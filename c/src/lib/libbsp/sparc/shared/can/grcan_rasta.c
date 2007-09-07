@@ -58,16 +58,16 @@ void (*grcan_rasta_int_reg)(void *handler, int irq, void *arg) = 0;
 #define RX_BUF_SIZE 4096
 
 #define STATIC_TX_BUF_ADDR(core) \
-	(grcan_rasta_rambase+(core)*(STATIC_TX_BUF_SIZE+STATIC_RX_BUF_SIZE))
+	((unsigned int *)\
+  (grcan_rasta_rambase+(core)*(STATIC_TX_BUF_SIZE+STATIC_RX_BUF_SIZE)))
 
 #define STATIC_RX_BUF_ADDR(core) \
-	(grcan_rasta_rambase+(core)*(STATIC_TX_BUF_SIZE+STATIC_RX_BUF_SIZE)+STATIC_RX_BUF_SIZE)
+  ((unsigned int *) \
+	(grcan_rasta_rambase+(core)*(STATIC_TX_BUF_SIZE+STATIC_RX_BUF_SIZE)+STATIC_RX_BUF_SIZE))
   
   
 #define GRCAN_DEVNAME "/dev/grcan0"
 #define GRCAN_DEVNAME_NO(devstr,no) ((devstr)[10]='0'+(no))
-
-static int grcan_rasta_calc_memoffs(int maxcores, int corenum, unsigned int *mem_base, unsigned int *mem_end, unsigned int *bdtable_base);
 
 void grcan_rasta_interrupt_handler(int irq, void *pDev);
 

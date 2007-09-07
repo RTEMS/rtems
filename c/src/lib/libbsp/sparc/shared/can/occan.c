@@ -65,6 +65,8 @@ rtems_assoc_t errno_assoc[] = {
 
 #ifndef OCCAN_REG_INT
 	#define OCCAN_REG_INT(handler,irq,arg) set_vector(handler,irq+0x10,1)
+  #undef  OCCAN_DEFINE_INTHANDLER
+  #define OCCAN_DEFINE_INTHANDLER
 #endif
 
 /* Default to 40MHz system clock */
@@ -258,14 +260,14 @@ static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing);
 static int pelican_speed_auto(occan_priv *priv);
 static void pelican_init(occan_priv *priv);
 static void pelican_open(occan_priv *priv);
-static void pelican_close(occan_priv *priv);
 static int pelican_start(occan_priv *priv);
 static void pelican_stop(occan_priv *priv);
-static void pelican_exit(occan_priv *priv);
 static int pelican_send(occan_priv *can, CANMsg *msg);
 static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned char *amask);
 static void occan_interrupt(occan_priv *can);
+#ifdef DEBUG_PRINT_REGMAP
 static void pelican_regadr_print(pelican_regs *regs);
+#endif
 
 /***** Driver related interface *****/
 static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
@@ -274,8 +276,9 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 static rtems_device_driver occan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg);
+#ifdef OCCAN_DEFINE_INTHANDLER
 static void occan_interrupt_handler(rtems_vector_number v);
-
+#endif
 static int can_cores;
 static occan_priv *cans;
 static amba_confarea_type *amba_bus;
@@ -429,14 +432,6 @@ static void pelican_open(occan_priv *priv){
 	tmp = READ_REG(&priv->regs->intflags);
 }
 
-static void pelican_close(occan_priv *priv){
-
-	/* disable all interrupts */
-	priv->regs->inten = 0;
-	
-	priv->regs->mode = PELICAN_MOD_RESET;
-}
-
 static int pelican_start(occan_priv *priv){
 	unsigned char tmp;
 	/* Start HW communication */
@@ -508,11 +503,6 @@ static void pelican_stop(occan_priv *priv){
 	priv->status |= OCCAN_STATUS_RESET;
 }
 
-
-static void pelican_exit(occan_priv *priv){
-	/* reset core */
-	priv->regs->mode = PELICAN_MOD_RESET;
-}
 
 /* Try to send message "msg", if hardware txfifo is 
  * full, then -1 is returned.
@@ -595,6 +585,7 @@ static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned 
 	*amask3 = amask[3];
 }
 
+#ifdef DEBUG
 static void pelican_regs_print(pelican_regs *regs){
 	printk("--- PELICAN 0x%lx ---\n\r",(unsigned int)regs);
 	printk(" MODE: 0x%02x\n\r",READ_REG(&regs->mode));
@@ -627,7 +618,9 @@ static void pelican_regs_print(pelican_regs *regs){
 	printk(" CLKDIV: 0x%02x\n\r",READ_REG(&regs->clkdiv));
 	printk("-------------------\n\r");
 }
+#endif
 
+#ifdef DEBUG_PRINT_REGMAP
 static void pelican_regadr_print(pelican_regs *regs){
 	printk("--- PELICAN 0x%lx ---\n\r",(unsigned int)regs);
 	printk(" MODE: 0x%lx\n\r",(unsigned int)&regs->mode);
@@ -717,7 +710,9 @@ static void pelican_regadr_print(pelican_regs *regs){
 	printk(" CLKDIV: 0x%lx\n\r",(unsigned int)&regs->clkdiv);
 	printk("-------------------\n\r");
 }
+#endif
 
+#ifdef DEBUG
 static void occan_stat_print(occan_stats *stats){
 	printk("----Stats----\n\r");
 	printk("rx_msgs: %d\n\r",stats->rx_msgs);
@@ -731,6 +726,7 @@ static void occan_stat_print(occan_stats *stats){
 	printk("tx_buf_err: %d\n\r",stats->tx_buf_error);
 	printk("-------------\n\r");
 }
+#endif
 
 /* This function calculates BTR0 BTR1 values for a given bitrate.
  * Heavily based on mgt_mscan_bitrate() from peak driver, which 
@@ -1391,7 +1387,6 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 	rtems_libio_ioctl_args_t	*ioarg = (rtems_libio_ioctl_args_t *) arg;
 	struct occan_afilter *afilter;
 	occan_stats *dststats;
-	unsigned char btr0, btr1;
 	unsigned int rxcnt,txcnt;
 	
 	DBG("OCCAN: IOCTL %d\n\r",ioarg->command);
@@ -1794,6 +1789,7 @@ static void occan_interrupt(occan_priv *can){
 	}
 }
 
+#ifdef OCCAN_DEFINE_INTHANDLER
 static void occan_interrupt_handler(rtems_vector_number v){
 	int minor;
 	
@@ -1805,6 +1801,7 @@ static void occan_interrupt_handler(rtems_vector_number v){
 		}
 	}
 }
+#endif
 
 #define OCCAN_DRIVER_TABLE_ENTRY { occan_initialize, occan_open, occan_close, occan_read, occan_write, occan_ioctl }
 

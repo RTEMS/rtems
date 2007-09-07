@@ -39,6 +39,8 @@
 
 #ifndef B1553BRM_REG_INT
  #define B1553BRM_REG_INT(handler,irqno,arg) set_vector(handler,(irqno)+0x10,1)
+  #undef  B1553BRM_DEFINE_INTHANDLER
+  #define B1553BRM_DEFINE_INTHANDLER
 #endif
 
 /* default to 128K memory layout */
@@ -126,6 +128,11 @@ struct circ_buf_1 {
 };
 #endif
 
+struct irq_log_list {
+        volatile unsigned short iiw;
+        volatile unsigned short iaw;
+};
+
 typedef struct { 
 
     unsigned int memarea_base;
@@ -167,10 +174,7 @@ typedef struct {
 			unsigned short unused[(8*1024-(128*8+128*32))-16*2];
 #endif
 			/* interrupt log at 64 bytes from end */
-			struct {
-				unsigned short iiw;
-				unsigned short iaw;
-			} irq_logs[16];
+			struct irq_log_list irq_logs[16];
 		} *bcmem;
 
 #if defined(DMA_MEM_128K)
@@ -203,10 +207,7 @@ typedef struct {
 			unsigned short unused[(64*1024-(4*32*4+4*32*9*34))-16*2];
 			
 			/* interrupt log at 64 bytes from end */
-			struct {
-				unsigned short iiw;
-				unsigned short iaw;
-			} irq_logs[16];
+			struct irq_log_list irq_logs[16];
 		} *rtmem;
 #elif defined(DMA_MEM_16K)
 		/* Memory structure of a RT being inited, just used
@@ -239,20 +240,14 @@ typedef struct {
 			unsigned short unused[8*1024 -(4*32*4 +3*32*2*34 +1*32*1*34) -16*2];
 			
 			/* interrupt log at 64 bytes from end */
-			struct {
-				unsigned short iiw;
-				unsigned short iaw;
-			} irq_logs[16];
+			struct irq_log_list irq_logs[16];
 		} *rtmem;
 #else
 	#error You must define one DMA_MEM_???K
 #endif
 
     /* Interrupt log list */
-    struct irq_log_list {
-        volatile unsigned short iiw;
-        volatile unsigned short iaw;
-    }  *irq_log;
+    struct irq_log_list *irq_log;
     unsigned int irq;
 
     /* Received events waiting to be read */
@@ -291,7 +286,9 @@ static unsigned int allbrm_cfg_clkdiv;
 static unsigned int allbrm_cfg_freq;
 
 static void brm_interrupt(brm_priv *brm);
+#ifdef B1553BRM_DEFINE_INTHANDLER
 static void b1553brm_interrupt_handler(rtems_vector_number v);
+#endif
 
 #define OFS(ofs) (((unsigned int)&ofs & 0x1ffff)>>1)
 
@@ -361,7 +358,7 @@ int B1553BRM_PREFIX(_register)(amba_confarea_type *bus, unsigned int clksel, uns
 #ifdef B1553BRM_LOCAL_MEM
 		allbrm_memarea = B1553BRM_LOCAL_MEM_ADR;
 #else
-		allbrm_memarea = NULL;
+		allbrm_memarea = 0;
 #endif
 		
 		/* Save clksel, clkdiv and brm_freq for later use */
@@ -419,7 +416,7 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 		return RTEMS_NO_MEMORY;
 	}
 
-	brm->irq_log = &brm->rtmem->irq_logs[0];
+	brm->irq_log = (struct irq_log_list *)&brm->rtmem->irq_logs[0];
 
 	brm->regs->ctrl	  = 0x1912;  /* enable both buses, circular 1 bufmode, broadcast, interrupt log */
 	brm->regs->oper	  = 0x0900;  /* configure as RT, with addr 1 */
@@ -496,7 +493,7 @@ static rtems_device_driver bc_init(brm_priv *brm){
 	
 	brm->bcmem = (void *)brm->mem;
 	brm->rtmem = NULL;
-	brm->irq_log = &brm->bcmem->irq_logs[0];
+	brm->irq_log = (struct irq_log_list *)&brm->bcmem->irq_logs[0];
 	
 	brm->head = brm->tail = 0;
 	brm->rx_blocking = brm->tx_blocking = 1;
@@ -543,7 +540,7 @@ static rtems_device_driver bm_init(brm_priv *brm) {
 	}
 
 	/* end of 16K, fits all current modes (128K, 16K) */
-	brm->irq_log = &brm->mem[8*1024-16*2];
+	brm->irq_log = (struct irq_log_list *)&brm->mem[8*1024-16*2];
 
 	brm->regs->ctrl	  = 0x0006;  /* ping pong enable and enable interrupt log */
 	brm->regs->oper	  = 0x0A00;  /* configure as BM */
@@ -589,7 +586,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	}
 		
 	/* allocate & zero memory for the brm devices */
-	brms = malloc(sizeof(*brms)*dev_cnt);
+	brms = (brm_priv *)malloc(sizeof(*brms)*dev_cnt);
 	if ( !brms ){
 		printk("BRM: Failed to allocate SW memory\n\r");
 		return -1;
@@ -601,10 +598,10 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	 */
 	#define BRM_DESCS_PER_CTRL 128
 	if ( allbrm_memarea ){
-		mem = allbrm_memarea;
+		mem = (char *)allbrm_memarea;
 	}else{
  		/* sizeof(struct desc_table) * BRM_DESCS_PER_CTRL * dev_cnt */
-		mem = malloc( (128*1024) * (dev_cnt+1)); /* 128k per core + 128k for alignment */
+		mem = (char *)malloc( (128*1024) * (dev_cnt+1)); /* 128k per core + 128k for alignment */
 		if ( !mem ){
 			free(brms);
 			printk("BRM: Failed to allocate HW memory\n\r");
@@ -680,7 +677,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 		brm->memarea_base = (unsigned int)&mem[(128*1024) * minor];
 		brm->desc = (struct desc_table *) brm->memarea_base;
 		brm->mem = (volatile unsigned short *) brm->memarea_base;
- 	  brm->irq_log	= (void *)(brm->memarea_base + (0xFFE0<<1)); /* last 64byte */
+ 	  brm->irq_log	= (struct irq_log_list *)(brm->memarea_base + (0xFFE0<<1)); /* last 64byte */
 		
 		brm->bm_event = NULL;
 		brm->rt_event = NULL;
@@ -1126,6 +1123,7 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
     return RTEMS_SUCCESSFUL;
 }
 
+#ifdef B1553BRM_DEFINE_INTHANDLER
 static void b1553brm_interrupt_handler(rtems_vector_number v){
 	int i;
 	/* find minor */
@@ -1136,14 +1134,15 @@ static void b1553brm_interrupt_handler(rtems_vector_number v){
 		}
 	}
 }
+#endif
 
 static void brm_interrupt(brm_priv *brm) {
   unsigned short descriptor, current, pending, miw, wc, tmp;
 	unsigned short msgadr, iaw, iiw;
 	int len;
 	int signal_event=0;
-	unsigned int event_status;
-	#define SET_ERROR_DESCRIPTOR(descriptor) (event_status = (event_status & 0x0000ffff) | descriptor<<16);
+	unsigned int event_status=0;
+	#define SET_ERROR_DESCRIPTOR(descriptor) (event_status = (event_status & 0x0000ffff) | descriptor<<16)
  		
 	while( (iiw=READ_REG(&brm->irq_log[brm->irq].iiw)) != 0xffff ){
 		iaw=READ_REG(&brm->irq_log[brm->irq].iaw);

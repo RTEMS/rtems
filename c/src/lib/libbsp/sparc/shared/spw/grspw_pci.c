@@ -105,6 +105,7 @@ int grspw_pci_register(
  */
 int grspwpci_interrupt_handler(int irq, void *arg){
 	grspw_interrupt( (GRSPW_DEV *)arg );
+  return 0;
 }
 
 #if 0

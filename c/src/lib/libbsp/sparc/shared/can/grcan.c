@@ -82,6 +82,8 @@
 
 #ifndef GRCAN_REG_INT
  #define GRCAN_REG_INT(handler,irqno,arg) set_vector(handler,irqno+0x10,1)
+ #undef  GRCAN_DEFINE_INTHANDLER
+ #define GRCAN_DEFINE_INTHANDLER
 #endif
 
 #ifndef GRCAN_DEFAULT_BAUD
@@ -227,7 +229,6 @@ struct grcan_priv {
 static int grcan_core_cnt;
 struct grcan_priv *grcans;
 static amba_confarea_type *amba_bus;
-static unsigned int ram_base;
 struct grcan_device_info *grcan_cores;
 static int grcan_core_cnt;
 

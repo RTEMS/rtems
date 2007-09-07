@@ -1,3 +1,9 @@
+2007-09-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	* shared/1553/b1553brm.c, shared/can/grcan.c, shared/can/grcan_rasta.c,
+	shared/can/occan.c, shared/spw/grspw.c, shared/spw/grspw_pci.c,
+	shared/uart/apbuart.c: Remove warnings.
+
 2007-09-06	Daniel Hellstrom <daniel@gaisler.com>
 
 	* shared/pci/pcifinddevice.c: New file.

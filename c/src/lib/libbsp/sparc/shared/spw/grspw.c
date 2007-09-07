@@ -67,6 +67,8 @@
 
 #ifndef GRSPW_REG_INT
  #define GRSPW_REG_INT(handler,irqno,arg) set_vector(handler,irqno+0x10,1)
+ #undef  GRSPW_DEFINE_INTHANDLER
+ #define GRSPW_DEFINE_INTHANDLER
 #endif
 
 #include <bsp.h>
@@ -303,8 +305,8 @@ static unsigned int _MEM_READ(void *addr) {
 #define SPW_PREPAREMASK_RX (SPW_DMACTRL_TXEN | SPW_DMACTRL_TXIE | SPW_DMACTRL_AI | SPW_DMACTRL_PR | SPW_DMACTRL_RA)
 
 static int grspw_hw_init(GRSPW_DEV *pDev);
-static int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, unsigned char *hdr, unsigned int dlen, unsigned char *data);
-static int grspw_hw_receive(GRSPW_DEV *pDev,unsigned char *b,int c);
+static int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dlen, char *data);
+static int grspw_hw_receive(GRSPW_DEV *pDev,char *b,int c);
 static int grspw_hw_startup (GRSPW_DEV *pDev, int timeout);
 static int grspw_hw_stop (GRSPW_DEV *pDev, int rx, int tx);
 static void grspw_hw_wait_rx_inactive(GRSPW_DEV *pDev);
@@ -500,6 +502,7 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 
 }
 
+#ifdef GRSPW_DEFINE_INTHANDLER
 /*
  *  Standard Interrupt handler
  */
@@ -514,6 +517,7 @@ static rtems_isr grspw_interrupt_handler(rtems_vector_number v)
                 }
         }
 }
+#endif
 
 static void grspw_interrupt(GRSPW_DEV *pDev){
         int dmactrl;
@@ -1464,7 +1468,7 @@ static int grspw_hw_stop (GRSPW_DEV *pDev, int rx, int tx)
         return RTEMS_SUCCESSFUL;
 }
 
-int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, unsigned char *hdr, unsigned int dlen, unsigned char *data) 
+int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dlen, char *data) 
 {
         
         unsigned int dmactrl, ctrl;
@@ -1539,7 +1543,7 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, unsigned char *hdr, unsign
         return hlen + dlen;
 }
 
-static int grspw_hw_receive(GRSPW_DEV *pDev, unsigned char *b, int c) {
+static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
         unsigned int len, rxlen, ctrl;
         unsigned int cur; 
         unsigned int tmp;

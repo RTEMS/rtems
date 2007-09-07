@@ -44,6 +44,8 @@
 
 #ifndef APBUART_REG_INT
 	#define APBUART_REG_INT(handler,irq,arg) set_vector(handler,irq+0x10,1)
+  #undef APBUART_DEFINE_INTHANDLER
+  #define APBUART_DEFINE_INTHANDLER
 #endif
 
 /* Default to 40MHz system clock */
@@ -117,7 +119,9 @@ static rtems_driver_address_table apbuart_driver = APBUART_DRIVER_TABLE_ENTRY;
 static amba_confarea_type *amba_bus;
 
 static void apbuart_interrupt(apbuart_priv *uart);
+#ifdef APBUART_DEFINE_INTHANDLER
 static void apbuart_interrupt_handler(rtems_vector_number v);
+#endif
 static void apbuart_hw_close(apbuart_priv *uart);
 static void apbuart_hw_open(apbuart_priv *uart);
 
@@ -213,6 +217,7 @@ static void apbuart_hw_close(apbuart_priv *uart){
 	uart->regs->ctrl = 0;
 }
 
+#ifdef APBUART_DEFINE_INTHANDLER
 /* interrupt handler */
 static void apbuart_interrupt_handler(rtems_vector_number v){
 	int minor;
@@ -225,6 +230,7 @@ static void apbuart_interrupt_handler(rtems_vector_number v){
 		}
 	}
 }
+#endif
 
 /* The interrupt handler, taking care of the 
  * APBUART hardware
