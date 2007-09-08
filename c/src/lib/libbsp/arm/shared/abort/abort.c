@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems.h>
+#include <rtems/bspIo.h>
 
 #define INSN_MASK         0xc5
 
@@ -42,8 +43,6 @@
 #define GET_REG(r, ctx)      (((uint32_t   *)ctx)[r])
 #define SET_REG(r, ctx, v)   (((uint32_t   *)ctx)[r] = v)
 #define GET_OFFSET(insn)     (insn & 0xfff)
-
-extern void printk(char *fmt, ...);
 
 uint32_t 	g_data_abort_cnt = 0;
 /*this is a big overhead for MCU only got 16K RAM*/
@@ -83,7 +82,8 @@ void _print_full_context(uint32_t spsr)
               : [spsr] "r" (spsr)
 	      : "cc");
 
-    printk("Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n", prev_sp, prev_lr, cpsr);
+    printk("Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n",
+           prev_sp, prev_lr, cpsr);
 
     for(i=0;i<48;){
         printk(" 0x%08x",((uint32_t*)prev_sp)[i++]);

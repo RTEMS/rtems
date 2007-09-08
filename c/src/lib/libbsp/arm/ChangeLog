@@ -1,3 +1,8 @@
+2007-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/abort/abort.c, shared/abort/simple_abort.c: Remove incorrect
+	and unneccessary prototype of printk.
+
 2007-06-13	Ray Xu <rayx@gmail.com>
 
 	* shared/abort/simple_abort.c: Shrink the memory requirements. Joel

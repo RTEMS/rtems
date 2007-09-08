@@ -17,8 +17,9 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  */
-#include <rtems/system.h>
+
 #include <rtems.h>
+#include <rtems/bspIo.h>
 
 #define INSN_MASK         0xc5
 
@@ -41,9 +42,6 @@
 #define GET_REG(r, ctx)      (((uint32_t   *)ctx)[r])
 #define SET_REG(r, ctx, v)   (((uint32_t   *)ctx)[r] = v)
 #define GET_OFFSET(insn)     (insn & 0xfff)
-
-extern void printk(char *fmt, ...);
-
 
 char *_print_full_context_mode2txt[0x10]={
   [0x0]="user",  /* User */
