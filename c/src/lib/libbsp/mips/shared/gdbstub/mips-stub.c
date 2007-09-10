@@ -125,9 +125,8 @@
 #include "mips_opcode.h"
 /* #include "memlimits.h" */
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include "gdb_if.h"
-
-extern int printk(const char *fmt, ...);
 
 /* Change it to something meaningful when debugging */
 #undef ASSERT
