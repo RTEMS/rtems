@@ -1,3 +1,7 @@
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/keyboard.c: Replaced tabs with spaces.
+
 2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: If we cannot find enough memory to run the
