@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
 
 #include <sys/param.h>
@@ -44,8 +45,6 @@
 #define IN32(aPtr)                ((uint32_t)( *((volatile uint32_t *)(aPtr))) )
 #define OUT32(aPtr, aValue)     (*((volatile uint32_t *)(aPtr)) = (uint32_t)aValue)
 #define NUM_XILTEMAC_UNITS 2
-
-extern void printk(char*, ...);
 
 /* Why isn't this defined in stdio.h like it's supposed to be? */
 extern int snprintf(char*, size_t, const char*, ...);

@@ -1,3 +1,7 @@
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network/xiltemac.c: Remove duplicate prototype.
+
 2007-08-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	* network/xiltemac.c:
 	applied patch from Robert Grimes to correctly set the link speed
