@@ -1,3 +1,9 @@
+2007-09-10	Alain Schaefer <alani@easc.ch>
+
+	* startup/bspstart.c: Add a useful routine to program memory protection
+	in bfin. It is not used but a user of ezKit533 can customize its bsp
+	and use this function.
+
 2007-05-24	Alain Schaefer <alani@easc.ch>
 
 	* startup/bspstart.c: Fix a problem in the InitEBIU method.

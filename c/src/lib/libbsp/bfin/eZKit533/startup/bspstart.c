@@ -37,6 +37,52 @@ rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
+
+const unsigned int dcplbs_table[][] = {  
+
+       { 0xFF900000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) }, // L1 Data B
+       { 0xFF800000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) }, // L1 Data A
+
+       { 0x20300000,   (PAGE_SIZE_1MB | CPLB_DNOCACHE) },      // Async Memory Bank 3
+       { 0x20200000,   (PAGE_SIZE_1MB | CPLB_DNOCACHE) },      // Async Memory Bank 2 (Secnd)
+       { 0x20100000,   (PAGE_SIZE_1MB | CPLB_DNOCACHE) },      // Async Memory Bank 1 (Prim B)
+       { 0x20000000,   (PAGE_SIZE_1MB | CPLB_DNOCACHE) },      // Async Memory Bank 0 (Prim A)
+
+       { 0x02400000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+       { 0x02000000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+       { 0x00C00000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+       { 0x00800000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+       { 0x00400000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+       { 0x00000000,   (PAGE_SIZE_4MB | CPLB_DNOCACHE) },      // 
+
+       { 0xffffffff, 0xffffffff }                                                      // end of section - termination
+
+       }
+;
+
+
+const unsigned int _icplbs_table[][] = { 
+       { 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_I_PAGE_MGMT) },   // L1 Code
+
+       { 0xEF000000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      // AREA DE BOOT
+
+       { 0x20300000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      // Async Memory Bank 3
+       { 0x20200000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      // Async Memory Bank 2 (Secnd)
+       { 0x20100000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      // Async Memory Bank 1 (Prim B)
+       { 0x20000000,   (PAGE_SIZE_1MB | CPLB_INOCACHE) },      // Async Memory Bank 0 (Prim A)
+
+       { 0x02400000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+       { 0x02000000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+       { 0x00C00000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+       { 0x00800000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+       { 0x00400000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+       { 0x00000000,   (PAGE_SIZE_4MB | CPLB_INOCACHE) },      // 
+
+       { 0xffffffff, 0xffffffff  }                                                     // end of section - termination
+
+       }
+;
+
 /*
  *  Use the shared implementations of the following routines
  */
@@ -204,4 +250,22 @@ void setLED (uint8_t value)
 uint8_t getLED (void)
 {
   return *((uint8_t*)FlashA_PortB_Data);
+}
+
+void initCPLB() {
+
+       int i = 0;
+       unsigned int *addr;
+       unsigned int *data;
+        
+       addr = 0xffe00100;
+       data = 0xffe00200;
+
+       while ( dcplbs_table[i][0] != 0xffffffff ) {
+               *addr = dcplbs_table[i][0];
+               *data = dcplbs_table[i][1];
+
+               addr++;
+               data++;
+       } 
 }
