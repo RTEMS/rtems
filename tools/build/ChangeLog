@@ -1,3 +1,7 @@
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bin2c.c: Updated license after author changed it.
+
 2007-09-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bin2c.c: Update comments.

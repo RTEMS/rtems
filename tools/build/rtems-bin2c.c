@@ -3,9 +3,11 @@
  *
  * convert a binary file into a C source array.
  *
- * Origin:
- *   put into the public domain by Sandro Sigala
- *   http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images-Bin2c_In_C
+ * THE "BEER-WARE LICENSE" (Revision 3.1415):
+ * sandro AT sigala DOT it wrote this file. As long as you retain this
+ * notice you can do whatever you want with this stuff.  If we meet some
+ * day, and you think this stuff is worth it, you can buy me a beer in
+ * return.  Sandro Sigala
  *
  * Subsequently modified by Joel Sherrill <joel.sherrill@oarcorp.com>
  * to add a number of capabilities not in the original.
