@@ -1,5 +1,9 @@
 2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* console/vt.c: Changed tabs to spaces.
+
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* console/keyboard.c: Replaced tabs with spaces.
 
 2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
