@@ -1,5 +1,11 @@
 2007-09-10	Alain Schaefer <alani@easc.ch>
 
+	* preinstall.am, startup/bspstart.c, startup/linkcmds: Complete earlier
+	patch.
+	* include/cplb.h: New file.
+
+2007-09-10	Alain Schaefer <alani@easc.ch>
+
 	* startup/bspstart.c: Add a useful routine to program memory protection
 	in bfin. It is not used but a user of ezKit533 can customize its bsp
 	and use this function.

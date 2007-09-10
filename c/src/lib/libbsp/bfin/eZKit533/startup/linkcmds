@@ -14,9 +14,9 @@ _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 MEMORY
 {
+      sdram(rwx)    : ORIGIN = 0x00001000, LENGTH = 0x01000000
       l1code(rwx)   : ORIGIN = 0xffa08000, LENGTH = 0x00008000
       l1data(rwx)   : ORIGIN = 0xff804000, LENGTH = 0x00004000
-      sdram(rwx)    : ORIGIN = 0x00001000, LENGTH = 0x01000000
 }
 
 SECTIONS
