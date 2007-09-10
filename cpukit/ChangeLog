@@ -1,3 +1,7 @@
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/printk.c: Remove unnecessary comments.
+
 2007-09-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libmisc/monitor/mon-monitor.c:

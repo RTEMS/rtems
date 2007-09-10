@@ -74,9 +74,6 @@ vprintk(const char *fmt, va_list ap)
 {
   char     c, *str;
   int      lflag, base, sign, width, lead;
-  /* unsigned int level; */
-
-  /* _CPU_ISR_Disable(level); */
 
   for (; *fmt != '\0'; fmt++)
   {
@@ -132,8 +129,6 @@ vprintk(const char *fmt, va_list ap)
       BSP_output_char(*fmt);
     }
   }
-  /* _CPU_ISR_Enable(level); */
-
 } /* vprintk */
 
 void
