@@ -1,3 +1,7 @@
+2007-09-10	Alain Schaefer <alani@easc.ch>
+
+	* rtems/bfin/bf533.h: Add more definitions.
+
 2007-05-31	Alain Schaefer <alani@easc.ch>
 
 	* rtems/score/cpu.h: Modifiy inline assembly language

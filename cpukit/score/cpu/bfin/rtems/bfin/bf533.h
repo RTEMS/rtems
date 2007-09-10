@@ -358,6 +358,35 @@ extern "C" {
 #define EBIU_SDRRC             0xFFC00A18L
 #define EBIU_SDSTAT            0xFFC00A1CL
 
+
+
+
+/* DCPLB_DATA and ICPLB_DATA Registers */
+/*** Bit Positions */
+#define CPLB_VALID_P            0x00000000  /* 0=invalid entry, 1=valid entry */
+#define CPLB_LOCK_P             0x00000001  /* 0=entry may be replaced, 1=entry locked */
+#define CPLB_USER_RD_P          0x00000002  /* 0=no read access, 1=read access allowed (user mode) */
+/*** Masks */
+#define CPLB_VALID             0x00000001  /* 0=invalid entry, 1=valid entry */
+#define CPLB_LOCK              0x00000002  /* 0=entry may be replaced, 1=entry locked */
+#define CPLB_USER_RD           0x00000004  /* 0=no read access, 1=read access allowed (user mode) */
+#define PAGE_SIZE_1KB          0x00000000  /* 1 KB page size */
+#define PAGE_SIZE_4KB          0x00010000  /* 4 KB page size */
+#define PAGE_SIZE_1MB          0x00020000  /* 1 MB page size */
+#define PAGE_SIZE_4MB          0x00030000  /* 4 MB page size */
+#define CPLB_PORTPRIO             0x00000200  /* 0=low priority port, 1= high priority port */
+#define CPLB_L1_CHBL           0x00001000  /* 0=non-cacheable in L1, 1=cacheable in L1 */
+/*** ICPLB_DATA only */
+#define CPLB_LRUPRIO              0x00000100  /* 0=can be replaced by any line, 1=priority for non-replacement */
+/*** DCPLB_DATA only */
+#define CPLB_USER_WR           0x00000008  /* 0=no write access, 0=write access allowed (user mode) */
+#define CPLB_SUPV_WR           0x00000010  /* 0=no write access, 0=write access allowed (supervisor mode) */
+#define CPLB_DIRTY             0x00000080  /* 1=dirty, 0=clean */
+#define CPLB_L1_AOW                       0x00008000  /* 0=do not allocate cache lines on write-through writes,  */
+                                                                                  /* 1= allocate cache lines on write-through writes. */
+#define CPLB_WT                0x00004000  /* 0=write-back, 1=write-through */
+
+
 #ifdef __cplusplus
 }
 #endif
