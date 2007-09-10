@@ -20,8 +20,8 @@ __init:
 __fini:
 
 
-    .text
-    .align  2
+    .section .l1code
+    .align  4
 
     .global __start
 __start:
@@ -64,6 +64,22 @@ __start:
     
     START:
     [--SP] = RETI;
+    
+    p0.h = _bss_start;
+    p0.l = _bss_start;
+    p1.h = _end;
+    p1.l = _end;
+    r0 = p0;
+    r1 = p1;
+    r1 = r1 - r0;
+    p1 = r1;    
+    r0 = 0;
+
+    /* Set _bss_start until _end to zero */
+    lsetup(loop1,loop2) LC0 = p1;
+    loop1:     b[p0] = r0;
+    loop2:  p0 +=1;
+
     p0.l = _boot_card;
     p0.h = _boot_card;
 

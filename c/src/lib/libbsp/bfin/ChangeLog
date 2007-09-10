@@ -1,3 +1,7 @@
+2007-09-10	Alain Schaefer <alani@easc.ch>
+
+	* shared/start/start.S: Initialize bss to zero.
+
 2007-08-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/start/start.S: Fix typo of pO versus p0.
