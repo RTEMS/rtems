@@ -80,12 +80,13 @@ console_rel_SOURCES = console/console.c console/ns16550cfg.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES   = network/network.c 
 network_rel_CPPFLAGS  = $(AM_CPPFLAGS)
 network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
-
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 
 noinst_PROGRAMS += bsp_i2c.rel
 bsp_i2c_rel_SOURCES   = i2c/i2c_init.c 
