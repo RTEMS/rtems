@@ -1,3 +1,7 @@
+2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* capture/Makefile.am: Use all managers.
+
 2007-08-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* capture/Makefile.am: Fix typo -- not unlimited.

@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = io event
+MANAGERS = all
 
 rtems_tests_PROGRAMS = capture.exe
 capture_exe_SOURCES = init.c test1.c system.h
