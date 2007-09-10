@@ -1,3 +1,8 @@
+2007-09-10	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libmisc/monitor/mon-monitor.c:
+	Corrected linked list of rtems_monitor_commands
+
 2007-09-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/malloc.c: If RTEMS_HEAP_DEBUG is defined, add heap

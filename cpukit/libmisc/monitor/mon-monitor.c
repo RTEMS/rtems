@@ -168,6 +168,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_SEMAPHORE },
+      &rtems_monitor_commands[12],
     },
     { "region",
       "region [id [id ... ] ]\n"
@@ -177,6 +178,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_REGION },
+      &rtems_monitor_commands[13],
     },
     { "part",
       "part [id [id ... ] ]\n"
@@ -186,6 +188,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_PARTITION },
+      &rtems_monitor_commands[14],
     },
     { "object",
       "Display information about specified RTEMS objects. "
@@ -195,7 +198,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_INVALID },
-      &rtems_monitor_commands[12],
+      &rtems_monitor_commands[15],
     },
     { "driver",
       "Display the RTEMS device driver table.\n"
@@ -203,14 +206,14 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_DRIVER },
-      &rtems_monitor_commands[13],
+      &rtems_monitor_commands[16],
     },
     { "dname",
       "Displays information about named drivers.\n",
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_DNAME },
-      &rtems_monitor_commands[14],
+      &rtems_monitor_commands[17],
     },
     { "exit",
       "Invoke 'rtems_fatal_error_occurred' with 'status' "
@@ -219,7 +222,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_SUCCESSFUL },
-      &rtems_monitor_commands[15],
+      &rtems_monitor_commands[18],
     },
     { "fatal",
       "'exit' with fatal error; default error is RTEMS_TASK_EXITTED\n"
@@ -227,14 +230,14 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_TASK_EXITTED },		/* exit value */
-      &rtems_monitor_commands[16],
+      &rtems_monitor_commands[19],
     },
     { "quit",
       "Alias for 'exit'\n",
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
-      &rtems_monitor_commands[17],
+      &rtems_monitor_commands[20],
     },
     { "help",
       "Provide information about commands. "
@@ -243,7 +246,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_help_cmd,
       { .monitor_command_entry = rtems_monitor_commands },
-      &rtems_monitor_commands[18],
+      &rtems_monitor_commands[21],
     },
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
@@ -252,7 +255,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_debugger_cmd,
       { 0 },
-      &rtems_monitor_commands[19],
+      &rtems_monitor_commands[22],
     },
 #endif
     { 0, 0, 0, 0, { 0 }, &rtems_registered_commands },
