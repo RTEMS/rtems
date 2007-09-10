@@ -1,5 +1,12 @@
 2007-09-10	Alain Schaefer <alani@easc.ch>
 
+	* cpu_asm.S: Fix two problems:
+	    - CC bit has been clobbered and was not correctly restored
+	    - bfin hardware does not allow to read instructions from the L1
+
+
+2007-09-10	Alain Schaefer <alani@easc.ch>
+
 	* rtems/bfin/bf533.h: Add more definitions.
 
 2007-05-31	Alain Schaefer <alani@easc.ch>

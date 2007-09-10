@@ -268,7 +268,8 @@ __ISR_Handler:
     /* load base adress of scratchpad */
     P0.H = HI(SCRATCH);
     P0.L = LO(SCRATCH);
-
+ 
+ 	[--SP] = ASTAT; /*  save cc flag*/
     /* if SP is already inside the SCRATCHPAD */ 
     CC=SP<P0 (iu)
     if !CC jump continue;
@@ -302,19 +303,27 @@ __ISR_Handler:
      * Thread_Dispatch would not be possible. */
     
     P0 = RETI;
-    R0 = W[P0];
+    R0 = P0;
+    R0.L = 0x0000;
+    R1.H = 0xffa0;
+    R1.L = 0x0000;
+    CC = R0 == R1;
+    if CC jump disablethreaddispatch;
+        
+    R0 = W[P0](Z);    
+    
     /* shift 16 bits to the right (select the high nibble ) */
     /*R0 >>= 16;*/
     
     R3 = 0;
     /* Check if RETI is a LINK instruction */
-    R1.h = HI(0xE800);
+    R1.h = HI(0x0000);
     R1.l = LO(0xE800);
     CC=R0==R1; 
     if cc jump disablethreaddispatch;
     
     /* Check if RETI is a RTS instruction */
-    R1.h = HI(0x0010);
+    R1.h = HI(0x0000);
     R1.l = LO(0x0010);
     CC=R0==R1; 
     if cc jump disablethreaddispatch;
@@ -401,6 +410,7 @@ __ISR_Handler:
     
     restoreP0:
     P0 = USP;
+    ASTAT = [SP++]; /* restore cc flag */
         
     /*now we should be on the old "user-stack" again */ 
         
