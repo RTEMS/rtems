@@ -77,6 +77,9 @@ AM_CONDITIONAL(ppc403,[test "$RTEMS_CPU_MODEL" = "ppc403" \
 || test "$RTEMS_CPU_MODEL" = "ppc405"])
 AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
 
+RTEMS_CHECK_NETWORKING
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here

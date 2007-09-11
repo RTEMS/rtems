@@ -331,13 +331,15 @@ if mpc83xx
 include_mpc83xxdir = $(includedir)/mpc83xx
 include_mpc83xx_HEADERS  = mpc83xx/include/mpc83xx.h
 include_mpc83xx_HEADERS += mpc83xx/network/tsec.h
+
 ## mpc83xx/network
+if HAS_NETWORKING
 noinst_PROGRAMS += mpc83xx/tsec.rel
 mpc83xx_tsec_rel_SOURCES   = mpc83xx/network/tsec.c
 mpc83xx_tsec_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
 mpc83xx_tsec_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 mpc83xx_tsec_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
-
+endif
 ## mpc83xx/i2c
 include_mpc83xx_HEADERS += mpc83xx/i2c/mpc83xx_i2cdrv.h
 noinst_PROGRAMS += mpc83xx/i2c.rel
