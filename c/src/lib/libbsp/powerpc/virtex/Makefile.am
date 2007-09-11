@@ -12,7 +12,9 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h 
 include_HEADERS += include/tm27.h
 include_HEADERS += include/xparameters_dflt.h
+if HAS_NETWORKING
 include_HEADERS += network/xiltemac.h
+endif
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
@@ -82,7 +84,10 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 libbsp_a_LIBADD = startup.rel dlentry.rel bspconsole.rel opbintctrl.rel \
-	vectors.rel irq.rel network.rel
+	vectors.rel irq.rel
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
 
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \

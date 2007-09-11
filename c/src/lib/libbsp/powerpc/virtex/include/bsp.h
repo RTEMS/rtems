@@ -68,7 +68,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
-#include <rtems/rtems_bsdnet.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 
