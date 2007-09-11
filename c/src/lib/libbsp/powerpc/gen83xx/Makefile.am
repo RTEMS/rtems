@@ -95,9 +95,8 @@ bsp_i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel pclock.rel console.rel \
-                  vectors.rel irq.rel mpc83xx_regs.rel
-libbsp_a_LIBADD += network.rel bsp_i2c.rel
+libbsp_a_LIBADD = startup.rel pclock.rel console.rel vectors.rel irq.rel \
+    mpc83xx_regs.rel bsp_i2c.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -107,8 +106,12 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
+endif
 
 EXTRA_DIST += README.mpc8349eamds
 EXTRA_DIST += times.mpc8349eamds

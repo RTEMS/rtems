@@ -1,3 +1,8 @@
+2007-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Do not include networking drivers if networking is
+	disabled.
+
 2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Do not build networking if it is disabled.
