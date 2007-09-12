@@ -114,7 +114,7 @@ void  rtems_irq_mngt_init()
     int 			i;
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned int                limit;
-    unsigned int 		level;
+    rtems_interrupt_level       level;
 
     i386_get_info_from_IDTR(&idt_entry_tbl, &limit);
 
@@ -126,7 +126,7 @@ void  rtems_irq_mngt_init()
        while(1);
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * Init the complete IDT vector table with defaultRawIrq value

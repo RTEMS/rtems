@@ -62,7 +62,7 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
 {
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
-    unsigned int 		level;
+    rtems_interrupt_level       level;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
@@ -83,13 +83,13 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     raw_irq_table [irq->idtIndex] = *irq;
     create_interrupt_gate_descriptor (&idt_entry_tbl[irq->idtIndex], irq->hdl);
     irq->on(irq);
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return 1;
 }
 
@@ -100,7 +100,7 @@ void _CPU_ISR_install_vector (uint32_t vector,
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
     interrupt_gate_descriptor	new;
-    unsigned int 		level;
+    rtems_interrupt_level       level;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
@@ -110,14 +110,14 @@ void _CPU_ISR_install_vector (uint32_t vector,
     if (vector >= limit) {
       return;
     }
-    _CPU_ISR_Disable(level)
+    rtems_interrupt_disable(level);
     * ((unsigned int *) oldHdl) = idt_entry_tbl[vector].low_offsets_bits |
 	(idt_entry_tbl[vector].high_offsets_bits << 16);
 
     create_interrupt_gate_descriptor(&new,  hdl);
     idt_entry_tbl[vector] = new;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 }
 
 int i386_get_current_idt_entry (rtems_raw_irq_connect_data* irq)
@@ -144,7 +144,7 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
 {
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
-    unsigned int 		level;
+    rtems_interrupt_level       level;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
@@ -164,7 +164,7 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     if (get_hdl_from_vector(irq->idtIndex) != irq->hdl){
       return 0;
     }
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     idt_entry_tbl[irq->idtIndex] = default_idt_entry;
 
@@ -173,7 +173,7 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     raw_irq_table[irq->idtIndex] = default_raw_irq_entry;
     raw_irq_table[irq->idtIndex].idtIndex = irq->idtIndex;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -185,7 +185,7 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
 {
     unsigned			limit;
     unsigned 			i;
-    unsigned 			level;
+    rtems_interrupt_level       level;
     interrupt_gate_descriptor*	idt_entry_tbl;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
@@ -203,7 +203,7 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
     local_settings 		= config;
     default_raw_irq_entry 	= config->defaultRawEntry;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     create_interrupt_gate_descriptor (&default_idt_entry, default_raw_irq_entry.hdl);
 
@@ -218,7 +218,7 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
 	raw_irq_table[i].off(&raw_irq_table[i]);
       }
     }
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
