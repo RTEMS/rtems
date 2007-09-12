@@ -35,9 +35,9 @@ static int isValidInterrupt(int irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    rtems_irq_hdl *bsp_tbl;
-    int *vic_cntl;
-    static int     irq_counter=0;
+    rtems_irq_hdl        *bsp_tbl;
+    int                  *vic_cntl;
+    static int            irq_counter = 0;
     
     bsp_tbl = (rtems_irq_hdl *)VICVectAddrBase;
 
@@ -55,7 +55,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * store the new handler
@@ -76,7 +76,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     irq_counter++;    
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     
     return 1;
 }
@@ -90,7 +90,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level level;
-    rtems_irq_hdl *bsp_tbl;
+    rtems_irq_hdl        *bsp_tbl;
 
     bsp_tbl = (rtems_irq_hdl *)&VICVectAddr0;
   
@@ -104,7 +104,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     VICIntEnClr = 1 << irq->name;
 
@@ -119,8 +119,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     bsp_tbl[irq->name] = default_int_handler;
     
-
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }

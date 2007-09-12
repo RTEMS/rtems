@@ -50,7 +50,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
         return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * store the new handler
@@ -66,7 +66,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     	irq->on(irq);
     }
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     
     return 1;
 }
@@ -91,7 +91,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
         return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
 
     /*
@@ -106,7 +106,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     bsp_vector_table[irq->name].vector = default_int_handler;
     bsp_vector_table[irq->name].data = NULL;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
