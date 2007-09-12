@@ -100,7 +100,7 @@ static int isValidInterrupt(int irq)
  */
 int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
+    rtems_interrupt_level   level;
     rtems_irq_connect_data* vchain;
 
     if (!isValidInterrupt(irq->name)) {
@@ -109,10 +109,10 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     }
     printk("Install Shared interrupt %d\n", irq->name);
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
-      _CPU_ISR_Enable(level);
+      rtems_interrupt_enable(level);
       printk("IRQ vector %d already connected to an unshared handler\n",irq->name);
       return 0;
     }
@@ -156,7 +156,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
      */
     irq->on(irq);
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -168,7 +168,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
+    rtems_interrupt_level       level;
 
     if (!isValidInterrupt(irq->name)) {
       printk("Invalid interrupt vector %d\n",irq->name);
@@ -181,9 +181,9 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      _CPU_ISR_Enable(level);
+      rtems_interrupt_enable(level);
       printk("IRQ vector %d already connected\n",irq->name);
       return 0;
     }
@@ -218,7 +218,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     irq->on(irq);
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -226,21 +226,21 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
-     unsigned int level;
+    rtems_interrupt_level       level;
 
-     if (!isValidInterrupt(irq->name)) {
+    if (!isValidInterrupt(irq->name)) {
       return 0;
-     }
-     _CPU_ISR_Disable(level);
-     *irq = rtems_hdl_tbl[irq->name];
-     _CPU_ISR_Enable(level);
-     return 1;
+    }
+    rtems_interrupt_disable(level);
+      *irq = rtems_hdl_tbl[irq->name];
+    rtems_interrupt_enable(level);
+    return 1;
 }
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-   rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
-    unsigned int level;
+    rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
+    rtems_interrupt_level   level;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -252,9 +252,9 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
-      _CPU_ISR_Enable(level);
+      rtems_interrupt_enable(level);
       return 0;
     }
 
@@ -274,7 +274,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
        if( !found )
        {
-          _CPU_ISR_Enable(level);
+          rtems_interrupt_enable(level);
           return 0;
        }
     }
@@ -282,7 +282,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     {
        if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) 
        {
-          _CPU_ISR_Enable(level);
+          rtems_interrupt_enable(level);
          return 0;
        }
     }
@@ -335,7 +335,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
        free(vchain);
     }
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -346,17 +346,18 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-    int i;
-    unsigned int level;
-   /*
-    * Store various code accelerators
-    */
+    int                    i;
+    rtems_interrupt_level  level;
+
+    /*
+     * Store various code accelerators
+     */
     internal_config 		= config;
     default_rtems_entry 	= config->defaultEntry;
     rtems_hdl_tbl 		= config->irqHdlTbl;
     return 1;  
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     /*
      * set up internal tables used by rtems interrupt prologue
      */
@@ -428,7 +429,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
       }
     }
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return 1;
 }
 

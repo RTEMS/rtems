@@ -245,7 +245,7 @@ int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine)
 
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-	unsigned int level;
+	rtems_interrupt_level level;
 
 	if (!isValidInterrupt(irq->name)) {
 		printk( "not a valid intr\n" ) ;
@@ -263,7 +263,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 		return 0;
 	}
 
-	_CPU_ISR_Disable(level);
+	rtems_interrupt_disable(level);
 
 	/*
 	 * store the data provided by user
@@ -291,7 +291,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	 */
 	irq->on(irq);
 
-	_CPU_ISR_Enable(level);
+	rtems_interrupt_enable(level);
 
 	/*
 	    printk( "Enabled\n" );
@@ -310,7 +310,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-	unsigned int level;
+	rtems_interrupt_level level;
 
 	if (!isValidInterrupt(irq->name)) {
 		return 0;
@@ -325,7 +325,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
 	  return 0;
 	}
-	_CPU_ISR_Disable(level);
+	rtems_interrupt_disable(level);
 
 	if (is_cpm_irq(irq->name)) {
 	  /*
@@ -350,7 +350,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	 */
 	rtems_hdl_tbl[irq->name] = default_rtems_entry;
 
-	_CPU_ISR_Enable(level);
+	rtems_interrupt_enable(level);
 
 	return 1;
 }
@@ -361,8 +361,9 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-	int i;
-	unsigned int level;
+	int                   i;
+	rtems_interrupt_level level;
+
 	/*
 	 * Store various code accelerators
 	 */
@@ -373,7 +374,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 	/* Fill in priority masks */
 	compute_SIU_IvectMask_from_prio();
 
-	_CPU_ISR_Disable(level);
+	rtems_interrupt_disable(level);
 	/*
 	 * start with CPM IRQ
 	 */
@@ -398,7 +399,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 		}
 	}
 
-	_CPU_ISR_Enable(level);
+	rtems_interrupt_enable(level);
 	return 1;
 }
 
