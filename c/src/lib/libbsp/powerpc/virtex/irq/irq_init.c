@@ -143,7 +143,8 @@ void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
  ***********************************************************/
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-  unsigned int level;
+  rtems_interrupt_level level;
+
   /*
    * check for valid irq name
    * if invalid, print error and return 0
@@ -156,12 +157,12 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
   /*
    * disable interrupts
    */
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
   /*
    * check, that default handler is installed now
    */
   if (rtemsIrqTbl[irq->name].hdl != BSP_rtems_irq_config->defaultEntry.hdl) {
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     printk("IRQ vector %d already connected\n",irq->name);
     return 0;
   }
@@ -183,14 +184,14 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
   /*
    * reenable interrupts
    */
-  _CPU_ISR_Enable(level);
+  rtems_interrupt_enable(level);
 
   return 1;
 }
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
-  unsigned int level;
+  rtems_interrupt_level level;
   
   /*
    * check for valid IRQ name
@@ -198,18 +199,18 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
   if (!BSP_IS_VALID_IRQ(irq->name)) {
     return 0;
   }
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
   /*
    * return current IRQ entry
    */
   *irq = rtemsIrqTbl[irq->name];
-  _CPU_ISR_Enable(level);
+  rtems_interrupt_enable(level);
   return 1;
 }
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-  unsigned int level;
+  rtems_interrupt_level level;
   
   /*
    * check for valid IRQ name
@@ -217,12 +218,12 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
   if (!BSP_IS_VALID_IRQ(irq->name)) {
     return 0;
   }
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
   /*
    * check, that specified handler is really connected now
    */
   if (rtemsIrqTbl[irq->name].hdl != irq->hdl) {
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return 0;
   }
   /*
@@ -243,7 +244,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
   /*
    * reenable interrupts
    */
-  _CPU_ISR_Enable(level);
+  rtems_interrupt_enable(level);
 
   return 1;
 }
@@ -266,10 +267,10 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** ret_ptr)
  */
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-  int i;
-  unsigned int level;
+  int                    i;
+  rtems_interrupt_level  level;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
   /*
    * store given configuration
    */
@@ -309,7 +310,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
       }
     }
   }
-  _CPU_ISR_Enable(level);
+  rtems_interrupt_enable(level);
   return 1;
 }
 /**********************************************
