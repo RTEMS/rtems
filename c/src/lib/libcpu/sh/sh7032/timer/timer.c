@@ -72,10 +72,10 @@ static uint32_t   Timer_HZ ;
 
 void Timer_initialize( void )
 {
-  uint8_t    temp8;
-  uint16_t   temp16;
-  uint32_t   level;
-  rtems_isr	   *ignored;
+  uint8_t                temp8;
+  uint16_t               temp16;
+  rtems_interrupt_level  level;
+  rtems_isr             *ignored;
 
   Timer_HZ = rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE ;
 
@@ -85,51 +85,51 @@ void Timer_initialize( void )
    */
 
   Timer_interrupts /* .i */ = 0;
-  _CPU_ISR_Disable( level);
+  rtems_interrupt_disable( level );
 
   /*
    *  Somehow start the timer
    */
   /* stop Timer 1  */
-  temp8 = read8( ITU_TSTR) & ITU1_STARTMASK;
-  write8( temp8, ITU_TSTR);
+  temp8 = read8(ITU_TSTR) & ITU1_STARTMASK;
+  write8( temp8, ITU_TSTR );
 
   /* initialize counter 1 */
-  write16( 0, ITU_TCNT1);
+  write16( 0, ITU_TCNT1 );
 
   /* Timer 1 is independent of other timers */
-  temp8 = read8( ITU_TSNC) & ITU1_SYNCMASK;
-  write8( temp8, ITU_TSNC);
+  temp8 = read8(ITU_TSNC) & ITU1_SYNCMASK;
+  write8( temp8, ITU_TSNC );
 
   /* Timer 1, normal mode */
-  temp8 = read8( ITU_TMDR) & ITU1_MODEMASK;
-  write8( temp8, ITU_TMDR);
+  temp8 = read8(ITU_TMDR) & ITU1_MODEMASK;
+  write8( temp8, ITU_TMDR );
 
   /* Use a Phi/X counter */
-  write8( ITU1_TCRMASK, ITU_TCR1);
+  write8( ITU1_TCRMASK, ITU_TCR1 );
 
   /* gra and grb are not used */
-  write8( ITU1_TIORMASK, ITU_TIOR1);
+  write8( ITU1_TIORMASK, ITU_TIOR1 );
 
   /* reset all status flags */
-  temp8 = read8( ITU_TSR1) & ITU1_STAT_MASK;
-  write8( temp8, ITU_TSR1);
+  temp8 = read8(ITU_TSR1) & ITU1_STAT_MASK;
+  write8( temp8, ITU_TSR1 );
 
   /* enable overflow interrupt */
-  write8( ITU1_TIERMASK, ITU_TIER1);
+  write8( ITU1_TIERMASK, ITU_TIER1 );
 
   /* set interrupt priority */
-  temp16 = read16( INTC_IPRC) & IPRC_ITU1_MASK;
+  temp16 = read16(INTC_IPRC) & IPRC_ITU1_MASK;
   temp16 |= ITU1_PRIO;
-  write16( temp16, INTC_IPRC);
+  write16( temp16, INTC_IPRC );
 
   /* initialize ISR */
   _CPU_ISR_install_raw_handler( ITU1_VECTOR, timerisr, &ignored );
-  _CPU_ISR_Enable( level);
+  rtems_interrupt_enable( level );
 
   /* start timer 1 */
-  temp8 = read8( ITU_TSTR) | ~ITU1_STARTMASK;
-  write8( temp8, ITU_TSTR);
+  temp8 = read8(ITU_TSTR) | ~ITU1_STARTMASK;
+  write8( temp8, ITU_TSTR );
 }
 
 /*
@@ -156,7 +156,7 @@ int Read_timer( void )
    */
 
 
-  cclicks = read16( ITU_TCNT1);   /* XXX: read some HW here */
+  cclicks = read16( ITU_TCNT1 );    /* XXX: read some HW here */
 
   /*
    *  Total is calculated by taking into account the number of timer overflow
@@ -164,7 +164,7 @@ int Read_timer( void )
    *  interrupts.
    */
 
-  total = cclicks + Timer_interrupts * 65536 ;
+  total = cclicks + Timer_interrupts * 65536;
 
   if ( Timer_driver_Find_average_overhead )
     return total / CLOCK_SCALE;          /* in XXX microsecond units */
@@ -175,7 +175,7 @@ int Read_timer( void )
   /*
    *  Somehow convert total into microseconds
    */
-    return (total / CLOCK_SCALE - AVG_OVERHEAD) ;
+    return (total / CLOCK_SCALE - AVG_OVERHEAD);
   }
 }
 
@@ -204,8 +204,8 @@ void timerisr( void )
   uint8_t   temp8;
 
   /* reset the flags of the status register */
-  temp8 = read8( ITU_TSR1) & ITU1_STAT_MASK;
-  write8( temp8, ITU_TSR1);
+  temp8 = read8(ITU_TSR1) & ITU1_STAT_MASK;
+  write8( temp8, ITU_TSR1 );
 
   Timer_interrupts += 1;
 }

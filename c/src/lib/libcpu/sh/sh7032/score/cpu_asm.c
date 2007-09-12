@@ -68,10 +68,10 @@ unsigned int sh_set_irq_priority(
   unsigned int irq,
   unsigned int prio )
 {
-  uint32_t   shiftcount;
-  uint32_t   prioreg;
-  uint16_t   temp16;
-  uint32_t   level;
+  uint32_t         shiftcount;
+  uint32_t         prioreg;
+  uint16_t         temp16;
+  ISR_Level        level;
 
   /*
    * first check for valid interrupt
@@ -112,14 +112,14 @@ unsigned int sh_set_irq_priority(
   /*
    * Set the interrupt priority register
    */
-  _CPU_ISR_Disable( level );
+  _ISR_Disable( level );
 
-  temp16 = read16( prioreg);
-  temp16 &= ~( 15 << shiftcount);
-  temp16 |= prio << shiftcount;
-  write16( temp16, prioreg);
+    temp16 = read16( prioreg);
+    temp16 &= ~( 15 << shiftcount);
+    temp16 |= prio << shiftcount;
+    write16( temp16, prioreg);
 
-  _CPU_ISR_Enable( level );
+  _ISR_Enable( level );
 
   return 0;
 }
@@ -257,9 +257,9 @@ asm volatile(
 
 void __ISR_Handler( uint32_t   vector)
 {
-  register uint32_t   level;
+  ISR_Level level;
 
-  _CPU_ISR_Disable( level );
+  _ISR_Disable( level );
 
   _Thread_Dispatch_disable_level++;
 
@@ -275,13 +275,13 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Nest_level++;
 
-  _CPU_ISR_Enable( level );
+  _ISR_Enable( level );
 
   /* call isp */
   if( _ISR_Vector_table[ vector])
     (*_ISR_Vector_table[ vector ])( vector );
 
-  _CPU_ISR_Disable( level );
+  _ISR_Disable( level );
 
   _Thread_Dispatch_disable_level--;
 
@@ -294,7 +294,7 @@ void __ISR_Handler( uint32_t   vector)
     stack_ptr = _old_stack_ptr;
 #endif
 
-  _CPU_ISR_Enable( level );
+  _ISR_Enable( level );
 
   if ( _ISR_Nest_level )
     return;

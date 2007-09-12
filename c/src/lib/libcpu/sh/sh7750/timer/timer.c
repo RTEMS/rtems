@@ -65,15 +65,15 @@ rtems_boolean Timer_driver_Find_average_overhead;
 void
 Timer_initialize(void)
 {
-    uint8_t         temp8;
-    uint16_t        temp16;
+    uint8_t               temp8;
+    uint16_t              temp16;
     rtems_interrupt_level level;
     rtems_isr            *ignored;
     int                   cpudiv = 1;
     int                   tidiv = 1;
 
     Timer_interrupts  = 0;
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* Get CPU frequency divider from clock unit */
     switch (read16(SH7750_FRQCR) & SH7750_FRQCR_IFC)
@@ -167,7 +167,7 @@ Timer_initialize(void)
     write16(temp16, SH7750_IPRA);
 
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     /* Start the Timer 1 */
     temp8 = read8(SH7750_TSTR);
@@ -203,20 +203,20 @@ Timer_initialize(void)
 int
 Read_timer(void)
 {
-    uint32_t   clicks;
-    uint32_t   ints;
-    uint32_t   total ;
+    uint32_t              clicks;
+    uint32_t              ints;
+    uint32_t              total;
     rtems_interrupt_level level;
-    uint32_t   tcr;
+    uint32_t              tcr;
 
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     clicks = 0xFFFFFFFF - read32(SH7750_TCNT1);
     tcr = read32(SH7750_TCR1);
     ints = Timer_interrupts;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     /* Handle the case when timer overflowed but interrupt was not processed */
     if ((clicks > 0xFF000000) && ((tcr & SH7750_TCR_UNF) != 0))

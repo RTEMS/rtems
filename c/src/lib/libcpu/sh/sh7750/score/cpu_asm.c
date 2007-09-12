@@ -256,9 +256,9 @@ __CPU_Context_restore:\n\
 
 void __ISR_Handler( uint32_t   vector)
 {
-  register uint32_t   level;
+  ISR_Level level;
 
-  _CPU_ISR_Disable( level );
+  _ISR_Disable( level );
 
   _Thread_Dispatch_disable_level++;
 
@@ -274,13 +274,13 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Nest_level++;
 
-  _CPU_ISR_Enable( level );
+  _ISR_Enable( level );
 
   /* call isp */
   if( _ISR_Vector_table[ vector])
     (*_ISR_Vector_table[ vector ])( vector );
 
-  _CPU_ISR_Disable( level );
+  _ISR_Disable( level );
 
   _Thread_Dispatch_disable_level--;
 
@@ -293,7 +293,7 @@ void __ISR_Handler( uint32_t   vector)
     stack_ptr = _old_stack_ptr;
 #endif
 
-  _CPU_ISR_Enable( level );
+  _ISR_Enable( level );
 
   if ( _ISR_Nest_level )
     return;

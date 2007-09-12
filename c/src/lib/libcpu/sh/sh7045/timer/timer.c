@@ -63,10 +63,10 @@ static uint32_t   Timer_MHZ ;
 
 void Timer_initialize( void )
 {
-  uint8_t    temp8;
-  uint16_t   temp16;
-  uint32_t   level;
-  rtems_isr	   *ignored;
+  uint8_t                temp8;
+  uint16_t               temp16;
+  rtems_interrupt_level  level;
+  rtems_isr	        *ignored;
 
   Timer_MHZ = rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
 
@@ -76,25 +76,25 @@ void Timer_initialize( void )
    */
 
   Timer_interrupts /* .i */ = 0;
-  _CPU_ISR_Disable( level);
+  rtems_interrupt_disable( level );
 
   /*
    *  Somehow start the timer
    */
   /* stop Timer 1  */
-  temp8 = read8( MTU_TSTR) & MTU1_STARTMASK;
-  write8( temp8, MTU_TSTR);
+  temp8 = read8(MTU_TSTR) & MTU1_STARTMASK;
+  write8( temp8, MTU_TSTR );
 
   /* initialize counter 1 */
   write16( 0, MTU_TCNT1);
 
   /* Timer 1 is independent of other timers */
-  temp8 = read8( MTU_TSYR) & MTU1_SYNCMASK;
-  write8( temp8, MTU_TSYR);
+  temp8 = read8(MTU_TSYR) & MTU1_SYNCMASK;
+  write8( temp8, MTU_TSYR );
 
   /* Timer 1, normal mode */
-  temp8 = read8( MTU_TMDR1) & MTU1_MODEMASK;
-  write8( temp8, MTU_TMDR1);
+  temp8 = read8(MTU_TMDR1) & MTU1_MODEMASK;
+  write8( temp8, MTU_TMDR1 );
 
   /* x0000000
    * |||||+++--- Internal Clock
@@ -102,30 +102,30 @@ void Timer_initialize( void )
    * |++-------- disable TCNT clear
    * +---------- don`t care
    */
-  write8( MTU1_TCRMASK, MTU_TCR1);
+  write8( MTU1_TCRMASK, MTU_TCR1 );
 
   /* gra and grb are not used */
-  write8( MTU1_TIORMASK, MTU_TIOR1);
+  write8( MTU1_TIORMASK, MTU_TIOR1 );
 
   /* reset all status flags */
-  temp8 = read8( MTU_TSR1) & MTU1_STAT_MASK;
-  write8( temp8, MTU_TSR1);
+  temp8 = read8(MTU_TSR1) & MTU1_STAT_MASK;
+  write8( temp8, MTU_TSR1 );
 
   /* enable overflow interrupt */
-  write8( MTU1_TIERMASK, MTU_TIER1);
+  write8( MTU1_TIERMASK, MTU_TIER1 );
 
   /* set interrupt priority */
-  temp16 = read16( INTC_IPRC) & IPRC_MTU1_MASK;
+  temp16 = read16(INTC_IPRC) & IPRC_MTU1_MASK;
   temp16 |= MTU1_PRIO;
   write16( temp16, INTC_IPRC);
 
   /* initialize ISR */
   _CPU_ISR_install_raw_handler( MTU1_VECTOR, timerisr, &ignored );
-  _CPU_ISR_Enable( level);
+  rtems_interrupt_enable( level );
 
   /* start timer 1 */
-  temp8 = read8( MTU_TSTR) | ~MTU1_STARTMASK;
-  write8( temp8, MTU_TSTR);
+  temp8 = read8(MTU_TSTR) | ~MTU1_STARTMASK;
+  write8( temp8, MTU_TSTR );
 }
 
 /*
@@ -152,7 +152,7 @@ int Read_timer( void )
    */
 
 
-  clicks = read16( MTU_TCNT1);   /* XXX: read some HW here */
+  clicks = read16( MTU_TCNT1 );   /* XXX: read some HW here */
 
   /*
    *  Total is calculated by taking into account the number of timer overflow
@@ -160,7 +160,7 @@ int Read_timer( void )
    *  interrupts.
    */
 
-  total = clicks + Timer_interrupts * 65536 ;
+  total = clicks + Timer_interrupts * 65536;
 
   if ( Timer_driver_Find_average_overhead )
     return total / SCALE;          /* in XXX microsecond units */
@@ -200,8 +200,8 @@ void timerisr( void )
   uint8_t   temp8;
 
   /* reset the flags of the status register */
-  temp8 = read8( MTU_TSR1) & MTU1_STAT_MASK;
-  write8( temp8, MTU_TSR1);
+  temp8 = read8(MTU_TSR1) & MTU1_STAT_MASK;
+  write8( temp8, MTU_TSR1 );
 
   Timer_interrupts += 1;
 }
