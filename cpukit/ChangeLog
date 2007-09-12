@@ -1,3 +1,13 @@
+2007-09-12  Sergei Organov  <osv@javad.com>
+
+	PR 1258/rtems
+	* cpukit/score/src/heapallocatealigned.c (block_allocate): New routine.
+	* cpukit/score/src/heapallocatealigned.c (_Heap_Allocate_aligned):
+	Use block_allocate() instead of _Heap_Block_allocate(). Replace
+	_Heap_Head(the_heap)->next with equivalent _Heap_First(the_heap).
+	* cpukit/score/src/heap.c (_Heap_Allocate): fix comments according
+	to changed block split strategy in _Heap_Allocate_aligned().
+
 2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/printk.c: Remove unnecessary comments.
