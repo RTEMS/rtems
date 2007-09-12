@@ -34,27 +34,31 @@ extern void rtemsReboot( void );
 
 int set_bit(int nr, unsigned long * addr)
 {
-  int  mask, retval,level;
+  int                   mask;
+  int                   retval;
+  rtems_interrupt_level level;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
-  _CPU_ISR_Disable(level)
-  retval = (mask & *addr) != 0;
-  *addr |= mask;
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_disable(level);
+    retval = (mask & *addr) != 0;
+    *addr |= mask;
+  rtems_interrupt_enable(level);
   return retval;
 }
 
 int clear_bit(int nr, unsigned long * addr)
 {
-  int  mask, retval,level;
+  int                   mask;
+  int                   retval;
+  rtems_interrupt_level level;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
-  _CPU_ISR_Disable(level)
-  retval = (mask & *addr) != 0;
-  *addr &= ~mask;
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_disable(level);
+    retval = (mask & *addr) != 0;
+    *addr &= ~mask;
+  rtems_interrupt_enable(level);
   return retval;
 }
 

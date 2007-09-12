@@ -68,13 +68,13 @@ kd_nosound(unsigned long ignored)
 void
 _kd_mksound(unsigned int hz, unsigned int ticks)
 {
-  unsigned int count = 0;
-  int level;
+  unsigned int          count = 0;
+  rtems_interrupt_level level;
 
   if (hz > 20 && hz < 32767)
     count = 1193180 / hz;
 
-   _CPU_ISR_Disable(level);
+   rtems_interrupt_disable(level);
 /*  del_timer(&sound_timer);  */
   if (count) {
     /* enable counter 2 */
@@ -94,7 +94,7 @@ _kd_mksound(unsigned int hz, unsigned int ticks)
   } else
     kd_nosound(0);
 
-   _CPU_ISR_Enable (level);
+   rtems_interrupt_enable(level);
   return;
 }
 

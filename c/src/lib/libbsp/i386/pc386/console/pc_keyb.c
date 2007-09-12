@@ -631,12 +631,13 @@ void pckbd_init_hw(void)
 /*
 char BSP_wait_polled_input( void )
 {
-  int c,level;
+  int                   c;
+  rtems_interrupt_level level;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
   while ( ( c= kbd_wait_for_input() ) < 0 )
       continue;
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
   return c;
 }
 */

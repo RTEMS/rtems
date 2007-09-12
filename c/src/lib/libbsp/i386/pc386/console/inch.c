@@ -273,13 +273,14 @@ BSP_wait_polled_input(void)
  */
 int rtems_kbpoll( void )
 {
-  int rc,level;
+  int                    rc;
+  rtems_interrupt_level level;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
   rc = ( kbd_first != kbd_last ) ? TRUE : FALSE;
 
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 
   return rc;
 }
