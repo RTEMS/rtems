@@ -56,6 +56,61 @@ check_result(
 
 #endif /* !defined(RTEMS_HEAP_DEBUG) */
 
+/*
+ * Allocate block of size 'alloc_size' from 'the_block' belonging to
+ * 'the_heap'. Split 'the_block' if possible, otherwise allocate it entirely.
+ * When split, make the upper part used, and leave the lower part free.
+ * Return the block allocated.
+ *
+ * NOTE: this is similar to _Heap_Block_allocate(), except it makes different
+ * part of the split block used, and returns address of the block instead of its
+ * size. We do need such variant for _Heap_Allocate_aligned() as we can't allow
+ * user pointer to be too far from the beginning of the block, so that we can
+ * recover start-of-block address from the user pointer without additional
+ * information stored in the heap.
+ */
+static
+Heap_Block *block_allocate(
+  Heap_Control  *the_heap,
+  Heap_Block    *the_block,
+  uint32_t      alloc_size)
+{
+  Heap_Statistics *const stats = &the_heap->stats;
+  uint32_t const block_size = _Heap_Block_size(the_block);
+  uint32_t const the_rest = block_size - alloc_size;
+
+  _HAssert(_Heap_Is_aligned(block_size, the_heap->page_size));
+  _HAssert(_Heap_Is_aligned(alloc_size, the_heap->page_size));
+  _HAssert(alloc_size <= block_size);
+  _HAssert(_Heap_Is_prev_used(the_block));
+
+  if(the_rest >= the_heap->min_block_size) {
+    /* Split the block so that lower part is still free, and upper part
+       becomes used. */
+    the_block->size = the_rest | HEAP_PREV_USED;
+    the_block = _Heap_Block_at(the_block, the_rest);
+    the_block->prev_size = the_rest;
+    the_block->size = alloc_size;
+  }
+  else {
+    /* Don't split the block as remainder is either zero or too small to be
+       used as a separate free block. Change 'alloc_size' to the size of the
+       block and remove the block from the list of free blocks. */
+    _Heap_Block_remove(the_block);
+    alloc_size = block_size;
+    stats->free_blocks -= 1;
+  }
+  /* Mark the block as used (in the next block). */
+  _Heap_Block_at(the_block, alloc_size)->size |= HEAP_PREV_USED;
+  /* Update statistics */
+  stats->free_size -= alloc_size;
+  if(stats->min_free_size > stats->free_size)
+    stats->min_free_size = stats->free_size;
+  stats->used_blocks += 1;
+  return the_block;
+}
+
+
 /*PAGE
  *
  *  _Heap_Allocate_aligned
@@ -101,7 +156,7 @@ void *_Heap_Allocate_aligned(
 
   /* Find large enough free block that satisfies the alignment requirements. */
 
-  for(the_block = _Heap_Head(the_heap)->next, search_count = 0;
+  for(the_block = _Heap_First(the_heap), search_count = 0;
       the_block != tail;
       the_block = the_block->next, ++search_count)
   {
@@ -131,7 +186,7 @@ void *_Heap_Allocate_aligned(
       user_addr = aligned_user_addr;
       _Heap_Align_down_uptr(&user_addr, page_size);
 
-      /* Make sure 'user_addr' calculated didn't run out of 'the_block. */
+      /* Make sure 'user_addr' calculated didn't run out of 'the_block'. */
       if(user_addr >= user_area) {
 
         /* The block seems to be acceptable. Check if the remainder of
@@ -172,7 +227,7 @@ void *_Heap_Allocate_aligned(
 
           _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
 
-          (void)_Heap_Block_allocate(the_heap, the_block, alloc_size);
+          the_block = block_allocate(the_heap, the_block, alloc_size);
 
           stats->searches += search_count + 1;
           stats->allocs += 1;

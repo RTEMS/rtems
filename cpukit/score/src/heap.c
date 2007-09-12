@@ -65,11 +65,13 @@ static uint32_t instance = 0;
  *            |       size < page_size         |
  *            +--------------------------------+ <- end = begin + size
  *
- *  This is what a heap looks like after first allocation of SIZE bytes.
- *  BSIZE stands for SIZE + 4 aligned up on 'page_size' boundary if allocation
- *  has been performed by _Heap_Allocate(). If allocation has been performed
- *  by _Heap_Allocate_aligned(), the block size BSIZE is defined differently
- *  (see 'heapallocatealigned.c' for details).
+ *  Below is what a heap looks like after first allocation of SIZE bytes using
+ *  _Heap_allocate(). BSIZE stands for SIZE + 4 aligned up on 'page_size'
+ *  boundary.
+ *  [NOTE: If allocation were performed by _Heap_Allocate_aligned(), the
+ *  block size BSIZE is defined differently, and previously free block will
+ *  be split so that upper part of it will become used block (see
+ *  'heapallocatealigned.c' for details).]
  *
  *            +--------------------------------+ <- begin = starting_address
  *            |  unused space due to alignment |
