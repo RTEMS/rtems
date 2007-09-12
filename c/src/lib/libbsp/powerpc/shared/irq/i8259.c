@@ -33,15 +33,15 @@ volatile rtems_i8259_masks i8259s_cache = 0xfffb;
 +--------------------------------------------------------------------------*/
 int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
 {
-  unsigned short mask;
-  unsigned int 	level;
+  unsigned short        mask;
+  rtems_interrupt_level level;
 
   if ( ((int)irqLine < BSP_ISA_IRQ_LOWEST_OFFSET) ||
        ((int)irqLine > BSP_ISA_IRQ_MAX_OFFSET)
        )
     return 1;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
   mask = 1 << irqLine;
   i8259s_cache |= mask;
@@ -54,7 +54,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
   {
     outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 
   return 0;
 }
@@ -68,15 +68,15 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
 +--------------------------------------------------------------------------*/
 int BSP_irq_enable_at_i8259s    (const rtems_irq_number irqLine)
 {
-  unsigned short mask;
-  unsigned int 	level;
+  unsigned short        mask;
+  rtems_interrupt_level level;
 
   if ( ((int)irqLine < BSP_ISA_IRQ_LOWEST_OFFSET) ||
        ((int)irqLine > BSP_ISA_IRQ_MAX_OFFSET )
        )
     return 1;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
   mask = ~(1 << irqLine);
   i8259s_cache &= mask;
@@ -89,7 +89,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_number irqLine)
   {
     outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 
   return 0;
 } /* mask_irq */
