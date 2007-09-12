@@ -181,7 +181,7 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 	plen = CYG_LE16_TO_CPU(plen) - 6;
 #endif
 
-	if (LAN91CXX_RX_STATUS_IS_ODD(cpd, val))
+	if ( cpd->c111_reva || LAN91CXX_RX_STATUS_IS_ODD(cpd, val) ) /* RevA Odd-bit BUG */
 		plen++;
 
 	for (n = m; n; n = n->m_next) {
@@ -257,13 +257,14 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 	val = get_data(cpd);	/* Read control word (and potential data) unconditionally */
 #ifdef LAN91CXX_32BIT_RX
 	if (plen & 2) {
-		if (data) {
+		if (data && (mlen>1) ) {
 			*(unsigned short *)data = (val >> 16) & 0xffff;
-            data = (rxd_t *)((unsigned short *)data + 1);
+			data = (rxd_t *)((unsigned short *)data + 1);
 			val <<= 16;
+			mlen-=2;
 		}
 	}
-	if (plen & 1)
+	if ( (plen & 1) && data && (mlen>0) )
 		*(unsigned char *)data = val >> 24;
 #else
 	val = CYG_LE16_TO_CPU(val);
@@ -421,7 +422,7 @@ static int readpacket(struct lan91cxx_priv_data *cpd)
 		INCR_STAT(cpd, rx_good);
 		/* Then it's OK */
 
-		if (LAN91CXX_RX_STATUS_IS_ODD(cpd, stat))
+		if (cpd->c111_reva || LAN91CXX_RX_STATUS_IS_ODD(cpd, stat)) /* RevA Odd-bit BUG */
 			complen++;
 
 #if DEBUG & 1
@@ -491,7 +492,7 @@ static void smc91111_rxDaemon(void *arg)
 static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 {
 	struct lan91cxx_priv_data *cpd = ifp->if_softc;
-	int i, len, plen, tcr;
+	int i, len, plen, tcr, odd;
 	struct mbuf *n = m;
 	unsigned short *sdata = NULL;
 	unsigned short ints, control;
@@ -562,57 +563,88 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 	put_data(cpd, CYG_CPU_TO_LE16(0x7FE & (plen + 6)));	/* Always even, always < 15xx(dec) */
 
 	/* Put data into buffer */
+	odd = 0;
 	n = m;
 	while (n) {
 		sdata = (unsigned short *)n->m_data;
 		len = n->m_len;
 
-		CYG_ASSERT((0 == (len & 1)
-			    || !(n->m_next)), "!odd length");
 		CYG_ASSERT(sdata, "!No sg data pointer here");
 
-		while (len >= sizeof(*sdata)) {
+		/* start on an odd offset? 
+		 * If last byte also (1byte mbuf with different pointer should not occur)
+		 * let following code handle it
+		 */
+		if ( ((unsigned int)sdata & 1) && (len>1) ){
+			put_data8(cpd,*(unsigned char *)sdata);
+			sdata = (unsigned short *)((unsigned int)sdata + 1);
+			odd = ~odd;
+			len--;
+		}
+		
+		/* speed up copying a bit, never copy last word */
+		while(len >= 17){
+			put_data(cpd, *(sdata));
+			put_data(cpd, *(sdata+1));
+			put_data(cpd, *(sdata+2));
+			put_data(cpd, *(sdata+3));
+			put_data(cpd, *(sdata+4));
+			put_data(cpd, *(sdata+5));
+			put_data(cpd, *(sdata+6));
+			put_data(cpd, *(sdata+7));
+			sdata += 8;
+			len -= 16;
+		}
+		
+		/* copy word wise, skip last word */
+		while (len >= 3) {
 			put_data(cpd, *sdata++);
 			len -= sizeof(*sdata);
 		}
-		n = n->m_next;
-	}
-#if DEBUG & 64
-	n = m;
-	while (n) {
-		int lp = 0;
-		unsigned char *start = (unsigned char *)n->m_data;
-		len = n->m_len;
-		while (len > 0) {
-			unsigned char a = *(start++);
-			unsigned char b = *(start++);
-			db64_printf("%02x %02x ", a, b);
-			lp += 2;
-			if (lp >= 16) {
-				db64_printf("\n");
-				lp = 0;
+		
+		/* one or two bytes left to put into fifo */
+		if ( len > 1 ){
+			/* the last 2bytes */
+			if ( !odd || n->m_next ){
+				put_data(cpd, *sdata++);
+				len -= sizeof(*sdata);
+			}else{
+				/* write next byte, mark that we are not at an odd offset any more,
+				 * remaining byte will be written outside while together with control byte.
+				 */
+				put_data8(cpd,*(unsigned char *)sdata);
+				sdata = (unsigned short *)((unsigned int)sdata + 1);
+				odd = 0;
+				len--;
+				/*break;*/
 			}
-			len -= 2;
+		}else if ( (len>0) && (n->m_next) ){
+			/* one byte left to write, and more bytes is comming in next mbuf */
+			put_data8(cpd,*(unsigned char *)sdata);
+			odd = ~odd;
 		}
+
 		n = n->m_next;
 	}
-	db64_printf(" \n");
-#endif
-
-	m_freem(m);
-	CYG_ASSERT(sdata, "!No sg data pointer outside");
 
 	/* Lay down the control short unconditionally at the end. */
 	/* (or it might use random memory contents) */
 	control = 0;
-	if (1 & plen) {
-		/* Need to set ODD flag and insert the data */
-		unsigned char onebyte = *(unsigned char *)sdata;
-		control = onebyte;
-		control |= LAN91CXX_CONTROLBYTE_ODD;
+	if ( len > 0 ){
+		if ( !odd ) {
+			/* Need to set ODD flag and insert the data */
+			unsigned char onebyte = *(unsigned char *)sdata;
+			control = onebyte;
+			control |= LAN91CXX_CONTROLBYTE_ODD;
+		}else{
+			put_data8(cpd,*(unsigned char *)sdata);
+		}
 	}
 	control |= LAN91CXX_CONTROLBYTE_CRC;	/* Just in case... */
 	put_data(cpd, CYG_CPU_TO_LE16(control));
+
+	m_freem(m);
+	CYG_ASSERT(sdata, "!No sg data pointer outside");
 
 	/* ############ start transmit ############ */
 
@@ -1057,7 +1089,7 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 		   (val >> 4) & 0xf, val & 0xf);
 
 	/* Set RevA flag for LAN91C111 so we can cope with the odd-bit bug. */
-	cpd->c111_reva = (val == 0x3390);
+	cpd->c111_reva = (val == 0x3390); /* 90=A, 91=B, 92=C */
 
 	/* The controller may provide a function used to set up the ESA */
 	if (cpd->config_enaddr)
@@ -1594,4 +1626,25 @@ lan91cxx_write_phy(struct lan91cxx_priv_data *cpd, uint8_t phyaddr,
 	db16_printf("phy_write: %d : %04x\n", phyreg, value);
 }
 
+#endif
+
+#if 0
+void lan91cxx_print_bank(int bank){
+	struct lan91cxx_priv_data *cpd = &smc91111;
+	int regno;
+	unsigned short regval[8];
+	int i;
+
+	if ( bank >= 4 )
+		return;
+	for(i=0; i<8; i++){
+		regno=i+bank<<3;
+		regval[i] = get_reg(cpd, regno);
+	}
+	printk("---- BANK %d ----\n\r",bank);	
+	for(i=0; i<8; i++){
+		printk("0x%x: 0x%x\n\r",i,regval[i]);
+	}
+
+}
 #endif

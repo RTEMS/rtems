@@ -460,7 +460,7 @@ get_reg(struct lan91cxx_priv_data *cpd, int regno)
       }
       dbg++;
     }
-#else    
+#else
     db2_printf("%sread  reg %d:%x -> 0x%04x\n", dbg_prefix, regno>>3,(regno&0x7)*2, val);
 #endif
     
@@ -483,7 +483,7 @@ put_reg(struct lan91cxx_priv_data *cpd, int regno, unsigned short val)
       }
       dbg++;
     }
-#else    
+#else
     db2_printf("%swrite reg %d:%x <- 0x%04x\n", dbg_prefix, regno>>3,(regno&0x7)*2, val);
 #endif
     
@@ -508,6 +508,17 @@ put_data(struct lan91cxx_priv_data *cpd, unsigned short val)
     HAL_WRITE_UINT16(cpd->base+((LAN91CXX_DATA & 0x7)), val);
 
 }
+
+/* Assumes bank2 has been selected*/
+static __inline__ void
+put_data8(struct lan91cxx_priv_data *cpd, unsigned char val)
+{
+    db2_printf("%s[bdata] <- 0x%02x\n", dbg_prefix, val);
+    
+    HAL_WRITE_UINT8(((unsigned char *)(cpd->base+((LAN91CXX_DATA & 0x7))))+1, val);
+
+}
+
 #endif /* SMSC_PLATFORM_DEFINED_PUT_DATA*/
 
 #ifndef SMSC_PLATFORM_DEFINED_GET_DATA

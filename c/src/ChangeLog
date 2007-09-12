@@ -1,3 +1,15 @@
+2007-09-12	Daniel Hellstrom <daniel@gaisler.com>
+
+	* libchip/network/smc91111.c, libchip/network/smc91111.h: Multiple fixes.
+	  - Odd bit bug in some chips taken care of.
+	  - Buggy ASSERT removed, it seem to be inserted to detect if MBUF data
+	    alignment but failing to do so must have made the driver writer to make
+	    some incorrect assumptions about MBUFs.
+	  - Fixed MBUF handling to handle mbuf chains better. The Data length of
+	    MBUFs in middle of the mbuf chain are now checked for odd number of bytes.
+	  - Made while loop responsible for copying data to fifo port copy 16 shorts
+	    per loop instead of 1 short, increasing the copying process.
+
 2007-09-07	Daniel Hellstrom <daniel@gaisler.com>
 
 	* libchip/network/greth.c, libchip/network/greth.h: GRETH_GBIT support
