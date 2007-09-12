@@ -196,7 +196,7 @@ void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
 void bsp_reset(void)
 {
     rtems_interrupt_level level;
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     printk("bsp_reset.....\n");
         /* disable mmu, invalide i-cache and call swi #4 */
         asm volatile(""

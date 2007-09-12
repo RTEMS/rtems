@@ -257,7 +257,7 @@ void bsp_reset(void)
 {
     rtems_interrupt_level level;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     while(1);
 }

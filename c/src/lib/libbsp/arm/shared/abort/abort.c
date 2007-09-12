@@ -104,11 +104,9 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
                     Context_Control *ctx)
 {
     /* Clarify, which type is correct, CPU_Exception_frame or Context_Control */
-
-    uint8_t    decode;
-    uint8_t    insn_type;
-
-    uint32_t    tmp;
+    uint8_t               decode;
+    uint8_t               insn_type;
+    rtems_interrupt_level level;
 
     g_data_abort_insn_list[g_data_abort_cnt & 0x3ff] = ctx->register_lr - 8;
     g_data_abort_cnt++;
@@ -152,7 +150,7 @@ void do_data_abort(uint32_t   insn, uint32_t   spsr,
     _print_full_context(spsr);
 
     /* disable interrupts, wait forever */
-    _CPU_ISR_Disable(tmp);
+    rtems_interrupt_disable(level);
     while(1) {
         continue;
     }

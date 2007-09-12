@@ -14,18 +14,6 @@
 #include <rtems.h>
 #include "lan91c11x.h"
 
-static rtems_interrupt_level level;
-
-void lan91c11x_lock(void)
-{
-    _CPU_ISR_Disable(level);
-}
-
-void lan91c11x_unlock(void)
-{
-    _CPU_ISR_Enable(level);
-}
-
 uint16_t lan91c11x_read_reg(int reg)
 {
     volatile uint16_t *ptr = (uint16_t *)LAN91C11X_BASE_ADDR;
@@ -33,7 +21,7 @@ uint16_t lan91c11x_read_reg(int reg)
     uint16_t val;
     rtems_interrupt_level level;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* save the bank register */
     old_bank = ptr[7] & 0x7;
@@ -46,7 +34,7 @@ uint16_t lan91c11x_read_reg(int reg)
     /* restore the bank register */
     ptr[7] = old_bank;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return val;
 }
 
@@ -56,7 +44,7 @@ void lan91c11x_write_reg(int reg, uint16_t value)
     uint16_t old_bank;
     rtems_interrupt_level level;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* save the bank register */
     old_bank = ptr[7] & 0x7;
@@ -69,7 +57,7 @@ void lan91c11x_write_reg(int reg, uint16_t value)
     /* restore the bank register */
     ptr[7] = old_bank;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 }
 
 uint16_t lan91c11x_read_reg_fast(int reg)

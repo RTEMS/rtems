@@ -31,7 +31,7 @@ void  rtems_irq_mngt_init()
 {
     rtems_interrupt_level       level;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* First, connect the ISR_Handler for IRQ and FIQ interrupts */
     _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ISR_Handler, NULL);

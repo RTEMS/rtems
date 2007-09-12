@@ -54,7 +54,7 @@ void  rtems_irq_mngt_init(void)
 
     vectorTable = (uint32_t *)VECTOR_TABLE;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* @todo Can't use exception vectors in GBA because they are already in GBA ROM BIOS */
     /* First, connect the ISR_Handler for IRQ and FIQ interrupts */

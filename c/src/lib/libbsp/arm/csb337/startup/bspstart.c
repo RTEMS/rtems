@@ -192,7 +192,7 @@ void bsp_reset(void)
 {
     rtems_interrupt_level level;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /* Enable the watchdog timer, then wait for the world to end. */
     ST_REG(ST_WDMR) = ST_WDMR_RSTEN | 1;

@@ -109,9 +109,9 @@ void do_data_abort(
 {
   /* Clarify, which type is correct, CPU_Exception_frame or Context_Control */
 
-  uint8_t    decode;
-  uint8_t    insn_type;
-  uint32_t    tmp;
+  uint8_t               decode;
+  uint8_t               insn_type;
+  rtems_interrupt_level level;
 
   decode = ((insn >> 20) & 0xff);
 
@@ -152,7 +152,7 @@ void do_data_abort(
   _print_full_context(spsr);
 
   /* disable interrupts, wait forever */
-  _CPU_ISR_Disable(tmp);
+  rtems_interrupt_disable(level);
   while(1) {
     continue;
   }
