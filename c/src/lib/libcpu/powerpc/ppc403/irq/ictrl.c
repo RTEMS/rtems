@@ -128,10 +128,11 @@ set_exier(uint32_t   val)
 RTEMS_INLINE_ROUTINE void 
 enable_ext_irq( uint32_t   mask)
 {
-    uint32_t   isrlvl;
-    _CPU_ISR_Disable(isrlvl);
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
     set_exier(get_exier() | ((mask)&PPC_EXI_MASK));
-    _CPU_ISR_Enable(isrlvl);
+  rtems_interrupt_enable(level);
 }
 
 /* 
@@ -140,10 +141,11 @@ enable_ext_irq( uint32_t   mask)
 RTEMS_INLINE_ROUTINE void 
 disable_ext_irq( uint32_t   mask)
 {
-    uint32_t   isrlvl;
-    _CPU_ISR_Disable(isrlvl);
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
     set_exier(get_exier() & ~(mask) & PPC_EXI_MASK);
-    _CPU_ISR_Enable(isrlvl);
+  rtems_interrupt_enable(level);
 }
 
 /*

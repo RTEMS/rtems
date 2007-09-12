@@ -26,6 +26,7 @@
  */
 #include <rtems/system.h>
 #include <rtems/score/powerpc.h>
+#include <rtems/score/isr.h>
 #include <rtems/bspIo.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
@@ -385,7 +386,7 @@ int ppc_vector_is_valid(rtems_vector vector)
 
 int ppc_set_exception  (const rtems_raw_except_connect_data* except)
 {
-    unsigned int level;
+    ISR_Level       level;
 
     if (!ppc_vector_is_valid(except->exceptIndex)) {
       printk("ppc_set_exception: vector %d is not valid\n",
@@ -407,7 +408,7 @@ int ppc_set_exception  (const rtems_raw_except_connect_data* except)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    _ISR_Disable(level);
 
     raw_except_table [except->exceptIndex] = *except;
     codemove((void*)ppc_get_vector_addr(except->exceptIndex),
@@ -416,7 +417,7 @@ int ppc_set_exception  (const rtems_raw_except_connect_data* except)
 	     PPC_CACHE_ALIGNMENT);
     except->on(except);
 
-    _CPU_ISR_Enable(level);
+    _ISR_Enable(level);
     return 1;
 }
 
@@ -433,7 +434,7 @@ int ppc_get_current_exception (rtems_raw_except_connect_data* except)
 
 int ppc_delete_exception (const rtems_raw_except_connect_data* except)
 {
-  unsigned int level;
+  ISR_Level level;
 
   if (!ppc_vector_is_valid(except->exceptIndex)){
     return 0;
@@ -450,7 +451,7 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
 	     except->hdl.raw_hdl_size)) {
       return 0;
   }
-  _CPU_ISR_Disable(level);
+  _ISR_Disable(level);
 
   except->off(except);
   codemove((void*)ppc_get_vector_addr(except->exceptIndex),
@@ -462,7 +463,7 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
   raw_except_table[except->exceptIndex] = default_raw_except_entry;
   raw_except_table[except->exceptIndex].exceptIndex = except->exceptIndex;
 
-  _CPU_ISR_Enable(level);
+  _ISR_Enable(level);
 
   return 1;
 }
@@ -472,8 +473,8 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
  */
 int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 {
-    unsigned 			i;
-    unsigned int level;
+    int        i;
+    ISR_Level  level;
 
     /*
      * store various accelerators
@@ -482,7 +483,7 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
     local_settings 		= config;
     default_raw_except_entry 	= config->defaultRawEntry;
 
-    _CPU_ISR_Disable(level);
+    _ISR_Disable(level);
 
     for (i=0; i <= LAST_VALID_EXC; i++) {
       if (!ppc_vector_is_valid(i)){
@@ -499,7 +500,7 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 	raw_except_table[i].off(&raw_except_table[i]);
       }
     }
-    _CPU_ISR_Enable(level);
+    _ISR_Enable(level);
 
     return 1;
 }

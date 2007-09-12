@@ -1,3 +1,19 @@
+2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1257/bsps
+	* mpc5xx/exceptions/raw_exception.c, mpc5xx/irq/irq.c,
+	mpc6xx/exceptions/raw_exception.c,
+	mpc8260/exceptions/raw_exception.c,
+	mpc8xx/exceptions/raw_exception.c, new-exceptions/raw_exception.c,
+	ppc403/ictrl/ictrl.c, ppc403/irq/ictrl.c: Code outside of cpukit
+	should use the public API for
+	rtems_interrupt_disable/rtems_interrupt_enable. By bypassing the
+	public API and directly accessing _CPU_ISR_Disable and
+	_CPU_ISR_Enable, they were bypassing the compiler memory barrier
+	directive which could lead to problems. This patch also changes the
+	type of the variable passed into these routines and addresses minor
+	style issues.
+
 2007-09-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Do not build networking drivers if

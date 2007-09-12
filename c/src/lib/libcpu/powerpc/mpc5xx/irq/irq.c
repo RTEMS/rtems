@@ -206,7 +206,7 @@ int CPU_irq_enabled_at_usiu(const rtems_irq_number irqLine)
 
 int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
+    rtems_interrupt_level       level;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -222,7 +222,7 @@ int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * store the data provided by user
@@ -254,7 +254,7 @@ int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
      */
     irq->on(irq);
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -271,7 +271,7 @@ int CPU_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 
 int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    unsigned int level;
+    rtems_interrupt_level       level;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -286,7 +286,7 @@ int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
       return 0;
     }
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * Disable interrupt on device
@@ -316,7 +316,7 @@ int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     rtems_hdl_tbl[irq->name] = default_rtems_entry;
 
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -327,8 +327,8 @@ int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
 {
-    int i;
-    unsigned int level;
+    int                    i;
+    rtems_interrupt_level  level;
 
    /*
     * Store various code accelerators
@@ -337,7 +337,7 @@ int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
     default_rtems_entry 	= config->defaultEntry;
     rtems_hdl_tbl 		= config->irqHdlTbl;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     /*
      * Start with UIMB IRQ
@@ -387,7 +387,7 @@ int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
 	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
       }
     }
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return 1;
 }
 

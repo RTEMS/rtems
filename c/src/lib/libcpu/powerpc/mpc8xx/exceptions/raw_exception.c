@@ -82,7 +82,7 @@ int mpc8xx_vector_is_valid(rtems_vector vector)
 
 int mpc8xx_set_exception  (const rtems_raw_except_connect_data* except)
 {
-    unsigned int level;
+    rtems_interrupt_level       level;
 
     if (!mpc8xx_vector_is_valid(except->exceptIndex)) {
       return 0;
@@ -98,7 +98,7 @@ int mpc8xx_set_exception  (const rtems_raw_except_connect_data* except)
       return 0;
     }
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     
     raw_except_table [except->exceptIndex] = *except;
     codemove((void*)mpc8xx_get_vector_addr(except->exceptIndex),
@@ -107,7 +107,7 @@ int mpc8xx_set_exception  (const rtems_raw_except_connect_data* except)
 	     PPC_CACHE_ALIGNMENT);
     except->on(except);
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
     return 1;
 }
 
@@ -124,7 +124,7 @@ int mpc8xx_get_current_exception (rtems_raw_except_connect_data* except)
 
 int mpc8xx_delete_exception (const rtems_raw_except_connect_data* except)
 {
-  unsigned int level;
+  rtems_interrupt_level level;
   
   if (!mpc8xx_vector_is_valid(except->exceptIndex)){
     return 0;
@@ -141,7 +141,7 @@ int mpc8xx_delete_exception (const rtems_raw_except_connect_data* except)
 	     except->hdl.raw_hdl_size)) {
       return 0;
   }
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
   except->off(except);
   codemove((void*)mpc8xx_get_vector_addr(except->exceptIndex),
@@ -153,7 +153,7 @@ int mpc8xx_delete_exception (const rtems_raw_except_connect_data* except)
   raw_except_table[except->exceptIndex] = default_raw_except_entry;
   raw_except_table[except->exceptIndex].exceptIndex = except->exceptIndex;
 
-  _CPU_ISR_Enable(level);
+  rtems_interrupt_enable(level);
     
   return 1;
 }
@@ -163,8 +163,8 @@ int mpc8xx_delete_exception (const rtems_raw_except_connect_data* except)
  */
 int mpc8xx_init_exceptions (rtems_raw_except_global_settings* config)
 {
-    unsigned 			i;
-    unsigned int level;
+    int                    i;
+    rtems_interrupt_level  level;
     
     /*
      * store various accelerators
@@ -173,7 +173,7 @@ int mpc8xx_init_exceptions (rtems_raw_except_global_settings* config)
     local_settings 		= config;
     default_raw_except_entry 	= config->defaultRawEntry;
 
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
     for (i=0; i <= LAST_VALID_EXC; i++) {
       if (!mpc8xx_vector_is_valid(i)){
@@ -190,7 +190,7 @@ int mpc8xx_init_exceptions (rtems_raw_except_global_settings* config)
 	raw_except_table[i].off(&raw_except_table[i]);
       }
     }
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
