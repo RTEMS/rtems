@@ -1,3 +1,14 @@
+2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1257/bsps
+	* startup/bspstart.c: Code outside of cpukit should use the public
+	API for rtems_interrupt_disable/rtems_interrupt_enable. By bypassing
+	the public API and directly accessing _CPU_ISR_Disable and
+	_CPU_ISR_Enable, they were bypassing the compiler memory barrier
+	directive which could lead to problems. This patch also changes the
+	type of the variable passed into these routines and addresses minor
+	style issues.
+
 2007-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Eliminate maximum_drivers configuration parameter

@@ -1,10 +1,7 @@
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps
-	* csb336/network/lan91c11x.c, csb337/startup/bspstart.c,
-	edb7312/irq/irq.c, gba/irq/irq.c, gba/irq/irq_init.c,
-	gp32/startup/bspstart.c, rtl22xx/startup/bspstart.c,
-	shared/abort/abort.c, shared/abort/simple_abort.c,
+	* shared/abort/abort.c, shared/abort/simple_abort.c,
 	shared/irq/irq_init.c: Code outside of cpukit should use the public
 	API for rtems_interrupt_disable/rtems_interrupt_enable. By bypassing
 	the public API and directly accessing _CPU_ISR_Disable and
