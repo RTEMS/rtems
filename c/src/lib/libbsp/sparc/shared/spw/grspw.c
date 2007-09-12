@@ -93,7 +93,6 @@
 /* #define DEBUG_SPACEWIRE_ONOFF */
  
 #ifdef DEBUG_SPACEWIRE_ONOFF
-int DEBUG_printf(const char *fmt, ...);
 #define SPACEWIRE_DBG(fmt, args...)    do { { printk(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__,## args); }} while(0)
 #define SPACEWIRE_DBG2(fmt)            do { { printk(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__); }} while(0)
 #define SPACEWIRE_DBGC(c,fmt, args...) do { if (DEBUG_SPACEWIRE_FLAGS & c) { printk(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__,## args);  }} while(0)

@@ -103,29 +103,6 @@
 
 #include <debug_defs.h>
 
-/*
-#ifdef DEBUG
-#include <debug_defs.h>
-#else
-void silentdbg_init(void);
-void silentdbg_printf(char *fmt, ...);
-void silentdbg_int_printf(char *fmt, ...);
-void silentdbg_get_buf(char *buf, int max);
-int silentdbg_print_buf(int max);
- extern int DEBUG_printf(const char *fmt, ...);
- #define DBG(fmt, args...)    do { silentdbg_printf(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__,## args); } while(0)
- #define DBG2(fmt)            do { silentdbg_printf(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__); } while(0) 
- #define DBGC(c,fmt, args...) do { if (DEBUG_FLAGS & c) { silentdbg_printf(" : %03d @ %18s()]:" fmt , __LINE__,__FUNCTION__,## args);  }} while(0)
- #ifdef DEBUGFUNCS
-  #define FUNCDBG()         do { silentdbg_printf("%s\n\r",__FUNCTION__); } while(0)
-  #define FUNCDBG_INT()
- #else
-  #define FUNCDBG()
-  #define FUNCDBG_INT()     do { silentdbg_int_printf("%s\n\r",__FUNCTION__); } while(0)
- #endif
- 
-#endif
-*/
 /*********************************************************/
 
 /* grcan needs to have it buffers aligned to 1k boundaries */
