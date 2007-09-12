@@ -25,7 +25,7 @@
 
 void bsp_cleanup( void )
 {
-    int level;
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_level  level;
+    rtems_interrupt_disable(level);
     for(;;);
 }
