@@ -110,12 +110,12 @@ static void CleanMainIrqTbl(int irqNum)
 */
 void BSP_enable_main_irq(const rtems_irq_number irqNum) 
 {
-  unsigned bitNum;
-  unsigned int level;
+  unsigned              bitNum;
+  rtems_interrupt_level level;
 
   bitNum = ((int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET;
 
-  _CPU_ISR_Disable(level); 
+  rtems_interrupt_disable(level); 
 
 #if DynamicIrqTbl 
   UpdateMainIrqTbl((int) irqNum);
@@ -129,7 +129,7 @@ void BSP_enable_main_irq(const rtems_irq_number irqNum)
      GT_MAINirqHI_cache |= (1 << bitNum);
      outl(GT_MAINirqHI_cache, GT_CPU_INT_MASK_HI);
   }
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 }
 
 /***************************************************************************
@@ -140,12 +140,12 @@ void BSP_enable_main_irq(const rtems_irq_number irqNum)
 */
 void BSP_disable_main_irq(const rtems_irq_number irqNum) 
 {
-  unsigned bitNum;
-  unsigned int level;
+  unsigned              bitNum;
+  rtems_interrupt_level level;
 
   bitNum = ((int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
 #if DynamicIrqTbl 
   CleanMainIrqTbl((int) irqNum);
@@ -159,7 +159,7 @@ void BSP_disable_main_irq(const rtems_irq_number irqNum)
      GT_MAINirqHI_cache &= ~(1 << bitNum);
      outl(GT_MAINirqHI_cache, GT_CPU_INT_MASK_HI);
   }
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 }
 
 /******************************************************************************
@@ -171,13 +171,15 @@ void BSP_disable_main_irq(const rtems_irq_number irqNum)
 */
 void BSP_enable_gpp_irq(const rtems_irq_number irqNum) 
 {
-  unsigned bitNum;
-  unsigned int mask, level;
-  int group, bit;
+  unsigned              bitNum;
+  unsigned int          mask;
+  int                   group;
+  int                   bit;
+  rtems_interrupt_level level;
 
   bitNum = ((int)irqNum) - BSP_GPP_IRQ_LOWEST_OFFSET;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 
 #if DynamicIrqTbl 
   group = bitNum/8;
@@ -195,7 +197,7 @@ void BSP_enable_gpp_irq(const rtems_irq_number irqNum)
   printk("GPP mask %d \n", inl(GT_GPP_Interrupt_Mask)); 
 #endif
 
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 }
 
 /******************************************************************************
@@ -207,13 +209,16 @@ void BSP_enable_gpp_irq(const rtems_irq_number irqNum)
 */
 void BSP_disable_gpp_irq(const rtems_irq_number irqNum) 
 {
-  unsigned bitNum;
-  unsigned int mask, level;
-  int group, bit;
+  unsigned              bitNum;
+  unsigned int          mask;
+  int                   group;
+  int                   bit;
+  rtems_interrupt_level level;
+
 
   bitNum = ((int)irqNum) - BSP_GPP_IRQ_LOWEST_OFFSET;
 
-  _CPU_ISR_Disable(level);
+  rtems_interrupt_disable(level);
 #if DynamicIrqTbl 
   group = bitNum/8;
   bit = bitNum%8;
@@ -227,7 +232,7 @@ void BSP_disable_gpp_irq(const rtems_irq_number irqNum)
   mask = ~ (1 << bitNum);
   GT_GPPirq_cache &= mask;
   outl(GT_GPPirq_cache, GT_GPP_Interrupt_Mask);
-  _CPU_ISR_Enable (level);
+  rtems_interrupt_enable(level);
 }
 
 /* Only print ten entries for now */
