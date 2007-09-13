@@ -5,16 +5,13 @@
  *
  * CopyRight (C) 1999 valette@crf.canon.fr
  *
- * Special acknowledgement to Till Straumann <strauman@slac.stanford.edu>
- * for providing inputs to the IRQ optimization.
- * 
  * Modified and added support for the MVME5500.
- * Copyright 2003, 2004, Brookhaven National Laboratory and
+ * Copyright 2003, 2004, 2005, Brookhaven National Laboratory and
  *                 Shuchen Kate Feng <feng1@bnl.gov>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE.
+ * http://www.rtems.com/license/LICENSE
  * 
  */
 #include <libcpu/io.h>
@@ -22,14 +19,12 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 #include <libcpu/raw_exception.h>  /* ASM_EXT_VECTOR, ASM_DEC_VECTOR ... */
+/*#define  TRACE_IRQ_INIT*/
 
 extern unsigned int external_exception_vector_prolog_code_size[];
 extern void external_exception_vector_prolog_code();
 extern unsigned int decrementer_exception_vector_prolog_code_size[];
 extern void decrementer_exception_vector_prolog_code();
-extern void GT_GPP_IntHandler0(), GT_GPP_IntHandler1();
-extern void GT_GPP_IntHandler2(), GT_GPP_IntHandler3();
-extern void BSP_GT64260INT_init();
 
 /*
  * default on/off function
@@ -47,115 +42,48 @@ static int connected() {return 1;}
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
-  0, 			 nop_func	, NULL		, nop_func	, nop_func	, not_connected
+  /* vectorIdex,	 hdl	  , handle	, on		, off		, isOn */
+  0, 			 nop_func  , NULL	, nop_func	, nop_func	, not_connected
 };
 
-rtems_irq_prio BSPirqPrioTable[BSP_MAIN_IRQ_NUMBER]={
+rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
   /*
    * This table is where the developers can change the levels of priority
    * based on the need of their applications.
    *
-   * actual priorities for CPU MAIN interrupts 0-63:
+   * actual priorities for CPU MAIN and GPP interrupts (0-95) 
+   *
    *	0   means that only current interrupt is masked (lowest priority)
-   *	255 means all other interrupts are masked
+   *	255 is only used by bits 24, 25, 26 and 27 of the CPU high
+   *        interrupt Mask: (e.g. GPP7_0, GPP15_8, GPP23_16, GPP31_24). 
+   *        The IRQs of those four bits are always enabled. When it's used,
+   *        the IRQ number is never listed in the dynamic picIsrTable[96].
+   *
+   *        The priorities of GPP interrupts were decided by their own
+   *        value set at  BSPirqPrioTable.
+   *            
    */
   /* CPU Main cause low interrupt */
   /* 0-15 */
-  0, 0, 0, 0, 0, 0, 0, 0, 4/*Timer*/, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 64/*Timer*/, 0, 0, 0, 0, 0, 0, 0,
    /* 16-31 */
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   /* CPU Main cause high interrupt */
   /* 32-47 */
-  1/*10/100MHZ*/, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  2/*10/100MHZ*/, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   /* 48-63 */
-  0, 0, 0, 0, 0, 0, 0, 0, 0/*serial*/, 3/*VME*/, 2/*1GHZ*/, 5/*WD*/, 0, 0, 0, 0
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  255 /*GPP0-7*/, 255/*GPP8-15*/, 255/*GPP16-23*/, 255/*GPP24-31*/, 0, 0, 0, 0,
+  /* GPP interrupts */
+  /* GPP0-7 */
+  1/*serial*/,0, 0, 0, 0, 0, 0, 0,
+  /* GPP8-15 */
+  47/*PMC1A*/,46/*PMC1B*/,45/*PMC1C*/,44/*PMC1D*/,30/*VME0*/, 29/*VME1*/,3,1,
+  /* GPP16-23 */
+  37/*PMC2A*/,36/*PMC2B*/,35/*PMC2C*/,34/*PMC2D*/,23/*1GHZ*/, 0,0,0,  
+  /* GPP24-31 */
+  7/*watchdog*/, 0,0,0,0,0,0,0
 };
-
-/* The mainIrqTbl[64] lists the enabled CPU main interrupt
- * numbers [0-63] starting from the highest priority one
- * to the lowest priority one.
- *
- * The highest priority interrupt is located at mainIrqTbl[0], and 
- * the lowest priority interrupt is located at 
- * mainIrqTbl[MainIrqTblPtr-1].
- */
-
-#if DynamicIrqTbl
-/* The mainIrqTbl[64] is updated dynamically based on the priority
- * levels set at BSPirqPrioTable[64], as the BSP_enable_main_irq() and
- * BSP_disable_main_irq() commands are invoked.
- *
- * Caveat: The eight GPP IRQs for each BSP_MAIN_GPPx_y_IRQ group are set
- * at the same main priority in the BSPirqPrioTable, while the 
- * sub-priority levels for the eight GPP in each group  are sorted 
- * statically by developers in the GPPx_yIrqTbl[8] from the highest
- * priority to the lowest one.
- */
-int MainIrqTblPtr=0;
-unsigned long long MainIrqInTbl=0;
-unsigned char GPPinMainIrqTbl[4]={0,0,0,0};
-/* BitNums for Main Interrupt Lo/High Cause, -1 means invalid bit */ 
-unsigned int mainIrqTbl[BSP_MAIN_IRQ_NUMBER]={  
-                               -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1};
-#else
-/* Pre-sorted for IRQ optimization, and prioritization 
- * The interrupts sorted are :
-
- 1. Watchdog timer      (GPP #25)
- 2. Timers 0-1          (Main interrupt low cause, bit 8)
- 3. VME interrupt       (GPP #12)
- 4. 1 GHZ ethernet      (GPP #20)
- 5. 10/100 MHZ ethernet (Main interrupt high cause, bit 0)
- 6. COM1/COM2           (GPP #0)
-
-*/ 
-/* BitNums for Main Interrupt Lo/High Cause, -1 means invalid bit */ 
-unsigned int mainIrqTbl[64]={ BSP_MAIN_GPP31_24_IRQ, /* 59:watchdog timer */
-			       BSP_MAIN_TIMER0_1_IRQ, /* 8:Timers 0-1 */
-			       BSP_MAIN_GPP15_8_IRQ,  /* 57:VME interrupt */
-			       BSP_MAIN_GPP23_16_IRQ, /* 58: 1 GHZ ethernet */
-			       BSP_MAIN_ETH0_IRQ,  /* 32:10/100 MHZ ethernet */
-			       BSP_MAIN_GPP7_0_IRQ, /* 56:COM1/COM2 */
-			       -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-			       -1, -1, -1, -1};
-#endif
-
-unsigned int GPP7_0IrqTbl[8]={0, /* COM1/COM2 */
-                               -1, -1, -1, -1, -1, -1, -1};
-unsigned int GPP15_8IrqTbl[8]={ 4, 5, 6, 7,  /* VME interrupt 0-3 */
-				0, 1, 2, 3   /* PMC1 INT A, B, C, D */};
-unsigned int GPP23_16IrqTbl[8]={4, /* 82544 1GHZ ethernet (20-16=4)*/
-				0, 1, 2, 3, /* PMC2 INT A, B, C, D */
-			     	-1, -1, -1};
-unsigned int GPP31_24IrqTbl[8]={1, /* watchdog timer (25-24=1) */
-				-1, -1, -1, -1, -1, -1, -1};
-
-static int
-doit(unsigned intNum, rtems_irq_hdl handler, int (*p)(const rtems_irq_connect_data*))
-{
-	rtems_irq_connect_data d={0};
-	d.name = intNum;
-	d.isOn = connected;
-	d.hdl  = handler;
-	return p(&d);
-}
-
-int BSP_GT64260_install_isr(unsigned intNum,rtems_irq_hdl handler)
-{
-  return doit(intNum, handler, BSP_install_rtems_irq_handler);
-}
 
 /*
  * This code assumes the exceptions management setup has already
@@ -174,7 +102,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Initializing the interrupt controller of the GT64260\n");
 #endif       
-  BSP_GT64260INT_init();
 
 #ifdef TRACE_IRQ_INIT  
   printk("Going to re-initialize the rtemsIrq table %d\n",BSP_IRQ_NUMBER);
@@ -186,8 +113,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    * re-init the rtemsIrq table
    */
   for (i = 0; i < BSP_IRQ_NUMBER; i++) {
-      rtemsIrq[i]      = defaultIrq;
-      rtemsIrq[i].name = i;
+    rtemsIrq[i]      = defaultIrq;    
+    rtemsIrq[i].name = i;
   }
 
   /*
@@ -209,13 +136,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
   }
+#ifdef TRACE_IRQ_INIT  
+  printk("Done setup irq mngt configuration\n");
+#endif      
 
-  /* Connect the GPP int handler to each of the associated main cause bits */
-  BSP_GT64260_install_isr(BSP_MAIN_GPP7_0_IRQ, GT_GPP_IntHandler0); /* COM1 & COM2, .... */
-  BSP_GT64260_install_isr(BSP_MAIN_GPP15_8_IRQ, GT_GPP_IntHandler1);
-  BSP_GT64260_install_isr(BSP_MAIN_GPP23_16_IRQ, GT_GPP_IntHandler2);
-  BSP_GT64260_install_isr(BSP_MAIN_GPP31_24_IRQ, GT_GPP_IntHandler3);
- 
   /*
    * We must connect the raw irq handler for the two
    * expected interrupt sources : decrementer and external interrupts.

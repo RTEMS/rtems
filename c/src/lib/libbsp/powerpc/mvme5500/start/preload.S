@@ -1,9 +1,8 @@
 /*
- * Mini-loader for the SVGM and MVME5500 BSP.
+ * Mini-loader for the SVGM BSP.
  *
  * $Id$
  *
- * Copyright (C) 2003, 2004
  * Author: Till Straumann, 10/2001 <strauman@slac.stanford.edu>
  *
  * Some ideas are borrowed from the powerpc/shared/bootloader
@@ -11,9 +10,8 @@
  *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
- *
- * The SVGM firmware is unable to load the RTEMS image below
- * 0x2000 (I believe their stack is growing below 0x1000) ?
+ * The SMON firmware is unable to load the RTEMS image below
+ * 0x2000 (I believe their stack is growing below 0x1000).
  * 
  * The code provided by this file is responsible for the performing
  * the following steps:
@@ -23,13 +21,11 @@
  *       b) will not be overwritten by the moved image
  *          nor the final BSS segment (rtems clears BSS
  *          before saving the command line).
- *  2) Initialize and setup the memory controller to prepare the
- *     SDRAM before moving the image to it.
- *  3) Move the entire image (including this very file) to
+ *  2) Move the entire image (including this very file) to
  *     its final location starting at 0x0000.
  *     It is important to note that _NO_STACK_ is available
  *     during this step. Also, there is probably no return to
- *     Monitor because relocating RTEMS will destroy vital Monitor
+ *     SMON because relocating RTEMS will destroy vital SMON
  *     data (such as its stack).
  *  3) Flush the cache to make sure the relocated image is actually
  *     in memory.
@@ -44,10 +40,10 @@
  *
  *
  *  Calling convention:
- *     R1: Monitor SP
+ *     R1: SMON SP
  *     R3: command line string start
  *     R4: command line string end + 1
- *     R5: where Monitor put the image
+ *     R5: where SMON put the image
  *         if R5 is 0, the preloader will use its entry point
  *         as the image starting address.
  *         See NOTE below.
@@ -74,10 +70,7 @@
  *
  */
 #if 0
-/* TODO: I dont know where the appropriate CPU model is to be defined
- *       when including this to get PPC_CACHE_ALIGNMENT I get an error...
- */
-#include <rtems/score/ppc.h>
+#include <rtems/score/powerpc.h>
 #else
 #ifndef PPC_CACHE_ALIGNMENT
 #define PPC_CACHE_ALIGNMENT	32
@@ -90,8 +83,8 @@
 /* Note that major modifications may be needed
  * if DESTINATION_ADDR is not 0
  */
-#define KERNELBASE		0x0
-#define INITIAL_STACK		0x78			/* 8-byte aligned */
+#define KERNELBASE			0x0
+#define INITIAL_STACK		0x78					/* 8-byte aligned */
 #define CACHE_LINE_SIZE		PPC_CACHE_ALIGNMENT 	/* autodetect doesn't work, see below */
 #define	ASSUME_RTEMS_INSTALLS_VECTORS				/* assume we need not load vectors */
 #define DONT_USE_R5_ENTRY							/* always dynamically determine the address we're running from */
@@ -108,10 +101,8 @@ preload:
 	/* find out where we are */
 	bl	here
 here:
-	/* MOTLoad had MSR_EE turned on.  Disable it.*/
-	mfmsr   r0
-	xori    r0, r0, MSR_EE
-	mtmsr   r0               
+	xor		r0,r0,r0
+	mtmsr	r0	/* clear MSR to known state */
 	mflr	r5
 	addi	r5,r5,-(here-preload)
 	lis		r27,_edata@h
@@ -147,10 +138,9 @@ here:
 	add		r16, r5, r27	/* image end + 1 */
 	cmpw	r16, r18
 	bge		ishighenough
-	mr		r16,r18			/* __rtems_end is higher than
-	                                         * the image end
-					         * (without bss)
-					         */
+	mr		r16,r18			/* __rtems_end is higher than the image end
+							 * (without bss)
+							 */
 ishighenough:
 	cmpw	r16, r3 	    /* destination start > current string start ? */
 	ble		leaveparms		/* string already after dst, leave it */
@@ -165,7 +155,7 @@ leaveparms:
 	add		r7, r6, r17		/* destination + strlen */
 
 #ifndef CACHE_LINE_SIZE
-	/* Oh well, Monitor firmware has inhibited the cache, so this
+	/* Oh well, SMON has inhibited the cache, so this
 	 * nice routine doesn't work...
 	 */
 	/* figure out the cache line size */
@@ -187,7 +177,7 @@ leaveparms:
 	li		r16,CACHE_LINE_SIZE
 #endif
 	
-	lis		r3,preload@h
+    lis		r3,preload@h
 	ori		r3,r3,preload@l
 	mr		r4,r5			/* from-addr */
 	li		r5,_preload_size/* this is never > 16k */
@@ -202,8 +192,8 @@ leaveparms:
 return_here:
 	/* now we move the entire rest of the image */
 #ifdef ASSUME_RTEMS_INSTALLS_VECTORS
-	lis		r3,__rtems_entry_point@h
-	ori		r3,r3,__rtems_entry_point@l
+	lis		r3,__rtems_start@h
+	ori		r3,r3,__rtems_start@l
 	lis		r0,preload@h	/* calculate/adjust from address */
 	ori		r0,r0,preload@l
 	sub		r0,r3,r0
@@ -218,19 +208,19 @@ return_here:
 	/* OK, now everything should be in place.
      * we are ready to start...
 	 */
-	/* R6: start of command line */
-	/* R7: end of command line +1 */
-	
+
 	/* setup initial stack for rtems early boot */
-	lis		r1, INITIAL_STACK
+	li		r1,INITIAL_STACK
 	/* disable the MMU and fire up rtems */
 	mfmsr	r0
-	ori 	r0,r0,MSR_IR|MSR_DR|MSR_IP
+	ori 	r0,r0,MSR_IR|MSR_DR|MSR_IP|MSR_ME
 	xori	r0,r0,MSR_IR|MSR_DR
 	mtsrr1	r0
 	lis		r0,__rtems_entry_point@h
 	ori		r0,r0,__rtems_entry_point@l
 	mtsrr0	r0
+	/* R6: start of command line */
+	/* R7: end of command line +1 */
 	rfi
 
     /* domove(to, from, nbytes):
@@ -238,7 +228,7 @@ return_here:
      * move a R5 bytes from R4 to R3 and flush
      * the caches for the destination memory
      * region. R16 provides the cache line size.
-     * DESTROYS: R0, R17, R18, CTR, CR
+	 * DESTROYS: R0, R17, R18, CTR, CR
      */
 domove:
 	addi	r0,r5,3			/* convert to word count */
@@ -258,18 +248,18 @@ domove:
 	beq		3f				/* nothing to do */
 #endif
 #if defined(CACHE_LINE_SIZE) && CACHE_LINE_SIZE > 0
-	add	r17,r3,r5		/* target end pointer */
+	add		r17,r3,r5		/* target end pointer */
 	subi	r0,r16,1
-	add	r17,r17,r0
+	add		r17,r17,r0
 	andc	r17,r17,r0		/* cache aligned target end pointer */
-	mr	r18,r3
+	mr		r18,r3
 2:	cmpw	r18,r17
 	dcbst	0,r18			/* write out data cache line */
 	icbi	0,r18			/* invalidate corresponding i-cache line */
-	add	r18,r18,r16
-	blt	2b
-	sync		               /*  make sure data is written back */
-	isync		               /*  invalidate possibly preloaded instructions */
+	add		r18,r18,r16
+	blt		2b
+	sync					/* make sure data is written back */
+	isync					/* invalidate possibly preloaded instructions */
 #endif
 3:
 	blr

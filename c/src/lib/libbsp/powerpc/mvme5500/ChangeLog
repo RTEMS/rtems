@@ -1,13 +1,18 @@
-2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+2007-09-07      Kate Feng <feng1@bnl.gov>
 
-	PR 1257/bsps
-	* irq/GT64260Int.c, irq/irq.c: Code outside of cpukit should use the
-	public API for rtems_interrupt_disable/rtems_interrupt_enable. By
-	bypassing the public API and directly accessing _CPU_ISR_Disable and
-	_CPU_ISR_Enable, they were bypassing the compiler memory barrier
-	directive which could lead to problems. This patch also changes the
-	type of the variable passed into these routines and addresses minor
-	style issues.
+	* ChangeLog, Makefile.am, README, README.booting, README.irq,
+	preinstall.am, GT64260/MVME5500I2C.c, include/bsp.h, irq/irq.c,
+	irq/irq.h, irq/irq_init.c, pci/detect_host_bridge.c, pci/pci.c,
+	pci/pci_interface.c, pci/pcifinddevice.c, start/preload.S,
+	startup/bspclean.c, startup/bspstart.c, startup/pgtbl_activate.c,
+	startup/reboot.c, vectors/bspException.h, vectors/exceptionhandler.c:
+	Merge my improvements in this BSP including a new network
+	driver for the 1GHz NIC.
+	* network/if_100MHz/GT64260eth.c, network/if_100MHz/GT64260eth.h,
+	network/if_100MHz/GT64260ethreg.h, network/if_100MHz/Makefile.am,
+	network/if_1GHz/Makefile.am, network/if_1GHz/POSSIBLEBUG,
+	network/if_1GHz/if_wm.c, network/if_1GHz/if_wmreg.h,
+	network/if_1GHz/pci_map.c, network/if_1GHz/pcireg.h: New files.
 
 2007-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 

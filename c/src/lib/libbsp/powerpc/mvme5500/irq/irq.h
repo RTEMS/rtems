@@ -15,12 +15,13 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * Copyright 2004, Brookhaven National Laboratory and
+ * Copyright 2004, 2005 Brookhaven National Laboratory and
  *                 Shuchen Kate Feng <feng1@bnl.gov> 
  *
  *    - modified shared/irq/irq.h for Mvme5500 (no ISA devices/PIC)
  *    - Discovery GT64260 interrupt controller instead of 8259.
  *    - Added support for software IRQ priority levels. 
+ *    - modified to optimize the IRQ latency and handling
  *
  *  $Id$
  */
@@ -28,13 +29,14 @@
 #ifndef LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 
+/*#define BSP_SHARED_HANDLER_SUPPORT      1*/
 #include <rtems/irq.h>
 
 #define BSP_ASM_IRQ_VECTOR_BASE 0x0
 
 #ifndef ASM
 
-#define DynamicIrqTbl 1
+#define OneTierIrqPrioTbl 1
 
 /*
  * Symbolic IRQ names and related definitions.
@@ -83,7 +85,8 @@
    * Summary
    */
 #define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
-#define BSP_MAIN_IRQ_NUMBER            (64)
+#define BSP_MAIN_IRQ_NUMBER             (64)
+#define BSP_PIC_IRQ_NUMBER              (96)
 #define BSP_LOWEST_OFFSET		(BSP_MICL_IRQ_LOWEST_OFFSET)
 #define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
 
@@ -109,6 +112,7 @@
 #define BSP_MAIN_GPP31_24_IRQ         (BSP_MICH_IRQ_LOWEST_OFFSET+27)
 
   /* on the MVME5500, these are the GT64260B external GPP0 interrupt */
+#define BSP_PCI_IRQ_LOWEST_OFFSET       (BSP_GPP_IRQ_LOWEST_OFFSET)
 #define BSP_UART_COM2_IRQ		(BSP_GPP_IRQ_LOWEST_OFFSET)
 #define BSP_UART_COM1_IRQ		(BSP_GPP_IRQ_LOWEST_OFFSET)
 #define BSP_GPP8_IRQ_OFFSET		(BSP_GPP_IRQ_LOWEST_OFFSET+8)
@@ -129,29 +133,7 @@
    */
 #define BSP_DECREMENTER		(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 
-typedef unsigned int rtems_GTirq_masks;
-
-extern rtems_GTirq_masks GT_GPPirq_cache;
-extern rtems_GTirq_masks GT_MAINirqLO_cache, GT_MAINirqHI_cache;
-
-void BSP_enable_main_irq(unsigned irqNum);
-void BSP_disable_main_irq(unsigned irqNum);
-void BSP_enable_gpp_irq(unsigned irqNum);
-void BSP_disable_gpp_irq(unsigned irqNum); 
- 
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
-extern int gpp_int_error;
-#if  DynamicIrqTbl
-extern int MainIrqTblPtr;
-extern unsigned long long MainIrqInTbl;
-extern unsigned char GPPinMainIrqTbl[4];
-#endif
-extern unsigned int mainIrqTbl[64];
-extern unsigned int GPP7_0IrqTbl[8];
-extern unsigned int GPP15_8IrqTbl[8];
-extern unsigned int GPP23_16IrqTbl[8];
-extern unsigned int GPP31_24IrqTbl[8];
 
 #endif
-
 #endif

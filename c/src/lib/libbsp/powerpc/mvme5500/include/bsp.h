@@ -7,7 +7,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  S. Kate Feng 12/03 : Modified it to support the MVME5500 board.
+ *  S. Kate Feng 2003-2007 : Modified it to support the mvme5500 BSP.
  *
  */
 
@@ -53,6 +53,13 @@
 #define BSP_MAX_PCI_BUS  (BSP_MAX_PCI_BUS_ON_PCI0+BSP_MAX_PCI_BUS_ON_PCI1)
 
 
+/* The glues to Till's vmeUniverse, although the name does not
+ * actually reflect the relevant architect of the MVME5500.
+ * Till TODO ? :  BSP_PCI_DO_EOI instead ? 
+ * BSP_EXT_IRQ0 instead of BSP_PCI_IRQ0 ?
+ *
+ */
+#define BSP_PIC_DO_EOI  inl(0xc34)  /* PCI IACK */
 #define BSP_PCI_IRQ0 BSP_GPP_IRQ_LOWEST_OFFSET
 
 /*
@@ -103,11 +110,29 @@ extern int BSP_connect_clock_handler (void);
 
 extern unsigned long _BSP_clear_hostbridge_errors();
 
+extern unsigned int BSP_heap_start;
+
+#if 0
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"gt1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_GT64260eth_driver_attach
+#else
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	"wmG1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_i82544EI_driver_attach
+#endif
 
 extern int
 RTEMS_BSP_NETWORK_DRIVER_ATTACH(/* struct rtems_bsdnet_ifconfig * */);
 
+/* As per Linux, This should be in the ppc/system.h */
+
+static inline void memBar()
+{
+    asm volatile("sync":::"memory");
+}
+
+static inline void ioBar()
+{
+    asm volatile("eieio");
+}
 
 #endif 

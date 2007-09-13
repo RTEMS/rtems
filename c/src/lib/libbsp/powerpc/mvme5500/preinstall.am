@@ -19,12 +19,12 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_LIB)
+	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
@@ -49,7 +49,7 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
@@ -61,9 +61,9 @@ $(PROJECT_INCLUDE)/bsp/uart.h: ../../powerpc/shared/console/uart.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
 
-$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+$(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
 
 $(PROJECT_INCLUDE)/bsp/gtpcireg.h: pci/gtpcireg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gtpcireg.h
@@ -106,14 +106,22 @@ $(PROJECT_INCLUDE)/bsp/VPD.h: GT64260/VPD.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VPD.h
 
 if HAS_NETWORKING
-$(PROJECT_INCLUDE)/bsp/GT64260eth.h: network/GT64260eth.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/GT64260eth.h: network/if_100MHz/GT64260eth.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260eth.h
 
-$(PROJECT_INCLUDE)/bsp/GT64260ethreg.h: network/GT64260ethreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/GT64260ethreg.h: network/if_100MHz/GT64260ethreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
+$(PROJECT_INCLUDE)/bsp/if_wmreg.h: network/if_1GHz/if_wmreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/if_wmreg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/if_wmreg.h
+
+$(PROJECT_INCLUDE)/bsp/pcireg.h: network/if_1GHz/pcireg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pcireg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pcireg.h
 endif
+
 $(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
@@ -125,6 +133,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
+
+$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
 
 $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h: ../../shared/vmeUniverse/vmeUniverseDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h

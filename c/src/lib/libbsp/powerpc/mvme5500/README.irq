@@ -1,52 +1,20 @@
-README.irq : Shuchen Kate Feng  <feng1@bnl.gov>, 10/10/04
+README.irq : Shuchen Kate Feng  <feng1@bnl.gov>, Sept. 2, 2007
 
-
-The BSPirqPrioTable[] listed in irq_init.c is where the
+As per implementation in shared PPC code,
+the BSPirqPrioTable[96] listed in irq_init.c is where the
 software developers can change the levels of priority
-for main interrupts based on the need of their
-applications.
+for all the interrupts based on the need of their
+applications.  The IRQs can be eanbled dynamically via the
+BSP_enable_pic_irq(), or disbaled dynamically via the
+BSP_disable_pic_irq(). 
 
 
-Presently, a dynamic IRQ table (e.g. mainIrqTbl[64]), which is
-arranged dynamically based on the priority levels of enabled
-main interrupts, is used in C_dispatch_irq_handler() to
-incorporate the handling of the software priority levels. 
+Support for run-time priority setup could be
+added easily, but there is no action taken yet due to concerns
+over computer security at VME CPU level. 
 
 
-The valid entries listed in mainIrqTbl[64] by the BSP are:
-
-1. Main interrupt 59   (GPP31_24 : no enabled IRQ yet, 
-                        to enable 'watchdog timer' if needed)
-2. Main interrupt 57   (GPP15_8  : VME interrupt enabled,
-                        to enable 'PMC1' if needed)
-3. Main interrupt 58   (GPP23_16 : no enabled IRQ yet,
-                        to enable '1 GHZ ethernet' or 'PMC2'
-                        if needed)
-4. Main interrupt 32   (10/100 MHZ ethernet)
-5. Main interrupt 56   (GPP7_0 : presently only COM1/COM2 enabled)
-
-
-The main IRQs can be added to the mainIrqTbl[] dynamically
-via the BSP_enable_main_irq(), or removed from the mainIrqTbl[]
-dynamically via the BSP_disable_main_irq().
-
-
-Regarding other GPP interrupts not listed in the GPP7_0IrqTbl[8],
-GPP15_8IrqTbl[8], GPP23_16IrqTbl[8], or GPP31_24IrqTbl[8], they
-could be enabled by being added to the correspondent of
-the four aforementioned tables listed in the irq_init.c.
-
-
-Caveat: Presently, the eight GPP IRQs for each BSP_MAIN_GPPx_y_IRQ group
-are set at the same main priority in the BSPirqPrioTable[], while the 
-sub-priority levels for the eight GPP in each group  are sorted 
-statically by developers in the GPPx_yIrqTbl[8] from the highest
-priority to the lowest one.
-
-
-Note :
-1. GPP7-0   (Main interrupt high cause, bit 24)
-2. GPP15-8  (Main interrupt high cause, bit 25)
-3. GPP23-16 (Main interrupt high cause, bit 26)
-4. GPP31-24 (Main interrupt high cause, bit 27)
-
+The software developers are forbidden to setup picIsrTable[],
+as it is a powerful engine for the BSP to find the pending
+highest priority IRQ at run time. It ensures the fastest/faster
+interrupt service to the highest/higher priority IRQ, if pending.
