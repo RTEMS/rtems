@@ -1,6 +1,6 @@
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/inttypes.h newlib-1.15.0/newlib/libc/include/inttypes.h
 --- newlib-1.15.0.orig/newlib/libc/include/inttypes.h	2005-12-16 20:03:12.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/inttypes.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/inttypes.h	2007-09-13 03:11:09.000000000 +0200
 @@ -242,9 +242,12 @@
  #define SCNxMAX		__SCNMAX(x)
  
@@ -19,7 +19,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/inttypes.h newlib-1.15.0/newlib
  #define __SCNPTR(x) __STRINGIFY(l##x)
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.15.0/newlib/libc/include/machine/setjmp.h
 --- newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h	2006-12-18 17:48:03.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/machine/setjmp.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/machine/setjmp.h	2007-09-13 03:11:09.000000000 +0200
 @@ -27,7 +27,7 @@
  
  /* necv70 was 9 as well. */
@@ -31,7 +31,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.15.0/
   * fp2-fp7	for 68881.
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/stdint.h newlib-1.15.0/newlib/libc/include/stdint.h
 --- newlib-1.15.0.orig/newlib/libc/include/stdint.h	2006-08-16 23:39:43.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/stdint.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/stdint.h	2007-09-13 03:11:09.000000000 +0200
 @@ -393,6 +393,9 @@
  #define UINTMAX_C(x)	x##UL
  #endif
@@ -44,7 +44,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/stdint.h newlib-1.15.0/newlib/l
  }
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/errno.h newlib-1.15.0/newlib/libc/include/sys/errno.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/errno.h	2002-09-24 16:10:12.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/errno.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/errno.h	2007-09-13 03:11:09.000000000 +0200
 @@ -148,6 +148,7 @@
  #define ECASECLASH 137  /* Filename exists with different case */
  #define EILSEQ 138
@@ -55,7 +55,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/errno.h newlib-1.15.0/newli
  #define EWOULDBLOCK EAGAIN	/* Operation would block */
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/features.h newlib-1.15.0/newlib/libc/include/sys/features.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/features.h	2006-09-14 00:09:27.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/features.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/features.h	2007-09-13 03:11:09.000000000 +0200
 @@ -38,6 +38,7 @@
  #define _POSIX_MEMLOCK_RANGE		1
  #define _POSIX_MEMORY_PROTECTION	1
@@ -167,7 +167,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/features.h newlib-1.15.0/ne
  #ifdef __cplusplus
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/_types.h newlib-1.15.0/newlib/libc/include/sys/_types.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/_types.h	2004-06-11 22:37:09.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/_types.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/_types.h	2007-09-13 03:11:09.000000000 +0200
 @@ -39,4 +39,7 @@
  /* Iconv descriptor type */
  typedef void *_iconv_t;
@@ -178,7 +178,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/_types.h newlib-1.15.0/newl
  #endif	/* _SYS__TYPES_H */
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h newlib-1.15.0/newlib/libc/include/sys/unistd.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h	2006-11-07 16:33:40.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/sys/unistd.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/unistd.h	2007-09-13 03:11:09.000000000 +0200
 @@ -200,7 +200,7 @@
  int	_EXFUN(getdtablesize, (void));
  int	_EXFUN(setdtablesize, (int));
@@ -431,7 +431,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h newlib-1.15.0/newl
  /* FIXME: This is temporary until winsup gets sorted out.  */
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/tar.h newlib-1.15.0/newlib/libc/include/tar.h
 --- newlib-1.15.0.orig/newlib/libc/include/tar.h	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/tar.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/tar.h	2007-09-13 03:11:09.000000000 +0200
 @@ -0,0 +1,39 @@
 +/*
 + * tar.h
@@ -474,7 +474,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/tar.h newlib-1.15.0/newlib/libc
 +#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/time.h newlib-1.15.0/newlib/libc/include/time.h
 --- newlib-1.15.0.orig/newlib/libc/include/time.h	2005-11-18 16:57:24.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/time.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/time.h	2007-09-13 03:11:09.000000000 +0200
 @@ -226,6 +226,16 @@
  
  #endif
@@ -510,7 +510,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.1
 -#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S
 --- newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S	2002-04-19 21:16:17.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S	2007-09-13 03:11:09.000000000 +0200
 @@ -5,13 +5,14 @@
  #include "ppc-asm.h"
  
@@ -545,7 +545,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	stfdu	14,8(3)		# offset 96
  	stfdu	15,8(3)		# offset 104
  	stfdu	16,8(3)		# offset 112
-@@ -57,12 +64,21 @@
+@@ -57,12 +64,20 @@
  	stfdu	29,8(3)		# offset 216
  	stfdu	30,8(3)		# offset 224
  	stfdu	31,8(3)		# offset 232
@@ -564,11 +564,10 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
 +      addi    3,3,(8 + 12*16) # skip vector regs
 +      b               2f
 +1:
-+#endif
  	/* save Altivec vrsave and vr20-vr31 registers */
  	mfspr	4,256		# vrsave register
  	stwu	4,16(3)		# offset 248
-@@ -90,6 +106,7 @@
+@@ -90,6 +105,7 @@
  	stvx	30,0,3		# offset 416
  	addi	3,3,16
  	stvx	31,0,3		# offset 432
@@ -576,7 +575,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  
  	/* This requires a total of 240 + 8 + 8 + 12 * 16 == 448 bytes. */
  #endif
-@@ -99,13 +116,14 @@
+@@ -99,13 +115,14 @@
  
  
  FUNC_START(longjmp)
@@ -597,7 +596,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	lwz	1,0(3)		# offset 0 
  	lwzu	2,4(3)		# offset 4 
  	lwzu	13,4(3)		# offset 8 
-@@ -129,10 +147,17 @@
+@@ -129,10 +146,17 @@
  	lwzu	31,4(3)		# offset 80
  	lwzu	5,4(3)		# offset 84
  	mtlr	5
@@ -616,7 +615,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	lfdu	14,8(3)         # offset 96 
  	lfdu	15,8(3)         # offset 104
  	lfdu	16,8(3)         # offset 112
-@@ -151,9 +176,17 @@
+@@ -151,9 +175,17 @@
  	lfdu	29,8(3)         # offset 216
  	lfdu	30,8(3)         # offset 224
  	lfdu	31,8(3)         # offset 232
@@ -635,7 +634,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	/* restore Altivec vrsave and v20-v31 registers */
  	lwzu	5,16(3)		# offset 248
  	mtspr	256,5		# vrsave
-@@ -181,6 +214,7 @@
+@@ -181,6 +213,7 @@
  	lvx	30,0,3		# offset 416
  	addi	3,3,16
  	lvx	31,0,3		# offset 432
@@ -645,7 +644,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	mr.	3,4
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/db_local.h newlib-1.15.0/newlib/libc/search/db_local.h
 --- newlib-1.15.0.orig/newlib/libc/search/db_local.h	2002-06-25 01:05:08.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/db_local.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/db_local.h	2007-09-13 03:11:09.000000000 +0200
 @@ -50,7 +50,7 @@
  #define	MAX_PAGE_NUMBER	0xffffffff	/* >= # of pages in a file */
  typedef __uint32_t	pgno_t;
@@ -672,7 +671,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/db_local.h newlib-1.15.0/newlib/
  }
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/extern.h newlib-1.15.0/newlib/libc/search/extern.h
 --- newlib-1.15.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/extern.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/extern.h	2007-09-13 03:11:09.000000000 +0200
 @@ -48,7 +48,7 @@
  int	 __delpair(HTAB *, BUFHEAD *, int);
  int	 __expand_table(HTAB *);
@@ -684,7 +683,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/extern.h newlib-1.15.0/newlib/li
  int	 __get_page(HTAB *, char *, __uint32_t, int, int, int);
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.15.0/newlib/libc/search/hash_bigkey.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c	2006-06-07 21:22:59.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_bigkey.c	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/hash_bigkey.c	2007-09-13 03:11:09.000000000 +0200
 @@ -92,13 +92,13 @@
  	BUFHEAD *bufp;
  	const DBT *key, *val;
@@ -937,7 +936,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.15.0/newl
  		/*
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_buf.c newlib-1.15.0/newlib/libc/search/hash_buf.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_buf.c	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/hash_buf.c	2007-09-13 03:11:09.000000000 +0200
 @@ -176,7 +176,7 @@
  	BUFHEAD *next_xbp;
  	SEGMENT segp;
@@ -967,7 +966,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_buf.c newlib-1.15.0/newlib/
  					oaddr = shortp[shortp[0] - 1];
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.c newlib-1.15.0/newlib/libc/search/hash.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash.c	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/hash.c	2007-09-13 03:11:09.000000000 +0200
 @@ -628,10 +628,10 @@
  {
  	BUFHEAD *rbufp;
@@ -1055,7 +1054,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.c newlib-1.15.0/newlib/libc
  		if (!bp[0]) {
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.h newlib-1.15.0/newlib/libc/search/hash.h
 --- newlib-1.15.0.orig/newlib/libc/search/hash.h	2002-07-02 20:18:58.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/hash.h	2007-09-13 03:11:09.000000000 +0200
 @@ -102,7 +102,7 @@
  #define NCACHED	32			/* number of bit maps and spare 
  					 * points */
@@ -1067,7 +1066,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.h newlib-1.15.0/newlib/libc
  
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_page.c newlib-1.15.0/newlib/libc/search/hash_page.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_page.c	2002-09-19 23:28:51.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_page.c	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/hash_page.c	2007-09-13 03:11:09.000000000 +0200
 @@ -77,16 +77,16 @@
  static __uint32_t	*fetch_bitmap(HTAB *, int);
  static __uint32_t	 first_free(__uint32_t);
@@ -1414,7 +1413,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_page.c newlib-1.15.0/newlib
  	n = sp[0];
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/page.h newlib-1.15.0/newlib/libc/search/page.h
 --- newlib-1.15.0.orig/newlib/libc/search/page.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/page.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/search/page.h	2007-09-13 03:11:09.000000000 +0200
 @@ -74,20 +74,20 @@
   * You might as well do this up front.
   */
@@ -1444,7 +1443,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/page.h newlib-1.15.0/newlib/libc
  }       SPLIT_RETURN;
 diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h
 --- newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h	2007-09-13 03:11:09.000000000 +0200
 @@ -0,0 +1,31 @@
 +/*
 + *
@@ -1479,7 +1478,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.15.
 +#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h
 --- newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h	2004-05-07 22:29:24.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h	2007-09-13 03:11:09.000000000 +0200
 @@ -93,7 +93,6 @@
  #include <sys/resource.h>
  #include <sys/ucred.h>
@@ -1490,7 +1489,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.15.0/new
  #define	FALSE	0
 diff -uNr newlib-1.15.0.orig/newlib/Makefile.am newlib-1.15.0/newlib/Makefile.am
 --- newlib-1.15.0.orig/newlib/Makefile.am	2006-06-05 19:42:57.000000000 +0200
-+++ newlib-1.15.0/newlib/Makefile.am	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/Makefile.am	2007-09-13 03:11:09.000000000 +0200
 @@ -81,7 +81,7 @@
  	libc.a
  endif
@@ -1512,7 +1511,7 @@ diff -uNr newlib-1.15.0.orig/newlib/Makefile.am newlib-1.15.0/newlib/Makefile.am
  # used while building.
 diff -uNr newlib-1.15.0.orig/newlib/Makefile.in newlib-1.15.0/newlib/Makefile.in
 --- newlib-1.15.0.orig/newlib/Makefile.in	2006-12-18 21:32:41.000000000 +0100
-+++ newlib-1.15.0/newlib/Makefile.in	2007-09-12 21:34:47.000000000 +0200
++++ newlib-1.15.0/newlib/Makefile.in	2007-09-13 03:11:09.000000000 +0200
 @@ -103,7 +103,7 @@
  	pdf-recursive ps-recursive uninstall-info-recursive \
  	uninstall-recursive
