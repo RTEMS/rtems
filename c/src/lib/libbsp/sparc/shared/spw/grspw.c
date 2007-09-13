@@ -77,7 +77,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <sched.h>
 #include <ctype.h>
 #include <rtems/bspIo.h>
 #include <ambapp.h>

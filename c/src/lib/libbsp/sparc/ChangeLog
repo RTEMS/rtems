@@ -1,3 +1,8 @@
+2007-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/spw/grspw.c: Remove include of sched.h. It does not appear to
+	be needed and is unavailable when POSIX is disabled.
+
 2007-09-12	Daniel Hellstrom <daniel@gaisler.com>
 
 	* shared/can/grcan.c, shared/include/debug_defs.h, shared/spw/grspw.c:
