@@ -118,7 +118,6 @@ rtems_isr lan91cxx_interrupt_handler(rtems_vector_number v)
 	} else {
 
 		if (event & LAN91CXX_INTERRUPT_TX_SET) {
-			DEBUG_puts("#tx error\n");
 			db_printf("#*tx irq\n");
 			lan91cxx_finish_sent(cpd);
 			put_reg(cpd, LAN91CXX_INTERRUPT,

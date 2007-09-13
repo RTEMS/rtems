@@ -1,3 +1,7 @@
+2007-09-13	Daniel Hellstrom <daniel@gaisler.com>
+
+	* libchip/network/smc91111.c: Eliminate a stray DEBUG_puts().
+
 2007-09-12	Daniel Hellstrom <daniel@gaisler.com>
 
 	* libchip/network/smc91111.c, libchip/network/smc91111.h: Multiple fixes.
