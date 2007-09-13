@@ -186,6 +186,11 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
+  #if defined(BSP_DIRTY_MEMORY)
+  {
+    memset(&end, 0xCF,  (unsigned char *)&RAM_END - (unsigned char *)&end );
+  }
+  #endif
 
   /*
    * Initialize the interrupt related settings
