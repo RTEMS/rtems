@@ -205,9 +205,8 @@ rtems_status_code rtems_task_create(
   *id = the_thread->Object.id;
 
 #if defined(RTEMS_MULTIPROCESSING)
+  the_thread->is_global = is_global;
   if ( is_global ) {
-
-    the_thread->is_global = TRUE;
 
     _Objects_MP_Open(
       &_RTEMS_tasks_Information,

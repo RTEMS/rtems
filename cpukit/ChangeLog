@@ -1,3 +1,9 @@
+2007-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1259/rtems
+	* rtems/src/taskcreate.c: Initialize is_global in all cases since
+	memory is not guaranteed to be zero.
+
 2007-09-12  Sergei Organov  <osv@javad.com>
 
 	PR 1258/rtems
