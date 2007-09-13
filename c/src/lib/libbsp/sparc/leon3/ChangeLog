@@ -1,3 +1,7 @@
+2007-09-13	Daniel Hellstrom <daniel@gaisler.com>
+
+	* Makefile.am: Add smc91111.rel to libbsp.a
+
 2007-09-07	Daniel Hellstrom <daniel@gaisler.com>
 
 	* console/console.c, leon_greth/leon_greth.c,

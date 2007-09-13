@@ -141,10 +141,8 @@ libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel debugio.rel \
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel
-endif
-
-if HAS_NETWORKING
 libbsp_a_LIBADD += leon_greth.rel
+libbsp_a_LIBADD += leon_smc91111.rel
 endif
 
 if HAS_MP
