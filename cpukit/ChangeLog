@@ -1,3 +1,9 @@
+2007-09-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/monitor/monitor.h: Add network commands that were in the
+	network supplement but not in the code.
+	* libmisc/monitor/mon-network.c: New file.
+
 2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1261/cpukit

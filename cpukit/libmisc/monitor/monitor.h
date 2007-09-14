@@ -12,6 +12,7 @@
 #define __MONITOR_H
 
 #include <rtems/error.h>		/* rtems_error() */
+#include <rtems/config.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -492,6 +493,20 @@ void    rtems_monitor_symbol_canonical_by_value(rtems_monitor_symbol_t *, void *
 uint32_t   rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
 void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
 
+#if defined(RTEMS_NETWORKING)
+void mon_ifconfig(
+  int argc,
+  char *argv[],
+  uint32_t command_arg,
+  boolean verbose
+);
+void mon_route(
+  int argc,
+  char *argv[],
+  uint32_t command_arg,
+  boolean verbose
+);
+#endif
 
 /* mon-object.c */
 rtems_monitor_object_info_t *rtems_monitor_object_lookup(

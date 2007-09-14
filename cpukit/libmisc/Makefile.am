@@ -46,6 +46,9 @@ libmonitor_a_SOURCES = monitor/mon-command.c monitor/mon-symbols.c \
     monitor/mon-manager.c monitor/mon-config.c monitor/mon-part.c \
     monitor/mon-region.c monitor/mon-sema.c monitor/symbols.h  \
     monitor/monitor.h
+if LIBNETWORKING
+libmonitor_a_SOURCES += monitor/mon-network.c
+endif
 if HAS_MP
 libmonitor_a_SOURCES += monitor/mon-mpci.c
 endif
