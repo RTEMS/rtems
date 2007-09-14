@@ -86,9 +86,9 @@ void _Watchdog_Tickle(
   }      
 
   do {
-	 watchdog_state = _Watchdog_Remove( the_watchdog );
+     watchdog_state = _Watchdog_Remove( the_watchdog );
 
-	 _ISR_Enable( level );
+     _ISR_Enable( level );
 
      switch( watchdog_state ) {
        case WATCHDOG_ACTIVE:
