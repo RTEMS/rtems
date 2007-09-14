@@ -170,9 +170,10 @@ boolean _POSIX_Threads_Create_extension(
   if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API &&
        _Objects_Get_class( created->Object.id ) == 1 ) {
     executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-    api->signals_blocked = api->signals_blocked;
-  } else
+    api->signals_blocked = executing_api->signals_blocked;
+  } else {
     api->signals_blocked = 0xffffffff;
+  }
 
   _Thread_queue_Initialize(
     &api->Join_List,
