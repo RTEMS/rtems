@@ -410,7 +410,7 @@ void Stack_check_Dump_threads_usage(
 
   (*print_handler)(
     print_context,
-    "0x%08" PRIx32 "  %4s  0x%p - 0x%p   %8" PRId32 "   %8" PRId32 "\n",
+    "0x%08" PRIx32 "  %4s  %08p - %08p   %8" PRId32 "   %8" PRId32 "\n",
     the_thread ? the_thread->Object.id : ~0,
     name,
     stack->area,
@@ -453,7 +453,7 @@ void rtems_stack_checker_report_usage_with_plugin(
 
   (*print)( context, "Stack usage by thread\n");
   (*print)( context, 
-    "    ID      NAME       LOW        HIGH     AVAILABLE      USED\n"
+    "    ID      NAME    LOW        HIGH     AVAILABLE      USED\n"
   );
 
   /* iterate over all threads and dump the usage */
