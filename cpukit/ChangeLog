@@ -1,5 +1,11 @@
 2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1260/cpukit
+	* posix/src/pthread.c: Get initial signals blocked from creating
+	thread not from ourselves.
+
+2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/watchdogtickle.c: Remove tabs.
 
 2007-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
