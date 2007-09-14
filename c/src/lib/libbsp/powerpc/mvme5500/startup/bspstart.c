@@ -14,14 +14,13 @@
  *  Modified to support the MCP750.
  *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
- *  Modified to support the Synergy VGM & Motorola PowerPC boards.
- *  Many thanks to Till Straumann for providing assistance to port the 
- *  BSP_pgtbl_xxx().
- *  (C) by Till Straumann, <strauman@slac.stanford.edu>, 2002, 2004
+ *  Modified to support the Synergy VGM & Motorola PowerPC boards
+ *  (C) by Till Straumann, <strauman@slac.stanford.edu>, 2002, 2004, 2005
  *
- *  Modified to support the MVME5500 board
- *  (C) by S. Kate Feng <feng1@bnl.gov>, 2003, 2004
- *
+ *  Modified to support the MVME5500 board.
+ *  Also, the settings of L1, L2, and L3 caches is not necessary here.
+ *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003, 2004, 2005
+ *  
  *  $Id$
  */
 
@@ -62,19 +61,11 @@
 /* there is no public Workspace_Free() variant :-( */
 #include <rtems/score/wkspace.h>
 
-uint32_t
-_bsp_sbrk_init(uint32_t heap_start, uint32_t *heap_size_p);
-
-/* provide access to the command line parameters */
-char *BSP_commandline_string = 0;
-
 BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
 extern void _return_to_ppcbug();
 extern unsigned long __rtems_end[];
-extern void L1_caches_enables();
 extern unsigned get_L1CR(), get_L2CR(), get_L3CR();
-extern unsigned set_L2CR(unsigned);
 extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup();
 extern void BSP_pgtbl_activate();
@@ -112,6 +103,11 @@ unsigned int BSP_mem_size;
 /*
  * PCI Bus Frequency
  */
+/*
+ * Start of the heap
+ */
+unsigned int BSP_heap_start;
+
 unsigned int BSP_bus_frequency;
 /*
  * processor clock frequency
@@ -123,22 +119,16 @@ unsigned int BSP_processor_frequency;
 unsigned int BSP_time_base_divisor;
 unsigned char ConfVPD_buff[200];
 
+#define CMDLINE_BUF_SIZE	2048
+
+static char cmdline_buf[CMDLINE_BUF_SIZE];
+char *BSP_commandline_string = cmdline_buf;
+
 /*
  * system init stack and soft ir stack size
  */
 #define INIT_STACK_SIZE 0x1000
 #define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
-
-/* calculate the heap start */
-static unsigned long
-heapStart(void)
-{
-unsigned long rval;
-    rval = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
-    if (rval & (CPU_ALIGNMENT-1))
-        rval = (rval + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-	return rval;
-}
 
 void BSP_panic(char *s)
 {
@@ -173,40 +163,7 @@ extern void bsp_postdriver_hook(void); /* see c/src/lib/libbsp/shared/bsppost.c 
 
 extern void bsp_libc_init( void *, uint32_t, int );
 
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
-
-void bsp_pretasking_hook(void)
-{
-    uint32_t        heap_start=heapStart();    
-    uint32_t        heap_size,heap_sbrk_spared;
-    extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
-
-    heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
-
-    heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-   	printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", heap_start, heap_size, heap_sbrk_spared);
-#endif    
-
-    bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-}
+extern void bsp_pretasking_hook(void);
 
 void zero_bss()
 {
@@ -257,65 +214,12 @@ void
 save_boot_params(void *r3, void *r4, void* r5, char *cmdline_start, char *cmdline_end)
 {
 int		i=cmdline_end-cmdline_start;
-CmdLine future_heap=(CmdLine)heapStart();
-
- 	/* get the string out of the stack area into the future heap region;
-	 * assume there's enough memory...
-	 */
-	memmove(future_heap->buf,cmdline_start,i);
-	/* make sure there's an end of string marker */
-	future_heap->buf[i++]=0;
-	future_heap->size=i;
-}
-
-
-/* Configure and enable the L3CR */
-void config_enable_L3CR(unsigned l3cr)
-{
-	unsigned x;
-
-	/* By The Book (numbered steps from section 3.7.3.1 of MPC7450UM) */				
-	/*
-	 * 1: Set all L3CR bits for final config except L3E, L3I, L3PE, and
-	 *    L3CLKEN.  (also mask off reserved bits in case they were included
-	 *    in L3CR_CONFIG)
-	 */
-	l3cr &= ~(L3CR_L3E|L3CR_L3I|L3CR_LOCK_745x|L3CR_L3PE|L3CR_L3CLKEN|L3CR_RESERVED);
-	mtspr(L3CR, l3cr);
-
-	/* 2: Set L3CR[5] (otherwise reserved bit) to 1 */
-	l3cr |= 0x04000000;
-	mtspr(L3CR, l3cr);
-
-	/* 3: Set L3CLKEN to 1*/
-	l3cr |= L3CR_L3CLKEN;
-	mtspr(L3CR, l3cr);
-
-	/* 4/5: Perform a global cache invalidate (ref section 3.7.3.6) */
-	__asm __volatile("dssall;sync");
-	/* L3 cache is already disabled, no need to clear L3E */
-	mtspr(L3CR, l3cr|L3CR_L3I);
-
-	do {
-	       x = mfspr(L3CR);
-	} while (x & L3CR_L3I);
-	
-	/* 6: Clear L3CLKEN to 0 */
-	l3cr &= ~L3CR_L3CLKEN;
-	mtspr(L3CR, l3cr);
-
-	/* 7: Perform a 'sync' and wait at least 100 CPU cycles */
-	__asm __volatile("sync");
-	rtems_bsp_delay_in_bus_cycles(100);
-
-	/* 8: Set L3E and L3CLKEN */
-	l3cr |= (L3CR_L3E|L3CR_L3CLKEN);
-	mtspr(L3CR, l3cr);
-
-	/* 9: Perform a 'sync' and wait at least 100 CPU cycles */
-	__asm __volatile("sync");
-
-	rtems_bsp_delay_in_bus_cycles(100);
+	if ( i >= CMDLINE_BUF_SIZE )
+		i = CMDLINE_BUF_SIZE-1;
+	else if ( i < 0 )
+		i = 0;
+        memmove(cmdline_buf, cmdline_start, i);
+	cmdline_buf[i]=0;
 }
 
 /*
@@ -346,6 +250,24 @@ void bsp_start( void )
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl	pt=0;
+
+  /* Till Straumann: 4/2005
+   * Need to map the system registers early, so we can printk...
+   * (otherwise we silently die)
+   */
+  /*
+   * Kate Feng : PCI 0 domain memory space, want to leave room for the VME window 
+   */
+  setdbat(2, PCI0_MEM_BASE, PCI0_MEM_BASE, 0x10000000, IO_PAGE);
+
+  /* Till Straumann: 2004
+   * map the PCI 0, 1 Domain I/O space, GT64260B registers
+   * and the reserved area so that the size is the power of 2.
+   * 
+   */
+  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x2000000, IO_PAGE);
+
+
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
@@ -353,15 +275,6 @@ void bsp_start( void )
   myCpu 	= get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-  /*
-   * enables L1 Cache. Note that the L1_caches_enables() codes checks for
-   * relevant CPU type so that the reason why there is no use of myCpu...
-   *
-   * MOTLoad default is good. Otherwise, one would have to disable L2, L3
-   * first before settting L1.  Then L1->L2->L3.
-   * 
-   L1_caches_enables();*/
-  
 #ifdef SHOW_LCR1_REGISTER
   l1cr = get_L1CR();
   printk("Initial L1CR value = %x\n", l1cr); 
@@ -390,8 +303,8 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+  BSP_heap_start = ((uint32_t) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE;
+  intrStack = BSP_heap_start - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);
@@ -414,16 +327,6 @@ void bsp_start( void )
    * access
    * More PCI1 memory mapping to be done after BSP_pgtbl_activate.
    */
-  /*
-   * PCI 0 domain memory space, want to leave room for the VME window 
-   */
-  setdbat(2, PCI0_MEM_BASE, PCI0_MEM_BASE, 0x10000000, IO_PAGE);
-
-  /* map the PCI 0, 1 Domain I/O space, GT64260B registers
-   * and the reserved area so that the size is the power of 2.
-   */
-  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x2000000, IO_PAGE);
-
   printk("-----------------------------------------\n");
   printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
   printk("-----------------------------------------\n");
@@ -485,7 +388,7 @@ void bsp_start( void )
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
   Cpu_table.clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
   Cpu_table.exceptions_in_RAM 	 = TRUE;
-  _CPU_Table                     = Cpu_table;/* <skf> for rtems_bsp_delay() */
+  _CPU_Table                     = Cpu_table;/* S. Kate Feng <feng1@bnl.gov>, for rtems_bsp_delay() */
 
   printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size); 
   work_space_start = 
@@ -503,50 +406,10 @@ void bsp_start( void )
    */
    BSP_rtems_irq_mng_init(0);
 
-  /*
-   * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
-   * relevant CPU type (mpc750)...
-   *
-   * It also takes care of flushing the cache under certain conditions:
-   *   current    going to (E==enable, I==invalidate)
-   *     E           E | I	-> __NOT_FLUSHED_, invalidated, stays E
-   *     E               I	-> flush & disable, invalidate
-   *     E           E		-> nothing, stays E
-   *     0           E | I	-> not flushed, invalidated, enabled
-   *     0             | I	-> not flushed, invalidated, stays off
-   *     0           E      -> not flushed, _NO_INVALIDATE, enabled
-   *
-   * The first and the last combinations are potentially dangerous!
-   *
-   * NOTE: we assume the essential cache parameters (speed, size etc.)
-   *       have been set correctly by the firmware!
-   *
-   */
 #ifdef SHOW_LCR2_REGISTER
   l2cr = get_L2CR();
   printk("Initial L2CR value = %x\n", l2cr);
 #endif  
-#if 0
-  /* Again, MOTload setup seems to be fine. Otherwise, one would
-   * have to disable the L3 cahce, then R2 ->R3
-   */
-  if ( -1 != (int)l2cr ) {
-	/* -1 would mean that this machine doesn't support L2 */
-
-	l2cr &= ~( L2CR_LOCK_745x); /* clear 'data only' and 'instruction only' */
-	l2cr |= L2CR_L3OH0;    /* L3 output hold 0 should be set */
-	if ( ! (l2cr & L2CR_L2E) ) {
-	    /* we are going to enable the L2 - hence we
-	     * MUST invalidate it first; however, if
-	     * it was enabled already, we MUST NOT
-	     * invalidate it!!
-	     */
-	     l2cr |= L2CR_L2E | L2CR_L2I;
-	     l2cr=set_L2CR(l2cr);
-        }
-	l2cr=set_L2CR(l2cr);
-  }
-#endif
 
 #ifdef SHOW_LCR3_REGISTER
   /* L3CR needs DEC int. handler installed for bsp_delay()*/
@@ -554,22 +417,6 @@ void bsp_start( void )
   printk("Initial L3CR value = %x\n", l3cr);
 #endif  
 
-#if 0 
-  /* Again, use the MOTLoad default for L3CR again */
-  if ( -1 != (int)l3cr ) {
- 	/* -1 would mean that this machine doesn't support L3 */
-        /* BSD : %2 , SDRAM late wirte
-	   l3cr |= L3SIZ_2M|L3CLK_20|L3RT_PIPELINE_LATE; */
-        /* MOTLOad :0xDF826000-> %5, 4 clocks sample point,3 p-clocks SP */
-        l3cr |= L3CR_L3PE| L3SIZ_2M|L3CLK_50|L3CKSP_4|L3PSP_3;
-
-	/* TOCHECK MOTload had L2 cache enabled, try to set nothing first */
-	if ( !(l3cr & L3CR_L3E)) {
-           l3cr |= L3CR_L3E | L3CR_L3I;
-	   config_enable_L3CR(l3cr);
-        }
-  }
-#endif
 
   /* Activate the page table mappings only after
    * initializing interrupts because the irq_mng_init()
@@ -603,19 +450,6 @@ void bsp_start( void )
    * PCI config space scanning code will trip otherwise :-(
    */
   _BSP_clear_hostbridge_errors(0, 1 /*quiet*/);
-
-  /*
-   * Initialize VME bridge - needs working PCI
-   * and IRQ subsystems...
-   */
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Going to initialize VME bridge\n");
-#endif
-  /* VME initialization is in a separate file so apps which don't use
-   * VME or want a different configuration may link against a customized
-   * routine.
-   */
-  BSP_vme_config();
 
   /* Read Configuration Vital Product Data (VPD) */
   if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))

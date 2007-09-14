@@ -1,6 +1,39 @@
 #
-#  $Id$
+#  $Id: README,v 1.3.1  Shuchen Kate Feng, NSLS, BNL (08/27/07)
 #
+
+Please reference README.booting for the boot/load process.
+
+For the priority setting of the Interrupt Requests (IRQs), please
+reference README.irq 
+
+The BSP is built and tested on the 4.7.1 and 4.7.99.2 CVS RTEMS release.
+
+I believe in valuable real-time programming, where technical neatness,
+performance and truth are.  Any suggestion, bug reports, or even bug
+fixes (great!) are welcome so that I still believe what I believe.
+
+
+ACKNOWLEDGEMENTS
+----------------
+Acknowledgements:
+
+Valuable information was obtained from the following:
+1) Marvell NDA document for the discovery system controller.
+Other related documents are listed at :
+http://www.aps.anl.gov/epics/meetings/2006-06/RTEMS_Primer_SIG/RTEMS_BSP_MVME5500.pdf
+2) netBSD: For the two NICS and some headers :
+           Allegro Networks, Inc., Wasabi Systems, Inc.  
+3) RTEMS: For the SVGM5 BSP
+          Stanford Linear Accelerator Center, Till Straumann 
+
+ This BSP also builds on top of the work of others who have contributed
+ to similar RTEMS powerpc shared and motorola_powerpc BSPs, most notably
+ Eric Valette, Till Straumann, Eric Norum and others.
+
+LICENSE
+-------
+See ./LICENSE file.
 
 BSP NAME:           mvme5500
 BOARD:              MVME5500 by Motorola
@@ -11,9 +44,6 @@ COPROCESSORS:       N/A
 MODE:               32/64 bit mode (support 32 bit for now)
 DEBUG MONITOR:      MOTLoad
 SYSTEM CONTROLLER:  GT64260B
-
-OTHER README FILES: README.booting,README.rtems-4.6.0-patch,README.VME,
-		    README.irq
 
 PERIPHERALS
 ===========

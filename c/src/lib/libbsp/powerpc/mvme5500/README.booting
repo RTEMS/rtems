@@ -1,18 +1,15 @@
-README.booting: written by S. Kate Feng <feng1@bnl.gov>, 2004/10/11
+README.booting: written by S. Kate Feng <feng1@bnl.gov>, Aug. 28, 2007
 
 The bootloader is adapted from Till Straumann's Generic Mini-loader,
-which he wrote originally for the SVGM powerpc board. Part of the
-BSP was derived from the "RTEMS-PowerPC BSPs" and the NetBSD projects.
-As of today, the BSP is built and tested on the RTEMS-4.6.0
-release with small patches I added (see README.rtems-4.6.0-patch
-and rtems-4.6.0-patch/ directory).
-
+which he wrote originally for the SVGM powerpc board. 
+The BSP is built and tested on the 4.7 CVS RTEMS release.
 
 Booting requirement :
 -------------------------
 
-1) One needs to setup BOOTP/DHCP and TFTP servers and /etc/bootptab
-   properly to boot the system.  (Note : EPICS needs a NTP server).
+1) One needs to setup BOOTP/DHCP and TFTP servers and /etc/bootptab(BOOTP)
+   or /etc/dhcpd.conf (DHCP) properly to boot the system.
+   (Note : EPICS needs a NTP server).
  
 2) Please copy the prebuilt RTEMS binary (e.g. misc/rtems5500-cexp.bin)
    and perhaps others (e.g. misc/st.sys) to the /tftpboot/epics/hostname/bin/
@@ -35,8 +32,10 @@ MVME5500>
 Note : (cxx.xx.xx.xx is the client IP address and 
         sxx.xx.xx.xx is the server IP address)
 
-4) Other reference web sites:
+4) Other reference web sites for mvme5500 BSP:
 http://lansce.lanl.gov/EPICS/presentations/KateFeng%20RTEMS-mvme55001.ppt
+http://www.nsls.bnl.gov/facility/expsys/software/EPICS/
+http://www.nsls.bnl.gov/facility/expsys/software/EPICS/FAQ.txt
 
 5) When generating code (especially C++) for this system, one should
    use at least gcc-3.2 (preferrably a copy downloaded from the RTEMS
@@ -53,10 +52,3 @@ other useful utilities such as telnet, nfs, and so on.
 tools and BSP, I would recommend one to reference
 http://www.aps.anl.gov/epics/base/RTEMS/tutorial/
 in additional to the RTEMS document.
-
-
-TODO lists:
-1) 1 GHZ ethernet ( work in progress, to be released soon)
-2) To measure the interrupt latency and context switching.
-3) To implement the watchdog timer.
-

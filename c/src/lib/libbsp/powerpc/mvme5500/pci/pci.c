@@ -34,8 +34,8 @@
 #include <stdio.h>
 #include <string.h>
 
-/* #define PCI_DEBUG 1 */
-/* #define PCI_PRINT 1 */
+#define PCI_DEBUG 0
+#define PCI_PRINT 0
 
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
@@ -251,11 +251,6 @@ int pci_initialize()
   unsigned char ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;
   unsigned int ulHeader;
   unsigned int pcidata, ulClass, ulDeviceID;
-#if PCI_DEBUG
-  unsigned short sdata;
-  unsigned int data;
-#endif
-
 
   pci_interface();
   

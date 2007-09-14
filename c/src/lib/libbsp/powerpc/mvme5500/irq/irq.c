@@ -6,14 +6,20 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.OARcorp.com/rtems/license.html.
  *
- *  Special acknowledgement to Till Straumann <strauman@slac.stanford.edu>
- *  for providing inputs to the IRQ handling and optimization.
+ *  Acknowledgement May 2004 : to Till Straumann <strauman@slac.stanford.edu>
+ *  for some inputs.
  *
- *  Modified and added support for the MVME5500 board
- *  Copyright 2003, 2004, Shuchen Kate Feng <feng1@bnl.gov>,
+ *  Copyright 2003, 2004, 2005, 2007  Shuchen Kate Feng <feng1@bnl.gov>,
  *                  NSLS,Brookhaven National Laboratory
+ *  1) Modified and added support for the MVME5500 board.
+ *  2) The implementation of picIsrTable[] is an original work by the
+ *     author to optimize the software IRQ priority scheduling because
+ *     Discovery controller does not provide H/W IRQ priority schedule. 
+ *     It ensures the fastest/faster interrupt service to the
+ *     highest/higher priority IRQ, if pendig.
+ *  3) _CPU_MSR_SET() needs RTEMS_COMPILER_MEMORY_BARRIER()
  *
  */
   
@@ -23,7 +29,9 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
+#include <rtems/rtems/intr.h>
 #include <libcpu/io.h>
+#include <libcpu/byteorder.h>
 #include <bsp/vectors.h>
 
 #include <rtems/bspIo.h> /* for printk */
@@ -31,20 +39,35 @@
 
 #define HI_INT_CAUSE 0x40000000
 
-/*#define DEBUG*/
+#define MAX_IRQ_LOOP 30
 
-int gpp_int_error =0;
+#define EDGE_TRIGGER
+
+#define _MSR_GET( _mask) \
+  do { \
+     RTEMS_COMPILER_MEMORY_BARRIER(); \
+     _CPU_MSR_GET( _mask); \
+     RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0);
+
+#define _MSR_SET( _mask) \
+  do { \
+     RTEMS_COMPILER_MEMORY_BARRIER(); \
+     _CPU_MSR_SET( _mask); \
+     RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0);
+
+/* #define DEBUG_IRQ*/
 
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
- * They will be dynamically computed from teh prioruty table given
+ * They will be dynamically computed from the table given
  * in BSP_rtems_irq_mngt_set();
  * CAUTION : this table is accessed directly by interrupt routine
  * 	     prologue.
  */
-static unsigned int irq_prio_maskLO_tbl[BSP_MAIN_IRQ_NUMBER];
-static unsigned int irq_prio_maskHI_tbl[BSP_MAIN_IRQ_NUMBER];
+static unsigned int BSP_irq_prio_mask_tbl[3][BSP_PIC_IRQ_NUMBER];
 
 /*
  * default handler connected on each irq after bsp initialization
@@ -58,26 +81,55 @@ static rtems_irq_connect_data	default_rtems_entry;
 static rtems_irq_global_settings* 	internal_config;
 static rtems_irq_connect_data*		rtems_hdl_tbl;
 
-static unsigned int irqCAUSE[20], irqLOW[20], irqHIGH[20];
-static int irqIndex=0;
+static volatile unsigned  *BSP_irqMask_reg[3];
+static volatile unsigned  *BSP_irqCause_reg[3];
+static volatile unsigned  BSP_irqMask_cache[3]={0,0,0}; 
+
+
+static int picIsrTblPtr=0;
+static unsigned int GPPIrqInTbl=0;
+static unsigned long long MainIrqInTbl=0;
+
+/* 
+ * The software developers are forbidden to setup picIsrTable[],
+ * as it is a powerful engine for the BSP to find the pending
+ * highest priority IRQ at run time.  It ensures the fastest/faster
+ * interrupt service to the highest/higher priority IRQ, if pendig.
+ *
+ * The picIsrTable[96] is updated dynamically at run time
+ * based on the priority levels set at BSPirqPrioTable[96],
+ * while the BSP_enable_pic_irq(), and BSP_disable_pic_irq()
+ * commands are invoked.
+ *
+ * The picIsrTable[96] lists the enabled CPU main and GPP external interrupt 
+ * numbers [0 (lowest)- 95 (highest)] starting from the highest priority
+ * one to the lowest priority one. The highest priority interrupt is
+ * located at picIsrTable[0], and the lowest priority interrupt is located
+ * at picIsrTable[picIsrTblPtr-1].
+ *
+ *
+ */
+/* BitNums for Main Interrupt Lo/High Cause and GPP, -1 means invalid bit */ 
+static unsigned int picIsrTable[BSP_PIC_IRQ_NUMBER]={  
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1 };
+
 
 /*
- * Check if IRQ is a MAIN CPU internal IRQ 
+ * Check if IRQ is a MAIN CPU internal IRQ or GPP external IRQ
  */
-static inline int is_main_irq(const rtems_irq_number irqLine)
-{
-  return (((int) irqLine <= BSP_MICH_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_MICL_IRQ_LOWEST_OFFSET)
-	 );
-}
-
-/*
- * Check if IRQ is a GPP IRQ
- */
-static inline int is_gpp_irq(const rtems_irq_number irqLine)
+static inline int is_pic_irq(const rtems_irq_number irqLine)
 {
   return (((int) irqLine <= BSP_GPP_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_GPP_IRQ_LOWEST_OFFSET)
+	  ((int) irqLine >= BSP_MICL_IRQ_LOWEST_OFFSET)
 	 );
 }
 
@@ -91,104 +143,14 @@ static inline int is_processor_irq(const rtems_irq_number irqLine)
 	 );
 }
 
-#define GT_GPP_Int1_Cause GT_GPP_Interrupt_Cause+1
-#define GT_GPP_Int2_Cause GT_GPP_Interrupt_Cause+2
-#define GT_GPP_Int3_Cause GT_GPP_Interrupt_Cause+3
-
-void GT_GPP_IntHandler0()
+static inline unsigned int divIrq32(unsigned irq)
 {
-
-  unsigned  gppCause, irqNum, bitNum;
-  int i, found=0;
-
-  gppCause = inb(GT_GPP_Interrupt_Cause) & GT_GPPirq_cache;
-
-  for (i=0; GPP7_0IrqTbl[i]!=-1;i++){
-    bitNum =GPP7_0IrqTbl[i];
-    if (gppCause & (1<<bitNum)) {
-        /* Clear the GPP interrupt cause bit */
-      outb( ~(1<<bitNum), GT_GPP_Interrupt_Cause);/* Till Straumann */
-        found = 1; 
-        irqNum = bitNum+BSP_GPP_IRQ_LOWEST_OFFSET;
-        /* call the necessary interrupt handlers */
-        if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	   rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
-        else
-	   gpp_int_error= bitNum; /*GPP interrupt bitNum not connected */
-    }
-  }
-  if ( !found) gpp_int_error = 33; /* spurious GPP interrupt  */
+  return(irq/32);
 }
 
-void GT_GPP_IntHandler1()
+static inline unsigned int modIrq32(unsigned irq)
 {
-  unsigned  gppCause, irqNum, bitNum;
-  int i, found=0;
-
-  gppCause = inb(GT_GPP_Int1_Cause) & (GT_GPPirq_cache>>8);
-
-  for (i=0; GPP15_8IrqTbl[i]!=-1;i++){
-    bitNum =GPP15_8IrqTbl[i];
-    if (gppCause & (1<<bitNum)) {
-        /* Clear the GPP interrupt cause bit */
-        outb( ~(1<<bitNum), GT_GPP_Int1_Cause); /* Till Straumann */
-        found = 1; 
-        irqNum = bitNum+BSP_GPP8_IRQ_OFFSET;
-        /* call the necessary interrupt handlers */
-        if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	   rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
-        else
-	   gpp_int_error= bitNum+8; /*GPP interrupt bitNum not connected */
-    }
-  }
-  if ( !found) gpp_int_error = 33; /* spurious GPP interrupt  */
-}
-void GT_GPP_IntHandler2()
-{
-  unsigned  gppCause, irqNum, bitNum;
-  int i, found=0;
-
-  gppCause = inb(GT_GPP_Int2_Cause) & (GT_GPPirq_cache>>16);
-
-  for (i=0; GPP23_16IrqTbl[i]!=-1;i++){
-    bitNum =GPP23_16IrqTbl[i];
-    if (gppCause & (1<<bitNum)) {
-        /* Clear the GPP interrupt cause bit */
-        outb( ~(1<<bitNum), GT_GPP_Int2_Cause);
-        found = 1; 
-        irqNum = bitNum+BSP_GPP16_IRQ_OFFSET;
-        /* call the necessary interrupt handlers */
-        if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	    rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
-        else
-	   gpp_int_error= bitNum+16; /*GPP interrupt bitNum not connected */
-    }
-  }
-  if ( !found) gpp_int_error = 33; /* spurious GPP interrupt  */
-}
-
-void GT_GPP_IntHandler3()
-{
-  unsigned  gppCause, irqNum, bitNum;
-  int i, found=0;
-
-  gppCause = inb(GT_GPP_Int3_Cause) & (GT_GPPirq_cache>>24);
-
-  for (i=0; GPP31_24IrqTbl[i]!=-1;i++){
-    bitNum=GPP31_24IrqTbl[i];
-    if (gppCause & (1<<bitNum)) {
-        /* Clear the GPP interrupt cause bit */
-        outb(~(1<<bitNum), GT_GPP_Int3_Cause);
-        found = 1; 
-        irqNum = bitNum+BSP_GPP24_IRQ_OFFSET;
-        /* call the necessary interrupt handlers */
-        if (rtems_hdl_tbl[irqNum].hdl != default_rtems_entry.hdl)
-	    rtems_hdl_tbl[irqNum].hdl(rtems_hdl_tbl[irqNum].handle);
-        else
-	   gpp_int_error= bitNum+24; /*GPP interrupt bitNum not connected */
-    }
-  }
-  if ( !found) gpp_int_error = 33; /* spurious GPP interrupt  */
+   return(irq%32);
 }
 
 /*
@@ -200,33 +162,253 @@ void GT_GPP_IntHandler3()
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_GT64260int_masks_from_prio ()
+static void compute_pic_masks_from_prio()
 {
-  int i,j;
+  int i,j, k;
   unsigned long long irq_prio_mask=0;
 
   /*
    * Always mask at least current interrupt to prevent re-entrance
    */
-  for (i=0; i <BSP_MAIN_IRQ_NUMBER; i++) {
-    irq_prio_mask = (unsigned long long) (1LLU << i);
+  for (i=0; i <BSP_PIC_IRQ_NUMBER; i++) {
+    switch(i) {
+      case BSP_MAIN_GPP7_0_IRQ:
+      case BSP_MAIN_GPP15_8_IRQ:
+      case BSP_MAIN_GPP23_16_IRQ:
+      case BSP_MAIN_GPP31_24_IRQ:
+	for (k=0; k< 3; k++)
+	    BSP_irq_prio_mask_tbl[k][i]=0;
+
+        irq_prio_mask =0;
+        break;
+      default : 
+        irq_prio_mask = (unsigned long long) (1LLU << i);
+	break;
+    }
+    
+    if (irq_prio_mask) {
     for (j = 0; j <BSP_MAIN_IRQ_NUMBER; j++) {
-      /*
-       * Mask interrupts at GT64260int level that have a lower priority
-       * or <Till Straumann> a equal priority. 
-       */
-      if (internal_config->irqPrioTbl [i] >= internal_config->irqPrioTbl [j]) {
-	 irq_prio_mask |= (unsigned long long)(1LLU << j);
+        /*
+         * Mask interrupts at PIC level that have a lower priority
+         * or <Till Straumann> a equal priority. 
+         */
+        if (internal_config->irqPrioTbl [i] >= internal_config->irqPrioTbl [j])
+	   irq_prio_mask |= (unsigned long long)(1LLU << j);
+    }
+    
+
+    BSP_irq_prio_mask_tbl[0][i] = irq_prio_mask & 0xffffffff;
+    BSP_irq_prio_mask_tbl[1][i] = (irq_prio_mask>>32) & 0xffffffff;
+#ifdef DEBUG
+    printk("irq_mask_prio_tbl[%d]:0x%8x%8x\n",i,BSP_irq_prio_mask_tbl[1][i],
+	   BSP_irq_prio_mask_tbl[0][i]);
+#endif 
+
+    BSP_irq_prio_mask_tbl[2][i] = 1<<i;
+    /* Compute for the GPP priority interrupt mask */
+    for (j=BSP_GPP_IRQ_LOWEST_OFFSET; j <BSP_PROCESSOR_IRQ_LOWEST_OFFSET; j++) {      
+      if (internal_config->irqPrioTbl [i] >= internal_config->irqPrioTbl [j])
+	   BSP_irq_prio_mask_tbl[2][i] |= 1 << (j-BSP_GPP_IRQ_LOWEST_OFFSET); 
+    }
+    }
+  }
+}
+
+
+static void UpdateMainIrqTbl(int irqNum)
+{
+  int i=0, j, shifted=0;
+
+  switch (irqNum) {
+    case BSP_MAIN_GPP7_0_IRQ:
+    case BSP_MAIN_GPP15_8_IRQ:
+    case BSP_MAIN_GPP23_16_IRQ:
+    case BSP_MAIN_GPP31_24_IRQ:  
+      return;  /* Do nothing, let GPP take care of it */
+      break;
+  }
+#ifdef SHOW_MORE_INIT_SETTINGS
+  unsigned long val2, val1;
+#endif
+
+  /* If entry not in table*/
+  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) && 
+        (!((unsigned long long)(1LLU << irqNum) & MainIrqInTbl))) ||
+       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) && 
+        (!(( 1 << (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)) & GPPIrqInTbl))))
+  { 
+      while ( picIsrTable[i]!=-1) {
+        if (internal_config->irqPrioTbl[irqNum]>internal_config->irqPrioTbl[picIsrTable[i]]) {
+          /* all other lower priority entries shifted right */
+          for (j=picIsrTblPtr;j>i; j--) 
+              picIsrTable[j]=picIsrTable[j-1];
+          picIsrTable[i]=irqNum;
+          shifted=1;
+          break;
+       }
+       i++;
+     }
+     if (!shifted) picIsrTable[picIsrTblPtr]=irqNum;
+     if (irqNum >BSP_MICH_IRQ_MAX_OFFSET)
+        GPPIrqInTbl |= (1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)); 
+     else      
+        MainIrqInTbl |= (unsigned long long)(1LLU << irqNum);
+     picIsrTblPtr++;
+  }
+#ifdef SHOW_MORE_INIT_SETTINGS
+  val2 = (MainIrqInTbl>>32) & 0xffffffff;
+  val1 = MainIrqInTbl&0xffffffff;
+  printk("irqNum %d, MainIrqInTbl 0x%x%x\n", irqNum, val2, val1); 
+  BSP_printPicIsrTbl();
+#endif
+
+}
+
+
+static void CleanMainIrqTbl(int irqNum)
+{
+  int i, j;
+
+  switch (irqNum) {
+    case BSP_MAIN_GPP7_0_IRQ:
+    case BSP_MAIN_GPP15_8_IRQ:
+    case BSP_MAIN_GPP23_16_IRQ:
+    case BSP_MAIN_GPP31_24_IRQ: 
+      return;  /* Do nothing, let GPP take care of it */
+      break;  
+  }
+  if ( ((irqNum<BSP_GPP_IRQ_LOWEST_OFFSET) && 
+        ((unsigned long long)(1LLU << irqNum) & MainIrqInTbl)) ||
+       ((irqNum>BSP_MICH_IRQ_MAX_OFFSET) && 
+        (( 1 << (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)) & GPPIrqInTbl)))
+  { /* If entry in table*/
+     for (i=0; i<64; i++) {
+       if (picIsrTable[i]==irqNum) {/*remove it from the entry */
+          /* all other lower priority entries shifted left */
+          for (j=i;j<picIsrTblPtr; j++) 
+              picIsrTable[j]=picIsrTable[j+1];
+          if (irqNum >BSP_MICH_IRQ_MAX_OFFSET)
+            GPPIrqInTbl &= ~(1<< (irqNum-BSP_GPP_IRQ_LOWEST_OFFSET)); 
+          else      
+            MainIrqInTbl &= ~(1LLU << irqNum);
+          picIsrTblPtr--;
+          break;
+       }
+     }
+  }
+}
+
+void BSP_enable_pic_irq(const rtems_irq_number irqNum)
+{
+  unsigned bitNum, regNum;
+  unsigned int level;
+
+  bitNum = modIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
+  regNum = divIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
+
+  rtems_interrupt_disable(level); 
+
+  UpdateMainIrqTbl((int) irqNum);
+  BSP_irqMask_cache[regNum] |= (1 << bitNum);
+
+  out_le32(BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
+  while (in_le32(BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
+
+  rtems_interrupt_enable(level);
+}
+
+void BSP_disable_pic_irq(const rtems_irq_number irqNum)
+{
+  unsigned bitNum, regNum;
+  unsigned int level;
+
+  bitNum = modIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
+  regNum = divIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
+
+  rtems_interrupt_disable(level); 
+
+  CleanMainIrqTbl((int) irqNum);
+  BSP_irqMask_cache[regNum] &=  ~(1 << bitNum);
+
+  out_le32(BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
+  while (in_le32(BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
+
+  rtems_interrupt_enable(level);
+}
+
+int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
+{
+    int i;
+
+    /* Get ready for discovery BSP */
+    BSP_irqMask_reg[0]= (volatile unsigned int *) (GT64260_REG_BASE + GT_CPU_INT_MASK_LO);
+    BSP_irqMask_reg[1]= (volatile unsigned int *) (GT64260_REG_BASE + GT_CPU_INT_MASK_HI);
+    BSP_irqMask_reg[2]= (volatile unsigned int *) (GT64260_REG_BASE + GT_GPP_Interrupt_Mask);
+
+    BSP_irqCause_reg[0]= (volatile unsigned int *) (GT64260_REG_BASE + GT_MAIN_INT_CAUSE_LO);
+    BSP_irqCause_reg[1]= (volatile unsigned int *) (GT64260_REG_BASE + GT_MAIN_INT_CAUSE_HI);
+    BSP_irqCause_reg[2]= (volatile unsigned int *) (GT64260_REG_BASE + GT_GPP_Interrupt_Cause);
+
+#ifdef EDGE_TRIGGER
+
+    /* Page 401, Table 598:
+     * Comm Unit Arbiter Control register :
+     * bit 10:GPP interrupts as level sensitive(1) or edge sensitive(0).
+     * We set the GPP interrupts to be edge sensitive.
+     * MOTload default is set as level sensitive(1).
+     */
+    outl((inl(GT_CommUnitArb_Ctrl)& (~(1<<10))), GT_CommUnitArb_Ctrl);
+#else
+    outl((inl(GT_CommUnitArb_Ctrl)| (1<<10)), GT_CommUnitArb_Ctrl);
+#endif
+
+#if 0
+    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[0]),
+	   in_le32(BSP_irqCause_reg[0]));
+    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[1]),
+	   in_le32(BSP_irqCause_reg[1]));
+    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[2]),
+	   in_le32(BSP_irqCause_reg[2]));
+#endif
+
+    /* Initialize the interrupt related GT64260 registers */
+    for (i=0; i<3; i++) {
+      out_le32(BSP_irqCause_reg[i], 0);
+      out_le32(BSP_irqMask_reg[i], 0);
+    }         
+    in_le32(BSP_irqMask_reg[2]);
+    compute_pic_masks_from_prio();
+
+#if 0
+    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[0]),
+	   in_le32(BSP_irqCause_reg[0]));
+    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[1]),
+	   in_le32(BSP_irqCause_reg[1]));
+    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n", 
+	   in_le32(BSP_irqMask_reg[2]),
+	   in_le32(BSP_irqCause_reg[2]));
+#endif
+
+    /*
+     * 
+     */
+    for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
+      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
+	BSP_enable_pic_irq(i);
+	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+      }
+      else {
+	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	BSP_disable_pic_irq(i);
       }
     }
 
-    irq_prio_maskLO_tbl[i] = irq_prio_mask & 0xffffffff;
-    irq_prio_maskHI_tbl[i] = (irq_prio_mask>>32) & 0xffffffff;
-#ifdef DEBUG
-    printk("irq_mask_prio_tbl[%d]:0x%8x%8x\n",i,irq_prio_maskHI_tbl[i],
-	   irq_prio_maskLO_tbl[i]);
-#endif  
-  }
+    return(1);
 }
 
 /*
@@ -260,9 +442,9 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * RATIONALE : to always have the same transition by forcing the user
      * to get the previous handler before accepting to disconnect.
      */
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
     if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      _CPU_ISR_Enable(level);
+      rtems_interrupt_enable(level);
       printk("IRQ vector %d already connected\n",irq->name);
       return 0;
     }
@@ -271,35 +453,33 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+    rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
+#endif
 
-    if (is_main_irq(irq->name)) {
+    if (is_pic_irq(irq->name)) {
       /*
-       * Enable (internal ) Main Interrupt Cause Low and High
+       * Enable PIC  irq : Main Interrupt Cause Low and High & GPP external
        */
 #ifdef DEBUG_IRQ
-      printk("main irq %d\n",irq->name);
+      printk("PIC irq %d\n",irq->name);
 #endif
-      BSP_enable_main_irq(irq->name);
+      BSP_enable_pic_irq(irq->name);
     }
-    
-    if (is_gpp_irq(irq->name)) {
-      /*
-       * Enable (external) GPP[x] interrupt 
-       */
-      BSP_enable_gpp_irq((int) irq->name);
-    }
+    else {
+      if (is_processor_irq(irq->name)) {
+         /*
+          * Enable exception at processor level
+          */
 
-    if (is_processor_irq(irq->name)) {
-      /*
-       * Enable exception at processor level
-       */
+       }
     }
     /*
      * Enable interrupt on device
-     
-    irq->on(irq);*/
+     */
+    irq->on(irq);
     
-    _CPU_ISR_Enable(level);
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -331,24 +511,19 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
       return 0;
     }
-    _CPU_ISR_Disable(level);
+    rtems_interrupt_disable(level);
 
-    if (is_main_irq(irq->name)) {
-      /*
-       * disable CPU main interrupt
-       */
-      BSP_disable_main_irq(irq->name);
-    }
-    if (is_gpp_irq(irq->name)) {
-      /*
-       * disable external interrupt
-       */
-      BSP_disable_gpp_irq(irq->name);
-    }
-    if (is_processor_irq(irq->name)) {
-      /*
-       * disable exception at processor level
-       */
+    /*
+     * disable PIC interrupt
+     */
+    if (is_pic_irq(irq->name))
+      BSP_disable_pic_irq(irq->name);
+    else {
+      if (is_processor_irq(irq->name)) {
+         /*
+          * disable exception at processor level
+          */
+       }
     }    
 
     /*
@@ -361,7 +536,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     rtems_hdl_tbl[irq->name] = default_rtems_entry;
 
-    _CPU_ISR_Enable(level);
+
+    rtems_interrupt_enable(level);
 
     return 1;
 }
@@ -372,8 +548,9 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
-    int i;
     unsigned int level;
+    int i;
+
    /*
     * Store various code accelerators
     */
@@ -381,51 +558,17 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
     default_rtems_entry 	= config->defaultEntry;
     rtems_hdl_tbl 		= config->irqHdlTbl;
 
-    _CPU_ISR_Disable(level);
-    compute_GT64260int_masks_from_prio();
+    rtems_interrupt_disable(level);
 
-    /*
-     * set up internal tables used by rtems interrupt prologue
-     */
-    /*
-     * start with MAIN CPU IRQ
-     */
-    for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_GPP_IRQ_LOWEST_OFFSET ; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_enable_main_irq(i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_disable_main_irq(i);
-      }
-    }
-    /*
-     * continue with  external IRQ
-     */
-    for (i=BSP_GPP_IRQ_LOWEST_OFFSET; i<BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_enable_gpp_irq(i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_disable_gpp_irq(i);
-      }
+    if ( !BSP_setup_the_pic() ) {
+       printk("PIC setup failed; leaving IRQs OFF\n");
+       return 0;
     }
 
-    /*
-     * finish with Processor exceptions handled like IRQ
-     */
-    for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_MAX_OFFSET+1; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-      }
-    }
-    _CPU_ISR_Enable(level);
+    for (i= BSP_MAIN_GPP7_0_IRQ; i <= BSP_MAIN_GPP31_24_IRQ; i++) 
+      BSP_enable_pic_irq(i);
+
+    rtems_interrupt_enable(level);
     return 1;
 }
 
@@ -435,85 +578,74 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
     return 0;
 }    
 
-int _BSP_vme_bridge_irq = -1;
-
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
+
 void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
-  register unsigned msr;
-  register unsigned new_msr;
-  unsigned mainCause[2];
-  register unsigned selectCause;
-  register unsigned oldMask[2]={0,0};
-  unsigned i, regNum, irq, bitNum, startIrqNum=0;
+  register unsigned msr, new_msr;
+  unsigned long irqCause[3]={0, 0,0};
+  register unsigned long selectCause;
+  unsigned oldMask[3]={0,0,0};
+  register unsigned i=0, j, irq=0, bitmask=0, group=0;
 
   if (excNum == ASM_DEC_VECTOR) {
-    _CPU_MSR_GET(msr);
+    _MSR_GET(msr);
     new_msr = msr | MSR_EE;
-    _CPU_MSR_SET(new_msr);
+    _MSR_SET(new_msr);
     
     rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
-    _CPU_MSR_SET(msr);
+    _MSR_SET(msr);
     return;
     
   }
-  selectCause = inl( GT_CPU_SEL_CAUSE); 
-  if (selectCause & HI_INT_CAUSE ) {
-    mainCause[1]= selectCause & inl(GT_CPU_INT_MASK_HI);
-    startIrqNum=32;
+
+  for (j=0; j<3; j++ ) oldMask[j] = BSP_irqMask_cache[j];
+
+  if ((selectCause= in_le32((volatile unsigned *)0xf1000c70)) & HI_INT_CAUSE ){
+    irqCause[1] = (selectCause & BSP_irqMask_cache[1]);
+    irqCause[2] = in_le32(BSP_irqCause_reg[2]) & BSP_irqMask_cache[2];
   }
   else {
-    mainCause[0] =inl(GT_MAIN_INT_CAUSE_LO)&inl(GT_CPU_INT_MASK_LO);
-    mainCause[1] =inl(GT_MAIN_INT_CAUSE_HI)&inl(GT_CPU_INT_MASK_HI);
+    irqCause[0] = (selectCause & BSP_irqMask_cache[0]);
+    if ((irqCause[1] =(in_le32((volatile unsigned *)0xf1000c68)&BSP_irqMask_cache[1])))
+       irqCause[2] = in_le32(BSP_irqCause_reg[2]) & BSP_irqMask_cache[2];
   }
+  
+  while ((irq = picIsrTable[i++])!=-1)
+  {
+    if (irqCause[group=(irq/32)] && (irqCause[group]&(bitmask=(1<<(irq % 32))))) {
+      for (j=0; j<3; j++)
+        BSP_irqMask_cache[j] &= (~ BSP_irq_prio_mask_tbl[j][irq]);
 
-#if 0
-  /* very bad practice to put printk here, use only if for debug */
-  printk("main 0 %x, main 1 %x \n", mainCause[0],mainCause[1]);
+      RTEMS_COMPILER_MEMORY_BARRIER();
+      out_le32((volatile unsigned *)0xf1000c1c, BSP_irqMask_cache[0]);
+      out_le32((volatile unsigned *)0xf1000c6c, BSP_irqMask_cache[1]);
+      out_le32((volatile unsigned *)0xf100f10c, BSP_irqMask_cache[2]);
+      in_le32((volatile unsigned *)0xf100f10c);
+
+#ifdef EDGE_TRIGGER
+      if (irq > BSP_MICH_IRQ_MAX_OFFSET)
+         out_le32(BSP_irqCause_reg[2], ~bitmask);/* Till Straumann: Ack the edge triggered GPP IRQ */
 #endif
-  oldMask[0]= GT_MAINirqLO_cache;
-  oldMask[1]= GT_MAINirqHI_cache;
 
-  for (i=0;mainIrqTbl[i]!=-1;i++) {
-    irq=mainIrqTbl[i];
-    if ( irq < startIrqNum ) continue;
-    regNum = irq/32;
-    bitNum = irq % 32;
-    if ( mainCause[regNum] & (1<<bitNum)) {
-      GT_MAINirqLO_cache=oldMask[0]&(~irq_prio_maskLO_tbl[irq]);
-      outl(GT_MAINirqLO_cache, GT_CPU_INT_MASK_LO);
-      __asm __volatile("sync");
-      GT_MAINirqHI_cache=oldMask[1]&(~irq_prio_maskHI_tbl[irq]);
-      outl(GT_MAINirqHI_cache, GT_CPU_INT_MASK_HI);
-      __asm __volatile("sync");
-
-      /* <skf> It seems that reading back is necessary to ensure the 
-       * interrupt mask updated. Otherwise, spurious interrupt will
-       * happen.  However, I do not want to use "while loop" to risk 
-       * the CPU stuck.  I wound rather keep track of the interrupt
-       * mask if not updated.
-       */
-      if (((irqLOW[irqIndex]= inl(GT_CPU_INT_MASK_LO))!=GT_MAINirqLO_cache)||
-          ((irqHIGH[irqIndex]= inl(GT_CPU_INT_MASK_HI))!=GT_MAINirqHI_cache)){
-         irqIndex++;
-         irqIndex %=20;
-         irqCAUSE[irqIndex] = irq;
-      }
-      _CPU_MSR_GET(msr);
+      _MSR_GET(msr);
       new_msr = msr | MSR_EE;
-      _CPU_MSR_SET(new_msr);
+      _MSR_SET(new_msr); 
       rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
-      _CPU_MSR_SET(msr);
+      _MSR_SET(msr);
+      
+      for (j=0; j<3; j++ ) BSP_irqMask_cache[j] = oldMask[j];
       break;
     }
   }
-  GT_MAINirqLO_cache=oldMask[0];
-  outl(GT_MAINirqLO_cache, GT_CPU_INT_MASK_LO);
-  GT_MAINirqHI_cache=oldMask[1];
-  outl(GT_MAINirqHI_cache, GT_CPU_INT_MASK_HI);
+
+  out_le32((volatile unsigned *)0xf1000c1c, oldMask[0]);
+  out_le32((volatile unsigned *)0xf1000c6c, oldMask[1]);
+  out_le32((volatile unsigned *)0xf100f10c, oldMask[2]);
+  in_le32((volatile unsigned *)0xf100f10c);
 }
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
@@ -535,10 +667,15 @@ void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
    */
 }
 
-void BSP_printIRQMask()
+/* Only print part of the entries for now */
+void BSP_printPicIsrTbl()
 {
   int i;
 
-  for (i=0; i< 20; i++)
-    printk("IRQ%d : 0x%x %x \n", irqCAUSE[i], irqHIGH[i],irqLOW[i]);
+  printk("picIsrTable[12]={");
+  for (i=0; i<12; i++)
+    printk("%d,", picIsrTable[i]);
+  printk("}\n");
+
+  printk("GPPIrqInTbl: 0x%x :\n", GPPIrqInTbl);
 }

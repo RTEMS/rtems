@@ -1,10 +1,14 @@
 /* pci_interface.c
  *
- * Copyright 2004, Brookhaven National Laboratory and
- *                 Shuchen Kate Feng <feng1@bnl.gov>
+ * Copyright 2004, 2006, 2007 All rights reserved. (NDA items)
+ *      Brookhaven National Laboratory and Shuchen Kate Feng <feng1@bnl.gov>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
+ *
+ * 8/17/2006 : S. Kate Feng
+ *             uses in_le32()/out_le32(), instead of inl()/outl() so that
+ *             it is easier to be ported.
  *
  */
 #include <libcpu/io.h>
@@ -15,15 +19,16 @@
 #include <bsp/gtreg.h>
 #include <bsp/gtpcireg.h> 
 
+#define REG32_READ(reg) in_le32((volatile unsigned int *)(GT64260_REG_BASE+reg))
+#define REG32_WRITE(data, reg) out_le32((volatile unsigned int *)(GT64260_REG_BASE+reg), data)
+
 #define PCI_DEBUG     0
 
 /* Please reference the GT64260B datasheet, for the PCI interface, 
  * Synchronization Barriers and PCI ordering.
  *
  * Some PCI devices require Synchronization Barriers or PCI ordering
- * for synchronization.  For example, the VME-OMS58 motor controller we
- * used at NSLS requires either enhanced CPU Synchronization Barrier
- * or PCI-ordering (only one mechanism allowed. See section 11.1.2).
+ * for synchronization (only one mechanism allowed. See section 11.1.2).
  * To use the former mechanism(default), one needs to call 
  * CPU0_PciEnhanceSync() or CPU1_PciEnhanceSync() to perform software
  * synchronization between the CPU and PCI activities.
@@ -39,12 +44,11 @@
  * function correctly.
  *
  */
-#define PCI_ORDERING
+/*#define PCI_ORDERING*/
+
+#define EN_SYN_BAR   /* take MOTLoad default for enhanced SYN Barrier mode */
 
 /*#define PCI_DEADLOCK*/
-
-/*  So far, I do not see the need to disable the address pipelining.
-#define DIS_ADDR_PIPELINE*/
 
 #ifdef PCI_ORDERING
 #define PCI_ACCCTLBASEL_VALUE          0x01009000
@@ -86,40 +90,18 @@ void  pciAccessInit();
 
 void pci_interface()
 {
-  unsigned int data;
-
-#if  (defined(PCI_ORDERING)||defined(DIS_ADDR_PIPELINE))
-  data = inl(0); /* needed : read to flush */
-  /* MOTLOad default disables Configuration and I/O Read Sync Barrier 
-   * which is needed for enhanced CPU sync. barrier  */
-#ifdef PCI_ORDERING
-  /* enable Configuration Read Sync Barrier and IO read Sync Barrier*/
-  data &= ~ConfIOSBDis;
-#endif
-#ifdef DIS_ADDR_PIPELINE
-  data &= ~ADDR_PIPELINE;
-
-#if PCI_DEBUG
-  printk("data %x\n", data);
-#endif
-#endif
-  outl(data, 0);
-  /* read polling of the register until the new data is being read */
-  while ( inl(0)!=data);
-#endif
 
 #ifdef PCI_DEADLOCK
-  outl(0x07fff600, CNT_SYNC_REG);
+  REG32_WRITE(0x07fff600, CNT_SYNC_REG);
 #endif
 #ifdef PCI_ORDERING
-  outl(0xc0060002, DLOCK_ORDER_REG);
-  outl(0x07fff600, CNT_SYNC_REG);
-#else
-  outl(inl(PCI_CMD_CNTL)|PCI_COMMAND_SB_DIS, PCI_CMD_CNTL);
+  /* Let's leave this to be MOTLOad deafult : 0x80070000 
+     REG32_WRITE(0xc0070000, DLOCK_ORDER_REG);*/
+  /* Leave the CNT_SYNC_REG b/c MOTload default had the SyncBarMode set to 1 */
 #endif
 
   /* asserts SERR upon various detection */
-  outl(0x3fffff, 0xc28);
+  REG32_WRITE(0x3fffff, 0xc28);
 
   pciAccessInit();
 }
@@ -133,13 +115,14 @@ void pciAccessInit()
     /* MOTLoad combines the two banks of SDRAM into
      * one PCI access control because the top = 0x1ff
      */
-    data = inl(GT_SCS0_Low_Decode) & 0xfff; 
+    data = REG32_READ(GT_SCS0_Low_Decode) & 0xfff; 
     data |= PCI_ACCCTLBASEL_VALUE;
     data &= ~0x300000;
-    outl(data, PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80));
+    REG32_WRITE(data, PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80));
 #if PCI_DEBUG
-    printk("PCI%d_ACCESS_CNTL_BASE0_LOW 0x%x\n",PciLocal,inl(PCI_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))); 
+    printk("PCI%d_ACCESS_CNTL_BASE0_LOW 0x%x\n",PciLocal,REG32_READ(PCI_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))); 
 #endif
+
   }
 }
 
@@ -152,14 +135,14 @@ void pciAccessInit()
  */
 void CPU0_PciEnhanceSync(unsigned int syncVal)
 {
-  outl(syncVal,CPU0_SYNC_TRIGGER);
-  while (inl(CPU0_SYNC_VIRTUAL));
+  REG32_WRITE(syncVal,CPU0_SYNC_TRIGGER);
+  while (REG32_READ(CPU0_SYNC_VIRTUAL));
 }
 
 void CPU1_PciEnhanceSync(unsigned int syncVal)
 {
-  outl(syncVal,CPU1_SYNC_TRIGGER);
-  while (inl(CPU1_SYNC_VIRTUAL));
+  REG32_WRITE(syncVal,CPU1_SYNC_TRIGGER);
+  while (REG32_READ(CPU1_SYNC_VIRTUAL));
 }
 
 /* Currently, if PCI_ordering is used for synchronization, configuration

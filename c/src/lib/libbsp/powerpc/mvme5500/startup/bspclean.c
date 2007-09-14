@@ -7,10 +7,12 @@
 void bsp_cleanup(void)
 {
 #if AUTO_BOOT
+  /* Till Straumann <strauman@slac.stanford.edu> for SVGM */
   void rtemsReboot();
 
   rtemsReboot();
 #else
+  /* Kate Feng <feng1@bnl.gov> for the MVME5500 */
   printk("\nPrinting a stack trace for your convenience :-)\n");
   CPU_print_stack();
   printk("RTEMS terminated; Boot manually or turn on AUTO_BOOT.\n");

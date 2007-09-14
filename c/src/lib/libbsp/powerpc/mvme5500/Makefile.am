@@ -7,6 +7,9 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+#prevent the compiler from generating FP instructions
+AM_CFLAGS      += -msoft-float
+
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
@@ -29,6 +32,7 @@ EXTRA_DIST = startup/bootpstuff.c
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c startup/pgtbl_activate.c \
+    ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/main.c ../../shared/gnatinstallhandler.c startup/reboot.c
@@ -42,8 +46,8 @@ pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
-include_bsp_HEADERS = ../../powerpc/shared/console/uart.h	\
-	../../shared/vmeUniverse/vme_am_defs.h
+include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
+include_bsp_HEADERS += ../../powerpc/shared/console/consoleIo.h
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../powerpc/shared/console/uart.c \
@@ -64,7 +68,7 @@ pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c irq/GT64260Int.c irq/irq.c \
+irq_rel_SOURCES = irq/irq_init.c irq/irq.c \
     ../../powerpc/shared/irq/irq_asm.S
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -97,27 +101,28 @@ GT64260_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
 if HAS_NETWORKING
-include_bsp_HEADERS += network/GT64260eth.h network/GT64260ethreg.h
+include_bsp_HEADERS += network/if_100MHz/GT64260eth.h network/if_100MHz/GT64260ethreg.h \
+    network/if_1GHz/if_wmreg.h network/if_1GHz/pcireg.h
 
 network_CPPFLAGS = -D_KERNEL
 noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/GT64260eth.c
+network_rel_SOURCES = network/if_100MHz/GT64260eth.c \
+    network/if_1GHz/if_wm.c network/if_1GHz/pci_map.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-##
-include_bsp_HEADERS += ../../shared/vmeUniverse/VME.h vme/VMEConfig.h
-include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
+##vme
+include_bsp_HEADERS += ../../shared/vmeUniverse/VME.h vme/VMEConfig.h \
+	../../shared/vmeUniverse/vmeUniverse.h \
 	../../shared/vmeUniverse/vmeUniverseDMA.h\
 	../../shared/vmeUniverse/bspVmeDmaList.h\
-	../../shared/vmeUniverse/VMEDMA.h
+	../../shared/vmeUniverse/VMEDMA.h \
+	../../shared/vmeUniverse/vme_am_defs.h
 
 noinst_PROGRAMS += vme.rel
-vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c
-vme_rel_SOURCES+= ../../shared/vmeUniverse/bspVmeDmaList.c
-vme_rel_SOURCES+= ../shared/vme/vmeconfig.c
-vme_rel_SOURCES+= ../shared/vme/vme_universe.c
-vme_rel_SOURCES+= ../shared/vme/vme_universe_dma.c
+vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c\
+	../shared/vme/vmeconfig.c ../../shared/vmeUniverse/bspVmeDmaList.c\
+	../shared/vme/vme_universe.c ../shared/vme/vme_universe_dma.c
 
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
