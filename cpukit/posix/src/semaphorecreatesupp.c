@@ -78,9 +78,11 @@ int _POSIX_Semaphore_Create_support(
     the_semaphore->named = TRUE;
     the_semaphore->open_count = 1;
     the_semaphore->linked = TRUE;
-  }
-  else
+  } else {
     the_semaphore->named = FALSE;
+    the_semaphore->open_count = 0;
+    the_semaphore->linked = FALSE;
+  }
 
   the_sem_attr = &the_semaphore->Semaphore.Attributes;
 
