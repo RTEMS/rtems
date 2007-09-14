@@ -291,7 +291,7 @@ static void 		dc_rxeof(struct dc_softc *);
 static void 		dc_txeof(struct dc_softc *);
 /*static void 		dc_tick((void *));*/
 static void 		dc_tx_underrun(struct dc_softc *);
-static rtems_isr 	dc_intr(rtems_vector_number);
+static void		 	dc_intr(void *);
 static void		dc_daemon(void *);
 static void 		dc_start(struct ifnet *);
 static int 		dc_ioctl(struct ifnet *, ioctl_command_t, caddr_t);
@@ -1604,7 +1604,7 @@ static
 struct dc_type *dc_devtype( int unitnum )
 {
 	struct dc_type		*t;
-	uint32_t		rev;
+	unsigned int		rev;
 	int 			rc;
 
 	
@@ -1908,13 +1908,13 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	char		        *unitName;
 	int          		unitNumber;
 	
-	uint32_t		command;
+	unsigned int		command;
 	struct dc_softc		*sc;
 	struct ifnet		*ifp;
 	struct dc_type		*t;
-	uint32_t		revision;
+	unsigned int		revision;
 	int			error = 0, mac_offset;
-	uint32_t		value;
+	unsigned int		value;
 	
 	/*
 	 * Get the instance number for the board we're going to configure
@@ -3108,10 +3108,10 @@ dc_poll(struct ifnet *ifp, enum poll_cmd cmd, int count)
 #endif /* DEVICE_POLLING */
 
 static void
-dc_intr(rtems_vector_number v)
+dc_intr(void* arg)
 {
 	/* Need to make this work for multiple devices ... eventually */
-	struct dc_softc		*sc = &dc_softc_devs[0];
+	struct dc_softc		*sc = (struct dc_softc *)arg;
 
 
 	/* Disable interrupts. */
