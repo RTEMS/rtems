@@ -260,17 +260,6 @@ static void i82544EI_irq_off(const rtems_irq_connect_data *irq)
     return;
   }
 }
-static int ifwm_macaddr(char *hwaddr)
-{
-  hwaddr[0] = 0x00;
-  hwaddr[1] = 0x01;
-  hwaddr[2] = 0xaf;
-  hwaddr[3] = 0x0b;
-  hwaddr[4] = 0xb4;
-  hwaddr[5] = 0x75;
-
-  return 0;
-}
 
 static int i82544EI_irq_is_on(const rtems_irq_connect_data *irq)
 {
@@ -291,9 +280,9 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
   struct ifnet *ifp;
   uint8_t enaddr[ETHER_ADDR_LEN];
   uint16_t myea[ETHER_ADDR_LEN / 2], cfg1, cfg2, swdpin;
-  unsigned reg, preg;
+  unsigned reg;
   int b,d,f; /* PCI bus/device/function */
-  int unit, pmreg;
+  int unit;
   void	   *softc_mem;
   char     *name;
 
@@ -503,7 +492,7 @@ static void i82544EI_stats(struct wm_softc *sc)
 static int wm_ioctl(struct ifnet *ifp, u_long cmd,uint32_t data)
 {
   struct wm_softc *sc = ifp->if_softc;
-  int error;
+  int error=0;
 
   switch (cmd) {
     default:
@@ -1478,7 +1467,6 @@ static void i82544EI_daemon(void *arg)
   rtems_event_set	events;
   struct mbuf	*m=0;
   struct ifnet	*ifp=&sc->arpcom.ac_if;
-  int i;
 
 #ifdef WM_DEBUG
   printk("i82544EI_daemon()\n");

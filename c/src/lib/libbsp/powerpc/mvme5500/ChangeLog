@@ -1,3 +1,8 @@
+2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network/if_1GHz/if_wm.c, network/if_1GHz/pci_map.c: Remove a few
+	warnings.
+
 2007-09-07      Kate Feng <feng1@bnl.gov>
 
 	* ChangeLog, Makefile.am, README, README.booting, README.irq,

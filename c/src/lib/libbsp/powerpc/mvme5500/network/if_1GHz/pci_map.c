@@ -66,7 +66,6 @@ int pci_io_find(int b, int d, int f, int reg,unsigned *basep,unsigned *sizep)
 int pci_mem_find(int b, int d, int f, int reg, unsigned *basep,unsigned *sizep)
 {
   uint32_t address, mask;
-  int s;
 
   if (reg < PCI_MAPREG_START ||
 #if 0
