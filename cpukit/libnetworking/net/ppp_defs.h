@@ -34,6 +34,8 @@
 #ifndef _PPP_DEFS_H_
 #define _PPP_DEFS_H_
 
+#include <rtems/stdint.h>
+
 /*
  * The basic PPP frame.
  */
@@ -85,7 +87,7 @@
 /*
  * Extended asyncmap - allows any character to be escaped.
  */
-typedef u_int32_t	ext_accm[8];
+typedef uint32_t	ext_accm[8];
 
 /*
  * What to do with network protocol (NP) packets.

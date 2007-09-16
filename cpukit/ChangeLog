@@ -1,5 +1,10 @@
 2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/ppp_defs.h: Include rtems/stdint.h.
+	Use uint32_t for ext_accm.
+
+2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* pppd/auth.c, pppd/demand.c, pppd/ipcp.c, pppd/ipcp.h,
 	pppd/lcp.c, pppd/lcp.h, pppd/magic.c, pppd/magic.h, pppd/options.c,
 	pppd/pppd.h, pppd/sys-rtems.c, pppd/utils.c: Convert to using C99
