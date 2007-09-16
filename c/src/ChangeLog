@@ -1,3 +1,7 @@
+2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove AC_PROG_AWK (Unused).
+
 2007-09-14	Daron Chabot <djc915@mail.usask.ca>
 
 	* libchip/network/if_dc.c: Changed type of ISR argument to void* from
