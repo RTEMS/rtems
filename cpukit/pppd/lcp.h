@@ -58,10 +58,10 @@ typedef struct lcp_options {
     bool neg_cbcp;		/* Negotiate use of CBCP */
     int  mru;			/* Value of MRU */
     u_char chap_mdtype;		/* which MD type (hashing algorithm) */
-    u_int32_t asyncmap;		/* Value of async map */
-    u_int32_t magicnumber;
+    uint32_t asyncmap;		/* Value of async map */
+    uint32_t magicnumber;
     int numloops;		/* Number of loops during magic number neg. */
-    u_int32_t lqr_period;	/* Reporting period for LQR 1/100ths second */
+    uint32_t lqr_period;	/* Reporting period for LQR 1/100ths second */
 } lcp_options;
 
 extern fsm lcp_fsm[];
@@ -69,7 +69,7 @@ extern lcp_options lcp_wantoptions[];
 extern lcp_options lcp_gotoptions[];
 extern lcp_options lcp_allowoptions[];
 extern lcp_options lcp_hisoptions[];
-extern u_int32_t xmit_accm[][8];
+extern uint32_t xmit_accm[][8];
 
 #define DEFMRU	1500		/* Try for this */
 #define MINMRU	128		/* No MRUs below this */

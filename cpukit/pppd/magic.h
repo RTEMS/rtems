@@ -20,4 +20,4 @@
  */
 
 void magic_init(void);	/* Initialize the magic number generator */
-u_int32_t magic(void);	/* Returns the next magic number */
+uint32_t magic(void);	/* Returns the next magic number */

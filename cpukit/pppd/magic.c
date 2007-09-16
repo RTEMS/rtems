@@ -51,8 +51,8 @@ magic_init()
 /*
  * magic - Returns the next magic number.
  */
-u_int32_t
+uint32_t
 magic()
 {
-    return (u_int32_t) mrand48();
+    return (uint32_t) mrand48();
 }

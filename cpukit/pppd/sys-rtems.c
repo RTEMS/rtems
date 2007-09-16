@@ -86,13 +86,13 @@ static unsigned char inbuf[512]; /* buffer for chars read from loopback */
 static int sockfd;		/* socket for doing interface ioctls */
 
 static int if_is_up;		/* the interface is currently up */
-static u_int32_t ifaddrs[2];	/* local and remote addresses we set */
-static u_int32_t default_route_gateway;	/* gateway addr for default route */
-static u_int32_t proxy_arp_addr;	/* remote addr for proxy arp */
+static uint32_t ifaddrs[2];	/* local and remote addresses we set */
+static uint32_t default_route_gateway;	/* gateway addr for default route */
+static uint32_t proxy_arp_addr;	/* remote addr for proxy arp */
 
 /* Prototypes for procedures local to this file. */
-static int dodefaultroute(u_int32_t, int);
-static int get_ether_addr(u_int32_t, struct sockaddr_dl *);
+static int dodefaultroute(uint32_t, int);
+static int get_ether_addr(uint32_t, struct sockaddr_dl *);
 
 
 /*
@@ -581,7 +581,7 @@ get_loop_output()
 void
 ppp_send_config(unit, mtu, asyncmap, pcomp, accomp)
     int unit, mtu;
-    u_int32_t asyncmap;
+    uint32_t asyncmap;
     int pcomp, accomp;
 {
     u_int x;
@@ -625,7 +625,7 @@ ppp_set_xaccm(unit, accm)
 void
 ppp_recv_config(unit, mru, asyncmap, pcomp, accomp)
     int unit, mru;
-    u_int32_t asyncmap;
+    uint32_t asyncmap;
     int pcomp, accomp;
 {
     int x;
@@ -874,7 +874,7 @@ sifdown(u)
 int
 sifaddr(u, o, h, m)
     int u;
-    u_int32_t o, h, m;
+    uint32_t o, h, m;
 {
     struct ifaliasreq ifra;
     struct ifreq ifr;
@@ -914,7 +914,7 @@ sifaddr(u, o, h, m)
 int
 cifaddr(u, o, h)
     int u;
-    u_int32_t o, h;
+    uint32_t o, h;
 {
     struct ifaliasreq ifra;
 
@@ -939,7 +939,7 @@ cifaddr(u, o, h)
 int
 sifdefaultroute(u, l, g)
     int u;
-    u_int32_t l, g;
+    uint32_t l, g;
 {
     return dodefaultroute(g, 's');
 }
@@ -950,7 +950,7 @@ sifdefaultroute(u, l, g)
 int
 cifdefaultroute(u, l, g)
     int u;
-    u_int32_t l, g;
+    uint32_t l, g;
 {
     return dodefaultroute(g, 'c');
 }
@@ -960,7 +960,7 @@ cifdefaultroute(u, l, g)
  */
 static int
 dodefaultroute(g, cmd)
-    u_int32_t g;
+    uint32_t g;
     int cmd;
 {
 /*    int    status;  */
@@ -1025,7 +1025,7 @@ static int arpmsg_valid;
 int
 sifproxyarp(unit, hisaddr)
     int unit;
-    u_int32_t hisaddr;
+    uint32_t hisaddr;
 {
     int routes;
 
@@ -1075,7 +1075,7 @@ sifproxyarp(unit, hisaddr)
 int
 cifproxyarp(unit, hisaddr)
     int unit;
-    u_int32_t hisaddr;
+    uint32_t hisaddr;
 {
     int routes;
 
@@ -1110,7 +1110,7 @@ cifproxyarp(unit, hisaddr)
 int
 sifproxyarp(unit, hisaddr)
     int unit;
-    u_int32_t hisaddr;
+    uint32_t hisaddr;
 {
     struct arpreq arpreq;
     struct {
@@ -1150,7 +1150,7 @@ sifproxyarp(unit, hisaddr)
 int
 cifproxyarp(unit, hisaddr)
     int unit;
-    u_int32_t hisaddr;
+    uint32_t hisaddr;
 {
     struct arpreq arpreq;
 
@@ -1175,11 +1175,11 @@ cifproxyarp(unit, hisaddr)
 
 static int
 get_ether_addr(ipaddr, hwaddr)
-    u_int32_t ipaddr;
+    uint32_t ipaddr;
     struct sockaddr_dl *hwaddr;
 {
     struct ifreq *ifr, *ifend, *ifp;
-    u_int32_t ina, mask;
+    uint32_t ina, mask;
     struct sockaddr_dl *dla;
     struct ifreq ifreq;
     struct ifconf ifc;
@@ -1258,11 +1258,11 @@ get_ether_addr(ipaddr, hwaddr)
  * network as `addr'.  If we find any, we OR in their netmask to the
  * user-specified netmask.
  */
-u_int32_t
+uint32_t
 GetMask(addr)
-    u_int32_t addr;
+    uint32_t addr;
 {
-    u_int32_t mask, nmask, ina;
+    uint32_t mask, nmask, ina;
     struct ifreq *ifr, *ifend, ifreq;
     struct ifconf ifc;
     struct ifreq ifs[MAX_IFS];
@@ -1323,7 +1323,7 @@ GetMask(addr)
  * For demand mode to work properly, we have to ignore routes
  * through our own interface.
  */
-int have_route_to(u_int32_t addr)
+int have_route_to(uint32_t addr)
 {
     return -1;
 }

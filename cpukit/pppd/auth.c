@@ -169,7 +169,7 @@ static int  get_pap_passwd(char *);
 static int  have_pap_secret(int *);
 static int  have_chap_secret(char *, char *, int, int *);
 #if 0
-static int  ip_addr_check(u_int32_t, struct permitted_ip *);
+static int  ip_addr_check(uint32_t, struct permitted_ip *);
 #endif
 static void free_wordlist(struct wordlist *);
 static void auth_script(enum script_state s);
@@ -895,9 +895,9 @@ set_allowed_addrs(unit, addrs, opts)
     char *ptr_word, *ptr_mask;
     struct hostent *hp;
     struct netent *np;
-    u_int32_t a, mask, ah, offset;
+    uint32_t a, mask, ah, offset;
     struct ipcp_options *wo = &ipcp_wantoptions[unit];
-    u_int32_t suggested_ip = 0;
+    uint32_t suggested_ip = 0;
 
     if (addresses[unit] != NULL)
 	free(addresses[unit]);
@@ -936,7 +936,7 @@ set_allowed_addrs(unit, addrs, opts)
 	    ++ptr_word;
 	}
 
-	mask = ~ (u_int32_t) 0;
+	mask = ~ (uint32_t) 0;
 	offset = 0;
 	ptr_mask = strchr (ptr_word, '/');
 	if (ptr_mask != NULL) {
@@ -964,7 +964,7 @@ set_allowed_addrs(unit, addrs, opts)
 
 	hp = gethostbyname(ptr_word);
 	if (hp != NULL && hp->h_addrtype == AF_INET) {
-	    a = *(u_int32_t *)hp->h_addr;
+	    a = *(uint32_t *)hp->h_addr;
 	} else {
 	    np = getnetbyname (ptr_word);
 	    if (np != NULL && np->n_addrtype == AF_INET) {
@@ -987,7 +987,7 @@ set_allowed_addrs(unit, addrs, opts)
 	if (ptr_mask != NULL)
 	    *ptr_mask = '/';
 
-	if (a == (u_int32_t)-1L) {
+	if (a == (uint32_t)-1L) {
 	    warn("unknown host %s in auth. address list", ap->word);
 	    continue;
 	}
@@ -998,7 +998,7 @@ set_allowed_addrs(unit, addrs, opts)
 		continue;
 	    }
 	    a = htonl((ntohl(a) & mask) + offset);
-	    mask = ~(u_int32_t)0;
+	    mask = ~(uint32_t)0;
 	}
 	ip[n].mask = htonl(mask);
 	ip[n].base = a & ip[n].mask;
@@ -1030,7 +1030,7 @@ set_allowed_addrs(unit, addrs, opts)
 int
 auth_ip_addr(unit, addr)
     int unit;
-    u_int32_t addr;
+    uint32_t addr;
 {
 #if 0
     int ok;
@@ -1057,7 +1057,7 @@ auth_ip_addr(unit, addr)
 #if 0
 static int
 ip_addr_check(addr, addrs)
-    u_int32_t addr;
+    uint32_t addr;
     struct permitted_ip *addrs;
 {
     for (; ; ++addrs)
@@ -1073,7 +1073,7 @@ ip_addr_check(addr, addrs)
  */
 int
 bad_ip_adrs(addr)
-    u_int32_t addr;
+    uint32_t addr;
 {
     addr = ntohl(addr);
     return (addr >> IN_CLASSA_NSHIFT) == IN_LOOPBACKNET

@@ -116,7 +116,7 @@ lcp_options lcp_wantoptions[NUM_PPP];	/* Options that we want to request */
 lcp_options lcp_gotoptions[NUM_PPP];	/* Options that peer ack'd */
 lcp_options lcp_allowoptions[NUM_PPP];	/* Options we allow peer to request */
 lcp_options lcp_hisoptions[NUM_PPP];	/* Options that we ack'd */
-u_int32_t xmit_accm[NUM_PPP][8];		/* extended transmit ACCM */
+uint32_t xmit_accm[NUM_PPP][8];		/* extended transmit ACCM */
 
 static int lcp_echos_pending = 0;	/* Number of outstanding echo msgs */
 static int lcp_echo_number   = 0;	/* ID number of next echo frame */
@@ -654,7 +654,7 @@ lcp_ackci(f, p, len)
     lcp_options *go = &lcp_gotoptions[f->unit];
     u_char cilen, citype, cichar;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
 
     /*
      * CIs must be in exactly the same order that we sent.
@@ -785,7 +785,7 @@ lcp_nakci(f, p, len)
     lcp_options *wo = &lcp_wantoptions[f->unit];
     u_char citype, cichar, *next;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
     lcp_options no;		/* options we've seen Naks for */
     lcp_options try;		/* options to request next time */
     int looped_back = 0;
@@ -1096,7 +1096,7 @@ lcp_rejci(f, p, len)
     lcp_options *go = &lcp_gotoptions[f->unit];
     u_char cichar;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
     lcp_options try;		/* options to request next time */
 
     try = *go;
@@ -1234,7 +1234,7 @@ lcp_reqci(f, inp, lenp, reject_if_disagree)
     u_char *cip, *next;		/* Pointer to current and next CIs */
     int cilen, citype, cichar;	/* Parsed len, type, char value */
     u_short cishort;		/* Parsed short value */
-    u_int32_t cilong;		/* Parse long value */
+    uint32_t cilong;		/* Parse long value */
     int rc = CONFACK;		/* Final packet return code */
     int orc;			/* Individual option return code */
     u_char *p;			/* Pointer to next char to parse */
@@ -1637,7 +1637,7 @@ lcp_printpkt(p, plen, printer, arg)
     int code, id, len, olen;
     u_char *pstart, *optend;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
 
     if (plen < HEADERLEN)
 	return 0;
@@ -1865,7 +1865,7 @@ lcp_received_echo_reply (f, id, inp, len)
     u_char *inp;
     int len;
 {
-    u_int32_t magic;
+    uint32_t magic;
 
     /* Check the magic number - don't count replies from ourselves. */
     if (len < 4) {
@@ -1891,7 +1891,7 @@ static void
 LcpSendEchoRequest (f)
     fsm *f;
 {
-    u_int32_t lcp_magic;
+    uint32_t lcp_magic;
     u_char pkt[4], *pktp;
 
     /*

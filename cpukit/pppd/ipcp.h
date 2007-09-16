@@ -57,9 +57,9 @@ typedef struct ipcp_options {
     int  vj_protocol;		/* protocol value to use in VJ option */
     int  maxslotindex;		/* values for RFC1332 VJ compression neg. */
     bool cflag;
-    u_int32_t ouraddr, hisaddr;	/* Addresses in NETWORK BYTE ORDER */
-    u_int32_t dnsaddr[2];	/* Primary and secondary MS DNS entries */
-    u_int32_t winsaddr[2];	/* Primary and secondary MS WINS entries */
+    uint32_t ouraddr, hisaddr;	/* Addresses in NETWORK BYTE ORDER */
+    uint32_t dnsaddr[2];	/* Primary and secondary MS DNS entries */
+    uint32_t winsaddr[2];	/* Primary and secondary MS WINS entries */
 } ipcp_options;
 
 extern fsm ipcp_fsm[];
@@ -68,6 +68,6 @@ extern ipcp_options ipcp_gotoptions[];
 extern ipcp_options ipcp_allowoptions[];
 extern ipcp_options ipcp_hisoptions[];
 
-char *ip_ntoa(u_int32_t);
+char *ip_ntoa(uint32_t);
 
 extern struct protent ipcp_protent;

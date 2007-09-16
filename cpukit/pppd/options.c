@@ -68,7 +68,7 @@ char	devnam[MAXPATHLEN];	/* Device name */
 int	crtscts = 0;		/* Use hardware flow control */
 bool	modem = 1;		/* Use modem control lines */
 int	inspeed = 0;		/* Input/Output speed requested */
-u_int32_t netmask = 0;		/* IP netmask to set on interface */
+uint32_t netmask = 0;		/* IP netmask to set on interface */
 bool	lockflag = 0;		/* Create lock file to lock the serial dev */
 bool	nodetach = 0;		/* Don't detach from controlling tty */
 bool	updetach = 0;		/* Detach once link is up */
@@ -145,7 +145,7 @@ static int setactivefilter(char **);
 static option_t *find_option(char *name);
 static int process_option(option_t *, char **);
 static int n_arguments(option_t *);
-static int number_option(char *, u_int32_t *, int);
+static int number_option(char *, uint32_t *, int);
 
 /*
  * Structure to store extra lists of options.
@@ -612,7 +612,7 @@ process_option(opt, argv)
     option_t *opt;
     char **argv;
 {
-    u_int32_t v;
+    uint32_t v;
     int iv, a;
     char *sv;
     int (*parser)(char **);
@@ -698,10 +698,10 @@ process_option(opt, argv)
 	} else if (!number_option(*argv, &v, 16))
 	    return 0;
 	if (opt->flags & OPT_OR)
-	    v |= *(u_int32_t *)(opt->addr);
-	*(u_int32_t *)(opt->addr) = v;
+	    v |= *(uint32_t *)(opt->addr);
+	*(uint32_t *)(opt->addr) = v;
 	if (opt->addr2 && (opt->flags & OPT_A2COPY))
-	    *(u_int32_t *)(opt->addr2) = v;
+	    *(uint32_t *)(opt->addr2) = v;
 	break;
 
     case o_string:
@@ -1058,7 +1058,7 @@ getword(f, word, newlinep, filename)
 static int
 number_option(str, valp, base)
     char *str;
-    u_int32_t *valp;
+    uint32_t *valp;
     int base;
 {
     char *ptr;
@@ -1083,7 +1083,7 @@ int_option(str, valp)
     char *str;
     int *valp;
 {
-    u_int32_t v;
+    uint32_t v;
 
     if (!number_option(str, &v, 0))
 	return 0;
@@ -1237,15 +1237,15 @@ static int
 setspeed(arg)
     char *arg;
 {
-  int      spd;
-  uint32_t ret      = (int)1;
-  speed_t  spdValue = (speed_t)0;
+  long     spd;
+  uint32_t ret      = 1;
+  speed_t  spdValue = 0;
   char    *ptr;
 
   if ( !prepass ) {
     spd = strtol(arg, &ptr, 0);
     if (ptr == arg || *ptr != 0 || spd == 0) {
-      ret = (int)0;
+      ret = 0;
     }
     else {
       switch ( spd ) {
@@ -1271,7 +1271,7 @@ setspeed(arg)
           spdValue = B115200;
           break;
         default:
-          ret = (int)0;
+          ret = 0;
           break;
       }
 
@@ -1350,7 +1350,7 @@ setipaddr(arg)
 {
     struct hostent *hp;
     char *colon;
-    u_int32_t local, remote;
+    uint32_t local, remote;
     ipcp_options *wo = &ipcp_wantoptions[0];
   
     /*
@@ -1366,12 +1366,12 @@ setipaddr(arg)
      */
     if (colon != arg) {
 	*colon = '\0';
-	if ((local = inet_addr(arg)) == (u_int32_t) -1) {
+	if ((local = inet_addr(arg)) == (uint32_t) -1) {
 	    if ((hp = gethostbyname(arg)) == NULL) {
 		option_error("unknown host: %s", arg);
 		return -1;
 	    } else {
-		local = *(u_int32_t *)hp->h_addr;
+		local = *(uint32_t *)hp->h_addr;
 	    }
 	}
 	if (bad_ip_adrs(local)) {
@@ -1387,12 +1387,12 @@ setipaddr(arg)
      * If colon last character, then no remote addr.
      */
     if (*++colon != '\0') {
-	if ((remote = inet_addr(colon)) == (u_int32_t) -1) {
+	if ((remote = inet_addr(colon)) == (uint32_t) -1) {
 	    if ((hp = gethostbyname(colon)) == NULL) {
 		option_error("unknown host: %s", colon);
 		return -1;
 	    } else {
-		remote = *(u_int32_t *)hp->h_addr;
+		remote = *(uint32_t *)hp->h_addr;
 		if (remote_name[0] == 0)
 		    strlcpy(remote_name, colon, sizeof(remote_name));
 	    }
@@ -1416,7 +1416,7 @@ static int
 setnetmask(argv)
     char **argv;
 {
-    u_int32_t mask, b;
+    uint32_t mask, b;
     int n, ok;
     char *p, *endp;
 

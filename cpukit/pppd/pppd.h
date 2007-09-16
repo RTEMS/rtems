@@ -25,7 +25,7 @@
 #include <stdio.h>		/* for FILE */
 #include <limits.h>		/* for NGROUPS_MAX */
 #include <sys/param.h>		/* for MAXPATHLEN and BSD4_4, if defined */
-#include <sys/types.h>		/* for u_int32_t, if defined */
+#include <sys/types.h>		/* for uint32_t, if defined */
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
 #include <rtems/rtemsdialer.h>
@@ -113,8 +113,8 @@ typedef struct {
 /* Structure representing a list of permitted IP addresses. */
 struct permitted_ip {
     int		permit;		/* 1 = permit, 0 = forbid */
-    u_int32_t	base;		/* match if (addr & mask) == base */
-    u_int32_t	mask;		/* base and mask are in network byte order */
+    uint32_t	base;		/* match if (addr & mask) == base */
+    uint32_t	mask;		/* base and mask are in network byte order */
 };
 
 /*
@@ -181,7 +181,7 @@ extern char	devnam[MAXPATHLEN];	/* Device name */
 extern int	crtscts;	/* Use hardware flow control */
 extern bool	modem;		/* Use modem control lines */
 extern int	inspeed;	/* Input/Output speed requested */
-extern u_int32_t netmask;	/* IP netmask to set on interface */
+extern uint32_t netmask;	/* IP netmask to set on interface */
 extern bool	lockflag;	/* Create lock file to lock the serial dev */
 extern bool	nodetach;	/* Don't detach from controlling tty */
 extern bool	updetach;	/* Detach from controlling tty when link up */
@@ -346,9 +346,9 @@ int  check_passwd(int, char *, int, char *, int, char **);
 				/* Check peer-supplied username/password */
 int  get_secret(int, char *, char *, unsigned char *, int *, int);
 				/* get "secret" for chap */
-int  auth_ip_addr(int, u_int32_t);
+int  auth_ip_addr(int, uint32_t);
 				/* check if IP address is authorized */
-int  bad_ip_adrs(u_int32_t);
+int  bad_ip_adrs(uint32_t);
 				/* check if IP address is unreasonable */
 
 /* Procedures exported from demand.c */
@@ -381,11 +381,11 @@ void wait_input(struct timeval *); /* Wait for input, with timeout */
 void ppp_delay(void);       /* delay task for a little while */
 int  read_packet(u_char *); /* Read PPP packet */
 int  get_loop_output(void); /* Read pkts from loopback */
-void ppp_send_config(int, int, u_int32_t, int, int);
+void ppp_send_config(int, int, uint32_t, int, int);
 				/* Configure i/f transmit parameters */
 void ppp_set_xaccm(int, ext_accm);
 				/* Set extended transmit ACCM */
-void ppp_recv_config(int, int, u_int32_t, int, int);
+void ppp_recv_config(int, int, uint32_t, int, int);
 				/* Configure i/f receive parameters */
 int  ccp_test(int, u_char *, int, int);
 				/* Test support for compression scheme */
@@ -402,9 +402,9 @@ int  sifup(int);		/* Configure i/f up for one protocol */
 int  sifnpmode(int u, int proto, enum NPmode mode);
 				/* Set mode for handling packets for proto */
 int  sifdown(int);	/* Configure i/f down for one protocol */
-int  sifaddr(int, u_int32_t, u_int32_t, u_int32_t);
+int  sifaddr(int, uint32_t, uint32_t, uint32_t);
 				/* Configure IPv4 addresses for i/f */
-int  cifaddr(int, u_int32_t, u_int32_t);
+int  cifaddr(int, uint32_t, uint32_t);
 				/* Reset i/f IP addresses */
 #ifdef INET6
 int  sif6addr(int, eui64_t, eui64_t);
@@ -412,22 +412,22 @@ int  sif6addr(int, eui64_t, eui64_t);
 int  cif6addr(int, eui64_t, eui64_t);
 				/* Remove an IPv6 address from i/f */
 #endif
-int  sifdefaultroute(int, u_int32_t, u_int32_t);
+int  sifdefaultroute(int, uint32_t, uint32_t);
 				/* Create default route through i/f */
-int  cifdefaultroute(int, u_int32_t, u_int32_t);
+int  cifdefaultroute(int, uint32_t, uint32_t);
 				/* Delete default route through i/f */
-int  sifproxyarp(int, u_int32_t);
+int  sifproxyarp(int, uint32_t);
 				/* Add proxy ARP entry for peer */
-int  cifproxyarp(int, u_int32_t);
+int  cifproxyarp(int, uint32_t);
 				/* Delete proxy ARP entry for peer */
-u_int32_t GetMask(u_int32_t); /* Get appropriate netmask for address */
+uint32_t GetMask(uint32_t); /* Get appropriate netmask for address */
 int  lock(char *);	/* Create lock file for device */
 int  relock(int);		/* Rewrite lock file with new pid */
 void unlock(void);	/* Delete previously-created lock file */
 void logwtmp(const char *, const char *, const char *);
 				/* Write entry to wtmp file */
 int  get_host_seed(void);	/* Get host-dependent random number seed */
-int  have_route_to(u_int32_t); /* Check if route to addr exists */
+int  have_route_to(uint32_t); /* Check if route to addr exists */
 #ifdef PPP_FILTER
 int  set_filters(struct bpf_program *pass, struct bpf_program *active);
 				/* Set filter programs in kernel */

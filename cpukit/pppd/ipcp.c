@@ -176,7 +176,7 @@ static int  ipcp_printpkt(u_char *, int,
 static void ip_check_options(void);
 static int  ip_demand_conf(int);
 static int  ip_active_pkt(u_char *, int);
-static void create_resolv(u_int32_t, u_int32_t);
+static void create_resolv(uint32_t, uint32_t);
 
 struct protent ipcp_protent = {
     PPP_IPCP,
@@ -198,7 +198,7 @@ struct protent ipcp_protent = {
     ip_active_pkt
 };
 
-static void ipcp_clear_addrs(int, u_int32_t, u_int32_t);
+static void ipcp_clear_addrs(int, uint32_t, uint32_t);
 
 /*
  * Lengths of configuration options.
@@ -218,7 +218,7 @@ static void ipcp_clear_addrs(int, u_int32_t, u_int32_t);
  */
 char *
 ip_ntoa(ipaddr)
-u_int32_t ipaddr;
+uint32_t ipaddr;
 {
     static char b[64];
 
@@ -257,17 +257,17 @@ static int
 setdnsaddr(argv)
     char **argv;
 {
-    u_int32_t dns;
+    uint32_t dns;
     struct hostent *hp;
 
     dns = inet_addr(*argv);
-    if (dns == (u_int32_t) -1) {
+    if (dns == (uint32_t) -1) {
 	if ((hp = gethostbyname(*argv)) == NULL) {
 	    option_error("invalid address parameter '%s' for ms-dns option",
 			 *argv);
 	    return 0;
 	}
-	dns = *(u_int32_t *)hp->h_addr;
+	dns = *(uint32_t *)hp->h_addr;
     }
 
     /* if there is no primary then update it. */
@@ -289,17 +289,17 @@ static int
 setwinsaddr(argv)
     char **argv;
 {
-    u_int32_t wins;
+    uint32_t wins;
     struct hostent *hp;
 
     wins = inet_addr(*argv);
-    if (wins == (u_int32_t) -1) {
+    if (wins == (uint32_t) -1) {
 	if ((hp = gethostbyname(*argv)) == NULL) {
 	    option_error("invalid address parameter '%s' for ms-wins option",
 			 *argv);
 	    return 0;
 	}
-	wins = *(u_int32_t *)hp->h_addr;
+	wins = *(uint32_t *)hp->h_addr;
     }
 
     /* if there is no primary then update it. */
@@ -526,7 +526,7 @@ ipcp_addci(f, ucp, lenp)
     if (neg) { \
 	int addrlen = (old? CILEN_ADDRS: CILEN_ADDR); \
 	if (len >= addrlen) { \
-	    u_int32_t l; \
+	    uint32_t l; \
 	    PUTCHAR(opt, ucp); \
 	    PUTCHAR(addrlen, ucp); \
 	    l = ntohl(val1); \
@@ -543,7 +543,7 @@ ipcp_addci(f, ucp, lenp)
 #define ADDCIDNS(opt, neg, addr) \
     if (neg) { \
 	if (len >= CILEN_ADDR) { \
-	    u_int32_t l; \
+	    uint32_t l; \
 	    PUTCHAR(opt, ucp); \
 	    PUTCHAR(CILEN_ADDR, ucp); \
 	    l = ntohl(addr); \
@@ -583,7 +583,7 @@ ipcp_ackci(f, p, len)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     u_short cilen, citype, cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
     u_char cimaxslotindex, cicflag;
 
     /*
@@ -618,7 +618,7 @@ ipcp_ackci(f, p, len)
 #define ACKCIADDR(opt, neg, old, val1, val2) \
     if (neg) { \
 	int addrlen = (old? CILEN_ADDRS: CILEN_ADDR); \
-	u_int32_t l; \
+	uint32_t l; \
 	if ((len -= addrlen) < 0) \
 	    goto bad; \
 	GETCHAR(citype, p); \
@@ -640,7 +640,7 @@ ipcp_ackci(f, p, len)
 
 #define ACKCIDNS(opt, neg, addr) \
     if (neg) { \
-	u_int32_t l; \
+	uint32_t l; \
 	if ((len -= CILEN_ADDR) < 0) \
 	    goto bad; \
 	GETCHAR(citype, p); \
@@ -695,7 +695,7 @@ ipcp_nakci(f, p, len)
     u_char cimaxslotindex, cicflag;
     u_char citype, cilen, *next;
     u_short cishort;
-    u_int32_t ciaddr1, ciaddr2, l, cidnsaddr;
+    uint32_t ciaddr1, ciaddr2, l, cidnsaddr;
     ipcp_options no;		/* options we've seen Naks for */
     ipcp_options try;		/* options to request next time */
 
@@ -881,7 +881,7 @@ ipcp_rejci(f, p, len)
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     u_char cimaxslotindex, ciflag, cilen;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
     ipcp_options try;		/* options to request next time */
 
     try = *go;
@@ -895,7 +895,7 @@ ipcp_rejci(f, p, len)
 	len >= (cilen = old? CILEN_ADDRS: CILEN_ADDR) && \
 	p[1] == cilen && \
 	p[0] == opt) { \
-	u_int32_t l; \
+	uint32_t l; \
 	len -= cilen; \
 	INCPTR(2, p); \
 	GETLONG(l, p); \
@@ -940,7 +940,7 @@ ipcp_rejci(f, p, len)
 	((cilen = p[1]) == CILEN_ADDR) && \
 	len >= cilen && \
 	p[0] == opt) { \
-	u_int32_t l; \
+	uint32_t l; \
 	len -= cilen; \
 	INCPTR(2, p); \
 	GETLONG(l, p); \
@@ -1002,7 +1002,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
     u_char *cip, *next;		/* Pointer to current and next CIs */
     u_short cilen, citype;	/* Parsed len, type */
     u_short cishort;		/* Parsed short value */
-    u_int32_t tl, ciaddr1, ciaddr2;/* Parsed address values */
+    uint32_t tl, ciaddr1, ciaddr2;/* Parsed address values */
     int rc = CONFACK;		/* Final packet return code */
     int orc;			/* Individual option return code */
     u_char *p;			/* Pointer to next char to parse */
@@ -1057,7 +1057,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
 		&& (ciaddr1 == 0 || !wo->accept_remote)) {
 		orc = CONFNAK;
 		if (!reject_if_disagree) {
-		    DECPTR(sizeof(u_int32_t), p);
+		    DECPTR(sizeof(uint32_t), p);
 		    tl = ntohl(wo->hisaddr);
 		    PUTLONG(tl, p);
 		}
@@ -1080,7 +1080,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
 		if (ciaddr2 == 0 || !wo->accept_local) {
 		    orc = CONFNAK;
 		    if (!reject_if_disagree) {
-			DECPTR(sizeof(u_int32_t), p);
+			DECPTR(sizeof(uint32_t), p);
 			tl = ntohl(wo->ouraddr);
 			PUTLONG(tl, p);
 		    }
@@ -1114,7 +1114,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
 		&& (ciaddr1 == 0 || !wo->accept_remote)) {
 		orc = CONFNAK;
 		if (!reject_if_disagree) {
-		    DECPTR(sizeof(u_int32_t), p);
+		    DECPTR(sizeof(uint32_t), p);
 		    tl = ntohl(wo->hisaddr);
 		    PUTLONG(tl, p);
 		}
@@ -1144,7 +1144,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
 	    }
 	    GETLONG(tl, p);
 	    if (htonl(tl) != ao->dnsaddr[d]) {
-                DECPTR(sizeof(u_int32_t), p);
+                DECPTR(sizeof(uint32_t), p);
 		tl = ntohl(ao->dnsaddr[d]);
 		PUTLONG(tl, p);
 		orc = CONFNAK;
@@ -1164,7 +1164,7 @@ ipcp_reqci(f, inp, len, reject_if_disagree)
 	    }
 	    GETLONG(tl, p);
 	    if (htonl(tl) != ao->winsaddr[d]) {
-                DECPTR(sizeof(u_int32_t), p);
+                DECPTR(sizeof(uint32_t), p);
 		tl = ntohl(ao->winsaddr[d]);
 		PUTLONG(tl, p);
 		orc = CONFNAK;
@@ -1283,7 +1283,7 @@ static void
 ip_check_options()
 {
     struct hostent *hp;
-    u_int32_t local;
+    uint32_t local;
     ipcp_options *wo = &ipcp_wantoptions[0];
 
     /*
@@ -1298,7 +1298,7 @@ ip_check_options()
 	 */
 	wo->accept_local = 1;	/* don't insist on this default value */
 	if ((hp = gethostbyname(hostname)) != NULL) {
-	    local = *(u_int32_t *)hp->h_addr;
+	    local = *(uint32_t *)hp->h_addr;
 	    if (local != 0 && !bad_ip_adrs(local))
 		wo->ouraddr = local;
 	}
@@ -1356,7 +1356,7 @@ static void
 ipcp_up(f)
     fsm *f;
 {
-    u_int32_t mask;
+    uint32_t mask;
     ipcp_options *ho = &ipcp_hisoptions[f->unit];
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     ipcp_options *wo = &ipcp_wantoptions[f->unit];
@@ -1541,8 +1541,8 @@ ipcp_down(f)
 static void
 ipcp_clear_addrs(unit, ouraddr, hisaddr)
     int unit;
-    u_int32_t ouraddr;  /* local address */
-    u_int32_t hisaddr;  /* remote address */
+    uint32_t ouraddr;  /* local address */
+    uint32_t hisaddr;  /* remote address */
 {
     if (proxy_arp_set[unit]) {
 	cifproxyarp(unit, hisaddr);
@@ -1571,7 +1571,7 @@ ipcp_finished(f)
  */
 static void
 create_resolv(peerdns1, peerdns2)
-    u_int32_t peerdns1, peerdns2;
+    uint32_t peerdns1, peerdns2;
 {
   /* initialize values */
   rtems_bsdnet_nameserver_count = 0;
@@ -1610,7 +1610,7 @@ ipcp_printpkt(p, plen, printer, arg)
     int code, id, len, olen;
     u_char *pstart, *optend;
     u_short cishort;
-    u_int32_t cilong;
+    uint32_t cilong;
 
     if (plen < HEADERLEN)
 	return 0;

@@ -107,7 +107,7 @@ vslprintf(buf, buflen, fmt, args)
     unsigned char *p;
     char num[32];
     time_t t;
-    u_int32_t ip;
+    uint32_t ip;
     static char hexchars[] = "0123456789abcdef";
     struct buffer_info bufinfo;
 
@@ -197,7 +197,7 @@ vslprintf(buf, buflen, fmt, args)
 	    str = strerror(errno);
 	    break;
 	case 'I':
-	    ip = va_arg(args, u_int32_t);
+	    ip = va_arg(args, uint32_t);
 	    ip = ntohl(ip);
 	    slprintf(num, sizeof(num), "%d.%d.%d.%d", (ip >> 24) & 0xff,
 		     (ip >> 16) & 0xff, (ip >> 8) & 0xff, ip & 0xff);

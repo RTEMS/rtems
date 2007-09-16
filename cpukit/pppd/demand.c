@@ -85,8 +85,8 @@ demand_conf()
     flush_flag = 0;
     fcs = PPP_INITFCS;
 
-    ppp_send_config(0, PPP_MRU, (u_int32_t) 0, 0, 0);
-    ppp_recv_config(0, PPP_MRU, (u_int32_t) 0, 0, 0);
+    ppp_send_config(0, PPP_MRU, (uint32_t) 0, 0, 0);
+    ppp_recv_config(0, PPP_MRU, (uint32_t) 0, 0, 0);
 
 #ifdef PPP_FILTER
     set_filters(&pass_filter, &active_filter);
