@@ -1,3 +1,10 @@
+2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pppd/auth.c, pppd/demand.c, pppd/ipcp.c, pppd/ipcp.h,
+	pppd/lcp.c, pppd/lcp.h, pppd/magic.c, pppd/magic.h, pppd/options.c,
+	pppd/pppd.h, pppd/sys-rtems.c, pppd/utils.c: Convert to using C99
+	fixed-size types instead of BSD fixed-size types.
+
 2007-09-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/stackchk/check.c: Fix alignment of output.
