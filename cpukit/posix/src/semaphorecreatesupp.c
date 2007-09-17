@@ -39,6 +39,7 @@ int _POSIX_Semaphore_Create_support(
 {
   POSIX_Semaphore_Control   *the_semaphore;
   CORE_semaphore_Attributes *the_sem_attr;
+  char                      *name_p = (char *)name;
 
   _Thread_Disable_dispatch();
 
@@ -108,11 +109,7 @@ int _POSIX_Semaphore_Create_support(
    *  Make the semaphore available for use.
    */
 
-  _Objects_Open(
-    &_POSIX_Semaphore_Information,
-    &the_semaphore->Object,
-    (char *) name
-  );
+  _Objects_Open(&_POSIX_Semaphore_Information, &the_semaphore->Object, name_p);
 
   *the_sem = the_semaphore;
 
@@ -121,7 +118,7 @@ int _POSIX_Semaphore_Create_support(
     _POSIX_Semaphore_MP_Send_process_packet(
       POSIX_SEMAPHORE_MP_ANNOUNCE_CREATE,
       the_semaphore->Object.id,
-      (char *) name,
+      name_p,
       0                           /* proxy id - Not used */
     );
 #endif

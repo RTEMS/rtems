@@ -1,5 +1,9 @@
 2007-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/semaphorecreatesupp.c: Fixed warning.
+
+2007-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/dumpbuf/dumpbuf.c: Use printk.
 
 2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
