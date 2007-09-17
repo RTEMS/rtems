@@ -1,5 +1,9 @@
 2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* console/console.c, irq/irq_init.c: Eliminate warnings.
+
+2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* console/console.c: Eliminate DEBUG_puts.
 
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>

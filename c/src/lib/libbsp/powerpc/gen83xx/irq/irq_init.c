@@ -24,7 +24,9 @@
 #include <libcpu/raw_exception.h>
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
+#include <rtems/score/apiext.h>
 #include <bsp/vectors.h>
+
 
 static rtems_irq_connect_data rtemsIrqTbl[BSP_IRQ_NUMBER];
 rtems_irq_connect_data *BSP_rtems_irq_tbl;

@@ -243,7 +243,7 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-debug_putc_onlcr(const char c)
+void debug_putc_onlcr(const char c)
 {
   uint32_t Irql;
   if (Console_Is_Initialized) {
