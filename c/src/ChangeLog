@@ -1,3 +1,7 @@
+2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libchip/network/smc91111.h: Eliminate DEBUG_puts.
+
 2007-09-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove AC_PROG_AWK (Unused).

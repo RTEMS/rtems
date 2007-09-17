@@ -6,7 +6,7 @@
 #define _SMC91111_H_
 
 #include <libchip/smc91111exp.h>
-
+#include <rtems/bspIo.h>
 
 #define LAN91CXX_TCR         0x00
 #define LAN91CXX_EPH_STATUS  0x01
@@ -292,11 +292,10 @@ static int debugflag_out = 0;
 
 #define dbc_printf(lvl,format, args...) do { \
   if (!debugflag_out) { \
-  if (lvl & DEBUG) { \
-    char buf[1024]; \
-    sprintf(buf,format,##args); \
-    DEBUG_puts(buf); \
-  }} \
+    if (lvl & DEBUG) { \
+      printk(format,##args); \
+    } \
+  } \
 } while(0)
 
 #define db64_printf(format, args...) dbc_printf(64,format,##args);
