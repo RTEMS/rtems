@@ -17,6 +17,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <rtems/dumpbuf.h>
+#include <rtems/bspIo.h>
 
 /*
  *  Put the body below rtems_print_buffer so it won't get inlined.
@@ -75,5 +76,5 @@ static inline void Dump_Line(
 
   strcat( line_buffer, "|\n" );
 
-  fprintf(stdout, line_buffer );
+  printk( line_buffer );
 }
