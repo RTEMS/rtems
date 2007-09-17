@@ -1,6 +1,7 @@
 2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
-	* network/GT64260eth.c, network/GT64260eth.h, network/GT64260ethreg.h: Removed.
+	* network/GT64260eth.c, network/GT64260eth.h, network/GT64260ethreg.h:
+	Removed.
 
 2007-09-14	Kate Feng <feng1@bnl.gov>
 
