@@ -152,8 +152,6 @@ void initialize_external_exception_vector ();
 /*
  * console.c
  */
-void DEBUG_puts( char *string );
-
 void BSP_fatal_return( void );
 
 /*

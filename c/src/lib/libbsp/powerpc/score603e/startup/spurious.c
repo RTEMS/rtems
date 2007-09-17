@@ -16,6 +16,7 @@
  */
 
 #include <bsp.h>
+#include <rtems/bspIo.h>
 
 #include <string.h>
 
@@ -37,101 +38,101 @@ rtems_isr bsp_spurious_handler(
 
   switch ( trap ) {
     case PPC_IRQ_SYSTEM_RESET:
-      DEBUG_puts( "\nTrap: System reset" );
+      printk( "\nTrap: System reset\n" );
       break;
     case PPC_IRQ_MCHECK:
-      DEBUG_puts( "\nTrap: Machine check" );
+      printk( "\nTrap: Machine check\n" );
       break;
     case PPC_IRQ_PROTECT:
-      DEBUG_puts( "\nTrap: DSI" );
+      printk( "\nTrap: DSI\n" );
       break;
     case PPC_IRQ_ISI:
-      DEBUG_puts( "ISI" );
+      printk( "ISI\n" );
       break;
     case PPC_IRQ_EXTERNAL:
-      DEBUG_puts( "\nTrap: External interupt" );
+      printk( "\nTrap: External interupt\n" );
       break;
     case PPC_IRQ_ALIGNMENT:
-      DEBUG_puts( "\nTrap: Alignment Exception" );
+      printk( "\nTrap: Alignment Exception\n" );
       break;
     case PPC_IRQ_PROGRAM:
-      DEBUG_puts( "\nTrap: Program" );
+      printk( "\nTrap: Program\n" );
       break;
     case PPC_IRQ_NOFP:
-      DEBUG_puts( "\nTrap: Floating point unavailable" );
+      printk( "\nTrap: Floating point unavailable\n" );
       break;
     case PPC_IRQ_DECREMENTER:
-      DEBUG_puts( "\nTrap: Decrementer" );
+      printk( "\nTrap: Decrementer\n" );
       break;
     case PPC_IRQ_RESERVED_A:
-      DEBUG_puts( "\nTrap: Reserved 0x00a00" );
+      printk( "\nTrap: Reserved 0x00a00\n" );
       break;
     case PPC_IRQ_RESERVED_B:
-      DEBUG_puts( "\nTrap: Reserved 0x00b00" );
+      printk( "\nTrap: Reserved 0x00b00\n" );
       break;
     case PPC_IRQ_SCALL:
-      DEBUG_puts( "\nTrap: System call" );
+      printk( "\nTrap: System call\n" );
       break;
     case PPC_IRQ_TRACE:
-      DEBUG_puts( "\nTrap: Trace" );
+      printk( "\nTrap: Trace\n" );
       break;
     case PPC_IRQ_FP_ASST:
-      DEBUG_puts( "\nTrap: Floating point Assist" );
+      printk( "\nTrap: Floating point Assist\n" );
       break;
 
 #if defined(ppc403)
 #error "Please fill in names. "
     case PPC_IRQ_CRIT :
-      DEBUG_puts( "\nTrap: Critical Error ");
+      printk( "\nTrap: Critical Error\n ");
       break;
     case PPC_IRQ_PIT:
-      DEBUG_puts( "\nTrap: 0x01000" );
+      printk( "\nTrap: 0x01000\n" );
       break;
     case PPC_IRQ_FIT:
-      DEBUG_puts( "\nTrap: 0x01010" );
+      printk( "\nTrap: 0x01010\n" );
       break;
     case PPC_IRQ_WATCHDOG :
-      DEBUG_puts( "\nTrap: 0x01020" );
+      printk( "\nTrap: 0x01020\n" );
       break;
     case PPC_IRQ_DEBUG	 :
-      DEBUG_puts( "\nTrap: 0x02000" );
+      printk( "\nTrap: 0x02000\n" );
       break;
 
 #elif defined(ppc601)
 #error "Please fill in names. "
     case PPC_IRQ_TRACE    :
-      DEBUG_puts( "\nTrap: 0x02000" );
+      printk( "\nTrap: 0x02000\n" );
       break;
 
 #elif defined(ppc603) || defined(ppc603e)
     case PPC_IRQ_TRANS_MISS:
-      DEBUG_puts( "\nTrap: Instruction Translation Miss" );
+      printk( "\nTrap: Instruction Translation Miss\n" );
       break;
     case PPC_IRQ_DATA_LOAD:
-      DEBUG_puts( "\nTrap: Data Load Translation Miss" );
+      printk( "\nTrap: Data Load Translation Miss\n" );
       break;
     case PPC_IRQ_DATA_STORE:
-      DEBUG_puts( "\nTrap: Data store Translation Miss");
+      printk( "\nTrap: Data store Translation Mis\ns");
       break;
     case PPC_IRQ_ADDR_BRK:
-      DEBUG_puts( "\nTrap: Instruction address break point" );
+      printk( "\nTrap: Instruction address break point\n" );
       break;
     case PPC_IRQ_SYS_MGT:
-      DEBUG_puts( "\nTrap: System management interrupt" );
+      printk( "\nTrap: System management interrupt\n" );
       break;
 
 #elif defined(mpc604)
 #error "Please fill in names. "
     case PPC_IRQ_ADDR_BRK:
-      DEBUG_puts( "0x1300" );
+      printk( "0x1300\n" );
       break;
     case PPC_IRQ_SYS_MGT:
-      DEBUG_puts( "0x1400" );
+      printk( "0x1400\n" );
       break;
 #endif
 
   default:
-     DEBUG_puts( "\nTrap: Undefined exception " );
+     printk( "\nTrap: Undefined exception\n" );
      break;
   }
 

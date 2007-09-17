@@ -17,6 +17,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
 
 /*
  *  initialize FPGA
@@ -154,7 +155,7 @@ uint16_t         read_and_clear_irq()
   irq = (*SCORE603E_FPGA_VECT_DATA);
 
   if ((irq & 0xffff0) != 0x10) {
-    DEBUG_puts( "ERROR:: no irq data\n");
+    printk( "ERROR:: no irq data\n");
     return (irq | 0x80);
   }
 

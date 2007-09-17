@@ -9,6 +9,8 @@
 #include <rtems.h>
 #include <assert.h>
 #include <stdio.h>
+#include <inttypes.h>
+#include <rtems/bspIo.h>
 
 #include <bsp.h>
 #include "PCI.h"
@@ -175,7 +177,7 @@ void initialize_universe()
     * compare to known ID
     */
    if (pci_id !=  SCORE603E_UNIVERSE_CHIP_ID ){
-     DEBUG_puts ("Invalid SCORE603E_UNIVERSE_CHIP_ID: ");
+     printk ("Invalid SCORE603E_UNIVERSE_CHIP_ID: 0x08%" PRId32 "\n", pci_id);
      rtems_fatal_error_occurred( 0x603e0bad );
    }
 

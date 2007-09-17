@@ -297,7 +297,7 @@ void bsp_start( void )
     (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {
-    DEBUG_puts( "bspstart: Not enough RAM!!!\n" );
+    printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
 

@@ -1,3 +1,9 @@
+2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* PCI_bus/universe.c, console/console.c, include/bsp.h, irq/FPGA.c,
+	startup/bspstart.c, startup/genpvec.c, startup/spurious.c: Eliminate
+	DEBUG_puts.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps

@@ -62,45 +62,6 @@ int USE_FOR_CONSOLE = USE_FOR_CONSOLE_DEF;
 
 /* PAGE
  *
- *  DEBUG_puts
- *
- *  This should be safe in the event of an error.  It attempts to insure
- *  that no TX empty interrupts occur while it is doing polled IO.  Then
- *  it restores the state of that external interrupt.
- *
- *  Input parameters:
- *    string  - pointer to debug output string
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-
-void DEBUG_puts(
-  char *string
-)
-{
-  char *s;
-  int   console;
-  volatile uint8_t         *csr;
-
-  console = USE_FOR_CONSOLE;
-
-  csr = Ports_85C30[ console ].ctrl;
-
-  /* should disable interrupts here */
-
-  for ( s = string ; *s ; s++ )
-    outbyte_polled_85c30( csr, *s );
-
-  outbyte_polled_85c30( csr, '\r' );
-  outbyte_polled_85c30( csr, '\n' );
-
-  /* should enable interrupts here */
-}
-
-/* PAGE
- *
  *  console_inbyte_nonblocking
  *
  *  Console Termios polling input entry point.

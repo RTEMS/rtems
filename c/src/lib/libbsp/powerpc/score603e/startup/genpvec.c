@@ -15,6 +15,7 @@
 
 #include <bsp.h>
 #include <rtems/chain.h>
+#include <rtems/bspIo.h>
 #include <assert.h>
 
 #include <stdio.h> /* for sprintf */
@@ -139,7 +140,6 @@ rtems_isr external_exception_ISR (
  uint16_t            index;
  EE_ISR_Type         *node;
  uint16_t            value;
- char                err_msg[100];
 #if (HAS_PMC_PSC8)
  uint16_t            PMC_irq;
  uint16_t            check_irq;
@@ -148,8 +148,7 @@ rtems_isr external_exception_ISR (
 
  index = read_and_clear_irq();
  if ( index >= NUM_LIRQ ) {
-   sprintf( err_msg, "ERROR:: Invalid interrupt number (%02x)\n", index );
-   DEBUG_puts( err_msg );
+   printk( "ERROR:: Invalid interrupt number (%02x)\n", index );
    return;
  }
 
@@ -165,12 +164,9 @@ rtems_isr external_exception_ISR (
         node = (EE_ISR_Type *)(ISR_Array[ index ].first);
 
         if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
-          sprintf(err_msg,"ERROR:: check %d interrupt %02d has no isr\n",
-                  check_irq, index);
-          DEBUG_puts( err_msg);
+          printk"ERROR:: check %d interrupt %02d has no isr\n", check_irq, index);
           value = get_irq_mask();
-          sprintf(err_msg,"        Mask = %02x\n", value);
-          DEBUG_puts( err_msg);
+          printk("        Mask = %02x\n", value);
 	}
         while ( !_Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
           (*node->handler)( node->vector );
@@ -184,11 +180,9 @@ rtems_isr external_exception_ISR (
   {
     node = (EE_ISR_Type *)(ISR_Array[ index ].first);
     if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
-      sprintf(err_msg,"ERROR:: interrupt %02x has no isr\n", index);
-      DEBUG_puts( err_msg);
+      printk( "ERROR:: interrupt %02x has no isr\n", index);
       value = get_irq_mask();
-      sprintf(err_msg,"        Mask = %02x\n", value);
-      DEBUG_puts( err_msg);
+      printk("        Mask = %02x\n", value);
       return;
     }
     while ( !_Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
