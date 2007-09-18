@@ -1,3 +1,7 @@
+2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.inc.in: Add CXX and CXX_FOR_TARGET.
+
 2007-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp.cfg.in: Hard-code HAS_RDBG = no.

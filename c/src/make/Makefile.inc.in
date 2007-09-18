@@ -8,6 +8,7 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 CC_FOR_TARGET = @CC@
+CXX_FOR_TARGET = @CXX@
 AS_FOR_TARGET = @AS@
 AR_FOR_TARGET = @AR@
 NM_FOR_TARGET = @NM@
@@ -16,6 +17,7 @@ SIZE_FOR_TARGET = @SIZE@
 OBJCOPY_FOR_TARGET = @OBJCOPY@
 
 CC= $(CC_FOR_TARGET)
+CXX= $(CXX_FOR_TARGET)
 AS= $(AS_FOR_TARGET)
 LD= $(LD_FOR_TARGET)
 NM= $(NM_FOR_TARGET)
@@ -24,6 +26,7 @@ SIZE= $(SIZE_FOR_TARGET)
 OBJCOPY= $(OBJCOPY_FOR_TARGET)
 
 export CC
+export CXX
 export AS
 export LD
 export NM
