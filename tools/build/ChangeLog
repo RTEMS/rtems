@@ -1,3 +1,7 @@
+2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Rename bin2c to rtems-bin2c.
+
 2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bin2c.c: Updated license after author changed it.
