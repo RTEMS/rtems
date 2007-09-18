@@ -1,3 +1,7 @@
+2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/1553/b1553brm.c, shared/can/grcan.c: Remove include of sched.h
+
 2007-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/spw/grspw.c: Remove include of sched.h. It does not appear to
