@@ -44,10 +44,11 @@ $(PROJECT_INCLUDE)/xparameters_dflt.h: include/xparameters_dflt.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/xparameters_dflt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/xparameters_dflt.h
 
+if HAS_NETWORKING
 $(PROJECT_INCLUDE)/xiltemac.h: network/xiltemac.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/xiltemac.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/xiltemac.h
-
+endif
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
