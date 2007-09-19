@@ -10,8 +10,9 @@ reference README.irq
 The BSP is built and tested on the 4.7.1 and 4.7.99.2 CVS RTEMS release.
 
 I believe in valuable real-time programming, where technical neatness,
-performance and truth are.  Any suggestion, bug reports, or even bug
-fixes (great!) are welcome so that I still believe what I believe.
+performance and truth are.  I hope I still believe. Any suggestion,
+bug reports, or even bug fixes (great!) would be highly appreciated
+so that I still believe what I believe.
 
 
 ACKNOWLEDGEMENTS
@@ -24,12 +25,9 @@ Other related documents are listed at :
 http://www.aps.anl.gov/epics/meetings/2006-06/RTEMS_Primer_SIG/RTEMS_BSP_MVME5500.pdf
 2) netBSD: For the two NICS and some headers :
            Allegro Networks, Inc., Wasabi Systems, Inc.  
-3) RTEMS: For the SVGM5 BSP
-          Stanford Linear Accelerator Center, Till Straumann 
-
- This BSP also builds on top of the work of others who have contributed
- to similar RTEMS powerpc shared and motorola_powerpc BSPs, most notably
- Eric Valette, Till Straumann, Eric Norum and others.
+3) RTEMS:  This BSP also builds on top of the work of others who have
+ contributed to similar RTEMS powerpc shared and motorola_powerpc BSPs, most
+ notably Eric Valette, Till Straumann (SVGM1 BSP, too), Eric Norum and others.
 
 LICENSE
 -------
