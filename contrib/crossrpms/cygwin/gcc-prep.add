@@ -1,4 +1,0 @@
-# cygwin patches can't be directly applied through rpm
-cd gcc-%{gcc_pkgvers}
-patch -p1 -t < %{SOURCE60} || true
-cd ..
