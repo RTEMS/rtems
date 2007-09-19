@@ -1,3 +1,7 @@
+2007-09-19	Daniel Hellstrom <daniel@gaisler.com>
+
+	* shared/can/occan.c: Fix Reenable command and fix typo.
+
 2007-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/1553/b1553brm.c, shared/can/grcan.c: Remove include of sched.h

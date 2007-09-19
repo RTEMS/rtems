@@ -1625,7 +1625,7 @@ static void occan_interrupt(occan_priv *can){
 			}
 			
 			/* Re-Enable RX buffer for a new message */
-			regs->cmd = READ_REG(&regs->cmd) | PELICAN_CMD_RELRXBUF;
+			regs->cmd = PELICAN_CMD_RELRXBUF;
 			
 			/* make message available to the user */
 			occan_fifo_put(can->rxfifo);
@@ -1726,7 +1726,7 @@ static void occan_interrupt(occan_priv *can){
 			tx_error_cnt = READ_REG(&regs->tx_err_cnt);
 			rx_error_cnt = READ_REG(&regs->rx_err_cnt);
 			
-			if ( (tx_error_cnt > 127) || (tx_error_cnt > 127) ){
+			if ( (tx_error_cnt > 127) || (rx_error_cnt > 127) ){
 				can->status |= OCCAN_STATUS_ERR_PASSIVE;
 			}else{
 				can->status &= ~(OCCAN_STATUS_ERR_PASSIVE);
