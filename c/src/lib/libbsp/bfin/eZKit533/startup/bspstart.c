@@ -260,8 +260,8 @@ void initCPLB() {
        unsigned int *addr;
        unsigned int *data;
         
-       addr = 0xffe00100;
-       data = 0xffe00200;
+       addr = (unsigned int *)0xffe00100;
+       data = (unsigned int *)0xffe00200;
 
        while ( dcplbs_table[i][0] != 0xffffffff ) {
                *addr = dcplbs_table[i][0];
