@@ -1,3 +1,7 @@
+2007-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/read.c, libcsupport/src/write.c: Fix spacing.
+
 2007-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/semaphorecreatesupp.c: Fixed warning.
