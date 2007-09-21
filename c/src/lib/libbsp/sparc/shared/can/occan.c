@@ -1002,7 +1002,7 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 
 #ifdef OCCAN_BYTE_REGS
 			/* regs is byte regs */	
-			can->regs = (void *)ambadev.start[0] + OCCAN_NCORE_OFS*subi;
+			can->regs = (void *)(ambadev.start[0] + OCCAN_NCORE_OFS*subi);
 #else
 			/* regs is word regs, accessed 0x100 from base address */
 			can->regs = (void *)(ambadev.start[0] + OCCAN_NCORE_OFS*subi+ OCCAN_WORD_REG_OFS);
@@ -1181,7 +1181,7 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 		rtems_interrupt_disable(oldLevel);
 		
 		/* A bus off interrupt may have occured after checking can->started */
-		if ( can->status & OCCAN_STATUS_ERR_BUSOFF ){
+		if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
 			rtems_interrupt_enable(oldLevel);
 			DBG("OCCAN: read is cancelled due to a BUS OFF error\n\r");
 			rw_args->bytes_moved = rw_args->count-left;
@@ -1210,7 +1210,7 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 			rtems_semaphore_obtain(can->rxsem,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
 			
 			/* did we get woken up by a BUS OFF error? */
-			if ( can->status & OCCAN_STATUS_ERR_BUSOFF ){
+			if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
 				DBG("OCCAN: Blocking read got woken up by BUS OFF error\n\r");
 				/* At this point it should not matter how many messages we handled */
 				rw_args->bytes_moved = rw_args->count-left; 
@@ -1275,7 +1275,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 	rtems_interrupt_disable(oldLevel);
 	
 	/* A bus off interrupt may have occured after checking can->started */
-	if ( can->status & OCCAN_STATUS_ERR_BUSOFF ){
+	if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
 		rtems_interrupt_enable(oldLevel);
 		rw_args->bytes_moved = 0;
 		return RTEMS_IO_ERROR; /* EIO */
@@ -1330,8 +1330,8 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 			rtems_semaphore_obtain(can->txsem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 			
 			/* did we get woken up by a BUS OFF error? */
-			if ( can->status & OCCAN_STATUS_ERR_BUSOFF ){
-				DBG("OCCAN: Blocking write got woken up by BUS OFF error\n\r");
+			if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
+				DBG("OCCAN: Blocking write got woken up by BUS OFF error or RESET event\n\r");
 				/* At this point it should not matter how many messages we handled */
 				rw_args->bytes_moved = rw_args->count-left;
 				return RTEMS_IO_ERROR; /* EIO */
