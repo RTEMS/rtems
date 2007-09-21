@@ -1,5 +1,6 @@
 2007-09-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* VERSION: Bump VERSION to 4.8.99.0.
 	* aclocal/version.m4: Bump RTEMS_API to 4.9.
 	Bump RTEMS_VERSION to 4.8.99.0.
 
