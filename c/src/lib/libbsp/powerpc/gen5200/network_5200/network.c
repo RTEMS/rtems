@@ -1555,6 +1555,13 @@ static void mpc5200_fec_restart(struct mpc5200_enet_struct *sc)
   mpc5200.ecntrl |= (FEC_ECNTRL_OE | FEC_ECNTRL_EN);
 }
 
+int32_t mpc5200_fec_setMultiFilter(struct ifnet *ifp)
+{
+  /*struct mpc5200_enet_struct *sc = ifp->if_softc; */
+  /* XXX anything to do? */
+  return 0;
+}
+
 
 /*
  * Driver ioctl handler
@@ -1573,6 +1580,22 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
       ether_ioctl(ifp, command, data);
 
       break;
+
+    case SIOCADDMULTI:
+    case SIOCDELMULTI: {
+      struct ifreq* ifr = (struct ifreq*) data;
+      error = (command == SIOCADDMULTI)
+                  ? ether_addmulti(ifr, &sc->arpcom)
+                  : ether_delmulti(ifr, &sc->arpcom);
+       
+       if (error == ENETRESET) {
+         if (ifp->if_flags & IFF_RUNNING)
+           error = mpc5200_fec_setMultiFilter(ifp);
+         else
+           error = 0;
+       }
+       break;
+    }
 
     case SIOCSIFFLAGS:
 
@@ -1777,7 +1800,7 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   ifp->if_ioctl   = mpc5200_fec_ioctl;
   ifp->if_start   = mpc5200_fec_tx_start;
   ifp->if_output  = ether_output;
-  ifp->if_flags   = IFF_BROADCAST;
+  ifp->if_flags   = IFF_BROADCAST | IFF_MULTICAST;
   /*ifp->if_flags   = IFF_BROADCAST | IFF_SIMPLEX;*/
 
   if(ifp->if_snd.ifq_maxlen == 0)

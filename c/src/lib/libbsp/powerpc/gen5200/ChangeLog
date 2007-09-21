@@ -1,3 +1,7 @@
+2007-09-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network_5200/network.c: Add multicast support.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps
