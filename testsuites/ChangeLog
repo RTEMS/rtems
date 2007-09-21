@@ -1,3 +1,8 @@
+2007-09-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/version.m4: Bump RTEMS_API to 4.9.
+	Bump RTEMS_VERSION to 4.8.99.0.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* support/include/buffer_test_io.h: Add support for using printk for
