@@ -1,3 +1,10 @@
+2007-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libnetworking/Makefile.am: Add dummy socketpair() implementation to
+	document what is required to provide a fully functional
+	implementation.
+	* libnetworking/rtems/rtems_socketpair.c: New file.
+
 2007-09-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/version.m4: Bump RTEMS_API to 4.9.

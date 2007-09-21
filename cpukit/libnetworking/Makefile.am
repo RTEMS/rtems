@@ -121,8 +121,9 @@ libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c \
     rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
-    rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
-libnetworking_a_SOURCES += rtems/rtems_mii_ioctl.c rtems/rtems_mii_ioctl_kern.c
+    rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c \
+    rtems/rtems_mii_ioctl.c rtems/rtems_mii_ioctl_kern.c \
+    rtems/rtems_socketpair.c
 
 ## sys
 
