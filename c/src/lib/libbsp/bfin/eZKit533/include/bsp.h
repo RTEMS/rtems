@@ -72,8 +72,9 @@ extern "C" {
 #define FlashA_PortB_Dir  0x20270007L
 #define FlashA_PortB_Data 0x20270005L
 
-// Blackfin environment memory map
-//
+/*
+ * Blackfin environment memory map
+ */
 #define L1_DATA_SRAM_A 0xff800000L
 
 #define FIFOLENGTH 0x100
