@@ -40,12 +40,11 @@
 #include <rtems/bsd/sys/cdefs.h>
 
 /*
- * XXX
- * iov_base should be a void *.
+ *  POSIX compliant iovec definition
  */
 struct iovec {
-	char	*iov_base;	/* Base address. */
-	size_t	 iov_len;	/* Length. */
+  void    *iov_base;  /* pointer to data to be written */
+  size_t   iov_len;   /* length of this data block */
 };
 
 #if __BSD_VISIBLE

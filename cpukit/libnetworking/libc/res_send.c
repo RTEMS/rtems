@@ -97,6 +97,9 @@
 #include <poll.h>
 #endif
 
+/* RTEMS now has writev */
+#define USE_WRITEV
+
 #include "res_config.h"
 
 #if !defined(__rtems__)
@@ -378,7 +381,7 @@ res_send(buf, buflen, ans, anssiz)
 
 		if (v_circuit) {
 			int truncated;
-#if !defined(__rtems__)
+#if defined(USE_WRITEV)
 			struct iovec iov[2];
 #endif
 			u_short len;
@@ -416,7 +419,7 @@ res_send(buf, buflen, ans, anssiz)
 			 * Send length & message
 			 */
 			putshort((u_short)buflen, (u_char*)&len);
-#if !defined(__rtems__)
+#if defined(USE_WRITEV)
 			iov[0].iov_base = (caddr_t)&len;
 			iov[0].iov_len = INT16SZ;
 			iov[1].iov_base = (caddr_t)buf;

@@ -19,7 +19,7 @@ NOTES:
 
 1.  OOB not yet implemented. Only a reduced negotiation is implemented.
     
-2.  If you have tcp/ip inited you can start telnetd daemon.
+2.  If you have tcp/ip initialied you can start telnetd daemon.
     You need register pseudo-terminals driver into device drivers table.
     16 ptyX termios device terminales are created into /dev/.
     Calling rtems_initialize_telnetd() starts the daemon.

@@ -63,6 +63,12 @@ SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c src/creat.c \
     src/chroot.c src/sync.c
 
+## Until sys/uio.h is moved to libcsupport, we have to have networking
+## enabled to compile these.  Hopefully this is a temporary situation.
+if LIBNETWORKING
+SYSTEM_CALL_C_FILES += src/readv.c src/writev.c
+endif
+
 DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
     src/readdir_r.c src/rewinddir.c src/scandir.c src/seekdir.c \
     src/telldir.c src/getcwd.c

@@ -38,6 +38,10 @@ $(PROJECT_INCLUDE)/rtems/telnetd.h: telnetd.h $(PROJECT_INCLUDE)/rtems/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/telnetd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/telnetd.h
 
+$(PROJECT_INCLUDE)/rtems/passwd.h: passwd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/passwd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/passwd.h
+
 $(PROJECT_LIB)/libtelnetd.a: libtelnetd.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtelnetd.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libtelnetd.a

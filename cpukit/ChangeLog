@@ -1,3 +1,13 @@
+2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1262/filesystem
+	* libcsupport/Makefile.am, libnetworking/libc/herror.c,
+	libnetworking/libc/res_send.c, libnetworking/sys/uio.h,
+	telnetd/Makefile.am, telnetd/README, telnetd/preinstall.am,
+	telnetd/pty.c, telnetd/telnetd.c: Add support for readv() and
+	writev() including documentation and test case.
+	* libcsupport/src/readv.c, libcsupport/src/writev.c: New files.
+
 2007-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/Makefile.am: Add dummy socketpair() implementation to

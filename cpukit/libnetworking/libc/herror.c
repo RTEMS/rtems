@@ -69,6 +69,8 @@ int	h_nerr = { sizeof h_errlist / sizeof h_errlist[0] };
 
 int	h_errno;
 
+#define HERROR_USE_WRITEV
+
 /*
  * herror --
  *	print the error indicated by the h_errno value.
@@ -77,7 +79,7 @@ void
 herror(s)
 	const char *s;
 {
-#if 0
+#if defined(HERROR_USE_WRITEV)
 	struct iovec iov[4];
 	register struct iovec *v = iov;
 
@@ -97,7 +99,7 @@ herror(s)
 	writev(STDERR_FILENO, iov, (v - iov) + 1);
 #else
 	/*
-	 * RTEMS: no writev yet
+	 * no writev implementation available
 	 */
 	if (s && *s) {
 		write (2, s, strlen (s));
