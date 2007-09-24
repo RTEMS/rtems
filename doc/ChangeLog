@@ -1,3 +1,9 @@
+2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1262/filesystem
+	* posix_users/io.t: Add support for readv() and writev() including
+	documentation and test case.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems_footer.html.in, common/cpright.texi: Update copyright.

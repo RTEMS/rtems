@@ -28,6 +28,8 @@ The directives provided by the input and output primitives manager are:
 @item @code{sync} - Schedule file system updates
 @item @code{mount} - Mount a file system
 @item @code{unmount} - Unmount file systems
+@item @code{readv} - Vectored read from a file
+@item @code{writev} - Vectored write to a file
 @item @code{aio_read} - Asynchronous Read
 @item @code{aio_write} - Asynchronous Write
 @item @code{lio_listio} - List Directed I/O
@@ -178,7 +180,7 @@ and tried to open a new one.
 
 @subheading DESCRIPTION:
 
-@code{Dup2} creates a copy of the file descriptor @code{oldfd}.
+@code{dup2} creates a copy of the file descriptor @code{oldfd}.
 
 The old and new descriptors may be used interchangeably. They share locks, file
 position pointers and flags; for example, if the file position is modified by using
@@ -192,7 +194,7 @@ NONE
 @c
 @c
 @page
-@subsection close - Closes a file.
+@subsection close - Closes a file
 
 @findex close
 @cindex  closes a file.
@@ -238,10 +240,10 @@ may or may not be closed.
 @c
 @c
 @page
-@subsection read - Reads from a file.
+@subsection read - Reads from a file
 
 @findex read
-@cindex  reads from a file.
+@cindex  reads from a file
 
 @subheading CALLING SEQUENCE:
 
@@ -278,6 +280,9 @@ Function was interrupted by a signal.
 
 @item EIO
 Input or output error
+
+@item EINVAL
+Bad buffer pointer
 
 @end table
 
@@ -386,6 +391,9 @@ No space left on disk.
 
 @item EPIPE
 Attempt to write to a pope or FIFO with no reader.
+
+@item EINVAL
+Bad buffer pointer
 
 @end table
 
@@ -575,13 +583,13 @@ int lseek(
 
 @table @b
 @item EBADF
-@code{Fildes} is not an open file descriptor.
+@code{fildes} is not an open file descriptor.
 
 @item ESPIPE
-@code{Fildes} is associated with a pipe, socket or FIFO.
+@code{fildes} is associated with a pipe, socket or FIFO.
 
 @item EINVAL
-@code{Whence} is not a proper value.
+@code{whence} is not a proper value.
 
 @end table
 
@@ -673,7 +681,7 @@ NONE
 @c
 @c
 @page
-@subsection fdatasync - Synchronize file in-core data with that on disk.
+@subsection fdatasync - Synchronize file in-core data with that on disk
 
 @findex fdatasync
 @cindex  synchronize file in
@@ -850,6 +858,131 @@ int unmount(
 
 The @code{unmount} routine removes the attachment of the filesystem specified
 by @code{mount_path}.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c
+@c
+@page
+@subsection readv - Vectored read from a file
+
+@findex readv
+@cindex  vectored read from a file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/uio.h>
+
+ssize_t readv(
+  int                 fd,
+  const struct iovec *iov,
+  int                 iovcnt
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+In addition to the errors detected by
+@code{Input and Output Primitives Manager read - Reads from a file, read()},
+this routine may return -1 and sets @code{errno} based upon the following 
+errors:
+
+@table @b
+@item EINVAL
+The sum of the @code{iov_len} values in the iov array overflowed an 
+@code{ssize_t}.
+
+@item EINVAL
+The @code{iovcnt} argument was less than or equal to 0, or greater
+than @code{IOV_MAX}.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{readv()} function is equivalent to @code{read()}
+except as described here. The @code{readv()} function shall place
+the input data into the @code{iovcnt} buffers specified by the
+members of the @code{iov} array: @code{iov[0], iov[1], ..., iov[iovcnt-1]}.
+
+Each @code{iovec} entry specifies the base address and length of an area
+in memory where data should be placed. The @code{readv()} function
+always fills an area completely before proceeding to the next.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c
+@c
+@page
+@subsection writev - Vectored write to a file
+
+@findex writev
+@cindex  vectored write to a file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/uio.h>
+
+ssize_t writev(
+  int                 fd,
+  const struct iovec *iov,
+  int                 iovcnt
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+In addition to the errors detected by
+@code{Input and Output Primitives Manager write - Write to a file, write()},
+this routine may return -1 and sets @code{errno} based upon the following 
+errors:
+
+@table @b
+@item EINVAL
+The sum of the @code{iov_len} values in the iov array overflowed an 
+@code{ssize_t}.
+
+@item EINVAL
+The @code{iovcnt} argument was less than or equal to 0, or greater
+than @code{IOV_MAX}.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{writev()} function is equivalent to @code{write()},
+except as noted here. The @code{writev()} function gathers output
+data from the @code{iovcnt} buffers specified by the members of
+the @code{iov array}: @code{iov[0], iov[1], ..., iov[iovcnt-1]}.
+The @code{iovcnt} argument is valid if greater than 0 and less
+than or equal to @code{IOV_MAX}.
+
+Each @code{iovec} entry specifies the base address and length of
+an area in memory from which data should be written. The @code{writev()}
+function always writes a complete area before proceeding to the next.
+
+If @code{fd} refers to a regular file and all of the @code{iov_len}
+members in the array pointed to by @code{iov} are 0, @code{writev()}
+returns 0 and has no other effect. For other file types, the behavior
+is unspecified by POSIX.
 
 @subheading NOTES:
 
