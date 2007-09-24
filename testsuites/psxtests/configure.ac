@@ -23,6 +23,7 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
+AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
@@ -47,6 +48,7 @@ psxhdrs/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxreaddir/Makefile
+psxrdwrv/Makefile
 psxrwlock01/Makefile
 psxsem01/Makefile
 psxspin01/Makefile

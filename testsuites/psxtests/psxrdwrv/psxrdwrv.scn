@@ -1,0 +1,18 @@
+*** POSIX TEST READV/WRITEV ***
+writev bad file descriptor -- EBADF
+readv bad file descriptor -- EBADF
+writev bad iovec pointer -- EINVAL
+readv bad iovec pointer -- EINVAL
+readv bad iovcnt of 0 -- EINVAL
+readv bad iovcnt of 0 -- EINVAL
+writev bad iovcnt negative -- EINVAL
+readv bad iovcnt negative -- EINVAL
+writev bad iov[i].iov_base -- EINVAL
+readv bad iov[i].iov_base -- EINVAL
+writev bad iov[i].iov_len < 0 -- EINVAL
+readv bad iov[i].iov_len = 0 -- EINVAL
+writev iov_len total overflows -- EINVAL
+readv iov_len total overflows -- EINVAL
+File written using writev .. OK
+File read using readv .. OK
+*** END OF TEST PSXRDWRV ***

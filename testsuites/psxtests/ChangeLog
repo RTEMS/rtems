@@ -1,3 +1,11 @@
+2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1262/filesystem
+	* Makefile.am, configure.ac, include/pmacros.h: Add support for readv()
+	and writev() including documentation and test case.
+	* psxrdwrv/.cvsignore, psxrdwrv/Makefile.am, psxrdwrv/main.c,
+	psxrdwrv/psxrdwrv.scn, psxrdwrv/test.c: New files.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxsem01/init.c, psxsem01/psxsem01.scn, psxtimer/psxtimer.c,

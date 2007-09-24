@@ -5,7 +5,9 @@
 #ifndef __POSIX_TEST_MACROS_h
 #define __POSIX_TEST_MACROS_h
 
+#if defined(__rtems__)
 #include <bsp.h>
+#endif
 #include <pthread.h>
 #include <assert.h>
 #include <stdio.h>
