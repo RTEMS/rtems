@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
+#include <inttypes.h>
 
 #define DATACOL 15
 
@@ -116,9 +117,9 @@ rtems_monitor_mpci_dump(
     uint32_t     length = 0;
 
     length += rtems_monitor_pad(2, length);
-    length += fprintf(stdout,"  %d", monitor_mpci->node);
+    length += fprintf(stdout,"  %" PRId32 , monitor_mpci->node);
     length += rtems_monitor_pad(11, length);
-    length += fprintf(stdout,"%d", monitor_mpci->maximum_nodes);
+    length += fprintf(stdout,"%" PRId32, monitor_mpci->maximum_nodes);
 
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_decimal(monitor_mpci->maximum_global_objects);

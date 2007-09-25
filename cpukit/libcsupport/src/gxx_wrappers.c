@@ -53,13 +53,13 @@ typedef void *__gthread_recursive_mutex_t;
 
 /* uncomment this if you need to debug this interface */
 
-/*
 #define DEBUG_GXX_WRAPPERS 1
+/*
 */
 
 #ifdef DEBUG_GXX_WRAPPERS
 /* local function to return the ID of the calling thread */
-static rtems_id get_tid( void )
+static rtems_id rtems_gxx_get_tid( void )
 {
    rtems_id id = 0;
    rtems_task_ident( RTEMS_SELF, 0, &id );
@@ -160,7 +160,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
   }
 
 #ifdef DEBUG_GXX_WRAPPERS
-   printk( "gxx_wrappers: getspecific key=%x, ptr=%x, id=%x\n", key, p, get_tid() );
+   printk( "gxx_wrappers: getspecific key=%x, ptr=%x, id=%x\n", key, p, rtems_gxx_get_tid() );
 #endif
    return p;
 }
@@ -169,7 +169,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
 int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
 {
 #ifdef DEBUG_GXX_WRAPPERS
-  printk( "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n", key, ptr, get_tid() );
+  printk( "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n", key, ptr, rtems_gxx_get_tid() );
 #endif
   /* register with RTEMS the buffer that will hold the key values */
   if( rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor ) == RTEMS_SUCCESSFUL )
