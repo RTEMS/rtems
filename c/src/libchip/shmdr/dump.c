@@ -6,7 +6,7 @@
  *
  *  Output parameters: NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,8 @@
 
 #include <rtems.h>
 #include <stdio.h>
+#include <inttypes.h>
+#include <rtems/bspIo.h>
 
 #include "shm_driver.h"
 
@@ -27,7 +29,7 @@ Shm_Print_statistics(void)
   uint32_t    ticks;
   uint32_t    ticks_per_second;
   uint32_t    seconds;
-  int               packets_per_second;
+  int         packets_per_second;
 
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
@@ -40,11 +42,11 @@ Shm_Print_statistics(void)
   if ( (Shm_Receive_message_count % seconds) >= (seconds / 2) )
     packets_per_second++;
 
-  printf( "\n\nSHMDR STATISTICS (NODE %d)\n", Shm_Local_node );
-  printf( "TICKS SINCE BOOT = %d\n", ticks );
-  printf( "TICKS PER SECOND = %d\n", ticks_per_second );
-  printf( "ISRs=%d\n",     Shm_Interrupt_count );
-  printf( "RECV=%d\n",     Shm_Receive_message_count );
-  printf( "NULL=%d\n",     Shm_Null_message_count );
-  printf( "PKTS/SEC=%d\n", packets_per_second );
+  printk( "\n\nSHMDR STATISTICS (NODE %" PRId32 ")\n", Shm_Local_node );
+  printk( "TICKS SINCE BOOT = %" PRId32 "\n", ticks );
+  printk( "TICKS PER SECOND = %" PRId32 "\n", ticks_per_second );
+  printk( "ISRs=%" PRId32 "\n",     Shm_Interrupt_count );
+  printk( "RECV=%" PRId32 "\n",     Shm_Receive_message_count );
+  printk( "NULL=%" PRId32 "\n",     Shm_Null_message_count );
+  printk( "PKTS/SEC=%" PRId32 "\n", packets_per_second );
 }

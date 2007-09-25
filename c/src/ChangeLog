@@ -1,5 +1,9 @@
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libchip/shmdr/dump.c, libchip/shmdr/shm_driver.h: Fix warnings.
+
+2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* nfsclient/Makefile.am: Fix errors.
 
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>

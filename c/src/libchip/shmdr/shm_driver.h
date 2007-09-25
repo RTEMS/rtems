@@ -6,7 +6,7 @@
  *
  *  Processor board dependencies are in other files.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -423,7 +423,7 @@ struct shm_config_info {
   vol_u32           *base;     /* base address of SHM         */
   vol_u32            length;   /* length (in bytes) of SHM    */
   vol_u32            format;   /* SHM is big or little endian */
-  vol_u32          (*convert)();/* neutral conversion routine */
+  uint32_t         (*convert)();/* neutral conversion routine */
   vol_u32            poll_intr;/* POLLED or INTR driven mode  */
   void             (*cause_intr)( uint32_t);
   Shm_Interrupt_information   Intr;     /* cause intr information      */
