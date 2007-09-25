@@ -33,6 +33,10 @@ $(PROJECT_LIB)/dirutils.rel: dirutils.rel $(PROJECT_LIB)/$(dirstamp)
 TMPINSTALL_FILES += $(PROJECT_LIB)/dirutils.rel
 
 if HAS_NETWORKING
+$(PROJECT_LIB)/libnfs.a: libnfs.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libnfs.a
+
 $(PROJECT_INCLUDE)/librtemsNfs.h: src/librtemsNfs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/librtemsNfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/librtemsNfs.h
