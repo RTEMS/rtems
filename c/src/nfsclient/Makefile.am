@@ -37,7 +37,7 @@ project_lib_PROGRAMS += nfs.rel
 nfs_rel_SOURCES = src/nfs.c proto/nfs_prot.h proto/mount_prot.h
 nfs_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/proto
 nfs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-nfs_rel_LDADD = libnfsprot.a
+nfs_rel_LDADD = libnfs.a
 
 #%rpcio.obj: %rpcio.o %sock_mbuf.o %xdr_mbuf.o %rpcio.modini.o
 #	$(LD) -r -o $@ $^
@@ -49,7 +49,6 @@ rpcio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libnfs_a_SOURCES += proto/nfs_prot_xdr.c proto/nfs_prot.h
 libnfs_a_SOURCES += proto/mount_prot_xdr.c proto/mount_prot.h
 
-libnfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 libnfs_a_CPPFLAGS += -I$(srcdir)/proto
 libnfs_a_CPPFLAGS += -UHAVE_CEXP
 endif

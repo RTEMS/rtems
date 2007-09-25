@@ -1,5 +1,9 @@
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* nfsclient/Makefile.am: Fix errors.
+
+2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* nfsclient/Makefile.am, nfsclient/preinstall.am: Install libnfs.a.
 
 2007-09-21	Ralf Corsépius <ralf.corsepius@rtems.org>
