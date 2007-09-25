@@ -1,5 +1,9 @@
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/src/gxx_wrappers.c: Revert.
+
+2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/src/gxx_wrappers.c, libmisc/monitor/mon-mpci.c: Use
 	PRId32 to fix warning.
 
