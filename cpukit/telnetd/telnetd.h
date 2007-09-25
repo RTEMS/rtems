@@ -1,17 +1,15 @@
 /*
  * (A first version for telnetd)
  *
- *  Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
+ *  Original Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
  *  May 2001
+ *
+ *  Reworked by Till Straumann and .h overhauled by Joel Sherrill.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  rtems_initialize_telnetd() starts the daemon.
- *  main_telnetd() is the main_proc for the command telnetd in the shell
- *  register_telnetd() add a new command in the shell to start
- *  interactively the telnetd daemon.
  * 
  *  $Id$
  */
@@ -23,14 +21,23 @@
 extern "C" {
 #endif	
 
-extern int rtems_telnetd_initialize(void);
-extern int rtems_telnetd_main(int argc,char * argv[]);
-extern int rtems_telnetd_register(void);
-
-/* OBSOLETE */
-#define rtems_initialize_telnetd	rtems_telnetd_initialize
-#define main_telnetd  			rtems_telnetd_main
-#define register_telnetd		rtems_telnetd_register
+/*
+ *  Initialize the telnetd subsystem.
+ *
+ *  cmd        - function which is the "shell" telnetd invokes
+ *  arg        - context pointer to cmd
+ *  dontSpawn  - TRUE if telnetd takes over this task.
+ *               FALSE to create another task for the shell.
+ *  stack      - stack size of spawned task 
+ *  priority   - initial priority of spawned task
+ */
+int rtems_telnetd_initialize(
+  void               (*cmd)(char *, void *),
+  void                *arg,
+  int                  dontSpawn,
+  size_t               stack,
+  rtems_task_priority  priority
+);
 
 #ifdef __cplusplus
 }

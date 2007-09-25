@@ -1,3 +1,9 @@
+2007-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* telnetd/README, telnetd/pty.c, telnetd/pty.h, telnetd/telnetd.c,
+	telnetd/telnetd.h: telnetd rewrite.
+	* telnetd/check_passwd.c, telnetd/des.c, telnetd/genpw.c: New files.
+
 2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1262/filesystem

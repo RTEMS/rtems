@@ -21,8 +21,7 @@ NOTES:
     
 2.  If you have tcp/ip initialied you can start telnetd daemon.
     You need register pseudo-terminals driver into device drivers table.
-    16 ptyX termios device terminales are created into /dev/.
-    Calling rtems_initialize_telnetd() starts the daemon.
-    Enjoy it.
+
+Enjoy it.
 
 FUTURE:

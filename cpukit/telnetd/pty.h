@@ -61,7 +61,7 @@ rtems_device_driver pty_control(
 
 #define PTY_DRIVER_TABLE_ENTRY \
        { pty_initialize , pty_open , pty_close , \
-	 pty_read , pty_write , pty_control }
+   pty_read , pty_write , pty_control }
 
 #ifdef __cplusplus
 }
