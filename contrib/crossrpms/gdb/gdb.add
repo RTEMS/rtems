@@ -22,7 +22,7 @@ BuildRequires:	expat-devel
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-%if "@tool_target@" == "sparc-rtems4.8"
+%if "@tool_target@" == "sparc-rtems4.9"
 BuildRequires:	libtermcap-devel
 %endif
 BuildRequires:	ncurses-devel

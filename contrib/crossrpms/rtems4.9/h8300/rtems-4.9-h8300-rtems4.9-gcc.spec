@@ -378,7 +378,7 @@ GNU cc compiler for h8300-rtems4.9.
 
 %dir %{gcclib}/h8300-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "h8300-rtems4.9" != "bfin-rtems4.8"
+%if "h8300-rtems4.9" != "bfin-rtems4.9"
 %dir %{gcclib}/h8300-rtems4.9/%{gcc_version}/include/ssp
 %endif
 %endif

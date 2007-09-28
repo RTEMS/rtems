@@ -378,7 +378,7 @@ GNU cc compiler for i386-rtems4.9.
 
 %dir %{gcclib}/i386-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "i386-rtems4.9" != "bfin-rtems4.8"
+%if "i386-rtems4.9" != "bfin-rtems4.9"
 %dir %{gcclib}/i386-rtems4.9/%{gcc_version}/include/ssp
 %endif
 %endif

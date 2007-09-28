@@ -375,7 +375,7 @@ GNU cc compiler for m68k-rtems4.9.
 
 %dir %{gcclib}/m68k-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "m68k-rtems4.9" != "bfin-rtems4.8"
+%if "m68k-rtems4.9" != "bfin-rtems4.9"
 %dir %{gcclib}/m68k-rtems4.9/%{gcc_version}/include/ssp
 %endif
 %endif

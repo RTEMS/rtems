@@ -378,7 +378,7 @@ GNU cc compiler for sparc-rtems4.9.
 
 %dir %{gcclib}/sparc-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "sparc-rtems4.9" != "bfin-rtems4.8"
+%if "sparc-rtems4.9" != "bfin-rtems4.9"
 %dir %{gcclib}/sparc-rtems4.9/%{gcc_version}/include/ssp
 %endif
 %endif

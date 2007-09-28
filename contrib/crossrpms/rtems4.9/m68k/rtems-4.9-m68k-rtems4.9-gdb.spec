@@ -35,7 +35,7 @@ BuildRequires:	expat-devel
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%if "m68k-rtems4.9" == "sparc-rtems4.8"
+%if "m68k-rtems4.9" == "sparc-rtems4.9"
 BuildRequires:	libtermcap-devel
 %endif
 BuildRequires:	ncurses-devel
