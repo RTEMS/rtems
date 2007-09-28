@@ -64,11 +64,9 @@ static inline boolean Stack_check_Frame_pointer_in_range(
 
   #if defined(__GNUC__)
     if ( sp < the_stack->area ) {
-      printk( "Stack Pointer Too Low!\n" );
       return FALSE;
     }
     if ( sp > (the_stack->area + the_stack->size) ) {
-      printk( "Stack Pointer Too High!\n" );
       return FALSE;
     }
   #else
@@ -225,16 +223,14 @@ void Stack_check_report_blown_task(
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table()) {
       printk(
-        "; node=%d\n",
+        "; node=%d",
         rtems_configuration_get_user_multiprocessing_table()->node
       );
     }
-  #else
-      printk( "\n" );
   #endif
 
   printk(
-    "  stack covers range 0x%p - 0x%p (%d bytes)\n",
+    "\n  stack covers range 0x%p - 0x%p (%d bytes)\n",
     stack->area,
     stack->area + stack->size - 1,
     stack->size
@@ -305,10 +301,17 @@ boolean rtems_stack_checker_is_blown( void )
     ));
   }
 
-  if ( !sp_ok || !pattern_ok ) {
-    return TRUE;
-  }
-  return FALSE;
+  /*
+   * The Stack Pointer and the Pattern Area are OK so return FALSE.
+   */
+  if ( sp_ok && pattern_ok )
+    return FALSE;
+
+  /*
+   * Let's report as much as we can.
+   */
+  Stack_check_report_blown_task( _Thread_Executing, pattern_ok );
+  return TRUE;
 }
 
 /*

@@ -1,3 +1,10 @@
+2007-09-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/stackchk/check.c: Eliminate output with little information.
+	Always print a blown message using the same routine. Now works with
+	GNAT RTS -fstack-checking if you have patch for the RTEMS specific
+	support in your GCC version.
+
 2007-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/semaphorecreatesupp.c: Fixed warning.
