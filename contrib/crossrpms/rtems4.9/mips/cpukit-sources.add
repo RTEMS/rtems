@@ -1,0 +1,2 @@
+Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/rtems-%{cpukit_pkgvers}.tar.bz2
+%{?_without_sources:NoSource:   0}

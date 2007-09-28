@@ -1,0 +1,35 @@
+EXTRA_DIST += $(srcdir)/../rtems-prep.add
+EXTRA_DIST += $(srcdir)/rtems-sources.add
+
+CPUKIT_OPTS =
+
+CPUKIT_SUBPACKAGES = $(top_srcdir)/common/common.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/cpukit.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/prep.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/build.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/install.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/rpm-install.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/common/clean.add
+CPUKIT_SUBPACKAGES += $(top_srcdir)/cpukit/target-cpukit.add
+
+$(TARGET)-cpukit.spec.in: $(CPUKIT_SUBPACKAGES) Makefile.am $(srcdir)/cpukit-sources.add $(srcdir)/../cpukit-prep.add
+	cat $(CPUKIT_SUBPACKAGES) | sed \
+	  -e "/[@]SOURCES[@]/r $(srcdir)/cpukit-sources.add" \
+	  -e "/[@]SOURCES[@]/d" \
+	  -e "/[@]PREP[@]/r $(srcdir)/../cpukit-prep.add" \
+	  -e "/[@]PREP[@]/d" \
+	  -e "s/[@]CPUKIT_VERS[@]/$(CPUKIT_VERS)/g" \
+	  -e "s/[@]CPUKIT_PKGVERS[@]/$(CPUKIT_PKGVERS)/g" \
+	  -e "s/[@]CPUKIT_RPMREL[@]/$(CPUKIT_RPMREL)/g" \
+	  -e "/--with-sysroot/d" \
+	  -e "/[@]tool_target[@]-sys-root/d" \
+	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
+	  | $(MKSPEC0) > $(TARGET)-cpukit.spec.in
+CLEANFILES += $(TARGET)-cpukit.spec.in
+
+@rpmprefix@$(TARGET)-cpukit.spec: $(TARGET)-cpukit.spec.in
+	$(MKSPEC) $(TARGET)-cpukit.spec.in | $(SPECSTRIP) $(CPUKIT_OPTS) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-cpukit.spec
+noinst_DATA += @rpmprefix@$(TARGET)-cpukit.spec
+
+EXTRA_DIST += $(CPUKIT_SUBPACKAGES)
