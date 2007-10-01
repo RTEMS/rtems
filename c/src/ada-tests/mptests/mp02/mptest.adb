@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 2 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -55,7 +53,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating test task (Global)" );
 
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ),
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ),
          1, 
          2048, 
          RTEMS.NO_PREEMPT,
@@ -97,7 +95,7 @@ package body MPTEST is
       RTEMS.TASK_IDENT( RTEMS.SELF, RTEMS.SEARCH_ALL_NODES, TID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          REMOTE_NODE := 2;
       else
          REMOTE_NODE := 1;

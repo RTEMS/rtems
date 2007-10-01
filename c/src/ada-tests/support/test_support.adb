@@ -206,8 +206,10 @@ package body Test_Support is
    ) return RTEMS.Unsigned32 is
    begin
 
-      return RTEMS.Get_Index( TID ) - 1 -
-        RTEMS.Configuration.RTEMS_API_Configuration.Number_Of_Initialization_Tasks;
+      -- probably OK
+      return RTEMS.Get_Index( TID ) - 1;
+      --   Ignoring this component.
+      --   - RTEMS.Configuration.RTEMS_API_Configuration.Number_Of_Initialization_Tasks;
 
    end Task_Number;
 
@@ -229,7 +231,33 @@ package body Test_Support is
 
    function Milliseconds_Per_Tick 
    return RTEMS.Unsigned32 is
+      function Milliseconds_Per_Tick_Base return RTEMS.Unsigned32;
+      pragma Import (C, Milliseconds_Per_Tick_Base, "milliseconds_per_tick");
    begin
-      return RTEMS.Configuration.Microseconds_Per_Tick / 1000;
+      return Milliseconds_Per_Tick_Base;
    end Milliseconds_Per_Tick;
+
+--PAGE
+--
+--  Milliseconds_Per_Tick
+--
+   function Ticks_Per_Second 
+   return RTEMS.Interval is
+      function Ticks_Per_Second_Base return RTEMS.Unsigned32;
+      pragma Import (C, Ticks_Per_Second_Base, "ticks_per_second");
+   begin
+      return Ticks_Per_Second_Base;
+   end Ticks_Per_Second; 
+
+--
+--  Node is the node number in a multiprocessor configuration
+--
+
+   function Node 
+   return RTEMS.Unsigned32 is
+      function Get_Node_Base return RTEMS.Unsigned32;
+      pragma Import (C, Get_Node_Base, "get_node");
+   begin
+      return Get_Node_Base;
+   end Node;
 end Test_Support;

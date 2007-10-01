@@ -1,3 +1,23 @@
+2007-10-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mptests/mp01/mptest.adb, mptests/mp01/mptest.ads,
+	mptests/mp01/node1/Makefile.am, mptests/mp02/mptest.adb,
+	mptests/mp02/mptest.ads, mptests/mp03/mptest.adb,
+	mptests/mp03/mptest.ads, mptests/mp04/mptest.adb,
+	mptests/mp04/mptest.ads, mptests/mp05/mptest.adb,
+	mptests/mp05/mptest.ads, mptests/mp06/mptest.adb,
+	mptests/mp06/mptest.ads, mptests/mp07/mptest.adb,
+	mptests/mp07/mptest.ads, mptests/mp08/mptest.adb,
+	mptests/mp08/mptest.ads, mptests/mp09/mptest.adb,
+	mptests/mp09/mptest.ads, mptests/mp10/mptest.adb,
+	mptests/mp10/mptest.ads, mptests/mp11/mptest.adb,
+	mptests/mp11/mptest.ads, mptests/mp12/mptest.adb,
+	mptests/mp12/mptest.ads, mptests/mp13/mptest.adb,
+	mptests/mp13/mptest.ads, mptests/mp14/mptest.adb,
+	mptests/mp14/mptest.ads, support/init.c, support/test_support.adb,
+	support/test_support.ads: Most of single processor Ada tests now
+	build. Some run.
+
 2007-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* support/init.c: Spacing cleanup.

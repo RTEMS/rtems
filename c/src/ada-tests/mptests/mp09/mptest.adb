@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 9 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -74,7 +72,7 @@ package body MPTEST is
 
       MPTEST.QUEUE_NAME( 1 ) := RTEMS.BUILD_NAME(  'M', 'S', 'G', ' ' );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
          RTEMS.MESSAGE_QUEUE_CREATE(
@@ -90,8 +88,8 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating Test_task (local)" );
       RTEMS.TASK_CREATE(
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ),
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ),
+         TEST_SUPPORT.NODE,
          2048,
          RTEMS.TIMESLICE,
          RTEMS.DEFAULT_ATTRIBUTES,
@@ -296,7 +294,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 2 then
+      if TEST_SUPPORT.NODE = 2 then
 
          RTEMS.MESSAGE_QUEUE_DELETE( MPTEST.QUEUE_ID( 1 ), STATUS );
 

@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 8 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -54,7 +52,7 @@ package body MPTEST is
 
       MPTEST.SEMAPHORE_NAME( 1 ) := RTEMS.BUILD_NAME(  'S', 'E', 'M', ' ' );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Semaphore(Global)" );
 
@@ -71,8 +69,8 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ), 
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE, 
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
+         TEST_SUPPORT.NODE, 
          2048, 
          RTEMS.TIMESLICE,
          RTEMS.GLOBAL,
@@ -123,7 +121,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 2 then
+      if TEST_SUPPORT.NODE = 2 then
 
          RTEMS.SEMAPHORE_DELETE(
             MPTEST.SEMAPHORE_ID( 1 ),
@@ -174,7 +172,7 @@ package body MPTEST is
 
          COUNT := COUNT + 1;
 
-         if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 and then
+         if TEST_SUPPORT.NODE = 1 and then
             COUNT >= 1000 then
 
             RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );

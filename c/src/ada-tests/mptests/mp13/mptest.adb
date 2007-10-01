@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 13 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -56,7 +54,7 @@ package body MPTEST is
 
       MPTEST.SEMAPHORE_NAME( 1 ) := RTEMS.BUILD_NAME(  'S', 'E', 'M', ' ' );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
          RTEMS.MESSAGE_QUEUE_CREATE(
@@ -130,7 +128,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START" );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          RTEMS.TASK_WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
@@ -179,7 +177,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Receiving message ..." );
          RTEMS.MESSAGE_QUEUE_RECEIVE(
@@ -252,7 +250,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );

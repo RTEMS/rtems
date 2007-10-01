@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 4 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -55,8 +53,8 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
 
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ), 
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE, 
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
+         TEST_SUPPORT.NODE, 
          2048, 
          RTEMS.DEFAULT_MODES,
          RTEMS.GLOBAL,
@@ -100,7 +98,7 @@ package body MPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_IDENT OF SELF" );
    
       TEXT_IO.PUT_LINE( "Getting TID of remote task" );
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          MPTEST.REMOTE_NODE := 2;
       else
          MPTEST.REMOTE_NODE := 1;
@@ -124,7 +122,7 @@ package body MPTEST is
 
       RTEMS.TASK_SET_PRIORITY(
          MPTEST.REMOTE_TID,
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          PREVIOUS_PRIORITY,
          STATUS
       );

@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 6 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -55,8 +53,8 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
 
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ), 
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE, 
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
+         TEST_SUPPORT.NODE, 
          2048, 
          RTEMS.DEFAULT_MODES,
          RTEMS.GLOBAL,
@@ -79,7 +77,7 @@ package body MPTEST is
       MPTEST.TIMER_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'M', '2', ' ' );
 
       RTEMS.TIMER_CREATE(
-         MPTEST.TIMER_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ),
+         MPTEST.TIMER_NAME( TEST_SUPPORT.NODE ),
          MPTEST.TIMER_ID( 1 ),
          STATUS
       );
@@ -123,7 +121,7 @@ package body MPTEST is
 
       MPTEST.STOP_TEST := FALSE;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          MPTEST.REMOTE_NODE     := 2;
       else
          MPTEST.REMOTE_NODE     := 1;
@@ -147,7 +145,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          TEXT_IO.PUT_LINE( "Sending events to remote task" );
       else
          TEXT_IO.PUT_LINE( "Receiving events from remote task" );
@@ -173,7 +171,7 @@ package body MPTEST is
                INTEGER( COUNT ) mod MPTEST.EVENT_SET_TABLE'LAST + 1
             );
 
-         if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+         if TEST_SUPPORT.NODE = 1 then
 
             RTEMS.EVENT_SEND( 
                MPTEST.REMOTE_TID,
@@ -195,7 +193,7 @@ package body MPTEST is
             if RTEMS.ARE_STATUSES_EQUAL( STATUS, RTEMS.TIMEOUT ) then
                TEXT_IO.NEW_LINE( 1 );
 
-               if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 2 then
+               if TEST_SUPPORT.NODE = 2 then
                   TEXT_IO.PUT_LINE(
                      "Correct behavior if the other node exitted."
                   );
@@ -227,7 +225,7 @@ package body MPTEST is
 
       TEXT_IO.NEW_LINE;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 2 then
+      if TEST_SUPPORT.NODE = 2 then
 
          RTEMS.EVENT_RECEIVE( 
             RTEMS.EVENT_16,

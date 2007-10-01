@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 7 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -54,8 +52,8 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ), 
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE, 
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
+         TEST_SUPPORT.NODE, 
          2048, 
          RTEMS.TIMESLICE,
          RTEMS.GLOBAL,
@@ -111,14 +109,13 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      COUNT     : RTEMS.UNSIGNED32;
       EVENT_OUT : RTEMS.EVENT_SET;
       STATUS    : RTEMS.STATUS_CODES;
    begin
 
       MPTEST.STOP_TEST := FALSE;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          MPTEST.REMOTE_NODE := 2;
       else
          MPTEST.REMOTE_NODE := 1;
@@ -140,7 +137,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Sending first event to remote task" );
          RTEMS.EVENT_SEND( 

@@ -156,8 +156,8 @@ package Test_Support is
 --  occur each second.
 --
 
-   Ticks_Per_Second : RTEMS.Interval; 
-   pragma Import (C, Ticks_Per_Second, "_TOD_Ticks_per_second");
+   function Ticks_Per_Second 
+   return RTEMS.Interval; 
 
 --
 --  Milliseconds_Per_Tick is the number of milliseconds which
@@ -166,6 +166,19 @@ package Test_Support is
 
    function Milliseconds_Per_Tick 
    return RTEMS.Unsigned32;
+
+--
+--  Node is the node number in a multiprocessor configuration
+--
+
+   function Node 
+   return RTEMS.Unsigned32;
+
+--
+--  Longest time in seconds to run a test
+--
+
+    MAXIMUM_LONG_TEST_DURATION : RTEMS.UNSIGNED32;
 
 private
 

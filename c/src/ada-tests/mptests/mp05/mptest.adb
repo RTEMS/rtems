@@ -28,8 +28,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -44,7 +42,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 5 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -55,7 +53,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Test_task (Global)" );
 
       RTEMS.TASK_CREATE( 
-         MPTEST.TASK_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ), 
+         MPTEST.TASK_NAME( TEST_SUPPORT.NODE ), 
          1,
          2048, 
          RTEMS.TIMESLICE,
@@ -79,7 +77,7 @@ package body MPTEST is
       MPTEST.TIMER_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'M', '2', ' ' );
 
       RTEMS.TIMER_CREATE(
-         MPTEST.TIMER_NAME( MPTEST.MULTIPROCESSING_CONFIGURATION.NODE ),
+         MPTEST.TIMER_NAME( TEST_SUPPORT.NODE ),
          MPTEST.TIMER_ID( 1 ),
          STATUS
       );
@@ -158,7 +156,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SIGNAL_CATCH" );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          MPTEST.REMOTE_NODE     := 2;
          MPTEST.REMOTE_SIGNAL   := RTEMS.SIGNAL_18;
          MPTEST.EXPECTED_SIGNAL := RTEMS.SIGNAL_17;
@@ -194,7 +192,7 @@ package body MPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_FIRE_AFTER" );
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Sending signal to remote task" );
          loop

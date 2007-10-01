@@ -22,15 +22,14 @@
 
 with INTERFACES; use INTERFACES;
 with INTERFACES.C;
-with BSP;
 with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
-package body MPTEST is
+with System.Storage_Elements; use System.Storage_Elements;
 
-   package body PER_NODE_CONFIGURATION is separate;
+package body MPTEST is
 
 --PAGE
 --
@@ -84,7 +83,7 @@ package body MPTEST is
       TEXT_IO.NEW_LINE( 2 );
       TEXT_IO.PUT( "*** TEST 14 -- NODE " );
       UNSIGNED32_IO.PUT(
-         MPTEST.MULTIPROCESSING_CONFIGURATION.NODE,
+         TEST_SUPPORT.NODE,
          WIDTH => 1
       );
       TEXT_IO.PUT_LINE( " ***" );
@@ -102,7 +101,7 @@ package body MPTEST is
 
       RTEMS.TIMER_FIRE_AFTER(
          MPTEST.STOP_TIMER_ID,
-         BSP.MAXIMUM_LONG_TEST_DURATION * TEST_SUPPORT.TICKS_PER_SECOND,
+         TEST_SUPPORT.MAXIMUM_LONG_TEST_DURATION * TEST_SUPPORT.TICKS_PER_SECOND,
          MPTEST.STOP_TEST_TSR'ACCESS,
          RTEMS.NULL_ADDRESS,
          STATUS
@@ -137,11 +136,11 @@ package body MPTEST is
       loop
 
          MPTEST.BUFFERS( INDEX ) :=
-            RTEMS.TO_BUFFER_POINTER( MPTEST.BUFFER_AREAS( INDEX )'ADDRESS );
+            MPTEST.BUFFER_AREAS( INDEX )'ADDRESS;
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          TEXT_IO.PUT_LINE( "Creating Semaphore (Global)" );
          RTEMS.SEMAPHORE_CREATE(
@@ -180,7 +179,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Event task (Global)" );
       RTEMS.TASK_CREATE(
          MPTEST.EVENT_TASK_NAME(
-            MPTEST.MULTIPROCESSING_CONFIGURATION.NODE
+            TEST_SUPPORT.NODE
          ),
          2,
          2048,
@@ -203,7 +202,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Semaphore task (Global)" );
       RTEMS.TASK_CREATE(
          MPTEST.SEMAPHORE_TASK_NAME(
-            MPTEST.MULTIPROCESSING_CONFIGURATION.NODE
+            TEST_SUPPORT.NODE
          ),
          2,
          2048,
@@ -226,7 +225,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Message Queue task (Global)" );
       RTEMS.TASK_CREATE(
          MPTEST.QUEUE_TASK_NAME(
-            MPTEST.MULTIPROCESSING_CONFIGURATION.NODE
+            TEST_SUPPORT.NODE
          ),
          2,
          2048,
@@ -249,7 +248,7 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Creating Partition task (Global)" );
       RTEMS.TASK_CREATE(
          MPTEST.PARTITION_TASK_NAME(
-            MPTEST.MULTIPROCESSING_CONFIGURATION.NODE 
+            TEST_SUPPORT.NODE 
          ),
          2,
          2048,
@@ -319,7 +318,7 @@ package body MPTEST is
       STATUS      : RTEMS.STATUS_CODES;
    begin
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          REMOTE_NODE := 2;
       else
          REMOTE_NODE := 1;
@@ -350,7 +349,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
          TEXT_IO.PUT_LINE( "Sending events to remote task" );
 
          loop
@@ -514,7 +513,7 @@ package body MPTEST is
 
       end loop;
 
-      if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+      if TEST_SUPPORT.NODE = 1 then
 
          RTEMS.MESSAGE_QUEUE_SEND(
             MPTEST.QUEUE_ID( 1 ),
@@ -581,7 +580,7 @@ package body MPTEST is
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
             if MPTEST.STOP_TEST = FALSE then
-               if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+               if TEST_SUPPORT.NODE = 1 then
 
                   YIELD_COUNT := YIELD_COUNT - 1;
 
@@ -666,7 +665,7 @@ package body MPTEST is
                "PARTITION_RETURN_BUFFER" 
             );
 
-            if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+            if TEST_SUPPORT.NODE = 1 then
 
                RTEMS.TASK_WAKE_AFTER( RTEMS.YIELD_PROCESSOR, STATUS );
                TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "YIELD" );
@@ -737,7 +736,7 @@ package body MPTEST is
             RTEMS.SEMAPHORE_RELEASE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_RELEASE" );
 
-            if MPTEST.MULTIPROCESSING_CONFIGURATION.NODE = 1 then
+            if TEST_SUPPORT.NODE = 1 then
 
                YIELD_COUNT := YIELD_COUNT - 1;
 

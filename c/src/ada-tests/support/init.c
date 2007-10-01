@@ -31,6 +31,7 @@ rtems_id tcb_to_id(
   return tcb->Object.id;
 }
 
+
 /*
  *  By putting this in brackets rather than quotes, we get the search
  *  path and can get this file from ".." in the mptests.
@@ -41,3 +42,20 @@ rtems_id tcb_to_id(
 #define CONFIGURE_MEMORY_OVERHEAD  (256)
 
 #include <config.h>
+
+uint32_t milliseconds_per_tick(void)
+{
+  return CONFIGURE_MICROSECONDS_PER_TICK / 1000;
+}
+
+uint32_t ticks_per_second(void)
+{
+  /* XXX HACK -- use public API */
+  return TOD_TICKS_PER_SECOND;
+}
+
+uint32_t get_node(void)
+{
+  /* XXX HACK -- use public API */
+  return _Objects_Local_node;
+}
