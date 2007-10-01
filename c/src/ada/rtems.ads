@@ -617,6 +617,13 @@ pragma Elaborate_Body (RTEMS);
    --
 
    --
+   --  Initialization Manager -- Shutdown Only
+   --
+   procedure Shutdown_Executive (
+      Status           : in     RTEMS.Unsigned32
+   );
+
+   --
    --  Task Manager
    --
 

@@ -1,3 +1,8 @@
+2007-10-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems.adb, rtems.ads: Most of single processor Ada tests now build.
+	Some run.
+
 2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb: Fix warnings.

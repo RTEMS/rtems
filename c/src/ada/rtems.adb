@@ -216,6 +216,21 @@ package body RTEMS is
    --
 
    --
+   --  Initialization Manager -- Shutdown Only
+   --
+   procedure Shutdown_Executive (
+      Status           : in     RTEMS.Unsigned32
+   ) is
+      procedure Shutdown_Executive_Base (
+         Status : RTEMS.Unsigned32
+      );
+      pragma Import (C, Shutdown_Executive_Base, "rtems_shutdown_executive");
+   begin
+      Shutdown_Executive_Base (Status);
+   end Shutdown_Executive;
+  
+
+   --
    --  Task Manager
    --
 
