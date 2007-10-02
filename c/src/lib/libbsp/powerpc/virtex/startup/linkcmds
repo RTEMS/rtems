@@ -22,7 +22,7 @@ _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 8M;
 
 MEMORY
   {
-        RAM : ORIGIN = 0, LENGTH = 16M
+        RAM : ORIGIN = 0, LENGTH = 128M
         /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
   }
 SECTIONS
@@ -202,6 +202,7 @@ SECTIONS
       *(.gnu.linkonce.s.*)
       data.end = .;
       data.size = data.end - data.start;
+      PROVIDE (_edata = .);
     } >RAM
 
     __SBSS_START__ = .;
@@ -222,7 +223,8 @@ SECTIONS
     PROVIDE(_data_size   = SIZEOF(.data));
     PROVIDE(_text_start  = ADDR(.text));
     PROVIDE(_text_size   = SIZEOF(.text));
-    PROVIDE(_end = data.end);
+    PROVIDE(_end = bss.end);
+
 
     .gzipmalloc : {
 	. = ALIGN (16);
@@ -269,9 +271,7 @@ SECTIONS
   . += 0x4000;
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
-
-  PROVIDE(_end = intrStack);
-
+ 
     .line 0 : { *(.line) }
     .debug 0 : { *(.debug) }
     .debug_sfnames 0 : { *(.debug_sfnames) }
