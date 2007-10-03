@@ -7,12 +7,12 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I$(srcdir)/..
 
-node1$(EXEEXT): ../mptest.adb
-	$(GNATCOMPILE) -margs -a $< -o $@
+noinst_PROGRAMS = mp01_node1
+mp01_node1_SOURCES = mp01_node1.adb ../mptest.adb config.h ../mptest.ads
+mp01_node1_SOURCES += ../../../support/init.c
 
-if EXPADA
-noinst_PROGRAMS = node1
-endif
+mp01_node1$(EXEEXT): mp01_node1.adb ../mptest.adb init.$(OBJEXT)
+	$(GNATCOMPILE) -margs -a $< -o $@
 
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = mp01-node1.scn

@@ -1,8 +1,9 @@
-/*  config.h
+/*  config_base.h
  *
- *  This include file defines the Configuration Table for this test.
+ *  This include file defines all of the Configuration Table for this test
+ *  EXCEPT the NODE NUMBER.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -13,14 +14,13 @@
  */
 
 
-/* configuration information */
-
-#define CONFIGURE_MPTEST
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_MAXIMUM_TASKS                       2
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS              10
 #define CONFIGURE_MAXIMUM_POSIX_KEYS                 10

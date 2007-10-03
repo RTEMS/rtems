@@ -1,3 +1,61 @@
+2007-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mptests/mp01/node1/Makefile.am, mptests/mp01/node2/Makefile.am,
+	mptests/mp02/node1/Makefile.am, mptests/mp02/node2/Makefile.am,
+	mptests/mp03/node1/Makefile.am, mptests/mp03/node2/Makefile.am,
+	mptests/mp04/node1/Makefile.am, mptests/mp04/node2/Makefile.am,
+	mptests/mp05/node1/Makefile.am, mptests/mp05/node2/Makefile.am,
+	mptests/mp06/node1/Makefile.am, mptests/mp06/node2/Makefile.am,
+	mptests/mp07/node1/Makefile.am, mptests/mp07/node2/Makefile.am,
+	mptests/mp08/node1/Makefile.am, mptests/mp08/node2/Makefile.am,
+	mptests/mp09/node1/Makefile.am, mptests/mp09/node2/Makefile.am,
+	mptests/mp10/node1/Makefile.am, mptests/mp10/node2/Makefile.am,
+	mptests/mp11/node1/Makefile.am, mptests/mp11/node2/Makefile.am,
+	mptests/mp12/node1/Makefile.am, mptests/mp12/node2/Makefile.am,
+	mptests/mp13/node1/Makefile.am, mptests/mp13/node2/Makefile.am,
+	mptests/mp14/node1/Makefile.am, mptests/mp14/node2/Makefile.am: Basic
+	build structure should now be correct. The remaining issues should be
+	test specific.
+	* mptests/mp01/config_base.h, mptests/mp01/node1/config.h,
+	mptests/mp01/node1/mp01_node1.adb, mptests/mp01/node2/config.h,
+	mptests/mp01/node2/mp01_node2.adb, mptests/mp02/config_base.h,
+	mptests/mp02/node1/config.h, mptests/mp02/node1/mp02_node1.adb,
+	mptests/mp02/node2/config.h, mptests/mp02/node2/mp02_node2.adb,
+	mptests/mp03/config_base.h, mptests/mp03/node1/config.h,
+	mptests/mp03/node1/mp03_node1.adb, mptests/mp03/node2/config.h,
+	mptests/mp03/node2/mp03_node2.adb, mptests/mp04/config_base.h,
+	mptests/mp04/node1/config.h, mptests/mp04/node1/mp04_node1.adb,
+	mptests/mp04/node2/config.h, mptests/mp04/node2/mp04_node2.adb,
+	mptests/mp05/config_base.h, mptests/mp05/node1/config.h,
+	mptests/mp05/node1/mp05_node1.adb, mptests/mp05/node2/config.h,
+	mptests/mp05/node2/mp05_node2.adb, mptests/mp06/config_base.h,
+	mptests/mp06/node1/config.h, mptests/mp06/node1/mp06_node1.adb,
+	mptests/mp06/node2/config.h, mptests/mp06/node2/mp06_node2.adb,
+	mptests/mp07/config_base.h, mptests/mp07/node1/config.h,
+	mptests/mp07/node1/mp07_node1.adb, mptests/mp07/node2/config.h,
+	mptests/mp07/node2/mp07_node2.adb, mptests/mp08/config_base.h,
+	mptests/mp08/node1/config.h, mptests/mp08/node1/mp08_node1.adb,
+	mptests/mp08/node2/config.h, mptests/mp08/node2/mp08_node2.adb,
+	mptests/mp09/config_base.h, mptests/mp09/node1/config.h,
+	mptests/mp09/node1/mp09_node1.adb, mptests/mp09/node2/config.h,
+	mptests/mp09/node2/mp09_node2.adb, mptests/mp10/config_base.h,
+	mptests/mp10/node1/config.h, mptests/mp10/node1/mp10_node1.adb,
+	mptests/mp10/node2/config.h, mptests/mp10/node2/mp10_node2.adb,
+	mptests/mp11/config_base.h, mptests/mp11/node1/config.h,
+	mptests/mp11/node1/mp11_node1.adb, mptests/mp11/node2/config.h,
+	mptests/mp11/node2/mp11_node2.adb, mptests/mp12/config_base.h,
+	mptests/mp12/node1/config.h, mptests/mp12/node1/mp12_node1.adb,
+	mptests/mp12/node2/config.h, mptests/mp12/node2/mp12_node2.adb,
+	mptests/mp13/config_base.h, mptests/mp13/node1/config.h,
+	mptests/mp13/node1/mp13_node1.adb, mptests/mp13/node2/config.h,
+	mptests/mp13/node2/mp13_node2.adb, mptests/mp14/config_base.h,
+	mptests/mp14/node1/config.h, mptests/mp14/node1/mp14_node1.adb,
+	mptests/mp14/node2/config.h, mptests/mp14/node2/mp14_node2.adb:
+	New files. GNATMAKE is easier to operate if the filename of the
+	main package matches the executable name.  In this case, we needed
+	one for each node's executable.
+	* mptests/mp01/config.h: Removed.
+
 2007-10-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mptests/mp01/mptest.adb, mptests/mp01/mptest.ads,
