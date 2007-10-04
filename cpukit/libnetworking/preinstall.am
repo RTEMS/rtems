@@ -436,4 +436,8 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
 $(PROJECT_INCLUDE)/dev/mii/mii.h: dev/mii/mii.h $(PROJECT_INCLUDE)/dev/mii/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/mii/mii.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/mii/mii.h
+
+$(PROJECT_INCLUDE)/ifaddrs.h: ifaddrs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ifaddrs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ifaddrs.h
 endif
