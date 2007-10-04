@@ -1,3 +1,12 @@
+2007-10-04	Keith Robertson <kjrobert@alumni.uwaterloo.ca>,
+	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/ifaddrs.h, libnetworking/libc/getifaddrs.c,
+	libnetworking/libc/if_indextoname.c,
+	libnetworking/libc/if_nameindex.c: New (from FreeBSD)
+	* Makefile.am: Add files above.
+	* libnetworking/net/if.h: Add if_nameindex (from FreeBSD).
+
 2007-09-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/stackchk/check.c: Eliminate output with little information.
