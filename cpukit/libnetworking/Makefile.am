@@ -152,6 +152,8 @@ libc_CPPFLAGS = -DNOPOLL -DNOSELECT -D__BSD_VISIBLE
 noinst_LIBRARIES += libc.a
 libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(libc_CPPFLAGS)
 
+include_HEADERS += ifaddrs.h
+
 libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
     libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
@@ -168,6 +170,9 @@ libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
 libc_a_SOURCES += libc/res_config.h
 libc_a_SOURCES += libc/send.c
 libc_a_SOURCES += libc/recv.c
+libc_a_SOURCES += libc/getifaddrs.c
+libc_a_SOURCES += libc/if_indextoname.c
+libc_a_SOURCES += libc/if_nameindex.c
 endif
 
 UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
