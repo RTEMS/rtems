@@ -278,6 +278,19 @@ struct	ifconf {
 };
 #endif /* __BSD_VISIBLE */
 
+#ifndef _KERNEL
+struct if_nameindex {
+    unsigned int    if_index;   /* 1, 2, ... */
+    char        *if_name;   /* null terminated name: "le0", ... */
+};
+
+__BEGIN_DECLS
+void             if_freenameindex(struct if_nameindex *);
+char            *if_indextoname(unsigned int, char *);
+struct if_nameindex *if_nameindex(void);
+__END_DECLS
+#endif
+
 #ifdef _KERNEL
 
 /* XXX - this should go away soon. */
