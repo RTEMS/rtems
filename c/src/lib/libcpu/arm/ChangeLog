@@ -1,3 +1,8 @@
+2007-10-05	Ray Xu <xr@trasin.net>
+
+	* lpc22xx/clock/clockdrv.c, lpc22xx/irq/irq.c, lpc22xx/irq/irq.h: Now
+	runs in Skyeye.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps

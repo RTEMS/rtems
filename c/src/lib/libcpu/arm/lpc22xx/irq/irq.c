@@ -37,7 +37,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_interrupt_level level;
     rtems_irq_hdl        *bsp_tbl;
     int                  *vic_cntl;
-    static int            irq_counter = 0;
     
     bsp_tbl = (rtems_irq_hdl *)VICVectAddrBase;
 
@@ -51,7 +50,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * Check if default handler is actually connected. If not issue an error.
      */
 
-    if (bsp_tbl[irq_counter] != default_int_handler) {
+    if (bsp_tbl[irq->name] != default_int_handler) {
       return 0;
     }
 
@@ -60,12 +59,12 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * store the new handler
      */
-    bsp_tbl[irq_counter] = irq->hdl;
+    bsp_tbl[irq->name] = irq->hdl;
     /* *(volatile unsigned long*)(VICVectAddr0+(irq->name * 4)&0x7c )= (uint32_t) irq->hdl;*/
     /*
      * Enable interrupt on device
      */
-    vic_cntl[irq_counter] = 0x20 | irq->name;
+    vic_cntl[irq->name] = 0x20 | irq->name;
 
     VICIntEnable |= 1 << irq->name; 
     
@@ -74,7 +73,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     	irq->on(irq);
     }
 
-    irq_counter++;    
 
     rtems_interrupt_enable(level);
     
