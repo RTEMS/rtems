@@ -54,6 +54,7 @@ extern void default_int_handler();
 #define LPC22xx_INTERRUPT_EINT2	16	/* Externel Interrupt 2 */
 #define LPC22xx_INTERRUPT_EINT3	17	/* Externel Interrupt 3 */
 #define LPC22xx_INTERRUPT_ADC 	18	/* AD Converter */
+/* Following interrupt used by lpc229x */
 #define LPC22xx_INTERRUPT_CANERR 19	/* CAN LUTerr interrupt */
 #define LPC22xx_INTERRUPT_CAN1TX 20	/* CAN1 Tx interrupt */
 #define LPC22xx_INTERRUPT_CAN1RX 21	/* CAN1 Rx interrupt */

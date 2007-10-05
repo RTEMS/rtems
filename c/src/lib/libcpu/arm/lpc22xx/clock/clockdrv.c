@@ -52,7 +52,7 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
 #define Clock_driver_support_at_tick() \
  do {							\
 	  if (!(T0IR & 0x01)) return; 	\
-	  T0IR = 0x01; 				\
+	  T0IR = 0x01; 			\
 	  VICVectAddr = 0x00;\
  } while(0)
 
@@ -85,12 +85,13 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
 #define Clock_driver_support_initialize_hardware() \
   do { \
 	T0TCR &= 0; 	 /* disable and clear timer 0, set to  */ \
-       T0PC  = 0;            /* TC is incrementet on every pclk.*/ \
+	T0PC  = 0;            /* TC is incrementet on every pclk.*/ \
 	T0MR0 = ((LPC22xx_Fpclk/1000* BSP_Configuration.microseconds_per_tick) / 1000); /* initialize the timer period and prescaler */  \
 	/*T0PR = (((LPC22xx_Fpclk / 1000) * BSP_Configuration.microseconds_per_tick) / 1000-1); \ */ \
 	T0MCR |= 0x03;		  /* generate interrupt when T0MR0 match T0TC and Reset Timer Count*/ \
-       T0EMR = 0;  /*No external match*/ \
+	T0EMR = 0;  /*No external match*/ \
 	T0TCR = 1; /*enable timer0*/ \
+	T0IR|=0x01;/*enable interrupt, skyeye will check this*/\
    } while (0)
 
 /**
