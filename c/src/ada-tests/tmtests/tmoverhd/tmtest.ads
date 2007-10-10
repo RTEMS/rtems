@@ -121,9 +121,9 @@ package TMTEST is
 --  This subprogram is an interrupt service routine.
 --
 
-   procedure ISR_HANDLER (
-      VECTOR : in     RTEMS.VECTOR_NUMBER
-   );
+--   procedure ISR_HANDLER (
+--      VECTOR : in     RTEMS.VECTOR_NUMBER
+--   );
 
 --
 --  ASR_HANDLER

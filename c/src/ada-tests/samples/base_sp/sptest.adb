@@ -87,6 +87,7 @@ package body SPTEST is
       UNSIGNED32_IO.PUT( ARGUMENT );
       TEXT_IO.PUT( ") and has id of 0x" );
       UNSIGNED32_IO.PUT( TID, BASE => 16 );
+      TEXT_IO.NEW_LINE;
 
       TEXT_IO.PUT_LINE( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***" );
 

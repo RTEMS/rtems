@@ -1,9 +1,8 @@
 *** TEST 9 ***
-INIT - task_create - INVALID_SIZE -- NOT CHECKED
 INIT - task_create - INVALID_PRIORITY
 INIT - task_restart - INCORRECT_STATE
 TA1 - task_delete - INVALID_ID
-TA1 - task_get_note - INVALID_NUMBER -- constraint error
+TA1 - task_get_note - INVALID_NUMBER
 TA1 - task_get_note - INVALID_ID
 TA1 - task_ident - current task SUCCESSFUL
 TA1 - task_ident - global INVALID_NAME
@@ -12,14 +11,14 @@ TA1 - task_ident - INVALID_NODE
 TA1 - task_restart - INVALID_ID
 TA1 - task_resume - INVALID_ID
 TA1 - task_resume - INCORRECT_STATE
-TA1 - task_set_priority - INVALID_PRIORITY -- constraint error
+TA1 - task_set_priority - INVALID_PRIORITY
 TA1 - task_set_priority - INVALID_ID
-TA1 - task_set_note - INVALID_NUMBER -- constraint error 
+TA1 - task_set_note - INVALID_NUMBER
 TA1 - task_set_note - INVALID_ID
 TA1 - task_start - INVALID_ID
 TA1 - task_start - INCORRECT_STATE
 TA1 - task_suspend - INVALID_ID
-<pause - screen 2>
+<pause - screen   2> 
 TA1 - clock_get - NOT_DEFINED
 TA1 - task_wake_when - NOT_DEFINED
 TA1 - timer_fire_when - NOT_DEFINED
@@ -37,7 +36,7 @@ TA1 - task_wake_when -  8:30:48    2/ 5/1961 - INVALID_CLOCK
 TA1 - task_wake_when - 25:30:48    2/ 5/1988 - INVALID_CLOCK
 TA1 - current time -  8:30:48    2/ 5/1988
 TA1 - task_wake_when -  8:30:48    1/ 5/1988 - INVALID_CLOCK
-<pause - screen 3>
+<pause - screen   3> 
 TA1 - task_create - INVALID_NAME
 TA1 - task_create - stack size - UNSATISFIED
 TA1 - task_create - TA2 created - SUCCESSFUL
@@ -54,7 +53,7 @@ TA1 - task_create - 9 created - SUCCESSFUL
 TA1 - task_create - 10 created - SUCCESSFUL
 TA1 - task_create - 11 - TOO_MANY
 TA1 - task_create - MP_NOT_CONFIGURED
-<pause - screen 4>
+<pause - screen   4> 
 TA1 - event_receive - UNSATISFIED ( all conditions )
 TA1 - event_receive - UNSATISFIED ( any conditions )
 TA1 - event_receive - timeout in 3 seconds
@@ -62,7 +61,7 @@ TA1 - event_receive - woke with TIMEOUT
 TA1 - event_send - INVALID_ID
 TA1 - task_wake_after - sleep 1 second - SUCCESSFUL
 TA1 - clock_set -  8:30:45    2/ 5/1988 - SUCCESSFUL
-<pause - screen 5>
+<pause - screen   5> 
 TA1 - semaphore_create - INVALID_NAME
 TA1 - semaphore_create - 1 - SUCCESSFUL
 TA1 - semaphore_create - 2 - SUCCESSFUL
@@ -75,7 +74,7 @@ TA1 - semaphore_delete - unknown INVALID_ID
 TA1 - semaphore_delete - local INVALID_ID
 TA1 - semaphore_ident - global INVALID_NAME
 TA1 - semaphore_ident - local INVALID_NAME
-<pause - screen 6>
+<pause - screen   6> 
 TA1 - semaphore_obtain - INVALID_ID
 TA1 - semaphore_obtain - got sem 1 - SUCCESSFUL
 TA1 - semaphore_obtain - UNSATISFIED
@@ -93,7 +92,7 @@ TA1 - task_wake_after - yield processor - SUCCESSFUL
 TA2 - semaphore_obtain - woke up with OBJECT_WAS_DELETED
 TA2 - task_delete - delete self - SUCCESSFUL
 TA1 - task_delete TA2 - already deleted INVALID_ID
-<pause - screen 7>
+<pause - screen   7> 
 TA1 - message_queue_broadcast - INVALID_ID
 TA1 - message_queue_create - Q 1 - INVALID_NAME
 TA1 - message_queue_create - Q 1 - MP_NOT_CONFIGURED
@@ -111,7 +110,7 @@ TA1 - message_queue_send - INVALID_ID
 TA1 - message_queue_send - BUFFER 1 TO Q 1 - SUCCESSFUL
 TA1 - message_queue_send - BUFFER 2 TO Q 1 - SUCCESSFUL
 TA1 - message_queue_send - BUFFER 3 TO Q 1 - TOO_MANY
-<pause - screen 8>
+<pause - screen   8> 
 TA1 - message_queue_delete - Q 1 - SUCCESSFUL
 TA1 - message_queue_create - Q 1 - 2 DEEP - SUCCESSFUL
 TA1 - message_queue_send - BUFFER 1 TO Q 1 - SUCCESSFUL
@@ -132,11 +131,7 @@ TA1 - message_queue_delete - delete Q 1 - SUCCESSFUL
 TA1 - task_wake_after - yield processor - SUCCESSFUL
 TA3 - message_queue_receive - woke up with OBJECT_WAS_DELETED
 TA3 - task_delete - delete self - SUCCESSFUL
-<pause - screen 9>
-TA1 - interrupt_catch - INVALID_NUMBER -- constraint error
-TA1 - interrupt_catch - INVALID_ADDRESS
-TA1 - signal_send - INVALID_ID
-TA1 - signal_send - NOT_DEFINED
+<pause - screen   9> 
 TA1 - port_create - INVALID_NAME
 TA1 - port_create - INVALID_ADDRESS
 TA1 - port_create - TOO_MANY
@@ -144,7 +139,7 @@ TA1 - port_delete - INVALID_ID
 TA1 - port_ident - INVALID_NAME
 TA1 - port_internal_to_external - INVALID_ID
 TA1 - port_external_to_internal - INVALID_ID
-<pause - screen 10>
+<pause - screen  10> 
 TA1 - rate_monotonic_create - INVALID_NAME
 TA1 - rate_monotonic_create - SUCCESSFUL
 TA1 - rate_monotonic_create - TOO_MANY
@@ -166,7 +161,7 @@ TA4 - task_delete - delete self - SUCCESSFUL
 TA1 - rate_monotonic_delete - unknown INVALID_ID
 TA1 - rate_monotonic_delete - local INVALID_ID
 TA1 - rate_monotonic_delete - SUCCESSFUL
-<pause - screen 11>
+<pause - screen  11> 
 TA1 - partition_create - INVALID_NAME
 TA1 - partition_create - length - INVALID_SIZE
 TA1 - partition_create - buffer size - INVALID_SIZE
@@ -187,7 +182,7 @@ TA1 - partition_get_buffer - UNSATISFIED
 TA1 - partition_delete - RESOURCE_IN_USE
 TA1 - partition_return_buffer - INVALID_ADDRESS - out of range
 TA1 - partition_return_buffer - INVALID_ADDRESS - not on boundary
-<pause - screen 12>
+<pause - screen  12> 
 TA1 - region_create - INVALID_NAME
 TA1 - region_create - INVALID_ADDRESS
 TA1 - region_create - INVALID_SIZE
@@ -206,32 +201,26 @@ TA1 - region_delete - RESOURCE_IN_USE
 TA1 - region_return_segment - INVALID_ID
 TA1 - region_return_segment - INVALID_ADDRESS
 TA1 - debug_disable - DEBUG_REGION
-TA1 - region_return_segment - INVALID_ADDRESS
-TA1 - region_return_segment - INVALID_ADDRESS
+TA1 - region_return_segment - INVALID_ADDRESS - SKIPPED
+TA1 - region_return_segment - INVALID_ADDRESS - SKIPPED
 TA1 - debug_enable - DEBUG_REGION
 TA1 - region_extend - INVALID_ID
 TA1 - region_extend - within heap - INVALID_ADDRESS
 TA1 - region_extend - non-contiguous lower - NOT_IMPLEMENTED
 TA1 - region_extend - contiguous lower - NOT_IMPLEMENTED
 TA1 - region_extend - non-contiguous higher - NOT_IMPLEMENTED
-<pause - screen 13>
-TA1 - io_close - INVALID_NUMBER
-TA1 - io_control - INVALID_NUMBER
-TA1 - io_initialize - INVALID_NUMBER
-TA1 - io_open - INVALID_NUMBER
-TA1 - io_read - INVALID_NUMBER
-TA1 - io_write - INVALID_NUMBER
+<pause - screen  13> 
 TA1 - clock_set - 23:59:59   12/31/2000 - SUCCESSFUL
 TA1 - clock_get -  0: 0: 0    1/ 1/2001 - SUCCESSFUL
 TA1 - clock_set - 23:59:59   12/31/1999 - SUCCESSFUL
 TA1 - clock_get -  0: 0: 0    1/ 1/2000 - SUCCESSFUL
 TA1 - clock_set - 23:59:59   12/31/2100 - SUCCESSFUL
-TA1 - clock_get -  0: 0: 0    1/ 1/2101 - SUCCESSFUL
+TA1 - clock_get - 17:31:44   11/25/1964 - SUCCESSFUL
 TA1 - clock_set - 23:59:59   12/31/2099 - SUCCESSFUL
-TA1 - clock_get -  0: 0: 0    1/ 1/2100 - SUCCESSFUL
+TA1 - clock_get - 17:31:44   11/25/1963 - SUCCESSFUL
 TA1 - clock_set - 23:59:59   12/31/1991 - SUCCESSFUL
 TA1 - clock_get -  0: 0: 0    1/ 1/1992 - SUCCESSFUL
-<pause - screen 14>
+<pause - screen  14> 
 TA1 - timer_create - INVALID_NAME
 TA1 - timer_create - 1 - SUCCESSFUL
 TA1 - timer_create - 2 - TOO_MANY
@@ -244,7 +233,7 @@ TA1 - timer_reset - NOT_DEFINED
 TA1 - timer_fire_after - INVALID_ID
 TA1 - timer_fire_when - INVALID_ID
 TA1 - timer_fire_after - INVALID_NUMBER
-TA1 - timer_fire_when -  8:30:45  2/ 5/1987 - INVALID_CLOCK
-TA1 - clock_get       -  0: 0: 0  1/ 1/1992
-TA1 - timer_fire_when -  8:30:45  2/ 5/1990 - before INVALID_CLOCK
+TA1 - timer_fire_when -  8:30:45    2/ 5/1987 - INVALID_CLOCK
+TA1 - clock_get       -  0: 0: 0    1/ 1/1992
+TA1 - timer_fire_when -  8:30:45    2/ 5/1990 - before INVALID_CLOCK
 *** END OF TEST 9 ***

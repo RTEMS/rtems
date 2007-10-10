@@ -1,3 +1,43 @@
+2007-10-10	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* configure.ac, samples/base_sp/base_sp.scn, samples/base_sp/config.h,
+	samples/base_sp/sptest.adb, samples/hello/config.h,
+	samples/ticker/config.h, samples/ticker/ticker.scn,
+	sptests/Makefile.am, sptests/sp01/sp01.scn, sptests/sp02/config.h,
+	sptests/sp02/sp02.scn, sptests/sp03/config.h, sptests/sp03/sp03.scn,
+	sptests/sp04/sp04.scn, sptests/sp04/sptest.adb,
+	sptests/sp05/config.h, sptests/sp05/sp05.scn, sptests/sp06/config.h,
+	sptests/sp07/config.h, sptests/sp07/sp07.scn,
+	sptests/sp07/sptest.adb, sptests/sp07/sptest.ads,
+	sptests/sp08/config.h, sptests/sp08/sp08.scn,
+	sptests/sp09/Makefile.am, sptests/sp09/config.h,
+	sptests/sp09/sp09.scn, sptests/sp09/sptest.adb,
+	sptests/sp09/sptest.ads, sptests/sp11/config.h,
+	sptests/sp11/sp11.scn, sptests/sp12/config.h, sptests/sp12/sp12.scn,
+	sptests/sp13/config.h, sptests/sp13/sp13.scn,
+	sptests/sp13/sptest.adb, sptests/sp14/config.h,
+	sptests/sp14/sp14.scn, sptests/sp15/config.h, sptests/sp15/sp15.scn,
+	sptests/sp16/config.h, sptests/sp16/sp16.scn,
+	sptests/sp16/sptest.adb, sptests/sp17/config.h,
+	sptests/sp19/config.h, sptests/sp19/sp19.scn, sptests/sp20/config.h,
+	sptests/sp20/sp20.scn, sptests/sp22/config.h, sptests/sp22/sp22.scn,
+	sptests/sp23/config.h, sptests/sp23/sp23.scn, sptests/sp24/config.h,
+	sptests/sp24/sp24.scn, sptests/sp25/config.h, sptests/sp25/sp25.scn,
+	support/init.c, support/test_support.adb, support/test_support.ads,
+	tmtests/tm09/config.h, tmtests/tm20/tmtest.adb,
+	tmtests/tmoverhd/dummy_rtems.adb, tmtests/tmoverhd/dummy_rtems.ads,
+	tmtests/tmoverhd/tmtest.adb, tmtests/tmoverhd/tmtest.ads: Updated
+	tests so that they would all compile and run without errors. Some
+	tests that are no longer valid using the current binding were
+	removed. Also updated the .scn files to reflect the current test
+	output.
+	* sptests/sp21/.cvsignore, sptests/sp21/Makefile.am,
+	sptests/sp21/config.h, sptests/sp21/sp21.adb, sptests/sp21/sp21.scn,
+	sptests/sp21/sptest.adb, sptests/sp21/sptest.ads,
+	sptests/spsize/.cvsignore, sptests/spsize/Makefile.am,
+	sptests/spsize/spsize.adb, sptests/spsize/sptest.adb,
+	sptests/spsize/sptest.ads: Removed.
+
 2007-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mptests/mp01/node1/Makefile.am, mptests/mp01/node2/Makefile.am,

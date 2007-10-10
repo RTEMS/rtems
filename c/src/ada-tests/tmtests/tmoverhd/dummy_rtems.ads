@@ -11,7 +11,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,17 +24,6 @@
 with RTEMS;
 
 package DUMMY_RTEMS is
-
--- Initialization Manager
-
-   procedure INITIALIZE_EXECUTIVE (
-      CONFIGURATION_TABLE   : in     RTEMS.CONFIGURATION_TABLE_POINTER;
-      CPU_TABLE             : in     RTEMS.CPU_TABLE_POINTER
-   );
-
-   procedure SHUTDOWN_EXECUTIVE (
-      RESULT : in     RTEMS.UNSIGNED32
-   );
 
 -- Task Manager
 
@@ -123,12 +112,12 @@ package DUMMY_RTEMS is
 
 -- Interrupt Manager
 
-   procedure INTERRUPT_CATCH (
-      NEW_ISR_HANDLER : in     RTEMS.ADDRESS;
-      VECTOR          : in     RTEMS.VECTOR_NUMBER;
-      OLD_ISR_HANDLER :    out RTEMS.ADDRESS;
-      RESULT          :    out RTEMS.STATUS_CODES
-   );
+--   procedure INTERRUPT_CATCH (
+--      NEW_ISR_HANDLER : in     RTEMS.ADDRESS;
+--      VECTOR          : in     RTEMS.VECTOR_NUMBER;
+--      OLD_ISR_HANDLER :    out RTEMS.ADDRESS;
+--      RESULT          :    out RTEMS.STATUS_CODES
+--   );
 
 -- Clock Manager
 
@@ -425,50 +414,6 @@ package DUMMY_RTEMS is
       INTERNAL : in     RTEMS.ADDRESS;
       EXTERNAL :    out RTEMS.ADDRESS;
       RESULT   :    out RTEMS.STATUS_CODES
-   );
-
--- Input/Output Manager
-
-   procedure IO_INITIALIZE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   );
-
-   procedure IO_OPEN (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   );
-
-   procedure IO_CLOSE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   );
-
-   procedure IO_READ (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   );
-
-   procedure IO_WRITE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   );
-
-   procedure IO_CONTROL (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
    );
 
 -- Fatal Error Manager

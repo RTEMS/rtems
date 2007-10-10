@@ -5,8 +5,8 @@ INIT - suspending TA2 while middle task on a ready chain
 TA1 - task_wake_after - sleep 1 second
 TA2 - task_wake_after - sleep 1 minute
 TA3 - task_wake_after - sleep 5 seconds
-TA1 - task_ident - tid of TA2 (16#10007#)
-TA1 - task_ident - tid of TA3 (16#10008#)
+TA1 - task_ident - tid of TA2 (16#A010004#)
+TA1 - task_ident - tid of TA3 (16#A010002#)
 TA1 - task_set_priority - set TA3's priority to 2
 TA1 - task_suspend - suspend TA2
 TA1 - task_delete - delete TA2

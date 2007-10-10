@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -68,22 +68,6 @@ package body SPTEST is
       SPTEST.PORT_NAME( 1 )      := RTEMS.BUILD_NAME( 'D', 'P', '1', ' ' );
 
       SPTEST.PERIOD_NAME( 1 )    := RTEMS.BUILD_NAME( 'T', 'M', '1', ' ' );
-
---      RTEMS.TASK_CREATE(
---         SPTEST.TASK_NAME( 1 ),
---         4,
---         10,
---         RTEMS.DEFAULT_MODES,
---         RTEMS.DEFAULT_ATTRIBUTES,
---         SPTEST.TASK_ID( 1 ),
---         STATUS
---      );
---       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
---          STATUS,
---          RTEMS.INVALID_SIZE,
---          "TASK_CREATE WITH ILLEGAL STACK SIZE"
---       );
-      TEXT_IO.PUT_LINE( "INIT - task_create - INVALID_SIZE -- NOT CHECKED" );
 
       RTEMS.TASK_CREATE(
          SPTEST.TASK_NAME( 1 ),
@@ -154,20 +138,6 @@ package body SPTEST is
 
 --PAGE
 -- 
---  SERVICE_ROUTINE
---
-
-   procedure SERVICE_ROUTINE (
-      IGNORED : in     RTEMS.VECTOR_NUMBER
-   ) is
-   begin
-
-      NULL;
-
-   end SERVICE_ROUTINE;
-
---PAGE
--- 
 --  SCREEN_1
 --
 
@@ -187,20 +157,24 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_delete - INVALID_ID" );
 
---      RTEMS.TASK_GET_NOTE( RTEMS.SELF, 
---                           RTEMS.NOTEPAD_INDEX'LAST + 10, 
---                           NOTEPAD_VALUE, 
---                           STATUS 
---      );
---      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
---         STATUS,
---         RTEMS.INVALID_NUMBER,
---         "TASK_GET_NOTE WITH ILLEGAL NOTEPAD"
---      );
---      TEXT_IO.PUT_LINE( "TA1 - task_get_note - INVALID_NUMBER" );
-      TEXT_IO.PUT_LINE(
-         "TA1 - task_get_note - INVALID_NUMBER -- constraint error"
-      );
+      begin
+        RTEMS.TASK_GET_NOTE( RTEMS.SELF, 
+                             RTEMS.NOTEPAD_INDEX'LAST + 10, 
+                             NOTEPAD_VALUE, 
+                             STATUS 
+        );
+        TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+           STATUS,
+           RTEMS.INVALID_NUMBER,
+           "TASK_GET_NOTE WITH ILLEGAL NOTEPAD"
+        );
+        TEXT_IO.PUT_LINE( "TA1 - task_get_note - INVALID_NUMBER" );
+      exception
+         when others =>
+            TEXT_IO.PUT_LINE(
+               "TA1 - task_get_note - INVALID_NUMBER -- constraint error"
+            );
+      end;
 
       RTEMS.TASK_GET_NOTE( 
          100, 
@@ -252,11 +226,19 @@ package body SPTEST is
       TEXT_IO.PUT_LINE( "TA1 - task_ident - local INVALID_NAME" );
 
       RTEMS.TASK_IDENT( 100, 2, SPTEST.JUNK_ID, STATUS );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NODE,
-         "TASK_IDENT WITH ILLEGAL NODE"
-      );
+      if TEST_SUPPORT.Is_Configured_Multiprocessing then
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.INVALID_NODE,
+            "TASK_IDENT WITH ILLEGAL NODE"
+         );
+      else
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.INVALID_NAME,
+            "TASK_IDENT WITH ILLEGAL NODE"
+         );
+      end if;
       TEXT_IO.PUT_LINE( "TA1 - task_ident - INVALID_NODE" );
 
       RTEMS.TASK_RESTART( 100, 0, STATUS );
@@ -283,18 +265,22 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_resume - INCORRECT_STATE" );
 
---      RTEMS.TASK_SET_PRIORITY( RTEMS.SELF, 512, PREVIOUS_PRIORITY, STATUS );
---      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
---         STATUS,
---         RTEMS.INVALID_PRIORITY,
---         "TASK_SET_PRIORITY WITH ILLEGAL PRIORITY"
---      );
---      TEXT_IO.PUT_LINE(
---         "TA1 - task_set_priority - INVALID_PRIORITY"
---      );
-      TEXT_IO.PUT_LINE(
-         "TA1 - task_set_priority - INVALID_PRIORITY -- constraint error"
-      );
+      begin
+        RTEMS.TASK_SET_PRIORITY( RTEMS.SELF, 512, PREVIOUS_PRIORITY, STATUS );
+        TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+           STATUS,
+           RTEMS.INVALID_PRIORITY,
+           "TASK_SET_PRIORITY WITH ILLEGAL PRIORITY"
+        );
+        TEXT_IO.PUT_LINE(
+           "TA1 - task_set_priority - INVALID_PRIORITY"
+        );
+      exception
+         when others =>
+            TEXT_IO.PUT_LINE(
+               "TA1 - task_set_priority - INVALID_PRIORITY -- constraint error"
+            );
+      end;
 
       RTEMS.TASK_SET_PRIORITY( 100, 8, PREVIOUS_PRIORITY, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -304,20 +290,24 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_set_priority - INVALID_ID" );
 
---       RTEMS.TASK_SET_NOTE( RTEMS.SELF, 
---                            RTEMS.NOTEPAD_INDEX'LAST + 10, 
---                            NOTEPAD_VALUE, 
---                            STATUS 
---       );
---       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
---          STATUS,
---          RTEMS.INVALID_NUMBER,
---          "TASK_SET_NOTE WITH ILLEGAL NOTEPAD"
---       );
---      TEXT_IO.PUT_LINE( "TA1 - task_set_note - INVALID_NUMBER" );
-      TEXT_IO.PUT_LINE(
-         "TA1 - task_set_note - INVALID_NUMBER -- constraint error"
-      );
+      begin
+         RTEMS.TASK_SET_NOTE( RTEMS.SELF, 
+                              RTEMS.NOTEPAD_INDEX'LAST + 10, 
+                              NOTEPAD_VALUE, 
+                              STATUS 
+         );
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.INVALID_NUMBER,
+            "TASK_SET_NOTE WITH ILLEGAL NOTEPAD"
+         );
+         TEXT_IO.PUT_LINE( "TA1 - task_set_note - INVALID_NUMBER" );
+      exception
+         when others =>
+            TEXT_IO.PUT_LINE(
+               "TA1 - task_set_note - INVALID_NUMBER -- constraint error"
+            );
+      end;
 
       RTEMS.TASK_SET_NOTE( 
          100, 
@@ -583,7 +573,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE(
          TASK_NAME,
          1,
-         RTEMS.CONFIGURATION.WORK_SPACE_SIZE,
+         TEST_SUPPORT.WORK_SPACE_SIZE,
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -762,20 +752,22 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - task_create - 11 - TOO_MANY" );
 
-      RTEMS.TASK_CREATE(
-         TASK_NAME,
-         4,
-         2048,
-         RTEMS.DEFAULT_MODES,
-         RTEMS.GLOBAL,
-         SPTEST.JUNK_ID,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.MP_NOT_CONFIGURED,
-         "TASK_CREATE OF GLOBAL TASK IN SINGLE CPU SYSTEM"
-      );
+      if TEST_SUPPORT.Is_Configured_Multiprocessing then
+         RTEMS.TASK_CREATE(
+            TASK_NAME,
+            4,
+            2048,
+            RTEMS.DEFAULT_MODES,
+            RTEMS.GLOBAL,
+            SPTEST.JUNK_ID,
+            STATUS
+         );
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.MP_NOT_CONFIGURED,
+            "TASK_CREATE OF GLOBAL TASK IN SINGLE CPU SYSTEM"
+         );
+      end if;
       TEXT_IO.PUT_LINE( "TA1 - task_create - MP_NOT_CONFIGURED" );
 
    end SCREEN_3;
@@ -911,7 +903,7 @@ package body SPTEST is
       RTEMS.SEMAPHORE_CREATE(
          SPTEST.SEMAPHORE_NAME( 2 ),
          1,
-         RTEMS.BINARY_SEMAPHORE,
+         (RTEMS.BINARY_SEMAPHORE or RTEMS.PRIORITY or RTEMS.INHERIT_PRIORITY),
          RTEMS.NO_PRIORITY,
          SPTEST.SEMAPHORE_ID( 2 ),
          STATUS
@@ -987,19 +979,21 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - INVALID_NUMBER");
 
-      RTEMS.SEMAPHORE_CREATE(
-         SPTEST.SEMAPHORE_NAME( 3 ),
-         1,
-         RTEMS.GLOBAL,
-         RTEMS.NO_PRIORITY,
-         SPTEST.JUNK_ID,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.MP_NOT_CONFIGURED,
-         "SEMAPHORE_CREATE OF MP_NOT_CONFIGURED"
-      );
+      if TEST_SUPPORT.Is_Configured_Multiprocessing then
+         RTEMS.SEMAPHORE_CREATE(
+            SPTEST.SEMAPHORE_NAME( 3 ),
+            1,
+            RTEMS.GLOBAL,
+            RTEMS.NO_PRIORITY,
+            SPTEST.JUNK_ID,
+            STATUS
+         );
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.MP_NOT_CONFIGURED,
+            "SEMAPHORE_CREATE OF MP_NOT_CONFIGURED"
+         );
+      end if;
       TEXT_IO.PUT_LINE("TA1 - semaphore_create - MP_NOT_CONFIGURED");
 
       RTEMS.SEMAPHORE_DELETE( 100, STATUS );
@@ -1239,19 +1233,21 @@ package body SPTEST is
          "TA1 - message_queue_create - Q 1 - INVALID_NAME"
       );
 
-      RTEMS.MESSAGE_QUEUE_CREATE(
-         SPTEST.QUEUE_NAME( 1 ),
-         1,
-         16,
-         RTEMS.GLOBAL,
-         SPTEST.JUNK_ID,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.MP_NOT_CONFIGURED,
-         "MESSAGE_QUEUE_CREATE OF MP NOT CONFIGURED"
-      );
+      if TEST_SUPPORT.Is_Configured_Multiprocessing then
+         RTEMS.MESSAGE_QUEUE_CREATE(
+            SPTEST.QUEUE_NAME( 1 ),
+            1,
+            16,
+            RTEMS.GLOBAL,
+            SPTEST.JUNK_ID,
+            STATUS
+         );
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.MP_NOT_CONFIGURED,
+            "MESSAGE_QUEUE_CREATE OF MP NOT CONFIGURED"
+         );
+      end if;
       TEXT_IO.PUT_LINE(
              "TA1 - message_queue_create - Q 1 - MP_NOT_CONFIGURED");
 
@@ -1643,55 +1639,9 @@ package body SPTEST is
 
    procedure SCREEN_9
    is
-      CONVERTED           : RTEMS.ADDRESS;
-      STATUS              : RTEMS.STATUS_CODES;
-      OLD_SERVICE_ROUTINE : RTEMS.ADDRESS;
+      CONVERTED : RTEMS.ADDRESS;
+      STATUS    : RTEMS.STATUS_CODES;
    begin
-
---      RTEMS.INTERRUPT_CATCH( 
---         SPTEST.SERVICE_ROUTINE'ACCESS,
---         500,
---         OLD_SERVICE_ROUTINE,
---         STATUS
---      );
---      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
---         STATUS,
---         RTEMS.INVALID_NUMBER,
---         "INTERRUPT_CATCH WITH INVALID VECTOR"
---      );
---      TEXT_IO.PUT_LINE( "TA1 - interrupt_catch - INVALID_NUMBER" );
-      TEXT_IO.PUT_LINE(
-         "TA1 - interrupt_catch - INVALID_NUMBER -- constraint error"
-      );
-
-      RTEMS.INTERRUPT_CATCH( 
-         RTEMS.NULL_ADDRESS,
-         3,
-         OLD_SERVICE_ROUTINE,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ADDRESS,
-         "INTERRUPT_CATCH WITH INVALID HANDLER"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - interrupt_catch - INVALID_ADDRESS" );
-
-      RTEMS.SIGNAL_SEND( 100, RTEMS.SIGNAL_1, STATUS );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ID,
-         "SIGNAL_SEND WITH ILLEGAL ID"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - signal_send - INVALID_ID" );
-
-      RTEMS.SIGNAL_SEND( RTEMS.SELF, RTEMS.SIGNAL_16, STATUS );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.NOT_DEFINED,
-         "SIGNAL_SEND WITH NO HANDLER"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - signal_send - NOT_DEFINED" );
 
       RTEMS.PORT_CREATE(
          0,
@@ -2077,20 +2027,22 @@ package body SPTEST is
        "TA1 - partition_create - length < buffer size - INVALID_SIZE"
       );
 
-      RTEMS.PARTITION_CREATE(
-         SPTEST.PARTITION_NAME( 1 ),
-         SPTEST.PARTITION_GOOD_AREA'ADDRESS,
-         128,
-         64,
-         RTEMS.GLOBAL,
-         SPTEST.JUNK_ID,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.MP_NOT_CONFIGURED,
-         "PARTITION_CREATE OF GLOBAL"
-      );
+      if TEST_SUPPORT.Is_Configured_Multiprocessing then
+         RTEMS.PARTITION_CREATE(
+            SPTEST.PARTITION_NAME( 1 ),
+            SPTEST.PARTITION_GOOD_AREA'ADDRESS,
+            128,
+            64,
+            RTEMS.GLOBAL,
+            SPTEST.JUNK_ID,
+            STATUS
+         );
+         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+            STATUS,
+            RTEMS.MP_NOT_CONFIGURED,
+            "PARTITION_CREATE OF GLOBAL"
+         );
+      end if;
       TEXT_IO.PUT_LINE("TA1 - partition_create - MP_NOT_CONFIGURED");
 
       RTEMS.PARTITION_CREATE(
@@ -2323,7 +2275,7 @@ package body SPTEST is
       RTEMS.REGION_CREATE(
          SPTEST.REGION_NAME( 1 ),
          SPTEST.REGION_GOOD_AREA'ADDRESS,
-         16#40#,
+         34,
          34,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.JUNK_ID,
@@ -2653,89 +2605,6 @@ package body SPTEST is
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
    begin
-
-      RTEMS.IO_CLOSE(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_CLOSE WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE("TA1 - io_close - INVALID_NUMBER");
-
-      RTEMS.IO_CONTROL(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_CONTROL WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE(
-         "TA1 - io_control - INVALID_NUMBER"
-      );
-
-      RTEMS.IO_INITIALIZE(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_INITIALIZE WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE(
-         "TA1 - io_initialize - INVALID_NUMBER"
-      );
-
-      RTEMS.IO_OPEN(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_OPEN WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - io_open - INVALID_NUMBER" );
-
-      RTEMS.IO_READ(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_READ WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - io_read - INVALID_NUMBER" );
-
-      RTEMS.IO_WRITE(
-         RTEMS.DEVICE_MAJOR_NUMBER'LAST,
-         0,
-         RTEMS.NULL_ADDRESS,
-         STATUS
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_NUMBER,
-         "IO_WRITE WITH BAD MAJOR NUMBER"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - io_write - INVALID_NUMBER" );
-
       TIME := ( 2000, 12, 31, 23, 59, 59, 0 );
       RTEMS.CLOCK_SET( TIME, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_SET SUCCESSFUL" );

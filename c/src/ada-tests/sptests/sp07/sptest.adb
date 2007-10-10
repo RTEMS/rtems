@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -27,6 +27,89 @@ with TEXT_IO;
 with UNSIGNED32_IO;
 
 package body SPTEST is
+
+      type Task_Event_Type is (
+         Created,
+         Deleted,
+         Restarted,
+         Started
+      );
+
+      type Task_Event is record
+         The_Event : Task_Event_Type;
+         Task1     : RTEMS.Unsigned32;
+         Task2     : RTEMS.Unsigned32;
+      end record;
+
+      Task_Events : array (1 .. 10) of Task_Event;
+      Task_Events_Index : Natural := Task_Events'First;
+
+      procedure Log_Task_Event (
+         The_Event : in     Task_Event_Type;
+         Task1     : in     RTEMS.Unsigned32;
+         Task2     : in     RTEMS.Unsigned32
+      ) is
+      begin
+         if Task_Events_Index = Task_Events'Last then
+            RTEMS.Fatal_Error_Occurred ( 1 );  -- no other choice
+         else
+            Task_Events (Task_Events_Index).The_Event := The_Event;
+            Task_Events (Task_Events_Index).Task1 := Task1;
+            Task_Events (Task_Events_Index).Task2 := Task2;
+            Task_Events_Index := Task_Events_Index + 1;
+         end if;
+      end Log_Task_Event;
+
+      procedure Flush_Task_Event_Log is
+      begin
+         for I in Task_Events'First .. Task_Events_Index - 1 loop
+
+            case Task_Events (I).The_Event is
+
+               when Created =>
+                  TEXT_IO.PUT( "TASKS_CREATE - " );
+                  TEST_SUPPORT.PUT_NAME( 
+                     SPTEST.TASK_NAME( Task_Events (I).Task1 ),
+                     FALSE
+                  );
+                  TEXT_IO.PUT_LINE( " - created." );
+
+               when Deleted =>
+                  TEXT_IO.PUT( "TASKS_DELETE - " );
+                  TEST_SUPPORT.PUT_NAME( 
+                     SPTEST.TASK_NAME( Task_Events (I).Task1 ),
+                     FALSE
+                  );
+
+                  TEXT_IO.PUT( " deleting " );
+                  TEST_SUPPORT.PUT_NAME( 
+                     SPTEST.TASK_NAME( Task_Events (I).Task2 ),
+                     TRUE
+                  );
+
+               when Restarted =>
+                  TEXT_IO.PUT( "TASKS_RESTART - " );
+                  TEST_SUPPORT.PUT_NAME( 
+                     SPTEST.TASK_NAME( Task_Events (I).Task1 ),
+                     FALSE
+                  );
+                  TEXT_IO.PUT_LINE( " - restarted." );
+
+               when Started =>
+                  TEXT_IO.PUT( "TASKS_START - " );
+                  TEST_SUPPORT.PUT_NAME( 
+                     SPTEST.TASK_NAME( Task_Events (I).Task1 ),
+                     FALSE
+                  );
+                  TEXT_IO.PUT_LINE( " - started." );
+
+            end case;
+         end loop;
+
+         -- Reset the events list
+         Task_Events_Index := Task_Events'First;
+
+      end Flush_Task_Event_Log;
 
 --PAGE
 --
@@ -145,6 +228,8 @@ package body SPTEST is
 
       RTEMS.TASK_RESTART( SPTEST.TASK_ID( 3 ), 0, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_RESTART OF TA3" );
+
+      Flush_Task_Event_Log;
 
       RTEMS.TASK_SET_NOTE( SPTEST.TASK_ID( 1 ), 8, 4, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE OF TA1" );
@@ -363,6 +448,8 @@ package body SPTEST is
    ) is
    begin
 
+      Flush_Task_Event_Log;
+
       TEXT_IO.PUT_LINE( "TA4 - exitting task" );
 
    end TASK_4;
@@ -391,22 +478,21 @@ package body SPTEST is
 --  TASK_CREATE_EXTENSION
 --
 
-   procedure TASK_CREATE_EXTENSION (
+   function TASK_CREATE_EXTENSION (
       UNUSED       : in     RTEMS.TCB_POINTER;
       CREATED_TASK : in     RTEMS.TCB_POINTER
-   ) is
+   ) return RTEMS.Boolean is
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) ) > 0 then
-         TEXT_IO.PUT( "TASKS_CREATE - " );
-         TEST_SUPPORT.PUT_NAME( 
-            SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) )
-            ),
-            FALSE
+         Log_Task_Event ( 
+            Created, 
+            TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) ),
+            0
          );
-         TEXT_IO.PUT_LINE( "- created." );
       end if;
+
+      return RTEMS.True;
 
    end TASK_CREATE_EXTENSION;
 
@@ -421,23 +507,12 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) > 0 then
-         TEXT_IO.PUT( "TASKS_DELETE - " );
-         TEST_SUPPORT.PUT_NAME( 
-            SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) 
-            ),
-            FALSE
-         );
-      end if;
-
-      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) ) > 0 then
-         TEXT_IO.PUT( "deleting " );
-         TEST_SUPPORT.PUT_NAME( 
-            SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) ) 
-            ),
-            TRUE
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) > 0 and
+        TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) ) > 0 then
+         Log_Task_Event ( 
+            Deleted, 
+            TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ),
+            TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) )
          );
       end if;
 
@@ -455,14 +530,11 @@ package body SPTEST is
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ) > 0 then
-         TEXT_IO.PUT( "TASKS_RESTART - " );
-         TEST_SUPPORT.PUT_NAME( 
-            SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ) 
-            ),
-            FALSE
+         Log_Task_Event ( 
+            Restarted, 
+            TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ),
+            0
          );
-         TEXT_IO.PUT_LINE( " - restarted." );
       end if;
 
    end TASK_RESTART_EXTENSION;
@@ -479,14 +551,11 @@ package body SPTEST is
    begin
 
       if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ) > 0 then
-         TEXT_IO.PUT( "TASKS_START - " );
-         TEST_SUPPORT.PUT_NAME( 
-            SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ) 
-            ),
-            FALSE
+         Log_Task_Event ( 
+            Started, 
+            TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ),
+            0
          );
-         TEXT_IO.PUT_LINE( " - started." );
       end if;
 
    end TASK_START_EXTENSION;

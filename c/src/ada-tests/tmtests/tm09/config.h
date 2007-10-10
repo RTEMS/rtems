@@ -2,7 +2,7 @@
  *
  *  This include file defines the Configuration Table for this test.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -20,6 +20,7 @@
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
+#define CONFIGURE_MAXIMUM_TASKS              2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
 

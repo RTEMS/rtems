@@ -4,21 +4,21 @@ TA1 - signal_send - SIGNAL_16 to self
 ASR - ENTRY - signal => 16#10000#
 ASR - EXIT  - signal => 16#10000#
 TA1 - signal_send - SIGNAL_0 to self
-ASR - ENTRY - signal =>     16#1#
+ASR - ENTRY - signal =>    16#1#
 ASR - task_wake_after - yield processor
 TA2 - signal_send - SIGNAL_17 to TA1
 TA2 - task_wake_after - yield processor
 ASR - ENTRY - signal => 16#20000#
 ASR - EXIT  - signal => 16#20000#
-ASR - EXIT  - signal =>     16#1#
+ASR - EXIT  - signal =>    16#1#
 TA1 - signal_catch - NO_ASR
-<pause>
+<pause> 
 TA1 - signal_send - SIGNAL_1 to self
-ASR - ENTRY - signal =>     16#2#
+ASR - ENTRY - signal =>    16#2#
 ASR - task_wake_after - yield processor
 TA2 - signal_send - SIGNAL_18 and SIGNAL_19 to TA1
 TA2 - task_wake_after - yield processor
-ASR - EXIT  - signal =>     16#2#
+ASR - EXIT  - signal =>    16#2#
 ASR - ENTRY - signal => 16#C0000#
 ASR - EXIT  - signal => 16#C0000#
 TA1 - task_mode - disable ASRs
@@ -26,8 +26,8 @@ TA1 - sending signal to SELF from timer
 TA1 - waiting for signal to arrive
 TA1 - timer routine got the correct arguments
 TA1 - task_mode - enable ASRs
-ASR - ENTRY - signal => 16#8#
-ASR - EXIT  - signal => 16#8#
+ASR - ENTRY - signal =>    16#8#
+ASR - EXIT  - signal =>    16#8#
 TA1 - signal_catch - ASR ADDRESS of NULL
 TA1 - task_delete - delete self
 *** END OF TEST 14 ***

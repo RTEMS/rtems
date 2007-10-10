@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -248,6 +248,36 @@ package body Test_Support is
    begin
       return Ticks_Per_Second_Base;
    end Ticks_Per_Second; 
+
+--
+--  Return the size of the RTEMS Workspace
+--
+
+   function Work_Space_Size
+   return RTEMS.Unsigned32 is 
+      function Work_Space_Size_Base return RTEMS.Unsigned32;
+      pragma Import (C, Work_Space_Size_Base, "work_space_size");
+   begin
+      return Work_Space_Size_Base;
+   end Work_Space_Size;
+
+--
+--  Return an indication of whether multiprocessing is configured
+--
+
+   function Is_Configured_Multiprocessing
+   return Boolean is
+      function Is_Configured_Multiprocessing_Base return RTEMS.Unsigned32;
+      pragma Import (
+         C, Is_Configured_Multiprocessing_Base, "is_configured_multiprocessing"
+      );
+   begin
+      if Is_Configured_Multiprocessing_Base = 1 then
+         return True;
+      else
+         return False;
+      end if;
+   end Is_Configured_Multiprocessing;
 
 --
 --  Node is the node number in a multiprocessor configuration

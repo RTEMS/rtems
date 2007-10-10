@@ -1,11 +1,11 @@
 *** TEST 22 ***
 INIT - timer_create - creating timer 1
-INIT - timer 1 has id (16#10001#)
+INIT - timer 1 has id (16#12010001#)
 TA1 - timer_ident - identing timer 1
-TA1 - timer 1 has id (16#10001#)
+TA1 - timer 1 has id (16#12010001#)
 TA1 - clock_get -  9: 0: 0   12/31/1988
 TA1 - timer_after - timer 1 in 3 seconds
-TA1 - task_suspend( SELF ) 
+TA1 - task_suspend( SELF )
 TA1 - clock_get -  9: 0: 3   12/31/1988
 TA1 - timer_after - timer 1 in 3 seconds
 TA1 - task_wake_after - 1 second
@@ -13,7 +13,7 @@ TA1 - clock_get -  9: 0: 4   12/31/1988
 TA1 - timer_reset - timer 1
 TA1 - task_suspend( SELF )
 TA1 - clock_get -  9: 0: 7   12/31/1988
-<pause>
+<pause> 
 TA1 - timer_after - timer 1 in 3 seconds
 TA1 - timer_cancel - timer 1
 TA1 - clock_get -  9: 0: 7   12/31/1988

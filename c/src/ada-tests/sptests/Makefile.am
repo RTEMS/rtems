@@ -19,12 +19,10 @@ SUBDIRS += sp16
 SUBDIRS += sp17
 SUBDIRS += sp19
 SUBDIRS += sp20
-SUBDIRS += sp21
 SUBDIRS += sp22
 SUBDIRS += sp23
 SUBDIRS += sp24
 SUBDIRS += sp25
-SUBDIRS += spsize
 
 include $(top_srcdir)/../../../testsuites/automake/subdirs.am
 include $(top_srcdir)/../../../testsuites/automake/local.am

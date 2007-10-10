@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -483,12 +483,12 @@ TEST_SUPPORT.PAUSE;
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_PRIORITY" );
 
       TEXT_IO.PUT( 
-         "TA2 - region_get_segment - wait on 3968 byte segment "
+         "TA2 - region_get_segment - wait on 3950 byte segment "
       );
       TEXT_IO.PUT_LINE( "from region 2" );
       RTEMS.REGION_GET_SEGMENT(
          SPTEST.REGION_ID( 2 ),
-         3968,
+         3950,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          SEGMENT_ADDRESS_2,
@@ -530,11 +530,11 @@ TEST_SUPPORT.PAUSE;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
-      TEXT_IO.PUT( "TA3 - region_get_segment - wait on 3968 byte segment " );
+      TEXT_IO.PUT( "TA3 - region_get_segment - wait on 3950 byte segment " );
       TEXT_IO.PUT_LINE( "from region 2" );
       RTEMS.REGION_GET_SEGMENT(
          SPTEST.REGION_ID( 2 ),
-         3968,
+         3950,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          SEGMENT_ADDRESS_1,

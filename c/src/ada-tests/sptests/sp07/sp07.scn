@@ -1,16 +1,16 @@
 *** TEST 7 ***
-TASKS_CREATE - TA1 - created.
-TASKS_CREATE - TA2 - created.
-TASKS_CREATE - TA3 - created.
-TASKS_CREATE - TA4 - created.
-TASKS_START - TA1 - started.
-TASKS_START - TA2 - started.
-TASKS_START - TA3 - started.
-TASKS_START - TA4 - started.
-TASKS_RESTART - TA3 - restarted.
+TASKS_CREATE - TA1  - created.
+TASKS_CREATE - TA2  - created.
+TASKS_CREATE - TA3  - created.
+TASKS_CREATE - TA4  - created.
+TASKS_START - TA1  - started.
+TASKS_START - TA2  - started.
+TASKS_START - TA3  - started.
+TASKS_START - TA4  - started.
+TASKS_RESTART - TA3  - restarted.
 INIT - task_set_note - set TA1's NOTEPAD_8 to TA1's initial priority:  4
 INIT - task_set_note - set TA2's NOTEPAD_8 to TA2's initial priority:  4
-<pause>
+<pause> 
 TA1 - task_set_priority - get initial priority of self:  4
 TA1 - task_get_note - get NOTEPAD_8 - current priority:  4
 TA1 - task_set_note - set TA2's NOTEPAD_8:  3
@@ -24,9 +24,9 @@ TA1 - task_set_priority - set TA2's priority:  1
 TA2 - task_get_note - get NOTEPAD_8 - current priority:  1
 TA2 - task_suspend - suspend TA1
 TA2 - task_set_priority - set priority of TA1 ( blocked )
-TASKS_DELETE - TA2 deleting TA1
-TASKS_DELETE - TA2 deleting TA3
-TASKS_DELETE - TA2 deleting TA2
+TASKS_DELETE - TA2  deleting TA1 
+TASKS_DELETE - TA2  deleting TA3 
+TASKS_DELETE - TA2  deleting TA2 
 TA4 - exitting task
 TASK_EXITTED - user extension invoked correctly
 *** END OF TEST 7 ***

@@ -16,11 +16,11 @@ TA2 - event_receive - waiting forever on EVENT_10
 TA1 - EVENT_14 received - eventout => 16#4000#
 TA1 - event_send - send EVENT_19 to TA2
 TA1 - clock_get -  8:15: 0    2/12/1988
-<pause>
+<pause> 
 TA1 - event_send - send EVENT_18 to self after 5 seconds
 TA1 - event_receive - waiting forever on EVENT_18
-TA2 - EVENT_10 received - eventout => 16#400#
-TA2 - clock_get -  8:15: 5   02/12/1988
+TA2 - EVENT_10 received - eventout =>  16#400#
+TA1 - clock_get -  8:15: 5    2/12/1988
 TA2 - event_receive - PENDING_EVENTS
 TA2 - eventout => 16#80000#
 TA2 - event_receive - EVENT_19 - NO_WAIT
@@ -30,11 +30,11 @@ TA1 - EVENT_18 received - eventout => 16#40000#
 TA1 - clock_get -  8:15: 5    2/12/1988
 TA1 - event_send - send EVENT_3 to self
 TA1 - event_receive - EVENT_3 or EVENT_22 - NO_WAIT and EVENT_ANY
-TA1 - EVENT_3 received - eventout => 16#8#
+TA1 - EVENT_3 received - eventout =>    16#8#
 TA1 - event_send - send EVENT_4 to self
 TA1 - event_receive - waiting forever on EVENT_4 or EVENT_5 - EVENT_ANY
-TA1 - EVENT_4 received - eventout => 16#10#
-<pause>
+TA1 - EVENT_4 received - eventout =>   16#10#
+<pause> 
 TA1 - event_send - send EVENT_18 to self after 5 seconds
 TA1 - timer_cancel - cancelling timer for event EVENT_18
 TA1 - event_send - send EVENT_8 to self after 60 seconds
@@ -43,11 +43,11 @@ TA1 - event_send - send EVENT_10 to self after 60 seconds
 TA1 - timer_cancel - cancelling timer for event EVENT_8
 TA1 - clock_set -  8:15: 0    2/12/1988
 TA1 - event_send - send EVENT_1 every second
-TA1 - EVENT_1 received - eventout => 16#2# - at  8:15: 1    2/12/1988
-TA1 - EVENT_1 received - eventout => 16#2# - at  8:15: 2    2/12/1988
-TA1 - EVENT_1 received - eventout => 16#2# - at  8:15: 3    2/12/1988
+TA1 - EVENT_1 received - eventout =>    16#2# - at  8:15: 1    2/12/1988
+TA1 - EVENT_1 received - eventout =>    16#2# - at  8:15: 2    2/12/1988
+TA1 - EVENT_1 received - eventout =>    16#2# - at  8:15: 3    2/12/1988
 TA1 - timer_cancel - cancelling timer for event EVENT_1
-<pause>
+<pause> 
 TA1 - event_send - send EVENT_11 to self in 1 day
 TA1 - event_send - send EVENT_11 to self in 1 day
 TA1 - event_send - send EVENT_11 to self in 2 days
@@ -56,17 +56,17 @@ TA1 - timer_cancel - cancelling EVENT_11 to self in 2 days
 TA1 - event_send - resending EVENT_11 to self in 2 days
 TA1 - clock_set -  8:15: 3    2/15/1988
 TA1 - event_receive - waiting forever on EVENT_11
-TA1 - EVENT_11 received - eventout => 16#800#
-<pause>
+TA1 - EVENT_11 received - eventout =>  16#800#
+<pause> 
 TA1 - event_send/event_receive combination
 TA1 - clock_set -  8:15: 0    2/12/1988
 TA1 - event_receive all outstanding events
 TA1 - event_send - send EVENT_10 to self in 1 day
 TA1 - event_send - send EVENT_11 to self in 2 days
-TA1 - clock_set -  7:15: 0  2/12/1988
+TA1 - clock_set -  7:15: 0    2/12/1988
 TA1 - set time backwards
 TA1 - no events received
-TA1 - clock_set -  7:15: 0  2/14/1988
+TA1 - clock_set -  7:15: 0    2/14/1988
 TA1 - set time forwards (leave a timer)
 TA1 - EVENT_10 received
 TA1 - event_send - send EVENT_11 to self in 100 ticks

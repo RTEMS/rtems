@@ -256,19 +256,6 @@ package SPTEST is
    );
 
 --
---  SERVICE_ROUTINE
---
---  DESCRIPTION:
---
---  This subprogram serves as a dummy ISR which is installed at an
---  illegal vector number.
---
-
-   procedure SERVICE_ROUTINE (
-      IGNORED : in     RTEMS.VECTOR_NUMBER
-   );
-
---
 --  SCREEN_1
 --
 --  DESCRIPTION:

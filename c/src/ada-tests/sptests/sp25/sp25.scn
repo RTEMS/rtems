@@ -1,29 +1,29 @@
 *** TEST 25 ***
-TA1 - region_ident - rnid => 16#10001#
+TA1 - region_ident - rnid => 16#32010001#
 TA1 - region_get_segment - wait on 64 byte segment from region 1
-TA1 - got segment from region 1 - 16#F9B8#
+TA1 - got segment from region 1 -   16#10#
 TA1 - region_get_segment - wait on 128 byte segment from region 1
-TA1 - got segment from region 1 - 16#F930#
+TA1 - got segment from region 1 -   16#70#
 TA1 - region_get_segment - wait on 256 byte segment from region 1
-TA1 - got segment from region 1 - 16#F828#
+TA1 - got segment from region 1 -  16#110#
 TA1 - region_get_segment - wait on 512 byte segment from region 1
-TA1 - got segment from region 1 - 16#F620#
+TA1 - got segment from region 1 -  16#230#
 TA1 - region_get_segment - wait on 1024 byte segment from region 1
-TA1 - got segment from region 1 - 16#F218#
+TA1 - got segment from region 1 -  16#450#
 TA1 - region_get_segment - wait on 2048 byte segment from region 1
-TA1 - got segment from region 1 - 16#EA10#
+TA1 - got segment from region 1 -  16#870#
 TA1 - region_get_segment - wait on 4096 byte segment from region 1
-TA1 - got segment from region 1 - 16#DA08#
+TA1 - got segment from region 1 - 16#1090#
 TA1 - region_get_segment - wait on 8192 byte segment from region 1
-TA1 - got segment from region 1 - 16#BA00#
-<pause>
-TA1 - region_return_segment - return segment to region 1 - 16#F828#
-TA1 - region_return_segment - return segment to region 1 - 16#F620#
-TA1 - region_return_segment - return segment to region 1 - 16#F9B8#
-TA1 - region_return_segment - return segment to region 1 - 16#F930#
-TA1 - region_return_segment - return segment to region 1 - 16#DA08#
-TA1 - region_return_segment - return segment to region 1 - 16#EA10#
-TA1 - region_return_segment - return segment to region 1 - 16#BA00#
-TA1 - region_return_segment - return segment to region 1 - 16#F218#
+TA1 - got segment from region 1 - 16#20B0#
+<pause> 
+TA1 - region_return_segment - return segment to region 1 -  16#110#
+TA1 - region_return_segment - return segment to region 1 -  16#230#
+TA1 - region_return_segment - return segment to region 1 -   16#10#
+TA1 - region_return_segment - return segment to region 1 -   16#70#
+TA1 - region_return_segment - return segment to region 1 - 16#1090#
+TA1 - region_return_segment - return segment to region 1 -  16#870#
+TA1 - region_return_segment - return segment to region 1 - 16#20B0#
+TA1 - region_return_segment - return segment to region 1 -  16#450#
 TA1 - region_delete - walks heap if debug enabled
 *** END OF TEST 25 ***

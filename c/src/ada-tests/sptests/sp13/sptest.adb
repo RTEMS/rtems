@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -504,10 +504,6 @@ TEST_SUPPORT.PAUSE;
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
       TEXT_IO.PUT_LINE( " messages were flushed from Q 3" );
      
-      TEXT_IO.PUT( "TA1 - ERROR - " );
-      UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
-      TEXT_IO.PUT_LINE( " messages flushed" );
-
       TEXT_IO.PUT_LINE( "*** END OF TEST 13 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

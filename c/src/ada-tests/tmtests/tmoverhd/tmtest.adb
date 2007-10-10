@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -92,14 +92,14 @@ package body TMTEST is
 --  ISR_HANDLER
 --
 
-   procedure ISR_HANDLER (
-      VECTOR : in     RTEMS.VECTOR_NUMBER
-   ) is
-   begin
-
-      NULL;
-
-   end ISR_HANDLER;
+--   procedure ISR_HANDLER (
+--      VECTOR : in     RTEMS.VECTOR_NUMBER
+--   ) is
+--   begin
+--
+--      NULL;
+--
+--   end ISR_HANDLER;
 
 --PAGE
 -- 
@@ -119,8 +119,6 @@ package body TMTEST is
 -- 
 --  TASK_1
 --
-
-   CPU_TABLE      : aliased RTEMS.CPU_TABLE;
 
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
@@ -162,43 +160,6 @@ package body TMTEST is
       MINOR := 0;
       ERROR := 0;
      
--- INITIALIZE_EXECUTIVE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.INITIALIZE_EXECUTIVE( 
-               RTEMS.CONFIGURATION,
-               CPU_TABLE'ACCESS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "INITIALIZE_EXECUTIVE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- SHUTDOWN_EXECUTIVE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.SHUTDOWN_EXECUTIVE( ERROR );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "SHUTDOWN_EXECUTIVE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
 -- TASK_CREATE
 
       TIMER_DRIVER.INITIALIZE;
@@ -455,25 +416,25 @@ package body TMTEST is
 
 -- INTERRUPT_CATCH
 
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.INTERRUPT_CATCH( 
-               TMTEST.ISR_HANDLER'ADDRESS,  
-               RTEMS.VECTOR_NUMBER'FIRST,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "INTERRUPT_CATCH",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
+--      TIMER_DRIVER.INITIALIZE;
+--         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+--         loop
+--            DUMMY_RTEMS.INTERRUPT_CATCH( 
+--               TMTEST.ISR_HANDLER'ADDRESS,  
+--               RTEMS.VECTOR_NUMBER'FIRST,
+--               ADDRESS_1,
+--               STATUS
+--            );
+--         end loop;
+--      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
+--
+--      TIME_TEST_SUPPORT.PUT_TIME( 
+--         "INTERRUPT_CATCH",
+--         TMTEST.END_TIME, 
+--         TIME_TEST_SUPPORT.OPERATION_COUNT, 
+--         OVERHEAD,
+--         0
+--      );
 
 -- CLOCK_GET
 
@@ -1311,138 +1272,6 @@ TEST_SUPPORT.PAUSE;
       );
 
 TEST_SUPPORT.PAUSE;
-
--- IO_INITIALIZE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_INITIALIZE( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_INITIALIZE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- IO_OPEN
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_OPEN( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_OPEN",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- IO_CLOSE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_CLOSE( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_CLOSE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- IO_READ
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_READ( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_READ",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- IO_WRITE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_WRITE( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_WRITE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- IO_CONTROL
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.IO_CONTROL( 
-               MAJOR,
-               MINOR,
-               ADDRESS_1,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "IO_CONTROL",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
 
 -- FATAL_ERROR_OCCURRED
 

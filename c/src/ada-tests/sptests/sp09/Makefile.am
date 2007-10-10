@@ -5,6 +5,10 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
+# Prevents Ada from raising a constraint so that the error
+# handling can be verified in the binding.
+AM_ADAFLAGS += -gnatp
+
 noinst_PROGRAMS = sp09
 
 sp09_SOURCES = sp09.adb config.h sptest.adb sptest.ads

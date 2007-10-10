@@ -48,9 +48,8 @@ TA4  - clock_get -  9: 0:14   12/31/1988
 TA5  - clock_get -  9: 0:14   12/31/1988
 TA1  - clock_get -  9: 0:15   12/31/1988
 TA3  - clock_get -  9: 0:15   12/31/1988
-TA5  - clock_get -  9: 0:15   12/31/1988
 TA4  - clock_get -  9: 0:15   12/31/1988
+TA5  - clock_get -  9: 0:15   12/31/1988
 TA4 - task_delete - self
 TA5 - task_delete - TA3
 *** END OF TEST 19 ***
-

@@ -3,7 +3,7 @@ TA1 - task_wake_after - sleep 5 seconds
 TA2 - task_suspend - suspend self
 TA3 - task_suspend - suspend self
 TA1 - task_suspend - suspend TA3
-TA1 - task_resume  - resume TA2
+TA1 - task_resume - resume TA2
 TA1 - task_wake_after - sleep 5 seconds
 TA2 - task_wake_after - sleep 1 second
 TA2 - task_wake_after - sleep 1 second
@@ -19,7 +19,7 @@ TA3 - task_wake_after - sleep 1 second
 TA3 - task_wake_after - sleep 1 second
 TA3 - task_wake_after - sleep 1 second
 TA1 - task_suspend - suspend TA3
-TA1 - task_resume  - resume TA2
+TA1 - task_resume - resume TA2
 TA1 - task_wake_after - sleep 5 seconds
 TA2 - task_wake_after - sleep 1 second
 TA2 - task_wake_after - sleep 1 second
@@ -45,4 +45,3 @@ TA2 - task_wake_after - sleep 1 second
 TA1 - task_suspend - suspend TA2
 TA1 - task_resume - resume TA3
 *** END OF TEST 5 ***
-

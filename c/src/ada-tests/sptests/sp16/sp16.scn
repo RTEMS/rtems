@@ -1,48 +1,48 @@
 *** TEST 16 ***
-TA1 - region_ident - rnid => 16#10001#
+TA1 - region_ident - rnid => 16#32010001#
 TA1 - region_get_segment - wait on 100 byte segment from region 2
-TA1 - got segment from region 2 - 16#F78#
+TA1 - got segment from region 2 -   16#30#
 TA1 - region_get_segment - wait on 3K segment from region 3
-TA1 - got segment from region 3 - 16#3F8#
+TA1 - got segment from region 3 -   16#30#
 TA1 - region_get_segment - get 3080 byte segment from region 1 - NO_WAIT
-TA1 - got segment from region 1 - 16#378#
+TA1 - got segment from region 1 -   16#20#
 TA1 - task_wake_after - yield processor
 TA2 - region_get_segment - wait on 2K segment from region 1
-TA3 - region_get_segment - wait on 3968 byte segment from region 2
-<pause>
-TA1 - region_return_segment - return segment to region 1 - 16#378#
+TA3 - region_get_segment - wait on 3950 byte segment from region 2
+<pause> 
+TA1 - region_return_segment - return segment to region 1 -   16#20#
 TA1 - region_get_segment - wait 10 seconds for 3K segment from region 1
-TA2 - got segment from region 1 - 16#7F8#
-TA2 - region_return_segment - return segment to region 1 - 16#7F8#
+TA2 - got segment from region 1 -   16#20#
+TA2 - region_return_segment - return segment to region 1 -   16#20#
 TA2 - task_set_priority - make self highest priority task
-TA2 - region_get_segment - wait on 3968 byte segment from region 2
-TA1 - got segment from region 1 - 16#3F8#
-TA1 - region_return_segment - return segment to region 2 - 16#F78#
-TA2 - got segment from region 2 - 16#8#
-TA2 - region_return_segment - return segment to region 2 - 16#8#
+TA2 - region_get_segment - wait on 3950 byte segment from region 2
+TA1 - got segment from region 1 -   16#20#
+TA1 - region_return_segment - return segment to region 2 -   16#30#
+TA2 - got segment from region 2 -   16#30#
+TA2 - region_return_segment - return segment to region 2 -   16#30#
 TA2 - task_delete - delete self
 TA1 - task_wake_after - yield processor
-TA3 - got segment from region 2 - 16#8#
+TA3 - got segment from region 2 -   16#30#
 TA3 - region_get_segment - wait on 2K segment from region 3
 TA1 - task_delete - delete TA3
-<pause>
+<pause> 
 TA1 - task_wake_after - yield processor
 TA4 - region_get_segment - wait on 1.5K segment from region 1
 TA5 - region_get_segment - wait on 1.5K segment from region 1
-TA1 - region_return_segment - return segment to region 1 - 16#3F8#
+TA1 - region_return_segment - return segment to region 1 -   16#20#
 TA1 - task_wake_after - yield processor
-TA4 - got and returned 16#9F8#
-TA5 - got and returned 16#3F0#
+TA4 - got and returned   16#20#
+TA5 - got and returned  16#6A0#
 TA1 - region_get_segment - wait 10 seconds for 3K segment from region 1
-TA1 - got segment from region 1 - 16#3F8#
+TA1 - got segment from region 1 -   16#20#
 TA1 - task_wake_after - sleep 1 second
-TA4 - region_get_segment - wait on 3K segment from region 1
 TA5 - region_get_segment - wait on 3K segment from region 1
+TA4 - region_get_segment - wait on 3K segment from region 1
 TA1 - task_delete - delete TA4
-TA1 - region_return_segment - return segment to region 1 - 16#3F8#
+TA1 - region_return_segment - return segment to region 1 -   16#20#
 TA1 - task_wake_after - yield processor
-TA5 - got segment from region 1 - 16#3F8#
-TA5 - region_return_segment - return segment to region 1 - 16#3F8#
+TA5 - got segment from region 1 -   16#20#
+TA5 - region_return_segment - return segment to region 1 -   16#20#
 TA5 - task_delete - delete self
 TA1 - region_delete - delete region 1
 *** END OF TEST 16 ***

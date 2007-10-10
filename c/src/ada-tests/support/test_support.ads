@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -166,6 +166,20 @@ package Test_Support is
 
    function Milliseconds_Per_Tick 
    return RTEMS.Unsigned32;
+
+--
+--  Return the size of the RTEMS Workspace
+--
+
+   function Work_Space_Size
+   return RTEMS.Unsigned32;
+
+--
+--  Return an indication of whether multiprocessing is configured
+--
+
+   function Is_Configured_Multiprocessing 
+   return Boolean;
 
 --
 --  Node is the node number in a multiprocessor configuration

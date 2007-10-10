@@ -1,16 +1,16 @@
-*** CLOCK TICK TEST ***
+*** TEST 1 ***
 TA1 - clock_get -  9: 0: 0   12/31/1988
 TA2 - clock_get -  9: 0: 0   12/31/1988
 TA3 - clock_get -  9: 0: 0   12/31/1988
 TA1 - clock_get -  9: 0: 5   12/31/1988
 TA2 - clock_get -  9: 0:10   12/31/1988
 TA1 - clock_get -  9: 0:10   12/31/1988
-TA1 - clock_get -  9: 0:15   12/31/1988
 TA3 - clock_get -  9: 0:15   12/31/1988
+TA1 - clock_get -  9: 0:15   12/31/1988
 TA2 - clock_get -  9: 0:20   12/31/1988
 TA1 - clock_get -  9: 0:20   12/31/1988
 TA1 - clock_get -  9: 0:25   12/31/1988
-TA2 - clock_get -  9: 0:30   12/31/1988
-TA1 - clock_get -  9: 0:30   12/31/1988
 TA3 - clock_get -  9: 0:30   12/31/1988
+TA1 - clock_get -  9: 0:30   12/31/1988
+TA2 - clock_get -  9: 0:30   12/31/1988
 *** END OF CLOCK TICK TEST ***

@@ -1,20 +1,20 @@
 *** TEST 8 ***
-TA1 - task_mode - ASR                  - previous mode:     16#0#
-TA1 - task_mode - NO_ASR               - previous mode:     16#0#
-TA1 - task_mode - NO_ASR               - previous mode:   16#400#
-TA1 - task_mode - ASR                  - previous mode:   16#400#
-TA1 - task_mode - NO_TIMESLICE         - previous mode:     16#0#
-TA1 - task_mode - TIMESLICE            - previous mode:     16#0#
-TA1 - task_mode - TIMESLICE            - previous mode:   16#200#
-TA1 - task_mode - NO_TIMESLICE         - previous mode:   16#200#
-TA1 - task_mode - PREEMPT              - previous mode:     16#0#
-TA1 - task_mode - NO_PREEMPT           - previous mode:     16#0#
-TA1 - task_mode - NO_PREEMPT           - previous mode:   16#100#
-TA1 - task_mode - PREEMPT              - previous mode:   16#100#
-TA1 - task_mode - INTERRUPT_LEVEL( 3 ) - previous mode:     16#0#
-TA1 - task_mode - INTERRUPT_LEVEL( 5 ) - previous mode:     16#3#
-TA1 - task_mode - set all modes        - previous mode:     16#5#
-TA1 - task_mode - set all modes        - previous mode:   16#703#
-TA1 - task_mode - clear all modes      - previous mode:   16#703#
-TA1 - task_mode - get current mode     - previous mode:     16#0#
+TA1 - task_mode - ASR                  - previous mode:    16#0#
+TA1 - task_mode - NO_ASR               - previous mode:    16#0#
+TA1 - task_mode - NO_ASR               - previous mode:  16#400#
+TA1 - task_mode - ASR                  - previous mode:  16#400#
+TA1 - task_mode - NO_TIMESLICE         - previous mode:    16#0#
+TA1 - task_mode - TIMESLICE            - previous mode:    16#0#
+TA1 - task_mode - TIMESLICE            - previous mode:  16#200#
+TA1 - task_mode - NO_TIMESLICE         - previous mode:  16#200#
+TA1 - task_mode - PREEMPT              - previous mode:    16#0#
+TA1 - task_mode - NO_PREEMPT           - previous mode:    16#0#
+TA1 - task_mode - NO_PREEMPT           - previous mode:  16#100#
+TA1 - task_mode - PREEMPT              - previous mode:  16#100#
+TA1 - task_mode - INTERRUPT_LEVEL( 3 ) - previous mode:    16#0#
+TA1 - task_mode - INTERRUPT_LEVEL( 5 ) - previous mode:    16#1#
+TA1 - task_mode - set all modes        - previous mode:    16#1#
+TA1 - task_mode - set all modes        - previous mode:  16#701#
+TA1 - task_mode - clear all modes      - previous mode:  16#701#
+TA1 - task_mode - get current mode     - previous mode:    16#0#
 *** END OF TEST 8 ***

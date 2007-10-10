@@ -21,7 +21,7 @@ void *POSIX_Init(
 }
 
 /*
- *  Only for sp04
+ *  Only for sp04 and sp07
  */
 
 rtems_id tcb_to_id(
@@ -52,6 +52,20 @@ uint32_t ticks_per_second(void)
 {
   /* XXX HACK -- use public API */
   return TOD_TICKS_PER_SECOND;
+}
+
+uint32_t work_space_size(void)
+{
+  return CONFIGURE_EXECUTIVE_RAM_SIZE;
+}
+
+uint32_t is_configured_multiprocessing(void)
+{
+#if defined(RTEMS_MULTIPROCESSING)
+  return 1;
+#else
+  return 0;
+#endif
 }
 
 uint32_t get_node(void)

@@ -11,7 +11,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,27 +24,6 @@
 with RTEMS;
 
 package body DUMMY_RTEMS is
-
--- Initialization Manager
-
-   procedure INITIALIZE_EXECUTIVE (
-      CONFIGURATION_TABLE   : in     RTEMS.CONFIGURATION_TABLE_POINTER;
-      CPU_TABLE             : in     RTEMS.CPU_TABLE_POINTER
-   ) is
-   begin
-
-      NULL;
-
-   end INITIALIZE_EXECUTIVE;
-
-   procedure SHUTDOWN_EXECUTIVE (
-      RESULT : in     RTEMS.UNSIGNED32
-   ) is
-   begin
-
-      NULL;
-
-   end SHUTDOWN_EXECUTIVE;
 
 -- Task Manager
 
@@ -203,18 +182,18 @@ package body DUMMY_RTEMS is
 
 -- Interrupt Manager
 
-   procedure INTERRUPT_CATCH (
-      NEW_ISR_HANDLER : in     RTEMS.ADDRESS;
-      VECTOR          : in     RTEMS.VECTOR_NUMBER;
-      OLD_ISR_HANDLER :    out RTEMS.ADDRESS;
-      RESULT          :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      OLD_ISR_HANDLER := RTEMS.Null_Address;
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end INTERRUPT_CATCH;
+--   procedure INTERRUPT_CATCH (
+--      NEW_ISR_HANDLER : in     RTEMS.ADDRESS;
+--      VECTOR          : in     RTEMS.VECTOR_NUMBER;
+--      OLD_ISR_HANDLER :    out RTEMS.ADDRESS;
+--      RESULT          :    out RTEMS.STATUS_CODES
+--   ) is
+--   begin
+--
+--      OLD_ISR_HANDLER := RTEMS.Null_Address;
+--      RESULT := RTEMS.SUCCESSFUL;
+--
+--   end INTERRUPT_CATCH;
 
 -- Clock Manager
 
@@ -742,80 +721,6 @@ package body DUMMY_RTEMS is
       RESULT := RTEMS.SUCCESSFUL;
 
    end PORT_INTERNAL_TO_EXTERNAL;
-
--- Input/Output Manager
-
-   procedure IO_INITIALIZE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_INITIALIZE;
-
-   procedure IO_OPEN (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_OPEN;
-
-   procedure IO_CLOSE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_CLOSE;
-
-   procedure IO_READ (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_READ;
-
-   procedure IO_WRITE (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_WRITE;
-
-   procedure IO_CONTROL (
-      MAJOR        : in     RTEMS.DEVICE_MAJOR_NUMBER;
-      MINOR        : in     RTEMS.DEVICE_MINOR_NUMBER;
-      ARGUMENT     : in     RTEMS.ADDRESS;
-      RESULT       :    out RTEMS.STATUS_CODES
-   ) is
-   begin
-
-      RESULT := RTEMS.SUCCESSFUL;
-
-   end IO_CONTROL;
 
 -- Fatal Error Manager
 

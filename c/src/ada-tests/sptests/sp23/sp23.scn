@@ -1,6 +1,6 @@
 *** TEST 23 ***
-INIT - port_create - DP1 - internal = 16#1000# external = 16#2000#
-TA1 - port_ident - 16#10001#
+INIT - port_create - DP1 - internal = 16#1000# external =  16#2000#
+TA1 - port_ident - 16#3A010001#
 TA1 - port_external_to_internal - external: 16#200E# => internal: 16#100E#
 TA1 - port_internal_to_external - internal: 16#100E# => external: 16#200E#
 TA1 - port_external_to_internal - external: 16#300E# => internal: 16#300E#

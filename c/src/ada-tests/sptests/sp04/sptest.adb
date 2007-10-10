@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -26,6 +26,45 @@ with TEST_SUPPORT;
 with TEXT_IO;
 
 package body SPTEST is
+
+   TestsFinished : Boolean := False;
+   pragma Volatile (TestsFinished);
+
+   type Task_Event is record
+      Task_Index    : RTEMS.Unsigned32;
+      When_Switched : RTEMS.Time_Of_Day;
+   end record;
+
+   Task_Events : array (1 .. 15) of Task_Event;
+   Task_Events_Index : Natural := Task_Events'First;
+
+   procedure Log_Task_Event (
+      Task_Index    : RTEMS.Unsigned32;
+      When_Switched : RTEMS.Time_Of_Day
+   ) is
+   begin
+      if Task_Events_Index = Task_Events'Last then
+         RTEMS.Fatal_Error_Occurred ( 1 );  -- no other choice
+      else
+         Task_Events (Task_Events_Index).Task_Index := Task_Index;
+         Task_Events (Task_Events_Index).When_Switched := When_Switched;
+         Task_Events_Index := Task_Events_Index + 1;
+      end if;
+   end Log_Task_Event;
+
+   procedure Flush_Task_Event_Log is
+   begin
+      for I in Task_Events'First .. Task_Events_Index - 1 loop
+
+         TEST_SUPPORT.PUT_NAME(
+            SPTEST.TASK_NAME( Task_Events (I).Task_Index ), FALSE
+         );
+         TEST_SUPPORT.PRINT_TIME( "- ", Task_Events (I).When_Switched, "" );
+         TEXT_IO.NEW_LINE;
+
+      end loop;
+
+   end Flush_Task_Event_Log;
 
 --PAGE
 -- 
@@ -229,9 +268,12 @@ package body SPTEST is
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
 
-            LOOP
+            while not TestsFinished loop
                NULL;
             END LOOP;
+            Flush_Task_Event_Log;
+            TEXT_IO.PUT_LINE( "*** END OF TEST 4 ***" );
+            RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
          end if;
 
@@ -290,8 +332,7 @@ package body SPTEST is
          
    begin
 
-      --INDEX := TEST_SUPPORT.TASK_NUMBER( HEIR.OBJECT.ID );
-      INDEX := TCB_To_ID( HEIR );
+      INDEX := TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( HEIR ) );
 
       case INDEX is
          when 1  | 2 | 3 =>
@@ -300,13 +341,10 @@ package body SPTEST is
             RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET" );
 
-            TEST_SUPPORT.PUT_NAME( SPTEST.TASK_NAME( INDEX ), FALSE );
-            TEST_SUPPORT.PRINT_TIME( "- ", TIME, "" );
-            TEXT_IO.NEW_LINE;
+            Log_Task_Event ( INDEX, TIME );
            
             if TIME.SECOND >= 16 then
-               TEXT_IO.PUT_LINE( "*** END OF TEST 4 ***" );
-               RTEMS.SHUTDOWN_EXECUTIVE( 0 );
+               TestsFinished := True;
             end if;
 
          when others =>

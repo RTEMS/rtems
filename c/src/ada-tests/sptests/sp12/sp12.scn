@@ -11,7 +11,7 @@ PRI4 - semaphore_obtain - wait forever on SM2
 PRI3 - semaphore_obtain - wait forever on SM2
 PRI2 - semaphore_obtain - wait forever on SM2
 PRI1 - semaphore_obtain - wait forever on SM2
-<pause>
+<pause> 
 INIT - Binary Semaphore and Priority Inheritance Test
 INIT - semaphore_create - allocated binary semaphore
 INIT - semaphore_release - allocated binary semaphore
@@ -20,7 +20,7 @@ PRI5 - semaphore_obtain - wait forever on SM2
 PRI5 - task_suspend - until all priority tasks blocked
 PDRV - priority of PRI5 is          67
 PRI4 - semaphore_obtain - wait forever on SM2
-PDRV - change priority of PRI5 from          67 to 68
+PDRV - change priority of PRI5 from          67 to          68
 PDRV - priority of PRI5 is          67
 PRI3 - semaphore_obtain - wait forever on SM2
 PDRV - priority of PRI5 is          67
@@ -34,8 +34,8 @@ PRI5 - semaphore_obtain - nested
 PRI5 - semaphore_release - nested
 PRI5 - semaphore_release - restore priority
 PRI5 - priority of PRI5 is          68
-<pause>
-TA1 - semaphore_ident - smid => 16#10001#
+<pause> 
+TA1 - semaphore_ident - smid => 16#1A010009#
 TA1 - semaphore_obtain - wait forever on SM2
 TA1 - got SM2
 TA1 - semaphore_obtain - wait forever on SM3
@@ -45,7 +45,7 @@ TA1 - got SM1
 TA1 - task_wake_after - sleep 5 seconds
 TA2 - semaphore_obtain - wait forever on SM1
 TA3 - semaphore_obtain - wait forever on SM2
-<pause>
+<pause> 
 TA1 - semaphore_release - release SM1
 TA1 - semaphore_obtain - waiting for SM1 with 10 second timeout
 TA2 - got SM1
@@ -61,7 +61,7 @@ TA1 - task_wake_after - sleep 5 seconds
 TA3 - got SM2
 TA3 - semaphore_release - release SM2
 TA3 - semaphore_obtain - wait forever on SM3
-<pause>
+<pause> 
 TA1 - task_delete - delete TA3
 TA1 - task_wake_after - sleep 5 seconds
 TA4 - semaphore_obtain - wait forever on SM1

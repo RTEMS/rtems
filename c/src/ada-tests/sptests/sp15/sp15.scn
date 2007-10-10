@@ -1,16 +1,16 @@
 *** TEST 15 ***
 INIT - partition_create - partition 1
 INIT - partition_create - partition 2
-TA1 - partition_ident - partition 1 id = 16#10001#
-TA1 - partition_ident - partition 2 id = 16#10002#
-TA1 - partition_get_buffer - get buffer 1 from partition 1  -     16#0#
-TA1 - partition_get_buffer - get buffer 2 from partition 1  -   16#200#
-TA1 - partition_get_buffer - get buffer 1 from partition 2  -     16#0#
-TA1 - partition_get_buffer - get buffer 2 from partition 2  -    16#80#
-TA1 - partition_return_buffer - return buffer 1 to partition 1 -     16#0#
-TA1 - partition_return_buffer - return buffer 2 to partition 1 -   16#200#
-TA1 - partition_return_buffer - return buffer 1 to partition 2 -     16#0#
-TA1 - partition_return_buffer - return buffer 2 to partition 2 -    16#80#
+TA1 - partition_ident - partition 1 id = 16#2A010001#
+TA1 - partition_ident - partition 2 id = 16#2A010002#
+TA1 - partition_get_buffer - get buffer 1 from partition 1 -    16#0#
+TA1 - partition_get_buffer - get buffer 2 from partition 1 -  16#200#
+TA1 - partition_get_buffer - get buffer 1 from partition 2 -    16#0#
+TA1 - partition_get_buffer - get buffer 2 from partition 2 -   16#80#
+TA1 - partition_return_buffer - return buffer 1 to partition 1 -    16#0#
+TA1 - partition_return_buffer - return buffer 2 to partition 1 -  16#200#
+TA1 - partition_return_buffer - return buffer 1 to partition 2 -    16#0#
+TA1 - partition_return_buffer - return buffer 2 to partition 2 -   16#80#
 TA1 - partition_delete - delete partition 1
 TA1 - partition_delete - delete partition 2
 *** END OF TEST 15 ***

@@ -10,7 +10,7 @@
 --
 --  
 --
---  COPYRIGHT (c) 1989-1997.
+--  COPYRIGHT (c) 1989-2007.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -108,10 +108,10 @@ package SPTEST is
 --  This subprogram is the TASK_CREATE extension for this test.
 --
 
-   procedure TASK_CREATE_EXTENSION (
+   function TASK_CREATE_EXTENSION (
       UNUSED       : in     RTEMS.TCB_POINTER;
       CREATED_TASK : in     RTEMS.TCB_POINTER
-   );
+   ) return RTEMS.Boolean;
 
 --
 --  TASK_DELETE_EXTENSION
