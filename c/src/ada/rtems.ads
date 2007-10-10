@@ -77,6 +77,7 @@ pragma Elaborate_Body (RTEMS);
    True  : constant RTEMS.Boolean := 1;
    False : constant RTEMS.Boolean := 0;
 
+   --
    --  More Types
    --
 
@@ -94,26 +95,23 @@ pragma Elaborate_Body (RTEMS);
    subtype Debug_Set           is RTEMS.Unsigned32;
    subtype Device_Major_Number is RTEMS.Unsigned32;
    subtype Device_Minor_Number is RTEMS.Unsigned32;
-   subtype Vector_Number       is RTEMS.Unsigned32;
    subtype ISR_Level           is RTEMS.Unsigned32;
 
    subtype Node                is RTEMS.Unsigned32;
 
    --
    --  Task Related Types
-   --  XXXX fix this
+   --
+
    subtype Task_Argument       is RTEMS.Unsigned32;
    type Task_Argument_PTR      is access all Task_Argument;
-
-   -- XXXX fix this
-   subtype TCB                 is RTEMS.Unsigned32;
-   type    TCB_Pointer         is access all RTEMS.TCB;
-
-   subtype Task_States         is RTEMS.Unsigned32;
 
    type Task_Entry is access procedure (
       Argument : RTEMS.Unsigned32
    );
+
+   subtype TCB                 is RTEMS.Unsigned32;
+   type    TCB_Pointer         is access all RTEMS.TCB;
 
    --
    --  Clock and Time of Day Types
@@ -143,42 +141,6 @@ pragma Elaborate_Body (RTEMS);
       Clock_Get_Ticks_Per_Seconds,
       Clock_Get_Time_Value
    );
-
-   --
-   --  Device Driver Entry Prototype
-   --
-
-   type Device_Driver_Entry is access function (
-      Major    : in     RTEMS.Device_Major_Number;
-      Minor    : in     RTEMS.Device_Major_Number;
-      Argument : in     RTEMS.Unsigned32;
-      ID       : in     RTEMS.Unsigned32
-   ) return RTEMS.Unsigned32;
-
-   type Driver_Address_Table_Entry is
-      record
-         Initialization : RTEMS.Device_Driver_Entry;
-         Open           : RTEMS.Device_Driver_Entry;
-         Close          : RTEMS.Device_Driver_Entry;
-         Read           : RTEMS.Device_Driver_Entry;
-         Write          : RTEMS.Device_Driver_Entry;
-         Control        : RTEMS.Device_Driver_Entry;
-      end record;
-
-   type Driver_Address_Table is array ( RTEMS.Unsigned32
-     range 1 .. RTEMS.Unsigned32'Last ) of RTEMS.Driver_Address_Table_Entry;
-
-   type Driver_Address_Table_Pointer is access all Driver_Address_Table;
-
-   type Driver_Name_t is
-      record
-         Device_Name        : RTEMS.Address;
-         Device_Name_Length : RTEMS.Unsigned32;
-         Major              : RTEMS.Device_Major_Number;
-         Minor              : RTEMS.Device_Minor_Number;
-      end record;
-
-   type Driver_Name_t_Pointer is access all Driver_Name_t;
 
    --
    --  Ident Options
@@ -249,7 +211,6 @@ pragma Elaborate_Body (RTEMS);
    Minimum_Stack_Size : RTEMS.Unsigned32;
    pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");
 
-
    --
    --  Notepad index constants
    --
@@ -282,15 +243,14 @@ pragma Elaborate_Body (RTEMS);
    Current_Priority : constant RTEMS.Task_Priority := 0;
    No_Priority      : constant RTEMS.Task_Priority := 0;
 
-
    --
    --  Extension Callouts and Table
    --
 
-   type Thread_Create_Extension is access procedure (
+   type Thread_Create_Extension is access function (
       Current_Task : in     RTEMS.TCB_Pointer;
       New_Task     : in     RTEMS.TCB_Pointer
-   );
+   ) return RTEMS.Boolean;
 
    type Thread_Start_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer;
@@ -539,15 +499,6 @@ pragma Elaborate_Body (RTEMS);
    Signal_31   : constant RTEMS.Signal_Set := 16#80000000#;
 
    --
-   --  For now, do not provide access to the CPU Table from Ada.
-   --  When this type is provided, a CPU dependent file must
-   --  define it.
-   --
-
-   subtype CPU_Table is RTEMS.Address;
-   type CPU_Table_Pointer is access all CPU_Table;
-
-   --
    --  Utility Functions
    --
 
@@ -612,6 +563,8 @@ pragma Elaborate_Body (RTEMS);
       Left   : in     RTEMS.Address;
       Right  : in     RTEMS.Address
    ) return Standard.Boolean;
+
+
    --
    --  RTEMS API
    --
@@ -704,25 +657,25 @@ pragma Elaborate_Body (RTEMS);
       Argument : in     RTEMS.Address
    );
 
---   procedure Task_Variable_Add (
---      ID            : in     RTEMS.ID;
---      Task_Variable : in     RTEMS.Address;
---      Dtor          : in     RTEMS.Task_Variable_Dtor;
---      Result        :    out RTEMS.Status_Codes
---   );
+   procedure Task_Variable_Add (
+      ID            : in     RTEMS.ID;
+      Task_Variable : in     RTEMS.Address;
+      Dtor          : in     RTEMS.Task_Variable_Dtor;
+      Result        :    out RTEMS.Status_Codes
+   );
 
---   procedure Task_Variable_Get (
---      ID                  : in     RTEMS.ID;
---      Task_Variable       :    out RTEMS.Address;
---      Task_Variable_Value :    out RTEMS.Address;
---      Result              :    out RTEMS.Status_Codes
---   );
+   procedure Task_Variable_Get (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Task_Variable_Value :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   );
 
---   procedure Task_Variable_Delete (
---      ID                  : in     RTEMS.ID;
---      Task_Variable       :    out RTEMS.Address;
---      Result              :    out RTEMS.Status_Codes
---   );
+   procedure Task_Variable_Delete (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   );
 
    procedure Task_Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
@@ -737,13 +690,6 @@ pragma Elaborate_Body (RTEMS);
    --
    --  Interrupt Manager
    --
-
-   procedure Interrupt_Catch (
-      New_ISR_Handler : in     RTEMS.Address;
-      Vector          : in     RTEMS.Vector_Number;
-      Old_ISR_Handler :    out RTEMS.Address;
-      Result          :    out RTEMS.Status_Codes
-   );
 
    function Interrupt_Disable return RTEMS.ISR_Level;
    pragma Interface (C, Interrupt_Disable);
@@ -806,7 +752,6 @@ pragma Elaborate_Body (RTEMS);
       ID     : in     RTEMS.ID;
       Result :    out RTEMS.Status_Codes
    );
-
 
    --
    --  Timer Manager
@@ -915,7 +860,6 @@ pragma Elaborate_Body (RTEMS);
       Result :    out RTEMS.Status_Codes
    );
 
-
    --
    --  Message Queue Manager
    --
@@ -978,7 +922,6 @@ pragma Elaborate_Body (RTEMS);
       Result :    out RTEMS.Status_Codes
    );
 
-
    --
    --  Event Manager
    --
@@ -1012,7 +955,6 @@ pragma Elaborate_Body (RTEMS);
       Signal_Set : in     RTEMS.Signal_Set;
       Result     :    out RTEMS.Status_Codes
    );
-
 
    --
    --  Partition Manager
@@ -1051,7 +993,6 @@ pragma Elaborate_Body (RTEMS);
       Buffer : in     RTEMS.Address;
       Result :    out RTEMS.Status_Codes
    );
-
 
    --
    --  Region Manager
@@ -1107,7 +1048,6 @@ pragma Elaborate_Body (RTEMS);
       Result  :    out RTEMS.Status_Codes
    );
 
-
    --
    --  Dual Ported Memory Manager
    --
@@ -1147,66 +1087,12 @@ pragma Elaborate_Body (RTEMS);
    );
 
    --
-   --  Input/Output Manager
-   --
-
-   procedure IO_Register_Name (
-      Name   : in     String;
-      Major  : in     RTEMS.Device_Major_Number;
-      Minor  : in     RTEMS.Device_Minor_Number;
-      Result :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Lookup_Name (
-      Name         : in     String;
-      Device_Info  : In     RTEMS.Driver_Name_t_Pointer;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Open (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Close (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Read (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Write (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-   procedure IO_Control (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   );
-
-
-   --
    --  Fatal Error Manager
    --
 
    procedure Fatal_Error_Occurred (
       The_Error : in     RTEMS.Unsigned32
    );
-
 
    --
    --  Rate Monotonic Manager
@@ -1245,7 +1131,6 @@ pragma Elaborate_Body (RTEMS);
       Status  :    out RTEMS.Rate_Monotonic_Period_Status;
       Result  :    out RTEMS.Status_Codes
    );
-
 
    --
    --  Debug Manager
