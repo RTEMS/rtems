@@ -17,11 +17,11 @@ NEWLIB_VERS = 1.15.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 
-GDB_VERS = 6.5
+GDB_VERS = 6.6.90
 GDB_PKGVERS = $(GDB_VERS)
 GDB_RPMREL = 1%{?dist}
 include ../gdb.am
-GDB_OPTS +=
+GDB_OPTS += --disable-infos
 
 CPUKIT_VERS = 4.7.99.1
 CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
