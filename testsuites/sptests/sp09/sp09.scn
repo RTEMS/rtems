@@ -1,5 +1,4 @@
 *** TEST 9 ***
-INIT - rtems_task_create - RTEMS_INVALID_SIZE -- NOT CHECKED
 INIT - rtems_task_create - RTEMS_INVALID_PRIORITY
 INIT - rtems_task_restart - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_delete - RTEMS_INVALID_ID

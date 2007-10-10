@@ -1,3 +1,8 @@
+2007-10-10	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* sp09/init.c, sp09/sp09.scn: Removed an obsolete test that was
+	commented out and updated the .scn file.
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp20/task1.c, sp34/changepri.c, sp35/priinv.c: Build when using

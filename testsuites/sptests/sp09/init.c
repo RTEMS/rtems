@@ -60,24 +60,6 @@ rtems_task Init(
 
   Period_name[ 1 ]     =  rtems_build_name( 'T', 'M', '1', ' ' );
 
-#if 0
-  status = rtems_task_create(
-    Task_name[1],
-    4,
-    10,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id[ 1 ]
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_SIZE,
-    "rtems_task_create with illegal stack size"
-  );
-  puts( "INIT - rtems_task_create - RTEMS_INVALID_SIZE" );
-#endif
-  puts( "INIT - rtems_task_create - RTEMS_INVALID_SIZE -- NOT CHECKED" );
-
   status = rtems_task_create(
      Task_name[1],
      0,
