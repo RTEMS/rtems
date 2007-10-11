@@ -28,7 +28,7 @@ extern "C" {
  */
 #ifdef SCORE_INIT
 const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-2004.\n\
+"COPYRIGHT (c) 1989-2007.\n\
 On-Line Applications Research Corporation (OAR).\n";
 #else
 extern const char _Copyright_Notice[];
