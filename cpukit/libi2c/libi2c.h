@@ -113,7 +113,8 @@ typedef struct rtems_libi2c_bus_ops_
  * (i.e., libi2c) and the minor number encodes a bus# and a i2c address.
  *
  * The name will be registered in the filesystem (parent
- * directories must exist). It may be NULL in which case
+ * directories must exist, also IMFS filesystem must exist see 
+ * CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM). It may be NULL in which case
  * the library will pick a default.
  *
  * RETURNS: bus # (>=0) or -1 on error (errno set).

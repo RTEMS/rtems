@@ -323,7 +323,7 @@ rtems_libi2c_initialize ()
     return -1;
 
   sc = rtems_io_register_driver (0, &libi2c_io_ops, &rtems_libi2c_major);
-  if (RTEMS_SUCCESSFUL != 0) {
+  if (RTEMS_SUCCESSFUL != sc) {
     fprintf (stderr,
              DRVNM " Claiming driver slot failed (rtems status code %i)\n",
              sc);
@@ -366,8 +366,8 @@ rtems_libi2c_register_bus (char *name, rtems_libi2c_bus_t * bus)
   i = stat (nmcpy, &sbuf);
   *chpt = tmp;
   if (i) {
-    fprintf (stderr, "Bad name '%s'; parent directory doesn't exist\n",
-             nmcpy);
+    fprintf (stderr, "Get %s status failed: %s\n",
+             nmcpy,strerror(errno));
     return -RTEMS_INVALID_NAME;
   }
   /* should be a directory since name terminates in '/' */
