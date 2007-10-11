@@ -13,8 +13,8 @@
 %define _exeext %{nil}
 %endif
 
-%define gdb_version 6.6.90
-%define gdb_rpmvers %{expand:%(echo 6.6.90 | tr - _)} 
+%define gdb_version 6.7
+%define gdb_rpmvers %{expand:%(echo 6.7 | tr - _)} 
 
 Name:		rtems-4.9-sparc-rtems4.9-gdb
 Summary:	Gdb for target sparc-rtems4.9
@@ -32,10 +32,15 @@ BuildRequires:	expat
 BuildRequires:	expat-devel
 %endif
 %endif
+# Required for building the infos
+BuildRequires:	/sbin/install-info
+BuildRequires:	texinfo >= 4.2
 %if "sparc-rtems4.9" == "sparc-rtems4.9"
 BuildRequires:	libtermcap-devel
 %endif
 BuildRequires:	ncurses-devel
+
+Requires:	rtems-4.9-gdb-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
@@ -44,6 +49,9 @@ Patch0:		gdb-6.5-rtems-20060713.diff
 %endif
 %if "%{gdb_version}" == "6.6"
 Patch0:		gdb-6.6-rtems4.8-20070306.diff
+%endif
+%if "%{gdb_version}" == "6.7"
+Patch0:		gdb-6.7-rtems4.9-20071011.diff
 %endif
 
 %description
@@ -73,6 +81,7 @@ cd ..
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make all
+  make info
   cd ..
 
 %install
@@ -90,10 +99,22 @@ cd ..
     mandir=$RPM_BUILD_ROOT%{_mandir} \
     install
 
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    bindir=$RPM_BUILD_ROOT%{_bindir} \
+    includedir=$RPM_BUILD_ROOT%{_includedir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    install-info
 %endif
 
-# Conflict with a native gdb's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# These come from other packages
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
 
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
@@ -158,4 +179,51 @@ GNU gdb targetting sparc-rtems4.9.
 
 %dir %{_bindir}
 %{_bindir}/sparc-rtems4.9-*
+
+# ==============================================================
+# rtems-4.9-gdb-common
+# ==============================================================
+%package -n rtems-4.9-gdb-common
+Summary:      Base package for RTEMS gdbs
+Group: Development/Tools
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+
+%description -n rtems-4.9-gdb-common
+
+GDB files shared by all targets.
+
+%post -n rtems-4.9-gdb-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+%if "%{gdb_version}" < "6.3"
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
+%endif
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+
+%preun -n rtems-4.9-gdb-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+%if "%{gdb_version}" < "6.3"
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
+%endif
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+fi
+
+%files -n rtems-4.9-gdb-common
+%defattr(-,root,root)
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/gdb.info*
+
+# FIXME: When had mmalloc.info been removed?
+%if "%{gdb_version}" < "6.3"
+%{_infodir}/mmalloc.info*
+%endif
+%{_infodir}/gdbint.info*
+%{_infodir}/stabs.info*
+%{_infodir}/annotate.info*
 
