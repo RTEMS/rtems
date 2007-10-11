@@ -198,8 +198,8 @@ typedef struct {
 } pelican_regs;
 #endif
 
-#define MAX_TSEG1 7
-#define MAX_TSEG2 15
+#define MAX_TSEG2 7
+#define MAX_TSEG1 15
 
 #if 0
 typedef struct {
@@ -728,16 +728,13 @@ static void occan_stat_print(occan_stats *stats){
 }
 #endif
 
-/* This function calculates BTR0 BTR1 values for a given bitrate.
- * Heavily based on mgt_mscan_bitrate() from peak driver, which 
- * in turn is based on work by Arnaud Westenberg.
+/* This function calculates BTR0 and BTR1 values for a given bitrate.
  *
  * Set communication parameters.
- * baud rate in Hz
- * input clock frequency of can core in Hz (system frequency)
- * sjw synchronization jump width (0-3) prescaled clock cycles
- * sampl_pt sample point in % (0-100) sets (TSEG1+2)/(TSEG1+TSEG2+3)
- *                                                               ratio
+ * \param clock_hz OC_CAN Core frequency in Hz.
+ * \param rate Requested baud rate in bits/second.
+ * \param result Pointer to where resulting BTRs will be stored.
+ * \return zero if successful to calculate a baud rate.
  */
 static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result){
 	int best_error = 1000000000;
@@ -748,7 +745,7 @@ static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_
 	int clock = clock_hz / 2;
 	int sampl_pt = 90;
 
-	if ( (rate<10000) || (rate>1000000) ){
+	if ( (rate<5000) || (rate>1000000) ){
 		/* invalid speed mode */
 		return -1;
 	}
@@ -816,12 +813,7 @@ static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_
 		tseg1 = MAX_TSEG1;
 		tseg2 = best_tseg - tseg1 - 2;
 	}
-/*
-	result->sjw = sjw;
-	result->brp = best_brp;
-	result->tseg1 = tseg1;
-	result->tseg2 = tseg2;
-*/
+
 	result->btr0 = (sjw<<OCCAN_BUSTIM_SJW_BIT) | (best_brp&OCCAN_BUSTIM_BRP);
 	result->btr1 = (0<<7) | (tseg2<<OCCAN_BUSTIM_TSEG2_BIT) | tseg1;
 	
@@ -834,10 +826,6 @@ static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing){
 	
 	priv->regs->bustim0 = timing->btr0;
 	priv->regs->bustim1 = timing->btr1;
-	/*
-	priv->regs->bustim0 = (timing->sjw<<OCCAN_BUSTIM_SJW_BIT) | (timing->brp&OCCAN_BUSTIM_BRP);
-	priv->regs->bustim1 = (timing->sam<<7) | (timing->tseg2<<OCCAN_BUSTIM_TSEG2_BIT) | timing->tseg1;
-	*/
 	return 0;
 }
 
