@@ -1,3 +1,9 @@
+2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
+
+	* Makefile.am, shared/can/occan.c, shared/include/ambapp.h: Add initial
+	i2c and update OC-CAN support.
+	* shared/i2c/i2cmst.c, shared/include/i2cmst.h: New files.
+
 2007-09-21	Daniel Hellstrom <daniel@gaisler.com>
 
 	* shared/can/occan.c: Fix warning on Diab compiler.

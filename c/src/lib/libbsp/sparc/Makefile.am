@@ -59,5 +59,9 @@ EXTRA_DIST += shared/include/b1553brm.h
 EXTRA_DIST += shared/include/b1553brm_pci.h
 EXTRA_DIST += shared/include/b1553brm_rasta.h
 
+# I2C-master (I2CMST)
+EXTRA_DIST += shared/i2c/i2cmst.c
+EXTRA_DIST += shared/include/i2cmst.h
+
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

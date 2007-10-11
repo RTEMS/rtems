@@ -58,6 +58,8 @@ extern "C" {
 #define GAISLER_ETHMAC    0x1D
 #define GAISLER_SPACEWIRE 0x1f
 #define GAISLER_AHB2AHB   0x20
+#define GAISLER_I2CMST    0x28
+#define GAISLER_GRSPW2    0x29
 #define GAISLER_GRHCAN    0x34
 #define GAISLER_GRFIFO    0x35
 #define GAISLER_GRPULSE   0x37
