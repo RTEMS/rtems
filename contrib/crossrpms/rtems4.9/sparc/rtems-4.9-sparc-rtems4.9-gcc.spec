@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.2.1
-%define gcc_version 4.2.1
-%define gcc_rpmvers %{expand:%(echo "4.2.1" | tr - _ )}
+%define gcc_pkgvers 4.2.2
+%define gcc_version 4.2.2
+%define gcc_rpmvers %{expand:%(echo "4.2.2" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	sparc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -75,6 +75,10 @@ Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
 %if "%{gcc_version}" == "4.2.1"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
+%endif
+%if "%{gcc_version}" == "4.2.2"
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-4.2.2-rtems4.9-20071011.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
