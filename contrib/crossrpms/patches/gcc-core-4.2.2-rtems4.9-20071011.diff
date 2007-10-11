@@ -1,0 +1,187 @@
+diff -uNr gcc-4.2.2.orig/gcc/config/arm/rtems-elf.h gcc-4.2.2/gcc/config/arm/rtems-elf.h
+--- gcc-4.2.2.orig/gcc/config/arm/rtems-elf.h	2007-09-01 17:28:30.000000000 +0200
++++ gcc-4.2.2/gcc/config/arm/rtems-elf.h	2007-10-11 04:34:05.000000000 +0200
+@@ -26,6 +26,7 @@
+ #define TARGET_OS_CPP_BUILTINS()		\
+     do {					\
+ 	builtin_define ("__rtems__");		\
++	builtin_define ("__USE_INIT_FINI__");	\
+ 	builtin_assert ("system=rtems");	\
+     } while (0)
+ 
+diff -uNr gcc-4.2.2.orig/gcc/config/arm/rtems-elf.h.orig gcc-4.2.2/gcc/config/arm/rtems-elf.h.orig
+--- gcc-4.2.2.orig/gcc/config/arm/rtems-elf.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.2.2/gcc/config/arm/rtems-elf.h.orig	2007-09-01 17:28:30.000000000 +0200
+@@ -0,0 +1,45 @@
++/* Definitions for RTEMS based ARM systems using ELF
++   Copyright (C) 2000, 2002, 2005, 2007 Free Software Foundation, Inc.
++ 
++   This file is part of GCC.
++ 
++   GCC is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published
++   by the Free Software Foundation; either version 3, or (at your
++   option) any later version.
++ 
++   GCC is distributed in the hope that it will be useful, but WITHOUT
++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++   License for more details.
++ 
++   You should have received a copy of the GNU General Public License
++   along with GCC; see the file COPYING3.  If not see
++   <http://www.gnu.org/licenses/>.  */
++
++/* Run-time Target Specification.  */
++#undef TARGET_VERSION
++#define TARGET_VERSION  fputs (" (ARM/ELF RTEMS)", stderr);
++
++#define HAS_INIT_SECTION
++
++#define TARGET_OS_CPP_BUILTINS()		\
++    do {					\
++	builtin_define ("__rtems__");		\
++	builtin_assert ("system=rtems");	\
++    } while (0)
++
++/*
++ * The default in gcc now is soft-float, but gcc misses it to 
++ * pass it to the assembler.
++ */
++#undef SUBTARGET_EXTRA_ASM_SPEC
++#define SUBTARGET_EXTRA_ASM_SPEC "\
++  %{!mhard-float: %{!msoft-float:-mfpu=softfpa}}"
++
++/*
++ *  The default includes --start-group and --end-group which conflicts
++ *  with how this used to be defined.
++ */
++#undef LINK_GCC_C_SEQUENCE_SPEC
++#define LINK_GCC_C_SEQUENCE_SPEC "%G %L"
+diff -uNr gcc-4.2.2.orig/gcc/config/c4x/rtems.h gcc-4.2.2/gcc/config/c4x/rtems.h
+--- gcc-4.2.2.orig/gcc/config/c4x/rtems.h	2007-09-01 17:28:30.000000000 +0200
++++ gcc-4.2.2/gcc/config/c4x/rtems.h	2007-10-11 04:34:05.000000000 +0200
+@@ -23,6 +23,5 @@
+ #define TARGET_OS_CPP_BUILTINS()		\
+     do {					\
+ 	builtin_define ("__rtems__");		\
+-	builtin_define ("__USE_INIT_FINI__");	\
+ 	builtin_assert ("system=rtems");	\
+     } while (0)
+diff -uNr gcc-4.2.2.orig/gcc/config/c4x/rtems.h.orig gcc-4.2.2/gcc/config/c4x/rtems.h.orig
+--- gcc-4.2.2.orig/gcc/config/c4x/rtems.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.2.2/gcc/config/c4x/rtems.h.orig	2007-09-01 17:28:30.000000000 +0200
+@@ -0,0 +1,28 @@
++/* Definitions of RTEMS executing on an TMS320C[34]x using coff
++   Copyright (C) 1996, 1997, 1999, 2002, 2007 Free Software Foundation, Inc.
++   Contributed by Joel Sherrill (joel@OARcorp.com).
++
++This file is part of GCC.
++
++GCC is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 3, or (at your option)
++any later version.
++
++GCC is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with GCC; see the file COPYING3.  If not see
++<http://www.gnu.org/licenses/>.  */
++
++/* Specify predefined symbols in preprocessor.  */
++
++#define TARGET_OS_CPP_BUILTINS()		\
++    do {					\
++	builtin_define ("__rtems__");		\
++	builtin_define ("__USE_INIT_FINI__");	\
++	builtin_assert ("system=rtems");	\
++    } while (0)
+diff -uNr gcc-4.2.2.orig/gcc/config/m68k/t-rtems gcc-4.2.2/gcc/config/m68k/t-rtems
+--- gcc-4.2.2.orig/gcc/config/m68k/t-rtems	2005-02-07 06:13:25.000000000 +0100
++++ gcc-4.2.2/gcc/config/m68k/t-rtems	2007-10-11 04:34:06.000000000 +0200
+@@ -1,7 +1,11 @@
+ # Custom multilibs for RTEMS
+ 
+-MULTILIB_OPTIONS = m68000/m68020/m5200/mcpu32/m68030/m68040/m68060 m68881/msoft-float
++MULTILIB_OPTIONS = m68000/m68020/m5200/m528x/mcpu32/m68030/m68040/m68060
++MULTILIB_OPTIONS += m68881/msoft-float
+ MULTILIB_DIRNAMES =
+ MULTILIB_MATCHES = m68000=mc68000 m68000=m68302 mcpu32=m68332 m68020=mc68020 m68030=mc68030
+-MULTILIB_MATCHES += m5200=m528x
+-MULTILIB_EXCEPTIONS = m68000/msoft-float m5200/m68881 m5200/msoft-float mcpu32/m68881 mcpu32/msoft-float m68040/m68881 m68060/m68881
++MULTILIB_MATCHES += m5200=m5206e
++MULTILIB_EXCEPTIONS = m68000/msoft-float m68040/m68881 m68060/m68881
++MULTILIB_EXCEPTIONS += mcpu32/m68881 mcpu32/msoft-float
++MULTILIB_EXCEPTIONS += m5200/m68881 m5200/msoft-float
++MULTILIB_EXCEPTIONS += m528x/m68881 m528x/msoft-float
+diff -uNr gcc-4.2.2.orig/gcc/config/mips/elf.h gcc-4.2.2/gcc/config/mips/elf.h
+--- gcc-4.2.2.orig/gcc/config/mips/elf.h	2007-09-01 17:28:30.000000000 +0200
++++ gcc-4.2.2/gcc/config/mips/elf.h	2007-10-11 04:34:06.000000000 +0200
+@@ -48,6 +48,4 @@
+ #undef  ENDFILE_SPEC
+ #define ENDFILE_SPEC "crtend%O%s crtn%O%s"
+ 
+-#define NO_IMPLICIT_EXTERN_C 1
+-
+ #define HANDLE_PRAGMA_PACK_PUSH_POP 1
+diff -uNr gcc-4.2.2.orig/gcc/config/mips/elf.h.orig gcc-4.2.2/gcc/config/mips/elf.h.orig
+--- gcc-4.2.2.orig/gcc/config/mips/elf.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ gcc-4.2.2/gcc/config/mips/elf.h.orig	2007-09-01 17:28:30.000000000 +0200
+@@ -0,0 +1,53 @@
++/* Target macros for mips*-elf targets.
++   Copyright (C) 1994, 1997, 1999, 2000, 2002, 2003, 2004, 2007
++   Free Software Foundation, Inc.
++
++This file is part of GCC.
++
++GCC is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 3, or (at your option)
++any later version.
++
++GCC is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with GCC; see the file COPYING3.  If not see
++<http://www.gnu.org/licenses/>.  */
++
++/* MIPS assemblers don't have the usual .set foo,bar construct;
++   .set is used for assembler options instead.  */
++#undef SET_ASM_OP
++#define ASM_OUTPUT_DEF(FILE, LABEL1, LABEL2)			\
++  do								\
++    {								\
++      fputc ('\t', FILE);					\
++      assemble_name (FILE, LABEL1);				\
++      fputs (" = ", FILE);					\
++      assemble_name (FILE, LABEL2);				\
++      fputc ('\n', FILE);					\
++    }								\
++  while (0)
++
++#undef ASM_DECLARE_OBJECT_NAME
++#define ASM_DECLARE_OBJECT_NAME mips_declare_object_name
++
++#undef ASM_FINISH_DECLARE_OBJECT
++#define ASM_FINISH_DECLARE_OBJECT mips_finish_declare_object
++
++/* Leave the linker script to choose the appropriate libraries.  */
++#undef  LIB_SPEC
++#define LIB_SPEC ""
++
++#undef  STARTFILE_SPEC
++#define STARTFILE_SPEC "crti%O%s crtbegin%O%s"
++
++#undef  ENDFILE_SPEC
++#define ENDFILE_SPEC "crtend%O%s crtn%O%s"
++
++#define NO_IMPLICIT_EXTERN_C 1
++
++#define HANDLE_PRAGMA_PACK_PUSH_POP 1
