@@ -1,0 +1,45 @@
+diff -uNr gdb-6.7.orig/bfd/sysdep.h gdb-6.7/bfd/sysdep.h
+--- gdb-6.7.orig/bfd/sysdep.h	2007-07-03 09:26:42.000000000 -0500
++++ gdb-6.7/bfd/sysdep.h	2007-10-11 03:26:24.000000000 -0500
+@@ -136,7 +136,7 @@
+ #endif
+ 
+ #if !HAVE_DECL_STRSTR
+-extern char *strstr ();
++/* extern char *strstr (); */
+ #endif
+ 
+ #ifdef HAVE_FTELLO
+diff -uNr gdb-6.7.orig/sim/erc32/erc32.c gdb-6.7/sim/erc32/erc32.c
+--- gdb-6.7.orig/sim/erc32/erc32.c	1999-04-15 20:35:00.000000000 -0500
++++ gdb-6.7/sim/erc32/erc32.c	2007-10-11 03:26:24.000000000 -0500
+@@ -413,7 +413,7 @@
+     if (rom8) mec_memcfg &= ~0x20000;
+     else mec_memcfg |= 0x20000;
+ 
+-    mem_ramsz = (256 * 1024) << ((mec_memcfg >> 10) & 7);
++    mem_ramsz = (512 * 1024) << ((mec_memcfg >> 10) & 7);
+     mem_romsz = (128 * 1024) << ((mec_memcfg >> 18) & 7);
+ 
+     if (sparclite_board) {
+diff -uNr gdb-6.7.orig/sim/erc32/exec.c gdb-6.7/sim/erc32/exec.c
+--- gdb-6.7.orig/sim/erc32/exec.c	2005-03-07 05:09:05.000000000 -0600
++++ gdb-6.7/sim/erc32/exec.c	2007-10-11 03:26:24.000000000 -0500
+@@ -1713,7 +1713,7 @@
+     	    sregs->fdp[rs2 | 1] = sregs->fs[rs2 & ~1];
+     	    sregs->fdp[rs2 & ~1] = sregs->fs[rs2 | 1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+ 
+@@ -1886,7 +1886,7 @@
+ 	sregs->fs[rd & ~1] = sregs->fdp[rd | 1];
+ 	sregs->fs[rd | 1] = sregs->fdp[rd & ~1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+     if (sregs->fpstate == FP_EXC_PE) {
