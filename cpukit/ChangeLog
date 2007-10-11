@@ -1,3 +1,16 @@
+2007-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/copyrt.h: Update year.
+
+2007-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/copyrt.h: Update year.
+
+2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
+
+	* libi2c/libi2c.c, libi2c/libi2c.h: Add message about needing IMFS.
+	Fixed check of status when registering driver. Add use of strerror().
+
 2007-10-04	Keith Robertson <kjrobert@alumni.uwaterloo.ca>,
 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
