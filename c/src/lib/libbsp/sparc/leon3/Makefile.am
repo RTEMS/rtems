@@ -104,6 +104,12 @@ uart_rel_SOURCES = ../../sparc/shared/uart/apbuart.c ../../sparc/shared/uart/apb
 uart_rel_CPPFLAGS = $(AM_CPPFLAGS)
 uart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+# I2CMST
+include_HEADERS += ../../sparc/shared/include/i2cmst.h
+noinst_PROGRAMS += i2cmst.rel
+i2cmst_rel_SOURCES = ../../sparc/shared/i2c/i2cmst.c
+i2cmst_rel_CPPFLAGS = $(AM_CPPFLAGS)
+i2cmst_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
@@ -137,7 +143,7 @@ endif
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel amba.rel console.rel clock.rel debugio.rel \
-  timer.rel gnatsupp.rel brm.rel can.rel spw.rel uart.rel pci.rel
+  timer.rel gnatsupp.rel brm.rel can.rel spw.rel uart.rel pci.rel i2cmst.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel

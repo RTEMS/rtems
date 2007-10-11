@@ -1,3 +1,8 @@
+2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
+
+	* Makefile.am, preinstall.am: Add initial i2c and update OC-CAN
+	support.
+
 2007-09-13	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am: Add smc91111.rel to libbsp.a
