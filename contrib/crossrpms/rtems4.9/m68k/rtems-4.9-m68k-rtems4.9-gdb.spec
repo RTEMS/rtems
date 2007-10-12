@@ -13,14 +13,14 @@
 %define _exeext %{nil}
 %endif
 
-%define gdb_version 6.6
-%define gdb_rpmvers %{expand:%(echo 6.6 | tr - _)} 
+%define gdb_version 6.7
+%define gdb_rpmvers %{expand:%(echo 6.7 | tr - _)} 
 
 Name:		rtems-4.9-m68k-rtems4.9-gdb
 Summary:	Gdb for target m68k-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -49,6 +49,9 @@ Patch0:		gdb-6.5-rtems-20060713.diff
 %endif
 %if "%{gdb_version}" == "6.6"
 Patch0:		gdb-6.6-rtems4.8-20070306.diff
+%endif
+%if "%{gdb_version}" == "6.7"
+Patch0:		gdb-6.7-rtems4.9-20071011.diff
 %endif
 
 %description
