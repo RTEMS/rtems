@@ -1,0 +1,69 @@
+diff -ur gdb-6.7.orig/bfd/sysdep.h gdb-6.7/bfd/sysdep.h
+--- gdb-6.7.orig/bfd/sysdep.h	2007-07-03 16:26:42.000000000 +0200
++++ gdb-6.7/bfd/sysdep.h	2007-10-11 16:46:10.000000000 +0200
+@@ -136,7 +136,7 @@
+ #endif
+ 
+ #if !HAVE_DECL_STRSTR
+-extern char *strstr ();
++/* extern char *strstr (); */
+ #endif
+ 
+ #ifdef HAVE_FTELLO
+diff -ur gdb-6.7.orig/configure gdb-6.7/configure
+--- gdb-6.7.orig/configure	2007-08-21 06:15:07.000000000 +0200
++++ gdb-6.7/configure	2007-10-11 16:46:38.000000000 +0200
+@@ -6154,7 +6154,7 @@
+     # For an installed makeinfo, we require it to be from texinfo 4.4 or
+     # higher, else we use the "missing" dummy.
+     if ${MAKEINFO} --version \
+-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
++       | egrep 'texinfo[^0-9]*(4\.([4-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+       :
+     else
+       MAKEINFO="$MISSING makeinfo"
+diff -ur gdb-6.7.orig/configure.ac gdb-6.7/configure.ac
+--- gdb-6.7.orig/configure.ac	2007-10-10 19:12:21.000000000 +0200
++++ gdb-6.7/configure.ac	2007-10-11 16:46:32.000000000 +0200
+@@ -2424,7 +2424,7 @@
+     # For an installed makeinfo, we require it to be from texinfo 4.4 or
+     # higher, else we use the "missing" dummy.
+     if ${MAKEINFO} --version \
+-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
++       | egrep 'texinfo[^0-9]*(4\.([4-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+       :
+     else
+       MAKEINFO="$MISSING makeinfo"
+diff -ur gdb-6.7.orig/sim/erc32/erc32.c gdb-6.7/sim/erc32/erc32.c
+--- gdb-6.7.orig/sim/erc32/erc32.c	1999-04-16 03:35:00.000000000 +0200
++++ gdb-6.7/sim/erc32/erc32.c	2007-10-11 16:46:10.000000000 +0200
+@@ -413,7 +413,7 @@
+     if (rom8) mec_memcfg &= ~0x20000;
+     else mec_memcfg |= 0x20000;
+ 
+-    mem_ramsz = (256 * 1024) << ((mec_memcfg >> 10) & 7);
++    mem_ramsz = (512 * 1024) << ((mec_memcfg >> 10) & 7);
+     mem_romsz = (128 * 1024) << ((mec_memcfg >> 18) & 7);
+ 
+     if (sparclite_board) {
+diff -ur gdb-6.7.orig/sim/erc32/exec.c gdb-6.7/sim/erc32/exec.c
+--- gdb-6.7.orig/sim/erc32/exec.c	2005-03-07 12:09:05.000000000 +0100
++++ gdb-6.7/sim/erc32/exec.c	2007-10-11 16:46:10.000000000 +0200
+@@ -1713,7 +1713,7 @@
+     	    sregs->fdp[rs2 | 1] = sregs->fs[rs2 & ~1];
+     	    sregs->fdp[rs2 & ~1] = sregs->fs[rs2 | 1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+ 
+@@ -1886,7 +1886,7 @@
+ 	sregs->fs[rd & ~1] = sregs->fdp[rd | 1];
+ 	sregs->fs[rd | 1] = sregs->fdp[rd & ~1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+     if (sregs->fpstate == FP_EXC_PE) {
