@@ -97,10 +97,6 @@ struct	hostent {
 #define	h_addr	h_addr_list[0]	/* address, for backward compatibility */
 };
 
-/*
- * Assumption here is that a network number
- * fits in an unsigned long -- probably a poor one.
- */
 struct	netent {
 	char		*n_name;	/* official name of net */
 	char		**n_aliases;	/* alias list */
@@ -123,7 +119,7 @@ struct	protoent {
 
 /*
  * Error return codes from gethostbyname() and gethostbyaddr()
- * (left in extern int h_errno).
+ * (left in h_errno).
  */
 
 #define	NETDB_INTERNAL	-1	/* see errno */
@@ -139,11 +135,11 @@ void		endhostent(void);
 void		endnetent(void);
 void		endprotoent(void);
 void		endservent(void);
-struct hostent	*gethostbyaddr(const char *, int, int);
+struct hostent	*gethostbyaddr(const void *, socklen_t, int);
 struct hostent	*gethostbyname(const char *);
 struct hostent	*gethostbyname2(const char *, int);
 struct hostent	*gethostent(void);
-struct netent	*getnetbyaddr(unsigned long, int);
+struct netent	*getnetbyaddr(uint32_t, int);
 struct netent	*getnetbyname(const char *);
 struct netent	*getnetent(void);
 struct protoent	*getprotobyname(const char *);

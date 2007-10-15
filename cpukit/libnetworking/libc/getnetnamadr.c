@@ -145,9 +145,7 @@ getnetbyname(const char *name)
 }
 
 struct netent *
-getnetbyaddr(addr, af)
-	u_long addr;
-	int af;
+getnetbyaddr(uint32_t addr, int af)
 {
 	struct netent *hp = 0;
 	int nserv = 0;
@@ -175,15 +173,14 @@ getnetbyaddr(addr, af)
 }
 
 void
-setnetent(stayopen)
-	int stayopen;
+setnetent(int stayopen)
 {
 	_setnethtent(stayopen);
 	_setnetdnsent(stayopen);
 }
 
 void
-endnetent()
+endnetent(void)
 {
 	_endnethtent();
 	_endnetdnsent();
