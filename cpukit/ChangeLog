@@ -1,3 +1,9 @@
+2007-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netdb.h, libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/getnetnamadr.c: Adjust to POSIX.
+	Minor updates from FreeBSD.
+
 2007-10-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/copyrt.h: Update year.
