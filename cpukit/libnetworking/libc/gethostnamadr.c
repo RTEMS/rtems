@@ -159,7 +159,7 @@ gethostbyname2(const char *name, int type)
 }
 
 struct hostent *
-gethostbyaddr(const char *addr, int len, int type)
+gethostbyaddr(const void *addr, socklen_t len, int type)
 {
 	struct hostent *hp = 0;
 	int nserv = 0;
