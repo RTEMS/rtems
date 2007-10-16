@@ -30,7 +30,18 @@ extern int __SRAMBASE[];
 #define IDLE_COUNTER      __SRAMBASE[0]
 #define FILTERED_IDLE     __SRAMBASE[1]
 #define MAX_IDLE_COUNT    __SRAMBASE[2]
+#define PCNTR_AT_TICK     (*(uint16 *)&__SRAMBASE[3])
 #define FILTER_SHIFT    6
+
+uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+{
+    int i = MCF5282_PIT3_PCNTR;
+    if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
+        i = MCF5282_PIT3_PCNTR + MCF5282_PIT3_PMR;
+    return (i - PCNTR_AT_TICK) * 1000;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
 
 /*
  * Periodic interval timer interrupt handler
@@ -42,14 +53,15 @@ extern int __SRAMBASE[];
         if (idle > MAX_IDLE_COUNT)                                           \
             MAX_IDLE_COUNT = idle;                                           \
         FILTERED_IDLE = idle + FILTERED_IDLE - (FILTERED_IDLE>>FILTER_SHIFT);\
+        PCNTR_AT_TICK = MCF5282_PIT3_PCNTR;                                  \
         MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF;                           \
     } while (0)
 
 /*
  * Attach clock interrupt handler
  */
-#define Clock_driver_support_install_isr( _new, _old )             \
-    do {                                                           \
+#define Clock_driver_support_install_isr( _new, _old )              \
+    do {                                                            \
         _old = (rtems_isr_entry)set_vector(_new, CLOCK_VECTOR, 1);  \
     } while(0)
 
@@ -84,17 +96,18 @@ extern int __SRAMBASE[];
                               MCF5282_INTC_ICR_IP(PIT3_IRQ_PRIORITY);    \
         rtems_interrupt_disable( level );                                \
         MCF5282_INTC0_IMRH &= ~MCF5282_INTC_IMRH_INT58;                  \
-		MCF5282_PIT3_PCSR &= ~MCF5282_PIT_PCSR_EN;                       \
+        MCF5282_PIT3_PCSR &= ~MCF5282_PIT_PCSR_EN;                       \
         rtems_interrupt_enable( level );                                 \
-		MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
+        MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_OVW |                       \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD;                        \
-		MCF5282_PIT3_PMR = BSP_Configuration.microseconds_per_tick - 1;  \
-		MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
+        MCF5282_PIT3_PMR = BSP_Configuration.microseconds_per_tick - 1;  \
+        MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \
                             MCF5282_PIT_PCSR_EN;                         \
+        PCNTR_AT_TICK = MCF5282_PIT3_PCNTR;                              \
     } while (0)
 
 /*
