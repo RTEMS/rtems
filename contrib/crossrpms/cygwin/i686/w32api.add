@@ -2,7 +2,7 @@
 %define w32api_rpmvers %{expand:%(echo @W32API_VERS@ | tr - _)} 
 
 Name:         @rpmprefix@@tool_target@-w32api
-Release:      @W32API_RPMREL@%{?dist}
+Release:      @W32API_RPMREL@
 License:      GPL
 Group:        Development/Tools
 

@@ -2,7 +2,7 @@
 %define zlib_rpmvers %{expand:%(echo @ZLIB_VERS@ | tr - _)} 
 
 Name:         @rpmprefix@@tool_target@-zlib
-Release:      @ZLIB_RPMREL@%{?dist}
+Release:      @ZLIB_RPMREL@
 License:      GPL
 Group:        Development/Tools
 

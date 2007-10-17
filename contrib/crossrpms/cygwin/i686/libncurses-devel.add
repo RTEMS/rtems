@@ -2,7 +2,7 @@
 %define libncurses_devel_rpmvers %{expand:%(echo @NCURSES_VERS@ | tr - _)} 
 
 Name:         @rpmprefix@@tool_target@-libncurses-devel
-Release:      @NCURSES_RPMREL@%{?dist}
+Release:      @NCURSES_RPMREL@
 License:      GPL
 Group:        Development/Tools
 

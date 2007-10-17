@@ -2,7 +2,7 @@
 %define cygwin_rpmvers %{expand:%(echo @CYGWIN_VERS@ | tr - _)} 
 
 Name:         @rpmprefix@@tool_target@
-Release:      @CYGWIN_RPMREL@%{?dist}
+Release:      @CYGWIN_RPMREL@
 License:      GPL
 Group:        Development/Tools
 
