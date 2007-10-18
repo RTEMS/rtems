@@ -1,5 +1,10 @@
 2007-10-18	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
+	* sptests/sp16/sptest.ads, sptests/sp20/sptest.adb,
+	sptests/sp20/sptest.ads: Forgot to update the copyright.
+
+2007-10-18	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
 	* sptests/sp09/sp09.scn, sptests/sp09/sptest.adb,
 	sptests/sp13/sp13.scn, sptests/sp13/sptest.adb,
 	sptests/sp16/sp16.scn, sptests/sp16/sptest.adb,
