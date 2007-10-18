@@ -121,4 +121,6 @@ void Screen6()
     RTEMS_INVALID_ID,
     "rtems_task_delete after the task has been deleted"
   );
+
+  puts( "TA1 - rtems_task_delete TA2 - already deleted RTEMS_INVALID_ID" );
 }

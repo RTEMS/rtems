@@ -195,12 +195,14 @@ rtems_test_pause();
   status = rtems_message_queue_delete( Queue_id[ 2 ] );
   directive_failed( status, "rtems_message_queue_delete" );
 
-  puts( "TA1 - rtems_message_queue_get_number_pending - SUCCESSFUL\n" );
+  puts( "TA1 - rtems_message_queue_get_number_pending - check Q 3" );
   status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
+  directive_failed( status, "rtems_message_queue_get_number_pending" );
   printf( "TA1 - %d messages are pending on Q 3\n", count );
 
   puts( "TA1 - rtems_message_queue_flush - empty Q 3" );
   status = rtems_message_queue_flush( Queue_id[ 3 ], &count );
+  directive_failed( status, "rtems_message_queue_flush" );
   printf( "TA1 - %d messages were flushed from Q 3\n", count );
 
   Fill_buffer( "BUFFER 1 TO Q 3", buffer );
@@ -215,18 +217,18 @@ rtems_test_pause();
 
   /* this broadcast should have no effect on the queue */
   Fill_buffer( "NO BUFFER TO Q1", (long *)buffer );
-  puts( "TA3 - rtems_message_queue_broadcast - NO BUFFER TO Q1" );
+  puts( "TA1 - rtems_message_queue_broadcast - NO BUFFER TO Q1" );
   status = rtems_message_queue_broadcast(
     Queue_id[ 1 ],
     (long (*)[4])buffer,
     16,
     &count
   );
-  printf( "TA3 - number of tasks awakened = %d\n", count );
+  printf( "TA1 - number of tasks awakened = %d\n", count );
 
-
-  puts( "TA1 - rtems_message_queue_get_number_pending - SUCCESSFUL\n" );
+  puts( "TA1 - rtems_message_queue_get_number_pending - check Q 3" );
   status = rtems_message_queue_get_number_pending( Queue_id[ 3 ], &count );
+  directive_failed( status, "rtems_message_queue_get_number_pending" );
   printf( "TA1 - %d messages are pending on Q 3\n", count );
 
   Fill_buffer( "BUFFER 3 TO Q 3", buffer );
@@ -261,7 +263,7 @@ rtems_test_pause();
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create of Q1; 20 bytes each" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], big_send_buffer, 40 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], big_send_buffer, 40 );
   fatal_directive_status(status, RTEMS_INVALID_SIZE, "expected RTEMS_INVALID_SIZE");
 
   puts( "TA1 - rtems_message_queue_delete - delete queue 1" );

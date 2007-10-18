@@ -135,7 +135,7 @@ void Screen14()
   );
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_set" );
+  directive_failed( status, "rtems_clock_get" );
   print_time( "TA1 - rtems_clock_get       - ", &time, "\n" );
 
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
@@ -227,7 +227,7 @@ void Screen14()
   );
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  directive_failed( status, "rtems_clock_set" );
+  directive_failed( status, "rtems_clock_get" );
   print_time( "TA1 - rtems_clock_get       - ", &time, "\n" );
 
   build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
