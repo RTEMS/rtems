@@ -1317,6 +1317,14 @@ package body SPTEST is
       );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_ident - INVALID_NAME" );
 
+      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING( 100, COUNT, STATUS );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_ID,
+        "MESSAGE_QUEUE_GET_NUMBER_PENDING WITH ILLEGAL ID"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - INVALID_ID" );
+
       RTEMS.MESSAGE_QUEUE_FLUSH( 100, COUNT, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
@@ -2879,6 +2887,130 @@ package body SPTEST is
          "TA1 - timer_fire_when - ",
          TIME,
          " - before INVALID_CLOCK"
+      );
+      TEXT_IO.NEW_LINE;
+
+      RTEMS.TIMER_SERVER_FIRE_AFTER(
+         0, 5, SPTEST.DELAYED_SUBPROGRAM'ACCESS, RTEMS.NULL_ADDRESS, STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INCORRECT_STATE,
+        "TIMER_SERVER_FIRE_AFTER INCORRECT STATE"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INCORRECT_STATE" );
+
+      RTEMS.TIMER_SERVER_FIRE_WHEN(
+         0, TIME, SPTEST.DELAYED_SUBPROGRAM'ACCESS, RTEMS.NULL_ADDRESS, STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INCORRECT_STATE,
+        "TIMER_SERVER_FIRE_WHEN INCORRECT STATE"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_when - INCORRECT_STATE" );
+
+      RTEMS.timer_initiate_server( 0, 0, 0, STATUS );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_PRIORITY,
+        "timer_initiate_server invalid priority"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_initiate_server - INVALID_PRIORITY" );
+
+      RTEMS.timer_initiate_server(
+-- XXX ask Joel
+--         RTEMS.TIMER_SERVER_DEFAULT_PRIORITY, 0, 0, STATUS
+         -1, 0, 0, STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "timer_initiate_server" );
+      TEXT_IO.PUT_LINE( "TA1 - timer_initiate_server" );
+
+      RTEMS.TIMER_SERVER_FIRE_AFTER(
+        16#010100#,
+        5 * TEST_SUPPORT.TICKS_PER_SECOND,
+        SPTEST.DELAYED_SUBPROGRAM'ACCESS,
+        RTEMS.NULL_ADDRESS,
+        STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_ID,
+        "TIMER_SERVER_FIRE_AFTER ILLEGAL ID"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INVALID_ID" );
+
+      TIME := ( 1994, 12, 31, 9, 0, 0, 0 );
+      RTEMS.TIMER_SERVER_FIRE_WHEN(
+         16#010100#,
+         TIME,
+         SPTEST.DELAYED_SUBPROGRAM'ACCESS,
+         RTEMS.NULL_ADDRESS,
+         STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_ID,
+        "TIMER_SERVER_FIRE_WHEN WITH ILLEGAL ID"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_when - INVALID_ID" );
+
+      RTEMS.TIMER_SERVER_FIRE_AFTER(
+         SPTEST.TIMER_ID( 1 ),
+         0,
+         SPTEST.DELAYED_SUBPROGRAM'ACCESS,
+         RTEMS.NULL_ADDRESS,
+         STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_NUMBER,
+        "TIMER_SERVER_FIRE_AFTER WITH 0 TICKS"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - timer_server_fire_after - INVALID_NUMBER" );
+
+      TIME := ( 1987, 2, 5, 8, 30, 45, 0 );
+      RTEMS.TIMER_SERVER_FIRE_WHEN(
+         SPTEST.TIMER_ID( 1 ),
+         TIME,
+         SPTEST.DELAYED_SUBPROGRAM'ACCESS,
+         RTEMS.NULL_ADDRESS,
+         STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_CLOCK,
+        "TIMER_SERVER_FIRE_WHEN WITH ILLEGAL TIME"
+      );
+      TEST_SUPPORT.PRINT_TIME(
+        "TA1 - timer_server_fire_when - ",
+        TIME,
+        " - INVALID_CLOCK"
+      );
+      TEXT_IO.NEW_LINE;
+
+      RTEMS.CLOCK_GET( RTEMS.CLOCK_GET_TOD, TIME'ADDRESS, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "clock_set" );
+      TEST_SUPPORT.PRINT_TIME( "TA1 - clock_get       - ", TIME, "" );
+      TEXT_IO.NEW_LINE;
+
+      TIME := ( 1990, 2, 5, 8, 30, 45, 0 );
+      RTEMS.TIMER_SERVER_FIRE_WHEN(
+         SPTEST.TIMER_ID( 1 ),
+         TIME,
+         SPTEST.DELAYED_SUBPROGRAM'ACCESS,
+         RTEMS.NULL_ADDRESS,
+         STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.INVALID_CLOCK,
+        "TIMER_SERVER_FIRE_WHEN BEFORE CURRENT TIME"
+      );
+      TEST_SUPPORT.PRINT_TIME(
+        "TA1 - timer_server_fire_when - ",
+        TIME,
+        " - before INVALID_CLOCK"
       );
       TEXT_IO.NEW_LINE;
 

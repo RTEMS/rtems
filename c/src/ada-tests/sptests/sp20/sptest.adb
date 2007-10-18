@@ -47,8 +47,9 @@ package body SPTEST is
       SPTEST.TASK_NAME( 3 ) := RTEMS.BUILD_NAME(  'T', 'A', '3', ' ' );
       SPTEST.TASK_NAME( 4 ) := RTEMS.BUILD_NAME(  'T', 'A', '4', ' ' );
       SPTEST.TASK_NAME( 5 ) := RTEMS.BUILD_NAME(  'T', 'A', '5', ' ' );
+      SPTEST.TASK_NAME( 6 ) := RTEMS.BUILD_NAME(  'T', 'A', '6', ' ' );
 
-      for INDEX in 1 .. 5
+      for INDEX in 1 .. 6
       loop
 
          SPTEST.COUNT( INDEX ) := 0;
@@ -66,12 +67,12 @@ package body SPTEST is
 
       end loop;
 
-      for INDEX in 1 .. 5
+      for INDEX in 1 .. 6
       loop
 
          RTEMS.TASK_START(
             SPTEST.TASK_ID( INDEX ),
-            SPTEST.TASK_1_THROUGH_5'ACCESS,
+            SPTEST.TASK_1_THROUGH_6'ACCESS,
             RTEMS.TASK_ARGUMENT( INDEX ),
             STATUS
          );
@@ -86,10 +87,10 @@ package body SPTEST is
 
 --PAGE
 -- 
---  TASK_1_THROUGH_5
+--  TASK_1_THROUGH_6
 --
 
-   procedure TASK_1_THROUGH_5 (
+   procedure TASK_1_THROUGH_6 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       RMID      : RTEMS.ID;
@@ -97,6 +98,9 @@ package body SPTEST is
       PASS      : RTEMS.UNSIGNED32;
       FAILED    : RTEMS.UNSIGNED32;
       STATUS    : RTEMS.STATUS_CODES;
+      TIME      : array( 0 .. 10 ) of RTEMS.INTERVAL;
+      PERIOD    : RTEMS.INTERVAL;
+      MEASURE   : RTEMS.INTERVAL;
    begin
 
       RTEMS.RATE_MONOTONIC_CREATE( ARGUMENT, RMID, STATUS );
@@ -183,8 +187,7 @@ package body SPTEST is
 
                SPTEST.GET_ALL_COUNTERS;
 
-               for INDEX in 1 .. 4 
-               loop
+               for INDEX in 1 .. 4 loop
 
                   if SPTEST.TEMPORARY_COUNT( INDEX ) /= 
                         SPTEST.ITERATIONS( INDEX ) then
@@ -230,12 +233,51 @@ package body SPTEST is
 
             end loop;
  
+         when 6 =>
+            -- test changing periods
+            for INDEX in 0 .. 10 loop
+               PERIOD := RTEMS.INTERVAL( ( INDEX + 1 ) * 10 );
+               RTEMS.RATE_MONOTONIC_PERIOD( RMID, PERIOD, STATUS);
+               TEST_SUPPORT.DIRECTIVE_FAILED(
+                  STATUS, "rate_monotonic_period of TA6"
+               );
+
+               -- timestamp
+               RTEMS.CLOCK_GET(
+                  RTEMS.CLOCK_GET_TICKS_SINCE_BOOT,
+                  Time( INDEX )'ADDRESS,
+                  STATUS
+               );
+               TEST_SUPPORT.DIRECTIVE_FAILED(
+                  STATUS, "clock_get of TA6"
+               );
+            end loop;
+
+            for INDEX in 1 .. 10 loop
+               MEASURE := TIME( INDEX ) - TIME( INDEX - 1 );
+               PERIOD := RTEMS.INTERVAL( INDEX * 10 );
+               TEXT_IO.PUT( "TA6 - Actual: " );
+               UNSIGNED32_IO.PUT( MEASURE, WIDTH => 3, BASE => 10 );
+               TEXT_IO.PUT( "  Expected: " );
+               UNSIGNED32_IO.PUT( PERIOD, WIDTH => 3, BASE => 10 );
+               if PERIOD = MEASURE then
+                  TEXT_IO.PUT_LINE( " - OK" );
+               else
+                  TEXT_IO.PUT_LINE( " - FAILED" );
+               end if;
+            end loop;
+
+            RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
+            TEST_SUPPORT.DIRECTIVE_FAILED(
+               STATUS, "task_suspend of TA6"
+            );
+
          when others =>
             NULL;
             
       end case;
 
-   end TASK_1_THROUGH_5;
+   end TASK_1_THROUGH_6;
 
 --PAGE
 -- 

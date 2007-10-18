@@ -37,8 +37,8 @@ package SPTEST is
 --  by this test.
 --
 
-   REGION_ID   : array ( RTEMS.UNSIGNED32 range 1 .. 3 ) of RTEMS.ID;
-   REGION_NAME : array ( RTEMS.UNSIGNED32 range 1 .. 3 ) of RTEMS.NAME;
+   REGION_ID   : array ( RTEMS.UNSIGNED32 range 1 .. 4 ) of RTEMS.ID;
+   REGION_NAME : array ( RTEMS.UNSIGNED32 range 1 .. 4 ) of RTEMS.NAME;
 
 --
 --  The following constant defines the priority of most of the 
@@ -61,6 +61,9 @@ package SPTEST is
 
    AREA_3 : array ( RTEMS.UNSIGNED32 range 0 .. 4095 ) of RTEMS.UNSIGNED8;
    for AREA_3'ALIGNMENT use RTEMS.STRUCTURE_ALIGNMENT;
+
+   AREA_4 : array ( RTEMS.UNSIGNED32 range 0 .. 8191 ) of RTEMS.UNSIGNED8;
+   for AREA_4'ALIGNMENT use RTEMS.STRUCTURE_ALIGNMENT;
 
 --
 --  INIT

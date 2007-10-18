@@ -29,30 +29,30 @@ package SPTEST is
 --  by this test.
 --
 
-   TASK_ID   : array ( 1 .. 5 ) of RTEMS.ID;
-   TASK_NAME : array ( 1 .. 5 ) of RTEMS.NAME;
+   TASK_ID   : array ( 1 .. 6 ) of RTEMS.ID;
+   TASK_NAME : array ( 1 .. 6 ) of RTEMS.NAME;
 
 --
 --  These arrays contain the parameters which define the execution
 --  characteristics and periods of each instantiation of the 
---  copies of the RTEMS task TASKS_1_THROUGH_5.
+--  copies of the RTEMS task TASKS_1_THROUGH_6.
 --
 
-   PERIODS : constant array ( 1 .. 5 ) 
-     of RTEMS.UNSIGNED32 := ( 2, 2, 2, 2, 100 );
+   PERIODS : constant array ( 1 .. 6 ) 
+     of RTEMS.UNSIGNED32 := ( 2, 2, 2, 2, 100, 0 );
 
-   ITERATIONS : constant array ( 1 .. 5 ) 
-     of RTEMS.UNSIGNED32 := ( 50, 50, 50, 50, 1 );
+   ITERATIONS : constant array ( 1 .. 6 ) 
+     of RTEMS.UNSIGNED32 := ( 50, 50, 50, 50, 1, 10 );
 
-   PRIORITIES : constant array ( 1 .. 5 ) 
-     of RTEMS.UNSIGNED32 := ( 1, 1, 3, 4, 5 );
+   PRIORITIES : constant array ( 1 .. 6 ) 
+     of RTEMS.UNSIGNED32 := ( 1, 1, 3, 4, 5, 1 );
 
 --
 --  The following type defines the array used to manage the 
 --  execution counts of each task's period.
 --
 
-   type COUNT_ARRAY is array ( 1 .. 5 ) of RTEMS.UNSIGNED32;
+   type COUNT_ARRAY is array ( 1 .. 6 ) of RTEMS.UNSIGNED32;
 
 --
 --  These arrays contains the number of periods successfully completed
@@ -79,14 +79,14 @@ package SPTEST is
    );
 
 --
---  TASK_1_THROUGH_5
+--  TASK_1_THROUGH_6
 --
 --  DESCRIPTION:
 --
 --  These RTEMS tasks test the Rate Monotonic Manager.
 --
 
-   procedure TASK_1_THROUGH_5 (
+   procedure TASK_1_THROUGH_6 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
 

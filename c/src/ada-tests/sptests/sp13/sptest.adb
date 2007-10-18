@@ -25,8 +25,12 @@ with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
+use type RTEMS.STATUS_CODES;
 
 package body SPTEST is
+
+   type BIG_BUFFER_TYPE is array (1 .. 2048) of RTEMS.UNSIGNED8;
+
 
 --PAGE
 -- 
@@ -216,15 +220,18 @@ package body SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      QID            : RTEMS.ID;
-      BUFFER         : SPTEST.BUFFER;
-      BUFFER_POINTER : RTEMS.ADDRESS;
-      COUNT          : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
-      STATUS         : RTEMS.STATUS_CODES;
+      QID                        : RTEMS.ID;
+      BIG_SEND_BUFFER            : BIG_BUFFER_TYPE;
+      BIG_SEND_BUFFER_POINTER    : RTEMS.ADDRESS := BIG_SEND_BUFFER'ADDRESS;
+      BIG_RECEIVE_BUFFER         : BIG_BUFFER_TYPE;
+      BIG_RECEIVE_BUFFER_POINTER : RTEMS.ADDRESS := BIG_RECEIVE_BUFFER'ADDRESS;
+      BUFFER                     : SPTEST.BUFFER;
+      BUFFER_POINTER             : RTEMS.ADDRESS := BUFFER'ADDRESS;
+      COUNT                      : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE               : RTEMS.UNSIGNED32;
+      STATUS                     : RTEMS.STATUS_CODES;
+      SIZE                       : RTEMS.UNSIGNED32;
    begin
-
-      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_IDENT( 
          SPTEST.QUEUE_NAME( 1 ), 
@@ -431,6 +438,17 @@ TEST_SUPPORT.PAUSE;
       RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 2 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
    
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - check Q 3" );
+      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING(
+         SPTEST.QUEUE_ID( 3 ), COUNT, STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED(
+         STATUS, "MESSAGE_QUEUE_GET_NUMBER_PENDING"
+      );
+      TEXT_IO.PUT( "TA1 - " );
+      UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
+      TEXT_IO.PUT_LINE( " messages are pending on Q 3" );
+   
       TEXT_IO.PUT_LINE( "TA1 - message_queue_flush - empty Q 3" );
       RTEMS.MESSAGE_QUEUE_FLUSH( SPTEST.QUEUE_ID( 3 ), COUNT, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_FLUSH" );
@@ -457,6 +475,31 @@ TEST_SUPPORT.PAUSE;
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
+
+      -- this broadcast should have no effect on the queue
+      SPTEST.FIlL_BUFFER( "NO BUFFER TO Q1 ", BUFFER );
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_broadcast - NO BUFFER TO Q1" );
+      RTEMS.MESSAGE_QUEUE_BROADCAST(
+         SPTEST.QUEUE_ID( 1 ),
+         BUFFER_POINTER,
+         16,
+         COUNT,
+         STATUS
+      );
+      TEXT_IO.PUT( "TA1 - number of tasks awakened = " );
+      UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
+      TEXT_IO.NEW_LINE;
+   
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_get_number_pending - check Q 3" );
+      RTEMS.MESSAGE_QUEUE_GET_NUMBER_PENDING(
+         SPTEST.QUEUE_ID( 3 ), COUNT, STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED(
+         STATUS, "MESSAGE_QUEUE_GET_NUMBER_PENDING"
+      );
+      TEXT_IO.PUT( "TA1 - " );
+      UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
+      TEXT_IO.PUT_LINE( " messages are pending on Q 3" );
 
       SPTEST.FILL_BUFFER( "BUFFER 3 TO Q 3 ", BUFFER );
       TEXT_IO.PUT_LINE( "TA1 - message_queue_send - BUFFER 3 TO Q 3" );
@@ -503,7 +546,137 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT( "TA1 - " );
       UNSIGNED32_IO.PUT( COUNT, WIDTH => 3, BASE => 10 );
       TEXT_IO.PUT_LINE( " messages were flushed from Q 3" );
+
+TEST_SUPPORT.PAUSE;
      
+      TEXT_IO.PUT_LINE( "TA1 - create message queue of 20 bytes on queue 1" );
+      RTEMS.MESSAGE_QUEUE_CREATE(
+         SPTEST.QUEUE_NAME( 1 ),
+         100,
+         20,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.QUEUE_ID( 1 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED(
+         STATUS, "MESSAGE_QUEUE_CREATE of Q1; 20 bytes each"
+      );
+      RTEMS.MESSAGE_QUEUE_SEND(
+         SPTEST.QUEUE_ID( 1 ), BIG_SEND_BUFFER_POINTER, 40, STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+         STATUS, RTEMS.INVALID_SIZE, "expected INVALID_SIZE"
+      );
+
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_delete - delete queue 1" );
+      RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_DELETE" );
+
+TEST_SUPPORT.PAUSE;
+
+      TEXT_IO.PUT_LINE( "TA1 - message_queue_create - variable sizes " );
+      for QUEUE_SIZE in 1 .. 1029 loop
+          RTEMS.MESSAGE_QUEUE_CREATE(
+              SPTEST.QUEUE_NAME( 1 ),
+              2,            -- just 2 msgs each
+              RTEMS.UNSIGNED32( QUEUE_SIZE ),
+              RTEMS.DEFAULT_ATTRIBUTES,
+              QUEUE_ID( 1 ),
+              STATUS
+          );
+          if STATUS /= RTEMS.SUCCESSFUL then
+              TEXT_IO.PUT( "TA1 - msq que size: " );
+              UNSIGNED32_IO.PUT(
+                 RTEMS.UNSIGNED32( QUEUE_SIZE ), WIDTH => 3, BASE => 10
+              );
+              TEXT_IO.NEW_LINE;
+              TEST_SUPPORT.DIRECTIVE_FAILED(
+                 STATUS, "message_queue_create of Q1"
+              );
+          end if;
+
+          RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "message_queue_delete" );
+      end loop;
+
+      TEXT_IO.PUT_LINE(
+         "TA1 - message_queue_create and send - variable sizes "
+      );
+      for QUEUE_SIZE in 1 .. 1029 loop
+
+          RTEMS.MESSAGE_QUEUE_CREATE(
+              SPTEST.QUEUE_NAME( 1 ),
+              2,            -- just 2 msgs each
+              RTEMS.UNSIGNED32( QUEUE_SIZE ),
+              RTEMS.DEFAULT_ATTRIBUTES,
+              SPTEST.QUEUE_ID( 1 ),
+              STATUS
+          );
+          TEST_SUPPORT.DIRECTIVE_FAILED( status, "message_queue_create of Q1" );
+
+          BIG_SEND_BUFFER := (others => CHARACTER'POS( 'A' ));
+          BIG_RECEIVE_BUFFER := (others => CHARACTER'POS( 'Z' ));
+
+          -- send a msg too big
+          RTEMS.MESSAGE_QUEUE_SEND(
+             SPTEST.QUEUE_ID( 1 ),
+             BIG_SEND_BUFFER_POINTER,
+             RTEMS.UNSIGNED32( QUEUE_SIZE + 1 ),
+             STATUS
+          );
+          TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+             STATUS, RTEMS.INVALID_SIZE, "message_queue_send too large"
+          );
+
+          -- send a msg that is just right
+          RTEMS.MESSAGE_QUEUE_SEND(
+             SPTEST.QUEUE_ID( 1 ),
+             BIG_SEND_BUFFER_POINTER,
+             RTEMS.UNSIGNED32( QUEUE_SIZE ),
+             STATUS
+          );
+          TEST_SUPPORT.DIRECTIVE_FAILED(
+             STATUS, "message_queue_send exact size"
+          );
+
+          -- now read and verify the message just sent
+          RTEMS.MESSAGE_QUEUE_RECEIVE(
+             SPTEST.QUEUE_ID( 1 ),
+             BIG_RECEIVE_BUFFER_POINTER,
+             RTEMS.DEFAULT_OPTIONS,
+             1 * TEST_SUPPORT.TICKS_PER_SECOND,
+             SIZE,
+             STATUS
+          );
+          TEST_SUPPORT.DIRECTIVE_FAILED(
+             STATUS, "message_queue_receive exact size"
+          );
+          if SIZE /= RTEMS.UNSIGNED32( QUEUE_SIZE ) then
+              TEXT_IO.PUT(
+                 "TA1 - exact size size match failed for queue_size = "
+              );
+              UNSIGNED32_IO.PUT(
+                 RTEMS.UNSIGNED32( QUEUE_SIZE ), WIDTH => 3, BASE => 10
+              );
+              TEXT_IO.NEW_LINE;
+          end if;
+
+          if (BIG_SEND_BUFFER( BIG_SEND_BUFFER'FIRST .. Integer( SIZE )) /=
+            BIG_RECEIVE_BUFFER( BIG_RECEIVE_BUFFER'FIRST .. Integer( SIZE ))) then
+              TEXT_IO.PUT_LINE("TA1 - exact size data match failed");
+          end if;
+
+          for I in Integer( SIZE + 1 ) .. BIG_RECEIVE_BUFFER'LAST loop
+              if BIG_RECEIVE_BUFFER( I ) /= CHARACTER'POS( 'Z' ) then
+                  TEXT_IO.PUT_LINE("TA1 - exact size overrun match failed");
+              end if;
+          end loop;
+
+          -- all done with this one; delete it
+          RTEMS.MESSAGE_QUEUE_DELETE( SPTEST.QUEUE_ID( 1 ), STATUS );
+          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "message_queue_delete" );
+      end loop;
+
       TEXT_IO.PUT_LINE( "*** END OF TEST 13 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

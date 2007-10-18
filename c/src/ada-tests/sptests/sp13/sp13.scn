@@ -52,10 +52,16 @@ TA1 - buffer received: BUFFER 3 TO Q 2
 TA1 - message_queue_delete - delete queue 1
 TA1 - message_queue_urgent - BUFFER 3 TO Q 2
 TA1 - message_queue_delete - delete queue 2
+TA1 - message_queue_get_number_pending - check Q 3
+TA1 -   0 messages are pending on Q 3
 TA1 - message_queue_flush - empty Q 3
 TA1 -   0 messages were flushed from Q 3
 TA1 - message_queue_send - BUFFER 1 TO Q 3
 TA1 - message_queue_send - BUFFER 2 TO Q 3
+TA1 - message_queue_broadcast - NO BUFFER TO Q1
+TA1 - number of tasks awakened =   0
+TA1 - message_queue_get_number_pending - check Q 3
+TA1 -   2 messages are pending on Q 3
 TA1 - message_queue_send - BUFFER 3 TO Q 3
 TA1 - message_queue_flush - Q 3
 TA1 -   3 messages were flushed from Q 3
@@ -63,4 +69,10 @@ TA1 - message_queue_send - until all message buffers consumed
 TA1 - message_queue_send - all message buffers consumed
 TA1 - message_queue_flush - Q 3
 TA1 - 100 messages were flushed from Q 3
+<pause> 
+TA1 - create message queue of 20 bytes on queue 1
+TA1 - message_queue_delete - delete queue 1
+<pause> 
+TA1 - message_queue_create - variable sizes 
+TA1 - message_queue_create and send - variable sizes 
 *** END OF TEST 13 ***

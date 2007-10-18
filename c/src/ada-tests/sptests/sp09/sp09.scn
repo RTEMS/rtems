@@ -101,6 +101,7 @@ TA1 - message_queue_create - Q 2 - TOO_MANY
 TA1 - message_queue_delete - unknown INVALID_ID
 TA1 - message_queue_delete - local INVALID_ID
 TA1 - message_queue_ident - INVALID_NAME
+TA1 - message_queue_get_number_pending - INVALID_ID
 TA1 - message_queue_flush - INVALID_ID
 TA1 - message_queue_receive - INVALID_ID
 TA1 - message_queue_receive - Q 1 - UNSATISFIED
@@ -236,4 +237,14 @@ TA1 - timer_fire_after - INVALID_NUMBER
 TA1 - timer_fire_when -  8:30:45    2/ 5/1987 - INVALID_CLOCK
 TA1 - clock_get       -  0: 0: 0    1/ 1/1992
 TA1 - timer_fire_when -  8:30:45    2/ 5/1990 - before INVALID_CLOCK
+TA1 - timer_server_fire_after - INCORRECT_STATE
+TA1 - timer_server_fire_when - INCORRECT_STATE
+TA1 - timer_initiate_server - INVALID_PRIORITY
+TA1 - timer_initiate_server
+TA1 - timer_server_fire_after - INVALID_ID
+TA1 - timer_server_fire_when - INVALID_ID
+TA1 - timer_server_fire_after - INVALID_NUMBER
+TA1 - timer_server_fire_when -  8:30:45    2/ 5/1987 - INVALID_CLOCK
+TA1 - clock_get       -  0: 0: 0    1/ 1/1992
+TA1 - timer_server_fire_when -  8:30:45    2/ 5/1990 - before INVALID_CLOCK
 *** END OF TEST 9 ***

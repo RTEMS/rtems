@@ -1,3 +1,12 @@
+2007-10-18	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* sptests/sp09/sp09.scn, sptests/sp09/sptest.adb,
+	sptests/sp13/sp13.scn, sptests/sp13/sptest.adb,
+	sptests/sp16/sp16.scn, sptests/sp16/sptest.adb,
+	sptests/sp16/sptest.ads, sptests/sp20/sp20.scn,
+	sptests/sp20/sptest.adb, sptests/sp20/sptest.ads: Updated tests to
+	match the current C tests and regenerated the .scn files.
+
 2007-10-10	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* configure.ac, samples/base_sp/base_sp.scn, samples/base_sp/config.h,

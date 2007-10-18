@@ -106,8 +106,9 @@ package body SPTEST is
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF TA3" );
 
       SPTEST.REGION_NAME( 1 ) := RTEMS.BUILD_NAME(  'R', 'N', '1', ' ' );
-      SPTEST.REGION_NAME( 2 ) := RTEMS.BUILD_NAME(  'R', 'N', '1', ' ' );
-      SPTEST.REGION_NAME( 3 ) := RTEMS.BUILD_NAME(  'R', 'N', '1', ' ' );
+      SPTEST.REGION_NAME( 2 ) := RTEMS.BUILD_NAME(  'R', 'N', '2', ' ' );
+      SPTEST.REGION_NAME( 3 ) := RTEMS.BUILD_NAME(  'R', 'N', '3', ' ' );
+      SPTEST.REGION_NAME( 4 ) := RTEMS.BUILD_NAME(  'R', 'N', '4', ' ' );
 
       RTEMS.REGION_CREATE(
          SPTEST.REGION_NAME( 1 ), 
@@ -142,7 +143,17 @@ package body SPTEST is
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_CREATE OF RN3" );
 
- 
+      RTEMS.REGION_CREATE(
+         SPTEST.REGION_NAME( 4 ), 
+         SPTEST.AREA_4'ADDRESS,
+         4096, 
+         128,
+         RTEMS.DEFAULT_ATTRIBUTES,
+         SPTEST.REGION_ID( 4 ),
+         STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_CREATE OF RN4" );
+
       RTEMS.TASK_DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
@@ -202,6 +213,24 @@ package body SPTEST is
       );
 
    end PUT_ADDRESS_FROM_AREA_3;
+
+--PAGE
+-- 
+--  PUT_ADDRESS_FROM_AREA_4
+--
+
+   procedure PUT_ADDRESS_FROM_AREA_4 (
+      TO_BE_PRINTED : in     RTEMS.ADDRESS
+   ) is
+   begin
+
+      UNSIGNED32_IO.PUT(
+         RTEMS.SUBTRACT( TO_BE_PRINTED, SPTEST.AREA_4'ADDRESS ),
+         WIDTH => 8,
+         BASE => 16
+      );
+
+   end PUT_ADDRESS_FROM_AREA_4;
 
 --PAGE
 -- 
@@ -398,7 +427,7 @@ TEST_SUPPORT.PAUSE;
       SPTEST.PUT_ADDRESS_FROM_AREA_1( SEGMENT_ADDRESS_4 );
       TEXT_IO.NEW_LINE;
 
-      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - sleep 1 second" );
+      TEXT_IO.PUT_LINE( "TA1 - task_wake_after - yield processor" );
       RTEMS.TASK_WAKE_AFTER( TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
    
@@ -425,6 +454,85 @@ TEST_SUPPORT.PAUSE;
       TEXT_IO.PUT_LINE( "TA1 - region_delete - delete region 1" );
       RTEMS.REGION_DELETE( SPTEST.REGION_ID( 1 ), STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "REGION_DELETE OF RN1" );
+--XXX
+      TEXT_IO.PUT_LINE(
+         "TA1 - region_get_segment - get 3K segment from region 4"
+      );
+      RTEMS.REGION_GET_SEGMENT(
+        SPTEST.REGION_ID( 4 ),
+        3072,
+        RTEMS.DEFAULT_OPTIONS,
+        RTEMS.NO_TIMEOUT,
+        segment_address_1,
+        STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "region_get_segment" );
+      TEXT_IO.PUT( "TA1 - got segment from region 4 - " );
+      PUT_ADDRESS_FROM_AREA_4( segment_address_1 );
+      TEXT_IO.NEW_LINE;
+
+      TEXT_IO.PUT_LINE(
+       "TA1 - region_get_segment - attempt to get 3K segment from region 4"
+      );
+      RTEMS.REGION_GET_SEGMENT(
+        SPTEST.REGION_ID( 4 ),
+        3072,
+        RTEMS.NO_WAIT,
+        RTEMS.NO_TIMEOUT,
+        SEGMENT_ADDRESS_2,
+        STATUS
+      );
+      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
+        STATUS,
+        RTEMS.UNSATISFIED,
+        "task_get_segment with no memory left"
+      );
+      TEXT_IO.PUT_LINE( "TA1 - task_get_note - UNSATISFIED" );
+
+      TEXT_IO.PUT_LINE( "TA1 - region_extend - extend region 4 by 4K" );
+      RTEMS.REGION_EXTEND(
+        SPTEST.REGION_ID( 4 ),
+        SPTEST.AREA_4( 4096 )'ADDRESS,
+        4096,
+        STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( status, "region_extend" );
+
+      TEXT_IO.PUT_LINE(
+       "TA1 - region_get_segment - attempt to get 3K segment from region 4"
+      );
+      RTEMS.REGION_GET_SEGMENT(
+        SPTEST.REGION_ID( 4 ),
+        3072,
+        RTEMS.NO_WAIT,
+        RTEMS.NO_TIMEOUT,
+        segment_address_3,
+        STATUS
+      );
+      TEST_SUPPORT.DIRECTIVE_FAILED( status, "region_get_segment" );
+      TEXT_IO.PUT( "TA1 - got 3K segment from region 4 - " );
+      PUT_ADDRESS_FROM_AREA_4( segment_address_3 );
+      TEXT_IO.NEW_LINE;
+
+      TEXT_IO.PUT(
+        "TA1 - return_segment - return segment to region 4 - "
+      );
+      PUT_ADDRESS_FROM_AREA_4( segment_address_1 );
+      RTEMS.REGION_RETURN_SEGMENT( SPTEST.REGION_ID( 4 ), segment_address_1, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( status, "region_return_segment" );
+      TEXT_IO.NEW_LINE;
+
+      TEXT_IO.PUT(
+        "TA1 - region_return_segment - return segment to region 4 - "
+      );
+      PUT_ADDRESS_FROM_AREA_4( segment_address_3 );
+      RTEMS.REGION_RETURN_SEGMENT( SPTEST.REGION_ID( 4 ), segment_address_3, STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( status, "region_return_segment" );
+      TEXT_IO.NEW_LINE;
+
+      TEXT_IO.PUT_LINE( "TA1 - region_delete - delete region 4" );
+      RTEMS.REGION_DELETE( SPTEST.REGION_ID( 4 ), STATUS );
+      TEST_SUPPORT.DIRECTIVE_FAILED( status, "region_delete" );
 
       TEXT_IO.PUT_LINE( "*** END OF TEST 16 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
