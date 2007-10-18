@@ -17,7 +17,7 @@
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
 --
---  rtems.adb,v 1.13.2.2 2003/09/04 18:46:47 joel Exp
+--  $Id$
 --
 
 with Ada;
@@ -596,7 +596,7 @@ package body RTEMS is
       Result := Clock_Tick_Base;
 
    end Clock_Tick;
- 
+
    --
    -- Extension Manager
    --
@@ -1114,6 +1114,30 @@ package body RTEMS is
       Size := Size_Base;
 
    end Message_Queue_Receive;
+ 
+   procedure Message_Queue_Get_Number_Pending (
+      ID     : in     RTEMS.ID;
+      Count  :    out RTEMS.Unsigned32;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Message_Queue_Get_Number_Pending_Base (
+         ID    : RTEMS.ID;
+         Count : access RTEMS.Unsigned32
+      )  return RTEMS.Status_Codes;
+      pragma Import (
+         C,
+         Message_Queue_Get_Number_Pending_Base,
+         "rtems_message_queue_get_number_pending"
+      );
+      COUNT_Base : aliased RTEMS.Unsigned32;
+   begin
+ 
+      Result := Message_Queue_Get_Number_Pending_Base (
+         ID, COUNT_Base'Unchecked_Access
+      );
+      Count := COUNT_Base;
+
+   end Message_Queue_Get_Number_Pending;
  
    procedure Message_Queue_Flush (
       ID     : in     RTEMS.ID;

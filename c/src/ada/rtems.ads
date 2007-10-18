@@ -18,7 +18,7 @@
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
 --
---  rtems.ads,v 1.19.2.2 2003/11/25 14:07:32 joel Exp
+--  $Id$
 --
 
 with System;
@@ -914,6 +914,12 @@ pragma Elaborate_Body (RTEMS);
       Timeout    : in     RTEMS.Interval;
       Size       :    out RTEMS.Unsigned32;
       Result     :    out RTEMS.Status_Codes
+   );
+
+   procedure Message_Queue_Get_Number_Pending (
+      ID     : in     RTEMS.ID;
+      Count  :    out RTEMS.Unsigned32;
+      Result :    out RTEMS.Status_Codes
    );
 
    procedure Message_Queue_Flush (
