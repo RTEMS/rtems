@@ -2,6 +2,7 @@
 
 	* libcsupport/src/assoc.c: Removed.  Accidentally included routine
 	also in another file.  Mistake after splitting.
+	* libcsrc/Makefile.am: Reflect file removal.
 
 2007-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
