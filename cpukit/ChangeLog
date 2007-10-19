@@ -1,5 +1,9 @@
 2007-10-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* telnetd/icmds.c: Add header to file.
+
+2007-10-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/src/assoc.c: Removed.  Accidentally included routine
 	also in another file.  Mistake after splitting.
 	* libcsupport/Makefile.am: Reflect file removal.
