@@ -5,6 +5,7 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
+project_lib_LIBRARIES = libcsupport.a
 noinst_LIBRARIES = libcsupport.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 
@@ -35,7 +36,7 @@ include_rtems_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c
 
-ASSOCIATION_C_FILES = src/assoc.c src/assoclocalbyname.c \
+ASSOCIATION_C_FILES = src/assoclocalbyname.c \
     src/assoclocalbyremotebitfield.c src/assoclocalbyremote.c \
     src/assocnamebad.c src/assocnamebylocalbitfield.c \
     src/assocnamebylocal.c src/assocnamebyremotebitfield.c \
