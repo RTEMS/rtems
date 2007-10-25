@@ -138,9 +138,17 @@ pragma Elaborate_Body (RTEMS);
       Clock_Get_TOD,
       Clock_Get_Seconds_Since_Epoch,
       Clock_Get_Ticks_Since_Boot,
-      Clock_Get_Ticks_Per_Seconds,
+      Clock_Get_Ticks_Per_Second,
       Clock_Get_Time_Value
    );
+
+   type Time_T is new Interfaces.C.Long;
+
+   type Timespec is record
+      TV_Sec  : Time_T;
+      TV_Nsec : Interfaces.C.Long;
+   end record;
+   pragma Convention (C, Timespec);
 
    --
    --  Ident Options
@@ -573,7 +581,7 @@ pragma Elaborate_Body (RTEMS);
    --  Initialization Manager -- Shutdown Only
    --
    procedure Shutdown_Executive (
-      Status           : in     RTEMS.Unsigned32
+      Status : in     RTEMS.Unsigned32
    );
 
    --
@@ -621,6 +629,11 @@ pragma Elaborate_Body (RTEMS);
    );
 
    procedure Task_Resume (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Task_Is_Suspended (
       ID     : in     RTEMS.ID;
       Result :    out RTEMS.Status_Codes
    );
@@ -716,15 +729,20 @@ pragma Elaborate_Body (RTEMS);
    --  Clock Manager
    --
 
+   procedure Clock_Set (
+      Time_Buffer : in     RTEMS.Time_Of_Day;
+      Result      :    out RTEMS.Status_Codes
+   );
+
    procedure Clock_Get (
       Option      : in     RTEMS.Clock_Get_Options;
       Time_Buffer : in     RTEMS.Address;
       Result      :    out RTEMS.Status_Codes
    );
 
-   procedure Clock_Set (
-      Time_Buffer : in     RTEMS.Time_Of_Day;
-      Result      :    out RTEMS.Status_Codes
+   procedure Clock_Get_Uptime (
+      Uptime :    out RTEMS.Timespec;
+      Result :    out RTEMS.Status_Codes
    );
 
    procedure Clock_Tick (
@@ -856,6 +874,11 @@ pragma Elaborate_Body (RTEMS);
    );
 
    procedure Semaphore_Release (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Semaphore_Flush (
       ID     : in     RTEMS.ID;
       Result :    out RTEMS.Status_Codes
    );
@@ -1054,6 +1077,14 @@ pragma Elaborate_Body (RTEMS);
       Result  :    out RTEMS.Status_Codes
    );
 
+   procedure Region_Resize_Segment (
+      ID         : in     RTEMS.ID;
+      Segment    : in     RTEMS.Address;
+      Size       : in     RTEMS.Unsigned32;
+      Old_Size   :    out RTEMS.Unsigned32;
+      Result     :    out RTEMS.Status_Codes
+   );
+
    --
    --  Dual Ported Memory Manager
    --
@@ -1137,6 +1168,84 @@ pragma Elaborate_Body (RTEMS);
       Status  :    out RTEMS.Rate_Monotonic_Period_Status;
       Result  :    out RTEMS.Status_Codes
    );
+
+   procedure Rate_Monotonic_Reset_Statistics (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Rate_Monotonic_Reset_All_Statistics;
+   pragma Import (
+      C,
+      Rate_Monotonic_Reset_All_Statistics,
+      "rtems_rate_monotonic_reset_all_statistics"
+   );
+
+   procedure Rate_Monotonic_Report_Statistics;
+   pragma Import (
+      C,
+      Rate_Monotonic_Report_Statistics,
+      "rtems_rate_monotonic_report_statistics"
+   );
+
+   --
+   --  Barrier Manager
+   --
+
+   procedure Barrier_Create (
+      Name            : in     RTEMS.Name;
+      Attribute_Set   : in     RTEMS.Attribute;
+      Maximum_Waiters : in     RTEMS.Unsigned32;
+      ID              :    out RTEMS.ID;
+      Result          :    out RTEMS.Status_Codes
+   );
+
+   procedure Barrier_Ident (
+      Name   : in     RTEMS.Name;
+      ID     :    out RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Barrier_Delete (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Barrier_Wait (
+      ID         : in     RTEMS.ID;
+      Option_Set : in     RTEMS.Option;
+      Timeout    : in     RTEMS.Interval;
+      Result     :    out RTEMS.Status_Codes
+   );
+
+   procedure Barrier_Release (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   --
+   --  Stack Bounds Checker
+   --
+
+   function Stack_Checker_Is_Blown return RTEMS.Boolean;
+   pragma Interface (C, Stack_Checker_Is_Blown);
+   pragma Interface_Name
+     (Interrupt_Is_In_Progress, "rtems_stack_checker_is_blown");
+
+   procedure Stack_Checker_Report_Usage;
+   pragma Import (
+      C, Stack_Checker_Report_Usage, "rtems_stack_checker_report_usage"
+   );
+
+   --
+   --  CPU Usage Statistics
+   --
+
+   procedure CPU_Usage_Report;
+   pragma Import (C, CPU_Usage_Report, "rtems_cpu_usage_report");
+
+   procedure CPU_Usage_Reset;
+   pragma Import (C, CPU_Usage_Reset, "rtems_cpu_usage_reset");
 
    --
    --  Debug Manager
