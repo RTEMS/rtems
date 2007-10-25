@@ -1,3 +1,24 @@
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c:
+	fixed typo in comment of attach function
+	
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, mpc83xx/spi/mpc83xx_spidrv.c,  
+	* mpc83xx/spi/mpc83xx_spidrv.h, mpc83xx/include/mpc83xx.h:
+	added spi driver
+	
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c:  
+	added IRQ support in I2C driver
+	
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c:  
+	added statistics counters to tsec
+	
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps

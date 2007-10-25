@@ -64,12 +64,14 @@ EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
 
 # i2c
 if LIBCHIP
-include_libchip_HEADERS += i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h
+include_libchip_HEADERS += i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h \
+                           i2c/spi-flash-m25p40.h
 
 noinst_LIBRARIES += libi2cio.a
 libi2cio_a_CPPFLAGS = $(AM_CPPFLAGS)
 libi2cio_a_SOURCES  = i2c/i2c-ds1621.c i2c/i2c-2b-eeprom.c \
-    i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h
+    i2c/i2c-ds1621.h i2c/i2c-2b-eeprom.h \
+    i2c/spi-flash-m25p40.c i2c/spi-flash-m25p40.h
 endif
 
 # serial

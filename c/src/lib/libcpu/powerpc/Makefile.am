@@ -348,6 +348,14 @@ mpc83xx_i2c_rel_SOURCES   = mpc83xx/i2c/mpc83xx_i2cdrv.c \
 mpc83xx_i2c_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
 mpc83xx_i2c_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
 
+## mpc83xx/spi
+include_mpc83xx_HEADERS += mpc83xx/spi/mpc83xx_spidrv.h
+noinst_PROGRAMS += mpc83xx/spi.rel
+mpc83xx_spi_rel_SOURCES   = mpc83xx/spi/mpc83xx_spidrv.c \
+                            mpc83xx/spi/mpc83xx_spidrv.h
+mpc83xx_spi_rel_CPPFLAGS  = $(AM_CPPFLAGS) 
+mpc83xx_spi_rel_LDFLAGS   = $(RTEMS_RELLDFLAGS)
+
 endif
 
 include $(srcdir)/preinstall.am

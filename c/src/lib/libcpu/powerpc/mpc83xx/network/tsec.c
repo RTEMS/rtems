@@ -94,23 +94,12 @@ struct mpc83xx_tsec_struct {
    * statistic counters Rx
    */
   unsigned long           rxInterrupts;
-  unsigned long           rxNotLast;
-  unsigned long           rxGiant;
-  unsigned long           rxNonOctet;
-  unsigned long           rxBadCRC;
-  unsigned long           rxOverrun;
-  unsigned long           rxCollision;
-
+  unsigned long           rxErrors;
   /*
    * statistic counters Tx
    */
   unsigned long           txInterrupts;
-  unsigned long           txDeferred;
-  unsigned long           txLateCollision;
-  unsigned long           txUnderrun;
-  unsigned long           txMisaligned;
-  unsigned long           rxNotFirst;
-  unsigned long           txRetryLimit;
+  unsigned long           txErrors;
   };
 
 static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
@@ -238,10 +227,14 @@ static void mpc83xx_tsec_hwinit
 				  * due to alignment              */
 
   /*
-   * init EDIS register: enable all error reportings
-   * FIXME: make sure we handle these errors correctly
+   * init EDIS register: disable all error reportings
    */
-  reg_ptr->edis = 0;
+  reg_ptr->edis = (M83xx_TSEC_EDIS_BSYDIS    |
+		   M83xx_TSEC_EDIS_EBERRDIS  |
+		   M83xx_TSEC_EDIS_TXEDIS    |
+		   M83xx_TSEC_EDIS_LCDIS     |
+		   M83xx_TSEC_EDIS_CRLXDADIS |
+		   M83xx_TSEC_EDIS_FUNDIS);
   /*
    * init minimum frame length register
    */
@@ -616,26 +609,6 @@ static void mpc83xx_tsec_receive_packets
        * throw away mbuf
        */
       MFREE(m,n);
-      /*
-       * update statistics
-       */
-      if (0 != (status & M83xx_BD_LAST))
-        sc->rxNotLast++;
-      if (0 != (status & M83xx_BD_FIRST_IN_FRAME))
-        sc->rxNotFirst++;
-
-      if (0 == (status & M83xx_BD_LONG)) {
-        sc->rxGiant++;
-      }
-      if (0 == (status & M83xx_BD_NONALIGNED)) {
-        sc->rxNonOctet++;
-      }
-      if (0 == (status & M83xx_BD_CRC_ERROR)) {
-        sc->rxBadCRC++;
-      }
-      if (0 == (status & M83xx_BD_OVERRUN)) {
-        sc->rxOverrun++;
-      }
     }
     /*
      * mark buffer as non-allocated (for refill)
@@ -1234,18 +1207,26 @@ static void mpc83xx_tsec_err_irq_handler
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  struct mpc83xx_tsec_struct *sc = 
+    (struct mpc83xx_tsec_struct *)handle;
   /*
-   * FIXME: check error conditions, do something useful
+   * clear error events in IEVENT
    */
-#if 0
+  sc->reg_ptr->tstat = M83xx_IEVENT_ERRALL;
   /*
-   * disable error interrupts
+   * has Rx been stopped? then restart it
    */
-  M83xx_TSEC_IMASK_SET(sc->reg_ptr->imask,M83xx_IEVENT_ERRALL,0);
+  if (0 != (sc->reg_ptr->rstat & M83xx_TSEC_RSTAT_QHLT)) {
+    sc->rxErrors++;
+    sc->reg_ptr->rstat = M83xx_TSEC_RSTAT_QHLT;
+  }
   /*
-   * FIXME: do something :-)
+   * has Tx been stopped? then restart it
    */
-#endif
+  if (0 != (sc->reg_ptr->tstat & M83xx_TSEC_TSTAT_THLT)) {
+    sc->txErrors++;
+    sc->reg_ptr->tstat = M83xx_TSEC_TSTAT_THLT;
+  }
 }
 
 
@@ -1529,7 +1510,7 @@ static void mpc83xx_tsec_off
 \*=========================================================================*/
 {
   /*
-   * FIXME: deinitialize driver
+   * deinitialize driver?
    */
 }
 
@@ -1540,7 +1521,7 @@ static void mpc83xx_tsec_stats
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
-|   perform io control functions                                            |
+|   print statistics                                                        |
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
@@ -1568,21 +1549,35 @@ static void mpc83xx_tsec_stats
   /*
    * print some statistics
    */
-  printf ("  Rx Interrupts:%-8lu",   sc->rxInterrupts);
-  printf ("      Not First:%-8lu",   sc->rxNotFirst);
-  printf ("       Not Last:%-8lu\n", sc->rxNotLast);
-  printf ("          Giant:%-8lu",   sc->rxGiant);
-  printf ("      Non-octet:%-8lu\n", sc->rxNonOctet);
-  printf ("        Bad CRC:%-8lu",   sc->rxBadCRC);
-  printf ("        Overrun:%-8lu",   sc->rxOverrun);
-  printf ("      Collision:%-8lu\n", sc->rxCollision);
+  printf ("   Rx Interrupts:%-8lu",   sc->rxInterrupts);
+  printf ("       Rx Errors:%-8lu",   sc->rxErrors);
+  printf ("      Rx packets:%-8lu\n",   
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rpkt]);
+  printf ("   Rx broadcasts:%-8lu",   
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rbca]);
+  printf ("   Rx multicasts:%-8lu",   
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rmca]);
+  printf ("           Giant:%-8lu\n",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rovr]);
+  printf ("       Non-octet:%-8lu",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_raln]);
+  printf ("         Bad CRC:%-8lu",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rfcs]);
+  printf ("         Overrun:%-8lu\n",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_rdrp]);
   
-  printf ("  Tx Interrupts:%-8lu",   sc->txInterrupts);
-  printf ("       Deferred:%-8lu",   sc->txDeferred);
-  printf (" Late Collision:%-8lu\n", sc->txLateCollision);
-  printf ("Retransmit Limit:%-8lu",   sc->txRetryLimit);
-  printf ("        Underrun:%-8lu",   sc->txUnderrun);
-  printf ("     Misaligned:%-8lu\n", sc->txMisaligned);
+  printf ("   Tx Interrupts:%-8lu",   sc->txInterrupts);
+  printf ("       Tx Errors:%-8lu",   sc->txErrors);
+  printf ("      Tx packets:%-8lu\n",   
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tpkt]);
+  printf ("        Deferred:%-8lu",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tdfr]);
+  printf ("  Late Collision:%-8lu",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tlcl]);
+  printf ("Retransmit Limit:%-8lu\n",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tedf]);
+  printf ("        Underrun:%-8lu\n",
+	  sc->reg_ptr->rmon_mib[m83xx_tsec_rmon_tund]);
 }
 
 /*=========================================================================*\
@@ -1632,7 +1627,7 @@ static int mpc83xx_tsec_ioctl
       mpc83xx_tsec_off(sc);
     }
     if (ifp->if_flags & IFF_UP) {
-      mpc83xx_tsec_off(sc);
+      mpc83xx_tsec_init(sc);
     }
     break;
 
@@ -1644,7 +1639,7 @@ static int mpc83xx_tsec_ioctl
     break;
 
     /*
-     * FIXME: All sorts of multicast commands need to be added here!
+     * All sorts of multicast commands need to be added here!
      */
   default:
     error = EINVAL;
@@ -1799,7 +1794,7 @@ static int mpc83xx_tsec_driver_attach
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
-|    zero, if success                                                       |
+|    1, if success                                                          |
 \*=========================================================================*/
 {
   struct mpc83xx_tsec_struct *sc;
@@ -1899,7 +1894,6 @@ static int mpc83xx_tsec_driver_attach
 
   return 1;
 }
-
 
 /*=========================================================================*\
 | Function:                                                                 |

@@ -26,11 +26,7 @@
 #include <errno.h>
 #include <rtems/libi2c.h>
 
-/* #define DEBUG */
-
-/*
- * XXX: for the beginning, this driver works polled
- */
+#define DEBUG 
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -110,9 +106,12 @@ static int mpc83xx_i2c_wait
 #if defined(DEBUG)
   printk("mpc83xx_i2c_wait called... ");
 #endif
-  softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MIEN;
 
   if (softc_ptr->initialized) {
+    /*
+     * enable interrupt mask 
+     */
+    softc_ptr->reg_ptr->i2ccr |= MPC83XX_I2CCR_MIEN;
     rc = rtems_semaphore_obtain(softc_ptr->irq_sema_id,RTEMS_WAIT,100);
     if (rc != RTEMS_SUCCESSFUL) {
       return rc;
@@ -131,8 +130,8 @@ static int mpc83xx_i2c_wait
   }
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
 
-  act_status = softc_ptr->reg_ptr->i2csr & status_mask;
-  if (act_status != desired_status) {
+  act_status = softc_ptr->reg_ptr->i2csr;
+  if ((act_status  & status_mask) != desired_status) {
 #if defined(DEBUG)
     printk("... exit with RTEMS_IO_ERROR\r\n");
 #endif
@@ -142,6 +141,145 @@ static int mpc83xx_i2c_wait
 	printk("... exit OK\r\n");
 #endif
   return RTEMS_SUCCESSFUL;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static void mpc83xx_i2c_irq_handler
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   handle interrupts                                                       |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ rtems_irq_hdl_param handle     /* handle, is softc_ptr structure          */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    <none>                                                                 |
+\*=========================================================================*/
+{
+  mpc83xx_i2c_softc_t *softc_ptr = (mpc83xx_i2c_softc_t *)handle;
+  
+  /*
+   * disable interrupt mask 
+   */
+  softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
+  if (softc_ptr->initialized) {
+    rtems_semaphore_release(softc_ptr->irq_sema_id);
+  }  
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static void mpc83xx_i2c_irq_on_off
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   enable/disable interrupts (void, handled at different position)         |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ const
+ rtems_irq_connect_data *irq_conn_data   /* irq connect data                */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    <none>                                                                 |
+\*=========================================================================*/
+{
+}
+
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int mpc83xx_i2c_irq_isOn
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   check state of interrupts, void, done differently                       |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ const
+ rtems_irq_connect_data *irq_conn_data  /* irq connect data                */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    TRUE, if enabled                                                       |
+\*=========================================================================*/
+{
+  return (TRUE);
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static void mpc83xx_i2c_install_irq_handler
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   (un-)install the interrupt handler                                      |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ mpc83xx_i2c_softc_t *softc_ptr,        /* ptr to control structure        */
+ int install                            /* TRUE: install, FALSE: remove    */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    <none>                                                                 |
+\*=========================================================================*/
+{
+  rtems_status_code rc = RTEMS_SUCCESSFUL;
+
+  rtems_irq_connect_data irq_conn_data = {
+    softc_ptr->irq_number,
+    mpc83xx_i2c_irq_handler,           /* rtems_irq_hdl           */
+    (rtems_irq_hdl_param)softc_ptr,    /* (rtems_irq_hdl_param)   */
+    mpc83xx_i2c_irq_on_off,            /* (rtems_irq_enable)      */
+    mpc83xx_i2c_irq_on_off,            /* (rtems_irq_disable)     */
+    mpc83xx_i2c_irq_isOn               /* (rtems_irq_is_enabled)  */
+  };
+
+  /*
+   * (un-)install handler for I2C device
+   */
+  if (install) {
+    /*
+     * create semaphore for IRQ synchronization
+     */
+    rc = rtems_semaphore_create(rtems_build_name('i','2','c','s'),
+				0,
+				RTEMS_FIFO 
+				| RTEMS_SIMPLE_BINARY_SEMAPHORE,
+				0,
+				&softc_ptr->irq_sema_id);
+    if (rc != RTEMS_SUCCESSFUL) {
+      rtems_panic("I2C: cannot create semaphore");
+    }
+    if (!BSP_install_rtems_irq_handler (&irq_conn_data)) {
+      rtems_panic("I2C: cannot install IRQ handler");
+    }
+  }
+  else {
+    if (!BSP_remove_rtems_irq_handler (&irq_conn_data)) {
+      rtems_panic("I2C: cannot uninstall IRQ handler");
+    }
+    /*
+     * delete sync semaphore
+     */
+    if (softc_ptr->irq_sema_id != 0) {
+      rc = rtems_semaphore_delete(softc_ptr->irq_sema_id);
+      if (rc != RTEMS_SUCCESSFUL) {
+	rtems_panic("I2C: cannot delete semaphore");
+      }
+    }
+  }
 }
 
 /*=========================================================================*\
@@ -185,7 +323,7 @@ static rtems_status_code mpc83xx_i2c_init
    */
   softc_ptr->reg_ptr->i2cdfsrr = 0x10 ; /* no special filtering needed */
   /*
-   * set own slave address to broadcasr (0x00)
+   * set own slave address to broadcast (0x00)
    */
   softc_ptr->reg_ptr->i2cadr = 0x00 ; 
 
@@ -195,11 +333,14 @@ static rtems_status_code mpc83xx_i2c_init
   softc_ptr->reg_ptr->i2ccr = MPC83XX_I2CCR_MEN;
   
   /*
-   * FIXME: init interrupt stuff
-   */  
-  /*
-   * FIXME: init other stuff
+   * init interrupt stuff
    */
+  mpc83xx_i2c_install_irq_handler(softc_ptr,TRUE);
+
+  /*
+   * mark, that we have initialized
+   */
+  softc_ptr->initialized = TRUE;
 #if defined(DEBUG)
   printk("... exit OK\r\n");
 #endif

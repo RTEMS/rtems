@@ -46,6 +46,7 @@
  * 
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */ 
+
 #include <rtems.h>
 
 #include <rtems/io.h>
@@ -101,6 +102,11 @@ typedef struct rtems_libi2c_bus_ops_
   /* write a number of bytes */
   int (*write_bytes) (rtems_libi2c_bus_t * bushdl, unsigned char *bytes,
                       int nbytes);
+  /* ioctl misc functions */
+  int (*ioctl) (rtems_libi2c_bus_t * bushdl, 
+		int   cmd,
+		void *buffer;
+		);
 } rtems_libi2c_bus_ops_t;
 
 
@@ -265,13 +271,101 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
 
 /* Send start, send address and read bytes */
 int
-rtems_libi2c_start_read_bytes (uint32_t minor, unsigned char *bytes,
+rtems_libi2c_start_read_bytes (rtems_device_minor_number minor, 
+			       unsigned char *bytes,
                                int nbytes);
 
 /* Send start, send address and write bytes */
 int
-rtems_libi2c_start_write_bytes (uint32_t minor, unsigned char *bytes,
+rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
+				unsigned char *bytes,
                                 int nbytes);
+
+
+/* call misc iocontrol function */
+int
+rtems_libi2c_ioctl (rtems_device_minor_number minor,
+		    int cmd,
+		    ...);
+/*
+ * NOTE: any low-level driver ioctl returning a negative
+ * result for release the bus (perform a STOP condition)
+ */
+/*******************************
+ * defined IOCTLs:
+ *******************************/
+#define RTEMS_LIBI2C_IOCTL_READ_WRITE  1
+/*
+ * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
+ *                             RTEMS_LIBI2C_IOCTL_READ_WRITE,
+ *                              rtems_libi2c_read_write_t *arg);
+ * 
+ * This call performs a simultanous read/write transfer, 
+ * which is possible (and sometimes needed) for SPI devices
+ * 
+ *   arg is a pointer to a rd_wr info data structure
+ * 
+ * This call is only needed for SPI devices
+ */
+#define RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE  2
+/*
+ * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
+ *                             RTEMS_LIBI2C_IOCTL_START_READ_WRITE,
+ *                             unsigned char *rd_buffer,
+ *                             const unsigned char *wr_buffer,
+ *                             int byte_cnt,
+ *                             const rtems_libi2c_tfr_mode_t *tfr_mode_ptr);
+ * 
+ * This call addresses a slave and then:
+ * - sets the proper transfer mode,
+ *  - performs a simultanous  read/write transfer, 
+ *    (which is possible and sometimes needed for SPI devices)
+ *    NOTE: - if rd_buffer is NULL, receive data will be dropped
+ *          - if wr_buffer is NULL, bytes with content 0 will transmitted
+ * 
+ *   rd_buffer is a pointer to a receive buffer (or NULL) 
+ *   wr_buffer is a pointer to the data to be sent (or NULL)
+ * 
+ * This call is only needed for SPI devices
+ */
+
+#define RTEMS_LIBI2C_IOCTL_SET_TFRMODE 3
+/*
+ * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
+ *                             RTEMS_LIBI2C_IOCTL_SET_TFRMODE,
+ *                             const rtems_libi2c_tfr_mode_t *tfr_mode_ptr);
+ * 
+ * This call sets an SPI device to the transfer mode needed (baudrate etc.)
+ * 
+ *   tfr_mode is a pointer to a structure defining the SPI transfer mode needed
+ *   (see below). 
+ * 
+ * This call is only needed for SPI devices
+ */
+
+/*
+ * arguemtn data structures for IOCTLs defined above
+ */
+typedef struct {
+  unsigned char       *rd_buf;
+  const unsigned char *wr_buf;
+  int                  byte_cnt;
+} rtems_libi2c_read_write_t;
+
+typedef struct {
+  uint32_t baudrate;       /* maximum bits per second               */
+                           /* only valid for SPI drivers:           */
+  uint8_t  bits_per_char;  /* how many bits per byte/word/longword? */
+  boolean  lsb_first;      /* TRUE: send LSB first                  */
+  boolean  clock_inv;      /* TRUE: inverted clock (high active)    */
+  boolean  clock_phs;      /* TRUE: clock starts toggling at start of data tfr */
+} rtems_libi2c_tfr_mode_t;
+
+typedef struct {
+  rtems_libi2c_tfr_mode_t   tfr_mode;
+  rtems_libi2c_read_write_t rd_wr;
+} rtems_libi2c_tfm_read_write_t;
+
 
 #ifdef __cplusplus
 }

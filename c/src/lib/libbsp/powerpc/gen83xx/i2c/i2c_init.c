@@ -73,9 +73,10 @@ rtems_status_code bsp_register_i2c
 
 {
   int ret_code;
+  int i2c1_busno,i2c2_busno;
 
   /*
-   * init I2C library
+   * init I2C library (if not already done)
    */
   rtems_libi2c_initialize ();
 
@@ -87,6 +88,7 @@ rtems_status_code bsp_register_i2c
   if (ret_code < 0) {
     return -ret_code;
   }
+  i2c1_busno = ret_code;
   /*
    * register second I2C bus
    */
@@ -95,12 +97,13 @@ rtems_status_code bsp_register_i2c
   if (ret_code < 0) {
     return -ret_code;
   }
+  i2c2_busno = ret_code;
   /*
    * register EEPROM to bus 1, Address 0x50
    */
   ret_code = rtems_libi2c_register_drv(RTEMS_BSP_I2C_EEPROM_DEVICE_NAME,
 				       i2c_2b_eeprom_driver_descriptor,
-				       0,0x50);
+				       i2c1_busno,0x50);
   if (ret_code < 0) {
     return -ret_code;
   }

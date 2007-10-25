@@ -76,7 +76,7 @@ irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/ns16550cfg.c
+console_rel_SOURCES = console/console.c console/ns16550cfg.c 
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -93,10 +93,16 @@ bsp_i2c_rel_SOURCES   = i2c/i2c_init.c
 bsp_i2c_rel_CPPFLAGS  = $(AM_CPPFLAGS)
 bsp_i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += bsp_spi.rel
+bsp_spi_rel_SOURCES   = spi/spi_init.c 
+bsp_spi_rel_CPPFLAGS  = $(AM_CPPFLAGS)
+bsp_spi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel pclock.rel console.rel vectors.rel irq.rel \
-    mpc83xx_regs.rel bsp_i2c.rel
+    mpc83xx_regs.rel bsp_i2c.rel bsp_spi.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -106,7 +112,8 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
+    ../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

@@ -1,3 +1,9 @@
+2007-09-24	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-flash-m25p40.c, 
+	* libchip/Makefile.am:
+	added SPI flash driver for a M25P40 chip (based on libi2c extensions)
+
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libchip/shmdr/dump.c, libchip/shmdr/shm_driver.h: Fix warnings.

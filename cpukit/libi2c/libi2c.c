@@ -46,6 +46,10 @@
  * 
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */ 
+/*
+ * adaptations to also handle SPI devices 
+ * by Thomas Doerfler, embedded brains GmbH, Puchheim, Germany
+ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -55,6 +59,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
@@ -318,7 +323,15 @@ int
 rtems_libi2c_initialize ()
 {
   rtems_status_code sc;
+  static boolean is_initialized = FALSE;
 
+  if (is_initialized) {
+    /*
+     * already called before? then skip this step
+     */
+    return 0;
+  }
+  
   if (!(libmutex = mutexCreate (rtems_build_name ('l', 'I', '2', 'C'))))
     return -1;
 
@@ -331,6 +344,7 @@ rtems_libi2c_initialize ()
     libmutex = 0;
     return -1;
   }
+  is_initialized = TRUE;
 
   return 0;
 }
@@ -428,7 +442,7 @@ not_started (int busno)
 }
 
 rtems_status_code
-rtems_libi2c_send_start (uint32_t minor)
+rtems_libi2c_send_start (rtems_device_minor_number minor)
 {
   int rval;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -459,7 +473,7 @@ rtems_libi2c_send_start (uint32_t minor)
 }
 
 rtems_status_code
-rtems_libi2c_send_stop (uint32_t minor)
+rtems_libi2c_send_stop (rtems_device_minor_number minor)
 {
   rtems_status_code rval;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -476,7 +490,7 @@ rtems_libi2c_send_stop (uint32_t minor)
 }
 
 rtems_status_code
-rtems_libi2c_send_addr (uint32_t minor, int rw)
+rtems_libi2c_send_addr (rtems_device_minor_number minor, int rw)
 {
   rtems_status_code sc;
   DECL_CHECKED_BH (busno, bush, minor, +)
@@ -491,7 +505,9 @@ rtems_libi2c_send_addr (uint32_t minor, int rw)
 }
 
 int
-rtems_libi2c_read_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
+rtems_libi2c_read_bytes (rtems_device_minor_number minor, 
+			 unsigned char *bytes, 
+			 int nbytes)
 {
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
@@ -506,7 +522,9 @@ rtems_libi2c_read_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
 }
 
 int
-rtems_libi2c_write_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
+rtems_libi2c_write_bytes (rtems_device_minor_number minor, 
+			  unsigned char *bytes, 
+			  int nbytes)
 {
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
@@ -520,8 +538,70 @@ rtems_libi2c_write_bytes (uint32_t minor, unsigned char *bytes, int nbytes)
   return sc;
 }
 
+int
+rtems_libi2c_ioctl (rtems_device_minor_number minor, 
+		    int cmd,
+		    ...)
+{
+  va_list            ap;
+  int sc = 0;
+  void *args;
+  DECL_CHECKED_BH (busno, bush, minor, -)
+
+    if (not_started (busno))
+    return -RTEMS_NOT_OWNER_OF_RESOURCE;
+
+  va_start(ap, cmd);
+  args = va_arg(ap, void *);
+
+  switch(cmd) {
+    /*
+     * add ioctls defined for this level here:    
+     */
+    
+  case RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE:
+    /*
+     * address device, then set transfer mode and perform read_write transfer
+     */
+    /*
+     * perform start/address
+     */
+    if (sc == 0) {
+      sc = rtems_libi2c_send_start (minor);
+    }
+    /*
+     * set tfr mode
+     */
+    if (sc == 0) {
+      sc = bush->ops->ioctl 
+	(bush, 
+	 RTEMS_LIBI2C_IOCTL_SET_TFRMODE, 
+	 &((rtems_libi2c_tfm_read_write_t *)args)->tfr_mode);
+    }
+    /*
+     * perform read_write
+     */
+    if (sc == 0) {
+      sc = bush->ops->ioctl 
+	(bush, 
+	 RTEMS_LIBI2C_IOCTL_READ_WRITE, 
+	 &((rtems_libi2c_tfm_read_write_t *)args)->rd_wr);
+    }
+    break;
+  default:
+    sc = bush->ops->ioctl (bush, cmd, args);
+    break;
+  }
+  if (sc < 0)
+    rtems_libi2c_send_stop (minor);
+  return sc;
+}
+
 static int
-do_s_rw (uint32_t minor, unsigned char *bytes, int nbytes, int rw)
+do_s_rw (rtems_device_minor_number minor, 
+	 unsigned char *bytes, 
+	 int nbytes, 
+	 int rw)
 {
   rtems_status_code sc;
   rtems_libi2c_bus_t *bush;
@@ -549,14 +629,16 @@ do_s_rw (uint32_t minor, unsigned char *bytes, int nbytes, int rw)
 }
 
 int
-rtems_libi2c_start_read_bytes (uint32_t minor, unsigned char *bytes,
+rtems_libi2c_start_read_bytes (rtems_device_minor_number minor, 
+			       unsigned char *bytes,
                                int nbytes)
 {
   return do_s_rw (minor, bytes, nbytes, 1);
 }
 
 int
-rtems_libi2c_start_write_bytes (uint32_t minor, unsigned char *bytes,
+rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
+				unsigned char *bytes,
                                 int nbytes)
 {
   return do_s_rw (minor, bytes, nbytes, 0);

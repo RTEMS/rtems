@@ -1,3 +1,11 @@
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* include/bsp.h: fixed some typos
+
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, spi/spi_init.c, include/bsp.h: add spi support
+
 2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c, irq/irq_init.c: Eliminate warnings.

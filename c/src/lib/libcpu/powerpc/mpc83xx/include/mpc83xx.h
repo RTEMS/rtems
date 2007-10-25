@@ -376,6 +376,29 @@ typedef struct m83xxSPIRegisters_ {
   volatile uint32_t spird;                /* 0x0_7034 SPI receive register R 0xFFFF_FFFF 19.4.1.6/19-15 */
   uint8_t reserved0_7038[0x07100-0x07038];/* 0x0_7038-70FF Reserved */
 } m83xxSPIRegisters_t;
+                                              /* SPIMODE register fields    */
+#define  MPC83XX_SPIMODE_LOOP   (1   << (31- 1)) /* loopback                */
+#define  MPC83XX_SPIMODE_CI     (1   << (31- 2)) /* clock invert            */
+#define  MPC83XX_SPIMODE_CP     (1   << (31- 3)) /* clock phase             */
+#define  MPC83XX_SPIMODE_DIV16  (1   << (31- 4)) /* divide by 16            */
+#define  MPC83XX_SPIMODE_REV    (1   << (31- 5)) /* LSB first               */
+#define  MPC83XX_SPIMODE_M_S    (1   << (31- 6)) /* master/slave            */
+#define  MPC83XX_SPIMODE_EN     (1   << (31- 7)) /* enable                  */
+#define  MPC83XX_SPIMODE_LEN(n) ((n) << (31-11)) /* length code             */
+#define  MPC83XX_SPIMODE_PM(n)  ((n) << (31-15)) /* prescaler               */
+#define  MPC83XX_SPIMODE_OD     (1   << (31-19)) /* open drain              */
+
+                                               /* SPCOM  register fields    */
+#define  MPC83XX_SPCOM_LST    (1   << (31- 9))  /* last transfer            */
+
+                                            /* SPIE/M register fields     */
+#define  MPC83XX_SPIE_LT     (1 << (31-17)) /* last character transmitted */
+#define  MPC83XX_SPIE_DNR    (1 << (31-18)) /* data not ready             */
+#define  MPC83XX_SPIE_OV     (1 << (31-19)) /* overrun                    */
+#define  MPC83XX_SPIE_UN     (1 << (31-20)) /* unterrun                   */
+#define  MPC83XX_SPIE_MME    (1 << (31-21)) /* multi-master error         */
+#define  MPC83XX_SPIE_NE     (1 << (31-22)) /* not empty                  */
+#define  MPC83XX_SPIE_NF     (1 << (31-23)) /* not full                   */
 
 typedef struct m83xxDMARegisters_ {
   /* DMA Registers */
@@ -774,6 +797,10 @@ typedef struct m83xxTSEC_Registers_ {
  */
 #define M83xx_TSEC_TSTAT_THLT  (1<<(31-0))
 
+/*
+ * TSEC RSTAT bit definitions
+ */
+#define M83xx_TSEC_RSTAT_QHLT  (1<<(31-8))
   /*
    * TSEC ECNTRL bit positions
    */

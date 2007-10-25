@@ -1,3 +1,9 @@
+2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libi2c/libi2c.c, libi2c/libi2c.h:
+	extend API to support SPI devices
+	made libi2c.h C++-proof
+
 2007-10-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/assoc.c: Removed.  Accidentally included routine

@@ -239,6 +239,7 @@ extern rtems_configuration_table BSP_Configuration;
 
 void bsp_cleanup(void);
 rtems_status_code bsp_register_i2c(void);
+rtems_status_code bsp_register_spi(void);
 
 /* console modes (only termios) */
 #ifdef  PRINTK_MINOR
@@ -279,6 +280,12 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
  */
 #define RTEMS_BSP_I2C_EEPROM_DEVICE_NAME "eeprom"
 #define RTEMS_BSP_I2C_EEPROM_DEVICE_PATH "/dev/i2c1.eeprom"
+
+/*
+ * SPI Flash device name
+ */
+#define RTEMS_BSP_SPI_FLASH_DEVICE_NAME "flash"
+#define RTEMS_BSP_SPI_FLASH_DEVICE_PATH "/dev/spi.flash"
 
 #ifdef __cplusplus
 }
