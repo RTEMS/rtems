@@ -7,17 +7,17 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I$(srcdir)/..
 
-node2$(EXEEXT): ../mptest.adb init.o
+node2.exe: ../mptest.adb init.o
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.o: ../../../support/init.c
 	$(COMPILE.c) -DNODE_NUMBER=2 -I$(srcdir)/.. -c $<
 
 if EXPADA
-noinst_PROGRAMS = node2
+noinst_PROGRAMS = node2.exe
 endif
 
-node2_SOURCES = mptest-per_node_configuration.adb
+node2_exe_SOURCES = mptest-per_node_configuration.adb
 
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = base_mp-node2.scn

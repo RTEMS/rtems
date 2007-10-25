@@ -5,11 +5,11 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-noinst_PROGRAMS = sp15
-sp15_SOURCES = sp15.adb config.h sptest.adb sptest.ads
-sp15_SOURCES += ../../support/init.c
+noinst_PROGRAMS = sp15.exe
+sp15_exe_SOURCES = sp15.adb config.h sptest.adb sptest.ads
+sp15_exe_SOURCES += ../../support/init.c
 
-sp15$(EXEEXT): sp15.adb init.$(OBJEXT)
+sp15.exe: sp15.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 scndir = $(rtems_ada_testsdir)

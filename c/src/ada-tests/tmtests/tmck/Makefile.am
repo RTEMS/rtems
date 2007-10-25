@@ -5,11 +5,11 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-noinst_PROGRAMS = tmck
-tmck_SOURCES = tmck.adb config.h tmtest.adb tmtest.ads
-tmck_SOURCES += ../../support/init.c
+noinst_PROGRAMS = tmck.exe
+tmck_exe_SOURCES = tmck.adb config.h tmtest.adb tmtest.ads
+tmck_exe_SOURCES += ../../support/init.c
 
-tmck$(EXEEXT): tmck.adb init.$(OBJEXT)
+tmck.exe: tmck.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

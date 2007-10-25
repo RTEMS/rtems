@@ -5,11 +5,11 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-noinst_PROGRAMS = tm01
-tm01_SOURCES = tm01.adb config.h tmtest.adb tmtest.ads
-tm01_SOURCES += ../../support/init.c
+noinst_PROGRAMS = tm01.exe
+tm01_exe_SOURCES = tm01.adb config.h tmtest.adb tmtest.ads
+tm01_exe_SOURCES += ../../support/init.c
 
-tm01$(EXEEXT): tm01.adb init.$(OBJEXT)
+tm01.exe: tm01.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

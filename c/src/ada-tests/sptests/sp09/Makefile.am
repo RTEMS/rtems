@@ -9,12 +9,12 @@ include $(top_srcdir)/ada.am
 # handling can be verified in the binding.
 AM_ADAFLAGS += -gnatp
 
-noinst_PROGRAMS = sp09
+noinst_PROGRAMS = sp09.exe
 
-sp09_SOURCES = sp09.adb config.h sptest.adb sptest.ads
-sp09_SOURCES += ../../support/init.c
+sp09_exe_SOURCES = sp09.adb config.h sptest.adb sptest.ads
+sp09_exe_SOURCES += ../../support/init.c
 
-sp09$(EXEEXT): sp09.adb init.$(OBJEXT)
+sp09.exe: sp09.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 scndir = $(rtems_ada_testsdir)

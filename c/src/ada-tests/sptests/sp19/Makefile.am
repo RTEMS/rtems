@@ -7,14 +7,14 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I.
 
-noinst_PROGRAMS = sp19
+noinst_PROGRAMS = sp19.exe
 
-sp19_SOURCES = sp19.adb sptest.adb config.h sptest.ads
-sp19_SOURCES += ../../support/init.c
+sp19_exe_SOURCES = sp19.adb sptest.adb config.h sptest.ads
+sp19_exe_SOURCES += ../../support/init.c
 
 CLEANFILES += sptest.adb
 
-sp19$(EXEEXT): sp19.adb sptest.adb sptest.ads init.$(OBJEXT)
+sp19.exe: sp19.adb sptest.adb sptest.ads init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 scndir = $(rtems_ada_testsdir)

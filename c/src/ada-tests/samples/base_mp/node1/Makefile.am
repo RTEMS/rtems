@@ -7,14 +7,14 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I$(srcdir)/..
 
-node1$(EXEEXT): ../mptest.adb init.o
+node1.exe: ../mptest.adb init.o
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.o: ../../../support/init.c
 	$(COMPILE.c) -DNODE_NUMBER=1 -I$(srcdir)/.. -c $<
 
 if EXPADA
-noinst_PROGRAMS = node1
+noinst_PROGRAMS = node1.exe
 endif
 
 scndir = $(rtems_ada_testsdir)

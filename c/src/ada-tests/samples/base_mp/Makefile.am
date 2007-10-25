@@ -6,14 +6,14 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 SUBDIRS = node1 node2
 #include $(top_srcdir)/ada.am
 
-#mptest$(EXEEXT): mptest.adb
+#mptest.exe: mptest.adb
 #	$(GNATCOMPILE) -margs -a $< -o $@
 
 #if EXPADA
 #noinst_PROGRAMS = mptest
 #endif
 
-#mptest_SOURCES = mptest.adb mptest.ads
+#mptest_exe_SOURCES = mptest.adb mptest.ads
 
 #EXTRA_DIST += node1/mptest-per_node_configuration.adb
 

@@ -5,12 +5,12 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-noinst_PROGRAMS = tmoverhd
-tmoverhd_SOURCES = tmoverhd.adb config.h tmtest.adb tmtest.ads \
+noinst_PROGRAMS = tmoverhd.exe
+tmoverhd_exe_SOURCES = tmoverhd.adb config.h tmtest.adb tmtest.ads \
     dummy_rtems.adb dummy_rtems.ads
-tmoverhd_SOURCES += ../../support/init.c
+tmoverhd_exe_SOURCES += ../../support/init.c
 
-tmoverhd$(EXEEXT): tmoverhd.adb init.$(OBJEXT)
+tmoverhd.exe: tmoverhd.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

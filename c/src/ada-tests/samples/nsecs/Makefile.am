@@ -5,15 +5,15 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-nsecs$(EXEEXT): nsecs.adb init.$(OBJEXT)
+nsecs.exe: nsecs.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.$(OBJEXT): ../../support/init.c
 	$(COMPILE.c) -I$(srcdir) -c $<
 
-noinst_PROGRAMS = nsecs
+noinst_PROGRAMS = nsecs.exe
 
-nsecs_SOURCES = nsecs.adb config.h sptest.adb sptest.ads
+nsecs_exe_SOURCES = nsecs.adb config.h sptest.adb sptest.ads
 
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = nsecs.scn
