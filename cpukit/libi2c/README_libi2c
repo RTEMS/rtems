@@ -1,0 +1,178 @@
+#
+#  $Id$
+#
+
+=====================
+Copyright and License
+=====================
+
+For Copyright and License of the source code, see the header in
+libi2c.c. 
+
+=========
+Overview
+========
+
+This directory contains a general I2C/SPI API library. It offers a
+standard API to I2C or SPI based device drivers, abstracting the low
+level driver (dealing with the I2C/SPI controller hardware of the
+board) from the high-level drivers (dealing with devices connected to
+the I2C or SPI bus).
+
+In most cases throughout this document, i2c and spi devices are
+handled in a similar way. Therefore spi will not be explicitly named
+in every location.
+
+=========
+Features
+=========
+
+  + supports multiple i2c and/or spi busses 
+
+  + supports multiple devices connected to each i2c/spi bus
+
+  + handles bus and device registration to the I/O manager
+
+=========
+Structure
+=========
+
+This library defines a layered API to i2c and spi devices. The
+layering is:
+
+  +---------------------------------------+
+ 6|           Application                 |
+  +---------------------------------------+
+ 5|        RTEMS I/O Manager              |
+  +---------------------------------------+
+ 4|**     libi2c OS adaption layer      **|
+  +---------------------------------------+
+ 3|    high level i2c device driver       |
+  |         (EEPROM, RTC, ...)            |
+  |    (e.g. in c/src/libchip/i2c)        |
+  +---------------------------------------+
+ 2|** libi2c low level abstration layer **|
+  +---------------------------------------+
+ 1|     i2c controller driver             |
+  |             (in BSP)                  |
+  +---------------------------------------+
+
+This document will describe the following interfaces in separate
+sections:
+
+  + the interface between the RTEMS I/O Manager and the libi2c OS
+  interface (5<->4)
+
+  + the interface between the libi2c OS interface and the high level
+  i2c device driver (4<->3)
+
+  + the interface between the high level i2c device driver and the
+  libi2c low level abstraction layer (3<->2)
+
+  + the interface between the libi2c low level abstraction layer and
+  the i2c controller driver (2<->1)
+
+
+======================
+Library Initialization
+======================
+Before any libi2c API is used, the library must be initialized. This
+is achived with a call to function
+
+    rtems_libi2c_initialize (). 
+
+It creates a global mutex to lock internal data structures and
+registers the OS adaption layer to the RTEMS I/O manager.
+
+Any subsequent call to this function will be silently ignored.
+
+Typically the BSP startup code will perform this initialization.
+
+===================
+Bus Registration
+===================
+Each i2c and/or spi bus available must be registerd with a call to
+
+int rtems_libi2c_register_bus (char *name, 
+			       rtems_libi2c_bus_t * bus)
+
+It registers the bus to the libi2c internal data structures and
+creates a device node in the RTEMS filesystem with the given name. If
+no name is given (name==NULL), then the default name "/dev/i2c" is
+used instead.
+
+With the second calling parameter "rtems_libi2c_bus_t * bus" the
+caller passes in a set of function pointers, which define the entries
+into the i2c controller driver (defined in the BSP).
+
+This call returns an integer bus number, which can be used in
+subsequent calls to register devices attached to this bus (see below).
+
+Typically the BSP startup code will perform this registration for each
+bus available on the board.
+
+===================
+Device Registration
+===================
+tbd
+
+====================================================================
+(5<->4) RTEMS I/O Manager and the libi2c OS adaption layer IF
+====================================================================
+
+The RTEMS I/O Manager regards the libi2c OS adaption layer as a normal
+RTEMS Device Driver with one unique major number and a set of minor
+numbers, one for each bus and one for each device attached to one of
+the busses.
+
+Therefore the libi2c OS adaption layer provides the standard calls:
+
+static rtems_driver_address_table libi2c_io_ops = {
+  initialization_entry:  i2c_init,
+  open_entry:            i2c_open,
+  close_entry:           i2c_close,
+  read_entry:            i2c_read,
+  write_entry:           i2c_write,
+  control_entry:         i2c_ioctl
+};
+
+These calls perform some parameter checking and then call the
+appropriate high level i2c device driver function, if available.
+
+There are two exceptions: when i2c_read or i2c_write is called with a
+minor number specifying a bus (and not a device attached to the bus),
+then the respective transfer is performed as a raw byte stream
+transfer to the bus.
+
+The main reason for the libi2c OS adaption layer is, that it
+dispatches the RTEMS I/O Manager calles to the proper device driver
+according to the minor number used.
+
+====================================================================
+libi2c OS adaption layer and the high level i2c device driver IF
+====================================================================
+
+Each high level i2c device driver provides a set of functions in the
+rtems_libi2c_drv_t data structure passed the libi2c when the device is
+registered (see "Device registration"). These function directly match
+the RTEMS I/O Mangers calls "open", "close", "read", "write",
+"control", and they are passed the same arguments. Functions not
+needed may be ommited. 
+
+======================================================================
+high level i2c device driver and libi2c low level abstraction layer IF
+======================================================================
+tbd
+
+====================================================================
+libi2c low level abstraction layer and i2c controller driver IF
+====================================================================
+tbd
+
+Differences between i2c and spi device drivers
+==================================================
+tbd
+
+Differences between i2c and spi controller drivers
+==================================================
+tbd
