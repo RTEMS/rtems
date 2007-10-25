@@ -48,6 +48,7 @@ samples/Makefile
 samples/base_sp/Makefile
 samples/hello/Makefile
 samples/ticker/Makefile
+samples/nsecs/Makefile
 samples/base_mp/Makefile
 samples/base_mp/node1/Makefile
 samples/base_mp/node2/Makefile
