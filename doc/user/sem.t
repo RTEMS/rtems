@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -397,11 +397,12 @@ rtems_status_code rtems_semaphore_create(
 @ifset is-Ada
 @example
 procedure Semaphore_Create (
-   Name          : in     RTEMS.Name;
-   Count         : in     RTEMS.Unsigned32;
-   Attribute_Set : in     RTEMS.Attribute;
-   ID            :    out RTEMS.ID;
-   Result        :    out RTEMS.Status_Codes
+   Name             : in     RTEMS.Name;
+   Count            : in     RTEMS.Unsigned32;
+   Attribute_Set    : in     RTEMS.Attribute;
+   Priority_Ceiling : in     RTEMS.Task_Priority;
+   ID               :    out RTEMS.ID;
+   Result           :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset

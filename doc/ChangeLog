@@ -1,3 +1,10 @@
+2007-10-25	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* user/barrier.t, user/clock.t, user/concepts.t, user/cpuuse.t,
+	user/init.t, user/intr.t, user/io.t, user/mp.t, user/rtmon.t,
+	user/sem.t, user/stackchk.t, user/task.t, user/timer.t: Updated the
+	Ada documentation to reflect the current binding.
+
 2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1262/filesystem

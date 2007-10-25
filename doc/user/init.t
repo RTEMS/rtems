@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -208,10 +208,7 @@ void rtems_initialize_executive(
 
 @ifset is-Ada
 @example
-procedure Initialize_Executive (
-  Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
-  CPU_Table           : in     RTEMS.CPU_Table_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -274,11 +271,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
 @ifset is-Ada
 @example
-procedure Initialize_Executive_Early(
-  Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
-  CPU_Table           : in     RTEMS.Cpu_Table;
-  Level               :    out RTEMS.ISR_Level
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -321,9 +314,7 @@ initialization sequences:
 @ifset is-C
 @findex rtems_initialize_executive_late
 @example
-void rtems_initialize_executive_late(
-  rtems_interrupt_level  bsp_level
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -390,7 +381,7 @@ void rtems_shutdown_executive(
 @ifset is-Ada
 @example
 procedure Shutdown_Executive(
-  result : in     RTEMS.Unsigned32
+  Status : in     RTEMS.Unsigned32
 );
 @end example
 @end ifset

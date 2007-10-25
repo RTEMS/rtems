@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -168,11 +168,7 @@ rtems_device_driver io_entry(
 
 @ifset is-Ada
 @example
-function IO_Entry (
-  Major          : in     RTEMS.Device_Major_Number;
-  Minor          : in     RTEMS.Device_Major_Number;
-  Argument_Block : in     RTEMS.Address
-) return RTEMS.Status_Code;
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -269,7 +265,7 @@ rtems_status_code rtems_io_register_driver(
 
 @ifset is-Ada
 @example
-No Ada implementation.
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -326,7 +322,7 @@ rtems_status_code rtems_io_register_driver(
 
 @ifset is-Ada
 @example
-No Ada implementation.
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -366,12 +362,7 @@ rtems_status_code rtems_io_initialize(
 
 @ifset is-Ada
 @example
-procedure IO_Initialize (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -421,12 +412,7 @@ rtems_status_code rtems_io_register_name(
 
 @ifset is-Ada
 @example
-procedure IO_Register_Name (
-   Name   : in     String;
-   Major  : in     RTEMS.Device_Major_Number;
-   Minor  : in     RTEMS.Device_Minor_Number;
-   Result :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -466,11 +452,7 @@ rtems_status_code rtems_io_lookup_name(
 
 @ifset is-Ada
 @example
-procedure IO_Lookup_Name (
-   Name         : in     String;
-   Device_Info  :    out RTEMS.Driver_Name_t_Pointer;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -511,12 +493,7 @@ rtems_status_code rtems_io_open(
 
 @ifset is-Ada
 @example
-procedure IO_Open (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -560,12 +537,7 @@ rtems_status_code rtems_io_close(
 
 @ifset is-Ada
 @example
-procedure IO_Close (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -609,12 +581,7 @@ rtems_status_code rtems_io_read(
 
 @ifset is-Ada
 @example
-procedure IO_Read (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -659,12 +626,7 @@ rtems_status_code rtems_io_write(
 
 @ifset is-Ada
 @example
-procedure IO_Write (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -710,12 +672,7 @@ rtems_status_code rtems_io_control(
 
 @ifset is-Ada
 @example
-procedure IO_Control (
-   Major        : in     RTEMS.Device_Major_Number;
-   Minor        : in     RTEMS.Device_Minor_Number;
-   Argument     : in     RTEMS.Address;
-   Result       :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -526,9 +526,10 @@ rtems_status_code rtems_timer_initiate_server(
 @ifset is-Ada
 @example
 procedure Timer_Initiate_Server (
-   Stack_Size    : in     RTEMS.Unsigned32;
-   Attribute_Set : in     RTEMS.Attribute;
-   Result        :    out RTEMS.Status_Codes
+   Server_Priority : in     RTEMS.Task_Priority;
+   Stack_Size      : in     RTEMS.Unsigned32;
+   Attribute_Set   : in     RTEMS.Attribute;
+   Result          :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset

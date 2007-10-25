@@ -114,7 +114,7 @@ void rtems_cpu_usage_report( void );
 
 @ifset is-Ada
 @example
-An Ada interface is not currently available.
+procedure CPU_Usage_Report;
 @end example
 @end ifset
 
@@ -142,7 +142,7 @@ void rtems_cpu_usage_reset( void );
 
 @ifset is-Ada
 @example
-An Ada interface is not currently available.
+procedure CPU_Usage_Reset;
 @end example
 @end ifset
 

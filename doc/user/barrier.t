@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -362,9 +362,9 @@ id can delete the barrier.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_barrier_obtain
+@findex rtems_barrier_wait
 @example
-rtems_status_code rtems_barrier_obtain(
+rtems_status_code rtems_barrier_wait(
   rtems_id         id,
   rtems_unsigned32 option_set,
   rtems_interval   timeout
@@ -374,7 +374,7 @@ rtems_status_code rtems_barrier_obtain(
 
 @ifset is-Ada
 @example
-procedure Barrier_Obtain (
+procedure Barrier_Wait (
    ID         : in     RTEMS.ID;
    Option_Set : in     RTEMS.Option;
    Timeout    : in     RTEMS.Interval;
