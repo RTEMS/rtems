@@ -1,5 +1,9 @@
 2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
+	* startup/cpuinit.c: reenable instruction MMU
+
+2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* README.mpc8349eamds: added file
 
 2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>

@@ -198,7 +198,7 @@ void cpu_init(void)
   /*
    * enable data/instruction MMU in MSR
    */
-  _write_MSR(_read_MSR() | MSR_DR/* | MSR_IR*/);
+  _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
 
   /*
    * enable FPU in MSR
