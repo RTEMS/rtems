@@ -16,8 +16,8 @@
 +-----------------------------------------------------------------+
 \*===============================================================*/
 /*
- * FIXME: currently, this driver only supports read accesses
- * write/erase accesses are to be completed
+ * FIXME: currently, this driver only supports read/write accesses
+ * erase accesses are to be completed
  */
 
 
@@ -108,9 +108,17 @@ rtems_status_code spi_flash_m25p40_write
   unsigned char       cmdbuf[4];
   int                   ret_cnt = 0;
   /*
-   * FIXME: check arguments
+   * check arguments
    */
   if (rc == RTEMS_SUCCESSFUL) {
+    if ((cnt <= 0)                      ||
+	(cnt > M25P40_TOTAL_SIZE)       ||
+	(off > (M25P40_TOTAL_SIZE-cnt))) {
+      rc = RTEMS_INVALID_SIZE;
+    }
+    else if (buf == NULL) {
+      rc = RTEMS_INVALID_ADDRESS;
+    }
   }
   /*
    * select device, set transfer mode, address device
@@ -126,6 +134,14 @@ rtems_status_code spi_flash_m25p40_write
 			     RTEMS_LIBI2C_IOCTL_SET_TFRMODE,
 			     &spi_flash_m25p40_tfr_mode);
   }
+
+  /*
+   * address device
+   */
+  if (rc == RTEMS_SUCCESSFUL) {
+    rc = rtems_libi2c_send_addr(minor,TRUE);
+  }
+
   /*
    * send write_enable command
    */
@@ -150,11 +166,19 @@ rtems_status_code spi_flash_m25p40_write
       curr_cnt = M25P40_PAGE_SIZE - (off % M25P40_PAGE_SIZE);
     }
     /*
-     * select device, set transfer mode, address device
+     * select device, set transfer mode
      */
     if (rc == RTEMS_SUCCESSFUL) {
       rc = rtems_libi2c_send_start(minor);
     }
+
+    /*
+     * address device
+     */
+    if (rc == RTEMS_SUCCESSFUL) {
+      rc = rtems_libi2c_send_addr(minor,TRUE);
+    }
+
     /*
      * set transfer mode
      */
@@ -236,9 +260,17 @@ rtems_status_code spi_flash_m25p40_read
   unsigned char       cmdbuf[4];
   int                   ret_cnt = 0;
   /*
-   * FIXME: check arguments
+   * check arguments
    */
   if (rc == RTEMS_SUCCESSFUL) {
+    if ((cnt <= 0)                      ||
+	(cnt > M25P40_TOTAL_SIZE)       ||
+	(off > (M25P40_TOTAL_SIZE-cnt))) {
+      rc = RTEMS_INVALID_SIZE;
+    }
+    else if (buf == NULL) {
+      rc = RTEMS_INVALID_ADDRESS;
+    }
   }
   /*
    * select device, set transfer mode, address device

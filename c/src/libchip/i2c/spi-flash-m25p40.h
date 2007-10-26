@@ -16,8 +16,8 @@
 +-----------------------------------------------------------------+
 \*===============================================================*/
 /*
- * FIXME: currently, this driver only supports read accesses
- * write/erase accesses are to be completed
+ * FIXME: currently, this driver only supports read/write accesses
+ * erase accesses are to be completed
  */
 
 
