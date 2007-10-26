@@ -1,19 +1,19 @@
-*** TEST 20 ***
-TA1 - rtems_rate_monotonic_create id = 0x28010001
-TA1 - rtems_rate_monotonic_ident id = 0x28010001
-TA1 - (0x28010001) period 2
-TA2 - rtems_rate_monotonic_create id = 0x28010002
-TA2 - rtems_rate_monotonic_ident id = 0x28010002
-TA2 - (0x28010002) period 2
-TA3 - rtems_rate_monotonic_create id = 0x28010003
-TA3 - rtems_rate_monotonic_ident id = 0x28010003
-TA3 - (0x28010003) period 2
-TA4 - rtems_rate_monotonic_create id = 0x28010004
-TA4 - rtems_rate_monotonic_ident id = 0x28010004
-TA4 - (0x28010004) period 2
-TA5 - rtems_rate_monotonic_create id = 0x28010005
-TA5 - rtems_rate_monotonic_ident id = 0x28010005
-TA5 - (0x28010005) period 100
+*** RATE MONOTONIC PERIOD STATISTICS TEST ***
+TA1 - rtems_rate_monotonic_create id = 0x42010001
+TA1 - rtems_rate_monotonic_ident id = 0x42010001
+TA1 - (0x42010001) period 2
+TA2 - rtems_rate_monotonic_create id = 0x42010002
+TA2 - rtems_rate_monotonic_ident id = 0x42010002
+TA2 - (0x42010002) period 2
+TA3 - rtems_rate_monotonic_create id = 0x42010003
+TA3 - rtems_rate_monotonic_ident id = 0x42010003
+TA3 - (0x42010003) period 2
+TA4 - rtems_rate_monotonic_create id = 0x42010004
+TA4 - rtems_rate_monotonic_ident id = 0x42010004
+TA4 - (0x42010004) period 2
+TA5 - rtems_rate_monotonic_create id = 0x42010005
+TA5 - rtems_rate_monotonic_ident id = 0x42010005
+TA5 - (0x42010005) period 100
 TA5 - PERIODS CHECK OK (1)
 TA5 - PERIODS CHECK OK (2)
 TA5 - PERIODS CHECK OK (3)
@@ -24,4 +24,42 @@ TA5 - PERIODS CHECK OK (7)
 TA5 - PERIODS CHECK OK (8)
 TA5 - PERIODS CHECK OK (9)
 TA5 - PERIODS CHECK OK (10)
-*** END OF TEST 20 ***
+
+Period information by period
+--- CPU times are seconds:microseconds ---
+--- Wall times are seconds:microseconds ---
+   ID     OWNER COUNT MISSED          CPU TIME                  WALL TIME
+                                    MIN/MAX/AVG                MIN/MAX/AVG
+0x42010001 TA1    502      0 0:000039/0:042650/0:004158 0:000039/0:020118/0:002848
+0x42010002 TA2    502      0 0:000041/0:042657/0:004309 0:000041/0:020116/0:002848
+0x42010003 TA3    501      0 0:000041/0:041564/0:003653 0:000041/0:020003/0:002814
+0x42010004 TA4    501      0 0:000043/0:044075/0:004911 0:000043/0:020004/0:002814
+0x42010005 TA5     10      0 0:000065/0:005413/0:002739 0:000065/1:000457/0:041058
+
+TA5 - PERIOD STATISTICS RESET
+
+Period information by period
+--- CPU times are seconds:microseconds ---
+--- Wall times are seconds:microseconds ---
+   ID     OWNER COUNT MISSED          CPU TIME                  WALL TIME
+                                    MIN/MAX/AVG                MIN/MAX/AVG
+0x42010001 TA1    502      0 0:000039/0:042650/0:004158 0:000039/0:020118/0:002848
+0x42010002 TA2    502      0 0:000041/0:042657/0:004309 0:000041/0:020116/0:002848
+0x42010003 TA3    501      0 0:000041/0:041564/0:003653 0:000041/0:020003/0:002814
+0x42010004 TA4    501      0 0:000043/0:044075/0:004911 0:000043/0:020004/0:002814
+0x42010005 TA5      0      0 
+
+TA5 - ALL PERIOD STATISTICS RESET
+
+Period information by period
+--- CPU times are seconds:microseconds ---
+--- Wall times are seconds:microseconds ---
+   ID     OWNER COUNT MISSED          CPU TIME                  WALL TIME
+                                    MIN/MAX/AVG                MIN/MAX/AVG
+0x42010001 TA1      0      0 
+0x42010002 TA2      0      0 
+0x42010003 TA3      0      0 
+0x42010004 TA4      0      0 
+0x42010005 TA5      0      0 
+
+*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***
