@@ -269,6 +269,7 @@ SECTIONS
         _startmalloc = .;
      } >ram
           	
+    clear_end = .;
 
     /*
      * Interrupt stack setup
@@ -278,27 +279,9 @@ SECTIONS
     intrStack = .;
     PROVIDE(intrStackPtr = intrStack);
 
-
-
-
     _WorkspaceBase = .;
     __WorkspaceBase = .;
-    . += WorkSpaceSize;
 
-    _RamDiskBase = .;
-    __RamDiskBase = .;
-    . += RamDiskSize;
-    _RamDiskEnd  = .;
-    __RamDiskEnd = .;
-    PROVIDE( _RamDiskSize = _RamDiskEnd - _RamDiskBase );
-
-    _HeapStart = .;
-    __HeapStart = .;
-    . += HeapSize;
-    _HeapEnd = .;
-    __HeapEnd = .;
-
-    clear_end = .;
 
     /* Sections for compressed .text and .data         */
     /* after the .datarom section is an int specifying */

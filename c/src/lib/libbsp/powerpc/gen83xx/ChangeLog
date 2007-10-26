@@ -1,3 +1,12 @@
+2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* README.mpc8349eamds: added file
+
+2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/bspstart.c, startup/linkcmds: 
+	removed unneeded address definitions
+
 2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* include/bsp.h: fixed some typos

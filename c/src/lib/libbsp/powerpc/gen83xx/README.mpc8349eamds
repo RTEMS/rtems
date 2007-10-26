@@ -1,0 +1,46 @@
+#
+#  $Id$
+#
+
+BSP NAME:           gen83xx
+BOARD:              Freescale MPC8349 board MPC8349EAMDS
+BUS:                PCI (unused)
+CPU FAMILY:         ppc
+CPU:                PowerPC e300 (SW compatible to 603e)
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      U-Boot 
+
+PERIPHERALS
+===========
+TIMERS:             PPC internal Timebase register
+  RESOLUTION:         ???
+SERIAL PORTS:       2 internal PSCs
+REAL-TIME CLOCK:    (not yet supported)
+DMA:                none
+VIDEO:              none
+SCSI:               none
+NETWORKING:         2xTSEC triple speed ethernet channels
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       PPC internal
+TTY DRIVER:         PPC internal
+
+STDIO
+=====
+PORT:               Console port 1
+ELECTRICAL:         na
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             N
+STOP BITS:          1
+
+Notes
+=====
+
+<tbd>

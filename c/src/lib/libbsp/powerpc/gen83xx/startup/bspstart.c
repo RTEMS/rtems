@@ -144,7 +144,7 @@ void bsp_calc_mem_layout()
    * not the object otself
    */
   extern unsigned char TopRamReserved;
-  extern unsigned char _WorkspaceBase;
+  extern unsigned char _WorkspaceBase[];
 
   /*
    * compute the memory layout:
@@ -152,7 +152,7 @@ void bsp_calc_mem_layout()
    * - Heap starts at end of workspace
    * - Heap ends at end of memory - reserved memory area
    */
-  BSP_Configuration.work_space_start = &_WorkspaceBase;
+  BSP_Configuration.work_space_start = _WorkspaceBase;
 
   BSP_heap_start = ((char *)BSP_Configuration.work_space_start +
                     BSP_Configuration.work_space_size);
