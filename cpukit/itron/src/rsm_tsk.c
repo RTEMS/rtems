@@ -37,7 +37,9 @@ ER rsm_tsk(
 
   the_thread = _ITRON_Task_Get( tskid, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
     case OBJECTS_ERROR:
       return _ITRON_Task_Clarify_get_id_error( tskid );
 

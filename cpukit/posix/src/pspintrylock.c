@@ -1,7 +1,7 @@
 /*
  *  POSIX Spinlock Manager -- Wait at a Spinlock
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,7 +47,9 @@ int pthread_spin_trylock(
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
     case OBJECTS_ERROR:
       return EINVAL;
 

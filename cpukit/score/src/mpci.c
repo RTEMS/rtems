@@ -2,7 +2,7 @@
  *  Multiprocessing Communications Interface (MPCI) Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -328,7 +328,9 @@ Thread_Control *_MPCI_Process_response (
   the_thread = _Thread_Get( the_packet->id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
       the_thread = NULL;          /* IMPOSSIBLE */
       break;
     case OBJECTS_LOCAL:

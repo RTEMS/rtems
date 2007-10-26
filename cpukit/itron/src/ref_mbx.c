@@ -1,7 +1,7 @@
 /*
  *  ITRON 3.0 Mailbox Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,7 +38,9 @@ ER ref_mbx(
 
   the_mailbox = _ITRON_Mailbox_Get( mbxid, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
     case OBJECTS_ERROR:
       return _ITRON_Mailbox_Clarify_get_id_error( mbxid );
 

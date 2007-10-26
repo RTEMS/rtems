@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -61,8 +61,8 @@ rtems_status_code rtems_task_delete(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
@@ -73,11 +73,13 @@ rtems_status_code rtems_task_delete(
     case OBJECTS_LOCAL:
       the_information = _Objects_Get_information( the_thread->Object.id );
 
+#if defined(RTEMS_DEBUG)
       if ( !the_information ) {
         _Thread_Enable_dispatch();
         return RTEMS_INVALID_ID;
         /* This should never happen if _Thread_Get() works right */
       }
+#endif
 
       _Thread_Close( the_information, the_thread );
 

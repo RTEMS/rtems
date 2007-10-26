@@ -15,7 +15,7 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -81,8 +81,8 @@ rtems_status_code rtems_semaphore_release(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
 
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       return _Semaphore_MP_Send_request_packet(
         SEMAPHORE_MP_RELEASE_REQUEST,
         id,

@@ -33,8 +33,10 @@ int pthread_setspecific(
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */
+#endif
+    case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
       api   = _Objects_Get_API( _Thread_Executing->Object.id );

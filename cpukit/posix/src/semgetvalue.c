@@ -37,10 +37,12 @@ int sem_getvalue(
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EINVAL );
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
+#endif
     case OBJECTS_LOCAL:
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
       _Thread_Enable_dispatch();

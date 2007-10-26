@@ -6,7 +6,7 @@
  *  This package is the implementation of the flush directive
  *  of the Semaphore Manager.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -71,8 +71,8 @@ rtems_status_code rtems_semaphore_flush(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
 
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif

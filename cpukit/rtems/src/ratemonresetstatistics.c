@@ -48,8 +48,10 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+#endif
 
     case OBJECTS_ERROR:
       return RTEMS_INVALID_ID;

@@ -228,8 +228,8 @@ int timer_delete(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
 #endif
@@ -292,8 +292,8 @@ int timer_settime(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return -1;
      rtems_set_errno_and_return_minus_one( EINVAL );
@@ -416,8 +416,8 @@ int timer_gettime(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
 #endif
@@ -465,8 +465,8 @@ int timer_getoverrun(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
 #endif

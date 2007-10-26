@@ -39,8 +39,8 @@ int _POSIX_Mutex_Lock_support(
 
   the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       return _POSIX_Mutex_MP_Send_request_packet(
           POSIX_MUTEX_MP_OBTAIN_REQUEST,
           *mutex,

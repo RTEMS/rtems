@@ -80,7 +80,9 @@ int pthread_mutex_init(
 
     mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
     switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
       case OBJECTS_REMOTE:
+#endif
       case OBJECTS_ERROR:
         break;
       case OBJECTS_LOCAL:

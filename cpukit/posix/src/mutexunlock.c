@@ -36,8 +36,8 @@ int pthread_mutex_unlock(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       return _POSIX_Mutex_MP_Send_request_packet(
           POSIX_MUTEX_MP_RELEASE_REQUEST,
           *mutex,

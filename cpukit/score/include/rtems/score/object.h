@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -287,8 +287,10 @@ typedef enum {
  */
 typedef enum {
   OBJECTS_LOCAL  = 0,         /* object is local */
-  OBJECTS_REMOTE = 1,         /* object is remote */
-  OBJECTS_ERROR  = 2          /* id was invalid */
+  OBJECTS_ERROR  = 1,         /* id was invalid */
+#if defined(RTEMS_MULTIPROCESSING)
+  OBJECTS_REMOTE = 2,         /* object is remote */
+#endif
 } Objects_Locations;
 
 /**

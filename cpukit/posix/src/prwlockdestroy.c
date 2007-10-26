@@ -1,7 +1,7 @@
 /*
  *  POSIX RWLock Manager -- Destroy a RWLock
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,7 +49,9 @@ int pthread_rwlock_destroy(
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {
 
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
     case OBJECTS_ERROR:
       return EINVAL;
 

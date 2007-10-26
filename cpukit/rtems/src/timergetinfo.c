@@ -2,7 +2,7 @@
  *  Timer Manager - rtems_timer_get_information directive
  *
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,8 +55,10 @@ rtems_status_code rtems_timer_get_information(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+#endif
 
     case OBJECTS_ERROR:
       return RTEMS_INVALID_ID;

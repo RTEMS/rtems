@@ -1,7 +1,7 @@
 /*
  *  Dual Port Memory Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,8 +58,10 @@ rtems_status_code rtems_port_internal_to_external(
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+#endif
 
     case OBJECTS_ERROR:
       return RTEMS_INVALID_ID;

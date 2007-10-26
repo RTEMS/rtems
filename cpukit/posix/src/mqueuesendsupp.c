@@ -64,10 +64,12 @@ int _POSIX_Message_queue_Send_support(
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EBADF );
 
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
+#endif
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_RDONLY ) {

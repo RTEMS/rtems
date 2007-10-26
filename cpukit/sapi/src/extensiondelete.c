@@ -2,7 +2,7 @@
  *  Extension Manager -- rtems_extension_delete
  *
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,7 +46,9 @@ rtems_status_code rtems_extension_delete(
   the_extension = _Extension_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:            /* should never return this */
+#endif
       return RTEMS_INVALID_ID;
     case OBJECTS_LOCAL:
       _User_extensions_Remove_set( &the_extension->Extension );

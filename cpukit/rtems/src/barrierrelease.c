@@ -1,7 +1,7 @@
 /*
  *  Barrier Manager -- Release Tasks Waitng at a Barrier
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,7 +50,9 @@ rtems_status_code rtems_barrier_release(
 
   the_barrier = _Barrier_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
     case OBJECTS_ERROR:
       return RTEMS_INVALID_ID;
 

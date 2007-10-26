@@ -36,10 +36,12 @@ int sem_destroy(
   switch ( location ) {
     case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( EINVAL );
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       rtems_set_errno_and_return_minus_one( EINVAL );
+#endif
     case OBJECTS_LOCAL:
       /*
        *  Undefined operation on a named semaphore.

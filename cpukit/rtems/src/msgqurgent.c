@@ -72,8 +72,8 @@ rtems_status_code rtems_message_queue_urgent(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location )
   {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       return _Message_queue_MP_Send_request_packet(
         MESSAGE_QUEUE_MP_URGENT_REQUEST,
         id,

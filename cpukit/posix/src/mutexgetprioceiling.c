@@ -37,8 +37,8 @@ int pthread_mutex_getprioceiling(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
 #endif
     case OBJECTS_ERROR:

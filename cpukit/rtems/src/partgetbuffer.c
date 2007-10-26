@@ -2,7 +2,7 @@
  *  Partition Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,8 +55,8 @@ rtems_status_code rtems_partition_get_buffer(
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = buffer;
       return(
         _Partition_MP_Send_request_packet(

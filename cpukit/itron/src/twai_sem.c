@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,7 +50,9 @@ ER twai_sem(
 
   the_semaphore = _ITRON_Semaphore_Get( semid, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:               /* Multiprocessing not supported */
+#endif
     case OBJECTS_ERROR:
       return _ITRON_Semaphore_Clarify_get_id_error( semid );
 

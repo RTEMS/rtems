@@ -2,7 +2,7 @@
  *  Region Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,9 +63,11 @@ rtems_status_code rtems_region_extend(
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
   the_region = _Region_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       _RTEMS_Unlock_allocator();
       return RTEMS_INTERNAL_ERROR;
+#endif
 
     case OBJECTS_ERROR:
       _RTEMS_Unlock_allocator();

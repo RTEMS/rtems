@@ -1,7 +1,7 @@
 /*
  *  3.3.10 Send a Signal to a Thread, P1003.1c/D10, p. 43
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,8 +47,10 @@ int pthread_kill(
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
       rtems_set_errno_and_return_minus_one( ESRCH );
     case OBJECTS_LOCAL:
       /*

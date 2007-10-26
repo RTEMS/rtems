@@ -53,8 +53,10 @@ int pthread_equal(
 
   (void) _POSIX_Threads_Get( t1, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
       /* return status == 0 */
       break;
 

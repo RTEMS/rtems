@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -85,8 +85,8 @@ rtems_status_code rtems_task_get_note(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
-    case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = note;
 
       return _RTEMS_tasks_MP_Send_request_packet(

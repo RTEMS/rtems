@@ -39,7 +39,7 @@ int pthread_cond_init(
    */
 
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    return POSIX_MP_NOT_IMPLEMENTED();
+    return EINVAL;
 
   if ( !the_attr->is_initialized )
     return EINVAL;

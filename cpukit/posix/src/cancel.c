@@ -42,8 +42,10 @@ int pthread_cancel(
   switch ( location ) {
     case OBJECTS_ERROR:
       return EINVAL;
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       return POSIX_MP_NOT_IMPLEMENTED();
+#endif
     case OBJECTS_LOCAL:
       thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
 

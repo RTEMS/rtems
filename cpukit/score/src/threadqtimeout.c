@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,7 +48,9 @@ void _Thread_queue_Timeout(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:  /* impossible */
+#endif
       break;
     case OBJECTS_LOCAL:
       _Thread_queue_Process_timeout( the_thread );

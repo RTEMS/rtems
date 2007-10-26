@@ -54,7 +54,9 @@ void _Rate_monotonic_Timeout(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
+#if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:  /* impossible */
+#endif
     case OBJECTS_ERROR:
       break;
 
