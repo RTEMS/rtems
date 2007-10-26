@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -59,13 +59,21 @@ composed of four ASCII characters which help identify that object.
 For example, a task which causes a light to blink might be
 called "LITE".  The @code{@value{DIRPREFIX}build_name} routine
 is provided to build an object name from four ASCII characters.  
-@ifset is-C
 The following example illustrates this:
 
+@ifset is-C
 @example
 rtems_object_name my_name;
 
 my_name = rtems_build_name( 'L', 'I', 'T', 'E' );
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+My_Name : RTEMS.Name;
+
+My_Name = RTEMS.Build_Name( 'L', 'I', 'T', 'E' );
 @end example
 @end ifset
 
@@ -76,13 +84,13 @@ assign meaningful ASCII names to each task.  A more convenient
 approach would be to name them the binary values one through
 one-hundred, respectively.
 
+@ifset is-C
 @findex rtems_get_object_name
 
 RTEMS provides a helper routine, @code{@value{DIRPREFIX}get_object_name},
 which can be used to obtain the name of any RTEMS object using just
 its ID.  This routine attempts to convert the name into a printable string.
 
-@ifset is-C
 The following example illustrates the use of this method to print
 an object name:
 

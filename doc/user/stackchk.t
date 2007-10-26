@@ -173,7 +173,7 @@ boolean rtems_stack_checker_is_blown( void );
 
 @ifset is-Ada
 @example
-An Ada interface is not currently available.
+function Stack_Checker_Is_Blown return RTEMS.Boolean;
 @end example
 @end ifset
 
@@ -207,7 +207,7 @@ void rtems_stack_checker_report_usage( void );
 
 @ifset is-Ada
 @example
-An Ada interface is not currently available.
+procedure Stack_Checker_Report_Usage;
 @end example
 @end ifset
 

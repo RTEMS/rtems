@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -313,9 +313,7 @@ rtems_mpci_entry user_mpci_initialization(
 
 @ifset is-Ada
 @example
-procedure User_MPCI_Initialization (
-   Configuration : in     RTEMS.Configuration_Table_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -351,9 +349,7 @@ rtems_mpci_entry user_mpci_get_packet(
 
 @ifset is-Ada
 @example
-procedure User_MPCI_Get_Packet (
-   Packet : access RTEMS.Packet_Prefix_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -388,9 +384,7 @@ rtems_mpci_entry user_mpci_return_packet(
 
 @ifset is-Ada
 @example
-procedure User_MPCI_Return_Packet (
-   Packet : in     RTEMS.Packet_Prefix_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -417,9 +411,7 @@ rtems_mpci_entry user_mpci_receive_packet(
 
 @ifset is-Ada
 @example
-procedure User_MPCI_Receive_Packet (
-   Packet : access RTEMS.Packet_Prefix_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -449,10 +441,7 @@ rtems_mpci_entry user_mpci_send_packet(
 
 @ifset is-Ada
 @example
-procedure User_MPCI_Send_Packet (
-   Node   : in     RTEMS.Unsigned32;
-   Packet : access RTEMS.Packet_Prefix_Pointer
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -596,7 +585,7 @@ void rtems_multiprocessing_announce( void );
 
 @ifset is-Ada
 @example
-procedure Multiprocessing_Announce;
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -66,9 +66,7 @@ rtems_isr user_isr(
 
 @ifset is-Ada
 @example
-procedure User_ISR (
-  vector : in     RTEMS.Vector_Number
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -261,12 +259,7 @@ rtems_status_code rtems_interrupt_catch(
 
 @ifset is-Ada
 @example
-procedure Interrupt_Catch (
-   New_ISR_handler : in     RTEMS.Address;
-   Vector          : in     RTEMS.Vector_Number;
-   Old_ISR_Handler :    out RTEMS.Address;
-   Result          :    out RTEMS.Status_Codes
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -313,8 +306,7 @@ void rtems_interrupt_disable(
 
 @ifset is-Ada
 @example
-function Interrupt_Disable
-return RTEMS.ISR_Level;
+function Interrupt_Disable return RTEMS.ISR_Level;
 @end example
 @end ifset
 
@@ -446,8 +438,7 @@ rtems_boolean rtems_interrupt_is_in_progress( void );
 
 @ifset is-Ada
 @example
-function Interrupt_Is_In_Progress
-return RTEMS.Boolean;
+function Interrupt_Is_In_Progress return RTEMS.Boolean;
 @end example
 @end ifset
 

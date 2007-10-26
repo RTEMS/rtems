@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2006.
+@c  COPYRIGHT (c) 1988-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -871,8 +871,8 @@ rtems_status_code rtems_task_start(
 @example
 procedure Task_Start (
    ID          : in     RTEMS.ID;
-   Entry_Point : in     System.Address;
-   Argument    : in     RTEMS.Task_Argument_PTR;
+   Entry_Point : in     RTEMS.Task_Entry;
+   Argument    : in     RTEMS.Task_Argument;
    Result      :    out RTEMS.Status_Codes
 );
 @end example
@@ -923,7 +923,7 @@ rtems_status_code rtems_task_restart(
 @example
 procedure Task_Restart (
    ID       : in     RTEMS.ID;
-   Argument : in     RTEMS.Task_Argument_PTR;
+   Argument : in     RTEMS.Task_Argument;
    Result   :    out RTEMS.Status_Codes
 );
 @end example
@@ -1631,7 +1631,7 @@ void rtems_iterate_over_all_threads(
 
 @ifset is-Ada
 @example
-NOT SUPPORTED FROM Ada
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 

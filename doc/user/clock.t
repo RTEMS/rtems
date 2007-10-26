@@ -351,33 +351,33 @@ indicated below:
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - (rtems_time_of_day *)
 
-@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - (rtems_interval *)
 
 @item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - (rtems_interval *)
 
-@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - (rtems_interval *)
-
 @item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - (rtems_interval *)
+
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - (rtems_clock_time_value *)
 
 @end itemize
 @end ifset
 
 @ifset is-Ada
 @itemize @bullet
-@item @code{@value{RPREFIX}CLOCK_GET_TOD} - Address of an variable of
+@item @code{@value{RPREFIX}Clock_Get_TOD} - Address of an variable of
 type RTEMS.Time_Of_Day
 
-@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - Address of an variable of
+@item @code{@value{RPREFIX}Clock_Get_Seconds_Since_Epoch} - Address of an
+variable of type RTEMS.Interval
+
+@item @code{@value{RPREFIX}Clock_Get_Ticks_Since_Boot} - Address of an
+variable of type RTEMS.Interval
+
+@item @code{@value{RPREFIX}Clock_Get_Ticks_Per_Second} - Address of an
+variable of type RTEMS.Interval
+
+@item @code{@value{RPREFIX}Clock_Get_Time_Value} - Address of an variable of
 type RTEMS.Clock_Time_Value
-
-@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - Address of an
-variable of type RTEMS.Interval
-
-@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an
-variable of type RTEMS.Interval
-
-@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - Address of an
-variable of type RTEMS.Interval
 
 @end itemize
 @end ifset
@@ -447,7 +447,7 @@ current date and time as well as timestamps.
 @c
 @c
 @page
-@subsection CLOCK_GET_UPTIME - Get the time since booy
+@subsection CLOCK_GET_UPTIME - Get the time since boot
 
 @cindex clock get uptime
 @cindex uptime
@@ -465,7 +465,10 @@ rtems_status_code rtems_clock_get_uptime(
 
 @ifset is-Ada
 @example
-NOT SUPPORTED FROM Ada BINDING
+procedure Clock_Get_Uptime (
+   Uptime :    out RTEMS.Timespec;
+   Result :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
@@ -503,7 +506,9 @@ rtems_status_code rtems_clock_tick( void );
 
 @ifset is-Ada
 @example
-NOT SUPPORTED FROM Ada BINDING
+procedure Clock_Tick (
+   Result :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
