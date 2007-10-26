@@ -42,18 +42,20 @@ void _Timespec_Divide(
   right  = rhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
   right += rhs->tv_nsec;
 
-  if ( rhs == 0 ) {
+  if ( right == 0 ) {
     *ival_percentage = 0;
-    *ival_percentage = 0;
+    *fval_percentage = 0;
     return;
   }
 
   /*
-   *  Put it back in the timespec result
+   *  Put it back in the timespec result.
+   *
+   *  TODO: Rounding on the last digit of the fval.
    */
 
   answer = (left * 100000) / right;
 
-  *fval_percentage = answer % 1000;
   *ival_percentage = answer / 1000;
+  *fval_percentage = answer % 1000;
 }

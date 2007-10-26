@@ -86,15 +86,12 @@ void rtems_cpu_usage_report_with_plugin(
     }
   #endif
   
-  #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-    (*print)( context, "--- CPU Usage times are seconds:microseconds ---\n" );
-  #endif
   (*print)( context, "CPU Usage by thread\n"
-    #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          "   ID        NAME     SECONDS  PERCENT\n"
-    #else
-          "   ID        NAME     TICKS    PERCENT\n"
-    #endif
+  #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
+     "   ID        NAME     SECONDS   PERCENT\n"
+  #else
+     "   ID        NAME     TICKS   PERCENT\n"
+  #endif
   );
 
   for ( api_index = 1 ;
@@ -112,7 +109,7 @@ void rtems_cpu_usage_report_with_plugin(
 
         rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
  
-        (*print)( context, "0x%08" PRIx32 "   %4s    ", the_thread->Object.id, name );
+        (*print)( context, "0x%08" PRIx32 "   %4s   ", the_thread->Object.id, name );
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           /*
@@ -134,7 +131,7 @@ void rtems_cpu_usage_report_with_plugin(
            */
 
           (*print)( context,
-            "%2" PRId32 ":%06" PRId32 " %3" PRId32 ".%02" PRId32 "\n",
+            "%3" PRId32 ".%06" PRId32 "  %3" PRId32 ".%03" PRId32 "\n",
             ran.tv_sec, ran.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND,
             ival, fval
           );
@@ -144,7 +141,7 @@ void rtems_cpu_usage_report_with_plugin(
           fval = ival % 100;
           ival /= 100;
           (*print)( context,
-            "%8" PRId32 "     %3" PRId32 ".%02" PRId32"\n",
+            "%8" PRId32 "  %3" PRId32 ".%02" PRId32"\n",
             the_thread->ticks_executed,
             ival,
             fval
@@ -165,7 +162,7 @@ void rtems_cpu_usage_report_with_plugin(
       "Ticks since last reset = %" PRId32 "\n",
       _Watchdog_Ticks_since_boot - CPU_usage_Ticks_at_last_reset
     );
-    (*print)( context, "Total Units = %" PRId32 "\n\n", total_units );
+    (*print)( context, "Total Units = %" PRId32 "\n", total_units );
   #endif
 }
 
