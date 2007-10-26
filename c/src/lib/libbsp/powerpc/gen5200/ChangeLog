@@ -1,3 +1,7 @@
+2007-10-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* irq/irq.h: Fixed typos.
+
 2007-09-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* network_5200/network.c: Add multicast support.

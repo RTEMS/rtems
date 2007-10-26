@@ -323,15 +323,15 @@ int BSP_irq_disable_at_siu(const rtems_irq_symbolic_name irqLine);
  */
 int BSP_irq_enable_at_siu(const rtems_irq_symbolic_name irqLine);
 /*
- * function to acknoledge a particular irq. After calling
+ * function to acknowledge a particular irq. After calling
  * this function, if a device asserts an enabled interrupt line it will
- * be propagated further to the processor. Mainly usefull for people
- * writting raw handlers as this is automagically done for rtems managed
+ * be propagated further to the processor. Mainly useful for people
+ * writing raw handlers as this is automagically done for rtems managed
  * handlers.
  */
 int BSP_irq_ack_at_siu(const rtems_irq_symbolic_name irqLine);
 /*
- * function to check if a particular irq is enabled. After calling
+ * function to check ifl d  a particular irq is enabled. After calling
  */
 int BSP_irq_enabled_at_siu(const rtems_irq_symbolic_name irqLine);
 
