@@ -1,3 +1,7 @@
+2007-10-26	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* user/rtmon.t: Fix report output.
+
 2007-10-25	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* user/barrier.t, user/clock.t, user/concepts.t, user/cpuuse.t,
