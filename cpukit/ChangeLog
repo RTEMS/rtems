@@ -1,3 +1,8 @@
+2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libi2c/README-libi2c
+	document structure of libi2c library 
+
 2007-10-25	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libi2c/libi2c.c, libi2c/libi2c.h:

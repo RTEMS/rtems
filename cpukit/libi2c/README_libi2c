@@ -72,6 +72,27 @@ sections:
   + the interface between the libi2c low level abstraction layer and
   the i2c controller driver (2<->1)
 
+===================================
+Differences between i2c and spi bus
+===================================
+SPI and I2C has many similarities, but also some differences:
+
+- I2C uses inband addressing (the first bits sent select, which slave
+device is addressed) while SPI uses dedicated select lines to address
+a slave device
+
+- SPI supports combined full duplex read-write transactions while I2C
+either sends or receives data from a slave device
+
+- SPI supports a varity of per-slave options, which include:
+  - number of bits per character to transfer
+  - polarity and phase of clock wrt data
+  - clock frequency
+
+The libi2c API defines a superset of functions to handle both flavours
+of serial data transmission, but care should be taken not to use
+features dedicated to the wrong type of serial bus.
+
 
 ======================
 Library Initialization
@@ -111,10 +132,36 @@ subsequent calls to register devices attached to this bus (see below).
 Typically the BSP startup code will perform this registration for each
 bus available on the board.
 
-===================
-Device Registration
-===================
-tbd
+==========================
+Device/Driver Registration
+==========================
+Each device attached to an i2c or spi bus must be registered with a
+call to
+
+int
+rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
+                           unsigned bus, unsigned i2caddr);
+
+With this call, libi2c is informed, that:
+
+- a device is attached to the given "bus" number (which in fact is the
+return value received from a previous rtems_libi2c_register_bus()
+call) with the address "i2caddr"
+
+- the device is managed by a driver, who's entry functions are listed
+  in "drvtbl"
+
+- the device should be registered with the given "name" in the device
+  tree of the filesystem.
+
+The call will create a proper minor device number, which has the bus
+number and i2c_address encoded. This minor number is the return value
+of the call and is also associated with the filesystem node created
+for this device.
+
+Note: If you have multiple devices of the same type, you must register
+each of them through a separate call (with the same "drvtbl", but
+different name/bus/i2caddr).
 
 ====================================================================
 (5<->4) RTEMS I/O Manager and the libi2c OS adaption layer IF
@@ -137,7 +184,9 @@ static rtems_driver_address_table libi2c_io_ops = {
 };
 
 These calls perform some parameter checking and then call the
-appropriate high level i2c device driver function, if available.
+appropriate high level i2c device driver function, if available,
+according to the entries in the "drvtbl" passed in the
+rtems_libi2c_register_drv() call.
 
 There are two exceptions: when i2c_read or i2c_write is called with a
 minor number specifying a bus (and not a device attached to the bus),
@@ -145,7 +194,7 @@ then the respective transfer is performed as a raw byte stream
 transfer to the bus.
 
 The main reason for the libi2c OS adaption layer is, that it
-dispatches the RTEMS I/O Manager calles to the proper device driver
+dispatches the RTEMS I/O Manager calls to the proper device driver
 according to the minor number used.
 
 ====================================================================
@@ -154,25 +203,143 @@ libi2c OS adaption layer and the high level i2c device driver IF
 
 Each high level i2c device driver provides a set of functions in the
 rtems_libi2c_drv_t data structure passed the libi2c when the device is
-registered (see "Device registration"). These function directly match
+registered (see "Device registration" above). These function directly match
 the RTEMS I/O Mangers calls "open", "close", "read", "write",
 "control", and they are passed the same arguments. Functions not
-needed may be ommited. 
+needed may be ommited (and replaced by a NULL pointer in
+rtems_libi2c_drv_t).
 
 ======================================================================
 high level i2c device driver and libi2c low level abstraction layer IF
 ======================================================================
-tbd
+libi2c provides a set of functions for the high level drivers. These
+functions are:
+
+rtems_libi2c_send_start();
+rtems_libi2c_send_stop();
+rtems_libi2c_send_addr();
+rtems_libi2c_read_bytes();
+rtems_libi2c_write_bytes();
+rtems_libi2c_start_read_bytes();
+rtems_libi2c_start_write_bytes();
+rtems_libi2c_ioctl();
+
+Please look into libi2c.h for the proper parameters and return codes.
+
+These functions perform the proper i2c operations when called. 
+
+A typical access sequence for the I2C bus would be:
+
+rtems_libi2c_send_start();
+rtems_libi2c_send_addr();
+rtems_libi2c_write_bytes();
+rtems_libi2c_send_stop();
+
+Alternatively, the rtems_libi2c_write_bytes() call could be relpaced
+with a 
+          rtems_libi2c_read_bytes() 
+
+call or a sequence of multiple calls.
+
+Note: rtems_libi2c_send_start() locks the i2c/spi bus used, so no other
+device can use this i2c/spi bus, until rtems_libi2c_send_stop() function
+is called for the same device.
+
+Special provisions for SPI devices:
+===================================
+For SPI devices and their drivers, the libi2c interface is used
+slightly differently:
+
+rtems_libi2c_send_start() will lock access to the SPI bus, but has no
+effect on the hardware bus interface.
+
+rtems_libi2c_ioctl(...,RTEMS_LIBI2C_IOCTL_SET_TFRMODE,...) will set
+the transfer mode (bit rate, clock phase and polaritiy, bits per
+char...) according to the rtems_libi2c_tfr_mode_t structure passed in.
+
+rtems_libi2c_send_addr() will activate the proper select line to
+address a certain SPI device. The correspondance between an address
+and the select line pulled is BSP specific.
+
+rtems_libi2c_send_stop(); will deactivate the address line and unlock
+the bus.
+
+A typical access sequence for the SPI bus would be:
+
+rtems_libi2c_send_start();
+rtems_libi2c_ioctl(...,RTEMS_LIBI2C_IOCTL_SET_TFRMODE,...);
+rtems_libi2c_send_addr();
+rtems_libi2c_write_bytes();
+rtems_libi2c_send_stop();
+
+Alternatively, the rtems_libi2c_write_bytes() call could be relpaced
+with a 
+         rtems_libi2c_read_bytes() 
+or a 
+         rtems_libi2c_ioctl(...,RTEMS_LIBI2C_IOCTL_READ_WRITE,...)
+call or a sequence of multiple calls.
 
 ====================================================================
 libi2c low level abstraction layer and i2c controller driver IF
 ====================================================================
-tbd
+Each low level i2c/spi driver must provide a set of bus_ops functions
+as defined in the rtems_libi2c_bus_ops_t structure.
 
-Differences between i2c and spi device drivers
-==================================================
-tbd
+typedef struct rtems_libi2c_bus_ops_
+{
+  /* Initialize the bus; might be called again to reset the bus driver */
+  rtems_status_code (*init) (rtems_libi2c_bus_t * bushdl);
+  /* Send start condition */
+  rtems_status_code (*send_start) (rtems_libi2c_bus_t * bushdl);
+  /* Send stop  condition */
+  rtems_status_code (*send_stop) (rtems_libi2c_bus_t * bushdl);
+  /* initiate transfer from (rw!=0) or to a device */
+  rtems_status_code (*send_addr) (rtems_libi2c_bus_t * bushdl,
+                                  uint32_t addr, int rw);
+  /* read a number of bytes */
+  int (*read_bytes) (rtems_libi2c_bus_t * bushdl, unsigned char *bytes,
+                     int nbytes);
+  /* write a number of bytes */
+  int (*write_bytes) (rtems_libi2c_bus_t * bushdl, unsigned char *bytes,
+                      int nbytes);
+  /* ioctl misc functions */
+  int (*ioctl) (rtems_libi2c_bus_t * bushdl, 
+		int   cmd,
+		void *buffer;
+		);
+} rtems_libi2c_bus_ops_t;
 
-Differences between i2c and spi controller drivers
-==================================================
-tbd
+Each of these functions performs the corresponding function to the i2c
+bus. 
+
+Special provisions for SPI devices:
+===================================
+For SPI busses, special behaviour is required:
+
+(*send_start) (rtems_libi2c_bus_t * bushdl) 
+	      normally is an empty function.
+
+ (*send_addr) (rtems_libi2c_bus_t * bushdl, uint32_t addr, int rw)
+              will activate the SPI select line matching to addr.
+
+(*send_stop) (rtems_libi2c_bus_t * bushdl) 
+              will deactivate the SPI select line 
+
+(*ioctl(...,RTEMS_LIBI2C_IOCTL_SET_TFRMODE,...) 
+             will set the transfer mode (bit rate, clock phase and
+             polaritiy, bits per char...) according to the
+             rtems_libi2c_tfr_mode_t structure passed in. 
+
+(*ioctl(...,RTEMS_LIBI2C_IOCTL_READ_WRITE,...) 
+             will send and receive data at the same time.
+
+Note: 
+
+- low-level I2C drivers normally are specific to the master
+device, but independent from the board hardware. So in many cases they
+can totally reside in libcpu or libchip.
+
+- low-level SPI drivers are mostly board independent, but the
+  addressing is board/BSP dependent. Therefore the (*send_start),
+  (*send_addr) and (*send_stop) functions are typically defined in the
+  BSP. The rest of the functions can reside in libcpu or libchip.
