@@ -41,7 +41,14 @@ rtems_task Task_2(
   while ( !testsFinished );
 
   showTaskSwitches ();
+  puts( "" );
   rtems_cpu_usage_report();
+  puts( "" );
+  puts( "TA2 - RESETTING USAGE STATISTICS" );
+  rtems_cpu_usage_reset();
+  puts( "" );
+  rtems_cpu_usage_report();
+  puts( "" );
   puts( "*** END OF CPU USAGE LIBRARY TEST ***" );
   rtems_test_exit( 0 );
 }

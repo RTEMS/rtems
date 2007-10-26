@@ -106,12 +106,23 @@ rtems_task Task_1_through_5(
         FLUSH_OUTPUT();
 
         if ( pass == 10 ) {
-          puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
-          puts( "" );
-          rtems_cpu_usage_report();
           puts( "" );
           rtems_rate_monotonic_report_statistics();
+
+          rtems_rate_monotonic_reset_statistics( rmid );
           puts( "" );
+          puts( "TA5 - PERIOD STATISTICS RESET" );
+          puts( "" );
+          rtems_rate_monotonic_report_statistics();
+
+          rtems_rate_monotonic_reset_all_statistics();
+          puts( "" );
+          puts( "TA5 - ALL PERIOD STATISTICS RESET" );
+          puts( "" );
+          rtems_rate_monotonic_report_statistics();
+
+          puts( "" );
+          puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
 
           rtems_test_exit( 0 );
         }
