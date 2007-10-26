@@ -1,3 +1,15 @@
+2007-10-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl: No longer inline _Thread_Get. It
+	resulted in unnessary code explosion, many uncovered paths when
+	looking at binary executable coverage, and only optimized getting
+	self. Id translations were still getting pushed to a subroutine call
+	to _Objects_Get. Later the non-inlined version can be further
+	optimized to get Ids in range for the current API, then self, then
+	look at other APIs.
+	* score/src/threadget.c: New file.
+
 2007-10-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libi2c/README-libi2c

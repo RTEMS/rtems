@@ -126,7 +126,7 @@ libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
     src/threaddelayended.c src/threaddispatch.c src/threadevaluatemode.c \
-    src/threadhandler.c src/threadidlebody.c \
+    src/threadget.c src/threadhandler.c src/threadidlebody.c \
     src/threadinitialize.c src/threadloadenv.c src/threadready.c \
     src/threadresettimeslice.c src/threadreset.c src/threadrestart.c \
     src/threadresume.c src/threadrotatequeue.c src/threadsetpriority.c \
