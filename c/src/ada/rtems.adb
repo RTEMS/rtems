@@ -17,7 +17,7 @@
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
 --
---  rtems.adb,v 1.13.2.2 2003/09/04 18:46:47 joel Exp
+--  $Id$
 --
 
 with Ada;
@@ -216,6 +216,21 @@ package body RTEMS is
    --
 
    --
+   --  Initialization Manager -- Shutdown Only
+   --
+   procedure Shutdown_Executive (
+      Status           : in     RTEMS.Unsigned32
+   ) is
+      procedure Shutdown_Executive_Base (
+         Status : RTEMS.Unsigned32
+      );
+      pragma Import (C, Shutdown_Executive_Base, "rtems_shutdown_executive");
+   begin
+      Shutdown_Executive_Base (Status);
+   end Shutdown_Executive;
+  
+
+   --
    --  Task Manager
    --
 
@@ -348,6 +363,20 @@ package body RTEMS is
 
    end Task_Resume;
  
+   procedure Task_Is_Suspended (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Task_Is_Suspended_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Task_Is_Suspended_Base, "rtems_task_is_suspended");
+   begin
+
+      Result := Task_Is_Suspended_Base ( ID );
+
+   end Task_Is_Suspended;
+ 
    procedure Task_Set_Priority (
       ID           : in     RTEMS.ID;
       New_Priority : in     RTEMS.Task_Priority;
@@ -434,6 +463,72 @@ package body RTEMS is
 
    end Task_Set_Note;
  
+   procedure Task_Variable_Add (
+      ID            : in     RTEMS.ID;
+      Task_Variable : in     RTEMS.Address;
+      Dtor          : in     RTEMS.Task_Variable_Dtor;
+      Result        :    out RTEMS.Status_Codes
+   ) is
+      function Task_Variable_Add_Base (
+         ID            : RTEMS.ID;
+         Task_Variable : RTEMS.Address;
+         Dtor          : RTEMS.Task_Variable_Dtor
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Task_Variable_Add_Base, "rtems_task_variable_add");
+   begin
+
+      Result := Task_Variable_Add_Base ( ID, Task_Variable, Dtor );
+
+   end Task_Variable_Add;
+
+   procedure Task_Variable_Get (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Task_Variable_Value :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   ) is
+      function Task_Variable_Get_Base (
+         ID                  : RTEMS.ID;
+         Task_Variable       : access RTEMS.Address;
+         Task_Variable_Value : access RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Task_Variable_Get_Base, "rtems_task_variable_get");
+      Task_Variable_Base       : aliased RTEMS.Address;
+      Task_Variable_Value_Base : aliased RTEMS.Address;
+   begin
+
+      Result := Task_Variable_Get_Base (
+         ID,
+         Task_Variable_Base'Unchecked_Access,
+         Task_Variable_Value_Base'Unchecked_Access
+      );
+      Task_Variable := Task_Variable_Base;
+      Task_Variable_Value := Task_Variable_Value_Base;
+
+   end Task_Variable_Get;
+
+   procedure Task_Variable_Delete (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   ) is
+      function Task_Variable_Delete_Base (
+         ID                  : RTEMS.ID;
+         Task_Variable       : access RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (
+         C, Task_Variable_Delete_Base, "rtems_task_variable_delete"
+      );
+      Task_Variable_Base : aliased RTEMS.Address;
+   begin
+
+      Result := Task_Variable_Delete_Base (
+         ID, Task_Variable_Base'Unchecked_Access
+      );
+      Task_Variable := Task_Variable_Base;
+
+   end Task_Variable_Delete;
+
    procedure Task_Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
       Result      :    out RTEMS.Status_Codes
@@ -466,30 +561,6 @@ package body RTEMS is
    -- Interrupt Manager
    --
 
-   procedure Interrupt_Catch (
-      New_ISR_Handler : in     RTEMS.Address;
-      Vector          : in     RTEMS.Vector_Number;
-      Old_ISR_Handler :    out RTEMS.Address;
-      Result          :    out RTEMS.Status_Codes
-   ) is
-      function Interrupt_Catch_Base (
-         New_ISR_Handler : RTEMS.Address;
-         Vector          : RTEMS.Vector_Number;
-         Old_ISR_Handler : access RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, Interrupt_Catch_Base, "rtems_interrupt_catch");
-      Old_ISR_Handler_Base : aliased RTEMS.Address;
-   begin
- 
-      Result := Interrupt_Catch_Base (
-         New_ISR_Handler,
-         Vector,
-         OLD_ISR_HANDLER_Base'Unchecked_Access
-      );
-      Old_ISR_Handler := OLD_ISR_HANDLER_Base;
- 
-   end Interrupt_Catch;
-
    -- Interrupt_Disable is interfaced in the specification
    -- Interrupt_Enable is interfaced in the specification
    -- Interrupt_Flash is interfaced in the specification
@@ -499,35 +570,53 @@ package body RTEMS is
    -- Clock Manager
    -- 
  
+   procedure Clock_Set (
+      Time_Buffer : in     RTEMS.Time_Of_Day;
+      Result      :    out RTEMS.Status_Codes
+   ) is
+      function Clock_Set_Base (
+         Time_Buffer : RTEMS.Time_Of_Day
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Clock_Set_Base, "rtems_clock_set");
+   begin
+ 
+      Result := Clock_Set_Base ( Time_Buffer );
+
+   end Clock_Set;
+ 
    procedure Clock_Get (
       Option      : in     RTEMS.Clock_Get_Options;
       Time_Buffer : in     RTEMS.Address;
       Result      :    out RTEMS.Status_Codes
    ) is
-      function Clock_Get_base (
+      function Clock_Get_Base (
          Option      : RTEMS.Clock_Get_Options;
          Time_Buffer : RTEMS.Address
       )  return RTEMS.Status_Codes;
-      pragma Import (C, Clock_Get_base, "rtems_clock_get");
+      pragma Import (C, Clock_Get_Base, "rtems_clock_get");
    begin
 
-      Result := Clock_Get_base ( Option, Time_Buffer );
+      Result := Clock_Get_Base ( Option, Time_Buffer );
 
    end Clock_Get;
  
-   procedure Clock_Set (
-      Time_Buffer : in     RTEMS.Time_Of_Day;
-      Result      :    out RTEMS.Status_Codes
+   procedure Clock_Get_Uptime (
+      Uptime :    out RTEMS.Timespec;
+      Result :    out RTEMS.Status_Codes
    ) is
-      function Clock_Set_base (
-         Time_Buffer : RTEMS.Time_Of_Day
+      function Clock_Get_Uptime_Base (
+         Uptime : access RTEMS.Timespec
       )  return RTEMS.Status_Codes;
-      pragma Import (C, Clock_Set_base, "rtems_clock_set");
+      pragma Import (C, Clock_Get_Uptime_Base, "rtems_clock_get_uptime");
+      Uptime_Base : aliased RTEMS.Timespec;
    begin
- 
-      Result := Clock_Set_base ( Time_Buffer );
 
-   end Clock_Set;
+      Result := Clock_Get_Uptime_Base (
+         Uptime_Base'Unchecked_Access
+      );
+      Uptime := Uptime_Base;
+
+   end Clock_Get_Uptime;
  
    procedure Clock_Tick (
       Result :    out RTEMS.Status_Codes
@@ -539,7 +628,7 @@ package body RTEMS is
       Result := Clock_Tick_Base;
 
    end Clock_Tick;
- 
+
    --
    -- Extension Manager
    --
@@ -890,6 +979,20 @@ package body RTEMS is
 
    end Semaphore_Release;
  
+   procedure Semaphore_Flush (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Semaphore_Flush_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Semaphore_Flush_Base, "rtems_semaphore_flush");
+   begin
+ 
+      Result := Semaphore_Flush_Base ( ID );
+
+   end Semaphore_Flush;
+ 
    --
    -- Message Queue Manager
    --
@@ -1057,6 +1160,30 @@ package body RTEMS is
       Size := Size_Base;
 
    end Message_Queue_Receive;
+ 
+   procedure Message_Queue_Get_Number_Pending (
+      ID     : in     RTEMS.ID;
+      Count  :    out RTEMS.Unsigned32;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Message_Queue_Get_Number_Pending_Base (
+         ID    : RTEMS.ID;
+         Count : access RTEMS.Unsigned32
+      )  return RTEMS.Status_Codes;
+      pragma Import (
+         C,
+         Message_Queue_Get_Number_Pending_Base,
+         "rtems_message_queue_get_number_pending"
+      );
+      COUNT_Base : aliased RTEMS.Unsigned32;
+   begin
+ 
+      Result := Message_Queue_Get_Number_Pending_Base (
+         ID, COUNT_Base'Unchecked_Access
+      );
+      Count := COUNT_Base;
+
+   end Message_Queue_Get_Number_Pending;
  
    procedure Message_Queue_Flush (
       ID     : in     RTEMS.ID;
@@ -1426,6 +1553,34 @@ package body RTEMS is
 
    end Region_Return_Segment;
  
+   procedure Region_Resize_Segment (
+      ID         : in     RTEMS.ID;
+      Segment    : in     RTEMS.Address;
+      Size       : in     RTEMS.Unsigned32;
+      Old_Size   :    out RTEMS.Unsigned32;
+      Result     :    out RTEMS.Status_Codes
+   ) is
+      function Region_Resize_Segment_Base (
+         ID       : RTEMS.ID;
+         Segment  : RTEMS.Address;
+         Size     : RTEMS.Unsigned32;
+         Old_Size : access RTEMS.Unsigned32
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Region_Resize_Segment_Base,
+         "rtems_region_resize_segment");
+      Old_Size_Base : aliased RTEMS.Unsigned32;
+   begin
+ 
+      Result := Region_Resize_Segment_Base (
+         ID,
+         Segment,
+         Size,
+         Old_Size_Base'Unchecked_Access
+      );
+      Old_Size := Old_Size_Base;
+
+   end Region_Resize_Segment;
+
    --
    -- Dual Ported Memory Manager
    --
@@ -1542,139 +1697,6 @@ package body RTEMS is
 
    end Port_Internal_To_External;
  
-   --
-   -- Input/Output Manager
-   --
- 
-   procedure IO_Register_Name (
-      Name   : in     String;
-      Major  : in     RTEMS.Device_Major_Number;
-      Minor  : in     RTEMS.Device_Minor_Number;
-      Result :    out RTEMS.Status_Codes
-   ) is
-      function IO_Register_Name_Base (
-         Name   : Interfaces.C.Char_Array;
-         Major  : RTEMS.Device_Major_Number;
-         Minor  : RTEMS.Device_Minor_Number
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Register_Name_Base, "rtems_io_register_name");
-   begin
-
-      Result :=
-         IO_Register_Name_Base ( Interfaces.C.To_C (Name), Major, Minor );
-
-   end IO_Register_Name;
-
-   procedure IO_Lookup_Name (
-      Name         : in     String;
-      Device_Info  : in     RTEMS.Driver_Name_t_Pointer;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Lookup_Name_Base (
-         Name        : Interfaces.C.Char_Array;
-         Device_Info : access RTEMS.Driver_Name_t
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Lookup_Name_Base, "rtems_io_lookup_name");
-      Device_Info_Base : aliased RTEMS.Driver_Name_t;
-   begin
-
-      Result := IO_Lookup_Name_Base (
-         Interfaces.C.To_C (Name),
-         Device_Info_Base'Unchecked_Access
-      );
-      Device_Info.All := Device_Info_Base;
-
-   end IO_Lookup_Name;
-
-   procedure IO_Open (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Open_Base (
-         Major        : RTEMS.Device_Major_Number;
-         Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Open_Base, "rtems_io_open");
-   begin
- 
-      Result := IO_Open_Base (Major, Minor, Argument);
- 
-   end IO_Open;
- 
-   procedure IO_Close (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Close_Base (
-         Major        : RTEMS.Device_Major_Number;
-         Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Close_Base, "rtems_io_close");
-   begin
- 
-      Result := IO_Close_Base (Major, Minor, Argument);
- 
-   end IO_Close;
- 
-   procedure IO_Read (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Read_Base (
-         Major        : RTEMS.Device_Major_Number;
-         Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Read_Base, "rtems_io_read");
-   begin
- 
-      Result := IO_Read_Base (Major, Minor, Argument);
- 
-   end IO_Read;
- 
-   procedure IO_Write (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Write_Base (
-         Major        : RTEMS.Device_Major_Number;
-         Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Write_Base, "rtems_io_write");
-   begin
- 
-      Result := IO_Write_Base (Major, Minor, Argument);
- 
-   end IO_Write;
- 
-   procedure IO_Control (
-      Major        : in     RTEMS.Device_Major_Number;
-      Minor        : in     RTEMS.Device_Minor_Number;
-      Argument     : in     RTEMS.Address;
-      Result       :    out RTEMS.Status_Codes
-   ) is
-      function IO_Control_Base (
-         Major        : RTEMS.Device_Major_Number;
-         Minor        : RTEMS.Device_Minor_Number;
-         Argument     : RTEMS.Address
-      )  return RTEMS.Status_Codes;
-      pragma Import (C, IO_Control_Base, "rtems_io_control");
-   begin
- 
-      Result := IO_Control_Base (Major, Minor, Argument);
- 
-   end IO_Control;
  
    --
    -- Fatal Error Manager
@@ -1683,7 +1705,7 @@ package body RTEMS is
    procedure Fatal_Error_Occurred (
       The_Error : in     RTEMS.Unsigned32
    ) is
-      procedure Fatal_Error_Occurred_base (
+      procedure Fatal_Error_Occurred_Base (
          The_Error : RTEMS.Unsigned32
       );
    pragma Import (C, Fatal_Error_Occurred_Base, "rtems_fatal_error_occurred");
@@ -1703,15 +1725,15 @@ package body RTEMS is
       ID     :    out RTEMS.ID;
       Result :    out RTEMS.Status_Codes
    ) is
-      function Rate_Monotonic_Create_base (
+      function Rate_Monotonic_Create_Base (
          Name   : RTEMS.Name;
          ID     : access RTEMS.ID
       )  return RTEMS.Status_Codes;
-      pragma Import (C, Rate_Monotonic_Create_base, "rtems_rate_monotonic_create");
+      pragma Import (C, Rate_Monotonic_Create_Base, "rtems_rate_monotonic_create");
       ID_Base : aliased RTEMS.ID;
    begin
  
-      Result := Rate_Monotonic_Create_base ( Name, ID_Base'Unchecked_Access );
+      Result := Rate_Monotonic_Create_Base ( Name, ID_Base'Unchecked_Access );
       ID := ID_Base;
 
    end Rate_Monotonic_Create;
@@ -1746,7 +1768,7 @@ package body RTEMS is
          "rtems_rate_monotonic_delete");
    begin
  
-      Result := Rate_Monotonic_Delete_base ( ID );
+      Result := Rate_Monotonic_Delete_Base ( ID );
 
    end Rate_Monotonic_Delete;
  
@@ -1778,10 +1800,9 @@ package body RTEMS is
          "rtems_rate_monotonic_period");
    begin
  
-      Result := Rate_Monotonic_Period_base ( ID, Length );
+      Result := Rate_Monotonic_Period_Base ( ID, Length );
 
    end Rate_Monotonic_Period;
- 
  
    procedure Rate_Monotonic_Get_Status (
       ID      : in     RTEMS.ID;
@@ -1807,6 +1828,117 @@ package body RTEMS is
 
 
    end Rate_Monotonic_Get_Status;
+
+   procedure Rate_Monotonic_Reset_Statistics (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Rate_Monotonic_Reset_Statistics_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Rate_Monotonic_Reset_Statistics_Base,
+         "rtems_rate_monotonic_reset_statistics");
+   begin
+
+      Result := Rate_Monotonic_Reset_Statistics_Base ( ID );
+
+   end Rate_Monotonic_Reset_Statistics;
+
+
+   --
+   -- Barrier Manager
+   --
+
+   procedure Barrier_Create (
+      Name            : in     RTEMS.Name;
+      Attribute_Set   : in     RTEMS.Attribute;
+      Maximum_Waiters : in     RTEMS.Unsigned32;
+      ID              :    out RTEMS.ID;
+      Result          :    out RTEMS.Status_Codes
+   ) is
+      function Barrier_Create_Base (
+         Name            : RTEMS.Name;
+         Attribute_Set   : RTEMS.Attribute;
+         Maximum_Waiters : RTEMS.Unsigned32;
+         ID              : access RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Barrier_Create_Base, "rtems_barrier_create");
+      ID_Base : aliased RTEMS.ID;
+   begin
+
+      Result := Barrier_Create_Base (
+         Name,
+         Attribute_Set,
+         Maximum_Waiters,
+         ID_Base'Unchecked_Access
+      );
+      ID := ID_Base;
+
+   end Barrier_Create;
+
+   procedure Barrier_Ident (
+      Name   : in     RTEMS.Name;
+      ID     :    out RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Barrier_Ident_Base (
+         Name : RTEMS.Name;
+         ID   : access RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Barrier_Ident_Base, "rtems_barrier_ident");
+      ID_Base : aliased RTEMS.ID;
+   begin
+
+      Result := Barrier_Ident_Base ( Name, ID_Base'Unchecked_Access );
+      ID := ID_Base;
+
+   end Barrier_Ident;
+
+   procedure Barrier_Delete (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Barrier_Delete_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Barrier_Delete_Base, "rtems_barrier_delete");
+   begin
+
+      Result := Barrier_Delete_Base ( ID );
+
+   end Barrier_Delete;
+
+   procedure Barrier_Wait (
+      ID         : in     RTEMS.ID;
+      Option_Set : in     RTEMS.Option;
+      Timeout    : in     RTEMS.Interval;
+      Result     :    out RTEMS.Status_Codes
+   ) is
+      function Barrier_Wait_Base (
+         ID         : RTEMS.ID;
+         Option_Set : RTEMS.Option;
+         Timeout    : RTEMS.Interval
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Barrier_Wait_Base, "rtems_barrier_wait");
+   begin
+
+      Result := Barrier_Wait_Base ( ID, Option_Set, Timeout );
+
+   end Barrier_Wait;
+
+   procedure Barrier_Release (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Barrier_Release_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Barrier_Release_Base, "rtems_barrier_release");
+   begin
+
+      Result := Barrier_Release_Base ( ID );
+
+   end Barrier_Release;
 
  
    --

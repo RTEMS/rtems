@@ -1,3 +1,8 @@
+2007-10-26	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* rtems.adb, rtems.ads: Merge binding updates from CVS head. Bindings
+	should now be reasonably in sync with C Classic API.
+
 2007-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb: Fix warnings.
