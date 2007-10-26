@@ -1,3 +1,10 @@
+2007-10-26	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* libmisc/cpuuse/cpuusagereport.c, rtems/src/ratemonreportstatistics.c:
+	Cleaned up reports and fixed a bug related the printf format which
+	resulted in lack of leading zeroes and misleading magnitude.
+	* score/src/timespecdivide.c: Fixed bugs related to zero divide case.
+
 2007-10-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* itron/src/can_wup.c, itron/src/chg_pri.c, itron/src/del_mbf.c,

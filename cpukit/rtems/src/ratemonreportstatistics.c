@@ -29,7 +29,7 @@
   /* We print to 1/10's of milliseconds */
   #define NANOSECONDS_DIVIDER 1000
   #define PERCENT_FMT     "%04" PRId32
-  #define NANOSECONDS_FMT "%" PRId32
+  #define NANOSECONDS_FMT "%06" PRId32
 #endif
 
 /*
@@ -55,12 +55,11 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
     return;
 
   (*print)( context, "Period information by period\n" );
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
-  (*print)( context, "--- Period times are seconds:microseconds ---\n" );
-#endif
-    
 #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  (*print)( context, "--- CPU Usage times are seconds:microseconds ---\n" );
+  (*print)( context, "--- CPU times are in seconds ---\n" );
+#endif
+#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
+  (*print)( context, "--- Wall times are in seconds ---\n" );
 #endif
 /*
 Layout by columns -- in memory of Hollerith :)
@@ -71,18 +70,35 @@ ididididid NNNN ccccc mmmmmm X
 
   Uncomment the following if you are tinkering with the formatting.
   Be sure to test the various cases.
-*/
   (*print)( context,"\
 1234567890123456789012345678901234567890123456789012345678901234567890123456789\
 \n");
-  (*print)( context, "   ID     OWNER COUNT MISSED     CPU TIME     "
+*/
+  (*print)( context, "   ID     OWNER COUNT MISSED     "
+       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          "     "
+       #endif
+          "CPU TIME     "
        #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           "    "
        #endif
        #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-          "   "
+          "      "
        #endif
           "   WALL TIME\n"
+  );
+  (*print)( context, "                               "
+       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          "     "
+       #endif
+          "MIN/MAX/AVG    "
+       #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+          "    "
+       #endif
+       #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+          "      "
+       #endif
+          "  MIN/MAX/AVG\n"
   );
 
   /*
@@ -99,9 +115,6 @@ ididididid NNNN ccccc mmmmmm X
     /* If the above passed, so should this but check it anyway */
     status = rtems_rate_monotonic_get_status( id, &the_status );
     if ( status != RTEMS_SUCCESSFUL )
-      continue;
-    
-    if ( the_stats.count == 0 )
       continue;
 
     name[ 0 ] = '\0';
@@ -121,6 +134,15 @@ ididididid NNNN ccccc mmmmmm X
     );
 
     /*
+     *  If the count is zero, don't print statistics
+     */
+
+    if (the_stats.count == 0) {
+      (*print)( context, "\n" );
+      continue;
+    }
+
+    /*
      *  print CPU Usage part of statistics
      */
     {
@@ -133,9 +155,9 @@ ididididid NNNN ccccc mmmmmm X
          &cpu_average
       );
       (*print)( context,
-        "%" PRId32 ":"  NANOSECONDS_FMT "/"        /* min cpu time */
-        "%" PRId32 ":"  NANOSECONDS_FMT "/"        /* max cpu time */
-        "%" PRId32 ":"  NANOSECONDS_FMT " ",       /* avg cpu time */
+        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* min cpu time */
+        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* max cpu time */
+        "%" PRId32 "."  NANOSECONDS_FMT " ",       /* avg cpu time */
         the_stats.min_cpu_time.tv_sec, 
           the_stats.min_cpu_time.tv_nsec / NANOSECONDS_DIVIDER,
         the_stats.max_cpu_time.tv_sec,
@@ -169,9 +191,9 @@ ididididid NNNN ccccc mmmmmm X
          &wall_average
       );
       (*print)( context,
-        "%" PRId32 ":" PERCENT_FMT "/"        /* min wall time */
-        "%" PRId32 ":" PERCENT_FMT "/"        /* max wall time */
-        "%" PRId32 ":" PERCENT_FMT "\n",      /* avg wall time */
+        "%" PRId32 "." NANOSECONDS_FMT "/"        /* min wall time */
+        "%" PRId32 "." NANOSECONDS_FMT "/"        /* max wall time */
+        "%" PRId32 "." NANOSECONDS_FMT "\n",      /* avg wall time */
         the_stats.min_wall_time.tv_sec, 
           the_stats.min_wall_time.tv_nsec / NANOSECONDS_DIVIDER,
         the_stats.max_wall_time.tv_sec,
