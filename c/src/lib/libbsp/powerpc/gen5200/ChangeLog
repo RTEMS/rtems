@@ -1,5 +1,9 @@
 2007-10-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/mpc5200.h: Fix constants off by one nibble.
+
+2007-10-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* include/mpc5200.h: Added some simple interrupt GPIO constants.
 
 2007-10-26	Joel Sherrill <joel.sherrill@oarcorp.com>
