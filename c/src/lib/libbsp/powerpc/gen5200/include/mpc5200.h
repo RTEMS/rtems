@@ -54,12 +54,12 @@
 #define	DABR	1013		/* Data Address Breakpoint */
 #define	IABR2	1018		/* Instruction Breakpoint #2 */
 
-/* 
- * Initial post-reset location of MGT5100 module base address register (MBAR) 
+/*
+ * Initial post-reset location of MGT5100 module base address register (MBAR)
  */
 #define	MBAR_RESET 	    0x80000000
 
-/* 
+/*
  * Location and size of onchip SRAM (relative to MBAR)
  */
 #define ONCHIP_SRAM_OFFSET  0x8000
@@ -409,68 +409,68 @@ typedef struct mpc5200_
 	volatile uint8_t		idmr7;		/* + 0x3D */
 	volatile uint8_t		res33;		/* + 0x3E */
 	volatile uint8_t		res34;		/* + 0x3F */
-	volatile uint8_t		rxidr0;	    /* + 0x40 */
-	volatile uint8_t		rxidr1;	    /* + 0x41 */
+	volatile uint8_t		rxidr0;	        /* + 0x40 */
+	volatile uint8_t		rxidr1;	        /* + 0x41 */
 	volatile uint8_t		res35;		/* + 0x42 */
 	volatile uint8_t		res36;		/* + 0x43 */
-	volatile uint8_t		rxidr2;	    /* + 0x44 */
-	volatile uint8_t		rxidr3;	    /* + 0x45 */
+	volatile uint8_t		rxidr2;	        /* + 0x44 */
+	volatile uint8_t		rxidr3;	        /* + 0x45 */
 	volatile uint8_t		res37;		/* + 0x46 */
 	volatile uint8_t		res38;		/* + 0x47 */
-	volatile uint8_t		rxdsr0;	    /* + 0x48 */
-	volatile uint8_t		rxdsr1;	    /* + 0x49 */
+	volatile uint8_t		rxdsr0;	        /* + 0x48 */
+	volatile uint8_t		rxdsr1;	        /* + 0x49 */
 	volatile uint8_t		res39;		/* + 0x4A */
 	volatile uint8_t		res40;		/* + 0x4B */
-	volatile uint8_t		rxdsr2;	    /* + 0x4C */
-	volatile uint8_t		rxdsr3;	    /* + 0x4D */
+	volatile uint8_t		rxdsr2;	        /* + 0x4C */
+	volatile uint8_t		rxdsr3;	        /* + 0x4D */
 	volatile uint8_t		res41;		/* + 0x4E */
 	volatile uint8_t		res42;		/* + 0x4F */
-	volatile uint8_t		rxdsr4;	    /* + 0x50 */
-	volatile uint8_t		rxdsr5;	    /* + 0x51 */
+	volatile uint8_t		rxdsr4;	        /* + 0x50 */
+	volatile uint8_t		rxdsr5;	        /* + 0x51 */
 	volatile uint8_t		res43;		/* + 0x52 */
 	volatile uint8_t		res44;		/* + 0x53 */
-	volatile uint8_t		rxdsr6;	    /* + 0x54 */
-	volatile uint8_t		rxdsr7;	    /* + 0x55 */
+	volatile uint8_t		rxdsr6;	        /* + 0x54 */
+	volatile uint8_t		rxdsr7;	        /* + 0x55 */
 	volatile uint8_t		res45;		/* + 0x56 */
 	volatile uint8_t		res46;		/* + 0x57 */
 	volatile uint8_t		rxdlr;		/* + 0x58 */
 	volatile uint8_t		res47;		/* + 0x59 */
 	volatile uint8_t		res48;		/* + 0x5A */
 	volatile uint8_t		res49;		/* + 0x5B */
-	volatile uint8_t		rxtimh;	    /* + 0x5C */
-	volatile uint8_t		rxtiml;	    /* + 0x5D */
+	volatile uint8_t		rxtimh;	        /* + 0x5C */
+	volatile uint8_t		rxtiml;	        /* + 0x5D */
 	volatile uint8_t		res50;		/* + 0x5E */
 	volatile uint8_t		res51;		/* + 0x5F */
-	volatile uint8_t		txidr0;	    /* + 0x60 */
-	volatile uint8_t		txidr1;	    /* + 0x61 */
+	volatile uint8_t		txidr0;	        /* + 0x60 */
+	volatile uint8_t		txidr1;	        /* + 0x61 */
 	volatile uint8_t		res52;		/* + 0x62 */
 	volatile uint8_t		res53;		/* + 0x63 */
-	volatile uint8_t		txidr2;	    /* + 0x64 */
-	volatile uint8_t		txidr3;	    /* + 0x65 */
+	volatile uint8_t		txidr2;	        /* + 0x64 */
+	volatile uint8_t		txidr3;	        /* + 0x65 */
 	volatile uint8_t		res54;		/* + 0x66 */
 	volatile uint8_t		res55;		/* + 0x67 */
-	volatile uint8_t		txdsr0;	    /* + 0x68 */
-	volatile uint8_t		txdsr1;	    /* + 0x69 */
+	volatile uint8_t		txdsr0;	        /* + 0x68 */
+	volatile uint8_t		txdsr1;	        /* + 0x69 */
 	volatile uint8_t		res56;		/* + 0x6A */
 	volatile uint8_t		res57;		/* + 0x6B */
-	volatile uint8_t		txdsr2;	    /* + 0x6C */
-	volatile uint8_t		txdsr3;	    /* + 0x6D */
+	volatile uint8_t		txdsr2;	        /* + 0x6C */
+	volatile uint8_t		txdsr3;	        /* + 0x6D */
 	volatile uint8_t		res58;		/* + 0x6E */
 	volatile uint8_t		res59;		/* + 0x6F */
-	volatile uint8_t		txdsr4;	    /* + 0x70 */
-	volatile uint8_t		txdsr5;	    /* + 0x71 */
+	volatile uint8_t		txdsr4;	        /* + 0x70 */
+	volatile uint8_t		txdsr5;	        /* + 0x71 */
 	volatile uint8_t		res60;		/* + 0x72 */
 	volatile uint8_t		res61;		/* + 0x73 */
-	volatile uint8_t		txdsr6;	    /* + 0x74 */
-	volatile uint8_t		txdsr7;	    /* + 0x75 */
+	volatile uint8_t		txdsr6;	        /* + 0x74 */
+	volatile uint8_t		txdsr7;	        /* + 0x75 */
 	volatile uint8_t		res62;		/* + 0x76 */
 	volatile uint8_t		res63;		/* + 0x77 */
 	volatile uint8_t		txdlr;		/* + 0x78 */
-	volatile uint8_t		txtbpr;	    /* + 0x79 */
+	volatile uint8_t		txtbpr;	        /* + 0x79 */
 	volatile uint8_t		res64;		/* + 0x7A */
 	volatile uint8_t		res65;		/* + 0x7B */
-	volatile uint8_t		txtimh;	    /* + 0x7C */
-	volatile uint8_t		txtiml;	    /* + 0x7D */
+	volatile uint8_t		txtimh;	        /* + 0x7C */
+	volatile uint8_t		txtiml;	        /* + 0x7D */
 	volatile uint8_t		res66;		/* + 0x7E */
 	volatile uint8_t		res67;		/* + 0x7F */
     } mscan[MPC5200_CAN_NO];
@@ -480,23 +480,116 @@ typedef struct mpc5200_
 	/*
 	 * GPIO standard registers (MBAR + 0xB00)
 	 */
-    volatile uint32_t gpiopcr;	    /* + 0x00 */
-    volatile uint32_t gpiosen;	    /* + 0x04 */
-    volatile uint32_t gpiosod;	    /* + 0x08 */
-    volatile uint32_t gpiosdd;	    /* + 0x0C */
-    volatile uint32_t gpiosdo;	    /* + 0x10 */
-    volatile uint32_t gpiosdi;	    /* + 0x14 */
-    volatile uint32_t gpiooe;	    /* + 0x18 */
-    volatile uint32_t gpioodo;	    /* + 0x1C */
-    volatile uint32_t gpiosie;	    /* + 0x20 */
-    volatile uint32_t gpiosiod;	    /* + 0x24 */
-    volatile uint32_t gpiosidd;	    /* + 0x28 */
-    volatile uint32_t gpiosido;	    /* + 0x2C */
-    volatile uint32_t gpiosiie;	    /* + 0x30 */
-    volatile uint32_t gpiosiit;	    /* + 0x34 */
-    volatile uint32_t gpiosime;	    /* + 0x38 */
-    volatile uint32_t gpiosist;	    /* + 0x3C */
-    volatile uint8_t  res4[0xC0];
+	volatile uint32_t gpiopcr;	    /* + 0x00 */
+	#define GPIO_PCR_CHIP_SELECT_1          0x80000000
+	#define GPIO_PCR_CHIP_ALTS              0x30000000
+	  #define GPIO_PCR_CHIP_ALTS_NONE         0x00000000
+	  #define GPIO_PCR_CHIP_ALTS_CAN          0x10000000
+	  #define GPIO_PCR_CHIP_ALTS_SPI          0x20000000
+	  #define GPIO_PCR_CHIP_ALTS_BOTH         0x30000000
+	#define GPIO_PCR_CHIP_SELECT_7          0x08000000
+	#define GPIO_PCR_CHIP_SELECT_6          0x04000000
+	#define GPIO_PCR_CHIP_SELECT_ATA        0x03000000
+	#define GPIO_PCR_CHIP_SELECT_IR_USB_CLK 0x00800000
+	#define GPIO_PCR_IRDA                   0x00700000
+	#define GPIO_PCR_ETHERNET               0x000F0000
+	#define GPIO_PCR_PCI_DIS                0x00008000
+	#define GPIO_PCR_USB_SE                 0x00004000
+	#define GPIO_PCR_USB_GPIO               0x00003000
+	#define GPIO_PCR_PSC3                   0x00000F00
+	#define GPIO_PCR_PSC2                   0x00000070
+	#define GPIO_PCR_PSC1                   0x00000007
+
+	volatile uint32_t gpiosen;	    /* + 0x04 */
+	volatile uint32_t gpiosod;	    /* + 0x08 */
+	volatile uint32_t gpiosdd;	    /* + 0x0C */
+	volatile uint32_t gpiosdo;	    /* + 0x10 */
+	volatile uint32_t gpiosdi;	    /* + 0x14 */
+	volatile uint32_t gpiooe;	    /* + 0x18 */
+	volatile uint32_t gpioodo;	    /* + 0x1C */
+
+	volatile uint32_t gpiosie;	    /* + 0x20 */
+	#define GPIO_SIE_SINT_7_ETH_16_PIN 0x80000000
+	#define GPIO_SIE_SINT_6_ETH_15_PIN 0x40000000
+	#define GPIO_SIE_SINT_5_ETH_14_PIN 0x20000000
+	#define GPIO_SIE_SINT_4_ETH_13_PIN 0x10000000
+	#define GPIO_SIE_SINT_3_USB1_9_PIN 0x08000000
+	#define GPIO_SIE_SINT_2_PSC3_8_PIN 0x04000000
+	#define GPIO_SIE_SINT_1_PSC3_5_PIN 0x02000000
+	#define GPIO_SIE_SINT_0_PSC3_4_PIN 0x01000000
+
+	volatile uint32_t gpiosiod;	    /* + 0x24 */
+
+	volatile uint32_t gpiosidd;	    /* + 0x28 */
+	#define GPIO_SIDD_SINT_7_ETH_16_PIN 0x80000000
+	#define GPIO_SIDD_SINT_6_ETH_15_PIN 0x40000000
+	#define GPIO_SIDD_SINT_5_ETH_14_PIN 0x20000000
+	#define GPIO_SIDD_SINT_4_ETH_13_PIN 0x10000000
+	#define GPIO_SIDD_SINT_3_USB1_9_PIN 0x08000000
+	#define GPIO_SIDD_SINT_2_PSC3_8_PIN 0x04000000
+	#define GPIO_SIDD_SINT_1_PSC3_5_PIN 0x02000000
+	#define GPIO_SIDD_SINT_0_PSC3_4_PIN 0x01000000
+
+	volatile uint32_t gpiosido;	    /* + 0x2C */
+
+	volatile uint32_t gpiosiie;	    /* + 0x30 */
+	#define GPIO_SIIE_SINT_7_ETH_16_PIN 0x80000000
+	#define GPIO_SIIE_SINT_6_ETH_15_PIN 0x40000000
+	#define GPIO_SIIE_SINT_5_ETH_14_PIN 0x20000000
+	#define GPIO_SIIE_SINT_4_ETH_13_PIN 0x10000000
+	#define GPIO_SIIE_SINT_3_USB1_9_PIN 0x08000000
+	#define GPIO_SIIE_SINT_2_PSC3_8_PIN 0x04000000
+	#define GPIO_SIIE_SINT_1_PSC3_5_PIN 0x02000000
+	#define GPIO_SIIE_SINT_0_PSC3_4_PIN 0x01000000
+
+	volatile uint32_t gpiosiit;	    /* + 0x34 */
+	#define GPIO_SIIT_SINT_7_ETH_16_PIN_MASK 0xc0000000
+	#define GPIO_SIIT_SINT_6_ETH_15_PIN_MASK 0x30000000
+	#define GPIO_SIIT_SINT_5_ETH_14_PIN_MASK 0x0c000000
+	#define GPIO_SIIT_SINT_4_ETH_13_PIN_MASK 0x03000000
+	#define GPIO_SIIT_SINT_3_USB1_9_PIN_MASK 0x00c00000
+	#define GPIO_SIIT_SINT_2_PSC3_8_PIN_MASK 0x00300000
+	#define GPIO_SIIT_SINT_1_PSC3_5_PIN_MASK 0x000c0000
+	#define GPIO_SIIT_SINT_0_PSC3_4_PIN_MASK 0x00030000
+
+	#define GPIO_SIIT_ON_ANY_TRANSITION      0x00000000
+	#define GPIO_SIIT_ON_RISING_EDGE         0x00000001
+	#define GPIO_SIIT_ON_FALLING_EDGE        0x00000002
+	#define GPIO_SIIT_ON_PULSE               0x00000003
+
+	#define GPIO_SIIT_SINT_7_ETH_16_PIN_SHIFT 16
+	#define GPIO_SIIT_SINT_6_ETH_15_PIN_SHIFT 18
+	#define GPIO_SIIT_SINT_5_ETH_14_PIN_SHIFT 20
+	#define GPIO_SIIT_SINT_4_ETH_13_PIN_SHIFT 22
+	#define GPIO_SIIT_SINT_3_USB1_9_PIN_SHIFT 24
+	#define GPIO_SIIT_SINT_2_PSC3_8_PIN_SHIFT 26
+	#define GPIO_SIIT_SINT_1_PSC3_5_PIN_SHIFT 28
+	#define GPIO_SIIT_SINT_0_PSC3_4_PIN_SHIFT 30
+
+	volatile uint32_t gpiosime;	    /* + 0x38 */
+	#define GPIO_SIME_MASTER_ENABLE    0x10000000
+
+	volatile uint32_t gpiosist;	    /* + 0x3C */
+	#define GPIO_SIST_SINT_7_ETH_16_PIN_STATUS 0x80000000
+	#define GPIO_SIST_SINT_6_ETH_15_PIN_STATUS 0x40000000
+	#define GPIO_SIST_SINT_5_ETH_14_PIN_STATUS 0x20000000
+	#define GPIO_SIST_SINT_4_ETH_13_PIN_STATUS 0x10000000
+	#define GPIO_SIST_SINT_3_USB1_9_PIN_STATUS 0x08000000
+	#define GPIO_SIST_SINT_2_PSC3_8_PIN_STATUS 0x04000000
+	#define GPIO_SIST_SINT_1_PSC3_5_PIN_STATUS 0x02000000
+	#define GPIO_SIST_SINT_0_PSC3_4_PIN_STATUS 0x01000000
+	#define GPIO_SIST_SINT_7_ETH_16_PIN_VALUE  0x08000000
+	#define GPIO_SIST_SINT_6_ETH_15_PIN_VALUE  0x04000000
+	#define GPIO_SIST_SINT_5_ETH_14_PIN_VALUE  0x02000000
+	#define GPIO_SIST_SINT_4_ETH_13_PIN_VALUE  0x01000000
+	#define GPIO_SIST_SINT_3_USB1_9_PIN_VALUE  0x00800000
+	#define GPIO_SIST_SINT_2_PSC3_8_PIN_VALUE  0x00400000
+	#define GPIO_SIST_SINT_1_PSC3_5_PIN_VALUE  0x00200000
+	#define GPIO_SIST_SINT_0_PSC3_4_PIN_VALUE  0x00100000
+
+	#define GPIO_SIST_SINT_CLEAR_ALL           0x00000000
+
+	volatile uint8_t  res4[0xC0];
 
 	/*
 	 * GPIO wakeup registers (MBAR + 0xC00)
