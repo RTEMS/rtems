@@ -1,19 +1,15 @@
-diff -uNr gdb-6.7.1.orig/bfd/sysdep.h gdb-6.7.1/bfd/sysdep.h
---- gdb-6.7.1.orig/bfd/sysdep.h	2007-07-03 16:26:42.000000000 +0200
-+++ gdb-6.7.1/bfd/sysdep.h	2007-10-31 06:08:42.000000000 +0100
-@@ -136,7 +136,7 @@
- #endif
- 
- #if !HAVE_DECL_STRSTR
--extern char *strstr ();
-+/* extern char *strstr (); */
- #endif
- 
- #ifdef HAVE_FTELLO
 diff -uNr gdb-6.7.1.orig/sim/erc32/erc32.c gdb-6.7.1/sim/erc32/erc32.c
 --- gdb-6.7.1.orig/sim/erc32/erc32.c	1999-04-16 03:35:00.000000000 +0200
-+++ gdb-6.7.1/sim/erc32/erc32.c	2007-10-31 06:08:42.000000000 +0100
-@@ -413,7 +413,7 @@
++++ gdb-6.7.1/sim/erc32/erc32.c	2007-10-31 12:27:54.000000000 +0100
+@@ -24,6 +24,7 @@
+ 
+ #include <sys/types.h>
+ #include <stdio.h>
++#include <string.h>
+ #include <termios.h>
+ #include <sys/fcntl.h>
+ #include <sys/file.h>
+@@ -413,7 +414,7 @@
      if (rom8) mec_memcfg &= ~0x20000;
      else mec_memcfg |= 0x20000;
  
@@ -22,6 +18,24 @@ diff -uNr gdb-6.7.1.orig/sim/erc32/erc32.c gdb-6.7.1/sim/erc32/erc32.c
      mem_romsz = (128 * 1024) << ((mec_memcfg >> 18) & 7);
  
      if (sparclite_board) {
+@@ -1659,7 +1660,7 @@
+ 	errmec = 0;
+ 	return(1);
+     }
+-#endif;
++#endif
+ 
+     if ((addr >= mem_ramstart) && (addr < (mem_ramstart + mem_ramsz))) {
+ 	fetch_bytes (asi, &ramb[addr & mem_rammask], data, sz);
+@@ -1736,7 +1737,7 @@
+ 	errmec = 0;
+ 	return(1);
+     }
+-#endif;
++#endif
+ 
+     if ((addr >= mem_ramstart) && (addr < (mem_ramstart + mem_ramsz))) {
+ 	if (mem_accprot) {
 diff -uNr gdb-6.7.1.orig/sim/erc32/exec.c gdb-6.7.1/sim/erc32/exec.c
 --- gdb-6.7.1.orig/sim/erc32/exec.c	2005-03-07 12:09:05.000000000 +0100
 +++ gdb-6.7.1/sim/erc32/exec.c	2007-10-31 06:08:42.000000000 +0100
@@ -43,3 +57,19 @@ diff -uNr gdb-6.7.1.orig/sim/erc32/exec.c gdb-6.7.1/sim/erc32/exec.c
      }
  #endif
      if (sregs->fpstate == FP_EXC_PE) {
+diff -uNr gdb-6.7.1.orig/sim/erc32/Makefile.in gdb-6.7.1/sim/erc32/Makefile.in
+--- gdb-6.7.1.orig/sim/erc32/Makefile.in	2007-08-24 16:28:35.000000000 +0200
++++ gdb-6.7.1/sim/erc32/Makefile.in	2007-10-31 16:17:05.000000000 +0100
+@@ -18,8 +18,10 @@
+ 
+ ## COMMON_PRE_CONFIG_FRAG
+ 
+-TERMCAP_LIB = @TERMCAP@
+-READLINE_LIB = @READLINE@
++# TERMCAP_LIB = @TERMCAP_LIB@
++TERMCAP_LIB = -ltinfo
++# READLINE_LIB = @READLINE_LIB@
++READLINE_LIB = -lreadline
+ 
+ SIM_OBJS = exec.o erc32.o func.o help.o float.o interf.o
+ SIM_EXTRA_LIBS = $(READLINE_LIB) $(TERMCAP_LIB) -lm
