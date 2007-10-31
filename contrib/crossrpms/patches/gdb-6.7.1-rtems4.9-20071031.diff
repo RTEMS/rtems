@@ -67,7 +67,7 @@ diff -uNr gdb-6.7.1.orig/sim/erc32/Makefile.in gdb-6.7.1/sim/erc32/Makefile.in
 -TERMCAP_LIB = @TERMCAP@
 -READLINE_LIB = @READLINE@
 +# TERMCAP_LIB = @TERMCAP_LIB@
-+TERMCAP_LIB = -ltinfo
++TERMCAP_LIB = -lncurses
 +# READLINE_LIB = @READLINE_LIB@
 +READLINE_LIB = -lreadline
  
