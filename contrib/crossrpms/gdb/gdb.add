@@ -18,7 +18,6 @@ BuildRequires: libexpat-devel
 %else
 BuildRequires: expat
 %endif
-BuildRequires:	expat
 %else
 # fedora/redhat 
 BuildRequires:	expat-devel
@@ -30,8 +29,9 @@ BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
 %if "@tool_target@" == "sparc-rtems4.9"
-BuildRequires:	libtermcap-devel
+BuildConflicts:	libtermcap-devel termcap-devel
 %endif
+BuildRequires:  readline-devel
 BuildRequires:	ncurses-devel
 %if %build_infos
 
