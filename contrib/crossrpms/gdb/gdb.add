@@ -11,9 +11,16 @@ URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+# suse
 %if "%{?suse}"
+%if "%{?suse}" >= "10.3"
+BuildRequires: libexpat-devel
+%else
+BuildRequires: expat
+%endif
 BuildRequires:	expat
-%else 
+%else
+# fedora/redhat 
 BuildRequires:	expat-devel
 %endif
 %endif
