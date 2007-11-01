@@ -26,9 +26,15 @@ URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+# suse
 %if "%{?suse}"
-BuildRequires:	expat
-%else 
+%if "%{?suse}" >= "10.3"
+BuildRequires: libexpat-devel
+%else
+BuildRequires: expat
+%endif
+%else
+# fedora/redhat 
 BuildRequires:	expat-devel
 %endif
 %endif
@@ -36,8 +42,9 @@ BuildRequires:	expat-devel
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %if "bfin-rtems4.9" == "sparc-rtems4.9"
-BuildRequires:	libtermcap-devel
+BuildConflicts:	libtermcap-devel termcap-devel
 %endif
+BuildRequires:  readline-devel
 BuildRequires:	ncurses-devel
 
 Requires:	rtems-4.9-gdb-common
@@ -68,6 +75,10 @@ cd ..
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
+%if "%{gdb_version}" >= "6.6"
+    --with-system-readline \
+    --with-expat \
+%endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}

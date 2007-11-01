@@ -13,22 +13,28 @@
 %define _exeext %{nil}
 %endif
 
-%define gdb_version 6.7
-%define gdb_rpmvers %{expand:%(echo 6.7 | tr - _)} 
+%define gdb_version 6.7.1
+%define gdb_rpmvers %{expand:%(echo 6.7.1 | tr - _)} 
 
 Name:		rtems-4.9-arm-rtems4.9-gdb
 Summary:	Gdb for target arm-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+# suse
 %if "%{?suse}"
-BuildRequires:	expat
-%else 
+%if "%{?suse}" >= "10.3"
+BuildRequires: libexpat-devel
+%else
+BuildRequires: expat
+%endif
+%else
+# fedora/redhat 
 BuildRequires:	expat-devel
 %endif
 %endif
@@ -36,8 +42,9 @@ BuildRequires:	expat-devel
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %if "arm-rtems4.9" == "sparc-rtems4.9"
-BuildRequires:	libtermcap-devel
+BuildConflicts:	libtermcap-devel termcap-devel
 %endif
+BuildRequires:  readline-devel
 BuildRequires:	ncurses-devel
 
 Requires:	rtems-4.9-gdb-common
@@ -52,6 +59,9 @@ Patch0:		gdb-6.6-rtems4.8-20070306.diff
 %endif
 %if "%{gdb_version}" == "6.7"
 Patch0:		gdb-6.7-rtems4.9-20071011.diff
+%endif
+%if "%{gdb_version}" == "6.7.1"
+Patch0:		gdb-6.7.1-rtems4.9-20071031.diff
 %endif
 
 %description
@@ -76,6 +86,10 @@ cd ..
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
+%if "%{gdb_version}" >= "6.6"
+    --with-system-readline \
+    --with-expat \
+%endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
