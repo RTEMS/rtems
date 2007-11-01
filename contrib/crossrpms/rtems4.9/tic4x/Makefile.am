@@ -17,11 +17,6 @@ NEWLIB_VERS = 1.15.0
 include ../gcc.am
 GCC_OPTS +=
 
-### GDB-6.4 doesn't support the tic4x
-## GDB_VERS = 6.4
-## include ../gdb.am
-## GDB_OPTS +=
-
 ### rtems doesn't build for the tic4x
 ## CPUKIT_VERS = 4.7.99.1
 ## CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
