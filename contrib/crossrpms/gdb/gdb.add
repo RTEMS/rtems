@@ -11,9 +11,15 @@ URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{gdb_version}" >= "6.6"
+# suse
 %if "%{?suse}"
-BuildRequires:	expat
-%else 
+%if "%{?suse}" >= "10.3"
+BuildRequires: libexpat-devel
+%else
+BuildRequires: expat
+%endif
+%else
+# fedora/redhat 
 BuildRequires:	expat-devel
 %endif
 %endif
@@ -22,9 +28,10 @@ BuildRequires:	expat-devel
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-%if "@tool_target@" == "sparc-rtems4.8"
-BuildRequires:	libtermcap-devel
+%if "@tool_target@" == "sparc-rtems4.9"
+BuildConflicts:	libtermcap-devel termcap-devel
 %endif
+BuildRequires:  readline-devel
 BuildRequires:	ncurses-devel
 %if %build_infos
 
