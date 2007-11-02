@@ -69,6 +69,22 @@ SCORE_EXTERN volatile boolean _Context_Switch_necessary;
    _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry, _is_fp )
 
 /**
+ *  This macro is invoked from _Thread_Handler to do whatever CPU
+ *  specific magic is required that must be done in the context of
+ *  the thread when it starts.
+ *
+ *  If the CPU architecture does not require any magic, then this
+ *  macro is empty.
+ */
+
+#if defined(_CPU_Context_Initialization_at_thread_begin)
+  #define _Context_Initialization_at_thread_begin() \
+     _CPU_Context_Initialization_at_thread_begin()
+#else
+  #define _Context_Initialization_at_thread_begin()
+#endif
+
+/**
  *  @brief Perform Context Switch
  *
  *  This routine saves the current context into the @a _executing
