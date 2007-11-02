@@ -1,3 +1,11 @@
+2007-11-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/cpu/sparc/cpu.c, score/cpu/sparc/rtems/score/cpu.h,
+	score/include/rtems/score/context.h, score/src/threadhandler.c: Fix
+	stack so gdb backtrace does not print corrupted frame message after
+	_Thread_Handler. Daniel Hellstrom <daniel@gaisler.com> provided the
+	SPARC implementation and I made it more general.
+
 2007-10-26	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* libmisc/cpuuse/cpuusagereport.c, rtems/src/ratemonreportstatistics.c:

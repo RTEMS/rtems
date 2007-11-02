@@ -1,7 +1,7 @@
 /*
  *  SPARC Dependent Source
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -301,7 +301,7 @@ void _CPU_Context_Initialize(
  
     the_context->o7    = ((uint32_t  ) entry_point) - 8;
     the_context->o6_sp = stack_high - CPU_MINIMUM_STACK_FRAME_SIZE;
-    the_context->i6_fp = stack_high;
+    the_context->i6_fp = 0;
 
     /*
      *  Build the PSR for the task.  Most everything can be 0 and the

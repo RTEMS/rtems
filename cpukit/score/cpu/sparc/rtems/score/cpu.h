@@ -791,6 +791,25 @@ void _CPU_Context_Initialize(
 );
 
 /*
+ *  This macro is invoked from _Thread_Handler to do whatever CPU
+ *  specific magic is required that must be done in the context of
+ *  the thread when it starts.
+ *
+ *  On the SPARC, this is setting the frame pointer so GDB is happy.
+ *  Make GDB stop unwinding at _Thread_Handler, previous register window
+ *  Frame pointer is 0 and calling address must be a function with starting
+ *  with a SAVE instruction. If return address is leaf-function (no SAVE) 
+ *  GDB will not look at prev reg window fp.
+ *
+ *  _Thread_Handler is known to start with SAVE.
+ */
+
+#define _CPU_Context_Initialization_at_thread_begin() \
+  do { \
+    asm volatile ("set _Thread_Handler,%%i7\n"::); \
+  } while (0)
+
+/*
  *  This routine is responsible for somehow restarting the currently
  *  executing task.  
  *
