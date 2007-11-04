@@ -21,7 +21,7 @@ Name:		rtems-4.8-bfin-rtems4.8-binutils
 Summary:	Binutils for target bfin-rtems4.8
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -36,11 +36,8 @@ Requires:	rtems-4.8-binutils-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
-%if "%{binutils_version}" == "2.17"
-Patch0:		binutils-2.17-rtems4.8-20061021.diff
-%endif
-%if "%{binutils_version}" == "2.17.90"
-Patch0:		binutils-2.17.90-rtems4.8-20070807.diff
+%if "%{binutils_version}" == "2.18"
+Patch0:		binutils-2.18-rtems4.8-20071104.diff
 %endif
 
 %description
