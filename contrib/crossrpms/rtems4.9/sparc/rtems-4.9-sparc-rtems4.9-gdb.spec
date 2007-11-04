@@ -102,25 +102,7 @@ cd ..
   rm -rf $RPM_BUILD_ROOT
 
   cd build
-%if "%{gdb_version}" >= "6.3"
   make DESTDIR=$RPM_BUILD_ROOT install
-%else
-  make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    bindir=$RPM_BUILD_ROOT%{_bindir} \
-    includedir=$RPM_BUILD_ROOT%{_includedir} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} \
-    infodir=$RPM_BUILD_ROOT%{_infodir} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
-    install
-
-  make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    bindir=$RPM_BUILD_ROOT%{_bindir} \
-    includedir=$RPM_BUILD_ROOT%{_includedir} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} \
-    infodir=$RPM_BUILD_ROOT%{_infodir} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
-    install-info
-%endif
 
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
@@ -133,10 +115,8 @@ cd ..
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
-%if "%{gdb_version}" >= "6.4"
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libsparc-rtems4.9-sim.a
-%endif
 
   cd ..
 
@@ -209,9 +189,6 @@ GDB files shared by all targets.
 
 %post -n rtems-4.9-gdb-common
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
-%if "%{gdb_version}" < "6.3"
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
-%endif
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
@@ -219,9 +196,6 @@ GDB files shared by all targets.
 %preun -n rtems-4.9-gdb-common
 if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
-%if "%{gdb_version}" < "6.3"
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/mmalloc.info.gz || :
-%endif
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
@@ -233,10 +207,6 @@ fi
 %ghost %{_infodir}/dir
 %{_infodir}/gdb.info*
 
-# FIXME: When had mmalloc.info been removed?
-%if "%{gdb_version}" < "6.3"
-%{_infodir}/mmalloc.info*
-%endif
 %{_infodir}/gdbint.info*
 %{_infodir}/stabs.info*
 %{_infodir}/annotate.info*
