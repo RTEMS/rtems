@@ -36,7 +36,7 @@ Requires:	rtems-4.9-binutils-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
-%if "%{binutils_version}" == "2.17.90"
+%if "%{binutils_version}" == "2.18"
 Patch0:		binutils-2.18-rtems4.9-20071104.diff
 %endif
 
