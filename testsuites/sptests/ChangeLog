@@ -1,3 +1,7 @@
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp13/system.h: We need 32K of message buffer memory not 32 bytes.
+
 2007-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp20/task1.c, sp34/changepri.c, sp35/priinv.c: Build when using
