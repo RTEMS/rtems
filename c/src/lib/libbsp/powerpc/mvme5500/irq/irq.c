@@ -400,10 +400,12 @@ int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
     for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
 	BSP_enable_pic_irq(i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].on)
+		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].off)
+		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
 	BSP_disable_pic_irq(i);
       }
     }
@@ -477,7 +479,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
     
     rtems_interrupt_enable(level);
 
@@ -529,7 +532,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Disable interrupt on device
      */
-    irq->off(irq);
+	if (irq->off)
+    	irq->off(irq);
 
     /*
      * restore the default irq value

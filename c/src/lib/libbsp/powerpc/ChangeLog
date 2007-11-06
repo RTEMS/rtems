@@ -1,5 +1,14 @@
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* ep1a/irq/irq.c, gen5200/irq/irq.c, mbx8xx/irq/irq.c,
+	mpc8260ads/irq/irq.c, mvme5500/irq/irq.c, psim/irq/irq.c,
+	score603e/irq/irq.c, shared/irq/irq.c:
+	test for non-NULL-ness before calling 'on'/'off'
+	methods so that users don't have to provide
+	no-ops if they don't want this feature.
+
+2007-11-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/console/uart.c: removed #define UARTDEBUG
 
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>

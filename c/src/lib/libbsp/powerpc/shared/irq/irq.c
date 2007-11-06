@@ -49,19 +49,6 @@ static inline int is_processor_irq(const rtems_irq_number irqLine)
 	 );
 }
 
-/*
- * default on/off function
- */
-static void nop_func(){}
-/*
- * default isOn function
-static int not_connected() {return 0;}
- */
-/*
- * default possible isOn function
- */
-static int connected() {return 1;}
-
 
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
@@ -123,7 +110,8 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
 
     rtems_interrupt_enable(level);
 
@@ -172,7 +160,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
 
     rtems_interrupt_enable(level);
 
@@ -253,7 +242,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Disable interrupt on device
      */
-    irq->off(irq);
+	if (irq->off)
+    	irq->off(irq);
 
     /*
      * restore the default irq value
@@ -316,6 +306,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 		     ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
 		     vchain = (rtems_irq_connect_data*)vchain->next_handler )
 		{
+			if (vchain->on)
               vchain->on(vchain);
 		}
 	}
@@ -330,9 +321,9 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
     vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
     vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
     vectorDesc.hdl.raw_hdl_size	=	(unsigned) decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
+    vectorDesc.on		=	0;
+    vectorDesc.off		=	0;
+    vectorDesc.isOn		=	0;
     if (!ppc_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
     }

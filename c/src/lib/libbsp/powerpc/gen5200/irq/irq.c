@@ -556,7 +556,8 @@ int BSP_install_rtems_irq_handler (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-  irq->on(irq);
+  if (irq->on)
+  	irq->on(irq);
 
   rtems_interrupt_enable(level);
 
@@ -632,7 +633,8 @@ int BSP_remove_rtems_irq_handler (const rtems_irq_connect_data* irq)
   /*
    * Disable interrupt on device
    */
-  irq->off(irq);
+  if (irq->off)
+  	irq->off(irq);
 
   /*
    * restore the default irq value
@@ -677,13 +679,15 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
       {
 
 	  BSP_irq_enable_at_siu(i);
-	  rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	  if (rtems_hdl_tbl[i].on)
+	  	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
 
       }
     else
       {
 
-	  rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	  if (rtems_hdl_tbl[i].off)
+	  	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
 	  BSP_irq_disable_at_siu(i);
 
       }
@@ -699,13 +703,15 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
     if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl)
       {
 
-	  rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	  if (rtems_hdl_tbl[i].on)
+	  	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
 
       }
     else
       {
 
-	  rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	  if (rtems_hdl_tbl[i].off)
+	  	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
 
       }
 

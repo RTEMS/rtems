@@ -154,7 +154,8 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
     
     rtems_interrupt_enable(level);
 
@@ -216,7 +217,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
     
     rtems_interrupt_enable(level);
 
@@ -308,7 +310,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Disable interrupt on device
      */
-    irq->off(irq);
+	if (irq->off)
+    	irq->off(irq);
 
     /*
      * restore the default irq value
@@ -374,19 +377,21 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
                  ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
+			  if(vchain->on)
                vchain->on(vchain);
             }
          }
 
       }
       else {
-         /* rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
+         /* if (rtems_hdl_tbl[i].off) rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
                  ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
+			  if (vchain->off)
                vchain->off(vchain);
             }
          }
@@ -403,26 +408,28 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
      */
     for (i=BSP_PROCESSOR_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-         /* rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]); */
+         /* if (rtems_hdl_tbl[i].on) rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]); */
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
                  ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
+			  if (vchain->on)
                vchain->on(vchain);
             }
          }
 
       }
       else {
-         /* rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
+         /* if (rtems_hdl_tbl[i].off) rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]); */
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
                  ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
+			  if (vchain->off)
                vchain->off(vchain);
             }
          }
