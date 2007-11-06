@@ -49,15 +49,15 @@ MEMORY
 
 SECTIONS
 {
-    
+
     _header_offset = 0;
-    
+
     /*
      * Text, data and bss segments
      */
     .text _DownloadLocation : {
-       
-       *(.text*)
+
+        *(.text*)
         *(.ram_code)
 
         /*
@@ -67,8 +67,8 @@ SECTIONS
 
         /*
          * Initialization and finalization code.
-              *
-              * Various files can provide initialization and finalization
+         *
+         * Various files can provide initialization and finalization
          * functions.  crtbegin.o and crtend.o are two instances. The
          * body of these functions are in .init and .fini sections. We
          * accumulate the bodies here, and prepend function prologues
@@ -78,7 +78,7 @@ SECTIONS
          * actually link against crti.o and crtn.o; the linker won't
          * look for a file to match a wildcard.  The wildcard also
          * means that it doesn't matter which directory crti.o and
-         * crtn.o are in. 
+         * crtn.o are in.
          */
         PROVIDE (_init = .);
         *crti.o(.init)
@@ -98,7 +98,6 @@ SECTIONS
         __stop_set_sysctl_set = ABSOLUTE(.);
         *(set_domain_*);
         *(set_pseudo_*);
-
 
         /*
          * C++ constructors/destructors
@@ -133,43 +132,43 @@ SECTIONS
         _rodata_start = . ;
         *(.rodata*)
         *(.gnu.linkonce.r*)
-        
+
         . = ALIGN (16);
 
         *(.console_gdb_xfer)
         *(.bootstrap_data)
         . = ALIGN(16);
         _estuff = .;
-    PROVIDE (_etext = .);
+        PROVIDE (_etext = .);
     } >ram
-        
-        .data : {
-            PROVIDE( _data_dest_start = . );
-            PROVIDE( _copy_start = .);
-            *(.data*)
-            *(.gnu.linkonce.d*)
-            *(.gcc_except_table)
-            *(.jcr)
-            . = ALIGN (16);
-            PROVIDE (_edata = .);
+
+    .data : {
+        PROVIDE( _data_dest_start = . );
+        PROVIDE( _copy_start = .);
+        *(.data*)
+        *(.gnu.linkonce.d*)
+        *(.gcc_except_table)
+        *(.jcr)
+        . = ALIGN (16);
+        PROVIDE (_edata = .);
         PROVIDE (_copy_end = .);
         PROVIDE (_data_dest_end = . );
-        } >ram
+    } >ram
 
-        _data_src_start = LOADADDR(.data);
-        _data_src_end = _data_src_start + SIZEOF(.data);        
-        
-        .bss : {
-                _clear_start = .;
-                *(.bss*)
-                *(.gnu.linkonce.b.*)
-                *(COMMON)
-                . = ALIGN (16);
-                PROVIDE (end = .);
-                _clear_end = .;
+    _data_src_start = LOADADDR(.data);
+    _data_src_end = _data_src_start + SIZEOF(.data);
 
-                _WorkspaceBase = .;
-        } >ram
+    .bss : {
+        _clear_start = .;
+        *(.bss*)
+        *(.gnu.linkonce.b.*)
+        *(COMMON)
+        . = ALIGN (16);
+        PROVIDE (end = .);
+        _clear_end = .;
+        _WorkspaceBase = .;
+    } >ram
+
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }
   .stabstr 0 : { *(.stabstr) }
@@ -185,15 +184,15 @@ SECTIONS
   /* DWARF 1 */
   .debug          0 : { *(.debug) }
   .line           0 : { *(.line) }
-  
+
   /* GNU DWARF 1 extensions */
   .debug_srcinfo  0 : { *(.debug_srcinfo) }
   .debug_sfnames  0 : { *(.debug_sfnames) }
-  
+
   /* DWARF 1.1 and DWARF 2 */
   .debug_aranges  0 : { *(.debug_aranges) }
   .debug_pubnames 0 : { *(.debug_pubnames) }
-  
+
   /* DWARF 2 */
   .debug_info     0 : { *(.debug_info) }
   .debug_abbrev   0 : { *(.debug_abbrev) }
@@ -202,7 +201,7 @@ SECTIONS
   .debug_str      0 : { *(.debug_str) }
   .debug_loc      0 : { *(.debug_loc) }
   .debug_macinfo  0 : { *(.debug_macinfo) }
-  
+
   /* SGI/MIPS DWARF 2 extensions */
   .debug_weaknames 0 : { *(.debug_weaknames) }
   .debug_funcnames 0 : { *(.debug_funcnames) }
@@ -210,5 +209,5 @@ SECTIONS
   .debug_varnames  0 : { *(.debug_varnames) }
   /* These must appear regardless of  .  */
 
-PROVIDE (end_of_all = .);  
+PROVIDE (end_of_all = .);
 }
