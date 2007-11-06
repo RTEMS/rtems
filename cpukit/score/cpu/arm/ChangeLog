@@ -1,3 +1,7 @@
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c: Fix headers.
+
 2007-11-03      Ray Xu <rayx.cn@gmail.com>
 
         * cpu.c, cpu_asm.S, score/cpu.h : add support for ARM<->THUMB veneer
