@@ -1,0 +1,8 @@
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, thumb_isr.c: New files.
+
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+
+        * Makefile.am, thumb_isr.c : add support for ARM<->THUMB veneer
+          thumb_isr.c  control CPSR/SPRS in thumb mode 
