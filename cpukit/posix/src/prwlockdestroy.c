@@ -56,12 +56,17 @@ int pthread_rwlock_destroy(
       return EINVAL;
 
     case OBJECTS_LOCAL:
-#if 0
-      if ( the_rwlock->RWLock.number_of_waiting_threads != 0 ) {
+      /*
+       *  If there is at least one thread waiting, then do not delete it.
+       */
+      if ( _Thread_queue_First( &the_rwlock->RWLock.Wait_queue ) != NULL ) {
         _Thread_Enable_dispatch();
         return EBUSY;
       }
-#endif
+
+      /*
+       *  POSIX doesn't require behavior when it is locked.
+       */
 
       _Objects_Close( &_POSIX_RWLock_Information, &the_rwlock->Object );
 

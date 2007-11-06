@@ -36,6 +36,7 @@
 static int _POSIX_Spinlock_Return_codes[] = {
   0,                        /* CORE_SPINLOCK_SUCCESSFUL */
   EDEADLK,                  /* CORE_SPINLOCK_HOLDER_RELOCKING */
+  EPERM,                    /* CORE_SPINLOCK_NOT_HOLDER */
   -1,                       /* CORE_SPINLOCK_TIMEOUT */
   EBUSY,                    /* CORE_SPINLOCK_IS_BUSY */
   EBUSY,                    /* CORE_SPINLOCK_UNAVAILABLE */

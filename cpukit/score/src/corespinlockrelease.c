@@ -30,7 +30,10 @@
  *  Input parameters:
  *    the_spinlock    - the spinlock control block to initialize
  *
- *  Output parameters:  NONE
+ *  Output parameters:
+ *    CORE_SPINLOCK_SUCCESSFUL - if successful
+ *    error code               - if unsuccessful
+ *
  */
 
 CORE_spinlock_Status _CORE_spinlock_Release(
@@ -40,14 +43,30 @@ CORE_spinlock_Status _CORE_spinlock_Release(
   ISR_Level level;
 
   _ISR_Disable( level );
+
+    /*
+     *  It must locked before it can be unlocked.
+     */
     if ( the_spinlock->lock == CORE_SPINLOCK_UNLOCKED ) {
       _ISR_Enable( level );
       return CORE_SPINLOCK_NOT_LOCKED;
     } 
+
+    /*
+     *  It must locked by the current thread before it can be unlocked.
+     */
+    if ( the_spinlock->holder != _Thread_Executing->Object.id ) {
+      _ISR_Enable( level );
+      return CORE_SPINLOCK_NOT_HOLDER;
+    } 
     
+    /*
+     *  Let it be unlocked.
+     */
     the_spinlock->users -= 1;
     the_spinlock->lock   = CORE_SPINLOCK_UNLOCKED;
     the_spinlock->holder = 0;
+
   _ISR_Enable( level );
   return CORE_SPINLOCK_SUCCESSFUL;
 }

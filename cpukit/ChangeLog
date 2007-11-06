@@ -1,3 +1,19 @@
+2007-11-06	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	Miscellaneous changes made after a review against the POSIX spec.
+	* posix/src/pbarrierinit.c, posix/src/prwlockinit.c: If the caller
+	passes a NULL in the attributes parameter, default attributes are used.
+	* posix/src/prwlockdestroy.c: If there is at least one thread
+	waiting, do not allow deletion.
+	* posix/src/prwlockwrlock.c: Corrected parameter passed to the core
+	operation used to obtain a RWLock for writing.
+	* posix/src/pspinlocktranslatereturncode.c,
+	score/include/rtems/score/corespinlock.h,
+	score/src/corespinlockrelease.c: If the current thread is not the
+	holder of the lock, do not allow an unlock and return EPERM.
+	* score/src/corerwlockobtainwrite.c: Corrected to use the operation
+	for queueing with a timeout handler.
+
 2007-11-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/cpu/sparc/cpu.c, score/cpu/sparc/rtems/score/cpu.h,
