@@ -17,9 +17,13 @@
  * BSP specific interrupt handler for INT or FIQ. In here
  * you do determine which interrupt happened and call its
  * handler.
+ * Called from ISR_Handler, It is better to write in C function
  */
 	.globl ExecuteITHandler
 ExecuteITHandler :
+#ifdef __thumb__
+    .code 16
+#endif
 
 /*
  * Look at interrupt status register to determine source.
@@ -28,19 +32,30 @@ ExecuteITHandler :
  */
  
   ldr 	r0, =0xFFFFF030  /* Read the vector number */
-  ldr	r1, [r0]
-
-  /* find the ISR's address based on the vector VICVectAddr0 */	
-  /*ldr   r0, =0xFFFFF100*/
-  /*ldr	r0, [r0, r1, LSL #2]*/	/* Read the address */
-
-
+    ldr	r0, [r0]
+#ifdef __thumb__
+    push {lr}
+    ldr	r2, =IRQ_return         /* prepare the return from handler  */
+    mov lr, r2
+#else
   stmdb	  sp!,{lr}
   ldr     lr, =IRQ_return         /* prepare the return from handler  */
+#endif
 
-  mov     pc, r1		/* EXECUTE INT HANDLER */
 
+    /*C code will be called*/
+    mov	pc, r0		/* EXECUTE INT HANDLER */
+
+    /*
+     * C code may come back from Thumb if --thumb-interwork flag is False
+     * Add some veneer to make sure that code back to ARM
+     */
 IRQ_return:
-  ldmia sp!,{lr}
+#ifdef __thumb__
+    pop {r1}
+    bx  r1
+#else
+    ldmia sp!,{r1}
+    mov pc, r1
+#endif
 
-  mov pc, lr

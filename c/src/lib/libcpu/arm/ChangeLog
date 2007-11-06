@@ -1,3 +1,7 @@
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+        *lpc22xx/irq/bsp_irq_asm.S: Add veneer for ARM<->Thumb
+        lpc22xx/irq/bsp_irq_init.c: add VIC address init
+
 2007-10-05	Ray Xu <xr@trasin.net>
 
 	* lpc22xx/clock/clockdrv.c, lpc22xx/irq/irq.c, lpc22xx/irq/irq.h: Now

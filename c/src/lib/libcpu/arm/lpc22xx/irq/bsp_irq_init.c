@@ -1,6 +1,6 @@
 /*
- * Motorola LPC22XX/LPC21xx Interrupt handler
- *  Modified by Ray 2006 <rayx.cn@gmail.com> to support LPC ARM     
+ *  NXP/Philips LPC22XX/LPC21xx Interrupt handler
+ *  Ray 2007 <rayx.cn@gmail.com> to support LPC ARM     
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -66,6 +66,6 @@ void BSP_rtems_irq_mngt_init()
    */
   VICProtection = 0;
   VICIntSelect = 0;
-  
+  VICVectAddr = 0;
 }
 
