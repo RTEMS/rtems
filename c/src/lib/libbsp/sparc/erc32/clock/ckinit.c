@@ -56,7 +56,8 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   return (uint32_t) (BSP_Configuration.microseconds_per_tick - clicks) * 1000;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_nanoseconds_since_last_tick \
+  bsp_clock_nanoseconds_since_last_tick
 
 #define Clock_driver_support_initialize_hardware() \
   do { \
