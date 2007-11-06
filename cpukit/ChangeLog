@@ -1,5 +1,11 @@
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1266/cpukit
+	* posix/src/keycreate.c, posix/src/keyrundestructors.c: Use API instead
+	of class for key indexing.
+
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libmisc/cpuuse/cpuuse.c: Fix date formatting.
 
 2007-09-14	Joel Sherrill <joel.sherrill@OARcorp.com>

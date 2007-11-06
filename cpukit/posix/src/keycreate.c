@@ -46,7 +46,7 @@ int pthread_key_create(
   /*
    *  This is a bit more complex than one might initially expect because
    *  APIs are optional.  Thus there may be no ITRON tasks to have keys
-   *  for.  [NOTE: Currently RTEMS Classic API tasks are not always enabled.]
+   *  for.  [NOTE: Currently RTEMS Classic API tasks are always enabled.]
    */
 
   for ( the_api = 1;
