@@ -94,6 +94,19 @@
 
 #define SPSR REG(SPSR)
 
+#define NUM_IRQ_VECTOR          6       // IRQ number
+#define NUM_FIQ_VECTOR          7       // IRQ number
+										// 										// 
+#define CPSR_IRQ_DISABLE        0x80    // FIQ disabled when =1
+#define CPSR_FIQ_DISABLE        0x40    // FIQ disabled when =1
+#define CPSR_THUMB_ENABLE       0x20    // Thumb mode when =1
+#define CPSR_FIQ_MODE           0x11
+#define CPSR_IRQ_MODE           0x12
+#define CPSR_SUPERVISOR_MODE    0x13
+#define CPSR_UNDEF_MODE         0x1B
+
+#define CPSR_MODE_BITS          0x1F
+
 /*
  *  Define macros to handle section beginning and ends.
  */

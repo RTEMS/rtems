@@ -43,18 +43,56 @@ void _CPU_Initialize(
  *
  *  _CPU_ISR_Get_level - returns the current interrupt level
  */
+#define str(x) #x
+#define xstr(x) str(x)
+#define L(x) #x "_" xstr(__LINE__)
+
+#define TO_ARM_MODE(x)      \
+    asm volatile (          \
+    ".code  16           \n" \
+    L(x) "_thumb:        \n" \
+    ".align 2            \n" \
+    "push {lr}           \n" \
+    "adr %0, "L(x) "_arm \n" \
+    "bl " L(x)"         \n" \
+    "pop    {pc}        \n" \
+    ".balign 4          \n" \
+    L(x) ":             \n" \
+    "bx %0              \n" \
+    "nop                \n" \
+    ".pool              \n" \
+    ".code 32           \n" \
+    L(x) "_arm:         \n" \
+    :"=&r" (reg))
  
+
+/*
+ * Switch to Thumb mode Veneer,ugly but safe
+ */
+
+#define TO_THUMB_MODE(x)    \
+    asm volatile (          \
+        ".code  32                  \n"\
+        "adr %0, "L(x) "_thumb +1   \n"\
+        "bx  %0                     \n"\
+        ".pool                      \n"\
+        ".thumb_func                \n"\
+        L(x) "_thumb:               \n"\
+        : "=&r" (reg))
+
+#if (!defined(__THUMB_INTERWORK__) &&  !defined(__thumb__)) 
 uint32_t   _CPU_ISR_Get_level( void )
 {
     uint32_t   reg = 0; /* to avoid warning */
-    
     asm volatile ("mrs  %0, cpsr \n"           \
                   "and  %0,  %0, #0xc0 \n"     \
                   : "=r" (reg)                 \
                   : "0" (reg) );
-    
     return reg;
 }
+#endif
+
+
 
 /*
  *  _CPU_ISR_install_vector
@@ -162,6 +200,9 @@ cpuExcHandlerType _currentExcHandler = _defaultExcHandler;
 extern void _Exception_Handler_Undef_Swi(); 
 extern void _Exception_Handler_Abort(); 
 extern void _exc_data_abort(); 
+
+
+
 /* FIXME: put comments here */
 void rtems_exception_init_mngt()
 {

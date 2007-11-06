@@ -512,7 +512,26 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  */
+#if (defined(__THUMB_INTERWORK__) || defined(__thumb__))
 
+extern unsigned int _CPU_ISR_Disable_Thumb(void) __attribute__ ((naked));
+extern void _CPU_ISR_Enable_Thumb( int ) __attribute__ ((naked));
+extern void _CPU_ISR_Flash_Thumb(int) __attribute__ ((naked));
+extern void _CPU_ISR_Set_level_Thumb(int ) __attribute__ ((naked));
+extern uint32_t _CPU_ISR_Get_level_Thumb(void ) __attribute__ ((naked));
+
+#define _CPU_ISR_Disable(_level)	\
+ (_level) = _CPU_ISR_Disable_Thumb()
+
+#define _CPU_ISR_Enable(a) 	_CPU_ISR_Enable_Thumb(a)
+
+#define _CPU_ISR_Flash(a)	_CPU_ISR_Flash_Thumb(a)
+
+#define _CPU_ISR_Set_level(a) 	_CPU_ISR_Set_level_Thumb(a)
+
+#define _CPU_ISR_Get_level(a) 	_CPU_ISR_Get_level_Thumb(a)
+
+#else /*For ARM mode*/
 #define _CPU_ISR_Disable( _level )                \
   {                                               \
     int reg;                                       \
@@ -575,6 +594,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
                   : "0" (reg), "r" (new_level)); \
   }
 
+#endif /*(defined(__THUMB_INTERWORK__) || defined(__thumb__))*/
 
 uint32_t   _CPU_ISR_Get_level( void );
 

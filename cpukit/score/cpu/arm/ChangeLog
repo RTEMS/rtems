@@ -1,3 +1,13 @@
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+
+        * cpu.c, cpu_asm.S, score/cpu.h : add support for ARM<->THUMB veneer
+          thumb  new dir to controll CPSR/SPRS in thumb mode
+
+2007-05-09      Ray Xu <rayx.cn@gmail.com>
+
+        * cpu.c: move do_data_abort() to libbsp/arm/shared/abort/
+          implement a compact do_data_abort() in simple_abort.c
+
 2007-05-09	Ray Xu <rayx@gmail.com>
 
 	* cpu.c: move do_data_abort() to libbsp/arm/shared/abort/
