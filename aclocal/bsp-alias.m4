@@ -28,6 +28,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     icecube)      $2=gen5200          ;; # MPC5200 based board - LITE5200B
     mpc8349eamds) $2=gen83xx          ;; # MPC8349 based board
     hsc_cm01)     $2=gen83xx          ;; # MPC8349 based board
+    rtl22xx_t)    $2=rtl22xx          ;; # rtl22xx bsp in thumb mode
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     simsh7032)    $2=shsim            ;; # SH7032 simulator
     simsh7045)    $2=shsim            ;; # SH7045 simulator

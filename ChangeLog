@@ -1,3 +1,7 @@
+2007-11-06	Ray Xu <rayx.cn@gmail.com>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4:
+
 2007-09-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* VERSION: Bump VERSION to 4.8.99.0.
