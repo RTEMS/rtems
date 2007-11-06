@@ -1,3 +1,8 @@
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+
+        * custom/rtl22xx_t.cfg: New file, rtl22xx_t is a new bsp compiled
+        with THUMB enabled
+
 2007-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/icecube.cfg: Rename EP5200 to IceCube since that is the
