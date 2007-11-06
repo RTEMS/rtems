@@ -1,3 +1,9 @@
+2007-11-06	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/irq.c: test for non-NULL-ness before calling
+	'on'/'off' methods so that users don't have to provide
+	no-ops if they don't want this feature.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps
