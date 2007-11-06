@@ -415,7 +415,8 @@ int ppc_set_exception  (const rtems_raw_except_connect_data* except)
 	     except->hdl.raw_hdl,
 	     except->hdl.raw_hdl_size,
 	     PPC_CACHE_ALIGNMENT);
-    except->on(except);
+	if (except->on)
+    	except->on(except);
 
     _ISR_Enable(level);
     return 1;
@@ -453,7 +454,8 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
   }
   _ISR_Disable(level);
 
-  except->off(except);
+  if (except->off)
+  	except->off(except);
   codemove((void*)ppc_get_vector_addr(except->exceptIndex),
 	   default_raw_except_entry.hdl.raw_hdl,
 	   default_raw_except_entry.hdl.raw_hdl_size,
@@ -494,10 +496,12 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 	     raw_except_table[i].hdl.raw_hdl_size,
 	     PPC_CACHE_ALIGNMENT);
       if (raw_except_table[i].hdl.raw_hdl != default_raw_except_entry.hdl.raw_hdl) {
-	raw_except_table[i].on(&raw_except_table[i]);
+	if (raw_except_table[i].on)
+		raw_except_table[i].on(&raw_except_table[i]);
       }
       else {
-	raw_except_table[i].off(&raw_except_table[i]);
+	if (raw_except_table[i].off)
+		raw_except_table[i].off(&raw_except_table[i]);
       }
     }
     _ISR_Enable(level);

@@ -95,7 +95,8 @@ int mpc5xx_set_exception  (const rtems_raw_except_connect_data* except)
   raw_except_table[except->exceptIndex] = *except;
 
   exception_handler_table[except->exceptIndex] = except->hdl.raw_hdl;
-  except->on(except);
+  if (except->on)
+  	except->on(except);
   
   rtems_interrupt_enable(level);
   return 1;
@@ -132,7 +133,8 @@ int mpc5xx_delete_exception (const rtems_raw_except_connect_data* except)
 
   rtems_interrupt_disable(level);
 
-  except->off(except);
+  if (except->off)
+  	except->off(except);
   exception_handler_table[except->exceptIndex] = 
     default_raw_except_entry.hdl.raw_hdl;
   
@@ -168,10 +170,12 @@ int mpc5xx_init_exceptions (rtems_raw_except_global_settings* config)
     exception_handler_table[i] = raw_except_table[i].hdl.raw_hdl;
 
     if (raw_except_table[i].hdl.raw_hdl != default_raw_except_entry.hdl.raw_hdl) {
-      raw_except_table[i].on(&raw_except_table[i]);
+      if (raw_except_table[i].on)
+      	raw_except_table[i].on(&raw_except_table[i]);
     }
     else {
-      raw_except_table[i].off(&raw_except_table[i]);
+      if (raw_except_table[i].off)
+      	raw_except_table[i].off(&raw_except_table[i]);
     }
   }
   rtems_interrupt_enable(level);

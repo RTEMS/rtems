@@ -252,7 +252,8 @@ int CPU_install_rtems_irq_handler	(const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-    irq->on(irq);
+	if (irq->on)
+    	irq->on(irq);
     
     rtems_interrupt_enable(level);
 
@@ -291,7 +292,8 @@ int CPU_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Disable interrupt on device
      */
-    irq->off(irq);
+	if (irq->off)
+    	irq->off(irq);
 
     if (is_uimb_irq(irq->name)) {
       /*
@@ -345,10 +347,12 @@ int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
     for (i = CPU_UIMB_IRQ_MIN_OFFSET; i <= CPU_UIMB_IRQ_MAX_OFFSET ; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
 	CPU_irq_enable_at_uimb (i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].on)
+		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].off)
+		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
 	CPU_irq_disable_at_uimb (i);
       }
     }
@@ -362,10 +366,12 @@ int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
     for (i = CPU_USIU_IRQ_MIN_OFFSET; i <= CPU_USIU_IRQ_MAX_OFFSET ; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
 	CPU_irq_enable_at_usiu (i);
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].on)
+		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].off)
+		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
 	CPU_irq_disable_at_usiu (i);
        }
     }
@@ -381,10 +387,12 @@ int CPU_rtems_irq_mngt_set	(rtems_irq_global_settings* config)
      */
     for (i = CPU_PROC_IRQ_MIN_OFFSET; i <= CPU_PROC_IRQ_MAX_OFFSET; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].on)
+		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
       }
       else {
-	rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
+	if (rtems_hdl_tbl[i].off)
+		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
       }
     }
     rtems_interrupt_enable(level);
