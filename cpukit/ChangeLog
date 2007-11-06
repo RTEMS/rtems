@@ -1,3 +1,9 @@
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1266/cpukit
+	* posix/src/keycreate.c, posix/src/keyrundestructors.c: Use API instead
+	of class for key indexing.
+
 2007-11-06	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	Miscellaneous changes made after a review against the POSIX spec.

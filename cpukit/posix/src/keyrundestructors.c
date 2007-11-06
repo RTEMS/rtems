@@ -31,15 +31,15 @@ void _POSIX_Keys_Run_destructors(
 )
 {
   uint32_t             index;
-  uint32_t             pthread_index;
-  uint32_t             pthread_class;
+  uint32_t             thread_index;
+  uint32_t             thread_api;
   uint32_t             iterations;
   boolean              are_all_null;
   POSIX_Keys_Control  *the_key;
   void                *value;
 
-  pthread_index = _Objects_Get_index( thread->Object.id );
-  pthread_class = _Objects_Get_class( thread->Object.id );
+  thread_index = _Objects_Get_index( thread->Object.id );
+  thread_api   = _Objects_Get_API( thread->Object.id );
 
   iterations = 0;
 
@@ -53,10 +53,10 @@ void _POSIX_Keys_Run_destructors(
         _POSIX_Keys_Information.local_table[ index ];
 
       if ( the_key && the_key->is_active && the_key->destructor ) {
-        value = the_key->Values[ pthread_class ][ pthread_index ];
+        value = the_key->Values[ thread_api ][ thread_index ];
         if ( value ) {
           (*the_key->destructor)( value );
-          if ( the_key->Values[ pthread_class ][ pthread_index ] )
+          if ( the_key->Values[ thread_api ][ thread_index ] )
             are_all_null = FALSE;
         }
       }
