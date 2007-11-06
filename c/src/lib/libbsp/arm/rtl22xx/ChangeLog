@@ -1,3 +1,9 @@
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+
+        * start/start.S, startup/bspclean.c: Add veneer between ARM and 
+        Thumb instructions.  also moved bss init after CPSR/stack init in
+	start.S
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps

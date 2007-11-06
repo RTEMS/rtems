@@ -28,6 +28,7 @@
 .equ PSR_T,              0x20
 
 .text
+.code	32
 .globl  _start
 _start:
         /* 
@@ -37,8 +38,55 @@ _start:
          * I'll just set the CPSR for SVC mode, interrupts 
          * off, and ARM instructions.
          */
-        mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
+        
+        /* --- Initialize stack pointer registers */
+        /* Enter IRQ mode and set up the IRQ stack pointer */
+        mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
+        bic	r0, r0, #PSR_T
         msr     cpsr, r0
+        ldr     r1, =_irq_stack_size
+        ldr     sp, =_irq_stack
+        add     sp, sp, r1
+
+        /* Enter FIQ mode and set up the FIQ stack pointer */
+        mov     r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)     /* No interrupts */
+        bic	r0, r0, #PSR_T
+        msr     cpsr, r0
+        ldr     r1, =_fiq_stack_size
+        ldr     sp, =_fiq_stack
+        add     sp, sp, r1
+
+        /* Enter ABT mode and set up the ABT stack pointer */
+        mov     r0, #(PSR_MODE_ABT | PSR_I | PSR_F)     /* No interrupts */
+        bic	r0, r0, #PSR_T
+        msr     cpsr, r0
+        bic	r0, r0, #PSR_T        
+        ldr     r1, =_abt_stack_size
+        ldr     sp, =_abt_stack
+        add     sp, sp, r1
+        
+        /* Set up the SVC stack pointer last and stay in SVC mode */
+        mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
+        bic	r0, r0, #PSR_T
+        msr     cpsr, r0
+        ldr     r1, =_svc_stack_size
+        ldr     sp, =_svc_stack
+        add     sp, sp, r1
+        sub     sp, sp, #0x64   
+              
+        /* 
+         * Initialize the exception vectors. This includes the
+         * exceptions vectors (0x00000000-0x0000001c), and the 
+         * pointers to the exception handlers (0x00000020-0x0000003c).
+         */
+        mov     r0, #0
+        adr     r1, vector_block
+        ldmia   r1!, {r2-r9}
+        stmia   r0!, {r2-r9}
+        
+        ldmia   r1!, {r2-r9}
+        stmia   r0!, {r2-r9}
+
 
         /* zero the bss */
         ldr     r1, =_bss_end_
@@ -49,52 +97,15 @@ _bss_init:
         cmp     r0, r1
         strlot  r2, [r0], #4
         blo     _bss_init        /* loop while r0 < r1 */ 
-        
-        /* --- Initialize stack pointer registers */
-        /* Enter IRQ mode and set up the IRQ stack pointer */
-        mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
-        msr     cpsr, r0
-        ldr     r1, =_irq_stack_size
-        ldr     sp, =_irq_stack
-        add     sp, sp, r1
 
-        /* Enter FIQ mode and set up the FIQ stack pointer */
-        mov     r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)     /* No interrupts */
-        msr     cpsr, r0
-        ldr     r1, =_fiq_stack_size
-        ldr     sp, =_fiq_stack
-        add     sp, sp, r1
 
-        /* Enter ABT mode and set up the ABT stack pointer */
-        mov     r0, #(PSR_MODE_ABT | PSR_I | PSR_F)     /* No interrupts */
-        msr     cpsr, r0
-        ldr     r1, =_abt_stack_size
-        ldr     sp, =_abt_stack
-        add     sp, sp, r1
-        
-        /* Set up the SVC stack pointer last and stay in SVC mode */
-        mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
-        msr     cpsr, r0
-        ldr     r1, =_svc_stack_size
-        ldr     sp, =_svc_stack
-        add     sp, sp, r1
-        sub     sp, sp, #0x64   
-              
-
-        /* 
-         * Initialize the exception vectors. This includes the
-         * exceptions vectors (0x00000000-0x0000001c), and the 
-         * pointers to the exception handlers (0x00000020-0x0000003c).
-         */
-        mov     r0, #0
-        adr     r1, vector_block
-        ldmia   r1!, {r2-r9}
-        stmia   r0!, {r2-r9}
-        ldmia   r1!, {r2-r9}
-        stmia   r0!, {r2-r9}
-
+#ifdef __thumb__
         /* Now we are prepared to start the BSP's C code */
+	ldr	r3, =boot_card
+        bx      r3
+#else
         bl      boot_card
+
 
         /* 
          * Theoretically, we could return to what started us up,
@@ -102,6 +113,8 @@ _bss_init:
          * Instead, we'll just reset.
          */
         bl      bsp_reset
+#endif
+	.code	32
 
         /* We shouldn't get here. If we do, hang */
 _hang:  b       _hang

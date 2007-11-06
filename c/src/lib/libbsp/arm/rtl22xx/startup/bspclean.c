@@ -19,7 +19,16 @@ int uart_poll_read(int);
 
 void rtemsReboot (void)
 {
+#ifdef __thumb__
+  int tmp;
+  asm volatile (" .code 16            \n" \
+                "ldr %[tmp], =_start  \n" \
+                "bx  %[tmp]           \n" \
+                "nop                  \n" \
+                : [tmp]"=&r" (tmp) );
+#else                   
   asm volatile ("b _start");
+#endif   
 }
 
 void bsp_cleanup(void)
