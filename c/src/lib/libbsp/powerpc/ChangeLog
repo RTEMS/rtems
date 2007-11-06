@@ -1,5 +1,9 @@
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/console/uart.c: removed #define UARTDEBUG
+
+2007-11-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/pci/pci.c: converted access to pci_config_addr to
 	conditionally defined macros so that bsp.h can override details.
 

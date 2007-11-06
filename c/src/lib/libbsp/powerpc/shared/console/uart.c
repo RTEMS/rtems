@@ -81,7 +81,7 @@ uwrite(int uart, int reg, unsigned int val)
   out_8((unsigned char*)(uart_data[uart].ioBase + reg), val);
 }
 
-#define UARTDEBUG
+
 #ifdef UARTDEBUG
     static void
 uartError(int uart, void *termiosPrivate)
