@@ -2,7 +2,7 @@
  *  ARM CPU Dependent Source
  *
  *  COPYRIGHT (c) 2007 Ray Xu.
- *  mailto: Rayx at gmail dot com
+ *  mailto: Rayx.cn at gmail dot com
  *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
@@ -64,6 +64,15 @@ void _print_full_context(uint32_t spsr)
   mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
   if(!mode) mode="unknown";
 
+#if defined(__thumb__)
+  asm volatile (" .code 16 \n" \
+                "adr %[tmp], arm_code \n" \
+                "bx  %[tmp]           \n" \
+                "nop                  \n" \
+                ".code 32             \n" \
+                "arm_code:            \n" \
+                : [tmp]"=&r" (tmp) );
+#endif
   asm volatile ("	MRS  %[cpsr], cpsr \n"
             "	ORR  %[tmp], %[spsr], #0xc0 \n"
             "	MSR  cpsr_c, %[tmp] \n"

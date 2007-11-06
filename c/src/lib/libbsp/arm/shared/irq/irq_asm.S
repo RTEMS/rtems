@@ -21,8 +21,14 @@
 #include <rtems/asm.h>
 #define __asm__
 
+
+         /*MUST be ARM code*/
+         /* assume that before interrupt we are in svc mode */
+         /* fix me: No priority support, interrupt disabled too long in the ISR */
+        .arm
         .globl _ISR_Handler
 _ISR_Handler:
+        .code 32
         stmdb   sp!, {r0, r1, r2, r3, r12}   /* save regs on INT stack */
         stmdb   sp!, {lr}               /*    now safe to call C funcs */
 
@@ -41,7 +47,13 @@ _ISR_Handler:
 /* BSP specific function to INT handler */
         /* FIXME: I'm not sure why I can't save just r12. I'm also  */
         /*     not sure which of r1-r3 are important.               */
+#if __thumb__
+        ldr     r0, =ExecuteITHandler +1
+        mov     lr, pc
+        bx      r0
+#else
         bl      ExecuteITHandler
+#endif
 
 /* one less nest level  */
         ldr     r0, =_ISR_Nest_level
@@ -107,11 +119,15 @@ bframe:
         ldr     lr, =_ISR_Dispatch_p_4    /* On entry to an ISR, the lr is */
                                           /*    the return address + 4, so */
                                           /*    we have to emulate that    */
+#ifdef __thumb__
+        sub     lr,  #0x1
+#endif        
         ldmia   sp!, {r1}                 /* out with the old          */
         stmdb   sp!, {lr}                 /*    in with the new (lr) */
-
+#ifndef __thumb__
         orr     r0, r0, #0xc0
-        msr     spsr, r0
+        msr     spsr_cf, r0               /* mask interrupt */
+#endif
 
 exitit:
         ldmia   sp!, {lr}                     /* restore regs from INT stack */
@@ -121,15 +137,41 @@ exitit:
         /* on entry to _ISR_Dispatch, we're in SVC mode */
         .globl _ISR_Dispatch
 _ISR_Dispatch:
+#ifdef __thumb__
+        /* will be called from ISR, with SPSR in T mode */
+	/* ISR will enter from here */
+        .code 16
+	.thumb_func
+        push {r0-r3,lr}              /* save regs on SVC stack */
+                                          /*    (now safe to call C funcs) */
+                                          /*    we don't save lr, since  */
+                                          /*    it's just going to get   */
+                                          /*    overwritten              */
+#else
+        .code 32
         stmdb   sp!, {r0-r3, r12,lr}      /* save regs on SVC stack */
                                           /*    (now safe to call C funcs) */
                                           /*    we don't save lr, since  */
                                           /*    it's just going to get   */
                                           /*    overwritten              */
+#endif
+        nop                /*made _ISR_Dispatch_p_4 4-word align */
+
 _ISR_Dispatch_p_4:
         bl      _Thread_Dispatch
-	ldmia	sp!, {r0-r3, r12, lr}
+#ifdef __thumb__
+        ldr     r0, = .Thread_Disp_T
+        bx      r0
+        .pool
+        .code   32
+.Thread_Disp_T:
+#endif
 
+#ifdef __thumb__
+        ldmia	sp!, {r0-r3, lr} /*r12 not saved in thumb mode*/
+#else
+	ldmia	sp!, {r0-r3, r12, lr}
+#endif
 	stmdb   sp!, {r0-r2}
         /* Now we have to screw with the stack */
         mov     r0, sp                  /* copy the SVC stack pointer */
@@ -160,3 +202,4 @@ _ISR_Dispatch_p_4:
 
         /* Finally, we can return to the interrupted task */
         subs    pc, lr, #4
+

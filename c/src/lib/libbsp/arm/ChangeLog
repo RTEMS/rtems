@@ -1,3 +1,8 @@
+2007-11-03      Ray Xu <rayx.cn@gmail.com>
+
+        * shared/abort/simple_abort.c: Add veneer for ARM<->Thumb
+        shared/irq/irq_asm.S: Add veneer for ARM<->Thumb
+
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>
 
 	* gba/irq/irq.c: test for non-NULL-ness before calling
@@ -42,11 +47,11 @@
 	armulator/startup/swi.h, armulator/startup/syscalls.c,
 	armulator/startup/trap.S: Removed.
 
-2007-05-15	Ray Xu <rayx@gmail.com>
+2007-05-15      Ray Xu <rayx.cn@gmail.com>
 
 	* shared/abort/abort.c, shared/abort/simple_abort.c: New files.
 
-2007-05-15	Ray Xu <rayx@gmail.com>
+2007-05-15      Ray Xu <rayx.cn@gmail.com>
 
 	* Makefile.am: Add abort.rel since it is now in the BSP shared source,
 	not in score/cpu.
