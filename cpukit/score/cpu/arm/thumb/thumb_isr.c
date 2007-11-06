@@ -1,6 +1,13 @@
 /*
-*  The thumb mode do not support multi-level ISR, only disable and enable
-*/
+ *  The thumb mode do not support multi-level ISR, only disable and enable
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
 #include <rtems/system.h>
 
 #if (defined(__THUMB_INTERWORK__) || defined(__thumb__))

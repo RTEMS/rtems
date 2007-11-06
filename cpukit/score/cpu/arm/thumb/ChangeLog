@@ -1,5 +1,9 @@
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* thumb_isr.c: Fix headers.
+
+2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* .cvsignore, ChangeLog, Makefile.am, thumb_isr.c: New files.
 
 2007-11-03      Ray Xu <rayx.cn@gmail.com>
