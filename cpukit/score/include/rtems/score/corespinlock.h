@@ -45,6 +45,10 @@ typedef enum {
    *  An attempt to relock it will result in deadlock.
    */
   CORE_SPINLOCK_HOLDER_RELOCKING,
+  /** This status indicates that the current thread is attempting to unlock a
+   *  spinlock that is held by another thread.
+   */
+  CORE_SPINLOCK_NOT_HOLDER,
   /** This status indicates that a thread reached the limit of time it
    *  was willing to wait on the spin lock. 
    */

@@ -43,23 +43,37 @@ int pthread_barrier_init(
   unsigned int                 count
 )
 {
-  POSIX_Barrier_Control   *the_barrier;
-  CORE_barrier_Attributes  the_attributes;
-  
+  POSIX_Barrier_Control         *the_barrier;
+  CORE_barrier_Attributes        the_attributes;
+  pthread_barrierattr_t          my_attr;
+  const pthread_barrierattr_t   *the_attr;
 
+  /*
+   *  Error check parameters
+   */
   if ( !barrier )
     return EINVAL;
 
   if ( count == 0 )
     return EINVAL;
 
-  if ( !attr )
+  /*
+   * If the user passed in NULL, use the default attributes
+   */
+  if ( attr ) {
+    the_attr = attr;
+  } else {
+    (void) pthread_barrierattr_init( &my_attr );
+    the_attr = &my_attr;
+  }
+
+  /*
+   * Now start error checking the attributes that we are going to use
+   */
+  if ( !the_attr->is_initialized )
     return EINVAL;
 
-  if ( !attr->is_initialized )
-    return EINVAL;
-
-  switch ( attr->process_shared ) {
+  switch ( the_attr->process_shared ) {
     case PTHREAD_PROCESS_PRIVATE:    /* only supported values */
       break;
     case PTHREAD_PROCESS_SHARED:
@@ -67,9 +81,15 @@ int pthread_barrier_init(
       return EINVAL;
   }
 
+  /*
+   * Convert from POSIX attributes to Core Barrier attributes
+   */
   the_attributes.discipline    = CORE_BARRIER_AUTOMATIC_RELEASE;
   the_attributes.maximum_count = count;
 
+  /*
+   * Enter dispatching critical section to allocate and initialize barrier
+   */
   _Thread_Disable_dispatch();             /* prevents deletion */
 
   the_barrier = _POSIX_Barrier_Allocate();
@@ -87,8 +107,10 @@ int pthread_barrier_init(
     0
   );
 
+  /*
+   * Exit the critical section and return the user an operational barrier
+   */
   *barrier = the_barrier->Object.id;
-
   _Thread_Enable_dispatch();
   return 0;
 }

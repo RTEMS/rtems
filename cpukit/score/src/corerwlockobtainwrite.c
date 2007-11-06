@@ -87,7 +87,12 @@ void _CORE_RWLock_Obtain_for_writing(
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
     _ISR_Enable( level );
 
-    _Thread_queue_Enqueue( &the_rwlock->Wait_queue, timeout );
+    _Thread_queue_Enqueue_with_handler(
+       &the_rwlock->Wait_queue,
+       timeout,
+       _CORE_RWLock_Timeout
+    );
+
 
     /* return to API level so it can dispatch and we block */
 }

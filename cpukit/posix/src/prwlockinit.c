@@ -41,16 +41,30 @@ int pthread_rwlock_init(
   const pthread_rwlockattr_t *attr
 )
 {
-  POSIX_RWLock_Control   *the_rwlock;
-  CORE_RWLock_Attributes  the_attributes;
-  
+  POSIX_RWLock_Control        *the_rwlock;
+  CORE_RWLock_Attributes       the_attributes;
+  pthread_rwlockattr_t         default_attr;
+  const pthread_rwlockattr_t  *the_attr;
 
+  /*
+   *  Error check parameters
+   */
   if ( !rwlock )
     return EINVAL;
 
-  if ( !attr )
-    return EINVAL;
+  /*
+   * If the user passed in NULL, use the default attributes
+   */
+  if ( attr ) {
+    the_attr = attr;
+  } else {
+    (void) pthread_rwlockattr_init( &default_attr );
+    the_attr = &default_attr;
+  }
 
+  /*
+   * Now start error checking the attributes that we are going to use
+   */
   if ( !attr->is_initialized )
     return EINVAL;
 
@@ -62,10 +76,14 @@ int pthread_rwlock_init(
       return EINVAL;
   }
 
-/*
-  the_attributes.discipline    = CORE_RWLOCK_AUTOMATIC_RELEASE;
-*/
+  /*
+   * Convert from POSIX attributes to Core RWLock attributes
+   */
+  /*  Currently there are no core rwlock attributes */
 
+  /*
+   * Enter dispatching critical section to allocate and initialize RWLock
+   */
   _Thread_Disable_dispatch();             /* prevents deletion */
 
   the_rwlock = _POSIX_RWLock_Allocate();
