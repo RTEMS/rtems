@@ -1,3 +1,14 @@
+/*
+ *  Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
+ *  May 2001
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  $Id$
+ */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

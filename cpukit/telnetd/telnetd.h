@@ -1,16 +1,12 @@
 /*
- * (A first version for telnetd)
- *
  *  Original Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
  *  May 2001
- *
  *  Reworked by Till Straumann and .h overhauled by Joel Sherrill.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * 
  *  $Id$
  */
 
