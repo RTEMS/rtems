@@ -1,5 +1,13 @@
 2007-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/inline/rtems/score/object.inl: During test coverage analysis,
+	we identified this sanity check which should have been conditional on
+	RTEMS_DEBUG since it can NOT be tripped during normal RTEMS
+	operations. With all APIs enabled, this saved 352 bytes from the
+	minimum executable on the SPARC/ERC32.
+
+2007-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/include/rtems/system.h, score/include/rtems/score/interr.h: Add
 	compiler conditional attribute for methods that do not return. This
 	avoids gcc generating unreachable code following calls to

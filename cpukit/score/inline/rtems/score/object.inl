@@ -7,7 +7,7 @@
  *  This include file contains the static inline implementation of all
  *  of the inlined routines in the Object Handler.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -200,6 +200,11 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
  *  @param[in] information points to an Object Information Table
  *  @param[in] index is the index of the object the caller wants to access
  *  @param[in] the_object is the local object pointer
+ *
+ *  @note This routine is ONLY to be called in places where the
+ *        index portion of the Id is known to be good.  This is
+ *        OK since it is normally called from object create/init
+ *        or delete/destroy operations.
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
@@ -208,8 +213,17 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Control     *the_object
 )
 {
-  if ( index <= information->maximum )
-    information->local_table[ index ] = the_object;
+  /*
+   *  This routine is ONLY to be called from places in the code
+   *  where the Id is known to be good.  Therefore, this should NOT
+   *  occur in normal situations.
+   */ 
+  #if defined(RTEMS_DEBUG)
+    if ( index > information->maximum )
+      return;
+  #endif
+
+  information->local_table[ index ] = the_object;
 }
 
 /**
