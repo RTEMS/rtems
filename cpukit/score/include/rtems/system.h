@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -122,6 +122,20 @@ extern "C" {
   #define RTEMS_COMPILER_MEMORY_BARRIER() asm volatile("" ::: "memory")
 #else
   #define RTEMS_COMPILER_MEMORY_BARRIER()
+#endif
+
+/**
+ *  The following macro is a compiler specific way to indicate that
+ *  the method will NOT return to the caller.  This can assist the
+ *  compiler in code generation and avoid unreachable paths.  This
+ *  can impact the code generated following calls to
+ *  rtems_fatal_error_occurred and _Internal_error_Occurred.
+ */
+#ifdef __GNUC__
+  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE \
+      __attribute__ ((noreturn))
+#else
+  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
 #endif
 
 #ifdef RTEMS_POSIX_API

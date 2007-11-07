@@ -1,3 +1,10 @@
+2007-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/system.h, score/include/rtems/score/interr.h: Add
+	compiler conditional attribute for methods that do not return. This
+	avoids gcc generating unreachable code following calls to
+	_Internal_error_Occurred.
+
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac: Add ARM/Thumb Makefile.

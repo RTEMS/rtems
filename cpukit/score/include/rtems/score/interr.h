@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -91,7 +91,7 @@ void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   boolean                 is_internal,
   uint32_t                the_error
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
 }
