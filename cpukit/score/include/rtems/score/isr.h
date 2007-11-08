@@ -159,7 +159,12 @@ void _ISR_Handler_initialization ( void );
  *  routine exits.
  */
 #define _ISR_Set_level( _new_level ) \
-        _CPU_ISR_Set_level( _new_level )
+	  do { \
+		RTEMS_COMPILER_MEMORY_BARRIER();  \
+		_CPU_ISR_Set_level( _new_level ); \
+		RTEMS_COMPILER_MEMORY_BARRIER();  \
+	} while (0)
+
 
 /**
  *  This routine is the interrupt dispatcher.  ALL interrupts

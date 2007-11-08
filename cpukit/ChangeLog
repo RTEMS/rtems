@@ -1,3 +1,8 @@
+2007-11-07	Till Straumann <strauman@slac.stanford.edu>
+
+	* score/include/rtems/score/isr.h: added RTEMS_COMPILER_MEMORY_BARRIER
+	around _CPU_ISR_Set_level().
+
 2007-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/inline/rtems/score/object.inl: During test coverage analysis,
