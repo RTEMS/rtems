@@ -33,12 +33,12 @@ struct shell_cmd_tt ;
 typedef struct shell_cmd_tt shell_cmd_t;
 
 struct shell_cmd_tt {
- char * name;
- char * usage;
- char * topic;
- shell_command_t command;
- shell_cmd_t * alias;
- shell_cmd_t * next;
+ char            *name;
+ char            *usage;
+ char            *topic;
+ shell_command_t  command;
+ shell_cmd_t     *alias;
+ shell_cmd_t     *next;
 };
 
 uint32_t   new_rtems_name(char * rtems_name);
@@ -69,15 +69,22 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
 void cat_file(FILE * out,char *name);
 void write_file(char *name,char * content);
 
-rtems_status_code shell_init(char * task_name      ,
-                              uint32_t      task_stacksize,/*0 default*/
-		              rtems_task_priority task_priority ,
-                              char * devname      ,
-			      tcflag_t tcflag     ,
-			      int forever         );
+rtems_status_code shell_init(
+  char                *task_name,
+  uint32_t             task_stacksize,  /*0 default*/
+  rtems_task_priority  task_priority,
+  char                *devname,
+  tcflag_t             tcflag,
+  int                  forever
+);
 
-extern shell_env_t global_shell_env,
-                *  current_shell_env;
+rtems_boolean shell_shell_loop(
+  shell_env_t *shell_env
+);
+
+extern shell_env_t  global_shell_env;
+extern shell_env_t *current_shell_env;
+
 /*--------*/
 /* cmds.c */
 /*--------*/

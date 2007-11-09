@@ -1,5 +1,11 @@
 2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/shell.c, libmisc/shell/shell.h: Much cleanup but much
+	of the focus was on the beginning stages of making the login checker
+	pluggable just like the shell.
+
+2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/mprotect.c: Update comments.
 
 2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
