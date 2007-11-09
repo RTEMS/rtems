@@ -1,3 +1,8 @@
+2007-11-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/apimutexlock.c, score/src/apimutexunlock.c: Functions were
+	in opposite files. Whoops!
+
 2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell.c, libmisc/shell/shell.h: Much cleanup but much

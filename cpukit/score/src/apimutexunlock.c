@@ -16,19 +16,15 @@
 #include <rtems/system.h>
 #include <rtems/score/apimutex.h>
 
-void _API_Mutex_Lock(
+void _API_Mutex_Unlock(
   API_Mutex_Control *the_mutex
 )
 {
-  ISR_Level level; 
-
-  _ISR_Disable( level );
-
-  _CORE_mutex_Seize(
-    &the_mutex->Mutex,
-    the_mutex->Object.id,
-    TRUE,
-    0,
-    level
-  );
+  _Thread_Disable_dispatch();
+    _CORE_mutex_Surrender(
+      &the_mutex->Mutex,
+      the_mutex->Object.id,
+      NULL
+   );
+  _Thread_Enable_dispatch();
 }
