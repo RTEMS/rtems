@@ -13,10 +13,6 @@ Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
 %endif
-%if "%{gcc_version}" == "4.2.0"
-Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
-%endif
 %if "%{gcc_version}" == "4.2.1"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
