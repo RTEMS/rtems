@@ -1,3 +1,7 @@
+2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ada.am: Now builds cleanly with GCC trunk.
+
 2007-10-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mptests/mp01/node1/Makefile.am, mptests/mp01/node2/Makefile.am,
