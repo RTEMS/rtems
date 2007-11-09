@@ -60,25 +60,9 @@ Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
-%if "%{gcc_version}" == "4.1.1"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.1.1-rtems4.8-20070201.diff
-%endif
-%if "%{gcc_version}" == "4.1.2"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.1.2-rtems4.8-20070613.diff
-%endif
-%if "%{gcc_version}" == "4.2.0"
-Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20070613.diff
-%endif
-%if "%{gcc_version}" == "4.2.1"
-Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.1-rtems4.8-20070804.diff
-%endif
 %if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.9-20071011.diff
+Patch0:		gcc-core-4.2.2-rtems4.9-20071109.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
