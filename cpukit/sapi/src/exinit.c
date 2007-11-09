@@ -168,7 +168,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
    * Initialize the internal allocator Mutex
    */
   _API_Mutex_Initialization( 1 );
-  _API_Mutex_Allocate( _RTEMS_Allocator_Mutex );
+  _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
 
   _Priority_Handler_initialization();
 

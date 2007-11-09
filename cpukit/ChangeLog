@@ -1,3 +1,13 @@
+2007-11-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/src/exinit.c, score/Makefile.am,
+	score/include/rtems/score/apimutex.h: API Mutex calls should never
+	have been inlined. Inlining them lead to many inlined copies of core
+	mutex lock. This lead to over 2K savings in the SPARC/ERC32
+	minimum.exe.
+	* score/src/apimutex.c, score/src/apimutexallocate.c,
+	score/src/apimutexlock.c, score/src/apimutexunlock.c: New files.
+
 2007-11-07	Till Straumann <strauman@slac.stanford.edu>
 
 	* score/include/rtems/score/isr.h: added RTEMS_COMPILER_MEMORY_BARRIER

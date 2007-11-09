@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,77 +56,39 @@ SCORE_EXTERN Objects_Information  _API_Mutex_Information;
 /**
  *  This routine performs the initialization necessary for this handler.
  *
- *  @param[in] _maximum_mutexes is the maximum number of API mutexes
+ *  @param[in] maximum_mutexes is the maximum number of API mutexes
  *         that may exist at any time
  */
-#if defined(RTEMS_MULTIPROCESSING)
-#define _API_Mutex_Initialization( _maximum_mutexes ) \
-  _Objects_Initialize_information( \
-    &_API_Mutex_Information, \
-    OBJECTS_INTERNAL_API, \
-    OBJECTS_INTERNAL_MUTEXES, \
-    _maximum_mutexes, \
-    sizeof( API_Mutex_Control ), \
-    FALSE, \
-    0, \
-    FALSE, \
-    NULL \
-  );
-#else
-#define _API_Mutex_Initialization( _maximum_mutexes ) \
-  _Objects_Initialize_information( \
-    &_API_Mutex_Information, \
-    OBJECTS_INTERNAL_API, \
-    OBJECTS_INTERNAL_MUTEXES, \
-    _maximum_mutexes, \
-    sizeof( API_Mutex_Control ), \
-    FALSE, \
-    0  \
-  );
-#endif
+void _API_Mutex_Initialization(
+  uint32_t maximum_mutexes
+);
 
 /**
  *  This routine allocates an API mutex from the inactive set.
  *
- *  @param[out] _the_mutex will contain the allocated mutex.
+ *  @param[out] the_mutex will contain the allocated mutex.
  */
-#define _API_Mutex_Allocate( _the_mutex ) \
-  do { \
-    CORE_mutex_Attributes attr =  \
-      { CORE_MUTEX_NESTING_IS_ERROR, FALSE, \
-        CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT, 0 }; \
-    (_the_mutex) = (API_Mutex_Control *) \
-      _Objects_Allocate( &_API_Mutex_Information ); \
-    _CORE_mutex_Initialize( \
-       &(_the_mutex)->Mutex, &attr, CORE_MUTEX_UNLOCKED ); \
-  } while (0)
+void _API_Mutex_Allocate(
+  API_Mutex_Control **the_mutex
+);
 
 /**
  *  This routine acquires the specified API mutex.
  *
- *  @param[in] _the_mutex is the mutex to acquire.
+ *  @param[in] the_mutex is the mutex to acquire.
  */
-#define _API_Mutex_Lock( _the_mutex ) \
-  do { \
-    ISR_Level _level;  \
-    _ISR_Disable( _level ); \
-    _CORE_mutex_Seize( \
-      &(_the_mutex)->Mutex, (_the_mutex)->Object.id, TRUE, 0, (_level) ); \
-  } while (0)
+void _API_Mutex_Lock(
+  API_Mutex_Control *the_mutex
+);
 
 /**
  *  This routine releases the specified API mutex.
  *
  *  @param[in] _the_mutex is the mutex to release.
  */
-
-#define _API_Mutex_Unlock( _the_mutex ) \
-  do { \
-    _Thread_Disable_dispatch(); \
-      _CORE_mutex_Surrender( \
-        &(_the_mutex)->Mutex, (_the_mutex)->Object.id, NULL ); \
-    _Thread_Enable_dispatch(); \
-  } while (0);
+void _API_Mutex_Unlock(
+  API_Mutex_Control *the_mutex
+);
 
 /**
  *  This variable points to the API Mutex instance that is used
