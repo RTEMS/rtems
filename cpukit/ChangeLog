@@ -1,5 +1,9 @@
 2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/mprotect.c: Update comments.
+
+2007-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/Makefile.am: Add support for Ada95 interrupt tasks.  This
 	will require gcc 4.3 or newer.
 	* posix/src/ada_intrsupp.c: New file.
