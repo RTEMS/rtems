@@ -6,7 +6,7 @@ diff -uNr gcc-4.0.4.orig/gcc/collect2.c gcc-4.0.4/gcc/collect2.c
      {
        /* Open response file.  */
 -      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT);
-+      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT, S_IWRUSR | S_IRUSR);
++      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT, S_IWUSR | S_IRUSR);
  
        /* Duplicate the stdout and stderr file handles
  	 so they can be restored later.  */
