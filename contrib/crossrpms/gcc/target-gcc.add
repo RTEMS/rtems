@@ -38,7 +38,9 @@ GNU cc compiler for @tool_target@.
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "@tool_target@" != "bfin-rtems4.9"
+%if "@tool_target@" != "avr-rtems4.9"
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include/ssp
+%endif
 %endif
 %endif
 
