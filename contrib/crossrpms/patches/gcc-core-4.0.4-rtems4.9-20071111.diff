@@ -1,0 +1,27 @@
+diff -uNr gcc-4.0.4.orig/gcc/collect2.c gcc-4.0.4/gcc/collect2.c
+--- gcc-4.0.4.orig/gcc/collect2.c	2005-06-06 21:21:03.000000000 +0200
++++ gcc-4.0.4/gcc/collect2.c	2007-11-12 08:09:42.000000000 +0100
+@@ -1577,7 +1577,7 @@
+   if (redir)
+     {
+       /* Open response file.  */
+-      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT);
++      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT, S_IWRUSR | S_IRUSR);
+ 
+       /* Duplicate the stdout and stderr file handles
+ 	 so they can be restored later.  */
+diff -uNr gcc-4.0.4.orig/gcc/Makefile.in gcc-4.0.4/gcc/Makefile.in
+--- gcc-4.0.4.orig/gcc/Makefile.in	2006-09-06 12:30:49.000000000 +0200
++++ gcc-4.0.4/gcc/Makefile.in	2007-11-12 06:39:10.000000000 +0100
+@@ -3275,9 +3275,9 @@
+ install-driver: installdirs xgcc$(exeext)
+ 	-rm -f $(DESTDIR)$(bindir)/$(GCC_INSTALL_NAME)$(exeext)
+ 	-$(INSTALL_PROGRAM) xgcc$(exeext) $(DESTDIR)$(bindir)/$(GCC_INSTALL_NAME)$(exeext)
+-	-rm -f $(DESTDIR)$(bindir)/$(target_noncanonical)-gcc-$(version)
++	-rm -f $(DESTDIR)$(bindir)/$(target_noncanonical)-gcc-$(version)$(exeext)
+ 	-( cd $(DESTDIR)$(bindir) && \
+-	   $(LN) $(GCC_INSTALL_NAME)$(exeext) $(target_noncanonical)-gcc-$(version) )
++	   $(LN) $(GCC_INSTALL_NAME)$(exeext) $(target_noncanonical)-gcc-$(version)$(exeext) )
+ 	-if [ -f gcc-cross$(exeext) ] ; then \
+ 	  if [ -d $(DESTDIR)$(gcc_tooldir)/bin/. ] ; then \
+ 	    rm -f $(DESTDIR)$(gcc_tooldir)/bin/gcc$(exeext); \
