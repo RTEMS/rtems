@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.0.3
-%define gcc_version 4.0.3
-%define gcc_rpmvers %{expand:%(echo "4.0.3" | tr - _ )}
+%define gcc_pkgvers 4.0.4
+%define gcc_version 4.0.4
+%define gcc_rpmvers %{expand:%(echo "4.0.4" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	avr-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,12 +53,9 @@ Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "3.4.6"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
-%endif
-%if "%{gcc_version}" == "4.0.3"
+%if "%{gcc_version}" == "4.0.4"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.0.3-rtems-20060822.diff
+Patch0:		gcc-core-4.0.4-rtems4.9-20071111.diff
 %endif
 %if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -361,7 +358,9 @@ GNU cc compiler for avr-rtems4.9.
 %dir %{gcclib}/avr-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "avr-rtems4.9" != "bfin-rtems4.9"
+%if "avr-rtems4.9" != "avr-rtems4.9"
 %dir %{gcclib}/avr-rtems4.9/%{gcc_version}/include/ssp
+%endif
 %endif
 %endif
 

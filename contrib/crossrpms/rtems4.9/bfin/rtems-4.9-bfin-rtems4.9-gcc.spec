@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -361,7 +361,9 @@ GNU cc compiler for bfin-rtems4.9.
 %dir %{gcclib}/bfin-rtems4.9/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "bfin-rtems4.9" != "bfin-rtems4.9"
+%if "bfin-rtems4.9" != "avr-rtems4.9"
 %dir %{gcclib}/bfin-rtems4.9/%{gcc_version}/include/ssp
+%endif
 %endif
 %endif
 
