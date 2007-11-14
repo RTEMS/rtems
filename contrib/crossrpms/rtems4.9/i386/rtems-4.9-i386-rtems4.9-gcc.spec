@@ -26,7 +26,7 @@ Summary:      	i386-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	3%{?dist}
+Release:      	4%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -55,10 +55,6 @@ Requires:	rtems-4.9-i386-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "3.4.6"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
-%endif
-%if "%{gcc_version}" == "4.0.3"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
 %if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
