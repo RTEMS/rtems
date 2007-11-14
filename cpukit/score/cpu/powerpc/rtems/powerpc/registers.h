@@ -286,6 +286,25 @@ lidate */
 #define SR14	14
 #define SR15	15
 
+#define BOOKE_DECAR	54
+
+#define BOOKE_TSR	336
+#define BOOKE_TSR_ENW		(1<<31)
+#define BOOKE_TSR_WIS		(1<<30)
+#define BOOKE_TSR_DIS		(1<<27)
+#define BOOKE_TSR_FIS		(1<<26)
+
+#define BOOKE_TCR	340
+#define BOOKE_TCR_WP(x)		(((x)&3)<<30)
+#define BOOKE_TCR_WRC(x)	(((x)&3)<<28)
+#define BOOKE_TCR_WIE		(1<<27)
+#define BOOKE_TCR_DIE		(1<<26)
+#define BOOKE_TCR_FP(x)		(((x)&3)<<24)
+#define BOOKE_TCR_FIE		(1<<23)
+#define BOOKE_TCR_ARE		(1<<22)
+#define BOOKE_TCR_WPEXT(x)	(((x)&0xf)<<17)
+#define BOOKE_TCR_FPEXT(x)	(((x)&0xf)<<13)
+
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
     _msr_value = 0; \
