@@ -218,10 +218,24 @@ extern "C" {
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
+#elif defined(__ppc_generic)
+
+/* Generic ppc */
+
+#ifdef _SOFT_FLOAT
+#define CPU_MODEL_NAME "PowerPC Generic (no FPU)"
+#elif defined(__NO_FPRS__)
+#define CPU_MODEL_NAME "PowerPC Generic (E500/float-gprs)"
 #else
- 
+#define CPU_MODEL_NAME "PowerPC Generic"
+#endif
+
+#define PPC_ALIGNMENT		8
+
+#else
+
 #error "Unsupported CPU Model"
- 
+
 #endif
 
 /*
@@ -300,7 +314,7 @@ extern "C" {
  */
 
 #ifndef PPC_HAS_FPU
-#ifdef _SOFT_FLOAT
+#if defined(_SOFT_FLOAT) || defined(__NO_FPRS__) /* e500 has unified integer/FP registers */
 #define PPC_HAS_FPU 0
 #else
 #define PPC_HAS_FPU 1

@@ -1,5 +1,13 @@
 2007-11-13	Till Straumann <strauman@slac.stanford.edu>
 
+	* rtems/score/powerpc.h: Added a '__ppc_generic' CPU variant.
+	The goal would be making cpukit and hopefully libcpu work
+	for all (or at least most) CPUs/BSPs with -D__ppc_generic so
+	that eventually all tests [#if defined(<cpu_flavor>)] for CPU
+	flavors can be eliminated.
+
+2007-11-13	Till Straumann <strauman@slac.stanford.edu>
+
 	* rtems/powerpc/registers.h: Added SPR definitions for BookE
 	DECAR, TCR, TSR.
 
