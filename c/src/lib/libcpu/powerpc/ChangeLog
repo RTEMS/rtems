@@ -1,3 +1,8 @@
+2007-11-13	Till Straumann <strauman@slac.stanford.edu>
+	
+	* shared/include/byteorder.h: fixed wrong pointer-type
+	of ld_le32() (uint16_t* -> uint32_t*).
+
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc5xx/irq/irq.c, mpc5xx/exceptions/raw_exception.c,

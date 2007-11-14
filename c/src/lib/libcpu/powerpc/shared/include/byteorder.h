@@ -34,7 +34,7 @@ extern __inline__ void st_le16(volatile uint16_t *addr, unsigned val)
 	__asm__ __volatile__ ("sthbrx %1,0,%2" : "=m" (*addr) : "r" (val), "r" (addr));
 }
 
-extern __inline__ unsigned ld_le32(volatile uint16_t *addr)
+extern __inline__ unsigned ld_le32(volatile uint32_t *addr)
 {
 	unsigned val;
 
