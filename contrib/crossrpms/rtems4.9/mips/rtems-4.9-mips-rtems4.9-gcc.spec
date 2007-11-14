@@ -58,7 +58,7 @@ Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
 %endif
 %if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.9-20071109.diff
+Patch0:		gcc-core-4.2.2-rtems4.9-20071114.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
