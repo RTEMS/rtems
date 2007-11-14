@@ -29,7 +29,10 @@
 
 #endif
 #endif
+
+#ifdef _OLD_EXCEPTIONS
 #include <libcpu/cache.h>
+#endif
 
 #endif
 /* end of include file */

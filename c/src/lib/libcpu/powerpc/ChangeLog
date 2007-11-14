@@ -1,4 +1,10 @@
 2007-11-13	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/src/cache_.h: include <libcpu/cache.h> only
+	#ifdef _OLD_EXCEPTIONS - no need for <libcpu/cache.h>
+	otherwise.
+
+2007-11-13	Till Straumann <strauman@slac.stanford.edu>
 	
 	* shared/include/byteorder.h: fixed wrong pointer-type
 	of ld_le32() (uint16_t* -> uint32_t*).
