@@ -1,5 +1,11 @@
 2007-11-13	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/src/cache.c: moved generic operations
+	(flush/invalidate 1 data line, invalidate 1 inst. line)
+	from #ifdef <cpu_flavor> to general section (all CPUs).
+
+2007-11-13	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/src/cache_.h: include <libcpu/cache.h> only
 	#ifdef _OLD_EXCEPTIONS - no need for <libcpu/cache.h>
 	otherwise.

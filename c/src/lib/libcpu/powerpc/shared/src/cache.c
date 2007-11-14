@@ -62,13 +62,6 @@ void _CPU_cache_disable_data (
   PPC_Set_HID0( value );
 }
 
-void _CPU_cache_invalidate_1_data_line(
-	const void * _address )
-{
-  register const void *__address = _address;
-  asm volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
-}
-
 void _CPU_cache_invalidate_entire_data (
 	void )
 {
@@ -98,13 +91,6 @@ void _CPU_cache_unfreeze_data (
   PPC_Set_HID0( value );
 }
 
-void _CPU_cache_flush_1_data_line(
-	const void * _address )
-{
-  register const void *__address = _address;
-  asm volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
-}
-
 void _CPU_cache_flush_entire_data (
 	void )
 {
@@ -131,12 +117,6 @@ void _CPU_cache_disable_instruction (
   PPC_Set_HID0( value );
 }
 
-void _CPU_cache_invalidate_1_instruction_line(
-	const void * _address )
-{
-  register const void *__address = _address;
-  asm volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
-}
 
 void _CPU_cache_invalidate_entire_instruction (
 	void )
@@ -236,5 +216,27 @@ void _CPU_cache_disable_instruction ( void )
   isync;
 }
 #endif
+
+void _CPU_cache_invalidate_1_data_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbi 0,%0" :: "r"(__address) : "memory" );
+}
+
+void _CPU_cache_flush_1_data_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "dcbf 0,%0" :: "r" (__address) : "memory" );
+}
+
+
+void _CPU_cache_invalidate_1_instruction_line(
+	const void * _address )
+{
+  register const void *__address = _address;
+  asm volatile ( "icbi 0,%0" :: "r" (__address) : "memory");
+}
 
 /* end of file */
