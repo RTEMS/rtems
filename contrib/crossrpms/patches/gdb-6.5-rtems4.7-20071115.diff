@@ -1,0 +1,133 @@
+diff -uNr gdb-6.5.orig/bfd/sysdep.h gdb-6.5/bfd/sysdep.h
+--- gdb-6.5.orig/bfd/sysdep.h	2005-05-05 20:51:14.000000000 +0200
++++ gdb-6.5/bfd/sysdep.h	2007-11-15 06:31:01.000000000 +0100
+@@ -135,7 +135,7 @@
+ #endif
+ 
+ #if !HAVE_DECL_STRSTR
+-extern char *strstr ();
++/* extern char *strstr (); */
+ #endif
+ 
+ #ifdef HAVE_FTELLO
+diff -uNr gdb-6.5.orig/configure gdb-6.5/configure
+--- gdb-6.5.orig/configure	2006-05-02 02:16:50.000000000 +0200
++++ gdb-6.5/configure	2007-11-15 06:31:09.000000000 +0100
+@@ -3648,7 +3648,7 @@
+     # For an installed makeinfo, we require it to be from texinfo 4.4 or
+     # higher, else we use the "missing" dummy.
+     if ${MAKEINFO} --version \
+-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
++       | egrep 'texinfo[^0-9]*(4\.([4-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+       :
+     else
+       MAKEINFO="$MISSING makeinfo"
+diff -uNr gdb-6.5.orig/configure.in gdb-6.5/configure.in
+--- gdb-6.5.orig/configure.in	2006-06-21 07:16:16.000000000 +0200
++++ gdb-6.5/configure.in	2007-11-15 06:31:09.000000000 +0100
+@@ -2217,7 +2217,7 @@
+     # For an installed makeinfo, we require it to be from texinfo 4.4 or
+     # higher, else we use the "missing" dummy.
+     if ${MAKEINFO} --version \
+-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
++       | egrep 'texinfo[^0-9]*(4\.([4-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+       :
+     else
+       MAKEINFO="$MISSING makeinfo"
+diff -uNr gdb-6.5.orig/gdb/config/sparc/embedded.mt gdb-6.5/gdb/config/sparc/embedded.mt
+--- gdb-6.5.orig/gdb/config/sparc/embedded.mt	1970-01-01 01:00:00.000000000 +0100
++++ gdb-6.5/gdb/config/sparc/embedded.mt	2007-11-15 06:31:01.000000000 +0100
+@@ -0,0 +1,5 @@
++# Target: SPARC embedded with simulator
++TDEPFILES= sparc-tdep.o
++
++SIM_OBS = remote-sim.o
++SIM = ../sim/erc32/libsim.a
+diff -uNr gdb-6.5.orig/gdb/configure.tgt gdb-6.5/gdb/configure.tgt
+--- gdb-6.5.orig/gdb/configure.tgt	2006-04-21 01:18:48.000000000 +0200
++++ gdb-6.5/gdb/configure.tgt	2007-11-15 06:31:01.000000000 +0100
+@@ -197,6 +197,7 @@
+ sparc-*-solaris2* | sparcv9-*-solaris2* | sparc64-*-solaris2*)
+ 			gdb_target=sol2-64
+ 			;;
++sparc-*-rtems*)		gdb_target=embedded ;;
+ sparc-*-*)		gdb_target=sparc ;;
+ sparc64-*-*)		gdb_target=sparc64 ;;
+ 
+diff -uNr gdb-6.5.orig/sim/configure gdb-6.5/sim/configure
+--- gdb-6.5.orig/sim/configure	2006-05-05 19:11:19.000000000 +0200
++++ gdb-6.5/sim/configure	2007-11-15 06:31:01.000000000 +0100
+@@ -3525,6 +3525,14 @@
+ 	   testsuite=yes
+ 	   common=yes
+ 	   ;;
++       sparc-*-rtems*|sparc-*-elf*)
++
++
++subdirs="$subdirs erc32"
++
++	   testsuite=yes
++	   common=yes
++	   ;;
+        powerpc*-*-* )
+ 
+ 
+diff -uNr gdb-6.5.orig/sim/configure.ac gdb-6.5/sim/configure.ac
+--- gdb-6.5.orig/sim/configure.ac	2006-05-05 19:11:19.000000000 +0200
++++ gdb-6.5/sim/configure.ac	2007-11-15 06:31:01.000000000 +0100
+@@ -115,6 +115,11 @@
+ 	   testsuite=yes
+ 	   common=yes
+ 	   ;;
++       sparc-*-rtems*|sparc-*-elf*)
++           AC_CONFIG_SUBDIRS(erc32)
++	   testsuite=yes
++	   common=yes
++	   ;;
+        powerpc*-*-* )
+            AC_CONFIG_SUBDIRS(ppc)
+ 	   common=yes
+diff -uNr gdb-6.5.orig/sim/erc32/exec.c gdb-6.5/sim/erc32/exec.c
+--- gdb-6.5.orig/sim/erc32/exec.c	2005-03-07 12:09:05.000000000 +0100
++++ gdb-6.5/sim/erc32/exec.c	2007-11-15 06:31:01.000000000 +0100
+@@ -1713,7 +1713,7 @@
+     	    sregs->fdp[rs2 | 1] = sregs->fs[rs2 & ~1];
+     	    sregs->fdp[rs2 & ~1] = sregs->fs[rs2 | 1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+ 
+@@ -1886,7 +1886,7 @@
+ 	sregs->fs[rd & ~1] = sregs->fdp[rd | 1];
+ 	sregs->fs[rd | 1] = sregs->fdp[rd & ~1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+     if (sregs->fpstate == FP_EXC_PE) {
+diff -uNr gdb-6.5.orig/sim/erc32/Makefile.in gdb-6.5/sim/erc32/Makefile.in
+--- gdb-6.5.orig/sim/erc32/Makefile.in	2000-03-07 16:32:49.000000000 +0100
++++ gdb-6.5/sim/erc32/Makefile.in	2007-11-15 06:31:01.000000000 +0100
+@@ -53,7 +53,7 @@
+ # Copy the files into directories where they will be run.
+ install-sis: installdirs
+ 	n=`echo sis | sed '$(program_transform_name)'`; \
+-	$(INSTALL_PROGRAM) sis$(EXEEXT) $(bindir)/$$n$(EXEEXT)
++	$(INSTALL_PROGRAM) sis$(EXEEXT) $(DESTDIR)$(bindir)/$$n$(EXEEXT)
+ 
+ clean-sis:
+ 	rm -f sis end end.h
+diff -uNr gdb-6.5.orig/sim/Makefile.in gdb-6.5/sim/Makefile.in
+--- gdb-6.5.orig/sim/Makefile.in	2006-05-05 19:11:19.000000000 +0200
++++ gdb-6.5/sim/Makefile.in	2007-11-15 06:31:01.000000000 +0100
+@@ -84,6 +84,7 @@
+ 	"exec_prefix=$(exec_prefix)" \
+ 	"bindir=$(bindir)" \
+ 	"mandir=$(mandir)" \
++	"libdir=$(libdir)" \
+ 	"against=$(against)" \
+ 	"AR=$(AR)" \
+ 	"AR_FLAGS=$(AR_FLAGS)" \
