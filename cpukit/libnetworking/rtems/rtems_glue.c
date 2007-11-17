@@ -1098,6 +1098,10 @@ int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param)
 			break;
 
 		case SIOCGIFMEDIA:
+			/* 'param' passes the phy index they want to
+			 * look at...
+			 */
+			ifreq.ifr_media = *((int*) param);
 			if ((r = ioctl (s, cmd, &ifreq)) < 0)
 				break;
 			*((int*) param) = ifreq.ifr_media;
