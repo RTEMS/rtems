@@ -1,3 +1,9 @@
+2007-11-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* libchip/rtc/ds1375.c, libchip/rtc/ds1375-rtc.h,
+	* libchip/Makefile.am, libchip/preinstall.am:
+	added new driver for Maxim DS1375 i2c RTC.
+
 2007-09-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libchip/i2c/spi-flash-m25p40.c:

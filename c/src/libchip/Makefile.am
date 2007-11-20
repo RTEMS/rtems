@@ -49,14 +49,14 @@ EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
 # rtc
 if LIBCHIP
 include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h \
-    rtc/mc146818a.h
+    rtc/mc146818a.h rtc/ds1375-rtc.h
 
 noinst_LIBRARIES += librtcio.a
 librtcio_a_CPPFLAGS = $(AM_CPPFLAGS)
 librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
     rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
     rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c \
-    rtc/mc146818a.c rtc/mc146818a_ioreg.c
+    rtc/mc146818a.c rtc/mc146818a_ioreg.c rtc/ds1375.c
 endif
 
 EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \

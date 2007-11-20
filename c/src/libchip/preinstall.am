@@ -106,6 +106,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/m48t08.h
 $(PROJECT_INCLUDE)/libchip/mc146818a.h: rtc/mc146818a.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mc146818a.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc146818a.h
+
+$(PROJECT_INCLUDE)/libchip/ds1375-rtc.h: rtc/ds1375-rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ds1375-rtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ds1375-rtc.h
 endif
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/i2c-ds1621.h: i2c/i2c-ds1621.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
