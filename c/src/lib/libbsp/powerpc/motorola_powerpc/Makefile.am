@@ -110,6 +110,7 @@ include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/detect_raven_bridge.c \
+    ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

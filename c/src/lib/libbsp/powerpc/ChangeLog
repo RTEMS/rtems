@@ -1,3 +1,11 @@
+2007-11-21	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, motorola_powerpc/Makefile.am,
+	* shared/pci/detect_raven_bridge.c, Makefile.am,
+	* shared/pci/generic_clear_hberrs.c: separated the generic
+	version of _BSP_clear_hostbridge_errors() into its own
+	file.
+
 2007-11-06	Till Straumann <strauman@slac.stanford.edu>
 
 	* ep1a/irq/irq.c, gen5200/irq/irq.c, mbx8xx/irq/irq.c,

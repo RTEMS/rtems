@@ -35,7 +35,8 @@ EXTRA_DIST += shared/console/console.c shared/console/inch.c shared/console/poll
 EXTRA_DIST += shared/motorola/motorola.c
 
 ## shared/pci
-EXTRA_DIST += shared/pci/pci.c shared/pci/detect_raven_bridge.c shared/pci/pcifinddevice.c
+EXTRA_DIST += shared/pci/pci.c shared/pci/detect_raven_bridge.c shared/pci/pcifinddevice.c \
+	shared/pci/generic_clear_hberrs.c
 
 ## shared/residual
 EXTRA_DIST += shared/residual/residual.c
