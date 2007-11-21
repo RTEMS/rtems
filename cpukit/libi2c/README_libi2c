@@ -109,6 +109,28 @@ Any subsequent call to this function will be silently ignored.
 
 Typically the BSP startup code will perform this initialization.
 
+A proper place for initializing the i2c layer and populating it
+with busses and device drivers (see 'Bus Registration' and
+'Device/Driver Registration' below) is the 'predriver_hook'
+where most facilities (such as malloc, libio) are already
+available. Note, however, that 'stdio' is not yet functional
+at this point and all i2c bus and device drivers should carefully
+avoid using stdio so that other drivers which may build on top
+of i2c devices may be initialized properly (this may happen
+just after 'predriver_hook' when stdio is still not available).
+E.g., drivers listed in the configuration table are initialized
+during this step.
+
+Note that while 'libi2c' could be initialized from the rtems
+configuration table like other drivers there is no easy
+way of populating the i2c framework with bus- and device-
+drivers at this point (unless a special 'i2c' configuration
+table describing the bus layout is implemented in the future).
+
+For the time being, we must rely on the BSP (predriver_hook)
+to initialize the i2c system if it is used by other drivers
+(e.g., the RTC driver may have to use a i2c device).
+
 ===================
 Bus Registration
 ===================

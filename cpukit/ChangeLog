@@ -1,5 +1,18 @@
 2007-11-17	Till Straumann <strauman@slac.stanford.edu>
 
+	* libi2c/libi2c.c, libi2c/libi2c.h, libi2c/README_libi2c:
+	Added checks so that use of 'stdio' is avoided (falling
+	back to 'printk') before the system is up.
+	Publish driver entry points so that the libi2c driver could
+	be added to the applications 'device driver table'.
+	This is not fully implemented yet, though, since in addition to
+	initializing libi2c the low-level i2c bus drivers as well
+	as high-level i2c device drivers need to be registered
+	with the library.
+	Updated README_libi2c accordingly.
+
+2007-11-17	Till Straumann <strauman@slac.stanford.edu>
+
 	* libnetworking/rtems/rtems_glue.c: let rtems_bsdnet_ifconfig
 	(SIOCGIFMEDIA) pass the user parameter down to the ioctl 
 	so that it knows what PHY they want to look at.

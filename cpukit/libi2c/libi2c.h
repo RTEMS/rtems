@@ -60,6 +60,76 @@ extern "C" {
 /* Initialize the libary - may fail if no semaphore or no driver slot is available */
 int rtems_libi2c_initialize ();
 
+/* Alternatively to rtems_libi2c_initialize() the library can also be
+ * initialized by means of a traditional driver table entry containing
+ * the following entry points:
+ */
+rtems_status_code
+rtems_i2c_init (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+rtems_status_code
+rtems_i2c_open (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+rtems_status_code
+rtems_i2c_close (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+rtems_status_code
+rtems_i2c_read (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+rtems_status_code
+rtems_i2c_write (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+rtems_status_code
+rtems_i2c_ioctl (
+	rtems_device_major_number major,
+	rtems_device_minor_number minor,
+    void *arg);
+
+extern rtems_driver_address_table rtems_libi2c_io_ops;
+
+/* Unfortunately, if you want to add this driver to 
+ * a RTEMS configuration table then you need all the
+ * members explicitly :-( (Device_driver_table should
+ * hold pointers to rtems_driver_address_tables rather
+ * than full structs).
+ *
+ * The difficulty is that adding this driver to the
+ * configuration table is not enough; you still need
+ * to populate the framework with low-level bus-driver(s)
+ * and high-level drivers and/or device-files...
+ *
+ * Currently the preferred way is having the BSP
+ * call 'rtems_libi2c_initialize' followed by
+ * 'rtems_libi2c_register_bus' and 
+ * 'rtems_libi2c_register_drv' and/or
+ * 'mknod' (for 'raw' device nodes)
+ * from the 'pretasking_hook'.
+ */
+#define RTEMS_LIBI2C_DRIVER_TABLE_ENTRY   \
+{                                         \
+  initialization_entry:  rtems_i2c_init,  \
+  open_entry:            rtems_i2c_open,  \
+  close_entry:           rtems_i2c_close, \
+  read_entry:            rtems_i2c_read,  \
+  write_entry:           rtems_i2c_write, \
+  control_entry:         rtems_i2c_ioctl, \
+}
+
 /* Bus Driver API
  *
  * Bus drivers provide access to low-level i2c functions
