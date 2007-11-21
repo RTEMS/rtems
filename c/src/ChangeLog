@@ -1,5 +1,11 @@
 2007-11-20	Till Straumann <strauman@slac.stanford.edu>
 
+	* libchip/rtc/ds1375.c, libchip/rtc/ds1375-rtc.h:
+	Avoid using 'stdio' before the system is up and fully
+	initialized.
+
+2007-11-20	Till Straumann <strauman@slac.stanford.edu>
+
 	* libchip/rtc/ds1375.c, libchip/rtc/ds1375-rtc.h,
 	* libchip/Makefile.am, libchip/preinstall.am:
 	added new driver for Maxim DS1375 i2c RTC.

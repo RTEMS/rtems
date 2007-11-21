@@ -54,12 +54,29 @@
 #include <libchip/ds1375-rtc.h>
 
 #include <sys/fcntl.h>
+#include <sys/errno.h>
 #include <stdio.h>
 #include <inttypes.h>
 
 
 #define STATIC static
 #undef  DEBUG
+
+/* The RTC driver routines are possibly called during
+ * system initialization -- that would be prior to opening
+ * the console. At this point it is not safe to use stdio
+ * (printf, perror etc.).
+ * Our file descriptors may even be 0..2
+ */
+#define STDIOSAFE(fmt,args...)	    	\
+	do {                                \
+		if ( _System_state_Is_up( _System_state_Get() ) ) { \
+			fprintf(stderr,fmt,args);   \
+		} else {                        \
+			printk(fmt,args);           \
+		}                               \
+	} while (0)
+ 
 
 STATIC uint8_t ds1375_bcd2bin(uint8_t x)
 {
@@ -399,19 +416,19 @@ rtc_ds1375_device_probe( int minor )
 int fd;
 
 	if ( ( fd = getfd( minor ) ) < 0 ) {
-		perror("ds1375_probe (open)");
+		STDIOSAFE( "ds1375_probe (open): %s\n", strerror( errno ) );
 		return FALSE;
 	}
 
 	/* Try to set file pointer */
 	if ( 0 != wr_bytes( fd, DS1375_SEC_REG, 0, 0 ) ) {
-		perror( "ds1375_probe (wr_bytes)" );
+		STDIOSAFE( "ds1375_probe (wr_bytes): %s\n", strerror( errno ) );
 		close( fd );
 		return FALSE;
 	}
 
 	if ( close( fd ) ) {
-		perror( "ds1375_probe (close)" );
+		STDIOSAFE( "ds1375_probe (close): %s\n", strerror( errno ) );
 		return FALSE;
 	}
 

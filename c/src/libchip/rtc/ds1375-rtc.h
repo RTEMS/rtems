@@ -71,6 +71,13 @@ rtc_ds1375_set_register( uint32_t port, uint8_t reg, uint32_t value );
  * BSP must supply string constant argument 'i2cname' which matches
  * the registered device name of the raw i2c device (created with mknod).
  * E.g., "/dev/i2c.ds1375-raw"
+ *
+ * NOTE: The i2c bus driver must already be up and 'i2cname' already
+ *       be available when this ENTRY is registered or initialized.
+ *
+ *       If you want to allow applications to add the RTC driver to
+ *       the configuration table then the i2c subsystem must be
+ *       initialized by the BSP from the predriver_hook.
  */
 #define DS1375_RTC_TBL_ENTRY(i2cname) \
 {                                              	      \
