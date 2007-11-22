@@ -144,7 +144,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   /* Make sure any printk activity drains before
    * re-initializing.
    */
-  while ( ! (uread(uart, LSR) & THRE) )
+  while ( ! (uread(uart, LSR) & TEMT) )
 	;
 
   switch(baud)
@@ -170,6 +170,12 @@ BSP_uart_init(int uart, int baud, int hwFlow)
 
   /* Set DLAB bit to 1 */
   uwrite(uart, LCR, DLAB);
+
+  if ( (int)BSPBaseBaud <= 0 ) {
+  	/* Use current divisor assuming BSPBaseBaud gives us the current speed */
+	BSPBaseBaud  = BSPBaseBaud ? -BSPBaseBaud : 9600;
+	BSPBaseBaud *= ((uread(uart, DLM) << 8) | uread(uart, DLL));
+  }
 
   /* Set baud rate */
   uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff);

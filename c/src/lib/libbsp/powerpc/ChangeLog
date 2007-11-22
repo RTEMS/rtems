@@ -1,5 +1,20 @@
 2007-11-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/console/uart.c: when draining UART during
+	initialization (wait for possible printk() activity
+	to finish) look at TEMT (fifo, holding-reg and shift-reg)
+	rather than THRE (fifo, holding-reg only). This resolved
+	some scrambled output issues for me.
+
+	Enhanced semantics: if BSP initializes BSPBaseBaud to a negative
+	value then the driver interprets the modulus as a speed value
+	and uses the current setting of the divisor to compute the
+	clock speed (BSPBaseBaud). This is useful if you have a board
+	that you know is initialized e.g., to 9600 but you
+	don't know the clock speed.
+
+2007-11-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, motorola_powerpc/Makefile.am,
 	* shared/pci/detect_raven_bridge.c, Makefile.am,
 	* shared/pci/generic_clear_hberrs.c: separated the generic
