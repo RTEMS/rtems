@@ -101,8 +101,6 @@ void bsp_start( void )
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.interrupt_table_segment = get_ds();
-  Cpu_table.interrupt_table_offset = (void *)Interrupt_descriptor_table;
   /* changed Sept 14 STACK_MINIMUM_SIZE */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 

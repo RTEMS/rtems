@@ -1,3 +1,9 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Eliminate the interrupt_table_segment and
+	interrupt_table_offset fields in the i386 CPU Table since they are
+	never read.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Handle .data.* sections
