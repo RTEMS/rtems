@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c: Add comment.
+
 2007-07-15	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.c: Use size_t for sizes.
