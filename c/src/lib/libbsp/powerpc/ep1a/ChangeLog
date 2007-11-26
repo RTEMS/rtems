@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/config.c: Fix typo.
+
 2007-09-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Eliminate DEBUG_puts.

@@ -93,7 +93,7 @@ console_tbl	Console_Port_Tbl[] = {
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
 		(void *)9600,	/* baud rate */	/* pDeviceParams */
-                UART_BASE_COM1,                 /* ulCtrlPort1e */
+                UART_BASE_COM1,                 /* ulCtrlPort1 */
 		0,				/* ulCtrlPort2 */
                 UART_BASE_COM1,       		/* ulDataPort */
 		Read_ns16550_register,		/* getRegister */
