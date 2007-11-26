@@ -127,7 +127,6 @@ void bsp_start( void )
   /* We only use a hook to get the C library initialized. */
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
   /* Must match value in start.s */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 

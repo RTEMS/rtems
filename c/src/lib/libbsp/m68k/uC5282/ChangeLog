@@ -1,3 +1,8 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Eliminate the interrupt_vector_table field in the
+	m68k CPU Table since it is never read.
+
 2007-11-26	Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Fix LED configuration to match uCDIMM.

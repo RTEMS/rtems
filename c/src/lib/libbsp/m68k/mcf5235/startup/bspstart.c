@@ -185,33 +185,31 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
-  Cpu_table.interrupt_vector_table = (m68k_isr *)0; /* vectors at start of RAM */
 
-    /*
-     * Invalidate the cache and disable it
-     */
-    m68k_set_acr0(0);
-    m68k_set_acr1(0);
-    m68k_set_cacr(MCF5XXX_CACR_CINV);
+  /*
+   * Invalidate the cache and disable it
+   */
+  m68k_set_acr0(0);
+  m68k_set_acr1(0);
+  m68k_set_cacr(MCF5XXX_CACR_CINV);
 
-    /*
-     * Cache SDRAM
-     */
-    m68k_set_acr0(MCF5XXX_ACR_AB(SDRAM_BASE)    |
-                  MCF5XXX_ACR_AM(SDRAM_SIZE-1)  |
-                  MCF5XXX_ACR_EN                |
-                  MCF5XXX_ACR_BWE               |
-                  MCF5XXX_ACR_SM_IGNORE);
+  /*
+   * Cache SDRAM
+   */
+  m68k_set_acr0(MCF5XXX_ACR_AB(SDRAM_BASE)    |
+                MCF5XXX_ACR_AM(SDRAM_SIZE-1)  |
+                MCF5XXX_ACR_EN                |
+                MCF5XXX_ACR_BWE               |
+                MCF5XXX_ACR_SM_IGNORE);
 
-    /*
-     * Enable the cache
-     */
-    m68k_set_cacr(cacr_mode);
-
+  /*
+   * Enable the cache
+   */
+  m68k_set_cacr(cacr_mode);
 }
 
 uint32_t get_CPU_clock_speed(void)
 {
-    extern char _CPUClockSpeed[];
-    return( (uint32_t)_CPUClockSpeed);
+  extern char _CPUClockSpeed[];
+  return( (uint32_t)_CPUClockSpeed);
 }

@@ -62,9 +62,6 @@ void bsp_start( void )
    *  typically done by stock BSPs) by subtracting the required amount
    *  of work space from the last physical address on the CPU board.
    */
-#if 0
-  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
-#endif
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and

@@ -276,57 +276,56 @@ void bsp_start( void )
     extern void _BSP_Thread_Idle_body(void);
     Cpu_table.idle_task = _BSP_Thread_Idle_body;
   }
-  Cpu_table.interrupt_vector_table = (m68k_isr *)0; /* vectors at start of RAM */
 
-    /*
-     * Invalidate the cache and disable it
-     */
-    m68k_set_acr0(mcf5282_acr0_mode);
-    m68k_set_acr1(mcf5282_acr1_mode);
-    m68k_set_cacr_nop(MCF5XXX_CACR_CINV);
+  /*
+   * Invalidate the cache and disable it
+   */
+  m68k_set_acr0(mcf5282_acr0_mode);
+  m68k_set_acr1(mcf5282_acr1_mode);
+  m68k_set_cacr_nop(MCF5XXX_CACR_CINV);
 
-    /*
-     * Cache SDRAM
-     */
-    mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
-                        MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
-                        MCF5XXX_ACR_EN                         |
-                        MCF5XXX_ACR_BWE                        |
-                        MCF5XXX_ACR_SM_IGNORE;
-    m68k_set_acr0(mcf5282_acr0_mode);
+  /*
+   * Cache SDRAM
+   */
+  mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
+                      MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
+                      MCF5XXX_ACR_EN                         |
+                      MCF5XXX_ACR_BWE                        |
+                      MCF5XXX_ACR_SM_IGNORE;
+  m68k_set_acr0(mcf5282_acr0_mode);
 
-    /*
-     * Enable the cache
-     */
-    m68k_set_cacr(mcf5282_cacr_mode);
+  /*
+   * Enable the cache
+   */
+  m68k_set_cacr(mcf5282_cacr_mode);
 
-    /*
-     * Set up CS* space (fake 'VME')
-     *   Two A24/D16 spaces, supervisor data acces
-     */
-    MCF5282_CS1_CSAR = MCF5282_CS_CSAR_BA(VME_ONE_BASE);
-    MCF5282_CS1_CSMR = MCF5282_CS_CSMR_BAM_16M | 
-                       MCF5282_CS_CSMR_CI |
-                       MCF5282_CS_CSMR_SC |
-                       MCF5282_CS_CSMR_UC |
-                       MCF5282_CS_CSMR_UD |
-                       MCF5282_CS_CSMR_V;
-    MCF5282_CS1_CSCR = MCF5282_CS_CSCR_PS_16;
-    MCF5282_CS2_CSAR = MCF5282_CS_CSAR_BA(VME_TWO_BASE);
-    MCF5282_CS2_CSMR = MCF5282_CS_CSMR_BAM_16M | 
-                       MCF5282_CS_CSMR_CI |
-                       MCF5282_CS_CSMR_SC |
-                       MCF5282_CS_CSMR_UC |
-                       MCF5282_CS_CSMR_UD |
-                       MCF5282_CS_CSMR_V;
-    MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
-    MCF5282_GPIO_PJPAR |= 0x06;
+  /*
+   * Set up CS* space (fake 'VME')
+   *   Two A24/D16 spaces, supervisor data acces
+   */
+  MCF5282_CS1_CSAR = MCF5282_CS_CSAR_BA(VME_ONE_BASE);
+  MCF5282_CS1_CSMR = MCF5282_CS_CSMR_BAM_16M | 
+                     MCF5282_CS_CSMR_CI |
+                     MCF5282_CS_CSMR_SC |
+                     MCF5282_CS_CSMR_UC |
+                     MCF5282_CS_CSMR_UD |
+                     MCF5282_CS_CSMR_V;
+  MCF5282_CS1_CSCR = MCF5282_CS_CSCR_PS_16;
+  MCF5282_CS2_CSAR = MCF5282_CS_CSAR_BA(VME_TWO_BASE);
+  MCF5282_CS2_CSMR = MCF5282_CS_CSMR_BAM_16M | 
+                     MCF5282_CS_CSMR_CI |
+                     MCF5282_CS_CSMR_SC |
+                     MCF5282_CS_CSMR_UC |
+                     MCF5282_CS_CSMR_UD |
+                     MCF5282_CS_CSMR_V;
+  MCF5282_CS2_CSCR = MCF5282_CS_CSCR_PS_16;
+  MCF5282_GPIO_PJPAR |= 0x06;
 }
 
 uint32_t bsp_get_CPU_clock_speed(void)
 {
-    extern char _CPUClockSpeed[];
-    return( (uint32_t)_CPUClockSpeed);
+  extern char _CPUClockSpeed[];
+  return( (uint32_t)_CPUClockSpeed);
 }
 
 /*
@@ -335,19 +334,19 @@ uint32_t bsp_get_CPU_clock_speed(void)
 rtems_status_code
 bsp_allocate_interrupt(int level, int priority)
 {
-    static char used[7];
-    rtems_interrupt_level l;
-    rtems_status_code ret = RTEMS_RESOURCE_IN_USE;
+  static char used[7];
+  rtems_interrupt_level l;
+  rtems_status_code ret = RTEMS_RESOURCE_IN_USE;
 
-    if ((level < 1) || (level > 7) || (priority < 0) || (priority > 7))
-        return RTEMS_INVALID_NUMBER;
-    rtems_interrupt_disable(l);
-    if ((used[level-1] & (1 << priority)) == 0) {
-        used[level-1] |= (1 << priority);
-        ret = RTEMS_SUCCESSFUL;
-    }
-    rtems_interrupt_enable(l);
-    return ret;
+  if ((level < 1) || (level > 7) || (priority < 0) || (priority > 7))
+    return RTEMS_INVALID_NUMBER;
+  rtems_interrupt_disable(l);
+  if ((used[level-1] & (1 << priority)) == 0) {
+    used[level-1] |= (1 << priority);
+    ret = RTEMS_SUCCESSFUL;
+  }
+  rtems_interrupt_enable(l);
+  return ret;
 }
 
 /*
@@ -361,6 +360,7 @@ do {                                                   \
    }                                                   \
    return (type)(ret);                                 \
 } while (0)
+
 #define syscall_1(type,name,d1type,d1)                      \
 type bsp_##name(d1type d1)                                  \
 {                                                           \
@@ -374,6 +374,7 @@ type bsp_##name(d1type d1)                                  \
                          : "d0" );                          \
    syscall_return(type,ret);                                \
 }
+
 #define syscall_2(type,name,d1type,d1,d2type,d2)            \
 type bsp_##name(d1type d1, d2type d2)                       \
 {                                                           \
@@ -389,6 +390,7 @@ type bsp_##name(d1type d1, d2type d2)                       \
                          : "d0" );                          \
    syscall_return(type,ret);                                \
 }
+
 #define syscall_3(type,name,d1type,d1,d2type,d2,d3type,d3)  \
 type bsp_##name(d1type d1, d2type d2, d3type d3)            \
 {                                                           \
@@ -406,6 +408,7 @@ type bsp_##name(d1type d1, d2type d2, d3type d3)            \
                          : "d0" );                          \
    syscall_return(type,ret);                                \
 }
+
 #define SysCode_reset              0 /* reset */
 #define SysCode_program            5 /* program flash memory */
 #define SysCode_gethwaddr         12 /* get hardware address */
@@ -449,54 +452,54 @@ int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
 #define FPGA_IRQ_INFO    *((vuint16 *)(0x31000000 + 0xfffffe))
 
 static struct handlerTab {
-    BSP_VME_ISR_t func;
-    void         *arg;
+  BSP_VME_ISR_t func;
+  void         *arg;
 } handlerTab[NVECTOR];
 
 BSP_VME_ISR_t
 BSP_getVME_isr(unsigned long vector, void **pusrArg)
 {
-    if (vector >= NVECTOR)
-        return (BSP_VME_ISR_t)NULL;
-    if (pusrArg)
-        *pusrArg = handlerTab[vector].arg;
-    return handlerTab[vector].func;
+  if (vector >= NVECTOR)
+    return (BSP_VME_ISR_t)NULL;
+  if (pusrArg)
+    *pusrArg = handlerTab[vector].arg;
+  return handlerTab[vector].func;
 }
 
 static rtems_isr
 fpga_trampoline (rtems_vector_number v)
 {
-	/*
-	 * Handle FPGA interrupts until all have been consumed
-	 */
-	int loopcount = 0;
-	while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
-		v = 192 + (v & 0x3f);
-		if (++loopcount >= 50) {
-			rtems_interrupt_level level;
-			rtems_interrupt_disable(level);
-			printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
-			MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
-			rtems_interrupt_enable(level);
-			return;
-		}
-		if (handlerTab[v].func)  {
-			(*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
-		}
-		else {
-			rtems_interrupt_level level;
-			rtems_vector_number nv;
-			rtems_interrupt_disable(level);
-			printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
-			if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
-					&& ((nv & 0x3f) == (v & 0x3f))) {
-				printk("DISABLING ALL FPGA INTERRUPTS.\n");
-				MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
-			}
-			rtems_interrupt_enable(level);
-			return;
-		}
-	}
+  /*
+   * Handle FPGA interrupts until all have been consumed
+   */
+  int loopcount = 0;
+  while (((v = FPGA_IRQ_INFO) & 0x80) != 0) {
+    v = 192 + (v & 0x3f);
+    if (++loopcount >= 50) {
+      rtems_interrupt_level level;
+      rtems_interrupt_disable(level);
+      printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
+      MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+      rtems_interrupt_enable(level);
+      return;
+    }
+    if (handlerTab[v].func)  {
+      (*handlerTab[v].func)(handlerTab[v].arg, (unsigned long)v);
+    }
+    else {
+      rtems_interrupt_level level;
+      rtems_vector_number nv;
+      rtems_interrupt_disable(level);
+      printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
+      if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
+          && ((nv & 0x3f) == (v & 0x3f))) {
+        printk("DISABLING ALL FPGA INTERRUPTS.\n");
+        MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
+      }
+      rtems_interrupt_enable(level);
+      return;
+    }
+  }
 }
 
 static rtems_isr
@@ -510,13 +513,13 @@ static void
 enable_irq(unsigned source)
 {
 rtems_interrupt_level level;
-	rtems_interrupt_disable(level);
-	if (source >= 32)
-		MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
-	else
-		MCF5282_INTC0_IMRL &= ~((1 << source) |
-				MCF5282_INTC_IMRL_MASKALL);
-	rtems_interrupt_enable(level);
+  rtems_interrupt_disable(level);
+  if (source >= 32)
+    MCF5282_INTC0_IMRH &= ~(1 << (source - 32));
+  else
+    MCF5282_INTC0_IMRL &= ~((1 << source) |
+        MCF5282_INTC_IMRL_MASKALL);
+  rtems_interrupt_enable(level);
 }
 
 static void
@@ -524,12 +527,12 @@ disable_irq(unsigned source)
 {
 rtems_interrupt_level level;
 
-	rtems_interrupt_disable(level);
-	if (source >= 32)
-		MCF5282_INTC0_IMRH |= (1 << (source - 32));
-	else
-		MCF5282_INTC0_IMRL |= (1 << source);
-	rtems_interrupt_enable(level);
+  rtems_interrupt_disable(level);
+  if (source >= 32)
+    MCF5282_INTC0_IMRH |= (1 << (source - 32));
+  else
+    MCF5282_INTC0_IMRL |= (1 << source);
+  rtems_interrupt_enable(level);
 }
 
 void
@@ -537,9 +540,9 @@ BSP_enable_irq_at_pic(rtems_vector_number v)
 {
 int                   source = v - 64;
 
-	if ( source > 0 && source < 64 ) {
-		enable_irq(source);
-	}
+  if ( source > 0 && source < 64 ) {
+    enable_irq(source);
+  }
 }
 
 void
@@ -547,9 +550,9 @@ BSP_disable_irq_at_pic(rtems_vector_number v)
 {
 int                   source = v - 64;
 
-	if ( source > 0 && source < 64 ) {
-		disable_irq(source);
-	}
+  if ( source > 0 && source < 64 ) {
+    disable_irq(source);
+  }
 }
 
 int
@@ -557,12 +560,12 @@ BSP_irq_is_enabled_at_pic(rtems_vector_number v)
 {
 int                   source = v - 64;
 
-	if ( source > 0 && source < 64 ) {
-		return ! ((source >= 32) ?
-			MCF5282_INTC0_IMRH & (1 << (source - 32)) :
-			MCF5282_INTC0_IMRL & (1 << source));
-	}
-	return -1;
+  if ( source > 0 && source < 64 ) {
+    return ! ((source >= 32) ?
+      MCF5282_INTC0_IMRH & (1 << (source - 32)) :
+      MCF5282_INTC0_IMRL & (1 << source));
+  }
+  return -1;
 }
 
 
@@ -597,123 +600,123 @@ rtems_interrupt_level level;
                         *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
                                                        MCF5282_INTC_ICR_IL(l) |
                                                        MCF5282_INTC_ICR_IP(p);
-					enable_irq(source);
+          enable_irq(source);
                     return 0;
                 }
             }
         }
         return -1;
     }
-	return 0;
+  return 0;
 }
 
 int
 BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 {
-    rtems_isr_entry old_handler;
-    rtems_interrupt_level level;
+  rtems_isr_entry old_handler;
+  rtems_interrupt_level level;
 
-    /*
-     * Register the handler information
-     */
-    if (vector >= NVECTOR)
-        return -1;
-    handlerTab[vector].func = handler;
-    handlerTab[vector].arg = usrArg;
+  /*
+   * Register the handler information
+   */
+  if (vector >= NVECTOR)
+    return -1;
+  handlerTab[vector].func = handler;
+  handlerTab[vector].arg = usrArg;
 
-    /*
-     * If this is an external FPGA ('VME') vector set up the real IRQ.
-     */
-    if ((vector >= 192) && (vector <= 255)) {
-        int i;
-        static volatile int setupDone;
-        rtems_interrupt_disable(level);
-        if (setupDone) {
-            rtems_interrupt_enable(level);
-            return 0;
-        }
-        MCF5282_EPORT_EPPAR &= ~FPGA_EPPAR;
-        MCF5282_EPORT_EPDDR &= ~FPGA_EPDDR;
-        MCF5282_EPORT_EPIER |=  FPGA_EPIER;
-        MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
-                                MCF5282_INTC_IMRL_MASKALL);
-        setupDone = 1;
-    	handlerTab[vector].func = NULL;
-    	handlerTab[vector].arg  = NULL;
-		rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
-        i = init_intc0_bit(FPGA_VECTOR);
-        rtems_interrupt_enable(level);
-        return i;
+  /*
+   * If this is an external FPGA ('VME') vector set up the real IRQ.
+   */
+  if ((vector >= 192) && (vector <= 255)) {
+    int i;
+    static volatile int setupDone;
+    rtems_interrupt_disable(level);
+    if (setupDone) {
+      rtems_interrupt_enable(level);
+      return 0;
     }
+    MCF5282_EPORT_EPPAR &= ~FPGA_EPPAR;
+    MCF5282_EPORT_EPDDR &= ~FPGA_EPDDR;
+    MCF5282_EPORT_EPIER |=  FPGA_EPIER;
+    MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
+                                MCF5282_INTC_IMRL_MASKALL);
+    setupDone = 1;
+    handlerTab[vector].func = NULL;
+    handlerTab[vector].arg  = NULL;
+    rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
+    i = init_intc0_bit(FPGA_VECTOR);
+    rtems_interrupt_enable(level);
+    return i;
+  }
 
-    /*
-     * Make the connection between the interrupt and the local handler
-     */
-    rtems_interrupt_catch(trampoline, vector, &old_handler);
+  /*
+   * Make the connection between the interrupt and the local handler
+   */
+  rtems_interrupt_catch(trampoline, vector, &old_handler);
 
-    return init_intc0_bit(vector);
+  return init_intc0_bit(vector);
 }
 
 int
 BSP_removeVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
 {
-    if (vector >= NVECTOR)
-        return -1;
-    if ((handlerTab[vector].func != handler)
+  if (vector >= NVECTOR)
+    return -1;
+  if ((handlerTab[vector].func != handler)
      || (handlerTab[vector].arg != usrArg))
-        return -1;
-    handlerTab[vector].func = (BSP_VME_ISR_t)NULL;
-    return 0;
+    return -1;
+  handlerTab[vector].func = (BSP_VME_ISR_t)NULL;
+  return 0;
 }
 
 int
 BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr)
 {
-    unsigned long offset;
+  unsigned long offset;
 
-    switch (am) {
+  switch (am) {
     default:    return -1;
     case VME_AM_SUP_SHORT_IO: offset = 0x31FF0000; break; /* A16/D16 */
     case VME_AM_STD_SUP_DATA: offset = 0x30000000; break; /* A24/D16 */
     case VME_AM_EXT_SUP_DATA: offset = 0x31000000; break; /* A32/D32 */
-    }
-    *plocaladdr = vmeaddr + offset;
-    return 0;
+  }
+  *plocaladdr = vmeaddr + offset;
+  return 0;
 }
 
 void
 rtems_bsp_reset_cause(char *buf, size_t capacity)
 {
-   int bit, rsr;
-   size_t i;
-   const char *cp;
+  int bit, rsr;
+  size_t i;
+  const char *cp;
     
-    if (buf == NULL)
-        return;
-    if (capacity)
-        buf[0] = '\0';
-    rsr = MCF5282_RESET_RSR;
-    for (i = 0, bit = 0x80 ; bit != 0 ; bit >>= 1) {
-        if (rsr & bit) {
-            switch (bit) {
-            case MCF5282_RESET_RSR_LVD:  cp = "Low voltage";        break;
-            case MCF5282_RESET_RSR_SOFT: cp = "Software reset";     break;
-            case MCF5282_RESET_RSR_WDR:  cp = "Watchdog reset";     break;
-            case MCF5282_RESET_RSR_POR:  cp = "Power-on reset";     break;
-            case MCF5282_RESET_RSR_EXT:  cp = "External reset";     break;
-            case MCF5282_RESET_RSR_LOC:  cp = "Loss of clock";      break;
-            case MCF5282_RESET_RSR_LOL:  cp = "Loss of lock";       break;
-            default:                     cp = "??";                 break;
-            }
-            i += snprintf(buf+i, capacity-i, cp); 
-            if (i >= capacity)
-                break;
-            rsr &= ~bit;
-            if (rsr == 0)
-                break;
-            i += snprintf(buf+i, capacity-i, ", "); 
-            if (i >= capacity)
-                break;
-        }
+  if (buf == NULL)
+    return;
+  if (capacity)
+    buf[0] = '\0';
+  rsr = MCF5282_RESET_RSR;
+  for (i = 0, bit = 0x80 ; bit != 0 ; bit >>= 1) {
+    if (rsr & bit) {
+      switch (bit) {
+        case MCF5282_RESET_RSR_LVD:  cp = "Low voltage";        break;
+        case MCF5282_RESET_RSR_SOFT: cp = "Software reset";     break;
+        case MCF5282_RESET_RSR_WDR:  cp = "Watchdog reset";     break;
+        case MCF5282_RESET_RSR_POR:  cp = "Power-on reset";     break;
+        case MCF5282_RESET_RSR_EXT:  cp = "External reset";     break;
+        case MCF5282_RESET_RSR_LOC:  cp = "Loss of clock";      break;
+        case MCF5282_RESET_RSR_LOL:  cp = "Loss of lock";       break;
+        default:                     cp = "??";                 break;
+      }
+      i += snprintf(buf+i, capacity-i, cp); 
+      if (i >= capacity)
+        break;
+      rsr &= ~bit;
+      if (rsr == 0)
+        break;
+      i += snprintf(buf+i, capacity-i, ", "); 
+      if (i >= capacity)
+        break;
     }
+  }
 }

@@ -1,3 +1,8 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Eliminate the interrupt_vector_table field in the
+	m68k CPU Table since it is never read.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Handle .data.* sections

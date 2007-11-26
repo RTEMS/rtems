@@ -1,3 +1,8 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Eliminate the interrupt_vector_table field in the
+	m68k CPU Table since it is never read.
+
 2007-06-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/leds.c, console/mc68ec.c: Rename delay to rtems_bsp_delay to

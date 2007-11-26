@@ -74,7 +74,6 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
   m68k_get_vbr( vbr );
-  Cpu_table.interrupt_vector_table = vbr;
 
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
 

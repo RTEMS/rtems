@@ -59,21 +59,20 @@ void bsp_pretasking_hook(void);               /* m68k version */
  */
 void bsp_start( void )
 {
-    extern void *_WorkspaceBase;
+  extern void *_WorkspaceBase;
 
-    /*
-     *  Need to "allocate" the memory for the RTEMS Workspace and
-     *  tell the RTEMS configuration where it is.  This memory is
-     *  not malloc'ed.  It is just "pulled from the air".
-     */
+  /*
+   *  Need to "allocate" the memory for the RTEMS Workspace and
+   *  tell the RTEMS configuration where it is.  This memory is
+   *  not malloc'ed.  It is just "pulled from the air".
+   */
 
-    BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
+  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
 
-    /*
-     *  initialize the CPU table for this BSP
-     */
-    Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-    Cpu_table.postdriver_hook = bsp_postdriver_hook;
-    Cpu_table.interrupt_stack_size = 4096;
-    Cpu_table.interrupt_vector_table = (m68k_isr *)0; /* vectors at start of RAM */
+  /*
+   *  initialize the CPU table for this BSP
+   */
+  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
+  Cpu_table.postdriver_hook = bsp_postdriver_hook;
+  Cpu_table.interrupt_stack_size = 4096;
 }

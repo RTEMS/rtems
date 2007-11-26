@@ -53,11 +53,7 @@ void bsp_start( void )
   extern void          *_RamSize;
   extern unsigned long  _M68k_Ramsize;
 
-  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
-
-#if 0
-  Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
-#endif
+  _M68k_Ramsize = (unsigned long)&_RamSize;  /* RAM size set in linker script */
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
