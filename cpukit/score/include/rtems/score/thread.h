@@ -165,7 +165,7 @@ typedef struct {
 typedef struct {
   /** This field is the starting address for the thread. */
   Thread_Entry         entry_point;
-  /** This field indicatres the how task is invoked. */
+  /** This field indicates the how task is invoked. */
   Thread_Start_types   prototype;
   /** This field is the pointer argument passed at thread start. */
   void                *pointer_argument;
