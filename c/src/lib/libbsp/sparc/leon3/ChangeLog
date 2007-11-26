@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shmsupp/getcfg.c: Fix spacing.
+
 2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am, preinstall.am: Add initial i2c and update OC-CAN
