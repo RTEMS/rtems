@@ -112,15 +112,18 @@ char *  telnet_get_pty(int socket)
   int ndx;
 
   if (telnet_pty_inited) {
+#if 0
     if ( rtems_telnetd_maximum_ptys < 5 )
       rtems_telnetd_maximum_ptys = 5;
 
     telnet_ptys = malloc( rtems_telnetd_maximum_ptys * sizeof (pty_t) );
+#endif
     if ( !telnet_ptys ) {
       return NULL;
     }
       
     for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
+
       if (telnet_ptys[ndx].socket<0) {
         struct timeval t;
         /* set a long polling interval to save CPU time */
@@ -425,23 +428,28 @@ rtems_device_driver my_pty_initialize(
   void                      *arg
 )
 {
-int ndx;
-rtems_status_code status ;
+  int ndx;
+  rtems_status_code status;
+
+  if ( rtems_telnetd_maximum_ptys < 5 )
+    rtems_telnetd_maximum_ptys = 5;
+
+  telnet_ptys = malloc( rtems_telnetd_maximum_ptys * sizeof (pty_t) );
 
   /* 
    * Set up ptys
    */
 
   for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
-    telnet_ptys[ndx].devname=(char*)malloc(strlen("/dev/ptyXX")+1);
+    telnet_ptys[ndx].devname = (char*)malloc(strlen("/dev/ptyXX")+1);
     sprintf(telnet_ptys[ndx].devname,"/dev/pty%X",ndx);
-    telnet_ptys[ndx].ttyp=NULL;
-    telnet_ptys[ndx].c_cflag=CS8|B9600;
-    telnet_ptys[ndx].socket=-1;
-    telnet_ptys[ndx].opened=FALSE;
-    telnet_ptys[ndx].sb_ind=0;
-    telnet_ptys[ndx].width=0;
-    telnet_ptys[ndx].height=0;
+    telnet_ptys[ndx].ttyp    =  NULL;
+    telnet_ptys[ndx].c_cflag = CS8|B9600;
+    telnet_ptys[ndx].socket  = -1;
+    telnet_ptys[ndx].opened  = FALSE;
+    telnet_ptys[ndx].sb_ind  = 0;
+    telnet_ptys[ndx].width   = 0;
+    telnet_ptys[ndx].height  = 0;
 
   }
 

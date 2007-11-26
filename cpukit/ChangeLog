@@ -1,5 +1,10 @@
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* telnetd/pty.c, telnetd/telnetd.c, telnetd/telnetd.h: Style clean up.
+	Now works on gen5200/icecube.
+
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/printk.c, score/src/objectget.c: Fix spacing.
 
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>

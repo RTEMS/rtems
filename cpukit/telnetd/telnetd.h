@@ -20,19 +20,23 @@ extern "C" {
 /*
  *  Initialize the telnetd subsystem.
  *
- *  cmd        - function which is the "shell" telnetd invokes
- *  arg        - context pointer to cmd
- *  dontSpawn  - TRUE if telnetd takes over this task.
- *               FALSE to create another task for the shell.
- *  stack      - stack size of spawned task 
- *  priority   - initial priority of spawned task
+ *  cmd              - function which is the "shell" telnetd invokes
+ *  arg              - context pointer to cmd
+ *  dontSpawn        - TRUE if telnetd takes over this task.
+ *                     FALSE to create another task for the shell.
+ *  stack            - stack size of spawned task 
+ *  priority         - initial priority of spawned task
+ *  askForPassword   - TRUE if telnetd asks for password
+ *                     FALSE to invoke "cmd" with no password check.
+ *                        This may be OK if "cmd" includes its own check.
  */
 int rtems_telnetd_initialize(
   void               (*cmd)(char *, void *),
   void                *arg,
   int                  dontSpawn,
   size_t               stack,
-  rtems_task_priority  priority
+  rtems_task_priority  priority,
+  int                  askForPassword
 );
 
 #ifdef __cplusplus
