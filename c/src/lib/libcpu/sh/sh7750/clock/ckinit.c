@@ -24,6 +24,8 @@
 #include <rtems/score/ispsh7750.h>
 #include <rtems/score/iosh7750.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 #ifndef CLOCKPRIO
 #define CLOCKPRIO 10
 #endif
@@ -176,8 +178,7 @@ Install_clock(rtems_isr_entry clock_isr)
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
     timer_divider =
-        (rtems_cpu_configuration_get_clicks_per_second() *
-         cpudiv / (tidiv*1000000)) *
+        (bsp_clicks_per_second * cpudiv / (tidiv*1000000)) *
         rtems_configuration_get_microseconds_per_tick();
 
     /*

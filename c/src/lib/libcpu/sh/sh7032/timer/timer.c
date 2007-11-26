@@ -34,6 +34,8 @@
 #include <rtems/score/ispsh7032.h>
 #include <rtems/score/iosh7032.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 #define I_CLK_PHI_1     0
 #define I_CLK_PHI_2     1
 #define I_CLK_PHI_4     2
@@ -77,7 +79,7 @@ void Timer_initialize( void )
   rtems_interrupt_level  level;
   rtems_isr             *ignored;
 
-  Timer_HZ = rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE ;
+  Timer_HZ = bsp_clicks_per_second / CLOCK_SCALE ;
 
   /*
    *  Timer has never overflowed.  This may not be necessary on some

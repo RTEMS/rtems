@@ -43,6 +43,8 @@
 #include <rtems/score/ispsh7045.h>
 #include <rtems/score/iosh7045.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 #define _MTU_COUNTER0_MICROSECOND (Clock_MHZ/16)
 
 #ifndef CLOCKPRIO
@@ -161,7 +163,7 @@ void Install_clock(
   Clock_isrs = Clock_isrs_const;
 
   factor /= rtems_configuration_get_microseconds_per_tick(); /* minimalization of integer division error */
-  Clock_MHZ = rtems_cpu_configuration_get_clicks_per_second() / factor ;
+  Clock_MHZ = bsp_clicks_per_second / factor ;
 
   rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
 

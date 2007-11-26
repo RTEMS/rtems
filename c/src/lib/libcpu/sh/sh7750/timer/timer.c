@@ -27,6 +27,8 @@
 #include <rtems/score/sh_io.h>
 #include <rtems/score/iosh7750.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 #ifndef TIMER_PRIO
 #define TIMER_PRIO 15
 #endif
@@ -133,9 +135,7 @@ Timer_initialize(void)
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
 
-    microseconds_divider =
-        rtems_cpu_configuration_get_clicks_per_second() * cpudiv /
-        (tidiv * 1000000);
+    microseconds_divider = bsp_clicks_per_second * cpudiv / (tidiv * 1000000);
     microseconds_per_int = 0xFFFFFFFF / microseconds_divider;
 
     /*

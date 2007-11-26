@@ -23,6 +23,8 @@
 
 #include <rtems.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
@@ -38,10 +40,9 @@
 
 void CPU_delay( uint32_t   microseconds )
 {
-  register uint32_t   clicks_per_usec =
-    rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
-  register uint32_t   _delay =
-    (microseconds) * (clicks_per_usec);
+  register uint32_t   clicks_per_usec = bsp_clicks_per_second / 1000000;
+  register uint32_t   _delay = (microseconds) * (clicks_per_usec);
+
   asm volatile (
 "0:	add  #-4,%0\n\
 	nop\n\

@@ -31,6 +31,8 @@
 #include <rtems/score/ispsh7032.h>
 #include <rtems/score/iosh7032.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 #ifndef CLOCKPRIO
 #define CLOCKPRIO 10
 #endif
@@ -80,7 +82,8 @@
  */
 static unsigned int sh_clicks_per_tick(
   unsigned int clicks_per_sec,
-  unsigned int usec_per_tick )
+  unsigned int usec_per_tick
+)
 {
 #if 1
   unsigned int clicks_per_tick = 0 ;
@@ -195,9 +198,9 @@ void Install_clock(
 )
 {
   uint8_t   temp8 = 0;
-  uint32_t   microseconds_per_tick ;
-  uint32_t   cclicks_per_tick ;
-  uint16_t   Clock_limit ;
+  uint32_t   microseconds_per_tick;
+  uint32_t   cclicks_per_tick;
+  uint16_t   Clock_limit;
 
   /*
    *  Initialize the clock tick device driver variables
@@ -211,10 +214,8 @@ void Install_clock(
     microseconds_per_tick = 10000 ; /* 10000 us */
 
   /* clock clicks per tick */
-  cclicks_per_tick =
-    sh_clicks_per_tick(
-      rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE,
-      microseconds_per_tick );
+  cclicks_per_tick = sh_clicks_per_tick(
+     bsp_clicks_per_second / CLOCK_SCALE, microseconds_per_tick );
 
   Clock_isrs_const = cclicks_per_tick >> 16 ;
   if ( ( cclicks_per_tick | 0xffff ) > 0 )

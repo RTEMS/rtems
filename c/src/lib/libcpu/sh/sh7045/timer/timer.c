@@ -33,6 +33,8 @@
 #include <rtems/score/sh_io.h>
 #include <rtems/score/iosh7045.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 /*
  *  We use a Phi/4 timer
  */
@@ -68,7 +70,7 @@ void Timer_initialize( void )
   rtems_interrupt_level  level;
   rtems_isr	        *ignored;
 
-  Timer_MHZ = rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
+  Timer_MHZ = bsp_clicks_per_second / 1000000 ;
 
   /*
    *  Timer has never overflowed.  This may not be necessary on some
