@@ -1,5 +1,11 @@
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* cpu_supplement/sh.t: Eliminate the clicks_per_microsecond field in
+	the SuperH CPU Table and define another mechanism for drivers to
+	obtain this information.
+
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* cpu_supplement/i386.t, cpu_supplement/m68k.t: Pick up changes missed
 	earlier.
 
