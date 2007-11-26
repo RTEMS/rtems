@@ -1,3 +1,7 @@
+2007-11-26	Eric Norum <norume@aps.anl.gov>
+
+	* network/network.c: Fix LED configuration to match uCDIMM.
+
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Formatting.
