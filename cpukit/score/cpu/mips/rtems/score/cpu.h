@@ -609,22 +609,7 @@ typedef struct {
   void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-
-  uint32_t     clicks_per_microsecond;
 }   rtems_cpu_table;
-
-
-/*
- *  Macros to access required entires in the CPU Table are in
- *  the file rtems/system.h.
- */
-
-/*
- *  Macros to access MIPS specific additions to the CPU Table
- */
-
-#define rtems_cpu_configuration_get_clicks_per_microsecond() \
-   (_CPU_Table.clicks_per_microsecond)
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
