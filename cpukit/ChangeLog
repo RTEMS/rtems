@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/malloc.c: Do not assert on free of bad pointer.
+
 2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/thread.h: Fix spelling error.
