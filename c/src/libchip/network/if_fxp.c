@@ -452,21 +452,21 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
     { int j; int pbus, pdev, pfun;
 
       for (j=0; fxp_ident_table[j].devid; j++ ) {
-		i = pci_find_device( 0x8086, fxp_ident_table[j].devid,
-			unitNumber-1, &pbus, &pdev, &pfun );
- 		sc->pci_signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
-		DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
+		    i = pci_find_device( 0x8086, fxp_ident_table[j].devid,
+			       unitNumber-1, &pbus, &pdev, &pfun );
+ 		    sc->pci_signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
+		    DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
 		      "and pci signature 0x%x\n",
 		      i,sc->pci_signature);
-        	if (PCIB_ERR_SUCCESS == i) {
-		  if ( UNTESTED == fxp_ident_table[j].warn ) {
-		  	device_printf(dev,
+      	if (PCIB_ERR_SUCCESS == i) {
+		    if ( UNTESTED == fxp_ident_table[j].warn ) {
+		  	  device_printf(dev,
 "WARNING: this chip version has NOT been reported to work under RTEMS yet.\n");
-			device_printf(dev,
+			    device_printf(dev,
 "         If it works OK, report it as tested in 'c/src/libchip/network/if_fxp.c'\n");
-			}
+			  }
   			break;
-		}
+		  }
 	  }
 	}
 
