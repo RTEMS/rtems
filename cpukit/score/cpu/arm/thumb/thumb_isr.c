@@ -17,10 +17,10 @@
  *  _CPU_ISR_Get_level_Thumb - returns the current interrupt level
  */
 uint32_t        _CPU_ISR_Get_level_Thumb(void)       __attribute__ ((naked));
-unsigned int    _CPU_ISR_Disable_Thumb(void )        __attribute__ ((naked));
-void __inline__ _CPU_ISR_Enable_Thumb(int  _level )  __attribute__ ((naked));
-void __inline__ _CPU_ISR_Flash_Thumb(int _level )    __attribute__ ((naked));
-void __inline__ _CPU_ISR_Set_level_Thumb(int  new_level )  __attribute__ ((naked));
+uint32_t    _CPU_ISR_Disable_Thumb(void )        __attribute__ ((naked));
+void    _CPU_ISR_Enable_Thumb(int  _level )  __attribute__ ((naked));
+void    _CPU_ISR_Flash_Thumb(int _level )    __attribute__ ((naked));
+void    _CPU_ISR_Set_level_Thumb(int  new_level )  __attribute__ ((naked));
 
 /*
  * prevent multipule enable/disable ISR
@@ -33,24 +33,9 @@ void __inline__ _CPU_ISR_Set_level_Thumb(int  new_level )  __attribute__ ((naked
  */
 
 
-
-/*
- *  Fix me: use mutex to visit isr_flag
- */
-
 #define str(x) #x
 #define xstr(x) str(x)
 #define L(x) #x "_" xstr(__LINE__)
-
-#define U0THR           (*((volatile unsigned char *) 0xE000C000))
-#define U0LSR           (*((volatile unsigned char *) 0xE000C014))
-
-void __inline__  UART0_Send_Byte(char data)
-{
-    U0THR = data;
-
-    while( (U0LSR&0x40)==0 );
-}
 
 /*
  * Switch to ARM mode Veneer,ugly but safe
@@ -78,7 +63,7 @@ void __inline__  UART0_Send_Byte(char data)
  *  level is returned in _level.
  */
 
-unsigned int __inline__ _CPU_ISR_Disable_Thumb(void )
+uint32_t _CPU_ISR_Disable_Thumb(void )
   {
     int reg=0;
     TO_ARM_MODE(disable);
@@ -100,7 +85,7 @@ unsigned int __inline__ _CPU_ISR_Disable_Thumb(void )
  *  _level is not modified. I do not think _level is useful in this
  */
 
-void __inline__ _CPU_ISR_Enable_Thumb(int  _level )
+void _CPU_ISR_Enable_Thumb(int  _level )
   {
   	int reg=0;
   	TO_ARM_MODE(enable);
@@ -120,12 +105,9 @@ void __inline__ _CPU_ISR_Enable_Thumb(int  _level )
  *  sections into two or more parts.  The parameter _level is not
  * modified.
  */
-void __inline__ _CPU_ISR_Flash_Thumb(int _level )
+void _CPU_ISR_Flash_Thumb(int _level )
   {
     int reg=0;
-    UART0_Send_Byte(70);
-    //asm volatile("NOP");
-    //(*((volatile unsigned char *) 0xE000C000))='\r';
     TO_ARM_MODE(flash);
     asm volatile ( \
 			".code	32 			\n" \
@@ -155,7 +137,7 @@ void __inline__ _CPU_ISR_Flash_Thumb(int _level )
  *  ARM/Thumb dont distinguishd the interrupt levels
  */
 
-void __inline__ _CPU_ISR_Set_level_Thumb(int  new_level )
+void _CPU_ISR_Set_level_Thumb(int  new_level )
   {
    int reg = 0; /* to avoid warning */		\
    TO_ARM_MODE(SetISR);				\
@@ -171,7 +153,7 @@ void __inline__ _CPU_ISR_Set_level_Thumb(int  new_level )
 			: "0" (reg));
  }
 
-uint32_t __inline__  _CPU_ISR_Get_level_Thumb( void )
+uint32_t  _CPU_ISR_Get_level_Thumb( void )
 {
     uint32_t   reg = 0; /* to avoid warning */
     TO_ARM_MODE(GetISR); \
