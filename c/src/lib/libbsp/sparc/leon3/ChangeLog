@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shmsupp/getcfg.c: Fix spacing.
+
 2007-09-13	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am: Add smc91111.rel to libbsp.a

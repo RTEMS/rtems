@@ -86,49 +86,38 @@ void Shm_Get_configuration(
 {
   extern rtems_configuration_table Configuration;
   int i;
-  unsigned int tmp /* , ncpu */;
+  unsigned int tmp;
   
-   BSP_shm_cfgtbl.base         = 0x40000000;
-   BSP_shm_cfgtbl.length       = 0x00001000;
-   BSP_shm_cfgtbl.format       = SHM_BIG;
+  BSP_shm_cfgtbl.base         = 0x40000000;
+  BSP_shm_cfgtbl.length       = 0x00001000;
+  BSP_shm_cfgtbl.format       = SHM_BIG;
 
-   /*
-    *  Override cause_intr or shm_isr if your target has
-    *  special requirements.
-    */
+  /*
+   *  Override cause_intr or shm_isr if your target has
+   *  special requirements.
+   */
 
-   BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt;
+  BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt;
 
 #ifdef NEUTRAL_BIG
-   BSP_shm_cfgtbl.convert      = NULL_CONVERT;
+  BSP_shm_cfgtbl.convert      = NULL_CONVERT;
 #else
-   BSP_shm_cfgtbl.convert      = CPU_swap_u32;
+  BSP_shm_cfgtbl.convert      = CPU_swap_u32;
 #endif
 
-   BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
-   BSP_shm_cfgtbl.Intr.address = (vol_u32) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
-   BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ; 
-   BSP_shm_cfgtbl.Intr.length  = 4;
+  BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
+  BSP_shm_cfgtbl.Intr.address =
+     (vol_u32) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
+  BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ; 
+  BSP_shm_cfgtbl.Intr.length  = 4;
 
-   if (LEON3_Cpu_Index == 0)
-   {
-     tmp = 0; /* ncpu = (((LEON3_IrqCtrl_Regs->mpstat) >> 28) & 0xf) + 1; */
-     for (i = 1; i < (Configuration.User_multiprocessing_table)->maximum_nodes+1; i++)
-       tmp |= (1 << i);
-     LEON3_IrqCtrl_Regs->mpstat = tmp; 
-   }
+  if (LEON3_Cpu_Index == 0) {
+    tmp = 0;
+    for (i = 1;
+         i < (Configuration.User_multiprocessing_table)->maximum_nodes+1; i++)
+      tmp |= (1 << i);
+    LEON3_IrqCtrl_Regs->mpstat = tmp; 
+  }
 
-   /*
-   if ((Configuration.User_multiprocessing_table)->node == 1) 
-   {
-     tmp = 0;
-     for (i = 1; i < (Configuration.User_multiprocessing_table)->maximum_nodes; i++)
-     {
-       tmp = tmp | (1 << (LEON3_Cpu_Index + i));
-     }
-     LEON3_IrqCtrl_Regs->mpstat = tmp; 
-   }
-   */
-     
-   *shmcfg = &BSP_shm_cfgtbl;
+  *shmcfg = &BSP_shm_cfgtbl;
 }
