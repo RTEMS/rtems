@@ -1,5 +1,9 @@
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/bspstart.c: Fix spacing.
+
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/bspstart.c: Eliminate the interrupt_vector_table field in the
 	m68k CPU Table since it is never read.
 

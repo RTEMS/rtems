@@ -155,7 +155,7 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
  */
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);			/* m68k version */
+void bsp_pretasking_hook(void);      /* m68k version */
 
 /*
  *  bsp_start
@@ -168,7 +168,7 @@ void bsp_start( void )
   extern char _RamSize[];
   extern unsigned long  _M68k_Ramsize;
 
-  _M68k_Ramsize = (unsigned long)_RamSize;		/* RAM size set in linker script */
+  _M68k_Ramsize = (unsigned long)_RamSize;    /* RAM size set in linker script */
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
