@@ -129,6 +129,13 @@ int boot_card(int argc, char **argv, char **envp)
 
   rtems_initialize_executive_late( bsp_isr_level );
 
+  /***************************************************************
+   ***************************************************************
+   *  APPLICATION RUNS HERE!!!  When it shuts down, we return!!! *
+   ***************************************************************
+   ***************************************************************
+   */
+
   /*
    *  Perform any BSP specific shutdown actions.
    */
