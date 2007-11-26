@@ -31,6 +31,8 @@
 
 #include <string.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -136,5 +138,5 @@ void bsp_start(void)
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 #endif
 
-  Cpu_table.clicks_per_second = CPU_CLOCK_RATE_HZ ;
+  bsp_clicks_per_second = CPU_CLOCK_RATE_HZ;
 }

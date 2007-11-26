@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 
+extern uint32_t bsp_clicks_per_second;
+
 /*
  * Clock_driver_ticks is a monotonically increasing counter of the
  * number of clock ticks since the driver was initialized.
@@ -95,23 +97,22 @@ Clock_exit(void)
 static void
 Install_clock(rtems_isr_entry clock_isr)
 {
-    uint32_t         period;
-    Clock_driver_ticks = 0;
-    if (BSP_Configuration.ticks_per_timeslice)
-    {
-        rtems_isr_entry  old_isr;
-        period = Cpu_table.clicks_per_second /
-                 BSP_Configuration.ticks_per_timeslice;
+  uint32_t         period;
 
-        /* Configure timer interrupts */
-        set_clock_period(period);
+  Clock_driver_ticks = 0;
+  if (BSP_Configuration.ticks_per_timeslice) {
+      rtems_isr_entry  old_isr;
+      period = bsp_clicks_per_second / BSP_Configuration.ticks_per_timeslice;
 
-        /* Register the interrupt handler */
-        rtems_interrupt_catch(clock_isr, CLOCK_VECTOR, &old_isr);
+      /* Configure timer interrupts */
+      set_clock_period(period);
 
-        /* Register the driver exit procedure so we can shutdown */
-        atexit(Clock_exit);
-    }
+      /* Register the interrupt handler */
+      rtems_interrupt_catch(clock_isr, CLOCK_VECTOR, &old_isr);
+
+      /* Register the driver exit procedure so we can shutdown */
+      atexit(Clock_exit);
+  }
 }
 
 /* Clock_initialize --
