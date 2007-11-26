@@ -2,7 +2,7 @@
  *
  *  This include file contains all SPARC simulator definitions.
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
