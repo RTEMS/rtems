@@ -765,7 +765,4 @@ is the address of the optional user provided routine which frees
 memory for task stacks.  If this hook is not NULL, then a stack_allocate_hook
 must be provided as well.
 
-@item interrupt_vector_table
-is the base address of the CPU's Exception Vector Table.
-
 @end table

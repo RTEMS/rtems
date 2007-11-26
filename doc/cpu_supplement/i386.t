@@ -675,14 +675,6 @@ is the address of the optional user provided routine which frees
 memory for task stacks.  If this hook is not NULL, then a stack_allocate_hook
 must be provided as well.
 
-@item interrupt_segment
-is the value of the selector which should be placed in a segment 
-register to access the Interrupt Descriptor Table.
-
-@item interrupt_vector_table
-is the base address of the Interrupt Descriptor Table relative to the 
-interrupt_segment.
-
 @end table
 
 The contents of the i386 Interrupt Descriptor Table
