@@ -240,8 +240,9 @@ do
            ;;
        *)
            output_it=1
+           grep -v "Memory exception " ${logfile}.tmp | \
            sed -e '1,9d' \
-               -e 's///' -e '/^$/d' < ${logfile}.tmp | 
+               -e 's///' -e '/^$/d' | \
              while read line
               do
                 if [ $output_it -eq 1 ] ; then
@@ -267,7 +268,8 @@ do
        echo "Test run on: `uname -n`    ( `uname -a` )"
 
        output_it=0
-       sed -e 's///' < ${logfile}.tmp | 
+       grep -v "Memory exception " ${logfile}.tmp | \
+       sed -e 's///' | \
          while read line
          do
            if [ $output_it -eq 1 ] ; then

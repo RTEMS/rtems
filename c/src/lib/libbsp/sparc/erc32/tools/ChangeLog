@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest.in: Filter out Memory exception error messages.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest.in: Add capture to list of interative tests to skip in batch
