@@ -27,6 +27,8 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
+uint32_t bsp_clicks_per_second;
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -123,5 +125,5 @@ void bsp_start( void )
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 #endif
-  Cpu_table.clicks_per_second = CPU_CLOCK_RATE_HZ ;
+  bsp_clicks_per_second = CPU_CLOCK_RATE_HZ;
 }
