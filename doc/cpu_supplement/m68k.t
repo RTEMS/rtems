@@ -703,8 +703,6 @@ typedef struct @{
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-
-  m68k_isr    *interrupt_vector_table;
 @} rtems_cpu_table;
 @end group
 @end example

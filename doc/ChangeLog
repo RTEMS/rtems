@@ -1,3 +1,8 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_supplement/m68k.t: Eliminate the interrupt_vector_table field in
+	the m68k CPU Table since it is never read.
+
 2007-10-26	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* user/rtmon.t: Fix report output.
