@@ -304,13 +304,13 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 
     /*
      * Set PHYS
-     *  LED1 link status, LED2 receive status, LEDs stretched
+     *  LED1 receive status, LED2 link status, LEDs stretched
      *  Advertise 100 Mb/s, full-duplex, IEEE-802.3
      *  Turn off auto-negotiate
      *  Enable speed-change, duplex-change and link-status-change interrupts
      *  Set 100/full and perhaps auto-negotiate
      */
-    setMII(1, 20, 0x42F2);
+    setMII(1, 20, 0x24F2);
     setMII(1,  4, 0x0181);
     setMII(1,  0, 0x2100);
     rtems_task_wake_after(2);
