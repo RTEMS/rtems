@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/console/uart.c: Fix typo.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps
