@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <assert.h>
 #include <errno.h>
 #include <string.h>
 
@@ -493,8 +492,11 @@ void free(
 #endif
 
   if ( !_Protected_heap_Free( &RTEMS_Malloc_Heap, ptr ) ) {
-    errno = EINVAL;
-    assert( 0 );
+    printk( "Program heap: free of bad pointer %p -- range %p - %p \n",
+      ptr,
+      RTEMS_Malloc_Heap.start,
+      RTEMS_Malloc_Heap.end
+    );
   }
 }
 
