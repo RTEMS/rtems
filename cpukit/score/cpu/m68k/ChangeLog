@@ -1,3 +1,8 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Eliminate the interrupt_vector_table field in the
+	m68k CPU Table since it is never read.
+
 2007-08-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/m68k.h: Add stubs for mcf5307, mcf5407, mcfv4e.
