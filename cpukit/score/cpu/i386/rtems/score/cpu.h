@@ -195,25 +195,12 @@ typedef struct {
   void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-
-  uint32_t     interrupt_table_segment;
-  void        *interrupt_table_offset;
 }   rtems_cpu_table;
 
 /*
  *  Macros to access required entires in the CPU Table are in
  *  the file rtems/system.h.
  */
-
-/*
- *  Macros to access i386 specific additions to the CPU Table
- */
-
-#define rtems_cpu_configuration_get_interrupt_table_segment() \
-   (_CPU_Table.interrupt_table_segment)
-
-#define rtems_cpu_configuration_get_interrupt_table_offset() \
-   (_CPU_Table.interrupt_table_offset)
 
 /*
  *  context size area for floating point
