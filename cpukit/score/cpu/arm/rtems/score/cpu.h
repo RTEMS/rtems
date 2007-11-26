@@ -8,6 +8,8 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
+ *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
+ *
  *  Copyright (c) 2006 OAR Corporation
  *
  *  Copyright (c) 2002 Advent Networks, Inc.
@@ -514,7 +516,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  */
 #if (defined(__THUMB_INTERWORK__) || defined(__thumb__))
 
-extern unsigned int _CPU_ISR_Disable_Thumb(void) __attribute__ ((naked));
+extern uint32_t _CPU_ISR_Disable_Thumb(void) __attribute__ ((naked));
 extern void _CPU_ISR_Enable_Thumb( int ) __attribute__ ((naked));
 extern void _CPU_ISR_Flash_Thumb(int) __attribute__ ((naked));
 extern void _CPU_ISR_Set_level_Thumb(int ) __attribute__ ((naked));

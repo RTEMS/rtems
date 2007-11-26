@@ -8,6 +8,8 @@
  *  Copyright (c) 2002 Advent Networks, Inc
  *      Jay Monkman <jmonkman@adventnetworks.com>
  *
+ *  Copyright (c) 2007 Ray xu <rayx.cn@gmail.com>
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.

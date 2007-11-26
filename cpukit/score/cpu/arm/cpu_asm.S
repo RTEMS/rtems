@@ -4,6 +4,9 @@
  *  This file contains all assembly code for the ARM implementation
  *  of RTEMS.
  *
+ *  Copyright (c) 2007 by Ray Xu, <Rayx.cn@gmail.com>
+ *          Thumb support added.
+ *
  *  Copyright (c) 2002 by Advent Networks, Inc.
  *          Jay Monkman <jmonkman@adventnetworks.com>
  *
