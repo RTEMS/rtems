@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+
+uint32_t bsp_clicks_per_microsecond;
  
 /*
  *  The original table from the application and our copy of it with
@@ -108,10 +110,7 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  Cpu_table.clicks_per_microsecond = CPU_CLOCK_RATE_MHZ;
+  bsp_clicks_per_microsecond = CPU_CLOCK_RATE_MHZ;
 
-  mips_install_isr_entries();		/* Install generic MIPS exception handler */
-
-/*  init_exc_vecs(); */         			/* Install BSP specific exception handler */
-
+  mips_install_isr_entries(); /* Install generic MIPS exception handler */
 }

@@ -1,3 +1,9 @@
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/ckinit.c, startup/bspstart.c: Eliminate the
+	clicks_per_microsecond field in the MIPS CPU Table and define another
+	mechanism for drivers to obtain this information.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove qrtems_debug.

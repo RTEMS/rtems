@@ -43,17 +43,12 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
+extern uint32_t bsp_clicks_per_microsecond;
+
 #define EXT_INT1    0x800  /* external interrupt 5 */
 
 #include "clock.h"
 
-/* formerly in the BSP */
-#if 0
-#define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */
-#endif
-
-#define CLOCKS_PER_MICROSECOND \
-  rtems_cpu_configuration_get_clicks_per_microsecond()
 /* to avoid including the bsp */
 mips_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 
@@ -127,7 +122,7 @@ rtems_isr Clock_isr(
  * perform any timer dependent tasks
  */
 
-  reset_wdt();		/* Reset hardware watchdog timer */
+  reset_wdt();    /* Reset hardware watchdog timer */
 
   Clock_driver_ticks += 1;
 
@@ -156,42 +151,42 @@ void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
-	/*
-	*  Initialize the clock tick device driver variables
-	*/
+  /*
+  *  Initialize the clock tick device driver variables
+  */
 
-	Clock_driver_ticks = 0;
-	Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
+  Clock_driver_ticks = 0;
+  Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
 
-	mips_timer_rate =
-		rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
+  mips_timer_rate = rtems_configuration_get_microseconds_per_tick() *
+           bsp_clicks_per_microsecond;
 
-	/*
-	*  Hardware specific initialize goes here
-	*/
-	
-	/* Set up USC heartbeat timer to generate interrupts */
-	disable_hbi();			/* Disable heartbeat interrupt in USC */
-	
-							/* Install interrupt handler */
-	Old_ticker = (rtems_isr_entry) set_vector( USC_isr, CLOCK_VECTOR, 1 );
-	
-	init_hbt();				/* Initialize heartbeat timer */
-	
-	reset_wdt();			/* Reset watchdog timer */
-	
-	enable_wdi();			/* Enable watchdog interrupt in USC */
-	
-	enable_hbi();			/* Enable heartbeat interrupt in USC */
-	
-							/* Enable USC interrupt in MIPS processor */
-	mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK);
-	
-	/*
-	*  Schedule the clock cleanup routine to execute if the application exits.
-	*/
+  /*
+  *  Hardware specific initialize goes here
+  */
+  
+  /* Set up USC heartbeat timer to generate interrupts */
+  disable_hbi();      /* Disable heartbeat interrupt in USC */
+  
+              /* Install interrupt handler */
+  Old_ticker = (rtems_isr_entry) set_vector( USC_isr, CLOCK_VECTOR, 1 );
+  
+  init_hbt();        /* Initialize heartbeat timer */
+  
+  reset_wdt();      /* Reset watchdog timer */
+  
+  enable_wdi();      /* Enable watchdog interrupt in USC */
+  
+  enable_hbi();      /* Enable heartbeat interrupt in USC */
+  
+              /* Enable USC interrupt in MIPS processor */
+  mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK);
+  
+  /*
+  *  Schedule the clock cleanup routine to execute if the application exits.
+  */
 
-	atexit( Clock_exit );
+  atexit( Clock_exit );
 }
 
 /*
