@@ -608,7 +608,6 @@ typedef struct @{
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  /* XXX CPU family dependent stuff */
 @} rtems_cpu_table;
 @end group
 @end example
