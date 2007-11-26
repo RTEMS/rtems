@@ -1,3 +1,7 @@
+2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/console/uart.c: Fix typo and spacing.
+
 2007-11-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/console/uart.c: when draining UART during

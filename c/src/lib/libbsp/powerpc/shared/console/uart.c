@@ -20,11 +20,11 @@
 
 struct uart_data
 {
-  unsigned long			ioBase;
-  int					irq;
-  int					hwFlow;
-  int					baud;
-  BSP_UartBreakCbRec	breakCallback;
+  unsigned long       ioBase;
+  int                 irq;
+  int                 hwFlow;
+  int                 baud;
+  BSP_UartBreakCbRec  breakCallback;
 };
 
 /*
@@ -63,7 +63,7 @@ static struct uart_data uart_data[2] = {
 #define SANITY_CHECK(uart) \
   assert( MAX_UARTS > (unsigned)(uart) && uart_data[(uart)].ioBase != UART_UNSUPP )
 /*
- * Macros to read/wirte register of uart, if configuration is
+ * Macros to read/write register of uart, if configuration is
  * different just rewrite these macros
  */
 
