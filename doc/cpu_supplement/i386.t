@@ -606,15 +606,13 @@ typedef struct @{
   void       (*predriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
  
-  unsigned32   interrupt_segment;
-  void        *interrupt_vector_table;
 @} rtems_cpu_table;
 @end group
 @end example

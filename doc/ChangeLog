@@ -1,5 +1,11 @@
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* cpu_supplement/i386.t: Eliminate the interrupt_table_segment and
+	interrupt_table_offset fields in the i386 CPU Table since they are
+	never read.
+
+2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* cpu_supplement/m68k.t: Eliminate the interrupt_vector_table field in
 	the m68k CPU Table since it is never read.
 
