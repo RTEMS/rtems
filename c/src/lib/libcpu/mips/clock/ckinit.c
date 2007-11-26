@@ -47,13 +47,8 @@
 
 #include "clock.h"
 
-/* formerly in the BSP */
-#if 0
-#define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */
-#endif
+extern uint32_t bsp_clicks_per_microsecond;
 
-#define CLOCKS_PER_MICROSECOND \
-  rtems_cpu_configuration_get_clicks_per_microsecond()
 /* to avoid including the bsp */
 mips_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 
@@ -165,8 +160,8 @@ void Install_clock(
    *  Hardware specific initialize goes here
    */
 
-  mips_timer_rate =
-     rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
+  mips_timer_rate = rtems_configuration_get_microseconds_per_tick() * 
+     bsp_clicks_per_microsecond;
   mips_set_timer( mips_timer_rate );
   mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK);
 
