@@ -63,7 +63,7 @@ Objects_Control *_Objects_Get(
   /* index = _Objects_Get_index( id ); */
   index = id & 0x0000ffff;
   /* This should work but doesn't always :( */
-  /* index = (uint16_t  ) id; */
+  /* index = (uint16_t) id; */
 #endif
 
    if ( information->maximum >= index ) {

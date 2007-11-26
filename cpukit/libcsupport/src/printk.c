@@ -103,7 +103,7 @@ vprintk(const char *fmt, va_list ap)
       switch (c)
       {
         case 'o': case 'O': base = 8; sign = 0; break;
-		case 'i': case 'I':
+        case 'i': case 'I':
         case 'd': case 'D': base = 10; sign = 1; break;
         case 'u': case 'U': base = 10; sign = 0; break;
         case 'x': case 'X': base = 16; sign = 0; break;
