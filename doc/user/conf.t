@@ -306,6 +306,13 @@ This device driver simply provides entry points that return
 successful and is primarily a test fixture.
 By default, this is not defined.
 
+@findex CONFIGURE_APPLICATION_EXTRA_DRIVERS
+@item @code{CONFIGURE_APPLICATION_EXTRA_DRIVERS}
+is defined if the application has device drivers it needs to
+include in the Device Driver Table.  This should be defined
+to the set of device driver entries that will be placed in
+the table.  By default, this is not defined.
+
 @end itemize
 
 @subsection Multiprocessing Configuration
