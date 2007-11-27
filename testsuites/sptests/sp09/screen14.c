@@ -20,8 +20,9 @@
 
 void Screen14()
 {
-  rtems_status_code  status;
-  rtems_time_of_day  time;
+  rtems_status_code       status;
+  rtems_time_of_day       time;
+  rtems_timer_information timer_info;
 
   status = rtems_timer_create( 0, &Junk_id );
   fatal_directive_status(
@@ -150,6 +151,14 @@ void Screen14()
     &time,
     " - before RTEMS_INVALID_CLOCK\n"
   );
+
+  status = rtems_timer_get_information( 100, &timer_info );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_timer_get_information with illegal id"
+  );
+  puts( "TA1 - rtems_timer_get_information - RTEMS_INVALID_ID" );
 
 /* timer server interface routines */
 

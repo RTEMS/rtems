@@ -142,7 +142,7 @@ void Screen5()
     RTEMS_INVALID_ID,
     "rtems_semaphore_delete with illegal id"
   );
-  puts( "TA1 - rtems_semaphore_delete - unknown RTEMS_INVALID_ID" );
+  puts( "TA1 - rtems_semaphore_delete - RTEMS_INVALID_ID" );
 
   status = rtems_semaphore_delete( 0x010100 );
   fatal_directive_status(
@@ -167,4 +167,20 @@ void Screen5()
     "rtems_semaphore_ident will illegal name (global)"
   );
   puts( "TA1 - rtems_semaphore_ident - local RTEMS_INVALID_NAME" );
+
+  status = rtems_semaphore_release( 100 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_semaphore_release with illegal id"
+  );
+  puts( "TA1 - rtems_semaphore_release - RTEMS_INVALID_ID" );
+
+  status = rtems_semaphore_flush( 100 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_semaphore_flush with illegal id"
+  );
+  puts( "TA1 - rtems_semaphore_flush - RTEMS_INVALID_ID" );
 }

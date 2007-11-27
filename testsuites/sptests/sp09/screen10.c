@@ -20,8 +20,12 @@
 
 void Screen10()
 {
-  rtems_status_code status;
+  rtems_rate_monotonic_period_status period_status;
+  rtems_status_code                  status;
 
+  /*
+   * Check create error cases.
+   */
   status = rtems_rate_monotonic_create( 0, &Junk_id );
   fatal_directive_status(
     status,
@@ -42,6 +46,9 @@ void Screen10()
   );
   puts( "TA1 - rtems_rate_monotonic_create - RTEMS_TOO_MANY" );
 
+  /*
+   * Check ident error cases.
+   */
   status = rtems_rate_monotonic_ident( 0, &Junk_id );
   fatal_directive_status(
     status,
@@ -50,13 +57,16 @@ void Screen10()
   );
   puts( "TA1 - rtems_rate_monotonic_ident - RTEMS_INVALID_NAME" );
 
+  /*
+   * Check period error cases.
+   */
   status = rtems_rate_monotonic_period( 100, 5 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
     "rtems_rate_monotonic_period with illegal id"
   );
-  puts( "TA1 - rtems_rate_monotonic_period - unknown RTEMS_INVALID_ID" );
+  puts( "TA1 - rtems_rate_monotonic_period - RTEMS_INVALID_ID" );
 
   status = rtems_rate_monotonic_period( 0x10100, 5 );
   fatal_directive_status(
@@ -101,13 +111,27 @@ void Screen10()
     "TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_TIMEOUT"
   );
 
+  /*
+   * Check get_status error cases.
+   */
+  status = rtems_rate_monotonic_get_status( 100, &period_status );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_rate_monotonic_get_status with illegal id"
+  );
+  puts( "TA1 - rtems_rate_monotonic_get_status - RTEMS_INVALID_ID" );
+
+  /*
+   * Check cancel error cases.
+   */
   status = rtems_rate_monotonic_cancel( 100 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
     "rtems_rate_monotonic_cancel with illegal id"
   );
-  puts( "TA1 - rtems_rate_monotonic_cancel - unknown RTEMS_INVALID_ID" );
+  puts( "TA1 - rtems_rate_monotonic_cancel - RTEMS_INVALID_ID" );
 
   status = rtems_rate_monotonic_cancel( 0x10100 );
   fatal_directive_status(
@@ -141,13 +165,16 @@ void Screen10()
   puts( "TA1 - yielding to TA4" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
 
+  /*
+   * Check delete error cases.
+   */
   status = rtems_rate_monotonic_delete( 100 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
     "rtems_rate_monotonic_delete with illegal id"
   );
-  puts( "TA1 - rtems_rate_monotonic_delete - unknown RTEMS_INVALID_ID" );
+  puts( "TA1 - rtems_rate_monotonic_delete - RTEMS_INVALID_ID" );
 
   status = rtems_rate_monotonic_delete( 0x10100 );
   fatal_directive_status(

@@ -42,7 +42,7 @@ rtems_task Task_1(
   );
 
   while( FOREVER ) {
-    status = rtems_task_get_note( RTEMS_SELF, RTEMS_NOTEPAD_8, &the_priority );
+    status = rtems_task_get_note( _Thread_Executing->Object.id, RTEMS_NOTEPAD_8, &the_priority );
     directive_failed( status, "rtems_task_get_note" );
     printf(
 "TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: %02d\n",

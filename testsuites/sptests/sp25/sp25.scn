@@ -2,9 +2,11 @@ NOTE: Addresses vary between BSPs.  Please check that the addresses
       printed are reasonable for your target board and that the
       segments noted as being returned were allocated from the region.
 *** TEST 25 ***
-TA1 - rtems_region_ident - 0x32010002
+TA1 - rtems_region_ident - 0x32010001
 TA1 - rtems_region_get_segment - wait on 64 byte segment from region 1
 TA1 - got segment from region 1 - 0xXXXXXXXX
+TA1 - rtems_region_get_segment_size from - 0xXXXXXXXX
+TA1 - got segment size of 124
 TA1 - rtems_region_get_segment - wait on 128 byte segment from region 1
 TA1 - got segment from region 1 - 0xXXXXXXXX
 TA1 - rtems_region_get_segment - wait on 256 byte segment from region 1
@@ -19,6 +21,12 @@ TA1 - rtems_region_get_segment - wait on 4096 byte segment from region 1
 TA1 - got segment from region 1 - 0xXXXXXXXX
 TA1 - rtems_region_get_segment - wait on 8192 byte segment from region 1
 TA1 - got segment from region 1 - 0xXXXXXXXX
+TA1 - rtems_region_get_segment_size from - 0xXXXXXXXX
+TA1 - got segment size of 8252
+TA1 - rtems_region_get_information - 0x32010001
+TA1 - got information - free = 1, used = 8
+TA1 - rtems_region_get_free_information - 0x32010001
+TA1 - got free information - free = 1, used = 0
 <pause>
 TA1 - rtems_region_return_segment - return segment to region 1 - 0xXXXXXXXX
 TA1 - rtems_region_return_segment - return segment to region 1 - 0xXXXXXXXX

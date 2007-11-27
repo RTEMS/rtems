@@ -23,21 +23,25 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  void              *address_1;
-  void              *address_2;
-  void              *address_3;
-  void              *address_4;
-  void              *address_5;
-  void              *address_6;
-  void              *address_7;
-  void              *address_8;
-  rtems_status_code  status;
-  rtems_id           region_id;
+  void                   *address_1;
+  void                   *address_2;
+  void                   *address_3;
+  void                   *address_4;
+  void                   *address_5;
+  void                   *address_6;
+  void                   *address_7;
+  void                   *address_8;
+  rtems_id                region_id;
+  Heap_Information_block  region_info;
+  size_t                  segment_size;
+  rtems_status_code       status;
 
+  /* Obtain the region id */
   status = rtems_region_ident(Region_name[ 1 ], &region_id);
   printf( "TA1 - rtems_region_ident - 0x%08x\n", region_id );
   directive_failed(status, "rtems_region_ident of RN01");
 
+  /* Get a 64 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 64 byte segment from region 1"
   );
@@ -53,6 +57,15 @@ rtems_task Task_1(
   Put_address_from_area_1( address_1 );
   new_line;
 
+  /* Get the size of segment_1 */
+  puts_nocr( "TA1 - rtems_region_get_segment_size from - " );
+  Put_address_from_area_1( address_1 );
+  new_line;
+  status = rtems_region_get_segment_size(region_id, address_1, &segment_size);
+  directive_failed(status, "rtems_region_get_segment_size of segment 1");
+  printf( "TA1 - got segment size of %d\n", segment_size );
+
+  /* Get a 128 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 128 byte segment from region 1"
   );
@@ -68,6 +81,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_2 );
   new_line;
 
+  /* Get a 256 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 256 byte segment from region 1"
   );
@@ -83,6 +97,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_3 );
   new_line;
 
+  /* Get a 512 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 512 byte segment from region 1"
   );
@@ -98,6 +113,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_4 );
   new_line;
 
+  /* Get a 1024 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 1024 byte segment from region 1"
   );
@@ -113,6 +129,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_5 );
   new_line;
 
+  /* Get a 2048 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 2048 byte segment from region 1"
   );
@@ -128,6 +145,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_6 );
   new_line;
 
+  /* Get a 4096 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 4096 byte segment from region 1"
   );
@@ -143,6 +161,7 @@ rtems_task Task_1(
   Put_address_from_area_1( address_7 );
   new_line;
 
+  /* Get a 8192 byte segment from the region */
   puts(
     "TA1 - rtems_region_get_segment - wait on 8192 byte segment from region 1"
   );
@@ -157,6 +176,33 @@ rtems_task Task_1(
   puts_nocr( "TA1 - got segment from region 1 - " );
   Put_address_from_area_1( address_8 );
   new_line;
+
+  /* Get the size of segment_8 */
+  puts_nocr( "TA1 - rtems_region_get_segment_size from - " );
+  Put_address_from_area_1( address_8 );
+  new_line;
+  status = rtems_region_get_segment_size(region_id, address_8, &segment_size);
+  directive_failed(status, "rtems_region_get_segment_size of segment 8");
+  printf( "TA1 - got segment size of %d\n", segment_size );
+
+  /* Get information about the region */
+  printf( "TA1 - rtems_region_get_information - 0x%08x\n", region_id );
+  status = rtems_region_get_information(region_id, &region_info);
+  directive_failed(status, "rtems_region_get_information of RN01");
+  printf(
+    "TA1 - got information - free = %d, used = %d\n",
+    region_info.Free.number,
+    region_info.Used.number
+  );
+
+  printf( "TA1 - rtems_region_get_free_information - 0x%08x\n", region_id );
+  status = rtems_region_get_free_information(region_id, &region_info);
+  directive_failed(status, "rtems_region_get_free_information of RN01");
+  printf(
+    "TA1 - got free information - free = %d, used = %d\n",
+    region_info.Free.number,
+    region_info.Used.number
+  );
 
 rtems_test_pause();
 

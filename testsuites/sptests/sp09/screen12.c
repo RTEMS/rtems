@@ -20,14 +20,17 @@
 
 void Screen12()
 {
-  void              *segment_address_1;
-  void              *segment_address_2;
-  void              *segment_address_3;
-  uint32_t     offset;
-  uint32_t     good_front_flag;
-  uint32_t     good_back_flag;
-  rtems_status_code  status;
+  void                   *segment_address_1;
+  void                   *segment_address_2;
+  void                   *segment_address_3;
+  uint32_t                good_back_flag;
+  uint32_t                good_front_flag;
+  uint32_t                offset;
+  size_t                  segment_size;
+  rtems_status_code       status;
+  Heap_Information_block  the_info;
 
+  /* Check invalid name error case */
   status = rtems_region_create(
     0,
     Region_good_area,
@@ -42,6 +45,22 @@ void Screen12()
     "rtems_region_create with illegal name"
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_NAME" );
+
+  /* Check NULL starting address error case */
+  status = rtems_region_create(
+    Region_name[ 1 ],
+    NULL,
+    0x40,
+    32,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_create with NULL address"
+  );
+  puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS" );
 
 #if defined(_C3x) || defined(_C4x)
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
@@ -80,6 +99,22 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_SIZE" );
 #endif
+
+  /* Check NULL id error case */
+  status = rtems_region_create(
+    Region_name[ 1 ],
+    Region_good_area,
+    REGION_LENGTH,
+    0x40,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_create with NULL id"
+  );
+  puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_create(
     Region_name[ 1 ],
@@ -130,6 +165,40 @@ void Screen12()
     "rtems_region_ident with illegal name"
   );
   puts( "TA1 - rtems_region_ident - RTEMS_INVALID_NAME" );
+
+  /* Check get_information errors */
+  status = rtems_region_get_information( Region_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_get_information with NULL information"
+  );
+  puts( "TA1 - rtems_region_get_information - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_get_information( 100, &the_info );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_region_get_information with illegal id"
+  );
+  puts( "TA1 - rtems_region_get_information - unknown RTEMS_INVALID_ID" );
+
+  /* Check get_free_information errors */
+  status = rtems_region_get_free_information( Region_id[ 1 ], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_get_free_information with NULL information"
+  );
+  puts( "TA1 - rtems_region_get_free_information - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_get_free_information( 100, &the_info );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_region_get_free_information with illegal id"
+  );
+  puts( "TA1 - rtems_region_get_free_information - unknown RTEMS_INVALID_ID" );
 
   status = rtems_region_get_segment(
     100,
@@ -198,6 +267,35 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_get_segment - woke up with RTEMS_TIMEOUT" );
 
+  /* Check get_segment_size errors */
+  status = rtems_region_get_segment_size( Region_id[ 1 ], NULL, &segment_size );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_get_segment_size with NULL segment"
+  );
+  puts( "TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_get_segment_size(
+    Region_id[ 1 ], segment_address_1, NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_get_segment_size with NULL size"
+  );
+  puts( "TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_get_segment_size(
+    100, segment_address_1, &segment_size
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_region_get_segment_size with illegal id"
+  );
+  puts( "TA1 - rtems_region_get_segment_size - unknown RTEMS_INVALID_ID" );
+
   status = rtems_region_delete( Region_id[ 1 ] );
   fatal_directive_status(
     status,
@@ -206,6 +304,38 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_delete - RTEMS_RESOURCE_IN_USE" );
 
+  /* Check resize_segment errors */
+  status = rtems_region_resize_segment(
+    Region_id[ 1 ], segment_address_3, 256, NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_resize_segment with NULL old size"
+  );
+  puts( "TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_resize_segment(
+    Region_id[ 1 ], NULL, 256, &segment_size
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_resize_segment with NULL segment"
+  );
+  puts( "TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_region_resize_segment(
+    100, segment_address_3, 256, &segment_size
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_region_resize_segment with illegal id"
+  );
+  puts( "TA1 - rtems_region_resize_segment - RTEMS_INVALID_ID" );
+
+  /* Check return_segment errors */
   status = rtems_region_return_segment( 100, segment_address_1 );
   fatal_directive_status(
     status,

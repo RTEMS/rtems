@@ -23,8 +23,8 @@
 void Screen7()
 {
   long              buffer[ 4 ];
-  size_t      size;
-  uint32_t    count;
+  uint32_t          count;
+  size_t            size;
   rtems_status_code status;
 
   status = rtems_message_queue_broadcast( 100, buffer, MESSAGE_SIZE, &count );
@@ -146,9 +146,37 @@ void Screen7()
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
-    "rtems_message_queue_receive wit illegal id"
+    "rtems_message_queue_receive with illegal id"
   );
   puts( "TA1 - rtems_message_queue_receive - RTEMS_INVALID_ID" );
+
+  status = rtems_message_queue_receive(
+    Queue_id[ 1 ],
+    NULL,
+    &size,
+    RTEMS_NO_WAIT,
+    RTEMS_NO_TIMEOUT
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_receive NULL buffer"
+  );
+  puts( "TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL buffer" );
+
+  status = rtems_message_queue_receive(
+    Queue_id[ 1 ],
+    (long (*)[4]) buffer,
+    NULL,
+    RTEMS_NO_WAIT,
+    RTEMS_NO_TIMEOUT
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_receive NULL size"
+  );
+  puts( "TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL size" );
 
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
@@ -205,4 +233,12 @@ void Screen7()
     "rtems_message_queue_send too many to a limited queue"
   );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY" );
+
+  status = rtems_message_queue_urgent( 100, buffer, MESSAGE_SIZE );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_message_queue_urgent with illegal id"
+  );
+  puts( "TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID" );
 }

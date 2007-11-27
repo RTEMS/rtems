@@ -4,6 +4,8 @@ INIT - rtems_task_restart - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_delete - RTEMS_INVALID_ID
 TA1 - rtems_task_get_note - RTEMS_INVALID_NUMBER
 TA1 - rtems_task_get_note - RTEMS_INVALID_ID
+TA1 - rtems_task_get_note - RTEMS_INVALID_ID
+TA1 - rtems_task_get_note - RTEMS_INVALID_ID
 TA1 - rtems_task_ident - current task RTEMS_SUCCESSFUL
 TA1 - rtems_task_ident - global RTEMS_INVALID_NAME
 TA1 - rtems_task_ident - local RTEMS_INVALID_NAME
@@ -70,10 +72,12 @@ TA1 - rtems_semaphore_create - RTEMS_NOT_DEFINED
 TA1 - rtems_semaphore_create - RTEMS_NOT_DEFINED
 TA1 - rtems_semaphore_create - RTEMS_INVALID_NUMBER
 TA1 - rtems_semaphore_create - RTEMS_MP_NOT_CONFIGURED
-TA1 - rtems_semaphore_delete - unknown RTEMS_INVALID_ID
+TA1 - rtems_semaphore_delete - RTEMS_INVALID_ID
 TA1 - rtems_semaphore_delete - local RTEMS_INVALID_ID
 TA1 - rtems_semaphore_ident - global RTEMS_INVALID_NAME
 TA1 - rtems_semaphore_ident - local RTEMS_INVALID_NAME
+TA1 - rtems_semaphore_release - RTEMS_INVALID_ID
+TA1 - rtems_semaphore_flush - RTEMS_INVALID_ID
 <pause - screen 6>
 TA1 - rtems_semaphore_obtain - RTEMS_INVALID_ID
 TA1 - rtems_semaphore_obtain - got sem 1 - RTEMS_SUCCESSFUL
@@ -91,6 +95,7 @@ TA1 - rtems_semaphore_delete - delete sem 2 - RTEMS_RESOURCE_IN_USE
 TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA2 - rtems_semaphore_obtain - woke up with RTEMS_OBJECT_WAS_DELETED
 TA2 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+TA1 - rtems_task_delete TA2 - already deleted RTEMS_INVALID_ID
 <pause - screen 7>
 TA1 - rtems_message_queue_broadcast - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_create - Q 1 - RTEMS_INVALID_NAME
@@ -103,6 +108,8 @@ TA1 - rtems_message_queue_ident - RTEMS_INVALID_NAME
 TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_flush - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_receive - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL buffer
+TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL size
 TA1 - rtems_message_queue_receive - Q 1 - RTEMS_UNSATISFIED
 TA1 - rtems_message_queue_receive - Q 1 - timeout in 3 seconds
 TA1 - rtems_message_queue_receive - Q 1 - woke up with RTEMS_TIMEOUT
@@ -110,6 +117,7 @@ TA1 - rtems_message_queue_send - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY
+TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID
 <pause - screen 8>
 TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
@@ -149,13 +157,14 @@ TA1 - rtems_rate_monotonic_create - RTEMS_INVALID_NAME
 TA1 - rtems_rate_monotonic_create - RTEMS_SUCCESSFUL
 TA1 - rtems_rate_monotonic_create - RTEMS_TOO_MANY
 TA1 - rtems_rate_monotonic_ident - RTEMS_INVALID_NAME
-TA1 - rtems_rate_monotonic_period - unknown RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_period - RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_period - local RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_NOT_DEFINED
 TA1 - rtems_rate_monotonic_period - 100 ticks - RTEMS_SUCCESSFUL
 TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_SUCCESSFUL
 TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_TIMEOUT
-TA1 - rtems_rate_monotonic_cancel - unknown RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_get_status - RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_cancel - RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_cancel - local RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_cancel - RTEMS_SUCCESSFUL
 TA1 - rtems_rate_monotonic_period - 5 ticks - RTEMS_TIMEOUT
@@ -163,7 +172,7 @@ TA1 - yielding to TA4
 TA4 - rtems_rate_monotonic_cancel - RTEMS_NOT_OWNER_OF_RESOURCE
 TA4 - rtems_rate_monotonic_period - RTEMS_NOT_OWNER_OF_RESOURCE
 TA4 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
-TA1 - rtems_rate_monotonic_delete - unknown RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_delete - RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_delete - local RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_delete - RTEMS_SUCCESSFUL
 <pause - screen 11>
@@ -190,19 +199,31 @@ TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ADDRESS - not on boundary
 <pause - screen 12>
 TA1 - rtems_region_create - RTEMS_INVALID_NAME
 TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_INVALID_SIZE
+TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_SUCCESSFUL
 TA1 - rtems_region_create - RTEMS_TOO_MANY
 TA1 - rtems_region_delete - unknown RTEMS_INVALID_ID
 TA1 - rtems_region_delete - local RTEMS_INVALID_ID
 TA1 - rtems_region_ident - RTEMS_INVALID_NAME
+TA1 - rtems_region_get_information - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_information - unknown RTEMS_INVALID_ID
+TA1 - rtems_region_get_free_information - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_free_information - unknown RTEMS_INVALID_ID
 TA1 - rtems_region_get_segment - RTEMS_INVALID_ID
 TA1 - rtems_region_get_segment - RTEMS_INVALID_SIZE
 TA1 - rtems_region_get_segment - RTEMS_SUCCESSFUL
 TA1 - rtems_region_get_segment - RTEMS_UNSATISFIED
 TA1 - rtems_region_get_segment - timeout in 3 seconds
 TA1 - rtems_region_get_segment - woke up with RTEMS_TIMEOUT
+TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_segment_size - unknown RTEMS_INVALID_ID
 TA1 - rtems_region_delete - RTEMS_RESOURCE_IN_USE
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ID
 TA1 - rtems_region_return_segment - RTEMS_INVALID_ID
 TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS
 TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION
@@ -226,9 +247,9 @@ TA1 - rtems_clock_get - 00:00:00   01/01/2001 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/1999 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_get - 00:00:00   01/01/2000 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/2100 - RTEMS_SUCCESSFUL
-TA1 - rtems_clock_get - 00:00:00   01/01/2101 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get - 17:31:44   11/25/1964 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/2099 - RTEMS_SUCCESSFUL
-TA1 - rtems_clock_get - 00:00:00   01/01/2100 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get - 17:31:44   11/25/1963 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 23:59:59   12/31/1991 - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_get - 00:00:00   01/01/1992 - RTEMS_SUCCESSFUL
 <pause - screen 14>
@@ -245,8 +266,9 @@ TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID
 TA1 - rtems_timer_fire_when - RTEMS_INVALID_ID
 TA1 - rtems_timer_fire_after - RTEMS_INVALID_NUMBER
 TA1 - rtems_timer_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
-TA1 - rtems_clock_get       - 00:00:01   01/01/1992
+TA1 - rtems_clock_get       - 00:00:00   01/01/1992
 TA1 - rtems_timer_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
+TA1 - rtems_timer_get_information - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE
 TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE
 TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY
@@ -255,6 +277,6 @@ TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER
 TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
-TA1 - rtems_clock_get       - 00:00:01   01/01/1992
+TA1 - rtems_clock_get       - 00:00:00   01/01/1992
 TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
 *** END OF TEST 9 ***
