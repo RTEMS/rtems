@@ -23,7 +23,6 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
 /*PAGE
@@ -49,9 +48,9 @@ rtems_status_code rtems_region_get_segment_size(
   size_t            *size
 )
 {
-  register Region_Control *the_region;
   Objects_Locations        location;
-  Thread_Control          *executing;
+  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  register Region_Control *the_region;
 
   if ( !segment )
     return RTEMS_INVALID_ADDRESS;
@@ -60,28 +59,27 @@ rtems_status_code rtems_region_get_segment_size(
     return RTEMS_INVALID_ADDRESS;
 
   _RTEMS_Lock_allocator();
-  executing  = _Thread_Executing;
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
+
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
+
+      case OBJECTS_LOCAL:
+        if ( !_Heap_Size_of_user_area( &the_region->Memory, segment, size ) )
+          return_status = RTEMS_INVALID_ADDRESS;
+        else
+          return_status = RTEMS_SUCCESSFUL;
+        break;
+
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-    case OBJECTS_LOCAL:
-
-      if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
-        _RTEMS_Unlock_allocator();
-        return RTEMS_SUCCESSFUL;
-      }
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ADDRESS;
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }

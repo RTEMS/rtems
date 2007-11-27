@@ -47,35 +47,36 @@ rtems_status_code rtems_region_get_information(
   Heap_Information_block *the_info
 )
 {
-  register Region_Control *the_region;
   Objects_Locations        location;
+  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  register Region_Control *the_region;
 
   if ( !the_info )
     return RTEMS_INVALID_ADDRESS;
 
   _RTEMS_Lock_allocator();
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
+
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
+
+      case OBJECTS_LOCAL:
+        if ( _Heap_Get_information( &the_region->Memory, the_info ) !=
+             HEAP_GET_INFORMATION_SUCCESSFUL )
+          return_status = RTEMS_INVALID_ADDRESS;
+        else
+          return_status = RTEMS_SUCCESSFUL;
+        break;
+
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-    case OBJECTS_LOCAL:
-
-      if ( _Heap_Get_information( &the_region->Memory, the_info ) ==
-           HEAP_GET_INFORMATION_SUCCESSFUL ) {
-        _RTEMS_Unlock_allocator();
-        return RTEMS_SUCCESSFUL;
-      }
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ADDRESS;
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }

@@ -56,7 +56,8 @@ rtems_status_code rtems_region_create(
   Objects_Id         *id
 )
 {
-  Region_Control *the_region;
+  rtems_status_code  return_status;
+  Region_Control    *the_region;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -72,43 +73,49 @@ rtems_status_code rtems_region_create(
 
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
 
-  the_region = _Region_Allocate();
+    the_region = _Region_Allocate();
 
-  if ( !the_region ) {
-    _RTEMS_Unlock_allocator();
-    return RTEMS_TOO_MANY;
-  }
+    if ( !the_region )
+      return_status = RTEMS_TOO_MANY;
 
-  the_region->maximum_segment_size =
-    _Heap_Initialize(&the_region->Memory, starting_address, length, page_size);
+    else {
 
-  if ( !the_region->maximum_segment_size ) {
-    _Region_Free( the_region );
-    _RTEMS_Unlock_allocator();
-    return RTEMS_INVALID_SIZE;
-  }
+      the_region->maximum_segment_size = _Heap_Initialize(
+        &the_region->Memory, starting_address, length, page_size
+      );
 
-  the_region->starting_address      = starting_address;
-  the_region->length                = length;
-  the_region->page_size             = page_size;
-  the_region->attribute_set         = attribute_set;
-  the_region->number_of_used_blocks = 0;
+      if ( !the_region->maximum_segment_size ) {
+        _Region_Free( the_region );
+        return_status = RTEMS_INVALID_SIZE;
+      }
 
-  _Thread_queue_Initialize(
-    &the_region->Wait_queue,
-    _Attributes_Is_priority( attribute_set ) ?
-       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_SEGMENT,
-    RTEMS_TIMEOUT
-  );
+      else {
 
-  _Objects_Open(
-    &_Region_Information,
-    &the_region->Object,
-    (Objects_Name) name
-  );
+        the_region->starting_address      = starting_address;
+        the_region->length                = length;
+        the_region->page_size             = page_size;
+        the_region->attribute_set         = attribute_set;
+        the_region->number_of_used_blocks = 0;
 
-  *id = the_region->Object.id;
+        _Thread_queue_Initialize(
+          &the_region->Wait_queue,
+          _Attributes_Is_priority( attribute_set ) ?
+             THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
+          STATES_WAITING_FOR_SEGMENT,
+          RTEMS_TIMEOUT
+        );
+
+        _Objects_Open(
+          &_Region_Information,
+          &the_region->Object,
+          (Objects_Name) name
+        );
+
+        *id = the_region->Object.id;
+        return_status = RTEMS_SUCCESSFUL;
+      }
+    }
+
   _RTEMS_Unlock_allocator();
-  return RTEMS_SUCCESSFUL;
+  return return_status;
 }

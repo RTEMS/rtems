@@ -49,54 +49,54 @@ rtems_status_code rtems_region_extend(
   uint32_t            length
 )
 {
-  Region_Control     *the_region;
-  Objects_Locations   location;
   uint32_t            amount_extended;
   Heap_Extend_status  heap_status;
-  rtems_status_code   status;
+  Objects_Locations   location;
+  rtems_status_code   return_status = RTEMS_INTERNAL_ERROR;
+  Region_Control     *the_region;
 
   if ( !starting_address )
     return RTEMS_INVALID_ADDRESS;
 
-  status = RTEMS_SUCCESSFUL;
-
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
+
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
+
+      case OBJECTS_LOCAL:
+
+        heap_status = _Heap_Extend(
+          &the_region->Memory,
+          starting_address,
+          length,
+          &amount_extended
+        );
+
+        switch ( heap_status ) {
+          case HEAP_EXTEND_SUCCESSFUL:
+            the_region->length                += amount_extended;
+            the_region->maximum_segment_size  += amount_extended;
+            return_status = RTEMS_SUCCESSFUL;
+            break;
+          case HEAP_EXTEND_ERROR:
+            return_status = RTEMS_INVALID_ADDRESS;
+            break;
+          case HEAP_EXTEND_NOT_IMPLEMENTED:
+            return_status = RTEMS_NOT_IMPLEMENTED;
+            break;
+        }
+        break;
+
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-    case OBJECTS_LOCAL:
-
-      heap_status = _Heap_Extend(
-        &the_region->Memory,
-        starting_address,
-        length,
-        &amount_extended
-      );
-
-      switch ( heap_status ) {
-        case HEAP_EXTEND_SUCCESSFUL:
-          the_region->length                += amount_extended;
-          the_region->maximum_segment_size  += amount_extended;
-          break;
-        case HEAP_EXTEND_ERROR:
-          status = RTEMS_INVALID_ADDRESS;
-          break;
-        case HEAP_EXTEND_NOT_IMPLEMENTED:
-          status = RTEMS_NOT_IMPLEMENTED;
-          break;
-      }
-      _RTEMS_Unlock_allocator();
-      return( status );
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }

@@ -54,55 +54,58 @@ rtems_status_code rtems_region_return_segment(
   void       *segment
 )
 {
-  register Region_Control *the_region;
   Objects_Locations        location;
+  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
   uint32_t                 size;
 #endif
   int                      status;
+  register Region_Control *the_region;
 
   _RTEMS_Lock_allocator();
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
-#endif
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_LOCAL:
 
-    case OBJECTS_LOCAL:
-
-      _Region_Debug_Walk( the_region, 3 );
+        _Region_Debug_Walk( the_region, 3 );
 
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
-      if ( _Heap_Size_of_user_area( &the_region->Memory, segment, &size ) ) {
-        memset( segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size );
-      } else {
-        _RTEMS_Unlock_allocator();
-        return RTEMS_INVALID_ADDRESS;
-      }
+        if ( !_Heap_Size_of_user_area( &the_region->Memory, segment, &size ) )
+          return_status = RTEMS_INVALID_ADDRESS;
+        else {
+          memset( segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size );
+#endif
+          status = _Region_Free_segment( the_region, segment );
+
+          _Region_Debug_Walk( the_region, 4 );
+
+          if ( !status )
+            return_status = RTEMS_INVALID_ADDRESS;
+
+          else {
+            the_region->number_of_used_blocks -= 1;
+
+            _Region_Process_queue(the_region); /* unlocks allocator */
+
+            return RTEMS_SUCCESSFUL;
+          }
+#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
+        }
+#endif
+        break;
+
+#if defined(RTEMS_MULTIPROCESSING)
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-      status = _Region_Free_segment( the_region, segment );
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-      _Region_Debug_Walk( the_region, 4 );
-
-      if ( !status ) {
-        _RTEMS_Unlock_allocator();
-        return RTEMS_INVALID_ADDRESS;
-      }
-
-      the_region->number_of_used_blocks -= 1;
-
-      _Region_Process_queue(the_region); /* unlocks allocator internally */
-
-      return RTEMS_SUCCESSFUL;
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }

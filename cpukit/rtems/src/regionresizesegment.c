@@ -50,54 +50,57 @@ rtems_status_code rtems_region_resize_segment(
   size_t     *old_size
 )
 {
-  register Region_Control *the_region;
-  Objects_Locations        location;
-  Heap_Resize_status       status;
   uint32_t                 avail_size;
+  Objects_Locations        location;
   uint32_t                 osize;
+  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  Heap_Resize_status       status;
+  register Region_Control *the_region;
 
   if ( !old_size )
     return RTEMS_INVALID_ADDRESS;
 
   _RTEMS_Lock_allocator();
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
+
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
+
+      case OBJECTS_LOCAL:
+
+        _Region_Debug_Walk( the_region, 7 );
+
+        status = _Heap_Resize_block(
+          &the_region->Memory,
+          segment,
+          (uint32_t) size,
+          &osize,
+          &avail_size
+        );
+        *old_size = (uint32_t) osize;
+
+        _Region_Debug_Walk( the_region, 8 );
+
+        if ( status == HEAP_RESIZE_SUCCESSFUL && avail_size > 0 )
+          _Region_Process_queue( the_region );    /* unlocks allocator */
+        else
+          _RTEMS_Unlock_allocator();
+
+        return
+          (status == HEAP_RESIZE_SUCCESSFUL) ?  RTEMS_SUCCESSFUL :
+          (status == HEAP_RESIZE_UNSATISFIED) ? RTEMS_UNSATISFIED :
+          RTEMS_INVALID_ADDRESS;
+        break;
 
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-    case OBJECTS_LOCAL:
-
-      _Region_Debug_Walk( the_region, 7 );
-
-      status = _Heap_Resize_block(
-        &the_region->Memory,
-        segment,
-        (uint32_t) size,
-        &osize,
-        &avail_size
-      );
-      *old_size = (uint32_t) osize;
-
-      _Region_Debug_Walk( the_region, 8 );
-
-      if( status == HEAP_RESIZE_SUCCESSFUL && avail_size > 0 )
-        _Region_Process_queue( the_region ); /* unlocks allocator internally */
-      else
-        _RTEMS_Unlock_allocator();
-
-      return
-        (status == HEAP_RESIZE_SUCCESSFUL) ?  RTEMS_SUCCESSFUL :
-        (status == HEAP_RESIZE_UNSATISFIED) ? RTEMS_UNSATISFIED :
-        RTEMS_INVALID_ADDRESS;
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }

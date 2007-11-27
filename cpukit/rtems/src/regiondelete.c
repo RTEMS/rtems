@@ -46,33 +46,36 @@ rtems_status_code rtems_region_delete(
   Objects_Id id
 )
 {
-  register Region_Control *the_region;
   Objects_Locations        location;
+  rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
+  register Region_Control *the_region;
 
   _RTEMS_Lock_allocator();
-  the_region = _Region_Get( id, &location );
-  switch ( location ) {
+
+    the_region = _Region_Get( id, &location );
+    switch ( location ) {
+
+      case OBJECTS_LOCAL:
+        _Region_Debug_Walk( the_region, 5 );
+        if ( the_region->number_of_used_blocks != 0 )
+          return_status = RTEMS_RESOURCE_IN_USE;
+        else {
+          _Objects_Close( &_Region_Information, &the_region->Object );
+          _Region_Free( the_region );
+          return_status = RTEMS_SUCCESSFUL;
+        }
+        break;
+
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INTERNAL_ERROR;
+      case OBJECTS_REMOTE:        /* this error cannot be returned */
+        break;
 #endif
 
-    case OBJECTS_ERROR:
-      _RTEMS_Unlock_allocator();
-      return RTEMS_INVALID_ID;
+      case OBJECTS_ERROR:
+        return_status = RTEMS_INVALID_ID;
+        break;
+    }
 
-    case OBJECTS_LOCAL:
-      _Region_Debug_Walk( the_region, 5 );
-      if ( the_region->number_of_used_blocks == 0 ) {
-        _Objects_Close( &_Region_Information, &the_region->Object );
-        _Region_Free( the_region );
-        _RTEMS_Unlock_allocator();
-        return RTEMS_SUCCESSFUL;
-      }
-      _RTEMS_Unlock_allocator();
-      return RTEMS_RESOURCE_IN_USE;
-  }
-
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  _RTEMS_Unlock_allocator();
+  return return_status;
 }
