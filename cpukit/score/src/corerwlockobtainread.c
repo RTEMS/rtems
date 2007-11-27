@@ -84,6 +84,7 @@ void _CORE_RWLock_Obtain_for_reading(
     if ( !wait ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
+      return;
     }
 
     /*

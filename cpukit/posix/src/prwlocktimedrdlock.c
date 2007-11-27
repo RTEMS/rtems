@@ -49,7 +49,7 @@ int pthread_rwlock_timedrdlock(
     return EINVAL;
 
   status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
-  if ( !status )
+  if ( status )
     return status;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );

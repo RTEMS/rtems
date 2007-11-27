@@ -145,7 +145,6 @@ rtems_status_code rtems_barrier_delete(
  *  clock ticks.
  *
  *  @param[in] id indicates the barrier to wait at.
- *  @param[in] option_set indicates if the caller is willing to wait.
  *  @param[in] timeout is the maximum length of time in ticks the calling
  *             thread is willing to block.
  *
@@ -161,17 +160,17 @@ rtems_status_code rtems_barrier_wait(
  *
  *  This routine implements the rtems_barrier_release directive.  It
  *  unblocks all of the threads waiting on the barrier associated with
- *  @a id.  The number of threads unblocked is returns in @a unblocked.
+ *  @a id.  The number of threads unblocked is returned in @a released.
  *
  *
  *  @param[in] id indicates the barrier to wait at.
- *  @param[out] unblocked will contain the number of threads unblocked.
+ *  @param[out] released will contain the number of threads unblocked.
  *
  *  @return a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_release(
   rtems_id  id,
-  uint32_t *unblocked
+  uint32_t *released
 );
 
 /**
