@@ -1,3 +1,8 @@
+2007-11-27	Kate Feng <feng1@bnl.gov>
+
+	* custom/mvme5500.cfg: Add compiler arguments sine without them, the
+	BSP has issues.
+
 2007-11-03      Ray Xu <rayx.cn@gmail.com>
 
         * custom/rtl22xx_t.cfg: New file, rtl22xx_t is a new bsp compiled
