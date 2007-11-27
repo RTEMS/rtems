@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -182,79 +182,4 @@ file binary.bin:
 @example
 unhex -o binary.bin downloadA.sr downloadB.sr
 @end example
-
-@c
-@c size_rtems
-@c
-@section size_rtems - report RTEMS size information
-
-@subheading SYNOPSIS
-
-@example
-size_rtems
-@end example
-
-@subheading DESCRIPTION
-
-size_rtems analyzes RTEMS and determines all of the
-critical sizing information which is reported in the related
-documentation.
-
-@subheading EXAMPLES
-
-To generate the RTEMS size report for the currently
-configured processor, execute the following command:
-
-@example
-size_rtems
-@end example
-
-Although the actual size information will differ, a
-report of the following format will be output:
-
-@example
-     RTEMS SIZE REPORT
-
-CODE  DATA    BSS
-==================
-MANAGERS: 15988 0       0
-CORE    : 4568  0       0
-CPU     : 364   0       0
-OVERALL : 20556 0       0
-MINIMUM : 8752  0       0
-
-init    : 1592  0       0
-tasks   : 2440  0       0
-intr    : 64    0       0
-clock   : 2252  0       0
-sem     : 876   0       0
-msg     : 1624  0       0
-event   : 604   0       0
-signal  : 212   0       0
-part    : 872   0       0
-region  : 844   0       0
-dpmem   : 532   0       0
-timer   : 424   0       0
-io      : 288   0       0
-fatal   : 40    0       0
-rtmon   : 764   0       0
-mp      : 2984  0       0
-
-sem     : 4     0       0
-msg     : 4     0       0
-event   : 4     0       0
-signal  : 4     0       0
-part    : 4     0       0
-region  : 4     0       0
-timer   : 4     0       0
-dpmem   : 4     0       0
-io      : 4     0       0
-rtmon   : 4     0       0
-mp      : 8     0       0
-@end example
-
-@subheading SEE ALSO
-
-gsize020(1G), gsize386(1G), gsize960(1G)
-
 
