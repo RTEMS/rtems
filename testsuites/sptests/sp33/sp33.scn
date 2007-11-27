@@ -1,0 +1,48 @@
+*** TEST 33 ***
+Delete barrier with bad id
+Release barrier with bad id
+Wait on barrier with bad id
+Create barrier with automatic release and 0 max waiters
+Create barrier
+Create too many barriers
+Check barrier ident
+Wait on barrier w/timeout and TIMEOUT
+
+*** Testing manual release of barrier ***
+Delay to let Waiters block
+Waiter 0 waiting on barrier
+Waiter 1 waiting on barrier
+Waiter 2 waiting on barrier
+Waiter 3 waiting on barrier
+Releasing tasks
+Delay to let Waiters print a message
+Waiter 0 back from barrier
+Waiter 1 back from barrier
+Waiter 2 back from barrier
+Waiter 3 back from barrier
+
+*** Testing Deletion of barrier ***
+Delay to let Waiters block
+Waiter 0 waiting on barrier
+Waiter 1 waiting on barrier
+Waiter 2 waiting on barrier
+Waiter 3 waiting on barrier
+Delete barrier
+Delay to let Waiters print a message
+Waiter 0 back from barrier
+Waiter 1 back from barrier
+Waiter 2 back from barrier
+Waiter 3 back from barrier
+Create barrier
+
+*** Testing automatic release of barrier ***
+Delay to let task wait on barrier
+Waiter 0 waiting on barrier
+Waiter 1 waiting on barrier
+Waiter 2 waiting on barrier
+Waiter 3 waiting on barrier
+Waiter 3 back from barrier
+Waiter 0 back from barrier
+Waiter 1 back from barrier
+Waiter 2 back from barrier
+*** END OF TEST SP33 ***

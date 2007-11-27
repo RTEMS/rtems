@@ -1,3 +1,8 @@
+2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* sp33/init.c, sp33/sp33.scn: Added several test cases to improve test
+	coverage.
+
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp13/system.h: We need 32K of message buffer memory not 32 bytes.
