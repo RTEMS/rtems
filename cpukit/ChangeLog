@@ -1,5 +1,12 @@
 2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
+	* posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	rtems/include/rtems/rtems/barrier.h,
+	score/src/corerwlockobtainread.c, score/src/corerwlockobtainwrite.c,
+	score/src/corerwlockrelease.c: Fixed several implementation errors.
+
+2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
 	* rtems/src/regioncreate.c, rtems/src/regiondelete.c,
 	rtems/src/regionextend.c, rtems/src/regiongetfreeinfo.c,
 	rtems/src/regiongetinfo.c, rtems/src/regiongetsegment.c,

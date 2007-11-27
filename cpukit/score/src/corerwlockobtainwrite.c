@@ -74,6 +74,7 @@ void _CORE_RWLock_Obtain_for_writing(
     if ( !wait ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
+      return;
     }
 
     /*

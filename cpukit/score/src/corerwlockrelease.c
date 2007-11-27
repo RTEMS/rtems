@@ -40,7 +40,6 @@ CORE_RWLock_Status _CORE_RWLock_Release(
   ISR_Level       level;
   Thread_Control *executing = _Thread_Executing;
   Thread_Control *next;
-  uint32_t        rwmode;
 
   /*
    *  If unlocked, then OK to read.
@@ -80,32 +79,30 @@ CORE_RWLock_Status _CORE_RWLock_Release(
     next = _Thread_queue_Dequeue( &the_rwlock->Wait_queue );
     
     if ( next ) {
-      rwmode = next->Wait.option;
-      if ( rwmode == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE ) {
-       the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
-       return CORE_RWLOCK_SUCCESSFUL;
-     } 
+      if ( next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE ) {
+        the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
+        return CORE_RWLOCK_SUCCESSFUL;
+      }
 
-     /*
-      * Must be CORE_RWLOCK_THREAD_WAITING_FOR_READING now see if more
-      * readers can be let go.
-      */
+      /*
+       * Must be CORE_RWLOCK_THREAD_WAITING_FOR_READING
+       */
+      the_rwlock->number_of_readers += 1;
+      the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_READING;
 
-     while ( 1 ) {
-       next = _Thread_queue_First( &the_rwlock->Wait_queue );
-       if ( !next ) 
-         return CORE_RWLOCK_SUCCESSFUL;
-       if ( next->Wait.option != CORE_RWLOCK_THREAD_WAITING_FOR_READ )
-         return CORE_RWLOCK_SUCCESSFUL;
-
-       /* it is definitely wanting to read */
-       the_rwlock->number_of_readers += 1;
-       _Thread_queue_Extract( &the_rwlock->Wait_queue, next );
-     }
-
-    /* XXX need to put read/write lock request indicator in Wait info */
-
-  }
+      /*
+       * Now see if more readers can be let go.
+       */
+      while ( 1 ) {
+        next = _Thread_queue_First( &the_rwlock->Wait_queue );
+        if ( !next ||  
+             next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE )
+          return CORE_RWLOCK_SUCCESSFUL;
+        the_rwlock->number_of_readers += 1;
+        _Thread_queue_Extract( &the_rwlock->Wait_queue, next );
+      }
+    }
+  /* indentation is to match _ISR_Disable at top */
 
   return CORE_RWLOCK_SUCCESSFUL;
 }
