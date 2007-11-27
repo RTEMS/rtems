@@ -42,8 +42,9 @@
  */
 
 
-#if (defined(__GNUC__) && defined(__arm__))
+#if (defined(__GNUC__) && (defined(__arm__) && !defined(__thumb__))) 
 
+/* This currently does not support Thumb assembly */
 #include "in_cksum_arm.h"
 
 #elif (defined(__GNUC__) && defined(__i386__))

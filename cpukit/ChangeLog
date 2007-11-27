@@ -1,3 +1,8 @@
+2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libnetworking/netinet/in_cksum.c: ARM optimized version does not
+	support Thumb.
+
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* telnetd/pty.c, telnetd/telnetd.c, telnetd/telnetd.h: Style clean up.
