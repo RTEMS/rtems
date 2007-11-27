@@ -1,3 +1,8 @@
+2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Do not inline _Thread_Enable_dispatch for Thumb to
+	save space.
+
 2007-11-26      Ray Xu <rayx.cn@gmail.com>
 
         * cpu.c, score/cpu.h: Fix headers. Remove extra inline definition.

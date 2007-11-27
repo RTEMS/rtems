@@ -56,7 +56,11 @@ extern "C" {
  *  one subroutine call is avoided entirely.]
  */
 
+#if defined(__thumb__)
+#define CPU_INLINE_ENABLE_DISPATCH       FALSE
+#else
 #define CPU_INLINE_ENABLE_DISPATCH       TRUE
+#endif
 
 /*
  *  Should the body of the search loops in _Thread_queue_Enqueue_priority
