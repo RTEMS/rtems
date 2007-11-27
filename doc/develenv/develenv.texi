@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -96,7 +96,7 @@ This is the online version of the RTEMS Development Environment Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, RTEMS Specific Utilities size_rtems - report RTEMS size information, Top
+@node Command and Variable Index, Concept Index, RTEMS Specific Utilities unhex - Convert Hexadecimal File into Binary Equivalent, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.

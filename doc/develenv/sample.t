@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -11,7 +11,7 @@
 @section Introduction
 
 The RTEMS source distribution includes a set of sample applications
-that are located in the @code{$@{RTEMS_ROOT@}/c/src/tests/samples/}
+that are located in the @code{$@{RTEMS_ROOT@}/testsuites/samples/}
 directory.  These applications are intended to illustrate the
 basic format of RTEMS single and multiple processor
 applications and the use of some features.  In addition, these
@@ -26,51 +26,51 @@ more detail in the following sections:
 @table @b
 @item Hello World
 The RTEMS Hello World test is provided in
-the subdirectory @code{$@{RTEMS_ROOT@}/c/src/tests/samples/hello/}.
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/hello/}.
 This test is helpful when testing new
 versions of RTEMS, BSPs, or modifications to any portion of the
 RTEMS development environment.  
 
 @item Clock Tick
-The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/ticker/}
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/ticker/}
 subdirectory provides a test for verification of clock chip
 device drivers of BSPs.  
 
 @item Base Single Processor
 A simple single processor test similar to those in the
 single processor test suite is provided in
-@code{$@{RTEMS_ROOT@}/c/src/tests/samples/base_sp/}.
+@code{$@{RTEMS_ROOT@}/testsuites/samples/base_sp/}.
 
 @item Base Multiple Processor
 A simple two node multiprocessor test capable of testing an newly
 developed MPCI layer is provided in 
-@code{$@{RTEMS_ROOT@}/c/src/tests/samples/base_mp/}.
+@code{$@{RTEMS_ROOT@}/testsuites/samples/base_mp/}.
 
 @item Constructor/Destructor C++ Test
-The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/cdtest/}
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/cdtest/}
 subdirectory provides a simple C++ application using
 constructors and destructors.  It is only built when
 C++ is enabled.  
 
 
 @item Paranoia Floating Point Test
-The directory @code{$@{RTEMS_ROOT@}/c/src/tests/samples/paranoia/}
+The directory @code{$@{RTEMS_ROOT@}/testsuites/samples/paranoia/}
 contains the public domain floating point and math library test.
 
 @item Minimum Size Test
 The directory
-@code{$@{RTEMS_ROOT@}/c/src/tests/samples/minimum/}
+@code{$@{RTEMS_ROOT@}/testsuites/samples/minimum/}
 contains a simple RTEMS program that results in a non-functional 
 executable.  It is intended to show the size of a minimum footprint
 application based upon the current RTEMS configuration.  
 
 @item Unlimited Object Allocation
-The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/unlimited/}
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/unlimited/}
 directory contains a sample test that demonstrates the use of the
 @i{unlimited} object allocation configuration option to RTEMS.
 
 @item Network Loopback Test
-The @code{$@{RTEMS_ROOT@}/c/src/tests/samples/loopback/}
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/loopback/}
 directory contains a sample test that demonstrates the use of 
 sockets and the loopback network device.  It does not require
 the presence of network hardware in order to run.
@@ -87,7 +87,7 @@ material presented in the @b{RTEMS Applications Users Guide}.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/hello/
+$@{RTEMS_ROOT@}/testsuites/samples/hello/
 @end example
 
 It provides a rudimentary test of the BSP start up
@@ -115,7 +115,7 @@ console output routine is not operating properly.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/ticker/
+$@{RTEMS_ROOT@}/testsuites/samples/ticker/
 @end example
 
 This application is designed as a simple test of the
@@ -162,7 +162,7 @@ operating properly.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/base_sp/
+$@{RTEMS_ROOT@}/testsuites/samples/base_sp/
 @end example
 
 It provides a framework from which a single processor
@@ -189,7 +189,7 @@ are printed from the single application task.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/base_mp/
+$@{RTEMS_ROOT@}/testsuites/samples/base_mp/
 @end example
 
 It provides a framework from which a multiprocessor
@@ -238,7 +238,7 @@ must be unique on each node.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/cdtest/
+$@{RTEMS_ROOT@}/testsuites/samples/cdtest/
 @end example
 
 This sample application demonstrates that RTEMS is
@@ -284,7 +284,7 @@ Hey I'M in base class constructor number 1 for 0x400010cc.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/minimum/
+$@{RTEMS_ROOT@}/testsuites/samples/minimum/
 @end example
 
 This sample application is designed to produce the 
@@ -300,7 +300,7 @@ hardware shutdown support.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/paranoia/
+$@{RTEMS_ROOT@}/testsuites/samples/paranoia/
 @end example
 
 This sample application uses a public domain floating
@@ -318,7 +318,7 @@ handlers not installed.
 This sample application is in the following directory:
 
 @example
-$@{RTEMS_ROOT@}/tests/samples/loopback/
+$@{RTEMS_ROOT@}/testsuites/samples/loopback/
 @end example
 
 This sample application uses the network loopback device to

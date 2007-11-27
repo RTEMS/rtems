@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -68,9 +68,9 @@ as @code{$@{RTEMS_ROOT@}} in this discussion.
 @group
                       rtems-VERSION
                            |
-   +--------+----+----+----+--+-----+---+------+-----+
-   |        |    |    |       |     |   |      |     |
-aclocal automake c contrib  cpukit doc make scripts tools
+   +--------+----+----+----+--+-----+---+-------+--------+
+   |        |    |    |       |     |   |       |        |
+aclocal automake c contrib  cpukit doc make testsuites tools
 @end group
 @end example
 @c @end ifset
@@ -109,11 +109,21 @@ in the @ref{Directory Structure c/ Directory} section.
 @item $@{RTEMS_ROOT@}/contrib/
 This directory contains contributed support software.  Currently
 this directory contains the RPM specifications for cross-compilers
-hosted on GNU/Linux that target Cygwin and Solaris.  The 
+hosted on GNU/Linux that target various operating systems
+including MinGW, Cygwin, FreeBSD, and Solaris.  The 
 cross-compilers produced using these specifications are then
-used in a Canadian cross build procedure to produce the Cygwin
-and Solaris hosted RTEMS toolsets on a GNU/Linux host.  This
-directory will not be discussed further in this document.
+used in a Canadian cross build procedure to produce the various
+RTEMS toolsets on a GNU/Linux host.  
+
+This directory also contains RPM specifications for the
+prebuilt cross-compilation toolsets provided by the
+RTEMS project.  There are separate subdirectories
+for each of the components in the RTEMS Cross Compilation
+Environment unde the  @code{contrib/crossrpms/} directory.
+This directory is configured, built, and installed separately
+from the RTEMS executive and tests.  This directory will not
+be discussed further in this document.
+
 
 @item $@{RTEMS_ROOT@}/cpukit/
 This directory is the root for all of the "multilib'able"
@@ -123,7 +133,7 @@ C Library (@code{libc.a}) and the functionality is
 neither CPU model nor BSP specific.  The source code
 for most RTEMS services reside under this directory.
 The contents of this directory will be discussed
-in the @ref{Directory Structure CPUKit Directory} section.
+in the @ref{Directory Structure CPU Kit Directory} section.
 
 @item $@{RTEMS_ROOT@}/doc/
 This directory is the root for all RTEMS documentation.
@@ -146,16 +156,11 @@ These files are described in detail in the
 @b{RTEMS BSP and Device Driver Development Guide}
 and will not be discussed further in this document.
 
-@item $@{RTEMS_ROOT@}/scripts/
-This directory contains the RPM specifications for the
-prebuilt cross-compilation toolsets provided by the
-RTEMS project.  There are separate subdirectories
-for each of the components in the RTEMS Cross Compilation
-Environment including @code{binutils/}, @code{gcc3newlib/},
-and @code{gdb/}.  This directory is configured, built,
-and installed separately from the RTEMS executive
-and tests.  This directory will not be discussed further
-in this document.
+@item $@{RTEMS_ROOT@}/testsuites/
+This directory contains the test suites for the 
+various RTEMS APIs and support libraries.  This
+contents of this directory are discussed in the
+@ref{Directory Structure testsuites/ Test Suites} section.
 
 @item $@{RTEMS_ROOT@}/tools/
 This directory contains RTEMS specific support utilities which
@@ -188,7 +193,7 @@ following subdirectories:
 @item $@{RTEMS_ROOT@}/c/src/
 This directory is logically the root for the RTEMS components
 which are CPU model or board dependent.  Thus this directory
-is the root for the BSPs and the various Test Suites as well
+is the root for the BSPs and the Ada Test Suites as well
 as CPU model and BSP dependent libraries.  The contents of
 this directory are discussed in the
 @ref{Directory Structure c/src/ Directory} section.
@@ -213,6 +218,10 @@ following is a list of the subdirectories in this
 directorie and a description of each.
 
 @table @code
+@item $@{RTEMS_ROOT@}/c/src/ada/
+This directory contains the Ada95 language bindings to the 
+RTEMS Classic API.
+
 @item $@{RTEMS_ROOT@}/c/src/ada-tests/
 This directory contains the test suite for the Ada
 language bindings to the Classic API.
@@ -242,22 +251,6 @@ board dependent.  This directory contains a variety
 of drivers for serial devices, network interface
 controllers, and real-time clocks.
 
-@item $@{RTEMS_ROOT@}/c/src/libmisc/
-This directory contains support facilities which 
-are RTEMS specific but otherwise unclassified.  In
-general, they do not adhere to a standard API.  
-Among the support facilities in this directory are
-a @code{/dev/null} device driver, the Stack
-Overflow Checker, a mini-shell, the CPU and 
-rate monotonic period usage monitoring libraries,
-and a utility to "dump a buffer" in a nicely
-formatted way similar to many ROM monitors.
-
-@item $@{RTEMS_ROOT@}/c/src/libnetworking/
-This directory contains the networking components which
-might be tailored based upon the particular BSP.  This
-includes the RTEMS telnetd, httpd, and ftpd servers.
-
 @item $@{RTEMS_ROOT@}/c/src/librdbg/
 This directory contains the Ethernet-based remote debugging
 stub.  This software must be built to be intimately aware
@@ -279,12 +272,6 @@ Managers which are considered optional and whose use
 may be explicitly forbidden by an application.  All of the
 directive implementations in this Optional Managers 
 return @code{E_NOTCONFIGURED}.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/
-This directory contains the test suites for the 
-various RTEMS APIs and support libraries.  This
-contents of this directory are discussed in the
-@ref{Directory Structure c/src/tests/ Test Suites} section.
 
 @item $@{RTEMS_ROOT@}/c/src/wrapup/
 This directory is responsible for taking the individual
@@ -348,106 +335,20 @@ clock      console    include     shmsupp    startup     timer
 @c @end ifset
 
 @c
-@c  c/src/tests/ Test Suites
+@c  CPU Kit Directory
 @c
-@subsection c/src/tests/ Test Suites
-
-This directory provides all of the RTEMS Test Suite
-except those for the Classic API Ada95 binding
-This includes the single processor tests, multiprocessor tests,
-timing tests, library tests, and sample tests.   Additionally,
-subdirectories for support functions and test related header
-files are provided.  The following table lists the test suites
-currently included with the RTEMS and the directory in which
-they may be located:
-
-@table @code
-
-@item $@{RTEMS_ROOT@}/c/src/tests/itrontests/
-This directory contains the test suite for the 
-RTEMS ITRON API.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/libtests/
-This directory contains the test suite for the
-various RTEMS support components.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/mptests/
-This directory contains the test suite for the 
-multiprocessor support in the Classic API.
-The tests provided address two node configurations
-and provide coverage for the multiprocessor code found
-in RTEMS.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/psxtests/
-This directory contains the test suite for the 
-RTEMS POSIX API.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/samples/
-This directory provides sample application tests
-which aid in the testing a newly built RTEMS environment, a new
-BSP, or as starting points for the development of an application
-using the RTEMS executive.  They are discussed in
-@ref{Sample Applications}.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/sptests/
-This directory contains the test suite for the RTEMS
-Classic API when executing on a single processor.
-The tests were originally designed to provide
-near complete test coverage for the the entire
-executive code.  With the addition of multiple APIs,
-this is no longer the case as some SuperCore functionality
-is not available through the Classic API.  Thus
-some functionality in the SuperCore is only covered
-by tests in the POSIX API and ITRON API Test Suites.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/support/
-This directory contains support software and header files
-for the various test suites.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/tmitrontests/
-This directory contains the timing test suite for
-the RTEMS ITRON API.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/tmtests/
-This directory contains the timing test suite for
-the RTEMS Classic API.  This include tests that
-benchmark each directive in the Classic API
-as well as a set of critical SuperCore functions.
-These tests are important for helping to verify
-that RTEMS performs as expected on your target hardware.
-It is not uncommon to discover mistakes in board 
-initialization such as caching being disabled as
-a side-effect of analyzing the results of these tests.
-
-@item $@{RTEMS_ROOT@}/c/src/tests/tools/
-This directory contains tools which execute on 
-the development host and aid in executing and
-evaluating the results of the test suite.  The
-tools @code{difftest} compares the output of one
-or more tests with the expected output.  If you
-place the output of all the @code{tmtests/} in
-a single file, then the utility @code{sorttimes} 
-will be able to produce a report organizing the
-execution times by manager.
-
-@end table
-
-
-@c
-@c  CPUKit Directory
-@c
-@section CPUKit Directory
+@section CPU Kit Directory
 
 @c The @code{cpukit/} directory structure is as follows:
 
 @c
-@c  CPUKit Tree
+@c  CPU Kit Tree
 @c
 
 @c @ifset use-ascii
 @c @example
 @c @group
-@c                        CPUKit
+@c                        cpukit
 @c                          |
 @c   +-----------+----------+-----------+----------+
 @c   |           |          |           |          |
@@ -478,14 +379,17 @@ RTEMS build for a particular host and target environment.  The
 contents of this directory will not be discussed further in this
 document.
 
-@item $@{RTEMS_ROOT@}/cpukit/ada/
-This directory contains the Ada95 language bindings to the 
-RTEMS Classic API.
-
 @item $@{RTEMS_ROOT@}/cpukit/automake/
 This directory contains files which are "Makefile fragments."
 They are included as required by the various @code{Makefile.am}
 files throughout the CPU Kit portion of the RTEMS source tree.
+
+@item $@{RTEMS_ROOT@}/cpukit/ftpd/
+This directory contains the RTEMS ftpd server.
+
+@item $@{RTEMS_ROOT@}/cpukit/httpd/
+This directory contains the port of the GoAhead
+web server to RTEMS.
 
 @item $@{RTEMS_ROOT@}/cpukit/include/
 This directory contains header files which are private to
@@ -517,6 +421,24 @@ filesystem implementations for RTEMS.  It includes
 the In-Memory FileSystem (IMFS), the mini-IMFS,
 and FAT filesystems.
 
+@item $@{RTEMS_ROOT@}/cpukit/libi2c/
+This directory contains the RTEMS I2C framework.
+
+@item $@{RTEMS_ROOT@}/cpukit/libmd/
+This directory contains a port of the standard MD5
+checksum code.
+
+@item $@{RTEMS_ROOT@}/c/src/libmisc/
+This directory contains support facilities which 
+are RTEMS specific but otherwise unclassified.  In
+general, they do not adhere to a standard API.  
+Among the support facilities in this directory are
+a @code{/dev/null} device driver, the Stack
+Overflow Checker, a mini-shell, the CPU and 
+rate monotonic period usage monitoring libraries,
+and a utility to "dump a buffer" in a nicely
+formatted way similar to many ROM monitors.
+
 @item $@{RTEMS_ROOT@}/cpukit/libnetworking/
 This directory contains the port of the FreeBSD 
 TCP/IP stack to RTEMS.
@@ -528,6 +450,10 @@ RPC/XDR source to RTEMS.
 @item $@{RTEMS_ROOT@}/cpukit/posix/
 This directory contains the RTEMS implementation
 of the threading portions of the POSIX API.  
+
+@item $@{RTEMS_ROOT@}/cpukit/pppd/
+This directory contains a port of the free implementation
+of the PPPD network protocol.
 
 @item $@{RTEMS_ROOT@}/cpukit/rtems/
 This directory contains the implementation of the
@@ -551,13 +477,20 @@ independent of the API used to create it.
 
 Within the @code{score/} directory the CPU dependent modules are found.
 The @code{score/cpu/} subdirectory contains a subdirectory for each
-target CPU supported by the @value{RELEASE} release of the RTEMS
+target CPU supported by this release of the RTEMS
 executive.  Each processor directory contains the CPU dependent
 code necessary to host RTEMS.  The @code{no_cpu} directory provides a
 starting point for developing a new port to an unsupported
 processor.  The files contained within the @code{no_cpu} directory
 may also be used as a reference for the other ports to specific
 processors.
+
+@item $@{RTEMS_ROOT@}/cpukit/shttpd/
+This directory contains the port of the Simple HTTPD
+web server to RTEMS.
+
+@item $@{RTEMS_ROOT@}/cpukit/telnet/
+This directory contains the RTEMS telnetd server.
 
 @item $@{RTEMS_ROOT@}/cpukit/wrapup/
 This directory is responsible for taking the individual
@@ -566,7 +499,97 @@ in the RTEMS CPU Kit source tree and bundling them
 together to form the single RTEMS library @code{librtemscpu.a}.  This
 library contains all BSP and CPU model specific software.
 
+@item $@{RTEMS_ROOT@}/cpukit/zlib/
+This directory contains a port of the GNU Zlib compression
+library to RTEMS.
+
 @end table
+
+@c
+@c  testsuites/ Test Suites
+@c
+@section testsuites/ Test Suites
+
+This directory provides all of the RTEMS Test Suite
+except those for the Classic API Ada95 binding
+This includes the single processor tests, multiprocessor tests,
+timing tests, library tests, and sample tests.   Additionally,
+subdirectories for support functions and test related header
+files are provided.  The following table lists the test suites
+currently included with the RTEMS and the directory in which
+they may be located:
+
+@table @code
+
+@item $@{RTEMS_ROOT@}/testsuites/itrontests/
+This directory contains the test suite for the 
+RTEMS ITRON API.
+
+@item $@{RTEMS_ROOT@}/testsuites/libtests/
+This directory contains the test suite for the
+various RTEMS support components.
+
+@item $@{RTEMS_ROOT@}/testsuites/mptests/
+This directory contains the test suite for the 
+multiprocessor support in the Classic API.
+The tests provided address two node configurations
+and provide coverage for the multiprocessor code found
+in RTEMS.
+
+@item $@{RTEMS_ROOT@}/testsuites/psxtests/
+This directory contains the test suite for the 
+RTEMS POSIX API.
+
+@item $@{RTEMS_ROOT@}/testsuites/samples/
+This directory provides sample application tests
+which aid in the testing a newly built RTEMS environment, a new
+BSP, or as starting points for the development of an application
+using the RTEMS executive.  They are discussed in
+@ref{Sample Applications}.
+
+@item $@{RTEMS_ROOT@}/testsuites/sptests/
+This directory contains the test suite for the RTEMS
+Classic API when executing on a single processor.
+The tests were originally designed to provide
+near complete test coverage for the the entire
+executive code.  With the addition of multiple APIs,
+this is no longer the case as some SuperCore functionality
+is not available through the Classic API.  Thus
+some functionality in the SuperCore is only covered
+by tests in the POSIX API and ITRON API Test Suites.
+
+@item $@{RTEMS_ROOT@}/testsuites/support/
+This directory contains support software and header files
+for the various test suites.
+
+@item $@{RTEMS_ROOT@}/testsuites/tmitrontests/
+This directory contains the timing test suite for
+the RTEMS ITRON API.
+
+@item $@{RTEMS_ROOT@}/testsuites/tmtests/
+This directory contains the timing test suite for
+the RTEMS Classic API.  This include tests that
+benchmark each directive in the Classic API
+as well as a set of critical SuperCore functions.
+These tests are important for helping to verify
+that RTEMS performs as expected on your target hardware.
+It is not uncommon to discover mistakes in board 
+initialization such as caching being disabled as
+a side-effect of analyzing the results of these tests.
+
+@item $@{RTEMS_ROOT@}/testsuites/tools/
+This directory contains tools which execute on 
+the development host and aid in executing and
+evaluating the results of the test suite.  The
+tools @code{difftest} compares the output of one
+or more tests with the expected output.  If you
+place the output of all the @code{tmtests/} in
+a single file, then the utility @code{sorttimes} 
+will be able to produce a report organizing the
+execution times by manager.
+
+@end table
+
 
 @c
 @c  Documentation Directory
@@ -602,6 +625,10 @@ are shared across multiple manuals in the RTEMS Documentation Set.
 This includes the copyright page as well as the timing 
 tables which can be filled in on a per BSP basis in the 
 CPU supplements.
+
+@item $@{RTEMS_ROOT@}/doc/cpu_supplement/
+This directory contains the source code for the 
+RTEMS CPU Supplement.
 
 @item $@{RTEMS_ROOT@}/doc/develenv/
 This directory contains the source code for the 
@@ -670,11 +697,6 @@ This directory contains the source code for the
 @item $@{RTEMS_ROOT@}/doc/started_ada/
 This directory contains the source code for the 
 @cite{Getting Started with RTEMS for Ada Users} manual.
-
-@item $@{RTEMS_ROOT@}/doc/cpu_supplement/
-This directory contains the source code for the 
-RTEMS CPU Supplement.
-the 
 
 @item $@{RTEMS_ROOT@}/doc/tools/
 This directory contains the source code for the tools
