@@ -1910,33 +1910,35 @@ package body RTEMS is
 
    procedure Barrier_Wait (
       ID         : in     RTEMS.ID;
-      Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
       Result     :    out RTEMS.Status_Codes
    ) is
       function Barrier_Wait_Base (
          ID         : RTEMS.ID;
-         Option_Set : RTEMS.Option;
          Timeout    : RTEMS.Interval
       )  return RTEMS.Status_Codes;
       pragma Import (C, Barrier_Wait_Base, "rtems_barrier_wait");
    begin
 
-      Result := Barrier_Wait_Base ( ID, Option_Set, Timeout );
+      Result := Barrier_Wait_Base ( ID, Timeout );
 
    end Barrier_Wait;
 
    procedure Barrier_Release (
-      ID     : in     RTEMS.ID;
-      Result :    out RTEMS.Status_Codes
+      ID       : in     RTEMS.ID;
+      Released :    out RTEMS.Unsigned32;
+      Result   :    out RTEMS.Status_Codes
    ) is
       function Barrier_Release_Base (
-         ID : RTEMS.ID
+         ID       : RTEMS.ID
+         Released : access RTEMS.Unsigned32
       )  return RTEMS.Status_Codes;
       pragma Import (C, Barrier_Release_Base, "rtems_barrier_release");
+      Released_Base : aliased RTEMS.Unsigned32;
    begin
 
-      Result := Barrier_Release_Base ( ID );
+      Result := Barrier_Release_Base ( ID, Released_Base'Unchecked_Access );
+      Released := Released_Base;
 
    end Barrier_Release;
 

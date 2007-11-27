@@ -354,6 +354,7 @@ pragma Elaborate_Body (RTEMS);
 
    type Rate_Monotonic_Period_Status is
       record
+         Owner                            : RTEMS.ID;
          State                            : RTEMS.Rate_Monotonic_Period_States;
          Ticks_Since_Last_Period          : RTEMS.Unsigned32;
          Ticks_Executed_Since_Last_Period : RTEMS.Unsigned32;
@@ -1213,14 +1214,14 @@ pragma Elaborate_Body (RTEMS);
 
    procedure Barrier_Wait (
       ID         : in     RTEMS.ID;
-      Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
       Result     :    out RTEMS.Status_Codes
    );
 
    procedure Barrier_Release (
-      ID     : in     RTEMS.ID;
-      Result :    out RTEMS.Status_Codes
+      ID       : in     RTEMS.ID;
+      Released :    out RTEMS.Unsigned32;
+      Result   :    out RTEMS.Status_Codes
    );
 
    --
