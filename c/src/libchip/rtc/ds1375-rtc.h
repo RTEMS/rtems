@@ -1,5 +1,7 @@
 #ifndef DS1375_I2C_RTC_H
 #define DS1375_I2C_RTC_H
+/* $Id$ */
+
 /* Driver for the Maxim 1375 i2c RTC (TOD only; very simple...) */
 
 /* 

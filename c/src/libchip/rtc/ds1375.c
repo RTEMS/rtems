@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /* Driver for the Maxim 1375 i2c RTC (TOD only; very simple...) */
 
 /* 
