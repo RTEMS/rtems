@@ -1,3 +1,16 @@
+2007-11-29	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, shared/flash, shared/flash/flash.c,
+	shared/flash/flashPgm.h, shared/flash/flashPgmPvt.h,
+	shared/flash/intelFlash.c, shared/flash/spansionFlash.c:
+	Added flash programmer API, implementation and chip drivers
+	for some intel + spansion flash chips (as found on mvme5500,
+	mvme6100 and mvme3100 boards).
+	A more appopriate place would probably be libchip but
+	I don't know if the API is acceptable and if the implementation
+	is generic enough (e.g., no CFI support) so I leave it here
+	for now.
+
 2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/console/uart.c: Fix typo and spacing.

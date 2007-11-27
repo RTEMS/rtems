@@ -31,6 +31,10 @@ EXTRA_DIST += shared/clock/p_clock.c
 EXTRA_DIST += shared/console/console.c shared/console/inch.c shared/console/polled_io.c \
     shared/console/uart.c shared/console/reboot.c shared/console/console.inl
 
+## shared/flash
+EXTRA_DIST += shared/flash/flash.c shared/flash/flashPgm.h shared/flash/flashPgmPvt.h \
+	shared/flash/intelFlash.c shared/flash/spansionFlash.c
+
 ## shared/motorola
 EXTRA_DIST += shared/motorola/motorola.c
 
