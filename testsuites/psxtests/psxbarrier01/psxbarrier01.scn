@@ -1,0 +1,41 @@
+*** POSIX BARRIER TEST 01 ***
+pthread_barrierattr_init( NULL ) -- EINVAL
+pthread_barrierattr_setpshared( NULL, private ) -- EINVAL
+pthread_barrierattr_setpshared( NULL, shared ) -- EINVAL
+pthread_barrierattr_getpshared( NULL, &p ) -- EINVAL
+pthread_barrierattr_destroy( NULL ) -- EINVAL
+pthread_barrierattr_setpshared( &attr, shared ) -- EINVAL
+pthread_barrierattr_getpshared( &attr, NULL ) -- EINVAL
+pthread_barrierattr_destroy( &attr ) -- EINVAL
+pthread_barrierattr_init( &attr ) -- OK
+pthread_barrierattr_setpshared( &attr, private ) -- OK
+pthread_barrierattr_getpshared( &attr, &p ) -- OK
+pthread_barrierattr_setpshared( &attr, shared ) -- OK
+pthread_barrierattr_getpshared( &attr, &p ) -- OK
+pthread_barrierattr_setpshared( &attr, private ) -- EINVAL
+pthread_barrierattr_destroy( &attr ) -- OK
+pthread_barrierattr_getpshared( &attr, &p ) destroyed -- EINVAL
+pthread_barrier_init( NULL, NULL, 2 ) -- EINVAL
+pthread_barrier_init( &barrier, &attr, 2 ) -- EINVAL
+pthread_barrierattr_init( &attr ) -- OK
+pthread_barrier_init( &barrier, &attr, 0 ) -- EINVAL
+pthread_barrier_init( &barrier, NULL, 1 ) -- OK
+pthread_barrier_init( &barrier, NULL, 1 ) -- EAGAIN
+pthread_barrier_destroy( &barrier ) -- OK
+pthread_barrierattr_destroy( &attr ) -- OK
+pthread_barrier_destroy( NULL ) -- EINVAL
+pthread_barrier_destroy( &bad_barrier ) -- EINVAL
+pthread_barrier_wait( NULL ) -- EINVAL
+pthread_barrier_wait( &bad_barrier ) -- EINVAL
+pthread_barrierattr_init( &attr ) -- OK
+pthread_barrier_init( &barrier, &attr, 2 ) -- OK
+pthread_barrier_destroy( &barrier ) -- OK
+pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS ) -- OK
+Init: pthread_create - thread 1 OK
+pthread_barrier_wait( &Barrier ) for thread 0x0b010001
+pthread_barrier_destroy( &Barrier ) -- EBUSY
+Init: pthread_create - thread 2 OK
+pthread_barrier_wait( &Barrier ) for thread 0x0b010002
+pthread_barrier_wait - 0x0b010002 released
+pthread_barrier_wait - 0x0b010001 released
+*** END OF POSIX BARRIER TEST 01 ***
