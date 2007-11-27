@@ -1,3 +1,7 @@
+2007-11-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Add CONFIGURE_APPLICATION_EXTRA_DRIVERS.
+
 2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libnetworking/netinet/in_cksum.c: ARM optimized version does not
