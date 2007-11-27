@@ -119,9 +119,12 @@ int main(
   status = pthread_rwlockattr_destroy( &attr );
   assert( status == EINVAL );
 
+  /*************** BAD PSHARED CHECK *****************/
+  puts( "pthread_rwlockattr_setpshared( &attr, private ) -- EINVAL" );
+  status = pthread_rwlockattr_setpshared( &attr, ~PTHREAD_PROCESS_PRIVATE );
+  assert( status == EINVAL );
 
   /*************** ACTUALLY WORK THIS TIME *****************/
-
   puts( "pthread_rwlockattr_init( &attr ) -- OK" );
   status = pthread_rwlockattr_init( &attr );
   assert( status == 0 );
@@ -144,11 +147,6 @@ int main(
   assert( status == 0 );
   assert( p == PTHREAD_PROCESS_SHARED );
 
-  /*************** BAD PSHARED CHECK *****************/
-  puts( "pthread_rwlockattr_setpshared( &attr, private ) -- EINVAL" );
-  status = pthread_rwlockattr_setpshared( &attr, ~PTHREAD_PROCESS_PRIVATE );
-  assert( status == EINVAL );
-
   /*************** DESTROY/REUSE CHECK *****************/
   puts( "pthread_rwlockattr_destroy( &attr ) -- OK" );
   status = pthread_rwlockattr_destroy( &attr );
@@ -158,10 +156,10 @@ int main(
   status = pthread_rwlockattr_getpshared( &attr, &p );
   assert( status == EINVAL );
 
+  /*************** NULL ARGUMENT CHECKS *****************/
+  abstime.tv_sec = 0;
+  abstime.tv_nsec = 0;
 
-  /* XXX _init error checks */
-
-  /*************** NULL ID ARGUMENT CHECKS *****************/
   puts( "pthread_rwlock_init(NULL, &attr) -- EINVAL" );
   status = pthread_rwlock_init(NULL, &attr);
   assert( status == EINVAL );
@@ -178,10 +176,6 @@ int main(
   status = pthread_rwlock_rdlock(NULL);
   assert( status == EINVAL );
 
-  puts( "pthread_rwlock_tryrdlock(NULL) -- EINVAL" );
-  status = pthread_rwlock_tryrdlock(NULL);
-  assert( status == EINVAL );
-
   puts( "pthread_rwlock_timedrdlock( NULL, &abstime) -- EINVAL" );
   status = pthread_rwlock_timedrdlock( NULL, &abstime);
   assert( status == EINVAL );
@@ -190,16 +184,12 @@ int main(
   status = pthread_rwlock_timedrdlock( &rwlock, NULL);
   assert( status == EINVAL );
 
-  puts( "pthread_rwlock_timedrdlock( &rwlock, NULL) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( &rwlock, NULL);
+  puts( "pthread_rwlock_tryrdlock(NULL) -- EINVAL" );
+  status = pthread_rwlock_tryrdlock(NULL);
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_wrlock(NULL) -- EINVAL" );
   status = pthread_rwlock_wrlock(NULL);
-  assert( status == EINVAL );
-
-  puts( "pthread_rwlock_trywrlock(NULL) -- EINVAL" );
-  status = pthread_rwlock_trywrlock(NULL);
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_timedwrlock( NULL, &abstime) -- EINVAL" );
@@ -210,46 +200,52 @@ int main(
   status = pthread_rwlock_timedwrlock( &rwlock, NULL);
   assert( status == EINVAL );
 
+  puts( "pthread_rwlock_trywrlock(NULL) -- EINVAL" );
+  status = pthread_rwlock_trywrlock(NULL);
+  assert( status == EINVAL );
+
+  puts( "pthread_rwlock_unlock(NULL) -- EINVAL" );
+  status = pthread_rwlock_unlock(NULL);
+  assert( status == EINVAL );
 
   /*************** BAD ID CHECK *****************/
   rwlock = 1;
-
-  /* XXX make a valid abstime */
+  /* make a valid abstime */
+  puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );
+  status = clock_gettime( CLOCK_REALTIME, &abstime );
+  assert( !status );
+  abstime.tv_sec += 5;
 
   puts( "pthread_rwlock_destroy(BadId) -- EINVAL" );
   status = pthread_rwlock_destroy(&rwlock);
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_rdlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_rdlock(NULL);
+  status = pthread_rwlock_rdlock(&rwlock);
+  assert( status == EINVAL );
+
+  puts( "pthread_rwlock_timedrdlock(BadId, &abstime) -- EINVAL" );
+  status = pthread_rwlock_timedrdlock( &rwlock, &abstime);
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_tryrdlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_tryrdlock(NULL);
-  assert( status == EINVAL );
-
-  puts( "pthread_rwlock_timedrdlock( BadId, &abstime) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( NULL, &abstime);
-  assert( status == EINVAL );
-
-  puts( "pthread_rwlock_timedrdlock( &rwlock, BadId) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( &rwlock, NULL);
-  assert( status == EINVAL );
-
-  puts( "pthread_rwlock_timedrdlock( &rwlock, BadId) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( &rwlock, NULL);
+  status = pthread_rwlock_tryrdlock(&rwlock);
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_wrlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_wrlock(NULL);
+  status = pthread_rwlock_wrlock(&rwlock);
+  assert( status == EINVAL );
+
+  puts( "pthread_rwlock_timedwrlock(BadId, &abstime) -- EINVAL" );
+  status = pthread_rwlock_timedwrlock( &rwlock, &abstime );
   assert( status == EINVAL );
 
   puts( "pthread_rwlock_trywrlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_trywrlock(NULL);
+  status = pthread_rwlock_trywrlock(&rwlock);
   assert( status == EINVAL );
 
-  puts( "pthread_rwlock_timedwrlock( BadId, &abstime) -- EINVAL" );
-  status = pthread_rwlock_timedwrlock( &rwlock, &abstime );
+  puts( "pthread_rwlock_unlock(BadId) -- EINVAL" );
+  status = pthread_rwlock_unlock(&rwlock);
   assert( status == EINVAL );
 
   /*************** BAD ABSTIME CHECK *****************/
@@ -262,7 +258,7 @@ int main(
   abstime.tv_sec = 0;
   abstime.tv_nsec = 0x7fffffffL;
 
-
+  /* XXX do we need bad time check? */
 
   /*************** ACTUALLY CREATE ONE CHECK *****************/
   puts( "pthread_rwlockattr_init( &attr ) -- OK" );
@@ -274,18 +270,21 @@ int main(
   assert( status == 0 );
   assert( rwlock != 0 );
 
+  puts( "pthread_rwlock_init( &rwlock, &attr ) -- EAGAIN" );
+  status = pthread_rwlock_init( &rwlock, &attr );
+  assert( status == EAGAIN );
+
   puts( "pthread_rwlock_destroy( &rwlock ) -- OK" );
   status = pthread_rwlock_destroy( &rwlock );
   assert( status == 0 );
 
-  /*************** CREATE TESTS AND LET THEM OBTAIN READLOCK *****************/
+  /*************** CREATE THREADS AND LET THEM OBTAIN READLOCK ***************/
   puts( "pthread_rwlock_init( &RWLock, &attr ) -- OK" );
   status = pthread_rwlock_init( &RWLock, &attr );
   assert( status == 0 );
-  assert( rwlock != 0 );
 
-  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
-  status = pthread_rwlock_trywrlock(&RWLock);
+  puts( "pthread_rwlock_tryrdlock(RWLock) -- OK" );
+  status = pthread_rwlock_tryrdlock(&RWLock);
   assert( !status );
 
   for (i=0 ; i<NUMBER_THREADS ; i++ ) {
@@ -302,11 +301,42 @@ int main(
 
   sleep(1);
 
- 
-  /*************** CREATE TESTS AND LET THEM OBTAIN WRITE LOCK ***************/
+  /*************** CREATE THREADS AND LET THEM OBTAIN READLOCK ***************/
   puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
   status = pthread_rwlock_trywrlock(&RWLock);
   assert( !status );
+
+  puts( "pthread_rwlock_tryrdlock(&RWLock) -- EBUSY" );
+  status = pthread_rwlock_tryrdlock(&RWLock);
+  assert( status == EBUSY );
+
+  for (i=0 ; i<NUMBER_THREADS ; i++ ) {
+    printf( "Init: pthread_create - thread %d OK\n", i+1 );
+    status = pthread_create(&ThreadIds[i], NULL, ReadLockThread, &ThreadIds[i]);
+    assert( !status );
+
+    sleep(1);
+  }
+
+  /* Attempt delete while threads are blocked */
+  puts( "pthread_rwlock_destroy( &RWLock ) -- EBUSY" );
+  status = pthread_rwlock_destroy( &RWLock );
+  assert( status == EBUSY );
+
+  puts( "pthread_rwlock_unlock(RWLock) -- OK" );
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
+
+  sleep(2);
+ 
+  /*************** CREATE THREADS AND LET THEM OBTAIN WRITE LOCK *************/
+  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  assert( !status );
+
+  puts( "pthread_rwlock_trywrlock(&RWLock) -- EBUSY" );
+  status = pthread_rwlock_trywrlock(&RWLock);
+  assert( status == EBUSY );
 
   for (i=0 ; i<NUMBER_THREADS ; i++ ) {
     printf( "Init: pthread_create - thread %d OK\n", i+1 );
@@ -321,13 +351,9 @@ int main(
   status = pthread_rwlock_unlock(&RWLock);
   assert( !status );
 
-  sleep( 3 );
-  puts( "pthread_rwlock_trywrlock(RWLock) -- OK" );
-  status = pthread_rwlock_trywrlock(&RWLock);
-  assert( !status );
+  sleep(2);
 
   /*************** TIMEOUT ON RWLOCK ***************/
-
   puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );
   status = clock_gettime( CLOCK_REALTIME, &abstime );
   assert( !status );
@@ -335,16 +361,16 @@ int main(
   abstime.tv_sec += 1;
   puts( "pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK" );
   status = pthread_rwlock_timedwrlock( &RWLock, &abstime );
-  assert( !status );
+  assert( status == 0 );
 
   abstime.tv_sec += 1;
   puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- OK" );
   status = pthread_rwlock_timedrdlock( &RWLock, &abstime );
-  assert( !status );
+  assert( status == ETIMEDOUT );
 
   /*************** DESTROY RWLOCK ***************/
-  puts( "pthread_rwlock_destroy( &rwlock ) -- OK" );
-  status = pthread_rwlock_destroy( &rwlock );
+  puts( "pthread_rwlock_destroy( &RWLock ) -- OK" );
+  status = pthread_rwlock_destroy( &RWLock );
   assert( status == 0 );
 
 

@@ -30,13 +30,8 @@ void *BarrierThread(void *arg)
 
   printf( "pthread_barrier_wait( &Barrier ) for thread 0x%08x\n", id );
   status = pthread_barrier_wait( &Barrier );
-  if ( id == ThreadIds[NUMBER_THREADS - 1] ) {
-    printf( "pthread_barrier_wait - 0x%08x auto released\n", id );
-    assert( status == PTHREAD_BARRIER_SERIAL_THREAD );
-  } else {
-    printf( "pthread_barrier_wait - 0x%08x released\n", id );
-    assert( status == 0 );
-  }
+  printf( "pthread_barrier_wait - 0x%08x released\n", id );
+  assert( (status == 0) || (status == PTHREAD_BARRIER_SERIAL_THREAD) );
 
   return NULL;
 }
@@ -54,6 +49,8 @@ int main(
 )
 #endif
 {
+  pthread_barrier_t     another_barrier;
+  pthread_barrier_t     bad_barrier = 100;
   pthread_barrier_t     barrier;
   pthread_barrierattr_t attr;
   int                   status;
@@ -138,8 +135,63 @@ int main(
   status = pthread_barrierattr_getpshared( &attr, &p );
   assert( status == EINVAL );
 
+  /*************** pthread_barrier_init ERROR CHECKs *********/
+  /* NULL barrier argument */
+  puts( "pthread_barrier_init( NULL, NULL, 2 ) -- EINVAL" );
+  status = pthread_barrier_init( NULL, NULL, 2 );
+  assert( status == EINVAL );
 
-  /* XXX _init error checks */
+  /* uninitialized attr argument */
+  puts( "pthread_barrier_init( &barrier, &attr, 2 ) -- EINVAL" );
+  status = pthread_barrier_init( &barrier, &attr, 2 );
+  assert( status == EINVAL );
+
+  /* zero count argument */
+  puts( "pthread_barrierattr_init( &attr ) -- OK" );
+  status = pthread_barrierattr_init( &attr );
+  assert( status == 0 );
+
+  puts( "pthread_barrier_init( &barrier, &attr, 0 ) -- EINVAL" );
+  status = pthread_barrier_init( &barrier, &attr, 0 );
+  assert( status == EINVAL );
+
+  /* allocating too many */
+  puts( "pthread_barrier_init( &barrier, NULL, 1 ) -- OK" );
+  status = pthread_barrier_init( &barrier, NULL, 1 );
+  assert( status == 0 );
+
+  puts( "pthread_barrier_init( &barrier, NULL, 1 ) -- EAGAIN" );
+  status = pthread_barrier_init( &barrier, NULL, 1 );
+  assert( status == EAGAIN );
+
+  /* clean up */
+  puts( "pthread_barrier_destroy( &barrier ) -- OK" );
+  status = pthread_barrier_destroy( &barrier );
+  assert( status == 0 );
+
+  puts( "pthread_barrierattr_destroy( &attr ) -- OK" );
+  status = pthread_barrierattr_destroy( &attr );
+  assert( status == 0 );
+
+  /*************** pthread_barrier_destroy ERROR CHECKs *********/
+  /* NULL barrier argument */
+  puts( "pthread_barrier_destroy( NULL ) -- EINVAL" );
+  status = pthread_barrier_destroy( NULL );
+  assert( status == EINVAL );
+
+  puts( "pthread_barrier_destroy( &bad_barrier ) -- EINVAL" );
+  status = pthread_barrier_destroy( &bad_barrier );
+  assert( status == EINVAL );
+
+  /*************** pthread_barrier_wait ERROR CHECKs *********/
+  /* NULL barrier argument */
+  puts( "pthread_barrier_wait( NULL ) -- EINVAL" );
+  status = pthread_barrier_wait( NULL );
+  assert( status == EINVAL );
+
+  puts( "pthread_barrier_wait( &bad_barrier ) -- EINVAL" );
+  status = pthread_barrier_wait( &bad_barrier );
+  assert( status == EINVAL );
 
   /*************** ACTUALLY CREATE ONE CHECK *****************/
   puts( "pthread_barrierattr_init( &attr ) -- OK" );
@@ -155,13 +207,22 @@ int main(
   status = pthread_barrier_destroy( &barrier );
   assert( status == 0 );
 
-  /*************** CREATE TESTS AND LET THEM RELEASE *****************/
-  puts( "pthread_barrier_init( &Barrier, &attr, 2 ) -- OK" );
-  status = pthread_barrier_init( &Barrier, &attr, 2 );
+  /*************** CREATE THREADS AND LET THEM RELEASE *****************/
+  puts( "pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS ) -- OK" );
+  status = pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS );
   assert( status == 0 );
   assert( barrier != 0 );
 
   for (i=0 ; i<NUMBER_THREADS ; i++ ) {
+
+    /* check for unable to destroy while threads waiting */
+    if (i == NUMBER_THREADS - 1) {
+      puts( "pthread_barrier_destroy( &Barrier ) -- EBUSY" );
+      status = pthread_barrier_destroy( &Barrier );
+      assert( status == EBUSY );
+    }
+
+    /* create a thread to block on the barrier */
     printf( "Init: pthread_create - thread %d OK\n", i+1 );
     status = pthread_create(&ThreadIds[i], NULL, BarrierThread, &ThreadIds[i]);
     assert( !status );

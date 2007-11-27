@@ -1,0 +1,77 @@
+*** POSIX RWLOCK TEST 01 ***
+pthread_rwlockattr_init( NULL ) -- EINVAL
+pthread_rwlockattr_setpshared( NULL, private ) -- EINVAL
+pthread_rwlockattr_setpshared( NULL, shared ) -- EINVAL
+pthread_rwlockattr_getpshared( NULL, &p ) -- EINVAL
+pthread_rwlockattr_destroy( NULL ) -- EINVAL
+pthread_rwlockattr_setpshared( &attr, shared ) -- EINVAL
+pthread_rwlockattr_getpshared( &attr, NULL ) -- EINVAL
+pthread_rwlockattr_destroy( &attr ) -- EINVAL
+pthread_rwlockattr_setpshared( &attr, private ) -- EINVAL
+pthread_rwlockattr_init( &attr ) -- OK
+pthread_rwlockattr_setpshared( &attr, private ) -- OK
+pthread_rwlockattr_getpshared( &attr, &p ) -- OK
+pthread_rwlockattr_setpshared( &attr, shared ) -- OK
+pthread_rwlockattr_getpshared( &attr, &p ) -- OK
+pthread_rwlockattr_destroy( &attr ) -- OK
+pthread_rwlockattr_getpshared( &attr, &p ) destroyed -- EINVAL
+pthread_rwlock_init(NULL, &attr) -- EINVAL
+pthread_rwlock_init(&rwlock, NULL) -- EINVAL
+pthread_rwlock_destroy(NULL) -- EINVAL
+pthread_rwlock_rdlock(NULL) -- EINVAL
+pthread_rwlock_timedrdlock( NULL, &abstime) -- EINVAL
+pthread_rwlock_timedrdlock( &rwlock, NULL) -- EINVAL
+pthread_rwlock_tryrdlock(NULL) -- EINVAL
+pthread_rwlock_wrlock(NULL) -- EINVAL
+pthread_rwlock_timedwrlock( NULL, &abstime) -- EINVAL
+pthread_rwlock_timedwrlock( &rwlock, NULL) -- EINVAL
+pthread_rwlock_trywrlock(NULL) -- EINVAL
+pthread_rwlock_unlock(NULL) -- EINVAL
+clock_gettime(CLOCK_REALTIME, &abstime) -- OK
+pthread_rwlock_destroy(BadId) -- EINVAL
+pthread_rwlock_rdlock(BadId) -- EINVAL
+pthread_rwlock_timedrdlock(BadId, &abstime) -- EINVAL
+pthread_rwlock_tryrdlock(BadId) -- EINVAL
+pthread_rwlock_wrlock(BadId) -- EINVAL
+pthread_rwlock_timedwrlock(BadId, &abstime) -- EINVAL
+pthread_rwlock_trywrlock(BadId) -- EINVAL
+pthread_rwlock_unlock(BadId) -- EINVAL
+pthread_rwlockattr_init( &attr ) -- OK
+pthread_rwlock_init( &rwlock, &attr ) -- OK
+pthread_rwlock_init( &rwlock, &attr ) -- EAGAIN
+pthread_rwlock_destroy( &rwlock ) -- OK
+pthread_rwlock_init( &RWLock, &attr ) -- OK
+pthread_rwlock_tryrdlock(RWLock) -- OK
+Init: pthread_create - thread 1 OK
+ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
+Init: pthread_create - thread 2 OK
+ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
+pthread_rwlock_unlock(RWLock) -- OK
+pthread_rwlock_trywrlock(RWLock) -- OK
+pthread_rwlock_tryrdlock(&RWLock) -- EBUSY
+Init: pthread_create - thread 1 OK
+ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK
+Init: pthread_create - thread 2 OK
+ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK
+pthread_rwlock_destroy( &RWLock ) -- EBUSY
+pthread_rwlock_unlock(RWLock) -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
+ReadThread - pthread_rwlock_rdlock(RWLock) unblocked -- OK
+pthread_rwlock_trywrlock(RWLock) -- OK
+pthread_rwlock_trywrlock(&RWLock) -- EBUSY
+Init: pthread_create - thread 1 OK
+WriteThread - pthread_rwlock_wrlock(RWLock) blocking -- OK
+Init: pthread_create - thread 2 OK
+WriteThread - pthread_rwlock_wrlock(RWLock) blocking -- OK
+pthread_rwlock_unlock(RWLock) -- OK
+WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
+WriteThread - pthread_rwlock_unlock(RWLock) -- OK
+WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
+clock_gettime(CLOCK_REALTIME, &abstime) -- OK
+pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK
+WriteThread - pthread_rwlock_unlock(RWLock) -- OK
+pthread_rwlock_timedrdlock( &RWLock, &abstime) -- OK
+pthread_rwlock_destroy( &RWLock ) -- OK
+*** END OF POSIX RWLOCK TEST 01 ***

@@ -1,3 +1,9 @@
+2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* psxbarrier01/psxbarrier01.scn, psxbarrier01/test.c,
+	psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Added several test
+	cases to improve test coverage.
+
 2007-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1262/filesystem
