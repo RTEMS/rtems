@@ -104,6 +104,9 @@ BSP_flashProbeSize(struct bankdesc *b);
 STATIC struct bankdesc *
 bankValidate(int bank, int quiet);
 
+static struct bankdesc *
+argcheck(int bank, uint32_t offset, char *src, uint32_t size);
+
 /* Type definitions */
 
 union bconv	{
@@ -407,9 +410,38 @@ unsigned		q;
 		for ( rval = 0, q=1; rval < max && (dd = BSP_flashCheckId(b, b->start + max - SCAN_BACK_OFFSET - rval, q)); q=3 ) {
 			rval += dd->size * FLASH_NDEVS(b);
 		}
+		b->start += max - rval;
 	}
 	return rval;
 }
+
+uint32_t
+BSP_flashStart(int bank)
+{
+struct bankdesc *b;
+	if ( ! ( b = argcheck(bank, 0, 0, 0) ) )
+		return -1;
+	return b->start;
+}
+
+uint32_t
+BSP_flashSize(int bank)
+{
+struct bankdesc *b;
+	if ( ! ( b = argcheck(bank, 0, 0, 0) ) )
+		return -1;
+	return b->size;
+}
+
+uint32_t
+BSP_flashBlockSize(int bank)
+{
+struct bankdesc *b;
+	if ( ! ( b = argcheck(bank, 0, 0, 0) ) )
+		return -1;
+	return b->fblksz;
+}
+
 
 #ifndef TESTING
 
@@ -446,7 +478,7 @@ struct bankdesc *b = BSP_flashBspOps.bankcheck(bank, quiet);
  */
 
 static struct bankdesc *
-argcheck(uint32_t bank, uint32_t offset, char *src, uint32_t size)
+argcheck(int bank, uint32_t offset, char *src, uint32_t size)
 {
 struct bankdesc *b;
 
@@ -639,7 +671,7 @@ bail:
 }
 
 int
-BSP_flashErase(uint32_t bank, uint32_t offset, uint32_t size, int quiet)
+BSP_flashErase(int bank, uint32_t offset, uint32_t size, int quiet)
 {
 struct bankdesc *b;
 uint32_t		 a,i;
@@ -660,7 +692,7 @@ int              f;
 	a = b->start + offset;
 
 	if ( !quiet ) {
-		printf("ERASING Flash (Bank #%"PRIu32")\n    from 0x%08"PRIx32" .. 0x%08"PRIx32"\nproceed y/[n]?",
+		printf("ERASING Flash (Bank #%i)\n    from 0x%08"PRIx32" .. 0x%08"PRIx32"\nproceed y/[n]?",
 			bank, a, (a+size-1));
 		fflush(stdout);
 		if ( 'Y' != getUc() ) {

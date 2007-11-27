@@ -70,12 +70,13 @@ BSP_flashWriteDisable(int bank);
  *    NOTES: - 'offset' and 'size' must be block-aligned. Common 16-bit devices
  *           have a block size of 0x20000 bytes. If two such devices are
  *           operated in parallel to form a 32-bit word then the 'effective'
- *           block size is 0x40000 bytes. 
+ *           block size is 0x40000 bytes. The block size can be queried by
+ *           BSP_flashBlockSize(int bank);
  *
  *           - erase operation is verified.
  */
 int
-BSP_flashErase(uint32_t bank, uint32_t offset, uint32_t size, int quiet);
+BSP_flashErase(int bank, uint32_t offset, uint32_t size, int quiet);
 
 /* Write data from a buffer to flash. The target area is erased if necessary.
  *
@@ -132,6 +133,30 @@ BSP_flashWriteFile(int bank, uint32_t offset, char *path, int quiet);
  */
 int
 BSP_flashDumpInfo(FILE *f);
+
+/*
+ * Obtain starting-address of flash bank (as seen from CPU)
+ * (returns ((uint32_t) -1) if the bank argument is invalid).
+ */
+
+uint32_t
+BSP_flashStart(int bank);
+
+/*
+ * Obtain size of flash bank (returns ((uint32_t) -1) if the
+ * bank argument is invalid).
+ */
+uint32_t
+BSP_flashSize(int bank);
+
+/*
+ * Obtain block size of flash bank (sector size times
+ * number of devices in parallel; the block size determines
+ * alignment and granularity accepted by BSP_flashErase()
+ * (returns ((uint32_t) -1) if the bank argument is invalid).
+ */
+uint32_t
+BSP_flashBlockSize(int bank);
 
 #ifdef __cplusplus
   }
