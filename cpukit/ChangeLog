@@ -1,3 +1,11 @@
+2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac, score/inline/rtems/score/thread.inl,
+	score/src/threaddispatch.c: Add ability for user to disable inlining
+	of _Thread_Enable_dispatch. This can save code space but more
+	importantly it means the binary generated does not have code inlined
+	that is difficult to test and very seldom executed.
+
 2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,

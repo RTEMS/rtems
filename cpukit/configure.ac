@@ -224,6 +224,12 @@ RTEMS_CPUOPT([__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__],
   [disable nanosecond granularity for period statistics]
 )
 
+RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
+  [test x"${RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH}" = x"1"],
+  [1],
+  [disable inlining _Thread_Enable_dispatch]
+)
+
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
   [$rtems_major],

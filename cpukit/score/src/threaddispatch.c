@@ -31,8 +31,33 @@
 #include <rtems/score/wkspace.h>
 
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-
   #include <rtems/score/timespec.h>
+#endif
+
+/*PAGE
+ *
+ *  _Thread_Enable_dispatch
+ *
+ *  This kernel routine exits a context switch disable critical section.
+ *  This is the NOT INLINED version.
+ *
+ *  Input parameters:  NONE
+ *
+ *  Output parameters:  NONE
+ *
+ *  INTERRUPT LATENCY:
+ *    dispatch thread
+ *    no dispatch thread
+ */
+
+#if ( (CPU_INLINE_ENABLE_DISPATCH == FALSE) || \
+      (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) )
+void _Thread_Enable_dispatch( void )
+{
+  if ( --_Thread_Dispatch_disable_level )
+    return;
+  _Thread_Dispatch();
+}
 #endif
 
 /*PAGE
@@ -54,15 +79,6 @@
  *    dispatch thread
  *    no dispatch thread
  */
-
-#if ( CPU_INLINE_ENABLE_DISPATCH == FALSE )
-void _Thread_Enable_dispatch( void )
-{
-  if ( --_Thread_Dispatch_disable_level )
-    return;
-  _Thread_Dispatch();
-}
-#endif
 
 void _Thread_Dispatch( void )
 {

@@ -189,7 +189,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
  *  processor will be transferred to the heir thread.
  */
 
-#if ( CPU_INLINE_ENABLE_DISPATCH == TRUE )
+#if ( (CPU_INLINE_ENABLE_DISPATCH == FALSE) || \
+      (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1) )
+void _Thread_Enable_dispatch( void );
+#else
+/* inlining of enable dispatching must be true */
 RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch()
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
@@ -198,9 +202,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch()
 }
 #endif
 
-#if ( CPU_INLINE_ENABLE_DISPATCH == FALSE )
-void _Thread_Enable_dispatch( void );
-#endif
 
 /**
  *  This routine allows dispatching to occur again.  However,
