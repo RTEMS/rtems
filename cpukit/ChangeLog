@@ -19,6 +19,12 @@
 
 2007-11-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h,
+	score/cpu/powerpc/rtems/old-exceptions/cpu.h: Add
+	CONFIGURE_APPLICATION_EXTRA_DRIVERS.
+
+2007-11-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: Add CONFIGURE_APPLICATION_EXTRA_DRIVERS.
 
 2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
