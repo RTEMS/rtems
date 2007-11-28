@@ -113,11 +113,11 @@ constants, usage, and status codes.
 @findex rtems_port_create
 @example
 rtems_status_code rtems_port_create(
-  rtems_name        name,
-  void             *internal_start,
-  void             *external_start,
-  rtems_unsigned32  length,
-  rtems_id         *id
+  rtems_name  name,
+  void       *internal_start,
+  void       *external_start,
+  uint32_t    length,
+  rtems_id   *id
 );
 @end example
 @end ifset

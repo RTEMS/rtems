@@ -386,7 +386,7 @@ constants, usage, and status codes.
 @example
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
-  rtems_unsigned32     count,
+  uint32_t             count,
   rtems_attribute      attribute_set,
   rtems_task_priority  priority_ceiling,
   rtems_id            *id
@@ -499,9 +499,9 @@ the Configuration Table.
 @findex rtems_semaphore_ident
 @example
 rtems_status_code rtems_semaphore_ident(
-  rtems_name        name,
-  rtems_unsigned32  node,
-  rtems_id         *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 @end example
 @end ifset
@@ -627,9 +627,9 @@ reclaimed when the semaphore is deleted.
 @findex rtems_semaphore_obtain
 @example
 rtems_status_code rtems_semaphore_obtain(
-  rtems_id         id,
-  rtems_unsigned32 option_set,
-  rtems_interval   timeout
+  rtems_id        id,
+  uint32_t        option_set,
+  rtems_interval  timeout
 );
 @end example
 @end ifset

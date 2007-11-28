@@ -366,7 +366,6 @@ id can delete the barrier.
 @example
 rtems_status_code rtems_barrier_wait(
   rtems_id         id,
-  rtems_unsigned32 option_set,
   rtems_interval   timeout
 );
 @end example
@@ -376,7 +375,6 @@ rtems_status_code rtems_barrier_wait(
 @example
 procedure Barrier_Wait (
    ID         : in     RTEMS.ID;
-   Option_Set : in     RTEMS.Option;
    Timeout    : in     RTEMS.Interval;
    Result     :    out RTEMS.Status_Codes
 );
@@ -442,7 +440,8 @@ this directive.
 @findex rtems_barrier_release
 @example
 rtems_status_code rtems_barrier_release(
-  rtems_id id
+  rtems_id  id,
+  uint32_t *released
 );
 @end example
 @end ifset
@@ -450,8 +449,9 @@ rtems_status_code rtems_barrier_release(
 @ifset is-Ada
 @example
 procedure Barrier_Release (
-   ID     : in     RTEMS.ID;
-   Result :    out RTEMS.Status_Codes
+   ID       : in     RTEMS.ID;
+   Released :    out RTEMS.Unsigned32;
+   Result   :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset
