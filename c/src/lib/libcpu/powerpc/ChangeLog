@@ -1,3 +1,8 @@
+2007-11-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/src/cache.c: removed redundant mpc8xx versions
+	of flush/invalidate 1 cache line routines.
+
 2007-11-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/src/cache.c: moved generic operations
