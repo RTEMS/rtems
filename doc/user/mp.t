@@ -43,6 +43,17 @@ performs the actions required to access the desired object.
 Simply stated, RTEMS allows the entire system, both hardware and
 software, to be viewed logically as a single system.
 
+@ifset is-Ada
+Multiprocessing operations are transparent at the application level.
+Operations on remote objects are implicitly processed as remote
+procedure calls.  Although remote operations on objects are supported
+from Ada tasks, the calls used to support the multiprocessing
+communications should be implemented in C and are not supported
+in the Ada binding.  Since there is no Ada binding for RTEMS
+multiprocessing support services, all examples and data structures
+shown in this chapter are in C.
+@end ifset
+
 @section Background
 
 @cindex multiprocessing topologies
@@ -177,7 +188,7 @@ task.
 
 @item The MPCI layer on the destination node senses the
 arrival of a packet (commonly in an ISR), and calls the
-@code{@value{DIRPREFIX}multiprocessing_announce}
+@code{rtems_multiprocessing_announce}
 directive.  This directive readies the Multiprocessing Server.
 
 @item The Multiprocessing Server calls the user-provided
@@ -186,7 +197,7 @@ builds an RR message, and returns it to the originating node.
 
 @item The MPCI layer on the originating node senses the
 arrival of a packet (typically via an interrupt), and calls the RTEMS
-@code{@value{DIRPREFIX}multiprocessing_announce} directive.  This directive
+@code{rtems_multiprocessing_announce} directive.  This directive
 readies the Multiprocessing Server.
 
 @item The Multiprocessing Server calls the user-provided
@@ -284,7 +295,7 @@ If the target hardware supports it, the arrival of a
 packet at a node may generate an interrupt.  Otherwise, the
 real-time clock ISR can check for the arrival of a packet.  In
 any case, the 
-@code{@value{DIRPREFIX}multiprocessing_announce} directive must be called
+@code{rtems_multiprocessing_announce} directive must be called
 to announce the arrival of a packet.  After exiting the ISR,
 control will be passed to the Multiprocessing Server to process
 the packet.  The Multiprocessing Server will call the get_packet
@@ -294,13 +305,12 @@ copy the message into the buffer obtained.
 @subsection INITIALIZATION
 
 The INITIALIZATION component of the user-provided
-MPCI layer is called as part of the @code{@value{DIRPREFIX}initialize_executive}
+MPCI layer is called as part of the @code{rtems_initialize_executive}
 directive to initialize the MPCI layer and associated hardware.
 It is invoked immediately after all of the device drivers have
 been initialized.  This component should be adhere to the
 following prototype:
 
-@ifset is-C
 @findex rtems_mpci_entry
 @example
 @group
@@ -309,13 +319,6 @@ rtems_mpci_entry user_mpci_initialization(
 );
 @end group
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 where configuration is the address of the user's
 Configuration Table.  Operations on global objects cannot be
@@ -337,7 +340,6 @@ layer is called when RTEMS must obtain a packet buffer to send
 or broadcast a message.  This component should be adhere to the
 following prototype:
 
-@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_get_packet(
@@ -345,13 +347,6 @@ rtems_mpci_entry user_mpci_get_packet(
 );
 @end group
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 where packet is the address of a pointer to a packet.
 This routine always succeeds and, upon return, packet will
@@ -372,7 +367,6 @@ layer is called when RTEMS needs to release a packet to the free
 packet buffer pool.  This component should be adhere to the
 following prototype:
 
-@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_return_packet(
@@ -380,13 +374,6 @@ rtems_mpci_entry user_mpci_return_packet(
 );
 @end group
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 where packet is the address of a packet.  If the
 packet cannot be successfully returned, the fatal error manager
@@ -399,7 +386,6 @@ MPCI layer is called when RTEMS needs to obtain a packet which
 has previously arrived.  This component should be adhere to the
 following prototype:
 
-@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_receive_packet(
@@ -407,13 +393,6 @@ rtems_mpci_entry user_mpci_receive_packet(
 );
 @end group
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 where packet is a pointer to the address of a packet
 to place the message from another node.  If a message is
@@ -428,7 +407,6 @@ layer is called when RTEMS needs to send a packet containing a
 message to another node.  This component should be adhere to the
 following prototype:
 
-@ifset is-C
 @example
 @group
 rtems_mpci_entry user_mpci_send_packet(
@@ -437,13 +415,6 @@ rtems_mpci_entry user_mpci_send_packet(
 );
 @end group
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 where node is the node number of the destination and packet is the 
 address of a packet which containing a message.  If the packet cannot 
@@ -457,12 +428,12 @@ of the packet for each node in the system.
 
 @c XXX packet_prefix structure needs to be defined in this document
 Many MPCI layers use the @code{packet_length} field of the
-@code{@value{DIRPREFIX}packet_prefix} portion
+@code{rtems_packet_prefix} portion
 of the packet to avoid sending unnecessary data.  This is especially 
 useful if the media connecting the nodes is relatively slow.
 
 The to_convert field of the MP_packet_prefix portion of the packet indicates
-how much of the packet (in @code{@value{DIRPREFIX}unsigned32}'s) may require
+how much of the packet (in @code{rtems_unsigned32}'s) may require
 conversion in a heterogeneous system.
 
 @subsection Supporting Heterogeneous Environments
@@ -553,7 +524,7 @@ data component of the packet.
 
 @subsection Announcing a Packet
 
-The @code{@value{DIRPREFIX}multiprocessing_announce} directive is called by
+The @code{rtems_multiprocessing_announce} directive is called by
 the MPCI layer to inform RTEMS that a packet has arrived from
 another node.  This directive can be called from an interrupt
 service routine or from within a polling routine.
@@ -576,18 +547,10 @@ status codes.
 
 @subheading CALLING SEQUENCE:
 
-@ifset is-C
 @findex rtems_multiprocessing_announce
 @example
 void rtems_multiprocessing_announce( void );
 @end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
 
 @subheading DIRECTIVE STATUS CODES:
 

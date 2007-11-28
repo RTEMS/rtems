@@ -825,7 +825,6 @@ rtems_task Periodic_task(rtems_task_argument arg)
 @}
 @end example
 
-
 The above task creates a rate monotonic period as
 part of its initialization.  The first time the loop is
 executed, the @code{@value{DIRPREFIX}rate_monotonic_period}
@@ -1226,9 +1225,18 @@ the rate monotonic period id in the following data @value{STRUCTURE}:
 @findex rtems_rate_monotonic_period_status
 @example
 typedef struct @{
+  rtems_id                            owner;
   rtems_rate_monotonic_period_states  state;
-  rtems_unsigned32                    ticks_since_last_period;
-  rtems_unsigned32                    ticks_executed_since_last_period;
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec                   since_last_period;
+  #else
+    uint32_t                          ticks_since_last_period;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec                   executed_since_last_period;
+  #else
+    uint32_t                          ticks_executed_since_last_period;
+  #endif
 @}  rtems_rate_monotonic_period_status;
 @end example
 @end ifset
@@ -1237,6 +1245,7 @@ typedef struct @{
 @example
 type Rate_Monotonic_Period_Status is
    begin
+      Owner                            : RTEMS.ID;
       State                            : RTEMS.Rate_Monotonic_Period_States;
       Ticks_Since_Last_Period          : RTEMS.Unsigned32;
       Ticks_Executed_Since_Last_Period : RTEMS.Unsigned32;
@@ -1246,15 +1255,18 @@ type Rate_Monotonic_Period_Status is
 
 @c RATE_MONOTONIC_INACTIVE does not have RTEMS_ in front of it.
 
-If the period's state is @code{RATE_MONOTONIC_INACTIVE}, both
-ticks_since_last_period and ticks_executed_since_last_period 
-will be set to 0.  Otherwise, ticks_since_last_period will
-contain the number of clock ticks which have occurred since
-the last invocation of the
+A configure time option can be used to select whether the time information is
+given in ticks or seconds and nanoseconds.  The default is seconds and
+nanoseconds.  If the period's state is @code{RATE_MONOTONIC_INACTIVE}, both
+time values will be set to 0.  Otherwise, both time values will contain
+time information since the last invocation of the
+@code{@value{DIRPREFIX}rate_monotonic_period} directive.  More
+specifically, the (ticks_)since_last_period value contains the elapsed time
+which has occurred since the last invocation of the
+@code{@value{DIRPREFIX}rate_monotonic_period} directive and the
+(ticks_)executed_since_last_period contains how much processor time the
+owning task has consumed since the invocation of the
 @code{@value{DIRPREFIX}rate_monotonic_period} directive.
-Also in this case, the ticks_executed_since_last_period will indicate
-how much processor time the owning task has consumed since the invocation
-of the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
 
 @subheading NOTES:
 
@@ -1301,14 +1313,26 @@ the rate monotonic period id in the following data @value{STRUCTURE}:
 @findex rtems_rate_monotonic_period_statistics
 @example
 typedef struct @{
- uint32_t     count;           /* periods executed */
- uint32_t     missed_count;    /* period deadlines missed */
- uint32_t     min_cpu_time;    /* minimum CPU time used in a period */
- uint32_t     max_cpu_time;    /* maximum CPU time used in a period */
- uint32_t     total_cpu_time;  /* total CPU time consumed */
- uint32_t     min_wall_time;   /* minimum wall time used in a period */
- uint32_t     max_wall_time;   /* maximum wall time used in a period */
- uint32_t     total_wall_time; /* total wall time consumed */
+  uint32_t     count;
+  uint32_t     missed_count;
+  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+    struct timespec min_cpu_time;
+    struct timespec max_cpu_time;
+    struct timespec total_cpu_time;
+  #else
+    uint32_t  min_cpu_time;
+    uint32_t  max_cpu_time;
+    uint32_t  total_cpu_time;
+  #endif
+  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+    struct timespec min_wall_time;
+    struct timespec max_wall_time;
+    struct timespec total_wall_time;
+  #else
+    uint32_t  min_wall_time;
+    uint32_t  max_wall_time;
+    uint32_t  total_wall_time;
+  #endif
 @}  rtems_rate_monotonic_period_statistics;
 @end example
 @end ifset

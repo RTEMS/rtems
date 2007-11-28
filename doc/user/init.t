@@ -314,15 +314,15 @@ initialization sequences:
 @ifset is-C
 @findex rtems_initialize_executive_late
 @example
-NOT SUPPORTED FROM Ada BINDING
+void rtems_initialize_executive_late(
+  rtems_interrupt_level bsp_level
+);
 @end example
 @end ifset
 
 @ifset is-Ada
 @example
-procedure Initialize_Executive_Late(
-  BSP_Level : in    RTEMS.ISR_Level
-);
+NOT SUPPORTED FROM Ada BINDING
 @end example
 @end ifset
 
@@ -373,7 +373,7 @@ initialization sequences:
 @findex rtems_shutdown_executive
 @example
 void rtems_shutdown_executive(
-  rtems_unsigned32 result
+  uint32_t result
 );
 @end example
 @end ifset

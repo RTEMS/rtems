@@ -49,13 +49,13 @@ and time @value{STRUCTURE} for the native time and date format:
 @findex rtems_time_of_day
 @example
 struct rtems_tod_control @{
-  rtems_unsigned32 year;   /* greater than 1987 */
-  rtems_unsigned32 month;  /* 1 - 12 */
-  rtems_unsigned32 day;    /* 1 - 31 */
-  rtems_unsigned32 hour;   /* 0 - 23 */
-  rtems_unsigned32 minute; /* 0 - 59 */
-  rtems_unsigned32 second; /* 0 - 59 */
-  rtems_unsigned32 ticks;  /* elapsed between seconds */
+  uint32_t year;   /* greater than 1987 */
+  uint32_t month;  /* 1 - 12 */
+  uint32_t day;    /* 1 - 31 */
+  uint32_t hour;   /* 0 - 23 */
+  uint32_t minute; /* 0 - 59 */
+  uint32_t second; /* 0 - 59 */
+  uint32_t ticks;  /* elapsed between seconds */
 @};
 
 typedef struct rtems_tod_control rtems_time_of_day;
@@ -90,8 +90,8 @@ following @value{STRUCTURE}:
 @example
 @group
 typedef struct @{
-  rtems_unsigned32 seconds;       /* seconds since RTEMS epoch*/
-  rtems_unsigned32 microseconds;  /* since last second        */
+  uint32_t seconds;       /* seconds since RTEMS epoch*/
+  uint32_t microseconds;  /* since last second        */
 @} rtems_clock_time_value;
 @end group
 @end example

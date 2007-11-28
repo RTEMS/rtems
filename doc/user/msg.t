@@ -231,8 +231,8 @@ constants, usage, and status codes.
 @example
 rtems_status_code rtems_message_queue_create(
   rtems_name        name,
-  rtems_unsigned32  count,
-  rtems_unsigned32  max_message_size,
+  uint32_t          count,
+  uint32_t          max_message_size,
   rtems_attribute   attribute_set,
   rtems_id         *id
 );
@@ -323,9 +323,9 @@ configuration table.
 @findex rtems_message_queue_ident
 @example
 rtems_status_code rtems_message_queue_ident(
-  rtems_name        name,
-  rtems_unsigned32  node,
-  rtems_id         *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 @end example
 @end ifset
@@ -454,9 +454,9 @@ reclaimed when the message queue is deleted.
 @findex rtems_message_queue_send
 @example
 rtems_status_code rtems_message_queue_send(
-  rtems_id           id,
-  void              *buffer,
-  rtems_unsigned32   size
+  rtems_id  id,
+  void     *buffer,
+  size_t    size
 );
 @end example
 @end ifset
@@ -519,9 +519,9 @@ proxy used to represent the task is reclaimed.
 @findex rtems_message_queue_urgent
 @example
 rtems_status_code rtems_message_queue_urgent(
-  rtems_id           id,
-  void              *buffer,
-  rtems_unsigned32   size
+  rtems_id  id,
+  void     *buffer,
+  size_t    size
 );
 @end example
 @end ifset
@@ -585,10 +585,10 @@ proxy used to represent the task is reclaimed.
 @findex rtems_message_queue_broadcast
 @example
 rtems_status_code rtems_message_queue_broadcast(
-  rtems_id           id,
-  void              *buffer,
-  rtems_unsigned32   size,
-  rtems_unsigned32  *count
+  rtems_id  id,
+  void     *buffer,
+  size_t    size,
+  uint32_t *count
 );
 @end example
 @end ifset
@@ -656,11 +656,11 @@ proxy used to represent the task is reclaimed.
 @findex rtems_message_queue_receive
 @example
 rtems_status_code rtems_message_queue_receive(
-  rtems_id           id,
-  void              *buffer,
-  rtems_unsigned32  *size,
-  rtems_unsigned32   option_set,
-  rtems_interval     timeout
+  rtems_id        id,
+  void           *buffer,
+  size_t         *size,
+  uint32_t        option_set,
+  rtems_interval  timeout
 );
 @end example
 @end ifset
@@ -750,8 +750,8 @@ this directive.
 @findex rtems_message_queue_get_number_pending
 @example
 rtems_status_code rtems_message_queue_get_number_pending(
-  rtems_id          id,
-  rtems_unsigned32 *count
+  rtems_id  id,
+  uint32_t *count
 );
 @end example
 @end ifset
@@ -799,8 +799,8 @@ the specified message queue.
 @findex rtems_message_queue_flush
 @example
 rtems_status_code rtems_message_queue_flush(
-  rtems_id          id,
-  rtems_unsigned32 *count
+  rtems_id  id,
+  uint32_t *count
 );
 @end example
 @end ifset
