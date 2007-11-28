@@ -1,3 +1,7 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/mvme5500.cfg: Fix typo.
+
 2007-11-27	Kate Feng <feng1@bnl.gov>
 
 	* custom/mvme5500.cfg: Add compiler arguments sine without them, the
