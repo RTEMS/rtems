@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,6 +53,12 @@ SPR_RW(SPRG1)
 extern void ShowBATS();`
 #endif
 
+/*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
+
+/*
 /*
  * Copy of residuals passed by firmware
  */
@@ -384,7 +390,8 @@ void bsp_start( void )
   Cpu_table.pretasking_hook 	 = bsp_pretasking_hook;    /* init libc, etc. */
   Cpu_table.postdriver_hook 	 = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  Cpu_table.clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+
+  bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("BSP_Configuration.work_space_size = %x\n",

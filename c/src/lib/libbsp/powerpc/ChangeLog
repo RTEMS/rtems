@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/startup/bspstart.c: Eliminate PowerPC specific elements from
+	the CPU Table. They have been replaced with variables named bsp_XXX
+	as needed.
+
 2007-11-29	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, shared/flash, shared/flash/flash.c,
