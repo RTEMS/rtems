@@ -1,3 +1,7 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Fix mistake in previous work.
+
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock/ckinit.c, startup/bspstart.c: Eliminate the

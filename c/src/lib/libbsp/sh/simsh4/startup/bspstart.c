@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  *
- *  COPYRIGHT (c) 1998-2001.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,10 @@
 
 #include <string.h>
 
-extern uint32_t bsp_clicks_per_second;
+/*
+ *  Driver configuration parameters
+ */
+uint32_t bsp_clicks_per_second;
 
 /*
  *  The original table from the application and our copy of it with
