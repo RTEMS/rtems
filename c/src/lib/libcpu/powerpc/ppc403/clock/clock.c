@@ -189,9 +189,7 @@ void ClockOn(
     uint32_t   iocr;
     register uint32_t   tcr;
     extern uint32_t bsp_clicks_per_usec;
-#ifdef ppc405
     extern boolean bsp_timer_internal_clock;
-#endif
 #ifdef ppc403
     uint32_t   pvr;
 #endif /* ppc403 */

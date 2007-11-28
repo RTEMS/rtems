@@ -1,5 +1,9 @@
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* ppc403/clock/clock.c: Now compiles and links.
+
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* mpc5xx/clock/clock.c, mpc5xx/timer/timer.c, mpc8260/clock/clock.c,
 	mpc8260/cpm/brg.c, mpc8260/timer/timer.c, mpc8xx/clock/clock.c,
 	mpc8xx/console-generic/console-generic.c, mpc8xx/timer/timer.c,
