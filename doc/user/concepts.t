@@ -210,9 +210,9 @@ prototyped as follows:
 @findex rtems_get_index
 
 @example
-rtems_unsigned32 rtems_get_class( rtems_id );
-rtems_unsigned32 rtems_get_node( rtems_id );
-rtems_unsigned32 rtems_get_index( rtems_id );
+uint32_t rtems_get_class( rtems_id );
+uint32_t rtems_get_node( rtems_id );
+uint32_t rtems_get_index( rtems_id );
 @end example
 
 An object control block is a data structure defined

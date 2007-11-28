@@ -689,7 +689,7 @@ status codes.
 rtems_status_code rtems_task_create(
   rtems_name           name,
   rtems_task_priority  initial_priority,
-  rtems_unsigned32     stack_size,
+  size_t               stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
   rtems_id            *id
@@ -801,9 +801,9 @@ by the maximum_global_objects field in the Configuration Table.
 @findex rtems_task_ident
 @example
 rtems_status_code rtems_task_ident(
-  rtems_name        name,
-  rtems_unsigned32  node,
-  rtems_id         *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 @end example
 @end ifset
@@ -1415,9 +1415,9 @@ mask constant is provided in the following table:
 @findex rtems_task_get_note
 @example
 rtems_status_code rtems_task_get_note(
-  rtems_id          id,
-  rtems_unsigned32  notepad,
-  rtems_unsigned32 *note
+  rtems_id  id,
+  uint32_t  notepad,
+  uint32_t *note
 );
 @end example
 @end ifset
@@ -1472,9 +1472,9 @@ the notepad entry of the specified task.
 @findex rtems_task_set_note
 @example
 rtems_status_code rtems_task_set_note(
-  rtems_id         id,
-  rtems_unsigned32 notepad,
-  rtems_unsigned32 note
+  rtems_id  id,
+  uint32_t  notepad,
+  uint32_t  note
 );
 @end example
 @end ifset
@@ -1561,7 +1561,7 @@ A task may give up the processor and remain in the ready state
 by specifying a value of @code{@value{RPREFIX}YIELD_PROCESSOR} in ticks.
 
 The maximum timer interval that can be specified is the maximum
-value which can be represented by the rtems_unsigned32 type.
+value which can be represented by the uint32_t type.
 
 A clock tick is required to support the functionality of this directive.
 

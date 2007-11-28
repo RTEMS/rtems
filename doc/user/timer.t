@@ -515,9 +515,9 @@ preempted.
 @findex rtems_timer_initiate_server
 @example
 rtems_status_code rtems_timer_initiate_server(
-  rtems_unsigned32     priority,
-  rtems_unsigned32     stack_size,
-  rtems_attribute      attribute_set
+  uint32_t         priority,
+  uint32_t         stack_size,
+  rtems_attribute  attribute_set
 )
 );
 @end example

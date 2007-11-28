@@ -1,3 +1,10 @@
+2007-11-28	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* user/clock.t, user/concepts.t, user/conf.t, user/datatypes.t,
+	user/dpmem.t, user/fatal.t, user/init.t, user/mp.t, user/msg.t,
+	user/part.t, user/region.t, user/rtmon.t, user/sem.t, user/task.t,
+	user/timer.t: Corrected various errors in the documentation.
+
 2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* develenv/develenv.texi, develenv/direct.t, develenv/intro.texi,

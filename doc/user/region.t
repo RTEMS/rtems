@@ -245,12 +245,12 @@ and status codes.
 @findex rtems_region_create
 @example
 rtems_status_code rtems_region_create(
-  rtems_name        name,
-  void             *starting_address,
-  rtems_unsigned32  length,
-  rtems_unsigned32  page_size,
-  rtems_attribute   attribute_set,
-  rtems_id         *id
+  rtems_name       name,
+  void            *starting_address,
+  uint32_t         length,
+  uint32_t         page_size,
+  rtems_attribute  attribute_set,
+  rtems_id        *id
 );
 @end example
 @end ifset
@@ -431,9 +431,9 @@ delete the region.
 @findex rtems_region_extend
 @example
 rtems_status_code rtems_region_extend(
-  rtems_id            id,
-  void               *starting_address,
-  rtems_unsigned32    length
+  rtems_id  id,
+  void     *starting_address,
+  uint32_t  length
 );
 @end example
 @end ifset
@@ -483,11 +483,11 @@ extend the region.
 @findex rtems_region_get_segment
 @example
 rtems_status_code rtems_region_get_segment(
-  rtems_id            id,
-  rtems_unsigned32    size,
-  rtems_option        option_set,
-  rtems_interval      timeout,
-  void              **segment
+  rtems_id         id,
+  uint32_t         size,
+  rtems_option     option_set,
+  rtems_interval   timeout,
+  void           **segment
 );
 @end example
 @end ifset
@@ -637,9 +637,9 @@ is less than or equal to the size of the segment returned.
 @findex rtems_region_get_segment_size
 @example
 rtems_status_code rtems_region_get_segment_size(
-  rtems_id            id,
-  void               *segment,
-  rtems_unsigned32   *size
+  rtems_id  id,
+  void     *segment,
+  size_t   *size
 );
 @end example
 @end ifset

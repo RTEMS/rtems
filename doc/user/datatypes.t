@@ -280,30 +280,6 @@ return type for an RTEMS Timer Service Routine.
 the entry point to an RTEMS TSR.  It is equivalent to the
 entry point of the function implementing the TSR.
 
-@findex rtems_unsigned8
-@item @code{@value{DIRPREFIX}unsigned8} is the data
-type that corresponds to unsigned eight bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
-
-@findex rtems_unsigned16
-@item @code{@value{DIRPREFIX}unsigned16} is the data
-type that corresponds to unsigned sixteen bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
-
-@findex rtems_unsigned32
-@item @code{@value{DIRPREFIX}unsigned32} is the data
-type that corresponds to unsigned thirty-two bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
-
-@findex rtems_unsigned64
-@item @code{@value{DIRPREFIX}unsigned64} is the data
-type that corresponds to unsigned sixty-four bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
-
 @findex rtems_vector_number
 @item @code{@value{DIRPREFIX}vector_number} is the data
 type used to manage and manipulate interrupt vector numbers.

@@ -144,12 +144,12 @@ constants, usage, and status codes.
 @findex rtems_partition_create
 @example
 rtems_status_code rtems_partition_create(
-  rtems_name        name,
-  void             *starting_address,
-  rtems_unsigned32  length,
-  rtems_unsigned32  buffer_size,
-  rtems_attribute   attribute_set,
-  rtems_id         *id
+  rtems_name       name,
+  void            *starting_address,
+  uint32_t         length,
+  uint32_t         buffer_size,
+  rtems_attribute  attribute_set,
+  rtems_id        *id
 );
 @end example
 @end ifset
@@ -239,9 +239,9 @@ the Configuration Table.
 @findex rtems_partition_ident
 @example
 rtems_status_code rtems_partition_ident(
-  rtems_name        name,
-  rtems_unsigned32  node,
-  rtems_id         *id
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
 );
 @end example
 @end ifset

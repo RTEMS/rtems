@@ -133,7 +133,7 @@ constants, usage, and status codes.
 @findex rtems_fatal_error_occurred
 @example
 void volatile rtems_fatal_error_occurred(
-  rtems_unsigned32        the_error
+  uint32_t  the_error
 );
 @end example
 @end ifset
