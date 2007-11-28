@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,8 +45,11 @@
 
 void _Thread_Handler_initialization(
   uint32_t     ticks_per_timeslice,
-  uint32_t     maximum_extensions,
+  uint32_t     maximum_extensions
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
   uint32_t     maximum_proxies
+#endif
 )
 {
   uint32_t        index;

@@ -1,7 +1,7 @@
 /*
  *  Initialization Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -67,16 +67,17 @@ rtems_interrupt_level rtems_initialize_executive_early(
 )
 {
   rtems_interrupt_level        bsp_level;
-  rtems_multiprocessing_table *multiprocessing_table;
 
   /*
    *  Dispatching and interrupts are disabled until the end of the
    *  initialization sequence.  This prevents an inadvertent context
    *  switch before the executive is initialized.
    */
-
   _ISR_Disable( bsp_level );
 
+  /*
+   *  Make sure the parameters were not NULL.
+   */
   if ( configuration_table == NULL )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
@@ -84,52 +85,41 @@ rtems_interrupt_level rtems_initialize_executive_early(
       INTERNAL_ERROR_NO_CONFIGURATION_TABLE
     );
 
-  /*
-   *  Initialize the system state based on whether this is an MP system.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  multiprocessing_table = configuration_table->User_multiprocessing_table;
-
-  _System_state_Handler_initialization(
-    (multiprocessing_table) ? TRUE : FALSE
-  );
-#else
-  multiprocessing_table = NULL;
-
-  _System_state_Handler_initialization( FALSE );
-#endif
-
-  /*
-   *  Grab our own copy of the user's CPU table.
-   */
-
-  _CPU_Table = *cpu_table;
-
-  /*
-   *  Provided just for user convenience.
-   */
-
-  _Configuration_Table    = configuration_table;
-#if defined(RTEMS_MULTIPROCESSING)
-  _Configuration_MP_table = multiprocessing_table;
-#endif
-
-  /*
-   *  Internally we view single processor systems as a very restricted
-   *  multiprocessor system.
-   */
-
-  if ( multiprocessing_table == NULL )
-    multiprocessing_table =
-      (void *)&_Initialization_Default_multiprocessing_table;
-
   if ( cpu_table == NULL )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
       INTERNAL_ERROR_NO_CPU_TABLE
     );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  /*
+   *  Initialize the system state based on whether this is an MP system.
+   *  In an MP configuration, internally we view single processor
+   *  systems as a very restricted multiprocessor system.
+   */
+  _Configuration_MP_table = configuration_table->User_multiprocessing_table;
+
+  if ( _Configuration_MP_table == NULL ) {
+    _Configuration_MP_table =
+      (void *)&_Initialization_Default_multiprocessing_table;
+    _System_state_Handler_initialization( FALSE );
+  } else {
+    _System_state_Handler_initialization( TRUE );
+  }
+#else
+  _System_state_Handler_initialization( FALSE );
+#endif
+
+  /*
+   *  Grab our own copy of the user's CPU table.
+   */
+  _CPU_Table = *cpu_table;
+
+  /*
+   *  Provide pointers just for later convenience.
+   */
+  _Configuration_Table    = configuration_table;
 
   _CPU_Initialize( cpu_table, _Thread_Dispatch );
 
@@ -157,9 +147,11 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _ISR_Handler_initialization();
 
   _Objects_Handler_initialization(
-    multiprocessing_table->node,
-    multiprocessing_table->maximum_nodes,
-    multiprocessing_table->maximum_global_objects
+#if defined(RTEMS_MULTIPROCESSING)
+    _Configuration_MP_table->node,
+    _Configuration_MP_table->maximum_nodes,
+    _Configuration_MP_table->maximum_global_objects
+#endif
   );
 
   _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
@@ -178,8 +170,11 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Handler_initialization(
     configuration_table->ticks_per_timeslice,
-    configuration_table->maximum_extensions,
+    configuration_table->maximum_extensions
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
     multiprocessing_table->maximum_proxies
+#endif
   );
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -2,7 +2,7 @@
  *  Object Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,11 +43,14 @@
  */
 
 void _Objects_Handler_initialization(
+#if defined(RTEMS_MULTIPROCESSING)
   uint32_t   node,
   uint32_t   maximum_nodes,
   uint32_t   maximum_global_objects
+#endif
 )
 {
+#if defined(RTEMS_MULTIPROCESSING)
   if ( node < 1 || node > maximum_nodes )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
@@ -55,7 +58,6 @@ void _Objects_Handler_initialization(
       INTERNAL_ERROR_INVALID_NODE
     );
 
-#if defined(RTEMS_MULTIPROCESSING)
   _Objects_Local_node    = node;
   _Objects_Maximum_nodes = maximum_nodes;
 

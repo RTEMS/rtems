@@ -1,3 +1,10 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/src/exinit.c, score/include/rtems/score/object.h,
+	score/include/rtems/score/thread.h, score/src/object.c,
+	score/src/thread.c: Conditionally compile out more code that is
+	specific to multiprocessor configurations.
+
 2007-11-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/Makefile.am, posix/preinstall.am, posix/src/cancel.c,

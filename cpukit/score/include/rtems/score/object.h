@@ -435,9 +435,11 @@ SCORE_EXTERN Objects_Information
  *             concurrently offered in the system.
  */
 void _Objects_Handler_initialization(
+#if defined(RTEMS_MULTIPROCESSING)
   uint32_t   node,
   uint32_t   maximum_nodes,
   uint32_t   maximum_global_objects
+#endif
 );
 
 /**
