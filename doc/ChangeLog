@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu_supplement/powerpc.t: Eliminate PowerPC specific elements from
+	the CPU Table. They have been replaced with variables named bsp_XXX
+	as needed.
+
 2007-11-28	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* user/barrier.t, user/clock.t, user/concepts.t, user/conf.t,
