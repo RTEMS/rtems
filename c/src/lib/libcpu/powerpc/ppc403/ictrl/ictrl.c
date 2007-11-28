@@ -161,6 +161,7 @@ ictrl_spurious_handler(uint32_t   spurious_mask,
 		       CPU_Interrupt_frame *cpu_frame)
 {
   int v;
+  extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
   
   for (v=0; v < PPC_IRQ_EXT_MAX; v++) {
     if (VEC_TO_EXMSK(v) & spurious_mask) {
@@ -170,8 +171,8 @@ ictrl_spurious_handler(uint32_t   spurious_mask,
       printf("spurious external interrupt: %d at pc 0x%x; disabling\n",
 	     vector, cpu_frame->Interrupt.pcoqfront);
 #endif
-      if (rtems_cpu_configuration_get_spurious_handler()) {
-	rtems_cpu_configuration_get_spurious_handler()(v + PPC_IRQ_EXT_BASE,cpu_frame);
+      if (bsp_spurious_handler) {
+	bsp_spurious_handler(v + PPC_IRQ_EXT_BASE,cpu_frame);
       }
     }
   }

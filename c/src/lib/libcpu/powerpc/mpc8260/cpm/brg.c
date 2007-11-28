@@ -51,9 +51,6 @@ static unsigned int brg_use_count[NUM_BRGS];
 /* (initialised to zeros) */
 static unsigned int clk_use_count[NUM_BRGS];
 
-
-extern rtems_cpu_table Cpu_table;
-
 /*
  * Compute baud-rate-generator configuration register value
  */
@@ -62,8 +59,9 @@ m8xx_get_brg_cd (int baud)
 {
   int divisor;
   int div16 = 0;
+  extern uint32_t bsp_serial_per_sec;
 
-  divisor = ((Cpu_table.serial_per_sec) + (baud / 2)) / baud;
+  divisor = ((bsp_serial_per_sec) + (baud / 2)) / baud;
   if (divisor > 4096) {
     div16 = 1;
     divisor = (divisor + 8) / 16;

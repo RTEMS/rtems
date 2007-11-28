@@ -18,7 +18,7 @@
  *
  *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/console/console.c:
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -140,17 +140,20 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
   register unsigned tmp;
+  extern uint32_t bsp_serial_per_sec;
+  extern boolean bsp_serial_external_clock;
+  extern boolean bsp_serial_cts_rts;
+  extern uint32_t bsp_serial_rate;
 
   /* Initialise the serial port */
   asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
   tmp &= ~3;
-  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ? 2 : 0) |
-      (rtems_cpu_configuration_get_serial_cts_rts() ? 1 : 0);
+  tmp |= (bsp_serial_external_clock ? 2 : 0) |
+      (bsp_serial_cts_rts ? 1 : 0);
   asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
   port->SPLS = (LSRDataReady | LSRFramingError | LSROverrunError |
          LSRParityError | LSRBreakInterrupt);
-  tmp = rtems_cpu_configuration_get_serial_per_sec() /
-          rtems_cpu_configuration_get_serial_rate();
+  tmp = bsp_serial_per_sec / bsp_get_serial_rate;
 #if 0 /* replaced by IMD... */
   tmp = ((tmp + 8) >> 4) - 1;
   port->BRDL = tmp & 0x255;
@@ -262,6 +265,7 @@ void outbyte(
 )
 {
   unsigned char status;
+  extern boolean bsp_serial_xon_xoff;
 
   while (port->SPHS)
     port->SPHS = (HSRDsr | HSRCts);
@@ -276,7 +280,7 @@ void outbyte(
 	      break;
     }
 
-  if (rtems_cpu_configuration_get_serial_xon_xoff())
+  if (bsp_serial_xon_xoff)
     while (is_character_ready(&status))
     {
 	    if (status == XOFFchar)

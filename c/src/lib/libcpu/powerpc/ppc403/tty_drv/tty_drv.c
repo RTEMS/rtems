@@ -18,6 +18,11 @@
 #include "../ictrl/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
 
+extern uint32_t bsp_serial_per_sec;
+extern boolean bsp_serial_external_clock;
+extern boolean bsp_serial_cts_rts;
+extern boolean bsp_serial_xon_xoff;
+extern uint32_t bsp_serial_rate;
 
 struct ttyasync {
 /*---------------------------------------------------------------------------+
@@ -154,7 +159,7 @@ tty0BaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
 
-  tmp = tty0_round( (double)rtems_cpu_configuration_get_serial_per_sec() / (baudrate * 16) );
+  tmp = tty0_round( (double)bsp_serial_per_sec / (baudrate * 16) );
 
   tty0port->LCR = tty0port->LCR | LCR_DL;
 
@@ -327,7 +332,7 @@ tty0DeInit(void)
    */
 
   /* set up baud rate to original state */
-  tty0BaudSet(rtems_cpu_configuration_get_serial_rate());
+  tty0BaudSet(bsp_serial_rate);
 
   tty0port->IER = 0;
 
@@ -345,6 +350,8 @@ tty0Initialize(void)
   rtems_isr_entry previous_isr; /* this is a dummy */
   unsigned char _ier;
   unsigned char _tmp;
+  extern uint32_t bsp_serial_rate;
+  extern boolean bsp_serial_external_clock;
 
   /*
    * Initialise the serial tty0port 
@@ -357,9 +364,9 @@ tty0Initialize(void)
   asm volatile ("mfdcr %0, 0x0b1" : "=r" (tmp)); /* CPC_CR0 0x0b1 */
 
   /* UART0 bit 24 0x80, UART1 bit 25 0x40 */
-  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ?  (TTY0_USE_UART ? 0x40 : 0x80) : 0);
+  tmp |= (bsp_serial_external_clock ?  (TTY0_USE_UART ? 0x40 : 0x80) : 0);
 
-  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ?  0: ((TTY0_UART_INTERNAL_CLOCK_DIVISOR -1) << 1));
+  tmp |= (bsp_serial_external_clock ?  0: ((TTY0_UART_INTERNAL_CLOCK_DIVISOR -1) << 1));
 
   asm volatile ("mtdcr 0x0b1, %0" : "=r" (tmp) : "0" (tmp)); /* CPC_CR0 0x0b1*/
 
@@ -371,7 +378,7 @@ tty0Initialize(void)
   tty0port->LCR = LCR_WL8 | LCR_SB1 | LCR_PN;
 
   /* set up baud rate */
-  tty0BaudSet(rtems_cpu_configuration_get_serial_rate());
+  tty0BaudSet(bsp_serial_rate);
  
 
 #ifdef TTY0_USE_INTERRUPT

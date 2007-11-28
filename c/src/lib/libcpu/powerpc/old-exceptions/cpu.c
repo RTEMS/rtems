@@ -18,7 +18,7 @@
  *
  *  Derived from c/src/exec/cpu/no_cpu/cpu.c:
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be found in
@@ -111,11 +111,12 @@ void _CPU_Initialize_vectors(void)
 {
   int i;
   proc_ptr handler = (proc_ptr)ppc_spurious;
+  extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
 
   _CPU_IRQ_info.Vector_table = _ISR_Vector_table;
 
-  if ( _CPU_Table.spurious_handler )
-    handler = (proc_ptr)_CPU_Table.spurious_handler;
+  if ( bsp_spurious_handler )
+    handler = (proc_ptr)bsp_spurious_handler;
 
   for (i = 0; i < PPC_INTERRUPT_MAX;  i++)
     _ISR_Vector_table[i] = handler;
@@ -305,30 +306,33 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 )
 {
-   proc_ptr   ignored;
-   *old_handler = _ISR_Vector_table[ vector ];
+  proc_ptr   ignored;
+  extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
+  extern boolean bsp_exceptions_in_RAM;
 
-   /*
-    *  If the interrupt vector table is a table of pointer to isr entry
-    *  points, then we need to install the appropriate RTEMS interrupt
-    *  handler for this vector number.
-    */
+  *old_handler = _ISR_Vector_table[ vector ];
 
-   /*
-    * Install the wrapper so this ISR can be invoked properly.
-    */
-   if (_CPU_Table.exceptions_in_RAM)
-      _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
+  /*
+   *  If the interrupt vector table is a table of pointer to isr entry
+   *  points, then we need to install the appropriate RTEMS interrupt
+   *  handler for this vector number.
+   */
 
-   /*
-    *  We put the actual user ISR address in '_ISR_vector_table'.  This will
-    *  be used by the _ISR_Handler so the user gets control.
-    */
+  /*
+   * Install the wrapper so this ISR can be invoked properly.
+   */
+  if (bsp_exceptions_in_RAM)
+     _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 
-    _ISR_Vector_table[ vector ] = new_handler ? (ISR_Handler_entry)new_handler :
-       _CPU_Table.spurious_handler ?
-          (ISR_Handler_entry)_CPU_Table.spurious_handler :
-          (ISR_Handler_entry)ppc_spurious;
+  /*
+   *  We put the actual user ISR address in '_ISR_vector_table'.  This will
+   *  be used by the _ISR_Handler so the user gets control.
+   */
+
+   _ISR_Vector_table[ vector ] = new_handler ? (ISR_Handler_entry)new_handler :
+     bsp_spurious_handler ?
+         (ISR_Handler_entry)bsp_spurious_handler :
+         (ISR_Handler_entry)ppc_spurious;
 }
 
 /*PAGE

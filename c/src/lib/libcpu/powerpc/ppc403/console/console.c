@@ -209,7 +209,8 @@ void
 spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
-  tmp = rtems_cpu_configuration_get_serial_per_sec() / baudrate;
+  extern uint32_t bsp_serial_per_sec;
+  tmp = bsp_serial_per_sec / baudrate;
   tmp = ((tmp) >> 4) - 1;
   port->BRDL = tmp & 0xff;
   port->BRDH = tmp >> 8;
@@ -302,13 +303,14 @@ spiPollWrite(int minor,const char *buf,int len)
 void
 spiDeInit(void) 
 {
+  extern uint32_t bsp_serial_rate;
   /*
    * disable interrupts for serial port 
    * set it to state to work with polling boot monitor, if any... 
    */
 
   /* set up baud rate to original state */
-  spiBaudSet(rtems_cpu_configuration_get_serial_rate());
+  spiBaudSet(bsp_serial_rate);
 
   /* clear any receive (error) status */
   port->SPLS = (LSRDataReady   | LSRFramingError | LSROverrunError |
@@ -338,6 +340,8 @@ spiInitialize(void)
 {
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
+  extern boolean bsp_serial_external_clock;
+  extern uint32_t bsp_serial_rate;
 
   /*
    * Initialise the serial port 
@@ -350,7 +354,7 @@ spiInitialize(void)
   asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
 
   tmp &= ~3;
-  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ? 2 : 0) | 1;
+  tmp |= (bsp_serial_external_clock ? 2 : 0) | 1;
 
   asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
 
@@ -359,7 +363,7 @@ spiInitialize(void)
 		LSRParityError | LSRBreakInterrupt);
 
   /* set up baud rate */
-  spiBaudSet(rtems_cpu_configuration_get_serial_rate());
+  spiBaudSet(bsp_serial_rate);
 
   /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
   port->SPCTL = (CRNormal | 

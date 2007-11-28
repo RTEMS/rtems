@@ -25,7 +25,7 @@
  *  for these modifications:
  *  COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -188,6 +188,10 @@ void ClockOn(
 {
     uint32_t   iocr;
     register uint32_t   tcr;
+    extern uint32_t bsp_clicks_per_usec;
+#ifdef ppc405
+    extern boolean bsp_timer_internal_clock;
+#endif
 #ifdef ppc403
     uint32_t   pvr;
 #endif /* ppc403 */
@@ -196,7 +200,7 @@ void ClockOn(
  
 #ifndef ppc405 /* this is a ppc403 */
     asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
-    if (rtems_cpu_configuration_get_timer_internal_clock()) {
+    if (bsp_timer_internal_clock) {
 	iocr &= ~4; /* timer clocked from system clock */
     }
     else {
@@ -220,7 +224,7 @@ void ClockOn(
  
 #else /* ppc405 */
     asm volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
-    if (rtems_cpu_configuration_get_timer_internal_clock()) {
+    if (bsp_timer_internal_clock) {
 	iocr &=~0x800000	;/* timer clocked from system clock CETE*/
     }
     else {
@@ -236,7 +240,7 @@ void ClockOn(
 
 #endif /* ppc405 */
     pit_value = rtems_configuration_get_microseconds_per_tick() *
-      rtems_cpu_configuration_get_clicks_per_usec();
+      bsp_clicks_per_usec;
  
      /*
       * Set PIT value

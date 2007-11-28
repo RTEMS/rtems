@@ -30,7 +30,7 @@
  *    Saskatoon, Saskatchewan, CANADA
  *    eric@skatter.usask.ca
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
@@ -57,7 +57,6 @@
 #include <rtems/bspIo.h>   /* for printk */
 
 int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
-extern rtems_cpu_table Cpu_table;
 
 /* BSP supplied routine */
 extern int mbx8xx_console_get_configuration();
@@ -111,8 +110,9 @@ m8xx_get_brg_cd (int baud)
 {
   int divisor;
   int div16 = 0;
+  extern uint32_t bsp_clock_speed;
 
-  divisor = ((Cpu_table.clock_speed / 16) + (baud / 2)) / baud;
+  divisor = ((bsp_clock_speed / 16) + (baud / 2)) / baud;
   if (divisor > 4096) {
     div16 = 1;
     divisor = (divisor + 8) / 16;

@@ -31,7 +31,7 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1_1/clock/clock.c:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -79,10 +79,11 @@ void clockOn(void* unused)
 {
   unsigned desiredLevel;
   uint32_t pit_value;
+  extern uint32_t bsp_clicks_per_usec;
 
   /* calculate and set modulus */  
   pit_value = (rtems_configuration_get_microseconds_per_tick() *
-               rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;
+               bsp_clicks_per_usec) - 1 ;
   
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);

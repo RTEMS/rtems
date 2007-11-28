@@ -43,7 +43,7 @@ void * codemove(void *, const void *, unsigned int, unsigned long);
 static void* ppc_get_vector_addr(rtems_vector vector)
 {
   unsigned vaddr;
-  extern rtems_cpu_table Cpu_table;
+  extern boolean bsp_exceptions_in_RAM;
 
   switch(vector) {
     /*
@@ -76,7 +76,7 @@ static void* ppc_get_vector_addr(rtems_vector vector)
     vaddr = ((unsigned)vector) << 8;
     break;
   }
-  if ( Cpu_table.exceptions_in_RAM )
+  if ( bsp_exceptions_in_RAM )
     return ((void*)  vaddr);
 
   return ((void*)  (vaddr + 0xfff00000));

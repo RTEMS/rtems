@@ -38,7 +38,7 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1_1/timer/timer.c:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -79,18 +79,12 @@ void Timer_initialize(void)
   Timer_starting = get_itimer();
 }
 
-#ifndef  rtems_cpu_configuration_get_timer_least_valid
-#define  rtems_cpu_configuration_get_timer_least_valid() 0
-#endif
-
-#ifndef  rtems_cpu_configuration_get_timer_average_overhead
-#define  rtems_cpu_configuration_get_timer_average_overhead() 0
-#endif
-
 int Read_timer(void)
 {
   uint32_t clicks;
   uint32_t total;
+  extern uint32_t bsp_timer_least_valid;
+  extern uint32_t bsp_timer_average_overhead;
 
   clicks = get_itimer();
 
@@ -100,10 +94,10 @@ int Read_timer(void)
     return total;          /* in XXX microsecond units */
 
   else {
-    if ( total < rtems_cpu_configuration_get_timer_least_valid() ) {
+    if ( total < bsp_timer_least_valid ) {
       return 0;            /* below timer resolution */
     }
-    return (total - rtems_cpu_configuration_get_timer_average_overhead());
+    return (total - bsp_timer_average_overhead);
   }
 }
 

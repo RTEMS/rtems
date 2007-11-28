@@ -25,7 +25,7 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1_1/clock/clock.c:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -73,12 +73,15 @@ void clockOn(void* unused)
   uint32_t   pit_value;
   uint32_t mf_value;
   rtems_boolean force_prescaler = FALSE;
-  if (rtems_cpu_configuration_get_clicks_per_usec() == 0) {
+  extern uint32_t bsp_clicks_per_usec;
+  extern uint32_t bsp_clock_speed;
+
+  if (bsp_clicks_per_usec == 0) {
     /*
      * oscclk is too low for PIT, compute extclk and derive PIT from there
      */
     mf_value  = m8xx.plprcr >> 20;    
-    pit_value = (_CPU_Table.clock_speed
+    pit_value = (bsp_clock_speed
 		 / (mf_value+1) 
 		 / 1000
 		 / 4
@@ -89,7 +92,7 @@ void clockOn(void* unused)
   }
   else {
     pit_value = (rtems_configuration_get_microseconds_per_tick() *
-		 rtems_cpu_configuration_get_clicks_per_usec());
+		 bsp_clicks_per_usec);
   
     m8xx.sccr &= ~(1<<23);
   }

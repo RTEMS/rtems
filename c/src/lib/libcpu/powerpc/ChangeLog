@@ -1,3 +1,16 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc5xx/clock/clock.c, mpc5xx/timer/timer.c, mpc8260/clock/clock.c,
+	mpc8260/cpm/brg.c, mpc8260/timer/timer.c, mpc8xx/clock/clock.c,
+	mpc8xx/console-generic/console-generic.c, mpc8xx/timer/timer.c,
+	new-exceptions/raw_exception.c, old-exceptions/cpu.c,
+	ppc403/clock/clock.c, ppc403/console/console.c,
+	ppc403/console/console.c.polled, ppc403/console/console405.c,
+	ppc403/ictrl/ictrl.c, ppc403/irq/ictrl.c, ppc403/timer/timer.c,
+	ppc403/tty_drv/tty_drv.c: Eliminate PowerPC specific elements from
+	the CPU Table. They have been replaced with variables named bsp_XXX
+	as needed.
+
 2007-11-28	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/src/cache.c: removed redundant mpc8xx versions

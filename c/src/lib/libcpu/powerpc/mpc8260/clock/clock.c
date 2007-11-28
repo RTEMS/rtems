@@ -25,7 +25,7 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1_1/clock/clock.c:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -90,36 +90,17 @@ rtems_isr Clock_isr(rtems_vector_number vector)
 
 void clockOn(void* unused)
 {
+  extern uint32_t bsp_clicks_per_usec;
 
   decrementer_value = rtems_configuration_get_microseconds_per_tick() *
-                      rtems_cpu_configuration_get_clicks_per_usec() - 1;
+                      bsp_clicks_per_usec - 1;
 
   PPC_Set_decrementer( decrementer_value );
   Clock_driver_ticks = 0;
 
   ClockInitialised = 1;
-
-
-#if 0
-  unsigned desiredLevel;
-  uint32_t   pit_value;
-  
-  pit_value = (rtems_configuration_get_microseconds_per_tick() *
-               rtems_cpu_configuration_get_clicks_per_usec()) - 1 ;
-  
-  if (pit_value > 0xffff) {           /* pit is only 16 bits long */
-    rtems_fatal_error_occurred(-1);
-  }
-  m8260.sccr &= ~(1<<24);
-  m8260.pitc = pit_value;
-
-  desiredLevel = BSP_get_clock_irq_level();
-  /* set PIT irq level, enable PIT, PIT interrupts */
-  /*  and clear int. status */
-  m8260.piscr = /*M8260_PISCR_PIRQ(desiredLevel) |*/
-    M8260_PISCR_PTE | M8260_PISCR_PS | M8260_PISCR_PIE;
-#endif
 }
+
 /*
  * Called via atexit()
  * Remove the clock interrupt handler by setting handler to NULL
@@ -156,11 +137,12 @@ Clock_exit(void)
 
 void Install_clock(rtems_isr_entry clock_isr)
 {
+  extern uint32_t bsp_clicks_per_usec;
+
   Clock_driver_ticks = 0;
 
-
   decrementer_value = rtems_configuration_get_microseconds_per_tick() *
-                      rtems_cpu_configuration_get_clicks_per_usec() - 1;
+                      bsp_clicks_per_usec - 1;
 
   PPC_Set_decrementer( decrementer_value );
 
