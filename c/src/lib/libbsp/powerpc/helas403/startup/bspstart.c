@@ -79,6 +79,7 @@ void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 /*
  *  Driver configuration parameters
  */
+boolean    bsp_exceptions_in_RAM;
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
 boolean    bsp_serial_external_clock;
@@ -88,6 +89,7 @@ uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+void     (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook

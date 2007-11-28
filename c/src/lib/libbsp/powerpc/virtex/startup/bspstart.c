@@ -93,6 +93,7 @@ uint32_t _top_of_ram;
 /*
  *  Driver configuration parameters
  */
+boolean    bsp_exceptions_in_RAM;
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
 boolean    bsp_serial_external_clock;
