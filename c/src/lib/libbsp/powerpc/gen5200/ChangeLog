@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/clock.c, startup/bspstart.c: Eliminate PowerPC specific
+	elements from the CPU Table. They have been replaced with variables
+	named bsp_XXX as needed.
+
 2007-10-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/mpc5200.h: Fix typo.

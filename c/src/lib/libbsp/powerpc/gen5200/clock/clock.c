@@ -71,7 +71,7 @@
 /*   for these modifications:                                          */
 /*   COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.                     */
 /*                                                                     */
-/*   COPYRIGHT (c) 1989-1999.                                          */
+/*   COPYRIGHT (c) 1989-2007.
 /*   On-Line Applications Research Corporation (OAR).                  */
 /*                                                                     */
 /*   The license and distribution terms for this file may be           */
@@ -221,11 +221,12 @@ uint32_t mpc5200_check_gpt_status(uint32_t gpt_no)
 void clockOn(const rtems_irq_connect_data* irq)
 {
   uint32_t gpt_no;
+  extern uint32_t bsp_clicks_per_usec;
 
   gpt_no = BSP_SIU_IRQ_TMR0 - (irq->name);
 
   counter_value = rtems_configuration_get_microseconds_per_tick() *
-                      rtems_cpu_configuration_get_clicks_per_usec();
+                      bsp_clicks_per_usec;
 
   mpc5200_set_gpt_count(counter_value, (uint32_t)gpt_no);
   mpc5200_enable_gpt_int((uint32_t)gpt_no);
@@ -341,8 +342,9 @@ int BSP_connect_clock_handler (uint32_t gpt_no)
 /* This driver does this in clockOn called at connection time */
 #define Clock_driver_support_initialize_hardware() \
   do {        \
+    extern uint32_t bsp_clicks_per_usec; \
     counter_value = rtems_configuration_get_microseconds_per_tick() * \
-                    rtems_cpu_configuration_get_clicks_per_usec(); \
+                    bsp_clicks_per_usec; \
     mpc5200_init_gpt(GPT); \
     mpc5200_set_gpt_count(counter_value, GPT); \
   } while (0)
