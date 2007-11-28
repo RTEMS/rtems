@@ -1,3 +1,10 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
+	rtems/score/cpu.h: Eliminate PowerPC specific elements from the CPU
+	Table. They have been replaced with variables named bsp_XXX as
+	needed.
+
 2007-11-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* rtems/score/powerpc.h: Added a '__ppc_generic' CPU variant.
