@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c, startup/bspstart.c.nocache: Eliminate PowerPC
+	specific elements from the CPU Table. They have been replaced with
+	variables named bsp_XXX as needed.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps
