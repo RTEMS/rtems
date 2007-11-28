@@ -47,9 +47,6 @@ int _POSIX_Condition_variables_Wait_support(
   switch ( location ) {
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
-      return EINVAL;
 #endif
     case OBJECTS_ERROR:
       return EINVAL;

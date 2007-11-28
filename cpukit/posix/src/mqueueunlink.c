@@ -54,28 +54,10 @@ int mq_unlink(
     rtems_set_errno_and_return_minus_one( status );
    }
 
-  /*
-   *  Don't support unlinking a remote message queue.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id(the_mq_id) ) {
-    _Thread_Enable_dispatch();
-    rtems_set_errno_and_return_minus_one( ENOSYS );
-  }
-#endif
-
   the_mq = (POSIX_Message_queue_Control *) _Objects_Get_local_object(
     &_POSIX_Message_queue_Information,
     _Objects_Get_index( the_mq_id )
   );
-
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-  if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
-    _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq_id );
-  }
-#endif
-
 
   the_mq->linked = FALSE;
   _Workspace_Free( the_mq->Object.name );

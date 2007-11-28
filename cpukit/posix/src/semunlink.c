@@ -46,27 +46,10 @@ int sem_unlink(
     rtems_set_errno_and_return_minus_one( status );
   }
 
-  /*
-   *  Don't support unlinking a remote semaphore.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id((Objects_Id)the_semaphore_id) ) {
-    _Thread_Enable_dispatch();
-    rtems_set_errno_and_return_minus_one( ENOSYS );
-  }
-#endif
-
   the_semaphore = (POSIX_Semaphore_Control *) _Objects_Get_local_object(
     &_POSIX_Semaphore_Information,
     _Objects_Get_index( the_semaphore_id )
   );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
-    _Objects_MP_Close( &_POSIX_Semaphore_Information, the_semaphore_id );
-  }
-#endif
 
   the_semaphore->linked = FALSE;
   _POSIX_Semaphore_Namespace_remove( the_semaphore );

@@ -38,12 +38,6 @@ int pthread_mutex_unlock(
   switch ( location ) {
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      return _POSIX_Mutex_MP_Send_request_packet(
-          POSIX_MUTEX_MP_RELEASE_REQUEST,
-          *mutex,
-          0,                    /* Not used */
-          MPCI_DEFAULT_TIMEOUT
-      );
 #endif
     case OBJECTS_ERROR:
       return EINVAL;

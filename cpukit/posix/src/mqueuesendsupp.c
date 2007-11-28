@@ -61,15 +61,11 @@ int _POSIX_Message_queue_Send_support(
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EBADF );
-
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
-      rtems_set_errno_and_return_minus_one( EINVAL );
 #endif
+    case OBJECTS_ERROR:
+      rtems_set_errno_and_return_minus_one( EBADF );
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_RDONLY ) {
@@ -84,11 +80,7 @@ int _POSIX_Message_queue_Send_support(
         msg_ptr,
         msg_len,
         mqdes,      /* mqd_t is an object id */
-#if defined(RTEMS_MULTIPROCESSING)
-        NULL,      /* XXX _POSIX_Message_queue_Core_message_queue_mp_support*/
-#else
         NULL,
-#endif
         _POSIX_Message_queue_Priority_to_core( msg_prio ),
          (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE,
         timeout    /* no timeout */

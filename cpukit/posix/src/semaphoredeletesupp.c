@@ -34,32 +34,10 @@ void _POSIX_Semaphore_Delete(
 
       _CORE_semaphore_Flush(
         &the_semaphore->Semaphore,
-#if defined(RTEMS_MULTIPROCESSING)
-        _POSIX_Semaphore_MP_Send_object_was_deleted,
-#else
         NULL,
-#endif
-        -1  /* XXX should also seterrno -> EINVAL */
+        -1
       );
 
     _POSIX_Semaphore_Free( the_semaphore );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
-
-      _Objects_MP_Close(
-        &_POSIX_Semaphore_Information,
-        the_semaphore->Object.id
-      );
-
-      _POSIX_Semaphore_MP_Send_process_packet(
-        POSIX_SEMAPHORE_MP_ANNOUNCE_DELETE,
-        the_semaphore->Object.id,
-        0,                         /* Not used */
-        0                          /* Not used */
-      );
-    }
-#endif
-
   }
 }

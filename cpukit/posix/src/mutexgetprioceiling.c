@@ -39,7 +39,6 @@ int pthread_mutex_getprioceiling(
   switch ( location ) {
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
 #endif
     case OBJECTS_ERROR:
       return EINVAL;

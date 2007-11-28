@@ -113,27 +113,6 @@ $(PROJECT_INCLUDE)/rtems/posix/spinlock.h: include/rtems/posix/spinlock.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/spinlock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlock.h
 
-if HAS_MP
-$(PROJECT_INCLUDE)/rtems/posix/condmp.h: include/rtems/posix/condmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/condmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/condmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h: include/rtems/posix/mqueuemp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueuemp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mutexmp.h: include/rtems/posix/mutexmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutexmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutexmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h: include/rtems/posix/pthreadmp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthreadmp.h
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h: include/rtems/posix/semaphoremp.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoremp.h
-endif
 $(PROJECT_INCLUDE)/rtems/posix/cond.inl: inline/rtems/posix/cond.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl

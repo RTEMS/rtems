@@ -23,14 +23,6 @@
 
 #include <assert.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
-int POSIX_MP_NOT_IMPLEMENTED()
-{
-  assert( 0 );
-  return 0;
-}
-#endif
-
 int POSIX_BOTTOM_REACHED()
 {
   assert( 0 );

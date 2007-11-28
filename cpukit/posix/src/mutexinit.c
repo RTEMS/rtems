@@ -101,10 +101,8 @@ int pthread_mutex_init(
 
   assert( the_attr->process_shared == PTHREAD_PROCESS_PRIVATE );
 
-#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    return POSIX_MP_NOT_IMPLEMENTED();
-#endif
+    return ENOSYS;
 
   /*
    *  Determine the discipline of the mutex

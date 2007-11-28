@@ -39,12 +39,6 @@ include_rtems_posix_HEADERS = include/rtems/posix/cancel.h \
     include/rtems/posix/timer.h include/rtems/posix/barrier.h \
     include/rtems/posix/rwlock.h include/rtems/posix/spinlock.h
 
-if HAS_MP
-include_rtems_posix_HEADERS += include/rtems/posix/condmp.h \
-    include/rtems/posix/mqueuemp.h include/rtems/posix/mutexmp.h \
-    include/rtems/posix/pthreadmp.h include/rtems/posix/semaphoremp.h
-endif
-
 include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
     inline/rtems/posix/key.inl inline/rtems/posix/mqueue.inl \
     inline/rtems/posix/mutex.inl inline/rtems/posix/pthread.inl \
@@ -78,7 +72,7 @@ libposix_a_SOURCES += src/cancel.c src/cancelrun.c src/cleanuppop.c \
 libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
     src/condattrgetpshared.c src/condattrinit.c src/condattrsetpshared.c \
     src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
-    src/condinit.c src/condmp.c src/condsignal.c src/condsignalsupp.c \
+    src/condinit.c src/condsignal.c src/condsignalsupp.c \
     src/condtimedwait.c src/condwait.c src/condwaitsupp.c
 
 ## KEY_C_FILES
@@ -105,7 +99,7 @@ libposix_a_SOURCES += src/mutex.c src/mutexattrdestroy.c \
     src/mutexattrsetprioceiling.c src/mutexattrsetprotocol.c \
     src/mutexattrsetpshared.c src/mutexdefaultattributes.c \
     src/mutexdestroy.c src/mutexfromcorestatus.c src/mutexgetprioceiling.c \
-    src/mutexinit.c src/mutexlock.c src/mutexlocksupp.c src/mutexmp.c \
+    src/mutexinit.c src/mutexlock.c src/mutexlocksupp.c \
     src/mutexsetprioceiling.c src/mutextimedlock.c src/mutextrylock.c \
     src/mutexunlock.c
 
@@ -145,7 +139,7 @@ libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
 
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
-    src/semaphoredeletesupp.c src/semaphoremp.c src/semaphorenametoid.c \
+    src/semaphoredeletesupp.c src/semaphorenametoid.c \
     src/semaphorewaitsupp.c src/semclose.c src/semdestroy.c \
     src/semgetvalue.c src/seminit.c src/semopen.c src/sempost.c \
     src/semtimedwait.c src/semtrywait.c src/semunlink.c src/semwait.c

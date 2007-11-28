@@ -195,6 +195,7 @@ typedef struct {
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
+#if 0
   uint32_t     clicks_per_usec;	       /* Timer clicks per microsecond */
   void       (*spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
@@ -214,6 +215,7 @@ typedef struct {
 #if (defined(mpc555) \
   || defined(mpc860) || defined(mpc821) || defined(mpc8260))
   uint32_t     clock_speed;            /* Speed of CPU in Hz */
+#endif
 #endif
 }   rtems_cpu_table;
 #endif

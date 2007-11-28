@@ -55,8 +55,6 @@ int pthread_mutex_setprioceiling(
   switch ( location ) {
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      /*  XXX It feels questionable to set the ceiling on a remote mutex. */
-      return EINVAL;
 #endif
     case OBJECTS_ERROR:
       return EINVAL;        /* impossible to get here */

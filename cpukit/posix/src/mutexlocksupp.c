@@ -41,12 +41,6 @@ int _POSIX_Mutex_Lock_support(
   switch ( location ) {
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      return _POSIX_Mutex_MP_Send_request_packet(
-          POSIX_MUTEX_MP_OBTAIN_REQUEST,
-          *mutex,
-          0,   /* must define the option set */
-          WATCHDOG_NO_TIMEOUT
-      );
 #endif
     case OBJECTS_ERROR:
       return EINVAL;

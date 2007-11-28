@@ -89,16 +89,6 @@ int _POSIX_Message_queue_Create_support(
     attr = *attr_ptr;
   }
 
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-  if ( pshared == PTHREAD_PROCESS_SHARED &&
-       !( _Objects_MP_Allocate_and_open( &_POSIX_Message_queue_Information, 0,
-                            the_mq->Object.id, FALSE ) ) ) {
-    _POSIX_Message_queue_Free( the_mq );
-    _Thread_Enable_dispatch();
-    rtems_set_errno_and_return_minus_one( ENFILE );
-  }
-#endif
-
   the_mq = _POSIX_Message_queue_Allocate();
   if ( !the_mq ) {
     _Thread_Enable_dispatch();
@@ -139,11 +129,6 @@ int _POSIX_Message_queue_Create_support(
            attr.mq_msgsize
       ) ) {
 
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-    if ( pshared == PTHREAD_PROCESS_SHARED )
-      _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq->Object.id );
-#endif
-
     _POSIX_Message_queue_Free( the_mq );
     _Workspace_Free(name);
     _Thread_Enable_dispatch();
@@ -157,16 +142,6 @@ int _POSIX_Message_queue_Create_support(
   );
 
   *message_queue = the_mq;
-
-#if 0 && defined(RTEMS_MULTIPROCESSING)
-  if ( pshared == PTHREAD_PROCESS_SHARED )
-    _POSIX_Message_queue_MP_Send_process_packet(
-      POSIX_MESSAGE_QUEUE_MP_ANNOUNCE_CREATE,
-      the_mq->Object.id,
-      (char *) name,
-      0                          /* Not used */
-    );
-#endif
 
   _Thread_Enable_dispatch();
   return 0;

@@ -1,3 +1,34 @@
+2007-11-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am, posix/preinstall.am, posix/src/cancel.c,
+	posix/src/conddestroy.c, posix/src/condinit.c,
+	posix/src/condsignalsupp.c, posix/src/condwaitsupp.c,
+	posix/src/mqueueclose.c, posix/src/mqueuecreatesupp.c,
+	posix/src/mqueuedeletesupp.c, posix/src/mqueuegetattr.c,
+	posix/src/mqueuenotify.c, posix/src/mqueuerecvsupp.c,
+	posix/src/mqueuesendsupp.c, posix/src/mqueuesetattr.c,
+	posix/src/mqueueunlink.c, posix/src/mutexattrdestroy.c,
+	posix/src/mutexattrgetprioceiling.c,
+	posix/src/mutexattrgetprotocol.c, posix/src/mutexattrgetpshared.c,
+	posix/src/mutexattrinit.c, posix/src/mutexattrsetprioceiling.c,
+	posix/src/mutexattrsetprotocol.c, posix/src/mutexattrsetpshared.c,
+	posix/src/mutexdefaultattributes.c, posix/src/mutexdestroy.c,
+	posix/src/mutexgetprioceiling.c, posix/src/mutexinit.c,
+	posix/src/mutexlocksupp.c, posix/src/mutexsetprioceiling.c,
+	posix/src/mutexunlock.c, posix/src/semaphorecreatesupp.c,
+	posix/src/semaphoredeletesupp.c, posix/src/semaphorewaitsupp.c,
+	posix/src/semclose.c, posix/src/semdestroy.c,
+	posix/src/semgetvalue.c, posix/src/sempost.c, posix/src/semunlink.c,
+	posix/src/types.c, score/cpu/powerpc/rtems/old-exceptions/cpu.h:
+	Remove all pretense of POSIX MP support. The support in place was
+	only a shell. This should make maintenance easier.
+	* posix/include/rtems/posix/condmp.h,
+	posix/include/rtems/posix/mqueuemp.h,
+	posix/include/rtems/posix/mutexmp.h,
+	posix/include/rtems/posix/pthreadmp.h,
+	posix/include/rtems/posix/semaphoremp.h, posix/src/condmp.c,
+	posix/src/mutexmp.c, posix/src/semaphoremp.c: Removed.
+
 2007-11-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac, score/inline/rtems/score/thread.inl,

@@ -35,7 +35,7 @@ int pthread_cond_init(
   else        the_attr = &_POSIX_Condition_variables_Default_attributes;
 
   /*
-   *  XXX: Be careful about attributes when global!!!
+   *  Be careful about attributes when global!!!
    */
 
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
@@ -52,16 +52,6 @@ int pthread_cond_init(
     _Thread_Enable_dispatch();
     return ENOMEM;
   }
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED &&
-     !( _Objects_MP_Allocate_and_open( &_POSIX_Condition_variables_Information,
-                0, the_cond->Object.id, FALSE ) ) ) {
-    _POSIX_Condition_variables_Free( the_cond );
-    _Thread_Enable_dispatch();
-    return EAGAIN;
-  }
-#endif
 
   the_cond->process_shared  = the_attr->process_shared;
 
@@ -82,16 +72,6 @@ int pthread_cond_init(
   );
 
   *cond = the_cond->Object.id;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    _POSIX_Condition_variables_MP_Send_process_packet(
-      POSIX_CONDITION_VARIABLES_MP_ANNOUNCE_CREATE,
-      the_cond->Object.id,
-      0,                         /* Name not used */
-      0                          /* Not used */
-    );
-#endif
 
   _Thread_Enable_dispatch();
 

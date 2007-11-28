@@ -34,14 +34,11 @@ int sem_post(
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
-      rtems_set_errno_and_return_minus_one( EINVAL );
 #endif
+    case OBJECTS_ERROR:
+      rtems_set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       _CORE_semaphore_Surrender(
         &the_semaphore->Semaphore,

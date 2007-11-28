@@ -63,16 +63,6 @@ int _POSIX_Semaphore_Create_support(
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( pshared == PTHREAD_PROCESS_SHARED &&
-       !( _Objects_MP_Allocate_and_open( &_POSIX_Semaphore_Information, 0,
-                            the_semaphore->Object.id, FALSE ) ) ) {
-    _POSIX_Semaphore_Free( the_semaphore );
-    _Thread_Enable_dispatch();
-    rtems_set_errno_and_return_minus_one( EAGAIN );
-  }
-#endif
-
   the_semaphore->process_shared  = pshared;
 
   if ( name ) {
@@ -112,16 +102,6 @@ int _POSIX_Semaphore_Create_support(
   _Objects_Open(&_POSIX_Semaphore_Information, &the_semaphore->Object, name_p);
 
   *the_sem = the_semaphore;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( pshared == PTHREAD_PROCESS_SHARED )
-    _POSIX_Semaphore_MP_Send_process_packet(
-      POSIX_SEMAPHORE_MP_ANNOUNCE_CREATE,
-      the_semaphore->Object.id,
-      name_p,
-      0                           /* proxy id - Not used */
-    );
-#endif
 
   _Thread_Enable_dispatch();
   return 0;
