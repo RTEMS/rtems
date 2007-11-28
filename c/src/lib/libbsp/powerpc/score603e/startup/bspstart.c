@@ -5,7 +5,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -36,6 +36,11 @@ unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score boa
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
+
+/*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
 
 /*
  *  The original table from the application and our copy of it with
@@ -311,9 +316,10 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook; /* init libc, etc. */
   Cpu_table.predriver_hook  = bsp_predriver_hook;   /* Init vectors    */
   Cpu_table.postdriver_hook = SCORE603e_bsp_postdriver_hook;
-  Cpu_table.clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.idle_task_stack_size = (3 * STACK_MINIMUM_SIZE);
+
+  bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
 
 #if ( PPC_USE_DATA_CACHE )
   instruction_cache_enable ();

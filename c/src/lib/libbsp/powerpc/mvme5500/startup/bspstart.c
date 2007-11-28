@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -71,6 +71,8 @@ extern Triv121PgTbl BSP_pgtbl_setup();
 extern void BSP_pgtbl_activate();
 extern int I2Cread_eeprom();
 extern void BSP_vme_config(void);
+
+uint32_t bsp_clicks_per_usec;
 
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
@@ -386,10 +388,10 @@ void bsp_start( void )
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
-  Cpu_table.clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
   Cpu_table.exceptions_in_RAM 	 = TRUE;
   _CPU_Table                     = Cpu_table;/* S. Kate Feng <feng1@bnl.gov>, for rtems_bsp_delay() */
 
+  bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
   printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size); 
   work_space_start = 
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;

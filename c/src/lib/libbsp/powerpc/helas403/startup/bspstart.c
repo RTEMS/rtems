@@ -76,6 +76,19 @@ rtems_cpu_table Cpu_table;
 char *rtems_progname;
 void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 
+/*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
+uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
+boolean    bsp_serial_external_clock;
+boolean    bsp_serial_xon_xoff;
+boolean    bsp_serial_cts_rts;
+uint32_t   bsp_serial_rate;
+uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
+uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
+boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
  */
@@ -167,14 +180,14 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-  Cpu_table.clicks_per_usec = 25;
-  Cpu_table.serial_per_sec = 25000000;
-  Cpu_table.serial_external_clock = 0;
-  Cpu_table.timer_internal_clock  = 1;
-  Cpu_table.serial_xon_xoff = 0;
-  Cpu_table.serial_cts_rts = 1;
-  Cpu_table.serial_rate = 9600;
-  Cpu_table.timer_average_overhead = 2;
-  Cpu_table.timer_least_valid = 3;
-  Cpu_table.exceptions_in_RAM = TRUE;
+  bsp_clicks_per_usec = 25;
+  bsp_serial_per_sec = 25000000;
+  bsp_serial_external_clock = 0;
+  bsp_timer_internal_clock  = 1;
+  bsp_serial_xon_xoff = 0;
+  bsp_serial_cts_rts = 1;
+  bsp_serial_rate = 9600;
+  bsp_timer_average_overhead = 2;
+  bsp_timer_least_valid = 3;
+  bsp_exceptions_in_RAM = TRUE;
 }

@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Eliminate PowerPC specific elements from the CPU
+	Table. They have been replaced with variables named bsp_XXX as
+	needed.
+
 2007-09-20	Kate Feng <feng1@bnl.gov>
 
 	* network/if_100MHz/GT64260eth.c: Add else.

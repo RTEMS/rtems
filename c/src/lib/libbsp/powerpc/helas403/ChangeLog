@@ -1,3 +1,9 @@
+2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Eliminate PowerPC specific elements from the CPU
+	Table. They have been replaced with variables named bsp_XXX as
+	needed.
+
 2007-04-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Add ecrti%O%s to "startfile:".

@@ -25,7 +25,7 @@
  *  The mmu is unused at this time.
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -73,6 +73,20 @@ rtems_configuration_table  BSP_Configuration;
 rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
+
+/*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clock_speed;
+uint32_t   bsp_clicks_per_usec;
+uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
+boolean    bsp_serial_external_clock;
+boolean    bsp_serial_xon_xoff;
+boolean    bsp_serial_cts_rts;
+uint32_t   bsp_serial_rate;
+uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
+uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
+boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 /*
  *  Use the shared implementations of the following routines.
@@ -293,15 +307,15 @@ void bsp_start(void)
   if( Cpu_table.interrupt_stack_size < 4*1024 )
     Cpu_table.interrupt_stack_size   = 4 * 1024;
 
-  Cpu_table.clicks_per_usec 	   = 10;  /* for 40MHz extclk */
-  Cpu_table.serial_per_sec  	   = 40000000;
-  Cpu_table.serial_external_clock  = 0;
-  Cpu_table.serial_xon_xoff 	   = 0;
-  Cpu_table.serial_cts_rts 	   = 0;
-  Cpu_table.serial_rate 	   = 9600;
-  Cpu_table.timer_average_overhead = 3;
-  Cpu_table.timer_least_valid 	   = 3;
-  Cpu_table.clock_speed 	   = 40000000;
+  bsp_clicks_per_usec 	   = 10;  /* for 40MHz extclk */
+  bsp_serial_per_sec  	   = 40000000;
+  bsp_serial_external_clock  = 0;
+  bsp_serial_xon_xoff 	   = 0;
+  bsp_serial_cts_rts 	   = 0;
+  bsp_serial_rate 	   = 9600;
+  bsp_timer_average_overhead = 3;
+  bsp_timer_least_valid 	   = 3;
+  bsp_clock_speed 	   = 40000000;
 
 #ifdef REV_0_2
   /* set up some board specific registers */

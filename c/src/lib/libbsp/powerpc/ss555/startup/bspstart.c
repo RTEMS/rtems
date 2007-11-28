@@ -5,7 +5,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,6 +52,12 @@ rtems_configuration_table  BSP_Configuration;
 rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
+
+/*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
+uint32_t   bsp_clock_speed;	       /* Serial clocks per second */
 
 /*
  *  Use the shared implementations of the following routines.
@@ -186,8 +192,8 @@ void bsp_start(void)
   if( Cpu_table.interrupt_stack_size < 4 * 1024 )
       Cpu_table.interrupt_stack_size = 4 * 1024;
 
-  Cpu_table.clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
-  Cpu_table.clock_speed = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
+  bsp_clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
+  bsp_clock_speed     = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
 
   /*
    * Call this in case we use TERMIOS for console I/O

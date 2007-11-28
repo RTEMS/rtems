@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,6 +42,8 @@ extern void BSP_pgtbl_activate();
 extern void BSP_vme_config();
 extern void ShowBATS();
 unsigned int rsPMCQ1Init();
+
+uint32_t bsp_clicks_per_usec;
 
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
@@ -376,8 +378,9 @@ void bsp_start( void )
   Cpu_table.pretasking_hook      = bsp_pretasking_hook;    /* init libc, etc. */
   Cpu_table.postdriver_hook      = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  Cpu_table.clicks_per_usec      = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
   Cpu_table.exceptions_in_RAM    = TRUE;
+
+  bsp_clicks_per_usec = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
 
 ShowBATS();
 #if 0   /* XXX - Add back in cache enable when we get this up and running!! */

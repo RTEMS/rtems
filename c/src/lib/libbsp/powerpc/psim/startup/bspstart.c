@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,6 +29,10 @@
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
+/*
+ *  Driver configuration parameters
+ */
+boolean bsp_exceptions_in_RAM;
 
 extern unsigned long __rtems_end[];
 
@@ -51,7 +55,7 @@ extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-rtems_cpu_table   Cpu_table;
+rtems_cpu_table                   Cpu_table;
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
@@ -64,13 +68,12 @@ extern uint32_t          rdb_start;
 /*
  * PCI Bus Frequency
  */
- unsigned int BSP_bus_frequency;
- /*
-  *  * Time base divisior (how many tick for 1 second).
-  *   */
- unsigned int BSP_time_base_divisor;
+unsigned int BSP_bus_frequency;
 
-
+/*
+ * Time base divisior (how many tick for 1 second).
+ */
+unsigned int BSP_time_base_divisor;
 
 /*
  *  Use the shared implementations of the following routines
@@ -80,22 +83,21 @@ void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*
- * system init stack and soft ir stack size
+ * system init stack and soft irq stack size
  */
 #define INIT_STACK_SIZE 0x1000
 #define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
 
-
 void BSP_panic(char *s)
 {
-    printk("%s PANIC %s\n",_RTEMS_version, s);
-      __asm__ __volatile ("sc");
+  printk("%s PANIC %s\n",_RTEMS_version, s);
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
-    printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-      __asm__ __volatile ("sc");
+  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  __asm__ __volatile ("sc");
 }
 
 /*
@@ -123,7 +125,6 @@ void bsp_pretasking_hook(void)
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
-
 }
 
 /*
@@ -139,7 +140,8 @@ void bsp_start( void )
   register uint32_t *intrStackPtr;
 
   /*
-   * Note we can not get CPU identification dynamically, so force current_ppc_cpu.
+   * Note we can not get CPU identification dynamically, so
+   * force current_ppc_cpu.
    */
   current_ppc_cpu = PPC_PSIM;
 
@@ -173,7 +175,7 @@ void bsp_start( void )
    *  The simulator likes the exception table to be at 0xfff00000.
    */
 
-  Cpu_table.exceptions_in_RAM = FALSE;
+  bsp_exceptions_in_RAM = FALSE;
 
   BSP_Configuration.work_space_size += 1024;
 

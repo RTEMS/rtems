@@ -62,6 +62,11 @@ unsigned int BSP_bus_frequency = BSP_CSB_CLK_FRQ;
 unsigned int BSP_time_base_divisor = 4000;  /* 4 bus clicks per TB click */
 
 /*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
+
+/*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
  *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
@@ -205,15 +210,16 @@ void bsp_start(void)
   Cpu_table.pretasking_hook        = bsp_pretasking_hook;    /* init libc, etc. */
   Cpu_table.predriver_hook         = bsp_predriver_hook;     /* init PCI / RTC ...   */
   Cpu_table.postdriver_hook        = bsp_postdriver_hook;
-  Cpu_table.clicks_per_usec        = (BSP_CSB_CLK_FRQ/1000000);
   Cpu_table.exceptions_in_RAM      = TRUE;
 
   if( Cpu_table.interrupt_stack_size < 4*1024 )
     Cpu_table.interrupt_stack_size = 4 * 1024;
 
- /*
-  * Install our own set of exception vectors
-  */
+  bsp_clicks_per_usec        = (BSP_CSB_CLK_FRQ/1000000);
+
+  /*
+   * Install our own set of exception vectors
+   */
 
   initialize_exceptions();
 
