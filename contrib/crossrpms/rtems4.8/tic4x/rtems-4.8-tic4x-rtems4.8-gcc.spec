@@ -59,7 +59,7 @@ Patch0:		gcc-core-3.4.6-rtems4.8-20071111.diff
 %endif
 %if "%{gcc_version}" == "4.2.1"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.1-rtems4.8-20071111.diff
+Patch0:		gcc-core-4.2.1-rtems4.8-20071129.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
