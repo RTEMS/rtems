@@ -1,3 +1,8 @@
+2007-11-29	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* develenv/direct.t, develenv/sample.t: Corrected various errors in the
+	documentation.
+
 2007-11-28	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* user/barrier.t, user/clock.t, user/concepts.t, user/conf.t,
