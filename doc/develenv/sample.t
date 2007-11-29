@@ -20,16 +20,14 @@ developed board support packages and device drivers as they
 exercise a critical subset of RTEMS functionality that is often
 broken in new BSPs.
 
-Each of the following sample applications will be listed in
-more detail in the following sections:
+Some of the following sample applications will be covered in
+more detail in subsequent sections:
 
 @table @b
 @item Hello World
 The RTEMS Hello World test is provided in
 the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/hello/}.
-This test is helpful when testing new
-versions of RTEMS, BSPs, or modifications to any portion of the
-RTEMS development environment.  
+This test is helpful when testing new RTEMS development environment.  
 
 @item Clock Tick
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/ticker/}
@@ -50,24 +48,26 @@ developed MPCI layer is provided in
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/cdtest/}
 subdirectory provides a simple C++ application using
 constructors and destructors.  It is only built when
-C++ is enabled.  
+C++ is enabled and its primary purpose is to demonstrate
+that global constructors and destructors work.  Since this
+requires that the linker script for your BSP be correct, this is
+an important test.
 
+@item File IO
+The RTEMS File IO test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/fileio/}.
+This is an interactive test which allows the user to interact with
+an ATA/IDE device.  It will read the partition table and allow the
+user to dynamically mount one of the FAT32 partitions it finds.
+Commands are also provided to write and read files on the disk.
 
-@item Paranoia Floating Point Test
-The directory @code{$@{RTEMS_ROOT@}/testsuites/samples/paranoia/}
-contains the public domain floating point and math library test.
-
-@item Minimum Size Test
-The directory
-@code{$@{RTEMS_ROOT@}/testsuites/samples/minimum/}
-contains a simple RTEMS program that results in a non-functional 
-executable.  It is intended to show the size of a minimum footprint
-application based upon the current RTEMS configuration.  
-
-@item Unlimited Object Allocation
-The @code{$@{RTEMS_ROOT@}/testsuites/samples/unlimited/}
-directory contains a sample test that demonstrates the use of the
-@i{unlimited} object allocation configuration option to RTEMS.
+@item IO Stream
+The RTEMS IO Stream test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/iostream/}.
+This test is a simple C++ application which demonstrates that
+C++ iostreams are functional. This requires that the RTEMS C++
+run-time support is functioning properly.  This test is only
+build when C++ is enabled.
 
 @item Network Loopback Test
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/loopback/}
@@ -76,12 +76,37 @@ sockets and the loopback network device.  It does not require
 the presence of network hardware in order to run.
 It is only built if RTEMS was configured with networking enabled.
 
+@item Minimum Size Test
+The directory
+@code{$@{RTEMS_ROOT@}/testsuites/samples/minimum/}
+contains a simple RTEMS program that results in a non-functional 
+executable.  It is intended to show the size of a minimum footprint
+application based upon the current RTEMS configuration.  
+
+@item Paranoia Floating Point Test
+The directory @code{$@{RTEMS_ROOT@}/testsuites/samples/paranoia/}
+contains the public domain floating point and math library test.
+
+@item Point-to-Point Protocol Daemon
+The RTEMS Point-to-Point Protocol Daemon test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/pppd/}.
+This test primarily serves as the baseline for a user application
+using the PPP protocol.
+
+@item Unlimited Object Allocation
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/unlimited/}
+directory contains a sample test that demonstrates the use of the
+@i{unlimited} object allocation configuration option to RTEMS.
+
 @end table
 
 The sample tests are written using the Classic API so the reader
 should be familiar with the terms used and
 material presented in the @b{RTEMS Applications Users Guide}.
 
+@c
+@c
+@c
 @section Hello World
 
 This sample application is in the following directory:
@@ -94,7 +119,7 @@ It provides a rudimentary test of the BSP start up
 code and the console output routine.  The C version of this
 sample application uses the printf function from the RTEMS
 Standard C Library to output messages.   The Ada version of this
-sample use the TEXT_IO package to output the hello messages.
+sample uses the TEXT_IO package to output the hello messages.
 The following messages are printed:
 
 @example
@@ -110,6 +135,9 @@ single initialization task.  If the above messages are not
 printed correctly, then either the BSP start up code or the
 console output routine is not operating properly.
 
+@c
+@c
+@c
 @section Clock Tick
 
 This sample application is in the following directory:
@@ -157,6 +185,9 @@ task, TA3, every fifteen seconds. If the time printed does not
 match the above output, then the clock device driver is not
 operating properly.
 
+@c
+@c
+@c
 @section Base Single Processor Application
 
 This sample application is in the following directory:
@@ -184,6 +215,9 @@ The first two messages are printed from the
 application's single initialization task.  The final messages
 are printed from the single application task.
 
+@c
+@c
+@c
 @section Base Multiple Processor Application
 
 This sample application is in the following directory:
@@ -233,6 +267,9 @@ Configuration Table. This file is not shared because the node
 number field in the RTEMS Multiprocessor Configuration Table
 must be unique on each node.
 
+@c
+@c
+@c
 @section Constructor/Destructor C++ Application
 
 This sample application is in the following directory:
@@ -279,6 +316,9 @@ Hey I'M in base class constructor number 1 for 0x400010cc.
 @end group
 @end example
 
+@c
+@c
+@c
 @section Minimum Size Test
 
 This sample application is in the following directory:
@@ -295,6 +335,9 @@ consists of hardware and RTEMS initialization, basic
 infrastructure such as malloc(), and RTEMS and
 hardware shutdown support.
 
+@c
+@c
+@c
 @section Paranoia Floating Point Application
 
 This sample application is in the following directory:
@@ -313,6 +356,9 @@ to run.   Problems which commonly prevent this test from
 executing to completion include stack overflow and FPU exception
 handlers not installed.
 
+@c
+@c
+@c
 @section Network Loopback Test
 
 This sample application is in the following directory:

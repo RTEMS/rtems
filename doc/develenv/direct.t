@@ -124,10 +124,9 @@ This directory is configured, built, and installed separately
 from the RTEMS executive and tests.  This directory will not
 be discussed further in this document.
 
-
 @item $@{RTEMS_ROOT@}/cpukit/
 This directory is the root for all of the "multilib'able"
-portions of RTEMS.  This is a GNU way of saying the the
+portions of RTEMS.  This is a GNU way of saying the
 contents of this directory can be compiled like the 
 C Library (@code{libc.a}) and the functionality is 
 neither CPU model nor BSP specific.  The source code
@@ -151,14 +150,14 @@ most important parts are found in the @code{custom/}
 subdirectory.  Each ".cfg" file in this directory
 is associated with a specific BSP and describes
 the CPU model, compiler flags, and procedure to
-a produce an executable for the target board.
+produce an executable for the target board.
 These files are described in detail in the
 @b{RTEMS BSP and Device Driver Development Guide}
 and will not be discussed further in this document.
 
 @item $@{RTEMS_ROOT@}/testsuites/
 This directory contains the test suites for the 
-various RTEMS APIs and support libraries.  This
+various RTEMS APIs and support libraries.  The
 contents of this directory are discussed in the
 @ref{Directory Structure testsuites/ Test Suites} section.
 
@@ -174,8 +173,6 @@ only components of this subtree that will be discussed in this
 document. 
 
 @end table
-
-
 
 @c
 @c  c/ Directions
@@ -197,13 +194,6 @@ is the root for the BSPs and the Ada Test Suites as well
 as CPU model and BSP dependent libraries.  The contents of
 this directory are discussed in the
 @ref{Directory Structure c/src/ Directory} section.
-
-@item $@{RTEMS_ROOT@}/c/make/
-This directory is used to generate the file @code{target.cfg}
-which is installed as part of the Application Makefiles.  This
-file contains settings for various Makefile variables to 
-tailor them to the particular CPU model and BSP configured.
-
 @end table
 
 @c
@@ -215,9 +205,18 @@ As mentioned previously, this directory is logically
 the root for the RTEMS components
 which are CPU model or board dependent.  The 
 following is a list of the subdirectories in this
-directorie and a description of each.
+directory and a description of each.
 
 @table @code
+@item $@{RTEMS_ROOT@}/c/src/aclocal/
+This directory contains the custom M4 macros which are available to
+the various GNU autoconf @code{configure.ac} scripts throughout 
+this portion of the RTEMS source tree.  GNU autoconf interprets
+@code{configure.ac} files to produce the @code{configure} files used
+to tailor RTEMS build for a particular host and target environment.  The
+contents of this directory will not be discussed further in this
+document.
+
 @item $@{RTEMS_ROOT@}/c/src/ada/
 This directory contains the Ada95 language bindings to the 
 RTEMS Classic API.
@@ -226,8 +225,13 @@ RTEMS Classic API.
 This directory contains the test suite for the Ada
 language bindings to the Classic API.
 
+@item $@{RTEMS_ROOT@}/c/src/automake/
+This directory contains files which are "Makefile fragments."
+They are included as required by the various @code{Makefile.am}
+files throughout this portion of the RTEMS source tree.
+
 @item $@{RTEMS_ROOT@}/c/src/lib/
-This directory contains the directories @code{libbsp}
+This directory contains the directories @code{libbsp/}
 and @code{libcpu/} which contain the source code for
 the Board Support Packages (BSPs) and CPU Model 
 specific source code for RTEMS.  
@@ -249,7 +253,7 @@ This directory contains device drivers for various
 peripheral chips which are designed to be CPU and
 board dependent.  This directory contains a variety
 of drivers for serial devices, network interface
-controllers, and real-time clocks.
+controllers, shared memory and real-time clocks.
 
 @item $@{RTEMS_ROOT@}/c/src/librdbg/
 This directory contains the Ethernet-based remote debugging
@@ -273,6 +277,11 @@ may be explicitly forbidden by an application.  All of the
 directive implementations in this Optional Managers 
 return @code{E_NOTCONFIGURED}.
 
+@item $@{RTEMS_ROOT@}/c/src/support/
+This directory exists solely to generate the RTEMS
+version string which includes the RTEMS version,
+CPU architecture, CPU model, and BSP name.
+
 @item $@{RTEMS_ROOT@}/c/src/wrapup/
 This directory is responsible for taking the individual
 libraries and objects built in each of the components
@@ -285,7 +294,6 @@ library contains all BSP and CPU model specific software.
 @c
 @c  c/src/lib/libbsp BSP Directory
 @c
-
 @subsubsection c/src/lib/libbsp BSP Directory
 
 The "libbsp" directory contains a directory for each CPU family supported
@@ -295,20 +303,15 @@ processor family.
 @c
 @c  Tree 7 - C BSP Library
 @c
-
 The "libbsp" directory provides all the BSPs provided with this
 release of the RTEMS executive.  The subdirectories are
 divided,  as discussed previously, based on specific processor
-family, then further breaking down into specific target board
-environments.  The "shmdr" subdirectory provides the
-implementation of a shared memory driver which supports the
-multiprocessing portion of the executive.  In addition, two
-starting point subdirectories are provided for reference.  The
-"no_cpu" subdirectory provides a template BSP which can be used
-to develop a specific BSP for an unsupported target board.  The
-"stubdr" subdirectory provides stubbed out BSPs.  These files
-may aid in preliminary testing of the RTEMS development
-environment that has been built for no particular target in mind.
+family, then further broken down into specific target board
+environments.  The "no_cpu" subdirectory provides a starting point
+template BSP which can be used to develop a specific BSP for an
+unsupported target board.  The files in this subdirectory may aid
+in preliminary testing of the RTEMS development environment that has
+been built for no particular target in mind.
 
 Below each CPU dependent directory is a directory for each target BSP
 supported in this release.
@@ -424,11 +427,7 @@ and FAT filesystems.
 @item $@{RTEMS_ROOT@}/cpukit/libi2c/
 This directory contains the RTEMS I2C framework.
 
-@item $@{RTEMS_ROOT@}/cpukit/libmd/
-This directory contains a port of the standard MD5
-checksum code.
-
-@item $@{RTEMS_ROOT@}/c/src/libmisc/
+@item $@{RTEMS_ROOT@}/cpukit/libmisc/
 This directory contains support facilities which 
 are RTEMS specific but otherwise unclassified.  In
 general, they do not adhere to a standard API.  
@@ -485,11 +484,7 @@ processor.  The files contained within the @code{no_cpu} directory
 may also be used as a reference for the other ports to specific
 processors.
 
-@item $@{RTEMS_ROOT@}/cpukit/shttpd/
-This directory contains the port of the Simple HTTPD
-web server to RTEMS.
-
-@item $@{RTEMS_ROOT@}/cpukit/telnet/
+@item $@{RTEMS_ROOT@}/cpukit/telnetd/
 This directory contains the RTEMS telnetd server.
 
 @item $@{RTEMS_ROOT@}/cpukit/wrapup/
@@ -509,7 +504,6 @@ library to RTEMS.
 @c  testsuites/ Test Suites
 @c
 @section testsuites/ Test Suites
-
 This directory provides all of the RTEMS Test Suite
 except those for the Classic API Ada95 binding
 This includes the single processor tests, multiprocessor tests,
@@ -551,7 +545,7 @@ using the RTEMS executive.  They are discussed in
 This directory contains the test suite for the RTEMS
 Classic API when executing on a single processor.
 The tests were originally designed to provide
-near complete test coverage for the the entire
+near complete test coverage for the entire
 executive code.  With the addition of multiple APIs,
 this is no longer the case as some SuperCore functionality
 is not available through the Classic API.  Thus
@@ -595,7 +589,6 @@ execution times by manager.
 @c  Documentation Directory
 @c
 @section Documentation Directory
-
 This directory contains the source code for all RTEMS documentation
 in @code{TexInfo} format as well as utilities used in the generation
 of the RTEMS documentation set.  This source code is used to produce
@@ -603,10 +596,6 @@ the RTEMS documentation in various formats including PDF, HTML,
 and PostScript.
 
 @table @code
-
-@item $@{RTEMS_ROOT@}/doc/user/
-This directory contains the source code for the @cite{RTEMS
-Applications C User's Guide} which documents the Classic API.
 
 @item $@{RTEMS_ROOT@}/doc/ada_user/
 This directory contains the source code for the @cite{RTEMS
@@ -682,14 +671,6 @@ This directory contains the source code for a formally
 release notes document.  This has not been used for 
 recent RTEMS releases.
 
-@item $@{RTEMS_ROOT@}/doc/rgdb_specs/
-This directory contains the source code for the 
-@cite{RTEMS Remote Debugger Server Specifications}.
-
-@item $@{RTEMS_ROOT@}/doc/rtems_gdb/
-This directory contains the source code for the 
-@cite{RTEMS/GDB User's Guide}.
-
 @item $@{RTEMS_ROOT@}/doc/started/
 This directory contains the source code for the 
 @cite{Getting Started with RTEMS for C/C++ Users} manual.
@@ -705,5 +686,9 @@ RTEMS Documentation.  The most important of these tools
 is @code{bmenu} which generates the hierarchical node
 linking commands based upon chapter, section, and
 subsection organization.
+
+@item $@{RTEMS_ROOT@}/doc/user/
+This directory contains the source code for the @cite{RTEMS
+Applications C User's Guide} which documents the Classic API.
 
 @end table
