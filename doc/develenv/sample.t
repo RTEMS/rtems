@@ -20,16 +20,14 @@ developed board support packages and device drivers as they
 exercise a critical subset of RTEMS functionality that is often
 broken in new BSPs.
 
-Each of the following sample applications will be listed in
-more detail in the following sections:
+Some of the following sample applications will be covered in
+more detail in subsequent sections:
 
 @table @b
 @item Hello World
 The RTEMS Hello World test is provided in
 the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/hello/}.
-This test is helpful when testing new
-versions of RTEMS, BSPs, or modifications to any portion of the
-RTEMS development environment.  
+This test is helpful when testing new RTEMS development environment.  
 
 @item Clock Tick
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/ticker/}
@@ -46,28 +44,39 @@ A simple two node multiprocessor test capable of testing an newly
 developed MPCI layer is provided in 
 @code{$@{RTEMS_ROOT@}/testsuites/samples/base_mp/}.
 
+@item Capture
+The RTEMS Capture test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/capture/}.
+This is an interactive test which demonstrates the capabilities
+of the RTEMS Capture Engine.  It includes a few test threads
+which generate interesting execution patterns.  Look at the
+file @code{$@{RTEMS_ROOT@}/testsuites/samples/capture/capture.scn}
+for a sample session.
+
 @item Constructor/Destructor C++ Test
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/cdtest/}
 subdirectory provides a simple C++ application using
 constructors and destructors.  It is only built when
-C++ is enabled.  
+C++ is enabled and its primary purpose is to demonstrate
+that global constructors and destructors work.  Since this
+requires that the linker script for your BSP be correct, this is
+an important test.
 
+@item File IO
+The RTEMS File IO test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/fileio/}.
+This is an interactive test which allows the user to interact with
+an ATA/IDE device.  It will read the partition table and allow the
+user to dynamically mount one of the FAT32 partitions it finds.
+Commands are also provided to write and read files on the disk.
 
-@item Paranoia Floating Point Test
-The directory @code{$@{RTEMS_ROOT@}/testsuites/samples/paranoia/}
-contains the public domain floating point and math library test.
-
-@item Minimum Size Test
-The directory
-@code{$@{RTEMS_ROOT@}/testsuites/samples/minimum/}
-contains a simple RTEMS program that results in a non-functional 
-executable.  It is intended to show the size of a minimum footprint
-application based upon the current RTEMS configuration.  
-
-@item Unlimited Object Allocation
-The @code{$@{RTEMS_ROOT@}/testsuites/samples/unlimited/}
-directory contains a sample test that demonstrates the use of the
-@i{unlimited} object allocation configuration option to RTEMS.
+@item IO Stream
+The RTEMS IO Stream test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/iostream/}.
+This test is a simple C++ application which demonstrates that
+C++ iostreams are functional. This requires that the RTEMS C++
+run-time support is functioning properly.  This test is only
+build when C++ is enabled.
 
 @item Network Loopback Test
 The @code{$@{RTEMS_ROOT@}/testsuites/samples/loopback/}
@@ -76,12 +85,46 @@ sockets and the loopback network device.  It does not require
 the presence of network hardware in order to run.
 It is only built if RTEMS was configured with networking enabled.
 
+@item Minimum Size Test
+The directory
+@code{$@{RTEMS_ROOT@}/testsuites/samples/minimum/}
+contains a simple RTEMS program that results in a non-functional 
+executable.  It is intended to show the size of a minimum footprint
+application based upon the current RTEMS configuration.  
+
+@item Nanoseconds
+The RTEMS Nanoseconds test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/nsecs/}.
+This test demonstrates that the BSP has support for nanosecond
+timestamp granularity.  It prints the time of day and uptime multiple
+times as quickly as possible.  It should be possible from the output
+to determine if your BSP has nanosecond accurate clock support
+and it is functional.
+
+@item Paranoia Floating Point Test
+The directory @code{$@{RTEMS_ROOT@}/testsuites/samples/paranoia/}
+contains the public domain floating point and math library test.
+
+@item Point-to-Point Protocol Daemon
+The RTEMS Point-to-Point Protocol Daemon test is provided in
+the subdirectory @code{$@{RTEMS_ROOT@}/testsuites/samples/pppd/}.
+This test primarily serves as the baseline for a user application
+using the PPP protocol.
+
+@item Unlimited Object Allocation
+The @code{$@{RTEMS_ROOT@}/testsuites/samples/unlimited/}
+directory contains a sample test that demonstrates the use of the
+@i{unlimited} object allocation configuration option to RTEMS.
+
 @end table
 
 The sample tests are written using the Classic API so the reader
 should be familiar with the terms used and
 material presented in the @b{RTEMS Applications Users Guide}.
 
+@c
+@c
+@c
 @section Hello World
 
 This sample application is in the following directory:
@@ -94,7 +137,7 @@ It provides a rudimentary test of the BSP start up
 code and the console output routine.  The C version of this
 sample application uses the printf function from the RTEMS
 Standard C Library to output messages.   The Ada version of this
-sample use the TEXT_IO package to output the hello messages.
+sample uses the TEXT_IO package to output the hello messages.
 The following messages are printed:
 
 @example
@@ -110,6 +153,9 @@ single initialization task.  If the above messages are not
 printed correctly, then either the BSP start up code or the
 console output routine is not operating properly.
 
+@c
+@c
+@c
 @section Clock Tick
 
 This sample application is in the following directory:
@@ -157,6 +203,9 @@ task, TA3, every fifteen seconds. If the time printed does not
 match the above output, then the clock device driver is not
 operating properly.
 
+@c
+@c
+@c
 @section Base Single Processor Application
 
 This sample application is in the following directory:
@@ -184,6 +233,9 @@ The first two messages are printed from the
 application's single initialization task.  The final messages
 are printed from the single application task.
 
+@c
+@c
+@c
 @section Base Multiple Processor Application
 
 This sample application is in the following directory:
@@ -233,6 +285,9 @@ Configuration Table. This file is not shared because the node
 number field in the RTEMS Multiprocessor Configuration Table
 must be unique on each node.
 
+@c
+@c
+@c
 @section Constructor/Destructor C++ Application
 
 This sample application is in the following directory:
@@ -279,6 +334,9 @@ Hey I'M in base class constructor number 1 for 0x400010cc.
 @end group
 @end example
 
+@c
+@c
+@c
 @section Minimum Size Test
 
 This sample application is in the following directory:
@@ -295,6 +353,84 @@ consists of hardware and RTEMS initialization, basic
 infrastructure such as malloc(), and RTEMS and
 hardware shutdown support.
 
+@c
+@c
+@c
+@section Nanosecond Granularity Application
+
+This sample application is in the following directory:
+
+@example
+$@{RTEMS_ROOT@}/testsuites/samples/nsecs/
+@end example
+
+This sample application exercises the Clock Driver 
+for this BSP and demonstrates its ability to generate
+accurate timestamps.  This application does this by
+exercising the time subsystem in three ways:
+
+@itemize @bullet
+@item Obtain Time of Day Twice Back to Back
+@item Obtain System Up Time Twice Back to Back
+@item Use System Up Time to Measure Loops
+@end itemize
+
+The following is an example of what the output of this
+test may appear like:
+
+@example
+*** NANOSECOND CLOCK TEST ***
+10 iterations of getting TOD
+Start: Sat Mar 24 11:15:00 2007:540000
+Stop : Sat Mar 24 11:15:00 2007:549000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:3974000
+Stop : Sat Mar 24 11:15:00 2007:3983000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:7510000
+Stop : Sat Mar 24 11:15:00 2007:7519000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:11054000
+Stop : Sat Mar 24 11:15:00 2007:11063000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:14638000
+Stop : Sat Mar 24 11:15:00 2007:14647000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:18301000
+Stop : Sat Mar 24 11:15:00 2007:18310000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:21901000
+Stop : Sat Mar 24 11:15:00 2007:21910000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:25526000
+Stop : Sat Mar 24 11:15:00 2007:25535000 --> 0:9000
+Start: Sat Mar 24 11:15:00 2007:29196000
+Stop : Sat Mar 24 11:15:00 2007:29206000 --> 0:10000
+Start: Sat Mar 24 11:15:00 2007:32826000
+Stop : Sat Mar 24 11:15:00 2007:32835000 --> 0:9000
+
+10 iterations of getting Uptime
+0:38977000 0:38986000 --> 0:9000
+0:40324000 0:40332000 --> 0:8000
+0:41636000 0:41645000 --> 0:9000
+0:42949000 0:42958000 --> 0:9000
+0:44295000 0:44304000 --> 0:9000
+0:45608000 0:45617000 --> 0:9000
+0:46921000 0:46930000 --> 0:9000
+0:48282000 0:48291000 --> 0:9000
+0:49595000 0:49603000 --> 0:8000
+0:50908000 0:50917000 --> 0:9000
+
+10 iterations of getting Uptime with different loop values
+loop of 10000 0:119488000 0:119704000 --> 0:216000
+loop of 20000 0:124028000 0:124463000 --> 0:435000
+loop of 30000 0:128567000 0:129220000 --> 0:653000
+loop of 40000 0:133097000 0:133964000 --> 0:867000
+loop of 50000 0:137643000 0:138728000 --> 0:1085000
+loop of 60000 0:142265000 0:143572000 --> 0:1307000
+loop of 70000 0:146894000 0:148416000 --> 0:1522000
+loop of 80000 0:151519000 0:153260000 --> 0:1741000
+loop of 90000 0:156145000 0:158099000 --> 0:1954000
+loop of 100000 0:160770000 0:162942000 --> 0:2172000
+*** END OF NANOSECOND CLOCK TEST ***
+@end example
+
+@c
+@c
+@c
 @section Paranoia Floating Point Application
 
 This sample application is in the following directory:
@@ -313,6 +449,9 @@ to run.   Problems which commonly prevent this test from
 executing to completion include stack overflow and FPU exception
 handlers not installed.
 
+@c
+@c
+@c
 @section Network Loopback Test
 
 This sample application is in the following directory:
