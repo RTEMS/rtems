@@ -1,5 +1,10 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* irq/irq.h, irq/no_pic.c: some more changes to let
+	using shared/irq/irq.c work.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, irq/irq.h, irq/no_pic.c: install
 	and use new <irq/irq_supp.h> header.
 

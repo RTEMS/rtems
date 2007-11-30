@@ -25,7 +25,7 @@ static rtems_irq_connect_data *rtems_hdl_tbl;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum)
 {
 	register unsigned msr;
 	register unsigned new_msr;

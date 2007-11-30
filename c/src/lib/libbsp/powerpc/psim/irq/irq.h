@@ -22,9 +22,11 @@
 #define LIBBSP_POWERPC_IRQ_H
 
 #define BSP_SHARED_HANDLER_SUPPORT      1
-#include <rtems/irq.h>
 
 #ifndef ASM
+
+#include <rtems/irq.h>
+
 
 /*
  * Symblolic IRQ names and related definitions.
@@ -47,6 +49,16 @@
 #define BSP_DECREMENTER			(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 
 #include <bsp/irq_supp.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void BSP_rtems_irq_mng_init(unsigned cpuId);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 #endif
