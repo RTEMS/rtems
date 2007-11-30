@@ -1,4 +1,9 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+	
+	* vectors/vectors.S: Removed; this BSP now uses the shared
+	version.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* irq/irq.h, irq/irq_init.c: Removed the definition
 	of ASM_IRQ_VECTOR_BASE; this symbol was only use to
