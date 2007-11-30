@@ -73,7 +73,7 @@ pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
-include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h
+include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h ../../powerpc/shared/irq_supp.h
 
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq_init.c irq/irq.c ../../powerpc/shared/irq/i8259.c \

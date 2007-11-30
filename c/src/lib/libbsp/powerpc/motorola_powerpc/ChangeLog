@@ -1,3 +1,7 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am: install new <irq/irq_supp.h> header
+
 2007-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: ShowBATS() split out to helper routine so sharable by

@@ -1,5 +1,9 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: install new <irq/irq_supp.h> header
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* irq/irq.h, irq/irq_init.c: Removed the definition
 	of ASM_IRQ_VECTOR_BASE; this symbol was only use to
 	initialize the irqBase member of the rtems_irq_global_settings
