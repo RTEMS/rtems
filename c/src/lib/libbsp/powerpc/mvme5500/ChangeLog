@@ -1,3 +1,8 @@
+2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* irq/GT64260Int.c, network/if_100MHz/Makefile.am,
+	network/if_1GHz/Makefile.am: Removed.
+
 2007-09-20	Kate Feng <feng1@bnl.gov>
 
 	* network/if_100MHz/GT64260eth.c: Add else.
