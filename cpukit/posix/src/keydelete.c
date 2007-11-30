@@ -31,11 +31,7 @@ int pthread_key_delete(
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:   /* should never happen */
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
 
@@ -55,6 +51,13 @@ int pthread_key_delete(
       _POSIX_Keys_Free( the_key );
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:   /* should never happen */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

@@ -53,11 +53,7 @@ int pthread_mutex_setprioceiling(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;        /* impossible to get here */
+
     case OBJECTS_LOCAL:
       *old_ceiling = _POSIX_Priority_From_core(
         the_mutex->Mutex.Attributes.priority_ceiling
@@ -74,6 +70,13 @@ int pthread_mutex_setprioceiling(
       );
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:  /* impossible to get here */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

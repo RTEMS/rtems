@@ -36,11 +36,7 @@ int pthread_mutex_unlock(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
       status = _CORE_mutex_Surrender(
         &the_mutex->Mutex,
@@ -52,8 +48,14 @@ int pthread_mutex_unlock(
 #endif
       );
       _Thread_Enable_dispatch();
-      return _POSIX_Mutex_From_core_mutex_status( status );
+      return _POSIX_Mutex_Translate_core_mutex_return_code( status );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
       break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

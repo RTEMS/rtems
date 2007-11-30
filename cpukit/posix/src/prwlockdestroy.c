@@ -49,12 +49,6 @@ int pthread_rwlock_destroy(
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
-
     case OBJECTS_LOCAL:
       /*
        *  If there is at least one thread waiting, then do not delete it.
@@ -74,7 +68,13 @@ int pthread_rwlock_destroy(
 
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  return EINVAL;
 }

@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -91,6 +91,13 @@ typedef enum {
    */
   CORE_SEMAPHORE_BAD_TIMEOUT_VALUE
 }   CORE_semaphore_Status;
+
+/**
+ *  @brief Core Semaphore Last Status
+ *
+ *  This is the last status value.
+ */
+#define CORE_SEMAPHORE_STATUS_LAST CORE_SEMAPHORE_BAD_TIMEOUT_VALUE
 
 /**
  *  The following defines the control block used to manage the

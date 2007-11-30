@@ -33,11 +33,7 @@ int pthread_mutex_destroy(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
        /*
         * XXX: There is an error for the mutex being locked
@@ -78,6 +74,13 @@ int pthread_mutex_destroy(
 #endif
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

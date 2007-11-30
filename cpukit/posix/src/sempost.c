@@ -34,11 +34,7 @@ int sem_post(
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+
     case OBJECTS_LOCAL:
       _CORE_semaphore_Surrender(
         &the_semaphore->Semaphore,
@@ -51,6 +47,13 @@ int sem_post(
       );
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

@@ -36,11 +36,6 @@ int _POSIX_Condition_variables_Signal_support(
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
 
     case OBJECTS_LOCAL:
       do {
@@ -52,6 +47,13 @@ int _POSIX_Condition_variables_Signal_support(
       _Thread_Enable_dispatch();
 
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

@@ -36,11 +36,7 @@ int _POSIX_Semaphore_Wait_support(
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+
     case OBJECTS_LOCAL:
       _CORE_semaphore_Seize(
         &the_semaphore->Semaphore,
@@ -49,26 +45,22 @@ int _POSIX_Semaphore_Wait_support(
         timeout
       );
       _Thread_Enable_dispatch();
-      switch ( _Thread_Executing->Wait.return_code ) {
-        case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
-	  break;
-        case CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT:
-          rtems_set_errno_and_return_minus_one( EAGAIN );
-        case CORE_SEMAPHORE_WAS_DELETED:
-          rtems_set_errno_and_return_minus_one( EAGAIN );
-        case CORE_SEMAPHORE_TIMEOUT:
-          rtems_set_errno_and_return_minus_one( ETIMEDOUT );
-	  break;
-        case CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED:
-          /*
-           *  This error can not occur since we set the maximum
-           *  count to the largest value the count can hold.
-           */
- 	  break;
-	case CORE_SEMAPHORE_BAD_TIMEOUT_VALUE:
-          rtems_set_errno_and_return_minus_one( EINVAL );
-	  break;
-      }
+
+      if ( !_Thread_Executing->Wait.return_code )
+        return 0;
+
+      rtems_set_errno_and_return_minus_one(
+        _POSIX_Semaphore_Translate_core_semaphore_return_code(
+          _Thread_Executing->Wait.return_code
+        )
+      );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return 0;
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

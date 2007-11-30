@@ -1,7 +1,7 @@
 /*
  *  Spinlock Manager -- Translate SuperCore Status
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,7 +19,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/score/corespinlock.h>
 
 /*
  *  _POSIX_Spinlock_Translate_core_spinlock_return_code
@@ -32,8 +32,7 @@
  *
  */
 
-/* XXX fix me */
-static int _POSIX_Spinlock_Return_codes[] = {
+static int _POSIX_Spinlock_Return_codes[CORE_SPINLOCK_STATUS_LAST + 1] = {
   0,                        /* CORE_SPINLOCK_SUCCESSFUL */
   EDEADLK,                  /* CORE_SPINLOCK_HOLDER_RELOCKING */
   EPERM,                    /* CORE_SPINLOCK_NOT_HOLDER */
@@ -48,7 +47,12 @@ int _POSIX_Spinlock_Translate_core_spinlock_return_code(
   CORE_spinlock_Status  the_spinlock_status
 )
 {
-  if ( the_spinlock_status <= CORE_SPINLOCK_STATUS_LAST )
-    return _POSIX_Spinlock_Return_codes[the_spinlock_status];
-  return POSIX_BOTTOM_REACHED();
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( the_spinlock_status > CORE_SPINLOCK_STATUS_LAST )
+      return EINVAL;
+  #endif
+  return _POSIX_Spinlock_Return_codes[the_spinlock_status];
 }

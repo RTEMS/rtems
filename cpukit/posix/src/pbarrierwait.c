@@ -47,11 +47,6 @@ int pthread_barrier_wait(
 
   the_barrier = _POSIX_Barrier_Get( barrier, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
 
     case OBJECTS_LOCAL:
       _CORE_barrier_Wait(
@@ -65,6 +60,12 @@ int pthread_barrier_wait(
       return _POSIX_Barrier_Translate_core_barrier_return_code(
                 _Thread_Executing->Wait.return_code );
 
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

@@ -49,12 +49,6 @@ int pthread_barrier_destroy(
   the_barrier = _POSIX_Barrier_Get( barrier, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
-
     case OBJECTS_LOCAL:
       if ( the_barrier->Barrier.number_of_waiting_threads != 0 ) {
         _Thread_Enable_dispatch();
@@ -67,7 +61,13 @@ int pthread_barrier_destroy(
 
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  return EINVAL;
 }

@@ -40,24 +40,26 @@ int pthread_cancel(
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
       thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       thread_support->cancelation_requested = 1;
 
-      if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
-           thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS ) {
+      if (thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
+          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS) {
         _POSIX_Threads_cancel_run( the_thread );
       }
 
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  return EINVAL;
 }

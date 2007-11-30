@@ -39,16 +39,19 @@ int sem_close(
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+
     case OBJECTS_LOCAL:
       the_semaphore->open_count -= 1;
       _POSIX_Semaphore_Delete( the_semaphore );
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

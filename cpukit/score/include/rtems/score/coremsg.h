@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -148,6 +148,13 @@ typedef enum {
   /** This value indicates that a blocking receive was unsuccessful. */
   CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT
 }   CORE_message_queue_Status;
+
+/**
+ *  @brief Core Message Queue Last Status
+ *
+ *  This is the last status value.
+ */
+#define CORE_MESSAGE_QUEUE_STATUS_LAST CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT
 
 /**
  *  @brief Message Queue Attributes Type

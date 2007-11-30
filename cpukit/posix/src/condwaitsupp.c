@@ -45,11 +45,7 @@ int _POSIX_Condition_variables_Wait_support(
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
 
       if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) ) {
@@ -100,6 +96,13 @@ int _POSIX_Condition_variables_Wait_support(
         return EINVAL;
 
       return status;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

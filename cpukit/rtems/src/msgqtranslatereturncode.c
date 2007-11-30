@@ -2,7 +2,7 @@
  *  Message Queue Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,13 +60,22 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
   uint32_t   status
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( status == THREAD_STATUS_PROXY_BLOCKING )
-    return RTEMS_PROXY_BLOCKING;
-  else
-#endif
-  if ( status > CORE_MESSAGE_QUEUE_STATUS_TIMEOUT )
-    return RTEMS_INTERNAL_ERROR;
-  else
-    return _Message_queue_Translate_core_return_code_[status];
+  /*
+   *  Check for proxy blocking first since it is out of range
+   *  from the external status codes.
+   */
+  #if defined(RTEMS_MULTIPROCESSING)
+    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+      return RTEMS_PROXY_BLOCKING;
+  #endif
+
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( status > CORE_MESSAGE_QUEUE_STATUS_TIMEOUT )
+      return RTEMS_INTERNAL_ERROR;
+  #endif
+
+  return _Message_queue_Translate_core_return_code_[status];
 }

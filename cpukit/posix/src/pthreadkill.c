@@ -47,11 +47,7 @@ int pthread_kill(
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( ESRCH );
+
     case OBJECTS_LOCAL:
       /*
        *  If sig == 0 then just validate arguments
@@ -79,7 +75,13 @@ int pthread_kill(
       }
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  rtems_set_errno_and_return_minus_one( ESRCH );
 }

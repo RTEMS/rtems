@@ -47,12 +47,6 @@ int pthread_rwlock_trywrlock(
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
-
     case OBJECTS_LOCAL:
 
       _CORE_RWLock_Obtain_for_writing(
@@ -67,7 +61,13 @@ int pthread_rwlock_trywrlock(
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
         (CORE_RWLock_Status) _Thread_Executing->Wait.return_code
       );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  return EINVAL;
 }

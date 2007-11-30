@@ -47,16 +47,18 @@ int pthread_spin_lock(
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
 
     case OBJECTS_LOCAL:
       status = _CORE_spinlock_Wait( &the_spinlock->Spinlock, TRUE, 0 );
       _Thread_Enable_dispatch();
       return _POSIX_Spinlock_Translate_core_spinlock_return_code( status );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

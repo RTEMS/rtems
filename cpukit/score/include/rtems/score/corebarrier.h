@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -80,6 +80,13 @@ typedef enum {
    */
   CORE_BARRIER_TIMEOUT
 }   CORE_barrier_Status;
+
+/**
+ *  @brief Core Barrier Last Status
+ *
+ *  This is the last status value.
+ */
+#define CORE_BARRIER_STATUS_LAST CORE_BARRIER_TIMEOUT
 
 /**
  *  The following defines the control block used to manage the

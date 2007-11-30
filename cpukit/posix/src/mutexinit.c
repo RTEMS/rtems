@@ -69,8 +69,6 @@ int pthread_mutex_init(
    *
    *  Joel Sherrill <joel@OARcorp.com>     14 May 1999
    */
-
-
 #if 0
   /* avoid infinite recursion on call to this routine in _POSIX_Mutex_Get */
 
@@ -80,14 +78,14 @@ int pthread_mutex_init(
 
     mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
     switch ( location ) {
+      case OBJECTS_LOCAL:
+        _Thread_Enable_dispatch();
+        return EBUSY;
 #if defined(RTEMS_MULTIPROCESSING)
       case OBJECTS_REMOTE:
 #endif
       case OBJECTS_ERROR:
         break;
-      case OBJECTS_LOCAL:
-        _Thread_Enable_dispatch();
-        return EBUSY;
     }
   }
 #endif

@@ -38,11 +38,7 @@ int pthread_getschedparam(
 
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return ESRCH;
+
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       if ( policy )
@@ -54,8 +50,14 @@ int pthread_getschedparam(
       }
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return POSIX_BOTTOM_REACHED();
+  return ESRCH;
 
 }

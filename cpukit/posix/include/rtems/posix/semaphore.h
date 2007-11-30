@@ -7,7 +7,7 @@
  *  This include file contains all the private support information for
  *  POSIX Semaphores.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -169,6 +169,19 @@ int _POSIX_Semaphore_Wait_support(
 int _POSIX_Semaphore_Name_to_id(
   const char          *name,
   sem_t          *id
+);
+
+/*
+ *  _POSIX_Semaphore_Translate_core_semaphore_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which converts core semaphore status codes into the
+ *  appropriate POSIX status values.
+ */
+
+int _POSIX_Semaphore_Translate_core_semaphore_return_code(
+  CORE_semaphore_Status  the_semaphore_status
 );
 
 #include <rtems/posix/semaphore.inl>

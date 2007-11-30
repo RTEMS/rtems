@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -106,6 +106,13 @@ typedef enum {
    */
   CORE_MUTEX_STATUS_CEILING_VIOLATED
 }   CORE_mutex_Status;
+
+/**
+ *  @brief Core Mutex Last Status
+ *
+ *  This is the last status value.
+ */
+#define CORE_MUTEX_STATUS_LAST CORE_MUTEX_STATUS_CEILING_VIOLATED
 
 /**
  *  @brief Mutex Lock Nesting Behavior Enumeration

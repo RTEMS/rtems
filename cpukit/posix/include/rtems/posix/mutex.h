@@ -6,7 +6,7 @@
  *  This include file contains all the private support information for
  *  POSIX mutex's.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -134,7 +134,7 @@ int _POSIX_Mutex_Lock_support(
 );
 
 /*
- *  _POSIX_Mutex_From_core_mutex_status
+ *  _POSIX_Mutex_Translate_core_mutex_return_code
  *
  *  DESCRIPTION:
  *
@@ -142,8 +142,8 @@ int _POSIX_Mutex_Lock_support(
  *  appropriate POSIX status values.
  */
 
-int _POSIX_Mutex_From_core_mutex_status(
-  CORE_mutex_Status  status
+int _POSIX_Mutex_Translate_core_mutex_return_code(
+  CORE_mutex_Status  the_mutex_status
 );
 
 

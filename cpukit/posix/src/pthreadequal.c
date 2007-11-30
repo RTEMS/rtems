@@ -53,12 +53,6 @@ int pthread_equal(
 
   (void) _POSIX_Threads_Get( t1, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      /* return status == 0 */
-      break;
 
     case OBJECTS_LOCAL:
 
@@ -68,20 +62,30 @@ int pthread_equal(
 
       (void) _POSIX_Threads_Get( t2, &location );
       switch ( location ) {
+
+        case OBJECTS_LOCAL:
+          status = _Objects_Are_ids_equal( t1, t2 );
+	  _Thread_Unnest_dispatch();
+	  _Thread_Enable_dispatch();
+	  break;
+
         case OBJECTS_ERROR:
         case OBJECTS_REMOTE:
           /* t1 must have been valid so exit the critical section */
           _Thread_Enable_dispatch();
           /* return status == 0 */
           break;
-        case OBJECTS_LOCAL:
-          status = _Objects_Are_ids_equal( t1, t2 );
-	  _Thread_Unnest_dispatch();
-	  _Thread_Enable_dispatch();
-	  break;
       }
       break;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      /* return status == 0 */
+      break;
   }
+
   return status;
 #endif
 }

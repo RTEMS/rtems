@@ -39,11 +39,7 @@ int _POSIX_Mutex_Lock_support(
 
   the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return EINVAL;
+
     case OBJECTS_LOCAL:
       _CORE_mutex_Seize(
         &the_mutex->Mutex,
@@ -52,9 +48,16 @@ int _POSIX_Mutex_Lock_support(
         timeout,
         level
       );
-      return _POSIX_Mutex_From_core_mutex_status(
+      return _POSIX_Mutex_Translate_core_mutex_return_code(
         (CORE_mutex_Status) _Thread_Executing->Wait.return_code
       );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  return EINVAL;
 }

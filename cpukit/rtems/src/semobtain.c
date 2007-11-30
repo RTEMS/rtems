@@ -77,19 +77,6 @@ rtems_status_code rtems_semaphore_obtain(
 
   the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Semaphore_MP_Send_request_packet(
-          SEMAPHORE_MP_OBTAIN_REQUEST,
-          id,
-          option_set,
-          timeout
-      );
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
@@ -114,7 +101,21 @@ rtems_status_code rtems_semaphore_obtain(
       );
       return _Semaphore_Translate_core_semaphore_return_code(
                   _Thread_Executing->Wait.return_code );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      return _Semaphore_MP_Send_request_packet(
+          SEMAPHORE_MP_OBTAIN_REQUEST,
+          id,
+          option_set,
+          timeout
+      );
+#endif
+
+    case OBJECTS_ERROR:
+      break;
+
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

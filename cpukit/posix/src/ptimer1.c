@@ -228,14 +228,6 @@ int timer_delete(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      rtems_set_errno_and_return_minus_one( EINVAL );
-#endif
-
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
@@ -244,8 +236,15 @@ int timer_delete(
       _POSIX_Timer_Free( ptimer );
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return -1;   /* unreached - only to remove warnings */
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 /*
@@ -292,15 +291,6 @@ int timer_settime(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return -1;
-     rtems_set_errno_and_return_minus_one( EINVAL );
-#endif
-
-    case OBJECTS_ERROR:
-      return -1;
 
     case OBJECTS_LOCAL:
       /* First, it verifies if the timer must be stopped */
@@ -376,9 +366,16 @@ int timer_settime(
            return 0;
       }
       _Thread_Enable_dispatch();
-      rtems_set_errno_and_return_minus_one( EINVAL );
+      break;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return -1;   /* unreached - only to remove warnings */
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 /*
@@ -416,14 +413,6 @@ int timer_gettime(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      rtems_set_errno_and_return_minus_one( EINVAL );
-#endif
-
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
 
@@ -439,8 +428,15 @@ int timer_gettime(
 
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return -1;   /* unreached - only to remove warnings */
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
 /*
@@ -465,20 +461,19 @@ int timer_getoverrun(
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      rtems_set_errno_and_return_minus_one( EINVAL );
-#endif
-
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EINVAL );
 
     case OBJECTS_LOCAL:
       overrun = ptimer->overrun;
       ptimer->overrun = 0;
       _Thread_Enable_dispatch();
       return overrun;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return -1;   /* unreached - only to remove warnings */
+
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

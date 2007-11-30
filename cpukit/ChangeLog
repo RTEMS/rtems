@@ -1,3 +1,46 @@
+2007-11-30	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
+	* posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/semaphore.h, posix/src/cancel.c,
+	posix/src/conddestroy.c, posix/src/condsignalsupp.c,
+	posix/src/condwaitsupp.c, posix/src/keydelete.c,
+	posix/src/keygetspecific.c, posix/src/keysetspecific.c,
+	posix/src/mqueueclose.c, posix/src/mqueuegetattr.c,
+	posix/src/mqueuenotify.c, posix/src/mqueuerecvsupp.c,
+	posix/src/mqueuesendsupp.c, posix/src/mqueuesetattr.c,
+	posix/src/mqueuetranslatereturncode.c, posix/src/mutexdestroy.c,
+	posix/src/mutexgetprioceiling.c, posix/src/mutexinit.c,
+	posix/src/mutexlocksupp.c, posix/src/mutexsetprioceiling.c,
+	posix/src/mutexunlock.c, posix/src/pbarrierdestroy.c,
+	posix/src/pbarriertranslatereturncode.c, posix/src/pbarrierwait.c,
+	posix/src/prwlockdestroy.c, posix/src/prwlockrdlock.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/prwlocktranslatereturncode.c, posix/src/prwlocktryrdlock.c,
+	posix/src/prwlocktrywrlock.c, posix/src/prwlockunlock.c,
+	posix/src/prwlockwrlock.c, posix/src/pspindestroy.c,
+	posix/src/pspinlock.c, posix/src/pspinlocktranslatereturncode.c,
+	posix/src/pspintrylock.c, posix/src/pspinunlock.c,
+	posix/src/pthreaddetach.c, posix/src/pthreadequal.c,
+	posix/src/pthreadgetschedparam.c, posix/src/pthreadjoin.c,
+	posix/src/pthreadkill.c, posix/src/pthreadsetschedparam.c,
+	posix/src/ptimer1.c, posix/src/semaphorewaitsupp.c,
+	posix/src/semclose.c, posix/src/semdestroy.c,
+	posix/src/semgetvalue.c, posix/src/sempost.c, posix/src/types.c,
+	rtems/src/msgqtranslatereturncode.c, rtems/src/semobtain.c,
+	rtems/src/timerfireafter.c, score/include/rtems/system.h,
+	score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/coresem.h: Restructed to move the
+	OBJECTS_LOCAL case to the top of the switch statement and
+        eliminate the fall-through return of POSIX_BOTTOM_REACHED.  These
+	changes produced simplier assembly code and allowed for complete
+	test coverage.  Also applied some consistency to the functions
+	that translate the core status codes to POSIX status codes.
+	* posix/src/mutextranslatereturncode.c,
+	posix/src/semaphoretranslatereturncode.c: New files.
+	* posix/src/mutexfromcorestatus.c: Removed.
+
 2007-11-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/inline/rtems/posix/priority.inl: Fix typo.

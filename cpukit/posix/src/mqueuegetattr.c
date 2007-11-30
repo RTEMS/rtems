@@ -52,11 +52,7 @@ int mq_getattr(
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EBADF );
+
     case OBJECTS_LOCAL:
       the_mq = the_mq_fd->Queue;
 
@@ -73,6 +69,13 @@ int mq_getattr(
 
       _Thread_Enable_dispatch();
       return 0;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  rtems_set_errno_and_return_minus_one( EBADF );
 }

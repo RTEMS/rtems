@@ -23,12 +23,6 @@
 
 #include <assert.h>
 
-int POSIX_BOTTOM_REACHED()
-{
-  assert( 0 );
-  return 0;
-}
-
 int POSIX_NOT_IMPLEMENTED()
 {
   assert( 0 );

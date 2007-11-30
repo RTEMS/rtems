@@ -55,11 +55,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      rtems_set_errno_and_return_minus_one( EBADF );
+
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
         _Thread_Enable_dispatch();
@@ -101,6 +97,13 @@ ssize_t _POSIX_Message_queue_Receive_support(
           _Thread_Executing->Wait.return_code
         )
       );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
-  return POSIX_BOTTOM_REACHED();
+
+  rtems_set_errno_and_return_minus_one( EBADF );
 }
