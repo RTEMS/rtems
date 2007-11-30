@@ -166,13 +166,13 @@ static struct _int_map mvme24xx_intmap[] = {
 */
 
    {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
-			{{1, {11,21,-1,-1,-1}},  /* Universe  ISA/PCI */
+			{{1, {11,21,-1,-1}},  /* Universe  ISA/PCI */
 			/* strictly speaking, a non-multi function device
 			 * must only use pin A
 			 */
-			 {2, {22,-1,-1,-1,-1}},  /* Universe          */
-			 {3, {23,-1,-1,-1,-1}},  /* Universe          */
-			 {4, {24,-1,-1,-1,-1}},  /* Universe          */
+			 {2, {22,-1,-1,-1}},  /* Universe          */
+			 {3, {23,-1,-1,-1}},  /* Universe          */
+			 {4, {24,-1,-1,-1}},  /* Universe          */
              NULL_PINMAP}},
 
    {0, 14, PCI_FIXUP_OPT_OVERRIDE_NAME,

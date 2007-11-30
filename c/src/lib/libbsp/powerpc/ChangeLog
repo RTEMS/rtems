@@ -1,5 +1,10 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/motorola/motorola.c: removed excess initializer
+	elements.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq.h, shared/irq/irq.c, shared/irq/irq_init.c,
 	shared/irq/irq_supp.h (added):
 	Removed 'is_processor_irq()' from irq.c; the BSP routines
