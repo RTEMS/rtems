@@ -1,3 +1,12 @@
+2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
+
+	* shared/can/grcan.c, shared/can/grcan_rasta.c,
+	shared/include/ambapp.h: GRCAN CAN driver. Fixes Interrupt
+	enabling/disabling in the driver, interrupt may not be restored
+	correctly. Implements the baud rate calculation routine. Removed
+	unnecessary printk. Fixed scanning to support GRCAN and GRHCAN
+	hardware. Added GRCAN device number to ambapp.h.
+
 2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am, shared/can/occan.c, shared/include/ambapp.h: Add initial

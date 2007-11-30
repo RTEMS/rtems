@@ -26,7 +26,6 @@
 
 #include <grcan.h>
 #include <ambapp.h>
-#include <pci.h>
 
 #define WRAP_AROUND_TX_MSGS 1
 #define WRAP_AROUND_RX_MSGS 2
@@ -43,12 +42,16 @@
 #define RX_BUF_SIZE ((3*BLOCK_SIZE)*16)
 #endif
 
+#ifndef IRQ_GLOBAL_PREPARE
+ #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
+#endif
+
 #ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE() sparc_disable_interrupts()
+ #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
 #endif
 
 #ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE() sparc_enable_interrupts()
+ #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
 #endif
 
 #ifndef IRQ_CLEAR_PENDING
@@ -90,6 +93,10 @@
   #define GRCAN_DEFAULT_BAUD 500000
 #endif
 
+#ifndef GRCAN_SAMPLING_POINT
+#define GRCAN_SAMPLING_POINT 80
+#endif
+
 /* Uncomment for debug output */
 /****************** DEBUG Definitions ********************/
 #define DBG_IOCTRL 1
@@ -97,9 +104,10 @@
 #define DBG_RX 4
 
 #define DEBUG_FLAGS (DBG_IOCTRL | DBG_RX | DBG_TX )
-/*#define DEBUG
-#define DEBUGFUNCS*/
-
+/*
+#define DEBUG
+#define DEBUGFUNCS
+*/
 #include <debug_defs.h>
 
 /*********************************************************/
@@ -250,7 +258,7 @@ static void grcan_interrupt(struct grcan_priv *pDev);
 #ifdef GRCAN_REG_BYPASS_CACHE
 #define READ_REG(address) _grcan_read_nocache((unsigned int)(address))
 #else
-#define READ_REG(address) (*(unsigned int *)(address))
+#define READ_REG(address) (*(volatile unsigned int *)(address))
 #endif
 
 #ifdef GRCAN_DMA_BYPASS_CACHE
@@ -266,8 +274,8 @@ static unsigned char __inline__ _grcan_read_nocache_byte(unsigned int address)
   return tmp;
 }
 #else
-#define READ_DMA_WORD(address) (*(unsigned int *)(address))
-#define READ_DMA_BYTE(address) (*(unsigned char *)(address))
+#define READ_DMA_WORD(address) (*(volatile unsigned int *)(address))
+#define READ_DMA_BYTE(address) (*(volatile unsigned char *)(address))
 #endif
 
 #if defined(GRCAN_REG_BYPASS_CACHE) || defined(GRCAN_DMA_BYPASS_CACHE)
@@ -293,6 +301,8 @@ static void __inline__ grcan_hw_reset(struct grcan_regs *regs)
 static rtems_device_driver grcan_start(struct grcan_priv *pDev)
 {
   unsigned int tmp;
+  IRQ_GLOBAL_PREPARE(oldLevel);
+  
   FUNCDBG();
   
   /* Check that memory has been allocated successfully */
@@ -335,11 +345,11 @@ static rtems_device_driver grcan_start(struct grcan_priv *pDev)
   pDev->regs->imr = 0x1601f;
   
   /* Enable routing of the IRQs */
-  IRQ_GLOBAL_DISABLE();
+  IRQ_GLOBAL_DISABLE(oldLevel);
   IRQ_UNMASK(pDev->irq+GRCAN_IRQ_TXSYNC);
   IRQ_UNMASK(pDev->irq+GRCAN_IRQ_RXSYNC);
   IRQ_UNMASK(pDev->irq+GRCAN_IRQ_IRQ);
-  IRQ_GLOBAL_ENABLE();
+  IRQ_GLOBAL_ENABLE(oldLevel);
   
   /* Reset some software data */
   /*pDev->txerror = 0;
@@ -507,13 +517,121 @@ static int grcan_hw_tx_ongoing(struct grcan_regs *regs)
   return READ_REG(&regs->tx0ctrl) & GRCAN_TXCTRL_ONGOING;
 };
 
+
+#define MIN_TSEG1 1
+#define MIN_TSEG2 2
+#define MAX_TSEG1 14
+#define MAX_TSEG2 8
+
 static int grcan_calc_timing(
   unsigned int baud,          /* The requested BAUD to calculate timing for */
   unsigned int core_hz,       /* Frequency in Hz of GRCAN Core */
+  unsigned int sampl_pt,
   struct grcan_timing *timing /* result is placed here */
   )
 {
-  return -1; /* not implemented yet */
+	int best_error = 1000000000;
+	int error;
+	int best_tseg=0, best_brp=0, best_rate=0, brp=0;
+	int tseg=0, tseg1=0, tseg2=0;
+	int sjw = 1;
+  
+  /* Default to 90% */
+  if ( (sampl_pt < 50) || (sampl_pt>99) ){
+    sampl_pt = GRCAN_SAMPLING_POINT;
+  }
+
+	if ( (baud<5000) || (baud>1000000) ){
+		/* invalid speed mode */
+		return -1;
+	}
+	
+	/* find best match, return -2 if no good reg 
+	 * combination is available for this frequency
+   */
+
+	/* some heuristic specials */
+	if (baud > ((1000000 + 500000) / 2))
+		sampl_pt = 75;
+
+	if (baud < ((12500 + 10000) / 2))
+		sampl_pt = 75;
+
+	/* tseg even = round down, odd = round up */
+	for (tseg = (MIN_TSEG1 + MIN_TSEG2 + 2) * 2;
+	     tseg <= (MAX_TSEG2 + MAX_TSEG1 + 2) * 2 + 1;
+	     tseg++)
+	{
+		brp = core_hz / ((1 + tseg / 2) * baud) + tseg % 2;
+		if ((brp <= 0) || 
+        ( (brp > 256*1) && (brp <= 256*2) && (brp&0x1) ) ||
+        ( (brp > 256*2) && (brp <= 256*4) && (brp&0x3) ) ||
+        ( (brp > 256*4) && (brp <= 256*8) && (brp&0x7) ) ||
+        (brp > 256*8)
+        )
+			continue;
+
+		error = baud - core_hz / (brp * (1 + tseg / 2));
+		if (error < 0)
+		{
+			error = -error;
+		}
+
+		if (error <= best_error)
+		{
+			best_error = error;
+			best_tseg = tseg/2;
+			best_brp = brp-1;
+			best_rate = core_hz/(brp*(1+tseg/2));
+		}
+	}
+
+	if (best_error && (baud / best_error < 10))
+	{
+		return -2;
+	}else if ( !timing )
+		return 0; /* nothing to store result in, but a valid bitrate can be calculated */
+
+	tseg2 = best_tseg - (sampl_pt * (best_tseg + 1)) / 100;
+
+	if (tseg2 < MIN_TSEG2)
+	{
+		tseg2 = MIN_TSEG2;
+	}
+
+	if (tseg2 > MAX_TSEG2)
+	{
+		tseg2 = MAX_TSEG2;
+	}
+
+	tseg1 = best_tseg - tseg2 - 2;
+
+	if (tseg1 > MAX_TSEG1)
+	{
+		tseg1 = MAX_TSEG1;
+		tseg2 = best_tseg - tseg1 - 2;
+	}
+  
+  /* Get scaler and BRP from pseudo BRP */
+  if ( best_brp <= 256 ){
+    timing->scaler = best_brp;
+    timing->bpr = 0;
+  }else if ( best_brp <= 256*2 ){
+    timing->scaler = ((best_brp+1)>>1) -1;
+    timing->bpr = 1;
+  }else if ( best_brp <= 256*4 ){
+    timing->scaler = ((best_brp+1)>>2) -1;
+    timing->bpr = 2;
+  }else{
+    timing->scaler = ((best_brp+1)>>3) -1;
+    timing->bpr = 3;
+  }
+  
+	timing->ps1    = tseg1+1;
+	timing->ps2    = tseg2;
+	timing->rsj    = sjw;
+
+	return 0;
 }
 
 static unsigned int grcan_hw_read_try(
@@ -663,7 +781,6 @@ static unsigned int grcan_hw_write_try(
   i=0;
   while( (grcan_hw_tx_ongoing(regs)) && i<1000 ){
     i++;
-    printk("ongoing tx\n");
   }
   regs->tx0wr = (unsigned int)dest - addr; /* Update write pointer */
   regs->tx0ctrl = GRCAN_TXCTRL_ENABLE; /* ENABLE_TX_CHANNEL */
@@ -678,9 +795,16 @@ static int grcan_wait_rxdata(
   unsigned int wp, rp, size, irq;
   unsigned int irq_trunk, dataavail;
   int wait;
+  IRQ_GLOBAL_PREPARE(oldLevel);
   
   FUNCDBG();
-  
+
+  /*** block until receive IRQ received 
+   * Set up a valid IRQ point so that an IRQ is received 
+   * when one or more messages are received
+   */
+  IRQ_GLOBAL_DISABLE(oldLevel);
+    
   size = READ_REG(&pDev->regs->rx0size);
   rp = READ_REG(&pDev->regs->rx0rd);
   wp = READ_REG(&pDev->regs->rx0wr);
@@ -692,12 +816,6 @@ static int grcan_wait_rxdata(
     irq_trunk = irq-size;
   }else
     irq_trunk = irq;
-
-  /*** block until receive IRQ received 
-   * Set up a valid IRQ point so that an IRQ is received 
-   * when one or more messages are received
-   */
-  IRQ_GLOBAL_DISABLE();
   
   /* init IRQ HW */
   pDev->regs->rx0irq = irq_trunk;
@@ -718,7 +836,7 @@ static int grcan_wait_rxdata(
     /* enough message has been received, abort sleep - don't unmask interrupt */
     wait=0;
   }
-  IRQ_GLOBAL_ENABLE();
+  IRQ_GLOBAL_ENABLE(oldLevel);
     
     /* Wait for IRQ to fire only if has been triggered */
   if ( wait ){
@@ -744,14 +862,17 @@ static int grcan_wait_txspace(
   int wait;
   unsigned int irq, rp, wp, size, space_left;
   unsigned int irq_trunk;
+  IRQ_GLOBAL_PREPARE(oldLevel);
   
   DBGC(DBG_TX,"\n");
   /*FUNCDBG();*/
   
+  IRQ_GLOBAL_DISABLE(oldLevel);
+
+  /*pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;*/
+  
   size = READ_REG(&pDev->regs->tx0size);
   wp = READ_REG(&pDev->regs->tx0wr);  
-
-  IRQ_GLOBAL_DISABLE();  
   
   rp = READ_REG(&pDev->regs->tx0rd);
   
@@ -788,11 +909,11 @@ static int grcan_wait_txspace(
     /* There are enough room in buffer, abort wait - don't unmask interrupt */
     wait=0;
   }
-  IRQ_GLOBAL_ENABLE();
+  IRQ_GLOBAL_ENABLE(oldLevel);
   
   /* Wait for IRQ to fire only if it has been triggered */
   if ( wait ){
-    if ( rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT) ==
+    if ( rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, 100) ==
          RTEMS_UNSATISFIED ){
       /* Device driver has flushed us, this may be due to another thread has 
        * closed the device, this is to avoid deadlock */
@@ -808,6 +929,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 {
   int wait;
   unsigned int rp, wp;
+  IRQ_GLOBAL_PREPARE(oldLevel);
   FUNCDBG();
   
   /* loop until all data in circular buffer has been read by hw.
@@ -817,7 +939,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
    */
   while ( (wp=READ_REG(&pDev->regs->tx0wr)) != (rp=READ_REG(&pDev->regs->tx0rd)) ) {
     /* Wait for TX empty IRQ */
-    IRQ_GLOBAL_DISABLE();
+    IRQ_GLOBAL_DISABLE(oldLevel);
     /* Clear pending TXEmpty IRQ */
     pDev->regs->picr = GRCAN_TXEMPTY_IRQ;
       
@@ -829,7 +951,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
       /* TX fifo is empty */
       wait = 0;
     }
-    IRQ_GLOBAL_ENABLE();
+    IRQ_GLOBAL_ENABLE(oldLevel);
     if ( !wait )
       break;
     
@@ -932,6 +1054,7 @@ static rtems_device_driver grcan_initialize(
   rtems_status_code status;
   char fs_name[20];
   unsigned int sys_freq_hz;
+  unsigned int deviceid = GAISLER_GRHCAN;
 
   printk("grcan_initialize()\n\r");
 
@@ -939,10 +1062,16 @@ static rtems_device_driver grcan_initialize(
   
   /* find GRCAN cores */
   if ( !grcan_cores ) {    
-    grcan_core_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_GRHCAN);
+    grcan_core_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,deviceid);
+    if ( grcan_core_cnt < 1 ){
+      deviceid = GAISLER_GRCAN;
+      grcan_core_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,deviceid);
+      if ( grcan_core_cnt < 1 ) {
+        DBG("GRCAN: Using AMBA Plug&Play, found %d cores\n",grcan_core_cnt);
+        return RTEMS_UNSATISFIED;
+      }
+    }
     DBG("GRCAN: Using AMBA Plug&Play, found %d cores\n",grcan_core_cnt);
-    if ( grcan_core_cnt < 1 )
-      return RTEMS_UNSATISFIED;
   }
 
 #ifdef GRCAN_MAX_CORENR
@@ -1003,7 +1132,7 @@ static rtems_device_driver grcan_initialize(
     
     /* Find core address & IRQ */
     if ( !grcan_cores ) {
-      amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_GRHCAN,&dev,minor);
+      amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,deviceid,&dev,minor);
       pDev->irq = dev.irq;
       pDev->regs = (struct grcan_regs *)dev.start;
     }else{
@@ -1011,7 +1140,6 @@ static rtems_device_driver grcan_initialize(
       pDev->regs = (struct grcan_regs *)grcan_cores[minor].base_address;
     }
     
-    DBG("Registering GRCAN core at [0x%x] irq %d, minor %d as %s\n",pDev->regs,pDev->irq,minor,fs_name);
     printk("Registering GRCAN core at [0x%x] irq %d, minor %d as %s\n\r",pDev->regs,pDev->irq,minor,fs_name);
     
     status = rtems_io_register_name(fs_name, major, 0);
@@ -1121,7 +1249,7 @@ static rtems_device_driver grcan_open(rtems_device_major_number major, rtems_dev
   pDev->sfilter.code = 0x00000000;
     
   /* Calculate default timing register values */
-  grcan_calc_timing(GRCAN_DEFAULT_BAUD,pDev->corefreq_hz,&pDev->config.timing);
+  grcan_calc_timing(GRCAN_DEFAULT_BAUD,pDev->corefreq_hz,GRCAN_SAMPLING_POINT,&pDev->config.timing);
   
   if ( grcan_alloc_buffers(pDev,1,1) ) {
     ret=RTEMS_NO_MEMORY;
@@ -1333,6 +1461,7 @@ static rtems_device_driver grcan_ioctl(rtems_device_major_number major, rtems_de
   rtems_device_driver status;
   struct grcan_stats *stats;
   struct grcan_filter *filter;
+  IRQ_GLOBAL_PREPARE(oldLevel);
   
   FUNCDBG();
   
@@ -1448,9 +1577,9 @@ static rtems_device_driver grcan_ioctl(rtems_device_major_number major, rtems_de
       break;
     
     case GRCAN_IOC_CLR_STATS:
-      IRQ_GLOBAL_DISABLE();
+      IRQ_GLOBAL_DISABLE(oldLevel);
       memset(&pDev->stats,0,sizeof(struct grcan_stats));
-      IRQ_GLOBAL_ENABLE();
+      IRQ_GLOBAL_ENABLE(oldLevel);
       break;
 
 		case GRCAN_IOC_SET_SPEED:
@@ -1461,7 +1590,7 @@ static rtems_device_driver grcan_ioctl(rtems_device_major_number major, rtems_de
 			
 			/* get speed rate from argument */
 			speed = (unsigned int)ioarg->buffer;
-			ret = grcan_calc_timing(pDev->corefreq_hz,speed,&timing);
+			ret = grcan_calc_timing(speed,pDev->corefreq_hz,GRCAN_SAMPLING_POINT,&timing);
 			if ( ret )
 				return  RTEMS_INVALID_NAME; /* EINVAL */
 			
@@ -1537,7 +1666,7 @@ static rtems_isr grcan_interrupt_handler(rtems_vector_number v)
 {
   int minor=0;
   while ( minor < grcan_core_cnt ){
-    if ( grcans[minor].irq == (v+0x10) ){
+    if ( (grcans[minor].irq+0x10) == v ){
       grcan_interrupt(&grcans[minor]);
       break;
     }

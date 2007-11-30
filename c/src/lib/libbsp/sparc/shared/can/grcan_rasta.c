@@ -2,7 +2,7 @@
 #include <rasta.h>
 
 /* PCI frequency */
-#define SYS_FREQ_HZ 33000000
+#define SYS_FREQ_HZ 30000000
 
 /*#define USE_AT697_RAM              1      */
 
@@ -29,8 +29,9 @@ static inline unsigned int memarea_to_hw(unsigned int addr) {
 #define IRQ_UNMASK(irqno) 
 #define IRQ_MASK(irqno) 
 
-#define IRQ_GLOBAL_DISABLE() sparc_disable_interrupts()
-#define IRQ_GLOBAL_ENABLE() sparc_enable_interrupts()
+#define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
+#define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
+#define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
 
 #define GRCAN_REG_INT(handler,irqno,arg) \
   if ( grcan_rasta_int_reg ) \
