@@ -253,6 +253,7 @@ static int occan_fifo_full(occan_fifo *fifo);
 static int occan_fifo_empty(occan_fifo *fifo);
 static void occan_fifo_get(occan_fifo *fifo);
 static CANMsg *occan_fifo_claim_get(occan_fifo *fifo);
+static void occan_fifo_clr(occan_fifo *fifo);
 
 /**** Hardware related Interface ****/
 static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result);
@@ -288,7 +289,7 @@ static unsigned int sys_freq_hz;
 /* Read byte bypassing */
 
 #ifdef OCCAN_DONT_BYPASS_CACHE
- #define READ_REG(address) (*(unsigned char *)(address))
+ #define READ_REG(address) (*(volatile unsigned char *)(address))
 #else
  /* Bypass cache */
  #define READ_REG(address) _OCCAN_REG_READ((unsigned int)(address))
@@ -302,7 +303,7 @@ static unsigned int sys_freq_hz;
 	}
 #endif
 
-#define WRITE_REG(address,data) (*(unsigned char *)(address) = (data))
+#define WRITE_REG(address,data) (*(volatile unsigned char *)(address) = (data))
 
 /* Mode register bit definitions */
 #define PELICAN_MOD_RESET          0x1
@@ -439,6 +440,12 @@ static int pelican_start(occan_priv *priv){
 	if ( !priv->rxfifo || !priv->txfifo )
 		return -1;
 
+  /* In case we were started before and stopped we
+   * should empty the TX fifo or try to resend those 
+   * messages. We make it simple...
+   */
+  occan_fifo_clr(priv->txfifo);
+  
 	/* Clear status bits */
 	priv->status = 0;
 	
@@ -1904,4 +1911,11 @@ static void occan_fifo_get(occan_fifo *fifo){
 	fifo->tail = (fifo->tail >= &fifo->base[fifo->cnt-1])? fifo->base : fifo->tail+1;
 	fifo->full = 0;
 }
+
+static void occan_fifo_clr(occan_fifo *fifo){
+  fifo->full  = 0;
+  fifo->ovcnt = 0;
+  fifo->head  = fifo->tail = fifo->base;
+}
+
 /*******************************************************************************/
