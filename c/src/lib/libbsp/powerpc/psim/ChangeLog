@@ -1,3 +1,8 @@
+2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: BSP_DIRTY_MEMORY should be tested for zero not
+	just defined.
+
 2007-09-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac, startup/bspstart.c: Add BSP_DIRTY_MEMORY option.
