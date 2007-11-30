@@ -17,6 +17,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/irq_supp.h>
 #include <libcpu/raw_exception.h>
 
 static rtems_irq_connect_data *rtems_hdl_tbl;

@@ -62,7 +62,7 @@ consoleio_rel_SOURCES = console/console-io.c console/consupp.S
 consoleio_rel_CPPFLAGS = $(AM_CPPFLAGS)
 consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_bsp_HEADERS = irq/irq.h
+include_bsp_HEADERS = irq/irq.h ../shared/irq/irq_supp.h
 
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = ../shared/irq/irq.c irq/irq_init.c ../shared/irq/irq_asm.S irq/no_pic.c

@@ -46,11 +46,7 @@
    */
 #define BSP_DECREMENTER			(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 
-/* dummy routines - there is no PIC */
-void BSP_enable_irq_at_pic(const rtems_irq_number);
-void BSP_disable_irq_at_pic(const rtems_irq_number);
-int  BSP_setup_the_pic(rtems_irq_global_settings *);
-
+#include <bsp/irq_supp.h>
 
 #endif
 #endif
