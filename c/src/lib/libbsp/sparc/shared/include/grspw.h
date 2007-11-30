@@ -54,7 +54,7 @@ typedef struct {
 typedef struct {
    unsigned int nodeaddr;
    unsigned int destkey;
-   unsigned int clkdiv;
+   unsigned int clkdiv; /* Note: contain both CLKDIVSTART and CLKDIVRUN, but IOCTL_SET_CLKDIV* commands are split into two */
    unsigned int rxmaxlen;
    unsigned int timer;
    unsigned int disconnect;
@@ -76,6 +76,8 @@ typedef struct {
    unsigned int is_rmap;
    unsigned int is_rxunaligned;
    unsigned int is_rmapcrc;
+   
+   unsigned int nodemask;
 } spw_config;
 
 #define SPACEWIRE_IOCTRL_SET_NODEADDR        1
@@ -103,6 +105,8 @@ typedef struct {
 #define SPACEWIRE_IOCTRL_LINKSTART           30
 #define SPACEWIRE_IOCTRL_SET_TXBLOCK_ON_FULL 31
 #define SPACEWIRE_IOCTRL_SET_COREFREQ        32
+#define SPACEWIRE_IOCTRL_SET_CLKDIVSTART     33
+#define SPACEWIRE_IOCTRL_SET_NODEMASK        34
 
 #define SPACEWIRE_IOCTRL_START               64
 #define SPACEWIRE_IOCTRL_STOP                65
