@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.2.1
-%define gcc_version 4.2.1
-%define gcc_rpmvers %{expand:%(echo "4.2.1" | tr - _ )}
+%define gcc_pkgvers 4.2.2
+%define gcc_version 4.2.2
+%define gcc_rpmvers %{expand:%(echo "4.2.2" | tr - _ )}
 
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	26%{?dist}
+Release:      	27%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,9 +53,9 @@ Requires:	rtems-4.8-bfin-rtems4.8-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.2.1"
+%if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.1-rtems4.8-20071129.diff
+Patch0:		gcc-core-4.2.2-rtems4.8-20071127.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
