@@ -1,5 +1,20 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq.h, shared/irq/irq.c, shared/irq/irq_init.c,
+	shared/irq/irq_supp.h (added):
+	Removed 'is_processor_irq()' from irq.c; the BSP routines
+	BSP_enable_irq_at_pic()/BSP_disable_irq_at_pic() are required
+	to ignore processor irqs anyways. Removed
+	all BSP-defined constants from irq.c. This makes irq.c (almost)
+	binary-compatible among BSPs (ultimate goal is making 'shared'
+	a library).
+	Added a header (irq_supp.h) defining the interface between
+	the generic interrupt manager (irq.c) and the routines it
+	requires to be supplied by the BSP (eventually, these
+	should go into rtems/irq.h).
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq.h, shared/irq/irq_init.c: Removed the definition
 	of ASM_IRQ_VECTOR_BASE; this symbol was only use to
 	initialize the irqBase member of the rtems_irq_global_settings

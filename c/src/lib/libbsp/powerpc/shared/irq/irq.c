@@ -13,8 +13,8 @@
 
 #include <stdlib.h>
 
-#include <bsp.h>
-#include <bsp/irq.h>
+#include <rtems/irq.h>
+#include <bsp/irq_supp.h>
 #include <rtems/score/apiext.h>  /* for post ISR signal processing */
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
@@ -40,17 +40,6 @@ static rtems_irq_global_settings* 	internal_config;
 static rtems_irq_connect_data*		rtems_hdl_tbl;
 
 /*
- * Check if IRQ is a Processor IRQ
- */
-static inline int is_processor_irq(const rtems_irq_number irqLine)
-{
-  return (((int) irqLine <= BSP_PROCESSOR_IRQ_MAX_OFFSET) &
-	  ((int) irqLine >= BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
-	 );
-}
-
-
-/*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
 
@@ -61,7 +50,7 @@ static inline int is_processor_irq(const rtems_irq_number irqLine)
 
 static int isValidInterrupt(int irq)
 {
-  if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET))
+  if ( (irq < internal_config->irqBase) || (irq >= internal_config->irqBase + internal_config->irqNb))
     return 0;
   return 1;
 }
@@ -100,13 +89,13 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     /* link chain to new topmost handler */
     rtems_hdl_tbl[irq->name].next_handler = (void *)vchain;
 
-    if (is_processor_irq(irq->name)) {
-      /*
-       * Enable exception at processor level
-       */
-    } else {
-		BSP_enable_irq_at_pic(irq->name);
-	}
+	/*
+	 * enable_irq_at_pic is supposed to ignore
+	 * requests to disable interrupts outside
+	 * of the range handled by the PIC
+	 */
+	BSP_enable_irq_at_pic(irq->name);
+
     /*
      * Enable interrupt on device
      */
@@ -150,13 +139,13 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_hdl_tbl[irq->name] = *irq;
     rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
 
-    if (is_processor_irq(irq->name)) {
-      /*
-       * Enable exception at processor level
-       */
-    } else {
-	  BSP_enable_irq_at_pic(irq->name);
-	}
+	/*
+	 * enable_irq_at_pic is supposed to ignore
+	 * requests to disable interrupts outside
+	 * of the range handled by the PIC
+	 */
+	BSP_enable_irq_at_pic(irq->name);
+
     /*
      * Enable interrupt on device
      */
@@ -231,13 +220,12 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
        }
     }
 
-    if (is_processor_irq(irq->name)) {
-      /*
-       * disable exception at processor level
-       */
-    } else {
-	  BSP_disable_irq_at_pic(irq->name);
-	}
+	/*
+	 * disable_irq_at_pic is supposed to ignore
+	 * requests to disable interrupts outside
+	 * of the range handled by the PIC
+	 */
+	BSP_disable_irq_at_pic(irq->name);
 
     /*
      * Disable interrupt on device
@@ -301,7 +289,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 		return 0;
 	}
 
-	for ( i = BSP_LOWEST_OFFSET; i <= BSP_MAX_OFFSET; i++ ) {
+	for ( i = config->irqBase; i < config->irqBase + config->irqNb; i++ ) {
 		for( vchain = &rtems_hdl_tbl[i];
 		     ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
 		     vchain = (rtems_irq_connect_data*)vchain->next_handler )

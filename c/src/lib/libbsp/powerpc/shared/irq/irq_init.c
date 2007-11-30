@@ -24,6 +24,7 @@
 #include <bsp/residual.h>
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
+#include <bsp/irq_supp.h>
 #include <bsp.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/motorola.h>

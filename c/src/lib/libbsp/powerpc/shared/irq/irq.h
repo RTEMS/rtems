@@ -181,14 +181,9 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 extern void BSP_i8259s_init(void);
 
-/*
- * PIC-independent function to enable/disable interrupt lines at
- * the pic.
- */
-extern void BSP_enable_irq_at_pic		(const rtems_irq_number irqLine);
-extern void BSP_disable_irq_at_pic		(const rtems_irq_number irqLine);
+/* Stuff in irq_supp.h should eventually go into <rtems/irq.h> */
+#include <bsp/irq_supp.h>
 
-extern int BSP_setup_the_pic			(rtems_irq_global_settings* config);
 #ifdef __cplusplus
 };
 #endif
