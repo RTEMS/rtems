@@ -18,9 +18,12 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <bsp/consoleIo.h>
 #ifndef BSP_HAS_NO_VME
 #include <bsp/VME.h>
+#endif
+
+#ifdef SHOW_MORE_INIT_SETTINGS
+#include <rtems/bspIo.h>
 #endif
 
 void bsp_libc_init( void *, uint32_t, int );
@@ -81,5 +84,8 @@ void bsp_pretasking_hook(void)
 
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
+#endif
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Leaving bsp_pretasking_hook\n");
 #endif
 }

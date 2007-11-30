@@ -1,5 +1,11 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/pretaskinghook.c: Replaced inclusion of
+	<bsp/consoleIo.h> by <rtems/bspIo.> (for printk) and
+	made it conditional on #ifdef SHOW_MORE_INIT_SETTINGS.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/bspstart.c: Removed excess /*, replaced
 	#ifdef checks for mpc8240 by #ifdef mvme2100; eventually
 	there should be run-time checks.
