@@ -1,4 +1,13 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+	* irq/irq.h, irq/irq.c (removed), irq/no_pic.c (added),
+	irq/irq_init.c, Makefile.am: The PSIM BSP (currently)
+	has no support for an interrupt controller or interrupts
+	other than the decrementer. Removed all definitions for PCI + ISA
+	interrupts and all unnecessary code (leftovers from copying).
+	Separated PIC-specific bits into 'no_pic.c' which allows us
+	to use 'irq.c' (i.e., more code) from 'shared'.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/linkcmds.c, start/start.S: call __eabi() from start.S
 	and make sure linkcmds defines _SDA_BASE_ + _SDA2_BASE_ so that

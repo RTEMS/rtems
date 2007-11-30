@@ -31,18 +31,9 @@
 #include <bsp/motorola.h>
 #endif
 
-
 /*
 #define SHOW_ISA_PCI_BRIDGE_SETTINGS
 */
-
-typedef struct {
-  unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
-  unsigned char device;
-  unsigned char function;
-} pci_isa_bridge_device;
-
-pci_isa_bridge_device* via_82c586 = 0;
 
 extern unsigned int external_exception_vector_prolog_code_size[];
 extern void external_exception_vector_prolog_code();
@@ -70,34 +61,10 @@ static rtems_irq_connect_data     	defaultIrq = {
 };
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*
-   * actual rpiorities for interrupt :
-   *	0   means that only current interrupt is masked
-   *	255 means all other interrupts are masked
-   */
-  /*
-   * ISA interrupts.
-   * The second entry has a priority of 255 because
-   * it is the slave pic entry and is should always remain
-   * unmasked.
-   */
-  0,0,
-  255,
-  0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-  /*
-   * PCI Interrupts
-   */
-  8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, /* for raven prio 0 means unactive... */
-  /*
    * Processor exceptions handled as interrupts
    */
   0
 };
-
-void VIA_isa_bridge_interrupts_setup(void)
-{
-  printk("VIA_isa_bridge_interrupts_setup - Shouldn't get here!\n");
-  return;
-}
 
   /*
    * This code assumes the exceptions management setup has already
@@ -165,4 +132,3 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }
-
