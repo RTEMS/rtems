@@ -12,7 +12,7 @@
 /*
  *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
  *
- *  "Numericallly higher values represent higher priorities."
+ *  "Numerically higher values represent higher priorities."
  *
  *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
  */

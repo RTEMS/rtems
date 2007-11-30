@@ -1,3 +1,7 @@
+2007-11-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/inline/rtems/posix/priority.inl: Fix typo.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/src/exinit.c, score/include/rtems/score/object.h,
