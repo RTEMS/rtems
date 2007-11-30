@@ -1,3 +1,8 @@
+2007-11-29	Till Straumann <strauman@slac.stanford.edu>
+
+	* mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h: Added support
+	for setting & reading IBATs.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ppc403/clock/clock.c: Now compiles and links.

@@ -45,17 +45,27 @@
  *   - Bat ranges must not overlap.
  *   - Physical & virtual addresses must be aligned
  *     to the size.
+ *
+ * RETURNS: zero on success, nonzero on failure.
  */
-extern void setdbat(int bat_index, unsigned long virt, unsigned long phys,
+extern int setdbat(int bat_index, unsigned long virt, unsigned long phys,
 		    unsigned int size, int flags);
 
-/* read DBAT # 'idx' into *pu/*pl. NULL pointers may be passed.
+/* Same as setdbat but sets IBAT */
+extern int setibat(int bat_index, unsigned long virt, unsigned long phys,
+		    unsigned int size, int flags);
+
+/* read DBAT # 'idx' into *pu / *pl. NULL pointers may be passed.
  * If pu and pl are NULL, the bat contents are dumped to the console (printk).
  * 
  * RETURNS: upper BAT contents or (-1) if index is invalid
  */
 extern int getdbat(int bat_index, unsigned long *pu, unsigned long *pl);
 
+/* Same as getdbat but reads IBAT */
+extern int getibat(int bat_index, unsigned long *pu, unsigned long *pl);
+
+/* Do not use the asm routines; they are obsolete; use setdbat() instead */
 extern void asm_setdbat0(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat1(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat2(unsigned int uperPart, unsigned int lowerPart);
