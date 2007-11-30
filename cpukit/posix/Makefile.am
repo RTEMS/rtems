@@ -11,6 +11,7 @@ if LIBPOSIX
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
+project_lib_LIBRARIES = libposix.a
 noinst_LIBRARIES = libposix.a
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
@@ -98,9 +99,9 @@ libposix_a_SOURCES += src/mutex.c src/mutexattrdestroy.c \
     src/mutexattrgetpshared.c src/mutexattrinit.c \
     src/mutexattrsetprioceiling.c src/mutexattrsetprotocol.c \
     src/mutexattrsetpshared.c src/mutexdefaultattributes.c \
-    src/mutexdestroy.c src/mutexfromcorestatus.c src/mutexgetprioceiling.c \
-    src/mutexinit.c src/mutexlock.c src/mutexlocksupp.c \
-    src/mutexsetprioceiling.c src/mutextimedlock.c src/mutextrylock.c \
+    src/mutexdestroy.c src/mutexgetprioceiling.c src/mutexinit.c \
+    src/mutexlock.c src/mutexlocksupp.c src/mutexsetprioceiling.c \
+    src/mutextimedlock.c src/mutextranslatereturncode.c src/mutextrylock.c \
     src/mutexunlock.c
 
 ## PTHREAD_C_FILES
@@ -140,9 +141,10 @@ libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
     src/semaphoredeletesupp.c src/semaphorenametoid.c \
-    src/semaphorewaitsupp.c src/semclose.c src/semdestroy.c \
-    src/semgetvalue.c src/seminit.c src/semopen.c src/sempost.c \
-    src/semtimedwait.c src/semtrywait.c src/semunlink.c src/semwait.c
+    src/semaphoretranslatereturncode.c src/semaphorewaitsupp.c \
+    src/semclose.c src/semdestroy.c src/semgetvalue.c src/seminit.c \
+    src/semopen.c src/sempost.c src/semtimedwait.c src/semtrywait.c \
+    src/semunlink.c src/semwait.c
 
 ## SPINLOCK_C_FILES
 libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \

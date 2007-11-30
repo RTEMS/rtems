@@ -1,5 +1,14 @@
 2007-11-30	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
+	* posix/Makefile.am: Restructed to move the
+	OBJECTS_LOCAL case to the top of the switch statement and
+	eliminate the fall-through return of POSIX_BOTTOM_REACHED.  These
+	changes produced simplier assembly code and allowed for complete
+	test coverage.  Also applied some consistency to the functions
+	that translate the core status codes to POSIX status codes.
+
+2007-11-30	Glenn Humphrey <glenn.humphrey@OARcorp.com>
+
 	* posix/include/rtems/posix/mutex.h,
 	posix/include/rtems/posix/semaphore.h, posix/src/cancel.c,
 	posix/src/conddestroy.c, posix/src/condsignalsupp.c,
