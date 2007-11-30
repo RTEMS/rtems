@@ -1,3 +1,9 @@
+2007-11-29	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c, Makefile.am: Initialize BATs and enable MMU
+	to come closer to what other BSPs do. This allows us to use the
+	shared irq_asm.S. No more individual assembly code :-)
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Eliminate PowerPC specific elements from the CPU
