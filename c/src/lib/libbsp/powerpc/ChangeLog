@@ -1,5 +1,11 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/bspstart.c: Removed excess /*, replaced
+	#ifdef checks for mpc8240 by #ifdef mvme2100; eventually
+	there should be run-time checks.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/motorola/motorola.c: removed excess initializer
 	elements.
 

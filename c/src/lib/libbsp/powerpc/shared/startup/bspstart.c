@@ -59,7 +59,6 @@ extern void ShowBATS();`
 uint32_t   bsp_clicks_per_usec;
 
 /*
-/*
  * Copy of residuals passed by firmware
  */
 RESIDUAL residualCopy;
@@ -138,7 +137,7 @@ void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_op
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
 }
 
-#if defined(mpc8240) || defined(mpc8245)
+#if defined(mvme2100)
 unsigned int EUMBBAR;
 
 /* 
@@ -161,7 +160,7 @@ unsigned int get_eumbbar() {
 void bsp_start( void )
 {
   unsigned char *stack;
-#if !defined(mpc8240) && !defined(mpc8245)
+#if !defined(mvme2100)
   unsigned l2cr;
 #endif
   register uint32_t  intrStack;
@@ -216,7 +215,7 @@ void bsp_start( void )
    */
   L1_caches_enables();
 
-#if !defined(mpc8240) && !defined(mpc8245)
+#if !defined(mvme2100)
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
    * relevant CPU type (mpc750)...
