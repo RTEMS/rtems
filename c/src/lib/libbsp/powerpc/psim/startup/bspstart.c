@@ -189,7 +189,7 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
-  #if defined(BSP_DIRTY_MEMORY)
+  #if (BSP_DIRTY_MEMORY == 1)
   {
     memset(&end, 0xCF,  (unsigned char *)&RAM_END - (unsigned char *)&end );
   }
