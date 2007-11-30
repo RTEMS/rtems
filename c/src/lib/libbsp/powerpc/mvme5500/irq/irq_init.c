@@ -123,7 +123,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   initial_config.irqNb 	= BSP_IRQ_NUMBER;
   initial_config.defaultEntry   = defaultIrq;
   initial_config.irqHdlTbl	= rtemsIrq;
-  initial_config.irqBase	= BSP_ASM_IRQ_VECTOR_BASE;
+  initial_config.irqBase	= BSP_LOWEST_OFFSET;
   initial_config.irqPrioTbl	= BSPirqPrioTable;
 
 #ifdef TRACE_IRQ_INIT  

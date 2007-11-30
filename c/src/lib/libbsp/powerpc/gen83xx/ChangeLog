@@ -1,3 +1,11 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq.h, irq/irq_init.c: Removed the definition
+	of ASM_IRQ_VECTOR_BASE; this symbol was only use to
+	initialize the irqBase member of the rtems_irq_global_settings
+	struct. However, irqBase is an rtems_irq_symbolic_name,
+	so using BSP_LOWEST_OFFSET is more appropriate.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Eliminate PowerPC specific elements from the CPU

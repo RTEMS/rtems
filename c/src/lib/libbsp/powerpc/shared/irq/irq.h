@@ -47,7 +47,6 @@
 #define ELCRM_INT1_LVL          0x2
 #define ELCRM_INT0_LVL          0x1
 
-#define BSP_ASM_IRQ_VECTOR_BASE 0x0
     /* PIC's command and mask registers */
 #define PIC_MASTER_COMMAND_IO_PORT		0x20	/* Master PIC command register */
 #define PIC_SLAVE_COMMAND_IO_PORT		0xa0	/* Slave PIC command register */
@@ -69,8 +68,6 @@ extern "C" {
  * rtems_irq_number Definitions
  */
 
-/* Base vector for our ISA IRQ handlers. */
-#define  BSP_ISA_IRQ_VECTOR_BASE	(BSP_ASM_IRQ_VECTOR_BASE)
 /*
  * ISA IRQ handler related definitions
  */

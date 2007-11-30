@@ -30,8 +30,6 @@
 #define LIBBSP_POWERPC_IRQ_H
 #include <rtems/irq.h>
 
-#define BSP_ASM_IRQ_VECTOR_BASE 0x0
-
 #ifndef ASM
 
 #ifdef __cplusplus
@@ -46,15 +44,12 @@ extern volatile unsigned int ppc_cached_irq_mask;
  * Symblolic IRQ names and related definitions.
  */
 
-  /* Base vector for our SIU IRQ handlers. */
-#define BSP_SIU_VECTOR_BASE		(BSP_ASM_IRQ_VECTOR_BASE)
-
   /*
    * CPM IRQ handlers related definitions
    * CAUTION : BSP_CPM_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
    */
 #define BSP_CPM_IRQ_NUMBER		(64)
-#define BSP_CPM_IRQ_LOWEST_OFFSET	(BSP_SIU_VECTOR_BASE)
+#define BSP_CPM_IRQ_LOWEST_OFFSET	(0)
 #define BSP_CPM_IRQ_MAX_OFFSET		(BSP_CPM_IRQ_LOWEST_OFFSET + BSP_CPM_IRQ_NUMBER - 1)
   /*
    * PowerPc exceptions handled as interrupt where a rtems managed interrupt

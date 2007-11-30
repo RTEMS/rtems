@@ -32,8 +32,6 @@
 /*#define BSP_SHARED_HANDLER_SUPPORT      1*/
 #include <rtems/irq.h>
 
-#define BSP_ASM_IRQ_VECTOR_BASE 0x0
-
 #ifndef ASM
 
 #define OneTierIrqPrioTbl 1

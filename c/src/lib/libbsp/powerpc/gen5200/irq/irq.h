@@ -99,15 +99,10 @@
 #define PSE_SOURCE(_source)	(((_source) >> 24) & 0x0000001F)
 
 /*
- * Base index for the module specific irq handlers
- */
-#define BSP_ASM_IRQ_VECTOR_BASE 	0
-#define BSP_PER_VECTOR_BASE		BSP_ASM_IRQ_VECTOR_BASE /* 0 */
-/*
  * Peripheral IRQ handlers related definitions
  */
 #define BSP_PER_IRQ_NUMBER		22
-#define BSP_PER_IRQ_LOWEST_OFFSET	BSP_PER_VECTOR_BASE  /* 0 */
+#define BSP_PER_IRQ_LOWEST_OFFSET	0
 #define BSP_PER_IRQ_MAX_OFFSET		\
 	(BSP_PER_IRQ_LOWEST_OFFSET + BSP_PER_IRQ_NUMBER - 1) /* 21 */
 /*
@@ -288,7 +283,7 @@ typedef struct {
    */
   rtems_irq_connect_data*	irqHdlTbl;
   /*
-   * actual value of BSP_PER_IRQ_VECTOR_BASE...
+   * actual value of BSP_PER_IRQ_LOWEST_OFFSET...
    */
   rtems_irq_symbolic_name	irqBase;
   /*

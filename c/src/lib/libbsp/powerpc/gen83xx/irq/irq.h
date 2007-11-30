@@ -28,16 +28,10 @@
  */
 
 /*
- * Base index for the module specific irq handlers
- */
-#define BSP_ASM_IRQ_VECTOR_BASE 0x0
-#define BSP_IPIC_VECTOR_BASE	BSP_ASM_IRQ_VECTOR_BASE
-
-/*
  * Peripheral IRQ handlers related definitions
  */
 #define BSP_IPIC_PER_IRQ_NUMBER	        128
-#define BSP_IPIC_IRQ_LOWEST_OFFSET   BSP_IPIC_VECTOR_BASE  /* 0 */
+#define BSP_IPIC_IRQ_LOWEST_OFFSET        0
 #define BSP_IPIC_IRQ_MAX_OFFSET      (BSP_IPIC_IRQ_LOWEST_OFFSET\
                                          +BSP_IPIC_PER_IRQ_NUMBER-1)
 
