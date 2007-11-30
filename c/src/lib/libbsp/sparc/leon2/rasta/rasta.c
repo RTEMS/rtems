@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #include <rtems/bspIo.h>
 #include <pci.h>
 #include <rasta.h>
@@ -12,7 +16,7 @@
 /* If RASTA_SRAM is defined SRAM will be used, else SDRAM */
 /*#define RASTA_SRAM 1*/
 
-#define RASTA_IRQ  4
+#define RASTA_IRQ  5
 
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_IOAREA_BASE_ADDR 0x80100000
@@ -288,7 +292,7 @@ int rasta_register(void)
 
     /* Configure AT697 ioport bit 7 to input pci irq */
     regs->PIO_Direction &= ~(1<<7);
-    regs->PIO_Interrupt  = 0x87;          /* level sensitive */
+    regs->PIO_Interrupt  |= (0x87<<8);    /* level sensitive */
 
     apb_base[0x100] |= 0x40000000;        /* Set GRPCI mmap 0x4 */
     apb_base[0x104] =  0x40000000;        /* 0xA0000000;  Point PAGE1 to RAM */

@@ -1,3 +1,9 @@
+2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
+
+	* rasta/rasta.c: LEON2 PCI RASTA driver. Changes RASTA PCI interrupt to
+	5 from 4. This is to avoid conflict with the LAN9C111 network MAC
+	driver using interrupt 4.
+
 2007-10-11	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am, preinstall.am: Fixes bug in OC-CAN baud rate calculator.
