@@ -119,7 +119,7 @@ SECTIONS
   PROVIDE (__FRAME_END__ = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
-  PROVIDE (__SDATA2_START__ = .);
+_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
   PROVIDE (__SBSS2_END__ = .);
@@ -187,7 +187,7 @@ SECTIONS
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
-  PROVIDE (__SDATA_START__ = .);
+_SDA_BASE_ = __SDATA_START__ + 0x8000;
   .sdata	  : { *(.sdata*) *(.gnu.linkonce.s.*)	} >RAM
   _edata  =  .;
   PROVIDE (edata = .);

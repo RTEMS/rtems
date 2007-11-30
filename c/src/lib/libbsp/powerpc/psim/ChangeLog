@@ -1,3 +1,9 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/linkcmds.c, start/start.S: call __eabi() from start.S
+	and make sure linkcmds defines _SDA_BASE_ + _SDA2_BASE_ so that
+	sysv + eabi are properly supported.
+
 2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: BSP_DIRTY_MEMORY should be tested for zero not

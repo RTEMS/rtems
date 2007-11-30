@@ -103,6 +103,7 @@ _start:
 	lis	r0,0
 	stw	r0,0(sp)		/* clear back chain */
 	stwu	sp,-56(sp)		/* push another stack frame */
+	bl  FUNC_NAME(__eabi)
 
         lis	r5,environ@ha
         la	r5,environ@l(r5)	/* environp */
