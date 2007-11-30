@@ -1,5 +1,11 @@
 2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
 
+	* shared/include/grspw.h, shared/spw/grspw.c: GRSPW SpaceWire Driver.
+	Fixes typecast to volatile integer instead of to integer. Added
+	scanning for GRSPW2 Core, The GRSPW2 core is run in legacy mode.
+
+2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
+
 	* shared/can/occan.c: LEON2/3 OCCAN CAN driver. Fixes typecast to
 	volatile integer where needed. Fixes bug where closing the driver and
 	opening it again could make the driver not starting transmission due

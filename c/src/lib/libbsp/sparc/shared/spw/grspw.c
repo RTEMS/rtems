@@ -10,6 +10,9 @@
  *
  * Changes:
  * 
+ * 2007-09-27, Daniel Hellstrom <daniel@gaisler.com>
+ *  Added basic support for GRSPW2 core.
+ *
  * 2007-07-12, Daniel Hellstrom <daniel@gaisler.com>
  *  Fixed bug in TXBLOCK mode (normally called flush).
  *
@@ -115,6 +118,10 @@ typedef struct {
    volatile unsigned int dma0rxmax;
    volatile unsigned int dma0txdesc;
    volatile unsigned int dma0rxdesc;
+   
+   /* For GRSPW core 2 and onwards */
+   volatile unsigned int dma0addr;
+   
 } LEON3_SPACEWIRE_Regs_Map;
 
 typedef struct {
@@ -165,6 +172,7 @@ typedef struct {
 
    unsigned int irq;
    int minor;
+   int core_ver;
    int open;
    int running;
    unsigned int core_freq_khz;
@@ -188,12 +196,13 @@ typedef struct {
 } GRSPW_DEV;
 
 static int spw_cores;
+static int spw_cores2;
 static unsigned int sys_freq_khz;
 static GRSPW_DEV *grspw_devs;
 
 #ifdef GRSPW_DONT_BYPASS_CACHE
-#define _SPW_READ(address) (*(unsigned int *)(address))
-#define _MEM_READ(address) (*(unsigned char *)(address))
+#define _SPW_READ(address) (*(volatile unsigned int *)(address))
+#define _MEM_READ(address) (*(volatile unsigned char *)(address))
 #else
 static unsigned int _SPW_READ(void *addr) {
         unsigned int tmp;
@@ -508,7 +517,7 @@ static rtems_isr grspw_interrupt_handler(rtems_vector_number v)
 {
         int minor;
 
-        for(minor = 0; minor < spw_cores; minor++) {
+        for(minor = 0; minor < spw_cores+spw_cores2; minor++) {
                 if (v == (grspw_devs[minor].irq+0x10) ) {
                         grspw_interrupt(&grspw_devs[minor]);
                         break;
@@ -601,16 +610,18 @@ static rtems_device_driver grspw_initialize(
         GRSPW_DEV *pDev;
         char console_name[20];
 				amba_apb_device dev;
+                                
         SPACEWIRE_DBG2("spacewire driver initialization\n");        
         
         /* Copy device name */
         strcpy(console_name,GRSPW_DEVNAME);
         
         /* Get the number of GRSPW cores */
-        i=0; spw_cores = 0;
+        i=0; spw_cores = 0; spw_cores2 = 0;
 
         /* get number of GRSPW cores */
         spw_cores = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE);
+        spw_cores2 = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_GRSPW2);
 #if 0
 				if ( spw_cores > SPACEWIRE_MAX_CORENR )
 					spw_cores = SPACEWIRE_MAX_CORENR;
@@ -623,24 +634,31 @@ static rtems_device_driver grspw_initialize(
         }
 #endif
         
-        if ( spw_cores < 1 ){
+        if ( (spw_cores+spw_cores2) < 1 ){
                 /* No GRSPW cores around... */
                 return RTEMS_SUCCESSFUL;
         }
         
         /* Allocate memory for all spacewire cores */
-        grspw_devs = (GRSPW_DEV *)malloc(spw_cores * sizeof(GRSPW_DEV));
+        grspw_devs = (GRSPW_DEV *)malloc((spw_cores+spw_cores2) * sizeof(GRSPW_DEV));
         
         /* Zero out all memory */
-        memset(grspw_devs,0,spw_cores * sizeof(GRSPW_DEV));
+        memset(grspw_devs,0,(spw_cores+spw_cores2) * sizeof(GRSPW_DEV));
         
         /* loop all found spacewire cores */
         i = 0;
-        for(minor=0; minor<spw_cores; minor++){
-                /* Get device */
-                amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE,&dev,minor);
-                
+        for(minor=0; minor<(spw_cores+spw_cores2); minor++){
+
                 pDev = &grspw_devs[minor];
+                
+                /* Get device */
+                if ( spw_cores > minor ) {
+                        amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE,&dev,minor);
+                        pDev->core_ver = 1;
+                } else {
+                        amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_GRSPW2,&dev,minor-spw_cores);
+                        pDev->core_ver = 2;
+                }
                 
                 pDev->regs = (LEON3_SPACEWIRE_Regs_Map *)dev.start;
                 pDev->irq = dev.irq;
@@ -683,7 +701,7 @@ static rtems_device_driver grspw_initialize(
         }
   
         /*  Register Device Names, /dev/grspw0, /dev/grspw1  ... */
-        for (i = 0; i < spw_cores; i++) {
+        for (i = 0; i < spw_cores+spw_cores2; i++) {
            GRSPW_DEVNAME_NO(console_name,i);
            SPACEWIRE_DBG("registering minor %i as %s\n", i, console_name);
            status = rtems_io_register_name( console_name, major, i);
@@ -694,7 +712,7 @@ static rtems_device_driver grspw_initialize(
   
         /* Initialize Hardware and semaphores*/
         c = 'a';
-        for (i = 0; i < spw_cores; i++) {
+        for (i = 0; i < spw_cores+spw_cores2; i++) {
                 pDev = &grspw_devs[i];
                 rtems_semaphore_create(
                         rtems_build_name('T', 'x', 'S', c), 
@@ -725,7 +743,7 @@ static rtems_device_driver grspw_open(
 {
         GRSPW_DEV *pDev;
         SPACEWIRE_DBGC(DBGSPW_IOCALLS, "open [%i,%i]\n", major, minor);
-        if ( minor >= spw_cores ) {
+        if ( minor >= (spw_cores+spw_cores2) ) {
                 SPACEWIRE_DBG("minor %i too big\n", minor);
                 return RTEMS_INVALID_NAME;
         }
@@ -882,7 +900,7 @@ static rtems_device_driver grspw_control(
         spw_ioctl_pkt_send *args;
         spw_ioctl_packetsize *ps;
         int status;
-        unsigned int tmp;
+        unsigned int tmp,nodeaddr,nodemask;
         int timeout;
         rtems_device_driver ret;
         rtems_libio_ioctl_args_t	*ioarg = (rtems_libio_ioctl_args_t *) arg;
@@ -896,15 +914,39 @@ static rtems_device_driver grspw_control(
         switch(ioarg->command) {
                 case SPACEWIRE_IOCTRL_SET_NODEADDR:
                         /*set node address*/
-                        SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEADDR %i\n", (unsigned int)ioarg->buffer);
+                        SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEADDR %i\n",(unsigned int)ioarg->buffer);
                         if ((unsigned int)ioarg->buffer > 255) {
                                 return RTEMS_INVALID_NAME;
                         }
-                        SPW_WRITE(&pDev->regs->nodeaddr, (unsigned int)ioarg->buffer);  
-                        if (SPW_READ(&pDev->regs->nodeaddr) != (unsigned int)ioarg->buffer) {
+                        nodeaddr = ((unsigned int)ioarg->buffer) & 0xff;
+                        tmp = SPW_READ(&pDev->regs->nodeaddr);
+                        tmp &= 0xffffff00; /* Remove old address */
+                        tmp |= nodeaddr;
+                        SPW_WRITE(&pDev->regs->nodeaddr, tmp);
+                        if ((SPW_READ(&pDev->regs->nodeaddr)&0xff) != nodeaddr) {
                                 return RTEMS_IO_ERROR;
                         }
-                        pDev->config.nodeaddr = (unsigned int) ioarg->buffer;
+                        pDev->config.nodeaddr = nodeaddr;
+                        break;
+                case SPACEWIRE_IOCTRL_SET_NODEMASK:
+                        /*set node address*/
+                        SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_NODEMASK %i\n",(unsigned int)ioarg->buffer);
+                        if ( pDev->core_ver > 1 ){
+                          if ((unsigned int)ioarg->buffer > 255) {
+                                  return RTEMS_INVALID_NAME;
+                          }
+                          nodemask = ((unsigned int)ioarg->buffer) & 0xff;
+                          tmp = SPW_READ(&pDev->regs->nodeaddr);
+                          tmp &= 0xffff00ff; /* Remove old mask */
+                          tmp |= nodemask<<8;
+                          SPW_WRITE(&pDev->regs->nodeaddr, tmp);
+                          if (((SPW_READ(&pDev->regs->nodeaddr)>>8)&0xff) != nodemask) {
+                                  return RTEMS_IO_ERROR;
+                          }
+                          pDev->config.nodemask = nodemask;
+                        }else{
+                          SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_NODEMASK: not implemented in GRSPW1 HW\n");
+                        }
                         break;
                 case SPACEWIRE_IOCTRL_SET_RXBLOCK:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL, "SPACEWIRE_IOCTRL_SET_RXBLOCK %i \n", (unsigned int)ioarg->buffer);
@@ -932,33 +974,58 @@ static rtems_device_driver grspw_control(
                         if ((unsigned int)ioarg->buffer > 255) {
                                 return RTEMS_INVALID_NAME;
                         }
-                        SPW_WRITE(&pDev->regs->clkdiv, (unsigned int)ioarg->buffer);
-                        if (SPW_READ(&pDev->regs->clkdiv) != (unsigned int)ioarg->buffer) {
+                        tmp = SPW_READ(&pDev->regs->clkdiv);
+                        tmp &= ~0xff; /* Remove old Clockdiv Setting */
+                        tmp |= ((unsigned int)ioarg->buffer) & 0xff; /* add new clockdiv setting */
+                        SPW_WRITE(&pDev->regs->clkdiv, tmp);
+                        if (SPW_READ(&pDev->regs->clkdiv) != tmp) {
                                 return RTEMS_IO_ERROR;
                         }
-                        pDev->config.clkdiv = (unsigned int)ioarg->buffer;
+                        pDev->config.clkdiv = tmp;
                         break;
-                case SPACEWIRE_IOCTRL_SET_TIMER:
-                        SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_TIMER %i\n", (unsigned int)ioarg->buffer);
-                        if ((unsigned int)ioarg->buffer > 4095) {
+                case SPACEWIRE_IOCTRL_SET_CLKDIVSTART:
+                        SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_CLKDIVSTART %i\n", (unsigned int)ioarg->buffer);
+                        if ((unsigned int)ioarg->buffer > 255) {
                                 return RTEMS_INVALID_NAME;
                         }
-                        SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFFFF000) | ((unsigned int)ioarg->buffer & 0xFFF));
-                        if ((SPW_READ(&pDev->regs->timer) & 0xFFF) != (unsigned int)ioarg->buffer) {
+                        tmp = SPW_READ(&pDev->regs->clkdiv);
+                        tmp &= ~0xff00; /* Remove old Clockdiv Start Setting */
+                        tmp |= (((unsigned int)ioarg->buffer) & 0xff)<<8; /* add new clockdiv start setting */
+                        SPW_WRITE(&pDev->regs->clkdiv, tmp);
+                        if (SPW_READ(&pDev->regs->clkdiv) != tmp) {
                                 return RTEMS_IO_ERROR;
                         }
-                        pDev->config.timer = (unsigned int)ioarg->buffer;
+                        pDev->config.clkdiv = tmp;
+                        break;                        
+                case SPACEWIRE_IOCTRL_SET_TIMER:
+                        SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_TIMER %i\n", (unsigned int)ioarg->buffer);
+                        if ( pDev->core_ver <= 1 ) {
+                          if ((unsigned int)ioarg->buffer > 4095) {
+                                  return RTEMS_INVALID_NAME;
+                          }
+                          SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFFFF000) | ((unsigned int)ioarg->buffer & 0xFFF));
+                          if ((SPW_READ(&pDev->regs->timer) & 0xFFF) != (unsigned int)ioarg->buffer) {
+                                  return RTEMS_IO_ERROR;
+                          }
+                          pDev->config.timer = (unsigned int)ioarg->buffer;
+                        }else{
+                          SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_TIMER: removed in GRSPW2 HW\n");
+                        }
                         break;
                 case SPACEWIRE_IOCTRL_SET_DISCONNECT:
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_DISCONNECT %i\n", (unsigned int)ioarg->buffer);
-                        if ((unsigned int)ioarg->buffer > 1023) {
-                                return RTEMS_INVALID_NAME;
+                        if ( pDev->core_ver <= 1 ) {
+                          if ((unsigned int)ioarg->buffer > 1023) {
+                                  return RTEMS_INVALID_NAME;
+                          }
+                          SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFC00FFF) | (((unsigned int)ioarg->buffer & 0x3FF) << 12));
+                          if (((SPW_READ(&pDev->regs->timer) >> 12) & 0x3FF) != (unsigned int)ioarg->buffer) {
+                                  return RTEMS_IO_ERROR;
+                          }
+                          pDev->config.disconnect = (unsigned int)ioarg->buffer;
+                        }else{
+                          SPACEWIRE_DBG("SPACEWIRE_IOCTRL_SET_DISCONNECT: not implemented for GRSPW2\n");
                         }
-                        SPW_WRITE(&pDev->regs->timer, (SPW_READ(&pDev->regs->timer) & 0xFFC00FFF) | (((unsigned int)ioarg->buffer & 0x3FF) << 12));
-                        if (((SPW_READ(&pDev->regs->timer) >> 12) & 0x3FF) != (unsigned int)ioarg->buffer) {
-                                return RTEMS_IO_ERROR;
-                        }
-                        pDev->config.disconnect = (unsigned int)ioarg->buffer;
                         break;
                 case SPACEWIRE_IOCTRL_SET_PROMISCUOUS:        
                         SPACEWIRE_DBGC(DBGSPW_IOCTRL,"SPACEWIRE_IOCTRL_SET_PROMISCUOUS %i \n", (unsigned int)ioarg->buffer);
@@ -1105,6 +1172,7 @@ static rtems_device_driver grspw_control(
                                 return RTEMS_INVALID_NAME;
                         SPACEWIRE_DBG2("SPACEWIRE_IOCTRL_GET_CONFIG \n");
                         (*(spw_config *)ioarg->buffer).nodeaddr = pDev->config.nodeaddr;
+                        (*(spw_config *)ioarg->buffer).nodemask = pDev->config.nodemask;
                         (*(spw_config *)ioarg->buffer).destkey = pDev->config.destkey;
                         (*(spw_config *)ioarg->buffer).clkdiv = pDev->config.clkdiv;
                         (*(spw_config *)ioarg->buffer).rxmaxlen = pDev->config.rxmaxlen;
@@ -1231,21 +1299,26 @@ static rtems_device_driver grspw_control(
                                  pDev->core_freq_khz = sys_freq_khz;
                         }
                         
-                        /* Calculate Timer64 & Disconnect */
-                        pDev->config.timer = grspw_calc_timer64(pDev->core_freq_khz);
-                        pDev->config.disconnect = grspw_calc_disconnect(pDev->core_freq_khz);
-                        
-                        /* Set Timer64 & Disconnect Register */
-                        SPW_WRITE(&pDev->regs->timer, 
+                        /* Only GRSPW1 needs the Timer64 and Disconnect values 
+                         * GRSPW2 and onwards doesn't have this register.
+                         */
+                        if ( pDev->core_ver <= 1 ){
+                          /* Calculate Timer64 & Disconnect */
+                          pDev->config.timer = grspw_calc_timer64(pDev->core_freq_khz);
+                          pDev->config.disconnect = grspw_calc_disconnect(pDev->core_freq_khz);
+                          
+                          /* Set Timer64 & Disconnect Register */
+                          SPW_WRITE(&pDev->regs->timer, 
                                  (SPW_READ(&pDev->regs->timer) & 0xFFC00000) |
                                  ((pDev->config.disconnect & 0x3FF)<<12) |
                                  (pDev->config.timer & 0xFFF));
                         
-                        /* Check that the registers were written successfully */
-                        tmp = SPW_READ(&pDev->regs->timer) & 0x003fffff;
-                        if ( ((tmp & 0xFFF) != pDev->config.timer) ||
-                             (((tmp >> 12) & 0x3FF) != pDev->config.disconnect) ) {
-                                return RTEMS_IO_ERROR;
+                          /* Check that the registers were written successfully */
+                          tmp = SPW_READ(&pDev->regs->timer) & 0x003fffff;
+                          if ( ((tmp & 0xFFF) != pDev->config.timer) ||
+                               (((tmp >> 12) & 0x3FF) != pDev->config.disconnect) ) {
+                                  return RTEMS_IO_ERROR;
+                          }
                         }
                         break;
                         
@@ -1357,9 +1430,11 @@ static void grspw_hw_read_config(GRSPW_DEV *pDev)
 {
         unsigned int tmp;
         
-        pDev->config.nodeaddr = 0xFF & SPW_READ(&pDev->regs->nodeaddr);
+        tmp = SPW_READ(&pDev->regs->nodeaddr);
+        pDev->config.nodeaddr = 0xFF & tmp;
+        pDev->config.nodemask = 0xFF & (tmp>>8);
         pDev->config.destkey = 0xFF & SPW_READ(&pDev->regs->destkey);
-        pDev->config.clkdiv = 0xFF & SPW_READ(&pDev->regs->clkdiv);
+        pDev->config.clkdiv = 0xFFFF & SPW_READ(&pDev->regs->clkdiv);
         
         tmp = SPW_CTRL_READ(pDev);
         pDev->config.promiscuous = 1 & (tmp >> 5);
@@ -1371,9 +1446,14 @@ static void grspw_hw_read_config(GRSPW_DEV *pDev)
         pDev->config.linkdisabled = 1 & tmp;
         pDev->config.linkstart = 1 & (tmp >> 1);
         
-        tmp = SPW_READ(&pDev->regs->timer);
-        pDev->config.timer = 0xFFF & tmp;
-        pDev->config.disconnect = 0x3FF & (tmp >> 12);
+        if ( pDev->core_ver <= 1 ){
+          tmp = SPW_READ(&pDev->regs->timer);
+          pDev->config.timer = 0xFFF & tmp;
+          pDev->config.disconnect = 0x3FF & (tmp >> 12);
+        }else{
+          pDev->config.timer = 0;
+          pDev->config.disconnect = 0;
+        }
         
         return;
 }
