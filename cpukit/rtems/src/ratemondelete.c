@@ -46,13 +46,6 @@ rtems_status_code rtems_rate_monotonic_delete(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-      return RTEMS_INTERNAL_ERROR;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
@@ -61,7 +54,13 @@ rtems_status_code rtems_rate_monotonic_delete(
       _Rate_monotonic_Free( the_period );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:            /* should never return this */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

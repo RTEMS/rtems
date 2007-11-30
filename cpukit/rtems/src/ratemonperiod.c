@@ -184,13 +184,6 @@ rtems_status_code rtems_rate_monotonic_period(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-      return RTEMS_INTERNAL_ERROR;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
@@ -203,14 +196,12 @@ rtems_status_code rtems_rate_monotonic_period(
           case RATE_MONOTONIC_INACTIVE:
             return_value = RTEMS_NOT_DEFINED;
             break;
-          case RATE_MONOTONIC_ACTIVE:
-            return_value = RTEMS_SUCCESSFUL;
-            break;
           case RATE_MONOTONIC_EXPIRED:
             return_value = RTEMS_TIMEOUT;
             break;
+          case RATE_MONOTONIC_ACTIVE:
           default:              /* unreached -- only to remove warnings */
-            return_value = RTEMS_INTERNAL_ERROR;
+            return_value = RTEMS_SUCCESSFUL;
             break;
         }
         _Thread_Enable_dispatch();
@@ -351,7 +342,13 @@ rtems_status_code rtems_rate_monotonic_period(
            */
           break;
       }
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:            /* should never return this */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -74,21 +74,6 @@ rtems_status_code rtems_message_queue_receive(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Message_queue_MP_Send_request_packet(
-          MESSAGE_QUEUE_MP_RECEIVE_REQUEST,
-          id,
-          buffer,
-          size,
-          option_set,
-          timeout
-        );
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( _Options_Is_no_wait( option_set ) )
         wait = FALSE;
@@ -108,7 +93,21 @@ rtems_status_code rtems_message_queue_receive(
         _Thread_Executing->Wait.return_code
       );
 
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      return _Message_queue_MP_Send_request_packet(
+          MESSAGE_QUEUE_MP_RECEIVE_REQUEST,
+          id,
+          buffer,
+          size,
+          option_set,
+          timeout
+        );
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

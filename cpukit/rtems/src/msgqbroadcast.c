@@ -72,6 +72,25 @@ rtems_status_code rtems_message_queue_broadcast(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
+
+    case OBJECTS_LOCAL:
+      core_status = _CORE_message_queue_Broadcast(
+                      &the_message_queue->message_queue,
+                      buffer,
+                      size,
+                      id,
+                      #if defined(RTEMS_MULTIPROCESSING)
+                        _Message_queue_Core_message_queue_mp_support,
+                      #else
+                        NULL,
+                      #endif
+                      count
+                    );
+
+      _Thread_Enable_dispatch();
+      return
+        _Message_queue_Translate_core_message_queue_return_code( core_status );
+
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = count;
@@ -88,26 +107,7 @@ rtems_status_code rtems_message_queue_broadcast(
 #endif
 
     case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
-    case OBJECTS_LOCAL:
-      core_status = _CORE_message_queue_Broadcast(
-                      &the_message_queue->message_queue,
-                      buffer,
-                      size,
-                      id,
-#if defined(RTEMS_MULTIPROCESSING)
-                      _Message_queue_Core_message_queue_mp_support,
-#else
-                      NULL,
-#endif
-                      count
-                    );
-
-      _Thread_Enable_dispatch();
-      return
-        _Message_queue_Translate_core_message_queue_return_code( core_status );
-
+      break;
   }
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

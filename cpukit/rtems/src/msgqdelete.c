@@ -59,26 +59,17 @@ rtems_status_code rtems_message_queue_delete(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       _Objects_Close( &_Message_queue_Information,
                       &the_message_queue->Object );
 
       _CORE_message_queue_Close(
         &the_message_queue->message_queue,
-#if defined(RTEMS_MULTIPROCESSING)
-        _Message_queue_MP_Send_object_was_deleted,
-#else
-        NULL,
-#endif
+        #if defined(RTEMS_MULTIPROCESSING)
+          _Message_queue_MP_Send_object_was_deleted,
+        #else
+          NULL,
+        #endif
         CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED
       );
 
@@ -99,10 +90,18 @@ rtems_status_code rtems_message_queue_delete(
         );
       }
 #endif
-
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -81,19 +81,6 @@ rtems_status_code rtems_semaphore_release(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Semaphore_MP_Send_request_packet(
-        SEMAPHORE_MP_RELEASE_REQUEST,
-        id,
-        0,                               /* Not used */
-        MPCI_DEFAULT_TIMEOUT
-      );
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         mutex_status = _CORE_mutex_Surrender(
@@ -113,7 +100,20 @@ rtems_status_code rtems_semaphore_release(
         return
           _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
       }
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      return _Semaphore_MP_Send_request_packet(
+        SEMAPHORE_MP_RELEASE_REQUEST,
+        id,
+        0,                               /* Not used */
+        MPCI_DEFAULT_TIMEOUT
+      );
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

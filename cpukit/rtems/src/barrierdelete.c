@@ -48,12 +48,6 @@ rtems_status_code rtems_barrier_delete(
   the_barrier = _Barrier_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       _CORE_barrier_Flush(
         &the_barrier->Barrier,
@@ -67,7 +61,13 @@ rtems_status_code rtems_barrier_delete(
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

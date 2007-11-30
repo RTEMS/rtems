@@ -51,6 +51,14 @@ rtems_status_code rtems_event_send(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
+
+    case OBJECTS_LOCAL:
+      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+      _Event_sets_Post( event_in, &api->pending_events );
+      _Event_Surrender( the_thread );
+      _Thread_Enable_dispatch();
+      return RTEMS_SUCCESSFUL;
+
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       return(
@@ -61,15 +69,10 @@ rtems_status_code rtems_event_send(
         )
       );
 #endif
+
     case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-    case OBJECTS_LOCAL:
-      api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
-      _Event_sets_Post( event_in, &api->pending_events );
-      _Event_Surrender( the_thread );
-      _Thread_Enable_dispatch();
-      return RTEMS_SUCCESSFUL;
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -52,6 +52,16 @@ rtems_status_code rtems_partition_return_buffer(
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
 
+    case OBJECTS_LOCAL:
+      if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
+        _Partition_Free_buffer( the_partition, buffer );
+        the_partition->number_of_used_blocks -= 1;
+        _Thread_Enable_dispatch();
+        return RTEMS_SUCCESSFUL;
+      }
+      _Thread_Enable_dispatch();
+      return RTEMS_INVALID_ADDRESS;
+
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       return _Partition_MP_Send_request_packet(
@@ -62,18 +72,8 @@ rtems_status_code rtems_partition_return_buffer(
 #endif
 
     case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
-    case OBJECTS_LOCAL:
-      if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
-        _Partition_Free_buffer( the_partition, buffer );
-        the_partition->number_of_used_blocks -= 1;
-        _Thread_Enable_dispatch();
-        return RTEMS_SUCCESSFUL;
-      }
-      _Thread_Enable_dispatch();
-      return RTEMS_INVALID_ADDRESS;
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

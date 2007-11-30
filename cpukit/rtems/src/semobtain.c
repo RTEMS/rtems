@@ -77,6 +77,7 @@ rtems_status_code rtems_semaphore_obtain(
 
   the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
+
     case OBJECTS_LOCAL:
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(

@@ -54,11 +54,6 @@ void _Rate_monotonic_Timeout(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:  /* impossible */
-#endif
-    case OBJECTS_ERROR:
-      break;
 
     case OBJECTS_LOCAL:
       the_thread = the_period->owner;
@@ -74,6 +69,12 @@ void _Rate_monotonic_Timeout(
       } else
         the_period->state = RATE_MONOTONIC_EXPIRED;
       _Thread_Unnest_dispatch();
+      break;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:  /* impossible */
+#endif
+    case OBJECTS_ERROR:
       break;
   }
 }

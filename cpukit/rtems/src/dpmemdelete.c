@@ -48,20 +48,19 @@ rtems_status_code rtems_port_delete(
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-      return RTEMS_INTERNAL_ERROR;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
       _Dual_ported_memory_Free( the_port );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:        /* this error cannot be returned */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

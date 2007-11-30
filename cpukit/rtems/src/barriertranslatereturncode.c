@@ -1,7 +1,7 @@
 /*
  *  Barrier Manager -- Translate SuperCore Status
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,12 +38,16 @@ rtems_status_code _Barrier_Translate_core_barrier_return_code_[] = {
   RTEMS_TIMEOUT             /* CORE_BARRIER_TIMEOUT */
 };
 
-
 rtems_status_code _Barrier_Translate_core_barrier_return_code (
   CORE_barrier_Status  the_barrier_status
 )
 {
-  if ( the_barrier_status > CORE_BARRIER_TIMEOUT )
-    return RTEMS_INTERNAL_ERROR;
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( the_barrier_status > CORE_BARRIER_STATUS_LAST )
+      return RTEMS_INTERNAL_ERROR;
+  #endif
   return _Barrier_Translate_core_barrier_return_code_[the_barrier_status];
 }

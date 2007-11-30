@@ -58,15 +58,6 @@ rtems_status_code rtems_task_is_suspended(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( !_States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Enable_dispatch();
@@ -74,7 +65,16 @@ rtems_status_code rtems_task_is_suspended(
       }
       _Thread_Enable_dispatch();
       return RTEMS_ALREADY_SUSPENDED;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -46,11 +46,6 @@ rtems_status_code rtems_barrier_wait(
 
   the_barrier = _Barrier_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       _CORE_barrier_Wait(
@@ -64,7 +59,12 @@ rtems_status_code rtems_barrier_wait(
       return _Barrier_Translate_core_barrier_return_code(
                 _Thread_Executing->Wait.return_code );
 
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

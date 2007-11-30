@@ -1,7 +1,7 @@
 /*
  *  Clock Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -111,6 +111,6 @@ rtems_status_code rtems_clock_get(
     }
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* should never get here */
+  return RTEMS_INVALID_NUMBER;
 
 }

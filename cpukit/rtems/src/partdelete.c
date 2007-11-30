@@ -50,14 +50,6 @@ rtems_status_code rtems_partition_delete(
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       if ( the_partition->number_of_used_blocks == 0 ) {
@@ -85,7 +77,16 @@ rtems_status_code rtems_partition_delete(
       }
       _Thread_Enable_dispatch();
       return RTEMS_RESOURCE_IN_USE;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

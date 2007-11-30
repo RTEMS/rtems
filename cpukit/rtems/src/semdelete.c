@@ -81,15 +81,6 @@ rtems_status_code rtems_semaphore_delete(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) &&
@@ -130,7 +121,16 @@ rtems_status_code rtems_semaphore_delete(
 #endif
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

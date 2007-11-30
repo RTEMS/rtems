@@ -70,6 +70,18 @@ rtems_status_code rtems_task_set_priority(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
+    case OBJECTS_LOCAL:
+      /* XXX convert from core priority */
+      *old_priority = the_thread->current_priority;
+      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
+        the_thread->real_priority = new_priority;
+        if ( the_thread->resource_count == 0 ||
+             the_thread->current_priority > new_priority )
+          _Thread_Change_priority( the_thread, new_priority, FALSE );
+      }
+      _Thread_Enable_dispatch();
+      return RTEMS_SUCCESSFUL;
+
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = old_priority;
@@ -83,20 +95,8 @@ rtems_status_code rtems_task_set_priority(
 #endif
 
     case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
-    case OBJECTS_LOCAL:
-      /* XXX convert from core priority */
-      *old_priority = the_thread->current_priority;
-      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        the_thread->real_priority = new_priority;
-        if ( the_thread->resource_count == 0 ||
-             the_thread->current_priority > new_priority )
-          _Thread_Change_priority( the_thread, new_priority, FALSE );
-      }
-      _Thread_Enable_dispatch();
-      return RTEMS_SUCCESSFUL;
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

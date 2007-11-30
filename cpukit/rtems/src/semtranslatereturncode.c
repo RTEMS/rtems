@@ -15,7 +15,7 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -76,12 +76,21 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   uint32_t   status
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( status == THREAD_STATUS_PROXY_BLOCKING )
-    return RTEMS_PROXY_BLOCKING;
-#endif
-  if ( status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
-    return RTEMS_INTERNAL_ERROR;
+  /*
+   *  If this thread is blocking waiting for a result on a remote operation.
+   */
+  #if defined(RTEMS_MULTIPROCESSING)
+    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+      return RTEMS_PROXY_BLOCKING;
+  #endif
+
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( status > CORE_MUTEX_STATUS_LAST )
+      return RTEMS_INTERNAL_ERROR;
+  #endif
   return _Semaphore_Translate_core_mutex_return_code_[status];
 }
 
@@ -110,11 +119,16 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
   uint32_t   status
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( status == THREAD_STATUS_PROXY_BLOCKING )
-    return RTEMS_PROXY_BLOCKING;
-#endif
-  if ( status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
-    return RTEMS_INTERNAL_ERROR;
+  #if defined(RTEMS_MULTIPROCESSING)
+    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+      return RTEMS_PROXY_BLOCKING;
+  #endif
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( the_semaphore_status > CORE_SEMAPHORE_STATUS_LAST )
+      return RTEMS_INTERNAL_ERROR;
+  #endif
   return _Semaphore_Translate_core_semaphore_return_code_[status];
 }

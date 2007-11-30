@@ -1,3 +1,38 @@
+2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/barrierdelete.c, rtems/src/barrierrelease.c,
+	rtems/src/barriertranslatereturncode.c, rtems/src/barrierwait.c,
+	rtems/src/clockget.c, rtems/src/dpmemdelete.c,
+	rtems/src/dpmemexternal2internal.c,
+	rtems/src/dpmeminternal2external.c, rtems/src/eventsend.c,
+	rtems/src/eventtimeout.c, rtems/src/msgqbroadcast.c,
+	rtems/src/msgqdelete.c, rtems/src/msgqflush.c,
+	rtems/src/msgqgetnumberpending.c, rtems/src/msgqreceive.c,
+	rtems/src/msgqsend.c, rtems/src/msgqurgent.c, rtems/src/partdelete.c,
+	rtems/src/partgetbuffer.c, rtems/src/partreturnbuffer.c,
+	rtems/src/ratemoncancel.c, rtems/src/ratemondelete.c,
+	rtems/src/ratemongetstatistics.c, rtems/src/ratemongetstatus.c,
+	rtems/src/ratemonperiod.c, rtems/src/ratemonresetstatistics.c,
+	rtems/src/ratemontimeout.c, rtems/src/semdelete.c,
+	rtems/src/semflush.c, rtems/src/semobtain.c, rtems/src/semrelease.c,
+	rtems/src/semtranslatereturncode.c, rtems/src/signalsend.c,
+	rtems/src/taskdelete.c, rtems/src/taskgetnote.c,
+	rtems/src/taskissuspended.c, rtems/src/taskrestart.c,
+	rtems/src/taskresume.c, rtems/src/tasksetnote.c,
+	rtems/src/tasksetpriority.c, rtems/src/taskstart.c,
+	rtems/src/tasksuspend.c, rtems/src/taskvariableadd.c,
+	rtems/src/taskvariabledelete.c, rtems/src/taskvariableget.c,
+	rtems/src/timercancel.c, rtems/src/timerdelete.c,
+	rtems/src/timerfirewhen.c, rtems/src/timergetinfo.c,
+	rtems/src/timerreset.c, rtems/src/timerserverfireafter.c,
+	rtems/src/timerserverfirewhen.c: Restructured all code with
+	the switch (location) pattern so that OBJECTS_LOCAL is first
+	and we can fall into it and the OBJECTS_ERROR case breaks
+	to a return RTEMS_INVALID_ID.  This eliminates the return
+	RTEMS_INTERNAL_ERROR at the bottom of each of these files which
+	was unreachable and untestable code.  This resulted in a code
+	savings of approximately 20 bytes per file on the SPARC/ERC32.
+
 2007-11-30	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* posix/Makefile.am: Restructed to move the

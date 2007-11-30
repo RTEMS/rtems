@@ -48,20 +48,19 @@ rtems_status_code rtems_timer_cancel(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-      return RTEMS_INTERNAL_ERROR;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       if ( !_Timer_Is_dormant_class( the_timer->the_class ) )
         (void) _Watchdog_Remove( &the_timer->Ticker );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:            /* should never return this */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

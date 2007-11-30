@@ -56,18 +56,6 @@ rtems_status_code rtems_signal_send(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Signal_MP_Send_request_packet(
-        SIGNAL_MP_SEND_REQUEST,
-        id,
-        signal_set
-      );
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
       asr = &api->Signal;
@@ -88,7 +76,19 @@ rtems_status_code rtems_signal_send(
       }
       _Thread_Enable_dispatch();
       return RTEMS_NOT_DEFINED;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      return _Signal_MP_Send_request_packet(
+        SIGNAL_MP_SEND_REQUEST,
+        id,
+        signal_set
+      );
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

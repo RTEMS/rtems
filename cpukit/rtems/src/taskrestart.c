@@ -61,15 +61,6 @@ rtems_status_code rtems_task_restart(
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_LOCAL:
       if ( _Thread_Restart( the_thread, NULL, argument ) ) {
         _Thread_Enable_dispatch();
@@ -77,7 +68,16 @@ rtems_status_code rtems_task_restart(
       }
       _Thread_Enable_dispatch();
       return RTEMS_INCORRECT_STATE;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -70,22 +70,7 @@ rtems_status_code rtems_message_queue_urgent(
     return RTEMS_INVALID_ADDRESS;
 
   the_message_queue = _Message_queue_Get( id, &location );
-  switch ( location )
-  {
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Message_queue_MP_Send_request_packet(
-        MESSAGE_QUEUE_MP_URGENT_REQUEST,
-        id,
-        buffer,
-        &size,
-        0,                               /* option_set */
-        MPCI_DEFAULT_TIMEOUT
-      );
-#endif
-
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+  switch ( location ) {
 
     case OBJECTS_LOCAL:
       status = _CORE_message_queue_Urgent(
@@ -106,6 +91,21 @@ rtems_status_code rtems_message_queue_urgent(
 
       return _Message_queue_Translate_core_message_queue_return_code(status);
 
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:
+      return _Message_queue_MP_Send_request_packet(
+        MESSAGE_QUEUE_MP_URGENT_REQUEST,
+        id,
+        buffer,
+        &size,
+        0,                               /* option_set */
+        MPCI_DEFAULT_TIMEOUT
+      );
+#endif
+
+    case OBJECTS_ERROR:
+      break;
   }
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+
+  return RTEMS_INVALID_ID;
 }

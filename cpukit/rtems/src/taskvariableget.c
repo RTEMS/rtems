@@ -44,37 +44,35 @@ rtems_status_code rtems_task_variable_get(
 
   the_thread = _Thread_Get (tid, &location);
   switch (location) {
+
+    case OBJECTS_LOCAL:
+      /*
+       *  Figure out if the variable is in this task's list.
+       */
+      tvp = the_thread->task_variables;
+      while (tvp) {
+        if (tvp->ptr == ptr) {
+	  /*
+	   * Should this return the current (i.e not the
+	   * saved) value if `tid' is the current task?
+	   */
+          *result = tvp->tval;
+          _Thread_Enable_dispatch();
+          return RTEMS_SUCCESSFUL;
+        }
+        tvp = (rtems_task_variable_t *)tvp->next;
+      }
+      _Thread_Enable_dispatch();
+      return RTEMS_INVALID_ADDRESS;
+
 #if defined(RTEMS_MULTIPROCESSING)
-  case OBJECTS_REMOTE:
-    _Thread_Dispatch();
-    return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    case OBJECTS_REMOTE:
+      _Thread_Dispatch();
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
 
-  case OBJECTS_ERROR:
-  default:
-    return RTEMS_INVALID_ID;
-
-  case OBJECTS_LOCAL:
-
-    /*
-     *  Figure out if the variable is in this task's list.
-     */
-
-    tvp = the_thread->task_variables;
-    while (tvp) {
-      if (tvp->ptr == ptr) {
-	/*
-	 * Should this return the current (i.e not the
-	 * saved) value if `tid' is the current task?
-	 */
-        *result = tvp->tval;
-        _Thread_Enable_dispatch();
-        return RTEMS_SUCCESSFUL;
-      }
-      tvp = (rtems_task_variable_t *)tvp->next;
-    }
-    _Thread_Enable_dispatch();
-    return RTEMS_INVALID_ADDRESS;
+    case OBJECTS_ERROR:
+      break;
   }
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

@@ -65,6 +65,12 @@ rtems_status_code rtems_message_queue_flush(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
+
+    case OBJECTS_LOCAL:
+      *count = _CORE_message_queue_Flush( &the_message_queue->message_queue );
+      _Thread_Enable_dispatch();
+      return RTEMS_SUCCESSFUL;
+
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Executing->Wait.return_argument = count;
@@ -81,13 +87,8 @@ rtems_status_code rtems_message_queue_flush(
 #endif
 
     case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
-    case OBJECTS_LOCAL:
-      *count = _CORE_message_queue_Flush( &the_message_queue->message_queue );
-      _Thread_Enable_dispatch();
-      return RTEMS_SUCCESSFUL;
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }
