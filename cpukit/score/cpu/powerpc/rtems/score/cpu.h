@@ -400,8 +400,19 @@ static inline uint32_t CPU_swap_u32(
  *  This is very dependent on the clock speed of the target.
  */
 
+#if 0
+/* Wonderful bookE doesn't have mftb/mftbu; they only
+ * define the TBRU/TBRL SPRs so we use these. Luckily,
+ * we run in supervisory mode so that should work on
+ * all CPUs. In user mode we'd have a problem...
+ * 2007/11/30, T.S.
+ */
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mftb  %0" : "=r" (_value) )
+#else
+#define CPU_Get_timebase_low( _value ) \
+    asm volatile( "mfspr %0,268" : "=r" (_value) )
+#endif
 
 #define rtems_bsp_delay( _microseconds ) \
   do { \
@@ -453,9 +464,16 @@ static inline uint64_t PPC_Get_timebase_register( void )
   uint64_t tbr;
 
   do {
+#if 0
+/* See comment above (CPU_Get_timebase_low) */
     asm volatile( "mftbu %0" : "=r" (tbr_high_old));
     asm volatile( "mftb  %0" : "=r" (tbr_low));
     asm volatile( "mftbu %0" : "=r" (tbr_high));
+#else
+    asm volatile( "mfspr %0, 269" : "=r" (tbr_high_old));
+    asm volatile( "mfspr %0, 268" : "=r" (tbr_low));
+    asm volatile( "mfspr %0, 269" : "=r" (tbr_high));
+#endif
   } while ( tbr_high_old != tbr_high );
 
   tbr = tbr_high;

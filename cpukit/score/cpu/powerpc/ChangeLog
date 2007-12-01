@@ -1,3 +1,9 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/score/cpu.h: Wonderful bookE doesn't have mftb/mftbu;
+	( CPU_Get_timebase_low() ) they only define the TBRU/TBRL SPRs
+	so we use these. Should work on all CPUs.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
