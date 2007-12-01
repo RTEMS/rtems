@@ -23,8 +23,9 @@
  */
 SPR_RO(PVR)
 
-ppc_cpu_id_t current_ppc_cpu = PPC_UNKNOWN;
+ppc_cpu_id_t       current_ppc_cpu      = PPC_UNKNOWN;
 ppc_cpu_revision_t current_ppc_revision = 0xff;
+ppc_feature_t      current_ppc_features = {0};
 
 char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
@@ -46,6 +47,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_860:		return "MPC860";
     case PPC_8260:		return "MPC8260";
     case PPC_8245:		return "MPC8245";
+	case PPC_8540:		return "MPC8540";
 	case PPC_PSIM:		return "PSIM";
     default:
       printk("Unknown CPU value of 0x%x. Please add it to "
@@ -56,8 +58,14 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 
 ppc_cpu_id_t get_ppc_cpu_type()
 {
-  unsigned int pvr = (_read_PVR() >> 16);
+  unsigned int pvr;
+
+  if ( PPC_UNKNOWN != current_ppc_cpu )
+  	return current_ppc_cpu;
+
+  pvr = (_read_PVR() >> 16);
   current_ppc_cpu = (ppc_cpu_id_t) pvr;
+
   switch (pvr) {
     case PPC_405:
     case PPC_601:
@@ -77,12 +85,58 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_8260:
     case PPC_8245:
 	case PPC_PSIM:
-      return current_ppc_cpu;
+	case PPC_8540:
+      break;
     default:
       printk("Unknown PVR value of 0x%x. Please add it to "
              "<libcpu/powerpc/shared/include/cpuIdent.c>\n", pvr );
     return PPC_UNKNOWN;
   }
+
+  /* determine features */
+
+  /* FIXME: This is incomplete; I couldn't go through all the
+   * manuals (yet).
+   */
+  switch ( current_ppc_cpu ) {
+    case PPC_7455:
+    case PPC_7457:
+		current_ppc_features.has_8_bats			= 1;
+    case PPC_7400:
+		current_ppc_features.has_altivec		= 1;
+	case PPC_604:
+	case PPC_604e:
+	case PPC_604r:
+	case PPC_750:
+		current_ppc_features.has_hw_ptbl_lkup	= 1;
+	case PPC_8260:
+	case PPC_8245:
+	case PPC_601:
+	case PPC_603:
+	case PPC_603e:
+	case PPC_603ev:
+	case PPC_603le:
+		current_ppc_features.is_60x				= 1;
+	default:
+	break;
+  }
+
+  switch ( current_ppc_cpu ) {
+  	case PPC_405:
+  	case PPC_8540:
+		current_ppc_features.is_bookE			= 1;
+	default:
+	break;
+  }
+
+  switch ( current_ppc_cpu ) {
+  	case PPC_860:
+		current_ppc_features.has_16byte_clne	=1;
+	default:
+	break;
+  }
+		
+  return current_ppc_cpu;
 }
 
 ppc_cpu_revision_t get_ppc_cpu_revision()

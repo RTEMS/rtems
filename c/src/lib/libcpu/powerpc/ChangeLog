@@ -1,5 +1,14 @@
 2007-11-29	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/include/cpuIdent.h, shared/include/cpuIdent.c:
+	Added a simple 'feature check' facility. Code should
+	not check for a particular CPU type if possible but
+	check the respective feature bit (e.g., 'has_altivec').
+	This makes it much less cumbersome to add more CPU
+	types in the future.
+
+2007-11-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h: Added support
 	for setting & reading IBATs.
 
