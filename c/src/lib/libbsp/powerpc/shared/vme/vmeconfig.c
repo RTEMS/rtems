@@ -52,7 +52,9 @@
 #include <bsp.h>
 #include <bsp/VME.h>
 #include <bsp/VMEConfig.h>
+#ifdef BSP_VME_BAT_IDX
 #include <libcpu/bat.h>
+#endif
 #include <rtems/bspIo.h>
 
 extern int BSP_VMEInit();
