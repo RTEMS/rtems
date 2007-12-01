@@ -162,8 +162,6 @@ bat_addrs_put (ubat * bat, int typ, int idx)
 static void
 bat_addrs_init ()
 {
-  ppc_cpu_id_t cpu = get_ppc_cpu_type ();
-
   ubat bat;
 
   GETBAT (DBAT0, bat.words.u, bat.words.l);
@@ -185,8 +183,7 @@ bat_addrs_init ()
   bat_addrs_put (&bat, TYP_I, 3);
 
 
-  if ((cpu == PPC_7455 || cpu == PPC_7457)
-      && (HID0_7455_HIGH_BAT_EN & _read_HID0 ())) {
+  if ( ppc_cpu_has_8_bats() && (HID0_7455_HIGH_BAT_EN & _read_HID0 ())) {
     GETBAT (DBAT4, bat.words.u, bat.words.l);
     bat_addrs_put (&bat, TYP_D, 4);
     GETBAT (DBAT5, bat.words.u, bat.words.l);
@@ -251,9 +248,7 @@ check_bat_index (int i)
   if (i >= 0 && i < 4)
     return 0;
   if (i >= 4 && i < 8) {
-    /* don't use current_ppc_cpu because we don't know if it has been set already */
-    ppc_cpu_id_t cpu = get_ppc_cpu_type ();
-    if (cpu != PPC_7455 && cpu != PPC_7457)
+    if ( ! ppc_cpu_has_8_bats() )
       return -1;
     /* OK, we're on the right hardware;
      * check if we are already enabled
@@ -298,9 +293,7 @@ check_bat_size (unsigned long size)
   }
   /* bit < 17 is not really legal but we aliased it to 0 in the past */
   if (bit > (11 + 17)) {
-    /* don't use current_ppc_cpu because we don't know if it has been set already */
-    ppc_cpu_id_t cpu = get_ppc_cpu_type ();
-    if (cpu != PPC_7455 && cpu != PPC_7457)
+    if ( ! ppc_cpu_has_8_bats() )
       return -1;
 
     hid0 = _read_HID0 ();

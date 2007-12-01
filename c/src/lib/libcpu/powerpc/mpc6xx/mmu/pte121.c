@@ -428,14 +428,7 @@ triv121PgTblInit (unsigned long base, unsigned ldSize)
    *               performance, screwing deterministic latency!
    *               (Could still be useful for debugging, though)
    */
-  if (   PPC_604 != current_ppc_cpu
-      && PPC_604e != current_ppc_cpu
-      && PPC_604r != current_ppc_cpu
-      && PPC_750  != current_ppc_cpu
-      && PPC_7400 != current_ppc_cpu
-      && PPC_7455 != current_ppc_cpu
-      && PPC_7457 != current_ppc_cpu 
-     )
+  if ( ! ppc_cpu_has_hw_ptbl_lkup() )
     return 0;                   /* unsupported by this CPU */
 
   pgTbl.base = (APte) base;
