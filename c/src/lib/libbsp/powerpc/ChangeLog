@@ -1,5 +1,10 @@
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vectors/vectors.h: Give the BSP_Exception_frame
+	struct a name.
+
+2007-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vme/vmeconfig.c: Include <libcpu/bat.h> only
 	if the BSP-specific configuration header (VMEConfig.h)
 	defines BSP_VME_BAT_IDX so that this file can be used

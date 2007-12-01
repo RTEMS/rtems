@@ -116,7 +116,7 @@ extern void exception_nop_enable(const rtems_raw_except_connect_data* ptr);
 extern int  exception_always_enabled(const rtems_raw_except_connect_data* ptr);
 extern void initialize_exceptions();
 
-typedef struct {
+typedef struct _BSP_Exception_frame {
   unsigned 	EXC_SRR0;
   unsigned 	EXC_SRR1;
   unsigned	_EXC_number;
@@ -158,7 +158,7 @@ typedef struct {
   unsigned	EXC_LR;
   unsigned 	EXC_MSR;
   unsigned	EXC_DAR;
-}BSP_Exception_frame;
+} BSP_Exception_frame;
 
 typedef void (*exception_handler_t) (BSP_Exception_frame* excPtr);
 extern exception_handler_t globalExceptHdl;
