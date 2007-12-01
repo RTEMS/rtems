@@ -39,6 +39,7 @@ static rtems_raw_except_global_settings* 	local_settings;
 
 void * codemove(void *, const void *, unsigned int, unsigned long);
 
+boolean bsp_exceptions_in_RAM = TRUE;
 
 static void* ppc_get_vector_addr(rtems_vector vector)
 {

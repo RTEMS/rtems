@@ -56,6 +56,20 @@ static void ppc_spurious(int, CPU_Interrupt_frame *);
 int _CPU_spurious_count = 0;
 int _CPU_last_spurious = 0;
 
+/* This variable is initialized to 'TRUE' by default;
+ * BSPs which have their vectors in ROM should set it
+ * to FALSE prior to initializing raw exceptions.
+ *
+ * I suspect the only candidate is the simulator.
+ * After all, the value of this variable is used to
+ * determine where to install the prologue code and
+ * installing to ROM on anyting that's real ROM
+ * will fail anyways.
+ *
+ * This should probably go away... (T.S. 2007/11/30)
+ */
+boolean bsp_exceptions_in_RAM = TRUE;
+
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
@@ -308,7 +322,6 @@ void _CPU_ISR_install_vector(
 {
   proc_ptr   ignored;
   extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
-  extern boolean bsp_exceptions_in_RAM;
 
   *old_handler = _ISR_Vector_table[ vector ];
 

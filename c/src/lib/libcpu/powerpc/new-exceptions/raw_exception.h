@@ -319,6 +319,20 @@ extern int ppc_vector_is_valid(rtems_vector vector);
 extern int ppc_init_exceptions (rtems_raw_except_global_settings* config);
 extern int ppc_get_exception_config (rtems_raw_except_global_settings** config);
 
+/* This variable is initialized to 'TRUE' by default;
+ * BSPs which have their vectors in ROM should set it
+ * to FALSE prior to initializing raw exceptions.
+ *
+ * I suspect the only candidate is the simulator.
+ * After all, the value of this variable is used to
+ * determine where to install the prologue code and
+ * installing to ROM on anyting that's real ROM
+ * will fail anyways.
+ *
+ * This should probably go away... (T.S. 2007/11/30)
+ */
+extern boolean bsp_exceptions_in_RAM;
+
 # endif /* ASM */
 
 #endif
