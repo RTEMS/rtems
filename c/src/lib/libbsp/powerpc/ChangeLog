@@ -1,5 +1,10 @@
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/clock/p_clock.c: (run-time) check for e500-cpu
+	and install different ISR for that type of CPU.
+
+2007-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/pci/detect_raven_bridge.c: use ifdef mvme2100
 	rather than ifdef mpc824x so that we don't depend on
 	compile-time CPU flavor. Eventually, this should become

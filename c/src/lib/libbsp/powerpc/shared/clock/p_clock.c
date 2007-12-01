@@ -17,6 +17,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <libcpu/c_clock.h>
+#include <libcpu/cpuIdent.h>
 
 static rtems_irq_connect_data clockIrqData;
 static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
@@ -32,5 +33,8 @@ int BSP_disconnect_clock_handler (void)
 
 int BSP_connect_clock_handler (void)
 {
+  if ( ppc_cpu_is_bookE() )
+  	clockIrqData.hdl = clockIsrBookE;
+
   return BSP_install_rtems_irq_handler (&clockIrqData);
 }
