@@ -1,5 +1,12 @@
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/pci/detect_raven_bridge.c: use ifdef mvme2100
+	rather than ifdef mpc824x so that we don't depend on
+	compile-time CPU flavor. Eventually, this should become
+	a run-time check.
+
+2007-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/vectors.h: Give the BSP_Exception_frame
 	struct a name.
 

@@ -32,7 +32,7 @@
 extern const pci_config_access_functions pci_direct_functions;
 extern const pci_config_access_functions pci_indirect_functions;
 
-#if (defined(mpc8240) || defined(mpc8245))
+#if defined(mvme2100)
 /* FIXME - this should really be in a separate file - the 2100 doesn't
  *         have a raven chip so there is no point having 2100 code here
  */
