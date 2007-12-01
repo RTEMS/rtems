@@ -1,5 +1,11 @@
 2007-11-29	Till Straumann <strauman@slac.stanford.edu>
 
+	* mpc6xx/exceptions/raw_exception.c, 
+	mpc6xx/exceptions/raw_exception.h: removed. mpc6xx
+	uses generic version in new-exceptions.
+
+2007-11-29	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/include/cpuIdent.h, shared/include/cpuIdent.c:
 	Added a simple 'feature check' facility. Code should
 	not check for a particular CPU type if possible but
