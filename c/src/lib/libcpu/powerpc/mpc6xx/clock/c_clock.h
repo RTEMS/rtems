@@ -32,6 +32,8 @@
 extern void clockOff	(void* unused);
 extern void clockOn	(void* unused);
 extern void clockIsr	(void* unused);
+/* bookE decrementer is slightly different */
+extern void clockIsrBookE (void *unused);
 extern int  clockIsOn	(void* unused);
 
 /*

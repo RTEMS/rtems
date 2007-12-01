@@ -25,7 +25,14 @@
 #include <stdlib.h>                     /* for atexit() */
 #include <assert.h>
 #include <libcpu/c_clock.h>
+#include <libcpu/cpuIdent.h>
+#include <libcpu/spr.h>
 #include <rtems/bspIo.h>                     /* for printk() */
+
+SPR_RW(BOOKE_TCR)
+SPR_RW(BOOKE_TSR)
+SPR_RW(BOOKE_DECAR)
+SPR_RW(DEC)
 
 extern int BSP_connect_clock_handler (void);
 
@@ -50,14 +57,39 @@ rtems_device_minor_number rtems_clock_minor;
 
 void clockOff(void* unused)
 {
+rtems_interrupt_level l;
+
+  if ( ppc_cpu_is_bookE() ) {
+    rtems_interrupt_disable(l);
+    _write_BOOKE_TCR(_read_BOOKE_TCR() & ~BOOKE_TCR_DIE);
+    rtems_interrupt_enable(l);
+  } else {
   /*
    * Nothing to do as we cannot disable all interrupts and
    * the decrementer interrupt enable is MSR_EE
    */
+  }
 }
+
 void clockOn(void* unused)
 {
+rtems_interrupt_level l;
+
   PPC_Set_decrementer( Clock_Decrementer_value );
+
+  if ( ppc_cpu_is_bookE() ) {
+    _write_BOOKE_DECAR( Clock_Decrementer_value );
+
+    rtems_interrupt_disable(l);
+
+    /* clear pending/stale irq */
+    _write_BOOKE_TSR( BOOKE_TSR_DIS );
+    /* enable */
+    _write_BOOKE_TCR( _read_BOOKE_TCR() | BOOKE_TCR_DIE );
+
+    rtems_interrupt_enable(l);
+
+  }
 }
 
 static void clockHandler(void)
@@ -101,13 +133,51 @@ int decr;
   } while ( decr < 0 );
 }
 
+/*
+ *  Clock_isr_bookE
+ *
+ *  This is the clock tick interrupt handler
+ *  for bookE CPUs. For efficiency reasons we
+ *  provide a separate handler rather than
+ *  checking the CPU type each time.
+ *
+ *  Input parameters:
+ *    vector - vector number
+ *
+ *  Output parameters:  NONE
+ *
+ *  Return values:      NONE
+ *
+ */
+void clockIsrBookE(void *unused)
+{
+  /* Note: TSR bit has already been cleared in the exception handler */
+
+  /*
+   *  The driver has seen another tick.
+   */
+
+  Clock_driver_ticks += 1;
+
+  /*
+   *  Real Time Clock counter/timer is set to automatically reload.
+   */
+  clock_handler();
+
+}
+
 int clockIsOn(void* unused)
 {
-  uint32_t   msr_value;
+uint32_t   msr_value;
 
-  _CPU_MSR_GET( msr_value );
-  if (msr_value & MSR_EE) return 1;
-  return 0;
+	_CPU_MSR_GET( msr_value );
+
+	if ( ppc_cpu_is_bookE() && ! (_read_BOOKE_TCR() & BOOKE_TCR_DIE) )
+		msr_value = 0;
+
+	if (msr_value & MSR_EE) return 1;
+
+	return 0;
 }
 
 
@@ -167,6 +237,8 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
+rtems_interrupt_level l,tcr;
+
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
             (rtems_configuration_get_microseconds_per_tick()/1000);
 
@@ -174,6 +246,22 @@ rtems_device_driver Clock_initialize(
    * so no interrupts will happen in a while.
    */
   PPC_Set_decrementer( (unsigned)-1 );
+
+  /* On a bookE CPU the decrementer works differently. It doesn't
+   * count past zero but we can enable auto-reload :-)
+   */
+  if ( ppc_cpu_is_bookE() ) {
+
+    rtems_interrupt_disable(l);
+
+    tcr  = _read_BOOKE_TCR();
+	tcr |= BOOKE_TCR_ARE;
+	tcr &= ~BOOKE_TCR_DIE;
+    _write_BOOKE_TCR(tcr);
+
+    rtems_interrupt_enable(l);
+
+  }
 
   /*
    *  Set the nanoseconds since last tick handler
