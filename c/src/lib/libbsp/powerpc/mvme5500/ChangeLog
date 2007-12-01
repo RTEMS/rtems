@@ -1,3 +1,7 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart: removed _Cpu_table.exceptions_in_RAM.
+
 2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* irq/GT64260Int.c, network/if_100MHz/Makefile.am,

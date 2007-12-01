@@ -1,5 +1,9 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/bspstart: removed _Cpu_table.exceptions_in_RAM.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/pretaskinghook.c: Replaced inclusion of
 	<bsp/consoleIo.h> by <rtems/bspIo.> (for printk) and
 	made it conditional on #ifdef SHOW_MORE_INIT_SETTINGS.

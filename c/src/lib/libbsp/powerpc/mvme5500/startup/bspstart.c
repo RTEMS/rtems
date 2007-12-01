@@ -322,7 +322,6 @@ void bsp_start( void )
   /*
    * Initialize default raw exception hanlders. See vectors/vectors_init.c
    */
-  Cpu_table.exceptions_in_RAM = TRUE;
   initialize_exceptions();
   /*
    * Init MMU block address translation to enable hardware
@@ -388,7 +387,6 @@ void bsp_start( void )
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
   _CPU_Table                     = Cpu_table;/* S. Kate Feng <feng1@bnl.gov>, for rtems_bsp_delay() */
 
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);

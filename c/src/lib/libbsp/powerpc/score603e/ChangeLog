@@ -1,4 +1,8 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart: removed _Cpu_table.exceptions_in_RAM.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 	
 	* vectors/vectors.S: Removed; this BSP now uses the shared
 	version.

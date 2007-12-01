@@ -261,21 +261,17 @@ void bsp_start( void )
      *A_Vector = Code;
    }
 
-  Cpu_table.exceptions_in_RAM = TRUE;
   msr_value = 0x2030;
 
 #elif (SCORE603E_USE_OPEN_FIRMWARE)
-  Cpu_table.exceptions_in_RAM = TRUE;
   msr_value = 0x2030;
 
 #elif (SCORE603E_USE_NONE)
-  Cpu_table.exceptions_in_RAM = TRUE;
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
   bsp_set_trap_vectors();
 
 #elif (SCORE603E_USE_DINK)
-  Cpu_table.exceptions_in_RAM = TRUE;
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
 
@@ -312,7 +308,6 @@ void bsp_start( void )
    *  initialize the CPU table for this BSP
    */
 
-  /* Cpu_table.exceptions_in_RAM was set above */
   Cpu_table.pretasking_hook = bsp_pretasking_hook; /* init libc, etc. */
   Cpu_table.predriver_hook  = bsp_predriver_hook;   /* Init vectors    */
   Cpu_table.postdriver_hook = SCORE603e_bsp_postdriver_hook;

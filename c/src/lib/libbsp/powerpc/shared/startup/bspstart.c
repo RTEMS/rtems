@@ -263,8 +263,6 @@ void bsp_start( void )
   /* signal them that we have fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
-  /* initialize_exceptions() evaluates the exceptions_in_RAM flag */
-  Cpu_table.exceptions_in_RAM 	 = TRUE;
   /*
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
