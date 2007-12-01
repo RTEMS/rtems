@@ -11,6 +11,10 @@
  *
  */
 
+#ifndef BSP_SHARED_HANDLER_SUPPORT
+#define BSP_SHARED_HANDLER_SUPPORT      1
+#endif
+
 #include <rtems/irq.h>
 
 #ifdef __cplusplus
@@ -34,6 +38,15 @@ extern void BSP_disable_irq_at_pic		(const rtems_irq_number irqLine);
  * as fatal by the manager).
  */
 extern int  BSP_setup_the_pic			(rtems_irq_global_settings* config);
+
+struct _BSP_Exception_frame;
+
+/* IRQ dispatcher to be defined by the PIC driver; note that it MUST
+ * implement shared interrupts.
+ * Note that the exception frame passed to this handler is not very
+ * meaningful. Only the volatile registers and info are set up.
+ */
+void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum);
 
 #ifdef __cplusplus
 }

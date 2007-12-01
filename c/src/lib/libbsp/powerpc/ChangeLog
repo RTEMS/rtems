@@ -1,5 +1,15 @@
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq_supp.h: Make sure BSP_SHARED_HANDLER_SUPPORT
+	is set. The shared irq manager supports shared interrupts
+	(but requires also that the PIC-driver supports them by
+	traversing the list of shared handlers).
+	Declare C_dispatch_irq_handler() which must be defined
+	(like the other routines declared in this header) by the
+	PIC-driver.
+
+2007-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/clock/p_clock.c: (run-time) check for e500-cpu
 	and install different ISR for that type of CPU.
 
