@@ -1,3 +1,7 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: removed bsp_exceptions_in_RAM
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Eliminate PowerPC specific elements from the CPU

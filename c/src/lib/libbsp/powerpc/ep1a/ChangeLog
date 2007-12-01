@@ -1,5 +1,9 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/bspstart.c: removed bsp_exceptions_in_RAM
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, irq/irq.c: fixed source-tree path of irq_supp.h,
 	fixed type of 1st arg to C_dispatch_irq_handler() which
 	is NOT a CPU_Interrupt_frame but a BSP_Exception_frame

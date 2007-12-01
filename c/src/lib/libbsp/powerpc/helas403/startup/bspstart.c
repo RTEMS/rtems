@@ -79,7 +79,6 @@ void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 /*
  *  Driver configuration parameters
  */
-boolean    bsp_exceptions_in_RAM;
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
 boolean    bsp_serial_external_clock;
@@ -191,5 +190,4 @@ void bsp_start( void )
   bsp_serial_rate = 9600;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid = 3;
-  bsp_exceptions_in_RAM = TRUE;
 }

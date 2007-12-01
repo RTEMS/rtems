@@ -1,5 +1,10 @@
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/bspstart.c: removed declaration of 
+	bsp_exceptions_in_RAM.
+
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
 	* irq/irq.h, irq/no_pic.c: some more changes to let
 	using shared/irq/irq.c work.
 

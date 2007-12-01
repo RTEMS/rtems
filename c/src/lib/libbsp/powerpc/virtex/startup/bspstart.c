@@ -93,7 +93,6 @@ uint32_t _top_of_ram;
 /*
  *  Driver configuration parameters
  */
-boolean    bsp_exceptions_in_RAM;
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
 boolean    bsp_serial_external_clock;
@@ -220,7 +219,6 @@ void bsp_start( void )
   bsp_serial_rate = 115200;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid = 3;
-  bsp_exceptions_in_RAM = TRUE;
 
   /*
    * Initialize some SPRG registers related to irq handling

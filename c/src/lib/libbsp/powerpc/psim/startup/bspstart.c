@@ -30,11 +30,6 @@
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
-/*
- *  Driver configuration parameters
- */
-boolean bsp_exceptions_in_RAM;
-
 extern unsigned long __rtems_end[];
 
 void  initialize_exceptions(void);

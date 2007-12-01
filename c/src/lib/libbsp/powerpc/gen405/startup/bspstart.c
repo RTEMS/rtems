@@ -200,5 +200,4 @@ void bsp_start( void )
   bsp_serial_rate = 115200;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid = 3;
-  bsp_exceptions_in_RAM = TRUE;
 }
