@@ -26,6 +26,7 @@
 #include <rtems/bspIo.h> /* for printk */
 #define RAVEN_INTR_ACK_REG 0xfeff0030
 
+#ifdef BSP_PCI_ISA_BRIDGE_IRQ
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
@@ -35,6 +36,7 @@
  * 	     prologue.
  */
 rtems_i8259_masks 	irq_mask_or_tbl[BSP_IRQ_NUMBER];
+#endif
 
 /*
  * default handler connected on each irq after bsp initialization
@@ -206,6 +208,31 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
 int _BSP_vme_bridge_irq = -1;
 
 unsigned BSP_spuriousIntr = 0;
+
+static inline void
+dispatch_list(unsigned int irq)
+{
+register uint32_t	l_orig;
+
+	l_orig = _ISR_Get_level();
+
+	/* Enable all interrupts */
+	_ISR_Set_level(0);
+
+  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
+  {
+     rtems_irq_connect_data* vchain;
+     for( vchain = &rtems_hdl_tbl[irq];
+          ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
+          vchain = (rtems_irq_connect_data*)vchain->next_handler )
+     {
+        vchain->hdl(vchain->handle);
+     }
+  }
+
+  /* Restore original level */
+  _ISR_Set_level(l_orig);
+}
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
@@ -217,17 +244,11 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
   register unsigned oldMask = 0;	      /* old isa pic masks */
   register unsigned newMask;                  /* new isa pic masks */
 #endif
-  register unsigned msr;
-  register unsigned new_msr;
 
   if (excNum == ASM_DEC_VECTOR) {
-    _CPU_MSR_GET(msr);
-    new_msr = msr | MSR_EE;
-    _CPU_MSR_SET(new_msr);
 
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
+  	dispatch_list(BSP_DECREMENTER);
 
-    _CPU_MSR_SET(msr);
     return;
 
   }
@@ -259,22 +280,9 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
     openpic_eoi(0);
   }
 #endif
-  _CPU_MSR_GET(msr);
-  new_msr = msr | MSR_EE;
-  _CPU_MSR_SET(new_msr);
 
-  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
-  {
-     rtems_irq_connect_data* vchain;
-     for( vchain = &rtems_hdl_tbl[irq];
-          ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
-          vchain = (rtems_irq_connect_data*)vchain->next_handler )
-     {
-        vchain->hdl(vchain->handle);
-     }
-  }
-
-  _CPU_MSR_SET(msr);
+  /* dispatch handlers */
+  dispatch_list(irq);
 
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
   if (isaIntr)  {

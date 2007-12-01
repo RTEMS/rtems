@@ -1,5 +1,18 @@
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/openpic_i8259_irq.c:
+	- conditionally define 'irq_mask_or_tbl' only if
+	  BSP_PCI_ISA_BRIDGE_IRQ is defined.
+	- use _ISR_Get_level() / _ISR_Set_level() for re-enabling
+	  interrupts rather than messing with MSR directly;
+	  these macros:
+	    o implement compiler memory barrier
+		o will handle multiple levels (e500 'critical' interrupts)
+		  if they are ever supported.
+	- decrementer irqs are also shareable - added list traversal.
+
+2007-12-01	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_supp.h: Make sure BSP_SHARED_HANDLER_SUPPORT
 	is set. The shared irq manager supports shared interrupts
 	(but requires also that the PIC-driver supports them by
