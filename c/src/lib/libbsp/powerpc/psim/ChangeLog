@@ -1,3 +1,7 @@
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq_init.c: removed irrelevant comment.
+
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: removed declaration of 

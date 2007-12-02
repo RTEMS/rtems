@@ -8,9 +8,6 @@
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
  * to make it valid for MVME2300 Motorola boards.
  *
- * Till Straumann <strauman@slac.stanford.edu>, 12/20/2001:
- * Use the new interface to openpic_init
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
