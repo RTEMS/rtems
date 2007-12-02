@@ -1,4 +1,13 @@
 2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/openpic/openpic.c shared/openpic/openpic.h,
+	shared/irq/irq_init.c: added more parameters to 
+	openpic_init() so that more details of the configuration
+	can be overridden/set from the BSP. Moved setup of
+	the EPIC-specific EOI delay from BSP code into openpic_init()
+	using the new 'epic_freq' parameter.
+
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
 	* shared/openpic/openpic.c, shared/openpic/openpic.h:
 	- eliminated conditional compilation (#ifdef mpc8240)
 	  The difference in register-layout between the EPIC

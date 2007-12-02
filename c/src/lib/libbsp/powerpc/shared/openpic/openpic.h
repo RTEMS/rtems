@@ -315,18 +315,37 @@ extern volatile struct OpenPIC *OpenPIC;
  *      openpic_set_sense()
  *      openpic_get_source_priority()
  *      openpic_set_source_priority()
+ *    the desired source offset parameter is passed to openpic_init().
  *
- * The routines 'openpic_set_eoi_delay()' and 'openpic_set_src_offst()'
- * return the respective previous values of the affected parameters.
- *
- * NOTE: openpic_set_src_offst() MUST be called PRIOR to openpic_init()
+ * The routine 'openpic_set_eoi_delay()' returns the previous/old
+ * value of the delay parameter.
  */
 extern unsigned openpic_set_eoi_delay(unsigned tb_cycles);
-extern      int openpic_set_src_offst(int offset);
 
 
 /* Global Operations */
-extern void openpic_init(int,unsigned char *, unsigned char *);
+
+/* num_sources: number of sources to use; if zero this value
+ * is read from the device, if nonzero the value read from
+ * the device is overridden.
+ * 'polarities' and 'senses' are arrays defining the desired
+ * polarities (active hi [nonzero]/lo [zero]) and
+ * senses (level [nonzero]/edge [zero]).
+ * Either of the two array pointers may be NULL resulting
+ * in the driver choosing default values of: 'active low'
+ * and 'level sensitive', respectively.
+ * NOTE: if you do pass arrays then their size must either
+ *       match the number of sources read from the device or
+ *       that value must be overridden by specifying 
+ *       a non-zero 'num_sources' parameter.
+ *
+ * Nonzero 'epic_freq' activates the EOI delay if the EPIC is
+ * configured in serial mode (driver assumes firmware performs initial
+ * EPIC setup). The BSP must pass the clock frequency of the EPIC
+ * serial interface here.
+ */
+extern void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses, int num_sources, int source_offset, unsigned long epic_freq);
+
 extern void openpic_reset(void);
 extern void openpic_enable_8259_pass_through(void);
 extern void openpic_disable_8259_pass_through(void);

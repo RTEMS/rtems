@@ -167,7 +167,7 @@ static void openpic_safe_writefield(volatile unsigned int *addr, unsigned int ma
      *                           IRQ0 is no longer treated specially.
      */
 
-void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses)
+void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses, int num_sources, int source_offset, unsigned long epic_freq)
 {
     unsigned int t, i;
     unsigned int vendorid, devid, stepping, timerfreq;
@@ -237,6 +237,16 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
     printk("OpenPIC Vendor %d (%s), Device %d (%s), Stepping %d\n", vendorid,
 	   vendor, devid, device, stepping);
 
+	/* Override if they desire */
+	if ( num_sources ) {
+		if ( NumSources != num_sources )
+			printk("Overriding NumSources (%i) from configuration with %i\n",
+				NumSources, num_sources);
+		NumSources = num_sources;
+	}
+
+	openpic_src_offst = source_offset;
+
     timerfreq = openpic_read(&OpenPIC->Global.Timer_Frequency);
     printk("OpenPIC timer frequency is ");
     if (timerfreq)
@@ -280,6 +290,41 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 	    openpic_set_priority(0, 0);
 	    openpic_disable_8259_pass_through();
     }
+	if ( epic_freq ) {
+		/* Speed up the serial interface; if it is too slow then we might get spurious
+		 * interrupts:
+		 * After an ISR clears the interrupt condition at the source/device, the wire
+		 * remains asserted during the propagation delay introduced by the serial interface
+		 * (something really stupid). If the ISR returns while the wire is not released
+		 * yet, then a spurious interrupt happens.
+		 * The book says we should be careful if the serial clock is > 33MHz.
+		 * Empirically, it seems that running it at 33MHz is fast enough. Otherwise,
+		 * we should introduce a delay in openpic_eoi().
+		 * The maximal delay are 16 (serial) clock cycles. If the divisor is 8
+		 * [power-up default] then the lag is 2us [66MHz SDRAM clock; I assume this
+		 * is equal to the bus frequency].
+		 * FIXME: This should probably be a EPIC-specific piece in 'openpic.c'
+		 *        Unfortunately, there is no easy way of figuring out if the
+		 *        device is an EPIC or not.
+		 */
+		uint32_t eicr_val, ratio;
+		/* On the 8240 this is the EICR register */
+		eicr_val = in_le32( &OpenPIC->Global.Global_Configuration1 ) & ~(7<<28);
+		if ( (1<<27) & eicr_val ) {
+			/* serial interface mode enabled */
+
+			/* round to nearest integer:
+			 *   round(Bus_freq/33000000) = floor( 2*(Bus_freq/33e6) + 1 ) / 2
+			 */ 
+			ratio   = epic_freq / 16500000 + 1;
+			ratio >>= 2; /* EICR value is half actual divisor */
+			if ( 0==ratio )
+				ratio = 1;
+			out_le32(&OpenPIC->Global.Global_Configuration1, eicr_val | ((ratio &7) << 28));
+			/*  Delay in TB cycles (assuming TB runs at 1/4 of the bus frequency) */
+			openpic_set_eoi_delay( 16 * (2*ratio) / 4 );
+		}
+	}
 }
 
     /*
@@ -338,13 +383,6 @@ unsigned openpic_set_eoi_delay(unsigned tb_cycles)
 {
 unsigned rval = openpic_eoi_delay;
     openpic_eoi_delay = tb_cycles;
-	return rval;
-}
-
-int openpic_set_src_offst(int offset)
-{
-int rval = openpic_src_offst;
-    openpic_src_offst = offset;
 	return rval;
 }
 
