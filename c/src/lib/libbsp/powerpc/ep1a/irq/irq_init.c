@@ -272,7 +272,12 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize openpic compliant device\n");
 #endif       
-  openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses);
+  /* FIXME (t.s.): we should probably setup the EOI delay by
+   * passing a non-zero 'epic_freq' argument (frequency of the
+   * EPIC serial interface) but I don't know the value on this
+   * board (8245 SDRAM freq, IIRC)...
+   */
+  openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses, 0, 16, 0 /* epic_freq */);
 
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");

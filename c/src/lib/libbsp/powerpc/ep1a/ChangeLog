@@ -1,3 +1,10 @@
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq_init.c: added new args to openpic_init().
+	This BSP probably needs them (8245 has an EPIC).
+	I would be surprised if the PCI interrupts with the
+	old code actually worked...
+
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: removed bsp_exceptions_in_RAM
