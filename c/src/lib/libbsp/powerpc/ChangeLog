@@ -1,5 +1,14 @@
 2007-12-02	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/i8259.c, shared/irq/irq.h, shared/irq/irq_supp.h,
+	shared/irq/openpic_i8259_irq.c: BSP_disable_irq_at_pic(),
+	openpic_disable_irq(), BSP_irq_disable_at_i8259s() now return
+	0/1 if irq was disabled/enabled prior to disabling.
+	irq_supp.h now exports a inline helper routine for scanning
+	a list of shared handlers; to be used by PIC drivers.
+
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/openpic/openpic.c shared/openpic/openpic.h,
 	shared/irq/irq_init.c: added more parameters to 
 	openpic_init() so that more details of the configuration

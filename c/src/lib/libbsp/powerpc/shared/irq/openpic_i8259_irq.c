@@ -118,7 +118,7 @@ BSP_enable_irq_at_pic(const rtems_irq_number name)
     }
 }
 
-void
+int
 BSP_disable_irq_at_pic(const rtems_irq_number name)
 {
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
@@ -126,15 +126,16 @@ BSP_disable_irq_at_pic(const rtems_irq_number name)
       /*
        * disable interrupt at PIC level
        */
-      BSP_irq_disable_at_i8259s ((int) name - BSP_ISA_IRQ_LOWEST_OFFSET);
+      return BSP_irq_disable_at_i8259s ((int) name - BSP_ISA_IRQ_LOWEST_OFFSET);
     }
 #endif
     if (is_pci_irq(name)) {
       /*
        * disable interrupt at OPENPIC level
        */
-      openpic_disable_irq ((int) name - BSP_PCI_IRQ_LOWEST_OFFSET);
+      return openpic_disable_irq ((int) name - BSP_PCI_IRQ_LOWEST_OFFSET);
     }
+	return -1;
 }
 
 /*
@@ -209,30 +210,6 @@ int _BSP_vme_bridge_irq = -1;
 
 unsigned BSP_spuriousIntr = 0;
 
-static inline void
-dispatch_list(unsigned int irq)
-{
-register uint32_t	l_orig;
-
-	l_orig = _ISR_Get_level();
-
-	/* Enable all interrupts */
-	_ISR_Set_level(0);
-
-  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
-  {
-     rtems_irq_connect_data* vchain;
-     for( vchain = &rtems_hdl_tbl[irq];
-          ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
-          vchain = (rtems_irq_connect_data*)vchain->next_handler )
-     {
-        vchain->hdl(vchain->handle);
-     }
-  }
-
-  /* Restore original level */
-  _ISR_Set_level(l_orig);
-}
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
@@ -247,7 +224,7 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 
   if (excNum == ASM_DEC_VECTOR) {
 
-  	dispatch_list(BSP_DECREMENTER);
+  	bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_entry.hdl);
 
     return;
 
@@ -282,7 +259,7 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 #endif
 
   /* dispatch handlers */
-  dispatch_list(irq);
+  bsp_irq_dispatch_list(rtems_hdl_tbl, irq, default_rtems_entry.hdl);
 
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
   if (isaIntr)  {

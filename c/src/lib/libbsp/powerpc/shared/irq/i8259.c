@@ -29,21 +29,23 @@ volatile rtems_i8259_masks i8259s_cache = 0xfffb;
 |      Description: Mask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: vector_offset - number of IRQ line to mask.
-|          Returns: Nothing.
+|          Returns: original state or -1 on error.
 +--------------------------------------------------------------------------*/
 int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
 {
   unsigned short        mask;
   rtems_interrupt_level level;
+  int                   rval;
 
   if ( ((int)irqLine < BSP_ISA_IRQ_LOWEST_OFFSET) ||
        ((int)irqLine > BSP_ISA_IRQ_MAX_OFFSET)
        )
-    return 1;
+    return -1;
 
   rtems_interrupt_disable(level);
 
   mask = 1 << irqLine;
+  rval = i8259s_cache & mask ? 0 : 1;
   i8259s_cache |= mask;
 
   if (irqLine < 8)
@@ -56,7 +58,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
   }
   rtems_interrupt_enable(level);
 
-  return 0;
+  return rval;
 }
 
 /*-------------------------------------------------------------------------+

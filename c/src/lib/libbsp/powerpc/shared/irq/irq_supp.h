@@ -30,7 +30,11 @@ extern "C" {
  *       PIC(s).
  */
 extern void BSP_enable_irq_at_pic		(const rtems_irq_number irqLine);
-extern void BSP_disable_irq_at_pic		(const rtems_irq_number irqLine);
+/*
+ * RETURNS: nonzero (> 0 ) if irq was enabled originally, zero if irq
+ *          was off and negative value if there was an error.
+ */
+extern int  BSP_disable_irq_at_pic		(const rtems_irq_number irqLine);
 
 /*
  * Initialize the PIC.
@@ -47,6 +51,38 @@ struct _BSP_Exception_frame;
  * meaningful. Only the volatile registers and info are set up.
  */
 void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum);
+
+/*
+ * Snippet to be used by PIC drivers;
+ * enables interrupts, traverses list of
+ * shared handlers for a given interrupt
+ * and restores original irq level
+ */
+
+static inline void
+bsp_irq_dispatch_list(rtems_irq_connect_data *tbl, unsigned irq, rtems_irq_hdl sentinel)
+{
+register uint32_t	l_orig;
+
+	l_orig = _ISR_Get_level();
+
+	/* Enable all interrupts */
+	_ISR_Set_level(0);
+
+  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
+  {
+     rtems_irq_connect_data* vchain;
+     for( vchain = &tbl[irq];
+          ((int)vchain != -1 && vchain->hdl != sentinel);
+          vchain = (rtems_irq_connect_data*)vchain->next_handler )
+     {
+        vchain->hdl(vchain->handle);
+     }
+  }
+
+  /* Restore original level */
+  _ISR_Set_level(l_orig);
+}
 
 #ifdef __cplusplus
 }

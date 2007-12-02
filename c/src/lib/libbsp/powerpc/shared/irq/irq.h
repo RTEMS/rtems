@@ -157,6 +157,9 @@ void BSP_i8259s_init(void);
  * function to disable a particular irq at 8259 level. After calling
  * this function, even if the device asserts the interrupt line it will
  * not be propagated further to the processor
+ *
+ * RETURNS: 1/0 if the interrupt was enabled/disabled originally or
+ *          a value < 0 on error.
  */
 int BSP_irq_disable_at_i8259s        (const rtems_irq_number irqLine);
 /*
