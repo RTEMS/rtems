@@ -1,5 +1,10 @@
 2007-12-02	Till Straumann <strauman@slac.stanford.edu>
 
+	* irq/no_pic.c: use new inline routine exported by
+	shared/irq/irq_supp.h for scanning the handler list.
+
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
 	* irq/irq_init.c: removed irrelevant comment.
 
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
