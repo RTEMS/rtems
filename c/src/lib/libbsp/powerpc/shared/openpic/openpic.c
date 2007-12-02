@@ -39,9 +39,9 @@ volatile struct OpenPIC *OpenPIC = NULL;
 static unsigned int NumProcessors;
 static unsigned int NumSources;
 
-#if defined(mpc8240) || defined(mpc8245)
 static unsigned int openpic_eoi_delay = 0;
-#endif
+static          int openpic_src_offst = 0;
+#define SOURCE(irq)	Source[ (irq) + openpic_src_offst ]
 
     /*
      *  Accesses to the current processor's registers
@@ -93,7 +93,11 @@ static inline unsigned int openpic_read(volatile unsigned int *addr)
 {
     unsigned int val;
 
+#ifdef BSP_OPEN_PIC_BIG_ENDIAN
+	val = in_be32(addr);
+#else
     val = in_le32(addr);
+#endif
 #ifdef REGISTER_DEBUG
     printk("openpic_read(0x%08x) = 0x%08x\n", (unsigned int)addr, val);
 #endif
@@ -105,7 +109,11 @@ static inline void openpic_write(volatile unsigned int *addr, unsigned int val)
 #ifdef REGISTER_DEBUG
     printk("openpic_write(0x%08x, 0x%08x)\n", (unsigned int)addr, val);
 #endif
-    out_le32(addr, val);
+#ifdef BSP_OPEN_PIC_BIG_ENDIAN
+    out_be32(addr, val);
+#else
+	out_le32(addr, val);
+#endif
 }
 
 static inline unsigned int openpic_readfield(volatile unsigned int *addr, unsigned int mask)
@@ -321,19 +329,24 @@ unsigned int openpic_irq(unsigned int cpu)
 void openpic_eoi(unsigned int cpu)
 {
     check_arg_cpu(cpu);
-#if defined(mpc8240) || defined(mpc8245)
     if ( openpic_eoi_delay )
         rtems_bsp_delay_in_bus_cycles(openpic_eoi_delay);
-#endif
     openpic_write(&OpenPIC->THIS_CPU.EOI, 0);
 }
 
-#if defined(mpc8240) || defined(mpc8245)
-void openpic_set_eoi_delay(unsigned tb_cycles)
+unsigned openpic_set_eoi_delay(unsigned tb_cycles)
 {
+unsigned rval = openpic_eoi_delay;
     openpic_eoi_delay = tb_cycles;
+	return rval;
 }
-#endif
+
+int openpic_set_src_offst(int offset)
+{
+int rval = openpic_src_offst;
+    openpic_src_offst = offset;
+	return rval;
+}
 
     /*
      *  Get/set the current task priority
@@ -452,17 +465,22 @@ void openpic_enable_irq(unsigned int irq)
 unsigned long flags;
     check_arg_irq(irq);
 	rtems_interrupt_disable(flags);
-    openpic_clearfield(&OpenPIC->Source[irq].Vector_Priority, OPENPIC_MASK);
+    openpic_clearfield(&OpenPIC->SOURCE(irq).Vector_Priority, OPENPIC_MASK);
 	rtems_interrupt_enable(flags);
 }
 
-void openpic_disable_irq(unsigned int irq)
+int openpic_disable_irq(unsigned int irq)
 {
+int           rval;
 unsigned long flags;
     check_arg_irq(irq);
+	if ( irq < 0 || irq >=NumSources )
+		return -1;
 	rtems_interrupt_disable(flags);
-    openpic_setfield(&OpenPIC->Source[irq].Vector_Priority, OPENPIC_MASK);
+	rval = openpic_readfield(&OpenPIC->SOURCE(irq).Vector_Priority, OPENPIC_MASK) ? 0 : 1;
+    openpic_setfield(&OpenPIC->SOURCE(irq).Vector_Priority, OPENPIC_MASK);
 	rtems_interrupt_enable(flags);
+	return rval;
 }
 
     /*
@@ -485,7 +503,7 @@ void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vec, int p
     check_arg_irq(irq);
     check_arg_pri(pri);
     check_arg_vec(vec);
-    openpic_safe_writefield(&OpenPIC->Source[irq].Vector_Priority,
+    openpic_safe_writefield(&OpenPIC->SOURCE(irq).Vector_Priority,
     			    OPENPIC_PRIORITY_MASK | OPENPIC_VECTOR_MASK |
     			    OPENPIC_SENSE_POLARITY | OPENPIC_SENSE_LEVEL,
     			    (pri << OPENPIC_PRIORITY_SHIFT) | vec |
@@ -500,7 +518,7 @@ void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vec, int p
 void openpic_mapirq(unsigned int irq, unsigned int cpumask)
 {
     check_arg_irq(irq);
-    openpic_write(&OpenPIC->Source[irq].Destination, cpumask);
+    openpic_write(&OpenPIC->SOURCE(irq).Destination, cpumask);
 }
 
 	/*
@@ -509,7 +527,7 @@ void openpic_mapirq(unsigned int irq, unsigned int cpumask)
 unsigned int openpic_get_source_priority(unsigned int irq)
 {
     check_arg_irq(irq);
-	return openpic_readfield(&OpenPIC->Source[irq].Vector_Priority,
+	return openpic_readfield(&OpenPIC->SOURCE(irq).Vector_Priority,
 							 OPENPIC_PRIORITY_MASK) >> OPENPIC_PRIORITY_SHIFT;
 }
 
@@ -520,7 +538,7 @@ unsigned long flags;
     check_arg_pri(pri);
 	rtems_interrupt_disable(flags);
 	openpic_writefield(
-					&OpenPIC->Source[irq].Vector_Priority,
+					&OpenPIC->SOURCE(irq).Vector_Priority,
 					OPENPIC_PRIORITY_MASK,
 					pri << OPENPIC_PRIORITY_SHIFT);
 	rtems_interrupt_enable(flags);
@@ -534,7 +552,7 @@ unsigned long flags;
 void openpic_set_sense(unsigned int irq, int sense)
 {
     check_arg_irq(irq);
-    openpic_safe_writefield(&OpenPIC->Source[irq].Vector_Priority,
+    openpic_safe_writefield(&OpenPIC->SOURCE(irq).Vector_Priority,
     			    OPENPIC_SENSE_LEVEL,
 			    (sense ? OPENPIC_SENSE_LEVEL : 0));
 }

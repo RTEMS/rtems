@@ -1,3 +1,16 @@
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+	* shared/openpic/openpic.c, shared/openpic/openpic.h:
+	- eliminated conditional compilation (#ifdef mpc8240)
+	  The difference in register-layout between the EPIC
+	  and the std. openPIC is handled by an offset parameter
+	  which can be set at run-time (initialization) with
+	  a new routine 'openpic_set_src_offset()'.
+	- allow BSP to define symbol BSP_OPEN_PIC_BIG_ENDIAN
+	  which builds the driver for big-endian register access
+	  (mpc8540).
+	- openpic_disable_irq() now returns the old state so
+	  that it can be restored later.
+
 2007-12-01	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/openpic_i8259_irq.c:

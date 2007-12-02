@@ -40,19 +40,7 @@
     /*
      *  OpenPIC supports up to 2048 interrupt sources and up to 32 processors
      */
-
-#if defined(mpc8240) || defined(mpc8245)
-#define OPENPIC_MAX_SOURCES    (2048 - 16)
-/* If the BSP uses the serial interrupt mode / 'multiplexer' then
- * EOI must be delayed by at least 16 SRAM_CLK cycles to avoid
- * spurious interrupts.
- * It is the BSP's responsibility to set up an appropriate delay
- * (in timebase-clock cycles) at init time.
- */
-extern void openpic_set_eoi_delay(unsigned tb_cycles);
-#else
 #define OPENPIC_MAX_SOURCES	2048
-#endif
 #define OPENPIC_MAX_PROCESSORS	32
 
 #define OPENPIC_NUM_TIMERS	4
@@ -162,9 +150,6 @@ typedef struct _OpenPIC_Global {
     OpenPIC_Reg _Timer_Frequency;		/* Read/Write */
     OpenPIC_Timer Timer[OPENPIC_NUM_TIMERS];
     char Pad1[0xee00];
-#if defined(mpc8240) || defined(mpc8245)
-    char Pad2[0x0200];
-#endif  
 } OpenPIC_Global;
 
     /*
@@ -306,6 +291,40 @@ extern volatile struct OpenPIC *OpenPIC;
      *  OpenPIC Operations
      */
 
+/*
+ * Handle EPIC differences. Unfortunately, I don't know of an easy
+ * way to tell an EPIC from a normal PIC at run-time. Therefore,
+ * the BSP must enable a few quirks if it knows that an EPIC is being
+ * used:
+ *  - If the BSP uses the serial interrupt mode / 'multiplexer' then
+ *    EOI must be delayed by at least 16 SRAM_CLK cycles to avoid
+ *    spurious interrupts.
+ *    It is the BSP's responsibility to set up an appropriate delay
+ *    (in timebase-clock cycles) at init time using
+ *    'openpic_set_eoi_delay()'. This is ONLY necessary when using
+ *    an EPIC in serial mode.
+ *  - The EPIC sources start at an offset of 16 in the register
+ *    map, i.e., on an EPIC you'd say Sources[ x + 16 ] where
+ *    on a PIC you would say Sources[ x ].
+ *    Again, the BSP can set an offset that is used by the
+ *    calls dealing with 'Interrupt Sources'
+ *      openpic_enable_irq()
+ *      openpic_disable_irq()
+ *      openpic_initirq()
+ *      openpic_mapirq()
+ *      openpic_set_sense()
+ *      openpic_get_source_priority()
+ *      openpic_set_source_priority()
+ *
+ * The routines 'openpic_set_eoi_delay()' and 'openpic_set_src_offst()'
+ * return the respective previous values of the affected parameters.
+ *
+ * NOTE: openpic_set_src_offst() MUST be called PRIOR to openpic_init()
+ */
+extern unsigned openpic_set_eoi_delay(unsigned tb_cycles);
+extern      int openpic_set_src_offst(int offset);
+
+
 /* Global Operations */
 extern void openpic_init(int,unsigned char *, unsigned char *);
 extern void openpic_reset(void);
@@ -329,7 +348,7 @@ extern void openpic_maptimer(unsigned int timer, unsigned int cpumask);
 
 /* Interrupt Sources */
 extern void openpic_enable_irq(unsigned int irq);
-extern void openpic_disable_irq(unsigned int irq);
+extern int  openpic_disable_irq(unsigned int irq);
 extern void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vector, int polarity,
 			    int is_level);
 extern void openpic_mapirq(unsigned int irq, unsigned int cpumask);
