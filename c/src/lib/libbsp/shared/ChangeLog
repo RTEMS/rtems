@@ -1,3 +1,9 @@
+2007-12-02	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeTsi148.c:
+	silenced compiler warnings caused by type changes
+	in byteorder.h (volatile unsigned * -> volatile uint32_t *)
+
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Add comment.

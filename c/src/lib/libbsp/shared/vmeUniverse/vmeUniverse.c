@@ -48,9 +48,12 @@
  */ 
 
 #include <stdio.h>
+#include <inttypes.h>
 
 #if defined(__rtems__)
+#ifndef __INSIDE_RTEMS_BSP__
 #define __INSIDE_RTEMS_BSP__
+#endif
 #endif
 
 #include "vmeUniverse.h"
@@ -125,7 +128,7 @@
 /* PCI_MEM_BASE is a possible offset between CPU- and PCI addresses.
  * Should be defined by the BSP.
  */
-typedef unsigned int pci_ulong;
+typedef uint32_t pci_ulong;
 
 #ifndef BSP_PCI2LOCAL_ADDR
 #ifndef PCI_MEM_BASE
@@ -208,7 +211,7 @@ WRITE_LE(
 	/* offset is in bytes and MUST not end up in r0 */
 	__asm__ __volatile__("stwbrx %1, %0, %2" :: "b"(off),"r"(val),"r"(adrs));
 #elif defined(__rtems__)
-	st_le32((volatile unsigned long*)(((unsigned long)adrs)+off), val);
+	st_le32((volatile uint32_t *)(((uint32_t)adrs)+off), val);
 #else
 #error "little endian register writing not implemented"
 #endif
@@ -237,7 +240,7 @@ register unsigned long rval;
 __asm__ __volatile__("lwbrx %0, 0, %1":"=r"(rval):"r"(adrs));
 	return rval;
 #elif defined(__rtems__)
-	return ld_le32((volatile unsigned long*)adrs);
+	return ld_le32((volatile uint32_t*)adrs);
 #else
 #error "little endian register reading not implemented"
 #endif
@@ -1549,7 +1552,7 @@ DFLT_BASE;
  * and we get 'alias' warnings when we submit uint32_t *
  */
 
-typedef volatile unsigned LERegister1;
+typedef volatile uint32_t LERegister1;
 
 typedef struct VmeUniverseDmaListDescRec_ {
 	LERegister1	dctl;
@@ -1583,13 +1586,6 @@ VMEDmaListClassRec	vmeUniverseDmaListClass = {
 	desc_refr:  0,
 	desc_dump:	uni_desc_dump,
 };
-
-/* gcc complains even if unsigned and uint32 are the same size :-( */
-
-static inline void ST_LE32(volatile uint32_t *a, uint32_t v)
-{
-	st_le32( (volatile unsigned *)a, v);
-}
 
 static void     uni_desc_init  (DmaDescriptor p)
 {
@@ -1702,7 +1698,7 @@ LERegister1            dcpp = ld_le32(&d->dcpp);
 
 	printf("   DLA: 0x%08x\n", ld_le32(&d->dla));
 	printf("   DVA: 0x%08x\n", ld_le32(&d->dva));
-	printf("  DCPP: 0x%08x%s\n", dcpp, (dcpp & UNIV_DCPP_IMG_NULL) ? " (LAST)" : "");
+	printf("  DCPP: 0x%08"PRIx32"%s\n", dcpp, (dcpp & UNIV_DCPP_IMG_NULL) ? " (LAST)" : "");
 	printf("   CTL: 0x%08x\n", ld_le32(&d->dctl));
 	printf("   TBC: 0x%08x\n", ld_le32(&d->dtbc));
 }
@@ -2371,7 +2367,7 @@ rtems_id			q = 0;
 int					installed = 0;
 int					i, err = 0;
 int					doDisable = 0;
-uint32_t			size;
+size_t				size;
 unsigned long		msg;
 char *				irqfmt  = "VME IRQ @vector %3i %s";
 char *				iackfmt = "VME IACK            %s";
