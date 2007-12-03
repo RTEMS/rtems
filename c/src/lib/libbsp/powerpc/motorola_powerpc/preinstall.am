@@ -89,6 +89,10 @@ $(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
 
+$(PROJECT_INCLUDE)/bsp/irq_supp.h: ../shared/irq/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
+
 $(PROJECT_INCLUDE)/bsp/openpic.h: ../../powerpc/shared/openpic/openpic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
