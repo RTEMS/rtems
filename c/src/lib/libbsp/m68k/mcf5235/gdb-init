@@ -1,0 +1,29 @@
+#
+# Connect to the target.
+# 
+target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0
+
+#
+# The console loop the Axman dbug monitor. Found by trial and error
+# with the debugger.
+#
+hb *0xffe254c0
+
+#
+# Run to initialise the RAM. The target will stop when the
+# breakpoint is hit. Load the program.
+#
+c
+load
+
+#
+# Break on an exception.
+#
+b _uhoh
+
+#
+# Travel to main then stop.
+#
+tb main
+c
+

@@ -722,6 +722,20 @@ rtems_device_driver console_open(
 		}
 	}
 
+  if (status == RTEMS_SUCCESSFUL)
+  {
+    /*
+     * Reset the default baudrate.
+     */
+    struct termios term;
+    if (tcgetattr (STDIN_FILENO, &term) >= 0)
+    {
+      term.c_cflag &= ~(CBAUD | CSIZE);
+      term.c_cflag |= CS8 | B19200;
+      tcsetattr (STDIN_FILENO, TCSANOW, &term);
+    }
+  }
+
 	return( status );
 }
 

@@ -1,3 +1,10 @@
+2007-12-03	Chris Johns <chrisj@rtems.org>
+
+	* console/console.c: Set the baud rate for stdin to 19200 when
+	opening the console. This is the default rate for the dbug
+	monitor.
+	* gdb-init: New.
+
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Eliminate the interrupt_vector_table field in the
