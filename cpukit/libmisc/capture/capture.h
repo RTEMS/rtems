@@ -121,7 +121,7 @@ typedef struct rtems_capture_control_s
                                      RTEMS_CAPTURE_EXITTED)
                                      
 /**
- * rtems_capture_control_t
+ * rtems_capture_task_t
  *
  *  DESCRIPTION:
  *

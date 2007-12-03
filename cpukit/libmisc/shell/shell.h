@@ -69,6 +69,21 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
 void cat_file(FILE * out,char *name);
 void write_file(char *name,char * content);
 
+/**
+ * Initialise the shell creating tasks to login and run the shell
+ * sessions.
+ *
+ * @param task_name Name of the shell task.
+ * @param task_stacksize The size of the stack. If 0 the default size is used.
+ * @param task_priority The priority the shell runs at.
+ * @param tcflag The termios c_cflag value. If 0 the default is used, if
+ *               not 0 the value is ORed with CLOCAL and CREAD.
+ * @param forever Repeat logins.
+ *
+ * @todo CCJ I am not sure this termios flag setting is a good idea. The shell
+ *           needs to adjust the termios for its use but it should assume the
+ *           settings are set by the user for things like baudrate etc.
+ */
 rtems_status_code shell_init(
   char                *task_name,
   uint32_t             task_stacksize,  /*0 default*/

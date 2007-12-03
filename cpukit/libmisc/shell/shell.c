@@ -599,7 +599,9 @@ rtems_boolean shell_shell_loop(
    term.c_oflag &= ~OPOST;
    term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
    term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-   term.c_cflag  = CLOCAL | CREAD |(shell_env->tcflag);
+   if (shell_env->tcflag)
+     term.c_cflag = shell_env->tcflag;
+   term.c_cflag  |= CLOCAL | CREAD;
    term.c_cc[VMIN]  = 1;
    term.c_cc[VTIME] = 0;
    if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {

@@ -1,3 +1,12 @@
+2007-12-03	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/shell.h: Added comments for the parameters to the
+	shell_init function.
+	* libmisc/shell/shell.c: Only set cflags if tcflags is
+	non-zero. This means the shell can use the current cflags settings
+	and the application does not need to know the baudrate etc.
+	* libmisc/capture/capture.h: Fix the comment.
+
 2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/barrierdelete.c, rtems/src/barrierrelease.c,
