@@ -269,13 +269,7 @@ void bsp_start( void )
   /*
    *  initialize the CPU table for this BSP
    */
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
-  {
-    extern void _BSP_Thread_Idle_body(void);
-    Cpu_table.idle_task = _BSP_Thread_Idle_body;
-  }
 
   /*
    * Invalidate the cache and disable it

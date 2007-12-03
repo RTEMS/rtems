@@ -149,6 +149,14 @@ int BSP_enableVME_int_lvl(unsigned int level);
 int BSP_disableVME_int_lvl(unsigned int level);
 int BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr);
 
+/*
+ *  This BSP provides its own IDLE task to override the RTEMS one.
+ *  So we prototype it and define the constant confdefs.h expects
+ *  to configure a BSP specific one.
+ */
+void _BSP_Thread_Idle_body(void);
+
+#define BSP_IDLE_TASK_BODY _BSP_Thread_Idle_body
 
 #ifdef __cplusplus
 }
