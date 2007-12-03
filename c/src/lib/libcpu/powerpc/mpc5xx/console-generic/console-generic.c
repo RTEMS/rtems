@@ -220,9 +220,10 @@ m5xx_uart_setAttributes(
     case B460800: baud = 460800;  break;
   }
   if (baud > 0) {
+    extern uint32_t bsp_clock_speed;
     sccr0 &= ~QSMCM_SCI_BAUD(-1);
     sccr0 |= 
-      QSMCM_SCI_BAUD((Cpu_table.clock_speed + (16 * baud)) / (32 * baud));
+      QSMCM_SCI_BAUD((bsp_clock_speed + (16 * baud)) / (32 * baud));
   }
      
   /* Number of data bits -- not available with MPC5xx SCI */
