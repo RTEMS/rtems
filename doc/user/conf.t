@@ -223,9 +223,29 @@ of time between clock ticks.  By default, this is set to
 10000 microseconds.
 
 @findex CONFIGURE_TICKS_PER_TIMESLICE
-@item @code{CONFIGURE_TICKS_PER_TIMESLICE} is the number
-of ticks per each task's timeslice.  By default, this is
-50.
+@item @code{CONFIGURE_TICKS_PER_TIMESLICE} is the length
+of the timeslice quantum in ticks for each task.  By
+default, this is 50.
+
+@findex CONFIGURE_TASK_STACK_ALLOCATOR
+@item @code{CONFIGURE_TASK_STACK_ALLOCATOR}
+may point to a user provided routine to allocate task stacks.
+The default value for this field is NULL which indicates that
+task stacks will be allocated from the RTEMS Workspace.
+
+@findex CONFIGURE_TASK_STACK_DEALLOCATOR
+@item @code{CONFIGURE_TASK_STACK_DEALLOCATOR}
+may point to a user provided routine to free task stacks.
+The default value for this field is NULL which indicates that
+task stacks will be allocated from the RTEMS Workspace.
+
+@findex CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+@item @code{CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY}
+indicates whether RTEMS should zero the RTEMS Workspace and
+C Program Heap as part of its initialization.  If set to
+TRUE, the Workspace is zeroed.  Otherwise, it is not.
+Unless overridden by the BSP, the default value for this
+field is FALSE.
 
 @findex CONFIGURE_MESSAGE_BUFFER_MEMORY
 @item @code{CONFIGURE_MESSAGE_BUFFER_MEMORY} is set to the number of
@@ -251,6 +271,33 @@ The default value is 0.
 NOTE: The required size of the Executive RAM Work Area is calculated
 automatically when using the @code{rtems/confdefs.h} mechanism.
 
+@c
+@c
+@c
+@subsection Idle Task Configuration
+
+This section defines the IDLE task related configuration parameters
+supported by @code{rtems/confdefs.h}.
+
+@itemize @bullet
+
+@fnindex CONFIGURE_IDLE_TASK_BODY
+@item @code{CONFIGURE_IDLE_TASK_BODY} is set to the method name
+corresponding to the application specific IDLE thread body.  If
+not specified, the BSP or RTEMS default IDLE thread body will
+be used.  The default value is NULL.
+
+@fnindex CONFIGURE_IDLE_TASK_STACK_SIZE
+@item @code{CONFIGURE_IDLE_TASK_STACK_SIZE} is set to the 
+desired stack size for the IDLE task.  If not specified,
+the IDLE task will have a stack of minimum size.  The default
+value is @code{RTEMS_MINIMUM_STACK_SIZE}.
+
+@end itemize
+
+@c
+@c
+@c
 @subsection Device Driver Table
 
 This section defines the configuration parameters related
@@ -739,14 +786,22 @@ typedef struct @{
   uint32_t                        maximum_extensions;
   uint32_t                        microseconds_per_tick;
   uint32_t                        ticks_per_timeslice;
+  void                          (*idle_task)( void );
+  uint32_t                        idle_task_stack_size;
+  void *                        (*stack_allocate_hook)( uint32_t );
+  void                          (*stack_free_hook)( void * );
+  boolean                         do_zero_of_workspace;
   uint32_t                        maximum_drivers;
   uint32_t                        number_of_device_drivers;
   rtems_driver_address_table     *Device_driver_table;
   uint32_t                        number_of_initial_extensions;
   rtems_extensions_table         *User_extension_table;
+#if defined(RTEMS_MULTIPROCESSING)
   rtems_multiprocessing_table    *User_multiprocessing_table;
+#endif
   rtems_api_configuration_table  *RTEMS_api_configuration;
   posix_api_configuration_table  *POSIX_api_configuration;
+  itron_api_configuration        *ITRON_api_configuration;
 @} rtems_configuration_table;
 @end group
 @end example
@@ -789,6 +844,49 @@ is the number of clock ticks for a timeslice.
 When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
+
+@item idle_task
+is the address of the optional user
+provided routine which is used as the system's IDLE task.  If
+this field is not NULL, then the RTEMS default IDLE task is not
+used.  This field may be NULL to indicate that the default IDLE
+is to be used.  When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro @code{CONFIGURE_IDLE_TASK_BODY}.
+
+@item idle_task_stack_size
+is the size of the RTEMS idle task stack in bytes.  
+If this number is less than MINIMUM_STACK_SIZE, then the 
+idle task's stack will be MINIMUM_STACK_SIZE in byte.
+When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+@code{CONFIGURE_IDLE_TASK_STACK_SIZE}.
+
+@item stack_allocate_hook
+may point to a user provided routine to allocate task stacks.
+The default is to allocate task stacks from the RTEMS Workspace.
+When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+@code{CONFIGURE_TASK_STACK_ALLOCATOR}.
+
+@item stack_free_hook
+may point to a user provided routine to free task stacks.
+The default is to allocate task stacks from the RTEMS Workspace.
+When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+@code{CONFIGURE_TASK_STACK_DEALLOCATOR}.
+
+@item do_zero_of_workspace
+indicates whether RTEMS should zero the RTEMS Workspace and
+C Program Heap as part of its initialization.  If set to
+TRUE, the Workspace is zeroed.  Otherwise, it is not.
+When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+@code{CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY}.
 
 @item maximum_drivers
 is the maximum number of device drivers that can be registered.
@@ -1524,6 +1622,7 @@ typedef struct @{
   uint32_t          maximum_nodes;
   uint32_t          maximum_global_objects;
   uint32_t          maximum_proxies;
+  uint32_t          extra_mpci_receive_server_stack;
   rtems_mpci_table *User_mpci_table;
 @} rtems_multiprocessing_table;
 @end example
@@ -1581,6 +1680,10 @@ to the setting of the macro @code{CONFIGURE_MP_MAXIMUM_PROXIES}.
 If not defined by the application, then the @code{CONFIGURE_MP_MAXIMUM_PROXIES}
 macro defaults to the value 32.
 
+@item extra_mpci_receive_server_stack
+is the extra stack space allocated for the RTEMS MPCI receive server task
+in bytes.  The MPCI receive server may invoke nearly all directives and 
+may require extra stack space on some targets.
 
 @item User_mpci_table
 is the address of the Multiprocessor Communications Interface
