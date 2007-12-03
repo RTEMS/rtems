@@ -1,3 +1,7 @@
+2007-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/include/cpuIdent.h: Correct conditionals and includes.
+
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h,

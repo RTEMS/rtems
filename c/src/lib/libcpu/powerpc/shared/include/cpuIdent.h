@@ -66,10 +66,22 @@ typedef struct {
 } ppc_feature_t;
 
 extern ppc_feature_t   current_ppc_features;
+extern ppc_cpu_id_t current_ppc_cpu;
+
+typedef unsigned short ppc_cpu_revision_t;
+
+extern ppc_cpu_id_t get_ppc_cpu_type ();
+extern char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
+extern ppc_cpu_revision_t get_ppc_cpu_revision ();
+extern ppc_cpu_revision_t current_ppc_revision;
 
 /* PUBLIC ACCESS ROUTINES */
 #define _PPC_FEAT_DECL(x) \
-static inline ppc_cpu_##x() { if ( PPC_UNKNOWN == current_ppc_cpu ) get_ppc_cpu_type(); return current_ppc_features.x; }
+static inline ppc_cpu_##x() { \
+  if ( PPC_UNKNOWN == current_ppc_cpu ) \
+    get_ppc_cpu_type(); \
+  return current_ppc_features.x; \
+}
 
 _PPC_FEAT_DECL(has_altivec)
 /* has_fpu not implemented yet */
@@ -80,14 +92,6 @@ _PPC_FEAT_DECL(has_8_bats)
 _PPC_FEAT_DECL(has_epic)
 
 #undef _PPC_FEAT_DECL
-
-typedef unsigned short ppc_cpu_revision_t;
-
-extern ppc_cpu_id_t get_ppc_cpu_type ();
-extern ppc_cpu_id_t current_ppc_cpu;
-extern char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
-extern ppc_cpu_revision_t get_ppc_cpu_revision ();
-extern ppc_cpu_revision_t current_ppc_revision;
 #endif /* ASM */
 
 #endif
