@@ -1,3 +1,10 @@
+2007-11-29	Chris Johns <chrisj@rtems.org>
+
+	* iostream/Makefile.am: Change the executable name so it does not
+	create a file which is the same name as the standard header file.
+	* iostream/system.h: Need to increase the number of semaphores for
+	the libstdc++ runtime.
+
 2007-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* capture/Makefile.am: Use all managers.
