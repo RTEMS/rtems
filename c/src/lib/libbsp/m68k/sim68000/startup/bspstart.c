@@ -58,8 +58,6 @@ void bsp_start( void )
   extern void          *_RamSize;
   extern unsigned long  _M68k_Ramsize;
 
-  _M68k_Ramsize = (unsigned long)&_RamSize; /* RAM size set in linker script */
-
 #if defined(mcpu32)
 #warning "do something about vectors!!!"
 #endif
@@ -67,10 +65,6 @@ void bsp_start( void )
   /*
    *  Clear interrupt sources.
    */
-
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.predriver_hook  = bsp_predriver_hook;
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
 /* XXX address shutdown
   if ( BSP_Configuration.work_space_size >(128*1024) )

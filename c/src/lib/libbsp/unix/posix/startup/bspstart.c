@@ -179,32 +179,10 @@ void bsp_start(void)
     BSP_Configuration.work_space_start = (void *) workspace_ptr;
 
     /*
-     * Set up our hooks
-     * Make sure libc_init is done before drivers init'd so that
-     * they can use atexit()
-     */
-
-    Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-    Cpu_table.predriver_hook = NULL;
-
-    Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-    Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-    /*
-     *  Don't zero out the workspace since it is in the BSS under UNIX.
-     */
-
-    Cpu_table.do_zero_of_workspace = FALSE;
-
-    /*
      * XXX; interrupt stack not currently used, so this doesn't matter
      */
 
     Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
-    Cpu_table.extra_mpci_receive_server_stack = 0;
 
     /*
      * Add 1 extension for MPCI_fatal

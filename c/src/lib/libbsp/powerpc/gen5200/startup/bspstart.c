@@ -291,14 +291,10 @@ void bsp_start(void)
    *  initialize the CPU table for this BSP
    */
 
-  Cpu_table.pretasking_hook        = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.predriver_hook         = bsp_predriver_hook;     /* init PCI / RTC ...   */
-  Cpu_table.postdriver_hook        = bsp_postdriver_hook;
-
   if( Cpu_table.interrupt_stack_size < 4*1024 )
     Cpu_table.interrupt_stack_size = 4 * 1024;
 
- bsp_clicks_per_usec        = (IPB_CLOCK/1000000);
+ bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
 
  /*
   * Install our own set of exception vectors
