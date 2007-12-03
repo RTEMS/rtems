@@ -1,5 +1,9 @@
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* bsppredriverhook.c: New file.
+
+2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* bootcard.c: Moved most of the remaining CPU Table fields to the
 	Configuration Table. This included pretasking_hook, predriver_hook,
 	postdriver_hook, idle_task, do_zero_of_workspace,
