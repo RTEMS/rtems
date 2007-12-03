@@ -14,11 +14,19 @@ include_HEADERS += include/tm27.h
 include_HEADERS += include/rasta.h
 include_HEADERS += include/cchip.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
-include_HEADERS += ../../sparc/shared/include/grspw.h ../../sparc/shared/include/grspw_pci.h ../../sparc/shared/include/grspw_rasta.h
-include_HEADERS += ../../sparc/shared/include/occan.h ../../sparc/shared/include/occan_pci.h
-include_HEADERS += ../../sparc/shared/include/grcan.h ../../sparc/shared/include/grcan_rasta.h
-include_HEADERS += ../../sparc/shared/include/apbuart.h ../../sparc/shared/include/apbuart_pci.h ../../sparc/shared/include/apbuart_rasta.h
-include_HEADERS += ../../sparc/shared/include/b1553brm.h ../../sparc/shared/include/b1553brm_pci.h ../../sparc/shared/include/b1553brm_rasta.h
+include_HEADERS += ../../sparc/shared/include/grspw.h
+include_HEADERS += ../../sparc/shared/include/grspw_pci.h
+include_HEADERS += ../../sparc/shared/include/grspw_rasta.h
+include_HEADERS += ../../sparc/shared/include/occan.h
+include_HEADERS += ../../sparc/shared/include/occan_pci.h
+include_HEADERS += ../../sparc/shared/include/grcan.h
+include_HEADERS += ../../sparc/shared/include/grcan_rasta.h
+include_HEADERS += ../../sparc/shared/include/apbuart.h
+include_HEADERS += ../../sparc/shared/include/apbuart_pci.h
+include_HEADERS += ../../sparc/shared/include/apbuart_rasta.h
+include_HEADERS += ../../sparc/shared/include/b1553brm.h
+include_HEADERS += ../../sparc/shared/include/b1553brm_pci.h
+include_HEADERS += ../../sparc/shared/include/b1553brm_rasta.h
 include_HEADERS += ../../sparc/shared/include/debug_defs.h
 include_HEADERS += ../../sparc/shared/include/pci.h
 
@@ -44,9 +52,9 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../../sparc/shared/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
-    startup/spurious.c
+    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+    ../../sparc/shared/bspstart.c ../../shared/bootcard.c \
+    ../../shared/sbrk.c startup/setvec.c startup/spurious.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

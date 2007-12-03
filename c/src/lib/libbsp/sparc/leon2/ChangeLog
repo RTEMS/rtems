@@ -1,3 +1,12 @@
+2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Moved most of the remaining CPU Table fields to the
+	Configuration Table. This included pretasking_hook, predriver_hook,
+	postdriver_hook, idle_task, do_zero_of_workspace,
+	extra_mpci_receive_server_stack, stack_allocate_hook, and
+	stack_free_hook. As a side-effect of this effort some multiprocessing
+	code was made conditional and some style clean up occurred.
+
 2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
 
 	* rasta/rasta.c: LEON2 PCI RASTA driver. Changes RASTA PCI interrupt to

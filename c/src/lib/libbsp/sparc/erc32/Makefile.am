@@ -31,6 +31,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/erc32mec.c startup/boardinit.S
@@ -84,6 +85,7 @@ startup_rel-bootcard.o \
 startup_rel-bspclean.o \
 startup_rel-bsplibc.o \
 startup_rel-bsppost.o \
+startup_rel-bsppredriverhook.o \
 startup_rel-bspstart.o \
 startup_rel-erc32mec.o \
 startup_rel-sbrk.o \
