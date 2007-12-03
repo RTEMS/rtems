@@ -80,15 +80,7 @@ int boot_card(int argc, char **argv, char **envp)
    *  right most of the time.
    */
 
-  Cpu_table.pretasking_hook                 = NULL;
-  Cpu_table.predriver_hook                  = NULL;
-  Cpu_table.postdriver_hook                 = NULL;
-  Cpu_table.idle_task                       = NULL;
-  Cpu_table.do_zero_of_workspace            = FALSE;
   Cpu_table.interrupt_stack_size            = RTEMS_MINIMUM_STACK_SIZE;
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-  Cpu_table.stack_allocate_hook             = NULL;
-  Cpu_table.stack_free_hook                 = NULL;
 
   /*
    *  Copy the configuration table so we and the BSP wants to change it.
