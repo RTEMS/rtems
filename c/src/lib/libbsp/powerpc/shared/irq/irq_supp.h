@@ -1,3 +1,14 @@
+/*
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
+#include <stdlib.h>
+#include <stdint.h>
+
 #ifndef IRQ_SHARED_IRQ_C_GLUE_H
 #define IRQ_SHARED_IRQ_C_GLUE_H
 /* 
@@ -29,19 +40,19 @@ extern "C" {
  *       interrupts that are outside of the range handled by the
  *       PIC(s).
  */
-extern void BSP_enable_irq_at_pic		(const rtems_irq_number irqLine);
+extern void BSP_enable_irq_at_pic(const rtems_irq_number irqLine);
 /*
  * RETURNS: nonzero (> 0 ) if irq was enabled originally, zero if irq
  *          was off and negative value if there was an error.
  */
-extern int  BSP_disable_irq_at_pic		(const rtems_irq_number irqLine);
+extern int  BSP_disable_irq_at_pic(const rtems_irq_number irqLine);
 
 /*
  * Initialize the PIC.
  * Return nonzero on success, zero on failure (which will be treated
  * as fatal by the manager).
  */
-extern int  BSP_setup_the_pic			(rtems_irq_global_settings* config);
+extern int  BSP_setup_the_pic(rtems_irq_global_settings* config);
 
 struct _BSP_Exception_frame;
 
@@ -60,25 +71,32 @@ void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int ex
  */
 
 static inline void
-bsp_irq_dispatch_list(rtems_irq_connect_data *tbl, unsigned irq, rtems_irq_hdl sentinel)
+bsp_irq_dispatch_list(
+  rtems_irq_connect_data *tbl,
+  unsigned irq,
+  rtems_irq_hdl sentinel
+)
 {
-register uint32_t	l_orig;
+  register uint32_t l_orig;
 
-	l_orig = _ISR_Get_level();
+  l_orig = _ISR_Get_level();
 
-	/* Enable all interrupts */
-	_ISR_Set_level(0);
+  /* Enable all interrupts */
+  _ISR_Set_level(0);
 
-  /* rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
-  {
-     rtems_irq_connect_data* vchain;
-     for( vchain = &tbl[irq];
-          ((int)vchain != -1 && vchain->hdl != sentinel);
-          vchain = (rtems_irq_connect_data*)vchain->next_handler )
-     {
-        vchain->hdl(vchain->handle);
-     }
-  }
+  #ifndef BSP_SHARED_HANDLER_SUPPORT
+    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
+  #else
+    {
+      rtems_irq_connect_data* vchain;
+      for( vchain = &tbl[irq];
+           ((int)vchain != -1 && vchain->hdl != sentinel);
+           vchain = (rtems_irq_connect_data*)vchain->next_handler )
+      {
+         vchain->hdl(vchain->handle);
+      }
+   }
+  #endif
 
   /* Restore original level */
   _ISR_Set_level(l_orig);
