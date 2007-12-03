@@ -148,9 +148,6 @@ int _POSIX_Mutex_Translate_core_mutex_return_code(
 
 
 #include <rtems/posix/mutex.inl>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/posix/mutexmp.h>
-#endif
 
 #ifdef __cplusplus
 }

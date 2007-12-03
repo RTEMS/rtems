@@ -159,9 +159,6 @@ int _POSIX_Condition_variables_Wait_support(
 );
 
 #include <rtems/posix/cond.inl>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/posix/condmp.h>
-#endif
 
 #ifdef __cplusplus
 }

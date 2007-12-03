@@ -141,9 +141,6 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 );
 
 #include <rtems/posix/pthread.inl>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/posix/pthreadmp.h>
-#endif
 
 #ifdef __cplusplus
 }

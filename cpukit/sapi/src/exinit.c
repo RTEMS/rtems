@@ -92,6 +92,21 @@ rtems_interrupt_level rtems_initialize_executive_early(
       INTERNAL_ERROR_NO_CPU_TABLE
     );
 
+  /*
+   *  Grab our own copy of the user's CPU table.
+   */
+  _CPU_Table = *cpu_table;
+
+  /*
+   *  Provide pointers just for later convenience.
+   */
+  _Configuration_Table    = configuration_table;
+
+  /*
+   * Initialize any target architecture specific support as early as possible
+   */
+  _CPU_Initialize( cpu_table, _Thread_Dispatch );
+
 #if defined(RTEMS_MULTIPROCESSING)
   /*
    *  Initialize the system state based on whether this is an MP system.
@@ -110,18 +125,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
 #else
   _System_state_Handler_initialization( FALSE );
 #endif
-
-  /*
-   *  Grab our own copy of the user's CPU table.
-   */
-  _CPU_Table = *cpu_table;
-
-  /*
-   *  Provide pointers just for later convenience.
-   */
-  _Configuration_Table    = configuration_table;
-
-  _CPU_Initialize( cpu_table, _Thread_Dispatch );
 
   /*
    *  Do this as early as possible to insure no debugging output
@@ -173,13 +176,13 @@ rtems_interrupt_level rtems_initialize_executive_early(
     configuration_table->maximum_extensions
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    multiprocessing_table->maximum_proxies
+    _Configuration_MP_table->maximum_proxies
 #endif
   );
 
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Handler_initialization(
-    multiprocessing_table->User_mpci_table,
+    _Configuration_MP_table->User_mpci_table,
     RTEMS_TIMEOUT
   );
 #endif
@@ -220,8 +223,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
    *  Scheduling can properly occur now as long as we avoid dispatching.
    */
 
-  if ( cpu_table->pretasking_hook )
-    (*cpu_table->pretasking_hook)();
+  {
+    extern void bsp_pretasking_hook(void);
+    bsp_pretasking_hook();
+  }
 
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Create_server();
@@ -233,8 +238,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _API_extensions_Run_predriver();
 
-  if ( _CPU_Table.predriver_hook )
-    (*_CPU_Table.predriver_hook)();
+  {
+    extern void bsp_predriver_hook(void);
+    bsp_predriver_hook();
+  }
 
   /*
    *  Initialize all the device drivers and initialize the MPCI layer.
@@ -261,8 +268,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _API_extensions_Run_postdriver();
 
-  if ( _CPU_Table.postdriver_hook )
-    (*_CPU_Table.postdriver_hook)();
+  {
+    extern void bsp_postdriver_hook(void);
+    bsp_postdriver_hook();
+  }
 
   return bsp_level;
 }

@@ -43,16 +43,6 @@ extern "C" {
 #include <rtems/score/coresem.h>
 
 /**
- *  The following constants define the stack size requirements for
- *  the system threads.
- */
-#define MPCI_RECEIVE_SERVER_STACK_SIZE \
-  ( STACK_MINIMUM_SIZE + \
-    CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
-    _CPU_Table.extra_mpci_receive_server_stack \
-  )
-
-/**
  *  The following defines the node number used when a broadcast is desired.
  */
 #define MPCI_ALL_NODES 0

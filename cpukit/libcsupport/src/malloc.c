@@ -175,7 +175,7 @@ void RTEMS_Malloc_Initialize(
    *  left over from another process.  This would be a security violation.
    */
 
-  if ( rtems_cpu_configuration_get_do_zero_of_workspace() )
+  if ( rtems_configuration_get_do_zero_of_workspace() )
      memset( starting_address, 0, length );
 
   /*

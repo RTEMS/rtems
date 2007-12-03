@@ -199,7 +199,6 @@ SCORE_EXTERN rtems_cpu_table _CPU_Table;
 /** This macro assists in accessing the CPU Specific Configuration Table. */
 #define rtems_cpu_configuration_get_table() (&_CPU_Table)
 
-
 /** This macro assists in accessing the pretasking BSP hook. */
 #define rtems_cpu_configuration_get_pretasking_hook() \
    (_CPU_Table.pretasking_hook)
@@ -212,36 +211,9 @@ SCORE_EXTERN rtems_cpu_table _CPU_Table;
 #define rtems_cpu_configuration_get_postdriver_hook() \
    (_CPU_Table.postdriver_hook)
 
-/** This macro assists in accessing the BSP specific IDLE task entry point. */
-#define rtems_cpu_configuration_get_idle_task() \
-   (_CPU_Table.idle_task)
-
-/**
-  * This macro assists in accessing the field which indicates whether
-  * RTEMS is responsible for zeroing the Executive Workspace.
-  */
-#define rtems_cpu_configuration_get_do_zero_of_workspace() \
-   (_CPU_Table.do_zero_of_workspace)
-
-/** This macro assists in accessing the IDLE task stack point size. */
-#define rtems_cpu_configuration_get_idle_task_stack_size() \
-   (_CPU_Table.idle_task_stack_size)
-
 /** This macro assists in accessing the interrupt stack size. */
 #define rtems_cpu_configuration_get_interrupt_stack_size() \
    (_CPU_Table.interrupt_stack_size)
-
-/** This macro assists in accessing the size of the MPCI receiver server. */
-#define rtems_cpu_configuration_get_extra_mpci_receive_server_stack() \
-   (_CPU_Table.extra_mpci_receive_server_stack)
-
-/** This macro assists in accessing the BSP stack allocation hook. */
-#define rtems_cpu_configuration_get_stack_allocate_hook() \
-   (_CPU_Table.stack_allocate_hook)
-
-/** This macro assists in accessing the BSP stack allocation free hook. */
-#define rtems_cpu_configuration_get_stack_free_hook() \
-   (_CPU_Table.stack_free_hook)
 
 /** This macro defines the maximum length of a Classic API name. */
 #define RTEMS_MAXIMUM_NAME_LENGTH sizeof(rtems_name)

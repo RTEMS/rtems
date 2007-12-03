@@ -29,6 +29,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -58,9 +59,8 @@ void _Thread_Handler_initialization(
    * BOTH stacks hooks must be set or both must be NULL.
    * Do not allow mixture.
    */
-
-  if ( !( ( _CPU_Table.stack_allocate_hook == 0 )
-       == ( _CPU_Table.stack_free_hook == 0 ) ) )
+    if ( !( (!_Configuration_Table->stack_allocate_hook)
+            == (!_Configuration_Table->stack_free_hook) ) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,

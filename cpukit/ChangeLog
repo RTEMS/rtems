@@ -1,3 +1,26 @@
+2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/malloc.c, libmisc/monitor/mon-command.c,
+	posix/preinstall.am, posix/include/rtems/posix/cond.h,
+	posix/include/rtems/posix/mqueue.h,
+	posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/pthread.h,
+	posix/include/rtems/posix/semaphore.h, posix/src/conddestroy.c,
+	posix/src/mutexdestroy.c, posix/src/mutexinit.c,
+	posix/src/mutexsetprioceiling.c, posix/src/mutexunlock.c,
+	sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	sapi/include/rtems/init.h, sapi/include/rtems/sptables.h,
+	sapi/src/exinit.c, score/include/rtems/system.h,
+	score/include/rtems/score/mpci.h, score/src/mpci.c,
+	score/src/thread.c, score/src/threadcreateidle.c,
+	score/src/threadstackallocate.c, score/src/threadstackfree.c,
+	score/src/wkspace.c: Moved most of the remaining CPU Table fields to
+	the Configuration Table. This included pretasking_hook,
+	predriver_hook, postdriver_hook, idle_task, do_zero_of_workspace,
+	extra_mpci_receive_server_stack, stack_allocate_hook, and
+	stack_free_hook. As a side-effect of this effort some multiprocessing
+	code was made conditional and some style clean up occurred.
+
 2007-12-03	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/shell.h: Added comments for the parameters to the

@@ -1,11 +1,7 @@
 /*
  *  Workspace Handler
  *
- *  XXX
- *
- *  NOTE:
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +18,9 @@
 #include <rtems/system.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/interr.h>
+#include <rtems/config.h>
+
+#include <string.h>  /* for memset */
 
 /*PAGE
  *
@@ -33,8 +32,6 @@ void _Workspace_Handler_initialization(
   size_t      size
 )
 {
-  uint32_t   *zero_out_array;
-  uint32_t    index;
   uint32_t    memory_available;
 
   if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
@@ -44,12 +41,8 @@ void _Workspace_Handler_initialization(
       INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
     );
 
-  if ( _CPU_Table.do_zero_of_workspace ) {
-    for( zero_out_array  = (uint32_t   *) starting_address, index = 0 ;
-         index < size / sizeof( uint32_t   ) ;
-         index++ )
-      zero_out_array[ index ] = 0;
-  }
+  if ( _Configuration_Table->do_zero_of_workspace )
+   memset( starting_address, 0, size );
 
   memory_available = _Heap_Initialize(
     &_Workspace_Area,

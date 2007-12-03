@@ -12,9 +12,6 @@
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
@@ -47,31 +44,9 @@ int pthread_mutex_destroy(
 
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
 
-      _CORE_mutex_Flush(
-        &the_mutex->Mutex,
-#if defined(RTEMS_MULTIPROCESSING)
-        _POSIX_Mutex_MP_Send_object_was_deleted,
-#else
-        NULL,
-#endif
-        EINVAL
-      );
+      _CORE_mutex_Flush( &the_mutex->Mutex, NULL, EINVAL );
 
       _POSIX_Mutex_Free( the_mutex );
-
-#if defined(RTEMS_MULTIPROCESSING)
-      if ( the_mutex->process_shared == PTHREAD_PROCESS_SHARED ) {
-
-        _Objects_MP_Close( &_POSIX_Mutex_Information, the_mutex->Object.id );
-
-        _POSIX_Mutex_MP_Send_process_packet(
-          POSIX_MUTEX_MP_ANNOUNCE_DELETE,
-          the_mutex->Object.id,
-          0,                         /* Not used */
-          0                          /* Not used */
-        );
-      }
-#endif
       _Thread_Enable_dispatch();
       return 0;
 

@@ -41,11 +41,7 @@ int pthread_mutex_unlock(
       status = _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id,
-#if defined(RTEMS_MULTIPROCESSING)
-        _POSIX_Threads_mutex_MP_support
-#else
         NULL
-#endif
       );
       _Thread_Enable_dispatch();
       return _POSIX_Mutex_Translate_core_mutex_return_code( status );

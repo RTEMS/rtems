@@ -52,7 +52,9 @@ extern "C" {
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
 extern rtems_configuration_table        Configuration;
-extern rtems_multiprocessing_table      Multiprocessing_configuration;
+#if defined(RTEMS_MULTIPROCESSING)
+  extern rtems_multiprocessing_table      Multiprocessing_configuration;
+#endif
 #ifdef RTEMS_POSIX_API
 extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
@@ -173,6 +175,62 @@ extern int rtems_telnetd_maximum_ptys;
 #else
   #ifndef CONFIGURE_INTERRUPT_STACK_MEMORY
   #define CONFIGURE_INTERRUPT_STACK_MEMORY RTEMS_MINIMUM_STACK_SIZE
+  #endif
+#endif
+
+/*
+ *  Idle task body configuration
+ *
+ *  There is a default IDLE thread body provided by RTEMS which
+ *  has the possibility of being CPU specific.  There may be a
+ *  BSP specific override of the RTEMS default body and in turn,
+ *  the application may override and provide its own.
+ */
+#ifndef CONFIGURE_IDLE_TASK_BODY
+  #ifdef BSP_IDLE_TASK_BODY
+    #define CONFIGURE_IDLE_TASK_BODY BSP_IDLE_TASK_BODY
+  #else
+    #define CONFIGURE_IDLE_TASK_BODY NULL
+  #endif
+#endif
+
+/*
+ *  Idle task stack size configuration
+ *
+ *  By default, the IDLE task will have a stack of minimum size.
+ *  The BSP or application may override this value.
+ */
+#ifndef CONFIGURE_IDLE_TASK_STACK_SIZE
+  #ifdef BSP_IDLE_TASK_STACK_SIZE
+    #define CONFIGURE_IDLE_TASK_STACK_SIZE BSP_IDLE_TASK_STACK_SIZE
+  #else
+    #define CONFIGURE_IDLE_TASK_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
+  #endif
+#endif
+
+/*
+ *  Task stack allocator configuration
+ */
+
+#ifndef CONFIGURE_TASK_STACK_ALLOCATOR
+  #define CONFIGURE_TASK_STACK_ALLOCATOR NULL
+#endif
+
+#ifndef CONFIGURE_TASK_STACK_DEALLOCATOR
+  #define CONFIGURE_TASK_STACK_DEALLOCATOR NULL
+#endif
+
+/*
+ *  Should the RTEMS Workspace and C Program Heap be cleared automatically
+ *  at system start up?
+ */
+
+#ifndef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+  #ifdef BSP_ZERO_WORKSPACE_AUTOMATICALLY
+    #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY \
+            BSP_ZERO_WORKSPACE_AUTOMATICALLY
+  #else
+    #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY FALSE
   #endif
 #endif
 
@@ -399,6 +457,8 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
 #endif /* CONFIGURE_INIT */
 #endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
+
+#if defined(RTEMS_MULTIPROCESSING)
 /*
  *  Default Multiprocessing Configuration Table.  The defaults are
  *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
@@ -448,6 +508,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
 
 #endif /* CONFIGURE_MP_APPLICATION */
+#endif /* RTEMS_MULTIPROCESSING */
 
 /*
  *  Default Configuration Table.
@@ -1178,17 +1239,24 @@ itron_api_configuration_table Configuration_ITRON_API = {
 
 rtems_configuration_table Configuration = {
   CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
-  CONFIGURE_EXECUTIVE_RAM_SIZE,
+  CONFIGURE_EXECUTIVE_RAM_SIZE,              /* required RTEMS workspace */
   CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION +
-      CONFIGURE_STACK_CHECKER_EXTENSION,
-  CONFIGURE_MICROSECONDS_PER_TICK,
-  CONFIGURE_TICKS_PER_TIMESLICE,
-  CONFIGURE_MAXIMUM_DRIVERS,
-  CONFIGURE_NUMBER_OF_DRIVERS,               /* number of device drivers */
+      CONFIGURE_STACK_CHECKER_EXTENSION,     /* maximum user extensions */
+  CONFIGURE_MICROSECONDS_PER_TICK,           /* microseconds per clock tick */
+  CONFIGURE_TICKS_PER_TIMESLICE,             /* ticks per timeslice quantum */
+  CONFIGURE_IDLE_TASK_BODY,                  /* user's IDLE task */
+  CONFIGURE_IDLE_TASK_STACK_SIZE,            /* IDLE task stack size */
+  CONFIGURE_TASK_STACK_ALLOCATOR,            /* stack allocator */
+  CONFIGURE_TASK_STACK_DEALLOCATOR,          /* stack deallocator */
+  CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,    /* true to clear memory */
+  CONFIGURE_MAXIMUM_DRIVERS,                 /* maximum device drivers */
+  CONFIGURE_NUMBER_OF_DRIVERS,               /* static device drivers */
   Device_drivers,                            /* pointer to driver table */
   CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,    /* number of initial extensions */
   CONFIGURE_INITIAL_EXTENSION_TABLE,         /* pointer to initial extensions */
+#if defined(RTEMS_MULTIPROCESSING)
   CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
+#endif
   &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
 #ifdef RTEMS_POSIX_API
   &Configuration_POSIX_API,                  /* pointer to POSIX API config */

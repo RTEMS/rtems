@@ -29,6 +29,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 /*
  *  _Thread_Stack_Free
@@ -53,8 +54,10 @@ void _Thread_Stack_Free(
      * routine properly matches the allocation of the stack.
      */
 
-    if ( _CPU_Table.stack_free_hook )
-        (*_CPU_Table.stack_free_hook)( the_thread->Start.Initial_stack.area );
+    if ( _Configuration_Table->stack_free_hook )
+      (*_Configuration_Table->stack_free_hook)(
+        the_thread->Start.Initial_stack.area
+      );
     else
         _Workspace_Free( the_thread->Start.Initial_stack.area );
 }

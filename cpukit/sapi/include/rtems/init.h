@@ -36,6 +36,7 @@ extern "C" {
 #include <rtems/config.h>
 #include <rtems/rtems/intr.h>
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*
  *  The following defines the default Multiprocessing Configuration
  *  Table.  This table is used in a single processor system.
@@ -43,6 +44,7 @@ extern "C" {
 
 extern const rtems_multiprocessing_table
   _Initialization_Default_multiprocessing_table;
+#endif
 
 /*
  *  rtems_initialize_executive_early

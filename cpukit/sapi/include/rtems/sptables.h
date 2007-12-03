@@ -47,23 +47,24 @@ extern "C" {
 #include <rtems/rtems/signal.h>
 #include <rtems/rtems/timer.h>
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*
  *  This is the default Multiprocessing Configuration Table.
  *  It is used in single processor configurations.
  */
-
-#if defined(SAPI_INIT)
-const rtems_multiprocessing_table
-       _Initialization_Default_multiprocessing_table = {
-  1,                      /* local node number */
-  1,                      /* maximum number nodes in system */
-  0,                      /* maximum number global objects */
-  0,                      /* maximum number proxies */
-  NULL,                   /* pointer to MPCI address table */
-};
-#else
-extern const rtems_multiprocessing_table
-       _Initialization_Default_multiprocessing_table;
+  #if defined(SAPI_INIT)
+    const rtems_multiprocessing_table
+	   _Initialization_Default_multiprocessing_table = {
+      1,                      /* local node number */
+      1,                      /* maximum number nodes in system */
+      0,                      /* maximum number global objects */
+      0,                      /* maximum number proxies */
+      NULL,                   /* pointer to MPCI address table */
+    };
+  #else
+    extern const rtems_multiprocessing_table
+	   _Initialization_Default_multiprocessing_table;
+  #endif
 #endif
 
 #ifdef __cplusplus

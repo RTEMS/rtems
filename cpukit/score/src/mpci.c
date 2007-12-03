@@ -17,12 +17,12 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/cpu.h>
-#include <rtems/score/interr.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #include <rtems/score/mppkt.h>
 #endif
+#include <rtems/score/cpu.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
@@ -31,6 +31,7 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/coresem.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -112,7 +113,9 @@ void _MPCI_Create_server( void )
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
     NULL,        /* allocate the stack */
-    MPCI_RECEIVE_SERVER_STACK_SIZE,
+    STACK_MINIMUM_SIZE +
+      CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
+      _Configuration_MP_table->extra_mpci_receive_server_stack,
     CPU_ALL_TASKS_ARE_FP,
     PRIORITY_MINIMUM,
     FALSE,       /* no preempt */

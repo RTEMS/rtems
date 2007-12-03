@@ -185,9 +185,6 @@ int _POSIX_Semaphore_Translate_core_semaphore_return_code(
 );
 
 #include <rtems/posix/semaphore.inl>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/posix/semaphoremp.h>
-#endif
 
 #ifdef __cplusplus
 }

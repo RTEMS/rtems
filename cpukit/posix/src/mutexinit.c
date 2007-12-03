@@ -13,9 +13,6 @@
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
@@ -132,16 +129,6 @@ int pthread_mutex_init(
     return EAGAIN;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED &&
-       !( _Objects_MP_Allocate_and_open( &_POSIX_Mutex_Information, 0,
-                            the_mutex->Object.id, FALSE ) ) ) {
-    _POSIX_Mutex_Free( the_mutex );
-    _Thread_Enable_dispatch();
-    return EAGAIN;
-  }
-#endif
-
   the_mutex->process_shared = the_attr->process_shared;
 
   the_mutex_attr = &the_mutex->Mutex.Attributes;
@@ -168,16 +155,6 @@ int pthread_mutex_init(
   _Objects_Open( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
 
   *mutex = the_mutex->Object.id;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    _POSIX_Mutex_MP_Send_process_packet(
-      POSIX_MUTEX_MP_ANNOUNCE_CREATE,
-      the_mutex->Object.id,
-      0,                         /* Name not used */
-      0                          /* Not used */
-    );
-#endif
 
   _Thread_Enable_dispatch();
   return 0;

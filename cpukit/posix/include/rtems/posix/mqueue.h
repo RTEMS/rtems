@@ -239,9 +239,6 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
 
 
 #include <rtems/posix/mqueue.inl>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/posix/mqueuemp.h>
-#endif
 
 #ifdef __cplusplus
 }

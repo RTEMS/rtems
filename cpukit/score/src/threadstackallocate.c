@@ -29,6 +29,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -57,8 +58,8 @@ size_t _Thread_Stack_Allocate(
    * routine can call the correct deallocation routine.
    */
 
-  if ( _CPU_Table.stack_allocate_hook ) {
-    stack_addr = (*_CPU_Table.stack_allocate_hook)( the_stack_size );
+  if ( _Configuration_Table->stack_allocate_hook ) {
+    stack_addr = (*_Configuration_Table->stack_allocate_hook)( the_stack_size );
   } else {
 
     /*
