@@ -120,15 +120,6 @@ void bsp_start( void )
   unsigned char *work_space_start;
 
   /*
-   * Set up our hooks
-   * Make sure libc_init is done before drivers initialized so that
-   * they can use atexit()
-   */
-
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  /*
    *  This should be enough interrupt stack.
    */
 
