@@ -40,6 +40,7 @@ dist_project_lib_DATA += startup/linkcmds
 noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../i386/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \

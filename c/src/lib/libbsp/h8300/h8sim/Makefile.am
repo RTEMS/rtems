@@ -27,9 +27,9 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c startup/__main.c
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/__main.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

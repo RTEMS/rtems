@@ -28,7 +28,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bspclean.c \
+startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \

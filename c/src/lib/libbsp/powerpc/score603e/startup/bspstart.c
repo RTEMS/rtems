@@ -195,16 +195,17 @@ void initialize_PMC() {
 
 /*PAGE
  *
- *  SCORE603e_bsp_postdriver_hook
+ *  bsp_postdriver_hook
  *
  *  Standard post driver hook plus some BSP specific stuff.
  */
 
-void SCORE603e_bsp_postdriver_hook(void)
+void bsp_postdriver_hook(void)
 {
   extern void Init_EE_mask_init(void);
+  extern void open_dev_console(void);
 
-  bsp_postdriver_hook();
+  open_dev_console();
 
   Init_EE_mask_init();
 }
@@ -308,11 +309,7 @@ void bsp_start( void )
    *  initialize the CPU table for this BSP
    */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook; /* init libc, etc. */
-  Cpu_table.predriver_hook  = bsp_predriver_hook;   /* Init vectors    */
-  Cpu_table.postdriver_hook = SCORE603e_bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  Cpu_table.idle_task_stack_size = (3 * STACK_MINIMUM_SIZE);
 
   bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
 

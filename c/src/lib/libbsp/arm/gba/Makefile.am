@@ -31,6 +31,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppredriverhook.c \
     startup/bspstart.c startup/exit.c startup/cpu.c startup/cpu_asm.S \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c

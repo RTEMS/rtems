@@ -144,8 +144,6 @@ void bsp_start( void )
    *  we only use a hook to get the C library initialized.
    */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;

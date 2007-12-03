@@ -94,6 +94,7 @@ pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../i386/shared/comm/uart.h
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppredriverhook.c \
     startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \

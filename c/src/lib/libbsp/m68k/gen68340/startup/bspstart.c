@@ -56,7 +56,8 @@ void bsp_start( void )
   extern void          *_RamSize;
   extern unsigned long  _M68k_Ramsize;
 
-  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
+  /* RAM size set in linker script */
+  _M68k_Ramsize = (unsigned long)&_RamSize;
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
@@ -77,8 +78,5 @@ void bsp_start( void )
   /*
    *  initialize the CPU table for this BSP
    */
-
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 }

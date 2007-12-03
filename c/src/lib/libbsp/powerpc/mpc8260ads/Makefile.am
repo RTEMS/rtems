@@ -49,8 +49,8 @@ include_bsp_HEADERS += vectors/vectors.h
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
+    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/cpuinit.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

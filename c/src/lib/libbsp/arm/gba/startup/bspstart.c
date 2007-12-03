@@ -142,13 +142,7 @@ void bsp_start_default( void )
   rtemsFreeMemStart = (uint32_t)&_end;
 
   /* If we don't have command line arguments set default program name. */
-  Cpu_table.pretasking_hook         = bsp_pretasking_hook; /* init libc, etc. */
-  Cpu_table.predriver_hook          = NULL;                /* use system's    */
-  Cpu_table.postdriver_hook         = bsp_postdriver_hook;
-  Cpu_table.idle_task               = NULL; /* don't override system IDLE task */
   Cpu_table.interrupt_stack_size    = 0;
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
 
   /* Place RTEMS workspace at beginning of free memory. */
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;

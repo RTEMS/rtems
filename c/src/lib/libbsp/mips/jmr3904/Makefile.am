@@ -48,8 +48,8 @@ consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
+    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -69,6 +69,7 @@ libbsp_a_LIBADD += \
     startup_rel-bspclean.o \
     startup_rel-bsplibc.o \
     startup_rel-bsppost.o \
+    startup_rel-bsppredriverhook.o \
     startup_rel-bspstart.o \
     startup_rel-bootcard.o \
     startup_rel-sbrk.o \

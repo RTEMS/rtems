@@ -200,16 +200,14 @@ void bsp_start(void)
 
   _write_SPRG1((unsigned int)intrStack);
 
-  /* Signal them that this BSP has fixed PR288 - eventually, this should go away */
+  /* Signal them that this BSP has fixed PR288 - eventually, this should
+   * go away
+   */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
    *  initialize the CPU table for this BSP
    */
-
-  Cpu_table.pretasking_hook        = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.predriver_hook         = bsp_predriver_hook;     /* init PCI / RTC ...   */
-  Cpu_table.postdriver_hook        = bsp_postdriver_hook;
 
   if( Cpu_table.interrupt_stack_size < 4*1024 )
     Cpu_table.interrupt_stack_size = 4 * 1024;

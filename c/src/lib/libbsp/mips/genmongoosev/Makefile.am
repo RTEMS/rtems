@@ -30,10 +30,10 @@ startup_CPPFLAGS = -I$(srcdir)/../../mips/shared/gdbstub
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
     ../../shared/gdbstub/rtems-stub-glue.c ../../shared/bspclean.c \
-    ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    startup/gdb-support.c
+    ../../shared/bsppredriverhook.c ../../shared/bsplibc.c \
+    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c \
+    ../../shared/setvec.c startup/gdb-support.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(startup_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

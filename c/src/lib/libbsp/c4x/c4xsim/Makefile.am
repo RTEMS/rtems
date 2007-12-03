@@ -33,6 +33,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
     ../../c4x/shared/c3xspurious.c ../../c4x/shared/c4xspurious.c \

@@ -95,10 +95,7 @@ void bsp_start( void )
 {
   extern void mips_install_isr_entries(void);
   unsigned int compare = 0; 
-  /* Configure Number of Register Caches */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 8192;
 
   /* Place RTEMS workspace at beginning of free memory. */

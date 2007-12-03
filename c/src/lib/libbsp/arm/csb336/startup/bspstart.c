@@ -112,10 +112,6 @@ void bsp_start_default( void )
     /* Set interrupt priority to -1 (allow all priorities) */
     MC9328MXL_AITC_NIMASK = 0x1f;
 
-    /* tell rtems about the hooks we are using */
-    Cpu_table.pretasking_hook        = bsp_pretasking_hook;
-    Cpu_table.postdriver_hook        = bsp_postdriver_hook;
-    
     /* Place RTEMS workspace at beginning of free memory. */
     BSP_Configuration.work_space_start = (void *)&_bss_free_start;
     
@@ -123,7 +119,6 @@ void bsp_start_default( void )
                       BSP_Configuration.work_space_size);
     
     free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
-    
 
     /*
      * Init rtems exceptions management

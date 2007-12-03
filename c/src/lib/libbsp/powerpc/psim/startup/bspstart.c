@@ -147,21 +147,6 @@ void bsp_start( void )
    * they can use atexit()
    */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  /*
-   *  Is this true?
-   *
-   *  PSIM does zero out memory BUT only when IT begins execution.  Thus
-   *  if we want to have a clean slate in the workspace each time we
-   *  begin execution of OUR application, then we must zero the workspace.
-   *
-   *  It is true that it takes simulated time to clear the memory.
-   */
-
-  Cpu_table.do_zero_of_workspace = FALSE;
-
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND;

@@ -128,8 +128,6 @@ void bsp_start_default( void )
     /* disable interrupts */
     *EP7312_INTMR1 = 0;
     *EP7312_INTMR2 = 0;
-    Cpu_table.pretasking_hook        = bsp_pretasking_hook;
-    Cpu_table.postdriver_hook        = bsp_postdriver_hook;
 
     /* Place RTEMS workspace at beginning of free memory. */
     BSP_Configuration.work_space_start = (void *)&_bss_free_start;

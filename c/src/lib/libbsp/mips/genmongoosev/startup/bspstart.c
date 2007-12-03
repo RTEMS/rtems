@@ -87,10 +87,6 @@ void bsp_start( void )
    extern void mips_install_isr_entries();
    extern void mips_gdb_stub_install(void);
 
-   /* Configure Number of Register Caches */
-
-   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-   Cpu_table.postdriver_hook = bsp_postdriver_hook;
    Cpu_table.interrupt_stack_size = 4096;
 
    /* HACK -- tied to value linkcmds */

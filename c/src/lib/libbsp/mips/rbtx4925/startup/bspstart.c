@@ -89,16 +89,11 @@ void bsp_start( void )
 
   /* Configure Number of Register Caches */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
 
   BSP_Configuration.work_space_start =
        (void *)((uint64_t)((&end) + LIBC_HEAP_SIZE + 0x100) & ~0x7);
 
-  mips_install_isr_entries();		/* Install generic MIPS exception handler */
-
-/*  init_exc_vecs();	*/        			/* Install BSP specific exception handler */
-
+  mips_install_isr_entries();  /* Install generic MIPS exception handler */
 }
 

@@ -86,7 +86,8 @@ void bsp_start( void )
   m68k_isr_entry *rom_monitor_vector_table;
   int index;
 
-  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
+  /* RAM size set in linker script */
+  _M68k_Ramsize = (unsigned long)&_RamSize;
 
   /*
    *  167Bug Vectors are at 0xFFE00000
@@ -124,9 +125,6 @@ void bsp_start( void )
    */
   page_table_init( &Configuration );
 
-  /* We only use a hook to get the C library initialized. */
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   /* Must match value in start.s */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 

@@ -28,6 +28,7 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.prom \
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/alloc360.c startup/bspclean.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../m68k/shared/m68kpretaskinghook.c startup/bspstart.c \
     startup/init68360.c ../../shared/bootcard.c \
