@@ -117,10 +117,6 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  /* Fixed */
-
-  BSP_Configuration.microseconds_per_tick = 1000;
-
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
@@ -137,7 +133,5 @@ void bsp_start( void )
    *  initialize the CPU table for this BSP
    */
 
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 }

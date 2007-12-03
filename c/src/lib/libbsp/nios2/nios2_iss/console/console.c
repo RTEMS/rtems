@@ -143,21 +143,6 @@ void outbyte(
 
   while ((ajur->control & ALTERA_AVALON_JTAG_UART_CONTROL_WSPACE_MSK) == 0);
 
-#if 0
-  if (Cpu_table.serial_xon_xoff)
-  {
-      while (is_character_ready(&status))
-      {
-          if (status == XOFFchar)
-          do
-          {
-              while (!is_character_ready(&status));
-          }
-          while (status != XONchar);
-      }
-  }
-#endif
-
   ajur->data = ch;
 }
 
