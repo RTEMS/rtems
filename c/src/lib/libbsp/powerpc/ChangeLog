@@ -1,3 +1,7 @@
+2007-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq.c: Spacing.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/bspstart.c: Moved most of the remaining CPU Table
