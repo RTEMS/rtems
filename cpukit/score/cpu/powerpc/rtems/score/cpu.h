@@ -406,6 +406,10 @@ static inline uint32_t CPU_swap_u32(
  * we run in supervisory mode so that should work on
  * all CPUs. In user mode we'd have a problem...
  * 2007/11/30, T.S.
+ *
+ * OTOH, PSIM currently lacks support for reading
+ * SPRs 268/269. You need GDB patch sim/2376 to avoid
+ * a crash...
  */
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mftb  %0" : "=r" (_value) )

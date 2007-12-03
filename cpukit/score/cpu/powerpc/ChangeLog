@@ -1,3 +1,9 @@
+2007-12-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/score/cpu.h: Added comment that GDB patch sim/2376
+	is needed for reading the time-base with the new (more
+	portable) method.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h: Moved most of
