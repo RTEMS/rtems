@@ -404,25 +404,13 @@ typedef struct {
  *  NOTE: The interrupt_stack_size field is required if
  *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.
  *
- *        The pretasking_hook, predriver_hook, and postdriver_hook,
- *        and the do_zero_of_workspace fields are required on ALL CPUs.
- *
  *  H8300 Specific Information:
  *
  *  XXX
  */
 
 typedef struct {
-  void       (*pretasking_hook)( void );
-  void       (*predriver_hook)( void );
-  void       (*postdriver_hook)( void );
-  void       (*idle_task)( void );
-  boolean      do_zero_of_workspace;
-  uint32_t     idle_task_stack_size;
   uint32_t     interrupt_stack_size;
-  uint32_t     extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( uint32_t   );
-  void       (*stack_free_hook)( void* );
 }   rtems_cpu_table;
 
 /*

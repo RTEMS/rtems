@@ -385,32 +385,8 @@ typedef CPU_Exception_frame CPU_Interrupt_frame;
  */
 
 typedef struct {
-  void       (*pretasking_hook)( void );
-  void       (*predriver_hook)( void );
-  void       (*postdriver_hook)( void );
-  void       (*idle_task)( void );
-  boolean      do_zero_of_workspace;
-  uint32_t     idle_task_stack_size;
   uint32_t     interrupt_stack_size;
-  uint32_t     extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( uint32_t   );
-  void       (*stack_free_hook)( void* );
-  /* end of fields required on all CPUs */
-
 }   rtems_cpu_table;
-
-/*
- *  Macros to access required entires in the CPU Table are in 
- *  the file rtems/system.h.
- */
-
-/*
- *  Macros to access ARM specific additions to the CPU Table
- *
- *  none required
- */
-
-/* There are no CPU specific additions to the CPU Table for this port. */
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult

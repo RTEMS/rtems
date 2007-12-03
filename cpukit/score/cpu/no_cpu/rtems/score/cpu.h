@@ -497,66 +497,12 @@ typedef struct {
  */
 
 typedef struct {
-  /** This element points to the BSP's pretasking hook. */
-  void       (*pretasking_hook)( void );
-  /** This element points to the BSP's predriver hook. */
-  void       (*predriver_hook)( void );
-  /** This element points to the BSP's postdriver hook. */
-  void       (*postdriver_hook)( void );
-  /** This element points to the BSP's optional idle task which may override
-   *  the default one provided with RTEMS.
-   */
-  void       (*idle_task)( void );
-  /** If this element is TRUE, then RTEMS will zero the Executive Workspace.
-   *  When this element is FALSE, it is assumed that the BSP or invoking
-   *  environment has ensured that memory was cleared before RTEMS was 
-   *  invoked.
-   */
-  boolean      do_zero_of_workspace;
-  /** This field specifies the size of the IDLE task's stack.  If less than or
-   *  equal to the minimum stack size, then the IDLE task will have the minimum
-   *  stack size.
-   */
-  uint32_t     idle_task_stack_size;
   /** This field specifies the size of the interrupt stack.  If less than or
    *  equal to the minimum stack size, then the interrupt stack will be of
    *  minimum stack size.
    */
   uint32_t     interrupt_stack_size;
-  /** The MPCI Receive server is assumed to have a stack of at least 
-   *  minimum stack size.  This field specifies the amount of extra
-   *  stack this task will be given in bytes.
-   */
-  uint32_t     extra_mpci_receive_server_stack;
-  /** The BSP may want to provide it's own stack allocation routines.
-   *  In this case, the BSP will provide this stack allocation hook.
-   */
-  void *     (*stack_allocate_hook)( uint32_t   );
-  /** The BSP may want to provide it's own stack free routines.
-   *  In this case, the BSP will provide this stack free hook.
-   */
-  void       (*stack_free_hook)( void *);
-  /* end of fields required on all CPUs */
 }   rtems_cpu_table;
-
-/*
- *  Macros to access required entires in the CPU Table are in 
- *  the file rtems/system.h.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-/*
- *  Macros to access NO_CPU specific additions to the CPU Table
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-/* There are no CPU specific additions to the CPU Table for this port. */
 
 /**
  *  This variable is optional.  It is used on CPUs on which it is difficult
