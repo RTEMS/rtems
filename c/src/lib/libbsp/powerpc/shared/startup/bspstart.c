@@ -384,8 +384,6 @@ void bsp_start( void )
    * they can use atexit()
    */
 
-  Cpu_table.pretasking_hook 	 = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.postdriver_hook 	 = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
