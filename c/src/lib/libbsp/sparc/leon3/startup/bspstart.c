@@ -100,7 +100,7 @@ void bsp_pretasking_hook(void)
   bsp_spurious_initialize();
 }
 
-void bsp_leon3_predriver_hook(void);
+void bsp_predriver_hook(void);
 
 /*
  *  bsp_start
@@ -113,19 +113,8 @@ void bsp_start( void )
   unsigned char *work_space_start;
 
   /*
-   * Set up our hooks
-   * Make sure libc_init is done before drivers initialized so that
-   * they can use atexit()
-   */
-
-  Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.predriver_hook = bsp_leon3_predriver_hook;     /* scan system bus */
-
-  /*
    *  This should be enough interrupt stack.
    */
-
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   work_space_start =

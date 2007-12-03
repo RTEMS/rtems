@@ -24,7 +24,7 @@ volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
 int LEON3_Cpu_Index = 0;
 
 /*
- *  bsp_leon3_predriver_hook
+ *  bsp_predriver_hook
  *
  *  BSP predriver hook.  Called just before drivers are initialized.
  *  Used to scan system bus. Probes for AHB masters, AHB slaves and 
@@ -44,23 +44,23 @@ asm(" .text  \n"
 
 extern rtems_configuration_table Configuration;
 
-void bsp_leon3_predriver_hook(void)
+void bsp_predriver_hook(void)
 {
   int i;
   unsigned int tmp;
   amba_apb_device dev;
-	
-	/* Scan the AMBA Plug&Play info at the default LEON3 area */
-	amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
+
+  /* Scan the AMBA Plug&Play info at the default LEON3 area */
+  amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
 
   /* Find LEON3 Interrupt controler */
   i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev);
   if ( i > 0 ){
     /* Found APB IRQ_MP Interrupt Controller */
     LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
-    if (Configuration.User_multiprocessing_table != NULL) {	
-	    tmp = getasr17();
-     	LEON3_Cpu_Index = (tmp >> 28) & 3;
+    if (Configuration.User_multiprocessing_table != NULL) {
+      tmp = getasr17();
+      LEON3_Cpu_Index = (tmp >> 28) & 3;
     }
   }
   
