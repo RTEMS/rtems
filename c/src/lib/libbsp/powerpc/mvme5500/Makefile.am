@@ -34,7 +34,8 @@ startup_rel_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppredriverhook.c startup/bspclean.c \
+    ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c startup/reboot.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

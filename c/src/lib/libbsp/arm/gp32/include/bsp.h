@@ -64,6 +64,15 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
 /* How big should the interrupt stack be? */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
+/*
+ *  This BSP provides its own IDLE task to override the RTEMS one.
+ *  So we prototype it and define the constant confdefs.h expects
+ *  to configure a BSP specific one.
+ */
+void bsp_idle_task(void);
+
+#define BSP_IDLE_TASK_BODY bsp_idle_task
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,3 +1,13 @@
+2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, include/bsp.h, startup/bspstart.c: Moved most of the
+	remaining CPU Table fields to the Configuration Table. This included
+	pretasking_hook, predriver_hook, postdriver_hook, idle_task,
+	do_zero_of_workspace, extra_mpci_receive_server_stack,
+	stack_allocate_hook, and stack_free_hook. As a side-effect of this
+	effort some multiprocessing code was made conditional and some style
+	clean up occurred.
+
 2007-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1257/bsps

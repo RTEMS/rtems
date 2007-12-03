@@ -121,15 +121,6 @@ extern "C" {
 // RTL8019AS definition
 #define RTL8019AS_BASE            0x82000000                //
 
-
-
-
-/*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Following are not defined and are board independent
- *
- */
 struct rtems_bsdnet_ifconfig;
 int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
                           int                          attaching);
@@ -144,6 +135,11 @@ extern rtems_configuration_table BSP_Configuration;
  */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	cs8900_driver_attach
+
+/*
+ *  BSP Configuration Default Overrides
+ */
+#define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 
 #ifdef __cplusplus
 }

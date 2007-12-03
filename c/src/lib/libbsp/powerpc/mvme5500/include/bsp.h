@@ -123,6 +123,11 @@ extern unsigned int BSP_heap_start;
 extern int
 RTEMS_BSP_NETWORK_DRIVER_ATTACH(/* struct rtems_bsdnet_ifconfig * */);
 
+/*
+ *  BSP Configuration Default Overrides
+ */
+#define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
+
 /* As per Linux, This should be in the ppc/system.h */
 
 static inline void memBar()

@@ -19,7 +19,7 @@
  *
  *  Modified to support the MVME5500 board.
  *  Also, the settings of L1, L2, and L3 caches is not necessary here.
- *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003, 2004, 2005
+ *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003-2007
  *  
  *  $Id$
  */
@@ -78,19 +78,19 @@ SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 typedef struct CmdLineRec_ {
-		unsigned long	size;
-		char		buf[0];
+    unsigned long  size;
+    char           buf[0];
 } CmdLineRec, *CmdLine;
 
 
-#define	mtspr(reg, val)	\
-	__asm __volatile("mtspr %0,%1" : : "K"(reg), "r"(val))
+#define mtspr(reg, val)  \
+  __asm __volatile("mtspr %0,%1" : : "K"(reg), "r"(val))
 
 
-#define	mfspr(reg) \
-	( { unsigned val; \
-	  __asm __volatile("mfspr %0,%1" : "=r"(val) : "K"(reg)); \
-	  val; } )
+#define mfspr(reg) \
+  ( { unsigned val; \
+    __asm __volatile("mfspr %0,%1" : "=r"(val) : "K"(reg)); \
+    val; } )
 
 /*
  * Copy Additional boot param passed by boot loader
@@ -121,7 +121,7 @@ unsigned int BSP_processor_frequency;
 unsigned int BSP_time_base_divisor;
 unsigned char ConfVPD_buff[200];
 
-#define CMDLINE_BUF_SIZE	2048
+#define CMDLINE_BUF_SIZE  2048
 
 static char cmdline_buf[CMDLINE_BUF_SIZE];
 char *BSP_commandline_string = cmdline_buf;
@@ -172,9 +172,22 @@ void zero_bss()
   /* prevent these from being accessed in the short data areas */
   extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
   extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
-  memset(__SBSS_START__, 0, ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__));
-  memset(__SBSS2_START__, 0, ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__));
-  memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
+
+  memset(
+    __SBSS_START__,
+    0,
+    ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__)
+  );
+  memset(
+    __SBSS2_START__,
+    0,
+    ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__)
+  );
+  memset(
+    __bss_start,
+    0,
+    ((unsigned) __rtems_end) - ((unsigned)__bss_start)
+  );
 }
 
 /* NOTE: we cannot simply malloc the commandline string;
@@ -213,15 +226,23 @@ void zero_bss()
  * and must be safe with a not properly aligned stack
  */
 void
-save_boot_params(void *r3, void *r4, void* r5, char *cmdline_start, char *cmdline_end)
+save_boot_params(
+  void *r3,
+  void *r4,
+  void* r5,
+  char *cmdline_start,
+  char *cmdline_end
+)
 {
-int		i=cmdline_end-cmdline_start;
-	if ( i >= CMDLINE_BUF_SIZE )
-		i = CMDLINE_BUF_SIZE-1;
-	else if ( i < 0 )
-		i = 0;
-        memmove(cmdline_buf, cmdline_start, i);
-	cmdline_buf[i]=0;
+  int i=cmdline_end-cmdline_start;
+
+  if ( i >= CMDLINE_BUF_SIZE )
+    i = CMDLINE_BUF_SIZE-1;
+  else if ( i < 0 )
+    i = 0;
+
+  memmove(cmdline_buf, cmdline_start, i);
+  cmdline_buf[i]=0;
 }
 
 /*
@@ -236,7 +257,7 @@ void bsp_start( void )
   int i;
 #endif
   unsigned char *stack;
-  unsigned long	 *r1sp;
+  unsigned long   *r1sp;
 #ifdef SHOW_LCR1_REGISTER
   unsigned l1cr;
 #endif
@@ -251,7 +272,7 @@ void bsp_start( void )
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
-  Triv121PgTbl	pt=0;
+  Triv121PgTbl  pt=0;
 
   /* Till Straumann: 4/2005
    * Need to map the system registers early, so we can printk...
@@ -274,7 +295,7 @@ void bsp_start( void )
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
    */
-  myCpu 	= get_ppc_cpu_type();
+  myCpu   = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
 #ifdef SHOW_LCR1_REGISTER
@@ -287,15 +308,16 @@ void bsp_start( void )
    * so there is no need to set it in r1 again... It is just for info
    * so that it can be printed without accessing R1.
    */
-  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+  stack = ((unsigned char*) __rtems_end) +
+          INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
- /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t *)stack) = 0;
 
   /* fill stack with pattern for debugging */
   __asm__ __volatile__("mr %0, %%r1":"=r"(r1sp));
   while (--r1sp >= (unsigned long*)__rtems_end)
-	  *r1sp=0xeeeeeeee;
+    *r1sp=0xeeeeeeee;
 
   /*
    * Initialize the interrupt related settings
@@ -323,6 +345,7 @@ void bsp_start( void )
    * Initialize default raw exception hanlders. See vectors/vectors_init.c
    */
   initialize_exceptions();
+
   /*
    * Init MMU block address translation to enable hardware
    * access
@@ -354,12 +377,15 @@ void bsp_start( void )
   __asm__ __volatile ("sc");
 #endif  
 
-  BSP_mem_size 				=  _512M;
-  /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit of System Status  register */
+  BSP_mem_size         =  _512M;
+  /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit
+   *       of System Status  register
+   */
   /* rtems_bsp_delay_in_bus_cycles are defined in registers.h */
-  BSP_bus_frequency			= 133333333;
-  BSP_processor_frequency		= 1000000000;
-  BSP_time_base_divisor			= 4000;/* P94 : 7455 clocks the TB/DECR at 1/4 of the system bus clock frequency */
+  BSP_bus_frequency      = 133333333;
+  BSP_processor_frequency    = 1000000000;
+  /* P94 : 7455 clocks the TB/DECR at 1/4 of the system bus clock frequency */
+  BSP_time_base_divisor      = 4000;
 
 
   /* Maybe not setup yet becuase of the warning message */
@@ -382,19 +408,21 @@ void bsp_start( void )
    * they can use atexit()
    */
 
-  Cpu_table.pretasking_hook 	 = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.postdriver_hook 	 = bsp_postdriver_hook;
-  Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
-  _CPU_Table                     = Cpu_table;/* S. Kate Feng <feng1@bnl.gov>, for rtems_bsp_delay() */
 
-  bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
-  printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size); 
+  bsp_clicks_per_usec    = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+
+  printk(
+    "BSP_Configuration.work_space_size = %x\n",
+     BSP_Configuration.work_space_size
+  ); 
+
   work_space_start = 
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
+  if ( work_space_start <=
+       ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
