@@ -65,7 +65,8 @@ consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS = irq/irq.h ../shared/irq/irq_supp.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ../shared/irq/irq.c irq/irq_init.c ../shared/irq/irq_asm.S irq/no_pic.c
+irq_rel_SOURCES = ../shared/irq/irq.c irq/irq_init.c \
+    ../shared/irq/irq_asm.S irq/no_pic.c
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

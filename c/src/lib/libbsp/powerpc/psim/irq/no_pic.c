@@ -12,8 +12,9 @@
  *
  *  T. Straumann, 2007/11/30
  *
- *  irq.c,v 1.4.2.8 2003/09/04 18:45:20 joel Exp
+ *  $Id$
  */
+
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -26,22 +27,24 @@ static rtems_irq_connect_data  dflt_entry;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum)
+void C_dispatch_irq_handler(
+  struct _BSP_Exception_frame *frame,
+  unsigned int excNum
+)
 {
-register uint32_t l_orig;
+  register uint32_t l_orig;
 
-	if (excNum == ASM_DEC_VECTOR) {
+  if (excNum == ASM_DEC_VECTOR) {
 
-		l_orig = _ISR_Get_level();
-		/* re-enable all interrupts */
-		_ISR_Set_level(0);
+    l_orig = _ISR_Get_level();
+    /* re-enable all interrupts */
+    _ISR_Set_level(0);
 
-		bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, dflt_entry.hdl);
+    bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, dflt_entry.hdl);
 
-		_ISR_Set_level(l_orig);
-		return;
-
-	}
+    _ISR_Set_level(l_orig);
+    return;
+  }
 }
 
 void
@@ -52,13 +55,13 @@ BSP_enable_irq_at_pic(const rtems_irq_number irq)
 int
 BSP_disable_irq_at_pic(const rtems_irq_number irq)
 {
-	return 0;
+  return 0;
 }
 
 int
 BSP_setup_the_pic(rtems_irq_global_settings *config)
 {
-	dflt_entry    = config->defaultEntry;
-	rtems_hdl_tbl = config->irqHdlTbl;
-	return 1;
+  dflt_entry    = config->defaultEntry;
+  rtems_hdl_tbl = config->irqHdlTbl;
+  return 1;
 }

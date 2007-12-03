@@ -1,3 +1,7 @@
+2007-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, irq/no_pic.c: Spacing.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, startup/bspstart.c: Moved most of the remaining CPU
