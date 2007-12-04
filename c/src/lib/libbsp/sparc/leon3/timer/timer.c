@@ -22,12 +22,13 @@
 
 #include <bsp.h>
 
-extern rtems_configuration_table Configuration;
-
-#define LEON3_TIMER_INDEX \
-  (Configuration.User_multiprocessing_table ?  \
-         (Configuration.User_multiprocessing_table)->maximum_nodes + \
-         (Configuration.User_multiprocessing_table)->node - 1 : 1)
+#if defined(RTEMS_MULTIPROCESSING)
+  #define LEON3_TIMER_INDEX \
+      (rtems_configuration_get_user_multiprocessing_table() ? : \
+        (rtems_configuration_get_user_multiprocessing_table()->node) - 1 : 1)
+#else 
+  #define LEON3_TIMER_INDEX 0
+#endif
 
 rtems_boolean Timer_driver_Find_average_overhead;
 

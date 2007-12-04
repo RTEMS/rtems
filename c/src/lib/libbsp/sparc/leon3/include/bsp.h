@@ -43,7 +43,6 @@ extern "C" {
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 /*
  * Network driver configuration
@@ -121,8 +120,6 @@ void BSP_fatal_return( void );
 void bsp_spurious_initialize( void );
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 #ifdef __cplusplus
 }

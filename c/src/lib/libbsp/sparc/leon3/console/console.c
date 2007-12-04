@@ -90,17 +90,18 @@ int uarts = 0;
 static int isinit = 0;
 volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
-int scan_uarts() {	
+int scan_uarts() {
   int i;
-	amba_apb_device apbuarts[LEON3_APBUARTS];
-	
+  amba_apb_device apbuarts[LEON3_APBUARTS];
+
   if (isinit == 0) {
     i = 0; uarts = 0;
     
-    uarts = amba_find_apbslvs(&amba_conf,VENDOR_GAISLER,GAISLER_APBUART,apbuarts,LEON3_APBUARTS);
+    uarts = amba_find_apbslvs(
+      &amba_conf, VENDOR_GAISLER, GAISLER_APBUART, apbuarts, LEON3_APBUARTS);
     for(i=0; i<uarts; i++){
-			LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
-		}
+      LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
+    }
     isinit = 1;
   }
   return uarts;
@@ -121,11 +122,13 @@ rtems_device_driver console_initialize(
 
   /* Find UARTs */
   scan_uarts();
-	
-  if (Configuration.User_multiprocessing_table != NULL)
-    uart0 =  LEON3_Cpu_Index;
-  else
-    uart0 = 0;  
+
+  /* default to zero and override if multiprocessing */
+  uart0 = 0;  
+  #if defined(RTEMS_MULTIPROCESSING)
+    if (rtems_configuration_get_user_multiprocessing_table() != NULL)
+      uart0 =  LEON3_Cpu_Index;
+  #endif
 
   /*  Register Device Names */
   
@@ -145,14 +148,17 @@ rtems_device_driver console_initialize(
 
 
   /*
-   *  Initialize Hardware
+   *  Initialize Hardware if ONLY CPU or first CPU in MP system
    */
-  if ((Configuration.User_multiprocessing_table == NULL) ||
-      ((Configuration.User_multiprocessing_table)->node == 1))
+  
+  #if defined(RTEMS_MULTIPROCESSING)
+    if ((rtems_configuration_get_user_multiprocessing_table())->node == 1))
+  #endif
   {
     for (i = uart0; i < uarts; i++)
     {
-      LEON3_Console_Uart[i]->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+      LEON3_Console_Uart[i]->ctrl |=
+        LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
       LEON3_Console_Uart[i]->status = 0;  
     }
   }

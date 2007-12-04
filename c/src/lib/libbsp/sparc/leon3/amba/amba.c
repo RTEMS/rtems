@@ -58,10 +58,12 @@ void bsp_predriver_hook(void)
   if ( i > 0 ){
     /* Found APB IRQ_MP Interrupt Controller */
     LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
-    if (Configuration.User_multiprocessing_table != NULL) {
-      tmp = getasr17();
-      LEON3_Cpu_Index = (tmp >> 28) & 3;
-    }
+    #if defined(RTEMS_MULTIPROCESSING)
+      if (rtems_configuration_get_user_multiprocessing_table() != NULL) {
+        tmp = getasr17();
+        LEON3_Cpu_Index = (tmp >> 28) & 3;
+      }
+    #endif
   }
   
   /* find GP Timer */

@@ -33,8 +33,13 @@
 
 extern rtems_configuration_table Configuration;
 
-#define LEON3_CLOCK_INDEX \
-  (Configuration.User_multiprocessing_table ? LEON3_Cpu_Index : 0)
+#if defined(RTEMS_MULTIPROCESSING)
+  #define LEON3_CLOCK_INDEX \
+    (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
+#else
+  #define LEON3_CLOCK_INDEX 0
+#endif 
+
 
 volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs = 0;
 static int clkirq;
@@ -42,6 +47,17 @@ static int clkirq;
 #define CLOCK_VECTOR LEON_TRAP_TYPE( clkirq )
 
 #define Clock_driver_support_at_tick()
+
+#if defined(RTEMS_MULTIPROCESSING)
+  #define Adjust_clkirq_for_node() \
+    do { \
+      if (rtems_configuration_get_user_multiprocessing_table() != NULL) { \
+        clkirq += LEON3_Cpu_Index; \
+      } \
+    } while(0)
+#else
+  #define Adjust_clkirq_for_node()
+#endif
 
 #define Clock_driver_support_find_timer() \
   do { \
@@ -55,9 +71,7 @@ static int clkirq;
       LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start; \
       clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
       \
-      if (Configuration.User_multiprocessing_table != NULL) { \
-        clkirq += LEON3_Cpu_Index; \
-      } \
+      Adjust_clkirq_for_node(); \
     } \
   } while (0)
 
