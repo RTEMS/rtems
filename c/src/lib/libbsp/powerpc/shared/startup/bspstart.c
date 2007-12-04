@@ -91,10 +91,9 @@ unsigned int BSP_processor_frequency;
  */
 unsigned int BSP_time_base_divisor;
 /*
- * system init stack and soft ir stack size
+ * system init stack
  */
 #define INIT_STACK_SIZE 0x1000
-#define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
 
 void BSP_panic(char *s)
 {
@@ -114,11 +113,7 @@ void _BSP_Fatal_error(unsigned int v)
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -246,7 +241,8 @@ void bsp_start( void )
    * This could be done later (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  BSP_heap_start = ((uint32_t) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE;
+  BSP_heap_start = ((uint32_t) __rtems_end) +
+    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size();
 
   /* reserve space for the marker/tag frame */
   intrStack      = BSP_heap_start - PPC_MINIMUM_STACK_FRAME_SIZE;
@@ -379,13 +375,8 @@ void bsp_start( void )
   }
 
   /*
-   * Set up our hooks
-   * Make sure libc_init is done before drivers initialized so that
-   * they can use atexit()
+   *  initialize the device driver parameters
    */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
@@ -396,8 +387,8 @@ void bsp_start( void )
   work_space_start =
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
-  if ( work_space_start <=
-       ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
+  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + 
+        rtems_configuration_get_interrupt_stack_size()) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
