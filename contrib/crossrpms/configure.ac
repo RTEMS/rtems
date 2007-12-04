@@ -170,7 +170,6 @@ AC_CONFIG_FILES([freebsd6.2/i586/Makefile])
 
 AC_CONFIG_FILES([rtems4.8/Makefile])
 AC_CONFIG_FILES([rtems4.8/arm/Makefile])
-AC_CONFIG_FILES([rtems4.8/avr/Makefile])
 AC_CONFIG_FILES([rtems4.8/bfin/Makefile])
 AC_CONFIG_FILES([rtems4.8/h8300/Makefile])
 AC_CONFIG_FILES([rtems4.8/i386/Makefile])
@@ -180,7 +179,6 @@ AC_CONFIG_FILES([rtems4.8/mipstx39/Makefile])
 AC_CONFIG_FILES([rtems4.8/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.8/sh/Makefile])
 AC_CONFIG_FILES([rtems4.8/sparc/Makefile])
-AC_CONFIG_FILES([rtems4.8/tic4x/Makefile])
 
 AC_CONFIG_FILES([autotools/Makefile])
 
