@@ -186,6 +186,18 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 #define rtems_configuration_get_ticks_per_timeslice() \
         (_Configuration_Table->ticks_per_timeslice)
 
+#define rtems_configuration_get_idle_task() \
+        (_Configuration_Table->idle_task)
+
+#define rtems_configuration_get_idle_task_stack_size() \
+        (_Configuration_Table->idle_task_stack_size)
+
+#define rtems_configuration_get_stack_allocate_hook() \
+        (_Configuration_Table->stack_allocate_hook)
+
+#define rtems_configuration_get_stack_free_hook() \
+        (_Configuration_Table->stack_free_hook)
+ 
 /**
   * This macro assists in accessing the field which indicates whether
   * RTEMS is responsible for zeroing the Executive Workspace.

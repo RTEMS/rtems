@@ -1,3 +1,8 @@
+2007-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/rtems/config.h: Add accessory macros for Configuration
+	Table fields merged from CPU Table.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/malloc.c, libmisc/monitor/mon-command.c,
