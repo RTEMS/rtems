@@ -57,8 +57,7 @@ extern const rtems_multiprocessing_table
  */
 
 rtems_interrupt_level rtems_initialize_executive_early(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
+  rtems_configuration_table *configuration_table
 );
 
 /*

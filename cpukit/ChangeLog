@@ -1,3 +1,12 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	sapi/include/rtems/init.h, sapi/src/exinit.c,
+	score/include/rtems/system.h, score/src/isr.c: Move
+	interrupt_stack_size field from CPU Table to Configuration Table.
+	Eliminate CPU Table from all ports. Delete references to CPU Table in
+	all forms.
+
 2007-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/rtems/config.h: Add accessory macros for Configuration

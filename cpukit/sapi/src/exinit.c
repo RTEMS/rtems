@@ -62,8 +62,7 @@
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
 rtems_interrupt_level rtems_initialize_executive_early(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
+  rtems_configuration_table *configuration_table
 )
 {
   rtems_interrupt_level        bsp_level;
@@ -85,18 +84,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
       INTERNAL_ERROR_NO_CONFIGURATION_TABLE
     );
 
-  if ( cpu_table == NULL )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      TRUE,
-      INTERNAL_ERROR_NO_CPU_TABLE
-    );
-
-  /*
-   *  Grab our own copy of the user's CPU table.
-   */
-  _CPU_Table = *cpu_table;
-
   /*
    *  Provide pointers just for later convenience.
    */
@@ -105,7 +92,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
   /*
    * Initialize any target architecture specific support as early as possible
    */
-  _CPU_Initialize( cpu_table, _Thread_Dispatch );
+  _CPU_Initialize( _Thread_Dispatch );
 
 #if defined(RTEMS_MULTIPROCESSING)
   /*

@@ -187,34 +187,6 @@ extern const char _RTEMS_version[];
  */
 extern const char _Copyright_Notice[];
 
-/**
- *  The following defines the CPU dependent information table.
- */
-SCORE_EXTERN rtems_cpu_table _CPU_Table;
-
-/*
- *  Macros to access CPU Table fields required by ALL ports.
- */
-
-/** This macro assists in accessing the CPU Specific Configuration Table. */
-#define rtems_cpu_configuration_get_table() (&_CPU_Table)
-
-/** This macro assists in accessing the pretasking BSP hook. */
-#define rtems_cpu_configuration_get_pretasking_hook() \
-   (_CPU_Table.pretasking_hook)
-
-/** This macro assists in accessing the predriver BSP hook. */
-#define rtems_cpu_configuration_get_predriver_hook() \
-   (_CPU_Table.predriver_hook)
-
-/** This macro assists in accessing the postdriver BSP hook. */
-#define rtems_cpu_configuration_get_postdriver_hook() \
-   (_CPU_Table.postdriver_hook)
-
-/** This macro assists in accessing the interrupt stack size. */
-#define rtems_cpu_configuration_get_interrupt_stack_size() \
-   (_CPU_Table.interrupt_stack_size)
-
 /** This macro defines the maximum length of a Classic API name. */
 #define RTEMS_MAXIMUM_NAME_LENGTH sizeof(rtems_name)
 

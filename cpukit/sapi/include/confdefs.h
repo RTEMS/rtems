@@ -162,21 +162,6 @@ extern int rtems_telnetd_maximum_ptys;
 #define CONFIGURE_STACK_CHECKER_EXTENSION 0
 #endif
 
-/*
- *  Interrupt Stack Space
- *
- *  NOTE: There is currently no way for the application to override
- *        the interrupt stack size set by the BSP.
- */
-
-#if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
-#undef CONFIGURE_INTERRUPT_STACK_MEMORY
-#define CONFIGURE_INTERRUPT_STACK_MEMORY 0
-#else
-  #ifndef CONFIGURE_INTERRUPT_STACK_MEMORY
-  #define CONFIGURE_INTERRUPT_STACK_MEMORY RTEMS_MINIMUM_STACK_SIZE
-  #endif
-#endif
 
 /*
  *  Idle task body configuration
@@ -206,6 +191,28 @@ extern int rtems_telnetd_maximum_ptys;
   #else
     #define CONFIGURE_IDLE_TASK_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
   #endif
+#endif
+
+/*
+ *  Interrupt stack size configuration
+ *
+ *  By default, the interrupt stack will be of minimum size.
+ *  The BSP or application may override this value.
+ */
+#ifndef CONFIGURE_INTERRUPT_STACK_SIZE
+  #ifdef BSP_INTERRUPT_STACK_SIZE
+    #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
+  #else
+    #define CONFIGURE_INTERRUPT_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
+  #endif
+#endif
+
+/* XXX try to get to the point where all BSP support allocating the
+ * XXX memory from the Workspace
+ */
+#if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
+  #undef CONFIGURE_INTERRUPT_STACK_SIZE
+  #define CONFIGURE_INTERRUPT_STACK_SIZE 0
 #endif
 
 /*
@@ -1098,7 +1105,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +                  /* IDLE */ \
     ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) + /* Ready chains */ \
     256 +                                 /* name/ptr table overhead */ \
-    CONFIGURE_INTERRUPT_STACK_MEMORY +    /* interrupt stack */ \
+    CONFIGURE_INTERRUPT_STACK_SIZE  +     /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY            /* allocation mutex */ \
   )
 
@@ -1246,6 +1253,7 @@ rtems_configuration_table Configuration = {
   CONFIGURE_TICKS_PER_TIMESLICE,             /* ticks per timeslice quantum */
   CONFIGURE_IDLE_TASK_BODY,                  /* user's IDLE task */
   CONFIGURE_IDLE_TASK_STACK_SIZE,            /* IDLE task stack size */
+  CONFIGURE_INTERRUPT_STACK_SIZE,            /* interrupt stack size */
   CONFIGURE_TASK_STACK_ALLOCATOR,            /* stack allocator */
   CONFIGURE_TASK_STACK_DEALLOCATOR,          /* stack deallocator */
   CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,    /* true to clear memory */

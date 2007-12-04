@@ -121,6 +121,12 @@ typedef struct {
    */
   uint32_t                       idle_task_stack_size;
 
+  /** This field specifies the size of the interrupt stack.  If less than or
+   *  equal to the minimum stack size, then the interrupt stack will be of
+   *  minimum stack size.
+   */
+  uint32_t                       interrupt_stack_size;
+
   /** The BSP may want to provide it's own stack allocation routines.
    *  In this case, the BSP will provide this stack allocation hook.
    */
@@ -192,6 +198,9 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 #define rtems_configuration_get_idle_task_stack_size() \
         (_Configuration_Table->idle_task_stack_size)
 
+#define rtems_configuration_get_interrupt_stack_size() \
+        (_Configuration_Table->interrupt_stack_size)
+
 #define rtems_configuration_get_stack_allocate_hook() \
         (_Configuration_Table->stack_allocate_hook)
 
@@ -220,8 +229,12 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 #define rtems_configuration_get_user_extension_table() \
         (_Configuration_Table->user_extension_table)
 
-#define rtems_configuration_get_user_multiprocessing_table() \
-        (_Configuration_Table->User_multiprocessing_table)
+#if defined(RTEMS_MULTIPROCESSING)
+  #define rtems_configuration_get_user_multiprocessing_table() \
+	  (_Configuration_Table->User_multiprocessing_table)
+#else
+  #define rtems_configuration_get_user_multiprocessing_table() NULL
+#endif
 
 #define rtems_configuration_get_rtems_api_configuration() \
         (_Configuration_Table->RTEMS_api_configuration)

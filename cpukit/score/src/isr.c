@@ -21,6 +21,7 @@
 #include <rtems/score/stack.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 /*  _ISR_Handler_initialization
  *
@@ -45,19 +46,20 @@ void _ISR_Handler_initialization( void )
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
-  if ( _CPU_Table.interrupt_stack_size < STACK_MINIMUM_SIZE )
+  if ( _Configuration_Table->interrupt_stack_size < STACK_MINIMUM_SIZE )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
       INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
     );
 
-  _CPU_Interrupt_stack_low =
-    _Workspace_Allocate_or_fatal_error( _CPU_Table.interrupt_stack_size );
+  _CPU_Interrupt_stack_low = _Workspace_Allocate_or_fatal_error(
+    _Configuration_Table->interrupt_stack_size
+  );
 
   _CPU_Interrupt_stack_high = _Addresses_Add_offset(
     _CPU_Interrupt_stack_low,
-    _CPU_Table.interrupt_stack_size
+    _Configuration_Table->interrupt_stack_size
   );
 
 #endif
