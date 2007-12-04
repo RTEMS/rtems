@@ -46,7 +46,7 @@ extern volatile unsigned int ppc_cached_irq_mask;
    * CAUTION : BSP_CPM_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
    */
 #define BSP_CPM_IRQ_NUMBER		32
-#define BSP_CPM_IRQ_LOWEST_OFFSET	(BSP_SIU_IRQ_NUMBER + BSP_IRQ_LOWEST_OFFSET)
+#define BSP_CPM_IRQ_LOWEST_OFFSET	(BSP_SIU_IRQ_NUMBER + BSP_SIU_IRQ_LOWEST_OFFSET)
 #define BSP_CPM_IRQ_MAX_OFFSET	 	(BSP_CPM_IRQ_LOWEST_OFFSET + BSP_CPM_IRQ_NUMBER - 1)
   /*
    * PowerPc exceptions handled as interrupt where a rtems managed interrupt

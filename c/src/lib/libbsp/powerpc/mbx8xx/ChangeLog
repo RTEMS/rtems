@@ -1,3 +1,9 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Add bsppredriverhook.c.
+	* irq/irq.h: Attempt to correct definition of
+	BSP_CPM_IRQ_LOWEST_OFFSET.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c, startup/bspstart.c.nocache: Moved most of the

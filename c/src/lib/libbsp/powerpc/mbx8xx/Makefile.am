@@ -55,7 +55,8 @@ vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+    startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
