@@ -1,3 +1,8 @@
+2007-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/cpu/nios2, score/cpu/c4x, score/cpu/avr: Remove from
+	  rtems-4-8-branch.
+
 2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
