@@ -1,3 +1,7 @@
+2007-12-04	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* spi/spi_init.c: added missing file
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, startup/bspstart.c: Moved most of the remaining CPU
