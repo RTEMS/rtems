@@ -1930,7 +1930,7 @@ package body RTEMS is
       Result   :    out RTEMS.Status_Codes
    ) is
       function Barrier_Release_Base (
-         ID       : RTEMS.ID
+         ID       : RTEMS.ID;
          Released : access RTEMS.Unsigned32
       )  return RTEMS.Status_Codes;
       pragma Import (C, Barrier_Release_Base, "rtems_barrier_release");
