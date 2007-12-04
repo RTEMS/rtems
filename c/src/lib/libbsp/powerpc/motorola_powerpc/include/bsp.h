@@ -30,8 +30,6 @@
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #endif
 
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
-
 /*
  * diagram illustrating the role of the configuration
  * constants
