@@ -155,15 +155,6 @@ extern "C" {
 #ifndef ASM
   
 /*
- *  The following table contains the information required to configure
- *  the PowerPC processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
-/*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
  *  _CPU_Initialize and copied into the task's FP context area during

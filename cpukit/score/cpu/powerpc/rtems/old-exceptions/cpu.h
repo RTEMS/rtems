@@ -178,16 +178,6 @@ typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
 
 #ifndef ASM
 /*
- *  The following table contains the information required to configure
- *  the PowerPC processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-#endif
-
-/*
  *  The following type defines an entry in the PPC's trap table.
  *
  *  NOTE: The instructions chosen are RTEMS dependent although one is

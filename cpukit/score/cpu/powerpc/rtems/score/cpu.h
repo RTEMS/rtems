@@ -676,7 +676,6 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void            (*thread_dispatch)
 );
 

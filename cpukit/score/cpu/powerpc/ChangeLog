@@ -1,3 +1,10 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
+	rtems/score/cpu.h: Move interrupt_stack_size field from CPU Table to
+	Configuration Table. Eliminate CPU Table from all ports. Delete
+	references to CPU Table in all forms.
+
 2007-12-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* rtems/score/cpu.h: Added comment that GDB patch sim/2376
