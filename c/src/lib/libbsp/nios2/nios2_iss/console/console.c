@@ -23,8 +23,6 @@
 /* #define JTAG_UART_REGS ((altera_avalon_jtag_uart_regs*)NIOS2_IO_BASE(JTAG_UART_BASE)) */
 
 #if 0
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 #define XOFFchar              0x13
 #define XONchar               0x11
 #endif
