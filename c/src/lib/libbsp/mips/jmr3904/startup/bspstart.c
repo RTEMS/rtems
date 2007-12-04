@@ -26,11 +26,7 @@
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -80,8 +76,6 @@ void bsp_start( void )
   extern int WorkspaceBase;
   extern void _sys_exit(int);
   extern void mips_install_isr_entries(void);
-
-  Cpu_table.interrupt_stack_size = 4096;
 
   /* HACK -- tied to value linkcmds */
   if ( BSP_Configuration.work_space_size >(4096*1024) )

@@ -29,8 +29,6 @@ extern rtems_configuration_table Configuration;
 
 rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -82,8 +80,6 @@ void bsp_pretasking_hook(void)
 void bsp_start( void )
 {
   extern int WorkspaceBase;
-
-  Cpu_table.interrupt_stack_size = 4096;
 
 /*
   if ( BSP_Configuration.work_space_size >(512*1024) )

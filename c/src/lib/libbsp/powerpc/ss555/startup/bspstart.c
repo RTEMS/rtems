@@ -48,9 +48,6 @@ SPR_RW(SPRG1)
 extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -87,11 +84,6 @@ void _BSP_Fatal_error(unsigned int v)
  *
  *  Must not use libc (to do io) from here, since drivers are not yet
  *  initialized.
- *
- *  Installed in the rtems_cpu_table defined in
- *  rtems/c/src/exec/score/cpu/powerpc/rtems/new-exceptions/cpu.h by main()
- *  below.  Called from rtems_initialize_executive() defined in
- *  rtems/c/src/exec/sapi/src/init.c
  *
  *  Input parameters: NONE
  *
@@ -185,11 +177,8 @@ void bsp_start(void)
   BSP_Configuration.work_space_start = _WorkspaceBase;
 
   /*
-   *  initialize the CPU table for this BSP
+   *  initialize the device driver parameters
    */
-  if( Cpu_table.interrupt_stack_size < 4 * 1024 )
-      Cpu_table.interrupt_stack_size = 4 * 1024;
-
   bsp_clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
   bsp_clock_speed     = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
 

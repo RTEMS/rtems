@@ -30,11 +30,7 @@ extern int end; /* defined by linker */
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -86,10 +82,6 @@ void bsp_start( void )
 {
   extern int WorkspaceBase;
   extern void mips_install_isr_entries(void);
-
-  /* Configure Number of Register Caches */
-
-  Cpu_table.interrupt_stack_size = 4096;
 
   BSP_Configuration.work_space_start =
        (void *)((uint64_t)((&end) + LIBC_HEAP_SIZE + 0x100) & ~0x7);

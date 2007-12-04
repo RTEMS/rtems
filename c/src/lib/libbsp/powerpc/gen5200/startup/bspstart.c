@@ -129,7 +129,6 @@ SPR_RW(SPRG1)
 extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
 rtems_configuration_table  BSP_Configuration;
-rtems_cpu_table Cpu_table;
 char *rtems_progname;
 
 /*
@@ -286,13 +285,6 @@ void bsp_start(void)
 
   /* Signal them that this BSP has fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
-
-  /*
-   *  initialize the CPU table for this BSP
-   */
-
-  if( Cpu_table.interrupt_stack_size < 4*1024 )
-    Cpu_table.interrupt_stack_size = 4 * 1024;
 
  bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
 

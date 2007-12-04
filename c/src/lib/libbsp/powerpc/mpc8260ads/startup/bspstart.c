@@ -69,9 +69,6 @@ SPR_RW(SPRG1)
 extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -295,12 +292,8 @@ void bsp_start(void)
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
-   *  initialize the CPU table for this BSP
+   *  initialize the device driver parameters
    */
-
-  if( Cpu_table.interrupt_stack_size < 4*1024 )
-    Cpu_table.interrupt_stack_size   = 4 * 1024;
-
   bsp_clicks_per_usec 	   = 10;  /* for 40MHz extclk */
   bsp_serial_per_sec  	   = 40000000;
   bsp_serial_external_clock  = 0;

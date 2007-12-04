@@ -48,7 +48,6 @@ extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
 rtems_configuration_table  BSP_Configuration;
 static char *BSP_heap_start, *BSP_heap_end;
-rtems_cpu_table Cpu_table;
 char *rtems_progname;
 
 /*
@@ -206,12 +205,8 @@ void bsp_start(void)
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
-   *  initialize the CPU table for this BSP
+   *  initialize the device driver parameters
    */
-
-  if( Cpu_table.interrupt_stack_size < 4*1024 )
-    Cpu_table.interrupt_stack_size = 4 * 1024;
-
   bsp_clicks_per_usec        = (BSP_CSB_CLK_FRQ/1000000);
 
   /*
