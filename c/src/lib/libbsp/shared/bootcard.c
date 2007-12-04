@@ -38,8 +38,6 @@ extern void bsp_cleanup( void );
 
 extern rtems_configuration_table  Configuration;
 extern rtems_configuration_table  BSP_Configuration;
-extern rtems_cpu_table            Cpu_table;
-
 rtems_api_configuration_table BSP_RTEMS_Configuration;
 
 #ifdef RTEMS_POSIX_API
@@ -75,14 +73,6 @@ int boot_card(int argc, char **argv, char **envp)
     envp_p = envp;
 
   /*
-   *  Set default values for the CPU Table fields all ports must have.
-   *  These values can be overridden in bsp_start() but they are
-   *  right most of the time.
-   */
-
-  Cpu_table.interrupt_stack_size            = RTEMS_MINIMUM_STACK_SIZE;
-
-  /*
    *  Copy the configuration table so we and the BSP wants to change it.
    */
 
@@ -106,8 +96,7 @@ int boot_card(int argc, char **argv, char **envp)
    *  Initialize RTEMS but do NOT start multitasking.
    */
 
-  bsp_isr_level =
-    rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
+  bsp_isr_level = rtems_initialize_executive_early( &BSP_Configuration );
 
   /*
    *  Call c_rtems_main() and eventually let the first task or the real

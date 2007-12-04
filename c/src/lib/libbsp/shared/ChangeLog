@@ -1,3 +1,9 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bootcard.c: Move interrupt_stack_size field from CPU Table to
+	Configuration Table. Eliminate CPU Table from all ports. Delete
+	references to CPU Table in all forms.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsppredriverhook.c: New file.
