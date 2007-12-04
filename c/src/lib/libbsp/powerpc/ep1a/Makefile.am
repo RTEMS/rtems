@@ -25,9 +25,9 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/bsppost.c ../../shared/bsplibc.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/bspclean.c \
-    ../../shared/gnatinstallhandler.c \
+    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+    ../../shared/bsplibc.c ../../powerpc/shared/startup/sbrk.c \
+    ../../shared/bspclean.c ../../shared/gnatinstallhandler.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/showbats.c

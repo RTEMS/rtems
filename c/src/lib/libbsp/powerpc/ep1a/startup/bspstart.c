@@ -108,10 +108,9 @@ unsigned int BSP_processor_frequency;
 unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
 
 /*
- * system init stack and soft ir stack size
+ * system init stack 
  */
 #define INIT_STACK_SIZE 0x1000
-#define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
 
 void BSP_panic(char *s)
 {
@@ -131,11 +130,7 @@ void _BSP_Fatal_error(unsigned int v)
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 int BSP_FLASH_Disable_writes(
@@ -206,7 +201,8 @@ void bsp_pretasking_hook(void)
 
   extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
   
-  heap_start = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
+  heap_start = ((uint32_t) __rtems_end) +
+    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size();
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -369,8 +365,6 @@ void bsp_start( void )
    */
   Read_ep1a_config_registers( myCpu );
 
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
   bsp_clicks_per_usec = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
 
 ShowBATS();
@@ -400,7 +394,8 @@ ShowBATS();
    * some settings below...
    */
   intrStack = ((uint32_t) __rtems_end) +
-          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size() - 
+    PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);
@@ -456,7 +451,8 @@ ShowBATS();
   work_space_start = 
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
+  if ( work_space_start <= ((unsigned char *)__rtems_end) + 
+        INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size()) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }

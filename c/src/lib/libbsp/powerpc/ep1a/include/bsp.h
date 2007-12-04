@@ -29,7 +29,6 @@
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 /* fundamental addresses for BSP (CHRPxxx and PREPxxx are from libcpu/io.h) */
 #define	_IO_BASE	        CHRP_ISA_IO_BASE 
