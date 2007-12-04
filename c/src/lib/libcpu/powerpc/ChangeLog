@@ -1,3 +1,10 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc5xx/console-generic/console-generic.c, mpc8260/timer/timer.c,
+	new-exceptions/cpu.c, old-exceptions/cpu.c: Move interrupt_stack_size
+	field from CPU Table to Configuration Table. Eliminate CPU Table from
+	all ports. Delete references to CPU Table in all forms.
+
 2007-12-04	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* mpc83xx/spi/mpc83xx_spidrv.c, mpc83xx/spi/mpc83xx_spidrv.h:

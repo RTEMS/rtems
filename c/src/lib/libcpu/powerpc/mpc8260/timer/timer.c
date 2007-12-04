@@ -53,8 +53,6 @@
 static volatile uint32_t   Timer_starting;
 static rtems_boolean Timer_driver_Find_average_overhead;
 
-extern rtems_cpu_table Cpu_table;
-
 /*
  *  This is so small that this code will be reproduced where needed.
  */

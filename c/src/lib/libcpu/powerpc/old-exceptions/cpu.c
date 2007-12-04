@@ -71,7 +71,6 @@ int _CPU_last_spurious = 0;
 boolean bsp_exceptions_in_RAM = TRUE;
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
@@ -107,8 +106,6 @@ void _CPU_Initialize(
   i = _CPU_IRQ_info.msr_initial;
   asm volatile("mtspr 0x112, %0" : "=r" (i) : "0" (i)); /* SPRG 2 */
 #endif
-
-  _CPU_Table = *cpu_table;
 }
 
 /*

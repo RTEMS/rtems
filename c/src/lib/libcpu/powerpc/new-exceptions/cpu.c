@@ -40,23 +40,21 @@
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  _CPU_Table = *cpu_table;
-
-  { unsigned hasFixed = 0;
-  /* assert that our BSP has fixed PR288 */
-  __asm__ __volatile__ ("mfspr %0, %2":"=r"(hasFixed):"0"(hasFixed),"i"(SPRG0));
-  if ( PPC_BSP_HAS_FIXED_PR288 != hasFixed ) {
-    BSP_panic("This BSP needs to fix PR#288");
-  }
+  {
+    unsigned hasFixed = 0;
+    /* assert that our BSP has fixed PR288 */
+    __asm__ __volatile__ ("mfspr %0, %2":
+                          "=r"(hasFixed):"0"(hasFixed),"i"(SPRG0));
+    if ( PPC_BSP_HAS_FIXED_PR288 != hasFixed ) {
+      BSP_panic("This BSP needs to fix PR#288");
+    }
   }
 }
 

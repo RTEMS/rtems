@@ -52,8 +52,6 @@
 #include <libcpu/irq.h>
 
 
-extern rtems_cpu_table Cpu_table;	/* for CPU clock speed */
-
 /*
  * SCI port descriptor table.
  */
