@@ -1,3 +1,8 @@
+2007-12-04	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/spi/mpc83xx_spidrv.c, mpc83xx/spi/mpc83xx_spidrv.h:
+	added missing files
+	
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc5xx/console-generic/console-generic.c: Moved most of the remaining
