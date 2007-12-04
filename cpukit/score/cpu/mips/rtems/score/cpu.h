@@ -591,16 +591,6 @@ typedef struct
 
 } CPU_Interrupt_frame;
 
-
-/*
- *  The following table contains the information required to configure
- *  the mips processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -1057,7 +1047,6 @@ extern void mips_break( int error );
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

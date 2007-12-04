@@ -541,30 +541,6 @@ typedef struct {
     uint32_t ipending;
 } CPU_Exception_frame;
 
-
-/**
- *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-typedef struct {
-  /** This element points to the BSP's pretasking hook. */
-  void       (*pretasking_hook)( void );
-  /** This element points to the BSP's predriver hook. */
-  void       (*predriver_hook)( void );
-  /** This element points to the BSP's postdriver hook. */
-  void       (*postdriver_hook)( void );
-  /** This field specifies the size of the interrupt stack.  If less than or
-   *  equal to the minimum stack size, then the interrupt stack will be of
-   *  minimum stack size.
-   */
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
 /**
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -1161,7 +1137,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  XXX document implementation including references if appropriate
  */
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

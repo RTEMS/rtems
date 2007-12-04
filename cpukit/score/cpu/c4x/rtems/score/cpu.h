@@ -520,19 +520,6 @@ typedef struct {
 } CPU_Interrupt_frame;
 
 /*
- *  The following table contains the information required to configure
- *  the C4x processor specific parameters.
- *
- *  C4x Specific Information:
- *
- *  XXXanswer
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
-/*
  *  Macros to access C4X specific additions to the CPU Table
  *
  *  C4x Specific Information:
@@ -1076,7 +1063,6 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

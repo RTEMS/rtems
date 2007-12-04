@@ -179,18 +179,6 @@ typedef enum {
 
 
 /*
- *  The following table contains the information required to configure
- *  the i386 specific parameters.
- */
-
-typedef struct {
-  void       (*pretasking_hook)( void );
-  void       (*predriver_hook)( void );
-  void       (*postdriver_hook)( void );
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
-/*
  *  context size area for floating point
  *
  *  NOTE:  This is out of place on the i386 to avoid a forward reference.
@@ -399,7 +387,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

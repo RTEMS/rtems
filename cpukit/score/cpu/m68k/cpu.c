@@ -19,14 +19,12 @@
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - entry pointer to thread dispatcher
  *
  *  OUTPUT PARAMETERS: NONE
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {

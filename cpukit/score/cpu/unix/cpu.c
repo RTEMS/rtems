@@ -272,13 +272,11 @@ uint32_t   _CPU_ISR_Get_level( void )
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  */
 
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
@@ -312,8 +310,6 @@ void _CPU_Initialize(
    */
 
   /* XXX: FP context initialization support */
-
-  _CPU_Table = *cpu_table;
 
   _CPU_Sync_io_Init();
 

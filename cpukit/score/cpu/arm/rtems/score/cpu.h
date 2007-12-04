@@ -380,15 +380,6 @@ extern void rtems_exception_init_mngt();
 typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 /*
- *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
-/*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
  *  _CPU_Initialize and copied into the task's FP context area during
@@ -706,7 +697,6 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

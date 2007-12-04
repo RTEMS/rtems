@@ -498,17 +498,6 @@ typedef struct {
 
 #define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0x50 
 #ifndef ASM
-
-/*
- *  The following table contains the information required to configure
- *  the processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-  /* end of fields required on all CPUs */
-}   rtems_cpu_table;
-
 /*
  *  This variable is contains the initialize context for the FP unit.
  *  It is filled in by _CPU_Initialize and copied into the task's FP 
@@ -881,7 +870,6 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void            (*thread_dispatch)
 );
 

@@ -185,15 +185,6 @@ typedef struct {
   uint32_t   a0, a1, a2, a3, a4, a5, a6, a7;
 } CPU_Exception_frame;
 
-/*
- *  The following table contains the information required to configure
- *  the m68k specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
 /* variables */
 
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
@@ -562,7 +553,6 @@ void _CPU_Thread_Idle_body( void );
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

@@ -40,13 +40,11 @@ extern proc_ptr _Hardware_isr_Table[];
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  */
 
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {

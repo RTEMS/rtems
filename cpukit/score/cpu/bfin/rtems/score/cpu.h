@@ -549,24 +549,6 @@ typedef struct {
     /*uint32_t   special_interrupt_register;*/
 } CPU_Interrupt_frame;
 
-
-/**
- *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-typedef struct {
-  /** This field specifies the size of the interrupt stack.  If less than or
-   *  equal to the minimum stack size, then the interrupt stack will be of
-   *  minimum stack size.
-   */
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
 /**
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -1162,7 +1144,6 @@ void _CPU_Context_Initialize(
  *  XXX document implementation including references if appropriate
  */
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

@@ -396,23 +396,6 @@ typedef struct {
     uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
 
-
-/*
- *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
- *
- *  NOTE: The interrupt_stack_size field is required if
- *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.
- *
- *  H8300 Specific Information:
- *
- *  XXX
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-}   rtems_cpu_table;
-
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -993,7 +976,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

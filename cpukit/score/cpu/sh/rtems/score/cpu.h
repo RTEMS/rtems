@@ -385,17 +385,6 @@ typedef struct {
 typedef struct {
 } CPU_Interrupt_frame;
 
-
-/*
- *  The following table contains the information required to configure
- *  the SH processor specific parameters.
- */
-
-typedef struct {
-  uint32_t     interrupt_stack_size;
-  /* end of fields required on all CPUs */
-}   rtems_cpu_table;
-
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -821,7 +810,6 @@ extern uint8_t   _bit_set_table[];
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)
 );
 

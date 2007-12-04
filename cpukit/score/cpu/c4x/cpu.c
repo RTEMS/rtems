@@ -22,7 +22,6 @@
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  *
  *  C4x Specific Information:
@@ -30,7 +29,6 @@
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {

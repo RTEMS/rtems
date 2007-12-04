@@ -39,7 +39,6 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
  *  This routine performs processor dependent initialization.
  *
  *  Input Parameters:
- *    cpu_table       - CPU table to initialize
  *    thread_dispatch - address of disptaching routine
  *
  *  Output Parameters: NONE
@@ -49,7 +48,6 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
  */
 
 void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
   void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
