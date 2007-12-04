@@ -11,7 +11,6 @@
 @c CONFIGURE_NEWLIB_EXTENSION - probably not needed
 @c CONFIGURE_MALLOC_REGION - probably not needed
 @c CONFIGURE_LIBIO_SEMAPHORES - implicitly discussed.
-@c CONFIGURE_INTERRUPT_STACK_MEMORY
 @c CONFIGURE_GNAT_RTEMS
 @c     CONFIGURE_GNAT_MUTEXES
 @c     CONFIGURE_GNAT_KEYS
@@ -201,13 +200,13 @@ This section defines the general system configuration parameters supported by
 if the application is providing their own complete set of configuration 
 tables.
 
-@findex CONFIGURE_INTERRUPT_STACK_MEMORY
-@item @code{CONFIGURE_INTERRUPT_STACK_MEMORY} is set to the 
+@findex CONFIGURE_INTERRUPT_STACK_SIZE
+@item @code{CONFIGURE_INTERRUPT_STACK_SIZE} is set to the 
 size of the interrupt stack.  The interrupt stack size is
 usually set by the BSP but since this memory is allocated
 from the RTEMS Ram Workspace, it must be accounted for.  The
 default for this field is RTEMS_MINIMUM_STACK_SIZE.  [NOTE:
-At this time, changing this constant does NOT change the
+In some BSPs, changing this constant does NOT change the
 size of the interrupt stack, only the amount of memory
 reserved for it.]
 
@@ -226,6 +225,12 @@ of time between clock ticks.  By default, this is set to
 @item @code{CONFIGURE_TICKS_PER_TIMESLICE} is the length
 of the timeslice quantum in ticks for each task.  By
 default, this is 50.
+
+@fnindex CONFIGURE_INTERRUPT_STACK_SIZE
+@item @code{CONFIGURE_INTERRUPT_STACK_SIZE} is set to the 
+desired stack size for the interrupt.  If not specified,
+the interrupt stack will be of minimum size.  The default
+value is @code{RTEMS_MINIMUM_STACK_SIZE}.
 
 @findex CONFIGURE_TASK_STACK_ALLOCATOR
 @item @code{CONFIGURE_TASK_STACK_ALLOCATOR}
@@ -788,6 +793,7 @@ typedef struct @{
   uint32_t                        ticks_per_timeslice;
   void                          (*idle_task)( void );
   uint32_t                        idle_task_stack_size;
+  uint32_t                        interrupt_stack_size;
   void *                        (*stack_allocate_hook)( uint32_t );
   void                          (*stack_free_hook)( void * );
   boolean                         do_zero_of_workspace;
@@ -857,11 +863,20 @@ corresponds to the setting of the macro @code{CONFIGURE_IDLE_TASK_BODY}.
 @item idle_task_stack_size
 is the size of the RTEMS idle task stack in bytes.  
 If this number is less than MINIMUM_STACK_SIZE, then the 
-idle task's stack will be MINIMUM_STACK_SIZE in byte.
+idle task's stack will be MINIMUM_STACK_SIZE in bytes.
 When using the @code{rtems/confdefs.h} mechanism
 for configuring an RTEMS application, the value for this field
 corresponds to the setting of the macro
 @code{CONFIGURE_IDLE_TASK_STACK_SIZE}.
+
+@item interrupt_stack_size
+is the size of the RTEMS interrupt stack in bytes.  
+If this number is less than MINIMUM_STACK_SIZE, then the 
+interrupt stack will be MINIMUM_STACK_SIZE in bytes.
+When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+@code{CONFIGURE_INTERRUPT_STACK_SIZE}.
 
 @item stack_allocate_hook
 may point to a user provided routine to allocate task stacks.

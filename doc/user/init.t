@@ -19,7 +19,6 @@ also initializes the interprocessor communications layer.  The
 directives provided by the initialization manager are:
 
 @itemize @bullet
-@item @code{@value{DIRPREFIX}initialize_executive} - Initialize RTEMS
 @item @code{@value{DIRPREFIX}initialize_executive_early} - Initialize RTEMS and do NOT Start Multitasking
 @item @code{@value{DIRPREFIX}initialize_executive_late} - Complete Initialization and Start Multitasking
 @item @code{@value{DIRPREFIX}shutdown_executive} - Shutdown RTEMS
@@ -124,14 +123,11 @@ created or started successfully.
 
 @subsection Initializing RTEMS
 
-The @code{@value{DIRPREFIX}initialize_executive}
-directive is called by the
-board support package at the completion of its initialization
+The Initializatiton Manager directives are called by the
+board support package framework as part of its initialization
 sequence.  RTEMS assumes that the board support package
-successfully completed its initialization activities.  The
-@code{@value{DIRPREFIX}initialize_executive}
-directive completes the initialization
-sequence by performing the following actions:
+successfully completed its initialization activities.  These
+directives initialize RTEMS by performing the following actions:
 
 @itemize @bullet
 @item Initializing internal RTEMS variables;
@@ -144,35 +140,20 @@ sequence by performing the following actions:
 
 This directive MUST be called before any other RTEMS
 directives.  The effect of calling any RTEMS directives before
-@code{@value{DIRPREFIX}initialize_executive}
+@code{@value{DIRPREFIX}initialize_executive_early}
 is unpredictable.  Many of RTEMS actions
 during initialization are based upon the contents of the
-Configuration Table and CPU Dependent Information Table.  For
-more information regarding the format and contents of these
-tables, please refer to the chapter Configuring a System.
+Configuration Table.  For more information regarding the format
+and contents of this table, please refer to the chapter
+Configuring a System.
 
 The final step in the initialization sequence is the
 initiation of multitasking.  When the scheduler and dispatcher
 are enabled, the highest priority, ready task will be dispatched
 to run.  Control will not be returned to the board support
 package after multitasking is enabled until
-@code{@value{DIRPREFIX}shutdown_executive}
+@code{@value{DIRPREFIX}shutdown_executive_late}
 the directive is called.
-
-The @code{@value{DIRPREFIX}initialize_executive}
-directive provides a
-conceptually simple way to initialize RTEMS.  However, in
-certain cases, this mechanism cannot be used.  The
-@code{@value{DIRPREFIX}initialize_executive_early}
-and @code{@value{DIRPREFIX}initialize_executive_late}
-directives are provided as an alternative mechanism for
-initializing RTEMS.  The
-@code{@value{DIRPREFIX}initialize_executive_early} directive
-returns to the caller BEFORE initiating multitasking.  The
-@code{@value{DIRPREFIX}initialize_executive_late}
-directive is invoked to start
-multitasking.  It is critical that only one of the RTEMS
-initialization sequences be used in an application.
 
 @subsection Shutting Down RTEMS
 
@@ -190,69 +171,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@subsection INITIALIZE_EXECUTIVE - Initialize RTEMS
-
-@cindex initialize RTEMS
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex rtems_initialize_executive
-@example
-void rtems_initialize_executive(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-NOT SUPPORTED FROM Ada BINDING
-@end example
-@end ifset
-
-@subheading DIRECTIVE STATUS CODES:
-
-NONE
-
-@subheading DESCRIPTION:
-
-This directive is called when the board support
-package has completed its initialization to allow RTEMS to
-initialize the application environment based upon the
-information in the Configuration Table, CPU Dependent
-Information Table, User Initialization Tasks Table, Device
-Driver Table, User Extension Table, Multiprocessor Configuration
-Table, and the Multiprocessor Communications Interface (MPCI)
-Table.  This directive starts multitasking and does not return
-to the caller until the @code{@value{DIRPREFIX}shutdown_executive}
-directive is invoked.
-
-@subheading NOTES:
-
-This directive MUST be the first RTEMS directive
-called and it DOES NOT RETURN to the caller until the
-@code{@value{DIRPREFIX}shutdown_executive}
-is invoked.
-
-This directive causes all nodes in the system to
-verify that certain configuration parameters are the same as
-those of the local node.  If an inconsistency is detected, then
-a fatal error is generated.
-
-The application must use only one of the two
-initialization sequences: 
-@code{@value{DIRPREFIX}initialize_executive} or
-@code{@value{DIRPREFIX}initialize_executive_early} and 
-@code{@value{DIRPREFIX}initialize_executive_late}.  The
-@code{@value{DIRPREFIX}initialize_executive}
-directive is logically equivalent to invoking 
-@code{@value{DIRPREFIX}initialize_executive_early} and
-@code{@value{DIRPREFIX}initialize_executive_late}
-with no intervening actions.
-
-@page
 @subsection INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking
 
 @cindex initialize RTEMS
@@ -263,8 +181,7 @@ with no intervening actions.
 @findex rtems_initialize_executive_early
 @example
 rtems_interrupt_level rtems_initialize_executive_early(
-  rtems_configuration_table *configuration_table,
-  rtems_cpu_table           *cpu_table
+  rtems_configuration_table *configuration_table
 );
 @end example
 @end ifset

@@ -1,3 +1,12 @@
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu_supplement/arm.t, cpu_supplement/i386.t, cpu_supplement/m68k.t,
+	cpu_supplement/mips.t, cpu_supplement/powerpc.t, cpu_supplement/sh.t,
+	cpu_supplement/sparc.t, cpu_supplement/tic4x.t, porting/cpuinit.t,
+	user/conf.t, user/init.t: Move interrupt_stack_size field from CPU
+	Table to Configuration Table. Eliminate CPU Table from all ports.
+	Delete references to CPU Table in all forms.
+
 2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu_supplement/arm.t, cpu_supplement/i386.t, cpu_supplement/m68k.t,
