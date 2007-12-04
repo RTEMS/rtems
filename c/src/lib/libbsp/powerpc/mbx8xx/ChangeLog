@@ -1,5 +1,12 @@
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* startup/bspstart.c, startup/bspstart.c.nocache: Move
+	interrupt_stack_size field from CPU Table to Configuration Table.
+	Eliminate CPU Table from all ports. Delete references to CPU Table in
+	all forms.
+
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am: Add bsppredriverhook.c.
 	* irq/irq.h: Attempt to correct definition of
 	BSP_CPM_IRQ_LOWEST_OFFSET.
