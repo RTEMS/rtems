@@ -40,7 +40,6 @@ extern "C" {
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 #include <mvme16x_hw.h>
 

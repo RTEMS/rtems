@@ -28,8 +28,6 @@
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
-rtems_cpu_table   Cpu_table;
-
 /*
  *  Use the shared implementations of the following routines
  */
@@ -73,14 +71,8 @@ extern void C4X_BSP_output_char(char c);
 
 void bsp_start( void )
 {
-  extern void *_WorkspaceBase;
-  extern uint32_t         _WorkspaceMax;
-
-  /*
-   *  This should be enough interrupt stack.
-   */
-
-  Cpu_table.interrupt_stack_size = 0;
+  extern void     *_WorkspaceBase;
+  extern uint32_t _WorkspaceMax;
 
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
   /* XXX check to see if satisfying small memory model */

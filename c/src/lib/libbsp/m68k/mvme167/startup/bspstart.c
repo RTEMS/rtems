@@ -35,9 +35,6 @@
 extern rtems_configuration_table Configuration;
 rtems_configuration_table BSP_Configuration;
 rtems_extensions_table user_extension_table;
-
-rtems_cpu_table Cpu_table;
-
 /*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
@@ -124,9 +121,6 @@ void bsp_start( void )
    *  May need to pass the multiprocessor configuration table.
    */
   page_table_init( &Configuration );
-
-  /* Must match value in start.s */
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   /*
    *  If the application has not overriden the default User_extension_table,

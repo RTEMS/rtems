@@ -33,7 +33,6 @@ extern rtems_configuration_table  Configuration;
 
 rtems_configuration_table    BSP_Configuration;
 rtems_multiprocessing_table  BSP_Multiprocessing;
-rtems_cpu_table              Cpu_table;
 uint32_t                     bsp_isr_level;
 uint32_t                     Heap_size;
 int                          rtems_argc;
@@ -179,12 +178,6 @@ void bsp_start(void)
     BSP_Configuration.work_space_start = (void *) workspace_ptr;
 
     /*
-     * XXX; interrupt stack not currently used, so this doesn't matter
-     */
-
-    Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
-    /*
      * Add 1 extension for MPCI_fatal
      */
 
@@ -198,8 +191,5 @@ void bsp_start(void)
      *  main() will start the rest
      */
 
-    bsp_isr_level = rtems_initialize_executive_early(
-      &BSP_Configuration,
-      &Cpu_table
-    );
+    bsp_isr_level = rtems_initialize_executive_early( &BSP_Configuration );
 }

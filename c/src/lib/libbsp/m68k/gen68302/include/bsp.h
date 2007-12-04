@@ -29,15 +29,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 
 /*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */

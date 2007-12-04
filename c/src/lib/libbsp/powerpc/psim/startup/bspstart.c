@@ -51,7 +51,6 @@ extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-rtems_cpu_table                   Cpu_table;
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
@@ -79,10 +78,9 @@ void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*
- * system init stack and soft irq stack size
+ * system init stack
  */
 #define INIT_STACK_SIZE 0x1000
-#define INTR_STACK_SIZE CONFIGURE_INTERRUPT_STACK_MEMORY
 
 void BSP_panic(char *s)
 {
@@ -142,13 +140,8 @@ void bsp_start( void )
   current_ppc_cpu = PPC_PSIM;
 
   /*
-   * Set up our hooks
-   * Make sure libc_init is done before drivers initialized so that
-   * they can use atexit()
+   *  initialize the device driver parameters
    */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
   BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND;
   BSP_time_base_divisor    = 1;
 
@@ -182,8 +175,9 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((uint32_t) __rtems_end) + 
-          INIT_STACK_SIZE + INTR_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+  intrStack = ((uint32_t) __rtems_end) + INIT_STACK_SIZE + 
+    rtems_configuration_get_interrupt_stack_size() -
+    PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
   intrStack &= ~(CPU_STACK_ALIGNMENT-1);

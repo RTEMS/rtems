@@ -49,7 +49,6 @@ uint32_t   bsp_clicks_per_usec;
 
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-rtems_cpu_table                   Cpu_table;
 uint32_t                          bsp_isr_level;
 
 void BSP_panic(char *s)
@@ -306,11 +305,8 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = work_space_start;
 
   /*
-   *  initialize the CPU table for this BSP
+   *  initialize the device driver parameters
    */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
   bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
 
 #if ( PPC_USE_DATA_CACHE )

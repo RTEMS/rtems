@@ -28,11 +28,7 @@ uint32_t bsp_clicks_per_microsecond;
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -103,11 +99,6 @@ void bsp_start( void )
   BSP_Configuration.work_space_start =
        (void *)((uint64_t)((&end) + LIBC_HEAP_SIZE + 0x2000) & ~0x7);
 
-  /*
-   *  initialize the CPU table for this BSP
-   */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   bsp_clicks_per_microsecond = CPU_CLOCK_RATE_MHZ;
 
   mips_install_isr_entries(); /* Install generic MIPS exception handler */

@@ -34,8 +34,6 @@ void bsp_clean_up(void);
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;
-
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
  */
@@ -92,8 +90,6 @@ void bsp_pretasking_hook(void)
 void bsp_start( void )
 {
   void rtems_irq_mngt_init();
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   BSP_Configuration.work_space_start = (void *)
      RAM_END - BSP_Configuration.work_space_size;

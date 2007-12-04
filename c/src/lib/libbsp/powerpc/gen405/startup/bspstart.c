@@ -70,11 +70,7 @@
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 
@@ -183,11 +179,8 @@ void bsp_start( void )
       ((char *)(bsp_ram_end)) - BSP_Configuration.work_space_size;
 
   /*
-   *  initialize the CPU table for this BSP
+   *  initialize the device driver parameters
    */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-
   bsp_clicks_per_usec = 300;
   bsp_serial_per_sec = 14625000;
   bsp_serial_external_clock = 0;

@@ -28,9 +28,6 @@
 
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*
@@ -73,12 +70,6 @@ void bsp_start( void )
   (*(uint8_t*)0xfffb0067) = 0x7f; /* make VME access round-robin */
 
   rtems_cache_enable_instruction();
-
-  /*
-   *  we only use a hook to get the C library initialized.
-   */
-
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
 }

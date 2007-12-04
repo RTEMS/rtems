@@ -66,8 +66,6 @@ void bsp_spurious_initialize( void );
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 extern uint32_t                  bsp_isr_level;
 
 #endif /* ASM */

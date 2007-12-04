@@ -145,7 +145,6 @@ extern "C" {
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 /* System frequency */
 #define BSP_SYSTEM_FREQUENCY ((unsigned int)&_SYS_CLOCK_FREQUENCY)

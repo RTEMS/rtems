@@ -36,7 +36,6 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
                           int                          attaching);
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 extern rtems_configuration_table BSP_Configuration;
 

@@ -26,15 +26,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
-
 #define RAM_START 0
 #define RAM_END   0x100000
 
@@ -63,8 +54,6 @@ void bsp_cleanup( void );
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 extern int                       rtems_argc;
 extern char                    **rtems_argv;
 

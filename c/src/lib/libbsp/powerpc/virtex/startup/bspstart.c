@@ -79,10 +79,7 @@ SPR_RW(SPRG1)
  */
 
 extern rtems_configuration_table Configuration;
-
 rtems_configuration_table  BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
 
@@ -197,17 +194,13 @@ void bsp_start( void )
    */
   myCpu 	    = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
-  /*
-   *  initialize the CPU table for this BSP
-   * NOTE: this must be before the exception initialization,
-   * because exception code useses some information from Cpu_table
-   */
 
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
+  /*
+   *  initialize the device driver parameters
+   */
 
   /* timebase register ticks/microsecond */
   bsp_clicks_per_usec = (250000000 / 1000000);
-
   bsp_serial_per_sec = 14625000;
   bsp_serial_external_clock = 0;
   bsp_timer_internal_clock  = 1;

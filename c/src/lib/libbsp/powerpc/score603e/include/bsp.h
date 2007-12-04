@@ -37,7 +37,6 @@ extern "C" {
 #else
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4)
 #endif
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (12 * 1024)
 
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
@@ -222,7 +221,6 @@ unsigned int SCORE603e_FLASH_Enable_writes(
   ( ((_data&0x00ff)<<8) | ((_data&0xff00)>>8) )
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 extern uint32_t                  bsp_isr_level;
 
 #endif /* ASM */

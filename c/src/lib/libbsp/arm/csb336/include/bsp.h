@@ -26,7 +26,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 #include <mc9328mxl.h>
-  
 
 /* What is the input clock freq in hertz? */
 #define BSP_OSC_FREQ  16000000    /* 16 MHz oscillator */
@@ -34,9 +33,6 @@ extern "C" {
 
 /* How many serial ports? */
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
-/* How big should the interrupt stack be? */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 extern rtems_configuration_table BSP_Configuration;
 

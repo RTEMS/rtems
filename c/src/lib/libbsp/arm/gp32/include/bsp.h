@@ -61,9 +61,6 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
 /* How many serial ports? */
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
 
-/* How big should the interrupt stack be? */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
-
 /*
  *  This BSP provides its own IDLE task to override the RTEMS one.
  *  So we prototype it and define the constant confdefs.h expects

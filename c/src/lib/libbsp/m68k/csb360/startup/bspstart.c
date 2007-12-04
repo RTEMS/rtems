@@ -40,17 +40,12 @@
 extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;
-
 extern unsigned int _RamSize;
-
-
 char *rtems_progname;
 
 /*
  *  Use the shared implementations of the following routines
  */
- 
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
@@ -64,7 +59,6 @@ void bsp_start( void )
     extern unsigned long _M68k_Ramsize;
     _M68k_Ramsize = (unsigned long)&_RamSize;   /* size set in linker script */
 
-
     /*
      *  Need to "allocate" the memory for the RTEMS Workspace and
      *  tell the RTEMS configuration where it is.  This memory is
@@ -72,9 +66,4 @@ void bsp_start( void )
      */
 
     BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
-
-    /*
-     *  initialize the CPU table for this BSP
-     */
-    Cpu_table.interrupt_stack_size = 4096;
 }

@@ -38,7 +38,6 @@ extern "C" {
 
 #define CONSOLE_SCI
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
-/* #define CONFIGURE_INTERRUPT_STACK_MEMORY  (TBD * 1024) */
 
 /*
  *  Simple spin delay in microsecond units for device drivers.

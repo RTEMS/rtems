@@ -125,7 +125,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 /* System frequency */
 #define BSP_SYSTEM_FREQUENCY (66 * 1000 * 1000)

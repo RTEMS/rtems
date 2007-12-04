@@ -59,7 +59,6 @@ extern "C" {
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 /* !!! Should be defined in accordance to simulator considerations.*/
 #define CLOCK_VECTOR 32
@@ -89,9 +88,6 @@ extern void *CPU_Interrupt_stack_high ;
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
-
-extern rtems_cpu_table           Cpu_table;
-
 extern void bsp_cleanup( void );
 
 /*

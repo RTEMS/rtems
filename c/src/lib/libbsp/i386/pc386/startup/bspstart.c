@@ -76,7 +76,6 @@ uint32_t         rtemsFreeMemStart;
 extern rtems_configuration_table  Configuration;
        rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;                     /* CPU configuration table.    */
 char            *rtems_progname;               /* Program name - from main(). */
 
 /*-------------------------------------------------------------------------+
@@ -179,8 +178,6 @@ void bsp_start_default( void )
 
   /* set the value of start of free memory. */
   rtemsFreeMemStart = (uint32_t)&_end + _stack_size;
-
-  Cpu_table.interrupt_stack_size    = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   /* Place RTEMS workspace at beginning of free memory. */
 

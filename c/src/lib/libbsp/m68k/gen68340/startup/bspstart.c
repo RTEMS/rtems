@@ -33,8 +33,6 @@
 extern rtems_configuration_table Configuration;
 rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*      Initialize whatever libc we are using
@@ -74,9 +72,4 @@ void bsp_start( void )
    */
 
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
-
-  /*
-   *  initialize the CPU table for this BSP
-   */
-  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 }

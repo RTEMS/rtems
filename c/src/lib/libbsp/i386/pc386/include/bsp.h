@@ -62,12 +62,6 @@ extern "C" {
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
 
-#if STACK_MINIMUM_SIZE < (4 * 1024)
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
-#else
-#define CONFIGURE_INTERRUPT_STACK_MEMORY STACK_MINIMUM_SIZE
-#endif
-
 /*
  * Network driver configuration
  */

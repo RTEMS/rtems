@@ -29,7 +29,6 @@ unsigned long           free_mem_end;
 
 rtems_configuration_table  BSP_Configuration;
 
-rtems_cpu_table Cpu_table;
 char            *rtems_progname = "RTEMS";
 
 extern void rtems_irq_mngt_init(void);

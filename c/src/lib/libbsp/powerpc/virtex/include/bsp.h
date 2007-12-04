@@ -49,15 +49,6 @@ extern "C" {
 
 #include <bspopts.h>
 
-/*
- *  confdefs.h overrides for this BSP:
- *   - number of termios serial ports (defaults to 1)
- *   - Interrupt stack space is not minimum if defined.
- */
-
-/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
-
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140
@@ -82,7 +73,6 @@ extern uint32_t _top_of_ram;
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 
 /* Network Defines */

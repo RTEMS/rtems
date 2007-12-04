@@ -26,9 +26,6 @@
 
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
-
-rtems_cpu_table Cpu_table;
-
 char *rtems_progname;
 
 /*

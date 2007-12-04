@@ -69,7 +69,6 @@
  */
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
 
 /* uart.c uses out_8 instead of outb  */
 #define BSP_UART_IOBASE_COM1	GT64260_DEV1_BASE + 0x20000
