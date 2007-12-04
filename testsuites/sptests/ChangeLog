@@ -1,3 +1,7 @@
+2007-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen03.c, spsize/size.c: Builds again after CPU Table changes.
+
 2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>
 
 	* sp07/sp07.scn, sp07/task1.c, sp09/screen01.c, sp09/screen05.c,

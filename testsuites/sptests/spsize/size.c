@@ -441,7 +441,9 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*sptables.h*/  (sizeof _Initialization_Default_multiprocessing_table)  +
+#endif
                 (strlen(_RTEMS_version)+1);
 
 

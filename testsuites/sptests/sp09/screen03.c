@@ -44,8 +44,10 @@ void Screen3()
    * skip the test that tries to allocate a stack that is too big.
    */
 
-  if (rtems_cpu_configuration_get_stack_allocate_hook()) {
-      puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED" );
+  if (rtems_configuration_get_stack_allocate_hook()) {
+    puts(
+      "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED"
+    );
   } else {
       status = rtems_task_create(
         task_name,
