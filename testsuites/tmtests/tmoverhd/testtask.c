@@ -58,8 +58,7 @@ rtems_task Task_1(
 )
 {
   rtems_name                 name;
-  uint32_t             index;
-  rtems_cpu_table            cpu_table;
+  uint32_t                   index;
   rtems_id                   id;
   rtems_task_priority        in_priority;
   rtems_task_priority        out_priority;
@@ -95,7 +94,7 @@ rtems_task Task_1(
 /* rtems_initialize_executive */
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_initialize_executive( rtems_configuration_get_table(), &cpu_table );
+      (void) rtems_initialize_executive( rtems_configuration_get_table() );
   end_time = Read_timer();
 
   put_time(
