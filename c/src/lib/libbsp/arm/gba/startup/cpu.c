@@ -39,11 +39,9 @@
  *  @return None
  */
 void _CPU_Initialize(
-    rtems_cpu_table  *cpu_table,
-    void      (*thread_dispatch)       /* ignored on this CPU */
+  void      (*thread_dispatch)       /* ignored on this CPU */
 )
 {
-    _CPU_Table = *cpu_table;
 }
 
 /**

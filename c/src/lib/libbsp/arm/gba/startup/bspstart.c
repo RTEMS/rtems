@@ -74,8 +74,6 @@ uint32_t   _heap_size = 0;
 /** Address of start of free memory - should be updated after creating new partitions or regions.*/
 uint32_t   rtemsFreeMemStart;
 
-/** CPU configuration table.    */
-rtems_cpu_table    Cpu_table;
 /** Program name - from main(). */
 char              *rtems_progname;
 
@@ -140,9 +138,6 @@ void bsp_start_default( void )
 {
   /* set the value of start of free memory. */
   rtemsFreeMemStart = (uint32_t)&_end;
-
-  /* If we don't have command line arguments set default program name. */
-  Cpu_table.interrupt_stack_size    = 0;
 
   /* Place RTEMS workspace at beginning of free memory. */
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
