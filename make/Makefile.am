@@ -30,7 +30,6 @@ EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/mvme136.cfg custom/mvme147.cfg custom/mvme147s.cfg \
     custom/mvme162.cfg custom/mvme162lx.cfg custom/mvme167.cfg \
     custom/mvme2100.cfg custom/mvme2307.cfg custom/no_bsp.cfg \
-    custom/nios2_iss.cfg \
     custom/ods68302.cfg custom/pc386.cfg custom/posix.cfg \
     custom/psim.cfg custom/rtl22xx.cfg custom/score603e.cfg \
     custom/shsim.cfg custom/ts_386ex.cfg
