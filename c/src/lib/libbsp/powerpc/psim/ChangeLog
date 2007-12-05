@@ -1,3 +1,7 @@
+2007-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clock.c: Fix typo.
+
 2007-12-04	Till Straumann <strauman@slac.stanford.edu>
 
 	* irq/irq_init.c: removed unnecessary code (alredy
