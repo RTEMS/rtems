@@ -97,7 +97,7 @@ void* ppc_get_vector_addr(rtems_vector vector)
 
 #if ( defined(mpc860) || defined(mpc821) || defined(__ppc_generic) )
 
-int mpc860_vector_is_valid(rtems_vector vector)
+static int mpc860_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -132,7 +132,7 @@ int mpc860_vector_is_valid(rtems_vector vector)
 
 #if (defined(mpc555) || defined(mpc505) || defined(__ppc_generic))
 
-int mpc5xx_vector_is_valid(rtems_vector vector)
+static int mpc5xx_vector_is_valid(rtems_vector vector)
 {
   switch (current_ppc_cpu) {
     case PPC_5XX:
@@ -172,7 +172,7 @@ int mpc5xx_vector_is_valid(rtems_vector vector)
 #endif
 
 #if ( defined(ppc405) || defined(__ppc_generic) )
-int ppc405_vector_is_valid(rtems_vector vector)
+static int ppc405_vector_is_valid(rtems_vector vector)
 
 {
   switch(vector) {
@@ -195,7 +195,7 @@ int ppc405_vector_is_valid(rtems_vector vector)
 
 #if defined(PPC_HAS_60X_VECTORS) /* 60x style cpu types */
 
-int altivec_vector_is_valid(rtems_vector vector)
+static int altivec_vector_is_valid(rtems_vector vector)
 {
 	if ( ppc_cpu_has_altivec() ) {
 		switch(vector) {
@@ -209,7 +209,7 @@ int altivec_vector_is_valid(rtems_vector vector)
   return 0;
 }
 
-int mpc750_vector_is_valid(rtems_vector vector)
+static int mpc750_vector_is_valid(rtems_vector vector)
 
 {
   switch(vector) {
@@ -232,7 +232,7 @@ int mpc750_vector_is_valid(rtems_vector vector)
   }
 }
 
-int PSIM_vector_is_valid(rtems_vector vector)
+static int PSIM_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -263,7 +263,7 @@ int PSIM_vector_is_valid(rtems_vector vector)
   return 0;
 }
 
-int mpc603_vector_is_valid(rtems_vector vector)
+static int mpc603_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -292,7 +292,7 @@ int mpc603_vector_is_valid(rtems_vector vector)
   return 0;
 }
 
-int mpc604_vector_is_valid(rtems_vector vector)
+static int mpc604_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -321,7 +321,7 @@ int mpc604_vector_is_valid(rtems_vector vector)
   return 0;
 }
 
-int e500_vector_is_valid(rtems_vector vector)
+static int e500_vector_is_valid(rtems_vector vector)
 {
 	switch (vector) {
 	case ASM_RESET_VECTOR:

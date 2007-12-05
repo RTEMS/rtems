@@ -1,5 +1,10 @@
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/raw_exception.c: made all <cpu>_vector_is_valid()
+	subroutines that are called from ppc_vector_is_valid() 'static'.
+
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h:
 	Qualified all exception vector symbols that are only defined
 	#ifdef <cpu_flavor> with <cpu_flavor> in the symbol name.
