@@ -6,9 +6,6 @@
  *  $Id$
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-
 #ifndef IRQ_SHARED_IRQ_C_GLUE_H
 #define IRQ_SHARED_IRQ_C_GLUE_H
 /* 
@@ -26,6 +23,8 @@
 #define BSP_SHARED_HANDLER_SUPPORT      1
 #endif
 
+#include <rtems.h>
+#include <stdint.h>
 #include <rtems/irq.h>
 
 #ifdef __cplusplus
@@ -85,7 +84,7 @@ bsp_irq_dispatch_list(
   _ISR_Set_level(0);
 
   #ifndef BSP_SHARED_HANDLER_SUPPORT
-    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle); */
+    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
   #else
     {
       rtems_irq_connect_data* vchain;

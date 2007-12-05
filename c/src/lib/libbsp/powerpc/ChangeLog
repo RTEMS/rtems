@@ -1,5 +1,12 @@
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq_supp.h: removed stray '*/'. Removed
+	inclusion of <stdlib.h> which is unnecessary and broke
+	if_dc in an obscure way (due to malloc/free redefinition
+	in the networking code).
+
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S, shared/vectors/vectors.S,
 	shared/vectors/vectors.h, shared/vectors/vectors_init.c:
 	Converted exception vector names to new ones
