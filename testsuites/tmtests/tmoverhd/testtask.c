@@ -65,18 +65,18 @@ rtems_task Task_1(
   rtems_mode                 in_mode;
   rtems_mode                 mask;
   rtems_mode                 out_mode;
-  uint32_t             note;
+  uint32_t                   note;
   rtems_time_of_day          time;
   rtems_interval             timeout;
   rtems_signal_set           signals;
   void                      *address_1;
   rtems_event_set            events;
   long                       buffer[ 4 ];
-  uint32_t             count;
+  uint32_t                   count;
   rtems_device_major_number  major;
   rtems_device_minor_number  minor;
-  uint32_t             io_result;
-  uint32_t             error;
+  uint32_t                   io_result;
+  uint32_t                   error;
   rtems_clock_get_options    options;
 
   name        = rtems_build_name( 'N', 'A', 'M', 'E' );
@@ -90,20 +90,6 @@ rtems_task Task_1(
   minor       = 0;
   error       = 100;
   options     = 0;
-
-/* rtems_initialize_executive */
-  Timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_initialize_executive( rtems_configuration_get_table() );
-  end_time = Read_timer();
-
-  put_time(
-    "rtems_initialize_executive",
-    end_time,
-    OPERATION_COUNT,
-    overhead,
-    0
-  );
 
 /* rtems_shutdown_executive */
 
