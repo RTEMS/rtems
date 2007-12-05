@@ -31,6 +31,16 @@
 #define _LIBCPU_RAW_EXCEPTION_H
 
 #include <rtems/powerpc/powerpc.h>
+
+/* For now, many BSPs still rely on <cpu_flavor> being defined
+ * but that should be phased out.
+ * The BSP support for exceptions and interrupts under 'bspsupp'
+ * is designed to be #ifdef <flavor> FREE.
+ * BSPs using 'bspsupp' should work with __ppc_generic
+ */
+
+#ifndef __ppc_generic
+
 /*
  * find out, whether we want to (re)enable the MMU in the assembly code
  * FIXME: move this to a better location
@@ -79,8 +89,8 @@
  *    size LAST_VALID_EXC.
  *    So until there is a CPU that uses 0xA we'll just use that :-(
  */
-#define ASM_VEC_VECTOR			0x0A
-#define ASM_VEC_VECTOR_OFFSET		(0xf20)
+#define ASM_60X_VEC_VECTOR			0x0A
+#define ASM_60X_VEC_VECTOR_OFFSET		(0xf20)
 
 #define	ASM_SYS_VECTOR			0x0C
 #define	ASM_SYS_VECTOR_OFFSET		(ASM_SYS_VECTOR   << 8)
@@ -92,25 +102,25 @@
      /*
       * vectors for PPC405
       */
-#define	ASM_CRIT_VECTOR                 ASM_RESET_VECTOR
-#define	ASM_CRIT_VECTOR_OFFSET          (ASM_CRIT_VECTOR << 8)	
+#define	ASM_BOOKE_CRIT_VECTOR                 ASM_RESET_VECTOR
+#define	ASM_BOOKE_CRIT_VECTOR_OFFSET          (ASM_BOOKE_CRIT_VECTOR << 8)	
 
-#define	ASM_PIT_VECTOR	                0x10
-#define	ASM_PIT_VECTOR_OFFSET           (ASM_PIT_VECTOR      << 8)
+#define	ASM_BOOKE_PIT_VECTOR	                0x10
+#define	ASM_BOOKE_PIT_VECTOR_OFFSET           (ASM_BOOKE_PIT_VECTOR      << 8)
 
-#define	ASM_ITLBMISS_VECTOR             0x11
-#define	ASM_ITLBMISS_VECTOR_OFFSET      (ASM_ITLBMISS_VECTOR << 8)
+#define	ASM_BOOKE_ITLBMISS_VECTOR             0x11
+#define	ASM_BOOKE_ITLBMISS_VECTOR_OFFSET      (ASM_BOOKE_ITLBMISS_VECTOR << 8)
 
-#define	ASM_DTLBMISS_VECTOR             0x12
-#define	ASM_DTLBMISS_VECTOR_OFFSET      (ASM_DTLBMISS_VECTOR << 8)
+#define	ASM_BOOKE_DTLBMISS_VECTOR             0x12
+#define	ASM_BOOKE_DTLBMISS_VECTOR_OFFSET      (ASM_BOOKE_DTLBMISS_VECTOR << 8)
 
-#define	ASM_FIT_VECTOR                  0x13
-#define	ASM_FIT_VECTOR_OFFSET	        (0x1010)
+#define	ASM_BOOKE_FIT_VECTOR                  0x13
+#define	ASM_BOOKE_FIT_VECTOR_OFFSET	        (0x1010)
 
-#define	ASM_WDOG_VECTOR                 0x14
-#define	ASM_WDOG_VECTOR_OFFSET	        (0x1020)
+#define	ASM_BOOKE_WDOG_VECTOR                 0x14
+#define	ASM_BOOKE_WDOG_VECTOR_OFFSET	        (0x1020)
 
-#define LAST_VALID_EXC                  ASM_WDOG_VECTOR
+#define LAST_VALID_EXC                  ASM_BOOKE_WDOG_VECTOR
 
 /*
  * bit mask of all exception vectors, that are handled
@@ -119,7 +129,7 @@
  * code to determine, whether to use SRR0/SRR1/rfi or SRR2/SRR3/rfci
  */
 #define ASM_VECTORS_CRITICAL			\
-  (( 1 << (31-ASM_CRIT_VECTOR))			\
+  (( 1 << (31-ASM_BOOKE_CRIT_VECTOR))			\
    |(1 << (31-ASM_MACH_VECTOR))			\
    |(1 << (31-ASM_WDOG_VECTOR)))
 
@@ -132,81 +142,81 @@
  * FIXME: even more vector names might get used in common,
  * but the names have diverged between different PPC families
  */
-#define	ASM_FLOATASSIST_VECTOR	      0x0E
-#define	ASM_FLOATASSIST_VECTOR_OFFSET (ASM_FLOATASSIST_VECTOR << 8)
+#define	ASM_8XX_FLOATASSIST_VECTOR	      0x0E
+#define	ASM_8XX_FLOATASSIST_VECTOR_OFFSET (ASM_8XX_FLOATASSIST_VECTOR << 8)
 
-#define	ASM_SOFTEMUL_VECTOR	      0x10
-#define	ASM_SOFTEMUL_VECTOR_OFFSET    (ASM_SOFTEMUL_VECTOR << 8)
+#define	ASM_8XX_SOFTEMUL_VECTOR	      0x10
+#define	ASM_8XX_SOFTEMUL_VECTOR_OFFSET    (ASM_8XX_SOFTEMUL_VECTOR << 8)
 
-#define	ASM_ITLBMISS_VECTOR           0x11
-#define	ASM_ITLBMISS_VECTOR_OFFSET    (ASM_ITLBMISS_VECTOR << 8)
+#define	ASM_8XX_ITLBMISS_VECTOR           0x11
+#define	ASM_8XX_ITLBMISS_VECTOR_OFFSET    (ASM_8XX_ITLBMISS_VECTOR << 8)
 
-#define	ASM_DTLBMISS_VECTOR           0x12
-#define	ASM_DTLBMISS_VECTOR_OFFSET    (ASM_DTLBMISS_VECTOR << 8)
+#define	ASM_8XX_DTLBMISS_VECTOR           0x12
+#define	ASM_8XX_DTLBMISS_VECTOR_OFFSET    (ASM_8XX_DTLBMISS_VECTOR << 8)
 
-#define	ASM_ITLBERROR_VECTOR          0x13
-#define	ASM_ITLBERROR_VECTOR_OFFSET   (ASM_ITLBERROR_VECTOR << 8)
+#define	ASM_8XX_ITLBERROR_VECTOR          0x13
+#define	ASM_8XX_ITLBERROR_VECTOR_OFFSET   (ASM_8XX_ITLBERROR_VECTOR << 8)
 
-#define	ASM_DTLBERROR_VECTOR          0x14
-#define	ASM_DTLBERROR_VECTOR_OFFSET   (ASM_DTLBERROR_VECTOR << 8)
+#define	ASM_8XX_DTLBERROR_VECTOR          0x14
+#define	ASM_8XX_DTLBERROR_VECTOR_OFFSET   (ASM_8XX_DTLBERROR_VECTOR << 8)
 
-#define ASM_DBREAK_VECTOR             0x1C
-#define ASM_DBREAK_VECTOR_OFFSET      (ASM_DBREAK_VECTOR << 8)
+#define ASM_8XX_DBREAK_VECTOR             0x1C
+#define ASM_8XX_DBREAK_VECTOR_OFFSET      (ASM_8XX_DBREAK_VECTOR << 8)
 
-#define ASM_IBREAK_VECTOR             0x1D
-#define ASM_IBREAK_VECTOR_OFFSET      (ASM_IBREAK_VECTOR << 8)
+#define ASM_8XX_IBREAK_VECTOR             0x1D
+#define ASM_8XX_IBREAK_VECTOR_OFFSET      (ASM_8XX_IBREAK_VECTOR << 8)
 
-#define ASM_PERIFBREAK_VECTOR         0x1E
-#define ASM_PERIFBREAK_VECTOR_OFFSET  (ASM_PERIFBREAK_VECTOR << 8)
+#define ASM_8XX_PERIFBREAK_VECTOR         0x1E
+#define ASM_8XX_PERIFBREAK_VECTOR_OFFSET  (ASM_8XX_PERIFBREAK_VECTOR << 8)
 
-#define ASM_DEVPORT_VECTOR            0x1F
-#define ASM_DEVPORT_VECTOR_OFFSET     (ASM_DEVPORT_VECTOR_OFFSET << 8)
+#define ASM_8XX_DEVPORT_VECTOR            0x1F
+#define ASM_8XX_DEVPORT_VECTOR_OFFSET     (ASM_8XX_DEVPORT_VECTOR_OFFSET << 8)
 
-#define LAST_VALID_EXC		ASM_DEVPORT_VECTOR
+#define LAST_VALID_EXC		ASM_8XX_DEVPORT_VECTOR
 
 #elif (defined(mpc555) || defined(mpc505))
      /*
       * vectorx for MPC5xx
       */
-#define	ASM_FLOATASSIST_VECTOR	0x0E
+#define	ASM_5XX_FLOATASSIST_VECTOR	0x0E
 
-#define	ASM_SOFTEMUL_VECTOR	0x10
+#define	ASM_5XX_SOFTEMUL_VECTOR	0x10
 
-#define	ASM_IPROT_VECTOR	0x13
-#define	ASM_DPROT_VECTOR	0x14
+#define	ASM_5XX_IPROT_VECTOR	0x13
+#define	ASM_5XX_DPROT_VECTOR	0x14
 
-#define ASM_DBREAK_VECTOR	0x1C
-#define ASM_IBREAK_VECTOR	0x1D
-#define ASM_MEBREAK_VECTOR	0x1E
-#define ASM_NMEBREAK_VECTOR	0x1F
+#define ASM_5XX_DBREAK_VECTOR	0x1C
+#define ASM_5XX_IBREAK_VECTOR	0x1D
+#define ASM_5XX_MEBREAK_VECTOR	0x1E
+#define ASM_5XX_NMEBREAK_VECTOR	0x1F
 
-#define LAST_VALID_EXC		ASM_NMEBREAK_VECTOR
+#define LAST_VALID_EXC		ASM_5XX_NMEBREAK_VECTOR
 
 #else /* 60x style cpu types */
 #define PPC_HAS_60X_VECTORS
 
-#define	ASM_PERFMON_VECTOR		0x0F
-#define	ASM_PERFMON_VECTOR_OFFSET	(ASM_PERFMON_VECTOR << 8)
+#define	ASM_60X_PERFMON_VECTOR		0x0F
+#define	ASM_60X_PERFMON_VECTOR_OFFSET	(ASM_60X_PERFMON_VECTOR << 8)
 
-#define	ASM_IMISS_VECTOR		0x10
+#define	ASM_60X_IMISS_VECTOR		0x10
 
-#define	ASM_DLMISS_VECTOR		0x11
+#define	ASM_60X_DLMISS_VECTOR		0x11
 
-#define	ASM_DSMISS_VECTOR		0x12
+#define	ASM_60X_DSMISS_VECTOR		0x12
 
-#define	ASM_ADDR_VECTOR			0x13
-#define	ASM_ADDR_VECTOR_OFFSET	        (ASM_ADDR_VECTOR  << 8)
+#define	ASM_60X_ADDR_VECTOR			0x13
+#define	ASM_60X_ADDR_VECTOR_OFFSET	        (ASM_60X_ADDR_VECTOR  << 8)
 
-#define	ASM_SYSMGMT_VECTOR		0x14
-#define	ASM_SYSMGMT_VECTOR_OFFSET	(ASM_SYSMGMT_VECTOR << 8)
+#define	ASM_60X_SYSMGMT_VECTOR		0x14
+#define	ASM_60X_SYSMGMT_VECTOR_OFFSET	(ASM_60X_SYSMGMT_VECTOR << 8)
 
-#define ASM_VEC_ASSIST_VECTOR           0x16
-#define ASM_VEC_ASSIST_VECTOR_OFFSET    (ASM_VEC_ASSIST_VECTOR << 8)
+#define ASM_60X_VEC_ASSIST_VECTOR           0x16
+#define ASM_60X_VEC_ASSIST_VECTOR_OFFSET    (ASM_60X_VEC_ASSIST_VECTOR << 8)
 
-#define	ASM_ITM_VECTOR                  0x17
-#define	ASM_ITM_VECTOR_OFFSET           (ASM_ITM_VECTOR   << 8)
+#define	ASM_60X_ITM_VECTOR                  0x17
+#define	ASM_60X_ITM_VECTOR_OFFSET           (ASM_60X_ITM_VECTOR   << 8)
 
-#define LAST_VALID_EXC                  ASM_ITM_VECTOR
+#define LAST_VALID_EXC                  ASM_60X_ITM_VECTOR
 
 #endif
 
@@ -222,6 +232,61 @@
 #else
 #endif
 
+#else  /* __ppc_generic */
+
+#define	ASM_RESET_VECTOR 		             0x01
+#define	ASM_MACH_VECTOR			             0x02
+#define	ASM_PROT_VECTOR			             0x03
+#define	ASM_ISI_VECTOR 			             0x04
+#define	ASM_EXT_VECTOR 			             0x05
+#define	ASM_ALIGN_VECTOR 		             0x06
+#define	ASM_PROG_VECTOR			             0x07
+#define	ASM_FLOAT_VECTOR		             0x08
+#define	ASM_DEC_VECTOR			             0x09
+#define ASM_60X_VEC_VECTOR			         0x0A
+#define	ASM_SYS_VECTOR			             0x0C
+#define	ASM_TRACE_VECTOR		             0x0D
+
+#define	ASM_BOOKE_CRIT_VECTOR	             0x01
+#define	ASM_BOOKE_PIT_VECTOR	             0x10
+#define	ASM_BOOKE_ITLBMISS_VECTOR            0x11
+#define	ASM_BOOKE_DTLBMISS_VECTOR            0x12
+#define	ASM_BOOKE_FIT_VECTOR                 0x13
+#define	ASM_BOOKE_WDOG_VECTOR                0x14
+
+#define	ASM_8XX_FLOATASSIST_VECTOR	         0x0E
+#define	ASM_8XX_SOFTEMUL_VECTOR	             0x10
+#define	ASM_8XX_ITLBMISS_VECTOR              0x11
+#define	ASM_8XX_DTLBMISS_VECTOR              0x12
+#define	ASM_8XX_ITLBERROR_VECTOR             0x13
+#define	ASM_8XX_DTLBERROR_VECTOR             0x14
+#define ASM_8XX_DBREAK_VECTOR                0x1C
+#define ASM_8XX_IBREAK_VECTOR                0x1D
+#define ASM_8XX_PERIFBREAK_VECTOR            0x1E
+#define ASM_8XX_DEVPORT_VECTOR               0x1F
+
+#define	ASM_5XX_FLOATASSIST_VECTOR	         0x0E
+#define	ASM_5XX_SOFTEMUL_VECTOR	             0x10
+#define	ASM_5XX_IPROT_VECTOR	             0x13
+#define	ASM_5XX_DPROT_VECTOR	             0x14
+#define ASM_5XX_DBREAK_VECTOR	             0x1C
+#define ASM_5XX_IBREAK_VECTOR	             0x1D
+#define ASM_5XX_MEBREAK_VECTOR	             0x1E
+#define ASM_5XX_NMEBREAK_VECTOR	             0x1F
+
+
+#define	ASM_60X_PERFMON_VECTOR               0x0F
+#define	ASM_60X_IMISS_VECTOR                 0x10
+#define	ASM_60X_DLMISS_VECTOR                0x11
+#define	ASM_60X_DSMISS_VECTOR                0x12
+#define	ASM_60X_ADDR_VECTOR                  0x13
+#define	ASM_60X_SYSMGMT_VECTOR               0x14
+#define ASM_60X_VEC_ASSIST_VECTOR            0x16
+#define	ASM_60X_ITM_VECTOR                   0x17
+
+#define LAST_VALID_EXC                       0x1F
+
+#endif /* __ppc_generic */
 
 
 #ifndef ASM
@@ -318,6 +383,11 @@ extern int ppc_vector_is_valid(rtems_vector vector);
  */
 extern int ppc_init_exceptions (rtems_raw_except_global_settings* config);
 extern int ppc_get_exception_config (rtems_raw_except_global_settings** config);
+
+void* ppc_get_vector_addr(rtems_vector vector);
+
+int ppc_is_e500();
+void e500_setup_raw_exceptions();
 
 /* This variable is initialized to 'TRUE' by default;
  * BSPs which have their vectors in ROM should set it
