@@ -1,5 +1,10 @@
 2007-12-05	Daniel Hellstrom <daniel@gaisler.com>
 
+	* Makefile.am: i2c should be on branch as well as CVS head.
+	* shared/i2c/i2cmst.c, shared/include/i2cmst.h: New files.
+
+2007-12-05	Daniel Hellstrom <daniel@gaisler.com>
+
 	* shared/include/ambapp.h: Sync head and 4.8 branch.
 
 2007-11-30	Daniel Hellstrom <daniel@gaisler.com>
