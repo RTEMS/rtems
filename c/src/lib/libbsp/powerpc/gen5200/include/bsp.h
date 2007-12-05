@@ -256,6 +256,9 @@ void bsp_cleanup(void);
 #define USE_SLICETIMER_0     TRUE
 #define USE_SLICETIMER_1     FALSE
 
+Thread _Thread_Idle_body(uint32_t ignored);
+#define BSP_IDLE_TASK_BODY _Thread_Idle_body
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,3 +1,7 @@
+2007-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Correct BSP specific Idle thread support.
+
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* irq/irq_init.c, irq_asm.S:
