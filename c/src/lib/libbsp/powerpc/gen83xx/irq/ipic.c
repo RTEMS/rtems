@@ -240,12 +240,12 @@ rtems_status_code BSP_irq_handle_at_ipic(uint32_t excNum)
     vecnum = MPC83xx_VCR_TO_VEC(mpc83xx.ipic.sivcr);
     msr_enable = PPC_MSR_EE;
     break;
-  case ASM_SYSMGMT_VECTOR:
+  case ASM_60X_SYSMGMT_VECTOR:
     vecnum = MPC83xx_VCR_TO_VEC(mpc83xx.ipic.smvcr);
     msr_enable = PPC_MSR_EE;
     break;
-#if defined(ASM_CRIT_VECTOR)
-  case ASM_CRIT_VECTOR:
+#if defined(ASM_BOOKE_CRIT_VECTOR)
+  case ASM_BOOKE_CRIT_VECTOR:
     vecnum = MPC83xx_VCR_TO_VEC(mpc83xx.ipic.scvcr);
     break;
 #endif

@@ -1,3 +1,9 @@
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/ipic.c, irq/irq_init.c:
+	Converted exception vector names to new ones
+	(qualified by <cpu_type> if non-std ppc exceptions).
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Move interrupt_stack_size field from CPU Table to

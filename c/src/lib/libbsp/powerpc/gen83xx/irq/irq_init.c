@@ -109,9 +109,9 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     
     break;
 #if 0 /* Critical interrupts not yet supported */
-  case ASM_CRIT_VECTOR:
+  case ASM_BOOKE_CRIT_VECTOR:
 #endif
-  case ASM_SYSMGMT_VECTOR:
+  case ASM_60X_SYSMGMT_VECTOR:
   case ASM_EXT_VECTOR:
     BSP_irq_handle_at_ipic(excNum);
     break;
@@ -323,9 +323,9 @@ static rtems_raw_except_connect_data BSP_vec_desc[] = {
    exception_always_enabled
   },
 #endif
-#if defined(ASM_SYSMGMT_VECTOR) 
-  {ASM_SYSMGMT_VECTOR,
-   {ASM_SYSMGMT_VECTOR,
+#if defined(ASM_60X_SYSMGMT_VECTOR) 
+  {ASM_60X_SYSMGMT_VECTOR,
+   {ASM_60X_SYSMGMT_VECTOR,
     sysmgmt_exception_vector_prolog_code,
     (size_t)sysmgmt_exception_vector_prolog_code_size
    },
@@ -344,8 +344,8 @@ static rtems_raw_except_connect_data BSP_vec_desc[] = {
    exception_always_enabled
   }
 #if 0 /* Critical interrupts not yet supported */
-  ,{ASM_CRIT_VECTOR,
-   {ASM_CRIT_VECTOR,
+  ,{ASM_BOOKE_CRIT_VECTOR,
+   {ASM_BOOKE_CRIT_VECTOR,
     critical_exception_vector_prolog_code,
     critical_exception_vector_prolog_code_size
    }
