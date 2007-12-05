@@ -205,7 +205,7 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 extern rtems_configuration_table    Configuration;
 
 #define rtems_configuration_get_interrupt_stack_size() \
-        (_Configuration_Table->interrupt_stack_size)
+        (Configuration.interrupt_stack_size)
 
 #define rtems_configuration_get_stack_allocate_hook() \
         (_Configuration_Table->stack_allocate_hook)
