@@ -571,9 +571,11 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 
     rtems_interrupt_disable(k);
 
+#if defined(ASM_BOOKE_CRIT_VECTOR)
 	if ( ppc_cpu_is_bookE() ) {
 		e500_setup_raw_exceptions();
 	}
+#endif
 
 	for (i=0; i < config->exceptSize; i++) {
 		if ( PPC_EXC_INVALID == ppc_vector_is_valid(raw_except_table[i].hdl.vector) ) {

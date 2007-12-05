@@ -1,5 +1,10 @@
 2007-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* new-exceptions/raw_exception.c: Conditionalize call to
+	e500_setup_raw_exceptions() since that is not even in the tree yet.
+
+2007-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* new-exceptions/raw_exception.c: Conditionalize some BOOKE vectors.
 
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
