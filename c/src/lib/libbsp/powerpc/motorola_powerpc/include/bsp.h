@@ -180,6 +180,11 @@ extern unsigned int BSP_processor_frequency;
  */
 extern unsigned int BSP_time_base_divisor;
 
+/*
+ * String passed by the bootloader.
+ */
+extern char *BSP_commandline_string;
+
 #define BSP_Convert_decrementer( _value ) \
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 

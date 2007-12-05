@@ -67,6 +67,8 @@ RESIDUAL residualCopy;
  */
 #define MAX_LOADER_ADD_PARM 80
 char loaderParam[MAX_LOADER_ADD_PARM];
+
+char *BSP_commandline_string = loaderParam;
 /*
  * Vital Board data Start using DATA RESIDUAL
  */

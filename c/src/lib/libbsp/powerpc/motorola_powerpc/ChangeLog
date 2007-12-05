@@ -1,3 +1,7 @@
+2007-11-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* include/bsp.h: declare BSP_commandline_string variable.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, include/bsp.h: Move interrupt_stack_size field from CPU
