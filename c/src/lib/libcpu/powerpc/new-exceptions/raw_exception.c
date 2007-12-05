@@ -338,16 +338,24 @@ ppc_raw_exception_category rval = PPC_EXC_INVALID;
 	case ASM_MACH_VECTOR:
 		return PPC_EXC_E500_MACHCHK;
 
+#if defined(ASM_BOOKE_CRIT_VECTOR)
 	case ASM_BOOKE_CRIT_VECTOR:
+#endif
+#if defined(ASM_BOOKE_WDOG_VECTOR)
 	case ASM_BOOKE_WDOG_VECTOR:
+#endif
+#if defined(ASM_BOOKE_CRIT_VECTOR) || defined(ASM_BOOKE_WDOG_VECTOR)
 		rval |= PPC_EXC_ASYNC;
 		/* fall thru */
+#endif
 	case ASM_TRACE_VECTOR:
 		return rval | PPC_EXC_BOOKE_CRITICAL;
 
 	case ASM_EXT_VECTOR:
 	case ASM_DEC_VECTOR:
+#if defined(ASM_BOOKE_CRIT_VECTOR)
 	case ASM_BOOKE_FIT_VECTOR:
+#endif
 		rval |= PPC_EXC_ASYNC;
 
 		/* fall thru */

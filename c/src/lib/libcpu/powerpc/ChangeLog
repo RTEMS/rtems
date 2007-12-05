@@ -1,3 +1,7 @@
+2007-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* new-exceptions/raw_exception.c: Conditionalize some BOOKE vectors.
+
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h:
