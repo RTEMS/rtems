@@ -1,3 +1,9 @@
+2007-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove score/cpu/avr/Makefile, 
+	score/cpu/nios2/Makefile, score/cpu/avr/Makefile.
+	* score/cpu/Makefile.am: Remove avr, nios2, c4x.
+
 2007-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/cpu/nios2, score/cpu/c4x, score/cpu/avr: Remove from
