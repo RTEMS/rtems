@@ -198,6 +198,12 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 #define rtems_configuration_get_idle_task_stack_size() \
         (_Configuration_Table->idle_task_stack_size)
 
+/* XXX We need to get this from the generated table 
+ *     since BSPs need it before the pointer is set.
+ *     Eventually all should be done this way.
+ */
+extern rtems_configuration_table    Configuration;
+
 #define rtems_configuration_get_interrupt_stack_size() \
         (_Configuration_Table->interrupt_stack_size)
 

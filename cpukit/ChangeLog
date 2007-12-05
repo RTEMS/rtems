@@ -1,3 +1,8 @@
+2007-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/rtems/config.h: Commit temporary fix so
+	interrupt_stack_size is accessible before RTEMS is initialized.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h, sapi/include/rtems/config.h,
