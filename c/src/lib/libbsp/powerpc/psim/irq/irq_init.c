@@ -21,21 +21,6 @@
 #include <bsp.h>
 #include <libcpu/raw_exception.h>
 #include <rtems/bspIo.h>
-#if 0
-#include <bsp/pci.h>
-#include <bsp/residual.h>
-#include <bsp/openpic.h>
-#include <bsp/motorola.h>
-#endif
-
-/*
-#define SHOW_ISA_PCI_BRIDGE_SETTINGS
-*/
-
-extern unsigned int external_exception_vector_prolog_code_size[];
-extern void external_exception_vector_prolog_code();
-extern unsigned int decrementer_exception_vector_prolog_code_size[];
-extern void decrementer_exception_vector_prolog_code();
 
 /*
  * default on/off function
@@ -71,7 +56,6 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-  rtems_raw_except_connect_data vectorDesc;
   int i;
   
   /*
@@ -104,27 +88,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
   
-  /*
-   * We must connect the raw irq handler for the two
-   * expected interrupt sources : decrementer and external interrupts.
-   */
-    vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
-    if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-    }
-    vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	external_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) external_exception_vector_prolog_code_size;
-    if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
 #ifdef TRACE_IRQ_INIT  
     printk("RTEMS IRQ management is now operationnal\n");
 #endif

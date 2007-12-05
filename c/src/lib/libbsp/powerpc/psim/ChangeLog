@@ -1,3 +1,8 @@
+2007-12-04	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq_init.c: removed unnecessary code (alredy
+	done by shared/irq/irq.c).
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Move interrupt_stack_size field
