@@ -20,7 +20,6 @@ AC_SUBST(program_prefix)
 AC_CONFIG_SUBDIRS(generic)
 case "$RTEMS_CPU" in
 sh ) AC_CONFIG_SUBDIRS(sh);;
-nios2 ) AC_CONFIG_SUBDIRS(nios2);;
 esac
 
 # Explicitly list all Makefiles here
