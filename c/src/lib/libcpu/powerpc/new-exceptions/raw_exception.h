@@ -359,6 +359,19 @@ typedef struct {
 }rtems_raw_except_global_settings;
 
 /*
+ * Exceptions of different categories use different SRR registers
+ * to save machine state (:-()
+ */
+typedef enum {
+	PPC_EXC_INVALID        = 0,
+	PPC_EXC_CLASSIC        = 1,
+	PPC_EXC_405_CRITICAL   = 2,
+	PPC_EXC_BOOKE_CRITICAL = 3,
+	PPC_EXC_E500_MACHCHK   = 4,
+	PPC_EXC_ASYNC          = 0x10000,
+} ppc_raw_exception_category;
+
+/*
  * C callable function enabling to set up one raw idt entry
  */
 extern int ppc_set_exception (const rtems_raw_except_connect_data*);
@@ -375,8 +388,9 @@ extern int ppc_delete_exception (const rtems_raw_except_connect_data*);
 
 /*
  * C callable function enabling to check if vector is valid
+ * and returns category.
  */
-extern int ppc_vector_is_valid(rtems_vector vector);
+extern ppc_raw_exception_category ppc_vector_is_valid(rtems_vector vector);
 
 /*
  * Exception global init.

@@ -1,5 +1,12 @@
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h:
+	Added typedef for exception classes (classic, critical, ...
+	synchronous / asynchronous). ppc_vector_is_valid() now returns
+	the appropriate class.
+
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/raw_exception.c: made all <cpu>_vector_is_valid()
 	subroutines that are called from ppc_vector_is_valid() 'static'.
 

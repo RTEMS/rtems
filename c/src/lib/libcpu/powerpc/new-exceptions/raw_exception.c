@@ -97,7 +97,7 @@ void* ppc_get_vector_addr(rtems_vector vector)
 
 #if ( defined(mpc860) || defined(mpc821) || defined(__ppc_generic) )
 
-static int mpc860_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category mpc860_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -124,15 +124,15 @@ static int mpc860_vector_is_valid(rtems_vector vector)
   case ASM_8XX_IBREAK_VECTOR:
   case ASM_8XX_PERIFBREAK_VECTOR:
   case ASM_8XX_DEVPORT_VECTOR:
-    return 1;
-  default: return 0;
+    return PPC_EXC_CLASSIC;
+  default: return PPC_EXC_INVALID;
   }
 }
 #endif
 
 #if (defined(mpc555) || defined(mpc505) || defined(__ppc_generic))
 
-static int mpc5xx_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category mpc5xx_vector_is_valid(rtems_vector vector)
 {
   switch (current_ppc_cpu) {
     case PPC_5XX:
@@ -159,57 +159,66 @@ static int mpc5xx_vector_is_valid(rtems_vector vector)
         case ASM_5XX_IBREAK_VECTOR:
         case ASM_5XX_MEBREAK_VECTOR:
         case ASM_5XX_NMEBREAK_VECTOR:
-          return 1;
+          return PPC_EXC_CLASSIC;
         default: 
-          return 0;
+          return PPC_EXC_INVALID;
       }
     default:
       printk("Please complete libcpu/powerpc/shared/new-exceptions/raw_exception.c\n");
       printk("current_ppc_cpu = %x\n", current_ppc_cpu);
-      return 0;
+      return PPC_EXC_INVALID;
   }
 }
 #endif
 
 #if ( defined(ppc405) || defined(__ppc_generic) )
-static int ppc405_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category ppc405_vector_is_valid(rtems_vector vector)
 
 {
+ppc_raw_exception_category rval = PPC_EXC_INVALID;
   switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
+  case ASM_EXT_VECTOR:
+  case ASM_BOOKE_PIT_VECTOR:
+
+  	rval |= PPC_EXC_ASYNC;
+
+	/* fall through */
   case ASM_PROT_VECTOR:
   case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
   case ASM_ALIGN_VECTOR:
   case ASM_PROG_VECTOR:
   case ASM_SYS_VECTOR:
-  case ASM_BOOKE_PIT_VECTOR:
   case ASM_BOOKE_ITLBMISS_VECTOR:
   case ASM_BOOKE_DTLBMISS_VECTOR:
-    return 1;
-  default: return 0;
+
+  	return rval | PPC_EXC_CLASSIC;
+
+  case ASM_RESET_VECTOR: /* fall through */
+  	rval |= PPC_EXC_ASYNC;
+  case ASM_MACH_VECTOR:
+    return rval | PPC_EXC_405_CRITICAL;
+  default: return PPC_EXC_INVALID;
   }
 }
 #endif /* defined(ppc405) */
 
 #if defined(PPC_HAS_60X_VECTORS) /* 60x style cpu types */
 
-static int altivec_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category altivec_vector_is_valid(rtems_vector vector)
 {
 	if ( ppc_cpu_has_altivec() ) {
 		switch(vector) {
 			case ASM_60X_VEC_VECTOR:
 			case ASM_60X_VEC_ASSIST_VECTOR:
-				return 1;
+				return PPC_EXC_CLASSIC;
 			default:
 				break;
 		}
 	}
-  return 0;
+  return PPC_EXC_INVALID;
 }
 
-static int mpc750_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category mpc750_vector_is_valid(rtems_vector vector)
 
 {
   switch(vector) {
@@ -227,12 +236,12 @@ static int mpc750_vector_is_valid(rtems_vector vector)
   case ASM_60X_ADDR_VECTOR:
   case ASM_60X_SYSMGMT_VECTOR:
   case ASM_60X_ITM_VECTOR:
-    return 1;
-  default: return 0;
+    return PPC_EXC_CLASSIC;
+  default: return PPC_EXC_INVALID;
   }
 }
 
-static int PSIM_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category PSIM_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -244,26 +253,26 @@ static int PSIM_vector_is_valid(rtems_vector vector)
   case ASM_PROG_VECTOR:
   case ASM_FLOAT_VECTOR:
   case ASM_DEC_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_SYS_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   case ASM_TRACE_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_PERFMON_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   case ASM_60X_IMISS_VECTOR: /* fall through */
   case ASM_60X_DLMISS_VECTOR:
   case ASM_60X_DSMISS_VECTOR:
   case ASM_60X_ADDR_VECTOR:
   case ASM_60X_SYSMGMT_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_ITM_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   }
-  return 0;
+  return PPC_EXC_INVALID;
 }
 
-static int mpc603_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category mpc603_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -277,22 +286,22 @@ static int mpc603_vector_is_valid(rtems_vector vector)
   case ASM_DEC_VECTOR:
   case ASM_SYS_VECTOR:
   case ASM_TRACE_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_PERFMON_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   case ASM_60X_IMISS_VECTOR: /* fall through */
   case ASM_60X_DLMISS_VECTOR:
   case ASM_60X_DSMISS_VECTOR:
   case ASM_60X_ADDR_VECTOR:
   case ASM_60X_SYSMGMT_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_ITM_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   }
-  return 0;
+  return PPC_EXC_INVALID;
 }
 
-static int mpc604_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category mpc604_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
   case ASM_RESET_VECTOR: /* fall through */
@@ -307,77 +316,88 @@ static int mpc604_vector_is_valid(rtems_vector vector)
   case ASM_SYS_VECTOR:
   case ASM_TRACE_VECTOR:
   case ASM_60X_PERFMON_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_IMISS_VECTOR: /* fall through */
   case ASM_60X_DLMISS_VECTOR:
   case ASM_60X_DSMISS_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   case ASM_60X_ADDR_VECTOR: /* fall through */
   case ASM_60X_SYSMGMT_VECTOR:
-    return 1;
+    return PPC_EXC_CLASSIC;
   case ASM_60X_ITM_VECTOR:
-    return 0;
+    return PPC_EXC_INVALID;
   }
-  return 0;
+  return PPC_EXC_INVALID;
 }
 
-static int e500_vector_is_valid(rtems_vector vector)
+static ppc_raw_exception_category e500_vector_is_valid(rtems_vector vector)
 {
+ppc_raw_exception_category rval = PPC_EXC_INVALID;
+
 	switch (vector) {
-	case ASM_RESET_VECTOR:
 	case ASM_MACH_VECTOR:
+		return PPC_EXC_E500_MACHCHK;
+
+	case ASM_BOOKE_CRIT_VECTOR:
+	case ASM_BOOKE_WDOG_VECTOR:
+		rval |= PPC_EXC_ASYNC;
+		/* fall thru */
+	case ASM_TRACE_VECTOR:
+		return rval | PPC_EXC_BOOKE_CRITICAL;
+
+	case ASM_EXT_VECTOR:
+	case ASM_DEC_VECTOR:
+	case ASM_BOOKE_FIT_VECTOR:
+		rval |= PPC_EXC_ASYNC;
+
+		/* fall thru */
+
 	case ASM_PROT_VECTOR:
 	case ASM_ISI_VECTOR:
-	case ASM_EXT_VECTOR:
 	case ASM_ALIGN_VECTOR:
 	case ASM_PROG_VECTOR:
 	case ASM_FLOAT_VECTOR:
 	case ASM_SYS_VECTOR:
 	case /* APU unavailable      */ 0x0b:
-	case ASM_DEC_VECTOR:
+
 	case ASM_60X_DLMISS_VECTOR:
 	case ASM_60X_DSMISS_VECTOR:
-	case ASM_TRACE_VECTOR:
 	case ASM_60X_VEC_VECTOR:
 	case ASM_60X_PERFMON_VECTOR:
 
-	case 0x13 /*ASM_BOOKE_FIT_VECTOR*/:
-	case 0x14 /*ASM_BOOKE_WDOG_VECTOR*/:
 	case /* emb FP data          */ 0x15:
 	case /* emb FP round         */ 0x16:
-		return 1;
+		return rval | PPC_EXC_CLASSIC;
 	default:
 		break;
 	}
-	return 0;
+	return PPC_EXC_INVALID;
 }
 
 #endif /* 60x style cpu types */
 
-int ppc_vector_is_valid(rtems_vector vector)
+ppc_raw_exception_category ppc_vector_is_valid(rtems_vector vector)
 {
+ppc_raw_exception_category rval = PPC_EXC_INVALID;
+
      switch (current_ppc_cpu) {
 #if defined(PPC_HAS_60X_VECTORS)
 	case PPC_7400:
-            if ( altivec_vector_is_valid(vector) )
-                return 1;
+            if ( ( rval = altivec_vector_is_valid(vector)) )
+                return rval;
             /* else fall thru */
         case PPC_750:
-            if (!mpc750_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = mpc750_vector_is_valid(vector);
             break;
         case PPC_7455:   /* Kate Feng */
         case PPC_7457: 
-            if ( altivec_vector_is_valid(vector) )
-                return 1;
+            if ( ( rval = altivec_vector_is_valid(vector) ) )
+                return rval;
             /* else fall thru */
         case PPC_604:
         case PPC_604e:
         case PPC_604r:
-            if (!mpc604_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = mpc604_vector_is_valid(vector);
             break;
         case PPC_603:
         case PPC_603e:
@@ -389,56 +409,48 @@ int ppc_vector_is_valid(rtems_vector vector)
         case PPC_e300c1:
         case PPC_e300c2:
         case PPC_e300c3:
-            if (!mpc603_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = mpc603_vector_is_valid(vector);
             break;
         case PPC_PSIM:
-            if (!PSIM_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = PSIM_vector_is_valid(vector);
             break;
 		case PPC_8540:
-			if ( !e500_vector_is_valid(vector) ) {
-				return 0;
-			}
+			rval = e500_vector_is_valid(vector);
 			break;
 #endif
 #if ( defined(mpc555) || defined(mpc505) || defined(__ppc_generic) )
         case PPC_5XX:
-            if (!mpc5xx_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = mpc5xx_vector_is_valid(vector);
             break;
 #endif
 #if ( defined(mpc860) || defined(mpc821) || defined(__ppc_generic) )
         case PPC_860:
-            if (!mpc860_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = mpc860_vector_is_valid(vector);
             break;
 #endif
 #if ( defined(ppc405) || defined(__ppc_generic) )
         case PPC_405:
-            if (!ppc405_vector_is_valid(vector)) {
-                return 0;
-            }
+            rval = ppc405_vector_is_valid(vector);
             break;
 #endif
         default:
             printk("Please complete "
                    "libcpu/powerpc/new-exceptions/raw_exception.c\n"
                    "current_ppc_cpu = %x\n", current_ppc_cpu);
-            return 0;
+            return PPC_EXC_INVALID;
      }
-     return 1;
+	 /* set ASYNC flag for all CPU flavors EE and DEC */
+	 if ( ASM_EXT_VECTOR == rval || ASM_DEC_VECTOR == rval ) {
+	 	rval |= PPC_EXC_ASYNC;
+	 }
+     return rval;
 }
 
 int ppc_set_exception  (const rtems_raw_except_connect_data* except)
 {
     rtems_interrupt_level k;
 
-    if (!ppc_vector_is_valid(except->hdl.vector)) {
+    if ( PPC_EXC_INVALID == ppc_vector_is_valid(except->hdl.vector) ) {
       printk("ppc_set_exception: vector %d is not valid\n",
               except->hdl.vector);
       return 0;
@@ -477,7 +489,7 @@ int ppc_get_current_exception (rtems_raw_except_connect_data* except)
 	rtems_interrupt_level k;
 	int i;
 
-	if (!ppc_vector_is_valid(except->hdl.vector)){
+	if ( PPC_EXC_INVALID == ppc_vector_is_valid(except->hdl.vector) ) {
 		return 0;
 	}
 
@@ -500,7 +512,7 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
 {
   rtems_interrupt_level k;
 
-  if (!ppc_vector_is_valid(except->hdl.vector)){
+  if ( PPC_EXC_INVALID == ppc_vector_is_valid(except->hdl.vector) ) {
     return 0;
   }
   /*
@@ -556,7 +568,7 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 	}
 
 	for (i=0; i < config->exceptSize; i++) {
-		if (!ppc_vector_is_valid(raw_except_table[i].hdl.vector)){
+		if ( PPC_EXC_INVALID == ppc_vector_is_valid(raw_except_table[i].hdl.vector) ) {
 			continue;
 		}
 		codemove(ppc_get_vector_addr(raw_except_table[i].hdl.vector),
