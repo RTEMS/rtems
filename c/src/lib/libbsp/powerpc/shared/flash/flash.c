@@ -779,7 +779,7 @@ uint32_t	    got;
 struct bankdesc *b;
 unsigned        f    = 0;
 
-	if ( ! (b = BSP_flashBspOps.bankcheck(bank, 0)) )
+	if ( ! (b = bankValidate(bank, 0)) )
 		return -1;
 
 	for ( sz = 0; -1 == fd ;  ) {

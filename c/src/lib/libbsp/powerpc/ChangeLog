@@ -1,3 +1,8 @@
+2007-12-04	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/flash/flash.c: added lazy init of driver
+	from BSP_flashWriteFile().
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/bspstart.c: Move interrupt_stack_size field from CPU
