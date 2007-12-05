@@ -288,8 +288,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
 
-  vectorDesc.exceptIndex	   = ASM_SYSMGMT_VECTOR;
-  vectorDesc.hdl.vector        = ASM_SYSMGMT_VECTOR;
+  vectorDesc.exceptIndex	   = ASM_60X_SYSMGMT_VECTOR;
+  vectorDesc.hdl.vector        = ASM_60X_SYSMGMT_VECTOR;
   vectorDesc.hdl.raw_hdl       = system_management_exception_vector_prolog_code;
   vectorDesc.hdl.raw_hdl_size  = (unsigned) &system_management_exception_vector_prolog_code_size;
 

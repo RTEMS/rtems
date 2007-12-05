@@ -654,7 +654,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
       return;
 
-    case ASM_SYSMGMT_VECTOR:
+    case ASM_60X_SYSMGMT_VECTOR:
 
       /* get the content of main interrupt status register */
       pmce =  mpc5200.pmce;

@@ -126,7 +126,7 @@ SYM (system_management_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
-	li	r4, ASM_SYSMGMT_VECTOR
+	li	r4, ASM_60X_SYSMGMT_VECTOR
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (system_management_exception_vector_prolog_code_size)
