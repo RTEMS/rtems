@@ -1,3 +1,11 @@
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/irq_asm.S, shared/vectors/vectors.S,
+	shared/vectors/vectors.h, shared/vectors/vectors_init.c:
+	Converted exception vector names to new ones
+	(qualified by <cpu_type> if non-std ppc exceptions).
+
+
 2007-12-04	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/startup/bspstart.c: export BSP_commandline_string

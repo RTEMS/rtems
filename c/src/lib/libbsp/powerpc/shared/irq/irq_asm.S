@@ -47,7 +47,7 @@ SYM (decrementer_exception_vector_prolog_code):
 	decrementer_exception_vector_prolog_code_size = . - decrementer_exception_vector_prolog_code
 #endif
 
-#if defined(ASM_SYSMGMT_VECTOR)
+#if defined(ASM_60X_SYSMGMT_VECTOR)
 	PUBLIC_VAR(sysmgmt_exception_vector_prolog_code)
 
 SYM (sysmgmt_exception_vector_prolog_code):
@@ -56,7 +56,7 @@ SYM (sysmgmt_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
-	li	r4, ASM_SYSMGMT_VECTOR
+	li	r4, ASM_60X_SYSMGMT_VECTOR
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (sysmgmt_exception_vector_prolog_code_size)
@@ -65,7 +65,7 @@ SYM (sysmgmt_exception_vector_prolog_code):
 #endif
 
 
-#if defined(ASM_PIT_VECTOR)
+#if defined(ASM_BOOKE_PIT_VECTOR)
 	PUBLIC_VAR(pit_exception_vector_prolog_code)
 
 SYM (pit_exception_vector_prolog_code):
@@ -74,7 +74,7 @@ SYM (pit_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
-	li	r4, ASM_PIT_VECTOR
+	li	r4, ASM_BOOKE_PIT_VECTOR
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (pit_exception_vector_prolog_code_size)
@@ -82,7 +82,7 @@ SYM (pit_exception_vector_prolog_code):
 	pit_exception_vector_prolog_code_size = . - pit_exception_vector_prolog_code
 #endif
 
-#if defined(ASM_FIT_VECTOR)
+#if defined(ASM_BOOKE_FIT_VECTOR)
 	PUBLIC_VAR(fit_exception_vector_prolog_code)
 
 SYM (fit_exception_vector_prolog_code):
@@ -91,7 +91,7 @@ SYM (fit_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
-	li	r4, ASM_FIT_VECTOR
+	li	r4, ASM_BOOKE_FIT_VECTOR
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (fit_exception_vector_prolog_code_size)

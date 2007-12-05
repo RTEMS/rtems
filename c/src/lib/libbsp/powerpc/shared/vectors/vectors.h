@@ -91,15 +91,15 @@ extern  unsigned int  external_exception_vector_prolog_code_size[];
 extern  void decrementer_exception_vector_prolog_code();
 extern  unsigned int  decrementer_exception_vector_prolog_code_size[];
 #endif
-#if defined(ASM_SYSMGMT_VECTOR)
+#if defined(ASM_60X_SYSMGMT_VECTOR)
 extern  void sysmgmt_exception_vector_prolog_code();
 extern  unsigned int  sysmgmt_exception_vector_prolog_code_size[];
 #endif
-#if defined(ASM_PIT_VECTOR)
+#if defined(ASM_BOOKE_PIT_VECTOR)
 extern  void pit_exception_vector_prolog_code();
 extern  unsigned int  pit_exception_vector_prolog_code_size[];
 #endif
-#if defined(ASM_FIT_VECTOR)
+#if defined(ASM_BOOKE_FIT_VECTOR)
 extern  void fit_exception_vector_prolog_code();
 extern  unsigned int  fit_exception_vector_prolog_code_size[];
 #endif

@@ -189,9 +189,9 @@ void initialize_exceptions()
     exception_table[i].exceptIndex	= i;
 #if defined(PPC_HAS_60X_VECTORS)
     if ( has_shadowed_gprs
-         && (   ASM_IMISS_VECTOR  == i
-             || ASM_DLMISS_VECTOR == i
-             || ASM_DSMISS_VECTOR == i ) ) {
+         && (   ASM_60X_IMISS_VECTOR  == i
+             || ASM_60X_DLMISS_VECTOR == i
+             || ASM_60X_DSMISS_VECTOR == i ) ) {
       exception_table[i].hdl.raw_hdl	  = tgpr_clr_exception_vector_code_prolog;
       exception_table[i].hdl.raw_hdl_size = (unsigned)tgpr_clr_exception_vector_code_prolog_size;
     } else {

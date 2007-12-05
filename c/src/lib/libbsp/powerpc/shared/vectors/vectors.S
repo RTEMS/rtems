@@ -70,13 +70,13 @@ SYM (push_normalized_frame):
 	mflr	r3
 	/* mask upper bits in case vectors are in the high area (psim) */
 	rlwinm  r3, r3, 32-5, 20, 31
-#if defined(ASM_VEC_VECTOR)
+#if defined(ASM_60X_VEC_VECTOR)
 	/*
 	 * Remap altivec unavaliable (0xf20) to its vector number...
 	 */
-	cmplwi  r3,(ASM_VEC_VECTOR_OFFSET>>5)
+	cmplwi  r3,(ASM_60X_VEC_VECTOR_OFFSET>>5)
 	bne     1f
-	li		r3,ASM_VEC_VECTOR<<3
+	li		r3,ASM_60X_VEC_VECTOR<<3
 1:
 #endif
 	/*
