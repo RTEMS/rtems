@@ -1,3 +1,7 @@
+2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/include/grcan_spwrtc.h: Removed.
+
 2007-12-05	Daniel Hellstrom <daniel@gaisler.com>
 
 	* Makefile.am: i2c should be on branch as well as CVS head.
