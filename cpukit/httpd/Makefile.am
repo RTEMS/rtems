@@ -7,10 +7,12 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -DWEBS -DUEMF
 
 if LIBNETWORKING
+## Always install this header file.  Both webservers use it.
+include_HEADERS = rtems_webserver.h
+
 if HAS_PTHREADS
 include_goaheaddir = $(includedir)/goahead
 
-include_HEADERS = rtems_webserver.h
 include_goahead_HEADERS = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h \
     wsIntrn.h
 

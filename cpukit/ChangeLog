@@ -1,3 +1,10 @@
+2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* httpd/Makefile.am, httpd/preinstall.am,
+	rtems/src/semtranslatereturncode.c: rtems_webserver.h must be
+	installed. It is the initialization interface for both GoAhead and
+	Simple HTTPD.
+
 2007-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove score/cpu/avr/Makefile, 
