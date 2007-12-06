@@ -1,3 +1,17 @@
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h:
+	Removed all #ifdef <cpu_flavor>. All exception vectors are now
+	always defined.
+	Changed implementation of <cpu>_vector_is_valid() from 'case'
+	statements to table lookup.
+	Replaced 'ASM_VECTORS_CRITICAL' by a variable
+	'bsp_raw_vector_is_405_critical' which is set at run-time.
+	Removed PPC_MSR_EXC_BITS. The exception handling code
+	(libbsp/shared/vectors/vectors.S and ../irq/irq_asm.S) now
+	has a run-time check for these bits.
+	Both files are now free of #if <cpu_flavor> constructs.
+
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, configure.ac, preinstall.am, 

@@ -32,207 +32,7 @@
 
 #include <rtems/powerpc/powerpc.h>
 
-/* For now, many BSPs still rely on <cpu_flavor> being defined
- * but that should be phased out.
- * The BSP support for exceptions and interrupts under 'bspsupp'
- * is designed to be #ifdef <flavor> FREE.
- * BSPs using 'bspsupp' should work with __ppc_generic
- */
-
-#ifndef __ppc_generic
-
-/*
- * find out, whether we want to (re)enable the MMU in the assembly code
- * FIXME: move this to a better location
- */
-#if (defined(ppc403) || defined(ppc405))
-#define PPC_USE_MMU 0
-#else
-#define PPC_USE_MMU 1
-#endif
-
-/*
- * Exception Vectors and offsets as defined in the MCP750 manual
- * used by most PPCs
- */
-
-#define	ASM_RESET_VECTOR 		0x01
-#define	ASM_RESET_VECTOR_OFFSET 	(ASM_RESET_VECTOR << 8)
-
-#define	ASM_MACH_VECTOR			0x02
-#define	ASM_MACH_VECTOR_OFFSET 		(ASM_MACH_VECTOR  << 8)
-
-#define	ASM_PROT_VECTOR			0x03
-#define	ASM_PROT_VECTOR_OFFSET 		(ASM_PROT_VECTOR  << 8)
-
-#define	ASM_ISI_VECTOR 			0x04
-#define	ASM_ISI_VECTOR_OFFSET 		(ASM_ISI_VECTOR   << 8)
-
-#define	ASM_EXT_VECTOR 			0x05
-#define	ASM_EXT_VECTOR_OFFSET 		(ASM_EXT_VECTOR   << 8)
-
-#define	ASM_ALIGN_VECTOR 		0x06
-#define	ASM_ALIGN_VECTOR_OFFSET 	(ASM_ALIGN_VECTOR << 8)
-
-#define	ASM_PROG_VECTOR			0x07
-#define	ASM_PROG_VECTOR_OFFSET 		(ASM_PROG_VECTOR  << 8)
-
-#define	ASM_FLOAT_VECTOR		0x08
-#define	ASM_FLOAT_VECTOR_OFFSET		(ASM_FLOAT_VECTOR << 8)
-
-#define	ASM_DEC_VECTOR			0x09
-#define	ASM_DEC_VECTOR_OFFSET		(ASM_DEC_VECTOR   << 8)
-
-/* Bummer: Altivec unavailable doesn't fit into this scheme... (0xf20).
- *    We'd like to avoid reserved vectors but OTOH we don't want to use
- *    just an available high number because tables (and copies) are of
- *    size LAST_VALID_EXC.
- *    So until there is a CPU that uses 0xA we'll just use that :-(
- */
-#define ASM_60X_VEC_VECTOR			0x0A
-#define ASM_60X_VEC_VECTOR_OFFSET		(0xf20)
-
-#define	ASM_SYS_VECTOR			0x0C
-#define	ASM_SYS_VECTOR_OFFSET		(ASM_SYS_VECTOR   << 8)
-
-#define	ASM_TRACE_VECTOR		0x0D
-#define	ASM_TRACE_VECTOR_OFFSET		(ASM_TRACE_VECTOR << 8)
-
-#if defined(ppc405)
-     /*
-      * vectors for PPC405
-      */
-#define	ASM_BOOKE_CRIT_VECTOR                 ASM_RESET_VECTOR
-#define	ASM_BOOKE_CRIT_VECTOR_OFFSET          (ASM_BOOKE_CRIT_VECTOR << 8)	
-
-#define	ASM_BOOKE_PIT_VECTOR	                0x10
-#define	ASM_BOOKE_PIT_VECTOR_OFFSET           (ASM_BOOKE_PIT_VECTOR      << 8)
-
-#define	ASM_BOOKE_ITLBMISS_VECTOR             0x11
-#define	ASM_BOOKE_ITLBMISS_VECTOR_OFFSET      (ASM_BOOKE_ITLBMISS_VECTOR << 8)
-
-#define	ASM_BOOKE_DTLBMISS_VECTOR             0x12
-#define	ASM_BOOKE_DTLBMISS_VECTOR_OFFSET      (ASM_BOOKE_DTLBMISS_VECTOR << 8)
-
-#define	ASM_BOOKE_FIT_VECTOR                  0x13
-#define	ASM_BOOKE_FIT_VECTOR_OFFSET	        (0x1010)
-
-#define	ASM_BOOKE_WDOG_VECTOR                 0x14
-#define	ASM_BOOKE_WDOG_VECTOR_OFFSET	        (0x1020)
-
-#define LAST_VALID_EXC                  ASM_BOOKE_WDOG_VECTOR
-
-/*
- * bit mask of all exception vectors, that are handled
- * as "critical" exsceptions (using SRR2/SRR3/rfci)
- * this value will be evaluated in the default exception entry/exit
- * code to determine, whether to use SRR0/SRR1/rfi or SRR2/SRR3/rfci
- */
-#define ASM_VECTORS_CRITICAL			\
-  (( 1 << (31-ASM_BOOKE_CRIT_VECTOR))			\
-   |(1 << (31-ASM_MACH_VECTOR))			\
-   |(1 << (31-ASM_WDOG_VECTOR)))
-
-#elif ( defined(mpc860) || defined(mpc821) )
-     /*
-      * vectors for MPC8xx
-      */
-
-/*
- * FIXME: even more vector names might get used in common,
- * but the names have diverged between different PPC families
- */
-#define	ASM_8XX_FLOATASSIST_VECTOR	      0x0E
-#define	ASM_8XX_FLOATASSIST_VECTOR_OFFSET (ASM_8XX_FLOATASSIST_VECTOR << 8)
-
-#define	ASM_8XX_SOFTEMUL_VECTOR	      0x10
-#define	ASM_8XX_SOFTEMUL_VECTOR_OFFSET    (ASM_8XX_SOFTEMUL_VECTOR << 8)
-
-#define	ASM_8XX_ITLBMISS_VECTOR           0x11
-#define	ASM_8XX_ITLBMISS_VECTOR_OFFSET    (ASM_8XX_ITLBMISS_VECTOR << 8)
-
-#define	ASM_8XX_DTLBMISS_VECTOR           0x12
-#define	ASM_8XX_DTLBMISS_VECTOR_OFFSET    (ASM_8XX_DTLBMISS_VECTOR << 8)
-
-#define	ASM_8XX_ITLBERROR_VECTOR          0x13
-#define	ASM_8XX_ITLBERROR_VECTOR_OFFSET   (ASM_8XX_ITLBERROR_VECTOR << 8)
-
-#define	ASM_8XX_DTLBERROR_VECTOR          0x14
-#define	ASM_8XX_DTLBERROR_VECTOR_OFFSET   (ASM_8XX_DTLBERROR_VECTOR << 8)
-
-#define ASM_8XX_DBREAK_VECTOR             0x1C
-#define ASM_8XX_DBREAK_VECTOR_OFFSET      (ASM_8XX_DBREAK_VECTOR << 8)
-
-#define ASM_8XX_IBREAK_VECTOR             0x1D
-#define ASM_8XX_IBREAK_VECTOR_OFFSET      (ASM_8XX_IBREAK_VECTOR << 8)
-
-#define ASM_8XX_PERIFBREAK_VECTOR         0x1E
-#define ASM_8XX_PERIFBREAK_VECTOR_OFFSET  (ASM_8XX_PERIFBREAK_VECTOR << 8)
-
-#define ASM_8XX_DEVPORT_VECTOR            0x1F
-#define ASM_8XX_DEVPORT_VECTOR_OFFSET     (ASM_8XX_DEVPORT_VECTOR_OFFSET << 8)
-
-#define LAST_VALID_EXC		ASM_8XX_DEVPORT_VECTOR
-
-#elif (defined(mpc555) || defined(mpc505))
-     /*
-      * vectorx for MPC5xx
-      */
-#define	ASM_5XX_FLOATASSIST_VECTOR	0x0E
-
-#define	ASM_5XX_SOFTEMUL_VECTOR	0x10
-
-#define	ASM_5XX_IPROT_VECTOR	0x13
-#define	ASM_5XX_DPROT_VECTOR	0x14
-
-#define ASM_5XX_DBREAK_VECTOR	0x1C
-#define ASM_5XX_IBREAK_VECTOR	0x1D
-#define ASM_5XX_MEBREAK_VECTOR	0x1E
-#define ASM_5XX_NMEBREAK_VECTOR	0x1F
-
-#define LAST_VALID_EXC		ASM_5XX_NMEBREAK_VECTOR
-
-#else /* 60x style cpu types */
-#define PPC_HAS_60X_VECTORS
-
-#define	ASM_60X_PERFMON_VECTOR		0x0F
-#define	ASM_60X_PERFMON_VECTOR_OFFSET	(ASM_60X_PERFMON_VECTOR << 8)
-
-#define	ASM_60X_IMISS_VECTOR		0x10
-
-#define	ASM_60X_DLMISS_VECTOR		0x11
-
-#define	ASM_60X_DSMISS_VECTOR		0x12
-
-#define	ASM_60X_ADDR_VECTOR			0x13
-#define	ASM_60X_ADDR_VECTOR_OFFSET	        (ASM_60X_ADDR_VECTOR  << 8)
-
-#define	ASM_60X_SYSMGMT_VECTOR		0x14
-#define	ASM_60X_SYSMGMT_VECTOR_OFFSET	(ASM_60X_SYSMGMT_VECTOR << 8)
-
-#define ASM_60X_VEC_ASSIST_VECTOR           0x16
-#define ASM_60X_VEC_ASSIST_VECTOR_OFFSET    (ASM_60X_VEC_ASSIST_VECTOR << 8)
-
-#define	ASM_60X_ITM_VECTOR                  0x17
-#define	ASM_60X_ITM_VECTOR_OFFSET           (ASM_60X_ITM_VECTOR   << 8)
-
-#define LAST_VALID_EXC                  ASM_60X_ITM_VECTOR
-
-#endif
-
-     /*
-      * bits to be set in MSR in exception entry code
-      */
-#if                     ( PPC_HAS_RI) && ( PPC_USE_MMU)
-#define PPC_MSR_EXC_BITS (PPC_MSR_RI   | PPC_MSR_DR | PPC_MSR_IR)
-#elif                   ( PPC_HAS_RI) && (!PPC_USE_MMU)
-#define PPC_MSR_EXC_BITS (PPC_MSR_RI)
-#elif                   (!PPC_HAS_RI) && ( PPC_USE_MMU)
-#define PPC_MSR_EXC_BITS (               PPC_MSR_DR | PPC_MSR_IR)
-#else
-#endif
-
-#else  /* __ppc_generic */
+/* DO NOT INTRODUCE #ifdef <cpu_flavor> in this file */
 
 #define	ASM_RESET_VECTOR 		             0x01
 #define	ASM_MACH_VECTOR			             0x02
@@ -286,8 +86,11 @@
 
 #define LAST_VALID_EXC                       0x1F
 
-#endif /* __ppc_generic */
-
+/* DO NOT USE -- this symbol is DEPRECATED
+ * (only used by libbsp/shared/vectors/vectors.S
+ * which should not be used by new BSPs).
+ */
+#define ASM_60X_VEC_VECTOR_OFFSET			0xf20
 
 #ifndef ASM
 
@@ -361,6 +164,8 @@ typedef struct {
 /*
  * Exceptions of different categories use different SRR registers
  * to save machine state (:-()
+ *
+ * For now, the CPU descriptions assume this fits into 8 bits.
  */
 typedef enum {
 	PPC_EXC_INVALID        = 0,
@@ -368,7 +173,7 @@ typedef enum {
 	PPC_EXC_405_CRITICAL   = 2,
 	PPC_EXC_BOOKE_CRITICAL = 3,
 	PPC_EXC_E500_MACHCHK   = 4,
-	PPC_EXC_ASYNC          = 0x10000,
+	PPC_EXC_ASYNC          = 0x80,
 } ppc_raw_exception_category;
 
 /*

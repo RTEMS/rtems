@@ -34,9 +34,13 @@
 
 #include <string.h>
 
-#ifdef __ppc_generic
-#define PPC_HAS_60X_VECTORS
-#endif
+/* DO NOT INTRODUCE #ifdef <cpu_flavor> in this file */
+
+/* enum ppc_raw_exception_category should fit into this type;
+ * we are setting up arrays of these for all known CPUs
+ * hence the attempt to save a few bytes.
+ */
+typedef uint8_t cat_ini_t;
 
 static rtems_raw_except_connect_data* 		raw_except_table;
 static rtems_raw_except_connect_data  		default_raw_except_entry;
@@ -45,6 +49,12 @@ static rtems_raw_except_global_settings* 	local_settings;
 void * codemove(void *, const void *, unsigned int, unsigned long);
 
 boolean bsp_exceptions_in_RAM = TRUE;
+
+/* DEPRECATED VARIABLE; we need this to support
+ * libbsp/powerpc/shared/vectors/vectors.S;
+ * new BSPs should NOT use this.
+ */
+uint32_t bsp_raw_vector_is_405_critical = 0;
 
 void* ppc_get_vector_addr(rtems_vector vector)
 {
@@ -67,7 +77,6 @@ void* ppc_get_vector_addr(rtems_vector vector)
    		vaddr = ASM_60X_VEC_VECTOR_OFFSET;
     break;
 
-#if defined(ASM_BOOKE_FIT_VECTOR)
   case ASM_BOOKE_FIT_VECTOR:
 #ifndef ASM_BOOKE_FIT_VECTOR_OFFSET
 #define ASM_BOOKE_FIT_VECTOR_OFFSET 0x1010
@@ -75,8 +84,6 @@ void* ppc_get_vector_addr(rtems_vector vector)
   	if ( PPC_405 == current_ppc_cpu )
     	vaddr = ASM_BOOKE_FIT_VECTOR_OFFSET;
     break;
-#endif
-#if defined(ASM_BOOKE_WDOG_VECTOR)
   case ASM_BOOKE_WDOG_VECTOR:
 #ifndef ASM_BOOKE_WDOG_VECTOR_OFFSET
 #define ASM_BOOKE_WDOG_VECTOR_OFFSET 0x1020
@@ -84,7 +91,6 @@ void* ppc_get_vector_addr(rtems_vector vector)
   	if ( PPC_405 == current_ppc_cpu )
     	vaddr = ASM_BOOKE_WDOG_VECTOR_OFFSET;
     break;
-#endif
   default:
     break;
   }
@@ -94,115 +100,88 @@ void* ppc_get_vector_addr(rtems_vector vector)
   return ((void*)  (vaddr + 0xfff00000));
 }
 
-
-#if ( defined(mpc860) || defined(mpc821) || defined(__ppc_generic) )
-
-static ppc_raw_exception_category mpc860_vector_is_valid(rtems_vector vector)
-{
-  switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_FLOAT_VECTOR:
-  case ASM_DEC_VECTOR:
+static cat_ini_t mpc_860_vector_categories[LAST_VALID_EXC + 1] = {
+  [ ASM_RESET_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_MACH_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_ALIGN_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_FLOAT_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_DEC_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
     
-  case ASM_SYS_VECTOR:
-  case ASM_TRACE_VECTOR:
-  case ASM_8XX_FLOATASSIST_VECTOR:
+  [ ASM_SYS_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_TRACE_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_FLOATASSIST_VECTOR ] = PPC_EXC_CLASSIC,
 
-  case ASM_8XX_SOFTEMUL_VECTOR:
-  case ASM_8XX_ITLBMISS_VECTOR:
-  case ASM_8XX_DTLBMISS_VECTOR:
-  case ASM_8XX_ITLBERROR_VECTOR:
-  case ASM_8XX_DTLBERROR_VECTOR:
+  [ ASM_8XX_SOFTEMUL_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_ITLBMISS_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_DTLBMISS_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_ITLBERROR_VECTOR   ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_DTLBERROR_VECTOR   ] = PPC_EXC_CLASSIC,
 
-  case ASM_8XX_DBREAK_VECTOR:
-  case ASM_8XX_IBREAK_VECTOR:
-  case ASM_8XX_PERIFBREAK_VECTOR:
-  case ASM_8XX_DEVPORT_VECTOR:
-    return PPC_EXC_CLASSIC;
-  default: return PPC_EXC_INVALID;
-  }
-}
-#endif
+  [ ASM_8XX_DBREAK_VECTOR      ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_IBREAK_VECTOR      ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_PERIFBREAK_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_8XX_DEVPORT_VECTOR     ] = PPC_EXC_CLASSIC,
+};
 
-#if (defined(mpc555) || defined(mpc505) || defined(__ppc_generic))
 
-static ppc_raw_exception_category mpc5xx_vector_is_valid(rtems_vector vector)
-{
-  switch (current_ppc_cpu) {
-    case PPC_5XX:
-      switch(vector) {
-        case ASM_RESET_VECTOR:
-        case ASM_MACH_VECTOR:
+static cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
+  [ ASM_RESET_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_MACH_VECTOR            ] = PPC_EXC_CLASSIC,
 
-        case ASM_EXT_VECTOR:
-        case ASM_ALIGN_VECTOR:
-        case ASM_PROG_VECTOR:
-        case ASM_FLOAT_VECTOR:
-        case ASM_DEC_VECTOR:
+  [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_ALIGN_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_FLOAT_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_DEC_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
 
-        case ASM_SYS_VECTOR:
-        case ASM_TRACE_VECTOR:
-        case ASM_5XX_FLOATASSIST_VECTOR:
+  [ ASM_SYS_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_TRACE_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_5XX_FLOATASSIST_VECTOR ] = PPC_EXC_CLASSIC,
 
-        case ASM_5XX_SOFTEMUL_VECTOR:
+  [ ASM_5XX_SOFTEMUL_VECTOR    ] = PPC_EXC_CLASSIC,
 
-        case ASM_5XX_IPROT_VECTOR:
-        case ASM_5XX_DPROT_VECTOR:
+  [ ASM_5XX_IPROT_VECTOR       ] = PPC_EXC_CLASSIC,
+  [ ASM_5XX_DPROT_VECTOR       ] = PPC_EXC_CLASSIC,
 
-        case ASM_5XX_DBREAK_VECTOR:
-        case ASM_5XX_IBREAK_VECTOR:
-        case ASM_5XX_MEBREAK_VECTOR:
-        case ASM_5XX_NMEBREAK_VECTOR:
-          return PPC_EXC_CLASSIC;
-        default: 
-          return PPC_EXC_INVALID;
-      }
-    default:
-      printk("Please complete libcpu/powerpc/shared/new-exceptions/raw_exception.c\n");
-      printk("current_ppc_cpu = %x\n", current_ppc_cpu);
-      return PPC_EXC_INVALID;
-  }
-}
-#endif
+  [ ASM_5XX_DBREAK_VECTOR      ] = PPC_EXC_CLASSIC,
+  [ ASM_5XX_IBREAK_VECTOR      ] = PPC_EXC_CLASSIC,
+  [ ASM_5XX_MEBREAK_VECTOR     ] = PPC_EXC_CLASSIC,
+  [ ASM_5XX_NMEBREAK_VECTOR    ] = PPC_EXC_CLASSIC,
+};
 
-#if ( defined(ppc405) || defined(__ppc_generic) )
-static ppc_raw_exception_category ppc405_vector_is_valid(rtems_vector vector)
+static cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
+  [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_PIT_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
 
-{
-ppc_raw_exception_category rval = PPC_EXC_INVALID;
-  switch(vector) {
-  case ASM_EXT_VECTOR:
-  case ASM_BOOKE_PIT_VECTOR:
+  [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_ALIGN_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_SYS_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_BOOKE_ITLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_BOOKE_DTLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
 
-  	rval |= PPC_EXC_ASYNC;
+  [ ASM_BOOKE_CRIT_VECTOR      ] = PPC_EXC_405_CRITICAL | PPC_EXC_ASYNC,
+  [ ASM_MACH_VECTOR            ] = PPC_EXC_405_CRITICAL,
+};
 
-	/* fall through */
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_SYS_VECTOR:
-  case ASM_BOOKE_ITLBMISS_VECTOR:
-  case ASM_BOOKE_DTLBMISS_VECTOR:
 
-  	return rval | PPC_EXC_CLASSIC;
-
-  case ASM_RESET_VECTOR: /* fall through */
-  	rval |= PPC_EXC_ASYNC;
-  case ASM_MACH_VECTOR:
-    return rval | PPC_EXC_405_CRITICAL;
-  default: return PPC_EXC_INVALID;
-  }
-}
-#endif /* defined(ppc405) */
-
-#if defined(PPC_HAS_60X_VECTORS) /* 60x style cpu types */
+#define PPC_BASIC_VECS \
+  [ ASM_RESET_VECTOR      ] = PPC_EXC_CLASSIC, \
+  [ ASM_MACH_VECTOR       ] = PPC_EXC_CLASSIC, \
+  [ ASM_PROT_VECTOR       ] = PPC_EXC_CLASSIC, \
+  [ ASM_ISI_VECTOR        ] = PPC_EXC_CLASSIC, \
+  [ ASM_EXT_VECTOR        ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC, \
+  [ ASM_ALIGN_VECTOR      ] = PPC_EXC_CLASSIC, \
+  [ ASM_PROG_VECTOR       ] = PPC_EXC_CLASSIC, \
+  [ ASM_FLOAT_VECTOR      ] = PPC_EXC_CLASSIC, \
+  [ ASM_DEC_VECTOR        ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC, \
+  [ ASM_SYS_VECTOR        ] = PPC_EXC_CLASSIC, \
+  [ ASM_TRACE_VECTOR      ] = PPC_EXC_CLASSIC
 
 static ppc_raw_exception_category altivec_vector_is_valid(rtems_vector vector)
 {
@@ -218,184 +197,99 @@ static ppc_raw_exception_category altivec_vector_is_valid(rtems_vector vector)
   return PPC_EXC_INVALID;
 }
 
-static ppc_raw_exception_category mpc750_vector_is_valid(rtems_vector vector)
+static cat_ini_t mpc_750_vector_categories[LAST_VALID_EXC + 1] = {
+	PPC_BASIC_VECS,
+  [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_60X_ADDR_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_CLASSIC,
+};
 
-{
-  switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_FLOAT_VECTOR:
-  case ASM_DEC_VECTOR:
-  case ASM_SYS_VECTOR:
-  case ASM_TRACE_VECTOR:
-  case ASM_60X_ADDR_VECTOR:
-  case ASM_60X_SYSMGMT_VECTOR:
-  case ASM_60X_ITM_VECTOR:
-    return PPC_EXC_CLASSIC;
-  default: return PPC_EXC_INVALID;
-  }
-}
+static cat_ini_t psim_vector_categories[LAST_VALID_EXC + 1] = {
+  [ ASM_RESET_VECTOR       ] = PPC_EXC_CLASSIC,
+  [ ASM_MACH_VECTOR        ] = PPC_EXC_CLASSIC,
+  [ ASM_PROT_VECTOR        ] = PPC_EXC_CLASSIC,
+  [ ASM_ISI_VECTOR         ] = PPC_EXC_CLASSIC,
+  [ ASM_EXT_VECTOR         ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_ALIGN_VECTOR       ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR        ] = PPC_EXC_CLASSIC,
+  [ ASM_FLOAT_VECTOR       ] = PPC_EXC_CLASSIC,
+  [ ASM_DEC_VECTOR         ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_SYS_VECTOR         ] = PPC_EXC_INVALID,
+  [ ASM_TRACE_VECTOR       ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_PERFMON_VECTOR ] = PPC_EXC_INVALID,
+  [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_60X_IMISS_VECTOR   ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_DLMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_DSMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ADDR_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
+};
 
-static ppc_raw_exception_category PSIM_vector_is_valid(rtems_vector vector)
-{
-  switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_FLOAT_VECTOR:
-  case ASM_DEC_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_SYS_VECTOR:
-    return PPC_EXC_INVALID;
-  case ASM_TRACE_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_PERFMON_VECTOR:
-    return PPC_EXC_INVALID;
-  case ASM_60X_IMISS_VECTOR: /* fall through */
-  case ASM_60X_DLMISS_VECTOR:
-  case ASM_60X_DSMISS_VECTOR:
-  case ASM_60X_ADDR_VECTOR:
-  case ASM_60X_SYSMGMT_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_ITM_VECTOR:
-    return PPC_EXC_INVALID;
-  }
-  return PPC_EXC_INVALID;
-}
+static cat_ini_t mpc_603_vector_categories[LAST_VALID_EXC + 1] = {
+	PPC_BASIC_VECS,
+  [ ASM_60X_PERFMON_VECTOR ] = PPC_EXC_INVALID,
+  [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_60X_IMISS_VECTOR   ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_DLMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_DSMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ADDR_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
+};
 
-static ppc_raw_exception_category mpc603_vector_is_valid(rtems_vector vector)
-{
-  switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_FLOAT_VECTOR:
-  case ASM_DEC_VECTOR:
-  case ASM_SYS_VECTOR:
-  case ASM_TRACE_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_PERFMON_VECTOR:
-    return PPC_EXC_INVALID;
-  case ASM_60X_IMISS_VECTOR: /* fall through */
-  case ASM_60X_DLMISS_VECTOR:
-  case ASM_60X_DSMISS_VECTOR:
-  case ASM_60X_ADDR_VECTOR:
-  case ASM_60X_SYSMGMT_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_ITM_VECTOR:
-    return PPC_EXC_INVALID;
-  }
-  return PPC_EXC_INVALID;
-}
+static cat_ini_t mpc_604_vector_categories[LAST_VALID_EXC + 1] = {
+	PPC_BASIC_VECS,
+  [ ASM_60X_PERFMON_VECTOR ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_IMISS_VECTOR   ] = PPC_EXC_INVALID,
+  [ ASM_60X_DLMISS_VECTOR  ] = PPC_EXC_INVALID,
+  [ ASM_60X_DSMISS_VECTOR  ] = PPC_EXC_INVALID,
+  [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_60X_ADDR_VECTOR    ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
+};
 
-static ppc_raw_exception_category mpc604_vector_is_valid(rtems_vector vector)
-{
-  switch(vector) {
-  case ASM_RESET_VECTOR: /* fall through */
-  case ASM_MACH_VECTOR:
-  case ASM_PROT_VECTOR:
-  case ASM_ISI_VECTOR:
-  case ASM_EXT_VECTOR:
-  case ASM_ALIGN_VECTOR:
-  case ASM_PROG_VECTOR:
-  case ASM_FLOAT_VECTOR:
-  case ASM_DEC_VECTOR:
-  case ASM_SYS_VECTOR:
-  case ASM_TRACE_VECTOR:
-  case ASM_60X_PERFMON_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_IMISS_VECTOR: /* fall through */
-  case ASM_60X_DLMISS_VECTOR:
-  case ASM_60X_DSMISS_VECTOR:
-    return PPC_EXC_INVALID;
-  case ASM_60X_ADDR_VECTOR: /* fall through */
-  case ASM_60X_SYSMGMT_VECTOR:
-    return PPC_EXC_CLASSIC;
-  case ASM_60X_ITM_VECTOR:
-    return PPC_EXC_INVALID;
-  }
-  return PPC_EXC_INVALID;
-}
+static cat_ini_t e500_vector_categories[LAST_VALID_EXC + 1] = {
+  [ ASM_MACH_VECTOR                 ] = PPC_EXC_E500_MACHCHK,
 
-static ppc_raw_exception_category e500_vector_is_valid(rtems_vector vector)
-{
-ppc_raw_exception_category rval = PPC_EXC_INVALID;
+  [ ASM_BOOKE_CRIT_VECTOR           ] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_WDOG_VECTOR           ] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+  [ ASM_TRACE_VECTOR                ] = PPC_EXC_BOOKE_CRITICAL,
 
-	switch (vector) {
-	case ASM_MACH_VECTOR:
-		return PPC_EXC_E500_MACHCHK;
+  [ ASM_EXT_VECTOR                  ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
+  /* FIXME: should eventually go to the PIT vector + cleanup clock driver */
+  [ ASM_DEC_VECTOR                  ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_FIT_VECTOR            ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
 
-#if defined(ASM_BOOKE_CRIT_VECTOR)
-	case ASM_BOOKE_CRIT_VECTOR:
-#endif
-#if defined(ASM_BOOKE_WDOG_VECTOR)
-	case ASM_BOOKE_WDOG_VECTOR:
-#endif
-#if defined(ASM_BOOKE_CRIT_VECTOR) || defined(ASM_BOOKE_WDOG_VECTOR)
-		rval |= PPC_EXC_ASYNC;
-		/* fall thru */
-#endif
-	case ASM_TRACE_VECTOR:
-		return rval | PPC_EXC_BOOKE_CRITICAL;
+  [ ASM_PROT_VECTOR                 ] = PPC_EXC_CLASSIC,
+  [ ASM_ISI_VECTOR                  ] = PPC_EXC_CLASSIC,
+  [ ASM_ALIGN_VECTOR                ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR                 ] = PPC_EXC_CLASSIC,
+  [ ASM_FLOAT_VECTOR                ] = PPC_EXC_CLASSIC,
+  [ ASM_SYS_VECTOR                  ] = PPC_EXC_CLASSIC,
+  [ /* APU unavailable      */ 0x0b ] = PPC_EXC_CLASSIC,
 
-	case ASM_EXT_VECTOR:
-	case ASM_DEC_VECTOR:
-#if defined(ASM_BOOKE_CRIT_VECTOR)
-	case ASM_BOOKE_FIT_VECTOR:
-#endif
-		rval |= PPC_EXC_ASYNC;
+  [ ASM_60X_DLMISS_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_DSMISS_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_VEC_VECTOR              ] = PPC_EXC_CLASSIC,
+  [ ASM_60X_PERFMON_VECTOR          ] = PPC_EXC_CLASSIC,
 
-		/* fall thru */
-
-	case ASM_PROT_VECTOR:
-	case ASM_ISI_VECTOR:
-	case ASM_ALIGN_VECTOR:
-	case ASM_PROG_VECTOR:
-	case ASM_FLOAT_VECTOR:
-	case ASM_SYS_VECTOR:
-	case /* APU unavailable      */ 0x0b:
-
-	case ASM_60X_DLMISS_VECTOR:
-	case ASM_60X_DSMISS_VECTOR:
-	case ASM_60X_VEC_VECTOR:
-	case ASM_60X_PERFMON_VECTOR:
-
-	case /* emb FP data          */ 0x15:
-	case /* emb FP round         */ 0x16:
-		return rval | PPC_EXC_CLASSIC;
-	default:
-		break;
-	}
-	return PPC_EXC_INVALID;
-}
-
-#endif /* 60x style cpu types */
+  [ /* emb FP data          */ 0x15 ] = PPC_EXC_CLASSIC,
+  [ /* emb FP round         */ 0x16 ] = PPC_EXC_CLASSIC,
+};
 
 ppc_raw_exception_category ppc_vector_is_valid(rtems_vector vector)
 {
 ppc_raw_exception_category rval = PPC_EXC_INVALID;
 
+	if ( vector > LAST_VALID_EXC )
+		return PPC_EXC_INVALID;
+
      switch (current_ppc_cpu) {
-#if defined(PPC_HAS_60X_VECTORS)
 	case PPC_7400:
             if ( ( rval = altivec_vector_is_valid(vector)) )
                 return rval;
             /* else fall thru */
         case PPC_750:
-            rval = mpc750_vector_is_valid(vector);
+			rval = mpc_750_vector_categories[vector];
             break;
         case PPC_7455:   /* Kate Feng */
         case PPC_7457: 
@@ -405,7 +299,7 @@ ppc_raw_exception_category rval = PPC_EXC_INVALID;
         case PPC_604:
         case PPC_604e:
         case PPC_604r:
-            rval = mpc604_vector_is_valid(vector);
+			rval = mpc_604_vector_categories[vector];
             break;
         case PPC_603:
         case PPC_603e:
@@ -417,40 +311,29 @@ ppc_raw_exception_category rval = PPC_EXC_INVALID;
         case PPC_e300c1:
         case PPC_e300c2:
         case PPC_e300c3:
-            rval = mpc603_vector_is_valid(vector);
+			rval = mpc_603_vector_categories[vector];
             break;
         case PPC_PSIM:
-            rval = PSIM_vector_is_valid(vector);
+			rval = psim_vector_categories[vector];
             break;
 		case PPC_8540:
-			rval = e500_vector_is_valid(vector);
+			rval = e500_vector_categories[vector];
 			break;
-#endif
-#if ( defined(mpc555) || defined(mpc505) || defined(__ppc_generic) )
         case PPC_5XX:
-            rval = mpc5xx_vector_is_valid(vector);
+			rval = mpc_5xx_vector_categories[vector];
             break;
-#endif
-#if ( defined(mpc860) || defined(mpc821) || defined(__ppc_generic) )
         case PPC_860:
-            rval = mpc860_vector_is_valid(vector);
+			rval = mpc_860_vector_categories[vector];
             break;
-#endif
-#if ( defined(ppc405) || defined(__ppc_generic) )
         case PPC_405:
-            rval = ppc405_vector_is_valid(vector);
+			rval = ppc_405_vector_categories[vector];
             break;
-#endif
         default:
             printk("Please complete "
                    "libcpu/powerpc/new-exceptions/raw_exception.c\n"
                    "current_ppc_cpu = %x\n", current_ppc_cpu);
             return PPC_EXC_INVALID;
      }
-	 /* set ASYNC flag for all CPU flavors EE and DEC */
-	 if ( ASM_EXT_VECTOR == rval || ASM_DEC_VECTOR == rval ) {
-	 	rval |= PPC_EXC_ASYNC;
-	 }
      return rval;
 }
 
@@ -571,11 +454,18 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 
     rtems_interrupt_disable(k);
 
-#if defined(ASM_BOOKE_CRIT_VECTOR)
 	if ( ppc_cpu_is_bookE() ) {
 		e500_setup_raw_exceptions();
 	}
-#endif
+
+	/* Need to support libbsp/powerpc/shared/vectors.S
+	 * (hopefully this can go away some day)
+	 * We also rely on LAST_VALID_EXC < 32
+	 */
+	for ( i=0; i <= LAST_VALID_EXC; i++ ) {
+		if ( PPC_EXC_405_CRITICAL == ppc_vector_is_valid( i ) )
+			bsp_raw_vector_is_405_critical |= (1<<i);
+	}
 
 	for (i=0; i < config->exceptSize; i++) {
 		if ( PPC_EXC_INVALID == ppc_vector_is_valid(raw_except_table[i].hdl.vector) ) {
