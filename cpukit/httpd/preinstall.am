@@ -29,15 +29,15 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if LIBNETWORKING
+$(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems_webserver.h
+
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/goahead/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/goahead
 	@: > $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/goahead/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems_webserver.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems_webserver.h
 
 $(PROJECT_INCLUDE)/goahead/ej.h: ej.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/ej.h
