@@ -1,3 +1,10 @@
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/powerpc/powerpc.h: added a #ifdef __ppc_generic
+	branch. The goal is eventually to make this the starting
+	point for cleanup (remove as many branches as possible;
+	replace by run-time tests if necessary).
+
 2007-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* new-exceptions/raw_exception.c: Conditionalize call to

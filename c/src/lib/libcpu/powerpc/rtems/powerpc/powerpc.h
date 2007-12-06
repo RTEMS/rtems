@@ -272,6 +272,12 @@ extern "C" {
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
 #define PPC_USE_MULTIPLE	1
+
+#elif defined(__ppc_generic)
+/* PPC_INTERRUPT_MAX and PPC_CACHE_ALIGNMENT already defined by score/powerc.h */
+#ifndef PPC_ABI
+#define PPC_ABI PPC_ABI_SVR4
+#endif
 #else
  
 #error "Unsupported CPU Model"
