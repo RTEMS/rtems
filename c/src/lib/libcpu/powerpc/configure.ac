@@ -51,7 +51,8 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "mpc8240" \
 || test "$RTEMS_CPU_MODEL" = "mpc8245" \
 || test "$RTEMS_CPU_MODEL" = "mpc8260" \
-|| test "$RTEMS_CPU_MODEL" = "mpc83xx" )
+|| test "$RTEMS_CPU_MODEL" = "mpc83xx" \
+|| test "$RTEMS_CPU_MODEL" = "e500")
 
 ## test on CPU type
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
@@ -76,6 +77,8 @@ AM_CONDITIONAL(mpc83xx, test "$RTEMS_CPU_MODEL" = "mpc83xx")
 AM_CONDITIONAL(ppc403,[test "$RTEMS_CPU_MODEL" = "ppc403" \
 || test "$RTEMS_CPU_MODEL" = "ppc405"])
 AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
+
+AM_CONDITIONAL(e500, test "$RTEMS_CPU_MODEL" = "e500")
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")

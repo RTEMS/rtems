@@ -150,6 +150,11 @@ $(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/l
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
 endif
+if e500
+$(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
+endif
 if mpc8xx
 $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc8xx

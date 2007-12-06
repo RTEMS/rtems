@@ -1,5 +1,11 @@
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am, configure.ac, preinstall.am, 
+	new-exceptions/e500_raw_exc_init.c: Started adding
+	support for e500 CPU. Most stuff is borrowed from mpc6xx.
+
+2007-12-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* rtems/powerpc/powerpc.h: added a #ifdef __ppc_generic
 	branch. The goal is eventually to make this the starting
 	point for cleanup (remove as many branches as possible;

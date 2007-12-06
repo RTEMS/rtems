@@ -29,7 +29,8 @@ old_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 else
 noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
 new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
-    new-exceptions/cpu_asm.S
+    new-exceptions/cpu_asm.S \
+	new-exceptions/e500_raw_exc_init.c
 new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -236,6 +237,22 @@ noinst_PROGRAMS += mpc6xx/timer.rel
 mpc6xx_timer_rel_SOURCES = mpc6xx/timer/timer.c
 mpc6xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+if e500
+## mpc6xx/clock
+include_libcpu_HEADERS += mpc6xx/clock/c_clock.h
+
+noinst_PROGRAMS += e500/clock.rel
+e500_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
+e500_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+e500_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## mpc6xx/timer
+noinst_PROGRAMS += e500/timer.rel
+e500_timer_rel_SOURCES = mpc6xx/timer/timer.c
+e500_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+e500_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 EXTRA_DIST += mpc8xx/README
