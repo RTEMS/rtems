@@ -63,6 +63,7 @@ typedef struct {
 	unsigned is_60x             : 1;
 	unsigned has_8_bats			: 1;
 	unsigned has_epic           : 1;
+	unsigned has_shadowed_gprs  : 1;
 } ppc_feature_t;
 
 extern ppc_feature_t   current_ppc_features;
@@ -90,6 +91,7 @@ _PPC_FEAT_DECL(is_bookE)
 _PPC_FEAT_DECL(is_60x)
 _PPC_FEAT_DECL(has_8_bats)
 _PPC_FEAT_DECL(has_epic)
+_PPC_FEAT_DECL(has_shadowed_gprs)
 
 #undef _PPC_FEAT_DECL
 #endif /* ASM */

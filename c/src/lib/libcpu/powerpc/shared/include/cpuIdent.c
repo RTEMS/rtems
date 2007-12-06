@@ -131,7 +131,20 @@ ppc_cpu_id_t get_ppc_cpu_type()
 
   switch ( current_ppc_cpu ) {
   	case PPC_860:
-		current_ppc_features.has_16byte_clne	=1;
+		current_ppc_features.has_16byte_clne	= 1;
+	default:
+	break;
+  }
+
+  switch ( current_ppc_cpu ) {
+    case PPC_603e:
+    case PPC_603ev:
+    case PPC_603le:
+    case PPC_e300c1:
+    case PPC_e300c2:
+    case PPC_e300c3:
+    case PPC_8240:
+		current_ppc_features.has_shadowed_gprs  = 1;
 	default:
 	break;
   }

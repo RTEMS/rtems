@@ -1,5 +1,10 @@
 2007-12-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/include/cpuIdent.h, shared/include/cpuIdent.c:
+	added feature check for 603 'TLBMISS exception GPRS shadowing'.
+
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h:
 	Removed all #ifdef <cpu_flavor>. All exception vectors are now
 	always defined.
