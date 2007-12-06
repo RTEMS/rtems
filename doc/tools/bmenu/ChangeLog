@@ -1,3 +1,9 @@
+2007-12-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* chain.c: Reflect removal of isr.h.
+	* isr.h: Remove.
+	* Makefile.am: Remove isr.h.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
