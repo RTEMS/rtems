@@ -12,6 +12,8 @@
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
+
+#define MSR_EXC_BITS (MSR_DR | MSR_IR | MSR_RI)
 		
 #define SYNC \
 	sync; \
@@ -70,6 +72,10 @@ SYM (push_normalized_frame):
 	mflr	r3
 	/* mask upper bits in case vectors are in the high area (psim) */
 	rlwinm  r3, r3, 32-5, 20, 31
+
+	/* FIXME: should do this really only on ALTIVEC-capable CPU
+	 * Hopefully, this vector offset doesn't apply to any other one...
+	 */
 #if defined(ASM_60X_VEC_VECTOR)
 	/*
 	 * Remap altivec unavaliable (0xf20) to its vector number...
@@ -85,13 +91,15 @@ SYM (push_normalized_frame):
 	srwi	r3,r3,3
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
+	stw	r4, GPR4_OFFSET(r1)
 	/* R2 should never change (EABI: pointer to .sdata2) - we
 	 * save it nevertheless..
 	 */
 	stw	r2, GPR2_OFFSET(r1)
-#if defined(ASM_VECTORS_CRITICAL)
-	lis	r0,ASM_VECTORS_CRITICAL@h
-	ori	r0,r0,ASM_VECTORS_CRITICAL@l
+
+	/* Fetch 405 critical exception state from SRR2/SRR3 */
+	lis r4, bsp_raw_vector_is_405_critical@ha
+	lwz r0, bsp_raw_vector_is_405_critical@l(r4)
 	rlwnm.  r0,r0,r3,0,0
 	beq	1f
 	/*
@@ -104,7 +112,6 @@ SYM (push_normalized_frame):
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 	b	2f
 1:		
-#endif	
 	mfsrr0  r3
 	stw	r3, SRR0_FRAME_OFFSET(r1)
 	mfsrr1  r3
@@ -119,7 +126,7 @@ SYM (push_normalized_frame):
 	 * series of individual "stw" but who cares about performance
 	 * for the DEFAULT exception handler?
 	 */
-	stmw	r4, GPR4_OFFSET(r1)	/* save R4->R31 */
+	stmw	r5, GPR5_OFFSET(r1)	/* save R5->R31 */
 
 	mfctr	r30
 	stw	r30,  EXC_CTR_OFFSET(r1)
@@ -138,15 +145,18 @@ SYM (push_normalized_frame):
 	 */
 	stw     r3, GPR1_OFFSET(r1)
 
-#if defined(PPC_MSR_EXC_BITS)
 	/*
 	 * Enable data and instruction address translation, exception nesting
+	 * by merging original bits from saved SRR1.
 	 */
+	lwz     r0, SRR1_FRAME_OFFSET(r1)
+	li      r3, MSR_EXC_BITS
+	and     r0, r0, r3
 	mfmsr	r3
-	ori     r3,r3, PPC_MSR_EXC_BITS
+	or      r3, r3, r0
 	mtmsr   r3
 	SYNC
-#endif
+
 	/*
 	 * Call C exception handler
 	 */
@@ -181,21 +191,19 @@ SYM (push_normalized_frame):
 	/*
 	 * Disable data and instruction translation. Mark path non recoverable
 	 */
-#if defined(PPC_MSR_EXC_BITS)
+	li      r0, MSR_EXC_BITS
 	mfmsr	r3
-	xori	r3, r3, PPC_MSR_EXC_BITS
+	andc	r3, r3, r0
 	mtmsr   r3
 	SYNC
-#endif
-#if defined(ASM_VECTORS_CRITICAL)
 	/*
 	 * determine, whether to restore from
 	 * srr0/1 or srr2/3
 	 */
-	lis	r0,ASM_VECTORS_CRITICAL@h
-	lwz	r3,EXCEPTION_NUMBER_OFFSET(r1)
-	ori	r0,r0,ASM_VECTORS_CRITICAL@l
-	rlwnm.  r0,r0,r3,0,0
+	lis r3, bsp_raw_vector_is_405_critical@ha
+	lwz	r0,EXCEPTION_NUMBER_OFFSET(r1)
+	lwz r3, bsp_raw_vector_is_405_critical@l(r3)
+	rlwnm.  r3,r3,r0,0,0
 	beq	1f
 	/*
 	 * NOTE: srr2/3 are stored in slots SRR0/1
@@ -215,7 +223,6 @@ SYM (push_normalized_frame):
 	SYNC
 	rfci
 1:		
-#endif	
 	/*
 	 * Restore rfi related settings
 	 */

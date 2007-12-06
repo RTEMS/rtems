@@ -1,3 +1,12 @@
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/irq_asm.S, shared/vectors/vectors.S:
+	Replaced use of hardcoded PPC_EXC_MSR_BITS by a
+	run-time method to determine these bits (use settings
+	effective before exception occurred).
+	Replaced use of hardcoded ASM_VECTORS_CRITICAL by
+	'bsp_raw_vector_is_405_critical' variable.
+
 2007-12-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/irq_supp.h: removed stray '*/'. Removed

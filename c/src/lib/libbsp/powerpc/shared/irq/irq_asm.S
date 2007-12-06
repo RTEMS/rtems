@@ -24,6 +24,8 @@
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
 
+#define MSR_EXC_BITS (MSR_DR | MSR_IR | MSR_RI)
+
 #define SYNC \
 	sync; \
 	isync
@@ -145,14 +147,15 @@ SYM (shared_raw_irq_code_entry):
 	stw	r0, SRR0_FRAME_OFFSET(r1)
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 
-#if defined(PPC_MSR_EXC_BITS)
-	mfmsr	r3
 	/*
 	 * Enable data and instruction address translation, exception recovery
+	 * by merging original bits from saved SRR1.
 	 */
-	ori     r3, r3, PPC_MSR_EXC_BITS
+	li      r0, MSR_EXC_BITS
+	and     r0, r0, r3
+	mfmsr	r3
+	or      r3, r3, r0
 	mtmsr   r3
-#endif
 	SYNC
 	/*
 	 * Push C scratch registers on the current stack. It may
@@ -337,12 +340,11 @@ nested:
 	/*
 	 * Disable data and instruction translation. Make path non recoverable...
 	 */
-#if defined(PPC_MSR_EXC_BITS)
+	li      r0, MSR_EXC_BITS
 	mfmsr	r3
-	xori	r3, r3, PPC_MSR_EXC_BITS
+	andc	r3, r3, r0
 	mtmsr   r3
 	SYNC
-#endif
 	/*
 	 * Restore rfi related settings
 	 */
@@ -390,12 +392,11 @@ easy_exit:
 	 * Disable nested exception processing, data and instruction
 	 * translation.
 	 */
-#if defined(PPC_MSR_EXC_BITS)
+	li      r0, MSR_EXC_BITS
 	mfmsr	r3
-	xori	r3, r3, PPC_MSR_EXC_BITS
+	andc	r3, r3, r0
 	mtmsr   r3
 	SYNC
-#endif
 	/*
 	 * Restore rfi related settings
 	 */
