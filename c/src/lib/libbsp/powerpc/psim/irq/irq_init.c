@@ -56,6 +56,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
+  rtems_raw_except_connect_data vectorDesc;
   int i;
   
   /*
