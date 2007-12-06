@@ -176,7 +176,6 @@ typedef void ( *ppc_isr_entry )( int, struct CPU_Interrupt_frame * );
  *  Processor defined structures required for cpukit/score.
  */
 
-#ifndef ASM
 /*
  *  The following type defines an entry in the PPC's trap table.
  *

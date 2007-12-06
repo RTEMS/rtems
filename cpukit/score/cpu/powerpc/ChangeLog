@@ -1,3 +1,7 @@
+2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/old-exceptions/cpu.h: Remove extra ifndef.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
