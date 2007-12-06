@@ -1,5 +1,10 @@
 2007-12-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vectors/vectors_init.c: replaced 
+	switch ( current_ppc_cpu ) { } check by feature check.
+
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/irq_asm.S, shared/vectors/vectors.S:
 	Replaced use of hardcoded PPC_EXC_MSR_BITS by a
 	run-time method to determine these bits (use settings

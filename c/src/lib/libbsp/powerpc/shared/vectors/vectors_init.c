@@ -150,7 +150,6 @@ int exception_always_enabled(const rtems_raw_except_connect_data* ptr)
 void initialize_exceptions()
 {
   int i;
-  int has_shadowed_gprs = 0;
 
   /*
    * Initialize pointer used by low level execption handling
@@ -171,24 +170,13 @@ void initialize_exceptions()
    */
   exception_config.defaultRawEntry.hdl.raw_hdl_size = (unsigned) default_exception_vector_code_prolog_size;
 
-  switch ( get_ppc_cpu_type() ) {
-    case PPC_603e:
-    case PPC_603ev:
-    case PPC_603le:
-    case PPC_e300c1:
-    case PPC_e300c2:
-    case PPC_e300c3:
-    case PPC_8240:
-      has_shadowed_gprs = 1;  
-    default: break;
-  }
   for (i=0; i <= exception_config.exceptSize; i++) {
     if (!ppc_vector_is_valid (i)) {
       continue;
     }
     exception_table[i].exceptIndex	= i;
 #if defined(PPC_HAS_60X_VECTORS)
-    if ( has_shadowed_gprs
+    if ( ppc_cpu.has_shadowed_gprs()
          && (   ASM_60X_IMISS_VECTOR  == i
              || ASM_60X_DLMISS_VECTOR == i
              || ASM_60X_DSMISS_VECTOR == i ) ) {
