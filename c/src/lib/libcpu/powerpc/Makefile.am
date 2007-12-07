@@ -29,8 +29,7 @@ old_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 else
 noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
 new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
-    new-exceptions/cpu_asm.S \
-	new-exceptions/e500_raw_exc_init.c
+    new-exceptions/cpu_asm.S 
 new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -39,7 +38,8 @@ if !mpc5xx
 include_libcpu_HEADERS += new-exceptions/raw_exception.h
 noinst_PROGRAMS += new-exceptions/raw_exception.rel
 new_exceptions_raw_exception_rel_SOURCES = new-exceptions/raw_exception.c \
-    new-exceptions/asm_utils.S
+    new-exceptions/asm_utils.S \
+	new-exceptions/e500_raw_exc_init.c
 new_exceptions_raw_exception_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_raw_exception_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
