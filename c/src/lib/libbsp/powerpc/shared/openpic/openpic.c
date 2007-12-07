@@ -492,6 +492,28 @@ void openpic_maptimer(unsigned int timer, unsigned int cpumask)
     openpic_write(&OpenPIC->Global.Timer[timer].Destination, cpumask);
 }
 
+    /*
+     *  Set base count and / or enable / disable interrupt.
+     */
+
+
+void openpic_settimer(unsigned int timer, unsigned int base_count, int irq_enable)
+{
+	check_arg_timer(timer);
+	if ( base_count )
+		openpic_write(&OpenPIC->Global.Timer[timer].Base_Count, base_count);
+	if ( irq_enable )
+		openpic_clearfield(&OpenPIC->Global.Timer[timer].Vector_Priority, OPENPIC_MASK);
+	else
+		openpic_setfield(&OpenPIC->Global.Timer[timer].Vector_Priority, OPENPIC_MASK);
+}
+
+unsigned int openpic_gettimer(unsigned int timer)
+{
+	check_arg_timer(timer);
+	return (openpic_read(&OpenPIC->Global.Timer[timer]) & ~OPENPIC_MASK);
+}
+
 /* -------- Interrupt Sources ---------------------------------------------- */
 
     /*

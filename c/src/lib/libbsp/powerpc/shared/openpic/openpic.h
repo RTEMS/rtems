@@ -363,6 +363,8 @@ extern void openpic_cause_IPI(unsigned int cpu, unsigned int ipi, unsigned int c
 
 /* Timer Interrupts */
 extern void openpic_inittimer(unsigned int timer, unsigned int pri, unsigned int vector);
+extern void openpic_settimer(unsigned int timer, unsigned int base_count, int irq_enable);
+extern unsigned int openpic_gettimer(unsigned int timer);
 extern void openpic_maptimer(unsigned int timer, unsigned int cpumask);
 
 /* Interrupt Sources */

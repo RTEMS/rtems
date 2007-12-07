@@ -1,5 +1,11 @@
 2007-12-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/openpic/openpic.c, shared/openpic/openpic.h:
+	added routines to set timer period and interupt mask
+	and to read current count.
+
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* virtex/irq/irq_init.c: use new ASM_xxx_VECTOR names.
 
 2007-12-06	Till Straumann <strauman@slac.stanford.edu>
