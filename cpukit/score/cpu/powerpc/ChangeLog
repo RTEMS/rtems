@@ -1,3 +1,8 @@
+2007-12-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* rtems/powerpc/registers.h: added definitions for MSR_CE,
+	MSR_DE (bookE).
+
 2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/old-exceptions/cpu.h: Remove extra ifndef.

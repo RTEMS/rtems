@@ -26,6 +26,7 @@ extern "C" {
 #define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
 #define MSR_TGPR	(1<<17)		/* TLB Update registers in use */
+#define MSR_CE		(1<<17)		/* BookE critical interrupt */
 #define MSR_ILE		(1<<16)		/* Interrupt Little-Endian enable */
 #define MSR_EE		(1<<15)		/* External Interrupt enable */
 #define MSR_PR		(1<<14)		/* Supervisor/User privilege */
@@ -34,6 +35,7 @@ extern "C" {
 #define MSR_FE0		(1<<11)		/* Floating Exception mode 0 */
 #define MSR_SE		(1<<10)		/* Single Step */
 #define MSR_BE		(1<<9)		/* Branch Trace */
+#define MSR_DE		(1<<9)		/* BookE debug exception */
 #define MSR_FE1		(1<<8)		/* Floating Exception mode 1 */
 #define MSR_IP		(1<<6)		/* Exception prefix 0x000/0xFFF */
 #define MSR_IR		(1<<5)		/* Instruction MMU enable */
