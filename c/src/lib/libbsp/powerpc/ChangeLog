@@ -1,5 +1,9 @@
 2007-12-06	Till Straumann <strauman@slac.stanford.edu>
 
+	* virtex/irq/irq_init.c: use new ASM_xxx_VECTOR names.
+
+2007-12-06	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/vectors_init.c: replaced 
 	switch ( current_ppc_cpu ) { } check by feature check.
 

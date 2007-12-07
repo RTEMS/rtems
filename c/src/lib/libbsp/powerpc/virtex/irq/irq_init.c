@@ -112,12 +112,12 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   case ASM_EXT_VECTOR:
     BSP_irq_handle_at_opbintc();
     break;
-  case ASM_PIT_VECTOR:
+  case ASM_BOOKE_PIT_VECTOR:
     BSP_rtems_irq_tbl[BSP_PIT].hdl
       (BSP_rtems_irq_tbl[BSP_PIT].handle);    
     break;
 #if 0 /* Critical interrupts not yet supported */
-  case ASM_CRIT_VECTOR:
+  case ASM_BOOKE_CRIT_VECTOR:
     break;
 #endif
   }
@@ -337,8 +337,8 @@ static rtems_raw_except_connect_data BSP_vec_desc[] = {
    exception_nop_enable,
    exception_always_enabled
   },
-  {ASM_PIT_VECTOR,
-   {ASM_PIT_VECTOR,
+  {ASM_BOOKE_PIT_VECTOR,
+   {ASM_BOOKE_PIT_VECTOR,
     pit_exception_vector_prolog_code,
     (size_t)&pit_exception_vector_prolog_code_size
    },
@@ -347,8 +347,8 @@ static rtems_raw_except_connect_data BSP_vec_desc[] = {
    exception_always_enabled
   }
 #if 0 /* Critical interrupts not yet supported */
-  ,{ASM_CRIT_VECTOR,
-   {ASM_CRIT_VECTOR,
+  ,{ASM_BOOKE_CRIT_VECTOR,
+   {ASM_BOOKE_CRIT_VECTOR,
     critical_exception_vector_prolog_code,
     critical_exception_vector_prolog_code_size
    }
