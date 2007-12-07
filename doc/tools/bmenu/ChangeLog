@@ -1,5 +1,11 @@
 2007-12-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* address.h, address.inl, chain.c, chain.h, system.h:
+	Eliminate unsigned8, unsigned16, unsigned32. 
+	Use size_t, ptrdiff_t, intptr_t for 64bit compliance.
+
+2007-12-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* chain.c: Reflect removal of isr.h.
 	* isr.h: Remove.
 	* Makefile.am: Remove isr.h.
