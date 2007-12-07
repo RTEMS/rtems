@@ -13,6 +13,8 @@
 #ifndef __ADDRESSES_h
 #define __ADDRESSES_h
 
+#include <stddef.h>
+
 /*
  *  _Addresses_Add_offset
  *
@@ -25,7 +27,7 @@
 
 STATIC INLINE void *_Addresses_Add_offset ( 
   void       *base, 
-  unsigned32  offset
+  size_t      offset
 );
 
 /*
@@ -40,7 +42,7 @@ STATIC INLINE void *_Addresses_Add_offset (
 
 STATIC INLINE void *_Addresses_Subtract_offset( 
   void       *base, 
-  unsigned32  offset
+  size_t      offset
 );
 
 /*
@@ -67,7 +69,7 @@ STATIC INLINE void *_Addresses_Add (
  *  resulting offset.
  */
 
-STATIC INLINE unsigned32 _Addresses_Subtract ( 
+STATIC INLINE ptrdiff_t _Addresses_Subtract ( 
   void *left, 
   void *right 
 );

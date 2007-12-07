@@ -13,6 +13,9 @@
 #ifndef __INLINE_ADDRESSES_inl
 #define __INLINE_ADDRESSES_inl
 
+#include <stddef.h>
+#include <stdint.h>
+
 /*PAGE
  *
  *  _Addresses_Add_offset
@@ -21,7 +24,7 @@
 
 STATIC INLINE void *_Addresses_Add_offset ( 
   void       *base, 
-  unsigned32  offset
+  size_t      offset
 )
 {
   return (base + offset);
@@ -35,7 +38,7 @@ STATIC INLINE void *_Addresses_Add_offset (
 
 STATIC INLINE void *_Addresses_Subtract_offset ( 
   void       *base, 
-  unsigned32  offset
+  size_t      offset
 )
 {
   return (base - offset);
@@ -54,7 +57,7 @@ STATIC INLINE void *_Addresses_Add (
   void *right 
 )
 {
-  return (left + (unsigned32)right);
+  return (left + (ptrdiff_t) right);
 }
 
 /*PAGE
@@ -65,7 +68,7 @@ STATIC INLINE void *_Addresses_Add (
  *         dependent on an addresses being thirty two bits.
  */
 
-STATIC INLINE unsigned32 _Addresses_Subtract ( 
+STATIC INLINE ptrdiff_t _Addresses_Subtract ( 
   void *left, 
   void *right 
 )
@@ -83,7 +86,7 @@ STATIC INLINE boolean _Addresses_Is_aligned (
   void *address
 )
 {
-    return ( ( (unsigned32)address % 4 ) == 0 );
+    return ( ( (intptr_t)address % 4 ) == 0 );
 }
 
 /*PAGE

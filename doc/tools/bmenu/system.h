@@ -9,10 +9,6 @@
 #ifndef __SYSTEM_h
 #define __SYSTEM_h
 
-typedef unsigned int   unsigned32;
-typedef unsigned short unsigned16;
-typedef unsigned char  unsigned8;
-
 #define STATIC static
 #define INLINE inline
 
