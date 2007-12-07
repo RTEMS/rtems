@@ -211,8 +211,9 @@ extern int rtems_telnetd_maximum_ptys;
  * XXX memory from the Workspace
  */
 #if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
-  #undef CONFIGURE_INTERRUPT_STACK_SIZE
-  #define CONFIGURE_INTERRUPT_STACK_SIZE 0
+  #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
+#else
+  #define CONFIGURE_INTERRUPT_STACK_MEMORY CONFIGURE_INTERRUPT_STACK_SIZE
 #endif
 
 /*
@@ -1105,7 +1106,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +                  /* IDLE */ \
     ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) + /* Ready chains */ \
     256 +                                 /* name/ptr table overhead */ \
-    CONFIGURE_INTERRUPT_STACK_SIZE  +     /* interrupt stack */ \
+    CONFIGURE_INTERRUPT_STACK_MEMORY +    /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY            /* allocation mutex */ \
   )
 

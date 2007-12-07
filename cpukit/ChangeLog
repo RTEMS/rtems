@@ -1,3 +1,9 @@
+2007-12-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h: Separate the concept of configuring the
+	interrupt stack size from actually reserving memory for it in the
+	RTEMS Workspace.
+
 2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* httpd/Makefile.am, httpd/preinstall.am: rtems_webserver.h must be
