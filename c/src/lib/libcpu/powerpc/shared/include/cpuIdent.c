@@ -123,8 +123,10 @@ ppc_cpu_id_t get_ppc_cpu_type()
 
   switch ( current_ppc_cpu ) {
   	case PPC_405:
+		current_ppc_features.is_bookE			= PPC_BOOKE_405;
+	break;
   	case PPC_8540:
-		current_ppc_features.is_bookE			= 1;
+		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
 	default:
 	break;
   }

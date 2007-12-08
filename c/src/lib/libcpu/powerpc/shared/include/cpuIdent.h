@@ -58,7 +58,10 @@ typedef struct {
 	unsigned has_altivec		: 1;
 	unsigned has_fpu			: 1;
 	unsigned has_hw_ptbl_lkup	: 1;
-	unsigned is_bookE			: 1;
+#define PPC_BOOKE_405   1	/* almost like booke but with some significant differences */
+#define PPC_BOOKE_STD	2
+#define PPC_BOOKE_E500	3	/* bookE with extensions */
+	unsigned is_bookE			: 2;
 	unsigned has_16byte_clne	: 1;
 	unsigned is_60x             : 1;
 	unsigned has_8_bats			: 1;

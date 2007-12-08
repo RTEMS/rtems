@@ -7,7 +7,8 @@
 void
 e500_setup_raw_exceptions()
 {
-	if ( !ppc_cpu_is_bookE() )
+unsigned c;
+	if ( ! (c = ppc_cpu_is_bookE()) || PPC_BOOKE_405 == c )
 		return;
 	asm volatile("mtivpr %0"::"r"(0));
 	/* setup vectors to be compatible with classic PPC */

@@ -1,3 +1,10 @@
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/e500_raw_exc_init.c, new-exceptions/raw_exception.c,
+	shared/include/cpuIdent.c, shared/include/cpuIdent.h:
+	Added different kinds of 'bookE' to the ppc_cpu_is_bookE feature
+	check; unfortunately...
+
 2007-12-07	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: must not add e500_raw_exc_init.c to 

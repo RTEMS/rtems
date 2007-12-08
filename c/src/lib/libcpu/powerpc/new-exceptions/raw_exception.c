@@ -443,7 +443,8 @@ int ppc_delete_exception (const rtems_raw_except_connect_data* except)
 int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 {
 	rtems_interrupt_level k;
-    int        i;
+    int                   i;
+	unsigned              c;
 
     /*
      * store various accelerators
@@ -454,7 +455,7 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 
     rtems_interrupt_disable(k);
 
-	if ( ppc_cpu_is_bookE() ) {
+	if ( (c = ppc_cpu_is_bookE()) && PPC_BOOKE_405 != c ) {
 		e500_setup_raw_exceptions();
 	}
 
@@ -463,7 +464,7 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 	 * We also rely on LAST_VALID_EXC < 32
 	 */
 	for ( i=0; i <= LAST_VALID_EXC; i++ ) {
-		if ( PPC_EXC_405_CRITICAL == ppc_vector_is_valid( i ) )
+		if ( PPC_EXC_405_CRITICAL == (ppc_vector_is_valid( i ) & ~PPC_EXC_ASYNC) )
 			bsp_raw_vector_is_405_critical |= (1<<i);
 	}
 
