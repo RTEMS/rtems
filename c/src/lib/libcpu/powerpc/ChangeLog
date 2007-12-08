@@ -1,5 +1,20 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/, new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_test.c,
+	new-exceptions/bspsupport/vectors.h,
+	new-exceptions/bspsupport/vectors_init.c,
+	new-exceptions/bspsupport/irq.c,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/nested_irq_test.c:
+	New files. Added 'middleware' code for helping BSPs implement
+	exception and interrupt handling and implementing the 'new'
+	RTEMS IRQ API (which I personally dislike).
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/e500_raw_exc_init.c, new-exceptions/raw_exception.c,
 	shared/include/cpuIdent.c, shared/include/cpuIdent.h:
 	Added different kinds of 'bookE' to the ppc_cpu_is_bookE feature
