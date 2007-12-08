@@ -57,10 +57,16 @@ struct _BSP_Exception_frame;
 
 /* IRQ dispatcher to be defined by the PIC driver; note that it MUST
  * implement shared interrupts.
- * Note that the exception frame passed to this handler is not very
- * meaningful. Only the volatile registers and info are set up.
+ * Note also that the exception frame passed to this handler is not very
+ * meaningful. Only the volatile registers and vector info are stored.
+ *
+ *******************************************************************
+ * The routine must return zero if the interrupt was handled. If a
+ * nonzero value is returned the dispatcher may panic and flag an
+ * uncaught exception.
+ *******************************************************************
  */
-void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum);
+int C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum);
 
 /*
  * Snippet to be used by PIC drivers;
@@ -76,29 +82,23 @@ bsp_irq_dispatch_list(
   rtems_irq_hdl sentinel
 )
 {
-  register uint32_t l_orig;
+	register uint32_t l_orig;
 
-  l_orig = _ISR_Get_level();
+	l_orig = _ISR_Get_level();
 
-  /* Enable all interrupts */
-  _ISR_Set_level(0);
+	/* Enable all interrupts */
+	_ISR_Set_level(0);
 
-  #ifndef BSP_SHARED_HANDLER_SUPPORT
-    rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
-  #else
-    {
-      rtems_irq_connect_data* vchain;
-      for( vchain = &tbl[irq];
-           ((int)vchain != -1 && vchain->hdl != sentinel);
-           vchain = (rtems_irq_connect_data*)vchain->next_handler )
-      {
-         vchain->hdl(vchain->handle);
-      }
-   }
-  #endif
+	rtems_irq_connect_data* vchain;
+	for( vchain = &tbl[irq];
+			((int)vchain != -1 && vchain->hdl != sentinel);
+			vchain = (rtems_irq_connect_data*)vchain->next_handler )
+	{
+		vchain->hdl(vchain->handle);
+	}
 
-  /* Restore original level */
-  _ISR_Set_level(l_orig);
+	/* Restore original level */
+	_ISR_Set_level(l_orig);
 }
 
 #ifdef __cplusplus
