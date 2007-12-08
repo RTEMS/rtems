@@ -213,7 +213,7 @@ unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
@@ -226,13 +226,13 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 
   	bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_entry.hdl);
 
-    return;
+    return 0;
 
   }
   irq = openpic_irq(0);
   if (irq == OPENPIC_VEC_SPURIOUS) {
     ++BSP_spuriousIntr;
-    return;
+    return 0;
   }
 
   /* some BSPs might want to use a different numbering... */
@@ -279,4 +279,5 @@ void C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 #endif
     		openpic_eoi(0);
   }
+  return 0;
 }

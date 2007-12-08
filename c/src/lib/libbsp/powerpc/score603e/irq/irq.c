@@ -400,7 +400,7 @@ unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned msr;
@@ -414,7 +414,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
     _CPU_MSR_SET(msr);
-    return;
+    return 0;
 
   }
   irq = read_and_clear_irq();
@@ -435,6 +435,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
   _CPU_MSR_SET(msr);
 
+  return 0;
 }
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)

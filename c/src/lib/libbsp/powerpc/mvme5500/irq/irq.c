@@ -586,7 +586,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
 
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned msr, new_msr;
   unsigned long irqCause[3]={0, 0,0};
@@ -602,7 +602,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
     _MSR_SET(msr);
-    return;
+    return 0;
     
   }
 
@@ -650,6 +650,8 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   out_le32((volatile unsigned *)0xf1000c6c, oldMask[1]);
   out_le32((volatile unsigned *)0xf100f10c, oldMask[2]);
   in_le32((volatile unsigned *)0xf100f10c);
+
+  return 0;
 }
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)

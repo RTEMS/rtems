@@ -422,7 +422,7 @@ volatile unsigned int maxLoop = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
 	register unsigned int irq;
 #if 0
@@ -448,7 +448,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
 		_CPU_MSR_SET(msr);
 
-		return;
+		return 0;
 	}
 
 	/*
@@ -503,6 +503,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 		++ loopCounter;
 #endif
 	}
+	return 0;
 }
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)

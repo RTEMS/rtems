@@ -88,7 +88,7 @@ void BSP_irqexc_off_fnc(rtems_irq_connect_data *unused)
 /***********************************************************
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
 
 
@@ -121,6 +121,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     break;
 #endif
   }
+  return 0;
 }
   
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)

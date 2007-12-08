@@ -1,5 +1,15 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* ep1a/irq/irq.c, gen5200/irq/irq.c, gen83xx/irq/irq_init.c,
+	mbx8xx/irq/irq.c, mpc8260ads/irq/irq.c, mvme5500/irq/irq.c,
+	psim/irq/no_pic.c, score603e/irq/irq.c, shared/irq/irq_supp.h,
+	shared/irq/openpic_i8259_irq.c, virtex/irq/irq_init.c:
+	let C_dispatch_irq_handler() return zero to indicate to
+	low-level exception handling code that the exception
+	was handled (not used yet).
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	*shared/irq/irq_supp.h: removed cpp test for
 	BSP_SHARED_HANDLER_SUPPORT; BSPs using irq_supp.h
 	*must* implement shared handlers.

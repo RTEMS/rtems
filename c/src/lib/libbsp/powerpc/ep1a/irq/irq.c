@@ -452,7 +452,7 @@ unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned isaIntr;                  /* boolean */
@@ -469,7 +469,7 @@ void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int ex
     rtems_hdl_tbl[BSP_DECREMENTER].hdl( rtems_hdl_tbl[BSP_DECREMENTER].handle );
 
     _CPU_MSR_SET(msr);
-    return;
+    return 0;
     
   }
 
@@ -477,7 +477,7 @@ void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int ex
 
   if (irq == OPENPIC_VEC_SPURIOUS) {
     ++BSP_spuriousIntr;
-   return;
+   return 0;
   }
 
   isaIntr = (irq == BSP_PCI_ISA_BRIDGE_IRQ);
@@ -529,6 +529,7 @@ void C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int ex
 #endif
     		openpic_eoi(0);
   }
+  return 0;
 }
     
     

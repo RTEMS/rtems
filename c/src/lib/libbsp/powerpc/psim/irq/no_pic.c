@@ -27,7 +27,7 @@ static rtems_irq_connect_data  dflt_entry;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler(
+int C_dispatch_irq_handler(
   struct _BSP_Exception_frame *frame,
   unsigned int excNum
 )
@@ -43,8 +43,9 @@ void C_dispatch_irq_handler(
     bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, dflt_entry.hdl);
 
     _ISR_Set_level(l_orig);
-    return;
+    return 0;
   }
+  return -1; /* unhandled interrupt */
 }
 
 void

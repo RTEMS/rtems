@@ -635,7 +635,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned int msr;
@@ -652,7 +652,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       /* call the module specific handler and pass the specific handler */
       rtems_hdl_tbl[BSP_DECREMENTER].hdl(0);
 
-      return;
+      return 0;
 
     case ASM_60X_SYSMGMT_VECTOR:
 
@@ -966,6 +966,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       break;
 
   } /* end of switch(excNum) */
+  return 0;
 }
 
 
