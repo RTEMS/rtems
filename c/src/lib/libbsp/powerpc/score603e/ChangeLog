@@ -1,3 +1,8 @@
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
+	* vme/VMEConfig.h: added error status to
+	BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err) macro.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Move interrupt_stack_size field

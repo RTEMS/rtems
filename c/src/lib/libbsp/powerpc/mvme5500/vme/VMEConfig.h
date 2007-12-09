@@ -28,9 +28,9 @@
  */
 #define _VME_DRAM_OFFSET		0x90000000
 
-#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR			\
+#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)			\
 	do {											\
-		vmeUniverseInstallIrqMgr(0,64+12,1,64+13);	\
+		err = vmeUniverseInstallIrqMgr(0,64+12,1,64+13);	\
 	} while (0)
 
 #endif

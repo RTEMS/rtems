@@ -90,9 +90,9 @@
 extern int BSP_VMEInit();
 extern int BSP_VMEIrqMgrInstall();
 
-#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR						\
+#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)						\
 	do {														\
-  		vmeUniverseInstallIrqMgr(0,5,1,6);						\
+  		err = vmeUniverseInstallIrqMgr(0,5,1,6);						\
 	} while (0)
 
 #endif
