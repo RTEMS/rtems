@@ -185,7 +185,7 @@ extern int _BSP_vme_bridge_irq;
 #include <bsp/motorola.h>
 #include <bsp/pci.h>
 
-#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR						\
+#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)					\
 do {															\
 int              bus, dev, i = 0, j;							\
 const struct _int_map  *bspmap;									\
@@ -193,6 +193,7 @@ const struct _int_map  *bspmap;									\
    * if there's a bsp route map, use it to						\
    * configure additional lines...								\
    */															\
+  err = -1;														\
   if (0 == pci_find_device(0x10e3, 0x0000, 0, &bus, &dev, &i)){	\
 	if ( (bspmap = motorolaIntMap(currentBoard)) ) {			\
 	for ( i=0; bspmap[i].bus >= 0; i++ ) {						\
@@ -220,7 +221,7 @@ const struct _int_map  *bspmap;									\
 	}															\
     }															\
 	if ( i >= 0 )												\
-  	  vmeUniverseInstallIrqMgrAlt(								\
+  	  err = vmeUniverseInstallIrqMgrAlt(						\
 	  			VMEUNIVERSE_IRQ_MGR_FLAG_SHARED,				\
 				0,-1,											\
 				-1);											\

@@ -1,5 +1,13 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vme/VMEConfig.h, shared/vme/vme_universe.c:
+	added support for Tsi148 bridge; BSP can define which
+	bridge driver to use from VMEConfig.h.
+	Added 'err' macro parameter to BSP_VME_INSTALL_IRQ_MGR(err)
+	macro so that an error status can be passed back.
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* irq_supp.h: was moved from shared/irq to
 	libcpu/powerpc/new-exceptions/bspsupport.
 
