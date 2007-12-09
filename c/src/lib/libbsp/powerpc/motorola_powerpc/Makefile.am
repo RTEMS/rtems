@@ -153,7 +153,6 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/VME.h \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/vme_universe.c \
-    ../../powerpc/shared/vme/vme_universe_dma.c \
     ../../powerpc/shared/vme/VMEConfig.h
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

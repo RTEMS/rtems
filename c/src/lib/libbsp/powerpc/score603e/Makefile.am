@@ -94,8 +94,7 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vme_am_defs.h \
 	../shared/vme/vmeconfig.c \
-	../shared/vme/vme_universe.c \
-	../shared/vme/vme_universe_dma.c
+	../shared/vme/vme_universe.c 
 
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

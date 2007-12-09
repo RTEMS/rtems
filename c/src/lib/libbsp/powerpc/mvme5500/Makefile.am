@@ -125,7 +125,7 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/VME.h vme/VMEConfig.h \
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c\
 	../shared/vme/vmeconfig.c ../../shared/vmeUniverse/bspVmeDmaList.c\
-	../shared/vme/vme_universe.c ../shared/vme/vme_universe_dma.c
+	../shared/vme/vme_universe.c
 
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

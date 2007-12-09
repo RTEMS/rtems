@@ -104,7 +104,6 @@ noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../shared/vme/vmeconfig.c \
-    ../shared/vme/vme_universe_dma.c \
     ../shared/vme/vme_universe.c \
     ../../shared/vmeUniverse/vme_am_defs.h
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)

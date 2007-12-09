@@ -1,5 +1,10 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: merged shared/vme/vme_universe.c and
+	shared/vme/vme_universe_dma.c into one file.
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* vme/VMEConfig.h: added error status to
 	BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err) macro.
 
