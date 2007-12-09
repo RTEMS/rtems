@@ -1,5 +1,11 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: merged shared/vme/vme_universe.c and
+	shared/vme/vme_universe_dma.c into one file.
+	Added support for Tsi148 driver (DMA).
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vme/VMEConfig.h, shared/vme/vme_universe.c:
 	added support for Tsi148 bridge; BSP can define which
 	bridge driver to use from VMEConfig.h.

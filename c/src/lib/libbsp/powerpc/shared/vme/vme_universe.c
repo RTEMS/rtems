@@ -1,8 +1,16 @@
 /*$Id$*/
 
+/* Implementation of the VME.h and VMEDMA.h APIs for the BSP using the
+ * vmeUniverse/vmeTsi148 drivers
+ *
+ * This file is named vme_universe.c for historic reasons.
+ */
+
+
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/VME.h>
+#include <bsp/VMEDMA.h>
 #include <bsp/VMEConfig.h>
 #include <bsp/irq.h>
 #include <stdio.h>
@@ -16,15 +24,19 @@
 #if defined(_VME_DRIVER_TSI148)
 #define _VME_TSI148_DECLARE_SHOW_ROUTINES
 #include <bsp/vmeTsi148.h>
+#include <bsp/vmeTsi148DMA.h>
 #endif
 
 #if defined(_VME_DRIVER_UNIVERSE)
 #define _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
 #include <bsp/vmeUniverse.h>
+#include <bsp/vmeUniverseDMA.h>
 #if     !defined(BSP_VME_INSTALL_IRQ_MGR) && defined(BSP_VME_UNIVERSE_INSTALL_IRQ_MGR)
 #define BSP_VME_INSTALL_IRQ_MGR BSP_VME_UNIVERSE_INSTALL_IRQ_MGR
 #endif
 #endif
+
+#include <bsp/bspVmeDmaList.h>
 
 /* Wrap BSP VME calls around driver calls - we do this so EPICS doesn't have to
  * include bridge-specific headers. This file provides the necessary glue
@@ -92,6 +104,16 @@ typedef struct {
 	int             irq_mgr_flags;
 } VMEOpsRec, *VMEOps;
 
+/* two separate 'ops' structs for historic reasons */
+typedef struct DmaOpsRec_ {
+	int				(*setup)(int, uint32_t, uint32_t, void *);
+	int				(*start)(int, uint32_t, uint32_t, uint32_t);
+	uint32_t		(*status)(int);
+	VMEDmaListClass	listClass;
+	int				nChannels;
+	int				*vectors;
+} DmaOpsRec, *DmaOps;
+
 #ifdef _VME_DRIVER_UNIVERSE
 static VMEOpsRec uniOpsRec = {
 	xlate_adrs: 		vmeUniverseXlateAddr,
@@ -107,6 +129,17 @@ static VMEOpsRec uniOpsRec = {
 	install_irq_mgr:	vmeUniverseInstallIrqMgrAlt,
 	irq_mgr_flags:      VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
 	                    VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,
+};
+
+static int uniVecs[] = { UNIV_DMA_INT_VEC };
+
+static DmaOpsRec uniDmaOps = {
+	setup:				vmeUniverseDmaSetup,
+	start:				vmeUniverseDmaStart,
+	status:				vmeUniverseDmaStatus,
+	listClass:			&vmeUniverseDmaListClass,
+	nChannels:			1,
+	vectors:			uniVecs,
 };
 #endif
 
@@ -125,9 +158,24 @@ static VMEOpsRec tsiOpsRec = {
 	install_irq_mgr:	vmeTsi148InstallIrqMgrAlt,
 	irq_mgr_flags:      VMETSI148_IRQ_MGR_FLAG_SHARED,
 };
+
+static int tsiVecs[] = {
+	TSI_DMA_INT_VEC,
+	TSI_DMA1_INT_VEC,
+};
+
+static DmaOpsRec tsiDmaOps = {
+	setup:				vmeTsi148DmaSetup,
+	start:				vmeTsi148DmaStart,
+	status:				vmeTsi148DmaStatus,
+	listClass:			&vmeTsi148DmaListClass,
+	nChannels:			2,
+	vectors:			tsiVecs,
+};
 #endif
 
-static VMEOps theOps = 0;
+static VMEOps theOps    = 0;
+static DmaOps theDmaOps = 0;
 
 int
 BSP_vme2local_adrs(unsigned long am, unsigned long vmeaddr, unsigned long *plocaladdr)
@@ -206,6 +254,96 @@ void
 BSP_VMEInboundPortsShow(FILE *f)
 {
 	theOps->inbound_p_show(f);
+}
+
+int
+BSP_VMEDmaSetup(int channel, uint32_t bus_mode, uint32_t xfer_mode, void *custom_setup)
+{
+	return theDmaOps->setup(channel, bus_mode, xfer_mode, custom_setup);
+}
+
+int
+BSP_VMEDmaStart(int channel, uint32_t pci_addr, uint32_t vme_addr, uint32_t n_bytes)
+{
+	return theDmaOps->start(channel, pci_addr, vme_addr, n_bytes);
+}
+
+uint32_t
+BSP_VMEDmaStatus(int channel)
+{
+	return theDmaOps->status(channel);
+}
+
+BSP_VMEDmaListDescriptor
+BSP_VMEDmaListDescriptorSetup(
+		BSP_VMEDmaListDescriptor d,
+		uint32_t                 attr_mask,
+		uint32_t				 xfer_mode,
+		uint32_t                 pci_addr,
+		uint32_t                 vme_addr,
+		uint32_t                 n_bytes)
+{
+VMEDmaListClass	pc;
+	if ( !d ) {
+		if ( ! (pc = theDmaOps->listClass) ) {
+			pc = (theDmaOps = selectOps())->listClass;	
+		}
+		return BSP_VMEDmaListDescriptorNewTool(
+					pc,
+					attr_mask,
+					xfer_mode,
+					pci_addr,
+					vme_addr,
+					n_bytes);
+					
+	}
+	return BSP_VMEDmaListDescriptorSetupTool(d, attr_mask, xfer_mode, pci_addr, vme_addr, n_bytes);
+}
+
+int
+BSP_VMEDmaListStart(int channel, BSP_VMEDmaListDescriptor list)
+{
+	return BSP_VMEDmaListDescriptorStartTool(0, channel, list);
+}
+
+/* NOT thread safe! */
+int
+BSP_VMEDmaInstallISR(int channel, BSP_VMEDmaIRQCallback cb, void *usr_arg)
+{
+int vec;
+BSP_VME_ISR_t curr;
+void          *carg;
+
+	if ( channel < 0 || channel >= theDmaOps->nChannels )
+		return -1;
+
+	vec = theDmaOps->vectors[channel];
+
+	curr = BSP_getVME_isr(vec, &carg);
+
+	if ( cb && curr ) {
+		/* IRQ currently in use */
+		return -1;
+	}
+
+	if ( !cb && !curr ) {
+		/* Allow uninstall if no handler is currently installed;
+		 * just make sure IRQ is disabled
+		 */
+		BSP_disableVME_int_lvl(vec);
+		return 0;
+	}
+	
+	if ( cb ) {
+		if ( BSP_installVME_isr(vec, (BSP_VME_ISR_t)cb, usr_arg) )
+			return -4;
+		BSP_enableVME_int_lvl(vec);
+	} else {
+		BSP_disableVME_int_lvl(vec);
+		if ( BSP_removeVME_isr(vec, curr, carg) )
+			return -4;
+	}
+	return 0;
 }
 
 #if defined(_VME_DRIVER_TSI148) && !defined(VME_CLEAR_BRIDGE_ERRORS)
