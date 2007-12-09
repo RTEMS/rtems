@@ -1,5 +1,12 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/irq.c,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c:
+	fixed some mismatching signed/unsigned types.
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/bspsupport/, new-exceptions/bspsupport/ppc_exc.S,
 	new-exceptions/bspsupport/ppc_exc_test.c,
 	new-exceptions/bspsupport/vectors.h,

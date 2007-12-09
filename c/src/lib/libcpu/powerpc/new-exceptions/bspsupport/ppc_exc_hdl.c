@@ -78,8 +78,8 @@ ppc_exc_set_handler(unsigned vector, ppc_exc_handler_t hdl)
 int
 ppc_exc_C_wrapper(int vect, BSP_Exception_frame *f)
 {
-int i    = vect & 0x3f;
-int rval = 1;
+unsigned int i    = vect & 0x3f;
+int          rval = 1;
 
 	if ( i <= LAST_VALID_EXC  && ppc_exc_handlers[i] ) {
 		rval = ppc_exc_handlers[i](f, i);

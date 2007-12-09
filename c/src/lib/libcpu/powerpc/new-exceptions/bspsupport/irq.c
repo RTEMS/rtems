@@ -19,6 +19,7 @@
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
 #include "vectors.h"
+#include "ppc_exc_bspsupp.h"
 #include <stdlib.h>
 #include <rtems/bspIo.h> /* for printk */
 #include <libcpu/spr.h>
@@ -46,14 +47,14 @@ SPR_RW(BOOKE_TSR)
  * However, the legacy mode works with less modifications
  * of user code.
  */
-void C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
+int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
 {
 	/* clear interrupt; we must do this
 	 * before C_dispatch_irq_handler()
 	 * re-enables MSR_EE.
 	 */
 	_write_BOOKE_TSR( BOOKE_TSR_DIS );
-	C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);	
+	return C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);	
 }
 
 /*

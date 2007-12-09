@@ -24,7 +24,7 @@ extern "C" {
 
 /****************************************************/
 
-typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, int vector);
+typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned int vector);
 
 /*
  * Bits in MSR that are enabled during execution of exception handlers / ISRs 
