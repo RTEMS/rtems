@@ -1,3 +1,8 @@
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am: irq_supp.h was moved from shared/irq to
+	libcpu/powerpc/new-exceptions/bspsupport.
+
 2007-12-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* irq/irq_init.c: Add missing vectDesc variable.

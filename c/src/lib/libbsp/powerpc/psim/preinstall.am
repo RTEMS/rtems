@@ -69,7 +69,7 @@ $(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
-$(PROJECT_INCLUDE)/bsp/irq_supp.h: ../shared/irq/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
 

@@ -1,3 +1,8 @@
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am: irq_supp.h was moved from shared/irq to
+	libcpu/powerpc/new-exceptions/bspsupport.
+
 2007-11-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h: declare BSP_commandline_string variable.
