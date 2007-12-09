@@ -7,6 +7,8 @@
 #include <bsp/irq.h>
 #include <stdio.h>
 
+#define __INSIDE_RTEMS_BSP__
+
 #if !defined(_VME_DRIVER_TSI148) && !defined(_VME_DRIVER_UNIVERSE)
 #define _VME_DRIVER_UNIVERSE
 #endif
