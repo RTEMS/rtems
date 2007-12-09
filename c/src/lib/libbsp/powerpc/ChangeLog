@@ -1,5 +1,10 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/vme/vme_universe.c: fixed wrong initialization
+	routine when using Tsi148 driver.
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am: merged shared/vme/vme_universe.c and
 	shared/vme/vme_universe_dma.c into one file.
 	Added support for Tsi148 driver (DMA).

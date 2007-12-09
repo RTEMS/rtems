@@ -377,7 +377,7 @@ int BSP_VMEInit()
 	else
 #endif
 #if defined(_VME_DRIVER_TSI148)
-  if ( 0 == vmeUniverseInit() ) {
+  if ( 0 == vmeTsi148Init() ) {
  	theOps    = &tsiOpsRec;
 	theDmaOps = &tsiDmaOpsRec;
 	vmeTsi148Reset();
