@@ -1,5 +1,10 @@
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
+	* irq_supp.h: was moved from shared/irq to
+	libcpu/powerpc/new-exceptions/bspsupport.
+
+2007-12-08	Till Straumann <strauman@slac.stanford.edu>
+
 	* ep1a/irq/irq.c, gen5200/irq/irq.c, gen83xx/irq/irq_init.c,
 	mbx8xx/irq/irq.c, mpc8260ads/irq/irq.c, mvme5500/irq/irq.c,
 	psim/irq/no_pic.c, score603e/irq/irq.c, shared/irq/irq_supp.h,
