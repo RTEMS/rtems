@@ -133,7 +133,7 @@ static VMEOpsRec uniOpsRec = {
 
 static int uniVecs[] = { UNIV_DMA_INT_VEC };
 
-static DmaOpsRec uniDmaOps = {
+static DmaOpsRec uniDmaOpsRec = {
 	setup:				vmeUniverseDmaSetup,
 	start:				vmeUniverseDmaStart,
 	status:				vmeUniverseDmaStatus,
@@ -164,7 +164,7 @@ static int tsiVecs[] = {
 	TSI_DMA1_INT_VEC,
 };
 
-static DmaOpsRec tsiDmaOps = {
+static DmaOpsRec tsiDmaOpsRec = {
 	setup:				vmeTsi148DmaSetup,
 	start:				vmeTsi148DmaStart,
 	status:				vmeTsi148DmaStatus,
@@ -284,10 +284,11 @@ BSP_VMEDmaListDescriptorSetup(
 		uint32_t                 n_bytes)
 {
 VMEDmaListClass	pc;
+
 	if ( !d ) {
-		if ( ! (pc = theDmaOps->listClass) ) {
-			pc = (theDmaOps = selectOps())->listClass;	
-		}
+
+		pc = theDmaOps->listClass;
+
 		return BSP_VMEDmaListDescriptorNewTool(
 					pc,
 					attr_mask,
@@ -297,6 +298,7 @@ VMEDmaListClass	pc;
 					n_bytes);
 					
 	}
+
 	return BSP_VMEDmaListDescriptorSetupTool(d, attr_mask, xfer_mode, pci_addr, vme_addr, n_bytes);
 }
 
@@ -366,7 +368,8 @@ int BSP_VMEInit()
 {
 #if defined(_VME_DRIVER_UNIVERSE)
   if ( 0 == vmeUniverseInit() ) {
-  	theOps = &uniOpsRec;
+  	theOps    = &uniOpsRec;
+	theDmaOps = &uniDmaOpsRec;
 	vmeUniverseReset();
   }
 #endif
@@ -375,8 +378,9 @@ int BSP_VMEInit()
 #endif
 #if defined(_VME_DRIVER_TSI148)
   if ( 0 == vmeUniverseInit() ) {
- 	theOps = &tsiOpsRec;
-	vmeUniverseReset();
+ 	theOps    = &tsiOpsRec;
+	theDmaOps = &tsiDmaOpsRec;
+	vmeTsi148Reset();
 #ifdef VME_CLEAR_BRIDGE_ERRORS
 	{
 	extern unsigned short (*_BSP_clear_vmebridge_errors)();
