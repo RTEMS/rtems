@@ -11,7 +11,6 @@
 #include "system.h"
 #include "address.h"
 #include "chain.h"
-#include "isr.h"
 
 /*PAGE
  *
@@ -31,11 +30,11 @@
 void _Chain_Initialize( 
   Chain_Control *the_chain,
   void           *starting_address,
-  unsigned32     number_nodes,
-  unsigned32     node_size
+  size_t         number_nodes,
+  size_t         node_size
 )
 {
-  unsigned32  count; 
+  size_t  count; 
   Chain_Node *current;
   Chain_Node *next;
 
@@ -76,14 +75,11 @@ Chain_Node *_Chain_Get(
   Chain_Control *the_chain
 )
 {
-  ISR_Level          level;
   Chain_Node *return_node;
 
   return_node = NULL;
-  _ISR_Disable( level );
     if ( !_Chain_Is_empty( the_chain ) ) 
       return_node = _Chain_Get_first_unprotected( the_chain );
-  _ISR_Enable( level ); 
   return return_node;
 }
 
@@ -108,11 +104,7 @@ void _Chain_Append(
   Chain_Node    *node
 )
 {
-  ISR_Level level;
-
-  _ISR_Disable( level );
     _Chain_Append_unprotected( the_chain, node );
-  _ISR_Enable( level ); 
 }
 
 /*PAGE
@@ -134,11 +126,7 @@ void _Chain_Extract(
   Chain_Node *node
 )
 { 
-  ISR_Level level;
-
-  _ISR_Disable( level );
     _Chain_Extract_unprotected( node );
-  _ISR_Enable( level );
 }
 
 /*PAGE
@@ -163,11 +151,7 @@ void _Chain_Insert(
   Chain_Node *node
 )
 {
-  ISR_Level level;
-
-  _ISR_Disable( level );
     _Chain_Insert_unprotected( after_node, node );
-  _ISR_Enable( level ); 
 }
 
 /*PAGE

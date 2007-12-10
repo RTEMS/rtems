@@ -13,6 +13,8 @@
 #ifndef __CHAIN_h
 #define __CHAIN_h
 
+#include <stddef.h>
+
 #include "address.h"
 
 /*
@@ -66,8 +68,8 @@ typedef struct {
 void _Chain_Initialize( 
   Chain_Control *the_chain,
   void          *starting_address,
-  unsigned32     number_nodes,
-  unsigned32     node_size
+  size_t         number_nodes,
+  size_t         node_size
 );
 
 /* 
