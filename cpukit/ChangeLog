@@ -1,3 +1,7 @@
+2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/rtems/config.h: Fix idle thread prototype.
+
 2007-12-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Separate the concept of configuring the

@@ -113,7 +113,7 @@ typedef struct {
   /** This element points to the BSP's optional idle task which may override
    *  the default one provided with RTEMS.
    */
-  void                         (*idle_task)( void );
+  void                         (*idle_task)( uint32_t );
 
   /** This field specifies the size of the IDLE task's stack.  If less than or
    *  equal to the minimum stack size, then the IDLE task will have the minimum
@@ -176,10 +176,10 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
         (&_Configuration_Table)
 
 #define rtems_configuration_get_work_space_start() \
-        (_Configuration_Table->work_space_start)
+        (Configuration.work_space_start)
 
 #define rtems_configuration_get_work_space_size() \
-        (_Configuration_Table->work_space_size)
+        (Configuration.work_space_size)
 
 #define rtems_configuration_get_maximum_extensions() \
         (_Configuration_Table->maximum_extensions)
