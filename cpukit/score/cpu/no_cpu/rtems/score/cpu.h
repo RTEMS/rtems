@@ -1050,7 +1050,6 @@ uint32_t   _CPU_ISR_Get_level( void );
 /**
  *  This routine performs CPU dependent initialization.
  *
- *  @param[in] cpu_table is the CPU Dependent Configuration Table
  *  @param[in] thread_dispatch is the address of @ref _Thread_Dispatch
  *
  *  Port Specific Information:
