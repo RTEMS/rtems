@@ -29,41 +29,46 @@ extern "C" {
 
 typedef int (*shell_command_t)(int argc,char * argv[]);
 
-struct shell_cmd_tt ;
+struct shell_cmd_tt;
 typedef struct shell_cmd_tt shell_cmd_t;
 
 struct shell_cmd_tt {
- char            *name;
- char            *usage;
- char            *topic;
- shell_command_t  command;
- shell_cmd_t     *alias;
- shell_cmd_t     *next;
+  char            *name;
+  char            *usage;
+  char            *topic;
+  shell_command_t  command;
+  shell_cmd_t     *alias;
+  shell_cmd_t     *next;
 };
 
-uint32_t   new_rtems_name(char * rtems_name);
+typedef struct {
+  char            *name;
+  char            *alias;
+} shell_alias_t;
+
 shell_cmd_t * shell_lookup_cmd(char * cmd);
-shell_cmd_t * shell_add_cmd(char * cmd,
-                            char * topic,
-                            char * usage,
-                            shell_command_t command);
-shell_cmd_t * shell_alias_cmd(char * cmd, char * alias);
 
-int shell_make_args(char * cmd,
-                    int  * pargc,
-                    char * argv[]);
+shell_cmd_t *shell_add_cmd_struct(
+  shell_cmd_t *shell_cmd
+);
 
-typedef struct  {
-  rtems_name magic; /* 'S','E','N','V': Shell Environment */
-  char * devname;
-  char * taskname;
-  tcflag_t tcflag;
-  /* user extensions */
-  int  exit_shell; /* logout */
-  int  forever   ; /* repeat login */
-  int  errorlevel;
-  int  mdump_adr;
-} shell_env_t;
+shell_cmd_t * shell_add_cmd(
+  char            *cmd,
+  char            *topic,
+  char            *usage,
+  shell_command_t  command
+);
+
+shell_cmd_t * shell_alias_cmd(
+  char *cmd,
+  char *alias
+);
+
+int shell_make_args(
+  char * cmd,
+  int  * pargc,
+  char * argv[]
+);
 
 int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
 void cat_file(FILE * out,char *name);
@@ -93,18 +98,30 @@ rtems_status_code shell_init(
   int                  forever
 );
 
+/*
+ *  Things that are useful to external entities developing commands and plugging
+ *  them in.
+ */
+int str2int(char * s);
+
+typedef struct  {
+  rtems_name  magic; /* 'S','E','N','V': Shell Environment */
+  char       *devname;
+  char       *taskname;
+  tcflag_t    tcflag;
+  /* user extensions */
+  int         exit_shell; /* logout */
+  int         forever   ; /* repeat login */
+  int         errorlevel;
+  uintptr_t   mdump_addr;
+} shell_env_t;
+
 rtems_boolean shell_shell_loop(
   shell_env_t *shell_env
 );
 
 extern shell_env_t  global_shell_env;
 extern shell_env_t *current_shell_env;
-
-/*--------*/
-/* cmds.c */
-/*--------*/
-int str2int(char * s);
-void register_cmds(void);
 
 #ifdef __cplusplus
 }

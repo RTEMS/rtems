@@ -1,5 +1,34 @@
 2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ChangeLog, preinstall.am, libmisc/Makefile.am, libmisc/shell/cmds.c,
+	libmisc/shell/shell.c, libmisc/shell/shell.h: Split shell commands
+	into multiple files and add initial stages of command configuration.
+	This seems to work but the monitor commands need to be integrated
+	this way and the ability to configure user commands needs to be
+	tested.
+	* libmisc/shell/cat_file.c, libmisc/shell/cmd_alias.c,
+	libmisc/shell/cmd_cat.c, libmisc/shell/cmd_cd.c,
+	libmisc/shell/cmd_chdir.c, libmisc/shell/cmd_chmod.c,
+	libmisc/shell/cmd_chroot.c, libmisc/shell/cmd_date.c,
+	libmisc/shell/cmd_dir.c, libmisc/shell/cmd_exit.c,
+	libmisc/shell/cmd_help.c, libmisc/shell/cmd_id.c,
+	libmisc/shell/cmd_logoff.c, libmisc/shell/cmd_ls.c,
+	libmisc/shell/cmd_mallocdump.c, libmisc/shell/cmd_mdump.c,
+	libmisc/shell/cmd_medit.c, libmisc/shell/cmd_mfill.c,
+	libmisc/shell/cmd_mkdir.c, libmisc/shell/cmd_mmove.c,
+	libmisc/shell/cmd_mwdump.c, libmisc/shell/cmd_pwd.c,
+	libmisc/shell/cmd_rm.c, libmisc/shell/cmd_rmdir.c,
+	libmisc/shell/cmd_tty.c, libmisc/shell/cmd_umask.c,
+	libmisc/shell/cmd_whoami.c, libmisc/shell/internal.h,
+	libmisc/shell/shellconfig.c, libmisc/shell/shellconfig.h,
+	libmisc/shell/str2int.c: New files.
+
+2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/cpu/no_cpu/rtems/score/cpu.h: Fix Doxygen.
+
+2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/rtems/config.h: Fix idle thread prototype.
 
 2007-12-07	Joel Sherrill <joel.sherrill@OARcorp.com>

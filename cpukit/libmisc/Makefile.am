@@ -64,7 +64,15 @@ libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c mw-fb/mw_fb.h \
 
 if LIBSHELL
 noinst_LIBRARIES += libshell.a
-libshell_a_SOURCES = shell/cmds.c shell/shell.c shell/shell.h
+libshell_a_SOURCES = shell/cat_file.c shell/cmd_alias.c shell/cmd_cat.c
+    shell/cmd_cd.c shell/cmd_chdir.c shell/cmd_chmod.c shell/cmd_chroot.c
+    shell/cmd_date.c shell/cmd_dir.c shell/cmd_exit.c shell/cmd_help.c
+    shell/cmd_id.c shell/cmd_logoff.c shell/cmd_ls.c shell/cmd_mallocdump.c
+    shell/cmd_mdump.c shell/cmd_medit.c shell/cmd_mfill.c shell/cmd_mkdir.c
+    shell/cmd_mmove.c shell/cmd_mwdump.c shell/cmd_pwd.c shell/cmd_rm.c
+    shell/cmd_rmdir.c shell/cmds.c shell/cmd_tty.c shell/cmd_umask.c
+    shell/cmd_whoami.c shell/internal.h shell/shell.c shell/shellconfig.c
+    shell/shellconfig.h shell/shell.h shell/str2int.c
 endif
 
 EXTRA_DIST += shell/README

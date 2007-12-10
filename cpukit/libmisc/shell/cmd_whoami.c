@@ -1,0 +1,46 @@
+/*
+ *  WHOAMI Shell Command Implmentation
+ *
+ *  Author: Fernando RUIZ CASAS
+ *  Work: fernando.ruiz@ctv.es
+ *  Home: correo@fernando-ruiz.com
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <pwd.h>
+
+#include <rtems.h>
+#include <rtems/monitor.h>
+#include <rtems/shell.h>
+#include "internal.h"
+
+int main_whoami(int argc,char *argv[])
+{
+  struct passwd *pwd;
+
+  pwd = getpwuid(getuid());
+  printf("%s\n",pwd?pwd->pw_name:"nobody");
+  return 0;
+}
+
+shell_cmd_t Shell_WHOAMI_Command = {
+  "whoami",                                   /* name */
+  "show current user",                        /* usage */
+  "misc",                                     /* topic */
+  main_whoami,                                /* command */
+  NULL,                                       /* alias */
+  NULL                                        /* next */
+};

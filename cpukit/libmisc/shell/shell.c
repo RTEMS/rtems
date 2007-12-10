@@ -7,8 +7,9 @@
  *   WORK: fernando.ruiz@ctv.es
  *   HOME: correo@fernando-ruiz.com
  *
- *   Thanks at:
- *    Chris John
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -25,6 +26,8 @@
 #include <rtems/libio_.h>
 #include <rtems/system.h>
 #include <rtems/shell.h>
+#include <rtems/shellconfig.h>
+#include "internal.h"
 
 #include <termios.h>
 #include <string.h>
@@ -35,74 +38,68 @@
 #include <errno.h>
 #include <pwd.h>
 
-/* ----------------------------------------------- *
- * This is a stupidity but is cute.
- * ----------------------------------------------- */
-uint32_t   new_rtems_name(char * rtems_name) {
-  static char b[5];
-  sprintf(b,"%-4.4s",rtems_name);
-  return rtems_build_name(b[0],b[1],b[2],b[3]);
-}
-/* **************************************************************
- * common linked list of shell commands.
- * Because the help report is very long
- * I have a topic for each command.
+/*
+ * Common linked list of shell commands.
+ *
+ * Because the help report is very long, there is a topic for each command.
+ *
  * Help list the topics
- * help [topic] list the commands for the topic
- * help [command] help for the command
- * Can you see help rtems monitor report?
- * ************************************************************** */
+ *   help [topic] list the commands for the topic
+ *   help [command] help for the command
+ * 
+ */
 
-struct shell_topic_tt;
-typedef struct shell_topic_tt shell_topic_t;
-
-struct shell_topic_tt {
-  char * topic;
-  shell_topic_t * next;
-};
-
-
-static shell_cmd_t   * shell_first_cmd;
-static shell_topic_t * shell_first_topic;
+shell_cmd_t   * shell_first_cmd;
+shell_topic_t * shell_first_topic;
 
 shell_env_t *shell_init_env(shell_env_t *);
 
-/* ----------------------------------------------- *
- * Using Chain I can reuse the rtems code.
- * I am more comfortable with this, sorry.
- * ----------------------------------------------- */
+/*
+ *  Find the topic from the set of topics registered.
+ */
 shell_topic_t * shell_lookup_topic(char * topic) {
   shell_topic_t * shell_topic;
   shell_topic=shell_first_topic;
+
   while (shell_topic) {
-   if (!strcmp(shell_topic->topic,topic)) return shell_topic;
-   shell_topic=shell_topic->next;
-  };
+    if (!strcmp(shell_topic->topic,topic))
+      return shell_topic;
+    shell_topic=shell_topic->next;
+  }
   return (shell_topic_t *) NULL;
 }
-/* ----------------------------------------------- */
+
+/*
+ *  Add a new topic to the list of topics
+ */
 shell_topic_t * shell_add_topic(char * topic) {
- shell_topic_t * current,*aux;
- if (!shell_first_topic) {
-  aux=malloc(sizeof(shell_topic_t));
-  aux->topic=topic;
-  aux->next=(shell_topic_t*)NULL;
-  return shell_first_topic=aux;
- } else {
+  shell_topic_t * current,*aux;
+
+  if (!shell_first_topic) {
+    aux = malloc(sizeof(shell_topic_t));
+    aux->topic = topic;
+    aux->next  = (shell_topic_t*)NULL;
+    return shell_first_topic = aux;
+  }
   current=shell_first_topic;
-  if (!strcmp(topic,current->topic)) return current;
+  if (!strcmp(topic,current->topic))
+    return current;
+
   while (current->next) {
-   if (!strcmp(topic,current->next->topic)) return current->next;
-   current=current->next;
-  };
-  aux=malloc(sizeof(shell_topic_t));
-  aux->topic=topic;
-  aux->next=(shell_topic_t*)NULL;
-  current->next=aux;
+    if (!strcmp(topic,current->next->topic))
+      return current->next;
+    current=current->next;
+  }
+  aux = malloc(sizeof(shell_topic_t));
+  aux->topic = topic;
+  aux->next = (shell_topic_t*)NULL;
+  current->next = aux;
   return aux;
- };
 }
-/* ----------------------------------------------- */
+
+/*
+ *  Find the command in the set
+ */
 shell_cmd_t * shell_lookup_cmd(char * cmd) {
   shell_cmd_t * shell_cmd;
   shell_cmd=shell_first_cmd;
@@ -112,37 +109,73 @@ shell_cmd_t * shell_lookup_cmd(char * cmd) {
   };
   return (shell_cmd_t *) NULL;
 }
-/* ----------------------------------------------- */
-shell_cmd_t * shell_add_cmd(char * cmd,
-          char * topic,
-          char * usage,
-                      shell_command_t command) {
-  int shell_help(int argc,char * argv[]);
-  shell_cmd_t * shell_cmd,*shell_pvt;
-  if (!shell_first_cmd) {
-   shell_first_cmd=(shell_cmd_t *) malloc(sizeof(shell_cmd_t));
-   shell_first_cmd->name   ="help";
-   shell_first_cmd->topic  ="help";
-   shell_first_cmd->usage  ="help [topic] # list of usage of commands";
-   shell_first_cmd->command=shell_help;
-   shell_first_cmd->alias  =(shell_cmd_t *) NULL;
-   shell_first_cmd->next   =(shell_cmd_t *) NULL;
-   shell_add_topic(shell_first_cmd->topic);
-   register_cmds();
-  };
-  if (!cmd)     return (shell_cmd_t *) NULL;
-  if (!command) return (shell_cmd_t *) NULL;
-  shell_cmd=(shell_cmd_t *) malloc(sizeof(shell_cmd_t));
-  shell_cmd->name   =cmd;
-  shell_cmd->topic  =topic;
-  shell_cmd->usage  =usage;
-  shell_cmd->command=command;
-  shell_cmd->alias  =(shell_cmd_t *) NULL;
-  shell_cmd->next   =(shell_cmd_t *) NULL;
-  shell_add_topic(shell_cmd->topic);
-  shell_pvt=shell_first_cmd;
-  while (shell_pvt->next) shell_pvt=shell_pvt->next;
-  return shell_pvt->next=shell_cmd;
+
+/*
+ *  Add a command structure to the set of known commands
+ */
+shell_cmd_t *shell_add_cmd_struct(
+  shell_cmd_t *shell_cmd
+)
+{
+  shell_cmd_t *shell_pvt;
+
+  if ( !shell_first_cmd ) {
+    shell_first_cmd = shell_cmd;
+  } else {
+    shell_pvt = shell_first_cmd;
+    while (shell_pvt->next)
+      shell_pvt = shell_pvt->next;
+    shell_pvt->next = shell_cmd;
+  }  
+  shell_add_topic( shell_cmd->topic );
+  return shell_cmd;
+}
+
+/*
+ *  Add a command as a set of arguments to the set and 
+ *  allocate the command structure on the fly.
+ */
+shell_cmd_t * shell_add_cmd(
+  char            *cmd,
+  char            *topic,
+  char            *usage,
+  shell_command_t  command
+)
+{
+  extern void register_cmds(void);
+
+  shell_cmd_t *shell_cmd;
+
+  if ( !shell_first_cmd ) {
+    shell_cmd_t **c;
+    shell_alias_t **a;
+
+    shell_first_cmd = NULL;
+    for ( c = Shell_Initial_commands ; *c  ; c++ ) {
+      shell_add_cmd_struct( *c );
+    }
+
+    for ( a = Shell_Initial_aliases ; *a  ; a++ ) {
+      shell_alias_cmd( (*a)->name, (*a)->alias );
+    }
+
+    register_cmds();
+  }
+
+  if (!cmd)
+    return (shell_cmd_t *) NULL;
+  if (!command)
+    return (shell_cmd_t *) NULL;
+
+  shell_cmd          = (shell_cmd_t *) malloc(sizeof(shell_cmd_t));
+  shell_cmd->name    = cmd;
+  shell_cmd->topic   = topic;
+  shell_cmd->usage   = usage;
+  shell_cmd->command = command;
+  shell_cmd->alias   = (shell_cmd_t *) NULL;
+  shell_cmd->next    = (shell_cmd_t *) NULL;
+
+  return shell_add_cmd_struct( shell_cmd );
 }
 /* ----------------------------------------------- *
  * you can make an alias for every command.
@@ -177,111 +210,7 @@ int shell_make_args(char * cmd,
   argv[argc]=(char*)NULL;
   return *pargc=argc;
 }
-/* ----------------------------------------------- *
- * show the help for one command.
- * ----------------------------------------------- */
-int shell_help_cmd(shell_cmd_t * shell_cmd) {
-  char * pc;
-  int    col,line;
-  printf("%-10.10s -",shell_cmd->name);
-  col=12;
-  line=1;
-  if (shell_cmd->alias) {
-   printf("is an <alias> for command '%s'",shell_cmd->alias->name);
-  } else
-  if (shell_cmd->usage) {
-   pc=shell_cmd->usage;
-   while (*pc) {
-    switch(*pc) {
-     case '\r':break;
-     case '\n':putchar('\n');
-               col=0;
-               break;
-     default  :putchar(*pc);
-               col++;
-               break;
-    };
-    pc++;
-    if(col>78) { /* What daring... 78?*/
-     if (*pc) {
-      putchar('\n');
-      col=0;
-     };
-    };
-    if (!col && *pc) {
-      printf("            ");
-      col=12;line++;
-    };
-   };
-  };
-  puts("");
-  return line;
-}
-/* ----------------------------------------------- *
- * show the help. The first command implemented.
- * Can you see the header of routine? Known?
- * The same with all the commands....
- * ----------------------------------------------- */
-int shell_help(int argc,char * argv[]) {
-  int col,line,arg;
-  shell_topic_t *topic;
-  shell_cmd_t * shell_cmd=shell_first_cmd;
-  if (argc<2) {
-   printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
-          "  TOPIC? The topics are\n");
-   topic=shell_first_topic;
-   col=0;
-   while (topic) {
-    if (!col){
-     col=printf("   %s",topic->topic);
-    } else {
-     if ((col+strlen(topic->topic)+2)>78){
-      printf("\n");
-      col=printf("   %s",topic->topic);
-     } else {
-      col+=printf(", %s",topic->topic);
-     };
-    };
-    topic=topic->next;
-   };
-   printf("\n");
-   return 1;
-  };
-  line=0;
-  for (arg=1;arg<argc;arg++) {
-   if (line>16) {
-    printf("Press any key to continue...");getchar();
-    printf("\n");
-    line=0;
-   };
-   topic=shell_lookup_topic(argv[arg]);
-   if (!topic){
-    if ((shell_cmd=shell_lookup_cmd(argv[arg]))==NULL) {
-     printf("help: topic or cmd '%s' not found. Try <help> alone for a list\n",
-            argv[arg]);
-     line++;
-    } else {
-     line+=shell_help_cmd(shell_cmd);
-    }
-    continue;
-   };
-   printf("help: list for the topic '%s'\n",argv[arg]);
-   line++;
-   while (shell_cmd) {
-    if (!strcmp(topic->topic,shell_cmd->topic))
-     line+=shell_help_cmd(shell_cmd);
-    if (line>16) {
-     printf("Press any key to continue...");
-     getchar();
-     printf("\n");
-     line=0;
-    };
-    shell_cmd=shell_cmd->next;
-   };
-  };
-  puts("");
-  return 0;
-}
+
 /* ----------------------------------------------- *
  * TODO: Add improvements. History, edit vi or emacs, ...
  * ----------------------------------------------- */
@@ -295,44 +224,52 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   tcdrain(fileno(in));
   if (out) tcdrain(fileno(out));
   for (;;) {
-   line[col]=0;
-   c = fgetc(in);
-   switch (c) {
-    case 0x04:/*Control-d*/
-        if (col) break;
-    case EOF :return 0;
-    case '\n':break;
-    case '\f':if (out) fputc('\f',out);
-    case 0x03:/*Control-C*/
+    line[col]=0;
+    c = fgetc(in);
+    switch (c) {
+      case 0x04:/*Control-d*/
+        if (col)
+          break;
+      case EOF:
+        return 0;
+      case '\f':
+        if (out)
+          fputc('\f',out);
+      case 0x03:/*Control-C*/
         line[0]=0;
-    case '\r':if (out) fputc('\n',out);
+      case '\n':
+      case '\r':
+        if (out)
+          fputc('\n',out);
         return 1;
-    case  127:
-    case '\b':if (col) {
-         if (out) {
-          fputc('\b',out);
-          fputc(' ',out);
-          fputc('\b',out);
-         };
-         col--;
+      case  127:
+      case '\b':
+        if (col) {
+          if (out) {
+            fputc('\b',out);
+            fputc(' ',out);
+            fputc('\b',out);
+          }
+          col--;
         } else {
-         if (out) fputc('\a',out);
-        };
+          if (out) fputc('\a',out);
+        }
         break;
-    default  :if (!iscntrl(c)) {
-    if (col<size-1) {
-     line[col++]=c;
+     default:
+       if (!iscntrl(c)) {
+         if (col<size-1) {
+           line[col++]=c;
            if (out) fputc(c,out);
-    } else {
-            if (out) fputc('\a',out);
-    };
-        } else {
-          if (out)
-     if (c=='\a') fputc('\a',out);
-        };
-        break;
-   };
-  };
+          } else {
+           if (out) fputc('\a',out);
+          }
+       } else {
+        if (out)
+          if (c=='\a') fputc('\a',out);
+       }
+       break;
+     }
+  }
 }
 /* ----------------------------------------------- *
  * - The shell TASK
@@ -343,18 +280,6 @@ shell_env_t  global_shell_env;
 shell_env_t *current_shell_env;
 
 extern char **environ;
-
-void cat_file(FILE * out,char * name) {
-  FILE * fd;
-  int c;
-  if (out) {
-    fd=fopen(name,"r");
-    if (fd) {
-       while ((c=fgetc(fd))!=EOF) fputc(c,out);
-     fclose(fd);
-    };
-  };
-}
 
 void write_file(char * name,char * content) {
   FILE * fd;
@@ -702,11 +627,17 @@ rtems_status_code   shell_init (
   rtems_id           task_id;
   rtems_status_code  sc;
   shell_env_t       *shell_env;
+  rtems_name         name;
+
+  if ( task_name )
+    name = rtems_build_name(task_name[0], task_name[1], task_name[2], task_name[3]);
+  else
+    name = rtems_build_name( 'S', 'E', 'N', 'V' );
 
   sc = rtems_task_create(
-    new_rtems_name(task_name),
+    name,
     task_priority,
-    task_stacksize?task_stacksize:RTEMS_MINIMUM_STACK_SIZE,
+    task_stacksize,
     RTEMS_DEFAULT_MODES,
     RTEMS_LOCAL | RTEMS_FLOATING_POINT,
     &task_id
@@ -744,8 +675,8 @@ shell_env_t *shell_init_env(
      return NULL;
   }
 
-  if (global_shell_env.magic != new_rtems_name("SENV")) {
-    global_shell_env.magic      = new_rtems_name("SENV");
+  if (global_shell_env.magic != 0x600D600d) {
+    global_shell_env.magic      = 0x600D600d;
     global_shell_env.devname    = "";
     global_shell_env.taskname   = "GLOBAL";
     global_shell_env.tcflag     = 0;
