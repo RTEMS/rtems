@@ -88,15 +88,6 @@ void	*lr;
 		lr=(LRFrame)_read_LR();
 	}
 	printk("LR: 0x%08x\n",lr);
-	{
-		uint32_t *x = (uint32_t*)sp;
-		uint32_t top;
-		asm volatile("mfspr %0, %1":"=r"(top):"i"(SPRG1));
-		printk("TOS: 0x%08x\n",top);
-		while ( x < (uint32_t*)sp->frameLink ) {
-			printk("   0x%08x\n",*x++);
-		}
-	}
 	for (f=(LRFrame)sp, i=0; f->frameLink && i<STACK_CLAMP; f=f->frameLink) {
 		printk("--^ 0x%08x", (long)(f->frameLink->lr));
 		if (!(++i%5))

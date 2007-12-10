@@ -1,3 +1,13 @@
+2007-12-09	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/ppc_exc_test.c,
+	new-exceptions/bspsupport/vectors_init.c,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/README,
+	new-exceptions/bspsupport/irq_supp.h:
+	Added README and some comments; now use TRAP exception
+	in ppc_exc_test.c so that it works on PSIM.
+
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
 	* irq_supp.h: was moved from libbsp/powerpc/shared/irq to

@@ -48,8 +48,6 @@ extern int  BSP_disable_irq_at_pic(const rtems_irq_number irqLine);
 
 /*
  * Initialize the PIC.
- * Return nonzero on success, zero on failure (which will be treated
- * as fatal by the manager).
  */
 extern int  BSP_setup_the_pic(rtems_irq_global_settings* config);
 
@@ -73,6 +71,9 @@ int C_dispatch_irq_handler (struct _BSP_Exception_frame *frame, unsigned int exc
  * enables interrupts, traverses list of
  * shared handlers for a given interrupt
  * and restores original irq level
+ *
+ * Note that _ISR_Get_level() & friends are preferable to
+ * manipulating MSR directly.
  */
 
 static inline void

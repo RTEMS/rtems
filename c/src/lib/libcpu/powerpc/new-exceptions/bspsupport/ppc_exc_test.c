@@ -84,7 +84,7 @@ storegs(ppc_exc_int_regs *p0, ppc_exc_int_regs *p1)
 		"	mfctr	0		 ;"
 		"	stw	 0, %5(%0)   ;"
 		"	lwz  0, %6(%0)   ;"
-		"	sc               ;"
+		"	trap             ;"
 		"	stmw 0, %6(%1)   ;"
 		"	mfcr	0		 ;"
 		"	stw	 0, %2(%1)   ;"
@@ -129,7 +129,7 @@ clobber()
 		/* must not clobber R13, R1, R2 */
 		"	stw 13, %6(2) ;"
 		"   lmw 3,  %5(2)  ;"
-		"   sc             ;"
+		"   trap           ;"
 		"   stmw 0, %4(2) ;"
 		"	mfcr	0	   ;"
 		"	stw	 0, %0(2) ;"
@@ -154,7 +154,7 @@ clobber()
 typedef union { uint32_t u; uint8_t c[4]; } u32_a_t;
 
 /* exception handler; adds 1 to all register contents (except r1,r2,r13) */
-void
+int
 handle_clobber_exc(BSP_Exception_frame *f, int vector)
 {
 int i;
@@ -172,6 +172,8 @@ u32_a_t *p = (u32_a_t*)&f->GPR0;
   f->EXC_CTR++;
   f->EXC_XER++;
   f->EXC_LR++;
+  f->EXC_SRR0 += 4;
+  return 0;
 }
 
 
@@ -180,7 +182,7 @@ u32_a_t *p = (u32_a_t*)&f->GPR0;
  *  - clobber all registers with 0xaffe0000 + <index>
  *    (except: r1, r2, r13, non-sticky bits in xer)
  *    R2 is clobbered with the address of the pre area.
- *  - issue 'sc' -> SYS exception
+ *  - issue 'trap' -> PROG exception
  *  - exception handler increments all reg. contents by 1,
  *    stores address of 'pst' area in R2 and returns control
  *    to ppc_exc_clobber().
@@ -197,9 +199,9 @@ u32_a_t *a, *b;
 	for ( i=0; i< sizeof(pre)/sizeof(uint32_t); i++ ) {
 		a[i].u = 0xaffe0000 + i;
 	}
-	ppc_exc_set_handler(ASM_SYS_VECTOR, handle_clobber_exc);
+	ppc_exc_set_handler(ASM_PROG_VECTOR, handle_clobber_exc);
 	clobber();
-	ppc_exc_set_handler(ASM_SYS_VECTOR, 0);
+	ppc_exc_set_handler(ASM_PROG_VECTOR, 0);
 	for ( i=0; i< sizeof(pre)/sizeof(uint32_t); i++ ) {
 		switch (i) {
 			case OFF(gpr1)/sizeof(uint32_t):

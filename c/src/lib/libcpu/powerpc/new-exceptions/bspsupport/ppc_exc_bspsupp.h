@@ -20,7 +20,7 @@ extern "C" {
 /********* C-Exception Handlers *********************/
 
 /* API to be used by middleware,                    */
-/* BSP and application code (if necessary           */
+/* BSP and application code (if necessary)          */
 
 /****************************************************/
 
@@ -71,7 +71,7 @@ ppc_exc_get_handler(unsigned vector);
 
 /********* Low-level Exception Handlers *************/
 
-/* This API is used by middleware code              */
+/* This part of the API is used by middleware code  */
 
 /****************************************************/
 
