@@ -103,11 +103,4 @@ EXTERN boolean          Verbose;                 /* status/debug msgs */
 EXTERN boolean          BlankAsWarnings;
 EXTERN Chain_Control    Lines;
 
-EXTERN int              NumberOfAttributes;
-EXTERN int              NumberOfAssociations;
-EXTERN int              NumberOfAbstractTypes;
-EXTERN int              NumberOfDataItems;
-EXTERN int              NumberOfMethods;
-EXTERN int              NumberOfTasks;
-
 #endif
