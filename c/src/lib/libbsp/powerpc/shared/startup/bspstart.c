@@ -110,15 +110,6 @@ void _BSP_Fatal_error(unsigned int v)
 }
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -382,12 +373,12 @@ void bsp_start( void )
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("BSP_Configuration.work_space_size = %x\n",
-          BSP_Configuration.work_space_size);
+  printk("rtems_configuration_get_work_space_size() = %x\n",
+          rtems_configuration_get_work_space_size());
 #endif
 
   work_space_start =
-    (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
+    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
 
   if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + 
         rtems_configuration_get_interrupt_stack_size()) {
@@ -395,7 +386,7 @@ void bsp_start( void )
     bsp_cleanup();
   }
 
-  BSP_Configuration.work_space_start = work_space_start;
+  Configuration.work_space_start = work_space_start;
 
   /*
    * Initalize RTEMS IRQ system

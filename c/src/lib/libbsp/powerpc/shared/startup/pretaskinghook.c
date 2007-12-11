@@ -52,7 +52,7 @@ void bsp_pretasking_hook(void)
   /* make sure it's properly aligned */
   BSP_heap_start = (BSP_heap_start + CPU_ALIGNMENT - 1) & ~(CPU_ALIGNMENT-1);
 
-  heap_size = (BSP_mem_size - BSP_heap_start) - BSP_Configuration.work_space_size;
+  heap_size = (BSP_mem_size - BSP_heap_start) - rtems_configuration_get_work_space_size();
   heap_sbrk_spared=_bsp_sbrk_init(BSP_heap_start, &heap_size);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
