@@ -37,6 +37,8 @@ EXTRA_DIST += shared/flash/flash.c shared/flash/flashPgm.h shared/flash/flashPgm
 
 ## shared/motorola
 EXTRA_DIST += shared/motorola/motorola.c
+EXTRA_DIST += shared/motorola/vpd.c
+EXTRA_DIST += shared/motorola/vpd.h
 
 ## shared/pci
 EXTRA_DIST += shared/pci/pci.c shared/pci/detect_raven_bridge.c shared/pci/pcifinddevice.c \

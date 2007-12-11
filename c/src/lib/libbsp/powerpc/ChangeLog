@@ -1,5 +1,11 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/motorola/vpd.c, shared/motorola/vpd.h:
+	added code (originally developed for 'beatnik')
+	to read MotLoad VPD data from i2c eeprom.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/vectors/README.deprecated, shared/irq/README.deprecated:
 	added READMEs stating that certain files should not be
 	copy/paste/modified when creating new BSPs. New BSPs
