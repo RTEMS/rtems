@@ -79,7 +79,7 @@ Clock_isr (rtems_vector_number vector)
 void
 Clock_exit(void)
 {
-    if (BSP_Configuration.ticks_per_timeslice)
+    if (rtems_configuration_get_ticks_per_timeslice())
     {
         /* disable all timer1 interrupts */
         *MCF5206E_IMR(MBAR) |= MCF5206E_INTR_BIT(MCF5206E_INTR_TIMER_1);
@@ -107,7 +107,7 @@ static void
 Install_clock(rtems_isr_entry clock_isr)
 {
     Clock_driver_ticks = 0;
-    if (BSP_Configuration.ticks_per_timeslice)
+    if (rtems_configuration_get_ticks_per_timeslice())
     {
         /* Configure timer1 interrupts */
         *MCF5206E_ICR(MBAR,MCF5206E_INTR_TIMER_1) =
@@ -133,7 +133,7 @@ Install_clock(rtems_isr_entry clock_isr)
             MCF5206E_TMR_RST;
             
         /* Set the timer timeout value from the BSP config */      
-        *MCF5206E_TRR(MBAR, 1) = BSP_Configuration.microseconds_per_tick - 1;
+        *MCF5206E_TRR(MBAR, 1) = rtems_configuration_get_microseconds_per_tick() - 1;
 
         /* Feed system frequency to the timer */
         *MCF5206E_TMR(MBAR, 1) |= MCF5206E_TMR_ICLK_MSCLK;

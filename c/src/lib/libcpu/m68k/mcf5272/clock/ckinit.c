@@ -84,7 +84,7 @@ Clock_isr (rtems_vector_number vector)
 void
 Clock_exit(void)
 {
-    if (BSP_Configuration.ticks_per_timeslice) {
+    if (rtems_configuration_get_ticks_per_timeslice()) {
         uint32_t icr;
         /* disable all timer1 interrupts */
         icr = g_intctrl_regs->icr1;
@@ -114,44 +114,44 @@ Clock_exit(void)
 static void
 Install_clock(rtems_isr_entry clock_isr)
 {
-    uint32_t icr;
-    Clock_driver_ticks = 0;
-    if (BSP_Configuration.ticks_per_timeslice) {
-        
-        /* Register the interrupt handler */
-        set_vector(clock_isr, BSP_INTVEC_TMR1, 1);
-        
-        /* Reset timer 1 */
-        g_timer_regs->tmr1 = MCF5272_TMR_RST;
-        g_timer_regs->tmr1 = MCF5272_TMR_CLK_STOP;
-        g_timer_regs->tmr1 = MCF5272_TMR_RST;
-        g_timer_regs->tcn1 = 0;  /* reset counter */
-        g_timer_regs->ter1 = MCF5272_TER_REF | MCF5272_TER_CAP;
-        
-        /* Set Timer 1 prescaler so that it counts in microseconds */
-        g_timer_regs->tmr1 = (
-            ((((BSP_SYSTEM_FREQUENCY / 1000000) - 1) << MCF5272_TMR_PS_SHIFT) |
-             MCF5272_TMR_CE_DISABLE                                      |
-             MCF5272_TMR_ORI                                             |
-             MCF5272_TMR_FRR                                             |
-             MCF5272_TMR_CLK_MSTR                                        |
-             MCF5272_TMR_RST));
+  uint32_t icr;
+  Clock_driver_ticks = 0;
+  if (rtems_configuration_get_ticks_per_timeslice()) {
+      
+      /* Register the interrupt handler */
+      set_vector(clock_isr, BSP_INTVEC_TMR1, 1);
+      
+      /* Reset timer 1 */
+      g_timer_regs->tmr1 = MCF5272_TMR_RST;
+      g_timer_regs->tmr1 = MCF5272_TMR_CLK_STOP;
+      g_timer_regs->tmr1 = MCF5272_TMR_RST;
+      g_timer_regs->tcn1 = 0;  /* reset counter */
+      g_timer_regs->ter1 = MCF5272_TER_REF | MCF5272_TER_CAP;
+      
+      /* Set Timer 1 prescaler so that it counts in microseconds */
+      g_timer_regs->tmr1 = (
+          ((((BSP_SYSTEM_FREQUENCY / 1000000) - 1) << MCF5272_TMR_PS_SHIFT) |
+           MCF5272_TMR_CE_DISABLE                                      |
+           MCF5272_TMR_ORI                                             |
+           MCF5272_TMR_FRR                                             |
+           MCF5272_TMR_CLK_MSTR                                        |
+           MCF5272_TMR_RST));
 
-        /* Set the timer timeout value from the BSP config */      
-        g_timer_regs->trr1 = BSP_Configuration.microseconds_per_tick - 1;
+      /* Set the timer timeout value from the BSP config */      
+      g_timer_regs->trr1 = rtems_configuration_get_microseconds_per_tick() - 1;
 
-        /* Feed system frequency to the timer */
-        g_timer_regs->tmr1 |= MCF5272_TMR_CLK_MSTR;
-            
-        /* Configure timer1 interrupts */
-        icr = g_intctrl_regs->icr1;
-        icr = icr & ~(MCF5272_ICR1_TMR1_MASK | MCF5272_ICR1_TMR1_PI);
-        icr |= (MCF5272_ICR1_TMR1_IPL(BSP_INTLVL_TMR1) | MCF5272_ICR1_TMR1_PI);
-        g_intctrl_regs->icr1 = icr;
+      /* Feed system frequency to the timer */
+      g_timer_regs->tmr1 |= MCF5272_TMR_CLK_MSTR;
+          
+      /* Configure timer1 interrupts */
+      icr = g_intctrl_regs->icr1;
+      icr = icr & ~(MCF5272_ICR1_TMR1_MASK | MCF5272_ICR1_TMR1_PI);
+      icr |= (MCF5272_ICR1_TMR1_IPL(BSP_INTLVL_TMR1) | MCF5272_ICR1_TMR1_PI);
+      g_intctrl_regs->icr1 = icr;
 
-        /* Register the driver exit procedure so we can shutdown */
-        atexit(Clock_exit);
-    }
+      /* Register the driver exit procedure so we can shutdown */
+      atexit(Clock_exit);
+  }
 }
 
 
