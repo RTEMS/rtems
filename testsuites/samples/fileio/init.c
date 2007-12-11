@@ -602,3 +602,39 @@ Init (rtems_task_argument ignored)
 
   fileio_menu();
 }
+
+/*
+ *  RTEMS Shell Configuration -- Add a command and an alias for it
+ */
+
+int main_usercmd(int argc, char **argv)
+{
+  int i;
+  printf( "UserCommand: argc=%d\n", argc );
+  for (i=0 ; i<argc ; i++ )
+    printf( "argv[%d]= %s\n", i, argv[i] );
+  return 0;
+}
+
+shell_cmd_t Shell_USERCMD_Command = {
+  "usercmd",                                       /* name */
+  "usercmd n1 [n2 [n3...]]     # echo arguments",  /* usage */
+  "user",                                          /* topic */
+  main_usercmd,                                    /* command */
+  NULL,                                            /* alias */
+  NULL                                             /* next */
+};
+
+shell_alias_t Shell_USERECHO_Alias = {
+  "usercmd",                 /* command */
+  "userecho"                 /* alias */
+};
+  
+
+#define CONFIGURE_SHELL_USER_COMMANDS &Shell_USERCMD_Command
+#define CONFIGURE_SHELL_USER_ALIASES &Shell_USERECHO_Alias
+#define CONFIGURE_SHELL_COMMANDS_INIT
+#define CONFIGURE_SHELL_COMMANDS_ALL
+
+#include <rtems/shellconfig.h>
+

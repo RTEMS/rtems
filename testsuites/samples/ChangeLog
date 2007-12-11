@@ -1,3 +1,8 @@
+2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c: Add RTEMS Shell configuration and static configuration
+	of user commands.
+
 2007-11-29	Chris Johns <chrisj@rtems.org>
 
 	* iostream/Makefile.am: Change the executable name so it does not
