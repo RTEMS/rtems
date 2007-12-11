@@ -74,9 +74,6 @@ rtems_irq_connect_data clock_isr_data = {BSP_IRQ_TIMER3,
  #define GBA_TMCNT_PS    0x0003
 #endif
 
-
-extern rtems_configuration_table BSP_Configuration;
-
 /**
  *  @brief This function set up the clock hardware
  *
@@ -85,7 +82,7 @@ extern rtems_configuration_table BSP_Configuration;
  */
 void Clock_driver_support_initialize_hardware()
 {
-  int tmreload = ((BSP_Configuration.microseconds_per_tick*1000)/__TimTickTime_ns);
+  int tmreload = ((rtems_configuration_get_microseconds_per_tick()*1000)/__TimTickTime_ns);
 
   if (tmreload>0xFFFF) tmreload = 0xFFFF;
   GBA_REG_TM3CNT = (GBA_TMCNT_PS);

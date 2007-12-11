@@ -48,7 +48,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
 #define Clock_driver_support_initialize_hardware()                            \
   do {                                                                        \
     *EP7312_SYSCON1 |= EP7312_SYSCON1_TC1_PRESCALE;                         \
-    *EP7312_TC1D =(BSP_Configuration.microseconds_per_tick * 2000)/1000000; \
+    *EP7312_TC1D =(rtems_configuration_get_microseconds_per_tick() * 2000)/1000000; \
     *EP7312_TC1EOI = 0xFFFFFFFF;                                            \
   } while (0)
 

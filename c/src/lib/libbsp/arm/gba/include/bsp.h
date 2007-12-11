@@ -47,9 +47,6 @@ extern "C" {
     asm volatile ("0: nop; sub %0, %0, #1; cmp %0,#0; bne 0b" : "=c"(_cnt) : "0"(_cnt)); \
   }
 
-/** Our copy of BSP configuration table from the application. */
-extern rtems_configuration_table BSP_Configuration;
-
 /** gba_zero_memory library function in start.S  */
 extern void gba_zero_memory(int start, int stop);
 /** gba_move_memory library function in start.S  */

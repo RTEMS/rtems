@@ -50,11 +50,6 @@ extern  void __load_stop_iwram;
 extern  void __bss_start;
 extern  void __bss_end;
 
-/**  The original BSP configuration table from the application. */
-extern rtems_configuration_table  Configuration;
-/** Our copy of BSP configuration table from the application. */
-rtems_configuration_table  BSP_Configuration;
-
 /* External Prototypes */
 extern void bsp_cleanup( void );
 extern void rtems_irq_mngt_init(void);
@@ -73,10 +68,6 @@ uint32_t   _heap_size = 0;
 
 /** Address of start of free memory - should be updated after creating new partitions or regions.*/
 uint32_t   rtemsFreeMemStart;
-
-/** Program name - from main(). */
-char              *rtems_progname;
-
 
 /**
  *  @brief BSP pretasking hook.
@@ -140,8 +131,8 @@ void bsp_start_default( void )
   rtemsFreeMemStart = (uint32_t)&_end;
 
   /* Place RTEMS workspace at beginning of free memory. */
-  BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
-  rtemsFreeMemStart += BSP_Configuration.work_space_size;
+  Configuration.work_space_start = (void *)rtemsFreeMemStart;
+  rtemsFreeMemStart += rtems_configuration_get_work_space_size();
 
   /* Init conio  */
   gba_textmode(CO60);
@@ -158,12 +149,13 @@ void bsp_start_default( void )
   printk("[bsp_start]\n");
   printk("rtemsFreeMemStart= 0x%x\n", rtemsFreeMemStart);
   printk("__heap_limit     = 0x%x\n", (uint32_t)&__heap_limit);
-  printk("work_space_start = 0x%x size = 0x%x\n", BSP_Configuration.work_space_start,BSP_Configuration.work_space_size);
-  printk("maximum_extensions    = 0x%x\n", BSP_Configuration.maximum_extensions);
-  printk("microseconds_per_tick = 0x%x\n", BSP_Configuration.microseconds_per_tick);
-  printk("ticks_per_timeslice   = 0x%x\n", BSP_Configuration.ticks_per_timeslice);
-  printk("number_of_device_drivers = 0x%x\n", BSP_Configuration.number_of_device_drivers);
-  printk("Device_driver_table      = 0x%x\n", BSP_Configuration.Device_driver_table);
+  printk("work_space_start = 0x%x size = 0x%x\n",
+          Configuration.work_space_start,
+          rtems_configuration_get_work_space_size());
+  printk("microseconds_per_tick = 0x%x\n",
+          rtems_configuration_get_microseconds_per_tick());
+  printk("ticks_per_timeslice   = 0x%x\n",
+          rtems_configuration_get_ticks_per_timeslice());
 #endif
 
   /* Do we have enough memory */
