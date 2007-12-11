@@ -1,5 +1,9 @@
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* irq/irq.c: Revert accidentally committed test code.
+
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* bsp_specs, clock/clock.c, include/bsp.h, irq/irq.c,
 	startup/bspclean.c, startup/bspstart.c: Eliminate copies of the
 	Configuration Table. Use the RTEMS provided accessor macros to obtain
