@@ -62,24 +62,24 @@ consoleio_rel_SOURCES = console/console-io.c console/consupp.S
 consoleio_rel_CPPFLAGS = $(AM_CPPFLAGS)
 consoleio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_bsp_HEADERS = irq/irq.h \
-	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+include_bsp_HEADERS = irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ../shared/irq/irq.c irq/irq_init.c \
-    ../shared/irq/irq_asm.S irq/no_pic.c
+irq_rel_SOURCES = irq/irq_init.c irq/no_pic.c
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_DIST += vectors/README
 
 noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = vectors/align_h.S ../../powerpc/shared/vectors/vectors.S \
-    ../../powerpc/shared/vectors/vectors_init.c
+vectors_rel_SOURCES = vectors/align_h.S
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
+include_bsp_HEADERS += \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h	\
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h	\
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
 if HAS_MP
 EXTRA_DIST += shmsupp/README
@@ -99,6 +99,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
