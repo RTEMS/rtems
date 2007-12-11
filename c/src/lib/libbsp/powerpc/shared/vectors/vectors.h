@@ -95,7 +95,7 @@ extern  unsigned int  decrementer_exception_vector_prolog_code_size[];
 extern  void sysmgmt_exception_vector_prolog_code();
 extern  unsigned int  sysmgmt_exception_vector_prolog_code_size[];
 #endif
-#if defined(ASM_BOOKE_PIT_VECTOR)
+#if defined(ASM_BOOKE_DEC_VECTOR)
 extern  void pit_exception_vector_prolog_code();
 extern  unsigned int  pit_exception_vector_prolog_code_size[];
 #endif

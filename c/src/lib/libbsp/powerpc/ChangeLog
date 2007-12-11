@@ -1,5 +1,11 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/irq/irq_asm.S, shared/vectors/vectors.h:
+	renamed ASM_BOOKE_PIT_VECTOR to ASM_BOOKE_DEC_VECTOR
+	to be closer to 'official' nomenclature.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/openpic/openpic.c: fixed wrong register
 	address in openpic_gettimer().
 
