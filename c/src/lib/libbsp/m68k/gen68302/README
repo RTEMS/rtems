@@ -135,7 +135,7 @@ Changed "typedef char signed8" to "typedef signed char signed8".
 *** clock/
 
 TODO: Add set_vector support.  Figure out what to do with Clock_exit().
-TODO: Pre-compute (BSP_Configuration.microseconds_per_tick/1000) so that
+TODO: Pre-compute (rtems_configuration_get_microseconds_per_tick()/1000) so that
 it doesn't have to be re-computed on each Clock_isr().
 
 *** console/
