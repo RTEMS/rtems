@@ -155,7 +155,7 @@ typedef union { uint32_t u; uint8_t c[4]; } u32_a_t;
 
 /* exception handler; adds 1 to all register contents (except r1,r2,r13) */
 int
-handle_clobber_exc(BSP_Exception_frame *f, int vector)
+handle_clobber_exc(BSP_Exception_frame *f, unsigned vector)
 {
 int i;
 u32_a_t *p = (u32_a_t*)&f->GPR0;

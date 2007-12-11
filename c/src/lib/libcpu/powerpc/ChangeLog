@@ -1,5 +1,11 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/ppc_exc_test.c: fixed
+	wrong type in argument (signed vs. unsigned)
+	compiler warning.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am: build new-exceptions/bspsupport for
 	non-mpc5xx, new-exception CPUs.
 
