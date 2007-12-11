@@ -1223,7 +1223,7 @@ static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
-  uint32_t   byte1, byte2, byte3, byte4, swapped;
+  uint32_t byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
@@ -1231,7 +1231,7 @@ static inline uint32_t CPU_swap_u32(
   byte1 =  value        & 0xff;
  
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-  return( swapped );
+  return swapped;
 }
 
 /**
