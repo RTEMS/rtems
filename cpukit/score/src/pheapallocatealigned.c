@@ -16,16 +16,17 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Get_block_size(
-  Heap_Control        *the_heap,
-  void                *starting_address,
-  size_t              *size
+void *_Protected_heap_Allocate_aligned(
+  Heap_Control *the_heap,
+  size_t        size,
+  uint32_t      alignment
 )
 {
-  boolean status;
+  void *p;
 
   _RTEMS_Lock_allocator();
-    status = _Heap_Size_of_user_area( the_heap, starting_address, size );
+    p = _Heap_Allocate_aligned( the_heap, size, alignment );
   _RTEMS_Unlock_allocator();
-  return status;
+  return p;
 }
+

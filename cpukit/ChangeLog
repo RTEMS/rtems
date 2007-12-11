@@ -1,5 +1,10 @@
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/pheapallocatealigned.c, score/src/pheapgetblocksize.c:
+	Reverse file contents.
+
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/include/rtems/config.h: Correct idle task prototype.
 
 2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
