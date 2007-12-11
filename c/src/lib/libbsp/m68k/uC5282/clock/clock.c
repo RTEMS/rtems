@@ -102,7 +102,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
                             MCF5282_PIT_PCSR_OVW |                       \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD;                        \
-        MCF5282_PIT3_PMR = BSP_Configuration.microseconds_per_tick - 1;  \
+        MCF5282_PIT3_PMR = rtems_configuration_get_microseconds_per_tick() - 1;  \
         MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \

@@ -36,12 +36,12 @@ void Clock_driver_support_initialize_hardware()
 
   tmpi = ((int) &_ClockFrequency) * 1000000;  /* ClockFrequency is in Mhz */
   tmp = (float) tmpi / 2.0;
-  tmp = ((float) BSP_Configuration.microseconds_per_tick / 1000000.0) * (tmp);
+  tmp = ((float) rtems_configuration_get_microseconds_per_tick() / 1000000.0) * (tmp);
 
   Clock_counter_register_value = (unsigned int) tmp;
 #if 0
   Clock_counter_register_value =
-      (uint32_t) ((float) BSP_Configuration.microseconds_per_tick /
+      (uint32_t) ((float) rtems_configuration_get_microseconds_per_tick() /
        ((float)_ClockFrequency / 2.0)));
 #endif
   c4x_timer_stop( C4X_TIMER_0 );

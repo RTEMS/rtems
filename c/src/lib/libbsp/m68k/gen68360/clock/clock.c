@@ -87,7 +87,7 @@ static unsigned long nsec;
         extern int m360_clock_rate;                                           \
         unsigned long nsec_per_chip_tick = 1000000000 / m360_clock_rate;      \
         unsigned long nsec_per_pit_tick = 512 * nsec_per_chip_tick;           \
-        rtems_nsec_per_tick = BSP_Configuration.microseconds_per_tick * 1000; \
+        rtems_nsec_per_tick = rtems_configuration_get_microseconds_per_tick() * 1000; \
         divisor = rtems_nsec_per_tick / nsec_per_pit_tick;                    \
         if (divisor > 255)                                                    \
             divisor = 255;                                                    \

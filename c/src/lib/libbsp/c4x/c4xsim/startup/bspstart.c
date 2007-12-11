@@ -21,14 +21,6 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table         BSP_Configuration;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -74,10 +66,10 @@ void bsp_start( void )
   extern void     *_WorkspaceBase;
   extern uint32_t _WorkspaceMax;
 
-  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
+  Configuration.work_space_start = (void *)&_WorkspaceBase;
   /* XXX check to see if satisfying small memory model */
 
-  if ( BSP_Configuration.work_space_size > (int) &_WorkspaceMax )
+  if ( rtems_configuration_get_work_space_size() > (int) &_WorkspaceMax )
     rtems_fatal_error_occurred( 0x43218765 );
 
   BSP_output_char = C4X_BSP_output_char;

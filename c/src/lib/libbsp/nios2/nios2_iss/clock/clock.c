@@ -39,7 +39,7 @@ void Clock_driver_support_initialize_hardware(void)
 
   CLOCK_REGS->control = ALTERA_AVALON_TIMER_CONTROL_STOP_MSK;
 
-  period = (CLOCK_FREQ/1000000L)*BSP_Configuration.microseconds_per_tick - 1;
+  period = (CLOCK_FREQ/1000000L)*rtems_configuration_get_microseconds_per_tick() - 1;
   CLOCK_REGS->period_hi = period >> 16;
   CLOCK_REGS->period_lo = period & 0xFFFF;
 

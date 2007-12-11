@@ -23,20 +23,11 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
 extern void bsp_postdriver_hook(void);
 extern void bsp_libc_init( void *, uint32_t, int );
-extern rtems_configuration_table  BSP_Configuration;
 
 #if 0
 extern char         _RAMBase[];
@@ -69,8 +60,8 @@ void bsp_pretasking_hook(void)
 #endif
     unsigned long ramSpace;
 
-    heapStart = (unsigned long)BSP_Configuration.work_space_start
-              + BSP_Configuration.work_space_size;
+    heapStart = (unsigned long)Configuration.work_space_start
+              + rtems_configuration_get_work_space_size();
 
     if (heapStart & (CPU_ALIGNMENT-1))
         heapStart = (heapStart + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
@@ -121,9 +112,9 @@ void bsp_start( void )
    */
 
 #if 0
-  BSP_Configuration.work_space_start = (void *)_WorkspaceBase;
+  Configuration.work_space_start = (void *)_WorkspaceBase;
 #else
-  BSP_Configuration.work_space_start = (void *)__alt_heap_start;
+  Configuration.work_space_start = (void *)__alt_heap_start;
 #endif
 
 }

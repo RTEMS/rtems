@@ -64,10 +64,6 @@ void BSP_fatal_return( void );
 
 void bsp_spurious_initialize( void );
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
-extern uint32_t                  bsp_isr_level;
-
 #endif /* ASM */
 
 #ifdef __cplusplus

@@ -132,8 +132,6 @@ altera_avalon_jtag_uart_regs;
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

@@ -27,14 +27,6 @@
 #include <errno.h>
  
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  * Location of 'VME' access
  */
 #define VME_ONE_BASE    0x30000000
@@ -263,7 +255,7 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start = (void *)_WorkspaceBase;
+  Configuration.work_space_start = (void *)_WorkspaceBase;
 
   /*
    * Invalidate the cache and disable it
