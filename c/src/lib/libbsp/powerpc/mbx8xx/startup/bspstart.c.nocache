@@ -25,16 +25,6 @@
 #include <rtems/libcsupport.h>
  
 /*
- *  The original table from the application (in ROM) and our copy of it with
- *  some changes. Configuration is defined in <confdefs.h>. Make sure that
- *  our configuration tables are uninitialized so that they get allocated in
- *  the .bss section (RAM).
- */
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Driver configuration parameters
  */
 uint32_t   bsp_clicks_per_usec;
@@ -153,7 +143,7 @@ void bsp_start(void)
    *  In this case, the memory is not malloc'ed.  It is just
    *  "pulled from the air".
    */
-  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
+  Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
    *  initialize the device driver parameters
@@ -177,7 +167,7 @@ void bsp_start(void)
   /* 
    * Call this in case we use TERMIOS for console I/O
    */
-  m8xx_uart_reserve_resources( &BSP_Configuration );
+  m8xx_uart_reserve_resources( &Configuration );
 
   m8xx.scc2.sccm=0;
   m8xx.scc2p.rbase=0;
