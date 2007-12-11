@@ -73,16 +73,6 @@ SPR_RW(SPRG1)
 #include RTEMS_XPARAMETERS_H
 #include <stdio.h>
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-char *rtems_progname;
-
 uint32_t _heap_start;
 uint32_t _heap_end;
 uint32_t _top_of_ram;
@@ -150,8 +140,8 @@ void bsp_pretasking_hook(void)
 
     /* round up from the top of workspace to next 64k boundary, get
      * default heapsize from linker script  */
-    heap_start = (((uint32_t)BSP_Configuration.work_space_start +
-		   BSP_Configuration.work_space_size) + 0x18000) & 0xffff0000;
+    heap_start = (((uint32_t)Configuration.work_space_start +
+		   rtems_configuration_get_work_space_size()) + 0x18000) & 0xffff0000;
 
     heap_end = _heap_start + (uint32_t)&_HeapSize;
 
@@ -254,7 +244,7 @@ void bsp_start( void )
     extern int _end;
 
     /* round _end up to next 64k boundary for start of workspace */
-    BSP_Configuration.work_space_start = (void *)((((uint32_t)&_end) + 0x18000) & 0xffff0000);
+    Configuration.work_space_start = (void *)((((uint32_t)&_end) + 0x18000) & 0xffff0000);
   }
 
 }

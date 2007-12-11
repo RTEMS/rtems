@@ -62,14 +62,6 @@
 #include <rtems/libcsupport.h>
 #include <ictrl.h>
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
 void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 
 /*
@@ -165,8 +157,8 @@ void bsp_start( void )
      -remove RAM_END from bsp.h, this cannot be valid...
       or must be a function call
    */
-  BSP_Configuration.work_space_start = (void *)
-      ((char *)(bsp_ram_end)) - BSP_Configuration.work_space_size;
+  Configuration.work_space_start = (void *)
+      ((char *)(bsp_ram_end)) - rtems_configuration_get_work_space_size();
 
   /*
    *  initialize the device driver parameters

@@ -72,9 +72,6 @@ extern uint32_t _top_of_ram;
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
-
 /* Network Defines */
 #if 1 /* EB/doe changes */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"

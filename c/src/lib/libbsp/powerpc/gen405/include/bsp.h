@@ -67,8 +67,6 @@ extern "C" {
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
 /*
  *  Device Driver Table Entries
  */

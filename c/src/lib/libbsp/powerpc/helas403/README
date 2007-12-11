@@ -45,11 +45,11 @@ Notes
 
 Board description
 -----------------
-clock rate:	25 MHz
-bus width:	8-bit PROM, 32-bit DRAM
-ROM:		Up to 512KByte (Am29F040), 90 nsec chip select 0
-RAM:		4 to 32 MByte DRAM SIMM (autodetect), 70 nsec,
-		no parity, at CS7 or CS6+CS7 (for two-bank-SIMMs)
+clock rate:   25 MHz
+bus width:    8-bit PROM, 32-bit DRAM
+ROM:          Up to 512KByte (Am29F040), 90 nsec chip select 0
+RAM:          4 to 32 MByte DRAM SIMM (autodetect), 70 nsec,
+              no parity, at CS7 or CS6+CS7 (for two-bank-SIMMs)
 
 
 helas403 only supports single processor operations.
@@ -62,8 +62,8 @@ system. The rough features of this board are described above.
 This BSP contains files for two startup methods:
 - Direct start from Flash after powerup (with code run out of flash):
   This is the default configuration, it uses the files
-	flashentry/flashentry.s
-	startup/linkcmds
+    flashentry/flashentry.s
+    startup/linkcmds
 
  Please note, that this configuration is good to startup the system,
 but it will not gain maximum performance due to slow Flash access (8
@@ -71,8 +71,8 @@ bit wide only)
 
 - Start after software download into DRAM:
   This configuration will use:
-	dlentry/dlentry.s
-	startup/linkcmds.dl
+    dlentry/dlentry.s
+    startup/linkcmds.dl
 
 If you want to use the download configuration, it is sufficient to
 rename the file "startup/linkcmds.dl" to "startup/linkcmds", it will
@@ -84,23 +84,22 @@ For adapting this BSP to other boards, the following files should be
 modified:
 
 - c/src/lib/libbsp/powerpc/helas403/flashentry/flashentry.s
-	for the memory controller configuration and other basic stuff
+        for the memory controller configuration and other basic stuff
 
 - c/src/lib/libbsp/powerpc/helas403/startup/linkcmds[.dl]
-	for the memory layout required
+        for the memory layout required
 
 - c/src/lib/libbsp/powerpc/helas403/startup/bspstart.c
-	for adaption of BSP_Configuration. here you can select
-	the clock source for the timers and the serial interface
-	(system clock or external clock pin), the clock rates, initial
-	baud rate and other stuff
+        Here you can select the clock source for the timers and the serial
+        interface (system clock or external clock pin), the clock rates,
+        initial baud rate and other stuff
 
 - c/src/lib/libbsp/powerpc/helas403/include/bsp.h
-	some BSP-related constants
+        some BSP-related constants
 
 The actual drivers are placed in 
 - c/src/lib/libcpu/powerpc/ppc403/*
-	well, they should be generic, so there _should_ be no reason
-	to mess around there (but who knows...)
+        well, they should be generic, so there _should_ be no reason
+        to mess around there (but who knows...)
 
 

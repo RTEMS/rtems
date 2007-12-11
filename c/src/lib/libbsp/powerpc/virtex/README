@@ -76,10 +76,9 @@ modified:
 	for the memory layout required
 
 - c/src/lib/libbsp/powerpc/virtex/startup/bspstart.c
-	for adaption of BSP_Configuration. here you can select
-	the clock source for the timers and the serial interface
-	(system clock or external clock pin), the clock rates, initial
-	baud rate and other stuff
+	Here you can select the clock source for the timers and the
+        serial interface (system clock or external clock pin), the clock
+        rates, initial baud rate and other stuff
 
 - c/src/lib/libbsp/powerpc/virtex/include/bsp.h
 	some BSP-related constants
