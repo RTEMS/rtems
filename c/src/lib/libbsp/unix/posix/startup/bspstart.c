@@ -24,16 +24,6 @@
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
 
-extern rtems_configuration_table  Configuration;
-
-/*
- * A copy of the configuration table from the application
- * with some changes applied to it.
- */
-
-rtems_configuration_table    BSP_Configuration;
-rtems_multiprocessing_table  BSP_Multiprocessing;
-uint32_t                     bsp_isr_level;
 uint32_t                     Heap_size;
 int                          rtems_argc;
 char                       **rtems_argv;
@@ -119,35 +109,23 @@ void bsp_start(void)
     uintptr_t   workspace_ptr;
 
     /*
-     *  Copy the table (normally done in shared main).
-     */
-
-    BSP_Configuration = Configuration;
-
-    /*
      *  If the node number is -1 then the application better provide
      *  it through environment variables RTEMS_NODE.
      *  Ditto for RTEMS_MAXIMUM_NODES
      */
 
-    if (BSP_Configuration.User_multiprocessing_table) {
+    if (Configuration.User_multiprocessing_table) {
         char *p;
 
-        /* make a copy for possible editing */
-        BSP_Multiprocessing = *BSP_Configuration.User_multiprocessing_table;
-        BSP_Configuration.User_multiprocessing_table = &BSP_Multiprocessing;
-
-        if (BSP_Multiprocessing.node == -1)
-        {
+        if (Configuration.User_multiprocessing_table->node == -1) {
             p = getenv("RTEMS_NODE");
-            BSP_Multiprocessing.node = p ? atoi(p) : 1;
+            Configuration.User_multiprocessing_table->node = p ? atoi(p) : 1;
         }
 
         /* If needed provide maximum_nodes also */
-        if (BSP_Multiprocessing.maximum_nodes == -1)
-        {
+        if (Configuration.User_multiprocessing_table->maximum_nodes == -1) {
             p = getenv("RTEMS_MAXIMUM_NODES");
-            BSP_Multiprocessing.maximum_nodes = p ? atoi(p) : 1;
+            Configuration.User_multiprocessing_table->maximum_nodes = p ? atoi(p) : 1;
         }
     }
 
@@ -155,41 +133,28 @@ void bsp_start(void)
      * Set cpu_number to accurately reflect our cpu number
      */
 
-    if (BSP_Configuration.User_multiprocessing_table)
-        cpu_number = BSP_Configuration.User_multiprocessing_table->node - 1;
+    if (Configuration.User_multiprocessing_table->User_multiprocessing_table)
+        cpu_number = Configuration.User_multiprocessing_table->node - 1;
     else
         cpu_number = 0;
 
     if (getenv("RTEMS_WORKSPACE_SIZE"))
-        BSP_Configuration.work_space_size =
+        rtems_configuration_get_work_space_size() =
            strtol(getenv("RTEMS_WORKSPACE_SIZE"), 0, 0);
     else
-        BSP_Configuration.work_space_size = DEFAULT_WORKSPACE_SIZE;
+        rtems_configuration_get_work_space_size() = DEFAULT_WORKSPACE_SIZE;
 
     /*
      * Allocate workspace memory, ensuring it is properly aligned
      */
 
     workspace_ptr =
-      (uintptr_t) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
+      (uintptr_t) sbrk(rtems_configuration_get_work_space_size() + CPU_ALIGNMENT);
     workspace_ptr += CPU_ALIGNMENT - 1;
     workspace_ptr &= ~(CPU_ALIGNMENT - 1);
 
-    BSP_Configuration.work_space_start = (void *) workspace_ptr;
-
-    /*
-     * Add 1 extension for MPCI_fatal
-     */
-
-    if (BSP_Configuration.User_multiprocessing_table)
-        BSP_Configuration.maximum_extensions++;
+    Configuration.work_space_start = (void *) workspace_ptr;
 
     CPU_CLICKS_PER_TICK = 1;
 
-    /*
-     *  Start most of RTEMS
-     *  main() will start the rest
-     */
-
-    bsp_isr_level = rtems_initialize_executive_early( &BSP_Configuration );
 }

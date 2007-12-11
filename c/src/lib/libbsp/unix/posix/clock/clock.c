@@ -36,7 +36,7 @@ void Install_clock(rtems_isr_entry clock_isr)
 
     (void) set_vector( clock_isr, Clock_driver_vector, 1 );
 
-    _CPU_Start_clock( BSP_Configuration.microseconds_per_tick );
+    _CPU_Start_clock( rtems_configuration_get_microseconds_per_tick() );
 
     atexit(Clock_exit);
 }

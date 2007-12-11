@@ -49,15 +49,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- * RTEMS program name
- * Probably not used by anyone, but it is nice to have it.
- * Actually the UNIX version of CPU_INVOKE_DEBUGGER will probably
- * need to use it
- */
-
-char *rtems_progname;
-
 class RTEMS {
     public:
          RTEMS();
@@ -89,6 +80,14 @@ extern "C" {
         rtems_argc = argc;
         rtems_argv = argv;
 
+        rtems_interrupt_level bsp_isr_level;
+
+        /*
+         *  Make sure interrupts are disabled.
+         */
+
+        rtems_interrupt_disable( bsp_isr_level );
+
         if ((argc > 0) && argv && argv[0])
             rtems_progname = argv[0];
         else
@@ -101,6 +100,8 @@ extern "C" {
         #ifndef __GNUC__
           invoke_non_gnu_constructors();
 	#endif
+
+        rtems_initialize_executive_early( &Configuration );
 
         /*
          *  Start multitasking

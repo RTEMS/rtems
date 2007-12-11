@@ -31,8 +31,6 @@ extern "C" {
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */
@@ -53,13 +51,8 @@ void bsp_cleanup( void );
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 extern int                       rtems_argc;
 extern char                    **rtems_argv;
-
-extern uint32_t                  bsp_isr_level;
-
-extern char *rtems_progname;    /* UNIX executable name */
 
 extern int cpu_number;
 
