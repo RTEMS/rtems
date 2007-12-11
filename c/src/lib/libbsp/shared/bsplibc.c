@@ -9,8 +9,6 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
-extern rtems_configuration_table  BSP_Configuration;
-
 void bsp_libc_init(
   void       *heap_start,
   uint32_t    heap_size,
@@ -31,7 +29,7 @@ void bsp_libc_init(
      * Set up for the libc handling.
      */
 
-    if ( BSP_Configuration.ticks_per_timeslice > 0 )
+    if ( rtems_configuration_get_ticks_per_timeslice() > 0 )
         libc_init(1);                /* reentrant if possible */
     else
         libc_init(0);                /* non-reentrant */

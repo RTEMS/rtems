@@ -36,16 +36,6 @@
 extern void bsp_start( void );
 extern void bsp_cleanup( void );
 
-extern rtems_configuration_table  Configuration;
-extern rtems_configuration_table  BSP_Configuration;
-rtems_api_configuration_table BSP_RTEMS_Configuration;
-
-#ifdef RTEMS_POSIX_API
-posix_api_configuration_table BSP_POSIX_Configuration;
-#endif
-
-rtems_interrupt_level bsp_isr_level;
-
 /*
  *  Since there is a forward reference
  */
@@ -58,6 +48,13 @@ int boot_card(int argc, char **argv, char **envp)
   static char  *envp_pointer = NULL;
   char **argv_p = &argv_pointer;
   char **envp_p = &envp_pointer;
+  rtems_interrupt_level bsp_isr_level;
+
+  /*
+   *  Make sure interrupts are disabled.
+   */
+
+  rtems_interrupt_disable( bsp_isr_level );
 
   /*
    *  Set things up so c_rtems_main() is called with real pointers for
@@ -73,20 +70,6 @@ int boot_card(int argc, char **argv, char **envp)
     envp_p = envp;
 
   /*
-   *  Copy the configuration table so we and the BSP wants to change it.
-   */
-
-  BSP_Configuration       = Configuration;
-
-  BSP_RTEMS_Configuration = *Configuration.RTEMS_api_configuration;
-  BSP_Configuration.RTEMS_api_configuration = &BSP_RTEMS_Configuration;
-
-#ifdef RTEMS_POSIX_API
-  BSP_POSIX_Configuration = *Configuration.POSIX_api_configuration;
-  BSP_Configuration.POSIX_api_configuration = &BSP_POSIX_Configuration;
-#endif
-
-  /*
    * Invoke Board Support Package initialization routine written in C.
    */
 
@@ -96,7 +79,7 @@ int boot_card(int argc, char **argv, char **envp)
    *  Initialize RTEMS but do NOT start multitasking.
    */
 
-  bsp_isr_level = rtems_initialize_executive_early( &BSP_Configuration );
+  rtems_initialize_executive_early( &Configuration );
 
   /*
    *  Call c_rtems_main() and eventually let the first task or the real
