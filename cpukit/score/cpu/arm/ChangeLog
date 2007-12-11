@@ -1,3 +1,8 @@
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Temporarily use C implementation of swap u32 for
+	thumb mode.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Move interrupt_stack_size field from CPU
