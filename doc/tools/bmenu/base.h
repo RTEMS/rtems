@@ -12,10 +12,6 @@
 #include "system.h"
 #include "chain.h"
 
-#ifndef EXTERN 
-#define EXTERN extern
-#endif
-
 /*
  *  Paragraph size should be kept down because it is allocated for each
  *  Line_Control.  If this number is large, the memory requirements for
@@ -98,8 +94,5 @@ void DumpList(
 );
 
 void ReleaseFile();
-
-EXTERN boolean          Verbose;                 /* status/debug msgs */
-EXTERN Chain_Control    Lines;
 
 #endif

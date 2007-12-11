@@ -1,5 +1,7 @@
 2007-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* base.h: Remove Lines, Verbose, EXTERN.
+	* menu2.c: Add Lines, Verbose. Remove EXTERN.
 	* base.h: Remove BlankAsWarnings.
 	* base.h: Remove NumberOf*.
 

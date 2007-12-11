@@ -42,9 +42,11 @@ extern char *optarg;     /* Why is this not in <stdlib.h>? */
 #define NAME_MAX      14 /* Why is the one in limits.h not showing up? */
 #endif
 #define INIT_DATA
-#define EXTERN
 
 #include "base.h"
+
+boolean          Verbose;                 /* status/debug msgs */
+Chain_Control    Lines;
 
 FILE           *OutFile;
 
