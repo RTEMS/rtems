@@ -52,7 +52,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 
   clicks = ERC32_MEC.Real_Time_Clock_Counter;
 
-  return (uint32_t) (BSP_Configuration.microseconds_per_tick - clicks) * 1000;
+  return (uint32_t) (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick \
@@ -63,7 +63,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
     /* approximately 1 us per countdown */ \
     ERC32_MEC.Real_Time_Clock_Scalar  = CLOCK_SPEED - 1; \
     ERC32_MEC.Real_Time_Clock_Counter = \
-      BSP_Configuration.microseconds_per_tick; \
+      rtems_configuration_get_microseconds_per_tick(); \
     \
     ERC32_MEC_Set_Real_Time_Clock_Timer_Control( \
       ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | \

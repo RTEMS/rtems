@@ -44,7 +44,7 @@ extern int CLOCK_SPEED;
 
 #define Clock_driver_support_initialize_hardware() \
   do { \
-    LEON_REG.Timer_Reload_1 = BSP_Configuration.microseconds_per_tick - 1; \
+    LEON_REG.Timer_Reload_1 = rtems_configuration_get_microseconds_per_tick() - 1; \
     \
     LEON_REG.Timer_Control_1 = ( \
       LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |  \

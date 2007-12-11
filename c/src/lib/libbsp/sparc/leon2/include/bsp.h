@@ -104,8 +104,6 @@ void BSP_fatal_return( void );
 
 void bsp_spurious_initialize( void );
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
 #ifdef __cplusplus
 }
 #endif
