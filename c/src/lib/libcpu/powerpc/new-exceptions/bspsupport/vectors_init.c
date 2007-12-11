@@ -117,8 +117,8 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
     printk(" R1  = %08x", excPtr->GPR1);
     printk(" R2  = %08x", excPtr->GPR2);
   } else {
-    printk("              ");
-    printk("              ");
+    printk("               ");
+    printk("               ");
   }
   printk(" R3  = %08x\n", excPtr->GPR3);
   printk("\t R4  = %08x", excPtr->GPR4);
