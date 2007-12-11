@@ -20,12 +20,6 @@ extern int mpc5200_uart_pollRead(int minor);
 
 void bsp_cleanup( void )
 {
-  
-  {
-    extern void BSP_report_IRQ_Timing(void);
-    BSP_report_IRQ_Timing();
-  }
- 
   #if defined(BSP_PRESS_KEY_FOR_RESET)
     printk( "\nEXECUTIVE SHUTDOWN! Any key to reboot..." );
 
