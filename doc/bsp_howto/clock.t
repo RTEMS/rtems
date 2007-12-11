@@ -59,9 +59,9 @@ used as the source of the clock tick.
 
 The device should be programmed such that an interrupt is generated
 every @i{m} microseconds, where @i{m} is equal to 
-@code{BSP_Configuration.microseconds_per_tick}. Sometimes the periodic interval
-timer can use a prescaler so you have to look carefully at your user's
-manual to determine the correct value. 
+@code{rtems_configuration_get_microseconds_per_tick()}. Sometimes
+the periodic interval timer can use a prescaler so you have to look
+carefully at your user's manual to determine the correct value. 
 
 You must use the RTEMS primitive @code{rtems_interrupt_catch} to install
 your clock interrupt service routine:
