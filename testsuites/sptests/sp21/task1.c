@@ -21,8 +21,8 @@
 
 #define STUB_DRIVER_MAJOR     0x2
 #define NO_DRIVER_MAJOR       0x3
-#define INVALID_DRIVER_MAJOR  (Configuration.number_of_device_drivers + 1)
-/* #define INVALID_DRIVER_MAJOR  0xffffffff */
+#define INVALID_DRIVER_MAJOR  \
+     (rtems_configuration_get_number_of_device_drivers() + 1)
 
 /* driver entries to use with io_register */
 rtems_driver_address_table GoodDriver = DEVNULL_DRIVER_TABLE_ENTRY;
