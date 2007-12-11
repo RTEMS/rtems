@@ -1,0 +1,14 @@
+The files in this directory (vectors.S, vectors.h, vectors_init.c)
+are DEPRECATED.
+
+DO NOT COPY/MODIFY FOR NEW BSPs
+
+as this has created major maintenance headache.
+Consider using the library in
+
+libcpu/powercp/new-exceptions/bspsupport/
+
+which implements the same functionality in a
+(hopefully) generic way.
+
+T.S., 12/2007

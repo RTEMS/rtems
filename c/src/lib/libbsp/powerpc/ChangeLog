@@ -1,4 +1,12 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/vectors/README.deprecated, shared/irq/README.deprecated:
+	added READMEs stating that certain files should not be
+	copy/paste/modified when creating new BSPs. New BSPs
+	are encouraged to use the new library under
+	libcpu/powerpc/new-exceptions/bspsupport.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 	
 	* shared/vectors/vectors_entry.S, motorola_powerpc/bsp_specs,
 	shared/start/vectors_entry.S: moved vectors_entry.S to
