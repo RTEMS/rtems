@@ -1,5 +1,13 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/e500_raw_exc_init.c: map DEC
+	exception to ASM_BOOKE_DEC_VECTOR instead of ASM_DEC_VECTOR.
+
+	Fixed wrong mapping of ASM_BOOKE_FIT_VECTOR
+	(was ASM_BOOKE_PIT_VECTOR).
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/raw_exception.c, new_exceptions/raw_exception.h,
 	new_exceptions/bspsupport/irq.c: renamed ASM_BOOKE_PIT_VECTOR
 	to ASM_BOOKE_DEC_VECTOR to be closer to 'official'
