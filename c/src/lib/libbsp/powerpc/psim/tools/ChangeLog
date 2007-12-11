@@ -1,3 +1,7 @@
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest: Change 4.8 to 4.9.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Add capture to list of interative tests to skip in batch

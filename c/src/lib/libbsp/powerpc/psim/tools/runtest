@@ -86,7 +86,7 @@ update_on_tick="no"
 max_run_time=$((5 * 60))
 using_print_buffer="yes"
 #simulator=/usr1/rtems/work/ada/4.00/ppc_src/b-gdb/sim/ppc/run
-simulator=powerpc-rtems4.8-run 
+simulator=powerpc-rtems4.9-run 
 instruction_limit=1000000000
 sizeof_ram=8388608
 
