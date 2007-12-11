@@ -31,8 +31,6 @@
  *  The Real Time Clock Counter Timer uses this trap type.
  */
 
-extern rtems_configuration_table Configuration;
-
 #if defined(RTEMS_MULTIPROCESSING)
   #define LEON3_CLOCK_INDEX \
     (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
@@ -83,7 +81,7 @@ static int clkirq;
 #define Clock_driver_support_initialize_hardware() \
   do { \
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = \
-      BSP_Configuration.microseconds_per_tick - 1; \
+      rtems_configuration_get_microseconds_per_tick() - 1; \
     \
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].conf = \
       LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | \

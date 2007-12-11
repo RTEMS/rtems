@@ -70,13 +70,6 @@ uint32_t         rtemsFreeMemStart;
                          /* Address of start of free memory - should be updated
                             after creating new partitions or regions.         */
 
-/* The original BSP configuration table from the application and our copy of it
-   with some changes. */
-
-extern rtems_configuration_table  Configuration;
-       rtems_configuration_table  BSP_Configuration;
-
-char            *rtems_progname;               /* Program name - from main(). */
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -184,8 +177,8 @@ void bsp_start_default( void )
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
-  rtemsFreeMemStart += BSP_Configuration.work_space_size;
+  Configuration.work_space_start = (void *)rtemsFreeMemStart;
+  rtemsFreeMemStart += rtems_configuration_get_work_space_size();
 
   /*
    * Init rtems interrupt management
@@ -204,27 +197,13 @@ void bsp_start_default( void )
       printk("PCI bus: could not initialize PCI BIOS interface\n");
   }
 
-  /*
-   *  The following information is very useful when debugging.
-   */
 
 #if 0
-  printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
-  printk( "maximum_extensions = 0x%x\n", BSP_Configuration.maximum_extensions );
-  printk( "microseconds_per_tick = 0x%x\n",
-     BSP_Configuration.microseconds_per_tick );
-  printk( "ticks_per_timeslice = 0x%x\n",
-     BSP_Configuration.ticks_per_timeslice );
-  printk( "number_of_device_drivers = 0x%x\n",
-     BSP_Configuration.number_of_device_drivers );
-  printk( "Device_driver_table = 0x%x\n",
-     BSP_Configuration.Device_driver_table );
-
   printk( "_heap_size = 0x%x\n", _heap_size );
   printk( "_stack_size = 0x%x\n", _stack_size );
   printk( "rtemsFreeMemStart = 0x%x\n", rtemsFreeMemStart );
-  printk( "work_space_start = 0x%x\n", BSP_Configuration.work_space_start );
-  printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+  printk( "work_space_start = 0x%x\n", rtems_configuration_get_work_space_start() );
+  printk( "work_space_size = 0x%x\n", rtems_configuration_get_work_space_size() );
 #endif
 } /* bsp_start */
 

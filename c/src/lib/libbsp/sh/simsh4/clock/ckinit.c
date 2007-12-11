@@ -77,7 +77,7 @@ Clock_isr (rtems_vector_number vector)
 void
 Clock_exit(void)
 {
-    if (BSP_Configuration.ticks_per_timeslice)
+    if (rtems_configuration_get_ticks_per_timeslice())
     {
         /* disable all timer1 interrupts */
         set_clock_period(0);
@@ -100,9 +100,9 @@ Install_clock(rtems_isr_entry clock_isr)
   uint32_t         period;
 
   Clock_driver_ticks = 0;
-  if (BSP_Configuration.ticks_per_timeslice) {
+  if (rtems_configuration_get_ticks_per_timeslice()) {
       rtems_isr_entry  old_isr;
-      period = bsp_clicks_per_second / BSP_Configuration.ticks_per_timeslice;
+      period = bsp_clicks_per_second / rtems_configuration_get_ticks_per_timeslice();
 
       /* Configure timer interrupts */
       set_clock_period(period);

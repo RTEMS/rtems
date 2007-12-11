@@ -44,7 +44,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
 
   if ( Clock_isrs == 1 ) {
     rtems_clock_tick();
-    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+    Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
   }
   else
     Clock_isrs -= 1;
@@ -55,7 +55,7 @@ void Install_clock(
 )
 {
   Clock_driver_ticks = 0;
-  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
 
   Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 

@@ -27,14 +27,6 @@ void bsp_clean_up(void);
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-/*
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
@@ -71,7 +63,7 @@ void bsp_pretasking_hook(void)
     if (heap_start & (CPU_ALIGNMENT-1))
       heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-    heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
+    heap_size = Configuration.work_space_start -(void *) heap_start ;
     heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
     bsp_libc_init((void *) heap_start, heap_size, 0);
@@ -91,8 +83,8 @@ void bsp_start( void )
 {
   void rtems_irq_mngt_init();
 
-  BSP_Configuration.work_space_start = (void *)
-     RAM_END - BSP_Configuration.work_space_size;
+  Configuration.work_space_start = (void *)
+     RAM_END - rtems_configuration_get_work_space_size();
 
   /*
    * Init rtems_interrupt_management
@@ -111,19 +103,13 @@ void bsp_start( void )
 #ifdef BSP_DEBUG
   printk( "RAM_START = 0x%x\nRAM_END = 0x%x\n", RAM_START, RAM_END );
   printk( "work_space_start = 0x%x\n",
-     BSP_Configuration.work_space_start );
+     Configuration.work_space_start );
   printk( "work_space_size = 0x%x\n",
-     BSP_Configuration.work_space_size );
-  printk( "maximum_extensions = 0x%x\n",
-     BSP_Configuration.maximum_extensions );
+     rtems_configuration_get_work_space_size() );
   printk( "microseconds_per_tick = 0x%x\n",
-     BSP_Configuration.microseconds_per_tick );
+     rtems_configuration_get_microseconds_per_tick() );
   printk( "ticks_per_timeslice = 0x%x\n",
-     BSP_Configuration.ticks_per_timeslice );
-  printk( "number_of_device_drivers = 0x%x\n",
-     BSP_Configuration.number_of_device_drivers );
-  printk( "Device_driver_table = 0x%x\n",
-     BSP_Configuration.Device_driver_table );
+     rtems_configuration_get_ticks_per_timeslice() );
 
   /*  printk( "_heap_size = 0x%x\n", _heap_size );
       printk( "_stack_size = 0x%x\n", _stack_size ); */

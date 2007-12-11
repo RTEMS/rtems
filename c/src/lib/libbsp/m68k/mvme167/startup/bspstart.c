@@ -26,15 +26,9 @@
 #include <page_table.h>
 #include <fatal.h>
 
-/*
- *  The original table from the application (in ROM) and our copy of it with
- *  some changes. Configuration is defined in <confdefs.h>. Make sure that
- *  our configuration tables are uninitialized so that they get allocated in
- *  the .bss section (RAM).
- */
-extern rtems_configuration_table Configuration;
-rtems_configuration_table BSP_Configuration;
+/* XXX If RTEMS let the BSP replace the default fatal error handler... */
 rtems_extensions_table user_extension_table;
+
 /*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
@@ -127,9 +121,9 @@ void bsp_start( void )
    *  supply one with our own fatal error handler that returns control to
    *  167Bug.
    */
-  if ( BSP_Configuration.User_extension_table == NULL ) {
+  if ( Configuration.User_extension_table == NULL ) {
     user_extension_table.fatal = bsp_fatal_error_occurred;
-    BSP_Configuration.User_extension_table = &user_extension_table;
+    Configuration.User_extension_table = &user_extension_table;
   }
 
   /*
@@ -137,5 +131,5 @@ void bsp_start( void )
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
+  Configuration.work_space_start = (void *)&_WorkspaceBase;
 }

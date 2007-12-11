@@ -25,16 +25,6 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-char *rtems_progname;
-
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
  */
@@ -71,5 +61,5 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
+  Configuration.work_space_start = (void *)&_WorkspaceBase;
 }

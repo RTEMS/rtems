@@ -77,7 +77,7 @@ rtems_isr Clock_isr(
 	   libgcc.a for gcc with software floating point support, this is not
 	   a problem */
     Clock_isrs =
-      (int)(BSP_Configuration.microseconds_per_tick / 1000);
+      (int)(rtems_configuration_get_microseconds_per_tick() / 1000);
   }
   else
     Clock_isrs -= 1;

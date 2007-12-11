@@ -101,7 +101,7 @@ rtems_isr VMEchip2_T2_isr(
   long i;
   long ct;                      /* Number of T2 ticks per RTEMS ticks */
 
-  ct = BSP_Configuration.microseconds_per_tick / 1000;
+  ct = rtems_configuration_get_microseconds_per_tick() / 1000;
 
   /*
    *  May have missed interrupts, so should look at the overflow counter.
@@ -149,7 +149,7 @@ rtems_isr VMEchip2_T2_isr(
 void VMEchip2_T2_initialize( void )
 {
   Clock_driver_ticks = 0;
-  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
 
   lcsr->intr_ena &= 0xFDFFFFFF;   /* Disable tick timer 2 interrupt */
   lcsr->intr_clear = 0x02000000;  /* Clear tick timer 2 interrupt */

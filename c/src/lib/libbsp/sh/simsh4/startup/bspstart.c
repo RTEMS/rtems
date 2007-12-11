@@ -36,16 +36,7 @@
  */
 uint32_t bsp_clicks_per_second;
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
 extern void bsp_hw_init(void);
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
 
 /*
  *  Use the shared implementations of the following routines
@@ -111,8 +102,8 @@ void bsp_start(void)
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start = (void *) &WorkSpaceStart ;
-  BSP_Configuration.work_space_size  =
+  Configuration.work_space_start = (void *) &WorkSpaceStart ;
+  rtems_configuration_get_work_space_size()  =
     (uint32_t) &WorkSpaceEnd -
     (uint32_t) &WorkSpaceStart ;
 

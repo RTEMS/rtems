@@ -41,10 +41,6 @@ extern "C" {
 #define RAM_START 0
 #define RAM_END   0x100000
 
-/* miscellaneous stuff assumed to exist */
-
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

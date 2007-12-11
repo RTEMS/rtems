@@ -177,8 +177,6 @@ typedef volatile struct {
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */

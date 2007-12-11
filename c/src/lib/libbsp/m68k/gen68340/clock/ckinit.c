@@ -108,7 +108,7 @@ Install_clock (rtems_isr_entry clock_isr)
 	/* sets the PITR count value */
 	/* this assumes a 32.765 kHz crystal */
 
-        usecs_per_tick = BSP_Configuration.microseconds_per_tick;
+        usecs_per_tick = rtems_configuration_get_microseconds_per_tick();
 	/* find out whether prescaler should be enabled or not */
 	if ( usecs_per_tick <= 31128 ) {
 	   pitr_tmp = ( usecs_per_tick * 8192 ) / 1000000 ;

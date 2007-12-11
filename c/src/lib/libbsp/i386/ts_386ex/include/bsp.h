@@ -132,8 +132,6 @@ extern void Wait_X_ms (unsigned);
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 #define IDT_SIZE 256
 #define GDT_SIZE 3
 

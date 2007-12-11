@@ -332,15 +332,7 @@ m68k_isr_entry set_vector(
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* miscellaneous stuff assumed to exist */
-
-extern rtems_configuration_table BSP_Configuration;
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 

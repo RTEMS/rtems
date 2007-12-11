@@ -50,7 +50,7 @@ void Clock_isr()
   Clock_driver_ticks += 1;
   if ( Clock_isrs == 1 ) {
     rtems_clock_tick();
-    Clock_isrs = Clock_initial_isr_value; /* BSP_Configuration.microseconds_per_tick / 1000;*/
+    Clock_isrs = Clock_initial_isr_value; /* rtems_configuration_get_microseconds_per_tick() / 1000;*/
   }
   else
     Clock_isrs -= 1;
@@ -114,7 +114,7 @@ rtems_device_driver Clock_initialize(
 
   Clock_isrs =
     Clock_initial_isr_value =
-    BSP_Configuration.microseconds_per_tick / 1000; /* ticks per clock_isr */
+    rtems_configuration_get_microseconds_per_tick() / 1000; /* ticks per clock_isr */
 
   /*
    * configure the counter timer ( should be based on microsecs/tick )
@@ -123,7 +123,7 @@ rtems_device_driver Clock_initialize(
    */
   ClockOff      ( &clockIrqData );
 
-  timer_counter_init_value  =  BSP_Configuration.microseconds_per_tick / Clock_isrs;
+  timer_counter_init_value  =  rtems_configuration_get_microseconds_per_tick() / Clock_isrs;
   clock_lsb = (unsigned char)timer_counter_init_value;
   clock_msb = timer_counter_init_value >> 8;
 

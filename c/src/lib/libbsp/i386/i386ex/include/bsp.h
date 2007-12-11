@@ -88,10 +88,6 @@ extern "C" {
  * NOTE: Use the standard Clock driver entry
  */
 
-/* miscellaneous stuff assumed to exist */
-
-extern rtems_configuration_table BSP_Configuration;
-
 #define IDT_SIZE 256
 #define GDT_SIZE 8192
 

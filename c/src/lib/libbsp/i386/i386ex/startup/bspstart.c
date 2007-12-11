@@ -28,14 +28,6 @@ void bsp_clean_up(void);
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-/*
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
@@ -72,7 +64,7 @@ void bsp_pretasking_hook(void)
     if (heap_start & (CPU_ALIGNMENT-1))
       heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-    heap_size = BSP_Configuration.work_space_start -(void *) heap_start ;
+    heap_size = Configuration.work_space_start -(void *) heap_start ;
     heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
     heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
@@ -93,10 +85,10 @@ void bsp_start( void )
 {
   void rtems_irq_mngt_init();
 
-  BSP_Configuration.work_space_start = (void *)
-     RAM_END - BSP_Configuration.work_space_size;
+  Configuration.work_space_start = (void *)
+     RAM_END - rtems_configuration_get_work_space_size();
 #ifdef DEBUG
-  printk("workspace size = 0x%x\nstart = 0x%x, RAM_END = 0x%x\n",BSP_Configuration.work_space_size,  BSP_Configuration.work_space_start, RAM_END );
+  printk("workspace size = 0x%x\nstart = 0x%x, RAM_END = 0x%x\n",rtems_configuration_get_work_space_size(),  Configuration.work_space_start, RAM_END );
 #endif
 
   /*

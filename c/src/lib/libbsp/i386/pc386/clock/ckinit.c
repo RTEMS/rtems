@@ -141,10 +141,10 @@ static void clockOn(const rtems_irq_connect_data* unused)
   Clock_driver_ticks  = 0;
   Clock_isrs_per_tick = 1;
 
-  if (BSP_Configuration.microseconds_per_tick == 0)
+  if (rtems_configuration_get_microseconds_per_tick() == 0)
     microseconds_per_isr = 10000; /* default 10 ms */
   else
-    microseconds_per_isr = BSP_Configuration.microseconds_per_tick;
+    microseconds_per_isr = rtems_configuration_get_microseconds_per_tick();
   while (US_TO_TICK(microseconds_per_isr) > 65535)
   {
     Clock_isrs_per_tick  *= 10;

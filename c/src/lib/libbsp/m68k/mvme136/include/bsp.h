@@ -90,8 +90,6 @@ struct w_m681_info {
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /* M68681 DUART chip register variables */
 
 EXTERN volatile struct r_m681_info *_Read_m681;  /* M68681 read registers */

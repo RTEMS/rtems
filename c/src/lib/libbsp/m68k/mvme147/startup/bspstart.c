@@ -25,15 +25,6 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table         BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -79,5 +70,5 @@ void bsp_start( void )
   rtems_cache_enable_instruction();
   rtems_cache_enable_data();
 
-  BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
+  Configuration.work_space_start = (void *) &_WorkspaceBase;
 }

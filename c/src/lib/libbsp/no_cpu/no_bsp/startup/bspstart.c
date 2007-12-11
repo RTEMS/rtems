@@ -21,15 +21,6 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -88,5 +79,5 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start = (void *) 0;
+  Configuration.work_space_start = (void *) 0;
 }

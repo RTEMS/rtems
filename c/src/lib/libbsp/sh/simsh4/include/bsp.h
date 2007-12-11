@@ -87,7 +87,6 @@ extern void *CPU_Interrupt_stack_high ;
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
 extern void bsp_cleanup( void );
 
 /*
