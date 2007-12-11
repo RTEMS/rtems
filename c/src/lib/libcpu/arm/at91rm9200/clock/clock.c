@@ -84,7 +84,7 @@ void Clock_driver_support_initialize_hardware(void)
   /* the system timer is driven from SLCK */
   slck = at91rm9200_get_slck();
   st_pimr_reload =
-    (((BSP_Configuration.microseconds_per_tick * slck) + (1000000/2))/ 1000000);
+    (((rtems_configuration_get_microseconds_per_tick() * slck) + (1000000/2))/ 1000000);
 
   /* read the status to clear the int */ 
   st_str = ST_REG(ST_SR);

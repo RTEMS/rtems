@@ -78,7 +78,7 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
  * NOPs.
  */
  
-  /* set timer to generate interrupt every BSP_Configuration.microseconds_per_tick
+  /* set timer to generate interrupt every rtems_configuration_get_microseconds_per_tick()
    * MR0/(LPC22xx_Fpclk/(PR0+1)) = 10/1000 = 0.01s
    */			
 	
@@ -86,8 +86,8 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
   do { \
 	T0TCR &= 0; 	 /* disable and clear timer 0, set to  */ \
 	T0PC  = 0;            /* TC is incrementet on every pclk.*/ \
-	T0MR0 = ((LPC22xx_Fpclk/1000* BSP_Configuration.microseconds_per_tick) / 1000); /* initialize the timer period and prescaler */  \
-	/*T0PR = (((LPC22xx_Fpclk / 1000) * BSP_Configuration.microseconds_per_tick) / 1000-1); \ */ \
+	T0MR0 = ((LPC22xx_Fpclk/1000* rtems_configuration_get_microseconds_per_tick()) / 1000); /* initialize the timer period and prescaler */  \
+	/*T0PR = (((LPC22xx_Fpclk / 1000) * rtems_configuration_get_microseconds_per_tick()) / 1000-1); \ */ \
 	T0MCR |= 0x03;		  /* generate interrupt when T0MR0 match T0TC and Reset Timer Count*/ \
 	T0EMR = 0;  /*No external match*/ \
 	T0TCR = 1; /*enable timer0*/ \
@@ -113,7 +113,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 	
 	clicks = T0TC;  /*T0TC is the 32bit time counter 0*/
 	
-	return (uint32_t) (BSP_Configuration.microseconds_per_tick - clicks) * 1000;
+	return (uint32_t) (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
 }
 	
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick

@@ -83,7 +83,7 @@ rtems_irq_connect_data clock_isr_data = {
         int cnt; \
         freq = get_perclk1_freq(); \
         printk("perclk1 freq is %d\n", freq); \
-        cnt = ((long long)freq * BSP_Configuration.microseconds_per_tick + 500000) / 1000000;\
+        cnt = ((long long)freq * rtems_configuration_get_microseconds_per_tick() + 500000) / 1000000;\
         printk("cnt freq is %d\n", cnt); \
         MC9328MXL_TMR1_TCMP = cnt; \
         /* use PERCLK1 as input, enable timer */ \
