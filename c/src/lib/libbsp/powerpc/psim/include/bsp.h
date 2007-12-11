@@ -81,8 +81,6 @@ extern int   end;        /* last address in the program */
 
 void bsp_cleanup( void );
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-
 #endif /* ASM */
 
 #ifdef __cplusplus

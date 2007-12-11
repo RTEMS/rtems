@@ -10,4 +10,4 @@
 %{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -e _start -u __vectors}
 
 *endfile:
-%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
+%{!qrtems: %(old_endfile)} %{qrtems: ecrtn.o%s}

@@ -45,22 +45,6 @@ void  initialize_exceptions(void);
 extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table         BSP_Configuration;
-
-/*
- *  Tells us where to put the workspace in case remote debugger is present.
- */
-
-#if 0
-extern uint32_t          rdb_start;
-#endif
-
-/*
  * PCI Bus Frequency
  */
 unsigned int BSP_bus_frequency;
@@ -111,7 +95,7 @@ void bsp_pretasking_hook(void)
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  heap_size = BSP_Configuration.work_space_start - (void *)&end;
+  heap_size = Configuration.work_space_start - (void *)&end;
   heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
   bsp_libc_init((void *) heap_start, heap_size, 0);
@@ -151,17 +135,17 @@ void bsp_start( void )
 
   bsp_exceptions_in_RAM = FALSE;
 
-  BSP_Configuration.work_space_size += 1024;
+  rtems_configuration_get_work_space_size() += 1024;
 
   work_space_start =
-    (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
+    (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
 
   if ( work_space_start <= (unsigned char *)&end ) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
 
-  BSP_Configuration.work_space_start = work_space_start;
+  Configuration.work_space_start = work_space_start;
   #if (BSP_DIRTY_MEMORY == 1)
   {
     memset(&end, 0xCF,  (unsigned char *)&RAM_END - (unsigned char *)&end );
