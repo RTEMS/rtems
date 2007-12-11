@@ -69,6 +69,10 @@ $(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 
+$(PROJECT_LIB)/vectors_entry.$(OBJEXT): vectors_entry.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/vectors_entry.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/vectors_entry.$(OBJEXT)
+
 $(PROJECT_LIB)/linkcmds: ../shared/startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
@@ -89,6 +93,14 @@ $(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bsps
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
 
+$(PROJECT_INCLUDE)/bsp/vectors.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
+
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
@@ -108,10 +120,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/residual.h
 $(PROJECT_INCLUDE)/bsp/pnp.h: ../../powerpc/shared/residual/pnp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pnp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pnp.h
-
-$(PROJECT_INCLUDE)/bsp/vectors.h: ../../powerpc/shared/vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
 $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h

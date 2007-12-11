@@ -1,3 +1,17 @@
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+	
+	* Makefile.am: use shared exception/interrupt support
+	from libcpu/powerpc/new-exceptions/bspsupport rather
+	than ../shared/vectors , ../shared/irq
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+	
+	* shared/vectors/vectors_entry.S, motorola_powerpc/bsp_specs,
+	shared/start/vectors_entry.S: moved vectors_entry.S to
+	'start' subdir and made a start file rather than
+	element of vectors.rel (it should always be linked but
+	won't if it is the sole member of vectors.rel).
+
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: merged shared/vme/vme_universe.c and

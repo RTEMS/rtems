@@ -37,6 +37,12 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
+EXTRA_DIST += ../../powerpc/shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA += vectors_entry.$(OBJEXT)
+
+
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
 noinst_PROGRAMS += startup.rel
@@ -80,12 +86,13 @@ console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(console_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
-	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c ../../powerpc/shared/irq/openpic_i8259_irq.c \
-    ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.c \
-    ../../powerpc/shared/irq/irq_asm.S ../../powerpc/shared/irq/irq.h
+    ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -127,16 +134,6 @@ residual_rel_SOURCES = ../../powerpc/shared/residual/pnp.h \
 residual_rel_CPPFLAGS = $(AM_CPPFLAGS)
 residual_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
-
-noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors.h \
-    ../../powerpc/shared/vectors/vectors_init.c \
-    ../../powerpc/shared/vectors/vectors_entry.S \
-    ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
     ../../shared/vmeUniverse/VME.h \
@@ -160,12 +157,13 @@ vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel pclock.rel console.rel irq.rel openpic.rel \
-    pci.rel residual.rel vectors.rel motorola.rel tod.rel vme.rel
+    pci.rel residual.rel motorola.rel tod.rel vme.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
