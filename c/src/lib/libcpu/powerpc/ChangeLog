@@ -1,5 +1,10 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: build new-exceptions/bspsupport for
+	non-mpc5xx, new-exception CPUs.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/bspsupport/nested_irq_test.c: adjusted
 	wrong irq name/number calculation.
 

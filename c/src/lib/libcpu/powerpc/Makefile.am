@@ -42,9 +42,23 @@ new_exceptions_raw_exception_rel_SOURCES = new-exceptions/raw_exception.c \
 	new-exceptions/e500_raw_exc_init.c
 new_exceptions_raw_exception_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_raw_exception_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
 
+noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
+new_exceptions_exc_bspsupport_rel_SOURCES = \
+    new-exceptions/bspsupport/ppc_exc.S \
+    new-exceptions/bspsupport/ppc_exc_hdl.c \
+    new-exceptions/bspsupport/irq.c \
+    new-exceptions/bspsupport/vectors_init.c
+new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
+new_exceptions_exc_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
+endif
+EXTRA_DIST += new-exceptions/bspsupport/vectors.h
+EXTRA_DIST += new-exceptions/bspsupport/irq_supp.h
+EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_bspsupp.h
+EXTRA_DIST += new-exceptions/bspsupport/README
+EXTRA_DIST += new-exceptions/bspsupport/nest_irq_test.c
+EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_test.c
 
 ## shared/include
 if shared
