@@ -1,3 +1,7 @@
+2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am: Fix typo.
+
 2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ChangeLog, preinstall.am, libmisc/Makefile.am, libmisc/shell/cmds.c,
