@@ -77,8 +77,6 @@ extern volatile cpld_t cpld;              /* defined in linkcmds */
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

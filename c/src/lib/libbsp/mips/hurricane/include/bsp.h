@@ -80,8 +80,6 @@ extern uint32_t mips_get_timer( void );
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

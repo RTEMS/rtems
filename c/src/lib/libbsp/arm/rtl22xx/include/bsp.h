@@ -127,8 +127,6 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  * Network driver configuration
  */

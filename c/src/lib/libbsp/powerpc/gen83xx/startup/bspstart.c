@@ -38,17 +38,8 @@
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
-/*
- *  The original table from the application (in ROM) and our copy of it with
- *  some changes. Configuration is defined in <confdefs.h>. Make sure that
- *  our configuration tables are uninitialized so that they get allocated in
- *  the .bss section (RAM).
- */
-extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
-rtems_configuration_table  BSP_Configuration;
 static char *BSP_heap_start, *BSP_heap_end;
-char *rtems_progname;
 
 /*
  * constants for c_clock driver:
@@ -156,10 +147,10 @@ void bsp_calc_mem_layout()
    * - Heap starts at end of workspace
    * - Heap ends at end of memory - reserved memory area
    */
-  BSP_Configuration.work_space_start = _WorkspaceBase;
+  Configuration.work_space_start = _WorkspaceBase;
 
-  BSP_heap_start = ((char *)BSP_Configuration.work_space_start +
-                    BSP_Configuration.work_space_size);
+  BSP_heap_start = ((char *)Configuration.work_space_start +
+                    rtems_configuration_get_work_space_size());
 
 #if defined(HAS_UBOOT)
   BSP_heap_end = (uboot_bdinfo_ptr->bi_memstart 

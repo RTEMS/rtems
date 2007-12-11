@@ -39,16 +39,7 @@
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
-/*
- *  The original table from the application (in ROM) and our copy of it with
- *  some changes. Configuration is defined in <confdefs.h>. Make sure that
- *  our configuration tables are uninitialized so that they get allocated in
- *  the .bss section (RAM).
- */
-extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
 
 /*
  *  Driver configuration parameters
@@ -104,8 +95,8 @@ void bsp_pretasking_hook(void)
    *  independently of each other.
    */
     uint8_t *_HeapStart =
-      (uint8_t *)BSP_Configuration.work_space_start
-           + BSP_Configuration.work_space_size;
+      (uint8_t *)Configuration.work_space_start
+           + rtems_configuration_get_work_space_size();
     extern uint8_t _HeapEnd[];
 
     bsp_libc_init( _HeapStart, _HeapEnd - _HeapStart, 0 );
@@ -174,7 +165,7 @@ void bsp_start(void)
    *  In this case, the memory is not malloc'ed.  It is just
    *  "pulled from the air".
    */
-  BSP_Configuration.work_space_start = _WorkspaceBase;
+  Configuration.work_space_start = _WorkspaceBase;
 
   /*
    *  initialize the device driver parameters
@@ -185,7 +176,7 @@ void bsp_start(void)
   /*
    * Call this in case we use TERMIOS for console I/O
    */
-  m5xx_uart_reserve_resources( &BSP_Configuration );
+  m5xx_uart_reserve_resources( &Configuration );
 
   /*
    * Initalize RTEMS IRQ system

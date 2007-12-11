@@ -23,15 +23,6 @@
 uint32_t bsp_clicks_per_microsecond;
  
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
  
@@ -96,7 +87,7 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start =
+  Configuration.work_space_start =
        (void *)((uint64_t)((&end) + LIBC_HEAP_SIZE + 0x2000) & ~0x7);
 
   bsp_clicks_per_microsecond = CPU_CLOCK_RATE_MHZ;

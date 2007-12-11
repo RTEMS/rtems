@@ -39,17 +39,8 @@ extern void            *_bss_free_start;
 extern void            *_bss_start_;
 extern void            *_bss_end_;
 
-
 unsigned long           free_mem_start;
 unsigned long           free_mem_end;
-
-/* The original BSP configuration table from the application and our copy of it
-   with some changes. */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table  BSP_Configuration;
-
-char            *rtems_progname;              /* Program name - from main(). */
 
 /*************************************************************/
 /* Function prototypes                                       */
@@ -115,13 +106,12 @@ void bsp_pretasking_hook(void)
 /*   This function also configures the CPU's memory protection unit.      */
 /*                                                                        */
 /* GLOBALS USED:                                                          */
-/*    CPU_table                                                    */
-/*    BSP_Configuration                                            */
-/*    free_mem_start                                               */
-/*    free_mem_end                                                 */
-/*    free_mem_nocache_start                                       */
-/*    _bss_free_start                                              */
-/*    mpu_region_tbl                                               */
+/*    Configuration                                                       */
+/*    free_mem_start                                                      */
+/*    free_mem_end                                                        */
+/*    free_mem_nocache_start                                              */
+/*    _bss_free_start                                                     */
+/*    mpu_region_tbl                                                      */
 /*                                                                        */
 /*                                                                        */
 /*                                                                        */
@@ -184,10 +174,10 @@ void bsp_start_default( void )
     VICProtection = 0;
 
     /* Place RTEMS workspace at beginning of free memory. */
-    BSP_Configuration.work_space_start = (void *)&_bss_free_start;
+    Configuration.work_space_start = (void *)&_bss_free_start;
 
     free_mem_start = ((uint32_t)&_bss_free_start +
-                      BSP_Configuration.work_space_size);
+                      rtems_configuration_get_work_space_size());
 
     free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
 
@@ -217,20 +207,16 @@ void bsp_start_default( void )
      */
 #if 0
 
-    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
-    printk( "maximum_extensions = 0x%x\n", BSP_Configuration.maximum_extensions );
+    printk( "work_space_size = 0x%x\n",
+            rtems_configuration_get_work_space_size() );
     printk( "microseconds_per_tick = 0x%x\n",
-            BSP_Configuration.microseconds_per_tick );
+            rtems_configuration_get_microseconds_per_tick() );
     printk( "ticks_per_timeslice = 0x%x\n",
-            BSP_Configuration.ticks_per_timeslice );
-    printk( "number_of_device_drivers = 0x%x\n",
-            BSP_Configuration.number_of_device_drivers );
-    printk( "Device_driver_table = 0x%x\n",
-            BSP_Configuration.Device_driver_table );
+            rtems_configuration_get_ticks_per_timeslice() );
 
     /*  printk( "_stack_size = 0x%x\n", _stack_size );*/
-    printk( "work_space_start = 0x%x\n", BSP_Configuration.work_space_start );
-    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+    printk( "work_space_start = 0x%x\n", Configuration.work_space_start );
+    printk( "work_space_size = 0x%x\n", rtems_configuration_get_work_space_size() );
 #endif
 } /* bsp_start */
 

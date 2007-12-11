@@ -63,7 +63,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
 /*
  * We need to decide how much memory will be non-cacheable. This
  * will mainly be memory that will be used in DMA (network and serial

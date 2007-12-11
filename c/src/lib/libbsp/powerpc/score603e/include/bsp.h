@@ -220,9 +220,6 @@ unsigned int SCORE603e_FLASH_Enable_writes(
 #define Convert_Endian_16( _data ) \
   ( ((_data&0x00ff)<<8) | ((_data&0xff00)>>8) )
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
-extern uint32_t                  bsp_isr_level;
-
 #endif /* ASM */
 
 #ifdef __cplusplus

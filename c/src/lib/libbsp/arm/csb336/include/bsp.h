@@ -34,8 +34,6 @@ extern "C" {
 /* How many serial ports? */
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 
-extern rtems_configuration_table BSP_Configuration;
-
 int get_perclk1_freq(void);
 
 /*

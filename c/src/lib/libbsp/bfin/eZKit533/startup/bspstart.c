@@ -25,18 +25,6 @@
 #include <rtems/libcsupport.h>
 
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-
-rtems_configuration_table  BSP_Configuration;
-
-char *rtems_progname;
-
-
 const unsigned int dcplbs_table[16][2] = {  
 	{ 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) },
         { 0xFF900000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) }, /* L1 Data B */
@@ -155,7 +143,7 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
+  Configuration.work_space_start = (void *) &_WorkspaceBase;
 
   int i=0;
   for (i=5;i<16;i++) {

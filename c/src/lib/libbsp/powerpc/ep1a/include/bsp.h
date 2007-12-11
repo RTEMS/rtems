@@ -186,7 +186,6 @@ extern unsigned int BSP_time_base_divisor;
 #define Processor_Synchronize() \
   asm(" eieio ")
 
-extern rtems_configuration_table  BSP_Configuration;
 extern void BSP_panic(char *s);
 extern void rtemsReboot(void);
 extern int BSP_disconnect_clock_handler (void);

@@ -124,15 +124,6 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc"); 
 }
  
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
 int BSP_FLASH_Disable_writes(
   uint32_t    area
 )
@@ -206,7 +197,7 @@ void bsp_pretasking_hook(void)
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
+  heap_size = (BSP_mem_size - heap_start) - rtems_configuration_get_work_space_size();
 
   heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
 
@@ -446,10 +437,11 @@ ShowBATS();
 #endif  
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size);
+  printk("rtems_configuration_get_work_space_size() = %x\n", 
+     rtems_configuration_get_work_space_size());
 #endif  
   work_space_start = 
-    (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
+    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
 
   if ( work_space_start <= ((unsigned char *)__rtems_end) + 
         INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size()) {
@@ -457,7 +449,7 @@ ShowBATS();
     bsp_cleanup();
   }
 
-  BSP_Configuration.work_space_start = work_space_start;
+  Configuration.work_space_start = work_space_start;
 
   /*
    * Initalize RTEMS IRQ system

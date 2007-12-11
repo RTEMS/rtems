@@ -21,15 +21,6 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -63,11 +54,11 @@ void bsp_start( void )
    */
 
 /* XXX address shutdown
-  if ( BSP_Configuration.work_space_size >(128*1024) )
+  if ( rtems_configuration_get_work_space_size() >(128*1024) )
    _sys_exit( 1 );
 */
 
-  BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
+  Configuration.work_space_start = (void *) &_WorkspaceBase;
 }
 
 #include <rtems/bspIo.h>

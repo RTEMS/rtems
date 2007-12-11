@@ -25,15 +25,6 @@
 extern int end; /* defined by linker */
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
  
@@ -83,7 +74,7 @@ void bsp_start( void )
   extern int WorkspaceBase;
   extern void mips_install_isr_entries(void);
 
-  BSP_Configuration.work_space_start =
+  Configuration.work_space_start =
        (void *)((uint64_t)((&end) + LIBC_HEAP_SIZE + 0x100) & ~0x7);
 
   mips_install_isr_entries();  /* Install generic MIPS exception handler */

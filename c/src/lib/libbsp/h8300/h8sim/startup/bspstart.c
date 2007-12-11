@@ -21,17 +21,6 @@
 #include <rtems/libcsupport.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-
-rtems_configuration_table  BSP_Configuration;
-
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -59,7 +48,7 @@ void bsp_pretasking_hook(void)
     extern int WorkspaceBase;
 
     heapStart =  (void *)
-       ((unsigned long)&WorkspaceBase + BSP_Configuration.work_space_size);
+       ((unsigned long)&WorkspaceBase + rtems_configuration_get_work_space_size());
     if ( (unsigned long) heapStart > (256 * 1024) )
        rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');
     heapSize = (256 * 1024) - (unsigned long)(heapStart);
@@ -82,11 +71,11 @@ void bsp_start( void )
   extern int WorkspaceBase;
 
 /*
-  if ( BSP_Configuration.work_space_size >(512*1024) )
+  if ( rtems_configuration_get_work_space_size() >(512*1024) )
    _sys_exit( 1 );
 */
 
-  BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
+  Configuration.work_space_start = (void *) &WorkspaceBase;
 }
 
 void H8BD_Install_IRQ(

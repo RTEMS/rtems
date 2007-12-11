@@ -30,10 +30,9 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <s3c2400.h>
 
-extern rtems_configuration_table BSP_Configuration;
-
 #define gp32_initButtons() {rPBCON=0x0;}
-#define gp32_getButtons() ( (((~rPEDAT >> 6) & 0x3 )<<8) | (((~rPBDAT >> 8) & 0xFF)<<0) )
+#define gp32_getButtons() \
+    ( (((~rPEDAT >> 6) & 0x3 )<<8) | (((~rPBDAT >> 8) & 0xFF)<<0) )
 
 /*functions to get the differents s3c2400 clks*/
 uint32_t get_FCLK(void);

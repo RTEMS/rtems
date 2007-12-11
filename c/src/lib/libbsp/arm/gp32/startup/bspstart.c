@@ -31,14 +31,6 @@ extern void            *_bss_free_start;
 unsigned long           free_mem_start;
 unsigned long           free_mem_end;
 
-/* The original BSP configuration table from the application and our copy of it
-   with some changes. */
-
-extern rtems_configuration_table  Configuration;
-       rtems_configuration_table  BSP_Configuration;
-
-char            *rtems_progname = "RTEMS";               /* Program name - from main(). */
-
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
@@ -137,9 +129,9 @@ void bsp_start_default( void )
     rTCFG0=(cr | (0<<0));
 
     /* Place RTEMS workspace at beginning of free memory. */
-    BSP_Configuration.work_space_start = (void *)&_bss_free_start;
+    Configuration.work_space_start = (void *)&_bss_free_start;
 
-    free_mem_start = ((uint32_t)&_bss_free_start + BSP_Configuration.work_space_size);
+    free_mem_start = ((uint32_t)&_bss_free_start + rtems_configuration_get_work_space_size());
     
     free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
 
@@ -157,22 +149,18 @@ void bsp_start_default( void )
      */
 
 #if 0
-    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
-    printk( "maximum_extensions = 0x%x\n", BSP_Configuration.maximum_extensions );
+    printk( "work_space_size = 0x%x\n",
+             rtems_configuration_get_work_space_size() );
     printk( "microseconds_per_tick = 0x%x\n",
-            BSP_Configuration.microseconds_per_tick );
+            rtems_configuration_get_microseconds_per_tick() );
     printk( "ticks_per_timeslice = 0x%x\n",
-            BSP_Configuration.ticks_per_timeslice );
-    printk( "number_of_device_drivers = 0x%x\n",
-            BSP_Configuration.number_of_device_drivers );
-    printk( "Device_driver_table = 0x%x\n",
-            BSP_Configuration.Device_driver_table );
+            rtems_configuration_get_ticks_per_timeslice() );
     
     printk( "_heap_size = 0x%x\n", _heap_size );
     /*  printk( "_stack_size = 0x%x\n", _stack_size );*/
     printk( "rtemsFreeMemStart = 0x%x\n", rtemsFreeMemStart );
-    printk( "work_space_start = 0x%x\n", BSP_Configuration.work_space_start );
-    printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
+    printk( "work_space_start = 0x%x\n", Configuration.work_space_start );
+    printk( "work_space_size = 0x%x\n", rtems_configuration_get_work_space_size() );
 #endif
 
 }

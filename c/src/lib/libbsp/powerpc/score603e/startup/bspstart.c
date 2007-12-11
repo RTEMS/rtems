@@ -42,15 +42,6 @@ unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
  */
 uint32_t   bsp_clicks_per_usec;
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table  Configuration;
-rtems_configuration_table         BSP_Configuration;
-uint32_t                          bsp_isr_level;
-
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
@@ -88,7 +79,7 @@ void bsp_pretasking_hook(void)
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  heap_size = BSP_Configuration.work_space_start - (void *)&end;
+  heap_size = Configuration.work_space_start - (void *)&end;
   heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
   bsp_libc_init((void *) heap_start, heap_size, 0);
@@ -295,14 +286,14 @@ void bsp_start( void )
    */
 
   work_space_start =
-    (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
+    (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
 
   if ( work_space_start <= (unsigned char *)&end ) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
 
-  BSP_Configuration.work_space_start = work_space_start;
+  Configuration.work_space_start = work_space_start;
 
   /*
    *  initialize the device driver parameters

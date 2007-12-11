@@ -54,8 +54,6 @@ extern void assertSoftwareInterrupt(uint32_t);
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

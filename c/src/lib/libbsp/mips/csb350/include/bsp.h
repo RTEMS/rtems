@@ -63,8 +63,6 @@ int negate_sw_irw(uint32_t irqnum);
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
-
 /*
  *  Device Driver Table Entries
  */

@@ -33,10 +33,6 @@ extern void            *_bss_free_start;
 unsigned long           free_mem_start;
 unsigned long           free_mem_end;
 
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
 au1x00_uart_t *uart0 = (au1x00_uart_t *)AU1X00_UART0_ADDR;
 au1x00_uart_t *uart3 = (au1x00_uart_t *)AU1X00_UART3_ADDR;
 
@@ -93,10 +89,10 @@ void bsp_start( void )
   unsigned int compare = 0; 
 
   /* Place RTEMS workspace at beginning of free memory. */
-  BSP_Configuration.work_space_start = (void *)&_bss_free_start;
+  Configuration.work_space_start = (void *)&_bss_free_start;
   
   free_mem_start = ((uint32_t)&_bss_free_start + 
-                    BSP_Configuration.work_space_size);
+                    rtems_configuration_get_work_space_size());
   
   free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
   

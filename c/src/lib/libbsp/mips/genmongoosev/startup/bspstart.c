@@ -26,15 +26,6 @@
 #include <libcpu/mongoose-v.h>
 
 /*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
-
-/*
  *  Use the shared implementations of the following routines
  */
 
@@ -84,10 +75,10 @@ void bsp_start( void )
    extern void mips_gdb_stub_install(void);
 
    /* HACK -- tied to value linkcmds */
-   if ( BSP_Configuration.work_space_size > (4096*1024) )
+   if ( rtems_configuration_get_work_space_size() > (4096*1024) )
       _sys_exit( 1 );
 
-   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
+   Configuration.work_space_start = (void *) &WorkspaceBase;
 
    /* mask off any interrupts */
    MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER, 0 );
