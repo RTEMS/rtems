@@ -97,6 +97,12 @@ int          rval = 1;
 		rval = 0;
 	}
 
+	if ( (ppc_exc_msr_bits ^ f->EXC_SRR1) & MSR_RI ) {
+		printk("unrecoverable exception (RI was clear), spinning to death.\n");
+		while (1)
+			;
+	}
+
 	return rval;
 }
 
