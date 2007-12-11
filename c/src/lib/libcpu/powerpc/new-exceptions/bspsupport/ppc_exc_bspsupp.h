@@ -46,6 +46,18 @@ extern uint32_t ppc_exc_msr_bits;
  */
 extern uint32_t ppc_exc_msr_irq_mask;
 
+/* (See README under CAVEATS). During initialization
+ * a check is performed to assert that write-back
+ * caching is enabled for memory accesses. If a BSP
+ * runs entirely without any caching then it should
+ * set this variable to zero prior to initializing
+ * exceptions in order to skip the test.
+ * NOTE: The code does NOT support mapping memory
+ *       with cache-attributes other than write-back
+ *       (unless the entire cache is physically disabled)
+ */
+extern uint32_t ppc_exc_cache_wb_check;
+
 /*
  * Hook C exception handlers.
  *  - handlers for asynchronous exceptions run on the ISR stack

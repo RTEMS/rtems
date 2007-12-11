@@ -26,6 +26,8 @@
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
+uint32_t ppc_exc_cache_wb_check = 1;
+
 #if 0
 typedef struct ppc_exc_connect_data_ {
 	rtems_raw_except_connect_data	raw;
@@ -105,25 +107,26 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
 {
   int recoverable = 0;
   int synch       = (int)excPtr->_EXC_number >= 0 ;
+  unsigned n      = excPtr->_EXC_number & 0x7fff; 
 
-  printk("Exception handler called for exception %d\n", excPtr->_EXC_number & 0x7fff);
-  printk("\t Next PC or Address of fault = %x\n", excPtr->EXC_SRR0);
-  printk("\t Saved MSR = %x\n", excPtr->EXC_SRR1);
-  printk("\t R0 = %08x",  excPtr->GPR0);
+  printk("Exception handler called for exception %d (0x%x)\n", n, n);
+  printk("\t Next PC or Address of fault = %08x\n", excPtr->EXC_SRR0);
+  printk("\t Saved MSR = %08x\n", excPtr->EXC_SRR1);
+  printk("\t R0  = %08x", excPtr->GPR0);
   if ( synch ) {
-    printk(" R1 = %08x",  excPtr->GPR1);
-    printk(" R2 = %08x",  excPtr->GPR2);
+    printk(" R1  = %08x", excPtr->GPR1);
+    printk(" R2  = %08x", excPtr->GPR2);
   } else {
     printk("              ");
     printk("              ");
   }
-  printk(" R3 = %08x\n",  excPtr->GPR3);
-  printk("\t R4 = %08x",  excPtr->GPR4);
-  printk(" R5 = %08x",    excPtr->GPR5);
-  printk(" R6 = %08x",    excPtr->GPR6);
-  printk(" R7 = %08x\n",  excPtr->GPR7);
-  printk("\t R8 = %08x",  excPtr->GPR8);
-  printk(" R9 = %08x",    excPtr->GPR9);
+  printk(" R3  = %08x\n", excPtr->GPR3);
+  printk("\t R4  = %08x", excPtr->GPR4);
+  printk(" R5  = %08x",   excPtr->GPR5);
+  printk(" R6  = %08x",   excPtr->GPR6);
+  printk(" R7  = %08x\n", excPtr->GPR7);
+  printk("\t R8  = %08x", excPtr->GPR8);
+  printk(" R9  = %08x",   excPtr->GPR9);
   printk(" R10 = %08x",   excPtr->GPR10);
   printk(" R11 = %08x\n", excPtr->GPR11);
   printk("\t R12 = %08x", excPtr->GPR12);
@@ -150,10 +153,10 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
   } else {
       printk("\n");
   }
-  printk("\t CR = %08x\n",  excPtr->EXC_CR);
+  printk("\t CR  = %08x\n", excPtr->EXC_CR);
   printk("\t CTR = %08x\n", excPtr->EXC_CTR);
   printk("\t XER = %08x\n", excPtr->EXC_XER);
-  printk("\t LR = %08x\n",  excPtr->EXC_LR);
+  printk("\t LR  = %08x\n", excPtr->EXC_LR);
 
   /* Would be great to print DAR but unfortunately,
    * that is not portable across different CPUs.
@@ -346,4 +349,37 @@ int n = sizeof(exception_table)/sizeof(exception_table[0]);
 	for ( i=0; i<n; i++ )
 		exception_table[i].hdl.vector = i;
 	ppc_exc_init(exception_table, n);
+
+	/* If we are on a classic PPC with MSR_DR enabled then
+	 * assert that the mapping for at least this task's
+	 * stack is write-back-caching enabled (see README/CAVEATS)
+	 * Do this only if the cache is physically enabled.
+	 * Since it is not easy to figure that out in a
+	 * generic way we need help from the BSP: BSPs
+	 * which run entirely w/o the cache may set
+	 * ppc_exc_cache_wb_check to zero prior to calling
+	 * this routine.
+	 *
+	 * We run this check only after exception handling is
+	 * initialized so that we have some chance to get
+	 * information printed if it fails.
+	 *
+	 * Note that it is unsafe to ignore this issue; if
+	 * the check fails, do NOT disable it unless caches
+	 * are always physically disabled.
+	 */
+	if ( ppc_exc_cache_wb_check && (MSR_DR & ppc_exc_msr_bits) ) {
+		/* The size of 63 assumes cache lines are at most 32 bytes */
+		uint8_t   dummy[63];
+		uintptr_t p = (uintptr_t)dummy;
+		/* If the dcbz instruction raises an alignment exception
+		 * then the stack is mapped as write-thru or caching-disabled.
+		 * The low-level code is not capable of dealing with this
+		 * ATM.
+		 */
+		p = (p + 31) & ~31;
+		asm volatile("dcbz 0, %0"::"b"(p));
+		/* If we make it thru here then things seem to be OK */
+	}
+
 }

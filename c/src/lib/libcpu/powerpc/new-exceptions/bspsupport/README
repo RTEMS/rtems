@@ -242,6 +242,34 @@ USAGE
 
 		  to 'libbsp_a_LIBADD'
 
+CAVEATS
+=======
+
+On classic PPCs, early (and late) parts of the low-level
+exception handling code run with the MMU disabled which mean
+that the default caching attributes (write-back) are in effect
+(thanks to Thomas Doerfler for bringing this up).
+The code currently assumes that the MMU translations
+for the task and interrupt stacks as well as some
+variables in the data-area MATCH THE DEFAULT CACHING
+ATTRIBUTES (this assumption also holds for the old code
+in libbsp/powepc/shared/vectors ../irq).
+
+During initialization of exception handling, a crude test
+is performed to check if memory seems to have the write-back
+attribute. The 'dcbz' instruction should - on most PPCs - cause
+an alignment exception if the tested cache-line does not
+have this attribute.
+
+BSPs which entirely disable caching (e.g., by physically
+disabling the cache(s)) should set the variable
+  ppc_exc_cache_wb_check = 0
+prior to calling initialize_exceptions(). 
+Note that this check does not catch all possible
+misconfigurations (e.g., on the 860, the default attribute
+is AFAIK [libcpu/powerpc/mpc8xx/mmu/mmu_init.c] set to
+'caching-disabled' which is potentially harmful but
+this situation is not detected).
 
 
 RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS

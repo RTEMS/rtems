@@ -1,3 +1,11 @@
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/README,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h
+	new-exceptions/bspsupport/vectors_init.c:
+	added crude test to make sure MMU maps memory as
+	write-back enabled.
+
 2007-12-09	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/ppc_exc_test.c,
