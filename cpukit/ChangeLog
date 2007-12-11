@@ -1,3 +1,7 @@
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/rtems/config.h: Correct idle task prototype.
+
 2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am, libmisc/shell/cmd_help.c, libmisc/shell/cmds.c,

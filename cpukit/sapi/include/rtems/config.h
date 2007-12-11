@@ -113,7 +113,7 @@ typedef struct {
   /** This element points to the BSP's optional idle task which may override
    *  the default one provided with RTEMS.
    */
-  void                         (*idle_task)( uint32_t );
+  Thread                       (*idle_task)( uint32_t );
 
   /** This field specifies the size of the IDLE task's stack.  If less than or
    *  equal to the minimum stack size, then the IDLE task will have the minimum
