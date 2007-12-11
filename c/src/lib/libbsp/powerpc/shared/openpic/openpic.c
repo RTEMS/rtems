@@ -511,7 +511,7 @@ void openpic_settimer(unsigned int timer, unsigned int base_count, int irq_enabl
 unsigned int openpic_gettimer(unsigned int timer)
 {
 	check_arg_timer(timer);
-	return (openpic_read(&OpenPIC->Global.Timer[timer]) & ~OPENPIC_MASK);
+	return (openpic_read(&OpenPIC->Global.Timer[timer].Current_Count) & ~OPENPIC_MASK);
 }
 
 /* -------- Interrupt Sources ---------------------------------------------- */

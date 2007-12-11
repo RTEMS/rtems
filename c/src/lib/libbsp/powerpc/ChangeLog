@@ -1,5 +1,10 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/openpic/openpic.c: fixed wrong register
+	address in openpic_gettimer().
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/motorola/vpd.c, shared/motorola/vpd.h:
 	added code (originally developed for 'beatnik')
 	to read MotLoad VPD data from i2c eeprom.
