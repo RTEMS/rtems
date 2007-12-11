@@ -360,7 +360,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 				 * We do this so that existing DEC handlers can be used
 				 * with minor modifications.
 				 */
-				ppc_exc_set_handler(ASM_BOOKE_PIT_VECTOR, C_dispatch_dec_handler_bookE);
+				ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, C_dispatch_dec_handler_bookE);
 			} else {
 				ppc_exc_set_handler(ASM_DEC_VECTOR, C_dispatch_irq_handler);
 			}

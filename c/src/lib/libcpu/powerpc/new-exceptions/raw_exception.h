@@ -48,7 +48,12 @@
 #define	ASM_TRACE_VECTOR		             0x0D
 
 #define	ASM_BOOKE_CRIT_VECTOR	             0x01
-#define	ASM_BOOKE_PIT_VECTOR	             0x10
+/* We could use the std. decrementer vector # on bookE, too,
+ * but the bookE decrementer has slightly different semantics
+ * so we use a different vector (which happens to be
+ * the PIT vector on the 405 which is like the booke decrementer)
+ */
+#define	ASM_BOOKE_DEC_VECTOR	             0x10
 #define	ASM_BOOKE_ITLBMISS_VECTOR            0x11
 #define	ASM_BOOKE_DTLBMISS_VECTOR            0x12
 #define	ASM_BOOKE_FIT_VECTOR                 0x13

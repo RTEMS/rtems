@@ -155,7 +155,7 @@ static cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
 
 static cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
-  [ ASM_BOOKE_PIT_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
 
   [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
   [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
@@ -255,8 +255,7 @@ static cat_ini_t e500_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_TRACE_VECTOR                ] = PPC_EXC_BOOKE_CRITICAL,
 
   [ ASM_EXT_VECTOR                  ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
-  /* FIXME: should eventually go to the PIT vector + cleanup clock driver */
-  [ ASM_DEC_VECTOR                  ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_DEC_VECTOR            ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
   [ ASM_BOOKE_FIT_VECTOR            ] = PPC_EXC_CLASSIC        | PPC_EXC_ASYNC,
 
   [ ASM_PROT_VECTOR                 ] = PPC_EXC_CLASSIC,
