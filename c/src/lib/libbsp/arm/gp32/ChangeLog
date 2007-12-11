@@ -1,5 +1,9 @@
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* include/bsp.h, startup/bspstart.c: Fix idle task prototype.
+
+2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the
 	Configuration Table. Use the RTEMS provided accessor macros to obtain
 	configuration fields.

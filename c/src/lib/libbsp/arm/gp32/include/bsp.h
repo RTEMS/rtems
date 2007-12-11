@@ -65,7 +65,7 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
  *  So we prototype it and define the constant confdefs.h expects
  *  to configure a BSP specific one.
  */
-void bsp_idle_task(void);
+Thread bsp_idle_task(uint32_t);
 
 #define BSP_IDLE_TASK_BODY bsp_idle_task
 
