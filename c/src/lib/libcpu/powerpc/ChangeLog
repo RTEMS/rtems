@@ -1,5 +1,10 @@
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/nested_irq_test.c: adjusted
+	wrong irq name/number calculation.
+
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/bspsupport/ppc_exc_hdl.c: make sure
 	RI is set in the exception frame and panic if it isn't
 	(state info might have been lost). This only affects

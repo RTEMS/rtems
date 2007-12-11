@@ -99,7 +99,7 @@ rtems_irq_connect_data xx;
 	}
 	if ( inst ) {
 		openpic_maptimer( t, 1 );
-		openpic_inittimer( t, 8 + t, OPENPIC_VEC_SOURCE + xx.name );
+		openpic_inittimer( t, 8 + t, OPENPIC_VEC_SOURCE - BSP_PCI_IRQ_LOWEST_OFFSET + xx.name );
 		openpic_settimer( t, period, 1 );
 	}
 	return 0;
