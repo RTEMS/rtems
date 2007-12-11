@@ -1,5 +1,15 @@
 2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/Makefile.am, libmisc/shell/cmd_help.c, libmisc/shell/cmds.c,
+	libmisc/shell/internal.h, libmisc/shell/shell.c,
+	libmisc/shell/shell.h, libmisc/shell/shellconfig.h: Command set
+	processing now separated from main command loop. Addition of user
+	commands and aliases tested. Monitor registration now explicit.
+	* libmisc/shell/shell_cmdset.c, libmisc/shell/shell_makeargs.c,
+	libmisc/shell/write_file.c: New files.
+
+2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am: Fix typo.
 
 2007-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -29,4 +29,8 @@ extern shell_topic_t * shell_first_topic;
 
 shell_topic_t * shell_lookup_topic(char * topic);
 
+
+void shell_register_monitor_commands(void);
+void shell_initialize_command_set(void);
+
 #endif

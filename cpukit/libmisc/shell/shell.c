@@ -13,6 +13,7 @@
  *
  *  $Id$
  */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -38,193 +39,58 @@
 #include <errno.h>
 #include <pwd.h>
 
-/*
- * Common linked list of shell commands.
- *
- * Because the help report is very long, there is a topic for each command.
- *
- * Help list the topics
- *   help [topic] list the commands for the topic
- *   help [command] help for the command
- * 
- */
-
-shell_cmd_t   * shell_first_cmd;
-shell_topic_t * shell_first_topic;
-
-shell_env_t *shell_init_env(shell_env_t *);
+shell_env_t  global_shell_env;
+shell_env_t *current_shell_env;
 
 /*
- *  Find the topic from the set of topics registered.
+ *  Initialize the shell user/process environment information
  */
-shell_topic_t * shell_lookup_topic(char * topic) {
-  shell_topic_t * shell_topic;
-  shell_topic=shell_first_topic;
-
-  while (shell_topic) {
-    if (!strcmp(shell_topic->topic,topic))
-      return shell_topic;
-    shell_topic=shell_topic->next;
-  }
-  return (shell_topic_t *) NULL;
-}
-
-/*
- *  Add a new topic to the list of topics
- */
-shell_topic_t * shell_add_topic(char * topic) {
-  shell_topic_t * current,*aux;
-
-  if (!shell_first_topic) {
-    aux = malloc(sizeof(shell_topic_t));
-    aux->topic = topic;
-    aux->next  = (shell_topic_t*)NULL;
-    return shell_first_topic = aux;
-  }
-  current=shell_first_topic;
-  if (!strcmp(topic,current->topic))
-    return current;
-
-  while (current->next) {
-    if (!strcmp(topic,current->next->topic))
-      return current->next;
-    current=current->next;
-  }
-  aux = malloc(sizeof(shell_topic_t));
-  aux->topic = topic;
-  aux->next = (shell_topic_t*)NULL;
-  current->next = aux;
-  return aux;
-}
-
-/*
- *  Find the command in the set
- */
-shell_cmd_t * shell_lookup_cmd(char * cmd) {
-  shell_cmd_t * shell_cmd;
-  shell_cmd=shell_first_cmd;
-  while (shell_cmd) {
-   if (!strcmp(shell_cmd->name,cmd)) return shell_cmd;
-   shell_cmd=shell_cmd->next;
-  };
-  return (shell_cmd_t *) NULL;
-}
-
-/*
- *  Add a command structure to the set of known commands
- */
-shell_cmd_t *shell_add_cmd_struct(
-  shell_cmd_t *shell_cmd
+shell_env_t *shell_init_env(
+  shell_env_t *shell_env_arg
 )
 {
-  shell_cmd_t *shell_pvt;
+  shell_env_t *shell_env;
+  
+  shell_env = shell_env_arg;
 
-  if ( !shell_first_cmd ) {
-    shell_first_cmd = shell_cmd;
-  } else {
-    shell_pvt = shell_first_cmd;
-    while (shell_pvt->next)
-      shell_pvt = shell_pvt->next;
-    shell_pvt->next = shell_cmd;
-  }  
-  shell_add_topic( shell_cmd->topic );
-  return shell_cmd;
+  if ( !shell_env ) {
+    shell_env = malloc(sizeof(shell_env_t));
+    if ( !shell_env )
+     return NULL;
+  }
+
+  if (global_shell_env.magic != 0x600D600d) {
+    global_shell_env.magic      = 0x600D600d;
+    global_shell_env.devname    = "";
+    global_shell_env.taskname   = "GLOBAL";
+    global_shell_env.tcflag     = 0;
+    global_shell_env.exit_shell = 0;
+    global_shell_env.forever    = TRUE;
+  }
+
+  *shell_env = global_shell_env;
+  shell_env->taskname = NULL;
+  shell_env->forever = FALSE;
+
+  return shell_env;
 }
 
 /*
- *  Add a command as a set of arguments to the set and 
- *  allocate the command structure on the fly.
+ *  Get a line of user input with modest features
  */
-shell_cmd_t * shell_add_cmd(
-  char            *cmd,
-  char            *topic,
-  char            *usage,
-  shell_command_t  command
-)
-{
-  extern void register_cmds(void);
-
-  shell_cmd_t *shell_cmd;
-
-  if ( !shell_first_cmd ) {
-    shell_cmd_t **c;
-    shell_alias_t **a;
-
-    shell_first_cmd = NULL;
-    for ( c = Shell_Initial_commands ; *c  ; c++ ) {
-      shell_add_cmd_struct( *c );
-    }
-
-    for ( a = Shell_Initial_aliases ; *a  ; a++ ) {
-      shell_alias_cmd( (*a)->name, (*a)->alias );
-    }
-
-    register_cmds();
-  }
-
-  if (!cmd)
-    return (shell_cmd_t *) NULL;
-  if (!command)
-    return (shell_cmd_t *) NULL;
-
-  shell_cmd          = (shell_cmd_t *) malloc(sizeof(shell_cmd_t));
-  shell_cmd->name    = cmd;
-  shell_cmd->topic   = topic;
-  shell_cmd->usage   = usage;
-  shell_cmd->command = command;
-  shell_cmd->alias   = (shell_cmd_t *) NULL;
-  shell_cmd->next    = (shell_cmd_t *) NULL;
-
-  return shell_add_cmd_struct( shell_cmd );
-}
-/* ----------------------------------------------- *
- * you can make an alias for every command.
- * ----------------------------------------------- */
-shell_cmd_t * shell_alias_cmd(char * cmd, char * alias) {
-  shell_cmd_t * shell_cmd,* shell_aux;
-  shell_aux=(shell_cmd_t *) NULL;
-  if (alias) {
-   if ((shell_aux=shell_lookup_cmd(alias))!=NULL) {
-    return NULL;
-   };
-   if ((shell_cmd=shell_lookup_cmd(cmd))!=NULL) {
-    shell_aux=shell_add_cmd(alias,shell_cmd->topic,
-                shell_cmd->usage,shell_cmd->command);
-    if (shell_aux) shell_aux->alias=shell_cmd;
-   };
-  };
-  return shell_aux;
-}
-/* ----------------------------------------------- *
- * Poor but enough..
- * TODO: Redirection capture. "" evaluate, ... C&S welcome.
- * ----------------------------------------------- */
-int shell_make_args(char * cmd,
-     int  * pargc,
-     char * argv[]) {
-  int argc=0;
-  while ((cmd=strtok(cmd," \t\r\n"))!=NULL) {
-    argv[argc++]=cmd;
-    cmd=(char*)NULL;
-   };
-  argv[argc]=(char*)NULL;
-  return *pargc=argc;
-}
-
-/* ----------------------------------------------- *
- * TODO: Add improvements. History, edit vi or emacs, ...
- * ----------------------------------------------- */
 int shell_scanline(char * line,int size,FILE * in,FILE * out) {
   int c,col;
-  col=0;
+
+  col = 0;
   if (*line) {
-   col=strlen(line);
-   if (out) fprintf(out,"%s",line);
-  };
+    col = strlen(line);
+    if (out) fprintf(out,"%s",line);
+  }
   tcdrain(fileno(in));
-  if (out) tcdrain(fileno(out));
+  if (out)
+    tcdrain(fileno(out));
   for (;;) {
-    line[col]=0;
+    line[col] = 0;
     c = fgetc(in);
     switch (c) {
       case 0x04:/*Control-d*/
@@ -236,7 +102,7 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
         if (out)
           fputc('\f',out);
       case 0x03:/*Control-C*/
-        line[0]=0;
+        line[0] = 0;
       case '\n':
       case '\r':
         if (out)
@@ -258,10 +124,10 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
      default:
        if (!iscntrl(c)) {
          if (col<size-1) {
-           line[col++]=c;
-           if (out) fputc(c,out);
+            line[col++] = c;
+            if (out) fputc(c,out);
           } else {
-           if (out) fputc('\a',out);
+            if (out) fputc('\a',out);
           }
        } else {
         if (out)
@@ -271,39 +137,35 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
      }
   }
 }
+
 /* ----------------------------------------------- *
  * - The shell TASK
  * Poor but enough..
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
-shell_env_t  global_shell_env;
-shell_env_t *current_shell_env;
-
-extern char **environ;
-
-void write_file(char * name,char * content) {
-  FILE * fd;
-  fd=fopen(name,"w");
-  if (fd) {
-     fwrite(content,1,strlen(content),fd);
-   fclose(fd);
-  };
-}
 
 void init_issue(void) {
- static char issue_inited=FALSE;
- struct stat buf;
- if (issue_inited) return;
- issue_inited=TRUE;
- getpwnam("root"); /* dummy call to init /etc dir */
- if (stat("/etc/issue",&buf))
-  write_file("/etc/issue",
-       "Welcome to @V\\n"
-       "Login into @S\\n");
- if (stat("/etc/issue.net",&buf))
-  write_file("/etc/issue.net",
-       "Welcome to %v\n"
-       "running on %m\n");
+  static char issue_inited=FALSE;
+  struct stat buf;
+
+  if (issue_inited)
+    return;
+  issue_inited = TRUE;
+
+  /* dummy call to init /etc dir */
+  getpwnam("root");
+
+  if (stat("/etc/issue",&buf)) {
+    write_file("/etc/issue",
+        "Welcome to @V\\n"
+        "Login into @S\\n");
+  }
+
+  if (stat("/etc/issue.net",&buf)) {
+     write_file("/etc/issue.net",
+        "Welcome to %v\n"
+        "running on %m\n");
+  }
 }
 
 int shell_login(FILE * in,FILE * out) {
@@ -433,16 +295,16 @@ int shell_login(FILE * in,FILE * out) {
         setuid(passwd->pw_uid);
         setgid(passwd->pw_gid);
         rtems_current_user_env->euid =
-        rtems_current_user_env->egid =0;
+        rtems_current_user_env->egid = 0;
         chown(current_shell_env->devname,passwd->pw_uid,0);
         rtems_current_user_env->euid = passwd->pw_uid;
         rtems_current_user_env->egid = passwd->pw_gid;
         if (!strcmp(passwd->pw_passwd,"*")) {
-         /* /etc/shadow */
-         return 0;
+          /* /etc/shadow */
+          return 0;
         } else {
-         /* crypt() */
-         return 0;
+          /* crypt() */
+          return 0;
         }
       }
     }
@@ -454,7 +316,7 @@ int shell_login(FILE * in,FILE * out) {
   return -1;
 }
 
-#if 0
+#if defined(SHELL_DEBUG)
 void shell_print_env(
   shell_env_t * shell_env
 )
@@ -488,6 +350,7 @@ rtems_task shell_shell(rtems_task_argument task_argument)
    rtems_task_delete( RTEMS_SELF );
 }
 
+#define SHELL_MAXIMUM_ARGUMENTS 128
 
 rtems_boolean shell_shell_loop(
   shell_env_t *shell_env_arg
@@ -501,13 +364,15 @@ rtems_boolean shell_shell_loop(
   char               cmd[256];
   char               last_cmd[256]; /* to repeat 'r' */
   int                argc;
-  char              *argv[128];
+  char              *argv[SHELL_MAXIMUM_ARGUMENTS];
+
+  shell_initialize_command_set();
 
   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&current_shell_env,free);
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
     return FALSE;
-  };
+  }
 
   shell_env         = 
   current_shell_env = shell_init_env( shell_env_arg );
@@ -519,24 +384,24 @@ rtems_boolean shell_shell_loop(
 
   setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
   /* make a raw terminal,Linux Manuals */
-  if (tcgetattr (fileno(stdin), &term)>=0) {
-   term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
-   term.c_oflag &= ~OPOST;
-   term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
-   term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-   if (shell_env->tcflag)
-     term.c_cflag = shell_env->tcflag;
-   term.c_cflag  |= CLOCAL | CREAD;
-   term.c_cc[VMIN]  = 1;
-   term.c_cc[VTIME] = 0;
-   if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
-     fprintf(stderr,
-       "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
-   };
-   setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
+  if (tcgetattr(fileno(stdin), &term) >= 0) {
+    term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+    term.c_oflag &= ~OPOST;
+    term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
+    term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+    if (shell_env->tcflag)
+      term.c_cflag = shell_env->tcflag;
+    term.c_cflag  |= CLOCAL | CREAD;
+    term.c_cc[VMIN]  = 1;
+    term.c_cc[VTIME] = 0;
+    if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
+      fprintf(stderr,
+        "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
+    }
+    setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
   }
 
-  shell_add_cmd(NULL,NULL,NULL,NULL); /* init the chain list*/
+  shell_initialize_command_set();
   do {
     /* Set again root user and root filesystem, side effect of set_priv..*/
     sc = rtems_libio_set_private_env();
@@ -552,7 +417,7 @@ rtems_boolean shell_shell_loop(
         "RTEMS SHELL (Ver.1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",
         shell_env->devname);
       chdir("/"); /* XXX: chdir to getpwent homedir */
-      shell_env->exit_shell=FALSE;
+      shell_env->exit_shell = FALSE;
       for (;;) {
         /* Prompt section */
         /* XXX: show_prompt user adjustable */
@@ -591,12 +456,15 @@ rtems_boolean shell_shell_loop(
          *  Run in a new shell task background. (unix &)
          *  Resuming. A little bash.
          */
-        if (shell_make_args(cmd,&argc,argv)) {
-          if ((shell_cmd=shell_lookup_cmd(argv[0]))!=NULL) {
-            shell_env->errorlevel=shell_cmd->command(argc,argv);
+        if (!shell_make_args(cmd, &argc, argv, SHELL_MAXIMUM_ARGUMENTS)) {
+          shell_cmd = shell_lookup_cmd(argv[0]);
+          if ( argv[0] == NULL ) {
+            shell_env->errorlevel = -1;
+          } else if ( shell_cmd == NULL ) {
+            printf("shell:%s command not found\n", argv[0]);
+            shell_env->errorlevel = -1;
           } else {
-            printf("shell:%s command not found\n",argv[0]);
-            shell_env->errorlevel=-1;
+            shell_env->errorlevel = shell_cmd->command(argc, argv);
           }
         }
         /* end exec cmd section */
@@ -604,7 +472,7 @@ rtems_boolean shell_shell_loop(
         if (shell_env->exit_shell)
           break;
         strcpy(last_cmd, cmd);
-        cmd[0]=0;
+        cmd[0] = 0;
       }
       printf("\nGoodbye from RTEMS SHELL :-(\n");
       fflush( stdout );
@@ -630,7 +498,8 @@ rtems_status_code   shell_init (
   rtems_name         name;
 
   if ( task_name )
-    name = rtems_build_name(task_name[0], task_name[1], task_name[2], task_name[3]);
+    name = rtems_build_name(
+      task_name[0], task_name[1], task_name[2], task_name[3]);
   else
     name = rtems_build_name( 'S', 'E', 'N', 'V' );
 
@@ -659,34 +528,4 @@ rtems_status_code   shell_init (
   shell_env->forever    = forever;
 
   return rtems_task_start(task_id,shell_shell,(rtems_task_argument) shell_env);
-}
-
-shell_env_t *shell_init_env(
-  shell_env_t *shell_env_arg
-)
-{
-  shell_env_t *shell_env;
-  
-  shell_env = shell_env_arg;
-
-  if ( !shell_env ) {
-    shell_env = malloc(sizeof(shell_env_t));
-    if ( !shell_env )
-     return NULL;
-  }
-
-  if (global_shell_env.magic != 0x600D600d) {
-    global_shell_env.magic      = 0x600D600d;
-    global_shell_env.devname    = "";
-    global_shell_env.taskname   = "GLOBAL";
-    global_shell_env.tcflag     = 0;
-    global_shell_env.exit_shell = 0;
-    global_shell_env.forever    = TRUE;
-  }
-
-  *shell_env = global_shell_env;
-  shell_env->taskname = NULL;
-  shell_env->forever = FALSE;
-
-  return shell_env;
 }

@@ -65,9 +65,10 @@ shell_cmd_t * shell_alias_cmd(
 );
 
 int shell_make_args(
-  char * cmd,
-  int  * pargc,
-  char * argv[]
+  char  *commandLine,
+  int   *argc_p, 
+  char **argv_p, 
+  int    max_args
 );
 
 int shell_scanline(char * line,int size,FILE * in,FILE * out) ;

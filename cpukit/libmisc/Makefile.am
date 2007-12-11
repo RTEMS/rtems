@@ -72,6 +72,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmd_alias.c shell/cmd_cat.c \
     shell/cmd_mmove.c shell/cmd_mwdump.c shell/cmd_pwd.c shell/cmd_rm.c \
     shell/cmd_rmdir.c shell/cmds.c shell/cmd_tty.c shell/cmd_umask.c \
     shell/cmd_whoami.c shell/internal.h shell/shell.c shell/shellconfig.c \
+    shell/shell_makeargs.c shell/shell_cmdset.c shell/write_file.c \
     shell/shellconfig.h shell/shell.h shell/str2int.c
 endif
 

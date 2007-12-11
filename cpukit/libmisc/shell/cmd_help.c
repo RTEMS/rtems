@@ -73,7 +73,11 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
  * Can you see the header of routine? Known?
  * The same with all the commands....
  */
-int shell_help(int argc,char * argv[]) {
+int shell_help(
+  int argc,
+  char * argv[]
+)
+{
   int col,line,arg;
   shell_topic_t *topic;
   shell_cmd_t * shell_cmd = shell_first_cmd;
