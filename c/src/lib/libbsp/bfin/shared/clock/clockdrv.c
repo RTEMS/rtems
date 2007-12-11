@@ -36,7 +36,7 @@
 
 #define Clock_driver_support_initialize_hardware() \
       *((uint32_t*)TCNTL)     = TAUTORLD|TMREN|TMPWR;                                   \
-      *((uint32_t*)TPERIOD) = CCLK / 1000000 * BSP_Configuration.microseconds_per_tick; \
+      *((uint32_t*)TPERIOD) = CCLK / 1000000 * rtems_configuration_get_microseconds_per_tick(); \
       *((uint32_t*)TSCALE)  = 0;                                                        \
   do { \
   } while (0)
