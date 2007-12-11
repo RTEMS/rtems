@@ -100,7 +100,6 @@ void DumpList(
 void ReleaseFile();
 
 EXTERN boolean          Verbose;                 /* status/debug msgs */
-EXTERN boolean          BlankAsWarnings;
 EXTERN Chain_Control    Lines;
 
 #endif

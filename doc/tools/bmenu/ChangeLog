@@ -1,5 +1,6 @@
 2007-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* base.h: Remove BlankAsWarnings.
 	* base.h: Remove NumberOf*.
 
 2007-12-06	Ralf Corsepius <ralf.corsepius@rtems.org>
