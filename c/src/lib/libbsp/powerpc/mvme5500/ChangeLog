@@ -1,3 +1,8 @@
+2007-12-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, start/preload.S: moved preload.S
+	to ../shared/start.
+
 2007-12-08	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: merged shared/vme/vme_universe.c and

@@ -89,7 +89,7 @@ include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h \
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
     vectors/exceptionhandler.c ../../powerpc/shared/vectors/vectors.S \
-    ../../powerpc/shared/vectors/vectors_entry.S	
+    ../../powerpc/shared/start/vectors_entry.S	
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -138,7 +138,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
 noinst_PROGRAMS += mvme5500start.$(OBJEXT)
-mvme5500start___OBJEXT__SOURCES = start/preload.S start/start.S
+mvme5500start___OBJEXT__SOURCES = ../shared/start/preload.S start/start.S
 mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS)
 mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 

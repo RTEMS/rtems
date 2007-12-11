@@ -55,7 +55,8 @@ EXTRA_DIST += shared/irq/i8259.c shared/irq/irq.c shared/irq/irq_init.c \
 	shared/irq/irq_asm.S shared/irq/openpic_i8259_irq.c
 
 ## shared/start
-EXTRA_DIST += shared/start/start.S shared/start/rtems_crti.S
+EXTRA_DIST += shared/start/start.S shared/start/rtems_crti.S \
+	shared/start/preload.S
 
 ## shared/startup
 EXTRA_DIST += shared/startup/bspstart.c shared/startup/pgtbl_setup.c \
