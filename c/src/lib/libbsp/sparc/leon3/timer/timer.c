@@ -24,7 +24,7 @@
 
 #if defined(RTEMS_MULTIPROCESSING)
   #define LEON3_TIMER_INDEX \
-      (rtems_configuration_get_user_multiprocessing_table() ? : \
+      ((rtems_configuration_get_user_multiprocessing_table()) ? \
         (rtems_configuration_get_user_multiprocessing_table()->node) - 1 : 1)
 #else 
   #define LEON3_TIMER_INDEX 0

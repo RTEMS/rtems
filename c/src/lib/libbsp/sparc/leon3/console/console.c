@@ -152,7 +152,7 @@ rtems_device_driver console_initialize(
    */
   
   #if defined(RTEMS_MULTIPROCESSING)
-    if ((rtems_configuration_get_user_multiprocessing_table())->node == 1))
+    if (rtems_configuration_get_user_multiprocessing_table()->node == 1)
   #endif
   {
     for (i = uart0; i < uarts; i++)
