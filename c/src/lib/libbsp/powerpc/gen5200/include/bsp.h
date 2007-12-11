@@ -151,7 +151,6 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 
 /* miscellaneous stuff assumed to exist */
 
-extern rtems_configuration_table BSP_Configuration;
 /*
  * We need to decide how much memory will be non-cacheable. This
  * will mainly be memory that will be used in DMA (network and serial

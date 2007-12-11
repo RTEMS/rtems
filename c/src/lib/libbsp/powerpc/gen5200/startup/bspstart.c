@@ -120,16 +120,7 @@ bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo *
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
-/*
- *  The original table from the application (in ROM) and our copy of it with
- *  some changes. Configuration is defined in <confdefs.h>. Make sure that
- *  our configuration tables are uninitialized so that they get allocated in
- *  the .bss section (RAM).
- */
-extern rtems_configuration_table Configuration;
 extern unsigned long intrStackPtr;
-rtems_configuration_table  BSP_Configuration;
-char *rtems_progname;
 
 /*
  *  Driver configuration parameters
@@ -305,29 +296,21 @@ void bsp_start(void)
 #endif
 
   /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-
-  /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-  BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
-
-
-  /*
-  BSP_Configuration.microseconds_per_tick  = 1000;
-  */
+  Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
+
+  {
+    void BSP_initialize_IRQ_Timing(void);
+    BSP_initialize_IRQ_Timing();
+  }
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
@@ -344,17 +327,13 @@ void bsp_start(void)
  *  defined in HID0.  HID0 is set during starup in start.S.
  *
  */
-Thread _Thread_Idle_body(uint32_t ignored )
-  {
-
-  for(;;)
-    {
-
-    asm volatile("mfmsr 3; oris 3,3,4; sync; mtmsr 3; isync; ori 3,3,0; ori 3,3,0");
-
-    }
-
-  return 0;
-
+Thread _Thread_Idle_body(uint32_t ignored)
+{
+  for(;;) {
+    asm volatile(
+      "mfmsr 3; oris 3,3,4; sync; mtmsr 3; isync; ori 3,3,0; ori 3,3,0"
+     );
   }
+  return 0;
+}
 

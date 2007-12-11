@@ -130,7 +130,7 @@ void mpc5200_gpt_clock_isr(rtems_irq_hdl_param handle)
   status = gpt->status;
 
   if (ClockInitialized  && (status & GPT_STATUS_TEXP)) {
-    gpt->status |= GPT_STATUS_TEXP;
+    gpt->status |= GPT_STATUS_RESET;
     Clock_last_TBR = PPC_Get_timebase_register();
 
     Clock_driver_ticks++;
@@ -328,7 +328,7 @@ int BSP_connect_clock_handler (uint32_t gpt_no)
     status = gpt->status;                                                \
     \
     if (ClockInitialized  && (status & GPT_STATUS_TEXP)) {               \
-      gpt->status |= GPT_STATUS_TEXP;                                    \
+      gpt->status |= GPT_STATUS_RESET;                                   \
       Clock_last_TBR = PPC_Get_timebase_register();                      \
     }                                                                    \
   } while(0)
