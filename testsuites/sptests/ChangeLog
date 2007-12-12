@@ -1,3 +1,7 @@
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp28/init.c: Add test code for task variables to improve coverage.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp21/task1.c: Eliminate copies of the Configuration Table. Use the
