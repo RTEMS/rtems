@@ -1,3 +1,7 @@
+2007-12-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/preinstall.am: Revert debug patch.
+
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/shell/cmd_ls.c: Add include of <sys/stat.h> needed for UNIX
