@@ -111,14 +111,18 @@ libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
 
 ## OBJECT_C_FILES
 libscore_a_SOURCES += src/object.c src/objectallocate.c \
-    src/objectallocatebyindex.c src/objectclearname.c \
-    src/objectcomparenameraw.c src/objectcomparenamestring.c \
-    src/objectcopynameraw.c src/objectcopynamestring.c \
-    src/objectextendinformation.c src/objectfree.c src/objectget.c \
-    src/objectgetisr.c src/objectgetbyindex.c src/objectgetnext.c \
+    src/objectclearname.c src/objectcomparenameraw.c \
+    src/objectcomparenamestring.c src/objectcopynameraw.c \
+    src/objectcopynamestring.c \ src/objectextendinformation.c \
+    src/objectfree.c src/objectget.c src/objectgetisr.c src/objectgetnext.c \
     src/objectinitializeinformation.c src/objectnametoid.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c
+
+## OBJECT_C_FILES only used by ITRON API
+if LIBITRON
+libscore_a_SOURCES += src/objectallocatebyindex.c src/objectgetbyindex.c
+endif
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
