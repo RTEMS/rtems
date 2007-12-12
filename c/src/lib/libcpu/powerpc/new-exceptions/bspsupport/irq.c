@@ -346,6 +346,12 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 			if (vchain->on)
               vchain->on(vchain);
 		}
+		if ( vchain != &rtems_hdl_tbl[i] ) {
+			/* at least one handler registered */
+			BSP_enable_irq_at_pic(i);
+		} else {
+			BSP_disable_irq_at_pic(i);
+		}
 	}
 
     rtems_interrupt_enable(level);

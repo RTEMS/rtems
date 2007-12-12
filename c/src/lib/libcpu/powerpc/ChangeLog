@@ -1,3 +1,9 @@
+2007-12-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/irq.c: enable/disable
+	irq at PIC if an initial handler is present/absent
+	(reproduce traditional semantics).
+
 2007-12-10	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/e500_raw_exc_init.c: map DEC
