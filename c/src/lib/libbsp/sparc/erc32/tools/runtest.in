@@ -199,7 +199,7 @@ do
    fi
 
    # Spin off the simulator in the background
-   sparc-rtems4.8-sis $extra_options -c ${scriptfile} >${logfile}.tmp &
+   sparc-rtems4.9-sis $extra_options -c ${scriptfile} >${logfile}.tmp &
    sim_pid=$!
 
    # Make sure it won't run forever...

@@ -1,3 +1,7 @@
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest.in: Update to 4.9.
+
 2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest.in: Filter out Memory exception error messages.
