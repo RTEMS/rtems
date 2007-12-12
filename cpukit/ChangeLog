@@ -1,5 +1,9 @@
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libgnat/Makefile.am: Handle POSIX being disabled correctly.
+
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/Makefile.am: Only used by ITRON so do not build if ITRON is
 	disabled.
 
