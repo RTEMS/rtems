@@ -88,7 +88,5 @@ rtems_status_code rtems_io_register_driver(
   _IO_Driver_address_table[major] = *driver_table;
   *registered_major               = major;
 
-  rtems_io_initialize( major, 0, NULL );
-
-  return RTEMS_SUCCESSFUL;
+  return rtems_io_initialize( major, 0, NULL );
 }

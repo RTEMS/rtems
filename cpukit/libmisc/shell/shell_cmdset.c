@@ -111,6 +111,13 @@ shell_cmd_t *shell_add_cmd_struct(
 )
 {
   shell_cmd_t *shell_pvt;
+  
+  shell_pvt = shell_first_cmd;
+  while (shell_pvt) {
+    if (strcmp(shell_pvt->name, shell_cmd->name) == 0)
+      return NULL;
+    shell_pvt = shell_pvt->next;
+  }
 
   if ( !shell_first_cmd ) {
     shell_first_cmd = shell_cmd;
@@ -135,10 +142,7 @@ shell_cmd_t * shell_add_cmd(
   shell_command_t  command
 )
 {
-  extern void register_cmds(void);
-
   shell_cmd_t *shell_cmd;
-
 
   if (!cmd)
     return (shell_cmd_t *) NULL;
@@ -146,14 +150,22 @@ shell_cmd_t * shell_add_cmd(
     return (shell_cmd_t *) NULL;
 
   shell_cmd          = (shell_cmd_t *) malloc(sizeof(shell_cmd_t));
-  shell_cmd->name    = cmd;
-  shell_cmd->topic   = topic;
-  shell_cmd->usage   = usage;
+  shell_cmd->name    = strdup( cmd );
+  shell_cmd->topic   = strdup( topic );
+  shell_cmd->usage   = strdup( usage );
   shell_cmd->command = command;
   shell_cmd->alias   = (shell_cmd_t *) NULL;
   shell_cmd->next    = (shell_cmd_t *) NULL;
 
-  return shell_add_cmd_struct( shell_cmd );
+  if (shell_add_cmd_struct( shell_cmd ) == NULL) {
+    free( shell_cmd->usage );
+    free( shell_cmd->topic );
+    free( shell_cmd->name );
+    free( shell_cmd );
+    shell_cmd = NULL;
+  }
+
+  return shell_cmd;
 }
 
 
@@ -161,9 +173,6 @@ void shell_initialize_command_set(void)
 {
   shell_cmd_t **c;
   shell_alias_t **a;
-
-  if ( shell_first_cmd )
-    return;
 
   for ( c = Shell_Initial_commands ; *c  ; c++ ) {
     shell_add_cmd_struct( *c );

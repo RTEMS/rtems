@@ -1,3 +1,12 @@
+2007-12-12	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am: Added libmisc/shell/shellconfig.h to the installed
+	header list.
+	* libmisc/shell/shell_cmdset.c: Let the Initial command add occur
+	in any order rather than before any commands have been added. Also
+	made the command's strings be copies rather than references.
+	* sapi/src/ioregisterdriver.c: Return the I/O initialise calls result.
+
 2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, posix/Makefile.am, wrapup/Makefile.am:
