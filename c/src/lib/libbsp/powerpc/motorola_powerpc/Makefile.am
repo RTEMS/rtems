@@ -164,6 +164,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
