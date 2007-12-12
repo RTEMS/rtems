@@ -1,3 +1,8 @@
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, startup/bspstart.c: Links and runs again.
+	* console/console-io.c: New file.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clock.c, include/bsp.h, startup/bspstart.c,

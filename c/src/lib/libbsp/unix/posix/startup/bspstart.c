@@ -106,37 +106,37 @@ void bsp_postdriver_hook(void)
 
 void bsp_start(void)
 {
-    uintptr_t   workspace_ptr;
+  uintptr_t   workspace_ptr;
 
+  cpu_number = 0;
+
+  #if defined(RTEMS_MULTIPROCESSING)
     /*
      *  If the node number is -1 then the application better provide
      *  it through environment variables RTEMS_NODE.
      *  Ditto for RTEMS_MAXIMUM_NODES
      */
-
     if (Configuration.User_multiprocessing_table) {
-        char *p;
+      char *p;
 
-        if (Configuration.User_multiprocessing_table->node == -1) {
-            p = getenv("RTEMS_NODE");
-            Configuration.User_multiprocessing_table->node = p ? atoi(p) : 1;
-        }
+      if (Configuration.User_multiprocessing_table->node == -1) {
+        p = getenv("RTEMS_NODE");
+        Configuration.User_multiprocessing_table->node = p ? atoi(p) : 1;
+      }
 
-        /* If needed provide maximum_nodes also */
-        if (Configuration.User_multiprocessing_table->maximum_nodes == -1) {
-            p = getenv("RTEMS_MAXIMUM_NODES");
-            Configuration.User_multiprocessing_table->maximum_nodes = p ? atoi(p) : 1;
-        }
+      /* If needed provide maximum_nodes also */
+      if (Configuration.User_multiprocessing_table->maximum_nodes == -1) {
+        p = getenv("RTEMS_MAXIMUM_NODES");
+       Configuration.User_multiprocessing_table->maximum_nodes = p ? atoi(p) : 1;
+      }
     }
 
     /*
      * Set cpu_number to accurately reflect our cpu number
      */
-
-    if (Configuration.User_multiprocessing_table->User_multiprocessing_table)
+      if (Configuration.User_multiprocessing_table)
         cpu_number = Configuration.User_multiprocessing_table->node - 1;
-    else
-        cpu_number = 0;
+   #endif
 
     if (getenv("RTEMS_WORKSPACE_SIZE"))
         rtems_configuration_get_work_space_size() =

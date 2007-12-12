@@ -41,7 +41,8 @@ noinst_LIBRARIES =
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    startup/bspstart.c startup/setvec.c ../../shared/bootcard.c
+    ../../shared/bsppredriverhook.c startup/bspstart.c \
+    startup/setvec.c ../../shared/bootcard.c
 ## for now always using main.c style startup
 ##if !HAS_CXX
 startup_rel_SOURCES += startup/main.c
@@ -56,7 +57,7 @@ clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
+console_rel_SOURCES = console/console.c console/console-io.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
