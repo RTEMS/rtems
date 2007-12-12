@@ -6,7 +6,9 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST=
 
-if LIBPOSIX
+if HAS_PTHREADS
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
+
 noinst_LIBRARIES = libgnat.a
 
 libgnat_a_SOURCES = ada_intrsupp.c adasupp.c

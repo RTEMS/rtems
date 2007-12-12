@@ -19,6 +19,9 @@ TMP_LIBS += ../rtems/librtems.a
 
 if LIBPOSIX
 TMP_LIBS += ../posix/libposix.a
+endif
+
+if HAS_PTHREADS
 TMP_LIBS += ../libgnat/libgnat.a
 endif
 
