@@ -23,7 +23,7 @@
  *     + wake up after interval
  *     + wake up when specified
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -448,6 +448,22 @@ rtems_status_code rtems_task_variable_delete(
  */
 
 void _RTEMS_tasks_Initialize_user_tasks( void );
+
+/*
+ *  _RTEMS_Tasks_Invoke_task_variable_dtor(
+ *
+ *  This routine invokes the optional user provided destructor on the
+ *  task variable and frees the memory for the task variable.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+void _RTEMS_Tasks_Invoke_task_variable_dtor(
+  Thread_Control        *the_thread,
+  rtems_task_variable_t *tvp
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/tasks.inl>

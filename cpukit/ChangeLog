@@ -1,3 +1,11 @@
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/Makefile.am, rtems/include/rtems/rtems/tasks.h,
+	rtems/src/tasks.c, rtems/src/taskvariableadd.c,
+	rtems/src/taskvariabledelete.c: Add test code for task variables to
+	improve coverage.
+	* rtems/src/taskvariable_invoke_dtor.c: New file.
+
 2007-12-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/preinstall.am: Revert debug patch.

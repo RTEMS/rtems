@@ -49,7 +49,7 @@ rtems_status_code rtems_task_variable_add(
       tvp = the_thread->task_variables;
       while (tvp) {
         if (tvp->ptr == ptr) {
-	  tvp->dtor = dtor;
+          tvp->dtor = dtor;
           _Thread_Enable_dispatch();
           return RTEMS_SUCCESSFUL;
         }
