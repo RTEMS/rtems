@@ -43,20 +43,6 @@
 
 #define EDGE_TRIGGER
 
-#define _MSR_GET( _mask) \
-  do { \
-     RTEMS_COMPILER_MEMORY_BARRIER(); \
-     _CPU_MSR_GET( _mask); \
-     RTEMS_COMPILER_MEMORY_BARRIER(); \
-  } while (0);
-
-#define _MSR_SET( _mask) \
-  do { \
-     RTEMS_COMPILER_MEMORY_BARRIER(); \
-     _CPU_MSR_SET( _mask); \
-     RTEMS_COMPILER_MEMORY_BARRIER(); \
-  } while (0);
-
 /* #define DEBUG_IRQ*/
 
 /*
@@ -70,16 +56,18 @@
 static unsigned int BSP_irq_prio_mask_tbl[3][BSP_PIC_IRQ_NUMBER];
 
 /*
- * default handler connected on each irq after bsp initialization
- */
-static rtems_irq_connect_data	default_rtems_entry;
-
-/*
  * location used to store initial tables used for interrupt
  * management.
  */
 static rtems_irq_global_settings* 	internal_config;
+/* handler table (cached copy ) */
 static rtems_irq_connect_data*		rtems_hdl_tbl;
+/*
+ * default handler connected on each irq after bsp initialization
+ * (locally cached copy)
+ */
+void (*default_rtems_hdl)(rtems_irq_hdl_param) = (void(*)(rtems_irq_hdl_param)) -1;
+
 
 static volatile unsigned  *BSP_irqMask_reg[3];
 static volatile unsigned  *BSP_irqCause_reg[3];
@@ -162,7 +150,7 @@ static inline unsigned int modIrq32(unsigned irq)
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_pic_masks_from_prio()
+static void compute_pic_masks_from_prio(rtems_irq_global_settings *config)
 {
   int i,j, k;
   unsigned long long irq_prio_mask=0;
@@ -192,7 +180,7 @@ static void compute_pic_masks_from_prio()
          * Mask interrupts at PIC level that have a lower priority
          * or <Till Straumann> a equal priority. 
          */
-        if (internal_config->irqPrioTbl [i] >= internal_config->irqPrioTbl [j])
+        if (config->irqPrioTbl [i] >= config->irqPrioTbl [j])
 	   irq_prio_mask |= (unsigned long long)(1LLU << j);
     }
     
@@ -207,7 +195,7 @@ static void compute_pic_masks_from_prio()
     BSP_irq_prio_mask_tbl[2][i] = 1<<i;
     /* Compute for the GPP priority interrupt mask */
     for (j=BSP_GPP_IRQ_LOWEST_OFFSET; j <BSP_PROCESSOR_IRQ_LOWEST_OFFSET; j++) {      
-      if (internal_config->irqPrioTbl [i] >= internal_config->irqPrioTbl [j])
+      if (config->irqPrioTbl [i] >= config->irqPrioTbl [j])
 	   BSP_irq_prio_mask_tbl[2][i] |= 1 << (j-BSP_GPP_IRQ_LOWEST_OFFSET); 
     }
     }
@@ -303,6 +291,9 @@ void BSP_enable_pic_irq(const rtems_irq_number irqNum)
   unsigned bitNum, regNum;
   unsigned int level;
 
+  if ( !is_pic_irq(irqNum) )
+  	return;
+
   bitNum = modIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
   regNum = divIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
 
@@ -317,10 +308,19 @@ void BSP_enable_pic_irq(const rtems_irq_number irqNum)
   rtems_interrupt_enable(level);
 }
 
-void BSP_disable_pic_irq(const rtems_irq_number irqNum)
+void BSP_enable_irq_at_pic(const rtems_irq_number irqNum)
 {
+	BSP_enable_pic_irq(irqNum);
+}
+
+int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
+{
+  int      rval;
   unsigned bitNum, regNum;
   unsigned int level;
+
+  if ( ! is_pic_irq(irqNum) )
+  	return -1;
 
   bitNum = modIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
   regNum = divIrq32(((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET);
@@ -328,17 +328,31 @@ void BSP_disable_pic_irq(const rtems_irq_number irqNum)
   rtems_interrupt_disable(level); 
 
   CleanMainIrqTbl((int) irqNum);
+
+  rval = BSP_irqMask_cache[regNum] & (1<<bitNum);
+
   BSP_irqMask_cache[regNum] &=  ~(1 << bitNum);
 
   out_le32(BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
   while (in_le32(BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
 
   rtems_interrupt_enable(level);
+
+  return rval ? 1 : 0;
 }
 
-int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
+void BSP_disable_pic_irq(const rtems_irq_number irqNum)
+{
+	(void)BSP_disable_irq_at_pic(irqNum);
+}
+
+int BSP_setup_the_pic(rtems_irq_global_settings *config)  /* adapt the same name as shared/irq */
 {
     int i;
+
+	internal_config   = config;
+	default_rtems_hdl = config->defaultEntry.hdl;
+	rtems_hdl_tbl     = config->irqHdlTbl;
 
     /* Get ready for discovery BSP */
     BSP_irqMask_reg[0]= (volatile unsigned int *) (GT64260_REG_BASE + GT_CPU_INT_MASK_LO);
@@ -380,7 +394,7 @@ int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
       out_le32(BSP_irqMask_reg[i], 0);
     }         
     in_le32(BSP_irqMask_reg[2]);
-    compute_pic_masks_from_prio();
+    compute_pic_masks_from_prio(config);
 
 #if 0
     printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n", 
@@ -394,22 +408,6 @@ int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
 	   in_le32(BSP_irqCause_reg[2]));
 #endif
 
-    /*
-     * 
-     */
-    for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-	BSP_enable_pic_irq(i);
-	if (rtems_hdl_tbl[i].on)
-		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	if (rtems_hdl_tbl[i].off)
-		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_disable_pic_irq(i);
-      }
-    }
-
     return(1);
 }
 
@@ -418,190 +416,21 @@ int BSP_setup_the_pic()  /* adapt the same name as shared/irq */
  * is valid.
  */
 
-static int isValidInterrupt(int irq)
-{
-  if ( (irq < BSP_LOWEST_OFFSET) || (irq > BSP_MAX_OFFSET))
-    return 0;
-  return 1;
-}
-
-/*
- * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
- */
-
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-    unsigned int level;
-  
-    if (!isValidInterrupt(irq->name)) {
-      printk("Invalid interrupt vector %d\n",irq->name);
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    rtems_interrupt_disable(level);
-    if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      rtems_interrupt_enable(level);
-      printk("IRQ vector %d already connected\n",irq->name);
-      return 0;
-    }
-
-    /*
-     * store the data provided by user
-     */
-    rtems_hdl_tbl[irq->name] = *irq;
-#ifdef BSP_SHARED_HANDLER_SUPPORT
-    rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
-#endif
-
-    if (is_pic_irq(irq->name)) {
-      /*
-       * Enable PIC  irq : Main Interrupt Cause Low and High & GPP external
-       */
-#ifdef DEBUG_IRQ
-      printk("PIC irq %d\n",irq->name);
-#endif
-      BSP_enable_pic_irq(irq->name);
-    }
-    else {
-      if (is_processor_irq(irq->name)) {
-         /*
-          * Enable exception at processor level
-          */
-
-       }
-    }
-    /*
-     * Enable interrupt on device
-     */
-	if (irq->on)
-    	irq->on(irq);
-    
-    rtems_interrupt_enable(level);
-
-    return 1;
-}
-
-
-int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
-{
-     if (!isValidInterrupt(irq->name)) {
-      return 0;
-     }
-     *irq = rtems_hdl_tbl[irq->name];
-     return 1;
-}
-
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-    unsigned int level;
-  
-    if (!isValidInterrupt(irq->name)) {
-      return 0;
-    }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
-      return 0;
-    }
-    rtems_interrupt_disable(level);
-
-    /*
-     * disable PIC interrupt
-     */
-    if (is_pic_irq(irq->name))
-      BSP_disable_pic_irq(irq->name);
-    else {
-      if (is_processor_irq(irq->name)) {
-         /*
-          * disable exception at processor level
-          */
-       }
-    }    
-
-    /*
-     * Disable interrupt on device
-     */
-	if (irq->off)
-    	irq->off(irq);
-
-    /*
-     * restore the default irq value
-     */
-    rtems_hdl_tbl[irq->name] = default_rtems_entry;
-
-
-    rtems_interrupt_enable(level);
-
-    return 1;
-}
-
-/*
- * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
- */
-
-int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
-{
-    unsigned int level;
-    int i;
-
-   /*
-    * Store various code accelerators
-    */
-    internal_config 		= config;
-    default_rtems_entry 	= config->defaultEntry;
-    rtems_hdl_tbl 		= config->irqHdlTbl;
-
-    rtems_interrupt_disable(level);
-
-    if ( !BSP_setup_the_pic() ) {
-       printk("PIC setup failed; leaving IRQs OFF\n");
-       return 0;
-    }
-
-    for (i= BSP_MAIN_GPP7_0_IRQ; i <= BSP_MAIN_GPP31_24_IRQ; i++) 
-      BSP_enable_pic_irq(i);
-
-    rtems_interrupt_enable(level);
-    return 1;
-}
-
-int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
-{
-    *config = internal_config;
-    return 0;
-}    
-
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
 
-int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
-  register unsigned msr, new_msr;
   unsigned long irqCause[3]={0, 0,0};
   register unsigned long selectCause;
   unsigned oldMask[3]={0,0,0};
   register unsigned i=0, j, irq=0, bitmask=0, group=0;
 
   if (excNum == ASM_DEC_VECTOR) {
-    _MSR_GET(msr);
-    new_msr = msr | MSR_EE;
-    _MSR_SET(new_msr);
-    
-    rtems_hdl_tbl[BSP_DECREMENTER].hdl(rtems_hdl_tbl[BSP_DECREMENTER].handle);
 
-    _MSR_SET(msr);
+  	bsp_irq_dispatch_list( rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_hdl);
+
     return 0;
     
   }
@@ -635,11 +464,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
          out_le32(BSP_irqCause_reg[2], ~bitmask);/* Till Straumann: Ack the edge triggered GPP IRQ */
 #endif
 
-      _MSR_GET(msr);
-      new_msr = msr | MSR_EE;
-      _MSR_SET(new_msr); 
-      rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
-      _MSR_SET(msr);
+  	  bsp_irq_dispatch_list( rtems_hdl_tbl, irq, default_rtems_hdl);
       
       for (j=0; j<3; j++ ) BSP_irqMask_cache[j] = oldMask[j];
       break;
@@ -652,25 +477,6 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   in_le32((volatile unsigned *)0xf100f10c);
 
   return 0;
-}
-
-void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
-{
-  /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
-   */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = FALSE;
-    _API_extensions_Run_postswitch();
-  }
-  /*
-   * I plan to process other thread related events here.
-   * This will include DEBUG session requested from keyboard...
-   */
 }
 
 /* Only print part of the entries for now */

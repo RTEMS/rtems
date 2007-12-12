@@ -29,7 +29,7 @@
 #ifndef LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 
-/*#define BSP_SHARED_HANDLER_SUPPORT      1*/
+#define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
 
 #ifndef ASM
@@ -132,6 +132,8 @@
 #define BSP_DECREMENTER		(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
+
+#include <bsp/irq_supp.h>
 
 #endif
 #endif

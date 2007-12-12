@@ -21,11 +21,6 @@
 #include <libcpu/raw_exception.h>  /* ASM_EXT_VECTOR, ASM_DEC_VECTOR ... */
 /*#define  TRACE_IRQ_INIT*/
 
-extern unsigned int external_exception_vector_prolog_code_size[];
-extern void external_exception_vector_prolog_code();
-extern unsigned int decrementer_exception_vector_prolog_code_size[];
-extern void decrementer_exception_vector_prolog_code();
-
 /*
  * default on/off function
  */
@@ -93,8 +88,8 @@ rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
  */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-  rtems_raw_except_connect_data vectorDesc;
-  int i;
+  int                   i;
+  rtems_interrupt_level l;
 
   /*
    * First initialize the Interrupt management hardware
@@ -130,6 +125,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Going to setup irq mngt configuration\n");
 #endif       
 
+  rtems_interrupt_disable(l);
   if (!BSP_rtems_irq_mngt_set(&initial_config)) {
       /*
        * put something here that will show the failure...
@@ -138,29 +134,14 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   }
 #ifdef TRACE_IRQ_INIT  
   printk("Done setup irq mngt configuration\n");
-#endif      
+#endif
+  
+  /* I don't really understand why all sources are enable here... (T.S) */
+  for (i= BSP_MAIN_GPP7_0_IRQ; i <= BSP_MAIN_GPP31_24_IRQ; i++) 
+      BSP_enable_pic_irq(i);
 
-  /*
-   * We must connect the raw irq handler for the two
-   * expected interrupt sources : decrementer and external interrupts.
-   */
-  vectorDesc.exceptIndex 	= ASM_DEC_VECTOR;
-  vectorDesc.hdl.vector	= ASM_DEC_VECTOR;
-  vectorDesc.hdl.raw_hdl	= decrementer_exception_vector_prolog_code;
-  vectorDesc.hdl.raw_hdl_size	= (unsigned) decrementer_exception_vector_prolog_code_size;
-  vectorDesc.on		= nop_func;
-  vectorDesc.off		= nop_func;
-  vectorDesc.isOn		= connected;
-  if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-  }
-  vectorDesc.exceptIndex	= ASM_EXT_VECTOR;
-  vectorDesc.hdl.vector	= ASM_EXT_VECTOR;
-  vectorDesc.hdl.raw_hdl	= external_exception_vector_prolog_code;
-  vectorDesc.hdl.raw_hdl_size	= (unsigned) external_exception_vector_prolog_code_size;
-  if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
+  rtems_interrupt_enable(l);
+
 #ifdef TRACE_IRQ_INIT  
   printk("RTEMS IRQ management is now operationnal\n");
 #endif

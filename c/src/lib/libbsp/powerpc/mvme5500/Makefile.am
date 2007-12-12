@@ -69,8 +69,7 @@ pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c irq/irq.c \
-    ../../powerpc/shared/irq/irq_asm.S
+irq_rel_SOURCES = irq/irq_init.c irq/irq.c 
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -83,12 +82,17 @@ tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
-include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h \
+include_bsp_HEADERS += \
     vectors/bspException.h
 
+include_bsp_HEADERS += \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
+
 noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
-    vectors/exceptionhandler.c ../../powerpc/shared/vectors/vectors.S \
+vectors_rel_SOURCES = \
+    vectors/exceptionhandler.c \
     ../../powerpc/shared/start/vectors_entry.S	
 vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -158,6 +162,8 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 

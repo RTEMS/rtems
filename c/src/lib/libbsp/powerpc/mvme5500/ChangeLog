@@ -1,3 +1,10 @@
+2007-12-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, irq/irq.c, irq/irq.h, irq/irq_init.c:
+	use new exception/irq support from
+	libcpu/powerpc/new-exceptions/bspsupport
+	rather than borrowing from ../shared/vectors ../shared/irq
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the
