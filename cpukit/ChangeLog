@@ -1,5 +1,10 @@
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libmisc/shell/cmd_ls.c: Add include of <sys/stat.h> needed for UNIX
+	BSP.
+
+2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libgnat/Makefile.am: Handle POSIX being disabled correctly.
 
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
