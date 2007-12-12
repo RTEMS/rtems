@@ -239,8 +239,12 @@ USAGE
 		- add
 
 		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+		    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
 
 		  to 'libbsp_a_LIBADD'
+
+		  (irq.c is in a separate '.rel' so that you can get support
+		  for exceptions only).
 
 CAVEATS
 =======
