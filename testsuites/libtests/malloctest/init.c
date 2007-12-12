@@ -24,6 +24,21 @@
 #define TEST_INIT
 #include "system.h"
 
+/*
+ *  A simple test of realloc
+ */
+void test_realloc(void)
+{
+  void *p1, *p2;
+  int i;
+
+  p2 = p1 = malloc(1);
+  for (i=2 ; i<2048 ; i++) 
+    p2 = realloc(p2, i);
+
+  free(p2);
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -36,6 +51,8 @@ rtems_task Init(
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
+
+  test_realloc();
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
