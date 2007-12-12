@@ -163,8 +163,7 @@ libposix_a_SOURCES += src/ptimer.c src/ptimer1.c
 
 EXTRA_DIST += src/README.mqueue
 
-libposix_a_SOURCES += src/adasupp.c src/ada_intrsupp.c src/sched.c \
-    src/sysconf.c src/types.c
+libposix_a_SOURCES += src/sched.c src/sysconf.c src/types.c
 endif
 endif
 

@@ -1,3 +1,15 @@
+2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, posix/Makefile.am, wrapup/Makefile.am:
+	Move Ada support code that is untestable from the Standard RTEMS Test
+	Suite into its own directory. All code in score, posix, rtems, and
+	sapi should be testable by the Standard RTEMS Test Suites. It was
+	buried under POSIX before so this should be a clearer location
+	anyway.
+	* libgnat/.cvsignore, libgnat/Makefile.am, libgnat/ada_intrsupp.c,
+	libgnat/adasupp.c: New files.
+	* posix/src/ada_intrsupp.c, posix/src/adasupp.c: Removed.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/pheapallocatealigned.c, score/src/pheapgetblocksize.c:

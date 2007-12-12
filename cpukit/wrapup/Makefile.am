@@ -19,6 +19,7 @@ TMP_LIBS += ../rtems/librtems.a
 
 if LIBPOSIX
 TMP_LIBS += ../posix/libposix.a
+TMP_LIBS += ../libgnat/libgnat.a
 endif
 
 if LIBITRON

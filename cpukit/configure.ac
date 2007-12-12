@@ -351,6 +351,7 @@ posix/Makefile
 itron/Makefile
 libblock/Makefile
 libfs/Makefile
+libgnat/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
 librpc/Makefile

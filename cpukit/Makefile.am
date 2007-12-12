@@ -14,6 +14,7 @@ SUBDIRS += libnetworking librpc
 SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
+SUBDIRS += libgnat
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
