@@ -1,5 +1,10 @@
 2007-12-11	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: don't normally build-in test code
+	(ppc_exc_test.c).
+
+2007-12-11	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, new-exceptions/bspsupport/README:
 	provide new irq_bspsupport.rel which was
 	split out of exc_bspsupport.rel to provide finer-grained

@@ -47,7 +47,6 @@ noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
 new_exceptions_exc_bspsupport_rel_SOURCES = \
     new-exceptions/bspsupport/ppc_exc.S \
     new-exceptions/bspsupport/ppc_exc_hdl.c \
-    new-exceptions/bspsupport/ppc_exc_test.c \
     new-exceptions/bspsupport/vectors_init.c 
 new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_exc_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
