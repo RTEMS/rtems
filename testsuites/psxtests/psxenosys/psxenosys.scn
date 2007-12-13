@@ -1,0 +1,32 @@
+*** POSIX TEST -- ENOSYS ***
+aio_read -- ENOSYS
+aio_write -- ENOSYS
+lio_listio -- ENOSYS
+aio_error -- ENOSYS
+aio_return -- ENOSYS
+aio_cancel -- ENOSYS
+aio_suspend -- ENOSYS
+aio_fsync -- ENOSYS
+clock_getcpuclockid -- ENOSYS
+clock_getenable_attr -- ENOSYS
+clock_setenable_attr -- ENOSYS
+clock_gettime - CLOCK_THREAD_CPUTIME -- ENOSYS
+clock_settime - CLOCK_PROCESS_CPUTIME -- ENOSYS
+clock_settime - CLOCK_THREAD_CPUTIME -- ENOSYS
+devctl -- ENOSYS
+execl -- ENOSYS
+execle -- ENOSYS
+execlp -- ENOSYS
+execv -- ENOSYS
+execve -- ENOSYS
+execvp -- ENOSYS
+fork -- ENOSYS
+pthread_atfork -- ENOSYS
+pthread_getcpuclockid -- ENOSYS
+sched_setparam -- ENOSYS
+sched_getparam -- ENOSYS
+sched_setscheduler -- ENOSYS
+sched_getscheduler -- ENOSYS
+wait -- ENOSYS
+waitpid -- ENOSYS
+*** END OF POSIX TEST ENOSYS ***

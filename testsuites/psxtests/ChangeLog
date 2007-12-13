@@ -1,5 +1,12 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: New test to cover all RTEMS POSIX
+	functions that return ENOSYS.
+	* psxenosys/.cvsignore, psxenosys/Makefile.am, psxenosys/init.c,
+	psxenosys/psxenosys.scn, psxenosys/system.h: New files.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psx13/test.c: Fix spelling error.
 
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
