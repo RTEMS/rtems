@@ -86,6 +86,60 @@ void check_a_tod(
   } while( i < 6 );
 }
 
+void test_adjtime()
+{
+  int                sc;
+  rtems_status_code  status;
+  struct timeval     delta;
+  struct timeval     olddelta;
+  rtems_time_of_day *the_tod;
+  
+  the_tod = &Dates[0];
+
+  print_time( "rtems_clock_set          ", the_tod, "\n" );
+  status = rtems_clock_set( the_tod );
+  assert( !status );
+
+  delta.tv_sec = 0;
+  delta.tv_usec = 0;
+  olddelta.tv_sec = 0;
+  olddelta.tv_usec = 0;
+
+  puts( "adjtime - NULL delta - EINVAL" );
+  sc = adjtime( NULL, &olddelta );
+  assert( sc == -1 );
+  assert( errno == EINVAL );
+
+  puts( "adjtime - delta out of range - EINVAL" );
+  delta.tv_usec = 1000000000; /* 100 seconds worth */
+  sc = adjtime( &delta, &olddelta );
+  assert( sc == -1 );
+  assert( errno == EINVAL );
+
+  puts( "adjtime - delta too small - do nothing" );
+  delta.tv_sec = 0;
+  delta.tv_usec = 1;
+  sc = adjtime( &delta, &olddelta );
+  assert( sc == 0 );
+
+  puts( "adjtime - delta too small - do nothing, olddelta=NULL" );
+  sc = adjtime( &delta, NULL );
+  assert( sc == 0 );
+
+  puts( "adjtime - delta of one second forward" );
+  delta.tv_sec = 1;
+  delta.tv_usec = 0;
+  sc = adjtime( &delta, &olddelta );
+  assert( sc == 0 );
+
+  puts( "adjtime - delta of almost two seconds forward" );
+  delta.tv_sec = 1;
+  delta.tv_usec = 1000000 - 1;
+  sc = adjtime( &delta, &olddelta );
+  assert( sc == 0 );
+
+}
+
 /*
  *  main entry point to the test
  */
@@ -102,6 +156,12 @@ int main(
   int i;
 
   puts( "\n\n*** POSIX TIME OF DAY TEST ***" );
+
+  test_adjtime();
+
+  /*
+   * Now test a number of dates
+   */
 
   i = 0;
   while ( i < NUMBER_OF_DATES ) {
