@@ -1,5 +1,9 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/sched_rr_get_interval.c: Fix warning.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/Makefile.am, posix/src/clockgetcpuclockid.c,
 	posix/src/clockgetenableattr.c, posix/src/clockgettime.c,
 	posix/src/clocksetenableattr.c, posix/src/clocksettime.c,
