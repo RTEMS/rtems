@@ -27,5 +27,5 @@ int clock_getcpuclockid(
   clockid_t *clock_id
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }

@@ -27,5 +27,5 @@ int clock_setenable_attr(
   int          attr
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }

@@ -7,11 +7,10 @@
 #endif
 
 #include <aio.h>
+#include <errno.h>
 
 #include <rtems/system.h>
 #include <rtems/seterr.h>
-
-int POSIX_NOT_IMPLEMENTED();
 
 /*PAGE
  *
@@ -22,7 +21,7 @@ int aio_read(
   struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -34,7 +33,7 @@ int aio_write(
   struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -49,7 +48,7 @@ int lio_listio(
   struct sigevent       *sig
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -61,7 +60,7 @@ int aio_error(
   const struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -74,7 +73,7 @@ int aio_return(
   const struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -87,7 +86,7 @@ int aio_cancel(
   struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -101,7 +100,7 @@ int aio_suspend(
   const struct timespec  *timeout
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
 
 /*PAGE
@@ -114,5 +113,5 @@ int aio_fsync(
   struct aiocb  *aiocbp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }

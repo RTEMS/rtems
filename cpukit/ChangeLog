@@ -1,5 +1,16 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/preinstall.am, posix/preinstall.am, posix/src/aio.c,
+	posix/src/clockgetcpuclockid.c, posix/src/clockgetenableattr.c,
+	posix/src/clockgettime.c, posix/src/clocksetenableattr.c,
+	posix/src/clocksettime.c, posix/src/devctl.c,
+	posix/src/pthreadcreate.c, posix/src/pthreadgetcpuclockid.c,
+	posix/src/types.c, rtems/preinstall.am, sapi/Makefile.am,
+	sapi/preinstall.am, score/Makefile.am, score/preinstall.am: Eliminate
+	POSIX_NOT_IMPLEMENTED(). Return ENOSYS instead.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/adjtime.c: Clean up and verify against behavior documented
 	in GNU/Linux man page provided with Fedora 7.
 

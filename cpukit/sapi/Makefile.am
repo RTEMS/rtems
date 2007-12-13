@@ -19,6 +19,7 @@ include_rtems_HEADERS += inline/rtems/extension.inl
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
+project_lib_LIBRARIES = libsapi.a
 noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/extensiondelete.c src/extensionident.c src/fatal.c src/exinit.c \

@@ -7,8 +7,10 @@
 #endif
 
 #include <devctl.h>
+#include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/seterr.h>
 
 /*PAGE
  *
@@ -22,5 +24,5 @@ int devctl(
   int    *dev_info_ptr
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }

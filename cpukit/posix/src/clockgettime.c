@@ -49,7 +49,7 @@ int clock_gettime(
 
 #ifdef _POSIX_THREAD_CPUTIME
     case CLOCK_THREAD_CPUTIME:
-      return POSIX_NOT_IMPLEMENTED();
+      rtems_set_errno_and_return_minus_one( ENOSYS );
       break;
 #endif
     default:

@@ -58,7 +58,7 @@ int pthread_create(
 
 #if 0
   int  cputime_clock_allowed;  /* see time.h */
-  POSIX_NOT_IMPLEMENTED();
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
 
   /*

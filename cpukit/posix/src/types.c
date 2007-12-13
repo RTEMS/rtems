@@ -17,18 +17,3 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
-/*
- * TEMPORARY
- */
-
-#include <assert.h>
-
-int POSIX_NOT_IMPLEMENTED()
-{
-  assert( 0 );
-  return 0;
-}
-
-/*
- * END OF TEMPORARY
- */
