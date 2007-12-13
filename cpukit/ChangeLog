@@ -1,5 +1,11 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/preinstall.am, posix/preinstall.am, rtems/Makefile.am,
+	rtems/preinstall.am, sapi/Makefile.am, sapi/preinstall.am,
+	score/Makefile.am, score/preinstall.am: Revert testing patch.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/sched_rr_get_interval.c: Fix warning.
 
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>

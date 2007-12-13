@@ -64,7 +64,6 @@ endif
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-project_lib_LIBRARIES = libscore.a
 noinst_LIBRARIES = libscore.a
 libscore_a_SOURCES =
 libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
