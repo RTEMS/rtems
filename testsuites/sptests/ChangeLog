@@ -1,5 +1,13 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new tests for interrupt disable,
+	enable, flash, and is in progress. These are normally inlines but
+	also have bodies for non-C code. This test also exercises the odd
+	case of calling clock tick from outside an ISR.
+	* sp37/.cvsignore, sp37/Makefile.am, sp37/sp37.scn, sp37/system.h: New files.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp07/init.c, sp07/sp07.scn, sp07/task1.c: Add tests for
 	using notepad with the current task's ID or SELF
 	* sp09/screen02.c, sp09/screen04.c, sp09/sp09.scn: Add
