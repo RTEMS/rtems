@@ -1,5 +1,27 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/Makefile.am, posix/src/clockgetcpuclockid.c,
+	posix/src/clockgetenableattr.c, posix/src/clockgettime.c,
+	posix/src/clocksetenableattr.c, posix/src/clocksettime.c,
+	posix/src/devctl.c, posix/src/execl.c, posix/src/execle.c,
+	posix/src/execlp.c, posix/src/execv.c, posix/src/execve.c,
+	posix/src/execvp.c, posix/src/fork.c, posix/src/mutexinit.c,
+	posix/src/pthreadatfork.c, posix/src/pthreadgetcpuclockid.c,
+	posix/src/pthreadkill.c, posix/src/semaphorecreatesupp.c,
+	posix/src/sysconf.c, posix/src/wait.c, posix/src/waitpid.c: Split
+	files into one function per file.
+	* posix/src/aio_cancel.c, posix/src/aio_error.c, posix/src/aio_fsync.c,
+	posix/src/aio_read.c, posix/src/aio_return.c,
+	posix/src/aio_suspend.c, posix/src/aio_write.c,
+	posix/src/lio_listio.c, posix/src/sched_getparam.c,
+	posix/src/sched_getprioritymax.c, posix/src/sched_getprioritymin.c,
+	posix/src/sched_getscheduler.c, posix/src/sched_rr_get_interval.c,
+	posix/src/sched_setparam.c, posix/src/sched_setscheduler.c,
+	posix/src/sched_yield.c: New files.
+	* posix/src/aio.c, posix/src/sched.c, posix/src/types.c: Removed.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/preinstall.am, posix/preinstall.am, posix/src/aio.c,
 	posix/src/clockgetcpuclockid.c, posix/src/clockgetenableattr.c,
 	posix/src/clockgettime.c, posix/src/clocksetenableattr.c,

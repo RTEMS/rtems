@@ -1,5 +1,5 @@
 /*
- *  execl() - POSIX 1003.1b 3.1.2
+ *  6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,13 +15,15 @@
 #include "config.h"
 #endif
 
+#include <aio.h>
 #include <errno.h>
+
+#include <rtems/system.h>
 #include <rtems/seterr.h>
 
-int execl(
-  const char *path,
-  const char *arg,
-  ...
+int aio_cancel(
+  int            filedes,
+  struct aiocb  *aiocbp
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

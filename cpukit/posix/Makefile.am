@@ -51,7 +51,9 @@ include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
 
 # These are really in the stand but not really functional
 ## BUILD_FOR_NOW_C_FILES
-libposix_a_SOURCES += src/aio.c src/devctl.c
+libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
+    src/aio_read.c src/aio_return.c src/aio_suspend.c src/aio_write.c \
+    src/lio_listio.c src/devctl.c
 
 ## ENOSYS_C_FILES
 libposix_a_SOURCES += src/execl.c src/execle.c src/execlp.c src/execv.c \
@@ -163,7 +165,10 @@ libposix_a_SOURCES += src/ptimer.c src/ptimer1.c
 
 EXTRA_DIST += src/README.mqueue
 
-libposix_a_SOURCES += src/sched.c src/sysconf.c src/types.c
+libposix_a_SOURCES += src/sched_getparam.c src/sched_getprioritymax.c \
+    src/sched_getprioritymin.c src/sched_getscheduler.c \
+    src/sched_rr_get_interval.c src/sched_setparam.c \
+    src/sched_setscheduler.c src/sched_yield.c src/sysconf.c
 endif
 endif
 

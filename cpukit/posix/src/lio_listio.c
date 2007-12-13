@@ -1,5 +1,5 @@
 /*
- *  execl() - POSIX 1003.1b 3.1.2
+ *  6.7.4 List Directed I/O, P1003.1b-1993, p. 158
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,13 +15,17 @@
 #include "config.h"
 #endif
 
+#include <aio.h>
 #include <errno.h>
+
+#include <rtems/system.h>
 #include <rtems/seterr.h>
 
-int execl(
-  const char *path,
-  const char *arg,
-  ...
+int lio_listio(
+  int                    mode,
+  struct aiocb  * const  list[],
+  int                    nent,
+  struct sigevent       *sig
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

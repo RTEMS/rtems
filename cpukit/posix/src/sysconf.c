@@ -11,6 +11,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/seterr.h>
 #include <rtems/score/tod.h>
 
 #include <sys/param.h>
@@ -49,6 +50,5 @@ long sysconf(
       break;
   }
 
-  errno = EINVAL;
-  return -1;
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

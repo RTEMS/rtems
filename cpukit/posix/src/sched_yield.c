@@ -1,5 +1,5 @@
 /*
- *  execl() - POSIX 1003.1b 3.1.2
+ *  13.3.5 Yield Processor, P1003.1b-1993, p. 257
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,14 +15,20 @@
 #include "config.h"
 #endif
 
+#include <sched.h>
 #include <errno.h>
-#include <rtems/seterr.h>
 
-int execl(
-  const char *path,
-  const char *arg,
-  ...
-)
+#include <rtems/system.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/thread.h>
+#include <rtems/seterr.h>
+#include <rtems/posix/priority.h>
+#include <rtems/posix/time.h>
+
+int sched_yield( void )
 {
-  rtems_set_errno_and_return_minus_one( ENOSYS );
+  _Thread_Disable_dispatch();
+    _Thread_Yield_processor();
+  _Thread_Enable_dispatch();
+  return 0;
 }

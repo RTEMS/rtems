@@ -1,7 +1,7 @@
 /*
  *  20.1.6 Accessing a Thread CPU-time Clock, P1003.4b/Draft 8, p. 58
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

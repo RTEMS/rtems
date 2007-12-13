@@ -10,6 +10,13 @@
  *   as described above or the pthread_atfork() funciton shall not be
  *   provided."
  *
+ *  COPYRIGHT (c) 1989-2007.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -17,8 +24,8 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
 #include <errno.h>
+#include <rtems/seterr.h>
 
 int pthread_atfork(
   void (*prepare)(void),
@@ -26,6 +33,5 @@ int pthread_atfork(
   void (*child)(void)
 )
 {
-  errno = ENOSYS;
-  return -1;
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
