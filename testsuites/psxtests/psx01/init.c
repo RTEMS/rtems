@@ -28,6 +28,7 @@ void *POSIX_Init(
   time_t          remaining;
   struct tm       tm;
   struct utsname  uts;
+  useconds_t      useconds;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
 
@@ -161,21 +162,28 @@ void *POSIX_Init(
   tv.tv_sec = 3;
   tv.tv_nsec = 500000;
 
-  puts( "Init: nanosleep - 3.05 seconds" );
+  puts( "Init: nanosleep - 1.05 seconds" );
   status = nanosleep ( &tv, &tr );
   assert( !status );
 
   /* print the current real time again */
-
   status = clock_gettime( CLOCK_REALTIME, &tv );
   assert( !status );
-
   printf( ctime( &tv.tv_sec ) );
 
   /* check the time remaining */
 
   printf( "Init: sec (%ld), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
   assert( !tr.tv_sec && !tr.tv_nsec );
+
+  puts( "Init: usleep - 1.35 seconds" );
+  useconds = usleep ( 1350000 );
+  assert( useconds < 1350000);
+  
+  /* print the current real time again */
+  status = clock_gettime( CLOCK_REALTIME, &tv );
+  assert( !status );
+  printf( ctime( &tv.tv_sec ) );
 
   /* get id of this thread */
 

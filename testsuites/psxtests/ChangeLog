@@ -1,5 +1,9 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psx01/init.c, psx01/psx01.scn: Add usleep() test.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: New test to cover all RTEMS POSIX
 	functions that return ENOSYS.
 	* psxenosys/.cvsignore, psxenosys/Makefile.am, psxenosys/init.c,
