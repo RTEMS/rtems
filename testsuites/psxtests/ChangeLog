@@ -1,5 +1,9 @@
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psx13/test.c: Fix spelling error.
+
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxtime/test.c: Add tests for adjtime().
 
 2007-11-27	Glenn Humphrey <glenn.humphrey@OARcorp.com>

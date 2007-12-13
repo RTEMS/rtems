@@ -425,7 +425,7 @@ int UTimeTest (void) {
  * assumptions: pipe function available.
  * actions: call pipe.
  *
- * returns: TRUE if pipe retuens ENOSYS,
+ * returns: TRUE if pipe returns ENOSYS,
  *          FALSE otherwise.
  *
  * ---------------------------------------------------------------
