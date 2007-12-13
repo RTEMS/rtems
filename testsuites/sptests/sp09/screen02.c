@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +21,8 @@
 void Screen2()
 {
   rtems_time_of_day time;
+  rtems_interval    interval;
+  struct timeval    tv;
   rtems_status_code status;
 
 /* errors before clock is set */
@@ -34,10 +36,47 @@ void Screen2()
     fatal_directive_status(
       status,
       RTEMS_NOT_DEFINED,
-      "rtems_clock_get before clock is set"
+      "rtems_clock_get before clock is set #1"
     );
-    puts( "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED" );
+    puts( "TA1 - rtems_clock_get - TOD - RTEMS_NOT_DEFINED" );
   }
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &interval );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    puts(
+     "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+    );
+  } else {
+    fatal_directive_status(
+      status,
+      RTEMS_NOT_DEFINED,
+      "rtems_clock_get before clock is set #2"
+    );
+    puts( "TA1 - rtems_clock_get - SECONDS SINCE EPOCH - RTEMS_NOT_DEFINED" );
+  }
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &tv );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    puts(
+     "TA1 - rtems_clock_get - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+    );
+  } else {
+    fatal_directive_status(
+      status,
+      RTEMS_NOT_DEFINED,
+      "rtems_clock_get before clock is set #3"
+    );
+    puts( "TA1 - rtems_clock_get - TIME VALUE - RTEMS_NOT_DEFINED" );
+  }
+
+  /* arbitrary bad value for switch */
+  status = rtems_clock_get( 0x100, &tv );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_clock_get bad case"
+  );
+  puts( "TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER" );
 
   status = rtems_task_wake_when( &time );
   if ( status == RTEMS_SUCCESSFUL ) {

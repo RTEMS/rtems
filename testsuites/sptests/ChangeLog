@@ -1,3 +1,10 @@
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp07/init.c, sp07/sp07.scn, sp07/task1.c: Add tests for
+	using notepad with the current task's ID or SELF
+	* sp09/screen02.c, sp09/screen04.c, sp09/sp09.scn: Add
+	test missing test cases for clock_get.
+
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp28/init.c: Add test code for task variables to improve coverage.

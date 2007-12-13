@@ -22,6 +22,8 @@ void Screen4()
 {
   rtems_event_set   event_out;
   rtems_time_of_day time;
+  struct timeval    tv;
+  time_t            seconds;
   rtems_status_code status;
 
   status = rtems_event_receive(
@@ -81,4 +83,11 @@ void Screen4()
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   puts( " - RTEMS_SUCCESSFUL" );
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &tv );
+  directive_failed( status, "clock_get time value OK" );
+
+  seconds = tv.tv_sec; 
+  printf( "TA1 - current time - %s\n", ctime(&seconds) );
+
 }

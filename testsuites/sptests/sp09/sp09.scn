@@ -21,7 +21,10 @@ TA1 - rtems_task_start - RTEMS_INVALID_ID
 TA1 - rtems_task_start - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_suspend - RTEMS_INVALID_ID
 <pause - screen 2>
-TA1 - rtems_clock_get - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get - TOD - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get - SECONDS SINCE EPOCH - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get - TIME VALUE - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get - RTEMS_INVALID_NUMBER
 TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED
 TA1 - rtems_timer_fire_when - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_set - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
@@ -63,6 +66,7 @@ TA1 - rtems_event_receive - woke up with RTEMS_TIMEOUT
 TA1 - rtems_event_send - RTEMS_INVALID_ID
 TA1 - rtems_task_wake_after - sleep 1 second - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_SUCCESSFUL
+TA1 - current time - Fri Feb  5 08:30:45 1988
 <pause - screen 5>
 TA1 - rtems_semaphore_create - RTEMS_INVALID_NAME
 TA1 - rtems_semaphore_create - 1 - RTEMS_SUCCESSFUL

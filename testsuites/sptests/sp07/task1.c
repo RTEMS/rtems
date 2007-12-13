@@ -27,6 +27,10 @@ rtems_task Task_1(
   rtems_status_code   status;
   rtems_task_priority the_priority;
   rtems_task_priority previous_priority;
+  rtems_id            my_id;
+
+  /* XXX really need a Classic API service for this */
+  my_id = _Thread_Executing->Object.id;
 
   rtems_test_pause();
 
@@ -42,7 +46,7 @@ rtems_task Task_1(
   );
 
   while( FOREVER ) {
-    status = rtems_task_get_note( _Thread_Executing->Object.id, RTEMS_NOTEPAD_8, &the_priority );
+    status = rtems_task_get_note( my_id, RTEMS_NOTEPAD_8, &the_priority );
     directive_failed( status, "rtems_task_get_note" );
     printf(
 "TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: %02d\n",

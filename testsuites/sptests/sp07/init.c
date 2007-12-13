@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -115,6 +115,11 @@ rtems_task Init(
   directive_failed( status, "rtems_task_restart of TA3" );
 
   buffered_io_flush();
+
+  status = rtems_task_set_note( RTEMS_SELF, RTEMS_NOTEPAD_4, 32 );
+  directive_failed( status, "task_set_node of Self" );
+  printf( "INIT - rtems_task_set_note - set my RTEMS_NOTEPAD_4 " );
+  puts  ( "to TA1's priority: 04" );
 
   status = rtems_task_set_note( Task_id[ 1 ], RTEMS_NOTEPAD_8, 4 );
   directive_failed( status, "task_set_node of TA1" );
