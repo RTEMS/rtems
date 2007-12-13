@@ -1,3 +1,8 @@
+2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/adjtime.c: Clean up and verify against behavior documented
+	in GNU/Linux man page provided with Fedora 7.
+
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libgnat/Makefile.am, wrapup/Makefile.am: Another attempt at the

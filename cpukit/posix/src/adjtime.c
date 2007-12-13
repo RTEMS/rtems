@@ -1,8 +1,9 @@
 /*
- *  adjime() function - required by NTP
+ *  adjime() function
  *
- *  I am unaware of the history behind the definition of this service
- *  and don't know if its behavior is covered by any standard. --joel
+ *  This method was initially added as part of porting NTP to RTEMS.
+ *  It is a BSD compatability function and now is available on
+ *  GNU/Linux.
  */
 
 /*
@@ -22,51 +23,81 @@
 
 #include <time.h>
 #include <sys/time.h>
+#include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/seterr.h>
 #include <rtems/score/tod.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/timespec.h>
 
-static long __adjustment = 0;
+/*
+ *  At one point there was a static variable named adjustment
+ *  used by this implementation.  I don't see any reason for it
+ *  to be here based upon the GNU/Linux documentation.
+ */
 
-int  adjtime ( struct timeval *delta, struct timeval *olddelta )
+int  adjtime(
+  struct timeval *delta,
+  struct timeval *olddelta
+)
 {
   struct timespec ts;
+  long   adjustment;
+
+  /*
+   * Simple validations
+   */
+  if ( !delta )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( delta->tv_usec >= TOD_MICROSECONDS_PER_SECOND )
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( olddelta ) {
-    olddelta->tv_sec  = __adjustment / TOD_MICROSECONDS_PER_SECOND;
-    olddelta->tv_usec = __adjustment / TOD_MICROSECONDS_PER_SECOND;
+    olddelta->tv_sec  = 0;
+    olddelta->tv_usec = 0;
   }
-
-  if ( !delta )
-    return -1;
 
   /* convert delta to microseconds */
-  __adjustment  = (delta->tv_sec * TOD_MICROSECONDS_PER_SECOND);
-  __adjustment += delta->tv_usec;
+  adjustment  = (delta->tv_sec * TOD_MICROSECONDS_PER_SECOND);
+  adjustment += delta->tv_usec;
 
   /* too small to account for */
-  if ( __adjustment < _TOD_Microseconds_per_tick )
+  if ( adjustment < _TOD_Microseconds_per_tick )
     return 0;
 
-  /* Grab the current TOD */
-  _TOD_Get( &ts );
+  /*
+   * This prevents context switches while we are adjusting the TOD
+   */
 
-  ts.tv_sec  += delta->tv_sec;
-  ts.tv_nsec += delta->tv_usec * TOD_NANOSECONDS_PER_MICROSECOND;
+  _Thread_Disable_dispatch();
 
-  /* if adjustment is too much positive */
-  while ( ts.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
-    ts.tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
-    ts.tv_sec++;
-  }
+    _TOD_Get( &ts );
 
-  /* if adjustment is too much negative */
-  while ( ts.tv_nsec <= (-1 * TOD_NANOSECONDS_PER_SECOND) ) {
-    ts.tv_nsec += TOD_NANOSECONDS_PER_SECOND;
-    ts.tv_sec--;
-  }
+    ts.tv_sec  += delta->tv_sec;
+    ts.tv_nsec += delta->tv_usec * TOD_NANOSECONDS_PER_MICROSECOND;
 
-  _TOD_Set( &ts );
+    /* if adjustment is too much positive */
+    while ( ts.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
+      ts.tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
+      ts.tv_sec++;
+    }
+
+    /* if adjustment is too much negative */
+    while ( ts.tv_nsec <= (-1 * TOD_NANOSECONDS_PER_SECOND) ) {
+      ts.tv_nsec += TOD_NANOSECONDS_PER_SECOND;
+      ts.tv_sec--;
+    }
+
+    _TOD_Set( &ts );
+
+  _Thread_Enable_dispatch();
+
+  /* set the user's output */
+  if ( olddelta )
+    *olddelta = *delta;
+
   return 0;
 }
