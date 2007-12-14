@@ -1,3 +1,10 @@
+2007-12-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am, irq/irq.c (removed), irq/irq_init.c:
+	Use shared exception/interrupt support from
+	libcpu/new-exceptions/bspsupport. NOTE: CHANGES MUST BE
+	TESTED ON REAL HARDWARE.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the

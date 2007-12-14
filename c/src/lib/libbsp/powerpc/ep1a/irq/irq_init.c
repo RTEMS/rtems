@@ -36,20 +36,6 @@
 #define SHOW_ISA_PCI_BRIDGE_SETTINGS
 */
 
-typedef struct {
-  unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
-  unsigned char device;
-  unsigned char function;
-} pci_isa_bridge_device;
-
-pci_isa_bridge_device* via_82c586 = 0;
-static pci_isa_bridge_device bridge;
-
-extern unsigned int external_exception_vector_prolog_code_size[];
-extern void external_exception_vector_prolog_code();
-extern unsigned int decrementer_exception_vector_prolog_code_size[];
-extern void decrementer_exception_vector_prolog_code();
-
 /*
  * default on/off function
  */
@@ -152,109 +138,6 @@ static unsigned char mcp750_openpic_initsenses[] = {
     1
 };
 
-void VIA_isa_bridge_interrupts_setup(void)
-{
-  pci_isa_bridge_device pci_dev;
-  uint32_t temp;
-  unsigned char tmp;
-  unsigned char maxBus;
-  unsigned found = 0;
-
-  maxBus = pci_bus_count();
-  pci_dev.function 	= 0; /* Assumes the bidge is the first function */
-     
-  for (pci_dev.bus = 0; pci_dev.bus < maxBus; pci_dev.bus++) {
-#ifdef SCAN_PCI_PRINT       
-    printk("isa_bridge_interrupts_setup: Scanning bus %d\n", pci_dev.bus);
-#endif       
-    for (pci_dev.device = 0; pci_dev.device < PCI_MAX_DEVICES; pci_dev.device++) {
-#ifdef SCAN_PCI_PRINT       
-      printk("isa_bridge_interrupts_setup: Scanning device %d\n", pci_dev.device);
-#endif       
-      pci_read_config_dword(pci_dev.bus, pci_dev.device,  pci_dev.function,
-			       PCI_VENDOR_ID, &temp);
-#ifdef SCAN_PCI_PRINT       
-      printk("Vendor/device = %x\n", temp);
-#endif
-      if ((temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_0 << 16)))
-	 ) {
-	bridge = pci_dev;
-	via_82c586 = &bridge;
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-	/*
-	 * Should print : bus = 0, device = 11, function = 0 on a MCP750.
-	 */
-	printk("Via PCI/ISA bridge found at bus = %d, device = %d, function = %d\n",
-	       via_82c586->bus,
-	       via_82c586->device,
-	       via_82c586->function);
-#endif       
-	found = 1;
-	goto loop_exit;
-	   
-      }
-    }
-  }
-loop_exit:
-  if (!found) BSP_panic("VIA_82C586 PCI/ISA bridge not found!n");
-     
-  tmp = inb(0x810);
-  if  ( !(tmp & 0x2)) {
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk("This is a second generation MCP750 board\n");
-    printk("We must reprogram the PCI/ISA bridge...\n");
-#endif       
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x47,  &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
-#endif       
-    /*
-     * Enable 4D0/4D1 ISA interrupt level/edge config registers
-     */
-    tmp |= 0x20;
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x47, tmp);
-    /*
-     * Now program the ISA interrupt edge/level
-     */
-    tmp = ELCRS_INT9_LVL | ELCRS_INT10_LVL | ELCRS_INT11_LVL;
-    outb(tmp, ISA8259_S_ELCR);
-    tmp = ELCRM_INT5_LVL;
-    outb(tmp, ISA8259_M_ELCR);;
-    /*
-     * Set the Interrupt inputs to non-inverting level interrupt
-     */
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			    0x54, &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
-#endif       
-    tmp = 0;
-    pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			  0x54, tmp);
-  }
-  else {
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk("This is a first generation MCP750 board\n");
-    printk("We just show the actual value used by PCI/ISA bridge\n");
-#endif       
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x47,  &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
-#endif       
-    /*
-     * Show the Interrupt inputs inverting/non-inverting level status
-     */
-    pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
-			 0x54, &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
-    printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
-#endif       
-  }
-}
-
   /*
    * This code assumes the exceptions management setup has already
    * been done. We just need to replace the exceptions that will
@@ -263,7 +146,6 @@ loop_exit:
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-  rtems_raw_except_connect_data vectorDesc;
   int i;
 
   /*
@@ -309,27 +191,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
   
-  /*
-   * We must connect the raw irq handler for the two
-   * expected interrupt sources : decrementer and external interrupts.
-   */
-    vectorDesc.exceptIndex 	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_DEC_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	decrementer_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) decrementer_exception_vector_prolog_code_size;
-    vectorDesc.on		=	nop_func;
-    vectorDesc.off		=	nop_func;
-    vectorDesc.isOn		=	connected;
-    if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-    }
-    vectorDesc.exceptIndex	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.vector	=	ASM_EXT_VECTOR;
-    vectorDesc.hdl.raw_hdl	=	external_exception_vector_prolog_code;
-    vectorDesc.hdl.raw_hdl_size	=	(unsigned) external_exception_vector_prolog_code_size;
-    if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
 #ifdef TRACE_IRQ_INIT  
     printk("RTEMS IRQ management is now operationnal\n");
 #endif

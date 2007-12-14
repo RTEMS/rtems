@@ -74,22 +74,14 @@ pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c irq/irq.c ../../powerpc/shared/irq/i8259.c \
-    ../../powerpc/shared/irq/irq_asm.S
+irq_rel_SOURCES = irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../../powerpc/shared/irq/i8259.c 
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-##
-include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
-
-noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
-    ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
@@ -124,13 +116,15 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = pclock.rel console.rel irq.rel openpic.rel pci.rel \
-    vectors.rel startup.rel vme.rel
+    startup.rel vme.rel
 
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
