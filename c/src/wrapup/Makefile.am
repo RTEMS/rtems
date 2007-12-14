@@ -20,6 +20,7 @@ endif
 # SRCS += $(wildcard $(PROJECT_LIB)/libcpu.a)
 
 if LIBCHIP
+SRCS += ../libchip/libflash.a
 SRCS += ../libchip/librtcio.a
 SRCS += ../libchip/libserialio.a
 SRCS += ../libchip/libide.a

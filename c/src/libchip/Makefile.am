@@ -13,6 +13,15 @@ EXTRA_DIST =
 noinst_LIBRARIES =
 noinst_PROGRAMS =
 
+# flash
+if LIBCHIP
+include_libchip_HEADERS += flash/am29lv160.h
+
+noinst_LIBRARIES += libflash.a
+libflash_a_SOURCES = flash/am29lv160.c
+libflash_a_CPPFLAGS = $(AM_CPPFLAGS)
+endif
+
 # ide
 if LIBCHIP
 include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \

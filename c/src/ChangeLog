@@ -1,3 +1,10 @@
+2007-12-14	Chris Johns <chrisj@rtems.org>
+
+	* wrapup/Makefile.am: Add libflash.a to the libbsp library.
+	* libchip/Makefile.am, libchip/preinstall.am: Add the flash chip support.
+	* libchip/flash, libchip/flash/am29lv160.c,
+	libchip/flash/am29lv160.h: New.
+
 2007-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/if_fxp.c: Spacing.
