@@ -1,5 +1,10 @@
 2007-12-12	Chris Johns <chrisj@rtems.org>
 
+	* libblock/include/rtems/flashdisk.h, libblock/src/flashdisk.c:
+	Add RTEMS license details.
+
+2007-12-12	Chris Johns <chrisj@rtems.org>
+
 	* Makefile.am, preinstall.am: Added
 	libblock/include/rtems/flashdisk.h to the installed header list.
 	* libblock/Makefile.am: Add flashdisk.c to the files to build.
