@@ -1,3 +1,8 @@
+2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c, fileio/system.h: Increase stack requested for shell
+	task. Turn on stack checking so the report is interesting.
+
 2007-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: Add RTEMS Shell configuration and static configuration

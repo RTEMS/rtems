@@ -104,7 +104,7 @@ void fileio_start_shell(void)
   printf(" =========================\n");
   printf(" starting shell\n");
   printf(" =========================\n");
-  shell_init("SHLL",0,100,"/dev/console",
+  shell_init("SHLL",RTEMS_MINIMUM_STACK_SIZE * 4,100,"/dev/console",
 	     B9600 | CS8,
 	     0);
   rtems_task_suspend(RTEMS_SELF);
