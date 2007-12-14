@@ -1,3 +1,8 @@
+2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* acinclude.m4, gen5200/irq/irq.c, gen5200/startup/bspclean.c: Add
+	mvme3100.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/bspstart.c, shared/startup/pretaskinghook.c: Eliminate

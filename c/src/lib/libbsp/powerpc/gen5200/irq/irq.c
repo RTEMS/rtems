@@ -631,6 +631,50 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
   return 0;
 }
 
+#include <stdio.h>
+uint64_t BSP_Starting_TBR;
+uint64_t BSP_Total_in_ISR;
+uint32_t BSP_ISR_Count;
+uint32_t BSP_Worst_ISR;
+#define BSP_COUNTED_IRQ 16
+uint32_t BSP_ISR_Count_Per[BSP_COUNTED_IRQ + 1];
+
+void BSP_initialize_IRQ_Timing(void)
+{
+  int i;
+  BSP_Starting_TBR = PPC_Get_timebase_register();
+  BSP_Total_in_ISR = 0;
+  BSP_ISR_Count = 0;
+  BSP_Worst_ISR = 0;
+  for ( i=0 ; i<BSP_COUNTED_IRQ ; i++ )
+    BSP_ISR_Count_Per[i] = 0;
+}
+
+static const char * u64tostring(
+  char *buffer,
+  uint64_t v
+)
+{
+  sprintf( buffer, "%lld %lld usecs", v, (v / 33) );
+  return buffer;
+}
+void BSP_report_IRQ_Timing(void)
+{
+  uint64_t now;
+  char buffer[96];
+  int i;
+
+  now = PPC_Get_timebase_register();
+  printk( "Started at: %s\n", u64tostring(buffer, BSP_Starting_TBR) );
+  printk( "Current   : %s\n", u64tostring(buffer, now) );
+  printk( "System up : %s\n", u64tostring(buffer, now - BSP_Starting_TBR) );
+  printk( "ISRs      : %d\n", BSP_ISR_Count );
+  printk( "ISRs ran  : %s\n", u64tostring(buffer, BSP_Total_in_ISR) );
+  printk( "Worst ISR : %s\n", u64tostring(buffer, BSP_Worst_ISR) );
+  for ( i=0 ; i<BSP_COUNTED_IRQ ; i++ )
+    printk( "IRQ %d: %d\n", i, BSP_ISR_Count_Per[i] );
+  printk( "Ticks     : %d\n",  Clock_driver_ticks );
+}
 
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
@@ -642,6 +686,14 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned int new_msr;
   register unsigned int pmce;
   register unsigned int crit_pri_main_mask, per_mask;
+  uint64_t start, stop, thisTime;
+
+  start = PPC_Get_timebase_register();
+  BSP_ISR_Count++;
+  if ( excNum < BSP_COUNTED_IRQ )
+    BSP_ISR_Count_Per[excNum]++;
+  else
+    printk( "not counting %d\n", excNum);
 
   switch (excNum) {
     /*
