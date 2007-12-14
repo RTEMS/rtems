@@ -1,3 +1,9 @@
+2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/sleep.c, posix/src/usleep.c: Add copyright header.
+	* rtems/src/ratemonreportstatistics.c, rtems/src/timerserver.c:
+	Minor cleanup to improve testability and eliminate dead code.
+
 2007-12-12	Chris Johns <chrisj@rtems.org>
 
 	* libblock/include/rtems/flashdisk.h, libblock/src/flashdisk.c:

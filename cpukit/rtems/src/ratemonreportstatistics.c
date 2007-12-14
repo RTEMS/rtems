@@ -114,8 +114,10 @@ ididididid NNNN ccccc mmmmmm X
     
     /* If the above passed, so should this but check it anyway */
     status = rtems_rate_monotonic_get_status( id, &the_status );
-    if ( status != RTEMS_SUCCESSFUL )
-      continue;
+    #if defined(RTEMS_DEBUG)
+      if ( status != RTEMS_SUCCESSFUL )
+        continue;
+    #endif
 
     name[ 0 ] = '\0';
 

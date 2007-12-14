@@ -149,14 +149,17 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_task_priority _priority;
 
   /*
-   *  Make sure the requested priority is valid.
+   *  Make sure the requested priority is valid.  The if is 
+   *  structured so we check it is invalid before looking for
+   *  a specific invalid value as the default.
    */
 
   _priority = priority;
-  if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY )
+  if ( !_RTEMS_tasks_Priority_is_valid( priority ) ) {
+    if ( priority != RTEMS_TIMER_SERVER_DEFAULT_PRIORITY )
+      return RTEMS_INVALID_PRIORITY;
     _priority = 0;
-  else if ( !_RTEMS_tasks_Priority_is_valid( priority ) )
-    return RTEMS_INVALID_PRIORITY;
+  }
 
   /*
    *  Just to make sure the test versus create/start operation are atomic.
