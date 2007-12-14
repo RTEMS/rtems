@@ -30,8 +30,17 @@ rtems_task Init(
 {
   uint32_t          index;
   rtems_status_code status;
+  rtems_id          rmid;
+  rtems_name        period;
 
   puts( "\n\n*** RATE MONOTONIC PERIOD STATISTICS TEST ***" );
+
+  period =  rtems_build_name( 'I', 'G', 'N', 'R' );
+  status = rtems_rate_monotonic_create( period, &rmid );
+  directive_failed( status, "rtems_rate_monotonic_create" );
+  put_name( Task_name[ argument ], FALSE );
+  printf( "- rtems_rate_monotonic_create id = 0x%08x (stays inactive)\n", rmid );
+
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
@@ -62,6 +71,6 @@ rtems_task Init(
   Count.count[ 4 ] = 0;
   Count.count[ 5 ] = 0;
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  status = rtems_task_suspend( RTEMS_SELF );
+  directive_failed( status, "rtems_task_suspend of RTEMS_SELF" );
 }

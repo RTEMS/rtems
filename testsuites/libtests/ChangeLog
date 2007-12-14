@@ -1,3 +1,8 @@
+2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtmonuse/init.c, rtmonuse/task1.c: Add period which is unused to
+	exericise another path in the period statistics code.
+
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* malloctest/init.c: Add some primitive testing of realloc() which also

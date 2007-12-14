@@ -32,9 +32,9 @@ rtems_task Task_1_through_5(
 {
   rtems_id          rmid;
   rtems_id          test_rmid;
-  uint32_t    index;
-  uint32_t    pass;
-  uint32_t    failed;
+  uint32_t          index;
+  uint32_t          pass;
+  uint32_t          failed;
   rtems_status_code status;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
