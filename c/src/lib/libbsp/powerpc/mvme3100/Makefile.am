@@ -31,16 +31,20 @@ EXTRA_DIST = ./start/start.S
 start.$(OBJEXT): ./start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
-EXTRA_DIST += ../beatnik/start/ssrl/preload.S
-preload.$(OBJEXT): ../beatnik/start/ssrl/preload.S
+EXTRA_DIST += ../shared/start/preload.S
+preload.$(OBJEXT): ../shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-motld_start.$(OBJEXT):	preload.$(OBJEXT) start.$(OBJEXT)
+EXTRA_DIST += ../shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
+	$(CPPASCOMPILE) -o $@ -c $<
+
+motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) start.$(OBJEXT)
 	$(LD) -o $@ -r $^
 
 project_lib_DATA += motld_start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
+EXTRA_DIST += ../shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)

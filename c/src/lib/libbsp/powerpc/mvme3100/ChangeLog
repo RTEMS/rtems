@@ -1,1 +1,4 @@
+2007-12-13	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am: use preload.S, vectors_entry.S from shared
+	area.
