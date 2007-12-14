@@ -1,3 +1,9 @@
+2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* irq/irq.c, startup/bspclean.c, startup/bspstart.c: I give. The code
+	is now in conditionally so I can avoid putting it in accidently
+	again.
+
 	* startup/bspclean.c: Revert patch with test code.
 
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>

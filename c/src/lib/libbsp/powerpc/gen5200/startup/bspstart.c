@@ -307,10 +307,12 @@ void bsp_start(void)
    */
   BSP_rtems_irq_mng_init(0);
 
+#if defined(TIME_IRQs)
   {
     void BSP_initialize_IRQ_Timing(void);
     BSP_initialize_IRQ_Timing();
   }
+#endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");

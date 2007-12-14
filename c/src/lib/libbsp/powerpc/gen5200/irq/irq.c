@@ -631,6 +631,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
   return 0;
 }
 
+#if defined(TIME_IRQs)
 #include <stdio.h>
 uint64_t BSP_Starting_TBR;
 uint64_t BSP_Total_in_ISR;
@@ -675,6 +676,7 @@ void BSP_report_IRQ_Timing(void)
     printk( "IRQ %d: %d\n", i, BSP_ISR_Count_Per[i] );
   printk( "Ticks     : %d\n",  Clock_driver_ticks );
 }
+#endif
 
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
@@ -686,6 +688,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned int new_msr;
   register unsigned int pmce;
   register unsigned int crit_pri_main_mask, per_mask;
+#if defined(TIME_IRQs)
   uint64_t start, stop, thisTime;
 
   start = PPC_Get_timebase_register();
@@ -694,6 +697,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     BSP_ISR_Count_Per[excNum]++;
   else
     printk( "not counting %d\n", excNum);
+#endif
 
   switch (excNum) {
     /*
@@ -704,7 +708,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       /* call the module specific handler and pass the specific handler */
       rtems_hdl_tbl[BSP_DECREMENTER].hdl(0);
 
-      return 0;
+      break;
 
     case ASM_60X_SYSMGMT_VECTOR:
 
@@ -1018,6 +1022,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       break;
 
   } /* end of switch(excNum) */
+#if defined(TIME_IRQs)
+  stop = PPC_Get_timebase_register();
+  thisTime = stop - start;
+  if ( thisTime > BSP_Worst_ISR );
+    thisTime = BSP_Worst_ISR;
+#endif
   return 0;
 }
 
