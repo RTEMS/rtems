@@ -1,3 +1,7 @@
+2007-12-14	Chris Johns <chrisj@rtems.org>
+
+	* gdb-init: Add the show-exception.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the
