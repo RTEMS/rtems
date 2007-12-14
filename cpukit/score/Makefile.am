@@ -137,11 +137,16 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadget.c src/threadhandler.c src/threadidlebody.c \
     src/threadinitialize.c src/threadloadenv.c src/threadready.c \
     src/threadresettimeslice.c src/threadreset.c src/threadrestart.c \
-    src/threadresume.c src/threadrotatequeue.c src/threadsetpriority.c \
-    src/threadsetstate.c src/threadsettransient.c src/threadstackallocate.c \
+    src/threadresume.c src/threadsetpriority.c src/threadsetstate.c \
+    src/threadsettransient.c src/threadstackallocate.c \
     src/threadstackfree.c src/threadstart.c src/threadstartmultitasking.c \
     src/threadsuspend.c src/threadtickletimeslice.c \
     src/threadyieldprocessor.c src/iterateoverthreads.c
+
+## THREAD_C_FILES only used by ITRON API
+if LIBITRON
+libscore_a_SOURCES += src/threadrotatequeue.c 
+endif
 
 ## THREADQ_C_FILES
 libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \

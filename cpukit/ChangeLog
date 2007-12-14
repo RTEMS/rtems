@@ -1,5 +1,10 @@
 2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/Makefile.am: _Thread_Rotate_ready_queue is only used by ITRON
+	API.
+
+2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/sleep.c, posix/src/usleep.c: Add copyright header.
 	* rtems/src/ratemonreportstatistics.c, rtems/src/timerserver.c:
 	Minor cleanup to improve testability and eliminate dead code.
