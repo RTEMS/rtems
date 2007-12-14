@@ -1,3 +1,7 @@
+2007-12-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* custom/mvme3100.cfg: Added; new BSP.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/mvme5500.cfg: Fix typo.
