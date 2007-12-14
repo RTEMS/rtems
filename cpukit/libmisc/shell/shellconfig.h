@@ -45,6 +45,9 @@ extern shell_cmd_t Shell_CAT_Command;
 extern shell_cmd_t Shell_RM_Command;
 extern shell_cmd_t Shell_UMASK_Command;
 
+extern shell_cmd_t Shell_CPUUSE_Command;
+extern shell_cmd_t Shell_STACKUSE_Command;
+
 extern shell_cmd_t Shell_MALLOC_DUMP_Command;
 
 extern shell_cmd_t *Shell_Initial_commands[];
@@ -59,8 +62,8 @@ extern shell_alias_t Shell_EXIT_Alias;
 extern shell_alias_t *Shell_Initial_aliases[];
 
 /*
- *  If we are configured to alias a command, then make sure the underlying command
- *  is configured.
+ *  If we are configured to alias a command, then make sure the underlying
+ *  command is configured.
  */
 
 #if !defined(CONFIGURE_SHELL_COMMANDS_ALL)
@@ -201,6 +204,18 @@ extern shell_alias_t *Shell_Initial_aliases[];
     #if defined(CONFIGURE_SHELL_COMMANDS_ALL) || \
         defined(CONFIGURE_SHELL_COMMAND_UMASK)
       &Shell_UMASK_Command,
+    #endif
+
+    /*
+     *  RTEMS Related commands
+     */
+    #if defined(CONFIGURE_SHELL_COMMANDS_ALL) || \
+        defined(CONFIGURE_SHELL_COMMAND_CPUUSE)
+      &Shell_CPUUSE_Command,
+    #endif
+    #if defined(CONFIGURE_SHELL_COMMANDS_ALL) || \
+        defined(CONFIGURE_SHELL_COMMAND_STACKUSE)
+      &Shell_STACKUSE_Command,
     #endif
 
     /*

@@ -1,9 +1,7 @@
 /*
- *
- *  Instantatiate a new terminal shell.
+ *  CAT Command Implementation
  *
  *  Author:
- *
  *   WORK: fernando.ruiz@ctv.es
  *   HOME: correo@fernando-ruiz.com
  *

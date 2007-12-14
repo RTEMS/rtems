@@ -1,3 +1,36 @@
+2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/cat_file.c,
+	libmisc/shell/shell_makeargs.c, libmisc/shell/shellconfig.h: Rename
+	cmd_XXX.c to main_XXX.c. Add cpuuse and stackuse commands.
+	* libmisc/shell/main_alias.c, libmisc/shell/main_cat.c,
+	libmisc/shell/main_cd.c, libmisc/shell/main_chdir.c,
+	libmisc/shell/main_chmod.c, libmisc/shell/main_chroot.c,
+	libmisc/shell/main_cpuuse.c, libmisc/shell/main_date.c,
+	libmisc/shell/main_dir.c, libmisc/shell/main_exit.c,
+	libmisc/shell/main_help.c, libmisc/shell/main_id.c,
+	libmisc/shell/main_logoff.c, libmisc/shell/main_ls.c,
+	libmisc/shell/main_mallocdump.c, libmisc/shell/main_mdump.c,
+	libmisc/shell/main_medit.c, libmisc/shell/main_mfill.c,
+	libmisc/shell/main_mkdir.c, libmisc/shell/main_mmove.c,
+	libmisc/shell/main_mwdump.c, libmisc/shell/main_pwd.c,
+	libmisc/shell/main_rm.c, libmisc/shell/main_rmdir.c,
+	libmisc/shell/main_stackuse.c, libmisc/shell/main_tty.c,
+	libmisc/shell/main_umask.c, libmisc/shell/main_whoami.c: New files.
+	* libmisc/shell/cmd_alias.c, libmisc/shell/cmd_cat.c,
+	libmisc/shell/cmd_cd.c, libmisc/shell/cmd_chdir.c,
+	libmisc/shell/cmd_chmod.c, libmisc/shell/cmd_chroot.c,
+	libmisc/shell/cmd_date.c, libmisc/shell/cmd_dir.c,
+	libmisc/shell/cmd_exit.c, libmisc/shell/cmd_help.c,
+	libmisc/shell/cmd_id.c, libmisc/shell/cmd_logoff.c,
+	libmisc/shell/cmd_ls.c, libmisc/shell/cmd_mallocdump.c,
+	libmisc/shell/cmd_mdump.c, libmisc/shell/cmd_medit.c,
+	libmisc/shell/cmd_mfill.c, libmisc/shell/cmd_mkdir.c,
+	libmisc/shell/cmd_mmove.c, libmisc/shell/cmd_mwdump.c,
+	libmisc/shell/cmd_pwd.c, libmisc/shell/cmd_rm.c,
+	libmisc/shell/cmd_rmdir.c, libmisc/shell/cmd_tty.c,
+	libmisc/shell/cmd_umask.c, libmisc/shell/cmd_whoami.c: Removed.
+
 2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/Makefile.am: _Thread_Rotate_ready_queue is only used by ITRON
