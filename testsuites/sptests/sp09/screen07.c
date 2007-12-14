@@ -241,4 +241,21 @@ void Screen7()
     "rtems_message_queue_urgent with illegal id"
   );
   puts( "TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID" );
+
+  status = rtems_message_queue_broadcast( Queue_id[ 1 ], NULL, MESSAGE_SIZE, &count );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_broadcast with NULL count"
+  );
+  puts( "TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_message_queue_broadcast( Queue_id[ 1 ], buffer, MESSAGE_SIZE, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_message_queue_broadcast with NULL count"
+  );
+  puts( "TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS" );
+
 }

@@ -39,12 +39,42 @@ rtems_task Init(
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
 
+  /* initiate with bad priority */
+  puts( "timer_initiate_server -- INVALID_PRIORITY" );
+  status = rtems_timer_initiate_server(
+    1000,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_PRIORITY,
+    "rtems_timer_initiate_server bad priority"
+  );
+
+  puts( "timer_initiate_server -- OK" );
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );
   directive_failed( status, "rtems_timer_initiate_server" );
+
+  puts( "timer_initiate_server -- already started" );
+  status = rtems_timer_initiate_server(
+    RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INCORRECT_STATE,
+    "rtems_timer_initiate_server already started"
+  );
+
+  /*
+   *  Create test tasks
+   */
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

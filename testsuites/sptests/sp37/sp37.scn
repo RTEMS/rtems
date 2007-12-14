@@ -1,5 +1,7 @@
 *** TEST 37 ***
 clock_tick from task level
+Blocking task... suspending self
+clock_tick from task level with preempt -- OK
 interrupt is in progress (use body)
 interrupt disable (use inline)
 interrupt flash (use inline)

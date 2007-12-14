@@ -1,16 +1,19 @@
 *** TEST 30 ***
+timer_initiate_server -- INVALID_PRIORITY
+timer_initiate_server -- OK
+timer_initiate_server -- already started
 TA1  - rtems_clock_get - 09:00:00   12/31/1988
 TA2  - rtems_clock_get - 09:00:00   12/31/1988
 TA3  - rtems_clock_get - 09:00:00   12/31/1988
 TA1  - rtems_clock_get - 09:00:05   12/31/1988
 TA2  - rtems_clock_get - 09:00:10   12/31/1988
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
-TA3  - rtems_clock_get - 09:00:15   12/31/1988
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
+TA3  - rtems_clock_get - 09:00:15   12/31/1988
 TA2  - rtems_clock_get - 09:00:20   12/31/1988
 TA1  - rtems_clock_get - 09:00:20   12/31/1988
 TA1  - rtems_clock_get - 09:00:25   12/31/1988
-TA3  - rtems_clock_get - 09:00:30   12/31/1988
 TA2  - rtems_clock_get - 09:00:30   12/31/1988
 TA1  - rtems_clock_get - 09:00:30   12/31/1988
+TA3  - rtems_clock_get - 09:00:30   12/31/1988
 *** END OF TEST 30 ***

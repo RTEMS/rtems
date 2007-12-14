@@ -122,6 +122,8 @@ TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY
 TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS
 <pause - screen 8>
 TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL

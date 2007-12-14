@@ -1,3 +1,13 @@
+2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp09/screen07.c, sp09/sp09.scn: Add test for
+	rtems_message_queue_broadcast for bad buffer and count pointers.
+	* sp30/init.c, sp30/sp30.scn: Add test for initiating timer server
+	with bad priority or initiating twice.
+	* sp37/sp37.scn, sp37/system.h: Add test for rtems_clock_tick when
+	it forces a dispatch.
+	* sp37/init.c: New file.
+
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new tests for interrupt disable,
