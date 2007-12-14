@@ -84,7 +84,7 @@ endif
 if !UNIX
 include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
     libblock/include/rtems/blkdev.h libblock/include/rtems/diskdevs.h \
-    libblock/include/rtems/ramdisk.h \
+    libblock/include/rtems/flashdisk.h libblock/include/rtems/ramdisk.h \
     libblock/include/rtems/ide_part_table.h
 endif
 

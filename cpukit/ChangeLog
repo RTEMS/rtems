@@ -1,3 +1,11 @@
+2007-12-12	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am, preinstall.am: Added
+	libblock/include/rtems/flashdisk.h to the installed header list.
+	* libblock/Makefile.am: Add flashdisk.c to the files to build.
+	* libblock/include/rtems/flashdisk.h, libblock/src/flashdisk.c:
+	New.
+
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/preinstall.am, posix/preinstall.am, rtems/Makefile.am,

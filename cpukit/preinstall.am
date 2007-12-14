@@ -156,6 +156,10 @@ $(PROJECT_INCLUDE)/rtems/diskdevs.h: libblock/include/rtems/diskdevs.h $(PROJECT
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/diskdevs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/diskdevs.h
 
+$(PROJECT_INCLUDE)/rtems/flashdisk.h: libblock/include/rtems/flashdisk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/flashdisk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/flashdisk.h
+
 $(PROJECT_INCLUDE)/rtems/ramdisk.h: libblock/include/rtems/ramdisk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ramdisk.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ramdisk.h
@@ -210,7 +214,6 @@ $(PROJECT_INCLUDE)/rtems/shellconfig.h: libmisc/shell/shellconfig.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shellconfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shellconfig.h
 endif
-
 $(PROJECT_INCLUDE)/rtems/libi2c.h: libi2c/libi2c.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libi2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libi2c.h
