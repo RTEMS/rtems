@@ -1,0 +1,77 @@
+I have observed what seem to be strange
+initialization problems with the ethernet
+driver:
+
+I usually configure RTEMS networking by
+BOOTP (the problem has nothing to do with
+BOOTP but I just want to describe my
+environment). Sometimes (it can actually
+happen quite frequently, like 1 out of 4
+attempts but since yesterday when I decided
+to hunt this down more systematically
+the problem seems to have gone - typical!)
+networking fails to initialize properly:
+
+BOOTP requests are sent (to the MAC),
+TX interrupts occur and the TX MIB
+counters increment - i.e., everything
+seems normal but no data can be seen on
+the wire. Also, even though we are on
+a quite busy network, the receiver
+doesn't see anything, i.e., 0 RX
+interrupts, RX MIB counters for broadcast
+packets remain steady at zero etc.
+In brief, everyting seems normal at the
+MAC and higher layers but no connection
+to the wire seems to be established.
+
+Some further tests reveal (system under
+test is in the 'bad' state):
+ 1 communication with the BCM5461 PHY
+   is normal. Registers can be read/written
+   and everything seems normal. In particular,
+   the link status is reported OK: disconnect
+   the cable and MII - BMSR bit 1<<2 is clear,
+   reconnect the cable and BMSR[2] is set.
+   Restart autoneg, the link goes and comes
+   back after a short while.
+ 2 setting the loopback bit in the TSEC's
+   MACCFG1 register correctly feeds packets
+   back into the RX, RX MIB counters now
+   increment and indicate data flow.
+   There are RX interrupts and all indicates
+   (I haven't actually looked at RX packet
+   data) that the RX would work normally.
+   After switching MACCFG1[LOOP_BACK] off
+   no RX traffic can be seen anymore.
+ 3 resetting the PHY (BMCR = 0x8000) and/or
+   restarting autoneg (BMCR = 0x1200) seems
+   to perform the desired action (registers
+   take on expected values) but still no luck
+   with communication all the way through
+   to the wire.
+
+Especially point 2 seems to indicate that
+the problem is likely to be between the
+wire and the MAC somewhere but re-setting
+the PHY doesn't change things. Analysis is
+much complicated by the fact that there
+is no documentation on the BCM5461 chip
+available.
+
+Noteworthy is also that if the system
+initializes OK then it continues to work
+normally; if initialization fails then
+only resetting the board and restarting
+helps.
+
+I wanted to test if it makes a difference
+if MotLoad used the chip prior to RTEMS
+being booted (in case MotLoad did some
+magic step during initialization) but 
+before I could really test this the
+problem went away.
+
+Big Mystery...
+
+12/12/2007, T.S.
