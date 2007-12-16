@@ -1,8 +1,5 @@
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
-%if "%{gdb_version}" == "6.7"
-Patch0:		gdb-6.7-rtems4.9-20071011.diff
-%endif
 %if "%{gdb_version}" == "6.7.1"
 Patch0:		gdb-6.7.1-rtems4.9-20071216.diff
 %endif
