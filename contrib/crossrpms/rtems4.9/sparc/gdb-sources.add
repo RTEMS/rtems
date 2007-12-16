@@ -10,5 +10,5 @@ Patch0:		gdb-6.6-rtems4.8-20070306.diff
 Patch0:		gdb-6.7-rtems4.9-20071011.diff
 %endif
 %if "%{gdb_version}" == "6.7.1"
-Patch0:		gdb-6.7.1-rtems4.9-20071031.diff
+Patch0:		gdb-6.7.1-rtems4.9-20071216.diff
 %endif
