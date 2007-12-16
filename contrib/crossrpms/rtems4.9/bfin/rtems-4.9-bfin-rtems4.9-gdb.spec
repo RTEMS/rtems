@@ -83,7 +83,7 @@ cd ..
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 
