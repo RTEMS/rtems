@@ -1,2 +1,0 @@
-Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
