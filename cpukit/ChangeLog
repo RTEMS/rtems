@@ -1,5 +1,11 @@
 2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/Makefile.am, libcsupport/src/mallocfreespace.c: Add
+	malloc_info() routine.
+	* libcsupport/src/mallocinfo.c: New file.
+
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/stackchk/check.c: Add print of current stack pointer and
 	stack info even if stack checker is not initialized.
 
