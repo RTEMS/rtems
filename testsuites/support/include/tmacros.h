@@ -96,6 +96,16 @@ extern "C" {
  fatal_posix_service_status_with_level( \
       _dirstat, RTEMS_SUCCESSFUL, _failmsg, _level )
 
+#define fatal_posix_service_status_errno( _stat, _desired, _msg ) \
+  if ( (_stat != -1) && (errno) != (_desired) ) { \
+    check_dispatch_disable_level( 0 ); \
+    printf( "\n%s FAILED -- expected (%d - %s) got (%d %d - %s)\n", \
+	    (_msg), _desired, strerror(_desired), \
+            _stat, errno, strerror(errno) ); \
+    FLUSH_OUTPUT(); \
+    rtems_test_exit( _stat ); \
+  }
+
 #define fatal_posix_service_status( _stat, _desired, _msg ) \
   fatal_posix_service_status_with_level( _stat, _desired, _msg, 0 )
 
