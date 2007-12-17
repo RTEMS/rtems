@@ -11,6 +11,10 @@ License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if "%{binutils_version}" >= "2.18"
+# Bug in bfd: Doesn't build without texinfo installed
+BuildRequires:	texinfo >= 4.2
+%else
 %if %build_infos
 # Required for building the infos
 BuildRequires:	/sbin/install-info
@@ -18,6 +22,7 @@ BuildRequires:	texinfo >= 4.2
 %else
 %if "@tool_target@" == "i686-pc-cygwin"
 BuildRequires:	texinfo >= 4.2
+%endif
 %endif
 %endif
 BuildRequires:	flex
