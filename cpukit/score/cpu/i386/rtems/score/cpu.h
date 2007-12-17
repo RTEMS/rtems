@@ -107,6 +107,9 @@ typedef struct {
   uint32_t    edi;      /* extended destination index flags register */
 }   Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->esp
+
 /*
  *  FP context save area for the i387 numeric coprocessors.
  */

@@ -1,3 +1,7 @@
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Add _CPU_Context_Get_SP() for stack check utility.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Move interrupt_stack_size field from CPU

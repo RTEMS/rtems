@@ -365,6 +365,9 @@ typedef struct {
 
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->r15
+
 typedef struct {
 #if SH_HAS_FPU
 #ifdef SH4_USE_X_REGISTERS

@@ -402,6 +402,9 @@ typedef struct {
     __MIPS_REGISTER_TYPE c0_epc;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->sp
+
 /* WARNING: If this structure is modified, the constants in cpu.h
  *          must also be updated.
  */

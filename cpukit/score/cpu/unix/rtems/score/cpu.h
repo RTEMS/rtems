@@ -485,6 +485,9 @@ typedef struct {
   char      Area[ SIZEOF_CPU_CONTEXT ] CONTEXT_STRUCTURE_ALIGNMENT;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  NULL
+
 typedef struct {
 } Context_Control_fp;
 

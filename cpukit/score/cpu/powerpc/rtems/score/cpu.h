@@ -251,6 +251,9 @@ typedef struct {
     uint32_t   msr;	/* Initial interrupt level */
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->gpr1
+
 typedef struct {
     /* The ABIs (PowerOpen/SVR4/EABI) only require saving f14-f31 over
      * procedure calls.  However, this would mean that the interrupt

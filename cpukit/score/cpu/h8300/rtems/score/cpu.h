@@ -388,6 +388,9 @@ typedef struct {
     uint32_t    xxx nogap;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->er7
+
 typedef struct {
     double      some_float_register[2];
 } Context_Control_fp;

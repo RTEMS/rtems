@@ -460,7 +460,15 @@ typedef struct {
      *  registers that need to be saved at a context switch.
      */
     uint32_t   some_system_register;
+
+    /** This field is a hint that a port will have a register that
+     *  is the stack pointer.
+     */
+    uint32_t   stack_pointer;
 } Context_Control;
+
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->stack_pointer
 
 /**
  *  @ingroup CPUContext Management

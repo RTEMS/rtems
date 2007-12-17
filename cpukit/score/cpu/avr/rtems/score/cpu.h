@@ -408,7 +408,11 @@ extern "C" {
 typedef struct {
     uint32_t   some_integer_register;
     uint32_t   some_system_register;
+    uint32_t   stack_pointer;
 } Context_Control;
+
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->stack_pointer
 
 typedef struct {
     double      some_float_register;

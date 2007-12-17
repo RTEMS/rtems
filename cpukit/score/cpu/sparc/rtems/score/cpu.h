@@ -336,6 +336,9 @@ typedef struct {
     uint32_t   isr_dispatch_disable;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->o6_sp
+
 #endif /* ASM */
 
 /*

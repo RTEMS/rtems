@@ -122,6 +122,9 @@ typedef struct {
   void       *a7_msp;            /* (a7) master stack pointer */
 }   Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->a7_msp
+
 /*
  *  Floating point context ares
  */

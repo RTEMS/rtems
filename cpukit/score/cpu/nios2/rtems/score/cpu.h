@@ -465,6 +465,9 @@ typedef struct {
     /* ipending? */
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->sp
+
 /**
  *  @ingroup CPUContext Management
  *  This defines the complete set of floating point registers that must

@@ -474,6 +474,9 @@ typedef struct {
   unsigned int sp;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->sp
+
 typedef struct {
 } Context_Control_fp;
 

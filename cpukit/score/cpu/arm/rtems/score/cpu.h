@@ -354,6 +354,9 @@ typedef struct {
     uint32_t   register_pc;
 } Context_Control;
 
+#define _CPU_Context_Get_SP( _context ) \
+  (_context)->register_sp
+
 typedef struct {
     double      some_float_register;
 } Context_Control_fp;
