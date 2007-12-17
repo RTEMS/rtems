@@ -3,7 +3,7 @@
  *
  *  Derived from c4x/irq.c
  *
- *  Copyright (c) 2006
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
