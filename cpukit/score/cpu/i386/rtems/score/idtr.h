@@ -14,7 +14,7 @@
  *
  * Formerly contained in and extracted from libcpu/i386/cpu.h.
  *
- * Copyright (C) 1998  Eric Valette (valette@crf.canon.fr)
+ * COPYRIGHT (C) 1998  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *
  *  The license and distribution terms for this file may be
