@@ -1,3 +1,13 @@
+2007-12-17	Chris Johns <chrisj@rtems.org>
+
+	* rtems4.8/.cvsignore, rtems4.8/arm/.cvsignore,
+	rtems4.8/avr/.cvsignore, rtems4.8/bfin/.cvsignore,
+	rtems4.8/h8300/.cvsignore, rtems4.8/i386/.cvsignore,
+	rtems4.8/m68k/.cvsignore, rtems4.8/mips/.cvsignore,
+	rtems4.8/mipstx39/.cvsignore, rtems4.8/powerpc/.cvsignore,
+	rtems4.8/sh/.cvsignore, rtems4.8/sparc/.cvsignore,
+	rtems4.8/tic4x/.cvsignore: New.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
