@@ -1,3 +1,8 @@
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c, irq.c, rtems/score/cpu_asm.h: Sweep to make sure grep for
+	COPYRIGHT passes.
+
 2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Move interrupt_stack_size field from CPU
