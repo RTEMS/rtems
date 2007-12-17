@@ -1,5 +1,9 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/mainpage.h: Sweep to make sure grep for COPYRIGHT passes.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/Makefile.am, posix/preinstall.am,
 	posix/include/rtems/posix/timer.h, score/src/objectget.c: Split POSIX
 	Timer implementation into multiple files. Add obvious error checks
