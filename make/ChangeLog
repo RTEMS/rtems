@@ -1,3 +1,9 @@
+2007-12-17	Chris Johns <chrisj@rtems.org>
+
+	* custom/mcf5235.cfg, custom/mrm332.cfg, custom/pc386.cfg: Split
+	the make-exe and make-cxx-exe into bsp-link-c, bsp-link-cxx and
+	bsp-post-link make macros. This allow external autotools support.
+
 2007-12-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* custom/mvme3100.cfg: Added; new BSP.
