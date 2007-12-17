@@ -1,5 +1,9 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/timergettime.c: Include rtems/score/timespec.h
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/preinstall.am, posix/include/aio.h, posix/include/devctl.h,
 	posix/include/mqueue.h, posix/include/sched.h,
 	posix/include/semaphore.h, posix/include/rtems/posix/cancel.h,
