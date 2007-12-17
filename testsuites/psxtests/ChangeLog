@@ -1,3 +1,16 @@
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Rename psxtimer to psxtimer01 to indicate
+	addition of second POSIX Timer test. Add initial version of
+	psxtimer02 to cover some conditions missed in psxtimer01. More cases
+	left to add.
+	* psxtimer01/.cvsignore, psxtimer01/Makefile.am, psxtimer01/psxtimer.c,
+	psxtimer01/psxtimer01.scn, psxtimer01/system.h,
+	psxtimer02/.cvsignore, psxtimer02/Makefile.am, psxtimer02/psxtimer.c,
+	psxtimer02/psxtimer02.scn, psxtimer02/system.h: New files.
+	* psxtimer/.cvsignore, psxtimer/Makefile.am, psxtimer/psxtimer.c,
+	psxtimer/psxtimer.scn, psxtimer/system.h: Removed.
+
 2007-12-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psx01/init.c, psx01/psx01.scn: Add usleep() test.

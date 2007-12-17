@@ -231,7 +231,7 @@ void *POSIX_Init (
    struct sched_param sch_param;     /* schedule parameters */
    struct periodic_params params_a, params_b, params_c;
 
-   puts( "\n\n*** POSIX Timers Test ***" );
+   puts( "\n\n*** POSIX Timers Test 01 ***" );
 
    data.updated = FALSE;
    data.x = 0;
@@ -334,6 +334,6 @@ void *POSIX_Init (
 
    /* execute 20 seconds and finish */
    sleep (20);
-   puts( "\n\n*** END OF POSIX Timers Test ***" );
+   puts( "*** END OF POSIX Timers Test 01 ***" );
    rtems_test_exit (0);
  }

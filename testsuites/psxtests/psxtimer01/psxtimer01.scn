@@ -1,4 +1,4 @@
-*** POSIX Timers Test ***
+*** POSIX Timers Test 01 ***
 Executing task A Fri Jan  1 00:00:01 1988
 Executing task B with x = 1 Fri Jan  1 00:00:02 1988
 Executing task A Fri Jan  1 00:00:02 1988
@@ -34,4 +34,4 @@ Executing task C with x = 9 Fri Jan  1 00:00:18 1988
 Executing task A Fri Jan  1 00:00:18 1988
 Executing task A Fri Jan  1 00:00:19 1988
 Executing task B with x = 10 Fri Jan  1 00:00:20 1988
-*** END OF POSIX Timers Test ***
+*** END OF POSIX Timers Test 01 ***

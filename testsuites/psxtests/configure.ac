@@ -55,6 +55,7 @@ psxsem01/Makefile
 psxspin01/Makefile
 psxstat/Makefile
 psxtime/Makefile
-psxtimer/Makefile
+psxtimer01/Makefile
+psxtimer02/Makefile
 ])
 AC_OUTPUT

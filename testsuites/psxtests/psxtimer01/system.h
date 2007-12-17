@@ -7,7 +7,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  system.h,v 1.9 1996/08/09 18:48:33 joel Exp
+ *  $Id}
  */
 
 /* functions */

@@ -1,0 +1,16 @@
+*** POSIX Timers Test 02 ***
+timer_create - bad clock id - EINVAL
+timer_create - bad timer id pointer - EINVAL
+timer_create - OK
+timer_create - too many - EAGAIN
+timer_delete - bad id - EINVAL
+timer_getoverrun - bad id - EINVAL
+timer_gettime - bad itimer - EINVAL
+timer_gettime - bad id - EINVAL
+timer_settime - bad itimer pointer - EINVAL
+timer_settime - bad itimer value - too many nanosecond - EINVAL
+timer_settime - bad itimer value - negative nanosecond - EINVAL
+timer_settime - bad clock value - EINVAL
+timer_delete - OK
+timer_delete - bad id - EINVAL
+*** END OF POSIX Timers Test 02 ***
