@@ -104,9 +104,8 @@ void fileio_start_shell(void)
   printf(" =========================\n");
   printf(" starting shell\n");
   printf(" =========================\n");
-  shell_init("SHLL",RTEMS_MINIMUM_STACK_SIZE * 4,100,"/dev/console",
-	     B9600 | CS8,
-	     0);
+  rtems_shell_init("SHLL",RTEMS_MINIMUM_STACK_SIZE * 4,100,"/dev/console",
+                   0, 0);
   rtems_task_suspend(RTEMS_SELF);
 }
 
@@ -616,7 +615,7 @@ int main_usercmd(int argc, char **argv)
   return 0;
 }
 
-shell_cmd_t Shell_USERCMD_Command = {
+rtems_shell_cmd_t Shell_USERCMD_Command = {
   "usercmd",                                       /* name */
   "usercmd n1 [n2 [n3...]]     # echo arguments",  /* usage */
   "user",                                          /* topic */
@@ -625,7 +624,7 @@ shell_cmd_t Shell_USERCMD_Command = {
   NULL                                             /* next */
 };
 
-shell_alias_t Shell_USERECHO_Alias = {
+rtems_shell_alias_t Shell_USERECHO_Alias = {
   "usercmd",                 /* command */
   "userecho"                 /* alias */
 };
@@ -635,6 +634,7 @@ shell_alias_t Shell_USERECHO_Alias = {
 #define CONFIGURE_SHELL_USER_ALIASES &Shell_USERECHO_Alias
 #define CONFIGURE_SHELL_COMMANDS_INIT
 #define CONFIGURE_SHELL_COMMANDS_ALL
+#define CONFIGURE_SHELL_MOUNT_MSDOS
 
 #include <rtems/shellconfig.h>
 
