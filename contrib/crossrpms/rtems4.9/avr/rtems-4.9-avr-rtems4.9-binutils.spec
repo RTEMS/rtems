@@ -21,14 +21,19 @@ Name:		rtems-4.9-avr-rtems4.9-binutils
 Summary:	Binutils for target avr-rtems4.9
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if "%{binutils_version}" >= "2.18"
+# Bug in bfd: Doesn't build without texinfo installed
+BuildRequires:	texinfo >= 4.2
+%else
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
+%endif
 BuildRequires:	flex
 BuildRequires:	bison
 
@@ -70,7 +75,7 @@ cd ..
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 
