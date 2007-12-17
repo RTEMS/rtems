@@ -1,5 +1,10 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/threadqextractwithproxy.c: Conditionalize code that is only
+	required in multiprocessing configuration.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/objectget.c: Revert.
 
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
