@@ -20,7 +20,7 @@ Name:		rtems-4.8-bfin-rtems4.8-gdb
 Summary:	Gdb for target bfin-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -83,7 +83,7 @@ cd ..
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 

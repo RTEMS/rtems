@@ -20,7 +20,7 @@ Name:		rtems-4.8-mipstx39-rtems4.8-gdb
 Summary:	Gdb for target mipstx39-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -52,7 +52,7 @@ Requires:	rtems-4.8-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.6"
-Patch0:		gdb-6.6-rtems4.8-20071110.diff
+Patch0:		gdb-6.6-rtems4.8-20071216.diff
 %endif
 
 %description
@@ -85,7 +85,7 @@ cd ..
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 
