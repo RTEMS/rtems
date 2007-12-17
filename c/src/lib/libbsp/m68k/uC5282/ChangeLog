@@ -1,3 +1,8 @@
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/clock.c, include/bsp.h: Correct prototype of idle thread. Eric
+	Norum pointed out this was wrong.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clock.c, include/bsp.h, startup/bspstart.c: Eliminate copies of

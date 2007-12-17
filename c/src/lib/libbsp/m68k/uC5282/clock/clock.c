@@ -113,7 +113,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 /*
  * Provide our own version of the idle task
  */
-void _BSP_Thread_Idle_body(void)
+Thread _BSP_Thread_Idle_body(uint32_t ignored)
 {
     for(;;)
         asm volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
