@@ -31,7 +31,9 @@ Init: ID is 0x0b010001
 Init: sched_get_priority_min (SCHED_FIFO) -- 1
 Init: sched_get_priority_min -- EINVAL (invalid policy)
 Init: sched_get_priority_max (SCHED_FIFO) -- 254
-Init: sched_get_priority_min -- EINVAL (invalid policy)
+Init: sched_get_priority_max -- EINVAL (invalid policy)
+Init: sched_rr_get_interval -- ESRCH (invalid PID)
+Init: sched_rr_get_interval -- EINVAL (invalid interval pointer)
 Init: Round Robin quantum is 0 seconds, 500000000 nanoseconds
 Init: pthread_create - SUCCESSFUL
 Init: pthread_create - EAGAIN (too many threads)

@@ -1,5 +1,10 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psx01/init.c, psx01/psx01.scn: Add more test cases for
+	sched_rr_get_interval() and sched_get_priority_max().
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxenosys/init.c: Fix typo.
 
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>

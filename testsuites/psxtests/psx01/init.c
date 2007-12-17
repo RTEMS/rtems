@@ -207,11 +207,21 @@ void *POSIX_Init(
   printf( "Init: sched_get_priority_max (SCHED_FIFO) -- %d\n", priority );
   assert( priority != -1 );
 
-  puts( "Init: sched_get_priority_min -- EINVAL (invalid policy)" );
-  priority = sched_get_priority_min( -1 );
+  puts( "Init: sched_get_priority_max -- EINVAL (invalid policy)" );
+  priority = sched_get_priority_max( -1 );
   assert( priority == -1 );
   assert( errno == EINVAL );
 
+  puts( "Init: sched_rr_get_interval -- ESRCH (invalid PID)" );
+  status = sched_rr_get_interval( 4, &tr );
+  assert( status == -1 );
+  assert( errno == ESRCH );
+  
+  puts( "Init: sched_rr_get_interval -- EINVAL (invalid interval pointer)" );
+  status = sched_rr_get_interval( getpid(), NULL );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+  
   /* print the round robin time quantum */
 
   status = sched_rr_get_interval( getpid(), &tr );
