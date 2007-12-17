@@ -27,7 +27,7 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-rtems_shell_filesystems_t rtems_Shell_Mount_MSDOS = {
+rtems_shell_filesystems_t rtems_shell_Mount_MSDOS = {
   name:          "msdos",
   driver_needed: 1,
   fs_ops:        &msdos_ops,

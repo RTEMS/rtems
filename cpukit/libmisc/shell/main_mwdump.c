@@ -55,7 +55,7 @@ int rtems_shell_main_mwdump(int argc,char * argv[]) {
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_WDUMP_Command = {
+rtems_shell_cmd_t rtems_shell_WDUMP_Command = {
   "wdump",                                      /* name */
   "wdump [addr [size]]",                        /* usage */
   "mem",                                        /* topic */

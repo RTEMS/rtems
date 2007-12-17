@@ -32,7 +32,7 @@ int rtems_shell_main_cpuuse(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_CPUUSE_Command = {
+rtems_shell_cmd_t rtems_shell_CPUUSE_Command = {
   "cpuuse",                                   /* name */
   "[-r] print or reset per thread cpu usage", /* usage */
   "rtems",                                    /* topic */

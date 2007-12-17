@@ -70,7 +70,7 @@ int rtems_shell_main_blksync(int argc, char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_BLKSYNC_Command = {
+rtems_shell_cmd_t rtems_shell_BLKSYNC_Command = {
   "blksync",                                 /* name */
   "blksync driver # sync the block driver",  /* usage */
   "files",                                   /* topic */

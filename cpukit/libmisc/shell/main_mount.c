@@ -72,7 +72,7 @@ int rtems_shell_main_mount(int argc, char *argv[])
           return 1;
         }
 
-        for (a = rtems_Shell_Mount_filesystems; *a; a++)
+        for (a = rtems_shell_Mount_filesystems; *a; a++)
         {
           if (strcmp (argv[arg], (*a)->name) == 0)
           {
@@ -89,7 +89,7 @@ int rtems_shell_main_mount(int argc, char *argv[])
       {
         rtems_shell_filesystems_t** a;
         fprintf (stdout, "File systems: ");
-        for (a = rtems_Shell_Mount_filesystems; *a; a++)
+        for (a = rtems_shell_Mount_filesystems; *a; a++)
           if (*a)
             fprintf (stdout, "%s ", (*a)->name);
         fprintf (stdout, "\n");
@@ -145,7 +145,7 @@ int rtems_shell_main_mount(int argc, char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_MOUNT_Command = {
+rtems_shell_cmd_t rtems_shell_MOUNT_Command = {
   "mount",                                                /* name */
   "mount [-t fstype] [-r] [-L] device path # mount disk", /* usage */
   "files",                                                /* topic */

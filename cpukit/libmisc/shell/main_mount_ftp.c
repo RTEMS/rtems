@@ -29,7 +29,7 @@
 
 #include <rtems/ftpfs.h>
 
-rtems_shell_filesystems_t rtems_Shell_Mount_FTP = {
+rtems_shell_filesystems_t rtems_shell_Mount_FTP = {
   name:          "ftp",
   driver_needed: 1,
   fs_ops:        &rtems_ftp_ops,

@@ -59,7 +59,7 @@ int rtems_shell_main_mdump(int argc,char * argv[]) {
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_MDUMP_Command = {
+rtems_shell_cmd_t rtems_shell_MDUMP_Command = {
   "mdump",                                      /* name */
   "mdump [addr [size]]",                        /* usage */
   "mem",                                        /* topic */

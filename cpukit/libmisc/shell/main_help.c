@@ -139,7 +139,7 @@ int rtems_shell_help(
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_HELP_Command  =  {
+rtems_shell_cmd_t rtems_shell_HELP_Command  =  {
   "help",                                       /* name  */
    "help [topic] # list of usage of commands",  /* usage */
   "help",                                       /* topic */

@@ -54,7 +54,7 @@ int rtems_shell_main_id(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_ID_Command = {
+rtems_shell_cmd_t rtems_shell_ID_Command = {
   "id",                                      /* name */
   "show uid, gid, euid, and egid",           /* usage */
   "misc",                                    /* topic */

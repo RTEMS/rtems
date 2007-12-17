@@ -133,7 +133,7 @@ int rtems_shell_main_msdos_format(int argc, char *argv[])
 
 #define OPTIONS "[-v label] [-r size] [-t any/12/16/32]"
 
-rtems_shell_cmd_t rtems_Shell_MSDOSFMT_Command = {
+rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command = {
   "msdosfmt",                                /* name */
   "msdosfmt " OPTIONS " path # format disk", /* usage */
   "files",                                   /* topic */

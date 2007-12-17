@@ -42,7 +42,7 @@ int rtems_shell_main_chmod(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_CHMOD_Command = {
+rtems_shell_cmd_t rtems_shell_CHMOD_Command = {
   "chmod",                                      /* name */
   "chmod 0777 n1 n2... # change filemode",      /* usage */
   "files",                                      /* topic */

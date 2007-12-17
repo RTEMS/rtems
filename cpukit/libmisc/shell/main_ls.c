@@ -98,7 +98,7 @@ int rtems_shell_main_ls(int argc, char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_LS_Command = {
+rtems_shell_cmd_t rtems_shell_LS_Command = {
   "ls",                                         /* name */
   "ls [dir]     # list files in the directory", /* usage */
   "files",                                      /* topic */

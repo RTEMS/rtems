@@ -34,7 +34,7 @@ int rtems_shell_main_date(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_DATE_Command = {
+rtems_shell_cmd_t rtems_shell_DATE_Command = {
   "date",                        /* name */
   "date",                        /* usage */
   "misc",                        /* topic */

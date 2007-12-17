@@ -32,7 +32,7 @@ int rtems_shell_main_tty(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_TTY_Command = {
+rtems_shell_cmd_t rtems_shell_TTY_Command = {
   "tty",                                      /* name */
   "show ttyname",                             /* usage */
   "misc",                                     /* topic */

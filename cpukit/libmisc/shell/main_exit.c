@@ -20,7 +20,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-rtems_shell_alias_t rtems_Shell_EXIT_Alias = {
+rtems_shell_alias_t rtems_shell_EXIT_Alias = {
   "logoff",                   /* command */
   "exit"                      /* alias */
 };

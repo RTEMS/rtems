@@ -40,7 +40,7 @@ int rtems_shell_main_rm(int argc, char *argv[])
    return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_RM_Command = {
+rtems_shell_cmd_t rtems_shell_RM_Command = {
   "rm",                                      /* name */
   "rm n1 [n2 [n3...]] # remove files",       /* usage */
   "files",                                   /* topic */

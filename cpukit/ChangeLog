@@ -1,5 +1,28 @@
 2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/main_alias.c, libmisc/shell/main_blksync.c,
+	libmisc/shell/main_cat.c, libmisc/shell/main_cd.c,
+	libmisc/shell/main_chdir.c, libmisc/shell/main_chmod.c,
+	libmisc/shell/main_chroot.c, libmisc/shell/main_cpuuse.c,
+	libmisc/shell/main_date.c, libmisc/shell/main_dir.c,
+	libmisc/shell/main_exit.c, libmisc/shell/main_help.c,
+	libmisc/shell/main_id.c, libmisc/shell/main_logoff.c,
+	libmisc/shell/main_ls.c, libmisc/shell/main_mallocinfo.c,
+	libmisc/shell/main_mdump.c, libmisc/shell/main_medit.c,
+	libmisc/shell/main_mfill.c, libmisc/shell/main_mkdir.c,
+	libmisc/shell/main_mmove.c, libmisc/shell/main_mount.c,
+	libmisc/shell/main_mount_ftp.c, libmisc/shell/main_mount_msdos.c,
+	libmisc/shell/main_mount_nfs.c, libmisc/shell/main_mount_tftp.c,
+	libmisc/shell/main_msdosfmt.c, libmisc/shell/main_mwdump.c,
+	libmisc/shell/main_pwd.c, libmisc/shell/main_rm.c,
+	libmisc/shell/main_rmdir.c, libmisc/shell/main_stackuse.c,
+	libmisc/shell/main_tty.c, libmisc/shell/main_umask.c,
+	libmisc/shell/main_unmount.c, libmisc/shell/main_whoami.c,
+	libmisc/shell/shell_cmdset.c, libmisc/shell/shellconfig.h: Change
+	rtems_Shell_ to rtems_shell_.
+
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add malloc command
 	with info and dump as replacement for older command. Fix what looked
 	like a typo for mount sub-commands.

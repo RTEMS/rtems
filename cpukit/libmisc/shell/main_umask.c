@@ -42,7 +42,7 @@ int rtems_shell_main_umask(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_UMASK_Command = {
+rtems_shell_cmd_t rtems_shell_UMASK_Command = {
   "umask",                                    /* name */
   "umask [new_umask]",                        /* usage */
   "misc",                                     /* topic */

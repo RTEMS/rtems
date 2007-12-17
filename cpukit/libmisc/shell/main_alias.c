@@ -35,7 +35,7 @@ int rtems_shell_rtems_main_alias(int argc, char **argv)
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_ALIAS_Command = {
+rtems_shell_cmd_t rtems_shell_ALIAS_Command = {
   "alias",                                /* name */
   "alias old new",                        /* usage */
   "misc",                                 /* topic */

@@ -45,7 +45,7 @@ int rtems_shell_main_mfill(int argc,char * argv[]) {
   return rtems_shell_main_mdump(0,NULL);
 }
 
-rtems_shell_cmd_t rtems_Shell_MFILL_Command = {
+rtems_shell_cmd_t rtems_shell_MFILL_Command = {
   "mfill",                                      /* name */
   "mfill addr size value",                      /* usage */
   "mem",                                        /* topic */

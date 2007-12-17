@@ -40,7 +40,7 @@ int rtems_shell_main_chdir (int argc, char *argv[]) {
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_CHDIR_Command = {
+rtems_shell_cmd_t rtems_shell_CHDIR_Command = {
   "chdir",                                        /* name */
   "chdir [dir]  # change the current directory",  /* usage */
   "files",                                        /* topic */

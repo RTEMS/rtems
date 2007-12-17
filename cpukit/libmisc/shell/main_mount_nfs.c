@@ -55,7 +55,7 @@ rtems_shell_nfs_mounter (const char*                device,
   return ret;
 }
 
-rtems_shell_filesystems_t rtems_Shell_Mount_NFS = {
+rtems_shell_filesystems_t rtems_shell_Mount_NFS = {
   name:          "ftp",
   driver_needed: 1,
   fs_ops:        NULL,

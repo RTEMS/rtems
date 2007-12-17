@@ -45,7 +45,7 @@ int rtems_shell_main_mmove(int argc,char * argv[]) {
  return rtems_shell_main_mdump(0,NULL);
 }
 
-rtems_shell_cmd_t rtems_Shell_MMOVE_Command = {
+rtems_shell_cmd_t rtems_shell_MMOVE_Command = {
   "mmove",                                      /* name */
   "mmove dst src size",                         /* usage */
   "mem",                                        /* topic */

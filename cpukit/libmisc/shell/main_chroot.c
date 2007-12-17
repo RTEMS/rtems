@@ -39,7 +39,7 @@ int rtems_shell_main_chroot(int argc,char * argv[]) {
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_CHROOT_Command = {
+rtems_shell_cmd_t rtems_shell_CHROOT_Command = {
   "chroot",                                     /* name */
   "chroot [dir] # change the root directory",   /* usage */
   "files",                                      /* topic */

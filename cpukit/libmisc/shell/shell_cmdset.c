@@ -174,11 +174,11 @@ void rtems_shell_initialize_command_set(void)
   rtems_shell_cmd_t **c;
   rtems_shell_alias_t **a;
 
-  for ( c = rtems_Shell_Initial_commands ; *c  ; c++ ) {
+  for ( c = rtems_shell_Initial_commands ; *c  ; c++ ) {
     rtems_shell_add_cmd_struct( *c );
   }
 
-  for ( a = rtems_Shell_Initial_aliases ; *a  ; a++ ) {
+  for ( a = rtems_shell_Initial_aliases ; *a  ; a++ ) {
     rtems_shell_alias_cmd( (*a)->name, (*a)->alias );
   }
 

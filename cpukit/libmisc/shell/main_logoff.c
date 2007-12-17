@@ -32,7 +32,7 @@ int rtems_shell_main_logoff(int argc,char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_LOGOFF_Command = {
+rtems_shell_cmd_t rtems_shell_LOGOFF_Command = {
   "logoff",                                  /* name */
   "logoff from the system",                  /* usage */
   "misc",                                    /* topic */

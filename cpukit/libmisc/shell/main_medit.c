@@ -46,7 +46,7 @@ int rtems_shell_main_medit(int argc,char * argv[]) {
   return rtems_shell_main_mdump(0,NULL);
 }
 
-rtems_shell_cmd_t rtems_Shell_MEDIT_Command = {
+rtems_shell_cmd_t rtems_shell_MEDIT_Command = {
   "medit",                                      /* name */
   "medit addr value [value ...]",               /* usage */
   "mem",                                        /* topic */

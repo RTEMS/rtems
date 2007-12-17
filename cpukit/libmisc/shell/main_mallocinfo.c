@@ -61,7 +61,7 @@ int rtems_shell_main_malloc_info(
   return -1;
 }
 
-rtems_shell_cmd_t rtems_Shell_MALLOC_INFO_Command = {
+rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command = {
   "malloc",                                   /* name */
   "[info|dump]",                              /* usage */
   "mem",                                      /* topic */

@@ -45,7 +45,7 @@ int rtems_shell_main_cat(int argc, char *argv[])
    return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_CAT_Command = {
+rtems_shell_cmd_t rtems_shell_CAT_Command = {
   "cat",                                           /* name */
   "cat n1 [n2 [n3...]] # show the ascii contents", /* usage */
   "files",                                         /* topic */

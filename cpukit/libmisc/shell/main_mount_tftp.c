@@ -29,7 +29,7 @@
 #include <rtems/ftpfs.h>
 #include <rtems/tftp.h>
 
-rtems_shell_filesystems_t rtems_Shell_Mount_TFTP = {
+rtems_shell_filesystems_t rtems_shell_Mount_TFTP = {
   name:          "tftp",
   driver_needed: 0,
   fs_ops:        &rtems_tftp_ops,

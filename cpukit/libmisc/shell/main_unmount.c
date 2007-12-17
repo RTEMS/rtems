@@ -65,7 +65,7 @@ int rtems_shell_main_unmount(int argc, char *argv[])
   return 0;
 }
 
-rtems_shell_cmd_t rtems_Shell_UNMOUNT_Command = {
+rtems_shell_cmd_t rtems_shell_UNMOUNT_Command = {
   "unmount",                     /* name */
   "unmount path # unmount disk", /* usage */
   "files",                       /* topic */

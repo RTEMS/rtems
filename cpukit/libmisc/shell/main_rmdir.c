@@ -39,7 +39,7 @@ int rtems_shell_main_rmdir (int argc, char *argv[])
   return errno;
 }
 
-rtems_shell_cmd_t rtems_Shell_RMDIR_Command = {
+rtems_shell_cmd_t rtems_shell_RMDIR_Command = {
   "rmdir",                                      /* name */
   "rmdir  dir   # remove directory",            /* usage */
   "files",                                      /* topic */

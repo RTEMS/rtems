@@ -41,7 +41,7 @@ int rtems_shell_main_mkdir(int argc, char *argv[]) {
   return errno;
 }
 
-rtems_shell_cmd_t rtems_Shell_MKDIR_Command = {
+rtems_shell_cmd_t rtems_shell_MKDIR_Command = {
   "mkdir",                                      /* name */
   "mkdir  dir   # make a directory",            /* usage */
   "files",                                      /* topic */
