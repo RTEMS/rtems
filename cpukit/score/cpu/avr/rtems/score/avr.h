@@ -8,7 +8,7 @@
  *  floating point is available.  This particular implementation
  *  is specified to the avr port.
  *
- *  Copyright 2004, Ralf Corsepius, Ulm, Germany.
+ *  COPYRIGHT 2004, Ralf Corsepius, Ulm, Germany.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
