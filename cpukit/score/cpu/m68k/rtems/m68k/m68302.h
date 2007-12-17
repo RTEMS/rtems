@@ -10,7 +10,7 @@
  * Based on Don Meyer's cpu68302.h that was posted in comp.sys.m68k
  * on 17 February, 1993.
  *
- * Copyright 1995 David W. Glessner.
+ * COPYRIGHT 1995 David W. Glessner.
  *
  * Redistribution and use in source and binary forms are permitted
  * provided that the following conditions are met:
