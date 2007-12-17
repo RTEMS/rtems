@@ -1,3 +1,7 @@
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu_asm.h: Sweep to make sure grep for COPYRIGHT passes.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/score/cpu.h: Temporarily use C implementation of swap u32 for

@@ -5,7 +5,7 @@
 /*
  *  $Id$
  *
- *  Copyright (c) 2002 by Advent Networks, Inc.
+ *  COPYRIGHT (c) 2002 by Advent Networks, Inc.
  *          Jay Monkman <jmonkman@adventnetworks.com>
  *
  *  The license and distribution terms for this file may be
@@ -13,8 +13,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  This file is the include file for cpu_asm.S
- *
- *
  */
 
 #ifndef _RTEMS_SCORE_CPU_ASM_H
