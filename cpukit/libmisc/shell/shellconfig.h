@@ -42,9 +42,12 @@ extern rtems_shell_cmd_t rtems_Shell_RMDIR_Command;
 extern rtems_shell_cmd_t rtems_Shell_CHROOT_Command;
 extern rtems_shell_cmd_t rtems_Shell_CHMOD_Command;
 extern rtems_shell_cmd_t rtems_Shell_CAT_Command;
+extern rtems_shell_cmd_t rtems_Shell_MSDOSFMT_Command;
 extern rtems_shell_cmd_t rtems_Shell_RM_Command;
 extern rtems_shell_cmd_t rtems_Shell_UMASK_Command;
 extern rtems_shell_cmd_t rtems_Shell_MOUNT_Command;
+extern rtems_shell_cmd_t rtems_Shell_UNMOUNT_Command;
+extern rtems_shell_cmd_t rtems_Shell_BLKSYNC_Command;
 
 extern rtems_shell_cmd_t rtems_Shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_Shell_STACKUSE_Command;
@@ -229,6 +232,11 @@ extern rtems_shell_filesystems_t *rtems_Shell_Mount_filesystems[];
       &rtems_Shell_CAT_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_MSDOSFMT)) || \
+        defined(CONFIGURE_SHELL_COMMAND_MSDOSFMT)
+      &rtems_Shell_MSDOSFMT_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_RM)) || \
         defined(CONFIGURE_SHELL_COMMAND_RM)
       &rtems_Shell_RM_Command,
@@ -242,6 +250,16 @@ extern rtems_shell_filesystems_t *rtems_Shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_MOUNT)) || \
         defined(CONFIGURE_SHELL_COMMAND_MOUNT)
       &rtems_Shell_MOUNT_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_UNMOUNT)) || \
+        defined(CONFIGURE_SHELL_COMMAND_UNMOUNT)
+      &rtems_Shell_UNMOUNT_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_BLKSYNC)) || \
+        defined(CONFIGURE_SHELL_COMMAND_BLKSYNC)
+      &rtems_Shell_BLKSYNC_Command,
     #endif
 
     /*

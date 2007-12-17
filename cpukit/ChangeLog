@@ -1,5 +1,12 @@
 2007-12-17	Chris Johns <chrisj@rtems.org>
 
+	* libmisc/shell/main_blksync.c, libmisc/shell/main_msdosfmt.c,
+	libmisc/shell/main_unmount.c: New.
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add the
+	blksync, msdosfmt, and unmount commands.
+
+2007-12-17	Chris Johns <chrisj@rtems.org>
+
 	* libnetworking/rtems/tftp.h: Provide a decl to the TFTP file
 	system opts table.
 	* libnetworking/rtems/ftpfs.h: Provide a decl to the FTP file
