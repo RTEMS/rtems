@@ -1,5 +1,13 @@
 2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add malloc command
+	with info and dump as replacement for older command. Fix what looked
+	like a typo for mount sub-commands.
+	* libmisc/shell/main_mallocinfo.c: New file.
+	* libmisc/shell/main_mallocdump.c: Removed.
+
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/src/mallocfreespace.c: Add
 	malloc_info() routine.
 	* libcsupport/src/mallocinfo.c: New file.

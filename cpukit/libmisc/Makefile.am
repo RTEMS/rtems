@@ -73,7 +73,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_chdir.c shell/main_chmod.c shell/main_chroot.c \
     shell/main_cpuuse.c shell/main_date.c shell/main_dir.c \
     shell/main_exit.c shell/main_help.c shell/main_id.c \
-    shell/main_logoff.c shell/main_ls.c shell/main_mallocdump.c \
+    shell/main_logoff.c shell/main_ls.c shell/main_mallocinfo.c \
     shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
     shell/main_mkdir.c shell/main_mount.c  $(shell_mount_fs) \
     shell/main_mount_msdos.c shell/main_mmove.c shell/main_msdosfmt.c \

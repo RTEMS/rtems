@@ -51,7 +51,7 @@ extern rtems_shell_cmd_t rtems_Shell_BLKSYNC_Command;
 
 extern rtems_shell_cmd_t rtems_Shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_Shell_STACKUSE_Command;
-extern rtems_shell_cmd_t rtems_Shell_MALLOC_DUMP_Command;
+extern rtems_shell_cmd_t rtems_Shell_MALLOC_INFO_Command;
 
 extern rtems_shell_cmd_t *rtems_Shell_Initial_commands[];
 
@@ -280,9 +280,9 @@ extern rtems_shell_filesystems_t *rtems_Shell_Mount_filesystems[];
      *  Malloc family commands
      */
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-         !defined(CONFIGURE_SHELL_COMMAND_MALLOC_DUMP)) || \
-        defined(CONFIGURE_SHELL_COMMAND_MALLOC_DUMP)
-      &rtems_Shell_MALLOC_DUMP_Command,
+         !defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)) || \
+        defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)
+      &rtems_Shell_MALLOC_INFO_Command,
     #endif
 
     /*
@@ -298,8 +298,8 @@ extern rtems_shell_filesystems_t *rtems_Shell_Mount_filesystems[];
    * The mount command's support file system types.
    */
   #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-       !defined(CONFIGURE_SHELL_COMMAND_MALLOC_DUMP)) || \
-       defined(CONFIGURE_SHELL_COMMAND_MALLOC_DUMP)
+       !defined(CONFIGURE_SHELL_COMMAND_MOUNT)) || \
+       defined(CONFIGURE_SHELL_COMMAND_UNMOUNT)
     rtems_shell_filesystems_t *rtems_Shell_Mount_filesystems[] = {
       #if defined(CONFIGURE_SHELL_MOUNT_MSDOS)
         &rtems_Shell_Mount_MSDOS,
