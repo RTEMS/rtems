@@ -1,5 +1,11 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add test for sysconf().
+	* psxsysconf/.cvsignore, psxsysconf/Makefile.am, psxsysconf/init.c,
+	psxsysconf/psxsysconf.scn, psxsysconf/system.h: New files.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psx01/init.c, psx01/psx01.scn: Add more test cases for
 	sched_rr_get_interval() and sched_get_priority_max().
 

@@ -54,6 +54,7 @@ psxrwlock01/Makefile
 psxsem01/Makefile
 psxspin01/Makefile
 psxstat/Makefile
+psxsysconf/Makefile
 psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
