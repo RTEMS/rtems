@@ -61,6 +61,22 @@ typedef struct {
 void _POSIX_Timer_Manager_initialization ( int max_timers );
 
 /*
+ *  Timer TSR
+ */
+void _POSIX_Timer_TSR(Objects_Id timer, void *data);
+
+/*
+ *  Watchdog Insert helper
+ */
+boolean _POSIX_Timer_Insert_helper(
+  Watchdog_Control               *timer,
+  Watchdog_Interval               ticks,
+  Objects_Id                      id,
+  Watchdog_Service_routine_entry  TSR,
+  void                           *arg
+);
+
+/*
  *  The following defines the information control block used to manage
  *  this class of objects.
  */

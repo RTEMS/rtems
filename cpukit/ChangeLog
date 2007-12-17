@@ -1,3 +1,15 @@
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/Makefile.am, posix/preinstall.am,
+	posix/include/rtems/posix/timer.h, score/src/objectget.c: Split POSIX
+	Timer implementation into multiple files. Add obvious error checks
+	for NULL parameters. Attempt to reduce include files.
+	* posix/src/timercreate.c, posix/src/timerdelete.c,
+	posix/src/timergetoverrun.c, posix/src/timergettime.c,
+	posix/src/timerinserthelper.c, posix/src/timersettime.c,
+	posix/src/timertsr.c: New files.
+	* posix/src/ptimer1.c: Removed.
+
 2007-12-17	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/main_blksync.c, libmisc/shell/main_msdosfmt.c,

@@ -85,6 +85,10 @@ $(PROJECT_INCLUDE)/rtems/posix/pthread.h: include/rtems/posix/pthread.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.h
 
+$(PROJECT_INCLUDE)/rtems/posix/ptimer.h: include/rtems/posix/ptimer.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
+
 $(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h

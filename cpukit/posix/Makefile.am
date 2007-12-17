@@ -35,10 +35,11 @@ include_rtems_posix_HEADERS = include/rtems/posix/cancel.h \
     include/rtems/posix/key.h include/rtems/posix/mqueue.h \
     include/rtems/posix/mutex.h include/rtems/posix/posixapi.h \
     include/rtems/posix/priority.h include/rtems/posix/psignal.h \
-    include/rtems/posix/pthread.h include/rtems/posix/semaphore.h \
-    include/rtems/posix/threadsup.h include/rtems/posix/time.h \
-    include/rtems/posix/timer.h include/rtems/posix/barrier.h \
-    include/rtems/posix/rwlock.h include/rtems/posix/spinlock.h
+    include/rtems/posix/pthread.h include/rtems/posix/ptimer.h \
+    include/rtems/posix/semaphore.h include/rtems/posix/threadsup.h \
+    include/rtems/posix/time.h include/rtems/posix/timer.h \
+    include/rtems/posix/barrier.h include/rtems/posix/rwlock.h \
+    include/rtems/posix/spinlock.h
 
 include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
     inline/rtems/posix/key.inl inline/rtems/posix/mqueue.inl \
@@ -161,7 +162,9 @@ libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.
 ## TIMER_C_FILES
-libposix_a_SOURCES += src/ptimer.c src/ptimer1.c
+libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
+    src/timergetoverrun.c src/timergettime.c src/timersettime.c \
+    src/timertsr.c src/timerinserthelper.c
 
 EXTRA_DIST += src/README.mqueue
 

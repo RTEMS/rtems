@@ -57,6 +57,9 @@ Objects_Control *_Objects_Get(
   Objects_Control *the_object;
   uint32_t         index;
 
+  index = id - information->minimum_id + 1;
+
+#if 0
 #if defined(RTEMS_MULTIPROCESSING)
   index = id - information->minimum_id + 1;
 #else
@@ -64,6 +67,7 @@ Objects_Control *_Objects_Get(
   index = id & 0x0000ffff;
   /* This should work but doesn't always :( */
   /* index = (uint16_t) id; */
+#endif
 #endif
 
    if ( information->maximum >= index ) {
