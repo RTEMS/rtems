@@ -1,5 +1,9 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psxenosys/init.c: Fix typo.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Rename psxtimer to psxtimer01 to indicate
 	addition of second POSIX Timer test. Add initial version of
 	psxtimer02 to cover some conditions missed in psxtimer01. More cases

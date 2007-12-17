@@ -159,7 +159,7 @@ void *POSIX_Init(
   check_enosys( sc );
 
   puts( "sched_getscheduler -- ENOSYS" );
-  sc = sched_setscheduler( 0, 0, NULL );
+  sc = sched_getscheduler( 0 );
   check_enosys( sc );
 
   puts( "wait -- ENOSYS" );
