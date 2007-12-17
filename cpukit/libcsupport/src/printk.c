@@ -1,5 +1,4 @@
 /*
- *
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
  *
@@ -11,11 +10,11 @@
  *
  * This file is provided "AS IS" without warranty of any kind, either
  * expressed or implied.
- *--------------------------------------------------------------------------+
+ *
  * This code is based on code by: Jose Rufino - IST
  *
  *  $Id$
- *--------------------------------------------------------------------------*/
+ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -25,19 +24,23 @@
 #include <stdio.h>
 #include <rtems/bspIo.h>
 
-/*-------------------------------------------------------------------------+
-|         Function: printNum
-|      Description: print number in a given base.
-| Global Variables: None.
-|        Arguments: num - number to print, base - base used to print the number.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-static void
-printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
+/*
+ * printNum - print number in a given base.
+ * Arguments
+ *    num - number to print
+ *    base - base used to print the number.
+ */
+static void printNum(
+  long unsigned int num,
+  int               base,
+  int               sign,
+  int               maxwidth,
+  int               lead
+)
 {
   long unsigned int n;
-  int count;
-  char toPrint[20];
+  int               count;
+  char              toPrint[20];
 
   if ( (sign == 1) && ((long)num <  0) ) {
     BSP_output_char('-');
@@ -48,42 +51,43 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
   count = 0;
   while ((n = num / base) > 0) {
     toPrint[count++] = (num - (n*base));
-    num = n ;
+    num = n;
   }
   toPrint[count++] = num;
 
   for (n=maxwidth ; n > count; n-- )
     BSP_output_char(lead);
 
-  for (n = 0; n < count; n++){
+  for (n = 0; n < count; n++) {
     BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
   }
-} /* printNum */
+}
 
 
-/*-------------------------------------------------------------------------+
-|         Function: printk
-|      Description: a simplified version of printf intended for use when the
-                    console is not yet initialized or in ISR's.
-| Global Variables: None.
-|        Arguments: as in printf: fmt - format string, ... - unnamed arguments.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-void
-vprintk(const char *fmt, va_list ap)
+/*
+ *  vprintk
+ *
+ *  A simplified version of printf intended for use when the
+ *  console is not yet initialized or in ISR's.
+ *
+ * Arguments:
+ *    as in printf: fmt - format string, ... - unnamed arguments.
+ */
+void vprintk(
+  const char *fmt,
+  va_list     ap
+)
 {
   char     c, *str;
   int      lflag, base, sign, width, lead;
 
-  for (; *fmt != '\0'; fmt++)
-  {
+  for (; *fmt != '\0'; fmt++) {
     lflag = 0;
     base  = 0;
     sign = 0;
     width = 0;
     lead = ' ';
-    if (*fmt == '%')
-    {
+    if (*fmt == '%') {
       fmt++;
       if (*fmt == '0' ) {
         lead = '0';
@@ -95,13 +99,11 @@ vprintk(const char *fmt, va_list ap)
         fmt++;
       }
 
-      if ((c = *fmt) == 'l')
-      {
+      if ((c = *fmt) == 'l') {
         lflag = 1;
         c = *++fmt;
       }
-      switch (c)
-      {
+      switch (c) {
         case 'o': case 'O': base = 8; sign = 0; break;
         case 'i': case 'I':
         case 'd': case 'D': base = 10; sign = 1; break;
@@ -123,20 +125,22 @@ vprintk(const char *fmt, va_list ap)
       if (base)
         printNum(lflag ? va_arg(ap, long int) : (long int)va_arg(ap, int),
                  base, sign, width, lead);
-    }
-    else
-    {
+    } else {
       BSP_output_char(*fmt);
     }
   }
-} /* vprintk */
+}
 
-void
-printk(const char *fmt, ...)
+/*
+ * printk
+ *
+ * Kernel printf function requiring minimal infrastrure.
+ */
+void printk(const char *fmt, ...)
 {
-  va_list  ap;      /* points to each unnamed argument in turn */
+  va_list  ap;       /* points to each unnamed argument in turn */
 
   va_start(ap, fmt); /* make ap point to 1st unnamed arg */
   vprintk(fmt, ap);
-  va_end(ap); /* clean up when done */
-} /* printk */
+  va_end(ap);        /* clean up when done */
+}

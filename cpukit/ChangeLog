@@ -1,3 +1,7 @@
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/printk.c: Style.
+
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/threadqextractwithproxy.c: Conditionalize code that is only
