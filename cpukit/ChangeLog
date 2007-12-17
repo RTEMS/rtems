@@ -1,5 +1,9 @@
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/objectget.c: Revert.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/timergettime.c: Include rtems/score/timespec.h
 
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
