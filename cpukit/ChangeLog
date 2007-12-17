@@ -1,5 +1,10 @@
 2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/stackchk/check.c: Add print of current stack pointer and
+	stack info even if stack checker is not initialized.
+
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/printk.c: Style.
 
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>

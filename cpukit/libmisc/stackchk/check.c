@@ -368,6 +368,7 @@ void Stack_check_Dump_threads_usage(
   uint32_t        size, used;
   void           *low;
   void           *high_water_mark;
+  void           *current;
   Stack_Control  *stack;
   char            name[5];
 
@@ -378,18 +379,21 @@ void Stack_check_Dump_threads_usage(
     return;
 
   /*
-   * XXX HACK to get to interrupt stack
+   *  Obtain interrupt stack information
    */
 
   if (the_thread == (Thread_Control *) -1) {
     if (Stack_check_Interrupt_stack.area) {
       stack = &Stack_check_Interrupt_stack;
       the_thread = 0;
+      current = 0;
     }
     else
       return;
-  } else
-    stack = &the_thread->Start.Initial_stack;
+  } else {
+    stack  = &the_thread->Start.Initial_stack;
+    current = (void *)_CPU_Context_Get_SP( &the_thread->Registers );
+  }
 
   low  = Stack_check_usable_stack_start(stack);
   size = Stack_check_usable_stack_size(stack);
@@ -402,25 +406,32 @@ void Stack_check_Dump_threads_usage(
     used = 0;
 
   if ( the_thread ) {
-    rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
+    (*print_handler)(
+      print_context,
+      "0x%08" PRIx32 "  %4s",
+      the_thread->Object.id,
+      rtems_object_get_name( the_thread->Object.id, sizeof(name), name )
+    );
   } else {
-    name[ 0 ] = 'I';
-    name[ 1 ] = 'N';
-    name[ 2 ] = 'T';
-    name[ 3 ] = 'R';
-    name[ 4 ] = '\0';
+    (*print_handler)( print_context, "0x%08" PRIx32 "  INTR", ~0 );
   }
 
   (*print_handler)(
     print_context,
-    "0x%08" PRIx32 "  %4s  %08p - %08p   %8" PRId32 "   %8" PRId32 "\n",
-    the_thread ? the_thread->Object.id : ~0,
-    name,
+    " %010p - %010p %010p  %8" PRId32 "   ",
     stack->area,
     stack->area + stack->size - 1,
-    size,
-    used
+    current,
+    size
   );
+
+  if (Stack_check_Initialized == 0) {
+    (*print_handler)( print_context, "Unavailable\n" );
+  } else {
+    (*print_handler)( print_context, "%8" PRId32 "\n", used );
+  }
+    
+
 }
 
 /*
@@ -448,15 +459,12 @@ void rtems_stack_checker_report_usage_with_plugin(
   rtems_printk_plugin_t  print
 )
 {
-  if (Stack_check_Initialized == 0)
-      return;
-
   print_context = context;
   print_handler = print;
 
   (*print)( context, "Stack usage by thread\n");
   (*print)( context, 
-    "    ID      NAME    LOW        HIGH     AVAILABLE      USED\n"
+"    ID      NAME    LOW          HIGH     CURRENT     AVAILABLE     USED\n"
   );
 
   /* iterate over all threads and dump the usage */
