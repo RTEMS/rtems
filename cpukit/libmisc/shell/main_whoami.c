@@ -27,7 +27,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_whoami(int argc,char *argv[])
+int rtems_shell_main_whoami(int argc,char *argv[])
 {
   struct passwd *pwd;
 
@@ -36,11 +36,11 @@ int main_whoami(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_WHOAMI_Command = {
+rtems_shell_cmd_t rtems_Shell_WHOAMI_Command = {
   "whoami",                                   /* name */
   "show current user",                        /* usage */
   "misc",                                     /* topic */
-  main_whoami,                                /* command */
+  rtems_shell_main_whoami,                    /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

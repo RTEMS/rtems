@@ -22,7 +22,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_cpuuse(int argc,char *argv[])
+int rtems_shell_main_cpuuse(int argc,char *argv[])
 {
   if ( argc >= 1 && !strcmp( argv[1], "-r" ) ) {
     printf( "Resetting CPU Usage information\n" );
@@ -32,11 +32,11 @@ int main_cpuuse(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_CPUUSE_Command = {
+rtems_shell_cmd_t rtems_Shell_CPUUSE_Command = {
   "cpuuse",                                   /* name */
   "[-r] print or reset per thread cpu usage", /* usage */
   "rtems",                                    /* topic */
-  main_cpuuse,                                /* command */
+  rtems_shell_main_cpuuse,                    /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

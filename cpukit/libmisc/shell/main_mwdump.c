@@ -24,15 +24,15 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_mwdump(int argc,char * argv[]) {
+int rtems_shell_main_mwdump(int argc,char * argv[]) {
   unsigned char n,m,max=0;
-  int addr=current_shell_env->mdump_addr;
+  int addr=rtems_current_shell_env->mdump_addr;
   unsigned short * pw;
 
   if (argc>1)
-    addr = str2int(argv[1]);
+    addr = rtems_shell_str2int(argv[1]);
   if (argc>2)
-    max = str2int(argv[2]);
+    max = rtems_shell_str2int(argv[2]);
 
   max /= 16;
 
@@ -51,15 +51,15 @@ int main_mwdump(int argc,char * argv[]) {
     fprintf(stdout,"\n");
     addr += 16;
   }
-  current_shell_env->mdump_addr = addr;
+  rtems_current_shell_env->mdump_addr = addr;
   return 0;
 }
 
-shell_cmd_t Shell_WDUMP_Command = {
+rtems_shell_cmd_t rtems_Shell_WDUMP_Command = {
   "wdump",                                      /* name */
   "wdump [addr [size]]",                        /* usage */
   "mem",                                        /* topic */
-  main_mwdump,                                  /* command */
+  rtems_shell_main_mwdump,                      /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

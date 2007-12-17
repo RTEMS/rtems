@@ -22,7 +22,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_stackuse(int argc,char *argv[])
+int rtems_shell_main_stackuse(int argc,char *argv[])
 {
  rtems_stack_checker_report_usage_with_plugin(
     stdout,
@@ -31,11 +31,11 @@ int main_stackuse(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_STACKUSE_Command = {
+rtems_shell_cmd_t rtems_Shell_STACKUSE_Command = {
   "stackuse",                                 /* name */
   "print per thread stack usage",             /* usage */
   "rtems",                                    /* topic */
-  main_stackuse,                              /* command */
+  rtems_shell_main_stackuse,                  /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

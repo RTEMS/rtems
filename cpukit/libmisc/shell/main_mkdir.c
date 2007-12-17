@@ -27,7 +27,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_mkdir(int argc, char *argv[]) {
+int rtems_shell_main_mkdir(int argc, char *argv[]) {
   char *dir;
 
   int n;
@@ -41,11 +41,11 @@ int main_mkdir(int argc, char *argv[]) {
   return errno;
 }
 
-shell_cmd_t Shell_MKDIR_Command = {
+rtems_shell_cmd_t rtems_Shell_MKDIR_Command = {
   "mkdir",                                      /* name */
   "mkdir  dir   # make a directory",            /* usage */
   "files",                                      /* topic */
-  main_mkdir,                                   /* command */
+  rtems_shell_main_mkdir,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

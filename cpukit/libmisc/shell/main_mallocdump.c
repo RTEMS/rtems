@@ -21,19 +21,21 @@
 #include "internal.h"
 
 /*----------------------------------------------------------------------------*/
-int main_malloc_dump(int argc,char * argv[]) {
+int rtems_shell_main_malloc_dump(int argc,char * argv[]) {
  #ifdef MALLOC_STATS  /* /rtems/s/src/lib/libc/malloc.c */
    void malloc_dump(void);
    malloc_dump();
+ #else
+   fprintf(stdout, "No malloc dump built into RTEMS\n");
  #endif
  return 0;
 }
 
-shell_cmd_t Shell_MALLOC_DUMP_Command = {
+rtems_shell_cmd_t rtems_Shell_MALLOC_DUMP_Command = {
   "malloc",                                   /* name */
   "mem  show memory malloc'ed",               /* usage */
   "mem",                                      /* topic */
-  main_malloc_dump,                           /* command */
+  rtems_shell_main_malloc_dump,               /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

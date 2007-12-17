@@ -39,36 +39,36 @@
 #include <errno.h>
 #include <pwd.h>
 
-shell_env_t  global_shell_env;
-shell_env_t *current_shell_env;
+rtems_shell_env_t  rtems_global_shell_env;
+rtems_shell_env_t *rtems_current_shell_env;
 
 /*
  *  Initialize the shell user/process environment information
  */
-shell_env_t *shell_init_env(
-  shell_env_t *shell_env_arg
+rtems_shell_env_t *rtems_shell_init_env(
+  rtems_shell_env_t *shell_env_arg
 )
 {
-  shell_env_t *shell_env;
+  rtems_shell_env_t *shell_env;
   
   shell_env = shell_env_arg;
 
   if ( !shell_env ) {
-    shell_env = malloc(sizeof(shell_env_t));
+    shell_env = malloc(sizeof(rtems_shell_env_t));
     if ( !shell_env )
      return NULL;
   }
 
-  if (global_shell_env.magic != 0x600D600d) {
-    global_shell_env.magic      = 0x600D600d;
-    global_shell_env.devname    = "";
-    global_shell_env.taskname   = "GLOBAL";
-    global_shell_env.tcflag     = 0;
-    global_shell_env.exit_shell = 0;
-    global_shell_env.forever    = TRUE;
+  if (rtems_global_shell_env.magic != 0x600D600d) {
+    rtems_global_shell_env.magic      = 0x600D600d;
+    rtems_global_shell_env.devname    = "";
+    rtems_global_shell_env.taskname   = "GLOBAL";
+    rtems_global_shell_env.tcflag     = 0;
+    rtems_global_shell_env.exit_shell = 0;
+    rtems_global_shell_env.forever    = TRUE;
   }
 
-  *shell_env = global_shell_env;
+  *shell_env = rtems_global_shell_env;
   shell_env->taskname = NULL;
   shell_env->forever = FALSE;
 
@@ -78,7 +78,7 @@ shell_env_t *shell_init_env(
 /*
  *  Get a line of user input with modest features
  */
-int shell_scanline(char * line,int size,FILE * in,FILE * out) {
+int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) {
   int c,col;
 
   col = 0;
@@ -144,7 +144,7 @@ int shell_scanline(char * line,int size,FILE * in,FILE * out) {
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
 
-void init_issue(void) {
+void rtems_shell_init_issue(void) {
   static char issue_inited=FALSE;
   struct stat buf;
 
@@ -156,19 +156,19 @@ void init_issue(void) {
   getpwnam("root");
 
   if (stat("/etc/issue",&buf)) {
-    write_file("/etc/issue",
-        "Welcome to @V\\n"
-        "Login into @S\\n");
+    rtems_shell_write_file("/etc/issue",
+                           "Welcome to @V\\n"
+                           "Login into @S\\n");
   }
 
   if (stat("/etc/issue.net",&buf)) {
-     write_file("/etc/issue.net",
-        "Welcome to %v\n"
-        "running on %m\n");
+     rtems_shell_write_file("/etc/issue.net",
+                            "Welcome to %v\n"
+                            "running on %m\n");
   }
 }
 
-int shell_login(FILE * in,FILE * out) {
+int rtems_shell_login(FILE * in,FILE * out) {
   FILE          *fd;
   int            c;
   time_t         t;
@@ -177,23 +177,23 @@ int shell_login(FILE * in,FILE * out) {
   char           pass[128];
   struct passwd *passwd;
 
-  init_issue();
+  rtems_shell_init_issue();
   setuid(0);
   setgid(0);
   rtems_current_user_env->euid =
   rtems_current_user_env->egid =0;
 
   if (out) {
-    if ((current_shell_env->devname[5]!='p')||
-        (current_shell_env->devname[6]!='t')||
-        (current_shell_env->devname[7]!='y')) {
+    if ((rtems_current_shell_env->devname[5]!='p')||
+        (rtems_current_shell_env->devname[6]!='t')||
+        (rtems_current_shell_env->devname[7]!='y')) {
       fd = fopen("/etc/issue","r");
       if (fd) {
         while ((c=fgetc(fd))!=EOF) {
           if (c=='@')  {
             switch(c=fgetc(fd)) {
               case 'L':
-                fprintf(out,"%s",current_shell_env->devname);
+                fprintf(out,"%s",rtems_current_shell_env->devname);
                 break;
               case 'B':
                 fprintf(out,"0");
@@ -240,7 +240,7 @@ int shell_login(FILE * in,FILE * out) {
           if (c=='%')  {
             switch(c=fgetc(fd)) {
               case 't':
-                fprintf(out,"%s",current_shell_env->devname);
+                fprintf(out,"%s",rtems_current_shell_env->devname);
                 break;
               case 'h':
                 fprintf(out,"0");
@@ -286,9 +286,9 @@ int shell_login(FILE * in,FILE * out) {
     times++;
     if (times>3) break;
     if (out) fprintf(out,"\nlogin: ");
-    if (!shell_scanline(name,sizeof(name),in,out )) break;
+    if (!rtems_shell_scanline(name,sizeof(name),in,out )) break;
     if (out) fprintf(out,"Password: ");
-    if (!shell_scanline(pass,sizeof(pass),in,NULL)) break;
+    if (!rtems_shell_scanline(pass,sizeof(pass),in,NULL)) break;
     if (out) fprintf(out,"\n");
     if ((passwd=getpwnam(name))) {
       if (strcmp(passwd->pw_passwd,"!")) { /* valid user */
@@ -296,7 +296,7 @@ int shell_login(FILE * in,FILE * out) {
         setgid(passwd->pw_gid);
         rtems_current_user_env->euid =
         rtems_current_user_env->egid = 0;
-        chown(current_shell_env->devname,passwd->pw_uid,0);
+        chown(rtems_current_shell_env->devname,passwd->pw_uid,0);
         rtems_current_user_env->euid = passwd->pw_uid;
         rtems_current_user_env->egid = passwd->pw_gid;
         if (!strcmp(passwd->pw_passwd,"*")) {
@@ -317,8 +317,8 @@ int shell_login(FILE * in,FILE * out) {
 }
 
 #if defined(SHELL_DEBUG)
-void shell_print_env(
-  shell_env_t * shell_env
+void rtems_shell_print_env(
+  rtems_shell_env_t * shell_env
 )
 {
   if ( !shell_env ) {
@@ -342,40 +342,47 @@ void shell_print_env(
 }
 #endif
 
-rtems_task shell_shell(rtems_task_argument task_argument)
+rtems_task rtems_shell_shell(rtems_task_argument task_argument)
 {
-  shell_env_t * shell_env =(shell_env_t*) task_argument;
+  rtems_shell_env_t * shell_env = (rtems_shell_env_t*) task_argument;
 
-   shell_shell_loop( shell_env );
+   rtems_shell_shell_loop( shell_env );
    rtems_task_delete( RTEMS_SELF );
 }
 
-#define SHELL_MAXIMUM_ARGUMENTS 128
+#define RTEMS_SHELL_MAXIMUM_ARGUMENTS 128
 
-rtems_boolean shell_shell_loop(
-  shell_env_t *shell_env_arg
+rtems_boolean rtems_shell_shell_loop(
+  rtems_shell_env_t *shell_env_arg
 )
 {
-  shell_env_t       *shell_env;
-  shell_cmd_t       *shell_cmd;
+  rtems_shell_env_t *shell_env;
+  rtems_shell_cmd_t *shell_cmd;
   rtems_status_code  sc;
   struct termios     term;
   char               curdir[256];
   char               cmd[256];
   char               last_cmd[256]; /* to repeat 'r' */
   int                argc;
-  char              *argv[SHELL_MAXIMUM_ARGUMENTS];
+  char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
 
-  shell_initialize_command_set();
+  rtems_shell_initialize_command_set();
 
-  sc = rtems_task_variable_add(RTEMS_SELF,(void*)&current_shell_env,free);
+  /*
+   * @todo chrisj
+   * Remove the use of task variables. Chnage to have a single
+   * allocation per shell and then set into a notepad register
+   * in the TCP. Provide a function to return the pointer.
+   * Task variables are a virus to embedded systems software.
+   */
+  sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_shell_env,free);
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
     return FALSE;
   }
 
-  shell_env         = 
-  current_shell_env = shell_init_env( shell_env_arg );
+  shell_env               = 
+  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
  
   setuid(0);
   setgid(0);
@@ -401,7 +408,7 @@ rtems_boolean shell_shell_loop(
     setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
   }
 
-  shell_initialize_command_set();
+  rtems_shell_initialize_command_set();
   do {
     /* Set again root user and root filesystem, side effect of set_priv..*/
     sc = rtems_libio_set_private_env();
@@ -409,8 +416,8 @@ rtems_boolean shell_shell_loop(
       rtems_error(sc,"rtems_libio_set_private_env():");
       return FALSE;
     }
-    if (!shell_login(stdin,stdout))  {
-      cat_file(stdout,"/etc/motd");
+    if (!rtems_shell_login(stdin,stdout))  {
+      rtems_shell_cat_file(stdout,"/etc/motd");
       strcpy(last_cmd,"");
       strcpy(cmd,"");
       printf("\n"
@@ -429,7 +436,7 @@ rtems_boolean shell_shell_loop(
           geteuid()?'$':'#'
         );
         /* getcmd section */
-        if (!shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
+        if (!rtems_shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
           break; /*EOF*/
         }
 
@@ -456,8 +463,9 @@ rtems_boolean shell_shell_loop(
          *  Run in a new shell task background. (unix &)
          *  Resuming. A little bash.
          */
-        if (!shell_make_args(cmd, &argc, argv, SHELL_MAXIMUM_ARGUMENTS)) {
-          shell_cmd = shell_lookup_cmd(argv[0]);
+        if (!rtems_shell_make_args(cmd, &argc, argv,
+                                   RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
+          shell_cmd = rtems_shell_lookup_cmd(argv[0]);
           if ( argv[0] == NULL ) {
             shell_env->errorlevel = -1;
           } else if ( shell_cmd == NULL ) {
@@ -483,7 +491,7 @@ rtems_boolean shell_shell_loop(
 }
 
 /* ----------------------------------------------- */
-rtems_status_code   shell_init (
+rtems_status_code   rtems_shell_init (
   char                *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
@@ -494,7 +502,7 @@ rtems_status_code   shell_init (
 {
   rtems_id           task_id;
   rtems_status_code  sc;
-  shell_env_t       *shell_env;
+  rtems_shell_env_t *shell_env;
   rtems_name         name;
 
   if ( task_name )
@@ -516,7 +524,7 @@ rtems_status_code   shell_init (
     return sc;
   }
 
-  shell_env = shell_init_env( NULL );
+  shell_env = rtems_shell_init_env( NULL );
   if ( !shell_env )  {
    rtems_error(sc,"allocating shell_env %s in shell_init()",task_name);
    return RTEMS_NO_MEMORY;
@@ -527,5 +535,6 @@ rtems_status_code   shell_init (
   shell_env->exit_shell = FALSE;
   shell_env->forever    = forever;
 
-  return rtems_task_start(task_id,shell_shell,(rtems_task_argument) shell_env);
+  return rtems_task_start(task_id,rtems_shell_shell,
+                          (rtems_task_argument) shell_env);
 }

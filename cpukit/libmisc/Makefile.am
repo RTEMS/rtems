@@ -64,6 +64,10 @@ libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c mw-fb/mw_fb.h \
 
 if LIBSHELL
 noinst_LIBRARIES += libshell.a
+if LIBNETWORKING
+shell_mount_fs = shell/main_mount_ftp.c shell/main_mount_nfs.c \
+    shell/main_mount_tftp.c
+endif
 libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_alias.c shell/main_cat.c shell/main_cd.c \
     shell/main_chdir.c shell/main_chmod.c shell/main_chroot.c \
@@ -71,10 +75,11 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_exit.c shell/main_help.c shell/main_id.c \
     shell/main_logoff.c shell/main_ls.c shell/main_mallocdump.c \
     shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
-    shell/main_mkdir.c shell/main_mmove.c shell/main_mwdump.c \
-    shell/main_pwd.c shell/main_rm.c shell/main_rmdir.c shell/main_stackuse.c \
-    shell/main_tty.c shell/main_umask.c shell/main_whoami.c \
-    shell/shell.c shell/shell_cmdset.c shell/shellconfig.c \
+    shell/main_mkdir.c shell/main_mount.c  $(shell_mount_fs) \
+    shell/main_mount_msdos.c shell/main_mmove.c shell/main_mwdump.c \
+    shell/main_pwd.c shell/main_rm.c shell/main_rmdir.c \
+    shell/main_stackuse.c shell/main_tty.c shell/main_umask.c \
+    shell/main_whoami.c shell/shell.c shell/shell_cmdset.c shell/shellconfig.c \
     shell/shellconfig.h shell/shell.h shell/shell_makeargs.c \
     shell/str2int.c shell/write_file.c
 endif

@@ -11,69 +11,71 @@
  *   HOME: correo@fernando-ruiz.com
  *
  *   Thanks at:
- *    Chris John
+ *    Chris Johns
  *
  *  $Id$
  */
 
-#ifndef __SHELL_H__
-#define __SHELL_H__
+#ifndef __RTEMS_SHELL_H__
+#define __RTEMS_SHELL_H__
 
 #include <rtems.h>
 #include <stdio.h>
 #include <termios.h>
+#include <rtems/fs.h>
+#include <rtems/libio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef int (*shell_command_t)(int argc,char * argv[]);
+typedef int (*rtems_shell_command_t)(int argc,char * argv[]);
 
-struct shell_cmd_tt;
-typedef struct shell_cmd_tt shell_cmd_t;
+struct rtems_shell_cmd_tt;
+typedef struct rtems_shell_cmd_tt rtems_shell_cmd_t;
 
-struct shell_cmd_tt {
-  char            *name;
-  char            *usage;
-  char            *topic;
-  shell_command_t  command;
-  shell_cmd_t     *alias;
-  shell_cmd_t     *next;
+struct rtems_shell_cmd_tt {
+  char                  *name;
+  char                  *usage;
+  char                  *topic;
+  rtems_shell_command_t  command;
+  rtems_shell_cmd_t     *alias;
+  rtems_shell_cmd_t     *next;
 };
 
 typedef struct {
   char            *name;
   char            *alias;
-} shell_alias_t;
+} rtems_shell_alias_t;
 
-shell_cmd_t * shell_lookup_cmd(char * cmd);
+rtems_shell_cmd_t * rtems_shell_lookup_cmd(char * cmd);
 
-shell_cmd_t *shell_add_cmd_struct(
-  shell_cmd_t *shell_cmd
+rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
+  rtems_shell_cmd_t *shell_cmd
 );
 
-shell_cmd_t * shell_add_cmd(
-  char            *cmd,
-  char            *topic,
-  char            *usage,
-  shell_command_t  command
+rtems_shell_cmd_t * rtems_shell_add_cmd(
+  char                  *cmd,
+  char                  *topic,
+  char                  *usage,
+  rtems_shell_command_t  command
 );
 
-shell_cmd_t * shell_alias_cmd(
+rtems_shell_cmd_t * rtems_shell_alias_cmd(
   char *cmd,
   char *alias
 );
 
-int shell_make_args(
+int rtems_shell_make_args(
   char  *commandLine,
   int   *argc_p, 
   char **argv_p, 
   int    max_args
 );
 
-int shell_scanline(char * line,int size,FILE * in,FILE * out) ;
-void cat_file(FILE * out,char *name);
-void write_file(char *name,char * content);
+int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) ;
+void rtems_shell_cat_file(FILE * out,char *name);
+void rtems_shell_write_file(char *name,char * content);
 
 /**
  * Initialise the shell creating tasks to login and run the shell
@@ -90,7 +92,7 @@ void write_file(char *name,char * content);
  *           needs to adjust the termios for its use but it should assume the
  *           settings are set by the user for things like baudrate etc.
  */
-rtems_status_code shell_init(
+rtems_status_code rtems_shell_init(
   char                *task_name,
   uint32_t             task_stacksize,  /*0 default*/
   rtems_task_priority  task_priority,
@@ -103,7 +105,7 @@ rtems_status_code shell_init(
  *  Things that are useful to external entities developing commands and plugging
  *  them in.
  */
-int str2int(char * s);
+int rtems_shell_str2int(char * s);
 
 typedef struct  {
   rtems_name  magic; /* 'S','E','N','V': Shell Environment */
@@ -115,14 +117,36 @@ typedef struct  {
   int         forever   ; /* repeat login */
   int         errorlevel;
   uintptr_t   mdump_addr;
-} shell_env_t;
+} rtems_shell_env_t;
 
-rtems_boolean shell_shell_loop(
-  shell_env_t *shell_env
+rtems_boolean rtems_shell_shell_loop(
+  rtems_shell_env_t *rtems_shell_env
 );
 
-extern shell_env_t  global_shell_env;
-extern shell_env_t *current_shell_env;
+extern rtems_shell_env_t  rtems_global_shell_env;
+extern rtems_shell_env_t *rtems_current_shell_env;
+
+/*
+ * The types of file systems we can mount. We have them broken out
+ * out like this so they can be configured by shellconfig.h. The
+ * mount command needs special treatment due to some file systems
+ * being dependent on the network stack and some not. If we had
+ * all possible file systems being included it would force the
+ * networking stack into the applcation and this may not be
+ * required.
+ */ 
+struct rtems_shell_filesystems_tt;
+typedef struct rtems_shell_filesystems_tt rtems_shell_filesystems_t;
+typedef int (*rtems_shell_filesystems_mounter_t)(const char*                driver,
+                                                 const char*                path,
+                                                 rtems_shell_filesystems_t* fs,
+                                                 rtems_filesystem_options_t options);
+struct rtems_shell_filesystems_tt {
+  const char*                        name;
+  int                                driver_needed;
+  rtems_filesystem_operations_table* fs_ops;
+  rtems_shell_filesystems_mounter_t  mounter;
+};
 
 #ifdef __cplusplus
 }

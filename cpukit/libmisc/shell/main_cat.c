@@ -35,21 +35,21 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_cat(int argc, char *argv[])
+int rtems_shell_main_cat(int argc, char *argv[])
 {
    int n;
    n=1;
 
    while (n<argc)
-     cat_file(stdout,argv[n++]);
+     rtems_shell_cat_file(stdout,argv[n++]);
    return 0;
 }
 
-shell_cmd_t Shell_CAT_Command = {
+rtems_shell_cmd_t rtems_Shell_CAT_Command = {
   "cat",                                           /* name */
   "cat n1 [n2 [n3...]] # show the ascii contents", /* usage */
   "files",                                         /* topic */
-  main_cat ,                                       /* command */
+  rtems_shell_main_cat ,                           /* command */
   NULL,                                            /* alias */
   NULL                                             /* next */
 };

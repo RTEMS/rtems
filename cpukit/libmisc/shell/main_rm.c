@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_rm(int argc, char *argv[])
+int rtems_shell_main_rm(int argc, char *argv[])
 {
    int n;
    n = 1;
@@ -40,11 +40,11 @@ int main_rm(int argc, char *argv[])
    return 0;
 }
 
-shell_cmd_t Shell_RM_Command = {
+rtems_shell_cmd_t rtems_Shell_RM_Command = {
   "rm",                                      /* name */
   "rm n1 [n2 [n3...]] # remove files",       /* usage */
   "files",                                   /* topic */
-  main_rm,                                   /* command */
+  rtems_shell_main_rm,                       /* command */
   NULL,                                      /* alias */
   NULL                                       /* next */
 };

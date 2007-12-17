@@ -22,24 +22,24 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_alias(int argc, char **argv)
+int rtems_shell_rtems_main_alias(int argc, char **argv)
 {
   if (argc<3) {
     fprintf(stdout,"too few arguments\n");
     return 1;
   }
 
-  if (!shell_alias_cmd(argv[1],argv[2])) {
+  if (!rtems_shell_alias_cmd(argv[1],argv[2])) {
     fprintf(stdout,"unable to make an alias(%s,%s)\n",argv[1],argv[2]);
   }
   return 0;
 }
 
-shell_cmd_t Shell_ALIAS_Command = {
+rtems_shell_cmd_t rtems_Shell_ALIAS_Command = {
   "alias",                                /* name */
   "alias old new",                        /* usage */
   "misc",                                 /* topic */
-  main_alias,                             /* command */
+  rtems_shell_rtems_main_alias,           /* command */
   NULL,                                   /* alias */
   NULL                                    /* next */
 };

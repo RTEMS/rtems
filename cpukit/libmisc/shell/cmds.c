@@ -28,7 +28,7 @@
  * with this you can call at all the rtems monitor commands.
  * Not all work fine but you can show the rtems status and more.
  *-----------------------------------------------------------*/
-int main_monitor(int argc,char * argv[]) {
+int rtems_shell_main_monitor(int argc,char * argv[]) {
   rtems_monitor_command_entry_t *command;
 
   if ((command=rtems_monitor_command_lookup(rtems_monitor_commands,argc,argv)))
@@ -37,15 +37,15 @@ int main_monitor(int argc,char * argv[]) {
   return 0;
 }
 
-void shell_register_monitor_commands(void)
+void rtems_shell_register_monitor_commands(void)
 {
   rtems_monitor_command_entry_t *command;
   /* monitor topic */
   command = rtems_monitor_commands;
   while (command) {
    if (strcmp("exit",command->command)) /* Exclude EXIT (alias quit)*/
-     shell_add_cmd(command->command,"monitor",
-                   command->usage  ,main_monitor);
+     rtems_shell_add_cmd(command->command,"monitor",
+                         command->usage,rtems_shell_main_monitor);
      command = command->next;
   }
 }

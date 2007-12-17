@@ -24,9 +24,9 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-extern int main_mdump(int, char *);
+extern int rtems_shell_main_mdump(int, char *);
 
-int main_mfill(int argc,char * argv[]) {
+int rtems_shell_main_mfill(int argc,char * argv[]) {
   uintptr_t  addr;
   size_t     size;
   unsigned char value;
@@ -36,20 +36,20 @@ int main_mfill(int argc,char * argv[]) {
     return 0;
   }
 
-  addr = str2int(argv[1]);
-  size = str2int(argv[2]);
-  value= str2int(argv[3]) % 0x100;
+  addr = rtems_shell_str2int(argv[1]);
+  size = rtems_shell_str2int(argv[2]);
+  value= rtems_shell_str2int(argv[3]) % 0x100;
   memset((unsigned char*)addr,size,value);
-  current_shell_env->mdump_addr = addr;
+  rtems_current_shell_env->mdump_addr = addr;
 
-  return main_mdump(0,NULL);
+  return rtems_shell_main_mdump(0,NULL);
 }
 
-shell_cmd_t Shell_MFILL_Command = {
+rtems_shell_cmd_t rtems_Shell_MFILL_Command = {
   "mfill",                                      /* name */
   "mfill addr size value",                      /* usage */
   "mem",                                        /* topic */
-  main_mfill,                                   /* command */
+  rtems_shell_main_mfill,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

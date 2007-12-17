@@ -26,17 +26,17 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_tty(int argc,char *argv[])
+int rtems_shell_main_tty(int argc,char *argv[])
 {
   printf("%s\n",ttyname(fileno(stdin)));
   return 0;
 }
 
-shell_cmd_t Shell_TTY_Command = {
+rtems_shell_cmd_t rtems_Shell_TTY_Command = {
   "tty",                                      /* name */
   "show ttyname",                             /* usage */
   "misc",                                     /* topic */
-  main_tty  ,                                 /* command */
+  rtems_shell_main_tty,                       /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_chdir (int argc, char *argv[]) {
+int rtems_shell_main_chdir (int argc, char *argv[]) {
   char *dir;
 
   dir = "/";
@@ -40,11 +40,11 @@ int main_chdir (int argc, char *argv[]) {
   return 0;
 }
 
-shell_cmd_t Shell_CHDIR_Command = {
+rtems_shell_cmd_t rtems_Shell_CHDIR_Command = {
   "chdir",                                        /* name */
   "chdir [dir]  # change the current directory",  /* usage */
   "files",                                        /* topic */
-  main_chdir,                                     /* command */
+  rtems_shell_main_chdir,                         /* command */
   NULL,                                           /* alias */
   NULL                                            /* next */
 };

@@ -23,7 +23,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_pwd (int argc, char *argv[]) {
+int rtems_shell_main_pwd (int argc, char *argv[]) {
   char dir[1024];
 
   getcwd(dir,1024);
@@ -31,11 +31,11 @@ int main_pwd (int argc, char *argv[]) {
   return 0;
 }
 
-shell_cmd_t Shell_PWD_Command = {
+rtems_shell_cmd_t rtems_Shell_PWD_Command = {
   "pwd",                                        /* name */
   "pwd          # print work directory",        /* usage */
   "files",                                      /* topic */
-  main_pwd  ,                                   /* command */
+  rtems_shell_main_pwd,                         /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

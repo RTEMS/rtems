@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_rmdir (int argc, char *argv[])
+int rtems_shell_main_rmdir (int argc, char *argv[])
 {
   char *dir;
   int n;
@@ -39,11 +39,11 @@ int main_rmdir (int argc, char *argv[])
   return errno;
 }
 
-shell_cmd_t Shell_RMDIR_Command = {
+rtems_shell_cmd_t rtems_Shell_RMDIR_Command = {
   "rmdir",                                      /* name */
   "rmdir  dir   # remove directory",            /* usage */
   "files",                                      /* topic */
-  main_rmdir,                                   /* command */
+  rtems_shell_main_rmdir,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

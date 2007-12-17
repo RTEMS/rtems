@@ -1,3 +1,39 @@
+2007-12-17	Chris Johns <chrisj@rtems.org>
+
+	* libnetworking/rtems/tftp.h: Provide a decl to the TFTP file
+	system opts table.
+	* libnetworking/rtems/ftpfs.h: Provide a decl to the FTP file
+	system opts table.
+	* libmisc/Makefile.am: Add the mount command and supporting files.
+	* libmisc/preinstall.am: Rebuilt.
+	* libmisc/shell/cat_file.c, libmisc/shell/cmds.c,
+	libmisc/shell/main_alias.c, libmisc/shell/main_cat.c,
+	libmisc/shell/main_cd.c, libmisc/shell/main_chdir.c,
+	libmisc/shell/main_chmod.c, libmisc/shell/main_chroot.c,
+	libmisc/shell/main_cpuuse.c, libmisc/shell/main_date.c,
+	libmisc/shell/main_dir.c, libmisc/shell/main_exit.c,
+	libmisc/shell/main_help.c, libmisc/shell/main_id.c,
+	libmisc/shell/main_logoff.c, libmisc/shell/main_ls.c,
+	libmisc/shell/main_mallocdump.c, libmisc/shell/main_mdump.c,
+	libmisc/shell/main_medit.c, libmisc/shell/main_mfill.c,
+	libmisc/shell/main_mkdir.c, libmisc/shell/main_mmove.c,
+	libmisc/shell/main_mwdump.c, libmisc/shell/main_pwd.c,
+	libmisc/shell/main_rm.c, libmisc/shell/main_rmdir.c,
+	libmisc/shell/main_stackuse.c, libmisc/shell/main_tty.c,
+	libmisc/shell/main_umask.c, libmisc/shell/main_whoami.c,
+	libmisc/shell/shell.c, libmisc/shell/shell_cmdset.c,
+	libmisc/shell/shell_makeargs.c, libmisc/shell/str2int.c, 
+	libmisc/shell/write_file.c: Move all shell_* types, variables and
+	functions to rtems_shell_* to avoid namespace clashes with
+	applications. The is an RTEMS shell after all.
+	* libmisc/shell/shell.h, libmisc/shell/internal.h,
+	libmisc/shell/shellconfig.h: Move all shell_* types, variables and
+	functions to rtems_shell_* to avoid namespace clashes with
+	applications. Add the mount command supporting types.
+	* libmisc/shell/main_mount.c, libmisc/shell/main_mount_ftp.c,
+	libmisc/shell/main_mount_msdos.c, libmisc/shell/main_mount_nfs.c,
+	libmisc/shell/main_mount_tftp.c: New.
+	
 2007-12-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Revert Joel's 2007-06-13 NDEBUG patch.

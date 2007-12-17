@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <string.h>
 
-void write_file(
+void rtems_shell_write_file(
   char *name,
   char * content
 )

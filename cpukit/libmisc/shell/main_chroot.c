@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_chroot(int argc,char * argv[]) {
+int rtems_shell_main_chroot(int argc,char * argv[]) {
   char *new_root="/";
 
   if (argc==2)
@@ -39,11 +39,11 @@ int main_chroot(int argc,char * argv[]) {
   return 0;
 }
 
-shell_cmd_t Shell_CHROOT_Command = {
+rtems_shell_cmd_t rtems_Shell_CHROOT_Command = {
   "chroot",                                     /* name */
   "chroot [dir] # change the root directory",   /* usage */
   "files",                                      /* topic */
-  main_chroot,                                  /* command */
+  rtems_shell_main_chroot,                      /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

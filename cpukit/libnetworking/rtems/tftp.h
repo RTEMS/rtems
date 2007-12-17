@@ -30,11 +30,19 @@
 extern "C" {
 #endif
 
+#include <rtems/libio.h>
+
 /*
  * Filesystem initialization routine
  */
 
 int rtems_bsdnet_initialize_tftp_filesystem( void );
+
+/*
+ * TFTP file system operations table.
+ */
+
+extern rtems_filesystem_operations_table  rtems_tftp_ops;
 
 #ifdef __cplusplus
 }

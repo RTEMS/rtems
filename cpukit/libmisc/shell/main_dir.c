@@ -20,7 +20,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-shell_alias_t Shell_DIR_Alias = {
+rtems_shell_alias_t rtems_Shell_DIR_Alias = {
   "ls",                      /* command */
   "dir"                      /* alias */
 };

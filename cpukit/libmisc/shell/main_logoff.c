@@ -23,20 +23,20 @@
 #include "internal.h"
 
 /*-----------------------------------------------------------*/
-int main_logoff(int argc,char *argv[])
+int rtems_shell_main_logoff(int argc,char *argv[])
 {
   printf("logoff from the system...");
 
-  current_shell_env->exit_shell=TRUE;
+  rtems_current_shell_env->exit_shell=TRUE;
 
   return 0;
 }
 
-shell_cmd_t Shell_LOGOFF_Command = {
+rtems_shell_cmd_t rtems_Shell_LOGOFF_Command = {
   "logoff",                                  /* name */
   "logoff from the system",                  /* usage */
   "misc",                                    /* topic */
-  main_logoff,                               /* command */
+  rtems_shell_main_logoff,                   /* command */
   NULL,                                      /* alias */
   NULL                                       /* next */
 };

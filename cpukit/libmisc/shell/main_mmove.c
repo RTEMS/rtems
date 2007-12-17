@@ -24,9 +24,9 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-extern int main_mdump(int, char *);
+extern int rtems_shell_main_mdump(int, char *);
 
-int main_mmove(int argc,char * argv[]) {
+int rtems_shell_main_mmove(int argc,char * argv[]) {
  uintptr_t  src;
  uintptr_t  dst;
  size_t     size;
@@ -36,20 +36,20 @@ int main_mmove(int argc,char * argv[]) {
   return 0;
  }
 
- dst  = str2int(argv[1]);
- src  = str2int(argv[2]);
- size = str2int(argv[3]);
+ dst  = rtems_shell_str2int(argv[1]);
+ src  = rtems_shell_str2int(argv[2]);
+ size = rtems_shell_str2int(argv[3]);
  memcpy((unsigned char*)dst, (unsigned char*)src, size);
- current_shell_env->mdump_addr = dst;
+ rtems_current_shell_env->mdump_addr = dst;
 
- return main_mdump(0,NULL);
+ return rtems_shell_main_mdump(0,NULL);
 }
 
-shell_cmd_t Shell_MMOVE_Command = {
+rtems_shell_cmd_t rtems_Shell_MMOVE_Command = {
   "mmove",                                      /* name */
   "mmove dst src size",                         /* usage */
   "mem",                                        /* topic */
-  main_mmove,                                   /* command */
+  rtems_shell_main_mmove,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

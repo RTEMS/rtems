@@ -28,12 +28,12 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_umask(int argc,char *argv[])
+int rtems_shell_main_umask(int argc,char *argv[])
 {
   mode_t msk = umask(0);
 
   if (argc == 2)
-    msk = str2int(argv[1]);
+    msk = rtems_shell_str2int(argv[1]);
   umask(msk);
 
   msk = umask(0);
@@ -42,11 +42,11 @@ int main_umask(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_UMASK_Command = {
+rtems_shell_cmd_t rtems_Shell_UMASK_Command = {
   "umask",                                    /* name */
   "umask [new_umask]",                        /* usage */
   "misc",                                     /* topic */
-  main_umask ,                                /* command */
+  rtems_shell_main_umask,                     /* command */
   NULL,                                       /* alias */
   NULL                                        /* next */
 };

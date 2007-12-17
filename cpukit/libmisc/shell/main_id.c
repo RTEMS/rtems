@@ -28,7 +28,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_id(int argc,char *argv[])
+int rtems_shell_main_id(int argc,char *argv[])
 {
   struct passwd *pwd;
   struct group  *grp;
@@ -54,11 +54,11 @@ int main_id(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_ID_Command = {
+rtems_shell_cmd_t rtems_Shell_ID_Command = {
   "id",                                      /* name */
   "show uid, gid, euid, and egid",           /* usage */
   "misc",                                    /* topic */
-  main_id    ,                               /* command */
+  rtems_shell_main_id,                       /* command */
   NULL,                                      /* alias */
   NULL                                       /* next */
 };

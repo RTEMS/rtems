@@ -27,8 +27,13 @@
 extern "C" {
 #endif
 
+#include <rtems/libio.h>
+
   /* create mount point and mount ftp file system */
   int rtems_bsdnet_initialize_ftp_filesystem () ;
+
+  /* FTP File sysem operations table. */
+  extern rtems_filesystem_operations_table rtems_ftp_ops;
 
 #ifdef __cplusplus
 }

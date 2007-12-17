@@ -24,9 +24,9 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-extern int main_mdump(int, char *);
+extern int rtems_shell_main_mdump(int, char *);
 
-int main_medit(int argc,char * argv[]) {
+int rtems_shell_main_medit(int argc,char * argv[]) {
   unsigned char * pb;
   int n,i;
 
@@ -35,22 +35,22 @@ int main_medit(int argc,char * argv[]) {
     return 0;
   }
 
-  pb = (unsigned char*)str2int(argv[1]);
+  pb = (unsigned char*)rtems_shell_str2int(argv[1]);
   i = 2;
   n = 0;
   while (i<=argc) {
-    pb[n++] = str2int(argv[i++])%0x100;
+    pb[n++] = rtems_shell_str2int(argv[i++])%0x100;
   }
-  current_shell_env->mdump_addr = (int)pb;
+  rtems_current_shell_env->mdump_addr = (int)pb;
 
-  return main_mdump(0,NULL);
+  return rtems_shell_main_mdump(0,NULL);
 }
 
-shell_cmd_t Shell_MEDIT_Command = {
+rtems_shell_cmd_t rtems_Shell_MEDIT_Command = {
   "medit",                                      /* name */
   "medit addr value [value ...]",               /* usage */
   "mem",                                        /* topic */
-  main_medit,                                   /* command */
+  rtems_shell_main_medit,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

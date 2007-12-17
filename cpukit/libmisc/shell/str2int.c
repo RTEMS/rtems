@@ -21,7 +21,7 @@
 /*
  * str to int "0xaffe" "0b010010" "0123" "192939"
  */
-int str2int(char * s) {
+int rtems_shell_str2int(char * s) {
   int sign=1;
   int base=10;
   int value=0;

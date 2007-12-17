@@ -27,7 +27,7 @@
 /*
  * show the help for one command.
  */
-int shell_help_cmd(shell_cmd_t * shell_cmd) {
+int rtems_shell_help_cmd(rtems_shell_cmd_t * shell_cmd) {
   char * pc;
   int    col,line;
 
@@ -73,19 +73,19 @@ int shell_help_cmd(shell_cmd_t * shell_cmd) {
  * Can you see the header of routine? Known?
  * The same with all the commands....
  */
-int shell_help(
+int rtems_shell_help(
   int argc,
   char * argv[]
 )
 {
   int col,line,arg;
-  shell_topic_t *topic;
-  shell_cmd_t * shell_cmd = shell_first_cmd;
+  rtems_shell_topic_t *topic;
+  rtems_shell_cmd_t * shell_cmd = rtems_shell_first_cmd;
 
   if (argc<2) {
     printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
            "  TOPIC? The topics are\n");
-    topic = shell_first_topic;
+    topic = rtems_shell_first_topic;
     col = 0;
     while (topic) {
       if (!col){
@@ -110,14 +110,14 @@ int shell_help(
       printf("\n");
       line = 0;
     }
-    topic  =  shell_lookup_topic(argv[arg]);
+    topic  =  rtems_shell_lookup_topic(argv[arg]);
     if (!topic){
-      if ((shell_cmd = shell_lookup_cmd(argv[arg])) == NULL) {
+      if ((shell_cmd = rtems_shell_lookup_cmd(argv[arg])) == NULL) {
         printf("help: topic or cmd '%s' not found. Try <help> alone for a list\n",
             argv[arg]);
         line++;
       } else {
-        line+= shell_help_cmd(shell_cmd);
+        line+= rtems_shell_help_cmd(shell_cmd);
       }
       continue;
     }
@@ -125,7 +125,7 @@ int shell_help(
     line++;
     while (shell_cmd) {
       if (!strcmp(topic->topic,shell_cmd->topic))
-        line+= shell_help_cmd(shell_cmd);
+        line+= rtems_shell_help_cmd(shell_cmd);
       if (line>16) {
         printf("Press any key to continue...");
         getchar();
@@ -139,11 +139,11 @@ int shell_help(
   return 0;
 }
 
-shell_cmd_t Shell_HELP_Command  =  {
+rtems_shell_cmd_t rtems_Shell_HELP_Command  =  {
   "help",                                       /* name  */
    "help [topic] # list of usage of commands",  /* usage */
   "help",                                       /* topic */
-  shell_help,                                   /* command */
+  rtems_shell_help,                             /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

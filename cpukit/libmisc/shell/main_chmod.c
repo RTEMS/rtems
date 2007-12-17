@@ -28,13 +28,13 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int main_chmod(int argc,char *argv[])
+int rtems_shell_main_chmod(int argc,char *argv[])
 {
   int n;
   mode_t mode;
 
   if (argc > 2){
-    mode = str2int(argv[1])&0777;
+    mode = rtems_shell_str2int(argv[1])&0777;
     n = 2;
     while (n<argc)
       chmod(argv[n++], mode);
@@ -42,11 +42,11 @@ int main_chmod(int argc,char *argv[])
   return 0;
 }
 
-shell_cmd_t Shell_CHMOD_Command = {
+rtems_shell_cmd_t rtems_Shell_CHMOD_Command = {
   "chmod",                                      /* name */
   "chmod 0777 n1 n2... # change filemode",      /* usage */
   "files",                                      /* topic */
-  main_chmod,                                   /* command */
+  rtems_shell_main_chmod,                       /* command */
   NULL,                                         /* alias */
   NULL                                          /* next */
 };

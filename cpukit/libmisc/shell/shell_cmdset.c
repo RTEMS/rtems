@@ -44,37 +44,37 @@
  * 
  */
 
-shell_cmd_t   * shell_first_cmd;
-shell_topic_t * shell_first_topic;
+rtems_shell_cmd_t   * rtems_shell_first_cmd;
+rtems_shell_topic_t * rtems_shell_first_topic;
 
 /*
  *  Find the topic from the set of topics registered.
  */
-shell_topic_t * shell_lookup_topic(char * topic) {
-  shell_topic_t * shell_topic;
-  shell_topic=shell_first_topic;
+rtems_shell_topic_t * rtems_shell_lookup_topic(char * topic) {
+  rtems_shell_topic_t * shell_topic;
+  shell_topic=rtems_shell_first_topic;
 
   while (shell_topic) {
     if (!strcmp(shell_topic->topic,topic))
       return shell_topic;
     shell_topic=shell_topic->next;
   }
-  return (shell_topic_t *) NULL;
+  return (rtems_shell_topic_t *) NULL;
 }
 
 /*
  *  Add a new topic to the list of topics
  */
-shell_topic_t * shell_add_topic(char * topic) {
-  shell_topic_t * current,*aux;
+rtems_shell_topic_t * rtems_shell_add_topic(char * topic) {
+  rtems_shell_topic_t * current,*aux;
 
-  if (!shell_first_topic) {
-    aux = malloc(sizeof(shell_topic_t));
+  if (!rtems_shell_first_topic) {
+    aux = malloc(sizeof(rtems_shell_topic_t));
     aux->topic = topic;
-    aux->next  = (shell_topic_t*)NULL;
-    return shell_first_topic = aux;
+    aux->next  = (rtems_shell_topic_t*)NULL;
+    return rtems_shell_first_topic = aux;
   }
-  current=shell_first_topic;
+  current=rtems_shell_first_topic;
   if (!strcmp(topic,current->topic))
     return current;
 
@@ -83,9 +83,9 @@ shell_topic_t * shell_add_topic(char * topic) {
       return current->next;
     current=current->next;
   }
-  aux = malloc(sizeof(shell_topic_t));
+  aux = malloc(sizeof(rtems_shell_topic_t));
   aux->topic = topic;
-  aux->next = (shell_topic_t*)NULL;
+  aux->next = (rtems_shell_topic_t*)NULL;
   current->next = aux;
   return aux;
 }
@@ -93,41 +93,41 @@ shell_topic_t * shell_add_topic(char * topic) {
 /*
  *  Find the command in the set
  */
-shell_cmd_t * shell_lookup_cmd(char * cmd) {
-  shell_cmd_t * shell_cmd;
-  shell_cmd=shell_first_cmd;
+rtems_shell_cmd_t * rtems_shell_lookup_cmd(char * cmd) {
+  rtems_shell_cmd_t * shell_cmd;
+  shell_cmd=rtems_shell_first_cmd;
   while (shell_cmd) {
    if (!strcmp(shell_cmd->name,cmd)) return shell_cmd;
    shell_cmd=shell_cmd->next;
   };
-  return (shell_cmd_t *) NULL;
+  return (rtems_shell_cmd_t *) NULL;
 }
 
 /*
  *  Add a command structure to the set of known commands
  */
-shell_cmd_t *shell_add_cmd_struct(
-  shell_cmd_t *shell_cmd
+rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
+  rtems_shell_cmd_t *shell_cmd
 )
 {
-  shell_cmd_t *shell_pvt;
+  rtems_shell_cmd_t *shell_pvt;
   
-  shell_pvt = shell_first_cmd;
+  shell_pvt = rtems_shell_first_cmd;
   while (shell_pvt) {
     if (strcmp(shell_pvt->name, shell_cmd->name) == 0)
       return NULL;
     shell_pvt = shell_pvt->next;
   }
 
-  if ( !shell_first_cmd ) {
-    shell_first_cmd = shell_cmd;
+  if ( !rtems_shell_first_cmd ) {
+    rtems_shell_first_cmd = shell_cmd;
   } else {
-    shell_pvt = shell_first_cmd;
+    shell_pvt = rtems_shell_first_cmd;
     while (shell_pvt->next)
       shell_pvt = shell_pvt->next;
     shell_pvt->next = shell_cmd;
   }  
-  shell_add_topic( shell_cmd->topic );
+  rtems_shell_add_topic( shell_cmd->topic );
   return shell_cmd;
 }
 
@@ -135,29 +135,29 @@ shell_cmd_t *shell_add_cmd_struct(
  *  Add a command as a set of arguments to the set and 
  *  allocate the command structure on the fly.
  */
-shell_cmd_t * shell_add_cmd(
-  char            *cmd,
-  char            *topic,
-  char            *usage,
-  shell_command_t  command
+rtems_shell_cmd_t * rtems_shell_add_cmd(
+  char                  *cmd,
+  char                  *topic,
+  char                  *usage,
+  rtems_shell_command_t  command
 )
 {
-  shell_cmd_t *shell_cmd;
+  rtems_shell_cmd_t *shell_cmd;
 
   if (!cmd)
-    return (shell_cmd_t *) NULL;
+    return (rtems_shell_cmd_t *) NULL;
   if (!command)
-    return (shell_cmd_t *) NULL;
+    return (rtems_shell_cmd_t *) NULL;
 
-  shell_cmd          = (shell_cmd_t *) malloc(sizeof(shell_cmd_t));
+  shell_cmd          = (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
   shell_cmd->name    = strdup( cmd );
   shell_cmd->topic   = strdup( topic );
   shell_cmd->usage   = strdup( usage );
   shell_cmd->command = command;
-  shell_cmd->alias   = (shell_cmd_t *) NULL;
-  shell_cmd->next    = (shell_cmd_t *) NULL;
+  shell_cmd->alias   = (rtems_shell_cmd_t *) NULL;
+  shell_cmd->next    = (rtems_shell_cmd_t *) NULL;
 
-  if (shell_add_cmd_struct( shell_cmd ) == NULL) {
+  if (rtems_shell_add_cmd_struct( shell_cmd ) == NULL) {
     free( shell_cmd->usage );
     free( shell_cmd->topic );
     free( shell_cmd->name );
@@ -169,42 +169,42 @@ shell_cmd_t * shell_add_cmd(
 }
 
 
-void shell_initialize_command_set(void)
+void rtems_shell_initialize_command_set(void)
 {
-  shell_cmd_t **c;
-  shell_alias_t **a;
+  rtems_shell_cmd_t **c;
+  rtems_shell_alias_t **a;
 
-  for ( c = Shell_Initial_commands ; *c  ; c++ ) {
-    shell_add_cmd_struct( *c );
+  for ( c = rtems_Shell_Initial_commands ; *c  ; c++ ) {
+    rtems_shell_add_cmd_struct( *c );
   }
 
-  for ( a = Shell_Initial_aliases ; *a  ; a++ ) {
-    shell_alias_cmd( (*a)->name, (*a)->alias );
+  for ( a = rtems_Shell_Initial_aliases ; *a  ; a++ ) {
+    rtems_shell_alias_cmd( (*a)->name, (*a)->alias );
   }
 
-  shell_register_monitor_commands();
+  rtems_shell_register_monitor_commands();
 }
 
 /* ----------------------------------------------- *
  * you can make an alias for every command.
  * ----------------------------------------------- */
-shell_cmd_t *shell_alias_cmd(
+rtems_shell_cmd_t *rtems_shell_alias_cmd(
   char *cmd,
   char *alias
 )
 {
-  shell_cmd_t *shell_cmd, *shell_aux;
+  rtems_shell_cmd_t *shell_cmd, *shell_aux;
 
-  shell_aux = (shell_cmd_t *) NULL;
+  shell_aux = (rtems_shell_cmd_t *) NULL;
 
   if (alias) {
-    shell_aux = shell_lookup_cmd(alias);
+    shell_aux = rtems_shell_lookup_cmd(alias);
     if (shell_aux != NULL) {
       return NULL;
     }
-    shell_cmd = shell_lookup_cmd(cmd);
+    shell_cmd = rtems_shell_lookup_cmd(cmd);
     if (shell_cmd != NULL) {
-      shell_aux = shell_add_cmd(
+      shell_aux = rtems_shell_add_cmd(
          alias,
          shell_cmd->topic,
          shell_cmd->usage,

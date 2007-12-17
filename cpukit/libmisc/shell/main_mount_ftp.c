@@ -1,5 +1,5 @@
 /*
- *  CD Shell Command Implmentation
+ *   Shell Command Implmentation
  *
  *  Author: Fernando RUIZ CASAS
  *  Work: fernando.ruiz@ctv.es
@@ -16,11 +16,22 @@
 #include "config.h"
 #endif
 
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/dosfs.h>
+#include <rtems/fsmount.h>
 #include "internal.h"
 
-rtems_shell_alias_t rtems_Shell_CD_Alias = {
-  "chdir",                   /* command */
-  "cd"                       /* alias */
+#include <rtems/ftpfs.h>
+
+rtems_shell_filesystems_t rtems_Shell_Mount_FTP = {
+  name:          "ftp",
+  driver_needed: 1,
+  fs_ops:        &rtems_ftp_ops,
+  mounter:       rtems_shell_libc_mounter
 };
