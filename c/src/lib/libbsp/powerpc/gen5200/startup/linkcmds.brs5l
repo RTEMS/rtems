@@ -236,7 +236,8 @@ SECTIONS
     .bss :
     {
       bss.start = .;
-      *(.bss) *(.sbss) *(COMMON)
+      *(.bss .bss* .gnu.linkonce.b*)
+      *(.sbss*) *(COMMON)
       . = ALIGN(4);
       bss.end = .;
     } > ram

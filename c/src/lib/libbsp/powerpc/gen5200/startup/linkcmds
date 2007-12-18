@@ -253,7 +253,6 @@ SECTIONS
 	. = ALIGN (16);
         _startmalloc = .;
      } >ram
-          	
 
     /*
      * Interrupt stack setup

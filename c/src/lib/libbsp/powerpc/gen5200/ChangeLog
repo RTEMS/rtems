@@ -1,3 +1,8 @@
+2007-12-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Spacing.
+	* startup/linkcmds.brs5l: Add wildcard to .bss section.
+
 2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/irq.c, startup/bspclean.c, startup/bspstart.c: I give. The code
