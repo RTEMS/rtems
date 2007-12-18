@@ -24,7 +24,7 @@ include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
 ## rtems
 include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
     include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
-    include/rtems/termiostypes.h
+    include/rtems/malloc.h include/rtems/termiostypes.h
 
 ## zilog
 
@@ -78,8 +78,12 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/getlogin.c src/getpgrp.c src/getpid.c src/getppid.c src/getuid.c \
     src/setpgid.c src/setsid.c
 
-MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/mallocinfo.c \
-    src/__brk.c src/__sbrk.c
+MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
+   src/realloc.c src/_calloc_r.c src/free.c src/_free_r.c src/_malloc_r.c \
+   src/_realloc_r.c src/__brk.c src/__sbrk.c src/mallocfreespace.c \
+   src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
+   src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
+   src/malloc_statistics_helpers.c src/malloc_boundary.c 
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
@@ -104,7 +108,7 @@ libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMIOS_C_FILES) src/getpagesize.c
 endif
 
-EXTRA_DIST = src/TODO src/CASES src/README
+EXTRA_DIST = src/TODO src/CASES src/README src/malloc_p.h
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

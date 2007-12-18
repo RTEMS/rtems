@@ -31,8 +31,6 @@ int malloc_info(
   Heap_Information_block *the_info
 )
 {
-  Heap_Information info;
-
   if ( !the_info )
     return -1;
 

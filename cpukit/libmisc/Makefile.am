@@ -77,12 +77,12 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
     shell/main_mkdir.c shell/main_mount.c  $(shell_mount_fs) \
     shell/main_mount_msdos.c shell/main_mmove.c shell/main_msdosfmt.c \
-    shell/main_mwdump.c shell/main_pwd.c shell/main_rm.c shell/main_rmdir.c \
-    shell/main_stackuse.c shell/main_tty.c shell/main_umask.c \
-    shell/main_unmount.c shell/main_blksync.c shell/main_whoami.c \
-    shell/shell.c shell/shell_cmdset.c shell/shellconfig.c \
-    shell/shellconfig.h shell/shell.h shell/shell_makeargs.c \
-    shell/str2int.c shell/write_file.c
+    shell/main_mwdump.c shell/main_perioduse.c shell/main_pwd.c \
+    shell/main_rm.c shell/main_rmdir.c shell/main_stackuse.c \
+    shell/main_tty.c shell/main_umask.c shell/main_unmount.c \
+    shell/main_blksync.c shell/main_whoami.c shell/shell.c \
+    shell/shell_cmdset.c shell/shellconfig.c shell/shellconfig.h \
+    shell/shell.h shell/shell_makeargs.c shell/str2int.c shell/write_file.c
 endif
 
 EXTRA_DIST += shell/README

@@ -18,6 +18,7 @@
 #include <inttypes.h>
 
 #include <rtems.h>
+#include <rtems/malloc.h>
 #include <rtems/shell.h>
 #include "internal.h"
 
@@ -39,8 +40,8 @@ static void printit(
 }
 
 int rtems_shell_main_malloc_info(
-  int argc,
-  char * argv[]
+  int   argc,
+  char *argv[]
 )
 {
   if ( argc == 2 ) {
@@ -51,19 +52,21 @@ int rtems_shell_main_malloc_info(
       printit( "free", &info.Free );
       printit( "used", &info.Used );
       return 0;
-    } else if ( !strcmp( argv[1], "dump" ) ) {
-      extern void malloc_dump();
-      malloc_dump();
+    } else if ( !strcmp( argv[1], "stats" ) ) {
+      malloc_report_statistics_with_plugin(
+        stdout,
+        (rtems_printk_plugin_t) fprintf
+      );
       return 0;
     }
   }
-  fprintf( stderr, "subcommands info or dump\n" );
+  fprintf( stderr, "subcommands info or stats\n" );
   return -1;
 }
 
 rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command = {
   "malloc",                                   /* name */
-  "[info|dump]",                              /* usage */
+  "[info|stats]",                             /* usage */
   "mem",                                      /* topic */
   rtems_shell_main_malloc_info,               /* command */
   NULL,                                       /* alias */
