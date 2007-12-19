@@ -14,8 +14,8 @@
  */
 
 #include "system.h"
-#include <rtems/libcsupport.h>    /* for malloc_dump, malloc_walk */
-#include <string.h>         /* for memset */
+#include <rtems/malloc.h> 
+#include <string.h>
 #include <stdlib.h>
 
 #define NUM_PASSES 100
@@ -55,7 +55,7 @@ rtems_task Task_1_through_5(
     }
     printf("mallocing %d bytes\n",mem_amt);
     memset( mem_ptr, mem_amt, mem_amt );
-    malloc_dump();
+    malloc_report_statistics();
     malloc_walk(1,FALSE);
     status = rtems_task_wake_after( task_number( tid ) * 1 * TICKS_PER_SECOND/4 );
     for (i=0; i < mem_amt; i++)

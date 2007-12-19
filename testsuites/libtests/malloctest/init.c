@@ -24,6 +24,9 @@
 #define TEST_INIT
 #include "system.h"
 
+#include <stdlib.h>
+#include <errno.h>
+
 /*
  *  A simple test of realloc
  */
@@ -37,6 +40,41 @@ void test_realloc(void)
     p2 = realloc(p2, i);
 
   free(p2);
+}
+
+/*
+ *  A simple test of posix_memalign
+ */
+void test_posix_memalign(void)
+{
+  void *p1, *p2;
+  int i;
+  int sc;
+
+  puts( "posix_memalign - NULL return pointer -- EINVAL" );
+  sc = posix_memalign( NULL, 32, 8 );
+  fatal_posix_service_status( sc, EINVAL, "posix_memalign NULL pointer" );
+
+  puts( "posix_memalign - alignment of 0 -- EINVAL" );
+  sc = posix_memalign( &p1, 0, 8 );
+  fatal_posix_service_status( sc, EINVAL, "posix_memalign alignment of 0" );
+
+  puts( "posix_memalign - alignment  of 2-- EINVAL" );
+  sc = posix_memalign( &p1, 2, 8 );
+  fatal_posix_service_status( sc, EINVAL, "posix_memalign alignment of 2" );
+
+  for ( i=2 ; i<32 ; i++ ) {
+    printf( "posix_memalign - alignment of %d -- OK\n", 1 << i );
+    sc = posix_memalign( &p1, 1 << i, 8 );
+    if ( sc == ENOMEM ) {
+      printf( "posix_memalign - ran out of memory trying %d\n", 1<<i );
+      break;
+    }
+    posix_service_failed( sc, "posix_memalign alignment OK" );
+
+    free( p1 );
+  }
+
 }
 
 rtems_task Init(
@@ -53,6 +91,8 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
 
   test_realloc();
+
+  test_posix_memalign();
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
