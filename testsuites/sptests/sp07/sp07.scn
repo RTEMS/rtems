@@ -1,4 +1,14 @@
 *** TEST 7 ***
+rtems_extension_create - bad id pointer -- RTEMS_INVALID_ADDRESS
+rtems_extension_create - bad name -- RTEMS_INVALID_NAME
+rtems_extension_create - first one -- OK
+rtems_extension_create - second one-- OK
+rtems_extension_create -- RTEMS_TOO_MANY
+rtems_extension_delete - second one -- OK
+rtems_extension_delete - second one again -- RTEMS_INVALID_ID
+rtems_extension_ident -- OK
+rtems_extension_ident - bad name -- RTEMS_INVALID_NAME
+rtems_extension_ident - bad name -- RTEMS_INVALID_ADDRESS
 TASK_CREATE - TA1  - created
 TASK_CREATE - TA2  - created
 TASK_CREATE - TA3  - created
@@ -25,9 +35,9 @@ TA1 - rtems_task_set_priority - set TA2's priority: 01
 TA2 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: 01
 TA2 - rtems_task_suspend - suspend TA1
 TA2 - rtems_task_set_priority - set priority of TA1 ( blocked )
-TASK_DELETE - TA2  TASK_DELETEdeleting - TA1 
-TASK_DELETE - TA2  TASK_DELETEdeleting - TA3 
-TASK_DELETE - TA2  TASK_DELETEdeleting - TA2 
+TASK_DELETE - TA2  TASK_DELETE deleting - TA1 
+TASK_DELETE - TA2  TASK_DELETE deleting - TA3 
+TASK_DELETE - TA2  TASK_DELETE deleting - TA2 
 TA4 - exitting task
 RTEMS_TASK_EXITTED - extension invoked for TA4 
 *** END OF TEST 7 ***

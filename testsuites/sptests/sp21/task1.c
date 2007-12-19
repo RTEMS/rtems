@@ -171,7 +171,7 @@ rtems_task Task_1(
   );
   puts( "TA1 - rtems_io_register_driver - RTEMS_TOO_MANY - no slots" );
 
-  /* there shuld be a driver at major 1 -- clock, console, or stub */
+  /* there should be a driver at major 1 -- clock, console, or stub */
   status = rtems_io_register_driver( 1, &GoodDriver, &registered );
   fatal_directive_status(
     status,

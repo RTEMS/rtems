@@ -1,5 +1,11 @@
 2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp07/init.c, sp07/system.h, sp07/tdelete.c, sp07/sp07.scn:
+	Add test cases for User Extension Manager to improve code coverage.
+	* sp21/task1.c: Fix spelling error.
+
+2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spsize/size.c: Account for previous changes in calculation of MPCI
 	receive server stack.
 

@@ -30,7 +30,7 @@ rtems_extension Task_delete_extension(
 
   if ( task_number( running_task->Object.id ) > 0 ) {
     name = Task_name[ task_number( running_task->Object.id ) ];
-    sprintf( line, "TASK_DELETE - %c%c%c%c TASK_DELETE",
+    sprintf( line, "TASK_DELETE - %c%c%c%c TASK_DELETE ",
       (name >> 24) & 0xff,
       (name >> 16) & 0xff,
       (name >> 8) & 0xff,

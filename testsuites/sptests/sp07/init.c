@@ -40,19 +40,72 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
+  rtems_id          id;
 
   puts( "\n\n*** TEST 7 ***" );
 
   buffered_io_initialize();
 
-  Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', ' ' );
+  Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', '1' );
+  Extension_name[ 2 ] =  rtems_build_name( 'E', 'X', 'T', '2' );
 
+  puts  ( "rtems_extension_create - bad id pointer -- RTEMS_INVALID_ADDRESS" );
+  status = rtems_extension_create( 0xa5a5a5a5, &Extensions, NULL );
+  fatal_directive_status(
+    status, RTEMS_INVALID_ADDRESS, "rtems_extension_create" );
+
+  puts  ( "rtems_extension_create - bad name -- RTEMS_INVALID_NAME" );
+  status = rtems_extension_create( 0, &Extensions, &id );
+  fatal_directive_status(
+    status, RTEMS_INVALID_NAME, "rtems_extension_create #1" );
+
+  puts( "rtems_extension_create - first one -- OK" );
   status = rtems_extension_create(
     Extension_name[ 1 ],
     &Extensions,
     &Extension_id[ 1 ]
   );
   directive_failed( status, "rtems_extension_create" );
+
+  puts( "rtems_extension_create - second one-- OK" );
+  status = rtems_extension_create(
+    Extension_name[ 2 ],
+    &Extensions,
+    &Extension_id[ 2 ]
+  );
+  directive_failed( status, "rtems_extension_create #2" );
+
+  puts  ( "rtems_extension_create -- RTEMS_TOO_MANY" );
+  status = rtems_extension_create( 0xa5a5a5a5, &Extensions, &id );
+  fatal_directive_status( status, RTEMS_TOO_MANY, "rtems_extension_create" );
+
+  puts( "rtems_extension_delete - second one -- OK" );
+  status = rtems_extension_delete( Extension_id[ 2 ] );
+  directive_failed( status, "rtems_extension_delete #2" );
+
+  puts( "rtems_extension_delete - second one again -- RTEMS_INVALID_ID" );
+  status = rtems_extension_delete( Extension_id[ 2 ] );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_extension_delete #2 bad"
+  );
+
+  puts  ( "rtems_extension_ident -- OK" );
+  status = rtems_extension_ident( Extension_name[1], &id );
+  directive_failed( status, "rtems_extension_ident" );
+
+  puts  ( "rtems_extension_ident - bad name -- RTEMS_INVALID_NAME" );
+  status = rtems_extension_ident( Extension_name[2], &id );
+  fatal_directive_status( status, RTEMS_INVALID_NAME, "rtems_extension_ident" );
+
+  puts  ( "rtems_extension_ident - bad name -- RTEMS_INVALID_ADDRESS" );
+  status = rtems_extension_ident( Extension_name[2], NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_extension_ident"
+  );
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
