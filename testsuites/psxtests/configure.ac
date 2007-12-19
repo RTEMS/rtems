@@ -52,6 +52,7 @@ psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile
 psxsem01/Makefile
+psxsignal01/Makefile
 psxspin01/Makefile
 psxstat/Makefile
 psxsysconf/Makefile

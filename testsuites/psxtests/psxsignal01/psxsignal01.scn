@@ -1,0 +1,19 @@
+*** POSIX TEST SIGNAL ***
+Init's ID is 0x0b010001
+Validate signal with SIG_DFL
+Validate signal with SIG_IGN
+Init: Unblock SIGUSR1 SIGFPE SIGILL SIGSEGV
+Init: signal return value verified
+Init: send SIGUSR1 to process
+Signal: 25 caught by 0xb010001 (1)
+Init: send SIGFPE to process
+Handler_1: Signal: 8 caught by 0xb010001 (2)
+Init: send SIGILL to process
+Handler_1: Signal: 4 caught by 0xb010001 (3)
+Init: send SIGSEGV to process
+Handler_1: Signal: 11 caught by 0xb010001 (4)
+Init: send SIGUSR1 to process from a TSR (interruptible sleep)
+Signal: 25 caught by 0xb010001 (1)
+Init: send SIGUSR1 to process from a TSR (spin)
+Signal: 25 caught by 0xb010001 (1)
+*** Validate unexpected program termination ***

@@ -1,3 +1,10 @@
+2007-12-19	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added posix signal test
+	* psxsignal01/Makefile.am, psxsignal01/init.c,
+	psxsignal01/psxsignal01.scn, psxsignal01/system.h,
+	psxsignal01/task1.c: New files.
+
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add test for sysconf().
