@@ -53,32 +53,28 @@ boolean _POSIX_signals_Check_signal(
    *  Since we made a union of these, only one test is necessary but this is
    *  safer.
    */
-
-  assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
-          _POSIX_signals_Vectors[ signo ].sa_sigaction );
+  #if defined(RTEMS_DEBUG)
+    assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
+            _POSIX_signals_Vectors[ signo ].sa_sigaction );
+  #endif
 
   /*
    *  Just to prevent sending a signal which is currently being ignored.
    */
-
   if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
     return FALSE;
 
   /*
    *  Block the signals requested in sa_mask
    */
-
   saved_signals_blocked = api->signals_blocked;
   api->signals_blocked |= _POSIX_signals_Vectors[ signo ].sa_mask;
 
-  /* Here, the signal handler function executes */
-
+  /*
+   *  Here, the signal handler function executes
+   */
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
-/*
- *
- *     assert( is_global );
- */
       (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
         signo,
         &siginfo_struct,
@@ -93,7 +89,6 @@ boolean _POSIX_signals_Check_signal(
   /*
    *  Restore the previous set of blocked signals
    */
-
   api->signals_blocked = saved_signals_blocked;
 
   return TRUE;

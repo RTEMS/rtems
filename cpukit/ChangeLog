@@ -1,5 +1,10 @@
 2007-12-19	Jennifer Averett <jennifer.averett@OARcorp.com>
 
+	* posix/src/psignalchecksignal.c: Make assert active during debug mode
+	only
+
+2007-12-19	Jennifer Averett <jennifer.averett@OARcorp.com>
+
 	* posix/src/psignal.c: Move source around to enable path testing
 
 2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
