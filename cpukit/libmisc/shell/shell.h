@@ -119,7 +119,7 @@ typedef struct  {
   uintptr_t   mdump_addr;
 } rtems_shell_env_t;
 
-rtems_boolean rtems_shell_shell_loop(
+rtems_boolean rtems_shell_main_loop(
   rtems_shell_env_t *rtems_shell_env
 );
 
@@ -137,10 +137,14 @@ extern rtems_shell_env_t *rtems_current_shell_env;
  */ 
 struct rtems_shell_filesystems_tt;
 typedef struct rtems_shell_filesystems_tt rtems_shell_filesystems_t;
-typedef int (*rtems_shell_filesystems_mounter_t)(const char*                driver,
-                                                 const char*                path,
-                                                 rtems_shell_filesystems_t* fs,
-                                                 rtems_filesystem_options_t options);
+
+typedef int (*rtems_shell_filesystems_mounter_t)(
+  const char*                driver,
+  const char*                path,
+  rtems_shell_filesystems_t* fs,
+  rtems_filesystem_options_t options
+);
+
 struct rtems_shell_filesystems_tt {
   const char*                        name;
   int                                driver_needed;

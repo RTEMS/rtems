@@ -34,30 +34,30 @@ void *malloc(
 
   MSBUMP(malloc_calls, 1);
 
-  if ( !size )
-    return (void *) 0;
-
-  #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE );
-  #endif
-
-  /*
-   *  Do not attempt to allocate memory if in a critical section or ISR.
-   */
-
-  if (_System_state_Is_up(_System_state_Get())) {
-    if (_Thread_Dispatch_disable_level > 0)
-      return (void *) 0;
-
-    if (_ISR_Nest_level > 0)
-      return (void *) 0;
-  }
-
   /*
    *  If some free's have been deferred, then do them now.
    */
-  while ((to_be_freed = Chain_Get(&RTEMS_Malloc_GC_list)) != NULL)
-    free(to_be_freed);
+  malloc_process_deferred_frees();
+
+  /*
+   * Validate the parameters
+   */
+  if ( !size )
+    return (void *) 0;
+
+  /*
+   *  Do not attempt to allocate memory if not in correct system state.
+   */
+  if ( _System_state_Is_up(_System_state_Get()) &&
+       !malloc_is_system_state_OK() )
+    return NULL;
+
+  /*
+   *  Walk the heap and verify its integrity
+   */
+  #if defined(RTEMS_HEAP_DEBUG)
+    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE );
+  #endif
 
   #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
     /*

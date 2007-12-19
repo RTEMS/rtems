@@ -1,3 +1,14 @@
+2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
+	libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_p.h,
+	libcsupport/src/malloc_report_statistics_plugin.c,
+	libmisc/shell/shell.c, libmisc/shell/shell.h,
+	score/src/objectinitializeinformation.c: Add posix_memalign. Split
+	out management of deferred frees to subroutines.
+	* libcsupport/src/malloc_deferred.c, libcsupport/src/posix_memalign.c: New files.
+
 2007-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/preinstall.am,

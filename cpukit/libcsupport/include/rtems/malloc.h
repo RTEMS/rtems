@@ -29,6 +29,7 @@
 typedef struct {
     uint32_t    space_available;             /* current size of malloc area */
     uint32_t    malloc_calls;                /* # calls to malloc */
+    uint32_t    memalign_calls;              /* # calls to memalign */
     uint32_t    free_calls;
     uint32_t    realloc_calls;
     uint32_t    calloc_calls;

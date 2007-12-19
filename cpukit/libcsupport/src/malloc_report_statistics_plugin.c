@@ -36,15 +36,15 @@ void malloc_report_statistics_with_plugin(
     "Malloc statistics\n"
     "  avail:%"PRIu32"k  allocated:%"PRIu32"k (%"PRId32"%%) "
       "max:%"PRIu32"k (%"PRIu32"%%)"
-      " lifetime:%"PRIuMAX"k freed:%"PRIuMAX"k\n",
+      " lifetime:%"PRIu32"k freed:%"PRIu32"k\n",
     s->space_available / 1024,
     allocated / 1024,
     /* avoid float! */
     (allocated * 100) / s->space_available,
     s->max_depth / 1024,
     (s->max_depth * 100) / s->space_available,
-    s->lifetime_allocated / 1024,
-    s->lifetime_freed / 1024
+    (uint32_t) (s->lifetime_allocated / 1024),
+    (uint32_t) (s->lifetime_freed / 1024)
   );
   (*print)(
     context,

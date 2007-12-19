@@ -63,10 +63,10 @@ void _Objects_Initialize_information(
 )
 {
   static Objects_Control *null_local_table = NULL;
-  uint32_t         minimum_index;
-  uint32_t         name_length;
+  uint32_t                minimum_index;
+  uint32_t                name_length;
 #if defined(RTEMS_MULTIPROCESSING)
-  uint32_t         index;
+  uint32_t                index;
 #endif
 
   information->the_api            = the_api;
@@ -96,7 +96,8 @@ void _Objects_Initialize_information(
    *  Are we operating in unlimited, or auto-extend mode
    */
 
-  information->auto_extend = (maximum & OBJECTS_UNLIMITED_OBJECTS) ? TRUE : FALSE;
+  information->auto_extend =
+        (maximum & OBJECTS_UNLIMITED_OBJECTS) ? TRUE : FALSE;
   maximum                 &= ~OBJECTS_UNLIMITED_OBJECTS;
 
   /*

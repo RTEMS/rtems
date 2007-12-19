@@ -53,3 +53,9 @@ extern rtems_malloc_statistics_t rtems_malloc_statistics;
  */
 #define MALLOC_DIRTY
 
+/*
+ *  Process deferred free operations
+ */
+boolean malloc_is_system_state_OK(void);
+void malloc_process_deferred_frees(void);
+void malloc_defer_free(void *);

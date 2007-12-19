@@ -342,17 +342,17 @@ void rtems_shell_print_env(
 }
 #endif
 
-rtems_task rtems_shell_shell(rtems_task_argument task_argument)
+rtems_task rtems_shell_task(rtems_task_argument task_argument)
 {
   rtems_shell_env_t * shell_env = (rtems_shell_env_t*) task_argument;
 
-   rtems_shell_shell_loop( shell_env );
+   rtems_shell_main_loop( shell_env );
    rtems_task_delete( RTEMS_SELF );
 }
 
 #define RTEMS_SHELL_MAXIMUM_ARGUMENTS 128
 
-rtems_boolean rtems_shell_shell_loop(
+rtems_boolean rtems_shell_main_loop(
   rtems_shell_env_t *shell_env_arg
 )
 {
@@ -535,6 +535,6 @@ rtems_status_code   rtems_shell_init (
   shell_env->exit_shell = FALSE;
   shell_env->forever    = forever;
 
-  return rtems_task_start(task_id,rtems_shell_shell,
+  return rtems_task_start(task_id, rtems_shell_task,
                           (rtems_task_argument) shell_env);
 }
