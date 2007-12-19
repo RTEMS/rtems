@@ -117,38 +117,39 @@ void _POSIX_signals_Post_switch_extension(
    *  The first thing done is to check there are any signals to be
    *  processed at all.  No point in doing this loop otherwise.
    */
+  while (1) {
+  restart:
+    _ISR_Disable( level );
+      if ( !(~api->signals_blocked &
+            (api->signals_pending | _POSIX_signals_Pending)) ) {
+       _ISR_Enable( level );
+       break;
+     }
+    _ISR_Enable( level );
 
-restart:
-  _ISR_Disable( level );
-    if ( !(~api->signals_blocked &
-          (api->signals_pending | _POSIX_signals_Pending)) ) {
-     _ISR_Enable( level );
-     return;
-   }
-  _ISR_Enable( level );
+    for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
 
-  for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
+      if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
+        goto restart;
 
-    if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
-      goto restart;
+      if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
+        goto restart;
 
-    if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
-      goto restart;
+    }
 
+    /* XXX - add __SIGFIRSTNOTRT or something like that to newlib signal .h */
+
+    for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
+
+      if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
+        goto restart;
+
+      if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
+        goto restart;
+
+    }
   }
-
-/* XXX - add __SIGFIRSTNOTRT or something like that to newlib signal .h */
-
-  for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
-
-    if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
-      goto restart;
-
-    if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
-      goto restart;
-
-  }
-
+  return;
 }
 
 /*PAGE
