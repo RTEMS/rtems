@@ -3,7 +3,7 @@
  *  This program is run to determine the data space and work space
  *  requirements of the current version of RTEMS.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -112,8 +112,10 @@ int getint( void );
 #endif
 
 #if defined(RTEMS_MULTIPROCESSING)
+#define MPCI_RECEIVE_SERVER_STACK_SIZE \
+
 #define MP_SYSTEM_TASKS \
-   (MPCI_RECEIVE_SERVER_STACK_SIZE + \
+   (STACK_MINIMUM_SIZE + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
     sizeof(Thread_Control) + \
     MPCI_RECEIVE_SERVER_FP)
 #else

@@ -1,3 +1,8 @@
+2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spsize/size.c: Account for previous changes in calculation of MPCI
+	receive server stack.
+
 2007-12-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp09/screen07.c, sp09/sp09.scn: Add test for
