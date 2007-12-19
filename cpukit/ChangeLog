@@ -1,3 +1,10 @@
+2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/src/extension.c, sapi/src/extensioncreate.c,
+	sapi/src/extensiondelete.c, sapi/src/extensionident.c: Extension
+	Manager clean up. Update object id switches to new pattern. Catch
+	some NULL parameter errors.
+
 2007-12-19	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* posix/src/psignalunblockthread.c: Remove source that

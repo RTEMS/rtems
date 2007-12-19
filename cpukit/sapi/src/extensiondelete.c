@@ -1,7 +1,6 @@
 /*
  *  Extension Manager -- rtems_extension_delete
  *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -45,18 +44,19 @@ rtems_status_code rtems_extension_delete(
 
   the_extension = _Extension_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-#endif
-      return RTEMS_INVALID_ID;
     case OBJECTS_LOCAL:
       _User_extensions_Remove_set( &the_extension->Extension );
       _Objects_Close( &_Extension_Information, &the_extension->Object );
       _Extension_Free( the_extension );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:            /* should never return this */
+#endif
+    case OBJECTS_ERROR:
+      break;
   }
 
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+  return RTEMS_INVALID_ID;
 }

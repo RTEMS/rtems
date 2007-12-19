@@ -1,8 +1,7 @@
 /*
  *  Extension Manager -- rtems_extension_create
  *
- *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,6 +45,9 @@ rtems_status_code rtems_extension_create(
 )
 {
   Extension_Control *the_extension;
+
+  if ( !id )
+    return RTEMS_INVALID_ADDRESS;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
