@@ -407,9 +407,6 @@ rtems_driver_address_table Device_drivers[] = {
 #define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
 #endif
 
-#if (CONFIGURE_MAXIMUM_DRIVERS < CONFIGURE_NUMBER_OF_DRIVERS)
-  #error "not enough slots for static drivers"
-#endif
 /*
  *  Default the number of devices per device driver.  This value may be
  *  overridden by the user.

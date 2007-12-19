@@ -1,5 +1,10 @@
 2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h: Revert. Requires info not available at
+	preprocessing time.
+
+2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/include/confdefs.h: Catch the error when the user lowers the
 	maximum number of drivers below the number of statically configured
 	ones.
