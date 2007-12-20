@@ -35,10 +35,16 @@ void _POSIX_signals_Ualarm_TSR(
   void           *argument
 )
 {
-  int status;
-
-  status = kill( getpid(), SIGALRM );
-  /* XXX can't print from an ISR, should this be fatal? */
+  /*
+   * Send a SIGALRM but if there is a problem, ignore it.
+   * It's OK, there isn't a way this should fail.
+   */
+  (void) kill( getpid(), SIGALRM );
+  
+  /*
+   * If the reset interval is non-zero, reschedule ourselves.
+   */ 
+  _Watchdog_Reset( &_POSIX_signals_Ualarm_timer );
 }
 
 useconds_t ualarm(
@@ -84,9 +90,22 @@ useconds_t ualarm(
     }
   }
 
-  tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
-  tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
-  _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
+  /*
+   *  If useconds is non-zero, then the caller wants to schedule
+   *  the alarm repeatedly at that interval.  If the interval is
+   *  less than a single clock tick, then fudge it to a clock tick.
+   */
+  if ( useconds ) {
+    Watchdog_Interval ticks;
+
+    tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
+    tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
+    ticks = _Timespec_To_ticks( &tp );
+
+    if ( ticks == 0 )
+      ticks = 1; 
+    _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
+  }
 
   return remaining;
 }
