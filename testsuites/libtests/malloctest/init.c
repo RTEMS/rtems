@@ -32,14 +32,66 @@
  */
 void test_realloc(void)
 {
-  void *p1, *p2;
+  void *p1, *p2, *p3;
   int i;
+  int sc;
 
-  p2 = p1 = malloc(1);
-  for (i=2 ; i<2048 ; i++) 
-    p2 = realloc(p2, i);
+  /* Test growing reallocation "in place" */
+  p1 = malloc(1);
+  for (i=2 ; i<2048 ; i++) {
+    p2 = realloc(p1, i);
+    if (p2 != p1)
+      printf( "realloc - failed grow in place: "
+              "%p != realloc(%p,%d)\n", p1, p2, i );
+    p1 = p2;
+  }
+  free(p1);
 
+  /* Test shrinking reallocation "in place" */
+  p1 = malloc(2048);
+  for (i=2047 ; i>=1; i--)  {
+    p2 = realloc(p1, i);
+    if (p2 != p1)
+      printf( "realloc - failed shrink in place: "
+              "%p != realloc(%p,%d)\n", p1, p2, i );
+    p1 = p2;
+  }
+  free(p1);
+
+  /* Test realloc that should fail "in place", i.e.,
+   * fallback to free()--malloc()
+   */
+  p1 = malloc(32);
+  p2 = malloc(32);
+  p3 = realloc(p1, 64);
+  if (p3 == p1 || p3 == NULL)
+    printf(
+      "realloc - failed non-in place: realloc(%p,%d) = %p\n", p1, 64, p3 );
+  free(p3);
   free(p2);
+
+  /*
+   *  Yet another case
+   */
+  p1 = malloc(8);
+  p2 = malloc(8);
+  free(p1);
+  sc = posix_memalign(&p1, 16, 32);
+  printf( "sc = %d\n", sc );
+  if (!sc)
+    free(p1);
+
+  /*
+   *  Bad hack to get coverage
+   */
+
+  {
+    void *p5;
+    extern Heap_Control RTEMS_Malloc_Heap;
+    p5 = _Protected_heap_Allocate_aligned( &RTEMS_Malloc_Heap, 8, 0 );
+    if ( p5 )
+      free( p5 );
+  }
 }
 
 /*
