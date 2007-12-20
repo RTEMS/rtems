@@ -526,7 +526,7 @@ typedef struct {
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->stack_pointer
+  (_context)->register_sp
 
 /**
  *  @ingroup CPUContext Management
