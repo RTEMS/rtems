@@ -18,7 +18,7 @@
 %define gcc_version 4.2.2
 %define gcc_rpmvers %{expand:%(echo "4.2.2" | tr - _ )}
 
-%define newlib_version		1.15.0
+%define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
 Name:         	rtems-4.9-bfin-rtems4.9-gcc
@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	5%{?dist}
+Release:      	6%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -63,8 +63,8 @@ Patch0:		gcc-core-4.2.2-rtems4.9-20071127.diff
 %{?_without_sources:NoSource:	0}
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
-%if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070804.diff
+%if "%{newlib_version}" == "1.16.0"
+Patch50:	newlib-1.16.0-rtems4.9-20071220.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -141,7 +141,7 @@ cd ..
   cp ../gcc-%{gcc_pkgvers}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 
