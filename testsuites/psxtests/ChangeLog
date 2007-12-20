@@ -1,3 +1,7 @@
+2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxsignal01/.cvsignore, psxualarm/.cvsignore: New files.
+
 2007-12-20	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, configure.ac: Added test for ualarm
