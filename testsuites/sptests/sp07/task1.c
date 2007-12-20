@@ -29,8 +29,7 @@ rtems_task Task_1(
   rtems_task_priority previous_priority;
   rtems_id            my_id;
 
-  /* XXX really need a Classic API service for this */
-  my_id = _Thread_Executing->Object.id;
+  my_id = rtems_task_self();
 
   rtems_test_pause();
 

@@ -33,7 +33,7 @@ const char *CallerName()
   static char buffer[32];
 #if defined(TEST_PRINT_TASK_ID)
   sprintf( buffer, "0x%08x -- %d",
-      _Thread_Executing->Object.id, _Thread_Executing->current_priority );
+      rtems_task_self(), _Thread_Executing->current_priority );
 #else
   union {
     uint32_t u;

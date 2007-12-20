@@ -1,3 +1,8 @@
+2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp07/task1.c, sp34/changepri.c, sp35/priinv.c: Add rtems_task_self()
+	directive instead of violating RTEMS internals.
+
 2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp07/init.c, sp07/system.h, sp07/tdelete.c, sp07/sp07.scn:
