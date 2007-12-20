@@ -1,5 +1,9 @@
 2007-12-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/killinfo.c: Clean up and eliminate some dead code paths.
+
+2007-12-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/include/rtems/posix/timer.h: Include rtems/score/object.h.
 
 2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>

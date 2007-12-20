@@ -89,14 +89,8 @@ int killinfo(
    *  faults.
    */
 
-  switch ( sig ) {
-    case SIGFPE:
-    case SIGILL:
-    case SIGSEGV:
+  if ( (sig == SIGFPE) || (sig == SIGILL) || (sig == SIGSEGV ) )
       return pthread_kill( pthread_self(), sig );
-    default:
-      break;
-  }
 
   mask = signo_to_mask( sig );
 
@@ -172,25 +166,28 @@ int killinfo(
   interested_thread = NULL;
   interested_priority = PRIORITY_MAXIMUM + 1;
 
-  for ( the_api = 2;
+  for ( the_api = OBJECTS_CLASSIC_API;
         the_api <= OBJECTS_APIS_LAST;
         the_api++ ) {
 
-    if ( the_api == OBJECTS_INTERNAL_THREADS )
-      continue;
-
-    if ( !_Objects_Information_table[ the_api ] )  /* API not installed */
+    /*
+     *  Thie can occur when no one is interested and ITRON is not configured.
+     */
+    if ( !_Objects_Information_table[ the_api ] )
       continue;
 
     the_info = _Objects_Information_table[ the_api ][ 1 ];
 
-    if ( !the_info )                        /* manager not installed */
+    /*
+     *  This cannot happen in the current (as of Dec 2007) implementation
+     *  of initialization but at some point, the object information
+     *  structure for a particular manager may not be installed.
+     */
+    if ( !the_info )
       continue;
 
     maximum = the_info->maximum;
     object_table = the_info->local_table;
-
-    assert( object_table );                 /* always at least 1 entry */
 
     for ( index = 1 ; index <= maximum ; index++ ) {
       the_thread = (Thread_Control *) object_table[ index ];
