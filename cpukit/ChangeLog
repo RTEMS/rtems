@@ -1,5 +1,11 @@
 2007-12-20	Jennifer Averett <jennifer.averett@OARcorp.com>
 
+	* posix/Makefile.am, posix/src/kill.c, posix/src/killinfo.c: Split file
+	and resolved copyright information.
+	* posix/src/kill_r.c: New file.
+
+2007-12-20	Jennifer Averett <jennifer.averett@OARcorp.com>
+
 	* posix/src/ualarm.c: Fixed bug where iteration did not work correctly.
 
 2007-12-19	Joel Sherrill <joel.sherrill@OARcorp.com>

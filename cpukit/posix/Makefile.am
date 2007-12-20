@@ -125,7 +125,7 @@ libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
 
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
-    src/pause.c src/psignalclearprocesssignals.c \
+    src/kill_r.c src/pause.c src/psignalclearprocesssignals.c \
     src/psignalsetprocesssignals.c src/psignalchecksignal.c \
     src/psignalclearsignals.c src/psignalunblockthread.c src/pthreadkill.c \
     src/pthreadsigmask.c src/sigaction.c src/sigaddset.c src/sigdelset.c \

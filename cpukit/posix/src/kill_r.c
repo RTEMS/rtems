@@ -22,11 +22,16 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
 
-int kill(
-  pid_t pid,
-  int   sig
+#if defined(RTEMS_NEWLIB)
+
+#include <reent.h>
+
+int _kill_r(
+  struct _reent *ptr,
+  pid_t          pid,
+  int            sig
 )
 {
   return killinfo( pid, sig, NULL );
 }
-
+#endif
