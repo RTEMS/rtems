@@ -59,5 +59,6 @@ psxsysconf/Makefile
 psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
+psxualarm/Makefile
 ])
 AC_OUTPUT
