@@ -437,6 +437,14 @@ rtems_status_code rtems_task_variable_delete(
 );
 
 /*
+ *  rtems_task_self
+ *
+ *  This directive returns the ID of the currently executing task.
+ */
+
+rtems_id rtems_task_self(void);
+
+/*
  *  _RTEMS_tasks_Initialize_user_tasks
  *
  *  This routine creates and starts all configured user

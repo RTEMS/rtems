@@ -58,7 +58,7 @@ librtems_a_SOURCES = src/rtemsobjectgetname.c
 librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskgetnote.c src/taskident.c src/taskinitusers.c \
     src/taskissuspended.c src/taskmode.c src/taskrestart.c src/taskresume.c \
-    src/tasksetnote.c src/tasksetpriority.c src/taskstart.c \
+    src/taskself.c src/tasksetnote.c src/tasksetpriority.c src/taskstart.c \
     src/tasksuspend.c src/taskwakeafter.c src/taskwakewhen.c \
     src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
     src/taskvariable_invoke_dtor.c src/taskdata.c

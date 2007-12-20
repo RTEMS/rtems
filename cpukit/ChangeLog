@@ -1,3 +1,9 @@
+2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/Makefile.am, rtems/include/rtems/rtems/tasks.h: Add
+	rtems_task_self() directive.
+	* rtems/src/taskself.c: New file.
+
 2007-12-20	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* posix/Makefile.am, posix/src/kill.c, posix/src/killinfo.c: Split file
