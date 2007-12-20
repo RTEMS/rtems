@@ -17,6 +17,7 @@
 #define _RTEMS_POSIX_TIMER_H
 
 #include <rtems/posix/config.h>
+#include <rtems/score/object.h>
 
 /* Timer is free */
 #define POSIX_TIMER_STATE_FREE        0x01

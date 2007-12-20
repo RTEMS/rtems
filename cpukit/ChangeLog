@@ -1,3 +1,7 @@
+2007-12-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/include/rtems/posix/timer.h: Include rtems/score/object.h.
+
 2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/Makefile.am, rtems/include/rtems/rtems/tasks.h: Add
