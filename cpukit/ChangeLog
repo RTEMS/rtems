@@ -1,3 +1,9 @@
+2007-12-21	Xi Yang <hiyangxi@gmail.com>
+
+	* rtems/src/semtranslatereturncode.c: Add support for proper stacking
+	of priority inheritance on mutexes as well as enforce proper order of
+	release.
+
 2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac, score/include/rtems/score/coremutex.h,
