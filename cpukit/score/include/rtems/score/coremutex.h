@@ -41,6 +41,7 @@ extern "C" {
 #include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
 
+
 /**
  *  @brief MP Support Callback Prototype
  *
@@ -102,16 +103,19 @@ typedef enum {
    *  because the resource never became available.
    */
   CORE_MUTEX_TIMEOUT,
+
 #ifdef __STRICT_ORDER_MUTEX__
   /** This status indicates that a thread not release the mutex which has
    *  the priority inheritance property in a right order.
    */
   CORE_MUTEX_RELEASE_NOT_ORDER,
 #endif
+
   /** This status indicates that a thread of logically greater importance
    *  than the ceiling priority attempted to lock this mutex.
    */
   CORE_MUTEX_STATUS_CEILING_VIOLATED,
+
 }   CORE_mutex_Status;
 
 /**
@@ -190,7 +194,7 @@ typedef struct {
 }   CORE_mutex_Attributes;
 
 #ifdef __STRICT_ORDER_MUTEX__
-/*@brief Core Mutex Lock_Chain Struct
+/*@beief Core Mutex Lock_Chain Struct
  *
  * The following defines the control block used to manage lock chain of 
  * priority inheritance mutex.
@@ -239,7 +243,7 @@ typedef struct {
   /** This element contains the object Id of the holding thread.  */
   Objects_Id              holder_id;
 #ifdef __STRICT_ORDER_MUTEX__
-  /** This field is used to manipulate the priority inheritance mutex queue. */
+  /** This field is used to manipulate the priority inheritance mutex queue*/
   CORE_mutex_order_list   queue;
 #endif
   
@@ -281,10 +285,21 @@ void _CORE_mutex_Initialize(
  *  @note  For performance reasons, this routine is implemented as
  *         a macro that uses two support routines.
  */
-int _CORE_mutex_Seize_interrupt_trylock(
+
+RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
 );
+
+#if !defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
+  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
+     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
+#else
+  int _CORE_mutex_Seize_interrupt_trylock(
+    CORE_mutex_Control  *the_mutex,
+    ISR_Level           *level_p
+  );
+#endif
 
 /**
  *  @brief Seize Mutex with Blocking

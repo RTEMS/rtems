@@ -1,3 +1,11 @@
+2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac, score/include/rtems/score/coremutex.h,
+	score/inline/rtems/score/coremutex.inl: Add the ability to disable
+	inlining coremutex seize. This reduces the code size and also
+	improves the process of coverage analysis.
+	* score/src/coremutexseizeintr.c: New file.
+
 2007-12-21	Xi Yang <hiyangxi@gmail.com>
 
 	* configure.ac, score/include/rtems/score/coremutex.h,

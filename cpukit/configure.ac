@@ -218,12 +218,21 @@ RTEMS_CPUOPT([__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__],
   [disable nanosecond granularity for period statistics]
 )
 
+## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
   [test x"${RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH}" = x"1"],
   [1],
   [disable inlining _Thread_Enable_dispatch]
 )
 
+## This improves both the size and coverage analysis.
+RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__],
+  [test x"${RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE}" = x"1"],
+  [1],
+  [disable inlining _Thread_Enable_dispatch]
+)
+
+## This gives the same behavior as 4.8 and older
 RTEMS_CPUOPT([__STRICT_ORDER_MUTEX__],
   [test x"${ENABLE_STRICT_ORDER_MUTEX}"=x"1"],
   [1],
