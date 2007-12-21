@@ -1,3 +1,11 @@
+2007-12-21	Xi Yang <hiyangxi@gmail.com>
+
+	* Makefile.am, configure.ac: Add support for proper stacking of
+	priority inheritance on mutexes as well as enforce proper order of
+	release.
+	* sp36/.cvsignore, sp36/Makefile.am, sp36/sp36.doc,
+	sp36/sp36.scn: New files.
+
 2007-12-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp07/task1.c, sp34/changepri.c, sp35/priinv.c: Add rtems_task_self()
