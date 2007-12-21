@@ -1,6 +1,6 @@
 2007-12-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* src/sync.c: Make sync() POSIX-compliant.
+	* libcsupport/src/sync.c: Make sync() POSIX-compliant.
 	* libcsupport/src/__gettod.c: Make gettimeofday() POSIX-compliant.
 
 2007-12-20	Joel Sherrill <joel.sherrill@OARcorp.com>
