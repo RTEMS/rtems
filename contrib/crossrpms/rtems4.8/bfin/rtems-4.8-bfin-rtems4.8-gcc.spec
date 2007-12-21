@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	27%{?dist}
+Release:      	28%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -61,7 +61,7 @@ Patch0:		gcc-core-4.2.2-rtems4.8-20071127.diff
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.15.0"
-Patch50:	newlib-1.15.0-rtems4.8-20070804.diff
+Patch50:	newlib-1.15.0-rtems4.8-20071221.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -138,7 +138,7 @@ cd ..
   cp ../gcc-%{gcc_pkgvers}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
-  make all
+  make %{?_smp_mflags} all
   make info
   cd ..
 
