@@ -60,7 +60,7 @@
   cp ../gcc-%{gcc_pkgvers}/gcc/gsyslimits.h gcc/include/syslimits.h
 %endif
 
-  make all
+  make %{?_smp_mflags} all
 %if %build_infos
   make info
 %endif
