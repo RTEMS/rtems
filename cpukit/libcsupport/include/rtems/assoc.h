@@ -15,7 +15,7 @@
 #define _RTEMS_RTEMS_ASSOC_H
 
 typedef struct {
-    const char   *name;
+    const char  *name;
     uint32_t     local_value;
     uint32_t     remote_value;
 } rtems_assoc_t;
@@ -29,11 +29,6 @@ typedef struct {
 const rtems_assoc_t *rtems_assoc_ptr_by_name(
   const rtems_assoc_t *,
   const char *
-);
-
-const rtems_assoc_t *rtems_assoc_ptr_by_value(
-  const rtems_assoc_t *,
-  uint32_t
 );
 
 const rtems_assoc_t *rtems_assoc_ptr_by_remote(
@@ -53,10 +48,12 @@ uint32_t rtems_assoc_local_by_remote(
 
 uint32_t rtems_assoc_remote_by_name(
   const rtems_assoc_t *,
-  const char *);
+  const char *
+);
 uint32_t rtems_assoc_local_by_name(
   const rtems_assoc_t *,
-  const char *);
+  const char *
+);
 
 const char *rtems_assoc_name_by_local(
   const rtems_assoc_t *,
