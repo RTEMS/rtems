@@ -1,3 +1,9 @@
+2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1268/cpukit
+	* libcsupport/include/rtems/assoc.h: There is no
+	rtems_assoc_ptr_by_value method.
+
 2007-11-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1266/cpukit
