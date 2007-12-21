@@ -114,7 +114,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
   if ( status == THREAD_STATUS_PROXY_BLOCKING )
     return RTEMS_PROXY_BLOCKING;
 #endif
-  if ( status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
+  if ( status > CORE_SEMAPHORE_BAD_TIMEOUT_VALUE )
     return RTEMS_INTERNAL_ERROR;
   return _Semaphore_Translate_core_semaphore_return_code_[status];
 }
