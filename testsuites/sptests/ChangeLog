@@ -1,3 +1,7 @@
+2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp36/strict_order_mut.c: New file.
+
 2007-12-21	Xi Yang <hiyangxi@gmail.com>
 
 	* Makefile.am, configure.ac: Add support for proper stacking of
