@@ -253,6 +253,7 @@ typedef struct {
   Priority_Control         real_priority;
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
+
   /** This field is the blocking information for this proxy. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage proxy delays and timeouts. */
@@ -309,6 +310,10 @@ struct Thread_Control_struct {
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;
+#endif
+#ifdef __STRICT_ORDER_MUTEX__
+  /**This field is the head of queue of priority inheritance mutex holed by the thread*/
+  Chain_Control            lock_mutex;
 #endif
      /*================= end of common block =================*/
   /** This field is the number of nested suspend calls. */

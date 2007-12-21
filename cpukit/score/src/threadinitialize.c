@@ -124,6 +124,11 @@ boolean _Thread_Initialize(
    */
   _Watchdog_Initialize( &the_thread->Timer, NULL, 0, NULL );
 
+#ifdef __STRICT_ORDER_MUTEX__
+  /*Initialize the head of chain of mutex */
+  _Chain_Initialize_empty(&the_thread->lock_mutex);
+#endif
+
   /*
    * Clear the libc reent hook.
    */

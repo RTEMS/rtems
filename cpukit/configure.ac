@@ -224,6 +224,12 @@ RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
   [disable inlining _Thread_Enable_dispatch]
 )
 
+RTEMS_CPUOPT([__STRICT_ORDER_MUTEX__],
+  [test x"${ENABLE_STRICT_ORDER_MUTEX}"=x"1"],
+  [1],
+  [disable strict order mutex]
+)
+
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
   [$rtems_major],

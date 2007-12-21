@@ -1,3 +1,12 @@
+2007-12-21	Xi Yang <hiyangxi@gmail.com>
+
+	* configure.ac, score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/coremutex.inl,
+	score/src/coremutexsurrender.c, score/src/threadinitialize.c: Add
+	support for proper stacking of priority inheritance on mutexes as
+	well as enforce proper order of release.
+
 2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1268/cpukit

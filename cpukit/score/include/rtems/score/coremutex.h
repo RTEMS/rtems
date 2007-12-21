@@ -21,6 +21,7 @@
 #ifndef _RTEMS_SCORE_COREMUTEX_H
 #define _RTEMS_SCORE_COREMUTEX_H
 
+
 /**
  *  @defgroup ScoreMutex Mutex Handler
  *
@@ -70,7 +71,7 @@ typedef enum {
    */
   CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
 }   CORE_mutex_Disciplines;
-
+  
 /**
  *  @brief Mutex method return statuses
  *
@@ -101,10 +102,16 @@ typedef enum {
    *  because the resource never became available.
    */
   CORE_MUTEX_TIMEOUT,
+#ifdef __STRICT_ORDER_MUTEX__
+  /** This status indicates that a thread not release the mutex which has
+   *  the priority inheritance property in a right order.
+   */
+  CORE_MUTEX_RELEASE_NOT_ORDER,
+#endif
   /** This status indicates that a thread of logically greater importance
    *  than the ceiling priority attempted to lock this mutex.
    */
-  CORE_MUTEX_STATUS_CEILING_VIOLATED
+  CORE_MUTEX_STATUS_CEILING_VIOLATED,
 }   CORE_mutex_Status;
 
 /**
@@ -182,6 +189,25 @@ typedef struct {
   Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
 
+#ifdef __STRICT_ORDER_MUTEX__
+/*@brief Core Mutex Lock_Chain Struct
+ *
+ * The following defines the control block used to manage lock chain of 
+ * priority inheritance mutex.
+ */
+  typedef struct{
+    /** This field is a chian of locked mutex by a thread,new mutex will
+     *  be added to the head of queue, and the mutex which will be released
+     *  must be the head of queue.
+     */
+    Chain_Node                lock_queue;
+    /** This field is the priority of thread before locking this mutex
+     *
+     */
+    Priority_Control          priority_before;
+  }  CORE_mutex_order_list;
+#endif
+
 /**
  *  @brief Core Mutex Control Structure
  *
@@ -212,6 +238,11 @@ typedef struct {
   Thread_Control         *holder;
   /** This element contains the object Id of the holding thread.  */
   Objects_Id              holder_id;
+#ifdef __STRICT_ORDER_MUTEX__
+  /** This field is used to manipulate the priority inheritance mutex queue. */
+  CORE_mutex_order_list   queue;
+#endif
+  
 }   CORE_mutex_Control;
 
 /**
@@ -250,7 +281,7 @@ void _CORE_mutex_Initialize(
  *  @note  For performance reasons, this routine is implemented as
  *         a macro that uses two support routines.
  */
-RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
+int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
 );

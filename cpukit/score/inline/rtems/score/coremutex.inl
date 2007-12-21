@@ -101,7 +101,6 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
  *  PRIORITY_CEILING and FALSE otherwise.
  *
  *  @param[in] the_attribute is the attribute set of the mutex
- *
  *  @return This method returns TRUE if the mutex is using priority
  *          ceiling.
  */
@@ -120,7 +119,8 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
  *
  *  NOTE: The Doxygen for this routine is in the .h file.
  */
-RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
+
+RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
 )
@@ -138,8 +138,16 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
     the_mutex->holder_id  = executing->Object.id;
     the_mutex->nest_count = 1;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
+
+#ifdef __STRICT_ORDER_MUTEX__
+       _Chain_Prepend_unprotected(&executing->lock_mutex,&the_mutex->queue.lock_queue);
+       the_mutex->queue.priority_before = executing->current_priority;
+#endif
+
       executing->resource_count++;
+    }
+
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
         _ISR_Enable( level );
         return 0;
