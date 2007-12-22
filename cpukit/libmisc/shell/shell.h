@@ -101,6 +101,29 @@ rtems_status_code rtems_shell_init(
   int                  forever
 );
 
+/**
+ * Run a shell script creating a shell tasks to execute the command under.
+ *
+ * @param task_name Name of the shell task.
+ * @param task_stacksize The size of the stack. If 0 the default size is used.
+ * @param task_priority The priority the shell runs at.
+ * @param input The file of commands. Can be 'stdin' to use stdin.
+ * @param output The output file to write commands to. Can be 'stdout',
+ *              'stderr' or '/dev/null'.
+ * @param output_append Append the output to the file or truncate the file.
+ *                      Create if it does not exist.
+ * @param wait Wait for the script to finish.
+ */
+rtems_status_code rtems_shell_script(
+  char                *task_name,
+  uint32_t             task_stacksize,  /*0 default*/
+  rtems_task_priority  task_priority,
+  const char          *input,
+  const char          *output,
+  int                  output_append,
+  int                  wait
+);
+
 /*
  *  Things that are useful to external entities developing commands and plugging
  *  them in.
@@ -117,6 +140,10 @@ typedef struct  {
   int         forever   ; /* repeat login */
   int         errorlevel;
   uintptr_t   mdump_addr;
+  const char* input;
+  const char* output;
+  int         output_append;
+  rtems_id    wake_on_end;
 } rtems_shell_env_t;
 
 rtems_boolean rtems_shell_main_loop(

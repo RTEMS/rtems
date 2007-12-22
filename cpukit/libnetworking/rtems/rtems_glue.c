@@ -311,13 +311,15 @@ rtems_bsdnet_semaphore_obtain (void)
 		level
 		);
 	if (_Thread_Executing->Wait.return_code)
-		rtems_panic ("Can't obtain network semaphore\n");
+		rtems_panic ("rtems-net: can't obtain network sema: %d\n",
+                 _Thread_Executing->Wait.return_code);
 #else
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_obtain (networkSemaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
-		rtems_panic ("Can't obtain network semaphore: `%s'\n", rtems_status_text (sc));
+		rtems_panic ("rtems-net: can't obtain network semaphore: `%s'\n",
+                 rtems_status_text (sc));
 #endif
 }
 
@@ -338,13 +340,14 @@ rtems_bsdnet_semaphore_release (void)
 		);
 	_Thread_Enable_dispatch();
 	if (i)
-		rtems_panic ("Can't release network semaphore\n");
+		rtems_panic ("rtems-net: can't release network sema: %i\n");
 #else
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_release (networkSemaphore);
 	if (sc != RTEMS_SUCCESSFUL)
-		rtems_panic ("Can't release network semaphore: `%s'\n", rtems_status_text (sc));
+		rtems_panic ("rtems-net: can't release network semaphore: `%s'\n",
+                 rtems_status_text (sc));
 #endif
 }
 

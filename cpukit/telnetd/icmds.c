@@ -54,11 +54,11 @@ static int main_udp(int argc,char * argv[]) {
 /*+++++++++++++++++++++++++++++++++++++++++++++*/
 
 void _rtems_telnetd_register_icmds(void) {
- shell_add_cmd("inet"    ,"net","inet routes"               ,main_inet);   
- shell_add_cmd("mbuf"    ,"net","mbuf stats"                ,main_mbuf);   
- shell_add_cmd("if"      ,"net","if   stats"                ,main_if  );   
- shell_add_cmd("ip"      ,"net","ip   stats"                ,main_ip  );   
- shell_add_cmd("icmp"    ,"net","icmp stats"                ,main_icmp);   
- shell_add_cmd("tcp"     ,"net","tcp  stats"                ,main_tcp );   
- shell_add_cmd("udp"     ,"net","udp  stats"                ,main_udp );   
+ rtems_shell_add_cmd("inet"    ,"net","inet routes"               ,main_inet);   
+ rtems_shell_add_cmd("mbuf"    ,"net","mbuf stats"                ,main_mbuf);   
+ rtems_shell_add_cmd("if"      ,"net","if   stats"                ,main_if  );   
+ rtems_shell_add_cmd("ip"      ,"net","ip   stats"                ,main_ip  );   
+ rtems_shell_add_cmd("icmp"    ,"net","icmp stats"                ,main_icmp);   
+ rtems_shell_add_cmd("tcp"     ,"net","tcp  stats"                ,main_tcp );   
+ rtems_shell_add_cmd("udp"     ,"net","udp  stats"                ,main_udp );   
 }

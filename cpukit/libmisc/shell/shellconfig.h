@@ -34,6 +34,7 @@ extern rtems_shell_cmd_t rtems_shell_ID_Command;
 extern rtems_shell_cmd_t rtems_shell_TTY_Command;
 extern rtems_shell_cmd_t rtems_shell_WHOAMI_Command;
 
+extern rtems_shell_cmd_t rtems_shell_CP_Command;
 extern rtems_shell_cmd_t rtems_shell_PWD_Command;
 extern rtems_shell_cmd_t rtems_shell_LS_Command;
 extern rtems_shell_cmd_t rtems_shell_CHDIR_Command;
@@ -192,6 +193,11 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
     /*
      *  File and directory commands
      */
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CP)) || \
+        defined(CONFIGURE_SHELL_COMMAND_CP)
+      &rtems_shell_CP_Command,
+    #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_PWD)) || \
         defined(CONFIGURE_SHELL_COMMAND_PWD)

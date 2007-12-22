@@ -68,10 +68,11 @@ if LIBNETWORKING
 shell_mount_fs = shell/main_mount_ftp.c shell/main_mount_nfs.c \
     shell/main_mount_tftp.c
 endif
+libshell_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shell
 libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_alias.c shell/main_cat.c shell/main_cd.c \
     shell/main_chdir.c shell/main_chmod.c shell/main_chroot.c \
-    shell/main_cpuuse.c shell/main_date.c shell/main_dir.c \
+    shell/main_cp.c shell/main_cpuuse.c shell/main_date.c shell/main_dir.c \
     shell/main_exit.c shell/main_help.c shell/main_id.c \
     shell/main_logoff.c shell/main_ls.c shell/main_mallocinfo.c \
     shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
@@ -82,7 +83,10 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_tty.c shell/main_umask.c shell/main_unmount.c \
     shell/main_blksync.c shell/main_whoami.c shell/shell.c \
     shell/shell_cmdset.c shell/shellconfig.c shell/shellconfig.h \
-    shell/shell.h shell/shell_makeargs.c shell/str2int.c shell/write_file.c
+    shell/shell.h shell/shell_makeargs.c shell/str2int.c shell/write_file.c \
+    shell/utils-cp.c shell/err.c shell/errx.c shell/verr.c shell/verrx.c \
+    shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \
+    shell/fts.c
 endif
 
 EXTRA_DIST += shell/README

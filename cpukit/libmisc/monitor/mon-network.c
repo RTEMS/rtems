@@ -326,7 +326,10 @@ void mon_route(int argc, char *argv[],  uint32_t command_arg,
         flags |= RTF_HOST;
     }
 
-    rc = rtems_bsdnet_rtrequest(cmd, &dst, &gw, &netmask, flags, NULL);
+    rc = rtems_bsdnet_rtrequest(cmd,
+                                (struct sockaddr*) &dst,
+                                (struct sockaddr*) &gw,
+                                (struct sockaddr*) &netmask, flags, NULL);
     if (rc < 0) {
         printf("Error adding route\n");
     }

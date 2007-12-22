@@ -43,6 +43,14 @@ rtems_shell_nfs_mounter (const char*                device,
     return -1;
   }
 
+  if (rpcUdpInit () < 0)
+  {
+    fprintf (stdout, "error: initialising RPC\n");
+    return -1;
+  }
+
+  nfsInit (0, 0);
+  
   uidhost = strdup (device);
   path = strchr (uidhost, ':');
   *path = '\0';
@@ -56,7 +64,7 @@ rtems_shell_nfs_mounter (const char*                device,
 }
 
 rtems_shell_filesystems_t rtems_shell_Mount_NFS = {
-  name:          "ftp",
+  name:          "nfs",
   driver_needed: 1,
   fs_ops:        NULL,
   mounter:       rtems_shell_nfs_mounter

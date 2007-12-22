@@ -64,6 +64,13 @@ void _CORE_mutex_Initialize(
     the_mutex->holder_id  = _Thread_Executing->Object.id;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+      
+#ifdef __STRICT_ORDER_MUTEX__
+       _Chain_Prepend_unprotected( &executing->lock_mutex,
+                                   &the_mutex->queue.lock_queue );
+       the_mutex->queue.priority_before = executing->current_priority;
+#endif
+
       _Thread_Executing->resource_count++;
   } else {
     the_mutex->nest_count = 0;

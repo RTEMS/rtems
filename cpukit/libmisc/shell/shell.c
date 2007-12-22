@@ -51,26 +51,27 @@ rtems_shell_env_t *rtems_shell_init_env(
 {
   rtems_shell_env_t *shell_env;
   
+  if (rtems_global_shell_env.magic != 0x600D600d) {
+    rtems_global_shell_env.magic         = 0x600D600d;
+    rtems_global_shell_env.devname       = "";
+    rtems_global_shell_env.taskname      = "GLOBAL";
+    rtems_global_shell_env.tcflag        = 0;
+    rtems_global_shell_env.exit_shell    = 0;
+    rtems_global_shell_env.forever       = TRUE;
+    rtems_global_shell_env.input         = 0;
+    rtems_global_shell_env.output        = 0;
+    rtems_global_shell_env.output_append = 0;
+  }
+
   shell_env = shell_env_arg;
 
   if ( !shell_env ) {
     shell_env = malloc(sizeof(rtems_shell_env_t));
     if ( !shell_env )
      return NULL;
+    *shell_env = rtems_global_shell_env;
+    shell_env->taskname = NULL;
   }
-
-  if (rtems_global_shell_env.magic != 0x600D600d) {
-    rtems_global_shell_env.magic      = 0x600D600d;
-    rtems_global_shell_env.devname    = "";
-    rtems_global_shell_env.taskname   = "GLOBAL";
-    rtems_global_shell_env.tcflag     = 0;
-    rtems_global_shell_env.exit_shell = 0;
-    rtems_global_shell_env.forever    = TRUE;
-  }
-
-  *shell_env = rtems_global_shell_env;
-  shell_env->taskname = NULL;
-  shell_env->forever = FALSE;
 
   return shell_env;
 }
@@ -344,10 +345,12 @@ void rtems_shell_print_env(
 
 rtems_task rtems_shell_task(rtems_task_argument task_argument)
 {
-  rtems_shell_env_t * shell_env = (rtems_shell_env_t*) task_argument;
-
-   rtems_shell_main_loop( shell_env );
-   rtems_task_delete( RTEMS_SELF );
+  rtems_shell_env_t *shell_env = (rtems_shell_env_t*) task_argument;
+  rtems_id           wake_on_end = shell_env->wake_on_end;
+  rtems_shell_main_loop( shell_env );
+  if (wake_on_end != RTEMS_INVALID_ID)
+    rtems_event_send (wake_on_end, RTEMS_EVENT_1);
+  rtems_task_delete( RTEMS_SELF );
 }
 
 #define RTEMS_SHELL_MAXIMUM_ARGUMENTS 128
@@ -365,14 +368,20 @@ rtems_boolean rtems_shell_main_loop(
   char               last_cmd[256]; /* to repeat 'r' */
   int                argc;
   char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
+  rtems_boolean      result = TRUE;
+  rtems_boolean      input_file = FALSE;
+  int                line = 0;
 
   rtems_shell_initialize_command_set();
 
+  shell_env               = 
+  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
+ 
   /*
    * @todo chrisj
-   * Remove the use of task variables. Chnage to have a single
+   * Remove the use of task variables. Change to have a single
    * allocation per shell and then set into a notepad register
-   * in the TCP. Provide a function to return the pointer.
+   * in the TCB. Provide a function to return the pointer.
    * Task variables are a virus to embedded systems software.
    */
   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_shell_env,free);
@@ -381,32 +390,62 @@ rtems_boolean rtems_shell_main_loop(
     return FALSE;
   }
 
-  shell_env               = 
-  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
- 
   setuid(0);
   setgid(0);
   rtems_current_user_env->euid =
   rtems_current_user_env->egid = 0;
 
-  setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
-  /* make a raw terminal,Linux Manuals */
-  if (tcgetattr(fileno(stdin), &term) >= 0) {
-    term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
-    term.c_oflag &= ~OPOST;
-    term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
-    term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-    if (shell_env->tcflag)
-      term.c_cflag = shell_env->tcflag;
-    term.c_cflag  |= CLOCAL | CREAD;
-    term.c_cc[VMIN]  = 1;
-    term.c_cc[VTIME] = 0;
-    if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
-      fprintf(stderr,
-        "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
+  fileno(stdout);
+
+  if (strcmp(shell_env->output, "stdout") != 0) {
+    if (strcmp(shell_env->output, "stderr") == 0) {
+      stdout = stderr;
+    } else if (strcmp(shell_env->output, "/dev/null") == 0) {
+      fclose (stdout);
+    } else {
+      FILE *output = fopen(shell_env_arg->output,
+                           shell_env_arg->output_append ? "a" : "w");
+      if (!output) {
+        fprintf(stderr, "shell: open output %s failed: %s\n",
+                shell_env_arg->output, strerror(errno));
+        return FALSE;
+      }
+      stdout = output;
     }
-    setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
   }
+  
+  if (strcmp(shell_env_arg->input, "stdin") != 0) {
+    FILE *input = fopen(shell_env_arg->input, "r");
+    if (!input) {
+      fprintf(stderr, "shell: open input %s failed: %s\n",
+              shell_env_arg->input, strerror(errno));
+      return FALSE;
+    }
+    stdin = input;
+    shell_env->forever = FALSE;
+    input_file = TRUE;
+  }
+  else {
+    /* make a raw terminal,Linux Manuals */
+    if (tcgetattr(fileno(stdin), &term) >= 0) {
+      term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+      term.c_oflag &= ~OPOST;
+      term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
+      term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+      if (shell_env->tcflag)
+        term.c_cflag = shell_env->tcflag;
+      term.c_cflag  |= CLOCAL | CREAD;
+      term.c_cc[VMIN]  = 1;
+      term.c_cc[VTIME] = 0;
+      if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
+        fprintf(stderr,
+                "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
+      }
+    }
+  }
+
+  setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
+  setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
 
   rtems_shell_initialize_command_set();
   do {
@@ -414,43 +453,64 @@ rtems_boolean rtems_shell_main_loop(
     sc = rtems_libio_set_private_env();
     if (sc != RTEMS_SUCCESSFUL) {
       rtems_error(sc,"rtems_libio_set_private_env():");
-      return FALSE;
+      result = FALSE;
+      break;
     }
-    if (!rtems_shell_login(stdin,stdout))  {
-      rtems_shell_cat_file(stdout,"/etc/motd");
+    if (input_file || !rtems_shell_login(stdin,stdout))  {
+      const char *c;
       strcpy(last_cmd,"");
       strcpy(cmd,"");
-      printf("\n"
-        "RTEMS SHELL (Ver.1.0-FRC):%s. "__DATE__". 'help' to list commands.\n",
-        shell_env->devname);
+      if (!input_file) {
+        rtems_shell_cat_file(stdout,"/etc/motd");
+        fprintf(stdout, "\n"
+                "RTEMS SHELL (Ver.1.0-FRC):%s. " \
+                __DATE__". 'help' to list commands.\n",
+                shell_env->devname);
+      }
       chdir("/"); /* XXX: chdir to getpwent homedir */
       shell_env->exit_shell = FALSE;
       for (;;) {
         /* Prompt section */
-        /* XXX: show_prompt user adjustable */
-        getcwd(curdir,sizeof(curdir));
-        printf( "%s%s[%s] %c ",
-          ((shell_env->taskname) ? shell_env->taskname : ""),
-          ((shell_env->taskname) ? " " : ""),
-          curdir,
-          geteuid()?'$':'#'
-        );
+        if (!input_file) {
+          /* XXX: show_prompt user adjustable */
+          getcwd(curdir,sizeof(curdir));
+          fprintf(stdout, "%s%s[%s] %c ",
+                  ((shell_env->taskname) ? shell_env->taskname : ""),
+                  ((shell_env->taskname) ? " " : ""),
+                  curdir,
+                  geteuid()?'$':'#');
+        }
+        
         /* getcmd section */
         if (!rtems_shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
           break; /*EOF*/
         }
 
+        line++;
+
         /* evaluate cmd section */
+        c = cmd;
+        while (*c) {
+          if (!isblank(*c))
+            break;
+          c++;
+        }
+
+        if (*c == '\0')                 /* empty line */
+          continue;
+        if (*c == '#')                  /* comment character */
+          continue;
+
         if (!strcmp(cmd,"e")) {         /* edit last command */
           strcpy(cmd,last_cmd);
           continue;
         } else if (!strcmp(cmd,"r")) {  /* repeat last command */
           strcpy(cmd,last_cmd);
-        } else if (!strcmp(cmd,"bye")) { /* exit to telnetd */
-          printf("Shell exiting\n" );
-          return TRUE;
-        } else if (!strcmp(cmd,"exit")) { /* exit application */
-          printf("System shutting down at user request\n" );
+        } else if (!strcmp(cmd,"bye") || !strcmp(cmd,"exit")) {
+          fprintf(stdout, "Shell exiting\n" );
+          break;
+        } else if (!strcmp(cmd,"shutdown")) { /* exit application */
+          fprintf(stdout, "System shutting down at user request\n" );
           exit(0);
         } else if (!strcmp(cmd,"")) {    /* only for get a new prompt */
           strcpy(last_cmd,cmd);
@@ -469,7 +529,7 @@ rtems_boolean rtems_shell_main_loop(
           if ( argv[0] == NULL ) {
             shell_env->errorlevel = -1;
           } else if ( shell_cmd == NULL ) {
-            printf("shell:%s command not found\n", argv[0]);
+            fprintf(stdout, "shell:%s command not found\n", argv[0]);
             shell_env->errorlevel = -1;
           } else {
             shell_env->errorlevel = shell_cmd->command(argc, argv);
@@ -482,22 +542,25 @@ rtems_boolean rtems_shell_main_loop(
         strcpy(last_cmd, cmd);
         cmd[0] = 0;
       }
-      printf("\nGoodbye from RTEMS SHELL :-(\n");
       fflush( stdout );
       fflush( stderr );
     }
-  } while (shell_env->forever);
-  return TRUE;
+  } while (result && shell_env->forever);
+  return result;
 }
 
 /* ----------------------------------------------- */
-rtems_status_code   rtems_shell_init (
+static rtems_status_code   rtems_shell_run (
   char                *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
   char                *devname,
   tcflag_t             tcflag,
-  int                  forever
+  int                  forever,
+  const char*          input,
+  const char*          output,
+  int                  output_append,
+  rtems_id             wake_on_end
 )
 {
   rtems_id           task_id;
@@ -526,15 +589,67 @@ rtems_status_code   rtems_shell_init (
 
   shell_env = rtems_shell_init_env( NULL );
   if ( !shell_env )  {
-   rtems_error(sc,"allocating shell_env %s in shell_init()",task_name);
+   rtems_error(RTEMS_NO_MEMORY,
+               "allocating shell_env %s in shell_init()",task_name);
    return RTEMS_NO_MEMORY;
   }
-  shell_env->devname    = devname;
-  shell_env->taskname   = task_name;
-  shell_env->tcflag     = tcflag;
-  shell_env->exit_shell = FALSE;
-  shell_env->forever    = forever;
+  shell_env->devname       = devname;
+  shell_env->taskname      = task_name;
+  shell_env->tcflag        = tcflag;
+  shell_env->exit_shell    = FALSE;
+  shell_env->forever       = forever;
+  shell_env->input         = strdup (input);
+  shell_env->output        = strdup (output);
+  shell_env->output_append = output_append;
+  shell_env->wake_on_end   = wake_on_end;
 
   return rtems_task_start(task_id, rtems_shell_task,
                           (rtems_task_argument) shell_env);
+}
+
+rtems_status_code   rtems_shell_init (
+  char                *task_name,
+  uint32_t             task_stacksize,
+  rtems_task_priority  task_priority,
+  char                *devname,
+  tcflag_t             tcflag,
+  int                  forever
+)
+{
+  return rtems_shell_run (task_name, task_stacksize, task_priority,
+                          devname, tcflag, forever,
+                          "stdin", "stdout", 0, RTEMS_INVALID_ID);
+}
+
+rtems_status_code   rtems_shell_script (
+  char                *task_name,
+  uint32_t             task_stacksize,
+  rtems_task_priority  task_priority,
+  const char*          input,
+  const char*          output,
+  int                  output_append,
+  int                  wait
+)
+{
+  rtems_id          current_task = RTEMS_INVALID_ID;
+  rtems_status_code sc;
+
+  if (wait) {
+    sc = rtems_task_ident (RTEMS_SELF, RTEMS_LOCAL, &current_task);
+    if (sc != RTEMS_SUCCESSFUL)
+      return sc;
+  }
+  
+  sc = rtems_shell_run (task_name, task_stacksize, task_priority,
+                        NULL, 0, 0, input, output, output_append,
+                        current_task);
+  if (sc != RTEMS_SUCCESSFUL)
+    return sc;
+
+  if (wait) {
+    rtems_event_set out;
+    sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
+  }
+
+  return sc;
 }

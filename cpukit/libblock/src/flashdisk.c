@@ -2002,7 +2002,7 @@ rtems_fdisk_read (rtems_flashdisk* fd, blkdev_request* req)
 
 /**
  * Flash disk WRITE request handler. This primitive copies data from
- * supplied buffer to RAM disk and invoke the callout function to inform
+ * supplied buffer to flash disk and invoke the callout function to inform
  * upper layer that writing is completed.
  *
  * @param req Pointers to the WRITE block device request info.
@@ -2340,6 +2340,8 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
 /**
  * Flash disk device driver initialization.
  *
+ * @todo Memory clean up on error is really badly handled.
+ *
  * @param major Flash disk major device number.
  * @param minor Minor device number, not applicable.
  * @param arg Initialization argument, not applicable.
@@ -2419,7 +2421,7 @@ rtems_fdisk_initialize (rtems_device_major_number major,
     if (!fd->blocks)
       return RTEMS_NO_MEMORY;
 
-    fd->block_count  = blocks;
+    fd->block_count = blocks;
 
     fd->devices = calloc (c->device_count, sizeof (rtems_fdisk_device_ctl));
     if (!fd->devices)
@@ -2471,9 +2473,9 @@ rtems_fdisk_initialize (rtems_device_major_number major,
     if (ret)
       rtems_fdisk_error ("compacting of disk failed: %s (%d)",
                          strerror (ret), ret);
-
-    rtems_flashdisk_count = rtems_flashdisk_configuration_size;
   }
+
+  rtems_flashdisk_count = rtems_flashdisk_configuration_size;
 
   return RTEMS_SUCCESSFUL;
 }

@@ -1,3 +1,29 @@
+2007-12-22	Chris Johns <chrisj@rtems.org>
+
+	* configure.ac: fixed bug that always enabled strict order
+	mutexes.
+	* score/inline/rtems/score/coremutex.inl: Fixed coding standard.
+	* score/src/coremutex.c: Add the holder's thread to the lock_mutex
+	list if the mutex is initialised locked.
+	* libnetworking/rtems/rtems_glue.c: Changed semaphore error
+	message to show the error is an rtems-net error.
+	* libmisc/monitor/mon-network.c: Removed warnings.
+	* telnetd/icmds.c: Changed shell_* to rtems_shell_*.
+	* score/Makefile.am: Fixed typo that stopped 'make tags' working.
+	* libmisc/shell/err.c, libmisc/shell/err.h, libmisc/shell/errx.c,
+	libmisc/shell/extern-cp.h, libmisc/shell/fts.c,
+	libmisc/shell/fts.h, libmisc/shell/main_cp.c,
+	libmisc/shell/utils-cp.c, libmisc/shell/verr.c,
+	libmisc/shell/verrx.c, libmisc/shell/vwarn.c,
+	libmisc/shell/vwarnx.c, libmisc/shell/warn.c,
+	libmisc/shell/warnx.c: New. Ported from BSD.
+	* libmisc/shell/shellconfig.h: Add the cp command.
+	* libmisc/Makefile.am: Add the new files to the shell.
+	* libmisc/shell/shell.c, libmisc/shell/shell.h: Add scripting
+	support.
+	* libblock/src/flashdisk.c: Fixed disk drive count size setting
+	bug.
+	
 2007-12-21	Xi Yang <hiyangxi@gmail.com>
 
 	* rtems/src/semtranslatereturncode.c: Add support for proper stacking
