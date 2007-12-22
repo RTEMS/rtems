@@ -920,12 +920,11 @@ rpcUdpInit(void)
 int					noblock = 1;
 struct sockwakeup	wkup;
 
-	fprintf(stderr,"This is RTEMS-RPCIOD Release $Name$\n");
-	fprintf(stderr,"($Id$)\n\n");
-	fprintf(stderr,"Till Straumann, Stanford/SLAC/SSRL 2002\n");
-	fprintf(stderr,"See LICENSE file for licensing info\n");
-
 	if (ourSock < 0) {
+    fprintf(stderr,"RTEMS-RPCIOD $Release$, " \
+            "Till Straumann, Stanford/SLAC/SSRL 2002, " \
+            "See LICENSE file for licensing info.\n");
+
 		ourSock=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (ourSock>=0) {
 			bindresvport(ourSock,(struct sockaddr_in*)0);

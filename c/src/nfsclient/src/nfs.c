@@ -963,13 +963,19 @@ NfsNode rval = nfsNodeCreate(node->nfs, 0);
  */
 void
 nfsInit(int smallPoolDepth, int bigPoolDepth)
-{  
+{
+static int initialised = 0;
 entry	dummy;
 
-	fprintf(stderr,"This is RTEMS-NFS Release $Name$\n");
-	fprintf(stderr,"($Id$)\n\n");
-	fprintf(stderr,"Till Straumann, Stanford/SLAC/SSRL 2002\n");
-	fprintf(stderr,"See LICENSE file for licensing info\n");
+	if (initialised)
+		return;
+
+	initialised = 1;
+
+	fprintf(stderr,
+          "RTEMS-NFS $Release$, "                       \
+          "Till Straumann, Stanford/SLAC/SSRL 2002, " \
+          "See LICENSE file for licensing info.\n");
 
 	/* Get a major number */
 
