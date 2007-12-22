@@ -1,6 +1,6 @@
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/inttypes.h newlib-1.15.0/newlib/libc/include/inttypes.h
 --- newlib-1.15.0.orig/newlib/libc/include/inttypes.h	2005-12-16 20:03:12.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/inttypes.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/inttypes.h	2007-12-21 18:01:37.000000000 +0100
 @@ -242,9 +242,12 @@
  #define SCNxMAX		__SCNMAX(x)
  
@@ -19,7 +19,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/inttypes.h newlib-1.15.0/newlib
  #define __SCNPTR(x) __STRINGIFY(l##x)
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.15.0/newlib/libc/include/machine/setjmp.h
 --- newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h	2006-12-18 17:48:03.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/machine/setjmp.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/machine/setjmp.h	2007-12-21 18:01:37.000000000 +0100
 @@ -27,7 +27,7 @@
  
  /* necv70 was 9 as well. */
@@ -31,7 +31,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.15.0/
   * fp2-fp7	for 68881.
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/stdint.h newlib-1.15.0/newlib/libc/include/stdint.h
 --- newlib-1.15.0.orig/newlib/libc/include/stdint.h	2006-08-16 23:39:43.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/stdint.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/stdint.h	2007-12-21 18:01:37.000000000 +0100
 @@ -393,6 +393,9 @@
  #define UINTMAX_C(x)	x##UL
  #endif
@@ -44,7 +44,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/stdint.h newlib-1.15.0/newlib/l
  }
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/errno.h newlib-1.15.0/newlib/libc/include/sys/errno.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/errno.h	2002-09-24 16:10:12.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/errno.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/errno.h	2007-12-21 18:01:37.000000000 +0100
 @@ -148,6 +148,7 @@
  #define ECASECLASH 137  /* Filename exists with different case */
  #define EILSEQ 138
@@ -55,7 +55,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/errno.h newlib-1.15.0/newli
  #define EWOULDBLOCK EAGAIN	/* Operation would block */
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/features.h newlib-1.15.0/newlib/libc/include/sys/features.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/features.h	2006-09-14 00:09:27.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/features.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/features.h	2007-12-21 18:01:37.000000000 +0100
 @@ -38,6 +38,7 @@
  #define _POSIX_MEMLOCK_RANGE		1
  #define _POSIX_MEMORY_PROTECTION	1
@@ -175,7 +175,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/features.h newlib-1.15.0/ne
  #ifdef __cplusplus
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/time.h newlib-1.15.0/newlib/libc/include/sys/time.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/time.h	2006-02-15 11:26:30.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/sys/time.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/time.h	2007-12-21 18:01:37.000000000 +0100
 @@ -70,7 +70,7 @@
    } while (0)
  #endif /* defined (__rtems__) || defined (__CYGWIN__) */
@@ -187,7 +187,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/time.h newlib-1.15.0/newlib
  int _EXFUN(getitimer, (int __which, struct itimerval *__value));
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/_types.h newlib-1.15.0/newlib/libc/include/sys/_types.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/_types.h	2004-06-11 22:37:09.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/include/sys/_types.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/_types.h	2007-12-21 18:01:37.000000000 +0100
 @@ -39,4 +39,7 @@
  /* Iconv descriptor type */
  typedef void *_iconv_t;
@@ -198,7 +198,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/_types.h newlib-1.15.0/newl
  #endif	/* _SYS__TYPES_H */
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h newlib-1.15.0/newlib/libc/include/sys/unistd.h
 --- newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h	2006-11-07 16:33:40.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/sys/unistd.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/unistd.h	2007-12-21 18:01:37.000000000 +0100
 @@ -27,6 +27,9 @@
  int     _EXFUN(chroot, (const char *__path ));
  #endif
@@ -523,9 +523,52 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h newlib-1.15.0/newl
  # define	MAXPATHLEN	1024
  #endif
  
+diff -uNr newlib-1.15.0.orig/newlib/libc/include/tar.h newlib-1.15.0/newlib/libc/include/tar.h
+--- newlib-1.15.0.orig/newlib/libc/include/tar.h	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/tar.h	2007-12-21 18:01:37.000000000 +0100
+@@ -0,0 +1,39 @@
++/*
++ * tar.h
++ */
++
++#ifndef _TAR_H
++#define _TAR_H
++
++/* General definitions */
++#define TMAGIC 		"ustar" /* ustar plus null byte. */
++#define TMAGLEN 	6 	/* Length of the above. */
++#define TVERSION 	"00"	/* 00 without a null byte. */
++#define TVERSLEN	2	/* Length of the above. */
++
++/* Typeflag field definitions */
++#define REGTYPE 	'0'	/* Regular file. */
++#define AREGTYPE	'\0'	/* Regular file. */
++#define LNKTYPE		'1'	/* Link. */
++#define SYMTYPE		'2'	/* Symbolic link. */
++#define CHRTYPE		'3'	/* Character special. */
++#define BLKTYPE		'4'	/* Block special. */
++#define DIRTYPE		'5'	/* Directory. */
++#define FIFOTYPE	'6'	/* FIFO special. */
++#define CONTTYPE	'7'	/* Reserved. */
++
++/* Mode field bit definitions (octal) */
++#define	TSUID		04000	/* Set UID on execution. */
++#define	TSGID		02000	/* Set GID on execution. */
++#define	TSVTX		01000	/* On directories, restricted deletion flag. */
++#define	TUREAD		00400	/* Read by owner. */
++#define	TUWRITE		00200	/* Write by owner. */
++#define	TUEXEC		00100	/* Execute/search by owner. */
++#define	TGREAD		00040	/* Read by group. */
++#define	TGWRITE		00020	/* Write by group. */
++#define	TGEXEC		00010	/* Execute/search by group. */
++#define	TOREAD		00004	/* Read by other. */
++#define	TOWRITE		00002	/* Write by other. */
++#define	TOEXEC		00001	/* Execute/search by other. */
++
++#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/include/time.h newlib-1.15.0/newlib/libc/include/time.h
 --- newlib-1.15.0.orig/newlib/libc/include/time.h	2005-11-18 16:57:24.000000000 +0100
-+++ newlib-1.15.0/newlib/libc/include/time.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/time.h	2007-12-21 18:01:37.000000000 +0100
 @@ -226,6 +226,16 @@
  
  #endif
@@ -543,9 +586,25 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/include/time.h newlib-1.15.0/newlib/lib
  #if defined(_POSIX_CPUTIME)
  
  /* Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55 */
+diff -uNr newlib-1.15.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.15.0/newlib/libc/machine/arm/machine/endian.h
+--- newlib-1.15.0.orig/newlib/libc/machine/arm/machine/endian.h	2004-05-07 22:29:24.000000000 +0200
++++ newlib-1.15.0/newlib/libc/machine/arm/machine/endian.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,12 +0,0 @@
+-/* ARM configuration file */
+-
+-#ifndef _MACHINE_ENDIAN_H
+-# define _MACHINE_ENDIAN_H
+-
+-#ifdef __ARMEB__
+-#define BYTE_ORDER BIG_ENDIAN
+-#else
+-#define BYTE_ORDER LITTLE_ENDIAN
+-#endif
+-
+-#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S
 --- newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S	2002-04-19 21:16:17.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S	2007-12-21 18:01:37.000000000 +0100
 @@ -5,13 +5,14 @@
  #include "ppc-asm.h"
  
@@ -679,7 +738,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/
  	mr.	3,4
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/db_local.h newlib-1.15.0/newlib/libc/search/db_local.h
 --- newlib-1.15.0.orig/newlib/libc/search/db_local.h	2002-06-25 01:05:08.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/db_local.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/db_local.h	2007-12-21 18:01:37.000000000 +0100
 @@ -50,7 +50,7 @@
  #define	MAX_PAGE_NUMBER	0xffffffff	/* >= # of pages in a file */
  typedef __uint32_t	pgno_t;
@@ -706,7 +765,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/db_local.h newlib-1.15.0/newlib/
  }
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/extern.h newlib-1.15.0/newlib/libc/search/extern.h
 --- newlib-1.15.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/extern.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/extern.h	2007-12-21 18:01:37.000000000 +0100
 @@ -48,7 +48,7 @@
  int	 __delpair(HTAB *, BUFHEAD *, int);
  int	 __expand_table(HTAB *);
@@ -718,7 +777,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/extern.h newlib-1.15.0/newlib/li
  int	 __get_page(HTAB *, char *, __uint32_t, int, int, int);
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.15.0/newlib/libc/search/hash_bigkey.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c	2006-06-07 21:22:59.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_bigkey.c	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/hash_bigkey.c	2007-12-21 18:01:37.000000000 +0100
 @@ -92,13 +92,13 @@
  	BUFHEAD *bufp;
  	const DBT *key, *val;
@@ -971,7 +1030,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.15.0/newl
  		/*
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_buf.c newlib-1.15.0/newlib/libc/search/hash_buf.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_buf.c	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/hash_buf.c	2007-12-21 18:01:37.000000000 +0100
 @@ -176,7 +176,7 @@
  	BUFHEAD *next_xbp;
  	SEGMENT segp;
@@ -1001,7 +1060,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_buf.c newlib-1.15.0/newlib/
  					oaddr = shortp[shortp[0] - 1];
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.c newlib-1.15.0/newlib/libc/search/hash.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash.c	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/hash.c	2007-12-21 18:01:37.000000000 +0100
 @@ -628,10 +628,10 @@
  {
  	BUFHEAD *rbufp;
@@ -1089,7 +1148,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.c newlib-1.15.0/newlib/libc
  		if (!bp[0]) {
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.h newlib-1.15.0/newlib/libc/search/hash.h
 --- newlib-1.15.0.orig/newlib/libc/search/hash.h	2002-07-02 20:18:58.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/hash.h	2007-12-21 18:01:37.000000000 +0100
 @@ -102,7 +102,7 @@
  #define NCACHED	32			/* number of bit maps and spare 
  					 * points */
@@ -1101,7 +1160,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash.h newlib-1.15.0/newlib/libc
  
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_page.c newlib-1.15.0/newlib/libc/search/hash_page.c
 --- newlib-1.15.0.orig/newlib/libc/search/hash_page.c	2002-09-19 23:28:51.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/hash_page.c	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/hash_page.c	2007-12-21 18:01:37.000000000 +0100
 @@ -77,16 +77,16 @@
  static __uint32_t	*fetch_bitmap(HTAB *, int);
  static __uint32_t	 first_free(__uint32_t);
@@ -1448,7 +1507,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/hash_page.c newlib-1.15.0/newlib
  	n = sp[0];
 diff -uNr newlib-1.15.0.orig/newlib/libc/search/page.h newlib-1.15.0/newlib/libc/search/page.h
 --- newlib-1.15.0.orig/newlib/libc/search/page.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/search/page.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/search/page.h	2007-12-21 18:01:37.000000000 +0100
 @@ -74,20 +74,20 @@
   * You might as well do this up front.
   */
@@ -1476,9 +1535,44 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/search/page.h newlib-1.15.0/newlib/libc
 -	__uint16_t next_addr;
 +	__uint_least16_t next_addr;
  }       SPLIT_RETURN;
+diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h
+--- newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h	2007-12-21 18:01:37.000000000 +0100
+@@ -0,0 +1,31 @@
++/*
++ *
++ */
++#ifndef _MACHINE_STDINT_H
++#define _MACHINE_STDINT_H
++
++#ifndef _STDINT_H
++#error machine/stdint.h is an internal file and  must not be directly included
++#endif
++
++#if defined(__sparc__) \
++  || defined(__powerpc__) || defined(__PPC__) \
++  || defined(__mips__) \
++  || defined(__sh__) \
++  || defined(__AVR__) \
++  || defined(_C4x) || defined(_C3x) \
++  || defined(__H8300__)
++/* PTRDIFF_TYPE = int */
++#define __ptrint_t_int_defined 1
++#endif
++
++#if defined(__i386__) \
++  || defined(__m68k__) \
++  || defined(__bfin__) \
++  || defined(__arm__) \
++  || defined(__H8300S__) || defined(__H8300H__)
++/* PTRDIFF_TYPE = long */
++#define __ptrint_t_long_defined 1
++#endif
++
++#endif
 diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h
 --- newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h	2004-05-07 22:29:24.000000000 +0200
-+++ newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h	2007-12-21 18:01:37.000000000 +0100
 @@ -93,7 +93,6 @@
  #include <sys/resource.h>
  #include <sys/ucred.h>
@@ -1489,7 +1583,7 @@ diff -uNr newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.15.0/new
  #define	FALSE	0
 diff -uNr newlib-1.15.0.orig/newlib/Makefile.am newlib-1.15.0/newlib/Makefile.am
 --- newlib-1.15.0.orig/newlib/Makefile.am	2006-06-05 19:42:57.000000000 +0200
-+++ newlib-1.15.0/newlib/Makefile.am	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/Makefile.am	2007-12-21 18:01:37.000000000 +0100
 @@ -81,7 +81,7 @@
  	libc.a
  endif
@@ -1511,7 +1605,7 @@ diff -uNr newlib-1.15.0.orig/newlib/Makefile.am newlib-1.15.0/newlib/Makefile.am
  # used while building.
 diff -uNr newlib-1.15.0.orig/newlib/Makefile.in newlib-1.15.0/newlib/Makefile.in
 --- newlib-1.15.0.orig/newlib/Makefile.in	2006-12-18 21:32:41.000000000 +0100
-+++ newlib-1.15.0/newlib/Makefile.in	2007-12-21 12:24:11.000000000 +0100
++++ newlib-1.15.0/newlib/Makefile.in	2007-12-21 18:01:37.000000000 +0100
 @@ -103,7 +103,7 @@
  	pdf-recursive ps-recursive uninstall-info-recursive \
  	uninstall-recursive
