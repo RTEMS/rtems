@@ -7,7 +7,7 @@ target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0
 # The console loop in the Axman dbug monitor. Found by trial and error
 # with the debugger.
 #
-hb *0xffe254c0
+thb *0xffe254c0
 
 #
 # Show the exception stack frame.

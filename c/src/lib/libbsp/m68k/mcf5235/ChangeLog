@@ -1,5 +1,12 @@
 2007-12-14	Chris Johns <chrisj@rtems.org>
 
+	* gdb-init: Make the first hb temporary.
+	* network/network.c: Add support for reading the MAC address from
+	the FEC if set by the boot monitor. dBug does not do this unless
+	the network is used which is a shame.
+
+2007-12-14	Chris Johns <chrisj@rtems.org>
+
 	* gdb-init: Add the show-exception.
 
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>

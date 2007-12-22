@@ -308,6 +308,28 @@ mcf5235_fec_initialize_hardware(struct mcf5235_enet_struct *sc)
 }
 
 /*
+ * Get the MAC address from the hardware.
+ */
+static void
+fec_get_mac_address(volatile struct mcf5235_enet_struct *sc, unsigned char* hwaddr)
+{
+  unsigned long addr;
+
+  addr = MCF5235_FEC_PALR;
+
+  hwaddr[0] = (addr >> 24) & 0xff;
+  hwaddr[1] = (addr >> 16) & 0xff;
+  hwaddr[2] = (addr >>  8) & 0xff;
+  hwaddr[3] = (addr >>  0) & 0xff;
+  
+  addr = MCF5235_FEC_PAUR;
+  
+  hwaddr[4] = (addr >> 24) & 0xff;
+  hwaddr[5] = (addr >> 16) & 0xff;
+}
+                    
+
+/*
  * Soak up buffer descriptors that have been sent.
  */
 static void
@@ -789,26 +811,30 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     /*
      * Is driver free?
      */
-    if ((unitNumber <= 0) || (unitNumber > NIFACES)) {
-        printf("Bad FEC unit number.\n");
+    if ((unitNumber < 0) || (unitNumber >= NIFACES)) {
+        printf("mcf5235: bad FEC unit number.\n");
         return 0;
     }
-    sc = &enet_driver[unitNumber - 1];
+    sc = &enet_driver[unitNumber];
     ifp = &sc->arpcom.ac_if;
     if (ifp->if_softc != NULL) {
-        printf("Driver already in use.\n");
+        printf("mcf5235: driver already in use.\n");
         return 0;
     }
 
     /*
      * Process options
      */
+    if (config->hardware_address)
+      memcpy(sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
+    else
+      fec_get_mac_address(sc, sc->arpcom.ac_enaddr);
+
     hwaddr = config->hardware_address;
-    printf("%s%d: Ethernet address: %02x:%02x:%02x:%02x:%02x:%02x\n",
-                                            unitName, unitNumber,
-                                            hwaddr[0], hwaddr[1], hwaddr[2],
-                                            hwaddr[3], hwaddr[4], hwaddr[5]);
-    memcpy(sc->arpcom.ac_enaddr, hwaddr, ETHER_ADDR_LEN);
+    printf("%s%d: mac: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           unitName, unitNumber,
+           hwaddr[0], hwaddr[1], hwaddr[2],
+           hwaddr[3], hwaddr[4], hwaddr[5]);
 
     if (config->mtu)
         mtu = config->mtu;
