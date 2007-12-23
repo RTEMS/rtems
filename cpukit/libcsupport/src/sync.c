@@ -70,7 +70,7 @@ static void sync_per_thread(Thread_Control *t)
    }
 }
 
-int sync(void)
+void sync(void)
 {
   extern struct _reent libc_global_reent;
 
@@ -88,6 +88,4 @@ int sync(void)
    *  Now walk all the per-thread reentrancy structures.
    */
   rtems_iterate_over_all_threads(sync_per_thread);
-
-  return 0;
 }
