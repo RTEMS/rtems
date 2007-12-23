@@ -35,9 +35,10 @@
 
 int gettimeofday(
   struct timeval  *tp,
-  struct timezone *tzp
+  void * __tz
 )
 {
+  /* struct timezone* tzp = (struct timezone*) __tz; */
   if ( !tp ) {
     errno = EFAULT;
     return -1;
