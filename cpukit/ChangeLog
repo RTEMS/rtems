@@ -1,3 +1,9 @@
+2007-12-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/Makefile.am: _rename_r is required by newlib 1.16.0.
+	Hopefully this implementation is OK.
+	* libcsupport/src/_rename_r.c: New file.
+
 2007-12-22	Chris Johns <chrisj@rtems.org>
 
 	* configure.ac: fixed bug that always enabled strict order
