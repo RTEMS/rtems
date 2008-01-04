@@ -1,3 +1,10 @@
+2008-01-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* bsp_specs: added crtend.o back to the endfiles. Otherwise,
+	C++ static constructors are not executed because the 
+	call to __do_global_ctors_aux() is emitted into the .init
+	section by this endfile (yes, the endfile contributes to .init).
+
 2007-12-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: use new irq_bspsupport.rel which was
