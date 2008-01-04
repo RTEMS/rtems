@@ -19,10 +19,6 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 
-#if defined(__USE_INIT_FINI__)
-#include <stdlib.h> /* for atexit() */
-#endif
-
 /*
  *  rtems_shutdown_executive
  *
@@ -40,11 +36,6 @@ void rtems_shutdown_executive(
 )
 {
   if ( _System_state_Current != SYSTEM_STATE_SHUTDOWN ) {
-
-    #if defined(__USE_INIT_FINI__)
-      extern void _fini( void );
-      atexit( _fini );
-    #endif
     _System_state_Set( SYSTEM_STATE_SHUTDOWN );
     _Thread_Stop_multitasking();
   }

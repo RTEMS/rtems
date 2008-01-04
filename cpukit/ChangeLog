@@ -1,3 +1,11 @@
+2008-01-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* score/src/threadhandler.c, sapi/src/exshutdown.c:
+	cannot call _fini via atexit() from rtems_shutdown_executive()
+	because at the point where rtems_shutdown_executive is called
+	the C-library is already dead.
+	Instead, register an atexit(_fini) after calling _init().
+
 2007-12-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/Makefile.am: _rename_r is required by newlib 1.16.0.

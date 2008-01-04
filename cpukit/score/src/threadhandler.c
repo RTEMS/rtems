@@ -30,6 +30,10 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
+#if defined(__USE_INIT_FINI__)
+#include <stdlib.h> /* for atexit() */
+#endif
+
 /*PAGE
  *
  *  _Thread_Handler
@@ -125,7 +129,11 @@ void _Thread_Handler( void )
    *  RTEMS target configuration.  --joel (12 May 2007)
    */
   if (!doneCons) /* && (volatile void *)_init) */
+  {
+    extern void _fini( void );
     _init ();
+    atexit( _fini );
+  }
 #endif
 #if defined(__USE__MAIN__)
   if (!doneCons && _main)
