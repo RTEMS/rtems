@@ -18,7 +18,9 @@
 
 #include <libchip/am29lv160.h>
 
+#ifndef AM26LV160_ERROR_TRACE
 #define AM26LV160_ERROR_TRACE (0)
+#endif
 
 /**
  * Boot blocks at the top
@@ -105,7 +107,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
     if (*seg_8++ != 0xff)
     {
 #if AM26LV160_ERROR_TRACE
-      printf ("AM26LV160: blank check: %p = 0x%02x\n",
+      printf ("AM26LV160: blank check error: %p = 0x%02x\n",
               seg_8 - 1, *(seg_8 - 1));
 #endif
       return EIO;
@@ -120,7 +122,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
     if (*seg_32++ != 0xffffffff)
     {
 #if AM26LV160_ERROR_TRACE
-      printf ("AM26LV160: blank check: %p = 0x%08lx\n",
+      printf ("AM26LV160: blank check error: %p = 0x%08lx\n",
               seg_32 - 1, *(seg_32 - 1));
 #endif
       return EIO;
@@ -132,7 +134,7 @@ rtems_am29lv160_blank (const rtems_fdisk_segment_desc* sd,
     if (*seg_8++ != 0xff)
     {
 #if AM26LV160_ERROR_TRACE
-      printf ("AM26LV160: blank check: %p = 0x%02x\n",
+      printf ("AM26LV160: blank check error: %p = 0x%02x\n",
               seg_8 - 1, *(seg_8 - 1));
 #endif
       return EIO;
