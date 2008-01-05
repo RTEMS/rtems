@@ -234,7 +234,7 @@ RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__],
 
 ## This gives the same behavior as 4.8 and older
 RTEMS_CPUOPT([__STRICT_ORDER_MUTEX__],
-  [test x"${ENABLE_STRICT_ORDER_MUTEX}"= x"1"],
+  [test x"${ENABLE_STRICT_ORDER_MUTEX}" = x"1"],
   [1],
   [disable strict order mutex]
 )

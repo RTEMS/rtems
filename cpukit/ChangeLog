@@ -1,3 +1,17 @@
+2008-01-05	Chris Johns <chrisj@rtems.org>
+
+	* configure.ac: Fix typo in the strict order mutex CPU OPTs test.
+	* libmisc/shell/shell.c: Handle '#' comment characters correctly.
+	* libblock/include/rtems/flashdisk.h: Add docmentation about the
+	control fields. Add more control fields to handle the flash when
+	full.
+	* libblock/src/flashdisk.c: Fix the descriptor erase test so it
+	detects a descriptor is erased. Add support for unavailable blocks
+	the user can configure. Print the used list as a diag. Fix the bug
+	when a page is detected as failed and present on more than one
+	queue. Add a count to the queues so queue length can be used to
+	manage compaction.
+	
 2008-01-03	Till Straumann <strauman@slac.stanford.edu>
 
 	* score/src/threadhandler.c, sapi/src/exshutdown.c:

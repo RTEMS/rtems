@@ -57,6 +57,7 @@ typedef struct rtems_fdisk_monitor_data
 {
   uint32_t block_size;
   uint32_t block_count;
+  uint32_t unavail_blocks;
   uint32_t device_count;
   uint32_t segment_count;
   uint32_t page_count;
@@ -264,17 +265,47 @@ typedef struct rtems_fdisk_device_desc
 /**
  * RTEMS Flash Disk configuration table used to initialise the
  * driver.
+ *
+ * The unavailable blocks count is the number of blocks less than the
+ * available number of blocks the file system is given. This means there
+ * will always be that number of blocks available when the file system
+ * thinks the disk is full. The compaction code needs blocks to compact
+ * with so you will never be able to have all the blocks allocated to the
+ * file system and be able to full the disk.
+ *
+ * The compacting segment count is the number of segments that are
+ * moved into a new segment. A high number will mean more segments with
+ * low active page counts and high used page counts will be moved into
+ * avaliable pages how-ever this extends the compaction time due to
+ * time it takes the erase the pages. There is no pont making this number
+ * greater than the maximum number of pages in a segment.
+ *
+ * The available compacting segment count is the level when compaction occurs
+ * when writing. If you set this to 0 then compaction will fail because
+ * there will be no segments to compact into.
+ * 
+ * The info level can be 0 for off with error, and abort messages allowed.
+ * Level 1 is warning messages, level 1 is informational messages, and level 3
+ * is debugging type prints. The info level can be turned off with a compile
+ * time directive on the command line to the compiler of:
+ *
+ *     -DRTEMS_FDISK_TRACE=0
  */
 typedef struct rtems_flashdisk_config
 {
-  uint32_t                       block_size;   /**< The block size. */
-  uint32_t                       device_count; /**< The number of devices. */
-  const rtems_fdisk_device_desc* devices;      /**< The device descriptions. */
-  uint32_t                       flags;        /**< Set of flags to control
-                                                    driver. */
-  uint32_t                       compact_segs; /**< Max number of segs to 
-                                                    compact in one pass. */
-  uint32_t                       info_level;   /**< Default info level. */
+  uint32_t                       block_size;     /**< The block size. */
+  uint32_t                       device_count;   /**< The number of devices. */
+  const rtems_fdisk_device_desc* devices;        /**< The device descriptions. */
+  uint32_t                       flags;          /**< Set of flags to control
+                                                      driver. */
+  uint32_t                       unavail_blocks; /**< Number of blocks not
+                                                      available to the file sys. */
+  uint32_t                       compact_segs;   /**< Max number of segs to 
+                                                      compact in one pass. */
+  uint32_t                       avail_compact_segs; /**< The number of segments
+                                                          when compaction occurs
+                                                          when writing. */
+  uint32_t                       info_level;     /**< Default info level. */
 } rtems_flashdisk_config;
 
 /*

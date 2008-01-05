@@ -498,8 +498,11 @@ rtems_boolean rtems_shell_main_loop(
 
         if (*c == '\0')                 /* empty line */
           continue;
-        if (*c == '#')                  /* comment character */
+
+        if (*c == '#') {                /* comment character */
+          cmd[0] = 0;
           continue;
+        }
 
         if (!strcmp(cmd,"e")) {         /* edit last command */
           strcpy(cmd,last_cmd);

@@ -204,6 +204,8 @@ typedef struct rtems_fdisk_segment_ctl
   uint32_t pages_used;    /**< Number of pages flagged as used. */
   uint32_t pages_bad;     /**< Number of pages detected as bad. */
 
+  uint32_t failed;        /**< The segment has failed. */
+
   uint32_t erased;        /**< Counter to debugging. Wear support would
                                remove this. */
 } rtems_fdisk_segment_ctl;
@@ -215,6 +217,7 @@ typedef struct rtems_fdisk_segment_ctl_queue
 {
   rtems_fdisk_segment_ctl* head;
   rtems_fdisk_segment_ctl* tail;
+  uint32_t                 count;
 } rtems_fdisk_segment_ctl_queue;
 
 /**
@@ -248,12 +251,15 @@ typedef struct rtems_flashdisk
   uint32_t flags;                          /**< configuration flags. */
 
   uint32_t compact_segs;                   /**< Max segs to compact at once. */
+  uint32_t avail_compact_segs;             /**< The number of segments when
+                                                compaction occurs when writing. */
   
   uint32_t               block_size;       /**< The block size for this disk. */
   rtems_fdisk_block_ctl* blocks;           /**< The block to segment-page
                                                 mappings. */
-  uint32_t               block_count;      /**< The number of available
-                                                blocks. */
+  uint32_t block_count;                    /**< The number of avail. blocks. */
+  uint32_t unavail_blocks;                 /**< The number of unavail blocks. */
+ 
   rtems_fdisk_device_ctl* devices;         /**< The flash devices for this
                                                 disk. */
   uint32_t                device_count;    /**< The number of flash devices. */
@@ -443,6 +449,25 @@ static void
 rtems_fdisk_segment_queue_init (rtems_fdisk_segment_ctl_queue* queue)
 {
   queue->head = queue->tail = 0;
+  queue->count = 0;
+}
+
+/**
+ * Push to the head of the segment control queue.
+ */
+static void
+rtems_fdisk_segment_queue_push_head (rtems_fdisk_segment_ctl_queue* queue,
+                                     rtems_fdisk_segment_ctl*       sc)
+{
+  if (sc)
+  {
+    sc->next = queue->head;
+    queue->head = sc;
+  
+    if (queue->tail == 0)
+      queue->tail = sc;
+    queue->count++;
+  }
 }
 
 /**
@@ -459,6 +484,8 @@ rtems_fdisk_segment_queue_pop_head (rtems_fdisk_segment_ctl_queue* queue)
     if (!queue->head)
       queue->tail = 0;
 
+    queue->count--;
+
     sc->next = 0;
 
     return sc;
@@ -466,29 +493,6 @@ rtems_fdisk_segment_queue_pop_head (rtems_fdisk_segment_ctl_queue* queue)
 
   return 0;
 }
-
-/**
- * Push to the head of the segment control queue.
- */
-#if 0
-static void
-rtems_fdisk_segment_queue_push_head (rtems_fdisk_segment_ctl_queue* queue,
-                                     rtems_fdisk_segment_ctl*       sc)
-{
-  if (sc)
-  {
-    if (queue->head)
-      sc->next = queue->head;
-    else
-    {
-      queue->tail = sc;
-      sc->next = 0;
-    }
-
-    queue->head = sc;
-  }
-}
-#endif
 
 /**
  * Push to the tail of the segment control queue.
@@ -510,6 +514,8 @@ rtems_fdisk_segment_queue_push_tail (rtems_fdisk_segment_ctl_queue* queue,
     {
       queue->head = queue->tail = sc;
     }
+
+    queue->count++;
   }
 }
 
@@ -544,6 +550,7 @@ rtems_fdisk_segment_queue_remove (rtems_fdisk_segment_ctl_queue* queue,
           queue->tail = prev;
       }
       sc->next = 0;
+      queue->count--;
       break;
     }
 
@@ -572,6 +579,7 @@ rtems_fdisk_segment_queue_insert_before (rtems_fdisk_segment_ctl_queue* queue,
       {
         sc->next = item;
         *prev = sc;
+        queue->count++;
         return;
       }
 
@@ -589,6 +597,15 @@ rtems_fdisk_segment_queue_insert_before (rtems_fdisk_segment_ctl_queue* queue,
 static uint32_t
 rtems_fdisk_segment_queue_count (rtems_fdisk_segment_ctl_queue* queue)
 {
+  return queue->count;
+}
+
+/**
+ * Count the number of elements on the list.
+ */
+static uint32_t
+rtems_fdisk_segment_count_queue (rtems_fdisk_segment_ctl_queue* queue)
+{
   rtems_fdisk_segment_ctl* sc = queue->head;
   uint32_t                 count = 0;
 
@@ -604,7 +621,6 @@ rtems_fdisk_segment_queue_count (rtems_fdisk_segment_ctl_queue* queue)
 /**
  * See if a segment control is present on this queue.
  */
-#if RTEMS_FDISK_TRACE
 static bool
 rtems_fdisk_segment_queue_present (rtems_fdisk_segment_ctl_queue* queue,
                                    rtems_fdisk_segment_ctl*       sc)
@@ -620,22 +636,20 @@ rtems_fdisk_segment_queue_present (rtems_fdisk_segment_ctl_queue* queue,
 
   return false;
 }
-#endif
 
 /**
- * Check if the buffer is erased.
+ * Format a string with the queue status.
  */
-static bool
-rtems_fdisk_is_erased (const void* buffer, uint32_t size)
+static void
+rtems_fdisk_queue_status (rtems_flashdisk*         fd,
+                          rtems_fdisk_segment_ctl* sc,
+                          char                     queues[5])
 {
-  const uint8_t* p = buffer;
-  uint32_t       c;
-  for (c = 0; c < size; c++)
-  {
-    if (*p != 0xff)
-      return false;
-  }
-  return true;
+  queues[0] = rtems_fdisk_segment_queue_present (&fd->available, sc) ? 'A' : '-';
+  queues[1] = rtems_fdisk_segment_queue_present (&fd->used, sc)      ? 'U' : '-';
+  queues[2] = rtems_fdisk_segment_queue_present (&fd->erase, sc)     ? 'E' : '-';
+  queues[3] = rtems_fdisk_segment_queue_present (&fd->failed, sc)    ? 'F' : '-';
+  queues[4] = '\0';
 }
 
 /**
@@ -644,7 +658,9 @@ rtems_fdisk_is_erased (const void* buffer, uint32_t size)
 static bool
 rtems_fdisk_page_desc_erased (const rtems_fdisk_page_desc* pd)
 {
-  return rtems_fdisk_is_erased (pd, sizeof (rtems_fdisk_page_desc));
+  return ((pd->crc == 0xffff) &&
+          (pd->flags == 0xffff) &&
+          (pd->block == 0xffffffff)) ? true : false;
 }
 
 /**
@@ -1126,7 +1142,9 @@ rtems_fdisk_erase_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
     rtems_fdisk_error (" erase-segment:%02d-%03d: "      \
                        "segment erase failed: %s (%d)",
                        sc->device, sc->segment, strerror (ret), ret);
-    rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
+    sc->failed = true;
+    if (!rtems_fdisk_segment_queue_present (&fd->failed, sc))
+      rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
     return ret;
   }
 
@@ -1137,6 +1155,8 @@ rtems_fdisk_erase_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
   sc->pages_active = 0;
   sc->pages_used   = 0;
   sc->pages_bad    = 0;
+  
+  sc->failed = false;
 
   /*
    * Push to the tail of the available queue. It is a very
@@ -1183,12 +1203,23 @@ static void
 rtems_fdisk_queue_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
 {
 #if RTEMS_FDISK_TRACE
-  rtems_fdisk_info (fd, " queue-seg:%02d-%03d: p=%d a=%d u=%d b=%d n=%s",
+  rtems_fdisk_info (fd, " queue-seg:%02d-%03d: p=%d a=%d u=%d b=%d f=%s n=%s",
                     sc->device, sc->segment,
                     sc->pages, sc->pages_active, sc->pages_used, sc->pages_bad,
-                    sc->next ? "set" : "null");
+                    sc->failed ? "FAILED" : "no", sc->next ? "set" : "null");
 #endif
 
+  /*
+   * If the segment has failed then check the failed queue and append
+   * if not failed.
+   */
+  if (sc->failed)
+  {
+    if (!rtems_fdisk_segment_queue_present (&fd->failed, sc))
+      rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
+    return;
+  }
+  
   /*
    * Remove the queue from the available or used queue.
    */
@@ -1207,10 +1238,9 @@ rtems_fdisk_queue_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
     if (sc->pages_active)
     {
       /*
-       * Keep the used queue sorted on the least number
-       * of pages. When we compact we want to move the
-       * pages into a new segment and cover more than one
-       * segment.
+       * Keep the used queue sorted by the most number of used
+       * pages. When we compact we want to move the pages into
+       * a new segment and cover more than one segment.
        */
       rtems_fdisk_segment_ctl* seg = fd->used.head;
       
@@ -1293,178 +1323,196 @@ rtems_fdisk_compact (rtems_flashdisk* fd)
   while (fd->used.head)
   {
     rtems_fdisk_segment_ctl* dsc;
+    rtems_fdisk_segment_ctl* ssc;
+    uint32_t                 dst_pages;
+    uint32_t                 segments;
+    uint32_t                 pages;
 
+#if RTEMS_FDISK_TRACE
+    rtems_fdisk_printf (fd, " compacting");
+#endif
+      
     dsc = rtems_fdisk_seg_most_available (&fd->available);
 
-    if (dsc)
+    if (dsc == 0)
     {
-      rtems_fdisk_segment_ctl* ssc = fd->used.head;
-      uint32_t                 dst_pages = rtems_fdisk_seg_pages_available (dsc);
-      uint32_t                 segments = 0;
-      uint32_t                 pages = 0;
-
+      rtems_fdisk_error ("compacting: no available segments to compact too");
+      return EIO;
+    }
+    
+    ssc = fd->used.head;
+    dst_pages = rtems_fdisk_seg_pages_available (dsc);
+    segments = 0;
+    pages = 0;
+    
 #if RTEMS_FDISK_TRACE
-      rtems_fdisk_printf (fd, "dsc: %d-%d", dsc->device, dsc->segment);
+    rtems_fdisk_printf (fd, " dsc:%02d-%03d: most available",
+                        dsc->device, dsc->segment);
 #endif
       
-      /*
-       * Count the number of segments that have active pages that fit into
-       * the destination segment. Also limit the number of segments that
-       * we handle during one compaction. A lower number means less aggressive
-       * compaction or less delay when compacting but it may mean the disk
-       * will fill.
-       */
+    /*
+     * Count the number of segments that have active pages that fit into
+     * the destination segment. Also limit the number of segments that
+     * we handle during one compaction. A lower number means less aggressive
+     * compaction or less delay when compacting but it may mean the disk
+     * will fill.
+     */
       
-      while (ssc &&
-             ((pages + ssc->pages_active) < dst_pages) &&
-             ((compacted_segs + segments) < fd->compact_segs))
-      {
-        pages += ssc->pages_active;
-        segments++;
-        ssc = ssc->next;
-      }
+    while (ssc &&
+           ((pages + ssc->pages_active) < dst_pages) &&
+           ((compacted_segs + segments) < fd->compact_segs))
+    {
+      pages += ssc->pages_active;
+      segments++;
+      ssc = ssc->next;
+    }
 
-      /*
-       * We need a source segment and have pages to copy and
-       * compacting one segment to another is silly. Compaction needs
-       * to free at least one more segment.
-       */
+    /*
+     * We need a source segment and have pages to copy and
+     * compacting one segment to another is silly. Compaction needs
+     * to free at least one more segment.
+     */
        
-      if (!ssc || (pages == 0) || ((compacted_segs + segments) == 1))
-        break;
+    if (!ssc || (pages == 0) || ((compacted_segs + segments) == 1))
+      break;
 
 #if RTEMS_FDISK_TRACE
-      rtems_fdisk_printf (fd, "ssc scan: %d-%d: p=%ld, seg=%ld",
-                          ssc->device, ssc->segment,
-                          pages, segments);
+    rtems_fdisk_printf (fd, " ssc scan: %d-%d: p=%ld, seg=%ld",
+                        ssc->device, ssc->segment,
+                        pages, segments);
 #endif
      
-      rtems_fdisk_segment_queue_remove (&fd->available, dsc);
+    rtems_fdisk_segment_queue_remove (&fd->available, dsc);
 
-      /*
-       * We now copy the pages to the new segment.
-       */
+    /*
+     * We now copy the pages to the new segment.
+     */
       
-      while (pages)
+    while (pages)
+    {
+      uint32_t spage;
+      int      ret;
+
+      ssc = rtems_fdisk_segment_queue_pop_head (&fd->used);
+
+      if (ssc)
       {
-        uint32_t spage;
-        int      ret;
-
-        ssc = rtems_fdisk_segment_queue_pop_head (&fd->used);
-
-        if (ssc)
+        uint32_t used = 0;
+        uint32_t active = 0;
+        for (spage = 0; spage < ssc->pages; spage++)
         {
-          uint32_t used = 0;
-          uint32_t active = 0;
-          for (spage = 0; spage < ssc->pages; spage++)
-          {
-            rtems_fdisk_page_desc* spd = &ssc->page_descriptors[spage];
+          rtems_fdisk_page_desc* spd = &ssc->page_descriptors[spage];
 
-            if (rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_ACTIVE) &&
-                !rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_USED))
+          if (rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_ACTIVE) &&
+              !rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_USED))
+          {
+            rtems_fdisk_page_desc* dpd;
+            uint32_t               dpage;
+
+            dpage = rtems_fdisk_seg_next_available_page (dsc);
+            dpd   = &dsc->page_descriptors[dpage];
+              
+            active++;
+              
+            if (dpage >= dsc->pages)
             {
-              rtems_fdisk_page_desc* dpd;
-              uint32_t               dpage;
-
-              dpage = rtems_fdisk_seg_next_available_page (dsc);
-              dpd   = &dsc->page_descriptors[dpage];
-              
-              active++;
-              
-              if (dpage >= dsc->pages)
-              {
-                rtems_fdisk_error ("compacting: %02d-%03d: " \
-                                   "no page desc available: %d",
-                                   dsc->device, dsc->segment,
-                                   rtems_fdisk_seg_pages_available (dsc));
-                rtems_fdisk_segment_queue_push_tail (&fd->failed, dsc);
-                return EIO;
-              }
-            
-#if RTEMS_FDISK_TRACE
-              rtems_fdisk_info (fd, "compacting: %02d-%03d-%03d=>%02d-%03d-%03d",
-                                ssc->device, ssc->segment, spage,
-                                dsc->device, dsc->segment, dpage);
-#endif
-              ret = rtems_fdisk_seg_copy_page (fd, ssc->device, ssc->segment,
-                                               spage + ssc->pages_desc,
-                                               dsc->device, dsc->segment,
-                                               dpage + dsc->pages_desc);
-              if (ret)
-              {
-                rtems_fdisk_error ("compacting: %02d-%03d-%03d=>" \
-                                   "%02d-%03d-%03d: "             \
-                                   "copy page failed: %s (%d)",
-                                   ssc->device, ssc->segment, spage,
-                                   dsc->device, dsc->segment, dpage,
-                                   strerror (ret), ret);
-                rtems_fdisk_segment_queue_push_tail (&fd->failed, dsc);
-                return ret;
-              }
-
-              *dpd = *spd;
-
-              ret = rtems_fdisk_seg_write_page_desc (fd,
-                                                     dsc->device, dsc->segment,
-                                                     dpage, dpd);
-
-              if (ret)
-              {
-                rtems_fdisk_error ("compacting: %02d-%03d-%03d=>"   \
-                                   "%02d-%03d-%03d: copy pd failed: %s (%d)",
-                                   ssc->device, ssc->segment, spage,
-                                   dsc->device, dsc->segment, dpage,
-                                   strerror (ret), ret);
-                rtems_fdisk_segment_queue_push_tail (&fd->failed, dsc);
-                return ret;
-              }
-
-              dsc->pages_active++;
-
-              /*
-               * No need to set the used bit on the source page as the
-               * segment will be erased. Power down could be a problem.
-               * We do the stats to make sure everything is as it should
-               * be.
-               */
-            
-              ssc->pages_active--;
-              ssc->pages_used++;
-              
-              fd->blocks[spd->block].segment = dsc;
-              fd->blocks[spd->block].page    = dpage;
-
-              /*
-               * Place the segment on to the correct queue.
-               */
+              rtems_fdisk_error ("compacting: %02d-%03d: " \
+                                 "no page desc available: %d",
+                                 dsc->device, dsc->segment,
+                                 rtems_fdisk_seg_pages_available (dsc));
+              dsc->failed = true;
               rtems_fdisk_queue_segment (fd, dsc);
-              
-              pages--;
+              rtems_fdisk_segment_queue_push_head (&fd->used, ssc);
+              return EIO;
             }
-            else
-              used++;
+            
+#if RTEMS_FDISK_TRACE
+            rtems_fdisk_info (fd, "compacting: %02d-%03d-%03d=>%02d-%03d-%03d",
+                              ssc->device, ssc->segment, spage,
+                              dsc->device, dsc->segment, dpage);
+#endif
+            ret = rtems_fdisk_seg_copy_page (fd, ssc->device, ssc->segment,
+                                             spage + ssc->pages_desc,
+                                             dsc->device, dsc->segment,
+                                             dpage + dsc->pages_desc);
+            if (ret)
+            {
+              rtems_fdisk_error ("compacting: %02d-%03d-%03d=>" \
+                                 "%02d-%03d-%03d: "             \
+                                 "copy page failed: %s (%d)",
+                                 ssc->device, ssc->segment, spage,
+                                 dsc->device, dsc->segment, dpage,
+                                 strerror (ret), ret);
+              dsc->failed = true;
+              rtems_fdisk_queue_segment (fd, dsc);
+              rtems_fdisk_segment_queue_push_head (&fd->used, ssc);
+              return ret;
+            }
+
+            *dpd = *spd;
+
+            ret = rtems_fdisk_seg_write_page_desc (fd,
+                                                   dsc->device, dsc->segment,
+                                                   dpage, dpd);
+
+            if (ret)
+            {
+              rtems_fdisk_error ("compacting: %02d-%03d-%03d=>"   \
+                                 "%02d-%03d-%03d: copy pd failed: %s (%d)",
+                                 ssc->device, ssc->segment, spage,
+                                 dsc->device, dsc->segment, dpage,
+                                 strerror (ret), ret);
+              dsc->failed = true;
+              rtems_fdisk_queue_segment (fd, dsc);
+              rtems_fdisk_segment_queue_push_head (&fd->used, ssc);
+              return ret;
+            }
+
+            dsc->pages_active++;
+
+            /*
+             * No need to set the used bit on the source page as the
+             * segment will be erased. Power down could be a problem.
+             * We do the stats to make sure everything is as it should
+             * be.
+             */
+            
+            ssc->pages_active--;
+            ssc->pages_used++;
+              
+            fd->blocks[spd->block].segment = dsc;
+            fd->blocks[spd->block].page    = dpage;
+
+            /*
+             * Place the segment on to the correct queue.
+             */
+            rtems_fdisk_queue_segment (fd, dsc);
+              
+            pages--;
           }
+          else
+            used++;
+        }
 
 #if RTEMS_FDISK_TRACE
-          rtems_fdisk_printf (fd, "ssc end: %d-%d: p=%ld, a=%ld, u=%ld",
-                              ssc->device, ssc->segment,
-                              pages, active, used);
+        rtems_fdisk_printf (fd, "ssc end: %d-%d: p=%ld, a=%ld, u=%ld",
+                            ssc->device, ssc->segment,
+                            pages, active, used);
 #endif
-          if (ssc->pages_active != 0)
-          {
-            rtems_fdisk_error ("compacting: ssc pages not 0: %d",
-                               ssc->pages_active);
-          }
-          
-          ret = rtems_fdisk_erase_segment (fd, ssc);
-
-          if (ret)
-            return ret;
+        if (ssc->pages_active != 0)
+        {
+          rtems_fdisk_error ("compacting: ssc pages not 0: %d",
+                             ssc->pages_active);
         }
-      }
+          
+        ret = rtems_fdisk_erase_segment (fd, ssc);
 
-      compacted_segs += segments;
+        if (ret)
+          return ret;
+      }
     }
+
+    compacted_segs += segments;
   }
 
   return 0;
@@ -1516,7 +1564,9 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
       sc->pages_active = 0;
       sc->pages_used   = 0;
       sc->pages_bad    = 0;
-    
+
+      sc->failed = false;
+      
       if (!sc->page_descriptors)
         sc->page_descriptors = malloc (sc->pages_desc * fd->block_size);
 
@@ -1574,8 +1624,11 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
                                                    page, pd);
             
             if (ret)
+            {
               rtems_fdisk_error ("forcing page to used failed: %d-%d-%d",
                                  device, segment, page);
+              sc->failed = true;
+            }
             
             sc->pages_used++;
           }
@@ -1664,13 +1717,17 @@ rtems_fdisk_read_block (rtems_flashdisk* fd,
   rtems_fdisk_segment_ctl* sc;
   rtems_fdisk_page_desc*   pd;
 
+#if RTEMS_FDISK_TRACE
+  rtems_fdisk_info (fd, "read-block:%d", block);
+#endif
+
   /*
    * Broken out to allow info messages when testing.
    */
 
-  if (block >= fd->block_count)
+  if (block >= (fd->block_count - fd->unavail_blocks))
   {
-    rtems_fdisk_error ("read-block: bad block: %d", block);
+    rtems_fdisk_error ("read-block: block out of range: %d", block);
     return EIO;
   }
 
@@ -1690,7 +1747,7 @@ rtems_fdisk_read_block (rtems_flashdisk* fd,
 
 #if RTEMS_FDISK_TRACE
   rtems_fdisk_info (fd,
-                    "read-block:%d=>%02d-%03d-%03d: p=%d a=%d u=%d b=%d n=%s: " \
+                    " read:%d=>%02d-%03d-%03d: p=%d a=%d u=%d b=%d n=%s: " \
                     "f=%04x c=%04x b=%d",
                     block, sc->device, sc->segment, bc->page,
                     sc->pages, sc->pages_active, sc->pages_used, sc->pages_bad,
@@ -1781,14 +1838,17 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
   uint32_t                 page;
   int                      ret;
     
+#if RTEMS_FDISK_TRACE
+  rtems_fdisk_info (fd, "write-block:%d", block);
+#endif
 
   /*
    * Broken out to allow info messages when testing.
    */
 
-  if (block >= fd->block_count)
+  if (block >= (fd->block_count - fd->unavail_blocks))
   {
-    rtems_fdisk_error ("write-block: bad block: %d", block);
+    rtems_fdisk_error ("write-block: block out of range: %d", block);
     return EIO;
   }
 
@@ -1801,6 +1861,11 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
   {
     sc = bc->segment;
     pd = &sc->page_descriptors[bc->page];
+
+#if RTEMS_FDISK_TRACE
+    rtems_fdisk_info (fd, " write:%02d-%03d-%03d: flag used",
+                      sc->device, sc->segment, bc->page);
+#endif
 
     /*
      * The page exists in flash so see if the page has been changed.
@@ -1830,16 +1895,19 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
     if (ret)
     {
 #if RTEMS_FDISK_TRACE
-      rtems_fdisk_info (fd, "write-block:%02d-%03d-%03d: "      \
+      rtems_fdisk_info (fd, " write:%02d-%03d-%03d: "      \
                         "write used page desc failed: %s (%d)",
                         sc->device, sc->segment, bc->page,
                         strerror (ret), ret);
 #endif
+      sc->failed = true;
     }
-
-    sc->pages_active--;
-    sc->pages_used++;
-
+    else
+    {
+      sc->pages_active--;
+      sc->pages_used++;
+    }
+    
     /*
      * If possible reuse this segment. This will mean the segment
      * needs to be removed from the available list and placed
@@ -1856,6 +1924,15 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
       rtems_fdisk_compact (fd);
   }
 
+  /*
+   * Is it time to compact the disk ?
+   *
+   * We override the background compaction configruation.
+   */
+  if (rtems_fdisk_segment_count_queue (&fd->available) <=
+      fd->avail_compact_segs)
+    rtems_fdisk_compact (fd);
+  
   /*
    * Get the next avaliable segment.
    */
@@ -1885,6 +1962,16 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
     }
   }
 
+#if RTEMS_FDISK_TRACE
+  if (fd->info_level >= 3)
+  {
+    char queues[5];
+    rtems_fdisk_queue_status (fd, sc, queues);
+    rtems_fdisk_info (fd, " write:%d=>%02d-%03d: queue check: %s",
+                      block, sc->device, sc->segment, queues);
+  }
+#endif
+  
   /*
    * Find the next avaliable page in the segment.
    */
@@ -1904,7 +1991,7 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
       rtems_fdisk_page_desc_set_flags (pd, RTEMS_FDISK_PAGE_ACTIVE);
 
 #if RTEMS_FDISK_TRACE
-      rtems_fdisk_info (fd, "write-block:%d=>%02d-%03d-%03d: "          \
+      rtems_fdisk_info (fd, " write:%d=>%02d-%03d-%03d: write: " \
                         "p=%d a=%d u=%d b=%d n=%s: f=%04x c=%04x b=%d",
                         block, sc->device, sc->segment, page,
                         sc->pages, sc->pages_active, sc->pages_used,
@@ -1925,36 +2012,38 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
                           "%s (%d)", sc->device, sc->segment, page,
                           strerror (ret), ret);
 #endif
-        rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
-        return ret;
+        sc->failed = true;
+      }
+      else
+      {
+        ret = rtems_fdisk_seg_write_page_desc (fd, sc->device, sc->segment,
+                                               page, pd);
+        if (ret)
+        {
+#if RTEMS_FDISK_TRACE
+          rtems_fdisk_info (fd, "write-block:%02d-%03d-%03d: "  \
+                            "write page desc failed: %s (%d)",
+                            sc->device, sc->segment, bc->page,
+                            strerror (ret), ret);
+#endif
+          sc->failed = true;
+        }
+        else
+        {
+          sc->pages_active++;
+        }
       }
       
-      ret = rtems_fdisk_seg_write_page_desc (fd, sc->device, sc->segment,
-                                             page, pd);
-      if (ret)
-      {
-#if RTEMS_FDISK_TRACE
-        rtems_fdisk_info (fd, "write-block:%02d-%03d-%03d: "  \
-                          "write page desc failed: %s (%d)",
-                          sc->device, sc->segment, bc->page,
-                          strerror (ret), ret);
-#endif
-        rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
-        return ret;
-      }
-    
-      sc->pages_active++;
-    
       rtems_fdisk_queue_segment (fd, sc);
-
-      return 0;
+      return ret;
     }
   }
 
   rtems_fdisk_error ("write-block: no erased page descs in segment: %d-%d",
                      sc->device, sc->segment);
 
-  rtems_fdisk_segment_queue_push_tail (&fd->failed, sc);
+  sc->failed = true;
+  rtems_fdisk_queue_segment (fd, sc);
 
   return EIO;
 }
@@ -2083,6 +2172,7 @@ rtems_fdisk_monitoring_data (rtems_flashdisk*          fd,
 
   data->block_size     = fd->block_size;
   data->block_count    = fd->block_count;
+  data->unavail_blocks = fd->unavail_blocks;
   data->device_count   = fd->device_count;
 
   data->blocks_used = 0;
@@ -2090,9 +2180,9 @@ rtems_fdisk_monitoring_data (rtems_flashdisk*          fd,
     if (fd->blocks[i].segment)
       data->blocks_used++;
 
-  data->segs_available = rtems_fdisk_segment_queue_count (&fd->available);
-  data->segs_used      = rtems_fdisk_segment_queue_count (&fd->used);
-  data->segs_failed    = rtems_fdisk_segment_queue_count (&fd->failed);
+  data->segs_available = rtems_fdisk_segment_count_queue (&fd->available);
+  data->segs_used      = rtems_fdisk_segment_count_queue (&fd->used);
+  data->segs_failed    = rtems_fdisk_segment_count_queue (&fd->failed);
 
   data->segment_count = 0;
   data->page_count    = 0;
@@ -2141,18 +2231,23 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
                       "Flash Disk Driver Status : %d.%d", fd->major, fd->minor);
 
   rtems_fdisk_printf (fd, "Block count\t%d", fd->block_count);
-  count = rtems_fdisk_segment_queue_count (&fd->available);
+  rtems_fdisk_printf (fd, "Unavail blocks\t%d", fd->unavail_blocks);
+  count = rtems_fdisk_segment_count_queue (&fd->available);
   total = count;
-  rtems_fdisk_printf (fd, "Available queue\t%ld", count);
-  count = rtems_fdisk_segment_queue_count (&fd->used);
+  rtems_fdisk_printf (fd, "Available queue\t%ld (%ld)",
+                      count, rtems_fdisk_segment_queue_count (&fd->available));
+  count = rtems_fdisk_segment_count_queue (&fd->used);
   total += count;
-  rtems_fdisk_printf (fd, "Used queue\t%ld", count);
-  count = rtems_fdisk_segment_queue_count (&fd->erase);
+  rtems_fdisk_printf (fd, "Used queue\t%ld (%ld)",
+                      count, rtems_fdisk_segment_queue_count (&fd->used));
+  count = rtems_fdisk_segment_count_queue (&fd->erase);
   total += count;
-  rtems_fdisk_printf (fd, "Erase queue\t%ld", count);
-  count = rtems_fdisk_segment_queue_count (&fd->failed);
+  rtems_fdisk_printf (fd, "Erase queue\t%ld (%ld)",
+                      count, rtems_fdisk_segment_queue_count (&fd->erase));
+  count = rtems_fdisk_segment_count_queue (&fd->failed);
   total += count;
-  rtems_fdisk_printf (fd, "Failed queue\t%ld", count);
+  rtems_fdisk_printf (fd, "Failed queue\t%ld (%ld)",
+                      count, rtems_fdisk_segment_queue_count (&fd->failed));
 
   count = 0;
   for (device = 0; device < fd->device_count; device++)
@@ -2182,21 +2277,8 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
       bool                     is_active = false;
       char                     queues[5];
 
-      queues[0] = '-';
-      queues[1] = '-';
-      queues[2] = '-';
-      queues[3] = '-';
-      queues[4] = '\0';
-      
-      if (rtems_fdisk_segment_queue_present (&fd->available, sc))
-        queues[0] = 'A';
-      if (rtems_fdisk_segment_queue_present (&fd->used, sc))
-        queues[1] = 'U';
-      if (rtems_fdisk_segment_queue_present (&fd->erase, sc))
-        queues[2] = 'E';
-      if (rtems_fdisk_segment_queue_present (&fd->failed, sc))
-        queues[3] = 'F';
-                                             
+      rtems_fdisk_queue_status (fd, sc, queues);
+
       for (page = 0; page < sc->pages; page++)
       {
         if (rtems_fdisk_page_desc_erased (&sc->page_descriptors[page]))
@@ -2241,7 +2323,19 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
                           count);
     }
   }
-  
+
+  {
+    rtems_fdisk_segment_ctl* sc = fd->used.head;
+    int count = 0;
+    rtems_fdisk_printf (fd, "Used List:");
+    while (sc)
+    {
+      rtems_fdisk_printf (fd, "  %3d %02d:%03d u:%3ld",
+                          count, sc->device, sc->segment, sc->pages_used);
+      sc = sc->next;
+      count++;
+    }
+  }
   fd->info_level = current_info_level;
 
   return 0;
@@ -2382,18 +2476,21 @@ rtems_fdisk_initialize (rtems_device_major_number major,
     snprintf (name, sizeof (name),
               RTEMS_FLASHDISK_DEVICE_BASE_NAME "%" PRIu32, minor);
   
-    fd->major        = major;
-    fd->minor        = minor;
-    fd->flags        = c->flags;
-    fd->compact_segs = c->compact_segs;
-    fd->block_size   = c->block_size;
-    fd->info_level   = c->info_level;
+    fd->major              = major;
+    fd->minor              = minor;
+    fd->flags              = c->flags;
+    fd->compact_segs       = c->compact_segs;
+    fd->avail_compact_segs = c->avail_compact_segs;
+    fd->block_size         = c->block_size;
+    fd->unavail_blocks     = c->unavail_blocks;
+    fd->info_level         = c->info_level;
   
     for (device = 0; device < c->device_count; device++)
       blocks += rtems_fdisk_blocks_in_device (&c->devices[device],
                                               c->block_size);
   
-    sc = rtems_disk_create_phys(dev, c->block_size, blocks,
+    sc = rtems_disk_create_phys(dev, c->block_size,
+                                blocks - fd->unavail_blocks,
                                 rtems_fdisk_ioctl, name);
     if (sc != RTEMS_SUCCESSFUL)
     {
