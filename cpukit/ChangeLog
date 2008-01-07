@@ -1,5 +1,13 @@
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/isr.inl: Fix spacing.
+	* score/src/apimutexallocate.c: Fix spacing.
+	* score/src/coremsgseize.c: Check for message pending instead of
+	message pending count to avoid dead code from inlined chain routine.
+	It checks if the chain is empty so is redundant to count == 0.
+
+2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/eventseize.c, rtems/src/eventtimeout.c: Minor style clean
 	up.
 

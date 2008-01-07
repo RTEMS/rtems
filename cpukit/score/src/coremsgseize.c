@@ -76,10 +76,9 @@ void _CORE_message_queue_Seize(
   executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
-  if ( the_message_queue->number_of_pending_messages != 0 ) {
+  the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
+  if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;
-
-    the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
     _ISR_Enable( level );
 
     *size = the_message->Contents.size;

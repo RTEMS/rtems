@@ -45,7 +45,7 @@ RTEMS_INLINE_ROUTINE boolean _ISR_Is_valid_user_handler (
   void *handler
 )
 {
-  return ( handler != NULL);
+  return (handler != NULL);
 }
 
 /**@}*/

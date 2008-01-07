@@ -22,19 +22,17 @@ void _API_Mutex_Allocate(
 {
   API_Mutex_Control *mutex;
   CORE_mutex_Attributes attr =  {
-      CORE_MUTEX_NESTING_IS_ERROR,
-      FALSE,
-      CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
-      0
-    };
+    CORE_MUTEX_NESTING_IS_ERROR,
+    FALSE,
+    CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
+    0
+  };
 
   mutex = (API_Mutex_Control *) _Objects_Allocate( &_API_Mutex_Information );
 
-  _CORE_mutex_Initialize( 
-    &mutex->Mutex,
-    &attr,
-    CORE_MUTEX_UNLOCKED
-  );
+  _CORE_mutex_Initialize( &mutex->Mutex, &attr, CORE_MUTEX_UNLOCKED );
+
+  _Objects_Open( &_API_Mutex_Information, &mutex->Object, (Objects_Name) 1 );
 
   *the_mutex = mutex;
 }
