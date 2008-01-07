@@ -33,9 +33,16 @@ rtems_shell_topic_t * rtems_shell_lookup_topic(char * topic);
 void rtems_shell_register_monitor_commands(void);
 void rtems_shell_initialize_command_set(void);
 
-int rtems_shell_libc_mounter (const char*                driver,
-                              const char*                path,
-                              rtems_shell_filesystems_t* fs,
-                              rtems_filesystem_options_t options);
+int rtems_shell_libc_mounter(
+  const char*                driver,
+  const char*                path,
+  rtems_shell_filesystems_t* fs,
+  rtems_filesystem_options_t options
+);
+
+void rtems_shell_print_heap_info(
+  const char       *c,
+  Heap_Information *h
+);
 
 #endif

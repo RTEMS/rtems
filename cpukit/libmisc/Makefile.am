@@ -61,7 +61,6 @@ libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c mw-fb/mw_fb.h \
     mw-fb/mw_uid.h
 
 ## shell
-
 if LIBSHELL
 noinst_LIBRARIES += libshell.a
 if LIBNETWORKING
@@ -86,7 +85,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/shell.h shell/shell_makeargs.c shell/str2int.c shell/write_file.c \
     shell/utils-cp.c shell/err.c shell/errx.c shell/verr.c shell/verrx.c \
     shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \
-    shell/fts.c
+    shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c
 endif
 
 EXTRA_DIST += shell/README

@@ -49,8 +49,8 @@ int rtems_shell_main_malloc_info(
       region_information_block info;
 
       malloc_info( &info );
-      printit( "free", &info.Free );
-      printit( "used", &info.Used );
+      rtems_shell_print_heap_info( "free", &info.Free );
+      rtems_shell_print_heap_info( "used", &info.Used );
       return 0;
     } else if ( !strcmp( argv[1], "stats" ) ) {
       malloc_report_statistics_with_plugin(
