@@ -55,7 +55,6 @@ extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
 extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
-extern rtems_shell_cmd_t rtems_shell_JOEL_Command;
 
 extern rtems_shell_cmd_t *rtems_shell_Initial_commands[];
 
@@ -305,7 +304,6 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
       &rtems_shell_MALLOC_INFO_Command,
     #endif
 
-    &rtems_shell_JOEL_Command,
     /*
      *  User defined shell commands
      */

@@ -36,8 +36,6 @@ int rtems_shell_main_wkspace_info(
   rtems_shell_print_heap_info( "free", &info.Free );
   rtems_shell_print_heap_info( "used", &info.Used );
 
-  classinfo_tester();
-  decode_id( _Thread_Executing->Object.id );
   return 0;
 }
 
