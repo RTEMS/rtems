@@ -1,3 +1,10 @@
+2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Added sp38 and sp39.
+	* sp38/.cvsignore, sp38/Makefile.am, sp38/init.c, sp38/sp38.scn,
+	sp38/system.h, sp39/.cvsignore, sp39/Makefile.am, sp39/init.c,
+	sp39/sp39.scn, sp39/system.h: New files.
+
 2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp36/strict_order_mut.c: New file.

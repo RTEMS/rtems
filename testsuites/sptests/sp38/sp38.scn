@@ -1,0 +1,4 @@
+*** TEST 38 ***
+rtems_signal_catch - handler installed
+Signal sent from ISR has been processed
+*** END OF TEST 38 ***
