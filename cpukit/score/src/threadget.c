@@ -64,7 +64,7 @@ Thread_Control *_Thread_Get (
   }
  
   the_api = _Objects_Get_API( id );
-  if ( the_api && the_api > OBJECTS_APIS_LAST ) {
+  if ( !_Objects_Is_api_valid( the_api ) ) {
     *location = OBJECTS_ERROR;
     goto done;
   }
@@ -76,7 +76,6 @@ Thread_Control *_Thread_Get (
   }
  
   information = _Objects_Information_table[ the_api ][ the_class ];
- 
   if ( !information ) {
     *location = OBJECTS_ERROR;
     goto done;
