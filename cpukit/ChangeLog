@@ -1,5 +1,9 @@
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/object.inl: Add _Objects_Is_api_valid.
+
+2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/threadget.c: Use _Objects_Is_api_valid rather than open
 	coding it.
 

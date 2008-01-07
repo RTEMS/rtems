@@ -101,6 +101,23 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_index(
 }
 
 /**
+ *  This function returns TRUE if the api is valid.
+ *
+ *  @param[in] the_api is the api portion of an object ID.
+ *
+ *  @return This method returns TRUE if the specified api value is valid
+ *          and FALSE otherwise.
+ */
+RTEMS_INLINE_ROUTINE boolean _Objects_Is_api_valid(
+  uint32_t   the_api
+)
+{
+  if ( !the_api || the_api > OBJECTS_APIS_LAST )
+   return FALSE;
+  return TRUE;
+}
+   
+/**
  *  This function returns TRUE if the class is valid.
  *
  *  @param[in] the_class is the class portion of an object ID.
