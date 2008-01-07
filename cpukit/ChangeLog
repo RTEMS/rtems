@@ -1,5 +1,9 @@
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-manager.c: Style. Eliminate tabs.
+
+2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am: Add new files.
 	* libmisc/shell/internal.h: Prototype for rtems_shell_print_heap_info()
 	* libmisc/shell/main_mallocinfo.c: Use rtems_shell_print_heap_info().
