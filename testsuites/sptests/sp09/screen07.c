@@ -70,6 +70,21 @@ void Screen7()
 #endif
   puts( "TA1 - rtems_message_queue_create - Q 1 - RTEMS_MP_NOT_CONFIGURED" );
 
+  /* not enough memory for messages */
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    1000000,                     /* 1 million messages should do it */
+    MESSAGE_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Queue_id[ 1 ]
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_message_queue_create unsatisfied"
+  );
+  puts( "TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED" );
+
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     2,
@@ -78,9 +93,7 @@ void Screen7()
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create successful" );
-  puts(
-    "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL"
-  );
+  puts( "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL" );
 
   status = rtems_message_queue_create(
     Queue_name[ 2 ],

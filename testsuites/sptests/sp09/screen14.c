@@ -187,10 +187,22 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY" );
 
+  status = rtems_timer_initiate_server(
+      RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+      0x10000000,
+      0
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_timer_initiate_server too much stack "
+  );
+  puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
+
   status =
     rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );
   directive_failed( status, "rtems_timer_initiate_server" );
-  puts( "TA1 - rtems_timer_initiate_server" );
+  puts( "TA1 - rtems_timer_initiate_server - SUCCESSFUL" );
 
   status = rtems_timer_server_fire_after(
     0x010100,

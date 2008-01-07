@@ -104,6 +104,7 @@ TA1 - rtems_task_delete TA2 - already deleted RTEMS_INVALID_ID
 TA1 - rtems_message_queue_broadcast - RTEMS_INVALID_ID
 TA1 - rtems_message_queue_create - Q 1 - RTEMS_INVALID_NAME
 TA1 - rtems_message_queue_create - Q 1 - RTEMS_MP_NOT_CONFIGURED
+TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED
 TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
 TA1 - rtems_message_queue_create - Q 2 - RTEMS_TOO_MANY
 TA1 - rtems_message_queue_delete - unknown RTEMS_INVALID_ID
@@ -209,6 +210,7 @@ TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_INVALID_SIZE
 TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_SUCCESSFUL
+TA1 - rtems_region_extend - address within - RTEMS_INVALID_ADDRESS
 TA1 - rtems_region_create - RTEMS_TOO_MANY
 TA1 - rtems_region_delete - unknown RTEMS_INVALID_ID
 TA1 - rtems_region_delete - local RTEMS_INVALID_ID
@@ -278,7 +280,8 @@ TA1 - rtems_timer_get_information - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE
 TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE
 TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY
-TA1 - rtems_timer_initiate_server
+TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED
+TA1 - rtems_timer_initiate_server - SUCCESSFUL
 TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID
 TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER

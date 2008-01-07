@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,6 +49,23 @@ rtems_task Priority_task(
   if ( its_priority < 64 ) {
     printf( "PRI%d - WHY AM I HERE? (pri=%d)", its_index, its_priority );
     rtems_test_exit( 0 );
+  }
+
+  /* special case of setting priority while holding a resource */
+  { 
+    rtems_task_priority priority;
+    rtems_task_priority old_priority;
+
+    puts( "Set priority of self while holding resource" );
+    status =
+      rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &priority );
+    directive_failed( status, "rtems_task_set_priority get current" );
+    status = rtems_task_set_priority( RTEMS_SELF, priority, &old_priority );
+    directive_failed( status, "rtems_task_set_priority with resource" );
+    if ( priority != old_priority ) {
+      printf( "priority != old_priority (%d != %d)\n", priority, old_priority );
+      rtems_test_exit(0);
+    }
   }
 
   if ( its_index == 5 )

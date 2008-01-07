@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -126,6 +126,18 @@ void Screen12()
   );
   directive_failed( status, "rtems_region_create" );
   puts( "TA1 - rtems_region_create - RTEMS_SUCCESSFUL" );
+
+  status = rtems_region_extend(
+    Region_id[ 1 ],
+    &Region_good_area[ REGION_START_OFFSET ],
+    REGION_LENGTH - 1
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_region_extend with address in heap"
+  );
+  puts( "TA1 - rtems_region_extend - address within - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_region_create(
     Region_name[ 1 ],
