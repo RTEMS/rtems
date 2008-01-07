@@ -237,6 +237,9 @@ int pthread_create(
 
   /*
    *  _Thread_Start only fails if the thread was in the incorrect state
+   *  
+   *  NOTE: This can only happen if someone slips in and touches the
+   *        thread while we are creating it.
    */
 
   if ( !status ) {

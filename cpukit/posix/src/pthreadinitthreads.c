@@ -73,7 +73,7 @@ void _POSIX_Threads_Initialize_user_threads_body( void )
     status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
     assert( !status );
 
-    status = pthread_attr_setstacksize( &attr, user_threads[ index ].stack_size);
+    status = pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
     assert( !status );
 
     status = pthread_create(

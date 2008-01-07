@@ -1,5 +1,10 @@
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/pthreadcreate.c: Add commit.
+	* posix/src/pthreadinitthreads.c: Fix line length.
+
+2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/object.inl: Add _Objects_Is_api_valid.
 
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
