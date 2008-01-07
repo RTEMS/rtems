@@ -88,8 +88,8 @@ void _Event_Seize(
 
   _Event_Sync_state = EVENT_SYNC_NOTHING_HAPPENED;
 
-  executing->Wait.option            = (uint32_t  ) option_set;
-  executing->Wait.count             = (uint32_t  ) event_in;
+  executing->Wait.option            = (uint32_t) option_set;
+  executing->Wait.count             = (uint32_t) event_in;
   executing->Wait.return_argument   = event_out;
 
   _ISR_Enable( level );

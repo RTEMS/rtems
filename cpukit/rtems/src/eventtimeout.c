@@ -71,7 +71,7 @@ void _Event_Timeout(
              _Thread_Is_executing( the_thread ) ) {
           if ( _Event_Sync_state != EVENT_SYNC_SATISFIED ) {
             _Event_Sync_state = EVENT_SYNC_TIMEOUT;
-            }
+          }
           _ISR_Enable( level );
         } else {
             the_thread->Wait.return_code = RTEMS_TIMEOUT;
