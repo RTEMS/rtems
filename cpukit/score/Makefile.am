@@ -89,7 +89,8 @@ libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
 
 ## CORE_MUTEX_C_FILES
 libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
-    src/coremutexseize.c src/coremutexsurrender.c
+    src/coremutexseize.c src/coremutexsurrender.c \
+    src/coremutexseizeintr.c
 
 ## CORE_RWLOCK_C_FILES
 libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \

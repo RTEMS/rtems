@@ -1,3 +1,7 @@
+2008-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/Makefile.am: Add missing file.
+
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/monitor/mon-manager.c: Style. Eliminate tabs.
