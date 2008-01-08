@@ -1,3 +1,10 @@
+2008-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add sp40 to test some cases of dynamic
+	driver registration.
+	* sp40/.cvsignore, sp40/Makefile.am, sp40/init.c, sp40/sp40.scn,
+	sp40/system.h: New files.
+
 2008-01-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp09/screen07.c, sp09/screen12.c, sp09/screen14.c, sp09/sp09.scn
