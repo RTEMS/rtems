@@ -27,9 +27,6 @@ void *malloc(
 )
 {
   void        *return_this;
-  void        *starting_address;
-  uint32_t     the_size;
-  uint32_t     sbrk_amount;
   Chain_Node  *to_be_freed;
 
   MSBUMP(malloc_calls, 1);
@@ -77,33 +74,8 @@ void *malloc(
   return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
 
   if ( !return_this ) {
-    /*
-     *  Round to the "requested sbrk amount" so hopefully we won't have
-     *  to grow again for a while.  This effectively does sbrk() calls
-     *  in "page" amounts.
-     */
-
-    sbrk_amount = RTEMS_Malloc_Sbrk_amount;
-
-    if ( sbrk_amount == 0 )
-      return (void *) 0;
-
-    the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
-
-    if ((starting_address = (void *)sbrk(the_size))
-            == (void*) -1)
-      return (void *) 0;
-
-    if ( !_Protected_heap_Extend(
-            &RTEMS_Malloc_Heap, starting_address, the_size) ) {
-      sbrk(-the_size);
-      errno = ENOMEM;
-      return (void *) 0;
-    }
-
-    MSBUMP(space_available, the_size);
-
-    return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
+    if (rtems_malloc_sbrk_helpers) 
+      return_this = (*rtems_malloc_sbrk_helpers->extend)( size );
     if ( !return_this ) {
       errno = ENOMEM;
       return (void *) 0;

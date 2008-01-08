@@ -5,14 +5,14 @@
 /*
  *  RTEMS Malloc Extensions
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $ld:
+ * $Id$
  */
 
 #ifndef _RTEMS_MALLOC_H
@@ -45,11 +45,11 @@ typedef struct {
   void (*initialize)(void);
   void (*at_malloc)(void *);
   void (*at_free)(void *);
-} rtems_malloc_statististics_functions_t;
+} rtems_malloc_statistics_functions_t;
 
-extern rtems_malloc_statististics_functions_t 
+extern rtems_malloc_statistics_functions_t 
   rtems_malloc_statistics_helpers_table;
-extern rtems_malloc_statististics_functions_t *rtems_malloc_statistics_helpers;
+extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
 
 /*
  *  Malloc boundary support plugin
@@ -65,7 +65,16 @@ typedef struct {
 extern rtems_malloc_boundary_functions_t rtems_malloc_boundary_helpers_table;
 extern rtems_malloc_boundary_functions_t *rtems_malloc_boundary_helpers;
 
+/*
+ *  Malloc Heap Extension (sbrk) plugin
+ */
+typedef struct {
+  void *(*initialize)(void *, size_t);
+  void *(*extend)(size_t);
+} rtems_malloc_sbrk_functions_t;
 
+extern rtems_malloc_sbrk_functions_t rtems_malloc_sbrk_helpers_table;
+extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
 
 /** @brief Print Malloc Statistic Usage Report
  *

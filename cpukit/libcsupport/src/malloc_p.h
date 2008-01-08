@@ -39,7 +39,6 @@
  */
 extern Heap_Control  RTEMS_Malloc_Heap;
 extern Chain_Control RTEMS_Malloc_GC_list;
-extern size_t        RTEMS_Malloc_Sbrk_amount;
 
 /*
  *  Malloc Statistics Structure

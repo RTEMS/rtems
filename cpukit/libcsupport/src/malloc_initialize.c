@@ -22,7 +22,6 @@
 
 Heap_Control              RTEMS_Malloc_Heap;
 Chain_Control             RTEMS_Malloc_GC_list;
-size_t                    RTEMS_Malloc_Sbrk_amount;
 rtems_malloc_statistics_t rtems_malloc_statistics;
 
 void RTEMS_Malloc_Initialize(
@@ -33,8 +32,6 @@ void RTEMS_Malloc_Initialize(
 {
   uint32_t      status;
   void         *starting_address;
-  uintptr_t     old_address;
-  uintptr_t     uaddress;
 
   #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
     /*
@@ -55,36 +52,18 @@ void RTEMS_Malloc_Initialize(
    */
   Chain_Initialize_empty(&RTEMS_Malloc_GC_list);
 
-  /*
-   * If the starting address is 0 then we are to attempt to
-   * get length worth of memory using sbrk. Make sure we
-   * align the address that we get back.
-   */
-
   starting_address = start;
-  RTEMS_Malloc_Sbrk_amount = sbrk_amount;
 
-  if (!starting_address) {
-    uaddress = (uintptr_t)sbrk(length);
-
-    if (uaddress == (uintptr_t) -1) {
-      rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
-      /* DOES NOT RETURN!!! */
-    }
-
-    if (uaddress & (CPU_HEAP_ALIGNMENT-1)) {
-      old_address = uaddress;
-      uaddress = (uaddress + CPU_HEAP_ALIGNMENT) & ~(CPU_HEAP_ALIGNMENT-1);
-
-      /*
-       * adjust the length by whatever we aligned by
-       */
-      length -= uaddress - old_address;
-    }
-
-    starting_address = (void *)uaddress;
+  /*
+   *  Initialize the optional sbrk support for extending the heap
+   */
+  if (rtems_malloc_sbrk_helpers) {
+    starting_address = (*rtems_malloc_sbrk_helpers->initialize)(
+      start,
+      sbrk_amount
+    );
   }
-
+    
   /*
    *  If the BSP is not clearing out the workspace, then it is most likely
    *  not clearing out the initial memory for the heap.  There is no

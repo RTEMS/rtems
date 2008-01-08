@@ -66,14 +66,11 @@ void rtems_malloc_statistics_at_free(
   }
 }
 
-rtems_malloc_statististics_functions_t rtems_malloc_statistics_helpers_table = {
+rtems_malloc_statistics_functions_t rtems_malloc_statistics_helpers_table = {
   rtems_malloc_statistics_initialize,
   rtems_malloc_statistics_at_malloc,
   rtems_malloc_statistics_at_free,
 };
-
-rtems_malloc_statististics_functions_t *rtems_malloc_statistics_helpers =
-  &rtems_malloc_statistics_helpers_table;
 
 #endif
 

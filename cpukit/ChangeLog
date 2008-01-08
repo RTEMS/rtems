@@ -1,3 +1,18 @@
+2008-01-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am: Add malloc_sbrk_helpers.c.
+	* libcsupport/include/rtems/malloc.h,
+	libcsupport/src/malloc.c, libcsupport/src/malloc_initialize.c,
+	libcsupport/src/malloc_p.h,
+	libcsupport/src/malloc_statistics_helpers.c: Make sbrk()
+	support pluggable and optional.  This eliminates the need for
+	heap extend and sbrk in the minimum footprint which is ~2.5K on
+	the SPARC.
+	* sapi/include/confdefs.h: Add the following configuration points:
+	  + CONFIGURE_MALLOC_STATISTICS
+	  + CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+	* libcsupport/src/malloc_sbrk_helpers.c: New file.
+
 2008-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/Makefile.am: Add missing file.

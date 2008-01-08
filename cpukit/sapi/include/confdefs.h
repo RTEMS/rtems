@@ -243,6 +243,30 @@ extern int rtems_telnetd_maximum_ptys;
 #endif
 
 /*
+ *  RTEMS Malloc configuration
+ */
+
+#include <rtems/malloc.h>
+
+#ifdef CONFIGURE_INIT
+  rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers =
+    #ifndef CONFIGURE_MALLOC_STATISTICS
+      NULL;
+    #else
+      &rtems_malloc_statistics_helpers_table;
+    #endif
+#endif
+
+#ifdef CONFIGURE_INIT
+  rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers =
+    #ifndef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+      NULL;
+    #else
+      &rtems_malloc_sbrk_helpers_table;
+    #endif
+#endif
+
+/*
  *  Default User Initialization Task Table.  This table guarantees that
  *  one user initialization table is defined.
  */
