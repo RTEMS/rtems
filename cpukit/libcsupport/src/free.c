@@ -38,7 +38,7 @@ void free(
 
   if ( _System_state_Is_up(_System_state_Get()) && 
        !malloc_is_system_state_OK() ) {
-      malloc_defer_free(ptr);
+      malloc_deferred_free(ptr);
       return;
   }
 

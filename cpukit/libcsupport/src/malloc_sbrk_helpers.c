@@ -1,6 +1,5 @@
 /*
- *  RTEMS Malloc Family Implementation --Initialization
- *
+ *  RTEMS Malloc -- SBRK Support Plugin
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

@@ -38,7 +38,6 @@
  * Basic management data
  */
 extern Heap_Control  RTEMS_Malloc_Heap;
-extern Chain_Control RTEMS_Malloc_GC_list;
 
 /*
  *  Malloc Statistics Structure
@@ -48,13 +47,9 @@ extern rtems_malloc_statistics_t rtems_malloc_statistics;
 #define MSBUMP(_f,_n)    rtems_malloc_statistics._f += (_n)
 
 /*
- *  Dirty memory plugin
- */
-#define MALLOC_DIRTY
-
-/*
  *  Process deferred free operations
  */
 boolean malloc_is_system_state_OK(void);
-void malloc_process_deferred_frees(void);
+void malloc_deferred_frees_initialize(void);
+void malloc_deferred_frees_process(void);
 void malloc_defer_free(void *);

@@ -27,14 +27,13 @@ void *malloc(
 )
 {
   void        *return_this;
-  Chain_Node  *to_be_freed;
 
   MSBUMP(malloc_calls, 1);
 
   /*
    *  If some free's have been deferred, then do them now.
    */
-  malloc_process_deferred_frees();
+  malloc_deferred_frees_process();
 
   /*
    * Validate the parameters
@@ -85,9 +84,8 @@ void *malloc(
   /*
    *  If the user wants us to dirty the allocated memory, then do it.
    */
-  #ifdef MALLOC_DIRTY
-    (void) memset(return_this, 0xCF, size);
-  #endif
+  if ( rtems_malloc_dirty_helper )
+    (*rtems_malloc_dirty_helper)( return_this, size );
 
   /*
    *  If configured, update the statistics

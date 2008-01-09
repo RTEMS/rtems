@@ -1,3 +1,15 @@
+2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
+	libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_deferred.c,
+	libcsupport/src/malloc_initialize.c, libcsupport/src/malloc_p.h,
+	libcsupport/src/malloc_sbrk_helpers.c,
+	libcsupport/src/posix_memalign.c: Place all deferred free code and
+	place it in subroutines. Add plugin for dirtying allocated memory to
+	assist in debugging. Clean up comments and spacing as needed.
+	* libcsupport/src/malloc_dirtier.c: New file.
+
 2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/objectgetnoprotection.c: Eliminate duplicate exit path code

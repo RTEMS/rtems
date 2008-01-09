@@ -22,6 +22,8 @@
 
 #include "malloc_p.h"
 
+Chain_Control RTEMS_Malloc_GC_list;
+
 boolean malloc_is_system_state_OK(void)
 {
   if ( _Thread_Dispatch_disable_level > 0 )
@@ -33,7 +35,12 @@ boolean malloc_is_system_state_OK(void)
   return TRUE;
 }
 
-void malloc_process_deferred_frees(void)
+void malloc_deferred_frees_initialize(void)
+{
+  Chain_Initialize_empty(&RTEMS_Malloc_GC_list);
+}
+
+void malloc_deferred_frees_process(void)
 {
   Chain_Node  *to_be_freed;
 
@@ -44,7 +51,7 @@ void malloc_process_deferred_frees(void)
     free(to_be_freed);
 }
 
-void malloc_defer_free(
+void malloc_deferred_free(
   void *pointer
 )
 {

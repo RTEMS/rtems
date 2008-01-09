@@ -59,7 +59,7 @@ int posix_memalign(
    *
    *  If some free's have been deferred, then do them now.
    */
-  malloc_process_deferred_frees();
+  malloc_deferred_frees_process();
 
   #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
     /*

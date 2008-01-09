@@ -21,7 +21,6 @@
 #include "malloc_p.h"
 
 Heap_Control              RTEMS_Malloc_Heap;
-Chain_Control             RTEMS_Malloc_GC_list;
 rtems_malloc_statistics_t rtems_malloc_statistics;
 
 void RTEMS_Malloc_Initialize(
@@ -50,7 +49,7 @@ void RTEMS_Malloc_Initialize(
   /*
    *  Initialize the garbage collection list to start with nothing on it.
    */
-  Chain_Initialize_empty(&RTEMS_Malloc_GC_list);
+  malloc_deferred_frees_initialize();
 
   starting_address = start;
 
