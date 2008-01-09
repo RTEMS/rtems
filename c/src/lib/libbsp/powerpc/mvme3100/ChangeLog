@@ -1,3 +1,7 @@
+2008-01-09	Eric Norum <norume@aps.anl.gov>
+
+	* include/bsp.h: Include <bsp/vectors.h>.
+
 2007-12-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: use preload.S, vectors_entry.S from shared
