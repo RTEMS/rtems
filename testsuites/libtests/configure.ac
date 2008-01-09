@@ -36,6 +36,7 @@ AC_CONFIG_FILES([Makefile
 cpuuse/Makefile
 malloctest/Makefile
 monitor/Makefile
+monitor02/Makefile
 putenvtest/Makefile
 rtems++/Makefile
 rtmonuse/Makefile

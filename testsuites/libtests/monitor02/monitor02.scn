@@ -1,0 +1,9 @@
+*** START OF MONITOR02 ***
+===> task
+  ID       NAME   PRIO   STAT   MODES  EVENTS   WAITID  WAITARG  NOTES
+------------------------------------------------------------------------------
+0a010001   UI1     10   READY  P:T:nA  NONE
+===> task 32
+  ID       NAME   PRIO   STAT   MODES  EVENTS   WAITID  WAITARG  NOTES
+------------------------------------------------------------------------------
+*** END OF MONITOR02 ***
