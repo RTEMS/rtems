@@ -17,23 +17,10 @@
 #include <rtems/bspIo.h>
 #include <rtems.h>
 
-void __assert(
-  const char *file,
-  int         line,
-  
-const char *failedexpr)
-{
-  printk(
-    "assertion \"%s\" failed: file \"%s\", line %d\n",
-    failedexpr,
-    file,
-    line
-   );
-   rtems_fatal_error_occurred(0);
-}
 
 /*
- * Newlib 1.16.0 added this method
+ * Newlib 1.16.0 added this method.  Together these provide an 
+ * RTEMS safe, low memory implementation.
  */
 void __assert_func(
   const char *file,
@@ -46,7 +33,17 @@ void __assert_func(
     failedexpr,
     file,
     line,
-    func ? ", function: " : "", func ? func : ""
+    (func) ? ", function: " : "",
+    (func) ? func : ""
   );
   rtems_fatal_error_occurred(0);
+}
+
+void __assert(
+  const char *file,
+  int         line,
+  const char *failedexpr
+)
+{
+  __assert_func (file, line, NULL, failedexpr);
 }

@@ -1,3 +1,8 @@
+2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/__assert.c: Clean up and make __assert() call
+	__assert_func().
+
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/__assert.c: Newlib 1.16.0 adds __assert_func(). We
