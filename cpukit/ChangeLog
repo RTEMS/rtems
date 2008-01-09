@@ -1,3 +1,8 @@
+2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/__assert.c: Newlib 1.16.0 adds __assert_func(). We
+	need to have it also.
+
 2008-01-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am: Add malloc_sbrk_helpers.c.

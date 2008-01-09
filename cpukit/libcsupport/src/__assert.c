@@ -17,9 +17,36 @@
 #include <rtems/bspIo.h>
 #include <rtems.h>
 
-void __assert(const char *file, int line, const char *failedexpr)
+void __assert(
+  const char *file,
+  int         line,
+  
+const char *failedexpr)
 {
-    printk("assertion \"%s\" failed: file \"%s\", line %d\n",
-               failedexpr, file, line);
-    rtems_fatal_error_occurred(0);
+  printk(
+    "assertion \"%s\" failed: file \"%s\", line %d\n",
+    failedexpr,
+    file,
+    line
+   );
+   rtems_fatal_error_occurred(0);
+}
+
+/*
+ * Newlib 1.16.0 added this method
+ */
+void __assert_func(
+  const char *file,
+  int         line,
+  const char *func,
+  const char *failedexpr
+)
+{
+  printk("assertion \"%s\" failed: file \"%s\", line %d%s%s\n",
+    failedexpr,
+    file,
+    line,
+    func ? ", function: " : "", func ? func : ""
+  );
+  rtems_fatal_error_occurred(0);
 }
