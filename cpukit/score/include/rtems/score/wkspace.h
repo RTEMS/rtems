@@ -55,6 +55,35 @@ void _Workspace_Handler_initialization(
   size_t      size
 );
 
+/** @brief Allocate Memory from Workspace
+ *
+ *  This routine returns the address of a block of memory of size
+ *  bytes.  If a block of the appropriate size cannot be allocated
+ *  from the workspace, then NULL is returned.
+ *
+ *  @param size is the requested size
+ *
+ *  @return a pointer to the requested memory or NULL.
+ */
+void *_Workspace_Allocate(
+  size_t   size
+);
+
+/** @brief Free Memory to the Workspace
+ *
+ *  This function frees the specified block of memory.  If the block
+ *  belongs to the Workspace and can be successfully freed, then
+ *  TRUE is returned.  Otherwise FALSE is returned.
+ *
+ *  @param block is the memory to free
+ *
+ *  @return TRUE if the free was successful.
+ */
+
+boolean _Workspace_Free(
+  void *block
+);
+
 /** @brief Workspace Allocate or Fail with Fatal Error
  *
  *  This routine returns the address of a block of memory of @a size

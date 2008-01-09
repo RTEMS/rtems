@@ -1,5 +1,14 @@
 2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/wkspace.h,
+	score/inline/rtems/score/wkspace.inl, score/src/wkspace.c: Do not
+	inline _Workspace_Free or _Workspace_Allocate since they are not
+	always inlined and actually smaller overall as subroutines. They are
+	not particularly time critical so inlining is not absolutely
+	necessary.
+
+2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/Makefile.am, posix/include/rtems/posix/cond.h,
 	posix/include/rtems/posix/mutex.h, posix/inline/rtems/posix/cond.inl,
 	posix/inline/rtems/posix/mutex.inl: Do not include POSIX Mutex or

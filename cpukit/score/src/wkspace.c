@@ -22,11 +22,9 @@
 
 #include <string.h>  /* for memset */
 
-/*PAGE
- *
+/*
  *  _Workspace_Handler_initialization
  */
-
 void _Workspace_Handler_initialization(
   void       *starting_address,
   size_t      size
@@ -59,12 +57,29 @@ void _Workspace_Handler_initialization(
     );
 }
 
-/*PAGE
- *
- *  _Workspace_Allocate_or_fatal_error
- *
+/*
+ *  _Workspace_Allocate
  */
+void *_Workspace_Allocate(
+  size_t   size
+)
+{
+   return _Heap_Allocate( &_Workspace_Area, size );
+}
 
+/*
+ *  _Workspace_Allocate
+ */
+boolean _Workspace_Free(
+  void *block
+)
+{
+   return _Heap_Free( &_Workspace_Area, block );
+}
+
+/*
+ *  _Workspace_Allocate_or_fatal_error
+ */
 void *_Workspace_Allocate_or_fatal_error(
   size_t      size
 )
