@@ -1,3 +1,7 @@
+2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* monitor02/.cvsignore: New file.
+
 2008-01-09	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, configure.ac: Added automatic test for monitor shell
