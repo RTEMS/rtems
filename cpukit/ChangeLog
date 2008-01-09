@@ -1,3 +1,14 @@
+2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/Makefile.am, posix/include/rtems/posix/cond.h,
+	posix/include/rtems/posix/mutex.h, posix/inline/rtems/posix/cond.inl,
+	posix/inline/rtems/posix/mutex.inl: Do not include POSIX Mutex or
+	Condition Variable object get helpers because they are more
+	complicated than the norm. They can implicitly perform a create. They
+	cross the line as being too complex and large to inline since they
+	negatively impact size and binary test coverage.
+	* posix/src/condget.c, posix/src/mutexget.c: New files.
+
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am: Add src/malloc_dirtier.c.

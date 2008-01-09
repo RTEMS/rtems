@@ -51,45 +51,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
  
 /*PAGE
  *
- *  _POSIX_Condition_variables_Get
- */
-
-RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control 
-*_POSIX_Condition_variables_Get (
-  pthread_cond_t    *cond,
-  Objects_Locations *location
-)
-{
-  Objects_Id        *id = (Objects_Id *)cond;
-  int status;
-
-  if ( !id ) {
-    *location = OBJECTS_ERROR;
-    return (POSIX_Condition_variables_Control *) 0;
-  }
-
-  if ( *id == PTHREAD_COND_INITIALIZER ) {
-    /*
-     *  Do an "auto-create" here.
-     */
-
-    status = pthread_cond_init( (pthread_cond_t *)id, 0 );
-    if ( status ) {
-      *location = OBJECTS_ERROR;
-      return (POSIX_Condition_variables_Control *) 0;
-    }
-  }
-
-  /*
-   *  Now call Objects_Get()
-   */
-
-  return (POSIX_Condition_variables_Control *)
-    _Objects_Get( &_POSIX_Condition_variables_Information, *id, location );
-}
- 
-/*PAGE
- *
  *  _POSIX_Condition_variables_Is_null
  */
  

@@ -44,65 +44,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
  
 /*PAGE
  *
- *  _POSIX_Mutex_Get_support
- *
- *  NOTE: The support macro makes it possible for both to use exactly
- *        the same code to check for NULL id pointer and
- *        PTHREAD_MUTEX_INITIALIZER without adding overhead.
- */
-
-#define ___POSIX_Mutex_Get_support( _id, _location ) \
-  do { \
-    int _status; \
-    \
-    if ( !_id ) { \
-      *_location = OBJECTS_ERROR; \
-      return (POSIX_Mutex_Control *) 0; \
-    }  \
-    \
-    if ( *_id == PTHREAD_MUTEX_INITIALIZER ) { \
-      /* \
-       *  Do an "auto-create" here. \
-       */ \
-    \
-      _status = pthread_mutex_init( (pthread_mutex_t *)_id, 0 ); \
-      if ( _status ) { \
-        *_location = OBJECTS_ERROR;  \
-        return (POSIX_Mutex_Control *) 0; \
-      } \
-    } \
-  } while (0)
- 
-RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location
-)
-{
-  Objects_Id *id = (Objects_Id *)mutex;
-
-  ___POSIX_Mutex_Get_support( id, location );
-
-  return (POSIX_Mutex_Control *)
-    _Objects_Get( &_POSIX_Mutex_Information, *id, location );
-}
-
-RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location,
-  ISR_Level         *level
-)
-{
-  Objects_Id *id = (Objects_Id *)mutex;
-
-  ___POSIX_Mutex_Get_support( id, location );
-
-  return (POSIX_Mutex_Control *)
-    _Objects_Get_isr_disable( &_POSIX_Mutex_Information, *id, location, level );
-}
-
- 
-/*PAGE
- *
  *  _POSIX_Mutex_Is_null
  */
  

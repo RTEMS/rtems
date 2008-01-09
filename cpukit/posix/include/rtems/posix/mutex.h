@@ -147,6 +147,43 @@ int _POSIX_Mutex_Translate_core_mutex_return_code(
 );
 
 
+/*
+ *  _POSIX_Mutex_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which translates the mutex id into a local pointer.
+ *  As a side-effect, it may create the mutex.
+ *
+ *  NOTE:
+ *
+ *  This version of the method uses a dispatching critical section.
+ */
+
+POSIX_Mutex_Control *_POSIX_Mutex_Get (
+  pthread_mutex_t   *mutex,
+  Objects_Locations *location
+);
+
+/*
+ *  _POSIX_Mutex_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which translates the mutex id into a local pointer.
+ *  As a side-effect, it may create the mutex.
+ *
+ *  NOTE:
+ *
+ *  This version of the method uses an interrupt critical section.
+ */
+
+POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
+  pthread_mutex_t   *mutex,
+  Objects_Locations *location,
+  ISR_Level         *level
+);
+
 #include <rtems/posix/mutex.inl>
 
 #ifdef __cplusplus

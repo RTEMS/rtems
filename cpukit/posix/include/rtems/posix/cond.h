@@ -158,6 +158,21 @@ int _POSIX_Condition_variables_Wait_support(
   boolean                    already_timedout
 );
 
+/*
+ *  _POSIX_Condition_variables_Get
+ *
+ *  DESCRIPTION:
+ *
+ *  A support routine which translates the condition variable id into
+ *  a local pointer.  As a side-effect, it may create the condition
+ *  variable.
+ */
+
+POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
+  pthread_cond_t    *cond,
+  Objects_Locations *location
+);
+
 #include <rtems/posix/cond.inl>
 
 #ifdef __cplusplus

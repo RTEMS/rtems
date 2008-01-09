@@ -77,7 +77,7 @@ libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
     src/condattrgetpshared.c src/condattrinit.c src/condattrsetpshared.c \
     src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
     src/condinit.c src/condsignal.c src/condsignalsupp.c \
-    src/condtimedwait.c src/condwait.c src/condwaitsupp.c
+    src/condtimedwait.c src/condwait.c src/condwaitsupp.c src/condget.c
 
 ## KEY_C_FILES
 libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
@@ -105,7 +105,7 @@ libposix_a_SOURCES += src/mutex.c src/mutexattrdestroy.c \
     src/mutexdestroy.c src/mutexgetprioceiling.c src/mutexinit.c \
     src/mutexlock.c src/mutexlocksupp.c src/mutexsetprioceiling.c \
     src/mutextimedlock.c src/mutextranslatereturncode.c src/mutextrylock.c \
-    src/mutexunlock.c
+    src/mutexunlock.c src/mutexget.c
 
 ## PTHREAD_C_FILES
 libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
