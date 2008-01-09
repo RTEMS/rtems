@@ -1,5 +1,9 @@
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h: Add CONFIGURE_MALLOC_DIRTY.
+
+2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
 	libcsupport/src/free.c, libcsupport/src/malloc.c,
 	libcsupport/src/malloc_deferred.c,

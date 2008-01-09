@@ -266,6 +266,15 @@ extern int rtems_telnetd_maximum_ptys;
     #endif
 #endif
 
+#ifdef CONFIGURE_INIT
+  rtems_malloc_dirtier_t *rtems_malloc_dirty_helper =
+    #if defined(CONFIGURE_MALLOC_DIRTY)
+      rtems_malloc_dirty_memory;
+    #else
+      NULL;
+    #endif
+#endif
+
 /*
  *  Default User Initialization Task Table.  This table guarantees that
  *  one user initialization table is defined.
