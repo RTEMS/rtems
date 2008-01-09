@@ -22,6 +22,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
+#if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
 int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
@@ -29,3 +30,4 @@ int _CORE_mutex_Seize_interrupt_trylock(
 {
   return _CORE_mutex_Seize_interrupt_trylock_body( the_mutex, level_p );
 }
+#endif

@@ -1,5 +1,11 @@
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/coremutex.h,
+	score/src/coremutexseizeintr.c: Fix conditional code for inlining
+	_CORE_mutex_Seize_interrupt_trylock() and add comments.
+
+2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: Add CONFIGURE_MALLOC_DIRTY.
 
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -291,14 +291,24 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   ISR_Level           *level_p
 );
 
-#if !defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
-  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
-     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
-#else
+#if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
+  /*
+   *  When doing test coverage analysis or trying to minimize the code
+   *  space for RTEMS, it is often helpful to not inline this method
+   *  multiple times.  It is fairly large and has a high branch complexity
+   *  which makes it harder to get full binary test coverage.
+   */
   int _CORE_mutex_Seize_interrupt_trylock(
     CORE_mutex_Control  *the_mutex,
     ISR_Level           *level_p
   );
+#else
+  /*
+   *  The default is to favor speed and inlining this definitely saves
+   *  a few instructions.  This is very important for mutex performance.
+   */
+  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
+     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
 #endif
 
 /**
