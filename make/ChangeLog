@@ -1,3 +1,7 @@
+2008-01-09	Eric Norum <norume@aps.anl.gov>
+
+	* custom/mvme3100.cfg: Add make-cxx-exe rule.
+
 2007-12-17	Chris Johns <chrisj@rtems.org>
 
 	* custom/mcf5235.cfg, custom/mrm332.cfg, custom/pc386.cfg: Split
