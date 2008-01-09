@@ -1,3 +1,9 @@
+2008-01-09	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* posix/src/keycreate.c, rtems/src/eventseize.c,
+	score/include/rtems/score/interr.h: Rearranged source to allow more
+	test coverage.
+
 2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/__assert.c: Clean up and make __assert() call

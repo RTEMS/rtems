@@ -117,17 +117,17 @@ void _Event_Seize(
        *  This cannot happen.  It indicates that this routine did not
        *  enter the synchronization states above.
        */
-      return;
+      break;
 
     case EVENT_SYNC_NOTHING_HAPPENED:
       _ISR_Enable( level );
-      return;
+      break;
 
     case EVENT_SYNC_TIMEOUT:
       executing->Wait.return_code = RTEMS_TIMEOUT;
       _ISR_Enable( level );
       _Thread_Unblock( executing );
-      return;
+      break;
 
     case EVENT_SYNC_SATISFIED:
       if ( _Watchdog_Is_active( &executing->Timer ) ) {
@@ -137,6 +137,6 @@ void _Event_Seize(
       } else
         _ISR_Enable( level );
       _Thread_Unblock( executing );
-      return;
+      break;
   }
 }
