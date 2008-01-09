@@ -57,27 +57,23 @@ Objects_Control *_Objects_Get_no_protection(
   Objects_Control *the_object;
   uint32_t         index;
 
-#if defined(RTEMS_MULTIPROCESSING)
+  /*
+   * You can't just extract the index portion or you can get tricked
+   * by a value between 1 and maximum.
+   */
   index = id - information->minimum_id + 1;
-#else
-  /* index = _Objects_Get_index( id ); */
-  index = id & 0x0000ffff;
-  /* This should work but doesn't always :( */
-  /* index = (uint16_t  ) id; */
-#endif
 
-   if ( information->maximum >= index ) {
+  if ( information->maximum >= index ) {
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
       return the_object;
     }
-    *location = OBJECTS_ERROR;
-    return NULL;
   }
-  *location = OBJECTS_ERROR;
 
-/*
- *  Not supported for multiprocessing
- */
+  /*
+   *  This isn't supported or required yet for Global objects so
+   *  if it isn't local, we don't find it.
+   */
+  *location = OBJECTS_ERROR;
   return NULL;
 }
