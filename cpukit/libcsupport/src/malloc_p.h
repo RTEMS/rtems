@@ -52,4 +52,4 @@ extern rtems_malloc_statistics_t rtems_malloc_statistics;
 boolean malloc_is_system_state_OK(void);
 void malloc_deferred_frees_initialize(void);
 void malloc_deferred_frees_process(void);
-void malloc_defer_free(void *);
+void malloc_deferred_free(void *);

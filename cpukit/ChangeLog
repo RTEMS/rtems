@@ -1,5 +1,11 @@
 2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/Makefile.am: Add src/malloc_dirtier.c.
+	* libcsupport/include/rtems/malloc.h: Add malloc dirty support.
+	* libcsupport/src/malloc_p.h: Correct prototype.
+
+2008-01-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/coremutex.h,
 	score/src/coremutexseizeintr.c: Fix conditional code for inlining
 	_CORE_mutex_Seize_interrupt_trylock() and add comments.

@@ -76,6 +76,23 @@ typedef struct {
 extern rtems_malloc_sbrk_functions_t rtems_malloc_sbrk_helpers_table;
 extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
 
+/*
+ * Malloc Plugin to Dirty Memory at Allocation Time
+ */
+typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
+extern rtems_malloc_dirtier_t *rtems_malloc_dirty_helper;
+
+/** @brief Dirty memory function
+ *  
+ *  This method fills the specified area with a non-zero pattern
+ *  to aid in debugging programs which do not initialize their
+ *  memory allocated from the heap.
+ */
+void rtems_malloc_dirty_memory(
+  void   *start,
+  size_t  size
+);
+
 /** @brief Print Malloc Statistic Usage Report
  *
  *  This method fills in the called provided malloc statistics area.
