@@ -1,3 +1,9 @@
+2008-01-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/irq.c: When unhooking
+	and ISR only disable IRQs at the PIC if we are
+	unhooking the last ISR.
+
 2007-12-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: don't normally build-in test code

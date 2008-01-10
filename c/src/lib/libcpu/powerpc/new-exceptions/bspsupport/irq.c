@@ -230,20 +230,13 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
        }
     }
     else
-    {
-       if (rtems_hdl_tbl[irq->name].hdl != irq->hdl)
-       {
-          rtems_interrupt_enable(level);
-         return 0;
-       }
-    }
-
-	/*
-	 * disable_irq_at_pic is supposed to ignore
-	 * requests to disable interrupts outside
-	 * of the range handled by the PIC
-	 */
-	BSP_disable_irq_at_pic(irq->name);
+	{
+		if (rtems_hdl_tbl[irq->name].hdl != irq->hdl)
+		{
+			rtems_interrupt_enable(level);
+			return 0;
+		}
+	}
 
     /*
      * Disable interrupt on device
@@ -276,6 +269,16 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
        }
        free(vchain);
     }
+
+	/* Only disable at PIC if we removed the last handler */
+	if ( rtems_hdl_tbl[irq->name].hdl == default_rtems_entry.hdl ) {
+		/*
+		 * disable_irq_at_pic is supposed to ignore
+		 * requests to disable interrupts outside
+		 * of the range handled by the PIC;
+		 */
+		BSP_disable_irq_at_pic(irq->name);
+	}
 
     rtems_interrupt_enable(level);
 
