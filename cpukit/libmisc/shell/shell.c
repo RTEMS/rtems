@@ -68,7 +68,7 @@ rtems_shell_env_t *rtems_shell_init_env(
   if ( !shell_env ) {
     shell_env = malloc(sizeof(rtems_shell_env_t));
     if ( !shell_env )
-     return NULL;
+      return NULL;
     *shell_env = rtems_global_shell_env;
     shell_env->taskname = NULL;
   }
@@ -397,7 +397,10 @@ rtems_boolean rtems_shell_main_loop(
 
   fileno(stdout);
 
-  if (strcmp(shell_env->output, "stdout") != 0) {
+fprintf( stderr, 
+  "-%s-%s-\n", shell_env->input, shell_env->output );
+
+  if (shell_env->output && strcmp(shell_env->output, "stdout") != 0) {
     if (strcmp(shell_env->output, "stderr") == 0) {
       stdout = stderr;
     } else if (strcmp(shell_env->output, "/dev/null") == 0) {
@@ -414,7 +417,7 @@ rtems_boolean rtems_shell_main_loop(
     }
   }
   
-  if (strcmp(shell_env_arg->input, "stdin") != 0) {
+  if (shell_env->input && strcmp(shell_env_arg->input, "stdin") != 0) {
     FILE *input = fopen(shell_env_arg->input, "r");
     if (!input) {
       fprintf(stderr, "shell: open input %s failed: %s\n",
