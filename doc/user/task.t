@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2007.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -19,6 +19,7 @@ by the task manager are:
 @itemize @bullet
 @item @code{@value{DIRPREFIX}task_create} - Create a task 
 @item @code{@value{DIRPREFIX}task_ident} - Get ID of a task 
+@item @code{@value{DIRPREFIX}task_self} - Obtain ID of caller
 @item @code{@value{DIRPREFIX}task_start} - Start a task 
 @item @code{@value{DIRPREFIX}task_restart} - Restart a task 
 @item @code{@value{DIRPREFIX}task_delete} - Delete a task 
@@ -847,6 +848,37 @@ are searched.
 
 This directive does not generate activity on remote nodes.  It
 accesses only the local copy of the global object table.
+
+@page
+
+@subsection TASK_SELF - Obtain ID of caller
+
+@cindex obtain ID of caller
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_task_self
+@example
+rtems_id rtems_task_self(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+function Task_Self return RTEMS.ID;
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+Returns the object Id of the calling task.
+
+@subheading DESCRIPTION:
+This directive returns the Id of the calling task.
+
+@subheading NOTES:
+If called from an interrupt service routine, this directive
+will return the Id of the interrupted task.
 
 @page
 

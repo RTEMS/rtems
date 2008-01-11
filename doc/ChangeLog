@@ -1,3 +1,7 @@
+2008-01-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/task.t: Add manual page for rtems_task_self().
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsp_howto/clock.t, bsp_howto/init.t: Eliminate copies of the
