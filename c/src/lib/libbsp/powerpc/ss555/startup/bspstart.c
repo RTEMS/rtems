@@ -46,6 +46,8 @@ extern unsigned long intrStackPtr;
  */
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_clock_speed;	       /* Serial clocks per second */
+uint32_t   bsp_timer_least_valid;
+uint32_t   bsp_timer_average_overhead;
 
 /*
  *  Use the shared implementations of the following routines.
@@ -172,6 +174,8 @@ void bsp_start(void)
    */
   bsp_clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
   bsp_clock_speed     = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
+  bsp_timer_least_valid      = 0
+  bsp_timer_average_overhead = 0;
 
   /*
    * Call this in case we use TERMIOS for console I/O

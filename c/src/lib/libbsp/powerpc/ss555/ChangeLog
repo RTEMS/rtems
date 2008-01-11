@@ -1,3 +1,8 @@
+2008-01-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Add bsp_timer_least_valid and
+	bsp_timer_average_overhead so tmtests link.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the
