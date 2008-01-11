@@ -32,7 +32,5 @@ rtems_task Init(
   printf( "\n\n*** HELLO WORLD TEST ***\n" );
   printf( "Hello World\n" );
   printf( "*** END OF HELLO WORLD TEST ***\n" );
-  rtems_shell_main_wkspace_info(0, NULL);
-  rtems_shell_main_joel(0, NULL);
   exit( 0 );
 }
