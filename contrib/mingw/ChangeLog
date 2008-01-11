@@ -1,4 +1,23 @@
-2007-0823	Chris Johns <chisj@rtems.org>
+2008-01-11	Chris Johns <chisj@rtems.org>
+
+	* expat-version: New.
+
+	* build-exes.sh: Fix the size calculation.
+
+	* build-rpms.sh: Add expax support. Clean the BUILD, RPM and SRPM
+	directories. Delete the RPM database if cleaning.
+
+	* msys-path.nsi: Add comments.
+
+	* rtems-tools.nsi: Fix the uninstall targets check.
+
+	* target-section-text, targets: Add bfin target.
+
+	* upload.sh: Upload only the specific version of files.
+
+	* version: Build 17.
+	
+2007-08-23	Chris Johns <chisj@rtems.org>
 
 	* mingw-path.nsi: Change the forward slashes to back slashes for
 	Windows.

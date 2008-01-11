@@ -1,5 +1,6 @@
 auto_section_text="Autoconf and Automake"
 arm_section_text="ARM Targets"
+bfin_section_text="Blackfin Targets"
 h8300_section_text="H8300 16bit Target"
 i386_section_text="Intel i386 Targets"
 m68k_section_text="Coldfire and M68000 Targets"

@@ -120,6 +120,7 @@ FunctionEnd
 
 Function MSYSFstabUpdate
  Call MSYSDetectSilent
+ ; Check the result.
  Pop $R0
  Push $R0
  Push $INSTDIR
@@ -132,6 +133,7 @@ Function MSYSFstabUpdate
  StrCpy $R1 "$R1 /opt/rtems-${PRODUCT_VERSION}$\n"
  FileOpen $9 "$R0\etc\fstab" a
  ifErrors 0 +3
+   ; Create the file.
    MessageBox MB_OK "Cannot open $R0\etc\fstab. MSYS mount point not added."
    Goto Close
  FileSeek $9 0 SET

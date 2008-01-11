@@ -72,13 +72,13 @@ if [ $prefix = none ]; then
   terminate "no prefix set"
 fi
 
-exebase=${prefix}/${version}/packages/mingw32/exe
-srcbase=${prefix}/${version}/packages/mingw32/SRPMS
+exebase=${prefix}/packages/mingw32/exe
+srcbase=${prefix}/packages/mingw32/SRPMS
 
 mkdir -p ${ftpbase}/${version}/build-${tool_build}/source
 check "creating: ${ftpbase}/${version}/build-${tool_build}/source"
 
-exes=$(find $exebase -name \*-${tool_build}.exe)
+exes=$(find $exebase -name rtems${version}-\*-${tool_build}.exe)
 for e in $exes
 do
   echo "cp $e ${ftpbase}/${version}/build-${tool_build}/."
@@ -89,7 +89,7 @@ done
 cd ${ftpbase}/${version}/build-${tool_build}/source
 check "change directory: ${ftpbase}/${version}/build-${tool_build}/source"
 
-for s in ${srcbase}/*.rpm
+for s in ${srcbase}/*-rtems${version}-*.rpm
 do
   echo "rpm2cpio $s | cpio --extract --quiet"
   rpm2cpio $s | cpio --extract --quiet

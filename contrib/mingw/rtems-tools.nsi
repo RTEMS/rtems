@@ -295,7 +295,7 @@ Section Uninstall
  FindFirst $0 $1 "$INSTDIR\rtems${PRODUCT_VERSION}-${RTEMS_BUILD_VERSION}-tools-*-uninst.exe"
  Uninstall_Targets:
   StrCmp $1 "" Uninstall_Targets_Done
-  IntCmp $2 0 0 +3
+  IntCmp $2 0 0 0 +3
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
              "You have tools installed. Are you sure you want to uninstall all RTEMS Tools ?" IDYES +2
     Abort

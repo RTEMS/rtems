@@ -35,13 +35,19 @@ processor=$(uname -p)
 base_tool_list="binutils gcc"
 
 target_list=$(cat $source/targets)
-host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
+# host_list="cygwin freebsd5.2 freebsd6.0 freebsd6.1 mingw32"
+host_list="mingw32"
 
-rtems_tool_list="autoconf automake $base_tool_list gdb"
 linux_tool_list="autoconf automake $base_tool_list"
 cygwin_tool_list="w32api libs autoconf automake $base_tool_list"
 freebsd_tool_list="libs autoconf automake $base_tool_list"
 mingw32_tool_list="w32api libs autoconf automake $base_tool_list"
+
+# We may build a different set of packages for different
+# hosts depending on what builds.
+rtems_tool_list="autoconf automake $base_tool_list"
+linux_rtems_tool_list=$rtems_tool_list
+mingw32_rtems_tool_list="$rtems_tool_list gdb"
 
 cygwin_cc_name="pc"
 freebsd_cc_name="pc"
@@ -52,7 +58,8 @@ cygwin_cpu_list="i686"
 freebsd_cpu_list="i586"
 mingw32_cpu_list="i686"
 
-rpm_topdir=$(rpm --eval "%{_topdir}")
+expat_list="mingw32"
+. $source/expat-version
 
 prefix=/opt/rtems-$version
 hosts=$host_list
@@ -120,6 +127,8 @@ do
  shift
 done
 
+rpm_topdir=$(rpm --eval "%{_topdir}")
+
 for t in $targets;
 do
  if [ -z "$(echo $target_list | grep $t)" ]; then
@@ -135,12 +144,19 @@ mkdir=${run_prefix}mkdir
 rm=${run_prefix}rm
 rpmbuild=${run_prefix}rpmbuild
 rpm=${run_prefix}rpm
+tar=${run_prefix}tar
 
 if [ $local_rpm_database = yes ]; then
   rpm_database="--dbpath $prefix/var/lib/rpm"
 else
   rpm_database=
 fi
+
+#
+# We always build tools for the build host. We need them to
+# build the libraries for the target processor.
+#
+hosts="linux $hosts"
 
 echo " Source: $source"
 echo " Prefix: $prefix"
@@ -166,9 +182,24 @@ fi
 $cd $prefix
 check "cannot change to the prefix directory: $prefix"
 
+#
+# Clean the files from the current prefix. Remove the various RPM
+# and SRPM files.
+#
 if [ $clean = yes ]; then
  echo "Cleaning: $(pwd)"
  $rm -rf *
+ $rm -rf $rpm_topdir/BUILD/*
+ for h in $hosts;
+ do
+  for d in RPMS SRPMS
+  do
+   rm -rf $rpm_topdir/$h/$d
+   check "removing rpm/srpm directory: $rpm_topdir/$h/$d"
+   mkdir -p $rpm_topdir/$h/$d
+   check "creating directory: $rpm_topdir/$h/$d"
+  done
+ done
 fi
 
 #
@@ -184,6 +215,10 @@ if [ $local_rpm_database = yes ]; then
  if [ ! -d var/lib ]; then
   $mkdir -p var/lib
   check "making the local RPM database directory: var/lib"
+ fi
+ if [ $clean = yes ]; then
+  $rm -rf var/lib/rpm/*
+  check "Deleting the current database."
  fi
  if [ $clean = yes -o ! -e var/lib/rpmPackages ]; then
   echo "Copying RPM database to a local RPM database"
@@ -263,12 +298,6 @@ rpm_arch()
  fi
 }
 
-#
-# We always build tools for the build host. We need them to
-# build the libraries for the target processor.
-#
-hosts="linux $hosts"
-
 echo "Configuring target: all"
 echo "configure --prefix=$prefix $rpm_prefix_arg " \
      " --target=all $infos"
@@ -283,6 +312,10 @@ echo "make -C autotools"
 $make -C autotools
 check "building the rpm spec files failed"
 
+#
+# Build for each type of host in your host list. The build host
+# will always be present.
+#
 for h in $hosts;
 do
  #
@@ -341,11 +374,46 @@ do
                   $rpmbuild_cmd
    done
   fi
+
+  #
+  # See if the host is listed in the expat list. If it is build the
+  # expat library.
+  #
+  for eh in $expat_list
+  do
+   if [ $th == $eh ]; then
+    _curpath=$PATH
+    PATH=$prefix/bin:$PATH
+    expat_build=${rpm_prefix}${th}-expat-${expat_version}
+    $rm -rf ${rpm_topdir}/BUILD/$expat_build
+    check "cleaning expat directory: ${rpm_topdir}/BUILD/$expat_build"
+    $mkdir ${rpm_topdir}/BUILD/$expat_build
+    check "make directory: ${rpm_topdir}/BUILD/$expat_build"
+    _curdir=$(pwd)
+    $cd ${rpm_topdir}/BUILD/$expat_build
+    check "change to directory: ${rpm_topdir}/BUILD/$expat_build"
+    $tar x${expat_tar_comp}f $rpm_topdir/SOURCES/expat-${expat_version}.tar.${expat_tar_ext}
+    check "extract tar file: $rpm_topdir/SOURCES/expat-${expat_version}.tar.${expat_tar_ext}"
+    $mkdir build
+    check "make directory: build"
+    $cd build
+    check "change directory: build"
+    ${run_prefix}../expat-${expat_version}/configure --build=$build --host=$p-pc-$th --prefix=$prefix
+    check "configure failed: ../expat-${expat_version}/configure --build=$build --host=$p-pc-$th --prefix=$prefix"
+    $make all install
+    check "expat make all install"
+    $cd $_curdir
+    check "change directory: $_curdir"
+    PATH=$_curpath
+   fi
+  done
  done
 
  for t in $targets;
  do
-  for s in ${rtems_tool_list}
+  rtl=${h}_rtems_tool_list
+  echo "RTEMS Tool List: ${!rtl}"
+  for s in ${!rtl}
   do
    case $s in
     autoconf|automake)

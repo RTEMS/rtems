@@ -198,8 +198,16 @@ get_size_in_k()
   cd $1
   check "changing directory: $1"
 
-  local size_in_k=$(du -c -k $(cat files.txt) | grep total | sed -e "s/\t.*//g")
-  check "getting total size"
+  local total=
+  local f
+  local size
+  for f in $(cat files.txt)
+  do
+   size=$(ls -l "$f" | awk '{ print $5 }')
+   check "getting size"
+   total=$(expr $total + $size)
+  done
+  local size_in_k=$(expr $total / 1024)
 
   cd $here
   check "changing directory: $here"
