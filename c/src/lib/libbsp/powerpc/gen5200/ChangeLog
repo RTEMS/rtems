@@ -1,3 +1,14 @@
+2008-01-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, irq/irq.c, startup/bspclean.c, startup/bspstart.c: Add
+	ALLOW_IRQ_NESTING option. The MPC5200 has a settle time after
+	acknowledging the IRQs and currently the BSP does not account for
+	that. After acknowledging an interrupt, it currently gets a second
+	spurious IRQ a significant percentage of the time. Rename to
+	BENCHMARK_IRQ_PROCESSING and get it working again. Under one test
+	load, not nesting interrupts resulted in a 50% reduction in the
+	number of IRQs and an ~30% reduction in time spent in IRQs.
+
 2007-12-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Spacing.

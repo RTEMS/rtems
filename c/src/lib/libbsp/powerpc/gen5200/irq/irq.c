@@ -631,7 +631,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
   return 0;
 }
 
-#if defined(TIME_IRQs)
+#if (BENCHMARK_IRQ_PROCESSING == 1)
 #include <stdio.h>
 uint64_t BSP_Starting_TBR;
 uint64_t BSP_Total_in_ISR;
@@ -688,7 +688,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned int new_msr;
   register unsigned int pmce;
   register unsigned int crit_pri_main_mask, per_mask;
-#if defined(TIME_IRQs)
+#if (BENCHMARK_IRQ_PROCESSING == 1)
   uint64_t start, stop, thisTime;
 
   start = PPC_Get_timebase_register();
@@ -759,18 +759,22 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 	      crit_pri_main_mask =  mpc5200.crit_pri_main_mask;
 	      mpc5200.crit_pri_main_mask |= irqMaskTable[irq];
 
+#if (ALLOW_IRQ_NESTING == 1)
               /* enable interrupt nesting */
 	      _CPU_MSR_GET(msr);
 	      new_msr = msr | MSR_EE;
 	      _CPU_MSR_SET(new_msr);
+#endif
 
               /* call the module specific handler and pass the
 	       * specific handler
 	       */
               rtems_hdl_tbl[irq].hdl(0);
 
+#if (ALLOW_IRQ_NESTING == 1)
               /* disable interrupt nesting */
               _CPU_MSR_SET(msr);
+#endif
 
               /* restore original interrupt mask */
               mpc5200.crit_pri_main_mask = crit_pri_main_mask;
@@ -796,18 +800,22 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
                 per_mask =  mpc5200.per_mask;
                 mpc5200.per_mask |= irqMaskTable[irq];
 
+#if (ALLOW_IRQ_NESTING == 1)
                 /* enable interrupt nesting */
 		_CPU_MSR_GET(msr);
 		new_msr = msr | MSR_EE;
 		_CPU_MSR_SET(new_msr);
+#endif
 
                 /* call the module specific handler and pass
 		 * the specific handler
 		 */
 		rtems_hdl_tbl[irq].hdl(0);
 
+#if (ALLOW_IRQ_NESTING == 1)
 		/* disable interrupt nesting */
 		_CPU_MSR_SET(msr);
+#endif
 
 		/* restore original interrupt mask */
 		mpc5200.per_mask = per_mask;
@@ -883,16 +891,20 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
                 per_mask =  mpc5200.per_mask;
                 mpc5200.per_mask |= irqMaskTable[irq];
 
+#if (ALLOW_IRQ_NESTING == 1)
                 /* enable interrupt nesting */
                 _CPU_MSR_GET(msr);
                 new_msr = msr | MSR_EE;
                 _CPU_MSR_SET(new_msr);
+#endif
 
                 /* call the module specific handler and pass the
                  * specific handler */
                 rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
+#if (ALLOW_IRQ_NESTING == 1)
                 _CPU_MSR_SET(msr);
+#endif
 
                 /* restore original interrupt mask */
                 mpc5200.per_mask = per_mask;
@@ -948,17 +960,21 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 	      crit_pri_main_mask =  mpc5200.crit_pri_main_mask;
 	      mpc5200.crit_pri_main_mask |= irqMaskTable[irq];
 
+#if (ALLOW_IRQ_NESTING == 1)
 	      /* enable interrupt nesting */
 	      _CPU_MSR_GET(msr);
 	      new_msr = msr | MSR_EE;
 	      _CPU_MSR_SET(new_msr);
+#endif
 
 	      /* call the module specific handler and pass the specific
 	       * handler */
 	      rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
+#if (ALLOW_IRQ_NESTING == 1)
 	      /* disable interrupt nesting */
 	      _CPU_MSR_SET(msr);
+#endif
 
 	      /* restore original interrupt mask */
 	      mpc5200.crit_pri_main_mask = crit_pri_main_mask;
@@ -980,17 +996,21 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 		per_mask =  mpc5200.per_mask;
 		mpc5200.per_mask |= irqMaskTable[irq];
 
+#if (ALLOW_IRQ_NESTING == 1)
 		/* enable interrupt nesting */
 		_CPU_MSR_GET(msr);
 		new_msr = msr | MSR_EE;
 		_CPU_MSR_SET(new_msr);
+#endif
 
 		/* call the module specific handler and pass the
 		 * specific handler */
 		rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
+#if (ALLOW_IRQ_NESTING == 1)
 		/* disable interrupt nesting */
 		_CPU_MSR_SET(msr);
+#endif
 
 		/* restore original interrupt mask */
 		mpc5200.per_mask = per_mask;
@@ -1022,11 +1042,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       break;
 
   } /* end of switch(excNum) */
-#if defined(TIME_IRQs)
+#if (BENCHMARK_IRQ_PROCESSING == 1)
   stop = PPC_Get_timebase_register();
   thisTime = stop - start;
-  if ( thisTime > BSP_Worst_ISR );
-    thisTime = BSP_Worst_ISR;
+  BSP_Total_in_ISR += thisTime;
+  if ( thisTime > BSP_Worst_ISR )
+    BSP_Worst_ISR = thisTime;
 #endif
   return 0;
 }

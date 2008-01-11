@@ -21,7 +21,7 @@ extern int mpc5200_uart_pollRead(int minor);
 void bsp_cleanup( void )
 {
   
- #if defined(TIME_IRQs)
+  #if (BENCHMARK_IRQ_PROCESSING == 1)
   {
     extern void BSP_report_IRQ_Timing(void);
     BSP_report_IRQ_Timing();

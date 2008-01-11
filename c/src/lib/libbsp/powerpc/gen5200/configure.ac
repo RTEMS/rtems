@@ -25,6 +25,14 @@ RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
 [If defined, the instruction cache will be enabled after address translation
  is turned on.])
 
+RTEMS_BSPOPTS_SET([BENCHMARK_IRQ_PROCESSING],[*],[0])
+RTEMS_BSPOPTS_HELP([BENCHMARK_IRQ_PROCESSING],
+[If defined, enable code to benchmark IRQ processing.])
+
+RTEMS_BSPOPTS_SET([ALLOW_IRQ_NESTING],[*],[1])
+RTEMS_BSPOPTS_HELP([ALLOW_IRQ_NESTING],
+[If defined, allow nested IRQ processing.])
+
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 

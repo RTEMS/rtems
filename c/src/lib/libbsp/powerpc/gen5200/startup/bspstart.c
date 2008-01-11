@@ -65,12 +65,12 @@
 /*   conditions.                                                       */
 /*   The mmu is unused at this time.                                   */
 /*                                                                     */
-/*   COPYRIGHT (c) 1989-2007.
+/*   COPYRIGHT (c) 1989-2007.                                          */
 /*   On-Line Applications Research Corporation (OAR).                  */
 /*                                                                     */
 /*   The license and distribution terms for this file may be           */
 /*   found in found in the file LICENSE in this distribution or at     */
-/*   http://www.rtems.com/license/LICENSE.                        */
+/*   http://www.rtems.com/license/LICENSE.                             */
 /*                                                                     */
 /*---------------------------------------------------------------------*/
 /*                                                                     */
@@ -301,13 +301,17 @@ void bsp_start(void)
    *  not malloc'ed.  It is just "pulled from the air".
    */
   Configuration.work_space_start = (void *)&_WorkspaceBase;
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk( "workspace=%p\n", Configuration.work_space_start );
+  printk( "workspace size=%d\n", Configuration.work_space_size );
+#endif
 
   /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
 
-#if defined(TIME_IRQs)
+#if (BENCHMARK_IRQ_PROCESSING == 1)
   {
     void BSP_initialize_IRQ_Timing(void);
     BSP_initialize_IRQ_Timing();
