@@ -26,7 +26,7 @@ Summary:      	mips-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	6%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,12 +53,9 @@ Requires:	rtems-4.9-mips-rtems4.9-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "3.4.6"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
-%endif
 %if "%{gcc_version}" == "4.2.2"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.9-20071127.diff
+Patch0:		gcc-core-4.2.2-rtems4.9-20080114.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
