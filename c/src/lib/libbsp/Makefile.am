@@ -21,8 +21,8 @@ EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/vmeTsi148.h	\
     shared/vmeUniverse/vmeTsi148DMA.h	\
     shared/vmeUniverse/vme_am_defs.h \
-	shared/vmeUniverse/VME.h \
-	shared/vmeUniverse/VMEDMA.h \
+    shared/vmeUniverse/VME.h \
+    shared/vmeUniverse/VMEDMA.h \
     shared/vmeUniverse/bspVmeDmaList.c \
     shared/vmeUniverse/bspVmeDmaList.h \
     shared/vmeUniverse/bspVmeDmaListP.h \

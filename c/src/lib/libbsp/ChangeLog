@@ -1,3 +1,7 @@
+2008-01-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix indentation.
+
 2007-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove shared/main.c.
