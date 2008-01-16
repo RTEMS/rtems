@@ -1,3 +1,7 @@
+2008-01-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/Makefile.am: Don't use make variables.
+
 2008-01-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell.c: When stdin or stdout is NULL, just use

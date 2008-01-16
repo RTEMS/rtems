@@ -63,10 +63,6 @@ libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c mw-fb/mw_fb.h \
 ## shell
 if LIBSHELL
 noinst_LIBRARIES += libshell.a
-if LIBNETWORKING
-shell_mount_fs = shell/main_mount_ftp.c shell/main_mount_nfs.c \
-    shell/main_mount_tftp.c
-endif
 libshell_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shell
 libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_alias.c shell/main_cat.c shell/main_cd.c \
@@ -86,6 +82,10 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/utils-cp.c shell/err.c shell/errx.c shell/verr.c shell/verrx.c \
     shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \
     shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c
+if LIBNETWORKING
+libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_nfs.c \
+    shell/main_mount_tftp.c
+endif
 endif
 
 EXTRA_DIST += shell/README
