@@ -1,3 +1,10 @@
+2008-01-18	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* posix/include/rtems/posix/timer.h, posix/src/cleanuppop.c,
+	posix/src/cleanuppush.c, posix/src/mqueueclose.c,
+	posix/src/timergettime.c, posix/src/timersettime.c,
+	score/include/rtems/score/timespec.h:
+
 2008-01-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/Makefile.am: Don't use make variables.

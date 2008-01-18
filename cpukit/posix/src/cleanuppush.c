@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,25 +39,26 @@ void pthread_cleanup_push(
   Chain_Control                     *handler_stack;
   POSIX_API_Control                 *thread_support;
 
+  /*
+   *  The POSIX standard does not address what to do when the routine
+   *  is NULL.  It also does not address what happens when we cannot 
+   *  allocate memory or anything else bad happens.
+   */
   if ( !routine )
-    return;          /* XXX what to do really? */
+    return;
 
   _Thread_Disable_dispatch();
   handler = _Workspace_Allocate( sizeof( POSIX_Cancel_Handler_control ) );
 
-  if ( !handler ) {
-    _Thread_Enable_dispatch();
-    return;          /* XXX what to do really? */
+  if ( handler ) {
+    thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+
+    handler_stack = &thread_support->Cancellation_Handlers;
+
+    handler->routine = routine;
+    handler->arg = arg;
+
+    _Chain_Append( handler_stack, &handler->Node );
   }
-
-  thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-
-  handler_stack = &thread_support->Cancellation_Handlers;
-
-  handler->routine = routine;
-  handler->arg = arg;
-
-  _Chain_Append( handler_stack, &handler->Node );
-
   _Thread_Enable_dispatch();
 }

@@ -1,7 +1,7 @@
 /*
  *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,6 +40,7 @@ int timer_gettime(
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
   struct timespec      current_time;
+  Watchdog_Interval    left;
 
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -54,11 +55,11 @@ int timer_gettime(
 
       /* Calculates the time left before the timer finishes */
 
-      _Timespec_Subtract(
-        &ptimer->timer_data.it_value,
-        &current_time,
-        &value->it_value
-      );
+      left =
+        (ptimer->Timer.start_time + ptimer->Timer.initial) - /* expire */
+        _Watchdog_Ticks_since_boot;                          /* now */
+
+      _Timespec_From_ticks( left, &value->it_value );
 
       value->it_interval  = ptimer->timer_data.it_interval;
 

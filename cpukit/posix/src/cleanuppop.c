@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,8 +44,18 @@ void pthread_cleanup_pop(
 
   handler_stack = &thread_support->Cancellation_Handlers;
 
+  /*
+   * We need interrupts disabled to safely check the chain and pull
+   * the last element off.  But we also need dispatching disabled to
+   * ensure that we do not get prempted and deleted while we are holding
+   * memory that needs to be freed.
+   */
+
+  _Thread_Disable_dispatch();
   _ISR_Disable( level );
+
     if ( _Chain_Is_empty( handler_stack ) ) {
+      _Thread_Enable_dispatch();
       _ISR_Enable( level );
       return;
     }
@@ -58,8 +68,8 @@ void pthread_cleanup_pop(
 
   tmp_handler = *handler;
 
-  _Thread_Disable_dispatch();
-    _Workspace_Free( handler );
+  _Workspace_Free( handler );
+
   _Thread_Enable_dispatch();
 
   if ( execute )

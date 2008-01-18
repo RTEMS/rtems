@@ -11,7 +11,7 @@
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,10 +53,9 @@ int mq_close(
   Objects_Locations               location;
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      /*
+  if ( location == OBJECTS_LOCAL ) {
+      /* OBJECTS_LOCAL:
+       *
        *  First update the actual message queue to reflect this descriptor
        *  being disassociated.  This may result in the queue being really
        *  deleted.
@@ -76,13 +75,11 @@ int mq_close(
 
       _Thread_Enable_dispatch();
       return 0;
+   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
-  }
-
-  rtems_set_errno_and_return_minus_one( EBADF );
+   /*
+    *  OBJECTS_REMOTE:
+    *  OBJECTS_ERROR:
+    */
+   rtems_set_errno_and_return_minus_one( EBADF );
 }

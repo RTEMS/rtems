@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -76,6 +76,21 @@ boolean _Timespec_Greater_than(
   const struct timespec *lhs,
   const struct timespec *rhs
 );
+
+/** @brief Timespec equal to Operator
+ *
+ *  This method is the is equal to than operator for timespecs.
+ *
+ *  @param[in] lhs is the left hand side timespec
+ *  @param[in] rhs is the left hand side timespec
+ *
+ *  @return This method returns true if @a lhs is equal to  @a rhs and 
+ *          false otherwise.
+ */
+#define _Timespec_Equal_to( lhs, rhs ) \
+  ( ((lhs)->tv_sec  == (rhs)->tv_sec) &&   \
+    ((lhs)->tv_nsec == (rhs)->tv_nsec)     \
+  )
 
 /** @brief Add to a Timespec
  *

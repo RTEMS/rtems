@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,7 +56,7 @@ typedef struct {
   struct itimerspec timer_data; /* Timing data of the timer              */
   uint32_t          ticks;      /* Number of ticks of the initialization */
   uint32_t          overrun;    /* Number of expirations of the timer    */
-  struct timespec   time;       /* Time in which the timer was started   */
+  struct timespec   time;       /* Time at which the timer was started   */
 } POSIX_Timer_Control;
 
 /*
