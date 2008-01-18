@@ -1,0 +1,6 @@
+*** POSIX CLEANUP TEST ***
+Lock for read
+cleanup push for read
+cleanup pop for read
+Lock for write
+*** END OF POSIX CLEANUP TEST ***

@@ -43,6 +43,7 @@ psx13/Makefile
 psxbarrier01/Makefile
 psxcancel/Makefile
 psxchroot01/Makefile
+psxcleanup/Makefile
 psxenosys/Makefile
 psxfile01/Makefile
 psxhdrs/Makefile
