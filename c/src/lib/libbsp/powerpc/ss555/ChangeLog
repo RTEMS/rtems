@@ -1,3 +1,7 @@
+2008-01-18	David Erickson <David.Erickson@drdc-rddc.gc.ca>
+
+	* startup/bspstart.c: Add semicolon.
+
 2008-01-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add bsp_timer_least_valid and

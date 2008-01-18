@@ -174,7 +174,7 @@ void bsp_start(void)
    */
   bsp_clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
   bsp_clock_speed     = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
-  bsp_timer_least_valid      = 0
+  bsp_timer_least_valid      = 0;
   bsp_timer_average_overhead = 0;
 
   /*
