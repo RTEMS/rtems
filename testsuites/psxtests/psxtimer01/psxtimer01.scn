@@ -1,4 +1,5 @@
 *** POSIX Timers Test 01 ***
+task A: timer_settime - value=0:0 interval=0:0
 Executing task A Fri Jan  1 00:00:01 1988
 Executing task B with x = 1 Fri Jan  1 00:00:02 1988
 Executing task A Fri Jan  1 00:00:02 1988
@@ -32,6 +33,8 @@ Executing task A Fri Jan  1 00:00:17 1988
 Executing task B with x = 9 Fri Jan  1 00:00:18 1988
 Executing task C with x = 9 Fri Jan  1 00:00:18 1988
 Executing task A Fri Jan  1 00:00:18 1988
+task C: timer_getoverrun - overruns=0
+task C: timer_gettime - 2:0 remaining from 3:0
 Executing task A Fri Jan  1 00:00:19 1988
 Executing task B with x = 10 Fri Jan  1 00:00:20 1988
 *** END OF POSIX Timers Test 01 ***

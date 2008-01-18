@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +43,7 @@ typedef struct {
   int                count;
 } Test_queue_type;
 
-Test_queue_type Test_q[ NUMBER_OF_TEST_QUEUES ] =
+Test_queue_type Test_q[ NUMBER_OF_TEST_QUEUES + 1 ] =
 {
   { 0, 0, "Qread",    ( O_CREAT | O_RDONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
   { 0, 1, "Qwrite",   ( O_CREAT | O_WRONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
@@ -51,6 +51,7 @@ Test_queue_type Test_q[ NUMBER_OF_TEST_QUEUES ] =
   { 0, 3, "Qblock",   ( O_CREAT | O_RDWR )               , MAXMSG, MSGSIZE, 0 },
   { 0, 4, "Qdefault", ( O_CREAT | O_RDWR )               , 10,     16,      0 },
   { 0, 5, "mq6",      ( O_CREAT | O_WRONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
+  { 0, 6, "Qblock",   (           O_RDWR )               , MAXMSG, MSGSIZE, 0 },
 };
 
 #define RW_NAME             Test_q[ RW_QUEUE ].name
@@ -130,7 +131,7 @@ void open_test_queues()
 
   puts( "Init: Open Test Queues" );
 
-  for( que = 0; que < NUMBER_OF_TEST_QUEUES; que++ ) {
+  for( que = 0; que < NUMBER_OF_TEST_QUEUES+1; que++ ) {
 
     tq = &Test_q[ que ];
     if ( que == DEFAULT_RW)
@@ -141,6 +142,8 @@ void open_test_queues()
     assert( Test_q[que].mq != (-1) );
   }
 
+  status = mq_close( Test_q[NUMBER_OF_TEST_QUEUES].mq );
+  fatal_posix_service_status( status, 0, "mq_close duplicate message queue");
   status = mq_close( Test_q[CLOSED].mq );
   fatal_posix_service_status( status, 0, "mq_close message queue");
   status = mq_unlink( CLOSED_NAME );
@@ -949,7 +952,6 @@ void verify_notify()
   /*
    * XXX setup notification
    */
-
   printf( "_____mq_notify - notify when %s gets a message\n",RW_NAME);
   status = mq_notify( Test_q[RW_QUEUE].mq, &event );
   fatal_posix_service_status( status, 0, "mq_notify valid status");

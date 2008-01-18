@@ -92,6 +92,12 @@ void *POSIX_Init (
   status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );
   fatal_posix_service_status_errno( status, EINVAL, "bad itimer value #2" );
 
+  itimer.it_value = _TOD_Now;
+  itimer.it_value.tv_sec = itimer.it_value.tv_sec - 1;
+  puts( "timer_settime - bad itimer value - previous time - EINVAL" );
+  status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );
+  fatal_posix_service_status_errno( status, EINVAL, "bad itimer value #3" );
+
   itimer.it_value.tv_nsec = 0;
   puts( "timer_settime - bad clock value - EINVAL" );
   status = timer_settime( timer, 0x80, &itimer, NULL );

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,8 +52,13 @@ void *POSIX_Init(
 
   /* error cases in clock_gettime and clock_settime */
 
+  puts( "Init: clock_gettime - EINVAL (NULL timespec)" );
+  status = clock_gettime( CLOCK_REALTIME, NULL );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
-  status = clock_settime( -1, &tv );
+  status = clock_gettime( -1, &tv );
   assert( status == -1 );
   assert( errno == EINVAL );
 
@@ -102,8 +107,11 @@ void *POSIX_Init(
 
   remaining = sleep( 3 );
   assert( !remaining );
-
+  
   /* print new times to make sure it has changed and we can get the realtime */
+  status = clock_gettime( CLOCK_PROCESS_CPUTIME, &tv );
+  assert( !status );
+  printf("Time since boot: (%d, %d)\n", tv.tv_sec,tv.tv_nsec );
 
   status = clock_gettime( CLOCK_REALTIME, &tv );
   assert( !status );

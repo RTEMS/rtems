@@ -27,13 +27,14 @@
 #include <sched.h>    /* schedule facilities */
 #include <time.h>     /* time facilities */
 #include <stdio.h>    /* console facilities */
-
+#include <rtems/score/timespec.h>
 
 
 /* temporal parameters of a task */
 
 struct periodic_params {
    struct timespec period;
+   int count;       /* Number of iterations to run */
    int signo;       /* signal number */
    int id;          /* task identification */
  };
@@ -46,25 +47,39 @@ struct shared_data {
    pthread_mutex_t mutex;
    pthread_cond_t  sync;
    int updated;
-   int x;
  };
 
 struct shared_data data;
 
+void StopTimer(
+  timer_t  timer_id,
+  struct   itimerspec *timerdata
+)
+{
+   timerdata->it_value.tv_sec  = 0;
+   timerdata->it_value.tv_nsec  = 0;
+   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
+     perror ("Error in timer setting\n");
+     pthread_exit ((void *) -1);
+   }
+}
+ 
 /* task A  */
-
 void * task_a (void *arg)
 {
    struct   timespec my_period;
    int      my_sig, received_sig;
    struct   itimerspec timerdata;
+   struct   itimerspec timergetdata;
    timer_t  timer_id;
    time_t   clock;
    struct   sigevent event;
    sigset_t set;
+   struct periodic_params *params;
 
-   my_period = ((struct periodic_params*) arg)->period;
-   my_sig    = ((struct periodic_params*) arg)->signo;
+   params = arg;
+   my_period = params->period;
+   my_sig    = params->signo;
 
    /* timer create */
    event.sigev_notify = SIGEV_SIGNAL;
@@ -82,18 +97,34 @@ void * task_a (void *arg)
    /* set the timer in periodic mode */
    timerdata.it_interval = my_period;
    timerdata.it_value    = my_period;
-   if (timer_settime(timer_id, 0, &timerdata, NULL) == -1) {
+   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,&timergetdata) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
    }
+   printf(
+    "task A: timer_settime - value=%d:%d interval=%d:%d\n",
+    timergetdata.it_value.tv_sec, timergetdata.it_value.tv_nsec,
+    timergetdata.it_interval.tv_sec, timergetdata.it_interval.tv_nsec
+  );
+   
 
    /* periodic activity */
    while(1) {
      if (sigwait(&set,&received_sig) == -1) {
        perror ("Error in sigwait\n");
      }
+     if (timer_gettime(timer_id, &timerdata) == -1) {
+       perror ("Error in timer_gettime\n");
+       pthread_exit ((void *) -1);
+     }
+     if (! _Timespec_Equal_to( &timerdata.it_value, &my_period )){
+       perror ("Error in Task A timer_gettime\n");
+     }
      clock = time(NULL);
-     printf("Executing task A %s", ctime(&clock));
+     printf("Executing task A with count = %2i %s", params->count, ctime(&clock));
+     params->count--;
+     if (params->count == 0)
+       StopTimer(timer_id, &timerdata);
    }
    return NULL;
 }
@@ -109,13 +140,12 @@ void * task_b (void *arg)
    time_t   clock;
    struct   sigevent event;
    sigset_t set;
+   struct periodic_params *params;
 
-   int x;   /* value to be copied to the shared datum */
+   params = arg;
+   my_period = params->period;
+   my_sig    = params->signo;
 
-   my_period = ((struct periodic_params*) arg)->period;
-   my_sig    = ((struct periodic_params*) arg)->signo;
-
-   x = 1;
 
    /* timer create */
    event.sigev_notify = SIGEV_SIGNAL;
@@ -132,11 +162,12 @@ void * task_b (void *arg)
 
    /* set the timer in periodic mode */
    timerdata.it_interval = my_period;
-   timerdata.it_value    = my_period;
-   if (timer_settime(timer_id, 0, &timerdata, NULL) == -1) {
+   timerdata.it_value = _TOD_Now;
+   _Timespec_Add_to( &timerdata.it_value, &my_period);
+   if (timer_settime(timer_id,TIMER_ABSTIME,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
-   }
+   }     
 
    /* periodic activity */
    while(1) {
@@ -144,14 +175,26 @@ void * task_b (void *arg)
        perror ("Error in sigwait\n");
        pthread_exit ((void *) -1);
      }
+ 
+     if (timer_gettime(timer_id, &timerdata) == -1) {
+       perror ("Error in timer_gettime\n");
+       pthread_exit ((void *) -1);
+     }
+     if (! _Timespec_Equal_to( &timerdata.it_value, &my_period) ){
+       perror ("Error in Task B timer_gettime\n");
+     }
+
      pthread_mutex_lock (&data.mutex);
      clock = time(NULL);
-     printf("Executing task B with x = %i %s", x, ctime(&clock));
-     data.x = x;
+     printf("Executing task B with count = %2i %s\n", 
+       params->count, ctime(&clock) 
+     );
      data.updated = TRUE;
      pthread_cond_signal  (&data.sync);
      pthread_mutex_unlock (&data.mutex);
-     x++;
+     params->count--;
+     if (params->count == 0)
+       StopTimer(timer_id, &timerdata);
    }
    return NULL;
 }
@@ -160,20 +203,20 @@ void * task_b (void *arg)
 
 void * task_c (void *arg)
 {
+   int      count;
    struct   timespec my_period;
    int      my_sig, received_sig;
    struct   itimerspec timerdata;
+   struct   itimerspec timergetdata;
    timer_t  timer_id;
    time_t   clock;
    struct   sigevent event;
    sigset_t set;
+   struct   periodic_params *params;
 
-   int x;   /* value to be copied to the shared datum */
-
-   my_period = ((struct periodic_params*) arg)->period;
-   my_sig    = ((struct periodic_params*) arg)->signo;
-
-   x = 0;
+   params = arg;
+   my_period = params->period;
+   my_sig    = params->signo;
 
    /* timer create */
    event.sigev_notify = SIGEV_SIGNAL;
@@ -191,29 +234,57 @@ void * task_c (void *arg)
    /* set the timer in periodic mode */
    timerdata.it_interval = my_period;
    timerdata.it_value    = my_period;
-   if (timer_settime(timer_id, 0, &timerdata, NULL) == -1) {
+   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
    }
 
    /* periodic activity */
-   while(1) {
+   for (count=0 ; ; count++) {
       if (sigwait(&set,&received_sig) == -1) {
        perror ("Error in sigwait\n");
        pthread_exit ((void *) -1);
+     }
+     if (timer_gettime(timer_id, &timerdata) == -1) {
+       perror ("Error in timer_gettime\n");
+       pthread_exit ((void *) -1);
+     }
+     if (! _Timespec_Equal_to( &timerdata.it_value, &my_period) ){
+       perror ("Error in Task C timer_gettime\n");
      }
      pthread_mutex_lock (&data.mutex);
      while (data.updated == FALSE) {
        pthread_cond_wait (&data.sync,&data.mutex);
      }
-     x = data.x;
      clock = time(NULL);
-     printf("Executing task C with x = %i %s", x, ctime(&clock));
+     printf("Executing task C with count = %2i %s\n", 
+       params->count, ctime(&clock) 
+     );
+
+     if ( count && (count % 5) == 0 ) {
+       int overruns = 0;
+       sleep(1);
+       overruns = timer_getoverrun( timer_id );
+       printf( "task C: timer_getoverrun - overruns=%d\n", overruns );
+      
+       if (timer_gettime(timer_id, &timergetdata) == -1) {
+	 perror ("Error in timer setting\n");
+	 pthread_exit ((void *) -1);
+       }
+       printf(
+         "task C: timer_gettime - %d:%d remaining from %d:%d\n",
+         timergetdata.it_value.tv_sec, timergetdata.it_value.tv_nsec,
+         timergetdata.it_interval.tv_sec, timergetdata.it_interval.tv_nsec
+       );
+     }
+
      pthread_mutex_unlock (&data.mutex);
+     params->count--;
+     if (params->count == 0)
+       StopTimer(timer_id, &timerdata);
    }
    return NULL;
 }
-
 
 /* main */
 
@@ -234,7 +305,6 @@ void *POSIX_Init (
    puts( "\n\n*** POSIX Timers Test 01 ***" );
 
    data.updated = FALSE;
-   data.x = 0;
 
    /* mask signal */
    sigemptyset (&set);
@@ -267,21 +337,18 @@ void *POSIX_Init (
    }
 
    /* set explicit schedule for every task */
-   if (pthread_attr_setinheritsched (&attr,
-     PTHREAD_EXPLICIT_SCHED) != 0) {
+   if (pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED) != 0) {
       perror("Error in attribute inheritsched\n");
    }
 
    /* set task independent (join will not use) */
-   if (pthread_attr_setdetachstate (&attr,
-     PTHREAD_CREATE_DETACHED) != 0) {
+   if (pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) != 0) {
       perror ("Error in attribute detachstate\n");
    }
 
    /* schedule policy POSIX_FIFO (priority preemtive and FIFO within the same
       priority) */
-   if (pthread_attr_setschedpolicy (&attr,
-     SCHED_FIFO) != 0) {
+   if (pthread_attr_setschedpolicy (&attr, SCHED_FIFO) != 0) {
       perror ("Error in attribute setschedpolicy\n");
     }
 
@@ -296,6 +363,7 @@ void *POSIX_Init (
 
    params_a.period.tv_sec  = 1;         /* seconds */
    params_a.period.tv_nsec = 000000000; /* nanoseconds */
+   params_a.count          = 20;
    params_a.signo = SIGALRM;
    if (pthread_create (&ta, &attr, task_a, &params_a) != 0 ) {
      perror ("Error in thread create for task a\n");
@@ -311,6 +379,7 @@ void *POSIX_Init (
    /* Temporal parameters (2 sec. periodicity) */
    params_b.period.tv_sec  = 2;         /* seconds */
    params_b.period.tv_nsec = 000000000; /* nanoseconds */
+   params_b.count          = 10;
    params_b.signo = SIGALRM;
    if (pthread_create (&tb, &attr, task_b, &params_b) != 0) {
      perror ("Error in thread create for task b\n");
@@ -326,14 +395,15 @@ void *POSIX_Init (
    /* Temporal parameters (3 sec. periodicity) */
    params_c.period.tv_sec  = 3;         /* seconds */
    params_c.period.tv_nsec = 000000000; /* nanoseconds */
+   params_c.count          = 6;
    params_c.signo = SIGALRM;
    if (pthread_create (&tc, &attr, task_c, &params_c) != 0) {
      perror ("Error in thread create for task c\n");
    }
 
 
-   /* execute 20 seconds and finish */
-   sleep (20);
+   /* execute 25 seconds and finish */
+   sleep (25);
    puts( "*** END OF POSIX Timers Test 01 ***" );
    rtems_test_exit (0);
  }
