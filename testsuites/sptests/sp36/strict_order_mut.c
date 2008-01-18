@@ -8,7 +8,7 @@
 #include <bsp.h>
 #include <stdio.h>
 #include "tmacros.h"
-
+#include <rtems/score/coremutex.h>
 
 #define BACK_TYPE(_type_in_ptr,_type_out,_type_in_name)		\
   ((_type_out *)((unsigned int)_type_in_ptr - (unsigned int)(&((_type_out *)0)->_type_in_name)))
@@ -121,13 +121,12 @@ rtems_task Task0(rtems_task_argument ignored)
   directive_failed( status,"rtems_semaphore_obtain of S1");
   printf("The current priority of T0 is %d\n",Get_current_pri());
 
-  
-
-
+#ifdef __STRICT_ORDER_MUTEX__
   status = rtems_semaphore_release( Mutex_id[0] );
   printf("T0 - rtems_semaphore_release - S0\n");
   if(status == CORE_MUTEX_RELEASE_NOT_ORDER)
     printf("T0 releasing S0 not in order\n");
+#endif
 
   status = rtems_semaphore_release(Mutex_id[1]);
   printf("T0 - rtems_semaphore_release - S1\n");
