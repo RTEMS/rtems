@@ -1,6 +1,8 @@
 [rtems-@RTEMS_API@]
 name=RTEMS $releasever - $basearch - RTEMS
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
+baseurl=
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
 # metadata_expire=0
 enabled=1
 gpgcheck=1
@@ -9,7 +11,9 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 
 [rtems-@RTEMS_API@-source]
 name=Fedora $releasever - $basearch - RTEMS sources
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
+baseurl=
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
 # metadata_expire=0
 enabled=0
 gpgcheck=1
@@ -18,35 +22,9 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 
 [rtems-@RTEMS_API@-debug]
 name=Fedora $releasever - $basearch - RTEMS sources
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
-# metadata_expire=0
-enabled=0
-gpgcheck=1
-gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
-	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
-
-# rtems-testing add-on repository
-[rtems-@RTEMS_API@-testing]
-name=RTEMS $releasever - $basearch - RTEMS
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
-# metadata_expire=0
-enabled=0
-gpgcheck=1
-gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
-	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
-
-[rtems-@RTEMS_API@-testing-source]
-name=Fedora $releasever - $basearch - RTEMS sources
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
-# metadata_expire=0
-enabled=0
-gpgcheck=1
-gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
-	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
-
-[rtems-@RTEMS_API@-testing-debug]
-name=Fedora $releasever - $basearch - RTEMS sources
-baseurl=ftp://ftp.rtems.org/pub/rtems/linux/testing/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
+baseurl=
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
 # metadata_expire=0
 enabled=0
 gpgcheck=1
