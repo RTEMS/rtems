@@ -26,45 +26,22 @@ rtems_timer_service_routine test_event_from_isr(
 {
   rtems_status_code     status;
 
-  status = rtems_event_send( main_task, 0x01 );
+  if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+    /*
+     *  This event send hits the critical section but sends to
+     *  another task so doesn't impact this critical section.
+     */
+    rtems_event_send( other_task, 0x02 );
 
-  if ( _Event_Sync_state == EVENT_SYNC_SATISFIED )
+    /*
+     *  This event send hits the main task but doesn't satisfy
+     *  it's blocking condition so it will still block
+     */
+    rtems_event_send( main_task, 0x02 );
+
     case_hit = TRUE;
-}
-
-rtems_timer_service_routine test_timeout_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
-{
-  if ( _Event_Sync_state != EVENT_SYNC_NOTHING_HAPPENED )
-    return;
-
-  /*
-   *  The main task should have timed out and we are in the
-   *  event synchronization critical section with "timeout".
-   */
-
-  /*
-   *  This event send hits the critical section but sends to
-   *  another task so doesn't impact this critical section.
-   */
-  rtems_event_send( other_task, 0x02 );
-
-  /*
-   *  This event send hits the main task but doesn't satisfy
-   *  it's blocking condition so it will still time out.
-   */
-  rtems_event_send( main_task, 0x02 );
-
-  /*
-   *  This event send should cancel the main task's time out
-   *  and deliver the interrupt because both occurred simultaneously.
-   */
-  rtems_event_send( main_task, 0x01 );
-
-
-  case_hit = TRUE;
+  }
+  status = rtems_event_send( main_task, 0x01 );
 }
 
 rtems_task Init(
@@ -111,7 +88,7 @@ rtems_task Init(
     directive_failed( status, "timer_fire_after failed" );
 
     for (i=0 ; i<max ; i++ )
-      if ( _Event_Sync_state == EVENT_SYNC_SATISFIED )
+      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
         break;
 
     status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 0, &out );
@@ -119,8 +96,6 @@ rtems_task Init(
     if ( case_hit == TRUE )
       break;
     max += 2;
-    if ( ++iterations >= 0x10000 )
-      break;
   }
 
    printf(
@@ -131,30 +106,30 @@ rtems_task Init(
   /*
    *  Now try for a timeout case
    */
+  iterations = 0;
   case_hit = FALSE;
   max = 1;
 
+  puts(
+    "Run multiple times in attempt to hit event timeout synchronization point"
+  ); 
   while (1) {
-    status = rtems_timer_fire_after( timer, 1, test_timeout_from_isr, NULL );
-    directive_failed( status, "timer_fire_after failed" );
-
 
     for (i=0 ; i<max ; i++ )
-      if ( case_hit )
+      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
         break;
 
     status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
-    if ( status == RTEMS_SUCCESSFUL ) {
-      break;
-    }
     fatal_directive_status( status, RTEMS_TIMEOUT, "event_receive timeout" );
-    max += 1;
-  }
+    if ( case_hit )
+      break;
 
-  printf(
-     "Event timeout hitting synchronization point has %soccurred\n",
-     (( case_hit == TRUE ) ? "" : "NOT ")
-  ); 
+    if ( ++max > 1024 )
+      max = 0;
+
+    if ( ++iterations >= 0x1000 )
+      break;
+  }
 
   puts( "*** END OF TEST 39 ***" );
   rtems_test_exit( 0 );
