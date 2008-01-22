@@ -1,7 +1,7 @@
 /*
  *  Event Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,48 +63,51 @@ void _Event_Surrender(
 
   seized_events = _Event_sets_Get( pending_events, event_condition );
 
-  if ( !_Event_sets_Is_empty( seized_events ) ) {
-    if ( _States_Is_waiting_for_event( the_thread->current_state ) ) {
-      if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
-        api->pending_events =
-           _Event_sets_Clear( pending_events, seized_events );
-        the_thread->Wait.count = 0;
-        *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
+  /*
+   *  No events were seized in this operation
+   */
+  if ( _Event_sets_Is_empty( seized_events ) )
+    return;
 
-        _ISR_Flash( level );
-
-        if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-          _ISR_Enable( level );
-          _Thread_Unblock( the_thread );
-        }
-        else {
-          _Watchdog_Deactivate( &the_thread->Timer );
-          _ISR_Enable( level );
-          (void) _Watchdog_Remove( &the_thread->Timer );
-          _Thread_Unblock( the_thread );
-        }
-        return;
-      }
+  /*
+   *  If we are in an ISR and sending to the current thread, then
+   *  we have a critical section issue to deal with.
+   */
+  if ( _ISR_Is_in_progress() && 
+       _Thread_Is_executing( the_thread ) &&
+       ((_Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ||
+        (_Event_Sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT)) ) {
+    if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
+      api->pending_events = _Event_sets_Clear( pending_events,seized_events );
+      the_thread->Wait.count = 0; 
+      *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
+      _Event_Sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
     }
+    _ISR_Enable( level );
+    return;
+  }
 
-    switch ( _Event_Sync_state ) {
-      case EVENT_SYNC_SYNCHRONIZED:
-      case EVENT_SYNC_SATISFIED:
-        break;
+  /*
+   *  Otherwise, this is a normal send to another thread
+   */
+  if ( _States_Is_waiting_for_event( the_thread->current_state ) ) {
+    if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
+      api->pending_events = _Event_sets_Clear( pending_events, seized_events );
+      the_thread->Wait.count = 0;
+      *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
 
-      case EVENT_SYNC_NOTHING_HAPPENED:
-      case EVENT_SYNC_TIMEOUT:
-        if ( !_Thread_Is_executing( the_thread ) )
-          break;
+      _ISR_Flash( level );
 
-        if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
-          api->pending_events =
-               _Event_sets_Clear( pending_events,seized_events );
-          the_thread->Wait.count = 0; 
-          *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
-          _Event_Sync_state = EVENT_SYNC_SATISFIED;
-        }
-        break;
+      if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+        _ISR_Enable( level );
+        _Thread_Unblock( the_thread );
+      } else {
+        _Watchdog_Deactivate( &the_thread->Timer );
+        _ISR_Enable( level );
+        (void) _Watchdog_Remove( &the_thread->Timer );
+        _Thread_Unblock( the_thread );
+      }
+      return;
     }
   }
   _ISR_Enable( level );

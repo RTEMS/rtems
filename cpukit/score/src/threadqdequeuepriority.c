@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,6 +55,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Chain_Node     *last_node;
   Chain_Node     *next_node;
   Chain_Node     *previous_node;
+  Thread_blocking_operation_States sync;
 
   _ISR_Disable( level );
   for( index=0 ;
@@ -67,17 +68,21 @@ Thread_Control *_Thread_queue_Dequeue_priority(
     }
   }
 
-  switch ( the_thread_queue->sync_state ) {
-    case THREAD_QUEUE_SYNCHRONIZED:
-    case THREAD_QUEUE_SATISFIED:
-      _ISR_Enable( level );
-      return NULL;
+  /*
+   * If we interrupted a blocking operation, cancel it.
+   */
+  sync = the_thread_queue->sync_state;
+  if ( (sync == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
+       (sync == THREAD_BLOCKING_OPERATION_SATISFIED) ) {
+    _ISR_Enable( level );
+    return NULL;
+  }
 
-    case THREAD_QUEUE_NOTHING_HAPPENED:
-    case THREAD_QUEUE_TIMEOUT:
-      the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
-      _ISR_Enable( level );
-      return _Thread_Executing;
+  if ( (sync == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ||
+       (sync == THREAD_BLOCKING_OPERATION_TIMEOUT ) ) {
+    the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
+    _ISR_Enable( level );
+    return _Thread_Executing;
   }
 
 dequeue:

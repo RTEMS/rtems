@@ -1,7 +1,7 @@
 /*
  *  Event Manager
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -64,25 +64,26 @@ void _Event_Timeout(
        *  a timeout is not allowed to occur.
        */
 
-      _ISR_Disable( level );
-      if ( the_thread->Wait.count ) {  /* verify thread is waiting */
-        the_thread->Wait.count = 0;
-        if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED &&
-             _Thread_Is_executing( the_thread ) ) {
-          if ( _Event_Sync_state != EVENT_SYNC_SATISFIED ) {
-            _Event_Sync_state = EVENT_SYNC_TIMEOUT;
-          }
-          _ISR_Enable( level );
-        } else {
-            the_thread->Wait.return_code = RTEMS_TIMEOUT;
-            _ISR_Enable( level );
-            _Thread_Unblock( the_thread );
-        }
-      }
-      else {
-        _ISR_Enable( level );
-      }
 
+      _ISR_Disable( level );
+        if ( !the_thread->Wait.count ) {  /* verify thread is waiting */
+          _Thread_Unnest_dispatch();
+          _ISR_Enable( level );
+          return;
+        }
+
+        the_thread->Wait.count = 0;
+        if ( _Thread_Is_executing( the_thread ) ) {
+          Thread_blocking_operation_States sync = _Event_Sync_state;
+          if ( (sync == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
+               (sync == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
+            _Event_Sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
+          }
+        }
+
+        the_thread->Wait.return_code = RTEMS_TIMEOUT;
+      _ISR_Enable( level );
+      _Thread_Unblock( the_thread );
       _Thread_Unnest_dispatch();
       break;
 

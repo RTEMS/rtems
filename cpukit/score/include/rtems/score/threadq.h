@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -178,9 +178,10 @@ Thread_Control *_Thread_queue_Dequeue_priority(
  *  the_thread_queue with an optional timeout using the
  *  priority discipline.
  */
-void _Thread_queue_Enqueue_priority(
+Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  ISR_Level            *level_p
 );
 
 /** @brief  Thread queue Extract priority Helper
@@ -230,9 +231,10 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
  *  the_thread_queue with an optional timeout using the
  *  FIFO discipline.
  */
-void _Thread_queue_Enqueue_fifo(
+Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  ISR_Level            *level_p
 );
 
 /** @brief  Thread queue Extract FIFO

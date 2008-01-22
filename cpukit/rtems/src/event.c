@@ -1,7 +1,7 @@
 /*
  *  Event Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,7 +36,7 @@
 
 void _Event_Manager_initialization( void )
 {
-  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
+  _Event_Sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   /*
    *  Register the MP Process Packet routine.

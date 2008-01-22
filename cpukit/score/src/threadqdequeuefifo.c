@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -75,14 +75,14 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
   }
 
   switch ( the_thread_queue->sync_state ) {
-    case THREAD_QUEUE_SYNCHRONIZED:
-    case THREAD_QUEUE_SATISFIED:
+    case THREAD_BLOCKING_OPERATION_SYNCHRONIZED:
+    case THREAD_BLOCKING_OPERATION_SATISFIED:
       _ISR_Enable( level );
       return NULL;
 
-    case THREAD_QUEUE_NOTHING_HAPPENED:
-    case THREAD_QUEUE_TIMEOUT:
-      the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
+    case THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED:
+    case THREAD_BLOCKING_OPERATION_TIMEOUT:
+      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
       _ISR_Enable( level );
       return _Thread_Executing;
   }

@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,19 +47,12 @@ Thread_Control *_Thread_queue_Dequeue(
   Thread_queue_Control *the_thread_queue
 )
 {
-  Thread_Control *the_thread;
+  Thread_Control *(*dequeue_p)( Thread_queue_Control * );
 
-  switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DISCIPLINE_FIFO:
-      the_thread = _Thread_queue_Dequeue_fifo( the_thread_queue );
-      break;
-    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      the_thread = _Thread_queue_Dequeue_priority( the_thread_queue );
-      break;
-    default:              /* this is only to prevent warnings */
-      the_thread = NULL;
-      break;
-  }
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+    dequeue_p = _Thread_queue_Dequeue_priority;
+  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
+    dequeue_p = _Thread_queue_Dequeue_fifo;
 
-  return( the_thread );
+  return (*dequeue_p)( the_thread_queue );
 }

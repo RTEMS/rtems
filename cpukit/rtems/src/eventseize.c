@@ -1,7 +1,7 @@
 /*
  *  Event Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,12 +54,12 @@ void _Event_Seize(
   rtems_event_set *event_out
 )
 {
-  Thread_Control    *executing;
-  rtems_event_set    seized_events;
-  rtems_event_set    pending_events;
-  ISR_Level          level;
-  RTEMS_API_Control  *api;
-  Event_Sync_states   sync_state;
+  Thread_Control                   *executing;
+  rtems_event_set                   seized_events;
+  rtems_event_set                   pending_events;
+  ISR_Level                         level;
+  RTEMS_API_Control                *api;
+  Thread_blocking_operation_States  sync_state;
 
   executing = _Thread_Executing;
   executing->Wait.return_code = RTEMS_SUCCESSFUL;
@@ -86,7 +86,7 @@ void _Event_Seize(
     return;
   }
 
-  _Event_Sync_state = EVENT_SYNC_NOTHING_HAPPENED;
+  _Event_Sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 
   executing->Wait.option            = (uint32_t) option_set;
   executing->Wait.count             = (uint32_t) event_in;
@@ -109,34 +109,17 @@ void _Event_Seize(
   _ISR_Disable( level );
 
   sync_state = _Event_Sync_state;
-  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
-
-  switch ( sync_state ) {
-    case EVENT_SYNC_SYNCHRONIZED:
-      /*
-       *  This cannot happen.  It indicates that this routine did not
-       *  enter the synchronization states above.
-       */
-      break;
-
-    case EVENT_SYNC_NOTHING_HAPPENED:
-      _ISR_Enable( level );
-      break;
-
-    case EVENT_SYNC_TIMEOUT:
-      executing->Wait.return_code = RTEMS_TIMEOUT;
-      _ISR_Enable( level );
-      _Thread_Unblock( executing );
-      break;
-
-    case EVENT_SYNC_SATISFIED:
-      if ( _Watchdog_Is_active( &executing->Timer ) ) {
-        _Watchdog_Deactivate( &executing->Timer );
-        _ISR_Enable( level );
-        (void) _Watchdog_Remove( &executing->Timer );
-      } else
-        _ISR_Enable( level );
-      _Thread_Unblock( executing );
-      break;
+  _Event_Sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+  if ( sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+    _ISR_Enable( level );
+    return;
   }
+
+  /*
+   *  An interrupt completed the thread's blocking request.
+   *  The blocking thread was satisfied by an ISR or timed out.
+   *
+   *  WARNING! Returning with interrupts disabled!
+   */
+  _Thread_blocking_operation_Cancel( sync_state, executing, level );
 }

@@ -13,7 +13,7 @@
  *     + receive event condition
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,6 +39,7 @@ extern "C" {
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/options.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threadsync.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/eventset.h>
 
@@ -48,18 +49,6 @@ extern "C" {
  */
 
 #define EVENT_CURRENT  0
-
-/*
- *  The following enumerated types indicate what happened while the event
- *  manager was in the synchronization window.
- */
-
-typedef enum {
-  EVENT_SYNC_SYNCHRONIZED,
-  EVENT_SYNC_NOTHING_HAPPENED,
-  EVENT_SYNC_TIMEOUT,
-  EVENT_SYNC_SATISFIED
-}  Event_Sync_states;
 
 /*
  *  Event_Manager_initialization
@@ -166,7 +155,7 @@ void _Event_Timeout (
  *  executing thread are received properly.
  */
 
-RTEMS_EVENT_EXTERN volatile Event_Sync_states _Event_Sync_state;
+RTEMS_EVENT_EXTERN volatile Thread_blocking_operation_States _Event_Sync_state;
 
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/eventmp.h>

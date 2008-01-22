@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -783,6 +783,27 @@ void rtems_iterate_over_all_threads(
 Thread_Control *_Thread_Get (
   Objects_Id         id,
   Objects_Locations *location
+);
+
+/**
+ *  @brief Cancel a blocking operation due to ISR
+ *
+ *  This method is used to cancel a blocking operation that was
+ *  satisfied from an ISR while the thread executing was in the
+ *  process of blocking.
+ *
+ *  @param[in] sync_state is the synchronization state
+ *  @param[in] the_thread is the thread whose blocking is canceled
+ *  @param[in] level is the previous ISR disable level
+ *
+ *  @note This is a rare routine in RTEMS.  It is called with
+ *        interrupts disabled and only when an ISR completed
+ *        a blocking condition in process.
+ */
+void _Thread_blocking_operation_Cancel(
+  Thread_blocking_operation_States  sync_state,
+  Thread_Control                   *the_thread,
+  ISR_Level                         level
 );
 
 #ifndef __RTEMS_APPLICATION__

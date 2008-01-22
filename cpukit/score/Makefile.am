@@ -28,10 +28,11 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
-    include/rtems/score/threadq.h include/rtems/score/timespec.h \
-    include/rtems/score/tod.h include/rtems/score/tqdata.h \
-    include/rtems/score/userext.h include/rtems/score/watchdog.h \
-    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
+    include/rtems/score/threadq.h include/rtems/score/threadsync.h \
+    include/rtems/score/timespec.h include/rtems/score/tod.h \
+    include/rtems/score/tqdata.h include/rtems/score/userext.h \
+    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
+    include/rtems/score/cpuopts.h
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
@@ -142,7 +143,8 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadsettransient.c src/threadstackallocate.c \
     src/threadstackfree.c src/threadstart.c src/threadstartmultitasking.c \
     src/threadsuspend.c src/threadtickletimeslice.c \
-    src/threadyieldprocessor.c src/iterateoverthreads.c
+    src/threadyieldprocessor.c src/iterateoverthreads.c \
+    src/threadblockingoperationcancel.c
 
 ## THREAD_C_FILES only used by ITRON API
 if LIBITRON

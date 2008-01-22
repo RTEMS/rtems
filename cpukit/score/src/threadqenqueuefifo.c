@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,64 +41,38 @@
  *    only case
  */
 
-void _Thread_queue_Enqueue_fifo (
+Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  ISR_Level            *level_p
 )
 {
-  ISR_Level            level;
-  Thread_queue_States  sync_state;
+  Thread_blocking_operation_States sync_state;
+  ISR_Level                        level;
 
   _ISR_Disable( level );
 
-  sync_state = the_thread_queue->sync_state;
-  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
-
-  switch ( sync_state ) {
-    case THREAD_QUEUE_SYNCHRONIZED:
-      /*
-       *  This should never happen.  It indicates that someone did not
-       *  enter a thread queue critical section.
-       */
-      break;
-
-    case THREAD_QUEUE_NOTHING_HAPPENED:
+    sync_state = the_thread_queue->sync_state;
+    the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+    if (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) {
       _Chain_Append_unprotected(
         &the_thread_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
       the_thread->Wait.queue = the_thread_queue;
+
+      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
       _ISR_Enable( level );
-      return;
-
-    case THREAD_QUEUE_TIMEOUT:
-      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
-      the_thread->Wait.queue = NULL;
-      _ISR_Enable( level );
-      break;
-
-    case THREAD_QUEUE_SATISFIED:
-      if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
-        _Watchdog_Deactivate( &the_thread->Timer );
-      the_thread->Wait.queue = NULL;
-        _ISR_Enable( level );
-        (void) _Watchdog_Remove( &the_thread->Timer );
-      } else
-        _ISR_Enable( level );
-      break;
-  }
-
+      return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
+    }
+      
   /*
-   *  Global objects with thread queue's should not be operated on from an
-   *  ISR.  But the sync code still must allow short timeouts to be processed
-   *  correctly.
+   *  An interrupt completed the thread's blocking request.
+   *  For example, the blocking thread could have been given
+   *  the mutex by an ISR or timed out.
+   *
+   *  WARNING! Returning with interrupts disabled!
    */
-
-  _Thread_Unblock( the_thread );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-    _Thread_MP_Free_proxy( the_thread );
-#endif
-
+  *level_p = level;
+  return sync_state;
 }

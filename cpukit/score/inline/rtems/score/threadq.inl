@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,10 +55,12 @@ static inline void _Thread_queue_Process_timeout(
    *  a timeout is not allowed to occur.
    */
 
-  if ( the_thread_queue->sync_state != THREAD_QUEUE_SYNCHRONIZED &&
+  if ( the_thread_queue->sync_state != THREAD_BLOCKING_OPERATION_SYNCHRONIZED &&
        _Thread_Is_executing( the_thread ) ) {
-    if ( the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED )
-      the_thread_queue->sync_state = THREAD_QUEUE_TIMEOUT;
+    if ( the_thread_queue->sync_state != THREAD_BLOCKING_OPERATION_SATISFIED ) {
+      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
+    }
   } else {
     the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
     _Thread_queue_Extract( the_thread->Wait.queue, the_thread );

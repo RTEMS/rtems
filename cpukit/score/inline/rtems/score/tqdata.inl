@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,7 +58,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enter_critical_section (
   Thread_queue_Control *the_thread_queue
 )
 {
-  the_thread_queue->sync_state = THREAD_QUEUE_NOTHING_HAPPENED;
+  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 }
 
 /**

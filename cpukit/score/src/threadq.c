@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,23 +47,20 @@ void _Thread_queue_Initialize(
   uint32_t                      timeout_status
 )
 {
-  uint32_t   index;
-
   the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;
   the_thread_queue->timeout_status = timeout_status;
-  the_thread_queue->sync_state     = THREAD_QUEUE_SYNCHRONIZED;
+  the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
-  switch ( the_discipline ) {
-    case THREAD_QUEUE_DISCIPLINE_FIFO:
-      _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
-      break;
-    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      for( index=0 ;
-           index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
-           index++)
-        _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
-      break;
+  if ( the_discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
+    uint32_t   index;
+
+    for( index=0 ;
+         index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
+         index++)
+      _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
+  } else { /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
+    _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
   }
 
 }

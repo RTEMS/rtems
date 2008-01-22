@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,6 +35,7 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/states.h>
+#include <rtems/score/threadsync.h>
 
 /**
  *  The following enumerated type details all of the disciplines
@@ -44,17 +45,6 @@ typedef enum {
   THREAD_QUEUE_DISCIPLINE_FIFO,     /* FIFO queue discipline */
   THREAD_QUEUE_DISCIPLINE_PRIORITY  /* PRIORITY queue discipline */
 }   Thread_queue_Disciplines;
-
-/**
- *  The following enumerated types indicate what happened while the thread
- *  queue was in the synchronization window.
- */
-typedef enum {
-  THREAD_QUEUE_SYNCHRONIZED,
-  THREAD_QUEUE_NOTHING_HAPPENED,
-  THREAD_QUEUE_TIMEOUT,
-  THREAD_QUEUE_SATISFIED
-}  Thread_queue_States;
 
 /**
  *  This is one of the constants used to manage the priority queues.
@@ -99,7 +89,7 @@ typedef struct {
     Chain_Control Priority[TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS];
   } Queues;
   /** This field is used to manage the critical section. */
-  Thread_queue_States      sync_state;
+  Thread_blocking_operation_States sync_state;
   /** This field indicates the thread queue's blocking discipline. */
   Thread_queue_Disciplines discipline;
   /** This indicates the blocking state for threads waiting on this

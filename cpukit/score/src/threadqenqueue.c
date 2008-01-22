@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,14 @@ void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Timeout_callout  handler
 )
 {
-  Thread_Control *the_thread;
+  Thread_Control                   *the_thread;
+  ISR_Level                         level;
+  Thread_blocking_operation_States  sync_state;
+  Thread_blocking_operation_States (*enqueue_p)(
+    Thread_queue_Control *,
+    Thread_Control *,
+    ISR_Level *
+  );
 
   the_thread = _Thread_Executing;
 
@@ -82,12 +89,12 @@ void _Thread_queue_Enqueue_with_handler(
   /*
    *  Now enqueue the thread per the discipline for this thread queue.
    */ 
-  switch( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DISCIPLINE_FIFO:
-      _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread );
-      break;
-    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      _Thread_queue_Enqueue_priority( the_thread_queue, the_thread );
-      break;
-  }
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+    enqueue_p = _Thread_queue_Enqueue_priority;
+  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
+    enqueue_p = _Thread_queue_Enqueue_fifo;
+
+  sync_state = (*enqueue_p)( the_thread_queue, the_thread, &level );
+  if ( sync_state != THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
+    _Thread_blocking_operation_Cancel( sync_state, the_thread, level );
 }

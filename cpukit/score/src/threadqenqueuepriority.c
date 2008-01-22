@@ -2,7 +2,7 @@
  *  Thread Queue Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,9 +42,10 @@
  *    forward equal
  */
 
-void _Thread_queue_Enqueue_priority(
+Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
   Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_Control       *the_thread,
+  ISR_Level            *level_p
 )
 {
   Priority_Control     search_priority;
@@ -58,7 +59,6 @@ void _Thread_queue_Enqueue_priority(
   Chain_Node          *search_node;
   Priority_Control     priority;
   States_Control       block_state;
-  Thread_queue_States  sync_state;
 
   _Chain_Initialize_empty( &the_thread->Wait.Block2n );
 
@@ -96,10 +96,11 @@ restart_forward_search:
        (Thread_Control *)search_thread->Object.Node.next;
   }
 
-  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
+  if ( the_thread_queue->sync_state !=
+       THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
     goto synchronize;
 
-  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
+  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -114,7 +115,7 @@ restart_forward_search:
   search_node->previous  = the_node;
   the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
-  return;
+  return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 
 restart_reverse_search:
   search_priority     = PRIORITY_MAXIMUM + 1;
@@ -142,10 +143,11 @@ restart_reverse_search:
                          search_thread->Object.Node.previous;
   }
 
-  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
+  if ( the_thread_queue->sync_state !=
+       THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
     goto synchronize;
 
-  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
+  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -160,7 +162,7 @@ restart_reverse_search:
   next_node->previous    = the_node;
   the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
-  return;
+  return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 
 equal_priority:               /* add at end of priority group */
   search_node   = _Chain_Tail( &search_thread->Wait.Block2n );
@@ -173,54 +175,16 @@ equal_priority:               /* add at end of priority group */
   search_node->previous  = the_node;
   the_thread->Wait.queue = the_thread_queue;
   _ISR_Enable( level );
-  return;
+  return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 
 synchronize:
-
-  sync_state = the_thread_queue->sync_state;
-  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
-
-  switch ( sync_state ) {
-    case THREAD_QUEUE_SYNCHRONIZED:
-      /*
-       *  This should never happen.  It indicates that someone did not
-       *  enter a thread queue critical section.
-       */
-      break;
-
-    case THREAD_QUEUE_NOTHING_HAPPENED:
-      /*
-       *  This should never happen.  All of this was dealt with above.
-       */
-      break;
-
-    case THREAD_QUEUE_TIMEOUT:
-      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
-      the_thread->Wait.queue = NULL;
-      _ISR_Enable( level );
-      break;
-
-    case THREAD_QUEUE_SATISFIED:
-      if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
-        _Watchdog_Deactivate( &the_thread->Timer );
-        the_thread->Wait.queue = NULL;
-        _ISR_Enable( level );
-        (void) _Watchdog_Remove( &the_thread->Timer );
-      } else
-        _ISR_Enable( level );
-      break;
-  }
-
   /*
-   *  Global objects with thread queue's should not be operated on from an
-   *  ISR.  But the sync code still must allow short timeouts to be processed
-   *  correctly.
+   *  An interrupt completed the thread's blocking request.
+   *  For example, the blocking thread could have been given
+   *  the mutex by an ISR or timed out.
+   *
+   *  WARNING! Returning with interrupts disabled!
    */
-
-  _Thread_Unblock( the_thread );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-    _Thread_MP_Free_proxy( the_thread );
-#endif
+  *level_p = level;
+  return the_thread_queue->sync_state;
 }
