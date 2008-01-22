@@ -109,8 +109,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
     ../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel
 
@@ -121,6 +119,7 @@ endif
 
 EXTRA_DIST += README.mpc8349eamds
 EXTRA_DIST += times.mpc8349eamds
+### XXX
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

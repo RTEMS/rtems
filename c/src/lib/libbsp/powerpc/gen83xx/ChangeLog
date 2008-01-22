@@ -1,3 +1,8 @@
+2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove duplicate cases of mmu.rel and timer.rel in list
+	of objects.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the
