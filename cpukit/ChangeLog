@@ -1,5 +1,9 @@
 2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/threadqfirst.c: Remove switch.
+
+2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/include/rtems/rtems/event.h,
 	rtems/inline/rtems/rtems/eventset.inl, rtems/src/event.c,
 	rtems/src/eventseize.c, rtems/src/eventsurrender.c,

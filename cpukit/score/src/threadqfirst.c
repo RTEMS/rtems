@@ -43,19 +43,12 @@ Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
 )
 {
-  Thread_Control *the_thread;
+  Thread_Control * (*first_p)(Thread_queue_Control *);
 
-  switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DISCIPLINE_FIFO:
-      the_thread = _Thread_queue_First_fifo( the_thread_queue );
-      break;
-    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      the_thread = _Thread_queue_First_priority( the_thread_queue );
-      break;
-    default:              /* this is only to prevent warnings */
-      the_thread = NULL;
-      break;
-  }
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+      first_p = _Thread_queue_First_priority;
+  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
+      first_p = _Thread_queue_First_fifo;
 
-  return the_thread;
+  return (*first_p)( the_thread_queue );
 }
