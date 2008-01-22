@@ -77,7 +77,6 @@ void test_realloc(void)
   p2 = malloc(8);
   free(p1);
   sc = posix_memalign(&p1, 16, 32);
-  printf( "sc = %d\n", sc );
   if (!sc)
     free(p1);
 

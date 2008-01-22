@@ -1,3 +1,7 @@
+2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* malloctest/init.c: Remove debug print.
+
 2008-01-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* monitor02/.cvsignore: New file.
