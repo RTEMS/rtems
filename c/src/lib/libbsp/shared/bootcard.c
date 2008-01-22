@@ -16,12 +16,12 @@
  *     + back to here eventually
  *     + bspclean.c: bsp_cleanup
  *
- *  This style of initialization insures that the C++ global
+ *  This style of initialization ensures that the C++ global
  *  constructors are executed after RTEMS is initialized.
+ *  Thanks to Chris Johns <cjohns@plessey.com.au> for the idea
+ *  to move C++ global constructors into the first task.
  *
- *  Thanks to Chris Johns <cjohns@plessey.com.au> for this idea.
- *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -70,6 +70,15 @@ int boot_card(int argc, char **argv, char **envp)
     envp_p = envp;
 
   /*
+   *  Set the program name in case some application cares.
+   */
+
+  if ((argc > 0) && argv && argv[0])
+    rtems_progname = argv[0];
+  else
+    rtems_progname = "RTEMS";
+
+  /*
    * Invoke Board Support Package initialization routine written in C.
    */
 
@@ -82,14 +91,9 @@ int boot_card(int argc, char **argv, char **envp)
   rtems_initialize_executive_early( &Configuration );
 
   /*
-   *  Call c_rtems_main() and eventually let the first task or the real
-   *  main() invoke the global constructors if there are any.
+   *  Complete initialization of RTEMS and switch to the first task.
+   *  Global C++ constructors will be executed in the context of that task.
    */
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
 
   rtems_initialize_executive_late( bsp_isr_level );
 
@@ -101,7 +105,7 @@ int boot_card(int argc, char **argv, char **envp)
    */
 
   /*
-   *  Perform any BSP specific shutdown actions.
+   *  Perform any BSP specific shutdown actions which are written in C.
    */
 
   bsp_cleanup();

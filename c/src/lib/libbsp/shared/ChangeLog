@@ -1,3 +1,7 @@
+2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bootcard.c: Improve comments and clean up argc/argv order.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bootcard.c, bsplibc.c: Eliminate copies of the Configuration Table.
