@@ -26,8 +26,8 @@
         .align  4
         .global SYM (_CPU_Context_switch)
 
-.set RUNCONTEXT_ARG,   4                   | save context argument
-.set HEIRCONTEXT_ARG,  8                   | restore context argument
+.set RUNCONTEXT_ARG,   4                 | save context argument
+.set HEIRCONTEXT_ARG,  8                 | restore context argument
 
 SYM (_CPU_Context_switch):
           moval    a7@(RUNCONTEXT_ARG),a0| a0 = running thread context
@@ -35,8 +35,8 @@ SYM (_CPU_Context_switch):
           movml    d1-d7/a2-a7,a0@       | save context
 
           moval    a7@(HEIRCONTEXT_ARG),a0| a0 = heir thread context
-restore:  movml    a0@,d1-d7/a2-a7     | restore context
-          movw     d1,sr                  | restore status register
+restore:  movml    a0@,d1-d7/a2-a7       | restore context
+          movw     d1,sr                 | restore status register
           rts
 
 /*PAGE
@@ -58,7 +58,7 @@ restore:  movml    a0@,d1-d7/a2-a7     | restore context
 
 #if (CPU_SOFTWARE_FP == FALSE)
 
-.set FPCONTEXT_ARG,   4                    | save FP context argument
+.set FPCONTEXT_ARG,   4                   | save FP context argument
 
         .align  4
         .global SYM (_CPU_Context_save_fp)
@@ -127,31 +127,34 @@ norst:  frestore a0@+                     | restore the fp state frame
         .global SYM (_ISR_Handler)
 
 SYM (_ISR_Handler):
-        addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
+                                         | disable multitasking
+        addql   #1,SYM (_Thread_Dispatch_disable_level)
 #if ( !defined(__mcoldfire__) )
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
 #else
-	lea	a7@(-SAVED),a7
-	movm.l  d0-d1/a0-a1,a7@		 | save d0-d1,a0-a1
+        lea     a7@(-SAVED),a7
+        movm.l  d0-d1/a0-a1,a7@          | save d0-d1,a0-a1
 #endif
-	movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
-	andl    #0x03fc,d0               | d0 = vector offset in vbr
+        movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
+        andl    #0x03fc,d0               | d0 = vector offset in vbr
 
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-	movel	_CPU_Interrupt_stack_high,a0	| a0 now point just above interrupt stack
-	cmpl	_CPU_Interrupt_stack_low,a7	| stack below interrupt stack?
-	bcs.b	1f			| yes, switch to interrupt stack
-	cmpl	a0,a7			| stack above interrupt stack?
-	bcs.b	2f			| no, do not switch stacks
+        | Make a0 point just above interrupt stack
+        movel   _CPU_Interrupt_stack_high,a0
+        cmpl    _CPU_Interrupt_stack_low,a7  | stack below interrupt stack?
+        bcs.b   1f                      | yes, switch to interrupt stack
+        cmpl    a0,a7                   | stack above interrupt stack?
+        bcs.b   2f                      | no, do not switch stacks
 1:
-	movel	a7,a1			| copy task stack pointer
-	movel	a0,a7			| switch to interrupt stack
-	movel	a1,a7@-			| store task stack pointer on interrupt stack
+        movel   a7,a1                   | copy task stack pointer
+        movel   a0,a7                   | switch to interrupt stack
+        movel   a1,a7@-                 | store task stack pointer
+                                        |     on interrupt stack
 2:
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
-	addql   #1,SYM(_ISR_Nest_level)	| one nest level deeper
+        addql   #1,SYM(_ISR_Nest_level) | one nest level deeper
         
         movel   SYM (_ISR_Vector_table),a0 | a0= base of RTEMS table
 #if ( M68K_HAS_PREINDEXING == 1 )
@@ -165,14 +168,14 @@ SYM (_ISR_Handler):
         movel   d0,a7@-                  | push vector number
         jbsr    a0@                      | invoke the user ISR
         addql   #4,a7                    | remove vector number
-        subql	#1,SYM(_ISR_Nest_level)	| Reduce interrupt-nesting count
+        subql   #1,SYM(_ISR_Nest_level)  | Reduce interrupt-nesting count
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
-	movel	_CPU_Interrupt_stack_high,a0
-	subql	#4,a0
-	cmpl	a0,a7			| At top of interrupt stack?
-	bne.b	1f			| No, do not restore task stack pointer
-	movel	(a7),a7			| Restore task stack pointer
+        movel   _CPU_Interrupt_stack_high,a0
+        subql   #4,a0
+        cmpl    a0,a7                   | At top of interrupt stack?
+        bne.b   1f                      | No, do not restore task stack pointer
+        movel   (a7),a7                 | Restore task stack pointer
 1:
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
         subql   #1,SYM (_Thread_Dispatch_disable_level)
@@ -219,10 +222,10 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
 #endif
 
 #if ( !defined(__mcoldfire__) )
-exit:   moveml  a7@+,d0-d1/a0-a1	 | restore d0-d1,a0-a1
+exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
 #else
-exit:	moveml	a7@,d0-d1/a0-a1		 | restore d0-d1,a0-a1
-	lea     a7@(SAVED),a7
+exit:   moveml  a7@,d0-d1/a0-a1          | restore d0-d1,a0-a1
+        lea     a7@(SAVED),a7
 #endif
 
 #if ( M68K_HAS_VBR == 0 )
@@ -252,11 +255,11 @@ SYM (_ISR_Dispatch):
         jsr     SYM (_Thread_Dispatch)
         movml   a7@+,d0-d1/a0-a1
 #else
-	lea     a7@(-SAVED),a7
-	movml   d0-d1/a0-a1,a7@
-	jsr     SYM (_Thread_Dispatch)
-	movml   a7@,d0-d1/a0-a1
-	lea     a7@(SAVED),a7
+        lea     a7@(-SAVED),a7
+        movml   d0-d1/a0-a1,a7@
+        jsr     SYM (_Thread_Dispatch)
+        movml   a7@,d0-d1/a0-a1
+        lea     a7@(SAVED),a7
 #endif
 
 #if ( M68K_HAS_VBR == 0 )
