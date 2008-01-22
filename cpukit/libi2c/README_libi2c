@@ -40,22 +40,22 @@ Structure
 This library defines a layered API to i2c and spi devices. The
 layering is:
 
-  +---------------------------------------+
- 6|           Application                 |
-  +---------------------------------------+
- 5|        RTEMS I/O Manager              |
-  +---------------------------------------+
- 4|**     libi2c OS adaption layer      **|
-  +---------------------------------------+
- 3|    high level i2c device driver       |
-  |         (EEPROM, RTC, ...)            |
-  |    (e.g. in c/src/libchip/i2c)        |
-  +---------------------------------------+
- 2|** libi2c low level abstration layer **|
-  +---------------------------------------+
- 1|     i2c controller driver             |
-  |             (in BSP)                  |
-  +---------------------------------------+
+  +----------------------------------------+
+ 6|            Application                 |
+  +----------------------------------------+
+ 5|         RTEMS I/O Manager              |
+  +----------------------------------------+
+ 4|**      libi2c OS adaption layer      **|
+  +----------------------------------------+
+ 3|     high level i2c device driver       |
+  |          (EEPROM, RTC, ...)            |
+  |     (e.g. in c/src/libchip/i2c)        |
+  +----------------------------------------+
+ 2|** libi2c low level abstraction layer **|
+  +----------------------------------------+
+ 1|      i2c controller driver             |
+  |              (in BSP)                  |
+  +----------------------------------------+
 
 This document will describe the following interfaces in separate
 sections:

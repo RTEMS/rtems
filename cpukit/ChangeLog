@@ -1,3 +1,8 @@
+2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libi2c/README_libi2c: Correct spelling error.
+	* score/src/threadclearstate.c: Improve comment.
+
 2008-01-18	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* posix/include/rtems/posix/timer.h, posix/src/cleanuppop.c,
