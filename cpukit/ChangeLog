@@ -1,3 +1,10 @@
+2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/eventsurrender.c, rtems/src/ratemonperiod.c,
+	score/src/threadqdequeue.c, score/src/threadqdequeuefifo.c,
+	score/src/threadqdequeuepriority.c: Fix bugs encountered while
+	testing and clean up more code.
+
 2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/threadqfirst.c: Remove switch.

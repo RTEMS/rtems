@@ -74,17 +74,6 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
     return the_thread;
   }
 
-  switch ( the_thread_queue->sync_state ) {
-    case THREAD_BLOCKING_OPERATION_SYNCHRONIZED:
-    case THREAD_BLOCKING_OPERATION_SATISFIED:
-      _ISR_Enable( level );
-      return NULL;
-
-    case THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED:
-    case THREAD_BLOCKING_OPERATION_TIMEOUT:
-      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
-      _ISR_Enable( level );
-      return _Thread_Executing;
-  }
-  return NULL;                /* this is only to prevent warnings */
+  _ISR_Enable( level );
+  return NULL;
 }

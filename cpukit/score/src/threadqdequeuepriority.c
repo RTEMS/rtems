@@ -55,7 +55,6 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Chain_Node     *last_node;
   Chain_Node     *next_node;
   Chain_Node     *previous_node;
-  Thread_blocking_operation_States sync;
 
   _ISR_Disable( level );
   for( index=0 ;
@@ -69,21 +68,10 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   }
 
   /*
-   * If we interrupted a blocking operation, cancel it.
+   * We did not find a thread to unblock.
    */
-  sync = the_thread_queue->sync_state;
-  if ( (sync == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
-       (sync == THREAD_BLOCKING_OPERATION_SATISFIED) ) {
-    _ISR_Enable( level );
-    return NULL;
-  }
-
-  if ( (sync == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ||
-       (sync == THREAD_BLOCKING_OPERATION_TIMEOUT ) ) {
-    the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
-    _ISR_Enable( level );
-    return _Thread_Executing;
-  }
+  _ISR_Enable( level );
+  return NULL;
 
 dequeue:
   the_thread->Wait.queue = NULL;

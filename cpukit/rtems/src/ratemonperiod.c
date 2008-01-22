@@ -197,6 +197,7 @@ rtems_status_code rtems_rate_monotonic_period(
             return_value = RTEMS_NOT_DEFINED;
             break;
           case RATE_MONOTONIC_EXPIRED:
+          case RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING:
             return_value = RTEMS_TIMEOUT;
             break;
           case RATE_MONOTONIC_ACTIVE:

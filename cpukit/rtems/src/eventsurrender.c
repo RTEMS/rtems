@@ -66,8 +66,10 @@ void _Event_Surrender(
   /*
    *  No events were seized in this operation
    */
-  if ( _Event_sets_Is_empty( seized_events ) )
+  if ( _Event_sets_Is_empty( seized_events ) ) {
+    _ISR_Enable( level );
     return;
+  }
 
   /*
    *  If we are in an ISR and sending to the current thread, then
