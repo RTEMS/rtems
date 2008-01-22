@@ -1,5 +1,9 @@
 2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp39/init.c: Clean up.
+
+2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp39/init.c: Modify to improve coverage.
 
 2008-01-18	Jennifer Averett <jennifer.averett@OARcorp.com>

@@ -79,6 +79,7 @@ rtems_task Init(
    * Test Event send successful from ISR
    */
   case_hit = FALSE;
+  iterations = 0;
   max = 1;
 
   while (1) {
@@ -96,6 +97,10 @@ rtems_task Init(
     if ( case_hit == TRUE )
       break;
     max += 2;
+
+    /* with our clock tick, this is about 30 seconds */
+    if ( ++iterations >= 4 * 1000 * 30)
+      break;
   }
 
    printf(
@@ -121,14 +126,14 @@ rtems_task Init(
 
     status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
     fatal_directive_status( status, RTEMS_TIMEOUT, "event_receive timeout" );
-    if ( case_hit )
-      break;
 
-    if ( ++max > 1024 )
+    if ( ++max > 10240 )
       max = 0;
 
-    if ( ++iterations >= 0x1000 )
+    /* with our clock tick, this is about 30 seconds */
+    if ( ++iterations >= 4 * 1000 * 30)
       break;
+
   }
 
   puts( "*** END OF TEST 39 ***" );
