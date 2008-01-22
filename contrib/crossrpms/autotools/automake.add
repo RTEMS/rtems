@@ -1,5 +1,5 @@
-%define rpmvers 1.10
-%define srcvers	1.10
+%define rpmvers @AUTOMAKE_VERS@
+%define srcvers	@AUTOMAKE_VERS@
 %define amvers  1.10
 
 %if "%{_prefix}" != "/usr"
