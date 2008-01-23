@@ -84,7 +84,7 @@ const char *CallerName()
   #if defined(TEST_ON_RTEMS_45)
     TempName.u = *(uint32_t *)_Thread_Executing->Object.name;
   #else
-    TempName.u = (uint32_t) _Thread_Executing->Object.name;
+    TempName.u = (uint32_t) _Thread_Executing->Object.name.name_u32;
   #endif
   sprintf( buffer, "%c%c%c%c -- %d",
       TempName.c[0], TempName.c[1], TempName.c[2], TempName.c[3],

@@ -1,3 +1,12 @@
+2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp34/changepri.c, sp35/priinv.c: Convert the Objects_Name type from a
+	simple type to a union of an unsigned 32 bit integer and a pointer.
+	This should help eliminate weird casts between u32 and pointers in
+	various places. The APIs now have to explicitly call _u32 or _string
+	versions of helper routines. This should also simplify things and
+	eliminate the need for ugly casts in some cases.
+
 2008-01-23	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* sp42/Makefile.am: New file.
