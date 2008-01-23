@@ -46,12 +46,13 @@ void _Thread_queue_Extract(
   Thread_Control       *the_thread
 )
 {
-  switch ( the_thread_queue->discipline ) {
-    case THREAD_QUEUE_DISCIPLINE_FIFO:
-      _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
-      break;
-    case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      _Thread_queue_Extract_priority( the_thread_queue, the_thread );
-      break;
-   }
+  /*
+   * Can not use indirect function pointer here since Extract priority
+   * is a macro and the underlying methods do not have the same signature.
+   */
+  if  ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+    _Thread_queue_Extract_priority( the_thread_queue, the_thread );
+  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
+    _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
+
 }

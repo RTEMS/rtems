@@ -1,3 +1,8 @@
+2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/threadblockingoperationcancel.c: Clean up.
+	* score/src/threadqextract.c: Restructure to eliminate dead code.
+
 2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/eventsurrender.c, rtems/src/ratemonperiod.c,

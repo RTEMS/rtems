@@ -54,12 +54,16 @@ void _Thread_blocking_operation_Cancel(
   #endif
 
   /*
+   * The thread is not waiting on anything after this completes.
+   */
+  the_thread->Wait.queue = NULL;
+
+  /*
    *  If the sync state is timed out, this is very likely not needed.
    *  But better safe than sorry when it comes to critical sections.
    */
   if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
     _Watchdog_Deactivate( &the_thread->Timer );
-    the_thread->Wait.queue = NULL;
     _ISR_Enable( level );
     (void) _Watchdog_Remove( &the_thread->Timer );
   } else
