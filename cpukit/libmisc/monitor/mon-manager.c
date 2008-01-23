@@ -45,10 +45,7 @@ rtems_monitor_manager_next(
     {
         copy = (rtems_monitor_generic_t *) canonical;
         copy->id = object->id;
-        if (table->is_string)
-          _Objects_Copy_name_raw(object->name, &copy->name, sizeof(copy->name));
-        else
-          _Objects_Copy_name_raw(&object->name, &copy->name, sizeof(copy->name));
+        copy->name = object->name.name_u32;
     }
 
 #if defined(RTEMS_MULTIPROCESSING)

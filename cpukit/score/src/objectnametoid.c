@@ -2,7 +2,7 @@
  *  Object Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,7 +30,7 @@
 
 /*PAGE
  *
- *  _Objects_Name_to_id
+ *  _Objects_Name_to_id_u32
  *
  *  These kernel routines search the object table(s) for the given
  *  object name and returns the associated object id.
@@ -47,9 +47,9 @@
  *    error code                           - if unsuccessful
  */
 
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
+Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Information *information,
-  Objects_Name         name,
+  uint32_t             name,
   uint32_t             node,
   Objects_Id          *id
 )
@@ -58,7 +58,8 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   Objects_Control           *the_object;
   uint32_t                   index;
   uint32_t                   name_length;
-  Objects_Name_comparators   compare_them;
+
+  /* ASSERT: information->is_string == FALSE */
 
   if ( !id )
     return OBJECTS_INVALID_ADDRESS;
@@ -78,15 +79,12 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   if ( search_local_node ) {
     name_length = information->name_length;
 
-    if ( information->is_string ) compare_them = _Objects_Compare_name_string;
-    else                          compare_them = _Objects_Compare_name_raw;
-
     for ( index = 1; index <= information->maximum; index++ ) {
       the_object = information->local_table[ index ];
-      if ( !the_object || !the_object->name )
+      if ( !the_object )
         continue;
 
-      if ( (*compare_them)( name, the_object->name, name_length ) ) {
+      if ( name == the_object->name.name_u32 ) {
         *id = the_object->id;
         return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
       }

@@ -412,13 +412,15 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   /*
    * Check the type of name the object has.
    */
-  if (_Objects_Get_API (new_task->Object.id) == OBJECTS_CLASSIC_API)
-    name = (rtems_name) new_task->Object.name;
-  else
-    name = rtems_build_name (((char*) new_task->Object.name)[0],
-                             ((char*) new_task->Object.name)[1],
-                             ((char*) new_task->Object.name)[2],
-                             ((char*) new_task->Object.name)[3]);
+
+  name = 0;  
+  if ( _Objects_Get_API (new_task->Object.id) == OBJECTS_CLASSIC_API )
+    name = new_task->Object.name.name_u32;
+  else if (new_task->Object.name.name_p)
+    name = rtems_build_name (new_task->Object.name.name_p[0],
+                             new_task->Object.name.name_p[1],
+                             new_task->Object.name.name_p[2],
+                             new_task->Object.name.name_p[3]);
   
   rtems_capture_dup_name (&task->name, name);
   

@@ -84,7 +84,7 @@ void _Objects_Extend_information(
   if (index_base >= information->maximum ) {
     ISR_Level         level;
     void            **object_blocks;
-    Objects_Name     *name_table;
+    void            **name_table;
     uint32_t         *inactive_per_block;
     Objects_Control **local_table;
     uint32_t          maximum;
@@ -147,7 +147,7 @@ void _Objects_Extend_information(
 
     inactive_per_block = (uint32_t   *) _Addresses_Add_offset(
         object_blocks, block_count * sizeof(void*) );
-    name_table = (Objects_Name *) _Addresses_Add_offset(
+    name_table = (void *) _Addresses_Add_offset(
         inactive_per_block, block_count * sizeof(uint32_t  ) );
     local_table = (Objects_Control **) _Addresses_Add_offset(
         name_table, block_count * sizeof(Objects_Name *) );
@@ -195,7 +195,7 @@ void _Objects_Extend_information(
 
     object_blocks[block_count] = NULL;
     inactive_per_block[block_count] = 0;
-    name_table[block_count] = NULL;
+    // name_table[block_count] = NULL;
 
     for ( index=index_base ;
           index < ( information->allocation_size + index_base );
@@ -209,7 +209,7 @@ void _Objects_Extend_information(
 
     information->object_blocks = object_blocks;
     information->inactive_per_block = inactive_per_block;
-    information->name_table = name_table;
+    information->name_table = (void *)name_table;
     information->local_table = local_table;
     information->maximum = maximum;
     information->maximum_id = _Objects_Build_id(
@@ -253,7 +253,7 @@ void _Objects_Extend_information(
     information->object_blocks[ block ],
     (information->allocation_size * information->size)
   );
-  information->name_table[ block ] = name_area;
+  // information->name_table[ block ] = name_area;
 
   /*
    *  Initialize objects .. add to a local chain first.
@@ -281,9 +281,7 @@ void _Objects_Extend_information(
         index
       );
 
-    the_object->name = (void *) name_area;
-
-    name_area = _Addresses_Add_offset( name_area, information->name_length );
+    name_area = (void *)_Addresses_Add_offset( name_area, information->name_length );
 
     _Chain_Append( &information->Inactive, &the_object->Node );
 

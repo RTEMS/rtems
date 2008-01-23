@@ -159,7 +159,7 @@ int pthread_mutex_init(
     CORE_MUTEX_UNLOCKED
   );
 
-  _Objects_Open( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
+  _Objects_Open_u32( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
 
   *mutex = the_mutex->Object.id;
 

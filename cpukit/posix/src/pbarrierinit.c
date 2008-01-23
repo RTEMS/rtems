@@ -101,7 +101,7 @@ int pthread_barrier_init(
 
   _CORE_barrier_Initialize( &the_barrier->Barrier, &the_attributes );
 
-  _Objects_Open(
+  _Objects_Open_u32(
     &_POSIX_Barrier_Information,
     &the_barrier->Object,
     0

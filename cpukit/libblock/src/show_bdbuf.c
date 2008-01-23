@@ -566,7 +566,7 @@ rtems_status_code rtems_show_bdbuf_print_wait_chain
 
     thread_id   = the_thread->Object.id;
     thread_name = the_thread->Object.name;
-    thread_name_nonstring = (uint32_t)thread_name; 
+    thread_name_nonstring = (uint32_t)thread_name.name_u32; 
     printf("%20s %3d (0x%08" PRIx32 ") %c%c%c%c\n",
 	   ((thread_cnt == 1) ? "Threads waiting:" : ""),
 	   thread_cnt,thread_id,

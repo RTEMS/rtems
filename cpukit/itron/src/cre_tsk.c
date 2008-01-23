@@ -36,6 +36,7 @@ ER cre_tsk(
   register Thread_Control     *the_thread;
   boolean                      status;
   Priority_Control             core_priority;
+  Objects_Name                 name;
 
   /*
    * Validate Parameters.
@@ -81,6 +82,7 @@ ER cre_tsk(
    *  Initialize the core thread for this task.
    */
 
+  name.name_u32 = 0;
   core_priority = _ITRON_Task_Priority_to_Core( pk_ctsk->itskpri );
   status = _Thread_Initialize(
     &_ITRON_Task_Information,
@@ -97,7 +99,7 @@ ER cre_tsk(
     THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
     NULL,        /* no budget algorithm callout */
     0,
-    NULL
+    name
   );
 
   if ( !status ) {

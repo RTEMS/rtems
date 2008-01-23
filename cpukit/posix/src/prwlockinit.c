@@ -95,7 +95,7 @@ int pthread_rwlock_init(
 
   _CORE_RWLock_Initialize( &the_rwlock->RWLock, &the_attributes );
 
-  _Objects_Open(
+  _Objects_Open_u32(
     &_POSIX_RWLock_Information,
     &the_rwlock->Object,
     0

@@ -67,7 +67,8 @@ int mq_unlink(
   );
 
   the_mq->linked = FALSE;
-  _Workspace_Free( the_mq->Object.name );
+  if ( the_mq->Object.name.name_p )
+    _Workspace_Free( (void *)the_mq->Object.name.name_p );
   _POSIX_Message_queue_Namespace_remove( the_mq );
   _POSIX_Message_queue_Delete( the_mq );
 

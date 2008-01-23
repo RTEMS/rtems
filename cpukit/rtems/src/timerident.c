@@ -49,9 +49,9 @@ rtems_status_code rtems_timer_ident(
 {
   Objects_Name_or_id_lookup_errors  status;
 
-  status = _Objects_Name_to_id(
+  status = _Objects_Name_to_id_u32(
     &_Timer_Information,
-    (Objects_Name) name,
+    name,
     OBJECTS_SEARCH_LOCAL_NODE,
     id
   );

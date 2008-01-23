@@ -47,9 +47,9 @@ rtems_status_code rtems_rate_monotonic_ident(
 {
   Objects_Name_or_id_lookup_errors  status;
 
-  status = _Objects_Name_to_id(
+  status = _Objects_Name_to_id_u32(
     &_Rate_monotonic_Information,
-    (Objects_Name) name,
+    name,
     OBJECTS_SEARCH_LOCAL_NODE,
     id
   );

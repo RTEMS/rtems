@@ -113,11 +113,9 @@ libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
 
 ## OBJECT_C_FILES
 libscore_a_SOURCES += src/object.c src/objectallocate.c \
-    src/objectclearname.c src/objectcomparenameraw.c \
-    src/objectcomparenamestring.c src/objectcopynameraw.c \
-    src/objectcopynamestring.c src/objectextendinformation.c \
-    src/objectfree.c src/objectget.c src/objectgetisr.c src/objectgetnext.c \
-    src/objectinitializeinformation.c src/objectnametoid.c \
+    src/objectextendinformation.c src/objectfree.c src/objectget.c \
+    src/objectgetisr.c src/objectgetnext.c src/objectinitializeinformation.c \
+    src/objectnametoid.c src/objectnametoidstring.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c
 

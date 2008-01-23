@@ -33,9 +33,11 @@ void pthread_exit(
 
   the_information = _Objects_Get_information( _Thread_Executing->Object.id );
 
-  /* This should never happen if _Thread_Get() works right */
-  assert( the_information );
-
+  /*
+   * the_information has to be non-NULL.  Otherwise, we couldn't be 
+   * running in a thread of this API and class.
+   */
+  
   _Thread_Disable_dispatch();
 
   _Thread_Executing->Wait.return_argument = value_ptr;

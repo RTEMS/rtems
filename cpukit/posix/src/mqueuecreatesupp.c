@@ -142,10 +142,10 @@ int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
-  _Objects_Open(
+  _Objects_Open_string(
     &_POSIX_Message_queue_Information,
     &the_mq->Object,
-    (char *) name
+    name
   );
 
   *message_queue = the_mq;

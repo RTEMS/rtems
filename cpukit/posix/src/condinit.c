@@ -72,7 +72,7 @@ int pthread_cond_init(
     ETIMEDOUT
   );
 
-  _Objects_Open(
+  _Objects_Open_u32(
     &_POSIX_Condition_variables_Information,
     &the_cond->Object,
     0

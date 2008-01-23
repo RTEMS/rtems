@@ -21,6 +21,7 @@ void _API_Mutex_Allocate(
 )
 {
   API_Mutex_Control *mutex;
+
   CORE_mutex_Attributes attr =  {
     CORE_MUTEX_NESTING_IS_ERROR,
     FALSE,
@@ -32,7 +33,7 @@ void _API_Mutex_Allocate(
 
   _CORE_mutex_Initialize( &mutex->Mutex, &attr, CORE_MUTEX_UNLOCKED );
 
-  _Objects_Open( &_API_Mutex_Information, &mutex->Object, (Objects_Name) 1 );
+  _Objects_Open_u32( &_API_Mutex_Information, &mutex->Object, 1 );
 
   *the_mutex = mutex;
 }

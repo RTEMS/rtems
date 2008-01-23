@@ -51,12 +51,7 @@ rtems_status_code rtems_partition_ident(
 {
   Objects_Name_or_id_lookup_errors  status;
 
-  status = _Objects_Name_to_id(
-    &_Partition_Information,
-    (Objects_Name) name,
-    node,
-    id
-  );
+  status = _Objects_Name_to_id_u32( &_Partition_Information, name, node, id );
 
   return _Status_Object_name_errors_to_status[ status ];
 }

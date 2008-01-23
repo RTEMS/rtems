@@ -192,7 +192,7 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
 
     /*
      *  NOTE: The local node was search (if necessary) by
-     *        _Objects_Name_to_id before this was invoked.
+     *        _Objects_Name_to_id_XXX before this was invoked.
      */
 
     if ( !_Objects_Is_local_node( node_index ) ) {
@@ -239,7 +239,7 @@ void _Objects_MP_Is_remote (
 
   /*
    *  NOTE: The local node was search (if necessary) by
-   *        _Objects_Name_to_id before this was invoked.
+   *        _Objects_Name_to_id_XXX before this was invoked.
    *
    *        The NODE field of an object id cannot be 0
    *        because 0 is an invalid node number.

@@ -51,10 +51,12 @@ void _POSIX_Message_queue_Delete(
 {
   if ( !the_mq->linked && !the_mq->open_count ) {
       /* the name memory may have been freed by unlink. */
-      if ( the_mq->Object.name )
-        _Workspace_Free( the_mq->Object.name );
+      Objects_Control *the_object = &the_mq->Object;
 
-      _Objects_Close( &_POSIX_Message_queue_Information, &the_mq->Object );
+      if ( the_object->name.name_p )
+        _Workspace_Free( (void *)the_object->name.name_p );
+
+      _Objects_Close( &_POSIX_Message_queue_Information, the_object );
 
       _CORE_message_queue_Close(
         &the_mq->Message_queue,

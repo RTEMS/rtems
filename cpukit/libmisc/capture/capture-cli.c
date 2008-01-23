@@ -659,12 +659,10 @@ rtems_capture_cli_get_name_id (char*          arg,
      * @warning The extra assigns play with the byte order so do not
      *          remove unless the score has been updated.
      */
-    Objects_Name object_name;
     rtems_name   rname;
     
     rname = rtems_build_name(arg[0], arg[1], arg[2], arg[3]);
-    object_name = (Objects_Name) rname;
-    *name = (rtems_name) object_name;
+    *name = rname;
     *valid_name = 1;
   }
 

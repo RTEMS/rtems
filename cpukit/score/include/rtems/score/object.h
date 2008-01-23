@@ -33,7 +33,12 @@ extern "C" {
  *  The following type defines the control block used to manage
  *  object names.
  */
-typedef void * Objects_Name;
+typedef union {
+  /** This is a pointer to a string name. */
+  const char *name_p;
+  /** This is the actual 32-bit "raw" integer name. */
+  uint32_t    name_u32;
+} Objects_Name;
 
 /**
  *  Space for object names is allocated in multiples of this.
@@ -337,7 +342,8 @@ typedef struct {
   /** This points to the table of local objects. */
   Objects_Control **local_table;
   /** This points to the table of local object names. */
-  Objects_Name     *name_table;
+  /* XXX should be safe to remove this field */
+  uint32_t        **name_table;
   /** This is the chain of inactive control blocks. */
   Chain_Control     Inactive;
   /** This is the number of objects on the Inactive list. */
@@ -533,69 +539,6 @@ void _Objects_Free(
 );
 
 /**
- *  This method zeroes out the name.
- *
- *  @param[in] name points to the name to be zeroed out.
- *  @param[in] length is the length of the object name field.
- */
-void _Objects_Clear_name(
-  void         *name,
-  const size_t  length
-);
-
-/**
- *  This method copies a string style object name from source to destination.
- *
- *  @param[in] source is the source name to copy.
- *  @param[in] destination is the destination of the copy.
- *  @param[in] length is the number of bytes to copy.
- */
-void _Objects_Copy_name_string(
-  const void   *source,
-  void         *destination,
-  const size_t  length
-);
-
-/**
- *  This method copies a raw style object name from source to destination.
- *
- *  @param[in] source is the source name to copy.
- *  @param[in] destination is the destination of the copy.
- *  @param[in] length is the number of bytes to copy.
- */
-void _Objects_Copy_name_raw(
-  const void   *source,
-  void         *destination,
-  const size_t  length
-);
-
-/**
- *  This method compares two string style object names.
- *
- *  @param[in] name_1 is the left hand name to compare.
- *  @param[in] name_2 is the right hand name to compare.
- *  @param[in] length is the length of the names to compare.
- */
-boolean _Objects_Compare_name_string(
-  void       *name_1,
-  void       *name_2,
-  uint16_t    length
-);
-
-/**
- *  This method compares two raw style object names.
- *
- *  @param[in] name_1 is the left hand name to compare.
- *  @param[in] name_2 is the right hand name to compare.
- *  @param[in] length is the length of the names to compare.
- */
-boolean _Objects_Compare_name_raw(
-  void       *name_1,
-  void       *name_2,
-  uint16_t    length
-);
-
-/**
  *  This function implements the common portion of the object
  *  identification directives.  This directive returns the object
  *  id associated with name.  If more than one object of this class
@@ -637,9 +580,30 @@ typedef enum {
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
  */
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
+Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Information *information,
-  Objects_Name         name,
+  uint32_t             name,
+  uint32_t             node,
+  Objects_Id          *id
+);
+
+/**
+ *  This method converts an object name to an Id.  It performs a look up
+ *  using the object information block for this object class.
+ *
+ *  @param[in] information points to an object class information block.
+ *  @param[in] name is the name of the object to find.
+ *  @param[in] node is the set of nodes to search.
+ *  @param[in] id will contain the Id if the search is successful.
+ *
+ *  @return This method returns one of the values from the 
+ *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
+ *          successful or failure.  On success @a id will contain the Id of
+ *          the requested object.
+ */
+Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
+  Objects_Information *information,
+  const char          *name,
   uint32_t             node,
   Objects_Id          *id
 );

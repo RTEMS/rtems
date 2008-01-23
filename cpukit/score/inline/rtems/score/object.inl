@@ -289,12 +289,53 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   index = _Objects_Get_index( the_object->id );
   _Objects_Set_local_object( information, index, the_object );
 
-  if ( information->is_string ) 
-    /* _Objects_Copy_name_string( name, the_object->name ); */
-    the_object->name = name;
-  else
-    /* _Objects_Copy_name_raw( name, the_object->name, information->name_length ); */
-    the_object->name = name;
+  the_object->name = name;
+}
+
+/**
+ *  This function places the_object control pointer and object name
+ *  in the Local Pointer and Local Name Tables, respectively.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
+ *  @param[in] name is the name of the object to make accessible
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
+  Objects_Information *information,
+  Objects_Control     *the_object,
+  uint32_t             name
+)
+{
+  uint32_t    index;
+
+  index = _Objects_Get_index( the_object->id );
+  _Objects_Set_local_object( information, index, the_object );
+
+  /* ASSERT: information->is_string == FALSE */ 
+  the_object->name.name_u32 = name;
+}
+
+/**
+ *  This function places the_object control pointer and object name
+ *  in the Local Pointer and Local Name Tables, respectively.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
+ *  @param[in] name is the name of the object to make accessible
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Open_string(
+  Objects_Information *information,
+  Objects_Control     *the_object,
+  const char          *name
+)
+{
+  uint32_t    index;
+
+  index = _Objects_Get_index( the_object->id );
+  _Objects_Set_local_object( information, index, the_object );
+
+  /* information->is_string */ 
+  the_object->name.name_p = name;
 }
 
 /**
@@ -309,12 +350,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   Objects_Control      *the_object
 )
 {
-  uint32_t   index;
+  _Objects_Set_local_object(
+    information,
+    _Objects_Get_index( the_object->id ),
+    NULL
+  );
 
-  index = _Objects_Get_index( the_object->id );
-  _Objects_Set_local_object( information, index, NULL );
-  /* _Objects_Clear_name( the_object->name, information->name_length ); */
-  the_object->name = 0;
+  the_object->name.name_u32 = 0;
+  the_object->name.name_p   = NULL;
 }
 
 /**
@@ -328,8 +371,11 @@ RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove(
   Objects_Control      *the_object
 )
 {
-  /* _Objects_Clear_name( the_object->name, information->name_length ); */
-  the_object->name = 0;
+  /*
+   * Clear out either format.
+   */
+  the_object->name.name_p   = NULL;
+  the_object->name.name_u32 = 0;
 }
 
 #endif

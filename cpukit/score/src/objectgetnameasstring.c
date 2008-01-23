@@ -35,7 +35,7 @@ char *_Objects_Get_name_as_string(
 )
 {
   Objects_Information *information;
-  char                  *s;
+  const char            *s;
   char                  *d;
   uint32_t               i;
   char                   lname[5];
@@ -65,9 +65,9 @@ char *_Objects_Get_name_as_string(
     case OBJECTS_LOCAL:
 
       if ( information->is_string ) {
-        s = the_object->name;
+        s = the_object->name.name_p;
       } else {
-        uint32_t  u32_name = (uint32_t) the_object->name;
+        uint32_t  u32_name = (uint32_t) the_object->name.name_u32;
 
         lname[ 0 ] = (u32_name >> 24) & 0xff;
         lname[ 1 ] = (u32_name >> 16) & 0xff;

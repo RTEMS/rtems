@@ -48,9 +48,9 @@ rtems_status_code rtems_port_ident(
 {
   Objects_Name_or_id_lookup_errors  status;
 
-  status = _Objects_Name_to_id(
+  status = _Objects_Name_to_id_u32(
     &_Dual_ported_memory_Information,
-    (Objects_Name) name,
+    name,
     OBJECTS_SEARCH_ALL_NODES,
     id
   );

@@ -98,7 +98,7 @@ int pthread_key_create(
 
   the_key->is_active = TRUE;
 
-  _Objects_Open( &_POSIX_Keys_Information, &the_key->Object, 0 );
+  _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->Object, 0 );
 
   *key = the_key->Object.id;
 

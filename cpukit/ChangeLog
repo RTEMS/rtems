@@ -1,5 +1,37 @@
 2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/object.h, itron/src/cre_tsk.c,
+	libblock/src/show_bdbuf.c, libmisc/capture/capture-cli.c,
+	libmisc/capture/capture.c, libmisc/monitor/mon-manager.c,
+	libmisc/stackchk/check.c, posix/src/condinit.c,
+	posix/src/keycreate.c, posix/src/mqueuecreatesupp.c,
+	posix/src/mqueuedeletesupp.c, posix/src/mqueuenametoid.c,
+	posix/src/mqueueopen.c, posix/src/mqueueunlink.c,
+	posix/src/mutexinit.c, posix/src/pbarrierinit.c,
+	posix/src/prwlockinit.c, posix/src/pspininit.c,
+	posix/src/pthreadcreate.c, posix/src/pthreadexit.c,
+	posix/src/semaphorecreatesupp.c, posix/src/semaphorenametoid.c,
+	posix/src/timercreate.c, rtems/src/barrierident.c,
+	rtems/src/dpmemident.c, rtems/src/msgqident.c, rtems/src/partident.c,
+	rtems/src/ratemonident.c, rtems/src/regionident.c,
+	rtems/src/semident.c, rtems/src/taskident.c, rtems/src/timerident.c,
+	sapi/src/extensionident.c, score/Makefile.am,
+	score/include/rtems/score/object.h,
+	score/inline/rtems/score/object.inl, score/src/apimutexallocate.c,
+	score/src/objectextendinformation.c,
+	score/src/objectgetnameasstring.c, score/src/objectmp.c,
+	score/src/objectnametoid.c: Convert the Objects_Name type from a
+	simple type to a union of an unsigned 32 bit integer and a pointer.
+	This should help eliminate weird casts between u32 and pointers in
+	various places. The APIs now have to explicitly call _u32 or _string
+	versions of helper routines. This should also simplify things and
+	eliminate the need for ugly casts in some cases.
+	* score/src/objectclearname.c, score/src/objectcomparenameraw.c,
+	score/src/objectcomparenamestring.c, score/src/objectcopynameraw.c,
+	score/src/objectcopynamestring.c: Removed.
+
+2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/threadblockingoperationcancel.c: Clean up.
 	* score/src/threadqextract.c: Restructure to eliminate dead code.
 

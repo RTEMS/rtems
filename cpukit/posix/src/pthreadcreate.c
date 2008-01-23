@@ -42,6 +42,7 @@ int pthread_create(
   POSIX_API_Control                  *api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
+  Objects_Name                        name;
 
   the_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -175,6 +176,7 @@ int pthread_create(
    *  Initialize the core thread for this task.
    */
 
+  name.name_p = NULL;   /* posix threads don't have a name by default */
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
@@ -186,7 +188,7 @@ int pthread_create(
     budget_algorithm,
     budget_callout,
     0,                    /* isr level */
-    NULL                  /* posix threads don't have a name */
+    name                  /* posix threads don't have a name */
   );
 
   if ( !status ) {

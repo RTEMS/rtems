@@ -106,7 +106,11 @@ int _POSIX_Semaphore_Create_support(
    *  Make the semaphore available for use.
    */
 
-  _Objects_Open(&_POSIX_Semaphore_Information, &the_semaphore->Object, name_p);
+  _Objects_Open_string(
+    &_POSIX_Semaphore_Information,
+    &the_semaphore->Object,
+    name_p
+  );
 
   *the_sem = the_semaphore;
 

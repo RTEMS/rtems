@@ -217,7 +217,7 @@ void Stack_check_report_blown_task(
         "id=0x%08" PRIx32 "; name=0x%08" PRIx32,
     running,
     running->Object.id,
-    (uint32_t) running->Object.name
+    running->Object.name.name_u32
   );
 
   #if defined(RTEMS_MULTIPROCESSING)
