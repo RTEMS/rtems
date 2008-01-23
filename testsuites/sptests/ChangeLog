@@ -1,3 +1,10 @@
+2008-01-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	Add sp42 to exercise thread queue with knowledge of the implementation
+	so we can exercise all of the normal paths possible.
+	* Makefile.am, configure.ac: Add sp42.
+	* sp42/.cvsignore, sp42/init.c, sp42/sp42.scn: New files.
+
 2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp39/init.c: Add case for long timeout on blocking operation.
