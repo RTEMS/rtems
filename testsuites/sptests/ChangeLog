@@ -1,3 +1,7 @@
+2008-01-23	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* sp42/Makefile.am: New file.
+
 2008-01-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	Add sp42 to exercise thread queue with knowledge of the implementation
