@@ -11,6 +11,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include "tmacros.h"
 
 #include <aio.h>
 #include <sys/types.h>
@@ -169,6 +170,10 @@ void *POSIX_Init(
   puts( "waitpid -- ENOSYS" );
   sc = waitpid( 0, NULL, 0 );
   check_enosys( sc );
+
+  puts( "mprotect -- stub implementation - OK" );
+  sc = mprotect( NULL, 0, 0 );
+  posix_service_failed( sc, "mprotect" );
 
   puts( "*** END OF POSIX TEST ENOSYS ***" );
   rtems_test_exit( 0 );

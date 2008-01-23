@@ -29,4 +29,5 @@ sched_setscheduler -- ENOSYS
 sched_getscheduler -- ENOSYS
 wait -- ENOSYS
 waitpid -- ENOSYS
+mprotect -- stub implementation - OK
 *** END OF POSIX TEST ENOSYS ***
