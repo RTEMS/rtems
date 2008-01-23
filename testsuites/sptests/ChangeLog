@@ -1,3 +1,11 @@
+2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp39/init.c: Add case for long timeout on blocking operation.
+	* Makefile.am, configure.ac: Add new test to exercise thread
+	queue blokcing synchronization. sp39 and sp41 are very similar.
+	* sp41/.cvsignore, sp41/Makefile.am, sp41/init.c, sp41/sp41.scn,
+	sp41/system.h: New files.
+
 2008-01-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp39/init.c: Clean up.

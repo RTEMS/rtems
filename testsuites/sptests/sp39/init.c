@@ -1,7 +1,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,6 +44,23 @@ rtems_timer_service_routine test_event_from_isr(
   status = rtems_event_send( main_task, 0x01 );
 }
 
+rtems_timer_service_routine test_event_with_timeout_from_isr(
+  rtems_id  timer,
+  void     *arg
+)
+{
+  rtems_status_code     status;
+
+  if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+    /*
+     *  We want to catch the task while it is blocking.  Otherwise
+     *  just send and make it happy.
+     */
+    case_hit = TRUE;
+  }
+  status = rtems_event_send( main_task, 0x01 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -76,7 +93,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_create" );
 
   /*
-   * Test Event send successful from ISR
+   * Test Event send successful from ISR -- receive is forever
    */
   case_hit = FALSE;
   iterations = 0;
@@ -105,6 +122,41 @@ rtems_task Init(
 
    printf(
      "Event sent from ISR hitting synchronization point has %soccurred\n",
+     (( case_hit == TRUE ) ? "" : "NOT ")
+  ); 
+
+  /*
+   * Test Event send successful from ISR -- receive has timeout
+   */
+  case_hit = FALSE;
+  iterations = 0;
+  max = 1;
+
+  while (1) {
+    if ( case_hit )
+      break;
+    status = rtems_timer_fire_after(
+      timer, 1, test_event_with_timeout_from_isr, NULL );
+    directive_failed( status, "timer_fire_after failed" );
+
+    for (i=0 ; i<max ; i++ )
+      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
+        break;
+
+    status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 10, &out );
+    directive_failed( status, "rtems_event_receive" );
+    if ( case_hit == TRUE )
+      break;
+    max += 2;
+
+    /* with our clock tick, this is about 30 seconds */
+    if ( ++iterations >= 4 * 1000 * 30)
+      break;
+  }
+
+   printf(
+     "Event sent from ISR (with timeout) hitting synchronization "
+       "point has %soccurred\n",
      (( case_hit == TRUE ) ? "" : "NOT ")
   ); 
 
