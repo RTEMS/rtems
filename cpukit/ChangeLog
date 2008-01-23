@@ -1,5 +1,9 @@
 2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/objectnametoidstring.c: New file.
+
+2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/include/rtems/itron/object.h, itron/src/cre_tsk.c,
 	libblock/src/show_bdbuf.c, libmisc/capture/capture-cli.c,
 	libmisc/capture/capture.c, libmisc/monitor/mon-manager.c,
