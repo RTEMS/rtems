@@ -81,7 +81,7 @@ subtask (rtems_task_argument arg)
   while (nRunning)
     rtems_task_wake_after(0);
 
-  puts("*** END OF TEST SP28 ***" );
+  puts("*** END OF TEST 28 ***" );
   rtems_test_exit(0);
 }
 
@@ -344,7 +344,7 @@ void test_delete_as_side_effect(void)
 
 rtems_task Init (rtems_task_argument ignored)
 {
-  puts("*** START OF TEST SP28 ***" );
+  puts("*** START OF TEST 28 ***" );
 
   test_errors();
 

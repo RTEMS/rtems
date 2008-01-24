@@ -180,6 +180,6 @@ rtems_task Init (rtems_task_argument ignored)
 			printf ("%d: Obtained obtain non-recursive-lock semaphore too quickly -- %d ticks not %d ticks\n", __LINE__, diff, (2 * ticksPerSecond) );
 	}
 
-	puts( "*** END OF SP29 ***" );
+	puts( "*** END OF TEST 29 ***" );
 	exit (0);
 }

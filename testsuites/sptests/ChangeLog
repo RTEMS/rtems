@@ -1,3 +1,9 @@
+2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp28/init.c, sp28/sp28.scn, sp29/init.c, sp29/sp29.scn, sp32/init.c,
+	sp32/sp32.scn, sp33/init.c, sp33/sp33.scn, sp42/init.c: Fix end of
+	test messages.
+
 2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp34/changepri.c, sp35/priinv.c: Convert the Objects_Name type from a

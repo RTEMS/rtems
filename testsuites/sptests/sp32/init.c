@@ -107,6 +107,6 @@ rtems_task Init(
   }
 
   /* the end */
-  printf("*** END OF TEST SP32 ***\n");
-  exit(0);
+  puts("*** END OF TEST 32 ***");
+  rtems_test_exit(0);
 }

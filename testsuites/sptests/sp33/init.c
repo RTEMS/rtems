@@ -239,6 +239,6 @@ rtems_task Init(
   directive_failed(status, "rtems_task_wake_after");
 
   /* the end */
-  printf("*** END OF TEST SP33 ***\n");
-  exit(0);
+  puts("*** END OF TEST 33 ***");
+  rtems_test_exit(0);
 }
