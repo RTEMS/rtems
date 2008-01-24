@@ -105,7 +105,6 @@ void _Objects_Shrink_information(
        */
 
       _Workspace_Free( information->object_blocks[ block ] );
-      information->name_table[ block ] = NULL;
       information->object_blocks[ block ] = NULL;
       information->inactive_per_block[ block ] = 0;
 

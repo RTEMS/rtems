@@ -74,7 +74,6 @@ void _Objects_Initialize_information(
   information->is_string          = is_string;
 
   information->local_table        = 0;
-  information->name_table         = 0;
   information->inactive_per_block = 0;
   information->object_blocks      = 0;
 

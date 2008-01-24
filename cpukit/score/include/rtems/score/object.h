@@ -341,9 +341,6 @@ typedef struct {
   size_t            size;
   /** This points to the table of local objects. */
   Objects_Control **local_table;
-  /** This points to the table of local object names. */
-  /* XXX should be safe to remove this field */
-  uint32_t        **name_table;
   /** This is the chain of inactive control blocks. */
   Chain_Control     Inactive;
   /** This is the number of objects on the Inactive list. */
