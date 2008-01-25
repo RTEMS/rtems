@@ -87,6 +87,11 @@ uint32_t     rtems_assoc_local_by_remote_bitfield(
   uint32_t
 );
 
+const rtems_assoc_t *rtems_assoc_ptr_by_local(
+  const rtems_assoc_t *ap,
+  uint32_t             local_value
+);
+
 #if defined(INSIDE_ASSOC)
 
 #define rtems_assoc_is_default(_ap) \
@@ -100,12 +105,7 @@ uint32_t     rtems_assoc_local_by_remote_bitfield(
 const char *rtems_assoc_name_bad(
   uint32_t   bad_value
 );
-
-const rtems_assoc_t *rtems_assoc_ptr_by_local(
-  const rtems_assoc_t *ap,
-  uint32_t             local_value
-);
-
 #endif
+
 
 #endif /* ! _INCLUDE_ASSOC_H */

@@ -1,5 +1,10 @@
 2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/include/rtems/assoc.h: rtems_assoc_ptr_by_local should be
+	in public API.
+
+2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/object.h,
 	score/src/objectextendinformation.c,
 	score/src/objectinitializeinformation.c,
