@@ -1,3 +1,7 @@
+2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* malloctest/init.c: Add include to remove warning.
+
 2008-01-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* malloctest/init.c: Remove debug print.

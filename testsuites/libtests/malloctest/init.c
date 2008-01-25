@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <errno.h>
+#include <rtems/score/protectedheap.h>
 
 /*
  *  A simple test of realloc
