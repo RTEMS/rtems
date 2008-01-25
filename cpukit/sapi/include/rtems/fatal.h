@@ -41,7 +41,7 @@ extern "C" {
 
 void rtems_fatal_error_occurred(
   uint32_t   the_error
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
 }

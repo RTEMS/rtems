@@ -354,7 +354,8 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  * If the caller is willing to wait
  *      then they are blocked. 
  */
-#define _CORE_mutex_Seize( \
+
+#define _CORE_mutex_Seize_body( \
   _the_mutex, _id, _wait, _timeout, _level ) \
   do { \
     if ( _Thread_Dispatch_disable_level \
@@ -364,7 +365,8 @@ void _CORE_mutex_Seize_interrupt_blocking(
         _Internal_error_Occurred( \
            INTERNAL_ERROR_CORE, \
            FALSE, \
-           18 /* called from wrong environment */); \
+           INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE \
+           ); \
     } \
     if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &_level ) ) {  \
       if ( !_wait ) { \
@@ -382,6 +384,18 @@ void _CORE_mutex_Seize_interrupt_blocking(
     } \
   } while (0)
 
+#if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
+  void _CORE_mutex_Seize(
+    CORE_mutex_Control  *_the_mutex,
+    Objects_Id           _id,
+    boolean              _wait,
+    Watchdog_Interval    _timeout,
+    ISR_Level            _level
+  );
+#else
+  #define _CORE_mutex_Seize( _the_mutex, _id, _wait, _timeout, _level ) \
+     _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level )
+#endif
 /**
  *  @brief Surrender the Mutex
  *

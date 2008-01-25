@@ -1,3 +1,10 @@
+2008-01-25	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* sapi/include/rtems/fatal.h, score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/interr.h,
+	score/inline/rtems/score/thread.inl, score/src/coremutexseize.c:
+	Modifications to aid in full path testing.
+
 2008-01-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/mqueuesendsupp.c: Remove warning.

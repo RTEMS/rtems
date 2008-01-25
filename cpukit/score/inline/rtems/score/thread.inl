@@ -19,6 +19,8 @@
 #ifndef _RTEMS_SCORE_THREAD_INL
 #define _RTEMS_SCORE_THREAD_INL
 
+#include <rtems/score/sysstate.h>
+
 /**
  *  @addtogroup ScoreThread 
  *  @{
@@ -32,7 +34,13 @@
 
 RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
 {
-  _Context_Switch( &_Thread_Executing->Registers, &_Thread_BSP_context );
+  Context_Control context_area;
+  Context_Control *context_p = &context_area;
+
+  if ( _System_state_Is_up(_System_state_Get ()) )
+    context_p = &_Thread_Executing->Registers;
+
+  _Context_Switch( context_p, &_Thread_BSP_context );
 }
 
 /**

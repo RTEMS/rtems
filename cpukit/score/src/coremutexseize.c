@@ -27,6 +27,19 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
+#if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
+void _CORE_mutex_Seize(
+  CORE_mutex_Control  *_the_mutex,
+  Objects_Id           _id,
+  boolean              _wait,
+  Watchdog_Interval    _timeout,
+  ISR_Level            _level
+)
+{
+  _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level );
+}
+#endif
+
 /*PAGE
  *
  *  _CORE_mutex_Seize (interrupt blocking support)
