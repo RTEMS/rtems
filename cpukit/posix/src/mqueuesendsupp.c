@@ -79,7 +79,7 @@ int _POSIX_Message_queue_Send_support(
 
       msg_status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
-        msg_ptr,
+        (void *)msg_ptr,
         msg_len,
         mqdes,      /* mqd_t is an object id */
         NULL,
