@@ -525,6 +525,10 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
 #define CONFIGURE_MP_MAXIMUM_PROXIES            32
 #endif
 
+#ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+#define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
+#endif
+
 #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
 #include <mpci.h>
 #define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
@@ -532,11 +536,12 @@ int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
 
 #ifdef CONFIGURE_INIT
 rtems_multiprocessing_table Multiprocessing_configuration = {
-  CONFIGURE_MP_NODE_NUMBER,              /* local node number */
-  CONFIGURE_MP_MAXIMUM_NODES,            /* maximum # nodes in system */
-  CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,   /* maximum # global objects */
-  CONFIGURE_MP_MAXIMUM_PROXIES,          /* maximum # proxies */
-  CONFIGURE_MP_MPCI_TABLE_POINTER        /* pointer to MPCI config table */
+  CONFIGURE_MP_NODE_NUMBER,                  /* local node number */
+  CONFIGURE_MP_MAXIMUM_NODES,                /* maximum # nodes in system */
+  CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,       /* maximum # global objects */
+  CONFIGURE_MP_MAXIMUM_PROXIES,              /* maximum # proxies */
+  CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI task stack > minimum */
+  CONFIGURE_MP_MPCI_TABLE_POINTER            /* pointer to MPCI config table */
 };
 #endif
 
@@ -1096,7 +1101,8 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_MEMORY_FOR_MP \
   ( CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
     CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
-    CONFIGURE_MEMORY_FOR_TASKS(1) \
+    CONFIGURE_MEMORY_FOR_TASKS(1) + \
+    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK \
   )
 
 #endif  /* CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE */

@@ -1,3 +1,10 @@
+2008-01-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h, score/src/mpci.c, score/src/objectmp.c,
+	score/src/objectnametoid.c, score/src/objectnametoidstring.c:
+	Multiprocessing compiles again and survives initialization. The
+	recent object name and confdefs.h changes had broken it.
+
 2008-01-25	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* sapi/include/rtems/fatal.h, score/include/rtems/score/coremutex.h,

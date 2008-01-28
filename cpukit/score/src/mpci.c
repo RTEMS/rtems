@@ -95,10 +95,10 @@ void _MPCI_Handler_initialization(
  *  This subprogram creates the MPCI receive server.
  */
 
-char *_MPCI_Internal_name = "MPCI";
-
 void _MPCI_Create_server( void )
 {
+  Objects_Name name;
+
 
   if ( !_System_state_Is_multiprocessing )
     return;
@@ -109,6 +109,7 @@ void _MPCI_Create_server( void )
 
   _MPCI_Receive_server_tcb = _Thread_Internal_allocate();
 
+  name.name_u32 = _Objects_Build_name( 'M', 'P', 'C', 'I' );
   _Thread_Initialize(
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
@@ -122,7 +123,7 @@ void _MPCI_Create_server( void )
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
-    _MPCI_Internal_name
+    name
   );
 
   _Thread_Start(

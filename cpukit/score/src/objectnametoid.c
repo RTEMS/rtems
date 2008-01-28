@@ -58,6 +58,9 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Control           *the_object;
   uint32_t                   index;
   uint32_t                   name_length;
+#if defined(RTEMS_MULTIPROCESSING)
+  Objects_Name               name_for_mp;
+#endif
 
   /* ASSERT: information->is_string == FALSE */
 
@@ -95,7 +98,8 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
     return OBJECTS_INVALID_NAME;
 
-  return ( _Objects_MP_Global_name_search( information, name, node, id ) );
+  name_for_mp.name_u32 = name;
+  return _Objects_MP_Global_name_search( information, name_for_mp, node, id );
 #else
   return OBJECTS_INVALID_NAME;
 #endif

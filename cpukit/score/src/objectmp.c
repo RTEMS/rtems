@@ -169,7 +169,7 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_MP_Control *the_object;
   uint32_t            name_to_use;
 
-  name_to_use = (uint32_t)the_name;  /* XXX only fixed length names */
+  name_to_use = the_name.name_u32;  /* XXX only fixed length names */
 
   if ( nodes_to_search > _Objects_Maximum_nodes )
     return OBJECTS_INVALID_NODE;
