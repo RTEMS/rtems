@@ -1,3 +1,18 @@
+2008-01-28	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added fatal error tests
+	* spfatal01/Makefile.am, spfatal01/spfatal01.scn, spfatal01/testcase.h,
+	spfatal02/Makefile.am, spfatal02/spfatal02.scn, spfatal02/testcase.h,
+	spfatal03/Makefile.am, spfatal03/spfatal03.scn, spfatal03/testcase.h,
+	spfatal04/Makefile.am, spfatal04/spfatal04.scn, spfatal04/testcase.h,
+	spfatal05/Makefile.am, spfatal05/spfatal05.scn, spfatal05/testcase.h,
+	spfatal06/Makefile.am, spfatal06/spfatal06.scn, spfatal06/testcase.h,
+	spfatal07/Makefile.am, spfatal07/spfatal07.scn, spfatal07/testcase.h,
+	spfatal08/Makefile.am, spfatal08/spfatal08.scn, spfatal08/testcase.h,
+	spfatal09/Makefile.am, spfatal09/spfatal09.scn, spfatal09/testcase.h,
+	spfatal10/Makefile.am, spfatal10/spfatal10.scn, spfatal10/testcase.h,
+	spfatal_support/init.c, spfatal_support/system.h: New files.
+
 2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp28/init.c, sp28/sp28.scn, sp29/init.c, sp29/sp29.scn, sp32/init.c,

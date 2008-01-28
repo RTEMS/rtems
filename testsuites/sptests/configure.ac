@@ -69,5 +69,15 @@ sp41/Makefile
 sp42/Makefile
 spsize/Makefile
 spfatal/Makefile
+spfatal01/Makefile
+spfatal02/Makefile
+spfatal03/Makefile
+spfatal04/Makefile
+spfatal05/Makefile
+spfatal06/Makefile
+spfatal07/Makefile
+spfatal08/Makefile
+spfatal09/Makefile
+spfatal10/Makefile
 ])
 AC_OUTPUT
