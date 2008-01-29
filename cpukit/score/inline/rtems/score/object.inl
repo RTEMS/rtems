@@ -7,7 +7,7 @@
  *  This include file contains the static inline implementation of all
  *  of the inlined routines in the Object Handler.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -241,33 +241,6 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   #endif
 
   information->local_table[ index ] = the_object;
-}
-
-/**
- *  This function return the information structure given
- *  an id of an object.
- *
- *  @param[in] id is an object ID
- *
- *
- *  @return This method returns a pointer to the Object Information Table
- *          for the class of objects which corresponds to this object ID.
- */
-RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
-  Objects_Id  id
-)
-{
-  Objects_APIs  the_api;
-  uint16_t      the_class;
-
-
-  the_class = _Objects_Get_class( id );
-
-  if ( !_Objects_Is_class_valid( the_class ) )
-    return NULL;
-
-  the_api = _Objects_Get_API( id );
-  return _Objects_Information_table[ the_api ][ the_class ];
 }
 
 /**

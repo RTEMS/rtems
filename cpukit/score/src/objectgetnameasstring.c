@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,7 +48,7 @@ char *_Objects_Get_name_as_string(
   if ( name == NULL )
     return NULL;
 
-  information = _Objects_Get_information( id );
+  information = _Objects_Get_information_id( id );
   if ( !information )
     return NULL;
 

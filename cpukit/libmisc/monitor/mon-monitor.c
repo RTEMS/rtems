@@ -604,7 +604,7 @@ rtems_monitor_init(
         return;
     }
 
-    rtems_monitor_node = rtems_get_node(rtems_monitor_task_id);
+    rtems_monitor_node = rtems_object_id_get_node(rtems_monitor_task_id);
     rtems_monitor_default_node = rtems_monitor_node;
 
     rtems_monitor_server_init(monitor_flags);

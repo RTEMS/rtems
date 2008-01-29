@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -62,7 +62,7 @@ void _POSIX_Threads_cancel_run(
 
   the_thread->Wait.return_argument = PTHREAD_CANCELED;
   _Thread_Close(
-    _Objects_Get_information( the_thread->Object.id ),
+    _Objects_Get_information_id( the_thread->Object.id ),
     the_thread
   );
   _POSIX_Threads_Free( the_thread );

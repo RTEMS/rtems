@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@ void exd_tsk( void )
 
   _Thread_Disable_dispatch();
 
-  the_information = _Objects_Get_information( _Thread_Executing->Object.id );
+  the_information = _Objects_Get_information_id( _Thread_Executing->Object.id );
 
   /* This should never happen if _Thread_Get() works right */
   assert( the_information );

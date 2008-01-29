@@ -64,7 +64,7 @@ rtems_monitor_config_next(
 )
 {
     rtems_configuration_table *c = _Configuration_Table;
-    int n = rtems_get_index(*next_id);
+    int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)
         goto failed;

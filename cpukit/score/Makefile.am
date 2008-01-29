@@ -117,7 +117,8 @@ libscore_a_SOURCES += src/object.c src/objectallocate.c \
     src/objectgetisr.c src/objectgetnext.c src/objectinitializeinformation.c \
     src/objectnametoid.c src/objectnametoidstring.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
-    src/objectidtoname.c src/objectgetnameasstring.c
+    src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \
+    src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c
 
 ## OBJECT_C_FILES only used by ITRON API
 if LIBITRON

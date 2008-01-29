@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the Signal Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -64,7 +64,7 @@ rtems_status_code _Signal_MP_Send_request_packet (
       the_packet->signal_in         = signal_in;
 
       return _MPCI_Send_request_packet(
-        rtems_get_node( task_id ),
+        _Objects_Get_node( task_id ),
         &the_packet->Prefix,
         STATES_READY   /* Not used */
       );
@@ -108,7 +108,7 @@ void _Signal_MP_Send_response_packet (
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Objects_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;

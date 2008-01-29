@@ -1,3 +1,38 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itron/src/exd_tsk.c, itron/src/task.c, libmisc/capture/capture.c,
+	libmisc/monitor/mon-config.c, libmisc/monitor/mon-driver.c,
+	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
+	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/mon-symbols.c, posix/src/cancelrun.c,
+	posix/src/pthreadexit.c, rtems/Makefile.am, rtems/preinstall.am,
+	rtems/include/rtems.h, rtems/include/rtems/rtems/support.h,
+	rtems/inline/rtems/rtems/tasks.inl, rtems/src/eventmp.c,
+	rtems/src/msgmp.c, rtems/src/partmp.c, rtems/src/regionmp.c,
+	rtems/src/rtemsobjectgetname.c, rtems/src/semmp.c,
+	rtems/src/signalmp.c, rtems/src/taskdelete.c, rtems/src/taskmp.c,
+	rtems/src/timerserver.c, score/Makefile.am,
+	score/include/rtems/score/object.h,
+	score/inline/rtems/score/object.inl, score/src/Unlimited.txt,
+	score/src/objectgetnameasstring.c,
+	score/src/threadqextractwithproxy.c: Add new Object Services
+	collection. This changed the name of a few previously public but
+	undocumented services and added a some new services.
+	* rtems/include/rtems/rtems/object.h, rtems/src/rtemsbuildid.c,
+	rtems/src/rtemsbuildname.c, rtems/src/rtemsobjectapimaximumclass.c,
+	rtems/src/rtemsobjectapiminimumclass.c,
+	rtems/src/rtemsobjectgetapiclassname.c,
+	rtems/src/rtemsobjectgetapiname.c,
+	rtems/src/rtemsobjectgetclassicname.c,
+	rtems/src/rtemsobjectgetclassinfo.c,
+	rtems/src/rtemsobjectidapimaximum.c,
+	rtems/src/rtemsobjectidapiminimum.c, rtems/src/rtemsobjectidgetapi.c,
+	rtems/src/rtemsobjectidgetclass.c, rtems/src/rtemsobjectidgetindex.c,
+	rtems/src/rtemsobjectidgetnode.c, rtems/src/rtemsobjectsetname.c,
+	score/src/objectapimaximumclass.c, score/src/objectgetinfo.c,
+	score/src/objectgetinfoid.c, score/src/objectsetname.c: New files.
+	* rtems/src/rtemsidtoname.c: Removed.
+
 2008-01-29	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* score/src/corerwlockrelease.c, score/src/coresemseize.c: Changed

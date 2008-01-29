@@ -1,7 +1,7 @@
 /*
  *  Multiprocessing Support for the Event Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,7 +63,7 @@ rtems_status_code _Event_MP_Send_request_packet (
 
       return (rtems_status_code)
         _MPCI_Send_request_packet(
-          rtems_get_node( event_id ),
+          _Objects_Get_node( event_id ),
           &the_packet->Prefix,
           STATES_READY
         );
@@ -108,7 +108,7 @@ void _Event_MP_Send_response_packet (
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Objects_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;

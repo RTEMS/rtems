@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -498,6 +498,18 @@ void _Objects_Initialize_information (
 );
 
 /**
+ *  This function returns the highest numeric value of a valid
+ *  API for the specified @code{api}.
+ *
+ *  @param[in] api is the API of interest
+ *
+ *  @return A positive integer on success and -1 otherwise.
+ */
+int _Objects_API_maximum_class(
+  uint32_t api
+);
+
+/**
  *  This function allocates a object control block from
  *  the inactive chain of free object control blocks.
  *
@@ -534,6 +546,22 @@ void _Objects_Free(
   Objects_Information *information,
   Objects_Control     *the_object
 );
+
+/**
+ *  This macro is used to build a thirty-two bit style name from
+ *  four characters.  The most significant byte will be the 
+ *  character @code{_C1}.
+ *
+ *  @param[in] _C1 is the first character of the name
+ *  @param[in] _C2 is the second character of the name
+ *  @param[in] _C3 is the third character of the name
+ *  @param[in] _C4 is the fourth character of the name
+ */
+#define  _Objects_Build_name( _C1, _C2, _C3, _C4 ) \
+  ( (uint32_t)(_C1) << 24 | \
+    (uint32_t)(_C2) << 16 | \
+    (uint32_t)(_C3) << 8 | \
+    (uint32_t)(_C4) )
 
 /**
  *  This function implements the common portion of the object
@@ -677,7 +705,7 @@ Objects_Control *_Objects_Get (
  *
  *  @note _Objects_Get returns with dispatching disabled for
  *  local and remote objects.  _Objects_Get_isr_disable returns with
- *  dispatching disabled for remote objects and interrupts for local
+ *  dispatchng disabled for remote objects and interrupts for local
  *  objects.
  */
 Objects_Control *_Objects_Get_isr_disable(
@@ -764,6 +792,37 @@ Objects_Control *_Objects_Get_next(
 );
 
 /**
+ *  This function return the information structure given
+ *  an the API and Class.  This can be done independent of
+ *  the existence of any objects created by the API.
+ *
+ *  @param[in] api indicates the API for the information we want
+ *  @param[in] api indicates the Class for the information we want
+ *
+ *
+ *  @return This method returns a pointer to the Object Information Table
+ *          for the class of objects which corresponds to this object ID.
+ */
+Objects_Information *_Objects_Get_information(
+  Objects_APIs   api,
+  uint32_t       class
+);
+
+/**
+ *  This function return the information structure given
+ *  an id of an object.
+ *
+ *  @param[in] id is an object ID
+ *
+ *
+ *  @return This method returns a pointer to the Object Information Table
+ *          for the class of objects which corresponds to this object ID.
+ */
+Objects_Information *_Objects_Get_information_id(
+  Objects_Id  id
+);
+
+/**
  *  This method objects the name of an object and returns its name
  *  in the form of a C string.  It attempts to be careful about
  *  overflowing the user's string and about returning unprintable characters.
@@ -774,11 +833,27 @@ Objects_Control *_Objects_Get_next(
  *
  *  @return This method returns @a name or NULL on error.
  */
-
 char *_Objects_Get_name_as_string(
   Objects_Id   id,
   size_t       length,
   char        *name
+);
+
+/**
+ *  This method sets the object name to either a copy of a string
+ *  or up to the first four characters of the string based upon
+ *  whether this object class uses strings for names.
+ *
+ *  @param[in] information points to the object information structure
+ *  @param[in] the_object is the object to operate upon
+ *  @param[in] name is a pointer to the name to use
+ *
+ *  @return If successful, TRUE is returned.  Otherwise FALSE is returned.
+ */
+boolean _Objects_Set_name(
+  Objects_Information *information,
+  Objects_Control     *the_object,
+  const char          *name
 );
 
 /*

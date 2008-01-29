@@ -8,7 +8,7 @@
  *  two (2) CPU dependent files to tailor its data structures for a
  *  particular processor.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,6 +56,7 @@ extern "C" {
 #include <rtems/rtems/event.h>
 #include <rtems/rtems/signal.h>
 #include <rtems/rtems/event.h>
+#include <rtems/rtems/object.h>
 #include <rtems/rtems/part.h>
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/dpmem.h>
@@ -118,47 +119,6 @@ extern "C" {
  */
 
 #define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
-
-/*
- *  rtems_object_id_to_name
- *
- *  This directive returns the name associated with the specified
- *  object ID.
- *
- *  Input parameters:
- *    id   - object id
- *
- *  Output parameters:
- *    *name            - user defined object name
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
-
-rtems_status_code rtems_object_id_to_name(
-  rtems_id      id,
-  rtems_name   *name
-);
-
-/*
- *  rtems_object_get_name
- *
- *  This directive returns the name associated with the specified
- *  object ID.
- *
- *  Input parameters:
- *    id   - object id
- *
- *  Output parameters:
- *    *name            - user defined object name
- *    name             - if successful
- *    NULL             - if unsuccessful
- */
-
-char *rtems_object_get_name(
-  rtems_id       id,
-  size_t         length,
-  char          *name
-);
 
 #ifdef __cplusplus
 }

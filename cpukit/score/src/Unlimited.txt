@@ -231,29 +231,6 @@ o Changes to Existing Object Functions
   The last were inlined, how-ever now they are not as they are too
   complex to implement as macros now.
 
-o Object Inline and Macro Changes
-
-  The functions :
-
-   _Object_Allocate, and 
-   _Object_Free
-
-  are now not inlined. The function :
-
-   _Objects_Get_local_object, and
-   _Objects_Set_local_object
-
-  have been added. There was no provided interface to allow an API to
-  get/set an objects local pointer given an index. The POSIX code
-  should be updated to use this interface.
-
-  The function :
-
-   _Objects_Get_information
-
-  has been moved to be an inline function. It is used in the get
-  object call which the API uses for every object reference.
-
 o Object Initialisation
 
   The function _Objects_Initialize_information has been changed to

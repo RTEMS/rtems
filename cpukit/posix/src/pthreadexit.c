@@ -3,7 +3,7 @@
  *
  *  NOTE: Key destructors are executed in the POSIX api delete extension.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,7 @@ void pthread_exit(
 {
   Objects_Information     *the_information;
 
-  the_information = _Objects_Get_information( _Thread_Executing->Object.id );
+  the_information = _Objects_Get_information_id( _Thread_Executing->Object.id );
 
   /*
    * the_information has to be non-NULL.  Otherwise, we couldn't be 

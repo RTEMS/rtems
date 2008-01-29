@@ -51,7 +51,7 @@ boolean _Thread_queue_Extract_with_proxy(
         Objects_Information                  *the_information;
         Objects_Thread_queue_Extract_callout  proxy_extract_callout;
 
-        the_information = _Objects_Get_information( the_thread->Wait.id );
+        the_information = _Objects_Get_information_id( the_thread->Wait.id );
         proxy_extract_callout =
           (Objects_Thread_queue_Extract_callout) the_information->extract;
 

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -95,7 +95,7 @@ ER _ITRON_Delete_task(
 {
   Objects_Information     *the_information;
 
-  the_information = _Objects_Get_information( the_thread->Object.id );
+  the_information = _Objects_Get_information_id( the_thread->Object.id );
   if ( !the_information ) {
     return E_OBJ;             /* XXX - should never happen */
   }

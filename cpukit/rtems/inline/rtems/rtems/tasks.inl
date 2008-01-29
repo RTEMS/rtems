@@ -6,7 +6,7 @@
  *  This file contains the static inline implementation of all inlined
  *  routines in the with RTEMS Tasks Manager.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,7 +49,7 @@ RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
 )
 {
   _Objects_Free( 
-    _Objects_Get_information( the_task->Object.id ),
+    _Objects_Get_information_id( the_task->Object.id ),
     &the_task->Object
   );
 }

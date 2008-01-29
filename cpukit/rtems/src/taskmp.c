@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -106,7 +106,7 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
       the_packet->note              = note;
 
       return _MPCI_Send_request_packet(
-        rtems_get_node( task_id ),
+        _Objects_Get_node( task_id ),
         &the_packet->Prefix,
         STATES_READY     /* Not used */
       );
@@ -160,7 +160,7 @@ void _RTEMS_tasks_MP_Send_response_packet (
       the_packet->Prefix.id    = the_packet->Prefix.source_tid;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Objects_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;

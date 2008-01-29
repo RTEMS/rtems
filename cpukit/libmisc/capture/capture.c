@@ -7,7 +7,7 @@
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
 
-  COPYRIGHT (c) 1989-1998.
+  COPYRIGHT (c) 1989-2008.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
@@ -1055,7 +1055,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
   }
   else
   {
-    capture_extension_index = rtems_get_index (capture_id);;
+    capture_extension_index = rtems_object_id_get_index (capture_id);;
   }
 
   /*

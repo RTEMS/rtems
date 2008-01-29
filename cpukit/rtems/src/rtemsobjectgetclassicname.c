@@ -2,7 +2,7 @@
  *  RTEMS ID To Name Lookup
  *
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,7 @@
 
 /*PAGE
  *
- *  rtems_object_id_to_name
+ *  rtems_object_get_classic_name
  *
  *  This directive returns the name associated with the specified
  *  object ID.
@@ -37,14 +37,19 @@
  *    error code       - if unsuccessful
  */
 
-rtems_status_code rtems_object_id_to_name(
+rtems_status_code rtems_object_get_classic_name(
   rtems_id      id,
   rtems_name   *name
 )
 {
   Objects_Name_or_id_lookup_errors  status;
+  Objects_Name                      name_u;
 
-  status = _Objects_Id_to_name( id, (Objects_Name *) name );
+  if ( !name )
+    return RTEMS_INVALID_ADDRESS;
 
+  status = _Objects_Id_to_name( id, &name_u );
+
+  *name = name_u.name_u32;
   return _Status_Object_name_errors_to_status[ status ];
 }

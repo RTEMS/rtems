@@ -140,14 +140,18 @@ rtems_monitor_id_fixup(
 {
     uint32_t    node;
 
-    node = rtems_get_node(id);
+    node = rtems_object_id_get_node(id);
     if (node == 0)
     {
-        if (rtems_get_class(id) != OBJECTS_CLASSIC_NO_CLASS)
-            type = rtems_get_class(id);
+        if (rtems_object_id_get_class(id) != OBJECTS_CLASSIC_NO_CLASS)
+            type = rtems_object_id_get_class(id);
 
-        id = _Objects_Build_id(
-          OBJECTS_CLASSIC_API, type, default_node, rtems_get_index(id));
+        id = rtems_build_id(
+          OBJECTS_CLASSIC_API,
+          type,
+          default_node,
+          rtems_object_id_get_index(id)
+        );
     }
     return id;
 }
@@ -189,7 +193,8 @@ rtems_monitor_object_canonical_next_remote(
     request.argument0 = (uint32_t  ) type;
     request.argument1 = (uint32_t  ) id;
 
-    status = rtems_monitor_server_request(rtems_get_node(id), &request, &response);
+    status = rtems_monitor_server_request(
+      rtems_object_id_get_node(id), &request, &response);
     if (status != RTEMS_SUCCESSFUL)
         goto failed;
 
@@ -370,7 +375,7 @@ rtems_monitor_object_cmd(
         {
             id = (rtems_id) strtoul(argv[arg], 0, 16);
             id = rtems_monitor_id_fixup(id, default_node, type);
-            type = (rtems_monitor_object_type_t) rtems_get_class(id);
+            type = (rtems_monitor_object_type_t) rtems_object_id_get_class(id);
 
             /*
              * Allow the item type to change in the middle
@@ -395,7 +400,7 @@ not_found:      fprintf(stdout,"Invalid or unsupported type %d\n", type);
 
             rtems_monitor_object_dump_1(info, id, verbose);
 
-            default_node = rtems_get_node(id);
+            default_node = rtems_object_id_get_node(id);
 
             last_type = type;
         }

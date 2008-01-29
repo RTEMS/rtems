@@ -2,7 +2,7 @@
  *  Timer Manager - rtems_timer_initiate_server directive along with
  *      the Timer Server Body and support routines
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -188,7 +188,7 @@ rtems_status_code rtems_timer_initiate_server(
    */
 
   status = rtems_task_create(
-    rtems_build_name('T','I','M','E'),           /* "TIME" */
+    _Objects_Build_name('T','I','M','E'),           /* "TIME" */
     _priority,            /* create with priority 1 since 0 is illegal */
     stack_size,           /* let user specify stack size */
     RTEMS_NO_PREEMPT,     /* no preempt is like an interrupt */

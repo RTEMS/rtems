@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the Message Queue Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -59,7 +59,7 @@ void _Message_queue_MP_Send_process_packet (
       the_packet->proxy_id          = proxy_id;
 
       if ( operation == MESSAGE_QUEUE_MP_EXTRACT_PROXY )
-         node = rtems_get_node( message_queue_id );
+         node = _Objects_Get_node( message_queue_id );
       else
          node = MPCI_ALL_NODES;
 
@@ -147,7 +147,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       }
 
       return (rtems_status_code) _MPCI_Send_request_packet(
-        rtems_get_node(message_queue_id),
+        _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
         STATES_WAITING_FOR_MESSAGE
       );
@@ -172,7 +172,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       _Thread_Executing->Wait.return_argument_1 = size_p;
 
       return (rtems_status_code) _MPCI_Send_request_packet(
-        rtems_get_node(message_queue_id),
+        _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
         STATES_WAITING_FOR_MESSAGE
       );
@@ -232,7 +232,7 @@ void _Message_queue_MP_Send_response_packet (
           the_packet->Prefix.length += the_packet->size;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Objects_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;

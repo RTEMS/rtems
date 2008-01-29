@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -62,7 +62,7 @@ rtems_status_code rtems_task_delete(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      the_information = _Objects_Get_information( the_thread->Object.id );
+      the_information = _Objects_Get_information_id( the_thread->Object.id );
 
 #if defined(RTEMS_DEBUG)
       if ( !the_information ) {

@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the Region Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,7 +58,7 @@ void _Region_MP_Send_process_packet (
       the_packet->proxy_id          = proxy_id;
 
       if ( operation == REGION_MP_EXTRACT_PROXY )
-         node = rtems_get_node( region_id );
+         node = _Object_Get_node( region_id );
       else
          node = MPCI_ALL_NODES;
 
@@ -109,7 +109,7 @@ rtems_status_code _Region_MP_Send_request_packet (
       the_packet->option_set        = option_set;
 
       return (rtems_status_code) _MPCI_Send_request_packet(
-          rtems_get_node( region_id ),
+          _Object_Get_node( region_id ),
           &the_packet->Prefix,
           STATES_READY      /* Not used */
         );
@@ -159,7 +159,7 @@ void _Region_MP_Send_response_packet (
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Object_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;

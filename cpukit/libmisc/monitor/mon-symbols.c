@@ -304,7 +304,7 @@ rtems_monitor_symbol_next(
 )
 {
     rtems_symbol_table_t *table;
-    uint32_t   n = rtems_get_index(*next_id);
+    uint32_t   n = rtems_object_id_get_index(*next_id);
 
     table = *(rtems_symbol_table_t **) object_info;
     if (table == 0)

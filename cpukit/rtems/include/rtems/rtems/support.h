@@ -6,7 +6,7 @@
  *  This include file contains information about support functions for
  *  the RTEMS API.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,59 +24,6 @@ extern "C" {
 #endif
 
 #include <rtems/rtems/types.h>
-
-/*
- *  rtems_build_name
- *
- *  DESCRIPTION:
- *
- *  This function returns an object name composed of the four characters
- *  C1, C2, C3, and C4.
- *
- *  NOTE:
- *
- *  This must be implemented as a macro for use in Configuration Tables.
- *
- */
-
-#define rtems_build_name( _C1, _C2, _C3, _C4 ) \
-  ( (uint32_t  )(_C1) << 24 | (uint32_t  )(_C2) << 16 | (uint32_t  )(_C3) << 8 | (uint32_t  )(_C4) )
-
-/*
- *  rtems_get_class
- *
- *  DESCRIPTION:
- *
- *  This function returns the class portion of the ID.
- *
- */
-
-#define rtems_get_class( _id ) \
-  _Objects_Get_class( _id )
-
-/*
- *  rtems_get_node
- *
- *  DESCRIPTION:
- *
- *  This function returns the node portion of the ID.
- *
- */
-
-#define rtems_get_node( _id ) \
-  _Objects_Get_node( _id )
-
-/*
- *  rtems_get_index
- *
- *  DESCRIPTION:
- *
- *  This function returns the index portion of the ID.
- *
- */
-
-#define rtems_get_index( _id ) \
-  _Objects_Get_index( _id )
 
 /*
  *  Time related

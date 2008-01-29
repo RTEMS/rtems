@@ -75,6 +75,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/modes.h: include/rtems/rtems/modes.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/modes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/modes.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/object.h: include/rtems/rtems/object.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/object.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/object.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/options.h: include/rtems/rtems/options.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/options.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/options.h

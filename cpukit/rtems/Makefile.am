@@ -19,11 +19,11 @@ include_rtems_rtemsdir = $(includedir)/rtems/rtems
 
 include_rtems_rtems_HEADERS = include/rtems/rtems/asr.h \
     include/rtems/rtems/attr.h include/rtems/rtems/barrier.h \
-    include/rtems/rtems/cache.h \
-    include/rtems/rtems/clock.h include/rtems/rtems/config.h \
-    include/rtems/rtems/dpmem.h include/rtems/rtems/event.h \
-    include/rtems/rtems/eventset.h include/rtems/rtems/intr.h \
-    include/rtems/rtems/message.h include/rtems/rtems/modes.h \
+    include/rtems/rtems/cache.h include/rtems/rtems/clock.h \
+    include/rtems/rtems/config.h include/rtems/rtems/dpmem.h \
+    include/rtems/rtems/event.h include/rtems/rtems/eventset.h \
+    include/rtems/rtems/intr.h include/rtems/rtems/message.h \
+    include/rtems/rtems/modes.h include/rtems/rtems/object.h \
     include/rtems/rtems/options.h include/rtems/rtems/part.h \
     include/rtems/rtems/ratemon.h include/rtems/rtems/region.h \
     include/rtems/rtems/rtemsapi.h include/rtems/rtems/sem.h \
@@ -52,7 +52,14 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl \
     inline/rtems/rtems/timer.inl
 
 ## src
-librtems_a_SOURCES = src/rtemsobjectgetname.c
+librtems_a_SOURCES = src/rtemsbuildid.c src/rtemsbuildname.c \
+    src/rtemsobjectgetname.c src/rtemsobjectsetname.c \
+    src/rtemsobjectidapimaximum.c src/rtemsobjectidapiminimum.c \
+    src/rtemsobjectidgetapi.c src/rtemsobjectidgetclass.c \
+    src/rtemsobjectidgetindex.c src/rtemsobjectidgetnode.c \
+    src/rtemsobjectapiminimumclass.c src/rtemsobjectapimaximumclass.c \
+    src/rtemsobjectgetapiname.c src/rtemsobjectgetapiclassname.c \
+    src/rtemsobjectgetclassinfo.c src/rtemsobjectgetclassicname.c
 
 ## TASK_C_FILES 
 librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
@@ -124,7 +131,7 @@ librtems_a_SOURCES += src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
     src/dpmeminternal2external.c src/dpmemdata.c
 
-librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c
+librtems_a_SOURCES += src/attr.c
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined

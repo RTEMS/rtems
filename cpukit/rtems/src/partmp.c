@@ -2,7 +2,7 @@
  *  Multiprocessing Support for the Partition Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,7 +58,7 @@ void _Partition_MP_Send_process_packet (
       the_packet->proxy_id          = proxy_id;
 
       if ( operation == PARTITION_MP_EXTRACT_PROXY )
-         node = rtems_get_node( partition_id );
+         node = _Objects_Get_node( partition_id );
       else
          node = MPCI_ALL_NODES;
 
@@ -102,7 +102,7 @@ rtems_status_code _Partition_MP_Send_request_packet (
 
       return
         _MPCI_Send_request_packet(
-          rtems_get_node( partition_id ),
+          _Objects_Get_node( partition_id ),
           &the_packet->Prefix,
           STATES_READY      /* Not used */
         );
@@ -153,7 +153,7 @@ void _Partition_MP_Send_response_packet (
       the_packet->Prefix.id = the_packet->Prefix.source_tid;
 
       _MPCI_Send_response_packet(
-        rtems_get_node( the_packet->Prefix.source_tid ),
+        _Objects_Get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
       );
       break;
