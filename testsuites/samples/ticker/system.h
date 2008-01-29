@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -110,7 +110,8 @@ static inline uint32_t   get_ticks_per_second( void )
  */
 
 #define task_number( tid ) \
-  ( rtems_get_index( tid ) - \
-     rtems_configuration_get_rtems_api_configuration()->number_of_initialization_tasks )
+  ( rtems_object_id_get_index( tid ) - \
+      rtems_configuration_get_rtems_api_configuration()-> \
+        number_of_initialization_tasks )
 
 /* end of include file */

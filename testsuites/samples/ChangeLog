@@ -1,3 +1,9 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/system.h, ticker/system.h: Add new Object Services collection.
+	This changed the name of a few previously public but undocumented
+	services and added a some new services.
+
 2008-01-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* hello/init.c: Remove accidental commit.
