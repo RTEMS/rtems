@@ -1,3 +1,14 @@
+2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/malloc.h,
+	libcsupport/src/malloc_walk.c, libcsupport/src/posix_memalign.c,
+	libcsupport/src/realloc.c, score/src/heapwalk.c: Add rtems_memalign
+	as helper and as exposed nmemalign variant with few restrictions.
+	Also turn on compilation of _Heap_Walk but make forced calls to it
+	conditionally compiled. This should allow more flexibility to the
+	user as to run-time checking of the heap.
+	* libcsupport/src/rtems_memalign.c: New file.
+
 2008-01-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h, score/src/mpci.c, score/src/objectmp.c,

@@ -16,14 +16,13 @@
 #endif
 
 #ifdef RTEMS_NEWLIB
-#include <sys/reent.h>
+#include "malloc_p.h"
+
 #include <stdlib.h>
 
 void malloc_walk(size_t source, size_t printf_enabled)
 {
-  #if defined(RTEMS_DEBUG)
-    _Protected_heap_Walk( &RTEMS_Malloc_Heap, source, printf_enabled );
-  #endif
+  _Protected_heap_Walk( &RTEMS_Malloc_Heap, source, printf_enabled );
 }
 
 #endif

@@ -37,19 +37,6 @@
  *  Output parameters: NONE
  */
 
-#if !defined(RTEMS_HEAP_DEBUG)
-
-boolean _Heap_Walk(
-  Heap_Control  *the_heap,
-  int            source,
-  boolean        do_dump
-)
-{
-  return TRUE;
-}
-
-#else /* defined(RTEMS_HEAP_DEBUG) */
-
 #include <stdio.h>
 
 boolean _Heap_Walk(
@@ -182,4 +169,3 @@ boolean _Heap_Walk(
   return error;
 
 }
-#endif  /* defined(RTEMS_HEAP_DEBUG) */

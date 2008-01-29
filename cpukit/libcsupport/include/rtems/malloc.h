@@ -125,4 +125,24 @@ void malloc_report_statistics_with_plugin(
   rtems_printk_plugin_t  print
 );
 
+/**
+ *
+ *  This method is a help memalign implementation which does all
+ *  error checking done by posix_memalign() EXCEPT it does NOT
+ *  place numeric restrictions on the alignment value.
+ *
+ *  @param[in] pointer points to the user pointer
+ *  @param[in] alignment is the desired alignment
+ *  @param[in] size is the allocation request size in bytes
+ *
+ *  @return This methods returns zero on success and a POSIX errno
+ *          value to indicate the failure condition.  On success
+ *          *pointer will contain the address of the allocated memory.
+ */
+int rtems_memalign(
+  void   **pointer,
+  size_t   alignment,
+  size_t   size
+);
+
 #endif

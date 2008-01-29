@@ -54,6 +54,11 @@ void *realloc(
     return (void *) 0;
   }
 
+  if ( !_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &old_size) ) {
+    errno = EINVAL;
+    return (void *) 0;
+  }
+
   /*
    *  If block boundary integrity checking is enabled, then
    *  we need to account for the boundary memory again.
@@ -86,11 +91,6 @@ void *realloc(
   MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
 
   if ( !new_area ) {
-    return (void *) 0;
-  }
-
-  if ( !_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &old_size) ) {
-    errno = EINVAL;
     return (void *) 0;
   }
 
