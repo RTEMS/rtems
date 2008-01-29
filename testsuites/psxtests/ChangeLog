@@ -1,3 +1,8 @@
+2008-01-29	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* psx07/init.c, psx07/system.h: Test cleanup and added testing for
+	pthread_attr_[get|set]clock.
+
 2008-01-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxenosys/init.c, psxenosys/psxenosys.scn: Add test for stub
