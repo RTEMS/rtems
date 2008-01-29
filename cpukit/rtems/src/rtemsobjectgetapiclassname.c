@@ -84,12 +84,16 @@ const char *rtems_object_get_api_class_name(
     case OBJECTS_CLASSIC_API:
       api_assoc = rtems_object_api_classic_assoc;
       break;
+#ifdef RTEMS_POSIX_API
     case OBJECTS_POSIX_API:
       api_assoc = rtems_object_api_posix_assoc;
       break;
+#endif
+#ifdef RTEMS_ITRON_API
     case OBJECTS_ITRON_API:
       api_assoc = rtems_object_api_itron_assoc;
       break;
+#endif
     default:
       return "BAD API";
   }

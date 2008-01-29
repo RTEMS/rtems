@@ -1,3 +1,8 @@
+2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/rtemsobjectgetapiclassname.c: Class name strings are not
+	available when API is disabled. Do not attempt to use them.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/system.h: First cut at Doxygen mainpage.
