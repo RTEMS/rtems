@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,13 +19,6 @@
 #ifndef _RTEMS_SCORE_TOD_H
 #define _RTEMS_SCORE_TOD_H
 
-/**
- *  @defgroup ScoreTOD Time Of Day (TOD) Handler
- *
- *  This handler encapsulates functionality used to manage time of day. 
- */
-/**@{*/
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +27,8 @@ extern "C" {
 #include <time.h>
 
 /** @defgroup ScoreTODConstants TOD Constants
- *  The following constants are related to the time of day.
+ *  The following constants are related to the time of day and are
+ *  independent of RTEMS.
  */
 /**@{*/
 
@@ -96,7 +90,9 @@ extern "C" {
  */
 #define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t)1000
 
-/*
+/**@}*/
+
+/**
  *  Seconds from January 1, 1970 to January 1, 1988.  Used to account for
  *  differences between POSIX API and RTEMS core. The timespec format time
  *  is kept in POSIX compliant form.
@@ -104,8 +100,6 @@ extern "C" {
 #define TOD_SECONDS_1970_THROUGH_1988 \
   (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
   (4 * TOD_SECONDS_PER_DAY))
-
-/**@}*/
 
 /**  @brief Ticks per Second
  *  
@@ -122,6 +116,13 @@ extern "C" {
  *  epoch.
  */
 #define TOD_BASE_YEAR 1988
+
+/**
+ *  @defgroup ScoreTOD Time Of Day (TOD) Handler
+ *
+ *  This handler encapsulates functionality used to manage time of day. 
+ */
+/**@{*/
 
 /** @brief Is the Time Of Day Set
  *

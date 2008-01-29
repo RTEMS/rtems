@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -84,7 +84,7 @@ void _API_Mutex_Lock(
 /**
  *  This routine releases the specified API mutex.
  *
- *  @param[in] _the_mutex is the mutex to release.
+ *  @param[in] the_mutex is the mutex to release.
  */
 void _API_Mutex_Unlock(
   API_Mutex_Control *the_mutex

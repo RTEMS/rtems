@@ -139,9 +139,9 @@ boolean _Protected_heap_Get_block_size(
  *  @param[in] starting_address is the starting address of the user block
  *         to be resized
  *  @param[in] size is the new size
- *  @param[in] old_mem_size points to a user area to return the size of the
- *  @return TRUE if successfully able to resize the block,
- *          FALSE if the block can't be resized in place,
+ *
+ *  @return TRUE if successfully able to resize the block.
+ *          FALSE if the block can't be resized in place.
  */
 boolean _Protected_heap_Resize_block(
   Heap_Control *the_heap,

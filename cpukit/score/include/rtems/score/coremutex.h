@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -292,23 +292,29 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 );
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
-  /*
+  /**
    *  When doing test coverage analysis or trying to minimize the code
    *  space for RTEMS, it is often helpful to not inline this method
    *  multiple times.  It is fairly large and has a high branch complexity
    *  which makes it harder to get full binary test coverage.
+   *
+   *  @param[in] the_mutex will attempt to lock
+   *  @param[in] level_p is the interrupt level holder
    */
   int _CORE_mutex_Seize_interrupt_trylock(
     CORE_mutex_Control  *the_mutex,
     ISR_Level           *level_p
   );
 #else
-  /*
+  /**
    *  The default is to favor speed and inlining this definitely saves
    *  a few instructions.  This is very important for mutex performance.
+   *  
+   *  @param[in] _mutex will attempt to lock
+   *  @param[in] _level_p is the interrupt level holder
    */
-  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
-     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
+  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level_p ) \
+     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level_p )
 #endif
 
 /**
@@ -343,7 +349,6 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  @note If the mutex is called from an interrupt service routine,
  *        with context switching disabled, or before multitasking,
  *        then a fatal error is generated. 
- *
  *
  *  The logic on this routine is as follows:
  *
@@ -384,6 +389,16 @@ void _CORE_mutex_Seize_interrupt_blocking(
     } \
   } while (0)
 
+/**
+ *  This method is used to obtain a core mutex.
+ *
+ *  @param[in] _the_mutex is the mutex to attempt to lock
+ *  @param[in] _id is the Id of the owning API level Semaphore object
+ *  @param[in] _wait is TRUE if the thread is willing to wait
+ *  @param[in] _timeout is the maximum number of ticks to block
+ *  @param[in] _level is a temporary variable used to contain the ISR
+ *         disable level cookie
+ */
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
   void _CORE_mutex_Seize(
     CORE_mutex_Control  *_the_mutex,

@@ -176,10 +176,10 @@ uint32_t _CORE_barrier_Release(
  *  This routine assists in the deletion of a barrier by flushing the
  *  associated wait queue.
  *
- *  @param[in] the_barrier is the barrier to flush
- *  @param[in] remote_extract_callout is the routine to invoke if the
+ *  @param[in] _the_barrier is the barrier to flush
+ *  @param[in] _remote_extract_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param[in] status is the status to be returned to the unblocked thread
+ *  @param[in] _status is the status to be returned to the unblocked thread
  */
 #define _CORE_barrier_Flush( _the_barrier, _remote_extract_callout, _status) \
   _Thread_queue_Flush( \

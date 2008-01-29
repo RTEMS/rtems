@@ -21,7 +21,7 @@
 #define _RTEMS_SCORE_THREAD_SYNC_H
 
 /**
- *  @defgroup ScoreThread Thread Blocking Operation Synchronization Handler
+ *  @defgroup ScoreThreadSync Thread Blocking Operation Synchronization Handler
  *
  *  This handler encapsulates functionality related to the management of
  *  synchronization critical sections during blocking operations.

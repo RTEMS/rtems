@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -193,10 +193,10 @@ CORE_RWLock_Status _CORE_RWLock_Release(
  *  This routine assists in the deletion of a RWLock by flushing the
  *  associated wait queue.
  *
- *  @param[in] the_rwlock is the RWLock to flush
- *  @param[in] remote_extract_callout is the routine to invoke if the
+ *  @param[in] _the_rwlock is the RWLock to flush
+ *  @param[in] _remote_extract_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param[in] status is the status to be returned to the unblocked thread
+ *  @param[in] _status is the status to be returned to the unblocked thread
  */
 #define _CORE_RWLock_Flush( _the_rwlock, _remote_extract_callout, _status) \
   _Thread_queue_Flush( \

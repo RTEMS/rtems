@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,13 +24,21 @@
  *  @{
  */
 
+/**
+ *
+ *  This method is used to determine if the spinlock is available or not.
+ *
+ *  @param[in] the_spinlock will be checked
+ *
+ *  @return This method will return TRUE if the spinlock is busy
+ *          and FALSE otherwise.
+ */
 RTEMS_INLINE_ROUTINE boolean _CORE_spinlock_Is_busy(
   CORE_spinlock_Control  *the_spinlock
 )
 {
   return (the_spinlock->users != 0);
 }
-
 
 /**@}*/
 

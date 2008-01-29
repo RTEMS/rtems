@@ -36,8 +36,8 @@ extern "C" {
  *  resolution.
  */
 #ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
-  /*
-   *  Enable the nanosecond accurate statistics
+  /**
+   *  This macro enables the nanosecond accurate statistics
    *
    *  When not defined, the older style tick accurate granularity
    *  is used.

@@ -141,8 +141,7 @@ struct Heap_Block_struct {
  *        rather small. Feel free to make it compile-time option if you think
  *        the overhead is too high for your application.
  */
-
-typedef struct Heap_Statistics_tag {
+typedef struct {
   /** instance number of this heap */
   uint32_t instance;
   /** the size of the memory for heap */

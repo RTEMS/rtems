@@ -1,3 +1,19 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Doxyfile: Update to latest Doxygen format.
+	* score/include/rtems/score/apimutex.h,
+	score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/heap.h, score/include/rtems/score/object.h,
+	score/include/rtems/score/protectedheap.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadsync.h,
+	score/include/rtems/score/tod.h,
+	score/inline/rtems/score/corerwlock.inl,
+	score/inline/rtems/score/corespinlock.inl: Remove most doxygen
+	warnings.
+
 2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/rtemsobjectgetapiclassname.c: Class name strings are not

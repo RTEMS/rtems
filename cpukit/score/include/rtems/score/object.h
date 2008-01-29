@@ -429,6 +429,7 @@ SCORE_EXTERN Objects_Information
  */
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
+#if defined(RTEMS_MULTIPROCESSING)
 /**
  *  This function performs the initialization necessary for this handler.
  *
@@ -438,12 +439,16 @@ SCORE_EXTERN Objects_Information
  *             concurrently offered in the system.
  */
 void _Objects_Handler_initialization(
-#if defined(RTEMS_MULTIPROCESSING)
   uint32_t   node,
   uint32_t   maximum_nodes,
   uint32_t   maximum_global_objects
-#endif
 );
+#else
+/**
+ *  This function performs the initialization necessary for this handler.
+ */
+void _Objects_Handler_initialization(void);
+#endif
 
 /**
  *  This function extends an object class information record.
@@ -499,7 +504,7 @@ void _Objects_Initialize_information (
 
 /**
  *  This function returns the highest numeric value of a valid
- *  API for the specified @code{api}.
+ *  API for the specified @a api.
  *
  *  @param[in] api is the API of interest
  *
@@ -550,7 +555,7 @@ void _Objects_Free(
 /**
  *  This macro is used to build a thirty-two bit style name from
  *  four characters.  The most significant byte will be the 
- *  character @code{_C1}.
+ *  character @a _C1.
  *
  *  @param[in] _C1 is the first character of the name
  *  @param[in] _C2 is the second character of the name
@@ -581,12 +586,14 @@ typedef enum {
   OBJECTS_INVALID_NODE
 } Objects_Name_or_id_lookup_errors;
 
-/** This macro defines the first entry in the
+/**
+ *  This macro defines the first entry in the
  *  @ref Objects_Name_or_id_lookup_errors enumerated list.
  */
 #define OBJECTS_NAME_ERRORS_FIRST OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL
 
-/** This macro defines the last entry in the
+/**
+ *  This macro defines the last entry in the
  *  @ref Objects_Name_or_id_lookup_errors enumerated list.
  */
 #define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
@@ -797,8 +804,7 @@ Objects_Control *_Objects_Get_next(
  *  the existence of any objects created by the API.
  *
  *  @param[in] api indicates the API for the information we want
- *  @param[in] api indicates the Class for the information we want
- *
+ *  @param[in] class indicates the Class for the information we want
  *
  *  @return This method returns a pointer to the Object Information Table
  *          for the class of objects which corresponds to this object ID.
@@ -814,7 +820,6 @@ Objects_Information *_Objects_Get_information(
  *
  *  @param[in] id is an object ID
  *
- *
  *  @return This method returns a pointer to the Object Information Table
  *          for the class of objects which corresponds to this object ID.
  */
@@ -829,9 +834,10 @@ Objects_Information *_Objects_Get_information_id(
  *
  *  @param[in] id is the object to obtain the name of
  *  @param[in] length indicates the length of the caller's buffer
- *  @param[inout] name is a string which will be filled in.
+ *  @param[in] name points a string which will be filled in.
  *
- *  @return This method returns @a name or NULL on error.
+ *  @return This method returns @a name or NULL on error. @a *name will
+ *          contain the name if successful.
  */
 char *_Objects_Get_name_as_string(
   Objects_Id   id,
