@@ -1,3 +1,8 @@
+2008-01-29	Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Fixes a lockup which occurs when a speculative
+	load occurs from a particular range of memory.
+
 2008-01-09	Eric Norum <norume@aps.anl.gov>
 
 	* include/bsp.h: Include <bsp/vectors.h>.

@@ -228,6 +228,10 @@ bsp_predriver_hook(void)
  *  This routine does the bulk of the system initialization.
  */
 
+#include <libcpu/spr.h>
+
+SPR_RW(HID1)
+
 void bsp_start( void )
 {
 unsigned char      *stack;
@@ -316,6 +320,15 @@ VpdBufRec          vpdData [] = {
 #ifdef SHOW_MORE_INIT_SETTINGS
 	printk("Going to start PCI buses scanning and initialization\n");
 #endif
+
+	{
+		/* disable checking for memory-select errors */
+		*(volatile uint32_t*)0xe1002e44 |= 1;
+		/* clear all pending errors */
+		*(volatile uint32_t*)0xe1002e40  = 0xffffffff;
+		/* enable machine check for bad bus errors */
+		_write_HID1( _read_HID1() | 0x20000 );
+	}
 
 	printk("Build Date: %s\n",BSP_build_date);
 
