@@ -1,3 +1,8 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* runtest.in: sp39 and sp41 lock on sis but run correctly on
+	tsim/erc32.
+
 2007-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest.in: Update to 4.9.
