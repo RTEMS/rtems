@@ -1,3 +1,10 @@
+2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spfatal01/.cvsignore, spfatal02/.cvsignore, spfatal03/.cvsignore,
+	spfatal04/.cvsignore, spfatal05/.cvsignore, spfatal06/.cvsignore,
+	spfatal07/.cvsignore, spfatal08/.cvsignore, spfatal09/.cvsignore:
+	New files.
+
 2008-01-28	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, configure.ac: Added fatal error tests
