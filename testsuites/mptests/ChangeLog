@@ -1,3 +1,9 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mp02/task1.c, mp14/delay.c: Add new Object Services collection. This
+	changed the name of a few previously public but undocumented services
+	and added a some new services.
+
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* mp12/node2/mp12-node2.scn: Redo screen to not have cvs conflict

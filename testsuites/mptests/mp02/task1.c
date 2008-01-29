@@ -9,7 +9,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,10 +29,11 @@ rtems_task Test_task(
 {
   rtems_id          tid;
   rtems_status_code status;
-  uint32_t    remote_node;
+  uint32_t          remote_node;
   rtems_id          remote_tid;
   rtems_id          test_tid;
-  uint32_t    note;
+  uint32_t          note;
+  uint32_t          tmpNode;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
 
@@ -84,29 +85,22 @@ rtems_task Test_task(
   );
   puts( "rtems_task_restart of remote task returned the correct error" );
 
-  printf(
-   "Setting notepad %d of the remote task to %d\n",
-   rtems_get_node(tid),
-   rtems_get_node(tid)
-  );
-  status = rtems_task_set_note(
-    remote_tid,
-    rtems_get_node(tid),
-    rtems_get_node(tid)
-  );
+  tmpNode = rtems_object_id_get_node(tid);
+  printf( "Setting notepad %d of the remote task to %d\n", tmpNode, tmpNode );
+  status = rtems_task_set_note( remote_tid, tmpNode, tmpNode );
   directive_failed( status, "rtems_task_set_note" );
 
   puts( "Getting a notepad of the remote task" );
-  status = rtems_task_get_note( remote_tid, rtems_get_node(tid), &note );
+  status = rtems_task_get_note( remote_tid, tmpNode, &note );
   directive_failed( status, "rtems_task_get_note" );
 
-  if ( note == rtems_get_node(tid) )
+  if ( note == tmpNode )
     puts( "Remote notepad set and read correctly" );
   else
     printf(
       "FAILURE!! Remote notepad was not set and read correctly (%d, %d)\n",
       note,
-      rtems_get_node( tid )
+      tmpNode
     );
 
   status = rtems_task_wake_after( TICKS_PER_SECOND );
