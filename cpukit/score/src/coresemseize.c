@@ -69,23 +69,23 @@ void _CORE_semaphore_Seize(
     return;
   }
 
-  switch ( wait ) {
-    case CORE_SEMAPHORE_NO_WAIT:
+  if ( wait == CORE_SEMAPHORE_NO_WAIT ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
       return;
-    case CORE_SEMAPHORE_BAD_TIMEOUT:
+  }
+  if (wait == CORE_SEMAPHORE_BAD_TIMEOUT ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
       return;
-    case CORE_SEMAPHORE_BLOCK_FOREVER:
-    case CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT:
+  }
+  if (( wait == CORE_SEMAPHORE_BLOCK_FOREVER) ||
+      ( wait == CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT ) ) {
       _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
       executing->Wait.queue          = &the_semaphore->Wait_queue;
       executing->Wait.id             = id;
       _ISR_Enable( level );
       _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
-      break;
   }
 
 }
