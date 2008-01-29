@@ -1817,7 +1817,7 @@ should be considered volatile.
 @findex rtems_task_variable_delete
 @example
 rtems_status_code rtems_task_variable_delete(
-  rtems_id  tid,
+  rtems_id  id,
   void    **task_variable
 );
 @end example

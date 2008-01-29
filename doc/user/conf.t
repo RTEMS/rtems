@@ -9,14 +9,6 @@
 @c chapter:
 @c 
 @c CONFIGURE_NEWLIB_EXTENSION - probably not needed
-@c CONFIGURE_MALLOC_REGION - probably not needed
-@c CONFIGURE_LIBIO_SEMAPHORES - implicitly discussed.
-@c CONFIGURE_GNAT_RTEMS
-@c     CONFIGURE_GNAT_MUTEXES
-@c     CONFIGURE_GNAT_KEYS
-@c     CONFIGURE_MAXIMUM_ADA_TASKS
-@c     CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
-@c     CONFIGURE_ADA_TASKS_STACK
 @c 
 @c In addition, there should be examples of defining your own
 @c Device Driver Table, Init task table, etc.
@@ -139,6 +131,18 @@ related configuration parameters supported by
 @code{rtems/confdefs.h}.
 
 @itemize @bullet
+@findex CONFIGURE_MALLOC_STATISTICS
+@item @code{CONFIGURE_MALLOC_STATISTICS} is defined when the application
+wishes to enable the gathering of more detailed statistics on the
+C Malloc Family of routines.
+
+@findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+@item @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} is defined by a BSP
+to indicate that it does not allocate all available memory to the
+C Program Heap used by the Malloc Family of routines.  If defined,
+when @code{malloc()} is unable to allocate memory, it will call
+the BSP supplied @code{sbrk()} to obtain more memory.
+
 @findex CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
 @item @code{CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS} is set to the
 maximum number of files that can be concurrently open.  Libio requires

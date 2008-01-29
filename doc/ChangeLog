@@ -1,3 +1,11 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/.cvsignore, user/Makefile.am, user/c_user.texi, user/concepts.t,
+	user/conf.t, user/dirstat.texi, user/stackchk.t, user/task.t,
+	user/userext.t: Add new Object Services collection. Tidy up some
+	configuration documentation from earlier changes.
+	* user/object.t: New file.
+
 2008-01-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems_footer.html.in, common/cpright.texi: Update copyright. Fix

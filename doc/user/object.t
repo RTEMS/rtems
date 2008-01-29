@@ -1,0 +1,781 @@
+@c
+@c  COPYRIGHT (c) 1988-2008.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@chapter Object Services
+
+@cindex object manipulation 
+
+@section Introduction
+
+RTEMS provides a collection of services to assist in the
+management and usage of the objects created and utilized
+via other managers.  These services assist in the 
+manipulation of RTEMS objects independent of the API used
+to create them.  The object related services provided by
+RTEMS are:
+
+@itemize @bullet
+@c build_id
+@item @code{@value{DIRPREFIX}build_name} - build object name from characters
+@item @code{@value{DIRPREFIX}object_get_classic_name} - lookup name from Id
+@item @code{@value{DIRPREFIX}object_get_name} - obtain object name as string
+@item @code{@value{DIRPREFIX}object_set_name} - set object name
+@item @code{@value{DIRPREFIX}object_id_get_api} - obtain API from Id
+@item @code{@value{DIRPREFIX}object_id_get_class} - obtain class from Id
+@item @code{@value{DIRPREFIX}object_id_get_node} - obtain node from Id
+@item @code{@value{DIRPREFIX}object_id_get_index} - obtain index from Id
+@item @code{@value{DIRPREFIX}build_id} - build object id from components
+@item @code{@value{DIRPREFIX}object_id_api_minimum} - obtain minimum API value
+@item @code{@value{DIRPREFIX}object_id_api_maximum} - obtain maximum API value
+@item @code{@value{DIRPREFIX}object_id_api_minimum_class} - obtain minimum class value
+@item @code{@value{DIRPREFIX}object_id_api_maximum_class} - obtain maximum class value
+@item @code{@value{DIRPREFIX}object_get_api_name} - obtain API name
+@item @code{@value{DIRPREFIX}object_get_api_class_name} - obtain class name
+@item @code{@value{DIRPREFIX}object_get_class_information} - obtain class information
+@end itemize
+
+@section Background
+
+@subsection APIs
+
+RTEMS implements multiple APIs including an Internal API,
+the Classic API, the POSIX API, and the uITRON API.  These
+APIs share the common foundation of SuperCore objects and
+thus share object management code. This includes a common
+scheme for object Ids and for managing object names whether
+those names be in the thirty-two bit form used by the Classic
+API or C strings.
+
+The object Id contains a field indicating the API that
+an object instance is associated with.  This field 
+holds a numerically small non-zero integer.
+
+@subsection Object Classes
+
+Each API consists of a collection of managers.  Each manager
+is responsible for instances of a particular object class.
+Classic API Tasks and POSIX Mutexes example classes.  
+
+The object Id contains a field indicating the class that
+an object instance is associated with.  This field 
+holds a numerically small non-zero integer.  In all APIs,
+a class value of one is reserved for tasks or threads.
+
+@subsection Object Names
+
+Every RTEMS object which has an Id may also have a 
+name associated with it.  Depending on the API, names
+may be either thirty-two bit integers as in the Classic
+API or strings as in the POSIX API.  
+
+Some objects have Ids but do not have a defined way to associate
+a name with them.  For example, POSIX threads have
+Ids but per POSIX do not have names. In RTEMS, objects
+not defined to have thirty-two bit names may have string
+names assigned to them via the @code{@value{DIRPREFIX}object_set_name}
+service.  The original impetus in providing this service
+was so the normally anonymous POSIX threads could have 
+a user defined name in CPU Usage Reports.
+
+@section Operations
+
+@subsection Decomposing an Object Id
+
+TBD
+
+@subsection Building an Object Id
+
+TBD
+
+@c
+@c
+@c
+@page
+@subsection BUILD_NAME - Build object name from characters
+
+@cindex build object name
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_build_name
+@example
+rtems_name rtems_build_name(
+  uint8_t c1,
+  uint8_t c2,
+  uint8_t c3,
+  uint8_t c4
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns a name constructed from the four characters.
+
+@subheading DESCRIPTION:
+
+This service takes the four characters provided as arguments
+and constructs a thirty-two bit object name with @code{c1}
+in the most significant byte and @code{c4} in the least
+significant byte.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_GET_CLASSIC_NAME - Lookup name from id
+
+@cindex get name from id
+@cindex obtain name from id
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_build_name
+@example
+rtems_status_code rtems_object_get_classic_name(
+  rtems_id      id,
+  rtems_name   *name
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+@code{@value{RPREFIX}SUCCESSFUL} - name looked up successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid name pointer@*
+@code{@value{RPREFIX}INVALID_ID} - invalid object id@*
+
+@subheading DESCRIPTION:
+
+This service looks up the name for the object @code{id} specified
+and, if found, places the result in @code{*name}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_GET_NAME - Obtain object name as string
+
+@cindex get object name as string
+@cindex obtain object name as string
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_build_name
+@example
+char *rtems_object_get_name(
+  rtems_id       id,
+  size_t         length,
+  char          *name
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns a pointer to the name if successful or @code{NULL}
+otherwise.
+
+@subheading DESCRIPTION:
+
+This service looks up the name of the object specified by
+@code{id} and places it in the memory pointed to by @code{name}.
+Every attempt is made to return name as a printable string even
+if the object has the Classic API thirty-two bit style name.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection SET_OBJECT_NAME - Set object name
+
+@cindex set object name
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_build_name
+@example
+rtems_status_code rtems_object_set_name(
+  rtems_id       id,
+  const char    *name
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+@code{@value{RPREFIX}SUCCESSFUL} - name looked up successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid name pointer@*
+@code{@value{RPREFIX}INVALID_ID} - invalid object id@*
+
+@subheading DESCRIPTION:
+
+This service sets the name of @code{id} to that specified
+by the string located at @code{name}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+If the object specified by @code{id} is of a class that
+has a string name, this method will free the existing
+name to the RTEMS Workspace and allocate enough memory
+from the RTEMS Workspace to make a copy of the string
+located at @code{name}.
+
+If the object specified by @code{id} is of a class that
+has a thirty-two bit integer style name, then the first
+four characters in @code{*name} will be used to construct
+the name.
+name to the RTEMS Workspace and allocate enough memory
+from the RTEMS Workspace to make a copy of the string
+
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_GET_API - Obtain API from Id
+
+@cindex obtain API from id
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_get_api
+@example
+uint32_t rtems_object_id_get_api(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the API portion of the object Id.
+
+@subheading DESCRIPTION:
+
+This directive returns the API portion of the provided object @code{id}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+This directive does NOT validate the @code{id} provided.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_GET_CLASS - Obtain Class from Id
+
+@cindex obtain class from object id
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_get_class
+@example
+uint32_t rtems_object_id_get_class(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the class portion of the object Id.
+
+@subheading DESCRIPTION:
+
+This directive returns the class portion of the provided object @code{id}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+This directive does NOT validate the @code{id} provided.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_GET_NODE - Obtain Node from Id
+
+@cindex obtain node from object id
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_get_node
+@example
+uint32_t rtems_object_id_get_node(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the node portion of the object Id.
+
+@subheading DESCRIPTION:
+
+This directive returns the node portion of the provided object @code{id}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+This directive does NOT validate the @code{id} provided.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_GET_INDEX - Obtain Index from Id
+
+@cindex obtain index from object id
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_get_index
+@example
+uint32_t rtems_object_id_get_index(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the index portion of the object Id.
+
+@subheading DESCRIPTION:
+
+This directive returns the index portion of the provided object @code{id}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+This directive does NOT validate the @code{id} provided.
+
+@c
+@c
+@c
+@page
+@subsection BUILD_ID - Build Object Id From Components
+
+@cindex build object id from components
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_build_id
+@example
+rtems_id rtems_build_id(
+  uint32_t api,
+  uint32_t class,
+  uint32_t node,
+  uint32_t index
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns an object Id constructed from the provided arguments.
+
+@subheading DESCRIPTION:
+
+This service constructs an object Id from the provided
+@code{api}, @code{class}, @code{node}, and @code{index}.
+
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+This directive does NOT validate the arguments provided
+or the Object id returned.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_API_MINIMUM - Obtain Minimum API Value
+
+@cindex obtain minimum API value
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_api_minimum
+@example
+uint32_t rtems_object_id_api_minimum(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the minimum valid for the API portion of an object Id.
+
+@subheading DESCRIPTION:
+
+This service returns the minimum valid for the API portion of
+an object Id.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_ID_API_MAXIMUM - Obtain Maximum API Value
+
+@cindex obtain maximum API value
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_id_api_maximum
+@example
+uint32_t rtems_object_id_api_maximum(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+Returns the maximum valid for the API portion of an object Id.
+
+@subheading DESCRIPTION:
+
+This service returns the maximum valid for the API portion of
+an object Id.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_API_MINIMUM_CLASS - Obtain Minimum Class Value
+
+@cindex obtain minimum class value
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_api_minimum_class
+@example
+uint32_t rtems_object_api_minimum_class(
+  uint32_t api
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+If @code{api} is not valid, -1 is returned.
+
+If successful, this service returns the minimum valid for the class
+portion of an object Id for the specified @code{api}.
+
+@subheading DESCRIPTION:
+
+This service returns the minimum valid for the class portion of
+an object Id for the specified @code{api}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_API_MAXIMUM_CLASS - Obtain Maximum Class Value
+
+@cindex obtain maximum class value
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_api_maximum_class
+@example
+uint32_t rtems_object_api_maximum_class(
+  uint32_t api
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+If @code{api} is not valid, -1 is returned.
+
+If successful, this service returns the maximum valid for the class
+portion of an object Id for the specified @code{api}.
+
+@subheading DESCRIPTION:
+
+This service returns the maximum valid for the class portion of
+an object Id for the specified @code{api}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_GET_API_NAME - Obtain API Name
+
+@cindex obtain API name
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_get_api_name
+@example
+const char *rtems_object_get_api_name(
+  uint32_t api
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+If @code{api} is not valid, the string @code{"BAD API"} is returned.
+
+If @code{class} is not valid, the string @code{"BAD CLASS"} is returned.
+
+If successful, this service returns a pointer to a string 
+containing the name of the specified @code{api}.
+
+@subheading DESCRIPTION:
+
+This service returns the name of the specified @code{api}. 
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+The string returned is from constant space.  Do not modify
+or free it.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_GET_API_CLASS_NAME - Obtain Class Name
+
+@cindex obtain class name
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_get_api_class_name
+@example
+const char *rtems_object_get_api_class_name(
+  uint32_t class,
+  uint32_t api
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+If @code{api} is not valid, the string @code{"BAD API"} is returned.
+
+If @code{class} is not valid, the string @code{"BAD CLASS"} is returned.
+
+If successful, this service returns a pointer to a string 
+containing the name of the specified @code{api}/@code{class} pair.
+
+@subheading DESCRIPTION:
+
+This service returns the name of the object class indicated by the
+specified @code{api} and @code{class}.
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+
+The string returned is from constant space.  Do not modify
+or free it.
+
+@c
+@c
+@c
+@page
+@subsection OBJECT_GET_CLASS_INFORMATION - Obtain Class Information
+
+@cindex obtain class information
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_object_get_class_information
+@example
+rtems_status_code rtems_object_get_class_information(
+  uint32_t                             api,
+  uint32_t                             class,
+  rtems_object_api_class_information *info
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+TBD
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+@code{@value{RPREFIX}SUCCESSFUL} - information obtained successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{info} is NULL@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid @code{api} or @code{class}
+
+If successful, the structure located at @code{info} will be filled
+in with information about the specified @code{api}/@code{class} pairing.
+
+@subheading DESCRIPTION:
+
+This service returns information about the object class indicated by the
+specified @code{api} and @code{class}. This structure is defined as
+follows:
+
+@example
+typedef struct @{
+  rtems_id  minimum_id;
+  rtems_id  maximum_id;
+  uint32_t  maximum;
+  boolean   auto_extend;
+  uint32_t  unallocated;
+@} rtems_object_api_class_information;
+@end example
+
+@subheading NOTES:
+
+This directive is strictly local and does not impact task scheduling.
+

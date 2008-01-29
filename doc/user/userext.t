@@ -150,7 +150,7 @@ returned when the extension is created:
 @ifset is-C
 @example
 @group
-index = rtems_get_index(extension_id);
+index = rtems_object_id_get_index(extension_id);
 @end group
 @end example
 @end ifset

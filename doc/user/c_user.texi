@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2006.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -105,6 +105,7 @@
 @include mp.texi
 @include stackchk.texi
 @include cpuuse.texi
+@include object.texi
 @include dirstat.texi
 @include example.texi
 @include glossary.texi
@@ -142,6 +143,7 @@ This is the online version of the RTEMS C User's Guide.
 * Multiprocessing Manager::
 * Stack Bounds Checker::
 * CPU Usage Statistics::
+* Object Services::
 * Directive Status Codes::
 * Example Application::
 * Glossary::

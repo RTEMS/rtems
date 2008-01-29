@@ -230,8 +230,9 @@ directives are not necessary in a properly designed single
 processor application.
 
 In addition, services are provided to portably examine the
-three subcomponents of an RTEMS ID.  These services are
-prototyped as follows:
+subcomponents of an RTEMS ID.  These services are
+described in detail later in this manual but are prototyped
+as follows:
 
 @cindex obtaining class from object ID
 @cindex obtaining node from object ID
@@ -239,14 +240,16 @@ prototyped as follows:
 @cindex get class from object ID
 @cindex get node from object ID
 @cindex get index from object ID
-@findex rtems_get_class
-@findex rtems_get_node
-@findex rtems_get_index
+@findex rtems_object_id_get_api
+@findex rtems_object_id_get_class
+@findex rtems_object_id_get_node
+@findex rtems_object_id_get_index
 
 @example
-uint32_t rtems_get_class( rtems_id );
-uint32_t rtems_get_node( rtems_id );
-uint32_t rtems_get_index( rtems_id );
+uint32_t rtems_object_id_get_api( rtems_id );
+uint32_t rtems_object_id_get_class( rtems_id );
+uint32_t rtems_object_id_get_node( rtems_id );
+uint32_t rtems_object_id_get_index( rtems_id );
 @end example
 
 An object control block is a data structure defined

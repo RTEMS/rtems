@@ -18,7 +18,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     task.texi intr.texi clock.texi timer.texi sem.texi msg.texi event.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
-    mp.texi stackchk.texi cpuuse.texi
+    mp.texi stackchk.texi cpuuse.texi object.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -170,7 +170,12 @@ stackchk.texi: stackchk.t
 	    -n "CPU Usage Statistics" < $< > $@
 
 cpuuse.texi: cpuuse.t
-	$(BMENU2) -p "Stack Bounds Checker stack_checker_report_usage - Report Task Stack Usage" \
+	$(BMENU2) -p "Stack Bounds Checker STACK_CHECKER_REPORT_USAGE - Report Task Stack Usage" \
+	    -u "Top" \
+	    -n "Object Services" < $< > $@
+
+object.texi: object.t
+	$(BMENU2) -p "CPU Usage Statistics cpu_usage_reset - Reset CPU Usage Statistics" \
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 

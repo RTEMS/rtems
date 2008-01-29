@@ -161,7 +161,7 @@ and status codes.
 @c  rtems_stack_checker_is_blown
 @c
 @page
-@subsection stack_checker_is_blown - Has Current Task Blown Its Stack
+@subsection STACK_CHECKER_IS_BLOWN - Has Current Task Blown Its Stack
 
 @subheading CALLING SEQUENCE:
 
@@ -195,7 +195,7 @@ the task was created and it looks for damage to the high water
 mark pattern for the worst case usage of the task being called.
 
 @page
-@subsection stack_checker_report_usage - Report Task Stack Usage
+@subsection STACK_CHECKER_REPORT_USAGE - Report Task Stack Usage
 
 @subheading CALLING SEQUENCE:
 

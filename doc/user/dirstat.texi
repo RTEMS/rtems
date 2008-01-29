@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Directive Status Codes, Example Application, CPU Usage Statistics cpu_usage_reset - Reset CPU Usage Statistics, Top
+@node Directive Status Codes, Example Application, Object Services OBJECT_GET_CLASS_INFORMATION - Obtain Class Information, Top
 @end ifinfo
 @chapter Directive Status Codes
 @table @b

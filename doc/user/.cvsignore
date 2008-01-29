@@ -38,6 +38,7 @@ Makefile.in
 mdate-sh
 mp.texi
 msg.texi
+object.texi
 overview.texi
 part.texi
 region.texi
