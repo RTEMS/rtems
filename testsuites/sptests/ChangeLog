@@ -1,3 +1,12 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, sp02/task1.c, sp24/resume.c,
+	sp30/resume.c, sp41/init.c, sp42/init.c: Add new Object Services
+	collection. This changed the name of a few previously public but
+	undocumented services and added a some new services.
+	* sp43/.cvsignore, sp43/Makefile.am, sp43/init.c, sp43/sp43.scn,
+	sp43/system.h: New files.
+
 2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spfatal10/.cvsignore: New file.

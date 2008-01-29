@@ -192,6 +192,6 @@ rtems_task Init(
       break;
   }
 
-  puts( "*** END OF TEST SP41 ***" );
+  puts( "*** END OF TEST 41 ***" );
   rtems_test_exit( 0 );
 }

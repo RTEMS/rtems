@@ -1,0 +1,58 @@
+*** TEST 43 ***
+rtems_object_get_classic_name - INVALID_ADDRESS
+rtems_object_get_classic_name - INVALID_ID
+UI1  - name returned by rtems_object_get_classic_name
+TEMP - rtems_build_name for TEMP
+rtems_object_get_name - bad id for class with instances
+rtems_object_get_name - bad id for class without instances
+rtems_object_get_name - bad length
+rtems_object_get_name - bad pointer
+rtems_object_get_name returned (UI1 ) for init task
+rtems_object_set_name - change name of init task
+New1 - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (New1) for init task
+rtems_build_id - build an id to match init task
+rtems_object_id_get_api - OK
+rtems_object_id_get_class - OK
+rtems_object_id_get_node - OK
+rtems_object_id_get_index - OK
+<pause>
+rtems_object_id_api_minimum returned 1
+rtems_object_id_api_maximum returned 4
+rtems_object_api_minimum_class(0) returned -1
+rtems_object_api_maximum_class(0) returned -1
+rtems_object_api_minimum_class(0) returned -1
+rtems_object_api_maximum_class(0) returned -1
+rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned 1
+rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) returned 2
+rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned 1
+rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) returned 10
+rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned 1
+rtems_object_api_maximum_class(OBJECTS_POSIX_API) returned 12
+rtems_object_api_minimum_class(OBJECTS_ITRON_API) returned 1
+rtems_object_api_maximum_class(OBJECTS_ITRON_API) returned 8
+<pause>
+rtems_object_get_api_name(0) = BAD CLASS
+rtems_object_get_api_name(255) = BAD CLASS
+rtems_object_get_api_name(INTERNAL_API) = Internal
+rtems_object_get_api_name(CLASSIC_API) = Classic
+rtems_object_get_api_name(POSIX_API) = POSIX
+rtems_object_get_api_name(ITRON_API) = ITRON
+rtems_object_get_api_class_name(0, RTEMS_TASKS) = BAD API
+rtems_object_get_api_class_name(CLASSIC_API, 0) = BAD CLASS
+rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = Barrier
+<pause>
+rtems_object_get_class_information - INVALID_ADDRESS
+rtems_object_get_class_information - INVALID_NUMBER (bad API)
+rtems_object_get_class_information - INVALID_NUMBER (bad class)
+rtems_object_get_class_information - Classic Tasks - OK
+Classic API Task Information
+    minimum id  : 0x0a010001 maximum id: 0x0a010002
+    maximum     :          2 available : 1
+    auto_extend : no
+rtems_object_get_class_information - Classic Timers - OK
+Classic API Timer Information
+    minimum id  : 0x12010001 maximum id: 0x12010001
+    maximum     :          1 available : 1
+    auto_extend : no
+*** END OF TEST 43 ***

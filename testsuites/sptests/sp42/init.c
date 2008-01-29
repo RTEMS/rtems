@@ -151,7 +151,7 @@ rtems_task Init(
   puts( "Exercising blocking discipline w/unblock in priority order" );
   do_test( RTEMS_PRIORITY, FALSE );
 
-  puts( "*** END OF TEST 40 ***" );
+  puts( "*** END OF TEST 42 ***" );
   exit(0);
 }
 

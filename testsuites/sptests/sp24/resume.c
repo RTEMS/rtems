@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,7 +27,7 @@ rtems_timer_service_routine Resume_task(
   rtems_id          task_to_resume;
   rtems_status_code status;
 
-  task_to_resume = Task_id[ rtems_get_index( timer_id ) ];
+  task_to_resume = Task_id[ rtems_object_id_get_index( timer_id ) ];
   status = rtems_task_resume( task_to_resume );
   directive_failed_with_level( status, "rtems_task_resume", 1 );
 }
