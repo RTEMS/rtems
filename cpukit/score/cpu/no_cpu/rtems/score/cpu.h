@@ -19,7 +19,8 @@
  *    add CPU family specific information in this section
  */
 
-/*  COPYRIGHT (c) 1989-2006.
+/*
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -467,6 +468,15 @@ typedef struct {
     uint32_t   stack_pointer;
 } Context_Control;
 
+/**
+ *  @ingroup CPUContext Management
+ *
+ *  This macro returns the stack pointer associated with @a _context.
+ *
+ *  @param[in] _context is the thread context area to access
+ *  
+ *  @return This method returns the stack pointer.
+ */
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->stack_pointer
 
