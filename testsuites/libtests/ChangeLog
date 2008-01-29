@@ -1,3 +1,8 @@
+2008-01-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* malloctest/init.c: Add more tests per suggestions from Sergei
+	Organov.
+
 2008-01-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Add include to remove warning.

@@ -33,7 +33,7 @@
  */
 void test_realloc(void)
 {
-  void *p1, *p2, *p3;
+  void *p1, *p2, *p3, *p4;
   int i;
   int sc;
 
@@ -82,16 +82,48 @@ void test_realloc(void)
     free(p1);
 
   /*
-   *  Bad hack to get coverage
+   *  Allocate with default alignment coverage
    */
+  sc = rtems_memalign( &p4, 0, 8 );
+  if ( !sc && p4 )
+    free( p4 );
 
-  {
-    void *p5;
-    extern Heap_Control RTEMS_Malloc_Heap;
-    p5 = _Protected_heap_Allocate_aligned( &RTEMS_Malloc_Heap, 8, 0 );
-    if ( p5 )
-      free( p5 );
-  }
+  /*
+   * Walk the C Program Heap
+   */
+  malloc_walk( 1234, 0 );
+
+  /*
+   *  Realloc with a bad pointer to force a point
+   */
+  p4 = realloc( test_realloc, 32 );
+
+  /*
+   * Another odd case.  What we are trying to do from Sergei
+   * 
+   * 32-bit CPU when CPU_ALIGNMENT = 4 (most targets have 8) with the
+   * code like this:
+   */
+   p1 = malloc(12);
+   p2 = malloc(32);
+   p3 = malloc(32);
+   free(p2);
+   sc = rtems_memalign(&p2, 8, 28);
+   free(p1);
+   free(p2);
+   free(p3);
+
+   /*
+    *  Odd case in resizing a block.  Again test case outline per Sergei
+    */
+   p1 = malloc(32);
+   p2 = malloc(8);
+   p3 = malloc(32);
+   free(p2);
+   p4 = realloc(p1, 42);
+   free(p3);
+   free(p4);
+
 }
 
 /*
