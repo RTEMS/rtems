@@ -1,5 +1,9 @@
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ada_user/Makefile.am, ada_user/ada_user.texi: Now builds.
+
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/.cvsignore, user/Makefile.am, user/c_user.texi, user/concepts.t,
 	user/conf.t, user/dirstat.texi, user/stackchk.t, user/task.t,
 	user/userext.t: Add new Object Services collection. Tidy up some
