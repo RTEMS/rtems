@@ -1,3 +1,8 @@
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/include/tmacros.h: Add new rtems_test_assert() which exits
+	rather than calling fatal error.
+
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* support/include/tmacros.h: Add new helper for POSIX tests.
