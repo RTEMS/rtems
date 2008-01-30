@@ -1,5 +1,9 @@
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* index.html.in: Update copyright year.
+
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ada_user/Makefile.am, ada_user/ada_user.texi: Now builds.
 
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
