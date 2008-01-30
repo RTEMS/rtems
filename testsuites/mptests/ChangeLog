@@ -1,3 +1,20 @@
+2008-01-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,
+	mp02/node1/Makefile.am, mp02/node2/Makefile.am,
+	mp03/node1/Makefile.am, mp03/node2/Makefile.am,
+	mp04/node1/Makefile.am, mp04/node2/Makefile.am,
+	mp05/node1/Makefile.am, mp05/node2/Makefile.am,
+	mp06/node1/Makefile.am, mp06/node2/Makefile.am,
+	mp07/node1/Makefile.am, mp07/node2/Makefile.am,
+	mp08/node1/Makefile.am, mp08/node2/Makefile.am,
+	mp09/node1/Makefile.am, mp09/node2/Makefile.am,
+	mp10/node1/Makefile.am, mp10/node2/Makefile.am,
+	mp11/node1/Makefile.am, mp11/node2/Makefile.am,
+	mp12/node1/Makefile.am, mp12/node2/Makefile.am,
+	mp13/node1/Makefile.am, mp13/node2/Makefile.am,
+	mp14/node1/Makefile.am, mp14/node2/Makefile.am: Use all managers.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mp02/task1.c, mp14/delay.c: Add new Object Services collection. This

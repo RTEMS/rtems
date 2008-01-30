@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp01-node2.exe
 mp01_node2_exe_SOURCES = ../init.c ../task1.c ../system.h

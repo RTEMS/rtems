@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp event partition semaphore timer message
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp14-node2.exe
 mp14_node2_exe_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \

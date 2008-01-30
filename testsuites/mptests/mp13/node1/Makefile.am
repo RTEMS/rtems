@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp message semaphore
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp13-node1.exe
 mp13_node1_exe_SOURCES = ../init.c ../task1.c ../task2.c ../system.h

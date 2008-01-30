@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp partition
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp12-node2.exe
 mp12_node2_exe_SOURCES = ../init.c ../system.h

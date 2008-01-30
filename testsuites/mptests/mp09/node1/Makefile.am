@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp message
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp09-node1.exe
 mp09_node1_exe_SOURCES = ../init.c ../task1.c ../recvmsg.c ../sendmsg.c ../system.h

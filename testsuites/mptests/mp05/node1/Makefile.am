@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp signal timer
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp05-node1.exe
 mp05_node1_exe_SOURCES = ../init.c ../asr.c ../task1.c ../system.h

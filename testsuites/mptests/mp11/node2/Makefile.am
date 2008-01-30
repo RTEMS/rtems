@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp message partition semaphore
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp11-node2.exe
 mp11_node2_exe_SOURCES = ../init.c ../system.h

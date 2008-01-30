@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io mp event timer
+MANAGERS = all
 
 rtems_tests_PROGRAMS = mp07-node2.exe
 mp07_node2_exe_SOURCES = ../init.c ../task1.c ../system.h
