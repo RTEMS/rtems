@@ -1,5 +1,9 @@
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/Doxyfile: Revert Doxygen version changes.
+
+2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/Doxyfile: Update to latest Doxygen format.
 	* score/include/rtems/score/apimutex.h,
 	score/include/rtems/score/corebarrier.h,
