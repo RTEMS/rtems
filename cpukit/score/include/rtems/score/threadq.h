@@ -270,6 +270,21 @@ void _Thread_queue_Timeout (
   void       *ignored
 );
 
+/**
+ * @brief Process Thread Queue Timeout
+ *
+ * This is a shared helper routine which makes it easier to have multiple 
+ * object class specific timeout routines.
+ *
+ * @param[in] the_thread is the thread to extract
+ *
+ * @note This method assumes thread dispatching is disabled
+ *       and is expected to be called via the processing of
+ *       a clock tick.
+ */
+void _Thread_queue_Process_timeout(
+  Thread_Control *the_thread
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/threadq.inl>

@@ -1,3 +1,10 @@
+2008-01-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/threadq.h,
+	score/inline/rtems/score/threadq.inl: _Thread_queue_Process_timeout
+	was really too complex to be inlined.
+	* score/src/threadqprocesstimeout.c: New file.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/Doxyfile: Revert Doxygen version changes.
