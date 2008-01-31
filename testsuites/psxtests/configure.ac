@@ -46,6 +46,8 @@ psxcancel/Makefile
 psxchroot01/Makefile
 psxcleanup/Makefile
 psxenosys/Makefile
+psxfatal01/Makefile
+psxfatal02/Makefile
 psxfile01/Makefile
 psxhdrs/Makefile
 psxmount/Makefile
