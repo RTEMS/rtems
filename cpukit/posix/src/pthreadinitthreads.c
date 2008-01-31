@@ -67,14 +67,12 @@ void _POSIX_Threads_Initialize_user_threads_body( void )
    */
 
   for ( index=0 ; index < maximum ; index++ ) {
-    status = pthread_attr_init( &attr );
-    assert( !status );
-
-    status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-    assert( !status );
-
-    status = pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
-    assert( !status );
+    /*
+     * There is no way for these calls to fail in this situation.
+     */
+    (void) pthread_attr_init( &attr );
+    (void) pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+    (void) pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
 
     status = pthread_create(
       &thread_id,
@@ -82,7 +80,8 @@ void _POSIX_Threads_Initialize_user_threads_body( void )
       user_threads[ index ].thread_entry,
       NULL
     );
-    assert( !status );
+    if ( status )
+      _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, status );
   }
 }
 
