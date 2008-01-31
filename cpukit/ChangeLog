@@ -1,3 +1,7 @@
+2008-01-31	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* posix/src/timersettime.c: Fix to remove warning.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/src/posix_memalign.c: Remove warning.

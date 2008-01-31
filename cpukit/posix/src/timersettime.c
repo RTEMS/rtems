@@ -57,7 +57,7 @@ int timer_settime(
   /* Convert absolute to relative time */
   if (flags == TIMER_ABSTIME) {
     /* Check for seconds in the past */
-    if ( _Timespec_Greater_than( &normalize, &_TOD_Now ) ) 
+    if ( _Timespec_Greater_than( &normalize.it_value, &_TOD_Now ) ) 
       rtems_set_errno_and_return_minus_one( EINVAL ); 
     _Timespec_Subtract( &_TOD_Now, &normalize.it_value, &normalize.it_value);
   }
