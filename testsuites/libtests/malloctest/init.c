@@ -21,6 +21,7 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #define TEST_INIT
 #include "system.h"
 
@@ -91,7 +92,13 @@ void test_realloc(void)
   /*
    * Walk the C Program Heap
    */
+  puts( "malloc_walk - normal path" );
   malloc_walk( 1234, 0 );
+
+  puts( "malloc_walk - in critical section path" );
+  _Thread_Disable_dispatch();
+  malloc_walk( 1234, 0 );
+  _Thread_Enable_dispatch();
 
   /*
    *  Realloc with a bad pointer to force a point
@@ -107,6 +114,7 @@ void test_heap_init()
 {
   _Heap_Initialize( &TestHeap, TestHeapMemory, TEST_HEAP_SIZE, 0 );
 }
+
 void test_heap_cases_1()
 {
   void     *p1, *p2, *p3, *p4;
@@ -141,6 +149,74 @@ void test_heap_cases_1()
   /* XXX what should we expect */
   _Heap_Free( &TestHeap, p3 );
   _Heap_Free( &TestHeap, p4 );
+}
+
+void test_heap_extend()
+{
+  void     *p1, *p2, *p3, *p4;
+  uint32_t  u1, u2;
+  boolean   ret;
+
+  /*
+   * Easier to hit extend with a dedicated heap.
+   * 
+   */
+  _Heap_Initialize( &TestHeap, TestHeapMemory, 512, 0 );
+
+  puts( "heap extend - bad address" );
+  ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory - 512, 512 );
+  rtems_test_assert( ret == FALSE );
+
+  puts( "heap extend - OK" );
+  ret = _Protected_heap_Extend( &TestHeap, &TestHeapMemory[ 512 ], 512 );
+  rtems_test_assert( ret == TRUE );
+}
+
+void test_heap_info(void)
+{
+  size_t                  s1, s2;
+  void                   *p1;
+  int                     sc;
+  Heap_Information_block  the_info;
+
+  s1 = malloc_free_space();
+  p1 = malloc( 512 );
+  s2 = malloc_free_space();
+  puts( "malloc_free_space - check malloc space drops after malloc" ); 
+  rtems_test_assert( s1 );
+  rtems_test_assert( s2 );
+  rtems_test_assert( s2 <= s1 );
+  free( p1 );
+
+  puts( "malloc_free_space - verify free space returns to previous value" );
+  s2 = malloc_free_space();
+  rtems_test_assert( s1 == s2 );
+
+  puts( "malloc_info - called with NULL\n" );
+  sc = malloc_info( NULL );
+  rtems_test_assert( sc == -1 );
+
+  puts( "malloc_info - check free space drops after malloc" );
+  sc = malloc_info( &the_info );
+  rtems_test_assert( sc == -1 );
+  s1 = the_info.Free.largest;
+
+  p1 = malloc( 512 );
+
+  sc = malloc_info( &the_info );
+  rtems_test_assert( sc == 0 );
+  s2 = the_info.Free.largest;
+
+  rtems_test_assert( s1 );
+  rtems_test_assert( s2 );
+  rtems_test_assert( s2 <= s1 );
+  free( p1 );
+
+  puts( "malloc_info - verify free space returns to previous value" );
+  sc = malloc_info( &the_info );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( s1 == the_info.Free.largest );
+
 }
 
 /*
@@ -193,6 +269,8 @@ rtems_task Init(
 
   test_realloc();
   test_heap_cases_1();
+  test_heap_extend();
+  test_heap_info();
 
   test_posix_memalign();
 

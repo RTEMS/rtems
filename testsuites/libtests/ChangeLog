@@ -1,5 +1,9 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* malloctest/init.c: Add more test cases to cover heap better.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* malloctest/init.c: Add new test cases per Sergei. Make some of the
 	stranger cases operate directly on a freshly initialized heap. This
 	should make them more reproducible.
