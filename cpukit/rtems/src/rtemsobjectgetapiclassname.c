@@ -77,26 +77,20 @@ const char *rtems_object_get_api_class_name(
   const rtems_assoc_t *api_assoc;
   const rtems_assoc_t *class_assoc;
   
-  switch (the_api) {
-    case OBJECTS_INTERNAL_API:
-      api_assoc = rtems_object_api_internal_assoc;
-      break;
-    case OBJECTS_CLASSIC_API:
-      api_assoc = rtems_object_api_classic_assoc;
-      break;
+  if ( the_api == OBJECTS_INTERNAL_API )
+    api_assoc = rtems_object_api_internal_assoc;
+  else if ( the_api == OBJECTS_CLASSIC_API )
+    api_assoc = rtems_object_api_classic_assoc;
 #ifdef RTEMS_POSIX_API
-    case OBJECTS_POSIX_API:
-      api_assoc = rtems_object_api_posix_assoc;
-      break;
+  else if ( the_api == OBJECTS_POSIX_API )
+    api_assoc = rtems_object_api_posix_assoc;
 #endif
 #ifdef RTEMS_ITRON_API
-    case OBJECTS_ITRON_API:
-      api_assoc = rtems_object_api_itron_assoc;
-      break;
+  else if ( the_api == OBJECTS_ITRON_API )
+    api_assoc = rtems_object_api_itron_assoc;
 #endif
-    default:
-      return "BAD API";
-  }
+  else
+    return "BAD API";
   class_assoc = rtems_assoc_ptr_by_local( api_assoc, the_class );
   if ( class_assoc )
     return class_assoc->name;

@@ -34,7 +34,7 @@ char *_Objects_Get_name_as_string(
   char             *name
 )
 {
-  Objects_Information *information;
+  Objects_Information   *information;
   const char            *s;
   char                  *d;
   uint32_t               i;
@@ -77,8 +77,11 @@ char *_Objects_Get_name_as_string(
         s = lname;
       }
 
-      for ( i=0, d=name ; i<(length-1) && *s ; i++, s++, d++ ) {
-        *d = (!isprint(*s)) ?  '*' : *s;
+      d = name;
+      if ( s ) {
+        for ( i=0 ; i<(length-1) && *s ; i++, s++, d++ ) {
+          *d = (isprint(*s)) ? *s : '*';
+        }
       }
       *d = '\0';
 

@@ -64,7 +64,7 @@ int _POSIX_Message_queue_Name_to_id(
     return ENAMETOOLONG;
 
   status = _Objects_Name_to_id_string(
-    &_POSIX_Message_queue_Information, name, 0, id );
+    &_POSIX_Message_queue_Information, name, id );
 
   if ( status == OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL )
     return 0;

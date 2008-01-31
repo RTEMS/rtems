@@ -49,7 +49,7 @@ int _POSIX_Semaphore_Name_to_id(
     return EINVAL;
 
   status = _Objects_Name_to_id_string(
-    &_POSIX_Semaphore_Information, name, 0, (Objects_Id*)id );
+    &_POSIX_Semaphore_Information, name, (Objects_Id*)id );
 
   if ( status == OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL )
     return 0;

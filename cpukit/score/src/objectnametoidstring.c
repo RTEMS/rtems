@@ -40,7 +40,6 @@
  *  Input parameters:
  *    information - object information
  *    name        - user defined object name
- *    node        - node indentifier (0 indicates any node)
  *    id          - address of return ID
  *
  *  Output parameters:
@@ -52,11 +51,9 @@
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   Objects_Information *information,
   const char          *name,
-  uint32_t             node,
   Objects_Id          *id
 )
 {
-  boolean                    search_local_node;
   Objects_Control           *the_object;
   uint32_t                   index;
   uint32_t                   name_length;
@@ -72,16 +69,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   if ( !name )
     return OBJECTS_INVALID_NAME;
 
-  search_local_node = FALSE;
-
-  if ( information->maximum != 0 &&
-      (node == OBJECTS_SEARCH_ALL_NODES ||
-       node == OBJECTS_SEARCH_LOCAL_NODE ||
-       _Objects_Is_local_node( node )
-      ))
-   search_local_node = TRUE;
-
-  if ( search_local_node ) {
+  if ( information->maximum != 0 ) {
     name_length = information->name_length;
 
     for ( index = 1; index <= information->maximum; index++ ) {
@@ -99,13 +87,5 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
     }
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
-    return OBJECTS_INVALID_NAME;
-
-  name_for_mp.name_p = name;
-  return _Objects_MP_Global_name_search( information, name_for_mp, node, id );
-#else
   return OBJECTS_INVALID_NAME;
-#endif
 }

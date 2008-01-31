@@ -49,8 +49,8 @@ void _POSIX_Mutex_Manager_initialization(
     maximum_mutexes,            /* maximum objects of this class */
     sizeof( POSIX_Mutex_Control ),
                                 /* size of this object's control block */
-    FALSE,                      /* TRUE if names for this object are strings */
-    0                           /* maximum length of each object's name */
+    TRUE,                       /* TRUE if names for this object are strings */
+    _POSIX_PATH_MAX             /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
     FALSE,                      /* TRUE if this is a global object class */

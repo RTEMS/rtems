@@ -37,8 +37,8 @@ void _POSIX_RWLock_Manager_initialization(
     OBJECTS_POSIX_SPINLOCKS,        /* object class */
     maximum_rwlocks,                /* maximum objects of this class */
     sizeof( POSIX_RWLock_Control ), /* size of this object's control block */
-    FALSE,                          /* TRUE if the name is a string */
-    0                               /* maximum length of an object name */
+    TRUE,                           /* TRUE if the name is a string */
+    _POSIX_PATH_MAX             /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
     FALSE,                         /* TRUE if this is a global object class */

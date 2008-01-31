@@ -1,3 +1,19 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/cond.c, posix/src/key.c, posix/src/mqueuenametoid.c,
+	posix/src/mutex.c, posix/src/pbarrier.c, posix/src/prwlock.c,
+	posix/src/pspin.c, posix/src/pthread.c, posix/src/ptimer.c,
+	posix/src/semaphorenametoid.c: Add option for all POSIX objects
+	whether named or unnamed to have a string name.  If the API does
+	not directly support having a name, then the user must explicitly
+	assign it using rtems_object_set_name().
+	* rtems/src/rtemsobjectgetapiclassname.c: Improved testability.
+	* score/include/rtems/score/object.h,
+	score/src/objectgetnameasstring.c, score/src/objectnametoidstring.c,
+	score/src/objectsetname.c: Modifications required to pass testing of
+	recently modified object name operations.  Also eliminated
+	multiprocessing related code that was not reachable.
+
 2008-01-31	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* posix/src/timersettime.c: Fix to remove warning.

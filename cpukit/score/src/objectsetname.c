@@ -47,26 +47,21 @@ boolean _Objects_Set_name(
     if ( !d )
       return FALSE;
 
-    if ( the_object->name.name_p )
+    if ( the_object->name.name_p ) {
       _Workspace_Free( (void *)the_object->name.name_p );
-
-    the_object->name.name_p = NULL;
+      the_object->name.name_p = NULL;
+    }
 
     strncpy( d, name, length );
     the_object->name.name_p = d;
   } else {
-    uint32_t  name_u32 = 0;
-    char      lname[5] = "    ";
-    int       i;
+    the_object->name.name_u32 =  _Objects_Build_name(
+      ((0<length) ? s[ 0 ] : ' '),
+      ((1<length) ? s[ 1 ] : ' '),
+      ((2<length) ? s[ 2 ] : ' '),
+      ((3<length) ? s[ 3 ] : ' ')
+    );
 
-    for ( i=0 ; i<4 && i<length ; i++ )
-      lname[ i ] = s[ i ];
-
-    name_u32 |= ((uint32_t)lname[ 0 ] << 24);
-    name_u32 |= ((uint32_t)lname[ 1 ] << 16);
-    name_u32 |= ((uint32_t)lname[ 2 ] << 8);
-    name_u32 |=  (uint32_t)lname[ 3 ];
-    the_object->name.name_u32 = name_u32;
   }
 
   return TRUE;

@@ -625,7 +625,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
  *
  *  @param[in] information points to an object class information block.
  *  @param[in] name is the name of the object to find.
- *  @param[in] node is the set of nodes to search.
  *  @param[in] id will contain the Id if the search is successful.
  *
  *  @return This method returns one of the values from the 
@@ -636,7 +635,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   Objects_Information *information,
   const char          *name,
-  uint32_t             node,
   Objects_Id          *id
 );
 
