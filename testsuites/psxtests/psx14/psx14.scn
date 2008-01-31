@@ -1,0 +1,11 @@
+*** POSIX TEST 14 ***
+rtems_object_get_name returned () for init thread
+Setting current thread name to Justin
+rtems_object_get_name returned (Justin) for init thread
+Setting current thread name to Jordan
+rtems_object_get_name returned (Jordan) for init thread
+rtems_object_api_minimum_class(OBJECTS_POSIX_API) returned 1
+rtems_object_api_maximum_class(OBJECTS_POSIX_API) returned 12
+rtems_object_get_api_name(POSIX_API) = POSIX
+rtems_object_get_api_class_name(POSIX_API, POSIX_KEYS) = Key
+*** END OF POSIX TEST 14 ***

@@ -1,3 +1,10 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add psx14 to exercise POSIX API specific
+	portions of Object Services added to API.
+	* psx14/.cvsignore, psx14/Makefile.am, psx14/init.c, psx14/psx14.scn,
+	psx14/system.h: New files.
+
 2008-01-29	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* psx07/init.c, psx07/system.h: Test cleanup and added testing for
