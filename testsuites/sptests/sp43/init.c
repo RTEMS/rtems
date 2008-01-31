@@ -48,14 +48,30 @@ void print_class_info(
 }
 
 void change_name(
-  const char *newName
+  const char *newName,
+  boolean     printable
 )
 {
   rtems_status_code    status;
   char                 name[ 5 ];
   char                *ptr;
+  const char          *c;
 
-  puts( "rtems_object_set_name - change name of init task" );
+  printf( "rtems_object_set_name - change name of init task to " );
+  if ( printable )
+    printf( "(%s)\n", newName );
+  else {
+    printf( "(" );
+    for (c=newName ; *c ; ) {
+       if (isprint(*ptr)) printf( "%c", *c );
+       else               printf( "0x%02x", *c );
+       c++;
+       if ( *c )
+         printf( "-" );
+    }
+    printf( ")\n" );
+  }
+
   status = rtems_object_set_name( main_task, newName );
   directive_failed( status, "rtems_object_set_name" );
 
@@ -79,6 +95,7 @@ rtems_task Init(
   char                                name[5];
   char                               *ptr;
   const char                          newName[5] = "New1";
+  char                                tmpNameString[5];
   uint32_t                            part;
   rtems_object_api_class_information  info;
 
@@ -183,11 +200,17 @@ rtems_task Init(
    * This is strange but pushes the SuperCore code to do different things.
    */
 
-  change_name( "New1" );
-  change_name( "Ne1" );
-  change_name( "N1" );
-  change_name( "N" );
-  change_name( "" );
+  change_name( "New1", TRUE );
+  change_name( "Ne1", TRUE );
+  change_name( "N1", TRUE );
+  change_name( "N", TRUE );
+  change_name( "", TRUE );
+  tmpNameString[0] = 'N';
+  tmpNameString[1] = 0x07;
+  tmpNameString[2] = 0x09;
+  tmpNameString[3] = '1';
+  tmpNameString[4] = '\0';
+  change_name( tmpNameString, FALSE );
 
   /*
    * Exercise id build and extraction routines
