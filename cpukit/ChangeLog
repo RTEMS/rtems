@@ -1,5 +1,10 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/preinstall.am, posix/preinstall.am: Revert temporary
+	changes which aid in coverage testing.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/cond.c, posix/src/key.c, posix/src/mqueuenametoid.c,
 	posix/src/mutex.c, posix/src/pbarrier.c, posix/src/prwlock.c,
 	posix/src/pspin.c, posix/src/pthread.c, posix/src/ptimer.c,
