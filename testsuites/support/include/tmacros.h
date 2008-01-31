@@ -22,6 +22,7 @@ extern "C" {
 
 #include <bsp.h>    /* includes <rtems.h> */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -214,10 +215,10 @@ extern "C" {
   c1 = (name >> 16) & 0xff; \
   c2 = (name >> 8) & 0xff; \
   c3 = name & 0xff; \
-  putchar( (char)c0 ); \
-  if ( c1 ) putchar( (char)c1 ); \
-  if ( c2 ) putchar( (char)c2 ); \
-  if ( c3 ) putchar( (char)c3 ); \
+  putchar( (isprint(c0)) ? c0 : '*' ); \
+  if ( c1 ) putchar( (isprint(c1)) ? c1 : '*' ); \
+  if ( c2 ) putchar( (isprint(c2)) ? c2 : '*' ); \
+  if ( c3 ) putchar( (isprint(c3)) ? c3 : '*' ); \
   if ( crlf ) \
     putchar( '\n' ); \
 }
