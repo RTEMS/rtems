@@ -20,6 +20,8 @@ rtems_task Init(
 {
   puts( "\n\n*** TEST 40 ***" );
 
+  puts( "TBD - Write test case matching this description" );
+
   /*
    *  Register two drivers to fill up the table
    */

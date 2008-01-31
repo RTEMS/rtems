@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,7 +49,11 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ID" );
 
-  status = rtems_task_get_note( _RTEMS_tasks_Information.maximum_id, RTEMS_NOTEPAD_LAST, &notepad_value );
+  status = rtems_task_get_note(
+    _RTEMS_tasks_Information.maximum_id,
+    RTEMS_NOTEPAD_LAST,
+    &notepad_value
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -67,8 +71,31 @@ void Screen1()
     RTEMS_INVALID_ID,
     "rtems_task_get_note with illegal id"
   );
-  puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ID" );
 
+  status = rtems_task_get_note(
+    rtems_build_id( OBJECTS_CLASSIC_API, 2, 1, 1 ),
+    RTEMS_NOTEPAD_LAST,
+    &notepad_value
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_task_get_note with non-task ID"
+  );
+
+  puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ID (no tasks in API)" );
+  status = rtems_task_get_note(
+    rtems_build_id( OBJECTS_ITRON_API, OBJECTS_ITRON_TASKS, 1, 1 ),
+    RTEMS_NOTEPAD_LAST,
+    &notepad_value
+  );
+  #ifdef RTEMS_ITRON_API
+    directive_failed( status,
+  #else
+    fatal_directive_status( status, RTEMS_INVALID_ID,
+  #endif
+    "rtems_task_get_note with no tasks in API"
+  );
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &self_id );
   directive_failed( status, "rtems_task_ident of self" );

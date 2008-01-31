@@ -1,3 +1,11 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp09/screen01.c, sp09/sp09.scn: Add more bad thread Id cases.
+	* sp40/init.c, sp40/sp40.scn: Add message to say test is TBD.
+	* sp41/sp41.scn: Now has content.
+	* sp43/init.c, sp43/sp43.scn: Enhanced to increase coverage of
+	Object Services recently added to API.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, sp02/task1.c, sp24/resume.c,
