@@ -803,15 +803,15 @@ Objects_Control *_Objects_Get_next(
  *  an the API and Class.  This can be done independent of
  *  the existence of any objects created by the API.
  *
- *  @param[in] api indicates the API for the information we want
- *  @param[in] class indicates the Class for the information we want
+ *  @param[in] the_api indicates the API for the information we want
+ *  @param[in] the_class indicates the Class for the information we want
  *
  *  @return This method returns a pointer to the Object Information Table
  *          for the class of objects which corresponds to this object ID.
  */
 Objects_Information *_Objects_Get_information(
-  Objects_APIs   api,
-  uint32_t       class
+  Objects_APIs   the_api,
+  uint32_t       the_class
 );
 
 /**

@@ -70,14 +70,14 @@ rtems_assoc_t rtems_object_api_itron_assoc[] = {
 #endif
 
 const char *rtems_object_get_api_class_name(
-  uint32_t api, 
-  uint32_t class
+  uint32_t the_api, 
+  uint32_t the_class
 )
 {
   const rtems_assoc_t *api_assoc;
   const rtems_assoc_t *class_assoc;
   
-  switch (api) {
+  switch (the_api) {
     case OBJECTS_INTERNAL_API:
       api_assoc = rtems_object_api_internal_assoc;
       break;
@@ -97,7 +97,7 @@ const char *rtems_object_get_api_class_name(
     default:
       return "BAD API";
   }
-  class_assoc = rtems_assoc_ptr_by_local( api_assoc, class );
+  class_assoc = rtems_assoc_ptr_by_local( api_assoc, the_class );
   if ( class_assoc )
     return class_assoc->name;
   return "BAD CLASS";

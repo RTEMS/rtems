@@ -20,6 +20,7 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -287,26 +288,26 @@ const char *rtems_object_get_api_name(
  *  This method returns a string containing the name of the
  *  @a class from the specified @a api.
  *
- *  @param[in] api is the API for the class
- *  @param[in] class is the class to obtain the name of
+ *  @param[in] the_api is the API for the class
+ *  @param[in] the_class is the class to obtain the name of
  *
  *  @return If successful, this method returns the name of
  *          the specified @a class.  Otherwise, it returns
  *          the string "BAD CLASS"
  */
 const char *rtems_object_get_api_class_name(
-  uint32_t api, 
-  uint32_t class
+  uint32_t the_api, 
+  uint32_t the_class
 );
 
 /**
  *  @brief Get Class Name
  *
  *  This method returns a string containing the name of the
- *  @a class from the specified @a api.
+ *  @a the_class from the specified @a api.
  *
- *  @param[in] api is the API for the class
- *  @param[in] class is the class to obtain information about
+ *  @param[in] the_api is the API for the class
+ *  @param[in] the_class is the class to obtain information about
  *  @param[in] info points to the information structure to fill in
  *
  *  @return If successful, this method returns the name of
@@ -315,8 +316,8 @@ const char *rtems_object_get_api_class_name(
  *
  */
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                            api,
-  uint32_t                            class,
+  uint32_t                            the_api,
+  uint32_t                            the_class,
   rtems_object_api_class_information *info
 );
 

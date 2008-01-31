@@ -24,8 +24,8 @@
 #include <rtems/rtems/object.h>
 
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                            api,
-  uint32_t                            class,
+  uint32_t                            the_api,
+  uint32_t                            the_class,
   rtems_object_api_class_information *info
 )
 {
@@ -39,7 +39,7 @@ rtems_status_code rtems_object_get_class_information(
   if ( !info )
     return RTEMS_INVALID_ADDRESS;
 
-  obj_info = _Objects_Get_information( api, class );
+  obj_info = _Objects_Get_information( the_api, the_class );
   if ( !obj_info )
     return RTEMS_INVALID_NUMBER;
 

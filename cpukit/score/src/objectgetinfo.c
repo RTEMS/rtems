@@ -19,19 +19,19 @@
 #include <rtems/score/wkspace.h>
 
 Objects_Information *_Objects_Get_information(
-  Objects_APIs   api,
-  uint32_t       class
+  Objects_APIs   the_api,
+  uint32_t       the_class
 )
 {
   Objects_Information *info;
 
-  if ( !_Objects_Is_api_valid( api ) )
+  if ( !_Objects_Is_api_valid( the_api ) )
     return NULL;
 
-  if ( !class || class > _Objects_API_maximum_class(api) )
+  if ( !the_class || the_class > _Objects_API_maximum_class(the_api) )
     return NULL;
 
-  info = _Objects_Information_table[ api ][ class ];
+  info = _Objects_Information_table[ the_api ][ the_class ];
   if ( !info )
     return NULL;
 

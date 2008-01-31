@@ -1,3 +1,11 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/object.h, score/src/objectgetinfo.c,
+	rtems/include/rtems/rtems/object.h,
+	rtems/src/rtemsobjectgetapiclassname.c,
+	rtems/src/rtemsobjectgetclassinfo.c: class is a C++ keyword and
+	cannot be used as a parameter.
+
 2008-01-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/Makefile.am, score/include/rtems/score/threadq.h,
