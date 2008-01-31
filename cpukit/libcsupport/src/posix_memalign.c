@@ -27,8 +27,6 @@ int posix_memalign(
   size_t   size
 )
 {
-  void *return_this;
-
   /*
    *  Update call statistics
    */
