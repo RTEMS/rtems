@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -97,6 +97,21 @@ void test_realloc(void)
    *  Realloc with a bad pointer to force a point
    */
   p4 = realloc( test_realloc, 32 );
+}
+
+#define TEST_HEAP_SIZE 1024
+uint8_t TestHeapMemory[TEST_HEAP_SIZE];
+Heap_Control TestHeap;
+
+void test_heap_init()
+{
+  _Heap_Initialize( &TestHeap, TestHeapMemory, TEST_HEAP_SIZE, 0 );
+}
+void test_heap_cases_1()
+{
+  void     *p1, *p2, *p3, *p4;
+  uint32_t  u1, u2;
+  Heap_Resize_status rsc;
 
   /*
    * Another odd case.  What we are trying to do from Sergei
@@ -104,26 +119,28 @@ void test_realloc(void)
    * 32-bit CPU when CPU_ALIGNMENT = 4 (most targets have 8) with the
    * code like this:
    */
-   p1 = malloc(12);
-   p2 = malloc(32);
-   p3 = malloc(32);
-   free(p2);
-   sc = rtems_memalign(&p2, 8, 28);
-   free(p1);
-   free(p2);
-   free(p3);
+  test_heap_init();
+  p1 = _Heap_Allocate( &TestHeap, 12 );
+  p2 = _Heap_Allocate( &TestHeap, 32 );
+  p3 = _Heap_Allocate( &TestHeap, 32 );
+  _Heap_Free( &TestHeap, p2 );
+  p2 = _Heap_Allocate_aligned( &TestHeap, 8, 28 );
+  _Heap_Free( &TestHeap, p1 );
+  _Heap_Free( &TestHeap, p2 );
+  _Heap_Free( &TestHeap, p3 );
 
-   /*
-    *  Odd case in resizing a block.  Again test case outline per Sergei
-    */
-   p1 = malloc(32);
-   p2 = malloc(8);
-   p3 = malloc(32);
-   free(p2);
-   p4 = realloc(p1, 42);
-   free(p3);
-   free(p4);
-
+  /*
+   *  Odd case in resizing a block.  Again test case outline per Sergei
+   */
+  test_heap_init();
+  p1 = _Heap_Allocate( &TestHeap, 32 );
+  p2 = _Heap_Allocate( &TestHeap, 8 );
+  p3 = _Heap_Allocate( &TestHeap, 32 );
+  _Heap_Free( &TestHeap, p2 );
+  rsc = _Heap_Resize_block( &TestHeap, p1, 41, &u1, &u2 );
+  /* XXX what should we expect */
+  _Heap_Free( &TestHeap, p3 );
+  _Heap_Free( &TestHeap, p4 );
 }
 
 /*
@@ -175,6 +192,7 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
 
   test_realloc();
+  test_heap_cases_1();
 
   test_posix_memalign();
 
