@@ -11,7 +11,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 
 #include <bsp.h>
 #include <tmacros.h>  /* instantiate buffering code if needed */

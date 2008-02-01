@@ -1,5 +1,15 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* include/pmacros.h, psx01/init.c, psx01/system.h, psx13/main.c,
+	psxbarrier01/main.c, psxchroot01/main.c, psxfatal_support/init.c,
+	psxfile01/main.c, psxfile01/test.c, psxmount/main.c, psxrdwrv/main.c,
+	psxreaddir/main.c, psxrwlock01/main.c, psxspin01/main.c,
+	psxstat/main.c, psxtime/main.c: Change TEST_INIT to CONFIGURE_INIT.
+	Make tmacros.h available to all POSIX tests. Add a clock_settime case
+	for < 1988.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: New tests.
 	* psxfatal01/.cvsignore, psxfatal01/Makefile.am,
 	psxfatal01/psxfatal01.scn, psxfatal01/testcase.h,

@@ -2,7 +2,7 @@
  *  Simple test program -- simplified version of sample test hello.
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 
 #include <bsp.h>
 #include <pmacros.h>

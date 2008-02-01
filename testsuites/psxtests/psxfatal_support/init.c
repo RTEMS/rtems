@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 void *POSIX_Init(

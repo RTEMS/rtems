@@ -15,6 +15,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <tmacros.h>
 #include <buffer_test_io.h>
 
 /*
@@ -42,8 +43,8 @@
 #define TM_NOVEMBER   12
 #define TM_DECEMBER   12
 
-#ifndef build_time
-#define build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
+#ifndef tm_build_time
+#define tm_build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
   { (TM)->tm_year = YR;  \
     (TM)->tm_mon  = MON; \
     (TM)->tm_mday = DAY; \
@@ -59,7 +60,7 @@
     struct timespec tv; \
     int status; \
     \
-    build_time( &tm, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ); \
+    tm_build_time( &tm, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ); \
     \
     tv.tv_sec = mktime( &tm ); \
     tv.tv_nsec = 0; \

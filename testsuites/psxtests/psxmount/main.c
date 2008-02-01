@@ -4,7 +4,7 @@
  *  Attempt to mount the IMFS file system on a mount point in the base IMFS
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 
 #include <bsp.h>
 #include <pmacros.h>
