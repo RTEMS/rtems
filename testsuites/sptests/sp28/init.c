@@ -6,7 +6,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include <tmacros.h>
 
 rtems_task Init(rtems_task_argument argument);

@@ -1,5 +1,18 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp01/init.c, sp02/init.c, sp03/init.c, sp04/init.c, sp05/init.c,
+	sp06/init.c, sp07/init.c, sp08/init.c, sp09/init.c, sp11/init.c,
+	sp12/init.c, sp13/init.c, sp14/init.c, sp15/init.c, sp16/init.c,
+	sp17/init.c, sp19/init.c, sp20/init.c, sp21/init.c, sp22/init.c,
+	sp23/init.c, sp24/init.c, sp25/init.c, sp26/init.c, sp28/init.c,
+	sp30/init.c, sp31/init.c, sp32/init.c, sp33/init.c, sp37/init.c,
+	sp38/init.c, sp39/init.c, sp40/init.c, sp41/init.c, sp43/init.c,
+	spfatal/init.c, spfatal_support/init.c, spsize/init.c: Change
+	TEST_INIT to CONFIGURE_INIT. Make tmacros.h available to all POSIX
+	tests. Add a clock_settime case for < 1988.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp43/init.c, sp43/sp43.scn: Add test case for unprintable names.
 
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
