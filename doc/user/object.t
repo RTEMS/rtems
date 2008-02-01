@@ -116,7 +116,13 @@ rtems_name rtems_build_name(
 
 @ifset is-Ada
 @example
-TBD
+procedure Build_Name(
+   c1   : in     RTEMS.Unsigned8;
+   c2   : in     RTEMS.Unsigned8;
+   c3   : in     RTEMS.Unsigned8;
+   c4   : in     RTEMS.Unsigned8;
+   Name :    out RTEMS.Name
+);
 @end example
 @end ifset
 
@@ -158,7 +164,11 @@ rtems_status_code rtems_object_get_classic_name(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Get_Classic_Name(
+   ID     : in     RTEMS.ID;
+   Name   :    out RTEMS.Name;
+   Result :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
@@ -189,7 +199,7 @@ This directive is strictly local and does not impact task scheduling.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_build_name
+@findex rtems_object_get_name
 @example
 char *rtems_object_get_name(
   rtems_id       id,
@@ -201,7 +211,11 @@ char *rtems_object_get_name(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Get_Name(
+   ID     : in     RTEMS.ID;
+   Name   :    out RTEMS.Name;
+   Result :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
@@ -225,14 +239,14 @@ This directive is strictly local and does not impact task scheduling.
 @c
 @c
 @page
-@subsection SET_OBJECT_NAME - Set object name
+@subsection OBJECT_SET_NAME - Set object name
 
 @cindex set object name
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_build_name
+@findex rtems_object_set_name
 @example
 rtems_status_code rtems_object_set_name(
   rtems_id       id,
@@ -243,7 +257,11 @@ rtems_status_code rtems_object_set_name(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Set_Name(
+   ID     : in     RTEMS.ID;
+   Name   : in     String;
+   Result :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
@@ -297,7 +315,10 @@ uint32_t rtems_object_id_get_api(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Id_Get_API(
+   ID  : in     RTEMS.ID;
+   API :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -336,7 +357,10 @@ uint32_t rtems_object_id_get_class(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Id_Get_Class(
+   ID        : in     RTEMS.ID;
+   The_Class :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -375,7 +399,10 @@ uint32_t rtems_object_id_get_node(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Id_Get_Node(
+   ID   : in     RTEMS.ID;
+   Node :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -414,7 +441,10 @@ uint32_t rtems_object_id_get_index(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Id_Get_Index(
+   ID    : in     RTEMS.ID;
+   Index :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -446,17 +476,22 @@ This directive does NOT validate the @code{id} provided.
 @findex rtems_build_id
 @example
 rtems_id rtems_build_id(
-  uint32_t api,
-  uint32_t class,
-  uint32_t node,
-  uint32_t index
+  uint32_t the_api,
+  uint32_t the_class,
+  uint32_t the_node,
+  uint32_t the_index
 );
 @end example
 @end ifset
 
 @ifset is-Ada
 @example
-TBD
+function Build_Id(
+   the_api   : in     RTEMS.Unsigned32;
+   the_class : in     RTEMS.Unsigned32;
+   the_node  : in     RTEMS.Unsigned32;
+   the_index : in     RTEMS.Unsigned32
+) return RTEMS.Id;
 @end example
 @end ifset
 
@@ -467,7 +502,7 @@ Returns an object Id constructed from the provided arguments.
 @subheading DESCRIPTION:
 
 This service constructs an object Id from the provided
-@code{api}, @code{class}, @code{node}, and @code{index}.
+@code{the_api}, @code{the_class}, @code{the_node}, and @code{the_index}.
 
 
 @subheading NOTES:
@@ -496,7 +531,7 @@ uint32_t rtems_object_id_api_minimum(void);
 
 @ifset is-Ada
 @example
-TBD
+function Object_Id_API_Minimum return RTEMS.Unsigned32;
 @end example
 @end ifset
 
@@ -532,7 +567,7 @@ uint32_t rtems_object_id_api_maximum(void);
 
 @ifset is-Ada
 @example
-TBD
+function Object_Id_API_Maximum return RTEMS.Unsigned32;
 @end example
 @end ifset
 
@@ -570,7 +605,10 @@ uint32_t rtems_object_api_minimum_class(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_API_Minimum_Class(
+   API     : in     RTEMS.Unsigned32;
+   Minimum :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -611,7 +649,10 @@ uint32_t rtems_object_api_maximum_class(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_API_Maximum_Class(
+   API     : in     RTEMS.Unsigned32;
+   Maximum :    out RTEMS.Unsigned32
+);
 @end example
 @end ifset
 
@@ -653,15 +694,16 @@ const char *rtems_object_get_api_name(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Get_API_Name(
+   API  : in     RTEMS.Unsigned32;
+   Name :    out String
+);
 @end example
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES
 
 If @code{api} is not valid, the string @code{"BAD API"} is returned.
-
-If @code{class} is not valid, the string @code{"BAD CLASS"} is returned.
 
 If successful, this service returns a pointer to a string 
 containing the name of the specified @code{api}.
@@ -691,31 +733,35 @@ or free it.
 @findex rtems_object_get_api_class_name
 @example
 const char *rtems_object_get_api_class_name(
-  uint32_t class,
-  uint32_t api
+  uint32_t the_class,
+  uint32_t the_api
 );
 @end example
 @end ifset
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Get_API_Class_Name(
+   The_API   : in     RTEMS.Unsigned32;
+   The_Class : in     RTEMS.Unsigned32;
+   Name      :    out String
+);
 @end example
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES
 
-If @code{api} is not valid, the string @code{"BAD API"} is returned.
+If @code{the_api} is not valid, the string @code{"BAD API"} is returned.
 
-If @code{class} is not valid, the string @code{"BAD CLASS"} is returned.
+If @code{the_class} is not valid, the string @code{"BAD CLASS"} is returned.
 
 If successful, this service returns a pointer to a string 
-containing the name of the specified @code{api}/@code{class} pair.
+containing the name of the specified @code{the_api}/@code{the_class} pair.
 
 @subheading DESCRIPTION:
 
 This service returns the name of the object class indicated by the
-specified @code{api} and @code{class}.
+specified @code{the_api} and @code{the_class}.
 
 @subheading NOTES:
 
@@ -738,8 +784,8 @@ or free it.
 @findex rtems_object_get_class_information
 @example
 rtems_status_code rtems_object_get_class_information(
-  uint32_t                             api,
-  uint32_t                             class,
+  uint32_t                            the_api,
+  uint32_t                            the_class,
   rtems_object_api_class_information *info
 );
 @end example
@@ -747,24 +793,30 @@ rtems_status_code rtems_object_get_class_information(
 
 @ifset is-Ada
 @example
-TBD
+procedure Object_Get_Class_Information(
+   The_API   : in     RTEMS.Unsigned32;
+   The_Class : in     RTEMS.Unsigned32;
+   Info      :    out RTEMS.Object_API_Class_Information;
+   Result    :    out RTEMS.Status_Codes
+);
 @end example
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES
 @code{@value{RPREFIX}SUCCESSFUL} - information obtained successfully@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{info} is NULL@*
-@code{@value{RPREFIX}INVALID_NUMBER} - invalid @code{api} or @code{class}
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid @code{api} or @code{the_class}
 
 If successful, the structure located at @code{info} will be filled
-in with information about the specified @code{api}/@code{class} pairing.
+in with information about the specified @code{api}/@code{the_class} pairing.
 
 @subheading DESCRIPTION:
 
 This service returns information about the object class indicated by the
-specified @code{api} and @code{class}. This structure is defined as
+specified @code{api} and @code{the_class}. This structure is defined as
 follows:
 
+@ifset is-C
 @example
 typedef struct @{
   rtems_id  minimum_id;
@@ -774,6 +826,14 @@ typedef struct @{
   uint32_t  unallocated;
 @} rtems_object_api_class_information;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+
+@end example
+@end ifset
+
 
 @subheading NOTES:
 
