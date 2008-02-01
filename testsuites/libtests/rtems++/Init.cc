@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "System.h"
 
 // make global so it lasts past the Init task's stack's life time

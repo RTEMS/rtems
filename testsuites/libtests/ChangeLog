@@ -1,5 +1,12 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* cpuuse/init.c, malloctest/init.c, monitor/init.c, monitor02/init.c,
+	putenvtest/init.c, rtems++/Init.cc, rtmonuse/init.c, stackchk/init.c:
+	Change TEST_INIT to CONFIGURE_INIT. Make tmacros.h available to all
+	POSIX tests. Add a clock_settime case for < 1988.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* malloctest/init.c: Add more test cases to cover heap better.
 
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>

@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include <tmacros.h>
 #include <stdio.h>
 #include <stdlib.h>

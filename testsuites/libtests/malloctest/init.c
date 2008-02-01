@@ -22,7 +22,7 @@
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 #include <stdlib.h>
