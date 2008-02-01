@@ -44,6 +44,9 @@ int pthread_create(
   struct sched_param                  schedparam;
   Objects_Name                        name;
 
+  if ( !start_routine )
+    return EFAULT;
+
   the_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
   if ( !the_attr->is_initialized )

@@ -1,5 +1,11 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/clockgettime.c, posix/src/clocksettime.c,
+	Minor modifications to improve testability.
+	* posix/src/pthreadcreate.c: Add NULL check for thread entry.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/pthreadinitthreads.c: Clean up error paths.
 
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>

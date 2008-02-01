@@ -36,31 +36,24 @@ int clock_settime(
   if ( !tp )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  switch ( clock_id ) {
-
-    case CLOCK_REALTIME:
-      if ( tp->tv_sec < TOD_SECONDS_1970_THROUGH_1988 )
-        rtems_set_errno_and_return_minus_one( EINVAL );
-
-      _Thread_Disable_dispatch();
-        _TOD_Set( tp );
-      _Thread_Enable_dispatch();
-      break;
-
-#ifdef _POSIX_CPUTIME
-    case CLOCK_PROCESS_CPUTIME:
-      rtems_set_errno_and_return_minus_one( ENOSYS );
-      break;
-#endif
-
-#ifdef _POSIX_THREAD_CPUTIME
-    case CLOCK_THREAD_CPUTIME:
-      rtems_set_errno_and_return_minus_one( ENOSYS );
-      break;
-#endif
-    default:
+  if ( clock_id == CLOCK_REALTIME ) {
+    if ( tp->tv_sec < TOD_SECONDS_1970_THROUGH_1988 )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
+    _Thread_Disable_dispatch();
+      _TOD_Set( tp );
+    _Thread_Enable_dispatch();
   }
+#ifdef _POSIX_CPUTIME
+  else if ( clock_id == CLOCK_PROCESS_CPUTIME )
+    rtems_set_errno_and_return_minus_one( ENOSYS );
+#endif
+#ifdef _POSIX_THREAD_CPUTIME
+  else if ( clock_id == CLOCK_THREAD_CPUTIME )
+    rtems_set_errno_and_return_minus_one( ENOSYS );
+#endif
+  else
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   return 0;
 }

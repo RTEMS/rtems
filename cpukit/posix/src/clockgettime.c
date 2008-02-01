@@ -36,32 +36,22 @@ int clock_gettime(
   if ( !tp )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  switch ( clock_id ) {
-
-    case CLOCK_REALTIME:
-      _TOD_Get(tp);
-      break;
-
+  if ( clock_id == CLOCK_REALTIME ) 
+    _TOD_Get(tp);
 #ifdef CLOCK_MONOTONIC
-    case CLOCK_MONOTONIC:
-      _TOD_Get_uptime(tp);
-      break;
+  else if ( clock_id == CLOCK_MONOTONIC )
+    _TOD_Get_uptime(tp);
 #endif
-
 #ifdef _POSIX_CPUTIME
-    case CLOCK_PROCESS_CPUTIME:
-      _TOD_Get_uptime(tp);
-      break;
+  else if ( clock_id == CLOCK_PROCESS_CPUTIME )
+    _TOD_Get_uptime(tp);
 #endif
-
 #ifdef _POSIX_THREAD_CPUTIME
-    case CLOCK_THREAD_CPUTIME:
-      rtems_set_errno_and_return_minus_one( ENOSYS );
-      break;
+  else if ( clock_id == CLOCK_THREAD_CPUTIME )
+    rtems_set_errno_and_return_minus_one( ENOSYS );
 #endif
-    default:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+  else
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
-  }
   return 0;
 }
