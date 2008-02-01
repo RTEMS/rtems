@@ -1,3 +1,11 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* itronhello/init.c, itronmbf01/init.c, itronmbox01/init.c,
+	itronsem01/init.c, itrontask01/init.c, itrontask02/init.c,
+	itrontask03/init.c, itrontask04/init.c, itrontime01/init.c: Change
+	TEST_INIT to CONFIGURE_INIT. Make tmacros.h available to all POSIX
+	tests. Add a clock_settime case for < 1988.
+
 2007-05-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* itronmbf01/init.c, itronmbf01/itronmbf01.scn, itrontask02/init.c,
