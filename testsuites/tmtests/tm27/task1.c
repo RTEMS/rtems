@@ -16,7 +16,7 @@
  *  THIS TEST USES INTERNAL RTEMS VARIABLES!!!
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 #include <bsp.h>

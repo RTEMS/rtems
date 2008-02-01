@@ -11,7 +11,7 @@
  */
 
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 #define MAXIMUM_DISTRIBUTION 10000

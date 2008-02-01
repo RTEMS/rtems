@@ -10,7 +10,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 rtems_id Task_id[ OPERATION_COUNT + 1 ];

@@ -10,7 +10,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 uint8_t   Memory_area[ 2048 ];
