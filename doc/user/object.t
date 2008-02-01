@@ -84,13 +84,86 @@ a user defined name in CPU Usage Reports.
 
 @section Operations
 
-@subsection Decomposing an Object Id
+@subsection Decomposing and Recomposing an Object Id
 
-TBD
+Services are provided to decompose an object Id into its
+subordinate components. The following services are used
+to do this:
 
-@subsection Building an Object Id
+@itemize @bullet
+@item @code{@value{DIRPREFIX}object_id_get_api}
+@item @code{@value{DIRPREFIX}object_id_get_class}
+@item @code{@value{DIRPREFIX}object_id_get_node}
+@item @code{@value{DIRPREFIX}object_id_get_index}
+@end itemize
 
-TBD
+The following C language example illustrates the
+decomposition of an Id and printing the values.
+
+@example
+void printObjectId(rtems_id id)
+@{
+  printf(
+    "API=%d Class=%d Node=%d Index=%d\n",
+    rtems_object_id_get_api(id),
+    rtems_object_id_get_class(id),
+    rtems_object_id_get_node(id),
+    rtems_object_id_get_index(id)
+  ); 
+@}
+@end example
+
+This prints the components of the Ids as integers.
+
+It is also possible to construct an arbitrary Id using
+the @code{@value{DIRPREFIX}build_id} service.  The following
+C language example illustrates how to construct the
+"next Id."
+
+@example
+rtems_id nextObjectId(rtems_id id)
+@{
+  return rtems_build_id(
+    rtems_object_id_get_api(id),
+    rtems_object_id_get_class(id),
+    rtems_object_id_get_node(id),
+    rtems_object_id_get_index(id) + 1
+  ); 
+@}
+@end example
+
+Note that this Id may not be valid in this
+system or associated with an allocated object.
+
+@subsection Printing an Object Id
+
+RTEMS also provides services to associate the API and Class
+portions of an Object Id with strings.  This allows the
+application developer to provide more information about
+an object in diagnostic messages.
+
+In the following C language example, an Id is decomposed into
+its constituent parts and "pretty-printed."
+
+@example
+void prettyPrintObjectId(rtems_id id)
+@{
+  uint32_t tmpAPI, tmpClass;
+
+  tmpAPI   = rtems_object_id_get_api(id),
+  tmpClass = rtems_object_id_get_class(id),
+
+  printf(
+    "API=%s Class=%s Node=%d Index=%d\n",
+    rtems_object_get_api_name(tmpAPI),
+    rtems_object_get_api_class_name(tmpAPI, tmpClass),
+    rtems_object_id_get_node(id),
+    rtems_object_id_get_index(id)
+  ); 
+@}
+@end example
+
+@section Directives
 
 @c
 @c

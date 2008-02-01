@@ -1,5 +1,9 @@
 2008-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* user/object.t: Added some examples.
+
+2008-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/object.t: Add Ada binding for Object Services.
 
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
