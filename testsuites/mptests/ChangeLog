@@ -1,3 +1,11 @@
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mp01/init.c, mp02/init.c, mp03/init.c, mp04/init.c, mp05/init.c,
+	mp06/init.c, mp07/init.c, mp08/init.c, mp09/init.c, mp10/init.c,
+	mp11/init.c, mp12/init.c, mp13/init.c, mp14/init.c: Change TEST_INIT
+	to CONFIGURE_INIT. Make tmacros.h available to all POSIX tests. Add a
+	clock_settime case for < 1988.
+
 2008-01-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mp01/node1/Makefile.am, mp01/node2/Makefile.am,

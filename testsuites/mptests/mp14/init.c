@@ -21,7 +21,7 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
 
 uint8_t   my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
