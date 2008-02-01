@@ -2004,7 +2004,6 @@ package body RTEMS is
          (C, Object_Get_Classic_Name_Base, "rtems_object_get_classic_name");
       Tmp_Name : aliased RTEMS.Name;
    begin
-      -- TBD
       Result := Object_Get_Classic_Name_Base (ID, Tmp_Name'Access);
       Name := Tmp_Name;
    end Object_Get_Classic_Name;
@@ -2012,21 +2011,22 @@ package body RTEMS is
 
    procedure Object_Get_Name(
       ID     : in     RTEMS.ID;
-      Length : in     RTEMS.Unsigned32;
       Name   :    out String;
       Result :    out RTEMS.Status_Codes
    ) is
       function Object_Get_Name_Base (
          ID     : RTEMS.ID;
-         -- Length : RTEMS.Unsigned32:
-         -- Name   : chars_ptr;
-         Length : RTEMS.Unsigned32
+         Length : RTEMS.Unsigned32;
+         Name   : System.Address
       )  return RTEMS.Status_Codes;
       pragma Import (C, Object_Get_Name_Base, "rtems_object_get_name");
    begin
-      -- TBD
-      Name := "";
-      Result := Object_Get_Name_Base (Id, Length);
+      Name := (others => ASCII.Nul);
+      Result := Object_Get_Name_Base (
+         Id,
+         Name'Length,
+         Name(Name'First)'Address
+      );
    end Object_Get_Name;
 
    procedure Object_Set_Name(

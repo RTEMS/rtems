@@ -1279,7 +1279,6 @@ pragma Elaborate_Body (RTEMS);
 
    procedure Object_Get_Name(
       ID     : in     RTEMS.ID;
-      Length : in     RTEMS.Unsigned32;
       Name   :    out String;
       Result :    out RTEMS.Status_Codes
    );
