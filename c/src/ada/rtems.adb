@@ -10,7 +10,7 @@
 --
 --
 --
---  COPYRIGHT (c) 1997-2007.
+--  COPYRIGHT (c) 1997-2008.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -24,7 +24,8 @@ with Ada;
 with Ada.Unchecked_Conversion;
 with System;
 with Interfaces; use Interfaces;
-with Interfaces.C;
+with Interfaces.C; use Interfaces.C;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body RTEMS is
 
@@ -86,30 +87,6 @@ package body RTEMS is
       return Microseconds_To_Ticks(Milliseconds_To_Microseconds(Milliseconds));
 
    end Milliseconds_To_Ticks;
-
-   function Build_Name (
-      C1 : in     Character;
-      C2 : in     Character;
-      C3 : in     Character;
-      C4 : in     Character
-   ) return RTEMS.Name is
-      C1_Value : RTEMS.Unsigned32;
-      C2_Value : RTEMS.Unsigned32;
-      C3_Value : RTEMS.Unsigned32;
-      C4_Value : RTEMS.Unsigned32;
-   begin
-
-     C1_Value := Character'Pos( C1 );
-     C2_Value := Character'Pos( C2 );
-     C3_Value := Character'Pos( C3 );
-     C4_Value := Character'Pos( C4 );
-
-     return Interfaces.Shift_Left( C1_Value, 24 ) or
-            Interfaces.Shift_Left( C2_Value, 16 ) or
-            Interfaces.Shift_Left( C3_Value, 8 )  or
-            C4_Value;
-
-   end Build_Name;
 
    procedure Name_To_Characters (
       Name : in     RTEMS.Name;
@@ -1985,5 +1962,260 @@ package body RTEMS is
       return Debug_Is_Enabled_Base ( Level );
 
    end Debug_Is_Enabled;
+
+   --
+   --  Object Services
+   --
+
+   function Build_Name (
+      C1 : in     Character;
+      C2 : in     Character;
+      C3 : in     Character;
+      C4 : in     Character
+   ) return RTEMS.Name is
+      C1_Value : RTEMS.Unsigned32;
+      C2_Value : RTEMS.Unsigned32;
+      C3_Value : RTEMS.Unsigned32;
+      C4_Value : RTEMS.Unsigned32;
+   begin
+
+     C1_Value := Character'Pos( C1 );
+     C2_Value := Character'Pos( C2 );
+     C3_Value := Character'Pos( C3 );
+     C4_Value := Character'Pos( C4 );
+
+     return Interfaces.Shift_Left( C1_Value, 24 ) or
+            Interfaces.Shift_Left( C2_Value, 16 ) or
+            Interfaces.Shift_Left( C3_Value, 8 )  or
+            C4_Value;
+
+   end Build_Name;
+
+   procedure Object_Get_Classic_Name(
+      ID     : in     RTEMS.ID;
+      Name   :    out RTEMS.Name;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Object_Get_Classic_Name_Base (
+         ID   : RTEMS.ID;
+         Name : access RTEMS.Name
+      )  return RTEMS.Status_Codes;
+      pragma Import
+         (C, Object_Get_Classic_Name_Base, "rtems_object_get_classic_name");
+      Tmp_Name : aliased RTEMS.Name;
+   begin
+      -- TBD
+      Result := Object_Get_Classic_Name_Base (ID, Tmp_Name'Access);
+      Name := Tmp_Name;
+   end Object_Get_Classic_Name;
+   
+
+   procedure Object_Get_Name(
+      ID     : in     RTEMS.ID;
+      Length : in     RTEMS.Unsigned32;
+      Name   :    out String;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Object_Get_Name_Base (
+         ID     : RTEMS.ID;
+         -- Length : RTEMS.Unsigned32:
+         -- Name   : chars_ptr;
+         Length : RTEMS.Unsigned32
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Object_Get_Name_Base, "rtems_object_get_name");
+   begin
+      -- TBD
+      Name := "";
+      Result := Object_Get_Name_Base (Id, Length);
+   end Object_Get_Name;
+
+   procedure Object_Set_Name(
+      ID     : in     RTEMS.ID;
+      Name   : in     String;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Object_Set_Name_Base (
+         ID     : RTEMS.ID;
+         Name   : chars_ptr
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Object_Set_Name_Base, "rtems_object_set_name");
+      NameAsCString : chars_ptr := New_String(Name);
+   begin
+      Result := Object_Set_Name_Base (ID, NameAsCString);
+   end Object_Set_Name;
+
+   procedure Object_Id_Get_API(
+      ID  : in     RTEMS.ID;
+      API :    out RTEMS.Unsigned32
+   ) is
+      function Object_Id_Get_API_Base (
+         ID     : RTEMS.ID
+      )  return RTEMS.Unsigned32;
+      pragma Import (C, Object_Id_Get_API_Base, "rtems_object_id_get_api");
+   begin
+      API := Object_Id_Get_API_Base (ID);
+   end Object_Id_Get_API;
+
+   procedure Object_Id_Get_Class(
+      ID        : in     RTEMS.ID;
+      The_Class :    out RTEMS.Unsigned32
+   ) is
+      function Object_Id_Get_Class_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Unsigned32;
+      pragma Import (C, Object_Id_Get_Class_Base, "rtems_object_id_get_class");
+   begin
+      The_Class := Object_Id_Get_Class_Base (ID);
+   end Object_Id_Get_Class;
+
+   procedure Object_Id_Get_Node(
+      ID   : in     RTEMS.ID;
+      Node :    out RTEMS.Unsigned32
+   ) is
+      function Object_Id_Get_Node_Base (
+         ID     : RTEMS.ID
+      )  return RTEMS.Unsigned32;
+      pragma Import (C, Object_Id_Get_Node_Base, "rtems_object_id_get_node");
+   begin
+      Node := Object_Id_Get_Node_Base (ID);
+   end Object_Id_Get_Node;
+
+   procedure Object_Id_Get_Index(
+      ID    : in     RTEMS.ID;
+      Index :    out RTEMS.Unsigned32
+   ) is
+      function Object_Id_Get_Index_Base (
+         ID     : RTEMS.ID
+      )  return RTEMS.Unsigned32;
+      pragma Import (C, Object_Id_Get_Index_Base, "rtems_object_id_get_index");
+   begin
+      Index := Object_Id_Get_Index_Base (ID);
+   end Object_Id_Get_Index;
+
+   function Build_Id(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      The_Node  : in     RTEMS.Unsigned32;
+      The_Index : in     RTEMS.Unsigned32
+   ) return RTEMS.Id is
+      function Build_Id_Base (
+        The_API   : RTEMS.Unsigned32;
+        The_Class : RTEMS.Unsigned32;
+        The_Node  : RTEMS.Unsigned32;
+        The_Index : RTEMS.Unsigned32
+      )  return RTEMS.Id;
+      pragma Import (C, Build_Id_Base, "rtems_build_id");
+   begin
+      return Build_Id_Base (The_API, The_Class, The_Node, The_Index);
+   end Build_Id;
+
+   function Object_Id_API_Minimum
+   return RTEMS.Unsigned32 is
+      function Object_Id_API_Minimum_Base return RTEMS.Unsigned32;
+      pragma Import
+         (C, Object_Id_API_Minimum_Base, "rtems_object_id_api_minimum");
+   begin
+      return Object_Id_API_Minimum_Base;
+   end Object_Id_API_Minimum;
+
+   function Object_Id_API_Maximum
+   return RTEMS.Unsigned32 is
+      function Object_Id_API_Maximum_Base return RTEMS.Unsigned32;
+      pragma Import
+         (C, Object_Id_API_Maximum_Base, "rtems_object_id_api_maximum");
+   begin
+      return Object_Id_API_Maximum_Base;
+   end Object_Id_API_Maximum;
+
+   procedure Object_API_Minimum_Class(
+      API     : in     RTEMS.Unsigned32;
+      Minimum :    out RTEMS.Unsigned32
+   ) is
+      function  Object_API_Minimum_Class_Base (
+         API : RTEMS.Unsigned32
+      )  return RTEMS.Unsigned32;
+      pragma Import
+         (C, Object_API_Minimum_Class_Base, "rtems_object_api_minimum_class");
+   begin
+      Minimum := Object_API_Minimum_Class_Base (API);
+   end Object_API_Minimum_Class;
+
+   procedure Object_API_Maximum_Class(
+      API     : in     RTEMS.Unsigned32;
+      Maximum :    out RTEMS.Unsigned32
+   ) is
+      function  Object_API_Maximum_Class_Base (
+         API : RTEMS.Unsigned32
+      )  return RTEMS.Unsigned32;
+      pragma Import
+         (C, Object_API_Maximum_Class_Base, "rtems_object_api_maximum_class");
+   begin
+      Maximum := Object_API_Maximum_Class_Base (API);
+   end Object_API_Maximum_Class;
+
+   -- Translate S from a C-style char* into an Ada String.
+   -- If S is Null_Ptr, return "", don't raise an exception.
+   -- Copied from Lovelace Tutorial
+   function Value_Without_Exception(S : chars_ptr) return String is
+   begin
+     if S = Null_Ptr then return "";
+      else return Value(S);
+     end if;
+   end Value_Without_Exception;
+   pragma Inline(Value_Without_Exception);
+
+   procedure Object_Get_API_Name(
+      API  : in     RTEMS.Unsigned32;
+      Name :    out String
+   ) is
+      function  Object_Get_API_Name_Base (
+	API : RTEMS.Unsigned32
+      )  return chars_ptr;
+      pragma Import (C, Object_Get_API_Name_Base, "rtems_object_get_api_name");
+      Result : chars_ptr := Object_Get_API_Name_Base (API);
+      APIName : String :=  Value_Without_Exception (Result);
+   begin
+      Name := APIName;
+   end Object_Get_API_Name;
+
+   procedure Object_Get_API_Class_Name(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      Name      :    out String
+   ) is
+      function  Object_Get_API_Class_Name_Base (
+	API   : RTEMS.Unsigned32;
+	Class : RTEMS.Unsigned32
+      )  return chars_ptr;
+      pragma Import
+         (C, Object_Get_API_Class_Name_Base, "rtems_object_get_api_class_name");
+      Result : chars_ptr := Object_Get_API_Class_Name_Base (The_API, The_Class);
+      ClassName : String :=  Value_Without_Exception (Result);
+   begin
+      Name := ClassName;
+   end Object_Get_API_Class_Name;
+
+   procedure Object_Get_Class_Information(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      Info      :    out RTEMS.Object_API_Class_Information;
+      Result    :    out RTEMS.Status_Codes
+   ) is
+      function  Object_Get_Class_Information_Base (
+	The_API   : RTEMS.Unsigned32;
+	The_Class : RTEMS.Unsigned32;
+	Info      : access RTEMS.Object_API_Class_Information
+      )  return RTEMS.Status_Codes;
+      pragma Import (
+         C,
+         Object_Get_Class_Information_Base,
+         "rtems_object_get_class_information"
+      );
+      TmpInfo : aliased RTEMS.Object_API_Class_Information;
+   begin
+      Result :=  Object_Get_Class_Information_Base
+         (The_API, The_Class, TmpInfo'Access);
+      Info := TmpInfo;
+   end Object_Get_Class_Information;
 
 end RTEMS;

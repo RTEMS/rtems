@@ -11,7 +11,7 @@
 --    RTEMS initialization and configuration are called from
 --    the BSP side, therefore should never be called from ADA.
 --
---  COPYRIGHT (c) 1997-2007.
+--  COPYRIGHT (c) 1997-2008.
 --  On-Line Applications Research Corporation (OAR).
 --
 --  The license and distribution terms for this file may in
@@ -531,13 +531,6 @@ pragma Elaborate_Body (RTEMS);
       Milliseconds : RTEMS.Unsigned32
    ) return RTEMS.Interval;
 
-   function Build_Name (
-      C1 : in     Character;
-      C2 : in     Character;
-      C3 : in     Character;
-      C4 : in     Character
-   ) return RTEMS.Name;
-
    procedure Name_To_Characters (
       Name : in     RTEMS.Name;
       C1   :    out Character;
@@ -666,7 +659,7 @@ pragma Elaborate_Body (RTEMS);
       Note    : in     RTEMS.Unsigned32;
       Result  :    out RTEMS.Status_Codes
    );
-   
+
    type Task_Variable_Dtor is access procedure (
       Argument : in     RTEMS.Address
    );
@@ -1266,5 +1259,103 @@ pragma Elaborate_Body (RTEMS);
    function Debug_Is_Enabled (
       Level : in     RTEMS.Debug_Set
    ) return RTEMS.Boolean;
+
+   --
+   --  Object Services
+   --
+
+   function Build_Name (
+      C1 : in     Character;
+      C2 : in     Character;
+      C3 : in     Character;
+      C4 : in     Character
+   ) return RTEMS.Name;
+
+   procedure Object_Get_Classic_Name(
+      ID     : in     RTEMS.ID;
+      Name   :    out RTEMS.Name;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Object_Get_Name(
+      ID     : in     RTEMS.ID;
+      Length : in     RTEMS.Unsigned32;
+      Name   :    out String;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Object_Set_Name(
+      ID     : in     RTEMS.ID;
+      Name   : in     String;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Object_Id_Get_API(
+      ID  : in     RTEMS.ID;
+      API :    out RTEMS.Unsigned32
+   );
+
+   procedure Object_Id_Get_Class(
+      ID        : in     RTEMS.ID;
+      The_Class :    out RTEMS.Unsigned32
+   );
+
+   procedure Object_Id_Get_Node(
+      ID   : in     RTEMS.ID;
+      Node :    out RTEMS.Unsigned32
+   );
+
+   procedure Object_Id_Get_Index(
+      ID    : in     RTEMS.ID;
+      Index :    out RTEMS.Unsigned32
+   );
+
+   function Build_Id(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      The_Node  : in     RTEMS.Unsigned32;
+      The_Index : in     RTEMS.Unsigned32
+   ) return RTEMS.Id;
+
+   function Object_Id_API_Minimum return RTEMS.Unsigned32;
+
+   function Object_Id_API_Maximum return RTEMS.Unsigned32;
+
+   procedure Object_API_Minimum_Class(
+      API     : in     RTEMS.Unsigned32;
+      Minimum :    out RTEMS.Unsigned32
+   );
+
+   procedure Object_API_Maximum_Class(
+      API     : in     RTEMS.Unsigned32;
+      Maximum :    out RTEMS.Unsigned32
+   );
+
+   procedure Object_Get_API_Name(
+      API  : in     RTEMS.Unsigned32;
+      Name :    out String
+   );
+
+   procedure Object_Get_API_Class_Name(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      Name      :    out String
+   );
+
+   type Object_API_Class_Information is
+     record
+        Minimum_Id    : RTEMS.Id;
+        Maximum_Id    : RTEMS.Id;
+        Maximum       : RTEMS.Unsigned32;
+        AutoExtend    : RTEMS.Boolean;
+        Unallocated   : RTEMS.Unsigned32;
+     end record;
+
+   procedure Object_Get_Class_Information(
+      The_API   : in     RTEMS.Unsigned32;
+      The_Class : in     RTEMS.Unsigned32;
+      Info      :    out RTEMS.Object_API_Class_Information;
+      Result    :    out RTEMS.Status_Codes
+   );
 
 end RTEMS;

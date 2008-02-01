@@ -1,3 +1,7 @@
+2008-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems.adb, rtems.ads: Add Ada binding for Object Services.
+
 2007-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb: Add missing semicolon.
