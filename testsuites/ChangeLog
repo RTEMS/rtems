@@ -1,5 +1,11 @@
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* support/include/tmacros.h: Change TEST_INIT to CONFIGURE_INIT. Make
+	tmacros.h available to all POSIX tests. Add a clock_settime case for
+	< 1988.
+
+2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* support/include/tmacros.h: Fix put_name to handle unprintable names.
 
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>

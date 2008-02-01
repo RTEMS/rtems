@@ -31,9 +31,8 @@ extern "C" {
 
 #define FOREVER 1                  /* infinite loop */
 
-#ifdef TEST_INIT
+#ifdef CONFIGURE_INIT
 #define TEST_EXTERN
-#define CONFIGURE_INIT
 #else
 #define TEST_EXTERN extern
 #endif
