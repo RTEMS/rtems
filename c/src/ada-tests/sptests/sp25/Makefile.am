@@ -5,14 +5,14 @@ include $(top_srcdir)/../../../testsuites/automake/compile.am
 
 include $(top_srcdir)/ada.am
 
-noinst_PROGRAMS = sp25.exe
-sp25_exe_SOURCES = sp25.adb config.h sptest.adb sptest.ads
-sp25_exe_SOURCES += ../../support/init.c
+noinst_PROGRAMS = ada_sp25.exe
+ada_sp25_exe_SOURCES = sp25.adb config.h sptest.adb sptest.ads
+ada_sp25_exe_SOURCES += ../../support/init.c
 
-sp25.exe: sp25.adb init.$(OBJEXT)
+ada_sp25.exe: sp25.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 scndir = $(rtems_ada_testsdir)
-dist_scn_DATA = sp25.scn
+dist_scn_DATA = ada_sp25.scn
 
 include $(top_srcdir)/../../../testsuites/automake/local.am

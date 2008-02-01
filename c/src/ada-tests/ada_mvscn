@@ -1,0 +1,65 @@
+while read f
+do
+  bname=`basename $f`
+  # mv $f `dirname $f`/ada_`basename $f`
+  cvs rm -f $f 
+  cvs add `dirname $f`/ada_`basename $f`
+done <<EOF
+./sptests/sp15/sp15.scn
+./sptests/sp24/sp24.scn
+./sptests/sp20/sp20.scn
+./sptests/sp17/sp17.scn
+./sptests/sp19/sp19.scn
+./sptests/sp09/sp09.scn
+./sptests/sp07/sp07.scn
+./sptests/sp12/sp12.scn
+./sptests/sp14/sp14.scn
+./sptests/sp03/sp03.scn
+./sptests/sp23/sp23.scn
+./sptests/sp16/sp16.scn
+./sptests/sp06/sp06.scn
+./sptests/sp04/sp04.scn
+./sptests/sp11/sp11.scn
+./sptests/sp01/sp01.scn
+./sptests/sp22/sp22.scn
+./sptests/sp05/sp05.scn
+./sptests/sp02/sp02.scn
+./sptests/sp08/sp08.scn
+./sptests/sp25/sp25.scn
+./sptests/sp13/sp13.scn
+./mptests/mp13/node2/mp13-node2.scn
+./mptests/mp13/node1/mp13-node1.scn
+./mptests/mp02/node2/mp02-node2.scn
+./mptests/mp02/node1/mp02-node1.scn
+./mptests/mp01/node2/mp01-node2.scn
+./mptests/mp01/node1/mp01-node1.scn
+./mptests/mp10/node2/mp10-node2.scn
+./mptests/mp10/node1/mp10-node1.scn
+./mptests/mp11/node2/mp11-node2.scn
+./mptests/mp11/node1/mp11-node1.scn
+./mptests/mp03/node2/mp03-node2.scn
+./mptests/mp03/node1/mp03-node1.scn
+./mptests/mp05/node2/mp05-node2.scn
+./mptests/mp05/node1/mp05-node1.scn
+./mptests/mp12/node2/mp12-node2.scn
+./mptests/mp12/node1/mp12-node1.scn
+./mptests/mp14/node2/mp14-node2.scn
+./mptests/mp14/node1/mp14-node1.scn
+./mptests/mp04/node2/mp04-node2.scn
+./mptests/mp04/node1/mp04-node1.scn
+./mptests/mp08/node2/mp08-node2.scn
+./mptests/mp08/node1/mp08-node1.scn
+./mptests/mp07/node2/mp07-node2.scn
+./mptests/mp07/node1/mp07-node1.scn
+./mptests/mp06/node2/mp06-node2.scn
+./mptests/mp06/node1/mp06-node1.scn
+./mptests/mp09/node2/mp09-node2.scn
+./mptests/mp09/node1/mp09-node1.scn
+./mvscn
+./samples/base_mp/node2/base_mp-node2.scn
+./samples/base_mp/node1/base_mp-node1.scn
+./samples/hello/hello.scn
+./samples/base_sp/base_sp.scn
+./samples/nsecs/nsecs.scn
+./samples/ticker/ticker.scn
+EOF
