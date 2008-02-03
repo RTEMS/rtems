@@ -26,7 +26,7 @@ Summary:      	tic4x-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	5%{?dist}
+Release:      	6%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -57,15 +57,15 @@ Requires:	rtems-4.9-tic4x-rtems4.9-newlib = %{newlib_version}-%{release}
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-3.4.6-rtems4.9-20071111.diff
 %endif
-%if "%{gcc_version}" == "4.2.2"
+%if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.9-20080114.diff
+Patch0:		gcc-core-4.2.3-rtems4.9-20080202.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20071220.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080131.diff
 %endif
 %{?_without_sources:NoSource:	50}
 

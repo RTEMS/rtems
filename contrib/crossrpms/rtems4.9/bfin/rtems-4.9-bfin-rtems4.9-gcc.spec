@@ -14,9 +14,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.2.2
-%define gcc_version 4.2.2
-%define gcc_rpmvers %{expand:%(echo "4.2.2" | tr - _ )}
+%define gcc_pkgvers 4.2.3
+%define gcc_version 4.2.3
+%define gcc_rpmvers %{expand:%(echo "4.2.3" | tr - _ )}
 
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -26,7 +26,7 @@ Summary:      	bfin-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	9%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,15 +53,15 @@ Requires:	rtems-4.9-bfin-rtems4.9-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.2.2"
+%if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.9-20080114.diff
+Patch0:		gcc-core-4.2.3-rtems4.9-20080202.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20071220.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080131.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
