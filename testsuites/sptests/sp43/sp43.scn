@@ -1,15 +1,19 @@
+
+
 *** TEST 43 ***
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
 rtems_object_get_classic_name - INVALID_ID (bad API)
-UI1  - name returned by rtems_object_get_classic_name
+UI1  - name returned by rtems_object_get_classic_name for Init task id
+UI1  - name returned by rtems_object_get_classic_name for RTEMS_SELF
 TEMP - rtems_build_name for TEMP
 rtems_object_get_name - bad id for class with instances
 rtems_object_get_name - bad id for class without instances
 rtems_object_get_name - bad length
 rtems_object_get_name - bad pointer
-rtems_object_get_name returned (UI1 ) for init task
+rtems_object_get_name returned (UI1 ) for init task id
+rtems_object_get_name returned (UI1 ) for RTEMS_SELF
 rtems_object_set_name - INVALID_ID (bad API)
 rtems_object_set_name - INVALID_ID (bad index)
 rtems_object_set_name - change name of init task to (New1)
@@ -27,9 +31,13 @@ rtems_object_get_name returned (N) for init task
 rtems_object_set_name - change name of init task to ()
 *    - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned () for init task
-rtems_object_set_name - change name of init task to (N-0x07-0x09-1)
+rtems_object_set_name - change name of init task to (N--        -1)
 N**1 - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (N**1) for init task
+rtems_object_set_name - change name of init task to (SELF)
+SELF - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (SELF) for init task
+rtems_object_get_name returned (SELF) for init task id
 rtems_build_id - build an id to match init task
 rtems_object_id_get_api - OK
 rtems_object_id_get_class - OK

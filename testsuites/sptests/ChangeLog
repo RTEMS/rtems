@@ -1,3 +1,7 @@
+2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp43/init.c, sp43/sp43.scn: Exercise passing as object Id of SELF.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp01/init.c, sp02/init.c, sp03/init.c, sp04/init.c, sp05/init.c,

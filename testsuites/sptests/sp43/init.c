@@ -48,6 +48,7 @@ void print_class_info(
 }
 
 void change_name(
+  rtems_id    id,
   const char *newName,
   boolean     printable
 )
@@ -72,15 +73,15 @@ void change_name(
     printf( ")\n" );
   }
 
-  status = rtems_object_set_name( main_task, newName );
+  status = rtems_object_set_name( id, newName );
   directive_failed( status, "rtems_object_set_name" );
 
-  status = rtems_object_get_classic_name( main_task, &main_name );
+  status = rtems_object_get_classic_name( id, &main_name );
   directive_failed( status, "rtems_object_get_classic_name" );
   put_name( main_name, FALSE );
   puts( " - name returned by rtems_object_get_classic_name" );
 
-  ptr = rtems_object_get_name( main_task, 5, name );
+  ptr = rtems_object_get_name( id, 5, name );
   rtems_test_assert(ptr != NULL);
   printf( "rtems_object_get_name returned (%s) for init task\n", ptr );
 }
@@ -139,7 +140,12 @@ rtems_task Init(
   status = rtems_object_get_classic_name( main_task, &main_name );
   directive_failed( status, "rtems_object_get_classic_name" );
   put_name( main_name, FALSE );
-  puts( " - name returned by rtems_object_get_classic_name" );
+  puts( " - name returned by rtems_object_get_classic_name for Init task id" );
+
+  status = rtems_object_get_classic_name( RTEMS_SELF, &main_name );
+  directive_failed( status, "rtems_object_get_classic_name" );
+  put_name( main_name, FALSE );
+  puts( " - name returned by rtems_object_get_classic_name for RTEMS_SELF" );
 
   tmpName = rtems_build_name( 'T', 'E', 'M', 'P' );
   put_name( tmpName, FALSE );
@@ -171,7 +177,11 @@ rtems_task Init(
 
   ptr = rtems_object_get_name( main_task, 5, name );
   rtems_test_assert(ptr != NULL);
-  printf( "rtems_object_get_name returned (%s) for init task\n", ptr );
+  printf( "rtems_object_get_name returned (%s) for init task id\n", ptr );
+
+  ptr = rtems_object_get_name( RTEMS_SELF, 5, name );
+  rtems_test_assert(ptr != NULL);
+  printf( "rtems_object_get_name returned (%s) for RTEMS_SELF\n", ptr );
 
   /*
    * rtems_object_set_name - errors
@@ -200,17 +210,28 @@ rtems_task Init(
    * This is strange but pushes the SuperCore code to do different things.
    */
 
-  change_name( "New1", TRUE );
-  change_name( "Ne1", TRUE );
-  change_name( "N1", TRUE );
-  change_name( "N", TRUE );
-  change_name( "", TRUE );
+  change_name( main_task,  "New1", TRUE );
+  change_name( main_task, "Ne1", TRUE );
+  change_name( main_task, "N1", TRUE );
+  change_name( main_task, "N", TRUE );
+  change_name( main_task, "", TRUE );
   tmpNameString[0] = 'N';
   tmpNameString[1] = 0x07;
   tmpNameString[2] = 0x09;
   tmpNameString[3] = '1';
   tmpNameString[4] = '\0';
-  change_name( tmpNameString, FALSE );
+  change_name( main_task, tmpNameString, FALSE );
+
+  /*
+   * Change object name using SELF ID
+   */
+
+  change_name( RTEMS_SELF,  "SELF", TRUE );
+
+  ptr = rtems_object_get_name( main_task, 5, name );
+  rtems_test_assert(ptr != NULL);
+  printf( "rtems_object_get_name returned (%s) for init task id\n", ptr );
+
 
   /*
    * Exercise id build and extraction routines
