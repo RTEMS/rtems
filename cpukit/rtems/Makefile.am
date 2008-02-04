@@ -131,6 +131,9 @@ librtems_a_SOURCES += src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
     src/dpmeminternal2external.c src/dpmemdata.c
 
+## WORKSPACE_FILES
+librtems_a_SOURCES += src/workspace.c
+
 librtems_a_SOURCES += src/attr.c
 
 if HAS_MP

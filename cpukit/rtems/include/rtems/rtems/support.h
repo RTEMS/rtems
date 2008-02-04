@@ -25,16 +25,66 @@ extern "C" {
 
 #include <rtems/rtems/types.h>
 
-/*
- *  Time related
+/**  @brief milliseconds to microseconds
+ *
+ *  This is the public milliseconds to microseconds conversion.
  */
-
 #define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) \
         TOD_MILLISECONDS_TO_MICROSECONDS(_ms)
+
+/** @brief milliseconds to ticks
+ *
+ *  This is the public milliseconds to ticks conversion.
+ */
 #define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
         TOD_MILLISECONDS_TO_TICKS(_ms)
+
+/** @brief microseconds to ticks
+ *  This is the public microseconds to tick conversion.
+ */
 #define RTEMS_MICROSECONDS_TO_TICKS(_ms) \
         TOD_MICROSECONDS_TO_TICKS(_ms)
+
+/** @brief get workspace information
+ *
+ *  This returns information about the heap that is used as
+ *  the RTEMS Executive Workspace.
+ *
+ *  @param[in] the_info
+ *
+ *  @return TRUE if successful
+ */
+boolean rtems_workspace_get_information(
+  Heap_Information_block  *the_info
+);
+
+/** @brief get workspace information
+ *
+ *  This returns information about the heap that is used as
+ *  the RTEMS Executive Workspace.
+ *
+ *  @param[in] bytes is the number of bytes to allocate 
+ *  @param[in] pointer is the returned pointer to allocated memory
+ *
+ *  @return TRUE if successful
+ */
+boolean rtems_workspace_allocate(
+  size_t   bytes,
+  void   **pointer
+);
+
+/** @brief free workspace
+ *
+ *  This frees the workspace that was allocated from   
+ *  the RTEMS Executive Workspace.
+ *
+ *  @param[in] pointer is the allocated workspace
+ *
+ *  @return TRUE if successful
+ */
+boolean rtems_workspace_free(
+  void *pointer
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/support.inl>
