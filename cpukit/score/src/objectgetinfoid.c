@@ -15,6 +15,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+#include <rtems/score/thread.h>
 
 Objects_Information *_Objects_Get_information_id(
   Objects_Id  id

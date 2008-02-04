@@ -43,6 +43,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
 {
   uint32_t             the_api;
   uint32_t             the_class;
+  Objects_Id           tmpId;
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
   Objects_Locations    ignored_location;
@@ -50,11 +51,13 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( !name )
     return OBJECTS_INVALID_NAME;
 
-  the_api = _Objects_Get_API( id );
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+
+  the_api = _Objects_Get_API( tmpId );
   if ( the_api && the_api > OBJECTS_APIS_LAST )
     return OBJECTS_INVALID_ID;
 
-  the_class = _Objects_Get_class( id );
+  the_class = _Objects_Get_class( tmpId );
 
   information = _Objects_Information_table[ the_api ][ the_class ];
   if ( !information )
@@ -63,7 +66,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( information->is_string )
     return OBJECTS_INVALID_ID;
 
-  the_object = _Objects_Get( information, id, &ignored_location );
+  the_object = _Objects_Get( information, tmpId, &ignored_location );
   if ( !the_object )
     return OBJECTS_INVALID_ID;
 

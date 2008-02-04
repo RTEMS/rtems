@@ -1,3 +1,9 @@
+2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/src/rtemsobjectsetname.c, score/src/objectgetinfoid.c,
+	score/src/objectgetnameasstring.c, score/src/objectidtoname.c: Handle
+	Object Id of SELF.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/clockgettime.c, posix/src/clocksettime.c,

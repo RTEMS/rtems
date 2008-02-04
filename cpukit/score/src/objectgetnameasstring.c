@@ -41,6 +41,7 @@ char *_Objects_Get_name_as_string(
   char                   lname[5];
   Objects_Control       *the_object;
   Objects_Locations      location;
+  Objects_Id             tmpId;
 
   if ( length == 0 )
     return NULL;
@@ -48,11 +49,13 @@ char *_Objects_Get_name_as_string(
   if ( name == NULL )
     return NULL;
 
-  information = _Objects_Get_information_id( id );
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+
+  information = _Objects_Get_information_id( tmpId );
   if ( !information )
     return NULL;
 
-  the_object = _Objects_Get( information, id, &location );
+  the_object = _Objects_Get( information, tmpId, &location );
   switch ( location ) {
 
 #if defined(RTEMS_MULTIPROCESSING)

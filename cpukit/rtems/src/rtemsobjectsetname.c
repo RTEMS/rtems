@@ -34,15 +34,18 @@ rtems_status_code rtems_object_set_name(
   Objects_Information *information;
   Objects_Locations    location;
   Objects_Control     *the_object;
+  Objects_Id           tmpId;
 
   if ( !name )
     return RTEMS_INVALID_ADDRESS;
 
-  information  = _Objects_Get_information_id( id );
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+
+  information  = _Objects_Get_information_id( tmpId );
   if ( !information )
     return RTEMS_INVALID_ID;
  
-  the_object = _Objects_Get( information, id, &location );
+  the_object = _Objects_Get( information, tmpId, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
