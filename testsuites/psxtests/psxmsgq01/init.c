@@ -16,6 +16,7 @@
 #include <time.h>
 #include <tmacros.h>
 #include <signal.h>   /* signal facilities */
+#include "test_support.h"
 
 typedef struct {
   char         msg[ 50 ];
@@ -100,24 +101,14 @@ void Validate_attributes(
   fatal_int_service_status((int)attr.mq_flags, oflag, "flag attribute" );
 }
 
-char Queue_Name[PATH_MAX + 2];
 #define Get_Queue_Name( i )  Test_q[i].name
-
 char *Build_Queue_Name( int i ) {
+
+  static char Queue_Name[PATH_MAX + 2]; 
+
   sprintf(Queue_Name,"mq%d", i+1 );
   return Queue_Name;
 }
-
-char *Get_Too_Long_Name()
-{
-  int i;
-
-  for ( i=0; i< PATH_MAX+1; i++ )
-    Queue_Name[i] = 'N';
-  Queue_Name[i] = '\0';
-  return Queue_Name;
-}
-
 
 void open_test_queues()
 {

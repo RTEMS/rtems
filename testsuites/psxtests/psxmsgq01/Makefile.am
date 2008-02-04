@@ -5,7 +5,9 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = psxmsgq01.exe
-psxmsgq01_exe_SOURCES = init.c system.h ../include/pmacros.h
+psxmsgq01_exe_SOURCES = init.c system.h ../include/pmacros.h \
+     ../../support/src/test_support.c
+
 
 dist_rtems_tests_DATA = psxmsgq01.scn
 

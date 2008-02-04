@@ -50,8 +50,10 @@ psxfatal01/Makefile
 psxfatal02/Makefile
 psxfile01/Makefile
 psxhdrs/Makefile
+psxkey01/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
+psxmsgq02/Makefile
 psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile

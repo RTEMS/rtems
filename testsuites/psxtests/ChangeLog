@@ -1,3 +1,12 @@
+2008-02-04	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* Makefile.am, configure.ac, psxmsgq01/Makefile.am, psxmsgq01/init.c:
+	Added tests for failure path coverages. Consolidated methods used in
+	multiple places into support routines.
+	* psxkey01/Makefile.am, psxkey01/init.c, psxkey01/psxkey01.scn,
+	psxkey01/system.h, psxkey01/task.c, psxmsgq02/Makefile.am,
+	psxmsgq02/init.c, psxmsgq02/psxmsgq02.scn, psxmsgq02/system.h: New files.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/pmacros.h, psx01/init.c, psx01/system.h, psx13/main.c,
