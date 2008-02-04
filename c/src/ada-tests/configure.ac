@@ -78,6 +78,7 @@ sptests/sp22/Makefile
 sptests/sp23/Makefile
 sptests/sp24/Makefile
 sptests/sp25/Makefile
+sptests/spname01/Makefile
 ])
 
 AC_CONFIG_FILES([
