@@ -1280,7 +1280,7 @@ pragma Elaborate_Body (RTEMS);
    procedure Object_Get_Name(
       ID     : in     RTEMS.ID;
       Name   :    out String;
-      Result :    out RTEMS.Status_Codes
+      Result :    out RTEMS.Address
    );
 
    procedure Object_Set_Name(

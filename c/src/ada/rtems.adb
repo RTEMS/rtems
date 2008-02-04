@@ -2012,13 +2012,13 @@ package body RTEMS is
    procedure Object_Get_Name(
       ID     : in     RTEMS.ID;
       Name   :    out String;
-      Result :    out RTEMS.Status_Codes
+      Result :    out RTEMS.Address
    ) is
       function Object_Get_Name_Base (
          ID     : RTEMS.ID;
          Length : RTEMS.Unsigned32;
-         Name   : System.Address
-      )  return RTEMS.Status_Codes;
+         Name   : RTEMS.Address
+      )  return RTEMS.Address;
       pragma Import (C, Object_Get_Name_Base, "rtems_object_get_name");
    begin
       Name := (others => ASCII.Nul);
