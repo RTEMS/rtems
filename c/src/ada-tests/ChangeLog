@@ -1,5 +1,9 @@
 2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sptests/spname01/config.h: New file.
+
+2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac, sptests/Makefile.am: Exercise passing as object Id of
 	SELF.
 	* sptests/spname01/.cvsignore, sptests/spname01/Makefile.am,
