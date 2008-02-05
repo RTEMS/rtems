@@ -95,6 +95,15 @@ struct rtems_bsdnet_config @{
   char                *log_host;               /* BOOTP      */
   char                *name_server[3];         /* BOOTP      */
   char                *ntp_server[3];          /* BOOTP      */
+  unsigned long        sb_efficiency;          /* 2          */
+  /* UDP TX: 9216 bytes */
+  unsigned long        udp_tx_buf_size;
+  /* UDP RX: 40 * (1024 + sizeof(struct sockaddr_in)) */
+  unsigned long        udp_rx_buf_size;
+  /* TCP TX: 16 * 1024 bytes */
+  unsigned long        tcp_tx_buf_size;
+  /* TCP TX: 16 * 1024 bytes */
+  unsigned long        tcp_rx_buf_size;
 @};
 @end group
 @end example
@@ -143,7 +152,7 @@ The name of the Internet domain to which the system belongs.
 
 @item char *gateway
 The Internet host number of the network gateway machine,
-specified in `dotted decimal' (@code{129.128.4.1}) form.
+specified in 'dotted decimal' (@code{129.128.4.1}) form.
 
 @item char *log_host
 The Internet host number of the machine to which @code{syslog} messages
@@ -156,6 +165,54 @@ Internet Domain Name Servers.
 @item char *ntp_server[3]
 The Internet host numbers of up to three machines to be used as
 Network Time Protocol (NTP) Servers.
+
+@item unsigned long sb_efficiency
+This is the first of five configuration parameters related to
+the amount of memory each socket may consume for buffers.  The
+TCP/IP stack reserves buffers (e.g. mbufs) for each open socket.  The
+TCP/IP stack has different limits for the transmit and receive
+buffers associated with each TCP and UDP socket.  By tuning these
+parameters, the application developer can make trade-offs between
+memory consumption and performance.  The default parameters favor
+performance over memory consumption.  See
+@uref{http://www.rtems.org/ml/rtems-users/2004/february/msg00200.html}
+for more details but note that after the RTEMS 4.8 release series,
+the sb_efficiency default was changed from @code{8} to @code{2}.
+
+The user should also be aware of the @code{SO_SNDBUF} and @code{SO_RCVBUF}
+IO control operations.  These can be used to specify the 
+send and receive buffer sizes for a specific socket.  There
+is no standard IO control to change the @code{sb_efficiency} factor.
+
+The @code{sb_efficiency} parameter is a buffering factor used
+in the implementation of the TCP/IP stack.  The default is @code{2}
+which indicates double buffering.  When allocating memory for each
+socket, this number is multiplied by the buffer sizes for that socket.
+
+@item unsigned long udp_tx_buf_size
+This configuration parameter specifies the maximum amount of 
+buffer memory which may be used for UDP sockets to transmit
+with.  The default size is 9216 bytes which corresponds to
+the maximum datagram size.
+
+@item unsigned long udp_rx_buf_size
+This configuration parameter specifies the maximum amount of 
+buffer memory which may be used for UDP sockets to receive
+into.  The default size is the following length in bytes:
+
+@example 
+40 * (1024 + sizeof(struct sockaddr_in)
+@end example
+
+@item unsigned long tcp_tx_buf_size
+This configuration parameter specifies the maximum amount of 
+buffer memory which may be used for TCP sockets to transmit
+with.  The default size is sixteen kilobytes.
+
+@item unsigned long tcp_rx_buf_size
+This configuration parameter specifies the maximum amount of 
+buffer memory which may be used for TCP sockets to receive
+into.  The default size is sixteen kilobytes.
 
 @end table
 
@@ -253,12 +310,12 @@ parameters.
 
 @example
 static struct rtems_bsdnet_ifconfig netdriver_config = @{
-	RTEMS_BSP_NETWORK_DRIVER_NAME,
-	RTEMS_BSP_NETWORK_DRIVER_ATTACH
+  RTEMS_BSP_NETWORK_DRIVER_NAME,
+  RTEMS_BSP_NETWORK_DRIVER_ATTACH
 @};
 struct rtems_bsdnet_config rtems_bsdnet_config = @{
-	&netdriver_config,
-	rtems_bsdnet_do_bootp,
+  &netdriver_config,
+  rtems_bsdnet_do_bootp,
 @};
 @end example
 

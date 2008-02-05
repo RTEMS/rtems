@@ -1,3 +1,8 @@
+2008-02-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* networking/networkapp.t: Add configuration parameters for network
+	stack efficiency multiplier and default socket buffer sizes.
+
 2008-02-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/object.t: Added some examples.
