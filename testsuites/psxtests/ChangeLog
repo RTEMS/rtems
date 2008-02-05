@@ -1,3 +1,7 @@
+2008-02-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxkey01/.cvsignore, psxmsgq02/.cvsignore: New files.
+
 2008-02-04	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, configure.ac, psxmsgq01/Makefile.am, psxmsgq01/init.c:
