@@ -110,8 +110,8 @@ libposix_a_SOURCES += src/mutex.c src/mutexattrdestroy.c \
     src/mutexunlock.c
 
 ## PTHREAD_C_FILES
-libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
-    src/pthreadgetcputime.c src/pthreadgetcpuclockid.c src/pthreadonce.c \
+libposix_a_SOURCES += src/pthread.c \
+    src/pthreadgetcpuclockid.c src/pthreadonce.c \
     src/pthreadequal.c src/pthreadself.c src/pthreadexit.c \
     src/pthreaddetach.c src/pthreadjoin.c src/pthreadcreate.c \
     src/pthreadattrsetdetachstate.c src/pthreadattrgetdetachstate.c \
