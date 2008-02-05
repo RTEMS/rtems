@@ -221,6 +221,9 @@ static int
 rtems_bsdnet_initialize (void)
 {
 	rtems_status_code sc;
+        extern void rtems_set_udp_buffer_sizes( u_long, u_long );
+        extern void rtems_set_tcp_buffer_sizes( u_long, u_long );
+        extern void rtems_set_sb_efficiency( u_long );
 
 	/*
 	 * Set the priority of all network tasks
@@ -237,6 +240,18 @@ rtems_bsdnet_initialize (void)
 		nmbuf = rtems_bsdnet_config.mbuf_bytecount / MSIZE;
 	if (rtems_bsdnet_config.mbuf_cluster_bytecount)
 		nmbclusters = rtems_bsdnet_config.mbuf_cluster_bytecount / MCLBYTES;
+
+        rtems_set_udp_buffer_sizes(
+          rtems_bsdnet_config.udp_tx_buf_size,
+          rtems_bsdnet_config.udp_rx_buf_size
+        );
+
+        rtems_set_tcp_buffer_sizes(
+          rtems_bsdnet_config.tcp_tx_buf_size,
+          rtems_bsdnet_config.tcp_rx_buf_size
+        );
+
+        rtems_set_sb_efficiency( rtems_bsdnet_config.sb_efficiency );
 
 	/*
 	 * Create the task-synchronization semaphore

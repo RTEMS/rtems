@@ -1,3 +1,14 @@
+2008-02-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libnetworking/kern/uipc_socket2.c,
+	libnetworking/netinet/tcp_usrreq.c,
+	libnetworking/netinet/udp_usrreq.c,
+	libnetworking/rtems/rtems_bsdnet.h, libnetworking/rtems/rtems_glue.c:
+	Add configuration parameters for network stack efficiency multiplier
+	and default socket buffer sizes. Change default multiplier from 8 to
+	2 to match GNU/Linux. This has no impact on performance on the BSPs
+	tested.
+
 2008-02-04	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* rtems/Makefile.am, rtems/include/rtems/rtems/support.h: Added

@@ -579,6 +579,19 @@ static u_long	udp_recvspace = 40 * (1024 + sizeof(struct sockaddr_in));
 SYSCTL_INT(_net_inet_udp, UDPCTL_RECVSPACE, recvspace, CTLFLAG_RW,
 	&udp_recvspace, 0, "");
 
+#if defined(__rtems__)
+  void rtems_set_udp_buffer_sizes(
+    u_long sendspace,
+    u_long recvspace
+  )
+  {
+    if ( sendspace != 0 )
+      udp_sendspace = sendspace;
+    if ( recvspace != 0 )
+      udp_recvspace = recvspace;
+  }
+#endif
+
 /*ARGSUSED*/
 int
 udp_usrreq(so, req, m, addr, control)

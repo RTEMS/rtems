@@ -730,6 +730,19 @@ u_long	tcp_recvspace = 1024*16;
 SYSCTL_INT(_net_inet_tcp, TCPCTL_RECVSPACE, recvspace,
 	CTLFLAG_RW, &tcp_recvspace , 0, "");
 
+#if defined(__rtems__)
+  void rtems_set_tcp_buffer_sizes(
+    u_long sendspace,
+    u_long recvspace
+  )
+  {
+    if ( sendspace != 0 )
+      tcp_sendspace = sendspace;
+    if ( recvspace != 0 )
+      tcp_recvspace = recvspace;
+  }
+#endif
+
 /*
  * Attach TCP protocol to socket, allocating
  * internet protocol control block, tcp control block,

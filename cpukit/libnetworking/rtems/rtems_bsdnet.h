@@ -154,6 +154,38 @@ struct rtems_bsdnet_config {
 	char			*log_host;		/* BOOTP	*/
 	char			*name_server[3];	/* BOOTP	*/
 	char			*ntp_server[3];		/* BOOTP	*/
+        /*
+	 *  Default "multiplier" on buffer size.  This is
+	 *  claimed by the TCP/IP implementation to be for
+	 *  efficiency but you will have to measure the 
+	 *  benefit for buffering beyond double buffering
+	 *  in your own application.
+	 *
+	 *  The default value is 2.
+	 *
+	 *  See kern/uipc_socket2.c for details.
+	 */
+	unsigned long		sb_efficiency;
+	/*
+	 * Default UDP buffer sizes PER SOCKET!!
+	 *
+	 *   TX = 9216 -- max datagram size
+	 *   RX = 40 * (1024 + sizeof(struct sockaddr_in)) 
+	 *
+	 * See netinet/udp_usrreq.c for details
+	 */
+	unsigned long		udp_tx_buf_size;
+	unsigned long		udp_rx_buf_size;
+	/*
+	 * Default UDP buffer sizes PER SOCKET!!
+	 *
+	 *   TX = 16 * 1024
+	 *   RX = 16 * 1024
+	 *
+	 * See netinet/tcp_usrreq.c for details
+	 */
+	unsigned long		tcp_tx_buf_size;
+	unsigned long		tcp_rx_buf_size;
 };
 
 /*

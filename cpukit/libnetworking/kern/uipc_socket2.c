@@ -65,6 +65,15 @@ static	u_long sb_efficiency = 8;	/* parameter for sbreserve() */
 SYSCTL_INT(_kern, OID_AUTO, sockbuf_waste_factor, CTLFLAG_RW, &sb_efficiency,
 	   0, "");
 
+#if defined(__rtems__)
+  void rtems_set_sb_efficiency(
+    u_long efficiency
+  )
+  {
+    sb_efficiency = (efficiency == 0) ? 2 : efficiency;
+  }
+#endif
+
 /*
  * Procedures to manipulate state flags of socket
  * and do appropriate wakeups.  Normal sequence from the
