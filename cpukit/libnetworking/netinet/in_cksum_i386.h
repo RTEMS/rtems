@@ -24,7 +24,7 @@
 #define ADDC(n)	__asm__ volatile \
     ("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (w))
 #define LOAD(n)	__asm__ volatile \
-     ("movb " #n "(%1), %0" : "=r" (junk) : "r" (w))
+     ("movb " #n "(%1), %0" : "=q" (junk) : "r" (w))
 #define MOP	__asm__ volatile \
     ("adcl         $0, %0" : "=r" (sum) : "0" (sum))
 

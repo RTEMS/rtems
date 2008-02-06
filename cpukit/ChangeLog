@@ -1,3 +1,10 @@
+2008-02-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1277/networking
+	* libnetworking/netinet/in_cksum_i386.h: Use q instead of r in
+	constraint for assembly language. This restricts the register choice
+	to the a-d registers.
+
 2007-12-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1268/cpukit
