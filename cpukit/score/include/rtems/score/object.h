@@ -860,6 +860,29 @@ boolean _Objects_Set_name(
   const char          *name
 );
 
+/**
+ *  This function removes the_object from the namespace.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
+ */
+void _Objects_Namespace_remove(
+  Objects_Information  *information,
+  Objects_Control      *the_object
+);
+
+/**
+ *  This function removes the_object control pointer and object name
+ *  in the Local Pointer and Local Name Tables.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is a pointer to an object
+ */
+void _Objects_Close(
+  Objects_Information  *information,
+  Objects_Control      *the_object
+);
+
 /*
  *  Pieces of object.inl are promoted out to the user
  */

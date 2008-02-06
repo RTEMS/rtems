@@ -112,13 +112,14 @@ libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
     src/heapresizeblock.c
 
 ## OBJECT_C_FILES
-libscore_a_SOURCES += src/object.c src/objectallocate.c \
+libscore_a_SOURCES += src/object.c src/objectallocate.c src/objectclose.c \
     src/objectextendinformation.c src/objectfree.c src/objectget.c \
     src/objectgetisr.c src/objectgetnext.c src/objectinitializeinformation.c \
     src/objectnametoid.c src/objectnametoidstring.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \
-    src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c
+    src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
+    src/objectnamespaceremove.c
 
 ## OBJECT_C_FILES only used by ITRON API
 if LIBITRON

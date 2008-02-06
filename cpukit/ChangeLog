@@ -1,5 +1,16 @@
 2008-02-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/src/mqueueunlink.c, score/Makefile.am,
+	score/include/rtems/score/object.h,
+	score/inline/rtems/score/object.inl: Enhance
+	_Objects_Namespace_remove() to handle freeing object names which are
+	strings. All changed _Objects_Close() to call
+	_Objects_Namespace_remove(). The resulting code was then moved from
+	inline routines to function calls.
+	* score/src/objectclose.c, score/src/objectnamespaceremove.c: New files.
+
+2008-02-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/printk.c: Added width and padding for %s.
 	* libmisc/cpuuse/cpuusagereport.c: Support object names that are
 	strings longer than 4 chanracters.

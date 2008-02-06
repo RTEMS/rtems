@@ -64,11 +64,11 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
  *
  *  @param[in] id is the object Id to be processed
  */
-RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_class(
+RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
   Objects_Id id
 )
 {
-  return (uint32_t  ) 
+  return (uint32_t) 
     ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
 }
  
@@ -79,7 +79,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_class(
  *
  *  @return This method returns the node portion of an object ID.
  */
-RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_node(
+RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
   Objects_Id id
 )
 {
@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_node(
  *
  *  @return This method returns the class portion of the specified object ID.
  */
-RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_index(
+RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_index(
   Objects_Id id
 )
 {
@@ -117,22 +117,6 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_api_valid(
   return TRUE;
 }
    
-/**
- *  This function returns TRUE if the class is valid.
- *
- *  @param[in] the_class is the class portion of an object ID.
- *
- *  @return This method returns TRUE if the specified class value is valid
- *          and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
-  uint32_t   the_class
-)
-{
-  /* XXX how do we determine this now? */
-  return TRUE; /* the_class && the_class <= OBJECTS_CLASSES_LAST; */
-}
-
 /**
  *  This function returns TRUE if the node is of the local object, and
  *  FALSE otherwise.
@@ -257,10 +241,11 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Name         name
 )
 {
-  uint32_t    index;
-
-  index = _Objects_Get_index( the_object->id );
-  _Objects_Set_local_object( information, index, the_object );
+  _Objects_Set_local_object(
+    information,
+    _Objects_Get_index( the_object->id ),
+    the_object
+  );
 
   the_object->name = name;
 }
@@ -279,10 +264,11 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
   uint32_t             name
 )
 {
-  uint32_t    index;
-
-  index = _Objects_Get_index( the_object->id );
-  _Objects_Set_local_object( information, index, the_object );
+  _Objects_Set_local_object(
+    information,
+    _Objects_Get_index( the_object->id ),
+    the_object
+  );
 
   /* ASSERT: information->is_string == FALSE */ 
   the_object->name.name_u32 = name;
@@ -302,53 +288,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const char          *name
 )
 {
-  uint32_t    index;
-
-  index = _Objects_Get_index( the_object->id );
-  _Objects_Set_local_object( information, index, the_object );
-
-  /* information->is_string */ 
-  the_object->name.name_p = name;
-}
-
-/**
- *  This function removes the_object control pointer and object name
- *  in the Local Pointer and Local Name Tables.
- *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
- */
-RTEMS_INLINE_ROUTINE void _Objects_Close(
-  Objects_Information  *information,
-  Objects_Control      *the_object
-)
-{
   _Objects_Set_local_object(
     information,
     _Objects_Get_index( the_object->id ),
-    NULL
+    the_object
   );
 
-  the_object->name.name_u32 = 0;
-  the_object->name.name_p   = NULL;
-}
-
-/**
- *  This function removes the_object from the namespace.
- *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
- */
-RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove(
-  Objects_Information  *information,
-  Objects_Control      *the_object
-)
-{
-  /*
-   * Clear out either format.
-   */
-  the_object->name.name_p   = NULL;
-  the_object->name.name_u32 = 0;
+  /* ASSERT: information->is_string */ 
+  the_object->name.name_p = name;
 }
 
 #endif
