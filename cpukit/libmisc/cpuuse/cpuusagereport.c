@@ -51,7 +51,7 @@ void rtems_cpu_usage_report_with_plugin(
   uint32_t             api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
-  char                 name[5];
+  char                 name[13];
   uint32_t             ival, fval;
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     struct timespec    uptime, total, ran;
@@ -88,9 +88,9 @@ void rtems_cpu_usage_report_with_plugin(
   
   (*print)( context, "CPU Usage by thread\n"
   #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-     "   ID        NAME     SECONDS   PERCENT\n"
+     "   ID            NAME         SECONDS   PERCENT\n"
   #else
-     "   ID        NAME     TICKS   PERCENT\n"
+     "   ID            NAME         TICKS   PERCENT\n"
   #endif
   );
 
@@ -109,7 +109,12 @@ void rtems_cpu_usage_report_with_plugin(
 
         rtems_object_get_name( the_thread->Object.id, sizeof(name), name );
  
-        (*print)( context, "0x%08" PRIx32 "   %4s   ", the_thread->Object.id, name );
+        (*print)(
+          context,
+          "0x%08" PRIx32 "   %-12s   ",
+          the_thread->Object.id,
+          name
+        );
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           /*

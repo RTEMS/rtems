@@ -63,7 +63,6 @@ static void printNum(
   }
 }
 
-
 /*
  *  vprintk
  *
@@ -79,18 +78,23 @@ void vprintk(
 )
 {
   char     c, *str;
-  int      lflag, base, sign, width, lead;
+  int      lflag, base, sign, width, lead, minus;
 
   for (; *fmt != '\0'; fmt++) {
     lflag = 0;
     base  = 0;
     sign = 0;
     width = 0;
+    minus = 0;
     lead = ' ';
     if (*fmt == '%') {
       fmt++;
       if (*fmt == '0' ) {
         lead = '0';
+        fmt++;
+      }
+      if (*fmt == '-' ) {
+        minus = 1;
         fmt++;
       }
       while (*fmt >= '0' && *fmt <= '9' ) {
@@ -111,8 +115,29 @@ void vprintk(
         case 'x': case 'X': base = 16; sign = 0; break;
         case 'p':           base = 16; sign = 0; break;
         case 's':
-          for (str = va_arg(ap, char *); *str; str++)
-            BSP_output_char(*str);
+          { int i, len;
+            char *s;
+
+            str = va_arg(ap, char *);
+
+            /* calculate length of string */
+            for ( len=0, s=str ; *s ; len++, s++ )
+              ;
+
+            /* leading spaces */
+            if ( !minus )
+              for ( i=len ; i<width ; i++ )
+                BSP_output_char(' ');
+
+            /* output the string */
+            for ( i=0 ; i<width && *str ; str++ )
+              BSP_output_char(*str);
+
+            /* trailing spaces */
+            if ( minus )
+              for ( i=len ; i<width ; i++ )
+                BSP_output_char(' ');
+          }
           break;
         case 'c':
           BSP_output_char(va_arg(ap, int));

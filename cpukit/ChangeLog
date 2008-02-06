@@ -1,3 +1,9 @@
+2008-02-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/printk.c: Added width and padding for %s.
+	* libmisc/cpuuse/cpuusagereport.c: Support object names that are
+	strings longer than 4 chanracters.
+
 2008-02-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1277/networking
