@@ -25,20 +25,20 @@ void *Task_1(
   void *arg
 )
 {
-  pthread_t id = *(pthread_t *) arg;
-  int               status;
+  pthread_t   id = *(pthread_t *) arg;
+  int         status;
   uint32_t   *key_data;
 
   printf( "Thread 0x%08x\n", id );
-   printf( "Task_1: Setting the key to %d\n", 1 );
-  status = pthread_setspecific( Key_id, &Data_array[ 1 ] );
+  printf( "Task_1: Setting the key to %d\n", 1 );
+  status = pthread_setspecific( Key_id[0], (void *)&Data_array[ 1 ] );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
 
-  key_data = pthread_getspecific( Key_id );
+  key_data = pthread_getspecific( Key_id[0] );
   printf( "Task_1: Got the key value of %ld\n",
-          (unsigned long) ((uint32_t   *)key_data - Data_array) );
+          (unsigned long) ((uint32_t *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
