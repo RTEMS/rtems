@@ -272,6 +272,13 @@ noinst_PROGRAMS += e500/timer.rel
 e500_timer_rel_SOURCES = mpc6xx/timer/timer.c
 e500_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 e500_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## e500/mmu
+include_libcpu_HEADERS += e500/mmu/e500_mmu.h
+noinst_PROGRAMS += e500/mmu.rel
+e500_mmu_rel_SOURCES = e500/mmu/mmu.c e500/mmu/e500_mmu.h
+e500_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
+e500_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 EXTRA_DIST += mpc8xx/README
