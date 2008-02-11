@@ -26,7 +26,7 @@ Summary:      	powerpc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	9%{?dist}
+Release:      	10%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -55,7 +55,7 @@ Requires:	rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.3-rtems4.9-20080202.diff
+Patch0:		gcc-core-4.2.3-rtems4.9-20080205.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
