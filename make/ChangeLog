@@ -1,3 +1,8 @@
+2008-02-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* custom/mvme3100.cfg: Removed CFLAGS_PROFILE_V;
+	added '-g' to CFLAGS_DEBUG_V.
+
 2008-02-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/pc386.cfg: Use file with symbols.
