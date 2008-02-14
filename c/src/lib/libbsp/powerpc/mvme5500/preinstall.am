@@ -19,12 +19,12 @@ PREINSTALL_FILES =
 CLEANFILES += $(PREINSTALL_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
+	@$(MKDIR_P) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
@@ -49,7 +49,7 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
@@ -113,6 +113,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260eth.h
 $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h: network/if_100MHz/GT64260ethreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/GT64260ethreg.h
+
 $(PROJECT_INCLUDE)/bsp/if_wmreg.h: network/if_1GHz/if_wmreg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/if_wmreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/if_wmreg.h
@@ -121,7 +122,6 @@ $(PROJECT_INCLUDE)/bsp/pcireg.h: network/if_1GHz/pcireg.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pcireg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pcireg.h
 endif
-
 $(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
@@ -134,10 +134,6 @@ $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 
-$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-
 $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h: ../../shared/vmeUniverse/vmeUniverseDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
@@ -149,6 +145,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
 $(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEDMA.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
+
+$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
 
 $(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
