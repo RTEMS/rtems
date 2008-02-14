@@ -135,3 +135,4 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cmst.h
+
