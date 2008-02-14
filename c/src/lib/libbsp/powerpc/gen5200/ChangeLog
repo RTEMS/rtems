@@ -1,3 +1,7 @@
+2008-02-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds.brs5l: Change .bss to .bss*.
+
 2007-09-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* network_5200/network.c: Add multicast support.
