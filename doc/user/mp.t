@@ -319,7 +319,6 @@ rtems_mpci_entry user_mpci_initialization(
 );
 @end group
 @end example
-@end ifset
 
 where configuration is the address of the user's
 Configuration Table.  Operations on global objects cannot be
@@ -348,7 +347,6 @@ rtems_mpci_entry user_mpci_get_packet(
 );
 @end group
 @end example
-@end ifset
 
 where packet is the address of a pointer to a packet.
 This routine always succeeds and, upon return, packet will
@@ -376,7 +374,6 @@ rtems_mpci_entry user_mpci_return_packet(
 );
 @end group
 @end example
-@end ifset
 
 where packet is the address of a packet.  If the
 packet cannot be successfully returned, the fatal error manager
@@ -396,7 +393,6 @@ rtems_mpci_entry user_mpci_receive_packet(
 );
 @end group
 @end example
-@end ifset
 
 where packet is a pointer to the address of a packet
 to place the message from another node.  If a message is
@@ -419,7 +415,6 @@ rtems_mpci_entry user_mpci_send_packet(
 );
 @end group
 @end example
-@end ifset
 
 where node is the node number of the destination and packet is the 
 address of a packet which containing a message.  If the packet cannot 
