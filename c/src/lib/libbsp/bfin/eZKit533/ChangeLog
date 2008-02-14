@@ -1,3 +1,7 @@
+2008-02-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* preinstall.am: Include cplb.h
+
 2007-09-24	Chris Johns <chrisj@rtems.org>
 
 	* include/bsp.h: Do not use C++ comments.
