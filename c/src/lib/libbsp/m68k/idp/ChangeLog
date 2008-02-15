@@ -1,3 +1,8 @@
+2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/ckinit.c, console/duart.c, timer/timer.c: Reflect changes
+	  to rtems/motorola/*.h.
+
 2007-06-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/leds.c, console/mc68ec.c: Rename delay to rtems_bsp_delay to

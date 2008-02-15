@@ -45,19 +45,19 @@ void Timer_initialize()
   /* some PI/T initialization stuff here */
   /* Set up the interrupt vector on the MC68230 chip:
      TIVR = TIMER_VECTOR; */
-  MC68230_WRITE (TIVR, TIMER_VECTOR);
+  MC68230_WRITE (MC68230_TIVR, TIMER_VECTOR);
 
   /* Set CPRH through CPRL to maximum count to reduce interrupt overhead
       CPRH = 0xFF;
       CPRM = 0xFF;
       CPRL = 0xFF; */
-  MC68230_WRITE (CPRH, 0xFF);
-  MC68230_WRITE (CPRM, 0xFF);
-  MC68230_WRITE (CPRL, 0xFF);
+  MC68230_WRITE (MC68230_CPRH, 0xFF);
+  MC68230_WRITE (MC68230_CPRM, 0xFF);
+  MC68230_WRITE (MC68230_CPRL, 0xFF);
 
   /* Enable timer and use it as an external periodic interrupt generator
       TCR = 0xA1; */
-  MC68230_WRITE (TCR, 0xA1);
+  MC68230_WRITE (MC68230_TCR, 0xA1);
 
 }
 
@@ -71,26 +71,26 @@ int Read_timer()
   uint32_t         remaining, total;
 
   /* Disable timer so that timer can be read
-        data = TCR;
-        TCR = (data & 0xFE); */
-  MC68230_READ (TCR, data);
-  MC68230_WRITE (TCR, (data & 0xFE));
+        data = MC68230_TCR;
+        MC68230_TCR = (data & 0xFE); */
+  MC68230_READ (MC68230_TCR, data);
+  MC68230_WRITE (MC68230_TCR, (data & 0xFE));
 
   /* Read the counter value
-        msb = CNTRH;
-        osb = CNTRM;
-        lsb = CNTRL; */
-  MC68230_READ (CNTRH, msb);
-  MC68230_READ (CNTRM, osb);
-  MC68230_READ (CNTRL, lsb);
+        msb = MC68230_CNTRH;
+        osb = MC68230_CNTRM;
+        lsb = MC68230_CNTRL; */
+  MC68230_READ (MC68230_CNTRH, msb);
+  MC68230_READ (MC68230_CNTRM, osb);
+  MC68230_READ (MC68230_CNTRL, lsb);
 
   /* Calculate the time so far */
   remaining = 0x1000000 - ((msb << 16) + (osb << 8) + lsb);
   total = (Ttimer_val * 0x1000000) + remaining;
 
   /* Enable timer so that timer can continue
-	 	TCR = 0xA1; */
-  MC68230_WRITE (TCR, 0xA1);
+	 	MC68230_TCR = 0xA1; */
+  MC68230_WRITE (MC68230_TCR, 0xA1);
 
   /* do not restore old vector */
   if ( Timer_driver_Find_average_overhead == 1 )
