@@ -154,6 +154,10 @@ if e500
 $(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h
+
+$(PROJECT_INCLUDE)/libcpu/e500_mmu.h: e500/mmu/e500_mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/e500_mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/e500_mmu.h
 endif
 if mpc8xx
 $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
