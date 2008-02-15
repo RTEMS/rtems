@@ -19,6 +19,10 @@
 #include <rtems/posix/config.h>
 #include <rtems/score/object.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Timer is free */
 #define POSIX_TIMER_STATE_FREE        0x01
                                                                 
@@ -92,6 +96,10 @@ POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/posix/timer.inl>
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif
