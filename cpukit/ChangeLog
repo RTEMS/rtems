@@ -1,5 +1,6 @@
 2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/timer.h: Add c++ guards.
 	* posix/src/cond.c, posix/src/mutex.c, posix/src/pbarrier.c,
 	posix/src/prwlock.c, posix/src/pspin.c: Include <limits.h>.
 	* libcsupport/include/motorola/mc68230.h: Prefix defines with
