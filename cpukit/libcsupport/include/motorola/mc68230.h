@@ -25,50 +25,50 @@
 #define _RTEMS_MOTOROLA_MC68230_H
 
 /* Some Motorola IDP User manual defines: */
-#define PIT_ADDR	0x00c01003		/* base address of the PIT */
-#define REGOFF	0x04				/* Difference between addresses */
-#define VECT	64
-#define H1VECT	0x00
-#define H2VECT	0x01
-#define H3VECT	0x02
-#define H4VECT	0x03
+#define MC68230_PIT_ADDR	0x00c01003		/* base address of the PIT */
+#define MC68230_REGOFF	0x04				/* Difference between addresses */
+#define MC68230_VECT	64
+#define MC68230_H1VECT	0x00
+#define MC68230_H2VECT	0x01
+#define MC68230_H3VECT	0x02
+#define MC68230_H4VECT	0x03
 
 /*
  * mc68230 register offsets
  */
-#define PGCR	0x00
-#define PSRR	1*REGOFF
-#define PADDR	2*REGOFF
-#define PBDDR	3*REGOFF
-#define PCDDR	4*REGOFF
-#define PIVR	5*REGOFF
-#define PACR	6*REGOFF
-#define PBCR	7*REGOFF
-#define PADR	8*REGOFF
-#define PBDR	9*REGOFF
-#define PAAR	10*REGOFF
-#define PBAR	11*REGOFF
-#define PCDR	12*REGOFF
-#define PITSR	13*REGOFF
-#define TCR		16*REGOFF
-#define TIVR	17*REGOFF
-#define CPRH	19*REGOFF
-#define CPRM	20*REGOFF
-#define CPRL	21*REGOFF
-#define CNTRH	23*REGOFF
-#define CNTRM	24*REGOFF
-#define CNTRL	25*REGOFF
-#define TSR		26*REGOFF
+#define MC68230_PGCR	0x00
+#define MC68230_PSRR	1*MC68230_REGOFF
+#define MC68230_PADDR	2*MC68230_REGOFF
+#define MC68230_PBDDR	3*MC68230_REGOFF
+#define MC68230_PCDDR	4*MC68230_REGOFF
+#define MC68230_PIVR	5*MC68230_REGOFF
+#define MC68230_PACR	6*MC68230_REGOFF
+#define MC68230_PBCR	7*MC68230_REGOFF
+#define MC68230_PADR	8*MC68230_REGOFF
+#define MC68230_PBDR	9*MC68230_REGOFF
+#define MC68230_PAAR	10*MC68230_REGOFF
+#define MC68230_PBAR	11*MC68230_REGOFF
+#define MC68230_PCDR	12*MC68230_REGOFF
+#define MC68230_PITSR	13*MC68230_REGOFF
+#define MC68230_TCR	16*MC68230_REGOFF
+#define MC68230_TIVR	17*MC68230_REGOFF
+#define MC68230_CPRH	19*MC68230_REGOFF
+#define MC68230_CPRM	20*MC68230_REGOFF
+#define MC68230_CPRL	21*MC68230_REGOFF
+#define MC68230_CNTRH	23*MC68230_REGOFF
+#define MC68230_CNTRM	24*MC68230_REGOFF
+#define MC68230_CNTRL	25*MC68230_REGOFF
+#define MC68230_TSR	26*MC68230_REGOFF
 
 /* Some RTEMS style defines: */
-#ifndef VOL8
-#define VOL8( ptr )   ((volatile uint8_t   *)(ptr))
+#ifndef MC68230_VOL8
+#define MC68230_VOL8( ptr )   ((volatile uint8_t   *)(ptr))
 #endif
 
 #define MC68230_WRITE( reg, data ) \
-   *(VOL8(PIT_ADDR+reg)) = (data)
+   *(MC68230_VOL8(MC68230_PIT_ADDR+reg)) = (data)
 
 #define MC68230_READ( reg, data ) \
-   (data) = *(VOL8(PIT_ADDR+reg))
+   (data) = *(MC68230_VOL8(MC68230_PIT_ADDR+reg))
 
 #endif

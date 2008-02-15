@@ -1,3 +1,8 @@
+2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/motorola/mc68230.h: Prefix defines with
+	  MC68230_ to avoid preprocessor clashes.
+
 2008-02-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1277/networking
