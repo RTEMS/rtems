@@ -1,7 +1,9 @@
 2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/cond.c, posix/src/mutex.c, posix/src/pbarrier.c,
+	posix/src/prwlock.c, posix/src/pspin.c: Include <limits.h>.
 	* libcsupport/include/motorola/mc68230.h: Prefix defines with
-	  MC68230_ to avoid preprocessor clashes.
+	MC68230_ to avoid preprocessor clashes.
 
 2008-02-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
