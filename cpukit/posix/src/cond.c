@@ -15,6 +15,7 @@
 
 #include <pthread.h>
 #include <errno.h>
+#include <limits.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>

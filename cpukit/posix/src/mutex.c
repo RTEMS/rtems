@@ -15,6 +15,7 @@
 
 #include <errno.h>
 #include <pthread.h>
+#include <limits.h>
 
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>

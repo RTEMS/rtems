@@ -15,6 +15,8 @@
 #include "config.h"
 #endif
 
+#include <limits.h>
+
 #include <rtems/system.h>
 #include <rtems/posix/rwlock.h>
 
