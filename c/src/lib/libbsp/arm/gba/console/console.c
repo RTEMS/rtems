@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <unistd.h>
 
 #include <bsp.h>
@@ -28,9 +27,6 @@
 #include <irq.h>
 #include <gba.h>
 #include <conio.h>
-
-#undef __assert
-void __assert (const char *file, int line, const char *msg);
 
 extern void rtemsReboot(void);
 
@@ -82,35 +78,6 @@ static int gba_setAttributes(int minor, const struct termios *t)
 BSP_output_char_function_type     BSP_output_char = (BSP_output_char_function_type)     gba_putch;
 /** BSP_poll_char for printk support */
 BSP_polling_getchar_function_type BSP_poll_char   = (BSP_polling_getchar_function_type) gba_getch;
-
-
-/**
- *  @brief assert function
- *
- *  @param  *file file name
- *  @param  line line number
- *  @param  *msg assert message
- *  @return None
- */
-void __assert (const char *file, int line, const char *msg)
-{
-  static const char exit_msg[] = "EXECUTIVE SHUTDOWN! Any button to reboot...";
-  /*
-   * Note we cannot call exit or printf from here,
-   * assert can fail inside ISR too
-   */
-  close(2); /* Close console */
-  close(1);
-  close(0);
-
-  printk("\nassert failed: %s: ", file);
-  printk("%d: ", line);
-  printk("%s\n\n", msg);
-  printk("%s",exit_msg);
-  while ( !GBA_ANY_KEY(GBA_KEY_ALL) );
-  printk("\n\n");
-  rtemsReboot();
-}
 
 /**
  *  @brief Console device driver INITIALIZE entry point
