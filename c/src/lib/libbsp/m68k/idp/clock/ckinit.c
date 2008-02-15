@@ -67,8 +67,8 @@ rtems_isr Clock_isr(
 {
   Clock_driver_ticks += 1;
   /* acknowledge interrupt
-  	TSR = 1; */
-  MC68230_WRITE (TSR, 1);
+  	MC68230_TSR = 1; */
+  MC68230_WRITE (MC68230_TSR, 1);
 
   if ( Clock_isrs == 1 ) {
     rtems_clock_tick();
@@ -86,7 +86,7 @@ rtems_isr Clock_isr(
 void Disable_clock()
 {
 	/* Disable timer */
-	MC68230_WRITE (TCR, 0x00);
+	MC68230_WRITE (MC68230_TCR, 0x00);
 }
 
 void Install_clock( clock_isr )
@@ -99,26 +99,26 @@ rtems_isr_entry clock_isr;
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
 
   /* Disable timer for initialization */
-  MC68230_WRITE (TCR, 0x00);
+  MC68230_WRITE (MC68230_TCR, 0x00);
 
   /* some PI/T initialization stuff here -- see comment in the ckisr.c
      file in this directory to understand why I use the values that I do */
   /* Set up the interrupt vector on the MC68230 chip:
-  TIVR = CLOCK_VECTOR; */
-  MC68230_WRITE (TIVR, CLOCK_VECTOR);
+  MC68230_TIVR = CLOCK_VECTOR; */
+  MC68230_WRITE (MC68230_TIVR, CLOCK_VECTOR);
 
   /* Set CPRH through CPRL to 193 (not 203) decimal for countdown--see ckisr.c
   	CPRH = 0x00;
   	CPRM = 0x00;
   	CPRL = 0xC1; */
-  MC68230_WRITE (CPRH, 0x00);
-  MC68230_WRITE (CPRM, 0x00);
-  MC68230_WRITE (CPRL, 0xC1);
+  MC68230_WRITE (MC68230_CPRH, 0x00);
+  MC68230_WRITE (MC68230_CPRM, 0x00);
+  MC68230_WRITE (MC68230_CPRL, 0xC1);
 
   /* Enable timer and use it as an external periodic interrupt generator
-  	TCR = 0xA1; */
+  	MC68230_TCR = 0xA1; */
 /*    led_putnum('a'); * for debugging purposes */
-  MC68230_WRITE (TCR, 0xA1);
+  MC68230_WRITE (MC68230_TCR, 0xA1);
 
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
@@ -134,8 +134,8 @@ void Clock_exit( void )
   /* disable timer
   	data = TCR;
   	TCR = (data & 0xFE); */
-  MC68230_READ (TCR, data);
-  MC68230_WRITE (TCR, (data & 0xFE));
+  MC68230_READ (MC68230_TCR, data);
+  MC68230_WRITE (MC68230_TCR, (data & 0xFE));
 
   /* do not restore old vector */
 }

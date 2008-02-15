@@ -58,7 +58,7 @@ void init_pit()
   /*
    *  install ISR for ports A and B
    */
-  set_vector(C_Receive_ISR, (VECT+H3VECT), 1);
+  set_vector(C_Receive_ISR, (MC68230_VECT+MC68230_H3VECT), 1);
 
   /*
    *  initialize pit
@@ -70,12 +70,12 @@ void init_pit()
    *  setup pivr
    *  turn on all ports
    */
-  MC68230_WRITE(PGCR, 0x00);
-  MC68230_WRITE(PSRR, 0x18);
-  MC68230_WRITE(PBDDR, 0x00);
-  MC68230_WRITE(PBCR, 0x82);
-  MC68230_WRITE(PIVR, VECT);
-  MC68230_WRITE(PGCR, 0x20);
+  MC68230_WRITE(MC68230_PGCR, 0x00);
+  MC68230_WRITE(MC68230_PSRR, 0x18);
+  MC68230_WRITE(MC68230_PBDDR, 0x00);
+  MC68230_WRITE(MC68230_PBCR, 0x82);
+  MC68230_WRITE(MC68230_PIVR, MC68230_VECT);
+  MC68230_WRITE(MC68230_PGCR, 0x20);
 
   /*
    *  For some reason, the reset of receiver/transmitter only works for
@@ -186,7 +186,7 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
   /*
    *  Clear pit interrupt.
    */
-  _addr = (unsigned char *) (PIT_ADDR + PITSR);
+  _addr = (unsigned char *) (MC68230_PIT_ADDR + MC68230_PITSR);
   *_addr = 0x04;
 
   /*

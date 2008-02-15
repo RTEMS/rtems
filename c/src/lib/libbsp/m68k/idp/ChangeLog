@@ -1,3 +1,8 @@
+2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/ckinit.c, console/duart.c, timer/timer.c: Reflect changes
+	  to rtems/motorola/*.h.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/ckinit.c, include/bsp.h, startup/bspstart.c: Eliminate copies
