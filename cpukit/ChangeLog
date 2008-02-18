@@ -1,3 +1,8 @@
+2008-02-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/preinstall.am,  libcsupport/preinstall.am:
+	Revert Joel's  2008-01-31 screw up.
+
 2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/rtems/posix/timer.h: Add c++ guards.
