@@ -15,18 +15,8 @@ include_libcpudir = $(includedir)/libcpu
 
 include_libcpu_HEADERS =
 
-EXTRA_DIST = old-exceptions/TODO old-exceptions/README
-EXTRA_DIST += old-exceptions/irq_stub.S old-exceptions/ppccache.c
-if OLD_EXCEPTIONS
-include_rtems_score_HEADERS = old-exceptions/rtems/score/ppc_offs.h
+EXTRA_DIST =
 
-noinst_PROGRAMS = old-exceptions/rtems-cpu.rel
-old_exceptions_rtems_cpu_rel_SOURCES = old-exceptions/cpu.c \
-    old-exceptions/cpu_asm.S old-exceptions/rtems/score/ppc_offs.h
-old_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    -I$(srcdir)/old-exceptions
-old_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-else
 noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
 new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
     new-exceptions/cpu_asm.S 
@@ -57,7 +47,7 @@ new_exceptions_irq_bspsupport_rel_SOURCES = new-exceptions/bspsupport/irq.c
 new_exceptions_irq_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_irq_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-endif
+
 EXTRA_DIST += new-exceptions/bspsupport/vectors.h
 EXTRA_DIST += new-exceptions/bspsupport/irq_supp.h
 EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_bspsupp.h
@@ -115,23 +105,10 @@ endif
 ppc403_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-if OLD_EXCEPTIONS
-## ppc403/ictrl
-include_HEADERS = ppc403/ictrl/ictrl.h
-else
 include_HEADERS = 
 shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c 
 shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-endif
-
-if OLD_EXCEPTIONS
-noinst_PROGRAMS += ppc403/ictrl.rel
-ppc403_ictrl_rel_SOURCES = ppc403/ictrl/ictrl.c ppc403/ictrl/ictrl.h
-ppc403_ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
-ppc403_ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
 
 ## ppc403/timer
 noinst_PROGRAMS += ppc403/timer.rel
@@ -149,13 +126,6 @@ ppc403_tty_drv_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_tty_drv_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if OLD_EXCEPTIONS
-## ppc403/vectors
-noinst_PROGRAMS += ppc403/vectors.rel
-ppc403_vectors_rel_SOURCES = ppc403/vectors/vectors.S ppc403/vectors/align_h.S
-ppc403_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-ppc403_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
 endif
 
 EXTRA_DIST += mpc5xx/README
