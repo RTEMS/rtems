@@ -1,3 +1,7 @@
+2008-02-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal.m4: Remove (bogusly checked in).
+
 2007-10-02	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* startup/linkcmds: Move definition of _end so memory is not corrupted.
