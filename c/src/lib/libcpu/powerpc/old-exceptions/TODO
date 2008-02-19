@@ -1,8 +1,0 @@
-#
-#  $Id$
-#
-
-Todo list:
-
-Maybe decode external interrupts like the HPPA does.
-   See c/src/lib/libcpu/powerpc/ppc403/ictrl/* for implementation on ppc403
