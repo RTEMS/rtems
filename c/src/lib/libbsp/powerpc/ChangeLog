@@ -1,3 +1,9 @@
+2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* gen405: Remove (Abandoned).
+	* helas403: Remove (Abandoned).
+	* acinclude: Regenerate.
+
 2007-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* acinclude.m4, gen5200/irq/irq.c, gen5200/startup/bspclean.c: Add
