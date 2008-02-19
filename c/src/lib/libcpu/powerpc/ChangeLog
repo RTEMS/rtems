@@ -1,5 +1,16 @@
 2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* old-exceptions/README, old-exceptions/TODO, old-exceptions/cpu.c,
+	old-exceptions/cpu_asm.S, old-exceptions/irq_stub.S,
+	old-exceptions/ppccache.c, old-exceptions/rtems/score/ppc_offs.h,
+	ppc403/ictrl/ictrl.c, ppc403/ictrl/ictrl.h, ppc403/vectors/align_h.S
+	ppc403/vectors/vectors.S: Remove (Abandoned).
+	* Makefile.am: Remove refs to files above.
+	Eliminate OLD_EXCEPTIONS.
+	* configure.ac: Remove OLD_EXCEPTIONS.
+
+2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Deactivate old-exceptions.
 
 2008-02-15	Joel Sherrill <joel.sherrill@OARcorp.com>
