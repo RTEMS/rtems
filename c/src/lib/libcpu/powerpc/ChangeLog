@@ -1,3 +1,7 @@
+2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Deactivate old-exceptions.
+
 2008-02-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am: Add e500_mmu.h
