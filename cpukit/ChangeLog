@@ -1,3 +1,12 @@
+2008-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/main_wkspaceinfo.c,
+	libmisc/shell/shell.c, libmisc/shell/shellconfig.h: Add route and
+	ifconfig commands. The code for these was previously in the
+	networking guide. Disable NFS filesystem mount until that code is in
+	cpukit.
+	* libmisc/shell/main_ifconfig.c, libmisc/shell/main_route.c: New files.
+
 2008-02-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/preinstall.am,  libcsupport/preinstall.am:

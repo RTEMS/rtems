@@ -488,7 +488,6 @@ fprintf( stderr,
         if (!rtems_shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
           break; /*EOF*/
         }
-
         line++;
 
         /* evaluate cmd section */

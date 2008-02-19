@@ -55,6 +55,12 @@ extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
 extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
+#if RTEMS_NETWORKING
+  #if defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING)
+    extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
+    extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
+  #endif
+#endif
 
 extern rtems_shell_cmd_t *rtems_shell_Initial_commands[];
 
@@ -302,6 +308,23 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)) || \
         defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)
       &rtems_shell_MALLOC_INFO_Command,
+    #endif
+
+    /*
+     *  Network related commands
+     */
+    #if RTEMS_NETWORKING
+      #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
+           !defined(CONFIGURE_SHELL_COMMAND_IFCONFIG)) || \
+          defined(CONFIGURE_SHELL_COMMAND_IFCONFIG)
+        &rtems_shell_IFCONFIG_Command,
+      #endif
+
+      #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
+           !defined(CONFIGURE_SHELL_COMMAND_ROUTE)) || \
+          defined(CONFIGURE_SHELL_COMMAND_ROUTE)
+        &rtems_shell_ROUTE_Command,
+      #endif
     #endif
 
     /*

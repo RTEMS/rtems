@@ -21,6 +21,7 @@
 #include <rtems.h>
 #include <rtems/malloc.h>
 #include <rtems/shell.h>
+#include <rtems/score/protectedheap.h>
 #include "internal.h"
 
 int rtems_shell_main_wkspace_info(
@@ -31,8 +32,7 @@ int rtems_shell_main_wkspace_info(
   Heap_Information_block info;
   extern void classinfo_tester();
 
-  /* XXX lock allocator and do not violate visibility */
-  _Heap_Get_information( &_Workspace_Area, &info );
+  _Protected_heap_Get_information( &_Workspace_Area, &info );
   rtems_shell_print_heap_info( "free", &info.Free );
   rtems_shell_print_heap_info( "used", &info.Used );
 
@@ -41,7 +41,7 @@ int rtems_shell_main_wkspace_info(
 
 rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command = {
   "wkspace",                                  /* name */
-  "",                                         /* usage */
+  "Report on RTEMS Executive Workspace",      /* usage */
   "rtems",                                    /* topic */
   rtems_shell_main_wkspace_info,              /* command */
   NULL,                                       /* alias */
