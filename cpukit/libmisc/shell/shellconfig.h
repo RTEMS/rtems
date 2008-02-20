@@ -59,6 +59,7 @@ extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
   #if defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING)
     extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
     extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
+    extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
   #endif
 #endif
 
@@ -324,6 +325,12 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
            !defined(CONFIGURE_SHELL_COMMAND_ROUTE)) || \
           defined(CONFIGURE_SHELL_COMMAND_ROUTE)
         &rtems_shell_ROUTE_Command,
+      #endif
+
+      #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
+           !defined(CONFIGURE_SHELL_COMMAND_NETSTATS)) || \
+          defined(CONFIGURE_SHELL_COMMAND_NETSTATS)
+        &rtems_shell_NETSTATS_Command,
       #endif
     #endif
 

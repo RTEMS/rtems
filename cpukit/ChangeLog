@@ -1,3 +1,9 @@
+2008-02-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add netstats
+	command to access statistics reporting functions in TCP/IP stack.
+	* libmisc/shell/main_netstats.c: New file.
+
 2008-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am, libmisc/shell/main_wkspaceinfo.c,
