@@ -1,3 +1,7 @@
+2008-02-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/enable-rtemsbsp.m4: s/AC_HELP/AS_HELP/.
+
 2008-02-04	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* support/include/test_support.h, support/src/test_support.c: New files.
