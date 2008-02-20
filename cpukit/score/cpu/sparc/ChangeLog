@@ -1,3 +1,9 @@
+2008-02-20	Alexandru Bugnar <a-bugnar@criticalsoftware.com>
+
+	PR 1278/cpukit
+	* cpu.c: Fix incorrect bit manipulation on returning old address of raw
+	trap handler.
+
 2007-05-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1237/rtems
