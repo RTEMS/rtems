@@ -1,0 +1,17 @@
+@c
+@c  COPYRIGHT (c) 1988-2008.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@ifinfo
+@node Preface, General Commands, Top, Top
+@end ifinfo
+@unnumbered Preface
+
+Real-time embedded systems vary widely based upon their 
+operational and maintenance requirements. Many of these
+systems now include a command line interface which can
+be used to diagnostic 

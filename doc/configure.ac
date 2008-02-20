@@ -212,5 +212,6 @@ started_ada/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile
+shell/Makefile
 ])
 AC_OUTPUT

@@ -59,6 +59,16 @@
             <A HREF="networking/index.html">
                RTEMS Network Supplement</A>
             </LI>
+
+        <LI><A HREF="../pdf/shell.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/shell.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/shell.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="shell/index.html">
+               RTEMS Shell</A>
+            </LI>
     </MENU>
     <LI>Ada Manuals</LI>
     <MENU>
