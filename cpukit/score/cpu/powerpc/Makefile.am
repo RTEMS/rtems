@@ -11,9 +11,6 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/powerpc.h rtems/score/cpu.h \
     rtems/score/types.h
 
-include_rtems_old_exceptionsdir = $(includedir)/rtems/old-exceptions
-include_rtems_old_exceptions_HEADERS = rtems/old-exceptions/cpu.h
-
 include_rtems_new_exceptionsdir = $(includedir)/rtems/new-exceptions
 include_rtems_new_exceptions_HEADERS = rtems/new-exceptions/cpu.h
 

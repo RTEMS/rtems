@@ -304,11 +304,7 @@ typedef struct CPU_Interrupt_frame {
 } CPU_Interrupt_frame;
 #endif /* ASM */
 
-#ifdef _OLD_EXCEPTIONS
-#include <rtems/old-exceptions/cpu.h>
-#else
 #include <rtems/new-exceptions/cpu.h>
-#endif
 
 /*
  *  Should be large enough to run all RTEMS tests.  This ensures
