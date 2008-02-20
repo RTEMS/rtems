@@ -1,3 +1,7 @@
+2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/gen405.cfg, custom/helas403.cfg: Remove (Abandonded).
+
 2008-02-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* custom/mvme3100.cfg: Removed CFLAGS_PROFILE_V;
