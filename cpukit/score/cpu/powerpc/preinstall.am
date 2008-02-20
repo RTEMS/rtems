@@ -39,15 +39,6 @@ $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
-$(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/old-exceptions
-	@: > $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/old-exceptions/cpu.h: rtems/old-exceptions/cpu.h $(PROJECT_INCLUDE)/rtems/old-exceptions/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/old-exceptions/cpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/old-exceptions/cpu.h
-
 $(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/new-exceptions
 	@: > $(PROJECT_INCLUDE)/rtems/new-exceptions/$(dirstamp)
