@@ -176,7 +176,7 @@ void _CPU_ISR_install_raw_handler(
 
   if ( slot->mov_psr_l0 == _CPU_Trap_slot_template.mov_psr_l0 ) {
     u32_handler = 
-      ((slot->sethi_of_handler_to_l4 & HIGH_BITS_MASK) << HIGH_BITS_SHIFT) |
+      (slot->sethi_of_handler_to_l4 << HIGH_BITS_SHIFT) |
       (slot->jmp_to_low_of_handler_plus_l4 & LOW_BITS_MASK);
     *old_handler = (proc_ptr) u32_handler;
   } else
