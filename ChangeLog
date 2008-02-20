@@ -1,3 +1,11 @@
+2008-02-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/enable-cxx.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rtems-debug.m4,
+	aclocal/enable-rtemsbsp.m4, aclocal/enable-tests.m4,
+	aclocal/multilib.m4: s/AC_HELP/AS_HELP/.
+
 2007-11-06	Ray Xu <rayx.cn@gmail.com>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4:
