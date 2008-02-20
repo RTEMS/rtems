@@ -3,7 +3,7 @@ dnl $Id$
 AC_DEFUN([RTEMS_ENABLE_TESTS],
 [
 AC_ARG_ENABLE(tests,
-[AC_HELP_STRING([--enable-tests],[enable tests (default:samples)])],
+[AS_HELP_STRING([--enable-tests],[enable tests (default:samples)])],
   [case "${enableval}" in
     samples) enable_tests=samples;;
     yes) enable_tests=yes ;;
