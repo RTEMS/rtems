@@ -36,11 +36,17 @@ The RTEMS shell has the following general commands:
 
 @subheading SYNOPSYS:
 
+@example
 alias oldCommand newCommand
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -99,11 +105,17 @@ extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
 
 @subheading SYNOPSYS:
 
+@example
 date
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -162,11 +174,17 @@ extern rtems_shell_cmd_t rtems_shell_DATE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 id
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -225,11 +243,17 @@ extern rtems_shell_cmd_t rtems_shell_ID_Command;
 
 @subheading SYNOPSYS:
 
+@example
 tty
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -288,11 +312,17 @@ extern rtems_shell_cmd_t rtems_shell_TTY_Command;
 
 @subheading SYNOPSYS:
 
+@example
 whoami
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -351,11 +381,17 @@ extern rtems_shell_cmd_t rtems_shell_WHOAMI_Command;
 
 @subheading SYNOPSYS:
 
+@example
 logoff
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -414,11 +450,17 @@ extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
 
 @subheading SYNOPSYS:
 
+@example
 exit
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 

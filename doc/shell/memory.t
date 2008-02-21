@@ -35,11 +35,17 @@ The RTEMS shell has the following memory commands:
 
 @subheading SYNOPSYS:
 
+@example
 mdump [addr [size]]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -98,11 +104,17 @@ extern rtems_shell_cmd_t rtems_shell_MDUMP_Command;
 
 @subheading SYNOPSYS:
 
+@example
 wdump [addr [size]]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -161,11 +173,17 @@ extern rtems_shell_cmd_t rtems_shell_WDUMP_Command;
 
 @subheading SYNOPSYS:
 
+@example
 medit addr value [value ...]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -224,11 +242,17 @@ extern rtems_shell_cmd_t rtems_shell_MEDIT_Command;
 
 @subheading SYNOPSYS:
 
+@example
 mfill addr size value
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -287,11 +311,17 @@ extern rtems_shell_cmd_t rtems_shell_MFILL_Command;
 
 @subheading SYNOPSYS:
 
+@example
 mmove dst src size
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -350,11 +380,17 @@ extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 malloc [info|stats]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 

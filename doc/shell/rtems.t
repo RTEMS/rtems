@@ -44,11 +44,17 @@ The RTEMS shell has the following rtems commands:
 
 @subheading SYNOPSYS:
 
+@example
 cpuuse [-r]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -107,11 +113,17 @@ extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 stackuse
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -170,11 +182,17 @@ extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 perioduse [-r]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -233,11 +251,17 @@ extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 wkspace
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -296,11 +320,17 @@ extern rtems_shell_cmd_t rtems_shell_WKSPACE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 config
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -359,11 +389,17 @@ extern rtems_shell_cmd_t rtems_shell_CONFIG_Command;
 
 @subheading SYNOPSYS:
 
+@example
 itask
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -422,11 +458,17 @@ extern rtems_shell_cmd_t rtems_shell_ITASK_Command;
 
 @subheading SYNOPSYS:
 
+@example
 extension [id [id ...] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -485,11 +527,17 @@ extern rtems_shell_cmd_t rtems_shell_EXTENSION_Command;
 
 @subheading SYNOPSYS:
 
+@example
 task [id [id ...] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -548,11 +596,17 @@ extern rtems_shell_cmd_t rtems_shell_TASK_Command;
 
 @subheading SYNOPSYS:
 
+@example
 queue [id [id ... ] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -611,11 +665,17 @@ extern rtems_shell_cmd_t rtems_shell_QUEUE_Command;
 
 @subheading SYNOPSYS:
 
+@example
 sema [id [id ... ] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -674,11 +734,17 @@ extern rtems_shell_cmd_t rtems_shell_SEMA_Command;
 
 @subheading SYNOPSYS:
 
+@example
 region [id [id ... ] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -737,11 +803,17 @@ extern rtems_shell_cmd_t rtems_shell_REGION_Command;
 
 @subheading SYNOPSYS:
 
+@example
 part [id [id ... ] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -800,11 +872,17 @@ extern rtems_shell_cmd_t rtems_shell_PART_Command;
 
 @subheading SYNOPSYS:
 
+@example
 object [id [id ...] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -863,11 +941,17 @@ extern rtems_shell_cmd_t rtems_shell_OBJECT_Command;
 
 @subheading SYNOPSYS:
 
+@example
 driver [ major [ major ... ] ]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -926,11 +1010,17 @@ extern rtems_shell_cmd_t rtems_shell_DRIVER_Command;
 
 @subheading SYNOPSYS:
 
+@example
 dname
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 

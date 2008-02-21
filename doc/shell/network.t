@@ -32,11 +32,17 @@ The RTEMS shell has the following network commands:
 
 @subheading SYNOPSYS:
 
+@example
 netstats [-Aimfpcutv]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -95,11 +101,17 @@ extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
 
 @subheading SYNOPSYS:
 
+@example
 ifconfig
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
@@ -158,11 +170,17 @@ extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
 
 @subheading SYNOPSYS:
 
+@example
 route [subcommand]
+@end example
 
 @subheading DESCRIPTION:
 
 This command XXX
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
