@@ -82,12 +82,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_CPUUSE
 @findex CONFIGURE_SHELL_COMMAND_CPUUSE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_CPUUSE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_CPUUSE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_CPUUSE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_CPUUSE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -143,12 +144,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_STACKUSE
 @findex CONFIGURE_SHELL_COMMAND_STACKUSE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_STACKUSE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_STACKUSE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_STACKUSE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_STACKUSE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -204,12 +206,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_PERIODUSE
 @findex CONFIGURE_SHELL_COMMAND_PERIODUSE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_PERIODUSE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_PERIODUSE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_PERIODUSE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_PERIODUSE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -265,12 +268,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WKSPACE
 @findex CONFIGURE_SHELL_COMMAND_WKSPACE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_WKSPACE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_WKSPACE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_WKSPACE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_WKSPACE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -326,12 +330,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_CONFIG
 @findex CONFIGURE_SHELL_COMMAND_CONFIG
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_CONFIG}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_CONFIG} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_CONFIG}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_CONFIG} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -387,12 +392,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ITASK
 @findex CONFIGURE_SHELL_COMMAND_ITASK
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_ITASK}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_ITASK} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_ITASK}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_ITASK} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -448,12 +454,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_EXTENSION
 @findex CONFIGURE_SHELL_COMMAND_EXTENSION
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_EXTENSION}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_EXTENSION} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_EXTENSION}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_EXTENSION} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -509,12 +516,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_TASK
 @findex CONFIGURE_SHELL_COMMAND_TASK
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_TASK}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_TASK} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_TASK}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_TASK} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -570,12 +578,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_QUEUE
 @findex CONFIGURE_SHELL_COMMAND_QUEUE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_QUEUE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_QUEUE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_QUEUE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_QUEUE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -631,12 +640,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_SEMA
 @findex CONFIGURE_SHELL_COMMAND_SEMA
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_SEMA}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_SEMA} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_SEMA}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_SEMA} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -692,12 +702,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_REGION
 @findex CONFIGURE_SHELL_COMMAND_REGION
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_REGION}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_REGION} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_REGION}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_REGION} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -753,12 +764,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_PART
 @findex CONFIGURE_SHELL_COMMAND_PART
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_PART}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_PART} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_PART}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_PART} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -814,12 +826,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_OBJECT
 @findex CONFIGURE_SHELL_COMMAND_OBJECT
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_OBJECT}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_OBJECT} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_OBJECT}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_OBJECT} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -875,12 +888,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DRIVER
 @findex CONFIGURE_SHELL_COMMAND_DRIVER
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_DRIVER}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_DRIVER} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_DRIVER}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_DRIVER} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -936,12 +950,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DNAME
 @findex CONFIGURE_SHELL_COMMAND_DNAME
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_DNAME}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_DNAME} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_DNAME}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_DNAME} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 

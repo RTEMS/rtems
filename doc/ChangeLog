@@ -1,3 +1,8 @@
+2008-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/file.t, shell/general.t, shell/memory.t, shell/network.t,
+	shell/rtems.t: Change configure messages per Chris Johns suggestion.
+
 2008-02-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, index.html.in: Add initial version of

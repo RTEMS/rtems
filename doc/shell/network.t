@@ -58,12 +58,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_NETSTATS
 @findex CONFIGURE_SHELL_COMMAND_NETSTATS
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_NETSTATS}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_NETSTATS} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_NETSTATS}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_NETSTATS} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -119,12 +120,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_IFCONFIG
 @findex CONFIGURE_SHELL_COMMAND_IFCONFIG
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_IFCONFIG}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_IFCONFIG} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_IFCONFIG}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_IFCONFIG} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -180,12 +182,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ROUTE
 @findex CONFIGURE_SHELL_COMMAND_ROUTE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_ROUTE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_ROUTE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_ROUTE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_ROUTE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 

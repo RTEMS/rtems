@@ -64,12 +64,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MDUMP
 @findex CONFIGURE_SHELL_COMMAND_MDUMP
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_MDUMP}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_MDUMP} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_MDUMP}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_MDUMP} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -125,12 +126,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WDUMP
 @findex CONFIGURE_SHELL_COMMAND_WDUMP
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_WDUMP}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_WDUMP} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_WDUMP}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_WDUMP} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -186,12 +188,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MEDIT
 @findex CONFIGURE_SHELL_COMMAND_MEDIT
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_MEDIT}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_MEDIT} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_MEDIT}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_MEDIT} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -247,12 +250,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MFILL
 @findex CONFIGURE_SHELL_COMMAND_MFILL
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_MFILL}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_MFILL} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_MFILL}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_MFILL} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -308,12 +312,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MMOVE
 @findex CONFIGURE_SHELL_COMMAND_MMOVE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_MMOVE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_MMOVE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_MMOVE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_MMOVE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -369,12 +374,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MALLOC
 @findex CONFIGURE_SHELL_COMMAND_MALLOC
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_MALLOC}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_MALLOC} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_MALLOC}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_MALLOC} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 

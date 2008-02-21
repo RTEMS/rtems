@@ -66,12 +66,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ALIAS
 @findex CONFIGURE_SHELL_COMMAND_ALIAS
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_ALIAS}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_ALIAS} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_ALIAS}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_ALIAS} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -127,12 +128,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DATE
 @findex CONFIGURE_SHELL_COMMAND_DATE
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_DATE}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_DATE} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_DATE}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_DATE} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -188,12 +190,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ID
 @findex CONFIGURE_SHELL_COMMAND_ID
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_ID}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_ID} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_ID}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_ID} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -249,12 +252,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_TTY
 @findex CONFIGURE_SHELL_COMMAND_TTY
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_TTY}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_TTY} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_TTY}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_TTY} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -310,12 +314,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WHOAMI
 @findex CONFIGURE_SHELL_COMMAND_WHOAMI
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_WHOAMI}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_WHOAMI} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_WHOAMI}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_WHOAMI} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -371,12 +376,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_LOGOFF
 @findex CONFIGURE_SHELL_COMMAND_LOGOFF
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_LOGOFF}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_LOGOFF} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_LOGOFF}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_LOGOFF} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
@@ -432,12 +438,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_EXIT
 @findex CONFIGURE_SHELL_COMMAND_EXIT
 
-In order to disable this command out if you are configuring all commands,
-define @code{CONFIGURE_SHELL_NO_COMMAND_EXIT}.
+This command is included as part of the all commands the shell command
+set.  Define @code{CONFIGURE_SHELL_COMMAND_EXIT} when building
+a custom command set.
 
-In order to enable this command if you are building a custom command set
-define @code{CONFIGURE_SHELL_COMMAND_EXIT}.
-
+This command can be excluded from the shell command set with the
+define @code{CONFIGURE_SHELL_NO_COMMAND_EXIT} when all
+shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
