@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $
+@c  $Id$
 @c
 
 @chapter Network Commands
@@ -14,11 +14,8 @@ The RTEMS shell has the following network commands:
 
 @itemize @bullet
 
-
 @item @code{netstats} - obtain network statistics
-
 @item @code{ifconfig} - configure a network interface
-
 @item @code{route} - show or manipulate the IP routing table
 
 @end itemize
@@ -58,12 +55,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_NETSTATS
 @findex CONFIGURE_SHELL_COMMAND_NETSTATS
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_NETSTATS} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_NETSTATS} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_NETSTATS} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_NETSTATS} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -120,12 +118,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_IFCONFIG
 @findex CONFIGURE_SHELL_COMMAND_IFCONFIG
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_IFCONFIG} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_IFCONFIG} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_IFCONFIG} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_IFCONFIG} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -182,12 +181,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ROUTE
 @findex CONFIGURE_SHELL_COMMAND_ROUTE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_ROUTE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_ROUTE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_ROUTE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_ROUTE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:

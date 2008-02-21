@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $
+@c  $Id$
 @c
 
 @chapter General Commands
@@ -14,19 +14,12 @@ The RTEMS shell has the following general commands:
 
 @itemize @bullet
 
-
 @item @code{alias} - Add alias for an existing command
-
 @item @code{date} - Print current date and time
-
 @item @code{id} - show uid gid euid and egid
-
 @item @code{tty} - show ttyname
-
 @item @code{whoami} - show current user
-
 @item @code{logoff} - logoff from the system
-
 @item @code{exit} - alias for logoff command
 
 @end itemize
@@ -66,12 +59,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ALIAS
 @findex CONFIGURE_SHELL_COMMAND_ALIAS
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_ALIAS} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_ALIAS} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_ALIAS} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_ALIAS} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -128,12 +122,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DATE
 @findex CONFIGURE_SHELL_COMMAND_DATE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_DATE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DATE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_DATE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DATE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -190,12 +185,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ID
 @findex CONFIGURE_SHELL_COMMAND_ID
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_ID} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_ID} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_ID} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_ID} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -252,12 +248,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_TTY
 @findex CONFIGURE_SHELL_COMMAND_TTY
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_TTY} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_TTY} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_TTY} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_TTY} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -314,12 +311,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WHOAMI
 @findex CONFIGURE_SHELL_COMMAND_WHOAMI
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_WHOAMI} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_WHOAMI} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_WHOAMI} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_WHOAMI} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -376,12 +374,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_LOGOFF
 @findex CONFIGURE_SHELL_COMMAND_LOGOFF
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_LOGOFF} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_LOGOFF} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_LOGOFF} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_LOGOFF} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -438,12 +437,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_EXIT
 @findex CONFIGURE_SHELL_COMMAND_EXIT
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_EXIT} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_EXIT} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_EXIT} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_EXIT} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:

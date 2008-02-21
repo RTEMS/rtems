@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $
+@c  $Id$
 @c
 
 @chapter RTEMS Commands
@@ -14,35 +14,20 @@ The RTEMS shell has the following rtems commands:
 
 @itemize @bullet
 
-
 @item @code{cpuuse} - print or reset per thread cpu usage
-
 @item @code{stackuse} - print per thread stack usage
-
 @item @code{perioduse} - print or reset per period usage
-
 @item @code{wkspace} - Display information on Executive Workspace
-
 @item @code{config} - Show the system configuration.
-
 @item @code{itask} - List init tasks for the system
-
 @item @code{extension} - Display information about extensions
-
 @item @code{task} - Display information about tasks
-
 @item @code{queue} - Display information about message queues
-
 @item @code{sema} - display information about semaphores
-
 @item @code{region} - display information about regions
-
 @item @code{part} - display information about partitions
-
 @item @code{object} - Display information about RTEMS objects
-
 @item @code{driver} - Display the RTEMS device driver table
-
 @item @code{dname} - Displays information about named drivers
 
 @end itemize
@@ -82,12 +67,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_CPUUSE
 @findex CONFIGURE_SHELL_COMMAND_CPUUSE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_CPUUSE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CPUUSE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_CPUUSE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CPUUSE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -144,12 +130,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_STACKUSE
 @findex CONFIGURE_SHELL_COMMAND_STACKUSE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_STACKUSE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_STACKUSE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_STACKUSE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_STACKUSE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -206,12 +193,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_PERIODUSE
 @findex CONFIGURE_SHELL_COMMAND_PERIODUSE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_PERIODUSE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_PERIODUSE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_PERIODUSE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_PERIODUSE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -268,12 +256,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WKSPACE
 @findex CONFIGURE_SHELL_COMMAND_WKSPACE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_WKSPACE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_WKSPACE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_WKSPACE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_WKSPACE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -330,12 +319,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_CONFIG
 @findex CONFIGURE_SHELL_COMMAND_CONFIG
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_CONFIG} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CONFIG} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_CONFIG} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CONFIG} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -392,12 +382,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_ITASK
 @findex CONFIGURE_SHELL_COMMAND_ITASK
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_ITASK} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_ITASK} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_ITASK} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_ITASK} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -454,12 +445,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_EXTENSION
 @findex CONFIGURE_SHELL_COMMAND_EXTENSION
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_EXTENSION} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_EXTENSION} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_EXTENSION} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_EXTENSION} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -516,12 +508,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_TASK
 @findex CONFIGURE_SHELL_COMMAND_TASK
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_TASK} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_TASK} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_TASK} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_TASK} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -578,12 +571,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_QUEUE
 @findex CONFIGURE_SHELL_COMMAND_QUEUE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_QUEUE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_QUEUE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_QUEUE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_QUEUE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -640,12 +634,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_SEMA
 @findex CONFIGURE_SHELL_COMMAND_SEMA
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_SEMA} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_SEMA} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_SEMA} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_SEMA} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -702,12 +697,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_REGION
 @findex CONFIGURE_SHELL_COMMAND_REGION
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_REGION} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_REGION} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_REGION} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_REGION} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -764,12 +760,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_PART
 @findex CONFIGURE_SHELL_COMMAND_PART
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_PART} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_PART} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_PART} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_PART} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -826,12 +823,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_OBJECT
 @findex CONFIGURE_SHELL_COMMAND_OBJECT
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_OBJECT} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_OBJECT} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_OBJECT} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_OBJECT} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -888,12 +886,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DRIVER
 @findex CONFIGURE_SHELL_COMMAND_DRIVER
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_DRIVER} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DRIVER} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_DRIVER} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DRIVER} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -950,12 +949,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_DNAME
 @findex CONFIGURE_SHELL_COMMAND_DNAME
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_DNAME} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DNAME} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_DNAME} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DNAME} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:

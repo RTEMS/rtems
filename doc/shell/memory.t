@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $
+@c  $Id$
 @c
 
 @chapter Memory Commands
@@ -14,17 +14,11 @@ The RTEMS shell has the following memory commands:
 
 @itemize @bullet
 
-
 @item @code{mdump} - Display contents of memory
-
 @item @code{wdump} - Display contents of memory (word)
-
 @item @code{medit} - Modify contents of memory
-
 @item @code{mfill} - File memory with pattern
-
 @item @code{mmove} - Move contents of memory
-
 @item @code{malloc} - Obtain information on C Program Heap
 
 @end itemize
@@ -64,12 +58,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MDUMP
 @findex CONFIGURE_SHELL_COMMAND_MDUMP
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_MDUMP} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MDUMP} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_MDUMP} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MDUMP} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -126,12 +121,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_WDUMP
 @findex CONFIGURE_SHELL_COMMAND_WDUMP
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_WDUMP} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_WDUMP} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_WDUMP} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_WDUMP} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -188,12 +184,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MEDIT
 @findex CONFIGURE_SHELL_COMMAND_MEDIT
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_MEDIT} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MEDIT} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_MEDIT} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MEDIT} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -250,12 +247,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MFILL
 @findex CONFIGURE_SHELL_COMMAND_MFILL
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_MFILL} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MFILL} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_MFILL} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MFILL} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -312,12 +310,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MMOVE
 @findex CONFIGURE_SHELL_COMMAND_MMOVE
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_MMOVE} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MMOVE} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_MMOVE} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MMOVE} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
@@ -374,12 +373,13 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_MALLOC
 @findex CONFIGURE_SHELL_COMMAND_MALLOC
 
-This command is included as part of the all commands the shell command
-set.  Define @code{CONFIGURE_SHELL_COMMAND_MALLOC} when building
-a custom command set.
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MALLOC} to have this
+command included.
 
-This command can be excluded from the shell command set with the
-define @code{CONFIGURE_SHELL_NO_COMMAND_MALLOC} when all
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MALLOC} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
