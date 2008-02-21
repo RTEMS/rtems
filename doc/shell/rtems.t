@@ -62,7 +62,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use cpuuse:
+The following is an example of how to use @code{cpuuse}:
 
 @example
 EXAMPLE_TBD
@@ -86,7 +86,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_cpuuse
 
-The @code{COMMAND} is implemented by a C language function
+The @code{cpuuse} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -96,7 +96,7 @@ int rtems_shell_rtems_main_cpuuse(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{cpuuse} has the
 following prototype:
 
 @example
@@ -131,7 +131,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use stackuse:
+The following is an example of how to use @code{stackuse}:
 
 @example
 EXAMPLE_TBD
@@ -155,7 +155,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_stackuse
 
-The @code{COMMAND} is implemented by a C language function
+The @code{stackuse} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -165,7 +165,7 @@ int rtems_shell_rtems_main_stackuse(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{stackuse} has the
 following prototype:
 
 @example
@@ -200,7 +200,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use perioduse:
+The following is an example of how to use @code{perioduse}:
 
 @example
 EXAMPLE_TBD
@@ -224,7 +224,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_perioduse
 
-The @code{COMMAND} is implemented by a C language function
+The @code{perioduse} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -234,7 +234,7 @@ int rtems_shell_rtems_main_perioduse(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{perioduse} has the
 following prototype:
 
 @example
@@ -269,7 +269,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use wkspace:
+The following is an example of how to use @code{wkspace}:
 
 @example
 EXAMPLE_TBD
@@ -293,7 +293,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_wkspace
 
-The @code{COMMAND} is implemented by a C language function
+The @code{wkspace} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -303,7 +303,7 @@ int rtems_shell_rtems_main_wkspace(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{wkspace} has the
 following prototype:
 
 @example
@@ -338,7 +338,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use config:
+The following is an example of how to use @code{config}:
 
 @example
 EXAMPLE_TBD
@@ -362,7 +362,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_config
 
-The @code{COMMAND} is implemented by a C language function
+The @code{config} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -372,7 +372,7 @@ int rtems_shell_rtems_main_config(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{config} has the
 following prototype:
 
 @example
@@ -407,7 +407,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use itask:
+The following is an example of how to use @code{itask}:
 
 @example
 EXAMPLE_TBD
@@ -431,7 +431,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_itask
 
-The @code{COMMAND} is implemented by a C language function
+The @code{itask} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -441,7 +441,7 @@ int rtems_shell_rtems_main_itask(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{itask} has the
 following prototype:
 
 @example
@@ -476,7 +476,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use extension:
+The following is an example of how to use @code{extension}:
 
 @example
 EXAMPLE_TBD
@@ -500,7 +500,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_extension
 
-The @code{COMMAND} is implemented by a C language function
+The @code{extension} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -510,7 +510,7 @@ int rtems_shell_rtems_main_extension(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{extension} has the
 following prototype:
 
 @example
@@ -545,7 +545,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use task:
+The following is an example of how to use @code{task}:
 
 @example
 EXAMPLE_TBD
@@ -569,7 +569,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_task
 
-The @code{COMMAND} is implemented by a C language function
+The @code{task} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -579,7 +579,7 @@ int rtems_shell_rtems_main_task(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{task} has the
 following prototype:
 
 @example
@@ -614,7 +614,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use queue:
+The following is an example of how to use @code{queue}:
 
 @example
 EXAMPLE_TBD
@@ -638,7 +638,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_queue
 
-The @code{COMMAND} is implemented by a C language function
+The @code{queue} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -648,7 +648,7 @@ int rtems_shell_rtems_main_queue(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{queue} has the
 following prototype:
 
 @example
@@ -683,7 +683,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use sema:
+The following is an example of how to use @code{sema}:
 
 @example
 EXAMPLE_TBD
@@ -707,7 +707,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_sema
 
-The @code{COMMAND} is implemented by a C language function
+The @code{sema} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -717,7 +717,7 @@ int rtems_shell_rtems_main_sema(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{sema} has the
 following prototype:
 
 @example
@@ -752,7 +752,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use region:
+The following is an example of how to use @code{region}:
 
 @example
 EXAMPLE_TBD
@@ -776,7 +776,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_region
 
-The @code{COMMAND} is implemented by a C language function
+The @code{region} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -786,7 +786,7 @@ int rtems_shell_rtems_main_region(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{region} has the
 following prototype:
 
 @example
@@ -821,7 +821,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use part:
+The following is an example of how to use @code{part}:
 
 @example
 EXAMPLE_TBD
@@ -845,7 +845,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_part
 
-The @code{COMMAND} is implemented by a C language function
+The @code{part} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -855,7 +855,7 @@ int rtems_shell_rtems_main_part(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{part} has the
 following prototype:
 
 @example
@@ -890,7 +890,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use object:
+The following is an example of how to use @code{object}:
 
 @example
 EXAMPLE_TBD
@@ -914,7 +914,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_object
 
-The @code{COMMAND} is implemented by a C language function
+The @code{object} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -924,7 +924,7 @@ int rtems_shell_rtems_main_object(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{object} has the
 following prototype:
 
 @example
@@ -959,7 +959,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use driver:
+The following is an example of how to use @code{driver}:
 
 @example
 EXAMPLE_TBD
@@ -983,7 +983,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_driver
 
-The @code{COMMAND} is implemented by a C language function
+The @code{driver} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -993,7 +993,7 @@ int rtems_shell_rtems_main_driver(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{driver} has the
 following prototype:
 
 @example
@@ -1028,7 +1028,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use dname:
+The following is an example of how to use @code{dname}:
 
 @example
 EXAMPLE_TBD
@@ -1052,7 +1052,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_dname
 
-The @code{COMMAND} is implemented by a C language function
+The @code{dname} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1062,7 +1062,7 @@ int rtems_shell_rtems_main_dname(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{dname} has the
 following prototype:
 
 @example

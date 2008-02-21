@@ -53,7 +53,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use mdump:
+The following is an example of how to use @code{mdump}:
 
 @example
 EXAMPLE_TBD
@@ -77,7 +77,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_mdump
 
-The @code{COMMAND} is implemented by a C language function
+The @code{mdump} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -87,7 +87,7 @@ int rtems_shell_rtems_main_mdump(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{mdump} has the
 following prototype:
 
 @example
@@ -122,7 +122,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use wdump:
+The following is an example of how to use @code{wdump}:
 
 @example
 EXAMPLE_TBD
@@ -146,7 +146,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_wdump
 
-The @code{COMMAND} is implemented by a C language function
+The @code{wdump} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -156,7 +156,7 @@ int rtems_shell_rtems_main_wdump(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{wdump} has the
 following prototype:
 
 @example
@@ -191,7 +191,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use medit:
+The following is an example of how to use @code{medit}:
 
 @example
 EXAMPLE_TBD
@@ -215,7 +215,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_medit
 
-The @code{COMMAND} is implemented by a C language function
+The @code{medit} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -225,7 +225,7 @@ int rtems_shell_rtems_main_medit(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{medit} has the
 following prototype:
 
 @example
@@ -260,7 +260,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use mfill:
+The following is an example of how to use @code{mfill}:
 
 @example
 EXAMPLE_TBD
@@ -284,7 +284,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_mfill
 
-The @code{COMMAND} is implemented by a C language function
+The @code{mfill} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -294,7 +294,7 @@ int rtems_shell_rtems_main_mfill(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{mfill} has the
 following prototype:
 
 @example
@@ -329,7 +329,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use mmove:
+The following is an example of how to use @code{mmove}:
 
 @example
 EXAMPLE_TBD
@@ -353,7 +353,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_mmove
 
-The @code{COMMAND} is implemented by a C language function
+The @code{mmove} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -363,7 +363,7 @@ int rtems_shell_rtems_main_mmove(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{mmove} has the
 following prototype:
 
 @example
@@ -398,7 +398,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use malloc:
+The following is an example of how to use @code{malloc}:
 
 @example
 EXAMPLE_TBD
@@ -422,7 +422,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_malloc
 
-The @code{COMMAND} is implemented by a C language function
+The @code{malloc} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -432,7 +432,7 @@ int rtems_shell_rtems_main_malloc(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{malloc} has the
 following prototype:
 
 @example

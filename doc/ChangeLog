@@ -1,6 +1,11 @@
 2008-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/file.t, shell/general.t, shell/memory.t, shell/network.t,
+	shell/rtems.t: More descriptions and examples added.
+
+2008-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/file.t, shell/general.t, shell/memory.t, shell/network.t,
 	shell/rtems.t: Add mount and cp command information from Chris Johns.
 	Reformat some things.
 

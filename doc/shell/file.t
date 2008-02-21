@@ -52,7 +52,8 @@ umask [new_umask]
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command sets the user file creation mask to @code{new_umask}.  The
+argument @code{new_umask} may be octal, hexadecimal, or decimal.
 
 @subheading EXIT STATUS:
 
@@ -60,14 +61,19 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+This command does not currently support symbolic mode masks.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use umask:
+The following is an example of how to use @code{umask}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ umask
+022
+SHLL [/] $ umask 0666
+0666
+SHLL [/] $ umask
+0666
 @end example
 
 @subheading CONFIGURATION:
@@ -88,7 +94,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_umask
 
-The @code{COMMAND} is implemented by a C language function
+The @code{umask} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -98,7 +104,7 @@ int rtems_shell_rtems_main_umask(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{umask} has the
 following prototype:
 
 @example
@@ -226,7 +232,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use cp:
+The following is an example of how to use @code{cp}:
 
 @example
 EXAMPLE_TBD
@@ -250,7 +256,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_cp
 
-The @code{COMMAND} is implemented by a C language function
+The @code{cp} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -260,7 +266,7 @@ int rtems_shell_rtems_main_cp(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{cp} has the
 following prototype:
 
 @example
@@ -288,7 +294,8 @@ pwd
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command prints the fully qualified filename of the current
+working directory. 
 
 @subheading EXIT STATUS:
 
@@ -300,10 +307,14 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use pwd:
+The following is an example of how to use @code{pwd}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ pwd
+/
+SHLL [/] $ cd dev
+SHLL [/dev] $ pwd
+/dev
 @end example
 
 @subheading CONFIGURATION:
@@ -324,7 +335,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_pwd
 
-The @code{COMMAND} is implemented by a C language function
+The @code{pwd} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -334,7 +345,7 @@ int rtems_shell_rtems_main_pwd(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{pwd} has the
 following prototype:
 
 @example
@@ -357,7 +368,9 @@ ls [dir]
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command displays the contents of the specified directory.  If
+no arguments are given, then it displays the contents of the current
+working directory.
 
 @subheading EXIT STATUS:
 
@@ -369,10 +382,22 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use ls:
+The following is an example of how to use @code{ls}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ ls
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] $ ls etc
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group 
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
+SHLL [/] $ ls dev etc
+-rwxr-xr-x   1  rtems   root           0 Jan 01 00:00 console 
+-rwxr-xr-x   1   root   root           0 Jan 01 00:00 console_b 
 @end example
 
 @subheading CONFIGURATION:
@@ -393,7 +418,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_ls
 
-The @code{COMMAND} is implemented by a C language function
+The @code{ls} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -403,7 +428,7 @@ int rtems_shell_rtems_main_ls(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{ls} has the
 following prototype:
 
 @example
@@ -426,7 +451,9 @@ chdir [dir]
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command is used to change the current working directory to
+the specified directory.  If no arguments are given, the current
+working directory will be changed to @code{/}.
 
 @subheading EXIT STATUS:
 
@@ -438,10 +465,14 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use chdir:
+The following is an example of how to use @code{chdir}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ pwd
+/
+SHLL [/] $ chdir etc
+SHLL [/etc] $ pwd 
+/etc
 @end example
 
 @subheading CONFIGURATION:
@@ -462,7 +493,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_chdir
 
-The @code{COMMAND} is implemented by a C language function
+The @code{chdir} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -472,7 +503,7 @@ int rtems_shell_rtems_main_chdir(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{chdir} has the
 following prototype:
 
 @example
@@ -490,12 +521,15 @@ extern rtems_shell_cmd_t rtems_shell_CHDIR_Command;
 @subheading SYNOPSYS:
 
 @example
-mkdir  dir
+mkdir  dir [dir1 .. dirN]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command creates the set of directories in the order they
+are specified on the command line.  If an error is encountered
+making one of the directories, the command will continue to 
+attempt to create the remaining directories on the command line.
 
 @subheading EXIT STATUS:
 
@@ -503,14 +537,28 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+If this command is invoked with no arguments, nothing occurs.
+
+The user must have sufficient permissions to create the directory.
+For the @code{fileio} test provided with RTEMS, this means the user
+must login as @code{root} not @code{rtems}.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use mkdir:
+The following is an example of how to use @code{mkdir}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # ls
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] # mkdir joel
+SHLL [/] # ls joel
+0 files 0 bytes occupied
+SHLL [/] # cp etc/passwd joel
+SHLL [/] # ls joel
+-rw-r--r--   1   root   root         102 Jan 01 00:02 passwd 
+1 files 102 bytes occupied
 @end example
 
 @subheading CONFIGURATION:
@@ -531,7 +579,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_mkdir
 
-The @code{COMMAND} is implemented by a C language function
+The @code{mkdir} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -541,7 +589,7 @@ int rtems_shell_rtems_main_mkdir(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{mkdir} has the
 following prototype:
 
 @example
@@ -576,7 +624,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use rmdir:
+The following is an example of how to use @code{rmdir}:
 
 @example
 EXAMPLE_TBD
@@ -600,7 +648,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_rmdir
 
-The @code{COMMAND} is implemented by a C language function
+The @code{rmdir} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -610,7 +658,7 @@ int rtems_shell_rtems_main_rmdir(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{rmdir} has the
 following prototype:
 
 @example
@@ -645,7 +693,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use chroot:
+The following is an example of how to use @code{chroot}:
 
 @example
 EXAMPLE_TBD
@@ -669,7 +717,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_chroot
 
-The @code{COMMAND} is implemented by a C language function
+The @code{chroot} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -679,7 +727,7 @@ int rtems_shell_rtems_main_chroot(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{chroot} has the
 following prototype:
 
 @example
@@ -714,7 +762,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use chmod:
+The following is an example of how to use @code{chmod}:
 
 @example
 EXAMPLE_TBD
@@ -738,7 +786,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_chmod
 
-The @code{COMMAND} is implemented by a C language function
+The @code{chmod} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -748,7 +796,7 @@ int rtems_shell_rtems_main_chmod(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{chmod} has the
 following prototype:
 
 @example
@@ -783,7 +831,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use cat:
+The following is an example of how to use @code{cat}:
 
 @example
 EXAMPLE_TBD
@@ -807,7 +855,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_cat
 
-The @code{COMMAND} is implemented by a C language function
+The @code{cat} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -817,7 +865,7 @@ int rtems_shell_rtems_main_cat(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{cat} has the
 following prototype:
 
 @example
@@ -852,7 +900,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use rm:
+The following is an example of how to use @code{rm}:
 
 @example
 EXAMPLE_TBD
@@ -876,7 +924,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_rm
 
-The @code{COMMAND} is implemented by a C language function
+The @code{rm} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -886,7 +934,7 @@ int rtems_shell_rtems_main_rm(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{rm} has the
 following prototype:
 
 @example
@@ -1004,7 +1052,7 @@ An example configuration is:
 
 @findex rtems_shell_rtems_main_mount
 
-The @code{COMMAND} is implemented by a C language function
+The @code{mount} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1014,7 +1062,7 @@ int rtems_shell_rtems_main_mount(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{mount} has the
 following prototype:
 
 @example
@@ -1049,7 +1097,7 @@ TBD
 
 @subheading EXAMPLES:
 
-The following is an example of how to use mount:
+The following is an example of how to use @code{mount}:
 
 @example
 EXAMPLE_TBD
@@ -1073,7 +1121,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_unmount
 
-The @code{COMMAND} is implemented by a C language function
+The @code{unmount} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1083,7 +1131,7 @@ int rtems_shell_rtems_main_unmount(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{unmount} has the
 following prototype:
 
 @example
@@ -1118,7 +1166,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use blksync:
+The following is an example of how to use @code{blksync}:
 
 @example
 EXAMPLE_TBD
@@ -1142,7 +1190,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_blksync
 
-The @code{COMMAND} is implemented by a C language function
+The @code{blksync} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1152,7 +1200,7 @@ int rtems_shell_rtems_main_blksync(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{blksync} has the
 following prototype:
 
 @example
@@ -1187,7 +1235,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use dir:
+The following is an example of how to use @code{dir}:
 
 @example
 EXAMPLE_TBD
@@ -1211,7 +1259,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_dir
 
-The @code{COMMAND} is implemented by a C language function
+The @code{dir} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1221,7 +1269,7 @@ int rtems_shell_rtems_main_dir(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{dir} has the
 following prototype:
 
 @example
@@ -1256,7 +1304,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use cd:
+The following is an example of how to use @code{cd}:
 
 @example
 EXAMPLE_TBD
@@ -1280,7 +1328,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_cd
 
-The @code{COMMAND} is implemented by a C language function
+The @code{cd} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -1290,7 +1338,7 @@ int rtems_shell_rtems_main_cd(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{cd} has the
 following prototype:
 
 @example

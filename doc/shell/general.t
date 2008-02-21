@@ -42,7 +42,8 @@ alias oldCommand newCommand
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command adds an alternate name for an existing command to
+the command set.
 
 @subheading EXIT STATUS:
 
@@ -54,10 +55,16 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use alias:
+The following is an example of how to use @code{alias}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ me
+shell:me command not found
+SHLL [/] $ alias whoami me
+SHLL [/] $ me
+rtems
+SHLL [/] $ whoami
+rtems
 @end example
 
 @subheading CONFIGURATION:
@@ -78,7 +85,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_alias
 
-The @code{COMMAND} is implemented by a C language function
+The @code{alias} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -88,7 +95,7 @@ int rtems_shell_rtems_main_alias(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{alias} has the
 following prototype:
 
 @example
@@ -123,7 +130,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use date:
+The following is an example of how to use @code{date}:
 
 @example
 EXAMPLE_TBD
@@ -147,7 +154,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_date
 
-The @code{COMMAND} is implemented by a C language function
+The @code{date} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -157,7 +164,7 @@ int rtems_shell_rtems_main_date(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{date} has the
 following prototype:
 
 @example
@@ -192,7 +199,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use id:
+The following is an example of how to use @code{id}:
 
 @example
 EXAMPLE_TBD
@@ -216,7 +223,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_id
 
-The @code{COMMAND} is implemented by a C language function
+The @code{id} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -226,7 +233,7 @@ int rtems_shell_rtems_main_id(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{id} has the
 following prototype:
 
 @example
@@ -261,7 +268,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use tty:
+The following is an example of how to use @code{tty}:
 
 @example
 EXAMPLE_TBD
@@ -285,7 +292,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_tty
 
-The @code{COMMAND} is implemented by a C language function
+The @code{tty} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -295,7 +302,7 @@ int rtems_shell_rtems_main_tty(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{tty} has the
 following prototype:
 
 @example
@@ -330,7 +337,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use whoami:
+The following is an example of how to use @code{whoami}:
 
 @example
 EXAMPLE_TBD
@@ -354,7 +361,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_whoami
 
-The @code{COMMAND} is implemented by a C language function
+The @code{whoami} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -364,7 +371,7 @@ int rtems_shell_rtems_main_whoami(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{whoami} has the
 following prototype:
 
 @example
@@ -399,7 +406,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use logoff:
+The following is an example of how to use @code{logoff}:
 
 @example
 EXAMPLE_TBD
@@ -423,7 +430,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_logoff
 
-The @code{COMMAND} is implemented by a C language function
+The @code{logoff} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -433,7 +440,7 @@ int rtems_shell_rtems_main_logoff(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{logoff} has the
 following prototype:
 
 @example
@@ -468,7 +475,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use exit:
+The following is an example of how to use @code{exit}:
 
 @example
 EXAMPLE_TBD
@@ -492,7 +499,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_exit
 
-The @code{COMMAND} is implemented by a C language function
+The @code{exit} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -502,7 +509,7 @@ int rtems_shell_rtems_main_exit(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{exit} has the
 following prototype:
 
 @example

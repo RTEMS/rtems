@@ -50,7 +50,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use netstats:
+The following is an example of how to use @code{netstats}:
 
 @example
 EXAMPLE_TBD
@@ -74,7 +74,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_netstats
 
-The @code{COMMAND} is implemented by a C language function
+The @code{netstats} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -84,7 +84,7 @@ int rtems_shell_rtems_main_netstats(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{netstats} has the
 following prototype:
 
 @example
@@ -119,7 +119,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use ifconfig:
+The following is an example of how to use @code{ifconfig}:
 
 @example
 EXAMPLE_TBD
@@ -143,7 +143,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_ifconfig
 
-The @code{COMMAND} is implemented by a C language function
+The @code{ifconfig} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -153,7 +153,7 @@ int rtems_shell_rtems_main_ifconfig(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{ifconfig} has the
 following prototype:
 
 @example
@@ -188,7 +188,7 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use route:
+The following is an example of how to use @code{route}:
 
 @example
 EXAMPLE_TBD
@@ -212,7 +212,7 @@ shell commands have been configured.
 
 @findex rtems_shell_rtems_main_route
 
-The @code{COMMAND} is implemented by a C language function
+The @code{route} is implemented by a C language function
 which has the following prototype:
 
 @example
@@ -222,7 +222,7 @@ int rtems_shell_rtems_main_route(
 );
 @end example
 
-The configuration structure for the @code{COMMAND} has the
+The configuration structure for the @code{route} has the
 following prototype:
 
 @example
