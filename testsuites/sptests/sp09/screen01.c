@@ -89,11 +89,7 @@ void Screen1()
     RTEMS_NOTEPAD_LAST,
     &notepad_value
   );
-  #ifdef RTEMS_ITRON_API
-    directive_failed( status,
-  #else
-    fatal_directive_status( status, RTEMS_INVALID_ID,
-  #endif
+  fatal_directive_status( status, RTEMS_INVALID_ID,
     "rtems_task_get_note with no tasks in API"
   );
 

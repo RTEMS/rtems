@@ -1,3 +1,9 @@
+2008-02-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen01.c: Correct test.
+	* sp09/screen14.c: Update copyright.
+	* sp28/init.c: Correct end of test messages.
+
 2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp43/init.c, sp43/sp43.scn: Exercise passing as object Id of SELF.

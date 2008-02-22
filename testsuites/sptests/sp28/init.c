@@ -18,6 +18,7 @@ rtems_task Init(rtems_task_argument argument);
 #define CONFIGURE_MAXIMUM_TASKS              4
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MICROSECONDS_PER_TICK       52429
+#define CONFIGURE_INIT_TASK_STACK_SIZE    (4*RTEMS_MINIMUM_STACK_SIZE)
 
 #define CONFIGURE_MICROSECONDS_INIT
 
@@ -214,18 +215,17 @@ void test_multiple_taskvars(void)
 }
 
 #define MAX_VARS 4096
+void *Pointers[MAX_VARS];
 
 void test_out_of_memory(void)
 {
   int                 i;
   int                 max;
-  void               *wkspace_base;
-  void              **base;
   rtems_status_code   sc;
   int                 ran_out = 0;
+  void              **base;
 
-  wkspace_base = rtems_configuration_get_work_space_start();
-  base = (void **)wkspace_base;
+  base = Pointers;
 
   for (i=0 ; i<MAX_VARS ; i++ ) {
     sc = rtems_task_variable_add(RTEMS_SELF, &base[i], NULL);
