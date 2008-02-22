@@ -1,3 +1,7 @@
+2008-02-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxmsgq02/init.c, psxsignal01/init.c: Corrent end of test messages.
+
 2008-02-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxkey01/task.c: Fix warnings.

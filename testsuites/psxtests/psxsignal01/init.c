@@ -221,11 +221,11 @@ void *POSIX_Init(
   Signal_occurred = 0;
   
   puts("*** Validate unexpected program termination ***");
+  puts( "*** END OF POSIX TEST SIGNAL ***" );
   _POSIX_signals_Abnormal_termination_handler( SIGUSR1 );
   status = sleep( 1 );
 
   puts( "ERROR==> Expected program termination");
-  puts( "*** END OF POSIX TEST SIGNAL ***" );
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
 }

@@ -58,7 +58,7 @@ void *POSIX_Init(
   mq = mq_open( Get_Longest_Name(), O_WRONLY, 0x777, &attr );
   fatal_posix_service_status_errno( mq, ENOMEM, "no workspace available" );  
 
-  puts( "*** END POSIX MESSAGE QUEUE 02 TEST ***" );
+  puts( "*** END OF POSIX MESSAGE QUEUE 02 TEST ***" );
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
