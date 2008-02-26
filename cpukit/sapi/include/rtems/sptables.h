@@ -55,11 +55,12 @@ extern "C" {
   #if defined(SAPI_INIT)
     const rtems_multiprocessing_table
 	   _Initialization_Default_multiprocessing_table = {
-      1,                      /* local node number */
-      1,                      /* maximum number nodes in system */
-      0,                      /* maximum number global objects */
-      0,                      /* maximum number proxies */
-      NULL,                   /* pointer to MPCI address table */
+      1,                        /* local node number */
+      1,                        /* maximum number nodes in system */
+      0,                        /* maximum number global objects */
+      0,                        /* maximum number proxies */
+      RTEMS_MINIMUM_STACK_SIZE, /* MPCI receive server stack size */
+      NULL,                     /* pointer to MPCI address table */
     };
   #else
     extern const rtems_multiprocessing_table

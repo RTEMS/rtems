@@ -6,7 +6,7 @@
  *  This include file contains the table of user defined configuration
  *  parameters.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -77,10 +77,14 @@ typedef void *itron_api_configuration_table;
  *  system.
  */
 typedef struct {
-  uint32_t            node;                   /* local node number */
-  uint32_t            maximum_nodes;          /* maximum # nodes in system */
-  uint32_t            maximum_global_objects; /* maximum # global objects */
-  uint32_t            maximum_proxies;        /* maximum # proxies */
+  /** This is the local node number. */
+  uint32_t            node;
+  /** This is the maximum number of nodes in system. */
+  uint32_t            maximum_nodes;
+  /** This is the maximum number of global objects. */
+  uint32_t            maximum_global_objects;
+  /** This is the maximum number of proxies. */
+  uint32_t            maximum_proxies;
 
   /** The MPCI Receive server is assumed to have a stack of at least 
    *  minimum stack size.  This field specifies the amount of extra
@@ -88,7 +92,8 @@ typedef struct {
    */
   uint32_t            extra_mpci_receive_server_stack;
 
-  rtems_mpci_table   *User_mpci_table;  /* pointer to MPCI table */
+  /** This is a pointer to User/BSP provided MPCI Table. */
+  rtems_mpci_table   *User_mpci_table;
 } rtems_multiprocessing_table;
 #endif
 

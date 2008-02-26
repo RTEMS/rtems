@@ -1,5 +1,11 @@
 2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/rtems/config.h, sapi/include/rtems/sptables.h: Add
+	missing field to default multiprocessing configuration table. Also
+	document fields in Doxygen format.
+
+2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/src/regionmp.c, score/src/objectnametoidstring.c: Fix some
 	warnings.
 
