@@ -299,7 +299,7 @@ written in a high-level language (typically C) can be invoked without
 damaging the state of the task that was interrupted.  In general, this
 results in the saving of registers which are NOT preserved across
 subroutine calls as well as any special interrupt state.  A port should
-define the CPU_Interrupt_frame structure so that application code can
+define the @code{CPU_Interrupt_frame} structure so that application code can
 examine the saved state.
 
 @example
