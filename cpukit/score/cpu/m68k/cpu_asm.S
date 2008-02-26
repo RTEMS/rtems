@@ -3,7 +3,7 @@
  *  This file contains all assembly code for the MC68020 implementation
  *  of RTEMS.
  *
- *  COPYRIGHT (c) 1989-2001.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
