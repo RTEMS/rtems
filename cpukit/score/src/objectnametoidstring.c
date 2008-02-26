@@ -57,9 +57,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   Objects_Control           *the_object;
   uint32_t                   index;
   uint32_t                   name_length;
-#if defined(RTEMS_MULTIPROCESSING)
-  Objects_Name               name_for_mp;
-#endif
 
   /* ASSERT: information->is_string == TRUE */
 

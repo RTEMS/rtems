@@ -1,3 +1,8 @@
+2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/regionmp.c, score/src/objectnametoidstring.c: Fix some
+	warnings.
+
 2008-02-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add netstats
