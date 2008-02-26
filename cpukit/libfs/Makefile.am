@@ -5,6 +5,10 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
+# Pick up nfsclient
+SUBDIRS = src/nfsclient
+DIST_SUBDIRS = $(SUBDIRS)
+
 EXTRA_DIST = README
 
 noinst_LIBRARIES = libimfs.a

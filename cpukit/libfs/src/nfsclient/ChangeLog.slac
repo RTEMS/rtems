@@ -1,0 +1,112 @@
+Changes since RTEMS-NFS 1.4:
+LICENSE:
+ - changed license terms; RTEMS-NFS is now released under the more liberal
+   'SLAC license'.
+NFS:
+ - silenced compiler warnings (follow handler declaration changes in libio.h
+   by using 'size_t' instead of 'uint32_t' etc.).
+
+Changes since RTEMS-NFS 1.3:
+RPCIOD:
+ - round timeout to next system clock tick and ensure it is at least
+   1 tick.
+ - cap retransmission timeout to transaction lifetime.
+ - BUGFIX (reported by Steven Johnson, 12/5/06): we must change the XID
+   before sending a timed-out transaction back to the requestor to prevent
+   a late reply from being accepted.
+ - Made task priority run-time configurable (and read from rtems_bsdnet_config
+   by default).
+
+NFS:
+ - added nfsGetTimeout() and nfsSetTimeout() to retrieve and modify,
+   respectively the (global) timeout for NFS/MOUNT operations.
+ - Minor mod. to fix 'type-punned pointer' warning (can avoid pointer cast).
+ - Added global variable 'nfsStBlksize' (defaults to 8k) which is now
+   used to report the file system's 'preferred' blocksize (stat(2)/st_blksize).
+   The old behavior (server's fattr.st_blksize is passed through) can be
+   obtained by setting nfsStBlksize=0.
+   The new feature lets stdio use 8k buffers (only if newlib was built with
+   HAVE_BLKSIZE defined). This enhances NFS (buffered) read performance quite
+   a bit. Thanks to Steven Johnson <sjohnson@sakuraindustries.com> for helping
+   with this.
+ - Updated README (performance section).
+ - Added simple performance test: nfsTest.c
+
+Changes since RTEMS-NFS 1.3_pre2:
+ RPCIOD:
+ - fix a problem with NFS server clusters (reply comes from an IP address
+   different from the destination of the request) by relaxing paranoia checks.
+
+Changes since RTEMS-NFS 1.2:
+ NFS:
+ - replaced inet_aton -> inet_pton
+ - replaced unsigned32 -> uint32_t
+ - added _KERNEL definition for 4.7 compilation
+ - silenced compiler warnings (4.7)
+ - added -Wno-unused-variable in 'proto' -- rpcgen produces a lot of them.
+ - new locking scheme. The 'in-use' counters cannot be protected by a mutex
+   because files might be closed when a thread is deleted from a dispatch-disabled
+   section where mutexes must not be locked. The counters are now protected by
+   disabling interrupts.
+   The only critical race-condition I can see ATM is while the NFS is being
+   unmounted and the mount point is crossed by another thread. It should be the
+   generic FS code's responsibility to handle that (but AFAIK, it doesn't) --
+   it's out of our scope...
+ - ftruncate didn't work. The functionality is achieved by nfs_sattr()
+   setting the file size to 0. However, nfs_sattr() always tried to set
+   all attributes (re-applying the current values to fields we didn't
+   want to change) which failed (EPERM) if we were not the owner.
+   Now, we restrict modifications to the requested fields (in case of
+   ftruncate this is *only* the size), adhering to rfc1094 (which states
+   that unused fields shall be set to -1).
+ - lseek(SEEK_END) didn't work. The underlying RTEMS filesystem code
+   uses an internal file 'size' field to compute the offset whence SEEK_END.
+   Instead of painfully maintaining 'size' across all system calls, we
+   just tweak the offset for SEEK_END and leave 'size' unused.
+ - fix: O_APPEND wasn't honoured. Note that there is no NFS 'append' call - 
+   the client simply uses the currently available idea of the file size
+   to set the write offset. This obviously is subject to race conditions
+   if multiple clients are writing the same file.
+ dirutils:
+ - replaced read/write calls by stdio; In case of copying to stdout, I
+   experienced occasional crashes when write(fileno(stdout),...) -- according
+   to the standard, mixing low-level i/o with stdio might produce undefined
+   results; there we go...
+
+Changes since RTEMS-NFS 1.1:
+ NFS:
+ - unlink() didnt work. The underlying RTEMS filesystem code evaluates
+   a '..' path on a non-directory node to find out the file's parent
+   directory. Workaround to this semantically inelegant RTEMS feature
+   was implemented.
+  
+Changes since RTEMS-NFS 1.0.beta3:
+ NFS:
+ - fixed possible string overrun in nfsMount
+ - nfs_read_dir() must reset the 'eofreached' flag if it skipped
+   dirents present in the xdr but not fitting into the user buffer.
+ - nfsMountsShow() released the wrong lock!
+ RPCIO:
+ - cannot delete locked binary semaphore (authlock) -- must unlock
+   first (authlock was never deleted and hence effectively leaked)
+ - added ASSERT paranoia around mutex primitives
+ - Relaxed paranoia check / ASSERTion failure:
+   paranoia_free() is called more than once on an ext_buf - it must
+   undo calls to paranoia_refcnt() - hence the 0 == --refcnt check
+   is too strict.
+ - Added a DEBUG flag to introduce random packet losses for testing
+   retransmission.
+ xdr_mbuf:
+ - make sure we do a signed comparison
+
+Changes since rtemsNFS-1.0.beta2:
+ - moved 'tar' command to the 'config' area; use
+   predefined 'make-tar' in individual Makefiles
+ - use INSTALL_CHANGE for headers, not INSTALL_VARIANT (probably doesn't
+   matter, though)
+ - use LD not LD_FOR_TARGET (to get absolute path)
+ - fixed assertion failure print format
+ - print requestor id if send_event fails - had just experienced this :-(
+ - hint about fprintf using FP registers is probably PPC specific
+ - provided implementation for xdrmbuf_getlong_aligned(). i386-rtems
+   seems to use it.

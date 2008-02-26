@@ -1,5 +1,30 @@
 2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* configure.ac, libfs/Makefile.am: Add nfsclient to cpukit. Although
+	the use of RPC/XDR could be an issue, the code does build multilib
+	across all targets. There are a few remaining warnings to deal with.
+	* libfs/src/nfsclient/.cvsignore, libfs/src/nfsclient/ChangeLog.slac,
+	libfs/src/nfsclient/LICENSE, libfs/src/nfsclient/Makefile.am,
+	libfs/src/nfsclient/README, libfs/src/nfsclient/preinstall.am,
+	libfs/src/nfsclient/rfc1094.txt,
+	libfs/src/nfsclient/proto/mount_prot.h,
+	libfs/src/nfsclient/proto/mount_prot.x,
+	libfs/src/nfsclient/proto/mount_prot_xdr.c,
+	libfs/src/nfsclient/proto/nfs_prot.h,
+	libfs/src/nfsclient/proto/nfs_prot.x,
+	libfs/src/nfsclient/proto/nfs_prot_xdr.c,
+	libfs/src/nfsclient/src/cexphelp.c,
+	libfs/src/nfsclient/src/dirutils.c,
+	libfs/src/nfsclient/src/librtemsNfs.h, libfs/src/nfsclient/src/nfs.c,
+	libfs/src/nfsclient/src/nfs.modini.c,
+	libfs/src/nfsclient/src/nfsTest.c, libfs/src/nfsclient/src/rpcio.c,
+	libfs/src/nfsclient/src/rpcio.h,
+	libfs/src/nfsclient/src/rpcio.modini.c,
+	libfs/src/nfsclient/src/sock_mbuf.c,
+	libfs/src/nfsclient/src/xdr_mbuf.c: New files.
+
+2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/include/rtems/config.h, sapi/include/rtems/sptables.h: Add
 	missing field to default multiprocessing configuration table. Also
 	document fields in Doxygen format.

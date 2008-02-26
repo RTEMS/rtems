@@ -332,6 +332,12 @@ test x"${RTEMS_CPU}" != x"unix" \
 
 AC_CONFIG_HEADER(config.h)
 
+## These are needed by the NFS Client
+AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
+AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
+&& test -n "$AWK" \
+&& test "$enable_rpcgen" = yes])
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
@@ -360,6 +366,7 @@ posix/Makefile
 itron/Makefile
 libblock/Makefile
 libfs/Makefile
+libfs/src/nfsclient/Makefile
 libgnat/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
