@@ -1,5 +1,6 @@
 file.texi
 general.texi
+index.html
 memory.texi
 network.texi
 rtems.texi
@@ -20,13 +21,15 @@ shell.ky
 shell.log
 shell.pdf
 shell.pg
+shell.pgs
 shell.ps
 shell.toc
 shell.tp
 shell.vr
-index.html
+stamp-vti
 Makefile
 Makefile.in
 mdate-sh
 rtems_footer.html
 rtems_header.html
+version.texi

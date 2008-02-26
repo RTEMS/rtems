@@ -1,5 +1,9 @@
 2008-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shell/.cvsignore, shell/file.t: Add most of file commands.
+
+2008-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* porting/interrupts.t: Formatting.
 
 2008-02-21	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -20,7 +20,7 @@ The RTEMS shell has the following file and directory commands:
 @item @code{ls} - list files in the directory
 @item @code{chdir} - change the current directory
 @item @code{mkdir} - create a directory
-@item @code{rmdir} - remove directory
+@item @code{rmdir} - remove empty directories
 @item @code{chroot} - change the root directory
 @item @code{chmod} - change permissions of a file
 @item @code{cat} - display file contents
@@ -378,7 +378,8 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+This command currently does not display information on a set of 
+files like POSIX ls(1).
 
 @subheading EXAMPLES:
 
@@ -600,19 +601,20 @@ extern rtems_shell_cmd_t rtems_shell_MKDIR_Command;
 @c
 @c
 @page
-@subsection rmdir - remove directory
+@subsection rmdir - remove empty directories
 
 @pgindex rmdir
 
 @subheading SYNOPSYS:
 
 @example
-rmdir  dir
+rmdir  [dir1 .. dirN]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command removes the specified set of directories.  If no 
+directories are provided on the command line, no actions are taken.
 
 @subheading EXIT STATUS:
 
@@ -620,14 +622,18 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+This command is a implemented using the @code{rmdir(2)} system
+call and all reasons that call may fail apply to this command.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{rmdir}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # mkdir joeldir
+SHLL [/] # rmdir joeldir
+SHLL [/] # ls joeldir
+joeldir: No such file or directory.
 @end example
 
 @subheading CONFIGURATION:
@@ -681,11 +687,14 @@ chroot [dir]
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command changes the root directory to @code{dir} for subsequent
+commands.
 
 @subheading EXIT STATUS:
 
 This command returns 0 on success and non-zero if an error is encountered.
+
+The destination directory @code{dir} must exist.
 
 @subheading NOTES:
 
@@ -745,12 +754,15 @@ extern rtems_shell_cmd_t rtems_shell_CHROOT_Command;
 @subheading SYNOPSYS:
 
 @example
-chmod 0777 n1 n2...
+chmod permissions file1 [file2...]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command changes the permissions on the files specified to the
+indicated @code{permissions}.  The permission values are POSIX based
+with owner, group, and world having individual read, write, and
+executive permission bits.
 
 @subheading EXIT STATUS:
 
@@ -758,14 +770,42 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+The @code{chmod} command only takes numeric representations of
+the permissions.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{chmod}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # cd etc
+SHLL [/etc] # ls
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group 
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0777 passwd
+SHLL [/etc] # ls 
+-rwxrwxrwx   1   root   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group 
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0322 passwd
+SHLL [/etc] # ls
+--wx-w--w-   1 nouser   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1 nouser   root          42 Jan 01 00:00 group 
+-rw-r--r--   1 nouser   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1 nouser   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0644 passwd
+SHLL [/etc] # ls
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group 
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
 @end example
 
 @subheading CONFIGURATION:
@@ -814,12 +854,12 @@ extern rtems_shell_cmd_t rtems_shell_CHMOD_Command;
 @subheading SYNOPSYS:
 
 @example
-cat n1 [n2 [n3...]]
+cat file1 [file2 .. fileN]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command displays the contents of the specified files.
 
 @subheading EXIT STATUS:
 
@@ -827,14 +867,17 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+It is possible to read the input from a device file using @code{cat}.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{cat}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # cat /etc/passwd
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
 @end example
 
 @subheading CONFIGURATION:
@@ -883,12 +926,20 @@ extern rtems_shell_cmd_t rtems_shell_CAT_Command;
 @subheading SYNOPSYS:
 
 @example
-rm n1 [n2 [n3...]]
+rm file1 [file2 ... fileN]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command deletes a name from the filesystem.  If the specified file name 
+was the last link to a file and there are no @code{open} file descriptor
+references to that file, then it is deleted and the associated space in
+the file system is made available for subsequent use.
+
+If the filename specified was the last link to a file but there
+are open file descriptor references to it, then the file will
+remain in existence until the last file descriptor referencing
+it is closed.
 
 @subheading EXIT STATUS:
 
@@ -903,7 +954,14 @@ NONE
 The following is an example of how to use @code{rm}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # cp /etc/passwd tmpfile
+SHLL [/] # cat tmpfile
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+SHLL [/] # rm tmpfile
+SHLL [/] # cat tmpfile
+cat: tmpfile: No such file or directory
 @end example
 
 @subheading CONFIGURATION:
@@ -1097,7 +1155,7 @@ TBD
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{mount}:
+The following is an example of how to use @code{unmount}:
 
 @example
 EXAMPLE_TBD
@@ -1223,7 +1281,9 @@ dir [dir]
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command is an alias or alternate name for the @code{ls}. 
+See @ref{File and Directory Commands ls - list files in the directory, ls}
+for more information.
 
 @subheading EXIT STATUS:
 
@@ -1287,12 +1347,14 @@ extern rtems_shell_cmd_t rtems_shell_DIR_Command;
 @subheading SYNOPSYS:
 
 @example
-cd DIRECTORY
+cd directory
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command is an alias or alternate name for the @code{chdir}. 
+See @ref{File and Directory Commands chdir - change the current directory, cd}
+for more information.
 
 @subheading EXIT STATUS:
 
