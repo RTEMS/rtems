@@ -1,3 +1,7 @@
+2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Stop building nfsclient here and build it in CPUKIT.
+
 2008-01-05	Chris Johns <chrisj@rtems.org>
 
 	* libchip/flash/am29lv160.c: Update the blank check error message
