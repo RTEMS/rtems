@@ -27,7 +27,10 @@
 /*
  * show the help for one command.
  */
-int rtems_shell_help_cmd(rtems_shell_cmd_t * shell_cmd) {
+int rtems_shell_help_cmd(
+  rtems_shell_cmd_t *shell_cmd
+)
+{
   char * pc;
   int    col,line;
 

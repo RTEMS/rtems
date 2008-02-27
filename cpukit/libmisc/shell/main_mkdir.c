@@ -27,15 +27,19 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_mkdir(int argc, char *argv[]) {
+int rtems_shell_main_mkdir(
+  int   argc,
+  char *argv[]
+)
+{
   char *dir;
-
   int n;
+
   n = 1;
   while (n<argc) {
     dir = argv[n++];
     if (mkdir(dir,S_IRWXU|S_IRWXG|S_IRWXO)) {
-      fprintf(stdout, "mkdir '%s' failed:%s\n", dir, strerror(errno));
+      fprintf(stderr, "mkdir '%s' failed:%s\n", dir, strerror(errno));
     }
   }
   return errno;

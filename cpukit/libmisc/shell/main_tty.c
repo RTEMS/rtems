@@ -26,9 +26,12 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_tty(int argc,char *argv[])
+int rtems_shell_main_tty(
+  int   argc,
+  char *argv[]
+)
 {
-  printf("%s\n",ttyname(fileno(stdin)));
+  printf("%s\n", ttyname(fileno(stdin)));
   return 0;
 }
 

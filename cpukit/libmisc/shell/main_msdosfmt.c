@@ -28,7 +28,10 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-int rtems_shell_main_msdos_format(int argc, char *argv[])
+int rtems_shell_main_msdos_format(
+  int   argc,
+  char *argv[]
+)
 {
   msdos_format_request_param_t rqdata = {
     OEMName:             "RTEMS",
@@ -45,17 +48,13 @@ int rtems_shell_main_msdos_format(int argc, char *argv[])
   const char* driver = NULL;
   int         arg;
   
-  for (arg = 1; arg < argc; arg++)
-  {
-    if (argv[arg][0] == '-')
-    {
-      switch (argv[arg][1])
-      {
+  for (arg = 1; arg < argc; arg++) {
+    if (argv[arg][0] == '-') {
+      switch (argv[arg][1]) {
         case 'v':
           arg++;
-          if (arg == argc)
-          {
-            printf ("error: no volume label.\n");
+          if (arg == argc) {
+            fprintf (stderr, "error: no volume label.\n");
             return 1;
           }
           rqdata.VolLabel = argv[arg];
@@ -63,9 +62,8 @@ int rtems_shell_main_msdos_format(int argc, char *argv[])
           
         case 'r':
           arg++;
-          if (arg == argc)
-          {
-            printf ("error: no root directory size.\n");
+          if (arg == argc) {
+            fprintf (stderr, "error: no root directory size.\n");
             return 1;
           }
           rqdata.files_per_root_dir = rtems_shell_str2int(argv[arg]);
@@ -73,9 +71,8 @@ int rtems_shell_main_msdos_format(int argc, char *argv[])
           
         case 't':
           arg++;
-          if (arg == argc)
-          {
-            printf ("error: no FAT type.\n");
+          if (arg == argc) {
+            fprintf (stderr, "error: no FAT type.\n");
             return 1;
           }
 
@@ -87,42 +84,36 @@ int rtems_shell_main_msdos_format(int argc, char *argv[])
             rqdata.fattype = MSDOS_FMT_FAT16;
           else if (strcmp (argv[arg], "32") == 0)
             rqdata.fattype = MSDOS_FMT_FAT32;
-          else
-          {
-            printf ("error: invalid type, can any, 12, 16, or 32\n");
+          else {
+            fprintf (stderr, "error: invalid type, can any, 12, 16, or 32\n");
             return 1;
           }
           break;
 
         default:
-          printf ("error: invalid option: %s\n", argv[arg]);
+          fprintf (stderr, "error: invalid option: %s\n", argv[arg]);
           return 1;
           
       }
-    }
-    else
-    {
+    } else {
       if (!driver)
         driver = argv[arg];
-      else
-      {
-        printf ("error: only one driver allowed: %s\n", argv[arg]);
+      else {
+        fprintf (stderr, "error: only one driver allowed: %s\n", argv[arg]);
         return 1;
       }
     }
   }
 
-  if (!driver)
-  {
-    printf ("error: no driver\n");
+  if (!driver) {
+    fprintf (stderr, "error: no driver\n");
     return 1;
   }
   
   printf ("msdos format: %s\n", driver);
   
-  if (msdos_format (driver, &rqdata) < 0)
-  {
-    printf ("error: format failed: %s\n", strerror (errno));
+  if (msdos_format (driver, &rqdata) < 0) {
+    fprintf (stderr, "error: format failed: %s\n", strerror (errno));
     return 1;
   }
 

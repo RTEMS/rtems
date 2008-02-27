@@ -26,28 +26,31 @@
 
 extern int rtems_shell_main_mdump(int, char *);
 
-int rtems_shell_main_mmove(int argc,char * argv[]) {
+int rtems_shell_main_mmove(
+  int   argc,
+  char *argv[]
+)
+{
  uintptr_t  src;
  uintptr_t  dst;
- size_t     size;
+ size_t     length;
 
- if (argc<4) {
-  fprintf(stdout,"too few arguments\n");
-  return 0;
+ if ( argc<4 ) {
+  fprintf(stderr,"%s: too few arguments\n", argv[0]);
+  return -1;
  }
 
- dst  = rtems_shell_str2int(argv[1]);
- src  = rtems_shell_str2int(argv[2]);
- size = rtems_shell_str2int(argv[3]);
- memcpy((unsigned char*)dst, (unsigned char*)src, size);
- rtems_current_shell_env->mdump_addr = dst;
+ dst    = rtems_shell_str2int(argv[1]);
+ src    = rtems_shell_str2int(argv[2]);
+ length = rtems_shell_str2int(argv[3]);
+ memcpy((unsigned char*)dst, (unsigned char*)src, length);
 
- return rtems_shell_main_mdump(0,NULL);
+ return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_MMOVE_Command = {
   "mmove",                                      /* name */
-  "mmove dst src size",                         /* usage */
+  "mmove dst src length",                       /* usage */
   "mem",                                        /* topic */
   rtems_shell_main_mmove,                       /* command */
   NULL,                                         /* alias */

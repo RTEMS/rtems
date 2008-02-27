@@ -74,7 +74,7 @@ int rtems_shell_make_args(
 );
 
 int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) ;
-void rtems_shell_cat_file(FILE * out,char *name);
+int rtems_shell_cat_file(FILE * out,char *name);
 void rtems_shell_write_file(char *name,char * content);
 
 /**
@@ -139,7 +139,6 @@ typedef struct  {
   int         exit_shell; /* logout */
   int         forever   ; /* repeat login */
   int         errorlevel;
-  uintptr_t   mdump_addr;
   const char* input;
   const char* output;
   int         output_append;

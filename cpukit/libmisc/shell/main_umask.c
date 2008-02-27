@@ -28,7 +28,10 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_umask(int argc,char *argv[])
+int rtems_shell_main_umask(
+  int   argc,
+  char *argv[]
+)
 {
   mode_t msk = umask(0);
 

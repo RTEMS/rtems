@@ -28,24 +28,23 @@
 #include <librtemsNfs.h>
 
 static int
-rtems_shell_nfs_mounter (const char*                device,
-                         const char*                mntpoint,
-                         rtems_shell_filesystems_t* fs,
-                         rtems_filesystem_options_t options)
+rtems_shell_nfs_mounter (
+  const char*                device,
+  const char*                mntpoint,
+  rtems_shell_filesystems_t* fs,
+  rtems_filesystem_options_t options)
 {
   char* uidhost;
   char* path;
   int   ret;
 
-  if (strchr (device, ':') == NULL)
-  {
-    fprintf (stdout, "error: nfs mount device is [uid.gid@]host:path\n");
+  if (strchr (device, ':') == NULL) {
+    fprintf (stderr, "error: nfs mount device is [uid.gid@]host:path\n");
     return -1;
   }
 
-  if (rpcUdpInit () < 0)
-  {
-    fprintf (stdout, "error: initialising RPC\n");
+  if (rpcUdpInit () < 0) {
+    fprintf (stderr, "error: initialising RPC\n");
     return -1;
   }
 

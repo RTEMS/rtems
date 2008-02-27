@@ -28,15 +28,18 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_chmod(int argc,char *argv[])
+int rtems_shell_main_chmod(
+  int argc,
+  char *argv[]
+)
 {
   int n;
   mode_t mode;
 
-  if (argc > 2){
-    mode = rtems_shell_str2int(argv[1])&0777;
+  if (argc > 2) {
+    mode = rtems_shell_str2int(argv[1]) & 0777;
     n = 2;
-    while (n<argc)
+    while (n < argc)
       chmod(argv[n++], mode);
   }
   return 0;

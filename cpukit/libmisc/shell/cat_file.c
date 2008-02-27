@@ -18,17 +18,20 @@
 
 #include <stdio.h>
 
-void rtems_shell_cat_file(FILE * out,char * name) {
+int rtems_shell_cat_file(FILE * out,char * name) {
   FILE * fd;
   int c;
 
   if (out) {
     fd = fopen(name,"r");
-    if (fd) {
-       while ((c=fgetc(fd))!=EOF) fputc(c,out);
-     fclose(fd);
+    if (!fd) {
+      return -1;
     }
+    while ((c=fgetc(fd))!=EOF)
+      fputc(c,out);
+    fclose(fd);
   }
+  return 0;
 }
 
 

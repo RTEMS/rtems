@@ -26,29 +26,32 @@
 
 extern int rtems_shell_main_mdump(int, char *);
 
-int rtems_shell_main_medit(int argc,char * argv[]) {
+int rtems_shell_main_medit(
+  int   argc,
+  char *argv[]
+)
+{
   unsigned char * pb;
   int n,i;
 
   if (argc<3) {
-    fprintf(stdout,"too few arguments\n");
-    return 0;
+    fprintf(stderr,"%s: too few arguments\n", argv[0]);
+    return -1;
   }
 
   pb = (unsigned char*)rtems_shell_str2int(argv[1]);
   i = 2;
   n = 0;
   while (i<=argc) {
-    pb[n++] = rtems_shell_str2int(argv[i++])%0x100;
+    pb[n++] = rtems_shell_str2int(argv[i++]) % 0x100;
   }
-  rtems_current_shell_env->mdump_addr = (int)pb;
 
-  return rtems_shell_main_mdump(0,NULL);
+  return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_MEDIT_Command = {
   "medit",                                      /* name */
-  "medit addr value [value ...]",               /* usage */
+  "medit address value1 [value2 ...]",          /* usage */
   "mem",                                        /* topic */
   rtems_shell_main_medit,                       /* command */
   NULL,                                         /* alias */

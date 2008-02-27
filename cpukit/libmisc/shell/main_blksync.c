@@ -28,45 +28,42 @@
 #include <rtems/blkdev.h>
 #include "internal.h"
 
-int rtems_shell_main_blksync(int argc, char *argv[])
+int rtems_shell_main_blksync(
+  int argc,
+  char *argv[]
+)
 {
   const char* driver = NULL;
   int         arg;
+  int         fd;
   
-  for (arg = 1; arg < argc; arg++)
-  {
-    if (argv[arg][0] == '-')
-    {
-      printf ("error: invalid option: %s\n", argv[arg]);
+  for (arg = 1; arg < argc; arg++) {
+    if (argv[arg][0] == '-') {
+      fprintf( stderr, "%s: invalid option: %s\n", argv[0], argv[arg]);
       return 1;
-    }
-    else
-    {
+    } else {
       if (!driver)
         driver = argv[arg];
-      else
-      {
-        printf ("error: only one driver name allowed: %s\n", argv[arg]);
+      else {
+        fprintf( stderr, "%s: only one driver name allowed: %s\n",
+          argv[0], argv[arg]);
         return 1;
       }
     }
   }
   
-  int fd = open (driver, O_WRONLY, 0);
-  if (fd < 0)
-  {
-    printf ("error: driver open failed: %s\n", strerror (errno));
+  fd = open (driver, O_WRONLY, 0);
+  if (fd < 0) {
+    fprintf( stderr, "%s: driver open failed: %s\n", argv[0], strerror (errno));
     return 1;
   }
   
-  if (ioctl (fd, BLKIO_SYNCDEV) < 0)
-  {
-    printf ("error: driver sync failed: %s\n", strerror (errno));
+  if (ioctl (fd, BLKIO_SYNCDEV) < 0) {
+    fprintf( stderr, "%s: driver sync failed: %s\n", argv[0], strerror (errno));
     return 1;
   }
   
   close (fd);
-  
   return 0;
 }
 

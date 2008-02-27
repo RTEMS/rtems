@@ -24,21 +24,6 @@
 
 extern int malloc_info( region_information_block * );
 
-static void printit(
-  const char       *c,
-  Heap_Information *h
-)
-{
-  printf(
-    "Number of %s blocks: %" PRId32 "\n"
-    "Largest %s block:    %" PRId32 "\n"
-    "Total bytes %s:      %" PRId32 "\n",
-    c, h->number,
-    c, h->largest,
-    c, h->total
-  );
-}
-
 int rtems_shell_main_malloc_info(
   int   argc,
   char *argv[]
@@ -60,7 +45,7 @@ int rtems_shell_main_malloc_info(
       return 0;
     }
   }
-  fprintf( stderr, "subcommands info or stats\n" );
+  fprintf( stderr, "%s: [info|stats]\n", argv[0] );
   return -1;
 }
 

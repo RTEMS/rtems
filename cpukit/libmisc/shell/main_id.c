@@ -28,7 +28,10 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_id(int argc,char *argv[])
+int rtems_shell_main_id(
+  int   argc,
+  char *argv[]
+)
 {
   struct passwd *pwd;
   struct group  *grp;
@@ -38,18 +41,18 @@ int rtems_shell_main_id(int argc,char *argv[])
   printf(
     "uid=%d(%s),gid=%d(%s),",
     getuid(),
-    pwd?pwd->pw_name:"",
+    (pwd) ? pwd->pw_name : "",
     getgid(),
-    grp?grp->gr_name:""
+    (grp) ? grp->gr_name : ""
   );
   pwd = getpwuid(geteuid());
   grp = getgrgid(getegid());
   printf(
     "euid=%d(%s),egid=%d(%s)\n",
     geteuid(),
-    pwd?pwd->pw_name:"",
+    (pwd) ? pwd->pw_name : "",
     getegid(),
-    grp?grp->gr_name:""
+    (grp) ? grp->gr_name : ""
   );
   return 0;
 }

@@ -28,10 +28,11 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-int rtems_shell_libc_mounter(const char*                driver,
-                             const char*                path,
-                             rtems_shell_filesystems_t* fs,
-                             rtems_filesystem_options_t options)
+int rtems_shell_libc_mounter(
+  const char*                driver,
+  const char*                path,
+  rtems_shell_filesystems_t* fs,
+  rtems_filesystem_options_t options)
 {
   rtems_filesystem_mount_table_entry_t* mt_entry;
   /*
@@ -40,7 +41,7 @@ int rtems_shell_libc_mounter(const char*                driver,
   
   if (mount (&mt_entry, fs->fs_ops, options, (char*) driver, (char*) path) < 0)
   {
-    printf ("error: mount failed: %s\n", strerror (errno));
+    fprintf (stderr, "mount: mount failed: %s\n", strerror (errno));
     return 1;
   }
   
@@ -49,7 +50,10 @@ int rtems_shell_libc_mounter(const char*                driver,
 
 #define NUMOF(_i) (sizeof (_i) / sizeof (_i[0]))
 
-int rtems_shell_main_mount(int argc, char *argv[])
+int rtems_shell_main_mount(
+  int   argc,
+  char *argv[]
+)
 {
   rtems_filesystem_options_t options = RTEMS_FILESYSTEM_READ_WRITE;
   rtems_shell_filesystems_t* fs = NULL;
@@ -57,79 +61,66 @@ int rtems_shell_main_mount(int argc, char *argv[])
   char*                      mount_point = NULL;
   int                        arg;
   
-  for (arg = 1; arg < argc; arg++)
-  {
-    if (argv[arg][0] == '-')
-    {
-      if (argv[arg][1] == 't')
-      {
+  for (arg = 1; arg < argc; arg++) {
+    if (argv[arg][0] == '-') {
+      if (argv[arg][1] == 't') {
         rtems_shell_filesystems_t** a;
         
         arg++;
-        if (arg == argc)
-        {
-          fprintf (stdout, "error: -t needs a type of file-system;; see -L.\n");
+        if (arg == argc) {
+          fprintf(
+            stderr,
+            "%s: -t needs a type of file-system;; see -L.\n",
+            argv[0]
+          );
           return 1;
         }
 
-        for (a = rtems_shell_Mount_filesystems; *a; a++)
-        {
-          if (strcmp (argv[arg], (*a)->name) == 0)
-          {
+        for (a = rtems_shell_Mount_filesystems; *a; a++) {
+          if (strcmp (argv[arg], (*a)->name) == 0) {
             fs = *a;
             break;
           }
         }
-      }
-      else if (argv[arg][1] == 'r')
-      {
+      } else if (argv[arg][1] == 'r') {
         options = RTEMS_FILESYSTEM_READ_ONLY;
-      }
-      else if (argv[arg][1] == 'L')
-      {
+      } else if (argv[arg][1] == 'L') {
         rtems_shell_filesystems_t** a;
-        fprintf (stdout, "File systems: ");
+        fprintf (stderr, "File systems: ");
         for (a = rtems_shell_Mount_filesystems; *a; a++)
           if (*a)
-            fprintf (stdout, "%s ", (*a)->name);
-        fprintf (stdout, "\n");
+            fprintf (stderr, "%s ", (*a)->name);
+        fprintf (stderr, "\n");
+        return 1;
+      } else {
+        fprintf (stderr, "unknown option: %s\n", argv[arg]);
         return 1;
       }
-      else
-      {
-        fprintf (stdout, "unknown option: %s\n", argv[arg]);
-        return 1;
-      }
-    }
-    else
-    {
+    } else {
       if (!driver)
         driver = argv[arg];
       else if (!mount_point)
         mount_point = argv[arg];
-      else
-      {
-        printf ("error: driver and mount only require: %s\n", argv[arg]);
+      else {
+        fprintf (
+          stderr, "mount: driver and mount only require: %s\n", argv[arg]);
         return 1;
       }
     }
   }
 
-  if (fs == NULL)
-  {
-    fprintf (stdout, "error: no file-system; see the -L option\n");
+  if (fs == NULL) {
+    fprintf (stderr, "mount: no file-system; see the -L option\n");
     return 1;
   }
   
-  if (fs->driver_needed && !driver)
-  {
-    fprintf (stdout, "error: no driver\n");
+  if (fs->driver_needed && !driver) {
+    fprintf (stderr, "mount: no driver\n");
     return 1;
   }
   
-  if (!mount_point)
-  {
-    printf ("error: no mount point\n");
+  if (!mount_point) {
+    fprintf (stderr, "mount: no mount point\n");
     return 1;
   }
   

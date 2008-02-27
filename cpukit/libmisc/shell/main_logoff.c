@@ -22,12 +22,14 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-/*-----------------------------------------------------------*/
-int rtems_shell_main_logoff(int argc,char *argv[])
+int rtems_shell_main_logoff(
+  int   argc,
+  char *argv[]
+)
 {
   printf("logoff from the system...");
 
-  rtems_current_shell_env->exit_shell=TRUE;
+  rtems_current_shell_env->exit_shell = TRUE;
 
   return 0;
 }

@@ -23,11 +23,15 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_pwd (int argc, char *argv[]) {
+int rtems_shell_main_pwd(
+  int   argc,
+  char *argv[]
+)
+{
   char dir[1024];
 
   getcwd(dir,1024);
-  fprintf(stdout,"%s\n",dir);
+  puts(dir);
   return 0;
 }
 

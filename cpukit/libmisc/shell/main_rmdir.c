@@ -30,13 +30,15 @@ int rtems_shell_main_rmdir (int argc, char *argv[])
   char *dir;
   int n;
 
-  n=1;
-  while (n<argc) {
-    dir=argv[n++];
-    if (rmdir(dir))
-      fprintf(stdout, "rmdir '%s' failed:%s\n", dir, strerror(errno));
+  n = 1;
+  while (n < argc) {
+    dir = argv[n++];
+    if (rmdir(dir)) {
+      fprintf(stderr,"%s: %s: %s\n", argv[0], dir, strerror(errno));
+      return -1;
+    }
   }
-  return errno;
+  return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_RMDIR_Command = {

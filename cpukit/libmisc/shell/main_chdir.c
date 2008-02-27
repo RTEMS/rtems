@@ -25,16 +25,20 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_chdir (int argc, char *argv[]) {
+int rtems_shell_main_chdir(
+  int   argc,
+  char *argv[]
+)
+{
   char *dir;
 
   dir = "/";
 
-  if (argc>1)
+  if (argc > 1)
     dir = argv[1];
 
   if (chdir(dir)) {
-    fprintf(stdout, "chdir to '%s' failed:%s\n", dir,strerror(errno));
+    fprintf(stderr, "chdir to '%s' failed:%s\n", dir,strerror(errno));
     return errno;
   }
   return 0;

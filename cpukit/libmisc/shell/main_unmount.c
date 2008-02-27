@@ -27,25 +27,25 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-int rtems_shell_main_unmount(int argc, char *argv[])
+int rtems_shell_main_unmount(
+  int   argc,
+  char *argv[]
+)
 {
   char* mount_point = NULL;
   int   arg;
   
-  for (arg = 1; arg < argc; arg++)
-  {
+  for (arg = 1; arg < argc; arg++) {
     if (!mount_point)
       mount_point = argv[arg];
-    else
-    {
-      printf ("error: only one mount path require: %s\n", argv[arg]);
+    else {
+      fprintf (stderr, "error: only one mount path require: %s\n", argv[arg]);
       return 1;
     }
   }
 
-  if (!mount_point)
-  {
-    printf ("error: no mount point\n");
+  if (!mount_point) {
+    fprintf (stderr, "error: no mount point\n");
     return 1;
   }
   
@@ -53,9 +53,8 @@ int rtems_shell_main_unmount(int argc, char *argv[])
    * Unmount the disk.
    */
   
-  if (unmount (mount_point) < 0)
-  {
-    fprintf (stdout, "error: unmount failed: %s: %s\n",
+  if (unmount (mount_point) < 0) {
+    fprintf (stderr, "error: unmount failed: %s: %s\n",
              mount_point, strerror (errno));
     return 1;
   }

@@ -27,12 +27,15 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_whoami(int argc,char *argv[])
+int rtems_shell_main_whoami(
+  int   argc,
+  char *argv[]
+)
 {
   struct passwd *pwd;
 
-  pwd = getpwuid(getuid());
-  printf("%s\n",pwd?pwd->pw_name:"nobody");
+  pwd = getpwuid(geteuid());
+  printf( "%s\n", (pwd) ? pwd->pw_name : "nobody");
   return 0;
 }
 

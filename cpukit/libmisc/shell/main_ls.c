@@ -35,7 +35,10 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_ls(int argc, char *argv[])
+int rtems_shell_main_ls(
+  int   argc,
+  char *argv[]
+)
 {
   char           *fname;
   DIR            *dirp;
@@ -55,7 +58,7 @@ int rtems_shell_main_ls(int argc, char *argv[])
     fname = argv[1];
 
   if ((dirp = opendir(fname)) == NULL) {
-    fprintf(stdout,"%s: No such file or directory.\n", fname);
+    fprintf(stderr,"%s: %s: No such file or directory.\n", argv[0], fname);
     return errno;
   }
   n = 0;
@@ -65,13 +68,13 @@ int rtems_shell_main_ls(int argc, char *argv[])
     if (nbuf[strlen(nbuf)-1]!='/')
       strcat(nbuf,"/");
     strcat(nbuf,dp->d_name); /* always the fullpathname. Avoid ftpd problem.*/
-    if (stat(nbuf, &stat_buf) == 0) { /* AWFUL buts works...*/
-      strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_mtime));
+    if (stat(nbuf, &stat_buf) == 0) { /* AWFUL but works...*/
+      strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M", gmtime(&stat_buf.st_mtime));
       pwd = getpwuid(stat_buf.st_uid);
       user = pwd?pwd->pw_name:"nouser";
       grp = getgrgid(stat_buf.st_gid);
       group = grp?grp->gr_name:"nogrp";
-      fprintf(stdout,"%c%c%c%c%c%c%c%c%c%c %3d %6.6s %6.6s %11d %s %s%c\n",
+      printf("%c%c%c%c%c%c%c%c%c%c %3d %6.6s %6.6s %11d %s %s%c\n",
               (S_ISLNK(stat_buf.st_mode)?('l'):
               (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
               (stat_buf.st_mode & S_IRUSR)?('r'):('-'),
@@ -93,7 +96,7 @@ int rtems_shell_main_ls(int argc, char *argv[])
       size += stat_buf.st_size;
     }
   }
-  fprintf(stdout,"%d files %d bytes occupied\n",n,size);
+  printf("%d files %d bytes occupied\n",n,size);
   closedir(dirp);
   return 0;
 }

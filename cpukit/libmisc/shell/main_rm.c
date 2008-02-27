@@ -25,14 +25,16 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_rm(int argc, char *argv[])
+int rtems_shell_main_rm(
+  int   argc,
+  char *argv[]
+)
 {
-   int n;
-   n = 1;
+   int n = 1;
 
-   while (n<argc) {
+   while ( n<argc ) {
      if (unlink(argv[n])) {
-       fprintf(stdout,"error %s:rm %s\n",strerror(errno),argv[n]);
+       fprintf(stderr,"%s: %s: %s\n", argv[0], argv[n], strerror(errno));
        return -1;
      }
      n++;

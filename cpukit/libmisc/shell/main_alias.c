@@ -25,12 +25,12 @@
 int rtems_shell_rtems_main_alias(int argc, char **argv)
 {
   if (argc<3) {
-    fprintf(stdout,"too few arguments\n");
+    fprintf(stderr,"too few arguments\n");
     return 1;
   }
 
   if (!rtems_shell_alias_cmd(argv[1],argv[2])) {
-    fprintf(stdout,"unable to make an alias(%s,%s)\n",argv[1],argv[2]);
+    fprintf(stderr,"unable to make an alias(%s,%s)\n",argv[1],argv[2]);
   }
   return 0;
 }

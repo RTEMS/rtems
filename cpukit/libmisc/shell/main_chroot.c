@@ -25,14 +25,18 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_chroot(int argc,char * argv[]) {
-  char *new_root="/";
+int rtems_shell_main_chroot(
+  int argc,
+  char * argv[]
+)
+{
+  char *new_root = "/";
 
-  if (argc==2)
-    new_root=argv[1];
+  if (argc == 2)
+     new_root = argv[1];
 
-  if (chroot(new_root)<0) {
-    fprintf(stdout,"error %s:chroot(%s);\n",strerror(errno),new_root);
+  if ( chroot(new_root) < 0 ) {
+    fprintf(stderr,"chroot %s (%s)\n", new_root, strerror(errno));
     return -1;
   }
 

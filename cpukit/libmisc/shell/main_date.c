@@ -25,18 +25,52 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_date(int argc,char *argv[])
+int rtems_shell_main_date(
+  int   argc,
+  char *argv[]
+)
 {
-  time_t t;
+  /*
+   *  Print the current date and time in default format.
+   */
+  if ( argc == 1 ) {
+    time_t t;
 
-  time(&t);
-  fprintf(stdout,"%s", ctime(&t));
-  return 0;
+    time(&t);
+    printf("%s", ctime(&t));
+    return 0;
+  }
+
+  /*
+   *  Set the current date and time
+   */
+  if ( argc == 3 ) {
+    char buf[128];
+    struct tm TOD;
+    struct timespec timesp;
+    char *result;
+
+    sprintf( buf, "%s %s", argv[1], argv[2] );
+    result = strptime(
+      buf, 
+      "%Y-%m-%d %T",
+      &TOD
+    );
+    if ( result && !*result ) {
+      timesp.tv_sec = mktime( &TOD );
+      timesp.tv_nsec = 0;
+      clock_settime( CLOCK_REALTIME, &timesp );
+      return 0;
+    }
+  }
+
+  fprintf( stderr, "%s: Usage: [YYYY-MM-DD HH:MM:SS]\n", argv[0] );
+  return -1;
 }
 
 rtems_shell_cmd_t rtems_shell_DATE_Command = {
   "date",                        /* name */
-  "date",                        /* usage */
+  "date [YYYY-MM-DD HH:MM:SS]",  /* usage */
   "misc",                        /* topic */
   rtems_shell_main_date,         /* command */
   NULL,                          /* alias */

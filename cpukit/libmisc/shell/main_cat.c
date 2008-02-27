@@ -37,12 +37,17 @@
 
 int rtems_shell_main_cat(int argc, char *argv[])
 {
-   int n;
-   n=1;
+  int n;
+  int sc;
 
-   while (n<argc)
-     rtems_shell_cat_file(stdout,argv[n++]);
-   return 0;
+  for ( n=1; n < argc ; n++) {
+    sc = rtems_shell_cat_file(stdout, argv[n]);
+    if ( sc == -1 ) {
+      fprintf(stderr, "%s: %s: %s\n", argv[0], argv[n], strerror(errno));
+      return -1;
+    }
+  }
+  return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_CAT_Command = {

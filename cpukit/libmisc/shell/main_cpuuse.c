@@ -22,14 +22,33 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_cpuuse(int argc,char *argv[])
+int rtems_shell_main_cpuuse(
+  int   argc,
+  char *argv[]
+)
 {
-  if ( argc >= 1 && !strcmp( argv[1], "-r" ) ) {
+  /*
+   *  When invoked with no arguments, print the report.
+   */
+  if ( argc == 1 ) {
+    rtems_cpu_usage_report_with_plugin(stdout, (rtems_printk_plugin_t)fprintf);
+    return 0;
+  }
+
+  /*
+   *  When invoked with the single argument -r, reset the statistics.
+   */
+  if ( argc == 2 && !strcmp( argv[1], "-r" ) ) {
     printf( "Resetting CPU Usage information\n" );
     rtems_cpu_usage_reset();
-  } else
-    rtems_cpu_usage_report_with_plugin(stdout, (rtems_printk_plugin_t)fprintf);
-  return 0;
+    return 0;
+  }
+
+  /*
+   *  OK.  The user did something wrong.
+   */
+  fprintf( stderr, "%s: [-r]\n", argv[0] );
+  return -1;
 }
 
 rtems_shell_cmd_t rtems_shell_CPUUSE_Command = {
