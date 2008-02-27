@@ -28,7 +28,7 @@ Summary:      	sh-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20080222.1%{?dist}
+Release:      	10.20080222.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -40,11 +40,13 @@ BuildRequires:  gmp-devel >= 4.1
 %if "%{?fedora}" >= "8"
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
-%if "%{?suse}" >= "10.3"
+%if "%{?suse}" > "10.3"
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 # These distros ship an insufficient mpfr
 %{?el4:%define 	_build_mpfr 	1}
+%{?suse10_2:%define 	_build_mpfr 	1}
+%{?suse10_3:%define 	_build_mpfr 	1}
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
