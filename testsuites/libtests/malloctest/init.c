@@ -198,7 +198,7 @@ void test_heap_info(void)
 
   puts( "malloc_info - check free space drops after malloc" );
   sc = malloc_info( &the_info );
-  rtems_test_assert( sc == -1 );
+  rtems_test_assert( sc == 0 );
   s1 = the_info.Free.largest;
 
   p1 = malloc( 512 );
