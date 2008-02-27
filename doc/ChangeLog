@@ -1,3 +1,7 @@
+2008-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/file.t, shell/general.t: More commands documented.
+
 2008-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/.cvsignore, shell/file.t: Add most of file commands.

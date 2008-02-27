@@ -118,7 +118,7 @@ date
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command prints the current date.
 
 @subheading EXIT STATUS:
 
@@ -126,14 +126,15 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+This comm
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{date}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ date
+Fri Jan  1 00:00:06 1988
 @end example
 
 @subheading CONFIGURATION:

@@ -379,7 +379,8 @@ This command returns 0 on success and non-zero if an error is encountered.
 @subheading NOTES:
 
 This command currently does not display information on a set of 
-files like POSIX ls(1).
+files like the POSIX ls(1).  It only displays the contents of
+entire directories.
 
 @subheading EXAMPLES:
 
