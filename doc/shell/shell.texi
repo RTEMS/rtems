@@ -82,7 +82,7 @@ This is the online version of the RTEMS Shell User's Guide.
 * General Commands::
 * File and Directory Commands::
 * Memory Commands::
-* RTEMS Commands::
+* RTEMS Specific Commands::
 * Network Commands::
 * Function and Variable Index::
 * Concept Index::

@@ -22,6 +22,10 @@ The RTEMS shell has the following network commands:
 
 @section Commands
 
+This section details the Network Commands available.  A
+subsection is dedicated to each of the commands and
+describes the behavior and configuration of that
+command as well as providing an example usage.
 @c
 @c
 @c

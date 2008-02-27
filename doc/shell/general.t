@@ -15,10 +15,10 @@ The RTEMS shell has the following general commands:
 @itemize @bullet
 
 @item @code{alias} - Add alias for an existing command
-@item @code{date} - Print current date and time
+@item @code{date} - Print or set current date and time
 @item @code{id} - show uid gid euid and egid
 @item @code{tty} - show ttyname
-@item @code{whoami} - show current user
+@item @code{whoami} - print effective user id
 @item @code{logoff} - logoff from the system
 @item @code{exit} - alias for logoff command
 
@@ -26,6 +26,10 @@ The RTEMS shell has the following general commands:
 
 @section Commands
 
+This section details the General Commands available.  A
+subsection is dedicated to each of the commands and
+describes the behavior and configuration of that
+command as well as providing an example usage.
 @c
 @c
 @c
@@ -106,7 +110,7 @@ extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
 @c
 @c
 @page
-@subsection date - print current date and time
+@subsection date - print or set current date and time
 
 @pgindex date
 
@@ -114,11 +118,18 @@ extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
 
 @example
 date
+date DATE TIME
 @end example
 
 @subheading DESCRIPTION:
 
-This command prints the current date.
+This command operates one of two modes.  When invoked with no
+arguments, it prints the current date and time.  When invoked
+with both @code{date} and @code{time} arguments, it sets the
+current time.  
+
+The @code{date} is specified in @code{YYYY-MM-DD} format.
+The @code{time} is specified in @code{HH:MM:SS} format.
 
 @subheading EXIT STATUS:
 
@@ -134,7 +145,10 @@ The following is an example of how to use @code{date}:
 
 @example
 SHLL [/] $ date
-Fri Jan  1 00:00:06 1988
+Fri Jan  1 00:00:09 1988
+SHLL [/] $ date 2008-02-29 06:45:32
+SHLL [/] $ date
+Fri Feb 29 06:45:35 2008
 @end example
 
 @subheading CONFIGURATION:
@@ -188,7 +202,9 @@ id
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command prints the user identity.  This includes the user id
+(uid), group id (gid), effective user id (euid), and effective
+group id (egid).
 
 @subheading EXIT STATUS:
 
@@ -196,14 +212,26 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+Remember there is only one POSIX process in a single processor RTEMS
+application. Each thread may have its own user identity and that
+identity is used by the filesystem to enforce permissions.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{id}:
+The first example of the @code{id} command is from a session logged
+in as the normal user @code{rtems}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # id
+uid=1(rtems),gid=1(rtems),euid=1(rtems),egid=1(rtems)
+@end example
+
+The second example of the @code{id} command is from a session logged
+in as the @code{root} user:
+
+@example
+SHLL [/] # id
+uid=0(root),gid=0(root),euid=0(root),egid=0(root)
 @end example
 
 @subheading CONFIGURATION:
@@ -257,7 +285,8 @@ tty
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command prints the file name of the device connected
+to standard input.
 
 @subheading EXIT STATUS:
 
@@ -272,7 +301,8 @@ NONE
 The following is an example of how to use @code{tty}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ tty
+/dev/console
 @end example
 
 @subheading CONFIGURATION:
@@ -314,7 +344,7 @@ extern rtems_shell_cmd_t rtems_shell_TTY_Command;
 @c
 @c
 @page
-@subsection whoami - show current user
+@subsection whoami - print effective user id
 
 @pgindex whoami
 
@@ -326,11 +356,12 @@ whoami
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command displays the user name associated with the current
+effective user id.
 
 @subheading EXIT STATUS:
 
-This command returns 0 on success and non-zero if an error is encountered.
+This command always succeeds.
 
 @subheading NOTES:
 
@@ -341,7 +372,8 @@ NONE
 The following is an example of how to use @code{whoami}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ whoami
+rtems
 @end example
 
 @subheading CONFIGURATION:
@@ -395,22 +427,26 @@ logoff
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command logs the user out of the shell.
 
 @subheading EXIT STATUS:
 
-This command returns 0 on success and non-zero if an error is encountered.
+This command does not return.
 
 @subheading NOTES:
 
-NONE
+The system behavior when the shell is exited depends upon how the
+shell was initiated.  The typical behavior is that a login prompt
+will be displayed for the next login attempt or that the connection
+will be dropped by the RTEMS system.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{logoff}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ logoff
+logoff from the system...
 @end example
 
 @subheading CONFIGURATION:
@@ -452,7 +488,7 @@ extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
 @c
 @c
 @page
-@subsection exit - alias for logoff command
+@subsection exit - exit the shell
 
 @pgindex exit
 
@@ -464,56 +500,32 @@ exit
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command causes the shell interpreter to @code{exit}.
 
 @subheading EXIT STATUS:
 
-This command returns 0 on success and non-zero if an error is encountered.
+This command does not return.
 
 @subheading NOTES:
 
-NONE
+In contrast to @ref{General Commands logoff - logoff from the system, logoff},
+this command is built into the shell interpreter loop.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{exit}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ exit
+Shell exiting
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_EXIT
-@findex CONFIGURE_SHELL_COMMAND_EXIT
-
-This command is included in the default shell command set.  
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_EXIT} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_EXIT} when all
-shell commands have been configured.
+This command is always present and cannot be disabled.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_exit
-
-The @code{exit} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_exit(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{exit} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_EXIT_Command;
-@end example
+The @code{exit} is implemented directly in the shell interpreter.
+There is no C routine associated with it.
 

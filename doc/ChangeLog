@@ -1,5 +1,11 @@
 2008-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shell/file.t, shell/general.t, shell/memory.t, shell/network.t,
+	shell/rtems.t, shell/shell.texi: Many commands now have real
+	descriptions with examples.
+
+2008-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shell/file.t, shell/general.t: More commands documented.
 
 2008-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
