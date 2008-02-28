@@ -1,3 +1,7 @@
+2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/chroot.c: Formatting.
+
 2008-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/cat_file.c, libmisc/shell/main_alias.c,

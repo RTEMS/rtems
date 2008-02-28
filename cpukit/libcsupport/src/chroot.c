@@ -2,7 +2,7 @@
  *  chroot() -  Change Root Directory
  *  Author: fernando.ruiz@ctv.es
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,15 +36,16 @@ int chroot(
    rtems_libio_set_private_env(); /* try to set a new private env*/
    if (rtems_current_user_env == &rtems_global_user_env) /* not ok */
     rtems_set_errno_and_return_minus_one( ENOTSUP );
-  };
+  }
 
   result = chdir(pathname);
   if (result) {
     rtems_set_errno_and_return_minus_one( errno );
-  };
+  }
+
   /* clone the new root location */
   if (rtems_filesystem_evaluate_path(".", 0, &loc, 0)) {
-	/* our cwd has changed, though - but there is no easy way of return :-( */
+    /* our cwd has changed, though - but there is no easy way of return :-( */
     rtems_set_errno_and_return_minus_one( errno );
   }
   rtems_filesystem_freenode(&rtems_filesystem_root);
