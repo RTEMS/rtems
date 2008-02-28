@@ -237,10 +237,42 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{cp}:
+The following is an example of how to use @code{cp} to
+copy a file to a new name in the current directory:
 
 @example
-EXAMPLE_TBD
+SHLL [/] # cat joel
+cat: joel: No such file or directory
+SHLL [/] # cp etc/passwd joel
+SHLL [/] # cat joel
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+SHLL [/] # ls
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+-rw-r--r--   1   root   root         102 Jan 01 00:00 joel 
+3 files 1710 bytes occupied
+@end example
+
+The following is an example of how to use @code{cp} to
+copy one or more files to a destination directory and
+use the same @code{basename} in the destination directory:
+
+@example
+SHLL [/] # mkdir tmp
+SHLL [/] # ls tmp         
+0 files 0 bytes occupied
+SHLL [/] # cp /etc/passwd tmp
+SHLL [/] # ls /tmp
+-rw-r--r--   1   root   root         102 Jan 01 00:01 passwd 
+1 files 102 bytes occupied
+SHLL [/] # cp /etc/passwd /etc/group /tmp
+SHLL [/] # ls /tmp
+-rw-r--r--   1   root   root         102 Jan 01 00:01 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:01 group 
+2 files 144 bytes occupied
+SHLL [/] # 
 @end example
 
 @subheading CONFIGURATION:
@@ -280,8 +312,8 @@ extern rtems_shell_cmd_t rtems_shell_CP_Command;
 
 @subheading ORIGIN:
 
-The implementation and documentation for this command are from
-NetBSD 4.0.
+The implementation and portions of the documentation for this
+command are from NetBSD 4.0.
 
 @c
 @c
@@ -708,10 +740,20 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{chroot}:
+The following is an example of how to use @code{chroot}
+and the impact it has on the environment for subsequent
+command invocations:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ cat passwd
+cat: passwd: No such file or directory
+SHLL [/] $ chroot etc
+SHLL [/] $ cat passwd
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+SHLL [/] $ cat /etc/passwd
+cat: /etc/passwd: No such file or directory
 @end example
 
 @subheading CONFIGURATION:
@@ -1149,7 +1191,7 @@ unmount path
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command unmounts the device at the specified @code{path}.
 
 @subheading EXIT STATUS:
 
@@ -1157,7 +1199,7 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-TBD
+TBD - Surely there must be some warnings to go here.
 
 @subheading EXAMPLES:
 
@@ -1304,7 +1346,16 @@ NONE
 The following is an example of how to use @code{dir}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ dir
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] $ dir etc
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group 
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+4 files 202 bytes occupied
 @end example
 
 @subheading CONFIGURATION:
@@ -1375,7 +1426,18 @@ NONE
 The following is an example of how to use @code{cd}:
 
 @example
-EXAMPLE_TBD
+SHLL [/] $ cd etc
+SHLL [/etc] $ cd /
+SHLL [/] $ cd /etc
+SHLL [/etc] $ pwd
+/etc
+SHLL [/etc] $ cd /
+SHLL [/] $ pwd
+/
+SHLL [/] $ cd etc
+SHLL [/etc] $ cd ..
+SHLL [/] $ pwd
+/
 @end example
 
 @subheading CONFIGURATION:

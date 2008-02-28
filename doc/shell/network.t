@@ -37,12 +37,41 @@ command as well as providing an example usage.
 @subheading SYNOPSYS:
 
 @example
-netstats [-Aimfpcutv]
+netstats [-Aimfpcut]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command is used to display various types of network statistics.  The
+information displayed can be specified using command line arguments in
+various combinations.  The arguments are interpreted as follows:
+
+@table @b
+@item -A
+print All statistics
+
+@item -i
+print Inet Routes
+
+@item -m
+print MBUF Statistics
+
+@item -f
+print IF Statistics
+
+@item -p
+print IP Statistics
+
+@item -c
+print ICMP Statistics
+
+@item -u
+print UDP Statistics
+
+@item -t
+print TCP Statistics
+
+@end table
 
 @subheading EXIT STATUS:
 
@@ -56,9 +85,108 @@ NONE
 
 The following is an example of how to use @code{netstats}:
 
-@example
-EXAMPLE_TBD
-@end example
+The following is an example of using the @code{netstats}
+command to print the IP routing table:
+
+@smallexample
+[/] $ netstats -i
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         1        0   1219 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0      840   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         1       23   1219 eth1
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the MBUF statistics:
+
+@smallexample
+[/] $ netstats -m
+************ MBUF STATISTICS ************
+mbufs:2048    clusters: 128    free:  63
+drops:   0       waits:   0  drains:   0
+      free:1967          data:79          header:2           socket:0       
+       pcb:0           rtable:0           htable:0           atable:0       
+    soname:0           soopts:0           ftable:0           rights:0       
+    ifaddr:0          control:0          oobdata:0       
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the print the interface statistics:
+
+@smallexample
+[/] $ netstats -f
+************ INTERFACE STATISTICS ************
+***** eth1 *****
+Ethernet Address: 00:04:9F:00:5B:21
+Address:192.168.1.244   Broadcast Address:192.168.1.255   Net mask:255.255.255.0   
+Flags: Up Broadcast Running Active Multicast
+Send queue limit:50   length:1    Dropped:0       
+      Rx Interrupts:889            Not First:0               Not Last:0       
+              Giant:0              Non-octet:0       
+            Bad CRC:0                Overrun:0              Collision:0       
+      Tx Interrupts:867             Deferred:0         Late Collision:0       
+   Retransmit Limit:0               Underrun:0             Misaligned:0       
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the print IP statistics:
+
+@smallexample
+[/] $ netstats -p
+************ IP Statistics ************
+             total packets received         894
+  packets rcvd for unreachable dest          13
+ datagrams delivered to upper level         881
+    total ip packets generated here         871
+
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the ICMP statistics:
+
+@smallexample
+[/] $ netstats -c
+************ ICMP Statistics ************
+                        Type 0 sent         843
+                number of responses         843
+                    Type 8 received         843
+
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the UDP statistics:
+
+@smallexample
+[/] $ netstats -u
+************ UDP Statistics ************
+
+@end smallexample
+
+The following is an example of using the @code{netstats}
+command to print the TCP statistics:
+
+@smallexample
+[/] $ netstats -t
+************ TCP Statistics ************
+               connections accepted           1
+            connections established           1
+     segs where we tried to get rtt          34
+                 times we succeeded          35
+                  delayed acks sent           2
+                 total packets sent          37
+                  data packets sent          35
+                    data bytes sent        2618
+              ack-only packets sent           2
+             total packets received          47
+       packets received in sequence          12
+         bytes received in sequence         307
+                   rcvd ack packets          35
+           bytes acked by rcvd acks        2590
+      times hdr predict ok for acks          27
+ times hdr predict ok for data pkts          10
+@end smallexample
 
 @subheading CONFIGURATION:
 
@@ -107,11 +235,16 @@ extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
 
 @example
 ifconfig
+ifconfig interface
+ifconfig interface [up|down]
+ifconfig interface [netmask|pointtopoint|broadcast] IP
+
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command may be used to display information about the
+network interfaces in the system or configure them.
 
 @subheading EXIT STATUS:
 
@@ -119,15 +252,26 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+Just like its counterpart on GNU/Linux and BSD systems, this command
+is complicated.  More example usages would be a welcome submission.
 
 @subheading EXAMPLES:
 
 The following is an example of how to use @code{ifconfig}:
 
-@example
-EXAMPLE_TBD
-@end example
+@smallexample
+ ************ INTERFACE STATISTICS ************
+***** eth1 *****
+Ethernet Address: 00:04:9F:00:5B:21
+Address:192.168.1.244   Broadcast Address:192.168.1.255   Net mask:255.255.255.0   
+Flags: Up Broadcast Running Active Multicast
+Send queue limit:50   length:1    Dropped:0       
+      Rx Interrupts:5391           Not First:0               Not Last:0       
+              Giant:0              Non-octet:0       
+            Bad CRC:0                Overrun:0              Collision:0       
+      Tx Interrupts:5256            Deferred:0         Late Collision:0       
+   Retransmit Limit:0               Underrun:0             Misaligned:0      
+@end smallexample
 
 @subheading CONFIGURATION:
 
@@ -175,12 +319,24 @@ extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
 @subheading SYNOPSYS:
 
 @example
-route [subcommand]
+route [subcommand] [args]
 @end example
 
 @subheading DESCRIPTION:
 
-This command XXX
+This command is used to display and manipulate the routing table.
+When invoked with no arguments, the current routing information is
+displayed.  When invoked with the subcommands @code{add} or @code{del},
+then additional arguments must be provided to describe the route.
+
+Command templates include the following:
+
+@smallexample
+route [add|del] -net IP_ADDRESS gw GATEWAY_ADDRESS [netmask MASK]
+route [add|del] -host IP_ADDRESS gw GATEWAY_ADDRES [netmask MASK]
+@end smallexample
+
+When not provided the netmask defaults to @code{255.255.255.0}
 
 @subheading EXIT STATUS:
 
@@ -188,15 +344,40 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+Just like its counterpart on GNU/Linux and BSD systems, this command
+is complicated.  More example usages would be a welcome submission.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{route}:
+The following is an example of how to use @code{route} to display,
+add, and delete a new route:
 
-@example
-EXAMPLE_TBD
-@end example
+@smallexample
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         1        0   1444 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    10844   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2       37   1399 eth1
+[/] $  route add -net 192.168.3.0 gw 192.168.1.14
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         2        0   1498 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    14937   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2       96   1399 eth1
+192.168.3.0     192.168.1.14       UGS         0        0      0 eth1
+[/] $ route del -net 192.168.3.0 gw 192.168.1.14
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         1        0   1498 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    15945   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2      117   1399 eth1
+@end smallexample
 
 @subheading CONFIGURATION:
 
