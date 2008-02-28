@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@
 #include "system.h"
 
 #include <iostream>
+#include <stdlib.h>
 
 rtems_task Init(
   rtems_task_argument ignored

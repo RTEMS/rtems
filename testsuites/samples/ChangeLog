@@ -1,3 +1,8 @@
+2008-02-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* iostream/init.cc: Add include of stdlib.h for exit(). Needed by gcc
+	4.3.x.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/system.h, ticker/system.h: Add new Object Services collection.
