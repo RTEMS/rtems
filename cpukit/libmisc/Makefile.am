@@ -84,8 +84,8 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c
 if LIBNETWORKING
 libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_tftp.c \
-    shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c
-##libshell_a_SOURCES += shell/main_mount_nfs.c
+    shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c \
+    shell/main_mount_nfs.c
 endif
 endif
 

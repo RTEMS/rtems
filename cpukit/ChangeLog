@@ -1,5 +1,10 @@
 2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/Makefile.am: Turn on NFS mount support when networking is
+	enabled.
+
+2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/chroot.c: Formatting.
 
 2008-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
