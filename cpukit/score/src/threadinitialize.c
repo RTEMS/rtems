@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -61,6 +61,7 @@ boolean _Thread_Initialize(
   void                *fp_area;
 #endif
   void                *extensions_area;
+  boolean              extension_status;
 
   /*
    *  Initialize the Ada self pointer
@@ -220,10 +221,15 @@ boolean _Thread_Initialize(
   _Objects_Open( information, &the_thread->Object, name );
 
   /*
-   *  Invoke create extensions
+   *  We assume the Allocator Mutex is locked and dispatching is
+   *  enabled when we get here.  We want to be able to run the
+   *  user extensions with dispatching enabled.  The Allocator 
+   *  Mutex provides sufficient protection to let the user extensions
+   *  run safely.
    */
+  extension_status = _User_extensions_Thread_create( the_thread );
 
-  if ( !_User_extensions_Thread_create( the_thread ) ) {
+  if ( !extension_status ) {
 
     if ( extensions_area )
       (void) _Workspace_Free( extensions_area );

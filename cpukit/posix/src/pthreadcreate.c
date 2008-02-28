@@ -2,7 +2,7 @@
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
 
-/*  COPYRIGHT (c) 1989-2007.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/apimutex.h>
 
 int pthread_create(
   pthread_t              *thread,
@@ -157,10 +158,9 @@ int pthread_create(
 #endif
 
   /*
-   *  Disable dispatch for protection
+   *  Lock the allocator mutex for protection
    */
-
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
 
   /*
    *  Allocate the thread control block.
@@ -171,7 +171,7 @@ int pthread_create(
   the_thread = _POSIX_Threads_Allocate();
 
   if ( !the_thread ) {
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return EAGAIN;
   }
 
@@ -196,7 +196,7 @@ int pthread_create(
 
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return EAGAIN;
   }
 
@@ -249,7 +249,7 @@ int pthread_create(
 
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return EINVAL;
   }
 
@@ -259,7 +259,6 @@ int pthread_create(
 
   *thread = the_thread->Object.id;
 
- _Thread_Enable_dispatch();
-
- return 0;
+  _RTEMS_Unlock_allocator();
+  return 0;
 }

@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,6 +31,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -133,10 +134,9 @@ rtems_status_code rtems_task_create(
    */
 
   /*
-   *  Disable dispatch for protection
+   *  Lock the allocator mutex for protection
    */
-
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
 
   /*
    *  Allocate the thread control block and -- if the task is global --
@@ -151,7 +151,7 @@ rtems_status_code rtems_task_create(
   the_thread = _RTEMS_tasks_Allocate();
 
   if ( !the_thread ) {
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return RTEMS_TOO_MANY;
   }
 
@@ -161,7 +161,7 @@ rtems_status_code rtems_task_create(
 
     if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
       _RTEMS_tasks_Free( the_thread );
-      _Thread_Enable_dispatch();
+      _RTEMS_Unlock_allocator();
       return RTEMS_TOO_MANY;
     }
   }
@@ -193,7 +193,7 @@ rtems_status_code rtems_task_create(
       _Objects_MP_Free_global_object( the_global_object );
 #endif
     _RTEMS_tasks_Free( the_thread );
-    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
     return RTEMS_UNSATISFIED;
   }
 
@@ -224,6 +224,6 @@ rtems_status_code rtems_task_create(
    }
 #endif
 
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
   return RTEMS_SUCCESSFUL;
 }

@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,6 +68,13 @@ void _Thread_Create_idle( void )
   if ( idle_task_stack_size < STACK_MINIMUM_SIZE )
     idle_task_stack_size = STACK_MINIMUM_SIZE;
 
+  /*
+   *  This is only called during initialization and we better be sure
+   *  that when _Thread_Initialize unnests dispatch that we do not
+   *  do anything stupid.
+   */
+  _Thread_Disable_dispatch();
+
   _Thread_Initialize(
     &_Thread_Internal_information,
     _Thread_Idle,
@@ -81,6 +88,8 @@ void _Thread_Create_idle( void )
     0,           /* all interrupts enabled */
     (Objects_Name) _Thread_Idle_name
   );
+
+  _Thread_Unnest_dispatch();
 
   /*
    *  WARNING!!! This is necessary to "kick" start the system and

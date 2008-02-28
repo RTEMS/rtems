@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/apimutex.h>
 
 #include <rtems/itron/task.h>
 
@@ -65,18 +66,19 @@ ER cre_tsk(
     return E_PAR;
 
   /*
-   * Disable dispatching.
+   *  Lock the allocator mutex for protection
    */
-
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
 
   /*
    * allocate the thread.
    */
 
   the_thread = _ITRON_Task_Allocate( tskid );
-  if ( !the_thread )
-    _ITRON_return_errorno( _ITRON_Task_Clarify_allocation_id_error( tskid ) );
+  if ( !the_thread ) {
+    _RTEMS_Unlock_allocator();
+    return _ITRON_Task_Clarify_allocation_id_error( tskid );
+  }
 
   /*
    *  Initialize the core thread for this task.
@@ -104,7 +106,8 @@ ER cre_tsk(
 
   if ( !status ) {
     _ITRON_Task_Free( the_thread );
-    _ITRON_return_errorno( E_NOMEM );
+    _RTEMS_Unlock_allocator();
+    return E_NOMEM;
   }
 
   /*
@@ -118,5 +121,6 @@ ER cre_tsk(
 
   the_thread->Start.entry_point = (Thread_Entry) pk_ctsk->task;
 
-  _ITRON_return_errorno( E_OK );
+  _RTEMS_Unlock_allocator();
+  return E_OK;
 }

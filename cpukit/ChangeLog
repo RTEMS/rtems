@@ -1,5 +1,19 @@
 2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/task.h, itron/src/cre_tsk.c,
+	posix/src/pthreadcreate.c, rtems/src/taskcreate.c,
+	rtems/src/taskdelete.c, rtems/src/timerserver.c,
+	score/src/threadclose.c, score/src/threadcreateidle.c,
+	score/src/threadinitialize.c: Switch task create and delete
+	operations to using API Allocator Mutex. This moves almost all uses
+	of the RTEMS Workspace from dispatching disabled to mutex protected
+	which should improve deterministic behavior. The implementation was
+	carefully done to allow task create and delete extensions to invoke
+	more services. In particular, a task delete extension should be able
+	to do mutex and file operations.
+
+2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am: Turn on NFS mount support when networking is
 	enabled.
 

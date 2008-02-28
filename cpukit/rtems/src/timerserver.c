@@ -147,6 +147,8 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_id            id;
   rtems_status_code   status;
   rtems_task_priority _priority;
+  static boolean      initialized = FALSE;
+  boolean             tmpInitialized;
 
   /*
    *  Make sure the requested priority is valid.  The if is 
@@ -162,15 +164,16 @@ rtems_status_code rtems_timer_initiate_server(
   }
 
   /*
-   *  Just to make sure the test versus create/start operation are atomic.
+   *  Just to make sure this is only called once.
    */
 
   _Thread_Disable_dispatch();
+    tmpInitialized  = initialized;
+    initialized = TRUE;
+  _Thread_Enable_dispatch();
 
-  if ( _Timer_Server ) {
-    _Thread_Enable_dispatch();
+  if ( tmpInitialized )
     return RTEMS_INCORRECT_STATE;
-  }
 
   /*
    *  Create the Timer Server with the name the name of "TIME".  The attribute
@@ -198,26 +201,14 @@ rtems_status_code rtems_timer_initiate_server(
     &id                   /* get the id back */
   );
   if (status) {
-    _Thread_Enable_dispatch();
+    initialized = FALSE;
     return status;
   }
 
-  status = rtems_task_start(
-    id,                                    /* the id from create */
-    (rtems_task_entry) _Timer_Server_body, /* the timer server entry point */
-    0                                      /* there is no argument */
-  );
-  if (status) {
-    /*
-     *  One would expect a call to rtems_task_delete() here to clean up
-     *  but there is actually no way (in normal circumstances) that the
-     *  start can fail.  The id and starting address are known to be
-     *  be good.  If this service fails, something is weirdly wrong on the
-     *  target such as a stray write in an ISR or incorrect memory layout.
-     */
-    _Thread_Enable_dispatch();
-    return status;
-  }
+  /*
+   *  Do all the data structure initialization before starting the
+   *  Timer Server so we do not have to have a critical section.
+   */
 
   /*
    *  We work with the TCB pointer, not the ID, so we need to convert
@@ -246,9 +237,27 @@ rtems_status_code rtems_timer_initiate_server(
 
   _Watchdog_Initialize( &_Timer_Server->Timer, _Thread_Delay_ended, id, NULL );
   _Watchdog_Initialize( &_Timer_Seconds_timer, _Thread_Delay_ended, id, NULL );
+  /*
+   *  Start the timer server
+   */
 
-  _Thread_Enable_dispatch();
-  return RTEMS_SUCCESSFUL;
+  status = rtems_task_start(
+    id,                                    /* the id from create */
+    (rtems_task_entry) _Timer_Server_body, /* the timer server entry point */
+    0                                      /* there is no argument */
+  );
+  if (status) {
+    /*
+     *  One would expect a call to rtems_task_delete() here to clean up
+     *  but there is actually no way (in normal circumstances) that the
+     *  start can fail.  The id and starting address are known to be
+     *  be good.  If this service fails, something is weirdly wrong on the
+     *  target such as a stray write in an ISR or incorrect memory layout.
+     */
+    initialized = FALSE;
+  }
+
+  return status;
 }
 
 /*PAGE

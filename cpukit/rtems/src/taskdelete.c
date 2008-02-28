@@ -31,6 +31,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/apimutex.h>
 
 /*PAGE
  *
@@ -57,6 +58,8 @@ rtems_status_code rtems_task_delete(
   register Thread_Control *the_thread;
   Objects_Locations        location;
   Objects_Information     *the_information;
+
+  _RTEMS_Lock_allocator();
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -89,11 +92,13 @@ rtems_status_code rtems_task_delete(
       }
 #endif
 
+      _RTEMS_Unlock_allocator();
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
+      _RTEMS_Unlock_allocator();
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
@@ -102,5 +107,6 @@ rtems_status_code rtems_task_delete(
       break;
   }
 
+  _RTEMS_Unlock_allocator();
   return RTEMS_INVALID_ID;
 }

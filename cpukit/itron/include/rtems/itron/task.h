@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -84,7 +84,9 @@ ER _ITRON_Delete_task(
   Thread_Control *the_thread
 );
 
-/* XXX remove the need for this.  Enable dispatch should not be hidden */
+/*
+ * Return a status code and enable dispatching
+ */
 
 #define _ITRON_return_errorno( _errno )                \
 do {                                                   \
