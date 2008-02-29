@@ -1,3 +1,7 @@
+2008-02-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/general.t: Add sleep and echo commands.
+
 2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/.cvsignore, shell/Makefile.am, shell/memory.t,

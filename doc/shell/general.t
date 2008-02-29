@@ -16,6 +16,8 @@ The RTEMS shell has the following general commands:
 
 @item @code{alias} - Add alias for an existing command
 @item @code{date} - Print or set current date and time
+@item @code{echo} - Produce message in a shell script
+@item @code{sleep} - Delay for a specified amount of time
 @item @code{id} - show uid gid euid and egid
 @item @code{tty} - show ttyname
 @item @code{whoami} - print effective user id
@@ -184,6 +186,212 @@ following prototype:
 
 @example
 extern rtems_shell_cmd_t rtems_shell_DATE_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection echo - produce message in a shell script
+
+@pgindex echo
+
+@subheading SYNOPSYS:
+
+@example
+echo [-n | -e] args ...
+@end example
+
+@subheading DESCRIPTION:
+
+echo prints its arguments on the standard output, separated by spaces.
+Unless the @b{-n} option is present, a newline is output following the
+arguments.  The @b{-e} option causes echo to treat the escape sequences 
+specially, as described in the following paragraph.  The @b{-e} option is the
+default, and is provided solely for compatibility with other systems.
+Only one of the options @b{-n} and @b{-e} may be given.
+
+If any of the following sequences of characters is encountered during
+output, the sequence is not output.  Instead, the specified action is
+performed:
+
+@table @b
+@item \b
+A backspace character is output.
+
+@item \c
+Subsequent output is suppressed.  This is normally used at the
+end of the last argument to suppress the trailing newline that
+echo would otherwise output.
+
+@item \f
+Output a form feed.
+
+@item \n
+Output a newline character.
+
+@item \r
+Output a carriage return.
+
+@item \t
+Output a (horizontal) tab character.
+
+@item \v
+Output a vertical tab.
+
+@item \0digits
+Output the character whose value is given by zero to three digits.  
+If there are zero digits, a nul character is output.
+
+@item \\
+Output a backslash.
+
+@end table
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+The octal character escape mechanism (\0digits) differs from the C lan-
+guage mechanism.
+
+There is no way to force @code{echo} to treat its arguments literally, rather
+than interpreting them as options and escape sequences.
+
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{echo}:
+
+@example
+SHLL [/] $ echo a b c
+a b c
+SHLL [/] $ echo
+
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_ECHO
+@findex CONFIGURE_SHELL_COMMAND_ECHO
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_ECHO} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_ECHO} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_echo
+
+The @code{echo} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_echo(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{echo} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_ECHO_Command;
+@end example
+
+@subheading ORIGIN:
+
+The implementation and portions of the documentation for this
+command are from NetBSD 4.0.
+
+@c
+@c
+@c
+@page
+@subsection sleep - delay for a specified amount of time
+
+@pgindex sleep
+
+@subheading SYNOPSYS:
+
+@example
+sleep seconds
+sleep seconds nanoseconds
+@end example
+
+@subheading DESCRIPTION:
+
+This command causes the task executing the shell to block
+for the specified number of @code{seconds} and @code{nanoseconds}.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+This command is implemented using the @code{nanosleep()} method.
+
+The command line interface is similar to the @code{sleep} command
+found on POSIX systems but the addition of the @code{nanoseconds}
+parameter allows fine grained delays in shell scripts without
+adding another command such as @code{usleep}.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{sleep}:
+
+@example
+SHLL [/] $ sleep 10
+SHLL [/] $ sleep 0 5000000
+@end example
+
+It is not clear from the above but there is a ten second
+pause after executing the first command before the prompt
+is printed.  The second command completes very quickly
+from a human perspective and there is no noticeable 
+delay in the prompt being printed.
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_SLEEP
+@findex CONFIGURE_SHELL_COMMAND_SLEEP
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_SLEEP} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_SLEEP} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_sleep
+
+The @code{sleep} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_sleep(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{sleep} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_SLEEP_Command;
 @end example
 
 @c
