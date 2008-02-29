@@ -438,7 +438,7 @@ extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
 @c
 @c
 @page
-@subsection malloc - obtain information on c program heap
+@subsection malloc - obtain information on C program heap
 
 @pgindex malloc
 

@@ -1,5 +1,13 @@
 2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shell/.cvsignore, shell/Makefile.am, shell/memory.t,
+	shell/preface.texi, shell/shell.texi: Added much information the
+	Preface. Created initial version of Configuration and Intialization
+	chapter. Links are now complete from start to end of manual.
+	* shell/confinit.t: New file.
+
+2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shell/file.t, shell/network.t: Document more commands and provide
 	more examples.
 

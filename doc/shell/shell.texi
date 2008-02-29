@@ -66,6 +66,7 @@
 @contents
 
 @include preface.texi
+@include confinit.texi
 @include general.texi
 @include file.texi
 @include memory.texi
@@ -79,6 +80,7 @@ This is the online version of the RTEMS Shell User's Guide.
 
 @menu
 * Preface::
+* Configuration and Initialization::
 * General Commands::
 * File and Directory Commands::
 * Memory Commands::
@@ -95,7 +97,7 @@ This is the online version of the RTEMS Shell User's Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Function and Variable Index, Concept Index, , Top
+@node Function and Variable Index, Concept Index, Network Commands route - show or manipulate the ip routing table, Top
 @unnumbered Function and Variable Index
 @printindex fn
 
