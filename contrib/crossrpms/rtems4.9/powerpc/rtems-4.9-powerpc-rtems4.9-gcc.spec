@@ -14,7 +14,7 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.0-RC-20080222
+%define gcc_pkgvers 4.3.0-RC-20080301
 %define gcc_version 4.3.0
 %define gcc_rpmvers %{expand:%(echo "4.3.0" | tr - _ )}
 
@@ -28,7 +28,7 @@ Summary:      	powerpc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	10.20080222.1%{?dist}
+Release:      	10.20080301.1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -71,7 +71,7 @@ Requires:	rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.3.0"
 Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080225.diff
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080302.diff
 %endif
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
