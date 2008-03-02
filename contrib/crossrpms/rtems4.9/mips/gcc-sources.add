@@ -1,6 +1,6 @@
 %if "%{gcc_version}" == "4.3.0"
 Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080225.diff
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080302.diff
 %endif
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
