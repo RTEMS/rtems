@@ -161,7 +161,7 @@ SECTIONS
     _sdata = . ;
     *(.data)
     *(.gnu.linkonce.d*)
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     *(.jcr)
 
     CONSTRUCTORS
