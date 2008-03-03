@@ -132,7 +132,7 @@ SECTIONS
     *(.eh_fram*)
     ___EH_FRAME_END__ = .;
     LONG(0);
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     *(.gnu.linkonce.d*)
     CONSTRUCTORS
   } > ram
