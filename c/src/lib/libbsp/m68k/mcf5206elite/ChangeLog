@@ -1,3 +1,9 @@
+2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.flash: Add wildcard to
+	gcc_except_table section so programs compiled with gcc 4.3.x can
+	link.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Eliminate copies of the

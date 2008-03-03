@@ -147,7 +147,7 @@ SECTIONS
            *(.data)
            . = ALIGN (0x10);
            *(.gcc_exc)
-           *(.gcc_except_table)
+           *(.gcc_except_table*)
            . = ALIGN (0x10);
            *(.gnu.linkonce.d*)
            . = ALIGN (0x10);
