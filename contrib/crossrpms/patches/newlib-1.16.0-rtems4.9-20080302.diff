@@ -1,6 +1,6 @@
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/getopt.h newlib-1.16.0/newlib/libc/include/getopt.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/getopt.h newlib-1.16.0/newlib/libc/include/getopt.h
 --- newlib-1.16.0.orig/newlib/libc/include/getopt.h	2006-01-04 22:21:52.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/getopt.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/getopt.h	2008-03-03 08:36:14.000000000 +0100
 @@ -89,31 +89,40 @@
  
  /* include files needed by this include file */
@@ -103,9 +103,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/getopt.h newlib-1.16.0/newlib/l
  
  #endif /* GETOPT_H */
  
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/inttypes.h newlib-1.16.0/newlib/libc/include/inttypes.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/inttypes.h newlib-1.16.0/newlib/libc/include/inttypes.h
 --- newlib-1.16.0.orig/newlib/libc/include/inttypes.h	2005-12-16 20:03:12.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/inttypes.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/inttypes.h	2008-03-03 08:36:14.000000000 +0100
 @@ -242,9 +242,12 @@
  #define SCNxMAX		__SCNMAX(x)
  
@@ -122,9 +122,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/inttypes.h newlib-1.16.0/newlib
  #elif __have_long64
  #define __PRIPTR(x) __STRINGIFY(l##x)
  #define __SCNPTR(x) __STRINGIFY(l##x)
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.16.0/newlib/libc/include/machine/setjmp.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.16.0/newlib/libc/include/machine/setjmp.h
 --- newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h	2007-11-07 22:42:24.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/machine/setjmp.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/machine/setjmp.h	2008-03-03 08:36:14.000000000 +0100
 @@ -27,7 +27,7 @@
  
  /* necv70 was 9 as well. */
@@ -189,9 +189,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.16.0/
  #ifdef __cplusplus
  }
  #endif
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/pthread.h newlib-1.16.0/newlib/libc/include/pthread.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/pthread.h newlib-1.16.0/newlib/libc/include/pthread.h
 --- newlib-1.16.0.orig/newlib/libc/include/pthread.h	2006-09-14 00:09:27.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/include/pthread.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/pthread.h	2008-03-03 08:36:14.000000000 +0100
 @@ -283,14 +283,6 @@
  int	_EXFUN(pthread_getcpuclockid,
  	(pthread_t __pthread_id, clockid_t *__clock_id));
@@ -207,9 +207,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/pthread.h newlib-1.16.0/newlib/
  #endif /* defined(_POSIX_THREAD_CPUTIME) */
  
  
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/stdint.h newlib-1.16.0/newlib/libc/include/stdint.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/stdint.h newlib-1.16.0/newlib/libc/include/stdint.h
 --- newlib-1.16.0.orig/newlib/libc/include/stdint.h	2006-08-16 23:39:43.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/include/stdint.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/stdint.h	2008-03-03 08:36:14.000000000 +0100
 @@ -393,6 +393,9 @@
  #define UINTMAX_C(x)	x##UL
  #endif
@@ -220,9 +220,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/stdint.h newlib-1.16.0/newlib/l
  
  #ifdef __cplusplus
  }
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/features.h newlib-1.16.0/newlib/libc/include/sys/features.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/features.h newlib-1.16.0/newlib/libc/include/sys/features.h
 --- newlib-1.16.0.orig/newlib/libc/include/sys/features.h	2007-12-19 19:51:19.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/sys/features.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/sys/features.h	2008-03-03 08:36:14.000000000 +0100
 @@ -38,6 +38,7 @@
  #define _POSIX_MEMLOCK_RANGE		1
  #define _POSIX_MEMORY_PROTECTION	1
@@ -231,9 +231,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/features.h newlib-1.16.0/ne
  #define _POSIX_PRIORITIZED_IO		1
  #define _POSIX_PRIORITY_SCHEDULING	1
  #define _POSIX_REALTIME_SIGNALS		1
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/_types.h newlib-1.16.0/newlib/libc/include/sys/_types.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/_types.h newlib-1.16.0/newlib/libc/include/sys/_types.h
 --- newlib-1.16.0.orig/newlib/libc/include/sys/_types.h	2007-09-18 22:05:17.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/include/sys/_types.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/sys/_types.h	2008-03-03 08:36:14.000000000 +0100
 @@ -84,4 +84,7 @@
  typedef void *_iconv_t;
  #endif
@@ -242,9 +242,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/_types.h newlib-1.16.0/newl
 +typedef unsigned long* __uintptr_t;
 +
  #endif	/* _SYS__TYPES_H */
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h newlib-1.16.0/newlib/libc/include/sys/unistd.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h newlib-1.16.0/newlib/libc/include/sys/unistd.h
 --- newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h	2007-11-08 17:20:12.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/sys/unistd.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/sys/unistd.h	2008-03-03 08:36:14.000000000 +0100
 @@ -219,13 +219,11 @@
  char *	_EXFUN(mktemp, (char *));
  #endif
@@ -261,9 +261,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h newlib-1.16.0/newl
  int     _EXFUN(symlink, (const char *__name1, const char *__name2));
  
  #define	F_OK	0
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/_syslist.h newlib-1.16.0/newlib/libc/include/_syslist.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/_syslist.h newlib-1.16.0/newlib/libc/include/_syslist.h
 --- newlib-1.16.0.orig/newlib/libc/include/_syslist.h	2005-08-22 23:13:35.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/include/_syslist.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/_syslist.h	2008-03-03 08:36:14.000000000 +0100
 @@ -11,6 +11,7 @@
  #define _fstat fstat
  #define _getpid getpid
@@ -272,9 +272,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/_syslist.h newlib-1.16.0/newlib
  #define _kill kill
  #define _link link
  #define _lseek lseek
-diff -uNr newlib-1.16.0.orig/newlib/libc/include/time.h newlib-1.16.0/newlib/libc/include/time.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/time.h newlib-1.16.0/newlib/libc/include/time.h
 --- newlib-1.16.0.orig/newlib/libc/include/time.h	2005-11-18 16:57:24.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/include/time.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/time.h	2008-03-03 08:36:14.000000000 +0100
 @@ -226,6 +226,16 @@
  
  #endif
@@ -292,7 +292,7 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/include/time.h newlib-1.16.0/newlib/lib
  #if defined(_POSIX_CPUTIME)
  
  /* Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55 */
-diff -uNr newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.16.0/newlib/libc/machine/arm/machine/endian.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.16.0/newlib/libc/machine/arm/machine/endian.h
 --- newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h	2004-05-07 22:29:24.000000000 +0200
 +++ newlib-1.16.0/newlib/libc/machine/arm/machine/endian.h	1970-01-01 01:00:00.000000000 +0100
 @@ -1,12 +0,0 @@
@@ -308,9 +308,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.1
 -#endif
 -
 -#endif
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/db_local.h newlib-1.16.0/newlib/libc/search/db_local.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/db_local.h newlib-1.16.0/newlib/libc/search/db_local.h
 --- newlib-1.16.0.orig/newlib/libc/search/db_local.h	2002-06-25 01:05:08.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/db_local.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/db_local.h	2008-03-03 08:36:14.000000000 +0100
 @@ -50,7 +50,7 @@
  #define	MAX_PAGE_NUMBER	0xffffffff	/* >= # of pages in a file */
  typedef __uint32_t	pgno_t;
@@ -335,9 +335,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/db_local.h newlib-1.16.0/newlib/
  	((char *)a)[0] = ((char *)&_tmp)[1];				\
  	((char *)a)[1] = ((char *)&_tmp)[0];				\
  }
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/extern.h newlib-1.16.0/newlib/libc/search/extern.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/extern.h newlib-1.16.0/newlib/libc/search/extern.h
 --- newlib-1.16.0.orig/newlib/libc/search/extern.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/extern.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/extern.h	2008-03-03 08:36:14.000000000 +0100
 @@ -48,7 +48,7 @@
  int	 __delpair(HTAB *, BUFHEAD *, int);
  int	 __expand_table(HTAB *);
@@ -347,9 +347,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/extern.h newlib-1.16.0/newlib/li
  void	 __free_ovflpage(HTAB *, BUFHEAD *);
  BUFHEAD	*__get_buf(HTAB *, __uint32_t, BUFHEAD *, int);
  int	 __get_page(HTAB *, char *, __uint32_t, int, int, int);
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.16.0/newlib/libc/search/hash_bigkey.c
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.16.0/newlib/libc/search/hash_bigkey.c
 --- newlib-1.16.0.orig/newlib/libc/search/hash_bigkey.c	2006-06-07 21:22:59.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/hash_bigkey.c	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/hash_bigkey.c	2008-03-03 08:36:14.000000000 +0100
 @@ -92,13 +92,13 @@
  	BUFHEAD *bufp;
  	const DBT *key, *val;
@@ -600,9 +600,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_bigkey.c newlib-1.16.0/newl
  	big_keyp->flags |= BUF_MOD;
  	if (tp[0] > 2) {
  		/*
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_buf.c newlib-1.16.0/newlib/libc/search/hash_buf.c
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/hash_buf.c newlib-1.16.0/newlib/libc/search/hash_buf.c
 --- newlib-1.16.0.orig/newlib/libc/search/hash_buf.c	2004-05-26 19:57:10.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/hash_buf.c	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/hash_buf.c	2008-03-03 08:36:14.000000000 +0100
 @@ -176,7 +176,7 @@
  	BUFHEAD *next_xbp;
  	SEGMENT segp;
@@ -630,9 +630,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_buf.c newlib-1.16.0/newlib/
  				if (shortp[0])
  					/* set before __put_page */
  					oaddr = shortp[shortp[0] - 1];
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash.c newlib-1.16.0/newlib/libc/search/hash.c
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/hash.c newlib-1.16.0/newlib/libc/search/hash.c
 --- newlib-1.16.0.orig/newlib/libc/search/hash.c	2007-05-16 21:31:08.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/hash.c	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/hash.c	2008-03-03 08:36:14.000000000 +0100
 @@ -632,10 +632,10 @@
  {
  	BUFHEAD *rbufp;
@@ -718,9 +718,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash.c newlib-1.16.0/newlib/libc
  			hashp->cndx = 1;
  		}
  		if (!bp[0]) {
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash.h newlib-1.16.0/newlib/libc/search/hash.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/hash.h newlib-1.16.0/newlib/libc/search/hash.h
 --- newlib-1.16.0.orig/newlib/libc/search/hash.h	2002-07-02 20:18:58.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/hash.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/hash.h	2008-03-03 08:36:14.000000000 +0100
 @@ -102,7 +102,7 @@
  #define NCACHED	32			/* number of bit maps and spare 
  					 * points */
@@ -730,9 +730,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash.h newlib-1.16.0/newlib/libc
  						 * bitmaps */
  } HASHHDR;
  
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_page.c newlib-1.16.0/newlib/libc/search/hash_page.c
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/hash_page.c newlib-1.16.0/newlib/libc/search/hash_page.c
 --- newlib-1.16.0.orig/newlib/libc/search/hash_page.c	2002-09-19 23:28:51.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/hash_page.c	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/hash_page.c	2008-03-03 08:36:14.000000000 +0100
 @@ -77,16 +77,16 @@
  static __uint32_t	*fetch_bitmap(HTAB *, int);
  static __uint32_t	 first_free(__uint32_t);
@@ -1077,9 +1077,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/hash_page.c newlib-1.16.0/newlib
  
  	p = (char *)sp;
  	n = sp[0];
-diff -uNr newlib-1.16.0.orig/newlib/libc/search/page.h newlib-1.16.0/newlib/libc/search/page.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/search/page.h newlib-1.16.0/newlib/libc/search/page.h
 --- newlib-1.16.0.orig/newlib/libc/search/page.h	2002-06-20 21:51:31.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/search/page.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/search/page.h	2008-03-03 08:36:14.000000000 +0100
 @@ -74,20 +74,20 @@
   * You might as well do this up front.
   */
@@ -1107,10 +1107,20 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/search/page.h newlib-1.16.0/newlib/libc
 -	__uint16_t next_addr;
 +	__uint_least16_t next_addr;
  }       SPLIT_RETURN;
-diff -uNr newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c newlib-1.16.0/newlib/libc/stdlib/getopt.c
+diff -Naur newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c newlib-1.16.0/newlib/libc/stdlib/getopt.c
 --- newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c	2007-05-29 23:26:59.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/stdlib/getopt.c	2008-03-03 07:11:43.000000000 +0100
-@@ -100,16 +100,19 @@
++++ newlib-1.16.0/newlib/libc/stdlib/getopt.c	2008-03-03 08:36:14.000000000 +0100
+@@ -90,6 +90,9 @@
+ #include <getopt.h>
+ 
+ /* macros */
++#define NO_ARG          	0
++#define REQUIRED_ARG    	1
++#define OPTIONAL_ARG    	2
+ 
+ /* types */
+ typedef enum GETOPT_ORDERING_T
+@@ -100,16 +103,19 @@
  } GETOPT_ORDERING_T;
  
  /* globally-defined variables */
@@ -1132,7 +1142,7 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c newlib-1.16.0/newlib/li
  {
    int i;
    char *tmp;
-@@ -126,281 +129,346 @@
+@@ -126,281 +132,346 @@
  static void
  permute (char *const argv[], int len1, int len2)
  {
@@ -1657,9 +1667,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c newlib-1.16.0/newlib/li
  }
  
  /* end of file GETOPT.C */
-diff -uNr newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h
 --- newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h	2008-03-03 08:36:14.000000000 +0100
 @@ -0,0 +1,31 @@
 +/*
 + *
@@ -1692,9 +1702,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.16.
 +#endif
 +
 +#endif
-diff -uNr newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h
+diff -Naur newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h
 --- newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h	2004-05-07 22:29:24.000000000 +0200
-+++ newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h	2008-03-03 08:36:14.000000000 +0100
 @@ -93,7 +93,6 @@
  #include <sys/resource.h>
  #include <sys/ucred.h>
@@ -1703,9 +1713,9 @@ diff -uNr newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.16.0/new
  
  #ifndef FALSE
  #define	FALSE	0
-diff -uNr newlib-1.16.0.orig/newlib/Makefile.am newlib-1.16.0/newlib/Makefile.am
+diff -Naur newlib-1.16.0.orig/newlib/Makefile.am newlib-1.16.0/newlib/Makefile.am
 --- newlib-1.16.0.orig/newlib/Makefile.am	2007-05-24 19:33:29.000000000 +0200
-+++ newlib-1.16.0/newlib/Makefile.am	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/Makefile.am	2008-03-03 08:36:14.000000000 +0100
 @@ -81,7 +81,7 @@
  	libc.a
  endif
@@ -1725,9 +1735,9 @@ diff -uNr newlib-1.16.0.orig/newlib/Makefile.am newlib-1.16.0/newlib/Makefile.am
  # The targ-include directory just holds the includes files for the
  # particular system and machine we have been configured for.  It is
  # used while building.
-diff -uNr newlib-1.16.0.orig/newlib/Makefile.in newlib-1.16.0/newlib/Makefile.in
+diff -Naur newlib-1.16.0.orig/newlib/Makefile.in newlib-1.16.0/newlib/Makefile.in
 --- newlib-1.16.0.orig/newlib/Makefile.in	2007-12-19 23:36:26.000000000 +0100
-+++ newlib-1.16.0/newlib/Makefile.in	2008-03-03 07:11:43.000000000 +0100
++++ newlib-1.16.0/newlib/Makefile.in	2008-03-03 08:36:14.000000000 +0100
 @@ -105,7 +105,7 @@
  	pdf-recursive ps-recursive uninstall-info-recursive \
  	uninstall-recursive
