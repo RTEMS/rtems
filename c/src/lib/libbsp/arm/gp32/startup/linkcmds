@@ -170,7 +170,7 @@ SECTIONS
 
   .gcc_except_table :
   {
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
   } >sdram = 0
   _axf_ro_end = . ;

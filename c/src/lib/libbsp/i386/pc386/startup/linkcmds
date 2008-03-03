@@ -95,7 +95,7 @@ SECTIONS
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     _edata = ALIGN( 0x10 ) ;
   }
 

@@ -151,7 +151,7 @@ SECTIONS
 
   .gcc_except_table :
   {
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     . = ALIGN(4);
   } =0xFF
 
