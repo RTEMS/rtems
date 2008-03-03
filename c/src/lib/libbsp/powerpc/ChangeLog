@@ -1,3 +1,8 @@
+2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* gen405: Remove (Abandoned).

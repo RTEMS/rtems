@@ -142,7 +142,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
   } > CODE
   .data1   : { *(.data1) }	> CODE
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table) } > CODE
+  .gcc_except_table   : { *(.gcc_except_table*) } > CODE
   PROVIDE (__EXCEPT_END__ = .);
   .got1           : { *(.got1) }	> CODE
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
