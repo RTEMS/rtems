@@ -335,18 +335,7 @@ int rtems_gdb_stub_get_thread_info(
       tmp_buf[8] = 0;
 
       strcat(info->display, tmp_buf);
-#if 0
-      name = *(uint32_t*)(obj_info->local_table[thread]->name);
-#else
-      name = *(uint32_t*)(obj_info->local_table[thread -
-						   first_rtems_id + 1]->name);
-#endif
-      info->name[0] = (name >> 24) & 0xff;
-      info->name[1] = (name >> 16) & 0xff;
-      info->name[2] = (name >> 8) & 0xff;
-      info->name[3] = name & 0xff;
-      info->name[4] = 0;
-
+      rtems_object_get_name( thread, 5, info->name );
       info->more_display[0] = 0; /* Nothing */
 
       return 1;
@@ -360,8 +349,7 @@ int rtems_gdb_stub_get_thread_info(
    max_id = obj_info->maximum_id;
 
    th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
-   if (th == NULL)
-   {
+   if (th == NULL) {
       /* Thread does not exist */
       return 0;
    }
@@ -379,16 +367,7 @@ int rtems_gdb_stub_get_thread_info(
    tmp_buf[8] = 0;
 
    strcat(info->display, tmp_buf);
-
-   name = *(uint32_t*)(obj_info->local_table[thread -
-                                                first_posix_id + 1]->name);
-
-   info->name[0] = (name >> 24) & 0xff;
-   info->name[1] = (name >> 16) & 0xff;
-   info->name[2] = (name >> 8) & 0xff;
-   info->name[3] = name & 0xff;
-   info->name[4] = 0;
-
+   rtems_object_get_name( thread, 5, info->name );
    info->more_display[0] = 0; /* Nothing */
 
    return 1;
