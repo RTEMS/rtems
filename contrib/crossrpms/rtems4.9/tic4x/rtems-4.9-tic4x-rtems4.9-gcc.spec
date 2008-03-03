@@ -21,17 +21,33 @@
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
+%define mpfr_version	2.3.1
+
 Name:         	rtems-4.9-tic4x-rtems4.9-gcc
 Summary:      	tic4x-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	6%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %define _use_internal_dependency_generator 0
+
+%if "%{gcc_version}" >= "4.3.0"
+BuildRequires:  gmp-devel >= 4.1
+%if "%{?fedora}" >= "8"
+BuildRequires:  mpfr-devel >= 2.3.0
+%endif
+%if "%{?suse}" > "10.3"
+BuildRequires:  mpfr-devel >= 2.3.0
+%endif
+# These distros ship an insufficient mpfr
+%{?el4:%define 	_build_mpfr 	1}
+%{?suse10_2:%define 	_build_mpfr 	1}
+%{?suse10_3:%define 	_build_mpfr 	1}
+%endif
 
 %if "%{gcc_version}" >= "4.2.0"
 BuildRequires:	flex bison
@@ -65,9 +81,13 @@ Patch0:		gcc-core-4.2.3-rtems4.9-20080205.diff
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080131.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080302.diff
 %endif
 %{?_without_sources:NoSource:	50}
+
+%if "%{gcc_version}" >= "4.3.0"
+Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+%endif
 
 %description
 Cross gcc for tic4x-rtems4.9.
@@ -89,6 +109,13 @@ cd newlib-%{newlib_version}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+
+%if 0%{?_build_mpfr}
+%setup -q -T -D -n %{name}-%{version} -a60
+%{?PATCH60:%patch60 -p1}
+  # Build mpfr one-tree style
+  ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
+%endif
 
 %if "%{gcc_version}" < "4.1.0"
   sed -e 's/\(version_string.* = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}\/newlib-%{newlib_version}-%release)/' \

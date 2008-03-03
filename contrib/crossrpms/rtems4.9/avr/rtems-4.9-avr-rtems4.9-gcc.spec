@@ -28,7 +28,7 @@ Summary:      	avr-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	10.20080301.1%{?dist}
+Release:      	10.20080301.2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -85,7 +85,7 @@ Patch0:		gcc-core-4.0.4-rtems4.9-20071111.diff
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080131.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080302.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
