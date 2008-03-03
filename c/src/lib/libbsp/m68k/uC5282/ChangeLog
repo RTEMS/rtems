@@ -1,3 +1,8 @@
+2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clock.c, include/bsp.h: Correct prototype of idle thread. Eric

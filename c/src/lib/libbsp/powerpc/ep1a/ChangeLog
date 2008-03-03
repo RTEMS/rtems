@@ -1,3 +1,8 @@
+2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2007-12-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am, irq/irq.c (removed), irq/irq_init.c:

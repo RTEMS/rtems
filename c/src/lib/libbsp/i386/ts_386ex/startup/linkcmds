@@ -124,7 +124,7 @@ SECTIONS
 	. = ALIGN(0x20);
 	*(.gnu.linkonce.d*)
 	. = ALIGN(0x20);
-	*(.gcc_except_table)
+	*(.gcc_except_table*)
 	. = ALIGN(0x20);
         _edata = .;
    	}

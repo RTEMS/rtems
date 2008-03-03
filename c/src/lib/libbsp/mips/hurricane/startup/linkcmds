@@ -38,7 +38,7 @@ SECTIONS
       *(set_domain_*);
       *(set_pseudo_*);
 
-      *(.gcc_except_table)
+      *(.gcc_except_table*)
       *(.eh_frame_hdr)
       *(.eh_frame)
   }

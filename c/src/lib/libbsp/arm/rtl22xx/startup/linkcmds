@@ -150,7 +150,7 @@ SECTIONS
   .eh_frame : { *(.eh_frame) } > sdram
   .data1   : { *(.data1) } > sdram
   .eh_frame : { *(.eh_frame) } > sdram
-  .gcc_except_table : { *(.gcc_except_table) } > sdram
+  .gcc_except_table : { *(.gcc_except_table*) } > sdram
 
   .rodata :
   {

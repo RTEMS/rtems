@@ -163,7 +163,7 @@ SECTIONS
     PROVIDE (__SDATA_END__ = .);
     
     PROVIDE (__EXCEPT_START__ = .);
-    *(.gcc_except_table)
+    *(.gcc_except_table*)
     PROVIDE (__EXCEPT_END__ = .);
     
     PROVIDE(__GOT_START__ = .);

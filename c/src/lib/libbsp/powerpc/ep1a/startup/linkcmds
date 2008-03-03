@@ -97,7 +97,7 @@ SECTIONS
     CONSTRUCTORS
   }
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table) }
+  .gcc_except_table   : { *(.gcc_except_table*) }
   PROVIDE (__EXCEPT_END__ = .);
 
   .data1   : { *(.data1) }
