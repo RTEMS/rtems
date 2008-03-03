@@ -1,3 +1,9 @@
+2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.bootp, startup/linkcmds.prom: Add
+	wildcard to gcc_except_table section so programs compiled with gcc
+	4.3.x can link.
+
 2007-05-03	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Handle .data.* sections
