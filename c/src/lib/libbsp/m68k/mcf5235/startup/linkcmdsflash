@@ -153,7 +153,7 @@ SECTIONS
             PROVIDE( _copy_start = .);
             *(.data)
             *(.gnu.linkonce.d*)
-            *(.gcc_except_table)
+            *(.gcc_except_table*)
             *(.jcr)
             . = ALIGN (16);
             PROVIDE (_edata = .);
