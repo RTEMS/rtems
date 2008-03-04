@@ -151,7 +151,7 @@ SECTIONS
   .jcr : { KEEP (*(.jcr)) } >ram
 
     PROVIDE (__EXCEPT_START__ = .);
-    .gcc_except_table   : { *(.gcc_except_table) } >ram
+    .gcc_except_table   : { *(.gcc_except_table*) } >ram
     PROVIDE (__EXCEPT_END__ = .);
     __GOT_START__ = .;
     .got :

@@ -1,3 +1,9 @@
+2008-03-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.brs5l, startup/linkcmds.icecube,
+	startup/linkcmds.pm520: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2008-02-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds.brs5l: Change .bss to .bss*.
