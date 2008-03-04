@@ -145,7 +145,7 @@ SECTIONS
     SORT(CONSTRUCTORS)
   } >RAM
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table) } >RAM
+  .gcc_except_table   : { *(.gcc_except_table*) } >RAM
   PROVIDE (__EXCEPT_END__ = .);
 
   .data1   	  : { *(.data1) 	} >RAM

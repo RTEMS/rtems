@@ -1,3 +1,8 @@
+2008-03-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2008-02-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal.m4: Remove (bogusly checked in).

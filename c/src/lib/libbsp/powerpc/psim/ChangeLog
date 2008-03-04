@@ -1,3 +1,8 @@
+2008-03-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: BSP_DIRTY_MEMORY should be tested for zero not
