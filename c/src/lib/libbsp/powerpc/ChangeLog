@@ -1,3 +1,8 @@
+2008-03-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/startup/linkcmds: Add wildcard to gcc_except_table section so
+	programs compiled with gcc 4.3.x can link.
+
 2007-11-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/console/uart.c: Fix typo.
