@@ -1,5 +1,10 @@
 2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/gxx_wrappers.c: Add rtems_gxx_mutex_destroy as needed
+	by gcc newer than the 4.3 release series.
+
+2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/shell/main_cp.c,
 	libmisc/shell/main_cpuuse.c, libmisc/shell/main_date.c,
 	libmisc/shell/main_mallocinfo.c, libmisc/shell/main_netstats.c,

@@ -213,6 +213,15 @@ int rtems_gxx_mutex_lock (__gthread_mutex_t *mutex)
             RTEMS_WAIT, RTEMS_NO_TIMEOUT ) ==  RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
+int rtems_gxx_mutex_destroy (__gthread_mutex_t *mutex)
+{
+#ifdef DEBUG_GXX_WRAPPERS
+  printk( "gxx_wrappers: destroy mutex=%X\n", *mutex );
+#endif
+  return ( rtems_semaphore_delete((rtems_id)*mutex)
+             ==  RTEMS_SUCCESSFUL) ? 0 : -1;
+}
+
 int rtems_gxx_mutex_trylock (__gthread_mutex_t *mutex)
 {
 #ifdef DEBUG_GXX_WRAPPERS
