@@ -1,3 +1,18 @@
+2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/main_cp.c,
+	libmisc/shell/main_cpuuse.c, libmisc/shell/main_date.c,
+	libmisc/shell/main_mallocinfo.c, libmisc/shell/main_netstats.c,
+	libmisc/shell/main_perioduse.c, libmisc/shell/main_stackuse.c,
+	libmisc/shell/main_wkspaceinfo.c, libmisc/shell/print_heapinfo.c,
+	libmisc/shell/shell.c, libmisc/shell/shell.h,
+	libmisc/shell/shell_makeargs.c, libmisc/shell/shellconfig.c,
+	libmisc/shell/shellconfig.h, libmisc/shell/write_file.c: Add initial
+	capability to automatically execute a script from the filesystem. Add
+	echo command from NetBSD and sleep command.
+	* libmisc/shell/main_echo.c, libmisc/shell/main_sleep.c,
+	libmisc/shell/shell_script.c: New files.
+
 2008-02-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* itron/include/rtems/itron/task.h, itron/src/cre_tsk.c,

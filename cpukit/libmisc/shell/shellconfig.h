@@ -29,7 +29,10 @@ extern rtems_shell_cmd_t rtems_shell_MEDIT_Command;
 extern rtems_shell_cmd_t rtems_shell_MFILL_Command;
 extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
 
+extern rtems_shell_cmd_t rtems_shell_JOEL_Command;
 extern rtems_shell_cmd_t rtems_shell_DATE_Command;
+extern rtems_shell_cmd_t rtems_shell_ECHO_Command;
+extern rtems_shell_cmd_t rtems_shell_SLEEP_Command;
 extern rtems_shell_cmd_t rtems_shell_ID_Command;
 extern rtems_shell_cmd_t rtems_shell_TTY_Command;
 extern rtems_shell_cmd_t rtems_shell_WHOAMI_Command;
@@ -144,9 +147,24 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
      *  Common commands that can be optional
      */
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_JOEL)) || \
+        defined(CONFIGURE_SHELL_COMMAND_JOEL)
+      &rtems_shell_JOEL_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_DATE)) || \
         defined(CONFIGURE_SHELL_COMMAND_DATE)
       &rtems_shell_DATE_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_ECHO)) || \
+        defined(CONFIGURE_SHELL_COMMAND_ECHO)
+      &rtems_shell_ECHO_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_SLEEP)) || \
+        defined(CONFIGURE_SHELL_COMMAND_SLEEP)
+      &rtems_shell_SLEEP_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_ID)) || \

@@ -208,7 +208,7 @@ int rtems_shell_login(FILE * in,FILE * out) {
                 fprintf(out,"RTEMS");
                 break;
               case 'V':
-                fprintf(out,"%s\n%s",_RTEMS_version,_Copyright_Notice);
+                fprintf(out,"%s\n%s",_RTEMS_version, _Copyright_Notice);
                 break;
               case '@':
                 fprintf(out,"@");
@@ -371,6 +371,8 @@ rtems_boolean rtems_shell_main_loop(
   rtems_boolean      result = TRUE;
   rtems_boolean      input_file = FALSE;
   int                line = 0;
+  FILE              *stdinToClose = NULL;
+  FILE              *stdoutToClose = NULL;
 
   rtems_shell_initialize_command_set();
 
@@ -397,8 +399,9 @@ rtems_boolean rtems_shell_main_loop(
 
   fileno(stdout);
 
-fprintf( stderr, 
-  "-%s-%s-\n", shell_env->input, shell_env->output );
+  /* fprintf( stderr, 
+     "-%s-%s-\n", shell_env->input, shell_env->output );
+   */
 
   if (shell_env->output && strcmp(shell_env->output, "stdout") != 0) {
     if (strcmp(shell_env->output, "stderr") == 0) {
@@ -414,6 +417,7 @@ fprintf( stderr,
         return FALSE;
       }
       stdout = output;
+      stdoutToClose = output;
     }
   }
   
@@ -425,6 +429,7 @@ fprintf( stderr,
       return FALSE;
     }
     stdin = input;
+    stdinToClose = input;
     shell_env->forever = FALSE;
     input_file = TRUE;
   }
@@ -534,8 +539,7 @@ fprintf( stderr,
           if ( argv[0] == NULL ) {
             shell_env->errorlevel = -1;
           } else if ( shell_cmd == NULL ) {
-            fprintf(stdout, "shell:%s command not found\n", argv[0]);
-            shell_env->errorlevel = -1;
+            shell_env->errorlevel = rtems_shell_script_file( argc, argv );
           } else {
             shell_env->errorlevel = shell_cmd->command(argc, argv);
           }
@@ -551,6 +555,10 @@ fprintf( stderr,
       fflush( stderr );
     }
   } while (result && shell_env->forever);
+  if ( stdinToClose )
+    fclose( stdinToClose );
+  if ( stdoutToClose )
+    fclose( stdoutToClose );
   return result;
 }
 

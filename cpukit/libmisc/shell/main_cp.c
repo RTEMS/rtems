@@ -522,10 +522,10 @@ mastercmp(const FTSENT **a, const FTSENT **b)
 }
 
 rtems_shell_cmd_t rtems_shell_CP_Command = {
-  "cp",                                                       /* name */
-  "cp [-R [-H | -L | -P]] [-f | -i] [-pv] src target # copy", /* usage */
-  "files",                                                    /* topic */
-  rtems_shell_main_cp,                                        /* command */
-  NULL,                                                       /* alias */
-  NULL                                                        /* next */
+  "cp",                                                /* name */
+  "cp [-R [-H | -L | -P]] [-f | -i] [-pv] src target", /* usage */
+  "files",                                             /* topic */
+  rtems_shell_main_cp,                                 /* command */
+  NULL,                                                /* alias */
+  NULL                                                 /* next */
 };

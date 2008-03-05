@@ -23,13 +23,17 @@
 #include <string.h>
 
 void rtems_shell_write_file(
-  char *name,
-  char * content
+  const char *name,
+  const char *content
 )
 {
   FILE * fd;
 
   fd = fopen(name,"w");
+  if ( !fd ) {
+    fprintf( stderr, "Unable to write %s\n", name );
+  }
+
   if (fd) {
     fwrite(content,1,strlen(content),fd);
     fclose(fd);

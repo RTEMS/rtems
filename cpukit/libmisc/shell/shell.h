@@ -73,9 +73,27 @@ int rtems_shell_make_args(
   int    max_args
 );
 
-int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) ;
-int rtems_shell_cat_file(FILE * out,char *name);
-void rtems_shell_write_file(char *name,char * content);
+int rtems_shell_scanline(
+  char *line,
+  int   size,
+  FILE *in,
+  FILE *out
+);
+
+int rtems_shell_cat_file(
+  FILE *out,
+  char *name
+);
+
+void rtems_shell_write_file(
+  const char *name,
+  const char *content
+);
+
+int rtems_shell_script_file(
+  int   argc,
+  char *argv[]
+);
 
 /**
  * Initialise the shell creating tasks to login and run the shell

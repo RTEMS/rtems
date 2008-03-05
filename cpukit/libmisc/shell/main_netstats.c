@@ -1,7 +1,7 @@
 /*
  *  Network Statistics Shell Command Implmentation
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,17 +52,21 @@ int rtems_shell_main_netstats(                       /* command */
   int   doICMPStats = 0;
   int   doUDPStats = 0;
   int   doTCPStats = 0;
+  int   verbose = 0;
+  struct getopt_data getopt_reent;
 
-  while ( (option = getopt( argc, argv, "Aimfpcutv")) != -1 ) {
-    switch (option) {
-      case 'A':    doAll = 1;         break;
-      case 'i':    doInetRoutes = 1;  break;
-      case 'm':    doMBUFStats = 1;   break;
-      case 'f':    doIFStats = 1;     break;
-      case 'p':    doIPStats = 1;     break;
-      case 'c':    doICMPStats = 1;   break;
-      case 'u':    doUDPStats = 1;    break;
-      case 't':    doTCPStats = 1;    break;
+  while ( (option = getopt_r( argc, argv, "Aimfpcutv", &getopt_reent)) != -1 ) {
+
+    switch ((char)option) {
+      case 'A': doAll = 1;        break;
+      case 'i': doInetRoutes = 1; break;
+      case 'm': doMBUFStats = 1;  break;
+      case 'f': doIFStats = 1;    break;
+      case 'p': doIPStats = 1;    break;
+      case 'c': doICMPStats = 1;  break;
+      case 'u': doUDPStats = 1;   break;
+      case 't': doTCPStats = 1;   break;
+      case 'v': verbose = 1;      break;
       case '?':
       default:
         netstats_usage();
@@ -70,21 +74,57 @@ int rtems_shell_main_netstats(                       /* command */
     }
   }
   
-  if ( doInetRoutes == 1 || doAll == 1 )
-    rtems_bsdnet_show_inet_routes();
-  if ( doMBUFStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_mbuf_stats();
-  if ( doIFStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_if_stats();
-  if ( doIPStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_ip_stats();
-  if ( doICMPStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_icmp_stats();
-  if ( doUDPStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_udp_stats();
-  if ( doTCPStats == 1 || doAll == 1 )
-    rtems_bsdnet_show_tcp_stats();
+  if ( verbose ) {
+    printf(
+      "doAll=%d\n"
+      "doInetRoutes=%d\n"
+      "doMBUFStats=%d\n"
+      "doIFStats=%d\n"
+      "doIPStats=%d\n"
+      "doICMPStats=%d\n"
+      "doUDPStats=%d\n"
+      "doTCPStats=%d\n",
+      doAll,
+      doInetRoutes,
+      doMBUFStats,
+      doIFStats,
+      doIPStats,
+      doICMPStats,
+      doUDPStats,
+      doTCPStats
+    );
+  }
 
+#if 0
+  if ( doInetRoutes == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_inet_routes();
+  }
+
+  if ( doMBUFStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_mbuf_stats();
+  }
+
+  if ( doIFStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_if_stats();
+  }
+
+  if ( doIPStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_ip_stats();
+  }
+
+  if ( doICMPStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_icmp_stats();
+  }
+
+  if ( doUDPStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_udp_stats();
+  }
+
+  if ( doTCPStats == 1 || doAll == 1 ) {
+    rtems_bsdnet_show_tcp_stats();
+  }
+
+#endif
   return 0;
 }
 
