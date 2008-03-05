@@ -1,5 +1,9 @@
 2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/copyrt.h: Update year.
+
+2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/gxx_wrappers.c: Add rtems_gxx_mutex_destroy as needed
 	by gcc newer than the 4.3 release series.
 

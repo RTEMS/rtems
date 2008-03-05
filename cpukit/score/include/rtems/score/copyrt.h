@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,7 @@ extern "C" {
  */
 #ifdef SCORE_INIT
 const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-2007.\n\
+"COPYRIGHT (c) 1989-2008.\n\
 On-Line Applications Research Corporation (OAR).\n";
 #else
 extern const char _Copyright_Notice[];
