@@ -29,13 +29,13 @@ CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
-BINUTILS_VERS = 2.17
+BINUTILS_VERS = 2.18
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = @VERSION@%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.1.2
+GCC_VERS = 4.2.3
 GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@%{?dist}
 include ../gcc.am
