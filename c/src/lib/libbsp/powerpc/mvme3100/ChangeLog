@@ -1,3 +1,7 @@
+2007-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* Makefile.am: add e500/mmu.rel to libbsp_a_LIBADD.
+
 2008-01-29	Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Fixes a lockup which occurs when a speculative

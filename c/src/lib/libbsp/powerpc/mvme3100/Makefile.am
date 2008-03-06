@@ -177,6 +177,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
