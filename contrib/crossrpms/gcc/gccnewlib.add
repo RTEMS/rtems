@@ -38,7 +38,14 @@ BuildRequires:  mpfr-devel >= 2.3.0
 
 %if "%{gcc_version}" >= "4.2.0"
 BuildRequires:	flex bison
+%if %build_f95
+BuildRequires:	gmp-devel >= 4.1
+%if "%{?fedora}" >= "8"
+BuildRequires:  mpfr-devel >= 2.2.1
 %endif
+%endif
+%endif
+
 %if %build_gcj
 # Building gcj requires bison and zlib
 BuildRequires:	bison
