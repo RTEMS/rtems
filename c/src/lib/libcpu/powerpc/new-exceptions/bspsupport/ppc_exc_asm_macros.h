@@ -92,7 +92,7 @@ no_r1_reload_\FLVR:
 	/* disable interrupts */
 	lwz		\RA, ppc_exc_msr_irq_mask@sdarel(r13)
 	mfmsr	\RB
-	and		\RA, \RB, \RA
+	andc	\RA, \RB, \RA
 	mtmsr	\RA
 	/* increment nest level */
 	lwz		\RA, _ISR_Nest_level@sdarel(r13)

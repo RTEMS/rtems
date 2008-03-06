@@ -1,3 +1,8 @@
+2008-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: bugfix;
+	need to andc with irq mask when disabling interrupts.
+
 2008-02-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* old-exceptions/README, old-exceptions/TODO, old-exceptions/cpu.c,
