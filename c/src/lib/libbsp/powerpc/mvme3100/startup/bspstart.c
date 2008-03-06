@@ -27,6 +27,7 @@
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>
 #include <libcpu/io.h>
+#include <libcpu/e500_mmu.h>
 #include <bsp/uart.h> 
 #include <bsp/irq.h> 
 #include <bsp/pci.h> 
@@ -37,6 +38,8 @@
 
 #define SHOW_MORE_INIT_SETTINGS
 #undef  DEBUG
+
+#define NumberOf(arr) (sizeof(arr)/sizeof(arr[0]))
 
 #ifdef  DEBUG
 #define STATIC
@@ -234,13 +237,15 @@ SPR_RW(HID1)
 
 void bsp_start( void )
 {
-unsigned char      *stack;
-register uint32_t  intrStack;
-register uint32_t  *intrStackPtr;
-unsigned char      *work_space_start;
-char               *chpt;
-ppc_cpu_id_t       myCpu;
-ppc_cpu_revision_t myCpuRevision;
+unsigned char       *stack;
+register uint32_t   intrStack;
+register uint32_t   *intrStackPtr;
+unsigned char       *work_space_start;
+char                *chpt;
+ppc_cpu_id_t        myCpu;
+ppc_cpu_revision_t  myCpuRevision;
+int                 i;
+E500_tlb_va_cache_t *tlb;
 
 VpdBufRec          vpdData [] = {
 	{ key: ProductIdent, instance: 0, buf: BSP_productIdent, buflen: sizeof(BSP_productIdent) - 1 },
@@ -321,13 +326,45 @@ VpdBufRec          vpdData [] = {
 	printk("Going to start PCI buses scanning and initialization\n");
 #endif
 
+	BSP_mem_size            = BSP_get_mem_size();
+
 	{
-		/* disable checking for memory-select errors */
-		*(volatile uint32_t*)0xe1002e44 |= 1;
-		/* clear all pending errors */
-		*(volatile uint32_t*)0xe1002e40  = 0xffffffff;
+		/* memory-select errors were disabled in 'start.S';
+		 * motload has all TLBs mapping a possible larger area as
+		 * memory (not-guarded, caching-enabled) than actual physical
+		 * memory is available.
+		 * In case of speculative loads this may cause 'memory-select' errors
+		 * which seem to raise 'core_fault_in' (found no description in
+		 * the manual but I experienced this problem).
+		 * Such errors (if HID1[RFXE] is clear) may *stall* execution
+		 * leading to mysterious 'hangs'.
+		 *
+		 * Here we remove all mappings, re-enable memory-select
+		 * errors and make sure we enable HID1[RFXE] to avoid
+		 * stalls (since we don't implement handling individual
+		 * error-handling interrupts).
+		 */
+
 		/* enable machine check for bad bus errors */
 		_write_HID1( _read_HID1() | 0x20000 );
+
+		rtems_e500_initlb();
+
+		for ( i=0, tlb=rtems_e500_tlb_va_cache; i<NumberOf(rtems_e500_tlb_va_cache); i++, tlb++ ) {
+			/* disable TLBs for caching-enabled, non-guarded areas
+			 * beyond physical memory
+			 */
+			if (    tlb->att.v
+			    &&  0xa != (tlb->att.wimge & 0xa)
+				&&  (tlb->va.va_epn<<12) >= BSP_mem_size ) {
+				rtems_e500_clrtlb( E500_SELTLB_1 | i );
+			}
+		}
+
+		/* clear all pending memory errors */
+		_ccsr_wr32(0x2e40, 0xffffffff);
+		/* enable checking for memory-select errors */
+		_ccsr_wr32(0x2e44, _ccsr_rd32(0x2e44) & ~1 );
 	}
 
 	printk("Build Date: %s\n",BSP_build_date);
@@ -388,8 +425,6 @@ VpdBufRec          vpdData [] = {
 	 */
 	_write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 #endif
-
-	BSP_mem_size            = BSP_get_mem_size();
 
 	if ( (chpt = strstr(BSP_commandline_string,"MEMSZ=")) ) {
 		char		*endp;

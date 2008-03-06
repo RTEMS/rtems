@@ -25,6 +25,13 @@
 
 #define KERNELBASE	0x0
 
+/* cannot include <bsp.h> from assembly :-( */
+#ifndef BSP_8540_CCSR_BASE
+#define BSP_8540_CCSR_BASE 0xe1000000
+#endif
+
+#define ERR_DISABLE_REG (BSP_8540_CCSR_BASE + 0x2e44)
+
 	.text
 	.globl	__rtems_entry_point
 	.type	__rtems_entry_point,@function
@@ -34,6 +41,25 @@ __rtems_entry_point:
 	mr	r29,r5
 	mr	r28,r6
 	mr	r27,r7
+	/* disable checking for memory-select errors; motload has all TLBs
+	 * mapping a possible larger area as memory (not-guarded, caching-enabled)
+	 * than actual physical memory is available.
+	 * In case of speculative loads this may cause 'memory-select' errors
+	 * which seem to raise 'core_fault_in' (found no description in 
+	 * the manual but I experienced this problem).
+	 * Such errors (if HID1[RFXE] is clear) may *stall* execution
+	 * leading to mysterious 'hangs'.
+	 * Note: enabling HID1[RFXE] at this point makes no sense since
+	 *       exceptions are not configured yet. Therefore we disable
+	 *       memory-select errors.
+	 * Eventually (bspstart.c) we want to delete TLB entries for
+	 * which no physical memory is present.
+	 */
+	lis r3, ERR_DISABLE_REG@ha
+	lwz r4, ERR_DISABLE_REG@l(r3)
+	/* disable memory-select errors */
+	ori r4, r4, 1
+	stw r4, ERR_DISABLE_REG@l(r3)
 
 	/* Use MotLoad's TLB setup for now; caches are on already */
 	bl  __eabi	/* setup EABI and SYSV environment */

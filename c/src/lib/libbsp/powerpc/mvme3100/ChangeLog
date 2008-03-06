@@ -1,5 +1,15 @@
 2007-03-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* start/start.S, startup/bspstart.c: disable memory-select
+	errors early (in start.S) to avoid hangs due to speculative
+	memory access (motload maps absent memory in TLBs).
+	Remove TLB mappings for which no physical memory is installed
+	(bspstart). Enable HID1[RFXE] so that 'core_fault_in' errors
+	result in a machine-check rather than stalling the machine.
+	Re-enable memory-select errors at this point.
+
+2007-03-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am: add e500/mmu.rel to libbsp_a_LIBADD.
 
 2008-01-29	Eric Norum <norume@aps.anl.gov>
