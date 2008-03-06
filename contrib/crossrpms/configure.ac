@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.9])
 
 AC_PREREQ(2.61)
-AC_INIT([crossrpms],[0.20080304.1],[http://www.rtems.org/bugzilla])
+AC_INIT([crossrpms],[0.20080306.1],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
