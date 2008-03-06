@@ -11,8 +11,8 @@ include ../binutils.am
 BINUTILS_OPTS +=
 
 GCC_VERS = 4.3.0
-GCC_PKGVERS = 4.3.0-RC-20080301
-GCC_RPMREL = 10.20080301.2%{?dist}
+GCC_PKGVERS = $(GCC_VERS)
+GCC_RPMREL = 11%{?dist}
 NEWLIB_VERS = 1.16.0
 include ../gcc.am
 GCC_OPTS +=
