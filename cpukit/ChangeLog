@@ -1,3 +1,11 @@
+2008-03-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_cp.c, libmisc/shell/main_netstats.c,
+	libmisc/shell/shell_script.c: Add memset() of getopt_data to
+	ensure it is zeroed out each time we use getopt_r().
+	* libmisc/shell/shell.c: Do not echo commands if input is not a tty.
+	This makes the scripts behave more like UNIX scripts.
+
 2008-03-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/Makefile.am: Make clock_settime() available always just like

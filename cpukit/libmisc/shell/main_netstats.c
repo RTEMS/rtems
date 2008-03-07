@@ -55,6 +55,7 @@ int rtems_shell_main_netstats(                       /* command */
   int   verbose = 0;
   struct getopt_data getopt_reent;
 
+  memset(&getopt_reent, 0, sizeof(getopt_data)); 
   while ( (option = getopt_r( argc, argv, "Aimfpcutv", &getopt_reent)) != -1 ) {
 
     switch ((char)option) {

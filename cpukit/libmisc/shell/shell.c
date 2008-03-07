@@ -79,13 +79,23 @@ rtems_shell_env_t *rtems_shell_init_env(
 /*
  *  Get a line of user input with modest features
  */
-int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) {
-  int c,col;
+int rtems_shell_scanline(
+  char  *line,
+  int    size,
+  FILE  *in,
+  FILE  *out
+)
+{
+  int c;
+  int col;
+  int doEcho;
+
+  doEcho = (out && isatty(fileno(in)));
 
   col = 0;
   if (*line) {
     col = strlen(line);
-    if (out) fprintf(out,"%s",line);
+    if (doEcho) fprintf(out,"%s",line);
   }
   tcdrain(fileno(in));
   if (out)
@@ -100,38 +110,38 @@ int rtems_shell_scanline(char * line,int size,FILE * in,FILE * out) {
       case EOF:
         return 0;
       case '\f':
-        if (out)
+        if (doEcho)
           fputc('\f',out);
       case 0x03:/*Control-C*/
         line[0] = 0;
       case '\n':
       case '\r':
-        if (out)
+        if (doEcho)
           fputc('\n',out);
         return 1;
       case  127:
       case '\b':
         if (col) {
-          if (out) {
+          if (doEcho) {
             fputc('\b',out);
             fputc(' ',out);
             fputc('\b',out);
           }
           col--;
         } else {
-          if (out) fputc('\a',out);
+          if (doEcho) fputc('\a',out);
         }
         break;
      default:
        if (!iscntrl(c)) {
          if (col<size-1) {
             line[col++] = c;
-            if (out) fputc(c,out);
+            if (doEcho) fputc(c,out);
           } else {
-            if (out) fputc('\a',out);
+            if (doEcho) fputc('\a',out);
           }
        } else {
-        if (out)
+        if (doEcho)
           if (c=='\a') fputc('\a',out);
        }
        break;

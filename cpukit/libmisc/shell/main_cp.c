@@ -65,6 +65,7 @@ __RCSID("$NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $");
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#include <getopt.h>
 
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -116,6 +117,7 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
   enum op type;
   int Hflag, Lflag, Pflag, ch, fts_options, r;
   char *target;
+  struct getopt_data getopt_reent;
 
   to.p_end = to.p_path;
   to.target_end = empty;
@@ -123,7 +125,9 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
   (void)setlocale(LC_ALL, "");
 
   Hflag = Lflag = Pflag = Rflag = 0;
-  while ((ch = getopt(argc, argv, "HLNPRfiprv")) != -1) 
+  memset(&getopt_reent, 0, sizeof(getopt_data)); 
+
+  while ((ch = getopt_r(argc, argv, "HLNPRfiprv", &getopt_reent)) != -1) 
     switch (ch) {
       case 'H':
         Hflag = 1;
