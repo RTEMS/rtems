@@ -1,3 +1,8 @@
+2008-03-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/Makefile.am: Make clock_settime() available always just like
+	clock_gettime().
+
 2008-03-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/copyrt.h: Update year.
