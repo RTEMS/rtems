@@ -62,14 +62,14 @@ elog(int flags, struct conn *c, const char *fmt, ...)
 }
 
 /*
- * HACK: m68k-gcc <= 4.2.1 ICEs on the snprintf below for some 
+ * HACK: m68k-gcc <= 4.2.3 ICEs on the snprintf below for some 
  * coldfire variants for yet unknown reasons.
  * C.f.: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=32307
+ * Fixed in gcc 4.3.x and unlikely ever to be fixed in 4.2 and older.
  */
 #if defined(__GNUC__) && \
-   ( (__GNUC__ < 4 ) || \
-     ( (__GNUC__ == 4 ) && (__GNUC_MINOR__ < 2 ) ) || \
-       ( (__GNUC__ == 4 ) && (__GNUC_MINOR__ == 2 ) && (__GNUC_PATCHLEVEL__ <= 1 ) ) )
+    (__GNUC__ < 4 ) || \
+    ( (__GNUC__ == 4 ) && (__GNUC_MINOR__ <= 2 ) )
 #if defined(__mcoldfire__) 
 #define SPLIT_SNPRINTF 1
 #endif /* __mcoldfire__ */

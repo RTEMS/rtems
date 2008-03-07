@@ -1,3 +1,9 @@
+2008-03-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1280/tools
+	* shttpd/log.c: Broaden logic so all gcc versions < 4.3.0 will enable
+	work around.
+
 2008-02-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/motorola/mc68230.h: Prefix defines with
