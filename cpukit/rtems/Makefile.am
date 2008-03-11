@@ -86,8 +86,10 @@ librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
    src/barrierwait.c src/barrierdata.c
 
 ## CLOCK_C_FILES
-librtems_a_SOURCES += src/rtclock.c src/clockget.c src/clockset.c \
-    src/clocktick.c src/clocksetnsecshandler.c src/clockgetuptime.c \
+librtems_a_SOURCES += src/clockget.c src/clockgetsecondssinceepoch.c \
+    src/clockgettickspersecond.c src/clockgettickssinceboot.c \
+    src/clockgettod.c src/clockgettodtimeval.c src/clockgetuptime.c \
+    src/clockset.c src/clocksetnsecshandler.c src/clocktick.c \
     src/clocktodtoseconds.c src/clocktodvalidate.c
 
 ## TIMER_C_FILES

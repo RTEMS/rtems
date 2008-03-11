@@ -1,7 +1,7 @@
 /*
  *  Clock Manager
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,65 +50,29 @@ rtems_status_code rtems_clock_get(
     return RTEMS_INVALID_ADDRESS;
 
   switch ( option ) {
-    case RTEMS_CLOCK_GET_TOD: {
-      struct tm time;
-      struct timeval now;
-      rtems_time_of_day *tmbuf = (rtems_time_of_day *)time_buffer;
+    case RTEMS_CLOCK_GET_TOD:
+      return rtems_clock_get_tod( (rtems_time_of_day *)time_buffer ); 
 
-      if ( !_TOD_Is_set )
-        return RTEMS_NOT_DEFINED;
-
-      /* Obtain the current time */
-      _TOD_Get_timeval( &now );
-
-      /* Split it into a closer format */
-      gmtime_r( &now.tv_sec, &time );
-
-      /* Now adjust it to the RTEMS format */
-      tmbuf->year   = time.tm_year + 1900;
-      tmbuf->month  = time.tm_mon + 1;
-      tmbuf->day    = time.tm_mday;
-      tmbuf->hour   = time.tm_hour;
-      tmbuf->minute = time.tm_min;
-      tmbuf->second = time.tm_sec;
-      tmbuf->ticks  = now.tv_usec / _TOD_Microseconds_per_tick;
-     
-      return RTEMS_SUCCESSFUL;
-    }
-    case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH: {
-      rtems_interval *interval = (rtems_interval *)time_buffer;
-
-      if ( !_TOD_Is_set )
-        return RTEMS_NOT_DEFINED;
-
-      *interval = _TOD_Seconds_since_epoch;
-      return RTEMS_SUCCESSFUL;
-    }
+    case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH:
+      return rtems_clock_get_seconds_since_epoch((rtems_interval *)time_buffer);
 
     case RTEMS_CLOCK_GET_TICKS_SINCE_BOOT: {
       rtems_interval *interval = (rtems_interval *)time_buffer;
-
-      *interval = _Watchdog_Ticks_since_boot;
+  
+      *interval = rtems_clock_get_ticks_since_boot();
       return RTEMS_SUCCESSFUL;
     }
-
     case RTEMS_CLOCK_GET_TICKS_PER_SECOND: {
       rtems_interval *interval = (rtems_interval *)time_buffer;
-
-      *interval = TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick;
+  
+      *interval = rtems_clock_get_ticks_per_second();
       return RTEMS_SUCCESSFUL;
     }
+    case RTEMS_CLOCK_GET_TIME_VALUE:
+      return rtems_clock_get_tod_timeval( (struct timeval *)time_buffer );
 
-    case RTEMS_CLOCK_GET_TIME_VALUE: {
-      struct timeval *time = (struct timeval *)time_buffer;
-
-      if ( !_TOD_Is_set )
-        return RTEMS_NOT_DEFINED;
-
-      _TOD_Get_timeval( time );
-
-      return RTEMS_SUCCESSFUL;
-    }
+    default:
+      break;
   }
 
   return RTEMS_INVALID_NUMBER;
