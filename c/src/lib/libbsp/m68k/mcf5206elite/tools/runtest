@@ -171,7 +171,7 @@ do
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
-       minimum*|stackchk*|spfatal*|malloctest*)
+       minimum*|stackchk*|*fatal*|malloctest*)
            continue
            ;;
    esac

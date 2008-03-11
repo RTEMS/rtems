@@ -168,9 +168,8 @@ do
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
-       minimum*|stackchk*|spfatal*|termio*)
-           continue
-           ;;
+       minimum*|stackchk*|*fatal*|termio*)
+           continue           ;;
    esac
 
    if [ $TEST_TYPE = "mp" ]
