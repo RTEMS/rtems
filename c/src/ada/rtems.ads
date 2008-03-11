@@ -109,6 +109,7 @@ pragma Elaborate_Body (RTEMS);
    type Task_Entry is access procedure (
       Argument : RTEMS.Unsigned32
    );
+   pragma Convention (C, Task_Entry);
 
    subtype TCB                 is RTEMS.Unsigned32;
    type    TCB_Pointer         is access all RTEMS.TCB;
@@ -259,42 +260,51 @@ pragma Elaborate_Body (RTEMS);
       Current_Task : in     RTEMS.TCB_Pointer;
       New_Task     : in     RTEMS.TCB_Pointer
    ) return RTEMS.Boolean;
+   pragma Convention (C, Thread_Create_Extension);
 
    type Thread_Start_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer;
       Started_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Start_Extension);
 
    type Thread_Restart_Extension is access procedure (
       Current_Task   : in     RTEMS.TCB_Pointer;
       Restarted_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Restart_Extension);
 
    type Thread_Delete_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer;
       Deleted_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Delete_Extension);
 
    type Thread_Switch_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer;
       Heir_Task    : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Switch_Extension);
 
    type Thread_Post_Switch_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Post_Switch_Extension);
 
    type Thread_Begin_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Begin_Extension);
 
    type Thread_Exitted_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer
    );
+   pragma Convention (C, Thread_Exitted_Extension);
 
    type Fatal_Error_Extension is access procedure (
       Error : in     RTEMS.Unsigned32
    );
+   pragma Convention (C, Fatal_Error_Extension);
 
    type Extensions_Table is
       record
@@ -319,6 +329,7 @@ pragma Elaborate_Body (RTEMS);
       ID          : in     RTEMS.ID;
       User_Data   : in     RTEMS.Address
    );
+   pragma Convention (C, Timer_Service_Routine);
 
    --
    --  The following type define a pointer to a signal service routine.
@@ -327,6 +338,7 @@ pragma Elaborate_Body (RTEMS);
    type ASR_Handler is access procedure (
       Signals : in     RTEMS.Signal_Set
    );
+   pragma Convention (C, ASR_Handler);
 
    --
    --  The following type defines the status information returned
@@ -663,6 +675,7 @@ pragma Elaborate_Body (RTEMS);
    type Task_Variable_Dtor is access procedure (
       Argument : in     RTEMS.Address
    );
+   pragma Convention (C, Task_Variable_Dtor);
 
    procedure Task_Variable_Add (
       ID            : in     RTEMS.ID;
@@ -732,6 +745,37 @@ pragma Elaborate_Body (RTEMS);
       Option      : in     RTEMS.Clock_Get_Options;
       Time_Buffer : in     RTEMS.Address;
       Result      :    out RTEMS.Status_Codes
+   );
+
+   procedure Clock_Get_TOD (
+      Time   :    out RTEMS.Time_Of_Day;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Clock_Get_TOD_Time_Value (
+      Time   :    out RTEMS.Clock_Time_Value;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure Clock_Get_Seconds_Since_Epoch(
+      The_Interval :    out RTEMS.Interval;
+      Result       :    out RTEMS.Status_Codes
+   );
+
+   function Clock_Get_Ticks_Per_Second
+   return RTEMS.Interval;
+   pragma Import (
+      C,
+      Clock_Get_Ticks_Per_Second,
+      "rtems_clock_get_ticks_per_second"
+   );
+
+   function Clock_Get_Ticks_Since_Boot
+   return RTEMS.Interval;
+   pragma Import (
+      C,
+      Clock_Get_Ticks_Since_Boot,
+      "rtems_clock_get_ticks_since_boot"
    );
 
    procedure Clock_Get_Uptime (
