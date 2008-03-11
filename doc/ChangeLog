@@ -1,3 +1,14 @@
+2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/clock.t: Refactored rtems_clock_get into 5 methods which
+	are single purpose and more strongly typed.  They are:
+	    rtems_clock_get_tod - Get TOD in Classic API structure
+	    rtems_clock_get_tod_timeval - Get TOD in struct timeval
+	    rtems_clock_get_seconds_since_epoch - Get TOD as seconds since 1988
+	    rtems_clock_get_ticks_since_boot - Get ticks since boot
+	    rtems_clock_get_ticks_per_second - Get ticks per second
+
+
 2008-02-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/general.t: Add sleep and echo commands.

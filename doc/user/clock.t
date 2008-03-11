@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2007
+@c  COPYRIGHT (c) 1988-2008
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -17,8 +17,13 @@ and other time related capabilities.  The directives provided by
 the clock manager are:
 
 @itemize @bullet
-@item @code{@value{DIRPREFIX}clock_set} - Set system date and time
-@item @code{@value{DIRPREFIX}clock_get} - Get system date and time information
+@item @code{@value{DIRPREFIX}clock_set} - Set date and time
+@item @code{@value{DIRPREFIX}clock_get} - Get date and time information
+@item @code{@value{DIRPREFIX}clock_get_tod} - Get date and time in TOD format
+@item @code{@value{DIRPREFIX}clock_get_tod_timeval} - Get date and time in timeval format
+@item @code{@value{DIRPREFIX}clock_get_seconds_since_epoch} - Get seconds since epoch 
+@item @code{@value{DIRPREFIX}clock_get_ticks_per_second} - Get ticks per second
+@item @code{@value{DIRPREFIX}clock_get_ticks_since_boot} - Get ticks since boot
 @item @code{@value{DIRPREFIX}clock_get_uptime} - Get time since boot
 @item @code{@value{DIRPREFIX}clock_set_nanoseconds_extension} - Install the nanoseconds since last tick handler
 @item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
@@ -238,7 +243,7 @@ and status codes.
 @c
 @c
 @page
-@subsection CLOCK_SET - Set system date and time
+@subsection CLOCK_SET - Set date and time
 
 @subheading CALLING SEQUENCE:
 
@@ -295,7 +300,7 @@ the system date and time to application specific specifications.
 @c
 @c
 @page
-@subsection CLOCK_GET - Get system date and time information
+@subsection CLOCK_GET - Get date and time information
 
 @cindex obtain the time of day
 
@@ -396,6 +401,295 @@ system date and time to application specific specifications.
 @c
 @c
 @page
+@subsection CLOCK_GET_TOD - Get date and time in TOD format
+
+@cindex obtain the time of day
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_tod
+@example
+rtems_status_code rtems_clock_get_tod(
+  rtems_time_of_day *time_buffer
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Get_TOD (
+   Time_Buffer : in     RTEMS.Time_Of_Day;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully@*
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
+
+@subheading DESCRIPTION:
+
+This directive obtains the system date and time.  If the date and time
+has not been set with a previous call to
+@code{@value{DIRPREFIX}clock_set}, then the
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be
+preempted.  Re-initializing RTEMS causes the system date and
+time to be reset to an uninitialized state.  Another call to
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_TOD_TIMEVAL - Get date and time in timeval format
+
+@cindex obtain the time of day
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_tod_timeval
+@example
+rtems_status_code rtems_clock_get_tod(
+  struct timeval  *time
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Get_TOD_Timeval (
+   Time   : in     RTEMS.Timeval;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully@*
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time} is NULL
+
+@subheading DESCRIPTION:
+
+This directive obtains the system date and time in POSIX
+@code{struct timeval} format.  If the date and time
+has not been set with a previous call to
+@code{@value{DIRPREFIX}clock_set}, then the
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be
+preempted.  Re-initializing RTEMS causes the system date and
+time to be reset to an uninitialized state.  Another call to
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_SECONDS_SINCE_EPOCH - Get seconds since epoch
+
+@cindex obtain seconds since epoch
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_seconds_since_epoch
+@example
+rtems_status_code rtems_clock_get_seconds_since_epoch(
+  rtems_interval *the_interval
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Get_Seconds_Since_Epoch(
+   The_Interval :    out RTEMS.Interval;
+   Result       :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - current time obtained successfully@*
+@code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{the_interval} is NULL
+
+@subheading DESCRIPTION:
+
+This directive returns the number of seconds since the RTEMS
+epoch and the current system date and time.  If the date and time
+has not been set with a previous call to
+@code{@value{DIRPREFIX}clock_set}, then the
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be
+preempted.  Re-initializing RTEMS causes the system date and
+time to be reset to an uninitialized state.  Another call to
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_TICKS_PER_SECOND - Get ticks per second
+
+@cindex obtain seconds since epoch
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_ticks_per_second
+@example
+rtems_interval rtems_clock_get_ticks_per_seconds(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+function Clock_Get_Ticks_Per_Seconds
+return RTEMS.Interval;
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+NONE
+
+@subheading DESCRIPTION:
+
+This directive returns the number of clock ticks per second.  This
+is strictly based upon the microseconds per clock tick that the
+application has configured.
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be
+preempted.  Re-initializing RTEMS causes the system date and
+time to be reset to an uninitialized state.  Another call to
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_TICKS_SINCE_BOOT - Get ticks since boot
+
+@cindex obtain ticks since boot
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_ticks_since_boot
+@example
+rtems_interval rtems_clock_get_ticks_since_boot(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+function Clock_Get_Ticks_Since_Boot
+return RTEMS.Interval;
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+NONE
+
+@subheading DESCRIPTION:
+
+This directive returns the number of clock ticks that have elapsed
+since the system was booted.  This is the historical measure of uptime
+in an RTEMS system.  The newer service
+@code{@value{DIRPREFIX}clock_get_uptime} is another and potentially
+more accurate way of obtaining similar information.
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be
+preempted.  Re-initializing RTEMS causes the system date and
+time to be reset to an uninitialized state.  Another call to
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
+
+This directive simply returns the number of times the dirivective
+@code{@value{DIRPREFIX}clock_tick} has been invoked since the 
+system was booted.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_GET_UPTIME - Get the time since boot
+
+@cindex clock get uptime
+@cindex uptime
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_uptime
+@example
+rtems_status_code rtems_clock_get_uptime(
+  struct timespec *uptime
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Clock_Get_Uptime (
+   Uptime :    out RTEMS.Timespec;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - clock tick processed successfully@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
+
+@subheading DESCRIPTION:
+
+This directive returns the seconds and nanoseconds since the
+system was booted.  If the BSP supports nanosecond clock
+accuracy, the time reported will probably be different on every
+call.
+
+@subheading NOTES:
+
+This directive may be called from an ISR.
+
+
+@c
+@c
+@c
+@page
 @subsection CLOCK_SET_NANOSECONDS_EXTENSION - Install the nanoseconds since last tick handler
 
 @cindex clock set nanoseconds extension
@@ -442,50 +736,6 @@ This directive may be called from an ISR.
 
 This directive is called as part of every service to obtain the 
 current date and time as well as timestamps.
-
-@c
-@c
-@c
-@page
-@subsection CLOCK_GET_UPTIME - Get the time since boot
-
-@cindex clock get uptime
-@cindex uptime
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex rtems_clock_get_uptime
-@example
-rtems_status_code rtems_clock_get_uptime(
-  struct timespec *uptime
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-procedure Clock_Get_Uptime (
-   Uptime :    out RTEMS.Timespec;
-   Result :    out RTEMS.Status_Codes
-);
-@end example
-@end ifset
-
-@subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - clock tick processed successfully@*
-@code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL
-
-@subheading DESCRIPTION:
-
-This directive returns the seconds and nanoseconds since the
-system was booted.  If the BSP supports nanosecond clock
-accuracy, the time reported will probably be different on every
-call.
-
-@subheading NOTES:
-
-This directive may be called from an ISR.
 
 @c
 @c
