@@ -177,6 +177,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TEST_TASK
@@ -189,6 +190,7 @@ package MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK);
 
 --
 --  DELAYED_EVENTS_TASK
@@ -201,6 +203,7 @@ package MPTEST is
    procedure DELAYED_EVENTS_TASK ( 
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, DELAYED_EVENTS_TASK);
 
 --
 --  MESSAGE_QUEUE_TASK
@@ -213,6 +216,7 @@ package MPTEST is
    procedure MESSAGE_QUEUE_TASK ( 
       INDEX : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, MESSAGE_QUEUE_TASK);
 
 --
 --  PARTITION_TASK
@@ -225,6 +229,7 @@ package MPTEST is
    procedure PARTITION_TASK ( 
       IGNORED : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, PARTITION_TASK);
 
 --
 --  SEMAPHORE_TASK
@@ -237,5 +242,6 @@ package MPTEST is
    procedure SEMAPHORE_TASK ( 
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, SEMAPHORE_TASK);
 
 end MPTEST;

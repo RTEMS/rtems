@@ -1,3 +1,43 @@
+2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mptests/mp01/mptest.ads, mptests/mp02/mptest.ads,
+	mptests/mp03/mptest.ads, mptests/mp04/mptest.ads,
+	mptests/mp05/mptest.ads, mptests/mp06/mptest.ads,
+	mptests/mp07/mptest.ads, mptests/mp08/mptest.ads,
+	mptests/mp09/mptest.ads, mptests/mp10/mptest.ads,
+	mptests/mp11/mptest.ads, mptests/mp12/mptest.ads,
+	mptests/mp13/mptest.ads, mptests/mp14/mptest.ads,
+	samples/base_mp/mptest.ads, samples/base_sp/sptest.ads,
+	samples/hello/sptest.ads, samples/nsecs/sptest.ads,
+	samples/ticker/sptest.ads, sptests/sp01/sptest.ads,
+	sptests/sp02/sptest.ads, sptests/sp03/sptest.ads,
+	sptests/sp04/sptest.ads, sptests/sp05/sptest.ads,
+	sptests/sp06/sptest.ads, sptests/sp07/sptest.ads,
+	sptests/sp08/sptest.ads, sptests/sp09/sptest.ads,
+	sptests/sp11/sptest.ads, sptests/sp12/sptest.ads,
+	sptests/sp13/sptest.ads, sptests/sp14/sptest.ads,
+	sptests/sp15/sptest.ads, sptests/sp16/sptest.ads,
+	sptests/sp17/sptest.ads, sptests/sp19/sptest.ads,
+	sptests/sp20/sptest.ads, sptests/sp22/sptest.ads,
+	sptests/sp23/sptest.ads, sptests/sp24/sptest.ads,
+	sptests/sp25/sptest.ads, sptests/spname01/spname01.adb,
+	tmtests/tm01/tmtest.ads, tmtests/tm02/tmtest.ads,
+	tmtests/tm03/tmtest.ads, tmtests/tm04/tmtest.ads,
+	tmtests/tm05/tmtest.ads, tmtests/tm06/tmtest.ads,
+	tmtests/tm07/tmtest.ads, tmtests/tm08/tmtest.ads,
+	tmtests/tm09/tmtest.ads, tmtests/tm10/tmtest.ads,
+	tmtests/tm11/tmtest.ads, tmtests/tm12/tmtest.ads,
+	tmtests/tm13/tmtest.ads, tmtests/tm14/tmtest.ads,
+	tmtests/tm15/tmtest.ads, tmtests/tm16/tmtest.ads,
+	tmtests/tm17/tmtest.ads, tmtests/tm18/tmtest.ads,
+	tmtests/tm19/tmtest.ads, tmtests/tm20/tmtest.adb,
+	tmtests/tm20/tmtest.ads, tmtests/tm21/tmtest.ads,
+	tmtests/tm22/tmtest.ads, tmtests/tm23/tmtest.ads,
+	tmtests/tm24/tmtest.ads, tmtests/tm25/tmtest.ads,
+	tmtests/tm28/tmtest.ads, tmtests/tm29/tmtest.ads,
+	tmtests/tmck/tmtest.ads, tmtests/tmoverhd/tmtest.ads:
+	Added pragma Convention C as required by gcc > 4.3.
+
 2008-02-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sptests/spname01/config.h: New file.

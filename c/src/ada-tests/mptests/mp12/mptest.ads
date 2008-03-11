@@ -65,6 +65,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  This is the area used for the partition.

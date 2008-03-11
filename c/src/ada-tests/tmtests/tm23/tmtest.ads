@@ -58,6 +58,7 @@ package TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  NULL_DELAY
@@ -72,6 +73,7 @@ package TMTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, NULL_DELAY);
 
 --
 --  HIGH_TASK
@@ -100,6 +102,7 @@ package TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, HIGH_TASK);
 
 --
 --  MIDDLE_TASKS
@@ -112,9 +115,10 @@ package TMTEST is
    procedure MIDDLE_TASKS (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, MIDDLE_TASKS);
 
 --
---  MIDDLE_TASKS
+--  LOW_TASK
 --
 --  DESCRIPTION:
 --
@@ -125,5 +129,6 @@ package TMTEST is
    procedure LOW_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, LOW_TASK);
 
 end TMTEST;

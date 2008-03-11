@@ -51,6 +51,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  RESUME_TASK
@@ -65,6 +66,7 @@ package SPTEST is
       TIMER_ID        : in     RTEMS.ID;
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, RESUME_TASK);
 
 --
 --  TASK_1_THROUGH_3
@@ -77,5 +79,6 @@ package SPTEST is
    procedure TASK_1_THROUGH_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1_THROUGH_3);
 
 end SPTEST;

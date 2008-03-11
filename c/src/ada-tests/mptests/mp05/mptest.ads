@@ -97,6 +97,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  PROCESS_ASR
@@ -109,6 +110,7 @@ package MPTEST is
    procedure PROCESS_ASR (
       SIGNAL : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, PROCESS_ASR);
 
 --
 --  STOP_TEST_TSR
@@ -122,6 +124,7 @@ package MPTEST is
       IGNORED_ID      : in     RTEMS.ID;
       IGNORED_ADDRESS : in     RTEMS.ADDRESS
    );
+   pragma Convention (C, STOP_TEST_TSR);
 
 --
 --  TEST_TASK
@@ -134,5 +137,6 @@ package MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK);
 
 end MPTEST;

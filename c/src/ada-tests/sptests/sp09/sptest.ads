@@ -192,6 +192,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  DELAYED_SUBPROGRAM
@@ -206,6 +207,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, DELAYED_SUBPROGRAM);
 
 --
 --  TASK_1
@@ -218,6 +220,7 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  TASK_2
@@ -230,6 +233,7 @@ package SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 --
 --  TASK_3
@@ -242,6 +246,7 @@ package SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_3);
 
 --
 --  TASK_4
@@ -254,6 +259,7 @@ package SPTEST is
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_4);
 
 --
 --  SCREEN_1

@@ -53,6 +53,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_18_TO_SELF_5_SECONDS);
 
 --
 --  TA1_SEND_8_TO_SELF_60_SECONDS
@@ -67,6 +68,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_8_TO_SELF_60_SECONDS);
 
 --
 --  TA1_SEND_9_TO_SELF_5_SECONDS
@@ -81,6 +83,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_9_TO_SELF_60_SECONDS);
 
 --
 --  TA1_SEND_10_TO_SELF
@@ -95,6 +98,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_10_TO_SELF);
 
 --
 --  TA1_SEND_1_TO_SELF_EVERY_SECOND
@@ -109,6 +113,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_1_TO_SELF_EVERY_SECOND);
 
 --
 --  TA1_SEND_11_TO_SELF
@@ -123,6 +128,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA1_SEND_11_TO_SELF);
 
 --
 --  TA2_SEND_10_TO_SELF
@@ -137,6 +143,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    ); 
+   pragma Convention (C, TA2_SEND_10_TO_SELF);
 
 --
 --  INIT
@@ -149,6 +156,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TASK_1
@@ -161,6 +169,7 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  TASK_2
@@ -173,5 +182,6 @@ package SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 end SPTEST;

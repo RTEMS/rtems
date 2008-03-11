@@ -51,6 +51,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TASK_1
@@ -63,6 +64,7 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  TASK_2
@@ -75,6 +77,7 @@ package SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 --
 --  TASK_3
@@ -87,6 +90,7 @@ package SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_3);
 
 --
 --  TASK_4
@@ -99,6 +103,7 @@ package SPTEST is
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_4);
 
 --
 --  TASK_CREATE_EXTENSION
@@ -112,6 +117,7 @@ package SPTEST is
       UNUSED       : in     RTEMS.TCB_POINTER;
       CREATED_TASK : in     RTEMS.TCB_POINTER
    ) return RTEMS.Boolean;
+   pragma Convention (C, TASK_CREATE_EXTENSION);
 
 --
 --  TASK_DELETE_EXTENSION
@@ -125,6 +131,7 @@ package SPTEST is
       RUNNING_TASK : in     RTEMS.TCB_POINTER;
       DELETED_TASK : in     RTEMS.TCB_POINTER
    );
+   pragma Convention (C, TASK_DELETE_EXTENSION);
 
 --
 --  TASK_RESTART_EXTENSION
@@ -138,6 +145,7 @@ package SPTEST is
       UNUSED         : in     RTEMS.TCB_POINTER;
       RESTARTED_TASK : in     RTEMS.TCB_POINTER
    );
+   pragma Convention (C, TASK_RESTART_EXTENSION);
 
 --
 --  TASK_START_EXTENSION
@@ -151,6 +159,7 @@ package SPTEST is
       UNUSED       : in     RTEMS.TCB_POINTER;
       STARTED_TASK : in     RTEMS.TCB_POINTER
    );
+   pragma Convention (C, TASK_START_EXTENSION);
 
 --
 --  TASK_EXIT_EXTENSION
@@ -164,6 +173,7 @@ package SPTEST is
    procedure TASK_EXIT_EXTENSION (
       RUNNING_TASK : in     RTEMS.TCB_POINTER
    );
+   pragma Convention (C, TASK_EXIT_EXTENSION);
 
 --
 --  This is the User Extension Table for this test.

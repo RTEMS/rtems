@@ -43,6 +43,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TASK_1_THROUGH_3
@@ -55,5 +56,6 @@ package SPTEST is
    procedure TASK_1_THROUGH_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1_THROUGH_3);
 
 end SPTEST;

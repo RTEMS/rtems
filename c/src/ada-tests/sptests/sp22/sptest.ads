@@ -51,6 +51,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  DELAYED_RESUME
@@ -65,6 +66,7 @@ package SPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, DELAYED_RESUME);
 
 --
 --  PRINT_TIME
@@ -87,5 +89,6 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 end SPTEST;

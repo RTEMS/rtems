@@ -116,6 +116,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  STOP_TEST_TSR
@@ -129,6 +130,7 @@ package MPTEST is
       IGNORED1 : in     RTEMS.ID;
       IGNORED2 : in     RTEMS.ADDRESS
    );
+   pragma Convention (C, STOP_TEST_TSR);
 
 --
 --  TEST_TASK
@@ -141,5 +143,6 @@ package MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK);
 
 end MPTEST;

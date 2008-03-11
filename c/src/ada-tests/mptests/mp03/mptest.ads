@@ -65,6 +65,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  DELAYED_SEND_EVENT
@@ -79,6 +80,7 @@ package MPTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, DELAYED_SEND_EVENT);
 
 --
 --  TEST_TASK
@@ -91,6 +93,7 @@ package MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK);
 
 --
 --  TEST_TASK_SUPPORT

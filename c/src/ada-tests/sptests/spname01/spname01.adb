@@ -24,8 +24,6 @@ with SPTEST;
 with TEST_SUPPORT;
 
 procedure SPNAME01 is
-  INIT_ID : RTEMS.ID;
-  STATUS  : RTEMS.STATUS_CODES;
 begin
 
    loop

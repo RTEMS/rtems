@@ -73,6 +73,7 @@ package MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TEST_TASK_1
@@ -85,6 +86,7 @@ package MPTEST is
    procedure TEST_TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK_1);
 
 --
 --  TEST_TASK_2  
@@ -97,5 +99,6 @@ package MPTEST is
    procedure TEST_TASK_2 ( 
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TEST_TASK_2);
 
 end MPTEST;

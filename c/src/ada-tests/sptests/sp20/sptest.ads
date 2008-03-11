@@ -77,6 +77,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TASK_1_THROUGH_6
@@ -89,6 +90,7 @@ package SPTEST is
    procedure TASK_1_THROUGH_6 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1_THROUGH_6);
 
 --
 --  GET_ALL_COUNTERS

@@ -99,6 +99,7 @@ package TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TIMER_HANDLER
@@ -112,6 +113,7 @@ package TMTEST is
       IGNORED_ID      : in     RTEMS.ID;  
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, TIMER_HANDLER);
 
 --
 --  ISR_HANDLER
@@ -136,6 +138,7 @@ package TMTEST is
    procedure ASR_HANDLER (
       SIGNALS : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, ASR_HANDLER);
 
 --
 --  TASK_1
@@ -150,5 +153,6 @@ package TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 end TMTEST;

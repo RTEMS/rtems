@@ -58,6 +58,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  FIRST_FP_TASK
@@ -70,6 +71,7 @@ package SPTEST is
    procedure FIRST_FP_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, FIRST_FP_TASK);
 
 --
 --  FP_TASK
@@ -83,6 +85,7 @@ package SPTEST is
    procedure FP_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, FP_TASK);
 
 --
 --  TASK_1
@@ -97,5 +100,6 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 end SPTEST;

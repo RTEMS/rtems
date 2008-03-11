@@ -50,6 +50,7 @@ package TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  PROCESS_ASR_FOR_PASS_1
@@ -65,6 +66,7 @@ package TMTEST is
    procedure PROCESS_ASR_FOR_PASS_1 (
       SIGNALS : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, PROCESS_ASR_FOR_PASS_1);
 
 --
 --  PROCESS_ASR_FOR_PASS_2
@@ -80,6 +82,7 @@ package TMTEST is
    procedure PROCESS_ASR_FOR_PASS_2 (
       SIGNALS : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, PROCESS_ASR_FOR_PASS_2);
 
 --
 --  TASK_1
@@ -97,6 +100,7 @@ package TMTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  PROCESS_ASR_FOR_TASK_2
@@ -109,6 +113,7 @@ package TMTEST is
    procedure PROCESS_ASR_FOR_TASK_2 (
       SIGNALS : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, PROCESS_ASR_FOR_TASK_2);
 
 --
 --  TASK_2
@@ -123,6 +128,7 @@ package TMTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 --
 --  TASK_3
@@ -139,5 +145,6 @@ package TMTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_3);
 
 end TMTEST;

@@ -50,6 +50,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  PRIORITY_TEST_DRIVER
@@ -77,6 +78,7 @@ package SPTEST is
    procedure PRIORITY_TASK (
       ITS_INDEX : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, PRIORITY_TASK);
 
 --
 --  TASK_1
@@ -89,6 +91,7 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  TASK_2
@@ -101,6 +104,7 @@ package SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 --
 --  TASK_3
@@ -113,6 +117,7 @@ package SPTEST is
    procedure TASK_3 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_3);
 
 --
 --  TASK_4
@@ -125,6 +130,7 @@ package SPTEST is
    procedure TASK_4 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_4);
 
 --
 --  TASK_5
@@ -137,5 +143,6 @@ package SPTEST is
    procedure TASK_5 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_5);
 
 end SPTEST;

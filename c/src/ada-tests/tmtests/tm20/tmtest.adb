@@ -98,7 +98,6 @@ package body TMTEST is
       BUFFER_COUNT      : RTEMS.UNSIGNED32;
       PREVIOUS_MODE     : RTEMS.MODE;
       PREVIOUS_PRIORITY : RTEMS.TASK_PRIORITY;
-      OVERHEAD          : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 

@@ -58,6 +58,7 @@ package TMTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  TEST_INIT
@@ -90,6 +91,7 @@ package TMTEST is
    procedure LOW_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, LOW_TASK);
 
 --
 --  HIGH_TASKS
@@ -104,5 +106,6 @@ package TMTEST is
    procedure HIGH_TASKS (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, HIGH_TASKS);
 
 end TMTEST;

@@ -77,6 +77,7 @@ package SPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, INIT);
 
 --
 --  SIGNAL_3_TO_TASK_1
@@ -90,6 +91,7 @@ package SPTEST is
       ID      : in     RTEMS.ID;
       POINTER : in     RTEMS.ADDRESS
    );
+   pragma Convention (C, SIGNAL_3_TO_TASK_1);
 
 --
 --  PROCESS_ASR
@@ -102,6 +104,7 @@ package SPTEST is
    procedure PROCESS_ASR (
       THE_SIGNAL_SET : in     RTEMS.SIGNAL_SET
    );
+   pragma Convention (C, PROCESS_ASR);
 
 --
 --  TASK_1
@@ -114,6 +117,7 @@ package SPTEST is
    procedure TASK_1 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_1);
 
 --
 --  TASK_2
@@ -126,5 +130,6 @@ package SPTEST is
    procedure TASK_2 (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    );
+   pragma Convention (C, TASK_2);
 
 end SPTEST;
