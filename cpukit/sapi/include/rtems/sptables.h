@@ -59,7 +59,7 @@ extern "C" {
       1,                        /* maximum number nodes in system */
       0,                        /* maximum number global objects */
       0,                        /* maximum number proxies */
-      RTEMS_MINIMUM_STACK_SIZE, /* MPCI receive server stack size */
+      STACK_MINIMUM_SIZE,       /* MPCI receive server stack size */
       NULL,                     /* pointer to MPCI address table */
     };
   #else

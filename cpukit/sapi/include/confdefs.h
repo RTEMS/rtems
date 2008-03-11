@@ -949,6 +949,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 #define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME NULL
 #define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE 0
+#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE 0
 
 #endif
 
@@ -984,10 +985,6 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_fixed_memory_pools) \
   ((_fixed_memory_pools) * \
    ( sizeof(ITRON_Fixed_memory_pool_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
-
-#ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
-#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE * 2)
-#endif
 
 
 #define CONFIGURE_MEMORY_FOR_ITRON \
@@ -1033,7 +1030,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
 
 #define CONFIGURE_OBJECT_TABLE_STUFF \
-  ( sizeof(Objects_Control *) + sizeof(rtems_name *) + sizeof(rtems_name) )
+  ( sizeof(Objects_Control *) )
 
 #if defined(RTEMS_NEWLIB)
 #include <reent.h>
