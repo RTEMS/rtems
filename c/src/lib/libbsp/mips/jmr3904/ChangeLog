@@ -1,3 +1,8 @@
+2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Increase default C Program Heap size to be able to
+	run Ada ACATS testsuite.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so
