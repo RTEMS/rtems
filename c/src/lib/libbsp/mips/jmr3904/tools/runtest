@@ -85,7 +85,7 @@ logdir=log
 update_on_tick="no"
 max_run_time=$((5 * 60))
 using_print_buffer="yes"
-simulator=mipstx39-rtems4.8-run 
+simulator=mipstx39-rtems4.9-run 
 
 while getopts vdl:o:s: OPT
 do
