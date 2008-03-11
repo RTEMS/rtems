@@ -146,7 +146,7 @@ do
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
-       minimum*|spfatal*)
+       minimum*|stackchk*|*fatal*|termio*)
            continue
            ;;
    esac

@@ -1,3 +1,7 @@
+2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* runtest.in: Skip all fatal error tests.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* runtest.in: sp39 and sp41 lock on sis but run correctly on

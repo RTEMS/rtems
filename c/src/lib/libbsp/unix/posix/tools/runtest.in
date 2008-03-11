@@ -147,7 +147,7 @@ do
            warn "Running both nodes associated with $tname"
            TEST_TYPE="mp"
            ;;
-       stackchk*|spfatal*|malloctest*|termio*)
+       stackchk*|*fatal*|malloctest*|termio*)
            warn "Skipping $tname; it locks up or takes a VERY long time to run"
            continue
 	   ;;

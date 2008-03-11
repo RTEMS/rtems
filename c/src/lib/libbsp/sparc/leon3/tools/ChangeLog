@@ -1,3 +1,7 @@
+2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* runtest.in: Skip all fatal error tests.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest.in: Add capture to list of interative tests to skip in batch

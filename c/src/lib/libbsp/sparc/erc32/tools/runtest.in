@@ -152,7 +152,7 @@ do
            warn "Skipping $tname; it does not complete long on sis"
            continue
            ;;
-       minimum*|stackchk*|spfatal*|termio*)
+       minimum*|stackchk*|*fatal*|termio*)
            warn "Skipping $tname; it locks up or takes a VERY long time to run"
            continue
            ;;

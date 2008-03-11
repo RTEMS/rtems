@@ -148,7 +148,7 @@ do
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
-       stackchk*|spfatal*|malloctest*|termio*)
+       stackchk*|*fatal*|malloctest*|termio*)
            warn "Skipping $tname; it locks up or takes a VERY long time to run"
            continue
            ;;
