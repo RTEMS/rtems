@@ -1,3 +1,8 @@
+2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* leaf.cfg, custom/pc386.cfg, custom/pc386dx.cfg: It appears that the
+	default processor model optimization has changed in gcc 4.3.0.
+
 2008-03-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/av5282.cfg, custom/bare.cfg, custom/default.cfg,
