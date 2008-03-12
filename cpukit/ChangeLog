@@ -1,3 +1,9 @@
+2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/cmds.c: Directly register the command structure to
+	avoid unnecessary duplication of static strings. We know best this
+	time.
+
 2008-03-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Do not reserve 2 * minimum stack size
