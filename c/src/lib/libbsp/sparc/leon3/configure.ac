@@ -24,7 +24,7 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 ## bsp-specific options
 RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
-[The erc32 console driver can operate in either polled or interrupt mode.
+[The leon3 console driver can operate in either polled or interrupt mode.
 Under the simulator (especially when FAST_UART is defined), polled seems to operate 
 better.  It is common for a task to print a line (like the end of test message) and
 then exit.  In this case, the program returns control to the simulator command line

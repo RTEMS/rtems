@@ -34,7 +34,7 @@ RTEMS_BSPOPTS_HELP([IDE_USE_PRIMARY_INTERFACE],
 
 RTEMS_BSPOPTS_SET([IDE_USE_SECONDARY_INTERFACE],[*],[0])
 RTEMS_BSPOPTS_HELP([IDE_USE_SECONDARY_INTERFACE],
-[Determines, whether RTEMS will try to use the primary IDE interface. 
+[Determines, whether RTEMS will try to use the secondary IDE interface. 
  Enable it, if:
  - you have a secondary IDE interface 
  - and you have at least one disk attached to this interface  

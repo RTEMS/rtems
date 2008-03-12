@@ -1,3 +1,7 @@
+2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Fix typo.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so
