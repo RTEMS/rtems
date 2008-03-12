@@ -177,7 +177,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	cmpli	cr4, r5, 0
 	lwz r5, ppc_exc_lock_crit@sdarel(r13)
 	cmpli	cr0, r5, 0
-	cror	EQ(cr4), EQ(cr4), EQ(cr0)
+	crand	EQ(cr4), EQ(cr4), EQ(cr0)
 	.endm
 
 	/* Minimal prologue snippets jump into WRAP

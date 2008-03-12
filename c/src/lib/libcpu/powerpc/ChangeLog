@@ -1,3 +1,9 @@
+2008-03-11	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: bugfix;
+	need to crand not cror when testing lower priority locks
+	during machine-check handling.
+
 2008-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: bugfix;
