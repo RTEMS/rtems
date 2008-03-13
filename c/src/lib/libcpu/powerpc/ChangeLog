@@ -1,3 +1,18 @@
+2008-03-13	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/README,
+	new-exceptions/bspsupport/ppc_exc_hdl.c:
+	Thomas Doerfler clarified (thanks!) that raising an
+	exception and executing the 1st instruction is not
+	an atomical operation. I added a fix to the code that
+	checks if a lower-priority interrupt is under way:
+	we now not only test if the 'lock' variable was set
+	but also check if the interrupted PC points to the
+	'write lock' instruction.
+	Added more comments and updated README.
+
 2008-03-11	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: bugfix;

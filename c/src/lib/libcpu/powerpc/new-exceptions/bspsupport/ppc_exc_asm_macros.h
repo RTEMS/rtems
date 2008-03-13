@@ -1,7 +1,7 @@
 /*
  * (c) 1999, Eric Valette valette@crf.canon.fr
  *
- * Modified and partially rewritten by Till Straumann, 2007
+ * Modified and partially rewritten by Till Straumann, 2007-2008
  *
  * Low-level assembly code for PPC exceptions (macros).
  *
@@ -16,6 +16,7 @@
 
 #define EXC_MIN_GPR1		0
 #define FRAME_LINK_SPACE	8
+
 
 #define r0	0
 #define r1	1
@@ -60,9 +61,18 @@
 
 #define	NOFRAME	0xffff8000
 
-/* Switch r1 to interrupt stack if not already there.
+/* Opcode of  'stw r1, off(r13)' */
+#define STW_R1_R13(off)	((((36<<10)|(r1<<5)|(r13))<<16) | ((off)&0xffff))
+
+/*
+ **********************************************************************
+ * MACRO: SWITCH_STACK
+ **********************************************************************
  *
- * USES:    RA, RB
+ * Increment _ISR_Nest_level and switch r1 to interrupt
+ * stack if not already there.
+ *
+ * USES:    RA, RB, cr0
  * ON EXIT: RA, RB available, r1 points into interrupt
  *          stack.
  *
@@ -131,11 +141,39 @@ no_r1_reload_\FLVR:
 	 *   4. branch
 	 *
 	 */ 
+
+/*
+ **********************************************************************
+ * MACRO: PPC_EXC_MIN_PROLOG_ASYNC
+ **********************************************************************
+ * USES:    r3
+ * ON EXIT: vector in r3
+ *
+ * NOTES:   r3 saved in special variable 'ppc_exc_gpr3_\_PRI'
+ *
+ */
 	.macro	PPC_EXC_MIN_PROLOG_ASYNC _NAME _VEC _PRI _FLVR
 	.global	ppc_exc_min_prolog_async_\_NAME
 ppc_exc_min_prolog_async_\_NAME:
 	/* Atomically write lock variable in 1st instruction with non-zero value
 	 * (r1 is always nonzero; r13 could also be used)
+	 *
+	 * NOTE: raising an exception and executing this first instruction
+	 *       of the exception handler is apparently NOT atomic, i.e.,
+	 *       a low-priority IRQ could set the PC to this location and
+	 *       a critical IRQ could intervene just at this point.
+	 *
+	 *       We check against this pathological case by checking the
+	 *       opcode/instruction at the interrupted PC for matching
+	 *
+	 *         stw r1, ppc_exc_lock_XXX@sdarel(r13)
+	 *
+	 *       ASSUMPTION:
+	 *          1) ALL 'asynchronous' exceptions (which disable thread-
+	 *             dispatching) execute THIS 'magical' instruction
+	 *             FIRST.
+	 *          2) This instruction (including the address offset)
+	 *             is not used anywhere else (probably a safe assumption).
 	 */
 	stw		r1, ppc_exc_lock_\_PRI@sdarel(r13)
 	/* We have no stack frame yet; store r3 in special area;
@@ -151,6 +189,16 @@ ppc_exc_min_prolog_async_\_NAME:
 	ba 		wrap_\_FLVR
 	.endm
 
+/*
+ **********************************************************************
+ * MACRO: PPC_EXC_MIN_PROLOG_SYNC
+ **********************************************************************
+ * USES:    r3
+ * ON EXIT: vector in r3
+ *
+ * NOTES:   exception stack frame pushed; r3 saved in frame
+ *
+ */
 	.macro PPC_EXC_MIN_PROLOG_SYNC _NAME _VEC _PRI _FLVR
 	.global ppc_exc_min_prolog_sync_\_NAME
 ppc_exc_min_prolog_sync_\_NAME:
@@ -160,34 +208,157 @@ ppc_exc_min_prolog_sync_\_NAME:
 	ba		wrap_nopush_\_FLVR
 	.endm
 		
-	.macro TEST_LOCK_std
+/*
+ **********************************************************************
+ * MACRO: TEST_1ST_OPCODE_crit
+ **********************************************************************
+ *
+ * USES:    REG, cr4
+ * ON EXIT: REG available (contains *pc - STW_R1_R13(0)), return value in cr4
+ *
+ * test opcode interrupted by critical (asynchronous) exception;
+ * set cr4 if
+ *
+ *   *SRR0 == 'stw r1, ppc_exc_std_lock@sdarel(r13)'
+ *
+ */
+	.macro TEST_1ST_OPCODE_crit _REG _SRR0
+	mf\_SRR0 \_REG
+	lwz		\_REG, 0(\_REG)
+	/* opcode now in REG */
+
+	/* subtract upper 16bits of 'stw r1, 0(r13)' instruction */
+	subis	\_REG, \_REG, STW_R1_R13(0)@h
+	/*
+	 * if what's left compares against the 'ppc_exc_lock_std@sdarel'
+	 * address offset then we have a match...
+	 */
+	cmpli   cr4, \_REG, ppc_exc_lock_std@sdarel
+	.endm
+
+/*
+ **********************************************************************
+ * MACRO: TEST_1ST_OPCODE_mchk
+ **********************************************************************
+ * USES:    REG, cr0, cr4
+ * ON EXIT: REG, cr0 available, return value in cr4
+ *
+ * test opcode interrupted by (asynchronous) machine-check exception;
+ * set cr4 if
+ *
+ *   *SRR0 == 'stw r1, ppc_exc_std_lock@sdarel(r13)'
+ *
+ * OR
+ *
+ *   *SRR0 == 'stw r1, ppc_exc_crit_lock@sdarel(r13)'
+ *
+ */
+	.macro TEST_1ST_OPCODE_mchk _REG _SRR0
+	TEST_1ST_OPCODE_crit _REG=\_REG _SRR0=\_SRR0
+	cmpli    cr0, \_REG, ppc_exc_lock_crit@sdarel
+	/* cr4 set if 1st opcode matches writing either lock */
+	cror     EQ(cr4), EQ(cr4), EQ(cr0)
+	.endm
+
+/*
+ **********************************************************************
+ * MACRO: TEST_LOCK_std
+ **********************************************************************
+ *
+ * USES:    cr4
+ * ON EXIT: cr4 is set (indicates no lower-priority locks are engaged)
+ *
+ */
+	.macro TEST_LOCK_std _SRR0
 	/* 'std' is lowest level, i.e., can not be locked -> EQ(cr4) = 1 */
 	creqv EQ(cr4), EQ(cr4), EQ(cr4)
 	.endm
 
-	/* critical-exception wrapper has to check 'std' lock: */
-	.macro TEST_LOCK_crit
-	lwz r5, ppc_exc_lock_std@sdarel(r13)
-	cmpli	cr4, r5, 0
-	.endm
-
-	/* machine-check wrapper has to check 'std' and 'crit' locks */
-	.macro TEST_LOCK_mchk
-	lwz r5, ppc_exc_lock_std@sdarel(r13)
-	cmpli	cr4, r5, 0
-	lwz r5, ppc_exc_lock_crit@sdarel(r13)
-	cmpli	cr0, r5, 0
-	crand	EQ(cr4), EQ(cr4), EQ(cr0)
-	.endm
-
-	/* Minimal prologue snippets jump into WRAP
-	 * which prepares calling code common to all
-	 * flavors of exceptions.
-	 * We must have this macro instantiated for
-	 * each possible flavor of exception so that
-	 * we use the proper lock variable, SRR register pair and
-	 * RFI instruction.
+/*
+ **********************************************************************
+ * MACRO: TEST_LOCK_crit
+ **********************************************************************
+ *
+ * USES:    cr4, cr0, r4, r5
+ * ON EXIT: cr0, r4, r5 available, returns result in cr4
+ *
+ * critical-exception wrapper has to check 'std' lock:
+ *
+ * Return cr4 = (   ppc_std_lock == 0
+ *               && * _SRR0 != <write std lock instruction> )
+ *
+ */
+	.macro TEST_LOCK_crit _SRR0
+	/* STD interrupt could have been interrupted before
+	 * executing the 1st instruction which sets the lock;
+	 * check this case by looking at the opcode present
+	 * at the interrupted PC location.
 	 */
+	TEST_1ST_OPCODE_crit _REG=r4 _SRR0=\_SRR0
+	/*
+	 * At this point cr4 is set if
+	 *
+	 *   *(PC) == 'stw r1, ppc_exc_lock_std@sdarel(r13)'
+	 *
+	 */
+	
+	/* check lock */
+	lwz r5, ppc_exc_lock_std@sdarel(r13)
+	cmpli	cr0, r5, 0
+	/*
+	 *
+	 * cr4 = (   *pc != <write std lock instruction>
+	 *        && ppc_exc_lock_std == 0 )
+	 */
+	crandc  EQ(cr4), EQ(cr0), EQ(cr4)
+	.endm
+
+/*
+ **********************************************************************
+ * MACRO: TEST_LOCK_mchk
+ **********************************************************************
+ *
+ * USES:    cr4, cr0, r4, r5
+ * ON EXIT: cr0, r4, r5 available, returns result in cr4
+ *
+ * machine-check wrapper has to check 'std' and 'crit' locks, i.e.,
+ *
+ * Return cr4 = (   * _SRR0 != <write std  lock instruction>
+ *               && * _SRR0 != <write crit lock instruction> )
+ *               && ppc_std_lock  == 0
+ *               && ppc_crit_lock == 0 )
+ */
+	.macro TEST_LOCK_mchk _SRR0
+	TEST_1ST_OPCODE_mchk _REG=r4 _SRR0=\_SRR0
+	/* cr4 set if 1st opcode matches writing either lock */
+
+	/* proceed checking the locks */
+	lwz r5, ppc_exc_lock_std@sdarel(r13)
+	lwz r4, ppc_exc_lock_crit@sdarel(r13)
+	/* set cr0 if neither lock is set */
+	or.     r4, r4, r5
+	/* set cr4 if
+	 *     cr0 is set   (neither lock set)
+	 * AND cr4 is clear (interrupted opcode doesn't match writing any lock)
+	 */
+	crandc	EQ(cr4), EQ(cr0), EQ(cr4)
+	.endm
+
+
+/*
+ **********************************************************************
+ * MACRO: WRAP
+ **********************************************************************
+ *
+ * Minimal prologue snippets jump into WRAP
+ * which prepares calling code common to all
+ * flavors of exceptions.
+ * We must have this macro instantiated for
+ * each possible flavor of exception so that
+ * we use the proper lock variable, SRR register pair and
+ * RFI instruction.
+ *
+ */
 	.macro	WRAP _FLVR _PRI _SRR0 _SRR1 _RFI
 wrap_\_FLVR:
 	stwu    r1,  -EXCEPTION_FRAME_END(r1)
@@ -223,6 +394,9 @@ wrap_no_save_r14_\_FLVR:
 	 * increment the thread-dispatch disable level
 	 * in case a higher priority exception occurs
 	 * we don't want it to run the scheduler.
+	 * (It is safe to increment this w/o disabling
+	 * higher priority interrupts since those will
+	 * see that we wrote the lock anyways).
 	 */
 	lwz		r5,  _Thread_Dispatch_disable_level@sdarel(r13)
 	addi	r5,  r5, 1
@@ -235,7 +409,7 @@ wrap_no_save_r14_\_FLVR:
 	stw		r5,  ppc_exc_lock_\_PRI@sdarel(r13)
 
 	/* test lower-priority locks; result in (non-volatile) cr4 */
-	TEST_LOCK_\_PRI
+	TEST_LOCK_\_PRI _SRR0=\_SRR0
 
 	/* Peform stack switch if necessary */
 	SWITCH_STACK RA=r4 RB=r5 FLVR=\_FLVR
@@ -262,10 +436,23 @@ no_thread_dispatch_disable_\_FLVR:
 	mf\_SRR0	r4
 	mf\_SRR1	r5
 
-	/* branch to common routine */
+	/*
+	 * branch to common routine;
+	 *
+	 * r1, r3, r4, r5, cr, lr and r14 are saved on the
+	 * stack at this point.
+	 */
 	bl		wrap_common
 
-	/* restore SRR, r4, r5, r1 (stack pointer) and lr */
+	/* 
+	 * restore SRRs, r4, r5, r1 (stack pointer) and lr;
+	 * wrap_common restores r3, r14 and cr for us.
+	 *
+	 * NOTE: we restore r1 from the frame rather than
+	 * just popping (adding to current r1) since the
+	 * exception handler might have done strange things
+	 * (e.g., a debugger moving and relocating the stack).
+	 */
 	mt\_SRR0	r4
 	mt\_SRR1	r5
 	/* restore lr */

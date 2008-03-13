@@ -118,9 +118,12 @@ ppc_exc_wrapup(int ll_rval, BSP_Exception_frame *f)
 		 */
 	}
 	/* dispatch_disable level is decremented from assembly code.  */
-	if ( _Context_Switch_necessary )
+	if ( _Context_Switch_necessary ) {
+		/* FIXME: I believe it should be OK to re-enable
+		 *        interrupts around the execution of _Thread_Dispatch();
+		 */
 		_Thread_Dispatch();
-	else if ( _ISR_Signals_to_thread_executing ) {
+	} else if ( _ISR_Signals_to_thread_executing ) {
 		_ISR_Signals_to_thread_executing = 0;
 		/*
 		 * Process pending signals that have not already been

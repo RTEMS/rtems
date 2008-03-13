@@ -40,7 +40,7 @@ ppc_exc_min_prolog_size      = 4 * 4
      * that off before we can use the stack pointer. Note that this is
      * ONLY safe if the shadowing is actually active -- otherwise, r1
      * is destroyed. We deliberately use r1 so problems become obvious
-     * if this is abused!
+     * if this is misused!
      */
 	.global ppc_exc_tgpr_clr_prolog
 ppc_exc_tgpr_clr_prolog:
@@ -246,15 +246,16 @@ wrap_common:
 skip_save_nonvolatile_regs:
 	/* store address of exception frame in r4; vector is in r3 */
 	addi  r4, r14, FRAME_LINK_SPACE 
+
+	/* load hi-halfword of C wrapper address */
+	lis		r5, ppc_exc_C_wrapper@h
 	/* clear CR[6] to make sure no vararg callee assumes that
 	 * there are any valid FP regs
 	 */
 	crxor 6,6,6
-
-	/* Far branch to ppc_C_wrapper */
-	lis		r5, ppc_exc_C_wrapper@h
-	addi    r4, r14, FRAME_LINK_SPACE 
+	/* merge lo-halfword of C wrapper address */
 	ori		r5, r5, ppc_exc_C_wrapper@l
+	/* Far branch to ppc_C_wrapper */
 	mtlr	r5
 	blrl
 
@@ -279,7 +280,10 @@ skip_save_nonvolatile_regs:
 	addi	r4, r4, -1
 	stw		r4, _ISR_Nest_level@sdarel(r13)
 
-	/* switch back to original stack */
+	/*
+	 * switch back to original stack (r14 == r1 if we are
+	 * still on the IRQ stack).
+	 */
 	mr		r1, r14
 
 	/* restore interrupt mask */
@@ -342,8 +346,10 @@ skip_restore_nonvolatile_regs:
 	lwz		r8,  GPR8_OFFSET(r1)
 	lwz		r7,  GPR7_OFFSET(r1)
 	lwz		r6,  GPR6_OFFSET(r1)
+	/* r4, r5 are eventually restored by caller */
 	lwz		r3,  GPR3_OFFSET(r1)
 	lwz		r2,  GPR2_OFFSET(r1)
+	/* r1, is eventually restored by caller */
 	lwz		r0,  GPR0_OFFSET(r1)
 
 	beq  cr3, 2f

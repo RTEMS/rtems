@@ -93,7 +93,7 @@ that they could is beyond doubt...):
 
  - some PPCs don't fit into the classic scheme where
    the exception vector addresses all were multiples of
-   0x100 (some are spaced as closely as 0x10).
+   0x100 (some vectors are spaced as closely as 0x10).
    The API should not expose vector offsets but only
    vector numbers which can be considered an abstract
    entity. The mapping from vector numbers to actual
@@ -323,10 +323,6 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
 		 .. increase thread-dispatch-disable-level
 		 .. clear 'ee_lock' variable
 
-	The earliest a critical exception could interrupt
-	the 'external' exception handler is after the
-	'stw r1, ee_lock@sdarel(r13)' instruction.
-
 	After the HPI decrements the dispatch-disable level
 	it checks 'ee_lock' and refrains from performing
 	a context switch if 'ee_lock' is nonzero. Since
@@ -340,4 +336,55 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
 	  b) use an addressing mode that doesn't require
 	     loading any registers. The short-data area
 		 pointer R13 is appropriate.
-         
+
+    CAVEAT: unfortunately, this method by itself
+	is *NOT* enough because raising a low-priority
+	exception and executing the first instruction
+	of the handler is *NOT* atomic. Hence, the following
+	could occur:
+
+	 1) LPI is taken
+	 2) PC is saved in SRR0, PC is loaded with 
+	    address of 'locking instruction'
+		  stw r1, ee_lock@sdarel(r13)
+     3) ==> critical interrupt happens
+	 4) PC (containing address of locking instruction)
+	    is saved in CSRR0
+     5) HPI is dispatched
+
+	For the HPI to correctly handle this situation
+	it does the following:
+
+	
+		a) increase thread-dispatch disable level
+		b) do interrupt work
+		c) decrease thread-dispatch disable level
+	    d) if ( dispatch-disable level == 0 )
+		 d1) check ee_lock
+		 d2) check instruction at *CSRR0
+		 d3) do a context switch if necessary ONLY IF
+		     ee_lock is NOT set AND *CSRR0 is NOT the
+			 'locking instruction'
+
+	this works because the address of 'ee_lock'
+	is embedded in the locking instruction
+	'stw r1, ee_lock@sdarel(r13)' and because the
+	registers r1/r13 have a special purpose
+	(stack-pointer, SDA-pointer). Hence it is safe
+	to assume that the particular instruction
+	'stw r1,ee_lock&sdarel(r13)' never occurs
+	anywhere else.
+
+	Another note: this algorithm also makes sure
+	that ONLY nested ASYNCHRONOUS interrupts which
+	enable/disable thread-dispatching and check if
+	thread-dispatching is required before returning
+	control engage in this locking protocol. It is
+	important that when a critical, asynchronous
+	interrupt interrupts a 'synchronous' exception
+	(which does not disable thread-dispatching)
+	the thread-dispatching operation upon return of
+	the HPI is NOT deferred (because the synchronous
+	handler would not, eventually, check for a
+	dispatch requirement).
+
