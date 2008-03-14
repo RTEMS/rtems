@@ -5,7 +5,7 @@ TARGET = i686-pc-cygwin
 include $(top_srcdir)/mkspec.am
 
 CYGWIN_VERS = 1.5.24-2
-CYGWIN_RPMREL = 0.20070724.2%{?dist}
+CYGWIN_RPMREL = 0.20080314.1%{?dist}
 EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 
@@ -30,7 +30,7 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 
 W32API_VERS = 3.8-1
-W32API_RPMREL = 0.20070724.2%{?dist}
+W32API_RPMREL = 0.20080314.1%{?dist}
 EXTRA_DIST += target-w32api.add
 EXTRA_DIST += w32api.add
 
@@ -78,7 +78,7 @@ CLEANFILES += @rpmprefix@$(TARGET)-libncurses-devel.spec
 noinst_DATA += @rpmprefix@$(TARGET)-libncurses-devel.spec
 
 ZLIB_VERS = 1.2.3-2
-ZLIB_RPMREL = 0.20070724.2%{?dist}
+ZLIB_RPMREL = 0.20080314.1%{?dist}
 EXTRA_DIST += target-zlib.add
 EXTRA_DIST += zlib.add
 
@@ -105,12 +105,13 @@ noinst_DATA += @rpmprefix@$(TARGET)-zlib.spec
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
 BINUTILS_PKGVERS = 20060817-1
-BINUTILS_RPMREL = 0.20070724.2%{?dist}
+BINUTILS_RPMREL = 0.20080314.1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20070724.2%{?dist}
+GCC_RPMREL = 0.20080314.1%{?dist}
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
+GCC_OPTS += --disable-infos
