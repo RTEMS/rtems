@@ -156,9 +156,6 @@ AC_CONFIG_FILES([mingw32/i686/Makefile])
 AC_CONFIG_FILES([solaris2.7/Makefile])
 AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
 
-AC_CONFIG_FILES([freebsd5.2/Makefile])
-AC_CONFIG_FILES([freebsd5.2/i586/Makefile])
-
 AC_CONFIG_FILES([freebsd6.0/Makefile])
 AC_CONFIG_FILES([freebsd6.0/i586/Makefile])
 
