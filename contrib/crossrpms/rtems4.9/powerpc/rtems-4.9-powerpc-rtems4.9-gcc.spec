@@ -14,7 +14,7 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.0-RC-20080301
+%define gcc_pkgvers 4.3.0
 %define gcc_version 4.3.0
 %define gcc_rpmvers %{expand:%(echo "4.3.0" | tr - _ )}
 
@@ -28,7 +28,7 @@ Summary:      	powerpc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	10.20080301.2%{?dist}
+Release:      	11%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,6 +53,7 @@ BuildRequires:  mpfr-devel >= 2.3.0
 BuildRequires:	flex bison
 %endif
 
+
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.9-powerpc-rtems4.9-binutils
 
@@ -70,8 +71,8 @@ Requires:	rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-%{release}
 %endif
 
 %if "%{gcc_version}" == "4.3.0"
-Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080302.diff
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080306.diff
 %endif
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -80,7 +81,7 @@ Patch0:		gcc-core-4.2.3-rtems4.9-20080205.diff
 %{?_without_sources:NoSource:	0}
 
 %if "%{gcc_version}" == "4.3.0" 
-Source1:        ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %if  "%{gcc_version}" == "4.2.3"
 Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
