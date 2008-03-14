@@ -29,7 +29,7 @@ Cygwin libncurses-devel libraries.
   ( cd @tool_target@/sys-root ; %{__tar} xvjf %{SOURCE0})
 
   sed -e 's,^prefix=\(.*\)$,prefix=$RPM_BUILD_ROOT%{_prefix}/@tool_target@/sys-root\1,' \
-    > etc/postinstall/libncurses-devel.sh \
+    < etc/postinstall/libncurses-devel.sh \
     > etc/postinstall/libncurses-devel.sh~
   mv etc/postinstall/libncurses-devel.sh~ etc/postinstall/libncurses-devel.sh
   chmod +x etc/postinstall/libncurses-devel.sh
