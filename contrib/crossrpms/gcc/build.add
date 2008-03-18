@@ -28,8 +28,12 @@
 %if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
 %endif
-
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+  CC="%{_host}-gcc ${RPM_OPT_FLAGS}" \
+%else
   CC="%{__cc} ${RPM_OPT_FLAGS}" \
+%endif
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
