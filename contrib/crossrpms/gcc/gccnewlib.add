@@ -36,6 +36,11 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %{?suse10_3:%define 	_build_mpfr 	1}
 %endif
 
+%if "%{_build}" != "%{_host}"
+BuildRequires:  @rpmprefix@%{_host}-gcc
+BuildRequires:  @rpmprefix@@tool_target@-gcc
+%endif
+
 %if "%{gcc_version}" >= "4.2.0"
 BuildRequires:	flex bison
 %if %build_f95
