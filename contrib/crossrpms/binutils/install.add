@@ -2,14 +2,7 @@
   rm -rf $RPM_BUILD_ROOT
 
   cd build
-  make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    bindir=$RPM_BUILD_ROOT%{_bindir} \
-    includedir=$RPM_BUILD_ROOT%{_includedir} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} \
-    infodir=$RPM_BUILD_ROOT%{_infodir} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
-    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
-    install
+  make DESTDIR=$RPM_BUILD_ROOT install
 
 %if %build_infos
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
