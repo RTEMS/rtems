@@ -1,3 +1,10 @@
+2008-03-17	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.c: Initialize VME Master
+	'VTON' timer and bus-release policy to less aggressive
+	values than the chip's defaults. The default VTON easily
+	overrides any settings used by the DMA engine.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* gdbstub/rtems-stub-glue.c: Update to use the new

@@ -58,9 +58,7 @@
 #include <bsp.h>
 #include <libcpu/byteorder.h>
 
-#ifndef __INSIDE_RTEMS_BSP__
 #define __INSIDE_RTEMS_BSP__
-#endif
 
 #include "vmeTsi148.h"
 #include <bsp/VMEDMA.h>
@@ -135,6 +133,40 @@
 #	define TSI_OTAT_ADMODE_USR4	0xb
 
 #define TSI_VIACK_1_REG		0x204
+
+#define TSI_VMCTRL_REG		0x234
+#	define TSI_VMCTRL_VSA		(1<<27)
+#	define TSI_VMCTRL_VS		(1<<26)
+#	define TSI_VMCTRL_DHB		(1<<25)
+#	define TSI_VMCTRL_DWB		(1<<24)
+#	define TSI_VMCTRL_RMWEN		(1<<20)
+#	define TSI_VMCTRL_A64DS		(1<<16)
+#	define TSI_VMCTRL_VTOFF_MSK	(7<<12)
+#	define TSI_VMCTRL_VTOFF_0us	(0<<12)
+#	define TSI_VMCTRL_VTOFF_1us	(1<<12)
+#	define TSI_VMCTRL_VTOFF_2us	(2<<12)
+#	define TSI_VMCTRL_VTOFF_4us	(3<<12)
+#	define TSI_VMCTRL_VTOFF_8us	(4<<12)
+#	define TSI_VMCTRL_VTOFF_16us	(5<<12)
+#	define TSI_VMCTRL_VTOFF_32us	(6<<12)
+#	define TSI_VMCTRL_VTOFF_64us	(7<<12)
+#	define TSI_VMCTRL_VTON_MSK	(7<< 8)
+#	define TSI_VMCTRL_VTON_4us	(0<< 8)
+#	define TSI_VMCTRL_VTON_8us	(1<< 8)
+#	define TSI_VMCTRL_VTON_16us	(2<< 8)
+#	define TSI_VMCTRL_VTON_32us	(3<< 8)
+#	define TSI_VMCTRL_VTON_64us	(4<< 8)
+#	define TSI_VMCTRL_VTON_128us	(5<< 8)
+#	define TSI_VMCTRL_VTON_256us	(6<< 8)
+#	define TSI_VMCTRL_VTON_512us	(7<< 8)
+#	define TSI_VMCTRL_VREL_MSK		(3<< 3)
+#	define TSI_VMCTRL_VREL_TON_or_DONE			(0<< 3)
+#	define TSI_VMCTRL_VREL_TONandREQ_or_DONE	(1<< 3)
+#	define TSI_VMCTRL_VREL_TONandBCLR_or_DONE	(2<< 3)
+#	define TSI_VMCTRL_VREL_TONorDONE_and_REQ	(3<< 3)
+#	define TSI_VMCTRL_VFAIR		(1<< 2)
+#	define TSI_VMCTRL_VREQL_MSK	(3<< 0)
+#	define TSI_VMCTRL_VREQL(x)	((x)&3)
 
 #define TSI_VSTAT_REG		0x23c
 #	define TSI_VSTAT_CPURST		(1<<15)	/* clear power-up reset bit */
@@ -310,7 +342,7 @@
 #define BSP_PCI_CONFIG_IN_BYTE	pci_read_config_byte
 #endif
 
-typedef uint32_t pci_ulong;
+typedef unsigned int pci_ulong;
 
 #ifdef __BIG_ENDIAN__
 	static inline void st_be32( uint32_t *a, uint32_t v)
@@ -463,6 +495,7 @@ void
 vmeTsi148ResetXX(BERegister *base)
 {
 int port;
+uint32_t v;
 
 	CHECK_BASE(base,0, );
 
@@ -479,6 +512,16 @@ int port;
 	/* Clear BDFAIL / (--> SYSFAIL) */
 #	define TSI_VSTAT_BDFAIL		(1<<14)
 	TSI_WR(base, TSI_VSTAT_REG, TSI_RD(base, TSI_VSTAT_REG) & ~TSI_VSTAT_BDFAIL);
+	/* Set (long) bus master timeout; the timeout actually overrides 
+	 * the DMA block size so that the DMA settings would effectively
+	 * not be used.
+	 * Also, we enable 'release on request' mode so that we normally
+	 * don't have to rearbitrate the bus for every transfer.
+	 */
+	v = TSI_RD(base, TSI_VMCTRL_REG);
+	v &= ~( TSI_VMCTRL_VTON_MSK | TSI_VMCTRL_VREL_MSK );
+	v |= (TSI_VMCTRL_VTON_512us | TSI_VMCTRL_VREL_TONorDONE_and_REQ );
+	TSI_WR(base, TSI_VMCTRL_REG, v);
 }
 
 void
