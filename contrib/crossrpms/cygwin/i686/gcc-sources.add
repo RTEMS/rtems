@@ -34,5 +34,5 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_pkgvers}.ta
 
 # Cygwin patch from
 # ftp://cygwin.com/pub/cygwin/release/gcc/gcc-core/gcc-core-3.4.4-3-src.tar.bz2
-Source60: gcc-3.4.4-3.patch
+Source70: gcc-3.4.4-3.patch
 
