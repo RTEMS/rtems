@@ -1,0 +1,41 @@
+%define gmp_version @GMP_VERS@
+%define gmp_rpmvers %{expand:%(echo @GMP_VERS@ | tr - _)} 
+
+Name:         @rpmprefix@@tool_target@-gmp
+Release:      @GMP_RPMREL@
+License:      GPL
+Group:        Development/Tools
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:	noarch
+
+Version:      	%gmp_rpmvers
+Summary:      	Cygwin gmp Libraries
+
+Source0:	ftp://cygwin.com/pub/cygwin/release/gmp/gmp-%{gmp_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/gmp/libgmp3/libgmp3-%{gmp_version}.tar.bz2
+Source2:	ftp://cygwin.com/pub/cygwin/release/gmp/libgmp-devel/libgmp-devel-%{gmp_version}.tar.bz2
+
+Provides:	@rpmprefix@@tool_target@-gmp-devel = %{version}-%{release}
+
+%description
+Cygwin gmp libraries.
+
+%prep
+%setup -c -q
+
+%build
+  rm -rf @tool_target@
+
+  # Setup sys-root (Usable for gcc >= 3.4)
+  mkdir -p @tool_target@/sys-root
+  ( cd @tool_target@/sys-root; %{__tar} xvjf %{SOURCE0})
+  ( cd @tool_target@/sys-root; %{__tar} xvjf %{SOURCE1})
+  ( cd @tool_target@/sys-root; %{__tar} xvjf %{SOURCE2})
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}
+  cp -a @tool_target@ $RPM_BUILD_ROOT%{_prefix}
+
+
