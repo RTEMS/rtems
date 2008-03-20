@@ -11,7 +11,6 @@ Group:		Development/Tools
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
-BuildRequires:	/usr/bin/star
 
 Version:      	%freebsd_rpmvers
 Summary:      	@tool_target@ Libraries
@@ -60,7 +59,7 @@ Source29: ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/@FREEBSD_VERS@-RELEASE
  %SOURCE15 %SOURCE16 %SOURCE17 %SOURCE18 %SOURCE19 \
  %SOURCE20 %SOURCE21 %SOURCE22 %SOURCE23 %SOURCE24 \
  %SOURCE25 %SOURCE26 %SOURCE27 %SOURCE28 %SOURCE29 \
- | /usr/bin/star xzf - lib usr/lib usr/include
+ | %{__tar} --unlink -pxzf - lib usr/lib usr/include
 
 %build
   # Setup sys-root (Usable for gcc >= 3.4)
