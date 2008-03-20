@@ -101,6 +101,30 @@ CLEANFILES += $(TARGET)-zlib.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-zlib.spec
 noinst_DATA += @rpmprefix@$(TARGET)-zlib.spec
 
+GMP_VERS = 4.2.1-1
+GMP_RPMREL = 0.20080320.1%{?dist}
+EXTRA_DIST += target-gmp.add
+EXTRA_DIST += gmp.add
+
+GMP_SUBPACKAGES = $(top_srcdir)/common/common.add
+GMP_SUBPACKAGES += $(srcdir)/gmp.add
+GMP_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+GMP_SUBPACKAGES += $(top_srcdir)/common/clean.add
+GMP_SUBPACKAGES += $(srcdir)/target-gmp.add
+
+$(TARGET)-gmp.spec.in: $(GMP_SUBPACKAGES) Makefile.am
+	cat $(GMP_SUBPACKAGES) | sed \
+	  -e "s/[@]GMP_VERS[@]/$(GMP_VERS)/g" \
+	  -e "s/[@]GMP_RPMREL[@]/$(GMP_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{gmp_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-gmp.spec.in
+CLEANFILES += $(TARGET)-gmp.spec.in
+	                      
+@rpmprefix@$(TARGET)-gmp.spec: $(TARGET)-gmp.spec.in
+	$(MKSPEC) $(TARGET)-gmp.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-gmp.spec
+noinst_DATA += @rpmprefix@$(TARGET)-gmp.spec
+
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
