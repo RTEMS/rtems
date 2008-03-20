@@ -353,7 +353,14 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 			/* at least one handler registered */
 			BSP_enable_irq_at_pic(i);
 		} else {
+/* Do NOT disable; there might be boards with cascaded
+ * interrupt controllers where the BSP (incorrectly) does
+ * not ignore the cascaded interrupts in BSP_disable_irq_at_pic()!
+ * Instead, we rely on BSP_setup_the_pic() for a good 
+ * initial configuration. 
+ * 
 			BSP_disable_irq_at_pic(i);
+ */
 		}
 	}
 

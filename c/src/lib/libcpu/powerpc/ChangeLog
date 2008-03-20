@@ -1,3 +1,12 @@
+2008-03-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/irq.c: don't disable irqs
+	at the interrupt controller (PIC) during initialization -- this
+	caused problems where some BSPs's BSP_disable_irq_at_pic() routine
+	did not ignore IRQ lines associated with cascaded PICs.
+	Rely on the BSP (BSP_setup_the_pic()) to provide a good
+	initial setup.
+
 2008-03-13	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/ppc_exc_asm_macros.h,
