@@ -26,6 +26,8 @@
 #include <rtems/bspIo.h>
 #endif
 
+#include <rtems/malloc.h>
+
 void bsp_libc_init( void *, uint32_t, int );
 
 /*
@@ -59,6 +61,12 @@ void bsp_pretasking_hook(void)
   printk( "HEAP start %x  size %x (%x bytes spared for sbrk)\n",
              BSP_heap_start, heap_size, heap_sbrk_spared);
 #endif    
+
+  /* Must install sbrk helpers since we rely on sbrk for giving
+   * us even the first chunk of memory (bsp_libc_init(heap start==NULL))
+   */
+
+  rtems_malloc_sbrk_helpers = &rtems_malloc_sbrk_helpers_table;
 
   bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
 
