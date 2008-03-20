@@ -7,11 +7,14 @@
  *  $Id$
  */
 
+#include <stdio.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/uart.h>
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
+#include <rtems/termiostypes.h>
+#include <termios.h>
 #include <assert.h>
 
 /*
@@ -25,6 +28,7 @@ struct uart_data
   int                 hwFlow;
   int                 baud;
   BSP_UartBreakCbRec  breakCallback;
+  int                 ioMode;
 };
 
 /*
@@ -526,8 +530,9 @@ static volatile char termios_tx_hold_valid_com[2]  = {0,0};
  * Set channel parameters
  */
 void
-BSP_uart_termios_set(int uart, void *ttyp)
+BSP_uart_termios_set(int uart, void *p)
 {
+  struct rtems_termios_tty *ttyp = p;
   unsigned char val;
   SANITY_CHECK(uart);
 
@@ -545,6 +550,8 @@ BSP_uart_termios_set(int uart, void *ttyp)
   termios_ttyp_com[uart]           = ttyp;
   termios_tx_hold_com[uart]        = 0;
   termios_tx_hold_valid_com[uart]  = 0;
+
+  uart_data[uart].ioMode           = ttyp->device.outputUsesInterrupts;
 
   return;
 }
@@ -615,11 +622,36 @@ BSP_uart_termios_write_com(int minor, const char *buf, int len)
   return 0;
 }
 
+int
+BSP_uart_termios_read_com(int uart)
+{
+  int     off = (int)0;
+  char    buf[40];
+  rtems_interrupt_level l;
+
+  /* read bytes */
+  while (( off < sizeof(buf) ) && ( uread(uart, LSR) & DR )) {
+    buf[off++] = uread(uart, RBR);
+  }
+
+  /* write out data */
+  if ( off > 0 ) {
+    rtems_termios_enqueue_raw_characters(termios_ttyp_com[uart], buf, off);
+  }
+
+  /* enable receive interrupts */
+  rtems_interrupt_disable(l);
+  uwrite(uart, IER, uread(uart, IER) | (RECEIVE_ENABLE | RECEIVER_LINE_ST_ENABLE));
+  rtems_interrupt_enable(l);
+
+  return ( EOF );
+}
+
 static void
 BSP_uart_termios_isr_com(int uart)
 {
   unsigned char buf[40];
-  unsigned char val;
+  unsigned char val, ier;
   int      off, ret, vect;
 
   off = 0;
@@ -693,9 +725,24 @@ BSP_uart_termios_isr_com(int uart)
 	  break;
 	case RECEIVER_DATA_AVAIL :
 	case CHARACTER_TIMEOUT_INDICATION:
-	  /* RX data ready */
-	  assert(off < sizeof(buf));
-	  buf[off++] = uread(uart, RBR);
+
+	  if ( uart_data[uart].ioMode == TERMIOS_TASK_DRIVEN )
+	    {
+	      /* ensure interrupts are enabled */
+	      if ( (ier = uread(uart,IER)) & RECEIVE_ENABLE )
+	        {
+	           /* disable interrupts and notify termios */
+	           ier &= ~(RECEIVE_ENABLE | RECEIVER_LINE_ST_ENABLE);
+	           uwrite(uart, IER, ier);
+	           rtems_termios_rxirq_occured(termios_ttyp_com[uart]);
+	        }
+	    }
+	  else
+	    {
+	      /* RX data ready */
+	      assert(off < sizeof(buf));
+	      buf[off++] = uread(uart, RBR);
+	    }
 	  break;
 	case RECEIVER_ERROR:
 	  /* RX error: eat character */

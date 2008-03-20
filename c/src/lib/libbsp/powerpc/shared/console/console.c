@@ -32,6 +32,7 @@ extern int close(int fd);
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
+#include <rtems/termiostypes.h>
 #include <termios.h>
 #include <bsp/uart.h>
 #include <rtems/bspIo.h>	/* printk */
@@ -46,6 +47,23 @@ extern int close(int fd);
 int BSPConsolePort = BSP_CONSOLE_PORT;
 
 int BSPBaseBaud    = BSP_UART_BAUD_BASE;
+
+/*
+ * TERMIOS_OUTPUT_MODE should be a 'bspopts.h/configure'-able option;
+ * we could even make it a link-time option (but that would require
+ * small changes)...
+ */
+#ifndef TERMIOS_OUTPUT_MODE
+#if 1
+#define TERMIOS_OUTPUT_MODE TERMIOS_IRQ_DRIVEN
+#else
+#define TERMIOS_OUTPUT_MODE TERMIOS_TASK_DRIVEN
+#endif
+#endif
+
+#if ! defined(USE_POLLED_IO) && (TERMIOS_OUTPUT_MODE == TERMIOS_POLLED)
+#define USE_POLLED_IO
+#endif
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -181,18 +199,22 @@ console_open(rtems_device_major_number major,
      conSetAttr,                        /* setAttributes */
      NULL,                              /* stopRemoteTx */
      NULL,                              /* startRemoteTx */
-     0                                  /* outputUsesInterrupts */
+     TERMIOS_POLLED                     /* outputUsesInterrupts */
   };
 #else
   { 
      console_first_open,                /* firstOpen */
      console_last_close,                /* lastClose */
+#if ( TERMIOS_OUTPUT_MODE == TERMIOS_TASK_DRIVEN )
+     BSP_uart_termios_read_com,         /* pollRead */
+#else
      NULL,                              /* pollRead */
+#endif
      BSP_uart_termios_write_com,        /* write */
      conSetAttr,                        /* setAttributes */
      NULL,                              /* stopRemoteTx */
      NULL,                              /* startRemoteTx */
-     1                                  /* outputUsesInterrupts */
+     TERMIOS_OUTPUT_MODE                /* outputUsesInterrupts */
   };
 #endif
 

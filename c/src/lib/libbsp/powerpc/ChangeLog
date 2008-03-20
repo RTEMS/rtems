@@ -1,5 +1,11 @@
 2008-03-19	Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/console/console.c, shared/console/uart.c,
+	shared/console/uart.h: added support for task-driven
+	console.
+
+2008-03-19	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/pretaskinghook.c: install pointer
 	to rtems_malloc_sbrk_helpers_table. This (and derived)
 	BSPs rely on sbrk delivering even the first/initial

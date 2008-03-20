@@ -25,6 +25,7 @@ void BSP_uart_polled_write(int uart, int val);
 int  BSP_uart_polled_read(int uart);
 void BSP_uart_termios_set(int uart, void *ttyp);
 int  BSP_uart_termios_write_com(int minor, const char *buf, int len);
+int  BSP_uart_termios_read_com (int minor);
 void BSP_uart_termios_isr_com1(void *unused);
 void BSP_uart_termios_isr_com2(void *unused);
 void BSP_uart_dbgisr_com1(void);
