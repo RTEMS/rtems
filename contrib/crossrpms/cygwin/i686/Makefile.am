@@ -125,6 +125,31 @@ CLEANFILES += $(TARGET)-gmp.spec.in
 CLEANFILES += @rpmprefix@$(TARGET)-gmp.spec
 noinst_DATA += @rpmprefix@$(TARGET)-gmp.spec
 
+
+MPFR_VERS = 2.2.1-1
+MPFR_RPMREL = 0.20080320.1%{?dist}
+EXTRA_DIST += target-mpfr.add
+EXTRA_DIST += mpfr.add
+
+MPFR_SUBPACKAGES = $(top_srcdir)/common/common.add
+MPFR_SUBPACKAGES += $(srcdir)/mpfr.add
+MPFR_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+MPFR_SUBPACKAGES += $(top_srcdir)/common/clean.add
+MPFR_SUBPACKAGES += $(srcdir)/target-mpfr.add
+
+$(TARGET)-mpfr.spec.in: $(MPFR_SUBPACKAGES) Makefile.am
+	cat $(MPFR_SUBPACKAGES) | sed \
+	  -e "s/[@]MPFR_VERS[@]/$(MPFR_VERS)/g" \
+	  -e "s/[@]MPFR_RPMREL[@]/$(MPFR_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{mpfr_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-mpfr.spec.in
+CLEANFILES += $(TARGET)-mpfr.spec.in
+	                      
+@rpmprefix@$(TARGET)-mpfr.spec: $(TARGET)-mpfr.spec.in
+	$(MKSPEC) $(TARGET)-mpfr.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-mpfr.spec
+noinst_DATA += @rpmprefix@$(TARGET)-mpfr.spec
+
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.17.50
