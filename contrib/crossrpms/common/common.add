@@ -18,5 +18,6 @@
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
 %define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
 %endif
 
