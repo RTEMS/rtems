@@ -1,3 +1,10 @@
+2008-03-19	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/pretaskinghook.c: install pointer
+	to rtems_malloc_sbrk_helpers_table. This (and derived)
+	BSPs rely on sbrk delivering even the first/initial
+	chunk of memory.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/linkcmds: Add wildcard to gcc_except_table section so
