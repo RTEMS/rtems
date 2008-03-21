@@ -1,3 +1,8 @@
+2008-03-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.c: type of 5th argument 
+	to pci_read_config_dword() is now uint32_t*.
+
 2008-03-17	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.c: Initialize VME Master

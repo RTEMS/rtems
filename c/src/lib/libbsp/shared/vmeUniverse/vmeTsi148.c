@@ -342,7 +342,7 @@
 #define BSP_PCI_CONFIG_IN_BYTE	pci_read_config_byte
 #endif
 
-typedef unsigned int pci_ulong;
+typedef uint32_t pci_ulong;
 
 #ifdef __BIG_ENDIAN__
 	static inline void st_be32( uint32_t *a, uint32_t v)
