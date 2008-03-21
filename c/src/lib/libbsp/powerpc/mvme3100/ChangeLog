@@ -1,10 +1,10 @@
-2007-03-20	Till Straumann <strauman@slac.stanford.edu>
+2008-03-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h, startup/bspstart.c: confdefs.h now wants
 	us to use BSP_INTERRUPT_STACK_SIZE instead of
 	CONFIGURE_INTERRUPT_STACK_MEMORY.
 
-2007-03-05	Till Straumann <strauman@slac.stanford.edu>
+2008-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* start/start.S, startup/bspstart.c: disable memory-select
 	errors early (in start.S) to avoid hangs due to speculative
@@ -14,7 +14,7 @@
 	result in a machine-check rather than stalling the machine.
 	Re-enable memory-select errors at this point.
 
-2007-03-05	Till Straumann <strauman@slac.stanford.edu>
+2008-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* Makefile.am: add e500/mmu.rel to libbsp_a_LIBADD.
 
