@@ -1,3 +1,9 @@
+2007-03-20	Till Straumann <strauman@slac.stanford.edu>
+
+	* include/bsp.h, startup/bspstart.c: confdefs.h now wants
+	us to use BSP_INTERRUPT_STACK_SIZE instead of
+	CONFIGURE_INTERRUPT_STACK_MEMORY.
+
 2007-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* start/start.S, startup/bspstart.c: disable memory-select

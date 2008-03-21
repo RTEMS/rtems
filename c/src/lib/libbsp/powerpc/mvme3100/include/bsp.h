@@ -28,8 +28,8 @@
  *   - Interrupt stack space is not minimum if defined.
  */
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
+ 
+#define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)
 
 /*
  * diagram illustrating the role of the configuration

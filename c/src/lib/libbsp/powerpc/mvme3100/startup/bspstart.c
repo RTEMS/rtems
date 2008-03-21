@@ -452,10 +452,6 @@ VpdBufRec          vpdData [] = {
 	 * they can use atexit()
 	 */
 
-#if 0
-	Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-/* FIXME */
-#endif
 	bsp_clicks_per_usec            = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
