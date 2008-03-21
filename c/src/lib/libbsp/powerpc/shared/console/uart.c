@@ -725,7 +725,6 @@ BSP_uart_termios_isr_com(int uart)
 	  break;
 	case RECEIVER_DATA_AVAIL :
 	case CHARACTER_TIMEOUT_INDICATION:
-
 	  if ( uart_data[uart].ioMode == TERMIOS_TASK_DRIVEN )
 	    {
 	      /* ensure interrupts are enabled */
@@ -741,7 +740,8 @@ BSP_uart_termios_isr_com(int uart)
 	    {
 	      /* RX data ready */
 	      assert(off < sizeof(buf));
-	      buf[off++] = uread(uart, RBR);
+	      while ( off < sizeof(buf) && ( DR & uread(uart, LSR) ) )
+	        buf[off++] = uread(uart, RBR);
 	    }
 	  break;
 	case RECEIVER_ERROR:
