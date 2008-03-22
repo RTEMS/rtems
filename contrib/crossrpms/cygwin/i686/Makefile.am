@@ -61,6 +61,10 @@ READLINE_VERS = 5.2.12-10
 READLINE_RPMREL = 0.20080322.1%{?dist}
 include ../readline.am
 
+TERMCAP_VERS = 20050421-1
+TERMCAP_RPMREL = 0.20080322.1%{?dist}
+include ../termcap.am
+
 ZLIB_VERS = 1.2.3-2
 ZLIB_RPMREL = 0.20080314.1%{?dist}
 include ../zlib.am
