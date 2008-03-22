@@ -55,101 +55,19 @@ noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 NCURSES_VERS = 5.5-3
 NCURSES_RPMREL = 0.20080321.1%{?dist}
-EXTRA_DIST += target-ncurses.add
-EXTRA_DIST += ncurses.add
-
-NCURSES_SUBPACKAGES = $(top_srcdir)/common/common.add
-NCURSES_SUBPACKAGES += $(srcdir)/ncurses.add
-NCURSES_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
-NCURSES_SUBPACKAGES += $(top_srcdir)/common/clean.add
-NCURSES_SUBPACKAGES += $(srcdir)/target-ncurses.add
-
-$(TARGET)-ncurses.spec.in: $(NCURSES_SUBPACKAGES) Makefile.am
-	cat $(NCURSES_SUBPACKAGES) | sed \
-	  -e "s/[@]NCURSES_VERS[@]/$(NCURSES_VERS)/g" \
-	  -e "s/[@]NCURSES_RPMREL[@]/$(NCURSES_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{ncurses_rpmvers},g" \
-	| $(MKSPEC0) > $(TARGET)-ncurses.spec.in
-CLEANFILES += $(TARGET)-ncurses.spec.in
-	                      
-@rpmprefix@$(TARGET)-ncurses.spec: $(TARGET)-ncurses.spec.in
-	$(MKSPEC) $(TARGET)-ncurses.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-ncurses.spec
-noinst_DATA += @rpmprefix@$(TARGET)-ncurses.spec
-
+include ../ncurses.am
 
 ZLIB_VERS = 1.2.3-2
 ZLIB_RPMREL = 0.20080314.1%{?dist}
-EXTRA_DIST += target-zlib.add
-EXTRA_DIST += zlib.add
-
-ZLIB_SUBPACKAGES = $(top_srcdir)/common/common.add
-ZLIB_SUBPACKAGES += $(srcdir)/zlib.add
-ZLIB_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
-ZLIB_SUBPACKAGES += $(top_srcdir)/common/clean.add
-ZLIB_SUBPACKAGES += $(srcdir)/target-zlib.add
-
-$(TARGET)-zlib.spec.in: $(ZLIB_SUBPACKAGES) Makefile.am
-	cat $(ZLIB_SUBPACKAGES) | sed \
-	  -e "s/[@]ZLIB_VERS[@]/$(ZLIB_VERS)/g" \
-	  -e "s/[@]ZLIB_RPMREL[@]/$(ZLIB_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{zlib_rpmvers},g" \
-	| $(MKSPEC0) > $(TARGET)-zlib.spec.in
-CLEANFILES += $(TARGET)-zlib.spec.in
-	                      
-@rpmprefix@$(TARGET)-zlib.spec: $(TARGET)-zlib.spec.in
-	$(MKSPEC) $(TARGET)-zlib.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-zlib.spec
-noinst_DATA += @rpmprefix@$(TARGET)-zlib.spec
+include ../zlib.am
 
 GMP_VERS = 4.2.1-1
 GMP_RPMREL = 0.20080320.1%{?dist}
-EXTRA_DIST += target-gmp.add
-EXTRA_DIST += gmp.add
-
-GMP_SUBPACKAGES = $(top_srcdir)/common/common.add
-GMP_SUBPACKAGES += $(srcdir)/gmp.add
-GMP_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
-GMP_SUBPACKAGES += $(top_srcdir)/common/clean.add
-GMP_SUBPACKAGES += $(srcdir)/target-gmp.add
-
-$(TARGET)-gmp.spec.in: $(GMP_SUBPACKAGES) Makefile.am
-	cat $(GMP_SUBPACKAGES) | sed \
-	  -e "s/[@]GMP_VERS[@]/$(GMP_VERS)/g" \
-	  -e "s/[@]GMP_RPMREL[@]/$(GMP_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{gmp_rpmvers},g" \
-	| $(MKSPEC0) > $(TARGET)-gmp.spec.in
-CLEANFILES += $(TARGET)-gmp.spec.in
-	                      
-@rpmprefix@$(TARGET)-gmp.spec: $(TARGET)-gmp.spec.in
-	$(MKSPEC) $(TARGET)-gmp.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-gmp.spec
-noinst_DATA += @rpmprefix@$(TARGET)-gmp.spec
-
+include ../gmp.am
 
 MPFR_VERS = 2.2.1-1
 MPFR_RPMREL = 0.20080320.1%{?dist}
-EXTRA_DIST += target-mpfr.add
-EXTRA_DIST += mpfr.add
-
-MPFR_SUBPACKAGES = $(top_srcdir)/common/common.add
-MPFR_SUBPACKAGES += $(srcdir)/mpfr.add
-MPFR_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
-MPFR_SUBPACKAGES += $(top_srcdir)/common/clean.add
-MPFR_SUBPACKAGES += $(srcdir)/target-mpfr.add
-
-$(TARGET)-mpfr.spec.in: $(MPFR_SUBPACKAGES) Makefile.am
-	cat $(MPFR_SUBPACKAGES) | sed \
-	  -e "s/[@]MPFR_VERS[@]/$(MPFR_VERS)/g" \
-	  -e "s/[@]MPFR_RPMREL[@]/$(MPFR_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{mpfr_rpmvers},g" \
-	| $(MKSPEC0) > $(TARGET)-mpfr.spec.in
-CLEANFILES += $(TARGET)-mpfr.spec.in
-	                      
-@rpmprefix@$(TARGET)-mpfr.spec: $(TARGET)-mpfr.spec.in
-	$(MKSPEC) $(TARGET)-mpfr.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-mpfr.spec
-noinst_DATA += @rpmprefix@$(TARGET)-mpfr.spec
+include ../mpfr.add
 
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
