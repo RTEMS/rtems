@@ -1,0 +1,21 @@
+EXTRA_DIST += target-termcap.add
+EXTRA_DIST += termcap.add
+
+TERMCAP_SUBPACKAGES = $(top_srcdir)/common/common.add
+TERMCAP_SUBPACKAGES += $(srcdir)/termcap.add
+TERMCAP_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+TERMCAP_SUBPACKAGES += $(top_srcdir)/common/clean.add
+TERMCAP_SUBPACKAGES += $(srcdir)/target-termcap.add
+
+$(TARGET)-termcap.spec.in: $(TERMCAP_SUBPACKAGES) Makefile.am
+	cat $(TERMCAP_SUBPACKAGES) | sed \
+	  -e "s/[@]TERMCAP_VERS[@]/$(TERMCAP_VERS)/g" \
+	  -e "s/[@]TERMCAP_RPMREL[@]/$(TERMCAP_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{termcap_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-termcap.spec.in
+CLEANFILES += $(TARGET)-termcap.spec.in
+	                      
+@rpmprefix@$(TARGET)-termcap.spec: $(TARGET)-termcap.spec.in
+	$(MKSPEC) $(TARGET)-termcap.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-termcap.spec
+noinst_DATA += @rpmprefix@$(TARGET)-termcap.spec
