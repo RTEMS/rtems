@@ -40,6 +40,13 @@ RTEMS_BSPOPTS_HELP([IDE_USE_SECONDARY_INTERFACE],
  - and you have at least one disk attached to this interface  
  - and you do want to access disks attached to this interface])
 
+#define BSP_PRESS_KEY_FOR_RESET 1
+RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
+[Determines, whether this BSP will wait for a key to be pressed 
+ before rebooting the PC.  This is useful for unattended PC deployments
+])
+
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])

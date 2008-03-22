@@ -154,7 +154,7 @@ SYM (_establish_stack):
 SYM (zero_bss):
 	cld				# make direction flag count up
 	movl	$ SYM (_end), ecx	# find end of .bss
-	movl	$ SYM (_bss_start), edi	# edi = beginning of .bss
+	movl	$ SYM (__bss_start), edi # edi = beginning of .bss
 	subl	edi, ecx		# ecx = size of .bss in bytes
 	shrl	ecx			# size of .bss in longs
 	shrl	ecx
