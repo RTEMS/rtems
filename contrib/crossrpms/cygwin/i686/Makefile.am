@@ -57,6 +57,10 @@ NCURSES_VERS = 5.5-3
 NCURSES_RPMREL = 0.20080321.1%{?dist}
 include ../ncurses.am
 
+READLINE_VERS = 5.2.12-10
+READLINE_RPMREL = 0.20080322.1%{?dist}
+include ../readline.am
+
 ZLIB_VERS = 1.2.3-2
 ZLIB_RPMREL = 0.20080314.1%{?dist}
 include ../zlib.am
