@@ -67,7 +67,7 @@ include ../gmp.am
 
 MPFR_VERS = 2.2.1-1
 MPFR_RPMREL = 0.20080320.1%{?dist}
-include ../mpfr.add
+include ../mpfr.am
 
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
