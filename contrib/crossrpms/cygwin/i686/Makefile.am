@@ -54,28 +54,29 @@ CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
 noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
 
 NCURSES_VERS = 5.5-3
-NCURSES_RPMREL = 0.20070726.2%{?dist}
-EXTRA_DIST += target-libncurses-devel.add
-EXTRA_DIST += libncurses-devel.add
+NCURSES_RPMREL = 0.20080321.1%{?dist}
+EXTRA_DIST += target-ncurses.add
+EXTRA_DIST += ncurses.add
 
 NCURSES_SUBPACKAGES = $(top_srcdir)/common/common.add
-NCURSES_SUBPACKAGES += $(srcdir)/libncurses-devel.add
+NCURSES_SUBPACKAGES += $(srcdir)/ncurses.add
 NCURSES_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
 NCURSES_SUBPACKAGES += $(top_srcdir)/common/clean.add
-NCURSES_SUBPACKAGES += $(srcdir)/target-libncurses-devel.add
+NCURSES_SUBPACKAGES += $(srcdir)/target-ncurses.add
 
-$(TARGET)-libncurses-devel.spec.in: $(NCURSES_SUBPACKAGES) Makefile.am
+$(TARGET)-ncurses.spec.in: $(NCURSES_SUBPACKAGES) Makefile.am
 	cat $(NCURSES_SUBPACKAGES) | sed \
 	  -e "s/[@]NCURSES_VERS[@]/$(NCURSES_VERS)/g" \
 	  -e "s/[@]NCURSES_RPMREL[@]/$(NCURSES_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{libncurses_devel_rpmvers},g" \
-	| $(MKSPEC0) > $(TARGET)-libncurses-devel.spec.in
-CLEANFILES += $(TARGET)-libncurses-devel.spec.in
+	  -e "s,%{gcc_rpmvers},%{ncurses_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-ncurses.spec.in
+CLEANFILES += $(TARGET)-ncurses.spec.in
 	                      
-@rpmprefix@$(TARGET)-libncurses-devel.spec: $(TARGET)-libncurses-devel.spec.in
-	$(MKSPEC) $(TARGET)-libncurses-devel.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-libncurses-devel.spec
-noinst_DATA += @rpmprefix@$(TARGET)-libncurses-devel.spec
+@rpmprefix@$(TARGET)-ncurses.spec: $(TARGET)-ncurses.spec.in
+	$(MKSPEC) $(TARGET)-ncurses.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-ncurses.spec
+noinst_DATA += @rpmprefix@$(TARGET)-ncurses.spec
+
 
 ZLIB_VERS = 1.2.3-2
 ZLIB_RPMREL = 0.20080314.1%{?dist}
