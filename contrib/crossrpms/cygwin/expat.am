@@ -1,0 +1,21 @@
+EXTRA_DIST += target-expat.add
+EXTRA_DIST += expat.add
+
+EXPAT_SUBPACKAGES = $(top_srcdir)/common/common.add
+EXPAT_SUBPACKAGES += $(srcdir)/expat.add
+EXPAT_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+EXPAT_SUBPACKAGES += $(top_srcdir)/common/clean.add
+EXPAT_SUBPACKAGES += $(srcdir)/target-expat.add
+
+$(TARGET)-expat.spec.in: $(EXPAT_SUBPACKAGES) Makefile.am
+	cat $(EXPAT_SUBPACKAGES) | sed \
+	  -e "s/[@]EXPAT_VERS[@]/$(EXPAT_VERS)/g" \
+	  -e "s/[@]EXPAT_RPMREL[@]/$(EXPAT_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{expat_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-expat.spec.in
+CLEANFILES += $(TARGET)-expat.spec.in
+	                      
+@rpmprefix@$(TARGET)-expat.spec: $(TARGET)-expat.spec.in
+	$(MKSPEC) $(TARGET)-expat.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-expat.spec
+noinst_DATA += @rpmprefix@$(TARGET)-expat.spec

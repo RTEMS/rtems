@@ -1,0 +1,21 @@
+EXTRA_DIST += target-w32api.add
+EXTRA_DIST += w32api.add
+
+W32API_SUBPACKAGES = $(top_srcdir)/common/common.add
+W32API_SUBPACKAGES += $(srcdir)/w32api.add
+W32API_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
+W32API_SUBPACKAGES += $(top_srcdir)/common/clean.add
+W32API_SUBPACKAGES += $(srcdir)/target-w32api.add
+
+$(TARGET)-w32api.spec.in: $(W32API_SUBPACKAGES) Makefile.am
+	cat $(W32API_SUBPACKAGES) | sed \
+	  -e "s/[@]W32API_VERS[@]/$(W32API_VERS)/g" \
+	  -e "s/[@]W32API_RPMREL[@]/$(W32API_RPMREL)/g" \
+	  -e "s,%{gcc_rpmvers},%{w32api_rpmvers},g" \
+	| $(MKSPEC0) > $(TARGET)-w32api.spec.in
+CLEANFILES += $(TARGET)-w32api.spec.in
+	                      
+@rpmprefix@$(TARGET)-w32api.spec: $(TARGET)-w32api.spec.in
+	$(MKSPEC) $(TARGET)-w32api.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-w32api.spec
+noinst_DATA += @rpmprefix@$(TARGET)-w32api.spec
