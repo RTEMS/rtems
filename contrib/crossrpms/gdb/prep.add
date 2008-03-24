@@ -4,5 +4,6 @@
 %setup -q -D -T -n %{name}-%{version} -a0
 cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
+%{?PATCH1:%patch1 -p1}
 cd ..
 
