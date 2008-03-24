@@ -1,4 +1,7 @@
 %install
+%if "%{_prefix}" != "/usr"
+  export PATH="%{_bindir}:${PATH}"
+%endif
   rm -rf $RPM_BUILD_ROOT
 
   cd build
