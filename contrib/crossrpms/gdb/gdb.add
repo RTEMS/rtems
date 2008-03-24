@@ -10,6 +10,10 @@ License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if "%{_build}" != "%{_host}"
+BuildRequires:  @rpmprefix@%{_host}-gcc
+%endif
+
 %if "%{gdb_version}" >= "6.6"
 # suse
 %if "%{?suse}"
