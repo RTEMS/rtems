@@ -1,3 +1,8 @@
+2008-03-25	Till Straumann <strauman@slac.stanford.edu>
+
+	* shttpd/log.c: Activate SPLIT_SNPRINTF for gcc <= 4.2.3 and
+	  coldfire.
+
 2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/cmds.c: Directly register the command structure to
