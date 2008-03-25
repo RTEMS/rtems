@@ -13,6 +13,12 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
 %define gdb_version 6.7.1
 %define gdb_rpmvers %{expand:%(echo 6.7.1 | tr - _)} 
 
@@ -20,10 +26,14 @@ Name:		rtems-4.9-sh-rtems4.9-gdb
 Summary:	Gdb for target sh-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:  rtems-4.9-%{_host}-gcc
+%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
@@ -52,7 +62,8 @@ Requires:	rtems-4.9-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.7.1"
-Patch0:		gdb-6.7.1-rtems4.9-20071216.diff
+Patch0:		gdb-6.7.1-rtems4.9-20080324.diff
+Patch1:		gdb-6.7.1-gdb-6.7.90-config.diff
 %endif
 
 %description
@@ -63,9 +74,11 @@ GDB for target sh-rtems4.9
 %setup -q -D -T -n %{name}-%{version} -a0
 cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
+%{?PATCH1:%patch1 -p1}
 cd ..
 
 %build
+  export PATH="%{_bindir}:${PATH}"
   mkdir -p build
   cd build
   CFLAGS="$RPM_OPT_FLAGS" \
@@ -90,6 +103,7 @@ cd ..
   cd ..
 
 %install
+  export PATH="%{_bindir}:${PATH}"
   rm -rf $RPM_BUILD_ROOT
 
   cd build
