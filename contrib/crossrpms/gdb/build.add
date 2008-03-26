@@ -4,6 +4,9 @@
 %endif
   mkdir -p build
   cd build
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
