@@ -9,7 +9,6 @@
 # %endif
 
 %description -n @rpmprefix@@tool_target@-gdb
-
 GNU gdb targetting @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-gdb
