@@ -9,7 +9,6 @@
 # %endif
 
 %description -n @rpmprefix@@tool_target@-binutils
-
 GNU binutils targetting @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-binutils
