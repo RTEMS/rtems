@@ -1,3 +1,7 @@
+2008-03-25	Till Straumann <strauman@slac.stanford.edu>
+
+	* include/bsp.h: declare BSP_commandline_string.
+
 2008-03-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h, startup/bspstart.c: confdefs.h now wants
