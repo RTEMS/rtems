@@ -39,3 +39,9 @@ Cygwin ncurses libraries.
   mkdir -p $RPM_BUILD_ROOT%{_prefix}
   cp -a @tool_target@ $RPM_BUILD_ROOT%{_prefix}
 
+  sed \
+    -e "s,^prefix=.*$,prefix=$RPM_BUILD_ROOT%{_prefix}/@tool_target@/sys-root/usr," \
+  < @tool_target@/sys-root/etc/postinstall/libncurses-devel.sh \
+  > postinst.sh
+
+  /bin/sh -x ./postinst.sh
