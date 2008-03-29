@@ -1,5 +1,9 @@
 2008-03-29	Chris Johns <chrisj@rtems.org>
 
+	* networking/testing.t: Cleaned up the patch from Ian.
+
+2008-03-29	Chris Johns <chrisj@rtems.org>
+
 	* networking/testing.t: Patch from Ian Caddy to document the
 	routes debug information.
 
