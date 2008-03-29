@@ -4,3 +4,6 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 Patch0:		gdb-6.7.1-rtems4.9-20080324.diff
 Patch1:		gdb-6.7.1-gdb-6.7.90-config.diff
 %endif
+%if "%{gdb_version}" == "6.8"
+Patch0:		gdb-6.8-rtems4.9-20080329.diff
+%endif
