@@ -1,3 +1,9 @@
+2008-03-29	Chris Johns <chrisj@rtems.org>
+
+	* librpc/include/rpc/clnt.h: Added the missing __BEGIN_DECLS as
+	reported to the mailing list by Pierre Kestener
+	(pierre.kestener@cea.fr).
+
 2008-03-25	Till Straumann <strauman@slac.stanford.edu>
 
 	* shttpd/log.c: Activate SPLIT_SNPRINTF for gcc <= 4.2.3 and

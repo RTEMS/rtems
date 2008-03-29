@@ -271,6 +271,7 @@ __END_DECLS
 /*
  * Added for compatibility to old rpc 4.0. Obsoleted by clnt_vc_create().
  */
+__BEGIN_DECLS
 extern CLIENT *clntunix_create(struct sockaddr_un *,
 			       u_long, u_long, int *, u_int, u_int);
 __END_DECLS
