@@ -1,3 +1,8 @@
+2008-03-29	Chris Johns <chrisj@rtems.org>
+
+	* networking/testing.t: Patch from Ian Caddy to document the
+	routes debug information.
+
 2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/clock.t: Refactored rtems_clock_get into 5 methods which
