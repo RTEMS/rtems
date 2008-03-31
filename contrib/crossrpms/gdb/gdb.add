@@ -21,10 +21,11 @@ BuildRequires: libexpat-devel
 BuildRequires: expat
 %endif
 %else
-# fedora/redhat 
-BuildRequires:	expat-devel
+# fedora/redhat/cygwin
+BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
+
 %if %build_infos
 # Required for building the infos
 BuildRequires:	/sbin/install-info
