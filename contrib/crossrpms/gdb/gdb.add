@@ -34,8 +34,14 @@ BuildRequires:	texinfo >= 4.2
 %if "@tool_target@" == "sparc-rtems4.9"
 BuildConflicts:	libtermcap-devel termcap-devel
 %endif
-BuildRequires:  readline-devel
-BuildRequires:	ncurses-devel
+%if "%{gdb_version}" < "6.6"
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}termcap-devel
+%endif
+%endif
+BuildRequires:  %{_host_rpmprefix}readline-devel
+BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
 %if %build_infos
 
 Requires:	@rpmprefix@gdb-common
