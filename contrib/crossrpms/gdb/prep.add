@@ -7,3 +7,7 @@ cd gdb-%{gdb_version}
 %{?PATCH1:%patch1 -p1}
 cd ..
 
+%if "%{gdb_version}" >= "6.8"
+# Force using a system-provided libreadline
+rm -f gdb-%{gdb_version}/readline/configure
+%endif
