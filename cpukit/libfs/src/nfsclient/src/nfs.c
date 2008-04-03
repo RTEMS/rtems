@@ -68,16 +68,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-
 #include <nfs_prot.h>
 #include <mount_prot.h>
 
 #include "rpcio.h"
-
-#ifdef HAVE_CEXP_H
-#include <cexpHelp.h>
-#endif
-
 
 /* Configurable parameters */
 

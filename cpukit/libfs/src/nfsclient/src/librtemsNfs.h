@@ -70,11 +70,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-
-#ifdef HAVE_CEXP_H
-#include <cexpHelp.h>
-#endif
-
 /* RPCIO driver interface.
  * If you need RPCIO for other purposes than NFS
  * you may want to include <rpcio.h>

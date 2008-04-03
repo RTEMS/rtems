@@ -1,3 +1,15 @@
+2008-04-03	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/nfsclient/src/librtemsNfs.h,
+	libfs/src/nfsclient/src/nfs.c: Remove CEXP references. CEXP is
+	external to RTEMS and even if in the cpukit it should not cross
+	reference in this way.
+	* libmisc/shell/shell_getchar.c: New. Taken from the monitor.
+	* libmisc/Makefile.am: Add shell_getchar.c and clean up a little
+	in the shell area.
+	* libmisc/shell/shell.c, libmisc/shell/shell.h: Add line editting
+	support.
+
 2008-03-29	Chris Johns <chrisj@rtems.org>
 
 	* librpc/include/rpc/clnt.h: Added the missing __BEGIN_DECLS as

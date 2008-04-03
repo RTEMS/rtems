@@ -29,6 +29,31 @@
 extern "C" {
 #endif
 
+/*
+ * Some key labels to define special keys.
+ */
+
+#define RTEMS_SHELL_KEYS_EXTENDED    (0x8000)
+#define RTEMS_SHELL_KEYS_NORMAL_MASK (0x00ff)
+#define RTEMS_SHELL_KEYS_INS         (0)
+#define RTEMS_SHELL_KEYS_DEL         (1)
+#define RTEMS_SHELL_KEYS_UARROW      (2)
+#define RTEMS_SHELL_KEYS_DARROW      (3)
+#define RTEMS_SHELL_KEYS_LARROW      (4)
+#define RTEMS_SHELL_KEYS_RARROW      (5)
+#define RTEMS_SHELL_KEYS_HOME        (6)
+#define RTEMS_SHELL_KEYS_END         (7)
+#define RTEMS_SHELL_KEYS_F1          (8)
+#define RTEMS_SHELL_KEYS_F2          (9)
+#define RTEMS_SHELL_KEYS_F3          (10)
+#define RTEMS_SHELL_KEYS_F4          (11)
+#define RTEMS_SHELL_KEYS_F5          (12)
+#define RTEMS_SHELL_KEYS_F6          (13)
+#define RTEMS_SHELL_KEYS_F7          (14)
+#define RTEMS_SHELL_KEYS_F8          (15)
+#define RTEMS_SHELL_KEYS_F9          (16)
+#define RTEMS_SHELL_KEYS_F10         (17)
+
 typedef int (*rtems_shell_command_t)(int argc,char * argv[]);
 
 struct rtems_shell_cmd_tt;
@@ -47,6 +72,12 @@ typedef struct {
   char            *name;
   char            *alias;
 } rtems_shell_alias_t;
+
+/*
+ * The return value has RTEMS_SHELL_KEYS_EXTENDED set if the key
+ * is extended, ie a special key.
+ */
+unsigned int rtems_shell_getchar(FILE *in);
 
 rtems_shell_cmd_t * rtems_shell_lookup_cmd(char * cmd);
 

@@ -79,11 +79,291 @@ rtems_shell_env_t *rtems_shell_init_env(
 /*
  *  Get a line of user input with modest features
  */
+int rtems_shell_line_editor(
+  char       *cmds[],
+  int         count,
+  int         size,
+  const char *prompt,
+  FILE       *in,
+  FILE       *out
+)
+{
+  unsigned int extended_key;
+  char         c;
+  int          col;
+  int          last_col;
+  int          output;
+  char         line[size];
+  char         new_line[size];
+  int          up;
+  int          cmd = -1;
+  int          inserting = 1;
+  
+  output = (out && isatty(fileno(in)));
+
+  col = last_col = 0;
+  
+  tcdrain(fileno(in));
+  if (out)
+    tcdrain(fileno(out));
+
+  if (output && prompt)
+    fprintf(out, "\r%s", prompt);
+  
+  line[0] = 0;
+  new_line[0] = 0;
+  
+  for (;;) {
+    
+    if (output)
+      fflush(out);
+
+    extended_key = rtems_shell_getchar(in);
+
+    if (extended_key == EOF)
+      return -2;
+    
+    c = extended_key & RTEMS_SHELL_KEYS_NORMAL_MASK;
+    
+    /*
+     * Make the extended_key usable as a boolean.
+     */
+    extended_key &= ~RTEMS_SHELL_KEYS_NORMAL_MASK;
+    
+    up = 0;
+    
+    if (extended_key)
+    {
+      switch (c)
+      {
+        case RTEMS_SHELL_KEYS_END:
+          if (output)
+            fprintf(out,line + col);
+          col = (int) strlen (line);
+          break;
+
+        case RTEMS_SHELL_KEYS_HOME:
+          if (output) {
+            if (prompt)
+              fprintf(out,"\r%s", prompt);
+          }
+          col = 0;
+          break;
+
+        case RTEMS_SHELL_KEYS_LARROW:
+          if (col > 0)
+          {
+            col--;
+            if (output)
+              fputc('\b', out);
+          }
+          break;
+
+          case RTEMS_SHELL_KEYS_RARROW:
+            if ((col < size) && (line[col] != '\0'))
+            {
+              if (output)
+                fprintf(out, "%c", line[col]);
+              col++;
+            }
+            break;
+
+        case RTEMS_SHELL_KEYS_UARROW:
+          if ((cmd >= (count - 1)) || (strlen(cmds[cmd + 1]) == 0)) {
+            if (output)
+              fputc('\x7', out);
+            break;
+          }
+
+          up = 1;
+
+          /* drop through */
+        case RTEMS_SHELL_KEYS_DARROW:
+          
+        {
+          int last_cmd = cmd;
+          int clen = strlen (line);
+
+          if (prompt)
+            clen += strlen(prompt);
+          
+          if (up) {
+            cmd++;
+          } else {
+            if (cmd < 0) {
+              if (output)
+                fprintf(out, "\x7");
+              break;
+            }
+            else
+              cmd--;
+          }
+
+          if ((last_cmd < 0) || (strcmp(cmds[last_cmd], line) != 0))
+            memcpy (new_line, line, size);
+
+          if (cmd < 0)
+            memcpy (line, new_line, size);
+          else
+            memcpy (line, cmds[cmd], size);
+          
+          col = strlen (line);
+          
+          if (output) {
+            fprintf(out,"\r%*c", clen, ' ');
+            fprintf(out,"\r%s%s", prompt, line);
+          }
+          else {
+            if (output)
+              fputc('\x7', out);
+          }
+        }
+        break;
+
+        case RTEMS_SHELL_KEYS_DEL:
+          if (line[col] != '\0')
+          {
+            int end;
+            int bs;
+            strcpy (&line[col], &line[col + 1]);
+            if (output) {
+              fprintf(out,"\r%s%s ", prompt, line);
+              end = (int) strlen (line);
+              for (bs = 0; bs < ((end - col) + 1); bs++)
+                fputc('\b', out);
+            }
+          }
+          break;
+
+        case RTEMS_SHELL_KEYS_INS:
+          inserting = inserting ? 0 : 1;
+          break;
+      }
+    }
+    else
+    {
+      switch (c)
+      {
+        case 1:/*Control-a*/
+          if (output) {
+            if (prompt)
+              fprintf(out,"\r%s", prompt);
+          }
+          col = 0;
+          break;
+          
+        case 5:/*Control-e*/
+          if (output)
+            fprintf(out,line + col);
+          col = (int) strlen (line);
+          break;
+
+        case 11:/*Control-k*/
+          if (line[col]) {
+            if (output) {
+              int end = strlen(line);
+              int bs;
+              fprintf(out,"%*c", end - col, ' ');
+              for (bs = 0; bs < (end - col); bs++)
+                fputc('\b', out);
+            }
+            line[col] = '\0';
+          }
+          break;
+          
+        case 0x04:/*Control-d*/
+          if (strlen(line))
+            break;
+        case EOF:
+          if (output)
+            fputc(out, '\n');
+          return -2;
+        
+        case '\f':
+          if (output) {
+            int end;
+            int bs;
+            fputc('\f',out);
+            fprintf(out,"\r%s%s", prompt, line);
+            end = (int) strlen (line);
+            for (bs = 0; bs < (end - col); bs++)
+              fputc('\b', out);
+          }
+          break;
+
+        case '\b':
+        case '\x7e':
+        case '\x7f':
+          if (col > 0)
+          {
+            int bs;
+            col--;
+            strcpy (line + col, line + col + 1);
+            if (output) {
+              fprintf(out,"\b%s \b", line + col);
+              for (bs = 0; bs < ((int) strlen (line) - col); bs++)
+                fputc('\b', out);
+            }
+          }
+          break;
+
+        case '\n':
+        case '\r':
+        {
+          /*
+           * Process the command.
+           */
+          if (output)
+            fprintf(out,"\n");
+          
+          /*
+           * Only process the command if we have a command and it is not
+           * repeated in the history.
+           */
+          if (strlen(line) == 0) {
+            cmd = -1;
+          } else {
+            if ((cmd < 0) || (strcmp(line, cmds[cmd]) != 0)) {
+              if (count > 1)
+                memmove(cmds[1], cmds[0], (count - 1) * size);
+              memmove (cmds[0], line, size);
+              cmd = 0;
+            }
+          }
+        }
+        return cmd;
+
+        default:
+          if ((col < (size - 1)) && (c >= ' ') && (c <= 'z')) {
+            int end = strlen (line);
+            if (inserting && (col < end) && (end < size)) {
+              int ch, bs;
+              for (ch = end + 1; ch > col; ch--)
+                line[ch] = line[ch - 1];
+              if (output) {
+                fprintf(out, line + col);
+                for (bs = 0; bs < (end - col + 1); bs++)
+                  fputc('\b', out);
+              }
+            }
+            line[col++] = c;
+            if (col > end)
+              line[col] = '\0';
+            if (output)
+              fputc(c, out);
+          }
+          break;
+      }
+    }
+  }
+  return -2;
+}
+
 int rtems_shell_scanline(
-  char  *line,
-  int    size,
-  FILE  *in,
-  FILE  *out
+  char *line,
+  int   size,
+  FILE *in,
+  FILE *out
 )
 {
   int c;
@@ -104,16 +384,8 @@ int rtems_shell_scanline(
     line[col] = 0;
     c = fgetc(in);
     switch (c) {
-      case 0x04:/*Control-d*/
-        if (col)
-          break;
       case EOF:
         return 0;
-      case '\f':
-        if (doEcho)
-          fputc('\f',out);
-      case 0x03:/*Control-C*/
-        line[0] = 0;
       case '\n':
       case '\r':
         if (doEcho)
@@ -148,7 +420,7 @@ int rtems_shell_scanline(
      }
   }
 }
-
+  
 /* ----------------------------------------------- *
  * - The shell TASK
  * Poor but enough..
@@ -363,19 +635,39 @@ rtems_task rtems_shell_task(rtems_task_argument task_argument)
   rtems_task_delete( RTEMS_SELF );
 }
 
-#define RTEMS_SHELL_MAXIMUM_ARGUMENTS 128
+void rtems_shell_get_prompt(
+  rtems_shell_env_t *shell_env,
+  char              *prompt,
+  int                size)
+{
+  char curdir[256];
+  
+  /* XXX: show_prompt user adjustable */
+  getcwd(curdir,sizeof(curdir));
+  snprintf(prompt, size - 1, "%s%s[%s] %c ",
+          ((shell_env->taskname) ? shell_env->taskname : ""),
+          ((shell_env->taskname) ? " " : ""),
+          curdir,
+          geteuid()?'$':'#');
+}
+
+#define RTEMS_SHELL_MAXIMUM_ARGUMENTS (128)
+#define RTEMS_SHELL_CMD_SIZE          (128)
+#define RTEMS_SHELL_CMD_COUNT         (32)
+#define RTEMS_SHELL_PROMPT_SIZE       (128)
 
 rtems_boolean rtems_shell_main_loop(
   rtems_shell_env_t *shell_env_arg
-)
+                                    )
 {
   rtems_shell_env_t *shell_env;
   rtems_shell_cmd_t *shell_cmd;
   rtems_status_code  sc;
   struct termios     term;
-  char               curdir[256];
-  char               cmd[256];
-  char               last_cmd[256]; /* to repeat 'r' */
+  char              *prompt = NULL;
+  int                cmd;
+  int                cmd_count = 1; /* assume a script and so only 1 command line */
+  char              *cmds[RTEMS_SHELL_CMD_COUNT];
   int                argc;
   char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
   rtems_boolean      result = TRUE;
@@ -384,10 +676,12 @@ rtems_boolean rtems_shell_main_loop(
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
 
+  memset(cmds, 0, sizeof(cmds));
+  
   rtems_shell_initialize_command_set();
 
   shell_env               = 
-  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
+    rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
  
   /*
    * @todo chrisj
@@ -404,14 +698,14 @@ rtems_boolean rtems_shell_main_loop(
 
   setuid(0);
   setgid(0);
-  rtems_current_user_env->euid =
-  rtems_current_user_env->egid = 0;
+
+  rtems_current_user_env->euid = rtems_current_user_env->egid = 0;
 
   fileno(stdout);
 
   /* fprintf( stderr, 
      "-%s-%s-\n", shell_env->input, shell_env->output );
-   */
+  */
 
   if (shell_env->output && strcmp(shell_env->output, "stdout") != 0) {
     if (strcmp(shell_env->output, "stderr") == 0) {
@@ -460,111 +754,133 @@ rtems_boolean rtems_shell_main_loop(
                 "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
       }
     }
+    cmd_count = RTEMS_SHELL_CMD_COUNT;
+    prompt = malloc(RTEMS_SHELL_PROMPT_SIZE);
+    if (!prompt)
+        fprintf(stderr,
+                "shell:cannot allocate prompt memory\n");
   }
 
   setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
   setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
 
   rtems_shell_initialize_command_set();
-  do {
-    /* Set again root user and root filesystem, side effect of set_priv..*/
-    sc = rtems_libio_set_private_env();
-    if (sc != RTEMS_SUCCESSFUL) {
-      rtems_error(sc,"rtems_libio_set_private_env():");
-      result = FALSE;
-      break;
+  
+  /*
+   * Allocate the command line buffers.
+   */
+  cmds[0] = calloc (cmd_count, RTEMS_SHELL_CMD_SIZE);
+  if (!cmds[0]) {
+    fprintf(stderr, "no memory for command line buffers\n" );
+  }
+  else {
+
+    memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
+
+    for (cmd = 1; cmd < cmd_count; cmd++) {
+      cmds[cmd] = cmds[cmd - 1] + RTEMS_SHELL_CMD_SIZE;
     }
-    if (input_file || !rtems_shell_login(stdin,stdout))  {
-      const char *c;
-      strcpy(last_cmd,"");
-      strcpy(cmd,"");
-      if (!input_file) {
-        rtems_shell_cat_file(stdout,"/etc/motd");
-        fprintf(stdout, "\n"
-                "RTEMS SHELL (Ver.1.0-FRC):%s. " \
-                __DATE__". 'help' to list commands.\n",
-                shell_env->devname);
+    
+    do {
+      /* Set again root user and root filesystem, side effect of set_priv..*/
+      sc = rtems_libio_set_private_env();
+      if (sc != RTEMS_SUCCESSFUL) {
+        rtems_error(sc,"rtems_libio_set_private_env():");
+        result = FALSE;
+        break;
       }
-      chdir("/"); /* XXX: chdir to getpwent homedir */
-      shell_env->exit_shell = FALSE;
-      for (;;) {
-        /* Prompt section */
+      if (input_file || !rtems_shell_login(stdin,stdout))  {
+        const char *c;
+        memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
         if (!input_file) {
-          /* XXX: show_prompt user adjustable */
-          getcwd(curdir,sizeof(curdir));
-          fprintf(stdout, "%s%s[%s] %c ",
-                  ((shell_env->taskname) ? shell_env->taskname : ""),
-                  ((shell_env->taskname) ? " " : ""),
-                  curdir,
-                  geteuid()?'$':'#');
+          rtems_shell_cat_file(stdout,"/etc/motd");
+          fprintf(stdout, "\n"
+                  "RTEMS SHELL (Ver.1.0-FRC):%s. " \
+                  __DATE__". 'help' to list commands.\n",
+                  shell_env->devname);
         }
         
-        /* getcmd section */
-        if (!rtems_shell_scanline(cmd,sizeof(cmd),stdin,stdout)) {
-          break; /*EOF*/
-        }
-        line++;
+        chdir("/"); /* XXX: chdir to getpwent homedir */
+        shell_env->exit_shell = FALSE;
 
-        /* evaluate cmd section */
-        c = cmd;
-        while (*c) {
-          if (!isblank(*c))
-            break;
-          c++;
-        }
-
-        if (*c == '\0')                 /* empty line */
-          continue;
-
-        if (*c == '#') {                /* comment character */
-          cmd[0] = 0;
-          continue;
-        }
-
-        if (!strcmp(cmd,"e")) {         /* edit last command */
-          strcpy(cmd,last_cmd);
-          continue;
-        } else if (!strcmp(cmd,"r")) {  /* repeat last command */
-          strcpy(cmd,last_cmd);
-        } else if (!strcmp(cmd,"bye") || !strcmp(cmd,"exit")) {
-          fprintf(stdout, "Shell exiting\n" );
-          break;
-        } else if (!strcmp(cmd,"shutdown")) { /* exit application */
-          fprintf(stdout, "System shutting down at user request\n" );
-          exit(0);
-        } else if (!strcmp(cmd,"")) {    /* only for get a new prompt */
-          strcpy(last_cmd,cmd);
-        }
-
-        /* exec cmd section */
-        /* TODO:
-         *  To avoid user crash catch the signals.
-         *  Open a new stdio files with posibility of redirection *
-         *  Run in a new shell task background. (unix &)
-         *  Resuming. A little bash.
-         */
-        if (!rtems_shell_make_args(cmd, &argc, argv,
-                                   RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
-          shell_cmd = rtems_shell_lookup_cmd(argv[0]);
-          if ( argv[0] == NULL ) {
-            shell_env->errorlevel = -1;
-          } else if ( shell_cmd == NULL ) {
-            shell_env->errorlevel = rtems_shell_script_file( argc, argv );
-          } else {
-            shell_env->errorlevel = shell_cmd->command(argc, argv);
+        for (;;) {
+          int cmd;
+          
+          /* Prompt section */
+          if (prompt) {
+            rtems_shell_get_prompt(shell_env, prompt,
+                                   RTEMS_SHELL_PROMPT_SIZE);
           }
-        }
-        /* end exec cmd section */
+        
+          /* getcmd section */
+          cmd = rtems_shell_line_editor(cmds, cmd_count,
+                                        RTEMS_SHELL_CMD_SIZE, prompt,
+                                        stdin, stdout);
 
-        if (shell_env->exit_shell)
-          break;
-        strcpy(last_cmd, cmd);
-        cmd[0] = 0;
+          if (cmd == -1)
+            continue; /* empty line */
+          
+          if (cmd == -2)
+            break; /*EOF*/
+
+          line++;
+
+          /* evaluate cmd section */
+          c = cmds[cmd];
+          while (*c) {
+            if (!isblank(*c))
+              break;
+            c++;
+          }
+
+          if (*c == '\0')   /* empty line */
+            continue;
+
+          if (*c == '#') {  /* comment character */
+            cmds[cmd][0] = 0;
+            continue;
+          }
+
+          if (!strcmp(cmds[cmd],"bye") || !strcmp(cmds[cmd],"exit")) {
+            fprintf(stdout, "Shell exiting\n" );
+            break;
+          } else if (!strcmp(cmds[cmd],"shutdown")) { /* exit application */
+            fprintf(stdout, "System shutting down at user request\n" );
+            exit(0);
+          }
+
+          /* exec cmd section */
+          /* TODO:
+           *  To avoid user crash catch the signals.
+           *  Open a new stdio files with posibility of redirection *
+           *  Run in a new shell task background. (unix &)
+           *  Resuming. A little bash.
+           */
+          if (!rtems_shell_make_args(cmds[cmd], &argc, argv,
+                                     RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
+            shell_cmd = rtems_shell_lookup_cmd(argv[0]);
+            if ( argv[0] == NULL ) {
+              shell_env->errorlevel = -1;
+            } else if ( shell_cmd == NULL ) {
+              shell_env->errorlevel = rtems_shell_script_file(argc, argv);
+            } else {
+              shell_env->errorlevel = shell_cmd->command(argc, argv);
+            }
+          }
+
+          /* end exec cmd section */
+          if (shell_env->exit_shell)
+            break;
+        }
+
+        fflush( stdout );
+        fflush( stderr );
       }
-      fflush( stdout );
-      fflush( stderr );
-    }
-  } while (result && shell_env->forever);
+    } while (result && shell_env->forever);
+
+    free (cmds[0]);
+  }
+
   if ( stdinToClose )
     fclose( stdinToClose );
   if ( stdoutToClose )
