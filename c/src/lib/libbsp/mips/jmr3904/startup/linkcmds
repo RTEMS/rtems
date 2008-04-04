@@ -9,7 +9,7 @@
  */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x0;
 _RamSize = DEFINED(_RamSize) ? _RamSize : 1M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x40000;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x80000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 SECTIONS
