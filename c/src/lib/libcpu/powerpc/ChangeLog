@@ -1,3 +1,8 @@
+2008-04-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* README: 
+	removed reference to outdated "old-exception-handling" PPC support
+
 2008-03-20	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/irq.c: don't disable irqs
