@@ -1,3 +1,9 @@
+2008-04-08	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/shell.c: Copy the cmd line to a buffer to split
+	into argv parts. Was using the command line history buffer so the
+	history was being corrupted.
+
 2008-04-03	Chris Johns <chrisj@rtems.org>
 
 	* libfs/src/nfsclient/src/librtemsNfs.h,

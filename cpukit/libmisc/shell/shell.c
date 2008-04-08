@@ -276,7 +276,7 @@ int rtems_shell_line_editor(
             break;
         case EOF:
           if (output)
-            fputc(out, '\n');
+            fputc('\n', out);
           return -2;
         
         case '\f':
@@ -668,6 +668,7 @@ rtems_boolean rtems_shell_main_loop(
   int                cmd;
   int                cmd_count = 1; /* assume a script and so only 1 command line */
   char              *cmds[RTEMS_SHELL_CMD_COUNT];
+  char              *cmd_argv;
   int                argc;
   char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
   rtems_boolean      result = TRUE;
@@ -769,11 +770,17 @@ rtems_boolean rtems_shell_main_loop(
   /*
    * Allocate the command line buffers.
    */
+  cmd_argv = malloc (RTEMS_SHELL_CMD_SIZE);
+  if (!cmd_argv) {
+    fprintf(stderr, "no memory for command line buffers\n" );
+  }
+  
   cmds[0] = calloc (cmd_count, RTEMS_SHELL_CMD_SIZE);
   if (!cmds[0]) {
     fprintf(stderr, "no memory for command line buffers\n" );
   }
-  else {
+
+  if (cmd_argv && cmds[0]) {
 
     memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
 
@@ -856,7 +863,8 @@ rtems_boolean rtems_shell_main_loop(
            *  Run in a new shell task background. (unix &)
            *  Resuming. A little bash.
            */
-          if (!rtems_shell_make_args(cmds[cmd], &argc, argv,
+          memcpy (cmd_argv, cmds[cmd], RTEMS_SHELL_CMD_SIZE);
+          if (!rtems_shell_make_args(cmd_argv, &argc, argv,
                                      RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
             shell_cmd = rtems_shell_lookup_cmd(argv[0]);
             if ( argv[0] == NULL ) {
@@ -878,9 +886,13 @@ rtems_boolean rtems_shell_main_loop(
       }
     } while (result && shell_env->forever);
 
-    free (cmds[0]);
   }
 
+  if (cmds[0])
+    free (cmds[0]);
+  if (cmd_argv)
+    free (cmd_argv);
+  
   if ( stdinToClose )
     fclose( stdinToClose );
   if ( stdoutToClose )
