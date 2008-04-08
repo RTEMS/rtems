@@ -118,7 +118,8 @@ struct mcf5282_enet_struct {
     /*
      * Link parameters
      */
-    int             force100Full;
+    enum            { link_auto, link_100Full, link_10Half } link;
+    uint16_t        mii_cr;
     uint16_t        mii_sr2;
 };
 static struct mcf5282_enet_struct enet_driver[NIFACES];
@@ -280,9 +281,12 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 
     /*
      * Set up Transmit Control Register:
-     *   Full duplex
+     *   Full or half duplex
      *   No heartbeat
      */
+    if (sc->link == link_10Half)
+        MCF5282_FEC_TCR = 0;
+    else
     MCF5282_FEC_TCR = MCF5282_FEC_TCR_FDEN;
 
     /*
@@ -307,17 +311,38 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
      *  LED1 receive status, LED2 link status, LEDs stretched
      *  Advertise 100 Mb/s, full-duplex, IEEE-802.3
      *  Turn off auto-negotiate
-     *  Enable speed-change, duplex-change and link-status-change interrupts
-     *  Set 100/full and perhaps auto-negotiate
+     *  Clear status
      */
     setMII(1, 20, 0x24F2);
     setMII(1,  4, 0x0181);
-    setMII(1,  0, 0x2100);
+    setMII(1,  0, 0x0);
     rtems_task_wake_after(2);
     sc->mii_sr2 = getMII(1, 17);
+    switch (sc->link) {
+    case link_auto:
+        /*
+         * Enable speed-change, duplex-change and link-status-change interrupts
+         * Enable auto-negotiate (start at 100/FULL)
+         */
     setMII(1, 18, 0x0072);
-    if (!sc->force100Full)
         setMII(1, 0, 0x3100);
+        break;
+
+    case link_10Half:
+        /*
+         * Force 10/HALF
+         */
+        setMII(1, 0, 0x0);
+        break;
+
+    case link_100Full:
+        /*
+         * Force 100/FULL
+         */
+        setMII(1, 0, 0x2100);
+        break;
+    }
+    sc->mii_cr = getMII(1, 0);
 
     /*
      * Set up receive buffer descriptors
@@ -799,9 +824,23 @@ enet_stats(struct mcf5282_enet_struct *sc)
         printf("LINK DOWN!\n");
     }
     else {
-        printf("Link speed %d Mb/s, %s-duplex.\n",
-                                    sc->mii_sr2  & 0x4000 ? 100 : 10,
-                                    sc->mii_sr2 & 0x200 ? "full" : "half");
+        int speed;
+        int full;
+        int fixed;
+        if (sc->mii_cr & 0x1000) {
+            fixed = 0;
+            speed = sc->mii_sr2 & 0x4000 ? 100 : 10;
+            full = sc->mii_sr2 & 0x200 ? 1 : 0;
+        }
+        else {
+            fixed = 1;
+            speed = sc->mii_cr & 0x2000 ? 100 : 10;
+            full = sc->mii_cr & 0x100 ? "full" : "half";
+        }
+        printf("Link %s %d Mb/s, %s-duplex.\n",
+                                            fixed ? "fixed" : "auto-negotiate",
+                                            speed,
+                                            full ? "full" : "half"); 
     }
     printf(" EIR:%8.8lx  ",  MCF5282_FEC_EIR);
     printf("EIMR:%8.8lx  ",  MCF5282_FEC_EIMR);
@@ -967,7 +1006,12 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
      */
     if (((env = bsp_getbenv("IPADDR0_100FULL")) != NULL)
      && ((*env == 'y') || (*env == 'Y')))
-        sc->force100Full = 1;
+        sc->link = link_100Full;
+    else if (((env = bsp_getbenv("IPADDR0_10HALF")) != NULL)
+     && ((*env == 'y') || (*env == 'Y')))
+        sc->link = link_10Half;
+    else
+        sc->link = link_auto;
 
     /*
      * Attach the interface

@@ -425,10 +425,6 @@ int BSP_disableVME_int_lvl(unsigned int level) { return 0; }
  */
 #define NVECTOR 256
 #define FPGA_VECTOR (64+1)  /* IRQ1* pin connected to external FPGA */
-#define FPGA_EPPAR  MCF5282_EPORT_EPPAR_EPPA1_LEVEL
-#define FPGA_EPDDR  MCF5282_EPORT_EPDDR_EPDD1
-#define FPGA_EPIER  MCF5282_EPORT_EPIER_EPIE1
-#define FPGA_EPPDR  MCF5282_EPORT_EPPDR_EPPD1
 #define FPGA_IRQ_INFO    *((vuint16 *)(0x31000000 + 0xfffffe))
 
 static struct handlerTab {
@@ -576,7 +572,9 @@ rtems_interrupt_level level;
             for (p = 0 ; p < 8 ; p++) {
                 if ((source < 8)
                  || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
-                    if (source >= 8)
+                    if (source < 8)
+                        MCF5282_EPORT_EPIER |= 1 << source;
+                    else
                         *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
                                                        MCF5282_INTC_ICR_IL(l) |
                                                        MCF5282_INTC_ICR_IP(p);
@@ -615,12 +613,6 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
       rtems_interrupt_enable(level);
       return 0;
     }
-    MCF5282_EPORT_EPPAR &= ~FPGA_EPPAR;
-    MCF5282_EPORT_EPDDR &= ~FPGA_EPDDR;
-    MCF5282_EPORT_EPIER |=  FPGA_EPIER;
-    MCF5282_INTC0_IMRL &= ~(MCF5282_INTC_IMRL_INT1 |
-                                MCF5282_INTC_IMRL_MASKALL);
-    setupDone = 1;
     handlerTab[vector].func = NULL;
     handlerTab[vector].arg  = NULL;
     rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
