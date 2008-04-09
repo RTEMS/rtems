@@ -71,7 +71,7 @@ extern "C" {
 #define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
 
 /**
- *  This constant represents the number of seconds in a millisecond.
+ *  This constant represents the number of millisecond in a second.
  */
 #define TOD_MILLISECONDS_PER_SECOND     (uint32_t)1000
 
@@ -86,7 +86,7 @@ extern "C" {
 #define TOD_NANOSECONDS_PER_SECOND      (uint32_t)1000000000
 
 /**
- *  This constant represents the number of nanoseconds in a second.
+ *  This constant represents the number of nanoseconds in a mircosecond.
  */
 #define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t)1000
 

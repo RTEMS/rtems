@@ -1,3 +1,7 @@
+2008-04-09	Madhusudan.C.S <madhusudancs@gmail.com>
+
+	* score/include/rtems/score/tod.h: Fix typo.
+
 2008-04-08	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/shell.c: Copy the cmd line to a buffer to split
