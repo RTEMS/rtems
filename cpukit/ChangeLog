@@ -1,3 +1,15 @@
+2008-04-12	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/shell.c, libmisc/shell/shell.h,
+	libmisc/shell/shell_script.c: Add support to echo the commands to
+	stdout. This is useful with the -v script option to show commands
+	as the run. Also added support to chdir to the directory the task
+	invoking the script is in.
+	* libmisc/shell/extern-cp.h, libmisc/shell/main_cp.c,
+	libmisc/shell/utils-cp.c: Update tro the latest FreeBSD version.
+	* libcsupport/Makefile.am, libcsupport/src/fchown.c: Add fchown
+	support.
+
 2008-04-09	Madhusudan.C.S <madhusudancs@gmail.com>
 
 	* score/include/rtems/score/tod.h: Fix typo.

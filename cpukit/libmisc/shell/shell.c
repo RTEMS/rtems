@@ -806,8 +806,12 @@ rtems_boolean rtems_shell_main_loop(
                   __DATE__". 'help' to list commands.\n",
                   shell_env->devname);
         }
+
+        if (input_file)
+          chdir(shell_env->cwd);
+        else
+          chdir("/"); /* XXX: chdir to getpwent homedir */
         
-        chdir("/"); /* XXX: chdir to getpwent homedir */
         shell_env->exit_shell = FALSE;
 
         for (;;) {
@@ -832,6 +836,9 @@ rtems_boolean rtems_shell_main_loop(
 
           line++;
 
+          if (shell_env->echo)
+            fprintf(stdout, "%d: %s\n", line, cmds[cmd]);
+          
           /* evaluate cmd section */
           c = cmds[cmd];
           while (*c) {
@@ -911,7 +918,8 @@ static rtems_status_code   rtems_shell_run (
   const char*          input,
   const char*          output,
   int                  output_append,
-  rtems_id             wake_on_end
+  rtems_id             wake_on_end,
+  int                  echo
 )
 {
   rtems_id           task_id;
@@ -949,10 +957,13 @@ static rtems_status_code   rtems_shell_run (
   shell_env->tcflag        = tcflag;
   shell_env->exit_shell    = FALSE;
   shell_env->forever       = forever;
+  shell_env->echo          = echo;
   shell_env->input         = strdup (input);
   shell_env->output        = strdup (output);
   shell_env->output_append = output_append;
   shell_env->wake_on_end   = wake_on_end;
+
+  getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
   return rtems_task_start(task_id, rtems_shell_task,
                           (rtems_task_argument) shell_env);
@@ -969,7 +980,7 @@ rtems_status_code   rtems_shell_init (
 {
   return rtems_shell_run (task_name, task_stacksize, task_priority,
                           devname, tcflag, forever,
-                          "stdin", "stdout", 0, RTEMS_INVALID_ID);
+                          "stdin", "stdout", 0, RTEMS_INVALID_ID, 0);
 }
 
 rtems_status_code   rtems_shell_script (
@@ -979,7 +990,8 @@ rtems_status_code   rtems_shell_script (
   const char*          input,
   const char*          output,
   int                  output_append,
-  int                  wait
+  int                  wait,
+  int                  echo
 )
 {
   rtems_id          current_task = RTEMS_INVALID_ID;
@@ -993,7 +1005,7 @@ rtems_status_code   rtems_shell_script (
   
   sc = rtems_shell_run (task_name, task_stacksize, task_priority,
                         NULL, 0, 0, input, output, output_append,
-                        current_task);
+                        current_task, echo);
   if (sc != RTEMS_SUCCESSFUL)
     return sc;
 

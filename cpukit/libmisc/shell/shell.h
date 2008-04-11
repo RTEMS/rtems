@@ -170,7 +170,8 @@ rtems_status_code rtems_shell_script(
   const char          *input,
   const char          *output,
   int                  output_append,
-  int                  wait
+  int                  wait,
+  int                  echo
 );
 
 /*
@@ -188,6 +189,8 @@ typedef struct  {
   int         exit_shell; /* logout */
   int         forever   ; /* repeat login */
   int         errorlevel;
+  int         echo;
+  char        cwd[256];
   const char* input;
   const char* output;
   int         output_append;

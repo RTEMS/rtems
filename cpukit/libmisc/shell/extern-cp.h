@@ -46,21 +46,22 @@ typedef struct {
 
 typedef struct {
   PATH_T to;
+  int info;
   uid_t myuid;
-  int Rflag, fflag, iflag, pflag, rflag, vflag, Nflag;
+  int fflag, iflag, lflag, nflag, pflag, vflag;
   mode_t myumask;
   jmp_buf exit_jmp;
 } rtems_shell_cp_globals;
 
 #define to           cp_globals->to
+#define info         cp_globals->info
 #define myuid        cp_globals->myuid
-#define Rflag        cp_globals->Rflag
 #define fflag        cp_globals->fflag
 #define iflag        cp_globals->iflag
+#define lflag        cp_globals->lflag
+#define nflag        cp_globals->nflag
 #define pflag        cp_globals->pflag
-#define rflag        cp_globals->rflag
 #define vflag        cp_globals->vflag
-#define Nflag        cp_globals->Nflag
 #define myumask      cp_globals->myumask
 #define exit_jump    &(cp_globals->exit_jmp)
 
@@ -81,7 +82,10 @@ int	copy_link(rtems_shell_cp_globals* cp_globals, FTSENT *, int);
 int	copy_special(rtems_shell_cp_globals* cp_globals, struct stat *, int);
 int	set_utimes(const char *, struct stat *);
 int	setfile(rtems_shell_cp_globals* cp_globals, struct stat *, int);
+int	preserve_dir_acls(struct stat *, char *, char *);
+int	preserve_fd_acls(int, int);
 void	usage();
+
 __END_DECLS
 
 #endif /* !_EXTERN_H_ */

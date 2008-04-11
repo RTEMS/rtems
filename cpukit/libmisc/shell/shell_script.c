@@ -189,7 +189,8 @@ int rtems_shell_main_joel(
     scriptFile,      /* the script file */
     outputFile,      /* where to redirect the script */
     0,               /* run once and exit */
-    1                /* we will wait */
+    1,               /* we will wait */
+    verbose          /* do we echo */
   );
   if (result)
     return -1;

@@ -58,8 +58,8 @@ TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
 SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/write_r.c \
     src/lseek.c src/ioctl.c src/mkdir.c src/mknod.c src/mkfifo.c src/rmdir.c \
-    src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/chown.c src/link.c \
-    src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \
+    src/chdir.c src/chmod.c src/fchdir.c src/fchmod.c src/fchown.c src/chown.c \
+    src/link.c src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \
     src/fcntl.c src/fpathconf.c src/getdents.c src/fsync.c src/fdatasync.c \
     src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c src/creat.c \
     src/chroot.c src/sync.c src/_rename_r.c
