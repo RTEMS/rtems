@@ -1,3 +1,7 @@
+2008-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bootstrap: Use find . ... preinstall.am for portability reasons.
+
 2008-02-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-cxx.m4, aclocal/enable-itron.m4,

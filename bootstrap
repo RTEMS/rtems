@@ -98,7 +98,7 @@ done
 
 case $mode in
 preinstall)
-  confs=`find -name Makefile.am -exec grep -l 'include .*/preinstall\.am' {} \;`
+  confs=`find . -name Makefile.am -exec grep -l 'include .*/preinstall\.am' {} \;`
   for i in $confs; do
     dir=$(dirname $i);
     test "$quite" = "true" || echo "Generating $dir/preinstall.am"
