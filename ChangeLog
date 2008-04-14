@@ -1,3 +1,7 @@
+2008-04-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bootstrap: Use find . ... preinstall.am for portability reasons.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.maint: touch all documentation master files so the date on
