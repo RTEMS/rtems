@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2007.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -49,7 +49,7 @@ would be performed by the application code which invoked the
 The timer can be used to implement watchdog routines
 which only fire to denote that an application error has
 occurred.  The timer is reset at specific points in the
-application to insure that the watchdog does not fire.  Thus, if
+application to ensure that the watchdog does not fire.  Thus, if
 the application does not reset the watchdog timer, then the
 timer service routine will fire to indicate that the application
 has failed to reach a reset point.  This use of a timer is

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2007.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -139,7 +139,7 @@ sections of code may be executed.  When these sections are
 encountered, RTEMS disables all maskable interrupts before the
 execution of the section and restores them to the previous level
 upon completion of the section.  RTEMS has been optimized to
-insure that interrupts are disabled for a minimum length of
+ensure that interrupts are disabled for a minimum length of
 time.  The maximum length of time interrupts are disabled by
 RTEMS is processor dependent and is detailed in the Timing
 Specification chapter of the Applications Supplement document
@@ -167,7 +167,7 @@ contents of the specified vector in the RTEMS' Vector Table.
 
 @subsection Directives Allowed from an ISR
 
-Using the interrupt manager insures that RTEMS knows
+Using the interrupt manager ensures that RTEMS knows
 when a directive is being called from an ISR.  The ISR may then
 use system calls to synchronize itself with an application task.
 The synchronization may involve messages, events or signals

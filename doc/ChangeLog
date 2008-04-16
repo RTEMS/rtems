@@ -1,3 +1,9 @@
+2008-04-16	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/bsp.t, user/conf.t, user/init.t, user/intr.t, user/overview.t,
+	user/timer.t: Correct default values. Make it clear that confdefs.h
+	calculates the memory required for you.
+
 2008-03-29	Chris Johns <chrisj@rtems.org>
 
 	* networking/testing.t: Cleaned up the patch from Ian.

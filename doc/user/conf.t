@@ -1,4 +1,4 @@
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -1058,7 +1058,7 @@ When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_TASKS}.
 If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TASKS}
-macro defaults to 10.
+macro defaults to 0.
 
 @item maximum_timers
 is the maximum number of timers
@@ -1221,7 +1221,7 @@ When using the @code{rtems/confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_THREADS}.
 If not defined by the application, then the
-@code{CONFIGURE_MAXIMUM_POSIX_THREADS} macro defaults to 10.
+@code{CONFIGURE_MAXIMUM_POSIX_THREADS} macro defaults to 0.
 
 @item maximum_mutexes
 is the maximum number of mutexes that can be concurrently 
@@ -1800,13 +1800,23 @@ This allows the application designer the flexibility to tailor
 RTEMS to most efficiently meet system requirements while still
 satisfying even the most stringent memory constraints.  As
 result, the size of the RTEMS executive is application
-dependent.  A Memory Requirements worksheet is provided in the
-Applications Supplement document for a specific target
-processor.  This worksheet can be used to calculate the memory
-requirements of a custom RTEMS run-time environment.  To insure
-that enough memory is allocated for future versions of RTEMS,
-the application designer should round these memory requirements
-up.  The following Classic API managers may be optionally excluded:
+dependent.
+
+It is not necessary for RTEMS Application Developers to calculate
+the amount of memory required for the RTEMS Workspace.  This
+is done automatically by @code{<rtems/confdefs.h>}.  
+See @ref{Configuring a System Sizing the RTEMS RAM Workspace} for
+more details on how 
+this works.  In the event, you are interested in the memory required
+for an instance of a particular RTEMS object, please run the test
+@code{spsize} on your target board.
+
+RTEMS is built to be a library and any routines that you do not 
+directly or indirectly require in your application will @b{NOT}
+be included in your executable image.  However, some managers
+may be explicitly excluded and no attempt to create these instances
+of these objects will succeed even if they are configured.
+The following Classic API managers may be optionally excluded:
 
 @itemize @bullet
 @item signal
@@ -1827,7 +1837,10 @@ RTEMS is implemented in such a way that there is a single
 entry point per source file.  This avoids having the 
 linker being forced to pull large object files in their
 entirety into an application when the application references
-a single symbol.
+a single symbol.  In the event you discover an RTEMS method
+that is included in your executable but never entered, please
+let us know.  It might be an opportunity to break a dependency
+and shrink many RTEMS applications.
 
 RTEMS based applications must somehow provide memory
 for RTEMS' code and data space.  Although RTEMS' data space must
@@ -1879,13 +1892,14 @@ the workspace area will result in the
 directive being invoked with the
 @code{@value{RPREFIX}INVALID_ADDRESS} error code.
 
-A worksheet is provided in the @b{Memory Requirements}
-chapter of the Applications Supplement document for a specific
-target processor to assist the user in calculating the minimum
-size of the RTEMS RAM Workspace for each application.  The value
-calculated with this worksheet is the minimum value that should
-be specified as the @code{work_space_size} parameter of the
-Configuration Table.  
+The file @code{<rtems/confdefs.h>} will calculate the 
+value that is specified as the @code{work_space_size}
+parameter of the Configuration Table. There are many
+parameters the application developer can specify to
+help @code{<rtems/confdefs.h>} in its calculations.  Correctly
+specifying the application requirements via parameters
+such as @code{CONFIGURE_EXTRA_TASK_STACKS} and
+@code{CONFIGURE_MAXIMUM_TASKS} is critical.
 
 The allocation of objects can operate in two modes. The default mode
 has an object number ceiling. No more than the specified number of
@@ -1914,10 +1928,10 @@ The user is cautioned that future versions of RTEMS may not have the
 same memory requirements per object. Although the value calculated is
 suficient for a particular target processor and release of RTEMS,
 memory usage is subject to change across versions and target
-processors.  The user is advised to allocate somewhat more memory than
-the worksheet recommends to insure compatibility with future releases
-for a specific target processor and other target processors. To avoid
-problems, the user should recalculate the memory requirements each
+processors.  To avoid problems, the user should accurately 
+specify each configuration parameter and allow
+@code{<rtems/confdefs.h>} to calculate the memory requirements.
+The memory requirements are likely to change each
 time one of the following events occurs:
 
 @itemize @bullet
