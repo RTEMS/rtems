@@ -12,6 +12,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([gba]);;
   gp32 )
     AC_CONFIG_SUBDIRS([gp32]);;
+  nds )
+    AC_CONFIG_SUBDIRS([nds]);;
   rtl22xx )
     AC_CONFIG_SUBDIRS([rtl22xx]);;
   *)

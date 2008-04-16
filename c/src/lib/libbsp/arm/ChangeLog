@@ -1,3 +1,7 @@
+2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
+
+	* acinclude.m4: Adding Nintendo DS BSP.
+
 2008-02-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/comm/console.c: Do not have BSP specific __assert.
