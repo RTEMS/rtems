@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2007.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -38,7 +38,7 @@ they are defined in the User Initialization Tasks Table and
 automatically created and started by RTEMS as part of its
 initialization sequence.  Since the initialization tasks are
 scheduled using the same algorithm as all other RTEMS tasks,
-they must be configured at a priority and mode which will insure
+they must be configured at a priority and mode which will ensure
 that they will complete execution before other application tasks
 execute.  Although there is no upper limit on the number of
 initialization tasks, an application is required to define at
@@ -58,7 +58,7 @@ initialization tasks.
 
 The System Initialization Task is responsible for
 initializing all device drivers.  As a result, this task has a
-higher priority than all other tasks to insure that no
+higher priority than all other tasks to ensure that no
 application tasks executes until all device drivers are
 initialized.  After device initialization in a single processor
 system, this task will delete itself.

@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -63,7 +63,7 @@ by the reset application initialization code.  Because
 interrupts are enabled automatically by RTEMS as part of the
 @code{@value{DIRPREFIX}initialize_executive} directive,
 the Interrupt Vector Table MUST
-be set before this directive is invoked to insure correct
+be set before this directive is invoked to ensure correct
 interrupt vectoring.  The processor's Interrupt Vector Table
 must be accessible by RTEMS as it will be modified by the
 @code{@value{DIRPREFIX}interrupt_catch} directive.  

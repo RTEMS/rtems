@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -329,33 +329,20 @@ microprocessor architecture.
 @section Memory Requirements
 
 Since memory is a critical resource in many real-time
-embedded systems, RTEMS was specifically designed to allow
-unused managers to be excluded from the run-time environment.
-This allows the application designer the flexibility to tailor
-RTEMS to most efficiently meet system requirements while still
-satisfying even the most stringent memory constraints.  As a
-result, the size of the RTEMS executive is application
-dependent.  A worksheet is provided in the Memory Requirements
-chapter of the Applications Supplement document for a specific
-target processor.  The worksheet is used to calculate the memory
-requirements of a custom RTEMS run-time environment.  The
-following managers may be optionally excluded:
+embedded systems, RTEMS was specifically designed to automatically
+leave out all services that are not required from the run-time
+environment.  Features such as networking, various fileystems,
+and many other features are completely optionsl.  This allows
+the application designer the flexibility to tailor RTEMS to most
+efficiently meet system requirements while still satisfying even
+the most stringent memory constraints.  As a result, the size
+of the RTEMS executive is application dependent.
 
-@itemize @bullet
-@item clock
-@item timer
-@item semaphore
-@item message
-@item event
-@item signal
-@item partition
-@item region
-@item dual ported memory
-@item I/O
-@item rate monotonic
-@item fatal error
-@item multiprocessing
-@end itemize
+RTEMS requires RAM to manage each instance of an RTEMS object
+that is created.  Thus the more RTEMS objects an application
+needs, the more memory that must be reserved.  See
+@ref{Configuring a System Determining Memory Requirements} for
+more details.
 
 RTEMS utilizes memory for both code and data space.
 Although RTEMS' data space must be in RAM, its code space can be
