@@ -1,3 +1,7 @@
+2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
+
+	* custom/nds.cfg: New file.
+
 2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* leaf.cfg, custom/pc386.cfg, custom/pc386dx.cfg: It appears that the
