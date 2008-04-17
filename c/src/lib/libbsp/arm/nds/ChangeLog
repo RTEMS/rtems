@@ -1,5 +1,10 @@
 2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libnds/source/arm9/exceptionHandler.S: Rename .s to .S and replace
+	blxne with bxne.
+
+2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am: Move .s files to .S
 	* dswifi/common/source/spinlock.S, libfat/source/disc_io/io_dldi.S,
 	libfat/source/disc_io/io_scsd_s.S, libnds/source/arm9/COS.S,
