@@ -358,10 +358,20 @@ This device driver is used to benchmark execution times
 by the RTEMS Timing Test Suites.  By default, this is not
 defined.
 
-@c @item @code{CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER}
-@c is defined
-@c if the application wishes to include the Real-Time Clock Driver.
-@c By default, this is not defined.
+@findex CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+@item @code{CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER} is defined
+when the application does @b{NOT} want the Clock Device Driver
+and is @b{NOT} using the Timer Driver.  The inclusion or
+exclusion of the Clock Driver must be explicit in typical
+user applications.  This is intended to prevent the common
+user error of using the Hello World example as the baseline
+for an application and leaving out a clock tick source.
+
+@findex CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+@item @code{CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER}
+is defined
+if the application wishes to include the Real-Time Clock Driver.
+By default, this is not defined.
 
 @findex CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER}
