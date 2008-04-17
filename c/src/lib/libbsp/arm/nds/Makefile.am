@@ -101,7 +101,7 @@ bin2s:	$(srcdir)/tools/bin2s.c
 
 SUFFIXES = .bin
 
-%.s:	%.bin bin2s
+%.S:	%.bin bin2s
 	$(srcdir)/tools/bin2s $< > $(srcdir)/$@
 
 libnds9_rel_SOURCES =  	libnds/source/common/biosCalls.S		\
@@ -110,9 +110,9 @@ libnds9_rel_SOURCES =  	libnds/source/common/biosCalls.S		\
 			libnds/source/common/interruptDispatcher.S	\
 			libnds/source/common/interrupts.c		\
 			libnds/source/arm9/boxtest.c			\
-			libnds/source/arm9/default_font.s		\
+			libnds/source/arm9/default_font.S		\
 			libnds/source/arm9/console.c			\
-			libnds/source/arm9/COS.s			\
+			libnds/source/arm9/COS.S			\
 			libnds/source/arm9/dcache.S			\
 			libnds/source/arm9/exceptionHandler.S		\
 			libnds/source/arm9/exceptions.c			\
@@ -124,10 +124,10 @@ libnds9_rel_SOURCES =  	libnds/source/common/biosCalls.S		\
 			libnds/source/arm9/ndsmotion.c			\
 			libnds/source/arm9/pcx.c			\
 			libnds/source/arm9/rumble.c			\
-			libnds/source/arm9/SIN.s			\
+			libnds/source/arm9/SIN.S			\
 			libnds/source/arm9/sound.c			\
 			libnds/source/arm9/system.c			\
-			libnds/source/arm9/TAN.s			\
+			libnds/source/arm9/TAN.S			\
 			libnds/source/arm9/touch.c			\
 			libnds/source/arm9/video.c			\
 			libnds/source/arm9/videoGL.c
@@ -139,7 +139,7 @@ if HAS_NETWORKING
 # dswifi, ARM9 side
 noinst_PROGRAMS += dswifi9.rel
 dswifi9_rel_SOURCES =  	dswifi/arm9/source/wifi_arm9.c			\
-			dswifi/common/source/spinlock.s
+			dswifi/common/source/spinlock.S
 dswifi9_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source -I$(srcdir)/wifi -D_KERNEL -Dcaddr_t=uint32_t
 dswifi9_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -160,8 +160,8 @@ libdldi_rel_SOURCES =  	libfat/source/disc_io/disc.c			\
 			libfat/source/disc_io/io_sc_common.c		\
 			libfat/source/disc_io/io_scsd.c			\
 			libfat/source/disc_io/io_sd_common.c		\
-			libfat/source/disc_io/io_dldi.s			\
-			libfat/source/disc_io/io_scsd_s.s
+			libfat/source/disc_io/io_dldi.S			\
+			libfat/source/disc_io/io_scsd_s.S
 libdldi_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include -I$(srcdir)/libfat/source/disc_io
 libdldi_rel_CCASFLAGS = $(AM_CCASFLAGS) -DARM9 -I$(srcdir)/libnds/include -I$(srcdir)/libfat/source/disc_io
 libdldi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -188,7 +188,7 @@ if HAS_NETWORKING
 # dswifi, ARM7 side
 noinst_PROGRAMS += dswifi7.rel
 dswifi7_rel_SOURCES =  	dswifi/arm7/source/wifi_arm7.c			\
-			dswifi/common/source/spinlock.s
+			dswifi/common/source/spinlock.S
 dswifi7_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM7 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source
 dswifi7_rel_CFLAGS = -mcpu=arm7tdmi -msoft-float
 dswifi7_rel_CCASFLAGS = -mcpu=arm7tdmi -msoft-float
