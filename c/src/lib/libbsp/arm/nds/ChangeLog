@@ -1,3 +1,7 @@
+2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* .cvsignore, include/.cvsignore: New files.
+
 2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
 
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
