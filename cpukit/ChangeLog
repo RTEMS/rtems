@@ -1,3 +1,15 @@
+2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/dummy/dummy.c, sapi/include/confdefs.h: Add checks for
+	application configuration errors. If any POSIX objects or a POSIX
+	init thread is configured without POSIX being configure, then error
+	out. Similarly for ITRON. Add
+	CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER configuration
+	parameter so the application has to explicitly configure the Clock
+	driver in or out if the Timer driver is not configured. Also verify
+	RTEMS was built for multiprocessing, if the user tries to configure a
+	multiprocessing application.
+
 2008-04-12	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/shell.c, libmisc/shell/shell.h,

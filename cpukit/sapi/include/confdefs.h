@@ -1368,14 +1368,18 @@ rtems_configuration_table Configuration = {
 }
 #endif
 
-/*
- *  Some warnings and error checking
+/******************************************************************
+ ******************************************************************
+ ******************************************************************
+ *         CONFIGURATION WARNINGS AND ERROR CHECKING              *
+ ******************************************************************
+ ******************************************************************
+ ******************************************************************
  */
 
 /*
  *  Make sure a task/thread of some sort is configured
  */
-
 #if (CONFIGURE_MAXIMUM_TASKS == 0) && \
     (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
     (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
@@ -1387,11 +1391,75 @@ rtems_configuration_table Configuration = {
  *  Make sure at least one of the initialization task/thread
  *  tables was defined.
  */
-
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
     !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
     !defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
+#endif
+
+/*
+ *  If the user is trying to configure a multiprocessing application and
+ *  RTEMS was not configured and built multiprocessing, then error out.
+ */
+#if defined(CONFIGURE_MP_APPLICATION) && \
+    !defined(RTEMS_MULTIPROCESSING)
+#error "CONFIGURATION ERROR: RTEMS not configured for multiprocessing!!"
+#endif
+
+/*
+ *  If an attempt was made to configure POSIX objects and
+ *  the POSIX API was not configured into RTEMS, error out.
+ */
+#if !defined(RTEMS_POSIX_API)
+  #if ((CONFIGURE_MAXIMUM_POSIX_THREADS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_MUTEXES != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_BARRIERS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_SPINLOCKS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_RWLOCKS != 0) || \
+      defined(CONFIGURE_POSIX_INIT_THREAD_TABLE)
+  #error "CONFIGURATION ERROR: POSIX API support not configured!!"
+  #endif
+#endif
+
+/*
+ *  If an attempt was made to configure ITRON objects and
+ *  the ITRON API was not configured into RTEMS, error out.
+ */
+#if !defined(RTEMS_ITRON_API)
+  #if ((CONFIGURE_MAXIMUM_ITRON_TASKS != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_SEMAPHORES != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_MAILBOXES != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_PORTS != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS != 0) || \
+       (CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS != 0)) || \
+      defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
+  #error "CONFIGURATION ERROR: ITRON API support not configured!!"
+  #endif
+#endif
+
+/*
+ *  You must either explicity include or exclude the clock driver.
+ *  It is such a common newbie error to leave it out.  Maybe this
+ *  will put an end to it.
+ *  
+ *  NOTE: If you are using the timer driver, it is considered 
+ *        mutually exclusive with the clock driver because it
+ *        is assume to use the smae hardware.
+ */
+#if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
+  #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+      !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
+      !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
+    #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
+   #endif
 #endif
 
 /*
@@ -1404,7 +1472,6 @@ rtems_configuration_table Configuration = {
     defined(CONFIGURE_TEST_NEEDS_STUB_DRIVER)
 #error "CONFIGURATION ERROR: CONFIGURE_TEST_XXX constants are obsolete"
 #endif
-
 
 #endif
 /* end of include file */
