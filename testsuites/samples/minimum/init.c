@@ -23,6 +23,9 @@ rtems_task Init(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1
 
+/* NOTICE: the clock driver is explicitly disabled */
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
 /*
  *  This is the smallest IO subsystem RTEMS currently supports.
  */

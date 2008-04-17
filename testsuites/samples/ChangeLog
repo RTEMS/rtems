@@ -1,3 +1,8 @@
+2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c, hello/system.h, minimum/init.c, unlimited/system.h:
+	Use CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER where needed.
+
 2008-02-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* iostream/init.cc: Add include of stdlib.h for exit(). Needed by gcc

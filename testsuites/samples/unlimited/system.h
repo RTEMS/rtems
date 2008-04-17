@@ -42,6 +42,8 @@ void test3();
 
 #include <bsp.h> /* for device driver prototypes */
 
+/* NOTICE: the clock driver is explicitly disabled */
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

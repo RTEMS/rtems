@@ -99,13 +99,60 @@ fstab_t fs_table[] = {
 #ifdef USE_SHELL
 #include <rtems/shell.h>
 
+void writeScript(
+  const char *name,
+  const char *contents
+)
+{
+  int sc;
+  sc = setuid(0);
+  if ( sc ) {
+    printf( "setuid failed: %s:\n", name, strerror(errno) );
+  }
+
+  rtems_shell_write_file( name, contents );
+  sc = chmod ( name, 0777 );
+  if ( sc ) {
+    printf( "chmod %s: %s:\n", name, strerror(errno) );
+  }
+}
+
 void fileio_start_shell(void)
 {
+  int sc;
+  sc = mkdir("/scripts", 0777);
+  if ( sc ) {
+    printf( "mkdir /scripts: %s:\n", strerror(errno) );
+  }
+
+  writeScript(
+    "/scripts/js", 
+    "#! joel\n"
+    "\n"
+    "date\n"
+    "echo Script successfully ran\n"
+    "date\n"
+    "stackuse\n"
+  );
+
+  writeScript(
+    "/scripts/j1", 
+    "#! joel -s 20480 -t JESS\n"
+    "stackuse\n"
+  );
+
+  rtems_shell_write_file(
+    "/scripts/j2", 
+    "echo j2 TEST FILE\n"
+    "echo j2   SHOULD BE non-executable AND\n"
+    "echo j2   DOES NOT have the magic first line\n"
+  );
+
   printf(" =========================\n");
   printf(" starting shell\n");
   printf(" =========================\n");
   rtems_shell_init("SHLL",RTEMS_MINIMUM_STACK_SIZE * 4,100,"/dev/console",
-                   0, 0);
+                   0, 1);
   rtems_task_suspend(RTEMS_SELF);
 }
 
