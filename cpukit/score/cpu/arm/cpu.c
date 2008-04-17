@@ -130,6 +130,8 @@ void _CPU_ISR_install_vector(
   
 }
 
+unsigned int arm_cpu_mode = 0x13;
+
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
@@ -141,7 +143,7 @@ void _CPU_Context_Initialize(
 {
     the_context->register_sp = (uint32_t  )stack_base + size ;
     the_context->register_lr = (uint32_t  )entry_point;
-    the_context->register_cpsr = new_level | 0x13;
+    the_context->register_cpsr = new_level | arm_cpu_mode;
 }
 
 
