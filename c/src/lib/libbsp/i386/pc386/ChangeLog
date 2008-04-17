@@ -1,3 +1,9 @@
+2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Do not use intermediate .rel files unless from libcpu or
+	a network driver. This simplifies the Makefile.am and avoids pulling
+	in unneeded code.
+
 2008-03-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, startup/exit.c: Add BSP_PRESS_KEY_FOR_RESET

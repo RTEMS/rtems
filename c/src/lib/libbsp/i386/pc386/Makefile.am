@@ -54,58 +54,40 @@ project_lib_DATA += start16.bin
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+clock_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = console/keyboard.h console/kd.h \
     console/serial_mouse.h console/ps2_drv.h console/fb_vga.h
 
-noinst_PROGRAMS += console.rel
 include_HEADERS += ../../i386/shared/comm/i386_io.h
-console_rel_SOURCES = console/console.c console/inch.c console/outch.c \
+console_SOURCES = console/console.c console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
     console/serial_mouse.c console/vgainit.c console/vt.c console/videoAsm.S \
     ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_PROGRAMS += gdb.rel
-gdb_rel_SOURCES = ../../i386/shared/comm/i386-stub.c \
+gdb_SOURCES = ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c \
     ../../i386/shared/comm/gdb_glue.c
-gdb_rel_CPPFLAGS = $(AM_CPPFLAGS)
-gdb_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_PROGRAMS += gnat.rel
-gnat_rel_SOURCES = ../../shared/gnatinstallhandler.c
-gnat_rel_CPPFLAGS = $(AM_CPPFLAGS)
-gnat_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+gnat_SOURCES = ../../shared/gnatinstallhandler.c
 
-noinst_PROGRAMS += pci.rel
 include_HEADERS += ../../i386/shared/pci/pcibios.h
-pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c ../../i386/shared/pci/pcibios.h
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+pci_SOURCES = ../../i386/shared/pci/pcibios.c \
+    ../../i386/shared/pci/pcibios.h
 
-noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../i386/shared/comm/uart.h
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c \
     startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+timer_SOURCES = timer/timer.c timer/timerisr.S
+
+ide_SOURCES = ide/idecfg.c ide/ide.c
 
 if HAS_NETWORKING
 ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -135,23 +117,20 @@ noinst_PROGRAMS += 3c509.rel
 3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_PROGRAMS += ide.rel
-ide_rel_SOURCES = ide/idecfg.c ide/ide.c
-ide_rel_CPPFLAGS = $(AM_CPPFLAGS)
-ide_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel ide.rel \
-    gdb.rel gnat.rel pci.rel
+libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(gdb_SOURCES) \
+    $(gnat_SOURCES) $(pci_SOURCES) $(startup_SOURCES) $(timer_SOURCES) \
+    $(ide_SOURCES)
+
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/page.rel \
+    ../../../libcpu/@RTEMS_CPU@/score.rel
 # We only build the Network library if HAS_NETWORKING was defined
 # dec21140 is supported via libchip
 if HAS_NETWORKING
 libbsp_a_LIBADD += ne2000.rel wd8003.rel 3c509.rel
 endif
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/page.rel \
-    ../../../libcpu/@RTEMS_CPU@/score.rel
+
 
 EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
 

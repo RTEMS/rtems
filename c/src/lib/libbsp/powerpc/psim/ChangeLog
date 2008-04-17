@@ -1,3 +1,9 @@
+2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Do not use intermediate .rel files unless from libcpu or
+	a network driver. This simplifies the Makefile.am and avoids pulling
+	in unneeded code.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so
