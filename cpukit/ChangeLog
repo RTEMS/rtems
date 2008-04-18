@@ -1,5 +1,9 @@
 2008-04-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/mainpage.h: New file.
+
+2008-04-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/Doxyfile, rtems/include/rtems/rtems/asr.h,
 	rtems/include/rtems/rtems/attr.h,
 	rtems/include/rtems/rtems/barrier.h,
