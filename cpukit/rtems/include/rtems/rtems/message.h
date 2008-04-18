@@ -1,24 +1,23 @@
 /**
  * @file rtems/rtems/message.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Message Queue Manager.  This manager provides a mechanism for
  *  communication and synchronization between tasks using messages.
  *
  *  Directives provided are:
  *
- *     + create a queue
- *     + get ID of a queue
- *     + delete a queue
- *     + put a message at the rear of a queue
- *     + put a message at the front of a queue
- *     + broadcast N messages to a queue
- *     + receive message from a queue
- *     + flush all messages on a queue
- *
- *  COPYRIGHT (c) 1989-2007.
+ *     - create a queue
+ *     - get ID of a queue
+ *     - delete a queue
+ *     - put a message at the rear of a queue
+ *     - put a message at the front of a queue
+ *     - broadcast N messages to a queue
+ *     - receive message from a queue
+ *     - flush all messages on a queue
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,22 +45,27 @@ extern "C" {
 #include <rtems/rtems/attr.h>
 #include <rtems/score/coremsg.h>
 
+/**
+ *  @defgroup ClassicMessageQueue Classic API Message Queue
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
 /*
  *  The following enumerated type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
  */
-
 typedef enum {
   MESSAGE_QUEUE_SEND_REQUEST   = 0,
   MESSAGE_QUEUE_URGENT_REQUEST = 1
 }  Message_queue_Submit_types;
 
-/*
+/**
  *  The following records define the control block used to manage
  *  each message queue.
  */
-
 typedef struct {
   Objects_Control             Object;
   rtems_attribute             attribute_set;
@@ -72,25 +76,19 @@ typedef struct {
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-
 RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
 
-/*
- *  _Message_queue_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief Message_queue_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _Message_queue_Manager_initialization(
   uint32_t   maximum_message_queues
 );
 
-/*
- *  rtems_message_queue_create
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_create
  *
  *  This routine implements the rtems_message_queue_create directive.  The
  *  message queue will have the name name.  If the attribute_set indicates
@@ -99,7 +97,6 @@ void _Message_queue_Manager_initialization(
  *  messages that will be held.  It returns the id of the created
  *  message queue in ID.
  */
-
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,
   uint32_t         count,
@@ -108,10 +105,8 @@ rtems_status_code rtems_message_queue_create(
   Objects_Id      *id
 );
 
-/*
- *  rtems_message_queue_ident
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_ident
  *
  *  This routine implements the rtems_message_queue_ident directive.
  *  This directive returns the message queue ID associated with NAME.
@@ -121,30 +116,24 @@ rtems_status_code rtems_message_queue_create(
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
  */
-
 rtems_status_code rtems_message_queue_ident(
   rtems_name    name,
   uint32_t      node,
   Objects_Id   *id
 );
 
-/*
- *  rtems_message_queue_delete
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_delete
  *
  *  This routine implements the rtems_message_queue_delete directive.  The
  *  message queue indicated by ID is deleted.
  */
-
 rtems_status_code rtems_message_queue_delete(
   Objects_Id id
 );
 
-/*
- *  rtems_message_queue_send
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_send
  *
  *  This routine implements the rtems_message_queue_send directive.
  *  This directive sends the message buffer to the message queue
@@ -156,17 +145,14 @@ rtems_status_code rtems_message_queue_delete(
  *  then the message buffer will be placed at the REAR of the
  *  chain of pending messages for this message queue.
  */
-
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
   void                 *buffer,
   size_t                size
 );
 
-/*
- *  rtems_message_queue_urgent
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_urgent
  *
  *  This routine implements the rtems_message_queue_urgent directive.
  *  This directive has the same behavior as rtems_message_queue_send
@@ -174,24 +160,20 @@ rtems_status_code rtems_message_queue_send(
  *  be placed at the FRONT of the chain of pending messages rather
  *  than at the REAR.
  */
-
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
   void                 *buffer,
   size_t                size
 );
 
-/*
- *  rtems_message_queue_broadcast
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_broadcast
  *
  *  This routine implements the rtems_message_queue_broadcast directive.
  *  This directive sends the message buffer to all of the tasks blocked
  *  waiting for a message on the message queue indicated by ID.
  *  If no tasks are waiting, then the message buffer will not be queued.
  */
-
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
@@ -199,10 +181,8 @@ rtems_status_code rtems_message_queue_broadcast(
   uint32_t             *count
 );
 
-/*
- *  rtems_message_queue_receive
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_receive
  *
  *  This routine implements the rtems_message_queue_receive directive.
  *  This directive is invoked when the calling task wishes to receive
@@ -212,7 +192,6 @@ rtems_status_code rtems_message_queue_broadcast(
  *  then the task will be blocked until a message arrives or until,
  *  optionally, timeout clock ticks have passed.
  */
-
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
@@ -221,43 +200,35 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval        timeout
 );
 
-/*
- *  rtems_message_queue_flush
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_flush
  *
  *  This routine implements the rtems_message_queue_flush directive.
  *  This directive takes all outstanding messages for the message
  *  queue indicated by ID and returns them to the inactive message
  *  chain.  The number of messages flushed is returned in COUNT.
  */
-
 rtems_status_code rtems_message_queue_flush(
   Objects_Id  id,
   uint32_t   *count
 );
 
-/*
- *  rtems_message_queue_get_number_pending
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_message_queue_get_number_pending
  *
  *  This routine implements the rtems_message_queue_get_number_pending
  *  directive.  This directive returns the number of pending
  *  messages for the message queue indicated by ID
  *  chain.  The number of messages pending is returned in COUNT.
  */
-
 rtems_status_code rtems_message_queue_get_number_pending(
   Objects_Id  id,
   uint32_t   *count
 );
 
 
-/*
- *  _Message_queue_Submit
- *
- *  DESCRIPTION:
+/**
+ *  @brief Message_queue_Submit
  *
  *  This routine implements the directives rtems_message_queue_send
  *  and rtems_message_queue_urgent.  It processes a message that is
@@ -266,7 +237,6 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *  at the rear of the queue or it will be processed as an urgent message
  *  which will be inserted at the front of the queue.
  */
-
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
@@ -274,36 +244,30 @@ rtems_status_code _Message_queue_Submit(
   Message_queue_Submit_types  submit_type
 );
 
-/*
- *  _Message_queue_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @brief Message_queue_Allocate
  *
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
  */
-
 Message_queue_Control *_Message_queue_Allocate (
     uint32_t            count,
     uint32_t            max_message_size
 );
 
-/*
- *  _Message_queue_Translate_core_message_queue_return_code
- *
- *  DESCRIPTION:
+/**
+ *  @brief Message_queue_Translate_core_message_queue_return_code
  *
  *  This function returns a RTEMS status code based on the core message queue
  *  status code specified.
  */
-
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
   uint32_t   the_message_queue_status
 );
 
-/*
- *
- *  _Message_queue_Core_message_queue_mp_support
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ *  @brief Message_queue_Core_message_queue_mp_support
  *
  *  Input parameters:
  *    the_thread - the remote thread the message was submitted to
@@ -311,8 +275,6 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
  *
  *  Output parameters: NONE
  */
-
-#if defined(RTEMS_MULTIPROCESSING)
 void  _Message_queue_Core_message_queue_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id

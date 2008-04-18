@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/attr.h
- */
-
-/*
+ *
  *  This include file contains all information about the Object Attributes
  *  Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +21,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup ClassicAttributes Classic API Attributes
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
 
 /* types */
 
@@ -74,17 +80,14 @@ typedef uint32_t   rtems_attribute;
 #define ATTRIBUTES_REQUIRED            0
 #endif
 
-/*
- *  _Attributes_Handler_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief _Attributes_Handler_initialization
  *
  *  This routine performs initialization for this handler.
  *
  *  NOTE: There is no initialization required in C.  Conditional compilation
  *        takes care of this in C.
  */
-
 #define _Attributes_Handler_initialization()
 
 #ifndef __RTEMS_APPLICATION__
@@ -94,6 +97,8 @@ typedef uint32_t   rtems_attribute;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

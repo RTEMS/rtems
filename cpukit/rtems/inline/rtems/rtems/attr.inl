@@ -1,11 +1,11 @@
 /**
  * @file rtems/rtems/attr.inl
+ *
+ *  This include file contains all of the inlined routines associated
+ *  with attributes.
  */
 
 /*
- *  This include file contains all of the inlined routines associated
- *  with attributes.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,16 +19,17 @@
 #ifndef _RTEMS_RTEMS_ATTR_INL
 #define _RTEMS_RTEMS_ATTR_INL
 
-/*PAGE
- *
- *  _Attributes_Set
- *
- *  DESCRIPTION:
+/**
+ *  @addtogroup ClassicAttributes
+ *  @{
+ */
+
+/**
+ *  @brief Attributes_Set
  *
  *  This function sets the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-
 RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
    rtems_attribute new_attributes,
    rtems_attribute attribute_set
@@ -37,16 +38,12 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
   return attribute_set | new_attributes;
 }
 
-/*PAGE
- *
- *  _Attributes_Clear
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Clear
  *
  *  This function clears the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
  */
-
 RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
    rtems_attribute attribute_set,
    rtems_attribute mask
@@ -55,16 +52,12 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
   return attribute_set & ~mask;
 }
 
-/*PAGE
- *
- *  _Attributes_Is_floating_point
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_floating_point
  *
  *  This function returns TRUE if the floating point attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
   rtems_attribute attribute_set
 )
@@ -72,17 +65,13 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
    return ( attribute_set & RTEMS_FLOATING_POINT );
 }
 
-/*PAGE
- *
- *  _Attributes_Is_global
- *
- *  DESCRIPTION:
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ *  @brief Attributes_Is_global
  *
  *  This function returns TRUE if the global object attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
-#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
   rtems_attribute attribute_set
 )
@@ -91,16 +80,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
 }
 #endif
 
-/*PAGE
- *
- *  _Attributes_Is_priority
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_priority
  *
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority(
   rtems_attribute attribute_set
 )
@@ -108,16 +93,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority(
    return ( attribute_set & RTEMS_PRIORITY );
 }
 
-/*PAGE
- *
- *  _Attributes_Is_binary_semaphore
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_binary_semaphore
  *
  *  This function returns TRUE if the binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
@@ -125,16 +106,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
   return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_BINARY_SEMAPHORE);
 }
 
-/*PAGE
- *
- *  _Attributes_Is_simple_binary_semaphore
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_simple_binary_semaphore
  *
  *  This function returns TRUE if the simple binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_simple_binary_semaphore(
   rtems_attribute attribute_set
 ) 
@@ -143,16 +120,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_simple_binary_semaphore(
     ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_SIMPLE_BINARY_SEMAPHORE);
 }  
 
-/*PAGE
- *
- *  _Attributes_Is_counting_semaphore
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_counting_semaphore
  *
  *  This function returns TRUE if the counting semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_counting_semaphore(
   rtems_attribute attribute_set
 )
@@ -160,16 +133,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_counting_semaphore(
   return ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_COUNTING_SEMAPHORE);
 }
 
-/*PAGE
- *
- *  _Attributes_Is_inherit_priority
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_inherit_priority
  *
  *  This function returns TRUE if the priority inheritance attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 )
@@ -177,16 +146,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_inherit_priority(
    return ( attribute_set & RTEMS_INHERIT_PRIORITY );
 }
 
-/*PAGE
- *
- *  _Attributes_Is_priority_ceiling
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_priority_ceiling
  *
  *  This function returns TRUE if the priority ceiling attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
   rtems_attribute attribute_set
 )
@@ -194,16 +159,12 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
    return ( attribute_set & RTEMS_PRIORITY_CEILING );
 }
 
-/*PAGE
- *
- *  _Attributes_Is_barrier_automatic
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_barrier_automatic
  *
  *  This function returns TRUE if the barrier automatic release
  *  attribute is enabled in the attribute_set and FALSE otherwise.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_barrier_automatic(
   rtems_attribute attribute_set
 )
@@ -211,22 +172,20 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_barrier_automatic(
    return ( attribute_set & RTEMS_BARRIER_AUTOMATIC_RELEASE );
 }
 
-/*PAGE
- *
- *  _Attributes_Is_system_task
- *
- *  DESCRIPTION:
+/**
+ *  @brief Attributes_Is_system_task
  *
  *  This function returns TRUE if the system task attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_system_task(
   rtems_attribute attribute_set
 )
 {
    return ( attribute_set & RTEMS_SYSTEM_TASK );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

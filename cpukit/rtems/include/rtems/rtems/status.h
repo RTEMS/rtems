@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/status.h
- */
-
-/*
+ *
  *  This include file contains the status codes returned from the
  *  executive directives.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +17,13 @@
 
 #ifndef _RTEMS_RTEMS_STATUS_H
 #define _RTEMS_RTEMS_STATUS_H
+
+/**
+ *  @defgroup ClassicStatus Classic API Status
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,12 +83,13 @@ rtems_status_code _Status_Object_name_errors_to_status[] = {
 /*
  *  Applications are allowed to use the macros to compare status codes.
  */
-
 #include <rtems/rtems/status.inl>
 
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

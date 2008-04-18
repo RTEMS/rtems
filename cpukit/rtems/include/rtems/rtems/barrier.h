@@ -1,20 +1,19 @@
 /**
  * @file rtems/rtems/barrier.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Barrier Manager.
  *
  *  Directives provided are:
  *
- *     + create a barrier
- *     + get an ID of a barrier
- *     + delete a barrier
- *     + wait for a barrier
- *     + signal a barrier
- *
- *  COPYRIGHT (c) 1989-2007.
+ *     - create a barrier
+ *     - get an ID of a barrier
+ *     - delete a barrier
+ *     - wait for a barrier
+ *     - signal a barrier
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,6 +25,13 @@
 
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
+
+/**
+ *  @defgroup ClassicBarrier Classic API Barrier
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
 
 #ifndef RTEMS_BARRIER_EXTERN
 #define RTEMS_BARRIER_EXTERN extern
@@ -45,7 +51,6 @@ extern "C" {
 /**
  *  This type defines the control block used to manage each barrier.
  */
-
 typedef struct {
   /** This is used to manage a barrier as an object. */
   Objects_Control          Object;
@@ -59,7 +64,6 @@ typedef struct {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-
 RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
 
 /**
@@ -70,7 +74,6 @@ RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
  *  @param[in] maximum_barriers is the total number of barriers allowed to
  *             concurrently be active in the system.
  */
-
 void _Barrier_Manager_initialization(
   uint32_t   maximum_barriers
 );
@@ -92,7 +95,6 @@ void _Barrier_Manager_initialization(
  *
  *  @return a status code indicating success or the reason for failure.
  */
-
 rtems_status_code rtems_barrier_create(
   rtems_name           name,
   rtems_attribute      attribute_set,
@@ -116,7 +118,6 @@ rtems_status_code rtems_barrier_create(
  *
  *  @return a status code indicating success or the reason for failure.
  */
-
 rtems_status_code rtems_barrier_ident(
   rtems_name    name,
   rtems_id     *id
@@ -194,6 +195,8 @@ rtems_status_code _Barrier_Translate_core_barrier_return_code (
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /*  end of include file */

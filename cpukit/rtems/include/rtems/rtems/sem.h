@@ -1,8 +1,6 @@
 /**
  * @file rtems/rtems/sem.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Semaphore Manager.  This manager utilizes standard Dijkstra
  *  counting semaphores to provide synchronization and mutual exclusion
@@ -10,13 +8,14 @@
  *
  *  Directives provided are:
  *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
- *  COPYRIGHT (c) 1989-2007.
+ *     - create a semaphore
+ *     - get an ID of a semaphore
+ *     - delete a semaphore
+ *     - acquire a semaphore
+ *     - release a semaphore
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,10 +44,16 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/coresem.h>
 
-/*
+/**
+ *  @defgroup ClassicSem Classic API Semaphore
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+/**
  *  The following defines the control block used to manage each semaphore.
  */
-
 typedef struct {
   Objects_Control          Object;
   rtems_attribute          attribute_set;
@@ -58,29 +63,23 @@ typedef struct {
   } Core_control;
 }   Semaphore_Control;
 
-/*
+/**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-
 RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
 
-/*
- *  _Semaphore_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief Semaphore_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _Semaphore_Manager_initialization(
   uint32_t   maximum_semaphores
 );
 
-/*
- *  rtems_semaphore_create
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_semaphore_create
  *
  *  This routine implements the rtems_semaphore_create directive.  The
  *  semaphore will have the name name.  The starting count for
@@ -88,7 +87,6 @@ void _Semaphore_Manager_initialization(
  *  the semaphore is global or local and the thread queue
  *  discipline.  It returns the id of the created semaphore in ID.
  */
-
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
   uint32_t             count,
@@ -97,10 +95,8 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 );
 
-/*
- *  rtems_semaphore_ident
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_semaphore_ident
  *
  *  This routine implements the rtems_semaphore_ident directive.
  *  This directive returns the semaphore ID associated with name.
@@ -110,30 +106,24 @@ rtems_status_code rtems_semaphore_create(
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
  */
-
 rtems_status_code rtems_semaphore_ident(
   rtems_name    name,
   uint32_t      node,
   rtems_id     *id
 );
 
-/*
- *  rtems_semaphore_delete
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_semaphore_delete
  *
  *  This routine implements the rtems_semaphore_delete directive.  The
  *  semaphore indicated by ID is deleted.
  */
-
 rtems_status_code rtems_semaphore_delete(
   rtems_id   id
 );
 
-/*
- *  rtems_semaphore_obtain
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_semaphore_obtain
  *
  *  This routine implements the rtems_semaphore_obtain directive.  It
  *  attempts to obtain a unit from the semaphore associated with ID.
@@ -143,17 +133,14 @@ rtems_status_code rtems_semaphore_delete(
  *  clock ticks.  Whether the task blocks or returns immediately
  *  is based on the RTEMS_NO_WAIT option in the option_set.
  */
-
 rtems_status_code rtems_semaphore_obtain(
   rtems_id       id,
   uint32_t       option_set,
   rtems_interval timeout
 );
 
-/*
- *  rtems_semaphore_release
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_semaphore_release
  *
  *  This routine implements the rtems_semaphore_release directive.  It
  *  frees a unit to the semaphore associated with ID.  If a task was
@@ -161,110 +148,49 @@ rtems_status_code rtems_semaphore_obtain(
  *  be readied and the unit given to that task.  Otherwise, the unit
  *  will be returned to the semaphore.
  */
-
 rtems_status_code rtems_semaphore_release(
   rtems_id   id
 );
 
-/*
- *  rtems_semaphore_flush
- *
- *  This directive allows a thread to flush the threads
+/**
+ *  @brief rtems_semaphore_flush
  *  pending on the semaphore.
  */
-
 rtems_status_code rtems_semaphore_flush(
   rtems_id	   id
 );
 
-/*
- *  _Semaphore_Seize
- *
- *  DESCRIPTION:
+/**
+ *  @brief _Semaphore_Seize
  *
  *  This routine attempts to receive a unit from the_semaphore.
  *  If a unit is available or if the RTEMS_NO_WAIT option is enabled in
  *  option_set, then the routine returns.  Otherwise, the calling task
  *  is blocked until a unit becomes available.
  */
-
 boolean _Semaphore_Seize(
   Semaphore_Control *the_semaphore,
   uint32_t           option_set
 );
 
-/*
- *  _Semaphore_Translate_core_mutex_return_code
- *
- *  DESCRIPTION:
+/**
+ *  @brief _Semaphore_Translate_core_mutex_return_code
  *
  *  This function returns a RTEMS status code based on the mutex
  *  status code specified.
  */
-
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   uint32_t   the_mutex_status
 );
 
-/*
- *  _Semaphore_Translate_core_semaphore_return_code
- *
- *  DESCRIPTION:
+/**
+ *  @brief _Semaphore_Translate_core_semaphore_return_code
  *
  *  This function returns a RTEMS status code based on the semaphore
  *  status code specified.
  */
-
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
   uint32_t   the_mutex_status
-);
-
-/*PAGE
- *
- *  _Semaphore_Core_mutex_mp_support
- *
- *  DESCRIPTION:
- *
- *  This function processes the global actions necessary for remote
- *  accesses to a global semaphore based on a core mutex.  This function
- *  is called by the core.
- */
-
-#if defined(RTEMS_MULTIPROCESSING)
-void  _Semaphore_Core_mutex_mp_support (
-  Thread_Control *the_thread,
-  rtems_id        id
-);
-#endif
-
-/*PAGE
- *
- *  _Semaphore_Core_mp_support
- *
- *  DESCRIPTION:
- *
- *  This function processes the global actions necessary for remote
- *  accesses to a global semaphore based on a core semaphore.  This function
- *  is called by the core.
- */
-
-void  _Semaphore_Core_semaphore_mp_support (
-  Thread_Control *the_thread,
-  rtems_id        id
-);
-
-/*PAGE
- *
- *  _POSIX_Semaphore_MP_support
- *
- *  DESCRIPTION:
- *
- *  XXX
- */
-
-void _POSIX_Semaphore_MP_support(
-  Thread_Control *the_thread,
-  Objects_Id      id
 );
 
 #ifndef __RTEMS_APPLICATION__
@@ -277,6 +203,8 @@ void _POSIX_Semaphore_MP_support(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /*  end of include file */

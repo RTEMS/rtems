@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/event.inl
- */
-
-/*
+ *
  *  This include file contains the static inline implementation of
  *  macros for the Event Manager.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +17,13 @@
 
 #ifndef _RTEMS_RTEMS_EVENT_INL
 #define _RTEMS_RTEMS_EVENT_INL
+
+/**
+ *  @addtogroup ClassicEvent
+ *  @{
+ */
+
+/**@}*/
 
 #endif
 /* end of include file */

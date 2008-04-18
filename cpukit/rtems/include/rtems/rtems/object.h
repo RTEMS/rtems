@@ -1,9 +1,8 @@
 /**
- * @file rtems/classinfo.h
+ * @file rtems/rtems/object.h
  */
- 
-/*
- *  COPYRIGHT (c) 1989-2008.
+
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +23,13 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+
+/**
+ *  @defgroup ClassicClassInfo Classic API Class Information
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
 
 /**
  *  This structure is used to return information to the application
@@ -324,6 +330,8 @@ rtems_status_code rtems_object_get_class_information(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

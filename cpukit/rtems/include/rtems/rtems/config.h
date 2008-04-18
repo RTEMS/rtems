@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/config.h
- */
-
-/*
+ *
  *  This include file contains the table of user defined configuration
  *  parameters specific for the RTEMS API.
- *
- *  COPYRIGHT (c) 1989-2006.
+ */
+
+/*  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,7 +25,14 @@ extern "C" {
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/tasks.h>
 
-/*
+/**
+ *  @defgroup ClassicConfig Classic API Configuration
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+/**
  *  The following records define the Configuration Table.  The
  *  information contained in this table is required in all
  *  RTEMS systems, whether single or multiprocessor.  This
@@ -34,7 +40,6 @@ extern "C" {
  *
  *     + required number of each object type
  */
-
 typedef struct {
   uint32_t                    maximum_tasks;
   uint32_t                    maximum_timers;
@@ -52,6 +57,8 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

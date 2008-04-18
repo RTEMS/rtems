@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/options.h
- */
-
-/*
+ *
  *  This include file contains information which defines the
  *  options available on many directives.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,18 +22,23 @@
 extern "C" {
 #endif
 
-/*
+/**
+ *  @defgroup ClassicOptions Classic API Options
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+/**
  *  The following type defines the control block used to manage
  *  option sets.
  */
-
 typedef uint32_t   rtems_option;
 
-/*
+/**
  *  The following constants define the individual options which may
  *  be used to compose an option set.
  */
-
 #define RTEMS_DEFAULT_OPTIONS   0x00000000
 
 #define RTEMS_WAIT      0x00000000        /* wait on resource */

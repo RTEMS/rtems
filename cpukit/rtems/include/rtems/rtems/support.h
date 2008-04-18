@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/support.h
- */
-
-/*
+ *
  *  This include file contains information about support functions for
  *  the RTEMS API.
- *
- *  COPYRIGHT (c) 1989-2008.
+ */
+
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,27 +24,39 @@ extern "C" {
 
 #include <rtems/rtems/types.h>
 
-/**  @brief milliseconds to microseconds
+/**
+ *  @defgroup ClassicSupport Classic API Support
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+/**
+ *  @brief milliseconds to microseconds
  *
  *  This is the public milliseconds to microseconds conversion.
  */
 #define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) \
         TOD_MILLISECONDS_TO_MICROSECONDS(_ms)
 
-/** @brief milliseconds to ticks
+/**
+ *  @brief milliseconds to ticks
  *
  *  This is the public milliseconds to ticks conversion.
  */
 #define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
         TOD_MILLISECONDS_TO_TICKS(_ms)
 
-/** @brief microseconds to ticks
+/**
+ *  @brief microseconds to ticks
+ *
  *  This is the public microseconds to tick conversion.
  */
 #define RTEMS_MICROSECONDS_TO_TICKS(_ms) \
         TOD_MICROSECONDS_TO_TICKS(_ms)
 
-/** @brief get workspace information
+/**
+ *  @brief get workspace information
  *
  *  This returns information about the heap that is used as
  *  the RTEMS Executive Workspace.
@@ -58,7 +69,8 @@ boolean rtems_workspace_get_information(
   Heap_Information_block  *the_info
 );
 
-/** @brief get workspace information
+/**
+ *  @brief get workspace information
  *
  *  This returns information about the heap that is used as
  *  the RTEMS Executive Workspace.
@@ -73,7 +85,8 @@ boolean rtems_workspace_allocate(
   void   **pointer
 );
 
-/** @brief free workspace
+/**
+ * @brief free workspace
  *
  *  This frees the workspace that was allocated from   
  *  the RTEMS Executive Workspace.
@@ -93,6 +106,8 @@ boolean rtems_workspace_free(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

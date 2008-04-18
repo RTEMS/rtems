@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/timer.inl
- */
-
-/*
+ *
  *  This file contains the static inline implementation of the inlined routines
  *  from the Timer Manager.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,31 +18,28 @@
 #ifndef _RTEMS_RTEMS_TIMER_INL
 #define _RTEMS_RTEMS_TIMER_INL
 
-/*PAGE
- *
- *  _Timer_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @addtogroup ClassicTimer
+ *  @{
+ */
+
+/**
+ *  @brief Timer_Allocate
  *
  *  This function allocates a timer control block from
  *  the inactive chain of free timer control blocks.
  */
-
 RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Allocate( void )
 {
   return (Timer_Control *) _Objects_Allocate( &_Timer_Information );
 }
 
-/*PAGE
- *
- *  _Timer_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Free
  *
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _Timer_Free (
   Timer_Control *the_timer
 )
@@ -51,11 +47,8 @@ RTEMS_INLINE_ROUTINE void _Timer_Free (
   _Objects_Free( &_Timer_Information, &the_timer->Object );
 }
 
-/*PAGE
- *
- *  _Timer_Get
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Get
  *
  *  This function maps timer IDs to timer control blocks.
  *  If ID corresponds to a local timer, then it returns
@@ -63,7 +56,6 @@ RTEMS_INLINE_ROUTINE void _Timer_Free (
  *  is set to OBJECTS_LOCAL.  Otherwise, location is set
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
-
 RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get (
   Objects_Id         id,
   Objects_Locations *location
@@ -73,16 +65,12 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get (
     _Objects_Get( &_Timer_Information, id, location );
 }
 
-/*PAGE
- *
- *  _Timer_Is_interval_class
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Is_interval_class
  *
  *  This function returns TRUE if the class is that of an INTERVAL
  *  timer, and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
   Timer_Classes the_class
 )
@@ -90,16 +78,12 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
   return (the_class == TIMER_INTERVAL) || (the_class == TIMER_INTERVAL_ON_TASK);
 }
 
-/*PAGE
- *
- *  _Timer_Is_time_of_day_class
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Is_time_of_day_class
  *
  *  This function returns TRUE if the class is that of an INTERVAL
  *  timer, and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Timer_Is_timer_of_day_class (
   Timer_Classes the_class
 )
@@ -107,16 +91,12 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_timer_of_day_class (
   return ( the_class == TIMER_TIME_OF_DAY );
 }
 
-/*PAGE
- *
- *  _Timer_Is_dormant_class
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Is_dormant_class
  *
  *  This function returns TRUE if the class is that of a DORMANT
  *  timer, and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Timer_Is_dormant_class (
   Timer_Classes the_class
 )
@@ -124,21 +104,19 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_dormant_class (
   return ( the_class == TIMER_DORMANT );
 }
 
-/*PAGE
- *
- *  _Timer_Is_null
- *
- *  DESCRIPTION:
+/**
+ *  @brief Timer_Is_null
  *
  *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Timer_Is_null (
   Timer_Control *the_timer
 )
 {
   return ( the_timer == NULL );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

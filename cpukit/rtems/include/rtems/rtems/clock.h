@@ -1,21 +1,20 @@
 /**
  * @file rtems/rtems/clock.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Clock Manager.  This manager provides facilities to set, obtain,
  *  and continually update the current date and time.
  *
  *  This manager provides directives to:
  *
- *     + set the current date and time
- *     + obtain the current date and time
- *     + set the nanoseconds since last clock tick handler
- *     + announce a clock tick
- *     + obtain the system uptime
- *
- *  COPYRIGHT (c) 1989-2008.
+ *     - set the current date and time
+ *     - obtain the current date and time
+ *     - set the nanoseconds since last clock tick handler
+ *     - announce a clock tick
+ *     - obtain the system uptime
+ */
+
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,14 +27,21 @@
 #ifndef _RTEMS_RTEMS_CLOCK_H
 #define _RTEMS_RTEMS_CLOCK_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+
+/**
+ *  @defgroup ClassicClock Classic API Clock
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  List of things which can be returned by the rtems_clock_get directive.
@@ -258,6 +264,8 @@ Watchdog_Interval _TOD_To_seconds(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

@@ -1,8 +1,6 @@
 /**
  * @file rtems/rtems/part.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Partition Manager.  This manager provides facilities to
  *  dynamically allocate memory in fixed-sized units which are returned
@@ -10,13 +8,14 @@
  *
  *  Directives provided are:
  *
- *     + create a partition
- *     + get an ID of a partition
- *     + delete a partition
- *     + get a buffer from a partition
- *     + return a buffer to a partition
- *
- *  COPYRIGHT (c) 1989-2007.
+ *     - create a partition
+ *     - get an ID of a partition
+ *     - delete a partition
+ *     - get a buffer from a partition
+ *     - return a buffer to a partition
+ */
+
+/*  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -44,10 +43,16 @@ extern "C" {
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/types.h>
 
-/*
+/**
+ *  @defgroup ClassicPart Classic API Partition
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
+/**
  *  The following defines the control block used to manage each partition.
  */
-
 typedef struct {
   Objects_Control     Object;
   void               *starting_address;      /* physical address */
@@ -58,29 +63,23 @@ typedef struct {
   Chain_Control       Memory;                /* buffer chain */
 }   Partition_Control;
 
-/*
+/**
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-
 RTEMS_PART_EXTERN Objects_Information _Partition_Information;
 
-/*
- *  _Partition_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _Partition_Manager_initialization(
   uint32_t   maximum_partitions
 );
 
-/*
- *  rtems_partition_create
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_partition_create
  *
  *  This routine implements the rtems_partition_create directive.  The
  *  partition will have the name name.  The memory area managed by
@@ -90,7 +89,6 @@ void _Partition_Manager_initialization(
  *  the partition is global or local.  It returns the id of the
  *  created partition in ID.
  */
-
 rtems_status_code rtems_partition_create(
   rtems_name          name,
   void               *starting_address,
@@ -100,10 +98,8 @@ rtems_status_code rtems_partition_create(
   Objects_Id         *id
 );
 
-/*
- *  rtems_partition_ident
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_partition_ident
  *
  *  This routine implements the rtems_partition_ident directive.
  *  This directive returns the partition ID associated with name.
@@ -113,51 +109,41 @@ rtems_status_code rtems_partition_create(
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
  */
-
 rtems_status_code rtems_partition_ident(
   rtems_name    name,
   uint32_t      node,
   Objects_Id   *id
 );
 
-/*
- *  rtems_partition_delete
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_partition_delete
  *
  *  This routine implements the rtems_partition_delete directive.  The
  *  partition indicated by ID is deleted.
  */
-
 rtems_status_code rtems_partition_delete(
   Objects_Id id
 );
 
-/*
- *  rtems_partition_get_buffer
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_partition_get_buffer
  *
  *  This routine implements the rtems_partition_get_buffer directive.  It
  *  attempts to allocate a buffer from the partition associated with ID.
  *  If a buffer is allocated, its address is returned in buffer.
  */
-
 rtems_status_code rtems_partition_get_buffer(
   Objects_Id  id,
   void       **buffer
 );
 
-/*
- *  rtems_partition_return_buffer
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_partition_return_buffer
  *
  *  This routine implements the rtems_partition_return_buffer directive.  It
  *  frees the buffer to the partition associated with ID.  The buffer must
  *  have been previously allocated from the same partition.
  */
-
 rtems_status_code rtems_partition_return_buffer(
   Objects_Id  id,
   void       *buffer
@@ -173,6 +159,8 @@ rtems_status_code rtems_partition_return_buffer(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

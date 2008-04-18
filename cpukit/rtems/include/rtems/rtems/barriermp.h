@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/barriermp.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Support in the Barrier Manager.
- *
- *  COPYRIGHT (c) 1989-2006.
+ */
+
+/*  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +17,13 @@
 
 #ifndef _RTEMS_RTEMS_SEMMP_H
 #define _RTEMS_RTEMS_SEMMP_H
+
+/**
+ *  @defgroup ClassicBarrierMP Classic API Barrier MP Support
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -136,6 +142,8 @@ Barrier_MP_Packet *_Barrier_MP_Get_packet ( void );
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of file */

@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/modes.h
- */
-
-/*
+ *
  *  This include file contains all constants and structures associated
  *  with the RTEMS thread and RTEMS_ASR modes.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,24 +18,29 @@
 #ifndef _RTEMS_RTEMS_MODES_H
 #define _RTEMS_RTEMS_MODES_H
 
+/**
+ *  @defgroup ClassicModes Classic API Modes
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems/score/isr.h>
 
-/*
+/**
  *  The following type defines the control block used to manage
  *  each a mode set.
  */
-
 typedef uint32_t   Modes_Control;
 
-/*
+/**
  *  The following constants define the individual modes and masks
  *  which may be used to compose a mode set and to alter modes.
  */
-
 #define RTEMS_ALL_MODE_MASKS     0x0000ffff
 
 #define RTEMS_DEFAULT_MODES     0x00000000
@@ -56,25 +60,21 @@ typedef uint32_t   Modes_Control;
 #define RTEMS_ASR          0x00000000     /* enable RTEMS_ASR               */
 #define RTEMS_NO_ASR       0x00000400     /* disable RTEMS_ASR              */
 
-/*
+/**
  *  The number of bits for interrupt levels is CPU dependent.
  *  RTEMS supports 0 to 256 levels in bits 0-7 of the mode.
  */
 
-/*PAGE
- *
- *  RTEMS_INTERRUPT_LEVEL
- *
- *  DESCRIPTION:
+/**
+ *  @brief RTEMS_INTERRUPT_LEVEL
  *
  *  This function returns the processor dependent interrupt
  *  level which corresponds to the requested interrupt level.
  *
- * NOTE: RTEMS supports 256 interrupt levels using the least
- *       significant eight bits of MODES.CONTROL.  On any
- *       particular CPU, fewer than 256 levels may be supported.
+ *  @note RTEMS supports 256 interrupt levels using the least
+ *        significant eight bits of MODES.CONTROL.  On any
+ *        particular CPU, fewer than 256 levels may be supported.
  */
-
 #define RTEMS_INTERRUPT_LEVEL( _mode_set ) \
   ( (_mode_set) & RTEMS_INTERRUPT_MASK )
 

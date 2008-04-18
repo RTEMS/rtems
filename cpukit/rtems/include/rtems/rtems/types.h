@@ -1,11 +1,10 @@
 /**
  * @file rtems/rtems/types.h
+ *
+ *  This include file defines the types used by the RTEMS API.
  */
 
-/*
- *  This include file defines the types used by the RTEMS API.
- *
- *  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +16,13 @@
 
 #ifndef _RTEMS_RTEMS_TYPES_H
 #define _RTEMS_RTEMS_TYPES_H
+
+/**
+ *  @defgroup ClassicTypes Classic API Types
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,18 +56,15 @@ typedef Context_Control            rtems_context;
 typedef Context_Control_fp         rtems_context_fp;
 typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 
-/*
+/**
  *  Region information block
  */
-
 typedef Heap_Information_block region_information_block;
 
-/*
+/**
  *  Time related
  */
-
 typedef Watchdog_Interval rtems_interval;
-
 
 /**
  *  The following record defines the time of control block.  This
@@ -86,16 +89,14 @@ typedef struct {
   uint32_t   ticks;
 }   rtems_time_of_day;
 
-/*
+/**
  *  Define the type for an RTEMS API task mode.
  */
-
 typedef Modes_Control rtems_mode;
 
 /*
  *  MPCI related entries
  */
-
 #if defined(RTEMS_MULTIPROCESSING)
 typedef MP_packet_Classes          rtems_mp_packet_classes;
 typedef MP_packet_Prefix           rtems_packet_prefix;
@@ -114,6 +115,8 @@ typedef MPCI_Control rtems_mpci_table;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

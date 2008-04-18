@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/tasks.inl
- */
-
-/*
+ *
  *  This file contains the static inline implementation of all inlined
  *  routines in the with RTEMS Tasks Manager.
- *
- *  COPYRIGHT (c) 1989-2008.
+ */
+
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,31 +18,28 @@
 #ifndef _RTEMS_RTEMS_TASKS_INL
 #define _RTEMS_RTEMS_TASKS_INL
 
-/*PAGE
- *
- *  _RTEMS_tasks_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @addtogroup ClassicTasks
+ *  @{
+ */
+
+/**
+ *  @brief RTEMS_tasks_Allocate
  *
  *  This function allocates a task control block from
  *  the inactive chain of free task control blocks.
  */
-
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate( void )
 {
   return (Thread_Control *) _Objects_Allocate( &_RTEMS_tasks_Information );
 }
 
-/*PAGE
- *
- *  _RTEMS_tasks_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief RTEMS_tasks_Free
  *
  *  This routine frees a task control block to the
  *  inactive chain of free task control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
   Thread_Control *the_task
 )
@@ -54,15 +50,11 @@ RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
   );
 }
 
-/*PAGE
- *
- *  _RTEMS_tasks_Priority_to_Core
- *
- *  DESCRIPTION:
+/**
+ *  @brief RTEMS_tasks_Priority_to_Core
  *
  *  This function converts an RTEMS API priority into a core priority.
  */
- 
 RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
   rtems_task_priority   priority
 )
@@ -70,16 +62,12 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
   return (Priority_Control) priority;
 }
 
-/*PAGE
- *
- *  _RTEMS_tasks_Priority_is_valid
- *
- *  DESCRIPTION:
+/**
+ *  @brief RTEMS_tasks_Priority_is_valid
  *
  *  This function returns TRUE if the_priority is a valid user task priority
  *  and FALSE otherwise.
  */
- 
 RTEMS_INLINE_ROUTINE boolean _RTEMS_tasks_Priority_is_valid (
   rtems_task_priority the_priority
 )
@@ -87,6 +75,8 @@ RTEMS_INLINE_ROUTINE boolean _RTEMS_tasks_Priority_is_valid (
   return (  ( the_priority >= RTEMS_MINIMUM_PRIORITY ) &&
             ( the_priority <= RTEMS_MAXIMUM_PRIORITY ) );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

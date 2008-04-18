@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/sem.inl
- */
-
-/*
+ *
  *  This file contains the static inlin implementation of the inlined
  *  routines from the Semaphore Manager.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,31 +18,28 @@
 #ifndef _RTEMS_RTEMS_SEM_INL
 #define _RTEMS_RTEMS_SEM_INL
 
-/*PAGE
- *
- *  _Semaphore_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @addtogroup ClassicSem
+ *  @{
+ */
+
+/**
+ *  @brief Semaphore_Allocate
  *
  *  This function allocates a semaphore control block from
  *  the inactive chain of free semaphore control blocks.
  */
-
 RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Allocate( void )
 {
   return (Semaphore_Control *) _Objects_Allocate( &_Semaphore_Information );
 }
 
-/*PAGE
- *
- *  _Semaphore_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief Semaphore_Free
  *
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   Semaphore_Control *the_semaphore
 )
@@ -51,11 +47,8 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
-/*PAGE
- *
- *  _Semaphore_Get
- *
- *  DESCRIPTION:
+/**
+ *  @brief Semaphore_Get
  *
  *  This function maps semaphore IDs to semaphore control blocks.
  *  If ID corresponds to a local semaphore, then it returns
@@ -65,7 +58,6 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
  *  and the_semaphore is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
-
 RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
   Objects_Id         id,
   Objects_Locations *location
@@ -85,21 +77,19 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
     _Objects_Get_isr_disable( &_Semaphore_Information, id, location, level );
 }
 
-/*PAGE
- *
- *  _Semaphore_Is_null
- *
- *  DESCRIPTION:
+/**
+ *  @brief Semaphore_Is_null
  *
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Semaphore_Is_null (
   Semaphore_Control *the_semaphore
 )
 {
   return ( the_semaphore == NULL );
 }
+
+/**@}*/
 
 #endif
 /*  end of include file */

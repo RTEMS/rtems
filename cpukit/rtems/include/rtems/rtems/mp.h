@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/mp.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Manager.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,37 +18,38 @@
 #ifndef _RTEMS_RTEMS_MP_H
 #define _RTEMS_RTEMS_MP_H
 
+/**
+ *  @defgroup ClassicMP Classic API Multiprocessing
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *
- *  _Multiprocessing_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief Multiprocessing_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _Multiprocessing_Manager_initialization ( void );
 
-/*
- *
- *  rtems_multiprocessing_announce
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_multiprocessing_announce
  *
  *  This routine implements the MULTIPROCESSING_ANNOUNCE directive.
  *  It is invoked by the MPCI layer to indicate that an MPCI packet
  *  has been received.
  */
-
 void rtems_multiprocessing_announce ( void );
 
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /*  end of include file */

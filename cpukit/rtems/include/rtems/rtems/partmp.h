@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/partmp.h
- */
-
-/*
+ *
  *  This include file contains all the constants and structures associated
  *  with the Multiprocessing Support in the Partition Manager.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,11 +29,17 @@ extern "C" {
 
 #include <rtems/rtems/part.h>
 
-/*
+/**
+ *  @defgroup ClassicPartMP Classic API Partition MP Support
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**{*/
+
+/**
  *  The following enumerated type defines the list of
  *  remote partition operations.
  */
-
 typedef enum {
   PARTITION_MP_ANNOUNCE_CREATE        =  0,
   PARTITION_MP_ANNOUNCE_DELETE        =  1,
@@ -45,11 +50,10 @@ typedef enum {
   PARTITION_MP_RETURN_BUFFER_RESPONSE =  6
 }   Partition_MP_Remote_operations;
 
-/*
+/**
  *  The following data structure defines the packet used to perform
  *  remote partition operations.
  */
-
 typedef struct {
   rtems_packet_prefix             Prefix;
   Partition_MP_Remote_operations  operation;
@@ -58,15 +62,12 @@ typedef struct {
   Objects_Id                      proxy_id;
 }   Partition_MP_Packet;
 
-/*
- *  _Partition_MP_Send_process_packet
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Send_process_packet
  *
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */
-
 void _Partition_MP_Send_process_packet (
   Partition_MP_Remote_operations operation,
   Objects_Id                     partition_id,
@@ -74,54 +75,43 @@ void _Partition_MP_Send_process_packet (
   Objects_Id                     proxy_id
 );
 
-/*
- *  _Partition_MP_Send_request_packet
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Send_request_packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive operation can be initiated on another node.
  */
-
 rtems_status_code _Partition_MP_Send_request_packet (
   Partition_MP_Remote_operations  operation,
   Objects_Id                      partition_id,
   void                           *buffer
 );
 
-/*
- *  _Partition_MP_Send_response_packet
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Send_response_packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive can be performed on another node.
  */
-
 void _Partition_MP_Send_response_packet (
   Partition_MP_Remote_operations  operation,
   Objects_Id                      partition_id,
   Thread_Control                 *the_thread
 );
 
-/*
+/**
  *
- *  _Partition_MP_Process_packet
- *
- *  DESCRIPTION:
+ *  @brief Partition_MP_Process_packet
  *
  *  This routine performs the actions specific to this package for
  *  the request from another node.
  */
-
 void _Partition_MP_Process_packet (
   rtems_packet_prefix *the_packet_prefix
 );
 
-/*
- *  _Partition_MP_Send_object_was_deleted
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Send_object_was_deleted
  *
  *  This routine is invoked indirectly by the thread queue
  *  when a proxy has been removed from the thread queue and
@@ -130,34 +120,31 @@ void _Partition_MP_Process_packet (
  *  This routine is not needed by the Partition since a partition
  *  cannot be deleted when buffers are in use.
  */
+#warning "Why is there no prototype for Partition_MP_Send_object_was_deleted"
 
-/*
- *  _Partition_MP_Send_extract_proxy
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Send_extract_proxy
  *
  *  This routine is invoked when a task is deleted and it
  *  has a proxy which must be removed from a thread queue and
  *  the remote node must be informed of this.
  */
-
 void _Partition_MP_Send_extract_proxy (
   void           *argument
 );
 
-/*
- *  _Partition_MP_Get_packet
- *
- *  DESCRIPTION:
+/**
+ *  @brief Partition_MP_Get_packet
  *
  *  This function is used to obtain a partition mp packet.
  */
-
 Partition_MP_Packet *_Partition_MP_Get_packet ( void );
 
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of file */

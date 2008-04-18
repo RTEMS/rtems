@@ -1,11 +1,10 @@
 /**
  * @file rtems/rtems/cache.h
+ *
+ *  Cache Manager
  */
 
-/*
- *  Cache Manager
- *
- *  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,103 +37,120 @@ extern "C" {
 #include <rtems/system.h>
 #include <sys/types.h>
 
+/**
+ *  @defgroup ClassicCache Classic API Cache
+ *
+ *  This encapsulates functionality which XXX
+ */
+/**@{*/
+
 /*
  *  These functions will ONLY do something if the
  *  libcpu support includes data cache routines AND
  *  the CPU model supports data caching.
  */
 
-/*
+/**
  * This function is called to flush the data cache by performing cache
  * copybacks. It must determine how many cache lines need to be copied
  * back and then perform the copybacks.
  */
 void rtems_cache_flush_multiple_data_lines( const void *, size_t );
 
-/*
+/**
  * This function is responsible for performing a data cache invalidate.
  * It must determine how many cache lines need to be invalidated and then
  * perform the invalidations.
  */
 void rtems_cache_invalidate_multiple_data_lines( const void *, size_t );
 
-/*
+/**
  * This function is responsible for performing a data cache flush.
  * It flushes the entire cache.
  */
 void rtems_cache_flush_entire_data( void );
 
-/*
+/**
  * This function is responsible for performing a data cache
  * invalidate. It invalidates the entire cache.
  */
 void rtems_cache_invalidate_entire_data( void );
 
-/*
+/**
  * This function returns the data cache granularity.
  */
 int rtems_cache_get_data_line_size( void );
 
-/*
+/**
  * This function freezes the data cache.
  */
 void rtems_cache_freeze_data( void );
 
-/*
+/**
  * This function unfreezes the data cache.
  */
 void rtems_cache_unfreeze_data( void );
 
-/*
- * These functions enable/disable the data cache.
+/**
+ * This function enables the data cache.
  */
 void rtems_cache_enable_data( void );
+
+/**
+ * This function disables the data cache.
+ */
 void rtems_cache_disable_data( void );
 
-/*
+/**
  *  These functions will ONLY do something if the
  *  libcpu support includes instruction cache routines AND
  *  the CPU model supports instruction caching.
  */
 
-/*
+/**
  * This function is responsible for performing an instruction cache
  * invalidate. It must determine how many cache lines need to be invalidated
  * and then perform the invalidations.
  */
 void rtems_cache_invalidate_multiple_instruction_lines( const void *, size_t );
 
-/*
+/**
  * This function is responsible for performing an instruction cache
  * invalidate. It invalidates the entire cache.
  */
 void rtems_cache_invalidate_entire_instruction( void );
 
-/*
+/**
  * This function returns the instruction cache granularity.
  */
 int rtems_cache_get_instruction_line_size( void );
 
-/*
+/**
  * This function freezes the instruction cache.
  */
 void rtems_cache_freeze_instruction( void );
 
-/*
+/**
  * This function unfreezes the instruction cache.
  */
 void rtems_cache_unfreeze_instruction( void );
 
-/*
- * These functions enable/disable the instruction cache.
+/**
+ * This function enables the instruction cache.
  */
 void rtems_cache_enable_instruction( void );
+
+/**
+ * This function disables the instruction cache.
+ */
 void rtems_cache_disable_instruction( void );
 
 
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

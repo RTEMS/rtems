@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/barrier.inl
- */
-
-/*
+ *
  *  This file contains the static inlin implementation of the inlined
  *  routines from the Barrier Manager.
- *
- *  COPYRIGHT (c) 1989-2006.
+ */
+
+/*  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +17,11 @@
 
 #ifndef _RTEMS_RTEMS_BARRIER_INL
 #define _RTEMS_RTEMS_BARRIER_INL
+
+/**
+ *  @addtogroup ClassicBarrier
+ *  @{
+ */
 
 /**
  *  @brief _Barrier_Allocate
@@ -74,6 +78,8 @@ RTEMS_INLINE_ROUTINE boolean _Barrier_Is_null (
 {
   return ( the_barrier == NULL );
 }
+
+/**@}*/
 
 #endif
 /*  end of include file */

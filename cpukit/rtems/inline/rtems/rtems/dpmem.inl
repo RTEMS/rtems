@@ -1,12 +1,11 @@
 /**
  * @file rtems/rtems/dpmem.inl
- */
-
-/*
+ *
  *  This include file contains the inline routine used in conjunction
  *  with the Dual Ported Memory Manager
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,17 +18,17 @@
 #ifndef _RTEMS_RTEMS_DPMEM_INL
 #define _RTEMS_RTEMS_DPMEM_INL
 
+/**
+ *  @addtogroup ClassicDPMEM
+ *  @{
+ */
 
-/*PAGE
- *
- *  _Dual_ported_memory_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @brief Dual_ported_memory_Allocate
  *
  *  This routine allocates a port control block from the inactive chain
  *  of free port control blocks.
  */
-
 RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
    *_Dual_ported_memory_Allocate ( void )
 {
@@ -37,16 +36,12 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
      _Objects_Allocate( &_Dual_ported_memory_Information );
 }
 
-/*PAGE
- *
- *  _Dual_ported_memory_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief Dual_ported_memory_Free
  *
  *  This routine frees a port control block to the inactive chain
  *  of free port control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
    Dual_ported_memory_Control *the_port
 )
@@ -54,11 +49,8 @@ RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
   _Objects_Free( &_Dual_ported_memory_Information, &the_port->Object );
 }
 
-/*PAGE
- *
- *  _Dual_ported_memory_Get
- *
- *  DESCRIPTION:
+/**
+ *  @brief Dual_ported_memory_Get
  *
  *  This function maps port IDs to port control blocks.  If ID
  *  corresponds to a local port, then it returns the_port control
@@ -67,7 +59,6 @@ RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
  *  local port, location is set to OBJECTS_ERROR and the_port is
  *  undefined.
  */
-
 RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
   Objects_Id         id,
   Objects_Locations *location
@@ -77,21 +68,19 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
      _Objects_Get( &_Dual_ported_memory_Information, id, location );
 }
 
-/*PAGE
- *
- *  _Dual_ported_memory_Is_null
- *
- *  DESCRIPTION:
+/**
+ *  @brief Dual_ported_memory_Is_null
  *
  *  This function returns TRUE if the_port is NULL and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Dual_ported_memory_Is_null(
   Dual_ported_memory_Control *the_port
 )
 {
   return ( the_port == NULL );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */
