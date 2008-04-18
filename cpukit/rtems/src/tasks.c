@@ -174,6 +174,8 @@ void _RTEMS_tasks_Post_switch_extension(
   Modes_Control      prev_mode;
 
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  if ( !api )
+    return;
 
   /*
    *  Signal Processing

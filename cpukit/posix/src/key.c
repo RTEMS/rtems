@@ -17,6 +17,7 @@
 #include <limits.h>
 #include <pthread.h>
 #include <string.h>
+#include <limits.h>
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>

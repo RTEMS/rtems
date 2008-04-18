@@ -1,3 +1,9 @@
+2008-04-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/key.c: Include <limits.h>
+	* posix/src/psignal.c, rtems/src/tasks.c: Do not attempt to process
+	a NULL extension block.
+
 2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/dummy/dummy.c, sapi/include/confdefs.h: Add checks for

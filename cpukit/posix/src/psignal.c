@@ -108,6 +108,8 @@ void _POSIX_signals_Post_switch_extension(
   ISR_Level           level;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  if ( !api )
+    return;
 
   /*
    *  If we invoke any user code, there is the possibility that
