@@ -5,7 +5,7 @@
  *  options available on many directives.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,11 +41,28 @@ typedef uint32_t   rtems_option;
  */
 #define RTEMS_DEFAULT_OPTIONS   0x00000000
 
-#define RTEMS_WAIT      0x00000000        /* wait on resource */
-#define RTEMS_NO_WAIT   0x00000001        /* do not wait on resource */
+/**
+ *  This option constants indicates that the task is to wait on resource.
+ */
+#define RTEMS_WAIT      0x00000000
+/**
+ *  This option constants indicates that the task is to not wait on
+ *  the resource.  If it is not available, return immediately with
+ *  a status to indicate unsatisfied.
+ */
+#define RTEMS_NO_WAIT   0x00000001
 
-#define RTEMS_EVENT_ALL 0x00000000        /* wait for all events */
-#define RTEMS_EVENT_ANY 0x00000002        /* wait on any event */
+/**
+ *  This option constants indicates that the task wishes to wait until
+ *  all events of interest are available.
+ */
+#define RTEMS_EVENT_ALL 0x00000000
+
+/**
+ *  This option constants indicates that the task wishes to wait until
+ *  ANY events of interest are available.
+ */
+#define RTEMS_EVENT_ANY 0x00000002
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/options.inl>
@@ -54,6 +71,8 @@ typedef uint32_t   rtems_option;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

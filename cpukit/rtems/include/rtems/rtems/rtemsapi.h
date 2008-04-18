@@ -4,7 +4,7 @@
  *  RTEMS API Support
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,11 +20,9 @@
 #include <rtems/config.h>
 
 /**
- *  @defgroup ClassicRTEMS Classic RTEMS Support
- *
- *  This encapsulates functionality which XXX
+ *  @addtogroup ClassicRTEMS
+ *  @{
  */
-/**@{*/
 
 /**
  *  _RTEMS_API_Initialize

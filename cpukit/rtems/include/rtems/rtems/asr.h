@@ -6,7 +6,7 @@
  *  support required by the Signal Manager.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,12 +56,18 @@ typedef rtems_asr ( *rtems_asr_entry )(
  *  signals.  Each thread has a copy of this record.
  */
 typedef struct {
-  boolean           is_enabled;       /* are ASRs enabled currently? */
-  rtems_asr_entry   handler;          /* address of RTEMS_ASR */
-  Modes_Control     mode_set;         /* RTEMS_ASR mode */
-  rtems_signal_set  signals_posted;   /* signal set */
-  rtems_signal_set  signals_pending;  /* pending signal set */
-  uint32_t          nest_level;       /* nest level of RTEMS_ASR */
+  /** This field indicates if are ASRs enabled currently. */
+  boolean           is_enabled;
+  /** This field indicates if address of the signal handler function. */
+  rtems_asr_entry   handler;
+  /** This field indicates if the task mode the signal will run with. */
+  Modes_Control     mode_set;
+  /** This field indicates the signal set that is posted. */
+  rtems_signal_set  signals_posted;
+  /** This field indicates the signal set that is pending. */
+  rtems_signal_set  signals_pending;
+  /** This field indicates if nest level of signals being processed */
+  uint32_t          nest_level;
 }   ASR_Information;
 
 /*

@@ -25,11 +25,9 @@ extern "C" {
 #include <rtems/rtems/types.h>
 
 /**
- *  @defgroup ClassicSupport Classic API Support
- *
- *  This encapsulates functionality which XXX
+ *  @addtogroup ClassicRTEMS
+ *  @{
  */
-/**@{*/
 
 /**
  *  @brief milliseconds to microseconds

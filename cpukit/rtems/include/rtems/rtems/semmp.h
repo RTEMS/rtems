@@ -5,7 +5,7 @@
  *  with the Multiprocessing Support in the Semaphore Manager.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -166,6 +166,8 @@ void  _Semaphore_Core_semaphore_mp_support (
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of file */

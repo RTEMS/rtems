@@ -5,7 +5,7 @@
  *  routines from the Region Manager.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -104,6 +104,8 @@ RTEMS_INLINE_ROUTINE boolean _Region_Is_null (
 {
   return ( the_region == NULL  );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

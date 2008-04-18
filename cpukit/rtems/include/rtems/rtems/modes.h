@@ -5,7 +5,7 @@
  *  with the RTEMS thread and RTEMS_ASR modes.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,27 +43,43 @@ typedef uint32_t   Modes_Control;
  */
 #define RTEMS_ALL_MODE_MASKS     0x0000ffff
 
+/**
+ *  This mode constant is the default mode set.
+ */
 #define RTEMS_DEFAULT_MODES     0x00000000
-#define RTEMS_CURRENT_MODE      0
-
-#define RTEMS_PREEMPT_MASK    0x00000100  /* preemption bit           */
-#define RTEMS_TIMESLICE_MASK  0x00000200  /* timeslice bit            */
-#define RTEMS_ASR_MASK        0x00000400  /* RTEMS_ASR enable bit           */
-#define RTEMS_INTERRUPT_MASK  CPU_MODES_INTERRUPT_MASK
-
-#define RTEMS_PREEMPT      0x00000000     /* enable preemption        */
-#define RTEMS_NO_PREEMPT   0x00000100     /* disable preemption       */
-
-#define RTEMS_NO_TIMESLICE 0x00000000     /* disable timeslicing      */
-#define RTEMS_TIMESLICE    0x00000200     /* enable timeslicing       */
-
-#define RTEMS_ASR          0x00000000     /* enable RTEMS_ASR               */
-#define RTEMS_NO_ASR       0x00000400     /* disable RTEMS_ASR              */
 
 /**
- *  The number of bits for interrupt levels is CPU dependent.
- *  RTEMS supports 0 to 256 levels in bits 0-7 of the mode.
+ *  This mode constant is used when the user wishes to obtain their
+ *  current execution mode.
  */
+#define RTEMS_CURRENT_MODE      0
+ 
+/** This mode constant corresponds to the timeslice enable/disable bit. */
+#define RTEMS_TIMESLICE_MASK  0x00000200
+
+/** This mode constant corresponds to the preemption enable/disable bit. */
+#define RTEMS_PREEMPT_MASK    0x00000100
+
+/** This mode constant corresponds to the signal enable/disable bit. */
+#define RTEMS_ASR_MASK        0x00000400
+
+/** This mode constant corresponds to the interrupt enable/disable bits. */
+#define RTEMS_INTERRUPT_MASK  CPU_MODES_INTERRUPT_MASK
+
+/** This mode constant is used to indicate preemption is enabled. */
+#define RTEMS_PREEMPT      0x00000000
+/** This mode constant is used to indicate preemption is disabled. */
+#define RTEMS_NO_PREEMPT   0x00000100
+
+/** This mode constant is used to indicate timeslicing is disabled. */
+#define RTEMS_NO_TIMESLICE 0x00000000
+/** This mode constant is used to indicate timeslicing is enabled. */
+#define RTEMS_TIMESLICE    0x00000200
+
+/** This mode constant is used to indicate signal processing is enabled. */
+#define RTEMS_ASR          0x00000000
+/** This mode constant is used to indicate signal processing is disabled. */
+#define RTEMS_NO_ASR       0x00000400
 
 /**
  *  @brief RTEMS_INTERRUPT_LEVEL
@@ -86,6 +102,8 @@ typedef uint32_t   Modes_Control;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

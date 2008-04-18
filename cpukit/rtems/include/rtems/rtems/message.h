@@ -17,7 +17,7 @@
  *     - flush all messages on a queue
  */
 
-/*  COPYRIGHT (c) 1989-2007.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,6 +30,12 @@
 #ifndef _RTEMS_RTEMS_MESSAGE_H
 #define _RTEMS_RTEMS_MESSAGE_H
 
+/**
+ *  This constant is defined to extern most of the time when using 
+ *  this header file.  However by defining it to nothing, the data
+ *  declared in this header file can be instantiated.  This is done
+ *  in a single per manager file.
+ */
 #ifndef RTEMS_MESSAGE_EXTERN
 #define RTEMS_MESSAGE_EXTERN extern
 #endif
@@ -52,13 +58,21 @@ extern "C" {
  */
 /**@{*/
 
-/*
+/**
  *  The following enumerated type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
  */
 typedef enum {
+  /**
+   *  This value indicates the user wants to send the message using the
+   *  normal message insertion protocol (FIFO or priority).
+   */
   MESSAGE_QUEUE_SEND_REQUEST   = 0,
+  /**
+   *  This value indicates the user considers the message to be urgent
+   *  and wants it inserted at the head of the pending message queue.
+   */
   MESSAGE_QUEUE_URGENT_REQUEST = 1
 }  Message_queue_Submit_types;
 
@@ -67,12 +81,15 @@ typedef enum {
  *  each message queue.
  */
 typedef struct {
+  /** This field is the inherited obejct characteristics. */
   Objects_Control             Object;
+  /** This field is the attribute set as defined by the API. */
   rtems_attribute             attribute_set;
+  /** This field is the instance of the SuperCore Message Queue. */
   CORE_message_queue_Control  message_queue;
 }   Message_queue_Control;
 
-/*
+/**
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
@@ -291,6 +308,8 @@ void  _Message_queue_Core_message_queue_mp_support (
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

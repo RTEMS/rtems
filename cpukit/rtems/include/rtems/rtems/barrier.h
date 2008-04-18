@@ -13,7 +13,7 @@
  *     - signal a barrier
  */
 
-/*  COPYRIGHT (c) 1989-2007.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,6 +33,12 @@
  */
 /**@{*/
 
+/**
+ *  This constant is defined to extern most of the time when using 
+ *  this header file.  However by defining it to nothing, the data
+ *  declared in this header file can be instantiated.  This is done
+ *  in a single per manager file.
+ */
 #ifndef RTEMS_BARRIER_EXTERN
 #define RTEMS_BARRIER_EXTERN extern
 #endif

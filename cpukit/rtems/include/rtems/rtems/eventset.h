@@ -6,7 +6,7 @@
  *  of event sets which will be sent and received by tasks.
  */
 
-/*  COPYRIGHT (c) 1989-1999.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,10 +36,15 @@ extern "C" {
 typedef uint32_t   rtems_event_set;
 
 /**
- *  The following constants define the individual events which may
- *  be used to compose an event set.
+ *  The following constant is used to receive the set of currently pending
+ *  events.
  */
-#define RTEMS_PENDING_EVENTS      0           /* receive pending events   */
+#define RTEMS_PENDING_EVENTS      0
+
+/**
+ *  The following constant is used when you wish to send or receive all
+ *  events.
+ */
 #define RTEMS_ALL_EVENTS  0xFFFFFFFF
 
 /** This defines the bit in the event set associated with event 0. */
