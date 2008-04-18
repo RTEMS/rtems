@@ -101,7 +101,7 @@ bin2s:	$(srcdir)/tools/bin2s.c
 
 SUFFIXES = .bin
 
-%.S:	%.bin bin2s
+%.s:	%.bin bin2s
 	$(srcdir)/tools/bin2s $< > $(srcdir)/$@
 
 libnds9_rel_SOURCES =  	libnds/source/common/biosCalls.S		\

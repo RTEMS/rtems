@@ -1,3 +1,9 @@
+2008-04-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Use bin2s to produce assembly files which do not need
+	preprocessing. Capital .S indicates an assembly file that gets
+	preprocessed.
+
 2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libnds/source/arm9/exceptionHandler.S: Rename .s to .S and replace
