@@ -25,6 +25,13 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/cpu.h>
 
+/*
+ * This variable can be used to change the running mode of the execution
+ * contexts.
+ */
+
+unsigned int arm_cpu_mode = 0x13;
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -129,8 +136,6 @@ void _CPU_ISR_install_vector(
     *(VectorTable + vector) = (long)new_handler ;
   
 }
-
-unsigned int arm_cpu_mode = 0x13;
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
