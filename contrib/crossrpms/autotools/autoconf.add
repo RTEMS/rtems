@@ -1,5 +1,5 @@
-%define rpmvers 2.61
-%define srcvers	2.61
+%define srcvers	@AUTOCONF_VERS@
+%define rpmvers %{expand:%(echo "@AUTOCONF_VERS@" | tr - _ )}
 
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@autoconf
