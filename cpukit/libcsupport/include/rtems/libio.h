@@ -10,7 +10,7 @@
  *  IO to devices but has since been enhanced to support networking
  *  and support for mounted file systems.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -605,11 +605,6 @@ int rtems_termios_enqueue_raw_characters(
 int rtems_termios_dequeue_characters(
   void *ttyp,
   int   len
-);
-
-void rtems_termios_reserve_resources(
-  rtems_configuration_table *configuration,
-  uint32_t             number_of_devices
 );
 
 int unmount(

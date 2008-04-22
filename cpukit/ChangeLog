@@ -1,3 +1,9 @@
+2008-04-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/libio.h: Remove
+	rtems_termios_reserve_resources. It is obsolete.
+	* libcsupport/src/termiosreserveresources.c: Removed.
+
 2008-04-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/mainpage.h: New file.

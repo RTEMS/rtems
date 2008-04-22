@@ -52,8 +52,7 @@ BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
     src/tcflow.c src/tcflush.c src/tcgetprgrp.c src/tcsendbreak.c \
-    src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
-    src/termiosreserveresources.c
+    src/tcsetpgrp.c src/termios.c src/termiosinitialize.c
 
 SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/write_r.c \
