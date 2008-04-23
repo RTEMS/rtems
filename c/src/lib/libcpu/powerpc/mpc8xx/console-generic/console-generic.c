@@ -91,7 +91,6 @@ struct rtems_termios_tty *ttyp[NUM_PORTS];
  */
 static int m8xx_get_brg_cd(int);
 static unsigned char m8xx_get_brg_clk(int);
-void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
 static void m8xx_smc1_interrupt_handler(void *unused);

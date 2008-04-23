@@ -1,3 +1,11 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc5xx/console-generic/console-generic.c, mpc5xx/include/console.h,
+	mpc8260/console-generic/console-generic.c, mpc8260/include/console.h,
+	mpc8xx/console-generic/console-generic.c, mpc8xx/include/console.h:
+	Remove all references to console_reserve_resources and
+	termios_reserve_resources.
+
 2008-04-07	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* README: 

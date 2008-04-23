@@ -99,7 +99,6 @@ static rtems_isr_entry old_handler[NUM_PORTS];
 /*
  * Device-specific routines
  */
-void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
 static rtems_isr m8xx_smc1_interrupt_handler(rtems_irq_hdl_param unused);

@@ -18,7 +18,6 @@
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 
-void m5xx_uart_reserve_resources(rtems_configuration_table *configuration);
 void m5xx_uart_initialize(int minor);
 
 /* Termios callbacks */

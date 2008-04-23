@@ -7,7 +7,6 @@
 
 #include <rtems/libio.h>
 
-void m8xx_uart_reserve_resources(rtems_configuration_table *configuration);
 void m8xx_uart_initialize(void);
 void m8xx_uart_interrupts_initialize(void);
 void m8xx_uart_scc_initialize (int minor);

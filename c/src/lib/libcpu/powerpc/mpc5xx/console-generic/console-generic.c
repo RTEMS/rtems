@@ -170,14 +170,6 @@ m5xx_uart_pollWrite(
   return 0;
 }
 
-void
-m5xx_uart_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources (configuration, NUM_PORTS);
-}
-
 int 
 m5xx_uart_setAttributes(
   int minor,
