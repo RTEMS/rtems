@@ -84,12 +84,6 @@ isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
-void tty_reserve_resources(rtems_configuration_table *conf)
-{
-  rtems_termios_reserve_resources(conf, 1);
-  return;
-}
-
 /*
  *  TTYS1 - device driver INITIALIZE entry point.
  */
