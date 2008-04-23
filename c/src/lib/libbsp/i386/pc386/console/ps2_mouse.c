@@ -543,12 +543,6 @@ static int psaux_init( void )
 	return 0;
 }
 
-void paux_reserve_resources(rtems_configuration_table *conf)
-{
-  rtems_termios_reserve_resources(conf, 1);
-  return;
-}
-
 /*
  * paux device driver INITIALIZE entry point.
  */
