@@ -44,8 +44,7 @@ pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/85c30.c console/85c30.h console/console.c \
-    console/consolereserveresources.c console/tbl85c30.c \
-    console/consolebsp.h
+    console/tbl85c30.c console/consolebsp.h
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

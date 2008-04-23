@@ -1,3 +1,9 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove all references to console_reserve_resources and
+	termios_reserve_resources.
+	* console/consolereserveresources.c: Removed.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds.bootp, startup/linkcmds.prom: Add

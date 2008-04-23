@@ -64,8 +64,7 @@ gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/consolereserveresources.c \
-    console/debugputs.c
+console_rel_SOURCES = console/console.c console/debugputs.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
