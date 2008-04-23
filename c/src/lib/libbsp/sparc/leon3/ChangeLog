@@ -1,3 +1,15 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ChangeLog, Makefile.am: Remove all references to
+	console_reserve_resources and termios_reserve_resources.
+	* console/consolereserveresources.c: Removed.
+
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove all references to console_reserve_resources and
+	termios_reserve_resources.
+	* console/consolereserveresources.c: Removed.
+
 2008-03-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Fix typo.

@@ -55,7 +55,7 @@ amba_rel_CPPFLAGS = $(AM_CPPFLAGS)
 amba_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/consolereserveresources.c
+console_rel_SOURCES = console/console.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
