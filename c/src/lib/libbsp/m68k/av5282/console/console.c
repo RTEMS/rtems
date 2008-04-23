@@ -596,18 +596,6 @@ IntUartPollWrite (int minor, const char *buf, int len)
 }
 
 /***************************************************************************
-   Function : console_reserve_resources
-
-   Description : This reserves resources consumed by this driver. It passes
-   the request on to the termios subsystem.
- ***************************************************************************/
-void console_reserve_resources( rtems_configuration_table *configuration )
-{
-	rtems_termios_reserve_resources (configuration, 1);
-}
-
-
-/***************************************************************************
    Function : console_initialize
 
    Description : This initialises termios, both sets of uart hardware before

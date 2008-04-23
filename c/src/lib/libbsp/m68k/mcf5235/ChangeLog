@@ -1,3 +1,8 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/console.c: Remove all references to console_reserve_resources
+	and termios_reserve_resources.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmdsflash, startup/linkcmdsram: Add
