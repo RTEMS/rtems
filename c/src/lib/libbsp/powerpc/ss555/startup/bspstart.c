@@ -178,11 +178,6 @@ void bsp_start(void)
   bsp_timer_average_overhead = 0;
 
   /*
-   * Call this in case we use TERMIOS for console I/O
-   */
-  m5xx_uart_reserve_resources( &Configuration );
-
-  /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);

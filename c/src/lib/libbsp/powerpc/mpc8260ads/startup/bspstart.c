@@ -161,8 +161,6 @@ void _BSP_Uart2_disable()
 
 }
 
-extern void m8260_console_reserve_resources(rtems_configuration_table *);
-
 /*
  *  Function:   bsp_pretasking_hook
  *  Created:    95/03/10
@@ -311,15 +309,6 @@ void bsp_start(void)
    */
   BSP_rtems_irq_mng_init(0);
 
-  /*
-   * Call this in case we use TERMIOS for console I/O
-   */
-
-  m8xx_uart_reserve_resources(&Configuration);
-
-/*
-  rtems_termios_initialize();
-*/
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
 #endif
