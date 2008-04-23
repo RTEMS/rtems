@@ -1,3 +1,8 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* iostream/system.h: Update to include definition of
+	CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER as appropriate.
+
 2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c, hello/system.h, minimum/init.c, unlimited/system.h:
