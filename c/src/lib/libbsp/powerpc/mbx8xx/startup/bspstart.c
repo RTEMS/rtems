@@ -225,11 +225,6 @@ void bsp_start(void)
   bsp_timer_least_valid = 3;
 #endif
 
-  /*
-   * Call this in case we use TERMIOS for console I/O
-   */
-  m8xx_uart_reserve_resources( &Configuration );
-
   m8xx.scc2.sccm=0;
   m8xx.scc2p.rbase=0;
   m8xx.scc2p.tbase=0;
