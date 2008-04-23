@@ -1,3 +1,8 @@
+2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems/rtems/partmp.h, sapi/include/confdefs.h: Fix
+	typos added with recent changes.
+
 2008-04-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/include/rtems/libio.h: Remove

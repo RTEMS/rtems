@@ -110,7 +110,7 @@ void _Partition_MP_Process_packet (
   rtems_packet_prefix *the_packet_prefix
 );
 
-/**
+/*
  *  @brief Partition_MP_Send_object_was_deleted
  *
  *  This routine is invoked indirectly by the thread queue
@@ -120,7 +120,6 @@ void _Partition_MP_Process_packet (
  *  This routine is not needed by the Partition since a partition
  *  cannot be deleted when buffers are in use.
  */
-#warning "Why is there no prototype for Partition_MP_Send_object_was_deleted"
 
 /**
  *  @brief Partition_MP_Send_extract_proxy

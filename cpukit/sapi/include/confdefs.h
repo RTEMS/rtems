@@ -1422,7 +1422,7 @@ rtems_configuration_table Configuration = {
        (CONFIGURE_MAXIMUM_POSIX_BARRIERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SPINLOCKS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_RWLOCKS != 0) || \
-      defined(CONFIGURE_POSIX_INIT_THREAD_TABLE)
+      defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))
   #error "CONFIGURATION ERROR: POSIX API support not configured!!"
   #endif
 #endif
@@ -1439,8 +1439,8 @@ rtems_configuration_table Configuration = {
        (CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS != 0) || \
        (CONFIGURE_MAXIMUM_ITRON_PORTS != 0) || \
        (CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS != 0) || \
-       (CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS != 0)) || \
-      defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
+       (CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS != 0) || \
+      defined(CONFIGURE_ITRON_INIT_TASK_TABLE))
   #error "CONFIGURATION ERROR: ITRON API support not configured!!"
   #endif
 #endif
