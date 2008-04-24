@@ -1,3 +1,9 @@
+2008-04-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc8260/console-generic/console-generic.c,
+	mpc8xx/console-generic/console-generic.c: Remove all references to
+	console_reserve_resources and termios_reserve_resources.
+
 2008-04-24	Nigel Spon <nigel@adi.co.nz>
 
 	* ppc403/console/console.c: Correct include path.
