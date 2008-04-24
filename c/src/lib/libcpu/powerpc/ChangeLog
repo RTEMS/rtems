@@ -1,3 +1,7 @@
+2008-04-24	Nigel Spon <nigel@adi.co.nz>
+
+	* ppc403/console/console.c: Correct include path.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc5xx/console-generic/console-generic.c, mpc5xx/include/console.h,

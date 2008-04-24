@@ -53,7 +53,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include "../ictrl/ictrl.h"
+#include "../irq/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
 
 struct async {
