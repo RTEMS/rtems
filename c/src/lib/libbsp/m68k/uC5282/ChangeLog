@@ -1,3 +1,7 @@
+2008-04-24	Eric Norum <norume@aps.anl.gov>
+
+    * startup/bspstart.c: More clean up of FPGA interrupts.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Remove all references to console_reserve_resources

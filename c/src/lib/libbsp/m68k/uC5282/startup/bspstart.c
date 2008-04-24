@@ -613,8 +613,7 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
       rtems_interrupt_enable(level);
       return 0;
     }
-    handlerTab[vector].func = NULL;
-    handlerTab[vector].arg  = NULL;
+    setupDone = 1;
     rtems_interrupt_catch(fpga_trampoline, FPGA_VECTOR, &old_handler);
     i = init_intc0_bit(FPGA_VECTOR);
     rtems_interrupt_enable(level);
