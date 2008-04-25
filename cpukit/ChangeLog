@@ -1,3 +1,7 @@
+2008-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/system.h: Fix typo in comment.
+
 2008-03-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1280/tools

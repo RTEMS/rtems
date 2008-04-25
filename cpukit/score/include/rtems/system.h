@@ -153,7 +153,7 @@ typedef void * proc_ptr;
 #endif
 
 #if !defined( FALSE ) || (FALSE != 0)
-/**  Boolean constant TRUE */
+/**  Boolean constant FALSE */
 #undef FALSE
 #define FALSE     (0)
 #endif
