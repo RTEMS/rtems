@@ -38,6 +38,13 @@ cd ..
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
 %endif
 
+%if 0%{?_build_mpfr}
+%setup -q -T -D -n %{name}-%{version} -a60
+%{?PATCH60:%patch60 -p1}
+  # Build mpfr one-tree style
+  ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
+%endif
+
 @PREP@
 
   # Fix timestamps
