@@ -352,6 +352,8 @@ typedef struct RpcUdpXactPoolRec_ {
  * number of all created transactions in the system.
  */
 static RpcUdpXact xactHashTbl[XACT_HASHS]={0};
+static u_long     xidUpper   [XACT_HASHS]={0};
+static unsigned   xidHashSeed            = 0 ;
 
 /* forward declarations */
 static RpcUdpXact
@@ -683,6 +685,7 @@ register int	i,j;
 		/* pick a free table slot and initialize the XID */
 		rval->obuf.xid = time(0) ^ (unsigned long)rval;
 		MU_LOCK(hlock);
+		rval->obuf.xid = (xidHashSeed++ ^ ((unsigned long)rval>>10)) & XACT_HASH_MSK;
 		i=j=(rval->obuf.xid & XACT_HASH_MSK);
 		if (msgQ) {
 			/* if there's no message queue, refuse to 
@@ -707,7 +710,7 @@ register int	i,j;
 			MY_FREE(rval);
 			return 0;
 		}
-		rval->obuf.xid  = (rval->obuf.xid << LD_XACT_HASH) | i;
+		rval->obuf.xid  = xidUpper[i] | i;
 		rval->xdrpos    = XDR_GETPOS(&(rval->xdrs));
 		rval->obufsize  = size;
 	}
@@ -727,6 +730,10 @@ int i = xact->obuf.xid & XACT_HASH_MSK;
 
 		MU_LOCK(hlock);
 		xactHashTbl[i]=0;
+		/* remember XID we used last time so we can avoid
+		 * reusing the same one (incremented by rpcUdpSend routine)
+		 */
+		xidUpper[i]   = xact->obuf.xid & ~XACT_HASH_MSK;
 		MU_UNLOCK(hlock);
 
 		bufFree(&xact->ibuf);
