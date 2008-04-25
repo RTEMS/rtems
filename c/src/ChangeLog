@@ -1,3 +1,19 @@
+2008-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	Moved to cpukit.
+	* nfsclient/.cvsignore, nfsclient/ChangeLog.slac, nfsclient/LICENSE,
+	nfsclient/Makefile.am, nfsclient/README, nfsclient/preinstall.am,
+	nfsclient/rfc1094.txt, nfsclient/rtems-filesystem-patch,
+	nfsclient/proto/mount_prot.h, nfsclient/proto/mount_prot.x,
+	nfsclient/proto/mount_prot_xdr.c, nfsclient/proto/nfs_prot.h,
+	nfsclient/proto/nfs_prot.x, nfsclient/proto/nfs_prot_xdr.c,
+	nfsclient/src/cexphelp.c, nfsclient/src/dirutils.c,
+	nfsclient/src/librtemsNfs.h, nfsclient/src/nfs.c,
+	nfsclient/src/nfs.modini.c, nfsclient/src/nfsTest.c,
+	nfsclient/src/rpcio.c, nfsclient/src/rpcio.h,
+	nfsclient/src/rpcio.modini.c, nfsclient/src/sock_mbuf.c,
+	nfsclient/src/xdr_mbuf.c: Removed.
+
 2008-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac: Stop building nfsclient here and build it in CPUKIT.
