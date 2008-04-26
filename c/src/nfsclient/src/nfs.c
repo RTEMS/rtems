@@ -929,6 +929,7 @@ NfsNode rval = nfsNodeCreate(node->nfs, 0);
 		if (node->str) {
 			rval->args.name = rval->str = strdup(node->str);
 			if (!rval->str) {
+				errno = ENOMEM;
 				nfsNodeDestroy(rval);
 				return 0;
 			}
@@ -1393,6 +1394,11 @@ unsigned long	niu,siu;
 	/* clone the node */
 	if ( !node ) {
 		/* nodeClone sets errno */
+		pathloc->node_access = 0;
+		if ( ! (e = errno) ) {
+			/* if we have no node, e must not be zero! */
+			e = ENOMEM;
+		}
 		goto cleanup;
 	}
 

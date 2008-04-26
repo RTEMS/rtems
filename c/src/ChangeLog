@@ -1,3 +1,9 @@
+2008-04-25  Till Straumann <strauman@slac.stanford.edu>
+
+	* nfsclient/Changelog.slac, nfsclient/src/nfs.c:
+	BUGFIX (PR#1284) -- possible memory corruption if
+	server connectivity is lost.
+
 2007-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* nfsclient/Makefile.am: Fix errors.

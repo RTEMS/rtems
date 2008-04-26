@@ -1,3 +1,11 @@
+Changes since RTEMS-NFS 1.5:
+ - BUGFIX: path lookup ('evalpath') would erroneously return 0 (success) if
+   1. server had been alive in the past
+   2. server connectivity is lost
+      the bug, if triggered, caused memory
+      corruption.
+      (fixes PR#1284)
+
 Changes since RTEMS-NFS 1.4:
 LICENSE:
  - changed license terms; RTEMS-NFS is now released under the more liberal
