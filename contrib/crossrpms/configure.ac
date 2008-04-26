@@ -144,6 +144,7 @@ ac_cv_mytarget=`$SHELL "$ac_aux_dir/config.sub" $f` ||
     ])
 done
 AC_SUBST(TARGET_SUBDIRS,$target_subdirs)
+AC_SUBST(rtems_api,RTEMS_API)
 
 AC_CONFIG_FILES([Makefile])
 

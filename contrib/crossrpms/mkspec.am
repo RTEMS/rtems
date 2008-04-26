@@ -13,4 +13,5 @@ MKSPEC = sed \
 	  -e "/[@]PATCH/d"
 
 MKSPEC0 = sed \
-	  -e "s/[@]tool_target[@]/$(TARGET)/g"
+	  -e "s/[@]tool_target[@]/$(TARGET)/g" \
+	  -e "s/[@]rtems_api[@]/$(rtems_api)/g"
