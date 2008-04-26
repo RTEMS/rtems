@@ -32,7 +32,7 @@ BuildRequires:	expat-devel
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-%if "@tool_target@" == "sparc-rtems4.8"
+%if "@tool_target@" == "sparc-rtems@rtems_api@"
 BuildConflicts:	libtermcap-devel termcap-devel
 %endif
 BuildRequires:  readline-devel
