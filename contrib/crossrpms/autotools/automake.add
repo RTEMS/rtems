@@ -15,7 +15,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	@AUTOMAKE_RPMREL@%{?dist}
+Release:	@AUTOMAKE_RPMREL@
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 %if "%{_prefix}" != "/usr"
