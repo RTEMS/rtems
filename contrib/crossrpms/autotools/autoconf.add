@@ -13,7 +13,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	@AUTOCONF_RPMREL@%{?dist}
+Release:	@AUTOCONF_RPMREL@
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 %if "%{_prefix}" != "/usr"
