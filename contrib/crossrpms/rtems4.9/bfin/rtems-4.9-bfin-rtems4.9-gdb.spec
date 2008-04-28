@@ -19,6 +19,12 @@
 %define debug_package		%{nil}
 %endif
 
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix rtems-4.9-%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
 %define gdb_version 6.5
 %define gdb_rpmvers %{expand:%(echo 6.5 | tr - _)} 
 
@@ -26,14 +32,12 @@ Name:		rtems-4.9-bfin-rtems4.9-gdb
 Summary:	Gdb for target bfin-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%if "%{_build}" != "%{_host}"
-BuildRequires:  rtems-4.9-%{_host}-gcc
-%endif
+BuildRequires:  %{_host_rpmprefix}gcc
 
 %if "%{gdb_version}" >= "6.6"
 # suse
@@ -44,18 +48,26 @@ BuildRequires: libexpat-devel
 BuildRequires: expat
 %endif
 %else
-# fedora/redhat 
-BuildRequires:	expat-devel
+# fedora/redhat/cygwin
+BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
+
+%if "%{gdb_version}" < "6.6"
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}termcap-devel
+%endif
+%endif
+BuildRequires:  %{_host_rpmprefix}readline-devel
+BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %if "bfin-rtems4.9" == "sparc-rtems4.9"
 BuildConflicts:	libtermcap-devel termcap-devel
 %endif
-BuildRequires:  readline-devel
-BuildRequires:	ncurses-devel
+
 
 Requires:	rtems-4.9-gdb-common
 
@@ -74,10 +86,17 @@ cd gdb-%{gdb_version}
 %{?PATCH1:%patch1 -p1}
 cd ..
 
+%if "%{gdb_version}" >= "6.8"
+# Force using a system-provided libreadline
+rm -f gdb-%{gdb_version}/readline/configure
+%endif
 %build
   export PATH="%{_bindir}:${PATH}"
   mkdir -p build
   cd build
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
@@ -164,7 +183,6 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 # %endif
 
 %description -n rtems-4.9-bfin-rtems4.9-gdb
-
 GNU gdb targetting bfin-rtems4.9.
 
 %files -n rtems-4.9-bfin-rtems4.9-gdb
