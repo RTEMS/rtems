@@ -70,7 +70,9 @@ int pthread_equal(
 	  break;
 
         case OBJECTS_ERROR:
+#if defined(RTEMS_MULTIPROCESSING)
         case OBJECTS_REMOTE:
+#endif
           /* t1 must have been valid so exit the critical section */
           _Thread_Enable_dispatch();
           /* return status == 0 */

@@ -1,3 +1,11 @@
+2008-04-28	Daron Chabot <daron.chabot@usask.ca>
+
+	* posix/src/keycreate.c, posix/src/pthreadequal.c,
+	rtems/src/semtranslatereturncode.c,
+	score/cpu/powerpc/rtems/score/powerpc.h,
+	score/src/threadblockingoperationcancel.c: Fix compilation errors
+	when --enable-rtems-debug is used.
+
 2008-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/system.h: Fix typo in comment.

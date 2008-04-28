@@ -130,7 +130,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
    *  Internal consistency check for bad status from SuperCore
    */
   #if defined(RTEMS_DEBUG)
-    if ( the_semaphore_status > CORE_SEMAPHORE_STATUS_LAST )
+    if ( status > CORE_SEMAPHORE_STATUS_LAST )
       return RTEMS_INTERNAL_ERROR;
   #endif
   return _Semaphore_Translate_core_semaphore_return_code_[status];

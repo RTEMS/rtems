@@ -43,7 +43,8 @@ void _Thread_blocking_operation_Cancel(
    */
 
   #if defined(RTEMS_DEBUG)
-    if ( (sync_state == THREAD_BLOCKING_OPERATION_SYNCHRONIZED)
+  #include <rtems/score/interr.h>
+    if ( (sync_state == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
          (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
       _Internal_error_Occurred(
         INTERNAL_ERROR_CORE,

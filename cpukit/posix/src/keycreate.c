@@ -70,7 +70,7 @@ int pthread_key_create(
           _Internal_error_Occurred(
             INTERNAL_ERROR_CORE,
             TRUE,
-            INTERNAL_ERROR_IMPLEMENTATION
+            INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY
           );
       #endif 
       bytes_to_allocate = sizeof( void * ) *
