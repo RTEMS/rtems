@@ -2,7 +2,6 @@
 
 	* posix/src/keycreate.c, posix/src/pthreadequal.c,
 	rtems/src/semtranslatereturncode.c,
-	score/cpu/powerpc/rtems/score/powerpc.h,
 	score/src/threadblockingoperationcancel.c: Fix compilation errors
 	when --enable-rtems-debug is used.
 

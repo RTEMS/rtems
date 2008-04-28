@@ -74,11 +74,6 @@ extern "C" {
  *                               - 0 otherwise
  */
  
-/* JRS: XXX treat this as generic until cleaned up */
-#if defined(ppc8540)
-#define __ppc_generic
-#endif
-
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler
  *  predefines.
