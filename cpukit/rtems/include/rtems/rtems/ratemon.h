@@ -158,7 +158,13 @@ typedef struct {
   Thread_Control                         *owner;
   rtems_rate_monotonic_period_statistics  Statistics;
 }   Rate_monotonic_Control;
-
+ 
+/**
+ *  @brief Rate Monotonic Period Class Management Structure
+ *
+ *  This instance of Objects_Information is used to manage the
+ *  set of rate monotonic period instances.
+ */
 RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
 
 /**
@@ -320,6 +326,11 @@ void _Rate_monotonic_Timeout(
   #define _Rate_monotonic_Reset_wall_time_statistics( _the_period )
 #endif
 
+/**
+ *  @brief Rate_monotonic_Reset_cpu_use_statistics
+ *
+ *  This helper method resets the period CPU usage statistics structure.
+ */
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
   #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
      do { \
@@ -331,6 +342,11 @@ void _Rate_monotonic_Timeout(
   #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period )
 #endif
 
+/**
+ *  @brief Rate_monotonic_Reset_statistics
+ *
+ *  This helper method resets the period wall time statistics structure.
+ */
 #define _Rate_monotonic_Reset_statistics( _the_period ) \
   do { \
     memset( \

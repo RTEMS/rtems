@@ -81,9 +81,30 @@ extern "C" {
  */
 typedef Priority_Control rtems_task_priority;
 
+/**
+ *  This is the constant used with the rtems_task_set_priority
+ *  directive to indicate that the caller wants to obtain its
+ *  current priority rather than set it as the name of the
+ *  directive indicates.
+ */
 #define RTEMS_NO_PRIORITY           RTEMS_CURRENT_PRIORITY
 
+/**
+ *  This constant is the least valid value for a Classic API
+ *  task priority.
+ */
 #define RTEMS_MINIMUM_PRIORITY      (PRIORITY_MINIMUM + 1)
+
+/**
+ *  This constant is the maximum valid value for a Classic API
+ *  task priority.
+ *
+ *  @note This is actually the priority of the IDLE thread so
+ *        using this priority will result in having a task
+ *        which never executes.  This could be useful if you
+ *        want to ensure that a task does not executes during
+ *        certain operations such as a system mode change.
+ */
 #define RTEMS_MAXIMUM_PRIORITY      PRIORITY_MAXIMUM
 
 /**
@@ -129,6 +150,7 @@ typedef Priority_Control rtems_task_priority;
 /** This is used to indicate the highest numbered notepad. */
 #define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15
 
+/** This is used to indicate the number of notepads available. */
 #define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
 
 /**
@@ -180,8 +202,8 @@ typedef struct {
   ASR_Information          Signal;
 }  RTEMS_API_Control;
 
-/*
- *  The following defines the information control block used to
+/**
+ *  The following instantiates the information control block used to
  *  manage this class of objects.
  */
 RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;

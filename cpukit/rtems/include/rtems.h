@@ -31,7 +31,11 @@
 extern "C" {
 #endif
 
-/*
+#if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && \
+    (!defined(__RTEMS_INSIDE__))
+/**
+ *  @brief Compiling RTEMS Application Macro
+ *
  *  Unless told otherwise, the RTEMS include files will hide some stuff
  *  from normal application code.  Defining this crosses a boundary which
  *  is undesirable since it means your application is using RTEMS features
@@ -39,7 +43,6 @@ extern "C" {
  *  Define this at your own risk.
  */
 
-#if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && (!defined(__RTEMS_INSIDE__))
 #define __RTEMS_APPLICATION__
 #endif
 
@@ -76,23 +79,72 @@ extern "C" {
 #include <rtems/rtems/support.h>
 #include <rtems/score/sysstate.h>
 
+/**
+ *  This constant indicates whether this processor variant has
+ *  hardware floating point support.
+ */
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
-/**
+/*
  *  The following define the constants which may be used in name searches.
  */
-#define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
-#define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
-#define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
-#define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
 
 /**
+ * This constant indicates that the search is across all nodes.
+ */
+#define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
+
+/**
+ *  This constant indicates that the search is across all nodes
+ *  except the one the call is made from.
+ */
+#define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
+
+/**
+ *  This constant indicates that the search is to be restricted
+ *  to the local node.
+ */
+#define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
+
+/**
+ *  This constant indicates that the caller wants to obtain the
+ *  name of the currently executing thread.
+ *
+ *  @note This constant is only meaningful when obtaining the name
+ *        of a task.
+ */
+#define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
+
+/*
  * Parameters and return id's for _Objects_Get_next
  */
-#define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
-#define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
-#define RTEMS_OBJECT_ID_INITIAL(api, class, node) OBJECTS_ID_INITIAL(api, class, node)
 
+/**
+ *  This constant is the lowest valid valid for the index portion
+ *  of an object Id.
+ */
+#define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
+
+/**
+ *  This constant is the maximum valid valid for the index portion
+ *  of an object Id.
+ */
+#define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
+
+/**
+ *  This method returns the Id of the object with the lowest
+ *  valid index valud.
+ *
+ *  @param[in] _api is the API of the object
+ *  @param[in] _class is the Object Class of the object
+ *  @param[in] _node is the node where the object resides
+ */
+#define RTEMS_OBJECT_ID_INITIAL(_api, _class, _node) \
+   OBJECTS_ID_INITIAL(_api, _class, _node)
+
+/**
+ *  This constant is the maximum valid object Id.
+ */
 #define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
 
 /**

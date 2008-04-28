@@ -29,55 +29,178 @@
 extern "C" {
 #endif
 
-/* types */
-
-/* enumerated constants */
-
+/**
+ *  @brief Classic API Status
+ *
+ *  This enumerates the possible status values returned b
+ *  Classic API directives.
+ */
 typedef enum {
-  RTEMS_SUCCESSFUL               =  0, /* successful completion */
-  RTEMS_TASK_EXITTED             =  1, /* returned from a thread */
-  RTEMS_MP_NOT_CONFIGURED        =  2, /* multiprocessing not configured */
-  RTEMS_INVALID_NAME             =  3, /* invalid object name */
-  RTEMS_INVALID_ID               =  4, /* invalid object id */
-  RTEMS_TOO_MANY                 =  5, /* too many */
-  RTEMS_TIMEOUT                  =  6, /* timed out waiting */
-  RTEMS_OBJECT_WAS_DELETED       =  7, /* object deleted while waiting */
-  RTEMS_INVALID_SIZE             =  8, /* specified size was invalid */
-  RTEMS_INVALID_ADDRESS          =  9, /* address specified is invalid */
-  RTEMS_INVALID_NUMBER           = 10, /* number was invalid */
-  RTEMS_NOT_DEFINED              = 11, /* item has not been initialized */
-  RTEMS_RESOURCE_IN_USE          = 12, /* resources still outstanding */
-  RTEMS_UNSATISFIED              = 13, /* request not satisfied */
-  RTEMS_INCORRECT_STATE          = 14, /* thread is in wrong state */
-  RTEMS_ALREADY_SUSPENDED        = 15, /* thread already in state */
-  RTEMS_ILLEGAL_ON_SELF          = 16, /* illegal on calling thread */
-  RTEMS_ILLEGAL_ON_REMOTE_OBJECT = 17, /* illegal for remote object */
-  RTEMS_CALLED_FROM_ISR          = 18, /* called from wrong environment */
-  RTEMS_INVALID_PRIORITY         = 19, /* invalid thread priority */
-  RTEMS_INVALID_CLOCK            = 20, /* invalid date/time */
-  RTEMS_INVALID_NODE             = 21, /* invalid node id */
-  RTEMS_NOT_CONFIGURED           = 22, /* directive not configured */
-  RTEMS_NOT_OWNER_OF_RESOURCE    = 23, /* not owner of resource */
-  RTEMS_NOT_IMPLEMENTED          = 24, /* directive not implemented */
-  RTEMS_INTERNAL_ERROR           = 25, /* RTEMS inconsistency detected */
-  RTEMS_NO_MEMORY                = 26, /* could not get enough memory */
-  RTEMS_IO_ERROR                 = 27, /* driver IO error */
-  RTEMS_PROXY_BLOCKING           = 28  /* internal error only */
+  /**
+   *  This is the status to indicate successful completion.
+   */
+  RTEMS_SUCCESSFUL               =  0,
+  /**
+   *  This is the status to indicate that a thread exited.
+   */
+  RTEMS_TASK_EXITTED             =  1,
+  /**
+   *  This is the status to indicate multiprocessing is not configured.
+   */
+  RTEMS_MP_NOT_CONFIGURED        =  2,
+  /**
+   *  This is the status to indicate that the object name was invalid.
+   */
+  RTEMS_INVALID_NAME             =  3,
+  /**
+   *  This is the status to indicate that the object Id was invalid.
+   */
+  RTEMS_INVALID_ID               =  4,
+  /**
+   *  This is the status to indicate you have attempted to create too many
+   *  instances of a particular object class.
+   */
+  RTEMS_TOO_MANY                 =  5,
+  /**
+   *  This is the status to indicate that a blocking directive timed out.
+   */
+  RTEMS_TIMEOUT                  =  6,
+  /**
+   *  This is the status to indicate the the object was deleted
+   *  while the task was blocked waiting.
+   */
+  RTEMS_OBJECT_WAS_DELETED       =  7,
+  /**
+   *  This is the status to indicate that the specified size was invalid.
+   */
+  RTEMS_INVALID_SIZE             =  8,
+  /**
+   *  This is the status to indicate that the specified address is invalid.
+   */
+  RTEMS_INVALID_ADDRESS          =  9,
+  /**
+   *  This is the status to indicate that the specified number was invalid.
+   */
+  RTEMS_INVALID_NUMBER           = 10,
+  /**
+   *  This is the status to indicate that the item has not been initialized.
+   */
+  RTEMS_NOT_DEFINED              = 11,
+  /**
+   *  This is the status to indicate that the object still has
+   *  resources in use.
+   */
+  RTEMS_RESOURCE_IN_USE          = 12,
+  /**
+   *  This is the status to indicate that the request was not satisfied.
+   */
+  RTEMS_UNSATISFIED              = 13,
+  /**
+   *  This is the status to indicate that a thread is in wrong state
+   *  was in the wrong execution state for the requested operation.
+   */
+  RTEMS_INCORRECT_STATE          = 14,
+  /**
+   *  This is the status to indicate thread was already suspended.
+   */
+  RTEMS_ALREADY_SUSPENDED        = 15,
+  /**
+   *  This is the status to indicate that the operation is illegal
+   *  on calling thread.
+   */
+  RTEMS_ILLEGAL_ON_SELF          = 16,
+  /**
+   *  This is the status to indicate illegal for remote object.
+   */
+  RTEMS_ILLEGAL_ON_REMOTE_OBJECT = 17,
+  /**
+   *  This is the status to indicate that the operation should not be
+   *  called from from this excecution environment.
+   */
+  RTEMS_CALLED_FROM_ISR          = 18,
+  /**
+   *  This is the status to indicate that an invalid thread priority
+   *  was provided.
+   */
+  RTEMS_INVALID_PRIORITY         = 19,
+  /**
+   *  This is the status to indicate that the specified date/time was invalid.
+   */
+  RTEMS_INVALID_CLOCK            = 20,
+  /**
+   *  This is the status to indicate that the specified node Id was invalid.
+   */
+  RTEMS_INVALID_NODE             = 21,
+  /**
+   *  This is the status to indicate that the directive was not configured.
+   */
+  RTEMS_NOT_CONFIGURED           = 22,
+  /**
+   *  This is the status to indicate that the caller is not the
+   *  owner of the resource.
+   */
+  RTEMS_NOT_OWNER_OF_RESOURCE    = 23,
+  /**
+   *  This is the status to indicate the the directive or requested
+   *  portion of the directive is not implemented.  This is a hint
+   *  that you have stumbled across an opportunity to submit code
+   *  to the RTEMS Project.
+   */
+  RTEMS_NOT_IMPLEMENTED          = 24,
+  /**
+   *  This is the status to indicate that an internal RTEMS inconsistency
+   *  was detected.
+   */
+  RTEMS_INTERNAL_ERROR           = 25,
+  /**
+   *  This is the status to indicate that the directive attempted to allocate
+   *  memory but was unable to do so.
+   */
+  RTEMS_NO_MEMORY                = 26,
+  /**
+   *  This is the status to indicate an driver IO error.
+   */
+  RTEMS_IO_ERROR                 = 27,
+  /**
+   *  This is the status is used internally to RTEMS when performing
+   *  operations on behalf of remote tasks.  This is referred to as
+   *  proxying operations and this status indicates that the operation
+   *  could not be completed immediately and the "proxy is blocking."
+   *
+   *  @note This status will @b NOT be returned to the user.
+   */
+  RTEMS_PROXY_BLOCKING           = 28,
 } rtems_status_code;
 
+/**
+ *  This is the lowest valid value for a Classic API status code.
+ */
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL
+
+/**
+ *  This is the highest valid value for a Classic API status code.
+ */
 #define RTEMS_STATUS_CODES_LAST  RTEMS_PROXY_BLOCKING
 
-extern rtems_status_code _Status_Object_name_errors_to_status[];
-
+/**
+ *  This array is used to map SuperCore Object Handler return
+ *  codes to Classic API status codes.
+ */
 #ifdef RTEMS_API_INIT
 rtems_status_code _Status_Object_name_errors_to_status[] = {
-  RTEMS_SUCCESSFUL,      /* OBJECTS_SUCCESSFUL */
-  RTEMS_INVALID_NAME,    /* OBJECTS_INVALID_NAME */
-  RTEMS_INVALID_ADDRESS, /* OBJECTS_INVALID_ADDRESS */
-  RTEMS_INVALID_ID,      /* OBJECTS_INVALID_ID */
-  RTEMS_INVALID_NODE     /* OBJECTS_INVALID_NODE */
+  /** This maps OBJECTS_SUCCESSFUL to RTEMS_SUCCESSFUL. */
+  RTEMS_SUCCESSFUL,
+  /** This maps OBJECTS_INVALID_NAME to RTEMS_INVALID_NAME. */
+  RTEMS_INVALID_NAME,
+  /** This maps OBJECTS_INVALID_ADDRESS to RTEMS_INVALID_NAME. */
+  RTEMS_INVALID_ADDRESS,
+  /** This maps OBJECTS_INVALID_ID to RTEMS_INVALID_ADDRESS. */
+  RTEMS_INVALID_ID,
+  /** This maps OBJECTS_INVALID_NODE to RTEMS_INVALID_NODE. */
+  RTEMS_INVALID_NODE
 };
+#else
+extern rtems_status_code _Status_Object_name_errors_to_status[];
 #endif
 
 /*

@@ -312,6 +312,8 @@ rtems_status_code rtems_timer_get_information(
  */
 extern Watchdog_Control _Timer_Seconds_timer;
 
+/**
+ *  This method is used to temporaril
 #define _Timer_Server_stop_ticks_timer() \
       _Watchdog_Remove( &_Timer_Server->Timer )
 
