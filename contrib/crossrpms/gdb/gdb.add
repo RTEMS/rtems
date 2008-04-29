@@ -26,7 +26,7 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
 
-%if "%{gdb_version}" < "6.6"
+%if "%{gdb_version}" < "6.7"
 %if "%{_build}" != "%{_host}"
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
@@ -38,9 +38,6 @@ BuildRequires:  %{_host_rpmprefix}ncurses-devel
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%endif
-%if "@tool_target@" == "sparc-rtems@rtems_api@"
-BuildConflicts:	libtermcap-devel termcap-devel
 %endif
 
 %if %build_infos

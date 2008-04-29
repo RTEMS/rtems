@@ -4,10 +4,9 @@
 %setup -q -D -T -n %{name}-%{version} -a0
 cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
-%{?PATCH1:%patch1 -p1}
 cd ..
 
-%if "%{gdb_version}" >= "6.8"
+%if "%{gdb_version}" >= "6.7"
 # Force using a system-provided libreadline
 rm -f gdb-%{gdb_version}/readline/configure
 %endif
