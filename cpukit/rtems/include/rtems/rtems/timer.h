@@ -313,10 +313,16 @@ rtems_status_code rtems_timer_get_information(
 extern Watchdog_Control _Timer_Seconds_timer;
 
 /**
- *  This method is used to temporaril
+ *  This method is used to temporarily disable updates to the 
+ *  Ticks Timer Chain managed by the Timer Server.
+ */
 #define _Timer_Server_stop_ticks_timer() \
       _Watchdog_Remove( &_Timer_Server->Timer )
 
+/**
+ *  This method is used to temporarily disable updates to the 
+ *  Seconds Timer Chain managed by the Timer Server.
+ */
 #define _Timer_Server_stop_seconds_timer() \
       _Watchdog_Remove( &_Timer_Seconds_timer );
 
