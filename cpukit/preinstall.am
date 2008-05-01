@@ -164,6 +164,14 @@ $(PROJECT_INCLUDE)/rtems/ramdisk.h: libblock/include/rtems/ramdisk.h $(PROJECT_I
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ramdisk.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ramdisk.h
 
+$(PROJECT_INCLUDE)/rtems/nvdisk.h: libblock/include/rtems/nvdisk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/nvdisk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/nvdisk.h
+
+$(PROJECT_INCLUDE)/rtems/nvdisk-sram.h: libblock/include/rtems/nvdisk-sram.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h
+
 $(PROJECT_INCLUDE)/rtems/ide_part_table.h: libblock/include/rtems/ide_part_table.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h

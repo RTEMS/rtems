@@ -1,3 +1,12 @@
+2008-05-01	Chris Johns <chrisj@rtems.org>
+
+	* libblock/include/rtems/nvdisk-sram.h,
+	libblock/include/rtems/nvdisk.h,
+	libblock/src/nvdisk-sram.c,
+	libblock/src/nvdisk.c: New. A Non-volatile memory disk drive.
+	* Makefile.am, preinstall.am, libblock/Makefile.am: Updated for
+	the NV disk driver.
+
 2008-05-01  Maarten Van Es <maarten@mind.be>
 	* libnetworking/rtems/rtems_dhcp.c: Removed panic()s.  Added
 	interface for rtems_dhcp_failsafe.
