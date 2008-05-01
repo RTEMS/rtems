@@ -1,14 +1,10 @@
 %if "%{gcc_version}" == "4.3.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080306.diff
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080501.diff
 %endif
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.2.3-rtems4.9-20080205.diff
-%endif
-%if "%{gcc_version}" == "4.0.4" 
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.0.4-rtems4.9-20071111.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -45,7 +41,7 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_pkgvers}.ta
 %if %build_newlib
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080302.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080430.diff
 %endif
 %{?_without_sources:NoSource:	50}
 %endif
