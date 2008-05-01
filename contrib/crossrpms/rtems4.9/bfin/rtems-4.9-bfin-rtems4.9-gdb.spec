@@ -32,7 +32,7 @@ Name:		rtems-4.9-bfin-rtems4.9-gdb
 Summary:	Gdb for target bfin-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,7 +53,7 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
 
-%if "%{gdb_version}" < "6.6"
+%if "%{gdb_version}" < "6.7"
 %if "%{_build}" != "%{_host}"
 BuildRequires:  %{_host_rpmprefix}termcap-devel
 %endif
@@ -64,9 +64,6 @@ BuildRequires:  %{_host_rpmprefix}ncurses-devel
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%if "bfin-rtems4.9" == "sparc-rtems4.9"
-BuildConflicts:	libtermcap-devel termcap-devel
-%endif
 
 
 Requires:	rtems-4.9-gdb-common
@@ -83,10 +80,9 @@ GDB for target bfin-rtems4.9
 %setup -q -D -T -n %{name}-%{version} -a0
 cd gdb-%{gdb_version}
 %{?PATCH0:%patch0 -p1}
-%{?PATCH1:%patch1 -p1}
 cd ..
 
-%if "%{gdb_version}" >= "6.8"
+%if "%{gdb_version}" >= "6.7"
 # Force using a system-provided libreadline
 rm -f gdb-%{gdb_version}/readline/configure
 %endif

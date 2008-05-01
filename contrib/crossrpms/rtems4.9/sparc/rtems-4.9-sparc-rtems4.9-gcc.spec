@@ -13,6 +13,18 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix rtems-4.9-%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
 
 %define gcc_pkgvers 4.3.0
 %define gcc_version 4.3.0
@@ -28,15 +40,21 @@ Summary:      	sparc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	11%{?dist}
+Release:      	12%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %define _use_internal_dependency_generator 0
 
+BuildRequires:  %{_host_rpmprefix}gcc
+
 %if "%{gcc_version}" >= "4.3.0"
 BuildRequires:  gmp-devel >= 4.1
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}gmp-devel
+BuildRequires:  %{_host_rpmprefix}mpfr-devel
+%endif
 %if "%{?fedora}" >= "8"
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
@@ -47,6 +65,10 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %{?el4:%define 	_build_mpfr 	1}
 %{?suse10_2:%define 	_build_mpfr 	1}
 %{?suse10_3:%define 	_build_mpfr 	1}
+%endif
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:  rtems-4.9-sparc-rtems4.9-gcc
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
@@ -72,7 +94,7 @@ Requires:	rtems-4.9-sparc-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.3.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080306.diff
+Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080501.diff
 %endif
 %if "%{gcc_version}" == "4.2.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -90,7 +112,7 @@ Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.ta
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080302.diff
+Patch50:	newlib-1.16.0-rtems4.9-20080430.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -150,8 +172,12 @@ cd ..
   languages="c"
   languages="$languages,c++"
   export PATH="%{_bindir}:${PATH}"
-
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+  CC="%{_host}-gcc ${RPM_OPT_FLAGS}" \
+%else
   CC="%{__cc} ${RPM_OPT_FLAGS}" \
+%endif
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
     --bindir=%{_bindir} \
@@ -422,7 +448,6 @@ Requires(post): 	/sbin/install-info
 Requires(preun):	/sbin/install-info
 
 %description -n rtems-4.9-gcc-common
-
 GCC files that are shared by all targets.
 
 %files -n rtems-4.9-gcc-common
@@ -477,6 +502,9 @@ Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
+%if "%{_build}" != "%{_host}"
+BuildRequires:  rtems-4.9-sparc-rtems4.9-gcc-c++
+%endif
 Provides:	rtems-4.9-sparc-rtems4.9-c++ = %{gcc_rpmvers}-%{release}
 Obsoletes:	rtems-4.9-sparc-rtems4.9-c++ < %{gcc_rpmvers}-%{release}
 
