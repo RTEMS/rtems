@@ -112,12 +112,13 @@ include_nfsclient_HEADERS = nfsclient/nfsargs.h nfsclient/nfsdiskless.h
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
-    rtems/dhcp.h rtems/tftp.h rtems/ftpfs.h rtems/mkrootfs.h
+    rtems/dhcp.h rtems/rtems_dhcp_failsafe.h rtems/tftp.h rtems/ftpfs.h \
+    rtems/mkrootfs.h
 include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
 
 libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c \
     rtems/rtems_glue.c rtems/rtems_malloc_mbuf.c rtems/rtems_syscall.c \
-    rtems/rtems_bootp.c rtems/rtems_dhcp.c \
+    rtems/rtems_bootp.c rtems/rtems_dhcp.c rtems/rtems_dhcp_failsafe.c \
     rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \

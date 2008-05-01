@@ -1,3 +1,20 @@
+2008-05-01  Maarten Van Es <maarten@mind.be>
+	* libnetworking/rtems/rtems_dhcp.c: Removed panic()s.  Added
+	interface for rtems_dhcp_failsafe.
+	* libnetworking/rtems/rtems_dhcp.h: Added interface for
+	rtems_dhcp_failsafe.
+
+2008-05-01  Arnout Vandecappelle <arnout@mind.be>
+
+	* libnetworking/nfs/bootp_subr: Allow some errors for sosend() and
+	return on timeout in bootpc_call().  Removed panic()s.
+	* libnetworking/rtems/rtems_glue.c: Fix the cast for the
+	SIOCAIFADDR ioctl call.
+	* libnetworking/rtems/rtems_dhcp_failsafe.c,
+	libnetworking/rtems/rtems_dhcp_failsafe.h: New.
+	* libnetworking/Makefile.am, libnetworking/preinstall.am: Added
+	rtems_dhcp_failsafe.c and rtems_dhcp_failsafe.h files.
+
 2008-04-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/timer.h: Fix typo.

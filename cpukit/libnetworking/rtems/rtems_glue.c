@@ -1127,7 +1127,7 @@ int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param)
 
 		case SIOCAIFADDR:
 		case SIOCDIFADDR:
-			r = ioctl(s, cmd, (struct freq *) param);
+			r = ioctl(s, cmd, (struct ifreq *) param);
 			break;
 
 		default:

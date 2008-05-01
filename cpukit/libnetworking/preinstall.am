@@ -290,6 +290,10 @@ $(PROJECT_INCLUDE)/rtems/dhcp.h: rtems/dhcp.h $(PROJECT_INCLUDE)/rtems/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dhcp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dhcp.h
 
+$(PROJECT_INCLUDE)/rtems/rtems_dhcp_failsafe.h: rtems/rtems_dhcp_failsafe.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_dhcp_failsafe.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_dhcp_failsafe.h
+
 $(PROJECT_INCLUDE)/rtems/tftp.h: rtems/tftp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tftp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tftp.h

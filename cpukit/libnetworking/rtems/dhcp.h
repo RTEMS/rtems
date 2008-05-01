@@ -29,6 +29,8 @@ extern "C"
  * Perform DHCP.
  */
 void rtems_bsdnet_do_dhcp (void);
+int rtems_bsdnet_do_dhcp_timeout (void);
+void rtems_bsdnet_dhcp_down (void);
 
 /*
  * Maintain a DHCP offer that has already been accepted.
