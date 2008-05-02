@@ -25,14 +25,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.7.1
-%define gdb_rpmvers %{expand:%(echo 6.7.1 | tr - _)} 
+%define gdb_version 6.8
+%define gdb_rpmvers %{expand:%(echo 6.8 | tr - _)} 
 
 Name:		rtems-4.8-sparc-rtems4.8-gdb
 Summary:	Gdb for target sparc-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	4%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,8 +70,8 @@ Requires:	rtems-4.8-gdb-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
-%if "%{gdb_version}" == "6.7.1"
-Patch0:		gdb-6.7.1-rtems4.8-20080429.diff
+%if "%{gdb_version}" == "6.8"
+Patch0:		gdb-6.8-rtems4.8-20080429.diff
 %endif
 
 %description
