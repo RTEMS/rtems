@@ -17,8 +17,8 @@ NEWLIB_VERS = 1.15.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 
-GDB_VERS = 6.7.1
+GDB_VERS = 6.8
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 4%{?dist}
+GDB_RPMREL = 1%{?dist}
 include ../gdb.am
 GDB_OPTS +=
