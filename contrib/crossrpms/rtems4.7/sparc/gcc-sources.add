@@ -3,7 +3,7 @@ Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.ta
 Patch0:		gcc-core-4.0.3-rtems-20060822.diff
 %endif
 %if "%{gcc_version}" == "4.1.1"
-Patch0:		gcc-core-4.1.1-rtems4.7-20070613.diff
+Patch0:		gcc-core-4.1.1-rtems4.7-20080503.diff
 %endif
 %if "%{gcc_version}" == "4.1.2"
 Patch0:		gcc-core-4.1.2-rtems4.7-20070613.diff
