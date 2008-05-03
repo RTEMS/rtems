@@ -21,8 +21,8 @@
 %define newlib_version		1.15.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
-Name:         	rtems-4.7-sparc-rtems4.7-gcc
-Summary:      	sparc-rtems4.7 gcc
+Name:         	rtems-4.7-arm-rtems4.7-gcc
+Summary:      	arm-rtems4.7 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
@@ -38,11 +38,11 @@ BuildRequires:	flex bison
 %endif
 
 BuildRequires:	texinfo >= 4.2
-BuildRequires:	rtems-4.7-sparc-rtems4.7-binutils
+BuildRequires:	rtems-4.7-arm-rtems4.7-binutils
 
 Requires:	rtems-4.7-gcc-common
-Requires:	rtems-4.7-sparc-rtems4.7-binutils
-Requires:	rtems-4.7-sparc-rtems4.7-newlib = %{newlib_version}-%{release}
+Requires:	rtems-4.7-arm-rtems4.7-binutils
+Requires:	rtems-4.7-arm-rtems4.7-newlib = %{newlib_version}-%{release}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -53,7 +53,7 @@ Requires:	rtems-4.7-sparc-rtems4.7-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
 %if "%{gcc_version}" == "4.0.3"
 Patch0:		gcc-core-4.0.3-rtems4.7-20080503.diff
 %endif
@@ -61,7 +61,7 @@ Patch0:		gcc-core-4.0.3-rtems4.7-20080503.diff
 Patch0:		gcc-core-4.1.1-rtems4.7-20080503.diff
 %endif
 %if "%{gcc_version}" == "4.1.2"
-Patch0:		gcc-core-4.1.2-rtems4.7-20070613.diff
+Patch0:		gcc-core-4.1.2-rtems4.7-20070216.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -75,7 +75,7 @@ Patch50:	newlib-1.15.0-rtems4.7-20080503.diff
 %{?_without_sources:NoSource:	50}
 
 %description
-Cross gcc for sparc-rtems4.7.
+Cross gcc for arm-rtems4.7.
 
 %prep
 %setup -c -T -n %{name}-%{version}
@@ -132,7 +132,7 @@ cd ..
     --infodir=%{_infodir} \
     --datadir=%{_datadir} \
     --build=%_build --host=%_host \
-    --target=sparc-rtems4.7 \
+    --target=arm-rtems4.7 \
     --with-gnu-as --with-gnu-ld --verbose \
     --with-newlib \
     --with-system-zlib \
@@ -162,7 +162,7 @@ cd ..
   make DESTDIR=$RPM_BUILD_ROOT install
   cd ..
 
-  cd build/sparc-rtems4.7/newlib
+  cd build/arm-rtems4.7/newlib
   make DESTDIR=$RPM_BUILD_ROOT install-info
   cd ../../..
 
@@ -170,7 +170,7 @@ cd ..
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/sparc-rtems4.7/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{gcclib}/arm-rtems4.7/%{gcc_version}/include/
   fi
 %endif
 
@@ -178,7 +178,7 @@ cd ..
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
 
   # We use the version from binutils
-  rm -f $RPM_BUILD_ROOT%{_bindir}/sparc-rtems4.7-c++filt%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_bindir}/arm-rtems4.7-c++filt%{_exeext}
 
 
   # We don't ship info/dir
@@ -188,21 +188,21 @@ cd ..
 
 %if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
-  rm -f $RPM_BUILD_ROOT%{_bindir}/sparc-rtems4.7-sparc-rtems4.7-gcjh%{_exeext}
+  rm -f $RPM_BUILD_ROOT%{_bindir}/arm-rtems4.7-arm-rtems4.7-gcjh%{_exeext}
 %endif
 
 %if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/sparc-rtems4.7/%{gcc_version}/install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/sparc-rtems4.7/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/arm-rtems4.7/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/arm-rtems4.7/%{gcc_version}/install-tools
 %endif
 
   # Collect multilib subdirectories
   f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
   echo "%defattr(-,root,root,-)" > build/files.newlib
-  TGTDIR="%{_exec_prefix}/sparc-rtems4.7/lib"
+  TGTDIR="%{_exec_prefix}/arm-rtems4.7/lib"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> build/files.newlib
@@ -220,9 +220,9 @@ cd ..
   echo "%dir %{_libexecdir}" >> dirs
 %endif
   echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/sparc-rtems4.7" >> dirs
+  echo "%dir %{gcclib}/arm-rtems4.7" >> dirs
 
-  TGTDIR="%{gcclib}/sparc-rtems4.7/%{gcc_version}"
+  TGTDIR="%{gcclib}/arm-rtems4.7/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -240,7 +240,7 @@ cd ..
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/sparc-rtems4.7/%{gcc_version}"
+  TGTDIR="%{gcclib}/arm-rtems4.7/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -267,7 +267,7 @@ cd ..
     esac
   done
 
-  TGTDIR="%{_exec_prefix}/sparc-rtems4.7/lib"
+  TGTDIR="%{_exec_prefix}/arm-rtems4.7/lib"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -308,16 +308,16 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/sparc-rtems4.7/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/sparc-rtems4.7/' | %__find_provides
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/arm-rtems4.7/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/arm-rtems4.7/' | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/sparc-rtems4.7/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/sparc-rtems4.7/' | %__find_requires
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/arm-rtems4.7/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/arm-rtems4.7/' | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
@@ -326,54 +326,54 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
   rm -rf $RPM_BUILD_ROOT
 
 # ==============================================================
-# rtems-4.7-sparc-rtems4.7-gcc
+# rtems-4.7-arm-rtems4.7-gcc
 # ==============================================================
-# %package -n rtems-4.7-sparc-rtems4.7-gcc
-# Summary:        GNU cc compiler for sparc-rtems4.7
+# %package -n rtems-4.7-arm-rtems4.7-gcc
+# Summary:        GNU cc compiler for arm-rtems4.7
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
-# Requires:       rtems-4.7-sparc-rtems4.7-binutils
-# Requires:       rtems-4.7-sparc-rtems4.7-newlib = %{newlib_version}-%{release}
+# Requires:       rtems-4.7-arm-rtems4.7-binutils
+# Requires:       rtems-4.7-arm-rtems4.7-newlib = %{newlib_version}-%{release}
 # License:	GPL
 
 # %if %build_infos
 # Requires:      rtems-4.7-gcc-common
 # %endif
 
-%description -n rtems-4.7-sparc-rtems4.7-gcc
-GNU cc compiler for sparc-rtems4.7.
+%description -n rtems-4.7-arm-rtems4.7-gcc
+GNU cc compiler for arm-rtems4.7.
 
-%files -n rtems-4.7-sparc-rtems4.7-gcc -f build/files.gcc
+%files -n rtems-4.7-arm-rtems4.7-gcc -f build/files.gcc
 %defattr(-,root,root)
 %dir %{_mandir}
 %dir %{_mandir}/man1
-%{_mandir}/man1/sparc-rtems4.7-gcc.1*
+%{_mandir}/man1/arm-rtems4.7-gcc.1*
 %if "%{gcc_version}" >= "3.4"
-%{_mandir}/man1/sparc-rtems4.7-cpp.1*
-%{_mandir}/man1/sparc-rtems4.7-gcov.1*
+%{_mandir}/man1/arm-rtems4.7-cpp.1*
+%{_mandir}/man1/arm-rtems4.7-gcov.1*
 %endif
 
 %dir %{_bindir}
-%{_bindir}/sparc-rtems4.7-cpp%{_exeext}
-%{_bindir}/sparc-rtems4.7-gcc%{_exeext}
+%{_bindir}/arm-rtems4.7-cpp%{_exeext}
+%{_bindir}/arm-rtems4.7-gcc%{_exeext}
 %if "%{gcc_version}" >= "3.3"
-%{_bindir}/sparc-rtems4.7-gcc-%{gcc_version}%{_exeext}
+%{_bindir}/arm-rtems4.7-gcc-%{gcc_version}%{_exeext}
 %endif
-%{_bindir}/sparc-rtems4.7-gcov%{_exeext}
-%{_bindir}/sparc-rtems4.7-gccbug
+%{_bindir}/arm-rtems4.7-gcov%{_exeext}
+%{_bindir}/arm-rtems4.7-gccbug
 
-%dir %{gcclib}/sparc-rtems4.7/%{gcc_version}/include
+%dir %{gcclib}/arm-rtems4.7/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
-%if "sparc-rtems4.7" != "bfin-rtems4.7"
-%dir %{gcclib}/sparc-rtems4.7/%{gcc_version}/include/ssp
+%if "arm-rtems4.7" != "bfin-rtems4.7"
+%dir %{gcclib}/arm-rtems4.7/%{gcc_version}/include/ssp
 %endif
 %endif
 
 %dir %{gccexec}
-%dir %{gccexec}/sparc-rtems4.7
-%dir %{gccexec}/sparc-rtems4.7/%{gcc_version}
-%{gccexec}/sparc-rtems4.7/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/sparc-rtems4.7/%{gcc_version}/collect2%{_exeext}
+%dir %{gccexec}/arm-rtems4.7
+%dir %{gccexec}/arm-rtems4.7/%{gcc_version}
+%{gccexec}/arm-rtems4.7/%{gcc_version}/cc1%{_exeext}
+%{gccexec}/arm-rtems4.7/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # rtems-4.7-rtems4.7-base-gcc
@@ -440,66 +440,66 @@ if [ $1 -eq 0 ]; then
 fi
 
 # ==============================================================
-# rtems-4.7-sparc-rtems4.7-gcc-c++
+# rtems-4.7-arm-rtems4.7-gcc-c++
 # ==============================================================
-%package -n rtems-4.7-sparc-rtems4.7-gcc-c++
-Summary:	GCC c++ compiler for sparc-rtems4.7
+%package -n rtems-4.7-arm-rtems4.7-gcc-c++
+Summary:	GCC c++ compiler for arm-rtems4.7
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
-Provides:	rtems-4.7-sparc-rtems4.7-c++ = %{gcc_rpmvers}-%{release}
-Obsoletes:	rtems-4.7-sparc-rtems4.7-c++ < %{gcc_rpmvers}-%{release}
+Provides:	rtems-4.7-arm-rtems4.7-c++ = %{gcc_rpmvers}-%{release}
+Obsoletes:	rtems-4.7-arm-rtems4.7-c++ < %{gcc_rpmvers}-%{release}
 
 Requires:       rtems-4.7-gcc-common
-Requires:       rtems-4.7-sparc-rtems4.7-gcc = %{gcc_rpmvers}-%{release}
+Requires:       rtems-4.7-arm-rtems4.7-gcc = %{gcc_rpmvers}-%{release}
 
-%description -n rtems-4.7-sparc-rtems4.7-gcc-c++
-GCC c++ compiler for sparc-rtems4.7.
+%description -n rtems-4.7-arm-rtems4.7-gcc-c++
+GCC c++ compiler for arm-rtems4.7.
 
-%files -n rtems-4.7-sparc-rtems4.7-gcc-c++ -f build/files.g++
+%files -n rtems-4.7-arm-rtems4.7-gcc-c++ -f build/files.g++
 %defattr(-,root,root)
-%{_mandir}/man1/sparc-rtems4.7-g++.1*
+%{_mandir}/man1/arm-rtems4.7-g++.1*
 
-%{_bindir}/sparc-rtems4.7-c++%{_exeext}
-%{_bindir}/sparc-rtems4.7-g++%{_exeext}
+%{_bindir}/arm-rtems4.7-c++%{_exeext}
+%{_bindir}/arm-rtems4.7-g++%{_exeext}
 
 %dir %{gccexec}
-%dir %{gccexec}/sparc-rtems4.7
-%dir %{gccexec}/sparc-rtems4.7/%{gcc_version}
-%{gccexec}/sparc-rtems4.7/%{gcc_version}/cc1plus%{_exeext}
+%dir %{gccexec}/arm-rtems4.7
+%dir %{gccexec}/arm-rtems4.7/%{gcc_version}
+%{gccexec}/arm-rtems4.7/%{gcc_version}/cc1plus%{_exeext}
 
-%dir %{gcclib}/sparc-rtems4.7/%{gcc_version}/include
+%dir %{gcclib}/arm-rtems4.7/%{gcc_version}/include
 %if "%{gcc_version}" >= "3.2"
-%{gcclib}/sparc-rtems4.7/%{gcc_version}/include/c++
+%{gcclib}/arm-rtems4.7/%{gcc_version}/include/c++
 %else
-%{gcclib}/sparc-rtems4.7/%{gcc_version}/include/g++
+%{gcclib}/arm-rtems4.7/%{gcc_version}/include/g++
 %endif
 
 
 
 # ==============================================================
-# rtems-4.7-sparc-rtems4.7-newlib
+# rtems-4.7-arm-rtems4.7-newlib
 # ==============================================================
-%package -n rtems-4.7-sparc-rtems4.7-newlib
-Summary:      	C Library (newlib) for sparc-rtems4.7
+%package -n rtems-4.7-arm-rtems4.7-newlib
+Summary:      	C Library (newlib) for arm-rtems4.7
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
 
-Provides:	rtems-4.7-sparc-rtems4.7-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.7-sparc-rtems4.7-libc < %{newlib_version}-%{release}
+Provides:	rtems-4.7-arm-rtems4.7-libc = %{newlib_version}-%{release}
+Obsoletes:	rtems-4.7-arm-rtems4.7-libc < %{newlib_version}-%{release}
 
 Requires:	rtems-4.7-newlib-common
 
-%description -n rtems-4.7-sparc-rtems4.7-newlib
-Newlib C Library for sparc-rtems4.7.
+%description -n rtems-4.7-arm-rtems4.7-newlib
+Newlib C Library for arm-rtems4.7.
 
-%files -n rtems-4.7-sparc-rtems4.7-newlib -f build/files.newlib
+%files -n rtems-4.7-arm-rtems4.7-newlib -f build/files.newlib
 %defattr(-,root,root)
 %dir %{_prefix}
-%dir %{_exec_prefix}/sparc-rtems4.7
-%{_exec_prefix}/sparc-rtems4.7/include
+%dir %{_exec_prefix}/arm-rtems4.7
+%{_exec_prefix}/arm-rtems4.7/include
 
 # ==============================================================
 # rtems-4.7-newlib-common
