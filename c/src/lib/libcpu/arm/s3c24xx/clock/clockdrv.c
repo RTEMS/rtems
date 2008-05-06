@@ -80,7 +80,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
         freq = get_PCLK(); \
         /* set TIMER4 counter, input freq=PLCK/16/16Mhz*/ \
         freq = (freq /16)/16; \
-        rTCNTB4 = ((freq / 1000) * BSP_Configuration.microseconds_per_tick) / 1000; \
+        rTCNTB4 = ((freq / 1000) * rtems_configuration_get_microseconds_per_tick()) / 1000; \
         /*unmask TIMER4 irq*/ \
         rINTMSK&=~BIT_TIMER4; \
         /* start TIMER4 with autoreload */ \

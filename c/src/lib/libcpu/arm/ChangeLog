@@ -1,3 +1,9 @@
+2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* s3c24xx/clock/clockdrv.c: Use
+	rtems_configuration_get_microseconds_per_tick() rather than obsolete
+	BSP_Configuration reference.
+
 2008-05-06	Ray Xu <rayx.cn@gmail.com>
 
 	* Makefile.am, configure.ac, preinstall.am, s3c2400/include/s3c2400.h:
