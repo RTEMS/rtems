@@ -19,10 +19,10 @@ extern "C" {
 #endif
 
 /**
- *  This file will not pre-installed
- *  smdk2410 BSP use bsp.h in gp32 now, This file is a place
- *  holder If you need to add sth specical for your 2410 bsp pls
- *  overide this file with your own. and change Makefile.am
+ *  This file will not be pre-installed because the smdk2410 BSP uses
+ *  the bsp.h in gp32 currently.  This file is a placeholder. If you
+ *  need to add something specical for your 2410 BSP please override
+ *  this file with your own and change Makefile.am
  */
 
 #ifdef __cplusplus

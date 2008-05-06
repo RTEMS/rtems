@@ -1,3 +1,7 @@
+2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/bsp.h: Grammar.
+
 2008-05-06	Ray Xu <rayx.cn@gmail.com>
 
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
