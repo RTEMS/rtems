@@ -1,5 +1,9 @@
 2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am: Use shared bsp_predriver_hook.
+
+2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* include/bsp.h: Grammar.
 
 2008-05-06	Ray Xu <rayx.cn@gmail.com>
