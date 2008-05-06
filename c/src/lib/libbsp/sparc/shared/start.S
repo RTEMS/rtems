@@ -215,7 +215,7 @@ SYM(hard_reset):
         mov     %g3, %wim
 
 	or	%g1, 0x20, %g1
-        wr      %g1, %psr         ! enable traps
+        wr      %g1, %psr		! enable traps
 
         nop
         nop

@@ -1,3 +1,7 @@
+2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/start.S: Spacing.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/bspstart.c: Eliminate copies of the Configuration Table. Use
