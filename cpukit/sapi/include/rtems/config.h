@@ -225,9 +225,6 @@ extern rtems_configuration_table    Configuration;
 #define rtems_configuration_get_do_zero_of_workspace() \
    (_Configuration_Table->do_zero_of_workspace)
 
-#define rtems_configuration_get_maximum_devices() \
-        (_Configuration_Table->maximum_devices)
-
 #define rtems_configuration_get_number_of_device_drivers() \
         (_Configuration_Table->number_of_device_drivers)
 
