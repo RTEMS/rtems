@@ -7,7 +7,7 @@
  *  This core object utilizes standard Dijkstra counting semaphores to provide
  *  synchronization and mutual exclusion capabilities.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,16 +69,35 @@ void _CORE_semaphore_Seize(
     return;
   }
 
+  /* 
+   *  If the semaphore was not available and the caller was not willing
+   *  to block, then return immediately with a status indicating that
+   *  the semaphore was not available and the caller never blocked.
+   */
   if ( wait == CORE_SEMAPHORE_NO_WAIT ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
       return;
   }
-  if (wait == CORE_SEMAPHORE_BAD_TIMEOUT ) {
+
+  /*
+   *  This is strange case because normally RTEMS validates parameters
+   *  before performing any real work.  But in this case, the POSIX
+   *  API requires that a semaphore be checked for immediate availability
+   *  BEFORE the timeout value is validated.  This is implemented in
+   *  RTEMS by indicating a special status that the timeout value
+   *  was invalid which is returned in this case.
+   */
+  if ( wait == CORE_SEMAPHORE_BAD_TIMEOUT ) {
       _ISR_Enable( level );
       executing->Wait.return_code = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
       return;
   }
+
+  /*
+   *  If the semaphore is not available and the caller is willing to
+   *  block, then we now block the caller with optional timeout.
+   */
   if (( wait == CORE_SEMAPHORE_BLOCK_FOREVER) ||
       ( wait == CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT ) ) {
       _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
@@ -87,5 +106,4 @@ void _CORE_semaphore_Seize(
       _ISR_Enable( level );
       _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
   }
-
 }

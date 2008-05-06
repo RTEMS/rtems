@@ -1,3 +1,9 @@
+2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems/rtems/message.h, sapi/include/confdefs.h,
+	score/src/coresemseize.c, score/src/threadhandler.c: Comment
+	improvements from class.
+
 2008-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1285/rtems

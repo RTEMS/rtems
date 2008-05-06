@@ -81,7 +81,7 @@ typedef enum {
  *  each message queue.
  */
 typedef struct {
-  /** This field is the inherited obejct characteristics. */
+  /** This field is the inherited object characteristics. */
   Objects_Control             Object;
   /** This field is the attribute set as defined by the API. */
   rtems_attribute             attribute_set;

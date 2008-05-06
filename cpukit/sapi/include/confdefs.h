@@ -26,7 +26,7 @@
  */
  
 /* 
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -1451,8 +1451,9 @@ rtems_configuration_table Configuration = {
  *  will put an end to it.
  *  
  *  NOTE: If you are using the timer driver, it is considered 
- *        mutually exclusive with the clock driver because it
- *        is assume to use the smae hardware.
+ *        mutually exclusive with the clock driver because the
+ *        drivers are assumed to use the same "timer" hardware
+ *        on many boards.
  */
 #if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
   #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
