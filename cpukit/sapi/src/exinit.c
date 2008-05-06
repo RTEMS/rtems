@@ -124,6 +124,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Dispatch_initialization();
 
+  /*
+   *  Before this is called, we are not allowed to allocate memory
+   *  from the Workspace because it is not initialized.
+   */
   _Workspace_Handler_initialization(
      (void *)configuration_table->work_space_start,
      configuration_table->work_space_size

@@ -55,8 +55,8 @@ void _Thread_Start_multitasking( void )
 {
   /*
    *  The system is now multitasking and completely initialized.
-   *  This system thread now either "goes away" in a single processor
-   *  system or "turns into" the server thread in an MP system.
+   *  This system thread now "hides" in a single processor until
+   *  the system is shut down.
    */
 
   _System_state_Set( SYSTEM_STATE_UP );

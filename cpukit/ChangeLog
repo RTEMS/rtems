@@ -1,3 +1,8 @@
+2008-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/src/exinit.c, score/src/threadstartmultitasking.c: Improve
+	comments.
+
 2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/objectget.c: Improve comments and readability.
