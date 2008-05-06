@@ -152,9 +152,6 @@ SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 #define rtems_configuration_get_ticks_per_timeslice() \
         (_Configuration_Table->ticks_per_timeslice)
 
-#define rtems_configuration_get_maximum_devices() \
-        (_Configuration_Table->maximum_devices)
-
 #define rtems_configuration_get_number_of_device_drivers() \
         (_Configuration_Table->number_of_device_drivers)
 
