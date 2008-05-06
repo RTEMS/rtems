@@ -33,6 +33,7 @@ EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/nios2_iss.cfg \
     custom/ods68302.cfg custom/pc386.cfg custom/posix.cfg \
     custom/psim.cfg custom/rtl22xx.cfg custom/score603e.cfg \
-    custom/shsim.cfg custom/ts_386ex.cfg custom/nds.cfg
+    custom/shsim.cfg custom/ts_386ex.cfg custom/nds.cfg \
+    custom/smdk2410.cfg
 
 include $(top_srcdir)/automake/host.am
