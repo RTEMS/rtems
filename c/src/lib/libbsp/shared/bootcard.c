@@ -42,7 +42,11 @@ extern void bsp_cleanup( void );
 
 char *rtems_progname;
 
-int boot_card(int argc, char **argv, char **envp)
+int boot_card(
+  int    argc, 
+  char **argv, 
+  char **envp
+)
 {
   static char  *argv_pointer = NULL;
   static char  *envp_pointer = NULL;
@@ -57,9 +61,9 @@ int boot_card(int argc, char **argv, char **envp)
   rtems_interrupt_disable( bsp_isr_level );
 
   /*
-   *  Set things up so c_rtems_main() is called with real pointers for
-   *  argv and envp.  If the BSP has passed us something useful, then
-   *  pass it on.  Somehow we need to eventually make this available to
+   *  Set things up so we have real pointers for argv and envp.
+   *  If the BSP has passed us something useful, then pass it on.
+   *  Somehow we need to eventually make this available to
    *  a real main() in user land. :)
    */
 
