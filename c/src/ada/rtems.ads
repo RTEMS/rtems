@@ -973,7 +973,7 @@ pragma Elaborate_Body (RTEMS);
       Buffer     : in     RTEMS.Address;
       Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
-      Size       :    out RTEMS.Unsigned32;
+      Size       : in out RTEMS.Unsigned32;
       Result     :    out RTEMS.Status_Codes
    );
 

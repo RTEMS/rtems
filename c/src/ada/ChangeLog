@@ -1,3 +1,7 @@
+2008-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems.adb, rtems.ads: Fix prototype.
+
 2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb, rtems.ads: Refactored rtems_clock_get into 5 methods

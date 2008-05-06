@@ -1170,7 +1170,7 @@ package body RTEMS is
       Buffer     : in     RTEMS.Address;
       Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
-      Size       :    out RTEMS.Unsigned32;
+      Size       : in out RTEMS.Unsigned32;
       Result     :    out RTEMS.Status_Codes
    ) is
       function Message_Queue_Receive_Base (
@@ -1184,6 +1184,8 @@ package body RTEMS is
          "rtems_message_queue_receive");
       Size_Base : aliased RTEMS.Unsigned32;
    begin
+
+      Size_Base := Size;
 
       Result := Message_Queue_Receive_Base (
          ID,
