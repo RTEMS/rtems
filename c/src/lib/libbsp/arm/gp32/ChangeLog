@@ -1,3 +1,8 @@
+2008-05-06	Ray Xu <rayx.cn@gmail.com>
+
+	* console/uart.c, include/bsp.h, smc/smc.c, startup/bspstart.c: Merge
+	smdk2410 with gp32.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so

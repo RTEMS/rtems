@@ -17,7 +17,7 @@
 #include "rtems/diskdevs.h"
 #include "smc.h"
 #include <rtems/bspIo.h>
-#include <s3c2400.h>
+#include <s3c24xx.h>
 
 #define SMC_DEVICE_NAME "/dev/smc"
 #define SMC_SAMSUNG_ID		0xEC
@@ -57,6 +57,14 @@ struct SMC_INFO
   uint32_t blocks;
   uint32_t mb;
 };
+
+#ifdef CPU_S3C2410	//different regester map
+#define rPBDAT rGPBDAT
+#define rPBCON rGPBCON
+#define rPDDAT rGPDDAT
+#define rPEDAT rGPEDAT
+#endif
+
 
 static struct SMC_INFO smc_info;
 

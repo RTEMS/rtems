@@ -28,7 +28,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <s3c2400.h>
+#include <s3c24xx.h>
 
 #define gp32_initButtons() {rPBCON=0x0;}
 #define gp32_getButtons() \

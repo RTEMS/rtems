@@ -18,7 +18,7 @@
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
-#include <s3c2400.h>
+#include <s3c24xx.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
@@ -92,8 +92,11 @@ void bsp_start_default( void )
     int i;
 
     /* stop RTC */
+#ifdef CPU_S3C2400
     rTICINT=0x0;
-
+#else
+    rTICNT=0x0;
+#endif
     /* stop watchdog,ADC and timers */
     rWTCON=0x0;
     rTCON=0x0;

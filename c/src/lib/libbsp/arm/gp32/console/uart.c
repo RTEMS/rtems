@@ -25,7 +25,7 @@
 #include <rtems/bspIo.h>
 
 /* Put the CPU (or UART) specific header file #include here */
-#include <s3c2400.h>
+#include <s3c24xx.h>
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 
