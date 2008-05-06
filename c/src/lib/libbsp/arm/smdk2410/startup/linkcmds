@@ -1,0 +1,275 @@
+/*
+ *  GP32 Linker script
+ *
+ *  Written by Philippe Simons <loki_666@fastmail.fm>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm","elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(_start)
+/* SEARCH_DIR(/usr/local/rtems-arm-dev-tools/arm-rtems/lib); */
+
+
+MEMORY {
+	sdram : ORIGIN = 0x30000000, LENGTH = 64M
+}
+
+/*
+ * Declare some sizes.
+ */
+
+/* The base for SDRAM is set to umon's APPRAMBASE */
+_sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0x30000000;
+_sdram_size = DEFINED(_sdram_size) ? _sdram_size : 64M;
+
+
+_irq_stack_size = DEFINED(_irq_stack_size) ? _irq_stack_size : 0x1000;
+_fiq_stack_size = DEFINED(_fiq_stack_size) ? _fiq_stack_size : 0x400;
+_abt_stack_size = DEFINED(_abt_stack_size) ? _abt_stack_size : 0x100;
+_svc_stack_size = DEFINED(_svc_stack_size) ? _svc_stack_size : 0x1000;
+
+
+
+/* Do we need any of these for elf?
+   __DYNAMIC = 0;    */
+
+SECTIONS
+{
+  .base :
+  {
+    arm_exception_table = .;    
+
+    arm_reset_vect    = .;     /* 0x00 */
+    . += 4;
+
+    arm_undef_vect    = .;     /* 0x04 */
+    . += 4;
+
+    arm_swi_vect      = .;     /* 0x08 */
+    . += 4;
+
+    arm_iabrt_vect    = .;     /* 0x0c */
+    . += 4;
+
+    arm_dabrt_vect    = .;     /* 0x10 */
+    . += 4;
+
+    /* no vector here */
+    . += 4;
+
+    arm_irq_vect      = .;     /* 0x18 */
+    . += 4;
+
+    arm_fiq_vect      = .;     /* 0x1c */
+    . += 4;
+			      /* FIXME: */
+
+    rtems_vector_table = .;
+    . += (8 * 4);                     /* 8 ARM interrupts */
+	
+    bsp_vector_table = .;
+    . += (32 * 4);                    /* 32 S3C2400 interrupts */
+
+    . = ALIGN (0x100);
+
+
+  } > sdram
+
+
+  .text      :
+  {
+    _axf_text_start = . ;
+    *(EXCLUDE_FILE (*text.iwram*) .text)
+    *(.text.*)
+    *(.stub)
+
+    /*
+     * Special FreeBSD sysctl sections.
+     */
+    . = ALIGN (16);
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_domain_*);
+    *(set_pseudo_*);
+
+    /* .gnu.warning sections are handled specially by elf32.em.  */
+    *(.gnu.warning)
+    *(.gnu.linkonce.t*)
+    *(.glue_7)
+    *(.glue_7t)
+
+    . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
+  } > sdram
+
+  __text_end = . ;
+
+  .init          : 
+  { 
+    *(.init)
+  } > sdram   /*=0*/
+
+  .jcr : 
+  { 
+    *(.jcr) 
+  } > sdram
+
+
+  .fini      :
+  {
+    *(.fini)
+  } > sdram  /*=0*/
+
+  .rodata :
+  {
+    *(.rodata)
+    *all.rodata*(*)
+    *(.roda)
+    *(.rodata.*)
+    *(.gnu.linkonce.r*)
+    SORT(CONSTRUCTORS)
+    . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+  } > sdram = 0xff
+
+  .ctors :
+  {
+    /* gcc uses crtbegin.o to find the start of the constructors, so
+       we make sure it is first.  Because this is a wildcard, it
+       doesn't matter if the user does not actually link against
+       crtbegin.o; the linker won't look for a file to match a
+       wildcard.  The wildcard also means that it doesn't matter which
+       directory crtbegin.o is in.  */
+    KEEP (*crtbegin.o(.ctors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+    . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+  } >sdram = 0
+
+  .dtors :
+  {
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+    . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+  } >sdram = 0
+
+
+  .eh_frame :
+  {
+    KEEP (*(.eh_frame))
+    . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+  } >sdram = 0
+
+  .gcc_except_table :
+  {
+    *(.gcc_except_table)
+    . = ALIGN(4);   /* REQUIRED. LD is flaky without it. */
+  } >sdram = 0
+  _axf_ro_end = . ;
+
+  .data ALIGN(4) :
+  {
+    _axf_data_start = ABSOLUTE(.);
+    *(.data)
+    *(.data.*)
+    *(.gnu.linkonce.d*)
+    CONSTRUCTORS
+    . = ALIGN(4);  /* REQUIRED. LD is flaky without it. */
+  } >sdram = 0xff
+
+  __data_end  =  . ;
+
+  .bss ALIGN(4):
+  {
+	_axf_bss_start = ABSOLUTE(.);
+	_clear_start = .;
+	*(.bss)
+	*(.bss.*)
+	*(.gnu.linkonce.b.*)
+	*(COMMON)
+	. = ALIGN(64);
+	_clear_end = .;
+
+	. = ALIGN (256);
+	_abt_stack = .;
+	. += _abt_stack_size;
+
+	. = ALIGN (256);
+	_irq_stack = .;
+	. += _irq_stack_size;
+
+	. = ALIGN (256);
+	_fiq_stack = .;
+	. += _fiq_stack_size;
+
+	. = ALIGN (256);
+	_svc_stack = .;
+	. += _svc_stack_size;
+
+/* 
+ * Ideally, the MMU's translation table would be in SRAM. But we
+ * don't have any. If we don't use more regions than TLB entries (64),
+ * the lookup will only happen once for each region.
+ */
+	. = ALIGN (16 * 1024);
+	_ttbl_base = .;
+	. += (16 * 1024);
+
+	. = ALIGN (1024);
+	_bss_free_start = .;
+
+  } > sdram
+  _axf_bss_end = . ;
+
+  _end = . ;
+  __end__ = . ;
+  PROVIDE (end = _end);
+
+
+/* Debugging stuff follows? */
+
+  /* Stabs debugging sections.  */
+  .stab 0 : { *(.stab) } 
+  .stabstr 0 : { *(.stabstr) } 
+  .stab.excl 0 : { *(.stab.excl) } 
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) } 
+  .stab.indexstr 0 : { *(.stab.indexstr) } 
+  .comment 0 : { *(.comment) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) } 
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) } 
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) } 
+  /*.stack 0x80000 : { _stack = .; *(.stack) }*/
+  /* These must appear regardless of  .  */
+}
+

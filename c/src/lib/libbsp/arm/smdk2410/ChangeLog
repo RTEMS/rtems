@@ -1,0 +1,18 @@
+2008-05-06	Ray Xu <rayx.cn@gmail.com>
+
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	preinstall.am, include/bsp.h, include/bspopts.h.in, startup/linkcmds,
+	startup/memmap.c: New files.
+
+2008-04-06	Ray Xu	<rayx.cn@gmail.com>
+
+	* Add note in README, cleanup code, merge it with gp32 and submit it to RTEMS
+
+2007-10-12	ZhangZhiMin <paopaoerzhang@gmail.com>
+
+	* Fix clock defect, verified BSP on skyeye
+
+2007-08-06	XiaJiaShan <ximenpiaoxue4016@sina.com>
+
+	* Frist draft, port from GBA BSP, add console, ethernet driver
+

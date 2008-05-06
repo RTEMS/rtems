@@ -1,0 +1,8 @@
+SMDK2410 is a standard evaluation board for samsung s3c2410 ARM9 CPU
+
+This BSP was first developed by xiajiashan <ximenchuixue4016@sina.com>, based on gp32 Apr/2007
+ZhiMing, Zhang <paopaoerzhang@gmail.com> fix timer defect and run it on skeyey
+Ray, Xu merge this bsp with gp32 on Apr/2008
+
+pls refer to wiki on how to run this BSP on skyeye.
+
