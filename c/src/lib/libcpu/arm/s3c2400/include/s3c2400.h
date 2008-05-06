@@ -427,6 +427,7 @@
                  }
 /* Wait until rINTPND is changed for the case that the ISR is very short. */
 
+#ifndef __asm__
 /* Typedefs */
 typedef union {
   struct _reg {
@@ -653,7 +654,7 @@ typedef union {
   } reg;
   unsigned long all;
 } IISSFIF;
-
+#endif //__asm__
 
 #define LCD_WIDTH 240
 #define LCD_HEIGHT 320

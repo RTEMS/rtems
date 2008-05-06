@@ -1,3 +1,14 @@
+2008-05-06	Ray Xu <rayx.cn@gmail.com>
+
+	* Makefile.am, configure.ac, preinstall.am, s3c2400/include/s3c2400.h:
+	Add CPU type s3c2410. Add a new s3c24xx common file shared between
+	s3c2400 and s3c2410. Most content is moved from s3c2400 now. Some
+	were changed to include <s3c24xx.h> instead of <s3c2400.h>.
+	* s3c2410/include/s3c2410.h, s3c2410/irq/bsp_irq_asm.S,
+	s3c2410/irq/irq.h, s3c24xx/clock/clockdrv.c, s3c24xx/clock/support.c,
+	s3c24xx/include/s3c24xx.h, s3c24xx/irq/bsp_irq_init.c,
+	s3c24xx/irq/irq.c, s3c24xx/irq/irq.h, s3c24xx/timer/timer.c: New files.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* at91rm9200/clock/clock.c, lpc22xx/clock/clockdrv.c,
