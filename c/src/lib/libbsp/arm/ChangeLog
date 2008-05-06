@@ -1,3 +1,7 @@
+2008-05-06	Ray Xu <rayx.cn@gmail.com>
+
+	* acinclude.m4: Add smdk2410. Update gp32 to use shared code.
+
 2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
 
 	* acinclude.m4: Adding Nintendo DS BSP.

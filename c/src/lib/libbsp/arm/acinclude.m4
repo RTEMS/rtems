@@ -16,6 +16,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([nds]);;
   rtl22xx )
     AC_CONFIG_SUBDIRS([rtl22xx]);;
+  smdk2410 )
+    AC_CONFIG_SUBDIRS([smdk2410]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
