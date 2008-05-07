@@ -1,3 +1,7 @@
+2008-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console-io.c: Typo.
+
 2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Do not use intermediate .rel files unless from libcpu or
