@@ -1405,6 +1405,7 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
     uint16_t           data_bs; /* the number of 512 bytes sectors into one
                                  * data block
                                  */
+	unsigned           retries;
     assert(areq);
 
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
@@ -1416,8 +1417,25 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
     ide_controller_write_register(ctrl_minor, IDE_REGISTER_DEVICE_HEAD,
                                   areq->regs.regs[IDE_REGISTER_DEVICE_HEAD]);
 
+	retries = 0;
     do {
         ide_controller_read_register(ctrl_minor, IDE_REGISTER_STATUS, &byte);
+        /* If device (on INIT, i.e. it should be idle) is neither
+         * busy nor ready something's fishy, i.e., there is probably
+         * no device present.
+         * I'd like to do a proper timeout but don't know of a portable
+         * timeout routine (w/o using multitasking / rtems_task_wake_after())
+         */
+        if ( ! (byte & (IDE_REGISTER_STATUS_BSY | IDE_REGISTER_STATUS_DRDY)))
+            retries++;
+        else
+            retries=0;
+        if ( 10000 == retries ) {
+            /* probably no drive connected */
+            areq->breq->status = RTEMS_UNSATISFIED;
+            areq->breq->error = RTEMS_IO_ERROR;
+            return;
+        }
     } while ((byte & IDE_REGISTER_STATUS_BSY) ||
              (!(byte & IDE_REGISTER_STATUS_DRDY)));
 

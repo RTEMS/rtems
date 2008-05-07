@@ -1,3 +1,8 @@
+2008-05-07	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 649/bsps
+	* libchip/ide/ata.c: Give up if the interface does not become ready.
+
 2008-04-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	Moved to cpukit.
