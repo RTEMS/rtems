@@ -1,3 +1,7 @@
+2008-05-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp32/init.c: Formatting.
+
 2008-02-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp09/screen01.c: Correct test.
