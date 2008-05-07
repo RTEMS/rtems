@@ -7,7 +7,7 @@
  *  The tick frequency is directly programmed to the configured number of
  *  microseconds per tick.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,7 +52,8 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 
   clicks = ERC32_MEC.Real_Time_Clock_Counter;
 
-  return (uint32_t) (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
+  return (uint32_t) 
+    (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick \

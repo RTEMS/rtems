@@ -1,3 +1,7 @@
+2008-05-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/ckinit.c: Add nanoseconds clock tick granularity support.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* ChangeLog, Makefile.am: Remove all references to
