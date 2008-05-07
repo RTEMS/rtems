@@ -123,8 +123,8 @@ console_tbl	Console_Port_Tbl[] = {
                 0                               /* ulIntVector */
         },
         /*
-         * Up to 12 serial ports are provided by MC16550 SCC ports.
-         *     EP1A may have one MC16550 providing 4 ports (A,B,C,D).
+         * Up to 12 serial ports are provided by MC68360 SCC ports.
+         *     EP1A may have one MC68360 providing 4 ports (A,B,C,D).
          */
         {
                 "/dev/rs232_2",                 /* sDeviceName */

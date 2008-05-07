@@ -1,3 +1,7 @@
+2008-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/config.c: Fix typo.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so
