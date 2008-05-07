@@ -5,23 +5,41 @@ Name:		@rpmprefix@@tool_target@-gdb
 Summary:	Gdb for target @tool_target@
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	@GDB_RPMREL@%{?dist}
+Release:	@GDB_RPMREL@
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  %{_host_rpmprefix}gcc
+
 %if "%{gdb_version}" >= "6.6"
-BuildRequires:	expat-devel
+# suse
+%if "%{?suse}"
+%if "%{?suse}" >= "10.3"
+BuildRequires: libexpat-devel
+%else
+BuildRequires: expat
 %endif
+%else
+# fedora/redhat/cygwin
+BuildRequires: %{_host_rpmprefix}expat-devel
+%endif
+%endif
+
+%if "%{gdb_version}" < "6.7"
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}termcap-devel
+%endif
+%endif
+BuildRequires:  %{_host_rpmprefix}readline-devel
+BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
 %if %build_infos
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 %endif
-%if "@tool_target@" == "sparc-rtems4.7"
-BuildRequires:	libtermcap-devel
-%endif
-BuildRequires:	ncurses-devel
+
 %if %build_infos
 
 Requires:	@rpmprefix@gdb-common

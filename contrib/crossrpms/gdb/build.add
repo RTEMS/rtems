@@ -1,6 +1,12 @@
 %build
+%if "%{_prefix}" != "/usr"
+  export PATH="%{_bindir}:${PATH}"
+%endif
   mkdir -p build
   cd build
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
@@ -10,12 +16,16 @@
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
+%if "%{gdb_version}" >= "6.6"
+    --with-system-readline \
+    --with-expat \
+%endif
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
 
-  make all
+  make %{?_smp_mflags} all
 %if %build_infos
   make info
 %endif
