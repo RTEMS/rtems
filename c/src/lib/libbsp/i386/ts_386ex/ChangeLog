@@ -1,3 +1,8 @@
+2008-05-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 649/bsps
+	* clock/ckinit.c, console/console.c: Add missing structure element.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so

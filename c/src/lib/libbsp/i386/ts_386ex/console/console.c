@@ -70,6 +70,7 @@ static int  isr_is_on(const rtems_irq_connect_data *);
 static rtems_irq_connect_data console_isr_data =
 { BSP_UART_COM2_IRQ,
   BSP_uart_termios_isr_com2,
+  0,
   isr_on,
   isr_off,
   isr_is_on};
