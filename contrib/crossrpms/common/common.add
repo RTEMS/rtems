@@ -15,3 +15,15 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix @rpmprefix@%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
