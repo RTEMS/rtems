@@ -24,6 +24,9 @@ Provides:	@rpmprefix@autoconf-rtems = %{version}-%{release}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires: 	perl m4 gawk emacs
+%if "%{version}" >= "2.62"
+BuildRequires:  m4 >= 1.4.5
+%endif
 Requires:     	m4 gawk
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
