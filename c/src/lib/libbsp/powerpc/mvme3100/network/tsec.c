@@ -425,7 +425,7 @@ static inline void membarrier()
 	asm volatile("sync":::"memory");
 }
 
-#define EIEIO(mem) do { asm volatile("eieio":"=m"(mem):"m"(mem)); } while (0)
+#define EIEIO(mem) do { asm volatile("eieio"); } while (0)
 
 #else
 #error "memory barrier not implemented for your CPU architecture"

@@ -1,3 +1,9 @@
+2008-05-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c: removed memory input/output operands
+	which caused problems with gcc-4.3.0 (see
+	http://gcc.gnu.org/ml/gcc/2008-03/msg00976.html)
+
 2008-03-25	Till Straumann <strauman@slac.stanford.edu>
 
 	* include/bsp.h: declare BSP_commandline_string.
