@@ -113,8 +113,6 @@ void _BSP_Fatal_error(unsigned int v)
  *  Use the shared implementations of the following routines
  */
 
-void bsp_postdriver_hook(void);
-void bsp_pretasking_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
