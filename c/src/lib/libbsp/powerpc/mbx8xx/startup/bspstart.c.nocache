@@ -42,7 +42,6 @@ boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
  *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
  *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*
