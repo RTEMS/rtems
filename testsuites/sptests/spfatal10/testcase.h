@@ -31,6 +31,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 void force_error()
 {
-  rtems_initialize_executive_early( NULL );
+  rtems_initialize_data_structures( NULL );
   /* we will not run this far */
 }

@@ -6,7 +6,7 @@
  *  the executive.  It is very carefully constructed to do this and
  *  uses the Configuration very carefully.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -130,6 +130,5 @@ void Process_case()
       Initialization_tasks[ 0 ].entry_point = Init;
       break;
   }
-  rtems_initialize_executive(
-    &New_Configuration, rtems_cpu_configuration_get_table() );
+  rtems_initialize_data_structures( &New_Configuration );
 }

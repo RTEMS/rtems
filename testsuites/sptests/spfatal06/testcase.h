@@ -44,7 +44,7 @@ void force_error()
   else
      New_Configuration.stack_allocate_hook = &New_stack_allocate_hook;
 
-  rtems_initialize_executive_early( &New_Configuration );
+  rtems_initialize_data_structures( &New_Configuration );
   /* we will not run this far */
 }
 

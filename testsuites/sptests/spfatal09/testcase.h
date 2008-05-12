@@ -36,6 +36,6 @@ void force_error()
  
   New_Configuration.work_space_start = NULL;
 
-  rtems_initialize_executive_early( &New_Configuration );
+  rtems_initialize_data_structures( &New_Configuration );
   /* we will not run this far */
 }

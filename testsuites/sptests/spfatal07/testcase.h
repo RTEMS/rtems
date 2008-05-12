@@ -35,7 +35,7 @@ void force_error()
   New_Configuration = *_Configuration_Table;
 
   New_Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
-  rtems_initialize_executive_early( &New_Configuration );
+  rtems_initialize_data_structures( &New_Configuration );
    
   /* we will not run this far */
 }
