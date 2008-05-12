@@ -24,9 +24,6 @@
  *  console_open
  *
  *  open a port as a termios console.
- *
- *  the console is opened in bsp_postdriver_hook() in bsppost.c
- *
  */
 
 rtems_device_driver console_open(
