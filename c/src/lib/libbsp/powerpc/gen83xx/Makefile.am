@@ -45,6 +45,7 @@ mpc83xx_regs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/cpuinit.c
 
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)

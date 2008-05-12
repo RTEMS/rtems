@@ -58,10 +58,8 @@ uint32_t   bsp_clicks_per_usec;
 
 /*
  *  Use the shared implementations of the following routines.
- *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
- *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
+ *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void initialize_exceptions(void);
 extern void cpu_init(void);
@@ -122,12 +120,6 @@ bsp_pretasking_hook(void)
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
-}
-
-
-
-void bsp_predriver_hook(void)
-{
 }
 
 void bsp_calc_mem_layout()

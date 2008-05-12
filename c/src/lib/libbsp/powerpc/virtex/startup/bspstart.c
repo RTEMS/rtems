@@ -96,24 +96,11 @@ boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
  */
 
 void bsp_XAssertHandler(const char* file, int line);
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 
 void bsp_XAssertHandler(const char* file, int line) {
   printf("\n***\n*** XAssert Failed!  File: %s, Line: %d\n***\n", file, line);
-}
-
-/*
- *
- *  bsp_predriver_hook
- *
- *  Before drivers are setup.
- */
-
-void bsp_predriver_hook(void)
-{
-  
 }
 
 /*
