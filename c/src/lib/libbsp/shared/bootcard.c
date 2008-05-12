@@ -7,12 +7,17 @@
  *  + start.S: basic CPU setup (stack, zero BSS) 
  *    + boot_card
  *      + bspstart.c: bsp_start - more advanced initialization
- *      + rtems_initialize_executive_early
+ *      + rtems_initialize_data_structures
+ *      + bsp_pretasking_hook
+ *      + rtems_initialize_before_drivers
+ *      + bsp_predriver_hook
+ *      + rtems_initialize_device_drivers
  *        + all device drivers
- *      + rtems_initialize_executive_late
+ *      + bsp_postdriver_hook
+ *      + rtems_initialize_start_multitasking
  *        + 1st task executes C++ global constructors
- *        .... appplication runs ...
- *        + exit
+ *          .... appplication runs ...
+ *          + exit
  *     + back to here eventually
  *     + bspclean.c: bsp_cleanup
  *
@@ -35,6 +40,9 @@
 
 extern void bsp_start( void );
 extern void bsp_cleanup( void );
+extern void bsp_pretasking_hook(void);
+extern void bsp_predriver_hook(void);
+extern void bsp_postdriver_hook(void);
 
 /*
  *  Since there is a forward reference
@@ -57,7 +65,6 @@ int boot_card(
   /*
    *  Make sure interrupts are disabled.
    */
-
   rtems_interrupt_disable( bsp_isr_level );
 
   /*
@@ -66,17 +73,12 @@ int boot_card(
    *  Somehow we need to eventually make this available to
    *  a real main() in user land. :)
    */
-
-  if ( argv )
-    argv_p = argv;
-
-  if ( envp )
-    envp_p = envp;
+  if ( argv ) argv_p = argv;
+  if ( envp ) envp_p = envp;
 
   /*
    *  Set the program name in case some application cares.
    */
-
   if ((argc > 0) && argv && argv[0])
     rtems_progname = argv[0];
   else
@@ -85,21 +87,53 @@ int boot_card(
   /*
    * Invoke Board Support Package initialization routine written in C.
    */
-
   bsp_start();
 
   /*
-   *  Initialize RTEMS but do NOT start multitasking.
+   *  Initialize RTEMS data structures
    */
+  rtems_initialize_data_structures( &Configuration );
 
-  rtems_initialize_executive_early( &Configuration );
+  /*
+   *  All BSP to do any required initialization now that RTEMS
+   *  data structures are initialized.  This is the typical
+   *  time when the C Library is initialized so malloc()
+   *  can be called by device drivers.
+   */
+  bsp_pretasking_hook();
+
+  /*
+   *  Let RTEMS perform initialization it requires before drivers
+   *  are allowed to be initialized.
+   */
+  rtems_initialize_before_drivers();
+
+  /*
+   *  Execute BSP specific pre-driver hook. Drivers haven't gotten
+   *  to initialize yet so this is a good chance to initialize
+   *  buses, spurious interrupt handlers, etc.. 
+   *
+   *  NOTE: Many BSPs do not require this handler and use the
+   *        shared stub.
+   */
+  bsp_predriver_hook();
+
+  /*
+   *  Initialize all device drivers.
+   */
+  rtems_initialize_device_drivers();
+
+  /*
+   *  Invoke the postdriver hook.  This normally opens /dev/console
+   *  for use as stdin, stdout, and stderr.
+   */
+  bsp_postdriver_hook();
 
   /*
    *  Complete initialization of RTEMS and switch to the first task.
    *  Global C++ constructors will be executed in the context of that task.
    */
-
-  rtems_initialize_executive_late( bsp_isr_level );
+  rtems_initialize_start_multitasking();
 
   /***************************************************************
    ***************************************************************
@@ -111,7 +145,6 @@ int boot_card(
   /*
    *  Perform any BSP specific shutdown actions which are written in C.
    */
-
   bsp_cleanup();
 
   /*
