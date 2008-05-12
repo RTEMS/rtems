@@ -26,7 +26,6 @@
  *  Use the shared implementations of the following routines
  */
 
-extern void bsp_postdriver_hook(void);
 extern void bsp_libc_init( void *, uint32_t, int );
 
 #if 0

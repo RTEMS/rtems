@@ -51,10 +51,8 @@ uint32_t   bsp_timer_average_overhead;
 
 /*
  *  Use the shared implementations of the following routines.
- *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
- *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
+ *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 void BSP_panic(char *s)

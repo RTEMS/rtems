@@ -75,7 +75,6 @@ const unsigned int _icplbs_table[16][2] = {
  *  Use the shared implementations of the following routines
  */
 
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void Init_PLL (void);
 void Init_EBIU (void);

@@ -76,7 +76,6 @@ uint32_t         rtemsFreeMemStart;
 +--------------------------------------------------------------------------*/
 extern void rtems_irq_mngt_init(void);
 void bsp_libc_init( void *, uint32_t, int );
-void bsp_postdriver_hook(void);
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_pretasking_hook

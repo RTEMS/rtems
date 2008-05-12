@@ -39,7 +39,6 @@ extern void bsp_hw_init(void);
  *  Use the shared implementations of the following routines
  */
 
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*

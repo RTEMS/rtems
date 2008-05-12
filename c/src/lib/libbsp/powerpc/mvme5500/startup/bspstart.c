@@ -147,11 +147,7 @@ void _BSP_Fatal_error(unsigned int v)
  *  Use the shared implementations of the following routines
  */
  
-extern void bsp_postdriver_hook(void); /* see c/src/lib/libbsp/shared/bsppost.c */
-
 extern void bsp_libc_init( void *, uint32_t, int );
-
-extern void bsp_pretasking_hook(void);
 
 void zero_bss()
 {

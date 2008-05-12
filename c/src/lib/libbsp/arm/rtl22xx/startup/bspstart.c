@@ -47,7 +47,6 @@ unsigned long           free_mem_end;
 /*************************************************************/
 extern void rtems_irq_mngt_init(void);
 void bsp_libc_init( void *, uint32_t, int );
-void bsp_postdriver_hook(void);
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
 /**************************************************************************/

@@ -40,7 +40,6 @@ au1x00_uart_t *uart3 = (au1x00_uart_t *)AU1X00_UART3_ADDR;
  *  Use the shared implementations of the following routines
  */
  
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*

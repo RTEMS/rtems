@@ -54,8 +54,6 @@ extern  void __bss_end;
 extern void bsp_cleanup( void );
 extern void rtems_irq_mngt_init(void);
 extern void bsp_libc_init( void *, uint32_t, int );
-extern void bsp_postdriver_hook(void);
-
 
 /** Chip registers */
 volatile unsigned int *Regs = (unsigned int *)GBA_IO_REGS_ADDR;

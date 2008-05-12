@@ -48,7 +48,6 @@ uint32_t         CPU_CLICKS_PER_TICK;
  *  Use the shared implementations of the following routines
  */
 
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
 /*

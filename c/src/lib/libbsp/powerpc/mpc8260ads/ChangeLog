@@ -1,3 +1,15 @@
+2008-05-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Refactored and renamed initialization routines to
+	rtems_initialize_data_structures, rtems_initialize_before_drivers,
+	rtems_initialize_device_drivers, and
+	rtems_initialize_start_multitasking. This opened the sequence up so
+	that bootcard() could provide a more robust and flexible framework
+	which is easier to explain and understand. This also lays the
+	groundwork for sharing the division of available memory between the
+	RTEMS workspace and heap and the C library initialization across all
+	BSPs.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Remove all references to

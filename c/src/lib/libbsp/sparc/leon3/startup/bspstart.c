@@ -36,7 +36,6 @@ extern uint32_t rdb_start;
  */ 
 int CPU_SPARC_HAS_SNOOPING;
 
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
 
@@ -87,8 +86,6 @@ void bsp_pretasking_hook(void)
 
   bsp_spurious_initialize();
 }
-
-void bsp_predriver_hook(void);
 
 /*
  *  bsp_start
