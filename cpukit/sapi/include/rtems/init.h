@@ -37,47 +37,52 @@ extern "C" {
 #include <rtems/rtems/intr.h>
 
 #if defined(RTEMS_MULTIPROCESSING)
-/*
+/**
  *  The following defines the default Multiprocessing Configuration
  *  Table.  This table is used in a single processor system.
  */
-
 extern const rtems_multiprocessing_table
   _Initialization_Default_multiprocessing_table;
 #endif
 
-/*
- *  rtems_initialize_executive_early
+/**
+ *  @brief rtems_initialize_data_structures
  *
- *  DESCRIPTION:
- *
- *  This routine implements the early portion of rtems_initialize_executive
- *  directive up to the pretasking hook. This directive is invoked at system
- *  startup to initialize the RTEMS multitasking environment.
+ *  This routine implements the portion of the RTEMS initializatin process
+ *  that involves initializing data structures to a state that scheduling
+ *  can occur in a consistent manner.
  */
-
-rtems_interrupt_level rtems_initialize_executive_early(
+void rtems_initialize_data_structures(
   rtems_configuration_table *configuration_table
 );
 
-/*
- *  rtems_initialize_executive_late
+/**
+ *  @brief rtems_initialize_before_drivers
  *
- *  DESCRIPTION:
+ *  This routine implements the portion of RTEMS initialization that
+ *  is done immediately before device drivers are initialized.
+ */
+void rtems_initialize_before_drivers(void);
+
+/**
+ *  @brief rtems_initialize_device_drivers
+ *
+ *  This routine implements the portion of RTEMS initialization that
+ *  initializes all device drivers.
+ */
+void rtems_initialize_device_drivers(void);
+
+/**
+ *  @brief rtems_initialize_start_multitasking
  *
  *  This routine implements the early portion of rtems_initialize_executive
  *  directive up to the pretasking hook. This directive is invoked at system
  *  startup to initialize the RTEMS multitasking environment.
  */
+void rtems_initialize_start_multitasking(void);
 
-void rtems_initialize_executive_late(
-  rtems_interrupt_level bsp_level
-);
-
-/*
- *  rtems_shutdown_executive
- *
- *  DESCRIPTION:
+/**
+ *  @brief rtems_shutdown_executive
  *
  *  This routine implements the rtems_shutdown_executive directive.  The
  *  invocation of this directive results in the RTEMS environment being
@@ -85,7 +90,6 @@ void rtems_initialize_executive_late(
  *  invocation of this directive results in the rtems_initialize_executive
  *  directive exitting to the startup code which invoked it.
  */
-
 void rtems_shutdown_executive(
   uint32_t   result
 );

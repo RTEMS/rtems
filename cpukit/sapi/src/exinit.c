@@ -1,7 +1,7 @@
 /*
  *  Initialization Manager
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -61,7 +61,7 @@
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
-rtems_interrupt_level rtems_initialize_executive_early(
+void rtems_initialize_data_structures(
   rtems_configuration_table *configuration_table
 )
 {
@@ -213,11 +213,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
   /*
    *  Scheduling can properly occur now as long as we avoid dispatching.
    */
+}
 
-  {
-    extern void bsp_pretasking_hook(void);
-    bsp_pretasking_hook();
-  }
+void rtems_initialize_before_drivers(void)
+{
 
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Create_server();
@@ -229,11 +228,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _API_extensions_Run_predriver();
 
-  {
-    extern void bsp_predriver_hook(void);
-    bsp_predriver_hook();
-  }
+}
 
+void rtems_initialize_device_drivers(void)
+{
   /*
    *  Initialize all the device drivers and initialize the MPCI layer.
    *
@@ -258,30 +256,21 @@ rtems_interrupt_level rtems_initialize_executive_early(
    */
 
   _API_extensions_Run_postdriver();
-
-  {
-    extern void bsp_postdriver_hook(void);
-    bsp_postdriver_hook();
-  }
-
-  return bsp_level;
 }
 
-void rtems_initialize_executive_late(
-  rtems_interrupt_level bsp_level
-)
+void rtems_initialize_start_multitasking(void)
 {
 
   _System_state_Set( SYSTEM_STATE_BEGIN_MULTITASKING );
 
   _Thread_Start_multitasking();
 
-  /*
-   *  Restore the interrupt level to what the BSP had.  Technically,
-   *  this is unnecessary since the BSP should have all interrupts
-   *  disabled when rtems_initialize_executive is invoked.  But this keeps
-   *  the ISR Disable/Enable calls paired.
-   */
-
-  _ISR_Enable( bsp_level );
+  /*******************************************************************
+   *******************************************************************
+   *******************************************************************
+   ******                 APPLICATION RUNS HERE                 ******
+   ******            RETURNS WHEN SYSTEM IS SHUT DOWN           ******
+   *******************************************************************
+   *******************************************************************
+   *******************************************************************/
 }
