@@ -49,7 +49,6 @@ int CPU_SPARC_HAS_SNOOPING;
  *  Use the shared implementations of the following routines
  */
 
-void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
 
