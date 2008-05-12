@@ -33,7 +33,7 @@
 #undef rtems_port_ident
 #undef rtems_event_receive
 #undef rtems_event_send
-#undef rtems_initialize_executive
+#undef rtems_initialize_data_structures
 #undef rtems_shutdown_executive
 #undef rtems_interrupt_catch
 #undef rtems_partition_create
