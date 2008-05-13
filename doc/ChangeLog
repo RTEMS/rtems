@@ -1,3 +1,8 @@
+2008-05-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/conf.t: Fix typo on
+	CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
+
 2008-04-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: Add CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
