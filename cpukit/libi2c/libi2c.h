@@ -175,7 +175,7 @@ typedef struct rtems_libi2c_bus_ops_
   /* ioctl misc functions */
   int (*ioctl) (rtems_libi2c_bus_t * bushdl, 
 		int   cmd,
-		void *buffer;
+		void *buffer
 		);
 } rtems_libi2c_bus_ops_t;
 

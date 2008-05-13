@@ -1,3 +1,7 @@
+2008-05-13	Robert S. Grimes <rsg@alum.mit.edu>
+
+	* libi2c/libi2c.h: Fix typo.
+
 2008-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* pppd/example/system.h: Fix path in example -- NOT COMPILED WITH
