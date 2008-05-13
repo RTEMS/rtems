@@ -1,3 +1,8 @@
+2008-05-13	Eric Norum: <norume@aps.anl.gov>
+
+	* cpukit/libcsupport/src/mallocinfo.c: Add locks around non-atomic
+    structure assignment.
+
 2008-05-13	Robert S. Grimes <rsg@alum.mit.edu>
 
 	* libi2c/libi2c.h: Fix typo.

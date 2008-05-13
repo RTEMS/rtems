@@ -24,7 +24,9 @@ int malloc_get_statistics(
 {
   if ( !stats )
     return -1;
+  _RTEMS_Lock_allocator();
   *stats = rtems_malloc_statistics;
+  _RTEMS_Unlock_allocator();
   return 0;
 }
 
