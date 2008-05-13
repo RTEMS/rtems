@@ -1,3 +1,8 @@
+2008-05-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* pppd/example/system.h: Fix path in example -- NOT COMPILED WITH
+	CPUKIT.
+
 2008-05-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/rtems/init.h, sapi/src/exinit.c: Refactored and renamed

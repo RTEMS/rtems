@@ -37,6 +37,6 @@ rtems_driver_address_table Device_drivers[5] = {
                                            RTEMS_NO_ASR | \
                                            RTEMS_INTERRUPT_LEVEL(0))
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 #endif
