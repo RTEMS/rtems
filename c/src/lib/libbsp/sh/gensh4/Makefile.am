@@ -28,28 +28,18 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.rom \
     startup/linkcmds.rom2ram
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += hw_init.rel
-hw_init_rel_SOURCES = hw_init/hw_init.c
-hw_init_rel_CPPFLAGS = $(AM_CPPFLAGS)
-hw_init_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
+hw_init_SOURCES = hw_init/hw_init.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel hw_init.rel console.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(hw_init_SOURCES) $(console_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel

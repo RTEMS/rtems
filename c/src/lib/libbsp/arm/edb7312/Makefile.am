@@ -26,43 +26,20 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../arm/shared/comm/uart.h
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c \
     startup/bspstart.c startup/exit.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/uart.c ../../shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += abort.rel
-abort_rel_SOURCES = ../shared/abort/abort.c
-abort_rel_CPPFLAGS = $(AM_CPPFLAGS)
-abort_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+clock_SOURCES = clock/clockdrv.c
+console_SOURCES = console/uart.c ../../shared/console.c
+timer_SOURCES = timer/timer.c
+abort_SOURCES = ../shared/abort/abort.c
 
 include_HEADERS += irq/irq.h
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c \
+irq_SOURCES = irq/irq.c irq/bsp_irq_init.c \
     ../../arm/shared/irq/irq_init.c irq/bsp_irq_asm.S \
     ../../arm/shared/irq/irq_asm.S irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -73,8 +50,13 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = clock.rel console.rel startup.rel irq.rel timer.rel abort.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(timer_SOURCES) $(abort_SOURCES) $(irq_SOURCES)
+
+include_HEADERS += irq/irq.h
+
+# libcpu libraries could go here
+libbsp_a_LIBADD = 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

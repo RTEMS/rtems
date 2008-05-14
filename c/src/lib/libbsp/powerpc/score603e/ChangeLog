@@ -1,3 +1,7 @@
+2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Rework to avoid .rel files.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Remove all references to console_reserve_resources and

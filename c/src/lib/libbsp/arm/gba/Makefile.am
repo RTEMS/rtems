@@ -29,43 +29,32 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c \
-    startup/bspstart.c startup/exit.c startup/cpu.c startup/cpu_asm.S \
+# some objects have to be forced together to ensure they are ALWAYS
+# the ones linked into the application executable.  Every application
+# needs startup/bspstart.c, so we will force in the others
+noinst_PROGRAMS += gbaoverrides.rel
+gbaoverrides_rel_SOURCES = startup/bspstart.c startup/cpu.c startup/cpu_asm.S
+gbaoverrides_rel_CPPFLAGS = $(AM_CPPFLAGS)
+gbaoverrides_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppredriverhook.c startup/exit.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/conio.c console/console.c \
+clock_SOURCES = clock/clockdrv.c
+console_SOURCES = console/conio.c console/console.c \
     console/defaultfont.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+timer_SOURCES = timer/timer.c
 
 include_HEADERS += irq/irq.h
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
+irq_SOURCES = irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
     irq/bsp_irq_asm.S irq/irq_asm.S
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = clock.rel console.rel \
-    startup.rel irq.rel timer.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(timer_SOURCES) $(irq_SOURCES)
+
+libbsp_a_LIBADD = gbaoverrides.rel
 if HAS_NETWORKING
 ##
 endif

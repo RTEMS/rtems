@@ -42,11 +42,9 @@ vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += vectors_entry.$(OBJEXT)
 
-
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
+startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/showbats.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
         ../../shared/bsppredriverhook.c \
@@ -56,25 +54,20 @@ startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += tod.rel
-tod_rel_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
-tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+tod_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
+pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
 include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
 
-console_CPPFLAGS = -DSTATIC_LOG_ALLOC
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = ../../powerpc/shared/console/polled_io.c \
+# Needs conditional compilation
+polledIO_CPPFLAGS = -DSTATIC_LOG_ALLOC
+noinst_PROGRAMS += polledIO.rel
+polledIO_rel_SOURCES = ../../powerpc/shared/console/polled_io.c
+polledIO_rel_CPPFLAGS = $(AM_CPPFLAGS) $(polledIO_CPPFLAGS)
+polledIO_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+console_SOURCES = \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/inch.c \
@@ -82,57 +75,36 @@ console_rel_SOURCES = ../../powerpc/shared/console/polled_io.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/keyboard.h \
     ../../powerpc/shared/console/uart.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(console_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c ../../powerpc/shared/irq/openpic_i8259_irq.c \
+irq_SOURCES = ../../powerpc/shared/irq/irq_init.c \
+    ../../powerpc/shared/irq/openpic_i8259_irq.c \
     ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
-
-noinst_PROGRAMS += motorola.rel
-motorola_rel_SOURCES = ../../powerpc/shared/motorola/motorola.h \
+motorola_SOURCES = ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/motorola/motorola.c
-motorola_rel_CPPFLAGS = $(AM_CPPFLAGS)
-motorola_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
-
-noinst_PROGRAMS += openpic.rel
-openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
+openpic_SOURCES = ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
 
-openpic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
-
-noinst_PROGRAMS += pci.rel
-pci_rel_SOURCES = ../../powerpc/shared/pci/pci.c \
+pci_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/detect_raven_bridge.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h
-
-noinst_PROGRAMS += residual.rel
-residual_rel_SOURCES = ../../powerpc/shared/residual/pnp.h \
+residual_SOURCES = ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/residual.c
-residual_rel_CPPFLAGS = $(AM_CPPFLAGS)
-residual_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -141,9 +113,7 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vmeUniverseDMA.h\
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
-
-noinst_PROGRAMS += vme.rel
-vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
+vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -151,14 +121,15 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/vme_universe.c \
     ../../powerpc/shared/vme/VMEConfig.h
-vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel pclock.rel console.rel irq.rel openpic.rel \
-    pci.rel residual.rel motorola.rel tod.rel vme.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
+    $(irq_SOURCES) $(openpic_SOURCES) $(pci_SOURCES) $(residual_SOURCES) \
+    $(motorola_SOURCES) $(tod_SOURCES) $(vme_SOURCES)
+
+libbsp_a_LIBADD = \
+    polledIO.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \

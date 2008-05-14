@@ -32,45 +32,24 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += dlentry.rel
-dlentry_rel_SOURCES = dlentry/dlentry.S
-dlentry_rel_CPPFLAGS = $(AM_CPPFLAGS)
-dlentry_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += bspconsole.rel
-bspconsole_rel_SOURCES = console/consolelite.c ../../shared/console.c
-bspconsole_rel_CPPFLAGS = $(AM_CPPFLAGS)
-bspconsole_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+dlentry_SOURCES = dlentry/dlentry.S
+bspconsole_SOURCES = console/consolelite.c ../../shared/console.c
 
 include_bsp_HEADERS = include/opbintctrl.h
-noinst_PROGRAMS += opbintctrl.rel
-opbintctrl_rel_SOURCES = opbintctrl/opbintctrl.c
-opbintctrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
-opbintctrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+opbintctrl_SOURCES = opbintctrl/opbintctrl.c
 
 include_bsp_HEADERS += irq/irq.h
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c ../shared/irq/irq_asm.S 
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+irq_SOURCES = irq/irq_init.c ../shared/irq/irq_asm.S 
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
-noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors.h \
+vectors_SOURCES = ../../powerpc/shared/vectors/vectors.h \
     ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -82,20 +61,21 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) \
+    $(bspconsole_SOURCES) $(opbintctrl_SOURCES) $(vectors_SOURCES) \
+    $(irq_SOURCES)
 
-libbsp_a_LIBADD = startup.rel dlentry.rel bspconsole.rel opbintctrl.rel \
-	vectors.rel irq.rel
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
-
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/tty_drv.rel
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
 
 EXTRA_DIST += times
 

@@ -37,48 +37,23 @@ dist_project_lib_DATA += startup/linkcmds \
                          startup/linkcmds.mpc8349eamds \
                          startup/linkcmds.hsc_cm01
 
-noinst_PROGRAMS += mpc83xx_regs.rel
-mpc83xx_regs_rel_SOURCES = startup/mpc83xx_regs.c
-mpc83xx_regs_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc83xx_regs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+mpc83xx_regs_SOURCES = startup/mpc83xx_regs.c
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/cpuinit.c
+pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-include_bsp_HEADERS = ./irq/irq.h\
- ../../powerpc/shared/vectors/vectors.h
-
-noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors.h \
+include_bsp_HEADERS = ./irq/irq.h \
+    ../../powerpc/shared/vectors/vectors.h
+vectors_SOURCES = ../../powerpc/shared/vectors/vectors.h \
     ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ./irq/irq.h \
-	./irq/irq_init.c      \
-	./irq/ipic.c          \
+irq_SOURCES = ./irq/irq.h ./irq/irq_init.c ./irq/ipic.c \
 	../shared/irq/irq_asm.S
-
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/ns16550cfg.c 
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+console_SOURCES = console/console.c console/ns16550cfg.c 
+bsp_i2c_SOURCES   = i2c/i2c_init.c 
+bsp_spi_SOURCES   = spi/spi_init.c 
 
 if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
@@ -88,22 +63,13 @@ network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_PROGRAMS += bsp_i2c.rel
-bsp_i2c_rel_SOURCES   = i2c/i2c_init.c 
-bsp_i2c_rel_CPPFLAGS  = $(AM_CPPFLAGS)
-bsp_i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += bsp_spi.rel
-bsp_spi_rel_SOURCES   = spi/spi_init.c 
-bsp_spi_rel_CPPFLAGS  = $(AM_CPPFLAGS)
-bsp_spi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel pclock.rel console.rel vectors.rel irq.rel \
-    mpc83xx_regs.rel bsp_i2c.rel bsp_spi.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
+    $(vectors_SOURCES) $(irq_SOURCES) $(mpc83xx_regs_SOURCES) \
+    $(bsp_i2c_SOURCES) $(bsp_spi_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \

@@ -36,40 +36,23 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
     startup/linkcmds.flash
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c ../../m68k/shared/m68kpretaskinghook.c \
     startup/bspstart.c startup/init5206e.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += i2c.rel
-i2c_rel_SOURCES = i2c/i2c.c i2c/i2cdrv.c
-i2c_rel_CPPFLAGS = $(AM_CPPFLAGS)
-i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += tod.rel
-tod_rel_SOURCES = tod/ds1307.c tod/todcfg.c ../../shared/tod.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
-tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += nvram.rel
-nvram_rel_SOURCES = nvram/nvram.c
-nvram_rel_CPPFLAGS = $(AM_CPPFLAGS)
-nvram_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
+i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c
+tod_SOURCES = tod/ds1307.c tod/todcfg.c ../../shared/tod.c
+nvram_SOURCES = nvram/nvram.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel i2c.rel tod.rel nvram.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) \
+    $(i2c_SOURCES) $(tod_SOURCES) $(nvram_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mcfuart.rel \

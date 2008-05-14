@@ -39,8 +39,7 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/rom startup/debugger
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
+startup_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/gdb-hooks.c ../../shared/bootcard.c \
     startup/m68302scc.c startup/m68k-stub.c \
     ../../m68k/shared/m68kpretaskinghook.c startup/memcheck.c \
@@ -48,28 +47,16 @@ startup_rel_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c startup/bspclean.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+clock_SOURCES = clock/ckinit.c
+console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
+timer_SOURCES = timer/timer.c timer/timerisr.S
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(timer_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
 include $(srcdir)/preinstall.am

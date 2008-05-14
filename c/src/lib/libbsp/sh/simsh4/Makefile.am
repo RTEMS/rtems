@@ -33,35 +33,20 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds-le \
     startup/linkcmds-le.coff
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = startup/hw_init.c ../../shared/bsplibc.c \
+startup_SOURCES = startup/hw_init.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
     ../../shared/bootcard.c ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+clock_SOURCES = clock/ckinit.c
+console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
+timer_SOURCES = timer/timer.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel
-# FIXME: This is missing.
-# libbsp_a_LIBADD += ramdisk.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(timer_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

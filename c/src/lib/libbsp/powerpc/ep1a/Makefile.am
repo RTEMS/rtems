@@ -23,67 +23,39 @@ include_bspdir = $(includedir)/bsp
 ###
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = startup/bspstart.c ../../shared/bootcard.c \
+startup_SOURCES = startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../powerpc/shared/startup/sbrk.c \
     ../../shared/bspclean.c ../../shared/gnatinstallhandler.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/showbats.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-###
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
-###
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
     ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/console/consoleIo.h console/rsPMCQ1.h
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/ns16550cfg.c \
+console_SOURCES = console/console.c console/ns16550cfg.c \
     console/mc68360_scc.c console/rsPMCQ1.c console/alloc360.c \
     console/init68360.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-###
-include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 
-noinst_PROGRAMS += openpic.rel
-openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
+include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
+openpic_SOURCES = ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c
 
-openpic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-###
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
-
-noinst_PROGRAMS += pci.rel
-pci_rel_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
+pci_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-###
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+irq_SOURCES = irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../../powerpc/shared/irq/i8259.c 
 
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../../powerpc/shared/irq/i8259.c 
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-##
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     vme/VMEConfig.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -92,16 +64,11 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
 
-noinst_PROGRAMS += vme.rel
-vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
+vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../shared/vme/vmeconfig.c \
     ../shared/vme/vme_universe.c \
     ../../shared/vmeUniverse/vme_am_defs.h
-vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-##
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
@@ -114,11 +81,11 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = pclock.rel console.rel irq.rel openpic.rel pci.rel \
-    startup.rel vme.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
+    $(openpic_SOURCES) $(pci_SOURCES) $(irq_SOURCES) $(vme_SOURCES)
 
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \

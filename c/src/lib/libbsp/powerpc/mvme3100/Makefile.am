@@ -39,7 +39,8 @@ EXTRA_DIST += ../shared/start/vectors_entry.S
 vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
-motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) start.$(OBJEXT)
+motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) \
+    start.$(OBJEXT)
 	$(LD) -o $@ -r $^
 
 project_lib_DATA += motld_start.$(OBJEXT)
@@ -55,63 +56,37 @@ build_date.c::
 	echo 'const char *BSP_build_date="'`date`'";' > $@
 
 noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ./startup/bspstart.c build_date.c \
+startup_SOURCES = ./startup/bspstart.c build_date.c \
 	./startup/misc.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
  	../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += tod.rel
-tod_rel_SOURCES = ../../shared/tod.c tod/todcfg.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
-tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+tod_SOURCES = ../../shared/tod.c tod/todcfg.c
+pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = ../../powerpc/shared/console/uart.c \
+console_SOURCES = ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/uart.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(console_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ./irq/irq.h
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = ./irq/irq_init.c ../../powerpc/shared/irq/openpic_i8259_irq.c \
+irq_SOURCES = ./irq/irq_init.c \
+    ../../powerpc/shared/irq/openpic_i8259_irq.c \
     ../../powerpc/shared/irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
-
-noinst_PROGRAMS += openpic.rel
-openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
+openpic_SOURCES = ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
 
-openpic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
-
-noinst_PROGRAMS += pci.rel
-pci_rel_SOURCES = ../../powerpc/shared/pci/pci.c \
+pci_SOURCES = ../../powerpc/shared/pci/pci.c \
     ./pci/detect_host_bridge.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
@@ -125,8 +100,7 @@ include_bsp_HEADERS += ./vme/VMEConfig.h \
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
 
-noinst_PROGRAMS += vme.rel
-vme_rel_SOURCES = ../../shared/vmeUniverse/vmeTsi148.c \
+vme_SOURCES = ../../shared/vmeUniverse/vmeTsi148.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vmeTsi148.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -134,46 +108,32 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeTsi148.c \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/vme_universe.c
 
-vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 include_bsp_HEADERS += ../shared/flash/flashPgm.h \
 	../shared/flash/flashPgmPvt.h
-
-noinst_PROGRAMS += flash.rel
-flash_rel_SOURCES = ../shared/flash/flash.c \
+flash_SOURCES = ../shared/flash/flash.c \
 	../shared/flash/spansionFlash.c \
 	./flash/flashcfg.c
 
-flash_rel_CPPFLAGS = $(AM_CPPFLAGS)
-flash_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-
 include_bsp_HEADERS += i2c/mpc8540_i2c_busdrv.h
-noinst_PROGRAMS += i2c.rel
-i2c_rel_SOURCES = i2c/mpc8540_i2c.c i2c/i2c_init.c
-i2c_rel_CPPFLAGS = $(AM_CPPFLAGS)
-i2c_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+i2c_SOURCES = i2c/mpc8540_i2c.c i2c/i2c_init.c
 
 include_bsp_HEADERS += ../shared/motorola/vpd.h
-noinst_PROGRAMS += vpd.rel
-vpd_rel_SOURCES = ../shared/motorola/vpd.c
-vpd_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vpd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+vpd_SOURCES = ../shared/motorola/vpd.c
 
+if HAS_NETWORKING
 include_bsp_HEADERS += network/if_tsec_pub.h
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/tsec.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel pclock.rel console.rel openpic.rel \
-       pci.rel irq.rel i2c.rel tod.rel vpd.rel network.rel vme.rel flash.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
+    $(openpic_SOURCES) $(pci_SOURCES) $(irq_SOURCES) $(i2c_SOURCES) \
+    $(tod_SOURCES) $(vpd_SOURCES) $(vme_SOURCES) $(flash_SOURCES)
 
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
@@ -182,6 +142,10 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
 
 EXTRA_DIST += LICENSE ChangeLog README KNOWN_PROBLEMS
 

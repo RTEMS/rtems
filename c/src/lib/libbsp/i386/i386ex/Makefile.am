@@ -31,9 +31,8 @@ start.$(OBJEXT): start/start.S
 project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
 include_HEADERS += ../../i386/shared/comm/uart.h
-startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
@@ -42,30 +41,12 @@ startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \
     ../../shared/gnatinstallhandler.c ../../i386/shared/comm/gdb_glue.c \
     ../../i386/shared/comm/tty_drv.c ../../i386/shared/irq/irq_asm.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += pci.rel
+clock_SOURCES = clock/ckinit.c
+console_SOURCES = console/console.c
 include_HEADERS += ../../i386/shared/pci/pcibios.h
-pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c \
+pci_SOURCES = ../../i386/shared/pci/pcibios.c \
     ../../i386/shared/pci/pcibios.h
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+timer_SOURCES = timer/timer.c timer/timerisr.S
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D_KERNEL
@@ -77,13 +58,15 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel pci.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(pci_SOURCES) $(timer_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/score.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/score.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

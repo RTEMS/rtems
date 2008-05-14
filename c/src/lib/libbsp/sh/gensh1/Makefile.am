@@ -27,14 +27,6 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c startup/bspclean.c \
-    ../../shared/sbrk.c ../../shared/bootcard.c \
-    ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
 scitab.c: $(SHGEN)
@@ -42,25 +34,20 @@ scitab.c: $(SHGEN)
 BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
-noinst_PROGRAMS += scitab.rel
-scitab_rel_SOURCES = scitab.c
-scitab_rel_CPPFLAGS = $(AM_CPPFLAGS)
-scitab_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += debugio.rel
-debugio_rel_SOURCES = ../../shared/dummy_printk_support.c
-debugio_rel_CPPFLAGS = $(AM_CPPFLAGS)
-debugio_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = ../../sh/shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppredriverhook.c startup/bspstart.c startup/bspclean.c \
+    ../../shared/sbrk.c ../../shared/bootcard.c \
+    ../../shared/gnatinstallhandler.c
+scitab_SOURCES = scitab.c
+console_SOURCES = ../../sh/shared/console.c
+debugio_SOURCES = ../../shared/dummy_printk_support.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel scitab.rel console.rel debugio.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
+libbsp_a_SOURCES = $(startup_SOURCES) $(scitab_SOURCES) $(console_SOURCES) \
+    $(debugio_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/delay.rel \

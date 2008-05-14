@@ -26,32 +26,17 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/bootcard.c ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = ../shared/clock/clockdrv.c ../shared/clock/rtc.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console-io.c ../shared/console/console.c
-console_rel_CPPFLAGS = 
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = ../shared/timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+clock_SOURCES = ../shared/clock/clockdrv.c ../shared/clock/rtc.c
+console_SOURCES = console/console-io.c ../shared/console/console.c
+timer_SOURCES = ../shared/timer/timer.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+    $(timer_SOURCES)
 
 EXTRA_DIST += times
 

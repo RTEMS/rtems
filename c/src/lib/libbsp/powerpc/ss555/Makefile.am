@@ -26,33 +26,20 @@ EXTRA_DIST = times
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+pclock_SOURCES = clock/p_clock.c
+console_SOURCES = console/console.c
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c startup/iss555.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += tm27supp.rel
-tm27supp_rel_SOURCES = startup/tm27supp.c
-tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS)
-tm27supp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+tm27supp_SOURCES = startup/tm27supp.c
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = pclock.rel console.rel startup.rel tm27supp.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(startup_SOURCES) \
+    $(tm27supp_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc5xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc5xx/console-generic.rel \

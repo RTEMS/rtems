@@ -27,40 +27,17 @@ EXTRA_DIST = times-mbx821 times-mbx860
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += pclock.rel
-pclock_rel_SOURCES = clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq.c irq/irq_asm.S irq/irq_init.c
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += ide.rel
-ide_rel_SOURCES = ide/idecfg.c ide/pcmcia_ide.c
-ide_rel_CPPFLAGS = $(AM_CPPFLAGS)
-ide_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += vectors.rel
-vectors_rel_SOURCES = vectors/vectors.h vectors/vectors_init.c \
+pclock_SOURCES = clock/p_clock.c
+console_SOURCES = console/console.c
+irq_SOURCES = irq/irq.c irq/irq_asm.S irq/irq_init.c
+ide_SOURCES = ide/idecfg.c ide/pcmcia_ide.c
+vectors_SOURCES = vectors/vectors.h vectors/vectors_init.c \
     vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -71,15 +48,11 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+libbsp_a_SOURCES = $(pclock_SOURCES) $(irq_SOURCES) $(ide_SOURCES) \
+    $(startup_SOURCES) $(console_SOURCES) $(vectors_SOURCES)
 
-libbsp_a_LIBADD = pclock.rel irq.rel ide.rel startup.rel console.rel \
-    vectors.rel
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
-
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
@@ -88,6 +61,10 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
+
+if HAS_NETWORKING
+libbsp_a_LIBADD += network.rel
+endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
