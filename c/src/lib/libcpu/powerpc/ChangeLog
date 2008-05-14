@@ -1,5 +1,11 @@
 2008-05-14	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/ppc_exc_bspsupp.h: added
+	comment about the semantics of the return value of 
+	ppc_exc_handler_t.
+
+2008-05-14	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/bspsupport/irq.c: moved malloc/free
 	outside of irq-protected critical section.
 

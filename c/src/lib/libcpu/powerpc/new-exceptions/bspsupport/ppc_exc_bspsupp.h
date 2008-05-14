@@ -24,6 +24,16 @@ extern "C" {
 
 /****************************************************/
 
+/*
+ * Exception handlers should return 0 if the exception
+ * was handled and normal execution may resume.
+ *
+ * They should return (-1) to 'rethrow' the exception
+ * resulting in the globalExcHdl() being called.
+ *
+ * Other return values are reserved.
+ */
+
 typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned int vector);
 
 /*
