@@ -346,10 +346,10 @@ defined.
 @findex CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER}
 is defined
-if the application wishes to include the Console Device Driver.
-This device driver is responsible for providing standard input
-and output using "/dev/console".  By default, this is not
-defined.
+if the application wishes to include the Clock Device Driver.
+This device driver is responsible for providing a regular
+interrupt which invokes the @code{rtems_clock_tick} directive.
+By default, this is not defined.
 
 @findex CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER}
