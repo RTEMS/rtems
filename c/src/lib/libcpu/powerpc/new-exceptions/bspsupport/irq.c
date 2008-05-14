@@ -86,15 +86,17 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
 
+	/* pre-allocate memory outside of critical section */
+    vchain = (rtems_irq_connect_data*)malloc(sizeof(rtems_irq_connect_data));
+
     rtems_interrupt_disable(level);
 
     if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
       rtems_interrupt_enable(level);
       printk("IRQ vector %d already connected to an unshared handler\n",irq->name);
+	  free(vchain);
       return 0;
     }
-
-     vchain = (rtems_irq_connect_data*)malloc(sizeof(rtems_irq_connect_data));
 
     /* save off topmost handler */
     vchain[0]= rtems_hdl_tbl[irq->name];
@@ -267,7 +269,6 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
           vchain = vchain->next_handler;
           rtems_hdl_tbl[irq->name]= *vchain;
        }
-       free(vchain);
     }
 
 	/* Only disable at PIC if we removed the last handler */
@@ -281,6 +282,8 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	}
 
     rtems_interrupt_enable(level);
+
+    free(vchain);
 
     return 1;
 }

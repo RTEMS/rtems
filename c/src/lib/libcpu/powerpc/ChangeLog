@@ -1,3 +1,8 @@
+2008-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/irq.c: moved malloc/free
+	outside of irq-protected critical section.
+
 2008-04-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc8260/console-generic/console-generic.c,
