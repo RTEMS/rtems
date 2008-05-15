@@ -90,9 +90,6 @@ void bsp_pretasking_hook(void)
     BSP_vme_config();
 #endif
 
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Leaving bsp_pretasking_hook\n");
 #endif
