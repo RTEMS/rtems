@@ -1,5 +1,9 @@
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* aclocal/bsp-bootcards-handles-ram-allocation.m4: New file.
+
+2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* wrapup/Makefile.am: Many BSPs do not include any .rel files now so do
 	not fail if there are none.
 
