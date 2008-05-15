@@ -223,11 +223,8 @@ SYM(hard_reset):
 
 	set	(SYM(rdb_start)), %g6	! End of work-space area
 	st	%sp, [%g6]
-	set	(SYM(Configuration)), %l1
-	ld	[%l1+4], %l3		! work_space_size
-	sub	%sp, %l3, %sp		! set %sp to area below work_space
+	sub	%g6, 4, %sp		! stack starts at end of RAM - 4
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
-
         mov     %sp, %fp                ! Set frame pointer
         nop
 
