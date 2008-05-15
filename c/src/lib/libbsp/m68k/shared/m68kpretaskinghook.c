@@ -59,9 +59,4 @@ void bsp_pretasking_hook(void)
         rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');
 
     bsp_libc_init(heapStart, heapSize, 0);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-
 }
