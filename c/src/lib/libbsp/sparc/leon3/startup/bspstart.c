@@ -36,9 +36,6 @@ extern uint32_t rdb_start;
  */ 
 int CPU_SPARC_HAS_SNOOPING;
 
-void bsp_libc_init( void *, uint32_t, int );
-extern void bsp_spurious_initialize();
-
 /*
  * set_snooping
  * 
@@ -50,41 +47,47 @@ extern void bsp_spurious_initialize();
 
 static inline int set_snooping(void) 
 {
-        int tmp;        
-        asm(" lda [%1] 2, %0 "
-            : "=r"(tmp)
-            : "r"(0xC)
-        );
-        return (tmp >> 27) & 1;
+  int tmp;        
+  asm(" lda [%1] 2, %0 "
+      : "=r"(tmp)
+      : "r"(0xC)
+  );
+  return (tmp >> 27) & 1;
 }
 
 /*
  *  bsp_pretasking_hook
  *
  *  BSP pretasking hook.  Called just before drivers are initialized.
- *  Used to setup libc and install any BSP extensions.
+ *  Used to setup libc and install any BSP extensions     .
  */
 
 void bsp_pretasking_hook(void)
 {
-  extern int end;
-  uint32_t heap_start;
-  uint32_t heap_size;
-
-  heap_start = (uint32_t) &end;
-  if (heap_start & (CPU_ALIGNMENT-1))
-    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  heap_size = Configuration.work_space_start - (void *)&end - STACK_SIZE;
-  heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
-
-  bsp_libc_init((void *) heap_start, heap_size, 0);
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
+  extern void bsp_spurious_initialize();
 
   bsp_spurious_initialize();
+}
+
+/*
+ *  This method returns the base address and size of the area which
+ *  is to be allocated between the RTEMS Workspace and the C Program
+ *  Heap.
+ */
+void bsp_get_workarea(
+  void   **workarea_base,
+  size_t  *workarea_size,
+  size_t  *requested_heap_size
+)
+{
+  /* Tells us where to put the workspace in case remote debugger is present.  */
+  extern uint32_t rdb_start;
+  /* must be identical to STACK_SIZE in start.S */
+  #define STACK_SIZE (16 * 1024)
+
+  *workarea_base       = &end;
+  *workarea_size       = (void *)rdb_start - (void *)&end - STACK_SIZE;
+  *requested_heap_size = 0;
 }
 
 /*
@@ -92,20 +95,7 @@ void bsp_pretasking_hook(void)
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
-  unsigned char *work_space_start;
-
-  work_space_start =
-    (unsigned char *)rdb_start - rtems_configuration_get_work_space_size();
-
-  if ( work_space_start <= (unsigned char *)&end ) {
-    printk( "bspstart: Not enough RAM!!!\n" );
-    BSP_fatal_return();
-  }
-
-  Configuration.work_space_start = work_space_start;
-  
   CPU_SPARC_HAS_SNOOPING = set_snooping();
 }

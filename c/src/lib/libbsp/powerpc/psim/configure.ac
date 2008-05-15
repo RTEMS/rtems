@@ -29,11 +29,7 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
-RTEMS_BSPOPTS_SET([BSP_DIRTY_MEMORY],[*],[0])
-RTEMS_BSPOPTS_HELP([BSP_DIRTY_MEMORY],
-[If defined, then PSIM will put a non-zero pattern into the RTEMS
- Workspace and C program heap.  This should assist in finding
- code that assumes memory starts set to zero.])
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

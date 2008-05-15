@@ -41,7 +41,8 @@ noinst_LIBRARIES = libbsp.a
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+    ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 pclock_SOURCES = ../shared/clock/p_clock.c
