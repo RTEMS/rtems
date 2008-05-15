@@ -71,14 +71,10 @@ void bsp_pretasking_hook(void)
    *  the kernel and the application can be linked and burned into ROM
    *  independently of each other.
    */
-    extern unsigned char _HeapStart;
-    extern unsigned char _HeapEnd;
+  extern unsigned char _HeapStart;
+  extern unsigned char _HeapEnd;
 
-    bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-  
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
+  bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
 }
 
 
