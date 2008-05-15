@@ -22,27 +22,14 @@
 #include <rtems/zilog/z8036.h>
 
 /*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);               /* m68k version */
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
   m68k_isr_entry *monitors_vector_table;
   int             index;
-  extern void          *_WorkspaceBase;
-  extern void          *_RamSize;
-  extern unsigned long  _M68k_Ramsize;
-
-  _M68k_Ramsize = (unsigned long)&_RamSize;
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* 135Bug Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
@@ -60,6 +47,4 @@ void bsp_start( void )
   (*(uint8_t*)0xfffb0067) = 0x7f; /* make VME access round-robin */
 
   rtems_cache_enable_instruction();
-
-  Configuration.work_space_start = (void *) &_WorkspaceBase;
 }
