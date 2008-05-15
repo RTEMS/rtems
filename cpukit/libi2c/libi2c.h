@@ -413,8 +413,19 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  * This call is only needed for SPI devices
  */
 
+#define RTEMS_LIBI2C_IOCTL_GET_DRV_T 4
 /*
- * arguemtn data structures for IOCTLs defined above
+ * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
+ *                             RTEMS_LIBI2C_IOCTL_GET_DRV_T,
+ *                             const rtems_libi2c_drv_t *drv_t_ptr);
+ * 
+ * This call allows the a high-level driver to query its driver table entry,
+ * including its private data appended to it during creation of the entry
+ * 
+ */
+
+/*
+ * argument data structures for IOCTLs defined above
  */
 typedef struct {
   unsigned char       *rd_buf;

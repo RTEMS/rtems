@@ -41,6 +41,7 @@ static rtems_status_code mpc83xx_spi_baud_to_mode
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  uint32_t baudrate,                      /* desired baudrate               */
+ uint32_t base_frq,                      /* input frequency                */
  uint32_t *spimode                       /* result value                   */
 )
 /*-------------------------------------------------------------------------*\
@@ -53,7 +54,7 @@ static rtems_status_code mpc83xx_spi_baud_to_mode
   /*
    * determine clock divider and DIV16 bit
    */
-  divider = (BSP_CSB_CLK_FRQ+baudrate-1)/baudrate;
+  divider = (base_frq+baudrate-1)/baudrate;
   if (divider > 64) {
     tmpmode = MPC83XX_SPIMODE_DIV16;
     divider /= 16;
@@ -586,7 +587,9 @@ rtems_status_code mpc83xx_spi_set_tfr_mode
    * FIXME: set proper mode
    */
   if (rc == RTEMS_SUCCESSFUL) {
-    rc = mpc83xx_spi_baud_to_mode(tfr_mode->baudrate,&spimode_baud);
+    rc = mpc83xx_spi_baud_to_mode(tfr_mode->baudrate,
+				  softc_ptr->base_frq,
+				  &spimode_baud);
   }
   if (rc == RTEMS_SUCCESSFUL) {
     rc = mpc83xx_spi_char_mode(softc_ptr,

@@ -472,6 +472,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
       ppc_cached_irq_mask |= (1 << (31 - BSP_CPM_INTERRUPT));
       ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = ppc_cached_irq_mask;
     }
+    /* 
+     * make sure, that the masking operations in 
+     * ICTL and MSR are executed in order
+     */
+    asm volatile("sync":::"memory");
+
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
@@ -479,6 +485,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     rtems_hdl_tbl[irq].hdl(rtems_hdl_tbl[irq].handle);
 
     _CPU_MSR_SET(msr);
+
+    /* 
+     * make sure, that the masking operations in 
+     * ICTL and MSR are executed in order
+     */
+    asm volatile("sync":::"memory");
 
     if (cpmIntr)  {
       irq -= BSP_CPM_IRQ_LOWEST_OFFSET;

@@ -37,10 +37,13 @@ MEMORY
 SECTIONS
 {
 
-    mpc83xx_regs (NOLOAD) :
+    .mpc83xx_regs (NOLOAD) :
     { 
     IMMRBAR = .;
-    *mpc83xx_regs*(*)
+    mpc83xx_regs*(.text)
+    mpc83xx_regs*(.data)
+    mpc83xx_regs*(.bss)
+    mpc83xx_regs*(*COM*)
     } > mpc83xx_regs
 
    .resconf 0x000 :

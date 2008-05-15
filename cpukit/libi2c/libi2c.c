@@ -576,11 +576,9 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
   va_list            ap;
   int sc = 0;
   void *args;
+  boolean is_started = FALSE;
   DECL_CHECKED_BH (busno, bush, minor, -)
-
-    if (not_started (busno))
-    return -RTEMS_NOT_OWNER_OF_RESOURCE;
-
+    
   va_start(ap, cmd);
   args = va_arg(ap, void *);
 
@@ -589,7 +587,17 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
      * add ioctls defined for this level here:    
      */
     
+  case RTEMS_LIBI2C_IOCTL_GET_DRV_T:
+    /*
+     * query driver table entry
+     */
+    *(rtems_libi2c_drv_t **)args = (drvs[MINOR2DRV(minor)-1].drv);
+    break;
+
   case RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE:
+    if (not_started (busno))
+      return -RTEMS_NOT_OWNER_OF_RESOURCE;
+
     /*
      * address device, then set transfer mode and perform read_write transfer
      */
@@ -598,6 +606,7 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
      */
     if (sc == 0) {
       sc = rtems_libi2c_send_start (minor);
+      is_started = (sc == 0);
     }
     /*
      * set tfr mode
@@ -617,14 +626,15 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
 	 RTEMS_LIBI2C_IOCTL_READ_WRITE, 
 	 &((rtems_libi2c_tfm_read_write_t *)args)->rd_wr);
     }
+    if ((sc < 0) && (is_started)) {
+      rtems_libi2c_send_stop (minor);
+    }
     break;
   default:
     sc = bush->ops->ioctl (bush, cmd, args);
     break;
   }
-  if (sc < 0)
-    rtems_libi2c_send_stop (minor);
-  return sc;
+    return sc;
 }
 
 static int

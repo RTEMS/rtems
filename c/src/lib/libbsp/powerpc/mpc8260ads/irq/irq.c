@@ -483,6 +483,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 			m8260.sipnr_h |= SIU_MaskBit[irq].mask_h;
 			m8260.sipnr_l |= SIU_MaskBit[irq].mask_l;
 
+			/* 
+			 * make sure, that the masking operations in 
+			 * ICTL and MSR are executed in order
+			 */
+			asm volatile("sync":::"memory");
+
 			/* re-enable external exceptions */
 			_CPU_MSR_GET(msr);
 			new_msr = msr | MSR_EE;
@@ -493,6 +499,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
 			/* disable exceptions again */
 			_CPU_MSR_SET(msr);
+
+			/* 
+			 * make sure, that the masking operations in 
+			 * ICTL and MSR are executed in order
+			 */
+			asm volatile("sync":::"memory");
 
 			/* restore interrupt masks */
 			m8260.simr_h = old_simr_h;

@@ -26,10 +26,16 @@
 #include <mpc83xx/mpc83xx.h>
 #include <stdio.h>
 
-#define TSEC_BITRATE 1000
 #define TSEC_IFMODE_RGMII 0
 #define TSEC_IFMODE_GMII  1
+
+#if defined(MPC8349EAMDS)
+#define TSEC_IFMODE TSEC_IFMODE_GMII
+#endif
+
+#if defined(HSC_CM01)
 #define TSEC_IFMODE TSEC_IFMODE_RGMII
+#endif
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -61,6 +67,7 @@ int BSP_tsec_attach
     return 0;
   }
   if (attaching) {
+#if (TSEC_IFMODE==TSEC_IFMODE_GMII)
     if (unitNumber == 1) {
       /*
        * init system I/O configuration registers 
@@ -73,13 +80,20 @@ int BSP_tsec_attach
       mpc83xx.gpio[1].gpdir = ((mpc83xx.gpio[1].gpdir & ~0x00000FFF)
 			       |                         0x0000001f);
     }
-  }
-  if (unitNumber == 2) {
+    if (unitNumber == 2) {
+      /*
+       * init port registers (GPIO2DIR) for TSEC2
+       */
+      mpc83xx.gpio[0].gpdir = ((mpc83xx.gpio[0].gpdir & ~0x000FFFFF)
+			       |                         0x00087881);
+    }
+#endif
+#if (TSEC_IFMODE==TSEC_IFMODE_RGMII)
+
     /*
-     * init port registers (GPIO2DIR) for TSEC2
+     * Nothing special needed for TSEC1 operation
      */
-    mpc83xx.gpio[0].gpdir = ((mpc83xx.gpio[0].gpdir & ~0x000FFFFF)
-			     |                         0x00087881);
+#endif    
   }
   /*
    * add MAC address into config->hardware_adderss

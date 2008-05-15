@@ -173,6 +173,11 @@ rtems_device_driver console_initialize(
     minor++)
   {
     /*
+     * transfer the real internal bus frequency into the 
+     * console port table
+     */
+    Console_Port_Tbl[minor].ulClock = BSP_bus_frequency;
+    /*
      * First perform the configuration dependant probe, then the
      * device dependant probe
      */

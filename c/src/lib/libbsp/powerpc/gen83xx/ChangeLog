@@ -1,3 +1,36 @@
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/network.c, start/start.S:
+	add support for different board
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* irq/ipic.c:
+	make sure, that the masking operations in 
+	ICTL and MSR are executed in order
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* include/bsp.h, startup/bspstart.c, 
+	* console/console.c, console/config.c:
+	derived module input frequencies from internal bus clock during
+	start time
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* spi/spi_init.c:
+	added base frequency into softc structure, added fm25l256 driver
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* i2c/i2c_init.c:
+	added base frequency into softc structure
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* include/bsp.h, include/hwreg_vals.h, ./Makefile.am: 
+	moved HW register settings from bsp.h to hwreg_vals.h
+
 2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rework to avoid .rel files.

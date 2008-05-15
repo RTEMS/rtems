@@ -1,3 +1,9 @@
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* irq/irq.c:
+	make sure, that the masking operations in 
+	ICTL and MSR are executed in order
+
 2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rework to avoid .rel files.

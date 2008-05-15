@@ -48,7 +48,7 @@ static char *BSP_heap_start, *BSP_heap_end;
  * Time base divisior: scaling value:
  * BSP_time_base_divisor = TB ticks per millisecond/BSP_bus_frequency
  */
-unsigned int BSP_bus_frequency = BSP_CSB_CLK_FRQ;
+unsigned int BSP_bus_frequency;
 unsigned int BSP_time_base_divisor = 4000;  /* 4 bus clicks per TB click */
 
 /*
@@ -188,9 +188,14 @@ void bsp_start(void)
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
   /*
+   * this is evaluated during runtime, so it should be ok to set it 
+   * before we initialize the drivers
+   */
+  BSP_bus_frequency   = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
+  /*
    *  initialize the device driver parameters
    */
-  bsp_clicks_per_usec        = (BSP_CSB_CLK_FRQ/1000000);
+  bsp_clicks_per_usec = (BSP_bus_frequency/1000000);
 
   /*
    * Install our own set of exception vectors

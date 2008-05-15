@@ -1,7 +1,7 @@
 /*===============================================================*\
-| Project: RTEMS support for MPC83xx                              |
+| Project: SPI driver for FM25L256 like spi fram device           |
 +-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
+|                    Copyright (c) 2008                           |
 |                    Embedded Brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
 |                    D-82178 Puchheim                             |
@@ -14,38 +14,31 @@
 | http://www.rtems.com/license/LICENSE.                           |
 |                                                                 |
 +-----------------------------------------------------------------+
-| this file contains the MPC83xx I2C driver declarations          |
 \*===============================================================*/
-#ifndef _MPC83XX_I2CDRV_H
-#define _MPC83XX_I2CDRV_H
+/*
+ * FIXME: currently, this driver only supports read/write accesses
+ * erase accesses are to be completed
+ */
 
-#include <mpc83xx/mpc83xx.h>
-#include <rtems/libi2c.h>
-#include <rtems/irq.h>
+
+#ifndef _LIBCHIP_SPI_FRAM_FM25L256_H 
+#define _LIBCHIP_SPI_FRAM_FM25L256_H 
+
+#include <libchip/spi-memdrv.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct mpc83xx_i2c_softc {
-  m83xxI2CRegisters_t *reg_ptr;     /* ptr to HW registers             */
-  int                  initialized; /* TRUE: module is initialized     */
-  rtems_irq_number     irq_number;  /* IRQ number used for this module */
-  uint32_t             base_frq;    /* input frq for baud rate divider */
-  rtems_id             irq_sema_id; /* SEMA used for IRQ signalling    */
-} mpc83xx_i2c_softc_t ;
+/*
+ * pass one of these descriptor pointers to rtems_libi2c_register_drv 
+ */
+extern rtems_libi2c_drv_t *spi_fram_fm25l256_rw_driver_descriptor;
 
-typedef struct {
-  rtems_libi2c_bus_t	   bus_desc;	
-  struct mpc83xx_i2c_softc softc;
-} mpc83xx_i2c_desc_t;
-
-
-extern rtems_libi2c_bus_ops_t mpc83xx_i2c_ops;
+extern rtems_libi2c_drv_t *spi_fram_fm25l256_ro_driver_descriptor;
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif /* _MPC83XX_I2CDRV_H */
+#endif /* _LIBCHIP_SPI_FRAM_FM25L256_H */

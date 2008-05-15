@@ -272,6 +272,13 @@ rtems_status_code BSP_irq_handle_at_ipic(uint32_t excNum)
     mpc83xx.ipic.simsr[1] &= mask_ptr->simsr_mask[1];
     mpc83xx.ipic.semsr    &= mask_ptr->semsr_mask   ;
     mpc83xx.ipic.sermr    &= mask_ptr->sermr_mask   ;
+
+    /* 
+     * make sure, that the masking operations in 
+     * ICTL and MSR are executed in order
+     */
+    asm volatile("sync":::"memory");
+    
     /*
      * reenable msr_ee
      */
@@ -293,6 +300,13 @@ rtems_status_code BSP_irq_handle_at_ipic(uint32_t excNum)
      * disable msr_enable
      */
     _CPU_MSR_SET(msr_save);
+
+    /* 
+     * make sure, that the masking operations in 
+     * ICTL and MSR are executed in order
+     */
+    asm volatile("sync":::"memory");
+
     /*
      * restore initial masks
      */

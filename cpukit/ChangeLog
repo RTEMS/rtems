@@ -1,3 +1,8 @@
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libi2c/libi2c.h, libi2c/libi2c.h: added interface to query
+	driver private data
+
 2008-05-13	Eric Norum: <norume@aps.anl.gov>
 
 	* cpukit/libcsupport/src/mallocinfo.c: Add locks around non-atomic

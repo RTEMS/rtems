@@ -68,3 +68,7 @@ $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 
+$(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+

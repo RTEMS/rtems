@@ -115,14 +115,14 @@ static struct mpc83xx_tsec_struct tsec_driver[M83xx_TSEC_NIFACES];
  */
 #define M83xx_IEVENT_TXALL (M83xx_TSEC_IEVENT_GTSC	\
 			    | M83xx_TSEC_IEVENT_TXC 	\
-			    | M83xx_TSEC_IEVENT_TXB 	\
+			    /*| M83xx_TSEC_IEVENT_TXB*/	\
 			    | M83xx_TSEC_IEVENT_TXF )
 
 /*
  * mask for all Rx interrupts
  */
 #define M83xx_IEVENT_RXALL (M83xx_TSEC_IEVENT_RXC  	\
-			    | M83xx_TSEC_IEVENT_RXB  	\
+			    /* | M83xx_TSEC_IEVENT_RXB */	\
 			    | M83xx_TSEC_IEVENT_GRSC 	\
 			    | M83xx_TSEC_IEVENT_RXF  )
 
@@ -251,14 +251,14 @@ static void mpc83xx_tsec_hwinit
    * init transmit interrupt coalescing register
    */
   reg_ptr->txic = (M83xx_TSEC_TXIC_ICEN
-		   | M83xx_TSEC_TXIC_ICFCT(16)
-		   | M83xx_TSEC_TXIC_ICTT(16));
+		   | M83xx_TSEC_TXIC_ICFCT(2)
+		   | M83xx_TSEC_TXIC_ICTT(32));
   /*
    * init receive interrupt coalescing register
    */
   reg_ptr->rxic = (M83xx_TSEC_RXIC_ICEN
-		   | M83xx_TSEC_RXIC_ICFCT(16)
-		   | M83xx_TSEC_RXIC_ICTT(16));
+		   | M83xx_TSEC_RXIC_ICFCT(2)
+		   | M83xx_TSEC_RXIC_ICTT(32));
   /*
    * init MACCFG1 register
    */
@@ -673,7 +673,7 @@ static void mpc83xx_tsec_refill_rxbds
       BD_ptr->buffer   = m->m_data;
       BD_ptr->length   = 0;
       BD_ptr->status   = (M83xx_BD_EMPTY 
-			  | M83xx_BD_INTERRUPT 
+			  | M83xx_BD_INTERRUPT
 			  | ((BD_ptr == sc->Rx_Last_BD) 
 			     ? M83xx_BD_WRAP 
 			     : 0));
@@ -971,7 +971,7 @@ static void mpc83xx_tsec_sendpacket
       }
       status = ((M83xx_BD_PAD_CRC | M83xx_BD_TX_CRC)
 		| ((m->m_next == NULL)        
-		   ? M83xx_BD_LAST | M83xx_BD_INTERRUPT 
+		   ? M83xx_BD_LAST | M83xx_BD_INTERRUPT
 		   : 0)
 		| ((CurrBD == sc->Tx_Last_BD) ? M83xx_BD_WRAP : 0));
 		
@@ -1212,7 +1212,7 @@ static void mpc83xx_tsec_err_irq_handler
   /*
    * clear error events in IEVENT
    */
-  sc->reg_ptr->tstat = M83xx_IEVENT_ERRALL;
+  sc->reg_ptr->ievent = M83xx_IEVENT_ERRALL;
   /*
    * has Rx been stopped? then restart it
    */
@@ -1546,6 +1546,18 @@ static void mpc83xx_tsec_stats
     rtems_ifmedia2str(media,NULL,0);
     printf ("\n");
   }
+#if 1 /* print all PHY registers */
+  {
+    int reg;
+    uint32_t reg_val;
+    printf("****** PHY register values****\n");
+    for (reg = 0;reg <= 31;reg++) {
+      mpc83xx_tsec_mdio_read(-1,sc,reg,&reg_val);
+      printf("%02d:0x%04x%c",reg,reg_val,
+	     (((reg % 4) == 3) ? '\n' : ' '));
+    }
+  }
+#endif  
   /*
    * print some statistics
    */
@@ -1713,13 +1725,6 @@ int rtems_mpc83xx_tsec_mode_adapt
       if (result != 0) {
 	return result;
       }
-#ifdef DEBUG
-      /*
-       * test: print current status
-       */
-      rtems_ifmedia2str(media,NULL,0);
-      printf ("\n");
-#endif
     } while (IFM_NONE == IFM_SUBTYPE(media));
   }
 
@@ -1727,7 +1732,7 @@ int rtems_mpc83xx_tsec_mode_adapt
    * now set HW according to media results:
    */
   /*
-   * if we are 1000MBit, then switch IF to GMII/byte mode
+   * if we are 1000MBit, then switch IF to byte mode
    */
   if (IFM_1000_T == IFM_SUBTYPE(media)) {
     sc->reg_ptr->maccfg2 = 
@@ -1738,6 +1743,15 @@ int rtems_mpc83xx_tsec_mode_adapt
     sc->reg_ptr->maccfg2 = 
       ((sc->reg_ptr->maccfg2 & ~M83xx_TSEC_MACCFG2_IFMODE_MSK)
        | M83xx_TSEC_MACCFG2_IFMODE_NIB);
+  }
+  /*
+   * if we are 10MBit, then switch rate to 10M
+   */
+  if (IFM_10_T == IFM_SUBTYPE(media)) {
+    sc->reg_ptr->ecntrl &= ~M83xx_TSEC_ECNTRL_R100M;
+  }
+  else {
+    sc->reg_ptr->ecntrl |= M83xx_TSEC_ECNTRL_R100M;
   }
   /*
    * if we are half duplex then switch to half duplex
@@ -1885,6 +1899,15 @@ static int mpc83xx_tsec_driver_attach
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
   }
 
+#if defined(HSC_CM01)
+  /*
+   * for HSC CM01: we need to configure the PHY to use maximum skew adjust
+   */
+  
+  mpc83xx_tsec_mdio_write(-1,sc,31,1);
+  mpc83xx_tsec_mdio_write(-1,sc,28,0xf000);
+  mpc83xx_tsec_mdio_write(-1,sc,31,0);
+#endif
   /*
    * Attach the interface
    */

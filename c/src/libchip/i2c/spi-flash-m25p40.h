@@ -24,7 +24,7 @@
 #ifndef _LIBCHIP_SPI_FLASH_M25P40_H 
 #define _LIBCHIP_SPI_FLASH_M25P40_H 
 
-#include <rtems/libi2c.h>
+#include <libchip/spi-memdrv.h>
 
 #ifdef __cplusplus
 extern "C" {

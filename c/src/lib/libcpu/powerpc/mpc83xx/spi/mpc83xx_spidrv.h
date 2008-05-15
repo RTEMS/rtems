@@ -32,6 +32,7 @@ typedef struct mpc83xx_spi_softc {
   m83xxSPIRegisters_t *reg_ptr;
   int                  initialized;
   rtems_irq_number     irq_number;
+  uint32_t             base_frq;    /* input frq for baud rate divider */
   rtems_id             irq_sema_id;
   uint32_t             curr_addr; /* current spi address */
   uint8_t              bytes_per_char;

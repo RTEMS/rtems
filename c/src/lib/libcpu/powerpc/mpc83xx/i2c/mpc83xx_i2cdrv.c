@@ -31,7 +31,7 @@
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static int mpc83xx_i2c_find_clock_divider
+static rtems_status_code mpc83xx_i2c_find_clock_divider
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -49,6 +49,7 @@ static int mpc83xx_i2c_find_clock_divider
 {
   int i;
   int fdr_val;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   struct {
     int divider;
     int fdr_val;
@@ -68,15 +69,23 @@ static int mpc83xx_i2c_find_clock_divider
     {49152,0x1E }, {61440,0x1F }
   };
 
-  for (i = 0, fdr_val = -1; i < sizeof(dividers)/sizeof(dividers[0]); i++) {
-    fdr_val = dividers[i].fdr_val;
-    if (dividers[i].divider >= divider)
-      {
-	break;
-      }
+  if (divider <= 0) {
+    sc = RTEMS_INVALID_NUMBER;
   }
-  *result = fdr_val;
-  return 0;
+
+  if (sc == RTEMS_SUCCESSFUL) {
+    sc = RTEMS_INVALID_NUMBER;
+    for (i = 0, fdr_val = -1; i < sizeof(dividers)/sizeof(dividers[0]); i++) {
+      fdr_val = dividers[i].fdr_val;
+      if (dividers[i].divider >= divider)
+	{
+	  sc = RTEMS_SUCCESSFUL;
+	  *result = fdr_val;
+	  break;
+	}
+    }
+  }
+  return sc;
 }
 
 /*=========================================================================*\
@@ -313,7 +322,7 @@ static rtems_status_code mpc83xx_i2c_init
    * init frequency divider to 100kHz
    */
   errval = mpc83xx_i2c_find_clock_divider(&fdr_val,
-					  BSP_CSB_CLK_FRQ/3/100000);
+					  softc_ptr->base_frq/100000);
   if (errval != 0) {
     return errval;
   }
@@ -471,9 +480,6 @@ static rtems_status_code mpc83xx_i2c_send_addr
       return rc;
     }
   }
-  addr_byte = (0xf0 
-	       | ((addr >> 7) & 0x06)
-	       | ((rw) ? 1 : 0));
   /*
    * send (final) byte 
    */
@@ -524,6 +530,10 @@ static int mpc83xx_i2c_read_bytes
 #endif
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MTX;
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_TXAK;
+  /*
+   * FIXME: do we need to deactivate TXAK from the start, 
+   * when only one byte is to be received?
+   */
   /*
    * we need a dummy transfer here to start the first read
    */

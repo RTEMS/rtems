@@ -45,7 +45,9 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
 pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ./irq/irq.h \
+    ./include/hwreg_vals.h        \
     ../../powerpc/shared/vectors/vectors.h
+
 vectors_SOURCES = ../../powerpc/shared/vectors/vectors.h \
     ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S

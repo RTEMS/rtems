@@ -1110,6 +1110,12 @@ extern m83xxRegisters_t mpc83xx;
 #define BR7_OFF  0x05038
 #define OR7_OFF  0x0503C
 
+#define MRPTR_OFF                    0x05084
+#define LSDMR_OFF                    0x05094
+#define LSRT_OFF                     0x050A4
+#define LCRR_OFF                     0x050d4
+
+
 #define CS0_BNDS_OFF       0x02000
 #define CS1_BNDS_OFF       0x02008
 #define CS2_BNDS_OFF       0x02010
@@ -1127,9 +1133,25 @@ extern m83xxRegisters_t mpc83xx;
 #define DDR_SDRAM_MODE_OFF           0x02118
 #define DDR_SDRAM_MODE_2_OFF         0x0211C
 #define DDR_SDRAM_MD_CNTL_OFF        0x02120
-#define DDR_SDRAM_MD_ITVL_OFF        0x02124
+#define DDR_SDRAM_INTERVAL_OFF       0x02124
+#define DDR_SDRAM_DATA_INIT_OFF      0x02128
+#define DDRCDR_OFF                   0x0012C
 #define DDR_SDRAM_CLK_CNTL_OFF       0x02130
 #define DDR_SDRAM_INIT_ADDR_OFF      0x02148
+#define DDR_ERR_DISABLE_OFF          0x02E44
+
+/*
+ * some bits in DDR_SDRAM_CFG register
+ */
+#define DDR_SDRAM_CFG_MEM_EN (1 << (31- 0))     /* enable memory        */
+/*
+ * bits in DDR_SDRAM_CFG_2 register
+ */
+#define DDR_SDRAM_CFG_2_D_FRC_SR (1 << (31- 0)) /* force self refresh        */
+#define DDR_SDRAM_CFG_2_D_SR_IE  (1 << (31- 1)) /* self refresh interrupt en */
+#define DDR_SDRAM_CFG_2_D_DLL_RST_DIS  (1 << (31- 2)) /* DLL reset disable   */
+#define DDR_SDRAM_CFG_2_D_DQS_CFG_DIF  (1 << (31- 5)) /* use diff. DQS       */
+#define DDR_SDRAM_CFG_2_D_INIT   (1 << (31-27)) /* Init DRAM with pattern    */
 
 /*
  * bits in reset configuration words/registers

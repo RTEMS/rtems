@@ -105,10 +105,11 @@ console_tbl	Console_Port_Tbl[] = {
 		Write_ns16550_register,		/* setRegister */
 		NULL,				/* getData */
 		NULL,				/* setData */
-		BSP_CSB_CLK_FRQ,		/* ulClock */
+		0,		                /* ulClock (filled in init) */
                 0				/* ulIntVector */
-	},
-        {
+	}
+#if BSP_USE_UART2
+        ,{
                 "/dev/ttyS1",                   /* sDeviceName */
                 SERIAL_NS16550,                 /* deviceType */
                 NS16550_FUNCTIONS,              /* pDeviceFns */
@@ -124,8 +125,9 @@ console_tbl	Console_Port_Tbl[] = {
                 Write_ns16550_register,         /* setRegister */
                 NULL,                           /* getData */
                 NULL,                           /* setData */
-                BSP_CSB_CLK_FRQ,                /* ulClock */
+		0,		                /* ulClock (filled in init) */
                 0                               /* ulIntVector */
         }
+#endif
 };
 

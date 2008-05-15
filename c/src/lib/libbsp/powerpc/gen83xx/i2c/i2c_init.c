@@ -31,7 +31,8 @@ static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
     { /* our private fields */
       reg_ptr:	 &mpc83xx.i2c[0],
       initialized: FALSE,
-      irq_number:  BSP_IPIC_IRQ_I2C1
+      irq_number :  BSP_IPIC_IRQ_I2C1,
+      base_frq   : 0 /* will be set during initiailization */
     }
   },
   /* second channel */
@@ -43,7 +44,8 @@ static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
     { /* our private fields */
       reg_ptr:	 &mpc83xx.i2c[1],
       initialized: FALSE,
-      irq_number:  BSP_IPIC_IRQ_I2C2
+      irq_number :  BSP_IPIC_IRQ_I2C2,
+      base_frq   : 0 /* will be set during initiailization */
     }
   } 
 };
@@ -81,6 +83,19 @@ rtems_status_code bsp_register_i2c
   rtems_libi2c_initialize ();
 
   /*
+   * update input frequency of I2c modules into descriptor
+   */
+  /*
+   * I2C1 is clocked with TSEC 1
+   */
+  if (((mpc83xx.clk.sccr >> (31-1)) & 0x03) > 0) {
+    mpc83xx_i2c_bus_tbl[0].softc.base_frq = 
+      (BSP_bus_frequency
+       /((mpc83xx.clk.sccr >> (31-1)) & 0x03));
+  }
+
+  mpc83xx_i2c_bus_tbl[1].softc.base_frq = BSP_bus_frequency;
+  /*
    * register first I2C bus
    */
   ret_code = rtems_libi2c_register_bus("/dev/i2c1",
@@ -98,6 +113,7 @@ rtems_status_code bsp_register_i2c
     return -ret_code;
   }
   i2c2_busno = ret_code;
+
   /*
    * register EEPROM to bus 1, Address 0x50
    */
@@ -107,6 +123,7 @@ rtems_status_code bsp_register_i2c
   if (ret_code < 0) {
     return -ret_code;
   }
+
   /*
    * FIXME: register RTC driver, when available
    */

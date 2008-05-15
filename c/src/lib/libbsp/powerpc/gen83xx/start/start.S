@@ -85,6 +85,7 @@
 .extern boot_card
 .extern MBAR   
 
+#if defined(RESET_CONF_WRD_L)
 .section ".resconf","ax"
 PUBLIC_VAR (reset_conf_words)
 reset_conf_words:	
@@ -97,6 +98,7 @@ reset_conf_words:
 	REP8( .byte ((RESET_CONF_WRD_H >> 16) & 0xff))
 	REP8( .byte ((RESET_CONF_WRD_H >>  8) & 0xff))
 	REP8( .byte ((RESET_CONF_WRD_H >>  0) & 0xff))
+#endif
 
 .section ".vectors","ax"
 PUBLIC_VAR (reset_vec)
@@ -145,7 +147,6 @@ rom_entry:
 	 * NOTE:	 now r31 points to onchip registers
 	*/
 	/*
-	 * FIXME:	 
 	 * we start from 0x100, so ROM is currently mapped to
 	 * 0x00000000..
 	 * in the next step, ROM will be remapped to its final location
@@ -223,6 +224,7 @@ start_code_in_rom:
 #ifdef OR3_VAL
 	SET_IMM_REGW r31,r30,OR3_OFF,OR3_VAL
 #endif
+	
 	/*
 	 * ROM startup: init SDRAM access window
 	 */
@@ -239,8 +241,20 @@ start_code_in_rom:
 	SET_IMM_REGW r31,r30,DDRLAWAR1_OFF,DDRLAWAR1_VAL
 #endif
 	/*
+	 * ROM startup: init refresh interval
+	 */
+#ifdef MRPTR_VAL
+	SET_IMM_REGW r31,r30,MRPTR_OFF,MRPTR_VAL
+#endif	
+	/*
 	 * ROM startup: init SDRAM
 	 */
+#ifdef LSRT_VAL
+	SET_IMM_REGW r31,r30, LSRT_OFF, LSRT_VAL
+#endif
+#ifdef LSDMR_VAL
+	SET_IMM_REGW r31,r30, LSDMR_OFF, LSDMR_VAL
+#endif
 #ifdef CS0_BNDS_VAL
 	SET_IMM_REGW r31,r30,CS0_BNDS_OFF,CS0_BNDS_VAL
 #endif
@@ -277,8 +291,8 @@ start_code_in_rom:
 #ifdef TIMING_CFG_2_VAL
 	SET_IMM_REGW r31,r30,TIMING_CFG_2_OFF,TIMING_CFG_2_VAL
 #endif
-#ifdef DDR_SDRAM_CFG_VAL
-	SET_IMM_REGW r31,r30,DDR_SDRAM_CFG_OFF,DDR_SDRAM_CFG_VAL
+#ifdef DDRCDR_VAL
+	SET_IMM_REGW r31,r30,DDRCDR_OFF,DDRCDR_VAL
 #endif
 #ifdef DDR_SDRAM_CFG_2_VAL
 	SET_IMM_REGW r31,r30,DDR_SDRAM_CFG_2_OFF,DDR_SDRAM_CFG_2_VAL
@@ -298,39 +312,123 @@ start_code_in_rom:
 #ifdef DDR_SDRAM_CLK_CNTL_VAL
 	SET_IMM_REGW r31,r30,DDR_SDRAM_CLK_CNTL_OFF,DDR_SDRAM_CLK_CNTL_VAL
 #endif
+#ifdef DDR_SDRAM_CFG_2_VAL
+	SET_IMM_REGW r31,r30,DDR_SDRAM_CFG_2_OFF,DDR_SDRAM_CFG_2_VAL|DDR_SDRAM_CFG_2_D_INIT
+#endif
+
+#ifdef DDR_ERR_DISABLE_VAL
+	/*
+	 * disable detect of RAM errors
+	 */
+	SET_IMM_REGW r31,r30,DDR_ERR_DISABLE_OFF,DDR_ERR_DISABLE_VAL
+#endif
+#ifdef DDR_SDRAM_DATA_INIT_VAL
+	/*
+	 * set this value to initialize memory
+	 */
+	SET_IMM_REGW r31,r30,DDR_SDRAM_DATA_INIT_OFF,DDR_SDRAM_DATA_INIT_VAL
+#endif
 #ifdef DDR_SDRAM_INIT_ADDR_VAL
 	SET_IMM_REGW r31,r30,DDR_SDRAM_INIT_ADDR_OFF,DDR_SDRAM_INIT_ADDR_VAL
 #endif
+#ifdef DDR_SDRAM_CFG_VAL
 	/*
-	 * FIXME: ROM startup: perform mode set commands etc for SDRAM
+	 * config DDR SDRAM
+	 */
+	SET_IMM_REGW r31,r30,DDR_SDRAM_CFG_OFF,DDR_SDRAM_CFG_VAL & ~DDR_SDRAM_CFG_MEM_EN
+	/*
+	 * FIXME: wait 200us
 	 */
 	/*
-	 * ROM startup: copy code to SDRAM
+	 * enable  DDR SDRAM
 	 */
-	LA	r30, _text_start  /* get start address of text section in RAM */
-	add	r30, r20, r30    /* get start address of text section in ROM (add reloc offset) */
-	LA	r29, _text_start /* get start address of text section in RAM */
-	LA	r28, _text_size  /* get size of RAM image */
-	bl	copy_image      /* copy text section from ROM to RAM location */
+	SET_IMM_REGW r31,r30,DDR_SDRAM_CFG_OFF,DDR_SDRAM_CFG_VAL | DDR_SDRAM_CFG_MEM_EN
+	/*
+	 * wait, until DDR_SDRAM_CFG_2_D_INIT is cleared
+	 */
+1:	lwz r30,DDR_SDRAM_CFG_2_OFF(r31)
+	andi. r30,r30,DDR_SDRAM_CFG_2_D_INIT
+	bne 1b
+#endif
+#ifdef DDR_ERR_DISABLE_VAL2
+	/*
+	 * enable detect of some RAM errors
+	 */
+	SET_IMM_REGW r31,r30,DDR_ERR_DISABLE_OFF,DDR_ERR_DISABLE_VAL2
+#endif
+#ifdef DDR_SDRAM_INTERVAL_VAL
+	/*
+	 * set the refresh interval
+	 */
+	SET_IMM_REGW r31,r30,DDR_SDRAM_INTERVAL_OFF,DDR_SDRAM_INTERVAL_VAL
+#endif
+start_rom_skip:
+	/*
+	 * determine current execution address offset
+	 */
+	bl start_rom_skip1
+start_rom_skip1:
+	mflr r20
+	LA   r30,start_rom_skip1
+	sub. r20,r20,r30	
+	/*
+	 * execution address offset == 0?
+	 * then do not relocate code and data
+	 */
+	beq  start_code_in_ram
+	/*
+	 * ROM or relocatable startup: copy startup code to SDRAM
+	 */
+	/* get start address of text section in RAM */
+	LA	r29, _text_start  
+	/* get start address of text section in ROM (add reloc offset) */
+	add	r30, r20, r29    
+	/* get size of startup code */
+	LA	r28, end_reloc_startup
+	LA	r31, _text_start
+	sub	28,r28,r31
+	/* copy startup code from ROM to RAM location */
+	bl	copy_image      
 	
-	/*
-	 * FIXME: ROM startup: copy data to SDRAM
-	 */
-	LA	r30, _data_start /* get start address of data section in RAM */
-	add	r30, r20, r30    /* get start address of data section in ROM (add reloc offset) */
-	LA	r29, _data_start /* get start address of data section in RAM */
-	LA	r28, _data_size  /* get size of RAM image */
-	bl	copy_image       /* copy initialized data section from ROM to RAM location */
 	/*
 	 * ROM startup: jump to code copy in  SDRAM
 	 */
-	LA	r29, start_code_in_ram /* get compile time address of label */
+	/* get compile time address of label */
+	LA	r29, copy_rest_of_text 
 	mtlr	r29
 	blr                     /* now further execution RAM */
+copy_rest_of_text:	
+#ifdef LCRR_VAL
+	SET_IMM_REGW r31,r30,LCRR_OFF,LCRR_VAL
+#endif
+	/*
+	 * ROM or relocatable startup: copy rest of code to SDRAM
+	 */
+	/* get start address of rest of code in RAM */
+	LA	r29, end_reloc_startup
+	/* get start address of text section in ROM (add reloc offset) */
+	add	r30, r20, r29    
+	/* get size of rest of code */
+	LA	r28, _text_start
+	LA	r31, _text_size
+	add	r28,r28,r31
+	sub	r28,r28,r29
+	bl	copy_image      /* copy text section from ROM to RAM location */
+	
+	/*
+	 * ROM or relocatable startup: copy data to SDRAM
+	 */
+	/* get start address of data section in RAM */
+	LA	r29, _data_start 
+	/* get start address of data section in ROM (add reloc offset) */
+	add	r30, r20, r29    
+	/* get size of RAM image */
+	LA	r28, _data_size  
+	/* copy initialized data section from ROM to RAM location */
+	bl	copy_image       
 
 start_code_in_ram:	
 
-start_rom_skip:	
 	/*
 	 * ROM/RAM startup: clear bss in SDRAM
 	 */
@@ -417,3 +515,4 @@ clr_mem_byte:
         
 clr_mem_end:
         blr					/* return */
+end_reloc_startup:

@@ -1,3 +1,14 @@
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c, mpc83xx/include/mpc83xx.h:
+	added support for RGMII interface and different board
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c, mpc83xx/i2c/mpc83xx_i2cdrv.h,
+	* mpc83xx/spi/mpc83xx_spidrv.c, mpc83xx/spi/mpc83xx_spidrv.h:
+	added base frequency into softc structure
+
 2008-05-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/ppc_exc_bspsupp.h: added

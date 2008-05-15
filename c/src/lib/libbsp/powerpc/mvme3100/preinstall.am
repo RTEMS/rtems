@@ -137,7 +137,8 @@ $(PROJECT_INCLUDE)/bsp/vpd.h: ../shared/motorola/vpd.h $(PROJECT_INCLUDE)/bsp/$(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vpd.h
 
+if HAS_NETWORKING
 $(PROJECT_INCLUDE)/bsp/if_tsec_pub.h: network/if_tsec_pub.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/if_tsec_pub.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/if_tsec_pub.h
-
+endif

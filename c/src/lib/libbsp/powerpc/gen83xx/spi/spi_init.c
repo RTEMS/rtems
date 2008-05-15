@@ -21,8 +21,10 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 #if defined(MPC8349EAMDS)
-#include <libchip/i2c-2b-eeprom.h>
 #include <libchip/spi-flash-m25p40.h>
+#endif
+#if defined(HSC_CM01)
+#include <libchip/spi-fram-fm25l256.h>
 #endif
 
 /*=========================================================================*\
@@ -189,7 +191,8 @@ static mpc83xx_spi_desc_t bsp_spi_bus_desc = {
   { /* our private fields */
     reg_ptr:	 &mpc83xx.spi,
     initialized: FALSE,
-    irq_number:  BSP_IPIC_IRQ_SPI
+    irq_number:  BSP_IPIC_IRQ_SPI,
+    base_frq  :  0 /* filled in during init */
   }
 };
 
@@ -248,6 +251,11 @@ rtems_status_code bsp_register_spi
   mpc83xx.gpio[0].gpdr  &= ~(0xf << (31-27));
 #endif
   /*
+   * update base frequency in spi descriptor
+   */
+  bsp_spi_bus_desc.softc.base_frq = BSP_bus_frequency;
+
+  /*
    * register SPI bus
    */
   ret_code = rtems_libi2c_register_bus("/dev/spi",
@@ -256,13 +264,24 @@ rtems_status_code bsp_register_spi
     return -ret_code;
   }
   spi_busno = ret_code;
-  /*
-   * register M25P40 Flash, when available
-   */
 #if defined(MPC8349EAMDS)
+  /*
+   * register M25P40 Flash
+   */
   ret_code = rtems_libi2c_register_drv(RTEMS_BSP_SPI_FLASH_DEVICE_NAME,
 				       spi_flash_m25p40_rw_driver_descriptor,
 				       spi_busno,0x00);
+  if (ret_code < 0) {
+    return -ret_code;
+  }
+#endif
+#if defined(HSC_CM01)
+  /*
+   * register FM25L256 FRAM
+   */
+  ret_code = rtems_libi2c_register_drv(RTEMS_BSP_SPI_FRAM_DEVICE_NAME,
+				       spi_fram_fm25l256_rw_driver_descriptor,
+				       spi_busno,0x02);
   if (ret_code < 0) {
     return -ret_code;
   }
