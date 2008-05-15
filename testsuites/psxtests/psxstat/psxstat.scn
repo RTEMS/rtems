@@ -1,5 +1,5 @@
 *** STAT TEST 01 ***
->>>>Current Time:  - rtems_clock_get - 09:00:00   12/31/1988
+--->Current Time:  - rtems_clock_get - 09:00:00   12/31/1988
 Making directory /my_mount_point/dir1
 Making directory /my_mount_point/dir2
 Making directory /my_mount_point/dir3

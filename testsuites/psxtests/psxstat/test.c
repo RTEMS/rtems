@@ -715,7 +715,7 @@ void Show_Time()
   rtems_status_code status;
 
   status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-  printf(">>>>Current Time: ");
+  printf("--->Current Time: ");
   print_time( " - rtems_clock_get - ", &time, "\n" );
 }
 
