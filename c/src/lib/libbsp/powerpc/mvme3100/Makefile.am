@@ -55,7 +55,6 @@ dist_project_lib_DATA += ../shared/startup/linkcmds
 build_date.c::
 	echo 'const char *BSP_build_date="'`date`'";' > $@
 
-noinst_PROGRAMS += startup.rel
 startup_SOURCES = ./startup/bspstart.c build_date.c \
 	./startup/misc.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
@@ -88,9 +87,10 @@ pci_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+include_bsp_HEADERS += \
+  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
+  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 include_bsp_HEADERS += ./vme/VMEConfig.h \
 	../../shared/vmeUniverse/vmeTsi148.h \
