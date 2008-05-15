@@ -89,11 +89,6 @@ void bsp_pretasking_hook(void)
 
   rtemsFreeMemStart += _heap_size;
 
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
-#endif /* RTEMS_DEBUG */
-
 #if BSP_DEBUG
   /*  The following information is very useful when debugging. */
   printk("[bsp_pretasking_hook]\n");

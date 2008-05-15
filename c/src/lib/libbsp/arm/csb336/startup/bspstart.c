@@ -56,13 +56,6 @@ void bsp_pretasking_hook(void)
 
     /* call rtems lib init - malloc stuff */
     bsp_libc_init((void *)heap_start, heap_size, 0);
-
-#ifdef RTEMS_DEBUG
-
-    rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
-
-#endif /* RTEMS_DEBUG */
-
 } 
  
 
