@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,10 +60,6 @@ void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void)
 {
     bsp_libc_init(&HeapStart, (char *)&HeapEnd - (char *)&HeapStart, 0);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 }
 
 /*

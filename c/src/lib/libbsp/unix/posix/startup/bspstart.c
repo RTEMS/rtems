@@ -75,17 +75,6 @@ void bsp_pretasking_hook(void)
     heap_start = 0;
 
     bsp_libc_init((void *)heap_start, Heap_size, 1024 * 1024);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-
-    /*
-     * Dump malloc stats on exit...
-     */
-#if defined(RTEMS_DEBUG)
-  atexit(malloc_dump);
-#endif
 }
 
 /*

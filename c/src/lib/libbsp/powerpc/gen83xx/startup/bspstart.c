@@ -106,20 +106,6 @@ bsp_pretasking_hook(void)
   bsp_libc_init( BSP_heap_start, 
 		 BSP_heap_end - BSP_heap_start,
 		 0);
-
-
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-
-  Stack_check_Initialize();
-#endif
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 }
 
 void bsp_calc_mem_layout()

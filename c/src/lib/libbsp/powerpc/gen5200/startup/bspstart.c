@@ -108,10 +108,6 @@
 
 #include <string.h>
 
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 #if defined(HAS_UBOOT)
 bd_t *uboot_bdinfo_ptr = (bd_t *)1; /* will be overwritten from startup code */
 bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo */
@@ -189,23 +185,7 @@ bsp_pretasking_hook(void)
 
     bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
 #endif
-
-
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-
-  Stack_check_Initialize();
-#endif
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 }
-
-
 
 void bsp_predriver_hook(void)
   {

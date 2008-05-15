@@ -1,3 +1,17 @@
+2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization
+	Framework to ask the BSP where it has memory for the RTEMS Workspace
+	and C Program Heap. These collectively are referred to as work area.
+	If the BSP supports this, then it does not have to include code to
+	split the available memory between the two areas. This reduces the
+	amount of code in the BSP specific bspstart.c file. Additionally, the
+	shared framework can initialize the C Library, call
+	rtems_debug_enable(), and dirty the work area memory. Until most/all
+	BSPs support this new capability, if the BSP supports this, it should
+	call RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION from its configure.ac.
+	When the transition is complete, this autoconf macro can be removed.
+
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/network.c, start/start.S:

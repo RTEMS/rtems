@@ -36,14 +36,10 @@ extern void bsp_spurious_initialize();
 
 void bsp_pretasking_hook(void)
 {
-  extern void *_HeapStart;
-  extern uint32_t         _HeapSize;
+  extern void      *_HeapStart;
+  extern uint32_t   _HeapSize;
 
   bsp_libc_init(&_HeapStart, (unsigned int) &_HeapSize, 0);
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 
   bsp_spurious_initialize();
 }

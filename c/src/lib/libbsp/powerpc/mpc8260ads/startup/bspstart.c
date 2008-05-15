@@ -53,10 +53,6 @@
 
 #include <string.h>
 
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
@@ -187,23 +183,10 @@ bsp_pretasking_hook(void)
    *  the kernel and the application can be linked and burned into ROM
    *  independently of each other.
    */
-    extern unsigned char _HeapStart;
-    extern unsigned char _HeapEnd;
+  extern unsigned char _HeapStart;
+  extern unsigned char _HeapEnd;
 
-    bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-
-  Stack_check_Initialize();
-#endif
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
+  bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
 }
 
 void bsp_start(void)

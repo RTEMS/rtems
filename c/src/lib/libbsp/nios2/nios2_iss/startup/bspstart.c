@@ -54,9 +54,6 @@ extern char __alt_heap_start[];
 void bsp_pretasking_hook(void)
 {
     unsigned long heapStart;
-#if 0
-    unsigned long heapSize = (unsigned long)_HeapSize;
-#endif
     unsigned long ramSpace;
 
     heapStart = (unsigned long)Configuration.work_space_start
@@ -65,35 +62,12 @@ void bsp_pretasking_hook(void)
     if (heapStart & (CPU_ALIGNMENT-1))
         heapStart = (heapStart + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-#if 0
-    ramSpace = (unsigned long)_RAMBase + (unsigned long)_RAMSize - heapStart;
-#else
-#if 0
-    ramSpace = SRAM_0_BASE 
-             + (SRAM_0_SRAM_MEMORY_SIZE * SRAM_0_SRAM_MEMORY_UNITS)
-             - heapStart;
-#else
     ramSpace = RAM_BASE + RAM_BYTES - heapStart;
-#endif
-#endif
 
     /* TODO */
     ramSpace -= 16384; /* Space for initial stack, not to be zeroed */
 
-#if 0
-    if (heapSize < 10)
-        heapSize = ramSpace;
-    else if (heapSize > ramSpace)
-        rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');
-
-    bsp_libc_init((void *)heapStart, heapSize, 0);
-#else
     bsp_libc_init((void *)heapStart, ramSpace, 0);
-#endif
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 }
 
 /*

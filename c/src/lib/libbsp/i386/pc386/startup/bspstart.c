@@ -144,11 +144,6 @@ void bsp_pretasking_hook(void)
 
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
-
-#ifdef RTEMS_DEBUG
-  rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
-#endif /* RTEMS_DEBUG */
-
 } /* bsp_pretasking_hook */
 
 /*-------------------------------------------------------------------------+

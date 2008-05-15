@@ -50,10 +50,6 @@ void bsp_pretasking_hook(void)
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
     bsp_libc_init((void *) heap_start, 64 * 1024, 0);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
 }
 
 /*

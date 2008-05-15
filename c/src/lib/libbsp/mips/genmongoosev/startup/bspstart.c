@@ -53,11 +53,6 @@ void bsp_pretasking_hook(void)
     unsigned long heapSize = (unsigned long)&HeapSize;
 
     bsp_libc_init(heapStart, (uint32_t) heapSize, 0);
-
-#ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-#endif
-
 }
 
 /*
