@@ -962,11 +962,11 @@ void uti596reset(void)
 
   /* abort ALL of the current work */
     /* FEB 17 REMOVED
-    >>>>>
+    ====>
     sc->scb.command = CUC_ABORT | RX_ABORT;
     outport_word(CHAN_ATTN,0);
     UTI_WAIT_COMMAND_ACCEPTED(4000, "reset: abort requested");
-    <<<<<
+    <====
     */
 
   uti596_reset_hardware(&uti596_softc); /* reset the ethernet hardware. must re-config */

@@ -1,3 +1,8 @@
+2008-05-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* network/network.c: Eliminate patterns that look like CVS conflict
+	markers.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization
