@@ -61,7 +61,8 @@ o-optimize/librtemsbsp.a: $(SRCS)
 	    ;; \
 	  esac; \
 	done
-	ls o-optimize/*.$(OBJEXT) o-optimize/*.rel > $@-list
+	ls o-optimize/*.$(OBJEXT) > $@-list
+	-ls o-optimize/*.rel >> $@-list
 	$(AR) rc $@ @$@-list
 	rm -f $@-list o-optimize/*.$(OBJEXT) o-optimize/*.rel
 	$(RANLIB) $@

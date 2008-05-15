@@ -1,3 +1,8 @@
+2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* wrapup/Makefile.am: Many BSPs do not include any .rel files now so do
+	not fail if there are none.
+
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-flash-m25p40.h,
