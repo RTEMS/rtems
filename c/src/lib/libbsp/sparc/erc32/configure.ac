@@ -44,6 +44,8 @@ RTEMS_BSPOPTS_HELP([ENABLE_SIS_QUIRKS],
  BSP will be enabled.  In particular, SIS requires special
  initialization not used on real ERC32 hardware.])
 
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

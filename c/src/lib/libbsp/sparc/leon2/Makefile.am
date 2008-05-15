@@ -50,83 +50,42 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../sparc/shared/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += gnatsupp.rel
-gnatsupp_rel_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
-gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c console/debugputs.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+console_SOURCES = console/console.c console/debugputs.c
+clock_SOURCES = clock/ckinit.c
 # AMBA PnP Scanning
-noinst_PROGRAMS += amba.rel
-amba_rel_SOURCES = ../../sparc/shared/amba/ambapp.c
-amba_rel_CPPFLAGS = $(AM_CPPFLAGS)
-amba_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+amba_SOURCES = ../../sparc/shared/amba/ambapp.c
 # PCI
-noinst_PROGRAMS += pci.rel
-pci_rel_SOURCES = pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+pci_SOURCES = pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 # RASTA Kit
-noinst_PROGRAMS += rasta.rel
-rasta_rel_SOURCES = rasta/rasta.c
-rasta_rel_CPPFLAGS = $(AM_CPPFLAGS)
-rasta_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+rasta_SOURCES = rasta/rasta.c
 # Companion Chip Kit
-noinst_PROGRAMS += cchip.rel
-cchip_rel_SOURCES = cchip/cchip.c
-cchip_rel_CPPFLAGS = $(AM_CPPFLAGS)
-cchip_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+cchip_SOURCES = cchip/cchip.c
 # B1553BRM
-noinst_PROGRAMS += brm.rel
-brm_rel_SOURCES = ../../sparc/shared/1553/b1553brm.c ../../sparc/shared/1553/b1553brm_pci.c ../../sparc/shared/1553/b1553brm_rasta.c
-brm_rel_CPPFLAGS = $(AM_CPPFLAGS)
-brm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+brm_SOURCES = ../../sparc/shared/1553/b1553brm.c \
+    ../../sparc/shared/1553/b1553brm_pci.c \
+    ../../sparc/shared/1553/b1553brm_rasta.c
 # CAN
-noinst_PROGRAMS += can.rel
-can_rel_SOURCES = ../../sparc/shared/can/occan.c ../../sparc/shared/can/occan_pci.c ../../sparc/shared/can/grcan.c ../../sparc/shared/can/grcan_rasta.c
-can_rel_CPPFLAGS = $(AM_CPPFLAGS)
-can_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+can_SOURCES = ../../sparc/shared/can/occan.c \
+    ../../sparc/shared/can/occan_pci.c \
+    ../../sparc/shared/can/grcan.c \
+    ../../sparc/shared/can/grcan_rasta.c
 # SpaceWire
-noinst_PROGRAMS += spw.rel
-spw_rel_SOURCES = ../../sparc/shared/spw/grspw.c ../../sparc/shared/spw/grspw_pci.c ../../sparc/shared/spw/grspw_rasta.c
-spw_rel_CPPFLAGS = $(AM_CPPFLAGS)
-spw_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+spw_SOURCES = ../../sparc/shared/spw/grspw.c \
+    ../../sparc/shared/spw/grspw_pci.c ../../sparc/shared/spw/grspw_rasta.c
 # UART (RAW)
-noinst_PROGRAMS += uart.rel
-uart_rel_SOURCES = ../../sparc/shared/uart/apbuart.c ../../sparc/shared/uart/apbuart_pci.c ../../sparc/shared/uart/apbuart_rasta.c
-uart_rel_CPPFLAGS = $(AM_CPPFLAGS)
-uart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+uart_SOURCES = ../../sparc/shared/uart/apbuart.c \
+    ../../sparc/shared/uart/apbuart_pci.c \
+    ../../sparc/shared/uart/apbuart_rasta.c
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
-noinst_PROGRAMS += i2cmst.rel
-i2cmst_rel_SOURCES = ../../sparc/shared/i2c/i2cmst.c
-i2cmst_rel_CPPFLAGS = $(AM_CPPFLAGS)
-i2cmst_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+i2cmst_SOURCES = ../../sparc/shared/i2c/i2cmst.c
+
+timer_SOURCES = timer/timer.c
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
@@ -135,11 +94,6 @@ leon_smc91111_rel_CPPFLAGS = $(AM_CPPFLAGS)
 leon_smc91111_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_smc91111_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_open_eth.rel
@@ -150,19 +104,20 @@ leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel console.rel clock.rel timer.rel gnatsupp.rel \
-                  amba.rel rasta.rel uart.rel spw.rel can.rel brm.rel pci.rel \
-                  cchip.rel
+libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(console_SOURCES) \
+    $(clock_SOURCES) $(amba_SOURCES) $(pci_SOURCES) $(rasta_SOURCES) \
+    $(cchip_SOURCES) $(brm_SOURCES) $(can_SOURCES) $(spw_SOURCES) \
+    $(uart_SOURCES) $(i2cmst_SOURCES) $(timer_SOURCES)
+
+libbsp_a_LIBADD = \
+    ../../../libcpu/@RTEMS_CPU@/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
+    ../../../libcpu/@RTEMS_CPU@/syscall.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += leon_open_eth.rel
 libbsp_a_LIBADD += leon_smc91111.rel
 endif
-
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
-    ../../../libcpu/@RTEMS_CPU@/syscall.rel
 
 EXTRA_DIST += times
 
