@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <rtems/libi2c.h>
 
-#define DEBUG 
+#undef DEBUG
 
 /*=========================================================================*\
 | Function:                                                                 |

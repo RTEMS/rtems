@@ -1,5 +1,10 @@
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c:
+	disabled debugging output
+
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
 	* mpc83xx/network/tsec.c, mpc83xx/include/mpc83xx.h:
 	added support for RGMII interface and different board
 
