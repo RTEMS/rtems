@@ -56,7 +56,7 @@ void _Thread_Change_priority(
 )
 {
   ISR_Level      level;
-  States_Control state;
+  States_Control state, original_state;
 
   /*
    *  If this is a case where prepending the task to its priority is
@@ -72,6 +72,11 @@ void _Thread_Change_priority(
        new_priority >= the_thread->current_priority )
     prepend_it = TRUE;
 */
+
+  /*
+   * Save original state
+   */
+  original_state = the_thread->current_state;
 
   /*
    * Set a transient state for the thread so it is pulled off the Ready chains.
@@ -95,7 +100,9 @@ void _Thread_Change_priority(
    */
   state = the_thread->current_state;
   if ( state != STATES_TRANSIENT ) {
-    the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+    /* Only clear the transient state if it wasn't set already */
+    if ( ! _States_Is_transient( original_state ) )
+      the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
     _ISR_Enable( level );
     if ( _States_Is_waiting_on_thread_queue( state ) ) {
       _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
@@ -103,19 +110,22 @@ void _Thread_Change_priority(
     return;
   }
 
-  /*
-   *  Interrupts are STILL disabled.
-   *  We now know the thread will be in the READY state when we remove
-   *  the TRANSIENT state.  So we have to place it on the appropriate
-   *  Ready Queue with interrupts off.
-   */
-  the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+  /* Only clear the transient state if it wasn't set already */
+  if ( ! _States_Is_transient( original_state ) ) {
+    /*
+     *  Interrupts are STILL disabled.
+     *  We now know the thread will be in the READY state when we remove
+     *  the TRANSIENT state.  So we have to place it on the appropriate
+     *  Ready Queue with interrupts off.
+     */
+    the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
-  _Priority_Add_to_bit_map( &the_thread->Priority_map );
-  if ( prepend_it )
-    _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
-  else
-    _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+    _Priority_Add_to_bit_map( &the_thread->Priority_map );
+    if ( prepend_it )
+      _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
+    else
+      _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+  }
 
   _ISR_Flash( level );
 

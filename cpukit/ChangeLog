@@ -1,3 +1,11 @@
+2008-05-16	Till Straumann <strauman@slac.stanford.edu>
+
+	* score/src/threadchangepriority.c: Just in case the transient
+	state was set when we entered, ensure that it is still set when
+	we exit.
+	* score/src/threadclose.c: When a thread is being deleted, it should
+	go into the dormant state -- not the transient state.
+
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libi2c/libi2c.h, libi2c/libi2c.h: added interface to query

@@ -66,10 +66,10 @@ void _Thread_Close(
   _Objects_Close( information, &the_thread->Object );
 
   /*
-   *  By setting the transient state, the thread will not be considered
+   *  By setting the dormant state, the thread will not be considered
    *  for scheduling when we remove any blocking states.
    */
-  _Thread_Set_state( the_thread, STATES_TRANSIENT );
+  _Thread_Set_state( the_thread, STATES_DORMANT );
 
   if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
     if ( _Watchdog_Is_active( &the_thread->Timer ) )
