@@ -1,3 +1,8 @@
+2008-05-16	Eric Norum <norume@aps.anl.gov>
+
+    * Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds: Use
+    shared version of bootstrap to set up workspace.
+
 2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rework to avoid .rel files.

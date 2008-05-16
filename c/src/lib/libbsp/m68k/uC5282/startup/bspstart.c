@@ -227,34 +227,14 @@ static void handler(int pc)
 void bsp_start( void )
 {
   int i;
-  extern char _WorkspaceBase[];
   extern char _RamBase[], _RamSize[];
-  extern unsigned long  _M68k_Ramsize;
-
-  _M68k_Ramsize = (unsigned long)_RamSize;      /* RAM size set in linker script */
 
   /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
+   * Set up default exception handler
    */
-
-    /*
-     * Set up default exception handler
-     */
-    for (i = 2 ; i < 256 ; i++)
-        if (i != (32+2)) /* Catch all but bootrom system calls */
-            *((void (**)(int))(i * 4)) = handler;
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *)_WorkspaceBase;
+  for (i = 2 ; i < 256 ; i++)
+    if (i != (32+2)) /* Catch all but bootrom system calls */
+      *((void (**)(int))(i * 4)) = handler;
 
   /*
    * Invalidate the cache and disable it

@@ -166,7 +166,6 @@ SECTIONS
         . = ALIGN (16);
         PROVIDE (end = .);
         _clear_end = .;
-        _WorkspaceBase = .;
     } >ram
 
   /* Stabs debugging sections.  */
