@@ -1,3 +1,8 @@
+2008-05-16	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc83xx/include/mpc83xx.h: or is not a good name for any name in
+	C/C++. See iso646.h for the reason.
+
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* mpc83xx/i2c/mpc83xx_i2cdrv.c:

@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #ifndef _MPC83XX_MPC83XX_H
 #define _MPC83XX_MPC83XX_H
 
@@ -337,7 +341,7 @@ typedef struct m83xxDUARTRegisters_ {
 typedef struct m83xxLBCRegisters_ {
   struct {
     volatile uint32_t br;                 /* 0x0_5000 Base register 0 ,R/W 0x0000_RR01 10.3.1.1/10-11 */
-    volatile uint32_t or;                 /* 0x0_5004 Options register 0 R/W 0x0000_0FF7 10.3.1.2/10-12 */
+    volatile uint32_t optionsr;                 /* 0x0_5004 Options register 0 R/W 0x0000_0FF7 10.3.1.2/10-12 */
   } bor[8];
   uint8_t reserved0_5040[0x05068-0x05040];/* 0x0_5040-5067 Reserved */
   volatile uint32_t mar;                  /* 0x0_5068 UPM address register R/W 0x0000_0000 10.3.1.3/10-18 */
