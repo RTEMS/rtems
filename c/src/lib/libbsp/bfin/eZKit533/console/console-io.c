@@ -16,6 +16,7 @@
  
 
 #include <bsp.h>
+#include <cplb.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
