@@ -1,3 +1,8 @@
+2008-05-19	Eric Norum <norume@aps.anl.gov>
+
+    * Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds: Back
+    out changes from 2008-05-16 -- they don't seem to work.
+
 2008-05-16	Eric Norum <norume@aps.anl.gov>
 
     * Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds: Use
