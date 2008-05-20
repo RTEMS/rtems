@@ -1,3 +1,7 @@
+2008-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* leaf.cfg: Do not override bsp-post-link.
+
 2008-03-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* leaf.cfg: Switch to explicit .exe instead of EXEEXT to get it to
