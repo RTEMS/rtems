@@ -1,5 +1,9 @@
 2008-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* custom/nds.cfg: Email from author says to drop this flag.
+
+2008-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* leaf.cfg: Do not override bsp-post-link.
 
 2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
