@@ -33,10 +33,14 @@ include_rtems_HEADERS = fb/fb.h touchscreen/touchscreen.h sound/sound.h
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/start.c ../../shared/bsppredriverhook.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/bsppretaskinghook.c ../../shared/bootcard.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_PROGRAMS += gnatsupp.rel
+gnatsupp_rel_SOURCES = ../../shared/gnatinstallhandler.c
+gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
+gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
@@ -251,9 +255,12 @@ project_lib_DATA += coproc.bin
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = clock.rel console.rel startup.rel irq.rel timer.rel libnds9.rel rtc.rel fb.rel touchscreen.rel sound.rel block.rel libdldi.rel
+libbsp_a_LIBADD = clock.rel console.rel gnatsupp.rel startup.rel irq.rel \
+    timer.rel libnds9.rel rtc.rel fb.rel touchscreen.rel sound.rel \
+    block.rel libdldi.rel
+
 if HAS_NETWORKING
-libbsp_a_LIBADD += wifi.rel dswifi9.rel
+    libbsp_a_LIBADD += wifi.rel dswifi9.rel
 endif
 
 include $(srcdir)/preinstall.am

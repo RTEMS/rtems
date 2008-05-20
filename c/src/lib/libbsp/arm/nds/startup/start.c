@@ -15,47 +15,27 @@
 #include <nds.h>
 
 /*
- * ld linker symbols.
- */
-
-extern uint8_t __bss_start;
-extern uint8_t __bss_end;
-extern uint8_t _end;
-extern uint8_t __ewram_end;
-
-/*
- * address of start of free memory - should be updated after creating new
- * partitions or regions.
- */
-
-static uint32_t heap_start;
-
-/*
- * other bsp init functions.
- */
-
-extern void bsp_libc_init (void *, uint32_t, int);
-
-/*
  * This definition comes from ARM cpu code.
  */
-
 extern unsigned int arm_cpu_mode;
 
 /*
- * setup libc.
+ *  This method returns the base address and size of the area which
+ *  is to be allocated between the RTEMS Workspace and the C Program
+ *  Heap.
  */
-
-void
-bsp_pretasking_hook (void)
+void bsp_get_workarea(
+  void   **workarea_base,
+  size_t  *workarea_size,
+  size_t  *requested_heap_size
+)
 {
-  uint32_t heap_size;
+  extern uint8_t _end;
+  extern uint8_t __ewram_end;
 
-  printk ("[+] initializing heap\n");
-
-  /* initialize heap with all remaining memory */
-  heap_size = (uint32_t) & __ewram_end - heap_start;
-  bsp_libc_init ((void *) heap_start, heap_size, 0);
+  *workarea_base       = &_end;
+  *workarea_size       = (void *)&__ewram_end - (void *)&_end;
+  *requested_heap_size = 0;
 }
 
 /*
@@ -65,8 +45,6 @@ bsp_pretasking_hook (void)
 void
 bsp_start (void)
 {
-  Configuration.work_space_start = &_end;
-
   /* initialize irq management */
   BSP_rtems_irq_mngt_init ();
 
@@ -89,15 +67,6 @@ bsp_start (void)
 
   /* configure clock period */
   Configuration.microseconds_per_tick = 10000;  /* us */
-
-  /* check memory space for rtems workspace */
-  heap_start =
-    Configuration.work_space_start +
-    rtems_configuration_get_work_space_size ();
-  if (heap_start > &__ewram_end) {
-    printk ("[!] memory exhausted\n");
-    bsp_cleanup ();
-  }
 }
 
 /*
@@ -107,6 +76,9 @@ bsp_start (void)
 void
 bss_reset (void)
 {
+  extern uint8_t __bss_start;
+  extern uint8_t __bss_end;
+
   memset (&__bss_start, 0, (uint32_t) & __bss_end - (uint32_t) & __bss_start);
 }
 
