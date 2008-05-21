@@ -1,3 +1,9 @@
+2008-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itronhello/system.h, itronmbox01/system.h, itrontask02/system.h,
+	itrontime01/system.h: Add use of
+	CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* itronhello/init.c, itronmbf01/init.c, itronmbox01/init.c,
