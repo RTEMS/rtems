@@ -1563,8 +1563,9 @@ typedef struct VmeUniverseDmaListDescRec_ {
 	LERegister1	dummy2;
 	LERegister1	dcpp;
 	LERegister1	dummy3;
-} VmeUniverseDmaListDescRec
-__attribute__((aligned(32), __may_alias__));
+} __attribute__((aligned(32), __may_alias__))
+VmeUniverseDmaListDescRec;
+
 typedef VmeUniverseDmaListDescRec *VmeUniverseDmaListDesc;
 
 static void     uni_desc_init  (DmaDescriptor);

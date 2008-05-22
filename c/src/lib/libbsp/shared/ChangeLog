@@ -1,3 +1,8 @@
+2008-05-22	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeUniverse.c: fixed compiler warning;
+	moved struct attributes as directed by gcc warning.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bootcard.c: Add capability for bootcard.c BSP Initialization
