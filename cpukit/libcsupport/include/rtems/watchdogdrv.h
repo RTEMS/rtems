@@ -39,17 +39,30 @@ extern "C" {
  *  should be initialized as DISABLED since BSP initialization may
  *  take longer than the timeout period for the watchdog.
  *
- *  @param[in] ma
+ *  @param[in] major is the watchdog device major number
+ *  @param[in] minor is the watchdog device minor number
+ *  @param[in] arguments points to device driver arguments
+ */
 rtems_device_driver Watchdog_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *arguments
 );
 
+/**
+ *  @brief Watchdog Driver IO Control
+ *
+ *  This method implements the IO Control device driver entry
+ *  point for the watchdog hardware device.
+ *
+ *  @param[in] major is the watchdog device major number
+ *  @param[in] minor is the watchdog device minor number
+ *  @param[in] arguments points to device driver arguments
+ */
 rtems_device_driver Watchdog_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arguments
 );
 
 #ifdef __cplusplus
