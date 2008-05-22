@@ -369,8 +369,12 @@ for an application and leaving out a clock tick source.
 
 @findex CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER}
-is defined
-if the application wishes to include the Real-Time Clock Driver.
+is defined if the application wishes to include the Real-Time Clock Driver.
+By default, this is not defined.
+
+@findex CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+@item @code{CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER}
+is defined if the application wishes to include the Watchdog Driver.
 By default, this is not defined.
 
 @findex CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
