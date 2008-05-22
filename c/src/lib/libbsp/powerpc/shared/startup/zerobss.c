@@ -21,8 +21,8 @@ void zero_bss()
   /* prevent these from being accessed in the short data areas */
   extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
   extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
-  extern unsigned long __rtems_end[];
+  extern unsigned long __bss_end[];
   memset(__SBSS_START__, 0, ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__));
   memset(__SBSS2_START__, 0, ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__));
-  memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
+  memset(__bss_start, 0, ((unsigned) __bss_end) - ((unsigned)__bss_start));
 }

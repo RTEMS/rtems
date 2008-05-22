@@ -221,6 +221,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
    *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   . = ALIGN(16);
+   PROVIDE (__bss_end = .);
   } > CODE
   . = ALIGN(16);
   _end = . ;
