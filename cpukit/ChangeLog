@@ -1,5 +1,12 @@
 2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/termios_baud2index.c,
+	libcsupport/src/termios_baud2num.c,
+	libcsupport/src/termios_num2baud.c,
+	libcsupport/src/termios_setinitialbaud.c: New files.
+
+2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/preinstall.am,
 	libcsupport/include/rtems/termiostypes.h: Move termios helper
 	routines from libchip to libcsupport. Add routine which makes it easy
