@@ -118,17 +118,17 @@
 uint32_t mpc5200_uart_avail_mask = GEN5200_UART_AVAIL_MASK;
 
 #if defined(UARTS_USE_TERMIOS_INT)
-  uint8_t psc_minor_to_irqname[NUM_PORTS] =
-    {BSP_SIU_IRQ_PSC1,
+  uint8_t psc_minor_to_irqname[NUM_PORTS] = {
+     BSP_SIU_IRQ_PSC1,
      BSP_SIU_IRQ_PSC2,
      BSP_SIU_IRQ_PSC3,
      BSP_SIU_IRQ_PSC4,
      BSP_SIU_IRQ_PSC5,
-     BSP_SIU_IRQ_PSC6};
+     BSP_SIU_IRQ_PSC6
+  };
 
-  static int mpc5200_psc_irqname_to_minor(int name)
-  {
-    int minor;
+  static int mpc5200_psc_irqname_to_minor(int name) {
+    int      minor;
     uint8_t *chrptr;
 
     chrptr = memchr(psc_minor_to_irqname, name, sizeof(psc_minor_to_irqname));
@@ -148,8 +148,7 @@ BSP_output_char_function_type BSP_output_char = A_BSP_output_char;
 uint32_t console_initialized = FALSE;
 
 /* per channel info structure */
-struct per_channel_info
-  {
+struct per_channel_info {
   uint16_t shadow_imr;
   uint8_t shadow_mode1;
   uint8_t shadow_mode2;
@@ -162,91 +161,60 @@ struct per_channel_info
   int framing_errors;
   int parity_errors;
   int overrun_errors;
-  };
+};
 
 /* Used to handle more than one channel */
 struct per_channel_info channel_info[NUM_PORTS];
 
-  /*
-   * XXX: there are only 6 PSCs, but PSC6 has an extra register gap
-   *      from PSC5, therefore we instantiate seven(!) PSC register sets
-   */
+/*
+ * XXX: there are only 6 PSCs, but PSC6 has an extra register gap
+ *      from PSC5, therefore we instantiate seven(!) PSC register sets
+ */
 uint8_t psc_minor_to_regset[MPC5200_PSC_NO] = {0,1,2,3,4,6};
 
 /* Used to track termios private data for callbacks */
 struct rtems_termios_tty *ttyp[NUM_PORTS];
 
-int mpc5200_psc_setAttributes(int minor, const struct termios *t)
-  {
+int mpc5200_psc_setAttributes(
+  int                   minor,
+  const struct termios *t
+)
+{
   int baud;
   uint8_t csize=0, cstopb, parenb, parodd;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
   /* Baud rate */
-  switch(t->c_cflag & CBAUD)
-    {
-    default:      baud = -1;      break;
-    case B50:     baud = 50;      break;
-    case B75:     baud = 75;      break;
-    case B110:    baud = 110;     break;
-    case B134:    baud = 134;     break;
-    case B150:    baud = 150;     break;
-    case B200:    baud = 200;     break;
-    case B300:    baud = 300;     break;
-    case B600:    baud = 600;     break;
-    case B1200:   baud = 1200;    break;
-    case B1800:   baud = 1800;    break;
-    case B2400:   baud = 2400;    break;
-    case B4800:   baud = 4800;    break;
-    case B9600:   baud = 9600;    break;
-    case B19200:  baud = 19200;   break;
-    case B38400:  baud = 38400;   break;
-    case B57600:  baud = 57600;   break;
-    case B115200: baud = 115200;  break;
-    case B230400: baud = 230400;  break;
-    case B460800: baud = 460800;  break;
-    }
-
-  if(baud > 0)
-    {
-
+  baud = termios_baud_to_number(t->c_cflag & CBAUD);
+  if (baud > 0) {
    /*
     * Calculate baud rate
     * round divider to nearest!
     */
     baud = (IPB_CLOCK + baud *16) / (baud * 32);
-
-    }
+  }
 
   /* Number of data bits */
-  switch ( t->c_cflag & CSIZE )
-    {
+  switch ( t->c_cflag & CSIZE ) {
     case CS5:     csize = 0x00;  break;
     case CS6:     csize = 0x01;  break;
     case CS7:     csize = 0x02;  break;
     case CS8:     csize = 0x03;  break;
-    }
+  }
 
   /* Stop bits */
-  if(csize == 0)
-    {
-
+  if(csize == 0) {
     if(t->c_cflag & CSTOPB)
       cstopb = 0x0F;           /* Two stop bits */
     else
       cstopb = 0x00;           /* One stop bit */
-
-    }
-  else
-    {
-
+  } else {
     if(t->c_cflag & CSTOPB)
       cstopb = 0x0F;           /* Two stop bits */
     else
       cstopb = 0x07;           /* One stop bit */
-
-    }
+  }
 
   /* Parity */
   if (t->c_cflag & PARENB)
@@ -288,13 +256,11 @@ int mpc5200_psc_setAttributes(int minor, const struct termios *t)
 
   return 0;
 
-  }
+}
 
 
 int mpc5200_uart_setAttributes(int minor, const struct termios *t)
-  {
-
-
+{
   /*
    * Check that port number is valid
    */
@@ -303,15 +269,14 @@ int mpc5200_uart_setAttributes(int minor, const struct termios *t)
 
   return mpc5200_psc_setAttributes(minor, t);
 
-  }
-
+}
 
 #ifdef UARTS_USE_TERMIOS_INT
 /*
  * Interrupt handlers
  */
 static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
-  {
+{
   unsigned char c;
   uint16_t isr;
   int nb_overflow;
@@ -327,21 +292,18 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
   /*
    * Character received?
    */
-  if(isr & ISR_RX_RDY_FULL)
-    {
+  if (isr & ISR_RX_RDY_FULL) {
 
     channel_info[minor].rx_interrupts++;
 
 
 #ifndef SINGLE_CHAR_MODE
-    while(psc->rfnum)
-      {
+    while(psc->rfnum) {
 #endif
-
-     /*
-      * get the character
-      */
-      c = (psc->rb_tb >> 24);
+      /*
+       * get the character
+       */
+       c = (psc->rb_tb >> 24);
 
       if (ttyp[minor] != NULL) {
         nb_overflow = rtems_termios_enqueue_raw_characters(
@@ -350,17 +312,15 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
       }
 
 #ifndef SINGLE_CHAR_MODE
-      }
+    }
 #endif
 
-    }
+  }
 
   /*
    * Character transmitted ?
    */
-  if(isr & ISR_TX_RDY & channel_info[minor].shadow_imr)
-    {
-
+  if (isr & ISR_TX_RDY & channel_info[minor].shadow_imr) {
     channel_info[minor].tx_interrupts++;
 
     /*
@@ -369,30 +329,24 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
     psc->isr_imr = channel_info[minor].shadow_imr &= ~(IMR_TX_RDY);
 
     if (ttyp[minor] != NULL) {
-#ifndef SINGLE_CHAR_MODE
-           rtems_termios_dequeue_characters((void *)ttyp[minor], channel_info[minor].cur_tx_len);
-
-           channel_info[minor].tx_characters += channel_info[minor].cur_tx_len;
-#else
-           rtems_termios_dequeue_characters((void *)ttyp[minor], (int)1);
-
-           channel_info[minor].tx_characters++;
-#endif
-      }
+      #ifndef SINGLE_CHAR_MODE
+        rtems_termios_dequeue_characters(
+           (void *)ttyp[minor], channel_info[minor].cur_tx_len);
+        channel_info[minor].tx_characters += channel_info[minor].cur_tx_len;
+      #else
+        rtems_termios_dequeue_characters((void *)ttyp[minor], (int)1);
+        channel_info[minor].tx_characters++;
+      #endif
     }
+  }
 
-  if(isr & ISR_ERROR)
-    {
-
+  if(isr & ISR_ERROR) {
     if(isr & ISR_RB)
       channel_info[minor].breaks_detected++;
-
     if(isr & ISR_FE)
       channel_info[minor].framing_errors++;
-
     if(isr & ISR_PE)
       channel_info[minor].parity_errors++;
-
     if(isr & ISR_OE)
       channel_info[minor].overrun_errors++;
 
@@ -400,12 +354,13 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
      *  Reset error status
      */
     psc->cr = ((4 << 4) << 8);
-
-    }
-
   }
+}
 
-void mpc5200_psc_enable(const rtems_irq_connect_data* ptr) {
+void mpc5200_psc_enable(
+  const rtems_irq_connect_data* ptr
+)
+{
   struct mpc5200_psc *psc;
   int minor =  mpc5200_psc_irqname_to_minor(ptr->name);
 
@@ -417,7 +372,10 @@ void mpc5200_psc_enable(const rtems_irq_connect_data* ptr) {
 }
 
 
-void mpc5200_psc_disable(const rtems_irq_connect_data* ptr) {
+void mpc5200_psc_disable(
+  const rtems_irq_connect_data* ptr
+)
+{
   struct mpc5200_psc *psc;
   int minor =  mpc5200_psc_irqname_to_minor(ptr->name);
 
@@ -428,8 +386,10 @@ void mpc5200_psc_disable(const rtems_irq_connect_data* ptr) {
   }
 }
 
-
-int mpc5200_psc_isOn(const rtems_irq_connect_data* ptr) {
+int mpc5200_psc_isOn(
+  const rtems_irq_connect_data* ptr
+)
+{
   struct mpc5200_psc *psc;
   int minor =  mpc5200_psc_irqname_to_minor(ptr->name);
 
@@ -437,16 +397,17 @@ int mpc5200_psc_isOn(const rtems_irq_connect_data* ptr) {
     psc = (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
     return ((psc->isr_imr & IMR_RX_RDY_FULL) & (psc->isr_imr & IMR_TX_RDY));
   }
-  else {
-    return FALSE;
-  }
+  return FALSE;
 }
 
 
 static rtems_irq_connect_data consoleIrqData;
 #endif
 
-void mpc5200_uart_psc_initialize(int minor) {
+void mpc5200_uart_psc_initialize(
+  int minor
+)
+{
   uint32_t baud_divider;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
@@ -454,14 +415,13 @@ void mpc5200_uart_psc_initialize(int minor) {
   /*
    * Check that minor number is valid
    */
-  if((minor < PSC1_MINOR) || (minor >= (PSC1_MINOR + NUM_PORTS)))
+  if ((minor < PSC1_MINOR) || (minor >= (PSC1_MINOR + NUM_PORTS)))
     return;
 
   /*
    * Clear per channel info
    */
   memset((void *)&channel_info[minor], 0, sizeof(struct per_channel_info));
-
 
   /*
    * Reset receiver and transmitter
@@ -536,13 +496,10 @@ void mpc5200_uart_psc_initialize(int minor) {
   /*
    * Install rtems irq handler
    */
-  if(!BSP_install_rtems_irq_handler (&consoleIrqData))
-    {
-
+  if (!BSP_install_rtems_irq_handler (&consoleIrqData)) {
     printk("Unable to connect PSC Irq handler\n");
     rtems_fatal_error_occurred(1);
-
-    }
+  }
 #endif
 
   /*
@@ -571,35 +528,37 @@ void mpc5200_uart_psc_initialize(int minor) {
    * Enable transmitter
    */
   psc->cr = ((1 << 2) << 8);
+}
 
-  }
 
-
-int mpc5200_uart_pollRead(int minor)
-  {
+int mpc5200_uart_pollRead(
+  int minor
+)
+{
   unsigned char c;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
-  if(psc->sr_csr & (1 << 8))
+  if (psc->sr_csr & (1 << 8))
      c = (psc->rb_tb >> 24);
-      else
-        return -1;
+  else
+     return -1;
 
   return c;
+}
 
-  }
 
-
-int mpc5200_uart_pollWrite(int minor, const char *buf, int len)
-  {
+int mpc5200_uart_pollWrite(
+  int minor,
+  const char *buf,
+  int len
+)
+{
   const char *tmp_buf = buf;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
-  while(len--)
-    {
-
+  while(len--) {
     while(!(psc->sr_csr & (1 << 11)))
       continue;
 
@@ -609,15 +568,18 @@ int mpc5200_uart_pollWrite(int minor, const char *buf, int len)
 
     tmp_buf++;
 
-    }
-
+  }
   return 0;
 
-  }
+}
 
 
-int mpc5200_uart_write(int minor, const char *buf, int len)
-  {
+int mpc5200_uart_write(
+  int         minor,
+  const char *buf,
+  int len
+)
+{
   int frame_len = len;
   const char *frame_buf = buf;
   struct mpc5200_psc *psc =
@@ -637,7 +599,7 @@ int mpc5200_uart_write(int minor, const char *buf, int len)
 
  /*rtems_cache_flush_multiple_data_lines( (void *)frame_buf, frame_len);*/
 
-  while(frame_len--)
+  while (frame_len--)
     /* perform byte write to avoid extra NUL characters */
     (* (volatile char *)&(psc->rb_tb)) = *frame_buf++;
 
@@ -647,13 +609,14 @@ int mpc5200_uart_write(int minor, const char *buf, int len)
   psc->isr_imr = channel_info[minor].shadow_imr |= IMR_TX_RDY;
 
   return 0;
-
-  }
+}
 
 /*
  *  Print functions prototyped in bspIo.h
  */
-static void A_BSP_output_char( char c )
+static void A_BSP_output_char(
+  char c
+)
 {
   char cr = '\r';
 
@@ -682,7 +645,6 @@ static void A_BSP_output_char( char c )
  *  All these functions are prototyped in rtems/c/src/lib/include/console.h.
  */
 
-
 /*
  * Initialize and register the device
  */
@@ -691,8 +653,7 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number minor,
   void *arg
 )
-  {
-
+{
   rtems_status_code status;
   rtems_device_minor_number console_minor;
   char dev_name[] = "/dev/ttyx";
@@ -705,8 +666,8 @@ rtems_device_driver console_initialize(
   rtems_termios_initialize();
 
   for (console_minor = PSC1_MINOR;
-      console_minor < PSC1_MINOR + NUM_PORTS;
-      console_minor++) {
+       console_minor < PSC1_MINOR + NUM_PORTS;
+       console_minor++) {
      /*
       * check, whether UART is available for this board
       */
@@ -718,10 +679,8 @@ rtems_device_driver console_initialize(
       dev_name[8] = '0' + tty_num;
       status = rtems_io_register_name (dev_name, major, console_minor);
 
-      if(status != RTEMS_SUCCESSFUL)
-        {
+      if (status != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred(status);
-        }
 
       tty_num++;
     }
@@ -735,9 +694,7 @@ rtems_device_driver console_initialize(
 
   console_initialized = TRUE;
   return RTEMS_SUCCESSFUL;
-
-  }
-
+}
 
 /*
  * Open the device
@@ -752,8 +709,7 @@ rtems_device_driver console_open(
   rtems_status_code sc;
 
 #ifdef UARTS_USE_TERMIOS_INT
-  static const rtems_termios_callbacks intrCallbacks =
-    {
+  static const rtems_termios_callbacks intrCallbacks = {
     NULL,                           /* firstOpen */
     NULL,                           /* lastClose */
     NULL,                           /* pollRead */
@@ -762,10 +718,9 @@ rtems_device_driver console_open(
     NULL,
     NULL,
     1                               /* outputUsesInterrupts */
-    };
+  };
 #else
-  static const rtems_termios_callbacks pollCallbacks =
-    {
+  static const rtems_termios_callbacks pollCallbacks = {
     NULL,                           /* firstOpen */
     NULL,                           /* lastClose */
     mpc5200_uart_pollRead,          /* pollRead */
@@ -774,7 +729,7 @@ rtems_device_driver console_open(
     NULL,
     NULL,
     0                               /* output don't use Interrupts */
-    };
+  };
 #endif
 
   if(minor > NUM_PORTS - 1)
@@ -799,62 +754,61 @@ rtems_device_driver console_open(
 /*
  * Close the device
  */
-rtems_device_driver console_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
-  {
-
+rtems_device_driver console_close(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
   ttyp[minor] = NULL; /* mark for int handler: tty no longer open */
 
   return rtems_termios_close( arg );
-  return 0;
-
-  }
+}
 
 
 /*
  * Read from the device
  */
-rtems_device_driver console_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
-  {
-
+rtems_device_driver console_read(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
   if(minor > NUM_PORTS-1)
     return RTEMS_INVALID_NUMBER;
 
   return rtems_termios_read(arg);
-
-  return 0;
-
-  }
-
+}
 
 /*
  * Write to the device
  */
-rtems_device_driver console_write(rtems_device_major_number major,rtems_device_minor_number minor,void *arg)
-  {
-
-  if( minor > NUM_PORTS-1 )
+rtems_device_driver console_write(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+  if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
-
   return rtems_termios_write(arg);
-
-  return 0;
-  }
-
+}
 
 /*
  * Handle ioctl request.
  */
-rtems_device_driver console_control(rtems_device_major_number major,rtems_device_minor_number minor,void *arg)
-  {
-
+rtems_device_driver console_control(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
   return rtems_termios_ioctl(arg);
-
-  return 0;
-
-  }
+}
