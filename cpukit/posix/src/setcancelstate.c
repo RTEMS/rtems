@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,7 +35,8 @@ int pthread_setcancelstate(
   int *oldstate
 )
 {
-  POSIX_API_Control                 *thread_support;
+  POSIX_API_Control *thread_support;
+  boolean            cancel = FALSE;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
@@ -61,8 +62,10 @@ int pthread_setcancelstate(
     if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
          thread_support->cancelation_requested )
-      _POSIX_Threads_cancel_run( _Thread_Executing );
-  _Thread_Enable_dispatch();
+      cancel = TRUE;
 
+ _Thread_Enable_dispatch();
+ if ( cancel )
+   _POSIX_Thread_Exit( _Thread_Executing, PTHREAD_CANCELED );
   return 0;
 }

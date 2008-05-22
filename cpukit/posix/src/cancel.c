@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,9 +34,10 @@ int pthread_cancel(
   pthread_t  thread
 )
 {
-  Thread_Control                    *the_thread;
-  POSIX_API_Control                 *thread_support;
-  Objects_Locations                  location;
+  Thread_Control     *the_thread;
+  POSIX_API_Control  *thread_support;
+  Objects_Locations   location;
+  boolean             cancel = FALSE;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
@@ -54,11 +55,12 @@ int pthread_cancel(
       thread_support->cancelation_requested = 1;
 
       if (thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
-          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS) {
-        _POSIX_Threads_cancel_run( the_thread );
-      }
+          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS)
+        cancel = TRUE;
 
       _Thread_Enable_dispatch();
+      if ( cancel )
+        _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

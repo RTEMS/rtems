@@ -22,11 +22,7 @@ void _Objects_Close(
   Objects_Control      *the_object
 )
 {
-  _Objects_Set_local_object(
-    information,
-    _Objects_Get_index( the_object->id ),
-    NULL
-  );
+  _Objects_Invalidate_Id( information, the_object );
 
   _Objects_Namespace_remove( information, the_object );
 }

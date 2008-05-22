@@ -1,5 +1,18 @@
 2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/task.h, itron/src/del_tsk.c,
+	itron/src/exd_tsk.c, itron/src/task.c,
+	posix/include/rtems/posix/threadsup.h, posix/src/cancel.c,
+	posix/src/cancelrun.c, posix/src/pthread.c, posix/src/pthreadexit.c,
+	posix/src/setcancelstate.c, posix/src/setcanceltype.c,
+	posix/src/testcancel.c, rtems/src/taskdelete.c,
+	score/inline/rtems/score/object.inl, score/src/objectclose.c,
+	score/src/threadclose.c: Make all task delete/exit/cancel routines
+	follow the same critical section pattern. Also ensure that POSIX
+	cancelation routines are run at thread exit.
+
+2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/termios_baud2index.c,
 	libcsupport/src/termios_baud2num.c,
 	libcsupport/src/termios_num2baud.c,

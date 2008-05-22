@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,8 @@
 
 void pthread_testcancel( void )
 {
-  POSIX_API_Control                 *thread_support;
+  POSIX_API_Control *thread_support;
+  boolean            cancel = FALSE;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
@@ -48,6 +49,9 @@ void pthread_testcancel( void )
   _Thread_Disable_dispatch();
     if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelation_requested )
-      _POSIX_Threads_cancel_run( _Thread_Executing );
+      cancel = TRUE;
   _Thread_Enable_dispatch();
+
+  if ( cancel )
+    _POSIX_Thread_Exit( _Thread_Executing, PTHREAD_CANCELED );
 }

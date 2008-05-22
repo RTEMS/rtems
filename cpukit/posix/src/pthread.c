@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -218,13 +218,16 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   /*
    *  Run the POSIX cancellation handlers
    */
+  _POSIX_Threads_cancel_run( deleted );
 
+  /*
+   *  Run all the key destructors
+   */
   _POSIX_Keys_Run_destructors( deleted );
 
   /*
    *  Wakeup all the tasks which joined with this one
    */
-
   value_ptr = (void **) deleted->Wait.return_argument;
 
   while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )

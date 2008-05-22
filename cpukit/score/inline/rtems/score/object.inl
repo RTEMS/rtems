@@ -228,6 +228,32 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
 }
 
 /**
+ *  This function sets the pointer to the local_table object
+ *  referenced by the index to a NULL so the object Id is invalid
+ *  after this call.
+ *
+ *  @param[in] information points to an Object Information Table
+ *  @param[in] the_object is the local object pointer
+ *
+ *  @note This routine is ONLY to be called in places where the
+ *        index portion of the Id is known to be good.  This is
+ *        OK since it is normally called from object create/init
+ *        or delete/destroy operations.
+ */
+
+RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
+  Objects_Information  *information,
+  Objects_Control      *the_object
+)
+{
+  _Objects_Set_local_object(
+    information,
+    _Objects_Get_index( the_object->id ),
+    NULL
+  );
+}
+
+/**
  *  This function places the_object control pointer and object name
  *  in the Local Pointer and Local Name Tables, respectively.
  *

@@ -76,15 +76,6 @@ void _ITRON_Task_Manager_initialization(
 );
 
 /*
- *
- *  _ITRON_Delete_task
- */
-
-ER _ITRON_Delete_task(
-  Thread_Control *the_thread
-);
-
-/*
  * Return a status code and enable dispatching
  */
 

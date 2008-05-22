@@ -20,6 +20,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/itron/task.h>
@@ -32,15 +33,18 @@ void exd_tsk( void )
 {
   Objects_Information     *the_information;
 
+  _RTEMS_Lock_allocator();
   _Thread_Disable_dispatch();
 
-  the_information = _Objects_Get_information_id( _Thread_Executing->Object.id );
+    the_information = _Objects_Get_information_id(_Thread_Executing->Object.id);
 
-  /* This should never happen if _Thread_Get() works right */
-  assert( the_information );
+    /* This should never happen if _Thread_Get() works right */
+    assert( the_information );
 
-  _Thread_Set_state( _Thread_Executing, STATES_DORMANT );
-  _ITRON_Delete_task( _Thread_Executing );
+    _Thread_Close( the_information, _Thread_Executing );
 
+    _ITRON_Task_Free( _Thread_Executing );
+
+  _RTEMS_Unlock_allocator();
   _Thread_Enable_dispatch();
 }

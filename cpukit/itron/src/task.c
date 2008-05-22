@@ -19,6 +19,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/itron/task.h>
@@ -82,29 +83,6 @@ void _ITRON_Task_Initialize_user_tasks( void )
   extern void (*_ITRON_Initialize_user_tasks_p)(void);
   if ( _ITRON_Initialize_user_tasks_p )
     (*_ITRON_Initialize_user_tasks_p)();
-}
-
-/*PAGE
- *
- *  _ITRON_Delete_task
- */
-
-ER _ITRON_Delete_task(
-  Thread_Control *the_thread
-)
-{
-  Objects_Information     *the_information;
-
-  the_information = _Objects_Get_information_id( the_thread->Object.id );
-  if ( !the_information ) {
-    return E_OBJ;             /* XXX - should never happen */
-  }
-
-  _Thread_Close( the_information, the_thread );
-
-  _ITRON_Task_Free( the_thread );
-
-  return E_OK;
 }
 
 /*

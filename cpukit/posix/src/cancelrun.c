@@ -25,12 +25,6 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/threadsup.h>
 
-/*PAGE
- *
- *  _POSIX_Threads_cancel_run
- *
- */
-
 void _POSIX_Threads_cancel_run(
   Thread_Control *the_thread
 )
@@ -57,14 +51,4 @@ void _POSIX_Threads_cancel_run(
 
     _Workspace_Free( handler );
   }
-
-  /* Now we can delete the thread */
-
-  the_thread->Wait.return_argument = PTHREAD_CANCELED;
-  _Thread_Close(
-    _Objects_Get_information_id( the_thread->Object.id ),
-    the_thread
-  );
-  _POSIX_Threads_Free( the_thread );
-
 }

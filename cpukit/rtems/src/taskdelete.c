@@ -67,30 +67,28 @@ rtems_status_code rtems_task_delete(
     case OBJECTS_LOCAL:
       the_information = _Objects_Get_information_id( the_thread->Object.id );
 
-#if defined(RTEMS_DEBUG)
-      if ( !the_information ) {
-        _Thread_Enable_dispatch();
-        return RTEMS_INVALID_ID;
-        /* This should never happen if _Thread_Get() works right */
-      }
-#endif
+      #if defined(RTEMS_DEBUG)
+	if ( !the_information ) {
+	  _Thread_Enable_dispatch();
+	  return RTEMS_INVALID_ID;
+	  /* This should never happen if _Thread_Get() works right */
+	}
+      #endif
+
+      #if defined(RTEMS_MULTIPROCESSING)
+        if ( the_thread->is_global ) {
+          _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
+          _RTEMS_tasks_MP_Send_process_packet(
+            RTEMS_TASKS_MP_ANNOUNCE_DELETE,
+            the_thread->Object.id,
+            0                                /* Not used */
+          );
+        }
+      #endif
 
       _Thread_Close( the_information, the_thread );
 
       _RTEMS_tasks_Free( the_thread );
-
-#if defined(RTEMS_MULTIPROCESSING)
-      if ( the_thread->is_global ) {
-
-        _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
-
-        _RTEMS_tasks_MP_Send_process_packet(
-          RTEMS_TASKS_MP_ANNOUNCE_DELETE,
-          the_thread->Object.id,
-          0                                /* Not used */
-        );
-      }
-#endif
 
       _RTEMS_Unlock_allocator();
       _Thread_Enable_dispatch();

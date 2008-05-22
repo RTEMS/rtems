@@ -45,6 +45,15 @@ void _Thread_Close(
   Thread_Control       *the_thread
 )
 {
+
+  /*
+   *  Now we are in a dispatching critical section again and we
+   *  can take the thread OUT of the published set.  It is invalid
+   *  to use this thread's Id after this call.  This will prevent
+   *  any other task from attempting to initiate a call on this task.
+   */
+  _Objects_Invalidate_Id( information, &the_thread->Object );
+
   /*
    *  We assume the Allocator Mutex is locked when we get here.
    *  This provides sufficient protection to let the user extensions
@@ -61,7 +70,7 @@ void _Thread_Close(
   /*
    *  Now we are in a dispatching critical section again and we
    *  can take the thread OUT of the published set.  It is invalid
-   *  to use this thread's Id after this call.
+   *  to use this thread's Id OR name after this call.
    */
   _Objects_Close( information, &the_thread->Object );
 
