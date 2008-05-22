@@ -1,3 +1,12 @@
+2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/Makefile.am: Move termios helper routines from libchip to
+	libcsupport. Add routine which makes it easy for a termios device
+	driver to inform termios of its default baud rate. This avoids
+	inconsistencies in later termios settings changes.
+	* libchip/serial/termios_baud2index.c,
+	libchip/serial/termios_baud2num.c: Removed.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* aclocal/bsp-bootcards-handles-ram-allocation.m4: New file.

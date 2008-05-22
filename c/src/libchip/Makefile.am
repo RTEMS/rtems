@@ -96,9 +96,8 @@ libserialio_a_CPPFLAGS = $(AM_CPPFLAGS)
 libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
     serial/mc68681_reg.c serial/mc68681_reg2.c serial/mc68681_reg4.c \
     serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
-    serial/z85c30_reg.c serial/serprobe.c serial/termios_baud2index.c \
-    serial/termios_baud2num.c serial/mc68681_p.h serial/ns16550_p.h \
-    serial/z85c30_p.h
+    serial/z85c30_reg.c serial/serprobe.c serial/mc68681_p.h \
+    serial/ns16550_p.h serial/z85c30_p.h
 endif
 
 EXTRA_DIST += serial/README.mc68681 serial/README.ns16550 \
