@@ -68,6 +68,10 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
+$(PROJECT_INCLUDE)/rtems/watchdogdrv.h: include/rtems/watchdogdrv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/watchdogdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/watchdogdrv.h
+
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/motorola
 	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)

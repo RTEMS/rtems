@@ -1,3 +1,9 @@
+2008-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/preinstall.am, sapi/include/confdefs.h: Add baseline
+	interface for Watchdog Driver.
+	* libcsupport/include/rtems/watchdogdrv.h: New file.
+
 2008-05-16	Till Straumann <strauman@slac.stanford.edu>
 
 	* score/src/threadchangepriority.c: Just in case the transient

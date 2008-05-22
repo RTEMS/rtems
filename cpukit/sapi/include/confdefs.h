@@ -371,6 +371,10 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #include <rtems/rtc.h>
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+#include <rtems/watchdogdrv.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 #include <rtems/devnull.h>
 #endif
@@ -399,6 +403,9 @@ rtems_driver_address_table Device_drivers[] = {
 #endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
   RTC_DRIVER_TABLE_ENTRY,
+#endif
+#ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+  WATCHDOG_DRIVER_TABLE_ENTRY,
 #endif
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   DEVNULL_DRIVER_TABLE_ENTRY,
