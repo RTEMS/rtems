@@ -5,7 +5,7 @@
 /*
  *  RTEMS termios device support internal data structures
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef	TERMIOSTYPES_H
-#define	TERMIOSTYPES_H
+#ifndef  __TERMIOSTYPES_H
+#define  __TERMIOSTYPES_H
 
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -38,97 +38,99 @@ struct ttywakeup {
  */
 struct rtems_termios_rawbuf {
   char *theBuf;
-  volatile unsigned int	Head;
-  volatile unsigned int	Tail;
-  volatile unsigned int	Size;
-  rtems_id		Semaphore;
+  volatile unsigned int  Head;
+  volatile unsigned int  Tail;
+  volatile unsigned int  Size;
+  rtems_id    Semaphore;
 };
 /*
  * Variables associated with each termios instance.
  * One structure for each hardware I/O device.
  */
 struct rtems_termios_tty {
-	/*
-	 * Linked-list of active TERMIOS devices
-	 */
-	struct rtems_termios_tty	*forw;
-	struct rtems_termios_tty	*back;
+  /*
+   * Linked-list of active TERMIOS devices
+   */
+  struct rtems_termios_tty  *forw;
+  struct rtems_termios_tty  *back;
 
-	/*
-	 * How many times has this device been opened
-	 */
-	int		refcount;
+  /*
+   * How many times has this device been opened
+   */
+  int    refcount;
 
-	/*
-	 * This device
-	 */
-	rtems_device_major_number	major;
-	rtems_device_major_number	minor;
+  /*
+   * This device
+   */
+  rtems_device_major_number  major;
+  rtems_device_major_number  minor;
 
-	/*
-	 * Mutual-exclusion semaphores
-	 */
-	rtems_id	isem;
-	rtems_id	osem;
+  /*
+   * Mutual-exclusion semaphores
+   */
+  rtems_id  isem;
+  rtems_id  osem;
 
-	/*
-	 * The canonical (cooked) character buffer
-	 */
-	char		*cbuf;
-	int		ccount;
-	int		cindex;
+  /*
+   * The canonical (cooked) character buffer
+   */
+  char    *cbuf;
+  int    ccount;
+  int    cindex;
 
-	/*
-	 * Keep track of cursor (printhead) position
-	 */
-	int		column;
-	int		read_start_column;
+  /*
+   * Keep track of cursor (printhead) position
+   */
+  int    column;
+  int    read_start_column;
 
-	/*
-	 * The ioctl settings
-	 */
-	struct termios	termios;
-	rtems_interval	vtimeTicks;
+  /*
+   * The ioctl settings
+   */
+  struct termios  termios;
+  rtems_interval  vtimeTicks;
 
-	/*
-	 * Raw input character buffer
-	 */
-        struct rtems_termios_rawbuf rawInBuf;
-	uint32_t  	rawInBufSemaphoreOptions;
-	rtems_interval		rawInBufSemaphoreTimeout;
-	rtems_interval		rawInBufSemaphoreFirstTimeout;
-	unsigned int		rawInBufDropped;	/* Statistics */
+  /*
+   * Raw input character buffer
+   */
+  struct rtems_termios_rawbuf rawInBuf;
+  uint32_t                    rawInBufSemaphoreOptions;
+  rtems_interval              rawInBufSemaphoreTimeout;
+  rtems_interval              rawInBufSemaphoreFirstTimeout;
+  unsigned int                rawInBufDropped;  /* Statistics */
 
-	/*
-	 * Raw output character buffer
-	 */
-        struct rtems_termios_rawbuf rawOutBuf;
-        int  t_dqlen; /* count of characters dequeued from device */
-	enum {rob_idle, rob_busy, rob_wait }	rawOutBufState;
+  /*
+   * Raw output character buffer
+   */
+  struct rtems_termios_rawbuf rawOutBuf;
+  int  t_dqlen; /* count of characters dequeued from device */
+  enum {rob_idle, rob_busy, rob_wait }  rawOutBufState;
 
-	/*
-	 * Callbacks to device-specific routines
-	 */
-	rtems_termios_callbacks	device;
-        volatile unsigned int   flow_ctrl;
-        unsigned int            lowwater,highwater;
+  /*
+   * Callbacks to device-specific routines
+   */
+  rtems_termios_callbacks  device;
+  volatile unsigned int    flow_ctrl;
+  unsigned int             lowwater,highwater;
 
-	/*
-	 * I/O task IDs (for task-driven drivers)
-	 */
-        rtems_id                rxTaskId;
-        rtems_id                txTaskId;
-        /*
-	 * line discipline related stuff
-	 */
-        int t_line;   /* id of line discipline                       */
-        void *t_sc;   /* hook for discipline-specific data structure */
-        /*
-	 * Wakeup callback variables
-	 */
-	struct ttywakeup tty_snd;
-	struct ttywakeup tty_rcv;
-	int              tty_rcvwakeup;
+  /*
+   * I/O task IDs (for task-driven drivers)
+   */
+  rtems_id                rxTaskId;
+  rtems_id                txTaskId;
+
+  /*
+   * line discipline related stuff
+   */
+  int t_line;   /* id of line discipline                       */
+  void *t_sc;   /* hook for discipline-specific data structure */
+
+  /*
+   * Wakeup callback variables
+   */
+  struct ttywakeup tty_snd;
+  struct ttywakeup tty_rcv;
+  int              tty_rcvwakeup;
 };
 
 struct rtems_termios_linesw {
@@ -150,32 +152,53 @@ struct rtems_termios_linesw {
 #define TERMIOS_IRQ_DRIVEN  1
 #define TERMIOS_TASK_DRIVEN 2
 
-
 /*
  * FIXME: this should move to termios.h!
  */
 void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty);
+
 /*
  * FIXME: this should move to termios.h!
  * put a string to output ring buffer
  */
-void rtems_termios_puts (const void *buf,
-			 int len,
-			 struct rtems_termios_tty *tty);
+void rtems_termios_puts (
+  const void               *buf,
+  int                       len,
+  struct rtems_termios_tty *tty
+);
+
 /*
  * global hooks for line disciplines
  */
 extern struct rtems_termios_linesw rtems_termios_linesw[];
-extern int rtems_termios_nlinesw;
+extern int   rtems_termios_nlinesw;
 
-#define	TTYDISC		0		/* termios tty line discipline */
-#define	TABLDISC	3		/* tablet discipline */
-#define	SLIPDISC	4		/* serial IP discipline */
-#define	PPPDISC		5		/* PPP discipline */
-#define MAXLDISC        8
+#define TTYDISC   0    /* termios tty line discipline */
+#define TABLDISC  3    /* tablet discipline */
+#define SLIPDISC  4    /* serial IP discipline */
+#define PPPDISC   5    /* PPP discipline */
+#define MAXLDISC  8
+
+/* convert xxx integer to equivalent Bxxx constant */
+int  termios_number_to_baud(int baud);
+/* convert Bxxx constant to xxx integer */
+int  termios_baud_to_number(int termios_baud);
+/* convert Bxxx constant to index */
+int  termios_baud_to_index(int termios_baud);
+
+/*
+ *  This method is used by a driver to tell termios its
+ *  initial baud rate.  This is especially important when
+ *  the device driver does not set the baud to the default
+ *  of B9600.
+ */
+int  rtems_termios_set_initial_baud(
+  struct rtems_termios_tty *ttyp,
+  int                       baud
+);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	/* TERMIOSTYPES_H */
+#endif  /* TERMIOSTYPES_H */

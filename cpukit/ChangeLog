@@ -1,3 +1,11 @@
+2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/preinstall.am,
+	libcsupport/include/rtems/termiostypes.h: Move termios helper
+	routines from libchip to libcsupport. Add routine which makes it easy
+	for a termios device driver to inform termios of its default baud
+	rate. This avoids inconsistencies in later termios settings changes.
+
 2008-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libcsupport/include/rtems/watchdogdrv.h: Finish writing comments.
