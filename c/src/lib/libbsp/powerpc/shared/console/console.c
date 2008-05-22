@@ -286,7 +286,6 @@ rtems_device_driver console_control(
   rtems_device_minor_number minor,
   void                      *arg
 )
-)
 {
 /* does the BSP support break callbacks ? */
 #if defined(BIOCSETBREAKCB) && defined(BIOCGETBREAKCB)
