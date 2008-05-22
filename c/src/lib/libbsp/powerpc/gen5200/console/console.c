@@ -58,7 +58,7 @@
 /*   Saskatoon, Saskatchewan, CANADA                                   */
 /*   eric@skatter.usask.ca                                             */
 /*                                                                     */
-/*   COPYRIGHT (c) 1989-1998.                                          */
+/*   COPYRIGHT (c) 1989-2008.                                          */
 /*   On-Line Applications Research Corporation (OAR).                  */
 /*                                                                     */
 /*   Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>     */
@@ -103,6 +103,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <string.h>
+#include <rtems/termiostypes.h>
 
 
 #define NUM_PORTS       MPC5200_PSC_NO
@@ -185,7 +186,7 @@ int mpc5200_psc_setAttributes(int minor, const struct termios *t)
   /* Baud rate */
   switch(t->c_cflag & CBAUD)
     {
-	default:      baud = -1;      break;
+    default:      baud = -1;      break;
     case B50:     baud = 50;      break;
     case B75:     baud = 75;      break;
     case B110:    baud = 110;     break;
@@ -211,8 +212,8 @@ int mpc5200_psc_setAttributes(int minor, const struct termios *t)
     {
 
    /*
-	* Calculate baud rate
-	* round divider to nearest!
+    * Calculate baud rate
+    * round divider to nearest!
     */
     baud = (IPB_CLOCK + baud *16) / (baud * 32);
 
@@ -240,9 +241,9 @@ int mpc5200_psc_setAttributes(int minor, const struct termios *t)
   else
     {
 
-	if(t->c_cflag & CSTOPB)
-	  cstopb = 0x0F;           /* Two stop bits */
-	else
+    if(t->c_cflag & CSTOPB)
+      cstopb = 0x0F;           /* Two stop bits */
+    else
       cstopb = 0x07;           /* One stop bit */
 
     }
@@ -338,13 +339,14 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
 #endif
 
      /*
-	  * get the character
+      * get the character
       */
       c = (psc->rb_tb >> 24);
 
       if (ttyp[minor] != NULL) {
-	nb_overflow = rtems_termios_enqueue_raw_characters((void *)ttyp[minor], (char *)&c, (int)1);
-	channel_info[minor].rx_characters++;
+        nb_overflow = rtems_termios_enqueue_raw_characters(
+           (void *)ttyp[minor], (char *)&c, (int)1);
+        channel_info[minor].rx_characters++;
       }
 
 #ifndef SINGLE_CHAR_MODE
@@ -362,11 +364,11 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
     channel_info[minor].tx_interrupts++;
 
     /*
-  	 * mask interrupt
-  	 */
-  	psc->isr_imr = channel_info[minor].shadow_imr &= ~(IMR_TX_RDY);
+     * mask interrupt
+     */
+    psc->isr_imr = channel_info[minor].shadow_imr &= ~(IMR_TX_RDY);
 
-	if (ttyp[minor] != NULL) {
+    if (ttyp[minor] != NULL) {
 #ifndef SINGLE_CHAR_MODE
            rtems_termios_dequeue_characters((void *)ttyp[minor], channel_info[minor].cur_tx_len);
 
@@ -376,27 +378,27 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
 
            channel_info[minor].tx_characters++;
 #endif
-	}
+      }
     }
 
   if(isr & ISR_ERROR)
     {
 
     if(isr & ISR_RB)
-	  channel_info[minor].breaks_detected++;
+      channel_info[minor].breaks_detected++;
 
-	if(isr & ISR_FE)
-	  channel_info[minor].framing_errors++;
+    if(isr & ISR_FE)
+      channel_info[minor].framing_errors++;
 
-	if(isr & ISR_PE)
-	  channel_info[minor].parity_errors++;
+    if(isr & ISR_PE)
+      channel_info[minor].parity_errors++;
 
-	if(isr & ISR_OE)
-	  channel_info[minor].overrun_errors++;
+    if(isr & ISR_OE)
+      channel_info[minor].overrun_errors++;
 
-	/*
-	*  Reset error status
-	*/
+    /*
+     *  Reset error status
+     */
     psc->cr = ((4 << 4) << 8);
 
     }
@@ -497,7 +499,8 @@ void mpc5200_uart_psc_initialize(int minor) {
    */
   psc->tfalarm = 1;
 
-  baud_divider = (IPB_CLOCK + GEN5200_CONSOLE_BAUD *16) / (GEN5200_CONSOLE_BAUD * 32);
+  baud_divider =
+    (IPB_CLOCK + GEN5200_CONSOLE_BAUD *16) / (GEN5200_CONSOLE_BAUD * 32);
 
   /*
    * Set upper timer counter
@@ -598,13 +601,13 @@ int mpc5200_uart_pollWrite(int minor, const char *buf, int len)
     {
 
     while(!(psc->sr_csr & (1 << 11)))
-	  continue;
+      continue;
 
-	/*rtems_cache_flush_multiple_data_lines( (void *)buf, 1);*/
+    /*rtems_cache_flush_multiple_data_lines( (void *)buf, 1);*/
 
-	psc->rb_tb = (*tmp_buf << 24);
+    psc->rb_tb = (*tmp_buf << 24);
 
-	tmp_buf++;
+    tmp_buf++;
 
     }
 
@@ -683,7 +686,11 @@ static void A_BSP_output_char( char c )
 /*
  * Initialize and register the device
  */
-rtems_device_driver console_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+rtems_device_driver console_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
   {
 
   rtems_status_code status;
@@ -713,10 +720,10 @@ rtems_device_driver console_initialize(rtems_device_major_number major, rtems_de
 
       if(status != RTEMS_SUCCESSFUL)
         {
-	    rtems_fatal_error_occurred(status);
+        rtems_fatal_error_occurred(status);
         }
 
-	  tty_num++;
+      tty_num++;
     }
   }
 
@@ -735,36 +742,38 @@ rtems_device_driver console_initialize(rtems_device_major_number major, rtems_de
 /*
  * Open the device
  */
-rtems_device_driver console_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
-  {
-#ifdef UARTS_USE_TERMIOS_INT
+rtems_device_driver console_open(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
   rtems_libio_open_close_args_t *args = arg;
-#endif
   rtems_status_code sc;
 
 #ifdef UARTS_USE_TERMIOS_INT
   static const rtems_termios_callbacks intrCallbacks =
     {
-    NULL,                       	/* firstOpen */
-    NULL,                       	/* lastClose */
+    NULL,                           /* firstOpen */
+    NULL,                           /* lastClose */
     NULL,                           /* pollRead */
-    mpc5200_uart_write,       	    /* write */
+    mpc5200_uart_write,             /* write */
     mpc5200_uart_setAttributes,     /* setAttributes */
     NULL,
     NULL,
-    1                           	/* outputUsesInterrupts */
+    1                               /* outputUsesInterrupts */
     };
 #else
   static const rtems_termios_callbacks pollCallbacks =
     {
-    NULL,                       	/* firstOpen */
-    NULL,                       	/* lastClose */
-    mpc5200_uart_pollRead,      	/* pollRead */
+    NULL,                           /* firstOpen */
+    NULL,                           /* lastClose */
+    mpc5200_uart_pollRead,          /* pollRead */
     mpc5200_uart_pollWrite,         /* write */
     mpc5200_uart_setAttributes,     /* setAttributes */
     NULL,
     NULL,
-    0                           	/* output don't use Interrupts */
+    0                               /* output don't use Interrupts */
     };
 #endif
 
@@ -773,14 +782,18 @@ rtems_device_driver console_open(rtems_device_major_number major, rtems_device_m
 
 #ifdef UARTS_USE_TERMIOS_INT
   sc = rtems_termios_open( major, minor, arg, &intrCallbacks );
-  ttyp[minor] = args->iop->data1;   /* Keep cookie returned by termios_open */
 #else                               /* RTEMS polled I/O with termios */
   sc = rtems_termios_open( major, minor, arg, &pollCallbacks );
 #endif
 
+  ttyp[minor] = args->iop->data1;   /* Keep cookie returned by termios_open */
+
+  if ( !sc )
+    rtems_termios_set_initial_baud( ttyp[minor], GEN5200_CONSOLE_BAUD );
+
   return sc;
 
-  }
+}
 
 
 /*

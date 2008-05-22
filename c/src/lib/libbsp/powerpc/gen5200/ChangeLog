@@ -1,3 +1,10 @@
+2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console.c: Properly inform termios of our initial baud rate.
+	If it is not the default, this causes problems when an application
+	changes any termios attributes since termios thinks our baud rate is
+	one thing when in fact, it is another.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization
