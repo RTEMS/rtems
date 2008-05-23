@@ -83,33 +83,12 @@ smc1BRGC (int baud)
 static int
 smc1SetAttributes (int minor, const struct termios *t)
 {
-	int baud;
+  int baud;
 
-	switch (t->c_cflag & CBAUD) {
-	default:	baud = -1;	break;
-	case B50:	baud = 50;	break;
-	case B75:	baud = 75;	break;
-	case B110:	baud = 110;	break;
-	case B134:	baud = 134;	break;
-	case B150:	baud = 150;	break;
-	case B200:	baud = 200;	break;
-	case B300:	baud = 300;	break;
-	case B600:	baud = 600;	break;
-	case B1200:	baud = 1200;	break;
-	case B1800:	baud = 1800;	break;
-	case B2400:	baud = 2400;	break;
-	case B4800:	baud = 4800;	break;
-	case B9600:	baud = 9600;	break;
-	case B19200:	baud = 19200;	break;
-	case B38400:	baud = 38400;	break;
-	case B57600:	baud = 57600;	break;
-	case B115200:	baud = 115200;	break;
-	case B230400:	baud = 230400;	break;
-	case B460800:	baud = 460800;	break;
-	}
-	if (baud > 0)
-		m360.brgc1 = smc1BRGC (baud);
-	return 0;
+  baud = termios_baud_to_number(t->c_cflag & CBAUD);
+  if (baud > 0)
+    m360.brgc1 = smc1BRGC (baud);
+  return 0;
 }
 
 /*

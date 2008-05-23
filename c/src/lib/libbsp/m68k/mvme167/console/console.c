@@ -815,53 +815,9 @@ int cd2401_setAttributes(
 
   /* Determine what the line parameters should be */
 
-  /* Output baud rate */
-  switch ( cfgetospeed (t) ) {
-    default:      out_baud = 9600;    break;
-    case B50:     out_baud = 50;      break;
-    case B75:     out_baud = 75;      break;
-    case B110:    out_baud = 110;     break;
-    case B134:    out_baud = 134;     break;
-    case B150:    out_baud = 150;     break;
-    case B200:    out_baud = 200;     break;
-    case B300:    out_baud = 300;     break;
-    case B600:    out_baud = 600;     break;
-    case B1200:   out_baud = 1200;    break;
-    case B1800:   out_baud = 1800;    break;
-    case B2400:   out_baud = 2400;    break;
-    case B4800:   out_baud = 4800;    break;
-    case B9600:   out_baud = 9600;    break;
-    case B19200:  out_baud = 19200;   break;
-    case B38400:  out_baud = 38400;   break;
-    case B57600:  out_baud = 57600;   break;
-    case B115200: out_baud = 115200;  break;
-    case B230400: out_baud = 230400;  break;
-    case B460800: out_baud = 460800;  break;
- }
-
-  /* Input baud rate */
-  switch ( cfgetispeed (t) ) {
-    default:      in_baud = out_baud; break;
-    case B50:     in_baud = 50;       break;
-    case B75:     in_baud = 75;       break;
-    case B110:    in_baud = 110;      break;
-    case B134:    in_baud = 134;      break;
-    case B150:    in_baud = 150;      break;
-    case B200:    in_baud = 200;      break;
-    case B300:    in_baud = 300;      break;
-    case B600:    in_baud = 600;      break;
-    case B1200:   in_baud = 1200;     break;
-    case B1800:   in_baud = 1800;     break;
-    case B2400:   in_baud = 2400;     break;
-    case B4800:   in_baud = 4800;     break;
-    case B9600:   in_baud = 9600;     break;
-    case B19200:  in_baud = 19200;    break;
-    case B38400:  in_baud = 38400;    break;
-    case B57600:  in_baud = 57600;    break;
-    case B115200: in_baud = 115200;   break;
-    case B230400: in_baud = 230400;   break;
-    case B460800: in_baud = 460800;   break;
-  }
+  /* baud rates */
+  out_baud = termios_baud_to_number(t->c_cflag & CBAUD);
+  in_baud  = termios_baud_to_number(t->c_cflag & CBAUD);
 
   /* Number of bits per char */
   csize = 0x07; /* to avoid a warning */

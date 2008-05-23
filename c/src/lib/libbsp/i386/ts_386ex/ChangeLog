@@ -1,3 +1,9 @@
+2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/console.c: Eliminate copies of switches to convert termios
+	Bxxx constants to xxx as an integer. Use the shared
+	termios_baud_to_number() routine to do the same conversion.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization

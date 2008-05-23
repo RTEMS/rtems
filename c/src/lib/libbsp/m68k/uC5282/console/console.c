@@ -76,45 +76,6 @@ struct IntUartInfoStruct
 
 struct IntUartInfoStruct IntUartInfo[MAX_UART_INFO];
 
-static int GetBaud( int baudHandle )
-{
-	int baud = 9600;
-	switch ( baudHandle )
-	{
-		case B0:
-			baud = (int)0;
-			break;
-		case B1200:
-			baud = (int)1200;
-			break;
-		case B2400:
-			baud = (int)2400;
-			break;
-		case B4800:
-			baud = (int)4800;
-			break;
-		case B9600:
-			baud = (int)9600;
-			break;
-		case B19200:
-			baud = (int)19200;
-			break;
-		case B38400:
-			baud = (int)38400;
-			break;
-		case B57600:
-			baud = (int)57600;
-			break;
-		case B115200:
-			baud = (int)115200;
-			break;
-/*		case B576000:
-			baud = (int)576000; */
-			break;
-	}
-	return ( baud );
-}
-
 /***************************************************************************
    Function : IntUartSet
 
@@ -226,7 +187,7 @@ IntUartSetAttributes(int minor, const struct termios *t)
 	if ( t != (const struct termios *)0 )
 	{
 		/* determine baud rate index */
-		baud = GetBaud( t->c_cflag & CBAUD );
+  		baud = termios_baud_to_number(t->c_cflag & CBAUD);
 
 		/* determine data bits */
 		switch ( t->c_cflag & CSIZE )
