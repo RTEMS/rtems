@@ -49,7 +49,6 @@ void bsp_pretasking_hook(void)
   uint32_t        heap_size;
   uint32_t        heap_sbrk_spared;
   extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
-  extern void     BSP_vme_config();
 
   /* make sure it's properly aligned */
   BSP_heap_start = (BSP_heap_start + CPU_ALIGNMENT - 1) & ~(CPU_ALIGNMENT-1);
@@ -71,8 +70,7 @@ void bsp_pretasking_hook(void)
   bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
 
   /* Note that VME support may be omitted also by
-   * providing a NULL BSP_vme_config routine
-   * (e.g., linker script)
+   * providing a no-op  BSP_vme_config routine
    */
 #ifndef BSP_HAS_NO_VME
   /*
@@ -86,8 +84,7 @@ void bsp_pretasking_hook(void)
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to initialize VME bridge\n");
 #endif
-  if ( BSP_vme_config )
-    BSP_vme_config();
+  BSP_vme_config();
 #endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS

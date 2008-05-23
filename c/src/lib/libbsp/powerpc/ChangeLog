@@ -1,3 +1,12 @@
+2008-05-23	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/pretaskinghook.c: removed declaration
+	of BSP_vme_config() (which is already declared in
+	<bsp/VME.h>. Removed test for NULL-ness of BSP_vme_config;
+	gcc doesn't seem to understand that the linker may 
+	define this to be NULL... Silences a compiler warning
+	(and users can always provide an empty routine).
+
 2008-05-22	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/startup/linkcmds, shared/startup/zerobss.c:
