@@ -1,3 +1,8 @@
+2008-05-22	Till Straumann <strauman@slac.stanford.edu>
+
+	* ppc403/tty_drv/tty_drv.c, ppc403/console/console405.c:
+	../ictrl/ictrl.h has gone; include ../irq/ictrl.h
+
 2008-05-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc83xx/include/mpc83xx.h: or is not a good name for any name in

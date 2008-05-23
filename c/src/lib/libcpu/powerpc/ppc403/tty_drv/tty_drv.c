@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <rtems.h>
 #include <rtems/libio.h>
-#include "../ictrl/ictrl.h"
+#include "../irq/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
 
 extern uint32_t bsp_serial_per_sec;
