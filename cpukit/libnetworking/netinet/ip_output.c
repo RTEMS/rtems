@@ -442,6 +442,7 @@ sendit:
 			ipstat.ips_odropped++;
 			goto sendorfree;
 		}
+		m->m_flags |= (m0->m_flags & M_MCAST);
 		m->m_data += max_linkhdr;
 		mhip = mtod(m, struct ip *);
 		*mhip = *ip;

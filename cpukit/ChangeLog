@@ -1,3 +1,10 @@
+2008-05-23	Till Straumann <strauman@slac.stanford.edu>
+
+	* libnetworking/netinet/ip_output.c: when fragmenting
+	multicast packets M_MCAST must be set on all fragments.
+	This was fixed in FreeBSD ip_output.c 1.82 on 1998/8/23 !
+	(see my email to rtems-users from 2008/5/15).
+
 2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* itron/include/rtems/itron/task.h, itron/src/del_tsk.c,
