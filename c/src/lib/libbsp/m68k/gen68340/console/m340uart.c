@@ -237,41 +237,6 @@ Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_Tran
  return return_value;
 }
 
-/******************************************************
-  Name: termios_baud_rates_equivalence
-  Input parameters: Termios coded speed
-  Output parameters: explicit speed
-  Description: ioctl calls return termios coded speed
-               we need to know real speed in order
-               to use the functions above
- *****************************************************/
-float termios_baud_rates_equivalence ( int speed )
-{
- switch (speed) {
-	default:	return 0;	break;
-	case B50:	return 50;	break;
-	case B75:	return 75;	break;
-	case B110:	return 110;	break;
-	case B134:	return 134;	break;
-	case B150:	return 150;	break;
-	case B200:	return 200;	break;
-	case B300:	return 300;	break;
-	case B600:	return 600;	break;
-	case B1200:	return 1200;	break;
-	case B1800:	return 1800;	break;
-	case B2400:	return 2400;	break;
-	case B4800:	return 4800;	break;
-	case B9600:	return 9600;	break;
-	case B19200:	return 19200;	break;
-	case B38400:	return 38400;	break;
-	case B57600:	return 57600;	break;
-	case B115200:	return 115200;	break;
-	case B230400:	return 230400;	break;
-	case B460800:	return 460800;	break;
- }
- return 0;
-}
-
 /****************************************************************************************************/
 
 /*
