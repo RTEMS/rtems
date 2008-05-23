@@ -60,7 +60,7 @@
  * BSP-specific configuration routine; sets up
  * VME windows and installs the VME interrupt manager.
  */
-void BSP_vme_config() __attribute__((weak));
+void BSP_vme_config();
 
 /* translate through host bridge and vme master window of vme bridge */
 int

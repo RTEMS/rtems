@@ -1,3 +1,8 @@
+2008-05-23	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/VME.h: removed 'weak' attribute from
+	declaration of BSP_vme_config().
+
 2008-05-22	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeUniverse.c: fixed compiler warning;
