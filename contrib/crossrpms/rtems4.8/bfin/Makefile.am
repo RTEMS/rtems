@@ -10,9 +10,9 @@ BINUTILS_RPMREL = 3%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.2.3
+GCC_VERS = 4.2.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 29%{?dist}
+GCC_RPMREL = 30%{?dist}
 NEWLIB_VERS = 1.15.0
 include ../gcc.am
 
