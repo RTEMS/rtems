@@ -10,6 +10,10 @@ Patch0:		gcc-core-4.2.2-rtems4.8-20071127.diff
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.2.3-rtems4.8-20080508.diff
 %endif
+%if "%{gcc_version}" == "4.2.4"
+Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		gcc-core-4.2.4-rtems4.8-20080526.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
 %if %build_cxx
