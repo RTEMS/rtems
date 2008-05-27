@@ -123,7 +123,7 @@ rtems_shell_getchar (FILE *in)
   struct translation_table *translation = 0;
   for (;;)
   {
-    char c = fgetc (in);
+    int c = fgetc (in);
     if (c == EOF)
       return EOF;
     if (c == 27)
