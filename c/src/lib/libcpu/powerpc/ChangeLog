@@ -1,3 +1,10 @@
+<<<<<<< ChangeLog
+2008-05-23	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c:
+	disabled debugging output, reduced rx interrupt coalescing
+
+=======
 2008-05-22	Till Straumann <strauman@slac.stanford.edu>
 
 	* ppc403/tty_drv/tty_drv.c, ppc403/console/console405.c:
@@ -8,6 +15,7 @@
 	* mpc83xx/include/mpc83xx.h: or is not a good name for any name in
 	C/C++. See iso646.h for the reason.
 
+>>>>>>> 1.282
 2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* mpc83xx/i2c/mpc83xx_i2cdrv.c:

@@ -256,9 +256,13 @@ static void mpc83xx_tsec_hwinit
   /*
    * init receive interrupt coalescing register
    */
+#if 0
   reg_ptr->rxic = (M83xx_TSEC_RXIC_ICEN
 		   | M83xx_TSEC_RXIC_ICFCT(2)
 		   | M83xx_TSEC_RXIC_ICTT(32));
+#else
+  reg_ptr->rxic = 0;
+#endif
   /*
    * init MACCFG1 register
    */
@@ -1546,7 +1550,7 @@ static void mpc83xx_tsec_stats
     rtems_ifmedia2str(media,NULL,0);
     printf ("\n");
   }
-#if 1 /* print all PHY registers */
+#if 0 /* print all PHY registers */
   {
     int reg;
     uint32_t reg_val;
