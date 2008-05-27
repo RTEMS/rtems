@@ -89,7 +89,7 @@ int rtems_shell_line_editor(
 )
 {
   unsigned int extended_key;
-  char         c;
+  int          c;
   int          col;
   int          last_col;
   int          output;
@@ -796,7 +796,20 @@ rtems_boolean rtems_shell_main_loop(
         result = FALSE;
         break;
       }
-      if (input_file || !rtems_shell_login(stdin,stdout))  {
+
+      /*
+       *  By using result here, we can fall to the bottom of the
+       *  loop when the connection is dropped during login and
+       *  keep on trucking.
+       */
+      if ( input_file ) {
+        result = TRUE;
+      } else {
+        if (rtems_shell_login(stdin,stdout)) result = FALSE;
+        else                                 result = TRUE;
+      }
+
+      if (result)  {
         const char *c;
         memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
         if (!input_file) {

@@ -1,3 +1,8 @@
+2008-05-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/shell.c: Minor change so dropping connection during
+	login prompt results in connection still being available.
+
 
 2008-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
