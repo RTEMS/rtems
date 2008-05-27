@@ -117,8 +117,6 @@ struct ppp_softc {
 	rtems_id sc_pppdtask;
 };
 
-struct	ppp_softc ppp_softc[NPPP];
-
 struct	ppp_softc *pppalloc(pid_t pid);
 void	pppdealloc(struct ppp_softc *sc);
 int	pppoutput(struct ifnet *, struct mbuf *,

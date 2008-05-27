@@ -132,6 +132,8 @@
 #include <net/ppp-comp.h>
 #endif
 
+static struct	ppp_softc ppp_softc[NPPP];
+
 static int	pppsioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data);
 static void	ppp_requeue(struct ppp_softc *);
 #ifdef PPP_COMPRESS
