@@ -129,6 +129,11 @@ void vprintk(
               for ( i=len ; i<width ; i++ )
                 BSP_output_char(' ');
 
+	    /* no width option */
+	    if (width == 0) {
+		    width = len;
+	    }
+
             /* output the string */
             for ( i=0 ; i<width && *str ; str++ )
               BSP_output_char(*str);
