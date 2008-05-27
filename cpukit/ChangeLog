@@ -2,48 +2,30 @@
 2008-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/include/rtems/score/object.h,
- 	rtems/include/rtems/rtems/types.h: Added new defines OBJECTS_ID_NONE
- 	and RTEMS_ID_NONE.  No object can have this ID.
- 
+	rtems/include/rtems/rtems/types.h: Added new defines OBJECTS_ID_NONE
+	and RTEMS_ID_NONE.  No object can have this ID.
+
 2008-05-27	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
-	* include/rtems/fs.h,
-	libblock/include/rtems/diskdevs.h,
-	libblock/src/diskdevs.c,
-	libcsupport/include/rtems/libio.h,
-	libcsupport/src/base_fs.c,
-	libcsupport/src/error.c,
-	libcsupport/src/libio.c,
-	libcsupport/src/mount.c,
-	libfs/src/dosfs/fat.c,
-	libfs/src/dosfs/msdos.h,
-	libfs/src/dosfs/msdos_handlers_dir.c,
-	libfs/src/dosfs/msdos_handlers_file.c,
-	libfs/src/dosfs/msdos_init.c,
-	libfs/src/dosfs/msdos_initsupp.c,
-	libfs/src/imfs/deviceio.c,
-	libfs/src/imfs/imfs.h,
-	libfs/src/imfs/imfs_config.c,
-	libfs/src/imfs/imfs_creat.c,
-	libfs/src/imfs/imfs_getchild.c,
+	* include/rtems/fs.h, libblock/include/rtems/diskdevs.h,
+	libblock/src/diskdevs.c, libcsupport/include/rtems/libio.h,
+	libcsupport/src/base_fs.c, libcsupport/src/error.c,
+	libcsupport/src/libio.c, libcsupport/src/mount.c, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/dosfs/msdos_init.c,
+	libfs/src/dosfs/msdos_initsupp.c, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_config.c,
+	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_getchild.c,
 	libfs/src/imfs/imfs_handlers_device.c,
 	libfs/src/imfs/imfs_handlers_directory.c,
 	libfs/src/imfs/imfs_handlers_link.c,
-	libfs/src/imfs/imfs_handlers_memfile.c,
-	libfs/src/imfs/imfs_init.c,
-	libfs/src/imfs/imfs_initsupp.c,
-	libfs/src/imfs/imfs_symlink.c,
-	libfs/src/imfs/imfs_unixstub.c,
-	libfs/src/imfs/miniimfs_init.c,
-	posix/include/rtems/posix/psignal.h,
-	posix/src/psignal.c,
-	rtems/include/rtems/rtems/status.h,
-	rtems/src/semtranslatereturncode.c,
-	sapi/include/confdefs.h,
-	sapi/include/rtems/io.h,
-	sapi/src/ioregisterdriver.c,
-	sapi/src/itronapi.c,
-	sapi/src/posixapi.c:
+	libfs/src/imfs/imfs_handlers_memfile.c, libfs/src/imfs/imfs_init.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/imfs_symlink.c,
+	libfs/src/imfs/imfs_unixstub.c, libfs/src/imfs/miniimfs_init.c,
+	posix/include/rtems/posix/psignal.h, posix/src/psignal.c,
+	rtems/include/rtems/rtems/status.h, rtems/src/semtranslatereturncode.c,
+	sapi/include/confdefs.h, sapi/include/rtems/io.h,
+	sapi/src/ioregisterdriver.c, sapi/src/itronapi.c, sapi/src/posixapi.c:
 	Added const qualifier to various pointers and data tables to
 	reduce size of data area.
 	IMFS: Fixed creation of symbolic links to avoid a compiler warning.
@@ -51,8 +33,7 @@
 	
 2008-05-27	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
-	* libcsupport/include/console.h:
-	New define: CONSOLE_DEVICE_NAME.
+	* libcsupport/include/console.h: New define: CONSOLE_DEVICE_NAME.
 
 2008-05-27	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
@@ -125,7 +106,7 @@
 2008-05-13	Eric Norum: <norume@aps.anl.gov>
 
 	* cpukit/libcsupport/src/mallocinfo.c: Add locks around non-atomic
-    structure assignment.
+	structure assignment.
 
 2008-05-13	Robert S. Grimes <rsg@alum.mit.edu>
 
@@ -1724,7 +1705,7 @@
 	score/include/rtems/score/coremutex.h,
 	score/include/rtems/score/coresem.h: Restructed to move the
 	OBJECTS_LOCAL case to the top of the switch statement and
-        eliminate the fall-through return of POSIX_BOTTOM_REACHED.  These
+	eliminate the fall-through return of POSIX_BOTTOM_REACHED.  These
 	changes produced simplier assembly code and allowed for complete
 	test coverage.  Also applied some consistency to the functions
 	that translate the core status codes to POSIX status codes.
@@ -2582,7 +2563,7 @@
 	Eliminated the variables _RTEMS_tasks_User_initialization_tasks and
 	_RTEMS_tasks_Number_of_initialization_tasks because they were only
 	used in one place after initialized. It was a waste of space.
- 	* rtems/src/barrierdata.c, rtems/src/dpmem.c, rtems/src/dpmemdata.c,
+	* rtems/src/barrierdata.c, rtems/src/dpmem.c, rtems/src/dpmemdata.c,
 	rtems/src/eventdata.c, rtems/src/msgdata.c, rtems/src/partdata.c,
 	rtems/src/ratemondata.c, rtems/src/regiondata.c,
 	rtems/src/rtemstimerdata.c, rtems/src/semdata.c, rtems/src/taskdata.c,
