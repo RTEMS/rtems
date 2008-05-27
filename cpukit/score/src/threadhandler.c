@@ -130,9 +130,7 @@ void _Thread_Handler( void )
    */
   if (!doneCons) /* && (volatile void *)_init) */
   {
-    extern void _fini( void );
     _init ();
-    atexit( _fini );
   }
 #endif
 #if defined(__USE__MAIN__)

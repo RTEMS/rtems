@@ -120,8 +120,16 @@ void libc_wrapup(void)
 #include <unistd.h>
 
 #if !defined(RTEMS_UNIX)
-void _exit(int status)
+  #define EXIT_SYMBOL _exit
+#else
+  #define EXIT_SYMBOL exit
+#endif
+
+void EXIT_SYMBOL(int status)
 {
+  extern void _fini( void );
+  _fini();
+
   /*
    *  We need to do the exit processing on the global reentrancy structure.
    *  This has already been done on the per task reentrancy structure
@@ -133,14 +141,5 @@ void _exit(int status)
   for (;;) ; /* to avoid warnings */
 }
 
-#else
-
-void exit(int status)
-{
-  libc_wrapup();
-  rtems_shutdown_executive(status);
-  for (;;) ; /* to avoid warnings */
-}
-#endif
 
 #endif

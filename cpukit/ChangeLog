@@ -1,5 +1,11 @@
 2008-05-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Call
+	fini() as part of exit(). This avoids atexit() being a required
+	function.
+
+2008-05-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/shell.c: Minor change so dropping connection during
 	login prompt results in connection still being available.
 
