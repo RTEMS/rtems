@@ -24,6 +24,8 @@
 extern "C" {
 #endif
 
+#define CONSOLE_DEVICE_NAME "/dev/console"
+
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   { console_initialize, console_open, console_close, \
     console_read, console_write, console_control }
