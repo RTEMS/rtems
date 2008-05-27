@@ -37,18 +37,18 @@ typedef struct msdos_fs_info_s
                                                            * volume
                                                            * description
                                                            */
-    rtems_filesystem_file_handlers_r *directory_handlers; /*
-                                                           * a set of routines
-                                                           * that handles the
-                                                           * nodes of directory
-                                                           * type
-                                                           */
-    rtems_filesystem_file_handlers_r *file_handlers;      /*
-                                                           * a set of routines
-                                                           * that handles the
-                                                           * nodes of file
-                                                           * type
-                                                           */
+    const rtems_filesystem_file_handlers_r *directory_handlers; /*
+                                                                 * a set of routines
+                                                                 * that handles the
+                                                                 * nodes of directory
+                                                                 * type
+                                                                 */
+    const rtems_filesystem_file_handlers_r *file_handlers; /*
+                                                            * a set of routines
+                                                            * that handles the
+                                                            * nodes of file
+                                                            * type
+                                                            */
     rtems_id                          vol_sema;           /*
                                                            * semaphore
                                                            * associated with
@@ -61,10 +61,10 @@ typedef struct msdos_fs_info_s
 } msdos_fs_info_t;
 
 /* a set of routines that handle the nodes which are directories */
-extern rtems_filesystem_file_handlers_r  msdos_dir_handlers;
+extern const rtems_filesystem_file_handlers_r  msdos_dir_handlers;
 
 /* a set of routines that handle the nodes which are files */
-extern rtems_filesystem_file_handlers_r  msdos_file_handlers;
+extern const rtems_filesystem_file_handlers_r  msdos_file_handlers;
 
 /* Volume semaphore timeout value. This value can be changed to a number
  * of ticks to help debugging or if you need such a  */
@@ -231,10 +231,10 @@ int msdos_utime(
 );
 
 int msdos_initialize_support(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
-  rtems_filesystem_operations_table    *op_table,
-  rtems_filesystem_file_handlers_r     *file_handlers,
-  rtems_filesystem_file_handlers_r     *directory_handlers
+  rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
+  const rtems_filesystem_operations_table *op_table,
+  const rtems_filesystem_file_handlers_r  *file_handlers,
+  const rtems_filesystem_file_handlers_r  *directory_handlers
 );
 
 int msdos_file_open(

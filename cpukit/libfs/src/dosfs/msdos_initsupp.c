@@ -47,10 +47,10 @@
  */
 int
 msdos_initialize_support(
-    rtems_filesystem_mount_table_entry_t *temp_mt_entry,
-    rtems_filesystem_operations_table    *op_table,
-    rtems_filesystem_file_handlers_r     *file_handlers,
-    rtems_filesystem_file_handlers_r     *directory_handlers
+    rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
+    const rtems_filesystem_operations_table *op_table,
+    const rtems_filesystem_file_handlers_r  *file_handlers,
+    const rtems_filesystem_file_handlers_r  *directory_handlers
     )
 {
     int                rc = RC_OK;

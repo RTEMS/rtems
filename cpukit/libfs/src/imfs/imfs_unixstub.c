@@ -31,7 +31,7 @@
  *  IMFS file system operations table
  */
 
-rtems_filesystem_operations_table  IMFS_ops = {
+const rtems_filesystem_operations_table  IMFS_ops = {
   NULL,
   NULL,
   NULL,
@@ -54,7 +54,7 @@ rtems_filesystem_operations_table  IMFS_ops = {
  *  IMFS file system operations table
  */
 
-rtems_filesystem_operations_table  miniIMFS_ops = {
+const rtems_filesystem_operations_table  miniIMFS_ops = {
   NULL,
   NULL,
   NULL,

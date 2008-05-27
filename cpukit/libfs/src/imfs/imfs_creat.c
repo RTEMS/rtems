@@ -24,18 +24,17 @@
 #include <rtems/libio_.h>
 
 IMFS_jnode_t *IMFS_create_node(
-  rtems_filesystem_location_info_t  *parent_loc,
-  IMFS_jnode_types_t                 type,
-  char                              *name,
-  mode_t                             mode,
-  IMFS_types_union                  *info
+  rtems_filesystem_location_info_t *parent_loc,
+  IMFS_jnode_types_t                type,
+  const char                       *name,
+  mode_t                            mode,
+  const IMFS_types_union           *info
 )
 {
   IMFS_jnode_t        *node;
   struct timeval       tv;
   IMFS_jnode_t        *parent = NULL;
   IMFS_fs_info_t      *fs_info;
-  char                *sym_name;
 
   if ( parent_loc != NULL )
     parent = parent_loc->node_access;
@@ -94,9 +93,7 @@ IMFS_jnode_t *IMFS_create_node(
       break;
 
     case IMFS_SYM_LINK:
-      sym_name = calloc( 1, strlen( info->sym_link.name ) + 1 );
-      strcpy( sym_name, info->sym_link.name );
-      node->info.sym_link.name = sym_name;
+      node->info.sym_link.name = info->sym_link.name;
       break;
 
     case IMFS_DEVICE:

@@ -51,7 +51,7 @@
  *  XXX
  */
 
-itron_api_configuration_table _ITRON_Default_configuration = {
+const itron_api_configuration_table _ITRON_Default_configuration = {
   0,                             /* maximum_tasks */
   0,                             /* maximum_semaphores */
   0,                             /* maximum_eventflags */
@@ -70,7 +70,7 @@ void _ITRON_API_Initialize(
   rtems_configuration_table *configuration_table
 )
 {
-  itron_api_configuration_table *api_configuration;
+  const itron_api_configuration_table *api_configuration;
 
   /* XXX need to assert here based on size assumptions */
 

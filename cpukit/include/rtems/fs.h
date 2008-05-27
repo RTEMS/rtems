@@ -45,10 +45,10 @@ typedef struct _rtems_filesystem_operations_table
   
 struct rtems_filesystem_location_info_tt
 {
-   void                                 *node_access;
-   rtems_filesystem_file_handlers_r     *handlers;
-   rtems_filesystem_operations_table	*ops;
-   rtems_filesystem_mount_table_entry_t *mt_entry;
+   void                                    *node_access;
+   const rtems_filesystem_file_handlers_r  *handlers;
+   const rtems_filesystem_operations_table *ops;
+   rtems_filesystem_mount_table_entry_t    *mt_entry;
 };
 
 #ifdef __cplusplus

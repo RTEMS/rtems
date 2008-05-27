@@ -133,7 +133,7 @@ extern int rtems_telnetd_maximum_ptys;
 
 #ifdef CONFIGURE_INIT
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
-    rtems_filesystem_mount_table_t configuration_mount_table = {
+    const rtems_filesystem_mount_table_t configuration_mount_table = {
       #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
         &IMFS_ops,
       #else  /* using miniIMFS as base filesystem */
@@ -144,9 +144,9 @@ extern int rtems_telnetd_maximum_ptys;
       NULL
     };
 
-    rtems_filesystem_mount_table_t
+    const rtems_filesystem_mount_table_t
 	*rtems_filesystem_mount_table = &configuration_mount_table;
-    int rtems_filesystem_mount_table_size = 1;
+    const int rtems_filesystem_mount_table_size = 1;
   #endif
 #endif
 

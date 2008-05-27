@@ -85,7 +85,7 @@ typedef struct disk_device {
 rtems_status_code
 rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
                        block_device_ioctl handler,
-                       char *name);
+                       const char *name);
 
 /* rtems_disk_create_log --
  *     Create logical disk entry. Logical disk is contiguous area on physical

@@ -18,7 +18,7 @@
 #include <rtems/libio_.h>
 #include "msdos.h"
 
-rtems_filesystem_operations_table  msdos_ops = {
+const rtems_filesystem_operations_table  msdos_ops = {
     msdos_eval_path,
     msdos_eval4make,
 #if 0

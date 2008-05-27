@@ -23,7 +23,7 @@
  *  Handler table for IMFS device nodes
  */
 
-rtems_filesystem_file_handlers_r IMFS_device_handlers = {
+const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_open,
   device_close,
   device_read,

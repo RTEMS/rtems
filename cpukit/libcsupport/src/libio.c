@@ -62,14 +62,14 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 
-rtems_assoc_t access_modes_assoc[] = {
+const rtems_assoc_t access_modes_assoc[] = {
   { "READ",       LIBIO_FLAGS_READ,  O_RDONLY },
   { "WRITE",      LIBIO_FLAGS_WRITE, O_WRONLY },
   { "READ/WRITE", LIBIO_FLAGS_READ_WRITE, O_RDWR },
   { 0, 0, 0 },
 };
 
-rtems_assoc_t status_flags_assoc[] = {
+const rtems_assoc_t status_flags_assoc[] = {
 #ifdef ACCEPT_O_NDELAY_ALIAS
   { "NO DELAY",  LIBIO_FLAGS_NO_DELAY,  O_NDELAY },
 #endif

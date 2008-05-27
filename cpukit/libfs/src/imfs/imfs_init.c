@@ -33,7 +33,7 @@
  *  IMFS file system operations table
  */
 
-rtems_filesystem_operations_table  IMFS_ops = {
+const rtems_filesystem_operations_table  IMFS_ops = {
   IMFS_eval_path,
   IMFS_evaluate_for_make,
   IMFS_link,

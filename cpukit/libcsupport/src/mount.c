@@ -68,11 +68,11 @@ static int Is_node_fs_root(
  */
 
 int mount(
-  rtems_filesystem_mount_table_entry_t **mt_entry,
-  rtems_filesystem_operations_table    *fs_ops,
-  rtems_filesystem_options_t            options,
-  char                                 *device,
-  char                                 *mount_point
+  rtems_filesystem_mount_table_entry_t    **mt_entry,
+  const rtems_filesystem_operations_table  *fs_ops,
+  rtems_filesystem_options_t                options,
+  const char                               *device,
+  const char                               *mount_point
 )
 {
   rtems_filesystem_location_info_t      loc;

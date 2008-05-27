@@ -66,10 +66,10 @@ static int IMFS_determine_bytes_per_block(
  */
 
 int IMFS_initialize_support(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
-   rtems_filesystem_operations_table    *op_table,
-   rtems_filesystem_file_handlers_r     *memfile_handlers,
-   rtems_filesystem_file_handlers_r     *directory_handlers
+  rtems_filesystem_mount_table_entry_t        *temp_mt_entry,
+   const rtems_filesystem_operations_table    *op_table,
+   const rtems_filesystem_file_handlers_r     *memfile_handlers,
+   const rtems_filesystem_file_handlers_r     *directory_handlers
 )
 {
   IMFS_fs_info_t                        *fs_info;

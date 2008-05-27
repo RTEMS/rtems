@@ -61,7 +61,7 @@
  *
  */
 
-rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
+const rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_MUTEX_STATUS_SUCCESSFUL */
   RTEMS_UNSATISFIED,        /* CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT */
   RTEMS_UNSATISFIED,        /* CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED */
@@ -109,7 +109,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  *
  */
 
-rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
+const rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_SEMAPHORE_STATUS_SUCCESSFUL */
   RTEMS_UNSATISFIED,        /* CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT */
   RTEMS_OBJECT_WAS_DELETED, /* CORE_SEMAPHORE_WAS_DELETED */

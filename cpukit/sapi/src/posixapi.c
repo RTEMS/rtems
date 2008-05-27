@@ -55,7 +55,7 @@
  *  XXX
  */
 
-posix_api_configuration_table _POSIX_Default_configuration = {
+const posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* maximum_threads */
   0,                             /* maximum_mutexes */
   0,                             /* maximum_condition_variables */
@@ -78,7 +78,7 @@ void _POSIX_API_Initialize(
   rtems_configuration_table *configuration_table
 )
 {
-  posix_api_configuration_table *api_configuration;
+  const posix_api_configuration_table *api_configuration;
 
   /* XXX need to assert here based on size assumptions */
 

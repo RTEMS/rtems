@@ -23,7 +23,7 @@
  *  Set of operations handlers for operations on directories.
  */
 
-rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
+const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_open,
   imfs_dir_close,
   imfs_dir_read,

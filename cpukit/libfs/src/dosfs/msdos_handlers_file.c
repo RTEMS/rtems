@@ -18,7 +18,7 @@
 #include <rtems/libio.h>
 #include "msdos.h"
 
-rtems_filesystem_file_handlers_r msdos_file_handlers = {
+const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_open,
     msdos_file_close,
     msdos_file_read,

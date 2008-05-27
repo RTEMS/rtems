@@ -171,7 +171,7 @@ get_disk_entry(dev_t dev)
  *     no memory available).
  */
 static rtems_status_code
-create_disk(dev_t dev, char *name, disk_device **diskdev)
+create_disk(dev_t dev, const char *name, disk_device **diskdev)
 {
     disk_device *dd;
     char *n;
@@ -235,7 +235,7 @@ create_disk(dev_t dev, char *name, disk_device **diskdev)
 rtems_status_code
 rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
                        block_device_ioctl handler,
-                       char *name)
+                       const char *name)
 {
     int bs_log2;
     int i;

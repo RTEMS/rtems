@@ -345,16 +345,16 @@ typedef enum
  */
 
 struct rtems_libio_tt {
-    rtems_driver_name_t              *driver;
-    off_t                             size;      /* size of file */
-    off_t                             offset;    /* current offset into file */
-    uint32_t                          flags;
-    rtems_filesystem_location_info_t  pathinfo;
-    rtems_id                          sem;
-    uint32_t                          data0;     /* private to "driver" */
-    void                             *data1;     /* ... */
-    void                             *file_info; /* used by file handlers */
-    rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
+    rtems_driver_name_t                    *driver;
+    off_t                                   size;      /* size of file */
+    off_t                                   offset;    /* current offset into file */
+    uint32_t                                flags;
+    rtems_filesystem_location_info_t        pathinfo;
+    rtems_id                                sem;
+    uint32_t                                data0;     /* private to "driver" */
+    void                                   *data1;     /* ... */
+    void                                   *file_info; /* used by file handlers */
+    const rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
 };
 
 /*
@@ -612,11 +612,11 @@ int unmount(
 );
 
 int mount(
-  rtems_filesystem_mount_table_entry_t **mt_entry,
-  rtems_filesystem_operations_table    *fs_ops,
-  rtems_filesystem_options_t            fsoptions,
-  char                                 *device,
-  char                                 *mount_point
+  rtems_filesystem_mount_table_entry_t    **mt_entry,
+  const rtems_filesystem_operations_table  *fs_ops,
+  rtems_filesystem_options_t                fsoptions,
+  const char                               *device,
+  const char                               *mount_point
 );
 
 /*
@@ -624,14 +624,14 @@ int mount(
  */
 
 typedef struct {
-  rtems_filesystem_operations_table     *fs_ops;
-  rtems_filesystem_options_t             fsoptions;
-  char                                  *device;
-  char                                  *mount_point;
+  const rtems_filesystem_operations_table *fs_ops;
+  rtems_filesystem_options_t               fsoptions;
+  const char                              *device;
+  const char                              *mount_point;
 } rtems_filesystem_mount_table_t;
 
-extern rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
-extern int                             rtems_filesystem_mount_table_size;
+extern const rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
+extern const int                             rtems_filesystem_mount_table_size;
 
 #ifdef __cplusplus
 }

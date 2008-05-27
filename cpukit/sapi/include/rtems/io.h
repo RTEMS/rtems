@@ -120,7 +120,7 @@ void _IO_Manager_initialization(
 
 rtems_status_code rtems_io_register_driver(
     rtems_device_major_number   major,
-    rtems_driver_address_table *driver_table,
+    const rtems_driver_address_table *driver_table,
     rtems_device_major_number  *registered_major
 );
 

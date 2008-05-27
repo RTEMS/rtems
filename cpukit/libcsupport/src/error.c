@@ -63,7 +63,7 @@ char *strerror(int);
 
 int          rtems_panic_in_progress;
 
-rtems_assoc_t rtems_status_assoc[] = {
+const rtems_assoc_t rtems_status_assoc[] = {
     { "successful completion",              RTEMS_SUCCESSFUL, },
     { "returned from a thread",             RTEMS_TASK_EXITTED, },
     { "multiprocessing not configured",     RTEMS_MP_NOT_CONFIGURED, },

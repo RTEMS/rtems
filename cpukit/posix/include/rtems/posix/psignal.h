@@ -52,7 +52,7 @@
 
 extern sigset_t  _POSIX_signals_Pending;
 
-extern struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ];
+extern const struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ];
 
 extern struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 

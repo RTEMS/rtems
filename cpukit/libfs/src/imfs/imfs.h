@@ -56,7 +56,7 @@ typedef struct {
 } IMFS_link_t;
 
 typedef struct {
-  const char *name;
+  char *name;
 } IMFS_sym_link_t;
 
 /*
@@ -205,9 +205,9 @@ struct IMFS_jnode_tt {
   } while (0)
 
 typedef struct {
-  ino_t                             ino_count;
-  rtems_filesystem_file_handlers_r *memfile_handlers;
-  rtems_filesystem_file_handlers_r *directory_handlers;
+  ino_t                                   ino_count;
+  const rtems_filesystem_file_handlers_r *memfile_handlers;
+  const rtems_filesystem_file_handlers_r *directory_handlers;
 } IMFS_fs_info_t;
 
 /*
@@ -226,13 +226,13 @@ typedef enum {
  *  Shared Data
  */
 
-extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
-extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
-extern rtems_filesystem_file_handlers_r       IMFS_link_handlers;
-extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
-extern rtems_filesystem_operations_table      IMFS_ops;
-extern rtems_filesystem_operations_table      miniIMFS_ops;
-extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
+extern const rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
+extern const rtems_filesystem_file_handlers_r       IMFS_device_handlers;
+extern const rtems_filesystem_file_handlers_r       IMFS_link_handlers;
+extern const rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
+extern const rtems_filesystem_operations_table      IMFS_ops;
+extern const rtems_filesystem_operations_table      miniIMFS_ops;
+extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*
  *  Routines
@@ -247,10 +247,10 @@ int miniIMFS_initialize(
 );
 
 int IMFS_initialize_support(
-   rtems_filesystem_mount_table_entry_t *mt_entry,
-   rtems_filesystem_operations_table    *op_table,
-   rtems_filesystem_file_handlers_r     *memfile_handlers,
-   rtems_filesystem_file_handlers_r     *directory_handlers
+   rtems_filesystem_mount_table_entry_t       *mt_entry,
+   const rtems_filesystem_operations_table    *op_table,
+   const rtems_filesystem_file_handlers_r     *memfile_handlers,
+   const rtems_filesystem_file_handlers_r     *directory_handlers
 );
 
 int IMFS_fsunmount(
@@ -340,11 +340,11 @@ int IMFS_mknod(
 );
 
 IMFS_jnode_t *IMFS_create_node(
-  rtems_filesystem_location_info_t  *parent_loc,   /* IN  */
-  IMFS_jnode_types_t                 type,         /* IN  */
-  char                              *name,         /* IN  */
-  mode_t                             mode,         /* IN  */
-  IMFS_types_union                  *info          /* IN  */
+  rtems_filesystem_location_info_t *parent_loc,   /* IN  */
+  IMFS_jnode_types_t                type,         /* IN  */
+  const char                       *name,         /* IN  */
+  mode_t                            mode,         /* IN  */
+  const IMFS_types_union           *info          /* IN  */
 );
 
 int IMFS_evaluate_for_make(

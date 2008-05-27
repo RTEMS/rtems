@@ -205,6 +205,7 @@ fat_cluster_write(
 int
 fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
 {
+    rtems_status_code   sc = RTEMS_SUCCESSFUL;
     int                 rc = RC_OK;
     fat_fs_info_t      *fs_info = mt_entry->fs_info;
     register fat_vol_t *vol = &fs_info->vol;
@@ -212,9 +213,9 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     char                boot_rec[FAT_MAX_BPB_SIZE];
     char                fs_info_sector[FAT_USEFUL_INFO_SIZE];
     ssize_t             ret = 0;
-    int                 fd;
     struct stat         stat_buf;
     int                 i = 0;
+    bdbuf_buffer       *block = NULL;
 
     rc = stat(mt_entry->dev, &stat_buf);
     if (rc == -1)
@@ -231,22 +232,25 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     vol->dev = stat_buf.st_dev;
 
-    fd = open(mt_entry->dev, O_RDONLY);
-    if (fd == -1)
+    /* Read boot record */
+    /* FIXME: Asserts FAT_MAX_BPB_SIZE < bdbuf block size */
+    sc = rtems_bdbuf_read( vol->dev, 0, &block);
+    if (sc != RTEMS_SUCCESSFUL)
     {
         rtems_disk_release(vol->dd);
-        return -1;
+        set_errno_and_return_minus_one( EIO);
     }
 
-    ret = read(fd, (void *)boot_rec, FAT_MAX_BPB_SIZE);
-    if ( ret != FAT_MAX_BPB_SIZE )
+    memcpy( boot_rec, block->buffer, FAT_MAX_BPB_SIZE);
+
+    sc = rtems_bdbuf_release( block);
+    if (sc != RTEMS_SUCCESSFUL)
     {
-        close(fd);
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one( EIO );
+        set_errno_and_return_minus_one( EIO);
     }
-    close(fd);
 
+    /* Evaluate boot record */
     vol->bps = FAT_GET_BR_BYTES_PER_SECTOR(boot_rec);
  
     if ( (vol->bps != 512)  && 

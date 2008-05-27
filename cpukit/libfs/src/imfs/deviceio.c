@@ -29,7 +29,7 @@
  * Convert RTEMS status to a UNIX errno
  */
 
-rtems_assoc_t errno_assoc[] = {
+const rtems_assoc_t errno_assoc[] = {
     { "OK",                 RTEMS_SUCCESSFUL,                0 },
     { "BUSY",               RTEMS_RESOURCE_IN_USE,           EBUSY },
     { "INVALID NAME",       RTEMS_INVALID_NAME,              EINVAL },

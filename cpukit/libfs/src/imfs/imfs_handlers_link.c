@@ -23,7 +23,7 @@
  *  Handler table for IMFS device nodes
  */
 
-rtems_filesystem_file_handlers_r IMFS_link_handlers = {
+const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
   NULL,       /* open */
   NULL,       /* close */
   NULL,       /* read */

@@ -45,8 +45,8 @@ void rtems_filesystem_initialize( void )
 #if !defined(RTEMS_UNIX)
   int                                   status;
   rtems_filesystem_mount_table_entry_t *entry;
-  rtems_filesystem_mount_table_t       *mt;
-  rtems_filesystem_location_info_t		loc;
+  const rtems_filesystem_mount_table_t *mt;
+  rtems_filesystem_location_info_t      loc;
 
   /*
    *  Set the default umask to "022".

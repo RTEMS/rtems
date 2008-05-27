@@ -42,7 +42,7 @@ void _POSIX_signals_Abnormal_termination_handler( int signo )
 }
 
 #define SIG_ARRAY_MAX  (SIGRTMAX + 1)
-struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
+const struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
   /* NO SIGNAL 0 */  SIGACTION_IGNORE,
   /* SIGHUP    1 */  SIGACTION_TERMINATE,
   /* SIGINT    2 */  SIGACTION_TERMINATE,

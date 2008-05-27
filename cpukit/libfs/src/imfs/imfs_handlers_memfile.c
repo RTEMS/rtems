@@ -23,7 +23,7 @@
  *  Set of operations handlers for operations on memfile entities.
  */
 
-rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
+const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
   memfile_close,
   memfile_read,

@@ -187,7 +187,7 @@ typedef enum {
  *  codes to Classic API status codes.
  */
 #ifdef RTEMS_API_INIT
-rtems_status_code _Status_Object_name_errors_to_status[] = {
+const rtems_status_code _Status_Object_name_errors_to_status[] = {
   /** This maps OBJECTS_SUCCESSFUL to RTEMS_SUCCESSFUL. */
   RTEMS_SUCCESSFUL,
   /** This maps OBJECTS_INVALID_NAME to RTEMS_INVALID_NAME. */

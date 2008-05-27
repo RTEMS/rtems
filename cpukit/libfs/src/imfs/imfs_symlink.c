@@ -20,6 +20,8 @@
 #endif
 
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
@@ -41,7 +43,14 @@ int IMFS_symlink(
 
   IMFS_get_token( node_name, new_name, &i );
 
-  info.sym_link.name = link_name;
+  /*
+   * Duplicate link name
+   */
+
+  info.sym_link.name = strdup( link_name);
+  if (info.sym_link.name == NULL) {
+    rtems_set_errno_and_return_minus_one( ENOMEM);
+  }
 
   /*
    *  Create a new link node.
@@ -55,8 +64,10 @@ int IMFS_symlink(
     &info
   );
 
-  if ( !new_node )
-    rtems_set_errno_and_return_minus_one( ENOMEM );
+  if (new_node == NULL) {
+    free( info.sym_link.name);
+    rtems_set_errno_and_return_minus_one( ENOMEM);
+  }
 
   return 0;
 }

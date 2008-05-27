@@ -22,8 +22,8 @@
 #include <string.h>
 #include "imfs.h"
 
-static char dotname[2] = ".";
-static char dotdotname[3] = "..";
+static const char dotname[2] = ".";
+static const char dotdotname[3] = "..";
 
 IMFS_jnode_t *IMFS_find_match_in_dir(
   IMFS_jnode_t *directory,
