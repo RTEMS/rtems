@@ -50,7 +50,10 @@ typedef double_precision rtems_double;    /* double precision float */
 typedef boolean          rtems_boolean;
 
 typedef uint32_t         rtems_name;
+
 typedef Objects_Id       rtems_id;
+
+#define RTEMS_ID_NONE OBJECTS_ID_NONE
 
 typedef Context_Control            rtems_context;
 typedef Context_Control_fp         rtems_context_fp;

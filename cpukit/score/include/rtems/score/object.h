@@ -388,6 +388,11 @@ SCORE_EXTERN Objects_Information
     **_Objects_Information_table[OBJECTS_APIS_LAST + 1];
 
 /**
+ *  No object can have this ID.
+ */
+#define OBJECTS_ID_NONE 0
+
+/**
  *  The following defines the constant which may be used
  *  with _Objects_Get to manipulate the calling task.
  */
