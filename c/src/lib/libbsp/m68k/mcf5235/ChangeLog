@@ -1,3 +1,8 @@
+2008-05-29	Chris Johns <chrisj@rtems.org>
+
+	* include/bsp.h: FEC unit numbers based on 0 not 1. Change the
+	interface name to fec0.
+
 2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Eliminate copies of switches to convert termios
