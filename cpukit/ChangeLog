@@ -1,3 +1,9 @@
+2008-05-30	Till Straumann <strauman@slac.stanford.edu>
+
+	* libfs/src/nfsclient/src/nfs.c:BUGFIX: must not attempt to
+	release node if rtems_filesystem_evaluate_path() fails
+	in nfs_eval_link() since pathloc contains no valid node.
+
 2008-05-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell_getchar.c: Minor change so dropping connection
