@@ -31,11 +31,11 @@
  */
 /**@{*/
 
+#include <rtems/score/object.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/object.h>
 
 /** @brief Maximum Interval Length
  *

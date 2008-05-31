@@ -22,12 +22,12 @@
 #ifndef _RTEMS_SCORE_OBJECT_H
 #define _RTEMS_SCORE_OBJECT_H
 
+#include <rtems/score/chain.h>
+#include <rtems/score/isr.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
 
 /**
  *  The following type defines the control block used to manage
