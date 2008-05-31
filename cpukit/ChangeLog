@@ -1,3 +1,9 @@
+2008-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/object.h, 
+	score/include/rtems/score/watchdog.h: Move #include's out of 
+	extern "C" {}.
+
 2008-05-30	Till Straumann <strauman@slac.stanford.edu>
 
 	* libfs/src/nfsclient/src/nfs.c:BUGFIX: must not attempt to
