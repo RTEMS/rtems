@@ -32,7 +32,7 @@ RTEMS_ENABLE_RTEMSBSP
 RTEMS_ENABLE_MULTILIB
 
 AC_ARG_ENABLE([docs],
-  [AC_HELP_STRING([--enable-docs],[enable building documentation
+  [AS_HELP_STRING([--enable-docs],[enable building documentation
     (default:disabled)])])
 
 ## NOTES:
