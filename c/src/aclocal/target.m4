@@ -33,7 +33,8 @@ if test "$no_recursion" != yes; then
     ],
     [rtems_configure_args])
 
-  for rtems_config_dir in $RTEMS_BUILD_SUBDIRS; do
+  for rtems_config_dir in : $RTEMS_BUILD_SUBDIRS; do test "x$rtems_config_dir" = x: && continue
+
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
     if test ! -d $srcdir/$rtems_config_dir; then
