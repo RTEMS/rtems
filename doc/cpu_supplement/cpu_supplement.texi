@@ -59,6 +59,7 @@
 @contents
 
 @include preface.texi
+@include general.texi
 @include arm.texi
 @include bfin.texi
 @include i386.texi
@@ -72,14 +73,15 @@
 @node Top, Preface, (dir), (dir)
 @top cpu_supplement
 
-This is the online version of the RTEMS CPU Architecture Supplement
+This is the online version of the RTEMS CPU Architecture Supplement.
 
 @menu
 * Preface::
+* Port Specific Information::
 * ARM Specific Information::
 * Blackfin Specific Information::
 * Intel/AMD x86 Specific Information::
-* Motorola M68xxx and Coldfire Specific Information::
+* M68xxx and Coldfire Specific Information::
 * MIPS Specific Information::
 * PowerPC Specific Information::
 * SuperH Specific Information::

@@ -10,18 +10,10 @@
 @end ifinfo
 @chapter PowerPC Specific Information
 
-The Real Time Executive for Multiprocessor Systems
-(RTEMS) is designed to be portable across multiple processor
-architectures.  However, the nature of real-time systems makes
-it essential that the application designer understand certain
-processor dependent implementation details.  These processor
-dependencies include calling convention, board support package
-issues, interrupt processing, exact RTEMS memory requirements,
-performance data, header files, and the assembly language
-interface to the executive.
-
-This document discusses the PowerPC architecture
-dependencies in this port of RTEMS.
+This chapter discusses the PowerPC architecture dependencies
+in this port of RTEMS.  The PowerPC family has a wide variety
+of implementations by a range of vendors.  Consequently,
+there are many, many CPU models within it.
 
 It is highly recommended that the PowerPC RTEMS
 application developer obtain and become familiar with the
@@ -61,7 +53,6 @@ Unit Reference Manual} (Motorola Document RCPUURM/AD).
 
 @item @cite{PowerQUICC MPC860 User's Manual} (Motorola Document MPC860UM/AD).
 
-
 @end itemize
 
 Motorola maintains an on-line electronic library for the PowerPC
@@ -85,85 +76,28 @@ supports the addition of user provided device models which can be
 used to allow one to develop and debug embedded applications using
 the simulator.
 
-The latest version of PSIM is made available to the public via
-anonymous ftp at ftp://ftp.ci.com.au/pub/psim or
-ftp://cambridge.cygnus.com/pub/psim.  There is also a mailing list 
-at powerpc-psim@@ci.com.au.
-
+The latest version of PSIM is included in GDB and enabled on pre-built
+binaries provided by the RTEMS Project.
 
 @c
-@c  COPYRIGHT (c) 1989-2007.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
-
 @section CPU Model Dependent Features
-
-
-Microprocessors are generally classified into
-families with a variety of CPU models or implementations within
-that family.  Within a processor family, there is a high level
-of binary compatibility.  This family may be based on either an
-architectural specification or on maintaining compatibility with
-a popular processor.  Recent microprocessor families such as the
-SPARC, and PowerPC are based on an architectural specification
-which is independent or any particular CPU model or
-implementation.  Older families such as the M68xxx and the iX86
-evolved as the manufacturer strived to produce higher
-performance processor models which maintained binary
-compatibility with older models.
-
-RTEMS takes advantage of the similarity of the
-various models within a CPU family.  Although the models do vary
-in significant ways, the high level of compatibility makes it
-possible to share the bulk of the CPU dependent executive code
-across the entire family.
-
-@subsection CPU Model Feature Flags
-
-Each processor family supported by RTEMS has a
-list of features which vary between CPU models
-within a family.  For example, the most common model dependent
-feature regardless of CPU family is the presence or absence of a
-floating point unit or coprocessor.  When defining the list of
-features present on a particular CPU model, one simply notes
-that floating point hardware is or is not present and defines a
-single constant appropriately.  Conditional compilation is
-utilized to include the appropriate source code for this CPU
-model's feature set.  It is important to note that this means
-that RTEMS is thus compiled using the appropriate feature set
-and compilation flags optimal for this CPU model used.  The
-alternative would be to generate a binary which would execute on
-all family members using only the features which were always
-present.
 
 This section presents the set of features which vary
 across PowerPC implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-cpukit/score/cpu/ppc/ppc.h based upon the particular CPU
-model defined on the compilation command line.
+@code{cpukit/score/cpu/powerpc/powerpc.h} based upon the particular CPU
+model specified on the compilation command line.
 
-@subsubsection CPU Model Name
-
-The macro CPU_MODEL_NAME is a string which designates
-the name of this CPU model.  For example, for the PowerPC 603e
-model, this macro is set to the string "PowerPC 603e".
-
-@subsubsection Floating Point Unit
-
-The macro PPC_HAS_FPU is set to 1 to indicate that this CPU model
-has a hardware floating point unit and 0 otherwise.
-
-@subsubsection Alignment
+@subsection Alignment
 
 The macro PPC_ALIGNMENT is set to the PowerPC model's worst case alignment
 requirement for data types on a byte boundary.  This value is used
 to derive the alignment restrictions for memory allocated from 
 regions and partitions.
 
-@subsubsection Cache Alignment
+@subsection Cache Alignment
 
 The macro PPC_CACHE_ALIGNMENT is set to the line size of the cache.  It is
 used to align the entry point of critical routines so that as much code
@@ -174,24 +108,24 @@ In addition, the "shortcut" data structure used by the PowerPC implementation
 to ease access to data elements frequently accessed by RTEMS routines
 implemented in assembly language is aligned using this value.
 
-@subsubsection Maximum Interrupts
+@subsection Maximum Interrupts
 
 The macro PPC_INTERRUPT_MAX is set to the number of exception sources
 supported by this PowerPC model.
 
-@subsubsection Has Double Precision Floating Point
+@subsection Has Double Precision Floating Point
 
 The macro PPC_HAS_DOUBLE is set to 1 to indicate that the PowerPC model
 has support for double precision floating point numbers.  This is
 important because the floating point registers need only be four bytes
 wide (not eight) if double precision is not supported.
 
-@subsubsection Critical Interrupts
+@subsection Critical Interrupts
 
 The macro PPC_HAS_RFCI is set to 1 to indicate that the PowerPC model
 has the Critical Interrupt capability as defined by the IBM 403 models.
 
-@subsubsection Use Multiword Load/Store Instructions
+@subsection Use Multiword Load/Store Instructions
 
 The macro PPC_USE_MULTIPLE is set to 1 to indicate that multiword load and
 store instructions should be used to perform context switch operations.
@@ -199,15 +133,15 @@ The relative efficiency of multiword load and store instructions versus
 an equivalent set of single word load and store instructions varies based
 upon the PowerPC model.
 
-@subsubsection Instruction Cache Size
+@subsection Instruction Cache Size
 
 The macro PPC_I_CACHE is set to the size in bytes of the instruction cache.
 
-@subsubsection Data Cache Size
+@subsection Data Cache Size
 
 The macro PPC_D_CACHE is set to the size in bytes of the data cache.
 
-@subsubsection Debug Model
+@subsection Debug Model
 
 The macro PPC_DEBUG_MODEL is set to indicate the debug support features 
 present in this CPU model.  The following debug support feature sets
@@ -246,36 +180,12 @@ indicates that this CPU model follows the low power model defined for
 the PPC603e.
 
 @end table
+
 @c
-@c  COPYRIGHT (c) 1989-2007.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Calling Conventions
-
-
-Each high-level language compiler generates
-subroutine entry and exit code based upon a set of rules known
-as the compiler's calling convention.   These rules address the
-following issues:
-
-@itemize @bullet
-@item register preservation and usage
-
-@item parameter passing
-
-@item call and return mechanism
-@end itemize
-
-A compiler's calling convention is of importance when
-interfacing to subroutines written in another language either
-assembly or high-level.  Even when the high-level language and
-target processor are the same, different compilers may use
-different calling conventions.  As a result, calling conventions
-are both processor and compiler dependent.
 
 RTEMS supports the Embedded Application Binary Interface (EABI)
 calling convention.  Documentation for EABI is available by sending
@@ -467,32 +377,11 @@ load first argument into r3
 invoke directive
 @end example
 
-@subsection User-Provided Routines
-
-All user-provided routines invoked by RTEMS, such as
-user extensions, device drivers, and MPCI routines, must also
-adhere to these same calling conventions.
-
-
 @c
-@c  COPYRIGHT (c) 1989-2007.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Memory Model
-
-
-A processor may support any combination of memory
-models ranging from pure physical addressing to complex demand
-paged virtual memory systems.  RTEMS supports a flat memory
-model which ranges contiguously over the processor's allowable
-address space.  RTEMS does not support segmentation or virtual
-memory of any kind.  The appropriate memory model for RTEMS
-provided by the targeted processor and related characteristics
-of that model are described in this chapter.
 
 @subsection Flat Memory Model
 
@@ -593,26 +482,17 @@ involving the PowerPC  are not supported.
 
 @section Interrupt Processing
 
-
-Different types of processors respond to the
-occurrence of an interrupt in its own unique fashion. In
-addition, each processor type provides a control mechanism to
-allow for the proper handling of an interrupt.  The processor
-dependent response to the interrupt modifies the current
-execution state and results in a change in the execution stream.
-Most processors require that an interrupt handler utilize some
-special control mechanisms to return to the normal processing
-stream.  Although RTEMS hides many of the processor dependent
+Although RTEMS hides many of the processor dependent
 details of interrupt processing, it is important to understand
 how the RTEMS interrupt manager is mapped onto the processor's
 unique architecture. Discussed in this chapter are the PowerPC's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 
-RTEMS and associated documentation uses the terms
-interrupt and vector.  In the PowerPC architecture, these terms
-correspond to exception and exception handler, respectively.  The terms will
-be used interchangeably in this manual.
+RTEMS and associated documentation uses the terms interrupt and vector.
+In the PowerPC architecture, these terms correspond to exception and
+exception handler, respectively.  The terms will be used interchangeably
+in this manual.
 
 @subsection Synchronous Versus Asynchronous Exceptions
 
@@ -722,77 +602,14 @@ Setting bit 2 of the interrupt level enables External Interrupt execptions.
 
 All other bits in the RTEMS task interrupt level are ignored.
 
-@subsection Disabling of Interrupts by RTEMS
-
-During the execution of directive calls, critical
-sections of code may be executed.  When these sections are
-encountered, RTEMS disables Critical Interrupts, External Interrupts
-and Machine Checks before the execution of this section and restores
-them to the previous level upon completion of the section.  RTEMS has been
-optimized to insure that interrupts are disabled for less than
-RTEMS_MAXIMUM_DISABLE_PERIOD microseconds on a 
-RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz PowerPC 603e with zero
-wait states.  These numbers will vary based the number of wait 
-states and processor speed present on the target board.
-[NOTE:  The maximum period with interrupts disabled is hand calculated.  This
-calculation was last performed for Release 
-RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
-
-If a PowerPC implementation provides non-maskable interrupts (NMI)
-which cannot be disabled, ISRs which process these interrupts
-MUST NEVER issue RTEMS system calls.  If a directive is invoked,
-unpredictable results may occur due to the inability of RTEMS
-to protect its critical sections.  However, ISRs that make no
-system calls may safely execute as non-maskable interrupts.
-
-@subsection Interrupt Stack
-
-The PowerPC architecture does not provide for a
-dedicated interrupt stack.  Thus by default, exception handlers would
-execute on the stack of the RTEMS task which they interrupted.
-This artificially inflates the stack requirements for each task
-since EVERY task stack would have to include enough space to
-account for the worst case interrupt stack requirements in
-addition to it's own worst case usage.  RTEMS addresses this
-problem on the PowerPC by providing a dedicated interrupt stack
-managed by software.
-
-During system initialization, RTEMS allocates the
-interrupt stack from the Workspace Area.  The amount of memory
-allocated for the interrupt stack is determined by the
-interrupt_stack_size field in the CPU Configuration Table.  As
-part of processing a non-nested interrupt, RTEMS will switch to
-the interrupt stack before invoking the installed handler.
-
-
-
 @c
-@c  COPYRIGHT (c) 1989-2007.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Default Fatal Error Processing
 
-
-Upon detection of a fatal error by either the
-application or RTEMS the fatal error manager is invoked.  The
-fatal error manager will invoke the user-supplied fatal error
-handlers.  If no user-supplied handlers are configured,  the
-RTEMS provided default fatal error handler is invoked.  If the
-user-supplied fatal error handlers return to the executive the
-default fatal error handler is then invoked.  This chapter
-describes the precise operations of the default fatal error
-handler.
-
-@subsection Default Fatal Error Handler Operations
-
-The default fatal error handler which is invoked by
-the @code{rtems_fatal_error_occurred} directive when there is no user handler
-configured or the user handler returns control to RTEMS.  The
-default fatal error handler performs the following actions:
+The default fatal error handler for this architecture performs the
+following actions:
 
 @itemize @bullet
 
@@ -813,22 +630,10 @@ If the Program Exception returns, then the following actions are performed:
 @end itemize
 
 @c
-@c  COPYRIGHT (c) 1989-2007.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Board Support Packages
-
-
-An RTEMS Board Support Package (BSP) must be designed
-to support a particular processor and target board combination.
-This chapter presents a discussion of PowerPC specific BSP issues.
-For more information on developing a BSP, refer to the chapter
-titled Board Support Packages in the RTEMS
-Applications User's Guide.
 
 @subsection System Reset
 
@@ -847,15 +652,6 @@ CPU may execute a hard reset.
 
 @subsection Processor Initialization
 
-It is the responsibility of the application's
-initialization code to initialize the CPU and board
-to a quiescent state before invoking the @code{rtems_initialize_executive}
-directive.  It is recommended that the BSP utilize the @code{predriver_hook}
-to install default handlers for all exceptions.  These default handlers
-may be overwritten as various device drivers and subsystems install
-their own exception handlers.  Upon completion of RTEMS executive
-initialization, all interrupts are enabled.
-
 If this PowerPC implementation supports on-chip caching
 and this is to be utilized, then it should be enabled during the
 reset application initialization code.  On-chip caching has been
@@ -873,8 +669,8 @@ the PowrePC version has the following specific requirements:
 to 0 so the PowerPC remains in the supervisor state.
 
 @item Must set stack pointer (sp or r1) such that a minimum stack
-size of MINIMUM_STACK_SIZE bytes is provided for the
-@code{rtems_initialize_executive} directive.
+size of MINIMUM_STACK_SIZE bytes is provided for the RTEMS initialization
+sequence.
 
 @item Must disable all external interrupts (i.e. clear the EI (EE)
 bit of the machine state register).

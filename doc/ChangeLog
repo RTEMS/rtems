@@ -1,5 +1,18 @@
 2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
+	cpu_supplement/arm.t, cpu_supplement/bfin.t,
+	cpu_supplement/cpu_supplement.texi, cpu_supplement/i386.t,
+	cpu_supplement/m68k.t, cpu_supplement/mips.t,
+	cpu_supplement/powerpc.t, cpu_supplement/preface.texi,
+	cpu_supplement/sh.t: Remove duplicated text from each CPU specific
+	chapter. This text was necessary when each CPU was a separate manual
+	but now only needs to be one place and that is in an introductory
+	chapter.
+	* cpu_supplement/general.t: New file.
+
+2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/bsp.t, user/init.t: Rework initialization and BSP chapters to
 	account for changes to initialization framework.
 

@@ -10,15 +10,10 @@
 @end ifinfo
 @chapter Intel/AMD x86 Specific Information
 
-The Real Time Executive for Multiprocessor Systems
-(RTEMS) is designed to be portable across multiple processor
-architectures.  However, the nature of real-time systems makes
-it essential that the application designer understand certain
-processor dependent implementation details.  These processor
-dependencies include calling convention, board support package
-issues, interrupt processing, exact RTEMS memory requirements,
-performance data, header files, and the assembly language
-interface to the executive.
+This chapter discusses the Intel x86 architecture dependencies
+in this port of RTEMS.  This family has multiple implementations
+from multiple vendors and suffers more from having evolved rather
+than being designed for growth.
 
 For information on the i386 processor, refer to the
 following documents:
@@ -34,118 +29,36 @@ Order No. 231732-003}.
 @item @cite{80387 Programmer's Reference Manual, Intel, Order No.  231917-001}.
 @end itemize
 
-It is highly recommended that the i386 RTEMS
-application developer obtain and become familiar with Intel's
-386 Programmer's Reference Manual.
-
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
-
 @section CPU Model Dependent Features
 
-
-Microprocessors are generally classified into
-families with a variety of CPU models or implementations within
-that family.  Within a processor family, there is a high level
-of binary compatibility.  This family may be based on either an
-architectural specification or on maintaining compatibility with
-a popular processor.  Recent microprocessor families such as the
-SPARC or PowerPC are based on an architectural specification
-which is independent or any particular CPU model or
-implementation.  Older families such as the M68xxx and the iX86
-evolved as the manufacturer strived to produce higher
-performance processor models which maintained binary
-compatibility with older models.
-
-RTEMS takes advantage of the similarity of the
-various models within a CPU family.  Although the models do vary
-in significant ways, the high level of compatibility makes it
-possible to share the bulk of the CPU dependent executive code
-across the entire family.  Each processor family supported by
-RTEMS has a list of features which vary between CPU models
-within a family.  For example, the most common model dependent
-feature regardless of CPU family is the presence or absence of a
-floating point unit or coprocessor.  When defining the list of
-features present on a particular CPU model, one simply notes
-that floating point hardware is or is not present and defines a
-single constant appropriately.  Conditional compilation is
-utilized to include the appropriate source code for this CPU
-model's feature set.  It is important to note that this means
-that RTEMS is thus compiled using the appropriate feature set
-and compilation flags optimal for this CPU model used.  The
-alternative would be to generate a binary which would execute on
-all family members using only the features which were always
-present.
-
-This chapter presents the set of features which vary
+This section presents the set of features which vary
 across i386 implementations and are of importance to RTEMS.
 The set of CPU model feature macros are defined in the file
-cpukit/score/cpu/i386/i386.h based upon the particular CPU
-model defined on the compilation command line.
-
-@subsection CPU Model Name
-
-The macro CPU_MODEL_NAME is a string which designates
-the name of this CPU model.  For example, for the Intel i386 without an
-i387 coprocessor, this macro is set to the string "i386 with i387".
+@code{cpukit/score/cpu/i386/i386.h} based upon the particular CPU
+model specified on the compilation command line.
 
 @subsection bswap Instruction
 
-The macro I386_HAS_BSWAP is set to 1 to indicate that
+The macro @code{I386_HAS_BSWAP} is set to 1 to indicate that
 this CPU model has the @code{bswap} instruction which
 endian swaps a thirty-two bit quantity.  This instruction
 appears to be present in all CPU models
 i486's and above.
 
-@subsection Floating Point Unit
-
-The macro I386_HAS_FPU is set to 1 to indicate that
-this CPU model has a hardware floating point unit and 0
-otherwise.  The hardware floating point may be on-chip (as in the
-case of an i486DX or Pentium) or as a coprocessor (as in the case of
-an i386/i387 combination).
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
-
 @section Calling Conventions
-
-
-Each high-level language compiler generates
-subroutine entry and exit code based upon a set of rules known
-as the compiler's calling convention.   These rules address the
-following issues:
-
-@itemize @bullet
-@item register preservation and usage
-
-@item parameter passing
-
-@item call and return mechanism
-@end itemize
-
-A compiler's calling convention is of importance when
-interfacing to subroutines written in another language either
-assembly or high-level.  Even when the high-level language and
-target processor are the same, different compilers may use
-different calling conventions.  As a result, calling conventions
-are both processor and compiler dependent.
 
 @subsection Processor Background
 
 The i386 architecture supports a simple yet effective
 call and return mechanism.  A subroutine is invoked via the call
-(call) instruction.  This instruction pushes the return address
-on the stack.  The return from subroutine (ret) instruction pops
+(@code{call}) instruction.  This instruction pushes the return address
+on the stack.  The return from subroutine (@code{ret}) instruction pops
 the return address off the current stack and transfers control
 to that instruction.  It is is important to note that the i386
 call and return mechanism does not automatically save or restore
@@ -155,18 +68,16 @@ convention.
 
 @subsection Calling Mechanism
 
-All RTEMS directives are invoked using a call
-instruction and return to the user application via the ret
-instruction.
+All RTEMS directives are invoked using a call instruction and return to
+the user application via the ret instruction.
 
 @subsection Register Usage
 
-As discussed above, the call instruction does not
-automatically save any registers.  RTEMS uses the registers EAX,
-ECX, and EDX as scratch registers.  These registers are not
-preserved by RTEMS directives therefore, the contents of these
-registers should not be assumed upon return from any RTEMS
-directive.
+As discussed above, the call instruction does not automatically save
+any registers.  RTEMS uses the registers EAX, ECX, and EDX as scratch
+registers.  These registers are not preserved by RTEMS directives
+therefore, the contents of these registers should not be assumed upon
+return from any RTEMS directive.
 
 @subsection Parameter Passing
 
@@ -192,31 +103,11 @@ from the stack after control is returned to the caller.  This
 removal is typically accomplished by adding the size of the
 argument list in bytes to the stack pointer.
 
-@subsection User-Provided Routines
-
-All user-provided routines invoked by RTEMS, such as
-user extensions, device drivers, and MPCI routines, must also
-adhere to these calling conventions.
-
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Memory Model
-
-
-A processor may support any combination of memory
-models ranging from pure physical addressing to complex demand
-paged virtual memory systems.  RTEMS supports a flat memory
-model which ranges contiguously over the processor's allowable
-address space.  RTEMS does not support segmentation or virtual
-memory of any kind.  The appropriate memory model for RTEMS
-provided by the targeted processor and related characteristics
-of that model are described in this chapter.
 
 @subsection Flat Memory Model
 
@@ -247,48 +138,13 @@ gigabytes).  Each address is represented by a 32-bit value and
 is byte addressable.  The address may be used to reference a
 single byte, half-word (2-bytes), or word (4 bytes).
 
-RTEMS does not require that logical addresses map
-directly to physical addresses, although it is desirable in many
-applications to do so.  If logical and physical addresses are
-not the same, then an additional selector will be required so
-RTEMS can access the Interrupt Descriptor Table to install
-interrupt service routines.  The selector number of this segment
-is provided to RTEMS in the CPU Dependent Information Table.
-
-By not requiring that logical addresses map directly
-to physical addresses, the memory space of an RTEMS application
-can be separated from that of a ROM monitor.  For example, on
-the Force Computers CPU386, the ROM monitor loads application
-programs into a logical address space where logical address
-0x00000000 corresponds to physical address 0x0002000.  On this
-board, RTEMS and the application use virtual addresses which do
-not map to physical addresses.
-
-RTEMS assumes that the DS and ES registers contain
-the selector for the single data segment when a directive is
-invoked.   This assumption is especially important when
-developing interrupt service routines.
-
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Interrupt Processing
 
-
-Different types of processors respond to the
-occurrence of an interrupt in their own unique fashion. In
-addition, each processor type provides a control mechanism to
-allow the proper handling of an interrupt.  The processor
-dependent response to the interrupt modifies the execution state
-and results in the modification of the execution stream. This
-modification usually requires that an interrupt handler utilize
-the provided control mechanisms to return to the normal
-processing stream.  Although RTEMS hides many of the processor
+Although RTEMS hides many of the processor
 dependent details of interrupt processing, it is important to
 understand how the RTEMS interrupt manager is mapped onto the
 processor's unique architecture. Discussed in this chapter are
@@ -392,27 +248,6 @@ RTEMS interrupt levels 0 and 1 such that level zero
 that interrupts are disabled.  All other RTEMS interrupt levels
 are undefined and their behavior is unpredictable.
 
-@subsection Disabling of Interrupts by RTEMS
-
-During the execution of directive calls, critical
-sections of code may be executed.  When these sections are
-encountered, RTEMS disables interrupts before the execution of
-this section and restores them to the previous level upon
-completion of the section.  RTEMS has been optimized to insure
-that interrupts are disabled for less than RTEMS_MAXIMUM_DISABLE_PERIOD
-microseconds on a RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz i386 with zero
-wait states.  These numbers will vary based the number of wait states
-and processor speed present on the target board.   [NOTE:  The maximum
-period with interrupts disabled within RTEMS was last calculated for
-Release RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
-
-Non-maskable interrupts (NMI) cannot be disabled, and
-ISRs which execute at this level MUST NEVER issue RTEMS system
-calls.  If a directive is invoked, unpredictable results may
-occur due to the inability of RTEMS to protect its critical
-sections.  However, ISRs that make no system calls may safely
-execute as non-maskable interrupts.
-
 @subsection Interrupt Stack
 
 The i386 family does not support a dedicated hardware
@@ -424,69 +259,26 @@ non-nested interrupt returns, RTEMS switches back to the stack
 of the interrupted stack.  The current stack pointer is not
 altered by RTEMS on nested interrupt.
 
-Without a dedicated interrupt stack, every task in
-the system MUST have enough stack space to accommodate the worst
-case stack usage of that particular task and the interrupt
-service routines COMBINED.  By supporting a dedicated interrupt
-stack, RTEMS significantly lowers the stack requirements for
-each task.
-
-RTEMS allocates the dedicated interrupt stack from
-the Workspace Area.  The amount of memory allocated for the
-interrupt stack is determined by the interrupt_stack_size field
-in the CPU Configuration Table.
-
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Default Fatal Error Processing
 
-
-Upon detection of a fatal error by either the
-application or RTEMS the fatal error manager is invoked.  The
-fatal error manager will invoke the user-supplied fatal error
-handlers.  If no user-supplied handlers are configured,  the
-RTEMS provided default fatal error handler is invoked.  If the
-user-supplied fatal error handlers return to the executive the
-default fatal error handler is then invoked.  This chapter
-describes the precise operations of the default fatal error
-handler.
-
-@subsection Default Fatal Error Handler Operations
-
-The default fatal error handler which is invoked by
-the fatal_error_occurred directive when there is no user handler
-configured or the user handler returns control to RTEMS.  The
-default fatal error handler disables processor interrupts,
-places the error code in EAX, and executes a HLT instruction to
-halt the processor.
+The default fatal error handler for this architecture disables processor
+interrupts, places the error code in EAX, and executes a HLT instruction
+to halt the processor.
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
-@c  On-Line Applications Research Corporation (OAR).
-@c  All rights reserved.
 @c
-@c  $Id$
 @c
 
 @section Board Support Packages
 
-
-An RTEMS Board Support Package (BSP) must be designed to support a
-particular processor and target board combination.  This chapter presents a
-discussion of i386 specific BSP issues.  For more information on developing
-a BSP, refer to the chapter titled Board Support Packages in the RTEMS
-Applications User's Guide. 
-
 @subsection System Reset
 
-An RTEMS based application is initiated when the i386
-processor is reset.  When the i386 is reset,
+An RTEMS based application is initiated when the i386 processor is reset.
+When the i386 is reset,
 
 @itemize @bullet
 
@@ -571,6 +363,6 @@ enabled during the reset application initialization code.  The reset code
 which is executed before the call to initialize_executive has the following
 requirements:
 
-For more information regarding the i386s data structures and their
+For more information regarding the i386 data structures and their
 contents, refer to Intel's 386 Programmer's Reference Manual.
 
