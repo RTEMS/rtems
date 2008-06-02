@@ -1,3 +1,8 @@
+2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/interr.h, score/src/interr.c: Convention
+	calls for leading underscore on private RTEMS variables.
+
 2008-05-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/object.h, 
