@@ -1,3 +1,8 @@
+2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/bsp.t, user/init.t: Rework initialization and BSP chapters to
+	account for changes to initialization framework.
+
 2008-05-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/conf.t: Add baseline interface for Watchdog Driver.

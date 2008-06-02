@@ -33,20 +33,9 @@ initialization code are highly processor and target dependent,
 the logical functionality of these actions are similar across a
 variety of processors and target platforms.
 
-Normally, the application's initialization is
-performed at two separate times:  before the call to
-@code{@value{DIRPREFIX}initialize_executive}
-(reset application initialization) and
-after @code{@value{DIRPREFIX}initialize_executive}
-in the user's initialization tasks
-(local and global application initialization).  The order of the
-startup procedure is as follows:
-
-@enumerate
-@item Reset application initialization.
-@item Call to @code{@value{DIRPREFIX}initialize_executive}
-@item Local and global application initialization.
-@end enumerate
+Normally, the BSP and some of the application initialization is
+intertwined in the RTEMS initialization sequence controlled by
+the shared function @code{boot_card()}.
 
 The reset application initialization code is executed
 first when the processor is reset.  All of the hardware must be
@@ -57,49 +46,45 @@ application.  Some of the hardware components may be initialized
 in this code as well as any application initialization that does
 not involve calls to RTEMS directives.
 
-The processor's Interrupt Vector Table which will be
-used by the application may need to be set to the required value
-by the reset application initialization code.  Because
-interrupts are enabled automatically by RTEMS as part of the
-@code{@value{DIRPREFIX}initialize_executive} directive,
-the Interrupt Vector Table MUST
-be set before this directive is invoked to ensure correct
-interrupt vectoring.  The processor's Interrupt Vector Table
-must be accessible by RTEMS as it will be modified by the
-@code{@value{DIRPREFIX}interrupt_catch} directive.  
-On some CPUs, RTEMS installs it's
-own Interrupt Vector Table as part of initialization and thus
-these requirements are met automatically.  The reset code which
-is executed before the call to @code{@value{DIRPREFIX}initialize_executive}
-has the following requirements:
+The processor's Interrupt Vector Table which will be used by the
+application may need to be set to the required value by the reset
+application initialization code.  Because interrupts are enabled
+automatically by RTEMS as part of the context switch to the first task,
+the Interrupt Vector Table MUST be set before this directive is invoked
+to ensure correct interrupt vectoring.  The processor's Interrupt Vector
+Table must be accessible by RTEMS as it will be modified by the when
+installing user Interrupt Service Routines (ISRs) On some CPUs, RTEMS
+installs it's own Interrupt Vector Table as part of initialization and
+thus these requirements are met automatically.  The reset code which is
+executed before the call to any RTEMS initialization routines has the
+following requirements:
 
 @itemize @bullet
-@item Must not make any RTEMS directive calls.
+@item Must not make any blocking RTEMS directive calls.
 
-@item If the processor supports multiple privilege levels,
-must leave the processor in the most privileged, or supervisory,
-state.
+@item If the processor supports multiple privilege levels, must leave
+the processor in the most privileged, or supervisory, state.
 
 @item Must allocate a stack of at least @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
-bytes and initialize the stack pointer for the
-@code{@value{DIRPREFIX}initialize_executive} directive.
+bytes and initialize the stack pointer for the initialization process.
 
 @item Must initialize the processor's Interrupt Vector Table.
 
 @item Must disable all maskable interrupts.
 
-@item If the processor supports a separate interrupt stack,
-must allocate the interrupt stack and initialize the interrupt
-stack pointer.
+@item If the processor supports a separate interrupt stack, must allocate
+the interrupt stack and initialize the interrupt stack pointer.
+
 @end itemize
 
-The @code{@value{DIRPREFIX}initialize_executive} directive does not return to
-the initialization code, but causes the highest priority
-initialization task to begin execution.  Initialization tasks
-are used to perform both local and global application
-initialization which is dependent on RTEMS facilities.  The user
-initialization task facility is typically used to create the
-application's set of tasks.
+At the end of the initialization sequence, RTEMS does not return to the
+BSP initialization code, but instead context switches to the highest
+priority task to begin application execution.  This task is typically
+a User Initialization Task which is responsible for performing both
+local and global application initialization which is dependent on RTEMS
+facilities.  It is also responsible for initializing any higher level
+RTEMS services the application uses such as networking and blocking
+device drivers.
 
 @subsection Interrupt Stack Requirements
 
@@ -121,38 +106,36 @@ stack usage must account for the following requirements:
 @item Application subroutine calls
 @end itemize
 
-The size of the interrupt stack must be greater than
-or equal to the constant @code{@value{RPREFIX}MINIMUM_STACK_SIZE}.
+The size of the interrupt stack must be greater than or equal to the
+constant @code{@value{RPREFIX}MINIMUM_STACK_SIZE}.
 
 @subsection Processors with a Separate Interrupt Stack
 
-Some processors support a separate stack for
-interrupts.  When an interrupt is vectored and the interrupt is
-not nested, the processor will automatically switch from the
-current stack to the interrupt stack.  The size of this stack is
-based solely on the worst-case stack usage by interrupt service
-routines.
+Some processors support a separate stack for interrupts.  When an
+interrupt is vectored and the interrupt is not nested, the processor
+will automatically switch from the current stack to the interrupt stack.
+The size of this stack is based solely on the worst-case stack usage by
+interrupt service routines.
 
-The dedicated interrupt stack for the entire
-application is supplied and initialized by the reset and
-initialization code of the user's board support package.  Since
-all ISRs use this stack, the stack size must take into account
-the worst case stack usage by any combination of nested ISRs.
+The dedicated interrupt stack for the entire application on some
+architectures is supplied and initialized by the reset and initialization
+code of the user's Board Support Package.  Whether allocated and
+initialized by the BSP or RTEMS, since all ISRs use this stack, the
+stack size must take into account the worst case stack usage by any
+combination of nested ISRs.
 
-@subsection Processors without a Separate Interrupt Stack
+@subsection Processors Without a Separate Interrupt Stack
 
-Some processors do not support a separate stack for
-interrupts.  In this case, without special assistance every
-task's stack must include enough space to handle the task's
-worst-case stack usage as well as the worst-case interrupt stack
-usage.  This is necessary because the worst-case interrupt
-nesting could occur while any task is executing.
+Some processors do not support a separate stack for interrupts.  In this
+case, without special assistance every task's stack must include
+enough space to handle the task's worst-case stack usage as well as
+the worst-case interrupt stack usage.  This is necessary because the
+worst-case interrupt nesting could occur while any task is executing.
 
-On many processors without dedicated hardware managed
-interrupt stacks, RTEMS manages a dedicated interrupt stack in
-software.  If this capability is supported on a CPU, then it is
-logically equivalent to the processor supporting a separate
-interrupt stack in hardware.
+On many processors without dedicated hardware managed interrupt stacks,
+RTEMS manages a dedicated interrupt stack in software.  If this capability
+is supported on a CPU, then it is logically equivalent to the processor
+supporting a separate interrupt stack in hardware.
 
 @section Device Drivers
 
@@ -178,23 +161,20 @@ the application is to utilize timeslicing, the clock manager, the
 timer manager, the rate monotonic manager, or the timeout option on blocking
 directives.
 
-The clock tick is usually provided as an interrupt
-from a counter/timer or a real-time clock device.  When a
-counter/timer is used to provide the clock tick, the device is
-typically programmed to operate in continuous mode.  This mode
-selection causes the device to automatically reload the initial
-count and continue the countdown without programmer
-intervention.  This reduces the overhead required to manipulate
-the counter/timer in the clock tick ISR and increases the
-accuracy of tick occurrences.  The initial count can be based on
-the microseconds_per_tick field in the RTEMS Configuration
-Table.  An alternate approach is to set the initial count for a
-fixed time period (such as one millisecond) and have the ISR
-invoke @code{@value{DIRPREFIX}clock_tick}
-on the microseconds_per_tick boundaries.
-Obviously, this can induce some error if the configured
-microseconds_per_tick is not evenly divisible by the chosen
-clock interrupt quantum.
+The clock tick is usually provided as an interrupt from a counter/timer
+or a real-time clock device.  When a counter/timer is used to provide the
+clock tick, the device is typically programmed to operate in continuous
+mode.  This mode selection causes the device to automatically reload the
+initial count and continue the countdown without programmer intervention.
+This reduces the overhead required to manipulate the counter/timer in
+the clock tick ISR and increases the accuracy of tick occurrences.
+The initial count can be based on the microseconds_per_tick field
+in the RTEMS Configuration Table.  An alternate approach is to set
+the initial count for a fixed time period (such as one millisecond)
+and have the ISR invoke @code{@value{DIRPREFIX}clock_tick} on the
+configured @code{microseconds_per_tick} boundaries.  Obviously, this
+can induce some error if the configured @code{microseconds_per_tick}
+is not evenly divisible by the chosen clock interrupt quantum.
 
 It is important to note that the interval between
 clock ticks directly impacts the granularity of RTEMS timing
@@ -235,7 +215,7 @@ switch extension would save and restore the context of the
 device.
 
 For more information on user extensions, refer to the
-User Extensions chapter.
+@ref{User Extensions Manager} chapter.
 
 @section Multiprocessor Communications Interface (MPCI)
 
