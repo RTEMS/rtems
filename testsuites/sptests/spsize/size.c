@@ -249,7 +249,7 @@ uninitialized =
 
 /*init.h*/      0                                         +
 
-/*interr.h*/    (sizeof Internal_errors_What_happened)    +
+/*interr.h*/    (sizeof _Internal_errors_What_happened)   +
 
 /*intr.h*/      0                                         +
 

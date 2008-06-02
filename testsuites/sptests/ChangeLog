@@ -1,3 +1,8 @@
+2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spsize/size.c: Convention calls for leading underscore on private
+	RTEMS variables.
+
 2008-05-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spfatal/fatal.c, spfatal06/testcase.h, spfatal07/testcase.h,
