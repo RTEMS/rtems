@@ -19,9 +19,9 @@ void BSP_panic(char *s)
   rebootQuestion();
 }
 
-#define THESRC Internal_errors_What_happened.the_source
-#define ISITNL Internal_errors_What_happened.is_internal
-#define THEERR Internal_errors_What_happened.the_error
+#define THESRC _Internal_errors_What_happened.the_source
+#define ISITNL _Internal_errors_What_happened.is_internal
+#define THEERR _Internal_errors_What_happened.the_error
 
 char *score_status_text(rtems_status_code sc)
 {
