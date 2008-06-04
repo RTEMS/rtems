@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.8])
 
 AC_PREREQ(2.60)
-AC_INIT([crossrpms],[0.20070226.1],[http://www.rtems.org/bugzilla])
+AC_INIT([crossrpms],[0.20080604.1],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -39,14 +39,6 @@ all )
       o=`echo $d | sed -e 's,/.*,,'`
       a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
       targets="$targets $a-$o"
-  done
-  for d in freebsd*/*/Makefile.am \
-    cygwin*/*/Makefile.am \
-    mingw*/*/Makefile.am; \
-  do
-      o=`echo $d | sed -e 's,/.*,,'`
-      a=`echo $d | sed -e 's,/Makefile\.am,,;s,.*/,,'`
-      targets="$targets $a-pc-$o"
   done
   for d in solaris*/*/Makefile.am; \
   do
@@ -122,9 +114,6 @@ case "$host" in
   i?86-*cygwin*) 	RPM_OS=cygwin ;;
   i?86-*mingw*)		RPM_OS=mingw32 ;;
   sparc-*solaris*)	RPM_OS=solaris2.7 ;;
-  i?86-*freebsd5*)	RPM_OS=freebsd5.2 ;;
-  i?86-*freebsd6.0)	RPM_OS=freebsd6.0 ;;
-  i?86-*freebsd6.1)	RPM_OS=freebsd6.1 ;;
   *)
     AC_MSG_ERROR([Unsupported host ${host}])
     ;;
@@ -156,9 +145,6 @@ AC_CONFIG_FILES([mingw32/i686/Makefile])
 
 AC_CONFIG_FILES([solaris2.7/Makefile])
 AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
-
-AC_CONFIG_FILES([freebsd6.2/Makefile])
-AC_CONFIG_FILES([freebsd6.2/i586/Makefile])
 
 AC_CONFIG_FILES([rtems4.8/Makefile])
 AC_CONFIG_FILES([rtems4.8/arm/Makefile])
