@@ -16,8 +16,11 @@ Source0:	ftp://cygwin.com/pub/cygwin/release/ncurses/ncurses-%{ncurses_version}.
 Source1:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses8/libncurses8-%{ncurses_version}.tar.bz2
 Source2:	ftp://cygwin.com/pub/cygwin/release/ncurses/libncurses-devel/libncurses-devel-%{ncurses_version}.tar.bz2
 
+BuildRequires:  @rpmprefix@@tool_target@-terminfo
+
 Provides:	@rpmprefix@@tool_target@-libncurses-devel = %{version}-%{release}
 Provides:       @rpmprefix@@tool_target@-ncurses-devel = %{version}-%{release}
+Requires:       @rpmprefix@@tool_target@-terminfo
 
 %description
 Cygwin ncurses libraries.
