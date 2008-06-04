@@ -30,7 +30,7 @@ Cygwin terminfo libraries.
   ( cd @tool_target@/sys-root ; %{__tar} xvjf %{SOURCE0})
   rm -f @tool_target@/sys-root/usr/share/terminfo/e/Eterm-color
   pushd @tool_target@/sys-root/usr/share/terminfo/e
-  ln -s Eterm-color ../e/Eterm
+  ln -s ../e/Eterm Eterm-color
   popd
 
 %install
