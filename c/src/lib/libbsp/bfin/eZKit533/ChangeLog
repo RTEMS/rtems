@@ -1,3 +1,7 @@
+2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Need cplb.h
+
 2008-05-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am, console/console-io.c: Install cplb.h and use it.
