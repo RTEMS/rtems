@@ -29,8 +29,10 @@ Cygwin terminfo libraries.
   mkdir -p @tool_target@/sys-root
   ( cd @tool_target@/sys-root ; %{__tar} xvjf %{SOURCE0})
   rm -f @tool_target@/sys-root/usr/share/terminfo/e/Eterm-color
-  pushd @tool_target@/sys-root/usr/share/terminfo/e
-  ln -s ../e/Eterm Eterm-color
+  rm -f @tool_target@/sys-root/usr/share/terminfo/n/ncr260vt300wpp
+  pushd @tool_target@/sys-root/usr/share/terminfo
+  ln -s ../e/Eterm e/Eterm-color
+  ln -s ../n/NCR260VT300WPP0 n/ncr260vt300wpp 
   popd
 
 %install
