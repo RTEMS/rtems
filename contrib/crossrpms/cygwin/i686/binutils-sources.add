@@ -1,3 +1,5 @@
 Source0:	ftp://cygwin.com/pub/cygwin/release/binutils/binutils-%{binutils_pkgvers}-src.tar.bz2
 %{?_without_sources:NoSource:	0}
+%if "%{binutils_version}" == "2.17.50"
 Patch0:	binutils-2.17.50-cygwin-%{binutils_pkgvers}.diff
+%endif
