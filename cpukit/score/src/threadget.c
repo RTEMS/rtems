@@ -53,6 +53,7 @@ Thread_Control *_Thread_Get (
 {
   uint32_t             the_api;
   uint32_t             the_class;
+  Objects_Information **api_information;
   Objects_Information *information;
   Thread_Control      *tp = (Thread_Control *) 0;
  
@@ -75,7 +76,13 @@ Thread_Control *_Thread_Get (
     goto done;
   }
  
-  information = _Objects_Information_table[ the_api ][ the_class ];
+  api_information = _Objects_Information_table[ the_api ];
+  if ( !api_information ) {
+    *location = OBJECTS_ERROR;
+    goto done;
+  }
+
+  information = api_information[ the_class ];
   if ( !information ) {
     *location = OBJECTS_ERROR;
     goto done;

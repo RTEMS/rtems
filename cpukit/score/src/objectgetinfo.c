@@ -31,6 +31,9 @@ Objects_Information *_Objects_Get_information(
   if ( !the_class || the_class > _Objects_API_maximum_class(the_api) )
     return NULL;
 
+  if ( !_Objects_Information_table[ the_api ] )
+    return NULL;
+
   info = _Objects_Information_table[ the_api ][ the_class ];
   if ( !info )
     return NULL;

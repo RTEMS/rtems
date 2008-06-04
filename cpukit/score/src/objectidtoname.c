@@ -54,7 +54,10 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
 
   the_api = _Objects_Get_API( tmpId );
-  if ( the_api && the_api > OBJECTS_APIS_LAST )
+  if ( !_Objects_Is_api_valid( the_api ) )
+    return OBJECTS_INVALID_ID;
+
+  if ( !_Objects_Information_table[ the_api ] )
     return OBJECTS_INVALID_ID;
 
   the_class = _Objects_Get_class( tmpId );

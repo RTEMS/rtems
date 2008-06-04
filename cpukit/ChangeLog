@@ -1,3 +1,9 @@
+2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/objectgetinfo.c, score/src/objectidtoname.c,
+	score/src/threadget.c: Make sure the pointer to the API object table
+	is valid before derefencing it.
+
 2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/interr.h, score/src/interr.c: Convention
