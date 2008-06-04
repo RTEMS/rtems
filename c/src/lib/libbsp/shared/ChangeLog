@@ -1,3 +1,7 @@
+2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/tm27.h: New file. Stub version of tm27 support.
+
 2008-05-23	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/VME.h: removed 'weak' attribute from
