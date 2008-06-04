@@ -28,6 +28,10 @@ TERMCAP_VERS = 20050421-1
 TERMCAP_RPMREL = 0.20080323.1%{?dist}
 include ../termcap.am
 
+TERMINFO_VERS = 5.5_20061104-1
+TERMINFO_RPMREL = 0.20080604.1%{?dist}
+include ../terminfo.am
+
 ZLIB_VERS = 1.2.3-2
 ZLIB_RPMREL = 0.20080323.1%{?dist}
 include ../zlib.am
