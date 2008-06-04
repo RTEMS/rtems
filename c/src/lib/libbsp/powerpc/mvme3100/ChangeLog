@@ -1,3 +1,7 @@
+2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Need tm27.h
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Remove stray line.

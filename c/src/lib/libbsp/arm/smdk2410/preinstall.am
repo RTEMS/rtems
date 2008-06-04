@@ -40,6 +40,10 @@ $(PROJECT_INCLUDE)/smc.h: ../gp32/smc/smc.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/smc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/smc.h
 
+$(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
+
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h

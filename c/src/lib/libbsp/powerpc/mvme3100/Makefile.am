@@ -14,6 +14,7 @@ include $(top_srcdir)/../../bsp.am
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
+include_HEADERS += ../../shared/include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
