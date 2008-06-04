@@ -673,7 +673,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(uint32_t))
+#define CPU_STACK_MINIMUM_SIZE          (8 * 1024)
 
 
 /*
