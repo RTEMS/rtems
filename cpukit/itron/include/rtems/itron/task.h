@@ -42,10 +42,12 @@ extern "C" {
  */
 
 
+#if 0
 typedef struct {
   uint32_t                  unused;  /* no use for the API extension */
                                      /*   structure for ITRON identified yet */
 }  ITRON_API_Control;
+#endif
 
 /*
  *  The following defines the information control block used to

@@ -24,6 +24,7 @@
 
 #include <rtems/itron/task.h>
 
+#if 0
 /*
  *  _ITRON_Task_Create_extension
  *
@@ -39,6 +40,11 @@ boolean _ITRON_Task_Create_extension(
   Thread_Control *created
 )
 {
+  /*
+   *  Until we actually put data in this structure, do not even
+   *  allocate it.
+   */
+#if 0
   ITRON_API_Control *api;
 
   api = _Workspace_Allocate( sizeof( ITRON_API_Control ) );
@@ -47,6 +53,9 @@ boolean _ITRON_Task_Create_extension(
     return FALSE;
 
   created->API_Extensions[ THREAD_API_ITRON ] = api;
+#else
+  created->API_Extensions[ THREAD_API_ITRON ] = NULL;
+#endif
 
   /*
    *  Initialize the ITRON API extension
@@ -66,10 +75,17 @@ User_extensions_routine _ITRON_Task_Delete_extension(
   Thread_Control *deleted
 )
 {
+  /*
+   *  Until we actually put data in this structure, do not even
+   *  allocate it.
+   */
+#if 0
   (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_ITRON ] );
 
   deleted->API_Extensions[ THREAD_API_ITRON ] = NULL;
+#endif
 }
+#endif
 
 /*
  *  _ITRON_Task_Initialize_user_tasks
@@ -102,10 +118,15 @@ API_extensions_Control _ITRON_Task_API_extensions = {
   NULL                                      /* post switch */
 };
 
+/*
+ *  Until ITRON needs this, do not even declare it.
+ */
+#if 0
 User_extensions_Control _ITRON_Task_User_extensions = {
   { NULL, NULL },
   { { NULL, NULL }, NULL },
-  { _ITRON_Task_Create_extension,             /* create */
+  {
+    _ITRON_Task_Create_extension,             /* create */
     NULL,                                     /* start */
     NULL,                                     /* restart */
     _ITRON_Task_Delete_extension,             /* delete */
@@ -115,6 +136,7 @@ User_extensions_Control _ITRON_Task_User_extensions = {
     NULL                                      /* fatal */
   }
 };
+#endif
 
 /*
  *  _ITRON_Task_Manager_initialization
@@ -137,15 +159,6 @@ void _ITRON_Task_Manager_initialization(
   _ITRON_Task_Number_of_initialization_tasks = number_of_initialization_tasks;
   _ITRON_Task_User_initialization_tasks = user_tasks;
 
-  /*
-   *  There may not be any ITRON_initialization tasks configured.
-   */
-
-#if 0
-  if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
-    _Internal_error_Occurred( INTERNAL_ERROR_ITRON_API, TRUE, -1 );
-#endif
-
   _Objects_Initialize_information(
     &_ITRON_Task_Information,   /* object information table */
     OBJECTS_ITRON_API,          /* object API */
@@ -162,16 +175,15 @@ void _ITRON_Task_Manager_initialization(
   );
 
   /*
-   *  Add all the extensions for this API
+   *  Until ITRON needs this, do not even declare it.
    */
-
-  _User_extensions_Add_API_set( &_ITRON_Task_User_extensions );
+  #if 0
+    /*
+     *  Add all the extensions for this API
+     */
+    _User_extensions_Add_API_set( &_ITRON_Task_User_extensions );
+  #endif
 
   _API_extensions_Add( &_ITRON_Task_API_extensions );
-
-  /*
-   *  XXX MP not supported
-   *  Register the MP Process Packet routine.
-   */
 
 }
