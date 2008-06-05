@@ -1,5 +1,9 @@
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/wkspace.c: Fix error in comment.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/psignal.c: Do not allocate any memory for queued signals if
 	the configuration parameter is 0. Before we would end up with an
 	allocation of 0 which rounded up and wasted some memory when POSIX

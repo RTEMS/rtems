@@ -68,7 +68,7 @@ void *_Workspace_Allocate(
 }
 
 /*
- *  _Workspace_Allocate
+ *  _Workspace_Free
  */
 boolean _Workspace_Free(
   void *block
