@@ -1,5 +1,11 @@
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/isr.h, score/src/isr.c: Use
+	CPU_SIMPLE_VECTORED_INTERRUPTS porting parameter to avoid allocating
+	memory for vector table.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/wkspace.c: Fix error in comment.
 
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>

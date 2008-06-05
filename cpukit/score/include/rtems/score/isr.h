@@ -87,11 +87,13 @@ SCORE_EXTERN boolean    _ISR_Signals_to_thread_executing;
  */
 SCORE_EXTERN volatile uint32_t   _ISR_Nest_level;
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
  *  The following declares the Vector Table.  Application
  *  interrupt service routines are vectored by the ISR Handler via this table.
  */
 SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
+#endif
 
 /**
  *  This routine performs the initialization necessary for this handler.

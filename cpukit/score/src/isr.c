@@ -38,9 +38,11 @@ void _ISR_Handler_initialization( void )
 
   _ISR_Nest_level = 0;
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
   _ISR_Vector_table = _Workspace_Allocate_or_fatal_error(
      sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS
   );
+#endif
 
   _CPU_Initialize_vectors();
 
