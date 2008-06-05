@@ -1,5 +1,10 @@
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/src/newlibc_exit.c: Only run the fini section on exit if
+	the target toolset uses init/fini sections.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* itron/include/rtems/itron/task.h, itron/src/task.c: ITRON currently
 	has no functional data in the user extension data area structure so
 	this disables the definition, allocation and deallocation of that

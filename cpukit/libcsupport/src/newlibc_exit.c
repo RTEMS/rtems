@@ -127,8 +127,14 @@ void libc_wrapup(void)
 
 void EXIT_SYMBOL(int status)
 {
-  extern void _fini( void );
-  _fini();
+  /*
+   *  If the toolset uses init/fini sections, then we need to 
+   *  run the global destructors now.
+   */
+  #if defined(__USE_INIT_FINI__)
+    extern void _fini( void );
+    _fini();
+  #endif
 
   /*
    *  We need to do the exit processing on the global reentrancy structure.
