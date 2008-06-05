@@ -1,3 +1,10 @@
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp28/init.c: Corrections to configuration.
+	* sp37/init.c: Correctly invoke rtems_interrupt_disable() body.
+	* spsize/size.c: _ISR_Vector_table only exists on architectures
+	which use the Simple Vectored Interrupt Model.
+
 2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spsize/size.c: Convention calls for leading underscore on private

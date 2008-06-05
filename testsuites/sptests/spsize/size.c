@@ -257,7 +257,9 @@ uninitialized =
                 (sizeof _IO_Driver_address_table)         +
 
 /*isr.h*/       (sizeof _ISR_Nest_level)                  +
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
                 (sizeof _ISR_Vector_table)                +
+#endif
                 (sizeof _ISR_Signals_to_thread_executing) +
 
 /*message.h*/   (sizeof _Message_queue_Information)       +

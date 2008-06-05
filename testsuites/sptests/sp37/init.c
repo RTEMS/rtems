@@ -240,10 +240,10 @@ rtems_task Init(
   }
 
   puts( "interrupt disable (use body)" );
-  rtems_interrupt_disable( level );
+  level = rtems_interrupt_disable();
 
   puts( "interrupt disable (use body)" );
-  rtems_interrupt_disable( level );
+  level = rtems_interrupt_disable();
 
   puts( "interrupt flash (use body)" );
   rtems_interrupt_flash( level );
