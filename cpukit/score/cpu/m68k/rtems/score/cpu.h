@@ -34,6 +34,19 @@ extern "C" {
 #define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
 
 /*
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  M68K Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
+
+/*
  *  Use the m68k's hardware interrupt stack support and have the
  *  interrupt manager allocate the memory for it.
  */

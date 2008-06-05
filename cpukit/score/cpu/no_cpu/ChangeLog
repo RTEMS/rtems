@@ -1,3 +1,11 @@
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Add CPU_SIMPLE_VECTORED_INTERRUPTS porting
+	parameter to indicate that the port uses the Simple Vectored
+	Interrupt model or the Programmable Interrupt Controller Model. The
+	PIC model is implemented primarily in the BSP and it is responsible
+	for all memory allocation.
+
 2008-01-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Remove most doxygen warnings.

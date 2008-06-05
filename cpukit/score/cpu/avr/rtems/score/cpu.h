@@ -156,6 +156,19 @@ extern "C" {
 #define CPU_ISR_PASSES_FRAME_POINTER 0
 
 /*
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  AVR Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
+
+/*
  *  Does the CPU have hardware floating point?
  *
  *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.

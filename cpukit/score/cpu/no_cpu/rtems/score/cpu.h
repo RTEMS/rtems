@@ -120,6 +120,19 @@ extern "C" {
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
 
 /**
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  Port Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
+
+/**
  *  Does this CPU have hardware support for a dedicated interrupt stack?
  *
  *  If TRUE, then it must be installed during initialization.
