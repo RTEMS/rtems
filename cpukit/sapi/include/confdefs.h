@@ -39,15 +39,15 @@
 #ifndef __CONFIGURATION_TEMPLATE_h
 #define __CONFIGURATION_TEMPLATE_h
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * Include the executive's configuration
  */
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/apimutex.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
@@ -56,76 +56,102 @@ extern rtems_configuration_table        Configuration;
   extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #endif
 #ifdef RTEMS_POSIX_API
-extern posix_api_configuration_table    Configuration_POSIX_API;
+  extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
 #ifdef RTEMS_ITRON_API
-extern itron_api_configuration_table    Configuration_ITRON_API;
+  extern itron_api_configuration_table    Configuration_ITRON_API;
 #endif
 
-/*
- *  RTEMS C Library and Newlib support
+/**
+ *  This macro determines whether the RTEMS reentrancy support for
+ *  the Newlib C Library is enabled.
  */
-
-#if (defined(RTEMS_NEWLIB) && defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
+#if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
   #define CONFIGURE_NEWLIB_EXTENSION 1
 #else
   #define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
-/*
- *  File descriptors managed by libio
+/**
+ *  This macro defines the number of POSIX file descriptors allocated 
+ *  and managed by libio.  These are the "integer" file descriptors that
+ *  are used by calls like open(2) and read(2).
  */
-
 #ifndef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 3
+  #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 3
 #endif
 
+/**
+ *  From the number of file descriptors, we can determine how many
+ *  semaphores the implementation will require.
+ */
 #define CONFIGURE_LIBIO_SEMAPHORES \
   (CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS + 1)
 
 #ifdef CONFIGURE_INIT
-uint32_t   rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+  /**
+   *  When instantiating the configuration tables, this variable is
+   *  initialized to specify the maximum number of file descriptors.
+   */
+  uint32_t rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
-/*
- *  Termios resources
+/**
+ *  This macro determines if termios is disabled by this application.
+ *  This only means that resources will not be reserved.  If you end
+ *  up using termios, it will fail.
  */
-
 #ifdef CONFIGURE_TERMIOS_DISABLED
-#define CONFIGURE_TERMIOS_SEMAPHORES 0
+  #define CONFIGURE_TERMIOS_SEMAPHORES 0
 #else
+  /**
+   *  This macro specifies the number of serial or PTY ports that will
+   *  use termios.
+   */
+  #ifndef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
+  #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
+  #endif
 
-#ifndef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
+  /**
+   *  This macro reserves the number of semaphores required by termios
+   *  based upon the number of communication ports that will use it.
+   */
+  #define CONFIGURE_TERMIOS_SEMAPHORES \
+    ((CONFIGURE_NUMBER_OF_TERMIOS_PORTS * 4) + 1)
 #endif
 
-#define CONFIGURE_TERMIOS_SEMAPHORES \
-  ((CONFIGURE_NUMBER_OF_TERMIOS_PORTS * 4) + 1)
-#endif
-
-/*
- *  PTYs
+/**
+ *  This macro specifies the number of PTYs that can be concurrently
+ *  active.
  */
-
 #ifndef CONFIGURE_MAXIMUM_PTYS
-#define CONFIGURE_MAXIMUM_PTYS 0
+  #define CONFIGURE_MAXIMUM_PTYS 0
 #endif
 
+/**
+ *  This variable contains the maximum number of PTYs that can be
+ *  concurrently active.
+ */
 #ifdef CONFIGURE_INIT
-int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
+  int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
 #else
-extern int rtems_telnetd_maximum_ptys;
+  extern int rtems_telnetd_maximum_ptys;
 #endif
 
 /*
  *  Mount Table Configuration
  */
-
 #include <rtems/imfs.h>
 
+/**
+ *  This specifies the number of bytes per block for files within
+ *  the IMFS.  There are a maximum number of blocks per file so
+ *  this dictates the maximum size of a file.  This has to be balanced
+ *  with the unused portion of each block that might be wasted.
+ */
 #ifndef CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK \
-                  IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
+  #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK \
+		    IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
 #endif
 #ifdef CONFIGURE_INIT
   int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
@@ -150,21 +176,17 @@ extern int rtems_telnetd_maximum_ptys;
   #endif
 #endif
 
-/*
- *  Stack Checker Requirements
- *
- *  NOTE: This does not automatically enable reporting at program exit.
+/**
+ *  This configures the stack checker user extension.
  */
-
 #ifdef STACK_CHECKER_ON
-#define CONFIGURE_STACK_CHECKER_EXTENSION 1
+  #define CONFIGURE_STACK_CHECKER_EXTENSION 1
 #else
-#define CONFIGURE_STACK_CHECKER_EXTENSION 0
+  #define CONFIGURE_STACK_CHECKER_EXTENSION 0
 #endif
 
-
-/*
- *  Idle task body configuration
+/**
+ *  @brief Idle task body configuration
  *
  *  There is a default IDLE thread body provided by RTEMS which
  *  has the possibility of being CPU specific.  There may be a
@@ -179,8 +201,8 @@ extern int rtems_telnetd_maximum_ptys;
   #endif
 #endif
 
-/*
- *  Idle task stack size configuration
+/**
+ *  @brief Idle task stack size configuration
  *
  *  By default, the IDLE task will have a stack of minimum size.
  *  The BSP or application may override this value.
@@ -193,8 +215,8 @@ extern int rtems_telnetd_maximum_ptys;
   #endif
 #endif
 
-/*
- *  Interrupt stack size configuration
+/**
+ *  @brief Interrupt stack size configuration
  *
  *  By default, the interrupt stack will be of minimum size.
  *  The BSP or application may override this value.
@@ -207,8 +229,12 @@ extern int rtems_telnetd_maximum_ptys;
   #endif
 #endif
 
-/* XXX try to get to the point where all BSP support allocating the
- * XXX memory from the Workspace
+/**
+ *  This reserves memory for the interrupt stack if it is to be allocated
+ *  by RTEMS rather than the BSP.
+ *
+ *  @todo Try to get to the point where all BSPs support allocating the
+ *        memory from the Workspace.
  */
 #if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
   #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
@@ -216,23 +242,24 @@ extern int rtems_telnetd_maximum_ptys;
   #define CONFIGURE_INTERRUPT_STACK_MEMORY CONFIGURE_INTERRUPT_STACK_SIZE
 #endif
 
-/*
- *  Task stack allocator configuration
+/**
+ *  Configure the very much optional task stack allocator
  */
-
 #ifndef CONFIGURE_TASK_STACK_ALLOCATOR
   #define CONFIGURE_TASK_STACK_ALLOCATOR NULL
 #endif
 
+/**
+ *  Configure the very much optional task stack deallocator
+ */
 #ifndef CONFIGURE_TASK_STACK_DEALLOCATOR
   #define CONFIGURE_TASK_STACK_DEALLOCATOR NULL
 #endif
 
-/*
+/**
  *  Should the RTEMS Workspace and C Program Heap be cleared automatically
  *  at system start up?
  */
-
 #ifndef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
   #ifdef BSP_ZERO_WORKSPACE_AUTOMATICALLY
     #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY \
@@ -249,6 +276,10 @@ extern int rtems_telnetd_maximum_ptys;
 #include <rtems/malloc.h>
 
 #ifdef CONFIGURE_INIT
+  /**
+   *  This configures the malloc family statistics to be available.
+   *  By default only function call counts are kept.
+   */
   rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers =
     #ifndef CONFIGURE_MALLOC_STATISTICS
       NULL;
@@ -258,6 +289,12 @@ extern int rtems_telnetd_maximum_ptys;
 #endif
 
 #ifdef CONFIGURE_INIT
+  /**
+   *  This configures the sbrk() support for the malloc family.
+   *  By default it is assumed that the BSP provides all available
+   *  RAM to the malloc family implementation so sbrk()'ing to get
+   *  more memory would always fail anyway.
+   */
   rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers =
     #ifndef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
       NULL;
@@ -267,6 +304,11 @@ extern int rtems_telnetd_maximum_ptys;
 #endif
 
 #ifdef CONFIGURE_INIT
+  /**
+   *  This configures the malloc family plugin which dirties memory
+   *  allocated.  This is helpful for finding unitialized data structure
+   *  problems. 
+   */
   rtems_malloc_dirtier_t *rtems_malloc_dirty_helper =
     #if defined(CONFIGURE_MALLOC_DIRTY)
       rtems_malloc_dirty_memory;
@@ -274,6 +316,30 @@ extern int rtems_telnetd_maximum_ptys;
       NULL;
     #endif
 #endif
+
+/**
+ *  This is a helper macro used in calculations in this file.  It is used
+ *  to noted when an element is allocated from the RTEMS Workspace and adds
+ *  a factor to account for heap overhead plus an alignment factor that
+ *  may be applied.
+ */
+#define _Configure_From_workspace(_size) \
+  ((_size) + (2 * sizeof(uint32_t)) + CPU_ALIGNMENT)
+
+/**
+ *  This macro accounts for how memory for a set of configured objects is 
+ *  allocated from the Executive Workspace.  
+ *
+ *  NOTE: It does NOT attempt to address the more complex case of unlimited
+ *        objects.
+ */
+#define _Configure_Object_RAM(_number, _size) \
+  ( _Configure_From_workspace((_number) * (_size)) + \
+    _Configure_From_workspace( \
+      (((_number) + 1) * sizeof(Objects_Control *)) + \
+      (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) \
+    ) \
+  )
 
 /*
  *  Default User Initialization Task Table.  This table guarantees that
@@ -292,44 +358,44 @@ extern int rtems_telnetd_maximum_ptys;
 #else
 
 #ifndef CONFIGURE_INIT_TASK_NAME
-#define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'U', 'I', '1', ' ' )
+  #define CONFIGURE_INIT_TASK_NAME          rtems_build_name('U', 'I', '1', ' ')
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_STACK_SIZE
-#define CONFIGURE_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
+  #define CONFIGURE_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_PRIORITY
-#define CONFIGURE_INIT_TASK_PRIORITY      1
+  #define CONFIGURE_INIT_TASK_PRIORITY      1
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ATTRIBUTES
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
+  #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
-#define CONFIGURE_INIT_TASK_ENTRY_POINT   Init
+  #define CONFIGURE_INIT_TASK_ENTRY_POINT   Init
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
+  #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ARGUMENTS
-#define CONFIGURE_INIT_TASK_ARGUMENTS     0
+  #define CONFIGURE_INIT_TASK_ARGUMENTS     0
 #endif
 
 #ifdef CONFIGURE_INIT
-rtems_initialization_tasks_table Initialization_tasks[] = {
-  { CONFIGURE_INIT_TASK_NAME,
-    CONFIGURE_INIT_TASK_STACK_SIZE,
-    CONFIGURE_INIT_TASK_PRIORITY,
-    CONFIGURE_INIT_TASK_ATTRIBUTES,
-    CONFIGURE_INIT_TASK_ENTRY_POINT,
-    CONFIGURE_INIT_TASK_INITIAL_MODES,
-    CONFIGURE_INIT_TASK_ARGUMENTS
-  }
-};
+  rtems_initialization_tasks_table Initialization_tasks[] = {
+    { CONFIGURE_INIT_TASK_NAME,
+      CONFIGURE_INIT_TASK_STACK_SIZE,
+      CONFIGURE_INIT_TASK_PRIORITY,
+      CONFIGURE_INIT_TASK_ATTRIBUTES,
+      CONFIGURE_INIT_TASK_ENTRY_POINT,
+      CONFIGURE_INIT_TASK_INITIAL_MODES,
+      CONFIGURE_INIT_TASK_ARGUMENTS
+    }
+  };
 #endif
 
 #define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
@@ -356,81 +422,81 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#include <rtems/console.h>
+  #include <rtems/console.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#include <rtems/clockdrv.h>
+  #include <rtems/clockdrv.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-#include <rtems/timerdrv.h>
+  #include <rtems/timerdrv.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-#include <rtems/rtc.h>
+  #include <rtems/rtc.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
-#include <rtems/watchdogdrv.h>
+  #include <rtems/watchdogdrv.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-#include <rtems/devnull.h>
+  #include <rtems/devnull.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
   /* the ide driver needs the ATA driver */
-#  ifndef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-#  define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-#  endif
-#include <libchip/ide_ctrl.h>
+  #ifndef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+    #define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+  #endif
+  #include <libchip/ide_ctrl.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-#include <libchip/ata.h>
+  #include <libchip/ata.h>
 #endif
 
 #ifndef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
 
 #ifdef CONFIGURE_INIT
-rtems_driver_address_table Device_drivers[] = {
-#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-  CONSOLE_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-  CLOCK_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-  RTC_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
-  WATCHDOG_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-  DEVNULL_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
-  IDE_CONTROLLER_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-  ATA_DRIVER_TABLE_ENTRY,
-#endif
-#ifdef CONFIGURE_APPLICATION_EXTRA_DRIVERS
-  CONFIGURE_APPLICATION_EXTRA_DRIVERS,
-#endif
-#ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
-  NULL_DRIVER_TABLE_ENTRY
-#elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_EXTRA_DRIVERS)
-  NULL_DRIVER_TABLE_ENTRY
-#endif
-};
+  rtems_driver_address_table Device_drivers[] = {
+    #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+      CONSOLE_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+      CLOCK_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+      RTC_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
+      WATCHDOG_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+      DEVNULL_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
+      IDE_CONTROLLER_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+      ATA_DRIVER_TABLE_ENTRY,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_EXTRA_DRIVERS
+      CONFIGURE_APPLICATION_EXTRA_DRIVERS,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+      NULL_DRIVER_TABLE_ENTRY
+    #elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) && \
+	!defined(CONFIGURE_APPLICATION_EXTRA_DRIVERS)
+      NULL_DRIVER_TABLE_ENTRY
+    #endif
+  };
 #endif
 
 #endif  /* CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE */
@@ -443,124 +509,126 @@ rtems_driver_address_table Device_drivers[] = {
 #define CONFIGURE_NUMBER_OF_DRIVERS \
   ((sizeof(Device_drivers) / sizeof(rtems_driver_address_table)))
 
+/**
+ *  This specifies the maximum number of device drivers that
+ *  can be installed in the system at one time.  It must account
+ *  for both the statically and dynamically installed drivers.
+ */
 #ifndef CONFIGURE_MAXIMUM_DRIVERS
-#define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
+  #define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
 #endif
 
-/*
+/**
  *  Default the number of devices per device driver.  This value may be
  *  overridden by the user.
  *
- *  NOTE: This configuration parameter is obsolete. Thus we will warn the
+ *  @note This configuration parameter is obsolete. Thus we will warn the
  *        user that it is obsolete.
  */
-
 #ifdef CONFIGURE_MAXIMUM_DEVICES
-#warning "CONFIGURE_MAXIMUM_DEVICES is obsolete.  Do not use any longer."
+  #warning "CONFIGURE_MAXIMUM_DEVICES is obsolete.  Do not use any longer."
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
   /*
    * configure the priority of the ATA driver task
    */
-#  ifndef CONFIGURE_ATA_DRIVER_TASK_PRIORITY
-#    define CONFIGURE_ATA_DRIVER_TASK_PRIORITY ATA_DRIVER_TASK_DEFAULT_PRIORITY
-#  endif
-#  ifdef CONFIGURE_INIT
-  rtems_task_priority ata_driver_task_priority
-    = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
-#  endif /* CONFIGURE_INIT */
+  #ifndef CONFIGURE_ATA_DRIVER_TASK_PRIORITY
+    #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY ATA_DRIVER_TASK_DEFAULT_PRIORITY
+  #endif
+  #ifdef CONFIGURE_INIT
+    rtems_task_priority ata_driver_task_priority
+      = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
+  #endif /* CONFIGURE_INIT */
 #endif
 
 /*
  * add bdbuf configuration and values for swapout task priority
  */
 #ifdef CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
-#include <rtems/bdbuf.h>
-/*
- * configure the priority of the bdbuf swapout task
- */
-#ifndef CONFIGURE_SWAPOUT_TASK_PRIORITY
-#define CONFIGURE_SWAPOUT_TASK_PRIORITY SWAPOUT_TASK_DEFAULT_PRIORITY
-#endif
-#ifdef CONFIGURE_INIT
-  rtems_task_priority swapout_task_priority
-    = CONFIGURE_SWAPOUT_TASK_PRIORITY;
-#endif  /* CONFIGURE_INIT */
-#ifndef CONFIGURE_HAS_OWN_BDBUF_TABLE
+  #include <rtems/bdbuf.h>
+  /*
+   * configure the priority of the bdbuf swapout task
+   */
+  #ifndef CONFIGURE_SWAPOUT_TASK_PRIORITY
+    #define CONFIGURE_SWAPOUT_TASK_PRIORITY SWAPOUT_TASK_DEFAULT_PRIORITY
+  #endif
+  #ifdef CONFIGURE_INIT
+    rtems_task_priority swapout_task_priority = CONFIGURE_SWAPOUT_TASK_PRIORITY;
+  #endif
+  #ifndef CONFIGURE_HAS_OWN_BDBUF_TABLE
+    #ifndef CONFIGURE_BDBUF_BUFFER_COUNT
+      #define CONFIGURE_BDBUF_BUFFER_COUNT 64
+    #endif
 
-#ifndef CONFIGURE_BDBUF_BUFFER_COUNT
-#define CONFIGURE_BDBUF_BUFFER_COUNT 64
-#endif /* CONFIGURE_BDBUF_BUFFER_COUNT */
-
-#ifndef CONFIGURE_BDBUF_BUFFER_SIZE
-#define CONFIGURE_BDBUF_BUFFER_SIZE 512
-#endif /* CONFIGURE_BDBUF_BUFFER_SIZE */
-#ifdef CONFIGURE_INIT
-rtems_bdbuf_config rtems_bdbuf_configuration[] = {
-  {CONFIGURE_BDBUF_BUFFER_SIZE,CONFIGURE_BDBUF_BUFFER_COUNT,NULL}
-};
-int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
-                                     /sizeof(rtems_bdbuf_configuration[0]));
-#endif /* CONFIGURE_INIT */
-#endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
+    #ifndef CONFIGURE_BDBUF_BUFFER_SIZE
+      #define CONFIGURE_BDBUF_BUFFER_SIZE 512
+    #endif
+    #ifdef CONFIGURE_INIT
+      rtems_bdbuf_config rtems_bdbuf_configuration[] = {
+        {CONFIGURE_BDBUF_BUFFER_SIZE, CONFIGURE_BDBUF_BUFFER_COUNT, NULL}
+      };
+      int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
+				 /sizeof(rtems_bdbuf_configuration[0]));
+    #endif /* CONFIGURE_INIT */
+  #endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 
 #if defined(RTEMS_MULTIPROCESSING)
-/*
- *  Default Multiprocessing Configuration Table.  The defaults are
- *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
- *  value may be overridden within each test to customize the environment.
- */
+  /*
+   *  Default Multiprocessing Configuration Table.  The defaults are
+   *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
+   *  value may be overridden within each test to customize the environment.
+   */
 
-#ifdef CONFIGURE_MP_APPLICATION
-#ifndef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
+  #ifdef CONFIGURE_MP_APPLICATION
+    #ifndef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
 
-#ifndef CONFIGURE_MP_NODE_NUMBER
-#define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
-#endif
+      #ifndef CONFIGURE_MP_NODE_NUMBER
+        #define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
+      #endif
 
-#ifndef CONFIGURE_MP_MAXIMUM_NODES
-#define CONFIGURE_MP_MAXIMUM_NODES              2
-#endif
+      #ifndef CONFIGURE_MP_MAXIMUM_NODES
+	#define CONFIGURE_MP_MAXIMUM_NODES              2
+      #endif
 
-#ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
-#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
-#endif
+      #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
+	#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
+      #endif
 
-#ifndef CONFIGURE_MP_MAXIMUM_PROXIES
-#define CONFIGURE_MP_MAXIMUM_PROXIES            32
-#endif
+      #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
+	#define CONFIGURE_MP_MAXIMUM_PROXIES            32
+      #endif
 
-#ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
-#define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
-#endif
+      #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+	#define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
+      #endif
 
-#ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
-#include <mpci.h>
-#define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
-#endif
+      #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
+	#include <mpci.h>
+	#define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
+      #endif
 
-#ifdef CONFIGURE_INIT
-rtems_multiprocessing_table Multiprocessing_configuration = {
-  CONFIGURE_MP_NODE_NUMBER,                  /* local node number */
-  CONFIGURE_MP_MAXIMUM_NODES,                /* maximum # nodes in system */
-  CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,       /* maximum # global objects */
-  CONFIGURE_MP_MAXIMUM_PROXIES,              /* maximum # proxies */
-  CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI task stack > minimum */
-  CONFIGURE_MP_MPCI_TABLE_POINTER            /* pointer to MPCI config table */
-};
-#endif
+      #ifdef CONFIGURE_INIT
+	rtems_multiprocessing_table Multiprocessing_configuration = {
+	  CONFIGURE_MP_NODE_NUMBER,               /* local node number */
+	  CONFIGURE_MP_MAXIMUM_NODES,             /* maximum # nodes */
+	  CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,    /* maximum # global objects */
+	  CONFIGURE_MP_MAXIMUM_PROXIES,           /* maximum # proxies */
+	  CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI stack > minimum */
+	  CONFIGURE_MP_MPCI_TABLE_POINTER         /* ptr to MPCI config table */
+	};
+      #endif
 
-#define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
+      #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
 
-#endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
+    #endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
 
-#else
+  #else
 
-#define CONFIGURE_MULTIPROCESSING_TABLE    NULL
+    #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
 
-#endif /* CONFIGURE_MP_APPLICATION */
+  #endif /* CONFIGURE_MP_APPLICATION */
 #endif /* RTEMS_MULTIPROCESSING */
 
 /*
@@ -569,57 +637,62 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 
 #ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
 
-#ifndef CONFIGURE_EXECUTIVE_RAM_WORK_AREA
-#define CONFIGURE_EXECUTIVE_RAM_WORK_AREA     NULL
-#endif
+  #ifndef CONFIGURE_EXECUTIVE_RAM_WORK_AREA
+    #define CONFIGURE_EXECUTIVE_RAM_WORK_AREA     NULL
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_TASKS
-#define CONFIGURE_MAXIMUM_TASKS               0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_TASKS
+    #define CONFIGURE_MAXIMUM_TASKS               0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_TIMERS
-#define CONFIGURE_MAXIMUM_TIMERS              0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
+    #define CONFIGURE_MAXIMUM_TASK_VARIABLES      0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_SEMAPHORES
-#define CONFIGURE_MAXIMUM_SEMAPHORES          0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_TIMERS
+    #define CONFIGURE_MAXIMUM_TIMERS              0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_SEMAPHORES
+    #define CONFIGURE_MAXIMUM_SEMAPHORES          0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_PARTITIONS
-#define CONFIGURE_MAXIMUM_PARTITIONS          0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_REGIONS
-#define CONFIGURE_MAXIMUM_REGIONS             0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_PARTITIONS
+    #define CONFIGURE_MAXIMUM_PARTITIONS          0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_PORTS
-#define CONFIGURE_MAXIMUM_PORTS               0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_REGIONS
+    #define CONFIGURE_MAXIMUM_REGIONS             0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_PERIODS
-#define CONFIGURE_MAXIMUM_PERIODS             0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_PORTS
+    #define CONFIGURE_MAXIMUM_PORTS               0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_BARRIERS
-#define CONFIGURE_MAXIMUM_BARRIERS            0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_PERIODS
+    #define CONFIGURE_MAXIMUM_PERIODS             0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_BARRIERS
+    #define CONFIGURE_MAXIMUM_BARRIERS            0
+  #endif
 
-#ifndef CONFIGURE_MICROSECONDS_PER_TICK
-#define CONFIGURE_MICROSECONDS_PER_TICK RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
-#endif
+  #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
+    #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
+  #endif
 
-#ifndef CONFIGURE_TICKS_PER_TIMESLICE
-#define CONFIGURE_TICKS_PER_TIMESLICE        50
-#endif
+  #ifndef CONFIGURE_MICROSECONDS_PER_TICK
+    #define CONFIGURE_MICROSECONDS_PER_TICK \
+            RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
+  #endif
+
+  #ifndef CONFIGURE_TICKS_PER_TIMESLICE
+    #define CONFIGURE_TICKS_PER_TIMESLICE        50
+  #endif
 
 /*
  *  Initial Extension Set
@@ -664,195 +737,228 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 
 #ifdef RTEMS_POSIX_API
 
-#include <sys/types.h>
-#include <signal.h>
-#include <limits.h>
-#include <mqueue.h>
-#include <rtems/posix/barrier.h>
-#include <rtems/posix/cond.h>
-#include <rtems/posix/mqueue.h>
-#include <rtems/posix/mutex.h>
-#include <rtems/posix/key.h>
-#include <rtems/posix/psignal.h>
-#include <rtems/posix/rwlock.h>
-#include <rtems/posix/semaphore.h>
-#include <rtems/posix/spinlock.h>
-#include <rtems/posix/threadsup.h>
-#include <rtems/posix/timer.h>
+  #include <sys/types.h>
+  #include <signal.h>
+  #include <limits.h>
+  #include <mqueue.h>
+  #include <rtems/posix/barrier.h>
+  #include <rtems/posix/cond.h>
+  #include <rtems/posix/mqueue.h>
+  #include <rtems/posix/mutex.h>
+  #include <rtems/posix/key.h>
+  #include <rtems/posix/psignal.h>
+  #include <rtems/posix/rwlock.h>
+  #include <rtems/posix/semaphore.h>
+  #include <rtems/posix/spinlock.h>
+  #include <rtems/posix/threadsup.h>
+  #include <rtems/posix/timer.h>
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-#define CONFIGURE_MAXIMUM_POSIX_THREADS      0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
+    #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES      0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
+    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES      0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
+    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-#define CONFIGURE_MAXIMUM_POSIX_KEYS         0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
+    #define CONFIGURE_MAXIMUM_POSIX_KEYS         0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
-#define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
+    #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-#define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
+    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-#define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-#define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
+    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-#define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
+    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-#define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
+    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
+  #endif
 
-#ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
+  #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
+    #ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
 
-/*
- *  The user is defining their own table information and setting the
- *  appropriate variables for the POSIX Initialization Thread Table.
- */
+      /*
+       *  The user is defining their own table information and setting the
+       *  appropriate variables for the POSIX Initialization Thread Table.
+       */
 
+    #else
+
+      #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+	#define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
+      #endif
+
+      #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+	#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
+                (RTEMS_MINIMUM_STACK_SIZE * 2)
+      #endif
+
+      #ifdef CONFIGURE_INIT
+	posix_initialization_threads_table POSIX_Initialization_threads[] = {
+	  { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT, \
+	      CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE }
+	};
+      #endif
+
+      #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME \
+              POSIX_Initialization_threads
+
+      #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
+	sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
+	    sizeof(posix_initialization_threads_table)
+
+    #endif    /* CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
+
+  #else     /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
+
+    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
+    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
+
+  #endif
+
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
+    ( \
+      sizeof (POSIX_API_Control) + \
+     (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
+    )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
+    _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condition_variables) \
+    _Configure_Object_RAM(_condition_variables, \
+			  sizeof(POSIX_Condition_variables_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
+    _Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
+    _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
+    _Configure_From_workspace( \
+      (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
+
+  /**
+   *  Account for the object control structures plus the name
+   *  of the object to be duplicated.
+   */
+  #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
+    _Configure_Object_RAM( (_number), _size ) + \
+    ((_number) + _Configure_From_workspace(NAME_MAX) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _message_queues, sizeof(POSIX_Message_queue_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _semaphores, sizeof(POSIX_Semaphore_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
+    _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
+    _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
+    _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX \
+    ( \
+      CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
+	  CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
+	  CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
+	  CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
+	  CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(CONFIGURE_MAXIMUM_POSIX_BARRIERS) + \
+      CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS( \
+	  CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
+	  CONFIGURE_MAXIMUM_POSIX_RWLOCKS ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) + \
+      (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
+     )
 #else
 
-#ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
-#define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
-#endif
-
-#ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
-#endif
-
-#ifdef CONFIGURE_INIT
-posix_initialization_threads_table POSIX_Initialization_threads[] = {
-  { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT, \
-      CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE }
-};
-#endif
-
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME POSIX_Initialization_threads
-
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
-  sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
-      sizeof(posix_initialization_threads_table)
-
-#endif    /* CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
-
-#else     /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
-
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
-
-#endif
-
-#define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
-  ( \
-    sizeof (POSIX_API_Control) + \
-   (sizeof (void *) * (CONFIGURE_GNAT_KEYS + CONFIGURE_MAXIMUM_POSIX_KEYS)) \
-  )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
-  ((_mutexes) * \
-   ( sizeof(POSIX_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF + \
-     NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condition_variables) \
-  ((_condition_variables) * \
-   ( sizeof(POSIX_Condition_variables_Control) + \
-        CONFIGURE_OBJECT_TABLE_STUFF ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-  ((_keys) * \
-   ( sizeof(POSIX_Keys_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
-   ((_timers) * (sizeof(POSIX_Timer_Control) + CONFIGURE_OBJECT_TABLE_STUFF))
-
-#define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
-  ((_queued_signals) * \
-   ( sizeof(POSIX_signals_Siginfo_node) + CONFIGURE_OBJECT_TABLE_STUFF ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
-  ((_message_queues) * \
-   ( sizeof( POSIX_Message_queue_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-  ((_semaphores) * \
-   ( sizeof( POSIX_Semaphore_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
-  ((_barriers) * \
-   ( sizeof( POSIX_Barrier_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
-  ((_spinlocks) * \
-   ( sizeof( POSIX_Spinlock_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
-  ((_rwlocks) * \
-   ( sizeof( POSIX_RWLock_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
-
-#define CONFIGURE_MEMORY_FOR_POSIX \
-  ( \
-    CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
-        CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
-        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
-        CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
-        CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_BARRIERS( CONFIGURE_MAXIMUM_POSIX_BARRIERS ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS( \
-        CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
-        CONFIGURE_MAXIMUM_POSIX_RWLOCKS ) + \
-    CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) + \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
-   )
-#else
-
-#define CONFIGURE_MAXIMUM_POSIX_THREADS         0
-#define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
-#define CONFIGURE_MEMORY_FOR_POSIX              0
-
+  #define CONFIGURE_MAXIMUM_POSIX_THREADS         0
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
+  #define CONFIGURE_MEMORY_FOR_POSIX              0
 
 #endif    /* RTEMS_POSIX_API */
 
 #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    0
+  #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    0
+#endif
+
+/*
+ *  This block of defines are for applications which use GNAT/RTEMS.
+ *  GNAT implements each Ada task as a POSIX thread.
+ */
+#ifdef CONFIGURE_GNAT_RTEMS
+
+  /**
+   *  The GNAT run-time needs something less than (10) POSIX mutexes.
+   *  We may be able to get by with less but why bother.
+   */
+  #define CONFIGURE_GNAT_MUTEXES 10
+
+  /**
+   *  This is the maximum number of Ada tasks which can be concurrently
+   *  in existence.  Twenty (20) are required to run all tests in the 
+   *  ACATS (formerly ACVC).
+   */
+  #ifndef CONFIGURE_MAXIMUM_ADA_TASKS
+    #define CONFIGURE_MAXIMUM_ADA_TASKS  20
+  #endif
+
+  /**
+   * This is the number of non-Ada tasks which invoked Ada code.
+   */
+  #ifndef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
+    #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
+  #endif
+
+  /**
+   * Ada tasks are allocated twice the minimum stack space.
+   */
+  #define CONFIGURE_ADA_TASKS_STACK \
+    (CONFIGURE_MAXIMUM_ADA_TASKS * (RTEMS_MINIMUM_STACK_SIZE + (6 * 1024)))
+
+#else
+  #define CONFIGURE_GNAT_MUTEXES           0
+  #define CONFIGURE_MAXIMUM_ADA_TASKS      0
+  #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
+  #define CONFIGURE_ADA_TASKS_STACK        0
 #endif
 
 /*
@@ -861,174 +967,172 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #ifdef RTEMS_ITRON_API
 
-#include <rtems/itron.h>
-#include <rtems/itron/config.h>
-#include <rtems/itron/eventflags.h>
-#include <rtems/itron/fmempool.h>
-#include <rtems/itron/mbox.h>
-#include <rtems/itron/msgbuffer.h>
-#include <rtems/itron/port.h>
-#include <rtems/itron/semaphore.h>
-#include <rtems/itron/task.h>
-#include <rtems/itron/vmempool.h>
+  #include <rtems/itron.h>
+  #include <rtems/itron/config.h>
+  #include <rtems/itron/eventflags.h>
+  #include <rtems/itron/fmempool.h>
+  #include <rtems/itron/mbox.h>
+  #include <rtems/itron/msgbuffer.h>
+  #include <rtems/itron/port.h>
+  #include <rtems/itron/semaphore.h>
+  #include <rtems/itron/task.h>
+  #include <rtems/itron/vmempool.h>
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
-#define CONFIGURE_MAXIMUM_ITRON_TASKS      0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
+    #define CONFIGURE_MAXIMUM_ITRON_TASKS      0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
-#define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
+    #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
-#define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
+    #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_MAILBOXES
-#define CONFIGURE_MAXIMUM_ITRON_MAILBOXES   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_MAILBOXES
+    #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
-#define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
+    #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_PORTS
-#define CONFIGURE_MAXIMUM_ITRON_PORTS   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_PORTS
+    #define CONFIGURE_MAXIMUM_ITRON_PORTS   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
-#define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
+    #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS   0
+  #endif
 
-#ifndef CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
-#define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS   0
-#endif
+  #ifndef CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
+    #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS   0
+  #endif
 
-#ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
+  #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
 
-#ifdef CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
+    #ifdef CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE
 
-/*
- *  The user is defining their own table information and setting the
- *  appropriate variables for the ITRON Initialization Task Table.
- */
+      /*
+       *  The user is defining their own table information and setting the
+       *  appropriate variables for the ITRON Initialization Task Table.
+       */
 
-#else
+    #else
 
-#ifndef CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
-#define CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT   ITRON_Init
-#endif
+      #ifndef CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT
+	#define CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT   ITRON_Init
+      #endif
 
-#ifndef CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
-#define CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES    TA_HLNG
-#endif
+      #ifndef CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES
+	#define CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES    TA_HLNG
+      #endif
 
-#ifndef CONFIGURE_ITRON_INIT_TASK_PRIORITY
-#define CONFIGURE_ITRON_INIT_TASK_PRIORITY      1
-#endif
+      #ifndef CONFIGURE_ITRON_INIT_TASK_PRIORITY
+	#define CONFIGURE_ITRON_INIT_TASK_PRIORITY      1
+      #endif
 
-#ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
-#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
-#endif
+      #ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
+	#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
+      #endif
 
-#ifdef CONFIGURE_INIT
-itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
-  { 1,                                    /* ID */
-    { (VP) 0,                                /* exinfo */
-      CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES,  /* task attributes */
-      CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT, /* task start address */
-      CONFIGURE_ITRON_INIT_TASK_PRIORITY,    /* initial task priority */
-      CONFIGURE_ITRON_INIT_TASK_STACK_SIZE   /* stack size */
-    }
-  }
-};
-#endif
+      #ifdef CONFIGURE_INIT
+	itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
+	  { 1,                                    /* ID */
+	    { (VP) 0,                                /* exinfo */
+	      CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES,  /* task attributes */
+	      CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT, /* task start address */
+	      CONFIGURE_ITRON_INIT_TASK_PRIORITY,    /* initial task priority */
+	      CONFIGURE_ITRON_INIT_TASK_STACK_SIZE   /* stack size */
+	    }
+	  }
+	};
+      #endif
 
-#define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME ITRON_Initialization_tasks
+      #define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME ITRON_Initialization_tasks
 
-#define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_ITRON_INIT_TASK_TABLE_NAME) / \
-      sizeof(itron_initialization_tasks_table)
+      #define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE \
+	sizeof(CONFIGURE_ITRON_INIT_TASK_TABLE_NAME) / \
+	    sizeof(itron_initialization_tasks_table)
 
-#endif    /* CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE */
+    #endif    /* CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE */
 
-#else     /* CONFIGURE_ITRON_INIT_TASK_TABLE */
+  #else     /* CONFIGURE_ITRON_INIT_TASK_TABLE */
 
-#define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME NULL
-#define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE 0
-#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE 0
+    #define CONFIGURE_ITRON_INIT_TASK_TABLE_NAME NULL
+    #define CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE 0
+    #define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE 0
 
-#endif
+  #endif
 
-#define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API \
-  ( \
-    sizeof (ITRON_API_Control) \
-  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API 0
 
-#define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
-  ((_semaphores) * \
-   ( sizeof(ITRON_Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
+    _Configure_Object_RAM(_semaphores, sizeof(ITRON_Semaphore_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
-  ((_eventflags) * \
-   ( sizeof(ITRON_Eventflags_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
+    _Configure_Object_RAM(_eventflags, sizeof(ITRON_Eventflags_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
-  ((_mailboxes) * \
-   ( sizeof(ITRON_Mailbox_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
+    _Configure_Object_RAM(_mailboxes, sizeof(ITRON_Mailbox_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
-  ((_message_buffers) * \
-   ( sizeof(ITRON_Message_buffer_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
+    _Configure_Object_RAM(_message_buffers, \
+      sizeof(ITRON_Message_buffer_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
-  ((_ports) * \
-   ( sizeof(ITRON_Port_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
+    _Configure_Object_RAM(_ports, sizeof(ITRON_Port_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_memory_pools) \
-  ((_memory_pools) * \
-   (sizeof(ITRON_Variable_memory_pool_Control) + CONFIGURE_OBJECT_TABLE_STUFF))
+  #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_memory_pools) \
+    _Configure_Object_RAM( \
+      _memory_pools, sizeof(ITRON_Variable_memory_pool_Control))
 
-#define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_fixed_memory_pools) \
-  ((_fixed_memory_pools) * \
-   ( sizeof(ITRON_Fixed_memory_pool_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_fixed_memory_pools) \
+    _Configure_Object_RAM( \
+    _fixed_memory_pools, sizeof(ITRON_Fixed_memory_pool_Control))
 
-
-#define CONFIGURE_MEMORY_FOR_ITRON \
-  ( \
-    CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES( \
-        CONFIGURE_MAXIMUM_ITRON_SEMAPHORES ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS( \
-        CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES( \
-        CONFIGURE_MAXIMUM_ITRON_MAILBOXES ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS( \
-        CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_PORTS( \
-        CONFIGURE_MAXIMUM_ITRON_PORTS ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS( \
-        CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ) + \
-    CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS( \
-        CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ) + \
-    CONFIGURE_ITRON_INIT_TASK_STACK_SIZE \
-   )
-
+  #define CONFIGURE_MEMORY_FOR_ITRON \
+    ( \
+      CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES( \
+	  CONFIGURE_MAXIMUM_ITRON_SEMAPHORES ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS( \
+	  CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES( \
+	  CONFIGURE_MAXIMUM_ITRON_MAILBOXES ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS( \
+	  CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_PORTS( \
+	  CONFIGURE_MAXIMUM_ITRON_PORTS ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS( \
+	  CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS ) + \
+      CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS( \
+	  CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS ) + \
+      CONFIGURE_ITRON_INIT_TASK_STACK_SIZE \
+     )
 
 #else
 
-#define CONFIGURE_MAXIMUM_ITRON_TASKS               0
-#define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES          0
-#define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS          0
-#define CONFIGURE_MAXIMUM_ITRON_MAILBOXES           0
-#define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS     0
-#define CONFIGURE_MAXIMUM_ITRON_PORTS               0
-#define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS        0
-#define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS  0
-#define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API     0
-#define CONFIGURE_MEMORY_FOR_ITRON                  0
+  #define CONFIGURE_MAXIMUM_ITRON_TASKS               0
+  #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES          0
+  #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS          0
+  #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES           0
+  #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS     0
+  #define CONFIGURE_MAXIMUM_ITRON_PORTS               0
+  #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS        0
+  #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS  0
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API     0
+  #define CONFIGURE_MEMORY_FOR_ITRON                  0
 
 #endif    /* RTEMS_ITRON_API */
 
+#if defined(RTEMS_NEWLIB)
+  #include <reent.h>
+
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY sizeof(struct _reent)
+#else
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY 0
+#endif
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -1036,76 +1140,75 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
 
-#define CONFIGURE_OBJECT_TABLE_STUFF \
-  ( sizeof(Objects_Control *) )
+/**
+ *  Account for allocating the following per object
+ *    + array of object control structures
+ *    + local pointer table -- pointer per object plus a zero'th
+ *      entry in the local pointer table.
+ */
 
-#if defined(RTEMS_NEWLIB)
-#include <reent.h>
+#define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
+ ( \
+  _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
+  ((_tasks) * \
+   (_Configure_From_workspace(STACK_MINIMUM_SIZE) + \
+    _Configure_From_workspace(sizeof(RTEMS_API_Control)) + \
+    _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY) + \
+    _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API) + \
+    _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API)))  + \
+  _Configure_From_workspace((_number_FP_tasks) * CONTEXT_FP_SIZE) \
+ )
 
-#define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY sizeof(struct _reent)
-#else
-#define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY 0
-#endif
-
-#define CONFIGURE_MEMORY_FOR_TASKS(_tasks) \
-  (((_tasks) + 1 ) * \
-   ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
-      STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
-      CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
-      CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API + \
-      CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY + \
-      CONFIGURE_OBJECT_TABLE_STUFF)) \
-  )
+/**
+ *  This macro calculates the memory required for task variables.
+ *
+ *  @note Each task variable is individually allocated from the Workspace.
+ *        Hence, we do the multiplication on the configured size.
+ */
+#define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
+  (_task_variables) * _Configure_From_workspace(sizeof(rtems_task_variable_t))
 
 #define CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
-  ((_timers) * ( sizeof(Timer_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
 
 #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
-  ((_semaphores) * \
-   ( sizeof(Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
 
 #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
-  ( (_queues) * \
-    ( sizeof(Message_queue_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
-  ( (_partitions) * \
-    ( sizeof(Partition_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
 
 #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
-  ( (_regions) * \
-    ( sizeof(Region_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_regions, sizeof(Region_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
-  ( (_ports) * \
-    ( sizeof(Dual_ported_memory_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
-  ( (_periods) * \
-    ( sizeof(Rate_monotonic_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
 
 #define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
-  ( (_barriers) * \
-    ( sizeof(Barrier_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
 
 #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
-  ( (_extensions) * \
-    ( sizeof(Extension_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
 
 #ifdef CONFIGURE_MP_APPLICATION
 
 #ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
 
 #define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
-  ( ((_proxies) + 1) * ( sizeof(Thread_Proxy_control) )  )
+  _Configure_Object_RAM((_proxies) + 1, sizeof(Thread_Proxy_control) )
 
 #define CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
-  ((_global_objects)  * ( sizeof(Objects_MP_Control) )  )
+  _Configure_Object_RAM((_global_objects), sizeof(Objects_MP_Control))
 
 #define CONFIGURE_MEMORY_FOR_MP \
   ( CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
     CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
-    CONFIGURE_MEMORY_FOR_TASKS(1) + \
+    CONFIGURE_MEMORY_FOR_TASKS(1, 1) + \
     CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK \
   )
 
@@ -1117,40 +1220,90 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 
 #endif
 
-/*
+/**
  *  This is so we can account for tasks with stacks greater than minimum
  *  size.  This is in bytes.
  */
 #ifndef CONFIGURE_EXTRA_TASK_STACKS
-#define CONFIGURE_EXTRA_TASK_STACKS 0
+  #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
 
-/*
- * Account for pending message buffers in bytes.
+/**
+ *  The following macro is used to calculate the memory allocated by RTEMS
+ *  for the message buffers associated with a particular message queue.
+ *  There is a fixed amount of overhead per message.
+ */
+#define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(_messages, _size) \
+    _Configure_From_workspace( \
+      (_messages) * ((_size) + sizeof(CORE_message_queue_Buffer_control)))
+
+/**
+ *  This macros is set to the amount of memory required for pending message
+ *  buffers in bytes.  It should be constructed by adding together a
+ *  set of values determined by CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE.
  */
 #ifndef CONFIGURE_MESSAGE_BUFFER_MEMORY
-#define CONFIGURE_MESSAGE_BUFFER_MEMORY 0
+  #define CONFIGURE_MESSAGE_BUFFER_MEMORY 0
 #endif
 
-/*
- * Catch all for extra memory in case something broken and underestimates.
- * Historically this was used for message buffers.
+/**
+ *  This macro is available just in case the confdefs.h file underallocates
+ *  memory for a particular application.  This lets the user add some extra
+ *  memory in case something broken and underestimates.
+ *
+ *  It is also possible for cases where confdefs.h overallocates memory,
+ *  you could substract memory from the allocated.  The estimate is just
+ *  that, an estimate, and assumes worst case alignment and padding on
+ *  each allocated element.  So in some cases it could be too conservative.
+ *
+ *  @note Historically this was used for message buffers.
  */
 #ifndef CONFIGURE_MEMORY_OVERHEAD
-#define CONFIGURE_MEMORY_OVERHEAD 0
+  #define CONFIGURE_MEMORY_OVERHEAD 0
 #endif
 
-#define CONFIGURE_API_MUTEX_MEMORY \
-  ( (1) * \
-    ( sizeof(API_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) \
-  )
+/**
+ *  On architectures that use Simple Vectored Interrupts, it is RTEMS
+ *  responsibility to allocate the vector table.  This avoids reserving
+ *  the memory on architectures that use the Programmable Interrupt
+ *  Controller Vectored Interrupts.
+ */
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+  /*
+   *  This is a (hopefully) temporary hack.  On the mips, the number of
+   *  vectors is NOT statically defined.  But it has to be statically
+   *  defined for this to work.  This is an issue looking for a nice
+   *  solution.
+   */
+  #if defined(__mips__)
+    #define CONFIGURE_INTERRUPT_VECTOR_TABLE (sizeof(ISR_Handler_entry) * 256)
+  #else
+    #define CONFIGURE_INTERRUPT_VECTOR_TABLE \
+      (sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS)
+  #endif
+#else
+  #define CONFIGURE_INTERRUPT_VECTOR_TABLE 0
+#endif
 
+/**
+ *  RTEMS uses one instance of an internal mutex class.  This accounts
+ *  for that mutex
+ */
+#define CONFIGURE_API_MUTEX_MEMORY \
+  _Configure_Object_RAM(1, sizeof(API_Mutex_Control))
+
+/**
+ *  This macro accounts for general RTEMS system overhead.
+ */
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
-  ( CONFIGURE_MEMORY_FOR_TASKS(1) +                  /* IDLE */ \
-    ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) + /* Ready chains */ \
-    256 +                                 /* name/ptr table overhead */ \
-    CONFIGURE_INTERRUPT_STACK_MEMORY +    /* interrupt stack */ \
-    CONFIGURE_API_MUTEX_MEMORY            /* allocation mutex */ \
+  ( \
+    CONFIGURE_MEMORY_FOR_TASKS(1, 0) +              /* IDLE and stack */ \
+    (CONFIGURE_IDLE_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE) + \
+    _Configure_From_workspace(                        /* Ready chains */ \
+        ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) ) + \
+    CONFIGURE_INTERRUPT_VECTOR_TABLE +           /* interrupt vectors */ \
+    CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
+    CONFIGURE_API_MUTEX_MEMORY                    /* allocation mutex */ \
   )
 
 /*
@@ -1158,36 +1311,76 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
  *  may have requested.
  */
 
-#ifdef RTEMS_POSIX_API
-#define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+/**
+ *  This accounts for any extra memory required by the Classic API
+ *  Initialization Task.
+ */
+#if (CONFIGURE_INIT_TASK_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
+      (CONFIGURE_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
 #else
-#define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
-#endif
-#ifdef RTEMS_ITRON_API
-#define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART \
-    (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
-#else
-#define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART 0
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART 0
 #endif
 
+/**
+ *  This accounts for any extra memory required by the POSIX API
+ *  Initialization Thread.
+ */
+#if defined(RTEMS_POSIX_API) && \
+    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
+      (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+#else
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
+#endif
+
+/**
+ *  This accounts for any extra memory required by the ITRON API
+ *  Initialization Task.
+ */
+#if defined(RTEMS_ITRON_API) && \
+    (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART \
+      (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+#else
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART 0
+#endif
+
+/**
+ *  This macro provides a summation of the various initialization task
+ *  and thread stack requirements.
+ */
 #define CONFIGURE_INITIALIZATION_THREADS_STACKS \
-   ((CONFIGURE_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE) + \
+    (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
     CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART + \
     CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART)
 
-/*
- *  POSIX Threads have a default stack size of 2x minimum.  The code
- *  below CONFIGURE_MEMORY_FOR_TASKS(...) takes this into account.
+/**
+ *  This macro provides a summation of the various task and thread
+ *  requirements.
  */
-#define CONFIGURE_EXECUTIVE_RAM_SIZE \
-(( CONFIGURE_MEMORY_FOR_POSIX + \
-   CONFIGURE_MEMORY_FOR_ITRON + \
-   CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS + \
-      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
-      CONFIGURE_MAXIMUM_ITRON_TASKS ) + \
-   (CONFIGURE_MAXIMUM_POSIX_THREADS * RTEMS_MINIMUM_STACK_SIZE ) + \
-   CONFIGURE_INITIALIZATION_THREADS_STACKS + \
+#define CONFIGURE_TOTAL_TASKS_AND_THREADS \
+   (CONFIGURE_MAXIMUM_TASKS + \
+    CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
+    CONFIGURE_MAXIMUM_ITRON_TASKS \
+   ) 
+
+/**
+ *  This macro reserves the memory required by the statically configured
+ *  user extensions.
+ */
+#define CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS \
+   _Configure_From_workspace( \
+     (CONFIGURE_NEWLIB_EXTENSION + CONFIGURE_STACK_CHECKER_EXTENSION) * \
+      sizeof(User_extensions_Control) \
+   )
+
+/**
+ *  This macro provides a summation of the memory required by the
+ *  Classic API as configured.
+ */
+#define CONFIGURE_MEMORY_FOR_CLASSIC \
+  (CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES) + \
    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES + \
      CONFIGURE_LIBIO_SEMAPHORES + CONFIGURE_TERMIOS_SEMAPHORES) + \
@@ -1197,130 +1390,151 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
    CONFIGURE_MEMORY_FOR_PORTS(CONFIGURE_MAXIMUM_PORTS) + \
    CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS) + \
    CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_MAXIMUM_BARRIERS) + \
-   CONFIGURE_MEMORY_FOR_USER_EXTENSIONS( \
-      CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION + \
-      CONFIGURE_STACK_CHECKER_EXTENSION ) + \
-   CONFIGURE_MEMORY_FOR_MP + \
+   CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) \
+  )
+
+#if 1 && defined(CONFIGURE_INIT)
+  /**
+   *  This is a debug mechanism, so if you need to, the executable will
+   *  have a structure with various partial values.  Add to this as you
+   *  need to.  Viewing this structure in gdb combined with dumping
+   *  the Configuration structures generated should help a lot in tracing
+   *  down errors and analyzing where over and under allocations are.
+   */
+  typedef struct {
+    uint32_t Classic;
+    uint32_t ITRON;
+    uint32_t POSIX;
+    uint32_t TASKS;
+    uint32_t INIT_TASK_STACKS;
+  } Configuration_Debug_t;
+
+  Configuration_Debug_t Configuration_Memory_Debug = {
+    CONFIGURE_MEMORY_FOR_CLASSIC, /* MEMORY_CLASSIC */
+    CONFIGURE_MEMORY_FOR_ITRON,   /* MEMORY_ITRON */
+    CONFIGURE_MEMORY_FOR_POSIX,   /* MEMORY_POSIX */
+    CONFIGURE_MEMORY_FOR_TASKS(   /* MEMORY_TASKS */
+        CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS),
+    CONFIGURE_INITIALIZATION_THREADS_STACKS /* INIT_TASK_STACKS */
+  };
+#endif
+
+/**
+ *  This calculates the memory required for the executive workspace.
+ */
+#define CONFIGURE_EXECUTIVE_RAM_SIZE \
+(( \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
+   CONFIGURE_MEMORY_FOR_TASKS( \
+     CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
+   CONFIGURE_MEMORY_FOR_CLASSIC + \
+   CONFIGURE_MEMORY_FOR_POSIX + \
+   (CONFIGURE_MAXIMUM_POSIX_THREADS * RTEMS_MINIMUM_STACK_SIZE ) + \
+   CONFIGURE_MEMORY_FOR_ITRON + \
+   CONFIGURE_INITIALIZATION_THREADS_STACKS + \
+   CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
+   CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
 ) & ~0x7)
 #endif
 
-#ifdef CONFIGURE_GNAT_RTEMS
-#define CONFIGURE_GNAT_MUTEXES 10
-/* GNAT/RTEMS provides an optimized Ada self and does not use POSIX Keys */
-#define CONFIGURE_GNAT_KEYS    0
-
-/* 20 are required to run all tests in the ACVC */
-#ifndef CONFIGURE_MAXIMUM_ADA_TASKS
-#define CONFIGURE_MAXIMUM_ADA_TASKS  20
-#endif
-
-/* This is the number of non-Ada tasks which invoked Ada code. */
-#ifndef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
-#define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
-#endif
-
-/* Ada tasks are allocated twice the minimum stack space */
-#define CONFIGURE_ADA_TASKS_STACK \
-  (CONFIGURE_MAXIMUM_ADA_TASKS * (RTEMS_MINIMUM_STACK_SIZE + (6 * 1024)))
-
-#else
-#define CONFIGURE_GNAT_MUTEXES           0
-#define CONFIGURE_GNAT_KEYS              0
-#define CONFIGURE_MAXIMUM_ADA_TASKS      0
-#define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
-#define CONFIGURE_ADA_TASKS_STACK        0
-#endif
-
-
 #ifdef CONFIGURE_INIT
+  /**
+   *  This is the Classic API Configuration Table.
+   */
+  rtems_api_configuration_table Configuration_RTEMS_API = {
+    CONFIGURE_MAXIMUM_TASKS,
+    CONFIGURE_MAXIMUM_TIMERS,
+    CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES +
+      CONFIGURE_TERMIOS_SEMAPHORES,
+    CONFIGURE_MAXIMUM_MESSAGE_QUEUES,
+    CONFIGURE_MAXIMUM_PARTITIONS,
+    CONFIGURE_MAXIMUM_REGIONS,
+    CONFIGURE_MAXIMUM_PORTS,
+    CONFIGURE_MAXIMUM_PERIODS,
+    CONFIGURE_MAXIMUM_BARRIERS,
+    CONFIGURE_INIT_TASK_TABLE_SIZE,
+    CONFIGURE_INIT_TASK_TABLE
+  };
 
-rtems_api_configuration_table Configuration_RTEMS_API = {
-  CONFIGURE_MAXIMUM_TASKS,
-  CONFIGURE_MAXIMUM_TIMERS,
-  CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES +
-    CONFIGURE_TERMIOS_SEMAPHORES,
-  CONFIGURE_MAXIMUM_MESSAGE_QUEUES,
-  CONFIGURE_MAXIMUM_PARTITIONS,
-  CONFIGURE_MAXIMUM_REGIONS,
-  CONFIGURE_MAXIMUM_PORTS,
-  CONFIGURE_MAXIMUM_PERIODS,
-  CONFIGURE_MAXIMUM_BARRIERS,
-  CONFIGURE_INIT_TASK_TABLE_SIZE,
-  CONFIGURE_INIT_TASK_TABLE
-};
+  #ifdef RTEMS_POSIX_API
+    /**
+     *  This is the POSIX API Configuration Table.
+     */
+    posix_api_configuration_table Configuration_POSIX_API = {
+      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS,
+      CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_GNAT_MUTEXES +
+	CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS,
+      CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
+	CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS,
+      CONFIGURE_MAXIMUM_POSIX_KEYS,
+      CONFIGURE_MAXIMUM_POSIX_TIMERS,
+      CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
+      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
+      CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
+      CONFIGURE_MAXIMUM_POSIX_BARRIERS,
+      CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
+      CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
+      CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
+      CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
+    };
+  #endif
 
-#ifdef RTEMS_POSIX_API
-posix_api_configuration_table Configuration_POSIX_API = {
-  CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS,
-  CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_GNAT_MUTEXES +
-    CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS,
-  CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
-    CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS,
-  CONFIGURE_MAXIMUM_POSIX_KEYS + CONFIGURE_GNAT_KEYS,
-  CONFIGURE_MAXIMUM_POSIX_TIMERS,
-  CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
-  CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
-  CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
-  CONFIGURE_MAXIMUM_POSIX_BARRIERS,
-  CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
-  CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
-  CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
-  CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
-};
-#endif
+  #ifdef RTEMS_ITRON_API
+    /**
+     *  This is the ITRON API Configuration Table.
+     */
+    itron_api_configuration_table Configuration_ITRON_API = {
+      CONFIGURE_MAXIMUM_ITRON_TASKS,
+      CONFIGURE_MAXIMUM_ITRON_SEMAPHORES,
+      CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS,
+      CONFIGURE_MAXIMUM_ITRON_MAILBOXES,
+      CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS,
+      CONFIGURE_MAXIMUM_ITRON_PORTS,
+      CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS,
+      CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS,
+      CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE,
+      CONFIGURE_ITRON_INIT_TASK_TABLE_NAME
+    };
+  #endif
 
-#ifdef RTEMS_ITRON_API
-itron_api_configuration_table Configuration_ITRON_API = {
-  CONFIGURE_MAXIMUM_ITRON_TASKS,
-  CONFIGURE_MAXIMUM_ITRON_SEMAPHORES,
-  CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS,
-  CONFIGURE_MAXIMUM_ITRON_MAILBOXES,
-  CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS,
-  CONFIGURE_MAXIMUM_ITRON_PORTS,
-  CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS,
-  CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS,
-  CONFIGURE_ITRON_INIT_TASK_TABLE_SIZE,
-  CONFIGURE_ITRON_INIT_TASK_TABLE_NAME
-};
-#endif
-
-rtems_configuration_table Configuration = {
-  CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
-  CONFIGURE_EXECUTIVE_RAM_SIZE,              /* required RTEMS workspace */
-  CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION +
-      CONFIGURE_STACK_CHECKER_EXTENSION,     /* maximum user extensions */
-  CONFIGURE_MICROSECONDS_PER_TICK,           /* microseconds per clock tick */
-  CONFIGURE_TICKS_PER_TIMESLICE,             /* ticks per timeslice quantum */
-  CONFIGURE_IDLE_TASK_BODY,                  /* user's IDLE task */
-  CONFIGURE_IDLE_TASK_STACK_SIZE,            /* IDLE task stack size */
-  CONFIGURE_INTERRUPT_STACK_SIZE,            /* interrupt stack size */
-  CONFIGURE_TASK_STACK_ALLOCATOR,            /* stack allocator */
-  CONFIGURE_TASK_STACK_DEALLOCATOR,          /* stack deallocator */
-  CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,    /* true to clear memory */
-  CONFIGURE_MAXIMUM_DRIVERS,                 /* maximum device drivers */
-  CONFIGURE_NUMBER_OF_DRIVERS,               /* static device drivers */
-  Device_drivers,                            /* pointer to driver table */
-  CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,    /* number of initial extensions */
-  CONFIGURE_INITIAL_EXTENSION_TABLE,         /* pointer to initial extensions */
-#if defined(RTEMS_MULTIPROCESSING)
-  CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
-#endif
-  &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
-#ifdef RTEMS_POSIX_API
-  &Configuration_POSIX_API,                  /* pointer to POSIX API config */
-#else
-  NULL,                                      /* pointer to POSIX API config */
-#endif
-#ifdef RTEMS_ITRON_API
-  &Configuration_ITRON_API                   /* pointer to ITRON API config */
-#else
-  NULL                                       /* pointer to ITRON API config */
-#endif
-};
+  /**
+   *  This is the primary Configuration Table for this application.
+   */
+  rtems_configuration_table Configuration = {
+    CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
+    CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
+    CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
+    CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
+    CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
+    CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
+    CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
+    CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */
+    CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
+    CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
+    CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,   /* true to clear memory */
+    CONFIGURE_MAXIMUM_DRIVERS,                /* maximum device drivers */
+    CONFIGURE_NUMBER_OF_DRIVERS,              /* static device drivers */
+    Device_drivers,                           /* pointer to driver table */
+    CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
+    CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
+    #if defined(RTEMS_MULTIPROCESSING)
+      CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
+    #endif
+    &Configuration_RTEMS_API,                 /* pointer to RTEMS API config */
+    #ifdef RTEMS_POSIX_API
+      &Configuration_POSIX_API,               /* pointer to POSIX API config */
+    #else
+      NULL,                                   /* pointer to POSIX API config */
+    #endif
+    #ifdef RTEMS_ITRON_API
+      &Configuration_ITRON_API                /* pointer to ITRON API config */
+    #else
+      NULL                                    /* pointer to ITRON API config */
+    #endif
+  };
 #endif
 
 #endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */

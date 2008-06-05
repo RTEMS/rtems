@@ -1,5 +1,13 @@
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sapi/include/confdefs.h: Rework to be more accurate on allocation. In
+	particular, there was a report from that Matthew Riek that memory was
+	being reserved twice for the IDLE task. This was covering up other
+	places that under allocated memory. Before I was done, I had reworked
+	the file to be easier to read, maintain and be more accurate.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/include/rtems/score/isr.h, score/src/isr.c: Use
 	CPU_SIMPLE_VECTORED_INTERRUPTS porting parameter to avoid allocating
 	memory for vector table.
