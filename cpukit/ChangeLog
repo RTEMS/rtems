@@ -1,5 +1,12 @@
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/psignal.c: Do not allocate any memory for queued signals if
+	the configuration parameter is 0. Before we would end up with an
+	allocation of 0 which rounded up and wasted some memory when POSIX
+	was configured.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/src/newlibc_exit.c: Only run the fini section on exit if
 	the target toolset uses init/fini sections.
 

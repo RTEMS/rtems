@@ -205,12 +205,16 @@ void _POSIX_signals_Manager_Initialization(
   for ( signo=1 ; signo<= SIGRTMAX ; signo++ )
     _Chain_Initialize_empty( &_POSIX_signals_Siginfo[ signo ] );
 
-  _Chain_Initialize(
-    &_POSIX_signals_Inactive_siginfo,
-    _Workspace_Allocate_or_fatal_error(
-      maximum_queued_signals * sizeof( POSIX_signals_Siginfo_node )
-    ),
-    maximum_queued_signals,
-    sizeof( POSIX_signals_Siginfo_node )
-  );
+  if ( maximum_queued_signals ) {
+    _Chain_Initialize(
+      &_POSIX_signals_Inactive_siginfo,
+      _Workspace_Allocate_or_fatal_error(
+        maximum_queued_signals * sizeof( POSIX_signals_Siginfo_node )
+      ),
+      maximum_queued_signals,
+      sizeof( POSIX_signals_Siginfo_node )
+    );
+  } else {
+    _Chain_Initialize_empty( &_POSIX_signals_Inactive_siginfo );
+  }
 }
