@@ -486,8 +486,8 @@ SetAttributes (int minor, const struct termios *t)
  isp = (t->c_cflag / (CIBAUD / CBAUD)) &  CBAUD;
 
  /* convert it */
- ispeed = termios_baud_rates_equivalence(isp);
- ospeed = termios_baud_rates_equivalence(osp);
+ ispeed = termios_baud_to_number(isp);
+ ospeed = termios_baud_to_number(osp);
 
  if (ispeed || ospeed) {
        /* update config table */

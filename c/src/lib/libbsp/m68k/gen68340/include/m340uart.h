@@ -12,7 +12,7 @@
  *  e-mail: g_montel@yahoo.com
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -80,7 +80,6 @@ Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_Tran
 
 extern rtems_isr InterruptHandler (rtems_vector_number v);
 
-extern float termios_baud_rates_equivalence ( int speed ) ;
 extern int dbugRead (int minor);
 extern int dbugWrite (int minor, const char *buf, int len);
 
