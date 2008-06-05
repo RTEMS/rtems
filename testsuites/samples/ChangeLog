@@ -1,3 +1,9 @@
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* minimum/Makefile.am: Link against all managers.
+	* minimum/init.c: Use existing confdefs.h macros to turn off more
+	this test does not use.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* iostream/system.h: Update to include definition of

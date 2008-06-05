@@ -1,6 +1,6 @@
 /*  Minimum Size Application Initialization 
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,6 +38,17 @@ rtems_task Init(
  *  be reentrant.  Caveat Emptor!!
  */
 #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+/*
+ *  This test does not need the console driver so there is no reason
+ *  to configure termios.
+ */
+#define CONFIGURE_TERMIOS_DISABLED
+
+/*
+ *  This test does not use any stdio.
+ */
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 0
 
 #define CONFIGURE_INIT
 
