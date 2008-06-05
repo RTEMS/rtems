@@ -2,7 +2,7 @@
  *
  *  This include file is used by all tests in the Time Suite.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,6 +32,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS              (2 + OPERATION_COUNT)
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(OPERATION_COUNT, 16)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
