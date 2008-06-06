@@ -23,8 +23,7 @@ void bsp_cleanup( void )
   
   #if (BENCHMARK_IRQ_PROCESSING == 1)
   {
-    extern void BSP_report_IRQ_Timing(void);
-    BSP_report_IRQ_Timing();
+    BSP_IRQ_Benchmarking_Report();
   }
   #endif
  

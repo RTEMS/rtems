@@ -258,6 +258,9 @@ void bsp_cleanup(void);
 Thread _Thread_Idle_body(uint32_t ignored);
 #define BSP_IDLE_TASK_BODY _Thread_Idle_body
 
+/* BSP specific IRQ Benchmarking support */
+void BSP_IRQ_Benchmarking_Reset(void);
+void BSP_IRQ_Benchmarking_Report(void);
 #ifdef __cplusplus
 }
 #endif

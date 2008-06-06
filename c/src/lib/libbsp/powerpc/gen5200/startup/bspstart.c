@@ -224,23 +224,24 @@ void bsp_start(void)
   register unsigned char* intrStack;
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables so that it can be used
+   * later...
    */
   myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-#if defined(HAS_UBOOT)
-  uboot_bdinfo_copy = *uboot_bdinfo_ptr;
-  uboot_bdinfo_ptr = &uboot_bdinfo_copy;
-#endif  
+  #if defined(HAS_UBOOT)
+    uboot_bdinfo_copy = *uboot_bdinfo_ptr;
+    uboot_bdinfo_ptr = &uboot_bdinfo_copy;
+  #endif  
 
-#if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
-  {
-    void dumpUBootBDInfo( bd_t * );
-    dumpUBootBDInfo( uboot_bdinfo_ptr );
-  }
-#endif
+  #if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
+    {
+      void dumpUBootBDInfo( bd_t * );
+      dumpUBootBDInfo( uboot_bdinfo_ptr );
+    }
+  #endif
 
   cpu_init();
 
@@ -266,12 +267,12 @@ void bsp_start(void)
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
    */
-#if INSTRUCTION_CACHE_ENABLE
-  rtems_cache_enable_instruction();
-#endif
-#if DATA_CACHE_ENABLE
-  rtems_cache_enable_data();
-#endif
+  #if INSTRUCTION_CACHE_ENABLE
+    rtems_cache_enable_instruction();
+  #endif
+  #if DATA_CACHE_ENABLE
+    rtems_cache_enable_data();
+  #endif
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
@@ -279,28 +280,29 @@ void bsp_start(void)
    *  not malloc'ed.  It is just "pulled from the air".
    */
   Configuration.work_space_start = (void *)&_WorkspaceBase;
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk( "workspace=%p\n", Configuration.work_space_start );
-  printk( "workspace size=%d\n", Configuration.work_space_size );
-#endif
+  #ifdef SHOW_MORE_INIT_SETTINGS
+    printk( "workspace=%p\n", Configuration.work_space_start );
+    printk( "workspace size=%d\n", Configuration.work_space_size );
+  #endif
 
   /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
 
-#if (BENCHMARK_IRQ_PROCESSING == 1)
-  {
-    void BSP_initialize_IRQ_Timing(void);
-    BSP_initialize_IRQ_Timing();
-  }
-#endif
+  /*
+   *  If the BSP was built with IRQ benchmarking enabled,
+   *  then intialize it.
+   */
+  #if (BENCHMARK_IRQ_PROCESSING == 1)
+    BSP_IRQ_Benchmarking_Reset();
+  #endif
 
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Exit from bspstart\n");
-#endif
+  #ifdef SHOW_MORE_INIT_SETTINGS
+    printk("Exit from bspstart\n");
+  #endif
 
-  }
+}
 
 /*
  *

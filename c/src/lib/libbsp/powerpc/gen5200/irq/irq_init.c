@@ -231,35 +231,42 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   {
   rtems_raw_except_connect_data vectorDesc;
   int i;
+  #if (BENCHMARK_IRQ_PROCESSING == 1)
+    extern void BSP_initialize_IRQ_Timing(void);
+
+    void BSP_initialize_IRQ_Timing(void);
+  #endif
 
   BSP_SIU_irq_init();
+
   /*
    * Initialize Rtems management interrupt table
    */
+
   /*
    * re-init the rtemsIrq table
    */
-  for (i = 0; i < BSP_IRQ_NUMBER; i++)
-    {
+  for (i = 0; i < BSP_IRQ_NUMBER; i++) {
     rtemsIrq[i]      = defaultIrq;
     rtemsIrq[i].name = i;
-    }
- /*
-  * Init initial Interrupt management config
-  */
+  }
+  /*
+   * Init initial Interrupt management config
+   */
   initial_config.irqNb        = BSP_IRQ_NUMBER;
   initial_config.defaultEntry = defaultIrq;
   initial_config.irqHdlTbl    = rtemsIrq;
   initial_config.irqBase      = BSP_LOWEST_OFFSET;
   initial_config.irqPrioTbl   = irqPrioTable;
-
-  if (!BSP_rtems_irq_mngt_set(&initial_config))
-    {
+ 
+  if (!BSP_rtems_irq_mngt_set(&initial_config)) {
     /*
      * put something here that will show the failure...
      */
-    BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
-    }
+    BSP_panic(
+      "Unable to initialize RTEMS interrupt Management!!! System locked\n"
+    );
+  }
 
   /*
    * We must connect the raw irq handler for the two
@@ -273,30 +280,26 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   vectorDesc.off               = nop_func;
   vectorDesc.isOn              = connected;
 
-  if (!ppc_set_exception (&vectorDesc))
-    {
-    BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-    }
+  if (!ppc_set_exception (&vectorDesc)) {
+   BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
+  }
 
   vectorDesc.exceptIndex	   = ASM_EXT_VECTOR;
   vectorDesc.hdl.vector        = ASM_EXT_VECTOR;
   vectorDesc.hdl.raw_hdl       = external_exception_vector_prolog_code;
   vectorDesc.hdl.raw_hdl_size  = (unsigned) &external_exception_vector_prolog_code_size;
 
-  if (!ppc_set_exception (&vectorDesc))
-    {
+  if (!ppc_set_exception (&vectorDesc)) {
     BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
+  }
 
   vectorDesc.exceptIndex	   = ASM_60X_SYSMGMT_VECTOR;
   vectorDesc.hdl.vector        = ASM_60X_SYSMGMT_VECTOR;
   vectorDesc.hdl.raw_hdl       = system_management_exception_vector_prolog_code;
   vectorDesc.hdl.raw_hdl_size  = (unsigned) &system_management_exception_vector_prolog_code_size;
 
-  if (!ppc_set_exception (&vectorDesc))
-    {
+  if (!ppc_set_exception (&vectorDesc)) {
     BSP_panic("Unable to initialize RTEMS system management raw exception\n");
-    }
-
+  }
 }
 

@@ -631,7 +631,14 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
   return 0;
 }
 
-#if (BENCHMARK_IRQ_PROCESSING == 1)
+#if (BENCHMARK_IRQ_PROCESSING == 0)
+void BSP_IRQ_Benchmarking_Reset(void)
+{
+}
+void BSP_IRQ_Benchmarking_Report(void)
+{
+}
+#else
 #include <stdio.h>
 uint64_t BSP_Starting_TBR;
 uint64_t BSP_Total_in_ISR;
@@ -640,7 +647,7 @@ uint32_t BSP_Worst_ISR;
 #define BSP_COUNTED_IRQ 16
 uint32_t BSP_ISR_Count_Per[BSP_COUNTED_IRQ + 1];
 
-void BSP_initialize_IRQ_Timing(void)
+void BSP_IRQ_Benchmarking_Reset(void)
 {
   int i;
   BSP_Starting_TBR = PPC_Get_timebase_register();
@@ -659,7 +666,8 @@ static const char * u64tostring(
   sprintf( buffer, "%lld %lld usecs", v, (v / 33) );
   return buffer;
 }
-void BSP_report_IRQ_Timing(void)
+
+void BSP_IRQ_Benchmarking_Report(void)
 {
   uint64_t now;
   char buffer[96];
