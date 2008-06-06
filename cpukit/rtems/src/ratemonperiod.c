@@ -33,10 +33,10 @@ void _Rate_monotonic_Update_statistics(
 )
 {
   rtems_rate_monotonic_period_statistics *stats;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE  executed;
-  rtems_rate_monotonic_period_time_t    since_last_period;
+  rtems_thread_cpu_usage_t                executed;
+  rtems_rate_monotonic_period_time_t      since_last_period;
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    rtems_rate_monotonic_period_time_t  period_start;
+    rtems_rate_monotonic_period_time_t    period_start;
   #endif
   #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
       defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
@@ -234,7 +234,7 @@ rtems_status_code rtems_rate_monotonic_period(
 
           #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
             { 
-              RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE ran;
+              rtems_thread_cpu_usage_t ran;
 
               the_period->owner_executed_at_period = 
                 _Thread_Executing->cpu_time_used;

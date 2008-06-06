@@ -104,9 +104,10 @@ typedef enum {
 typedef struct {
   uint32_t     count;
   uint32_t     missed_count;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE min_cpu_time;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE max_cpu_time;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE total_cpu_time;
+
+  rtems_thread_cpu_usage_t             min_cpu_time;
+  rtems_thread_cpu_usage_t             max_cpu_time;
+  rtems_thread_cpu_usage_t             total_cpu_time;
 
   rtems_rate_monotonic_period_time_t   min_wall_time;
   rtems_rate_monotonic_period_time_t   max_wall_time;
@@ -120,7 +121,7 @@ typedef struct {
   Objects_Id                           owner;
   rtems_rate_monotonic_period_states   state;
   rtems_rate_monotonic_period_time_t   since_last_period;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE executed_since_last_period;
+  rtems_thread_cpu_usage_t             executed_since_last_period;
 }  rtems_rate_monotonic_period_status;
 
 /**
@@ -131,7 +132,7 @@ typedef struct {
   Objects_Control                         Object;
   Watchdog_Control                        Timer;
   rtems_rate_monotonic_period_states      state;
-  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE    owner_executed_at_period;
+  rtems_thread_cpu_usage_t                owner_executed_at_period;
   rtems_rate_monotonic_period_time_t      time_at_period;
   uint32_t                                next_length;
   Thread_Control                         *owner;

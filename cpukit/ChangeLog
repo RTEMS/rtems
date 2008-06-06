@@ -1,5 +1,11 @@
 2008-06-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemonperiod.c,
+	score/include/rtems/score/thread.h: Complete previous patch. Add
+	typedef for cpu usage statistics.
+
+2008-06-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/src/__times.c, libmisc/cpuuse/cpuusagereport.c,
 	libmisc/cpuuse/cpuusagereset.c, libmisc/monitor/mon-task.c,
 	rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemongetstatus.c,
