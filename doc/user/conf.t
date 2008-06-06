@@ -256,11 +256,44 @@ TRUE, the Workspace is zeroed.  Otherwise, it is not.
 Unless overridden by the BSP, the default value for this
 field is FALSE.
 
+@findex CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE
+@item @code{CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE} is a helper macro
+which is used to assist in computing the total amount of memory
+required for message buffers.  Each message queue will have its
+own configuration with maximum message size and maximum number of
+pending messages.  The interface for this macro is as follows:
+
+@example
+CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(max_messages, size_per)
+@end example
+
+Where @code{max_messages} is the maximum number of pending messages
+and @code{size_per} is the size in bytes of the user message.
+
 @findex CONFIGURE_MESSAGE_BUFFER_MEMORY
 @item @code{CONFIGURE_MESSAGE_BUFFER_MEMORY} is set to the number of
 bytes the application requires to be reserved for pending message queue
 buffers.  This value should include memory for all buffers across
-all APIs.  The default value is 0.
+all APIs.  The default value is 0. 
+
+The following illustrates how the help macro
+@code{CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE} can be used to assist in
+calculating the message buffer memory required.  In this example, there
+are two message queues used in this application.  The first message
+queue has maximum of 24 pending messages with the message structure
+defined by the type @code{one_message_type}.  The other message queue
+has maximum of 500 pending messages with the message structure defined
+by the type @code{other_message_type}.
+
+@example
+
+#define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE \
+ (CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+    24, sizeof(one_message_type) + \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+    500, sizeof(other_message_type) \
+ )
+@end example
 
 @findex CONFIGURE_MEMORY_OVERHEAD
 @item @code{CONFIGURE_MEMORY_OVERHEAD} is set to the number of

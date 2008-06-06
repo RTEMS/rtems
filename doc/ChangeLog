@@ -1,3 +1,9 @@
+2008-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* started/buildc.t: Add paragraph on see CVS for latest patches.
+	* user/conf.t: Add CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE and example
+	of how to compute message CONFIGURE_MESSAGE_BUFFER_MEMORY using it.
+
 2008-06-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/rtmon.t: Change to using new types.

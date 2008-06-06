@@ -108,6 +108,19 @@ of each component as well as any required RTEMS specific patches.
 @end ifset
 @end example
 
+The individual components in the RTEMS Development Toolset are
+updated independently of one another by their respective
+maintainers.  In addition, the patches which the RTEMS Project
+has determined are necessary are subject to change as users
+report issues on individual host and target platforms.  As
+a result, it is possible that the versions listed in this
+document are @b{NOT} the latest ones available.  The latest
+patches for each tool are always available from RTEMS CVS
+on the respective branch and should always be mirrored on the
+RTEMS ftp site.  It is recommended that before building a
+toolset from source, you verify you are using the
+latest patches.
+
 @c
 @c  Unarchiving the Tools
 @c
