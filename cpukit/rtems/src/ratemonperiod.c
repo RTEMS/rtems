@@ -69,7 +69,7 @@ void _Rate_monotonic_Update_statistics(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
-      rtems_rate_monotonic_period_time_t ran, used;
+      rtems_thread_cpu_usage_t   ran, used;
        
       /* Grab CPU usage when the thread got switched in */
       used = _Thread_Executing->cpu_time_used;

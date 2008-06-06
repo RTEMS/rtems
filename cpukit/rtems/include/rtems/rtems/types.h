@@ -44,28 +44,56 @@ extern "C" {
 #include <rtems/score/mppkt.h>
 #endif
 
-typedef single_precision rtems_single;    /* single precision float */
-typedef double_precision rtems_double;    /* double precision float */
+/** This type defines a single precision float. */
+typedef single_precision rtems_single;
 
+/** This type defines a double precision float. */
+typedef double_precision rtems_double;
+
+/** This type defines the RTEMS boolean type . */
 typedef boolean          rtems_boolean;
 
+/** This type defines is for Classic API object names. */
 typedef uint32_t         rtems_name;
 
+/**
+ *  This type defines is for RTEMS object Id.  Although this
+ *  type name is specific to the Classic API, the format of
+ *  an object Id is the same across all APIs.
+ */
 typedef Objects_Id       rtems_id;
 
+/**
+ *  This defines a value that is an invalid object Id.
+ */
 #define RTEMS_ID_NONE OBJECTS_ID_NONE
 
+/**
+ * This type is the public name for task context area.
+ */
 typedef Context_Control            rtems_context;
+
+/**
+ * This type is the public name for task floating point context area.
+ */
 typedef Context_Control_fp         rtems_context_fp;
+
+/**
+ * This type is the public name for the architecture specific
+ * stack frame built as part of vectoring an interrupt.
+ */
 typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 
 /**
- *  Region information block
+ *  This type defines the public name for the information
+ *  structure returned by the Heap Handler via the Region
+ *  Manager.
  */
 typedef Heap_Information_block region_information_block;
 
 /**
- *  Time related
+ *  This type defines the public name for the type that is
+ *  used to manage intervals specified by clock ticks.
  */
 typedef Watchdog_Interval rtems_interval;
 
@@ -73,7 +101,7 @@ typedef Watchdog_Interval rtems_interval;
  *  The following record defines the time of control block.  This
  *  control block is used to maintain the current time of day.
  *
- *  @note This is an RTEID style time/date.
+ *  @note This is an RTEID (a.k.a. Classic API) style time/date.
  */
 typedef struct {
   /** This field is the year, A.D. */
@@ -93,7 +121,7 @@ typedef struct {
 }   rtems_time_of_day;
 
 /**
- *  Define the type for an RTEMS API task mode.
+ *  This defines the public name for an RTEMS API task mode type.
  */
 typedef Modes_Control rtems_mode;
 
@@ -101,18 +129,61 @@ typedef Modes_Control rtems_mode;
  *  MPCI related entries
  */
 #if defined(RTEMS_MULTIPROCESSING)
+/**
+ * This defines the public name for the set of MPCI packet
+ * classes which are internally dispatched to the managers.
+ */
 typedef MP_packet_Classes          rtems_mp_packet_classes;
+
+/**
+ * This defines the public name for the common prefix
+ * found at the beginning of each MPCI packet sent between
+ * nodes. This can be thought of as an envelope.
+ */
 typedef MP_packet_Prefix           rtems_packet_prefix;
 
+/**
+ * This defines the public name for the type for an indirect pointer
+ * to the initialization entry point for an MPCI handler.
+ */
 typedef MPCI_initialization_entry  rtems_mpci_initialization_entry;
+
+/**
+ * This defines the public name for the type for an indirect pointer
+ * to the get_packet entry point for an MPCI handler.
+ */
 typedef MPCI_get_packet_entry      rtems_mpci_get_packet_entry;
+
+/**
+ * This defines the public name for the type for an indirect pointer
+ * to the return_packet entry point for an MPCI handler.
+ */
 typedef MPCI_return_packet_entry   rtems_mpci_return_packet_entry;
+
+/**
+ * This defines the public name for the type for an indirect pointer
+ * to the send_packet entry point for an MPCI handler.
+ */
 typedef MPCI_send_entry            rtems_mpci_send_packet_entry;
+
+/**
+ * This defines the public name for the type for an indirect pointer
+ * to the receive entry point for an MPCI handler.
+ */
 typedef MPCI_receive_entry         rtems_mpci_receive_packet_entry;
 
-typedef MPCI_Entry rtems_mpci_entry;
+/**
+ * This defines the public name for the return type from every
+ * MPCI handler routine.
+ */
+typedef MPCI_Entry                 rtems_mpci_entry;
 
-typedef MPCI_Control rtems_mpci_table;
+/**
+ * This defines the public name for the structure which is used to
+ * configure an MPCI handler.
+ */
+typedef MPCI_Control               rtems_mpci_table;
+
 #endif
 
 #ifdef __cplusplus

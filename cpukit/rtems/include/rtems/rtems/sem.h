@@ -53,7 +53,8 @@ extern "C" {
 /**
  *  @defgroup ClassicSem Classic API Semaphore
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the Classic API
+ *  Semaphore Manager.
  */
 /**@{*/
 
@@ -61,10 +62,36 @@ extern "C" {
  *  The following defines the control block used to manage each semaphore.
  */
 typedef struct {
+  /** This field is the object management portion of a Semaphore instance. */
   Objects_Control          Object;
+
+  /**
+   *  This is the Classic API attribute provided to the create directive.
+   *  It is translated into behavioral attributes on the SuperCore Semaphore
+   *  or Mutex instance.
+   */
   rtems_attribute          attribute_set;
+
+  /**
+   *  This contains the memory associated with the SuperCore Semaphore or
+   *  Mutex instance that provides the primary functionality of each
+   *  Classic API Semaphore instance.  The structure used is dependent
+   *  on the attributes specified by the user on the create directive.
+   *
+   *  @note Only one of these has meaning in a particular Classic API
+   *        Semaphore instance.
+   */
   union {
+    /**
+     *  This is the SuperCore Mutex instance associated with this Classic
+     *  API Semaphore instance.
+     */
     CORE_mutex_Control     mutex;
+
+    /**
+     *  This is the SuperCore Semaphore instance associated with this Classic
+     *  API Semaphore instance.
+     */
     CORE_semaphore_Control semaphore;
   } Core_control;
 }   Semaphore_Control;

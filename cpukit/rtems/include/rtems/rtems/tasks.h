@@ -182,13 +182,20 @@ typedef rtems_task ( *rtems_task_entry )(
  *  initialization time.
  */
 typedef struct {
-  rtems_name            name;              /* task name */
-  size_t                stack_size;        /* task stack size */
-  rtems_task_priority   initial_priority;  /* task priority */
-  rtems_attribute       attribute_set;     /* task attributes */
-  rtems_task_entry      entry_point;       /* task entry point */
-  rtems_mode            mode_set;          /* task initial mode */
-  rtems_task_argument	argument;          /* task argument */
+  /** This is the Initialization Task's name. */
+  rtems_name            name;
+  /** This is the Initialization Task's stack size. */
+  size_t                stack_size;
+  /** This is the Initialization Task's priority. */
+  rtems_task_priority   initial_priority;
+  /** This is the Initialization Task's attributes. */
+  rtems_attribute       attribute_set;
+  /** This is the Initialization Task's entry point. */
+  rtems_task_entry      entry_point;
+  /** This is the Initialization Task's initial mode. */
+  rtems_mode            mode_set;
+  /** This is the Initialization Task's argument. */
+  rtems_task_argument	argument;
 } rtems_initialization_tasks_table;
 
 /**
@@ -196,9 +203,13 @@ typedef struct {
  *  the RTEMS API to function correctly.
  */
 typedef struct {
+  /** This field contains the notepads for this task. */
   uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  /** This field contains the pending events for this task. */
   rtems_event_set          pending_events;
+  /** This field contains the event wait condition for this task. */
   rtems_event_set          event_condition;
+  /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
 }  RTEMS_API_Control;
 

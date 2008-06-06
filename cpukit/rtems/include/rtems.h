@@ -1,10 +1,8 @@
 /**
  * @file  rtems.h
  *
- *  This include file contains information about RTEMS executive that
- *  is required by the application and is CPU independent.  It includes
- *  two (2) CPU dependent files to tailor its data structures for a
- *  particular processor.
+ *  This include file provides the public interface to the RTEMS Classic
+ *  API.
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -23,7 +21,8 @@
 /**
  *  @defgroup ClassicRTEMS Classic API RTEMS Header
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality which is specific to the Classic API
+ *  and generally shared across the various object classes.
  */
 /**@{*/
 
@@ -42,7 +41,6 @@ extern "C" {
  *  which are not included in the formally defined and supported API.
  *  Define this at your own risk.
  */
-
 #define __RTEMS_APPLICATION__
 #endif
 
@@ -85,9 +83,9 @@ extern "C" {
  */
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
-/*
- *  The following define the constants which may be used in name searches.
- */
+/**********************************************************************
+ *      CONSTANTS WHICH MAY BE USED IN OBJECT NAME TO ID SEARCHES
+ **********************************************************************/ 
 
 /**
  * This constant indicates that the search is across all nodes.
@@ -115,9 +113,9 @@ extern "C" {
  */
 #define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
 
-/*
- * Parameters and return id's for _Objects_Get_next
- */
+/**********************************************************************
+ *        Parameters and return Id's for _Objects_Get_next
+ **********************************************************************/ 
 
 /**
  *  This constant is the lowest valid valid for the index portion

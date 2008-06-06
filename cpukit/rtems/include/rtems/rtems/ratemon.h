@@ -42,7 +42,8 @@
 /**
  *  @defgroup ClassicRateMon Classic API Rate Monotonic
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the
+ *  Classic API Rate Monotonic Manager.
  */
 /**@{*/
 
@@ -54,7 +55,7 @@ extern "C" {
  *  The user can define this at configure time and go back to ticks
  *  resolution.
  */
-#ifndef __RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__
+#if defined(__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__)
   /**
    *  Enable the nanosecond accurate statistics
    *
@@ -62,9 +63,14 @@ extern "C" {
    *  is used.
    */
   #define RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+#endif
 
+/**
+ *  This is the type used to manage the rate monotonic timing
+ *  statistics.
+ */
+#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
   typedef struct timespec rtems_rate_monotonic_period_time_t;
-
 #else
   typedef uint32_t rtems_rate_monotonic_period_time_t;
 #endif
@@ -83,13 +89,37 @@ extern "C" {
  *  period may be.
  */
 typedef enum {
-  RATE_MONOTONIC_INACTIVE,               /* off chain, never initialized */
-  RATE_MONOTONIC_OWNER_IS_BLOCKING,      /* on chain, owner is blocking on it */
-  RATE_MONOTONIC_ACTIVE,                 /* on chain, running continuously */
-  RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING, /* on chain, expired while owner was */
-                                         /*   was blocking on it */
-  RATE_MONOTONIC_EXPIRED                 /* off chain, will be reset by next */
-                                         /*   rtems_rate_monotonic_period */
+  /**
+   * This value indicates the period is off the watchdog chain, 
+   * and has never been initialized.
+   */
+  RATE_MONOTONIC_INACTIVE,
+
+  /**
+   * This value indicates the period is on the watchdog chain, and 
+   * the owner is blocked waiting on it.
+   */
+  RATE_MONOTONIC_OWNER_IS_BLOCKING,
+
+  /**
+   * This value indicates the period is on the watchdog chain, and 
+   * running.  The owner should be executed or blocked waiting on
+   * another object.
+   */
+  RATE_MONOTONIC_ACTIVE,
+
+  /**
+   * This value indicates the period is on the watchdog chain, and 
+   * has expired.  The owner should be blocked waiting for the next period.
+   */
+  RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING,
+
+  /**
+   * This value indicates the period is off the watchdog chain, and 
+   * has expired.  The owner is still executing and has taken too much
+   * all time to complete this iteration of the period.
+   */
+  RATE_MONOTONIC_EXPIRED,
 }   rtems_rate_monotonic_period_states;
 
 /**
@@ -102,15 +132,23 @@ typedef enum {
  *  The following defines the statistics kept on each period instance.
  */
 typedef struct {
+  /** This field contains the number of periods executed. */
   uint32_t     count;
+  /** This field contains the number of periods missed. */
   uint32_t     missed_count;
 
+  /** This field contains the least amount of CPU time used in a period. */
   rtems_thread_cpu_usage_t             min_cpu_time;
+  /** This field contains the highest amount of CPU time used in a period. */
   rtems_thread_cpu_usage_t             max_cpu_time;
+  /** This field contains the total amount of wall time used in a period. */
   rtems_thread_cpu_usage_t             total_cpu_time;
 
+  /** This field contains the least amount of wall time used in a period. */
   rtems_rate_monotonic_period_time_t   min_wall_time;
+  /** This field contains the highest amount of wall time used in a period. */
   rtems_rate_monotonic_period_time_t   max_wall_time;
+  /** This field contains the total amount of CPU time used in a period. */
   rtems_rate_monotonic_period_time_t   total_wall_time;
 }  rtems_rate_monotonic_period_statistics;
 
@@ -118,9 +156,24 @@ typedef struct {
  *  The following defines the period status structure.
  */
 typedef struct {
+  /** This is the Id of the thread using this period. */
   Objects_Id                           owner;
+
+  /** This is the current state of this period. */
   rtems_rate_monotonic_period_states   state;
+
+  /**
+   *  This is the length of wall time that has passed since this period
+   *  was last initiated.  If the period is expired or has not been initiated,
+   *  then this field has no meaning.
+   */
   rtems_rate_monotonic_period_time_t   since_last_period;
+
+  /**
+   *  This is the amount of CPU time that has been used since this period
+   *  was last initiated.  If the period is expired or has not been initiated,
+   *  then this field has no meaning.
+   */
   rtems_thread_cpu_usage_t             executed_since_last_period;
 }  rtems_rate_monotonic_period_status;
 
@@ -129,13 +182,43 @@ typedef struct {
  *  each period.
  */
 typedef struct {
+  /** This field is the object management portion of a Period instance. */
   Objects_Control                         Object;
+
+  /** This is the timer used to provide the unblocking mechanism. */
   Watchdog_Control                        Timer;
+
+  /** This field indicates the current state of the period. */
   rtems_rate_monotonic_period_states      state;
+
+  /**
+   * This field contains the total CPU usage used while executing
+   * the body of the loop that is executed each period.
+   */
   rtems_thread_cpu_usage_t                owner_executed_at_period;
+
+  /**
+   * This field contains the total wall timer that passed while
+   * executing the body of the loop that is executed each period.
+   */
   rtems_rate_monotonic_period_time_t      time_at_period;
+
+  /**
+   * This field contains the length of the next period to be
+   * executed.
+   */
   uint32_t                                next_length;
+
+  /**
+   * This field contains a pointer to the TCB for the thread
+   * which owns and uses this period instance.
+   */
   Thread_Control                         *owner;
+
+  /**
+   * This field contains the statistics which are maintained
+   * on each period.
+   */
   rtems_rate_monotonic_period_statistics  Statistics;
 }   Rate_monotonic_Control;
  
@@ -148,7 +231,7 @@ typedef struct {
 RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
 
 /**
- *  _Rate_monotonic_Manager_initialization
+ *  @brief Rate Monotonic Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */

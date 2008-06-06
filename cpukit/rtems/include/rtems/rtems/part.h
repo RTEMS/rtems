@@ -52,7 +52,8 @@ extern "C" {
 /**
  *  @defgroup ClassicPart Classic API Partition
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the
+ *  Classic API Partition Manager.
  */
 /**@{*/
 
@@ -60,13 +61,20 @@ extern "C" {
  *  The following defines the control block used to manage each partition.
  */
 typedef struct {
+  /** This field is the object management portion of a Partition instance. */
   Objects_Control     Object;
-  void               *starting_address;      /* physical address */
-  uint32_t            length;                /* in bytes */
-  uint32_t            buffer_size;           /* in bytes */
-  rtems_attribute  attribute_set;         /* attributes */
-  uint32_t            number_of_used_blocks; /* or allocated buffers */
-  Chain_Control       Memory;                /* buffer chain */
+  /** This field is the physical starting address of the Partition. */
+  void               *starting_address;
+  /** This field is the size of the Partition in bytes. */
+  uint32_t            length;
+  /** This field is the size of each buffer in bytes */
+  uint32_t            buffer_size;
+  /** This field is the attribute set provided at create time. */
+  rtems_attribute     attribute_set;
+  /** This field is the of allocated buffers. */
+  uint32_t            number_of_used_blocks;
+  /** This field is the chain used to manage unallocated buffers. */
+  Chain_Control       Memory;
 }   Partition_Control;
 
 /**

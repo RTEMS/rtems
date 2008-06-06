@@ -22,7 +22,8 @@
 /**
  *  @defgroup ClassicEventSet Classic API Event Set
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to Classic API
+ *  Event Sets.  These are used by the Classic API Event Manager.
  */
 /**@{*/
 

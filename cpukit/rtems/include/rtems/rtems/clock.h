@@ -63,7 +63,9 @@ typedef enum {
  *  Standard flavor style to return TOD in for a rtems_clock_get option.
  */
 typedef struct {
+  /** This is the seconds portion of a time of day. */
   uint32_t    seconds;
+  /** This is the microseconds portion of a time of day. */
   uint32_t    microseconds;
 } rtems_clock_time_value;
 

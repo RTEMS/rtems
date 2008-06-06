@@ -50,7 +50,8 @@ extern "C" {
 /**
  *  @defgroup ClassicDPMEM Classic API Dual Ported Memory
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the
+ *  Classic API Dual Ported Memory Manager.
  */
 /**@{*/
 
@@ -60,10 +61,14 @@ extern "C" {
  *  all information required to support the port related operations.
  */
 typedef struct {
+  /** This field is the object management portion of a Port instance. */
   Objects_Control  Object;
-  void            *internal_base; /* base internal address */
-  void            *external_base; /* base external address */
-  uint32_t         length;        /* length of dual-ported area */
+  /** This field is the base internal address of the port. */
+  void            *internal_base;
+  /** This field is the base external address of the port. */
+  void            *external_base;
+  /** This field is the length of dual-ported area of the port. */
+  uint32_t         length;
 }   Dual_ported_memory_Control;
 
 /**

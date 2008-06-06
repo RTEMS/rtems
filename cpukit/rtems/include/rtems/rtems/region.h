@@ -66,14 +66,53 @@ extern "C" {
  */
 
 typedef struct {
+  /**
+   * This field is the object management portion of a Region instance.
+   */
   Objects_Control       Object;
-  Thread_queue_Control  Wait_queue;            /* waiting threads        */
-  void                 *starting_address;      /* physical start addr    */
-  uint32_t              length;                /* physical length(bytes) */
-  uint32_t              page_size;             /* in bytes               */
-  uint32_t              maximum_segment_size;  /* in bytes               */
+
+  /**
+   * This is the set of threads blocked waiting on memory.
+   */
+  Thread_queue_Control  Wait_queue;
+
+  /**
+   * This is the physical starting address of the Region area.
+   */
+  void                 *starting_address;
+
+  /**
+   * This is the physical length (in bytes) of the Region memory.
+   */
+  uint32_t              length;
+
+  /**
+   * This is the physical page size (in bytes) of each allocated segment.
+   */
+  uint32_t              page_size;
+
+  /**
+   * This is the maximum segment size (in bytes) that can ever be allocated
+   * from this Region.  It is calculated at creation time.
+   */
+  uint32_t              maximum_segment_size;
+
+  /**
+   *  This is the Classic API attribute provided to the create directive.
+   *  It is translated into behavioral attributes on the SuperCore Heap
+   *  instance.
+   */
   rtems_attribute       attribute_set;
-  uint32_t              number_of_used_blocks; /* blocks allocated       */
+
+  /**
+   * This is the number of blocks currently allocated from this Region.
+   */
+  uint32_t              number_of_used_blocks;
+
+  /**
+   * This is the Heap instance which implements the core functionality
+   * of a Region instance.
+   */
   Heap_Control          Memory;
 }  Region_Control;
 

@@ -97,7 +97,7 @@ typedef struct {
  *  @note The object must be have a name of the 32-bit form.
  *
  *  @return @a *name will contain user defined object name
- *  @return @a{RTEMS_SUCCESSFUL - if successful
+ *  @return @a RTEMS_SUCCESSFUL - if successful
  *  @return error code - if unsuccessful
  */
 rtems_status_code rtems_object_get_classic_name(
@@ -149,7 +149,7 @@ rtems_status_code rtems_object_set_name(
  *
  *  This function returns the API portion of the Id.
  *
- *  @param[in] id is the Id of the object to obtain the API from
+ *  @param[in] _id is the Id of the object to obtain the API from
  *
  *  @return This method returns the API portion of the provided
  *          @a _id.
@@ -166,7 +166,7 @@ rtems_status_code rtems_object_set_name(
  *
  *  This function returns the class portion of the ID.
  *
- *  @param[in] id is the Id of the object to obtain the class from
+ *  @param[in] _id is the Id of the object to obtain the class from
  *
  *  @return This method returns the class portion of the provided
  *          @a _id.
@@ -183,7 +183,7 @@ rtems_status_code rtems_object_set_name(
  *
  *  This function returns the node portion of the ID.
  *
- *  @param[in] id is the Id of the object to obtain the node from
+ *  @param[in] _id is the Id of the object to obtain the node from
  *
  *  @return This method returns the node portion of the provided
  *          @a _id.
@@ -200,7 +200,7 @@ rtems_status_code rtems_object_set_name(
  *
  *  This function returns the index portion of the ID.
  *
- *  @param[in] id is the Id of the object to obtain the index from
+ *  @param[in] _id is the Id of the object to obtain the index from
  *
  *  @return This method returns the index portion of the provided
  *          @a _id.

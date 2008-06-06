@@ -67,10 +67,33 @@ extern "C" {
  *  may belong.
  */
 typedef enum {
+  /**
+   * This value indicates the timer is currently in use as an interval
+   * timer which will fire in the clock tick ISR.
+   */
   TIMER_INTERVAL,
+
+  /**
+   * This value indicates the timer is currently in use as an interval
+   * timer which will fire in the timer server task.
+   */
   TIMER_INTERVAL_ON_TASK,
+
+  /**
+   * This value indicates the timer is currently in use as an time of day
+   * timer which will fire in the clock tick ISR.
+   */
   TIMER_TIME_OF_DAY,
+
+  /**
+   * This value indicates the timer is currently in use as an time of day
+   * timer which will fire in the timer server task.
+   */
   TIMER_TIME_OF_DAY_ON_TASK,
+
+  /**
+   * This value indicates the timer is currently not in use.
+   */
   TIMER_DORMANT
 } Timer_Classes;
 
@@ -79,6 +102,11 @@ typedef enum {
  */
 typedef void rtems_timer_service_routine;
 
+/**
+ *  This type defines the type used to manage and indirectly invoke
+ *  Timer Service Routines (TSRs).  This defines the prototype and interface
+ *  for a function which is to be used as a TSR.
+ */
 typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
                  rtems_id,
                  void *
@@ -98,17 +126,29 @@ RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
 RTEMS_TIMER_EXTERN Thread_Control *_Timer_Server;
 
 /**
- *  The following chains contain the list of interval timers that are
+ *  This chain contains the list of interval timers that are
  *  executed in the context of the Timer Server.
  *
- *  NOTE: These are extern'ed because they do not have to be in the
- *        minimum footprint.  They are only really required when
+ *  @note This is extern'ed because they do not have to be in the
+ *        minimum footprint.  It is only really required when
  *        task-based timers are used.  Since task-based timers can
- *        not be started until the server is initiated, these structures
- *        do not have to be initialized until then.  They are declared
+ *        not be started until the server is initiated, this structure
+ *        does not have to be initialized until then.  This is declared
  *        in the same file as _Timer_Server_body.
  */
 extern Chain_Control _Timer_Ticks_chain;
+
+/**
+ *  This chain contains the list of time of day timers that are
+ *  executed in the context of the Timer Server.
+ *
+ *  @note This is extern'ed because they do not have to be in the
+ *        minimum footprint.  It is only really required when
+ *        task-based timers are used.  Since task-based timers can
+ *        not be started until the server is initiated, this structure
+ *        does not have to be initialized until then.  This is declared
+ *        in the same file as _Timer_Server_body.
+ */
 extern Chain_Control _Timer_Seconds_chain;
 
 /**
@@ -116,8 +156,11 @@ extern Chain_Control _Timer_Seconds_chain;
  *  each timer.
  */
 typedef struct {
+  /** This field is the object management portion of a Timer instance. */
   Objects_Control  Object;
+  /** This field is the Watchdog instance which will be the scheduled. */
   Watchdog_Control Ticker;
+  /** This field indicates what type of timer this currently is. */
   Timer_Classes    the_class;
 }   Timer_Control;
 
@@ -288,9 +331,13 @@ rtems_status_code rtems_timer_initiate_server(
  *  service.
  */
 typedef struct {
+  /** This indicates the current type of the timer. */
   Timer_Classes      the_class;
+  /** This indicates the initial requested interval. */
   Watchdog_Interval  initial;
+  /** This indicates the time the timer was initially scheduled. */
   Watchdog_Interval  start_time;
+  /** This indicates the time the timer is scheduled to fire. */
   Watchdog_Interval  stop_time;
 } rtems_timer_information;
 
@@ -340,6 +387,10 @@ void _Timer_Server_process_ticks_chain(void);
  */
 void _Timer_Server_process_seconds_chain(void);
 
+/**
+ *  This method resets a timer and places it on the Ticks chain.  It
+ *  is assumed that the timer has already been canceled.
+ */
 #define _Timer_Server_reset_ticks_timer() \
    do { \
       if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) { \
@@ -348,6 +399,10 @@ void _Timer_Server_process_seconds_chain(void);
       } \
    } while (0)
 
+/**
+ *  This method resets a timer and places it on the Seconds chain.  It
+ *  is assumed that the timer has already been canceled.
+ */
 #define _Timer_Server_reset_seconds_timer() \
    do { \
       if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) { \
