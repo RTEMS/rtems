@@ -1225,18 +1225,10 @@ the rate monotonic period id in the following data @value{STRUCTURE}:
 @findex rtems_rate_monotonic_period_status
 @example
 typedef struct @{
-  rtems_id                            owner;
-  rtems_rate_monotonic_period_states  state;
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    struct timespec                   since_last_period;
-  #else
-    uint32_t                          ticks_since_last_period;
-  #endif
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec                   executed_since_last_period;
-  #else
-    uint32_t                          ticks_executed_since_last_period;
-  #endif
+  rtems_id                              owner;
+  rtems_rate_monotonic_period_states    state;
+  rtems_rate_monotonic_period_time_t    since_last_period;
+  rtems_thread_cpu_usage_t              executed_since_last_period;
 @}  rtems_rate_monotonic_period_status;
 @end example
 @end ifset
@@ -1245,10 +1237,10 @@ typedef struct @{
 @example
 type Rate_Monotonic_Period_Status is
    begin
-      Owner                            : RTEMS.ID;
-      State                            : RTEMS.Rate_Monotonic_Period_States;
-      Ticks_Since_Last_Period          : RTEMS.Unsigned32;
-      Ticks_Executed_Since_Last_Period : RTEMS.Unsigned32;
+      Owner                      : RTEMS.ID;
+      State                      : RTEMS.Rate_Monotonic_Period_States;
+      Since_Last_Period          : RTEMS.Unsigned32;
+      Executed_Since_Last_Period : RTEMS.Unsigned32;
    end record;
 @end example
 @end ifset

@@ -1,3 +1,7 @@
+2008-06-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/rtmon.t: Change to using new types.
+
 2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
