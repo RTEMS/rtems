@@ -1,3 +1,8 @@
+2008-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* samples/hello/config.h, sptests/spname01/config.h: These needed
+	CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
+
 2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mptests/mp01/mptest.ads, mptests/mp02/mptest.ads,
