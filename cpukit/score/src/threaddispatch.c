@@ -108,7 +108,7 @@ void _Thread_Dispatch( void )
         _Thread_Time_of_last_context_switch = uptime;
       }
     #else
-      heir->ticks_executed++;
+      heir->cpu_time_used++;
     #endif
 
     /*

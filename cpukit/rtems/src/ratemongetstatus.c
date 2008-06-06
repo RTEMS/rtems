@@ -68,13 +68,13 @@ rtems_status_code rtems_rate_monotonic_get_status(
           status->since_last_period.tv_sec = 0;
           status->since_last_period.tv_nsec = 0;
         #else
-          status->ticks_since_last_period = 0;
+          status->since_last_period = 0;
         #endif
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
           status->executed_since_last_period.tv_sec = 0;
           status->executed_since_last_period.tv_nsec = 0;
         #else
-          status->ticks_executed_since_last_period = 0;
+          status->executed_since_last_period = 0;
         #endif
       } else {
         /*
@@ -94,7 +94,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
             &status->since_last_period
           );
         #else
-          status->ticks_since_last_period =
+          status->since_last_period =
             _Watchdog_Ticks_since_boot - the_period->time_at_period;
         #endif
 
@@ -105,9 +105,9 @@ rtems_status_code rtems_rate_monotonic_get_status(
             &status->executed_since_last_period
           );
         #else
-          status->ticks_executed_since_last_period =
-            the_period->owner->ticks_executed -
-              the_period->owner_ticks_executed_at_period;
+          status->executed_since_last_period =
+            the_period->owner->cpu_time_used -
+            the_period->owner_executed_at_period;
         #endif
       }
 

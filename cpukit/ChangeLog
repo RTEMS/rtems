@@ -1,3 +1,16 @@
+2008-06-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/__times.c, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/cpuuse/cpuusagereset.c, libmisc/monitor/mon-task.c,
+	rtems/include/rtems/rtems/ratemon.h, rtems/src/ratemongetstatus.c,
+	rtems/src/ratemonperiod.c, score/include/rtems/score/thread.h,
+	score/src/threaddispatch.c, score/src/threadinitialize.c,
+	score/src/threadtickletimeslice.c: Add typedefs for cpu usage and
+	period timing statistics. Also renamed related variables and
+	structure members so they are the same whether you are using
+	nanosecond (e.g. struct timespec) or ticks (e.g. uint32_t)
+	granularity. This lays the groundwork for future cleanup.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Rework to be more accurate on allocation. In

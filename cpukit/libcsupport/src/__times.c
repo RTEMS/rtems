@@ -71,7 +71,7 @@ clock_t _times(
       ptms->tms_utime = ticks;
     }
   #else
-    ptms->tms_utime  = _Thread_Executing->ticks_executed;
+    ptms->tms_utime  = _Thread_Executing->cpu_time_used;
   #endif
   ptms->tms_stime  = ticks;
   ptms->tms_cutime = 0;

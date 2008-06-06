@@ -43,6 +43,11 @@ extern "C" {
    *  is used.
    */
   #define RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
+
+  #define RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE struct timespec
+
+#else
+  #define RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE uint32_t
 #endif
 
 #include <rtems/score/context.h>
@@ -344,11 +349,7 @@ struct Thread_Control_struct {
   /** This field is the amount of CPU time consumed by this thread
    *  since it was created.
    */
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec                       cpu_time_used;
-  #else
-    uint32_t                              ticks_executed;
-  #endif
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE  cpu_time_used;
   /** This field points to the Ready FIFO for this priority. */
   Chain_Control                        *ready;
   /** This field contains precalculated priority map indices. */

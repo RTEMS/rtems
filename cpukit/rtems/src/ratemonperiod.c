@@ -33,16 +33,10 @@ void _Rate_monotonic_Update_statistics(
 )
 {
   rtems_rate_monotonic_period_statistics *stats;
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec                       executed;
-  #else
-    uint32_t                              ticks_executed_since_last_period;
-  #endif
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE  executed;
+  rtems_rate_monotonic_period_time_t    since_last_period;
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    struct timespec                       period_start;
-    struct timespec                       since_last_period;
-  #else
-    uint32_t                              ticks_since_last_period;
+    rtems_rate_monotonic_period_time_t  period_start;
   #endif
   #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
       defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
@@ -69,14 +63,13 @@ void _Rate_monotonic_Update_statistics(
     _Timespec_Subtract( &period_start, &uptime, &since_last_period );
     the_period->time_at_period = uptime;
   #else
-    ticks_since_last_period =
-        _Watchdog_Ticks_since_boot - the_period->time_at_period;
+    since_last_period = _Watchdog_Ticks_since_boot - the_period->time_at_period;
     the_period->time_at_period = _Watchdog_Ticks_since_boot;
   #endif
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
-      struct timespec ran, used;
+      rtems_rate_monotonic_period_time_t ran, used;
        
       /* Grab CPU usage when the thread got switched in */
       used = _Thread_Executing->cpu_time_used;
@@ -95,8 +88,8 @@ void _Rate_monotonic_Update_statistics(
       );
     }
   #else
-      ticks_executed_since_last_period = the_period->owner->ticks_executed -
-        the_period->owner_ticks_executed_at_period;
+      executed = the_period->owner->cpu_time_used -
+        the_period->owner_executed_at_period;
   #endif
 
   /*
@@ -123,13 +116,13 @@ void _Rate_monotonic_Update_statistics(
     if ( _Timespec_Greater_than( &executed, &stats->max_cpu_time ) ) 
       stats->max_cpu_time = executed;
   #else
-    stats->total_cpu_time  += ticks_executed_since_last_period;
+    stats->total_cpu_time  += executed;
 
-    if ( ticks_executed_since_last_period < stats->min_cpu_time )
-      stats->min_cpu_time = ticks_executed_since_last_period;
+    if ( executed < stats->min_cpu_time )
+      stats->min_cpu_time = executed;
 
-    if ( ticks_executed_since_last_period > stats->max_cpu_time )
-      stats->max_cpu_time = ticks_executed_since_last_period;
+    if ( executed > stats->max_cpu_time )
+      stats->max_cpu_time = executed;
   #endif
 
   /*
@@ -137,13 +130,13 @@ void _Rate_monotonic_Update_statistics(
    */
 
   #ifndef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    stats->total_wall_time += ticks_since_last_period;
+    stats->total_wall_time += since_last_period;
 
-    if ( ticks_since_last_period < stats->min_wall_time )
-      stats->min_wall_time = ticks_since_last_period;
+    if ( since_last_period < stats->min_wall_time )
+      stats->min_wall_time = since_last_period;
 
-    if ( ticks_since_last_period > stats->max_wall_time )
-      stats->max_wall_time = ticks_since_last_period;
+    if ( since_last_period > stats->max_wall_time )
+      stats->max_wall_time = since_last_period;
   #else
     _Timespec_Add_to( &stats->total_wall_time, &since_last_period );
 
@@ -241,7 +234,7 @@ rtems_status_code rtems_rate_monotonic_period(
 
           #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
             { 
-              struct timespec ran;
+              RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE ran;
 
               the_period->owner_executed_at_period = 
                 _Thread_Executing->cpu_time_used;
@@ -260,8 +253,8 @@ rtems_status_code rtems_rate_monotonic_period(
               _Timespec_Add_to( &the_period->owner_executed_at_period, &ran );
             }
           #else
-            the_period->owner_ticks_executed_at_period =
-              _Thread_Executing->ticks_executed;
+            the_period->owner_executed_at_period =
+              _Thread_Executing->cpu_time_used;
           #endif
 
           the_period->state = RATE_MONOTONIC_ACTIVE;

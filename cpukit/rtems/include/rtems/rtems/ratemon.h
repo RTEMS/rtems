@@ -62,6 +62,11 @@ extern "C" {
    *  is used.
    */
   #define RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
+
+  typedef struct timespec rtems_rate_monotonic_period_time_t;
+
+#else
+  typedef uint32_t rtems_rate_monotonic_period_time_t;
 #endif
 
 #include <rtems/score/object.h>
@@ -71,6 +76,7 @@ extern "C" {
 #include <rtems/rtems/support.h>
 
 #include <string.h>
+
 
 /**
  *  The following enumerated type defines the states in which a
@@ -98,42 +104,23 @@ typedef enum {
 typedef struct {
   uint32_t     count;
   uint32_t     missed_count;
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec min_cpu_time;
-    struct timespec max_cpu_time;
-    struct timespec total_cpu_time;
-  #else
-    uint32_t  min_cpu_time;
-    uint32_t  max_cpu_time;
-    uint32_t  total_cpu_time;
-  #endif
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    struct timespec min_wall_time;
-    struct timespec max_wall_time;
-    struct timespec total_wall_time;
-  #else
-    uint32_t  min_wall_time;
-    uint32_t  max_wall_time;
-    uint32_t  total_wall_time;
-  #endif
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE min_cpu_time;
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE max_cpu_time;
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE total_cpu_time;
+
+  rtems_rate_monotonic_period_time_t   min_wall_time;
+  rtems_rate_monotonic_period_time_t   max_wall_time;
+  rtems_rate_monotonic_period_time_t   total_wall_time;
 }  rtems_rate_monotonic_period_statistics;
 
 /**
  *  The following defines the period status structure.
  */
 typedef struct {
-  Objects_Id                          owner;
-  rtems_rate_monotonic_period_states  state;
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    struct timespec                   since_last_period;
-  #else
-    uint32_t                          ticks_since_last_period;
-  #endif
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec                   executed_since_last_period;
-  #else
-    uint32_t                          ticks_executed_since_last_period;
-  #endif
+  Objects_Id                           owner;
+  rtems_rate_monotonic_period_states   state;
+  rtems_rate_monotonic_period_time_t   since_last_period;
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE executed_since_last_period;
 }  rtems_rate_monotonic_period_status;
 
 /**
@@ -144,16 +131,8 @@ typedef struct {
   Objects_Control                         Object;
   Watchdog_Control                        Timer;
   rtems_rate_monotonic_period_states      state;
-  #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec                       owner_executed_at_period;
-  #else
-    uint32_t                              owner_ticks_executed_at_period;
-  #endif
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    struct timespec                       time_at_period;
-  #else
-    uint32_t                              time_at_period;
-  #endif
+  RTEMS_CPU_USAGE_STATISTICS_TIME_TYPE    owner_executed_at_period;
+  rtems_rate_monotonic_period_time_t      time_at_period;
   uint32_t                                next_length;
   Thread_Control                         *owner;
   rtems_rate_monotonic_period_statistics  Statistics;

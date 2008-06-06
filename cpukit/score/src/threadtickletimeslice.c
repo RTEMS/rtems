@@ -53,7 +53,7 @@ void _Thread_Tickle_timeslice( void )
     /*
      *  Increment the number of ticks this thread has been executing
      */
-    executing->ticks_executed++;
+    executing->cpu_time_used++;
   #endif
 
   /*

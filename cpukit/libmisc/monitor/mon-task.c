@@ -37,7 +37,7 @@ rtems_monitor_task_canonical(
      * FIXME: make this optionally cpu_time_executed
      */
 #if 0
-    canonical_task->ticks = rtems_thread->ticks_executed;
+    canonical_task->ticks = rtems_thread->cpu_time_executed;
 #else
     canonical_task->ticks = 0;
 #endif

@@ -211,7 +211,7 @@ boolean _Thread_Initialize(
     the_thread->cpu_time_used.tv_sec  = 0;
     the_thread->cpu_time_used.tv_nsec = 0;
   #else
-    the_thread->ticks_executed        = 0;
+    the_thread->cpu_time_used         = 0;
   #endif
 
   /*

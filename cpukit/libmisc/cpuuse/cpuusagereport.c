@@ -80,7 +80,7 @@ void rtems_cpu_usage_report_with_plugin(
           the_thread = (Thread_Control *)information->local_table[ i ];
 
           if ( the_thread )
-            total_units += the_thread->ticks_executed;
+            total_units += the_thread->cpu_time_used;
         }
       }
     }
@@ -142,12 +142,12 @@ void rtems_cpu_usage_report_with_plugin(
           );
         #else
           ival = (total_units) ?
-                   the_thread->ticks_executed * 10000 / total_units : 0;
+                   the_thread->cpu_time_used * 10000 / total_units : 0;
           fval = ival % 100;
           ival /= 100;
           (*print)( context,
             "%8" PRId32 "  %3" PRId32 ".%02" PRId32"\n",
-            the_thread->ticks_executed,
+            the_thread->cpu_time_used,
             ival,
             fval
           );
