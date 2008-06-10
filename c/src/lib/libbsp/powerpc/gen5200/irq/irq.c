@@ -663,7 +663,7 @@ static const char * u64tostring(
   uint64_t v
 )
 {
-  sprintf( buffer, "%lld %lld usecs", v, (v / 33) );
+  sprintf( buffer, "%lld cycles %lld usecs", v, (v / 33) );
   return buffer;
 }
 
