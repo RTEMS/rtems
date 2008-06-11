@@ -1,3 +1,17 @@
+2008-06-10	Chris Johns <chrisj@rtems.org>
+
+	* custom/av5282.cfg, custom/csb360.cfg, custom/gen68302.cfg,
+	custom/gen68340.cfg, custom/gen68360.cfg, custom/mcf5206elite.cfg,
+	custom/mcf5235.cfg, custom/mrm332.cfg, custom/mvme136.cfg,
+	custom/mvme147.cfg, custom/mvme162.cfg, custom/mvme162lx.cfg,
+	custom/mvme167.cfg, custom/ods68302.cfg, custom/sim68000.cfg,
+	custom/simcpu32.cfg, custom/uC5282.cfg: Change CCFLAGS to use the
+	-mcpu= option for Coldfires now supported in GCC 4.3.0.
+
+2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* custom/mcf52235.cfg: New.
+
 2008-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/nds.cfg: Email from author says to drop this flag.
