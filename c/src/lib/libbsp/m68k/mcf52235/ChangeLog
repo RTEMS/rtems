@@ -1,0 +1,8 @@
+2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs,
+	clock/clock.c, configure.ac, console/console.c, gdb-init,
+	include/bsp.h, include/bspopts.h.in, include/coverhd.h,
+	include/tm27.h, preinstall.am, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/cfinit.c, startup/init52235.c,
+	startup/linkcmds, timer/timer.c: New.

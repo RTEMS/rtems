@@ -1,0 +1,56 @@
+#
+#  $Id:
+#
+
+Description: Motorola MCF52235EVB
+============
+CPU: MCF52235, 60MHz
+SRAM: 32K
+FLASH: 256K
+
+This is a Motorola evaluation board that uses the MCF52235 Coldfire CPU. 
+This board is running at 60MHz scaled from a 25MHz oscillator.
+
+NOTES:
+======
+
+Currently this BSP must be configured with most (all?) RTEMS features turned
+off as RAM usage is too high.
+
+Configure as follows:
+configure --target=m68k-rtems4.9 --enable-rtemsbsp=mcf52235 \
+          --disable-networking --disable-posix --disable-itron --disable-cxx \
+          --disable-tests
+
+TODO:
+=====
+
+*) Work with TINY RTEMS to get the ram usage down.
+*) Add drivers for I2C, ADC, FEC
+*) Support for LWIP
+*) Update the coverhd.h (calling overheads) page 21 of the BSP guide
+*) Adjust initial stack so that it's space is not forever unusable after init
+*) Fix up constants used by cfinit such as clockspeed, rambase, flashbase etc.
+
+============================================================================
+      Interrupt map
+
++-----+-----------------------------------------------------------------------+
+|     |                                PRIORITY                               |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|LEVEL|    7   |    6   |    5   |    4   |    3   |    2   |    1   |    0   |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  7  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  6  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  5  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  4  | FEC RX | FEC TX |        |        |        |        |        |   PIT  |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  3  | UART 0 | UART 1 | UART 2 |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  2  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  1  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+ 
