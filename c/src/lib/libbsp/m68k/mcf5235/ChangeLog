@@ -1,3 +1,11 @@
+2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* Makefile.am: Add shared/m68kbspgetworkarea.c to sources.
+	* configure.ac: Add RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION.
+	* include/bsp.h: Add include bspopts.h.
+	* start/start.S: Formatting changes.
+	* startup/bspstart.c: Updated to use the shared BSP support.
+
 2008-05-29	Chris Johns <chrisj@rtems.org>
 
 	* include/bsp.h: FEC unit numbers based on 0 not 1. Change the

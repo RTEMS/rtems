@@ -134,40 +134,12 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 }
 
 /*
- *  Use the shared implementations of the following routines
- */
-void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);			/* m68k version */
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialisation.
  */
 void bsp_start( void )
 {
-  extern char _WorkspaceBase[];
-  extern char _RamSize[];
-  extern unsigned long  _M68k_Ramsize;
-
-  _M68k_Ramsize = (unsigned long)_RamSize;		/* RAM size set in linker script */
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *)_WorkspaceBase;
-
   /*
    * Invalidate the cache and disable it
    */

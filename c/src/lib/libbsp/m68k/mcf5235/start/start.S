@@ -309,15 +309,19 @@ SYM(_spuriousInterrupt):
 .align 4
     PUBLIC (start)
 SYM(start):
-    move.w  #0x0000,d0			| Turn off watchdog timer
+    move.w  #0x0000,d0              | Turn off watchdog timer
     move.w  d0, (0x40140000)
-    move.l  #0x01000000,d0		| Set system frequency to 150 MHz
+    move.l  #0x01000000,d0          | Set system frequency to 150 MHz
     move.l  d0, (0x40120000)
-    move.w  #0x2700,sr                  | Disable interrupts
+    move.w  #0x2700,sr              | Disable interrupts
 
-    move.l  #__SRAMBASE+1,d0    	| Enable the MCF5235 internal SRAM
-    movec   d0,%rambar          	| ...so we have a stack
-    move.l  #__IPSBAR+1,d0      	| Enable the MCF5235 internal peripherals
+    move.l  #__SRAMBASE+1,d0        | Enable the MCF5235 internal SRAM
+    movec   d0,%rambar              | ...so we have a stack
+
+    move.l  #0x20000201, d0 
+    move.l   d0,(0x40000008)        | set up 2nd RAMBAR to make 2nd port avail to FEC
+
+    move.l  #__IPSBAR+1,d0          | Enable the MCF5235 internal peripherals
     move.l  d0,DEFAULT_IPSBAR
         
     /*
