@@ -40,6 +40,11 @@
 extern "C" {
 #endif
 
+/*
+ * Processor specific information.
+ */
+#include <rtems/score/cpu.h>
+
 /**
  *  The following type defines the control block used to manage
  *  thread priorities.
@@ -49,9 +54,18 @@ extern "C" {
 typedef uint32_t   Priority_Control;
 
 /** This defines the highest (most important) thread priority. */
+#if defined (CPU_PRIORITY_MINIMUM)
+#define PRIORITY_MINIMUM      CPU_PRIORITY_MINIMUM
+#else
 #define PRIORITY_MINIMUM      0
+#endif
+
 /** This defines the lowest (least important) thread priority. */
+#if defined (CPU_PRIORITY_MAXIMUM)
+#define PRIORITY_MAXIMUM      CPU_PRIORITY_MAXIMUM
+#else
 #define PRIORITY_MAXIMUM      255
+#endif
 
 /**
  *  The following record defines the information associated with
