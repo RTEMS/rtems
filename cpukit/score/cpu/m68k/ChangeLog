@@ -1,3 +1,11 @@
+2008-06-10	Chris Johns <chrisj@rtems.org>
+
+	* cpu_asm.S: Add Coldfire FPU support.
+	* rtems/score/m68k.h: Change the Coldfire CPU defines to be based
+	on the instruction set. Add Tiny RTEMS support to the small memory
+	model RTEMS processors.
+	* rtems/score/cpu.h: Handle the new Tiny RTEMS support.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/score/cpu.h: Add CPU_SIMPLE_VECTORED_INTERRUPTS porting

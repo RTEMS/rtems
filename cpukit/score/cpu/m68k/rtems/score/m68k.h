@@ -84,6 +84,82 @@ extern "C" {
  */
 
 /*
+ * Handle the Coldfire family based on the instruction set.
+ */
+#if defined(__mcoldfire__)
+
+# define CPU_NAME "Motorola ColdFire"
+
+# if defined(__mcfisaa__)
+/* Motorola ColdFire ISA A */ 
+# define CPU_MODEL_NAME         "mcfisaa"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_PREINDEXING     0
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+
+# elif defined(__mcfisaaplus__)
+/* Motorola ColdFire ISA A+ */ 
+# define CPU_MODEL_NAME         "mcfisaaplus"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_PREINDEXING     0
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+
+# elif defined(__mcfisab__)
+/* Motorola ColdFire ISA B */ 
+# define CPU_MODEL_NAME         "mcfisab"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_PREINDEXING     0
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+
+# else
+# error "Unsupported Coldfire ISA -- Please notify RTEMS"
+# endif
+
+/*
+ * Assume the FPU support is independent. I think it is just the ISA B
+ * instruction set.
+ */
+# if defined (__mcffpu__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   0
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
+
+/*
+ * Tiny RTEMS support. Small stack and limited priorities.
+ */
+# if (defined(__mcf_cpu_52221) || \
+      defined(__mcf_cpu_52223) || \
+      defined(__mcf_cpu_52230) || \
+      defined(__mcf_cpu_52231) || \
+      defined(__mcf_cpu_52232) || \
+      defined(__mcf_cpu_52233) || \
+      defined(__mcf_cpu_52234) || \
+      defined(__mcf_cpu_52235) || \
+      defined(__mcf_cpu_52225) || \
+      defined(__mcf_cpu_52235))
+# define M68K_CPU_STACK_MINIMUM_SIZE 2048
+/* Define the lowest priority. Based from 0 to this is 16 levels. */
+# define M68K_CPU_PRIORITY_MAXIMUM   15
+# else
+# define M68K_CPU_STACK_MINIMUM_SIZE 4096
+# define M68K_CPU_PRIORITY_MAXIMUM   255
+# endif
+
+#else
+
+/*
  *  Figure out all CPU Model Feature Flags based upon compiler 
  *  predefines.   Notice the only exception to this is that 
  *  gcc does not distinguish between CPU32 and CPU32+.  This
@@ -92,200 +168,146 @@ extern "C" {
  *  but less efficient CPU32 rules are used for the CPU32+.
  */
 
-#if (defined(__mc68020__) && !defined(__mcpu32__))
- 
-#define CPU_MODEL_NAME          "m68020"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-# if defined (__HAVE_68881__)
-# define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   0
-# else
-# define M68K_HAS_FPU            0
-# define M68K_HAS_FPSP_PACKAGE   0
-# endif
- 
-#elif defined(__mc68030__)
- 
-#define CPU_MODEL_NAME          "m68030"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-# if defined (__HAVE_68881__)
-# define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   0
-# else
-# define M68K_HAS_FPU            0
-# define M68K_HAS_FPSP_PACKAGE   0
-# endif
- 
-#elif defined(__mc68040__)
+# define CPU_NAME "Motorola MC68xxx"
 
-#define CPU_MODEL_NAME          "m68040"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-# if defined (__HAVE_68881__)
-# define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   1
-# else
-# define M68K_HAS_FPU            0
-# define M68K_HAS_FPSP_PACKAGE   0
-# endif
- 
-#elif defined(__mc68060__)
+/*
+ * One stack size fits all 68000 processors.
+ */ 
+# define M68K_CPU_STACK_MINIMUM_SIZE 4096
 
-#define CPU_MODEL_NAME          "m68060"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-# if defined (__HAVE_68881__)
-# define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   0
-# else
-# define M68K_HAS_FPU            0
-# define M68K_HAS_FPSP_PACKAGE   0
-# endif
- 
-#elif defined(__mc68302__)
+# if (defined(__mc68020__) && !defined(__mcpu32__))
 
-#define CPU_MODEL_NAME          "m68302"
-#define M68K_HAS_VBR             0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          0
-#define M68K_HAS_MISALIGNED      0
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
+# define CPU_MODEL_NAME          "m68020"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 1
+# define M68K_HAS_BFFFO           1
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+#  if defined (__HAVE_68881__)
+#  define M68K_HAS_FPU            1
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  else
+#  define M68K_HAS_FPU            0
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  endif
+ 
+# elif defined(__mc68030__)
+ 
+# define CPU_MODEL_NAME          "m68030"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 1
+# define M68K_HAS_BFFFO           1
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+#  if defined (__HAVE_68881__)
+#  define M68K_HAS_FPU            1
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  else
+#  define M68K_HAS_FPU            0
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  endif
+ 
+# elif defined(__mc68040__)
+
+# define CPU_MODEL_NAME          "m68040"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 1
+# define M68K_HAS_BFFFO           1
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+#  if defined (__HAVE_68881__)
+#  define M68K_HAS_FPU            1
+#  define M68K_HAS_FPSP_PACKAGE   1
+#  else
+#  define M68K_HAS_FPU            0
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  endif
+ 
+# elif defined(__mc68060__)
+
+# define CPU_MODEL_NAME          "m68060"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_BFFFO           1
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+#  if defined (__HAVE_68881__)
+#  define M68K_HAS_FPU            1
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  else
+#  define M68K_HAS_FPU            0
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  endif
+ 
+# elif defined(__mc68302__)
+
+# define CPU_MODEL_NAME          "m68302"
+# define M68K_HAS_VBR             0
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_PREINDEXING     0
+# define M68K_HAS_EXTB_L          0
+# define M68K_HAS_MISALIGNED      0
+# define M68K_HAS_FPU             0
+# define M68K_HAS_FPSP_PACKAGE    0
 
   /* gcc and egcs do not distinguish between CPU32 and CPU32+ */
-#elif defined(RTEMS__mcpu32p__)
+# elif defined(RTEMS__mcpu32p__)
  
-#define CPU_MODEL_NAME          "mcpu32+"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
+# define CPU_MODEL_NAME          "mcpu32+"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      1
+# define M68K_HAS_FPU             0
+# define M68K_HAS_FPSP_PACKAGE    0
 
-#elif defined(__mcpu32__)
+# elif defined(__mcpu32__)
  
-#define CPU_MODEL_NAME          "mcpu32"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      0
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
+# define CPU_MODEL_NAME          "mcpu32"
+# define M68K_HAS_VBR             1
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_PREINDEXING     1
+# define M68K_HAS_EXTB_L          1
+# define M68K_HAS_MISALIGNED      0
+# define M68K_HAS_FPU             0
+# define M68K_HAS_FPSP_PACKAGE    0
 
-#elif defined(__mcf528x__)
-/* Motorola ColdFire ISA A+ - RISC/68020 hybrid */ 
-#define CPU_MODEL_NAME         "m528x"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_HAS_ISA_APLUS       1
-
-#elif defined(__mcf5200__)
-/* Motorola ColdFire V2 core - RISC/68020 hybrid */ 
-#define CPU_MODEL_NAME         "m5200"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_HAS_ISA_APLUS       0
-
-#elif defined(__mcf5307__)
-/* UNCHECKED */
-/* Motorola ColdFire 5307 */ 
-#define CPU_MODEL_NAME         "m5307"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_HAS_ISA_APLUS       0
-
-#elif defined(__mcf5407__)
-#if defined(__mcfv4e__)
-/* UNCHECKED */
-/* Motorola ColdFire V4e */ 
-#define CPU_MODEL_NAME         "mcfv4e"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_HAS_ISA_APLUS       0
-#else
-/* UNCHECKED */
-/* Motorola ColdFire 5407 */ 
-#define CPU_MODEL_NAME         "m5407"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-#define M68K_HAS_ISA_APLUS       0
-#endif
-
-#elif defined(__mc68000__)
+# elif defined(__mc68000__)
  
-#define CPU_MODEL_NAME          "m68000"
-#define M68K_HAS_VBR             0
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          0
-#define M68K_HAS_MISALIGNED      0
-# if defined (__HAVE_68881__)
-# define M68K_HAS_FPU            1
-# define M68K_HAS_FPSP_PACKAGE   0
+# define CPU_MODEL_NAME          "m68000"
+# define M68K_HAS_VBR             0
+# define M68K_HAS_SEPARATE_STACKS 0
+# define M68K_HAS_BFFFO           0
+# define M68K_HAS_PREINDEXING     0
+# define M68K_HAS_EXTB_L          0
+# define M68K_HAS_MISALIGNED      0
+#  if defined (__HAVE_68881__)
+#  define M68K_HAS_FPU            1
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  else
+#  define M68K_HAS_FPU            0
+#  define M68K_HAS_FPSP_PACKAGE   0
+#  endif
+
 # else
-# define M68K_HAS_FPU            0
-# define M68K_HAS_FPSP_PACKAGE   0
+
+# error "Unsupported 68000 CPU model -- are you sure you're running a 68k compiler?"
+
 # endif
 
-#else
-
-#error "Unsupported CPU model -- are you sure you're running a 68k compiler?"
+/*
+ * No Tiny RTEMS support on the standard 68000 family.
+ */
+# define M68K_CPU_STACK_MINIMUM_SIZE 4096
+# define M68K_CPU_PRIORITY_MAXIMUM   255
 
 #endif
 
@@ -299,19 +321,9 @@ extern "C" {
  * Use __mcoldfire__ instead.
  */
 #if defined(__mcoldfire__)
-#define M68K_COLDFIRE_ARCH      1
+#define M68K_COLDFIRE_ARCH  1
 #else
 #define M68K_COLDFIRE_ARCH	0
-#endif
-
-/*
- *  Define the name of the CPU family.
- */
-
-#if ( defined(__mcoldfire__) )
-  #define CPU_NAME "Motorola ColdFire"
-#else
-  #define CPU_NAME "Motorola MC68xxx"
 #endif
 
 #ifndef ASM

@@ -59,6 +59,8 @@ restore:  movml    a0@,d1-d7/a2-a7       | restore context
 #if (CPU_SOFTWARE_FP == FALSE)
 
 .set FPCONTEXT_ARG,   4                   | save FP context argument
+.set FP_STATE_SAVED,  (4*4)               | FPU state is 4 longwords
+.set FP_REGS_SAVED,   (8*8)               | FPU regs is 8 64bit values
 
         .align  4
         .global SYM (_CPU_Context_save_fp)
@@ -66,11 +68,24 @@ SYM (_CPU_Context_save_fp):
 #if ( M68K_HAS_FPU == 1 )
         moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
         moval    a1@,a0                   | a0 = Save context area
+#if ( !defined(__mcoldfire__) && !__mc68060__ )
         fsave    a0@-                     | save 68881/68882 state frame
+#else
+        lea      a0@(-FP_STATE_SAVED),a0  | save the state of the FPU
+        fsave    a0@                      | on a Coldfire and 68060.
+#endif
         tstb     a0@                      | check for a null frame
         beq.b    nosv                     | Yes, skip save of user model
+#if ( !defined(__mcoldfire__) )
         fmovem   fp0-fp7,a0@-             | save data registers (fp0-fp7)
         fmovem   fpc/fps/fpi,a0@-         | and save control registers
+#else
+        lea      a0@(-FP_REGS_SAVED),a0
+        fmovem   fp0-fp7,a0@              | save data registers (fp0-fp7)
+        fmove.l  fpc,a0@-                 | and save control registers
+        fmove.l  fps,a0@-
+        fmove.l  fpi,a0@-
+#endif
         movl     #-1,a0@-                 | place not-null flag on stack
 nosv:   movl     a0,a1@                   | save pointer to saved context
 #endif
@@ -85,9 +100,19 @@ SYM (_CPU_Context_restore_fp):
         tstb     a0@                      | Null context frame?
         beq.b    norst                    | Yes, skip fp restore
         addql    #4,a0                    | throwaway non-null flag
+#if ( !defined(__mcoldfire__) )
         fmovem   a0@+,fpc/fps/fpi         | restore control registers
         fmovem   a0@+,fp0-fp7             | restore data regs (fp0-fp7)
 norst:  frestore a0@+                     | restore the fp state frame
+#else
+        fmove.l  a0@+,fpc                 | restore control registers
+        fmove.l  a0@+,fps    
+        fmove.l  a0@+,fpi
+        fmovem   a0@,fp0-fp7              | restore data regs (fp0-fp7)
+        lea      a0@(FP_REGS_SAVED),a0
+norst:	frestore a0@                      | restore the fp state frame
+        lea      a0@(FP_STATE_SAVED),a0
+#endif
         movl     a0,a1@                   | save pointer to saved context
 #endif
         rts
@@ -195,7 +220,7 @@ SYM (_ISR_Handler):
  * see if it is _ISR_Handler.  If it is we have the case of nesting interrupts
  * without the dispatch level being incremented.
  */
-  #if ( !defined(__mcoldfire__) && M68K_MC68060_ARCH == 0 )
+  #if ( !defined(__mcoldfire__) && !__mc68060__ )
         cmpl    #_ISR_Handler,a7@(SAVED+PC_OFFSET)
         beq.b   exit        
   #endif

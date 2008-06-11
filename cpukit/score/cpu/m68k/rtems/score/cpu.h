@@ -276,7 +276,12 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
  *  Minimum size of a thread's stack.
  */
 
-#define CPU_STACK_MINIMUM_SIZE           4096
+#define CPU_STACK_MINIMUM_SIZE           M68K_CPU_STACK_MINIMUM_SIZE
+
+/*
+ *  Maximum priority of a thread. Note based from 0 which is the idle task.
+ */
+#define CPU_PRIORITY_MAXIMUM             M68K_CPU_PRIORITY_MAXIMUM
 
 /*
  *  m68k is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
@@ -463,7 +468,7 @@ void _CPU_Thread_Idle_body( void );
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output) : "a" (&_value));
 
-#elif ( M68K_HAS_ISA_APLUS == 1 )
+#elif ( __mcfisaaplus__ )
   /* This is simplified by the fact that RTEMS never calls it with _value=0 */
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
     asm volatile ( \
