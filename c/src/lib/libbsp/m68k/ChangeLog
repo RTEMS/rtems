@@ -1,3 +1,10 @@
+2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* shared/m68kbspgetworkarea.c: Fix extern type to RamSize.
+	* shared/m68kpretaskinghook.c: Do not handle the RAM allocation if
+	the BSP is handling it.
+	* acinclude.m4: Add the mcf52235 BSP.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/m68kpretaskinghook.c: Add capability for bootcard.c BSP

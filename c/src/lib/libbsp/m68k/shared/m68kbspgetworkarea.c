@@ -29,7 +29,7 @@ void bsp_get_workarea(
   extern char         _RamBase[];
   extern char         _WorkspaceBase[];
   extern char         _HeapSize[];
-  extern void         *_RamSize;
+  extern char         _RamSize[];
 
   *workarea_base       = _WorkspaceBase;
   *workarea_size       = (unsigned long)_RamBase + (unsigned long) _RamSize -

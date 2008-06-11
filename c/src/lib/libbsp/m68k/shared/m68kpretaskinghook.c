@@ -31,6 +31,7 @@
  *
  */
 
+#if !defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
 extern void bsp_libc_init( void *, unsigned long, int );
 
 extern char         _RamBase[];
@@ -38,9 +39,11 @@ extern char         _WorkspaceBase[];
 extern char         _HeapSize[];
 
 unsigned long  _M68k_Ramsize;
+#endif
 
 void bsp_pretasking_hook(void)
 {
+#if !defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
     void         *heapStart;
     unsigned long heapSize = (unsigned long)_HeapSize;
     unsigned long ramSpace;
@@ -59,4 +62,5 @@ void bsp_pretasking_hook(void)
         rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');
 
     bsp_libc_init(heapStart, heapSize, 0);
+#endif
 }
