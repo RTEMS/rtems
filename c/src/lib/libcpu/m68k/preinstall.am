@@ -42,6 +42,16 @@ $(PROJECT_INCLUDE)/mcf5206/mcfuart.h: mcf5206/include/mcfuart.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 endif
+if mcf52235
+$(PROJECT_INCLUDE)/mcf52235/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf52235
+	@: > $(PROJECT_INCLUDE)/mcf52235/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf52235/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf52235/mcf52235.h: mcf52235/include/mcf52235.h $(PROJECT_INCLUDE)/mcf52235/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf52235/mcf52235.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf52235/mcf52235.h
+endif
 if mcf5235
 $(PROJECT_INCLUDE)/mcf5235/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5235
