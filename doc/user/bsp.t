@@ -65,8 +65,13 @@ following requirements:
 @item If the processor supports multiple privilege levels, must leave
 the processor in the most privileged, or supervisory, state.
 
-@item Must allocate a stack of at least @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
-bytes and initialize the stack pointer for the initialization process.
+@item Must allocate a stack of sufficient size to execute the initialization
+and shutdown of the system.  This stack area will NOT be used by any task
+once the system is initialized.  This stack is often reserved via the
+linker script or in the assembly language start up file.
+
+@item Must initialize the stack pointer for the initialization process to
+that allocated.
 
 @item Must initialize the processor's Interrupt Vector Table.
 
@@ -107,7 +112,7 @@ stack usage must account for the following requirements:
 @end itemize
 
 The size of the interrupt stack must be greater than or equal to the
-constant @code{@value{RPREFIX}MINIMUM_STACK_SIZE}.
+confugured minimum stack size.
 
 @subsection Processors with a Separate Interrupt Stack
 

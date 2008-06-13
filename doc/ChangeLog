@@ -1,3 +1,10 @@
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/bsp.t, user/conf.t, user/task.t: Add ability for application to
+	configure minimum stack size. Add RTEMS_CONFIGURED_MINIMUM_STACK_SIZE
+	constant so user can clearly indicate they want the configured as
+	opposed to the recommended minimum stack size.
+
 2008-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* started/buildc.t: Add paragraph on see CVS for latest patches.

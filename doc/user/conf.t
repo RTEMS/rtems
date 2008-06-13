@@ -204,16 +204,6 @@ This section defines the general system configuration parameters supported by
 if the application is providing their own complete set of configuration 
 tables.
 
-@findex CONFIGURE_INTERRUPT_STACK_SIZE
-@item @code{CONFIGURE_INTERRUPT_STACK_SIZE} is set to the 
-size of the interrupt stack.  The interrupt stack size is
-usually set by the BSP but since this memory is allocated
-from the RTEMS Ram Workspace, it must be accounted for.  The
-default for this field is RTEMS_MINIMUM_STACK_SIZE.  [NOTE:
-In some BSPs, changing this constant does NOT change the
-size of the interrupt stack, only the amount of memory
-reserved for it.]
-
 @findex CONFIGURE_EXECUTIVE_RAM_WORK_AREA
 @item @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA} is the base 
 address of the RTEMS RAM Workspace.  By default, this value
@@ -232,9 +222,15 @@ default, this is 50.
 
 @fnindex CONFIGURE_INTERRUPT_STACK_SIZE
 @item @code{CONFIGURE_INTERRUPT_STACK_SIZE} is set to the 
-desired stack size for the interrupt.  If not specified,
-the interrupt stack will be of minimum size.  The default
-value is @code{RTEMS_MINIMUM_STACK_SIZE}.
+size of the interrupt stack.  The interrupt stack size is
+usually set by the BSP but since this memory may be allocated
+from the RTEMS Ram Workspace, it must be accounted for.  The
+default for this field is the configured minimum stack size.  [NOTE:
+In some BSPs, changing this constant does NOT change the
+size of the interrupt stack, only the amount of memory
+reserved for it.] If not specified, the interrupt stack
+will be of minimum size.  The default value is the configured
+minimum stack size.
 
 @findex CONFIGURE_TASK_STACK_ALLOCATOR
 @item @code{CONFIGURE_TASK_STACK_ALLOCATOR}
@@ -333,7 +329,7 @@ be used.  The default value is NULL.
 @item @code{CONFIGURE_IDLE_TASK_STACK_SIZE} is set to the 
 desired stack size for the IDLE task.  If not specified,
 the IDLE task will have a stack of minimum size.  The default
-value is @code{RTEMS_MINIMUM_STACK_SIZE}.
+value is the configured minimum stack size.
 
 @end itemize
 
@@ -553,7 +549,7 @@ the value is @code{rtems_build_name( 'U', 'I', '1', ' ' )}.
 is the stack size
 of the single initialization task defined by the
 Classic API Initialization Tasks Table.  By default
-the value is @code{RTEMS_MINIMUM_STACK_SIZE}.
+value is the configured minimum stack size.
 
 @findex CONFIGURE_INIT_TASK_PRIORITY
 @item @code{CONFIGURE_INIT_TASK_PRIORITY}
@@ -677,7 +673,7 @@ the value is @code{POSIX_Init}.
 @item @code{CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE}
 is the stack size of the single initialization thread defined by the
 POSIX API Initialization Threads Table.  By default
-the value is @code{RTEMS_MINIMUM_STACK_SIZE * 2}.
+value is twice the configured minimum stack size.
 
 @end itemize
 
@@ -786,7 +782,7 @@ in the ITRON API.
 @item @code{CONFIGURE_ITRON_INIT_TASK_STACK_SIZE}
 is the stack size of the single initialization task defined by the
 ITRON API Initialization Tasks Table.  By default
-the value is @code{RTEMS_MINIMUM_STACK_SIZE}.
+value is the configured minimum stack size.
 
 @end itemize
 
@@ -912,22 +908,18 @@ for configuring an RTEMS application, the value for this field
 corresponds to the setting of the macro @code{CONFIGURE_IDLE_TASK_BODY}.
 
 @item idle_task_stack_size
-is the size of the RTEMS idle task stack in bytes.  
-If this number is less than MINIMUM_STACK_SIZE, then the 
-idle task's stack will be MINIMUM_STACK_SIZE in bytes.
-When using the @code{rtems/confdefs.h} mechanism
-for configuring an RTEMS application, the value for this field
-corresponds to the setting of the macro
-@code{CONFIGURE_IDLE_TASK_STACK_SIZE}.
+is the size of the RTEMS idle task stack in bytes.  If this number is less
+than the configured minimum stack size, then the idle task's stack will
+be set to the minimum.  When using the @code{rtems/confdefs.h} mechanism
+for configuring an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_IDLE_TASK_STACK_SIZE}.
 
 @item interrupt_stack_size
-is the size of the RTEMS interrupt stack in bytes.  
-If this number is less than MINIMUM_STACK_SIZE, then the 
-interrupt stack will be MINIMUM_STACK_SIZE in bytes.
-When using the @code{rtems/confdefs.h} mechanism
-for configuring an RTEMS application, the value for this field
-corresponds to the setting of the macro
-@code{CONFIGURE_INTERRUPT_STACK_SIZE}.
+is the size of the RTEMS interrupt stack in bytes.  If this number is less
+than configured minimum stack size, then the interrupt stack will be set
+to the minimum.  When using the @code{rtems/confdefs.h} mechanism for
+configuring an RTEMS application, the value for this field corresponds
+to the setting of the macro @code{CONFIGURE_INTERRUPT_STACK_SIZE}.
 
 @item stack_allocate_hook
 may point to a user provided routine to allocate task stacks.
@@ -1182,7 +1174,8 @@ to the task name of @code{"UI1 "} for User Initialization Task 1.
 
 @item @code{CONFIGURE_INIT_TASK_STACK_SIZE} - is the stack size
 of the single initialization task.  If this macro is not defined
-by the application, then this defaults to @code{RTEMS_MINIMUM_STACK_SIZE}.
+by the application, then this defaults to configured minimum
+stack size.
 
 @item @code{CONFIGURE_INIT_TASK_PRIORITY} - is the initial priority
 of the single initialization task.  If this macro is not defined
@@ -1333,8 +1326,8 @@ then this defaults to the C routine @code{POSIX_Init}.
 
 @item @code{CONFIGURE_POSIX_INIT_TASK_STACK_SIZE} - is the stack size
 of the single initialization thread.  If this macro is not defined
-by the application, then this defaults to
-@code{(RTEMS_MINIMUM_STACK_SIZE * 2)}.
+by the application, then this defaults to twice the configured
+minimum stack size.
 
 @end itemize
  

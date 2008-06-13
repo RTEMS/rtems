@@ -744,11 +744,37 @@ This directive will not cause the calling task to be preempted.
 
 Valid task priorities range from a high of 1 to a low of 255.
 
-If the requested stack size is less than
-@code{@value{RPREFIX}MINIMUM_STACK_SIZE} bytes, then RTEMS
-will use @code{@value{RPREFIX}MINIMUM_STACK_SIZE} as the
-stack size.  The value of @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
-is processor dependent. 
+If the requested stack size is less than the configured
+minimum stack size, then RTEMS will use the configured
+minimum as the stack size for this task.  In addition
+to being able to specify the task stack size as a integer,
+there are two constants which may be specified:
+
+@itemize @bullet
+@item @code{@value{RPREFIX}MINIMUM_STACK_SIZE} 
+is the minimum stack size @b{RECOMMENDED} for use on this processor.
+This value is selected by the RTEMS developers conservatively to
+minimize the risk of blown stacks for most user applications.
+Using this constant when specifying the task stack size, indicates
+that the stack size will be at least
+@code{@value{RPREFIX}MINIMUM_STACK_SIZE} bytes in size.  If the
+user configured minimum stack size is larger than the recommended
+minimum, then it will be used.
+
+@item @code{@value{RPREFIX}CONFIGURED_MINIMUM_STACK_SIZE} 
+indicates that this task is to be created with a stack size
+of the minimum stack size that was configured by the application.
+If not explicitly configured by the application, the default
+configured minimum stack size is the processor dependent value
+@code{@value{RPREFIX}MINIMUM_STACK_SIZE}.  Since this uses
+the configured minimum stack size value, you may get a stack
+size that is smaller or larger than the recommended minimum.  This
+can be used to provide large stacks for all tasks on complex
+applications or small stacks on applications that are trying
+to conserve memory.
+
+@end itemize
+
 Application developers should consider the stack usage of the
 device drivers when calculating the stack size required for
 tasks which utilize the driver.
