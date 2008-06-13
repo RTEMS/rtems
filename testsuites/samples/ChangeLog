@@ -1,5 +1,11 @@
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* minimum/init.c: Add CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION and
+	CONFIGURE_MAXIMUM_PRIORITY. Workspace usage now reduces to 4696 bytes
+	on psim.
+
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* minimum/init.c: Exerise new ability for application to configure
 	minimum stack size. This test still runs the same with a 7.5K stack
 	on the powerpc but reserves 15K less Workspace on the PowerPC.

@@ -16,13 +16,22 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  rtems_mode mode;
+
+  /* initialize application */
+
+  (void) rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &mode );
+
+  /* Real application would call idle loop functionality */
+
+  /* but in this case, just return and fall into a fatal error */ 
 }
 
 /* configuration information */
 
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS 1
-
+/*
+ * This application has no device drivers.
+ */
 /* NOTICE: the clock driver is explicitly disabled */
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
@@ -57,6 +66,22 @@ rtems_task Init(
  */
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE 512
 
+/*
+ *  This lowers the number of priorities that this test is able to
+ *  use.  The Idle task will be running at the lowest priority.
+ */
+#define CONFIGURE_MAXIMUM_PRIORITY 15
+
+/*
+ *  In this application, the initialization task performs the system
+ *  initialization and then transforms itself into the idle task.
+ */
+#define CONFIGURE_IDLE_TASK_BODY Init
+#define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+/*
+ *  Instantiate the configuration tables.
+ */
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
