@@ -1,5 +1,11 @@
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h, score/include/rtems/score/priority.h: Add
+	CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION and
+	CONFIGURE_MAXIMUM_PRIORITY.
+
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/include/rtems/posix/pthread.h, posix/src/pthread.c,
 	posix/src/pthreadcreate.c, rtems/include/rtems.h, rtems/src/attr.c,
 	sapi/include/confdefs.h, sapi/include/rtems/config.h,

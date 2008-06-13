@@ -186,6 +186,47 @@ extern rtems_configuration_table        Configuration;
 #endif
 
 /**
+ *  @brief Maximum Priority configuration
+ *
+ *  This configures the maximum priority value that
+ *  a task may have.
+ *
+ *  By reducing the number of priorities in a system,
+ *  the amount of RAM required by RTEMS can be significantly
+ *  reduced.  RTEMS allocates a Chain_Control structure per
+ *  priority and this structure contains 3 pointers.  So
+ *  the default is (256 * 12) = 3K on 32-bit architectures.
+ *
+ *  This must be one less than a power of 2 between
+ *  4 and 256.  Valid values along with the application
+ *  priority levels and memory saved when pointers are
+ *  32-bits in size are:
+ *
+ *    + 3,  2 application priorities, 3024 bytes saved
+ *    + 7, 5 application priorities, 2976 bytes saved
+ *    + 15, 13 application priorities, 2880 bytes saved
+ *    + 31, 29 application priorities, 2688 bytes saved
+ *    + 63, 61 application priorities, 2304 bytes saved
+ *    + 127, 125 application priorities, 1536 bytes saved
+ *    + 255, 253 application priorities, 0 bytes saved
+ *
+ *  It is specified in terms of Classic API
+ *  priority values.
+ */
+#ifndef CONFIGURE_MAXIMUM_PRIORITY
+  #define CONFIGURE_MAXIMUM_PRIORITY 255
+#endif
+
+/*
+ *  If you said the IDLE task was going to do application initialization
+ *  and didn't override the IDLE body, then something is amiss.
+ */
+#if (defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) && \
+     !defined(CONFIGURE_IDLE_TASK_BODY))
+  #error "CONFIGURE_ERROR: You did not override the IDLE task body.
+#endif
+
+/**
  *  @brief Idle task body configuration
  *
  *  There is a default IDLE thread body provided by RTEMS which
@@ -1309,7 +1350,7 @@ extern rtems_configuration_table        Configuration;
     CONFIGURE_MEMORY_FOR_TASKS(1, 0) +              /* IDLE and stack */ \
     (CONFIGURE_IDLE_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
     _Configure_From_workspace(                        /* Ready chains */ \
-        ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) ) + \
+        ((CONFIGURE_MAXIMUM_PRIORITY+1) * sizeof(Chain_Control)) ) + \
     CONFIGURE_INTERRUPT_VECTOR_TABLE +           /* interrupt vectors */ \
     CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY                    /* allocation mutex */ \
@@ -1519,6 +1560,17 @@ extern rtems_configuration_table        Configuration;
   uint32_t rtems_minimum_stack_size = 
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
+  /** This variable specifies the maximum priority value that
+   *  a task may have.  This must be a power of 2 between 4
+   *  and 256 and is specified in terms of Classic API
+   *  priority values.
+   *
+   *  @note This is left as a simple uint8_t so it can be externed as
+   *        needed without requring being high enough logical to
+   *        include the full configuration table.
+   */
+  uint8_t rtems_maximum_priority = CONFIGURE_MAXIMUM_PRIORITY;
+
   /**
    *  This is the primary Configuration Table for this application.
    */
@@ -1618,13 +1670,20 @@ extern rtems_configuration_table        Configuration;
  */
 
 /*
- *  Make sure a task/thread of some sort is configured
+ *  Make sure a task/thread of some sort is configured.
+ *
+ *  When analyzing RTEMS to find the smallest possible of memory
+ *  that must be allocated, you probably do want to configure 0
+ *  tasks/threads so there is a smaller set of calls to _Workspace_Allocate
+ *  to analyze.
  */
-#if (CONFIGURE_MAXIMUM_TASKS == 0) && \
-    (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
-    (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
-    (CONFIGURE_MAXIMUM_ITRON_TASKS == 0)
-#error "CONFIGURATION ERROR: No tasks or threads configured!!"
+#if !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
+  #if (CONFIGURE_MAXIMUM_TASKS == 0) && \
+      (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
+      (CONFIGURE_MAXIMUM_ADA_TASKS == 0) &&  \
+      (CONFIGURE_MAXIMUM_ITRON_TASKS == 0)
+    #error "CONFIGURATION ERROR: No tasks or threads configured!!"
+  #endif
 #endif
 
 /*
@@ -1633,7 +1692,8 @@ extern rtems_configuration_table        Configuration;
  */
 #if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
     !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
-    !defined(CONFIGURE_ITRON_INIT_TASK_TABLE)
+    !defined(CONFIGURE_ITRON_INIT_TASK_TABLE) && \
+    !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
 
@@ -1712,6 +1772,23 @@ extern rtems_configuration_table        Configuration;
     defined(CONFIGURE_TEST_NEEDS_RTC_DRIVER) || \
     defined(CONFIGURE_TEST_NEEDS_STUB_DRIVER)
 #error "CONFIGURATION ERROR: CONFIGURE_TEST_XXX constants are obsolete"
+#endif
+
+/*
+ *  Validate the configured maximum priority
+ */
+#if ((CONFIGURE_MAXIMUM_PRIORITY != 3) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 7) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 15) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 31) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 63) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 127) && \
+     (CONFIGURE_MAXIMUM_PRIORITY != 255))
+  #error "Maximum priority is not 1 less than a power of 2 between 4 and 256"
+#endif
+    
+#if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
+  #error "Maximum priority configured higher than supported by target."
 #endif
 
 #endif

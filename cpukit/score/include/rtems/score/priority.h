@@ -60,12 +60,15 @@ typedef uint32_t   Priority_Control;
 #define PRIORITY_MINIMUM      0
 #endif
 
-/** This defines the lowest (least important) thread priority. */
+/** This defines the default lowest (least important) thread priority. */
 #if defined (CPU_PRIORITY_MAXIMUM)
-#define PRIORITY_MAXIMUM      CPU_PRIORITY_MAXIMUM
+  #define PRIORITY_DEFAULT_MAXIMUM      CPU_PRIORITY_MAXIMUM
 #else
-#define PRIORITY_MAXIMUM      255
+  #define PRIORITY_DEFAULT_MAXIMUM      255
 #endif
+
+/** This defines the lowest (least important) thread priority. */
+#define PRIORITY_MAXIMUM      rtems_maximum_priority
 
 /**
  *  The following record defines the information associated with
@@ -83,6 +86,11 @@ typedef struct {
   /** This is the priority bit map block mask. */
   Priority_Bit_map_control  block_minor;
 }   Priority_Information;
+
+/**
+ *  This variable contains the configured number of priorities
+ */
+extern uint8_t rtems_maximum_priority;
 
 /**
  *  Each sixteen bit entry in this array is associated with one of
