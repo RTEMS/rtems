@@ -210,7 +210,6 @@ address of the RTEMS RAM Workspace.  By default, this value
 is NULL indicating that the BSP is to determine the location
 of the RTEMS RAM Workspace.
 
-@findex CONFIGURE_MICROSECONDS_PER_TICK
 @item @code{CONFIGURE_MICROSECONDS_PER_TICK} is the length
 of time between clock ticks.  By default, this is set to
 10000 microseconds.
@@ -219,6 +218,12 @@ of time between clock ticks.  By default, this is set to
 @item @code{CONFIGURE_TICKS_PER_TIMESLICE} is the length
 of the timeslice quantum in ticks for each task.  By
 default, this is 50.
+
+@fnindex CONFIGURE_MINIMUM_STACK_SIZE
+@item @code{CONFIGURE_MINIMUM_STACK_SIZE} is set to the number of bytes
+the application wants the minimum stack size to be for every task or 
+thread in the system.  By default, this is set to the recommended minimum
+stack size for this processor.
 
 @fnindex CONFIGURE_INTERRUPT_STACK_SIZE
 @item @code{CONFIGURE_INTERRUPT_STACK_SIZE} is set to the 
