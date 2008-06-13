@@ -1,3 +1,9 @@
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* minimum/init.c: Exerise new ability for application to configure
+	minimum stack size. This test still runs the same with a 7.5K stack
+	on the powerpc but reserves 15K less Workspace on the PowerPC.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* minimum/Makefile.am: Link against all managers.

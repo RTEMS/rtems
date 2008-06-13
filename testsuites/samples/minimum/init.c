@@ -50,6 +50,13 @@ rtems_task Init(
  */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 0
 
+/*
+ *  This may prevent us from running on every architecture but it
+ *  demonstrates that the user can specify how small of a minimum
+ *  stack they want.
+ */
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE 512
+
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
