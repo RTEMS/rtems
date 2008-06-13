@@ -138,6 +138,10 @@ extern "C" {
 
 /*
  * Tiny RTEMS support. Small stack and limited priorities.
+ *
+ * These CPUs have very limited on-CPU memory which cannot
+ * be expanded. We have to be gentle with them or nothing
+ * will every run.
  */
 # if (defined(__mcf_cpu_52221) || \
       defined(__mcf_cpu_52223) || \
@@ -149,12 +153,12 @@ extern "C" {
       defined(__mcf_cpu_52235) || \
       defined(__mcf_cpu_52225) || \
       defined(__mcf_cpu_52235))
-# define M68K_CPU_STACK_MINIMUM_SIZE 2048
-/* Define the lowest priority. Based from 0 to this is 16 levels. */
-# define M68K_CPU_PRIORITY_MAXIMUM   15
+  #define M68K_CPU_STACK_MINIMUM_SIZE 1024
+  /* Define the lowest priority. Based from 0 to this is 16 levels. */
+  #define M68K_CPU_PRIORITY_MAXIMUM   15
 # else
-# define M68K_CPU_STACK_MINIMUM_SIZE 4096
-# define M68K_CPU_PRIORITY_MAXIMUM   255
+  #define M68K_CPU_STACK_MINIMUM_SIZE 4096
+  /* Use the default number of priorities */
 # endif
 
 #else

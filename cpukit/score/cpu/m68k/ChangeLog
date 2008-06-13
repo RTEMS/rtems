@@ -1,3 +1,8 @@
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/m68k.h: There is no point in defining the maximum
+	priorities to 255. priority.h will default it to this.
+
 2008-06-10	Chris Johns <chrisj@rtems.org>
 
 	* cpu_asm.S: Add Coldfire FPU support.
