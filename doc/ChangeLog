@@ -1,5 +1,10 @@
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* user/conf.t: Add CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION and
+	CONFIGURE_MAXIMUM_PRIORITY.
+
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* user/conf.t: Add CONFIGURE_MINIMUM_STACK_SIZE.
 
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>

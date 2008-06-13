@@ -219,6 +219,19 @@ of time between clock ticks.  By default, this is set to
 of the timeslice quantum in ticks for each task.  By
 default, this is 50.
 
+@findex CONFIGURE_MAXIMUM_PRIORITY
+@item @code{CONFIGURE_MAXIMUM_PRIORITY} is the maximum numeric priority
+of any task in the system and one less that the number of priority levels
+in the system.  The numerically greatest priority is the logically lowest
+priority in the system and will thus be used by the IDLE task.  Valid values
+for this configuration parameter must be one (1) less than than a power
+of two (2) between 4 and 256 inclusively.  In other words, valid values
+are 3, 7, 31, 63, 127, and 255.  Reducing the number of priorities in the
+system reduces the amount of memory allocated from the RTEMS Workspace.
+By default, RTEMS supports 256 priority levels ranging from 0 to 255 so
+the default value for this field is 255.
+
+@findex CONFIGURE_MICROSECONDS_PER_TICK
 @fnindex CONFIGURE_MINIMUM_STACK_SIZE
 @item @code{CONFIGURE_MINIMUM_STACK_SIZE} is set to the number of bytes
 the application wants the minimum stack size to be for every task or 
@@ -335,6 +348,17 @@ be used.  The default value is NULL.
 desired stack size for the IDLE task.  If not specified,
 the IDLE task will have a stack of minimum size.  The default
 value is the configured minimum stack size.
+
+@fnindex CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+@item @code{CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION} is set to
+indicate that the user has configured @b{NO} user initialization tasks
+or threads and that the user provided IDLE task will perform application
+initialization and then transform itself into an IDLE task.  If you
+use this option be careful, the user IDLE task @b{CANNOT} block at
+all during the initialization sequence.  Further, once application
+initialization is complete, it must make itself preemptible and 
+enter an IDLE body loop.  By default, this is not the mode of operation
+and the user is assumed to provide one or more initialization tasks.
 
 @end itemize
 
