@@ -26,6 +26,16 @@
 #include <rtems/posix/time.h>
 #include <rtems/score/apimutex.h>
 
+static inline size_t _POSIX_Threads_Ensure_minimum_stack (
+  size_t size
+)
+{
+  if ( size >= PTHREAD_MINIMUM_STACK_SIZE )
+    return size;
+  return PTHREAD_MINIMUM_STACK_SIZE;
+}
+
+
 int pthread_create(
   pthread_t              *thread,
   const pthread_attr_t   *attr,
@@ -54,11 +64,13 @@ int pthread_create(
     return EINVAL;
 
   /*
-   *  Core Thread Initialize insures we get the minimum amount of
+   *  Core Thread Initialize ensures we get the minimum amount of
    *  stack space if it is allowed to allocate it itself.
+   *
+   *  NOTE: If the user provides the stack we will let it drop below
+   *        twice the minimum.
    */
-
-  if ( the_attr->stackaddr && !_Stack_Is_enough( the_attr->stacksize ) )
+  if ( the_attr->stackaddr && !_Stack_Is_enough(the_attr->stacksize) )
     return EINVAL;
 
 #if 0
@@ -184,7 +196,7 @@ int pthread_create(
     &_POSIX_Threads_Information,
     the_thread,
     the_attr->stackaddr,
-    the_attr->stacksize,
+    _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,
     core_priority,
     TRUE,                 /* preemptible */

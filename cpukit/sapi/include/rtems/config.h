@@ -109,10 +109,26 @@ typedef struct {
  *     + required number of each object type for each API configured
  */
 typedef struct {
+  /** This field specifies the base address of the RTEMS Workspace.
+   */
   void                          *work_space_start;
+
+  /** This field specifies the size in bytes of the RTEMS Workspace.
+   */
   uint32_t                       work_space_size;
+
+  /** This field specifies the maximum number of dynamically installed
+   *  used extensions.
+   */
   uint32_t                       maximum_extensions;
+
+  /** This field specifies the number of microseconds which elapse
+   *  between clock ticks.  This is the basis for RTEMS timing.
+   */
   uint32_t                       microseconds_per_tick;
+
+  /** This field specifies the number of ticks in each task's timeslice.
+   */
   uint32_t                       ticks_per_timeslice;
 
   /** This element points to the BSP's optional idle task which may override

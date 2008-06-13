@@ -44,7 +44,7 @@
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
   TRUE,                       /* is_initialized */
   NULL,                       /* stackaddr */
-  PTHREAD_MINIMUM_STACK_SIZE, /* stacksize */
+  0,                          /* stacksize -- will be adjusted to minimum */
   PTHREAD_SCOPE_PROCESS,      /* contentionscope */
   PTHREAD_INHERIT_SCHED,      /* inheritsched */
   SCHED_FIFO,                 /* schedpolicy */

@@ -202,6 +202,13 @@ extern rtems_configuration_table        Configuration;
 #endif
 
 /**
+ *  By default, use the minimum stack size requested by this port.
+ */
+#ifndef CONFIGURE_MINIMUM_TASK_STACK_SIZE
+  #define CONFIGURE_MINIMUM_TASK_STACK_SIZE CPU_STACK_MINIMUM_SIZE
+#endif
+
+/**
  *  @brief Idle task stack size configuration
  *
  *  By default, the IDLE task will have a stack of minimum size.
@@ -211,7 +218,7 @@ extern rtems_configuration_table        Configuration;
   #ifdef BSP_IDLE_TASK_STACK_SIZE
     #define CONFIGURE_IDLE_TASK_STACK_SIZE BSP_IDLE_TASK_STACK_SIZE
   #else
-    #define CONFIGURE_IDLE_TASK_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
+    #define CONFIGURE_IDLE_TASK_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
   #endif
 #endif
 
@@ -225,7 +232,7 @@ extern rtems_configuration_table        Configuration;
   #ifdef BSP_INTERRUPT_STACK_SIZE
     #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
   #else
-    #define CONFIGURE_INTERRUPT_STACK_SIZE RTEMS_MINIMUM_STACK_SIZE
+    #define CONFIGURE_INTERRUPT_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
   #endif
 #endif
 
@@ -362,7 +369,7 @@ extern rtems_configuration_table        Configuration;
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_STACK_SIZE
-  #define CONFIGURE_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
+  #define CONFIGURE_INIT_TASK_STACK_SIZE    CONFIGURE_MINIMUM_TASK_STACK_SIZE
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_PRIORITY
@@ -814,7 +821,7 @@ extern rtems_configuration_table        Configuration;
 
       #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
 	#define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-                (RTEMS_MINIMUM_STACK_SIZE * 2)
+                (CONFIGURE_MINIMUM_TASK_STACK_SIZE * 2)
       #endif
 
       #ifdef CONFIGURE_INIT
@@ -952,7 +959,8 @@ extern rtems_configuration_table        Configuration;
    * Ada tasks are allocated twice the minimum stack space.
    */
   #define CONFIGURE_ADA_TASKS_STACK \
-    (CONFIGURE_MAXIMUM_ADA_TASKS * (RTEMS_MINIMUM_STACK_SIZE + (6 * 1024)))
+    (CONFIGURE_MAXIMUM_ADA_TASKS * \
+      (CONFIGURE_MINIMUM_TASK_STACK_SIZE + (6 * 1024)))
 
 #else
   #define CONFIGURE_GNAT_MUTEXES           0
@@ -1034,7 +1042,8 @@ extern rtems_configuration_table        Configuration;
       #endif
 
       #ifndef CONFIGURE_ITRON_INIT_TASK_STACK_SIZE
-	#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
+	#define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE \
+                CONFIGURE_MINIMUM_TASK_STACK_SIZE
       #endif
 
       #ifdef CONFIGURE_INIT
@@ -1151,7 +1160,7 @@ extern rtems_configuration_table        Configuration;
  ( \
   _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
   ((_tasks) * \
-   (_Configure_From_workspace(STACK_MINIMUM_SIZE) + \
+   (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
     _Configure_From_workspace(sizeof(RTEMS_API_Control)) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API) + \
@@ -1298,7 +1307,7 @@ extern rtems_configuration_table        Configuration;
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( \
     CONFIGURE_MEMORY_FOR_TASKS(1, 0) +              /* IDLE and stack */ \
-    (CONFIGURE_IDLE_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE) + \
+    (CONFIGURE_IDLE_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
     _Configure_From_workspace(                        /* Ready chains */ \
         ((PRIORITY_MAXIMUM+1) * sizeof(Chain_Control)) ) + \
     CONFIGURE_INTERRUPT_VECTOR_TABLE +           /* interrupt vectors */ \
@@ -1315,9 +1324,9 @@ extern rtems_configuration_table        Configuration;
  *  This accounts for any extra memory required by the Classic API
  *  Initialization Task.
  */
-#if (CONFIGURE_INIT_TASK_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+#if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
-      (CONFIGURE_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+      (CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 #else
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART 0
 #endif
@@ -1327,9 +1336,9 @@ extern rtems_configuration_table        Configuration;
  *  Initialization Thread.
  */
 #if defined(RTEMS_POSIX_API) && \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
-      (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 #else
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
 #endif
@@ -1339,9 +1348,9 @@ extern rtems_configuration_table        Configuration;
  *  Initialization Task.
  */
 #if defined(RTEMS_ITRON_API) && \
-    (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE > RTEMS_MINIMUM_STACK_SIZE)
+    (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART \
-      (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE - RTEMS_MINIMUM_STACK_SIZE)
+      (CONFIGURE_ITRON_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 #else
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_ITRON_PART 0
 #endif
@@ -1429,7 +1438,7 @@ extern rtems_configuration_table        Configuration;
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX + \
-   (CONFIGURE_MAXIMUM_POSIX_THREADS * RTEMS_MINIMUM_STACK_SIZE ) + \
+   (CONFIGURE_MAXIMUM_POSIX_THREADS * CONFIGURE_MINIMUM_TASK_STACK_SIZE ) + \
    CONFIGURE_MEMORY_FOR_ITRON + \
    CONFIGURE_INITIALIZATION_THREADS_STACKS + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
@@ -1499,6 +1508,16 @@ extern rtems_configuration_table        Configuration;
       CONFIGURE_ITRON_INIT_TASK_TABLE_NAME
     };
   #endif
+
+  /** This variable specifies the minimum stack size for tasks in an RTEMS
+   *  application.
+   *
+   *  @note This is left as a simple uint32_t so it can be externed as
+   *        needed without requring being high enough logical to
+   *        include the full configuration table.
+   */
+  uint32_t rtems_minimum_stack_size = 
+    CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
   /**
    *  This is the primary Configuration Table for this application.

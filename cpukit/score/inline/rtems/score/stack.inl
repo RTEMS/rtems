@@ -29,7 +29,6 @@
  *  size bytes of memory starting at starting_address have been
  *  reserved for a stack.
  */
-
 RTEMS_INLINE_ROUTINE void _Stack_Initialize (
   Stack_Control *the_stack,
   void          *starting_address,
@@ -41,15 +40,48 @@ RTEMS_INLINE_ROUTINE void _Stack_Initialize (
 }
 
 /**
+ *  This function returns the minimum stack size configured
+ *  for this application.
+ *
+ *  @return This method returns the minimum stack size;
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
+{
+  extern uint32_t rtems_minimum_stack_size;
+  return rtems_minimum_stack_size;
+}
+
+/**
  *  This function returns TRUE if size bytes is enough memory for
  *  a valid stack area on this processor, and FALSE otherwise.
+ *
+ *  @param[in] size is the stack size to check
+ *
+ *  @return This method returns TRUE if the stack is large enough.
  */
-
 RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
   size_t size
 )
 {
-  return ( size >= STACK_MINIMUM_SIZE );
+  return ( size >= _Stack_Minimum() );
+}
+
+/**
+ *  This function returns the appropriate stack size given the requested
+ *  size.  If the requested size is below the minimum, then the minimum
+ *  configured stack size is returned.
+ *
+ *  @param[in] size is the stack size to check
+ *
+ *  @return This method returns the appropriate stack size.
+ */
+RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
+  size_t size
+)
+{
+  if ( size >= _Stack_Minimum() )
+    return size;
+  return _Stack_Minimum();
 }
 
 /**

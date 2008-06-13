@@ -27,9 +27,12 @@ extern "C" {
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 
-#define PTHREAD_MINIMUM_STACK_SIZE (STACK_MINIMUM_SIZE * 2)
+/**
+ *  The following sets the minimum stack size for POSIX threads.
+ */
+#define PTHREAD_MINIMUM_STACK_SIZE (_Stack_Minimum() * 2)
 
-/*
+/**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */

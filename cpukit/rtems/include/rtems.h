@@ -152,6 +152,12 @@ extern "C" {
 #define RTEMS_MINIMUM_STACK_SIZE  STACK_MINIMUM_SIZE
 
 /**
+ *  The following constant is used to specify that the task should
+ *  be created with the configured minimum stack size.
+ */
+#define RTEMS_CONFIGURED_MINIMUM_STACK_SIZE  0
+
+/**
  *  Constant for indefinite wait.  (actually an illegal interval)
  */
 #define RTEMS_NO_TIMEOUT  WATCHDOG_NO_TIMEOUT

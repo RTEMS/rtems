@@ -49,8 +49,7 @@ size_t _Thread_Stack_Allocate(
   void *stack_addr = 0;
   size_t the_stack_size = stack_size;
 
-  if ( !_Stack_Is_enough( the_stack_size ) )
-    the_stack_size = STACK_MINIMUM_SIZE;
+  the_stack_size = _Stack_Ensure_minimum( stack_size );
 
   /*
    * Call ONLY the CPU table stack allocate hook, _or_ the

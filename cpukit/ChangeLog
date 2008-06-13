@@ -1,3 +1,16 @@
+2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/rtems/posix/pthread.h, posix/src/pthread.c,
+	posix/src/pthreadcreate.c, rtems/include/rtems.h, rtems/src/attr.c,
+	sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	score/inline/rtems/score/stack.inl, score/src/isr.c,
+	score/src/mpci.c, score/src/threadcreateidle.c,
+	score/src/threadinitialize.c, score/src/threadstackallocate.c: Add
+	ability for application to configure minimum stack size. Add
+	RTEMS_CONFIGURED_MINIMUM_STACK_SIZE constant so user can clearly
+	indicate they want the configured as opposed to the recommended
+	minimum stack size.
+
 2008-06-10	Chris Johns <chrisj@rtems.org>
 
 	* score/include/rtems/score/priority.h: Let the CPU define the

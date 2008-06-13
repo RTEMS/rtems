@@ -64,9 +64,8 @@ void _Thread_Create_idle( void )
   if ( _Configuration_Table->idle_task )
     idle = _Configuration_Table->idle_task;
 
-  idle_task_stack_size =  _Configuration_Table->idle_task_stack_size;
-  if ( idle_task_stack_size < STACK_MINIMUM_SIZE )
-    idle_task_stack_size = STACK_MINIMUM_SIZE;
+  idle_task_stack_size = 
+    _Stack_Ensure_minimum( _Configuration_Table->idle_task_stack_size );
 
   /*
    *  This is only called during initialization and we better be sure

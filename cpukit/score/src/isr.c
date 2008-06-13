@@ -48,7 +48,7 @@ void _ISR_Handler_initialization( void )
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
-  if ( _Configuration_Table->interrupt_stack_size < STACK_MINIMUM_SIZE )
+  if ( !_Stack_Is_enough(_Configuration_Table->interrupt_stack_size) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
