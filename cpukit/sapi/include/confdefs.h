@@ -693,6 +693,12 @@ extern rtems_configuration_table        Configuration;
     #define CONFIGURE_MAXIMUM_TASKS               0
   #endif
 
+  #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
+    #define CONFIGURE_NOTEPADS_ENABLED           FALSE
+  #else
+    #define CONFIGURE_NOTEPADS_ENABLED           TRUE
+  #endif
+
   #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
     #define CONFIGURE_MAXIMUM_TASK_VARIABLES      0
   #endif
@@ -740,6 +746,14 @@ extern rtems_configuration_table        Configuration;
 
   #ifndef CONFIGURE_TICKS_PER_TIMESLICE
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
+  #endif
+
+  #ifndef CONFIGURE_DISABLE_CLASSIC_NOTEPADS
+    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
+      sizeof(RTEMS_API_Control)
+  #else
+    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
+      (sizeof(RTEMS_API_Control) - (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
   #endif
 
 /*
@@ -1202,7 +1216,7 @@ extern rtems_configuration_table        Configuration;
   _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
   ((_tasks) * \
    (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
-    _Configure_From_workspace(sizeof(RTEMS_API_Control)) + \
+    _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API)))  + \
@@ -1222,28 +1236,28 @@ extern rtems_configuration_table        Configuration;
   _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
 
 #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
-  _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
+_Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
 
 #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
-  _Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
+_Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
-  _Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
+_Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
 
 #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
-  _Configure_Object_RAM(_regions, sizeof(Region_Control) )
+_Configure_Object_RAM(_regions, sizeof(Region_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
-  _Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
+_Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
 
 #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
-  _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
+_Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
 
 #define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
-  _Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
+_Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
 
 #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
-  _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
+_Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
 
 #ifdef CONFIGURE_MP_APPLICATION
 
@@ -1496,6 +1510,7 @@ extern rtems_configuration_table        Configuration;
    */
   rtems_api_configuration_table Configuration_RTEMS_API = {
     CONFIGURE_MAXIMUM_TASKS,
+    CONFIGURE_NOTEPADS_ENABLED,
     CONFIGURE_MAXIMUM_TIMERS,
     CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES +
       CONFIGURE_TERMIOS_SEMAPHORES,

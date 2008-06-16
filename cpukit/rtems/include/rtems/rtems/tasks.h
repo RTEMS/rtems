@@ -201,16 +201,24 @@ typedef struct {
 /**
  *  This is the API specific information required by each thread for
  *  the RTEMS API to function correctly.
+ *
+ *  @note Notepads must be the last entry in the structure and memory
+ *        will be taken away from this structure when allocated if 
+ *        notespads are disabled by the application configuration.
  */
 typedef struct {
-  /** This field contains the notepads for this task. */
-  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
   /** This field contains the pending events for this task. */
   rtems_event_set          pending_events;
   /** This field contains the event wait condition for this task. */
   rtems_event_set          event_condition;
   /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
+  /**
+   *  This field contains the notepads for this task.
+   *
+   *  @note MUST BE LAST ENTRY.
+   */
+  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
 }  RTEMS_API_Control;
 
 /**

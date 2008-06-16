@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
@@ -59,6 +60,9 @@ rtems_status_code rtems_task_set_note(
   Objects_Locations        location;
   RTEMS_API_Control       *api;
 
+  if ( !rtems_configuration_get_notepads_enabled() )
+    return RTEMS_NOT_CONFIGURED;
+    
   /*
    *  NOTE:  There is no check for < RTEMS_NOTEPAD_FIRST because that would
    *         be checking an unsigned number for being negative.

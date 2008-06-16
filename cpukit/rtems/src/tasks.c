@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
@@ -49,8 +50,17 @@ boolean _RTEMS_tasks_Create_extension(
 {
   RTEMS_API_Control *api;
   int                i;
+  size_t             to_allocate;
 
-  api = _Workspace_Allocate( sizeof( RTEMS_API_Control ) );
+  /*
+   *  Notepads must be the last entry in the structure and they
+   *  can be left off if disabled in the configuration.
+   */
+  to_allocate = sizeof( RTEMS_API_Control );
+  if ( !rtems_configuration_get_notepads_enabled() )
+    to_allocate -= (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t));
+
+  api = _Workspace_Allocate( to_allocate );
 
   if ( !api )
     return FALSE;
@@ -61,8 +71,10 @@ boolean _RTEMS_tasks_Create_extension(
   _ASR_Initialize( &api->Signal );
   created->task_variables = NULL;
 
-  for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
-    api->Notepads[i] = 0;
+  if ( rtems_configuration_get_notepads_enabled() ) {
+    for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
+      api->Notepads[i] = 0;
+  }
 
   return TRUE;
 }
