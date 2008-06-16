@@ -1,3 +1,7 @@
+2008-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/conf.t: Add CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS.
+
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: Add CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION and
