@@ -159,6 +159,7 @@ extern "C" {
 # else
   #define M68K_CPU_STACK_MINIMUM_SIZE 4096
   /* Use the default number of priorities */
+  #define M68K_CPU_PRIORITY_MAXIMUM   255
 # endif
 
 #else

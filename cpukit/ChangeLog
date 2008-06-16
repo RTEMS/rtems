@@ -1,3 +1,11 @@
+2008-06-17	Chris Johns <chrisj@rtems.org>
+
+	* cpukit/sapi/include/confdefs.h: Add missing quote to string to
+	remove warning.
+	
+	* cpukit/score/cpu/m68k/rtems/score/m68k.h: Add the default
+	priority level for large memory Coldfires.
+
 2008-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/config.h,

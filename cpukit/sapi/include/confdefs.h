@@ -223,7 +223,7 @@ extern rtems_configuration_table        Configuration;
  */
 #if (defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) && \
      !defined(CONFIGURE_IDLE_TASK_BODY))
-  #error "CONFIGURE_ERROR: You did not override the IDLE task body.
+  #error "CONFIGURE_ERROR: You did not override the IDLE task body."
 #endif
 
 /**
