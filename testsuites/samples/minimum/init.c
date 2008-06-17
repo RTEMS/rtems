@@ -20,8 +20,6 @@ rtems_task Init(
 
   /* initialize application */
 
-  (void) rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &mode );
-
   /* Real application would call idle loop functionality */
 
   /* but in this case, just return and fall into a fatal error */ 
@@ -71,6 +69,13 @@ rtems_task Init(
  *  use.  The Idle task will be running at the lowest priority.
  */
 #define CONFIGURE_MAXIMUM_PRIORITY 15
+
+/*
+ *  This disables Classic API Notepads and saves 16 uint32_t's of RAM
+ *  per Task Control Block.  If you aren't using these and are tight
+ *  on RAM, this is an option.
+ */
+#define CONFIGURE_DISABLE_CLASSIC_NOTEPADS
 
 /*
  *  In this application, the initialization task performs the system
