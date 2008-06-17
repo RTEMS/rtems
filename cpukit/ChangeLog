@@ -1,5 +1,17 @@
 2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h: When you disabled newlib reentrancy, it
+	still reserved memory for the reentrancy structure. This is about 1K
+	per task. On psim, we now reserve only 1936 bytes and only 240 remain
+	after all allocations. Further analysis will be required to narrow
+	that down. In addition, the new constant CONFIGURE_CONFDEFS_DEBUG can
+	be defined and the structure named Configuration_Memory_Debug will be
+	instantiated. This structure contains many of the component values
+	that go into the memory reservation computation. This is helpful when
+	tracking down problems.
+
+2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: The math in the _Configure_Object_RAM macro
 	was always adding heap overhead even when the number of objects
 	configured was zero and we would not do an allocation. This resulted
