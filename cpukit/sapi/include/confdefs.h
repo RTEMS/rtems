@@ -643,10 +643,14 @@ extern rtems_configuration_table        Configuration;
       #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
 	#define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
       #endif
+      #define CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
+	_Configure_Object_RAM((_global_objects), sizeof(Objects_MP_Control))
 
       #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
 	#define CONFIGURE_MP_MAXIMUM_PROXIES            32
       #endif
+      #define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
+	_Configure_Object_RAM((_proxies) + 1, sizeof(Thread_Proxy_control) )
 
       #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
 	#define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
@@ -694,49 +698,114 @@ extern rtems_configuration_table        Configuration;
   #endif
 
   #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
-    #define CONFIGURE_NOTEPADS_ENABLED           FALSE
-  #else
     #define CONFIGURE_NOTEPADS_ENABLED           TRUE
+  #else
+    #define CONFIGURE_NOTEPADS_ENABLED           FALSE
   #endif
 
+  #ifndef CONFIGURE_DISABLE_CLASSIC_NOTEPADS
+    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
+      sizeof(RTEMS_API_Control)
+  #else
+    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
+      (sizeof(RTEMS_API_Control) - (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
+  #endif
+
+  /**
+   *  This macro calculates the memory required for task variables.
+   *
+   *  @note Each task variable is individually allocated from the Workspace.
+   *        Hence, we do the multiplication on the configured size.
+   */
   #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
-    #define CONFIGURE_MAXIMUM_TASK_VARIABLES      0
+    #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
+    #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
+      (_task_variables) * \
+         _Configure_From_workspace(sizeof(rtems_task_variable_t))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_TIMERS
-    #define CONFIGURE_MAXIMUM_TIMERS              0
+    #define CONFIGURE_MAXIMUM_TIMERS             0
+    #define CONFIGURE_MEMORY_FOR_TIMERS(_timers) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
+      _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_SEMAPHORES          0
+    #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
+  #else
+  #endif
+
+  /*
+   * If there are no user or support semaphores defined, then we can assume
+   * that no memory need be allocated at all for semaphores.
+   */
+  #if  ((CONFIGURE_MAXIMUM_SEMAPHORES == 0) && \
+        (CONFIGURE_LIBIO_SEMAPHORES == 0) && \
+        (CONFIGURE_TERMIOS_SEMAPHORES == 0))
+    #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
+      _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
-    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      0
+    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES             0
+    #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
+      _Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PARTITIONS
-    #define CONFIGURE_MAXIMUM_PARTITIONS          0
+    #define CONFIGURE_MAXIMUM_PARTITIONS                 0
+    #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
+      _Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_REGIONS
-    #define CONFIGURE_MAXIMUM_REGIONS             0
+    #define CONFIGURE_MAXIMUM_REGIONS              0
+    #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
+      _Configure_Object_RAM(_regions, sizeof(Region_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PORTS
-    #define CONFIGURE_MAXIMUM_PORTS               0
+    #define CONFIGURE_MAXIMUM_PORTS            0
+    #define CONFIGURE_MEMORY_FOR_PORTS(_ports) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
+      _Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PERIODS
-    #define CONFIGURE_MAXIMUM_PERIODS             0
+    #define CONFIGURE_MAXIMUM_PERIODS              0
+    #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
+      _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_BARRIERS
-    #define CONFIGURE_MAXIMUM_BARRIERS            0
+    #define CONFIGURE_MAXIMUM_BARRIERS               0
+    #define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
+      _Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
-    #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
+    #define CONFIGURE_MAXIMUM_USER_EXTENSIONS                 0
+    #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
+      _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
   #endif
 
   #ifndef CONFIGURE_MICROSECONDS_PER_TICK
@@ -815,48 +884,106 @@ extern rtems_configuration_table        Configuration;
   #include <rtems/posix/threadsup.h>
   #include <rtems/posix/timer.h>
 
+  /**
+   *  Account for the object control structures plus the name
+   *  of the object to be duplicated.
+   */
+  #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
+    _Configure_Object_RAM( (_number), _size ) + \
+    ((_number) + _Configure_From_workspace(NAME_MAX) )
+
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
   #endif
 
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
+    ( \
+      sizeof (POSIX_API_Control) + \
+     (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
+    )
+
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES      0
+    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              0
+    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
+      _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  0
+    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES               0
+    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
+        _Configure_Object_RAM(_condvars, \
+			    sizeof(POSIX_Condition_variables_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-    #define CONFIGURE_MAXIMUM_POSIX_KEYS         0
+    #define CONFIGURE_MAXIMUM_POSIX_KEYS           0
+    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
+      _Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
-    #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
+    #define CONFIGURE_MAXIMUM_POSIX_TIMERS             0
+    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
+      _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
+    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS                     0
+    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
+      _Configure_From_workspace( \
+	(_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 0
+    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                     0
+    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
+      _Configure_POSIX_Named_Object_RAM( \
+	 _message_queues, sizeof(POSIX_Message_queue_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
+    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES                 0
+    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+      _Configure_POSIX_Named_Object_RAM( \
+	 _semaphores, sizeof(POSIX_Semaphore_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
+    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS               0
+    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
+      _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
+    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS                0
+    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
+      _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
+    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS              0
+    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
+      _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
   #endif
 
   #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
@@ -901,54 +1028,6 @@ extern rtems_configuration_table        Configuration;
     #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
 
   #endif
-
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
-    ( \
-      sizeof (POSIX_API_Control) + \
-     (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
-    )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
-    _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condition_variables) \
-    _Configure_Object_RAM(_condition_variables, \
-			  sizeof(POSIX_Condition_variables_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-    _Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
-    _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
-    _Configure_From_workspace( \
-      (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
-
-  /**
-   *  Account for the object control structures plus the name
-   *  of the object to be duplicated.
-   */
-  #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
-    _Configure_Object_RAM( (_number), _size ) + \
-    ((_number) + _Configure_From_workspace(NAME_MAX) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
-    _Configure_POSIX_Named_Object_RAM( \
-       _message_queues, sizeof(POSIX_Message_queue_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-    _Configure_POSIX_Named_Object_RAM( \
-       _semaphores, sizeof(POSIX_Semaphore_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
-    _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
-    _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
-
-  #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
-    _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
 
   #define CONFIGURE_MEMORY_FOR_POSIX \
     ( \
@@ -1044,33 +1123,63 @@ extern rtems_configuration_table        Configuration;
   #ifndef CONFIGURE_MAXIMUM_ITRON_TASKS
     #define CONFIGURE_MAXIMUM_ITRON_TASKS      0
   #endif
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API 0
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES   0
+    #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES                 0
+    #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
+      _Configure_Object_RAM(_semaphores, sizeof(ITRON_Semaphore_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS
-    #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS   0
+    #define CONFIGURE_MAXIMUM_ITRON_EVENTFLAGS                 0
+    #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
+      _Configure_Object_RAM(_eventflags, sizeof(ITRON_Eventflags_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_MAILBOXES
-    #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES   0
+    #define CONFIGURE_MAXIMUM_ITRON_MAILBOXES                0
+    #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
+      _Configure_Object_RAM(_mailboxes, sizeof(ITRON_Mailbox_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS
-    #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS   0
+    #define CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS                      0
+    #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
+      _Configure_Object_RAM(_message_buffers, \
+	sizeof(ITRON_Message_buffer_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_PORTS
-    #define CONFIGURE_MAXIMUM_ITRON_PORTS   0
+    #define CONFIGURE_MAXIMUM_ITRON_PORTS            0
+    #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
+      _Configure_Object_RAM(_ports, sizeof(ITRON_Port_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS
-    #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS   0
+    #define CONFIGURE_MAXIMUM_ITRON_MEMORY_POOLS            0
+    #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_pools) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_pools) \
+      _Configure_Object_RAM( _pools, sizeof(ITRON_Variable_memory_pool_Control))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS
-    #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS   0
+    #define CONFIGURE_MAXIMUM_ITRON_FIXED_MEMORY_POOLS            0
+    #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_pools) 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_pools) \
+      _Configure_Object_RAM(_pools, sizeof(ITRON_Fixed_memory_pool_Control))
   #endif
 
   #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
@@ -1129,32 +1238,6 @@ extern rtems_configuration_table        Configuration;
     #define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE 0
 
   #endif
-
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API 0
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_SEMAPHORES(_semaphores) \
-    _Configure_Object_RAM(_semaphores, sizeof(ITRON_Semaphore_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_EVENTFLAGS(_eventflags) \
-    _Configure_Object_RAM(_eventflags, sizeof(ITRON_Eventflags_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_MAILBOXES(_mailboxes) \
-    _Configure_Object_RAM(_mailboxes, sizeof(ITRON_Mailbox_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_MESSAGE_BUFFERS(_message_buffers) \
-    _Configure_Object_RAM(_message_buffers, \
-      sizeof(ITRON_Message_buffer_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_PORTS(_ports) \
-    _Configure_Object_RAM(_ports, sizeof(ITRON_Port_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_MEMORY_POOLS(_memory_pools) \
-    _Configure_Object_RAM( \
-      _memory_pools, sizeof(ITRON_Variable_memory_pool_Control))
-
-  #define CONFIGURE_MEMORY_FOR_ITRON_FIXED_MEMORY_POOLS(_fixed_memory_pools) \
-    _Configure_Object_RAM( \
-    _fixed_memory_pools, sizeof(ITRON_Fixed_memory_pool_Control))
 
   #define CONFIGURE_MEMORY_FOR_ITRON \
     ( \
@@ -1224,64 +1307,19 @@ extern rtems_configuration_table        Configuration;
  )
 
 /**
- *  This macro calculates the memory required for task variables.
- *
- *  @note Each task variable is individually allocated from the Workspace.
- *        Hence, we do the multiplication on the configured size.
+ *  This defines the amount of memory configured for the multiprocessing
+ *  support required by this application.
  */
-#define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
-  (_task_variables) * _Configure_From_workspace(sizeof(rtems_task_variable_t))
-
-#define CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
-  _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
-
-#define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
-_Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
-
-#define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
-_Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
-
-#define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
-_Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
-
-#define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
-_Configure_Object_RAM(_regions, sizeof(Region_Control) )
-
-#define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
-_Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
-
-#define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
-_Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
-
-#define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
-_Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
-
-#define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
-_Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
-
 #ifdef CONFIGURE_MP_APPLICATION
-
-#ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
-
-#define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
-  _Configure_Object_RAM((_proxies) + 1, sizeof(Thread_Proxy_control) )
-
-#define CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
-  _Configure_Object_RAM((_global_objects), sizeof(Objects_MP_Control))
-
-#define CONFIGURE_MEMORY_FOR_MP \
-  ( CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
-    CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
-    CONFIGURE_MEMORY_FOR_TASKS(1, 1) + \
-    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK \
+  #define CONFIGURE_MEMORY_FOR_MP \
+    (CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
+     CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS( \
+             CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
+     CONFIGURE_MEMORY_FOR_TASKS(1, 1) + \
+     CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK \
   )
-
-#endif  /* CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE */
-
 #else
-
-#define CONFIGURE_MEMORY_FOR_MP  0
-
+  #define CONFIGURE_MEMORY_FOR_MP  0
 #endif
 
 /**
@@ -1471,6 +1509,7 @@ _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
     uint32_t POSIX;
     uint32_t TASKS;
     uint32_t INIT_TASK_STACKS;
+    uint32_t CLASSIC_SEMAPHORES;
   } Configuration_Debug_t;
 
   Configuration_Debug_t Configuration_Memory_Debug = {
@@ -1479,7 +1518,9 @@ _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
     CONFIGURE_MEMORY_FOR_POSIX,   /* MEMORY_POSIX */
     CONFIGURE_MEMORY_FOR_TASKS(   /* MEMORY_TASKS */
         CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS),
-    CONFIGURE_INITIALIZATION_THREADS_STACKS /* INIT_TASK_STACKS */
+    CONFIGURE_INITIALIZATION_THREADS_STACKS, /* INIT_TASK_STACKS */
+    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES + \
+      CONFIGURE_LIBIO_SEMAPHORES + CONFIGURE_TERMIOS_SEMAPHORES)
   };
 #endif
 

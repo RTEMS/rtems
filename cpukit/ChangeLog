@@ -1,3 +1,11 @@
+2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: The math in the _Configure_Object_RAM macro
+	was always adding heap overhead even when the number of objects
+	configured was zero and we would not do an allocation. This resulted
+	in an over estimation of the amount of Workspace required (~2K on
+	minimum.exe on PowerPC).
+
 2008-06-17	Chris Johns <chrisj@rtems.org>
 
 	* cpukit/sapi/include/confdefs.h: Add missing quote to string to
