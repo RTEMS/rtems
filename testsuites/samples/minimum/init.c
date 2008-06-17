@@ -75,7 +75,7 @@ rtems_task Init(
  *  per Task Control Block.  If you aren't using these and are tight
  *  on RAM, this is an option.
  */
-#define CONFIGURE_DISABLE_CLASSIC_NOTEPADS
+#define CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
 
 /*
  *  In this application, the initialization task performs the system
@@ -83,6 +83,11 @@ rtems_task Init(
  */
 #define CONFIGURE_IDLE_TASK_BODY Init
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+/*
+ *  If you are debugging confdefs.h, define this
+ */
+/* #define CONFIGURE_CONFDEFS_DEBUG */
 
 /*
  *  Instantiate the configuration tables.

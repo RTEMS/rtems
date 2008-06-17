@@ -1,5 +1,9 @@
 2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* minimum/init.c: Disable confdefs.h debug.
+
+2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* iostream/system.h: Init task was close to blowing stack on PowerPC.
 	* minimum/init.c: Disable Classic API Notepads.
 
