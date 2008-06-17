@@ -1,7 +1,7 @@
 /*
  *  Simple test program -- simplified version of sample test hello.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,6 +40,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 #define CONFIGURE_INIT_TASK_PRIORITY      2
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
+
+#define CONFIGURE_EXTRA_TASK_STACKS       RTEMS_MINIMUM_STACK_SIZE
 
 #define CONFIGURE_INIT
 

@@ -1,7 +1,7 @@
 /*
  *  Simple test program wrapper for Spinlocks
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,6 +39,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 #define CONFIGURE_INIT_TASK_PRIORITY      2
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
+
+#define CONFIGURE_EXTRA_TASK_STACKS       RTEMS_MINIMUM_STACK_SIZE
 
 #define CONFIGURE_INIT
 
