@@ -1,3 +1,7 @@
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* mcf5223x/include/mcf5223x.h: New.
+
 2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* shared/m68kbspgetworkarea.c: Fix extern type to RamSize.
