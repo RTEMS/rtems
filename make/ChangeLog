@@ -1,3 +1,7 @@
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* custom/mcf52235.cfg: Change to mcf5223x.
+
 2008-06-10	Chris Johns <chrisj@rtems.org>
 
 	* custom/av5282.cfg, custom/csb360.cfg, custom/gen68302.cfg,
