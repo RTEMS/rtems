@@ -1,3 +1,8 @@
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* sapi/include/confdefs.h: Use the PRIORITY_DEFAULT_MAXIMUM rather
+	than a number.
+
 2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: When you disabled newlib reentrancy, it

@@ -214,7 +214,7 @@ extern rtems_configuration_table        Configuration;
  *  priority values.
  */
 #ifndef CONFIGURE_MAXIMUM_PRIORITY
-  #define CONFIGURE_MAXIMUM_PRIORITY 255
+  #define CONFIGURE_MAXIMUM_PRIORITY PRIORITY_DEFAULT_MAXIMUM
 #endif
 
 /*
