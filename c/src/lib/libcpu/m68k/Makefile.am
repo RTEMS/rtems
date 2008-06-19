@@ -93,10 +93,10 @@ mcf5206_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if mcf52235
-## mcf52235/include
-include_mcf52235dir = $(includedir)/mcf52235
-include_mcf52235_HEADERS = mcf52235/include/mcf52235.h
+if mcf5223x
+## mcf5223x/include
+include_mcf5223xdir = $(includedir)/mcf5223x
+include_mcf5223x_HEADERS = mcf5223x/include/mcf5223x.h
 endif
 
 if mcf5235

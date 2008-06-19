@@ -1,3 +1,11 @@
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* mcf52235/include/mcf52235.h: Removed. Moved to the more generic
+	mcf5223x.h.
+	* mcf5223x/include/mcf5223x.h: New. Was mcf52235.h.
+	* Makefile.am, configure.ac, preinstall.am: Changed from mcf52235
+	to mcf5223x.
+
 2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* mcf52235/include/mcf52235.h: New.
