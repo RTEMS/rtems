@@ -16,43 +16,32 @@
 #include <rtems.h>
 #include <bsp.h>
 
-typedef volatile unsigned char vuint8;
-typedef volatile unsigned short vuint16;
-typedef volatile unsigned long vuint32;
-
-/* Declare base address of peripherals area */
-#define __IPSBAR ((vuint8 *) 0x40000000)
-
-void
-Timer_initialize(void)
+void Timer_initialize(void)
 {
-    uint32_t preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;
-    MCF_DTIM3_DTMR = 0;
-    MCF_DTIM3_DTMR = MCF_DTIM_DTMR_PS(preScaleDivisor - 1) | 
-                     MCF_DTIM_DTMR_CLK_DIV1 |
-                     MCF_DTIM_DTMR_RST;
+  uint32_t preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;
+
+  MCF_DTIM3_DTMR = 0;
+  MCF_DTIM3_DTMR = MCF_DTIM_DTMR_PS(preScaleDivisor - 1) |
+    MCF_DTIM_DTMR_CLK_DIV1 | MCF_DTIM_DTMR_RST;
 }
 
 /*
  * Return timer value in microsecond units
  */
-int
-Read_timer(void)
+int Read_timer(void)
 {
-    return MCF_DTIM3_DTCN;
+  return MCF_DTIM3_DTCN;
 }
 
 /*
  *  Empty function call used in loops to measure basic cost of looping
  *  in Timing Test Suite.
  */
-rtems_status_code
-Empty_function(void)
+rtems_status_code Empty_function(void)
 {
-    return RTEMS_SUCCESSFUL;
+  return RTEMS_SUCCESSFUL;
 }
 
-void
-Set_find_average_overhead(rtems_boolean find_flag)
+void Set_find_average_overhead(rtems_boolean find_flag)
 {
 }

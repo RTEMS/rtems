@@ -22,13 +22,11 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-void bsp_cleanup( void )
+void bsp_cleanup(void)
 {
-	printk("\nRTEMS exited!\n");
-	for ( ;; )
-	{
-		asm volatile ( " nop " );
-		asm volatile ( " nop " );
-	}
-
+  printk("\nRTEMS exited!\n");
+  for (;;) {
+    asm volatile (" nop ");
+    asm volatile (" nop ");
+  }
 }

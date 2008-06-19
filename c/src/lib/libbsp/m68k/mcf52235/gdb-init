@@ -24,10 +24,12 @@ define show-exception-sframe
 end
 
 # Add -v and -d flags for bdm info
+# Add -B flags to utilize hardware breakpoints when they are availiable
+
 #target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0
 target remote | m68k-bdm-gdbserver pipe /dev/tblcf2 -B
-
 #monitor set remote-debug 1
+
 monitor bdm-reset
 
 # Set VBR to the beginning of what will be SRAM
@@ -42,5 +44,5 @@ monitor bdm-ctl-set 0x0C04 0x00000061
 # Enable PST[3:0] signals
 set *((char*) 0x40100074) = 0x0F
 
-# Add the load when debugging from ram, should never happen with rtems
+# Add the load when debugging from ram which won't happen with rtems!
 #load

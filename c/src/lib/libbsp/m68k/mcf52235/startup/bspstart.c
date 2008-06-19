@@ -54,11 +54,11 @@ void _CPU_cache_invalidate_1_data_line(const void *addr) {}
  *
  *  This routine does the bulk of the system initialisation.
  */
-void bsp_start( void )
+void bsp_start(void)
 {
 }
 
 uint32_t bsp_get_CPU_clock_speed(void)
 {
-    return 60000000;
+  return 60000000;
 }

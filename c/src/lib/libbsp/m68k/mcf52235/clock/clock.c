@@ -17,15 +17,19 @@ static uint32_t s_nanoScale = 0;
 
 /*
  * Provide nanosecond extension
+ * Interrupts are disabled when this is called
  */
 static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
-    uint32_t i = MCF_PIT1_PCNTR;
-    if(MCF_PIT1_PCSR & MCF_PIT_PCSR_PIF)
-    {
-        i = MCF_PIT1_PCNTR + MCF_PIT1_PMR;
-    }
-    return (i - s_pcntrAtTick) * s_nanoScale;
+  uint32_t i;
+
+  if (MCF_PIT1_PCSR & MCF_PIT_PCSR_PIF) {
+    i = s_pcntrAtTick + (MCF_PIT1_PMR - MCF_PIT1_PCNTR);
+  }
+  else {
+    i = s_pcntrAtTick - MCF_PIT1_PCNTR;
+  }
+  return i * s_nanoScale;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
@@ -50,9 +54,9 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 /*
  * Turn off the clock
  */
-static void Clock_driver_support_shutdown_hardware() 
+static void Clock_driver_support_shutdown_hardware()
 {
-    MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN;
+  MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN;
 }
 
 /*
@@ -62,35 +66,33 @@ static void Clock_driver_support_shutdown_hardware()
  */
 static void Clock_driver_support_initialize_hardware()
 {
-    int level;
-    uint32_t pmr;
-    uint32_t preScaleCode = 0;
-    uint32_t clk = bsp_get_CPU_clock_speed() >> 1;
-    uint32_t tps = 1000000 / Configuration.microseconds_per_tick;
-    while (preScaleCode < 15) {
-        pmr = (clk >> preScaleCode) / tps;
-        if(pmr < (1 << 15)) break;
-        preScaleCode++;
-    }
-    s_nanoScale = 1000000000 / (clk >> preScaleCode);
+  int level;
+  uint32_t pmr;
+  uint32_t preScaleCode = 0;
+  uint32_t clk = bsp_get_CPU_clock_speed() >> 1;
+  uint32_t tps = 1000000 / Configuration.microseconds_per_tick;
 
-    MCF_INTC0_ICR56 = MCF_INTC_ICR_IL(PIT3_IRQ_LEVEL) |
-                        MCF_INTC_ICR_IP(PIT3_IRQ_PRIORITY);
-    rtems_interrupt_disable( level );
-    MCF_INTC0_IMRH &= ~MCF_INTC_IMRH_MASK56;
-    MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN;
-    rtems_interrupt_enable( level );
+  while (preScaleCode < 15) {
+    pmr = (clk >> preScaleCode) / tps;
+    if (pmr < (1 << 15))
+      break;
+    preScaleCode++;
+  }
+  s_nanoScale = 1000000000 / (clk >> preScaleCode);
 
-    MCF_PIT1_PCSR = MCF_PIT_PCSR_PRE(preScaleCode) |
-                        MCF_PIT_PCSR_OVW |
-                        MCF_PIT_PCSR_PIE |
-                        MCF_PIT_PCSR_RLD;
-    MCF_PIT1_PMR = pmr;
-    MCF_PIT1_PCSR = MCF_PIT_PCSR_PRE(preScaleCode) |
-                        MCF_PIT_PCSR_PIE |
-                        MCF_PIT_PCSR_RLD |
-                        MCF_PIT_PCSR_EN;
-    s_pcntrAtTick = MCF_PIT1_PCNTR;
+  MCF_INTC0_ICR56 = MCF_INTC_ICR_IL(PIT3_IRQ_LEVEL) |
+    MCF_INTC_ICR_IP(PIT3_IRQ_PRIORITY);
+  rtems_interrupt_disable(level);
+  MCF_INTC0_IMRH &= ~MCF_INTC_IMRH_MASK56;
+  MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN;
+  rtems_interrupt_enable(level);
+
+  MCF_PIT1_PCSR = MCF_PIT_PCSR_PRE(preScaleCode) |
+    MCF_PIT_PCSR_OVW | MCF_PIT_PCSR_PIE | MCF_PIT_PCSR_RLD;
+  MCF_PIT1_PMR = pmr;
+  MCF_PIT1_PCSR = MCF_PIT_PCSR_PRE(preScaleCode) |
+    MCF_PIT_PCSR_PIE | MCF_PIT_PCSR_RLD | MCF_PIT_PCSR_EN;
+  s_pcntrAtTick = MCF_PIT1_PCNTR;
 }
 
 #include "../../../shared/clockdrv_shell.c"

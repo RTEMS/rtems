@@ -21,7 +21,6 @@ _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x400;
 _FlashBase = DEFINED(_FlashBase) ? _FlashBase : 0x00000000;
 
-__IPSBAR = DEFINED(__IPSBAR) ? __IPSBAR : 0x40000000;
 _VBR = 0x20000000;
 
 ENTRY(start)
@@ -143,21 +142,23 @@ SECTIONS
 
     .bss : 
     {
-        _clear_start = .;
+        PROVIDE (_clear_start = .);
         *(.bss*)
         *(COMMON)
         . = ALIGN (16);
         PROVIDE (_end = .);
+        PROVIDE (_clear_end = .);
+    } >sram
 
+    .stack : 
+    {
         /*
          * Starting Stack
          */ 
         . += _StackSize;
         . = ALIGN (16);
         PROVIDE(_StackInit = .);
-
-        _clear_end = .;
-        _WorkspaceBase = .;
+        PROVIDE(_WorkspaceBase = .);
     } >sram
 
     /* Stabs debugging sections.  */

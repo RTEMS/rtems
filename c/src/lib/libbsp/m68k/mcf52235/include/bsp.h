@@ -19,16 +19,13 @@ extern "C" {
 
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
-#include <mcf52235/mcf52235.h>   /* internal MCF52235 modules */
+#include <mcf5223x/mcf5223x.h>
+    
+/* Declare base address of peripherals area */
+#define __IPSBAR ((vuint8 *) 0x40000000)    
 
 /***************************************************************************/
 /**  Network driver configuration                                         **/
-#if 0
-struct rtems_bsdnet_ifconfig;
-extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching );
-#define RTEMS_BSP_NETWORK_DRIVER_NAME     "fs1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH   rtems_fec_driver_attach
-#endif
 
 /***************************************************************************/
 /**  User Definable configuration                                         **/
@@ -58,7 +55,9 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 /* functions */
 
 uint32_t bsp_get_CPU_clock_speed(void);
+
 void bsp_cleanup(void);
+
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
@@ -69,9 +68,6 @@ m68k_isr_entry set_vector(
  * Interrupt assignments
  *  Highest-priority listed first
  */
-#define FEC_IRQ_LEVEL       4
-#define FEC_IRQ_RX_PRIORITY 7
-#define FEC_IRQ_TX_PRIORITY 6
 
 #define PIT3_IRQ_LEVEL      4
 #define PIT3_IRQ_PRIORITY   0

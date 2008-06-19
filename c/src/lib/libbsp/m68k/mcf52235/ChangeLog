@@ -1,3 +1,16 @@
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* mcf52235/README, mcf52235/gdb-init, mcf52235/clock/clock.c,
+	mcf52235/console/console.c, mcf52235/include/bsp.h,
+	mcf52235/include/coverhd.h, mcf52235/start/start.S,
+	mcf52235/startup/bspclean.c, mcf52235/startup/bspstart.c,
+	mcf52235/startup/linkcmds, mcf52235/timer/timer.c: Cleaned up
+	white space and code formmated to adhere to RTEMS standards. Fixed
+	a bug in the nano seconds since last tick support. Fixed a bug
+	with the location of the start stack (no longer within
+	.bss). Removed double definition of IPSBAR and some type defs
+	etc.. Added timing test overhead results. 
+
 2008-06-10	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs,

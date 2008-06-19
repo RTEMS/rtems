@@ -31,7 +31,7 @@ SYM(_INTERRUPT_VECTOR):
     .long   SYM(_uhoh) /* 02 Access Error */
     .long   SYM(_uhoh) /* 03 Address Error */
     .long   SYM(_uhoh) /* 04 Illegal Instruction */
-    .long   SYM(_uhoh) /* 05 Reserved */
+    .long   SYM(_uhoh) /* 05 Divide by Zero */
     .long   SYM(_uhoh) /* 06 Reserved */
     .long   SYM(_uhoh) /* 07 Reserved */
     .long   SYM(_uhoh) /* 08 Privilege Violation */
@@ -41,7 +41,7 @@ SYM(_INTERRUPT_VECTOR):
     .long   SYM(_uhoh) /* 12 Debug Interrupt */
     .long   SYM(_uhoh) /* 13 Reserved */
     .long   SYM(_uhoh) /* 14 Format Error */
-    .long   SYM(_uhoh) /* 15 Unitialized Int. */
+    .long   SYM(_uhoh) /* 15 Reserved */
     .long   SYM(_uhoh) /* 16 Reserved */
     .long   SYM(_uhoh) /* 17 Reserved */
     .long   SYM(_uhoh) /* 18 Reserved */
@@ -51,13 +51,13 @@ SYM(_INTERRUPT_VECTOR):
     .long   SYM(_uhoh) /* 22 Reserved */
     .long   SYM(_uhoh) /* 23 Reserved */
     .long   SYM(_spuriousInterrupt) /* 24 Spurious Interrupt */
-    .long   SYM(_uhoh) /* 25 Autovector Level 1 */
-    .long   SYM(_uhoh) /* 26 Autovector Level 2 */
-    .long   SYM(_uhoh) /* 27 Autovector Level 3 */
-    .long   SYM(_uhoh) /* 28 Autovector Level 4 */
-    .long   SYM(_uhoh) /* 29 Autovector Level 5 */
-    .long   SYM(_uhoh) /* 30 Autovector Level 6 */
-    .long   SYM(_uhoh) /* 31 Autovector Level 7 */
+    .long   SYM(_uhoh) /* 25 Reserved */
+    .long   SYM(_uhoh) /* 26 Reserved */
+    .long   SYM(_uhoh) /* 27 Reserved */
+    .long   SYM(_uhoh) /* 28 Reserved */
+    .long   SYM(_uhoh) /* 29 Reserved */
+    .long   SYM(_uhoh) /* 30 Reserved */
+    .long   SYM(_uhoh) /* 31 Reserved */
     .long   SYM(_uhoh) /* 32 TRAP #0 */
     .long   SYM(_uhoh) /* 33 TRAP #1 */
     .long   SYM(_uhoh) /* 34 TRAP #2 */
@@ -314,17 +314,6 @@ _cfm_msec:  .long   0x00000000
 .align 4
     PUBLIC (_uhoh)
 SYM(_uhoh): 
-/*
-    link     a6,#0 
-    lea     -20(sp), sp
-    movem.l d0-d2/a0-a1, (sp)
-    pea.l   20(sp)              | push exception frame address
-    jsr     mcf5xxx_exception_handler
-    movem.l 4(sp), d0-d2/a0-a1
-    lea     24(sp), sp
-    unlk a6
-    rte
-*/
     nop                     | Leave spot for breakpoint
     stop    #0x2700         | Stop with interrupts disabled 
     bra.w   SYM(_uhoh)      | Stuck forever
