@@ -1,5 +1,9 @@
 2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
+	* startup/cfinit.c, startup/init52235.c: Missed the last patch.
+
+2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
 	* mcf52235/README, mcf52235/gdb-init, mcf52235/clock/clock.c,
 	mcf52235/console/console.c, mcf52235/include/bsp.h,
 	mcf52235/include/coverhd.h, mcf52235/start/start.S,
