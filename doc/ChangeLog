@@ -1,3 +1,8 @@
+2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/io.t: Fix typos for IO unregister reported by Catalin Morosan
+	<catalin.morosan at gmail.com>.
+
 2008-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: Add CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS.
