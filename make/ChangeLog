@@ -1,3 +1,7 @@
+2008-06-20	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* custom/mcf5329.cfg: New file.
+
 2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* custom/mcf52235.cfg: Change to mcf5223x.
