@@ -138,7 +138,7 @@ SECTIONS
     {
         PROVIDE( _data_dest_start = . );
         PROVIDE( _copy_start = .);
-        *(.data)
+        *(.data*)
         *(.gnu.linkonce.d*)
         *(.gcc_except_table*)
         *(.jcr)

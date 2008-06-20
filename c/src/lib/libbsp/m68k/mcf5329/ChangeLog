@@ -1,3 +1,7 @@
+2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Use wildcard on .data section.
+
 2008-06-20	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac, gdb-init,
