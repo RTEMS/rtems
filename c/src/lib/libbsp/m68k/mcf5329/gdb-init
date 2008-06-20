@@ -1,0 +1,104 @@
+#target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0 -v -d
+target remote | m68k-bdm-gdbserver pipe /dev/bdmcf0
+
+#monitor set remote-debug 1
+#monitor set debug 1
+monitor bdm-reset
+
+#
+# Show the exception stack frame.
+#
+define show-exception-sframe
+ set $frsr = *(unsigned short *)((unsigned long)$sp + 2)
+ set $frpc = *(unsigned long *)((unsigned long)$sp + 4)
+ set $frfvo = *(unsigned short *)((unsigned long)$sp + 0)
+ set $frcode = $frfvo >> 12
+ set $frvect = ($frfvo & 0xFFF) >> 2
+ set $frstatus = ((($frfvo >> 10) & 3) << 2) | ($frfvo & 3)
+ printf "EXCEPTION -- SR:0x%X  PC:0x%X  FRAME:0x%x  VECTOR:%d  STATUS:%d\n", $frsr, $frpc, $frcode, $frvect, $frstatus
+ if $frstatus == 4
+  printf " Fault Type: Error on instruction fetch"
+ end
+ if $frstatus == 8
+  printf " Fault Type: Error on operand write"
+ end
+ if $frstatus == 12
+  printf " Fault Type: Error on operand read"
+ end
+ if $frstatus == 9
+  printf " Fault Type: Attempted write to write-protected space"
+ end
+end
+
+# I have to do this as there seems to be a problem with me setting up the 
+# chip selects.  As far as I can tell, gdb is probing whats at the program
+# counter.  It issues a 2 byte read (smallest instruction) followed by a
+# 4 byte read (depending on the result of the 2 byte read).  gdb issues these
+# reads after each and every write that the .gdbinit script issues.  This means
+# that as I'm initializing the chip selects the gdb reads can happen in an 
+# invalid memory address and this causes a target bus error.  For now I'm just
+# setting pc to 0, which seems to stop gdb from probing around to read 
+# assembler.  This lets me setup chip selects without error.
+
+set $pc = 0x00000000
+
+# Turn on RAMBAR1 at address 80000000 
+monitor bdm-ctl-set 0x0C05 0x80000221
+
+# Set VBR to the beginning of what will be SDRAM
+# VBR is an absolute CPU register
+monitor bdm-ctl-set 0x0801 0x40000000
+
+# Disable watchdog timer
+set *((short*) 0xFC098000) = 0x0000
+
+#Init CS0
+set *((long*) 0xFC008000) = 0x00000000
+set *((long*) 0xFC008008) = 0x00001FA0
+set *((long*) 0xFC008004) = 0x001F0001
+
+# SDRAM Initialization
+
+monitor delay-ms 100
+
+# SDCS0 
+set *((long*) 0xFC0B8110) = 0x40000018
+# SDCFG1
+set *((long*) 0xFC0B8008) = 0x53722730
+# SDCFG2
+set *((long*) 0xFC0B800C) = 0x56670000
+
+# Issue PALL
+# SDCR
+set *((long*) 0xFC0B8004) = 0xE1092002
+
+# Issue LEMR
+# SDMR
+set *((long*) 0xFC0B8000) = 0x40010000
+
+# Write mode register
+# SDMR
+set *((long*) 0xFC0B8000) = 0x058D0000
+
+# Wait a bit
+monitor delay-ms 600
+
+# Issue PALL
+# SDCR
+set *((long*) 0xFC0B8004) = 0xE1092002
+
+# Perform two refresh cycles
+# SDCR
+set *((long*) 0xFC0B8004) = 0xE1092004
+# SDCR
+set *((long*) 0xFC0B8004) = 0xE1092004
+
+# SDMR
+set *((long*) 0xFC0B8000) = 0x018D0000
+# SDCR
+set *((long*) 0xFC0B8004) = 0x71092C00
+
+# Wait a bit
+monitor delay-ms 100
+
+load

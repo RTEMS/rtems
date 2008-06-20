@@ -1,0 +1,9 @@
+2008-06-20	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac, gdb-init,
+	preinstall.am, clock/clock.c, console/console.c, include/bsp.h,
+	include/bspopts.h.in, include/coverhd.h, include/tm27.h,
+	network/network.c, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/cfinit.c, startup/init5329.c,
+	startup/linkcmds, startup/linkcmdsflash, timer/timer.c: New files.
+
