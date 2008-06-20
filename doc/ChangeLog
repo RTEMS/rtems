@@ -1,5 +1,10 @@
 2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* user/io.t: Fix typos for IO unregister reported by Catalin Morosan
+	<catalin.morosan at gmail.com>.
+
+2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* user/conf.t: Fix text on CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER.
 
 2008-02-14	Joel Sherrill <joel.sherrill@OARcorp.com>

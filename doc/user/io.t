@@ -21,6 +21,8 @@ directives provided by the I/O manager are:
 @itemize @bullet
 @item @code{@value{DIRPREFIX}io_initialize} - Initialize a device driver
 @item @code{@value{DIRPREFIX}io_register_name} - Register a device name
+@item @code{@value{DIRPREFIX}io_register_driver} - Register a device name
+@item @code{@value{DIRPREFIX}io_unregister_driver} - Unregister a device name
 @item @code{@value{DIRPREFIX}io_lookup_name} - Look up a device name
 @item @code{@value{DIRPREFIX}io_open} - Open a device
 @item @code{@value{DIRPREFIX}io_close} - Close a device
@@ -315,7 +317,7 @@ requires.
 @ifset is-C
 @findex rtems_io_unregister_driver
 @example
-rtems_status_code rtems_io_register_driver(
+rtems_status_code rtems_io_unregister_driver(
   rtems_device_major_number   major
 );
 @end example
