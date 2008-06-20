@@ -105,6 +105,12 @@ include_mcf5235dir = $(includedir)/mcf5235
 include_mcf5235_HEADERS = mcf5235/include/mcf5235.h
 endif
 
+if mcf532x
+## mcf532x/include
+include_mcf532xdir = $(includedir)/mcf532x
+include_mcf532x_HEADERS = mcf532x/include/mcf532x.h
+endif
+
 if mcf5272
 ## mcf5272/include
 include_mcf5272dir = $(includedir)/mcf5272

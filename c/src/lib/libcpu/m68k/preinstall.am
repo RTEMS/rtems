@@ -62,6 +62,16 @@ $(PROJECT_INCLUDE)/mcf5235/mcf5235.h: mcf5235/include/mcf5235.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5235/mcf5235.h
 endif
+if mcf532x
+$(PROJECT_INCLUDE)/mcf532x/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf532x
+	@: > $(PROJECT_INCLUDE)/mcf532x/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf532x/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf532x/mcf532x.h: mcf532x/include/mcf532x.h $(PROJECT_INCLUDE)/mcf532x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf532x/mcf532x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf532x/mcf532x.h
+endif
 if mcf5272
 $(PROJECT_INCLUDE)/mcf5272/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf5272
