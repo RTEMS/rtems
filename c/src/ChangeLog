@@ -1,3 +1,8 @@
+2008-06-29 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.
+	AC_PREREQ(2.62).
+
 2008-06-01 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/target.m4: Allow empty RTEMS_BUILD_SUBDIRS.
