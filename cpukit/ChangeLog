@@ -1,5 +1,11 @@
 2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AM_CONDITIONAL(LIBGNAT).
+	* libgnat/Makefile.am: Use LIBGNAT.
+	* wrapup/Makefile.am: Use LIBGNAT.
+
+2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* acinclude.m4: Add magic to update cpuopt.h.
 	* configure.ac: Remove magic to update cpuopt.h.
 
