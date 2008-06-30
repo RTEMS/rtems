@@ -1,5 +1,11 @@
 2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* acinclude.m4: Add _RTEMS_CPUOPT_INIT, _RTEMS_CPUOPT_FINI.
+	* configure.ac: Apply _RTEMS_CPU_INIT, _RTEMS_CPUOPT_FINI.
+	Cleanup mal-formated RTEMS_CPUOPT's.
+
+2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.
 	AC_PREREQ(2.62).
 
