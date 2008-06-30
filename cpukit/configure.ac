@@ -136,15 +136,7 @@ rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
 rtems_minor=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/\..*//"`
 rtems_revision=`echo _RTEMS_VERSION | sed "s/[[0-9]][[0-9]]*\.//;s/[[0-9]][[0-9]]*\.//;s/\..*//"`
 
-cat >>cpuopts.tmp <<\_ACEOF
-/**
- * @file rtems/score/cpuopts.h
- */
-/* target cpu dependent options file */
-/* automatically generated -- DO NOT EDIT!! */
-#ifndef _RTEMS_SCORE_CPUOPTS_H
-#define _RTEMS_SCORE_CPUOPTS_H
-_ACEOF
+_RTEMS_CPUOPT_INIT
 
 RTEMS_CPUOPT([RTEMS_DEBUG],
   [test x"${enable_rtems_debug}" = x"yes"],
@@ -209,35 +201,30 @@ RTEMS_CPUOPT([SIZEOF_CPU_CONTEXT],
 RTEMS_CPUOPT([__RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__],
   [test x"${USE_TICKS_FOR_CPU_USAGE_STATISTICS}" = x"1"],
   [1],
-  [disable nanosecond granularity for cpu usage statistics]
-)
+  [disable nanosecond granularity for cpu usage statistics])
 
 RTEMS_CPUOPT([__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__],
   [test x"${USE_TICKS_FOR_RATE_MONOTONIC_STATISTICS}" = x"1"],
   [1],
-  [disable nanosecond granularity for period statistics]
-)
+  [disable nanosecond granularity for period statistics])
 
 ## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
   [test x"${RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH}" = x"1"],
   [1],
-  [disable inlining _Thread_Enable_dispatch]
-)
+  [disable inlining _Thread_Enable_dispatch])
 
 ## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__],
   [test x"${RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE}" = x"1"],
   [1],
-  [disable inlining _Thread_Enable_dispatch]
-)
+  [disable inlining _Thread_Enable_dispatch])
 
 ## This gives the same behavior as 4.8 and older
 RTEMS_CPUOPT([__STRICT_ORDER_MUTEX__],
   [test x"${ENABLE_STRICT_ORDER_MUTEX}" = x"1"],
   [1],
-  [disable strict order mutex]
-)
+  [disable strict order mutex])
 
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
@@ -254,10 +241,7 @@ RTEMS_CPUOPT([__RTEMS_REVISION__],
   [$rtems_revision],
   [revision version portion of an RTEMS release])
 
-cat >>cpuopts.tmp <<\_ACEOF
-
-#endif /* _RTEMS_SCORE_CPUOPTS_H */
-_ACEOF
+_RTEMS_CPUOPT_FINI
 
 AS_MKDIR_P(score/include/rtems/score)
 AS_IF([test -f score/include/rtems/score/cpuopts.h],
