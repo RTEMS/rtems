@@ -1,5 +1,15 @@
 2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac, rtems/src/semtranslatereturncode.c,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/coremutex.inl,
+	score/src/coremutex.c, score/src/coremutexsurrender.c,
+	score/src/threadinitialize.c:
+	Rename __STRICT_ORDER_MUTEX__ to __RTEMS_STRICT_ORDER_MUTEX__.
+
+2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add AM_CONDITIONAL(LIBGNAT).
 	* libgnat/Makefile.am: Use LIBGNAT.
 	* wrapup/Makefile.am: Use LIBGNAT.
