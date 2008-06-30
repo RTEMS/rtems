@@ -1,7 +1,22 @@
 # RTEMS_CPUOPT(NAME,CONDITION,VALUE,EXPLANATION)
 
-AC_DEFUN([RTEMS_CPUOPT],
-[
+AC_DEFUN([_RTEMS_CPUOPT_INIT],[
+AC_BEFORE([_RTEMS_CPUOPT])
+cat >>cpuopts.tmp <<\_ACEOF
+/**
+ * @file rtems/score/cpuopts.h
+ */
+
+/* target cpu dependent options file */
+/* automatically generated -- DO NOT EDIT!! */
+#ifndef _RTEMS_SCORE_CPUOPTS_H
+#define _RTEMS_SCORE_CPUOPTS_H
+_ACEOF
+])
+
+AC_DEFUN([RTEMS_CPUOPT],[
+AC_REQUIRE([_RTEMS_CPUOPT_INIT])
+AC_BEFORE([_RTEMS_CPUOPT_FINI])
   if $2; then
 cat >>cpuopts.tmp <<_ACEOF
 
@@ -19,3 +34,11 @@ cat >>cpuopts.tmp <<\_ACEOF
 _ACEOF
   fi
 ])
+
+AC_DEFUN([_RTEMS_CPUOPT_FINI],[
+cat >>cpuopts.tmp <<\_ACEOF
+
+#endif /* _RTEMS_SCORE_CPUOPTS_H */
+_ACEOF
+])
+
