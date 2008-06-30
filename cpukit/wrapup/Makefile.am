@@ -21,7 +21,7 @@ if LIBPOSIX
 TMP_LIBS += ../posix/libposix.a
 endif
 
-if HAS_PTHREADS
+if LIBGNAT
 TMP_LIBS += ../libgnat/libgnat.a
 endif
 

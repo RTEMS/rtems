@@ -6,7 +6,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST=
 
-if HAS_PTHREADS
+if LIBGNAT
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libgnat.a
