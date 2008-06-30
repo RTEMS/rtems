@@ -243,24 +243,6 @@ RTEMS_CPUOPT([__RTEMS_REVISION__],
 
 _RTEMS_CPUOPT_FINI
 
-AS_MKDIR_P(score/include/rtems/score)
-AS_IF([test -f score/include/rtems/score/cpuopts.h],
-[
-  AS_IF([cmp -s score/include/rtems/score/cpuopts.h cpuopts.tmp 2>/dev/null],
-  [ 
-    AC_MSG_NOTICE([score/include/rtems/score/cpuopts.h is unchanged])
-    rm -f cpuopts.tmp
-  ],[
-    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
-    rm -f score/include/rtems/score/cpuopts.h
-    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
-  ])
-],[
-    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
-    rm -f score/include/rtems/score/cpuopts.h
-    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
-])
-
 AC_ENABLE_MULTILIB([Makefile],[..])
 
 # libmisc/shell/* wants to assign file descriptors to stdio file descriptors.
