@@ -40,5 +40,22 @@ cat >>cpuopts.tmp <<\_ACEOF
 
 #endif /* _RTEMS_SCORE_CPUOPTS_H */
 _ACEOF
-])
 
+AS_MKDIR_P(score/include/rtems/score)
+AS_IF([test -f score/include/rtems/score/cpuopts.h],
+[
+  AS_IF([cmp -s score/include/rtems/score/cpuopts.h cpuopts.tmp 2>/dev/null],
+  [ 
+    AC_MSG_NOTICE([score/include/rtems/score/cpuopts.h is unchanged])
+    rm -f cpuopts.tmp
+  ],[
+    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
+    rm -f score/include/rtems/score/cpuopts.h
+    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
+  ])
+],[
+    AC_MSG_NOTICE([creating score/include/rtems/score/cpuopts.h])
+    rm -f score/include/rtems/score/cpuopts.h
+    mv cpuopts.tmp score/include/rtems/score/cpuopts.h
+])
+])
