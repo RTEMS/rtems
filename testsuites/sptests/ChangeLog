@@ -1,3 +1,8 @@
+2008-06-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp36/strict_order_mut.c: Reflect __STRICT_ORDER_MUTEX__ having
+	  been renamed into __RTEMS_STRICT_ORDER_MUTEX__.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp28/init.c: Corrections to configuration.

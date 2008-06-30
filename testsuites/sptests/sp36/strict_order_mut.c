@@ -121,7 +121,7 @@ rtems_task Task0(rtems_task_argument ignored)
   directive_failed( status,"rtems_semaphore_obtain of S1");
   printf("The current priority of T0 is %d\n",Get_current_pri());
 
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
   status = rtems_semaphore_release( Mutex_id[0] );
   printf("T0 - rtems_semaphore_release - S0\n");
   if(status == CORE_MUTEX_RELEASE_NOT_ORDER)
