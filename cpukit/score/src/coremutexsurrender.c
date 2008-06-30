@@ -54,7 +54,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 {
   Thread_Control *the_thread;
   Thread_Control *holder;
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
   Chain_Node *first_node;
 #endif
   holder    = the_mutex->holder;
@@ -98,7 +98,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    */
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
     /*Check whether the holder release the mutex in LIFO order
       if not return error code*/
     if(holder->lock_mutex.first != &the_mutex->queue.lock_queue){
@@ -119,7 +119,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    */
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
     if(the_mutex->queue.priority_before != holder->current_priority)
       _Thread_Change_priority(holder,the_mutex->queue.priority_before,TRUE);
 #endif
@@ -157,14 +157,14 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY:
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
 	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
 	  the_mutex->queue.priority_before = the_thread->current_priority;
 #endif
           the_thread->resource_count++;
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
 	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
 	  the_mutex->queue.priority_before = the_thread->current_priority;
 #endif

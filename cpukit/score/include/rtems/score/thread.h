@@ -316,7 +316,7 @@ struct Thread_Control_struct {
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;
 #endif
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /**This field is the head of queue of priority inheritance mutex holed by the thread*/
   Chain_Control            lock_mutex;
 #endif

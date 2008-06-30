@@ -104,7 +104,7 @@ typedef enum {
    */
   CORE_MUTEX_TIMEOUT,
 
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /** This status indicates that a thread not release the mutex which has
    *  the priority inheritance property in a right order.
    */
@@ -193,7 +193,7 @@ typedef struct {
   Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
 
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
 /*@beief Core Mutex Lock_Chain Struct
  *
  * The following defines the control block used to manage lock chain of 
@@ -242,7 +242,7 @@ typedef struct {
   Thread_Control         *holder;
   /** This element contains the object Id of the holding thread.  */
   Objects_Id              holder_id;
-#ifdef __STRICT_ORDER_MUTEX__
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /** This field is used to manipulate the priority inheritance mutex queue*/
   CORE_mutex_order_list   queue;
 #endif
