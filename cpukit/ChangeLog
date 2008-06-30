@@ -1,5 +1,10 @@
 2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* acinclude.m4: Add magic to update cpuopt.h.
+	* configure.ac: Remove magic to update cpuopt.h.
+
+2008-06-30 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* acinclude.m4: Add _RTEMS_CPUOPT_INIT, _RTEMS_CPUOPT_FINI.
 	* configure.ac: Apply _RTEMS_CPU_INIT, _RTEMS_CPUOPT_FINI.
 	Cleanup mal-formated RTEMS_CPUOPT's.
