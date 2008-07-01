@@ -1,3 +1,7 @@
+2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psim-gdb: Change 4.8 to 4.9.
+
 2008-03-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* runtest: Skip all fatal error tests.
