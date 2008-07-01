@@ -25,7 +25,8 @@ extern "C" {
 /**
  *  @defgroup ClassicAttributes Classic API Attributes
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality which defines and manages the
+ *  set of Classic API object attributes.
  */
 /**@{*/
 

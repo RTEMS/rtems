@@ -131,18 +131,20 @@ rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "SUSP",   STATES_SUSPENDED },
     { "TRANS",  STATES_TRANSIENT },
     { "DELAY",  STATES_DELAYING },
+    { "Wtime",  STATES_WAITING_FOR_TIME },
     { "Wbuf",   STATES_WAITING_FOR_BUFFER },
     { "Wseg",   STATES_WAITING_FOR_SEGMENT },
     { "Wmsg" ,  STATES_WAITING_FOR_MESSAGE },
     { "Wevnt",  STATES_WAITING_FOR_EVENT },
     { "Wsem",   STATES_WAITING_FOR_SEMAPHORE },
-    { "Wtime",  STATES_WAITING_FOR_TIME },
-    { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY },
     { "Wmutex", STATES_WAITING_FOR_MUTEX },
     { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE },
     { "Wjatx",  STATES_WAITING_FOR_JOIN_AT_EXIT },
-    { "Wsig",   STATES_WAITING_FOR_SIGNAL },
+    { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY },
     { "WRATE",  STATES_WAITING_FOR_PERIOD },
+    { "Wsig",   STATES_WAITING_FOR_SIGNAL },
+    { "Wbar",   STATES_WAITING_FOR_BARRIER },
+    { "Wrwlk",  STATES_WAITING_FOR_RWLOCK },
     { "Wisig",  STATES_INTERRUPTIBLE_BY_SIGNAL },
     { 0, 0, 0 },
 };
@@ -162,11 +164,15 @@ rtems_monitor_dump_state(States_Control state)
 }
 
 rtems_assoc_t rtems_monitor_attribute_assoc[] = {
-    { "FL",  RTEMS_FLOATING_POINT },
     { "GL",  RTEMS_GLOBAL },
     { "PR",  RTEMS_PRIORITY },
+    { "FL",  RTEMS_FLOATING_POINT },
     { "BI",  RTEMS_BINARY_SEMAPHORE },
+    { "SB",  RTEMS_SIMPLE_BINARY_SEMAPHORE },
     { "IN",  RTEMS_INHERIT_PRIORITY },
+    { "CE",  RTEMS_PRIORITY_CEILING },
+    { "AR",  RTEMS_BARRIER_AUTOMATIC_RELEASE },
+    { "ST",  RTEMS_SYSTEM_TASK },
     { 0, 0, 0 },
 };
 
