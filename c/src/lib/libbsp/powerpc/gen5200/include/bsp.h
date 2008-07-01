@@ -261,6 +261,14 @@ Thread _Thread_Idle_body(uint32_t ignored);
 /* BSP specific IRQ Benchmarking support */
 void BSP_IRQ_Benchmarking_Reset(void);
 void BSP_IRQ_Benchmarking_Report(void);
+
+#if defined(HAS_UBOOT)
+  /* Routine to obtain U-Boot environment variables */
+  const char *bsp_uboot_getenv(
+    const char *name
+  );
+#endif
+
 #ifdef __cplusplus
 }
 #endif

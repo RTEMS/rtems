@@ -85,7 +85,7 @@ startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../shared/uboot_dump_bdinfo.c \
     ../../shared/gnatinstallhandler.c startup/cpuinit.c  \
-    ../shared/showbats.c
+    ../shared/showbats.c startup/uboot_support.c ../shared/uboot_getenv.c
 
 vectors_SOURCES = vectors/vectors_init.c vectors/vectors.h \
     vectors/vectors.S

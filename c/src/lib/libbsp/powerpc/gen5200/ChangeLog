@@ -1,3 +1,9 @@
+2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, include/bsp.h: Add bsp_uboot_getenv() to obtain U-Boot
+	environment variables.
+	* startup/uboot_support.c: New file.
+
 2008-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/irq.c: Add units.
