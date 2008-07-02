@@ -42,18 +42,6 @@ static void rtems_shell_joel_usage()
   );
 }
 
-int rtems_shell_main_decho(
-  int    argc,
-  char **argv
-)
-{
-  int i;
-
-  for (i=0 ; i<argc ; i++ )
-    printf( "argv[%d] = -%s-\n", i, argv[i] );
-  return 0;
-}
-
 static int findOnPATH(
   const char *userScriptName,
   char       *scriptFile
