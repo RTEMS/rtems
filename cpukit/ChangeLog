@@ -1,8 +1,14 @@
+2008-07-02 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/thread.h,
+	score/src/threaddispatch.c, score/src/threadinitialize.c:
+	Support rtems_ada_self iff __RTEMS_ADA__ is given.
+
 2008-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell_script.c: Remove unused function.
 
-2008-07-03 	Ralf Corsépius <ralf.corsepius@rtems.org>
+2008-07-02 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add __RTEMS_ADA__.
 
