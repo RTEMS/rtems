@@ -42,6 +42,25 @@
 
 extern int _serv_stayopen;
 
+int getservbyname_r(
+  const char *name,
+  const char *proto,
+  struct servent *result_buf,
+  char *buf,
+  size_t buflen,
+  struct servent **result
+)
+{
+  #warning "implement a proper getservbyport_r"
+ 
+  *result = getservbyname(name, proto);
+  if ( *result )
+    return 0;
+
+  return -1;
+}
+
+
 struct servent *
 getservbyname(name, proto)
 	const char *name, *proto;

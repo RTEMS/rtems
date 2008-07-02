@@ -158,6 +158,18 @@ gethostbyname2(const char *name, int type)
 	return hp;
 }
 
+int gethostbyaddr_r(const void *addr, socklen_t len, int type,
+               struct hostent *ret, char *buf, size_t buflen,
+               struct hostent **result, int *h_errnop)
+{
+  #warning "implement a proper gethostbyaddr_r"
+ 
+  *result = gethostbyaddr( addr, len, type );
+  if ( *result ) 
+    return 0;
+  return -1;
+}
+
 struct hostent *
 gethostbyaddr(const void *addr, socklen_t len, int type)
 {

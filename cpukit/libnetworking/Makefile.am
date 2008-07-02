@@ -149,7 +149,7 @@ include_dev_mii_HEADERS = dev/mii/mii.h
 
 ## libc
 
-libc_CPPFLAGS = -DNOPOLL -DNOSELECT -D__BSD_VISIBLE
+libc_CPPFLAGS = -DNOPOLL -DNOSELECT -D__BSD_VISIBLE -D_THREAD_SAFE
 
 noinst_LIBRARIES += libc.a
 libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(libc_CPPFLAGS)

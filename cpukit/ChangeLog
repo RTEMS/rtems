@@ -1,3 +1,12 @@
+2008-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libnetworking/Makefile.am, libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/getservbyname.c,
+	libnetworking/libc/getservbyport.c: Add initial versions of
+	getservbyport_r(), gethostbyaddr_r(), and getservbyport_r(). At this
+	point they are just simple weappers for the version without the _r in
+	the name.
+
 2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/monitor/mon-prmisc.c, rtems/include/rtems/rtems/attr.h:
