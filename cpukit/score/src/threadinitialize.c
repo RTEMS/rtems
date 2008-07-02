@@ -63,11 +63,13 @@ boolean _Thread_Initialize(
   void                *extensions_area;
   boolean              extension_status;
 
+#if __RTEMS_ADA__
   /*
    *  Initialize the Ada self pointer
    */
 
   the_thread->rtems_ada_self = NULL;
+#endif
 
   /*
    *  Allocate and Initialize the stack for this thread.

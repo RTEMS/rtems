@@ -93,8 +93,10 @@ void _Thread_Dispatch( void )
     _Thread_Dispatch_disable_level = 1;
     _Context_Switch_necessary = FALSE;
     _Thread_Executing = heir;
+#if __RTEMS_ADA__
     executing->rtems_ada_self = rtems_ada_self;
     rtems_ada_self = heir->rtems_ada_self;
+#endif
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
       heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
     _ISR_Enable( level );

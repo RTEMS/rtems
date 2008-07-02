@@ -331,8 +331,10 @@ struct Thread_Control_struct {
   boolean                               do_post_task_switch_extension;
   /** This field is true if the thread is preemptible. */
   boolean                               is_preemptible;
+#if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
   void                                 *rtems_ada_self;
+#endif
   /** This field is the length of the time quantum that this thread is
    *  allowed to consume.  The algorithm used to manage limits on CPU usage
    *  is specified by budget_algorithm.
