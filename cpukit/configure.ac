@@ -226,6 +226,12 @@ RTEMS_CPUOPT([__RTEMS_STRICT_ORDER_MUTEX__],
   [1],
   [disable strict order mutex])
 
+## Deactivate ada bindings
+RTEMS_CPUOPT([__RTEMS_ADA__],
+  [test x"${enable_ada}" = x"yes"],
+  [1],
+  [Define to 1 if ada/gnat bindings are built-in])
+
 RTEMS_CPUOPT([__RTEMS_MAJOR__],
   [true],
   [$rtems_major],
