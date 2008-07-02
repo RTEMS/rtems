@@ -1,3 +1,7 @@
+2008-07-03 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add __RTEMS_ADA__.
+
 2008-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/Makefile.am, libnetworking/libc/gethostnamadr.c,
