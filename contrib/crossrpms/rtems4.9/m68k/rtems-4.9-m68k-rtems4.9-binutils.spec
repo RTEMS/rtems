@@ -13,6 +13,18 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix rtems-4.9-%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
 %define binutils_pkgvers 2.18
 %define binutils_version 2.18
 %define binutils_rpmvers %{expand:%(echo "2.18" | tr - _ )}
@@ -25,6 +37,8 @@ Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+BuildRequires:	%{_host_rpmprefix}gcc
 
 %if "%{binutils_version}" >= "2.18"
 # Bug in bfd: Doesn't build without texinfo installed
@@ -56,12 +70,16 @@ cd binutils-%{binutils_pkgvers}
 cd ..
 
 %build
+  export PATH="%{_bindir}:${PATH}"
 %if "m68k-rtems4.9" == "i686-pc-cygwin"
 # The cygwin sources are leaking memory
   RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
 %endif
   mkdir -p build
   cd build
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_pkgvers}/configure \
     --build=%_build --host=%_host \
@@ -80,6 +98,7 @@ cd ..
   cd ..
 
 %install
+  export PATH="%{_bindir}:${PATH}"
   rm -rf $RPM_BUILD_ROOT
 
   cd build
@@ -161,7 +180,6 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 # %endif
 
 %description -n rtems-4.9-m68k-rtems4.9-binutils
-
 GNU binutils targetting m68k-rtems4.9.
 
 %files -n rtems-4.9-m68k-rtems4.9-binutils
