@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = mips-rtems4.9
+TARGET = mips-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

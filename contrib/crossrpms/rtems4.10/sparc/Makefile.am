@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = sparc-rtems4.9
+TARGET = sparc-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

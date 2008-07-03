@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = tic4x-rtems4.9
+TARGET = tic4x-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

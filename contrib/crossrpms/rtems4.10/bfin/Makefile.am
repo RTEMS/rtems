@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = bfin-rtems4.9
+TARGET = bfin-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

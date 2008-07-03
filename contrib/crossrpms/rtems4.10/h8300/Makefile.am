@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = h8300-rtems4.9
+TARGET = h8300-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

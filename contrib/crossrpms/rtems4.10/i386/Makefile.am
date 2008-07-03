@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = i386-rtems4.9
+TARGET = i386-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

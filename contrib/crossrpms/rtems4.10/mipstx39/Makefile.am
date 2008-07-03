@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = mipstx39-rtems4.9
+TARGET = mipstx39-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

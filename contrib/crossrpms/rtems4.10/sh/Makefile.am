@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = sh-rtems4.9
+TARGET = sh-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 

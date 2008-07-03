@@ -1,6 +1,6 @@
 # $Id$
 
-TARGET = powerpc-rtems4.9
+TARGET = powerpc-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 
