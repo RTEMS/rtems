@@ -94,7 +94,7 @@ Requires:	rtems-4.9-m68k-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.3.1"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.3.1-rtems4.9-20080609.diff
+Patch0:		gcc-core-4.3.1-rtems4.9-20080628.diff
 %endif
 %if "%{gcc_version}" == "4.3.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
