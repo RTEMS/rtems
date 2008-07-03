@@ -30,9 +30,9 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
   char         *name
 )
 {
-  Chain_Node        *the_node;
-  Chain_Control     *the_chain;
-  IMFS_jnode_t      *the_jnode;
+  rtems_chain_node    *the_node;
+  rtems_chain_control *the_chain;
+  IMFS_jnode_t        *the_jnode;
 
   /*
    *  Check for fatal errors.  A NULL directory show a problem in the
@@ -60,7 +60,7 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
   the_chain = &directory->info.directory.Entries;
 
   for ( the_node = the_chain->first;
-        !_Chain_Is_tail( the_chain, the_node );
+        !rtems_chain_is_tail( the_chain, the_node );
         the_node = the_node->next ) {
 
     the_jnode = (IMFS_jnode_t *) the_node;

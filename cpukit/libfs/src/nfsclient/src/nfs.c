@@ -1870,7 +1870,7 @@ static int nfs_unmount(
 /* for reference (libio.h) */
 
 struct rtems_filesystem_mount_table_entry_tt {
-  Chain_Node                             Node;
+  rtems_chain_node                       Node;
   rtems_filesystem_location_info_t       mt_point_node;
   rtems_filesystem_location_info_t       mt_fs_root;
   int                                    options;

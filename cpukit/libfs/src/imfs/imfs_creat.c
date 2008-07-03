@@ -85,7 +85,7 @@ IMFS_jnode_t *IMFS_create_node(
 
   switch (type) {
     case IMFS_DIRECTORY:
-      Chain_Initialize_empty(&node->info.directory.Entries);
+      rtems_chain_initialize_empty(&node->info.directory.Entries);
       break;
 
     case IMFS_HARD_LINK:
@@ -122,7 +122,7 @@ IMFS_jnode_t *IMFS_create_node(
    */
 
   if ( parent ) {
-    Chain_Append( &parent->info.directory.Entries, &node->Node );
+    rtems_chain_append( &parent->info.directory.Entries, &node->Node );
     node->Parent = parent;
 
     fs_info = parent_loc->mt_entry->fs_info;

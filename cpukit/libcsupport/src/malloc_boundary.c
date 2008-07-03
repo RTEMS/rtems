@@ -159,7 +159,7 @@ void reportMallocError(const char *msg, struct mallocNode *mp)
             mp, mp->forw, mp->forw->back, mp->back, mp->back->forw);
     if (mp->memory != (mp + 1))
         ind += sprintf(cbuf+ind, "mp+1:%p  ", mp + 1);
-    ind += sprintf(cbuf+ind, "mp->memory:%p  mp->size:%d\n", mp->memory, mp->size);
+    ind += sprintf(cbuf+ind, "mp->memory:%p  mp->size:%li\n", mp->memory, mp->size);
     if (memcmp((char *)mp->memory + mp->size, SENTINEL, SENTINELSIZE) != 0) {
         ind += sprintf(cbuf+ind, "mp->sentinel: ");
         for (i = 0 ; i < SENTINELSIZE ; i++)

@@ -42,7 +42,7 @@ struct IMFS_jnode_tt;
 typedef struct IMFS_jnode_tt IMFS_jnode_t;
 
 typedef struct {
-  Chain_Control                          Entries;
+  rtems_chain_control                    Entries;
   rtems_filesystem_mount_table_entry_t  *mt_fs;
 }  IMFS_directory_t;
 
@@ -158,7 +158,7 @@ typedef union {
  */
 
 struct IMFS_jnode_tt {
-  Chain_Node          Node;                  /* for chaining them together */
+  rtems_chain_node    Node;                  /* for chaining them together */
   IMFS_jnode_t       *Parent;                /* Parent node */
   char                name[IMFS_NAME_MAX+1]; /* "basename" */
   mode_t              st_mode;               /* File mode */

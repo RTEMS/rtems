@@ -687,8 +687,8 @@ bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
     p->nblks = config->num;
     p->tree = NULL;
 
-    Chain_Initialize_empty(&p->free);
-    Chain_Initialize_empty(&p->lru);
+    rtems_chain_initialize_empty(&p->free);
+    rtems_chain_initialize_empty(&p->lru);
 
     /* Allocate memory for buffer descriptors */
     p->bdbufs = calloc(config->num, sizeof(bdbuf_buffer));
@@ -720,7 +720,7 @@ bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
         b->actual = b->modified = b->in_progress = FALSE;
         b->use_count = 0;
         b->pool = pool;
-        _Chain_Append(&p->free, &b->link);
+        rtems_chain_append(&p->free, &b->link);
     }
 
     rc = rtems_semaphore_create(
@@ -795,7 +795,7 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
         return RTEMS_NO_MEMORY;
     }
 
-    Chain_Initialize_empty(&rtems_bdbuf_ctx.mod);
+    rtems_chain_initialize_empty(&rtems_bdbuf_ctx.mod);
 
     /* Initialize buffer pools and roll out if something failed */
     for (i = 0; i < size; i++)
@@ -927,9 +927,9 @@ again:
     if (bd_buf == NULL)
     {
         /* Assign new buffer descriptor */
-        if (_Chain_Is_empty(&bd_pool->free))
+        if (rtems_chain_is_empty(&bd_pool->free))
         {
-            bd_buf = (bdbuf_buffer *)Chain_Get(&bd_pool->lru);
+            bd_buf = (bdbuf_buffer *)rtems_chain_get(&bd_pool->lru);
             if (bd_buf != NULL)
             {
                 int avl_result;
@@ -943,7 +943,7 @@ again:
         }
         else
         {
-            bd_buf = (bdbuf_buffer *)Chain_Get(&(bd_pool->free));
+            bd_buf = (bdbuf_buffer *)rtems_chain_get(&(bd_pool->free));
         }
 
         if (bd_buf == NULL)
@@ -1009,7 +1009,7 @@ again:
 
             /* Buffer descriptor is linked to the lru or mod chain. Remove
                it from there. */
-            Chain_Extract(&bd_buf->link);
+            rtems_chain_extract(&bd_buf->link);
         }
         bd_buf->use_count++;
         while (bd_buf->in_progress != 0)
@@ -1453,7 +1453,7 @@ bdbuf_release(bdbuf_buffer *bd_buf)
 
             /* Buffer was modified. Insert buffer to the modified buffers
              * list and initiate flushing. */
-            Chain_Append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
+            rtems_chain_append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
 
             /* Release the flush_sema */
             rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
@@ -1462,7 +1462,7 @@ bdbuf_release(bdbuf_buffer *bd_buf)
         {
             /* Buffer was not modified. Add this descriptor to the
              * end of lru chain and make it available for reuse. */
-            Chain_Append(&bd_pool->lru, &bd_buf->link);
+            rtems_chain_append(&bd_pool->lru, &bd_buf->link);
             rc = rtems_semaphore_release(bd_pool->bufget_sema);
         }
     }
@@ -1690,7 +1690,7 @@ bdbuf_swapout_task(rtems_task_argument unused)
 					: RTEMS_NO_WAIT, 
 					0);
 	    if (rc == RTEMS_SUCCESSFUL) {
-	      nxt_bd_buf = (bdbuf_buffer *)Chain_Get(&rtems_bdbuf_ctx.mod);
+	      nxt_bd_buf = (bdbuf_buffer *)rtems_chain_get(&rtems_bdbuf_ctx.mod);
           if (nxt_bd_buf != NULL) {
   	        nxt_bd_buf->in_progress = TRUE;
             /* IMD try: clear "modified" bit early             */
@@ -1784,12 +1784,12 @@ bdbuf_swapout_task(rtems_task_argument unused)
 	    {
 	      if (bd_buf->modified)
 		{
-		  Chain_Append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
+		  rtems_chain_append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
 		  rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
 		}
 	      else
 		{
-		  Chain_Append(&bd_pool->lru, &bd_buf->link);
+		  rtems_chain_append(&bd_pool->lru, &bd_buf->link);
 		  rc = rtems_semaphore_release(bd_pool->bufget_sema);
 		}
 	    }

@@ -82,19 +82,19 @@ ssize_t imfs_dir_read(
    *  Read up to element  iop->offset in the directory chain of the
    *  imfs_jnode_t struct for this file descriptor.
    */
-   Chain_Node        *the_node;
-   Chain_Control     *the_chain;
-   IMFS_jnode_t      *the_jnode;
-   int                bytes_transferred;
-   int                current_entry;
-   int                first_entry;
-   int                last_entry;
-   struct dirent      tmp_dirent;
+   rtems_chain_node    *the_node;
+   rtems_chain_control *the_chain;
+   IMFS_jnode_t        *the_jnode;
+   int                  bytes_transferred;
+   int                  current_entry;
+   int                  first_entry;
+   int                  last_entry;
+   struct dirent        tmp_dirent;
 
    the_jnode = (IMFS_jnode_t *)iop->file_info;
    the_chain = &the_jnode->info.directory.Entries;
 
-   if ( Chain_Is_empty( the_chain ) )
+   if ( rtems_chain_is_empty( the_chain ) )
       return 0;
 
    /* Move to the first of the desired directory entries */
@@ -112,7 +112,7 @@ ssize_t imfs_dir_read(
       current_entry < last_entry;
       current_entry = current_entry + sizeof(struct dirent) ){
 
-      if ( Chain_Is_tail( the_chain, the_node ) ){
+      if ( rtems_chain_is_tail( the_chain, the_node ) ){
          /* We hit the tail of the chain while trying to move to the first */
          /* entry in the read */
          return bytes_transferred;  /* Indicate that there are no more */
@@ -238,9 +238,9 @@ int imfs_dir_fstat(
   struct stat                      *buf
 )
 {
-   Chain_Node        *the_node;
-   Chain_Control     *the_chain;
-   IMFS_jnode_t      *the_jnode;
+   rtems_chain_node    *the_node;
+   rtems_chain_control *the_chain;
+   IMFS_jnode_t        *the_jnode;
 
 
    the_jnode = (IMFS_jnode_t *) loc->node_access;
@@ -265,7 +265,7 @@ int imfs_dir_fstat(
    /* Run through the chain and count the number of directory entries */
    /* that are subordinate to this directory node                     */
    for ( the_node = the_chain->first ;
-         !_Chain_Is_tail( the_chain, the_node ) ;
+         !rtems_chain_is_tail( the_chain, the_node ) ;
          the_node = the_node->next ) {
 
       buf->st_size = buf->st_size + sizeof( struct dirent );
@@ -293,7 +293,7 @@ int imfs_dir_rmnod(
    * You cannot remove a node that still has children
    */
 
-  if ( ! Chain_Is_empty( &the_jnode->info.directory.Entries ) )
+  if ( ! rtems_chain_is_empty( &the_jnode->info.directory.Entries ) )
      rtems_set_errno_and_return_minus_one( ENOTEMPTY );
 
   /*
@@ -315,7 +315,7 @@ int imfs_dir_rmnod(
    */
 
   if ( the_jnode->Parent != NULL ) {
-    Chain_Extract( (Chain_Node *) the_jnode );
+    rtems_chain_extract( (rtems_chain_node *) the_jnode );
     the_jnode->Parent = NULL;
   }
 

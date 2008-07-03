@@ -24,6 +24,7 @@
 #define _RTEMS_RTEMS_LIBIO_H
 
 #include <rtems.h>
+#include <rtems/chain.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -308,7 +309,7 @@ typedef struct {
  */
 
 struct rtems_filesystem_mount_table_entry_tt {
-  Chain_Node                             Node;
+  rtems_chain_node                       Node;
   rtems_filesystem_location_info_t       mt_point_node;
   rtems_filesystem_location_info_t       mt_fs_root;
   int                                    options;

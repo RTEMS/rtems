@@ -22,7 +22,6 @@
 
 #include <rtems.h>
 #include <rtems/libio_.h>
-#include <rtems/chain.h>
 #include <rtems/imfs.h>
 #include <rtems/untar.h>
 #include <rtems/tar.h>

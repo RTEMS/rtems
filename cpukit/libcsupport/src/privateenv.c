@@ -20,10 +20,11 @@
 #include <stdlib.h>	/* free */
 
 #include <rtems.h>
+#include <rtems/chain.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 
-extern Chain_Control rtems_filesystem_mount_table_control;
+extern rtems_chain_control rtems_filesystem_mount_table_control;
 
 #define THE_ROOT_FS_LOC \
 	(((rtems_filesystem_mount_table_entry_t*)\

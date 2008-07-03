@@ -8,13 +8,14 @@ include $(top_srcdir)/automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/confdefs.h
-include_rtems_HEADERS += include/rtems/config.h include/rtems/extension.h \
-    include/rtems/fatal.h include/rtems/init.h include/rtems/io.h \
-    include/rtems/mptables.h include/rtems/sptables.h
+include_rtems_HEADERS += include/rtems/chain.h include/rtems/config.h \
+    include/rtems/extension.h include/rtems/fatal.h include/rtems/init.h \
+    include/rtems/io.h include/rtems/mptables.h include/rtems/sptables.h
 
 EXTRA_DIST = include/rtems/README
 
-include_rtems_HEADERS += inline/rtems/extension.inl
+include_rtems_HEADERS += inline/rtems/chain.inl \
+    inline/rtems/extension.inl
 
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__

@@ -43,7 +43,7 @@ int IMFS_rmnod(
    */
 
   if ( the_jnode->Parent != NULL ) {
-    Chain_Extract( (Chain_Node *) the_jnode );
+    rtems_chain_extract( (rtems_chain_node *) the_jnode );
     the_jnode->Parent = NULL;
   }
 
@@ -73,7 +73,7 @@ int IMFS_rmnod(
 
     if ( the_jnode->type == IMFS_SYM_LINK ) {
       if ( the_jnode->info.sym_link.name )
-        free( the_jnode->info.sym_link.name );
+        free( (void*) the_jnode->info.sym_link.name );
     }
     free( the_jnode );
   }

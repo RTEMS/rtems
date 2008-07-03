@@ -22,7 +22,7 @@
 
 #include "malloc_p.h"
 
-Chain_Control RTEMS_Malloc_GC_list;
+rtems_chain_control RTEMS_Malloc_GC_list;
 
 boolean malloc_is_system_state_OK(void)
 {
@@ -37,17 +37,17 @@ boolean malloc_is_system_state_OK(void)
 
 void malloc_deferred_frees_initialize(void)
 {
-  Chain_Initialize_empty(&RTEMS_Malloc_GC_list);
+  rtems_chain_initialize_empty(&RTEMS_Malloc_GC_list);
 }
 
 void malloc_deferred_frees_process(void)
 {
-  Chain_Node  *to_be_freed;
+  rtems_chain_node  *to_be_freed;
 
   /*
    *  If some free's have been deferred, then do them now.
    */
-  while ((to_be_freed = Chain_Get(&RTEMS_Malloc_GC_list)) != NULL)
+  while ((to_be_freed = rtems_chain_get(&RTEMS_Malloc_GC_list)) != NULL)
     free(to_be_freed);
 }
 
@@ -55,6 +55,6 @@ void malloc_deferred_free(
   void *pointer
 )
 {
-  Chain_Append(&RTEMS_Malloc_GC_list, (Chain_Node *)pointer);
+  rtems_chain_append(&RTEMS_Malloc_GC_list, (rtems_chain_node *)pointer);
 }
 #endif

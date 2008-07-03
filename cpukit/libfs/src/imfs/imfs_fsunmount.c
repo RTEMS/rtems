@@ -37,13 +37,13 @@
   (&jnode->info.directory.Entries)
 
 #define jnode_has_no_children( jnode )  \
-  Chain_Is_empty( jnode_get_control( jnode ) )
+  rtems_chain_is_empty( jnode_get_control( jnode ) )
 
 #define jnode_has_children( jnode ) \
   ( ! jnode_has_no_children( jnode ) )
 
 #define jnode_get_first_child( jnode ) \
-    ((IMFS_jnode_t *)( Chain_Head( jnode_get_control( jnode ) )->next))
+    ((IMFS_jnode_t *)( rtems_chain_head( jnode_get_control( jnode ) )->next))
 
 int IMFS_fsunmount(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry

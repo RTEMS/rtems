@@ -22,6 +22,10 @@ $(PROJECT_INCLUDE)/rtems/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/confdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/confdefs.h
 
+$(PROJECT_INCLUDE)/rtems/chain.h: include/rtems/chain.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.h
+
 $(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/config.h
@@ -49,6 +53,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
 $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
+
+$(PROJECT_INCLUDE)/rtems/chain.inl: inline/rtems/chain.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.inl
 
 $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl

@@ -119,8 +119,8 @@ void IMFS_dump_directory(
   int            level
 )
 {
-  Chain_Node           *the_node;
-  Chain_Control        *the_chain;
+  rtems_chain_node     *the_node;
+  rtems_chain_control  *the_chain;
   IMFS_jnode_t         *the_jnode;
   int                   i;
 
@@ -133,7 +133,7 @@ void IMFS_dump_directory(
   the_chain = &the_directory->info.directory.Entries;
 
   for ( the_node = the_chain->first;
-        !_Chain_Is_tail( the_chain, the_node );
+        !rtems_chain_is_tail( the_chain, the_node );
         the_node = the_node->next ) {
 
     the_jnode = (IMFS_jnode_t *) the_node;

@@ -37,7 +37,7 @@
  *  Data structures and routines private to mount/unmount pair.
  */
 
-extern Chain_Control                    rtems_filesystem_mount_table_control;
+extern rtems_chain_control rtems_filesystem_mount_table_control;
 
 int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
@@ -69,7 +69,7 @@ rtems_boolean file_systems_below_this_mountpoint(
   rtems_filesystem_mount_table_entry_t  *fs_to_unmount
 )
 {
-  Chain_Node                           *the_node;
+  rtems_chain_node                     *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
 
   /*
@@ -78,7 +78,7 @@ rtems_boolean file_systems_below_this_mountpoint(
    */
 
   for ( the_node = rtems_filesystem_mount_table_control.first;
-        !Chain_Is_tail( &rtems_filesystem_mount_table_control, the_node );
+        !rtems_chain_is_tail( &rtems_filesystem_mount_table_control, the_node );
         the_node = the_node->next ) {
      the_mount_entry = ( rtems_filesystem_mount_table_entry_t * )the_node;
      if (the_mount_entry->mt_point_node.mt_entry  == fs_root_loc->mt_entry ) {
@@ -205,7 +205,7 @@ int unmount(
    *  Extract the mount table entry from the chain
    */
 
-  Chain_Extract( ( Chain_Node * ) mt_entry );
+  rtems_chain_extract( ( rtems_chain_node * ) mt_entry );
 
   /*
    *  Free the memory node that was allocated in mount

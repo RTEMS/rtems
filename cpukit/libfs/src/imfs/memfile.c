@@ -1117,7 +1117,7 @@ int memfile_rmnod(
    */
 
   if ( the_jnode->Parent != NULL ) {
-    Chain_Extract( (Chain_Node *) the_jnode );
+    rtems_chain_extract( (rtems_chain_node *) the_jnode );
     the_jnode->Parent = NULL;
   }
 

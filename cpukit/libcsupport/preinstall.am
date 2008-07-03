@@ -32,10 +32,6 @@ $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
-$(PROJECT_INCLUDE)/rtems/chain.h: include/chain.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.h
-
 $(PROJECT_INCLUDE)/rtems/console.h: include/console.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/console.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/console.h

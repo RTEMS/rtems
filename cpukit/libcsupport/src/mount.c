@@ -33,7 +33,7 @@
 
 #include <rtems/libio_.h>
 
-Chain_Control rtems_filesystem_mount_table_control;
+rtems_chain_control rtems_filesystem_mount_table_control;
 
 /*
  *  Prototypes that probably should be somewhere else.
@@ -227,7 +227,8 @@ int mount(
    *  Add the mount table entry to the mount table chain
    */
 
-  Chain_Append( &rtems_filesystem_mount_table_control, &temp_mt_entry->Node );
+  rtems_chain_append( &rtems_filesystem_mount_table_control,
+                      &temp_mt_entry->Node );
 
   if ( mt_entry )
     *mt_entry = temp_mt_entry;
@@ -255,7 +256,7 @@ cleanup_and_bail:
 
 int init_fs_mount_table()
 {
-  Chain_Initialize_empty ( &rtems_filesystem_mount_table_control );
+  rtems_chain_initialize_empty ( &rtems_filesystem_mount_table_control );
   return 0;
 }
 
@@ -274,7 +275,7 @@ static int Is_node_fs_root(
   rtems_filesystem_location_info_t  *loc
 )
 {
-  Chain_Node                           *the_node;
+  rtems_chain_node                     *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
 
   /*
@@ -282,7 +283,7 @@ static int Is_node_fs_root(
    */
 
   for ( the_node = rtems_filesystem_mount_table_control.first;
-        !Chain_Is_tail( &rtems_filesystem_mount_table_control, the_node );
+        !rtems_chain_is_tail( &rtems_filesystem_mount_table_control, the_node );
         the_node = the_node->next ) {
      the_mount_entry = (rtems_filesystem_mount_table_entry_t *) the_node;
      if ( the_mount_entry->mt_fs_root.node_access  == loc->node_access )

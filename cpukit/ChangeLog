@@ -1,3 +1,38 @@
+2008-07-03	Chris Johns <chrisj@rtems.org>
+
+	* cpukit/libcsupport/include/chain.h: Removed. Use the SAPI
+	interface that is supported.
+
+	* cpukit/libcsupport/Makefile.am,
+	cpukit/libcsupport/preinstall.am: Remove chain.h header
+	references.
+
+	* cpukit/sapi/include/rtems/chain.h,
+	cpukit/sapi/inline/rtems/chain.inl: New. A supported chains
+	interface.
+
+	* cpukit/sapi/Makefile.am, cpukit/sapi/preinstall.am: Updated to
+	include the new chains interface.
+
+	* cpukit/libfs/src/imfs/imfs.h,
+	cpukit/libfs/src/imfs/imfs_creat.c,
+	cpukit/libfs/src/imfs/imfs_debug.c,
+	cpukit/libfs/src/imfs/imfs_directory.c,
+	cpukit/libfs/src/imfs/imfs_fsunmount.c,
+	cpukit/libfs/src/imfs/imfs_getchild.c,
+	cpukit/libfs/src/imfs/imfs_load_tar.c,
+	cpukit/libfs/src/imfs/imfs_rmnod.c,
+	cpukit/libfs/src/imfs/memfile.c,
+	cpukit/libfs/src/nfsclient/src/nfs.c,
+	cpukit/libcsupport/include/rtems/libio.h,
+	cpukit/libcsupport/src/malloc_deferred.c,
+	cpukit/libcsupport/src/mount.c,
+	cpukit/libcsupport/src/privateenv.c,
+	cpukit/libcsupport/src/unmount.c: Change to the new chains
+	interface.
+
+	* cpukit/libcsupport/src/malloc_boundary.c: Remove warning.
+
 2008-07-02 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/include/rtems/score/thread.h,
