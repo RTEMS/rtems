@@ -1,3 +1,8 @@
+2008-07-03	Chris Johns <chrisj@rtems.org>
+
+	* c/src/lib/libbsp/powerpc/score603e/startup/genpvec.c: Change to
+	the Chains API.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization

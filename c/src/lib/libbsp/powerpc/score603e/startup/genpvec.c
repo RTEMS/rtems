@@ -37,7 +37,7 @@ rtems_isr external_exception_ISR (
  */
 typedef struct
 {
-  Chain_Node          Node;
+  rtems_chain_node    Node;
   rtems_isr_entry     handler;                  /* isr routine        */
   rtems_vector_number vector;                   /* vector number      */
 } EE_ISR_Type;
@@ -45,9 +45,9 @@ typedef struct
 /* Note:  The following will not work if we add a method to remove
  *        handlers at a later time.
  */
-  EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-  uint16_t          Nodes_Used;
-  Chain_Control     ISR_Array  [NUM_LIRQ];
+  EE_ISR_Type         ISR_Nodes [NUM_LIRQ_HANDLERS];
+  uint16_t            Nodes_Used;
+  rtems_chain_control ISR_Array  [NUM_LIRQ];
 
 /* XXX */
 void init_irq_data_register();
@@ -65,7 +65,7 @@ void initialize_external_exception_vector ()
    */
 
   for (i=0; i <NUM_LIRQ; i++)
-    Chain_Initialize_empty( &ISR_Array[i] );
+    rtems_chain_initialize_empty( &ISR_Array[i] );
 
   init_irq_data_register();
 
@@ -120,7 +120,7 @@ rtems_isr_entry  set_EE_vector(
   /* printf( "Vector Index: %04x, Vector: %d (%x)\n",
           vec_idx, vector, vector); */
 
-  Chain_Append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
+  rtems_chain_append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
 
   /*
    * Unmask the interrupt.
@@ -163,12 +163,12 @@ rtems_isr external_exception_ISR (
         index = check_irq - SCORE603E_IRQ00;
         node = (EE_ISR_Type *)(ISR_Array[ index ].first);
 
-        if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
+        if ( rtems_chain_is_tail( &ISR_Array[ index ], (void *)node ) ) {
           printk"ERROR:: check %d interrupt %02d has no isr\n", check_irq, index);
           value = get_irq_mask();
           printk("        Mask = %02x\n", value);
 	}
-        while ( !_Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
+        while ( !rtems_chain_is_tail( &ISR_Array[ index ], (void *)node ) ) {
           (*node->handler)( node->vector );
           node = (EE_ISR_Type *) node->Node.next;
         }
@@ -179,13 +179,13 @@ rtems_isr external_exception_ISR (
 #endif
   {
     node = (EE_ISR_Type *)(ISR_Array[ index ].first);
-    if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
+    if ( rtems_chain_is_tail( &ISR_Array[ index ], (void *)node ) ) {
       printk( "ERROR:: interrupt %02x has no isr\n", index);
       value = get_irq_mask();
       printk("        Mask = %02x\n", value);
       return;
     }
-    while ( !_Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
+    while ( !rtems_chain_is_tail( &ISR_Array[ index ], (void *)node ) ) {
      (*node->handler)( node->vector );
      node = (EE_ISR_Type *) node->Node.next;
     }
