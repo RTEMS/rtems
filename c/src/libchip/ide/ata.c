@@ -49,7 +49,7 @@
 #define ATA_IRQ_CHAIN_MAX_CNT 4 /* support up to 4 ATA devices */
 typedef struct {
   rtems_irq_number name;
-  Chain_Control irq_chain;
+  rtems_chain_control irq_chain;
 } ata_irq_chain_t;
 
 ata_irq_chain_t ata_irq_chain[ATA_IRQ_CHAIN_MAX_CNT];
@@ -120,7 +120,7 @@ static rtems_id ata_queue_id;
 
 #if defined (ATA_USE_OLD_EXCEPTIONS)
 /* Mapping of interrupt vectors to devices */
-static Chain_Control ata_int_vec[ATA_MAX_RTEMS_INT_VEC_NUMBER + 1];
+static rtems_chain_control ata_int_vec[ATA_MAX_RTEMS_INT_VEC_NUMBER + 1];
 #endif
 
 static void
@@ -426,7 +426,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     ISR_Level        level;
 
     /* if no requests to controller then do nothing */
-    if (Chain_Is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
+    if (rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
         return;
 
     /* get first request in the controller's queue */
@@ -527,9 +527,9 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
 
     DISABLE_PREEMPTION(key);
     ATA_EXEC_CALLBACK(areq, status, error);
-    Chain_Extract(&areq->link);
+    rtems_chain_extract(&areq->link);
 
-    if (!Chain_Is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
+    if (!rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
     {
         ENABLE_PREEMPTION(key);
 	free(areq);
@@ -577,8 +577,8 @@ static void
 ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
                             ata_req_t                 *areq)
 {
-    Chain_Append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
-    if (Chain_Has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
+    rtems_chain_append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
+    if (rtems_chain_has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
     {
 
         ata_queue_msg_t msg;
@@ -615,11 +615,11 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
 rtems_isr
 ata_interrupt_handler(rtems_vector_number vec)
 {
-    Chain_Node      *the_node = ((Chain_Control *)(&ata_int_vec[vec]))->first;
+    rtems_chain_node *the_node = ((rtems_chain_control *)(&ata_int_vec[vec]))->first;
     ata_queue_msg_t  msg;
     uint16_t         byte; /* emphasize that only 8 low bits is meaningful */
 
-    for ( ; !Chain_Is_tail(&ata_int_vec[vec], the_node) ; )
+    for ( ; !rtems_chain_is_tail(&ata_int_vec[vec], the_node) ; )
     {
         /* if (1) - is temporary hack - currently I don't know how to identify
          * controller which asserted interrupt if few controllers share one
@@ -640,13 +640,13 @@ ata_interrupt_handler(rtems_vector_number vec)
 void ata_interrupt_handler(rtems_irq_hdl_param handle)
 {
   int ata_irq_chain_index = (int) handle;
-    Chain_Node      *the_node =
+    rtems_chain_node *the_node =
       ata_irq_chain[ata_irq_chain_index].irq_chain.last;
     ata_queue_msg_t  msg;
     uint16_t       byte; /* emphasize that only 8 low bits is meaningful */
 
 
-    for ( ; !Chain_Is_tail(&ata_irq_chain[ata_irq_chain_index].irq_chain,
+    for ( ; !rtems_chain_is_tail(&ata_irq_chain[ata_irq_chain_index].irq_chain,
 			   the_node) ; )
     {
         /* if (1) - is temporary hack - currently I don't know how to identify
@@ -1092,10 +1092,10 @@ ata_initialize(rtems_device_major_number major,
 #if defined(ATA_USE_OLD_EXCEPTIONS)
     /* prepare ATA driver for handling  interrupt driven devices */
     for (i = 0; i < ATA_MAX_RTEMS_INT_VEC_NUMBER; i++)
-        Chain_Initialize_empty(&ata_int_vec[i]);
+        rtems_chain_initialize_empty(&ata_int_vec[i]);
 #else
     for (i = 0; i < ATA_IRQ_CHAIN_MAX_CNT; i++) {
-      Chain_Initialize_empty(&(ata_irq_chain[i].irq_chain));
+      rtems_chain_initialize_empty(&(ata_irq_chain[i].irq_chain));
     }
 #endif
 
@@ -1121,7 +1121,7 @@ ata_initialize(rtems_device_major_number major,
     for (ctrl_minor = 0; ctrl_minor < IDE_Controller_Count; ctrl_minor++)
     if (IDE_Controller_Table[ctrl_minor].status == IDE_CTRL_INITIALIZED)
     {
-        Chain_Initialize_empty(&ata_ide_ctrls[ctrl_minor].reqs);
+        rtems_chain_initialize_empty(&ata_ide_ctrls[ctrl_minor].reqs);
 
         if (IDE_Controller_Table[ctrl_minor].int_driven == TRUE)
         {
@@ -1189,11 +1189,11 @@ ata_initialize(rtems_device_major_number major,
                 return status;
             }
 #if defined(ATA_USE_OLD_EXCEPTIONS)
-            Chain_Append(
+            rtems_chain_append(
                 &ata_int_vec[IDE_Controller_Table[ctrl_minor].int_vec],
                 &int_st->link);
 #else
-            Chain_Append(
+            rtems_chain_append(
 		&(ata_irq_chain[ata_irq_chain_use].irq_chain),
                 &int_st->link);
 #endif
