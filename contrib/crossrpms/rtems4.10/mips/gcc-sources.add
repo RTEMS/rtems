@@ -1,18 +1,11 @@
 %if "%{gcc_version}" == "4.3.1"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.3.1-rtems4.9-20080609.diff
-%endif
-%if "%{gcc_version}" == "4.3.0"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.3.0-rtems4.9-20080501.diff
+Patch0:		gcc-core-4.3.1-rtems4.9-20080628.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
 %if %build_cxx
 %if "%{gcc_version}" == "4.3.1" 
-Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
-%if "%{gcc_version}" == "4.3.0" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
