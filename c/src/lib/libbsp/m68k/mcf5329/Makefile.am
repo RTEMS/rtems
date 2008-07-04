@@ -52,7 +52,9 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
+    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
+    ../../../libcpu/@RTEMS_CPU@/mcf532x/cachepd.rel
+
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

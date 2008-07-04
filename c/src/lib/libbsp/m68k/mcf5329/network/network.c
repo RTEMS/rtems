@@ -417,16 +417,10 @@ static void fec_rxDaemon(void *arg)
       struct ether_header *eh;
       int len = rxBd->length - sizeof(uint32_t);;
 
-      /*
-       * Invalidate the cache and push the packet up.
-       * The cache is so small that it's more efficient to just
-       * invalidate the whole thing unless the packet is very small.
-       */
       m = sc->rxMbuf[rxBdIndex];
-      if (len < 128)
-        rtems_cache_invalidate_multiple_data_lines(m->m_data, len);
-      else
-        rtems_cache_invalidate_entire_data();
+
+      rtems_cache_invalidate_multiple_data_lines(m->m_data, len);
+
       m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
       eh = mtod(m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
@@ -542,8 +536,12 @@ static void fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
         p = dest;
         sc->txRealign++;
       }
+
       txBd->buffer = p;
       txBd->length = m->m_len;
+      
+      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
+      
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;
       if (++sc->txBdHead == sc->txBdCount) {

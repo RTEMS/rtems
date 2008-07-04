@@ -1,3 +1,10 @@
+2008-07-04	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* Makefile.am, README, include/coverhd.h, network/network.c,
+	startup/bspstart.c, startup/cfinit.c, startup/linkcmdsflash: Add
+	cache support for 5329. Fix bug in network driver. Enable the cache
+	in copyback and write-through so we can assume that in BSP.
+
 2008-06-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* .cvsignore: New file.

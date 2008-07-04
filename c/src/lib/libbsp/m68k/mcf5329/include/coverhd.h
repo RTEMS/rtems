@@ -40,18 +40,18 @@
 #define CALLING_OVERHEAD_TASK_MODE                 0
 #define CALLING_OVERHEAD_TASK_GET_NOTE             0
 #define CALLING_OVERHEAD_TASK_SET_NOTE             0
-#define CALLING_OVERHEAD_TASK_WAKE_WHEN            1
+#define CALLING_OVERHEAD_TASK_WAKE_WHEN            0
 #define CALLING_OVERHEAD_TASK_WAKE_AFTER           0
 #define CALLING_OVERHEAD_INTERRUPT_CATCH           0
-#define CALLING_OVERHEAD_CLOCK_GET                 1
-#define CALLING_OVERHEAD_CLOCK_SET                 1
+#define CALLING_OVERHEAD_CLOCK_GET                 0
+#define CALLING_OVERHEAD_CLOCK_SET                 0
 #define CALLING_OVERHEAD_CLOCK_TICK                0
 
 #define CALLING_OVERHEAD_TIMER_CREATE              0
 #define CALLING_OVERHEAD_TIMER_IDENT               0
 #define CALLING_OVERHEAD_TIMER_DELETE              0
-#define CALLING_OVERHEAD_TIMER_FIRE_AFTER          1
-#define CALLING_OVERHEAD_TIMER_FIRE_WHEN           1
+#define CALLING_OVERHEAD_TIMER_FIRE_AFTER          0
+#define CALLING_OVERHEAD_TIMER_FIRE_WHEN           0
 #define CALLING_OVERHEAD_TIMER_RESET               0
 #define CALLING_OVERHEAD_TIMER_CANCEL              0
 #define CALLING_OVERHEAD_SEMAPHORE_CREATE          0

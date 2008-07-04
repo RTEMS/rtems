@@ -22,60 +22,7 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-
-/*
- * Cannot be frozen
- */
-void _CPU_cache_freeze_data(void)
-{
-}
-void _CPU_cache_unfreeze_data(void)
-{
-}
-void _CPU_cache_freeze_instruction(void)
-{
-}
-void _CPU_cache_unfreeze_instruction(void)
-{
-}
-
-/*
- * Write-through data cache -- flushes are unnecessary
- */
-void _CPU_cache_flush_1_data_line(const void *d_addr)
-{
-}
-void _CPU_cache_flush_entire_data(void)
-{
-}
-
-void _CPU_cache_enable_instruction(void)
-{
-}
-void _CPU_cache_disable_instruction(void)
-{
-}
-void _CPU_cache_invalidate_entire_instruction(void)
-{
-}
-void _CPU_cache_invalidate_1_instruction_line(const void *addr)
-{
-}
-
-void _CPU_cache_enable_data(void)
-{
-}
-void _CPU_cache_disable_data(void)
-{
-}
-void _CPU_cache_invalidate_entire_data(void)
-{
-}
-void _CPU_cache_invalidate_1_data_line(const void *addr)
-{
-}
+#include <rtems/rtems/cache.h>
 
 /*
  *  bsp_start
@@ -84,6 +31,13 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
  */
 void bsp_start(void)
 {
+  /* cfinit invalidates cache and sets acr registers */
+
+  /*
+   * Enable the cache, we only need to enable the instruction cache as the
+   * 532x has a unified data and instruction cache.
+   */
+  rtems_cache_enable_instruction();
 }
 
 uint32_t bsp_get_CPU_clock_speed(void)
