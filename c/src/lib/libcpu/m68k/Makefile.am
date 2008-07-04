@@ -109,6 +109,12 @@ if mcf532x
 ## mcf532x/include
 include_mcf532xdir = $(includedir)/mcf532x
 include_mcf532x_HEADERS = mcf532x/include/mcf532x.h
+
+## mcf532x/cache
+noinst_PROGRAMS += mcf532x/cachepd.rel
+mcf532x_cachepd_rel_SOURCES = mcf532x/cache/cachepd.c
+mcf532x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf532x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf5272

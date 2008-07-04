@@ -1,3 +1,10 @@
+2008-07-04	Matthew Riek <matthew.riek@ibiscomputer.com.au>
+
+	* Makefile.am, mcf532x/include/mcf532x.h, shared/cache/cache_.h: Add
+	cache support for 5329. Enable the cache in copyback and
+	write-through so we can assume that in BSP.
+	* mcf532x/cache/cachepd.c: New file.
+
 2008-06-20	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* Makefile.am, configure.ac, preinstall.am: Adding mcf5329 BSP and CPU

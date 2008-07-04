@@ -8,6 +8,29 @@
 
 /*********************************************************************
 *
+* Cache
+*
+*********************************************************************/
+
+#define MCF_CACR_CENB                     (1 << 31)
+#define MCF_CACR_ESB                      (1 << 29)
+#define MCF_CACR_DPI                      (1 << 28)
+#define MCF_CACR_HLCK                     (1 << 27)
+#define MCF_CACR_CINVA                    (1 << 24)
+#define MCF_CACR_DNFB                     (1 << 10)
+#define MCF_CACR_DCM(A)                   (((A) & 0x3) << 8)
+#define MCF_CACR_DW                       (1 << 5)
+#define MCF_CACR_EUSP                     (1 << 4)
+
+#define MCF_ACR_ADDR_BASE(A)              (((A) & 0xFF) << 24)
+#define MCF_ACR_ADDR_MASK(A)              (((A) & 0xFF) << 16)
+#define MCF_ACR_E                         (1 << 15)
+#define MCF_ACR_S(A)                      (((A) & 0x3) << 13)
+#define MCF_ACR_CM(A)                     (((A) & 0x3) << 5)
+#define MCF_ACR_W                         (1 << 2)
+
+/*********************************************************************
+*
 * System Control Module (SCM)
 *
 *********************************************************************/
@@ -1243,7 +1266,7 @@
 #define MCF_EDMA_TCD13_CSR                   (*(vuint16*)(0xFC0451BE))
 #define MCF_EDMA_TCD14_CSR                   (*(vuint16*)(0xFC0451DE))
 #define MCF_EDMA_TCD15_CSR                   (*(vuint16*)(0xFC0451FE))
-#define MCF_EDMA_TCD_CSR(x)                  (*(vuint16*)(0xFC04501E+((x)*0x020)))
+#define MCF_EDMA_TCD_CSR(x)                  (*(vuint16*)(0xFC04501E +((x)*0x020)))
 
 /* Bit definitions and macros for MCF_EDMA_CR */
 #define MCF_EDMA_CR_EDBG                     (0x00000002)

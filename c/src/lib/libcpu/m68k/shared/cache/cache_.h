@@ -18,6 +18,9 @@
 # if ( defined(__mcf528x__) )
 #  define M68K_DATA_CACHE_ALIGNMENT 16
 # endif
+#elif ( defined(__mcf5300__) )
+# define M68K_INSTRUCTION_CACHE_ALIGNMENT 16
+# define M68K_DATA_CACHE_ALIGNMENT 16
 #endif
 
 #if defined(M68K_DATA_CACHE_ALIGNMENT)
