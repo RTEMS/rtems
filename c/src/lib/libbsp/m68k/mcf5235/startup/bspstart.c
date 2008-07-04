@@ -113,7 +113,6 @@ void _CPU_cache_disable_data(void)
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
-    rtems_interrupt_disable(level);
     cacr_mode |= MCF5XXX_CACR_DISD;
     m68k_set_cacr(cacr_mode);
     rtems_interrupt_enable(level);
