@@ -1,0 +1,11 @@
+diff -Naur binutils-2.18.50.orig/gas/configure.tgt binutils-2.18.50/gas/configure.tgt
+--- binutils-2.18.50.orig/gas/configure.tgt	2008-04-23 20:40:34.000000000 +0200
++++ binutils-2.18.50/gas/configure.tgt	2008-07-06 06:52:20.000000000 +0200
+@@ -128,6 +128,7 @@
+ 
+   bfin-*-linux-uclibc)			fmt=fdpicelf em=linux ;;
+   bfin-*-uclinux*)			fmt=elf em=linux ;;
++  bfin-*-rtems*)			fmt=elf ;;
+   bfin-*elf)				fmt=elf ;;
+ 
+   cr16-*-elf*)	    			fmt=elf ;;
