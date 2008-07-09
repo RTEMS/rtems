@@ -18,7 +18,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     task.texi intr.texi clock.texi timer.texi sem.texi msg.texi event.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
-    mp.texi stackchk.texi cpuuse.texi object.texi
+    mp.texi stackchk.texi cpuuse.texi object.texi chains.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -177,9 +177,14 @@ cpuuse.texi: cpuuse.t
 object.texi: object.t
 	$(BMENU2) -p "CPU Usage Statistics cpu_usage_reset - Reset CPU Usage Statistics" \
 	    -u "Top" \
+	    -n "Chains" < $< > $@
+
+chains.texi: chains.t
+	$(BMENU2) -p "Object Services OBJECT_GET_CLASS_INFORMATION - Obtain Class Information" \
+	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
-EXTRA_DIST = bsp.t clock.t concepts.t cpuuse.t datatypes.t conf.t dpmem.t \
+EXTRA_DIST = bsp.t clock.t chains.t concepts.t cpuuse.t datatypes.t conf.t dpmem.t \
     event.t fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t \
     rtmon.t sem.t schedule.t signal.t stackchk.t task.t timer.t userext.t \
     $(TXT_FILES) $(PNG_FILES) $(EPS_IMAGES) $(noinst_DATA)

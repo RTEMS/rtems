@@ -106,6 +106,7 @@
 @include stackchk.texi
 @include cpuuse.texi
 @include object.texi
+@include chains.texi
 @include dirstat.texi
 @include example.texi
 @include glossary.texi
@@ -144,6 +145,7 @@ This is the online version of the RTEMS C User's Guide.
 * Stack Bounds Checker::
 * CPU Usage Statistics::
 * Object Services::
+* Chains::
 * Directive Status Codes::
 * Example Application::
 * Glossary::

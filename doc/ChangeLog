@@ -1,3 +1,11 @@
+2008-07-09	Chris Johns <chrisj@rtems.org>
+
+	* doc/user/chains.t: New.
+
+	* doc/ada_user/ada_user.texi, doc/user/Makefile.am,
+	doc/user/c_user.texi, doc/user/dirstat.texi: Updated for the
+	chains documentation.
+
 2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/io.t: Fix typos for IO unregister reported by Catalin Morosan
