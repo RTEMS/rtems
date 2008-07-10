@@ -886,4 +886,11 @@ typedef struct m360_ {
 
 extern volatile m360_t m360;
 
+/*
+ * definitions for the port b SPI pin bits
+ */
+#define M360_PB_SPI_MISO_MSK       (1<< 3)
+#define M360_PB_SPI_MOSI_MSK       (1<< 2)
+#define M360_PB_SPI_CLK_MSK        (1<< 1)
+
 #endif /* _RTEMS_M68K_M68360_H */

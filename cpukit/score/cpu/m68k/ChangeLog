@@ -1,3 +1,7 @@
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* rtems/m68k/m68360.h: added port b pin definitions for SPI
+
 2008-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/m68k.h: There is no point in defining the maximum
