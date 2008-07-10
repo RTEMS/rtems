@@ -1,3 +1,8 @@
+2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: SD Card driver
+	via SPI.
+
 2008-06-29 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.

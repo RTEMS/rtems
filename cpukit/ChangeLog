@@ -1,3 +1,25 @@
+2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/include/rtems/status-checks.h: Macros for status code and
+	return value checks.
+
+2008-07-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/libmisc/shell/shell.c: Restore terminal settings on exit.
+
+2008-07-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/libfs/src/dosfs/msdos_dir.c,
+	cpukit/libfs/src/dosfs/msdos_file.c: Added S_IRWXU, S_IRWXG and S_IRWXO
+	to file mode.
+
+2008-07-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/libi2c/libi2c.h, cpukit/libi2c/libi2c.c: Modified error
+	messages.  Driver operations table is now constant.  New entry in the
+	rtems_libi2c_tfr_mode_t structure: idle_char. This character will be
+	continuously transmitted in read only functions.
+
 2008-07-03	Chris Johns <chrisj@rtems.org>
 
 	* cpukit/libcsupport/include/chain.h: Removed. Use the SAPI

@@ -1,3 +1,9 @@
+2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/irq-config.h, shared/include/irq-generic.h,
+	shared/src/irq-generic.c, shared/src/irq-legacy.c: Generic BSP
+	interrupt handler support.
+
 2008-01-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix indentation.
