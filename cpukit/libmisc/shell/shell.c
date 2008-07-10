@@ -664,6 +664,7 @@ rtems_boolean rtems_shell_main_loop(
   rtems_shell_cmd_t *shell_cmd;
   rtems_status_code  sc;
   struct termios     term;
+  struct termios     previous_term;
   char              *prompt = NULL;
   int                cmd;
   int                cmd_count = 1; /* assume a script and so only 1 command line */
@@ -740,7 +741,8 @@ rtems_boolean rtems_shell_main_loop(
   }
   else {
     /* make a raw terminal,Linux Manuals */
-    if (tcgetattr(fileno(stdin), &term) >= 0) {
+    if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
+      term = previous_term;
       term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
       term.c_oflag &= ~OPOST;
       term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
@@ -913,8 +915,17 @@ rtems_boolean rtems_shell_main_loop(
   if (cmd_argv)
     free (cmd_argv);
   
-  if ( stdinToClose )
+  if (stdinToClose) {
     fclose( stdinToClose );
+  } else {
+    if (tcsetattr( fileno( stdin), TCSADRAIN, &previous_term) < 0) {
+      fprintf(
+        stderr,
+        "shell: cannot reset terminal attributes (%s)\n",
+        shell_env->devname
+      );
+    }
+  }
   if ( stdoutToClose )
     fclose( stdoutToClose );
   return result;
