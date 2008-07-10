@@ -252,6 +252,12 @@ static inline void ppc_set_machine_state_register( uint32_t msr)
 	);
 }
 
+/**
+ * @brief Enables external exceptions.
+ * 
+ * You can use this function to enable the external exceptions and restore the
+ * machine state with ppc_external_exceptions_disable() later.
+ */
 static inline uint32_t ppc_external_exceptions_enable()
 {
 	uint32_t current_msr;
@@ -269,6 +275,11 @@ static inline uint32_t ppc_external_exceptions_enable()
 	return current_msr;
 }
 
+/**
+ * @brief Restores machine state.
+ * 
+ * @see ppc_external_exceptions_enable()
+ */
 static inline void ppc_external_exceptions_disable( uint32_t msr)
 {
 	ppc_set_machine_state_register( msr);
@@ -290,7 +301,9 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	PPC_Set_decrementer( dec);
 }
 
-#define PPC_RETURN_SPECIAL_PURPOSE_REGISTER( spr) \
+/* Do not use the following macros.  Use the inline functions instead. */
+
+#define PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER( spr) \
 	uint32_t val; \
 	asm volatile ( \
 		"mfspr %0, " #spr \
@@ -298,157 +311,157 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	); \
 	return val;
 
-#define PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( spr) \
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER( spr)
+#define PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( spr) \
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER( spr)
 
-#define PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val) \
+#define PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER( spr, val) \
 	asm volatile ( \
 		"mtspr " #spr ", %0" \
 		: \
 		: "r" (val) \
 	);
 
-#define PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( spr, val) \
-	PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val)
+#define PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( spr, val) \
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER( spr, val)
 
 static inline uint32_t ppc_special_purpose_register_0()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0);
 }
 
 static inline void ppc_set_special_purpose_register_0( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_1()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1);
 }
 
 static inline void ppc_set_special_purpose_register_1( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_2()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2);
 }
 
 static inline void ppc_set_special_purpose_register_2( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_3()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3);
 }
 
 static inline void ppc_set_special_purpose_register_3( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_4()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4);
 }
 
 static inline void ppc_set_special_purpose_register_4( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_5()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5);
 }
 
 static inline void ppc_set_special_purpose_register_5( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_6()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6);
 }
 
 static inline void ppc_set_special_purpose_register_6( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6, val);
 }
 
 static inline uint32_t ppc_special_purpose_register_7()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7);
 }
 
 static inline void ppc_set_special_purpose_register_7( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7, val);
 }
 
 static inline uint32_t ppc_user_special_purpose_register_0()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0);
 }
 
 static inline void ppc_set_user_special_purpose_register_0( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0, val);
 }
 
 static inline uint32_t ppc_timer_control_register()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR);
 }
 
 static inline void ppc_set_timer_control_register( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR, val);
 }
 
 static inline uint32_t ppc_timer_status_register()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR);
 }
 
 static inline void ppc_set_timer_status_register( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR, val);
 }
 
 static inline uint32_t ppc_decrementer_auto_reload_register()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR);
 }
 
 static inline void ppc_set_decrementer_auto_reload_register( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR, val);
 }
 
 static inline uint32_t ppc_hardware_implementation_dependent_register_0()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0);
 }
 
 static inline void ppc_set_hardware_implementation_dependent_register_0( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0, val);
 }
 
 static inline uint32_t ppc_hardware_implementation_dependent_register_1()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1);
 }
 
 static inline void ppc_set_hardware_implementation_dependent_register_1( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1, val);
 }
 
 static inline uint32_t ppc_time_base()
@@ -462,17 +475,17 @@ static inline uint32_t ppc_time_base()
 
 static inline void ppc_set_time_base( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWL, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWL, val);
 }
 
 static inline uint32_t ppc_time_base_upper()
 {
-	PPC_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( TBRU);
+	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( TBRU);
 }
 
 static inline void ppc_set_time_base_upper( uint32_t val)
 {
-	PPC_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWU, val);
+	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWU, val);
 }
 
 static inline uint64_t ppc_time_base_64()
