@@ -38,6 +38,7 @@
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/libio.h>
+#include <rtems/powerpc/powerpc.h>
 
 #include <stdlib.h>                     /* for atexit() */
 #include <mpc8xx.h>

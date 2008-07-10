@@ -42,6 +42,7 @@
 #include <rtems/libio.h>
 #include <stdlib.h>                     /* for atexit() */
 #include <rtems/bspIo.h>
+#include <rtems/powerpc/powerpc.h>
 /*
  * check, which exception handling code is present
  */

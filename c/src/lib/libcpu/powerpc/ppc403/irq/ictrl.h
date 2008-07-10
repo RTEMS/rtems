@@ -30,6 +30,7 @@
 #include <rtems.h>
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/powerpc/powerpc.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,5 +1,15 @@
 2008-07-10	Till Straumann <strauman@slac.stanford.edu>
 
+	* ChangeLog, mpc8xx/clock/clock.c, ppc403/clock/clock.c,
+	ppc403/irq/ictrl.h, rtems/powerpc/powerpc.h:
+	Removed all macro definitions which depended on
+	the compiler defining a PPC CPU-model dependent
+	symbol from files in cpukit.
+	Macros which were not used by cpukit have been
+	moved to libcpu/powerpc/rtems/powerpc/powerpc.h.
+
+2008-07-10	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/bspsupport/README,
 	new-exceptions/bspsupport/ppc_exc.S,
 	new-exceptions/bspsupport/ppc_exc_asm_macros.h,

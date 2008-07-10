@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/powerpc.h
+ * @file rtems/powerpc/powerpc.h
  */
 
 /*
@@ -49,13 +49,19 @@
 extern "C" {
 #endif
 
-#include <rtems/score/powerpc.h>
 
-/*
- *  Define the name of the CPU family.
+/* Till S. 2008/07/10:
+ * 
+ * Using the macros/definitions which depend on a preprocessor
+ * symbol defining the CPU flavor is discouraged.
+ * I recommend to not use definitions from this file and 
+ * in particular - not to add more bits and pieces.
+ *
+ * Instead, try to use run-time detection (see e.g. cpuIdent.c/cpuIdent.h)
+ * of features etc.
  */
 
-#define CPU_NAME "PowerPC"
+#include <rtems/score/powerpc.h>
 
 /*
  *  This file contains the information required to build
@@ -71,9 +77,6 @@ extern "C" {
  *    + PPC_CACHE_ALIGNMENT      - 32
  *    + PPC_LOW_POWER_MODE       - PPC_LOW_POWER_MODE_NONE
  *    + PPC_HAS_EXCEPTION_PREFIX - 1
- *    + PPC_HAS_FPU              - 1
- *    + PPC_HAS_DOUBLE           - 1 if PPC_HAS_FPU, 
- *                               - 0 otherwise
  *    + PPC_USE_MULTIPLE         - 0
  */
  
@@ -102,11 +105,6 @@ extern "C" {
  *  Does not have user mode.
  */
  
-#if defined(ppc403)
-#define CPU_MODEL_NAME "PowerPC 403"
-#elif defined (ppc405)
-#define CPU_MODEL_NAME "PowerPC 405"
-#endif
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RI    	        0
 #define PPC_HAS_RFCI    	1
@@ -118,8 +116,6 @@ extern "C" {
 #define PPC_HAS_EVPR             1
 
 #elif defined(mpc555)
-
-#define CPU_MODEL_NAME  "PowerPC 555"
 
 /* Copied from mpc505 */
 #define PPC_CACHE_ALIGNMENT	16
@@ -138,8 +134,6 @@ extern "C" {
  *  to get the setting correct.
  */
 
-#define CPU_MODEL_NAME  "PowerPC 505/509"
-
 #define PPC_CACHE_ALIGNMENT     16
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             0
@@ -151,36 +145,20 @@ extern "C" {
  *  Submitted with original port -- book checked only.
  */
  
-#define CPU_MODEL_NAME  "PowerPC 601"
-
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		0
 #define PPC_D_CACHE		32768
-
-#elif defined(ppc602)
-/*
- *  Submitted with original port -- book checked only.
- */
- 
-#define CPU_MODEL_NAME  "PowerPC 602"
-
-#define PPC_HAS_DOUBLE		0
-#define PPC_I_CACHE		4096
-#define PPC_D_CACHE		4096
 
 #elif defined(ppc603)
 /*
  *  Submitted with original port -- book checked only.
  */
  
-#define CPU_MODEL_NAME  "PowerPC 603"
-
 #define PPC_I_CACHE		8192
 #define PPC_D_CACHE		8192
 
 #elif defined(ppc603e)
  
-#define CPU_MODEL_NAME  "PowerPC 603e"
 /*
  *  Submitted with original port.
  *
@@ -197,8 +175,6 @@ extern "C" {
  *  Submitted with original port -- book checked only.
  */
  
-#define CPU_MODEL_NAME  "PowerPC 604"
-
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
  
@@ -207,8 +183,6 @@ extern "C" {
  *  Added by Jay Monkman (jmonkman@frasca.com) 6/28/98 
  *  with some changes by Darlene Stewart (Darlene.Stewart@iit.nrc.ca)
  */ 
-#define CPU_MODEL_NAME  "PowerPC MPC860"
-
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -224,8 +198,6 @@ extern "C" {
 /* 
  *  Added by Andrew Bray <andy@chaos.org.uk> 6/April/1999
  */ 
-#define CPU_MODEL_NAME  "PowerPC MPC821"
-
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -238,14 +210,10 @@ extern "C" {
 
 #elif defined(mpc750)
 
-#define CPU_MODEL_NAME  "PowerPC 750"
-
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
 
 #elif defined(mpc7400)
-
-#define CPU_MODEL_NAME  "PowerPC 7400"
 
 #define PPC_I_CACHE		32768
 #define PPC_D_CACHE		32768
@@ -255,8 +223,6 @@ extern "C" {
  *  Added by S.K. Feng <feng1@bnl.gov> 10/03
  */
 
-#define CPU_MODEL_NAME  "PowerPC 7455"
-
 #define PPC_CACHE_ALIGNMENT     32
 #define PPC_I_CACHE		32768
 #define PPC_D_CACHE		32768
@@ -265,8 +231,6 @@ extern "C" {
 /*
  *  Added by Andy Dachs <a.dachs@sstl.co.uk> 23/11/2000
  */
-#define CPU_MODEL_NAME  "PowerPC MPC8260"
-
 #define PPC_I_CACHE         	16384
 #define PPC_D_CACHE         	16384
 #define PPC_CACHE_ALIGNMENT	32
@@ -274,64 +238,12 @@ extern "C" {
 #define PPC_USE_MULTIPLE	1
 
 #elif defined(__ppc_generic)
-/* PPC_INTERRUPT_MAX and PPC_CACHE_ALIGNMENT already defined by score/powerc.h */
-#ifndef PPC_ABI
-#define PPC_ABI PPC_ABI_SVR4
-#endif
+#define PPC_CACHE_ALIGNMENT 32
+
 #else
  
 #error "Unsupported CPU Model"
  
-#endif
-
-/*
- *  Application binary interfaces.
- *
- *  PPC_ABI MUST be defined as one of these.
- *  Only big endian is currently supported.
- */
-/*
- *  SVR4 ABI
- */
-#define PPC_ABI_SVR4		2
-/*
- *  Embedded ABI
- */
-#define PPC_ABI_EABI		3
-
-/*
- *  Default to the EABI used by current GNU tools
- */
-
-#ifndef PPC_ABI
-#define PPC_ABI PPC_ABI_EABI
-#endif
-
-#if (PPC_ABI == PPC_ABI_SVR4)
-#define PPC_STACK_ALIGNMENT	16
-#elif (PPC_ABI == PPC_ABI_EABI)
-#define PPC_STACK_ALIGNMENT	8
-#else
-#error  "PPC_ABI is not properly defined"
-#endif
-
-/*
- *  Assemblers.
- *  PPC_ASM MUST be defined as one of these.
- *
- *  PPC_ASM_ELF:   ELF assembler. Currently used for all ABIs.
- *
- *  NOTE: Only PPC_ABI_ELF is currently fully supported.
- */
-
-#define PPC_ASM_ELF   0
-
-/*
- *  Default to the assembler format used by the current GNU tools.
- */
-
-#ifndef PPC_ASM
-#define PPC_ASM PPC_ASM_ELF
 #endif
 
 /*
@@ -393,36 +305,6 @@ extern "C" {
 
 #ifndef PPC_LOW_POWER_MODE
 #define PPC_LOW_POWER_MODE PPC_LOW_POWER_MODE_NONE
-#endif
-
-/*
- *  Unless specified above, assume PPC_HAS_FPU to be a synonym for _SOFT_FLOAT.
- *  FIXME: Should we tie PPC_HAS_FPU to _SOFT_FLOAT, directly 
- *     and disallow explicitly setting PPC_HAS_FPU?
- */
-
-#ifndef PPC_HAS_FPU
-#ifdef _SOFT_FLOAT
-#define PPC_HAS_FPU 0
-#else
-#define PPC_HAS_FPU 1
-#endif
-#endif
-
-/*
- *  Unless specified above, If the model has FP support, it is assumed to
- *  support doubles (8-byte floating point numbers).
- *
- *  If the model does NOT have FP support, then the model does
- *  NOT have double length FP registers. 
- */
-
-#ifndef PPC_HAS_DOUBLE
-#if (PPC_HAS_FPU)
-#define PPC_HAS_DOUBLE 1
-#else
-#define PPC_HAS_DOUBLE 0
-#endif
 #endif
 
 /*
@@ -711,13 +593,6 @@ extern "C" {
 #endif
 
 #define PPC_MSR_DISABLE_MASK (PPC_MSR_ME|PPC_MSR_EE|PPC_MSR_CE)
-
-/*
- *  Initial value for the FPSCR register
- */
-
-#define PPC_INIT_FPSCR		0x000000f8
-
 
 #define PPC_MINIMUM_STACK_FRAME_SIZE PPC_STACK_ALIGNMENT
 
