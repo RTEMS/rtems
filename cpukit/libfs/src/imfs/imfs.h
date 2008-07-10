@@ -480,6 +480,11 @@ int device_lseek(
   int            whence             /* IN  */
 );
 
+int device_ftruncate(
+  rtems_libio_t *iop,               /* IN  */
+  off_t          length             /* IN  */
+);
+
 int IMFS_utime(
   rtems_filesystem_location_info_t  *pathloc,       /* IN */
   time_t                             actime,        /* IN */

@@ -32,7 +32,7 @@ const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_lseek,
   IMFS_stat,
   IMFS_fchmod,
-  NULL,   /* ftruncate */
+  device_ftruncate,
   NULL,   /* fpathconf */
   NULL,   /* fsync */
   NULL,   /* fdatasync */

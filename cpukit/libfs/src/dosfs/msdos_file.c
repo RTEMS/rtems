@@ -280,7 +280,7 @@ msdos_file_stat(
 
     buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
-    buf->st_mode  = S_IFREG;
+    buf->st_mode  = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
     buf->st_rdev = 0ll;
     buf->st_size = fat_fd->fat_file_size;
     buf->st_blocks = fat_fd->fat_file_size >> FAT_SECTOR512_BITS;

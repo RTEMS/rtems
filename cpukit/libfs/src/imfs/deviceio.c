@@ -255,3 +255,11 @@ int device_lseek(
  *
  *  The IMFS_rmnod() is used.
  */
+
+int device_ftruncate(
+  rtems_libio_t *iop,
+  off_t          length
+)
+{
+  return 0;
+}
