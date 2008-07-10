@@ -247,8 +247,8 @@ SCORE_EXTERN struct {
  *  by RTEMS.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS     (PPC_INTERRUPT_MAX)
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (PPC_INTERRUPT_MAX - 1)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS     (0)
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (-1)
 
 /*
  *  This is defined if the port has a special way to report the ISR nesting

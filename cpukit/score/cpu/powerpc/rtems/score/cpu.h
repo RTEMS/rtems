@@ -116,7 +116,7 @@
  */
 
 #define CPU_STRUCTURE_ALIGNMENT \
-  __attribute__ ((aligned (PPC_CACHE_ALIGNMENT)))
+  __attribute__ ((aligned (PPC_STRUCTURE_ALIGNMENT)))
 
 /*
  *  Define what is required to specify how the network to host conversion

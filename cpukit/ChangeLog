@@ -1,3 +1,14 @@
+2008-07-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* cpukit/score/cpu/powerpc/rtems/new-exceptions/cpu.h,
+	cpukit/score/cpu/powerpc/rtems/score/cpu.h,
+	cpukit/score/cpu/powerpc/rtems/score/powerpc.h:
+	Removed all macro definitions which depended on
+	the compiler defining a PPC CPU-model dependent
+	symbol.
+	Macros which were not used by cpukit have been
+	moved to libcpu/powerpc/rtems/powerpc/powerpc.h.
+	
 2008-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/rtems/status-checks.h: Fix style.
