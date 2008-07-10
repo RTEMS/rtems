@@ -1,3 +1,8 @@
+2008-07-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/flash/spansionFlash.c: removed "m" memory
+	operands.
+
 2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/clock/clock.c: Alternative clock driver.  Uses exception handler

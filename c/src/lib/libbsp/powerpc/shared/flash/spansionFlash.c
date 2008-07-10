@@ -77,7 +77,7 @@
 /* Assume flash-endianness == CPU endianness */
 
 #ifdef __PPC__
-#define IOSYNC(mem)	do { asm volatile("eieio":"=m"(mem):"m"(mem)); } while (0)
+#define IOSYNC(mem)	do { asm volatile("eieio"); } while (0)
 #else
 #define IOSYNC(mem)	do { } while (0)
 #endif
