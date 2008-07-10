@@ -540,9 +540,9 @@ triv121PgTblMap (Triv121PgTbl pt,
               uint32_t flags;
               rtems_interrupt_disable (flags);
               /* order setting 'v' after writing everything else */
-              asm volatile ("eieio"::"m"(*pte));
+              asm volatile ("eieio":::"memory");
               pte->v = 1;
-              asm volatile ("sync"::"m"(*pte));
+              asm volatile ("sync":::"memory");
               rtems_interrupt_enable (flags);
             } else {
               pte->v = 1;
