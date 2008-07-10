@@ -271,6 +271,10 @@ skip_save_nonvolatile_regs:
 
 	/* decrement ISR nest level;
 	 * disable all interrupts.
+	 * (Disabling IRQs here is not necessary if we
+	 * use the stack-switching strategy which tests
+	 * if we are alreay on the ISR-stack as opposed
+	 * to test the nesting level; see ppc_exc_asm_macros.h)
 	 */
 	lwz		r4,  ppc_exc_msr_irq_mask@sdarel(r13)
 	mfmsr	r5
@@ -364,6 +368,22 @@ skip_restore_nonvolatile_regs:
 
 	lwz		r4,  EXC_CR_OFFSET(r1)
 	mtcr	r4
+
+	/* Must disable interrupts prior to restoring SSRs.
+	 * Here's a scenario discovered by Sebastian Huber:
+	 *  1) CE happens between writing to SRR and RFI
+	 *  2) CE handler does something which requires a task switch
+	 *  3) CE wrapper returns and determines that task switch
+     *     is OK since EE lock is not held, dispatch-disable level
+	 *     is zero etc.
+	 *  4) switch to other task enables EE
+	 *  5) eventually, switch back to task interrupted by 1)
+	 *  6) RFI happens but SRR contents have been clobbered.
+	 */
+	lwz		r4,  ppc_exc_msr_irq_mask@sdarel(r13)
+	mfmsr	r5
+	andc	r4, r5, r4
+	mtmsr	r4
 
 	/* restore SRR and stack */
 	lwz		r4,  SRR0_FRAME_OFFSET(r1)
