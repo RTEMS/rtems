@@ -1,3 +1,7 @@
+2008-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/rtems/status-checks.h: Fix style.
+
 2008-07-10     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/intr.h: Documentation.
