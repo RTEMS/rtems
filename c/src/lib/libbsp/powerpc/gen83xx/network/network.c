@@ -30,7 +30,7 @@
 #define TSEC_IFMODE_GMII  1
 
 #if defined(MPC8349EAMDS)
-#define TSEC_IFMODE TSEC_IFMODE_GMII
+#define TSEC_IFMODE TSEC_IFMODE_RGMII
 #endif
 
 #if defined(HSC_CM01)

@@ -1,3 +1,10 @@
+2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/clock/clock.c: Alternative clock driver.  Uses exception handler
+	directly.  Supports special variants for Book E and e300 cores.  For
+	standard decrementer CPUs the new decrementer value is calculated with
+	reference to a time base so that a time drift is avoided.
+
 2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/uboot_getenv.c: New file.
