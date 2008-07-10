@@ -388,3 +388,19 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
 	handler would not, eventually, check for a
 	dispatch requirement).
 
+	And one more note: We never want to disable
+    machine-check exceptions to avoid a checkstop.
+	This means that we cannot use enabling/disabling
+	this type of exception for protection of critical
+	OS data structures.
+	Therefore, calling OS primitives from a asynchronous
+	machine-check handler is ILLEGAL and not supported.
+	Since machine-checks can happen anytime it is not
+	legal to test if a deferred context switch should
+	be performed when the asynchronous machine-check
+	handler returns (since _Context_Switch_is_necessary
+	could have been set by a IRQ-protected section of
+	code that was hit by the machine-check).
+	Note that synchronous machine-checks can legally
+	use OS primitives and currently there are no
+	asynchronous machine-checks defined.
