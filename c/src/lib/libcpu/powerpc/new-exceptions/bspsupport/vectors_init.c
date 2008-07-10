@@ -337,11 +337,29 @@ int n = sizeof(exception_table)/sizeof(exception_table[0]);
 	/* Use current MMU / RI settings when running C exception handlers */
 	ppc_exc_msr_bits = _read_MSR() & ( MSR_DR | MSR_IR | MSR_RI );
 
+	/* Cache size of the interrupt stack in a SDA variable */
+	ppc_exc_intr_stack_size = rtems_configuration_get_interrupt_stack_size();
+
 	/* Copy into a SDA variable that is easy to access from
 	 * assembly code
 	 */
 	if ( ppc_cpu_is_bookE() ) {
 		ppc_exc_msr_irq_mask = MSR_EE | MSR_CE | MSR_DE ;
+		switch (ppc_exc_crit_always_enabled) {
+			case PPC_EXC_CRIT_NO_OS_SUPPORT:
+				_write_MSR(_read_MSR() | (MSR_CE | MSR_DE));
+			break;
+
+			case PPC_EXC_CRIT_OS_SUPPORT:
+				printk("ppc_exc: PPC_EXC_CRIT_OS_SUPPORT not yet implemented\n");
+				/* fall thru */
+
+			case PPC_EXC_CRIT_DISABLED:
+			default:
+				ppc_exc_crit_always_enabled = PPC_EXC_CRIT_DISABLED;
+				_write_MSR(_read_MSR() & ~(MSR_CE | MSR_DE));
+			break;
+		}
 	} else {
 		ppc_exc_msr_irq_mask = MSR_EE ;
 	}

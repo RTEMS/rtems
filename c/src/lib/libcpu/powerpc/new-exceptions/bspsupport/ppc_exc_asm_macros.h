@@ -84,18 +84,21 @@
  *     priority exceptions (HPE) (by disabling
  *     them while the stack is switched).
  */
-#if 0
+#if 1
 	.macro	SWITCH_STACK RA RB FLVR
 	mfspr	\RB, SPRG1
 	cmplw	cr0, r1, \RB
 	bgt		do_r1_reload_\FLVR
 	lwz     \RA, ppc_exc_intr_stack_size@sdarel(r13)
-	subf	\RB, \RB, \RA
+	subf	\RB, \RA, \RB
 	cmplw	cr0, r1, \RB
 	bge		no_r1_reload_\FLVR
 do_r1_reload_\FLVR:
 	mfspr	r1, SPRG1
 no_r1_reload_\FLVR:
+	lwz		\RA, _ISR_Nest_level@sdarel(r13)
+	addi	\RA, \RA, 1
+	stw		\RA, _ISR_Nest_level@sdarel(r13)
 	.endm
 #else
 	.macro	SWITCH_STACK RA RB FLVR
@@ -269,7 +272,7 @@ ppc_exc_min_prolog_sync_\_NAME:
  * ON EXIT: cr4 is set (indicates no lower-priority locks are engaged)
  *
  */
-	.macro TEST_LOCK_std _SRR0
+	.macro TEST_LOCK_std _SRR0 _FLVR
 	/* 'std' is lowest level, i.e., can not be locked -> EQ(cr4) = 1 */
 	creqv EQ(cr4), EQ(cr4), EQ(cr4)
 	.endm
@@ -285,10 +288,16 @@ ppc_exc_min_prolog_sync_\_NAME:
  * critical-exception wrapper has to check 'std' lock:
  *
  * Return cr4 = (   ppc_std_lock == 0
- *               && * _SRR0 != <write std lock instruction> )
+ *               && * _SRR0 != <write std lock instruction>
+ *               && ppc_exc_crit_always_enabled == 0 )
  *
  */
-	.macro TEST_LOCK_crit _SRR0
+	.macro TEST_LOCK_crit _SRR0 _FLVR
+	/* Are critical exceptions always enabled ? */
+	lwz	r4, ppc_exc_crit_always_enabled@sdarel(r13)
+	cmpwi cr4, r4, 0
+	bne  cr4, TEST_LOCK_crit_done_\_FLVR
+
 	/* STD interrupt could have been interrupted before
 	 * executing the 1st instruction which sets the lock;
 	 * check this case by looking at the opcode present
@@ -311,8 +320,10 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 *        && ppc_exc_lock_std == 0 )
 	 */
 	crandc  EQ(cr4), EQ(cr0), EQ(cr4)
+TEST_LOCK_crit_done_\_FLVR:
 	.endm
 
+#if 0
 /*
  **********************************************************************
  * MACRO: TEST_LOCK_mchk
@@ -328,7 +339,7 @@ ppc_exc_min_prolog_sync_\_NAME:
  *               && ppc_std_lock  == 0
  *               && ppc_crit_lock == 0 )
  */
-	.macro TEST_LOCK_mchk _SRR0
+	.macro TEST_LOCK_mchk _SRR0 _FLVR
 	TEST_1ST_OPCODE_mchk _REG=r4 _SRR0=\_SRR0
 	/* cr4 set if 1st opcode matches writing either lock */
 
@@ -343,6 +354,29 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 */
 	crandc	EQ(cr4), EQ(cr0), EQ(cr4)
 	.endm
+#else
+/*
+ **********************************************************************
+ * MACRO: TEST_LOCK_mchk
+ **********************************************************************
+ *
+ * USES:    cr4
+ * ON EXIT: cr4 is cleared.
+ *
+ * We never want to disable machine-check exceptions to avoid
+ * a checkstop. This means that we cannot use enabling/disabling
+ * this type of exception for protection of critical OS data structures.
+ * Therefore, calling OS primitives from a machine-check handler
+ * is ILLEGAL. Since machine-checks can happen anytime it is not
+ * legal to perform a context switch (since the exception could
+ * hit a IRQ protected section of code).
+ * We simply let this test return 0 so that ppc_exc_wrapup is
+ * never called after handling a machine-check.
+ */
+	.macro TEST_LOCK_mchk _SRR0 _FLVR
+	crxor	EQ(cr4), EQ(cr4), EQ(cr4)
+	.endm
+#endif
 
 
 /*
@@ -409,7 +443,7 @@ wrap_no_save_r14_\_FLVR:
 	stw		r5,  ppc_exc_lock_\_PRI@sdarel(r13)
 
 	/* test lower-priority locks; result in (non-volatile) cr4 */
-	TEST_LOCK_\_PRI _SRR0=\_SRR0
+	TEST_LOCK_\_PRI _SRR0=\_SRR0 _FLVR=\_FLVR
 
 	/* Peform stack switch if necessary */
 	SWITCH_STACK RA=r4 RB=r5 FLVR=\_FLVR

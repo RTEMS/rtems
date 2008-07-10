@@ -53,6 +53,10 @@ uint32_t ppc_exc_msr_irq_mask =  MSR_EE;
  */
 uint32_t ppc_exc_msr_bits     = MSR_IR | MSR_DR | MSR_RI;
 
+uint32_t ppc_exc_intr_stack_size = 0;
+
+int32_t ppc_exc_crit_always_enabled = PPC_EXC_CRIT_NO_OS_SUPPORT;
+
 
 /* Table of C-handlers */
 static ppc_exc_handler_t ppc_exc_handlers[LAST_VALID_EXC + 1] = {0, };
