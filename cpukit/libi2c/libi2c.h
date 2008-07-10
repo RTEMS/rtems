@@ -100,7 +100,7 @@ rtems_i2c_ioctl (
 	rtems_device_minor_number minor,
     void *arg);
 
-extern rtems_driver_address_table rtems_libi2c_io_ops;
+extern const rtems_driver_address_table rtems_libi2c_io_ops;
 
 /* Unfortunately, if you want to add this driver to 
  * a RTEMS configuration table then you need all the
@@ -144,7 +144,7 @@ extern rtems_driver_address_table rtems_libi2c_io_ops;
  */
 typedef struct rtems_libi2c_bus_t_
 {
-  struct rtems_libi2c_bus_ops_ *ops;
+  const struct rtems_libi2c_bus_ops_ *ops;
   int size;                     /* size of whole structure */
 } rtems_libi2c_bus_t;
 
@@ -196,7 +196,7 @@ typedef struct rtems_libi2c_bus_ops_
  * RETURNS: bus # (>=0) or -1 on error (errno set).
  */
 
-int rtems_libi2c_register_bus (char *name, rtems_libi2c_bus_t * bus);
+int rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus);
 
 extern rtems_device_major_number rtems_libi2c_major;
 
@@ -279,7 +279,7 @@ extern rtems_device_major_number rtems_libi2c_major;
 
 typedef struct rtems_libi2c_drv_t_
 {
-  rtems_driver_address_table *ops;      /* the driver ops */
+  const rtems_driver_address_table *ops;      /* the driver ops */
   int size;                     /* size of whole structure (including appended private data) */
 } rtems_libi2c_drv_t;
 
@@ -297,7 +297,7 @@ typedef struct rtems_libi2c_drv_t_
  * RETURNS minor number (FYI) or -1 on failure
  */
 int
-rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
+rtems_libi2c_register_drv (const char *name, rtems_libi2c_drv_t * drvtbl,
                            unsigned bus, unsigned i2caddr);
 
 /* Operations available to high level drivers */
@@ -440,6 +440,7 @@ typedef struct {
   boolean  lsb_first;      /* TRUE: send LSB first                  */
   boolean  clock_inv;      /* TRUE: inverted clock (high active)    */
   boolean  clock_phs;      /* TRUE: clock starts toggling at start of data tfr */
+  uint32_t  idle_char;      /* This character will be continuously transmitted in read only functions */
 } rtems_libi2c_tfr_mode_t;
 
 typedef struct {

@@ -68,7 +68,7 @@
 
 #include <rtems/libi2c.h>
 
-#define DRVNM "libi2c:"
+#define DRVNM "libi2c: "
 
 #define MAX_NO_BUSSES	8       /* Also limited by the macro building minor numbers */
 #define MAX_NO_DRIVERS	16      /* Number of high level drivers we support          */
@@ -97,7 +97,7 @@
 
 #define DISPATCH(rval, entry, dflt)	\
 	do {				\
-		rtems_driver_address_table *ops = drvs[--drv].drv->ops;	\
+		const rtems_driver_address_table *ops = drvs[--drv].drv->ops;	\
 		rval = ops->entry ? ops->entry(major,minor,arg) : dflt;	\
 	} while (0)
 
@@ -158,9 +158,9 @@ mutexCreate (rtems_name nm, rtems_id *pm)
   if (RTEMS_SUCCESSFUL !=
       (sc = rtems_semaphore_create (nm, 1, MUTEX_ATTS, 0, pm))) {
 	if ( _System_state_Is_up( _System_state_Get() ) )
-    	rtems_error (sc, DRVNM " unable to create mutex\n");
+    	rtems_error (sc, DRVNM "Unable to create mutex\n");
 	else
-		printk (DRVNM " unable to crate mutex (status code %i)\n", sc);
+		printk (DRVNM "Unable to create mutex (status code %i)\n", sc);
   }
   return sc;
 }
@@ -185,7 +185,7 @@ struct i2cbus *bus = &busses[busno];
     sc = mutexCreate (rtems_build_name ('i', '2', 'c', '0' + busno), &m);
     if ( RTEMS_SUCCESSFUL != sc ) {
       LIBUNLOCK ();
-      rtems_panic (DRVNM " unable to create bus lock");
+      rtems_panic (DRVNM "Unable to create bus lock");
     } else {
 	  bus->mutex = m;
 	}
@@ -338,7 +338,7 @@ rtems_i2c_ioctl (rtems_device_major_number major, rtems_device_minor_number mino
 
 
 /* Our ops just dispatch to the registered drivers */
-rtems_driver_address_table rtems_libi2c_io_ops = {
+const rtems_driver_address_table rtems_libi2c_io_ops = {
   initialization_entry:  rtems_i2c_init,
   open_entry:            rtems_i2c_open,
   close_entry:           rtems_i2c_close,
@@ -368,7 +368,7 @@ rtems_libi2c_initialize ()
   sc = rtems_io_register_driver (0, &rtems_libi2c_io_ops, &rtems_libi2c_major);
   if (RTEMS_SUCCESSFUL != sc) {
     safe_printf(
-             DRVNM " Claiming driver slot failed (rtems status code %i)\n",
+             DRVNM "Claiming driver slot failed (rtems status code %i)\n",
              sc);
 	if ( libmutex )
     	rtems_semaphore_delete (libmutex);
@@ -381,7 +381,7 @@ rtems_libi2c_initialize ()
 }
 
 int
-rtems_libi2c_register_bus (char *name, rtems_libi2c_bus_t * bus)
+rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
 {
   int i;
   rtems_status_code err;
@@ -394,12 +394,12 @@ rtems_libi2c_register_bus (char *name, rtems_libi2c_bus_t * bus)
 
   /* check */
   if ('/' != *nmcpy) {
-    safe_printf ( DRVNM "Bad name; must be an absolute path starting with '/'\n");
+    safe_printf ( DRVNM "Bad name: must be an absolute path starting with '/'\n");
     return -RTEMS_INVALID_NAME;
   }
   /* file must not exist */
   if (!stat (nmcpy, &sbuf)) {
-    safe_printf ( DRVNM "Bad name; file exists already\n");
+    safe_printf ( DRVNM "Bad name: file exists already\n");
     return -RTEMS_INVALID_NAME;
   }
 
@@ -418,12 +418,12 @@ rtems_libi2c_register_bus (char *name, rtems_libi2c_bus_t * bus)
 
 
   if (!libmutex) {
-    safe_printf ( DRVNM " library not initialized\n");
+    safe_printf ( DRVNM "Library not initialized\n");
     return -RTEMS_NOT_DEFINED;
   }
 
-  if (bus->size < sizeof (*bus)) {
-    safe_printf ( DRVNM " bus-ops size too small -- misconfiguration?\n");
+  if (bus == NULL || bus->size < sizeof (*bus)) {
+    safe_printf ( DRVNM "No bus-ops or size too small -- misconfiguration?\n");
     return -RTEMS_NOT_CONFIGURED;
   }
 
@@ -576,7 +576,7 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
   va_list            ap;
   int sc = 0;
   void *args;
-  boolean is_started = FALSE;
+  rtems_boolean is_started = FALSE;
   DECL_CHECKED_BH (busno, bush, minor, -)
     
   va_start(ap, cmd);
@@ -685,7 +685,7 @@ rtems_libi2c_start_write_bytes (rtems_device_minor_number minor,
 }
 
 int
-rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
+rtems_libi2c_register_drv (const char *name, rtems_libi2c_drv_t * drvtbl,
                            unsigned busno, unsigned i2caddr)
 {
   int i;
@@ -693,7 +693,7 @@ rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
   rtems_device_minor_number minor;
 
   if (!libmutex) {
-    safe_printf ( DRVNM " library not initialized\n");
+    safe_printf ( DRVNM "Library not initialized\n");
     return -RTEMS_NOT_DEFINED;
   }
 
@@ -707,8 +707,8 @@ rtems_libi2c_register_drv (char *name, rtems_libi2c_drv_t * drvtbl,
     return -RTEMS_INVALID_NUMBER;
   }
 
-  if (drvtbl->size < sizeof (*drvtbl)) {
-    safe_printf ( DRVNM " drv-ops size too small -- misconfiguration?\n");
+  if (drvtbl == NULL || drvtbl->size < sizeof (*drvtbl)) {
+    safe_printf ( DRVNM "No driver table or size too small -- misconfiguration?\n");
     return -RTEMS_NOT_CONFIGURED;
   }
 
