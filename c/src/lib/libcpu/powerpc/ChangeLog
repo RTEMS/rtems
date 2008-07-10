@@ -1,3 +1,20 @@
+2008-07-10	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/bspsupport/README,
+	new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c,
+	new-exceptions/bspsupport/vectors_init.c:
+	Fixed and enabled stack-switching algorithm which figures out
+	if we already run on the ISR stack rather than relying on the
+	_ISR_Nest_level.
+	Added 'ppc_exc_crit_always_enabled' variable which defines
+	the semantics of critical interrupts.
+	Let asynchronous machine-check handling never call the dispatcher.
+	We don't want to disable MSR_ME ever (to avoid checkstops)
+	and hence asynchronous MEs must not use OS services anyways.
+
 2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/powerpc-utility.h: Includes standard header files,
