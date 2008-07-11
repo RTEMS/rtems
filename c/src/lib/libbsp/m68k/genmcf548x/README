@@ -1,0 +1,180 @@
+/*===============================================================*\
+| Project: RTEMS generic mcf548x BSP                              |
++-----------------------------------------------------------------+
+| File: README                                                    |
++-----------------------------------------------------------------+
+| This is the README for the  generic MCF548x BSP.                |
++-----------------------------------------------------------------+
+|                    Copyright (c) 2007                           |
+|                    Embedded Brains GmbH                         |
+|                    Obere Lagerstr. 30                           |
+|                    D-82178 Puchheim                             |
+|                    Germany                                      |
+|                    rtems@embedded-brains.de                     |
++-----------------------------------------------------------------+
+|                                                                 |
+| Parts of the code has been derived from the "dBUG source code"  |
+| package Freescale is providing for M548X EVBs. The usage of     |
+| the modified or unmodified code and it's integration into the   |
+| generic mcf548x BSP has been done according to the Freescale    |
+| license terms.                                                  |
+|                                                                 |
+| The Freescale license terms can be reviewed in the file         |
+|                                                                 |
+|    Freescale_license.txt                                        |
+|                                                                 |
++-----------------------------------------------------------------+
+|                                                                 |
+| The generic mcf548x BSP has been developed on the basic         |
+| structures and modules of the av5282 BSP.                       |
+|                                                                 |
++-----------------------------------------------------------------+
+|                                                                 |
+| The license and distribution terms for this file may be         |
+| found in the file LICENSE in this distribution or at            |
+|                                                                 |
+| http://www.rtems.com/license/LICENSE.                           |
+|                                                                 |
++-----------------------------------------------------------------+
+|                                                                 |
+|   date                      history                        ID   |
+| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
+| 12.11.07                    1.0                            ras  |
+|                                                                 |
+\*===============================================================*/
+
+
+Description: Generic mcf548x BSP
+============
+CPU:         MCF548x, 200MHz
+XLB:         100 MHz, which is the main clock for all onchip peripherals
+RAM:         64M (m5484FireEngine)
+Boot-Flash:  2M (m5484FireEngine)
+Code-Flash:  16M (m5484FireEngine)
+Core-SRAM:   8K
+Core-SysRAM: 32K
+
+
+The genmcf548x supports the Fresscale m5484FireEngine EVB.
+
+ACKNOWLEDGEMENTS:
+=================
+This BSP is based on the 
+
+  av5282 BSP
+
+and the work of
+
+  D. Peter Siddons
+  Brett Swimley
+  Jay Monkman
+  Eric Norum
+  Mike Bertosh
+
+BSP INFO:
+=========
+BSP NAME:           genmcf548x
+BOARD:              m5484FireEngine (freescale), 
+CPU FAMILY:         ColdFire 548x
+CPU:                MCF5484
+FPU:                MCF548x FPU, context switch supported by RTEMS multitasking
+EMAC:               MCF548x EMAC context switch supported by RTEMS multitasking (handeld together with FPU context)
+
+PERIPHERALS
+===========
+TIMERS:             2 slice timers, 4 general purpose timers  (SLT0 is used for RTEMS clock, SLT1 is used for diagnostic pupose)
+RESOLUTION:         System tick 10 millieconds (via SLT0) 
+SERIAL PORTS:       Internal PSC 0-3
+NETWORKING:         Internal 10/100MHz FEC (not supported yet)
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       SLT0
+TIMER DRIVER:       SLT1 (diagnostics)
+TTY DRIVER:         PSC0-3
+
+STDIO
+=====
+PORT:               PSC0 (UART mode) terminal
+ELECTRICAL:         RS-232
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+MODES:              Interrupt driven (polled mode alternatively)
+
+
+      Memory map as set up by BSP initialization
+
+m5484FireEngine:
+
+          +--------------------------------------------------+
+0000 0000 |    64 MByte SDRAM (external)                     | 03FF FFFF
+          .                                                  .
+          .                                                  .
+          .                                                  .
+ 
+          
+m5484FireEngine:
+          
+          
+          |                                                  | 0FFF FFFF
+          +--------------------------------------------------+
+1000 0000 |    internal per. registers via MBAR              | 1003 FFFF
+          .                                                  .
+          .                                                  .
+          .                                                  .
+          |                                                  | 
+          +--------------------------------------------------+
+2000 0000 |    8K core SRAM (internal)                       | 2000 1FFF
+          .                                                  .
+          .                                                  .
+          .                                                  .
+          
+m5484FireEngine:
+
+          |                                                  | 
+          +--------------------------------------------------+
+E000 0000 |    16M code flash (external)                     | E0FF FFFF
+          .                                                  .
+	  .                                                  .
+          .                                                  .
+          |                                                  | 
+          +--------------------------------------------------+          
+FF80 0000 | External 8 MByte Flash memory                    | FF9F FFFF
+          .                                                  .
+	  .                                                  .
+          .                                                  .          
+          |                                                  | FFFF FFFF
+          +--------------------------------------------------+
+
+============================================================================
+
+      Interrupt map
+
++-----+-----------------------------------------------------------------------+
+|     |                                PRIORITY                               |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|LEVEL|    7   |    6   |    5   |    4   |    3   |    2   |    1   |    0   |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  7  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  6  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  5  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  4  |        |        |        |        |        |        |        |  SLT0  |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  3  | PSC 0  | PSC 1  | PSC 2  | PSC 3  |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  2  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+|  1  |        |        |        |        |        |        |        |        |
++-----+--------+--------+--------+--------+--------+--------+--------+--------+
+
+============================================================================
+
+TIMING TESTS
+**************************
+
+tbd.

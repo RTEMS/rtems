@@ -90,6 +90,8 @@ void *M360AllocateBufferDescriptors( int count );
 void *M360AllocateRiscTimers( int count );
 extern char M360DefaultWatchdogFeeder;
 
+extern int m360_clock_rate; /* BRG clock rate, defined in console.c */
+
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
@@ -102,6 +104,7 @@ m68k_isr_entry set_vector(
 extern char _RamBase[];
 extern char _HeapSize[];
 
+
 /*
  * Definitions for Atlas Computer Equipment Inc. High Speed Bridge (HSB)
  */
@@ -110,6 +113,26 @@ extern char _HeapSize[];
 #define ATLASHSB_DSRR   0x20010002L
 #define ATLASHSB_LED4   0x20010004L
 #define ATLASHSB_ROM_U6 0xFF080000L	/* U6 flash ROM socket */
+
+
+  /*
+   * definitions for PGH360 board
+   */
+#if defined(PGH360)
+/* 
+ * logical SPI addresses of SPI slaves available
+ */
+#define PGH360_SPI_ADDR_EEPROM     0
+#define PGH360_SPI_ADDR_DISP4_DATA 1
+#define PGH360_SPI_ADDR_DISP4_CTRL 2
+
+/* 
+ * Port B bit locations of SPI slave selects
+ */
+#define PGH360_PB_SPI_DISP4_RS_MSK   (1<<15)
+#define PGH360_PB_SPI_DISP4_CE_MSK   (1<<14)
+#define PGH360_PB_SPI_EEP_CE_MSK     (1<< 0)
+#endif /* defined(PGH360) */
 
 #ifdef __cplusplus
 }

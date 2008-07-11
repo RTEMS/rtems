@@ -1,3 +1,13 @@
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* Makefile.am, spi/m360_spidrv.c, spi/m360_spidrv.h:
+	added SPI driver
+
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* README:
+	added pgh360 BSP variant
+
 2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Eliminate copies of switches to convert termios

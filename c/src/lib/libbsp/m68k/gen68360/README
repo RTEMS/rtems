@@ -29,6 +29,8 @@
 #	  can be used with the Arnewsh SBC360 card.
 #	- If the preprocessor symbol M68360_ATLAS_HSB is defined,
 #	  the BSP is compiled for an Atlas HSB card.
+#	- If the preprocessor symbol M68360_IMD_PGH is defined,
+#	  the BSP is compiled for an IMD PGH360 card.
 #	- Otherwise, the BSP is compiled for a generic 68360 system
 #	  as described in Chapter 9 of the MC68360 User's Manual.  This
 #	  version works with the Atlas ACE360 card.
@@ -39,6 +41,7 @@ BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
 BOARD:              Atlas Computer Equipment Inc. High Speed Bridge (HSB)
 BOARD:              Atlas Computer Equipment Inc. Advanced Communication Engine (ACE)
 BOARD:              Arnewsh SBC360 68040/68360 card
+BOARD:              IMD PGH Board (custom)
 BUS:                none
 CPU FAMILY:         Motorola CPU32+, Motorola 68040
 COPROCESSORS:       none
@@ -82,6 +85,13 @@ clock rate:	25 MHz
 bus width:	8-bit PROM/FLASH, 32-bit DRAM
 ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
 RAM:		4 or 16 MBytes of 60 nsec parity DRAM (1Mx36) to RAS1*/CAS1*
+
+Board description (IMD PGH)
+---------------------------
+clock rate:	25 MHz
+bus width:	8-bit PROM/FLASH, 32-bit DRAM
+ROM:		512KByte, 180 nsec (3 wait states), chip select 0
+RAM:		16 MBytes of 60 nsec no-parity DRAM (1Mx32) to RAS1*/CAS1*
 
 Host System
 -----------
@@ -292,3 +302,4 @@ The board support package has been tested with:
 		Arnewsh Inc.
 		P.O. Box 270352
 		Fort Collins, CO 80527-0352
+	A custom 68360 board (PGH360) produced by IMD

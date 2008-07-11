@@ -1,3 +1,7 @@
+2008-07-11	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* genmcf548x: added BSP
+
 2008-06-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* acinclude.m4: Regenerated.

@@ -1,0 +1,14 @@
+2008-07-10	Peter Rasmussen <peter.rasmussen@embedded-brains.de>
+
+	* Makefile.am, preinstall.am, 
+	bsp_specs, ChangeLog,
+	README,
+	clock/clock.c,
+	console/console.c,
+	include/bsp.h,
+	include/coverhd.h, include/tm27.h,
+	network/network.c, 
+	start/start.S, 
+	startup/bspclean.c, 
+	startup/bspstart.c, startup/init548x.c, 
+	startup/linkcmds, startup/linkcmds.m5484FireEngine.flash: New files.
