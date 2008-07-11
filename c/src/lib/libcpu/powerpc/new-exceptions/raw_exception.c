@@ -56,6 +56,8 @@ boolean bsp_exceptions_in_RAM = TRUE;
  */
 uint32_t bsp_raw_vector_is_405_critical = 0;
 
+uint32_t ppc_exc_vector_base = 0;
+
 void* ppc_get_vector_addr(rtems_vector vector)
 {
   unsigned vaddr;
@@ -94,13 +96,18 @@ void* ppc_get_vector_addr(rtems_vector vector)
   default:
     break;
   }
-  if ( bsp_exceptions_in_RAM )
-    return ((void*)  vaddr);
+  if (bsp_exceptions_in_RAM) {
+    if (ppc_cpu_has_ivpr_and_ivor()) {
+      return ((void*) ((vaddr >> 4) + ppc_exc_vector_base));
+    } else {
+      return ((void*) (vaddr + ppc_exc_vector_base));
+    }
+  }
 
   return ((void*)  (vaddr + 0xfff00000));
 }
 
-static cat_ini_t mpc_860_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t mpc_860_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_RESET_VECTOR           ] = PPC_EXC_CLASSIC,
   [ ASM_MACH_VECTOR            ] = PPC_EXC_CLASSIC,
   [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
@@ -128,7 +135,7 @@ static cat_ini_t mpc_860_vector_categories[LAST_VALID_EXC + 1] = {
 };
 
 
-static cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_RESET_VECTOR           ] = PPC_EXC_CLASSIC,
   [ ASM_MACH_VECTOR            ] = PPC_EXC_CLASSIC,
 
@@ -153,7 +160,7 @@ static cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_5XX_NMEBREAK_VECTOR    ] = PPC_EXC_CLASSIC,
 };
 
-static cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
 
@@ -197,14 +204,14 @@ static ppc_raw_exception_category altivec_vector_is_valid(rtems_vector vector)
   return PPC_EXC_INVALID;
 }
 
-static cat_ini_t mpc_750_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t mpc_750_vector_categories[LAST_VALID_EXC + 1] = {
 	PPC_BASIC_VECS,
   [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ ASM_60X_ADDR_VECTOR    ] = PPC_EXC_CLASSIC,
   [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_CLASSIC,
 };
 
-static cat_ini_t psim_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t psim_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_RESET_VECTOR       ] = PPC_EXC_CLASSIC,
   [ ASM_MACH_VECTOR        ] = PPC_EXC_CLASSIC,
   [ ASM_PROT_VECTOR        ] = PPC_EXC_CLASSIC,
@@ -225,7 +232,7 @@ static cat_ini_t psim_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
 };
 
-static cat_ini_t mpc_603_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t mpc_603_vector_categories[LAST_VALID_EXC + 1] = {
 	PPC_BASIC_VECS,
   [ ASM_60X_PERFMON_VECTOR ] = PPC_EXC_INVALID,
   [ ASM_60X_SYSMGMT_VECTOR ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
@@ -236,7 +243,7 @@ static cat_ini_t mpc_603_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
 };
 
-static cat_ini_t mpc_604_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t mpc_604_vector_categories[LAST_VALID_EXC + 1] = {
 	PPC_BASIC_VECS,
   [ ASM_60X_PERFMON_VECTOR ] = PPC_EXC_CLASSIC,
   [ ASM_60X_IMISS_VECTOR   ] = PPC_EXC_INVALID,
@@ -247,7 +254,41 @@ static cat_ini_t mpc_604_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_60X_ITM_VECTOR     ] = PPC_EXC_INVALID,
 };
 
-static cat_ini_t e500_vector_categories[LAST_VALID_EXC + 1] = {
+static const cat_ini_t e200_vector_categories [LAST_VALID_EXC + 1] = {
+	[ASM_MACH_VECTOR]                 = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+	[ASM_PROT_VECTOR]                 = PPC_EXC_CLASSIC,
+	[ASM_ISI_VECTOR]                  = PPC_EXC_CLASSIC,
+	[ASM_EXT_VECTOR]                  = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+	[ASM_ALIGN_VECTOR]                = PPC_EXC_CLASSIC,
+	[ASM_PROG_VECTOR]                 = PPC_EXC_CLASSIC,
+	[ASM_FLOAT_VECTOR]                = PPC_EXC_CLASSIC,
+	[ASM_SYS_VECTOR]                  = PPC_EXC_CLASSIC,
+	[ASM_BOOKE_DEC_VECTOR]            = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+	[ASM_BOOKE_FIT_VECTOR]            = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+	[ASM_BOOKE_WDOG_VECTOR]           = PPC_EXC_BOOKE_CRITICAL,
+	[ASM_BOOKE_ITLBMISS_VECTOR]       = PPC_EXC_CLASSIC,
+	[ASM_BOOKE_DTLBMISS_VECTOR]       = PPC_EXC_CLASSIC,
+
+	/* FIXME: Depending on HDI0[DAPUEN] this is a critical or debug exception */
+	[ASM_TRACE_VECTOR]                = PPC_EXC_CLASSIC | PPC_EXC_BOOKE_CRITICAL,
+
+	[ASM_E200_SPE_UNAVAILABLE_VECTOR] = PPC_EXC_CLASSIC,
+	[ASM_E200_SPE_DATA_VECTOR]        = PPC_EXC_CLASSIC,
+	[ASM_E200_SPE_ROUND_VECTOR]       = PPC_EXC_CLASSIC,
+};
+
+static const cat_ini_t e300_vector_categories [LAST_VALID_EXC + 1] = {
+	PPC_BASIC_VECS,
+	[ASM_E300_CRIT_VECTOR]    = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+	[ASM_E300_PERFMON_VECTOR] = PPC_EXC_CLASSIC,
+	[ASM_E300_IMISS_VECTOR]   = PPC_EXC_CLASSIC,
+	[ASM_E300_DLMISS_VECTOR]  = PPC_EXC_CLASSIC,
+	[ASM_E300_DSMISS_VECTOR]  = PPC_EXC_CLASSIC,
+	[ASM_E300_ADDR_VECTOR]    = PPC_EXC_CLASSIC,
+	[ASM_E300_SYSMGMT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+};
+
+static const cat_ini_t e500_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_MACH_VECTOR                 ] = PPC_EXC_E500_MACHCHK,
 
   [ ASM_BOOKE_CRIT_VECTOR           ] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
@@ -307,17 +348,22 @@ ppc_raw_exception_category rval = PPC_EXC_INVALID;
         case PPC_8260:
         /* case PPC_8240: -- same value as 8260 */
         case PPC_8245:
+			rval = mpc_603_vector_categories[vector];
+            break;
         case PPC_e300c1:
         case PPC_e300c2:
         case PPC_e300c3:
-			rval = mpc_603_vector_categories[vector];
+			rval = e300_vector_categories[vector];
             break;
         case PPC_PSIM:
 			rval = psim_vector_categories[vector];
             break;
-		case PPC_8540:
+	case PPC_8540:
 			rval = e500_vector_categories[vector];
-			break;
+	    break;
+	case PPC_e200z6:
+			rval = e200_vector_categories[vector];
+	    break;
         case PPC_5XX:
 			rval = mpc_5xx_vector_categories[vector];
             break;
@@ -454,7 +500,10 @@ int ppc_init_exceptions (rtems_raw_except_global_settings* config)
 
     rtems_interrupt_disable(k);
 
-	if ( (c = ppc_cpu_is_bookE()) && PPC_BOOKE_405 != c ) {
+	/* FIXME special case selection method */
+	if (current_ppc_cpu == PPC_e200z6) {
+		e200_setup_raw_exceptions();
+	} else if ( (c = ppc_cpu_is_bookE()) && PPC_BOOKE_405 != c ) {
 		e500_setup_raw_exceptions();
 	}
 

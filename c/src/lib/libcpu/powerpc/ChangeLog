@@ -1,3 +1,57 @@
+2008-07-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am: Install powerpc-utility.h.
+
+	* shared/include/cpuIdent.h, shared/include/cpuIdent.c: Added e200 and
+	e300 features.
+
+	* new-exceptions/cpu.c: Removed PR288 bugfix check.
+
+	* new-exceptions/e500_raw_exc_init.c: Added initialization for e200.
+	Set IVPR register for e200 and e500 to ppc_exc_vector_base.
+
+	* new-exceptions/raw_exception.c, new-exceptions/raw_exception.h: Added
+	vector categories for e200 and e300 cores.  Added global variable
+	ppc_exc_vector_base for CPUs with IVPR register.
+
+	* new-exceptions/bspsupport/ppc_exc.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c,
+	new-exceptions/bspsupport/vectors.h,
+	new-exceptions/bspsupport/vectors_init.c: Conistent code layout in most
+	assember code sections and usage of defines for registers.  Usage of
+	standard header files to avoid multiple definitions.
+	
+	Optimized exception code: Removed many branches and exploit branch
+	prediction for asynchronous exceptions, moved common wrap code into
+	WRAP macro to eliminate branch, static initialization of the handler
+	table with a default handler to eliminate the test if a handler is
+	present.  Register CR6 is no more cleared because the exeption handler
+	functions are not variadic.
+	
+	New method to switch to the interrupt stack. It will be tested if the
+	exception stack pointer is already inside the interrupt stack area.  It
+	is no more necessary to disable interrupts.  The SPRG1 and SPRG2 are
+	used to store the initial interrupt stack pointer and the interrupt
+	stack memory area start.
+
+	Removed variable ppc_exc_msr_irq_mask and use general interrupt disable
+	mask from SPRG0 instead.
+
+	New initialization routine ppc_exc_initialize() for bsp_start().  It
+	takes the interrupt disable mask, interrupt stack start and size as
+	parameters.
+
+	Added packed prologues for CPUs with IVPR and IVOR registers to save
+	memory space.
+
+	Reverted ppc_exc_crit_always_enabled change from yesterday.
+
+	WARNING: Tests with critical interrupt exceptions crash the system at
+	least on MPC8313ERDB and MPC8349EAMDS.  There may be somewhere a
+	serious bug with the new code.
+
 2008-07-10	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/pte121.c: use general "memory" clobber

@@ -16,6 +16,8 @@
 #ifndef _LIBCPU_CPUIDENT_H
 #define _LIBCPU_CPUIDENT_H
 
+#include <stdbool.h>
+
 #ifndef ASM
 typedef enum
 {
@@ -44,6 +46,7 @@ typedef enum
   PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
   PPC_e300c2  = 0x8084, /* e300c2  core */
   PPC_e300c3  = 0x8085, /* e300c3  core */
+  PPC_e200z6 = 0x8115,
   PPC_PSIM = 0xfffe,  /* GDB PowerPC simulator -- fake version */
   PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;
@@ -67,6 +70,7 @@ typedef struct {
 	unsigned has_8_bats			: 1;
 	unsigned has_epic           : 1;
 	unsigned has_shadowed_gprs  : 1;
+	unsigned has_ivpr_and_ivor  : 1;
 } ppc_feature_t;
 
 extern ppc_feature_t   current_ppc_features;
@@ -81,7 +85,7 @@ extern ppc_cpu_revision_t current_ppc_revision;
 
 /* PUBLIC ACCESS ROUTINES */
 #define _PPC_FEAT_DECL(x) \
-static inline ppc_cpu_##x() { \
+static inline unsigned ppc_cpu_##x() { \
   if ( PPC_UNKNOWN == current_ppc_cpu ) \
     get_ppc_cpu_type(); \
   return current_ppc_features.x; \
@@ -95,6 +99,17 @@ _PPC_FEAT_DECL(is_60x)
 _PPC_FEAT_DECL(has_8_bats)
 _PPC_FEAT_DECL(has_epic)
 _PPC_FEAT_DECL(has_shadowed_gprs)
+_PPC_FEAT_DECL(has_ivpr_and_ivor)
+
+static inline bool ppc_cpu_is_e300()
+{
+	if (current_ppc_cpu == PPC_UNKNOWN) {
+		get_ppc_cpu_type();
+	}
+	return current_ppc_cpu == PPC_e300c1
+		|| current_ppc_cpu == PPC_e300c2
+		|| current_ppc_cpu == PPC_e300c3;
+}
 
 #undef _PPC_FEAT_DECL
 #endif /* ASM */

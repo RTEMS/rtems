@@ -39,11 +39,9 @@ uint32_t ppc_exc_lock_std  = 0;
 uint32_t ppc_exc_lock_crit = 0;
 uint32_t ppc_exc_lock_mchk = 0;
 
-uint32_t ppc_exc_gpr3_std     = 0;
-uint32_t ppc_exc_gpr3_crit    = 0;
-uint32_t ppc_exc_gpr3_mchk    = 0;
-
-uint32_t ppc_exc_msr_irq_mask =  MSR_EE;
+uint32_t ppc_exc_vector_register_std     = 0;
+uint32_t ppc_exc_vector_register_crit    = 0;
+uint32_t ppc_exc_vector_register_mchk    = 0;
 
 /* MSR bits to enable once critical status info is saved and the stack
  * is switched; must be set depending on CPU type
@@ -53,74 +51,44 @@ uint32_t ppc_exc_msr_irq_mask =  MSR_EE;
  */
 uint32_t ppc_exc_msr_bits     = MSR_IR | MSR_DR | MSR_RI;
 
-uint32_t ppc_exc_intr_stack_size = 0;
-
-int32_t ppc_exc_crit_always_enabled = PPC_EXC_CRIT_NO_OS_SUPPORT;
-
-
-/* Table of C-handlers */
-static ppc_exc_handler_t ppc_exc_handlers[LAST_VALID_EXC + 1] = {0, };
-
-ppc_exc_handler_t
-ppc_exc_get_handler(unsigned vector)
+int ppc_exc_handler_default( BSP_Exception_frame *f, unsigned int vector)
 {
-	if ( vector > LAST_VALID_EXC )
-		return 0;
-	return ppc_exc_handlers[vector];
+	return 1;
 }
 
-int
-ppc_exc_set_handler(unsigned vector, ppc_exc_handler_t hdl)
+/* Table of C-handlers */
+ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1] = {
+	[0 ... LAST_VALID_EXC] = ppc_exc_handler_default
+};
+
+ppc_exc_handler_t ppc_exc_get_handler( unsigned vector)
 {
-	if ( vector > LAST_VALID_EXC )
+	ppc_exc_handler_t handler = NULL;
+	if (vector > LAST_VALID_EXC) {
+		return 0;
+	}
+	if (ppc_exc_handler_table [vector] != ppc_exc_handler_default) {
+		handler = ppc_exc_handler_table [vector];
+	}
+	return handler;
+}
+
+int ppc_exc_set_handler( unsigned vector, ppc_exc_handler_t handler)
+{
+	if (vector > LAST_VALID_EXC) {
 		return -1;
-	ppc_exc_handlers[vector] = hdl;
+	}
+	if (handler == NULL) {
+		ppc_exc_handler_table [vector] = ppc_exc_handler_default;
+	} else {
+		ppc_exc_handler_table [vector] = handler;
+	}
 	return 0;
 }
 
-/* This routine executes on the interrupt stack (if vect < 0) */
-int
-ppc_exc_C_wrapper(int vect, BSP_Exception_frame *f)
-{
-unsigned int i    = vect & 0x3f;
-int          rval = 1;
-
-	if ( i <= LAST_VALID_EXC  && ppc_exc_handlers[i] ) {
-		rval = ppc_exc_handlers[i](f, i);
-	} 
-
-	if ( rval ) {
-		/* not handled, so far ... */
-		if ( globalExceptHdl ) {
-			/*
-			 * global handler must be prepared to
-			 * deal with asynchronous exceptions!
-			 */
-			globalExceptHdl(f);
-		}
-		rval = 0;
-	}
-
-	if ( (ppc_exc_msr_bits ^ f->EXC_SRR1) & MSR_RI ) {
-		printk("unrecoverable exception (RI was clear), spinning to death.\n");
-		while (1)
-			;
-	}
-
-	return rval;
-}
-
 void
-ppc_exc_wrapup(int ll_rval, BSP_Exception_frame *f)
+ppc_exc_wrapup( BSP_Exception_frame *f)
 {
-	/* Check if we need to run the global handler now */
-	if ( ll_rval ) {
-		/* We get here if ppc_exc_C_wrapper() returned nonzero.
-		 * This could be useful if we need to do something
-		 * with thread-dispatching enabled (at this point it is)
-		 * after handling an asynchronous exception.
-		 */
-	}
 	/* dispatch_disable level is decremented from assembly code.  */
 	if ( _Context_Switch_necessary ) {
 		/* FIXME: I believe it should be OK to re-enable

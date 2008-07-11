@@ -389,7 +389,7 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
 	dispatch requirement).
 
 	And one more note: We never want to disable
-    machine-check exceptions to avoid a checkstop.
+	machine-check exceptions to avoid a checkstop.
 	This means that we cannot use enabling/disabling
 	this type of exception for protection of critical
 	OS data structures.
@@ -404,3 +404,22 @@ RACE CONDITION WHEN DEALING WITH CRITICAL INTERRUPTS
 	Note that synchronous machine-checks can legally
 	use OS primitives and currently there are no
 	asynchronous machine-checks defined.
+
+   Epilogue:
+
+   You have to disable all asynchronous exceptions which may cause a context
+   switch before the restoring of the SRRs and the RFI.  Reason:
+   
+      Suppose we are in the epilogue code of an EE between the move to SRRs and
+      the RFI. Here EE is disabled but CE is enabled. Now a CE happens.  The
+      handler decides that a thread dispatch is necessary. The CE checks if
+      this is possible:
+   
+         o The thread dispatch disable level is 0, because the EE has already
+           decremented it.
+         o The EE lock variable is cleared.
+         o The EE executes not the first instruction.
+   
+      Hence a thread dispatch is allowed. The CE issues a context switch to a
+      task with EE enabled (for example a task waiting for a semaphore). Now a
+      EE happens and the current content of the SRRs is lost.

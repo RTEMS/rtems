@@ -47,8 +47,9 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_860:		return "MPC860";
     case PPC_8260:		return "MPC8260";
     case PPC_8245:		return "MPC8245";
-	case PPC_8540:		return "MPC8540";
-	case PPC_PSIM:		return "PSIM";
+    case PPC_8540:		return "MPC8540";
+    case PPC_PSIM:		return "PSIM";
+    case PPC_e200z6:		return "e200z6";
     default:
       printk("Unknown CPU value of 0x%x. Please add it to "
              "<libcpu/powerpc/shared/include/cpuIdent.c>\n", cpu );
@@ -84,8 +85,12 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_860:
     case PPC_8260:
     case PPC_8245:
-	case PPC_PSIM:
-	case PPC_8540:
+    case PPC_PSIM:
+    case PPC_8540:
+    case PPC_e200z6:
+    case PPC_e300c1:
+    case PPC_e300c2:
+    case PPC_e300c3:
       break;
     default:
       printk("Unknown PVR value of 0x%x. Please add it to "
@@ -126,6 +131,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
 		current_ppc_features.is_bookE			= PPC_BOOKE_405;
 	break;
   	case PPC_8540:
+  	case PPC_e200z6:
 		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
 	default:
 	break;
@@ -150,7 +156,15 @@ ppc_cpu_id_t get_ppc_cpu_type()
 	default:
 	break;
   }
-		
+
+	switch (current_ppc_cpu) {
+		case PPC_e200z6:
+			current_ppc_features.has_ivpr_and_ivor = 1;
+			break;
+		default:
+			break;
+	}
+
   return current_ppc_cpu;
 }
 

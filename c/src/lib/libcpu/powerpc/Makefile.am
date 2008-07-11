@@ -13,7 +13,7 @@ include_rtems_powerpc_HEADERS = rtems/powerpc/cache.h \
 include_rtems_scoredir = $(includedir)/rtems/score
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS =
+include_libcpu_HEADERS = shared/include/powerpc-utility.h
 
 EXTRA_DIST =
 

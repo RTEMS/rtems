@@ -43,7 +43,6 @@
 #define	ASM_PROG_VECTOR			             0x07
 #define	ASM_FLOAT_VECTOR		             0x08
 #define	ASM_DEC_VECTOR			             0x09
-#define ASM_60X_VEC_VECTOR			         0x0A
 #define	ASM_SYS_VECTOR			             0x0C
 #define	ASM_TRACE_VECTOR		             0x0D
 
@@ -80,6 +79,7 @@
 #define ASM_5XX_NMEBREAK_VECTOR	             0x1F
 
 
+#define ASM_60X_VEC_VECTOR                   0x0A
 #define	ASM_60X_PERFMON_VECTOR               0x0F
 #define	ASM_60X_IMISS_VECTOR                 0x10
 #define	ASM_60X_DLMISS_VECTOR                0x11
@@ -89,6 +89,24 @@
 #define ASM_60X_VEC_ASSIST_VECTOR            0x16
 #define	ASM_60X_ITM_VECTOR                   0x17
 
+/* e200 */
+#define ASM_E200_SPE_UNAVAILABLE_VECTOR      0x15
+#define ASM_E200_SPE_DATA_VECTOR             0x16
+#define ASM_E200_SPE_ROUND_VECTOR            0x17
+
+/* e300 */
+#define ASM_E300_CRIT_VECTOR                 0x0A
+#define ASM_E300_PERFMON_VECTOR              0x0F
+#define ASM_E300_IMISS_VECTOR                ASM_60X_IMISS_VECTOR  /* Special case: Shadowed GPRs */
+#define ASM_E300_DLMISS_VECTOR               ASM_60X_DLMISS_VECTOR /* Special case: Shadowed GPRs */
+#define ASM_E300_DSMISS_VECTOR               ASM_60X_DSMISS_VECTOR /* Special case: Shadowed GPRs */
+#define ASM_E300_ADDR_VECTOR                 0x13
+#define ASM_E300_SYSMGMT_VECTOR              0x14
+
+/*
+ * If you change that number make sure to adjust the wrapper code in ppc_exc.S
+ * and that ppc_exc_handler_table will be correctly initialized.
+ */
 #define LAST_VALID_EXC                       0x1F
 
 /* DO NOT USE -- this symbol is DEPRECATED
@@ -226,6 +244,12 @@ void e500_setup_raw_exceptions();
  * This should probably go away... (T.S. 2007/11/30)
  */
 extern boolean bsp_exceptions_in_RAM;
+
+/**
+ * @brief Vector base address for CPUs (for example e200 and e500) with IVPR
+ * and IVOR registers.
+ */
+extern uint32_t ppc_exc_vector_base;
 
 # endif /* ASM */
 

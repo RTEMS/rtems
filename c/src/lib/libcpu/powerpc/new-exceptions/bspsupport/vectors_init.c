@@ -47,6 +47,8 @@ typedef struct LRFrameRec_ {
 
 #define STACK_CLAMP 50	/* in case we have a corrupted bottom */
 
+SPR_RW(SPRG1)
+SPR_RW(SPRG2)
 SPR_RO(LR)
 SPR_RO(DAR)
 #define DEAR_BOOKE 61
@@ -250,11 +252,11 @@ ppc_exc_min_prolog_template_t tmpl;
 	return (rtems_raw_except_func)prologues[n_prolog++];
 }
 
-void ppc_exc_init(
+void ppc_exc_table_init(
 	rtems_raw_except_connect_data    *exception_table,
 	int                               nEntries)
 {
-int i,v;
+unsigned i,v;
 ppc_raw_exception_category cat;
 uintptr_t vaddr;
 
@@ -270,11 +272,17 @@ uintptr_t vaddr;
 	exception_config.rawExceptHdlTbl 		= exception_table;
 	exception_config.defaultRawEntry.exceptIndex	= 0;
 	exception_config.defaultRawEntry.hdl.vector	= 0;
-	/* Note that the 'auto' handler cannot be used for everything; in particular,
-	 * it assumes classic exceptions with a vector offset aligned on a 256-byte
-	 * boundary.
-	 */
-	exception_config.defaultRawEntry.hdl.raw_hdl	= ppc_exc_min_prolog_auto;
+
+	if (ppc_cpu_has_ivpr_and_ivor()) {
+		/* Use packed version with 16-byte boundaries for CPUs with IVPR and IVOR registers */
+		exception_config.defaultRawEntry.hdl.raw_hdl = ppc_exc_min_prolog_auto_packed;
+	} else {
+		/* Note that the 'auto' handler cannot be used for everything; in particular,
+		 * it assumes classic exceptions with a vector offset aligned on a 256-byte
+		 * boundary.
+		 */
+		exception_config.defaultRawEntry.hdl.raw_hdl = ppc_exc_min_prolog_auto;
+	}
 
 	/*
 	 * Note that the cast of an array address to an unsigned
@@ -306,7 +314,7 @@ uintptr_t vaddr;
 			 * default prolog can handle classic, synchronous exceptions
 			 * with a vector offset aligned on a 256-byte boundary.
 			 */
-			if ( PPC_EXC_CLASSIC == cat && 0 == ( vaddr & 0xff ) ) {
+			if (cat == PPC_EXC_CLASSIC && ((vaddr & 0xff) == 0 || (ppc_cpu_has_ivpr_and_ivor() && (vaddr & 0xf) == 0))) {
 				exception_table[i].hdl.raw_hdl_size = exception_config.defaultRawEntry.hdl.raw_hdl_size;
 				exception_table[i].hdl.raw_hdl	    = exception_config.defaultRawEntry.hdl.raw_hdl;
 			} else {
@@ -329,44 +337,45 @@ uintptr_t vaddr;
 #endif
 }
 
-void initialize_exceptions()
+
+void ppc_exc_initialize(
+	uint32_t interrupt_disable_mask,
+	uint32_t interrupt_stack_start,
+	uint32_t interrupt_stack_size
+)
 {
-int i;
-int n = sizeof(exception_table)/sizeof(exception_table[0]);
+	int i;
+	int n = sizeof(exception_table)/sizeof(exception_table[0]);
+
+	uint32_t interrupt_stack_end = 0;
+	uint32_t interrupt_stack_pointer = 0;
+	uint32_t *p = NULL;
+
+	/* Ensure proper interrupt stack alignment */
+	interrupt_stack_start &= ~(CPU_STACK_ALIGNMENT - 1);
+	interrupt_stack_size &= ~(CPU_STACK_ALIGNMENT - 1);
+
+	/* Interrupt stack end and pointer */
+	interrupt_stack_end = interrupt_stack_start + interrupt_stack_size;
+	interrupt_stack_pointer = interrupt_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
+
+	/* Tag interrupt stack bottom */
+	p = (uint32_t *) interrupt_stack_pointer;
+	*p = 0;
+
+	/* Move interrupt stack values to special purpose registers */
+	_write_SPRG1( interrupt_stack_pointer);
+	_write_SPRG2( interrupt_stack_start);
+
+	/* Interrupt disable mask */
+	ppc_interrupt_set_disable_mask( interrupt_disable_mask);
 
 	/* Use current MMU / RI settings when running C exception handlers */
 	ppc_exc_msr_bits = _read_MSR() & ( MSR_DR | MSR_IR | MSR_RI );
 
-	/* Cache size of the interrupt stack in a SDA variable */
-	ppc_exc_intr_stack_size = rtems_configuration_get_interrupt_stack_size();
-
-	/* Copy into a SDA variable that is easy to access from
-	 * assembly code
-	 */
-	if ( ppc_cpu_is_bookE() ) {
-		ppc_exc_msr_irq_mask = MSR_EE | MSR_CE | MSR_DE ;
-		switch (ppc_exc_crit_always_enabled) {
-			case PPC_EXC_CRIT_NO_OS_SUPPORT:
-				_write_MSR(_read_MSR() | (MSR_CE | MSR_DE));
-			break;
-
-			case PPC_EXC_CRIT_OS_SUPPORT:
-				printk("ppc_exc: PPC_EXC_CRIT_OS_SUPPORT not yet implemented\n");
-				/* fall thru */
-
-			case PPC_EXC_CRIT_DISABLED:
-			default:
-				ppc_exc_crit_always_enabled = PPC_EXC_CRIT_DISABLED;
-				_write_MSR(_read_MSR() & ~(MSR_CE | MSR_DE));
-			break;
-		}
-	} else {
-		ppc_exc_msr_irq_mask = MSR_EE ;
-	}
-
 	for ( i=0; i<n; i++ )
 		exception_table[i].hdl.vector = i;
-	ppc_exc_init(exception_table, n);
+	ppc_exc_table_init(exception_table, n);
 
 	/* If we are on a classic PPC with MSR_DR enabled then
 	 * assert that the mapping for at least this task's

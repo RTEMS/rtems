@@ -14,6 +14,7 @@
  */
 #ifndef LIBCPU_POWERPC_BSPSUPP_VECTORS_H
 #define LIBCPU_POWERPC_BSPSUPP_VECTORS_H
+
 #include <libcpu/raw_exception.h>
 
 /*
@@ -61,14 +62,20 @@
 #define EXC_CTR_OFFSET 152
 #define EXC_XER_OFFSET 156
 #define EXC_LR_OFFSET 160
+
+/* Exception stack frame -> BSP_Exception_frame */
+#define FRAME_LINK_SPACE 8
+
 /*
  * maintain the EABI requested 8 bytes aligment
  * As SVR4 ABI requires 16, make it 16 (as some
  * exception may need more registers to be processed...)
  */
-#define    EXCEPTION_FRAME_END 176
+#define EXCEPTION_FRAME_END 176
 
 #ifndef ASM
+
+#include <stdint.h>
 
 /* codemove is like memmove, but it also gets the cache line size
  * as 4th parameter to synchronize them. If this last parameter is
@@ -80,7 +87,12 @@
 extern void * codemove(void *, const void *, unsigned int, unsigned long);
 extern void exception_nop_enable(const rtems_raw_except_connect_data* ptr);
 extern int  exception_always_enabled(const rtems_raw_except_connect_data* ptr);
-extern void initialize_exceptions();
+
+void ppc_exc_initialize(
+  uint32_t interrupt_disable_mask,
+  uint32_t interrupt_stack_start,
+  uint32_t interrupt_stack_size
+);
 
 typedef struct _BSP_Exception_frame {
   unsigned 	EXC_SRR0;

@@ -13,6 +13,10 @@
 #ifndef PPC_EXC_SHARED_H
 #define PPC_EXC_SHARED_H
 
+#include <stdint.h>
+
+#include "vectors.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,7 +37,6 @@ extern "C" {
  *
  * Other return values are reserved.
  */
-
 typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned int vector);
 
 /*
@@ -45,52 +48,6 @@ typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned int vector);
  * handling is initialized is used.
  */
 extern uint32_t ppc_exc_msr_bits;
-
-/*
- * Set of MSR bits required to disable all 
- * asynchronous exceptions (depends on CPU type;
- * must be set during initialization).
- * Interrupt are disabled by writing the
- * one's complement of this mask to msr:
- *  msr &= ~ppc_exc_msr_irq_mask;
- */
-extern uint32_t ppc_exc_msr_irq_mask;
-
-/*
- * Cache size of the interrupt stack in a SDA variable
- */
-extern uint32_t ppc_exc_intr_stack_size;
-
-/*
- * This variable defines the semantics of asynchronous
- * critical exceptions ("critical interrupts")
- * on BookE-style CPUs.
- *
- * There are the following ways of using these interrupts
- *
- *  1) permanently disabled; no support
- *  2) permanently enabled; handlers for critical interrupts
- *     MUST NOT use any RTEMS primitives at all. They cannot
- *     directly e.g., release a semaphore.
- *  3) enabled/disabled by the OS during critical sections.
- *     In this scenario critical interrupts are not much
- *     different from 'normal' interrupts but handlers may
- *     safely use RTEMS primitives (i.e., the subset which
- *     is OK to use from ISR context).
- *
- * The BSP (or application) may initialize this
- * variable PRIOR to calling 'initialize_exceptions'
- * to any of the following values:
- *
- * NOTE: so far, OS_SUPPORT is not supported by the cpukit
- *       yet since the IRQ/enabling-disabling primitives
- *       do not mask MSR_CE yet.
- */
-#define PPC_EXC_CRIT_NO_OS_SUPPORT	 1
-#define PPC_EXC_CRIT_OS_SUPPORT      0
-#define PPC_EXC_CRIT_DISABLED      (-1)
-
-extern int32_t ppc_exc_crit_always_enabled;
 
 /* (See README under CAVEATS). During initialization
  * a check is performed to assert that write-back
@@ -168,6 +125,8 @@ extern void ppc_exc_tgpr_clr_prolog();
  * exceptions with a vector offset aligned on a 256-byte boundary.
  */
 extern void ppc_exc_min_prolog_auto();
+
+extern void ppc_exc_min_prolog_auto_packed();
 
 
 /* CPU support may store the address of a function here
