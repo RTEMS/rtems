@@ -1,3 +1,10 @@
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4,
+	make/custom/m5484FireEngine.cfg:
+	added pgh360 BSP variant
+	added m5484FireEngine BSP
+
 2008-06-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac, acinclude.m4: s/AC_HELP/AS_HELP/.

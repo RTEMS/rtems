@@ -34,14 +34,20 @@ extern "C" {
     #endif /* RTEMS_STATUS_CHECKS_USE_PRINTK */
   #endif /* DEBUG_PRINT */
 #else /* DEBUG */
+  #ifdef DEBUG_PRINT
+    #warning DEBUG_PRINT was defined, but DEBUG was undefined
+    #undef DEBUG_PRINT
+  #endif /* DEBUG_PRINT */
   #define DEBUG_PRINT( fmt, ...)
 #endif /* DEBUG */
 
 #ifndef SYSLOG_PRINT
   #ifdef RTEMS_STATUS_CHECKS_USE_PRINTK
-    #define SYSLOG_PRINT( fmt, ...) printk( fmt, ##__VA_ARGS__)
+    #define SYSLOG_PRINT( fmt, ...) \
+      printk( fmt, ##__VA_ARGS__)
   #else /* RTEMS_STATUS_CHECKS_USE_PRINTK */
-    #define SYSLOG_PRINT( fmt, ...) printf( fmt, ##__VA_ARGS__)
+    #define SYSLOG_PRINT( fmt, ...) \
+      printf( fmt, ##__VA_ARGS__)
   #endif /* RTEMS_STATUS_CHECKS_USE_PRINTK */
 #endif /* SYSLOG_PRINT */
 
@@ -177,7 +183,7 @@ extern "C" {
   do { \
     rv = val; \
     SYSLOG_ERROR( "RV = %i: %s\n", rv, hint ); \
-    goto label;
+    goto label; \
   } while (0)
 
 #ifdef __cplusplus

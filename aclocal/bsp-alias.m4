@@ -10,6 +10,8 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     bare*)        $2=bare             ;; # EXP: bare-aliases
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
+    pgh360)       $2=gen68360         ;; # m68k - 68360 custom board
+    m5484FireEngine) $2=genmcf548x    ;; # m68k - mcf548x eva board
     mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
     mcp750)       $2=motorola_powerpc ;; # Motorola PPC board variant
     mtx603e)      $2=motorola_powerpc ;; # Motorola PPC board variant

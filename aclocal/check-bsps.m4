@@ -17,7 +17,8 @@ AC_MSG_CHECKING([for available BSPs])
     case $bsp_family in
         # Now account for BSPs with build variants
           c4xsim)            bsps="c4xsim c3xsim";;
-          gen68360)          bsps="gen68360 gen68360_040";;
+          gen68360)          bsps="gen68360 gen68360_040 pgh360";;
+          genmcf548x)        bsps="m5484FireEngine";;
           p4000)             bsps="p4600 p4650";;
           mvme162)           bsps="mvme162 mvme162lx";;
           mbx8xx)            bsps="mbx821_001 mbx860_001b"

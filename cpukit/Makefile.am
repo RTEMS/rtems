@@ -66,12 +66,15 @@ endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
-    include/rtems/concat.h include/rtems/tar.h
+    include/rtems/concat.h include/rtems/tar.h \
+    include/rtems/status-checks.h
 
 include_rtems_HEADERS += include/rtems/endian.h
 
 ## should be conditional and only installed for PowerPC, x86, and ARM
 include_rtems_HEADERS += include/rtems/irq.h
+
+include_rtems_HEADERS += include/rtems/irq-extension.h
 
 ## libfs
 include_rtems_HEADERS += libfs/src/imfs/imfs.h

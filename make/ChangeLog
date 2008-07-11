@@ -1,3 +1,8 @@
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* custom/pgh360.cfg:
+	Creation from gen68360.cfg
+
 2008-06-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/mcf5329.cfg: Use -mcpu=5307 instead of -m5307.

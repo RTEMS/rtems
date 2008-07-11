@@ -1,3 +1,10 @@
+2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libchip/display/disp_fonts.h, libchip/display/disp_hcms29xx.c
+	* libchip/display/disp_hcms29xx.h, libchip/display/font_hcms29xx.c
+	* libchip/display/font_hcms29xx.h
+	Creation of SPI display driver
+
 2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: SD Card driver

@@ -194,6 +194,7 @@ i386		: 386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 m68k		: gen68360 gen68360_040 mvme136 mvme147s mvme162 mvme162lx
 		mvme167 ods68302 sim68000 mcf5206elite uC5282 
 		gen68302 csb360 simcpu32 mrm332 av5282 gen68340 mcf5235 idp
+		m5484FireEngine
 
 no_cpu          : no_bsp  (porting example)
 
