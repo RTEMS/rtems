@@ -35,6 +35,11 @@ $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 endif
 if LIBCHIP
+$(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h: display/disp_hcms29xx.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/disp_hcms29xx.h
+endif
+if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/am29lv160.h: flash/am29lv160.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/am29lv160.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/am29lv160.h

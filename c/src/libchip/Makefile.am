@@ -13,6 +13,15 @@ EXTRA_DIST =
 noinst_LIBRARIES =
 noinst_PROGRAMS =
 
+# display
+if LIBCHIP
+include_libchip_HEADERS += display/disp_hcms29xx.h
+
+noinst_LIBRARIES += libdisplay.a
+libdisplay_a_SOURCES = display/disp_hcms29xx.c display/font_hcms29xx.c
+libdisplay_a_CPPFLAGS = $(AM_CPPFLAGS)
+endif
+
 # flash
 if LIBCHIP
 include_libchip_HEADERS += flash/am29lv160.h
