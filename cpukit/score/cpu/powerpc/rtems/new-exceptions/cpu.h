@@ -311,15 +311,11 @@ void _BSP_Fatal_error(unsigned int);
 /* end of Fatal Error manager macros */
 
 /*
- *  Until all new-exception processing BSPs have fixed
- *  PR288, we let the good BSPs pass
- *
- *  PPC_BSP_HAS_FIXED_PR288
- *
- *  in SPRG0 and let _CPU_Initialize assert this.
+ * SPRG0 was previously used to make sure that the BSP fixed the PR288 bug.
+ * Now SPRG0 is devoted to the interrupt disable mask.
  */
 
-#define PPC_BSP_HAS_FIXED_PR288	0x600dbabe
+#define PPC_BSP_HAS_FIXED_PR288	ppc_this_is_now_the_interrupt_disable_mask
 
 #endif /* ASM */
 

@@ -157,15 +157,25 @@
  */
 #define srr0	0x01a
 #define srr1	0x01b
-#if defined(ppc403) || defined(ppc405)
-#define srr2	0x3de	/* IBM 400 series only */
-#define srr3	0x3df	/* IBM 400 series only */
-#endif /* ppc403 or ppc405 */
+#define srr2	0x3de /* IBM 400 series only */
+#define srr3	0x3df /* IBM 400 series only */
+#define csrr0	58 /* Book E */
+#define csrr1	59 /* Book E */
+#define mcsrr0	570 /* e500 */
+#define mcsrr1	571 /* e500 */
+#define dsrr0	574 /* e200 */
+#define dsrr1	575 /* e200 */
 
 #define sprg0	0x110
 #define sprg1	0x111
 #define sprg2	0x112
 #define sprg3	0x113
+#define sprg4	276
+#define sprg5	277
+#define sprg6	278
+#define sprg7	279
+
+#define usprg0	256
 
 #define dar     0x013   /* Data Address Register */
 #define dec		0x016	/* Decrementer Register */

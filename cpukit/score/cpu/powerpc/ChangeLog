@@ -1,3 +1,24 @@
+2008-07-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/asm.h: Added defines for save and restore registers and
+	special purpose registers 4 to 7.
+
+	* rtems/new-exceptions/cpu.h: Changed define PPC_BSP_HAS_FIXED_PR288 to
+	a value that results in a compile time error on usage since SPRG0 is
+	now used for the interrupt disable mask.
+
+	* rtems/powerpc/registers.h: Bugfix: Swapped values of TBWU and TBWL.
+
+	Added defines SPRG4..7 and USPRG0.
+
+	Changed _CPU_ISR_{Disable, Enable, Flush} to use static inline
+	functions.  The interrupt disable mask is now stored in SPRG0.  Which
+	was previously denoted to indicate a PR288 bugfix.  You may now
+	initialize the interrupt disable mask via
+	ppc_interrupt_set_disable_mask() and
+	PPC_INTERRUPT_DISABLE_MASK_DEFAULT.  The default value will be set in
+	bootcard.c.
+
 2008-02-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/old-exceptions/cpu.h: Remove (Abandoned).

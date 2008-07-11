@@ -18,10 +18,6 @@
 #ifndef _RTEMS_POWERPC_REGISTERS_H
 #define _RTEMS_POWERPC_REGISTERS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Bit encodings for Machine State Register (MSR) */
 #define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
@@ -37,6 +33,7 @@ extern "C" {
 #define MSR_BE		(1<<9)		/* Branch Trace */
 #define MSR_DE		(1<<9)		/* BookE debug exception */
 #define MSR_FE1		(1<<8)		/* Floating Exception mode 1 */
+#define MSR_E300_CE	(1<<7)		/* e300 critical interrupt */
 #define MSR_IP		(1<<6)		/* Exception prefix 0x000/0xFFF */
 #define MSR_IR		(1<<5)		/* Instruction MMU enable */
 #define MSR_DR		(1<<4)		/* Data MMU enable */
@@ -120,8 +117,8 @@ n:
 
 #define	TBRU	269	/* Time base Upper/Lower (Reading) */
 #define	TBRL	268
-#define TBWU	284	/* Time base Upper/Lower (Writing) */
-#define TBWL	285
+#define TBWU	285	/* Time base Upper/Lower (Writing) */
+#define TBWL	284
 #define	XER	1
 #define LR	8
 #define CTR	9
@@ -184,6 +181,11 @@ n:
 #define SPRG2   274
 #define SPR3	275
 #define SPRG3   275
+#define SPRG4   276
+#define SPRG5   277
+#define SPRG6   278
+#define SPRG7   279
+#define USPRG0  256
 #define DSISR	18
 #define SRR0	26	/* Saved Registers (exception) */
 #define SRR1	27
@@ -307,6 +309,22 @@ lidate */
 #define BOOKE_TCR_WPEXT(x)	(((x)&0xf)<<17)
 #define BOOKE_TCR_FPEXT(x)	(((x)&0xf)<<13)
 
+/**
+ * @brief Default value for the interrupt disable mask.
+ *
+ * The interrupt disable mask is stored in the SPRG0 (= special purpose
+ * register 272).
+ */
+#define PPC_INTERRUPT_DISABLE_MASK_DEFAULT MSR_EE
+
+#ifndef ASM
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
     _msr_value = 0; \
@@ -316,16 +334,57 @@ lidate */
 #define _CPU_MSR_SET( _msr_value ) \
 { asm volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
 
-#define _CPU_ISR_Disable( _isr_cookie ) \
-  { register unsigned int _disable_mask = MSR_EE; \
-    _isr_cookie = 0; \
-    asm volatile ( \
-	"mfmsr %0; andc %1,%0,%1; mtmsr %1" : \
-	"=&r" ((_isr_cookie)), "=&r" ((_disable_mask)) : \
-	"0" ((_isr_cookie)), "1" ((_disable_mask)) \
-	); \
-  }
+static inline void ppc_interrupt_set_disable_mask( uint32_t mask)
+{
+  asm volatile (
+    "mtspr 272, %0"
+    :
+    : "r" (mask)
+  );
+}
 
+static inline uint32_t ppc_interrupt_disable()
+{
+  uint32_t level;
+  uint32_t mask;
+
+  asm volatile (
+    "mfmsr %0;"
+    "mfspr %1, 272;"
+    "andc %1, %0, %1;"
+    "mtmsr %1"
+    : "=r" (level), "=r" (mask)
+  );
+
+  return level;
+}
+
+static inline void ppc_interrupt_enable( uint32_t level)
+{
+  asm volatile (
+    "mtmsr %0"
+    :
+    : "r" (level)
+  );
+}
+
+static inline void ppc_interrupt_flash( uint32_t level)
+{
+  uint32_t current_level;
+
+  asm volatile (
+    "mfmsr %0;"
+    "mtmsr %1;"
+    "mtmsr %0"
+    : "=&r" (current_level)
+    : "r" (level)
+  );
+}
+
+#define _CPU_ISR_Disable( _isr_cookie ) \
+  do { \
+    _isr_cookie = ppc_interrupt_disable(); \
+  } while (0)
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -334,11 +393,7 @@ lidate */
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
-  { \
-     asm volatile ( "mtmsr %0" : \
-		   "=r" ((_isr_cookie)) : \
-                   "0" ((_isr_cookie))); \
-  }
+  ppc_interrupt_enable( _isr_cookie)
 
 /*
  *  This temporarily restores the interrupt to _isr_cookie before immediately
@@ -352,19 +407,14 @@ lidate */
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  { register unsigned int _disable_mask = MSR_EE; \
-    asm volatile ( \
-      "mtmsr %0; andc %1,%0,%1; mtmsr %1" : \
-      "=&r" ((_isr_cookie)), "=&r" ((_disable_mask)) : \
-      "0" ((_isr_cookie)), "1" ((_disable_mask)) \
-    ); \
-  }
-
+  ppc_interrupt_flash( _isr_cookie)
 
 /* end of ISR handler macros */
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
+
+#endif /* ASM */
 
 #endif /* _RTEMS_POWERPC_REGISTERS_H */
