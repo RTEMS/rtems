@@ -55,6 +55,9 @@
  *
  *  $Id$
  */
+
+#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
+
 #include <string.h>
 #include <fcntl.h>
 
@@ -67,7 +70,6 @@
 #include <libcpu/spr.h>
 #include <rtems/powerpc/powerpc.h>
 
-SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 #include RTEMS_XPARAMETERS_H
@@ -186,9 +188,6 @@ void bsp_start( void )
 
   intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
   _write_SPRG1((unsigned int)intrStack);
-  /* signal them that we have fixed PR288 - eventually, this should go away */
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
-
 
   /*
    * Initialize default raw exception handlers. 

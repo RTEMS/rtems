@@ -43,7 +43,10 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#include <rtems.h>
 
 /*
  *  Since there is a forward reference
@@ -115,6 +118,14 @@ int boot_card(
     size_t  workarea_size;
     size_t  heap_size;
   #endif
+
+  /*
+   * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
+   * It must be valid before we can use rtems_interrupt_disable().
+   */
+  #ifdef PPC_INTERRUPT_DISABLE_MASK_DEFAULT
+    ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT);
+  #endif /* PPC_INTERRUPT_DISABLE_MASK_DEFAULT */
 
   /*
    *  Make sure interrupts are disabled.

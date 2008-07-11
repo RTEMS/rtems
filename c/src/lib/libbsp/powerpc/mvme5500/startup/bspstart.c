@@ -24,6 +24,8 @@
  *  $Id$
  */
 
+#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
+
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -74,7 +76,6 @@ extern void BSP_vme_config(void);
 
 uint32_t bsp_clicks_per_usec;
 
-SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 typedef struct CmdLineRec_ {
@@ -249,8 +250,8 @@ void bsp_start( void )
 #ifdef SHOW_LCR3_REGISTER
   unsigned l3cr;
 #endif
-  register uint32_t  intrStack;
-  register uint32_t *intrStackPtr;
+  uint32_t intrStackStart;
+  uint32_t intrStackSize;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -302,32 +303,20 @@ void bsp_start( void )
     *r1sp=0xeeeeeeee;
 
   /*
-   * Initialize the interrupt related settings
-   * SPRG0 = interrupt nesting level count
-   * SPRG1 = software managed IRQ stack
-   *
-   * This could be done latter (e.g in IRQ_INIT) but it helps to understand
-   * some settings below...
+   * Initialize the interrupt related settings.
    */
-  BSP_heap_start = ((uint32_t) __rtems_end) + INIT_STACK_SIZE + 
-    rtems_configuration_get_interrupt_stack_size();
-  intrStack = BSP_heap_start - PPC_MINIMUM_STACK_FRAME_SIZE;
-
-  /* make sure it's properly aligned */
-  intrStack &= ~(CPU_STACK_ALIGNMENT-1);
-
-  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  intrStackPtr = (uint32_t*) intrStack;
-  *intrStackPtr = 0;
-
-  _write_SPRG1(intrStack);
-
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  BSP_heap_start = intrStackStart + intrStackSize;
 
   /*
-   * Initialize default raw exception hanlders. See vectors/vectors_init.c
+   * Initialize default raw exception handlers.
    */
-  initialize_exceptions();
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    intrStackStart,
+    intrStackSize
+  );
 
   /*
    * Init MMU block address translation to enable hardware

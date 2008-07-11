@@ -1,3 +1,15 @@
+2008-07-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bootcard.c: Special case for PowerPC: The interrupt disable
+	mask is stored in SPRG0.  It must be valid before we can use
+	rtems_interrupt_disable().
+
+2008-07-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-config.h, include/irq-generic.h,
+	src/irq-generic.c, src/irq-legacy.c: Generic BSP interrupt handler
+	support.
+
 2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/tm27.h: New file. Stub version of tm27 support.

@@ -1,3 +1,20 @@
+2008-07-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* ep1a/startup/bspstart.c, mvme3100/startup/bspstart.c,
+	mvme5500/startup/bspstart.c, psim/startup/bspstart.c,
+	shared/startup/bspstart.c: The usage of SPRG0 as changed.  It is now
+	used to store the interrupt disable mask.  See bootcard.c and
+	ppc_exc_initialize() for default initialization.
+
+	Update to new exception initialization routine ppc_exc_initialize().
+	The exception low level code has changed, see libcpu/powerpc/ChangeLog.
+
+	* gen5200/startup/bspstart.c, mbx8xx/startup/bspstart.c,
+	mpc8260ads/startup/bspstart.c, ss555/startup/bspstart.c,
+	virtex/startup/bspstart.c: The usage of SPRG0 as changed.  It is now
+	used to store the interrupt disable mask.  See bootcard.c for default
+	initialization.
+
 2008-07-10	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/flash/spansionFlash.c: removed "m" memory

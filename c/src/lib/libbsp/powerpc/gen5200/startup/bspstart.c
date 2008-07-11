@@ -94,6 +94,8 @@
 /*                                                                     */
 /***********************************************************************/
 
+#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
+
 #include <bsp.h>
 
 #include <rtems/libio.h>
@@ -113,7 +115,6 @@ bd_t *uboot_bdinfo_ptr = (bd_t *)1; /* will be overwritten from startup code */
 bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo */
 #endif
 
-SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 extern unsigned long intrStackPtr;
@@ -252,9 +253,6 @@ void bsp_start(void)
   intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
 
   _write_SPRG1((unsigned int)intrStack);
-
-  /* Signal them that this BSP has fixed PR288 - eventually, this should go away */
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
 
  bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
 

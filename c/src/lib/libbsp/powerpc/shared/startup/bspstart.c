@@ -17,6 +17,8 @@
  *  $Id$
  */
 
+#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
+
 #include <string.h>
 
 #include <bsp.h>
@@ -46,7 +48,6 @@ extern Triv121PgTbl BSP_pgtbl_setup();
 extern void			BSP_pgtbl_activate();
 extern void			BSP_vme_config();
 
-SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
 #if defined(DEBUG_BATS)
@@ -149,8 +150,8 @@ void bsp_start( void )
 #if !defined(mvme2100)
   unsigned l2cr;
 #endif
-  register uint32_t  intrStack;
-  register uint32_t *intrStackPtr;
+  uint32_t intrStackStart;
+  uint32_t intrStackSize;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -226,34 +227,20 @@ void bsp_start( void )
   *((uint32_t*)stack) = 0;
 
   /*
-   * Initialize the interrupt related settings
-   * SPRG1 = software managed IRQ stack
-   *
-   * This could be done later (e.g in IRQ_INIT) but it helps to understand
-   * some settings below...
+   * Initialize the interrupt related settings.
    */
-  BSP_heap_start = ((uint32_t) __rtems_end) +
-    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size();
-
-  /* reserve space for the marker/tag frame */
-  intrStack      = BSP_heap_start - PPC_MINIMUM_STACK_FRAME_SIZE;
-
-  /* make sure it's properly aligned */
-  intrStack &= ~(CPU_STACK_ALIGNMENT-1);
-
-  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  intrStackPtr = (uint32_t*) intrStack;
-  *intrStackPtr = 0;
-
-  _write_SPRG1(intrStack);
-
-  /* signal them that we have fixed PR288 - eventually, this should go away */
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  BSP_heap_start = intrStackStart + intrStackSize;
 
   /*
-   * Initialize default raw exception handlers. See vectors/vectors_init.c
+   * Initialize default raw exception handlers.
    */
-  initialize_exceptions();
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    intrStackStart,
+    intrStackSize
+  );
 
   select_console(CONSOLE_LOG);
 
@@ -285,7 +272,7 @@ void bsp_start( void )
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
   printk("Additionnal boot options are %s\n", loaderParam);
   printk("Initial system stack at %x\n",stack);
-  printk("Software IRQ stack at %x\n",intrStack);
+  printk("Software IRQ stack starts at %x with size %u\n", intrStackStart, intrStackSize);
   printk("-----------------------------------------\n");
 #endif
 
@@ -330,13 +317,15 @@ void bsp_start( void )
   __asm__ __volatile ("sc");
 
   /*
-   *  Somehow doing the above seems to clobber SPRG0 on the mvme2100.  It
-   *  is probably a not so subtle hint that you do not want to use PPCBug
-   *  once RTEMS is up and running.  Anyway, we still needs to indicate
-   *  that we have fixed PR288.  Eventually, this should go away.
+   * Somehow doing the above seems to clobber SPRG0 on the mvme2100.  The
+   * interrupt disable mask is stored in SPRG0. Is this a problem?
    */
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+  ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT);
+
 #endif
+
+/* See above */
+#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
   BSP_mem_size            = residualCopy.TotalMemory;
   BSP_bus_frequency       = residualCopy.VitalProductData.ProcessorBusHz;
