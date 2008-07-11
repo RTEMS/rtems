@@ -1,3 +1,14 @@
+2008-07-10	Peter Rasmussen <peter.rasmussen@embedded-brains.de>
+
+	* Makefile.am:
+	install header for MCF548x
+	
+2008-07-10	Peter Rasmussen <peter.rasmussen@embedded-brains.de>
+
+	* mcf548x/include/mcf548x.h,
+	* mcf548x/include/Freescale_license.txt:
+	New files
+	
 2008-07-04	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* Makefile.am, mcf532x/include/mcf532x.h, shared/cache/cache_.h: Add

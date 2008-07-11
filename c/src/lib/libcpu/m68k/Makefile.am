@@ -141,5 +141,11 @@ include_mcf5282dir = $(includedir)/mcf5282
 include_mcf5282_HEADERS = mcf5282/include/mcf5282.h
 endif
 
+if mcf548x
+## mcf548x/include
+include_mcf548xdir = $(includedir)/mcf548x
+include_mcf548x_HEADERS = mcf548x/include/mcf548x.h
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

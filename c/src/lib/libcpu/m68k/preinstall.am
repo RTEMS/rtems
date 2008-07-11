@@ -92,3 +92,13 @@ $(PROJECT_INCLUDE)/mcf5282/mcf5282.h: mcf5282/include/mcf5282.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5282/mcf5282.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5282/mcf5282.h
 endif
+if mcf548x
+$(PROJECT_INCLUDE)/mcf548x/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mcf548x
+	@: > $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mcf548x/mcf548x.h: mcf548x/include/mcf548x.h $(PROJECT_INCLUDE)/mcf548x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf548x/mcf548x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf548x/mcf548x.h
+endif
