@@ -553,7 +553,7 @@ rtems_libi2c_read_bytes (rtems_device_minor_number minor,
 
 int
 rtems_libi2c_write_bytes (rtems_device_minor_number minor, 
-			  unsigned char *bytes, 
+			  const unsigned char *bytes, 
 			  int nbytes)
 {
   int sc;
@@ -562,7 +562,7 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
     if (not_started (busno))
     return -RTEMS_NOT_OWNER_OF_RESOURCE;
 
-  sc = bush->ops->write_bytes (bush, bytes, nbytes);
+  sc = bush->ops->write_bytes (bush, (unsigned char *)bytes, nbytes);
   if (sc < 0)
     rtems_libi2c_send_stop (minor);
   return sc;
@@ -678,10 +678,10 @@ rtems_libi2c_start_read_bytes (rtems_device_minor_number minor,
 
 int
 rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
-				unsigned char *bytes,
+				const unsigned char *bytes,
                                 int nbytes)
 {
-  return do_s_rw (minor, bytes, nbytes, 0);
+  return do_s_rw (minor, (unsigned char *)bytes, nbytes, 0);
 }
 
 int

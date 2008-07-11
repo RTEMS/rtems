@@ -337,7 +337,7 @@ rtems_libi2c_read_bytes (rtems_device_minor_number minor,
 
 int
 rtems_libi2c_write_bytes (rtems_device_minor_number minor,
-                          unsigned char *bytes, int nbytes);
+                          const unsigned char *bytes, int nbytes);
 
 /* Send start, send address and read bytes */
 int
@@ -348,7 +348,7 @@ rtems_libi2c_start_read_bytes (rtems_device_minor_number minor,
 /* Send start, send address and write bytes */
 int
 rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
-				unsigned char *bytes,
+				const unsigned char *bytes,
                                 int nbytes);
 
 
