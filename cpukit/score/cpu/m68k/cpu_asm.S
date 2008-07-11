@@ -15,6 +15,15 @@
 
 
 #include <rtems/asm.h>
+        .data
+
+#if (defined(__mcoldfire__))
+#if ( M68K_HAS_FPU == 1 )
+PUBLIC (_CPU_cacr_shadow)     
+SYM (_CPU_cacr_shadow):    
+         .long 1
+#endif
+#endif
 
         .text
 
@@ -35,6 +44,32 @@ SYM (_CPU_Context_switch):
           movml    d1-d7/a2-a7,a0@       | save context
 
           moval    a7@(HEIRCONTEXT_ARG),a0| a0 = heir thread context
+
+#if (defined(__mcoldfire__))
+#if ( M68K_HAS_FPU == 1 )          
+          moveb	   a0@(13*4),d0                 | get context specific DF bit info in d0   
+          btstb    #4,d0			| test context specific DF bit info
+          beq      fpu_on                       | branch if FPU needs to be switched on
+          
+fpu_off:  movl     _CPU_cacr_shadow,d0          | get content of _CPU_cacr_shadow in d0     
+          btstl    #4,d0                        | test DF bit info in d0
+          bne      restore                      | branch if FPU is already switched off     
+          bsetl    #4,d0                        | set DF bit in d0
+          bra      cacr_set                     | branch to set the new FPU setting in cacr and _CPU_cacr_shadow    
+          
+fpu_on:   movl     _CPU_cacr_shadow,d0          | get content of _CPU_cacr_shadow in d1        
+          btstl    #4,d0			| test context specific DF bit info
+          beq      restore                      | branch if FPU is already switched on   
+          bclrl    #4,d0                        | clear DF bit info in d0
+         
+cacr_set: movew    sr,d1                        | get content of sr in d1
+          oril     #0x00000700,d1               | mask d1 
+          movew    d1,sr                        | disable all interrupts
+          movl     d0,_CPU_cacr_shadow          | move _CPU_cacr_shadow to d1
+	  movec    d0,cacr                      | enable FPU in cacr    	  
+#endif
+#endif
+
 restore:  movml    a0@,d1-d7/a2-a7       | restore context
           movw     d1,sr                 | restore status register
           rts
@@ -66,6 +101,42 @@ restore:  movml    a0@,d1-d7/a2-a7       | restore context
         .global SYM (_CPU_Context_save_fp)
 SYM (_CPU_Context_save_fp):
 #if ( M68K_HAS_FPU == 1 )
+#if (defined(__mcoldfire__))
+        
+        moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
+        moval    a1@,a0                   | a0 = Save context area
+        leal     a0@(-16),a0              | open context frame for coldfire state frame
+        fsave    a0@                      | save coldfire state frame   
+        tstb     a0@                      | check for a null frame
+        beq.b    nosave                   | Yes, skip save of user model
+        leal     a0@(-64),a0              | open context frame for coldfire data registers (fp0-fp7)
+        fmovem   fp0-fp7,a0@              | save coldfire data registers (fp0-fp7)                      
+        movl     #-1,a0@-                 | place not-null flag on stack
+nosave: movl     a0,a1@                   | save pointer to saved context
+
+#if ( M68K_HAS_EMAC == 1 )
+
+        movel    macsr,d0                 | store content of macsr in d0
+        clrl     d1                       | clear d1
+        movl     d1,macsr                 | disable rounding in macsr
+        movl     acc0,d1                  | store content of acc0 in d1
+        moveml   d0-d1,a0@(-8)            | save EMAC macsr/acc0
+        movl     acc1,d0                  | store acc1 in d0 
+        movl     acc2,d1                  | store acc2 in d1 
+        moveml   d0-d1,a0@(-16)           | save EMAC acc1/acc2 with offset
+        movl     acc3,d0                  | store acc3 in d0 
+	movl     accext01,d1              | store acc2 in d1
+        moveml   d0-d1,a0@(-24)           | save EMAC acc3/accext01 with offset
+        movl     accext23,d0              | store accext23 in d0
+        movl     mask,d1                  | store mask in d1
+        moveml   d0-d1,a0@(-32)           | save EMAC accext23/mask with offset
+        leal     a0@(-32),a0              | set a0 to the begin of coldfire data registers frame (fp0-fp7)
+        movl     a0,a1@                   | save pointer to saved context
+
+#endif
+      
+#else
+
         moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
         moval    a1@,a0                   | a0 = Save context area
 #if ( !defined(__mcoldfire__) && !__mc68060__ )
@@ -88,6 +159,8 @@ SYM (_CPU_Context_save_fp):
 #endif
         movl     #-1,a0@-                 | place not-null flag on stack
 nosv:   movl     a0,a1@                   | save pointer to saved context
+
+#endif
 #endif
         rts
 
@@ -95,6 +168,43 @@ nosv:   movl     a0,a1@                   | save pointer to saved context
         .global SYM (_CPU_Context_restore_fp)
 SYM (_CPU_Context_restore_fp):
 #if ( M68K_HAS_FPU == 1 )
+
+#if (defined(__mcoldfire__))
+
+        moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
+        moval    a1@,a0                   | a0 = address of saved context
+        
+#if ( M68K_HAS_EMAC == 1 )
+
+        clrl     d0                       | clear d0
+        movl     d0,macsr                 | disable roundrounding in macsr
+        moveml   a0@(0),d0-d1		  | get mask/accext23 in d0/d1
+        movl     d0,mask                  | restore mask
+        movl     d1,accext23              | restore accext23
+        moveml   a0@(8),d0-d1		  | get accext01/acc3 in d0/d1
+	movl     d0,accext01              | restore accext01
+        movl     d1,acc3                  | restore acc3
+        moveml   a0@(16),d0-d1		  | get acc2/acc1 in d0/d1
+	movl     d0,acc2                  | restore acc2 
+        movl     d1,acc1                  | restore acc1
+        moveml   a0@(24),d0-d1		  | get acc0/macsr in d0/d1
+        movl     d0,acc0                  | restore acc0
+        movl     d1,macsr                 | restore macsr
+        leal     a0@(32),a0               | set a0 to the begin of coldfire FPU frame
+  
+#endif
+                
+        tstb     a0@                      | Null context frame?
+        beq.b    norest                   | Yes, skip fp restore
+        addql    #4,a0                    | throwaway non-null flag
+        fmovem   a0@,fp0-fp7              | restore data regs (fp0-fp7)
+        leal     a0@(+64),a0              | close context frame for coldfire data registers (fp0-fp7)
+norest: frestore a0@                      | restore the fp state frame
+        leal     a0@(+16),a0              | close context frame for coldfire state frame
+        movl     a0,a1@                   | save pointer to saved context
+
+#else
+
         moval    a7@(FPCONTEXT_ARG),a1    | a1 = &ptr to context area
         moval    a1@,a0                   | a0 = address of saved context
         tstb     a0@                      | Null context frame?
@@ -114,6 +224,8 @@ norst:	frestore a0@                      | restore the fp state frame
         lea      a0@(FP_STATE_SAVED),a0
 #endif
         movl     a0,a1@                   | save pointer to saved context
+
+#endif
 #endif
         rts
 #endif

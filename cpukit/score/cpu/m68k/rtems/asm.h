@@ -96,6 +96,17 @@
 #define rambar0 REG (rambar0)
 #define mbar    REG (mbar)
 
+/* additional v4e special regs */
+#define rambar1   REG (rambar1)
+#define macsr     REG (macsr)
+#define acc0      REG (acc0)
+#define acc1      REG (acc1)
+#define acc2      REG (acc2)
+#define acc3      REG (acc3)
+#define accext01  REG (accext01)
+#define accext23  REG (accext23)
+#define mask      REG (mask)
+
 
 #define fp0 REG (fp0)
 #define fp1 REG (fp1)

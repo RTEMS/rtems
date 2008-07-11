@@ -130,6 +130,10 @@ extern "C" {
  */
 # if defined (__mcffpu__)
 # define M68K_HAS_FPU            1
+  /*
+   * td: can we be sure that all CFs with FPU also have an EMAC?
+   */
+# define M68K_HAS_EMAC           1
 # define M68K_HAS_FPSP_PACKAGE   0
 # else
 # define M68K_HAS_FPU            0

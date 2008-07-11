@@ -133,6 +133,13 @@ typedef struct {
   void       *a5;                /* (a5) address register 5 */
   void       *a6;                /* (a6) address register 6 */
   void       *a7_msp;            /* (a7) master stack pointer */
+
+#if (defined(__mcoldfire__))
+#if ( M68K_HAS_FPU == 1 )
+  uint8_t   fpu_dis;
+#endif
+#endif
+
 }   Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -168,12 +175,35 @@ typedef struct {
   } _operand2;
 } Context_Control_fp;
 
-#else 
+#elif (defined(__mcoldfire__))
 
+/*
+ *  FP context save area for the ColdFire core numeric coprocessors
+ */
+typedef struct {
+  uint8_t     fp_save_area[84];     /*    16 bytes for FSAVE/FRESTORE    */
+                                    /*    64 bytes for FMOVEM FP0-7      */
+                                    /*     4 bytes for non-null flag     */
+
+#if (M68K_HAS_EMAC == 1)
+
+/*
+ *  EMAC context save area for the ColdFire core
+ */
+  uint8_t     emac_save_area[32];   /*  32 bytes for EMAC registers      */
+
+#endif
+
+} Context_Control_fp;
+
+#if ( M68K_HAS_FPU == 1 )
+extern uint32_t _CPU_cacr_shadow;
+#endif
+
+#else
 /*
  *  FP context save area for the M68881/M68882 numeric coprocessors.
  */
-
 typedef struct {
   uint8_t     fp_save_area[332];    /*   216 bytes for FSAVE/FRESTORE    */
                                     /*    96 bytes for FMOVEM FP0-7      */
@@ -341,6 +371,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *     + initialize an FP context area
  */
 
+#if (defined(__mcoldfire__) && ( M68K_HAS_FPU == 1 ))
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
    do { \
@@ -350,7 +381,20 @@ uint32_t   _CPU_ISR_Get_level( void );
      _stack                  = (uint32_t  )(_stack_base) + (_size) - 4; \
      (_the_context)->a7_msp  = (void *)_stack; \
      *(void **)_stack        = (void *)(_entry_point); \
+     (_the_context)->fpu_dis = (_is_fp == TRUE) ? 0x00 : 0x10;          \
    } while ( 0 )
+#else
+#define _CPU_Context_Initialize( _the_context, _stack_base, _size,      \
+                                 _isr, _entry_point, _is_fp )           \
+   do {                                                                 \
+     uint32_t   _stack;                                                 \
+                                                                        \
+     (_the_context)->sr      = 0x3000 | ((_isr) << 8);                  \
+     _stack                  = (uint32_t  )(_stack_base) + (_size) - 4; \
+     (_the_context)->a7_msp  = (void *)_stack;                          \
+     *(void **)_stack        = (void *)(_entry_point);                  \
+   } while ( 0 )
+#endif
 
 #define _CPU_Context_Restart_self( _the_context ) \
   { asm volatile( "movew %0,%%sr ; " \
@@ -396,12 +440,22 @@ uint32_t   _CPU_ISR_Get_level( void );
      ) \
    )
 
+#if (defined(__mcoldfire__) && ( M68K_HAS_FPU == 1 ))
+#define _CPU_Context_Initialize_fp( _fp_area ) \
+   { uint32_t   *_fp_context = (uint32_t   *)*(_fp_area); \
+     \
+     *(--(_fp_context)) = 0; \
+     *(_fp_area) = (uint8_t   *)(_fp_context); \
+     asm volatile("movl %0,%%macsr": : "d" (0) ); \
+   }
+#else
 #define _CPU_Context_Initialize_fp( _fp_area ) \
    { uint32_t   *_fp_context = (uint32_t   *)*(_fp_area); \
      \
      *(--(_fp_context)) = 0; \
      *(_fp_area) = (uint8_t   *)(_fp_context); \
    }
+#endif
 #endif
 
 /* end of Context handler macros */
