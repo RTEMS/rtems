@@ -44,6 +44,7 @@
 
 #include "console.h"
 #include <rtems/bspIo.h>
+#include <rtems/termiostypes.h>
 
 /*
  * Load configuration table
@@ -98,6 +99,9 @@ rtems_device_driver console_open(
 	Callbacks.outputUsesInterrupts = c->deviceOutputUsesInterrupts;
 	status = rtems_termios_open ( major, minor, arg, &Callbacks);
 	Console_Port_Data[minor].termios_data = args->iop->data1;
+	if (status == 0) {
+		rtems_termios_set_initial_baud( Console_Port_Data [minor].termios_data, (int) Console_Port_Tbl [minor].pDeviceParams);
+	}
 
 	return status;
 }
@@ -256,6 +260,11 @@ void debug_putc_onlcr(const char c)
     
     Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
       deviceWritePolled(Console_Port_Minor,c);
+
+    if (c == '\n') {
+      Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
+        deviceWritePolled(Console_Port_Minor,'\r');
+    }
     
     rtems_interrupt_enable(Irql);
   }

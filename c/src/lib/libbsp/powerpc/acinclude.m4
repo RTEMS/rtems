@@ -14,6 +14,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([mbx8xx]);;
   motorola_powerpc )
     AC_CONFIG_SUBDIRS([motorola_powerpc]);;
+  mpc55xxevb )
+    AC_CONFIG_SUBDIRS([mpc55xxevb]);;
   mpc8260ads )
     AC_CONFIG_SUBDIRS([mpc8260ads]);;
   mvme3100 )

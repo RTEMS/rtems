@@ -1,6 +1,15 @@
-## Process this file with autoconf to produce a configure script.
-## 
-## $Id$
+# Process this file with autoconf to produce a configure script.
+# 
+# $Id$
+
+##
+#
+# @file
+#
+# @ingroup mpc55xx_config
+#
+# @brief Configure script of LibCPU for PowerPC.
+#
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libcpu-powerpc],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -27,6 +36,7 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "mpc7455" \
 || test "$RTEMS_CPU_MODEL" = "mpc7457" \
 || test "$RTEMS_CPU_MODEL" = "mpc555" \
+|| test "$RTEMS_CPU_MODEL" = "mpc55xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc5xx" \
 || test "$RTEMS_CPU_MODEL" = "ppc603e" \
 || test "$RTEMS_CPU_MODEL" = "ppc403" \
@@ -42,8 +52,9 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "mpc83xx" \
 || test "$RTEMS_CPU_MODEL" = "e500")
 
-## test on CPU type
+# test on CPU type
 AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
+AM_CONDITIONAL(mpc55xx, test "$RTEMS_CPU_MODEL" = "mpc55xx")
 AM_CONDITIONAL(mpc5xx, test "$RTEMS_CPU_MODEL" = "mpc5xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc555" )
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \

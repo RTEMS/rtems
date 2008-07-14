@@ -16,16 +16,15 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
+#include <stdio.h>
+#include <errno.h>
+
 #include <rtems.h>
 #include <rtems/libi2c.h>
 #include <rtems/libio.h>
 #include <rtems/diskdevs.h>
 
-#include <errno.h>
-
 #include <libchip/spi-sd-card.h>
-
-// #define DEBUG
 
 #include <rtems/status-checks.h>
 

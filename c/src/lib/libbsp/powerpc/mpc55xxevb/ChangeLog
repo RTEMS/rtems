@@ -1,0 +1,7 @@
+2008-07-14     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, configure.ac, include/bsp.h, include/irq-config.h,
+	include/mpc55xxevb.h, Makefile.am, network/network.c, preinstall.am,
+	README, startup/bspclean.c, startup/bspstart.c, startup/linkcmds,
+	startup/linkcmds.memory, startup/sd-card-init.c, startup/start.S,
+	tests/tests.c: New files.

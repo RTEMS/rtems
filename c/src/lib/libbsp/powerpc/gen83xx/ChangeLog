@@ -1,3 +1,17 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* irq/irq_init.c, irq/irq.h, startup/linkcmds:
+	Removed.
+
+	* README.mpc8313erdb, include/irq-config.h, include/irq.h, irq/irq.c,
+	startup/linkcmds.base, startup/linkcmds.mpc8313erdb: New files.
+
+	* Makefile.am, configure.ac, console/config.c, console/console.c,
+	i2c/i2c_init.c, include/bsp.h, include/hwreg_vals.h, network/network.c,
+	spi/spi_init.c, start/start.S, startup/bspstart.c, startup/cpuinit.c,
+	startup/linkcmds.hsc_cm01, startup/linkcmds.mpc8349eamds: Support
+	MPC8313ERDB.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization

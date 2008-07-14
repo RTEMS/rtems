@@ -1,3 +1,7 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc55xxevb: New BSP.
+
 2008-07-14	Thomas Doefler <Thomas.Doerfler@embedded-brains.de>
 	* haleakala: added new BSP
 

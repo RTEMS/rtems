@@ -1,5 +1,14 @@
 dnl $Id$
 
+##
+#
+# @file
+#
+# @ingroup mpc55xx_config
+#
+# @brief Configuration macros.
+#
+
 dnl Report all available bsps for a target within the source tree
 dnl
 dnl RTEMS_CHECK_BSPS(bsp_list)
@@ -27,7 +36,8 @@ AC_MSG_CHECKING([for available BSPs])
                              bsps="$bsps mbx860_005b"
                              ;;
           gen5200)           bsps="pm520_cr825 pm520_ze30 brs5l";;
-          gen83xx)           bsps="mpc8349eamds hsc_cm01";;
+          mpc55xxevb)        bsps="mpc5566evb";;
+          gen83xx)           bsps="mpc8349eamds hsc_cm01 mpc8313erdb";;
 	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
           erc32)             bsps="erc32 sis";;

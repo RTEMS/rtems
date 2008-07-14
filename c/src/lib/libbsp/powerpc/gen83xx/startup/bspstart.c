@@ -1,243 +1,204 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC83xx BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.com/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the BSP startup code                         |
-\*===============================================================*/
-
-/*
- *  $Id$
+/**
+ * @file
+ *
+ * @ingroup mpc83xx
+ *
+ * @brief Source for BSP startup code.
  */
 
-#include <bsp.h>
-
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <rtems/powerpc/powerpc.h>
-#include <rtems/score/thread.h>
-
-#include <rtems/bspIo.h>
-#include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
-#include <bsp/irq.h>
+/*
+ * Copyright (c) 2008
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
+ *
+ * The license and distribution terms for this file may be found in the file
+ * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
+ */
 
 #include <string.h>
 
-SPR_RW(SPRG0)
-SPR_RW(SPRG1)
+#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
+#include <rtems/score/thread.h>
 
-extern unsigned long intrStackPtr;
-static char *BSP_heap_start, *BSP_heap_end;
+#include <libcpu/powerpc-utility.h>
+
+#include <bsp.h>
+#include <bsp/irq-generic.h>
+#include <bsp/ppc_exc_bspsupp.h>
+
+#ifdef HAS_UBOOT
 
 /*
- * constants for c_clock driver:
- * system bus frequency (for timebase etc)
- * and 
- * Time base divisior: scaling value:
- * BSP_time_base_divisor = TB ticks per millisecond/BSP_bus_frequency
+ * We want this in the data section, because the startup code clears the BSS
+ * section after the initialization of the board info.
  */
+bd_t mpc83xx_uboot_board_info = { .bi_baudrate = 123 };
+
+/* Size in words */
+const size_t mpc83xx_uboot_board_info_size = (sizeof( bd_t) + 3) / 4;
+
+#endif /* HAS_UBOOT */
+
+/* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;
-unsigned int BSP_time_base_divisor = 4000;  /* 4 bus clicks per TB click */
 
-/*
- *  Driver configuration parameters
- */
-uint32_t   bsp_clicks_per_usec;
+/* Configuration parameters for clock driver, ... */
+uint32_t bsp_clicks_per_usec;
+
+static char *BSP_heap_start, *BSP_heap_end;
 
 /*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
-void bsp_libc_init( void *, uint32_t, int );
-extern void initialize_exceptions(void);
-extern void cpu_init(void);
+extern void cpu_init( void);
 
-void BSP_panic(char *s)
-  {
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  /*
-   * FIXME: hang/restart system
-   */
-  __asm__ __volatile ("sc");
-  }
-
-void _BSP_Fatal_error(unsigned int v)
-  {
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  /*
-   * FIXME: hang/restart system
-   */
-  __asm__ __volatile ("sc");
-  }
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
-
-void
-bsp_pretasking_hook(void)
+void BSP_panic( char *s)
 {
+	rtems_interrupt_level level;
 
-  /*
-   * initialize libc including the heap
-   */
-  bsp_libc_init( BSP_heap_start, 
-		 BSP_heap_end - BSP_heap_start,
-		 0);
+	rtems_interrupt_disable( level);
+
+	printk( "%s PANIC %s\n", _RTEMS_version, s);
+
+	while (1) {
+		/* Do nothing */
+	}
+}
+
+void _BSP_Fatal_error( unsigned n)
+{
+	rtems_interrupt_level level;
+
+	rtems_interrupt_disable( level);
+
+	printk( "%s PANIC ERROR %u\n", _RTEMS_version, n);
+
+	while (1) {
+		/* Do nothing */
+	}
+}
+
+void bsp_pretasking_hook( void)
+{
+	/* Initialize libc including the heap */
+	bsp_libc_init( BSP_heap_start, BSP_heap_end - BSP_heap_start, 0);
 }
 
 void bsp_calc_mem_layout()
 {
-  /*
-   * these labels (!) are defined in the linker command file
-   * or when the linker is invoked
-   * NOTE: the information(size) is the address of the object,
-   * not the object otself
-   */
-  extern unsigned char TopRamReserved;
-  extern unsigned char _WorkspaceBase[];
+	size_t workspace_size = rtems_configuration_get_work_space_size();
 
-  /*
-   * compute the memory layout:
-   * - first unused address is Workspace start
-   * - Heap starts at end of workspace
-   * - Heap ends at end of memory - reserved memory area
-   */
-  Configuration.work_space_start = _WorkspaceBase;
+	/* We clear the workspace here */
+	Configuration.do_zero_of_workspace = 0;
+	/*
+	TODO
+	mpc83xx_zero_4( bsp_workspace_start, workspace_size);
+	 */
+	mpc83xx_zero_4( bsp_interrupt_stack_start, bsp_ram_end - bsp_interrupt_stack_start);
 
-  BSP_heap_start = ((char *)Configuration.work_space_start +
-                    rtems_configuration_get_work_space_size());
+	Configuration.work_space_start = bsp_workspace_start;
 
-#if defined(HAS_UBOOT)
-  BSP_heap_end = (uboot_bdinfo_ptr->bi_memstart 
-		  + uboot_bdinfo_ptr->bi_memsize
-		  - (uint32_t)&TopRamReserved);
-#else
-  BSP_heap_end = (void *)(RAM_END - (uint32_t)&TopRamReserved);
-#endif
+	BSP_heap_start = (char *) Configuration.work_space_start + workspace_size;
 
+#ifdef HAS_UBOOT
+	BSP_heap_end = mpc83xx_uboot_board_info.bi_memstart + mpc83xx_uboot_board_info.bi_memsize;
+#else /* HAS_UBOOT */
+	BSP_heap_end = bsp_ram_end;
+#endif /* HAS_UBOOT */
 }
 
-
-void bsp_start(void)
+void bsp_start( void)
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-  register unsigned char* intrStack;
+	ppc_cpu_id_t myCpu;
+	ppc_cpu_revision_t myCpuRevision;
 
-  /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
-   */
-  myCpu 	    = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
-  /*
-   * determine heap and workspace placement
-   */
-  bsp_calc_mem_layout();
+	uint32_t interrupt_stack_start = (uint32_t) bsp_interrupt_stack_start;
+	uint32_t interrupt_stack_size = (uint32_t) bsp_interrupt_stack_size;
 
-  cpu_init();
+	/*
+	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
+	 * store the result in global variables so that it can be used latter...
+	 */
+	myCpu = get_ppc_cpu_type();
+	myCpuRevision = get_ppc_cpu_revision();
 
-  /*
-   * Initialize some SPRG registers related to irq handling
-   */
+	/* Determine heap and workspace placement */
+	bsp_calc_mem_layout();
 
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
+	cpu_init();
 
-  _write_SPRG1((unsigned int)intrStack);
+	/*
+	 * This is evaluated during runtime, so it should be ok to set it
+	 * before we initialize the drivers.
+	 */
 
-  /* Signal them that this BSP has fixed PR288 - eventually, this should
-   * go away
-   */
-  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+	/* Initialize some device driver parameters */
 
-  /*
-   * this is evaluated during runtime, so it should be ok to set it 
-   * before we initialize the drivers
-   */
-  BSP_bus_frequency   = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
-  /*
-   *  initialize the device driver parameters
-   */
-  bsp_clicks_per_usec = (BSP_bus_frequency/1000000);
+#ifdef HAS_UBOOT
+	BSP_bus_frequency = mpc83xx_uboot_board_info.bi_busfreq;
+#else /* HAS_UBOOT */
+	BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
+#endif /* HAS_UBOOT */
 
-  /*
-   * Install our own set of exception vectors
-   */
+	bsp_clicks_per_usec = BSP_bus_frequency / 4000000;
 
-  initialize_exceptions();
+	/*
+	 * Enable instruction and data caches. Do not force writethrough mode.
+	 */
 
-  /*
-   * Enable instruction and data caches. Do not force writethrough mode.
-   */
 #if INSTRUCTION_CACHE_ENABLE
-  rtems_cache_enable_instruction();
+	rtems_cache_enable_instruction();
 #endif
+
 #if DATA_CACHE_ENABLE
-  rtems_cache_enable_data();
+	rtems_cache_enable_data();
 #endif
 
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
+	/* Initialize exception handler */
+	ppc_exc_initialize(
+		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+		interrupt_stack_start,
+		interrupt_stack_size
+	);
 
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
+	/* Initalize interrupt support */
+	if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+		BSP_panic("Cannot intitialize interrupt support\n");
+	}
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Exit from bspstart\n");
+	printk("Exit from bspstart\n");
 #endif
+}
 
-  }
-
-/*
+/**
+ * @brief Idle thread body.
  *
- *  _Thread_Idle_body
- *
- *  Replaces the one in c/src/exec/score/src/threadidlebody.c
- *  The MSR[POW] bit is set to put the CPU into the low power mode
- *  defined in HID0.  HID0 is set during starup in start.S.
- *
+ * Replaces the one in c/src/exec/score/src/threadidlebody.c
+ * The MSR[POW] bit is set to put the CPU into the low power mode
+ * defined in HID0.  HID0 is set during starup in start.S.
  */
-Thread _Thread_Idle_body(uint32_t ignored )
-  {
+Thread _Thread_Idle_body( uint32_t ignored)
+{
 
-  for(;;)
-    {
+	while (1) {
+		asm volatile (
+			"mfmsr 3;"
+			"oris 3, 3, 4;"
+			"sync;"
+			"mtmsr 3;"
+			"isync;"
+			"ori 3, 3, 0;"
+			"ori 3, 3, 0"
+		);
+	}
 
-    asm volatile("mfmsr 3; oris 3,3,4; sync; mtmsr 3; isync; ori 3,3,0; ori 3,3,0");
-
-    }
-
-  return 0;
-
-  }
-
+	return NULL;
+}

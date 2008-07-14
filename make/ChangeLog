@@ -1,3 +1,11 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* custom/mpc5566evb.cfg, custom/mpc55xx.cfg, custom/mpc8313erdb.cfg:
+	New files.
+
+	* custom/mpc83xx.cfg: More CPU_CFLAGS: -meabi -msdata -fno-common.
+	More CFLAGS_OPTIMIZE_V: -funit-at-a-time -W -Wno-unused.
+
 2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* custom/pgh360.cfg:

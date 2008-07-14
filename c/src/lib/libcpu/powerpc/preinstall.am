@@ -210,6 +210,19 @@ $(PROJECT_INCLUDE)/mpc8260/mmu.h: mpc8260/include/mmu.h $(PROJECT_INCLUDE)/mpc82
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
 endif
 if mpc83xx
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
+
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+
 $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc83xx
 	@: > $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
@@ -230,4 +243,55 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
 $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_spidrv.h: mpc83xx/spi/mpc83xx_spidrv.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_spidrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_spidrv.h
+
+$(PROJECT_INCLUDE)/mpc83xx/gtm.h: mpc83xx/include/gtm.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/gtm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/gtm.h
+endif
+if mpc55xx
+$(PROJECT_INCLUDE)/bsp/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
+	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+
+$(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
+
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/mpc55xx/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc55xx
+	@: > $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mpc55xx/regs.h: mpc55xx/include/regs.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/regs.h
+
+$(PROJECT_INCLUDE)/mpc55xx/reg-defs.h: mpc55xx/include/reg-defs.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/reg-defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/reg-defs.h
+
+$(PROJECT_INCLUDE)/mpc55xx/dspi.h: mpc55xx/include/dspi.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/dspi.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/dspi.h
+
+$(PROJECT_INCLUDE)/mpc55xx/edma.h: mpc55xx/include/edma.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/edma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/edma.h
+
+$(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h: mpc55xx/include/mpc55xx.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h
+
+$(PROJECT_INCLUDE)/mpc55xx/esci.h: mpc55xx/include/esci.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/esci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/esci.h
 endif

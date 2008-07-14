@@ -2,6 +2,15 @@ dnl
 dnl  $Id$
 dnl 
 
+##
+#
+# @file
+#
+# @ingroup mpc55xx_config
+#
+# @brief Configuration macros.
+#
+
 dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl Internal subroutine to RTEMS_BSP_ALIAS
 AC_DEFUN([_RTEMS_BSP_ALIAS],
@@ -28,8 +37,10 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     brs5l*)       $2=gen5200          ;; # MPC5200 based board
     pm520*)       $2=gen5200          ;; # MPC5200 based board
     icecube)      $2=gen5200          ;; # MPC5200 based board - LITE5200B
+    mpc55??evb)   $2=mpc55xxevb       ;; # MPC5566EVB based board
     mpc8349eamds) $2=gen83xx          ;; # MPC8349 based board
     hsc_cm01)     $2=gen83xx          ;; # MPC8349 based board
+    mpc8313erdb)  $2=gen83xx          ;; # MPC83XX based board
     rtl22xx_t)    $2=rtl22xx          ;; # rtl22xx bsp in thumb mode
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     simsh7032)    $2=shsim            ;; # SH7032 simulator

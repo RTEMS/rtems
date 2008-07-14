@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * #ingroup powerpc_shared
+ *
+ * @brief Source file for the Cache Manager PowerPC support.
+ */
+
 /*
  *  Cache Management Support Routines for the MC68040
  * Modified for MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
@@ -194,6 +202,67 @@ void _CPU_cache_disable_instruction ( void )
   mtspr( 560, r1 );
   isync;
 }
+
+#else
+
+#warning Most cache functions are not implemented
+
+void _CPU_cache_flush_entire_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_invalidate_entire_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_freeze_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_unfreeze_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_enable_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_disable_data()
+{
+	/* Void */
+}
+
+void _CPU_cache_invalidate_entire_instruction()
+{
+	/* Void */
+}
+
+void _CPU_cache_freeze_instruction()
+{
+	/* Void */
+}
+
+void _CPU_cache_unfreeze_instruction()
+{
+	/* Void */
+}
+
+
+void _CPU_cache_enable_instruction()
+{
+	/* Void */
+}
+
+void _CPU_cache_disable_instruction()
+{
+	/* Void */
+}
+
 #endif
 
 void _CPU_cache_invalidate_1_data_line(

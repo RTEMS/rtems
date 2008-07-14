@@ -1,3 +1,7 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bootcard.c: Removed duplicated code.
+
 2008-07-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bootcard.c: Special case for PowerPC: The interrupt disable

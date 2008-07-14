@@ -619,11 +619,11 @@ static int mpc83xx_i2c_write_bytes
 }
 
 rtems_libi2c_bus_ops_t mpc83xx_i2c_ops = {
-  init:        mpc83xx_i2c_init,
-  send_start:  mpc83xx_i2c_send_start,
-  send_stop:   mpc83xx_i2c_send_stop,
-  send_addr:   mpc83xx_i2c_send_addr,
-  read_bytes:  mpc83xx_i2c_read_bytes,
-  write_bytes: mpc83xx_i2c_write_bytes,
+  .init = mpc83xx_i2c_init,
+  .send_start = mpc83xx_i2c_send_start,
+  .send_stop = mpc83xx_i2c_send_stop,
+  .send_addr = mpc83xx_i2c_send_addr,
+  .read_bytes = mpc83xx_i2c_read_bytes,
+  .write_bytes = mpc83xx_i2c_write_bytes,
 };
 

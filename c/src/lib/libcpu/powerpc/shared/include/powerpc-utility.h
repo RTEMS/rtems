@@ -31,73 +31,7 @@
 
 #include <rtems/powerpc/registers.h>
 
-#ifdef ASM
-
-#include <rtems/asm.h>
-
-.macro LA reg, addr
-	lis \reg, (\addr)@h
-	ori \reg, \reg, (\addr)@l
-.endm
-
-.macro LWI reg, value
-	lis \reg, (\value)@h
-	ori \reg, \reg, (\value)@l
-.endm
-
-.macro LW reg, addr
-	lis \reg, \addr@ha
-	lwz \reg, \addr@l(\reg)
-.endm
-
-/*
- * Tests the bits in reg1 against the bits set in mask.  A match is indicated
- * by EQ = 0 in CR0.  A mismatch is indicated by EQ = 1 in CR0.  The register
- * reg2 is used to load the mask.
- */
-.macro	TSTBITS	reg1, reg2, mask
-	LWI 	\reg2, \mask
-	and	\reg1, \reg1, \reg2
-	cmplw	\reg1, \reg2
-.endm	
-	
-.macro 	SETBITS reg1, reg2, mask
-	LWI 	\reg2, \mask
-	or	\reg1, \reg1, \reg2 
-.endm
-
-.macro 	CLRBITS reg1, reg2, mask
-	LWI 	\reg2, \mask
-	andc	\reg1, \reg1, \reg2
-.endm
-
-.macro GLOBAL_FUNCTION name
-	.global \name
-	.type \name, @function
-\name:
-.endm
-
-/*
- * Disables all asynchronous exeptions (interrupts) which may cause a context
- * switch.
- */
-.macro INTERRUPT_DISABLE level, mask
-	mfmsr	\level
-	mfspr	\mask, sprg0
-	andc	\mask, \level, \mask
-	mtmsr	\mask
-.endm
-
-/*
- * Restore previous machine state.
- */
-.macro INTERRUPT_ENABLE level
-	mtmsr	\level
-.endm
-
-#define LINKER_SYMBOL( sym) .extern sym
-
-#else /* ASM */
+#ifndef ASM
 
 #include <stdint.h>
 
@@ -517,6 +451,72 @@ static inline void ppc_set_time_base_64( uint64_t val)
 {
 	PPC_Set_timebase_register( val);
 }
+
+#else /* ASM */
+
+#include <rtems/asm.h>
+
+.macro LA reg, addr
+	lis \reg, (\addr)@h
+	ori \reg, \reg, (\addr)@l
+.endm
+
+.macro LWI reg, value
+	lis \reg, (\value)@h
+	ori \reg, \reg, (\value)@l
+.endm
+
+.macro LW reg, addr
+	lis \reg, \addr@ha
+	lwz \reg, \addr@l(\reg)
+.endm
+
+/*
+ * Tests the bits in reg1 against the bits set in mask.  A match is indicated
+ * by EQ = 0 in CR0.  A mismatch is indicated by EQ = 1 in CR0.  The register
+ * reg2 is used to load the mask.
+ */
+.macro	TSTBITS	reg1, reg2, mask
+	LWI 	\reg2, \mask
+	and	\reg1, \reg1, \reg2
+	cmplw	\reg1, \reg2
+.endm	
+	
+.macro 	SETBITS reg1, reg2, mask
+	LWI 	\reg2, \mask
+	or	\reg1, \reg1, \reg2 
+.endm
+
+.macro 	CLRBITS reg1, reg2, mask
+	LWI 	\reg2, \mask
+	andc	\reg1, \reg1, \reg2
+.endm
+
+.macro GLOBAL_FUNCTION name
+	.global \name
+	.type \name, @function
+\name:
+.endm
+
+/*
+ * Disables all asynchronous exeptions (interrupts) which may cause a context
+ * switch.
+ */
+.macro INTERRUPT_DISABLE level, mask
+	mfmsr	\level
+	mfspr	\mask, sprg0
+	andc	\mask, \level, \mask
+	mtmsr	\mask
+.endm
+
+/*
+ * Restore previous machine state.
+ */
+.macro INTERRUPT_ENABLE level
+	mtmsr	\level
+.endm
+
+#define LINKER_SYMBOL( sym) .extern sym
 
 #endif /* ASM */
 

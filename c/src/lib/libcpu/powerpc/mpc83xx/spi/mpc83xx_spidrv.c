@@ -434,9 +434,9 @@ int mpc83xx_spi_read_write_bytes
 #endif
     if (tbuf == NULL) {
       /*
-       * perform dummy write to read byte
+       * perform idle char write to read byte
        */
-      softc_ptr->reg_ptr->spitd = 0;
+      softc_ptr->reg_ptr->spitd = softc_ptr->idle_char << bit_shift;
     }
     else {
       switch(bytes_per_char) {
@@ -583,6 +583,10 @@ rtems_status_code mpc83xx_spi_set_tfr_mode
   mpc83xx_spi_softc_t *softc_ptr = &(((mpc83xx_spi_desc_t *)(bh))->softc);
   uint32_t spimode_baud,spimode;
   rtems_status_code rc = RTEMS_SUCCESSFUL;
+
+  /* Set idle character */
+  softc_ptr->idle_char = tfr_mode->idle_char;
+
   /*
    * FIXME: set proper mode
    */

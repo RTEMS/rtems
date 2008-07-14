@@ -27,6 +27,7 @@
 #include <bsp/irq.h>
 #include <mpc83xx/mpc83xx.h>
 #include <mpc83xx/tsec.h>
+#include <libcpu/spr.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
@@ -43,6 +44,13 @@
 #include <netinet/if_ether.h>
 #include <stdio.h>
 
+/* System Version Register */
+#define SVR 286
+SPR_RO( SVR)
+
+/* Processor Version Register */
+SPR_RO( PVR)
+
 #define CLREVENT_IN_IRQ
 
 #define TSEC_WATCHDOG_TIMEOUT 5 /* check media every 5 seconds */
@@ -57,7 +65,8 @@ struct mpc83xx_tsec_struct {
   /*
    * HW links: (filled from rtems_bsdnet_ifconfig
    */
-  m83xxTSEC_Registers_t  *reg_ptr;     /* pointer to TSEC register block */
+  m83xxTSEC_Registers_t  *reg_ptr;    /* pointer to TSEC register block */
+  m83xxTSEC_Registers_t  *mdio_ptr;   /* pointer to TSEC register block which is responsible for MDIO communication */
   int                    irq_num_tx;  /* tx irq number                  */
   int                    irq_num_rx;  /* rx irq number                  */
   int                    irq_num_err; /* error irq number               */
@@ -192,7 +201,7 @@ static void mpc83xx_tsec_hwinit
 {
   m83xxTSEC_Registers_t  *reg_ptr = sc->reg_ptr; /* pointer to TSEC registers*/
   uint8_t *mac_addr;
-  int i;
+  size_t i;
 
   /*
    * init ECNTL register
@@ -272,9 +281,9 @@ static void mpc83xx_tsec_hwinit
   /*
    * init MACCFG2 register
    */
-  reg_ptr->maccfg2 = ((reg_ptr->maccfg2 & M83xx_TSEC_MACCFG2_IFMODE_MSK)
-		      | M83xx_TSEC_MACCFG2_PRELEN(7)
-		      | M83xx_TSEC_MACCFG2_FULLDUPLEX);
+  reg_ptr->maccfg2 = (reg_ptr->maccfg2 & M83xx_TSEC_MACCFG2_IFMODE_MSK)
+                     | M83xx_TSEC_MACCFG2_PRELEN( 7)
+                     | M83xx_TSEC_MACCFG2_FULLDUPLEX;
 
   /*
    * init station address register
@@ -324,10 +333,19 @@ static void mpc83xx_tsec_mdio_init
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+
+  /* Set TSEC registers for MDIO communication */
+
+  /*
+   * FIXME: Not clear if this works for all boards.
+   * Tested only on MPC8313ERDB.
+   */
+  sc->mdio_ptr = &mpc83xx.tsec [0];
+
   /*
    * set clock divider
    */
-  sc->reg_ptr->miimcfg = 3;
+  sc->mdio_ptr->miimcfg = 3;
 }
 
 /*=========================================================================*\
@@ -351,10 +369,10 @@ int mpc83xx_tsec_mdio_read
 |    0, if ok, else error                                                   |
 \*=========================================================================*/
 {
- struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
-  m83xxTSEC_Registers_t  *reg_ptr;     /* pointer to TSEC registers        */
+  struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
 
-  reg_ptr = sc->reg_ptr; 
+  /* pointer to TSEC registers */
+  m83xxTSEC_Registers_t *reg_ptr = sc->mdio_ptr;
 
   /*
    * make sure we work with a valid phy
@@ -419,10 +437,10 @@ int mpc83xx_tsec_mdio_write
 |    0, if ok, else error                                                   |
 \*=========================================================================*/
 {
- struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
-  m83xxTSEC_Registers_t  *reg_ptr;     /* pointer to TSEC registers        */
+  struct mpc83xx_tsec_struct *sc = uarg;/* control structure                */
 
-  reg_ptr = sc->reg_ptr; 
+  /* pointer to TSEC registers */
+  m83xxTSEC_Registers_t *reg_ptr = sc->mdio_ptr;
 
   /*
    * make sure we work with a valid phy
@@ -1685,9 +1703,9 @@ int rtems_mpc83xx_tsec_mode_adapt
 |    0, if success                                                       |
 \*=========================================================================*/
 {
-  int result;
-  int media;
+  int result = 0;
   struct mpc83xx_tsec_struct *sc = ifp->if_softc;
+  int media = IFM_MAKEWORD( 0, 0, 0, sc->phy_default);
 
 #ifdef DEBUG
   printf("c");
@@ -1819,6 +1837,8 @@ static int mpc83xx_tsec_driver_attach
   struct ifnet *ifp;
   int    unitNumber;
   char   *unitName;
+  uint32_t svr = _read_SVR();
+  uint32_t pvr = _read_PVR();
 
  /*
   * Parse driver name
@@ -1865,10 +1885,30 @@ static int mpc83xx_tsec_driver_attach
 
   /* get pointer to TSEC register block */
   sc->reg_ptr         = &mpc83xx.tsec[unitNumber-1];
-  /* get base interrupt number (for Tx irq, Rx=base+1,Err=base+2) */
-  sc->irq_num_tx      = config->irno + 0;  /* tx  irq number from BSP */
-  sc->irq_num_rx      = config->irno + 1;  /* rx  irq number from BSP */
-  sc->irq_num_err     = config->irno + 2;  /* err irq number from BSP */
+
+  if (svr == 0x80b00010 && pvr == 0x80850010) {
+    /*
+     * This is a special case for MPC8313ERDB with silicon revision 1.  Look in
+     * "MPC8313ECE Rev. 3, 3/2008" errata for "IPIC 1".
+     */
+    if (unitNumber == 1) {
+      sc->irq_num_tx      = 37;
+      sc->irq_num_rx      = 36;
+      sc->irq_num_err     = 35;
+    } else if (unitNumber == 2) {
+      sc->irq_num_tx      = 34;
+      sc->irq_num_rx      = 33;
+      sc->irq_num_err     = 32;
+    } else {
+      return 0;
+    }
+  } else {
+    /* get base interrupt number (for Tx irq, Rx=base+1,Err=base+2) */
+    sc->irq_num_tx      = config->irno + 0;  /* tx  irq number from BSP */
+    sc->irq_num_rx      = config->irno + 1;  /* rx  irq number from BSP */
+    sc->irq_num_err     = config->irno + 2;  /* err irq number from BSP */
+  }
+
   if (config->irno  == 0) {
     rtems_panic("TSEC: interupt base number irno not defined");
   }
@@ -1878,11 +1918,22 @@ static int mpc83xx_tsec_driver_attach
   sc->mdio_info.mdio_r   = mpc83xx_tsec_mdio_read;
   sc->mdio_info.mdio_w   = mpc83xx_tsec_mdio_write;
   sc->mdio_info.has_gmii = 1; /* we support gigabit IF */
+
   /*
    * XXX: Although most hardware builders will assign the PHY addresses
    * like this, this should be more configurable
    */
+#ifdef MPC8313ERDB
+  if (unitNumber == 2) {
+	  sc->phy_default = 4;
+  } else {
+	  /* TODO */
+	  return 0;
+  }
+#else /* MPC8313ERDB */
   sc->phy_default = unitNumber-1; 
+#endif /* MPC8313ERDB */
+
  /*
   * Set up network interface values
   */

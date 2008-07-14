@@ -1,3 +1,8 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added MPC5566EVB and
+	MPC8313ERDB.  Added Doxygen style comment.
+
 2008-07-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* make/custom/haleakala.cfg:

@@ -1,0 +1,14 @@
+/**
+ * @file
+ *
+ * MPC8313E Reference Design Board.
+ */
+
+MEMORY {
+	RAM : ORIGIN = 0x0, LENGTH = 128M
+	ROM : ORIGIN = 0xfe000000, LENGTH = 8M
+	MPC83XX_REGS : ORIGIN = 0xe0000000, LENGTH = 256k
+	NIRVANA : ORIGIN = 0x0, LENGTH = 0
+}
+
+INCLUDE linkcmds.base

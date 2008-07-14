@@ -233,22 +233,6 @@ int boot_card(
   bsp_predriver_hook();
 
   /*
-   *  Let RTEMS perform initialization it requires before drivers
-   *  are allowed to be initialized.
-   */
-  rtems_initialize_before_drivers();
-
-  /*
-   *  Execute BSP specific pre-driver hook. Drivers haven't gotten
-   *  to initialize yet so this is a good chance to initialize
-   *  buses, spurious interrupt handlers, etc.. 
-   *
-   *  NOTE: Many BSPs do not require this handler and use the
-   *        shared stub.
-   */
-  bsp_predriver_hook();
-
-  /*
    *  Initialize all device drivers.
    */
   rtems_initialize_device_drivers();

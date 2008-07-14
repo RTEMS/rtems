@@ -1,0 +1,64 @@
+OVERVIEW
+========
+
+BSP NAME:           mpc55xxevb
+BOARD:              Freescale MPC5566 evaluation board MPC5566EVB
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC e200z6
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+DEBUG MONITOR:      BAM
+
+PERIPHERALS
+===========
+
+TIMERS:             not yet supported
+  RESOLUTION:       not yet supported
+SERIAL PORTS:       2 internal eSCI
+REAL-TIME CLOCK:    N/A
+DMA:                eDMA
+VIDEO:              N/A
+SCSI:               N/A
+NETWORKING:         FEC (not yet supported)
+SPI:                DSPI
+
+DRIVER INFORMATION
+==================
+
+CLOCK DRIVER:       Book E decrementer
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       not yet supported
+TTY DRIVER:         BSP
+
+STDIO
+=====
+
+PORT:               ESCI A
+ELECTRICAL:         N/A
+BAUD:               115200
+BITS PER CHARACTER: 8
+PARITY:             N
+STOP BITS:          1
+
+NOTES
+=====
+
+BUS WIDTH:          32 bit Flash, 32 bit SDRAM
+FLASH:              3 MByte
+RAM:                128 kByte SDRAM 
+EXTERNAL RAM:       512 kByte SDRAM 
+
+
+DEBUGGING / CODE LOADING
+========================
+
+Tested using the Lauterbach TRACE32 ICD debugger.
+
+ISSUES
+======
+
+The memory blocks allocated by LibBlock are in general not cache aligned so we
+cannot use DMA transfers.  This is suboptimal in combination with a SD Card and
+SPI.

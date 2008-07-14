@@ -56,20 +56,20 @@ include_bsp_HEADERS += irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
-	
+
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq_init.c irq/irq.c
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 
-if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
+## if HAS_NETWORKING
+## network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+## noinst_PROGRAMS += network.rel
+## network_rel_SOURCES = network/network.c
+## network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
+## network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+## endif
 
 
 noinst_LIBRARIES = libbsp.a
@@ -77,17 +77,17 @@ libbsp_a_SOURCES =
 
 libbsp_a_LIBADD = startup.rel dlentry.rel console.rel irq.rel
 
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
+## if HAS_NETWORKING
+## libbsp_a_LIBADD += network.rel
+## endif
 
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
- 	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+	../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel 
+	../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel 
 
 
 EXTRA_DIST += times

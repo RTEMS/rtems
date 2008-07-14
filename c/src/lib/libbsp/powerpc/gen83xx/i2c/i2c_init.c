@@ -25,27 +25,27 @@ static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
   /* first channel */
   {
     {/* public fields */
-      ops:	&mpc83xx_i2c_ops,
-      size:	sizeof(mpc83xx_i2c_bus_tbl[0]),
+      .ops = &mpc83xx_i2c_ops,
+      .size = sizeof(mpc83xx_i2c_bus_tbl[0]),
     },
     { /* our private fields */
-      reg_ptr:	 &mpc83xx.i2c[0],
-      initialized: FALSE,
-      irq_number :  BSP_IPIC_IRQ_I2C1,
-      base_frq   : 0 /* will be set during initiailization */
+      .reg_ptr = &mpc83xx.i2c[0],
+      .initialized = FALSE,
+      .irq_number = BSP_IPIC_IRQ_I2C1,
+      .base_frq = 0 /* will be set during initiailization */
     }
   },
   /* second channel */
   {
     { /* public fields */
-      ops:	&mpc83xx_i2c_ops,
-      size:	sizeof(mpc83xx_i2c_bus_tbl[1]),
+      .ops = &mpc83xx_i2c_ops,
+      .size = sizeof(mpc83xx_i2c_bus_tbl[1]),
     },
     { /* our private fields */
-      reg_ptr:	 &mpc83xx.i2c[1],
-      initialized: FALSE,
-      irq_number :  BSP_IPIC_IRQ_I2C2,
-      base_frq   : 0 /* will be set during initiailization */
+      .reg_ptr = &mpc83xx.i2c[1],
+      .initialized = FALSE,
+      .irq_number = BSP_IPIC_IRQ_I2C2,
+      .base_frq = 0 /* will be set during initiailization */
     }
   } 
 };
@@ -114,15 +114,20 @@ rtems_status_code bsp_register_i2c
   }
   i2c2_busno = ret_code;
 
+#ifdef RTEMS_BSP_I2C_EEPROM_DEVICE_NAME
+
   /*
    * register EEPROM to bus 1, Address 0x50
    */
   ret_code = rtems_libi2c_register_drv(RTEMS_BSP_I2C_EEPROM_DEVICE_NAME,
 				       i2c_2b_eeprom_driver_descriptor,
 				       i2c1_busno,0x50);
+
   if (ret_code < 0) {
     return -ret_code;
   }
+
+#endif /* RTEMS_BSP_I2C_EEPROM_DEVICE_NAME */
 
   /*
    * FIXME: register RTC driver, when available

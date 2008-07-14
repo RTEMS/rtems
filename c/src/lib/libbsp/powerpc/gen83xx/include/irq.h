@@ -19,8 +19,11 @@
 #ifndef GEN83xx_IRQ_IRQ_H
 #define GEN83xx_IRQ_IRQ_H
 
+#include <stdbool.h>
+
 #include <rtems.h>
 #include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
 /*
  * the following definitions specify the indices used 
@@ -124,16 +127,17 @@ extern "C" {
     /* reserved irqs 92-127 */
 
     BSP_IPIC_IRQ_LAST     = BSP_IPIC_IRQ_MAX_OFFSET,
-    BSP_DECREMENTER       = BSP_PROCESSOR_IRQ_LOWEST_OFFSET + 0
   } rtems_irq_symbolic_name;
 
-  extern rtems_irq_connect_data *BSP_rtems_irq_tbl;
-  void BSP_rtems_irq_mng_init(unsigned cpuId);
+rtems_status_code mpc83xx_ipic_set_mask( rtems_vector_number vector, rtems_vector_number mask_vector, bool mask);
 
-  /* ipic.c */
-  rtems_status_code BSP_irq_handle_at_ipic(uint32_t excNum);
-  void BSP_irq_enable_at_ipic (rtems_irq_number irqnum);
-  void BSP_irq_disable_at_ipic (rtems_irq_number irqnum);
+#define MPC83XX_IPIC_INTERRUPT_NORMAL 0
+
+#define MPC83XX_IPIC_INTERRUPT_SYSTEM 1
+
+#define MPC83XX_IPIC_INTERRUPT_CRITICAL 2
+
+rtems_status_code mpc83xx_ipic_set_highest_priority_interrupt( rtems_vector_number vector, int type);
 
 #ifdef __cplusplus
 }

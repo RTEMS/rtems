@@ -35,6 +35,7 @@ typedef struct mpc83xx_spi_softc {
   uint32_t             base_frq;    /* input frq for baud rate divider */
   rtems_id             irq_sema_id;
   uint32_t             curr_addr; /* current spi address */
+  uint32_t             idle_char;
   uint8_t              bytes_per_char;
   uint8_t              bit_shift;
 } mpc83xx_spi_softc_t ;

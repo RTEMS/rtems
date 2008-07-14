@@ -91,6 +91,17 @@ extern "C" {
 #define PPC_LOW_POWER_MODE_NONE      0
 #define PPC_LOW_POWER_MODE_STANDARD  1
 
+/**
+ * @brief For boards with no cache set PPC_CACHE_ALIGNMENT to this value.
+ */
+#define PPC_NO_CACHE_ALIGNMENT 4
+
+/**
+ * @brief Used to define PPC_CACHE_ALIGN_POWER for boards with no cache (and
+ * PPC_NO_CACHE_ALIGNMENT defined).
+ */
+#define PPC_NO_CACHE_ALIGNMENT_POWER 2
+
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler
  *  predefines.
@@ -129,7 +140,7 @@ extern "C" {
 #elif defined(mpc555)
 
 /* Copied from mpc505 */
-#define PPC_CACHE_ALIGNMENT	16
+#define PPC_CACHE_ALIGNMENT	PPC_NO_CACHE_ALIGNMENT
 
 /* Added by querbach@realtime.bc.ca */
 #define PPC_LOW_POWER_MODE	PPC_LOW_POWER_MODE_STANDARD
@@ -145,7 +156,9 @@ extern "C" {
  *  to get the setting correct.
  */
 
-#define PPC_CACHE_ALIGNMENT     16
+#define CPU_MODEL_NAME  "PowerPC 505/509"
+
+#define PPC_CACHE_ALIGNMENT     PPC_NO_CACHE_ALIGNMENT
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             0
 
@@ -280,6 +293,8 @@ extern "C" {
 #define PPC_CACHE_ALIGN_POWER 4
 #elif (PPC_CACHE_ALIGNMENT == 32)
 #define PPC_CACHE_ALIGN_POWER 5
+#elif (PPC_CACHE_ALIGNMENT == PPC_NO_CACHE_ALIGNMENT)
+#define PPC_CACHE_ALIGN_POWER PPC_NO_CACHE_ALIGNMENT_POWER
 #else
 #error "Undefined power of 2 for PPC_CACHE_ALIGNMENT"
 #endif

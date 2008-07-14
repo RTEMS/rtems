@@ -1,3 +1,29 @@
+2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac: Support for MPC55XX.  Changed comment format to
+	Doxygen.
+
+	* mpc55xx/dspi/dspi.c, mpc55xx/edma/edma.c, mpc55xx/esci/esci.c,
+	mpc55xx/fec/fec.c, mpc55xx/include/dspi.h, mpc55xx/include/edma.h,
+	mpc55xx/include/esci.h, mpc55xx/include/irq.h,
+	mpc55xx/include/mpc55xx.h, mpc55xx/include/reg-defs.h,
+	mpc55xx/include/regs.h, mpc55xx/irq/irq.c, mpc55xx/misc/copy.S,
+	mpc55xx/misc/flash.S, mpc55xx/misc/fmpll.S: New BSP.
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c,
+	mpc83xx/network/tsec.c, mpc83xx/spi/mpc83xx_spidrv.c,
+	mpc83xx/spi/mpc83xx_spidrv.h: Support for MPC8313ERDB.
+
+	* shared/include/powerpc-utility.h: Exchanged ASM and non ASM code
+	sections.
+
+	* rtems/powerpc/powerpc.h, shared/src/cache.c, shared/src/cache_.h:
+	New defines PPC_NO_CACHE_ALIGNMENT and PPC_NO_CACHE_ALIGNMENT_POWER for
+	CPUs with no cache.  Provide default implementations for all cache
+	functions.
+
+	* mpc83xx/include/gtm.h, mpc83xx/gtm/gtm.c: New files.
+
 2008-07-14	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* Makefile.am, new-exceptions/raw_exception.c,

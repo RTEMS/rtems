@@ -97,7 +97,15 @@ console_tbl	Console_Port_Tbl[] = {
 		&ns16550_flow_RTSCTS,		/* pDeviceFlow */
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
-		(void *)9600,	/* baud rate */	/* pDeviceParams */
+
+		/* pDeviceParams */
+		/* baud rate */
+#ifdef MPC8313ERDB
+		(void *)115200,
+#else /* MPC8313ERDB */
+		(void *)9600,
+#endif /* MPC8313ERDB */
+
                 (uint32_t)&(mpc83xx.duart[0]),  /* ulCtrlPort1e */
 		0,				/* ulCtrlPort2 */
                 (uint32_t)&(mpc83xx.duart[0]),  /* ulDataPort */
@@ -117,7 +125,15 @@ console_tbl	Console_Port_Tbl[] = {
                 &ns16550_flow_RTSCTS,           /* pDeviceFlow */
                 16,                             /* ulMargin */
                 8,                              /* ulHysteresis */
-                (void *)9600,   /* baud rate */ /* pDeviceParams */
+
+		/* pDeviceParams */
+		/* baud rate */
+#ifdef MPC8313ERDB
+		(void *)115200,
+#else /* MPC8313ERDB */
+		(void *)9600,
+#endif /* MPC8313ERDB */
+
                 (uint32_t)&(mpc83xx.duart[1]),  /* ulCtrlPort1-Filled in at runtime */
                 0,                              /* ulCtrlPort2 */
                 (uint32_t)&(mpc83xx.duart[1]),  /* ulDataPort-Filled in at runtime*/

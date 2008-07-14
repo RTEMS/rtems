@@ -155,7 +155,7 @@ void cpu_init(void)
    * clear caches
    */
   GET_HID0(reg);
-  reg |=  (HID0_ICFI | HID0_DCI);
+  reg = (reg & ~(HID0_ILOCK | HID0_DLOCK)) | HID0_ICFI | HID0_DCI;
   SET_HID0(reg);
   reg &= ~(HID0_ICFI | HID0_DCI);
   SET_HID0(reg);
@@ -170,10 +170,20 @@ void cpu_init(void)
   SET_IBAT(5,ibat.batu,ibat.batl);
   SET_IBAT(6,ibat.batu,ibat.batl);
   SET_IBAT(7,ibat.batu,ibat.batl);
+#ifdef HAS_UBOOT
+  calc_dbat_regvals(&ibat,mpc83xx_uboot_board_info.bi_memstart,mpc83xx_uboot_board_info.bi_memsize,0,0,0,0,BPP_RX);
+#else /* HAS_UBOOT */
+  calc_dbat_regvals(&ibat,(uint32_t) bsp_ram_start,(uint32_t) bsp_ram_size,0,0,0,0,BPP_RX);
+#endif /* HAS_UBOOT */
 
-  calc_dbat_regvals(&ibat,RAM_START,RAM_SIZE,0,0,0,0,BPP_RX);
   SET_IBAT(0,ibat.batu,ibat.batl);
-  calc_dbat_regvals(&ibat,ROM_START,ROM_SIZE,0,0,0,0,BPP_RX);
+
+#ifdef HAS_UBOOT
+  calc_dbat_regvals(&ibat,mpc83xx_uboot_board_info.bi_flashstart,mpc83xx_uboot_board_info.bi_flashsize,0,0,0,0,BPP_RX);
+#else /* HAS_UBOOT */
+  calc_dbat_regvals(&ibat,(uint32_t) bsp_rom_start,(uint32_t) bsp_rom_size,0,0,0,0,BPP_RX);
+#endif /* HAS_UBOOT */
+
   SET_IBAT(1,ibat.batu,ibat.batl);
 
   /*
@@ -186,13 +196,28 @@ void cpu_init(void)
   SET_DBAT(6,dbat.batu,dbat.batl);
   SET_DBAT(7,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,RAM_START,RAM_SIZE,1,0,1,0,BPP_RW);
+#ifdef HAS_UBOOT
+  calc_dbat_regvals(&dbat,mpc83xx_uboot_board_info.bi_memstart,mpc83xx_uboot_board_info.bi_memsize,0,0,0,0,BPP_RW);
+#else /* HAS_UBOOT */
+  calc_dbat_regvals(&dbat,(uint32_t) bsp_ram_start,(uint32_t) bsp_ram_size,0,0,0,0,BPP_RW);
+#endif /* HAS_UBOOT */
+
   SET_DBAT(0,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,ROM_START,ROM_SIZE,1,0,1,0,BPP_RX);
+#ifdef HAS_UBOOT
+  calc_dbat_regvals(&dbat,mpc83xx_uboot_board_info.bi_flashstart,mpc83xx_uboot_board_info.bi_flashsize,0,0,0,0,BPP_RX);
+#else /* HAS_UBOOT */
+  calc_dbat_regvals(&dbat,(uint32_t) bsp_rom_start,(uint32_t) bsp_rom_size,0,0,0,0,BPP_RX);
+#endif /* HAS_UBOOT */
+
   SET_DBAT(1,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,IMMRBAR,1024*1024,1,1,1,1,BPP_RW);
+#ifdef HAS_UBOOT
+  calc_dbat_regvals(&dbat,mpc83xx_uboot_board_info.bi_immrbar,1024*1024,0,1,0,1,BPP_RW);
+#else /* HAS_UBOOT */
+  calc_dbat_regvals(&dbat,(uint32_t) IMMRBAR,1024*1024,0,1,0,1,BPP_RW);
+#endif /* HAS_UBOOT */
+
   SET_DBAT(2,dbat.batu,dbat.batl);
 
   /*

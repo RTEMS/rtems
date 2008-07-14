@@ -68,13 +68,10 @@
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
 #include <rtems/powerpc/powerpc.h>
+#include <bsp/ppc_exc_bspsupp.h>
 #include <ppc4xx/ppc405gp.h>
 #include <ppc4xx/ppc405ex.h>
-
-SPR_RW(SPRG0)
-SPR_RW(SPRG1)
 
 #include <stdio.h>
 
@@ -232,8 +229,8 @@ BSP_output_char_function_type BSP_output_char = DirectUARTWrite;
 
 void bsp_start( void )
 {
-	extern unsigned long *intrStackPtr;
-	register unsigned char* intrStack;
+	LINKER_SYMBOL(intrStack_start);
+	LINKER_SYMBOL(intrStack_size);
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
 
@@ -262,16 +259,12 @@ void bsp_start( void )
 	bsp_timer_least_valid = 3;
 	
 	/*
-	* Initialize some SPRG registers related to irq handling
-	*/
-
-	intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
-	_write_SPRG1((unsigned int)intrStack);
-	/* signal them that we have fixed PR288 - eventually, this should go away */
-	/*
 	* Initialize default raw exception handlers. 
 	*/
-	initialize_exceptions();
+	ppc_exc_initialize(
+		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+			   (uint32_t) intrStack_start,
+			   (uint32_t) intrStack_size);
 
 	/*
 	* Install our own set of exception vectors

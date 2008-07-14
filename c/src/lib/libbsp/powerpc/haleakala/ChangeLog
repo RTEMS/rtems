@@ -1,5 +1,12 @@
 2008-07-14	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
+	* irq/irq.c: adapted DCR access syntax
+	
+	* startup/linkcmds, startup/bspstartup.c, Makefile.am: 
+	adapted to exception support code
+
+2008-07-14	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
 	* README, bsp_specs, INSTALL, bsp_specs.dl, configure.ac,
 	* Makefile.am, preinstall.am, dlentry/dlentry.S, 
 	* include/bsp.h,  include/coverhd.h, include/tm27.h

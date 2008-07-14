@@ -21,6 +21,7 @@
 #define __GEN83xx_HWREG_VALS_h
 
 #include <mpc83xx/mpc83xx.h>
+
 /*
  * distinguish board characteristics
  */
@@ -103,36 +104,26 @@
 			  RCWHR_ENDIAN_BIG   |	\
 			  RCWHR_LALE_NORM    |	\
 			  RCWHR_LDP_PAR)
+
+#elif defined( HAS_UBOOT)
+
+/* TODO */
+
 #else
+
 #error "board type not defined"
+
 #endif
 
 #if defined(MPC8349EAMDS) 
 /**************************
  * for Freescale MPC8349EAMDS
  */
-/*
- * address range definitions
- */
-/* ROM definitions (8 MB, mirrored multiple times) */
-#define	ROM_START	0xFE000000
-#define ROM_SIZE        0x02000000
-#define	ROM_END		(ROM_START+ROM_SIZE-1)
-#define	BOOT_START      ROM_START
-#define	BOOT_END        ROM_END
-
-/* SDRAM definitions (256 MB) */
-#define	RAM_START       0x00000000
-#define RAM_SIZE        0x10000000
-#define	RAM_END		(RAM_START+RAM_SIZE-1)
-
-
-/* working internal memory map base address */
-#define	IMMRBAR         0xE0000000
 
 /*
  * working values for various registers, used in start/start.S
  */
+
 /*
  * Local Access Windows
  * FIXME: decode bit settings 
@@ -183,38 +174,21 @@
 /**************************
  * for JPK HSC_CM01
  */
-/*
- * address range definitions
- */
-/* ROM definitions (8 MB, mirrored multiple times) */
-#define	ROM_START	0xFE000000
-#define ROM_SIZE        0x02000000
-#define	ROM_END		(ROM_START+ROM_SIZE-1)
-#define	BOOT_START      ROM_START
-#define	BOOT_END        ROM_END
-
-/* SDRAM definitions (256 MB) */
-#define	RAM_START       0x00000000
-#define RAM_SIZE        0x10000000
-#define	RAM_END		(RAM_START+RAM_SIZE-1)
-
-
-/* working internal memory map base address */
-#define	IMMRBAR         0xE0000000
 
 /*
  * working values for various registers, used in start/start.S
  */
+
 /*
  * Local Access Windows
  * FIXME: decode bit settings 
  */
 
-#define LBLAWBAR0_VAL  ROM_START
+#define LBLAWBAR0_VAL  bsp_rom_start
 #define LBLAWAR0_VAL   0x80000018
 #define LBLAWBAR1_VAL  0xF8000000
 #define LBLAWAR1_VAL   0x80000015
-#define DDRLAWBAR0_VAL RAM_START
+#define DDRLAWBAR0_VAL bsp_ram_start
 #define DDRLAWAR0_VAL  0x8000001B
 /*
  * Local Bus (Memory) Controller
@@ -250,10 +224,16 @@
 #define DDR_SDRAM_DATA_INIT_VAL      0xC01DCAFE
 #define DDR_SDRAM_INIT_ADDR_VAL      0
 #define DDR_SDRAM_INTERVAL_VAL       0x05080000
-#else
-#error "board type not defined"
-#endif
 
+#elif defined( HAS_UBOOT)
+
+/* TODO */
+
+#else
+
+#error "board type not defined"
+
+#endif
 
 /**************************
  * derived values for all boards

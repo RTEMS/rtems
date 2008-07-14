@@ -29,12 +29,22 @@
 #define TSEC_IFMODE_RGMII 0
 #define TSEC_IFMODE_GMII  1
 
-#if defined(MPC8349EAMDS)
-#define TSEC_IFMODE TSEC_IFMODE_RGMII
-#endif
+#if defined( MPC8313ERDB)
 
-#if defined(HSC_CM01)
 #define TSEC_IFMODE TSEC_IFMODE_RGMII
+
+#elif defined( MPC8349EAMDS)
+
+#define TSEC_IFMODE TSEC_IFMODE_RGMII
+
+#elif defined( HSC_CM01)
+
+#define TSEC_IFMODE TSEC_IFMODE_RGMII
+
+#else
+
+#warning No TSEC configuration available
+
 #endif
 
 /*=========================================================================*\
@@ -56,7 +66,6 @@ int BSP_tsec_attach
 |    1, if success                                                       |
 \*=========================================================================*/
 {
-  char hw_addr[6] = {0x00,0x04,0x9F,0x00,0x2f,0xcb};
   int    unitNumber;
   char   *unitName;
 
@@ -100,7 +109,44 @@ int BSP_tsec_attach
    * FIXME: get the real address we need
    */
   if (config->hardware_address == NULL) {
+
+#ifdef HAS_UBOOT
+
+    switch (unitNumber) {
+      case 1:
+        config->hardware_address = mpc83xx_uboot_board_info.bi_enetaddr;
+        break;
+
+#ifdef CONFIG_HAS_ETH1
+      case 2:
+        config->hardware_address = mpc83xx_uboot_board_info.bi_enet1addr;
+        break;
+#endif /* CONFIG_HAS_ETH1 */
+
+#ifdef CONFIG_HAS_ETH2
+      case 3:
+        config->hardware_address = mpc83xx_uboot_board_info.bi_enet2addr;
+        break;
+#endif /* CONFIG_HAS_ETH2 */
+
+#ifdef CONFIG_HAS_ETH3
+      case 4:
+        config->hardware_address = mpc83xx_uboot_board_info.bi_enet3addr;
+        break;
+#endif /* CONFIG_HAS_ETH3 */
+
+      default:
+        return 0;
+    }
+
+#else /* HAS_UBOOT */
+
+    char hw_addr [6] = { 0x00, 0x04, 0x9f, 0x00, 0x2f, 0xcb};
+
     config->hardware_address = hw_addr;
+
+#endif /* HAS_UBOOT */
+
   }
   /*
    * set interrupt number for given interface

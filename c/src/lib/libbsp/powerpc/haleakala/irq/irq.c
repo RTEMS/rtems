@@ -69,9 +69,12 @@ static inline int IsUICIRQ(const rtems_irq_number irqLine)
 static void WriteIState()
 /* Write the gEnabledInts state masked by gIntInhibited to the hardware */
 {
-	mtdcr(UIC0_ER, gEnabledInts[0] & ~gIntInhibited[0]);
-	mtdcr(UIC1_ER, gEnabledInts[1] & ~gIntInhibited[1]);
-	mtdcr(UIC2_ER, gEnabledInts[2] & ~gIntInhibited[2]);
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_ER, 
+					gEnabledInts[0] & ~gIntInhibited[0]);
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC1_ER, 
+					gEnabledInts[1] & ~gIntInhibited[1]);
+	PPC_SET_DEVICE_CONTROL_REGISTER(UIC2_ER, 
+					gEnabledInts[2] & ~gIntInhibited[2]);
 }
 
 void
@@ -112,26 +115,44 @@ BSP_setup_the_pic(rtems_irq_global_settings* config)
 	for (i=0; i<kUICWords; i++)
 		gIntInhibited[i] = 0;
 		
-	mtdcr (UIC2_ER, 0x00000000);	/* disable all interrupts */
-	mtdcr (UIC2_CR, 0x00000000);	/* Set Critical / Non Critical interrupts */
-	mtdcr (UIC2_PR, 0xf7ffffff);	/* Set Interrupt Polarities */
-	mtdcr (UIC2_TR, 0x01e1fff8);	/* Set Interrupt Trigger Levels */
-	mtdcr (UIC2_VR, 0x00000001);	/* Set Vect base=0,INT31 Highest priority */
-	mtdcr (UIC2_SR, 0xffffffff);	/* clear all interrupts */
+	/* disable all interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_ER, 0x00000000);	
+	/* Set Critical / Non Critical interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_CR, 0x00000000);
+	/* Set Interrupt Polarities */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_PR, 0xf7ffffff);
+	/* Set Interrupt Trigger Levels */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_TR, 0x01e1fff8);
+	/* Set Vect base=0,INT31 Highest priority */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_VR, 0x00000001);
+	/* clear all interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC2_SR, 0xffffffff);
 
-	mtdcr (UIC1_ER, 0x00000000);	/* disable all interrupts */
-	mtdcr (UIC1_CR, 0x00000000);	/* Set Critical / Non Critical interrupts */
-	mtdcr (UIC1_PR, 0xfffac785);	/* Set Interrupt Polarities */
-	mtdcr (UIC1_TR, 0x001d0040);	/* Set Interrupt Trigger Levels */
-	mtdcr (UIC1_VR, 0x00000001);	/* Set Vect base=0,INT31 Highest priority */
-	mtdcr (UIC1_SR, 0xffffffff);	/* clear all interrupts */
+	/* disable all interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_ER, 0x00000000);
+	/* Set Critical / Non Critical interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_CR, 0x00000000);
+	/* Set Interrupt Polarities */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_PR, 0xfffac785);
+	/* Set Interrupt Trigger Levels */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_TR, 0x001d0040);
+	/* Set Vect base=0,INT31 Highest priority */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_VR, 0x00000001);
+	/* clear all interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC1_SR, 0xffffffff);
 
-	mtdcr (UIC0_ER, 0x0000000a);	/* Disable all interrupts except cascade UIC0 and UIC1 */
-	mtdcr (UIC0_CR, 0x00000000);	/* Set Critical / Non Critical interrupts */
-	mtdcr (UIC0_PR, 0xffbfefef);	/* Set Interrupt Polarities */
-	mtdcr (UIC0_TR, 0x00007000);	/* Set Interrupt Trigger Levels */
-	mtdcr (UIC0_VR, 0x00000001);	/* Set Vect base=0,INT31 Highest priority */
-	mtdcr (UIC0_SR, 0xffffffff);	/* clear all interrupts */
+	/* Disable all interrupts except cascade UIC0 and UIC1 */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_ER, 0x0000000a);
+	/* Set Critical / Non Critical interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_CR, 0x00000000);
+	/* Set Interrupt Polarities */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_PR, 0xffbfefef);
+	/* Set Interrupt Trigger Levels */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_TR, 0x00007000);
+	/* Set Vect base=0,INT31 Highest priority */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_VR, 0x00000001);
+	/* clear all interrupts */
+	PPC_SET_DEVICE_CONTROL_REGISTER (UIC0_SR, 0xffffffff);
 	
 	return 1;
 }
@@ -153,9 +174,9 @@ C_dispatch_irq_handler( struct _BSP_Exception_frame* frame, unsigned int excNum 
 		/* Fetch the masked flags that tell us what external ints are active.
 		   Likely to be only one, but we need to handle more than one,
 		   OR the flags into gIntInhibited */
-		active[0] = mfdcr(UIC0_MSR);
-		active[1] = mfdcr(UIC1_MSR);
-		active[2] = mfdcr(UIC2_MSR);
+		active[0] = PPC_DEVICE_CONTROL_REGISTER(UIC0_MSR);
+		active[1] = PPC_DEVICE_CONTROL_REGISTER(UIC1_MSR);
+		active[2] = PPC_DEVICE_CONTROL_REGISTER(UIC2_MSR);
 		gIntInhibited[0] |= active[0];
 		gIntInhibited[1] |= active[1];
 		gIntInhibited[2] |= active[2];
@@ -180,9 +201,15 @@ C_dispatch_irq_handler( struct _BSP_Exception_frame* frame, unsigned int excNum 
 			/* Write a 1-bit to the appropriate status register to clear it */
 			bmask = 0x80000000 >> bit;
 			switch (index) {
-				case 0: mtdcr(UIC0_SR, bmask); break;
-				case 1: mtdcr(UIC1_SR, bmask); break;
-				case 2: mtdcr(UIC2_SR, bmask); break;
+			case 0: 
+			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_SR, bmask);
+			  break;
+			case 1: 
+			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC1_SR, bmask);
+			  break;
+			case 2: 
+			  PPC_SET_DEVICE_CONTROL_REGISTER(UIC2_SR, bmask);
+			  break;
 			}
 			
 			/* Clear in the active record and gIntInhibited */
