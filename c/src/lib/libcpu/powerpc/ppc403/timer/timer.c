@@ -1,6 +1,6 @@
 /*  timer.c
  *
- *  This file manages the interval timer on the PowerPC 403*.
+ *  This file manages the interval timer on the PowerPC 405.
  *  We shall use the bottom 32 bits of the timebase register,
  *
  *  NOTE: It is important that the timer start/stop overhead be
@@ -32,85 +32,47 @@
  *
  *  Modifications for PPC405GP by Dennis Ehlin
  *
+ *  Further mods for PPC405EX/EXr by Michael Hamel
+ *
  *  $Id$
  *
  */
 
 #include <rtems.h>
+#include <libcpu/powerpc-utility.h>
 
-static volatile uint32_t   Timer_starting;
-static rtems_boolean Timer_driver_Find_average_overhead;
+extern uint32_t bsp_timer_least_valid;
+extern uint32_t bsp_timer_average_overhead;
 
-/*
- *  This is so small that this code will be reproduced where needed.
- */
-static inline uint32_t   get_itimer(void)
-{
-   uint32_t   ret;
-
-#ifndef ppc405
-   asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret))); /* TBLO */
-#else /* ppc405 */
-/*   asm volatile ("mfspr %0, 0x3dd" : "=r" ((ret)));  TBLO */
-
-   asm volatile ("mfspr %0, 0x10c" : "=r" ((ret))); /* 405GP TBL */
-#endif /* ppc405 */
-
-   return ret;
-}
+static volatile uint32_t	startedAt;
+static rtems_boolean		subtractOverhead;
 
 void Timer_initialize()
 {
-  uint32_t   iocr;
-
-#ifndef ppc405
-  asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
-  iocr &= ~4;
-  iocr |= 4;  /* Select external timer clock */
-  asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
-#else /* ppc405 */
-  asm volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
-/*  asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); IOCR */
-
-  /* iocr |= 0x800000;  select external timer clock CETE*/
-  iocr &= ~0x800000; /* timer clocked from system clock CETE*/
-
-  asm volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
-/*  asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr));  IOCR */
-#endif /* ppc405 */
-
-  Timer_starting = get_itimer();
+  /* We are going to rely on clock.c to sort out where the clock comes from */
+  startedAt = ppc_time_base();
 }
 
 int Read_timer()
 {
-  uint32_t   clicks;
-  uint32_t   total;
-  extern uint32_t bsp_timer_least_valid;
-  extern uint32_t bsp_timer_average_overhead;
+	uint32_t   clicks, total;
 
-  clicks = get_itimer();
-
-  total = clicks - Timer_starting;
-
-  if ( Timer_driver_Find_average_overhead == 1 )
-    return total;          /* in XXX microsecond units */
-
-  else {
-    if ( total < bsp_timer_least_valid )
-      return 0;            /* below timer resolution */
-    return (total - bsp_timer_average_overhead);
-  }
+	clicks = ppc_time_base();
+	total = clicks - startedAt;
+	if ( ! subtractOverhead )
+		return total;          /* in XXX microsecond units */
+	else if ( total < bsp_timer_least_valid )
+		return 0;            /* below timer resolution */
+	else
+		return (total - bsp_timer_average_overhead);
 }
 
 rtems_status_code Empty_function( void )
 {
-  return RTEMS_SUCCESSFUL;
+	return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
-  rtems_boolean find_flag
-)
+void Set_find_average_overhead( rtems_boolean find_flag)
 {
-  Timer_driver_Find_average_overhead = find_flag;
+	subtractOverhead = find_flag;
 }

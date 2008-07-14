@@ -31,6 +31,8 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
   switch (cpu) {
     case PPC_405:		return "PPC405";
+	case PPC_405GP:		return "PPC405GP";
+	case PPC_405EX:		return "PPC405EX";
     case PPC_601:		return "MPC601";
     case PPC_5XX:		return "MPC5XX";
     case PPC_603:		return "MPC603";
@@ -69,6 +71,8 @@ ppc_cpu_id_t get_ppc_cpu_type()
 
   switch (pvr) {
     case PPC_405:
+	case PPC_405GP:
+	case PPC_405EX:
     case PPC_601:
     case PPC_5XX:
     case PPC_603:
@@ -128,6 +132,8 @@ ppc_cpu_id_t get_ppc_cpu_type()
 
   switch ( current_ppc_cpu ) {
   	case PPC_405:
+ 	case PPC_405GP:
+ 	case PPC_405EX:
 		current_ppc_features.is_bookE			= PPC_BOOKE_405;
 	break;
   	case PPC_8540:

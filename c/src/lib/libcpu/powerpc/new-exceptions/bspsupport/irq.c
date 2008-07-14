@@ -38,6 +38,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
 
 
 SPR_RW(BOOKE_TSR)
+SPR_RW(PPC405_TSR)
 
 /* legacy mode for bookE DEC exception;
  * to avoid the double layer of function calls
@@ -52,8 +53,12 @@ int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNu
 	/* clear interrupt; we must do this
 	 * before C_dispatch_irq_handler()
 	 * re-enables MSR_EE.
+	 * Note that PPC405 uses a different SPR# for TSR
 	 */
-	_write_BOOKE_TSR( BOOKE_TSR_DIS );
+	if ( ppc_cpu_is_bookE()==PPC_BOOKE_405) 
+		_write_PPC405_TSR( BOOKE_TSR_DIS );
+	else
+		_write_BOOKE_TSR( BOOKE_TSR_DIS );
 	return C_dispatch_irq_handler(frame, ASM_DEC_VECTOR);	
 }
 

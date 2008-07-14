@@ -8,6 +8,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([gen5200]);;
   gen83xx )
     AC_CONFIG_SUBDIRS([gen83xx]);;
+  haleakala )
+    AC_CONFIG_SUBDIRS([haleakala]);;
   mbx8xx )
     AC_CONFIG_SUBDIRS([mbx8xx]);;
   motorola_powerpc )

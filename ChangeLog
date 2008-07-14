@@ -1,7 +1,12 @@
+2008-07-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* make/custom/haleakala.cfg:
+	added PPC405 haleakala BSP contributed by Michael Hamel
+
 2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4,
-	make/custom/m5484FireEngine.cfg:
+	* make/custom/m5484FireEngine.cfg:
 	added pgh360 BSP variant
 	added m5484FireEngine BSP
 

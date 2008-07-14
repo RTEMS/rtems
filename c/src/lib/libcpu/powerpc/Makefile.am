@@ -126,8 +126,19 @@ ppc403_tty_drv_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_tty_drv_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-endif
+endif # ppc403
 
+if ppc405
+
+## ppc4xx/include
+include_ppc4xxdir = $(includedir)/ppc4xx
+include_ppc4xx_HEADERS = ppc403/include/ppc405gp.h \
+		         ppc403/include/ppc405ex.h
+
+endif # ppc405
+
+
+## mpc5xx
 EXTRA_DIST += mpc5xx/README
 if mpc5xx
 include_mpc5xxdir = $(includedir)/mpc5xx
@@ -341,6 +352,7 @@ mpc8260_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mpc83xx
+
 include_mpc83xxdir = $(includedir)/mpc83xx
 include_mpc83xx_HEADERS  = mpc83xx/include/mpc83xx.h
 include_mpc83xx_HEADERS += mpc83xx/network/tsec.h

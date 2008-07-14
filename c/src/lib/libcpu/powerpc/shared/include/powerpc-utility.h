@@ -14,6 +14,9 @@
  * D-82178 Puchheim
  * Germany
  * rtems@embedded-brains.de
+ * 
+ * access function for Device Control Registers inspired by "ppc405common.h"
+ * from Michael Hamel ADInstruments May 2008
  *
  * The license and distribution terms for this file may be found in the file
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
@@ -189,6 +192,7 @@ static inline void ppc_write_word( uint32_t value, volatile void *dest)
 	);
 }
 
+
 static inline void *ppc_stack_pointer()
 {
 	void *sp;
@@ -301,6 +305,8 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	PPC_Set_decrementer( dec);
 }
 
+#define PPC_STRINGOF(x)	#x
+
 /* Do not use the following macros.  Use the inline functions instead. */
 
 #define PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER( spr) \
@@ -323,6 +329,20 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 
 #define PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( spr, val) \
 	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER( spr, val)
+
+/*
+ * PPC4xx have Device Control Registers...
+ */
+#define PPC_DEVICE_CONTROL_REGISTER(dcr)			\
+  ({uint32_t val;asm volatile ("mfspr %0," PPC_STRINGOF(dcr)	\
+			       : "=r" (val)); val;})
+
+#define PPC_SET_DEVICE_CONTROL_REGISTER(dcr,val)	\
+  do {							\
+    asm volatile ("mtspr " PPC_STRINGOF(dcr)",%0"	\
+		  :: "r" (val));			\
+    } while (0)
+
 
 static inline uint32_t ppc_special_purpose_register_0()
 {

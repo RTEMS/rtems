@@ -115,6 +115,17 @@ extern "C" {
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
 
+#elif defined (ppc405)
+
+#define PPC_CACHE_ALIGNMENT	32
+#define PPC_HAS_RI    	     0
+#define PPC_HAS_RFCI    	1
+#define PPC_USE_MULTIPLE	1
+#define PPC_I_CACHE		16384
+#define PPC_D_CACHE		16384		/* except GP/CR */
+#define PPC_HAS_EXCEPTION_PREFIX 0
+#define PPC_HAS_EVPR             1
+
 #elif defined(mpc555)
 
 /* Copied from mpc505 */

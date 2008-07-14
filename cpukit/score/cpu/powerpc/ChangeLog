@@ -1,3 +1,8 @@
+2008-07-14	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+	* rtems/powerpc/registers.h:
+
+	Added PPC405EX support contributed by Michael Hamel
+
 2008-07-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/asm.h: Added defines for save and restore registers and

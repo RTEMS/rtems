@@ -162,7 +162,8 @@ static const cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
 
 static const cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
   [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
-  [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* PIT */
+  [ ASM_BOOKE_FIT_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* FIT */
 
   [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
   [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
@@ -371,6 +372,8 @@ ppc_raw_exception_category rval = PPC_EXC_INVALID;
 			rval = mpc_860_vector_categories[vector];
             break;
         case PPC_405:
+        case PPC_405GP:
+        case PPC_405EX:
 			rval = ppc_405_vector_categories[vector];
             break;
         default:

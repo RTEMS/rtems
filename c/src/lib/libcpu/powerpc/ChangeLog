@@ -1,3 +1,13 @@
+2008-07-14	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
+	* Makefile.am, new-exceptions/raw_exception.c,
+	* new-exceptions/bspsupport/irq.c, ppc403/clock/clock_4xx.c,
+	* ppc403/include/ppc405ex.h, ppc403/include/ppc405gp.h,
+	* ppc403/timer/timer.c, rtems/powerpc/powerpc.h,
+	* shared/include/cpuIdent.c, shared/include/cpuIdent.h,
+	* shared/include/powerpc-utility.h:
+	Added support for PPC405EX (contributed by Michael Hamel)
+	
 2008-07-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am: Install powerpc-utility.h.
@@ -15,13 +25,14 @@
 	ppc_exc_vector_base for CPUs with IVPR register.
 
 	* new-exceptions/bspsupport/ppc_exc.S,
-	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
-	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
-	new-exceptions/bspsupport/ppc_exc_hdl.c,
-	new-exceptions/bspsupport/vectors.h,
-	new-exceptions/bspsupport/vectors_init.c: Conistent code layout in most
-	assember code sections and usage of defines for registers.  Usage of
-	standard header files to avoid multiple definitions.
+	* new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	* new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	* new-exceptions/bspsupport/ppc_exc_hdl.c,
+	* new-exceptions/bspsupport/vectors.h,
+	* new-exceptions/bspsupport/vectors_init.c: 
+	Conistent code layout in most assember code sections and usage of
+	defines for registers.  Usage of standard header files to avoid
+	multiple definitions. 
 	
 	Optimized exception code: Removed many branches and exploit branch
 	prediction for asynchronous exceptions, moved common wrap code into

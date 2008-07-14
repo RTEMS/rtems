@@ -126,6 +126,10 @@ $(PROJECT_INCLUDE)/rtems/tar.h: include/rtems/tar.h $(PROJECT_INCLUDE)/rtems/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tar.h
 
+$(PROJECT_INCLUDE)/rtems/status-checks.h: include/rtems/status-checks.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/status-checks.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/status-checks.h
+
 $(PROJECT_INCLUDE)/rtems/endian.h: include/rtems/endian.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/endian.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
@@ -133,6 +137,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
 $(PROJECT_INCLUDE)/rtems/irq.h: include/rtems/irq.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/irq.h
+
+$(PROJECT_INCLUDE)/rtems/irq-extension.h: include/rtems/irq-extension.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/irq-extension.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/irq-extension.h
 
 $(PROJECT_INCLUDE)/rtems/imfs.h: libfs/src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h

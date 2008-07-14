@@ -292,12 +292,14 @@ lidate */
 
 #define BOOKE_DECAR	54
 
+#define PPC405_TSR	0x3D8
 #define BOOKE_TSR	336
 #define BOOKE_TSR_ENW		(1<<31)
 #define BOOKE_TSR_WIS		(1<<30)
 #define BOOKE_TSR_DIS		(1<<27)
 #define BOOKE_TSR_FIS		(1<<26)
 
+#define PPC405_TCR	0x3DA
 #define BOOKE_TCR	340
 #define BOOKE_TCR_WP(x)		(((x)&3)<<30)
 #define BOOKE_TCR_WRC(x)	(((x)&3)<<28)

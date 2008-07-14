@@ -1,0 +1,255 @@
+/* 
+ *  This file contains directives for the GNU linker which are specific
+ *  to the 405GP/EX
+ *  This file is intended to be used together with dlentry.s
+ *  it will generate downloadable code
+ *
+ *  Modifications for gen405 by Dennis Ehlin
+ *  Modifications for virtex by Keith, Greg, and Bob
+ *  Modifications for 405GP/EX by Michael Hamel
+ *
+ *  $Id$
+ */
+
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+ENTRY(download_entry)
+
+kIntrStackSize = 16K;
+kMainStackSize = 64K;
+
+MEMORY {
+        RAM : ORIGIN = 0, LENGTH = 256M
+        /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
+}
+
+
+SECTIONS
+{
+  /* First 16K is occupied by exception vectors and anything else we want to put there */
+  .text 0x4000:
+  {
+     text.start = . ;
+     *(.entry)
+     *(.entry2)
+     *(.text*)
+     *(.rodata*)
+     *(.rodata1)
+
+     /*
+      * Special FreeBSD sysctl sections.
+      */
+     . = ALIGN (16);
+     __start_set_sysctl_set = .;
+     *(set_sysctl_*);
+     __stop_set_sysctl_set = ABSOLUTE(.);
+     *(set_domain_*);
+     *(set_pseudo_*);
+
+    /* C++ constructors/destructors */
+    *(.gnu.linkonce.t*)
+
+    /*  Initialization and finalization code.
+     *
+     *  Various files can provide initialization and finalization functions.
+     *  The bodies of these functions are in .init and .fini sections. We
+     *  accumulate the bodies here, and prepend function prologues from
+     *  ecrti.o and function epilogues from ecrtn.o. ecrti.o must be linked
+     *  first; ecrtn.o must be linked last. Because these are wildcards, it
+     *  doesn't matter if the user does not actually link against ecrti.o and
+     *  ecrtn.o; the linker won't look for a file to match a wildcard.  The
+     *  wildcard also means that it doesn't matter which directory ecrti.o
+     *  and ecrtn.o are in. 
+     */
+    PROVIDE (_init = .);
+    *ecrti.o(.init)
+    *(.init)
+    *ecrtn.o(.init)
+    
+    PROVIDE (_fini = .);
+    *ecrti.o(.fini)
+    *(.fini)
+    *ecrtn.o(.init)
+
+    /* 
+     *  C++ constructors and destructors for static objects.
+     *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
+     *  constructor and destructor lists that begin with the list lenght
+     *  end terminate with a NULL entry.
+     */
+     
+    PROVIDE (__CTOR_LIST__ = .);	     
+    *crtbegin.o(.ctors)
+    *(.ctors)
+    *crtend.o(.ctors)
+    LONG(0)
+    PROVIDE (__CTOR_END__ = .);
+	
+    PROVIDE (__DTOR_LIST__ = .);
+    *crtbegin.o(.dtors)
+    *(.dtors)
+    *crtend.o(.dtors)
+    LONG(0)
+    PROVIDE (__DTOR_END__ = .);
+	
+    /* Exception frame info */
+     *(.eh_frame)
+    /* Miscellaneous read-only data */
+    _rodata_start = . ;
+    *(.gnu.linkonce.r*)
+    *(.lit)
+    *(.shdata)
+    *(.rodata)
+    *(.rodata1)
+    *(.descriptors)
+    *(rom_ver)
+    _erodata = .;
+
+    PROVIDE (__EXCEPT_START__ = .);
+    *(.gcc_except_table*)
+    PROVIDE (__EXCEPT_END__ = .);
+    __GOT_START__ = .;
+    s.got = .;
+    *(.got.plt) 
+    *(.got)
+    *(.got1)
+    PROVIDE (__GOT2_START__ = .);
+    PROVIDE (_GOT2_START_ = .);
+    *(.got2)
+    PROVIDE (__GOT2_END__ = .);
+    PROVIDE (_GOT2_END_ = .);
+    
+    PROVIDE (__FIXUP_START__ = .);
+    PROVIDE (_FIXUP_START_ = .);
+    *(.fixup)
+    PROVIDE (_FIXUP_END_ = .);
+    PROVIDE (__FIXUP_END__ = .);
+    
+
+    /* Various possible names for the end of the .text section */
+     etext = ALIGN(0x10);
+     _etext = .;
+
+     *(.lit)
+     *(.shdata)
+     _endtext = ALIGN(0x10);
+     text.end = .;
+     text.size = text.end - text.start;
+  } >RAM
+
+  text.size = text.end - text.start;
+
+  .jcr : { KEEP (*(.jcr)) } >RAM
+
+    .rel.dyn : {
+      *(.rel.init)
+      *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+      *(.rel.fini)
+      *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+      *(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+      *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+      *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+      *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+      *(.rel.ctors)
+      *(.rel.dtors)
+      *(.rel.got)
+      *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
+      *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
+      *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
+      *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
+      *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+    } >RAM
+    .rela.dyn : {
+      *(.rela.init)
+      *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+      *(.rela.fini)
+      *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+      *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+      *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+      *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+      *(.rela.ctors)
+      *(.rela.dtors)
+      *(.rela.got)
+      *(.rela.got1)
+      *(.rela.got2)
+      *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+      *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+      *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+      *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+      *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+    } >RAM
+
+
+    /* Initialised large data */
+    .data ( . ) :
+    {
+      . = ALIGN (4);
+      data.start = .;
+      *(.data)
+      *(.data1)
+      *(.data.* .gnu.linkonce.d.*)
+      data.end = .;
+    } > RAM
+
+	/* Initialised small data addressed as offsets from r13 */
+	.sdata : {
+      . = ALIGN (4);
+	  PROVIDE (__SDATA_START__ = .);
+      sdata.start = .;
+	  *(.sdata*)
+      *(.gnu.linkonce.s.*)
+	  sdata.end = .;
+	} > RAM
+
+	/* Zeroed small data addressed as offsets from r13 */
+   .sbss : {
+      . = ALIGN (4);
+	  PROVIDE(__SBSS_START__ = .);
+	  sbss.start = .;
+      *(.sbss*)
+      *(.gnu.linkonce.sb.*);
+	  sbss.end = .;
+    } > RAM
+    PROVIDE(__SBSS_END__ = .);
+
+	/* Zeroed large data */
+	.bss : {
+      . = ALIGN (4);
+	  bss.start = .;
+      *(.bss .bss* .gnu.linkonce.b*)
+      . = ALIGN(4);
+      bss.end = .;
+    } > RAM
+
+    bss.size = bss.end - bss.start;
+    sbss.size = sbss.end - sbss.start;
+	          	
+    /* Interrupt stack: align to a cache-line boundary */
+    IntrStack_start = ALIGN(0x20);
+    . += kIntrStackSize;
+    intrStack = .;
+    PROVIDE(intrStackPtr = intrStack);
+
+ 	/* Main stack: align to a cache-line boundary */
+	stack.start = ALIGN(0x20);
+	. += kMainStackSize;
+	stack.end   = .;
+
+	/* RTEMS workspace: size specified by application */
+	_WorkspaceStart = ALIGN(0x20);
+
+	/* Heap: from end of the workspace to _RAMEnd */
+	_RAMEnd = ORIGIN(RAM) + LENGTH(RAM);
+
+	/* Debugging information */
+    .line 0 : { *(.line) }
+    .debug 0 : { *(.debug) }
+    .debug_sfnames 0 : { *(.debug_sfnames) }
+    .debug_srcinfo 0 : { *(.debug_srcinfo) }
+    .debug_pubnames 0 : { *(.debug_pubnames) }
+    .debug_aranges 0 : { *(.debug_aranges) }
+    .debug_aregion 0 : { *(.debug_aregion) }
+    .debug_macinfo 0 : { *(.debug_macinfo) }
+    .stab 0 : { *(.stab) }
+    .stabstr 0 : { *(.stabstr) }
+}

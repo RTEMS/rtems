@@ -45,6 +45,10 @@ $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
+$(PROJECT_INCLUDE)/libcpu/powerpc-utility.h: shared/include/powerpc-utility.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/powerpc-utility.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/powerpc-utility.h
+
 if !mpc5xx
 $(PROJECT_INCLUDE)/libcpu/raw_exception.h: new-exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
@@ -93,7 +97,21 @@ $(PROJECT_INCLUDE)/tty_drv.h: ppc403/tty_drv/tty_drv.h $(PROJECT_INCLUDE)/$(dirs
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tty_drv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tty_drv.h
 endif
-endif
+endif # ppc403
+if ppc405
+$(PROJECT_INCLUDE)/ppc4xx/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/ppc4xx
+	@: > $(PROJECT_INCLUDE)/ppc4xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/ppc4xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/ppc4xx/ppc405gp.h: ppc403/include/ppc405gp.h $(PROJECT_INCLUDE)/ppc4xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ppc4xx/ppc405gp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ppc4xx/ppc405gp.h
+
+$(PROJECT_INCLUDE)/ppc4xx/ppc405ex.h: ppc403/include/ppc405ex.h $(PROJECT_INCLUDE)/ppc4xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ppc4xx/ppc405ex.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ppc4xx/ppc405ex.h
+endif # ppc405
 if mpc5xx
 $(PROJECT_INCLUDE)/mpc5xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc5xx
