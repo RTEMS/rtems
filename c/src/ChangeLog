@@ -1,3 +1,8 @@
+2008-07-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libchip/display/font_hcms29xx.c, libchip/display/disp_fonts.h
+	make glyphs non-constant, added file headers 
+
 2008-07-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libchip/display/disp_fonts.h, libchip/display/disp_hcms29xx.c
