@@ -1,3 +1,8 @@
+2008-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c: Must include bsp.h or bspopts.h or we cannot know if
+	boot_card() handles RAM allocation.
+
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bootcard.c: Removed duplicated code.

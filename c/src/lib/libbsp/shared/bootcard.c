@@ -48,11 +48,12 @@
 
 #include <rtems.h>
 
+#include <bspopts.h>  /* for BSP_BOOTCARD_HANDLES_RAM_ALLOCATION */
+
 /*
  *  Since there is a forward reference
  */
 char *rtems_progname;
-
 
 /*
  *  Prototypes of external routines
