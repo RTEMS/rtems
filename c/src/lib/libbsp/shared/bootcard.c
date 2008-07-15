@@ -124,7 +124,7 @@ int boot_card(
    * It must be valid before we can use rtems_interrupt_disable().
    */
   #ifdef PPC_INTERRUPT_DISABLE_MASK_DEFAULT
-    ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT);
+    ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT );
   #endif /* PPC_INTERRUPT_DISABLE_MASK_DEFAULT */
 
   /*
