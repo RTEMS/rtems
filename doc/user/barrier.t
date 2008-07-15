@@ -200,7 +200,7 @@ procedure Barrier_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - barrier created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid barrier name@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}TOO_MANY} - too many barriers created@
 

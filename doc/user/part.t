@@ -170,7 +170,7 @@ procedure Partition_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - partition created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid partition name@*
 @code{@value{RPREFIX}TOO_MANY} - too many partitions created@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{starting_address} is NULL@*
@@ -186,7 +186,7 @@ procedure Partition_Create (
 This directive creates a partition of fixed size
 buffers from a physically contiguous memory space which starts
 at starting_address and is length bytes in size.  Each allocated
-buffer is to be of buffer_length in bytes.  The assigned
+buffer is to be of @code{buffer_size} in bytes.  The assigned
 partition id is returned in id.  This partition id is used to
 access the partition with other partition related directives.
 For control and maintenance of the partition, RTEMS allocates a

@@ -254,7 +254,7 @@ procedure Message_Queue_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - queue created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid queue name@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid message count@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*

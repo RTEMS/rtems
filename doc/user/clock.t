@@ -265,7 +265,7 @@ procedure Clock_Set (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - date and time set successfully@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{time_buffer} is NULL@*
-@code{@value{RPREFIX}INVALID_TIME_OF_DAY} - invalid time of day
+@code{@value{RPREFIX}INVALID_CLOCK} - invalid time of day
 
 @subheading DESCRIPTION:
 
