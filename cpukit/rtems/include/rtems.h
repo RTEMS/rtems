@@ -78,6 +78,15 @@ extern "C" {
 #include <rtems/score/sysstate.h>
 
 /**
+ *  @brief Obtain the RTEMS Version String
+ *
+ *  This method may be used to obtain the RTEMS version string.
+ *
+ *  @return This method returns a pointer to the version string.
+ */
+const char *rtems_get_version_string(void);
+
+/**
  *  This constant indicates whether this processor variant has
  *  hardware floating point support.
  */

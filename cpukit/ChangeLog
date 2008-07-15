@@ -1,3 +1,9 @@
+2008-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/include/rtems.h, sapi/Makefile.am: Add simple helper to get
+	RTEMS version string.
+	* sapi/src/getversionstring.c: New file.
+
 2008-07-10     Peter Rasmussen <Peter.Rasmussen@embedded-brains.de>
 
 	* score/cpu/m68k/cpu_asm.S, cpukit/score/cpu/m68k/rtems/asm.h, 
