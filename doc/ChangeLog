@@ -1,3 +1,10 @@
+2008-07-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/clock.t, user/dpmem.t, user/msg.t, user/part.t, user/region.t,
+	user/rtmon.t, user/sem.t, user/task.t, user/timer.t: Correct
+	documentation typos noticed and thankfully reported by Fabrício de
+	Novaes Kucinskis <fabricio@dea.inpe.br>
+
 2008-06-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/io.t: Fix typos for IO unregister reported by Catalin Morosan

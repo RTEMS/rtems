@@ -1154,8 +1154,8 @@ procedure Task_Is_Suspended (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task is suspended@*
-@code{@value{RPREFIX}ALREADY_SUSPENDED} - task is not suspended@*
+@code{@value{RPREFIX}SUCCESSFUL} - task is NOT suspended@*
+@code{@value{RPREFIX}ALREADY_SUSPENDED} - task is currently suspended@*
 @code{@value{RPREFIX}INVALID_ID} - task id invalid@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks
 

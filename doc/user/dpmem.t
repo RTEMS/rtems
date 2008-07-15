@@ -137,7 +137,7 @@ procedure Port_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - port created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid port name@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}TOO_MANY} - too many DP memory areas created
