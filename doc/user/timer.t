@@ -68,7 +68,7 @@ in task rather than interrupt space, the application is
 allowed a bit more flexibility in what operations a timer
 service routine can perform.  For example, the Timer Server
 can be configured to have a floating point context in which case
-it would be save to perform floating point operations
+it would be safe to perform floating point operations
 from a task-based timer.  Most of the time, executing floating
 point instructions from an interrupt service routine
 is not considered safe. However, since the Timer Server task

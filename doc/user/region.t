@@ -96,7 +96,7 @@ desired option components.  The set of valid options for the
 listed in the following table:
 
 @itemize @bullet
-@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}WAIT} - task will wait for segment (default)
 @item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
@@ -272,7 +272,7 @@ procedure Region_Create (
 @subheading DIRECTIVE STATUS CODES:
 
 @code{@value{RPREFIX}SUCCESSFUL} - region created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid region name@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{starting_address} is NULL@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - address not on four byte boundary@*
@@ -300,9 +300,9 @@ Specifying @code{@value{RPREFIX}FIFO} in attribute_set or selecting
 @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} will cause waiting tasks to
 be serviced in First In-First Out order.
 
-The starting_address parameter must be aligned on a
-four byte boundary.  The page_size parameter must be a multiple
-of four greater than or equal to four.
+The @code{starting_address} parameter must be aligned on a
+four byte boundary.  The @code{page_size} parameter must be a multiple
+of four greater than or equal to eight.
 
 @subheading NOTES:
 

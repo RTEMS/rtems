@@ -963,7 +963,7 @@ procedure Rate_Monotonic_Create (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - rate monotonic period created successfully@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid task name@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid period name@*
 @code{@value{RPREFIX}TOO_MANY} - too many periods created
 
 @subheading DESCRIPTION:
