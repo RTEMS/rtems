@@ -78,7 +78,7 @@ extern rtems_shell_alias_t rtems_shell_EXIT_Alias;
 extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
 
 /*
- *  Extern for alias commands
+ *  Externs for mount command helpers
  */
 extern rtems_shell_filesystems_t rtems_shell_Mount_MSDOS;
 extern rtems_shell_filesystems_t rtems_shell_Mount_TFTP;

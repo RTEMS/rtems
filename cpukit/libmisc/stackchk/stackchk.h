@@ -52,7 +52,7 @@ void rtems_stack_checker_report_usage( void );
  *  @param[in] context is the context to pass to the print handler 
  *  @param[in] print is the print handler 
  *
- *  @note It uses the CALLER's routine to print the report.
+ *  @note It uses the caller's routine to print the report.
  */
 void rtems_stack_checker_report_usage_with_plugin(
   void                  *context,
