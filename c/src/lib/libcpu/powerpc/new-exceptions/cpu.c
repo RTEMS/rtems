@@ -55,6 +55,7 @@ void _CPU_Initialize(
  *  _CPU_Context_Initialize
  */
 
+
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
@@ -76,11 +77,24 @@ void _CPU_Context_Initialize(
 
   _CPU_MSR_GET( msr_value );
 
+  /*
+   * Setting the interrupt mask here is not strictly necessary
+   * since the IRQ level will be established from _Thread_Handler()
+   * again, as soon as the task starts execution.
+   * Because we have to establish a defined state anyways we
+   * can as well leave this code here.
+   * I.e., simply (and unconditionally) saying
+   *
+   *   msr_value &= ~ppc_interrupt_get_disable_mask();
+   *
+   * would be an alternative.
+   */
+
   if (!(new_level & CPU_MODES_INTERRUPT_MASK)) {
-    msr_value |= MSR_EE;
+    msr_value |= ppc_interrupt_get_disable_mask();
   }
   else {
-    msr_value &= ~MSR_EE;
+    msr_value &= ~ppc_interrupt_get_disable_mask();
   }
 
   the_context->msr = msr_value;
