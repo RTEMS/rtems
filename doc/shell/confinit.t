@@ -195,17 +195,18 @@ void start_shell(void)
     RTEMS_MINIMUM_STACK_SIZE * 4,  /* task stack size */
     100,                           /* task priority */
     "/dev/console",                /* device name */
-    0,                             /* initial termios cflag value */
-    0                              /* run forever */
+    0,                             /* run forever */
+    1                              /* wait for shell to terminate */
   );
-  rtems_task_suspend(RTEMS_SELF);
 @}
 @end smallexample
 
 In the above example, the call to @code{rtems_shell_init}
 spawns a task to run the RTEMS Shell attached to @code{/dev/console}
 and executing at priority 100.  The caller suspends itself and
-lets the shell take over the console device.
+lets the shell take over the console device.  When the shell
+is exited by the user, then control returns to the caller.
+
 @c
 @c
 @c
