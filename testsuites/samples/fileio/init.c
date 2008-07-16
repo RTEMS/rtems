@@ -151,9 +151,14 @@ void fileio_start_shell(void)
   printf(" =========================\n");
   printf(" starting shell\n");
   printf(" =========================\n");
-  rtems_shell_init("SHLL",RTEMS_MINIMUM_STACK_SIZE * 4,100,"/dev/console",
-                   0, 1);
-  rtems_task_suspend(RTEMS_SELF);
+  rtems_shell_init(
+    "SHLL",                          /* task_name */
+    RTEMS_MINIMUM_STACK_SIZE * 4,    /* task_stacksize */
+    100,                             /* task_priority */
+    "/dev/console",                  /* devname */
+    0,                               /* forever */
+    1                                /* wait */
+  );
 }
 
 #endif /* USE_SHELL */
