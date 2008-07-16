@@ -345,6 +345,16 @@ static inline void ppc_interrupt_set_disable_mask( uint32_t mask)
   );
 }
 
+static inline uint32_t ppc_interrupt_get_disable_mask()
+{
+uint32_t mask;
+  asm volatile (
+    "mfspr %0,272"
+    : "=r" (mask)
+  );
+  return mask;
+}
+
 static inline uint32_t ppc_interrupt_disable()
 {
   uint32_t level;
