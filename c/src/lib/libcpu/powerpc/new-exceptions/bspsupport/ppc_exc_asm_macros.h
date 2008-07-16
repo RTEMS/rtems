@@ -140,9 +140,9 @@ ppc_exc_min_prolog_sync_\_NAME:
  * MACRO: TEST_1ST_OPCODE_crit
  *****************************************************************************
  *
- * USES:    REG, CR_LOCK
+ * USES:    REG, cr0
  * ON EXIT: REG available (contains *pc - STW_R1_R13(0)),
- *          return value in CR_LOCK.
+ *          return value in cr0.
  *
  * test opcode interrupted by critical (asynchronous) exception; set CR_LOCK if
  *
@@ -161,7 +161,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 * if what's left compares against the 'ppc_exc_lock_std@sdarel'
 	 * address offset then we have a match...
 	 */
-	cmpli	CR_LOCK, \_REG, ppc_exc_lock_std@sdarel
+	cmplwi	cr0, \_REG, ppc_exc_lock_std@sdarel
 
 	.endm
 
@@ -190,11 +190,19 @@ ppc_exc_min_prolog_sync_\_NAME:
  *
  * critical-exception wrapper has to check 'std' lock:
  *
- * Return CR_LOCK = (   ppc_lock_std == 0
+ * Return CR_LOCK = (   (interrupt_mask & MSR_CE) != 0
+                 &&                  ppc_lock_std == 0
  *               && * SRR0 != <write std lock instruction> )
  *
  */
 	.macro	TEST_LOCK_crit _FLVR
+	/* If MSR_CE is not in the IRQ mask then we must never allow
+	 * thread-dispatching!
+	 */
+	GET_INTERRUPT_MASK mask=SCRATCH_REGISTER_1
+	/* EQ(cr0) = ((interrupt_mask & MSR_CE) == 0) */
+	andis.	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, MSR_CE@h
+	beq	TEST_LOCK_crit_done_\_FLVR		
 
 	/* STD interrupt could have been interrupted before executing the 1st
 	 * instruction which sets the lock; check this case by looking at the
@@ -202,7 +210,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 */
 	TEST_1ST_OPCODE_crit	_REG=SCRATCH_REGISTER_0
 	/*
-	 * At this point CR_LOCK is set if
+	 * At this point cr0 is set if
 	 *
 	 *   *(PC) == 'stw r1, ppc_exc_lock_std@sdarel(r13)'
 	 *
@@ -210,13 +218,21 @@ ppc_exc_min_prolog_sync_\_NAME:
 	
 	/* check lock */
 	lwz	SCRATCH_REGISTER_1, ppc_exc_lock_std@sdarel(r13)
-	cmpli	cr0, SCRATCH_REGISTER_1, 0
-	/*
+	cmplwi	CR_LOCK, SCRATCH_REGISTER_1, 0
+
+	/* set EQ(CR_LOCK) to result */
+TEST_LOCK_crit_done_\_FLVR:
+	/* If we end up here because the interrupt mask did not contain
+     * MSR_CE then cr0 is set and therefore the value of CR_LOCK
+	 * does not matter since   x && !1 == 0:
 	 *
-	 * CR_LOCK = (   *pc != <write std lock instruction>
-	 *        && ppc_exc_lock_std == 0 )
+	 *  if ( (interrupt_mask & MSR_CE) == 0 ) {
+	 *      EQ(CR_LOCK) = EQ(CR_LOCK) && ! ((interrupt_mask & MSR_CE) == 0)
+	 *  } else {
+	 *      EQ(CR_LOCK) = (ppc_exc_lock_std == 0) && ! (*pc == <write std lock instruction>)
+	 *  }
 	 */
-	crandc	EQ(CR_LOCK), EQ(cr0), EQ(CR_LOCK)
+	crandc	EQ(CR_LOCK), EQ(CR_LOCK), EQ(cr0)
 
 	.endm
 

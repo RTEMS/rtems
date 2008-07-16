@@ -1,5 +1,14 @@
 2008-07-16	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/ppc_exc_asm_macros.h: Added
+	a test to TEST_LOCK_crit so that a context switch is
+	always prevented if MSR_CE is not set in the interrupt mask.
+	(Support mode where the user wants to leave MSR_CE always enabled
+	but abstains from calling OS primitives from the exception
+	handler.)
+
+2008-07-16	Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/include/powerpc-utility.h: Added 
 	GET_INTERRUPT_MASK macro.
 
