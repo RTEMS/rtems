@@ -1,5 +1,11 @@
 2008-07-16	Till Straumann <strauman@slac.stanford.edu>
 
+	* score/cpu/powerpc/rtems/new-exceptions/cpu.h:
+	use ppc_interrupt_get_disable_mask() to determine
+	which bits to set/clear from _CPU_ISR_Set_level().
+
+2008-07-16	Till Straumann <strauman@slac.stanford.edu>
+
 	* score/cpu/powerpc/rtems/powerpc/registers.h:
 	added ppc_interrupt_get_disable_mask() inline function.
 

@@ -285,10 +285,10 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
   register unsigned int msr;
   _CPU_MSR_GET(msr);
   if (!(level & CPU_MODES_INTERRUPT_MASK)) {
-    msr |= MSR_EE;
+    msr |= ppc_interrupt_get_disable_mask();
   }
   else {
-    msr &= ~MSR_EE;
+    msr &= ~ppc_interrupt_get_disable_mask();
   }
   _CPU_MSR_SET(msr);
 }
