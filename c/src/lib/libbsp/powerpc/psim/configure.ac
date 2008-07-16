@@ -29,6 +29,12 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
+RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_FAST_IDLE],[psim],[1])
+RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
+[This sets a mode where the time runs as fast as possible when
+ a clock ISR occurs while the IDLE thread is executing.  This can
+ significantly reduce simulation times.])
+
 RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
 
 # Explicitly list all Makefiles here
