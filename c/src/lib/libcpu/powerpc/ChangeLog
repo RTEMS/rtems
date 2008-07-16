@@ -1,5 +1,10 @@
 2008-07-16	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/cpu.c: propagate R2 to all task contexts
+	even if the ABI is SVR4. Cannot hurt...
+
+2008-07-16	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/cpu.c: use ppc_interrupt_get_disable_mask()
 	to determine which bits to set/clear from _CPU_Context_Initialize().
 

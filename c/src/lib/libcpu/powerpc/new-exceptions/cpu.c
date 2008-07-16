@@ -126,9 +126,15 @@ void _CPU_Context_Initialize(
   the_context->pc = (uint32_t)entry_point;
 
 #if (PPC_ABI == PPC_ABI_SVR4)
-  { unsigned    r13 = 0;
-    asm volatile ("mr %0, 13" : "=r" ((r13)));
+  /*
+   * SVR4 says R2 is for 'system-reserved' use; it cannot hurt to 
+   * propagate R2 to all task contexts.
+   */
+  { uint32_t    r2 = 0;
+    unsigned    r13 = 0;
+    asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
 
+    the_context->gpr2 = r2;
     the_context->gpr13 = r13;
   }
 #elif (PPC_ABI == PPC_ABI_EABI)
