@@ -1,3 +1,10 @@
+2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/shell.c, libmisc/shell/shell.h: New argument sequence
+	for rtems_shell_init(). This makes it possible to run the shell
+	forever or invoke it from a program as a subroutine, have a user
+	enter commands, and wait for it to exit.
+
 2008-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems.h, sapi/Makefile.am: Add simple helper to get

@@ -55,7 +55,6 @@ rtems_shell_env_t *rtems_shell_init_env(
     rtems_global_shell_env.magic         = 0x600D600d;
     rtems_global_shell_env.devname       = "";
     rtems_global_shell_env.taskname      = "GLOBAL";
-    rtems_global_shell_env.tcflag        = 0;
     rtems_global_shell_env.exit_shell    = 0;
     rtems_global_shell_env.forever       = TRUE;
     rtems_global_shell_env.input         = 0;
@@ -74,6 +73,26 @@ rtems_shell_env_t *rtems_shell_init_env(
   }
 
   return shell_env;
+}
+
+/*
+ *  Completely free a shell_env_t and all associated memory
+ */
+void rtems_shell_env_free(
+  void *ptr
+)
+{
+  rtems_shell_env_t *shell_env;
+  shell_env = (rtems_shell_env_t *) ptr;
+
+  if ( !ptr )
+    return;
+
+  if ( shell_env->input )
+    free((void *)shell_env->input);
+  if ( shell_env->output )
+    free((void *)shell_env->output);
+  free( ptr );
 }
 
 /*
@@ -612,13 +631,11 @@ void rtems_shell_print_env(
     "shell_env->magic=0x%08x\t"
     "shell_env->devname=%s\n"
     "shell_env->taskname=%s\t"
-    "shell_env->tcflag=%d\n"
     "shell_env->exit_shell=%d\t"
     "shell_env->forever=%d\n",
     shell_env->magic,
     shell_env->devname,
     ((shell_env->taskname) ? shell_env->taskname : "NOT SET"),
-    shell_env->tcflag,
     shell_env->exit_shell,
     shell_env->forever
   );
@@ -658,7 +675,7 @@ void rtems_shell_get_prompt(
 
 rtems_boolean rtems_shell_main_loop(
   rtems_shell_env_t *shell_env_arg
-                                    )
+)
 {
   rtems_shell_env_t *shell_env;
   rtems_shell_cmd_t *shell_cmd;
@@ -678,12 +695,10 @@ rtems_boolean rtems_shell_main_loop(
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
 
-  memset(cmds, 0, sizeof(cmds));
-  
   rtems_shell_initialize_command_set();
 
-  shell_env               = 
-    rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
+  shell_env =
+  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
  
   /*
    * @todo chrisj
@@ -692,7 +707,11 @@ rtems_boolean rtems_shell_main_loop(
    * in the TCB. Provide a function to return the pointer.
    * Task variables are a virus to embedded systems software.
    */
-  sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_shell_env,free);
+  sc = rtems_task_variable_add(
+    RTEMS_SELF,
+    (void*)&rtems_current_shell_env,
+    rtems_shell_env_free
+  );
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
     return FALSE;
@@ -747,8 +766,6 @@ rtems_boolean rtems_shell_main_loop(
       term.c_oflag &= ~OPOST;
       term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
       term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-      if (shell_env->tcflag)
-        term.c_cflag = shell_env->tcflag;
       term.c_cflag  |= CLOCAL | CREAD;
       term.c_cc[VMIN]  = 1;
       term.c_cc[VTIME] = 0;
@@ -914,11 +931,13 @@ rtems_boolean rtems_shell_main_loop(
     free (cmds[0]);
   if (cmd_argv)
     free (cmd_argv);
-  
+  if (prompt)
+    free (prompt);
+
   if (stdinToClose) {
     fclose( stdinToClose );
   } else {
-    if (tcsetattr( fileno( stdin), TCSADRAIN, &previous_term) < 0) {
+    if (tcsetattr(fileno(stdin), TCSADRAIN, &previous_term) < 0) {
       fprintf(
         stderr,
         "shell: cannot reset terminal attributes (%s)\n",
@@ -937,8 +956,8 @@ static rtems_status_code   rtems_shell_run (
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
   char                *devname,
-  tcflag_t             tcflag,
   int                  forever,
+  int                  wait,
   const char*          input,
   const char*          output,
   int                  output_append,
@@ -978,7 +997,6 @@ static rtems_status_code   rtems_shell_run (
   }
   shell_env->devname       = devname;
   shell_env->taskname      = task_name;
-  shell_env->tcflag        = tcflag;
   shell_env->exit_shell    = FALSE;
   shell_env->forever       = forever;
   shell_env->echo          = echo;
@@ -989,22 +1007,48 @@ static rtems_status_code   rtems_shell_run (
 
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
-  return rtems_task_start(task_id, rtems_shell_task,
+  sc = rtems_task_start(task_id, rtems_shell_task,
                           (rtems_task_argument) shell_env);
+  if (sc != RTEMS_SUCCESSFUL) {
+    rtems_error(sc,"starting task %s in shell_init()",task_name);
+    return sc;
+  }
+
+  if (wait) {
+    rtems_event_set out;
+    sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
+  }
+
+  return 0;
 }
 
-rtems_status_code   rtems_shell_init (
+rtems_status_code rtems_shell_init(
   char                *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
   char                *devname,
-  tcflag_t             tcflag,
-  int                  forever
+  int                  forever,
+  int                  wait
 )
 {
-  return rtems_shell_run (task_name, task_stacksize, task_priority,
-                          devname, tcflag, forever,
-                          "stdin", "stdout", 0, RTEMS_INVALID_ID, 0);
+  rtems_id to_wake = RTEMS_INVALID_ID;
+
+  if ( wait )
+    to_wake = rtems_task_self();
+
+  return rtems_shell_run(
+    task_name,               /* task_name */
+    task_stacksize,          /* task_stacksize */
+    task_priority,           /* task_priority */
+    devname,                 /* devname */
+    forever,                 /* forever */
+    wait,                    /* wait */
+    "stdin",                 /* input */
+    "stdout",                /* output */
+    0,                       /* output_append */
+    to_wake,                 /* wake_on_end */
+    0                        /* echo */
+  );
 }
 
 rtems_status_code   rtems_shell_script (
@@ -1027,16 +1071,21 @@ rtems_status_code   rtems_shell_script (
       return sc;
   }
   
-  sc = rtems_shell_run (task_name, task_stacksize, task_priority,
-                        NULL, 0, 0, input, output, output_append,
-                        current_task, echo);
+  sc = rtems_shell_run(
+    task_name,       /* task_name */
+    task_stacksize,  /* task_stacksize */
+    task_priority,   /* task_priority */
+    NULL,            /* devname */
+    0,               /* forever */
+    wait,            /* wait */
+    input,           /* input */
+    output,          /* output */
+    output_append,   /* output_append */
+    current_task,    /* wake_on_end */
+    echo             /* echo */
+  );
   if (sc != RTEMS_SUCCESSFUL)
     return sc;
-
-  if (wait) {
-    rtems_event_set out;
-    sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
-  }
 
   return sc;
 }

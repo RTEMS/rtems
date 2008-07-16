@@ -133,21 +133,17 @@ int rtems_shell_script_file(
  * @param task_name Name of the shell task.
  * @param task_stacksize The size of the stack. If 0 the default size is used.
  * @param task_priority The priority the shell runs at.
- * @param tcflag The termios c_cflag value. If 0 the default is used, if
- *               not 0 the value is ORed with CLOCAL and CREAD.
  * @param forever Repeat logins.
+ * @param wait Caller should block until shell exits
  *
- * @todo CCJ I am not sure this termios flag setting is a good idea. The shell
- *           needs to adjust the termios for its use but it should assume the
- *           settings are set by the user for things like baudrate etc.
  */
 rtems_status_code rtems_shell_init(
   char                *task_name,
   uint32_t             task_stacksize,  /*0 default*/
   rtems_task_priority  task_priority,
   char                *devname,
-  tcflag_t             tcflag,
-  int                  forever
+  int                  forever,
+  int                  wait
 );
 
 /**
@@ -184,7 +180,6 @@ typedef struct  {
   rtems_name  magic; /* 'S','E','N','V': Shell Environment */
   char       *devname;
   char       *taskname;
-  tcflag_t    tcflag;
   /* user extensions */
   int         exit_shell; /* logout */
   int         forever   ; /* repeat login */
