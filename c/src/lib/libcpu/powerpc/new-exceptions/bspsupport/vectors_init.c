@@ -107,13 +107,56 @@ void	*lr;
 
 void C_exception_handler(BSP_Exception_frame* excPtr)
 {
-  int recoverable = 0;
-  int synch       = (int)excPtr->_EXC_number >= 0 ;
-  unsigned n      = excPtr->_EXC_number & 0x7fff; 
+static int          nest        = 0;
+
+  int               recoverable = 0;
+  rtems_id          id          = 0;
+  int               synch;
+  unsigned          n;
+  rtems_status_code sc;
+
+  /* Catch recursion */
+  nest++;
+
+  if ( nest > 2 ) {
+	/* maybe printk() or dereferencing excPtr caused an exception;
+	 * die silently...
+	 */
+	while (1)
+		;
+  }
+
+  synch  = (int)excPtr->_EXC_number >= 0 ;
+  n      = excPtr->_EXC_number & 0x7fff; 
 
   printk("Exception handler called for exception %d (0x%x)\n", n, n);
   printk("\t Next PC or Address of fault = %08x\n", excPtr->EXC_SRR0);
   printk("\t Saved MSR = %08x\n", excPtr->EXC_SRR1);
+
+  if ( nest > 1 ) {
+    printk("Recursion in the exception handler detected; I'll spin now...\n");
+	while ( 1 )
+		;
+  }
+
+  /* Try to find out more about the context where this happened */
+  printk("\t Context: ");
+  if ( rtems_interrupt_is_in_progress() ) {
+	printk("ISR");
+  } else if ( !_Thread_Executing ) {
+	printk("Initialization (_Thread_Executing not available yet)");
+  } else {
+	if ( RTEMS_SUCCESSFUL != (sc=rtems_task_ident(RTEMS_SELF, RTEMS_LOCAL, &id)) ) {
+		printk("Unable to determine faulting task; rtems_task_ident() returned %u", sc);
+		id = 0;
+	} else {
+		printk("Task ID 0x%08x", id);
+	}
+  }
+  printk("\n");
+
+  /* Dump registers */
+
   printk("\t R0  = %08x", excPtr->GPR0);
   if ( synch ) {
     printk(" R1  = %08x", excPtr->GPR1);
@@ -180,10 +223,19 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
 #else
     recoverable = 0;
 #endif
-    if (!recoverable) {
-      printk("unrecoverable exception!!! Push reset button\n");
-      while(1);
-    }
+  if (!recoverable) {
+    if ( id ) {
+		printk("Suspending faulting task (0x%08x)\n", id);
+		/* Unnest here because rtems_task_suspend() never returns */
+		nest--;
+		rtems_task_suspend(id);
+	} else {
+    	printk("unrecoverable exception!!! Push reset button\n");
+    	while(1);
+	}
+  } else {
+  	nest--;
+  }
 }
 
 /***********************************************************
