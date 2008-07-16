@@ -350,14 +350,34 @@ void ppc_exc_initialize(
 	uint32_t interrupt_stack_end = 0;
 	uint32_t interrupt_stack_pointer = 0;
 	uint32_t *p = NULL;
+	uint32_t r13, sda_base;
 
-	/* Ensure proper interrupt stack alignment */
-	interrupt_stack_start &= ~(CPU_STACK_ALIGNMENT - 1);
-	interrupt_stack_size &= ~(CPU_STACK_ALIGNMENT - 1);
+	/* Assembly code needs SDA_BASE in r13 (SVR4 or EABI). Make sure
+	 * early init code put it there.
+	 */
+	asm volatile(
+		"	lis %0,     _SDA_BASE_@h  \n"
+		"	ori %0, %0, _SDA_BASE_@l  \n"
+		"	mr  %1, 13                \n"
+	:"=r"(sda_base),"=r"(r13)
+	);
+
+	if ( sda_base != r13 ) {
+		printk("ppc_exc_initialize(): INTERNAL ERROR\n");
+		printk("  your BSP seems to not have loaded _SDA_BASE_\n");
+		printk("  into R13 as required by SVR4/EABI. Check early init code...\n");
+		printk("  _SDA_BASE_: 0x%08x, R13: 0x%08x\n", sda_base, r13);
+		while (1)
+			;
+	}
 
 	/* Interrupt stack end and pointer */
 	interrupt_stack_end = interrupt_stack_start + interrupt_stack_size;
-	interrupt_stack_pointer = interrupt_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
+
+	interrupt_stack_pointer  = interrupt_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
+
+	/* Ensure proper interrupt stack alignment */
+	interrupt_stack_pointer &= ~(CPU_STACK_ALIGNMENT - 1);
 
 	/* Tag interrupt stack bottom */
 	p = (uint32_t *) interrupt_stack_pointer;

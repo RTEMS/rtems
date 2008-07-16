@@ -1,5 +1,16 @@
 2008-07-16	Till Straumann <strauman@slac.stanford.edu>
 
+	* new-exceptions/bspsupport/vectors_init.c: must not
+	align start of stack downwards (we don't 'own' memory
+	below start). Instead, use original boundaries but
+	align the stack pointer as required.
+
+	Added test to verify that R13 was loaded with _SDA_BASE_
+	during early initialization (low-level assembly code
+	relies on it).
+
+2008-07-16	Till Straumann <strauman@slac.stanford.edu>
+
 	* new-exceptions/cpu.c: propagate R2 to all task contexts
 	even if the ABI is SVR4. Cannot hurt...
 
