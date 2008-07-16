@@ -499,12 +499,19 @@ static inline void ppc_set_time_base_64( uint64_t val)
 .endm
 
 /*
+ * Obtain interrupt mask
+ */
+.macro GET_INTERRUPT_MASK mask
+	mfspr \mask, sprg0
+.endm
+
+/*
  * Disables all asynchronous exeptions (interrupts) which may cause a context
  * switch.
  */
 .macro INTERRUPT_DISABLE level, mask
 	mfmsr	\level
-	mfspr	\mask, sprg0
+	GET_INTERRUPT_MASK mask=\mask
 	andc	\mask, \level, \mask
 	mtmsr	\mask
 .endm
