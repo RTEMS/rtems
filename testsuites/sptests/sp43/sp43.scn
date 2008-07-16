@@ -1,6 +1,7 @@
 
 
 *** TEST 43 ***
+RTEMS Version: rtems-4.8.99.0(PowerPC/Generic (classic FPU)/psim)
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
@@ -31,7 +32,7 @@ rtems_object_get_name returned (N) for init task
 rtems_object_set_name - change name of init task to ()
 *    - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned () for init task
-rtems_object_set_name - change name of init task to (N--        -1)
+rtems_object_set_name - change name of init task to (0x4e-0x07-0x09-0x31)
 N**1 - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (N**1) for init task
 rtems_object_set_name - change name of init task to (SELF)

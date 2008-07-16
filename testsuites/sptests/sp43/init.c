@@ -102,6 +102,8 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 43 ***" );
 
+  printf( "RTEMS Version: %s\n", rtems_get_version_string() );
+
   main_task = rtems_task_self();
 
   puts( "rtems_object_get_classic_name - INVALID_ADDRESS" );
