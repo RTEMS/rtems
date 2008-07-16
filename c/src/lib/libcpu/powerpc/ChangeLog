@@ -1,3 +1,7 @@
+2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc6xx/clock/c_clock.c: Add fast idle.
+
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Support for MPC55XX.  Changed comment format to

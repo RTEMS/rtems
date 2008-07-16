@@ -27,7 +27,9 @@
 #include <libcpu/c_clock.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
-#include <rtems/bspIo.h>                     /* for printk() */
+#include <rtems/bspIo.h>                /* for printk() */
+
+#include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 
 SPR_RW(BOOKE_TCR)
 SPR_RW(BOOKE_TSR)
@@ -94,7 +96,16 @@ rtems_interrupt_level l;
 
 static void clockHandler(void)
 {
+
+  #if defined(CLOCK_DRIVER_USE_FAST_IDLE)
+    do {
+      rtems_clock_tick();
+    } while ( _Thread_Executing == _Thread_Idle &&
+              _Thread_Heir == _Thread_Executing);
+
+  #else
     rtems_clock_tick();
+  #endif
 }
 
 static void (*clock_handler)(void);
@@ -119,17 +130,20 @@ int decr;
    *  The driver has seen another tick.
    */
   do {
-	register uint32_t flags;
-	rtems_interrupt_disable(flags);
-	asm volatile ("mfdec %0; add %0, %0, %1; mtdec %0":"=&r"(decr):"r"(Clock_Decrementer_value));
-	rtems_interrupt_enable(flags);
+  register uint32_t flags;
+  rtems_interrupt_disable(flags);
+  asm volatile (
+    "mfdec %0; add %0, %0, %1; mtdec %0"
+    : "=&r"(decr)
+    : "r"(Clock_Decrementer_value));
+  rtems_interrupt_enable(flags);
 
-	Clock_driver_ticks += 1;
+  Clock_driver_ticks += 1;
 
-	/*
-	 *  Real Time Clock counter/timer is set to automatically reload.
-	 */
-	clock_handler();
+  /*
+   *  Real Time Clock counter/timer is set to automatically reload.
+   */
+  clock_handler();
   } while ( decr < 0 );
 }
 
@@ -170,14 +184,14 @@ int clockIsOn(void* unused)
 {
 uint32_t   msr_value;
 
-	_CPU_MSR_GET( msr_value );
+  _CPU_MSR_GET( msr_value );
 
-	if ( ppc_cpu_is_bookE() && ! (_read_BOOKE_TCR() & BOOKE_TCR_DIE) )
-		msr_value = 0;
+  if ( ppc_cpu_is_bookE() && ! (_read_BOOKE_TCR() & BOOKE_TCR_DIE) )
+    msr_value = 0;
 
-	if (msr_value & MSR_EE) return 1;
+  if (msr_value & MSR_EE) return 1;
 
-	return 0;
+  return 0;
 }
 
 
@@ -255,8 +269,8 @@ rtems_interrupt_level l,tcr;
     rtems_interrupt_disable(l);
 
     tcr  = _read_BOOKE_TCR();
-	tcr |= BOOKE_TCR_ARE;
-	tcr &= ~BOOKE_TCR_DIE;
+    tcr |= BOOKE_TCR_ARE;
+    tcr &= ~BOOKE_TCR_DIE;
     _write_BOOKE_TCR(tcr);
 
     rtems_interrupt_enable(l);
