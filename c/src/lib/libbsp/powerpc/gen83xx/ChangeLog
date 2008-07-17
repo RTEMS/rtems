@@ -1,7 +1,15 @@
+<<<<<<< ChangeLog
+2008-05-15	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/network.c:
+	mpc8249eamds uses gmii mode
+
+=======
 2008-07-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_AMPOLISH3.
 
+>>>>>>> 1.31
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* irq/irq_init.c, irq/irq.h, startup/linkcmds:

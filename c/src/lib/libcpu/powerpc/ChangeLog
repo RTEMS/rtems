@@ -1,5 +1,14 @@
 2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
+	* rtems/powerpc/powerpc.h:
+	ppc405 uses definitions distinct from ppc403 now
+
+	* shared/src/cache_.h: 
+	use correct powerpc.h to get cache attributes
+
+	
+2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
 	* shared/include/powerpc-utility.h:
 	Fixed typo in access macros for device control registers (DCR)
 	

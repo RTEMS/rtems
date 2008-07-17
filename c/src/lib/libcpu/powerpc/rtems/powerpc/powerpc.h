@@ -107,7 +107,7 @@ extern "C" {
  *  predefines.
  */
 
-#if defined(ppc403) || defined(ppc405)
+#if defined(ppc403) 
 /*
  *  IBM 403
  *

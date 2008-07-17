@@ -9,7 +9,7 @@
 #ifndef LIBCPU_POWERPC_CACHE_H
 #define LIBCPU_POWERPC_CACHE_H
 
-#include <rtems/score/powerpc.h>
+#include <rtems/powerpc/powerpc.h>
 
 /* Provide the CPU defines only if we have a cache */
 #if PPC_CACHE_ALIGNMENT != PPC_NO_CACHE_ALIGNMENT
