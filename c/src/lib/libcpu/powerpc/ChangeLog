@@ -1,3 +1,8 @@
+2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h:
+	Fixed typo in access macros for device control registers (DCR)
+	
 2008-07-16	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/bspsupport/vectors_init.c: added

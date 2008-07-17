@@ -268,12 +268,12 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
  * PPC4xx have Device Control Registers...
  */
 #define PPC_DEVICE_CONTROL_REGISTER(dcr)			\
-  ({uint32_t val;asm volatile ("mfspr %0," PPC_STRINGOF(dcr)	\
+  ({uint32_t val;asm volatile ("mfdcr %0," PPC_STRINGOF(dcr)	\
 			       : "=r" (val)); val;})
 
 #define PPC_SET_DEVICE_CONTROL_REGISTER(dcr,val)	\
   do {							\
-    asm volatile ("mtspr " PPC_STRINGOF(dcr)",%0"	\
+    asm volatile ("mtdcr " PPC_STRINGOF(dcr)",%0"	\
 		  :: "r" (val));			\
     } while (0)
 
