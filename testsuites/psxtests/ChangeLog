@@ -1,3 +1,7 @@
+2008-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfile01/test.c: truncate on /dev/console now works.
+
 2008-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxrwlock01/main.c, psxspin01/main.c: Now accounts for extra stack

@@ -481,7 +481,7 @@ int main(
 
   /* try to truncate the console and see what happens */
   status = truncate( "/dev/console", 40 );
-  assert(status == -1 );
+  assert( status == 0 );
 
   puts( "truncate /tmp/j to length of 0" );
   status = truncate( "/tmp/j", 0 );
