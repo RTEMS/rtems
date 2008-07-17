@@ -1,3 +1,8 @@
+2008-07-17	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libchip/display/font_hcms29xx.h, libchip/display/disp_hcms29xx.h
+	fixed some data types
+
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.c: Added missing header file.

@@ -33,7 +33,7 @@ extern "C" {
 
 extern disp_font_t font_hcms29xx;
 
-extern const struct disp_font_base font_hcms29xx_base;
+extern struct disp_font_base font_hcms29xx_base;
 
 #ifdef __cplusplus
 }

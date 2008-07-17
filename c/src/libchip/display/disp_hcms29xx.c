@@ -439,7 +439,7 @@ rtems_status_code disp_hcms29xx_send_to_control
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   int run, ret_cnt;
-  volatile uint8_t ctrl_buffer;
+  uint8_t ctrl_buffer;
 
   /* two accesses, control word 0 and 1 */
   for (run = 0;
