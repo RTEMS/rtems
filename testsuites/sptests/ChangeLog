@@ -1,3 +1,8 @@
+2008-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen09.c: Do not use Simple Vectored Interrupt calls on
+	architectures they are not supported on.
+
 2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp43/init.c, sp43/sp43.scn: Add call to rtems_get_version_string().

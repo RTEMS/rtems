@@ -24,41 +24,50 @@ void Screen9()
   rtems_status_code status;
   rtems_isr_entry   old_service_routine;
 
-  status = rtems_interrupt_catch(
-    Service_routine,
-    ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER + 10,
-    &old_service_routine
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_NUMBER,
-    "rtems_interrupt_catch with invalid vector"
-  );
-  puts( "TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER" );
-
-#if defined(_C3x) || defined(_C4x)
-  puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS -- SKIPPED" );
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+  puts( "TRUE" );
 #else
-  status = rtems_interrupt_catch( NULL, 3, &old_service_routine );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_interrupt_catch with invalid handler"
-  );
-  puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS" );
+  puts( "FALSE" );
 #endif
 
-#if defined(_C3x) || defined(_C4x)
-  puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS - SKIPPED" );
-#else
-  status = rtems_interrupt_catch( Service_routine, 3, NULL );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_interrupt_catch with invalid old isr pointer"
-  );
-  puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS" );
-#endif
+  #if ((CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE) || \
+       defined(_C3x) || defined(_C4x))
+    puts(
+      "TA1 - rtems_interrupt_catch - "
+      "bad handler RTEMS_INVALID_ADDRESS -- SKIPPED"
+    );
+    puts(
+      "TA1 - rtems_interrupt_catch - "
+      "old isr RTEMS_INVALID_ADDRESS - SKIPPED" );
+  #else
+    status = rtems_interrupt_catch(
+      Service_routine,
+      ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER + 10,
+      &old_service_routine
+    );
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_NUMBER,
+      "rtems_interrupt_catch with invalid vector"
+    );
+    puts( "TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER" );
+
+    status = rtems_interrupt_catch( NULL, 3, &old_service_routine );
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_ADDRESS,
+      "rtems_interrupt_catch with invalid handler"
+    );
+    puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS" );
+
+    status = rtems_interrupt_catch( Service_routine, 3, NULL );
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_ADDRESS,
+      "rtems_interrupt_catch with invalid old isr pointer"
+    );
+    puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS" );
+  #endif
 
   status = rtems_signal_send( 100, RTEMS_SIGNAL_1 );
   fatal_directive_status(
