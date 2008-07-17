@@ -6,7 +6,6 @@
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.c: Added missing header file.
-
 	* libchip/Makefile.am: Added SD Card driver.
 
 2008-07-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
