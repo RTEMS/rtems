@@ -1,7 +1,8 @@
 2008-07-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
-	* ChangeLog, startup/linkcmds, startup/linkcmds.m5484FireEngine.flash:
-	Formatting.
+	* ChangeLog: Formatting.
+	* startup/linkcmds, startup/linkcmds.m5484FireEngine.flash: Add
+	wildcard to gcc exceptions section.
 
 2008-07-10	Peter Rasmussen <peter.rasmussen@embedded-brains.de>
 
