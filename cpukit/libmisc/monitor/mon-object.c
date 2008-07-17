@@ -22,6 +22,9 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/monitor.h>
+#if defined(RTEMS_POSIX_API)
+  #include <rtems/posix/pthread.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
@@ -123,6 +126,14 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_canonical_fn)   rtems_monitor_driver_canonical,
       (rtems_monitor_object_dump_header_fn) rtems_monitor_driver_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_driver_dump,
+    },
+    { RTEMS_MONITOR_OBJECT_PTHREAD,
+      (void *) &_POSIX_Threads_Information,
+      sizeof(rtems_monitor_task_t),
+      (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
+      (rtems_monitor_object_canonical_fn)   rtems_monitor_task_canonical,
+      (rtems_monitor_object_dump_header_fn) rtems_monitor_task_dump_header,
+      (rtems_monitor_object_dump_fn)        rtems_monitor_task_dump,
     },
 };
 

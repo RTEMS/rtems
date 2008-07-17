@@ -248,6 +248,17 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { .monitor_command_entry = rtems_monitor_commands },
       &rtems_monitor_commands[21],
     },
+#ifdef RTEMS_POSIX_API
+    { "pthread",
+      "Display information about the specified pthreads. "
+      "Default is to display information about all pthreads on this node.\n"
+      "  pthread [id [id ...] ]",
+      0,
+      rtems_monitor_object_cmd,
+      { RTEMS_MONITOR_OBJECT_PTHREAD },
+      &rtems_monitor_commands[22],
+    },
+#endif
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
       "Enter the debugger, if possible. "
@@ -255,7 +266,7 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_debugger_cmd,
       { 0 },
-      &rtems_monitor_commands[22],
+      &rtems_monitor_commands[23],
     },
 #endif
     { 0, 0, 0, 0, { 0 }, &rtems_registered_commands },

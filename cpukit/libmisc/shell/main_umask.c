@@ -24,7 +24,6 @@
 #include <sys/stat.h>
 
 #include <rtems.h>
-#include <rtems/monitor.h>
 #include <rtems/shell.h>
 #include "internal.h"
 
