@@ -1,5 +1,5 @@
 @c
-@c COPYRIGHT (c) 1988-2002.
+@c COPYRIGHT (c) 1989-2008.
 @c On-Line Applications Research Corporation (OAR).
 @c All rights reserved.
 @c
@@ -629,6 +629,10 @@ ceiling.
 
 @item EDEADLK
 The current thread already owns the mutex.
+
+@item ETIMEDOUT
+The calling thread was unable to obtain the mutex within the specified
+timeout period.
 
 @end table
 
