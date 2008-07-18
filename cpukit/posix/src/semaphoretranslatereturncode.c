@@ -41,7 +41,6 @@ static int _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1] = {
    * count to the largest value the count can hold.
    */
   ENOSYS,              /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
-  EINVAL               /* CORE_SEMAPHORE_BAD_TIMEOUT_VALUE */
 };
 
 

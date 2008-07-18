@@ -1,7 +1,7 @@
 /*
  *  POSIX Mutex Error Translation
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,7 +38,7 @@ static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
   EDEADLK,                /* CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED */
   EPERM,                  /* CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE */
   EINVAL,                 /* CORE_MUTEX_WAS_DELETED */
-  EAGAIN,                 /* CORE_MUTEX_TIMEOUT */
+  ETIMEDOUT,              /* CORE_MUTEX_TIMEOUT */
   EINVAL                  /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
 };
 

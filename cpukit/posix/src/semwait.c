@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,9 +38,5 @@ int sem_wait(
   sem_t *sem
 )
 {
-  return _POSIX_Semaphore_Wait_support(
-           sem,
-           CORE_SEMAPHORE_BLOCK_FOREVER,
-           THREAD_QUEUE_WAIT_FOREVER
-         );
+  return _POSIX_Semaphore_Wait_support( sem, TRUE, THREAD_QUEUE_WAIT_FOREVER );
 }

@@ -11,7 +11,7 @@
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -58,6 +58,7 @@ int mq_send(
     msg_ptr,
     msg_len,
     msg_prio,
+    TRUE,
     THREAD_QUEUE_WAIT_FOREVER
   );
 }

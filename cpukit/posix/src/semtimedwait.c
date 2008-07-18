@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,32 +39,51 @@ int sem_timedwait(
   const struct timespec *abstime
 )
 {
-  /*
-   *  The abstime is a walltime.  We turn it into an interval.
-   */
-  Watchdog_Interval              ticks = 0;
-  struct timespec                current_time;
-  struct timespec                difference;
-  Core_semaphore_Blocking_option blocking = CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT;
+  Watchdog_Interval                            ticks;
+  boolean                                      do_wait = TRUE;
+  POSIX_Absolute_timeout_conversion_results_t  status;
+  int                                          lock_status;
 
   /*
-   *  Error check the absolute time to timeout
+   *  POSIX requires that blocking calls with timeouts that take
+   *  an absolute timeout must ignore issues with the absolute
+   *  time provided if the operation would otherwise succeed.
+   *  So we check the abstime provided, and hold on to whether it
+   *  is valid or not.  If it isn't correct and in the future,
+   *  then we do a polling operation and convert the UNSATISFIED
+   *  status into the appropriate error.
    */
-  if ( !_Timespec_Is_valid( abstime ) ) {
-    blocking = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
-  } else { 
-    _TOD_Get( &current_time );
-    /*
-     *  Make sure the abstime is in the future
-     */
-    if ( _Timespec_Less_than( abstime, &current_time ) ) {
-      blocking = CORE_SEMAPHORE_BAD_TIMEOUT;
-    } else {
-      _Timespec_Subtract( &current_time, abstime, &difference );
-      ticks = _Timespec_To_ticks( &difference );
-      blocking = CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT;
+  status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
+  switch ( status ) {
+    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
+    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
+      do_wait = FALSE;
+      break;
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+      do_wait = TRUE;
+      break;
+  }
+
+  lock_status = _POSIX_Semaphore_Wait_support( sem, do_wait, ticks );
+
+  /*
+   *  This service only gives us the option to block.  We used a polling
+   *  attempt to obtain if the abstime was not in the future.  If we did
+   *  not obtain the semaphore, then not look at the status immediately,
+   *  make sure the right reason is returned.
+   */
+  if ( !do_wait && (lock_status == EBUSY) ) {
+    switch (lock_status) {
+      case POSIX_ABSOLUTE_TIMEOUT_INVALID:
+        return EINVAL;
+      case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
+      case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
+        return ETIMEDOUT;
+      case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+        break;
     }
-   }
+  }
 
-   return _POSIX_Semaphore_Wait_support( sem, blocking, ticks );
+  return lock_status;
 }

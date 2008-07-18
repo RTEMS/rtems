@@ -7,7 +7,7 @@
  *  This include file contains all the private support information for
  *  POSIX Semaphores.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -153,9 +153,9 @@ void _POSIX_Semaphore_Delete(
  */
 
 int _POSIX_Semaphore_Wait_support(
-  sem_t                          *sem,
-  Core_semaphore_Blocking_option  blocking,
-  Watchdog_Interval               timeout
+  sem_t               *sem,
+  boolean              blocking,
+  Watchdog_Interval    timeout
 );
 
 /*

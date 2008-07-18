@@ -51,10 +51,10 @@
  */
 
 void _CORE_semaphore_Seize(
-  CORE_semaphore_Control         *the_semaphore,
-  Objects_Id                      id,
-  Core_semaphore_Blocking_option  wait,
-  Watchdog_Interval               timeout
+  CORE_semaphore_Control *the_semaphore,
+  Objects_Id              id,
+  boolean                 wait,
+  Watchdog_Interval       timeout
 )
 {
   Thread_Control *executing;
@@ -74,36 +74,19 @@ void _CORE_semaphore_Seize(
    *  to block, then return immediately with a status indicating that
    *  the semaphore was not available and the caller never blocked.
    */
-  if ( wait == CORE_SEMAPHORE_NO_WAIT ) {
-      _ISR_Enable( level );
-      executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
-      return;
-  }
-
-  /*
-   *  This is strange case because normally RTEMS validates parameters
-   *  before performing any real work.  But in this case, the POSIX
-   *  API requires that a semaphore be checked for immediate availability
-   *  BEFORE the timeout value is validated.  This is implemented in
-   *  RTEMS by indicating a special status that the timeout value
-   *  was invalid which is returned in this case.
-   */
-  if ( wait == CORE_SEMAPHORE_BAD_TIMEOUT ) {
-      _ISR_Enable( level );
-      executing->Wait.return_code = CORE_SEMAPHORE_BAD_TIMEOUT_VALUE;
-      return;
+  if ( !wait ) {
+    _ISR_Enable( level );
+    executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
+    return;
   }
 
   /*
    *  If the semaphore is not available and the caller is willing to
    *  block, then we now block the caller with optional timeout.
    */
-  if (( wait == CORE_SEMAPHORE_BLOCK_FOREVER) ||
-      ( wait == CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT ) ) {
-      _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
-      executing->Wait.queue          = &the_semaphore->Wait_queue;
-      executing->Wait.id             = id;
-      _ISR_Enable( level );
-      _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
-  }
+  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
+  executing->Wait.queue = &the_semaphore->Wait_queue;
+  executing->Wait.id    = id;
+  _ISR_Enable( level );
+  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
 }

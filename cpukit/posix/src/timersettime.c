@@ -59,8 +59,9 @@ int timer_settime(
     /* Check for seconds in the past */
     if ( _Timespec_Greater_than( &normalize.it_value, &_TOD_Now ) ) 
       rtems_set_errno_and_return_minus_one( EINVAL ); 
-    _Timespec_Subtract( &_TOD_Now, &normalize.it_value, &normalize.it_value);
+    _Timespec_Subtract( &_TOD_Now, &normalize.it_value, &normalize.it_value );
   }
+
   /* If the function reaches this point, then it will be necessary to do
    * something with the structure of times of the timer: to stop, start
    * or start it again

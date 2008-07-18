@@ -11,7 +11,7 @@
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,8 +39,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Receive_support
  *
  *  NOTE: XXX Document how size, priority, length, and the buffer go
@@ -52,6 +51,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   char               *msg_ptr,
   size_t              msg_len,
   unsigned int       *msg_prio,
+  boolean             wait,
   Watchdog_Interval   timeout
 )
 {
@@ -59,6 +59,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   POSIX_Message_queue_Control_fd  *the_mq_fd;
   Objects_Locations                location;
   size_t                           length_out;
+  boolean                          do_wait;
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
@@ -83,12 +84,23 @@ ssize_t _POSIX_Message_queue_Receive_support(
 
       length_out = -1;
 
+      /*
+       *  A timed receive with a bad time will do a poll regardless.
+       */
+      if ( wait )
+        do_wait = (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE;
+      else
+        do_wait = wait;
+
+      /*
+       *  Now perform the actual message receive
+       */
       _CORE_message_queue_Seize(
         &the_mq->Message_queue,
         mqdes,
         msg_ptr,
         &length_out,
-        (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE,
+        do_wait,
         timeout
       );
 

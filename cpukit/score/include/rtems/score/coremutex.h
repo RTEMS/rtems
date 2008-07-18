@@ -41,7 +41,6 @@ extern "C" {
 #include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
 
-
 /**
  *  @brief MP Support Callback Prototype
  *
@@ -411,6 +410,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   #define _CORE_mutex_Seize( _the_mutex, _id, _wait, _timeout, _level ) \
      _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level )
 #endif
+
 /**
  *  @brief Surrender the Mutex
  *

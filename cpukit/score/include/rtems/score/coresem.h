@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -82,14 +82,7 @@ typedef enum {
   /** This status indicates that an attempt was made to unlock the semaphore
    *  and this would have made its count greater than that allowed.
    */
-  CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED,
-  /** This status indicates that the semaphore was not immediately
-   *  available and the caller passed a bad timeout value to the API
-   *  routine.  In this case, the API required that the validity check
-   *  for the timeout occur after the check that the semaphore was immediately
-   *  available.
-   */
-  CORE_SEMAPHORE_BAD_TIMEOUT_VALUE
+  CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 }   CORE_semaphore_Status;
 
 /**
@@ -97,7 +90,7 @@ typedef enum {
  *
  *  This is the last status value.
  */
-#define CORE_SEMAPHORE_STATUS_LAST CORE_SEMAPHORE_BAD_TIMEOUT_VALUE
+#define CORE_SEMAPHORE_STATUS_LAST CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 
 /**
  *  The following defines the control block used to manage the
@@ -130,25 +123,6 @@ typedef struct {
 }   CORE_semaphore_Control;
 
 /**
- *  The following enumerated type is the set of blocking options
- *  available to seize operation.
- */
-typedef enum {
-  /** This value indicates that the caller does not wish to block. */
-  CORE_SEMAPHORE_NO_WAIT,
-  /** This value indicates that the caller is willing to block forever. */
-  CORE_SEMAPHORE_BLOCK_FOREVER,
-  /** This value indicates that the caller is blocking with a timeout. */
-  CORE_SEMAPHORE_BLOCK_WITH_TIMEOUT,
-  /** This value indicates that the caller wanted to block but passed in
-   *  a bad timeout value to the API. Unfortunately, this is a weird case
-   *  where the timeout bad error is required to be generated only if
-   *  the semaphore is not available.
-   */
-  CORE_SEMAPHORE_BAD_TIMEOUT
-} Core_semaphore_Blocking_option;
-
-/**
  *  This routine initializes the semaphore based on the parameters passed.
  *
  *  @param[in] the_semaphore is the semaphore to initialize
@@ -170,15 +144,15 @@ void _CORE_semaphore_Initialize(
  *  @param[in] the_semaphore is the semaphore to seize
  *  @param[in] id is the Id of the API level Semaphore object associated
  *         with this instance of a SuperCore Semaphore
- *  @param[in] wait is the blocking mode
+ *  @param[in] wait indicates if the caller is willing to block
  *  @param[in] timeout is the number of ticks the calling thread is willing
  *         to wait if @a wait is TRUE.
  */
 void _CORE_semaphore_Seize(
-  CORE_semaphore_Control         *the_semaphore,
-  Objects_Id                      id,
-  Core_semaphore_Blocking_option  wait,
-  Watchdog_Interval               timeout
+  CORE_semaphore_Control  *the_semaphore,
+  Objects_Id               id,
+  boolean                  wait,
+  Watchdog_Interval        timeout
 );
 
 /**

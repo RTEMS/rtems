@@ -6,7 +6,7 @@
  */
  
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -112,6 +112,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   char               *msg_ptr,
   size_t              msg_len,
   unsigned int       *msg_prio,
+  boolean             wait,
   Watchdog_Interval   timeout
 );
 
@@ -128,6 +129,7 @@ int _POSIX_Message_queue_Send_support(
   const char         *msg_ptr,
   size_t              msg_len,
   uint32_t            msg_prio,
+  boolean             wait,
   Watchdog_Interval   timeout
 );
 

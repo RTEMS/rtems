@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,47 +33,53 @@ extern "C" {
  *  15.1.1 Data Structures, P1003.1b-1993, p. 271
  */
 
+/**
+ *  Message queue id type
+ */
 typedef Objects_Id  mqd_t;
 
+/**
+ *  This is the message queue attributes structure.
+ */
 struct mq_attr {
-  long  mq_flags;     /* Message queue flags */
-  long  mq_maxmsg;    /* Maximum number of messages */
-  long  mq_msgsize;   /* Maximum message size */
-  long  mq_curmsgs;   /* Number of messages currently queued */
+  /** This is the message queue flags */
+  long  mq_flags;
+  /** This is the maximum number of messages */
+  long  mq_maxmsg;
+  /** This is the maximum message size */
+  long  mq_msgsize;
+  /** This is the mumber of messages currently queued */
+  long  mq_curmsgs;
 };
 
-/*
+/**
  *  15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
  */
-
 mqd_t mq_open(
   const char *name,
   int         oflag,
   ...
 );
 
-/*
+/**
  *  15.2.2 Close a Message Queue, P1003.1b-1993, p. 275
  */
-
 int mq_close(
   mqd_t  mqdes
 );
 
-/*
+/**
  *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
  */
-
 int mq_unlink(
   const char *name
 );
 
-/*
+/**
  *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
  *
- *  NOTE: P1003.4b/D8, p. 45 adds mq_timedsend().
+ *  @note P1003.4b/D8, p. 45 adds mq_timedsend().
  */
-
 int mq_send(
   mqd_t         mqdes,
   const char   *msg_ptr,
@@ -90,7 +96,7 @@ int mq_timedsend(
   const char            *msg_ptr,
   size_t                 msg_len,
   unsigned int           msg_prio,
-  const struct timespec *timeout
+  const struct timespec *abstime
 );
 
 #endif /* _POSIX_TIMEOUTS */
@@ -115,7 +121,7 @@ ssize_t mq_timedreceive(
   char                  *msg_ptr,
   size_t                 msg_len,
   unsigned int          *msg_prio,
-  const struct timespec *timeout
+  const struct timespec *abstime
 );
 
 #endif /* _POSIX_TIMEOUTS */

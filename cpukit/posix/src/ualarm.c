@@ -1,7 +1,7 @@
 /*
  *  3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -101,9 +101,9 @@ useconds_t ualarm(
     tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
     tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
     ticks = _Timespec_To_ticks( &tp );
-
     if ( ticks == 0 )
       ticks = 1; 
+
     _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
   }
 

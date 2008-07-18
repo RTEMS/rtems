@@ -1,3 +1,43 @@
+2008-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1291/cpukit
+	* itron/inline/rtems/itron/semaphore.inl, itron/src/twai_sem.c,
+	posix/include/mqueue.h, posix/include/rtems/posix/mqueue.h,
+	posix/include/rtems/posix/semaphore.h,
+	posix/include/rtems/posix/time.h, posix/src/condtimedwait.c,
+	posix/src/mqueuereceive.c, posix/src/mqueuerecvsupp.c,
+	posix/src/mqueuesend.c, posix/src/mqueuesendsupp.c,
+	posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c,
+	posix/src/mutextimedlock.c, posix/src/mutextranslatereturncode.c,
+	posix/src/posixtimespecabsolutetimeout.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/semaphoretranslatereturncode.c,
+	posix/src/semaphorewaitsupp.c, posix/src/semtimedwait.c,
+	posix/src/semtrywait.c, posix/src/semwait.c,
+	posix/src/sigtimedwait.c, posix/src/timersettime.c,
+	posix/src/ualarm.c, rtems/src/semobtain.c,
+	rtems/src/semtranslatereturncode.c,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/coresem.h, score/src/coresemseize.c: This
+	patch addresses issues on implementation of the timeout on the
+	following POSIX services. Some of these services incorrectly took a
+	timeout as a relative time. Others would compute a 0 delta to timeout
+	if the absolute time and the current time were equal and thus
+	incorrectly block the caller forever. The root of the confusion is
+	that POSIX specifies that if the timeout is incorrect (e.g. in the
+	past, is now, or is numerically invalid), that it does not matter if
+	the call would succeed without blocking. This is in contrast to RTEMS
+	programming style where all errors are checked before any critical
+	sections are entered. This fix implemented a more uniform way of
+	handling POSIX absolute time timeouts.
+	    + pthread_cond_timedwait - could block forever
+	    + mq_timedreceive - used relative not absolute time
+	    + mq_timedsend - used relative not absolute time
+	    + pthread_mutex_timedlock - used relative not absolute time
+	    + pthread_rwlock_timedrdlock- used relative not absolute time
+	    + pthread_rwlock_timedwrlock- used relative not absolute time
+	    + sem_timedwait - could block forever
+
 2008-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-object.c,

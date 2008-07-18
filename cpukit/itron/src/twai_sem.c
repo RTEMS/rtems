@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,16 +30,16 @@ ER twai_sem(
   TMO tmout
 )
 {
-  ITRON_Semaphore_Control        *the_semaphore;
-  Objects_Locations               location;
-  Watchdog_Interval               interval;
-  Core_semaphore_Blocking_option  blocking;
+  ITRON_Semaphore_Control  *the_semaphore;
+  Objects_Locations         location;
+  Watchdog_Interval         interval;
+  boolean                   blocking;
 
   interval = 0;
   if ( tmout == TMO_POL ) {
-    blocking = CORE_SEMAPHORE_NO_WAIT;
+    blocking = FALSE;
   } else {
-    blocking = CORE_SEMAPHORE_BLOCK_FOREVER;
+    blocking = TRUE;
 
     if ( tmout != TMO_FEVR )
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);

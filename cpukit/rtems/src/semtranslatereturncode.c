@@ -115,7 +115,6 @@ const rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
   RTEMS_OBJECT_WAS_DELETED, /* CORE_SEMAPHORE_WAS_DELETED */
   RTEMS_TIMEOUT,            /* CORE_SEMAPHORE_TIMEOUT  */
   RTEMS_INTERNAL_ERROR,     /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
-  RTEMS_INTERNAL_ERROR      /* CORE_SEMAPHORE_BAD_TIMEOUT_VALUE */
 };
 
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
