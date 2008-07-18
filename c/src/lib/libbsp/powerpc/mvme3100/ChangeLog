@@ -1,3 +1,8 @@
+2008-07-18	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: removed warning about SPRG0
+	now being used for IRQ mask; this BSP is OK.
+
 2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Need tm27.h
