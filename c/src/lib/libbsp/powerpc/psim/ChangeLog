@@ -1,3 +1,7 @@
+2008-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: This BSP is OK with SPRG0.
+
 2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Add fast idle.
