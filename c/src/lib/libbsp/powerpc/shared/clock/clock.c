@@ -124,7 +124,7 @@ int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned numb
 	uint32_t msr;
 
 	/* Acknowledge decrementer request */
-	ppc_set_timer_status_register( BOOKE_TSR_DIS);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_TSR, BOOKE_TSR_DIS);
 
 	/* Increment clock ticks */
 	Clock_driver_ticks += 1;
@@ -176,8 +176,6 @@ void Clock_exit()
 
 rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
-	rtems_interrupt_level level;
-
 	/* Current CPU type */
 	ppc_cpu_id_t cpu_type = get_ppc_cpu_type();
 
@@ -211,22 +209,18 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 
 	if (ppc_cpu_is_bookE()) {
 		/* Set decrementer auto-reload value */
-		ppc_set_decrementer_auto_reload_register( ppc_clock_decrementer_value);
+		PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_DECAR, ppc_clock_decrementer_value);
 
 		/* Install exception handler */
 		ppc_exc_set_handler( ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_booke);
 
 		/* Enable decrementer and auto-reload */
-		rtems_interrupt_disable( level);
-		ppc_set_timer_control_register( ppc_timer_control_register() | BOOKE_TCR_DIE | BOOKE_TCR_ARE);
-		rtems_interrupt_enable( level);
+		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( BOOKE_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
 	} else if (cpu_type == PPC_e300c2 || cpu_type == PPC_e300c3) {
 		/* TODO: Not tested for e300c2 */
 
 		/* Enable auto-reload */
-		rtems_interrupt_disable( level);
-		ppc_set_hardware_implementation_dependent_register_0( ppc_hardware_implementation_dependent_register_0() | 0x00000040);
-		rtems_interrupt_enable( level);
+		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, 0x00000040);
 
 		/* Install exception handler */
 		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_e300);
@@ -234,15 +228,11 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 		/* Here the decrementer value is actually the interval */
 		++ppc_clock_decrementer_value;
 
-		rtems_interrupt_disable( level);
-
 		/* Initialize next time base */
 		ppc_clock_next_time_base = ppc_time_base() + ppc_clock_decrementer_value;
 
 		/* Install exception handler */
 		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler);
-
-		rtems_interrupt_enable( level);
 	}
 
 	/* Set the decrementer value */
@@ -257,14 +247,16 @@ rtems_device_driver Clock_control( rtems_device_major_number major, rtems_device
 
 	if (io == NULL) {
 		return RTEMS_SUCCESSFUL;
-	} else if (ppc_clock_tick == NULL) {
-		Clock_initialize( major, minor, 0);
 	}
 
 	if (io->command == rtems_build_name( 'I', 'S', 'R', ' ')) {
 		ppc_clock_tick();
 	} else if (io->command == rtems_build_name( 'N', 'E', 'W', ' ')) {
-		ppc_clock_tick = io->buffer;
+		if (io->buffer != NULL) {
+			ppc_clock_tick = io->buffer;
+		} else {
+			ppc_clock_tick = ppc_clock_no_tick;
+		}
 	}
 
 	return RTEMS_SUCCESSFUL;

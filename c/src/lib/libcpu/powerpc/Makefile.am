@@ -429,8 +429,8 @@ include_mpc55xx_HEADERS = mpc55xx/include/regs.h \
 	mpc55xx/include/dspi.h \
 	mpc55xx/include/edma.h \
 	mpc55xx/include/mpc55xx.h \
-	mpc55xx/include/esci.h
-
+	mpc55xx/include/esci.h \
+	mpc55xx/include/watchdog.h
 
 # IRQ
 noinst_PROGRAMS += mpc55xx/irq.rel

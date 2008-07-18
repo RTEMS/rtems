@@ -294,4 +294,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h
 $(PROJECT_INCLUDE)/mpc55xx/esci.h: mpc55xx/include/esci.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/esci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/esci.h
+
+$(PROJECT_INCLUDE)/mpc55xx/watchdog.h: mpc55xx/include/watchdog.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
 endif

@@ -200,7 +200,7 @@ rtems_status_code mpc83xx_gtm_get_reference( int timer, uint16_t *reference)
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	reference = mpc83xx.gtm [module].gt_tim_regs [high].gtrfr [low];
+	*reference = mpc83xx.gtm [module].gt_tim_regs [high].gtrfr [low];
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -222,7 +222,7 @@ rtems_status_code mpc83xx_gtm_get_prescale( int timer, uint8_t *prescale)
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
-	prescale = mpc83xx.gtm [module].gtpsr [module_timer];
+	*prescale = mpc83xx.gtm [module].gtpsr [module_timer];
 
 	return RTEMS_SUCCESSFUL;
 }

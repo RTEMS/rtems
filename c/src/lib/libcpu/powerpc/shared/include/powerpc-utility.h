@@ -239,184 +239,176 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	PPC_Set_decrementer( dec);
 }
 
-#define PPC_STRINGOF(x)	#x
-
-/* Do not use the following macros.  Use the inline functions instead. */
-
-#define PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER( spr) \
-	uint32_t val; \
-	asm volatile ( \
-		"mfspr %0, " #spr \
-		: "=r" (val) \
-	); \
-	return val;
-
-#define PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( spr) \
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER( spr)
-
-#define PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER( spr, val) \
-	asm volatile ( \
-		"mtspr " #spr ", %0" \
-		: \
-		: "r" (val) \
-	);
-
-#define PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( spr, val) \
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER( spr, val)
-
-/*
- * PPC4xx have Device Control Registers...
+/**
+ * @brief Preprocessor magic for stringification of @a x.
  */
-#define PPC_DEVICE_CONTROL_REGISTER(dcr)			\
-  ({uint32_t val;asm volatile ("mfdcr %0," PPC_STRINGOF(dcr)	\
-			       : "=r" (val)); val;})
+#define PPC_STRINGOF( x) #x
 
-#define PPC_SET_DEVICE_CONTROL_REGISTER(dcr,val)	\
-  do {							\
-    asm volatile ("mtdcr " PPC_STRINGOF(dcr)",%0"	\
-		  :: "r" (val));			\
-    } while (0)
+/**
+ * @brief Returns the value of the Special Purpose Register with number @a spr.
+ *
+ * @note This macro uses a GNU C extension.
+ */
+#define PPC_SPECIAL_PURPOSE_REGISTER( spr) \
+	( { \
+		uint32_t val; \
+		asm volatile ( \
+			"mfspr %0, " PPC_STRINGOF( spr) \
+			: "=r" (val) \
+		); \
+		val;\
+	} )
 
+/**
+ * @brief Sets the Special Purpose Register with number @a spr to the value in
+ * @a val.
+ */
+#define PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val) \
+	do { \
+		asm volatile ( \
+			"mtspr " PPC_STRINGOF( spr) ", %0" \
+			: \
+			: "r" (val) \
+		); \
+	} while (0)
 
-static inline uint32_t ppc_special_purpose_register_0()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0);
-}
+/**
+ * @brief Sets in the Special Purpose Register with number @a spr all bits
+ * which are set in @a bits.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( spr, bits) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
+		val |= bits; \
+		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
-static inline void ppc_set_special_purpose_register_0( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG0, val);
-}
+/**
+ * @brief Sets in the Special Purpose Register with number @a spr all bits
+ * which are set in @a bits.  The previous register value will be masked with
+ * @a mask.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS_MASKED( spr, bits, mask) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
+		val &= ~mask; \
+		val |= bits; \
+		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
-static inline uint32_t ppc_special_purpose_register_1()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1);
-}
+/**
+ * @brief Clears in the Special Purpose Register with number @a spr all bits
+ * which are set in @a bits.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS( spr, bits) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
+		val &= ~bits; \
+		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
-static inline void ppc_set_special_purpose_register_1( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG1, val);
-}
+/**
+ * @brief Returns the value of the Device Control Register with number @a dcr.
+ *
+ * The PowerPC 4XX family has Device Control Registers.
+ *
+ * @note This macro uses a GNU C extension.
+ */
+#define PPC_DEVICE_CONTROL_REGISTER( dcr) \
+	( { \
+		uint32_t val; \
+		asm volatile ( \
+			"mfdcr %0, " PPC_STRINGOF( dcr) \
+			: "=r" (val) \
+		); \
+		val;\
+	} )
 
-static inline uint32_t ppc_special_purpose_register_2()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2);
-}
+/**
+ * @brief Sets the Device Control Register with number @a dcr to the value in
+ * @a val.
+ *
+ * The PowerPC 4XX family has Device Control Registers.
+ */
+#define PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val) \
+	do { \
+		asm volatile ( \
+			"mtdcr " PPC_STRINGOF( dcr) ", %0" \
+			: \
+			: "r" (val) \
+		); \
+	} while (0)
 
-static inline void ppc_set_special_purpose_register_2( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG2, val);
-}
+/**
+ * @brief Sets in the Device Control Register with number @a dcr all bits
+ * which are set in @a bits.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_SET_DEVICE_CONTROL_REGISTER_BITS( dcr, bits) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
+		val |= bits; \
+		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
-static inline uint32_t ppc_special_purpose_register_3()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3);
-}
+/**
+ * @brief Sets in the Device Control Register with number @a dcr all bits
+ * which are set in @a bits.  The previous register value will be masked with
+ * @a mask.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_SET_DEVICE_CONTROL_REGISTER_BITS_MASKED( dcr, bits, mask) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
+		val &= ~mask; \
+		val |= bits; \
+		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
-static inline void ppc_set_special_purpose_register_3( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG3, val);
-}
-
-static inline uint32_t ppc_special_purpose_register_4()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4);
-}
-
-static inline void ppc_set_special_purpose_register_4( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG4, val);
-}
-
-static inline uint32_t ppc_special_purpose_register_5()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5);
-}
-
-static inline void ppc_set_special_purpose_register_5( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG5, val);
-}
-
-static inline uint32_t ppc_special_purpose_register_6()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6);
-}
-
-static inline void ppc_set_special_purpose_register_6( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG6, val);
-}
-
-static inline uint32_t ppc_special_purpose_register_7()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7);
-}
-
-static inline void ppc_set_special_purpose_register_7( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( SPRG7, val);
-}
-
-static inline uint32_t ppc_user_special_purpose_register_0()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0);
-}
-
-static inline void ppc_set_user_special_purpose_register_0( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( USPRG0, val);
-}
-
-static inline uint32_t ppc_timer_control_register()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR);
-}
-
-static inline void ppc_set_timer_control_register( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TCR, val);
-}
-
-static inline uint32_t ppc_timer_status_register()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR);
-}
-
-static inline void ppc_set_timer_status_register( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_TSR, val);
-}
-
-static inline uint32_t ppc_decrementer_auto_reload_register()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR);
-}
-
-static inline void ppc_set_decrementer_auto_reload_register( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( BOOKE_DECAR, val);
-}
-
-static inline uint32_t ppc_hardware_implementation_dependent_register_0()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0);
-}
-
-static inline void ppc_set_hardware_implementation_dependent_register_0( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID0, val);
-}
-
-static inline uint32_t ppc_hardware_implementation_dependent_register_1()
-{
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1);
-}
-
-static inline void ppc_set_hardware_implementation_dependent_register_1( uint32_t val)
-{
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( HID1, val);
-}
+/**
+ * @brief Clears in the Device Control Register with number @a dcr all bits
+ * which are set in @a bits.
+ *
+ * Interrupts are disabled throughout this operation.
+ */
+#define PPC_CLEAR_DEVICE_CONTROL_REGISTER_BITS( dcr, bits) \
+	do { \
+		rtems_interrupt_level level; \
+		uint32_t val; \
+		rtems_interrupt_disable( level); \
+		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
+		val &= ~bits; \
+		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
+		rtems_interrupt_enable( level); \
+	} while (0)
 
 static inline uint32_t ppc_time_base()
 {
@@ -429,17 +421,17 @@ static inline uint32_t ppc_time_base()
 
 static inline void ppc_set_time_base( uint32_t val)
 {
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWL, val);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( TBWL, val);
 }
 
 static inline uint32_t ppc_time_base_upper()
 {
-	PPC_INTERNAL_MACRO_RETURN_SPECIAL_PURPOSE_REGISTER_EXPAND( TBRU);
+	return PPC_SPECIAL_PURPOSE_REGISTER( TBRU);
 }
 
 static inline void ppc_set_time_base_upper( uint32_t val)
 {
-	PPC_INTERNAL_MACRO_SET_SPECIAL_PURPOSE_REGISTER_EXPAND( TBWU, val);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( TBWU, val);
 }
 
 static inline uint64_t ppc_time_base_64()
@@ -457,18 +449,18 @@ static inline void ppc_set_time_base_64( uint64_t val)
 #include <rtems/asm.h>
 
 .macro LA reg, addr
-	lis \reg, (\addr)@h
-	ori \reg, \reg, (\addr)@l
+	lis	\reg, (\addr)@h
+	ori	\reg, \reg, (\addr)@l
 .endm
 
 .macro LWI reg, value
 	lis \reg, (\value)@h
-	ori \reg, \reg, (\value)@l
+	ori	\reg, \reg, (\value)@l
 .endm
 
 .macro LW reg, addr
-	lis \reg, \addr@ha
-	lwz \reg, \addr@l(\reg)
+	lis	\reg, \addr@ha
+	lwz	\reg, \addr@l(\reg)
 .endm
 
 /*
@@ -502,7 +494,7 @@ static inline void ppc_set_time_base_64( uint64_t val)
  * Obtain interrupt mask
  */
 .macro GET_INTERRUPT_MASK mask
-	mfspr \mask, sprg0
+	mfspr	\mask, sprg0
 .endm
 
 /*

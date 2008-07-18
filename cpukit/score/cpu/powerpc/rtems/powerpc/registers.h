@@ -302,14 +302,18 @@ lidate */
 #define PPC405_TCR	0x3DA
 #define BOOKE_TCR	340
 #define BOOKE_TCR_WP(x)		(((x)&3)<<30)
+#define BOOKE_TCR_WP_MASK	(3<<30)
 #define BOOKE_TCR_WRC(x)	(((x)&3)<<28)
+#define BOOKE_TCR_WRC_MASK	(3<<28)
 #define BOOKE_TCR_WIE		(1<<27)
 #define BOOKE_TCR_DIE		(1<<26)
 #define BOOKE_TCR_FP(x)		(((x)&3)<<24)
 #define BOOKE_TCR_FIE		(1<<23)
 #define BOOKE_TCR_ARE		(1<<22)
 #define BOOKE_TCR_WPEXT(x)	(((x)&0xf)<<17)
+#define BOOKE_TCR_WPEXT_MASK	(0xf<<17)
 #define BOOKE_TCR_FPEXT(x)	(((x)&0xf)<<13)
+#define BOOKE_TCR_FPEXT_MASK	(0xf<<13)
 
 /**
  * @brief Default value for the interrupt disable mask.

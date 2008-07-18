@@ -1,3 +1,18 @@
+2008-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h: Changed special purpose register
+	inline functions to macros.  Added macros to set and clear bits for
+	SPRs and DCRs.
+
+	* new-exceptions/raw_exception.c: The watchdog exception for e200 is
+	now asynchronous.
+
+	* mpc83xx/gtm/gtm.c: Bugfix for some value assignments.
+
+	* mpc55xx/include/watchdog.h: New file.
+
+	* Makefile.am: Install mpc55xx/include/watchdog.h for MPC55XX.
+
 2008-07-18	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* mpc83xx/network/tsec.c: Initialize PHY registers late enough,

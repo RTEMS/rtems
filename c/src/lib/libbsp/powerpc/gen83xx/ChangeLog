@@ -1,3 +1,8 @@
+2008-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c: Enable cache after CPU initialization.  Clear
+	only workspace memory area.
+
 2008-07-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/network.c:
