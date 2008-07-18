@@ -1503,6 +1503,16 @@ static void mpc83xx_tsec_init
     sc->reg_ptr->rctrl &= ~M83xx_TSEC_RCTRL_PROM;
   }
 
+#if defined(HSC_CM01)
+  /*
+   * for HSC CM01: we need to configure the PHY to use maximum skew adjust
+   */
+  
+  mpc83xx_tsec_mdio_write(-1,sc,31,1);
+  mpc83xx_tsec_mdio_write(-1,sc,28,0xf000);
+  mpc83xx_tsec_mdio_write(-1,sc,31,0);
+#endif
+
   /*
    * init timer so the "watchdog function gets called periodically
    */
@@ -1954,15 +1964,6 @@ static int mpc83xx_tsec_driver_attach
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
   }
 
-#if defined(HSC_CM01)
-  /*
-   * for HSC CM01: we need to configure the PHY to use maximum skew adjust
-   */
-  
-  mpc83xx_tsec_mdio_write(-1,sc,31,1);
-  mpc83xx_tsec_mdio_write(-1,sc,28,0xf000);
-  mpc83xx_tsec_mdio_write(-1,sc,31,0);
-#endif
   /*
    * Attach the interface
    */

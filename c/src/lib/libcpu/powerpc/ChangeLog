@@ -1,3 +1,8 @@
+2008-07-18	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c:
+	initialize PHY registers late enough, so that phy access is possible
+
 2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* rtems/powerpc/powerpc.h:

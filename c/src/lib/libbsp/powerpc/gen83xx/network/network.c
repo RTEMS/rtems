@@ -80,9 +80,9 @@ int BSP_tsec_attach
     if (unitNumber == 1) {
       /*
        * init system I/O configuration registers 
-       * to ensure proper pin functions for TSEC1_RX_ER and TSEC1_TX_ER
+       * to ensure proper pin functions 
        */
-      mpc83xx.syscon.sicrh = mpc83xx.syscon.sicrh & ~0x02800000;
+      mpc83xx.syscon.sicrh = mpc83xx.syscon.sicrh & ~0x1F800000;
       /*
        * init port registers (GPIO2DIR) for TSEC1
        */
@@ -90,6 +90,11 @@ int BSP_tsec_attach
 			       |                         0x0000001f);
     }
     if (unitNumber == 2) {
+      /*
+       * init system I/O configuration registers 
+       * to ensure proper pin functions 
+       */
+      mpc83xx.syscon.sicrh = mpc83xx.syscon.sicrh & ~0x007f8000;
       /*
        * init port registers (GPIO2DIR) for TSEC2
        */

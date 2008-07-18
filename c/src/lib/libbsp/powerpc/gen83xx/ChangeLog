@@ -1,6 +1,11 @@
 2008-07-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/network.c:
+	mpc8249eamds support for Gigabit Ethernet works again
+
+2008-07-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* network/network.c:
 	mpc8249eamds uses gmii mode
 
 2008-07-17	Ralf Corsépius <ralf.corsepius@rtems.org>
