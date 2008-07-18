@@ -1,3 +1,10 @@
+2008-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1291/cpukit
+	* psx05/init.c, psxmsgq01/init.c: As part of addressing timeouts and
+	POSIX services taking relative instead of absolute time for timeouts,
+	these tests were updated.
+
 2008-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxfile01/test.c: truncate on /dev/console now works.
