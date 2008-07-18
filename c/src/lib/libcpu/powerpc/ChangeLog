@@ -1,15 +1,13 @@
 2008-07-18	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
-	* mpc83xx/network/tsec.c:
-	initialize PHY registers late enough, so that phy access is possible
+	* mpc83xx/network/tsec.c: Initialize PHY registers late enough,
+	so that phy access is possible
 
 2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* rtems/powerpc/powerpc.h:
 	ppc405 uses definitions distinct from ppc403 now
-
-	* shared/src/cache_.h: 
-	use correct powerpc.h to get cache attributes
+	* shared/src/cache_.h: Use correct powerpc.h to get cache attributes
 
 	
 2008-07-17	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
