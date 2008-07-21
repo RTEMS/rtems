@@ -58,6 +58,8 @@
 #define	ASM_BOOKE_FIT_VECTOR                 0x13
 #define	ASM_BOOKE_WDOG_VECTOR                0x14
 
+#define ASM_PPC405_APU_UNAVAIL_VECTOR		ASM_60X_VEC_ASSIST_VECTOR
+
 #define	ASM_8XX_FLOATASSIST_VECTOR	         0x0E
 #define	ASM_8XX_SOFTEMUL_VECTOR	             0x10
 #define	ASM_8XX_ITLBMISS_VECTOR              0x11

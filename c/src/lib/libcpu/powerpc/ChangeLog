@@ -1,3 +1,9 @@
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
+	* new-exceptions/raw_exception,h,
+	new-exceptions/raw_exception.c: Added more vectors for PPC405:
+	watchdog, fpu-unavail, apu-unavail, itlbmiss, dtlbmiss, debug.
+	
 2008-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/powerpc-utility.h: Changed special purpose register

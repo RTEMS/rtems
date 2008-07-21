@@ -60,51 +60,65 @@ uint32_t ppc_exc_vector_base = 0;
 
 void* ppc_get_vector_addr(rtems_vector vector)
 {
-  unsigned vaddr;
+	unsigned vaddr;
 
-  vaddr = ((unsigned)vector) << 8;
+	vaddr = ((unsigned)vector) << 8;
 
-  switch(vector) {
-    /*
-     * some vectors are located at odd addresses and only available
-     * on some CPU derivates. this construct will handle them
-     * if available
-     */
-  /* Special case; altivec unavailable doesn't fit :-( */
-  case ASM_60X_VEC_VECTOR:
+	switch(vector) {
+		/*
+		 * some vectors are located at odd addresses and only available
+		 * on some CPU derivates. this construct will handle them
+		 * if available
+		 */
+		/* Special case; altivec unavailable doesn't fit :-( */
+		case ASM_60X_VEC_VECTOR:
 #ifndef ASM_60X_VEC_VECTOR_OFFSET
 #define ASM_60X_VEC_VECTOR_OFFSET 0xf20
 #endif
-  	if ( ppc_cpu_has_altivec() )
-   		vaddr = ASM_60X_VEC_VECTOR_OFFSET;
-    break;
+			if ( ppc_cpu_has_altivec() )
+				vaddr = ASM_60X_VEC_VECTOR_OFFSET;
+			break;
 
-  case ASM_BOOKE_FIT_VECTOR:
-#ifndef ASM_BOOKE_FIT_VECTOR_OFFSET
-#define ASM_BOOKE_FIT_VECTOR_OFFSET 0x1010
-#endif
-  	if ( PPC_405 == current_ppc_cpu )
-    	vaddr = ASM_BOOKE_FIT_VECTOR_OFFSET;
-    break;
-  case ASM_BOOKE_WDOG_VECTOR:
-#ifndef ASM_BOOKE_WDOG_VECTOR_OFFSET
-#define ASM_BOOKE_WDOG_VECTOR_OFFSET 0x1020
-#endif
-  	if ( PPC_405 == current_ppc_cpu )
-    	vaddr = ASM_BOOKE_WDOG_VECTOR_OFFSET;
-    break;
-  default:
-    break;
-  }
-  if (bsp_exceptions_in_RAM) {
-    if (ppc_cpu_has_ivpr_and_ivor()) {
-      return ((void*) ((vaddr >> 4) + ppc_exc_vector_base));
-    } else {
-      return ((void*) (vaddr + ppc_exc_vector_base));
-    }
-  }
+		default:
+			break;
+	}
 
-  return ((void*)  (vaddr + 0xfff00000));
+	if ( PPC_405 == current_ppc_cpu ) {
+		switch ( vector ) {
+			case ASM_BOOKE_FIT_VECTOR:
+#ifndef ASM_PPC405_FIT_VECTOR_OFFSET
+#define ASM_PPC405_FIT_VECTOR_OFFSET 0x1010
+#endif
+				vaddr = ASM_PPC405_FIT_VECTOR_OFFSET;
+				break;
+			case ASM_BOOKE_WDOG_VECTOR:
+#ifndef ASM_PPC405_WDOG_VECTOR_OFFSET
+#define ASM_PPC405_WDOG_VECTOR_OFFSET 0x1020
+#endif
+				vaddr = ASM_PPC405_WDOG_VECTOR_OFFSET;
+				break;
+			case ASM_TRACE_VECTOR:
+#ifndef ASM_PPC405_TRACE_VECTOR_OFFSET
+#define ASM_PPC405_TRACE_VECTOR_OFFSET	0x2000
+#endif
+				vaddr = ASM_PPC405_TRACE_VECTOR_OFFSET;
+				break;
+			case ASM_PPC405_APU_UNAVAIL_VECTOR:
+				vaddr = ASM_60X_VEC_VECTOR_OFFSET;
+			default:
+				break;
+		}
+	}
+
+	if (bsp_exceptions_in_RAM) {
+		if (ppc_cpu_has_ivpr_and_ivor()) {
+			return ((void*) ((vaddr >> 4) + ppc_exc_vector_base));
+		} else {
+			return ((void*) (vaddr + ppc_exc_vector_base));
+		}
+	}
+
+	return ((void*)  (vaddr + 0xfff00000));
 }
 
 static const cat_ini_t mpc_860_vector_categories[LAST_VALID_EXC + 1] = {
@@ -161,20 +175,27 @@ static const cat_ini_t mpc_5xx_vector_categories[LAST_VALID_EXC + 1] = {
 };
 
 static const cat_ini_t ppc_405_vector_categories[LAST_VALID_EXC + 1] = {
-  [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
-  [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* PIT */
-  [ ASM_BOOKE_FIT_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* FIT */
-
-  [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
-  [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
-  [ ASM_ALIGN_VECTOR           ] = PPC_EXC_CLASSIC,
-  [ ASM_PROG_VECTOR            ] = PPC_EXC_CLASSIC,
-  [ ASM_SYS_VECTOR             ] = PPC_EXC_CLASSIC,
-  [ ASM_BOOKE_ITLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
-  [ ASM_BOOKE_DTLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
-
   [ ASM_BOOKE_CRIT_VECTOR      ] = PPC_EXC_405_CRITICAL | PPC_EXC_ASYNC,
   [ ASM_MACH_VECTOR            ] = PPC_EXC_405_CRITICAL,
+  [ ASM_PROT_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_ISI_VECTOR             ] = PPC_EXC_CLASSIC,
+  [ ASM_EXT_VECTOR             ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ ASM_ALIGN_VECTOR           ] = PPC_EXC_CLASSIC,
+  [ ASM_PROG_VECTOR            ] = PPC_EXC_CLASSIC,
+  [ ASM_FLOAT_VECTOR           ] = PPC_EXC_CLASSIC,
+
+  [ ASM_PPC405_APU_UNAVAIL_VECTOR] = PPC_EXC_CLASSIC,
+
+  [ ASM_SYS_VECTOR             ] = PPC_EXC_CLASSIC,
+
+
+
+  [ ASM_BOOKE_DEC_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* PIT */
+  [ ASM_BOOKE_FIT_VECTOR       ] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,		/* FIT */
+  [ ASM_BOOKE_WDOG_VECTOR      ] = PPC_EXC_405_CRITICAL | PPC_EXC_ASYNC,
+  [ ASM_BOOKE_DTLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_BOOKE_ITLBMISS_VECTOR  ] = PPC_EXC_CLASSIC,
+  [ ASM_TRACE_VECTOR           ] = PPC_EXC_405_CRITICAL,
 };
 
 
