@@ -56,8 +56,6 @@
  *  $Id$
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <string.h>
 #include <fcntl.h>
 
@@ -69,8 +67,6 @@
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 #include <rtems/powerpc/powerpc.h>
-
-SPR_RW(SPRG1)
 
 #include RTEMS_XPARAMETERS_H
 #include <stdio.h>
@@ -154,8 +150,8 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  extern unsigned long *intrStackPtr;
-  register unsigned char* intrStack;
+  extern unsigned char IntrStack_start[];
+  extern unsigned char IntrStack_end[];
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
@@ -183,17 +179,13 @@ void bsp_start( void )
   bsp_timer_least_valid = 3;
 
   /*
-   * Initialize some SPRG registers related to irq handling
-   */
-
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
-  _write_SPRG1((unsigned int)intrStack);
-
-  /*
    * Initialize default raw exception handlers. 
-   * See shared/vectors/vectors_init.c
    */
-  initialize_exceptions();
+  ppc_exc_initialize(
+	PPC_INTERRUPT_DISABLE_MASK_DEFAULT | MSR_CE,
+	(uint32_t)IntrStack_start,
+	IntrStack_end - IntrStack_start
+  );
 
   /*
    * Install our own set of exception vectors
@@ -223,7 +215,7 @@ void bsp_start( void )
     extern int _end;
 
     /* round _end up to next 64k boundary for start of workspace */
-    Configuration.work_space_start = (void *)((((uint32_t)&_end) + 0x18000) & 0xffff0000);
+    Configuration.work_space_start = (void *)((((uint32_t)&_end) + 0xffff) & 0xffff0000);
   }
 
 }

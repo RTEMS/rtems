@@ -1,5 +1,18 @@
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/bspstart.c: Removed SPRG0 warning - this BSP
+	is OK.
+
+	Use interrupt stack limits from linker script.
+
+	No need to reserve space beyond '_end'. linkcmds now
+	reserves space below '_end'.
+
+	Use low-level exception handling support from
+	new-exceptions/bspsupport.
+
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* dlentry/dlentry.S: load R13 with _SDA_BASE_ so that
 	SVR4-ABI access of short data area works. No support
 	for R2/sdata2/eabi, so far but that would be easy
