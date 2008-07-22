@@ -1,5 +1,11 @@
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/bspstart.c: Removed MSR_CE from interrupt
+	mask - this was set for testing but should not be
+	in the mask by default.
+
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* Makefile.am, preinstall.am, irq/irq_init.c:
 	Use low-level exception handling support from
 	new-exceptions/bspsupport.
