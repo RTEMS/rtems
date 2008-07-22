@@ -630,6 +630,10 @@ ceiling.
 @item EDEADLK
 The current thread already owns the mutex.
 
+@item ETIMEDOUT
+The calling thread was unable to obtain the mutex within the specified
+timeout period.
+
 @end table
 
 @subheading DESCRIPTION:
