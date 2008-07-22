@@ -1,5 +1,11 @@
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* Makefile.am, preinstall.am, irq/irq_init.c:
+	Use low-level exception handling support from
+	new-exceptions/bspsupport.
+	
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* startup/bspstart.c: Removed SPRG0 warning - this BSP
 	is OK.
 

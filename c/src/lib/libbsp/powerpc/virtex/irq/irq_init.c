@@ -96,19 +96,6 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
    * Handle interrupt
    */
   switch(excNum) {
-#if 0
-  case ASM_DEC_VECTOR:
-    _CPU_MSR_GET(msr);
-    new_msr = msr | MSR_EE;
-    _CPU_MSR_SET(new_msr);
-    
-    BSP_rtems_irq_tbl[BSP_DECREMENTER].hdl
-      (BSP_rtems_irq_tbl[BSP_DECREMENTER].handle);
-    
-    _CPU_MSR_SET(msr);
-    
-    break;
-#endif
   case ASM_EXT_VECTOR:
     BSP_irq_handle_at_opbintc();
     break;
@@ -124,21 +111,6 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   return 0;
 }
   
-void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
-{
-  /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
-   */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = FALSE;
-    _API_extensions_Run_postswitch();
-  }
-}
-
 /***********************************************************
  * functions to set/get/remove interrupt handlers
  ***********************************************************/
@@ -314,51 +286,6 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
   rtems_interrupt_enable(level);
   return 1;
 }
-/**********************************************
- * list of exception vectors to tap for interrupt handlers
- */
-static rtems_raw_except_connect_data BSP_vec_desc[] = {
-#if 0 /* ppc405 has no decrementer */
-  {ASM_DEC_VECTOR,
-   {ASM_DEC_VECTOR,
-    decrementer_exception_vector_prolog_code,
-    (size_t)decrementer_exception_vector_prolog_code_size
-   },
-   exception_nop_enable,
-   exception_nop_enable,
-   exception_always_enabled
-  },
-#endif
-  {ASM_EXT_VECTOR,
-   {ASM_EXT_VECTOR,
-    external_exception_vector_prolog_code,
-    (size_t)&external_exception_vector_prolog_code_size
-   },
-   exception_nop_enable,
-   exception_nop_enable,
-   exception_always_enabled
-  },
-  {ASM_BOOKE_DEC_VECTOR,
-   {ASM_BOOKE_DEC_VECTOR,
-    pit_exception_vector_prolog_code,
-    (size_t)&pit_exception_vector_prolog_code_size
-   },
-   exception_nop_enable,
-   exception_nop_enable,
-   exception_always_enabled
-  }
-#if 0 /* Critical interrupts not yet supported */
-  ,{ASM_BOOKE_CRIT_VECTOR,
-   {ASM_BOOKE_CRIT_VECTOR,
-    critical_exception_vector_prolog_code,
-    critical_exception_vector_prolog_code_size
-   }
-   BSP_irq_nop_func,
-   BSP_irq_nop_func,
-   BSP_irq_true_func
-  }
-#endif
-};
 
 /*
  * dummy for an empty IRQ handler entry
@@ -389,17 +316,13 @@ static rtems_irq_global_settings initialConfig = {
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   int i;
+
   /*
    * connect all exception vectors needed
    */
-  for (i = 0;
-       i < (sizeof(BSP_vec_desc) / 
-	    sizeof(BSP_vec_desc[0]));
-       i++) {
-    if (!ppc_set_exception (&BSP_vec_desc[i])) {
-      BSP_panic("Unable to initialize RTEMS raw exception\n");
-    }
-  }
+ ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
+ ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, C_dispatch_irq_handler);
+
   /*
    * setup interrupt handlers table
    */
