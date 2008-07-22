@@ -130,6 +130,9 @@ text_length:
         la	r5,environ@l(r5)	/* environp */
 	li	r4, 0			/* argv */
 	li	r3, 0			/* argc */
+	.extern SYM(_SDA_BASE_)
+	lis r13,SYM(_SDA_BASE_)@h
+	ori r13,r13,SYM(_SDA_BASE_)@l
         .extern SYM (boot_card)
         b       SYM (boot_card) 	 /* call the first C routine */
 

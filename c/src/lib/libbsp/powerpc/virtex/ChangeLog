@@ -1,5 +1,12 @@
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* dlentry/dlentry.S: load R13 with _SDA_BASE_ so that
+	SVR4-ABI access of short data area works. No support
+	for R2/sdata2/eabi, so far but that would be easy
+	(atm R2 is loaded with got address IIRC).
+
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* startup/linkcmds: fixed sdata/sbss areas -- these
 	must be contiguous for SVR4 complicant access via R13.
 	Use kludged layout so that sbss, bss, sbss2 are all
