@@ -1,5 +1,20 @@
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
+	* startup/linkcmds: fixed sdata/sbss areas -- these
+	must be contiguous for SVR4 complicant access via R13.
+	Use kludged layout so that sbss, bss, sbss2 are all
+	contiguous and zeroed by dlentry.S.
+
+	Provide _SDA_BASE_ and _SDA2_BASE_ for loading R13 (and
+	R2 if anyone wants to use EABI).
+
+	Make sure interrupt stack is never in heap area by
+	moving it below '_end'. 
+
+	Provide symbols for start + end of interrupt stack.
+
+2008-07-21	Till Straumann <strauman@slac.stanford.edu>
+
 	* console/consolelite.c: use base address from RTEMS_XPARAMETERS_H
 	rather than hardcoded hex number.
 

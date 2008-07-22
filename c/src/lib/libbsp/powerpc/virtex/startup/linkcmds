@@ -179,14 +179,7 @@ SECTIONS
       *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
     } >RAM
 
-    PROVIDE (__SDATA2_START__ = .);
-  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
-  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
-    PROVIDE (__SBSS2_END__ = .);
-	
-    .sbss2   	  : { *(.sbss2) 	} >RAM
-    PROVIDE (__SBSS2_END__ = .);
-	
+
     /* R/W Data */
     .data ( . ) :
     {
@@ -197,33 +190,63 @@ SECTIONS
       *(.data)
       *(.data1)
       *(.data.* .gnu.linkonce.d.*)
-      PROVIDE (__SDATA_START__ = .);
-      *(.sdata*)
-      *(.gnu.linkonce.s.*)
       data.end = .;
       data.size = data.end - data.start;
-      PROVIDE (_edata = .);
     } >RAM
 
-    __SBSS_START__ = .;
-    .bss :
-    {
-      bss.start = .;
-      *(.bss .bss* .gnu.linkonce.b*)
-      *(.sbss*) *(COMMON)
-    bss.end = ALIGN(4);
+	/* Arrange as follows:
+	 *   sdata
+ 	 *   sbss
+     *   bss
+     *   sbss2
+     *   sdata2
+	 * so that we have a contiguous 'bss' area
+	 * which can be zeroed in one sweep.
+	 * (sdata/sbss and sdata2/sbss2 must also be
+	 * contiguous).
+	 */
+
+	_SDA_BASE_ = __SDATA_START__ + 0x8000;
+	.sdata : {
+		*(.sdata .sdata.*)
+		*(.gnu.linkonce.s.*)
+	} > RAM
+	_edata = .;
+	.sbss : {
+        *(.dynsbss)
+    	*(.sbss .sbss.* .gnu.linkonce.sb.*)
+	    *(.scommon)
+	} > RAM
+	.bss : {
+		*(.dynbss)
+		*(.bss .bss* .gnu.linkonce.b*)
+		*(COMMON)
     } >RAM
-      bss.size = bss.end - bss.start;
-    __SBSS_END__ = .;
-    
-    PROVIDE(_bss_start   = ADDR(.bss));
-    PROVIDE(_bss_size    = SIZEOF(.bss));
-    PROVIDE(bss.size    = SIZEOF(.bss));
-    PROVIDE(_data_start  = ADDR(.data));
-    PROVIDE(_data_size   = SIZEOF(.data));
-    PROVIDE(_text_start  = ADDR(.text));
-    PROVIDE(_text_size   = SIZEOF(.text));
-    PROVIDE(_end = bss.end);
+	_SDA2_BASE_ = __SBSS2_START__ + 0x8000;
+	.sbss2 : {
+		*(.sbss2 .sbss2.* .gnu.linkonce.sb2.*) 
+	} > RAM
+	.sdata2 : {
+		*(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+	} > RAM
+	
+	PROVIDE(bss.start    = __SBSS_START__);
+    PROVIDE(bss.size     = __SBSS2_END__ - __SBSS_START__);
+
+  /* align bottom of 32k init stack at a 32k boundary */
+  . = . + 0x4000;
+  . = ALIGN( 0x8000 );
+  stack.start = .;
+  . = . + 0x8000;
+  stack.end   = .;
+  /*
+   * Interrupt stack setup
+   */
+    IntrStack_start = ALIGN(0x10);
+    . += 0x4000;
+    IntrStack_end = .;
+ 
+    PROVIDE(_end = . );
 
 
     .gzipmalloc : {
@@ -231,14 +254,6 @@ SECTIONS
         _startmalloc = .;
      } >RAM
           	
-
-    /*
-     * Interrupt stack setup
-     */
-    IntrStack_start = ALIGN(0x10);
-    . += 0x4000;
-    intrStack = .;
-    PROVIDE(intrStackPtr = intrStack);
 
     /* Sections for compressed .text and .data         */
     /* after the .datarom section is an int specifying */
@@ -258,20 +273,7 @@ SECTIONS
     } >RAM
     dr_len = _dr_end - _dr_start;
 
-  /* align bottom of 32k init stack at a 32k boundary */
-  . = . + 0x4000;
-  . = ALIGN( 0x8000 );
-  stack.start = .;
-  . = . + 0x8000;
-  stack.end   = .;
-  /*
-   * Interrupt stack setup
-   */
-  IntrStack_start = ALIGN(0x10);
-  . += 0x4000;
-  intrStack = .;
-  PROVIDE(intrStackPtr = intrStack);
- 
+
     .line 0 : { *(.line) }
     .debug 0 : { *(.debug) }
     .debug_sfnames 0 : { *(.debug_sfnames) }
