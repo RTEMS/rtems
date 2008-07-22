@@ -63,16 +63,21 @@ int sigtimedwait(
 
   /*
    *  Error check parameters before disabling interrupts.
+   *
+   *  NOTE: This is very specifically a RELATIVE not ABSOLUTE time
+   *        in the Open Group specification.
    */
 
   interval = 0;
   if ( timeout ) {
 
-    if ( !_Timespec_Is_valid( timeout ) ) {
+    if ( !_Timespec_Is_valid( timeout ) )
       rtems_set_errno_and_return_minus_one( EINVAL );
-    }
 
     interval = _Timespec_To_ticks( timeout );
+
+    if ( !interval )
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /*

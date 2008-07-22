@@ -26,9 +26,9 @@
  */
 
 int _POSIX_Semaphore_Wait_support(
-  sem_t                          *sem,
-  Core_semaphore_Blocking_option  blocking,
-  Watchdog_Interval               timeout
+  sem_t             *sem,
+  boolean            blocking,
+  Watchdog_Interval  timeout
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
@@ -65,9 +65,6 @@ int _POSIX_Semaphore_Wait_support(
            *  count to the largest value the count can hold.
            */
  	  break;
-	case CORE_SEMAPHORE_BAD_TIMEOUT_VALUE:
-          rtems_set_errno_and_return_minus_one( EINVAL );
-	  break;
       }
   }
   return 0;

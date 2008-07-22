@@ -153,9 +153,9 @@ void _POSIX_Semaphore_Delete(
  */
 
 int _POSIX_Semaphore_Wait_support(
-  sem_t                          *sem,
-  Core_semaphore_Blocking_option  blocking,
-  Watchdog_Interval               timeout
+  sem_t               *sem,
+  boolean              blocking,
+  Watchdog_Interval    timeout
 );
 
 /*

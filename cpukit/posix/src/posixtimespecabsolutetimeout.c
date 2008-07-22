@@ -34,7 +34,7 @@
 /*
  *  The abstime is a walltime.  We turn it into an interval.
  */
-int _POSIX_Absolute_timeout_to_ticks(
+POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
   const struct timespec *abstime,
   Watchdog_Interval     *ticks_out
 )
@@ -42,21 +42,47 @@ int _POSIX_Absolute_timeout_to_ticks(
   struct timespec current_time;
   struct timespec difference;
 
-  if ( !_Timespec_Is_valid(abstime) )
-    return EINVAL;
-
-  _TOD_Get( &current_time );
+  
+  /*
+   *  Make sure there is always a value returned.
+   */
+  *ticks_out = 0;
 
   /*
-   *  Make sure the abstime is in the future
+   *  Is the absolute time even valid?
    */
-  if ( _Timespec_Less_than( abstime, &current_time ) )
-    return EINVAL;
+  if ( !_Timespec_Is_valid(abstime) )
+    return POSIX_ABSOLUTE_TIMEOUT_INVALID;
 
+  /*
+   *  Is the absolute time in the past?
+   */
+  _TOD_Get( &current_time );
+
+  if ( _Timespec_Less_than( abstime, &current_time ) )
+    return POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST;
+
+  /*
+   *  How long until the requested absolute time?
+   */
   _Timespec_Subtract( &current_time, abstime, &difference );
 
+  /*
+   *  Internally the SuperCore uses ticks, so convert to them.
+   */
   *ticks_out = _Timespec_To_ticks( &difference );
 
-  return 0;
+  /*
+   *  If the difference was 0, then the future is now.  It is so bright
+   *  we better wear shades.
+   */
+  if ( !*ticks_out )
+    return POSIX_ABSOLUTE_TIMEOUT_IS_NOW;
+
+  /*
+   *  This is the case we were expecting and it took this long to
+   *  get here.
+   */
+  return POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE;
 }
 

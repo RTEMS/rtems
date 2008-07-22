@@ -39,37 +39,34 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
-  Watchdog_Interval timeout;
-  struct timespec   current_time;
-  struct timespec   difference;
-  boolean           already_timedout = FALSE;
-
-  if ( !_Timespec_Is_valid(abstime) )
-    return EINVAL;
+  Watchdog_Interval ticks;
+  boolean           already_timedout = TRUE;
 
   /*
-   *  The abstime is a walltime.  We turn it into an interval.
+   *  POSIX requires that blocking calls with timeouts that take
+   *  an absolute timeout must ignore issues with the absolute
+   *  time provided if the operation would otherwise succeed.
+   *  So we check the abstime provided, and hold on to whether it
+   *  is valid or not.  If it isn't correct and in the future,
+   *  then we do a polling operation and convert the UNSATISFIED
+   *  status into the appropriate error.
    */
-
-  _TOD_Get( &current_time );
-
-  /*
-   * Make sure the timeout is in the future
-   */
-  if ( _Timespec_Less_than( abstime, &current_time ) ) {
-    already_timedout = TRUE;
-    difference.tv_sec  = 0;
-    difference.tv_nsec = 0;
-    timeout = 0;
-  } else {
-    _Timespec_Subtract( &current_time, abstime, &difference );
-    timeout = _Timespec_To_ticks( &difference );
+  switch ( _POSIX_Absolute_timeout_to_ticks(abstime, &ticks) ) {
+    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
+      return EINVAL;
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
+    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
+      already_timedout = TRUE;
+      break;
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+      already_timedout = FALSE;
+      break;
   }
 
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    timeout,
+    ticks,
     already_timedout
   );
 }
