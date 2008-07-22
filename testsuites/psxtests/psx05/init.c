@@ -72,6 +72,27 @@ void Print_mutexattr(
   }
 }
 
+void calculate_abstimeout(
+  struct timespec *times,
+  uint32_t         seconds,
+  uint32_t         nanoseconds
+)
+{
+  struct timeval       tv1;
+  struct timezone      tz1;
+
+  gettimeofday( &tv1, &tz1 );
+
+  times->tv_sec  = seconds     + tv1.tv_sec;
+  times->tv_nsec = nanoseconds + (tv1.tv_usec * 1000);
+
+  while ( times->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
+    times->tv_sec++;
+    times->tv_nsec - TOD_NANOSECONDS_PER_SECOND;
+  }
+
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -343,13 +364,13 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == EPERM );
 
-  times.tv_sec = 0;
-  times.tv_nsec = 500000000;
   puts( "Init: pthread_mutex_timedlock - time out in 1/2 second" );
+  calculate_abstimeout( &times, 0, (TOD_NANOSECONDS_PER_SECOND / 2) );
+
   status = pthread_mutex_timedlock( &Mutex_id, &times );
-  if ( status != EAGAIN )
+  if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
-  assert( status == EAGAIN );
+  assert( status == ETIMEDOUT );
 
      /* switch to idle */
 

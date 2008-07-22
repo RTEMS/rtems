@@ -750,29 +750,26 @@ void verify_timed_send_queue(
   int              status;
   char            *msg;
 
-  timeout.tv_sec  = 1;
-  timeout.tv_nsec = 0;
-
   printf( "Init: mq_timedsend - on queue %s ", Test_q[que].name);
   len = Predefined_Msgs[MAXMSG].size;
   msg = Predefined_Msgs[MAXMSG].msg;
+
   gettimeofday( &tv1, &tz1 );
+  timeout.tv_sec  = tv1.tv_sec + 1;
+  timeout.tv_nsec = tv1.tv_usec * 1000;
+
   status = mq_timedsend( Test_q[que].mq, msg, len , 0, &timeout );
+
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec  = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
 
   if ( is_blocking ) { /* Don't verify the non-blocking queue */
-    fatal_int_service_status( status, -1, "mq_timedsend status");
-    fatal_posix_service_status( errno, ETIMEDOUT,  "errno ETIMEDOUT");
+    fatal_int_service_status( status, -1, "mq_timedsend status" );
+    fatal_posix_service_status( errno, ETIMEDOUT,  "errno ETIMEDOUT" );
   }
 
-  printf("Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
-
-  if ( is_blocking ) /* non-blocking queue */
-    assert( tv3.tv_sec == 1 );
-  else
-    assert( tv3.tv_sec == 0 );
+  printf( "Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
 
   if ( que == DEFAULT_RW )
     Test_q[que].count++;
@@ -805,13 +802,18 @@ void verify_timed_receive_queue(
   struct timezone tz1, tz2;
   int              status;
 
-  tm.tv_sec  = 1;
-  tm.tv_nsec = 0;
-
-  printf( "Init: %s mq_timedreceive - on queue %s ", task_name, Test_q[que].name);
+  printf(
+    "Init: %s mq_timedreceive - on queue %s ",
+    task_name,
+    Test_q[que].name
+  );
 
   gettimeofday( &tv1, &tz1 );
+  tm.tv_sec  = tv1.tv_sec + 1;
+  tm.tv_nsec = tv1.tv_usec * 1000;
+
   status = mq_timedreceive( Test_q[ que ].mq, message, 100, &priority, &tm );
+
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec  = tv2.tv_sec - tv1.tv_sec;
   tv3.tv_usec = tv2.tv_usec - tv1.tv_usec;
@@ -821,13 +823,7 @@ void verify_timed_receive_queue(
     fatal_posix_service_status( errno, ETIMEDOUT,  "errno ETIMEDOUT");
   printf( "Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
 
-  if ( is_blocking )
-    assert( tv3.tv_sec == 1 );
-  else
-    assert( tv3.tv_sec == 0 );
 }
-
-
 
 void verify_timed_receive()
 {
