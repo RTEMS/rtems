@@ -23,6 +23,7 @@
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 
+#include RTEMS_XPARAMETERS_H
 
 /* Status Register Masks */
 #define PARITY_ERROR       0x80 /* Parity Error */
@@ -260,7 +261,7 @@ console_tbl     Console_Port_Tbl[] = {
    16,                                     /* ulMargin */
    8,                                      /* ulHysteresis */
    (void *) NULL,               /* NULL */ /* pDeviceParams */
-   0x40600000,                             /* ulCtrlPort1 */
+   STDIN_BASEADDRESS,                      /* ulCtrlPort1 */
    0,                                      /* ulCtrlPort2 */
    0,                                      /* ulDataPort */
    NULL,                                   /* getRegister */
