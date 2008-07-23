@@ -62,7 +62,6 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 
-
 /* Constants */
 
 extern uint32_t _HeapSize;
@@ -81,6 +80,8 @@ extern uint32_t _top_of_ram;
 #endif
 extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH xilTemac_driver_attach
+
+#define BSP_PPC403_CLOCK_HOOK_EXCEPTION ASM_BOOKE_DEC_VECTOR
 
 /*
  *  Device Driver Table Entries

@@ -1,3 +1,10 @@
+2008-07-22	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq_init.c, include/bsp.h:
+	define BSP_PPC403_CLOCK_HOOK_EXCEPTION
+	so that we hook the timer exception rather than going
+	through the interrupt dispatcher.
+
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: Removed MSR_CE from interrupt

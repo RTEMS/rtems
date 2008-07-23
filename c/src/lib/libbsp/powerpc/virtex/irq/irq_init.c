@@ -99,10 +99,12 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   case ASM_EXT_VECTOR:
     BSP_irq_handle_at_opbintc();
     break;
+#if 0 /* We now let the clock driver hook the exception directly */
   case ASM_BOOKE_DEC_VECTOR:
     BSP_rtems_irq_tbl[BSP_PIT].hdl
       (BSP_rtems_irq_tbl[BSP_PIT].handle);    
     break;
+#endif
 #if 0 /* Critical interrupts not yet supported */
   case ASM_BOOKE_CRIT_VECTOR:
     break;
