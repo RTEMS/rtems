@@ -235,10 +235,12 @@ extern rtems_configuration_table        Configuration;
  *  the application may override and provide its own.
  */
 #ifndef CONFIGURE_IDLE_TASK_BODY
-  #ifdef BSP_IDLE_TASK_BODY
+  #if defined(BSP_IDLE_TASK_BODY)
     #define CONFIGURE_IDLE_TASK_BODY BSP_IDLE_TASK_BODY
+  #elif (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
+    #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
   #else
-    #define CONFIGURE_IDLE_TASK_BODY NULL
+    #define CONFIGURE_IDLE_TASK_BODY _Thread_Idle_body
   #endif
 #endif
 

@@ -36,36 +36,18 @@
  *  _Thread_Create_idle
  */
 
-const char *_Thread_Idle_name = "IDLE";
-
 void _Thread_Create_idle( void )
 {
-  void       *idle;
-  uint32_t    idle_task_stack_size;
+  Objects_Name name;
+
+  name.name_p = "IDLE";
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
    *  fields not explicitly assigned were explicitly zeroed by
    *  _Workspace_Initialization.
    */
-
   _Thread_Idle = _Thread_Internal_allocate();
-
-  /*
-   *  Initialize the IDLE task.
-   */
-
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-  idle = (void *) _CPU_Thread_Idle_body;
-#else
-  idle = (void *) _Thread_Idle_body;
-#endif
-
-  if ( _Configuration_Table->idle_task )
-    idle = _Configuration_Table->idle_task;
-
-  idle_task_stack_size = 
-    _Stack_Ensure_minimum( _Configuration_Table->idle_task_stack_size );
 
   /*
    *  This is only called during initialization and we better be sure
@@ -78,14 +60,14 @@ void _Thread_Create_idle( void )
     &_Thread_Internal_information,
     _Thread_Idle,
     NULL,        /* allocate the stack */
-    idle_task_stack_size,
+    _Stack_Ensure_minimum( _Configuration_Table->idle_task_stack_size ),
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
     TRUE,        /* preemptable */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
-    (Objects_Name) _Thread_Idle_name
+    name
   );
 
   _Thread_Unnest_dispatch();
@@ -94,14 +76,13 @@ void _Thread_Create_idle( void )
    *  WARNING!!! This is necessary to "kick" start the system and
    *             MUST be done before _Thread_Start is invoked.
    */
-
   _Thread_Heir      =
   _Thread_Executing = _Thread_Idle;
 
   _Thread_Start(
     _Thread_Idle,
     THREAD_START_NUMERIC,
-    idle,
+    _Configuration_Table->idle_task,
     NULL,
     0
   );
