@@ -96,7 +96,7 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_dump_decimal(monitor_itask->id);
 
     length += rtems_monitor_pad(7, length);
-    length += rtems_monitor_dump_name(monitor_itask->name);
+    length += rtems_monitor_dump_name(monitor_itask->id);
 
     length += rtems_monitor_pad(14, length);
     length += rtems_monitor_symbol_dump(&monitor_itask->entry, verbose);

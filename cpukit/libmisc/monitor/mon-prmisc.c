@@ -43,15 +43,6 @@ rtems_monitor_pad(
 }
 
 int
-rtems_monitor_dump_char(char ch)
-{
-    if (isprint(ch))
-        return fprintf(stdout,"%c", ch);
-    else
-        return fprintf(stdout,"%02x", (unsigned char)ch);
-}
-
-int
 rtems_monitor_dump_decimal(uint32_t   num)
 {
     return fprintf(stdout,"%4" PRId32, num);
@@ -98,25 +89,13 @@ rtems_monitor_dump_id(rtems_id id)
 }
 
 int
-rtems_monitor_dump_name(rtems_name name)
+rtems_monitor_dump_name(rtems_id id)
 {
-    uint32_t   i;
-    int   length = 0;
-    union {
-        uint32_t   ui;
-        char       c[4];
-    } u;
+    char name_buffer[18];
 
-    u.ui = (uint32_t  ) name;
+    rtems_object_get_name( id, sizeof(name_buffer), name_buffer );  
 
-#if (CPU_BIG_ENDIAN == TRUE)
-    for (i=0; i<sizeof(u.c); i++)
-        length += rtems_monitor_dump_char(u.c[i]);
-#else
-    for (i=0; i<sizeof(u.c); i++)
-        length += rtems_monitor_dump_char(u.c[sizeof(u.c)-1-i]);
-#endif
-    return length;
+    return fprintf( stdout, name_buffer );
 }
 
 int
@@ -250,15 +229,10 @@ rtems_assoc_t rtems_monitor_events_assoc[] = {
 int
 rtems_monitor_dump_events(rtems_event_set events)
 {
-    uint32_t   length = 0;
-
     if (events == EVENT_SETS_NONE_PENDING)  /* value is 0 */
-        length += fprintf(stdout,"NONE");
+        return fprintf(stdout,"  NONE  ");
 
-    length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_events_assoc,
-                                                ":",
-                                                events);
-    return length;
+    return fprintf(stdout,"%08" PRIx32, events);
 }
 
 int

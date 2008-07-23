@@ -1,5 +1,16 @@
 2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-extension.c, libmisc/monitor/mon-itask.c,
+	libmisc/monitor/mon-part.c, libmisc/monitor/mon-prmisc.c,
+	libmisc/monitor/mon-queue.c, libmisc/monitor/mon-region.c,
+	libmisc/monitor/mon-sema.c, libmisc/monitor/mon-task.c,
+	libmisc/monitor/monitor.h: Use rtems_object_get_name() instead of
+	internal routine. This makes it possible to also print string names
+	of POSIX objects. Adjust task report to realign since we can have
+	longer names.
+
+2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h, score/src/threadcreateidle.c: Idle thread
 	body is now completely configured via the Configuration table.
 

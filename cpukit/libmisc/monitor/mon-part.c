@@ -52,7 +52,7 @@ rtems_monitor_part_dump(
 
     length += rtems_monitor_dump_id(monitor_part->id);
     length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_part->name);
+    length += rtems_monitor_dump_name(monitor_part->id);
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_attributes(monitor_part->attribute);
     length += rtems_monitor_pad(30, length);

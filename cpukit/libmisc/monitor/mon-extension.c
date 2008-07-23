@@ -69,7 +69,7 @@ rtems_monitor_extension_dump(
 
     length += rtems_monitor_dump_id(monitor_extension->id);
     length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_extension->name);
+    length += rtems_monitor_dump_name(monitor_extension->id);
 
     length += rtems_monitor_pad(18, length);
     length += fprintf(stdout,"create: ");

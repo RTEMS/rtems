@@ -54,7 +54,7 @@ rtems_monitor_queue_dump(
 
     length += rtems_monitor_dump_id(monitor_queue->id);
     length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_queue->name);
+    length += rtems_monitor_dump_name(monitor_queue->id);
     length += rtems_monitor_pad(19, length);
     length += rtems_monitor_dump_attributes(monitor_queue->attributes);
     length += rtems_monitor_pad(31, length);

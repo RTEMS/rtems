@@ -53,7 +53,7 @@ rtems_monitor_region_dump(
 
     length += rtems_monitor_dump_id(monitor_region->id);
     length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_region->name);
+    length += rtems_monitor_dump_name(monitor_region->id);
     length += rtems_monitor_pad(18, length);
     length += rtems_monitor_dump_attributes(monitor_region->attribute);
     length += rtems_monitor_pad(30, length);

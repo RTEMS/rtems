@@ -401,11 +401,10 @@ void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, bool
 /* prmisc.c */
 void       rtems_monitor_separator(void);
 uint32_t   rtems_monitor_pad(uint32_t   dest_col, uint32_t   curr_col);
-int        rtems_monitor_dump_char(char   ch);
 int        rtems_monitor_dump_decimal(uint32_t   num);
 int        rtems_monitor_dump_hex(uint32_t   num);
 int        rtems_monitor_dump_id(rtems_id id);
-int        rtems_monitor_dump_name(rtems_name name);
+int        rtems_monitor_dump_name(rtems_id id);
 int        rtems_monitor_dump_priority(rtems_task_priority priority);
 int        rtems_monitor_dump_state(States_Control state);
 int        rtems_monitor_dump_modes(rtems_mode modes);
