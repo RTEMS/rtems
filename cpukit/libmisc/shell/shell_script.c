@@ -47,25 +47,36 @@ static int findOnPATH(
   char       *scriptFile
 )
 {
+  int sc;
+
   /*
    *  If the user script name starts with a / assume it is a fully
    *  qualified path name and just use it.
    */
   if ( userScriptName[0] == '/' ) {
     strcpy( scriptFile, userScriptName );
-    return 0;
+  } else {
+    /*
+     *  For now, the provided name is just turned into a fully
+     *  qualified path name and used.  There is no attempt to
+     *  search along a path for it.
+     */
+
+    /* XXX should use strncat but what is the limit? */
+    getcwd( scriptFile, PATH_MAX );
+    strcat( scriptFile, "/" );
+    strcat(
+      scriptFile,
+      ( (userScriptName[0] == '.' && userScriptName[1] == '/') ? 
+         &userScriptName[2] : userScriptName)
+    );
   }
 
-  /*
-   *  For now, the provided name is just turned into a fully
-   *  qualified path name and used.  There is no attempt to
-   *  search along a path for it.
-   */
+  sc = access( scriptFile, R_OK );
+  if ( sc ) {
+    return -1;
+  }
 
-  getcwd( scriptFile, PATH_MAX );
-  /* XXX should use strncat but what is the limit? */
-  strcat( scriptFile, "/" );
-  strcat( scriptFile, userScriptName );
   return 0;
 
 #if 0
@@ -156,7 +167,7 @@ int rtems_shell_main_joel(
    */
   sc = findOnPATH( argv[getopt_reent.optind], scriptFile );
   if ( sc ) {
-    fprintf( stderr, "%s not found on PATH\n", argv[0] );
+    fprintf( stderr, "%s: command not found\n", argv[0] );
     return -1;
   }
 
@@ -227,7 +238,7 @@ int rtems_shell_script_file(
    */
   sc = findOnPATH( argv[0], scriptFile );
   if ( sc ) {
-    fprintf( stderr, "%s not found on PATH\n", argv[0] );
+    fprintf( stderr, "%s: command not found\n", argv[0] );
     return -1;
   }
 

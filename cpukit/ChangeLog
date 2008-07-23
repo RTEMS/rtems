@@ -1,5 +1,10 @@
 2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/shell_script.c: Clean up code for command not found
+	including the error message.
+
+2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/monitor/mon-extension.c, libmisc/monitor/mon-itask.c,
 	libmisc/monitor/mon-part.c, libmisc/monitor/mon-prmisc.c,
 	libmisc/monitor/mon-queue.c, libmisc/monitor/mon-region.c,
