@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/libi2c.h>
@@ -149,7 +150,7 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 
 #define SD_CARD_CID_GET_MID( cid) ((cid) [0])
 #define SD_CARD_CID_GET_OID( cid) sd_card_get_uint16( cid + 1)
-#define SD_CARD_CID_GET_PNM( cid, i) ((cid) [3 + (i)])
+#define SD_CARD_CID_GET_PNM( cid, i) ((char) (cid) [3 + (i)])
 #define SD_CARD_CID_GET_PRV( cid) ((cid) [9])
 #define SD_CARD_CID_GET_PSN( cid) sd_card_get_uint32( cid + 10)
 #define SD_CARD_CID_GET_MDT( cid) ((cid) [14])
@@ -352,11 +353,11 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 			if (SD_CARD_IS_ERRORLESS_RESPONSE( e->response [r])) {
 				return 0;
 			} else {
-				SYSLOG_ERROR( "Command error [%02u]: 0x%02x\n", r, e->response [r]);
+				SYSLOG_ERROR( "Command error [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				goto sd_card_send_command_error;
 			}
 		} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-			SYSLOG_ERROR( "Unexpected token [%02u]: 0x%02x\n", r, e->response [r]);
+			SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 			goto sd_card_send_command_error;
 		}
 	}
@@ -368,9 +369,9 @@ sd_card_send_command_error:
 	SYSLOG_ERROR( "Response:");
 	for (r = 0; r < SD_CARD_COMMAND_SIZE; ++r) {
 		if (e->response_index == r) {
-			SYSLOG_PRINT( " %02x:[%02x]", e->command [r], e->response [r]);
+			SYSLOG_PRINT( " %02" PRIx8 ":[%02" PRIx8 "]", e->command [r], e->response [r]);
 		} else {
-			SYSLOG_PRINT( " %02x:%02x", e->command [r], e->response [r]);
+			SYSLOG_PRINT( " %02" PRIx8 ":%02" PRIx8 "", e->command [r], e->response [r]);
 		}
 	}
 	SYSLOG_PRINT( "\n");
@@ -413,7 +414,7 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 	int rv = 0;
 
 	/* Access time idle tokens */
-	int n_ac = 1;
+	uint32_t n_ac = 1;
 
 	/* Discard command response */
 	int r = e->response_index + 1;
@@ -443,10 +444,10 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 				++r;
 				goto sd_card_read_start;
 			} else if (SD_CARD_IS_DATA_ERROR( e->response [r])) {
-				SYSLOG_ERROR( "Data error token [%02u]: 0x%02x\n", r, e->response [r]);
+				SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				return -RTEMS_IO_ERROR;
 			} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-				SYSLOG_ERROR( "Unexpected token [%02u]: 0x%02x\n", r, e->response [r]);
+				SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				return -RTEMS_IO_ERROR;
 			}
 			++n_ac;
@@ -514,7 +515,7 @@ static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t 
 	rv = sd_card_query( e, e->response, 2);
 	CHECK_RV( rv, "Read data response");
 	if (SD_CARD_IS_DATA_REJECTED( e->response [0])) {
-		SYSLOG_ERROR( "Data rejected: 0x%02x\n", e->response [0]);
+		SYSLOG_ERROR( "Data rejected: 0x%02" PRIx8 "\n", e->response [0]);
 		return -RTEMS_IO_ERROR;
 	}
 
@@ -893,8 +894,8 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CID_SIZE);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CID");
 		SYSLOG( "*** Card Identification ***\n");
-		SYSLOG( "Manufacturer ID          : %u\n", SD_CARD_CID_GET_MID( block));
-		SYSLOG( "OEM/Application ID       : %u\n", SD_CARD_CID_GET_OID( block));
+		SYSLOG( "Manufacturer ID          : %" PRIu8 "\n", SD_CARD_CID_GET_MID( block));
+		SYSLOG( "OEM/Application ID       : %" PRIu16 "\n", SD_CARD_CID_GET_OID( block));
 		SYSLOG(
 			"Product name             : %c%c%c%c%c%c\n",
 			SD_CARD_CID_GET_PNM( block, 0),
@@ -904,10 +905,10 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 			SD_CARD_CID_GET_PNM( block, 4),
 			SD_CARD_CID_GET_PNM( block, 5)
 		);
-		SYSLOG( "Product revision         : %u\n", SD_CARD_CID_GET_PRV( block));
-		SYSLOG( "Product serial number    : %u\n", SD_CARD_CID_GET_PSN( block));
-		SYSLOG( "Manufacturing date       : %u\n", SD_CARD_CID_GET_MDT( block));
-		SYSLOG( "7-bit CRC checksum       : %u\n",  SD_CARD_CID_GET_CRC7( block));
+		SYSLOG( "Product revision         : %" PRIu8 "\n", SD_CARD_CID_GET_PRV( block));
+		SYSLOG( "Product serial number    : %" PRIu32 "\n", SD_CARD_CID_GET_PSN( block));
+		SYSLOG( "Manufacturing date       : %" PRIu8 "\n", SD_CARD_CID_GET_MDT( block));
+		SYSLOG( "7-bit CRC checksum       : %" PRIu8 "\n",  SD_CARD_CID_GET_CRC7( block));
 	}
 
 	/* Card Specific Data */
@@ -929,16 +930,16 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	e->block_number = sd_card_block_number( block);
 	if (e->verbose) {
 		SYSLOG( "*** Card Specific Data ***\n");
-		SYSLOG( "CSD structure            : %u\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
-		SYSLOG( "Spec version             : %u\n", SD_CARD_CSD_GET_SPEC_VERS( block));
-		SYSLOG( "Access time [ns]         : %u\n", sd_card_access_time( block));
-		SYSLOG( "Max access time [N]      : %u\n", e->n_ac_max);
-		SYSLOG( "Max read block size [B]  : %u\n", read_block_size);
-		SYSLOG( "Max write block size [B] : %u\n", write_block_size);
-		SYSLOG( "Block size [B]           : %u\n", e->block_size);
-		SYSLOG( "Block number             : %u\n", e->block_number);
-		SYSLOG( "Capacity [B]             : %u\n", sd_card_capacity( block));
-		SYSLOG( "Max transfer speed [b/s] : %u\n", transfer_speed);
+		SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
+		SYSLOG( "Spec version             : %" PRIu8 "\n", SD_CARD_CSD_GET_SPEC_VERS( block));
+		SYSLOG( "Access time [ns]         : %" PRIu32 "\n", sd_card_access_time( block));
+		SYSLOG( "Max access time [N]      : %" PRIu32 "\n", e->n_ac_max);
+		SYSLOG( "Max read block size [B]  : %" PRIu32 "\n", read_block_size);
+		SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
+		SYSLOG( "Block size [B]           : %" PRIu32 "\n", e->block_size);
+		SYSLOG( "Block number             : %" PRIu32 "\n", e->block_number);
+		SYSLOG( "Capacity [B]             : %" PRIu32 "\n", sd_card_capacity( block));
+		SYSLOG( "Max transfer speed [b/s] : %" PRIu32 "\n", transfer_speed);
 	}
 
 	/* Set read block size */

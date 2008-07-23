@@ -64,7 +64,7 @@ typedef struct {
 	uint8_t command [SD_CARD_COMMAND_SIZE];
 	uint8_t response [SD_CARD_COMMAND_SIZE];
 	int response_index;
-	int n_ac_max; 
+	uint32_t n_ac_max; 
 	uint32_t block_number;
 	uint32_t block_size;
 	uint32_t block_size_shift;
