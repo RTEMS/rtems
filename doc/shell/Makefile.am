@@ -48,7 +48,7 @@ rtems.texi: rtems.t
 	    -n "Network Commands" < $< > $@
 
 network.texi: network.t
-	$(BMENU2) -p "RTEMS Specific Commands dname - displays information about named drivers" \
+	$(BMENU2) -p "RTEMS Specific Commands pthread - display information about POSIX threads" \
 	    -u "Top" \
 	    -n "Function and Variable Index" < $< > $@
 

@@ -29,6 +29,7 @@ The RTEMS shell has the following rtems commands:
 @item @code{object} - Display information about RTEMS objects
 @item @code{driver} - Display the RTEMS device driver table
 @item @code{dname} - Displays information about named drivers
+@item @code{pthread} - Displays information about POSIX threads
 
 @end itemize
 
@@ -1249,4 +1250,59 @@ following prototype:
 @example
 extern rtems_shell_cmd_t rtems_shell_DNAME_Command;
 @end example
+
+@c
+@c
+@c
+@page
+@subsection pthread - display information about POSIX threads
+
+@pgindex pthread
+
+@subheading SYNOPSYS:
+
+@example
+pthread [id [id ...] ]
+@end example
+
+@subheading DESCRIPTION:
+
+When invoked with no arguments, this command prints information on
+the set of POSIX API threads currently active in the system.
+
+If invoked with a set of ids as arguments, then just 
+those objects are included in the information printed.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+This command is only available when the POSIX API is configured.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use the @code{task} on an
+application with four POSIX threads:
+
+@smallexample
+SHLL [/] $ pthread
+  ID       NAME           PRI  STATE MODES   EVENTS    WAITID  WAITARG  NOTES
+------------------------------------------------------------------------------
+0b010002   Main           133 READY  P:T:nA    NONE   43010001 0x7b1148 
+0b010003   ISR            133 Wcvar  P:T:nA    NONE   43010003 0x7b1148 
+0b01000c                  133 READY  P:T:nA    NONE   33010002 0x7b1148 
+0b01000d                  133 Wmutex P:T:nA    NONE   33010002 0x7b1148 
+
+@end smallexample
+
+@subheading CONFIGURATION:
+
+This command is part of the monitor commands which are always
+available in the shell.
+
+@subheading PROGRAMMING INFORMATION:
+
+This command is not directly available for invocation.
 

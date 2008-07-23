@@ -1,3 +1,7 @@
+2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/Makefile.am, shell/rtems.t: Add pthread command.
+
 2008-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix_users/mutex.t: Add ETIMEDOUT.
