@@ -43,14 +43,25 @@
 #include <stdlib.h>                     /* for atexit() */
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
+
 /*
  * check, which exception handling code is present
  */
+
+#include <bsp.h>
+
+#ifdef BSP_PPC403_CLOCK_HOOK_EXCEPTION
+#include <libcpu/raw_exception.h>
+#include <bsp/vectors.h>
+#include <bsp/ppc_exc_bspsupp.h>
+#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
+#else
 #if !defined(ppc405)
 #define PPC_HAS_CLASSIC_EXCEPTIONS TRUE
 #else
 #define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 #include <bsp/irq.h>
+#endif
 #endif
 
 volatile uint32_t   Clock_driver_ticks;
@@ -91,11 +102,16 @@ static inline uint32_t   get_itimer(void)
 
 #if PPC_HAS_CLASSIC_EXCEPTIONS
 rtems_isr Clock_isr(rtems_vector_number vector)
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+int  Clock_isr(struct _BSP_Exception_frame *f, unsigned int vector)
 #else
 void Clock_isr(void* handle)
 #endif
 {
     uint32_t   clicks_til_next_interrupt;
+#if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
+	uint32_t   l_orig = _ISR_Get_level();
+#endif
     if (!auto_restart)
     {
       uint32_t   itimer_value;
@@ -147,11 +163,25 @@ void Clock_isr(void* handle)
     asm volatile ( "mtspr 0x3d8, %0" :: "r" (0x08000000)); /* TSR */
  
     Clock_driver_ticks++;
+
+	/* Give BSP a chance to say if they want to re-enable interrupts */
  
+#if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
+	_ISR_Set_level(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL);
+#endif
+
     rtems_clock_tick();
+
+#if defined(BSP_PPC403_CLOCK_ISR_IRQ_LEVEL)
+	_ISR_Set_level(l_orig)
+#endif
+
+#if defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+	return 0;
+#endif
 }
 
-#if !PPC_HAS_CLASSIC_EXCEPTIONS
+#if !PPC_HAS_CLASSIC_EXCEPTIONS && !defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
 int ClockIsOn(const rtems_irq_connect_data* unused)
 {
     register uint32_t   tcr;
@@ -163,7 +193,7 @@ int ClockIsOn(const rtems_irq_connect_data* unused)
 #endif
 
 void ClockOff(
-#if PPC_HAS_CLASSIC_EXCEPTIONS
+#if PPC_HAS_CLASSIC_EXCEPTIONS || defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
 	      void
 #else
 	      const rtems_irq_connect_data* unused
@@ -180,7 +210,7 @@ void ClockOff(
 }
 
 void ClockOn(
-#if PPC_HAS_CLASSIC_EXCEPTIONS
+#if PPC_HAS_CLASSIC_EXCEPTIONS || defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
 	      void
 #else
 	      const rtems_irq_connect_data* unused
@@ -266,6 +296,8 @@ void ClockOn(
 void Install_clock(
 #if PPC_HAS_CLASSIC_EXCEPTIONS
 		   rtems_isr_entry clock_isr
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+           ppc_exc_handler_t clock_isr
 #else
 		   void (*clock_isr)(void *)
 #endif
@@ -291,6 +323,11 @@ void Install_clock(
     rtems_interrupt_catch(clock_isr, PPC_IRQ_PIT, &previous_isr);
     ClockOn();
  }
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+ {
+ 	ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, clock_isr );
+    ClockOn();
+ }
 #else
  {
    rtems_irq_connect_data clockIrqConnData;
@@ -312,6 +349,8 @@ void
 ReInstall_clock(
 #if PPC_HAS_CLASSIC_EXCEPTIONS
 		rtems_isr_entry new_clock_isr
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+		ppc_exc_handler_t clock_isr
 #else
 		void (*new_clock_isr)(void *)
 #endif
@@ -326,6 +365,11 @@ ReInstall_clock(
    rtems_isr_entry previous_isr;
    rtems_interrupt_catch(new_clock_isr, PPC_IRQ_PIT, &previous_isr);
    ClockOn();
+ }
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+ {
+ 	ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, clock_isr );
+    ClockOn();
  }
 #else
   {
@@ -370,6 +414,9 @@ void Clock_exit(void)
   ClockOff();
  
   (void) set_vector(0, PPC_IRQ_PIT, 1);
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+  ClockOff();
+  ppc_exc_set_handler( BSP_PPC403_CLOCK_HOOK_EXCEPTION, 0 );
 #else
  {
     rtems_irq_connect_data clockIrqConnData;
@@ -423,6 +470,8 @@ rtems_device_driver Clock_control(
     {
 #if PPC_HAS_CLASSIC_EXCEPTIONS
         Clock_isr(PPC_IRQ_PIT);
+#elif defined(BSP_PPC403_CLOCK_HOOK_EXCEPTION)
+        Clock_isr(NULL, BSP_PPC403_CLOCK_HOOK_EXCEPTION);
 #else
         Clock_isr(NULL);
 #endif

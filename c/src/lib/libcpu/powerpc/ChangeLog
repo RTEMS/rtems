@@ -1,3 +1,9 @@
+2008-07-22	Till Straumann <strauman@slac.stanford.edu>
+
+	* ppc403/clock/clock.c: Added (conditionally compiled)
+	code so that a BSP can choose to hook the timer exception
+	directly rather than going through the interrupt dispatcher.
+
 2008-07-21	Till Straumann <strauman@slac.stanford.edu>
 
 	* new-exceptions/raw_exception,h,
