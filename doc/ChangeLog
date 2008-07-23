@@ -1,3 +1,8 @@
+2008-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1291/cpukit
+	* posix_users/semaphores.t: Update to reflect absolute time.
+
 2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/Makefile.am, shell/rtems.t: Add pthread command.

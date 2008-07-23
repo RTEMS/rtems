@@ -463,7 +463,7 @@ Multiprocessing is not supported in this implementation.
 @example
 int sem_timedwait(
   sem_t                 *sem,
-  const struct timespec *timeout
+  const struct timespec *abstime
 );
 @end example
 @end ifset
@@ -484,13 +484,15 @@ The @code{sem} argument does not refewr to a valid semaphore
 @end table
 
 @subheading DESCRIPTION:
-This function attemtps to lock a semaphore specified by @code{sem}, and will
-wait for the semaphore for an interval specified by @code{timeout}. If the
-semaphore is available, then the semaphore is locked (i.e., the semaphore
-value is decremented) and the function returns a value of 0. The semaphore
-remains locked until released by a @code{sem_post()} call. If the semaphore
-is unavailable, then the function will wait for the semaphore to become
-available for the amount of time specified by @code{timeout}.
+
+This function attemtps to lock a semaphore specified by @code{sem},
+and will wait for the semaphore until the absolute time specified by
+@code{abstime}. If the semaphore is available, then the semaphore is
+locked (i.e., the semaphore value is decremented) and the function
+returns a value of 0. The semaphore remains locked until released by
+a @code{sem_post()} call. If the semaphore is unavailable, then the
+function will wait for the semaphore to become available for the amount
+of time specified by @code{timeout}.
 
 If the semaphore does not become available within the interval specified by
 @code{timeout}, then the function returns -1 and sets @code{errno} to EAGAIN.
