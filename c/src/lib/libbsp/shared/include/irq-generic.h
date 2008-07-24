@@ -235,10 +235,6 @@ static inline void bsp_interrupt_handler_dispatch( rtems_vector_number vector)
 
 /** @} */
 
-rtems_status_code bsp_interrupt_handler_query( rtems_vector_number vector, bsp_interrupt_handler_entry *head);
-
-rtems_status_code bsp_interrupt_handler_query_free( bsp_interrupt_handler_entry *head);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

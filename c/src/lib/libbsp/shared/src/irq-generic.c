@@ -483,24 +483,22 @@ static rtems_status_code bsp_interrupt_handler_remove( rtems_vector_number vecto
 	return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code rtems_interrupt_handler_install( rtems_vector_number vector, const char *info, rtems_option options, rtems_interrupt_handler handler, void *arg)
-{
-	return bsp_interrupt_handler_install( vector, info, options, handler, arg);
-}
-
-rtems_status_code rtems_interrupt_handler_remove( rtems_vector_number vector, rtems_interrupt_handler handler, void *arg)
-{
-	return bsp_interrupt_handler_remove( vector, handler, arg);
-}
-
-rtems_status_code bsp_interrupt_handler_query( rtems_vector_number vector, bsp_interrupt_handler_entry *head)
+/**
+ * @brief Iterates over all installed interrupt handler of a vector.
+ *
+ * @ingroup bsp_interrupt
+ *
+ * @return In addition to the standard status codes this function returns
+ * RTEMS_INTERNAL_ERROR if the BSP interrupt support is not initialized.
+ *
+ * @see rtems_interrupt_handler_iterate().
+ */
+static rtems_status_code bsp_interrupt_handler_iterate( rtems_vector_number vector, rtems_interrupt_per_handler_routine routine, void *arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	bsp_interrupt_handler_entry *current_input = NULL;
-	bsp_interrupt_handler_entry *current_output = NULL;
-
-	/* Terminate list */
-	head = NULL;
+	bsp_interrupt_handler_entry *current = NULL;
+	rtems_option options = 0;
+	rtems_vector_number index = 0;
 
 	/* Check parameters and system state */
 	if (!bsp_interrupt_is_initialized()) {
@@ -517,27 +515,15 @@ rtems_status_code bsp_interrupt_handler_query( rtems_vector_number vector, bsp_i
 		return sc;
 	}
 
-	/* Fill output list */
-	current_input = &bsp_interrupt_handler_table [bsp_interrupt_handler_index( vector)];
-	if (!bsp_interrupt_is_empty_handler_entry( current_input)) {
+	/* Interate */
+	index = bsp_interrupt_handler_index( vector);
+	current = &bsp_interrupt_handler_table [index];
+	if (!bsp_interrupt_is_empty_handler_entry( current)) {
 		do {
-			bsp_interrupt_handler_entry *e = malloc( sizeof( bsp_interrupt_handler_entry));
-			if (e == NULL) {
-				bsp_interrupt_handler_query_free( head);
-				bsp_interrupt_unlock();
-				return RTEMS_NO_MEMORY;
-			}
-			*e = *current_input;
-			e->next = NULL;
-			if (head == NULL) {
-				head = e;
-				current_output = head;
-			} else {
-				current_output->next = e;
-				current_output = current_output->next;
-			}
-			current_input = current_input->next;
-		} while (current_input != NULL);
+			options = bsp_interrupt_is_handler_unique( index) ? RTEMS_INTERRUPT_UNIQUE : RTEMS_INTERRUPT_SHARED;
+			routine( arg, current->info, options, current->handler, current->arg);
+			current = current->next;
+		} while (current != NULL);
 	}
 
 	/* Unlock */
@@ -549,17 +535,17 @@ rtems_status_code bsp_interrupt_handler_query( rtems_vector_number vector, bsp_i
 	return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_handler_query_free( bsp_interrupt_handler_entry *head)
+rtems_status_code rtems_interrupt_handler_install( rtems_vector_number vector, const char *info, rtems_option options, rtems_interrupt_handler handler, void *arg)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	bsp_interrupt_handler_entry *next = NULL;
+	return bsp_interrupt_handler_install( vector, info, options, handler, arg);
+}
 
-	/* Free list */
-	while (head != NULL) {
-		next = head->next;
-		free( head);
-		head = next;
-	}
+rtems_status_code rtems_interrupt_handler_remove( rtems_vector_number vector, rtems_interrupt_handler handler, void *arg)
+{
+	return bsp_interrupt_handler_remove( vector, handler, arg);
+}
 
-	return RTEMS_SUCCESSFUL;
+rtems_status_code rtems_interrupt_handler_iterate( rtems_vector_number vector, rtems_interrupt_per_handler_routine routine, void *arg)
+{
+	return bsp_interrupt_handler_iterate( vector, routine, arg);
 }
