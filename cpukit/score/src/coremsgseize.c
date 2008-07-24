@@ -84,7 +84,7 @@ void _CORE_message_queue_Seize(
 
     *size = the_message->Contents.size;
     _Thread_Executing->Wait.count = the_message->priority;
-    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size);
+    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer, buffer,*size);
 
     /*
      *  There could be a thread waiting to send a message.  If there
@@ -107,7 +107,7 @@ void _CORE_message_queue_Seize(
      */
 
     the_message->priority  = the_thread->Wait.count;
-    the_message->Contents.size = (uint32_t  )the_thread->Wait.return_argument_1;
+    the_message->Contents.size = (uint32_t)the_thread->Wait.option;
     _CORE_message_queue_Copy_buffer(
       the_thread->Wait.return_argument,
       the_message->Contents.buffer,

@@ -51,6 +51,7 @@ ssize_t mq_receive(
     msg_ptr,
     msg_len,
     msg_prio,
+    TRUE,
     THREAD_QUEUE_WAIT_FOREVER
   );
 }

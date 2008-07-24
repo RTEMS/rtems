@@ -132,10 +132,11 @@ libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
 
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/time.c src/posixtimespecsubtract.c \
-    src/posixtimespectointerval.c src/posixintervaltotimespec.c \
-    src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
-    src/clockgettime.c src/clocksetenableattr.c src/clocksettime.c \
-    src/nanosleep.c src/sleep.c src/usleep.c
+    src/posixtimespecabsolutetimeout.c src/posixtimespectointerval.c \
+    src/posixintervaltotimespec.c src/clockgetcpuclockid.c \
+    src/clockgetenableattr.c src/clockgetres.c src/clockgettime.c \
+    src/clocksetenableattr.c src/clocksettime.c src/nanosleep.c src/sleep.c \
+    src/usleep.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.

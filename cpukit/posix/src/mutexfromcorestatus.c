@@ -41,7 +41,7 @@ int _POSIX_Mutex_From_core_mutex_status(
     case CORE_MUTEX_WAS_DELETED:
       return EINVAL;
     case CORE_MUTEX_TIMEOUT:
-      return EAGAIN;
+      return ETIMEDOUT;
     case CORE_MUTEX_STATUS_CEILING_VIOLATED:
       return EINVAL;
     default:

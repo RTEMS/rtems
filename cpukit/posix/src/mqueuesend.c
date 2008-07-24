@@ -51,6 +51,7 @@ int mq_send(
     msg_ptr,
     msg_len,
     msg_prio,
+    TRUE,
     THREAD_QUEUE_WAIT_FOREVER
   );
 }

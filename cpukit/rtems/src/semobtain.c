@@ -107,8 +107,7 @@ rtems_status_code rtems_semaphore_obtain(
       _CORE_semaphore_Seize_isr_disable(
         &the_semaphore->Core_control.semaphore,
         id,
-        ((_Options_Is_no_wait( option_set )) ?
-          CORE_SEMAPHORE_NO_WAIT : CORE_SEMAPHORE_BLOCK_FOREVER),
+        ((_Options_Is_no_wait( option_set )) ? FALSE : TRUE),
         timeout,
         &level
       );

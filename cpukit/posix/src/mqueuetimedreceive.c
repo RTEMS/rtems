@@ -44,14 +44,38 @@ ssize_t mq_timedreceive(
   char                  *msg_ptr,
   size_t                 msg_len,
   unsigned int          *msg_prio,
-  const struct timespec *timeout
+  const struct timespec *abstime
 )
 {
+  Watchdog_Interval ticks;
+  boolean           do_wait;
+
+  /*
+   *  POSIX requires that blocking calls with timeouts that take
+   *  an absolute timeout must ignore issues with the absolute
+   *  time provided if the operation would otherwise succeed.
+   *  So we check the abstime provided, and hold on to whether it
+   *  is valid or not.  If it isn't correct and in the future,
+   *  then we do a polling operation and convert the UNSATISFIED
+   *  status into the appropriate error.
+   */
+  switch ( _POSIX_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
+    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
+    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
+      do_wait = FALSE;
+      break;
+    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+      do_wait = TRUE;
+      break;
+  }
+
   return _POSIX_Message_queue_Receive_support(
     mqdes,
     msg_ptr,
     msg_len,
     msg_prio,
-    _POSIX_Timespec_to_interval( timeout )
+    do_wait,
+    ticks
   );
 }
