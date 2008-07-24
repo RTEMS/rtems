@@ -65,9 +65,8 @@ LINKER_SYMBOL( bsp_section_bss_size);
 LINKER_SYMBOL( bsp_interrupt_stack_start);
 LINKER_SYMBOL( bsp_interrupt_stack_end);
 LINKER_SYMBOL( bsp_interrupt_stack_size);
-LINKER_SYMBOL( bsp_interrupt_stack_pointer);
 
-LINKER_SYMBOL( bsp_workspace_start);
+LINKER_SYMBOL( bsp_work_area_start);
 
 LINKER_SYMBOL( IMMRBAR);
 

@@ -1,3 +1,9 @@
+2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/m68kbspgetworkarea.c: Changed bsp_get_workarea() to
+	bsp_get_work_area() and added support for an optional separate heap
+	area.
+
 2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* acinclude.m4: Regeneration to add new BSPs.

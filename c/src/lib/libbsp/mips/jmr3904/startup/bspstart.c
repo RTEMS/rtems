@@ -15,24 +15,27 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
  */
-void bsp_get_workarea(
-  void   **workarea_base,
-  size_t  *workarea_size,
-  size_t  *requested_heap_size
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size
 )
 {
   extern int WorkspaceBase;
   extern int end;
 
-  *workarea_base       = &WorkspaceBase;
-  *workarea_size       = (void *)&end - (void *)&WorkspaceBase;
-  *requested_heap_size = 0;
+  *work_area_start       = &WorkspaceBase;
+  *work_area_size       = (void *)&end - (void *)&WorkspaceBase;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 /*

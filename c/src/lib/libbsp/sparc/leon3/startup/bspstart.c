@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 
 /*
@@ -74,10 +75,11 @@ void bsp_pretasking_hook(void)
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
  */
-void bsp_get_workarea(
-  void   **workarea_base,
-  size_t  *workarea_size,
-  size_t  *requested_heap_size
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size
 )
 {
   /* Tells us where to put the workspace in case remote debugger is present.  */
@@ -85,9 +87,10 @@ void bsp_get_workarea(
   /* must be identical to STACK_SIZE in start.S */
   #define STACK_SIZE (16 * 1024)
 
-  *workarea_base       = &end;
-  *workarea_size       = (void *)rdb_start - (void *)&end - STACK_SIZE;
-  *requested_heap_size = 0;
+  *work_area_start       = &end;
+  *work_area_size       = (void *)rdb_start - (void *)&end - STACK_SIZE;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 /*

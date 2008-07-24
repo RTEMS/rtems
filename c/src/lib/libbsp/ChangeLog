@@ -1,3 +1,7 @@
+2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am: Install shared/include/bootcard.h.
+
 2008-01-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix indentation.

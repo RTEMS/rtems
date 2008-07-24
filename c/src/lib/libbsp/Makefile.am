@@ -32,5 +32,9 @@ EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
 EXTRA_DIST += shared/include/coverhd.h
 EXTRA_DIST += shared/gdbstub/rtems-stub-glue.c
 
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = shared/include/bootcard.h
+
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

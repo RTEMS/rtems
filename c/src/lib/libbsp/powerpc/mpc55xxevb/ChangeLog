@@ -1,3 +1,8 @@
+2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, startup/bspstart.c: Support RAM allocation via
+	bootcard.
+
 2008-07-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RTEMS_AMPOLISH3.

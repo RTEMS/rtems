@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/bootcard.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
@@ -70,15 +71,17 @@ void _BSP_Fatal_error(unsigned int v)
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
  */
-void bsp_get_workarea(
-  void   **workarea_base,
-  size_t  *workarea_size,
-  size_t  *requested_heap_size
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size
 )
 {
-  *workarea_base       = &end;
-  *workarea_size       = (void *)&RAM_END - (void *)&end;
-  *requested_heap_size = 0;
+  *work_area_start       = &end;
+  *work_area_size       = (void *)&RAM_END - (void *)&end;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 /*

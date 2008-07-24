@@ -1,5 +1,5 @@
 /*
- *  This routine is an implementation of the bsp_get_workarea()
+ *  This routine is an implementation of the bsp_get_work_area()
  *  that can be used by all m68k BSPs following linkcmds conventions
  *  regarding heap, stack, and workspace allocation.
  *
@@ -14,16 +14,18 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
  */
-void bsp_get_workarea(
-  void   **workarea_base,
-  size_t  *workarea_size,
-  size_t  *requested_heap_size
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size
 )
 {
   extern char         _RamBase[];
@@ -31,8 +33,9 @@ void bsp_get_workarea(
   extern char         _HeapSize[];
   extern char         _RamSize[];
 
-  *workarea_base       = _WorkspaceBase;
-  *workarea_size       = (unsigned long)_RamBase + (unsigned long) _RamSize -
+  *work_area_start       = _WorkspaceBase;
+  *work_area_size       = (unsigned long)_RamBase + (unsigned long) _RamSize -
        (unsigned long)_WorkspaceBase;
-  *requested_heap_size = (size_t) _HeapSize;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = (size_t) _HeapSize;
 }

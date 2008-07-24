@@ -12,6 +12,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <nds.h>
 
 /*
@@ -24,18 +25,20 @@ extern unsigned int arm_cpu_mode;
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
  */
-void bsp_get_workarea(
-  void   **workarea_base,
-  size_t  *workarea_size,
-  size_t  *requested_heap_size
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size
 )
 {
   extern uint8_t _end;
   extern uint8_t __ewram_end;
 
-  *workarea_base       = &_end;
-  *workarea_size       = (void *)&__ewram_end - (void *)&_end;
-  *requested_heap_size = 0;
+  *work_area_start       = &_end;
+  *work_area_size       = (void *)&__ewram_end - (void *)&_end;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 /*

@@ -43,12 +43,9 @@
  *  $Id$
  */
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <rtems.h>
 
-#include <bspopts.h>  /* for BSP_BOOTCARD_HANDLES_RAM_ALLOCATION */
+#include <bsp/bootcard.h>
 
 /*
  *  Since there is a forward reference
@@ -56,44 +53,41 @@
 char *rtems_progname;
 
 /*
- *  Prototypes of external routines
- */
-extern void bsp_start( void );
-extern void bsp_cleanup( void );
-extern void bsp_pretasking_hook(void);
-extern void bsp_libc_init( void *, uint32_t, int );
-extern void bsp_predriver_hook(void);
-extern void bsp_postdriver_hook(void);
-
-/*
  *  These are the prototypes and helper routines which are used
  *  when the BSP lets the framework handle RAM allocation between
  *  the RTEMS Workspace and C Program Heap.
  */
 #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-  extern void bsp_get_workarea( void **, size_t *, size_t *);
-
-  void bootcard_bsp_libc_helper(
-    void   *workarea_base,
-    size_t  workarea_size,
-    size_t  requested_heap_size
+  static void bootcard_bsp_libc_helper(
+    void   *work_area_start,
+    size_t  work_area_size,
+    void   *heap_start,
+    size_t  heap_size
   )
   {
-    uint32_t     heap_start;
-    uint32_t     heap_size;
+    if (heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
+      /* Use the work area start as heap start */
+      heap_start = work_area_start;
 
-    heap_start = (uint32_t) workarea_base;
-    if (heap_start & (CPU_ALIGNMENT-1))
-      heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
+      /* Ensure proper alignement */
+      if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
+        heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT - 1));
+      }
 
-    if ( requested_heap_size == 0 ) {
-      heap_size = Configuration.work_space_start - workarea_base;
-      heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
-    } else {
-      heap_size = requested_heap_size;
+      /*
+       * Use the free space from the start of the work area up to the work
+       * space start as heap area.
+       */
+      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+        heap_size = (char *) Configuration.work_space_start
+          - (char *) work_area_start;
+
+        /* Keep it as a multiple of 16 bytes */
+        heap_size &= 0xfffffff0;
+      }
     }
 
-    bsp_libc_init((void *) heap_start, heap_size, 0);
+    bsp_libc_init( heap_start, (uint32_t) heap_size, 0);
   }
 #endif
 
@@ -115,9 +109,10 @@ int boot_card(
   char **envp_p = &envp_pointer;
   rtems_interrupt_level bsp_isr_level;
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    void   *workarea_base;
-    size_t  workarea_size;
-    size_t  heap_size;
+    void   *work_area_start = NULL;
+    size_t  work_area_size = 0;
+    void   *heap_start = NULL;
+    size_t  heap_size = 0;
   #endif
 
   /*
@@ -156,14 +151,19 @@ int boot_card(
    */
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
   {
-    unsigned char     *work_space_start;
+    void *work_space_start = NULL;
 
-    bsp_get_workarea( &workarea_base, &workarea_size, &heap_size );
+    bsp_get_work_area(
+      &work_area_start,
+      &work_area_size,
+      &heap_start,
+      &heap_size
+    );
 
-    work_space_start = workarea_base + workarea_size
+    work_space_start = (char *) work_area_start + work_area_size
       - rtems_configuration_get_work_space_size();
 
-    if ( work_space_start <= (unsigned char *)workarea_base ) {
+    if ((uintptr_t) work_space_start <= (uintptr_t) work_area_start) {
       printk( "bootcard: Not enough RAM!!!\n" );
       bsp_cleanup();
       return -1;
@@ -172,7 +172,7 @@ int boot_card(
     Configuration.work_space_start = work_space_start;
 
     #if (BSP_DIRTY_MEMORY == 1)
-      memset(workarea_base, 0xCF,  workarea_size);
+      memset( work_area_start, 0xCF,  work_area_size);
     #endif
   }
 
@@ -193,7 +193,12 @@ int boot_card(
    *  framework.
    */
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    bootcard_bsp_libc_helper( workarea_base, workarea_size, heap_size );
+    bootcard_bsp_libc_helper(
+      work_area_start,
+      work_area_size,
+      heap_start,
+      heap_size
+    );
   #endif
 
   /*

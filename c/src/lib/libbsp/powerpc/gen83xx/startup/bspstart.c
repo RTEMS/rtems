@@ -29,6 +29,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 #include <bsp/ppc_exc_bspsupp.h>
 
@@ -50,8 +51,6 @@ unsigned int BSP_bus_frequency;
 
 /* Configuration parameters for clock driver, ... */
 uint32_t bsp_clicks_per_usec;
-
-static char *BSP_heap_start, *BSP_heap_end;
 
 /*
  *  Use the shared implementations of the following routines.
@@ -87,8 +86,21 @@ void _BSP_Fatal_error( unsigned n)
 
 void bsp_pretasking_hook( void)
 {
-	/* Initialize libc including the heap */
-	bsp_libc_init( BSP_heap_start, BSP_heap_end - BSP_heap_start, 0);
+	/* Do noting */
+}
+
+void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
+{
+#ifdef HAS_UBOOT
+	char *ram_end = (char *) mpc83xx_uboot_board_info.bi_memstart + mpc83xx_uboot_board_info.bi_memsize;
+#else /* HAS_UBOOT */
+	char *ram_end = bsp_ram_end;
+#endif /* HAS_UBOOT */
+
+	*work_area_start = bsp_work_area_start;
+	*work_area_size = ram_end - bsp_work_area_start;
+	*heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+	*heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 void bsp_start( void)
@@ -98,8 +110,6 @@ void bsp_start( void)
 
 	uint32_t interrupt_stack_start = (uint32_t) bsp_interrupt_stack_start;
 	uint32_t interrupt_stack_size = (uint32_t) bsp_interrupt_stack_size;
-
-	size_t workspace_size = rtems_configuration_get_work_space_size();
 
 	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -122,21 +132,6 @@ void bsp_start( void)
 #if DATA_CACHE_ENABLE
 	rtems_cache_enable_data();
 #endif
-
-	/* Clear the workspace */
-	Configuration.do_zero_of_workspace = 0;
-	mpc83xx_zero_4( bsp_workspace_start, workspace_size);
-
-	/* Workspace start */
-	Configuration.work_space_start = bsp_workspace_start;
-
-	/* Heap area */
-	BSP_heap_start = (char *) Configuration.work_space_start + workspace_size;
-#ifdef HAS_UBOOT
-	BSP_heap_end = mpc83xx_uboot_board_info.bi_memstart + mpc83xx_uboot_board_info.bi_memsize;
-#else /* HAS_UBOOT */
-	BSP_heap_end = bsp_ram_end;
-#endif /* HAS_UBOOT */
 
 	/*
 	 * This is evaluated during runtime, so it should be ok to set it

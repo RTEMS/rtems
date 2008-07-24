@@ -29,6 +29,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/ppc_exc_bspsupp.h>
@@ -78,19 +79,18 @@ void _BSP_Fatal_error( unsigned n)
 	}
 }
 
+void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
+{
+	*work_area_start = bsp_section_bss_end;
+	*work_area_size = bsp_ram_end - 2 * MPC55XX_INTERRUPT_STACK_SIZE - bsp_section_bss_end;
+	*heap_start = bsp_external_ram_start;
+	*heap_size = (size_t) bsp_external_ram_size;
+}
+
 void bsp_pretasking_hook()
 {
-	uint32_t heap_start = bsp_external_ram_start;
-	uint32_t heap_size = bsp_external_ram_size;
-
-	bsp_libc_init( heap_start, heap_size, 0);
-
 #ifdef STACK_CHECKER_ON
 	Stack_check_Initialize();
-#endif
-
-#ifdef RTEMS_DEBUG
-	rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
 
@@ -167,12 +167,8 @@ void bsp_start(void)
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
 
-	uint32_t ram_start = bsp_ram_start;
-	uint32_t ram_end = bsp_ram_end;
-	uint32_t interrupt_stack_start = ram_end - 2 * MPC55XX_INTERRUPT_STACK_SIZE;
+	uint32_t interrupt_stack_start = bsp_ram_end - 2 * MPC55XX_INTERRUPT_STACK_SIZE;
 	uint32_t interrupt_stack_size = MPC55XX_INTERRUPT_STACK_SIZE;
-	uint32_t work_space_start = bsp_section_bss_end;
-	uint32_t work_space_end = work_space_start + rtems_configuration_get_work_space_size();
 
 	/* ESCI pad configuration */
 	SIU.PCR [89].R = 0x400;
@@ -180,24 +176,13 @@ void bsp_start(void)
 
 	DEBUG_PRINT( "BSP start ...\n");
 
-	/* Memory layout */
-
-	Configuration.work_space_start = work_space_start;
-
 	DEBUG_PRINT( "System clock          : %i\n", mpc55xx_get_system_clock());
-	DEBUG_PRINT( "Memory start          : 0x%08x\n", ram_start);
-	DEBUG_PRINT( "Memory end            : 0x%08x\n", ram_end);
-	DEBUG_PRINT( "Memory size           : 0x%08x\n", ram_end - ram_start);
-	DEBUG_PRINT( "Work space start      : 0x%08x\n", work_space_start);
-	DEBUG_PRINT( "Work space end        : 0x%08x\n", work_space_end);
-	DEBUG_PRINT( "Work space size       : 0x%08x\n", work_space_end - work_space_start);
+	DEBUG_PRINT( "Memory start          : 0x%08x\n", bsp_ram_start);
+	DEBUG_PRINT( "Memory end            : 0x%08x\n", bsp_ram_end);
+	DEBUG_PRINT( "Memory size           : 0x%08x\n", bsp_ram_end - bsp_ram_start);
 	DEBUG_PRINT( "Interrupt stack start : 0x%08x\n", interrupt_stack_start);
 	DEBUG_PRINT( "Interrupt stack end   : 0x%08x\n", interrupt_stack_start + interrupt_stack_size);
 	DEBUG_PRINT( "Interrupt stack size  : 0x%08x\n", interrupt_stack_size);
-
-	if (work_space_end > interrupt_stack_start) {
-		BSP_panic( "Not enough memory for the work space");
-	}
 	
 	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type()

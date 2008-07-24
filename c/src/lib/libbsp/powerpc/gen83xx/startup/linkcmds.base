@@ -268,13 +268,12 @@ SECTIONS {
 	bsp_interrupt_stack_start = .;
 	bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
 	bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
-	bsp_interrupt_stack_pointer = bsp_interrupt_stack_end - 16;
 	. = bsp_interrupt_stack_end;
 
 	/*
-	 * BSP: Workspace start
+	 * BSP: Work area start
 	 */
-	bsp_workspace_start = .;
+	bsp_work_area_start = .;
 	
 	/* Stabs debugging sections.  */
 	.stab          0 : { *(.stab) }

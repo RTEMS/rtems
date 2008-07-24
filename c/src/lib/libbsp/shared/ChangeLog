@@ -1,5 +1,12 @@
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* include/bootcard.h: New file.
+
+	* bootcard.c: Changed bsp_get_workarea() to bsp_get_work_area() and
+	added support for an optional separate heap area.
+
+	* bsppretaskinghook.c: Cleanup.  Include bootcard.h.
+
 	* include/irq-generic.h, src/irq-generic.c, src/irq-legacy.c: Support
 	for new rtems_interrupt_handler_iterate() function.
 
