@@ -1,3 +1,10 @@
+2008-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1291/cpukit
+	* psx05/init.c, psxmsgq01/init.c, psxmsgq01/system.h, psxsem01/init.c,
+	psxsem01/psxsem01.scn: Update tests to reflect changes required by
+	problem.
+
 2006-12-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.

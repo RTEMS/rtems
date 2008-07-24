@@ -15,7 +15,7 @@ Init: sem_trywait - UNSUCCESSFUL (EAGAIN)
 Init: sem_trywait - UNSUCCESSFUL (EINVAL)
 Init: sem_timedwait - SUCCESSFUL
 Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)
-Init: sem_timedwait - UNSUCCESSFUL (EINVAL)
+Init: sem_timedwait - UNSUCCESSFUL (EAGAIN)
 Init: sem_post - UNSUCCESSFUL (EINVAL)
 Init: sem_destroy - SUCCESSFUL
 Init: sem_open - sem1 SUCCESSFUL
