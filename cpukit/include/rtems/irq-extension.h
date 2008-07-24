@@ -82,11 +82,11 @@ typedef void (*rtems_interrupt_handler)( rtems_vector_number, void *);
  * - Other error states are BSP specific.
  */
 rtems_status_code rtems_interrupt_handler_install(
-    rtems_vector_number vector,
-    const char *info,
-    rtems_option options,
-    rtems_interrupt_handler handler,
-    void *arg
+  rtems_vector_number vector,
+  const char *info,
+  rtems_option options,
+  rtems_interrupt_handler handler,
+  void *arg
 );
 
 /**
@@ -107,9 +107,45 @@ rtems_status_code rtems_interrupt_handler_install(
  * - Other error states are BSP specific.
  */
 rtems_status_code rtems_interrupt_handler_remove(
-    rtems_vector_number vector,
-    rtems_interrupt_handler handler,
-    void *arg
+  rtems_vector_number vector,
+  rtems_interrupt_handler handler,
+  void *arg
+);
+
+/**
+ * @brief Interrupt handler iteration routine type.
+ *
+ * @see rtems_interrupt_handler_iterate()
+ */
+typedef void (*rtems_interrupt_per_handler_routine)(
+  void *, const char *, rtems_option, rtems_interrupt_handler, void *
+);
+
+/**
+ * @brief Iterates over all installed interrupt handler of the interrupt vector
+ * with number @a vector.
+ *
+ * For each installed handler of the vector the function @a routine will be
+ * called with the supplied argument @a arg and the handler information,
+ * options, routine and argument.
+ *
+ * This function is intended for system information and diagnostics.
+ *
+ * @note This function may block.  Never install or remove an interrupt handler
+ * within the iteration routine.  This may result in a deadlock.
+ *
+ * @return
+ * - On success RTEMS_SUCCESSFUL shall be returned.
+ * - If this function is called within interrupt context RTEMS_CALLED_FROM_ISR
+ * shall be returned.
+ * - If the vector number is out of range RTEMS_INVALID_NUMBER shall be
+ * returned.
+ * - Other error states are BSP specific.
+ */
+rtems_status_code rtems_interrupt_handler_iterate(
+  rtems_vector_number vector,
+  rtems_interrupt_per_handler_routine routine,
+  void *arg
 );
 
 /** @} */
@@ -152,13 +188,13 @@ rtems_status_code rtems_interrupt_handler_remove(
  * @brief Returns true if the interrupt handler unique option is set.
  */
 #define RTEMS_INTERRUPT_IS_UNIQUE( options) \
-    ((options) & RTEMS_INTERRUPT_UNIQUE)
+  ((options) & RTEMS_INTERRUPT_UNIQUE)
 
 /**
  * @brief Returns true if the interrupt handler shared option is set.
  */
 #define RTEMS_INTERRUPT_IS_SHARED( options) \
-    (!RTEMS_INTERRUPT_IS_UNIQUE( options))
+  (!RTEMS_INTERRUPT_IS_UNIQUE( options))
 
 /** @} */
 

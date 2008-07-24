@@ -1,3 +1,9 @@
+2008-07-24     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/include/rtems/irq-extension.h: New function
+	rtems_interrupt_handler_iterate() for system information and
+	diagnostics.
+
 2008-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell_script.c: Clean up code for command not found
