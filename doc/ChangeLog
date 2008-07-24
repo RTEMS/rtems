@@ -1,3 +1,10 @@
+2008-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1291/cpukit
+	* posix_users/mutex.t, posix_users/semaphores.t: Update tests to
+	reflect changes required by POSIX blocking calls sometimes taking
+	relative not absolute time.
+
 2008-07-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/clock.t, user/dpmem.t, user/msg.t, user/part.t, user/region.t,
