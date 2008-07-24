@@ -1,3 +1,7 @@
+2008-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* preinstall.am: New file.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am: Install shared/include/bootcard.h.
