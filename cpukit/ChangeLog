@@ -1,5 +1,8 @@
 2008-07-24     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libcsupport.h: Moved declaration of
+	bsp_libc_init() into new bootcard.h.
+
 	* cpukit/include/rtems/irq-extension.h: New function
 	rtems_interrupt_handler_iterate() for system information and
 	diagnostics.
@@ -131,7 +134,7 @@
 
 	* include/rtems/status-checks.h: Fix style.
 
-2008-07-10     Sebastian Huber <sebastian.huber@embedded-brains.de>
+2008-07-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/intr.h: Documentation.
 

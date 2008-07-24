@@ -73,13 +73,6 @@ rtems_extension libc_delete_hook(
   0                                            /* fatal        */ \
 }
 
-/*
- * FIXME: Nearly every BSP declares this function in the BSP startup file
- * separately and uses the implementation in c/src/lib/libbsp/shared/bsplibc.c.
- * Why differ the parameter types from RTEMS_Malloc_Initialize()?
- */
-void bsp_libc_init( void *heap_start, uint32_t heap_size, int use_sbrk);
-
 #ifdef __cplusplus
 }
 #endif
