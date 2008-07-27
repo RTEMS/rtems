@@ -2,15 +2,6 @@
 # $Id$
 #
 
-##
-#
-# @file
-#
-# @ingroup mpc55xx_config
-#
-# @brief Makefile of LibCPU for PowerPC.
-#
-
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/compile.am
