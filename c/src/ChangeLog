@@ -1,3 +1,7 @@
+2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove RPCGEN, RPCTOOLS.
+
 2008-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Use inttypes.h

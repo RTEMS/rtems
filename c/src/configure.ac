@@ -19,20 +19,10 @@ RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENV_RTEMSBSP
 
-AC_ARG_ENABLE(rpcgen,
-[AS_HELP_STRING([--enable-rpcgen],[rebuild rpcgen-generated sources])],
-[case "${enable_rpcgen}" in 
-  yes) enable_rpcgen=yes ;;
-  no) enable_rpcgen=no ;;
-  *)  enable_rpcgen=no ;;
-esac],[enable_rpcgen=no]) 
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
-
-AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
 
 AC_MSG_NOTICE([setting up make/custom])
 
@@ -221,10 +211,6 @@ AM_CONDITIONAL([LIBCHIP],[test "$RTEMS_BSP_FAMILY" != "posix"])
 AM_CONDITIONAL([HAS_LIBBSP],[test "$RTEMS_BSP_FAMILY" != "bare"])
 
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
-
-AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
-&& test -n "$AWK" \
-&& test "$enable_rpcgen" = yes])
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
