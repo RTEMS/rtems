@@ -1,5 +1,6 @@
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add -ansi to RTEMS_PROG_CC_FOR_TARGET.
 	* Makefile.am: Remove doxygen comments.
 	Remove bogus BUILT_SOURCES.
 
