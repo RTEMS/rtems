@@ -211,7 +211,7 @@ if test "$no_recursion" != yes; then
   esac
 
   ac_popdir=`pwd`
-  for ac_dir in $$1_configdirs; do
+  for ac_dir in : $$1_configdirs; do test "x$ac_dir" = x: && continue
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
