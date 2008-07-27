@@ -1,5 +1,9 @@
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* acinclude.m4 (_RTEMS_OUTPUT_SUBDIRS): Allow empty configdirs.
+
+2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Remove doxygen
 	comments.
 	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.
