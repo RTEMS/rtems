@@ -1,11 +1,6 @@
 ##
-#
-# @file
-#
-# @ingroup mpc55xx_config
-#
-# @brief Makefile of LibBSP for the MPC55xx evaluation boards.
-#
+## $Id$
+##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
@@ -100,5 +95,3 @@ endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
-
-BUILT_SOURCES = preinstall
