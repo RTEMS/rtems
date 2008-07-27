@@ -45,6 +45,9 @@
   if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/@tool_target@-windres%{_exeext}; then 
     rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/@tool_target@-windres*
   fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/@tool_target@-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/@tool_target@-windmc*
+  fi
 
   cd ..
 
