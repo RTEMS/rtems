@@ -2,15 +2,6 @@ dnl
 dnl  $Id$
 dnl 
 
-##
-#
-# @file
-#
-# @ingroup mpc55xx_config
-#
-# @brief Configuration macros.
-#
-
 dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl Internal subroutine to RTEMS_BSP_ALIAS
 AC_DEFUN([_RTEMS_BSP_ALIAS],

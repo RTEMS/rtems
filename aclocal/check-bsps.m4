@@ -1,14 +1,5 @@
 dnl $Id$
 
-##
-#
-# @file
-#
-# @ingroup mpc55xx_config
-#
-# @brief Configuration macros.
-#
-
 dnl Report all available bsps for a target within the source tree
 dnl
 dnl RTEMS_CHECK_BSPS(bsp_list)
