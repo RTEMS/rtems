@@ -1,3 +1,10 @@
+2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Remove doxygen
+	comments.
+	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.
+	AC_PREREQ(2.62).
+
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added MPC5566EVB and
