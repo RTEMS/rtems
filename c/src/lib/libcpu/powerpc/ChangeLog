@@ -1,3 +1,7 @@
+2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove doxygen comments.
+
 2008-07-22	Till Straumann <strauman@slac.stanford.edu>
 
 	* ppc403/clock/clock.c: Added (conditionally compiled)
