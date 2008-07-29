@@ -51,6 +51,6 @@ struct rtems_ftpd_configuration
 #define TRANSIENT       4       /* transient negative completion */
 #define ERROR           5       /* permanent negative completion */
 
-int rtems_initialize_ftpd();
+int rtems_initialize_ftpd(void);
 
 #endif  /* _RTEMS_FTPD_H */

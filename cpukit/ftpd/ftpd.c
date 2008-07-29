@@ -485,7 +485,7 @@ task_pool_init(int count, rtems_task_priority priority)
  *
  */
 static FTPD_SessionInfo_t*
-task_pool_obtain()
+task_pool_obtain(void)
 {
   FTPD_SessionInfo_t* info = 0;
   rtems_status_code sc;
@@ -1906,7 +1906,7 @@ session(rtems_task_argument arg)
  *   NONE
  */
 static void
-daemon()
+daemon(void)
 {
   int                 s;
   socklen_t	      addrLen;

@@ -41,7 +41,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
  *  This routine activates updating of the current time of day.
  */
 
-RTEMS_INLINE_ROUTINE void _TOD_Activate()
+RTEMS_INLINE_ROUTINE void _TOD_Activate( void )
 {
   /* XXX do we need something now that we are using timespec for TOD */
 }
