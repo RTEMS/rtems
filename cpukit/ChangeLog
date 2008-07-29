@@ -1,3 +1,8 @@
+2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/prwlocktrywrlock.c, posix/src/prwlocktryrdlock.c,
+	  posix/src/prwlockrdlock.c: Use C-style comments.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* libblock/src/nvdisk.c: Fix block compile bug.
