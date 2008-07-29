@@ -481,7 +481,7 @@ void     rtems_monitor_driver_dump_header(boolean);
 void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, boolean);
 
 /* symbols.c */
-rtems_symbol_table_t *rtems_symbol_table_create();
+rtems_symbol_table_t *rtems_symbol_table_create(void);
 void                  rtems_symbol_table_destroy(rtems_symbol_table_t *table);
 
 rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, char *, uint32_t  );

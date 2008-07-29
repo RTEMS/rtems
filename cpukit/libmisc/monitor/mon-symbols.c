@@ -28,7 +28,7 @@
 
 
 rtems_symbol_table_t *
-rtems_symbol_table_create()
+rtems_symbol_table_create(void)
 {
     rtems_symbol_table_t *table;
 

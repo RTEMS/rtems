@@ -276,7 +276,7 @@ rtems_capture_open (uint32_t                size,
  * resources.
  */
 rtems_status_code
-rtems_capture_close ();
+rtems_capture_close (void);
 
 /**
  * rtems_capture_control
@@ -369,7 +369,7 @@ rtems_capture_watch_global (rtems_boolean enable);
  * This function returns the global watch state.
  */
 rtems_boolean
-rtems_capture_watch_global_on ();
+rtems_capture_watch_global_on (void);
 
 /**
  * rtems_capture_watch_ceiling
@@ -392,7 +392,7 @@ rtems_capture_watch_ceiling (rtems_task_priority ceiling);
  * This function gets the watch ceiling.
  */
 rtems_task_priority
-rtems_capture_watch_get_ceiling ();
+rtems_capture_watch_get_ceiling (void);
 
 /**
  * rtems_capture_watch_floor
@@ -415,7 +415,7 @@ rtems_capture_watch_floor (rtems_task_priority floor);
  * This function gets the watch floor.
  */
 rtems_task_priority
-rtems_capture_watch_get_floor ();
+rtems_capture_watch_get_floor (void);
 
 /**
  * rtems_capture_set_trigger
@@ -513,7 +513,7 @@ rtems_capture_release (uint32_t count);
  * This function returns the tick period in micro-seconds.
  */
 uint32_t
-rtems_capture_tick_time ();
+rtems_capture_tick_time (void);
 
 /*
  * rtems_capture_tick_time
@@ -523,7 +523,7 @@ rtems_capture_tick_time ();
  * This function returns the tick period in micro-seconds.
  */
 uint32_t
-rtems_capture_tick_time ();
+rtems_capture_tick_time (void);
 
 /**
  * rtems_capture_event_text
@@ -546,7 +546,7 @@ rtems_capture_event_text (int event);
  * capture engine has detected.
  */
 rtems_capture_task_t*
-rtems_capture_get_task_list ();
+rtems_capture_get_task_list (void);
 
 /**
  * rtems_capture_next_task
@@ -836,7 +836,7 @@ rtems_capture_task_delta_time (rtems_capture_task_t* task)
  * engine knows about.
  */
 static inline uint32_t
-rtems_capture_task_count ()
+rtems_capture_task_count (void)
 {
   rtems_capture_task_t* task = rtems_capture_get_task_list ();
   uint32_t        count = 0;
@@ -859,7 +859,7 @@ rtems_capture_task_count ()
  * capture engine.
  */
 rtems_capture_control_t*
-rtems_capture_get_control_list ();
+rtems_capture_get_control_list (void);
 
 /**
  * rtems_capture_next_control
@@ -1021,7 +1021,7 @@ rtems_capture_control_by_triggers (rtems_capture_control_t* control,
  * engine has.
  */
 static inline uint32_t
-rtems_capture_control_count ()
+rtems_capture_control_count (void)
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   uint32_t                 count = 0;
