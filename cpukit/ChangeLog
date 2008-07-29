@@ -1,3 +1,8 @@
+2008-07-29	Tim Cussins <timcussins@eml.cc>
+
+	* ChangeLog, libmisc/monitor/mon-object.c: Add mising RTEMS_POSIX_API
+	conditional.
+
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/monitor/mon-monitor.c: Remove stray arg from function
@@ -8,6 +13,7 @@
 	* ftpd/ftpd.c, ftpd/ftpd.h: Add missing prototypes.
 
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/capture/capture.h, libmisc/monitor/mon-symbols.c, 
 	libmisc/monitor/monitor.h: Add missing prototypes.
 	* score/inline/rtems/score/tod.inl: Add prototypes.
