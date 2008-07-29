@@ -39,7 +39,7 @@ extern void malloc_walk(size_t source, size_t printf_enabled);
 extern void libc_init(int reentrant);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);
-extern size_t malloc_free_space();
+extern size_t malloc_free_space(void);
 
 /*
  *  Prototypes required to install newlib reentrancy user extension

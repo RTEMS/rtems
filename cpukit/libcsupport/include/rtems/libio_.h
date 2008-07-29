@@ -246,9 +246,9 @@ int rtems_filesystem_evaluate_parent(
   rtems_filesystem_location_info_t  *pathloc
 );
 
-void rtems_filesystem_initialize();
+void rtems_filesystem_initialize(void);
 
-int init_fs_mount_table();
+int init_fs_mount_table(void);
 
 #ifdef __cplusplus
 }

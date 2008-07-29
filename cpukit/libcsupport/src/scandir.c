@@ -155,9 +155,9 @@ cleanup_and_bail:
  * Alphabetic order comparison routine for those who want it.
  */
 int
-alphasort(d1, d2)
-	const void *d1;
-	const void *d2;
+alphasort(
+	const void *d1,
+	const void *d2 )
 {
 	return(strcmp((*(struct dirent **)d1)->d_name,
 	    (*(struct dirent **)d2)->d_name));

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 
-void rtems_malloc_statistics_initialize()
+void rtems_malloc_statistics_initialize( void )
 {
   /*
    * Zero all the statistics
@@ -73,4 +73,3 @@ rtems_malloc_statistics_functions_t rtems_malloc_statistics_helpers_table = {
 };
 
 #endif
-
