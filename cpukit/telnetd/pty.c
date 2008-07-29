@@ -30,9 +30,6 @@
 
 /* #define DEBUG DEBUG_WH */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /*-----------------------------------------*/
 #include <termios.h>
 #include <rtems/termiostypes.h>
@@ -42,9 +39,6 @@ extern "C" {
 #include <rtems/bspIo.h>
 #include <errno.h>
 #include <sys/socket.h>
-#ifdef __cplusplus
-};
-#endif
 /*-----------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,11 +83,6 @@ struct pty_tt {
  int                       width;
  int                       height;
 };
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 static int    telnet_pty_inited=FALSE;
@@ -469,10 +458,10 @@ rtems_device_driver my_pty_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-static int pty_do_finalize()
+static int pty_do_finalize(void)
 {
-int ndx;
-rtems_status_code status;
+    int ndx;
+    rtems_status_code status;
 
     if ( !telnet_pty_inited )
       return 0;
@@ -643,7 +632,7 @@ static const rtems_termios_callbacks * pty_get_termios_handlers(int polled) {
 }
 /*-----------------------------------------------------------*/
 
-static int pty_do_initialize()
+static int pty_do_initialize(void)
 {
   if ( !telnet_pty_inited ) {
     if (RTEMS_SUCCESSFUL==rtems_io_register_driver(0, &drvPty, &pty_major))
@@ -654,46 +643,12 @@ static int pty_do_initialize()
   return telnet_pty_inited;
 }
 
-#ifdef __cplusplus
-
-class TelnetPtyIni {
-public:
-  TelnetPtyIni() {
-    if (!nest++) {
-      pty_do_initialize();
-    }
-  }
-
-  ~TelnetPtyIni() {
-    if (!--nest) {
-      pty_do_finalize();
-    }
-  }
-private:
-  static int nest;
-};
-
-static TelnetPtyIni onlyInst;
-int    TelnetPtyIni::nest=0;
-
-int telnet_pty_initialize()
-{
-  return telnet_pty_inited;
-}
-
-int telnet_pty_finalize()
-{
-  return telnet_pty_inited;
-}
-};
-#else
-int telnet_pty_initialize()
+int telnet_pty_initialize(void)
 {
   return pty_do_initialize();
 }
 
-int telnet_pty_finalize()
+int telnet_pty_finalize(void)
 {
   return pty_do_finalize();
 }
-#endif
