@@ -1,5 +1,10 @@
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h, cpukit/libblock/src/bdbuf.c:
+	Update the comments.
+
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
 	* libblock/Makefile.am: Removed src/show_bdbuf.c.
 
 	* libblock/src/show_bdbuf.c: Removed.
