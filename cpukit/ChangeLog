@@ -1,5 +1,7 @@
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture.h, libmisc/monitor/mon-symbols.c, 
+	libmisc/monitor/monitor.h: Add missing prototypes.
 	* score/inline/rtems/score/tod.inl: Add prototypes.
 	* score/src/coretodset.c: Remove stray args in function call.
 	* libcsupport/include/rtems/libcsupport.h, 
