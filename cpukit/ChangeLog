@@ -1,8 +1,12 @@
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libcsupport.h, 
+	libcsupport/include/rtems/libio_.h, 
+	libcsupport/src/malloc_statistics_helpers.c,
+	libcsupport/src/scandir.c: Add prototypes.
 	* telnetd/pty.c: Add prototypes. Remove misc. C++-code pollution.
 	* posix/src/prwlocktrywrlock.c, posix/src/prwlocktryrdlock.c,
-	  posix/src/prwlockrdlock.c: Use C-style comments.
+	posix/src/prwlockrdlock.c: Use C-style comments.
 
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
