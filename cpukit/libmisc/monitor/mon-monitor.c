@@ -414,7 +414,7 @@ rtems_monitor_symbols_loadup(void)
     if (rtems_monitor_symbols)
         rtems_symbol_table_destroy(rtems_monitor_symbols);
 
-    rtems_monitor_symbols = rtems_symbol_table_create(10);
+    rtems_monitor_symbols = rtems_symbol_table_create();
     if (rtems_monitor_symbols == 0)
         return;
 
