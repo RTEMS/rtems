@@ -541,7 +541,7 @@ int sm_ECCEncode(const uint8_t * p_buf, uint8_t * p_ecc)
 /* smc_write --
  * write stub
 */
-static int smc_write(blkdev_request *req)
+static int smc_write(rtems_blkdev_request *req)
 {
 	req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
 	return 0;
@@ -556,10 +556,10 @@ static int smc_write(blkdev_request *req)
  *     ioctl return value
  */
 static int
-smc_read(blkdev_request *req)
+smc_read(rtems_blkdev_request *req)
 {
     uint32_t   i;
-    blkdev_sg_buffer *sg;
+    rtems_blkdev_sg_buffer *sg;
     uint32_t   remains;
 
     remains = smc_info.bytes_per_page * req->count;
@@ -569,7 +569,7 @@ smc_read(blkdev_request *req)
         int count = sg->length;
         if (count > remains)
             count = remains;
-	smc_read_page(req->start,sg->buffer);
+	smc_read_page(sg->block,sg->buffer);
         remains -= count;
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
@@ -592,14 +592,14 @@ smc_ioctl(dev_t dev, uint32_t req, void *argp)
 {
     switch (req)
     {
-        case BLKIO_REQUEST:
+        case RTEMS_BLKIO_REQUEST:
         {
-            blkdev_request *r = argp;
+            rtems_blkdev_request *r = argp;
             switch (r->req)
             {
-                case BLKDEV_REQ_READ:
+                case RTEMS_BLKDEV_REQ_READ:
                     return smc_read(r);
-                case BLKDEV_REQ_WRITE:
+                case RTEMS_BLKDEV_REQ_WRITE:
 		    return smc_write(r);
                 default:
                     errno = EBADRQC;
