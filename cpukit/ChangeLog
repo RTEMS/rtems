@@ -1,5 +1,7 @@
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/inline/rtems/score/tod.inl: Add prototypes.
+	* score/src/coretodset.c: Remove stray args in function call.
 	* libcsupport/include/rtems/libcsupport.h, 
 	libcsupport/include/rtems/libio_.h, 
 	libcsupport/src/malloc_statistics_helpers.c,
