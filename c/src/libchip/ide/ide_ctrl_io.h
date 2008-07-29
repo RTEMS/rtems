@@ -104,9 +104,9 @@ extern "C" {
 void
 ide_controller_read_data_block(rtems_device_minor_number  minor,
                                uint16_t                   block_size,
-                               blkdev_sg_buffer          *bufs,
-                               uint32_t            *cbuf,
-                               uint32_t            *pos);
+                               rtems_blkdev_sg_buffer    *bufs,
+                               uint32_t                  *cbuf,
+                               uint32_t                  *pos);
 
 /*
  * ide_controller_write_data_block --
@@ -125,9 +125,9 @@ ide_controller_read_data_block(rtems_device_minor_number  minor,
 void
 ide_controller_write_data_block(rtems_device_minor_number  minor,
                                 uint16_t                   block_size,
-                                blkdev_sg_buffer          *bufs,
-                               uint32_t             *cbuf,
-                               uint32_t             *pos);
+                                rtems_blkdev_sg_buffer    *bufs,
+                                uint32_t                  *cbuf,
+                                uint32_t                  *pos);
 
 /*
  * ide_controller_read_register --

@@ -197,13 +197,13 @@ typedef struct ata_registers_s {
 
 /* ATA request */
 typedef struct ata_req_s {
-    Chain_Node        link;   /* link in requests chain */
+    rtems_chain_node  link;   /* link in requests chain */
     char              type;   /* request type */
     ata_registers_t   regs;   /* ATA command */
     uint32_t    cnt;    /* Number of sectors to be exchanged */
     uint32_t    cbuf;   /* number of current buffer from breq in use */
     uint32_t    pos;    /* current position in 'cbuf' */
-    blkdev_request   *breq;   /* blkdev_request which corresponds to the
+    rtems_blkdev_request *breq;   /* blkdev_request which corresponds to the
                                * ata request
                                */
     rtems_id          sema;   /* semaphore which is used if synchronous
@@ -258,7 +258,7 @@ typedef struct ata_queue_msg_s {
  * mapping of IDE controllers and interrupt vectors
  */
 typedef struct ata_int_st_s {
-    Chain_Node                link;
+    rtems_chain_node          link;
     rtems_device_minor_number ctrl_minor;
 } ata_int_st_t;
 
@@ -275,7 +275,7 @@ typedef struct ata_ide_dev_s {
  * ATA device description
  */
 typedef struct ata_dev_s {
-    int8_t       present;     /* 1 -- present, 0 -- not present, */
+    int8_t      present;     /* 1 -- present, 0 -- not present, */
                              /* -1 -- non-initialized */
     uint16_t    cylinders;
     uint16_t    heads;
@@ -300,7 +300,7 @@ typedef struct ata_dev_s {
 typedef struct ata_ide_ctrl_s {
     rtems_boolean present;   /* controller state */
     ata_dev_t     device[2]; /* ata diveces description */
-    Chain_Control reqs;      /* requests chain */
+    rtems_chain_control reqs; /* requests chain */
 } ata_ide_ctrl_t;
 
 #endif /* __ATA_INTERNAL_H__ */

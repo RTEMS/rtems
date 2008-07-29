@@ -558,7 +558,7 @@ static inline rtems_status_code sd_card_stop( sd_card_driver_entry *e)
  * @{
  */
 
-static int sd_card_disk_block_read( sd_card_driver_entry *e, blkdev_request *r)
+static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_request *r)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
@@ -648,7 +648,7 @@ sd_card_disk_block_read_cleanup:
 	return rv;
 }
 
-static int sd_card_disk_block_write( sd_card_driver_entry *e, blkdev_request *r)
+static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_request *r)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
@@ -749,14 +749,14 @@ sd_card_disk_block_write_cleanup:
 static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 {
 	DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
- 	if (req == BLKIO_REQUEST) {
+ 	if (req == RTEMS_BLKIO_REQUEST) {
  		rtems_device_minor_number minor = rtems_filesystem_dev_minor_t( dev);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
- 		blkdev_request *r = (blkdev_request *) arg;
+ 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
  		switch (r->req) {
- 			case BLKDEV_REQ_READ:
+ 			case RTEMS_BLKDEV_REQ_READ:
  				return sd_card_disk_block_read( e, r);
- 			case BLKDEV_REQ_WRITE:
+ 			case RTEMS_BLKDEV_REQ_WRITE:
  				return sd_card_disk_block_write( e, r);
  			default:
  				errno = EBADRQC;

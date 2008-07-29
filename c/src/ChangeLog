@@ -1,3 +1,18 @@
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
+	* libchip/i2c/spi-sd-card.c: Updated to the libblock changes.
+
+	* libchip/ide/ata.c: Change to use a mutex rather than disable
+	pre-emption. Updated to the libblock changes.
+
+	* libchip/ide/ata_internal.h: Updated to the new chains API.
+
+	* libchip/ide/ide_controller.c: Updated to the libblock
+	changes. Added come debug tracing.
+
+	* libchip/ide/ide_ctrl_cfg.h, libchip/ide/ide_ctrl_io.h: Updated
+	to the libblock changes.
+
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove RPCGEN, RPCTOOLS.

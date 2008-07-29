@@ -14,12 +14,19 @@
  * $Id$
  *
  */
+
+#define IDE_CONTROLLER_TRACE 0
+
 #include <rtems/chain.h>
 #include <assert.h>
 #include <rtems/blkdev.h>
 
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
+
+#if IDE_CONTROLLER_TRACE
+int ide_controller_trace;
+#endif
 
 /*
  * ide_controller_initialize --
@@ -86,10 +93,14 @@ ide_controller_initialize(rtems_device_major_number  major,
 void
 ide_controller_read_data_block(rtems_device_minor_number  minor,
                                uint16_t                   block_size,
-                               blkdev_sg_buffer          *bufs,
-                               uint32_t            *cbuf,
-                               uint32_t            *pos)
+                               rtems_blkdev_sg_buffer    *bufs,
+                               uint32_t                  *cbuf,
+                               uint32_t                  *pos)
 {
+#if IDE_CONTROLLER_TRACE
+    if (ide_controller_trace)
+        printk ("IDE data block read: %d:%d\n", *cbuf, bufs[*cbuf].block);
+#endif
     IDE_Controller_Table[minor].fns->ctrl_read_block(minor, block_size, bufs,
                                                      cbuf, pos);
 }
@@ -111,11 +122,15 @@ ide_controller_read_data_block(rtems_device_minor_number  minor,
 void
 ide_controller_write_data_block(rtems_device_minor_number  minor,
                                 uint16_t                   block_size,
-                                blkdev_sg_buffer          *bufs,
-                                uint32_t            *cbuf,
-                                uint32_t            *pos)
+                                rtems_blkdev_sg_buffer    *bufs,
+                                uint32_t                  *cbuf,
+                                uint32_t                  *pos)
 
 {
+#if IDE_CONTROLLER_TRACE
+    if (ide_controller_trace)
+        printk ("IDE data block write: %d:%d\n", *cbuf, bufs[*cbuf].block);
+#endif
     IDE_Controller_Table[minor].fns->ctrl_write_block(minor, block_size, bufs,
                                                       cbuf, pos);
 }
@@ -138,6 +153,10 @@ ide_controller_read_register(rtems_device_minor_number  minor,
                              uint16_t                  *value)
 {
     IDE_Controller_Table[minor].fns->ctrl_reg_read(minor, reg, value);
+#if IDE_CONTROLLER_TRACE
+    if (ide_controller_trace)
+        printk ("IDE read reg: %d => %04x\n", reg, *value);
+#endif
 }
 
 /*
@@ -156,6 +175,10 @@ void
 ide_controller_write_register(rtems_device_minor_number minor, int reg,
                               uint16_t   value)
 {
+#if IDE_CONTROLLER_TRACE
+    if (ide_controller_trace)
+        printk ("IDE write reg: %d => %04x\n", reg, value);
+#endif
     IDE_Controller_Table[minor].fns->ctrl_reg_write(minor, reg, value);
 }
 

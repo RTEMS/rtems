@@ -25,13 +25,13 @@ extern "C" {
 
 #include <rtems/blkdev.h>
 
-rtems_device_driver ata_initialize(
+rtems_device_driver rtems_ata_initialize(
         rtems_device_major_number major,
         rtems_device_minor_number minor,
         void *args);
 
 #define ATA_DRIVER_TABLE_ENTRY \
-    {ata_initialize, GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES}
+    {rtems_ata_initialize, RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES}
 
 /* ATA IOCTL request codes */
 #define ATAIO_SET_MULTIPLE_MODE          _IO('A', 1)
@@ -43,7 +43,7 @@ rtems_device_driver ata_initialize(
 #define ATA_DRIVER_MESSAGE_QUEUE_SIZE    50
 #define ATA_DRIVER_TASK_STACK_SIZE       16*1024
 #define ATA_DRIVER_TASK_DEFAULT_PRIORITY 140
-  extern rtems_task_priority ata_driver_task_priority;
+  extern rtems_task_priority rtems_ata_driver_task_priority;
 #ifdef __cplusplus
 }
 #endif

@@ -74,10 +74,10 @@ typedef struct ide_ctrl_fns_s {
      * functions calls
      */
     void  (*ctrl_read_block)(int minor, uint16_t   block_size,
-                             blkdev_sg_buffer *bufs, uint32_t   *cbuf,
+                             rtems_blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                              uint32_t   *pos);
     void  (*ctrl_write_block)(int minor, uint16_t   block_size,
-                              blkdev_sg_buffer *bufs, uint32_t   *cbuf,
+                              rtems_blkdev_sg_buffer *bufs, uint32_t   *cbuf,
                               uint32_t   *pos);
 
     rtems_status_code (*ctrl_config_io_speed)(int minor,

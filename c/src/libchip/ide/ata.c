@@ -26,7 +26,7 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include "ata_internal.h"
 #include <libchip/ata.h>
-/* #define DEBUG */
+//#define DEBUG
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -57,10 +57,43 @@ int ata_irq_chain_cnt = 0;
 #endif
 
 #define SAFE
+#define SAFE_MUTEX
+
 #ifdef SAFE
+#ifdef SAFE_MUTEX
+static rtems_id ata_lock;
+static void
+rtems_ata_lock ()
+{
+  rtems_status_code sc = rtems_semaphore_obtain (ata_lock,
+                                                 RTEMS_WAIT,
+                                                 RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
+}
+
+static void
+rtems_ata_unlock ()
+{
+  rtems_status_code sc = rtems_semaphore_release (ata_lock);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
+}
+
+#define RTEMS_ATA_LOCK_ATTRIBS \
+  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
+   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
+
+#define PREEMPTION_KEY(key)
+#define DISABLE_PREEMPTION(key) rtems_ata_lock ()
+#define ENABLE_PREEMPTION(key)  rtems_ata_unlock ()
+
+#else /* !SAFE_MUTEX */
 typedef rtems_mode preemption_key;
 
-#define DISABLE_PREEMPTION(key) \
+#define PREEMPTION_KEY(key) preemption_key key
+
+#define DISABLE_PREEMPTION(key)                                        \
     do {                                                               \
         rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &(key)); \
     } while (0)
@@ -70,10 +103,11 @@ typedef rtems_mode preemption_key;
         rtems_mode temp;                                        \
         rtems_task_mode((key), RTEMS_PREEMPT_MASK, &temp);      \
     } while (0)
-
-#else
-
+#endif
+#else /* !SAFE */
 typedef boolean preemption_key;
+
+#define PREEMPTION_KEY(key) preemption_key key
 
 #define DISABLE_PREEMPTION(key) \
     do {                                             \
@@ -95,8 +129,8 @@ typedef boolean preemption_key;
 
 /* Block device request with a single buffer provided */
 typedef struct blkdev_request1 {
-    blkdev_request   req;
-    blkdev_sg_buffer sg[1];
+    rtems_blkdev_request   req;
+    rtems_blkdev_sg_buffer sg[1];
 } blkdev_request1;
 
 
@@ -152,7 +186,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
  *     error occured
  */
 static rtems_status_code
-ata_io_data_request(dev_t device, blkdev_request *req)
+ata_io_data_request(dev_t device, rtems_blkdev_request *req)
 {
     ata_req_t                 *areq; /* ATA request */
     rtems_device_minor_number  rel_minor; /* relative minor which indexes
@@ -194,15 +228,19 @@ ata_io_data_request(dev_t device, blkdev_request *req)
     {
         /* XXX: never has been tested */
         areq->type = ATA_COMMAND_TYPE_DMA;
-        if (req->req == BLKDEV_REQ_READ)
+        if (req->req == RTEMS_BLKDEV_REQ_READ)
             areq->regs.regs[IDE_REGISTER_COMMAND] = ATA_COMMAND_READ_DMA;
         else
             areq->regs.regs[IDE_REGISTER_COMMAND] = ATA_COMMAND_WRITE_DMA;
     }
     else
     {
-        if (req->req == BLKDEV_REQ_READ)
+        if (req->req == RTEMS_BLKDEV_REQ_READ)
         {
+#ifdef DEBUG
+            printf("ata_io_data_request: type: READ: %d, %d\n",
+                   req->bufs[0].block, req->count);
+#endif            
             areq->type = ATA_COMMAND_TYPE_PIO_IN;
 
             /*
@@ -220,6 +258,10 @@ ata_io_data_request(dev_t device, blkdev_request *req)
         }
         else
         {
+#ifdef DEBUG
+            printf("ata_io_data_request: type: WRITE: %d, %d\n",
+                   req->bufs[0].block, req->count);
+#endif            
             areq->type = ATA_COMMAND_TYPE_PIO_OUT;
 
             /*
@@ -242,15 +284,16 @@ ata_io_data_request(dev_t device, blkdev_request *req)
      */
     if (ATA_DEV_INFO(ctrl_minor, dev).lba_avaible)
     {
-        areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t)req->start;
-        areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t)(req->start >> 8);
-        areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t)(req->start >> 16);
-        areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t) (req->start >> 24);
+        uint32_t start = req->bufs[0].block;
+        areq->regs.regs[IDE_REGISTER_LBA0] = (uint8_t)start;
+        areq->regs.regs[IDE_REGISTER_LBA1] = (uint8_t)(start >> 8);
+        areq->regs.regs[IDE_REGISTER_LBA2] = (uint8_t)(start >> 16);
+        areq->regs.regs[IDE_REGISTER_LBA3] |= (uint8_t) (start >> 24);
         areq->regs.regs[IDE_REGISTER_LBA3] |= IDE_REGISTER_LBA3_L;
     }
     else
     {
-        uint32_t   count = req->start;
+        uint32_t   count = req->bufs[0].block;
 
         areq->regs.regs[IDE_REGISTER_SECTOR_NUMBER] =
                         (count % ATA_DEV_INFO(ctrl_minor, dev).sectors) + 1;
@@ -273,7 +316,7 @@ ata_io_data_request(dev_t device, blkdev_request *req)
 
     /* add request to the queue of awaiting requests to the controller */
     ata_add_to_controller_queue(ctrl_minor, areq);
-
+    
     return RTEMS_SUCCESSFUL;
 }
 
@@ -424,7 +467,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
                                * data block
                                */
     ISR_Level        level;
-
+    
     /* if no requests to controller then do nothing */
     if (rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
         return;
@@ -459,6 +502,10 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
             ide_controller_write_register(ctrl_minor, i, areq->regs.regs[i]);
     }
 
+#ifdef DEBUG
+    printf("ata_process_request: type: %d\n", areq->type);
+#endif
+    
     /* continue to execute ATA protocols depending on type of request */
     if (areq->type == ATA_COMMAND_TYPE_PIO_OUT)
     {
@@ -521,23 +568,27 @@ static inline void
 ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
                  rtems_status_code status, int error)
 {
-    preemption_key key;
-
     assert(areq);
 
-    DISABLE_PREEMPTION(key);
+#ifdef DEBUG
+    printf("ata_request_done: entry\n");
+#endif
+    
     ATA_EXEC_CALLBACK(areq, status, error);
     rtems_chain_extract(&areq->link);
-
+    
     if (!rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
     {
-        ENABLE_PREEMPTION(key);
-	free(areq);
+        free(areq);
         ata_process_request(ctrl_minor);
         return;
     }
-    ENABLE_PREEMPTION(key);
+    
     free(areq);
+    
+#ifdef DEBUG
+    printf("ata_request_done: exit\n");
+#endif
 }
 
 /* ata_non_data_request_done --
@@ -577,6 +628,10 @@ static void
 ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
                             ata_req_t                 *areq)
 {
+    PREEMPTION_KEY(key);
+    
+    DISABLE_PREEMPTION(key);
+    
     rtems_chain_append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
     if (rtems_chain_has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
     {
@@ -597,6 +652,8 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
 #endif
         ATA_SEND_EVT(msg, ATA_MSG_PROCESS_NEXT_EVT, ctrl_minor, 0);
     }
+
+    ENABLE_PREEMPTION(key);
 }
 
 
@@ -636,7 +693,6 @@ ata_interrupt_handler(rtems_vector_number vec)
     }
 }
 #else
-
 void ata_interrupt_handler(rtems_irq_hdl_param handle)
 {
   int ata_irq_chain_index = (int) handle;
@@ -773,6 +829,10 @@ ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
     uint32_t        min_val;
     ata_queue_msg_t msg;
 
+#ifdef DEBUG
+    printf("ata_pio_out_protocol:\n");
+#endif
+    
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
 
@@ -826,9 +886,15 @@ ata_queue_task(rtems_task_argument arg)
     uint16_t                   val1;
     rtems_status_code          rc;
     ISR_Level                  level;
+    
+    PREEMPTION_KEY(key);
 
+    DISABLE_PREEMPTION(key);
+    
     while (1)
     {
+        ENABLE_PREEMPTION(key);
+        
         /* get event which has happend */
         rc = rtems_message_queue_receive(ata_queue_id, &msg, &size, RTEMS_WAIT,
                                          RTEMS_NO_TIMEOUT);
@@ -838,11 +904,13 @@ ata_queue_task(rtems_task_argument arg)
         /* get controller on which event has happend */
         ctrl_minor = msg.ctrl_minor;
 
+        DISABLE_PREEMPTION(key);
+        
         /* get current request to the controller */
         _ISR_Disable(level);
         areq = (ata_req_t *)(ata_ide_ctrls[ctrl_minor].reqs.first);
         _ISR_Enable(level);
-
+        
         switch(msg.type)
         {
             case ATA_MSG_PROCESS_NEXT_EVT:
@@ -925,6 +993,10 @@ ata_queue_task(rtems_task_argument arg)
                 break;
 
             default:
+#ifdef DEBUG
+                printf("ata_queue_task: internal error\n");
+                rtems_task_delete (RTEMS_SELF);
+#endif
                 rtems_fatal_error_occurred(RTEMS_INTERNAL_ERROR);
                 break;
         }
@@ -963,12 +1035,17 @@ ata_ioctl(dev_t device, int cmd, void *argp)
 
     switch (cmd)
     {
-        case BLKIO_REQUEST:
-            status = ata_io_data_request(device, (blkdev_request *)argp);
+        case RTEMS_BLKIO_REQUEST:
+            status = ata_io_data_request(device, (rtems_blkdev_request *)argp);
             break;
 
         case ATAIO_SET_MULTIPLE_MODE:
             status = ata_non_data_request(device, cmd, argp);
+            break;
+
+        case RTEMS_BLKDEV_CAPABILITIES:
+            *((uint32_t*) argp)  = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
+            status = RTEMS_SUCCESSFUL;
             break;
 
         default:
@@ -999,9 +1076,9 @@ ata_ioctl(dev_t device, int cmd, void *argp)
  *     error occured
  */
 rtems_device_driver
-ata_initialize(rtems_device_major_number major,
-               rtems_device_minor_number minor_arg,
-               void *args)
+rtems_ata_initialize(rtems_device_major_number major,
+                     rtems_device_minor_number minor_arg,
+                     void *args)
 {
     uint32_t           ctrl_minor;
     rtems_status_code  status;
@@ -1028,6 +1105,16 @@ ata_initialize(rtems_device_major_number major,
     if (status != RTEMS_SUCCESSFUL)
         return status;
 
+#ifdef SAFE
+#ifdef SAFE_MUTEX
+    status = rtems_semaphore_create (rtems_build_name ('A', 'T', 'A', 'L'),
+                                     1, RTEMS_ATA_LOCK_ATTRIBS, 0,
+                                     &ata_lock);
+    if (status != RTEMS_SUCCESSFUL)
+        return status;
+#endif
+#endif
+    
     /* create queue for asynchronous requests handling */
     status = rtems_message_queue_create(
                  rtems_build_name('A', 'T', 'A', 'Q'),
@@ -1047,11 +1134,11 @@ ata_initialize(rtems_device_major_number major,
      */
     status = rtems_task_create(
                  rtems_build_name ('A', 'T', 'A', 'T'),
-                 ((ata_driver_task_priority > 0) 
-		  ? ata_driver_task_priority
+                 ((rtems_ata_driver_task_priority > 0) 
+		  ? rtems_ata_driver_task_priority
 		  : ATA_DRIVER_TASK_DEFAULT_PRIORITY),
                  ATA_DRIVER_TASK_STACK_SIZE,
-                 RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR |
+                 RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
                  RTEMS_INTERRUPT_LEVEL(0),
                  RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                  &ata_task_id);
@@ -1215,7 +1302,7 @@ ata_initialize(rtems_device_major_number major,
                                   ATA_COMMAND_EXECUTE_DEVICE_DIAGNOSTIC;
         areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_ERROR);
 
-        areq.breq = (blkdev_request *)&breq;
+        areq.breq = (rtems_blkdev_request *)&breq;
 
         /*
          * Process the request. Special processing of requests on
@@ -1276,7 +1363,7 @@ ata_initialize(rtems_device_major_number major,
             areq.regs.regs[IDE_REGISTER_COMMAND] =
                                               ATA_COMMAND_IDENTIFY_DEVICE;
             areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_STATUS);
-            areq.breq = (blkdev_request *)&breq;
+            areq.breq = (rtems_blkdev_request *)&breq;
 
             areq.cnt = breq.req.count;
 
@@ -1363,7 +1450,7 @@ ata_initialize(rtems_device_major_number major,
                 (ATA_DEV_INFO(ctrl_minor, dev).heads *
                  ATA_DEV_INFO(ctrl_minor, dev).cylinders *
                  ATA_DEV_INFO(ctrl_minor, dev).sectors),
-                (block_device_ioctl) ata_ioctl, name);
+                (rtems_block_device_ioctl) ata_ioctl, name);
             if (status != RTEMS_SUCCESSFUL)
             {
                 ata_devs[ata_devs_number].device = ATA_UNDEFINED_VALUE;
