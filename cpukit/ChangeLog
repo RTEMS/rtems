@@ -1,5 +1,9 @@
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
+	* libblock/src/nvdisk.c: Fix block compile bug.
+
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
 	* libblock/include/rtems/bdbuf.h, cpukit/libblock/src/bdbuf.c:
 	Update the comments.
 

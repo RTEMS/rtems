@@ -606,7 +606,7 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
         length = nvd->block_size;
     }
 
-    ret = rtems_nvdisk_read_block (nvd, block, sg->buffer);
+    ret = rtems_nvdisk_read_block (nvd, sg->block, sg->buffer);
 
     if (ret)
       break;
@@ -647,7 +647,7 @@ rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
                          "bd:%d nvd:%d", sg->length, nvd->block_size);
     }
 
-    ret = rtems_nvdisk_write_block (nvd, block, sg->buffer);
+    ret = rtems_nvdisk_write_block (nvd, sg->block, sg->buffer);
 
     if (ret)
       break;
