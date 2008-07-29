@@ -53,7 +53,7 @@ void _TOD_Set(
   _TOD_Now                 = *time;
   _TOD_Is_set              = TRUE;
 
-  _TOD_Activate( 0 );
+  _TOD_Activate();
 
   _Thread_Enable_dispatch();
 }
