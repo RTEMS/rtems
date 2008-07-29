@@ -9,6 +9,8 @@ RTEMS_TOP(../../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
+CFLAGS="-g -O2 -Wall"
+
 AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 

@@ -1,5 +1,10 @@
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
+	* tools/configure.ac: Add CFLAGS to workaround building errors on
+	a 64bit AMD host.
+
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
 	* ide/ide.c: Updated to the rtems_* libblock changed.
 
 2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
