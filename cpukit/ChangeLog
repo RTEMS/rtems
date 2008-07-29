@@ -1,5 +1,6 @@
 2008-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* telnetd/pty.c: Add prototypes. Remove misc. C++-code pollution.
 	* posix/src/prwlocktrywrlock.c, posix/src/prwlocktryrdlock.c,
 	  posix/src/prwlockrdlock.c: Use C-style comments.
 
