@@ -161,10 +161,10 @@ void pc386_ide_read_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor,
- uint16_t   block_size,
- blkdev_sg_buffer *bufs,
- uint32_t         *cbuf,
- uint32_t         *pos
+ uint16_t                block_size,
+ rtems_blkdev_sg_buffer *bufs,
+ uint32_t               *cbuf,
+ uint32_t               *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -214,10 +214,10 @@ void pc386_ide_write_block
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  int minor,
- uint16_t   block_size,
- blkdev_sg_buffer *bufs,
- uint32_t         *cbuf,
- uint32_t         *pos
+ uint16_t                block_size,
+ rtems_blkdev_sg_buffer *bufs,
+ uint32_t               *cbuf,
+ uint32_t               *pos
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
