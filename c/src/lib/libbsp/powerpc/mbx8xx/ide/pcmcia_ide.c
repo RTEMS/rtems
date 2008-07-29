@@ -220,7 +220,7 @@ void mbx8xx_pcmciaide_read_block
 \*-------------------------------------------------------------------------*/
  int minor,
  uint16_t   block_size,
- blkdev_sg_buffer *bufs,
+ rtems_blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
  )
@@ -277,7 +277,7 @@ void mbx8xx_pcmciaide_write_block
 \*-------------------------------------------------------------------------*/
  int minor,
  uint16_t   block_size,
- blkdev_sg_buffer *bufs,
+ rtems_blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
  )

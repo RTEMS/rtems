@@ -143,7 +143,7 @@ extern volatile uint32_t * mpc5200_ata_drive_regs[];
 extern uint32_t ata_pio_timings[2][6];
 
 void mpc5200_pcmciaide_dma_blockop(
-  boolean, int, uint16_t, blkdev_sg_buffer *, uint32_t *, uint32_t *);
+  boolean, int, uint16_t, rtems_blkdev_sg_buffer *, uint32_t *, uint32_t *);
 /*
  * support functions for PCMCIA IDE IF
  */
@@ -321,7 +321,7 @@ void mpc5200_pcmciaide_dma_init(int minor)
 void mpc5200_pcmciaide_dma_blockop(boolean is_write,
 				   int minor, 
 				   uint16_t block_size, 
-				   blkdev_sg_buffer *bufs,
+				   rtems_blkdev_sg_buffer *bufs,
 				   uint32_t *cbuf, 
 				   uint32_t *pos)
 
@@ -446,7 +446,7 @@ void mpc5200_pcmciaide_dma_blockop(boolean is_write,
 #endif /* IDE_USE_DMA */
 
 
-void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, blkdev_sg_buffer *bufs,
+void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, rtems_blkdev_sg_buffer *bufs,
                                   uint32_t *cbuf, uint32_t *pos)
 {
 
@@ -537,7 +537,7 @@ void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, blkdev_sg_buff
 }
 
 void mpc5200_pcmciaide_write_block(int minor, uint16_t block_size,
-                                   blkdev_sg_buffer *bufs, uint32_t *cbuf,
+                                   rtems_blkdev_sg_buffer *bufs, uint32_t *cbuf,
                                    uint32_t *pos)
 
 {

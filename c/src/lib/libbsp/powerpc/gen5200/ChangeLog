@@ -1,3 +1,7 @@
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
+	* ide/pcmcia_ide.c: Updated to the libblock changes.
+
 2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, include/bsp.h: Add bsp_uboot_getenv() to obtain U-Boot
