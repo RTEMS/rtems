@@ -25,11 +25,6 @@ extern "C" {
 
 #include <rtems/seterr.h>
 
-/* XXX: temporary hack :(( */
-#ifndef set_errno_and_return_minus_one
-#define set_errno_and_return_minus_one rtems_set_errno_and_return_minus_one
-#endif /* set_errno_and_return_minus_one */
-
 #include <rtems/score/cpu.h>
 #include <errno.h>
 #include <rtems/bdbuf.h>
@@ -297,45 +292,45 @@ extern "C" {
  */
 typedef struct fat_vol_s
 {
-    uint16_t     bps;            /* bytes per sector */
-    uint8_t      sec_log2;       /* log2 of bps */
-    uint8_t      sec_mul;        /* log2 of 512bts sectors number per sector */
-    uint8_t      spc;            /* sectors per cluster */
-    uint8_t      spc_log2;       /* log2 of spc */
-    uint16_t     bpc;            /* bytes per cluster */
-    uint8_t      bpc_log2;       /* log2 of bytes per cluster */
-    uint8_t      fats;           /* number of FATs */
-    uint8_t      type;           /* FAT type */
-    uint32_t     mask;
-    uint32_t     eoc_val;
-    uint16_t     fat_loc;        /* FAT start */
-    uint32_t     fat_length;     /* sectors per FAT */
-    uint32_t     rdir_loc;       /* root directory start */
-    uint16_t     rdir_entrs;     /* files per root directory */
-    uint32_t     rdir_secs;      /* sectors per root directory */
-    uint32_t     rdir_size;      /* root directory size in bytes */
-    uint32_t     tot_secs;       /* total count of sectors */
-    uint32_t     data_fsec;      /* first data sector */
-    uint32_t     data_cls;       /* count of data clusters */
-    uint32_t     rdir_cl;        /* first cluster of the root directory */
-    uint16_t     info_sec;       /* FSInfo Sector Structure location */
-    uint32_t     free_cls;       /* last known free clusters count */
-    uint32_t     next_cl;        /* next free cluster number */
-    uint8_t      mirror;         /* mirroring enabla/disable */
-    uint32_t     afat_loc;       /* active FAT location */
-    uint8_t      afat;           /* the number of active FAT */
-    dev_t        dev;            /* device ID */
-    disk_device *dd;             /* disk device (see libblock) */
-    void        *private_data;   /* reserved */
+    uint16_t           bps;            /* bytes per sector */
+    uint8_t            sec_log2;       /* log2 of bps */
+    uint8_t            sec_mul;        /* log2 of 512bts sectors number per sector */
+    uint8_t            spc;            /* sectors per cluster */
+    uint8_t            spc_log2;       /* log2 of spc */
+    uint16_t           bpc;            /* bytes per cluster */
+    uint8_t            bpc_log2;       /* log2 of bytes per cluster */
+    uint8_t            fats;           /* number of FATs */
+    uint8_t            type;           /* FAT type */
+    uint32_t           mask;
+    uint32_t           eoc_val;
+    uint16_t           fat_loc;        /* FAT start */
+    uint32_t           fat_length;     /* sectors per FAT */
+    uint32_t           rdir_loc;       /* root directory start */
+    uint16_t           rdir_entrs;     /* files per root directory */
+    uint32_t           rdir_secs;      /* sectors per root directory */
+    uint32_t           rdir_size;      /* root directory size in bytes */
+    uint32_t           tot_secs;       /* total count of sectors */
+    uint32_t           data_fsec;      /* first data sector */
+    uint32_t           data_cls;       /* count of data clusters */
+    uint32_t           rdir_cl;        /* first cluster of the root directory */
+    uint16_t           info_sec;       /* FSInfo Sector Structure location */
+    uint32_t           free_cls;       /* last known free clusters count */
+    uint32_t           next_cl;        /* next free cluster number */
+    uint8_t            mirror;         /* mirroring enabla/disable */
+    uint32_t           afat_loc;       /* active FAT location */
+    uint8_t            afat;           /* the number of active FAT */
+    dev_t              dev;            /* device ID */
+    rtems_disk_device *dd;             /* disk device (see libblock) */
+    void              *private_data;   /* reserved */
 } fat_vol_t;
 
 
 typedef struct fat_cache_s
 {
-    uint32_t       blk_num;
-    rtems_boolean  modified;
-    uint8_t        state;
-    bdbuf_buffer   *buf;
+    uint32_t            blk_num;
+    rtems_boolean       modified;
+    uint8_t             state;
+    rtems_bdbuf_buffer *buf;
 } fat_cache_t;
 
 /*
@@ -344,15 +339,15 @@ typedef struct fat_cache_s
  */
 typedef struct fat_fs_info_s
 {
-    fat_vol_t      vol;           /* volume descriptor */
-    Chain_Control *vhash;         /* "vhash" of fat-file descriptors */
-    Chain_Control *rhash;         /* "rhash" of fat-file descriptors */
-    char          *uino;          /* array of unique ino numbers */
-    uint32_t       index;
-    uint32_t       uino_pool_size; /* size */
-    uint32_t       uino_base;
-    fat_cache_t    c;             /* cache */
-    uint8_t       *sec_buf; /* just placeholder for anything */
+    fat_vol_t            vol;           /* volume descriptor */
+    rtems_chain_control *vhash;         /* "vhash" of fat-file descriptors */
+    rtems_chain_control *rhash;         /* "rhash" of fat-file descriptors */
+    char                *uino;          /* array of unique ino numbers */
+    uint32_t             index;
+    uint32_t             uino_pool_size; /* size */
+    uint32_t             uino_base;
+    fat_cache_t          c;             /* cache */
+    uint8_t             *sec_buf; /* just placeholder for anything */
 } fat_fs_info_t;
 
 /*
@@ -415,145 +410,18 @@ fat_cluster_num_to_sector512_num(
             fs_info->vol.sec_mul);
 }
 
-static inline int
-fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
-               bdbuf_buffer **buf)
-{
-    rtems_status_code sc = RTEMS_SUCCESSFUL;
-    uint8_t           i;
-    rtems_boolean     sec_of_fat;
-
-
-    if (fs_info->c.state == FAT_CACHE_EMPTY)
-    {
-        if (op_type == FAT_OP_TYPE_READ)
-            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
-        else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
-        if (sc != RTEMS_SUCCESSFUL)
-            set_errno_and_return_minus_one(EIO);
-        fs_info->c.blk_num = blk;
-	fs_info->c.modified = 0;
-        fs_info->c.state = FAT_CACHE_ACTUAL;
-    }
-
-    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
-                  (fs_info->c.blk_num < fs_info->vol.rdir_loc));
-
-    if (fs_info->c.blk_num != blk)
-    {
-        if (fs_info->c.modified)
-        {
-            if (sec_of_fat && !fs_info->vol.mirror)
-                memcpy(fs_info->sec_buf, fs_info->c.buf->buffer,
-                       fs_info->vol.bps);
-
-            sc = rtems_bdbuf_release_modified(fs_info->c.buf);
-	    fs_info->c.state = FAT_CACHE_EMPTY;
-            fs_info->c.modified = 0;
-            if (sc != RTEMS_SUCCESSFUL)
-                set_errno_and_return_minus_one(EIO);
-
-            if (sec_of_fat && !fs_info->vol.mirror)
-            {
-                bdbuf_buffer *b;
-
-                for (i = 1; i < fs_info->vol.fats; i++)
-                {
-                    sc = rtems_bdbuf_get(fs_info->vol.dev,
-                                         fs_info->c.blk_num +
-                                         fs_info->vol.fat_length * i,
-                                         &b);
-                    if ( sc != RTEMS_SUCCESSFUL)
-                        set_errno_and_return_minus_one(ENOMEM);
-                    memcpy(b->buffer, fs_info->sec_buf, fs_info->vol.bps);
-                    sc = rtems_bdbuf_release_modified(b);
-                    if ( sc != RTEMS_SUCCESSFUL)
-                        set_errno_and_return_minus_one(ENOMEM);
-                }
-            }
-        }
-        else
-        {
-            sc = rtems_bdbuf_release(fs_info->c.buf);
-	    fs_info->c.state = FAT_CACHE_EMPTY;
-            if (sc != RTEMS_SUCCESSFUL)
-                set_errno_and_return_minus_one(EIO);
-
-        }
-        if (op_type == FAT_OP_TYPE_READ)
-            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
-        else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
-        if (sc != RTEMS_SUCCESSFUL)
-            set_errno_and_return_minus_one(EIO);
-        fs_info->c.blk_num = blk;
-	fs_info->c.state = FAT_CACHE_ACTUAL;
-    }
-    *buf = fs_info->c.buf;
-    return RC_OK;
-}
-
-
-static inline int
-fat_buf_release(fat_fs_info_t *fs_info)
-{
-    rtems_status_code sc = RTEMS_SUCCESSFUL;
-    uint8_t           i;
-    rtems_boolean     sec_of_fat;
-
-    if (fs_info->c.state == FAT_CACHE_EMPTY)
-        return RC_OK;
-
-    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
-                  (fs_info->c.blk_num < fs_info->vol.rdir_loc));
-
-    if (fs_info->c.modified)
-    {
-        if (sec_of_fat && !fs_info->vol.mirror)
-            memcpy(fs_info->sec_buf, fs_info->c.buf->buffer, fs_info->vol.bps);
-
-        sc = rtems_bdbuf_release_modified(fs_info->c.buf);
-        if (sc != RTEMS_SUCCESSFUL)
-            set_errno_and_return_minus_one(EIO);
-        fs_info->c.modified = 0;
-
-        if (sec_of_fat && !fs_info->vol.mirror)
-        {
-            bdbuf_buffer *b;
-
-            for (i = 1; i < fs_info->vol.fats; i++)
-            {
-                sc = rtems_bdbuf_get(fs_info->vol.dev,
-                                     fs_info->c.blk_num +
-                                     fs_info->vol.fat_length * i,
-                                     &b);
-                if ( sc != RTEMS_SUCCESSFUL)
-                    set_errno_and_return_minus_one(ENOMEM);
-                memcpy(b->buffer, fs_info->sec_buf, fs_info->vol.bps);
-                sc = rtems_bdbuf_release_modified(b);
-                if ( sc != RTEMS_SUCCESSFUL)
-                    set_errno_and_return_minus_one(ENOMEM);
-            }
-        }
-    }
-    else
-    {
-        sc = rtems_bdbuf_release(fs_info->c.buf);
-        if (sc != RTEMS_SUCCESSFUL)
-            set_errno_and_return_minus_one(EIO);
-    }
-    fs_info->c.state = FAT_CACHE_EMPTY;
-    return RC_OK;
-}
-
 static inline void
 fat_buf_mark_modified(fat_fs_info_t *fs_info)
 {
     fs_info->c.modified = TRUE;
 }
 
+int
+fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
+               rtems_bdbuf_buffer **buf);
 
+int
+fat_buf_release(fat_fs_info_t *fs_info);
 
 ssize_t
 _fat_block_read(rtems_filesystem_mount_table_entry_t *mt_entry,

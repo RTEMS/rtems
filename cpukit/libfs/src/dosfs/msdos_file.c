@@ -53,7 +53,7 @@ msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     rc = fat_file_reopen(fat_fd);
     if (rc != RC_OK)
@@ -94,7 +94,7 @@ msdos_file_close(rtems_libio_t *iop)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /*
      * if fat-file descriptor is not marked as "removed", synchronize
@@ -154,7 +154,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                         buffer);
@@ -187,7 +187,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     ret = fat_file_write(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                          buffer);
@@ -235,7 +235,7 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     rc = fat_file_extend(iop->pathinfo.mt_entry, fat_fd, iop->offset,
                          &real_size);
@@ -276,7 +276,7 @@ msdos_file_stat(
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
@@ -315,7 +315,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     rc = fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, length);
     if (rc != RC_OK)
@@ -356,7 +356,7 @@ msdos_file_sync(rtems_libio_t *iop)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /* synchronize file data */
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
@@ -416,7 +416,7 @@ msdos_file_datasync(rtems_libio_t *iop)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /* synchronize file data */
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
@@ -466,7 +466,7 @@ msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /* mark file removed */
     rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln,

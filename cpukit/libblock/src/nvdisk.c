@@ -51,7 +51,7 @@
  * footprint targets. Leave in by default.
  */
 #if !defined (RTEMS_NVDISK_TRACE)
-#define RTEMS_NVDISK_TRACE 1
+#define RTEMS_NVDISK_TRACE 0
 #endif
 
 /**
@@ -165,7 +165,7 @@ rtems_nvdisk_crc16_gen_factors (uint16_t pattern)
 /**
  * Print a message to the nvdisk output and flush it.
  *
- * @param fd The flashdisk control structure.
+ * @param nvd The nvdisk control structure.
  * @param format The format string. See printf for details.
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
@@ -189,7 +189,7 @@ rtems_nvdisk_printf (const rtems_nvdisk* nvd, const char *format, ...)
 /**
  * Print a info message to the nvdisk output and flush it.
  *
- * @param fd The flashdisk control structure.
+ * @param nvd The nvdisk control structure.
  * @param format The format string. See printf for details.
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
@@ -213,7 +213,7 @@ rtems_nvdisk_info (const rtems_nvdisk* nvd, const char *format, ...)
 /**
  * Print a warning to the nvdisk output and flush it.
  *
- * @param fd The flashdisk control structure.
+ * @param nvd The nvdisk control structure.
  * @param format The format string. See printf for details.
  * @param ... The arguments for the format text.
  * @return int The number of bytes written to the output.
@@ -253,24 +253,6 @@ rtems_nvdisk_error (const char *format, ...)
   fprintf (stderr, "\n");
   fflush (stderr);
   return ret;
-}
-
-/**
- * Print an abort message, flush it then abort the program.
- *
- * @param format The format string. See printf for details.
- * @param ... The arguments for the format text.
- */
-static void
-rtems_nvdisk_abort (const char *format, ...)
-{
-  va_list args;
-  va_start (args, format);
-  fprintf (stderr, "nvdisk:abort:");
-  vfprintf (stderr, format, args);
-  fprintf (stderr, "\n");
-  fflush (stderr);
-  exit (1);
 }
 
 /**
@@ -324,6 +306,7 @@ rtems_nvdisk_device_write (const rtems_nvdisk* nvd,
   return ops->write (device, dd->flags, dd->base, offset, buffer, size); 
 }
 
+#if NOT_USED
 /**
  * Verify the data with the data in a segment.
  */
@@ -344,6 +327,7 @@ rtems_nvdisk_device_verify (const rtems_nvdisk* nvd,
 #endif
   return ops->verify (device, dd->flags, dd->base, offset, buffer, size); 
 }
+#endif
 
 /**
  * Read a page of data from the device.
@@ -371,20 +355,6 @@ rtems_nvdisk_write_page (const rtems_nvdisk* nvd,
   return rtems_nvdisk_device_write (nvd, device,
                                     page * nvd->block_size,
                                     buffer, nvd->block_size);
-}
-
-/**
- * Verify a page of data with the data in the device.
- */
-static int
-rtems_nvdisk_verify_page (const rtems_nvdisk* nvd,
-                          uint32_t            device,
-                          uint32_t            page,
-                          const void*         buffer)
-{
-  return rtems_nvdisk_device_verify (nvd, device,
-                                     page * nvd->block_size,
-                                     buffer, nvd->block_size);
 }
 
 /**
@@ -532,7 +502,9 @@ rtems_nvdisk_read_block (rtems_nvdisk* nvd, uint32_t block, uint8_t* buffer)
 
   if (crc == 0xffff)
   {
+#if RTEMS_NVDISK_TRACE
     rtems_nvdisk_warning (nvd, "read-block: crc not set: %d", block);
+#endif
     memset (buffer, 0, nvd->block_size);
     return 0;
   }
@@ -605,13 +577,12 @@ rtems_nvdisk_write_block (rtems_nvdisk*        nvd,
  * @retval int The ioctl return value.
  */
 static int
-rtems_nvdisk_read (rtems_nvdisk* nvd, blkdev_request* req)
+rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 {
-  blkdev_sg_buffer* sg = req->bufs;
-  uint32_t          block = req->start;
-  uint32_t          b;
-  int32_t           remains;
-  int               ret = 0;
+  rtems_blkdev_sg_buffer* sg = req->bufs;
+  uint32_t                b;
+  int32_t                 remains;
+  int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
   rtems_nvdisk_info (nvd, "read: blocks=%d", req->bufnum);
@@ -619,7 +590,7 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, blkdev_request* req)
 
   remains = req->count * nvd->block_size;
   
-  for (b = 0; b < req->bufnum; b++, block++, sg++)
+  for (b = 0; b < req->bufnum; b++, sg++)
   {
     uint32_t length = sg->length;
 
@@ -658,18 +629,17 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, blkdev_request* req)
  * @retval int The ioctl return value.
  */
 static int
-rtems_nvdisk_write (rtems_nvdisk* nvd, blkdev_request* req)
+rtems_nvdisk_write (rtems_nvdisk* nvd, rtems_blkdev_request* req)
 {
-  blkdev_sg_buffer* sg = req->bufs;
-  uint32_t          block = req->start;
-  uint32_t          b;
-  int               ret = 0;
+  rtems_blkdev_sg_buffer* sg = req->bufs;
+  uint32_t                b;
+  int                     ret = 0;
 
 #if RTEMS_NVDISK_TRACE
   rtems_nvdisk_info (nvd, "write: blocks=%d", req->bufnum);
 #endif
 
-  for (b = 0; b < req->bufnum; b++, block++, sg++)
+  for (b = 0; b < req->bufnum; b++, sg++)
   {
     if (sg->length != nvd->block_size)
     {
@@ -720,7 +690,7 @@ rtems_nvdisk_erase_disk (rtems_nvdisk* nvd)
 }
 
 /**
- * MV disk IOCTL handler.
+ * NV disk IOCTL handler.
  *
  * @param dev Device number (major, minor number).
  * @param req IOCTL request code.
@@ -731,9 +701,21 @@ static int
 rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
 {
   rtems_device_minor_number minor = rtems_filesystem_dev_minor_t (dev);
-  blkdev_request*           r = argp;
+  rtems_blkdev_request*     r = argp;
   rtems_status_code         sc;
 
+  if (minor >= rtems_nvdisk_count)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+        
+  if (rtems_nvdisks[minor].device_count == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+        
   errno = 0;
 
   sc = rtems_semaphore_obtain (rtems_nvdisks[minor].lock, RTEMS_WAIT, 0);
@@ -743,39 +725,31 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
   {
     switch (req)
     {
-      case BLKIO_REQUEST:
-        if ((minor >= rtems_nvdisk_count) ||
-            (rtems_nvdisks[minor].device_count == 0))
+      case RTEMS_BLKIO_REQUEST:
+        switch (r->req)
         {
-          errno = ENODEV;
-        }
-        else
-        {
-          switch (r->req)
-          {
-            case BLKDEV_REQ_READ:
-              errno = rtems_nvdisk_read (&rtems_nvdisks[minor], r);
-              break;
-
-            case BLKDEV_REQ_WRITE:
-              errno = rtems_nvdisk_write (&rtems_nvdisks[minor], r);
-              break;
-        
-            default:
-              errno = EBADRQC;
-              break;
-          }
+          case RTEMS_BLKDEV_REQ_READ:
+            errno = rtems_nvdisk_read (&rtems_nvdisks[minor], r);
+            break;
+            
+          case RTEMS_BLKDEV_REQ_WRITE:
+            errno = rtems_nvdisk_write (&rtems_nvdisks[minor], r);
+            break;
+            
+          default:
+            errno = EBADRQC;
+            break;
         }
         break;
 
       case RTEMS_NVDISK_IOCTL_ERASE_DISK:
         errno = rtems_nvdisk_erase_disk (&rtems_nvdisks[minor]);
         break;
-
+        
       case RTEMS_NVDISK_IOCTL_INFO_LEVEL:
         rtems_nvdisks[minor].info_level = (uint32_t) argp;
         break;
-
+        
       default:
         errno = EBADRQC;
         break;

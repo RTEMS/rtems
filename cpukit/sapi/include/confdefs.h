@@ -587,7 +587,7 @@ extern rtems_configuration_table        Configuration;
     #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY ATA_DRIVER_TASK_DEFAULT_PRIORITY
   #endif
   #ifdef CONFIGURE_INIT
-    rtems_task_priority ata_driver_task_priority
+    rtems_task_priority rtems_ata_driver_task_priority
       = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
   #endif /* CONFIGURE_INIT */
 #endif
@@ -598,13 +598,36 @@ extern rtems_configuration_table        Configuration;
 #ifdef CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
   #include <rtems/bdbuf.h>
   /*
-   * configure the priority of the bdbuf swapout task
+   * configure the bdbuf cache parameters
    */
+  #ifndef CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
+    #define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS \
+                              RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT
+  #endif
+  #ifndef CONFIGURE_BDBUF_MAX_WRITE_BLOCKS
+    #define CONFIGURE_BDBUF_MAX_WRITE_BLOCKS \
+                              RTEMS_BDBUF_MAX_WRITE_BLOCKS_DEFAULT
+  #endif
   #ifndef CONFIGURE_SWAPOUT_TASK_PRIORITY
-    #define CONFIGURE_SWAPOUT_TASK_PRIORITY SWAPOUT_TASK_DEFAULT_PRIORITY
+    #define CONFIGURE_SWAPOUT_TASK_PRIORITY \
+                              RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT
+  #endif
+  #ifndef CONFIGURE_SWAPOUT_SWAP_PERIOD
+    #define CONFIGURE_SWAPOUT_SWAP_PERIOD \
+                              RTEMS_BDBUF_SWAPOUT_TASK_SWAP_PERIOD_DEFAULT
+  #endif
+  #ifndef CONFIGURE_SWAPOUT_BLOCK_HOLD
+    #define CONFIGURE_SWAPOUT_BLOCK_HOLD \
+                              RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT
   #endif
   #ifdef CONFIGURE_INIT
-    rtems_task_priority swapout_task_priority = CONFIGURE_SWAPOUT_TASK_PRIORITY;
+    rtems_bdbuf_config rtems_bdbuf_configuration = { 
+      CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS,
+      CONFIGURE_BDBUF_MAX_WRITE_BLOCKS,
+      CONFIGURE_SWAPOUT_TASK_PRIORITY,
+      CONFIGURE_SWAPOUT_SWAP_PERIOD,
+      CONFIGURE_SWAPOUT_BLOCK_HOLD
+    };
   #endif
   #ifndef CONFIGURE_HAS_OWN_BDBUF_TABLE
     #ifndef CONFIGURE_BDBUF_BUFFER_COUNT
@@ -615,11 +638,12 @@ extern rtems_configuration_table        Configuration;
       #define CONFIGURE_BDBUF_BUFFER_SIZE 512
     #endif
     #ifdef CONFIGURE_INIT
-      rtems_bdbuf_config rtems_bdbuf_configuration[] = {
+      rtems_bdbuf_pool_config rtems_bdbuf_pool_configuration[] = {
         {CONFIGURE_BDBUF_BUFFER_SIZE, CONFIGURE_BDBUF_BUFFER_COUNT, NULL}
       };
-      int rtems_bdbuf_configuration_size =( sizeof(rtems_bdbuf_configuration)
-                                 /sizeof(rtems_bdbuf_configuration[0]));
+      int rtems_bdbuf_pool_configuration_size = 
+        (sizeof(rtems_bdbuf_pool_configuration) /
+         sizeof(rtems_bdbuf_pool_configuration[0]));
     #endif /* CONFIGURE_INIT */
   #endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */

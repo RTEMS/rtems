@@ -980,7 +980,7 @@ static rtems_status_code   rtems_shell_run (
     name,
     task_priority,
     task_stacksize,
-    RTEMS_DEFAULT_MODES,
+    RTEMS_PREEMPT | RTEMS_TIMESLICE | RTEMS_NO_ASR,
     RTEMS_LOCAL | RTEMS_FLOATING_POINT,
     &task_id
   );

@@ -11,6 +11,8 @@
  *  @(#) $Id$
  */
 
+#define MSDOS_TRACE 1
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -786,7 +788,7 @@ int msdos_find_name_in_fat_file(
                                 fs_info->cl_buf)) != FAT_EOF)
     {
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
-            set_errno_and_return_minus_one(EIO);
+            rtems_set_errno_and_return_minus_one(EIO);
 
         assert(ret == bts2rd);
 
@@ -903,7 +905,7 @@ int msdos_find_node_by_cluster_num_in_fat_file(
                                   fs_info->cl_buf)) != FAT_EOF)
     {
         if ( ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE )
-            set_errno_and_return_minus_one( EIO );
+            rtems_set_errno_and_return_minus_one( EIO );
 
         assert(ret == bts2rd);
 

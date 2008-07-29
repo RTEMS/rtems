@@ -61,7 +61,7 @@ msdos_initialize_support(
 
     fs_info = (msdos_fs_info_t *)calloc(1, sizeof(msdos_fs_info_t));
     if (!fs_info)
-        set_errno_and_return_minus_one(ENOMEM);
+        rtems_set_errno_and_return_minus_one(ENOMEM);
 
     temp_mt_entry->fs_info = fs_info;
 
@@ -124,7 +124,7 @@ msdos_initialize_support(
         fat_file_close(temp_mt_entry, fat_fd);
         fat_shutdown_drive(temp_mt_entry);
         free(fs_info);
-        set_errno_and_return_minus_one(ENOMEM);
+        rtems_set_errno_and_return_minus_one(ENOMEM);
     }
 
     sc = rtems_semaphore_create(3,
@@ -138,7 +138,7 @@ msdos_initialize_support(
         fat_shutdown_drive(temp_mt_entry);
         free(fs_info->cl_buf);
         free(fs_info);
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
     }
 
     temp_mt_entry->mt_fs_root.node_access = fat_fd;

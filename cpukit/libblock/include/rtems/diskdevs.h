@@ -21,44 +21,47 @@ extern "C" {
 #include <rtems/libio.h>
 #include <stdlib.h>
 
-#include "rtems/blkdev.h"
-
 /* Buffer pool identifier */
 typedef int rtems_bdpool_id;
 
-/* Block device ioctl handler */
-typedef int (* block_device_ioctl) (dev_t dev, uint32_t req, void *argp);
+#include "rtems/blkdev.h"
 
-/* disk_device: Entry of this type created for every disk device (both for
- * logical and physical disks).
+/* Driver capabilities. */
+
+/* Block device ioctl handler */
+typedef int (* rtems_block_device_ioctl) (dev_t dev, uint32_t req, void *argp);
+
+/* rtems_disk_device: Entry of this type created for every disk device
+ * (both for logical and physical disks).
  * Array of arrays of pointers to disk_device structures maintained. First
  * table indexed by major number and second table indexed by minor number.
  * Such data organization allow quick lookup using data structure of
  * moderated size.
  */
-typedef struct disk_device {
-    dev_t               dev;              /* Device ID (major + minor) */
-    struct disk_device *phys_dev;         /* Physical device ID (the same
-                                             as dev if this entry specifies
-                                             the physical device) */
-    char               *name;             /* Disk device name */
-    int                 uses;             /* Use counter. Device couldn't be
-                                             removed if it is in use. */
-    int                 start;            /* Starting block number (0 for
-                                             physical devices, block offset
-                                             on the related physical device
-                                             for logical device) */
-    int                 size;             /* Size of physical or logical disk
-                                             in disk blocks */
-    int                 block_size;       /* Size of device block (minimum
-                                             transfer unit) in bytes
-                                             (must be power of 2) */
-    int                 block_size_log2;  /* log2 of block_size */
-    rtems_bdpool_id     pool;             /* Buffer pool assigned to this
-                                             device */
-    block_device_ioctl  ioctl;            /* ioctl handler for this block
-                                             device */
-} disk_device;
+typedef struct rtems_disk_device {
+    dev_t                     dev;          /* Device ID (major + minor) */
+    struct rtems_disk_device *phys_dev;     /* Physical device ID (the same
+                                               as dev if this entry specifies
+                                               the physical device) */
+    uint32_t                  capabilities; /* Driver capabilities. */
+    char                     *name;         /* Disk device name */
+    int                       uses;         /* Use counter. Device couldn't be
+                                               removed if it is in use. */
+    int                       start;        /* Starting block number (0 for
+                                               physical devices, block offset
+                                               on the related physical device
+                                               for logical device) */
+    int                       size;         /* Size of physical or logical disk
+                                               in disk blocks */
+    int                       block_size;   /* Size of device block (minimum
+                                               transfer unit) in bytes
+                                               (must be power of 2) */
+    int                 block_size_log2;    /* log2 of block_size */
+    rtems_bdpool_id     pool;               /* Buffer pool assigned to this
+                                               device */
+    rtems_block_device_ioctl  ioctl;        /* ioctl handler for this block
+                                               device */
+} rtems_disk_device;
 
 /* rtems_disk_create_phys --
  *     Create physical disk entry. This function usually invoked from
@@ -84,7 +87,7 @@ typedef struct disk_device {
  */
 rtems_status_code
 rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
-                       block_device_ioctl handler,
+                       rtems_block_device_ioctl handler,
                        const char *name);
 
 /* rtems_disk_create_log --
@@ -131,7 +134,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name);
 rtems_status_code
 rtems_disk_delete(dev_t dev);
 
-/* rtems_disk_lookup --
+/* rtems_disk_obtain --
  *     Find block device descriptor by its device identifier. This function
  *     increment usage counter to 1. User should release disk_device structure
  *     by invoking rtems_disk_release primitive.
@@ -143,8 +146,8 @@ rtems_disk_delete(dev_t dev);
  *     pointer to the block device descriptor, or NULL if no such device
  *     exists.
  */
-disk_device *
-rtems_disk_lookup(dev_t dev);
+rtems_disk_device *
+rtems_disk_obtain(dev_t dev);
 
 /* rtems_disk_release --
  *     Release disk_device structure (decrement usage counter to 1).
@@ -159,7 +162,7 @@ rtems_disk_lookup(dev_t dev);
  *     It should be implemented as inline function.
  */
 rtems_status_code
-rtems_disk_release(disk_device *dd);
+rtems_disk_release(rtems_disk_device *dd);
 
 /* rtems_disk_next --
  *     Disk device enumerator. Looking for device having device number larger
@@ -172,7 +175,7 @@ rtems_disk_release(disk_device *dd);
  * RETURNS:
  *     Pointer to the disk descriptor for next disk device, or NULL if all
  *     devices enumerated. */
-disk_device *
+rtems_disk_device *
 rtems_disk_next(dev_t dev);
 
 /* rtems_diskio_initialize --

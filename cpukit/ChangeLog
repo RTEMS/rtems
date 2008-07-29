@@ -1,3 +1,90 @@
+2008-07-29	Chris Johns <chrisj@rtems.org>
+
+	* libblock/Makefile.am: Removed src/show_bdbuf.c.
+
+	* libblock/src/show_bdbuf.c: Removed.
+
+	* libblock/include/rtems/bdbuf.h, cpukit/libblock/src/bdbuf.c:
+	Rewritten the bdbuf code. Remove pre-emption disable, score
+	access, fixed many bugs and increased performance.
+
+	* libblock/include/rtems/blkdev.h: Added
+	RTEMS_BLKDEV_CAPABILITIES block device request. Cleaned up
+	comments. Added block and user fields to the sg buffer
+	request. Move to rtems_* namespace.
+
+	* libblock/include/rtems/diskdevs.h,
+	cpukit/libblock/src/diskdevs.c: Move to rtems_* namespace. Add a
+	capabilities field for drivers. Change rtems_disk_lookup to
+	rtems_disk_obtain to match the release call. You do not lookup and
+	release a disk, you obtain and release a disk.
+
+	* libblock/include/rtems/ide_part_table.h,
+	libblock/include/rtems/ramdisk.h, libblock/src/ide_part_table.c:
+	Move to rtems_* namespace.
+
+	* libblock/include/rtems/nvdisk.h: Formatting change.
+
+	* libblock/src/blkdev.c: Move to rtems_* namespace. Change
+	rtems_disk_lookup to rtems_disk_obtain
+
+	* libblock/src/flashdisk.c: Move to rtems_* namespace. Use the new
+	support for the block number in the scatter/grather request
+	struct. This allows non-continuous buffer requests for those
+	drivers that can support increasing performance.
+
+	* libblock/src/nvdisk.c: Move to rtems_* namespace. Removed
+	warnings. Added better error checking. Fixed some comments.
+
+	* libblock/src/ramdisk.c: Move to rtems_* namespace. Added some
+	trace functions to help debugging upper layers. Use the new
+	support for the block number in the scatter/grather request
+	struct. This allows non-continuous buffer requests for those
+	drivers that can support increasing performance.
+
+	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h: Use new chains
+	API. Removed temporary hack and changed
+	set_errno_and_return_minus_one to
+	rtems_set_errno_and_return_minus_one. Move fat_buf_access from
+	header and stopped it being inlined. Updated to libblock changes.
+	
+	* libfs/src/dosfs/fat_fat_operations.c,
+	libfs/src/dosfs/fat_file.c, libfs/src/dosfs/msdos_create.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/dosfs/msdos_format.c,
+	libfs/src/dosfs/msdos_free.c, libfs/src/dosfs/msdos_initsupp.c,
+	libfs/src/dosfs/msdos_misc.c, libfs/src/dosfs/msdos_mknod.c: Use
+	new chains API. Removed temporary hack and changed
+	set_errno_and_return_minus_one to
+	rtems_set_errno_and_return_minus_one. Updated to libblock changes.
+
+	* libmisc/Makefile.am: Add new ls and rm command files.
+
+	* libmisc/shell/cmp-ls.c, libmisc/shell/extern-ls.h,
+	libmisc/shell/filemode.c, libmisc/shell/print-ls.c,
+	libmisc/shell/pwcache.c, libmisc/shell/utils-ls.c,
+	libmisc/shell/vis.c, shell/vis.h: New.
+
+	* libmisc/shell/extern-cp.h, libmisc/shell/main_cp.c,
+	libmisc/shell/utils-cp.c: Fixed the usage call bug.
+
+	* libmisc/shell/main_blksync.c: Updated to the new block IO ioctl
+	command.
+
+	* libmisc/shell/main_ls.c, libmisc/shell/main_rm.c: Updated to BSD
+	commands with more features.
+	
+	* score/src/coremutex.c: Fix the strick order mutex code.
+
+	* libmisc/shell/shell.c: Change shell tasks mode to be timeslice
+	and no ASR.
+	
+	* sapi/include/confdefs.h: Change ata_driver_task_priority to
+	rtems_ata_driver_task_priority. Add the new BD buf cache
+	parameters with defaults.
+
+	* score/src/interr.c: Do not return if the CPU halt call returns.
+	
 2008-07-24     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libcsupport.h: Moved declaration of

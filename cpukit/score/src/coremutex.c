@@ -66,9 +66,9 @@ void _CORE_mutex_Initialize(
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
       
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-       _Chain_Prepend_unprotected( &executing->lock_mutex,
+       _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
-       the_mutex->queue.priority_before = executing->current_priority;
+       the_mutex->queue.priority_before = _Thread_Executing->current_priority;
 #endif
 
       _Thread_Executing->resource_count++;

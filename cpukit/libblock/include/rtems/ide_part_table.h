@@ -77,16 +77,18 @@
  * sector_data_t --
  *      corresponds to the sector on the device
  */
-typedef struct sector_data_s
+typedef struct rtems_sector_data_s
 {
     uint32_t   sector_num; /* sector number on the device */
     uint8_t    data[0]; /* raw sector data */
-} sector_data_t;
+} rtems_sector_data_t;
 
 
 /*
  * Enum partition types
  * see list at http://ata-atapi.com/hiwtab.htm
+ *
+ * @todo Should these have RTEMS before them.
  */
 enum {
     EMPTY_PARTITION     = 0x00,
@@ -108,29 +110,32 @@ enum {
 
 
 /* Forward declaration */
-struct disk_desc_s;
+struct rtems_disk_desc_s;
 
 /*
  * part_desc_t --
  *      contains all neccessary information about partition
  */
-typedef struct part_desc_s {
+typedef struct rtems_part_desc_s {
     uint8_t             bootable; /* is the partition active */
     uint8_t             sys_type; /* type of partition */
     uint8_t             log_id; /* logical number of partition */
-    uint32_t            start; /* first partition sector, in absolute numeration */
+    uint32_t            start; /* first partition sector, in absolute
+                                * numeration */
     uint32_t            size; /* size in sectors */
     uint32_t            end; /* last partition sector, end = start + size - 1 */
-    struct disk_desc_s *disk_desc; /* descriptor of disk, partition contains in */
-    struct part_desc_s *ext_part; /* extended partition containing this one */
+    struct rtems_disk_desc_s *disk_desc; /* descriptor of disk, partition
+                                          * contains in */
+    struct rtems_part_desc_s *ext_part; /* extended partition containing this
+                                         * one */
 
     /* partitions, containing in this one */
-    struct part_desc_s *sub_part[RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER];
-} part_desc_t;
+    struct rtems_part_desc_s *sub_part[RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER];
+} rtems_part_desc_t;
 
 
 
-typedef struct disk_desc_s {
+typedef struct rtems_disk_desc_s {
     dev_t        dev; /* device number */
 
     /* device name in /dev filesystem */
@@ -142,8 +147,8 @@ typedef struct disk_desc_s {
     int          last_log_id; /* used for logical disks enumerating */
 
     /* primary partition descriptors */
-    part_desc_t *partitions[RTEMS_IDE_PARTITION_MAX_PARTITION_NUMBER];
-} disk_desc_t;
+    rtems_part_desc_t *partitions[RTEMS_IDE_PARTITION_MAX_PARTITION_NUMBER];
+} rtems_disk_desc_t;
 
 #ifdef __cplusplus
 extern "C" {
@@ -160,7 +165,7 @@ extern "C" {
  *      N/A
  */
 void
-rtems_ide_part_table_free(disk_desc_t *disk_desc);
+rtems_ide_part_table_free(rtems_disk_desc_t *disk_desc);
 
 
 /*
@@ -176,7 +181,7 @@ rtems_ide_part_table_free(disk_desc_t *disk_desc);
  *      RTEMS_SUCCESSFUL if success, or -1 and corresponding errno else
  */
 rtems_status_code
-rtems_ide_part_table_get(const char *dev_name, disk_desc_t *disk_desc);
+rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc);
 
 
 /*

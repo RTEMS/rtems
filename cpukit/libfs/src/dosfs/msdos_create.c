@@ -129,9 +129,9 @@ msdos_creat_node(
       *MSDOS_DIR_FILE_SIZE(new_node)     =*MSDOS_DIR_FILE_SIZE(link_node);
 
       *MSDOS_DIR_FIRST_CLUSTER_LOW(new_node) =
-	*MSDOS_DIR_FIRST_CLUSTER_LOW(link_node);
+           *MSDOS_DIR_FIRST_CLUSTER_LOW(link_node);
       *MSDOS_DIR_FIRST_CLUSTER_HI(new_node) =
-	*MSDOS_DIR_FIRST_CLUSTER_HI(link_node);
+           *MSDOS_DIR_FIRST_CLUSTER_HI(link_node);
       /*
        * set "archive bit" due to changes
        */
@@ -302,14 +302,14 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
      * check spelling and format new node name
      */
     if (MSDOS_NAME != msdos_get_token(token, new_name, &len)) {
-      set_errno_and_return_minus_one(ENAMETOOLONG);
+      rtems_set_errno_and_return_minus_one(ENAMETOOLONG);
     }
     /*
      * verify, that the existing node can be linked to
      * check that nodes are in same FS/volume?
      */
     if (to_loc->mt_entry->fs_info != par_loc->mt_entry->fs_info) {
-      set_errno_and_return_minus_one(EXDEV);
+      rtems_set_errno_and_return_minus_one(EXDEV);
     }
     /*
      * lock volume
@@ -317,7 +317,7 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
 
     /*
@@ -334,7 +334,7 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
       to_fat_fd->cln           = FAT_EOF;
       rc = msdos_set_first_cluster_num(to_loc->mt_entry, to_fat_fd);
       if (rc == RC_OK) {
-	rc = msdos_set_file_size(par_loc->mt_entry, to_fat_fd);
+          rc = msdos_set_file_size(par_loc->mt_entry, to_fat_fd);
       }
     }
     /*

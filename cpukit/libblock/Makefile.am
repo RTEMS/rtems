@@ -8,7 +8,7 @@ include $(top_srcdir)/automake/compile.am
 if !UNIX
 noinst_LIBRARIES = libblock.a
 libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
-    src/ramdisk.c src/ide_part_table.c src/show_bdbuf.c src/nvdisk.c \
+    src/ramdisk.c src/ide_part_table.c src/nvdisk.c \
     src/nvdisk-sram.c \
     include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/flashdisk.h \

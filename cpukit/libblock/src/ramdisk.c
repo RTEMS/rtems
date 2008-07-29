@@ -22,6 +22,14 @@
 #include "rtems/diskdevs.h"
 #include "rtems/ramdisk.h"
 
+/**
+ * Control tracing. It can be compiled out of the code for small
+ * footprint targets. Leave in by default.
+ */
+#if !defined (RTEMS_RAMDISK_TRACE)
+#define RTEMS_RAMDISK_TRACE 0
+#endif
+
 #define RAMDISK_DEVICE_BASE_NAME "/dev/ramdisk"
 
 /* Internal RAM disk descriptor */
@@ -32,10 +40,39 @@ struct ramdisk {
     rtems_boolean initialized;/* RAM disk is initialized */
     rtems_boolean malloced;   /* != 0, if memory allocated by malloc for this
                                  RAM disk */
+#if RTEMS_RAMDISK_TRACE
+    int           info_level; /* Trace level */
+#endif
 };
 
 static struct ramdisk *ramdisk;
 static int nramdisks;
+
+#if RTEMS_RAMDISK_TRACE
+/**
+ * Print a message to the ramdisk output and flush it.
+ *
+ * @param rd The ramdisk control structure.
+ * @param format The format string. See printf for details.
+ * @param ... The arguments for the format text.
+ * @return int The number of bytes written to the output.
+ */
+static int
+rtems_ramdisk_printf (struct ramdisk *rd, const char *format, ...)
+{
+  int ret = 0;
+  if (rd->info_level >= 1)
+  {
+    va_list args;
+    va_start (args, format);
+    fprintf (stdout, "ramdisk:");
+    ret =  vfprintf (stdout, format, args);
+    fprintf (stdout, "\n");
+    fflush (stdout);
+  }
+  return ret;
+}
+#endif
 
 /* ramdisk_read --
  *     RAM disk READ request handler. This primitive copies data from RAM
@@ -49,19 +86,25 @@ static int nramdisks;
  *     ioctl return value
  */
 static int
-ramdisk_read(struct ramdisk *rd, blkdev_request *req)
+ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
 {
     char *from;
     uint32_t   i;
-    blkdev_sg_buffer *sg;
+    rtems_blkdev_sg_buffer *sg;
     uint32_t   remains;
 
-    from = (char *)rd->area + (req->start * rd->block_size);
+#if RTEMS_RAMDISK_TRACE
+    rtems_ramdisk_printf (rd, "ramdisk read: start=%d, blocks=%d remains=%d",
+                          req->bufs[0].block, req->bufnum,
+                          rd->block_size * req->count);
+#endif
+
     remains = rd->block_size * req->count;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
         int count = sg->length;
+        from = ((char *)rd->area + (sg->block * rd->block_size));
         if (count > remains)
             count = remains;
         memcpy(sg->buffer, from, count);
@@ -84,19 +127,24 @@ ramdisk_read(struct ramdisk *rd, blkdev_request *req)
  *     ioctl return value
  */
 static int
-ramdisk_write(struct ramdisk *rd, blkdev_request *req)
+ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
 {
     char *to;
     uint32_t   i;
-    blkdev_sg_buffer *sg;
+    rtems_blkdev_sg_buffer *sg;
     uint32_t   remains;
 
-    to = (char *)rd->area + (req->start * rd->block_size);
+#if RTEMS_RAMDISK_TRACE
+    rtems_ramdisk_printf (rd, "ramdisk write: start=%d, blocks=%d remains=%d",
+                          req->bufs[0].block, req->bufnum,
+                          rd->block_size * req->count);
+#endif
     remains = rd->block_size * req->count;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
         int count = sg->length;
+        to = ((char *)rd->area + (sg->block * rd->block_size));
         if (count > remains)
             count = remains;
         memcpy(to, sg->buffer, count);
@@ -123,10 +171,10 @@ ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
 {
     switch (req)
     {
-        case BLKIO_REQUEST:
+        case RTEMS_BLKIO_REQUEST:
         {
             rtems_device_minor_number minor;
-            blkdev_request *r = argp;
+            rtems_blkdev_request *r = argp;
             struct ramdisk *rd;
 
             minor = rtems_filesystem_dev_minor_t(dev);
@@ -140,10 +188,10 @@ ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
 
             switch (r->req)
             {
-                case BLKDEV_REQ_READ:
+                case RTEMS_BLKDEV_REQ_READ:
                     return ramdisk_read(rd, r);
 
-                case BLKDEV_REQ_WRITE:
+                case RTEMS_BLKDEV_REQ_WRITE:
                     return ramdisk_write(rd, r);
 
                 default:
@@ -188,7 +236,9 @@ ramdisk_initialize(
 
     r = ramdisk = calloc(rtems_ramdisk_configuration_size,
                          sizeof(struct ramdisk));
-
+#if RTEMS_RAMDISK_TRACE
+    r->info_level = 1;
+#endif   
     for (i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++)
     {
         dev_t dev = rtems_filesystem_make_dev_t(major, i);

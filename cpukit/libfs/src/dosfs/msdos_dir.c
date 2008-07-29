@@ -56,7 +56,7 @@ msdos_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
 
     rc = fat_file_reopen(fat_fd);
     if (rc != RC_OK)
@@ -91,7 +91,7 @@ msdos_dir_close(rtems_libio_t *iop)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
 
     rc = fat_file_close(iop->pathinfo.mt_entry, fat_fd);
     if (rc != RC_OK)
@@ -233,7 +233,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     while (count > 0)
     {
@@ -248,7 +248,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             rtems_semaphore_release(fs_info->vol_sema);
-            set_errno_and_return_minus_one(EIO);
+            rtems_set_errno_and_return_minus_one(EIO);
         }
 
         for (i = 0; i < ret; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
@@ -377,7 +377,7 @@ msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
          */
         case SEEK_END:
         default:
-            set_errno_and_return_minus_one( EINVAL );
+            rtems_set_errno_and_return_minus_one( EINVAL );
             break;
     }
     return RC_OK;
@@ -416,7 +416,7 @@ msdos_dir_stat(
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
@@ -463,7 +463,7 @@ msdos_dir_sync(rtems_libio_t *iop)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
 
@@ -495,7 +495,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /*
      * We deny attemp to delete open directory (if directory is current
@@ -504,7 +504,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
     if (fat_fd->links_num > 1)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        set_errno_and_return_minus_one(EBUSY);
+        rtems_set_errno_and_return_minus_one(EBUSY);
     }
 
     /*
@@ -520,7 +520,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
     if (!is_empty)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        set_errno_and_return_minus_one(ENOTEMPTY);
+        rtems_set_errno_and_return_minus_one(ENOTEMPTY);
     }
 
     /*
@@ -529,7 +529,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
     if (pathloc->mt_entry->mt_fs_root.node_access == pathloc->node_access)
     {
         rtems_semaphore_release(fs_info->vol_sema);
-        set_errno_and_return_minus_one(EBUSY);
+        rtems_set_errno_and_return_minus_one(EBUSY);
     }
 
     /*

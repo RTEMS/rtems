@@ -61,4 +61,5 @@ void _Internal_error_Occurred(
   _CPU_Fatal_halt( the_error );
 
   /* will not return from this routine */
+  while (TRUE);
 }

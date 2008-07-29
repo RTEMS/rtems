@@ -25,116 +25,143 @@ extern "C" {
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"
 
-
-/*
- * To manage buffers we using Buffer Descriptors.
- * To speed-up buffer lookup descriptors are organized in AVL-Tree.
- * The fields 'dev' and 'block' are search key.
+/**
+ * State of a buffer in the cache.
  */
-
-/* Buffer descriptors
- * Descriptors organized in AVL-tree to speedup buffer lookup.
- * dev and block fields are search key in AVL-tree.
- * Modified buffers, free buffers and used buffers linked in 'mod', 'free' and
- * 'lru' chains appropriately.
- */
-
-typedef struct bdbuf_buffer {
-    Chain_Node link; /* Link in the lru, mod or free chains */
-
-    struct bdbuf_avl_node {
-    	signed char cache;           /* Cache */
-
-	    struct bdbuf_buffer* left;  /* Left Child */
-	    struct bdbuf_buffer* right; /* Right Child */
-
-    	signed char bal;             /* The balance of the sub-tree */
-    } avl;
-
-    dev_t       dev;     /* device number */
-    blkdev_bnum block;   /* block number on the device */
-
-    unsigned char    *buffer;  /* Pointer to the buffer memory area */
-    rtems_status_code status; /* Last I/O operation completion status */
-    int         error;   /* If status != RTEMS_SUCCESSFUL, this field contains
-                            errno value which can be used by user later */
-    boolean     modified:1;    /* =1 if buffer was modified */
-    boolean     in_progress:1; /* =1 if exchange with disk is in progress;
-                                  need to wait on semaphore */
-    boolean     actual:1;      /* Buffer contains actual data */
-    int         use_count; /* Usage counter; incremented when somebody use
-                              this buffer; decremented when buffer released
-                              without modification or when buffer is flushed
-                              by swapout task */
-
-    rtems_bdpool_id pool;  /* Identifier of buffer pool to which this buffer
-                              belongs */
-    CORE_mutex_Control transfer_sema;
-                           /* Transfer operation semaphore */
-} bdbuf_buffer;
-
-
-/*
- * the following data structures are internal to the bdbuf layer,
- * but it is convenient to have them visible from the outside for inspection
- */
-/*
- * The groups of the blocks with the same size are collected in the
- * bd_pool. Note that a several of the buffer's groups with the
- * same size can exists.
- */
-typedef struct bdbuf_pool
+typedef enum
 {
-    bdbuf_buffer *tree;         /* Buffer descriptor lookup AVL tree root */
+  RTEMS_BDBUF_STATE_EMPTY = 0,            /* Not in use. */
+  RTEMS_BDBUF_STATE_READ_AHEAD = 1,       /* Holds read ahead data only */
+  RTEMS_BDBUF_STATE_CACHED = 2,           /* In the cache and available */
+  RTEMS_BDBUF_STATE_ACCESS = 3,           /* The user has the buffer */
+  RTEMS_BDBUF_STATE_MODIFIED = 4,         /* In the cache but modified */
+  RTEMS_BDBUF_STATE_ACCESS_MODIFIED = 5,  /* With the user but modified */
+  RTEMS_BDBUF_STATE_SYNC = 6,             /* Requested to be sync'ed */
+  RTEMS_BDBUF_STATE_TRANSFER = 7          /* Being transferred to or from disk */
+} rtems_bdbuf_buf_state;
 
-    Chain_Control free;         /* Free buffers list */
-    Chain_Control lru;          /* Last recently used list */
+/**
+ * To manage buffers we using buffer descriptors (BD). A BD holds a buffer plus
+ * a range of other information related to managing the buffer in the cache. To
+ * speed-up buffer lookup descriptors are organized in AVL-Tree.  The fields
+ * 'dev' and 'block' are search keys.
+ */
+typedef struct rtems_bdbuf_buffer
+{
+  rtems_chain_node link;       /* Link in the BD onto a number of lists. */
 
-    int           blksize;      /* The size of the blocks (in bytes) */
-    int           nblks;        /* Number of blocks in this pool */
-    rtems_id      bufget_sema;  /* Buffer obtain counting semaphore */
-    void         *mallocd_bufs; /* Pointer to the malloc'd buffer memory,
-                                   or NULL, if buffer memory provided in
-                                   buffer configuration */
-    bdbuf_buffer *bdbufs;       /* Pointer to table of buffer descriptors
-                                   allocated for this buffer pool. */
-} bdbuf_pool;
+  struct rtems_bdbuf_avl_node
+  {
+    signed char                cache;  /* Cache */
+    struct rtems_bdbuf_buffer* left;   /* Left Child */
+    struct rtems_bdbuf_buffer* right;  /* Right Child */
+    signed char                bal;    /* The balance of the sub-tree */
+  } avl;
 
-/* Buffering layer context definition */
-struct bdbuf_context {
-    bdbuf_pool    *pool;         /* Table of buffer pools */
-    int            npools;       /* Number of entries in pool table */
+  dev_t             dev;        /* device number */
+  rtems_blkdev_bnum block;      /* block number on the device */
 
-    Chain_Control  mod;          /* Modified buffers list */
-    rtems_id       flush_sema;   /* Buffer flush semaphore; counting
-                                    semaphore; incremented when buffer
-                                    flushed to the disk; decremented when
-                                    buffer modified */
-    rtems_id       swapout_task; /* Swapout task ID */
-};
-  /*
-   * the context of the buffering layer, visible for inspection 
-   */
-extern struct bdbuf_context rtems_bdbuf_ctx;
+  unsigned char*    buffer;     /* Pointer to the buffer memory area */
+  int               error;      /* If not 0 indicate an error value (errno)
+                                 * which can be used by user later */
 
-/* bdbuf_config structure describes block configuration (size,
- * amount, memory location) for buffering layer
+  volatile rtems_bdbuf_buf_state state;  /* State of the buffer. */
+
+  volatile uint32_t waiters;    /* The number of threads waiting on this
+                                 * buffer. */
+  rtems_bdpool_id pool;         /* Identifier of buffer pool to which this buffer
+                                    belongs */
+
+  volatile uint32_t hold_timer; /* Timer to indicate how long a buffer
+                                 * has been held in the cache modified. */
+} rtems_bdbuf_buffer;
+
+/**
+ * The groups of the blocks with the same size are collected in a pool. Note
+ * that a several of the buffer's groups with the same size can exists.
+ */
+typedef struct rtems_bdbuf_pool
+{
+  int                 blksize;           /* The size of the blocks (in bytes) */
+  int                 nblks;             /* Number of blocks in this pool */
+
+  uint32_t            flags;             /* Configuration flags */
+
+  rtems_id            lock;              /* The pool lock. Lock this data and
+                                          * all BDs. */
+  rtems_id            sync_lock;         /* Sync calls lock writes. */
+  boolean             sync_active;       /* True if a sync is active. */
+  rtems_id            sync_requester;    /* The sync requester. */
+  dev_t               sync_device;       /* The device to sync */
+
+  rtems_bdbuf_buffer* tree;             /* Buffer descriptor lookup AVL tree
+                                         * root */
+  rtems_chain_control ready;            /* Free buffers list (or read-ahead) */
+  rtems_chain_control lru;              /* Last recently used list */
+  rtems_chain_control modified;         /* Modified buffers list */
+  rtems_chain_control sync;             /* Buffers to sync list */
+
+  rtems_id            access;           /* Obtain if waiting for a buffer in the
+                                         * ACCESS state. */
+  volatile uint32_t   access_waiters;   /* Count of access blockers. */
+  rtems_id            transfer;         /* Obtain if waiting for a buffer in the
+                                         * TRANSFER state. */
+  volatile uint32_t   transfer_waiters; /* Count of transfer blockers. */
+  rtems_id            waiting;          /* Obtain if waiting for a buffer and the
+                                         * none are available. */
+  volatile uint32_t   wait_waiters;     /* Count of waiting blockers. */
+
+  rtems_bdbuf_buffer* bds;              /* Pointer to table of buffer descriptors
+                                         * allocated for this buffer pool. */
+  void*               buffers;          /* The buffer's memory. */
+} rtems_bdbuf_pool;
+
+/**
+ * Configuration structure describes block configuration (size, amount, memory
+ * location) for buffering layer pool.
+ */
+typedef struct rtems_bdbuf_pool_config {
+  int            size;      /* Size of block */
+  int            num;       /* Number of blocks of appropriate size */
+  unsigned char* mem_area;  /* Pointer to the blocks location or NULL, in this
+                             * case memory for blocks will be allocated by
+                             * Buffering Layer with the help of RTEMS partition
+                             * manager */
+} rtems_bdbuf_pool_config;
+
+/**
+ * External references provided by the user for each pool in the system.
+ */
+extern rtems_bdbuf_pool_config rtems_bdbuf_pool_configuration[];
+extern int                     rtems_bdbuf_pool_configuration_size;
+
+/**
+ * Buffering configuration definition. See confdefs.h for support on using this
+ * structure.
  */
 typedef struct rtems_bdbuf_config {
-    int      size;      /* Size of block */
-    int      num;       /* Number of blocks of appropriate size */
-    unsigned char  *mem_area;
-                        /* Pointer to the blocks location or NULL, in this
-                           case memory for blocks will be allocated by
-                           Buffering Layer with the help of RTEMS partition
-                           manager */
+  int                 max_read_ahead_blocks; /*<< Number of blocks to read ahead. */
+  int                 max_write_blocks;      /*<< Number of blocks to write at once. */
+  rtems_task_priority swapout_priority;      /*<< Priority of the swap out task. */
+  uint32_t            swapout_period;        /*<< Period swapout checks buf timers. */
+  uint32_t            swap_block_hold;       /*<< Period a buffer is held. */
 } rtems_bdbuf_config;
 
-extern rtems_bdbuf_config rtems_bdbuf_configuration[];
-extern int rtems_bdbuf_configuration_size;
+/**
+ * External referernce to the configuration. The configuration is provided by
+ * the user.
+ */
+extern rtems_bdbuf_config rtems_bdbuf_configuration;
 
-#define SWAPOUT_TASK_DEFAULT_PRIORITY 15
-extern rtems_task_priority swapout_task_priority;
+/**
+ * The max_read_ahead_blocks value is altered if there are fewer buffers
+ * than this defined max. This stops thrashing in the cache.
+ */
+#define RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT    32
+#define RTEMS_BDBUF_MAX_WRITE_BLOCKS_DEFAULT         16
+#define RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT    15
+#define RTEMS_BDBUF_SWAPOUT_TASK_SWAP_PERIOD_DEFAULT 250  /* milli-seconds */
+#define RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT  1000 /* milli-seconds */
 
 /* rtems_bdbuf_init --
  *     Prepare buffering layer to work - initialize buffer descritors
@@ -143,17 +170,12 @@ extern rtems_task_priority swapout_task_priority;
  *     amount requested. After initialization all blocks is placed into
  *     free elements lists.
  *
- * PARAMETERS:
- *     conf_table - pointer to the buffers configuration table
- *     size       - number of entries in configuration table
- *
  * RETURNS:
  *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
  *     or error code if error is occured)
  */
 rtems_status_code
-rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size);
-
+rtems_bdbuf_init ();
 
 /* rtems_bdbuf_get --
  *     Obtain block buffer. If specified block already cached (i.e. there's
@@ -177,8 +199,8 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size);
  * SIDE EFFECTS:
  *     bufget_sema semaphore obtained by this primitive.
  */
-rtems_status_code
-rtems_bdbuf_get(dev_t device, blkdev_bnum block, bdbuf_buffer **bdb_ptr);
+  rtems_status_code
+  rtems_bdbuf_get(dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd);
 
 /* rtems_bdbuf_read --
  *     (Similar to the rtems_bdbuf_get, except reading data from media)
@@ -201,8 +223,8 @@ rtems_bdbuf_get(dev_t device, blkdev_bnum block, bdbuf_buffer **bdb_ptr);
  * SIDE EFFECTS:
  *     bufget_sema and transfer_sema semaphores obtained by this primitive.
  */
-rtems_status_code
-rtems_bdbuf_read(dev_t device, blkdev_bnum block, bdbuf_buffer **bdb_ptr);
+  rtems_status_code
+  rtems_bdbuf_read(dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd);
 
 /* rtems_bdbuf_release --
  *     Release buffer allocated before. This primitive decrease the
@@ -223,8 +245,8 @@ rtems_bdbuf_read(dev_t device, blkdev_bnum block, bdbuf_buffer **bdb_ptr);
  * SIDE EFFECTS:
  *     flush_sema and bufget_sema semaphores may be released by this primitive.
  */
-rtems_status_code
-rtems_bdbuf_release(bdbuf_buffer *bd_buf);
+  rtems_status_code
+  rtems_bdbuf_release(rtems_bdbuf_buffer* bd);
 
 /* rtems_bdbuf_release_modified --
  *     Release buffer allocated before, assuming that it is _modified_ by
@@ -244,8 +266,8 @@ rtems_bdbuf_release(bdbuf_buffer *bd_buf);
  * SIDE EFFECTS:
  *     flush_sema semaphore may be released by this primitive.
  */
-rtems_status_code
-rtems_bdbuf_release_modified(bdbuf_buffer *bd_buf);
+  rtems_status_code
+  rtems_bdbuf_release_modified(rtems_bdbuf_buffer* bd);
 
 /* rtems_bdbuf_sync --
  *     Wait until specified buffer synchronized with disk. Invoked on exchanges
@@ -265,8 +287,8 @@ rtems_bdbuf_release_modified(bdbuf_buffer *bd_buf);
  * SIDE EFFECTS:
  *     Primitive may be blocked on transfer_sema semaphore.
  */
-rtems_status_code
-rtems_bdbuf_sync(bdbuf_buffer *bd_buf);
+  rtems_status_code
+  rtems_bdbuf_sync(rtems_bdbuf_buffer* bd);
 
 /* rtems_bdbuf_syncdev --
  *     Synchronize with disk all buffers containing the blocks belonging to
@@ -279,8 +301,8 @@ rtems_bdbuf_sync(bdbuf_buffer *bd_buf);
  *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
  *     or error code if error is occured)
  */
-rtems_status_code
-rtems_bdbuf_syncdev(dev_t dev);
+  rtems_status_code
+  rtems_bdbuf_syncdev(dev_t dev);
 
 /* rtems_bdbuf_find_pool --
  *     Find first appropriate buffer pool. This primitive returns the index
@@ -297,8 +319,8 @@ rtems_bdbuf_syncdev(dev_t dev);
  *     of 2), RTEMS_NOT_DEFINED if buffer pool for this or greater block size
  *     is not configured.
  */
-rtems_status_code
-rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool);
+  rtems_status_code
+  rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool);
 
 /* rtems_bdbuf_get_pool_info --
  *     Obtain characteristics of buffer pool with specified number.
@@ -316,8 +338,8 @@ rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool);
  * NOTE:
  *     Buffer pools enumerated contiguously starting from 0.
  */
-rtems_status_code
-rtems_bdbuf_get_pool_info(rtems_bdpool_id pool, int *block_size, int *blocks);
+  rtems_status_code
+  rtems_bdbuf_get_pool_info(rtems_bdpool_id pool, int *block_size, int *blocks);
 
 #ifdef __cplusplus
 }

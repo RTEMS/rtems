@@ -46,18 +46,18 @@
  *      and does not support devices with sector size other than 512 bytes
  */
 static rtems_status_code
-get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
+get_sector(dev_t dev, uint32_t sector_num, rtems_sector_data_t **sector)
 {
-    sector_data_t      *s;
-    bdbuf_buffer       *buf;
-    rtems_status_code   rc;
+    rtems_sector_data_t *s;
+    rtems_bdbuf_buffer  *buf;
+    rtems_status_code    rc;
 
     if (sector == NULL)
     {
         return RTEMS_INTERNAL_ERROR;
     }
 
-    s = (sector_data_t *) malloc(sizeof(sector_data_t) + RTEMS_IDE_SECTOR_SIZE);
+    s = (rtems_sector_data_t *) malloc(sizeof(rtems_sector_data_t) + RTEMS_IDE_SECTOR_SIZE);
     if (s == NULL)
     {
         return RTEMS_NO_MEMORY;
@@ -92,7 +92,7 @@ get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
  *      TRUE if sector has msdos signature, FALSE otherwise
  */
 static rtems_boolean
-msdos_signature_check (sector_data_t *sector)
+msdos_signature_check (rtems_sector_data_t *sector)
 {
     uint8_t *p = sector->data + RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_OFFSET;
 
@@ -156,10 +156,10 @@ is_fat_partition(uint8_t type)
  *      RTEMS_INTERNAL_ERROR, if other error occurs.
  */
 static rtems_status_code
-data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
+data_to_part_desc(uint8_t *data, rtems_part_desc_t **new_part_desc)
 {
-    part_desc_t *part_desc;
-    uint32_t     temp;
+    rtems_part_desc_t *part_desc;
+    uint32_t           temp;
 
     if (new_part_desc == NULL)
     {
@@ -168,7 +168,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
 
     *new_part_desc = NULL;
 
-    if ((part_desc = calloc(1, sizeof(part_desc_t))) == NULL)
+    if ((part_desc = calloc(1, sizeof(rtems_part_desc_t))) == NULL)
     {
         return RTEMS_NO_MEMORY;
     }
@@ -219,15 +219,15 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
  *      RTEMS_INTERNAL_ERROR if other error occurs.
  */
 static rtems_status_code
-read_extended_partition(uint32_t start, part_desc_t *ext_part)
+read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
 {
-    int                 i;
-    dev_t               dev;
-    sector_data_t      *sector;
-    uint32_t            here;
-    uint8_t            *data;
-    part_desc_t        *new_part_desc;
-    rtems_status_code   rc;
+    int                  i;
+    dev_t                dev;
+    rtems_sector_data_t *sector;
+    uint32_t             here;
+    uint8_t             *data;
+    rtems_part_desc_t   *new_part_desc;
+    rtems_status_code    rc;
 
     if ((ext_part == NULL) || (ext_part->disk_desc == NULL))
     {
@@ -286,7 +286,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
         }
         else
         {
-            disk_desc_t *disk_desc = new_part_desc->disk_desc;
+            rtems_disk_desc_t *disk_desc = new_part_desc->disk_desc;
             disk_desc->partitions[disk_desc->last_log_id] = new_part_desc;
             new_part_desc->log_id = ++disk_desc->last_log_id;
             new_part_desc->start += here;
@@ -314,14 +314,14 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
  *      RTEMS_INTERNAL_ERROR otherwise
  */
 static rtems_status_code
-read_mbr(disk_desc_t *disk_desc)
+read_mbr(rtems_disk_desc_t *disk_desc)
 {
-    int                 part_num;
-    sector_data_t      *sector;
-    part_desc_t        *part_desc;
-    uint8_t            *data;
-    rtems_status_code   rc;
-    dev_t               dev = disk_desc->dev;
+    int                  part_num;
+    rtems_sector_data_t *sector;
+    rtems_part_desc_t   *part_desc;
+    uint8_t             *data;
+    rtems_status_code    rc;
+    dev_t                dev = disk_desc->dev;
 
     /* get MBR sector */
     rc = get_sector(dev, 0, &sector);
@@ -398,7 +398,7 @@ read_mbr(disk_desc_t *disk_desc)
  *      N/A
  */
 static void
-partition_free(part_desc_t *part_desc)
+partition_free(rtems_part_desc_t *part_desc)
 {
     int part_num;
 
@@ -429,7 +429,7 @@ partition_free(part_desc_t *part_desc)
  *      N/A
  */
 void
-rtems_ide_part_table_free(disk_desc_t *disk_desc)
+rtems_ide_part_table_free(rtems_disk_desc_t *disk_desc)
 {
     int part_num;
 
@@ -455,7 +455,7 @@ rtems_ide_part_table_free(disk_desc_t *disk_desc)
  *      RTEMS_INTERNAL_ERROR otherwise
  */
 rtems_status_code
-rtems_ide_part_table_get(const char *dev_name, disk_desc_t *disk_desc)
+rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
 {
     struct stat         dev_stat;
     rtems_status_code   rc;
@@ -494,16 +494,16 @@ rtems_ide_part_table_initialize(char *dev_name)
 {
     int                         part_num;
     dev_t                       dev;
-    disk_desc_t                *disk_desc;
+    rtems_disk_desc_t          *disk_desc;
     rtems_device_major_number   major;
     rtems_device_minor_number   minor;
     rtems_status_code           rc;
-    part_desc_t                *part_desc;
+    rtems_part_desc_t          *part_desc;
 
     /* logical device name /dev/hdxyy */
     char                        name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
 
-    disk_desc = (disk_desc_t *) calloc(1, sizeof(disk_desc_t));
+    disk_desc = (rtems_disk_desc_t *) calloc(1, sizeof(rtems_disk_desc_t));
     if (disk_desc == NULL)
     {
         return RTEMS_NO_MEMORY;

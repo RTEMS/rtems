@@ -10,657 +10,912 @@
  * @(#) bdbuf.c,v 1.14 2004/04/17 08:15:17 ralf Exp
  */
 
+/**
+ * @file
+ *
+ * The Buffer Descriptor Buffer code implement a cache between the disk
+ * devices and file systems. The code provides a read ahead and qrite queuing
+ * to the drivers and fast cache look up using an AVL tree.
+ *
+ * The buffers are held in pools based on size. Each pool has buffers and the
+ * buffers follow this state machine:
+ *
+ *                        read
+ *          +-------------------------------+
+ *          |                               v
+ *     +-----------+   read complete +------------+
+ *     |           |  write complete |            |---------+
+ *     |   EMPTY   |       +---------|  TRANSFER  |         |
+ *     |           |       |         |            |<--+     |
+ *     +-----------+       |         +------------+   |     |
+ *          ^   | get      v                     swap |     |
+ *          |   |    +-----------+ modified  +------------+ |
+ *          |   +--->|           |---------->|            | |
+ *          |        |  ACCESSED |<----------|  MODIFIED  | |
+ *          |   +----|           |<--+   get |            | |
+ *          |   |    +-----------+   |       +------------+ |
+ *          |   |                    |                      |
+ *          |   | release        get |                      |
+ *          |   |                    |                      |
+ *          |   |    +-----------+   |                      |
+ *   expire |   +--->|           |---+        read complete |
+ *          |        |   CACHED  |           write complete |
+ *          +--------|           |<-------------------------+
+ *                   +-----------+
+ *
+ * Empty buffers are added to the empty list and removed from this queue when a
+ * caller wishes to access a buffer. This is referred to getting a buffer in
+ * the code and the event get in the state diagram. The buffer is assigned to a
+ * block and inserted to the AVL. If the block is to be read by the user and
+ * not in the cache (empty) it is transfered from the disk into memory. If no
+ * empty buffers exist the buffer is expired from the cache. Currently the
+ * least recently used block is expired first. A block being accessed is given
+ * to the file system layer and not accessable to another requester until
+ * released back to the cache. If the user has modifed the block it is
+ * transfered to disk then placed on the LRU list.
+ *
+ * The pool have the following lists of buffers:
+ *
+ *   empty        - Empty buffers created when the pool is initialised.
+ *   modided      - Buffers waiting to be written to disk.
+ *   cached_lru   - Accessed buffers released in least recently used order.
+ *   cached_unsed - Read ahead buffers that have not been accessed.
+ *
+ */
+
+/**
+ * Set to 1 to enable debug tracing.
+ */
+#define RTEMS_BDBUF_TRACE 0
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
+#include <rtems/error.h>
 #include <limits.h>
 #include <errno.h>
 #include <assert.h>
 
+#if RTEMS_BDBUF_TRACE
+#include <stdio.h>
+#endif
+
 #include "rtems/bdbuf.h"
 
-/* Fatal errors: */
-#define BLKDEV_FATAL_ERROR(n) (((uint32_t)'B' << 24) | ((uint32_t)(n) & (uint32_t)0x00FFFFFF))
-#define BLKDEV_FATAL_BDBUF_CONSISTENCY BLKDEV_FATAL_ERROR(1)
-#define BLKDEV_FATAL_BDBUF_SWAPOUT     BLKDEV_FATAL_ERROR(2)
-
-
-#define SWAPOUT_TASK_STACK_SIZE (RTEMS_MINIMUM_STACK_SIZE * 2)
-
-#define READ_MULTIPLE
-
-#if defined(READ_MULTIPLE)
-#define READ_AHEAD_MAX_BLK_CNT 32
-typedef struct {
-  blkdev_request   req;
-  blkdev_sg_buffer sg[READ_AHEAD_MAX_BLK_CNT];
-} blkdev_request_read_ahead;
-/*
- * list of bd_bufs related to one transfer request
+/**
+ * The BD buffer context.
  */
-typedef struct {
-  int cnt;
-  bdbuf_buffer *bd_bufs[READ_AHEAD_MAX_BLK_CNT];
-} read_ahead_bd_buf_group;
-#endif
+/* Buffering layer context definition */
+typedef struct rtems_bdbuf_context {
+  rtems_bdbuf_pool* pool;      /* Table of buffer pools */
+  int               npools;    /* Number of entries in pool table */
+  rtems_id          swapout;   /* Swapout task ID */
+  boolean           swapout_enabled;
+} rtems_bdbuf_context;
 
-typedef struct {
-  blkdev_request *req;
-  bdbuf_buffer   **write_store;
-} write_tfer_done_arg_t;
-
-static rtems_task bdbuf_swapout_task(rtems_task_argument unused);
-
-static rtems_status_code bdbuf_release(bdbuf_buffer *bd_buf);
-/*
- * maximum number of blocks that might be chained together to one
- * write driver call
+/**
+ * Fatal errors
  */
-#define SWAP_OUT_MAX_BLK_CNT 32 
-/*#define SWAP_OUT_MAX_BLK_CNT 1 */
-/*
- * XXX: this is a global buffer. It is used in the swapout task
- * and currently will be reused only after it is no longer in use
- * 
+#define RTEMS_BLKDEV_FATAL_ERROR(n) (((uint32_t)'B' << 24) |         \
+                                     ((uint32_t)(n) & (uint32_t)0x00FFFFFF))
+
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY RTEMS_BLKDEV_FATAL_ERROR(1)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SWAPOUT     RTEMS_BLKDEV_FATAL_ERROR(2)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK   RTEMS_BLKDEV_FATAL_ERROR(3)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK RTEMS_BLKDEV_FATAL_ERROR(4)
+#define RTEMS_BLKDEV_FATAL_BDBUF_POOL_LOCK   RTEMS_BLKDEV_FATAL_ERROR(5)
+#define RTEMS_BLKDEV_FATAL_BDBUF_POOL_UNLOCK RTEMS_BLKDEV_FATAL_ERROR(6)
+#define RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAIT   RTEMS_BLKDEV_FATAL_ERROR(7)
+#define RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAKE   RTEMS_BLKDEV_FATAL_ERROR(8)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE     RTEMS_BLKDEV_FATAL_ERROR(9)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM    RTEMS_BLKDEV_FATAL_ERROR(10)
+#define BLKDEV_FATAL_BDBUF_SWAPOUT_RE        RTEMS_BLKDEV_FATAL_ERROR(11)
+#define BLKDEV_FATAL_BDBUF_SWAPOUT_TS        RTEMS_BLKDEV_FATAL_ERROR(12)
+
+#define RTEMS_BDBUF_TRANSFER_SYNC  RTEMS_EVENT_1
+#define RTEMS_BDBUF_SWAPOUT_SYNC   RTEMS_EVENT_2
+
+#define SWAPOUT_TASK_STACK_SIZE (8 * 1024)
+
+/**
+ * Lock semaphore attributes. This is used for locking type mutexes.
  */
-static bdbuf_buffer *bd_buf_write_store[SWAP_OUT_MAX_BLK_CNT];
+#define RTEMS_BDBUF_POOL_LOCK_ATTRIBS \
+  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
+   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
 
-/* Block device request with a single buffer provided */
-typedef struct blkdev_request1 {
-    blkdev_request   req;
-    blkdev_sg_buffer sg[1];
-} blkdev_request1;
-
-/* The context of buffering layer */
-struct bdbuf_context rtems_bdbuf_ctx;
-
-#define SAFE
-#ifdef SAFE
-typedef rtems_mode preemption_key;
-
-#define DISABLE_PREEMPTION(key) \
-    do {                                                               \
-        rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &(key)); \
-    } while (0)
-
-#define ENABLE_PREEMPTION(key) \
-    do {                                                        \
-        rtems_mode temp;                                        \
-        rtems_task_mode((key), RTEMS_PREEMPT_MASK, &temp);      \
-    } while (0)
-
-#else
-
-typedef boolean preemption_key;
-
-#define DISABLE_PREEMPTION(key) \
-    do {                                             \
-        (key) = _Thread_Executing->is_preemptible;   \
-        _Thread_Executing->is_preemptible = 0;       \
-    } while (0)
-
-#define ENABLE_PREEMPTION(key) \
-    do {                                             \
-        _Thread_Executing->is_preemptible = (key);   \
-        if (_Thread_Evaluate_mode())                 \
-            _Thread_Dispatch();                      \
-    } while (0)
-
-#endif
-
-
-/* The default maximum height of 32 allows for AVL trees having
-   between 5,704,880 and 4,294,967,295 nodes, depending on order of
-   insertion.  You may change this compile-time constant as you
-   wish. */
-#ifndef AVL_MAX_HEIGHT
-#define AVL_MAX_HEIGHT  32
-#endif
-
-/*
- * avl_search --
- *     Searches for the node with specified dev/block.
+/**
+ * Waiter semaphore attributes.
  *
- * PARAMETERS:
- *     root - pointer to the root node of the AVL-Tree.
- *     dev, block - search key
- *
- * RETURNS:
- *     NULL if node with specified dev/block not found
- *     non-NULL - pointer to the node with specified dev/block
+ * @note Do not configure as inherit priority. If a driver is in the driver
+ *       initialisation table this locked semaphore will have the IDLE task as
+ *       the holder and a blocking task will raise the priority of the IDLE
+ *       task which can cause unsual side effects.
  */
-static bdbuf_buffer *
-avl_search(bdbuf_buffer **root, dev_t dev, blkdev_bnum block)
+#define RTEMS_BDBUF_POOL_WAITER_ATTRIBS \
+  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
+   RTEMS_NO_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
+
+/*
+ * The swap out task.
+ */
+static rtems_task rtems_bdbuf_swapout_task(rtems_task_argument arg);
+
+/**
+ * The context of buffering layer.
+ */
+static rtems_bdbuf_context rtems_bdbuf_ctx;
+
+/**
+ * Print a message to the bdbuf trace output and flush it.
+ *
+ * @param format The format string. See printf for details.
+ * @param ... The arguments for the format text.
+ * @return int The number of bytes written to the output.
+ */
+#if RTEMS_BDBUF_TRACE
+boolean rtems_bdbuf_tracer;
+static void
+rtems_bdbuf_printf (const char *format, ...)
 {
-    bdbuf_buffer *p = *root;
+  va_list args;
+  va_start (args, format);
+  if (rtems_bdbuf_tracer)
+  {
+    fprintf (stdout, "bdbuf:");
+    vfprintf (stdout, format, args);
+    fflush (stdout);
+  }
+}
+#endif
 
-    while ((p != NULL) && ((p->dev != dev) || (p->block != block)))
+/**
+ * The default maximum height of 32 allows for AVL trees having between
+ * 5,704,880 and 4,294,967,295 nodes, depending on order of insertion.  You may
+ * change this compile-time constant as you wish.
+ */
+#ifndef RTEMS_BDBUF_AVL_MAX_HEIGHT
+#define RTEMS_BDBUF_AVL_MAX_HEIGHT (32)
+#endif
+
+/**
+ * Searches for the node with specified dev/block.
+ *
+ * @param root pointer to the root node of the AVL-Tree
+ * @param dev device search key
+ * @param block block search key
+ * @retval NULL node with the specified dev/block is not found
+ * @return pointer to the node with specified dev/block
+ */
+static rtems_bdbuf_buffer *
+rtems_bdbuf_avl_search (rtems_bdbuf_buffer** root,
+                        dev_t                dev,
+                        rtems_blkdev_bnum    block)
+{
+  rtems_bdbuf_buffer* p = *root;
+
+  while ((p != NULL) && ((p->dev != dev) || (p->block != block)))
+  {
+    if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
     {
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
-        {
-            p = p->avl.right;
-        }
-        else
-        {
-            p = p->avl.left;
-        }
+      p = p->avl.right;
     }
+    else
+    {
+      p = p->avl.left;
+    }
+  }
 
-    return p;
+  return p;
 }
 
-
-/* avl_search_for_sync --
- *     Search in AVL tree for first modified buffer belongs to specified
- *     disk device.
+#if CCJ_REMOVE_IN_IN_CVS
+/**
+ * Search in AVL tree for first modified buffer belongs to specified
+ * disk device.
  *
- * PARAMETERS:
- *     root - pointer to tree root
- *     dd - disk device descriptor
- *
- * RETURNS:
- *     Block buffer, or NULL if no modified blocks on specified device
- *     exists.
+ * @param root pointer to the root node of the AVL-Tree
+ * @param dd - disk device descriptor
+ * @retval NULL no modified blocks on the disk device
+ * @return pointer to the modified node
  */
-static bdbuf_buffer *
-avl_search_for_sync(bdbuf_buffer **root, disk_device *dd)
+static rtems_bdbuf_buffer *
+rtems_bdbuf_avl_search_for_sync (rtems_bdbuf_buffer** root,
+                                 rtems_disk_device*   dd)
 {
-    dev_t dev = dd->phys_dev->dev;
-    blkdev_bnum block_start = dd->start;
-    blkdev_bnum block_end = dd->start + dd->size - 1;
+  dev_t                dev = dd->phys_dev->dev;
+  rtems_blkdev_bnum    block_start = dd->start;
+  rtems_blkdev_bnum    block_end = dd->start + dd->size - 1;
+  rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
+  rtems_bdbuf_buffer** buf_prev = buf_stack;
+  rtems_bdbuf_buffer*  p = *root;
 
-    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
-    bdbuf_buffer **buf_prev = buf_stack;
-    bdbuf_buffer *p = *root;
-
-    while (p != NULL)
+  while (p != NULL)
+  {
+    if ((p->dev < dev) || ((p->dev == dev) && (p->block < block_start)))
     {
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block_start)))
-        {
-            p = p->avl.right;
-        }
-        else if ((p->dev > dev) || ((p->dev == dev) && (p->block > block_end)))
-        {
-            p = p->avl.left;
-        }
-        else if (p->modified)
-        {
-            return p;
-        }
-        else
-        {
-            if (p->avl.right != NULL)
-            {
-                *buf_prev++ = p->avl.right;
-            }
-            p = p->avl.left;
-        }
-
-        if ((p == NULL) && (buf_prev > buf_stack))
-        {
-            p = *--buf_prev;
-        }
+      p = p->avl.right;
+    }
+    else if ((p->dev > dev) || ((p->dev == dev) && (p->block > block_end)))
+    {
+      p = p->avl.left;
+    }
+    else if (p->state == RTEMS_BDBUF_STATE_MODIFIED)
+    {
+      return p;
+    }
+    else
+    {
+      if (p->avl.right != NULL)
+      {
+        *buf_prev++ = p->avl.right;
+      }
+      p = p->avl.left;
     }
 
-    return p;
+    if ((p == NULL) && (buf_prev > buf_stack))
+    {
+      p = *--buf_prev;
+    }
+  }
+
+  return p;
 }
+#endif
 
-
-/*
- * avl_insert --
- *     Inserts the specified node to the AVl-Tree.
+/**
+ * Inserts the specified node to the AVl-Tree.
  *
- * PARAMETERS:
- *     root - Pointer to pointer to the root node
- *     node - Pointer to the node to add.
- *
- * RETURNS:
- *     0 - The node added successfully
- *    -1 - An error occured
+ * @param root pointer to the root node of the AVL-Tree
+ * @param node Pointer to the node to add.
+ * @retval 0 The node added successfully
+ * @retval -1 An error occured
  */
 static int
-avl_insert(bdbuf_buffer **root, bdbuf_buffer *node)
+rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
+                       rtems_bdbuf_buffer*  node)
 {
-    dev_t dev = node->dev;
-    blkdev_bnum block = node->block;
+  dev_t             dev = node->dev;
+  rtems_blkdev_bnum block = node->block;
 
-    bdbuf_buffer *p = *root;
-    bdbuf_buffer *q, *p1, *p2;
-    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
-    bdbuf_buffer **buf_prev = buf_stack;
+  rtems_bdbuf_buffer*  p = *root;
+  rtems_bdbuf_buffer*  q;
+  rtems_bdbuf_buffer*  p1;
+  rtems_bdbuf_buffer*  p2;
+  rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
+  rtems_bdbuf_buffer** buf_prev = buf_stack;
 
-    boolean modified = FALSE;
+  boolean modified = FALSE;
 
-    if (p == NULL)
-    {
-        *root = node;
-        node->avl.left = NULL;
-        node->avl.right = NULL;
-        node->avl.bal = 0;
-        return 0;
-    }
-
-    while (p != NULL)
-    {
-        *buf_prev++ = p;
-
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
-        {
-            p->avl.cache = 1;
-            q = p->avl.right;
-            if (q == NULL)
-            {
-                q = node;
-                p->avl.right = q = node;
-                break;
-            }
-        }
-        else if ((p->dev != dev) || (p->block != block))
-        {
-            p->avl.cache = -1;
-            q = p->avl.left;
-            if (q == NULL)
-            {
-                q = node;
-                p->avl.left = q;
-                break;
-            }
-        }
-        else
-        {
-            return -1;
-        }
-
-        p = q;
-    }
-
-    q->avl.left = q->avl.right = NULL;
-    q->avl.bal = 0;
-    modified = TRUE;
-    buf_prev--;
-
-    while (modified)
-    {
-        if (p->avl.cache == -1)
-        {
-            switch (p->avl.bal)
-            {
-                case 1:
-                    p->avl.bal = 0;
-                    modified = FALSE;
-                    break;
-
-                case 0:
-                    p->avl.bal = -1;
-                    break;
-
-                case -1:
-                    p1 = p->avl.left;
-                    if (p1->avl.bal == -1) /* simple LL-turn */
-                    {
-                        p->avl.left = p1->avl.right;
-                        p1->avl.right = p;
-                        p->avl.bal = 0;
-                        p = p1;
-                    }
-                    else /* double LR-turn */
-                    {
-                        p2 = p1->avl.right;
-                        p1->avl.right = p2->avl.left;
-                        p2->avl.left = p1;
-                        p->avl.left = p2->avl.right;
-                        p2->avl.right = p;
-                        if (p2->avl.bal == -1) p->avl.bal = +1; else p->avl.bal = 0;
-                        if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
-                        p = p2;
-                    }
-                    p->avl.bal = 0;
-                    modified = FALSE;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            switch (p->avl.bal)
-            {
-                case -1:
-                    p->avl.bal = 0;
-                    modified = FALSE;
-                    break;
-
-                case 0:
-                    p->avl.bal = 1;
-                    break;
-
-                case 1:
-                    p1 = p->avl.right;
-                    if (p1->avl.bal == 1) /* simple RR-turn */
-                    {
-                        p->avl.right = p1->avl.left;
-                        p1->avl.left = p;
-                        p->avl.bal = 0;
-                        p = p1;
-                    }
-                    else /* double RL-turn */
-                    {
-                        p2 = p1->avl.left;
-                        p1->avl.left = p2->avl.right;
-                        p2->avl.right = p1;
-                        p->avl.right = p2->avl.left;
-                        p2->avl.left = p;
-                        if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
-                        if (p2->avl.bal == -1) p1->avl.bal = +1; else p1->avl.bal = 0;
-                        p = p2;
-                    }
-                    p->avl.bal = 0;
-                    modified = FALSE;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        q = p;
-        if (buf_prev > buf_stack)
-        {
-            p = *--buf_prev;
-
-            if (p->avl.cache == -1)
-            {
-                p->avl.left = q;
-            }
-            else
-            {
-                p->avl.right = q;
-            }
-        }
-        else
-        {
-            *root = p;
-            break;
-        }
-    };
-
+  if (p == NULL)
+  {
+    *root = node;
+    node->avl.left = NULL;
+    node->avl.right = NULL;
+    node->avl.bal = 0;
     return 0;
-}
+  }
 
+  while (p != NULL)
+  {
+    *buf_prev++ = p;
 
-/* avl_remove --
- *     removes the node from the tree.
- *
- * PARAMETERS:
- *     root_addr - Pointer to pointer to the root node
- *     node      - Pointer to the node to remove
- *
- * RETURNS:
- *     0 - Item removed
- *    -1 - No such item found
- */
-static int
-avl_remove(bdbuf_buffer **root, const bdbuf_buffer *node)
-{
-    dev_t dev = node->dev;
-    blkdev_bnum block = node->block;
-
-    bdbuf_buffer *p = *root;
-    bdbuf_buffer *q, *r, *s, *p1, *p2;
-    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
-    bdbuf_buffer **buf_prev = buf_stack;
-
-    boolean modified = FALSE;
-
-    memset(buf_stack, 0, sizeof(buf_stack));
-
-    while (p != NULL)
+    if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
     {
-        *buf_prev++ = p;
-
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
-        {
-            p->avl.cache = 1;
-            p = p->avl.right;
-        }
-        else if ((p->dev != dev) || (p->block != block))
-        {
-            p->avl.cache = -1;
-            p = p->avl.left;
-        }
-        else
-        {
-            /* node found */
-            break;
-        }
+      p->avl.cache = 1;
+      q = p->avl.right;
+      if (q == NULL)
+      {
+        q = node;
+        p->avl.right = q = node;
+        break;
+      }
+    }
+    else if ((p->dev != dev) || (p->block != block))
+    {
+      p->avl.cache = -1;
+      q = p->avl.left;
+      if (q == NULL)
+      {
+        q = node;
+        p->avl.left = q;
+        break;
+      }
+    }
+    else
+    {
+      return -1;
     }
 
-    if (p == NULL)
-    {
-        /* there is no such node */
-        return -1;
-    }
+    p = q;
+  }
 
+  q->avl.left = q->avl.right = NULL;
+  q->avl.bal = 0;
+  modified = TRUE;
+  buf_prev--;
+
+  while (modified)
+  {
+    if (p->avl.cache == -1)
+    {
+      switch (p->avl.bal)
+      {
+        case 1:
+          p->avl.bal = 0;
+          modified = FALSE;
+          break;
+
+        case 0:
+          p->avl.bal = -1;
+          break;
+
+        case -1:
+          p1 = p->avl.left;
+          if (p1->avl.bal == -1) /* simple LL-turn */
+          {
+            p->avl.left = p1->avl.right;
+            p1->avl.right = p;
+            p->avl.bal = 0;
+            p = p1;
+          }
+          else /* double LR-turn */
+          {
+            p2 = p1->avl.right;
+            p1->avl.right = p2->avl.left;
+            p2->avl.left = p1;
+            p->avl.left = p2->avl.right;
+            p2->avl.right = p;
+            if (p2->avl.bal == -1) p->avl.bal = +1; else p->avl.bal = 0;
+            if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
+            p = p2;
+          }
+          p->avl.bal = 0;
+          modified = FALSE;
+          break;
+
+        default:
+          break;
+      }
+    }
+    else
+    {
+      switch (p->avl.bal)
+      {
+        case -1:
+          p->avl.bal = 0;
+          modified = FALSE;
+          break;
+
+        case 0:
+          p->avl.bal = 1;
+          break;
+
+        case 1:
+          p1 = p->avl.right;
+          if (p1->avl.bal == 1) /* simple RR-turn */
+          {
+            p->avl.right = p1->avl.left;
+            p1->avl.left = p;
+            p->avl.bal = 0;
+            p = p1;
+          }
+          else /* double RL-turn */
+          {
+            p2 = p1->avl.left;
+            p1->avl.left = p2->avl.right;
+            p2->avl.right = p1;
+            p->avl.right = p2->avl.left;
+            p2->avl.left = p;
+            if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
+            if (p2->avl.bal == -1) p1->avl.bal = +1; else p1->avl.bal = 0;
+            p = p2;
+          }
+          p->avl.bal = 0;
+          modified = FALSE;
+          break;
+
+        default:
+          break;
+      }
+    }
     q = p;
-
-    buf_prev--;
     if (buf_prev > buf_stack)
     {
-        p = *(buf_prev - 1);
+      p = *--buf_prev;
+
+      if (p->avl.cache == -1)
+      {
+        p->avl.left = q;
+      }
+      else
+      {
+        p->avl.right = q;
+      }
     }
     else
     {
-        p = NULL;
+      *root = p;
+      break;
     }
+  };
 
-    /* at this moment q - is a node to delete, p is q's parent */
-    if (q->avl.right == NULL)
+  return 0;
+}
+
+
+/**
+ * Removes the node from the tree.
+ *
+ * @param root_addr Pointer to pointer to the root node
+ * @param node Pointer to the node to remove
+ * @retval 0 Item removed
+ * @retval -1 No such item found
+ */
+static int
+rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
+                       const rtems_bdbuf_buffer* node)
+{
+  dev_t             dev = node->dev;
+  rtems_blkdev_bnum block = node->block;
+
+  rtems_bdbuf_buffer*  p = *root;
+  rtems_bdbuf_buffer*  q;
+  rtems_bdbuf_buffer*  r;
+  rtems_bdbuf_buffer*  s;
+  rtems_bdbuf_buffer*  p1;
+  rtems_bdbuf_buffer*  p2;
+  rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
+  rtems_bdbuf_buffer** buf_prev = buf_stack;
+
+  boolean modified = FALSE;
+
+  memset (buf_stack, 0, sizeof(buf_stack));
+
+  while (p != NULL)
+  {
+    *buf_prev++ = p;
+
+    if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
     {
-        r = q->avl.left;
-        if (r != NULL)
-        {
-            r->avl.bal = 0;
-        }
-        q = r;
+      p->avl.cache = 1;
+      p = p->avl.right;
     }
-    else
+    else if ((p->dev != dev) || (p->block != block))
     {
-        bdbuf_buffer **t;
-
-        r = q->avl.right;
-
-        if (r->avl.left == NULL)
-        {
-            r->avl.left = q->avl.left;
-            r->avl.bal = q->avl.bal;
-            r->avl.cache = 1;
-            *buf_prev++ = q = r;
-        }
-        else
-        {
-            t = buf_prev++;
-            s = r;
-
-            while (s->avl.left != NULL)
-            {
-                *buf_prev++ = r = s;
-                s = r->avl.left;
-                r->avl.cache = -1;
-            }
-
-            s->avl.left = q->avl.left;
-            r->avl.left = s->avl.right;
-            s->avl.right = q->avl.right;
-            s->avl.bal = q->avl.bal;
-            s->avl.cache = 1;
-
-            *t = q = s;
-        }
-    }
-
-    if (p != NULL)
-    {
-        if (p->avl.cache == -1)
-        {
-            p->avl.left = q;
-        }
-        else
-        {
-            p->avl.right = q;
-        }
+      p->avl.cache = -1;
+      p = p->avl.left;
     }
     else
     {
-        *root = q;
+      /* node found */
+      break;
+    }
+  }
+
+  if (p == NULL)
+  {
+    /* there is no such node */
+    return -1;
+  }
+
+  q = p;
+
+  buf_prev--;
+  if (buf_prev > buf_stack)
+  {
+    p = *(buf_prev - 1);
+  }
+  else
+  {
+    p = NULL;
+  }
+
+  /* at this moment q - is a node to delete, p is q's parent */
+  if (q->avl.right == NULL)
+  {
+    r = q->avl.left;
+    if (r != NULL)
+    {
+      r->avl.bal = 0;
+    }
+    q = r;
+  }
+  else
+  {
+    rtems_bdbuf_buffer **t;
+
+    r = q->avl.right;
+
+    if (r->avl.left == NULL)
+    {
+      r->avl.left = q->avl.left;
+      r->avl.bal = q->avl.bal;
+      r->avl.cache = 1;
+      *buf_prev++ = q = r;
+    }
+    else
+    {
+      t = buf_prev++;
+      s = r;
+
+      while (s->avl.left != NULL)
+      {
+        *buf_prev++ = r = s;
+        s = r->avl.left;
+        r->avl.cache = -1;
+      }
+
+      s->avl.left = q->avl.left;
+      r->avl.left = s->avl.right;
+      s->avl.right = q->avl.right;
+      s->avl.bal = q->avl.bal;
+      s->avl.cache = 1;
+
+      *t = q = s;
+    }
+  }
+
+  if (p != NULL)
+  {
+    if (p->avl.cache == -1)
+    {
+      p->avl.left = q;
+    }
+    else
+    {
+      p->avl.right = q;
+    }
+  }
+  else
+  {
+    *root = q;
+  }
+
+  modified = TRUE;
+
+  while (modified)
+  {
+    if (buf_prev > buf_stack)
+    {
+      p = *--buf_prev;
+    }
+    else
+    {
+      break;
     }
 
-    modified = TRUE;
-
-    while (modified)
+    if (p->avl.cache == -1)
     {
-        if (buf_prev > buf_stack)
-        {
-            p = *--buf_prev;
-        }
-        else
-        {
-            break;
-        }
+      /* rebalance left branch */
+      switch (p->avl.bal)
+      {
+        case -1:
+          p->avl.bal = 0;
+          break;
+        case  0:
+          p->avl.bal = 1;
+          modified = FALSE;
+          break;
 
-        if (p->avl.cache == -1)
-        {
-            /* rebalance left branch */
-            switch (p->avl.bal)
+        case +1:
+          p1 = p->avl.right;
+
+          if (p1->avl.bal >= 0) /* simple RR-turn */
+          {
+            p->avl.right = p1->avl.left;
+            p1->avl.left = p;
+
+            if (p1->avl.bal == 0)
             {
-                case -1:
-                    p->avl.bal = 0;
-                    break;
-                case  0:
-                    p->avl.bal = 1;
-                    modified = FALSE;
-                    break;
-
-                case +1:
-                    p1 = p->avl.right;
-
-                    if (p1->avl.bal >= 0) /* simple RR-turn */
-                    {
-                        p->avl.right = p1->avl.left;
-                        p1->avl.left = p;
-
-                        if (p1->avl.bal == 0)
-                        {
-                            p1->avl.bal = -1;
-                            modified = FALSE;
-                        }
-                        else
-                        {
-                            p->avl.bal = 0;
-                            p1->avl.bal = 0;
-                        }
-                        p = p1;
-                    }
-                    else /* double RL-turn */
-                    {
-                        p2 = p1->avl.left;
-
-                        p1->avl.left = p2->avl.right;
-                        p2->avl.right = p1;
-                        p->avl.right = p2->avl.left;
-                        p2->avl.left = p;
-
-                        if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
-                        if (p2->avl.bal == -1) p1->avl.bal = 1; else p1->avl.bal = 0;
-
-                        p = p2;
-                        p2->avl.bal = 0;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            /* rebalance right branch */
-            switch (p->avl.bal)
-            {
-                case +1:
-                    p->avl.bal = 0;
-                    break;
-
-                case  0:
-                    p->avl.bal = -1;
-                    modified = FALSE;
-                    break;
-
-                case -1:
-                    p1 = p->avl.left;
-
-                    if (p1->avl.bal <= 0) /* simple LL-turn */
-                    {
-                        p->avl.left = p1->avl.right;
-                        p1->avl.right = p;
-                        if (p1->avl.bal == 0)
-                        {
-                            p1->avl.bal = 1;
-                            modified = FALSE;
-                        }
-                        else
-                        {
-                            p->avl.bal = 0;
-                            p1->avl.bal = 0;
-                        }
-                        p = p1;
-                    }
-                    else /* double LR-turn */
-                    {
-                        p2 = p1->avl.right;
-
-                        p1->avl.right = p2->avl.left;
-                        p2->avl.left = p1;
-                        p->avl.left = p2->avl.right;
-                        p2->avl.right = p;
-
-                        if (p2->avl.bal == -1) p->avl.bal = 1; else p->avl.bal = 0;
-                        if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
-
-                        p = p2;
-                        p2->avl.bal = 0;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        if (buf_prev > buf_stack)
-        {
-            q = *(buf_prev - 1);
-
-            if (q->avl.cache == -1)
-            {
-                q->avl.left = p;
+              p1->avl.bal = -1;
+              modified = FALSE;
             }
             else
             {
-                q->avl.right = p;
+              p->avl.bal = 0;
+              p1->avl.bal = 0;
             }
-        }
-        else
-        {
-            *root = p;
-            break;
-        }
+            p = p1;
+          }
+          else /* double RL-turn */
+          {
+            p2 = p1->avl.left;
 
+            p1->avl.left = p2->avl.right;
+            p2->avl.right = p1;
+            p->avl.right = p2->avl.left;
+            p2->avl.left = p;
+
+            if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
+            if (p2->avl.bal == -1) p1->avl.bal = 1; else p1->avl.bal = 0;
+
+            p = p2;
+            p2->avl.bal = 0;
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+    else
+    {
+      /* rebalance right branch */
+      switch (p->avl.bal)
+      {
+        case +1:
+          p->avl.bal = 0;
+          break;
+
+        case  0:
+          p->avl.bal = -1;
+          modified = FALSE;
+          break;
+
+        case -1:
+          p1 = p->avl.left;
+
+          if (p1->avl.bal <= 0) /* simple LL-turn */
+          {
+            p->avl.left = p1->avl.right;
+            p1->avl.right = p;
+            if (p1->avl.bal == 0)
+            {
+              p1->avl.bal = 1;
+              modified = FALSE;
+            }
+            else
+            {
+              p->avl.bal = 0;
+              p1->avl.bal = 0;
+            }
+            p = p1;
+          }
+          else /* double LR-turn */
+          {
+            p2 = p1->avl.right;
+
+            p1->avl.right = p2->avl.left;
+            p2->avl.left = p1;
+            p->avl.left = p2->avl.right;
+            p2->avl.right = p;
+
+            if (p2->avl.bal == -1) p->avl.bal = 1; else p->avl.bal = 0;
+            if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
+
+            p = p2;
+            p2->avl.bal = 0;
+          }
+          break;
+
+        default:
+          break;
+      }
     }
 
-    return 0;
+    if (buf_prev > buf_stack)
+    {
+      q = *(buf_prev - 1);
+
+      if (q->avl.cache == -1)
+      {
+        q->avl.left = p;
+      }
+      else
+      {
+        q->avl.right = p;
+      }
+    }
+    else
+    {
+      *root = p;
+      break;
+    }
+
+  }
+
+  return 0;
+}
+
+/**
+ * Get the pool for the device.
+ *
+ * @param pdd Physical disk device.
+ */
+static rtems_bdbuf_pool*
+rtems_bdbuf_get_pool (const rtems_bdpool_id pid)
+{
+  return &rtems_bdbuf_ctx.pool[pid];
+}
+
+/**
+ * Lock the pool. A single task can nest calls.
+ *
+ * @param pool The pool to lock.
+ */
+static void
+rtems_bdbuf_lock_pool (rtems_bdbuf_pool* pool)
+{
+  rtems_status_code sc = rtems_semaphore_obtain (pool->lock,
+                                                 RTEMS_WAIT,
+                                                 RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_LOCK);
+}
+
+/**
+ * Unlock the pool.
+ *
+ * @param pool The pool to unlock.
+ */
+static void
+rtems_bdbuf_unlock_pool (rtems_bdbuf_pool* pool)
+{
+  rtems_status_code sc = rtems_semaphore_release (pool->lock);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_UNLOCK);
+}
+
+/**
+ * Lock the pool's sync. A single task can nest calls.
+ *
+ * @param pool The pool's sync to lock.
+ */
+static void
+rtems_bdbuf_lock_sync (rtems_bdbuf_pool* pool)
+{
+  rtems_status_code sc = rtems_semaphore_obtain (pool->sync_lock,
+                                                 RTEMS_WAIT,
+                                                 RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK);
+}
+
+/**
+ * Unlock the pool's sync.
+ *
+ * @param pool The pool's sync to unlock.
+ */
+static void
+rtems_bdbuf_unlock_sync (rtems_bdbuf_pool* pool)
+{
+  rtems_status_code sc = rtems_semaphore_release (pool->sync_lock);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK);
+}
+
+/**
+ * Wait until woken. Semaphores are used so a number of tasks can wait and
+ * can be woken at once. Task events would require we maintain a list
+ * of tasks to be woken and this would require storgage and we do not
+ * know the number of tasks that could be waiting.
+ *
+ * While we have the pool locked we can try and claim the semaphore and
+ * therefore know when we release the lock to the pool we will block until the
+ * semaphore is released. This may even happen before we get to block.
+ *
+ * A counter is used to save the release call when no one is waiting.
+ *
+ * The function assumes the pool is locked on entry and it will have locked
+ * the pool on exit.
+ *
+ * @param pool The pool to wait for a buffer to return.
+ * @param sema The semaphore to block on and wait.
+ * @param waiters The wait counter for this semaphore.
+ */
+static void
+rtems_bdbuf_wait (rtems_bdbuf_pool* pool, rtems_id* sema,
+                  volatile uint32_t* waiters)
+{
+  rtems_status_code sc;
+  rtems_mode        prev_mode;
+  
+  /*
+   * Indicate we are waiting.
+   */
+  *waiters += 1;
+
+  /*
+   * Disable preemption then unlock the pool and block.
+   * There is no POSIX condition variable in the core API so
+   * this is a work around.
+   *
+   * The issue is a task could preempt after the pool is unlocked
+   * because it is blocking or just hits that window, and before
+   * this task has blocked on the semaphore. If the preempting task
+   * flushes the queue this task will not see the flush and may
+   * block for ever or until another transaction flushes this
+   * semaphore.
+   */
+  sc = rtems_task_mode (RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &prev_mode);
+
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAIT);
+  
+  /*
+   * Unlock the pool, wait, and lock the pool when we return.
+   */
+  rtems_bdbuf_unlock_pool (pool);
+
+  sc = rtems_semaphore_obtain (*sema, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  
+  if (sc != RTEMS_UNSATISFIED)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAIT);
+  
+  rtems_bdbuf_lock_pool (pool);
+
+  sc = rtems_task_mode (prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode);
+
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAIT);
+  
+  *waiters -= 1;
+}
+
+/**
+ * Wake a blocked resource. The resource has a counter that lets us know if
+ * there are any waiters.
+ *
+ * @param sema The semaphore to release.
+ * @param waiters The wait counter for this semaphore.
+ */
+static void
+rtems_bdbuf_wake (rtems_id sema, volatile uint32_t* waiters)
+{
+  if (*waiters)
+  {
+    rtems_status_code sc;
+
+    sc = rtems_semaphore_flush (sema);
+  
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_POOL_WAKE);
+  }
+}
+
+/**
+ * Add a buffer descriptor to the modified list. This modified list is treated
+ * a litte differently to the other lists. To access it you must have the pool
+ * locked and this is assumed to be the case on entry to this call and you must
+ * hold the sync lock. The sync lock is used to block writes while a sync is
+ * active.
+ *
+ * @param sema The semaphore to release.
+ * @param waiters The wait counter for this semaphore.
+ */
+static void
+rtems_bdbuf_append_modified (rtems_bdbuf_pool* pool, rtems_bdbuf_buffer* bd)
+{
+  /*
+   * Take a copy of the sync_active variable as it will change after
+   * we unlock the pool and wait for the sync to finish.
+   */
+  int sync_active = pool->sync_active;
+  if (0 && sync_active)
+  {
+    rtems_bdbuf_unlock_pool (pool);
+    rtems_bdbuf_lock_sync (pool);
+    rtems_bdbuf_lock_pool (pool);
+  }
+      
+  bd->state = RTEMS_BDBUF_STATE_MODIFIED;
+
+  rtems_chain_append (&pool->modified, &bd->link);
+
+  if (0 && sync_active)
+    rtems_bdbuf_unlock_sync (pool);
+}
+
+static void
+rtems_bdbuf_wake_swapper ()
+{
+  rtems_status_code sc = rtems_event_send (rtems_bdbuf_ctx.swapout,
+                                           RTEMS_BDBUF_SWAPOUT_SYNC);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE);
 }
 
 /* bdbuf_initialize_pool --
@@ -675,70 +930,134 @@ avl_remove(bdbuf_buffer **root, const bdbuf_buffer *node)
  *     code if error occured.
  */
 static rtems_status_code
-bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
+rtems_bdbuf_initialize_pool (rtems_bdbuf_pool_config* config,
+                             rtems_bdpool_id          pid)
 {
-    bdbuf_pool *p = rtems_bdbuf_ctx.pool + pool;
-    unsigned char *bufs;
-    bdbuf_buffer *b;
-    rtems_status_code rc;
-    int i;
+  unsigned char*      buffer = config->mem_area;
+  rtems_bdbuf_pool*   pool;
+  rtems_bdbuf_buffer* bd;
+  rtems_status_code   sc;
+  int                 b;
 
-    p->blksize = config->size;
-    p->nblks = config->num;
-    p->tree = NULL;
+  pool = rtems_bdbuf_get_pool (pid);
+  
+  pool->blksize = config->size;
+  pool->nblks   = config->num;
+  pool->tree    = NULL;
+  pool->buffers = NULL;
 
-    rtems_chain_initialize_empty(&p->free);
-    rtems_chain_initialize_empty(&p->lru);
+  rtems_chain_initialize_empty (&pool->ready);
+  rtems_chain_initialize_empty (&pool->lru);
+  rtems_chain_initialize_empty (&pool->modified);
+  rtems_chain_initialize_empty (&pool->sync);
 
-    /* Allocate memory for buffer descriptors */
-    p->bdbufs = calloc(config->num, sizeof(bdbuf_buffer));
-    if (p->bdbufs == NULL)
+  pool->access = 0;
+  pool->access_waiters = 0;
+  pool->transfer = 0;
+  pool->transfer_waiters = 0;
+  pool->waiting = 0;
+  pool->wait_waiters = 0;
+  
+  /*
+   * Allocate memory for buffer descriptors
+   */
+  pool->bds = calloc (config->num, sizeof (rtems_bdbuf_buffer));
+  
+  if (!pool->bds)
+    return RTEMS_NO_MEMORY;
+
+  /*
+   * Allocate memory for buffers if required.
+   */
+  if (buffer == NULL)
+  {
+    buffer = pool->buffers = malloc (config->num * config->size);
+    if (!pool->buffers)
     {
-        return RTEMS_NO_MEMORY;
+      free (pool->bds);
+      return RTEMS_NO_MEMORY;
     }
+  }
 
-    /* Allocate memory for buffers if required */
-    if (config->mem_area == NULL)
-    {
-        bufs = p->mallocd_bufs = malloc(config->num * config->size);
-        if (bufs == NULL)
-        {
-            free(p->bdbufs);
-            return RTEMS_NO_MEMORY;
-        }
-    }
-    else
-    {
-        bufs = config->mem_area;
-        p->mallocd_bufs = NULL;
-    }
+  for (b = 0, bd = pool->bds;
+       b < pool->nblks;
+       b++, bd++, buffer += pool->blksize)
+  {
+    bd->dev        = -1;
+    bd->block      = 0;
+    bd->buffer     = buffer;
+    bd->avl.left   = NULL;
+    bd->avl.right  = NULL;
+    bd->state      = RTEMS_BDBUF_STATE_EMPTY;
+    bd->pool       = pid;
+    bd->error      = 0;
+    bd->waiters    = 0;
+    bd->hold_timer = 0;
+    
+    rtems_chain_append (&pool->ready, &bd->link);
+  }
 
-    for (i = 0, b = p->bdbufs; i < p->nblks; i++, b++, bufs += p->blksize)
-    {
-        b->dev = -1; b->block = 0;
-        b->buffer = bufs;
-        b->actual = b->modified = b->in_progress = FALSE;
-        b->use_count = 0;
-        b->pool = pool;
-        rtems_chain_append(&p->free, &b->link);
-    }
+  sc = rtems_semaphore_create (rtems_build_name ('B', 'P', '0' + pid, 'L'),
+                               1, RTEMS_BDBUF_POOL_LOCK_ATTRIBS, 0,
+                               &pool->lock);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    free (pool->buffers);
+    free (pool->bds);
+    return sc;
+  }
 
-    rc = rtems_semaphore_create(
-        rtems_build_name('B', 'U', 'F', 'G'),
-        p->nblks,
-        RTEMS_FIFO | RTEMS_COUNTING_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
-        RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL,
-        0,
-        &p->bufget_sema);
+  sc = rtems_semaphore_create (rtems_build_name ('B', 'P', '0' + pid, 's'),
+                               0, RTEMS_BDBUF_POOL_WAITER_ATTRIBS, 0,
+                               &pool->sync_lock);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    rtems_semaphore_delete (pool->lock);
+    free (pool->buffers);
+    free (pool->bds);
+    return sc;
+  }
+  
+  sc = rtems_semaphore_create (rtems_build_name ('B', 'P', '0' + pid, 'a'),
+                               0, RTEMS_BDBUF_POOL_WAITER_ATTRIBS, 0,
+                               &pool->access);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    rtems_semaphore_delete (pool->sync_lock);
+    rtems_semaphore_delete (pool->lock);
+    free (pool->buffers);
+    free (pool->bds);
+    return sc;
+  }
 
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        free(p->bdbufs);
-        free(p->mallocd_bufs);
-        return rc;
-    }
+  sc = rtems_semaphore_create (rtems_build_name ('B', 'P', '0' + pid, 't'),
+                               0, RTEMS_BDBUF_POOL_WAITER_ATTRIBS, 0,
+                               &pool->transfer);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    rtems_semaphore_delete (pool->access);
+    rtems_semaphore_delete (pool->sync_lock);
+    rtems_semaphore_delete (pool->lock);
+    free (pool->buffers);
+    free (pool->bds);
+    return sc;
+  }
 
-    return RTEMS_SUCCESSFUL;
+  sc = rtems_semaphore_create (rtems_build_name ('B', 'P', '0' + pid, 'w'),
+                               0, RTEMS_BDBUF_POOL_WAITER_ATTRIBS, 0,
+                               &pool->waiting);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    rtems_semaphore_delete (pool->transfer);
+    rtems_semaphore_delete (pool->access);
+    rtems_semaphore_delete (pool->sync_lock);
+    rtems_semaphore_delete (pool->lock);
+    free (pool->buffers);
+    free (pool->bds);
+    return sc;
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /* bdbuf_release_pool --
@@ -751,21 +1070,29 @@ bdbuf_initialize_pool(rtems_bdbuf_config *config, int pool)
  *     RTEMS_SUCCESSFUL
  */
 static rtems_status_code
-bdbuf_release_pool(rtems_bdpool_id pool)
+rtems_bdbuf_release_pool (rtems_bdpool_id pid)
 {
-    bdbuf_pool *p = rtems_bdbuf_ctx.pool + pool;
-    rtems_semaphore_delete(p->bufget_sema);
-    free(p->bdbufs);
-    free(p->mallocd_bufs);
-    return RTEMS_SUCCESSFUL;
+  rtems_bdbuf_pool* pool = rtems_bdbuf_get_pool (pid);
+  
+  rtems_bdbuf_lock_pool (pool);
+
+  rtems_semaphore_delete (pool->waiting);
+  rtems_semaphore_delete (pool->transfer);
+  rtems_semaphore_delete (pool->access);
+  rtems_semaphore_delete (pool->lock);
+  
+  free (pool->buffers);
+  free (pool->bds);
+  
+  return RTEMS_SUCCESSFUL;
 }
 
 /* rtems_bdbuf_init --
  *     Prepare buffering layer to work - initialize buffer descritors
- *     and (if it is neccessary)buffers. Buffers will be allocated accoriding
+ *     and (if it is neccessary) buffers. Buffers will be allocated according
  *     to the configuration table, each entry describes kind of block and
- *     amount requested. After initialization all blocks is placed into
- *     free elements lists.
+ *     amount requested. After initialization all blocks are placed onto
+ *     empty elements lists.
  *
  * PARAMETERS:
  *     conf_table - pointer to the buffers configuration table
@@ -776,107 +1103,124 @@ bdbuf_release_pool(rtems_bdpool_id pool)
  *     or error code if error is occured)
  */
 rtems_status_code
-rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
+rtems_bdbuf_init ()
 {
-    rtems_bdpool_id i;
-    rtems_status_code rc;
+  rtems_bdpool_id   p;
+  rtems_status_code sc;
 
-    if (size <= 0)
-        return RTEMS_INVALID_SIZE;
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("init\n");
+#endif
 
-    rtems_bdbuf_ctx.npools = size;
+  if (rtems_bdbuf_pool_configuration_size <= 0)
+    return RTEMS_INVALID_SIZE;
 
-    /*
-     * Allocate memory for buffer pool descriptors
-     */
-    rtems_bdbuf_ctx.pool = calloc(size, sizeof(bdbuf_pool));
-    if (rtems_bdbuf_ctx.pool == NULL)
+  if (rtems_bdbuf_ctx.npools)
+    return RTEMS_RESOURCE_IN_USE;
+
+  rtems_bdbuf_ctx.npools = rtems_bdbuf_pool_configuration_size;
+
+  /*
+   * Allocate memory for buffer pool descriptors
+   */
+  rtems_bdbuf_ctx.pool = calloc (rtems_bdbuf_pool_configuration_size,
+                                 sizeof (rtems_bdbuf_pool));
+  
+  if (rtems_bdbuf_ctx.pool == NULL)
+    return RTEMS_NO_MEMORY;
+
+  /*
+   * Initialize buffer pools and roll out if something failed,
+   */
+  for (p = 0; p < rtems_bdbuf_ctx.npools; p++)
+  {
+    sc = rtems_bdbuf_initialize_pool (&rtems_bdbuf_pool_configuration[p], p);
+    if (sc != RTEMS_SUCCESSFUL)
     {
-        return RTEMS_NO_MEMORY;
+      rtems_bdpool_id j;
+      for (j = 0; j < p - 1; j++)
+        rtems_bdbuf_release_pool (j);
+      return sc;
     }
+  }
 
-    rtems_chain_initialize_empty(&rtems_bdbuf_ctx.mod);
+  /*
+   * Create and start swapout task
+   */
 
-    /* Initialize buffer pools and roll out if something failed */
-    for (i = 0; i < size; i++)
-    {
-        rc = bdbuf_initialize_pool(conf_table + i, i);
-        if (rc != RTEMS_SUCCESSFUL)
-        {
-             rtems_bdpool_id j;
-             for (j = 0; j < i - 1; j++)
-             {
-                 bdbuf_release_pool(j);
-             }
-             return rc;
-        }
-    }
+  rtems_bdbuf_ctx.swapout_enabled = TRUE;
+  
+  sc = rtems_task_create (rtems_build_name('B', 'S', 'W', 'P'),
+                          (rtems_bdbuf_configuration.swapout_priority ?
+                           rtems_bdbuf_configuration.swapout_priority :
+                           RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT),
+                          SWAPOUT_TASK_STACK_SIZE,
+                          RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
+                          RTEMS_LOCAL | RTEMS_NO_FLOATING_POINT,
+                          &rtems_bdbuf_ctx.swapout);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    for (p = 0; p < rtems_bdbuf_ctx.npools; p++)
+      rtems_bdbuf_release_pool (p);
+    free (rtems_bdbuf_ctx.pool);
+    return sc;
+  }
 
-    /* Create buffer flush semaphore */
-    rc = rtems_semaphore_create(
-        rtems_build_name('B', 'F', 'L', 'U'), 0,
-        RTEMS_FIFO | RTEMS_COUNTING_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
-        RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL, 0,
-        &rtems_bdbuf_ctx.flush_sema);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        for (i = 0; i < size; i++)
-            bdbuf_release_pool(i);
-        free(rtems_bdbuf_ctx.pool);
-        return rc;
-    }
+  sc = rtems_task_start (rtems_bdbuf_ctx.swapout,
+                         rtems_bdbuf_swapout_task,
+                         (rtems_task_argument) &rtems_bdbuf_ctx);
+  if (sc != RTEMS_SUCCESSFUL)
+  {
+    rtems_task_delete (rtems_bdbuf_ctx.swapout);
+    for (p = 0; p < rtems_bdbuf_ctx.npools; p++)
+      rtems_bdbuf_release_pool (p);
+    free (rtems_bdbuf_ctx.pool);
+    return sc;
+  }
 
-    /* Create and start swapout task */
-    rc = rtems_task_create(
-        rtems_build_name('B', 'S', 'W', 'P'),	
-        ((swapout_task_priority > 0) 
-	 ? swapout_task_priority
-	 : SWAPOUT_TASK_DEFAULT_PRIORITY),
-        SWAPOUT_TASK_STACK_SIZE,
-        RTEMS_DEFAULT_MODES | RTEMS_NO_PREEMPT,
-        RTEMS_DEFAULT_ATTRIBUTES,
-        &rtems_bdbuf_ctx.swapout_task);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        rtems_semaphore_delete(rtems_bdbuf_ctx.flush_sema);
-        for (i = 0; i < size; i++)
-            bdbuf_release_pool(i);
-        free(rtems_bdbuf_ctx.pool);
-        return rc;
-    }
-
-    rc = rtems_task_start(rtems_bdbuf_ctx.swapout_task, bdbuf_swapout_task, 0);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        rtems_task_delete(rtems_bdbuf_ctx.swapout_task);
-        rtems_semaphore_delete(rtems_bdbuf_ctx.flush_sema);
-        for (i = 0; i < size; i++)
-            bdbuf_release_pool(i);
-        free(rtems_bdbuf_ctx.pool);
-        return rc;
-    }
-
-    return RTEMS_SUCCESSFUL;
+  return RTEMS_SUCCESSFUL;
 }
 
-/* find_or_assign_buffer --
- *     Looks for buffer already assigned for this dev/block. If one is found
- *     obtain block buffer. If specified block already cached (i.e. there's
- *     block in the _modified_, or _recently_used_), return address
- *     of appropriate buffer descriptor and increment reference counter to 1.
- *     If block is not cached, allocate new buffer and return it. Data
- *     shouldn't be read to the buffer from media; buffer contains arbitrary
- *     data. This primitive may be blocked if there are no free buffer
- *     descriptors available and there are no unused non-modified (or
- *     synchronized with media) buffers available.
+/**
+ * Get a buffer for this device and block. This function returns a buffer once
+ * placed into the AVL tree. If no buffer is available and it is not a read
+ * ahead request wait until one is available. If the buffer is for a read ahead
+ * transfer return NULL if there is not buffer or it is in the cache.
  *
- * PARAMETERS:
- *     device - device number (constructed of major and minor device number
- *     block  - linear media block number
- *     ret_buf - address of the variable to store address of found descriptor
+ * The AVL tree of buffers for the pool is searched and if not located check
+ * obtain a buffer and insert it into the AVL tree. Buffers are first obtained
+ * from the ready list until all empty buffers are used. Once all buffers are
+ * in use buffers are taken from the LRU list with the least recently used
+ * buffer taken first. A buffer taken from the LRU list is removed from the AVL
+ * tree. The empty list or LRU list buffer is initialised to this device and
+ * block. If no buffers are available due to the empty and LRU lists being
+ * empty the caller is blocked on the waiting semaphore and counter. When
+ * buffers return from the upper layers (access) or lower driver (transfer) the
+ * blocked caller task is woken and this procedure is repeated. The repeat
+ * handles a case of a another thread pre-empting getting a buffer first and
+ * adding it to the AVL tree.
  *
+ * A buffer located in the AVL tree means it is already in the cache and maybe
+ * in use somewhere. The buffer can be either:
+ *
+ * # Cached. Not being accessed or part of a media transfer.
+ * # Access. Is with an upper layer being accessed.
+ * # Transfer. Is with the driver and part of a media transfer.
+ *
+ * If cached we assign the state new state extract it from any list it maybe
+ * part of and return to the user. The buffer could be part of the LRU list or
+ * the modifed list waiting to be swapped out by the swap out task.
+ *
+ * This function assumes the pool the buffer is being taken from is locked and
+ * it insure the pool is locked when it returns.
+ *
+ * @param device The physical disk device
+ * @param block  Linear media block number
+ * @param
+ * @param bd     Address to store of found descriptor
+
  * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
+ *     RTEMS status code ( if operation completed successfully
  *     or error code if error is occured)
  *
  * SIDE EFFEECTS:
@@ -885,252 +1229,251 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
  * NOTE:
  *     It is assumed that primitive invoked when thread preemption is disabled.
  */
-static rtems_status_code
-find_or_assign_buffer(disk_device *dd,
-                      blkdev_bnum block,
-                      bdbuf_buffer **ret_buf)
+static rtems_bdbuf_buffer*
+rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
+                        rtems_bdbuf_pool*  pool,
+                        rtems_blkdev_bnum  block,
+                        boolean            read_ahead)
 {
-    bdbuf_buffer *bd_buf;
-    bdbuf_pool   *bd_pool;
-    rtems_status_code rc;
-    dev_t         device;
-    ISR_Level     level;
+  dev_t               device = pdd->dev;
+  rtems_bdbuf_buffer* bd;
+  boolean             available;
 
-    int blksize;
-
-    device = dd->dev;
-    bd_pool = rtems_bdbuf_ctx.pool + dd->pool;
-    blksize = dd->block_size;
-
-again:
-    /* Looking for buffer descriptor used for this dev/block. */
-    bd_buf = avl_search(&bd_pool->tree, device, block);
-
-    if (bd_buf == NULL)
-    {
-        /* Try to obtain semaphore without waiting first. It is the most
-           frequent case when reasonable number of buffers configured. If
-           it is failed, obtain semaphore blocking on it. In this case
-           it should be checked that appropriate buffer hasn't been loaded
-           by another thread, because this thread is preempted */
-        rc = rtems_semaphore_obtain(bd_pool->bufget_sema, RTEMS_NO_WAIT, 0);
-        if (rc == RTEMS_UNSATISFIED)
-        {
-            rc = rtems_semaphore_obtain(bd_pool->bufget_sema,
-                                        RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-            bd_buf = avl_search(&bd_pool->tree, device, block);
-            if (bd_buf != NULL)
-                rtems_semaphore_release(bd_pool->bufget_sema);
-        }
-    }
-
-    if (bd_buf == NULL)
-    {
-        /* Assign new buffer descriptor */
-        if (rtems_chain_is_empty(&bd_pool->free))
-        {
-            bd_buf = (bdbuf_buffer *)rtems_chain_get(&bd_pool->lru);
-            if (bd_buf != NULL)
-            {
-                int avl_result;
-                avl_result = avl_remove(&bd_pool->tree, bd_buf);
-                if (avl_result != 0)
-                {
-                    rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_CONSISTENCY);
-                    return RTEMS_INTERNAL_ERROR;
-                }
-            }
-        }
-        else
-        {
-            bd_buf = (bdbuf_buffer *)rtems_chain_get(&(bd_pool->free));
-        }
-
-        if (bd_buf == NULL)
-        {
-            goto again;
-        }
-        else
-        {
-            bd_buf->dev = device;
-            bd_buf->block = block;
-#ifdef AVL_GPL
-            bd_buf->avl.link[0] = NULL;
-            bd_buf->avl.link[1] = NULL;
-#else
-            bd_buf->avl.left = NULL;
-            bd_buf->avl.right = NULL;
-#endif
-            bd_buf->use_count = 1;
-            bd_buf->modified = bd_buf->actual = bd_buf->in_progress = FALSE;
-            bd_buf->status = RTEMS_SUCCESSFUL;
-
-            if (avl_insert(&bd_pool->tree, bd_buf) != 0)
-            {
-                rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_CONSISTENCY);
-                return RTEMS_INTERNAL_ERROR;
-            }
-
-            *ret_buf = bd_buf;
-
-            return RTEMS_SUCCESSFUL;
-        }
-    }
-    else
-    {
-        /* Buffer descriptor already assigned for this dev/block */
-        if (bd_buf->use_count == 0)
-        {
-            /* If we are removing from lru list, obtain the bufget_sema
-             * first. If we are removing from mod list, obtain flush sema.
-             * It should be obtained without blocking because we know
-             * that our buffer descriptor is in the list. */
-            if (bd_buf->modified)
-            {
-                rc = rtems_semaphore_obtain(rtems_bdbuf_ctx.flush_sema,
-                                            RTEMS_NO_WAIT, 0);
-            }
-            else
-            {
-                rc = rtems_semaphore_obtain(bd_pool->bufget_sema,
-                                            RTEMS_NO_WAIT, 0);
-            }
-            /* It is possible that we couldn't obtain flush or bufget sema
-             * although buffer in the appropriate chain is available:
-             * semaphore may be released to swapout task, but this task
-             * actually did not start to process it. */
-            if (rc == RTEMS_UNSATISFIED)
-                rc = RTEMS_SUCCESSFUL;
-            if (rc != RTEMS_SUCCESSFUL)
-            {
-                rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_CONSISTENCY);
-                return RTEMS_INTERNAL_ERROR;
-            }
-
-            /* Buffer descriptor is linked to the lru or mod chain. Remove
-               it from there. */
-            rtems_chain_extract(&bd_buf->link);
-        }
-        bd_buf->use_count++;
-        while (bd_buf->in_progress != 0)
-        {
-            rtems_interrupt_disable(level);
-            _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
-                              WATCHDOG_NO_TIMEOUT, level);
-        }
-
-        *ret_buf = bd_buf;
-        return RTEMS_SUCCESSFUL;
-    }
-}
-
-/* rtems_bdbuf_get --
- *     Obtain block buffer. If specified block already cached (i.e. there's
- *     block in the _modified_, or _recently_used_), return address
- *     of appropriate buffer descriptor and increment reference counter to 1.
- *     If block is not cached, allocate new buffer and return it. Data
- *     shouldn't be read to the buffer from media; buffer may contains
- *     arbitrary data. This primitive may be blocked if there are no free
- *     buffer descriptors available and there are no unused non-modified
- *     (or synchronized with media) buffers available.
- *
- * PARAMETERS:
- *     device - device number (constructed of major and minor device number)
- *     block  - linear media block number
- *     bd     - address of variable to store pointer to the buffer descriptor
- *
- * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
- *     or error code if error is occured)
- *
- * SIDE EFFECTS:
- *     bufget_sema semaphore obtained by this primitive.
- */
-rtems_status_code
-rtems_bdbuf_get(dev_t device, blkdev_bnum block, bdbuf_buffer **bd)
-{
-    rtems_status_code rc;
-    disk_device *dd;
-    disk_device *pdd;
-    preemption_key key;
+  /*
+   * Loop until we get a buffer. Under load we could find no buffers are
+   * available so in the case of the required block this task needs to wait
+   * until some return before proceeding. There is no timeout. If the buffer is
+   * for a read ahead buffer return NULL.
+   *
+   * The search procedure is repeated as another thread could have pre-empted
+   * us while we waited for a buffer, obtained an empty buffer and loaded the
+   * AVL tree with it.
+   */
+  do
+  {
+    /*
+     * Search for buffer descriptor for this dev/block key.
+     */
+    bd = rtems_bdbuf_avl_search (&pool->tree, device, block);
 
     /*
-     * Convert logical dev/block to physical one
+     * No buffer in the cache for this block. We need to obtain a buffer and
+     * this means take a buffer that is ready to use. If all buffers are in use
+     * take the least recently used buffer. If there are none then the cache is
+     * empty. All the buffers are either queued to be written to disk or with
+     * the user. We cannot do much with the buffers with the user how-ever with
+     * the modified buffers waiting to be written to disk flush the maximum
+     * number transfered in a block to disk. After this all that be done is to
+     * wait for a buffer to return to the cache.
      */
-    dd = rtems_disk_lookup(device);
-    if (dd == NULL)
-        return RTEMS_INVALID_ID;
-
-    if (block >= dd->size)
+    if (!bd)
     {
-        rtems_disk_release(dd);
-        return RTEMS_INVALID_NUMBER;
+      /*
+       * Assign new buffer descriptor from the empty list if one is present. If
+       * the empty queue is empty get the oldest buffer from LRU list. If the
+       * LRU list is empty there are no available buffers so we need to wait
+       * until some are returned.
+       */
+      if (rtems_chain_is_empty (&pool->ready))
+      {
+        /*
+         * No unsed or read-ahead buffers.
+         *
+         * If this is a read ahead buffer just return. No need to place
+         * further pressure on the cache by reading something that may be
+         * needed when we have data in the cache that was needed.
+         */
+        if (read_ahead)
+          return NULL;
+
+        /*
+         * Check the LRU list.
+         */
+        bd = (rtems_bdbuf_buffer *) rtems_chain_get (&pool->lru);
+        
+        if (bd)
+        {
+          /*
+           * Remove the buffer from the AVL tree.
+           */
+          if (rtems_bdbuf_avl_remove (&pool->tree, bd) != 0)
+            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+        }
+        else
+        {
+          /*
+           * If there are buffers on the modified list expire the hold timer
+           * and wake the swap out task.
+           */
+          if (!rtems_chain_is_empty (&pool->modified))
+          {
+            rtems_chain_node* node = rtems_chain_head (&pool->modified);
+            int               write_blocks = 0;
+            
+            node = node->next;
+            while ((write_blocks < rtems_bdbuf_configuration.max_write_blocks) &&
+                   !rtems_chain_is_tail (&pool->modified, node))
+            {
+              rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
+              bd->hold_timer = 0;
+              write_blocks++;
+              node = node->next;
+            }
+
+            rtems_bdbuf_wake_swapper ();
+          }
+          
+          /*
+           * Wait for a buffer to be returned to the pool. The buffer will be
+           * placed on the LRU list.
+           */
+          rtems_bdbuf_wait (pool, &pool->waiting, &pool->wait_waiters);
+        }
+      }
+      else
+      {
+        bd = (rtems_bdbuf_buffer *) rtems_chain_get (&(pool->ready));
+
+        if ((bd->state != RTEMS_BDBUF_STATE_EMPTY) &&
+            (bd->state != RTEMS_BDBUF_STATE_READ_AHEAD))
+          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+
+        if (bd->state == RTEMS_BDBUF_STATE_READ_AHEAD)
+        {
+          if (rtems_bdbuf_avl_remove (&pool->tree, bd) != 0)
+            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+        }
+      }
+
+      if (bd)
+      {
+        bd->dev       = device;
+        bd->block     = block;
+        bd->avl.left  = NULL;
+        bd->avl.right = NULL;
+        bd->state     = RTEMS_BDBUF_STATE_EMPTY;
+        bd->error     = 0;
+        bd->waiters   = 0;
+
+        if (rtems_bdbuf_avl_insert (&pool->tree, bd) != 0)
+          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+
+        return bd;
+      }
     }
+  }
+  while (!bd);
 
-    pdd = dd->phys_dev;
-    block += dd->start;
-    rtems_disk_release(dd);
+  /*
+   * If the buffer is for read ahead and it exists in the AVL cache or is being
+   * accessed or being transfered then return NULL.
+   */
+  if (read_ahead)
+    return NULL;
 
-    DISABLE_PREEMPTION(key);
-    rc = find_or_assign_buffer(pdd, block, bd);
-    ENABLE_PREEMPTION(key);
+  /*
+   * Loop waiting for the buffer to enter the cached state. If the buffer
+   * is in the access or transfer state then wait until it is not.
+   */
+  available = FALSE;
+  while (!available)
+  {
+    switch (bd->state)
+    {
+      case RTEMS_BDBUF_STATE_CACHED:
+      case RTEMS_BDBUF_STATE_MODIFIED:
+      case RTEMS_BDBUF_STATE_READ_AHEAD:
+        available = TRUE;
+        break;
 
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
+      case RTEMS_BDBUF_STATE_ACCESS:
+      case RTEMS_BDBUF_STATE_ACCESS_MODIFIED:
+        bd->waiters++;
+        rtems_bdbuf_wait (pool, &pool->access, &pool->access_waiters);
+        bd->waiters--;
+        break;
 
-    return RTEMS_SUCCESSFUL;
+      case RTEMS_BDBUF_STATE_SYNC:
+      case RTEMS_BDBUF_STATE_TRANSFER:
+        bd->waiters++;
+        rtems_bdbuf_wait (pool, &pool->transfer, &pool->transfer_waiters);
+        bd->waiters--;
+        break;
+
+      default:
+        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+    }
+  }
+
+  /*
+   * Buffer is linked to the LRU, modifed, or sync lists. Remove it from there.
+   */
+  rtems_chain_extract (&bd->link);
+
+  return bd;
 }
 
-/* bdbuf_initialize_transfer_sema --
- *     Initialize transfer_sema mutex semaphore associated with buffer
- *     descriptor.
- */
-static inline void
-bdbuf_initialize_transfer_sema(bdbuf_buffer *bd_buf)
-{
-    CORE_mutex_Attributes mutex_attr;
-    mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
-    mutex_attr.only_owner_release = FALSE;
-    mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
-    mutex_attr.priority_ceiling = 0;
-
-    _CORE_mutex_Initialize(&bd_buf->transfer_sema,
-                           &mutex_attr, CORE_MUTEX_LOCKED);
-}
-
-/* bdbuf_write_transfer_done --
- *     Callout function. Invoked by block device driver when data transfer
- *     to device (write) is completed. This function may be invoked from
- *     interrupt handler.
+/**
+ * Obtain block buffer. If specified block already cached (i.e. there's block
+ * in the _modified_, or _recently_used_), return address of appropriate buffer
+ * descriptor. If block is not cached, allocate new buffer and return it. Data
+ * shouldn't be read to the buffer from media; buffer may contains arbitrary
+ * data. This primitive may be blocked if there are no free buffer descriptors
+ * available and there are no unused non-modified (or synchronized with media)
+ * buffers available.
  *
- * PARAMETERS:
- *     arg    - arbitrary argument specified in block device request
- *              structure (in this case - pointer to the appropriate
- *              bdbuf_buffer buffer descriptor structure).
- *     status - I/O completion status
- *     error  - errno error code if status != RTEMS_SUCCESSFUL
- *
- * RETURNS:
- *     none
+ * @param device device number (constructed of major and minor device number)
+ * @param block linear media block number
+ * @param bd address of variable to store pointer to the buffer descriptor
+ * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
+ *         or error code if error is occured)
  */
-static void
-bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
+rtems_status_code
+rtems_bdbuf_get (dev_t                device,
+                 rtems_blkdev_bnum    block,
+                 rtems_bdbuf_buffer** bdp)
 {
-    int i;
-    write_tfer_done_arg_t *wtd_arg = arg;
-    blkdev_request *req = wtd_arg->req;
-    bdbuf_buffer **bd_buf_write_store = wtd_arg->write_store;
-    bdbuf_buffer *bd_buf;
-    for (i = 0;i < req->count;i++) {
-      bd_buf = bd_buf_write_store[i];
-      bd_buf->status = status;
-      bd_buf->error = RTEMS_IO_ERROR;
-      
-      bd_buf->in_progress = FALSE;
-      _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-      _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
-			CORE_MUTEX_STATUS_SUCCESSFUL);
-    }
+  rtems_disk_device*  dd;
+  rtems_bdbuf_pool*   pool;
+  rtems_bdbuf_buffer* bd;
+
+  /*
+   * Do not hold the pool lock when obtaining the disk table.
+   */
+  dd = rtems_disk_obtain (device);
+  if (dd == NULL)
+    return RTEMS_INVALID_ID;
+
+  if (block >= dd->size)
+  {
+    rtems_disk_release (dd);
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  block += dd->start;
+
+  pool = rtems_bdbuf_get_pool (dd->phys_dev->pool);
+  
+  rtems_disk_release(dd);
+
+  rtems_bdbuf_lock_pool (pool);
+
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("get: %d (dev = %08x)\n", block, device);
+#endif
+
+  bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool, block, FALSE);
+
+  if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
+    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
+  else
+    bd->state = RTEMS_BDBUF_STATE_ACCESS;
+  
+  rtems_bdbuf_unlock_pool (pool);
+
+  *bdp = bd;
+  
+  return RTEMS_SUCCESSFUL;
 }
 
 /* bdbuf_read_transfer_done --
@@ -1149,455 +1492,399 @@ bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
  *     none
  */
 static void
-bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
+rtems_bdbuf_read_done (void* arg, rtems_status_code status, int error)
 {
-#if defined(READ_MULTIPLE)  
+  rtems_blkdev_request* req = (rtems_blkdev_request*) arg;
+
+  req->error = error;
+  req->status = status;
+
+  rtems_event_send (req->io_task, RTEMS_BDBUF_TRANSFER_SYNC);
+}
+
+/**
+ * Read a block into memory. If the block is not is the cache it is read into
+ * memory. The caller is blocked until the block is read and placed into the
+ * cache.
+ *
+ * @param device The device number (consists of major and minor device number)
+ * @param block Linear media block number
+ * @param bd Pointer to the buffer BD address.
+ * @retval RTEMS_SUCCESSFUL Operation completed successfully.
+ * @return rtems_status_code An error code. Buffer still passed to caller.
+ */
+
+rtems_status_code
+rtems_bdbuf_read (dev_t                device,
+                  rtems_blkdev_bnum    block,
+                  rtems_bdbuf_buffer** bdp)
+{
+  rtems_disk_device*    dd;
+  rtems_bdbuf_pool*     pool;
+  rtems_bdbuf_buffer*   bd = NULL;
+  int                   read_ahead_count;
+  rtems_blkdev_request* req;
   
-  read_ahead_bd_buf_group *bd_buf_group = arg;
-  bdbuf_buffer *bd_buf;
-  int i;
-  for (i = 0;i < bd_buf_group->cnt;i++) {
-    bd_buf = bd_buf_group->bd_bufs[i];
+  /*
+   * @todo This type of request structure is wrong and should be removed.
+   */
+#define bdbuf_alloc(size) __builtin_alloca (size)
 
-    bd_buf->status = status;
-    bd_buf->error = RTEMS_IO_ERROR;
-    _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
-                      CORE_MUTEX_STATUS_SUCCESSFUL);
-  }
-#else
-    bdbuf_buffer *bd_buf = arg;
-    bd_buf->status = status;
-    bd_buf->error = RTEMS_IO_ERROR;
-    _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
-                      CORE_MUTEX_STATUS_SUCCESSFUL);
+  req = bdbuf_alloc (sizeof (rtems_blkdev_request) +
+                     (sizeof ( rtems_blkdev_sg_buffer) *
+                      rtems_bdbuf_configuration.max_read_ahead_blocks));
+
+  /*
+   * Do not hold the pool lock when obtaining the disk table.
+   */
+  dd = rtems_disk_obtain (device);
+  if (dd == NULL)
+    return RTEMS_INVALID_ID;
+
+  block += dd->start;
+  
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("read: %d (dev = %08x)\n", block, device);
 #endif
-}
-
-/* rtems_bdbuf_read --
- *     (Similar to the rtems_bdbuf_get, except reading data from media)
- *     Obtain block buffer. If specified block already cached, return address
- *     of appropriate buffer and increment reference counter to 1. If block is
- *     not cached, allocate new buffer and read data to it from the media.
- *     This primitive may be blocked on waiting until data to be read from
- *     media, if there are no free buffer descriptors available and there are
- *     no unused non-modified (or synchronized with media) buffers available.
- *
- * PARAMETERS:
- *     device - device number (consists of major and minor device number)
- *     block  - linear media block number
- *     bd     - address of variable to store pointer to the buffer descriptor
- *
- * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
- *     or error code if error is occured)
- *
- * SIDE EFFECTS:
- *     bufget_sema and transfer_sema semaphores obtained by this primitive.
- */
-#if !defined(READ_MULTIPLE)
-rtems_status_code
-rtems_bdbuf_read(dev_t device,
-                 blkdev_bnum block,
-                 bdbuf_buffer **bd)
-{
-    preemption_key key;
-    ISR_Level level;
-
-    bdbuf_buffer *bd_buf;
-    rtems_status_code rc;
-    int result;
-    disk_device *dd;
-    disk_device *pdd;
-    blkdev_request1 req;
-
-    dd = rtems_disk_lookup(device);
-    if (dd == NULL)
-        return RTEMS_INVALID_ID;
-
-    if (block >= dd->size)
-    {
-        rtems_disk_release(dd);
-        return RTEMS_INVALID_NUMBER;
-    }
-
-    pdd = dd->phys_dev;
-    block += dd->start;
-
-    DISABLE_PREEMPTION(key);
-    rc = find_or_assign_buffer(pdd, block, &bd_buf);
-
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        ENABLE_PREEMPTION(key);
-        rtems_disk_release(dd);
-        return rc;
-    }
-
-    if (!bd_buf->actual)
-    {
-        bd_buf->in_progress = 1;
-
-        req.req.req = BLKDEV_REQ_READ;
-        req.req.req_done = bdbuf_read_transfer_done;
-        req.req.done_arg = bd_buf;
-        req.req.start = block;
-        req.req.count = 1;
-        req.req.bufnum = 1;
-        req.req.bufs[0].length = dd->block_size;
-        req.req.bufs[0].buffer = bd_buf->buffer;
-
-        bdbuf_initialize_transfer_sema(bd_buf);
-        result = dd->ioctl(pdd->dev, BLKIO_REQUEST, &req);
-        if (result == -1)
-        {
-            bd_buf->status = RTEMS_IO_ERROR;
-            bd_buf->error = errno;
-            bd_buf->actual = FALSE;
-        }
-        else
-        {
-            rtems_interrupt_disable(level);
-            _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
-                              WATCHDOG_NO_TIMEOUT, level);
-            bd_buf->actual = TRUE;
-        }
-        bd_buf->in_progress = FALSE;
-    }
+  
+  if (block >= dd->size)
+  {
     rtems_disk_release(dd);
+    return RTEMS_INVALID_NUMBER;
+  }
 
-    ENABLE_PREEMPTION(key);
+  req->count = 0;
+  req->bufnum = 0;
 
-    *bd = bd_buf;
-           
-    return RTEMS_SUCCESSFUL;
-}
-#else /* READ_MULTIPLE */
-rtems_status_code
-rtems_bdbuf_read(dev_t device, 
-                 blkdev_bnum block,
-                 bdbuf_buffer **bd)
-{
-    preemption_key key;
-    ISR_Level level;
+  /*
+   * Read the block plus the required number of blocks ahead. The number of
+   * blocks to read ahead is configured by the user and limited by the size of
+   * the disk or reaching a read ahead block that is also cached.
+   *
+   * Limit the blocks read by the size of the disk.
+   */
+  if ((rtems_bdbuf_configuration.max_read_ahead_blocks + block) < dd->size)
+    read_ahead_count = rtems_bdbuf_configuration.max_read_ahead_blocks;
+  else
+    read_ahead_count = dd->size - block;
 
-    bdbuf_buffer *bd_buf,*first_bd_buf;
-    rtems_status_code rc;
+  pool = rtems_bdbuf_get_pool (dd->phys_dev->pool);
+
+  rtems_bdbuf_lock_pool (pool);
+
+  while (req->count < read_ahead_count)
+  {
+    /*
+     * Get the buffer for the requested block. If the block is cached then
+     * return it. If it is not cached transfer the block from the disk media
+     * into memory.
+     *
+     * We need to clean up any buffers allocated and not passed back to the
+     * caller.
+     */
+    bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool,
+                                 block + req->count,
+                                 req->count == 0 ? FALSE : TRUE);
+
+    /*
+     * Read ahead buffer is in the cache or none available. Read what we
+     * can.
+     */
+    if (!bd)
+      break;
+
+    /*
+     * Is the block we are interested in the cache ?
+     */
+    if ((bd->state == RTEMS_BDBUF_STATE_CACHED) ||
+        (bd->state == RTEMS_BDBUF_STATE_MODIFIED))
+      break;
+
+    bd->state = RTEMS_BDBUF_STATE_TRANSFER;
+    bd->error = 0;
+
+    /*
+     * @todo The use of these req blocks is not a great design.
+     *       The req is a struct with a single 'bufs' declared in the
+     *       req struct and the others are added in the outer level
+     *       struct. This relies on the structs joining as a single
+     *       array and that assumes the compiler packs the structs.
+     *       Why not just place on a list ? The BD has a node that
+     *       can be used.
+     */
+    req->bufs[req->count].user   = bd;
+    req->bufs[req->count].block  = bd->block;
+    req->bufs[req->count].length = dd->block_size;
+    req->bufs[req->count].buffer = bd->buffer;
+    req->count++;
+    req->bufnum++;
+  }
+
+  /*
+   * Transfer any requested buffers. If the request count is 0 we have found
+   * the block in the cache so return it.
+   */
+  if (req->count)
+  {
+    /*
+     * Unlock the pool. We have the buffer for the block and it will be in the
+     * access or transfer state. We may also have a number of read ahead blocks
+     * if we need to transfer data. At this point any other threads can gain
+     * access to the pool and if they are after any of the buffers we have they
+     * will block and be woken when the buffer is returned to the pool.
+     *
+     * If a transfer is needed the I/O operation will occur with pre-emption
+     * enabled and the pool unlocked. This is a change to the previous version
+     * of the bdbuf code.
+     */
     int result;
-    disk_device *dd;
-    disk_device *pdd;
-    blkdev_request_read_ahead req;
-    read_ahead_bd_buf_group bd_buf_group;
-    boolean find_more_buffers;
-    int i;
-
-    dd = rtems_disk_lookup(device);
-    if (dd == NULL)
-        return RTEMS_INVALID_ID;
-     
-    if (block >= dd->size)
-    {
-        rtems_disk_release(dd);
-        return RTEMS_INVALID_NUMBER;
-    }
+    int b;
     
-    pdd = dd->phys_dev;
-    block += dd->start;
+    rtems_bdbuf_unlock_pool (pool);
 
-    DISABLE_PREEMPTION(key);
-    rc = find_or_assign_buffer(pdd, block, &first_bd_buf);
+    req->req = RTEMS_BLKDEV_REQ_READ;
+    req->req_done = rtems_bdbuf_read_done;
+    req->done_arg = req;
+    req->io_task = rtems_task_self ();
+    req->status = RTEMS_RESOURCE_IN_USE;
+    req->error = 0;
+    req->start = dd->start;
+  
+    result = dd->ioctl (dd->phys_dev->dev, RTEMS_BLKIO_REQUEST, req);
 
-    if (rc != RTEMS_SUCCESSFUL)
+    /*
+     * Inspection of the DOS FS code shows the result from this function is
+     * handled and a buffer must be returned.
+     */
+    if (result < 0)
     {
-        ENABLE_PREEMPTION(key);
-        rtems_disk_release(dd);
-        return rc;
+      req->error = errno;
+      req->status = RTEMS_IO_ERROR;
     }
-    if (!first_bd_buf->actual)
+    else
     {
+      rtems_status_code sc;
+      rtems_event_set   out;
+      sc = rtems_event_receive (RTEMS_BDBUF_TRANSFER_SYNC,
+                                RTEMS_EVENT_ALL | RTEMS_WAIT,
+                                0, &out);
 
-	bd_buf_group.bd_bufs[0] = first_bd_buf;
-	bd_buf_group.cnt = 1;
-
-        first_bd_buf->in_progress = TRUE;
-
-        req.req.req = BLKDEV_REQ_READ;
-        req.req.req_done = bdbuf_read_transfer_done;
-        req.req.done_arg = &bd_buf_group;
-        req.req.start = block;
-        req.req.count = 1;
-        req.req.bufnum = 1;
-        req.req.bufs[0].length = dd->block_size;
-        req.req.bufs[0].buffer = first_bd_buf->buffer;
-        
-        bdbuf_initialize_transfer_sema(first_bd_buf);
-	/*
-	 * FIXME: check for following blocks to be:
-	 *   - still in range of partition size
-	 *   - not yet assigned
-	 *   - buffer available
-	 * allocate for read call, if possible
-	 */
-	find_more_buffers = TRUE;
-	while (find_more_buffers) {	  
-	  block++;
-	  /*
-	   * still bd_buf_group entries free and 
-	   * still in range of this disk? 
-	   */
-	  if ((bd_buf_group.cnt >= READ_AHEAD_MAX_BLK_CNT) ||
-	      (block >= dd->size)) {
-	    find_more_buffers = FALSE;
-	  }
-	  if (find_more_buffers) {
-	    rc = find_or_assign_buffer(pdd, block, &bd_buf);
-	    if (rc != RTEMS_SUCCESSFUL) {
-	      find_more_buffers = FALSE;
-	    }      
-	    else if (bd_buf->actual) {
-	      find_more_buffers = FALSE;
-          bdbuf_release(bd_buf);
-	    }      
-	  }
-	  if (find_more_buffers) {
-	    bdbuf_initialize_transfer_sema(bd_buf);
-	    bd_buf->in_progress = TRUE;
-
-	    req.req.bufs[req.req.count].length = dd->block_size;
-	    req.req.bufs[req.req.count].buffer = bd_buf->buffer;
-	    req.req.count++;
-	    req.req.bufnum++;
-	    bd_buf_group.bd_bufs[bd_buf_group.cnt] = bd_buf;
-	    bd_buf_group.cnt++;
-	  }
-	}	    
-
-	/* do the actual read call here 
-	 */
-        result = dd->ioctl(pdd->dev, BLKIO_REQUEST, &req);
-
-	/*
-	 * cleanup: 
-	 * wait, until all bd_bufs are processed
-	 * set status in all bd_bufs
-	 */
-	for (i = 0;i < bd_buf_group.cnt;i++) {
-	  bd_buf = bd_buf_group.bd_bufs[i];
-	  if (result == -1)
-	    {
-	      bd_buf->status = RTEMS_IO_ERROR;
-	      bd_buf->error = errno;
-	      bd_buf->actual = FALSE;
-	    }
-	  else
-	    {
-	      rtems_interrupt_disable(level);
-	      _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
-				WATCHDOG_NO_TIMEOUT, level);
-	      bd_buf->actual = TRUE;
-	    }	
-	  bd_buf->in_progress = FALSE;
-	  /* release any pre-read buffers */
-	  if (i > 0) {
-	    bdbuf_release(bd_buf);
-	  }
-	}
+      if (sc != RTEMS_SUCCESSFUL)
+        rtems_fatal_error_occurred (BLKDEV_FATAL_BDBUF_SWAPOUT_RE);
     }
-    rtems_disk_release(dd);
-    
-    ENABLE_PREEMPTION(key);
 
-    *bd = first_bd_buf;
-           
-    return RTEMS_SUCCESSFUL;
-}
-#endif /* READ_MULTIPLE */
+    rtems_bdbuf_lock_pool (pool);
 
-
-/* bdbuf_release --
- *     Release buffer. Decrease buffer usage counter. If it is zero, further
- *     processing depends on modified attribute. If buffer was modified, it
- *     is inserted into mod chain and swapout task waken up. If buffer was
- *     not modified, it is returned to the end of lru chain making it available
- *     for further use.
- *
- * PARAMETERS:
- *     bd_buf - pointer to the released buffer descriptor.
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if buffer released successfully, or error code if
- *     error occured.
- *
- * NOTE:
- *     This is internal function. It is assumed that task made non-preemptive
- *     before its invocation.
- */
-static rtems_status_code
-bdbuf_release(bdbuf_buffer *bd_buf)
-{
-    bdbuf_pool *bd_pool;
-    rtems_status_code rc = RTEMS_SUCCESSFUL;
-
-    if (bd_buf->use_count <= 0)
-        return RTEMS_INTERNAL_ERROR;
-
-    bd_pool = rtems_bdbuf_ctx.pool + bd_buf->pool;
-
-    bd_buf->use_count--;
-
-    if (bd_buf->use_count == 0)
+    for (b = 1; b < req->count; b++)
     {
-        if (bd_buf->modified)
-        {
-
-            /* Buffer was modified. Insert buffer to the modified buffers
-             * list and initiate flushing. */
-            rtems_chain_append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
-
-            /* Release the flush_sema */
-            rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
-        }
-        else
-        {
-            /* Buffer was not modified. Add this descriptor to the
-             * end of lru chain and make it available for reuse. */
-            rtems_chain_append(&bd_pool->lru, &bd_buf->link);
-            rc = rtems_semaphore_release(bd_pool->bufget_sema);
-        }
+      bd = req->bufs[b].user;
+      bd->error = req->error;
+      bd->state = RTEMS_BDBUF_STATE_READ_AHEAD;
+      rtems_bdbuf_release (bd);
     }
-    return rc;
+
+    bd = req->bufs[0].user;
+  }
+
+  /*
+   * The data for this block is cached in the buffer.
+   */
+  if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
+    bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
+  else
+    bd->state = RTEMS_BDBUF_STATE_ACCESS;
+
+  rtems_bdbuf_unlock_pool (pool);
+  rtems_disk_release (dd);
+
+  *bdp = bd;
+
+  return RTEMS_SUCCESSFUL;
 }
 
-
-/* rtems_bdbuf_release --
- *     Release buffer allocated before. This primitive decrease the
- *     usage counter. If it is zero, further destiny of buffer depends on
- *     'modified' status. If buffer was modified, it is placed to the end of
- *     mod list and flush task waken up. If buffer was not modified,
- *     it is placed to the end of lru list, and bufget_sema released, allowing
- *     to reuse this buffer.
+/**
+ * Release buffer that has been in use. The buffer could have been in the
+ * access state and so with a user of the cache or it was being transfered to
+ * or from the disk media and so with a driver. Wake any waiters. If no one is
+ * waiting and this is the only buffer on the LRU list see if anyone is
+ * waiting. Wake them if they are.
  *
- * PARAMETERS:
- *     bd_buf - pointer to the bdbuf_buffer structure previously obtained using
- *              get/read primitive.
+ * If the buffer has been modified use the modified release call.
  *
- * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
- *     or error code if error is occured)
- *
- * SIDE EFFECTS:
- *     flush_sema and bufget_sema semaphores may be released by this primitive.
+ * @param bd The buffer to return to the pool.
+ * @retval RTEMS_SUCCESSFUL This operation always succeeds.
  */
+
 rtems_status_code
-rtems_bdbuf_release(bdbuf_buffer *bd_buf)
+rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
 {
-    preemption_key key;
-    rtems_status_code rc = RTEMS_SUCCESSFUL;
+  rtems_bdbuf_pool* pool;
 
-    if (bd_buf == NULL)
-        return RTEMS_INVALID_ADDRESS;
+  if (bd == NULL)
+    return RTEMS_INVALID_ADDRESS;
 
-    DISABLE_PREEMPTION(key);
+  pool = rtems_bdbuf_get_pool (bd->pool);
 
-    rc = bdbuf_release(bd_buf);
+  rtems_bdbuf_lock_pool (pool);
 
-    ENABLE_PREEMPTION(key);
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("release: %d\n", bd->block);
+#endif
+  
+  if (bd->state == RTEMS_BDBUF_STATE_ACCESS_MODIFIED)
+  {
+    rtems_bdbuf_append_modified (pool, bd);
+  }
+  else
+  {
+    /*
+     * If this is a read ahead buffer place the ready queue. Buffers are
+     * taken from here first. If we prepend then get from the queue the
+     * buffers furthermost from the read buffer will be used.
+     */
+    if (bd->state == RTEMS_BDBUF_STATE_READ_AHEAD)
+      rtems_chain_prepend (&pool->ready, &bd->link);
+    else
+    {
+      bd->state = RTEMS_BDBUF_STATE_CACHED;
+      rtems_chain_append (&pool->lru, &bd->link);
+    }
+  }
+  
+  /*
+   * If there are threads waiting to access the buffer wake them. Wake any
+   * waiters if this is the first buffer to placed back onto the queue.
+   */
+  if (bd->waiters)
+    rtems_bdbuf_wake (pool->access, &pool->access_waiters);
+  else
+  {
+    if (bd->state == RTEMS_BDBUF_STATE_READ_AHEAD)
+    {
+      if (rtems_chain_has_only_one_node (&pool->ready))
+        rtems_bdbuf_wake (pool->waiting, &pool->wait_waiters);
+    }
+    else
+    {
+      if (rtems_chain_has_only_one_node (&pool->lru))
+        rtems_bdbuf_wake (pool->waiting, &pool->wait_waiters);
+    }
+  }
+  
+  rtems_bdbuf_unlock_pool (pool);
 
-    return rc;
+  return RTEMS_SUCCESSFUL;
 }
 
-/* rtems_bdbuf_release_modified --
- *     Release buffer allocated before, assuming that it is _modified_ by
- *     it's owner. This primitive decrease usage counter for buffer, mark
- *     buffer descriptor as modified. If usage counter is 0, insert it at
- *     end of mod chain and release flush_sema semaphore to activate the
- *     flush task.
+/**
+ * Release buffer that has been in use and has been modified. The buffer could
+ * have been in the access state and so with a user of the cache or it was
+ * being transfered to or from the disk media and so with a driver. Wake any
+ * waiters. If no one is waiting and this is the only buffer on the LRU list
+ * see if anyone is waiting. Wake them if they are.
  *
- * PARAMETERS:
- *     bd_buf - pointer to the bdbuf_buffer structure previously obtained using
- *              get/read primitive.
+ * If the buffer has been modified use the modified release call.
  *
- * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
- *     or error code if error is occured)
- *
- * SIDE EFFECTS:
- *     flush_sema semaphore may be released by this primitive.
+ * @param bd The buffer to return to the pool.
+ * @retval RTEMS_SUCCESSFUL This operation always succeeds.
  */
+
 rtems_status_code
-rtems_bdbuf_release_modified(bdbuf_buffer *bd_buf)
+rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd)
 {
-    preemption_key key;
-    rtems_status_code rc = RTEMS_SUCCESSFUL;
+  rtems_bdbuf_pool* pool;
 
-    if (bd_buf == NULL)
-        return RTEMS_INVALID_ADDRESS;
+  if (bd == NULL)
+    return RTEMS_INVALID_ADDRESS;
 
-    DISABLE_PREEMPTION(key);
+  pool = rtems_bdbuf_get_pool (bd->pool);
 
-    if (!bd_buf->modified)
-    {
-        bdbuf_initialize_transfer_sema(bd_buf);
-    }
-    bd_buf->modified = TRUE;
-    bd_buf->actual = TRUE;
-    rc = bdbuf_release(bd_buf);
+  rtems_bdbuf_lock_pool (pool);
 
-    ENABLE_PREEMPTION(key);
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("release modified: %d\n", bd->block);
+#endif
 
-    return rc;
+  bd->hold_timer = rtems_bdbuf_configuration.swap_block_hold;
+  
+  rtems_bdbuf_append_modified (pool, bd);
+
+  if (bd->waiters)
+    rtems_bdbuf_wake (pool->access, &pool->access_waiters);
+  
+  rtems_bdbuf_unlock_pool (pool);
+
+  return RTEMS_SUCCESSFUL;
 }
 
-/* rtems_bdbuf_sync --
- *     Wait until specified buffer synchronized with disk. Invoked on exchanges
- *     critical for data consistency on the media. This primitive mark owned
- *     block as modified, decrease usage counter. If usage counter is 0,
- *     block inserted to the mod chain and flush_sema semaphore released.
- *     Finally, primitives blocked on transfer_sema semaphore.
+/**
+ * Wait until specified buffer synchronized with disk. Invoked on exchanges
+ * critical for data consistency on the media. The buffer is placed on the sync
+ * list and the swapper is woken. No sync lock is taken as the buffers on the
+ * sync list are taken first and passed to the driver before buffers on the
+ * modified list.
  *
- * PARAMETERS:
- *     bd_buf - pointer to the bdbuf_buffer structure previously obtained using
- *              get/read primitive.
+ * @note This code does not lock the sync mutex and stop additions to the
+ *       modified queue. This means the buffer could be written and then
+ *       returned to the modified list but will not happen as the buffer's
+ *       state is sync.
  *
- * RETURNS:
- *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
- *     or error code if error is occured)
- *
- * SIDE EFFECTS:
- *     Primitive may be blocked on transfer_sema semaphore.
+ * @param bd Pointer to the bdbuf_buffer structure previously obtained using
+ *           get/read primitive.
+ * @retval RTEMS_SUCCESSFUL Always returned.
  */
+
 rtems_status_code
-rtems_bdbuf_sync(bdbuf_buffer *bd_buf)
+rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
 {
-    preemption_key key;
-    ISR_Level level;
-    rtems_status_code rc = RTEMS_SUCCESSFUL;
+  rtems_bdbuf_pool* pool;
+  boolean           available;
 
-    if (bd_buf == NULL)
-        return RTEMS_INVALID_ADDRESS;
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("sync: %d\n", bd->block);
+#endif
+  
+  if (bd == NULL)
+    return RTEMS_INVALID_ADDRESS;
 
-    DISABLE_PREEMPTION(key);
+  pool = rtems_bdbuf_get_pool (bd->pool);
 
-    if (!bd_buf->modified)
+  rtems_bdbuf_lock_pool (pool);
+
+  bd->state = RTEMS_BDBUF_STATE_SYNC;
+
+  rtems_chain_append (&pool->sync, &bd->link);
+
+  rtems_bdbuf_wake_swapper ();
+
+  available = FALSE;
+  while (!available)
+  {
+    switch (bd->state)
     {
-        bdbuf_initialize_transfer_sema(bd_buf);
+      case RTEMS_BDBUF_STATE_CACHED:
+      case RTEMS_BDBUF_STATE_READ_AHEAD:
+      case RTEMS_BDBUF_STATE_MODIFIED:
+      case RTEMS_BDBUF_STATE_ACCESS:
+      case RTEMS_BDBUF_STATE_ACCESS_MODIFIED:
+        available = TRUE;
+        break;
+
+      case RTEMS_BDBUF_STATE_SYNC:
+      case RTEMS_BDBUF_STATE_TRANSFER:
+        bd->waiters++;
+        rtems_bdbuf_wait (pool, &pool->transfer, &pool->transfer_waiters);
+        bd->waiters--;
+        break;
+
+      default:
+        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
     }
-    bd_buf->modified = TRUE;
-    bd_buf->actual = TRUE;
+  }
 
-    rc = bdbuf_release(bd_buf);
-
-    if (rc == RTEMS_SUCCESSFUL)
-    {
-        rtems_interrupt_disable(level);
-        _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
-                          WATCHDOG_NO_TIMEOUT, level);
-    }
-
-    ENABLE_PREEMPTION(key);
-
-    return rc;
+  rtems_bdbuf_unlock_pool (pool);
+  
+  return RTEMS_SUCCESSFUL;
 }
 
 /* rtems_bdbuf_syncdev --
@@ -1612,195 +1899,475 @@ rtems_bdbuf_sync(bdbuf_buffer *bd_buf)
  *     or error code if error is occured)
  */
 rtems_status_code
-rtems_bdbuf_syncdev(dev_t dev)
+rtems_bdbuf_syncdev (dev_t dev)
 {
-    preemption_key key;
-    ISR_Level level;
+  rtems_disk_device*  dd;
+  rtems_bdbuf_pool*   pool;
+  rtems_status_code   sc;
+  rtems_event_set     out;
 
-    bdbuf_buffer *bd_buf;
-    disk_device *dd;
-    bdbuf_pool  *pool;
+#if RTEMS_BDBUF_TRACE
+  rtems_bdbuf_printf ("syncdev: %08x\n", dev);
+#endif
 
-    dd = rtems_disk_lookup(dev);
-    if (dd == NULL)
-        return RTEMS_INVALID_ID;
+  /*
+   * Do not hold the pool lock when obtaining the disk table.
+   */
+  dd = rtems_disk_obtain (dev);
+  if (dd == NULL)
+    return RTEMS_INVALID_ID;
 
-    pool = rtems_bdbuf_ctx.pool + dd->pool;
+  pool = rtems_bdbuf_get_pool (dd->pool);
 
-    DISABLE_PREEMPTION(key);
-    do {
-        bd_buf = avl_search_for_sync(&pool->tree, dd);
-        if (bd_buf != NULL /* && bd_buf->modified */)
-        {
-            rtems_interrupt_disable(level);
-            _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
-                              WATCHDOG_NO_TIMEOUT, level);
-        }
-    } while (bd_buf != NULL);
-    ENABLE_PREEMPTION(key);
-    return rtems_disk_release(dd);
+  /*
+   * Take the sync lock before locking the pool. Once we have the sync lock
+   * we can lock the pool. If another thread has the sync lock it will cause
+   * this thread to block until it owns the sync lock then it can own the
+   * pool. The sync lock can only be obtained with the pool unlocked.
+   */
+  
+  rtems_bdbuf_lock_sync (pool);
+  rtems_bdbuf_lock_pool (pool);  
+
+  pool->sync_active    = TRUE;
+  pool->sync_requester = rtems_task_self ();
+  pool->sync_device    = dev;
+  
+  rtems_bdbuf_wake_swapper ();
+  rtems_bdbuf_unlock_pool (pool);
+  
+  sc = rtems_event_receive (RTEMS_BDBUF_TRANSFER_SYNC,
+                            RTEMS_EVENT_ALL | RTEMS_WAIT,
+                            0, &out);
+
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (BLKDEV_FATAL_BDBUF_SWAPOUT_RE);
+      
+  rtems_bdbuf_lock_pool (pool);
+
+  pool->sync_active = FALSE;
+
+  rtems_bdbuf_unlock_sync (pool);
+  rtems_bdbuf_unlock_pool (pool);
+  
+  return rtems_disk_release(dd);
 }
 
-/* bdbuf_swapout_task --
- *     Body of task which take care on flushing modified buffers to the
- *     disk.
+/* bdbuf_write_transfer_done --
+ *     Callout function. Invoked by block device driver when data transfer
+ *     to device (write) is completed. This function may be invoked from
+ *     interrupt handler.
+ *
+ * PARAMETERS:
+ *     arg    - arbitrary argument specified in block device request
+ *              structure (in this case - pointer to the appropriate
+ *              bdbuf_buffer buffer descriptor structure).
+ *     status - I/O completion status
+ *     error  - errno error code if status != RTEMS_SUCCESSFUL
+ *
+ * RETURNS:
+ *     none
+ */
+static void
+rtems_bdbuf_write_done(void *arg, rtems_status_code status, int error)
+{
+  rtems_blkdev_request* req = (rtems_blkdev_request*) arg;
+
+  req->error = error;
+  req->status = status;
+
+  rtems_event_send (req->io_task, RTEMS_BDBUF_TRANSFER_SYNC);
+}
+
+/**
+ * Process the modified list of buffers. We can have a sync or modified
+ * list that needs to be handled.
+ */
+static void
+rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
+                                         dev_t*               dev,
+                                         rtems_chain_control* chain,
+                                         rtems_chain_control* transfer,
+                                         boolean              sync_active,
+                                         boolean              update_timers,
+                                         uint32_t             timer_delta)
+{
+  if (!rtems_chain_is_empty (chain))
+  {
+    rtems_chain_node* node = rtems_chain_head (chain);
+    node = node->next;
+
+    while (!rtems_chain_is_tail (chain, node))
+    {
+      rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
+    
+      if (bd->pool == pid)
+      {
+        /*
+         * Check if the buffer's hold timer has reached 0. If a sync
+         * is active force all the timers to 0.
+         *
+         * @note Lots of sync requests will skew this timer. It should
+         *       be based on TOD to be accurate. Does it matter ?
+         */
+        if (sync_active)
+          bd->hold_timer = 0;
+  
+        if (bd->hold_timer)
+        {
+          if (update_timers)
+          {
+            if (bd->hold_timer > timer_delta)
+              bd->hold_timer -= timer_delta;
+            else
+              bd->hold_timer = 0;
+          }
+
+          if (bd->hold_timer)
+          {
+            node = node->next;
+            continue;
+          }
+        }
+
+        /*
+         * This assumes we can set dev_t to -1 which is just an
+         * assumption. Cannot use the transfer list being empty
+         * the sync dev calls sets the dev to use.
+         */
+        if (*dev == -1)
+          *dev = bd->dev;
+
+        if (bd->dev == *dev)
+        {
+          rtems_chain_node* next_node = node->next;
+          rtems_chain_extract (node);
+          rtems_chain_append (transfer, node);
+          node = next_node;
+          bd->state = RTEMS_BDBUF_STATE_TRANSFER;
+        }
+        else
+        {
+          node = node->next;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Process the pool.
+ */
+static boolean
+rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
+                                     unsigned long         timer_delta,
+                                     boolean               update_timers,
+                                     rtems_blkdev_request* write_req)
+{
+  rtems_bdbuf_pool*   pool = rtems_bdbuf_get_pool (pid);
+  rtems_chain_control transfer;
+  dev_t               dev = -1;
+  rtems_disk_device*  dd;
+  boolean             result = TRUE;
+
+  rtems_chain_initialize_empty (&transfer);
+    
+  rtems_bdbuf_lock_pool (pool);
+
+  if (pool->sync_active)
+    dev = pool->sync_device;
+
+#if 1
+  /*
+   * If we have any buffers in the sync queue move then to the
+   * modified list. The first sync buffer will select the
+   * device we use.
+   */
+  rtems_bdbuf_swapout_modified_processing (pid, &dev,
+                                           &pool->sync, &transfer,
+                                           TRUE, FALSE,
+                                           timer_delta);
+
+  /*
+   * Process the pool's modified list.
+   */
+  rtems_bdbuf_swapout_modified_processing (pid, &dev,
+                                           &pool->modified, &transfer,
+                                           pool->sync_active,
+                                           update_timers,
+                                           timer_delta);
+
+  /*
+   * We have all the buffers that have been modified for this device so
+   * the pool can be unlocked because the state is set to TRANSFER.
+   */
+#endif
+  rtems_bdbuf_unlock_pool (pool);
+
+  /*
+   * If there are buffers to transfer to the media tranfer them.
+   */
+  if (rtems_chain_is_empty (&transfer))
+    result = FALSE;
+  else
+  {
+    /*
+     * Obtain the disk device. Release the pool mutex to avoid a dead
+     * lock.
+     */
+    dd = rtems_disk_obtain (dev);
+    if (dd == NULL)
+      result = FALSE;
+    else
+    {
+      /*
+       * The last block number used when the driver only supports
+       * continuous blocks in a single request.
+       */
+      uint32_t last_block = 0;
+      
+      /*
+       * Take as many buffers are configured and pass to the driver. Note,
+       * the API to the drivers has the array of buffers and if a chain was
+       * passed we could have just passed the list. If the driver API is
+       * updated it should be possible to make this change with little effect
+       * in this code. The array that is passed is broken in design and
+       * should be removed. Merging to members of a struct into the first
+       * member is trouble waiting to happen.
+       */
+
+      write_req->status = RTEMS_RESOURCE_IN_USE;
+      write_req->start = dd->start;
+      write_req->error = 0;
+      write_req->count = 0;
+      write_req->bufnum = 0;
+
+      while (!rtems_chain_is_empty (&transfer))
+      {
+        rtems_bdbuf_buffer* bd =
+          (rtems_bdbuf_buffer*) rtems_chain_get (&transfer);
+
+        boolean write = FALSE;
+        
+        /*
+         * If the device only accepts sequential buffers and
+         * this is not the first buffer (the first is always
+         * sequential, and the buffer is not sequential then
+         * put the buffer back on the transfer chain and
+         * write the committed buffers.
+         */
+        
+        if ((dd->capabilities & RTEMS_BLKDEV_CAP_MULTISECTOR_CONT) &&
+            write_req->count &&
+            (bd->block != (last_block + 1)))
+        {
+          rtems_chain_prepend (&transfer, &bd->link);
+          write = TRUE;
+        }
+        else
+        {
+          write_req->bufs[write_req->count].user   = bd;
+          write_req->bufs[write_req->count].block  = bd->block;
+          write_req->bufs[write_req->count].length = dd->block_size;
+          write_req->bufs[write_req->count].buffer = bd->buffer;
+          write_req->count++;
+          write_req->bufnum++;
+          last_block = bd->block;
+        }
+
+        /*
+         * Perform the transfer if there are no more buffers, or the
+         * transfer size has reached the configured max. value.
+         */
+
+        if (rtems_chain_is_empty (&transfer) ||
+            (write_req->count >= rtems_bdbuf_configuration.max_write_blocks))
+          write = TRUE;
+
+        if (write)
+        {
+          int result;
+          int b;
+
+          /*
+           * Perform the transfer. No pool locks, no preemption, only the
+           * disk device is being held.
+           */
+          result = dd->ioctl (dd->phys_dev->dev,
+                              RTEMS_BLKIO_REQUEST, write_req);
+
+          if (result < 0)
+          {
+            rtems_bdbuf_lock_pool (pool);
+              
+            for (b = 0; b < write_req->count; b++)
+            {
+              bd = write_req->bufs[b].user;
+              bd->state  = RTEMS_BDBUF_STATE_MODIFIED;
+              bd->error = errno;
+
+              /*
+               * Place back on the pools modified queue and try again.
+               *
+               * @warning Not sure this is the best option but I do
+               *          not know what else can be done.
+               */
+              rtems_chain_append (&pool->modified, &bd->link);
+            }
+          }
+          else
+          {
+            rtems_status_code sc = 0;
+            rtems_event_set   out;
+
+            sc = rtems_event_receive (RTEMS_BDBUF_TRANSFER_SYNC,
+                                      RTEMS_EVENT_ALL | RTEMS_WAIT,
+                                      0, &out);
+
+            if (sc != RTEMS_SUCCESSFUL)
+              rtems_fatal_error_occurred (BLKDEV_FATAL_BDBUF_SWAPOUT_RE);
+
+            rtems_bdbuf_lock_pool (pool);
+
+            for (b = 0; b < write_req->count; b++)
+            {
+              bd = write_req->bufs[b].user;
+              bd->state = RTEMS_BDBUF_STATE_CACHED;
+              bd->error = 0;
+
+              rtems_chain_append (&pool->lru, &bd->link);
+              
+              if (bd->waiters)
+                rtems_bdbuf_wake (pool->transfer, &pool->transfer_waiters);
+              else
+              {
+                if (rtems_chain_has_only_one_node (&pool->lru))
+                  rtems_bdbuf_wake (pool->waiting, &pool->wait_waiters);
+              }
+            }
+          }
+
+          rtems_bdbuf_unlock_pool (pool);
+
+          write_req->status = RTEMS_RESOURCE_IN_USE;
+          write_req->error = 0;
+          write_req->count = 0;
+          write_req->bufnum = 0;
+        }
+      }
+          
+      rtems_disk_release (dd);
+    }
+  }
+
+  if (pool->sync_active)
+    rtems_event_send (pool->sync_requester, RTEMS_BDBUF_TRANSFER_SYNC);
+  
+  return result;
+}
+
+/**
+ * Body of task which take care on flushing modified buffers to the disk.
  */
 static rtems_task
-bdbuf_swapout_task(rtems_task_argument unused)
+rtems_bdbuf_swapout_task (rtems_task_argument arg)
 {
-    rtems_status_code rc;
-    int result;
-    int i;
-    ISR_Level level;
-    bdbuf_buffer *bd_buf;
-    bdbuf_buffer *nxt_bd_buf;
-    bdbuf_pool *bd_pool = NULL;
-    disk_device *dd = NULL;
-    struct {
-      blkdev_request   req;
-      blkdev_sg_buffer sg[SWAP_OUT_MAX_BLK_CNT];
-    } req;
-    write_tfer_done_arg_t write_tfer_done_arg;
+  rtems_bdbuf_context*  context = (rtems_bdbuf_context*) arg;
+  rtems_blkdev_request* write_req;
+  uint32_t              period_in_ticks;
+  const uint32_t        period_in_msecs = rtems_bdbuf_configuration.swapout_period;
+  uint32_t              timer_delta;
+  rtems_status_code     sc;
+
+  /*
+   * @note chrisj The rtems_blkdev_request and the array at the end is a hack.
+   * I am disappointment at finding code like this in RTEMS. The request should
+   * have been a rtems_chain_control. Simple, fast and less storage as the node
+   * is already part of the buffer structure.
+   */
+  write_req =
+    malloc (sizeof (rtems_blkdev_request) +
+            (rtems_bdbuf_configuration.max_write_blocks *
+             sizeof (rtems_blkdev_sg_buffer)));
+
+  if (!write_req)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM);
+
+  write_req->req = RTEMS_BLKDEV_REQ_WRITE;
+  write_req->req_done = rtems_bdbuf_write_done;
+  write_req->done_arg = write_req;
+  write_req->io_task = rtems_task_self ();
+
+  period_in_ticks = TOD_MICROSECONDS_TO_TICKS (period_in_msecs * 1000);
+
+  /*
+   * This is temporary. Needs to be changed to use the real clock.
+   */
+  timer_delta = period_in_msecs;
+
+  while (context->swapout_enabled)
+  {
+    rtems_event_set out;
 
     /*
-     * provide info needed for write_transfer_done function
+     * Only update the timers once in the processing cycle.
      */
-    write_tfer_done_arg.req         = (blkdev_request *)&req.req;
-    write_tfer_done_arg.write_store =  bd_buf_write_store;
-    nxt_bd_buf = NULL;
-    while (1)
+    boolean update_timers = TRUE;
+    
+    /*
+     * If we write buffers to any disk perform a check again. We only
+     * write a single device at a time and a pool may have more than
+     * one devices buffers modified waiting to be written.
+     */
+    boolean transfered_buffers;
+
+    do
     {
-	req.req.req = BLKDEV_REQ_WRITE;
-	req.req.req_done = bdbuf_write_transfer_done;
-	req.req.done_arg = &write_tfer_done_arg;
-	req.req.count = 0;
-	req.req.bufnum = 0;
-	bd_buf = NULL;
-	do {
-	  /*
-	   * if a buffer was left over from last loop, then use this buffer
-	   * otherwise fetch new buffer from chain. 
-	   * Wait for buffer, if this is the first one of the request,
-	   * otherwise do not wait, if no buffer available
-	   */
-	  if (nxt_bd_buf == NULL) {
-	    rc = rtems_semaphore_obtain(rtems_bdbuf_ctx.flush_sema, 
-					(req.req.count == 0)
-					? RTEMS_WAIT
-					: RTEMS_NO_WAIT, 
-					0);
-	    if (rc == RTEMS_SUCCESSFUL) {
-	      nxt_bd_buf = (bdbuf_buffer *)rtems_chain_get(&rtems_bdbuf_ctx.mod);
-          if (nxt_bd_buf != NULL) {
-  	        nxt_bd_buf->in_progress = TRUE;
-            /* IMD try: clear "modified" bit early             */
-            /* (and not in bdbuf_write_transfer_done) to allow */
-            /* another modification during write processing    */
-            nxt_bd_buf->modified    = FALSE;
+      rtems_bdpool_id pid;
+    
+      transfered_buffers = FALSE;
 
-	        nxt_bd_buf->use_count++;
-		  }
-	    }
-	    else if ((rc != RTEMS_UNSATISFIED) && 
-		     (rc != RTEMS_TIMEOUT)) {
-	      rtems_fatal_error_occurred(BLKDEV_FATAL_BDBUF_SWAPOUT);
-	    }
-	  }
-	  /* 
-	   * It is possible that flush_sema semaphore will be released, but
-	   * buffer to be removed from mod chain before swapout task start
-	   * its processing. 
-	   */
-	  if ((req.req.count == 0)  || /* first bd_buf for this request */
-	      ((nxt_bd_buf        != NULL)            && 
-	       (nxt_bd_buf->dev   == bd_buf->dev)     && /* same device */
-	       (nxt_bd_buf->block == bd_buf->block+1))) {/* next block  */
-	    bd_buf     = nxt_bd_buf;
-	    nxt_bd_buf = NULL;
-	  }
-	  else {
-	    bd_buf = NULL;
-	  }
-	  /*
-	   * here we have three possible states:
-	   * bd_buf == NULL, nxt_bd_buf == NULL: no further block available
-	   * bd_buf != NULL, nxt_bd_buf == NULL: append bd_buf to request
-	   * bd_buf == NULL, nxt_bd_buf != NULL: nxt_bd_buf canot be appended 
-	   *                                     to current request, keep it
-	   *                                     for next main loop
-	   */
-	  if (bd_buf != NULL) {
-	    bd_pool = rtems_bdbuf_ctx.pool + bd_buf->pool;
-	    if (req.req.count == 0) {
-	      /*
-	       * this is the first block, so use its address
-	       */
-	      dd = rtems_disk_lookup(bd_buf->dev);
-	      req.req.start = bd_buf->block + dd->start;
-	    }
-	    req.req.bufs[req.req.bufnum].length = dd->block_size;
-	    req.req.bufs[req.req.bufnum].buffer = bd_buf->buffer;
-	    /*
-	     * keep bd_buf for postprocessing
-	     */
-	    bd_buf_write_store[req.req.bufnum] = bd_buf;
-	    req.req.count++;
-	    req.req.bufnum++;
-	  }
-	} while ((bd_buf != NULL) &&
-		 (req.req.count < SWAP_OUT_MAX_BLK_CNT));
-		 
-        /* transfer_sema initialized when bd_buf inserted in the mod chain 
-           first time */
-        result = dd->ioctl(dd->phys_dev->dev, BLKIO_REQUEST, &req);
-
-        rtems_disk_release(dd);
-        
-	for (i = 0;i < req.req.count;i++) {
-	  bd_buf = bd_buf_write_store[i];
-	  if (result == -1)
-	    {
-	      
-	      bd_buf->status = RTEMS_IO_ERROR;
-	      bd_buf->error = errno;
-	      /* Release tasks waiting on syncing this buffer */
-	      _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
-				CORE_MUTEX_STATUS_SUCCESSFUL);
-	    }
-	  else
-	    {
-	      if (bd_buf->in_progress)
-		{
-		  rtems_interrupt_disable(level);
-		  _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE, 0, level);
-		}
-	    }
-	  bd_buf->use_count--;
-
-	  /* Another task have chance to use this buffer, or even
-	   * modify it. If buffer is not in use, insert it in appropriate chain
-	   * and release semaphore */
-	  if (bd_buf->use_count == 0)
-	    {
-	      if (bd_buf->modified)
-		{
-		  rtems_chain_append(&rtems_bdbuf_ctx.mod, &bd_buf->link);
-		  rc = rtems_semaphore_release(rtems_bdbuf_ctx.flush_sema);
-		}
-	      else
-		{
-		  rtems_chain_append(&bd_pool->lru, &bd_buf->link);
-		  rc = rtems_semaphore_release(bd_pool->bufget_sema);
-		}
-	    }
+      /*
+       * Loop over each pool extacting all the buffers we find for a specific
+       * device. The device is the first one we find on a modified list of a
+       * pool. Process the sync queue of buffers first.
+       */
+      for (pid = 0; pid < context->npools; pid++)
+      {
+        if (rtems_bdbuf_swapout_pool_processing (pid,
+                                                 timer_delta,
+                                                 update_timers,
+                                                 write_req))
+        {
+          transfered_buffers = TRUE;
         }
+      }
+
+      /*
+       * Only update the timers once.
+       */
+      update_timers = FALSE;
     }
+    while (transfered_buffers);
+
+    sc = rtems_event_receive (RTEMS_BDBUF_SWAPOUT_SYNC,
+                              RTEMS_EVENT_ALL | RTEMS_WAIT,
+                              period_in_ticks,
+                              &out);
+
+    if ((sc != RTEMS_SUCCESSFUL) && (sc != RTEMS_TIMEOUT))
+      rtems_fatal_error_occurred (BLKDEV_FATAL_BDBUF_SWAPOUT_RE);
+  }
+
+  free (write_req);
+
+  rtems_task_delete (RTEMS_SELF);
 }
 
-/* rtems_bdbuf_find_pool --
- *     Find first appropriate buffer pool. This primitive returns the index
- *     of first buffer pool which block size is greater than or equal to
- *     specified size.
+/**
+ * Find first appropriate buffer pool. This primitive returns the index of
+ * first buffer pool which block size is greater than or equal to specified
+ * size.
  *
  * PARAMETERS:
  *     block_size - requested block size
@@ -1813,44 +2380,45 @@ bdbuf_swapout_task(rtems_task_argument unused)
  *     is not configured.
  */
 rtems_status_code
-rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool)
+rtems_bdbuf_find_pool (int block_size, rtems_bdpool_id *pool)
 {
-    rtems_bdpool_id i;
-    bdbuf_pool *p;
-    int cursize = INT_MAX;
-    rtems_bdpool_id curid = -1;
-    rtems_boolean found = FALSE;
-    int j;
+  rtems_bdbuf_pool* p;
+  rtems_bdpool_id   i;
+  rtems_bdpool_id   curid = -1;
+  rtems_boolean     found = FALSE;
+  int               cursize = INT_MAX;
+  int               j;
 
-    for (j = block_size; (j != 0) && ((j & 1) == 0); j >>= 1);
-    if (j != 1)
-        return RTEMS_INVALID_SIZE;
+  for (j = block_size; (j != 0) && ((j & 1) == 0); j >>= 1);
+  if (j != 1)
+    return RTEMS_INVALID_SIZE;
 
-    for (i = 0, p = rtems_bdbuf_ctx.pool; i < rtems_bdbuf_ctx.npools; i++, p++)
+  for (i = 0; i < rtems_bdbuf_ctx.npools; i++)
+  {
+    p = rtems_bdbuf_get_pool (i);
+    if ((p->blksize >= block_size) &&
+        (p->blksize < cursize))
     {
-        if ((p->blksize >= block_size) &&
-            (p->blksize < cursize))
-        {
-            curid = i;
-            cursize = p->blksize;
-            found = TRUE;
-        }
+      curid = i;
+      cursize = p->blksize;
+      found = TRUE;
     }
+  }
 
-    if (found)
-    {
-        if (pool != NULL)
-            *pool = curid;
-        return RTEMS_SUCCESSFUL;
-    }
-    else
-    {
-        return RTEMS_NOT_DEFINED;
-    }
+  if (found)
+  {
+    if (pool != NULL)
+      *pool = curid;
+    return RTEMS_SUCCESSFUL;
+  }
+  else
+  {
+    return RTEMS_NOT_DEFINED;
+  }
 }
 
-/* rtems_bdbuf_get_pool_info --
- *     Obtain characteristics of buffer pool with specified number.
+/**
+ * Obtain characteristics of buffer pool with specified number.
  *
  * PARAMETERS:
  *     pool       - buffer pool number
@@ -1866,21 +2434,20 @@ rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool)
  *     Buffer pools enumerated contiguously starting from 0.
  */
 rtems_status_code
-rtems_bdbuf_get_pool_info(rtems_bdpool_id pool, int *block_size,
-                          int *blocks)
+rtems_bdbuf_get_pool_info(rtems_bdpool_id pool, int* block_size, int* blocks)
 {
-    if (pool >= rtems_bdbuf_ctx.npools)
-        return RTEMS_INVALID_NUMBER;
+  if (pool >= rtems_bdbuf_ctx.npools)
+    return RTEMS_INVALID_NUMBER;
 
-    if (block_size != NULL)
-    {
-        *block_size = rtems_bdbuf_ctx.pool[pool].blksize;
-    }
+  if (block_size != NULL)
+  {
+    *block_size = rtems_bdbuf_ctx.pool[pool].blksize;
+  }
 
-    if (blocks != NULL)
-    {
-        *blocks = rtems_bdbuf_ctx.pool[pool].nblks;
-    }
+  if (blocks != NULL)
+  {
+    *blocks = rtems_bdbuf_ctx.pool[pool].nblks;
+  }
 
-    return RTEMS_SUCCESSFUL;
+  return RTEMS_SUCCESSFUL;
 }

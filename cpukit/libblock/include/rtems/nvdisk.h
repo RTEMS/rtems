@@ -164,7 +164,7 @@ typedef struct rtems_nvdisk_config
   const rtems_nvdisk_device_desc* devices;      /**< The device descriptions. */
   uint32_t                        flags;        /**< Set of flags to control
                                                      driver. */
-  uint32_t                       info_level;   /**< Default info level. */
+  uint32_t                        info_level;   /**< Default info level. */
 } rtems_nvdisk_config;
 
 /*

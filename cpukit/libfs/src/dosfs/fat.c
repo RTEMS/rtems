@@ -26,6 +26,137 @@
 #include "fat.h"
 #include "fat_fat_operations.h"
 
+int
+fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
+               rtems_bdbuf_buffer **buf)
+{
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    uint8_t           i;
+    rtems_boolean     sec_of_fat;
+
+
+    if (fs_info->c.state == FAT_CACHE_EMPTY)
+    {
+        if (op_type == FAT_OP_TYPE_READ)
+            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
+        else
+            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
+        if (sc != RTEMS_SUCCESSFUL)
+            rtems_set_errno_and_return_minus_one(EIO);
+        fs_info->c.blk_num = blk;
+        fs_info->c.modified = 0;
+        fs_info->c.state = FAT_CACHE_ACTUAL;
+    }
+
+    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
+                  (fs_info->c.blk_num < fs_info->vol.rdir_loc));
+
+    if (fs_info->c.blk_num != blk)
+    {
+        if (fs_info->c.modified)
+        {
+            if (sec_of_fat && !fs_info->vol.mirror)
+                memcpy(fs_info->sec_buf, fs_info->c.buf->buffer,
+                       fs_info->vol.bps);
+
+            sc = rtems_bdbuf_release_modified(fs_info->c.buf);
+            fs_info->c.state = FAT_CACHE_EMPTY;
+            fs_info->c.modified = 0;
+            if (sc != RTEMS_SUCCESSFUL)
+                rtems_set_errno_and_return_minus_one(EIO);
+
+            if (sec_of_fat && !fs_info->vol.mirror)
+            {
+                rtems_bdbuf_buffer *b;
+
+                for (i = 1; i < fs_info->vol.fats; i++)
+                {
+                    sc = rtems_bdbuf_get(fs_info->vol.dev,
+                                         fs_info->c.blk_num +
+                                         fs_info->vol.fat_length * i,
+                                         &b);
+                    if ( sc != RTEMS_SUCCESSFUL)
+                        rtems_set_errno_and_return_minus_one(ENOMEM);
+                    memcpy(b->buffer, fs_info->sec_buf, fs_info->vol.bps);
+                    sc = rtems_bdbuf_release_modified(b);
+                    if ( sc != RTEMS_SUCCESSFUL)
+                        rtems_set_errno_and_return_minus_one(ENOMEM);
+                }
+            }
+        }
+        else
+        {
+            sc = rtems_bdbuf_release(fs_info->c.buf);
+            fs_info->c.state = FAT_CACHE_EMPTY;
+            if (sc != RTEMS_SUCCESSFUL)
+                rtems_set_errno_and_return_minus_one(EIO);
+
+        }
+        if (op_type == FAT_OP_TYPE_READ)
+            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
+        else
+            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
+        if (sc != RTEMS_SUCCESSFUL)
+            rtems_set_errno_and_return_minus_one(EIO);
+        fs_info->c.blk_num = blk;
+        fs_info->c.state = FAT_CACHE_ACTUAL;
+    }
+    *buf = fs_info->c.buf;
+    return RC_OK;
+}
+
+int
+fat_buf_release(fat_fs_info_t *fs_info)
+{
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    uint8_t           i;
+    rtems_boolean     sec_of_fat;
+
+    if (fs_info->c.state == FAT_CACHE_EMPTY)
+        return RC_OK;
+
+    sec_of_fat = ((fs_info->c.blk_num >= fs_info->vol.fat_loc) &&
+                  (fs_info->c.blk_num < fs_info->vol.rdir_loc));
+
+    if (fs_info->c.modified)
+    {
+        if (sec_of_fat && !fs_info->vol.mirror)
+            memcpy(fs_info->sec_buf, fs_info->c.buf->buffer, fs_info->vol.bps);
+
+        sc = rtems_bdbuf_release_modified(fs_info->c.buf);
+        if (sc != RTEMS_SUCCESSFUL)
+            rtems_set_errno_and_return_minus_one(EIO);
+        fs_info->c.modified = 0;
+
+        if (sec_of_fat && !fs_info->vol.mirror)
+        {
+            rtems_bdbuf_buffer *b;
+
+            for (i = 1; i < fs_info->vol.fats; i++)
+            {
+                sc = rtems_bdbuf_get(fs_info->vol.dev,
+                                     fs_info->c.blk_num +
+                                     fs_info->vol.fat_length * i,
+                                     &b);
+                if ( sc != RTEMS_SUCCESSFUL)
+                    rtems_set_errno_and_return_minus_one(ENOMEM);
+                memcpy(b->buffer, fs_info->sec_buf, fs_info->vol.bps);
+                sc = rtems_bdbuf_release_modified(b);
+                if ( sc != RTEMS_SUCCESSFUL)
+                    rtems_set_errno_and_return_minus_one(ENOMEM);
+            }
+        }
+    }
+    else
+    {
+        sc = rtems_bdbuf_release(fs_info->c.buf);
+        if (sc != RTEMS_SUCCESSFUL)
+            rtems_set_errno_and_return_minus_one(EIO);
+    }
+    fs_info->c.state = FAT_CACHE_EMPTY;
+    return RC_OK;
+}
+
 /* _fat_block_read --
  *     This function reads 'count' bytes from device filesystem is mounted on,
  *     starts at 'start+offset' position where 'start' computed in sectors
@@ -57,7 +188,7 @@ _fat_block_read(
     ssize_t                 cmpltd = 0;
     uint32_t                blk = start;
     uint32_t                ofs = offset;
-    bdbuf_buffer           *block = NULL;
+    rtems_bdbuf_buffer     *block = NULL;
     uint32_t                c = 0;
 
     while (count > 0)
@@ -102,13 +233,13 @@ _fat_block_write(
     uint32_t                              count,
     const void                           *buff)
 {
-    int            rc = RC_OK;
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
-    ssize_t        cmpltd = 0;
-    uint32_t       blk  = start;
-    uint32_t       ofs = offset;
-    bdbuf_buffer  *block = NULL;
-    uint32_t       c = 0;
+    int                 rc = RC_OK;
+    fat_fs_info_t      *fs_info = mt_entry->fs_info;
+    ssize_t             cmpltd = 0;
+    uint32_t            blk  = start;
+    uint32_t            ofs = offset;
+    rtems_bdbuf_buffer *block = NULL;
+    uint32_t            c = 0;
 
     while(count > 0)
     {
@@ -132,9 +263,6 @@ _fat_block_write(
     }
     return cmpltd;
 }
-
-
-
 
 /* fat_cluster_read --
  *     wrapper for reading a whole cluster at once
@@ -215,7 +343,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     ssize_t             ret = 0;
     struct stat         stat_buf;
     int                 i = 0;
-    bdbuf_buffer       *block = NULL;
+    rtems_bdbuf_buffer *block = NULL;
 
     rc = stat(mt_entry->dev, &stat_buf);
     if (rc == -1)
@@ -223,12 +351,12 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     /* rtmes feature: no block devices, all are character devices */
     if (!S_ISCHR(stat_buf.st_mode))
-        set_errno_and_return_minus_one(ENOTBLK);
+        rtems_set_errno_and_return_minus_one(ENOTBLK);
 
-    /* check that  device is registred as block device and lock it */
-    vol->dd = rtems_disk_lookup(stat_buf.st_dev);
+    /* check that device is registred as block device and lock it */
+    vol->dd = rtems_disk_obtain(stat_buf.st_dev);
     if (vol->dd == NULL)
-        set_errno_and_return_minus_one(ENOTBLK);
+        rtems_set_errno_and_return_minus_one(ENOTBLK);
 
     vol->dev = stat_buf.st_dev;
 
@@ -238,7 +366,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     if (sc != RTEMS_SUCCESSFUL)
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one( EIO);
+        rtems_set_errno_and_return_minus_one( EIO);
     }
 
     memcpy( boot_rec, block->buffer, FAT_MAX_BPB_SIZE);
@@ -247,7 +375,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     if (sc != RTEMS_SUCCESSFUL)
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one( EIO);
+        rtems_set_errno_and_return_minus_one( EIO );
     }
 
     /* Evaluate boot record */
@@ -259,7 +387,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
          (vol->bps != 4096))
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one( EINVAL );
+        rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
     for (vol->sec_mul = 0, i = (vol->bps >> FAT_SECTOR512_BITS); (i & 1) == 0;
@@ -275,7 +403,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     if (vol->spc == 0)
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one(EINVAL);
+        rtems_set_errno_and_return_minus_one(EINVAL);
     }
 
     for (vol->spc_log2 = 0, i = vol->spc; (i & 1) == 0;
@@ -287,7 +415,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     if ((vol->bpc = vol->bps << vol->spc_log2) > MS_BYTES_PER_CLUSTER_LIMIT)
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one(EINVAL);
+        rtems_set_errno_and_return_minus_one(EINVAL);
     }
 
     for (vol->bpc_log2 = 0, i = vol->bpc; (i & 1) == 0;
@@ -361,7 +489,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         if( vol->info_sec == 0 )
         {
             rtems_disk_release(vol->dd);
-            set_errno_and_return_minus_one( EINVAL );
+            rtems_set_errno_and_return_minus_one( EINVAL );
         }
         else
         {
@@ -377,7 +505,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                 FAT_FSINFO_LEAD_SIGNATURE_VALUE)
             {
                 rtems_disk_release(vol->dd);
-                set_errno_and_return_minus_one( EINVAL );
+                rtems_set_errno_and_return_minus_one( EINVAL );
             }
             else
             {
@@ -412,25 +540,25 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     vol->afat_loc = vol->fat_loc + vol->fat_length * vol->afat;
 
     /* set up collection of fat-files fd */
-    fs_info->vhash = calloc(FAT_HASH_SIZE, sizeof(Chain_Control));
+    fs_info->vhash = calloc(FAT_HASH_SIZE, sizeof(rtems_chain_control));
     if ( fs_info->vhash == NULL )
     {
         rtems_disk_release(vol->dd);
-        set_errno_and_return_minus_one( ENOMEM );
+        rtems_set_errno_and_return_minus_one( ENOMEM );
     }
 
     for (i = 0; i < FAT_HASH_SIZE; i++)
-        _Chain_Initialize_empty(fs_info->vhash + i);
+        rtems_chain_initialize_empty(fs_info->vhash + i);
 
-    fs_info->rhash = calloc(FAT_HASH_SIZE, sizeof(Chain_Control));
+    fs_info->rhash = calloc(FAT_HASH_SIZE, sizeof(rtems_chain_control));
     if ( fs_info->rhash == NULL )
     {
         rtems_disk_release(vol->dd);
         free(fs_info->vhash);
-        set_errno_and_return_minus_one( ENOMEM );
+        rtems_set_errno_and_return_minus_one( ENOMEM );
     }
     for (i = 0; i < FAT_HASH_SIZE; i++)
-        _Chain_Initialize_empty(fs_info->rhash + i);
+        rtems_chain_initialize_empty(fs_info->rhash + i);
 
     fs_info->uino_pool_size = FAT_UINO_POOL_INIT_SIZE;
     fs_info->uino_base = (vol->tot_secs << vol->sec_mul) << 4;
@@ -441,7 +569,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         rtems_disk_release(vol->dd);
         free(fs_info->vhash);
         free(fs_info->rhash);
-        set_errno_and_return_minus_one( ENOMEM );
+        rtems_set_errno_and_return_minus_one( ENOMEM );
     }
     fs_info->sec_buf = (uint8_t *)calloc(vol->bps, sizeof(uint8_t));
     if (fs_info->sec_buf == NULL)
@@ -450,7 +578,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         free(fs_info->vhash);
         free(fs_info->rhash);
         free(fs_info->uino);
-        set_errno_and_return_minus_one( ENOMEM );
+        rtems_set_errno_and_return_minus_one( ENOMEM );
     }
 
     return RC_OK;
@@ -488,19 +616,19 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     for (i = 0; i < FAT_HASH_SIZE; i++)
     {
-        Chain_Node    *node = NULL;
-        Chain_Control *the_chain = fs_info->vhash + i;
+        rtems_chain_node    *node = NULL;
+        rtems_chain_control *the_chain = fs_info->vhash + i;
 
-        while ( (node = _Chain_Get(the_chain)) != NULL )
+        while ( (node = rtems_chain_get(the_chain)) != NULL )
             free(node);
     }
 
     for (i = 0; i < FAT_HASH_SIZE; i++)
     {
-        Chain_Node    *node = NULL;
-        Chain_Control *the_chain = fs_info->rhash + i;
+        rtems_chain_node    *node = NULL;
+        rtems_chain_control *the_chain = fs_info->rhash + i;
 
-        while ( (node = _Chain_Get(the_chain)) != NULL )
+        while ( (node = rtems_chain_get(the_chain)) != NULL )
             free(node);
     }
 
@@ -541,7 +669,7 @@ fat_init_clusters_chain(
 
     buf = calloc(fs_info->vol.bpc, sizeof(char));
     if ( buf == NULL )
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
 
     while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {

@@ -47,7 +47,7 @@ ramdisk_initialize(
     void *arg);
 
 #define RAMDISK_DRIVER_TABLE_ENTRY \
-    { ramdisk_initialize, GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES }
+    { ramdisk_initialize, RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES }
 
 #ifdef __cplusplus
 }

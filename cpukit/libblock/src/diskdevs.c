@@ -23,13 +23,13 @@
 #define DISKTAB_INITIAL_SIZE 32
 
 /* Table of disk devices having the same major number */
-struct disk_device_table {
-    disk_device **minor; /* minor-indexed disk device table */
+typedef struct rtems_disk_device_table {
+    rtems_disk_device **minor; /* minor-indexed disk device table */
     int size;            /* Number of entries in the table */
-};
+} rtems_disk_device_table;
 
 /* Pointer to [major].minor[minor] indexed array of disk devices */
-static struct disk_device_table *disktab;
+static rtems_disk_device_table *disktab;
 
 /* Number of allocated entries in disktab table */
 static int disktab_size;
@@ -64,24 +64,24 @@ static volatile rtems_boolean diskdevs_protected;
  *     pointer to the disk device descriptor entry, or NULL if no memory
  *     available for its creation.
  */
-static disk_device *
+static rtems_disk_device *
 create_disk_entry(dev_t dev)
 {
     rtems_device_major_number major;
     rtems_device_minor_number minor;
-    struct disk_device **d;
+    rtems_disk_device **d;
 
     rtems_filesystem_split_dev_t (dev, major, minor);
 
     if (major >= disktab_size)
     {
-        struct disk_device_table *p;
+        rtems_disk_device_table *p;
         int newsize;
         int i;
         newsize = disktab_size * 2;
         if (major >= newsize)
             newsize = major + 1;
-        p = realloc(disktab, sizeof(struct disk_device_table) * newsize);
+        p = realloc(disktab, sizeof(rtems_disk_device_table) * newsize);
         if (p == NULL)
             return NULL;
         p += disktab_size;
@@ -97,7 +97,7 @@ create_disk_entry(dev_t dev)
         (minor >= disktab[major].size))
     {
         int newsize;
-        disk_device **p;
+        rtems_disk_device **p;
         int i;
         int s = disktab[major].size;
 
@@ -108,7 +108,8 @@ create_disk_entry(dev_t dev)
         if (minor >= newsize)
             newsize = minor + 1;
 
-        p = realloc(disktab[major].minor, sizeof(disk_device *) * newsize);
+        p = realloc(disktab[major].minor,
+                    sizeof(rtems_disk_device *) * newsize);
         if (p == NULL)
             return NULL;
         disktab[major].minor = p;
@@ -121,7 +122,7 @@ create_disk_entry(dev_t dev)
     d = disktab[major].minor + minor;
     if (*d == NULL)
     {
-        *d = calloc(1, sizeof(disk_device));
+        *d = calloc(1, sizeof(rtems_disk_device));
     }
     return *d;
 }
@@ -136,12 +137,12 @@ create_disk_entry(dev_t dev)
  *     Pointer to the disk device descriptor corresponding to the specified
  *     device number, or NULL if disk device with such number not exists.
  */
-static inline disk_device *
+static rtems_disk_device *
 get_disk_entry(dev_t dev)
 {
     rtems_device_major_number major;
     rtems_device_minor_number minor;
-    struct disk_device_table *dtab;
+    rtems_disk_device_table *dtab;
 
     rtems_filesystem_split_dev_t (dev, major, minor);
 
@@ -171,9 +172,9 @@ get_disk_entry(dev_t dev)
  *     no memory available).
  */
 static rtems_status_code
-create_disk(dev_t dev, const char *name, disk_device **diskdev)
+create_disk(dev_t dev, const char *name, rtems_disk_device **diskdev)
 {
-    disk_device *dd;
+    rtems_disk_device *dd;
     char *n;
 
     dd = get_disk_entry(dev);
@@ -234,12 +235,12 @@ create_disk(dev_t dev, const char *name, disk_device **diskdev)
  */
 rtems_status_code
 rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
-                       block_device_ioctl handler,
+                       rtems_block_device_ioctl handler,
                        const char *name)
 {
     int bs_log2;
     int i;
-    disk_device *dd;
+    rtems_disk_device *dd;
     rtems_status_code rc;
     rtems_bdpool_id pool;
     rtems_device_major_number major;
@@ -284,6 +285,11 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
 
     rc = rtems_io_register_name(name, major, minor);
 
+    if (handler (dd->phys_dev->dev,
+                 RTEMS_BLKDEV_CAPABILITIES,
+                 &dd->capabilities) < 0)
+      dd->capabilities = 0;
+    
     diskdevs_protected = FALSE;
     rtems_semaphore_release(diskdevs_mutex);
 
@@ -317,8 +323,8 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
 rtems_status_code
 rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
 {
-    disk_device *dd;
-    disk_device *pdd;
+    rtems_disk_device *dd;
+    rtems_disk_device *pdd;
     rtems_status_code rc;
     rtems_device_major_number major;
     rtems_device_minor_number minor;
@@ -393,12 +399,12 @@ rtems_disk_delete(dev_t dev)
     used = 0;
     for (maj = 0; maj < disktab_size; maj++)
     {
-        struct disk_device_table *dtab = disktab + maj;
+        rtems_disk_device_table *dtab = disktab + maj;
         if (dtab != NULL)
         {
             for (min = 0; min < dtab->size; min++)
             {
-                disk_device *dd = dtab->minor[min];
+                rtems_disk_device *dd = dtab->minor[min];
                 if ((dd != NULL) && (dd->phys_dev->dev == dev))
                     used += dd->uses;
             }
@@ -415,12 +421,12 @@ rtems_disk_delete(dev_t dev)
     /* Delete this device and all of its logical devices */
     for (maj = 0; maj < disktab_size; maj++)
     {
-        struct disk_device_table *dtab = disktab +maj;
+        rtems_disk_device_table *dtab = disktab +maj;
         if (dtab != NULL)
         {
             for (min = 0; min < dtab->size; min++)
             {
-                disk_device *dd = dtab->minor[min];
+                rtems_disk_device *dd = dtab->minor[min];
                 if ((dd != NULL) && (dd->phys_dev->dev == dev))
                 {
                     unlink(dd->name);
@@ -437,7 +443,7 @@ rtems_disk_delete(dev_t dev)
     return rc;
 }
 
-/* rtems_disk_lookup --
+/* rtems_disk_obtain --
  *     Find block device descriptor by its device identifier.
  *
  * PARAMETERS:
@@ -447,11 +453,11 @@ rtems_disk_delete(dev_t dev)
  *     pointer to the block device descriptor, or NULL if no such device
  *     exists.
  */
-disk_device *
-rtems_disk_lookup(dev_t dev)
+rtems_disk_device *
+rtems_disk_obtain(dev_t dev)
 {
     rtems_interrupt_level level;
-    disk_device *dd;
+    rtems_disk_device *dd;
     rtems_status_code rc;
 
     rtems_interrupt_disable(level);
@@ -480,7 +486,7 @@ rtems_disk_lookup(dev_t dev)
 }
 
 /* rtems_disk_release --
- *     Release disk_device structure (decrement usage counter to 1).
+ *     Release rtems_disk_device structure (decrement usage counter to 1).
  *
  * PARAMETERS:
  *     dd - pointer to disk device structure
@@ -489,7 +495,7 @@ rtems_disk_lookup(dev_t dev)
  *     RTEMS_SUCCESSFUL
  */
 rtems_status_code
-rtems_disk_release(disk_device *dd)
+rtems_disk_release(rtems_disk_device *dd)
 {
     rtems_interrupt_level level;
     rtems_interrupt_disable(level);
@@ -510,12 +516,12 @@ rtems_disk_release(disk_device *dd)
  *     Pointer to the disk descriptor for next disk device, or NULL if all
  *     devices enumerated.
  */
-disk_device *
+rtems_disk_device *
 rtems_disk_next(dev_t dev)
 {
     rtems_device_major_number major;
     rtems_device_minor_number minor;
-    struct disk_device_table *dtab;
+    rtems_disk_device_table *dtab;
 
     dev++;
     rtems_filesystem_split_dev_t (dev, major, minor);
@@ -562,7 +568,7 @@ rtems_disk_io_initialize(void)
         return RTEMS_SUCCESSFUL;
 
     disktab_size = DISKTAB_INITIAL_SIZE;
-    disktab = calloc(disktab_size, sizeof(struct disk_device_table));
+    disktab = calloc(disktab_size, sizeof(rtems_disk_device_table));
     if (disktab == NULL)
         return RTEMS_NO_MEMORY;
 
@@ -578,8 +584,7 @@ rtems_disk_io_initialize(void)
         return rc;
     }
 
-    rc = rtems_bdbuf_init(rtems_bdbuf_configuration,
-                          rtems_bdbuf_configuration_size);
+    rc = rtems_bdbuf_init();
 
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -612,12 +617,12 @@ rtems_disk_io_done(void)
     /* Free data structures */
     for (maj = 0; maj < disktab_size; maj++)
     {
-        struct disk_device_table *dtab = disktab + maj;
+        rtems_disk_device_table *dtab = disktab + maj;
         if (dtab != NULL)
         {
             for (min = 0; min < dtab->size; min++)
             {
-                disk_device *dd = dtab->minor[min];
+                rtems_disk_device *dd = dtab->minor[min];
                 unlink(dd->name);
                 free(dd->name);
                 free(dd);

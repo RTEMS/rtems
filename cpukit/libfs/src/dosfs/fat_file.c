@@ -10,6 +10,8 @@
  *
  */
 
+#define MSDOS_TRACE 1
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -112,7 +114,7 @@ fat_file_open(
 
     lfat_fd = (*fat_fd) = (fat_file_fd_t*)malloc(sizeof(fat_file_fd_t));
     if ( lfat_fd == NULL )
-        set_errno_and_return_minus_one( ENOMEM );
+        rtems_set_errno_and_return_minus_one( ENOMEM );
 
     lfat_fd->links_num = 1;
     lfat_fd->flags &= ~FAT_FILE_REMOVED;
@@ -131,7 +133,7 @@ fat_file_open(
              * XXX: kernel resource is unsufficient, but not the memory,
              * but there is no suitable errno :(
              */
-            set_errno_and_return_minus_one( ENOMEM );
+            rtems_set_errno_and_return_minus_one( ENOMEM );
         }
     }
     _hash_insert(fs_info->vhash, key, lfat_fd->ino, lfat_fd);
@@ -383,11 +385,11 @@ fat_file_write(
         return cmpltd;
 
     if ( start > fat_fd->fat_file_size )
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
 
     if ((count > fat_fd->size_limit) ||
         (start > fat_fd->size_limit - count))
-        set_errno_and_return_minus_one( EIO );
+        rtems_set_errno_and_return_minus_one( EIO );
 
     rc = fat_file_extend(mt_entry, fat_fd, start + count, &c);
     if (rc != RC_OK)
@@ -493,7 +495,7 @@ fat_file_extend(
 
     if ((FAT_FD_OF_ROOT_DIR(fat_fd)) &&
         (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)))
-        set_errno_and_return_minus_one( ENOSPC );
+        rtems_set_errno_and_return_minus_one( ENOSPC );
 
     bytes_remain = (fs_info->vol.bpc -
                    (fat_fd->fat_file_size & (fs_info->vol.bpc - 1))) &
@@ -525,7 +527,7 @@ fat_file_extend(
 
     /* this means that no space left on device */
     if ((cls_added == 0) && (bytes_remain == 0))
-        set_errno_and_return_minus_one(ENOSPC);
+        rtems_set_errno_and_return_minus_one(ENOSPC);
 
     /*  check wether we satisfied request for 'cls2add' clusters */
     if (cls2add != cls_added)
@@ -687,7 +689,7 @@ fat_file_ioctl(
 
             /* sanity check */
             if ( pos >= fat_fd->fat_file_size )
-                set_errno_and_return_minus_one( EIO );
+                rtems_set_errno_and_return_minus_one( EIO );
 
             if ((FAT_FD_OF_ROOT_DIR(fat_fd)) &&
                 (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)))
@@ -759,13 +761,13 @@ fat_file_datasync(
     fat_file_fd_t                        *fat_fd
     )
 {
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_fs_info_t     *fs_info = mt_entry->fs_info;
-    uint32_t           cur_cln = fat_fd->cln;
-    bdbuf_buffer      *block = NULL;
-    uint32_t           sec = 0;
-    uint32_t           i = 0;
+    int                 rc = RC_OK;
+    rtems_status_code   sc = RTEMS_SUCCESSFUL;
+    fat_fs_info_t      *fs_info = mt_entry->fs_info;
+    uint32_t            cur_cln = fat_fd->cln;
+    rtems_bdbuf_buffer *block = NULL;
+    uint32_t            sec = 0;
+    uint32_t            i = 0;
 
     if (fat_fd->fat_file_size == 0)
         return RC_OK;
@@ -788,11 +790,11 @@ fat_file_datasync(
             /* ... sync it */
             sc = rtems_bdbuf_read(fs_info->vol.dev, (sec + i), &block);
             if (sc != RTEMS_SUCCESSFUL)
-                set_errno_and_return_minus_one( EIO );
+                rtems_set_errno_and_return_minus_one( EIO );
 
             sc = rtems_bdbuf_sync(block);
             if ( sc != RTEMS_SUCCESSFUL )
-                set_errno_and_return_minus_one( EIO );
+                rtems_set_errno_and_return_minus_one( EIO );
         }
 
         rc = fat_get_fat_cluster(mt_entry, cur_cln, &cur_cln);
@@ -947,9 +949,7 @@ fat_file_lseek(
     )
 {
     int rc = RC_OK;
-/*
-    assert(fat_fd->fat_file_size);
- */
+
     if (file_cln == fat_fd->map.file_cln)
         *disk_cln = fat_fd->map.disk_cln;
     else

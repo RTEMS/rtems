@@ -47,7 +47,7 @@ msdos_free_node_info(rtems_filesystem_location_info_t *pathloc)
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     rc = fat_file_close(pathloc->mt_entry, pathloc->node_access);
 

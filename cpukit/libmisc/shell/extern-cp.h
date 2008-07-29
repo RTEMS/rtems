@@ -84,7 +84,7 @@ int	set_utimes(const char *, struct stat *);
 int	setfile(rtems_shell_cp_globals* cp_globals, struct stat *, int);
 int	preserve_dir_acls(struct stat *, char *, char *);
 int	preserve_fd_acls(int, int);
-void	usage();
+void usage(rtems_shell_cp_globals* cp_globals);
 
 __END_DECLS
 

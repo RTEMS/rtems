@@ -465,11 +465,11 @@ preserve_dir_acls(struct stat *fs, char *source_dir, char *dest_dir)
 }
 
 void
-usage(void)
+usage(rtems_shell_cp_globals* cp_globals)
 {
-
 	(void)fprintf(stderr, "%s\n%s\n",
 "usage: cp [-R [-H | -L | -P]] [-f | -i | -n] [-alpv] source_file target_file",
 "       cp [-R [-H | -L | -P]] [-f | -i | -n] [-alpv] source_file ... "
 "target_directory");
+  longjmp (cp_globals->exit_jmp, 1);
 }

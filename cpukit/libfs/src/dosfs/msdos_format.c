@@ -277,7 +277,7 @@ static int msdos_format_eval_sectors_per_cluster
   } while (!finished);
 
   if (ret_val != 0) {
-    set_errno_and_return_minus_one(ret_val);
+    rtems_set_errno_and_return_minus_one(ret_val);
   }
   else {
     *sectors_per_cluster_adj = sectors_per_cluster;
@@ -298,9 +298,9 @@ static int msdos_format_determine_fmt_params
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- const disk_device            *dd,       /* disk device structure          */
+ const rtems_disk_device            *dd,       /* disk device structure          */
  const msdos_format_request_param_t *rqdata,   /* requested fmt parameters */
- msdos_format_param_t         *fmt_params/* computed fmt parameters        */
+ msdos_format_param_t               *fmt_params/* computed fmt parameters        */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -613,7 +613,7 @@ static int msdos_format_determine_fmt_params
    * Phuuu.... That's it.
    */
   if (ret_val != 0) {
-    set_errno_and_return_minus_one(ret_val);
+    rtems_set_errno_and_return_minus_one(ret_val);
   }
   else {
     return 0;
@@ -791,13 +791,13 @@ int msdos_format
 |    0, if success, -1 and errno if failed                                  |
 \*=========================================================================*/
 {
-  char         tmp_sec[FAT_TOTAL_MBR_SIZE];
-  int          rc;
-  disk_device *dd        = NULL; 
-  struct stat  stat_buf;
-  int          ret_val   = 0;
-  int          fd        = -1;
-  int          i;
+  char                 tmp_sec[FAT_TOTAL_MBR_SIZE];
+  int                  rc;
+  rtems_disk_device   *dd        = NULL; 
+  struct stat          stat_buf;
+  int                  ret_val   = 0;
+  int                  fd        = -1;
+  int                  i;
   msdos_format_param_t fmt_params;
 
   /*
@@ -817,7 +817,7 @@ int msdos_format
   
   /* check that  device is registered as block device and lock it */
   if (ret_val == 0) {
-    dd = rtems_disk_lookup(stat_buf.st_dev);
+    dd = rtems_disk_obtain(stat_buf.st_dev);
     if (dd == NULL) {
       errno = ENOTBLK;
       ret_val = -1;

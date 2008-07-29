@@ -89,7 +89,7 @@ msdos_eval_path(
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     if (!pathloc->node_access)
     {
@@ -271,7 +271,7 @@ msdos_eval4make(
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     if (!pathloc->node_access)
     {

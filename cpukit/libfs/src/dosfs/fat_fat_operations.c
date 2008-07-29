@@ -229,13 +229,13 @@ fat_get_fat_cluster(
 {
     int                     rc = RC_OK;
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
-    bdbuf_buffer           *block0 = NULL;
+    rtems_bdbuf_buffer     *block0 = NULL;
     uint32_t                sec = 0;
     uint32_t                ofs = 0;
 
     /* sanity check */
     if ( (cln < 2) || (cln > (fs_info->vol.data_cls + 1)) )
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     sec = (FAT_FAT_OFFSET(fs_info->vol.type, cln) >> fs_info->vol.sec_log2) +
           fs_info->vol.afat_loc;
@@ -284,7 +284,7 @@ fat_get_fat_cluster(
             break;
 
         default:
-            set_errno_and_return_minus_one(EIO);
+            rtems_set_errno_and_return_minus_one(EIO);
             break;
     }
 
@@ -311,17 +311,17 @@ fat_set_fat_cluster(
     uint32_t                              in_val
     )
 {
-    int                rc = RC_OK;
-    fat_fs_info_t     *fs_info = mt_entry->fs_info;
-    uint32_t           sec = 0;
-    uint32_t           ofs = 0;
-    uint16_t           fat16_clv = 0;
-    uint32_t           fat32_clv = 0;
-    bdbuf_buffer      *block0 = NULL;
+    int                 rc = RC_OK;
+    fat_fs_info_t      *fs_info = mt_entry->fs_info;
+    uint32_t            sec = 0;
+    uint32_t            ofs = 0;
+    uint16_t            fat16_clv = 0;
+    uint32_t            fat32_clv = 0;
+    rtems_bdbuf_buffer *block0 = NULL;
 
     /* sanity check */
     if ( (cln < 2) || (cln > (fs_info->vol.data_cls + 1)) )
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     sec = (FAT_FAT_OFFSET(fs_info->vol.type, cln) >> fs_info->vol.sec_log2) +
           fs_info->vol.afat_loc;
@@ -428,7 +428,7 @@ fat_set_fat_cluster(
             break;
 
         default:
-            set_errno_and_return_minus_one(EIO);
+            rtems_set_errno_and_return_minus_one(EIO);
             break;
 
     }

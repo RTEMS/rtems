@@ -74,12 +74,12 @@ int msdos_mknod(
         type = MSDOS_REGULAR_FILE;
     }
     else
-        set_errno_and_return_minus_one(EINVAL);
+        rtems_set_errno_and_return_minus_one(EINVAL);
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
-        set_errno_and_return_minus_one(EIO);
+        rtems_set_errno_and_return_minus_one(EIO);
 
     /* Create an MSDOS node */
     rc = msdos_creat_node(pathloc, type, new_name, mode, NULL);

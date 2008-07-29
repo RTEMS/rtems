@@ -38,10 +38,10 @@ rtems_blkdev_generic_read(
     unsigned int block;
     unsigned int blkofs;
     dev_t dev;
-    disk_device *dd;
+    rtems_disk_device *dd;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
-    dd = rtems_disk_lookup(dev);
+    dd = rtems_disk_obtain(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
@@ -57,7 +57,7 @@ rtems_blkdev_generic_read(
 
     while (count > 0)
     {
-        bdbuf_buffer *diskbuf;
+        rtems_bdbuf_buffer *diskbuf;
         int copy;
         rtems_status_code rc;
 
@@ -99,10 +99,10 @@ rtems_blkdev_generic_write(
     unsigned int blkofs;
     dev_t dev;
     rtems_status_code rc;
-    disk_device *dd;
+    rtems_disk_device *dd;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
-    dd = rtems_disk_lookup(dev);
+    dd = rtems_disk_obtain(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
@@ -118,7 +118,7 @@ rtems_blkdev_generic_write(
 
     while (count > 0)
     {
-        bdbuf_buffer *diskbuf;
+        rtems_bdbuf_buffer *diskbuf;
         int copy;
 
         if ((blkofs == 0) && (count >= block_size))
@@ -156,10 +156,10 @@ rtems_blkdev_generic_open(
     void                    * arg)
 {
     dev_t dev;
-    disk_device *dd;
+    rtems_disk_device *dd;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
-    dd = rtems_disk_lookup(dev);
+    dd = rtems_disk_obtain(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
@@ -181,10 +181,10 @@ rtems_blkdev_generic_close(
     void                    * arg)
 {
     dev_t dev;
-    disk_device *dd;
+    rtems_disk_device *dd;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
-    dd = rtems_disk_lookup(dev);
+    dd = rtems_disk_obtain(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
@@ -206,32 +206,32 @@ rtems_blkdev_generic_ioctl(
 {
     rtems_libio_ioctl_args_t *args = arg;
     dev_t dev;
-    disk_device *dd;
+    rtems_disk_device *dd;
     int rc;
 
     dev = rtems_filesystem_make_dev_t(major, minor);
-    dd = rtems_disk_lookup(dev);
+    dd = rtems_disk_obtain(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
     switch (args->command)
     {
-        case BLKIO_GETBLKSIZE:
+        case RTEMS_BLKIO_GETBLKSIZE:
             args->ioctl_return = dd->block_size;
             break;
 
-        case BLKIO_GETSIZE:
+        case RTEMS_BLKIO_GETSIZE:
             args->ioctl_return = dd->size;
             break;
 
-        case BLKIO_SYNCDEV:
+        case RTEMS_BLKIO_SYNCDEV:
             rc = rtems_bdbuf_syncdev(dd->dev);
             args->ioctl_return = (rc == RTEMS_SUCCESSFUL ? 0 : -1);
             break;
 
-        case BLKIO_REQUEST:
+        case RTEMS_BLKIO_REQUEST:
         {
-            blkdev_request *req = args->buffer;
+            rtems_blkdev_request *req = args->buffer;
             req->start += dd->start;
             args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
                                            req);

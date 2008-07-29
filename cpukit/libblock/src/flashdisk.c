@@ -2057,14 +2057,13 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
  * @retval int The ioctl return value.
  */
 static int
-rtems_fdisk_read (rtems_flashdisk* fd, blkdev_request* req)
+rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
 {
-  blkdev_sg_buffer* sg = req->bufs;
-  uint32_t          block = req->start;
-  uint32_t          b;
-  int               ret = 0;
+  rtems_blkdev_sg_buffer* sg = req->bufs;
+  uint32_t                b;
+  int                     ret = 0;
 
-  for (b = 0; b < req->bufnum; b++, block++, sg++)
+  for (b = 0; b < req->bufnum; b++, sg++)
   {
     uint32_t length = sg->length;
   
@@ -2077,7 +2076,7 @@ rtems_fdisk_read (rtems_flashdisk* fd, blkdev_request* req)
         length = fd->block_size;
     }
 
-    ret = rtems_fdisk_read_block (fd, block, sg->buffer);
+    ret = rtems_fdisk_read_block (fd, sg->block, sg->buffer);
 
     if (ret)
       break;
@@ -2098,14 +2097,13 @@ rtems_fdisk_read (rtems_flashdisk* fd, blkdev_request* req)
  * @retval int The ioctl return value.
  */
 static int
-rtems_fdisk_write (rtems_flashdisk* fd, blkdev_request* req)
+rtems_fdisk_write (rtems_flashdisk* fd, rtems_blkdev_request* req)
 {
-  blkdev_sg_buffer* sg = req->bufs;
-  uint32_t          block = req->start;
-  uint32_t          b;
-  int               ret = 0;
+  rtems_blkdev_sg_buffer* sg = req->bufs;
+  uint32_t                b;
+  int                     ret = 0;
 
-  for (b = 0; b < req->bufnum; b++, block++, sg++)
+  for (b = 0; b < req->bufnum; b++, sg++)
   {
     if (sg->length != fd->block_size)
     {
@@ -2113,7 +2111,7 @@ rtems_fdisk_write (rtems_flashdisk* fd, blkdev_request* req)
                          "bd:%d fd:%d", sg->length, fd->block_size);
     }
 
-    ret = rtems_fdisk_write_block (fd, block, sg->buffer);
+    ret = rtems_fdisk_write_block (fd, sg->block, sg->buffer);
 
     if (ret)
       break;
@@ -2356,7 +2354,7 @@ static int
 rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
 {
   rtems_device_minor_number minor = rtems_filesystem_dev_minor_t (dev);
-  blkdev_request*           r = argp;
+  rtems_blkdev_request*     r = argp;
   rtems_status_code         sc;
 
   errno = 0;
@@ -2368,7 +2366,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
   {
     switch (req)
     {
-      case BLKIO_REQUEST:
+      case RTEMS_BLKIO_REQUEST:
         if ((minor >= rtems_flashdisk_count) ||
             (rtems_flashdisks[minor].device_count == 0))
         {
@@ -2378,11 +2376,11 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         {
           switch (r->req)
           {
-            case BLKDEV_REQ_READ:
+            case RTEMS_BLKDEV_REQ_READ:
               errno = rtems_fdisk_read (&rtems_flashdisks[minor], r);
               break;
 
-            case BLKDEV_REQ_WRITE:
+            case RTEMS_BLKDEV_REQ_WRITE:
               errno = rtems_fdisk_write (&rtems_flashdisks[minor], r);
               break;
         

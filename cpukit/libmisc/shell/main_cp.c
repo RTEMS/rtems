@@ -175,14 +175,14 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
 			vflag = 1;
 			break;
 		default:
-			usage();
+			usage(cp_globals);
 			break;
 		}
 	argc -= getopt_reent.optind;
 	argv += getopt_reent.optind;
 
 	if (argc < 2)
-		usage();
+		usage(cp_globals);
 
 	fts_options = FTS_NOCHDIR | FTS_PHYSICAL;
 	if (Rflag && rflag)
