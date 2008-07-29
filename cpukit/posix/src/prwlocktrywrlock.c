@@ -52,7 +52,7 @@ int pthread_rwlock_trywrlock(
       _CORE_RWLock_Obtain_for_writing(
 	&the_rwlock->RWLock,
 	*rwlock,
-	FALSE,                 // we are not willing to wait
+	FALSE,                 /* we are not willing to wait */
 	0,
 	NULL
       );
