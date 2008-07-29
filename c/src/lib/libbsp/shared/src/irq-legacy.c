@@ -169,6 +169,9 @@ int BSP_remove_rtems_irq_handler( const rtems_irq_connect_data *cd)
 	}
 
 	sc = rtems_interrupt_handler_remove( cd->name, bsp_interrupt_legacy_dispatch, e.legacy_handler_arg);
+
+	free( e.legacy_handler_arg);
+
 	if (sc != RTEMS_SUCCESSFUL) {
 		return 0;
 	}

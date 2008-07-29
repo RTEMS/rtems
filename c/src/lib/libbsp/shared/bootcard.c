@@ -58,36 +58,49 @@ char *rtems_progname;
  *  the RTEMS Workspace and C Program Heap.
  */
 #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-  static void bootcard_bsp_libc_helper(
+  static rtems_status_code bootcard_bsp_libc_helper(
     void   *work_area_start,
     size_t  work_area_size,
     void   *heap_start,
     size_t  heap_size
   )
   {
+    size_t heap_size_default = 0;
+
     if (heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
       /* Use the work area start as heap start */
       heap_start = work_area_start;
 
       /* Ensure proper alignement */
       if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
-        heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT - 1));
+        heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT)
+	  & ~(CPU_ALIGNMENT - 1));
       }
 
       /*
-       * Use the free space from the start of the work area up to the work
-       * space start as heap area.
+       * For the default heap size use the free space from the start of the
+       * work area up to the work space start as heap area.
        */
-      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
-        heap_size = (char *) Configuration.work_space_start
-          - (char *) work_area_start;
+      heap_size_default = (char *) Configuration.work_space_start
+        - (char *) work_area_start;
 
-        /* Keep it as a multiple of 16 bytes */
-        heap_size &= 0xfffffff0;
+      /* Keep it as a multiple of 16 bytes */
+      heap_size_default &= ~((size_t) 0xf);
+
+      /* Use default heap size if requested */
+      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+        heap_size = heap_size_default;
+      }
+		
+      /* Check heap size */
+      if (heap_size > heap_size_default) {
+        return RTEMS_INVALID_SIZE;
       }
     }
 
     bsp_libc_init( heap_start, (uint32_t) heap_size, 0);
+
+    return RTEMS_SUCCESSFUL;
   }
 #endif
 
@@ -109,6 +122,7 @@ int boot_card(
   char **envp_p = &envp_pointer;
   rtems_interrupt_level bsp_isr_level;
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
     void   *work_area_start = NULL;
     size_t  work_area_size = 0;
     void   *heap_start = NULL;
@@ -150,32 +164,31 @@ int boot_card(
    *  the RTEMS Workspace and the C Program Heap is.
    */
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-  {
-    void *work_space_start = NULL;
-
-    bsp_get_work_area(
-      &work_area_start,
-      &work_area_size,
-      &heap_start,
-      &heap_size
-    );
-
-    work_space_start = (char *) work_area_start + work_area_size
-      - rtems_configuration_get_work_space_size();
-
-    if ((uintptr_t) work_space_start <= (uintptr_t) work_area_start) {
-      printk( "bootcard: Not enough RAM!!!\n" );
-      bsp_cleanup();
-      return -1;
+    {
+      void *work_space_start = NULL;
+    
+      bsp_get_work_area(
+        &work_area_start,
+        &work_area_size,
+        &heap_start,
+        &heap_size
+      );
+    
+      work_space_start = (char *) work_area_start + work_area_size
+        - rtems_configuration_get_work_space_size();
+    
+      if ((uintptr_t) work_space_start <= (uintptr_t) work_area_start) {
+        printk( "bootcard: Work space to big for work area!\n");
+        bsp_cleanup();
+        return -1;
+      }
+    
+      Configuration.work_space_start = work_space_start;
+    
+      #if (BSP_DIRTY_MEMORY == 1)
+        memset( work_area_start, 0xCF,  work_area_size);
+      #endif
     }
-
-    Configuration.work_space_start = work_space_start;
-
-    #if (BSP_DIRTY_MEMORY == 1)
-      memset( work_area_start, 0xCF,  work_area_size);
-    #endif
-  }
-
   #endif
 
   /*
@@ -193,12 +206,17 @@ int boot_card(
    *  framework.
    */
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    bootcard_bsp_libc_helper(
+    sc = bootcard_bsp_libc_helper(
       work_area_start,
       work_area_size,
       heap_start,
       heap_size
     );
+    if (sc != RTEMS_SUCCESSFUL) {
+      printk( "bootcard: Cannot initialize C library!\n");
+      bsp_cleanup();
+      return -1;
+    }
   #endif
 
   /*

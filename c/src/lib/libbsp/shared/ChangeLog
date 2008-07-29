@@ -1,3 +1,9 @@
+2008-07-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* src/irq-legacy.c: Free allocated memory in hander remove.
+
+	* bootcard.c: Check if the heap fits into the work area.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/bootcard.h: New file.
