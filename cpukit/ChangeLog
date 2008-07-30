@@ -1,3 +1,9 @@
+2008-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* httpd/emfdb.h, httpd/socket.c, httpd/uemf.c, httpd/uemf.h,
+	httpd/um.h, httpd/webmain.c, httpd/webs.c, httpd/webs.h, 
+	httpd/wsIntrn.h: Add missing protoypes.
+
 2008-07-29	Tim Cussins <timcussins@eml.cc>
 
 	* ChangeLog, libmisc/monitor/mon-object.c: Add mising RTEMS_POSIX_API
