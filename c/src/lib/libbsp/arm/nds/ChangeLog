@@ -4,8 +4,8 @@
 
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* startup/start.c: Changed bsp_get_workarea() to bsp_get_work_area() and
-	added support for an optional separate heap area.
+	* startup/start.c: Changed bsp_get_workarea() to bsp_get_work_area()
+	and added support for an optional separate heap area.
 
 2008-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
