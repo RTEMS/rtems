@@ -887,7 +887,7 @@ typedef struct {
  *
  */
 
-extern void 	 bclose();
+extern void 	 bclose(void);
 extern int 		 bopen(void *buf, int bufsize, int flags);
 
 /*
@@ -967,8 +967,8 @@ typedef void	(emfSchedProc)(void *data, int id);
 extern int		emfSchedCallback(int delay, emfSchedProc *proc, void *arg);
 extern void 	emfUnschedCallback(int id);
 extern void 	emfReschedCallback(int id, int delay);
-extern void		emfSchedProcess();
-extern int		emfInstGet();
+extern void		emfSchedProcess(void);
+extern int		emfInstGet(void);
 extern void		emfInstSet(int inst);
 extern void		error(E_ARGS_DEC, int flags, char_t *fmt, ...);
 extern void		(*errorSetHandler(void (*function)(int etype, char_t *msg))) \
@@ -1023,7 +1023,7 @@ extern void 	ringqAddNull(ringq_t *rq);
 extern int		scriptSetVar(int engine, char_t *var, char_t *value);
 extern int		scriptEval(int engine, char_t *cmd, char_t **rslt, int chan);
 
-extern void		socketClose();
+extern void		socketClose(void);
 extern void		socketCloseConnection(int sid);
 extern void		socketCreateHandler(int sid, int mask, socketHandler_t 
 					handler, int arg);
@@ -1035,7 +1035,7 @@ extern int		socketFlush(int sid);
 extern int		socketGets(int sid, char_t **buf);
 extern int		socketGetPort(int sid);
 extern int		socketInputBuffered(int sid);
-extern int		socketOpen();
+extern int		socketOpen(void);
 extern int 		socketOpenConnection(char *host, int port, 
 					socketAccept_t accept, int flags);
 extern void 	socketProcess(int hid);
@@ -1050,7 +1050,7 @@ extern int 		socketGetBlock(int sid);
 extern int 		socketAlloc(char *host, int port, socketAccept_t accept, 
 					int flags);
 extern void 	socketFree(int sid);
-extern int		socketGetError();
+extern int		socketGetError(void);
 extern socket_t *socketPtr(int sid);
 extern int 		socketWaitForEvent(socket_t *sp, int events, int *errCode);
 extern void 	socketRegisterInterest(socket_t *sp, int handlerMask);
@@ -1069,8 +1069,8 @@ extern int		symDelete(sym_fd_t sd, char_t *name);
 extern void 	symWalk(sym_fd_t sd, void (*fn)(sym_t *symp));
 extern sym_t	*symFirst(sym_fd_t sd);
 extern sym_t	*symNext(sym_fd_t sd);
-extern int		symSubOpen();
-extern void 	symSubClose();
+extern int		symSubOpen(void);
+extern void 	symSubClose(void);
 
 extern void		trace(int lev, char_t *fmt, ...);
 extern void		traceRaw(char_t *buf);
@@ -1085,25 +1085,25 @@ extern int		vxchdir(char *dirname);
 
 extern unsigned int hextoi(char_t *hexstring);
 extern unsigned int gstrtoi(char_t *s);
-extern				time_t	timeMsec();
+extern				time_t	timeMsec(void);
 
 extern char_t 	*ascToUni(char_t *ubuf, char *str, int nBytes);
 extern char 	*uniToAsc(char *buf, char_t *ustr, int nBytes);
 extern char_t	*ballocAscToUni(char  *cp, int alen);
 extern char		*ballocUniToAsc(char_t *unip, int ulen);
 
-extern char_t	*basicGetHost();
-extern char_t	*basicGetAddress();
-extern char_t	*basicGetProduct();
+extern char_t	*basicGetHost(void);
+extern char_t	*basicGetAddress(void);
+extern char_t	*basicGetProduct(void);
 extern void		basicSetHost(char_t *host);
 extern void		basicSetAddress(char_t *addr);
 
 extern int		harnessOpen(char_t **argv);
 extern void		harnessClose(int status);
 extern void		harnessTesting(char_t *msg, ...);
-extern void		harnessPassed();
+extern void		harnessPassed(void);
 extern void		harnessFailed(int line);
-extern int		harnessLevel();
+extern int		harnessLevel(void);
 
 #endif /* _h_UEMF */
 

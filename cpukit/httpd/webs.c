@@ -1987,7 +1987,7 @@ void websFree(webs_t wp)
  *	Return the server address
  */
 
-char_t *websGetHost()
+char_t *websGetHost(void)
 {
 	return websHost;
 }
@@ -1997,7 +1997,7 @@ char_t *websGetHost()
  *	Return the the url to access the server. (ip address)
  */
 
-char_t *websGetIpaddrUrl()
+char_t *websGetIpaddrUrl(void)
 {
 	return websIpaddrUrl;
 }
@@ -2007,7 +2007,7 @@ char_t *websGetIpaddrUrl()
  *	Return the server address
  */
 
-char_t *websGetHostUrl()
+char_t *websGetHostUrl(void)
 {
 	return websHostUrl;
 }
@@ -2017,7 +2017,7 @@ char_t *websGetHostUrl()
  *	Return the listen port
  */
 
-int websGetPort()
+int websGetPort(void)
 {
 	return websPort;
 }

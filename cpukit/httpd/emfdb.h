@@ -93,7 +93,7 @@ extern int		dbSearchStr(int did, char_t *table, char_t *column,
 
 extern void		dbZero(int did);
 
-extern char_t	*basicGetProductDir();
+extern char_t	*basicGetProductDir(void);
 extern void		basicSetProductDir(char_t *proddir);
 
 #endif /* _h_EMFDB */

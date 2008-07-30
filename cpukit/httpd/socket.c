@@ -983,7 +983,7 @@ int socketSetBlock(int sid, int on)
  *	Return true if a readable socket has buffered data. - not public
  */
 
-int socketDontBlock()
+int socketDontBlock(void)
 {
 	socket_t	*sp;
 	int			i;

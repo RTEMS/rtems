@@ -63,7 +63,7 @@ websTimer_t *tp;
 
 /****************************** Forward Declarations **************************/
 
-static int 	initWebs();
+static int 	initWebs(void);
 static int	aspTest(int eid, webs_t wp, int argc, char_t **argv);
 static void formTest(webs_t wp, char_t *path, char_t *query);
 static int  websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
@@ -71,16 +71,16 @@ static int  websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 static void timerProc(int signo);
 #if B_STATS
 static void printMemStats(int handle, char_t *fmt, ...);
-static void memLeaks();
+static void memLeaks(void);
 #endif
 static timer_t timer_id;
-static void rtems_httpd_daemon();
+static void rtems_httpd_daemon(rtems_task_argument args);
  
 /*********************************** Code *************************************/
 /*
  *	Main -- entry point from RTEMS
  */
-int rtems_initialize_webserver()
+int rtems_initialize_webserver(void)
 {
   rtems_status_code   sc;
   rtems_id            tid;
@@ -113,7 +113,7 @@ int rtems_initialize_webserver()
 }
 
 static void
-rtems_httpd_daemon()
+rtems_httpd_daemon(rtems_task_argument args)
 {
 /*
  *	Initialize the memory allocator. Allow use of malloc and start with a 
@@ -172,7 +172,7 @@ rtems_httpd_daemon()
  *	Initialize the web server.
  */
 
-static int initWebs()
+static int initWebs(void)
 {
 	struct hostent*	hp;
 	struct in_addr	intaddr;

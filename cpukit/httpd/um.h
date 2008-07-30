@@ -76,12 +76,12 @@ typedef enum {
 /*
  *	umOpen() must be called before accessing User Management functions
  */
-extern int				umOpen();
+extern int				umOpen(void);
 
 /*
  *	umClose() should be called before shutdown to free memory
  */
-extern void				umClose();
+extern void				umClose(void);
 
 /*
  *	umCommit() persists the user management database
@@ -101,7 +101,7 @@ extern int				umAddUser(char_t *user, char_t *password,
 
 extern int				umDeleteUser(char_t *user);
 
-extern char_t			*umGetFirstUser();
+extern char_t			*umGetFirstUser(void);
 extern char_t			*umGetNextUser(char_t *lastUser);
 
 extern bool_t			umUserExists(char_t *user);
@@ -126,7 +126,7 @@ extern int				umAddGroup(char_t *group, short privilege,
 
 extern int				umDeleteGroup(char_t *group);
 
-extern char_t 			*umGetFirstGroup();
+extern char_t 			*umGetFirstGroup(void);
 extern char_t			*umGetNextGroup(char_t *lastUser);
 
 extern bool_t			umGroupExists(char_t *group);
@@ -152,7 +152,7 @@ extern int			umAddAccessLimit(char_t *url, accessMeth_t am,
 
 extern int			umDeleteAccessLimit(char_t *url);
 
-extern char_t		*umGetFirstAccessLimit();
+extern char_t		*umGetFirstAccessLimit(void);
 extern char_t		*umGetNextAccessLimit(char_t *lastUser);
 
 /*

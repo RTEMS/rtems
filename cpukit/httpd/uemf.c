@@ -286,7 +286,7 @@ int errorOpen(char_t *pname)
 	return 0;
 }
 
-void errorClose()
+void errorClose(void)
 {
 }
 

@@ -136,7 +136,7 @@ extern int		 websAccept(int sid, char *ipaddr, int port, int listenSid);
 extern int 		 websAspDefine(char_t *name, 
 					int (*fn)(int ejid, webs_t wp, int argc, char_t **argv));
 extern int 		 websAspRequest(webs_t wp, char_t *lpath);
-extern void		 websCloseListen();
+extern void		 websCloseListen(void);
 extern int 		 websDecode64(char_t *outbuf, char_t *string, int buflen);
 extern void		 websDecodeUrl(char_t *token, char_t *decoded, int len);
 extern void  	 websDone(webs_t wp, int code);
@@ -147,14 +147,14 @@ extern char_t 	*websErrorMsg(int code);
 extern void  	 websFooter(webs_t wp);
 extern int 		 websFormDefine(char_t *name, void (*fn)(webs_t wp, 
 					char_t *path, char_t *query));
-extern char_t 	*websGetDefaultDir();
-extern char_t 	*websGetDefaultPage();
-extern char_t 	*websGetHostUrl();
-extern char_t 	*websGetIpaddrUrl();
-extern char_t 	*websGetPassword();
-extern int		 websGetPort();
+extern char_t 	*websGetDefaultDir(void);
+extern char_t 	*websGetDefaultPage(void);
+extern char_t 	*websGetHostUrl(void);
+extern char_t 	*websGetIpaddrUrl(void);
+extern char_t 	*websGetPassword(void);
+extern int		 websGetPort(void);
 extern char_t 	*websGetPublishDir(char_t *path, char_t **urlPrefix);
-extern char_t 	*websGetRealm();
+extern char_t 	*websGetRealm(void);
 extern int 		 websGetRequestBytes(webs_t wp);
 extern char_t	*websGetRequestDir(webs_t wp);
 extern int		 websGetRequestFlags(webs_t wp);
@@ -173,7 +173,7 @@ extern int 		 websPageOpen(webs_t wp, char_t *lpath, char_t *path,
 extern void 	 websPageClose(webs_t wp);
 extern int 		 websPublish(char_t *urlPrefix, char_t *path);
 extern void		 websRedirect(webs_t wp, char_t *url);
-extern void 	 websSecurityDelete();
+extern void 	 websSecurityDelete(void);
 extern int 		 websSecurityHandler(webs_t wp, char_t *urlPrefix, 
 					char_t *webDir, int arg, char_t *url, char_t *path, 
 					char_t *query);

@@ -238,12 +238,12 @@ extern int				websPort;			/* Port number */
 
 /******************************** Prototypes **********************************/
 
-extern int		 websAspOpen();
-extern void		 websAspClose();
-extern void		 websFormOpen();
-extern void		 websFormClose();
+extern int		 websAspOpen(void);
+extern void		 websAspClose(void);
+extern void		 websFormOpen(void);
+extern void		 websFormClose(void);
 extern int		 websAspWrite(int ejid, webs_t wp, int argc, char_t **argv);
-extern void  	 websDefaultClose();
+extern void  	 websDefaultClose(void);
 extern int 		 websDefaultHandler(webs_t wp, char_t *urlPrefix, 
 					char_t *webDir, int arg, char_t *url, char_t *path, 
 					char_t *query);
@@ -251,9 +251,9 @@ extern int 		 websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 					int arg, char_t *url, char_t *path, char_t *query);
 extern int 		 websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 					int arg, char_t *url, char_t *path, char_t *query);
-extern void		 websCgiCleanup();
+extern void		 websCgiCleanup(void);
 extern int		 websCheckCgiProc(int handle);
-extern char_t	 *websGetCgiCommName();
+extern char_t	 *websGetCgiCommName(void);
 
 extern int		 websLaunchCgiProc(char_t *cgiPath, char_t **argp,
 					char_t **envp, char_t *stdIn, char_t *stdOut);
@@ -269,8 +269,8 @@ extern void		 websPageSeek(webs_t wp, long offset);
 extern int 	 	 websPageStat(webs_t wp, char_t *lpath, char_t *path,
 					websStatType *sbuf);
 extern int		 websPageIsDirectory(char_t *lpath);
-extern int 		 websRomOpen();
-extern void		 websRomClose();
+extern int 		 websRomOpen(void);
+extern void		 websRomClose(void);
 extern int 		 websRomPageOpen(webs_t wp, char_t *path, int mode, int perm);
 extern void 	 websRomPageClose(int fd);
 extern int 		 websRomPageReadData(webs_t wp, char *buf, int len);
@@ -281,10 +281,10 @@ extern void 	 websSetRequestSocketHandler(webs_t wp, int mask,
 extern int 		 websSolutionHandler(webs_t wp, char_t *urlPrefix,
 					char_t *webDir, int arg, char_t *url, char_t *path, 
 					char_t *query);
-extern void 	 websUrlHandlerClose();
-extern int 		 websUrlHandlerOpen();
+extern void 	 websUrlHandlerClose(void);
+extern int 		 websUrlHandlerOpen(void);
 extern int 		 websOpenServer(int port, int retries);
-extern void 	 websCloseServer();
+extern void 	 websCloseServer(void);
 extern char_t*	 websGetDateString(websStatType* sbuf);
 
 extern int		strcmpci(char_t* s1, char_t* s2);
