@@ -66,7 +66,7 @@ test_exit()
 #
 # defaults for getopt vars
 #
-# max_run_time is defaulted to 5 minutes
+# max_run_time is defaulted to 3 minutes
 #
 
 verbose=""
@@ -76,7 +76,7 @@ stdio_setup="yes"
 run_to_completion="yes"
 logdir=log
 update_on_tick="no"
-max_run_time=$((10 * 60))
+max_run_time=$((3 * 60))
 using_print_buffer="yes"
 
 while getopts vhr12o:c:sl:t OPT
@@ -211,12 +211,17 @@ do
        time_run=0
        while [ $time_run -lt $max_run_time ]
        do
-           # sleep 10s at a time waiting for job to finish or timer to expire
+           # sleep 1s at a time waiting for job to finish or timer to expire
            # if job has exited, then we exit, too.
-           sleep 10
+           sleep 1
            if kill -0 $sim_pid 2>/dev/null
            then
-                time_run=$((time_run + 10))
+                grep "Memory exception " ${logfile}.tmp >/dev/null
+                if [ $? -eq 0 ] ; then
+                  break
+                fi
+
+                time_run=$((time_run + 1))
            else
                 exit 0
            fi
