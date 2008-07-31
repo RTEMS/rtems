@@ -1,5 +1,9 @@
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am: Do not build .rel files. Reduces code bloat.
+
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* tests/tests.c: Remove C++ style comments.
 
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
