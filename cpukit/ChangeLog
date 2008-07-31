@@ -1,3 +1,7 @@
+2008-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shttpd/compat_rtems.c: Replace C++-comments with C-comments.
+
 2008-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* httpd/emfdb.h, httpd/socket.c, httpd/uemf.c, httpd/uemf.h,
