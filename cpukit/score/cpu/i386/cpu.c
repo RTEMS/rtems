@@ -82,11 +82,12 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-void _CPU_Thread_Idle_body ()
+void *_CPU_Thread_Idle_body (uint32_t ignored)
 {
   while(1){
     asm volatile ("hlt");
   }
+  return NULL;
 }
 
 void _defaultExcHandler (CPU_Exception_frame *ctx)

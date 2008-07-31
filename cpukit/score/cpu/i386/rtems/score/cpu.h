@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the Intel
  *  i386 processor.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -426,7 +426,7 @@ void _CPU_ISR_install_vector(
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
 
-void _CPU_Thread_Idle_body( void );
+void *_CPU_Thread_Idle_body( uint32_t );
 
 #endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 

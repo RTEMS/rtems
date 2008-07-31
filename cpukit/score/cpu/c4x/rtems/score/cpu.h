@@ -1129,7 +1129,7 @@ void _CPU_ISR_install_vector(
  */
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == 1)
-void _CPU_Thread_Idle_body( void );
+void *_CPU_Thread_Idle_body( uint32_t );
 #endif
 
 /*

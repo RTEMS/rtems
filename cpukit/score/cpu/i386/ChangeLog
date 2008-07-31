@@ -1,3 +1,7 @@
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c, rtems/score/cpu.h: Correct prototype of Idle threads.
+
 2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Add _CPU_Context_Get_SP() for stack check utility.

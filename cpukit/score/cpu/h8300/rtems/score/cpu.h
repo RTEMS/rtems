@@ -1056,7 +1056,7 @@ void _CPU_Install_interrupt_stack( void );
  *  XXX
  */
 
-void _CPU_Thread_Idle_body( void );
+void *_CPU_Thread_Idle_body( uint32_t );
 
 /*
  *  _CPU_Context_switch
