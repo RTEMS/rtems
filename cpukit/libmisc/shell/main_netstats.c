@@ -23,7 +23,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-static void netstats_usage()
+static void netstats_usage(void)
 {
   printf(
     "netstats [-vAimfpcut] where:\n"
