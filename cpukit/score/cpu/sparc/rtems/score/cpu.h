@@ -923,7 +923,7 @@ void _CPU_ISR_install_vector(
  *  tries to take advantage of those models.
  */
  
-void _CPU_Thread_Idle_body( void );
+void *_CPU_Thread_Idle_body( uint32_t );
  
 #endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 
