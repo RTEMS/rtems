@@ -17,7 +17,7 @@
 
 /*PAGE
  *
- *  _Thread_Idle_body
+ *  _CPU_Thread_Idle_body
  *
  *  This kernel routine is the idle thread.  The idle thread runs any time
  *  no other thread is ready to run.  This thread loops forever with
@@ -29,7 +29,7 @@
  *  Output parameters:  NONE
  */
  
-void _CPU_Thread_Idle_body( void )
+void *_CPU_Thread_Idle_body( uint32_t ignored )
 {
 #if defined(mcf5272)
   for( ; ; ) {
