@@ -51,7 +51,9 @@ startup_SOURCES = ../../shared/bspclean.c \
 	../../shared/gnatinstallhandler.c \
 	../shared/src/tictac.c \
 	startup/cpuinit.c \
-	startup/bspstart.c
+	startup/bspstart.c \
+        startup/uboot_support.c \
+        ../shared/uboot_getenv.c
 
 clock_SOURCES = ../shared/clock/clock.c
 

@@ -1,3 +1,9 @@
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Add stub for U-Boot support. Hopefully someone more
+	knowledgeable than I can provide a real address and length.
+	* startup/uboot_support.c: New file.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac, include/bsp.h, startup/bspstart.c,
