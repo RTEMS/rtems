@@ -1,3 +1,8 @@
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libmisc/shell/main_rm.c: sys/mount.h is not available when networking
+	is disabled but luckily it is not even needed to compile.
+
 2008-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shttpd/compat_rtems.c: Replace C++-comments with C-comments.
