@@ -30,7 +30,7 @@ typedef struct RTEMS_HTTPD_ARGS {
     char                  webroot[MAX_WEB_BASE_PATH_LENGTH];
 } RTEMS_HTTPD_ARGS;
 
-static int rtems_webserver_running = FALSE; //not running.
+static int rtems_webserver_running = FALSE; /* not running. */
 
 static rtems_task rtems_httpd_daemon(rtems_task_argument args)
 {
@@ -119,7 +119,7 @@ rtems_status_code rtems_initialize_webserver(
 
 void rtems_terminate_webserver(void)
 {
-  rtems_webserver_running = FALSE; // not running, so terminate
+  rtems_webserver_running = FALSE; /* not running, so terminate */
 }
 
 int rtems_webserver_ok(void)
@@ -130,10 +130,12 @@ int rtems_webserver_ok(void)
 void
 set_close_on_exec(int fd)
 {
-        // RTEMS Does not have a functional "execve"
-        // so technically this call does not do anything,
-        // but it doesnt hurt either.
-        (void) fcntl(fd, F_SETFD, FD_CLOEXEC);
+   /*
+    * RTEMS Does not have a functional "execve"
+    * so technically this call does not do anything,
+    * but it doesnt hurt either.
+    */
+   (void) fcntl(fd, F_SETFD, FD_CLOEXEC);
 }
 #ifndef __rtems__
 int
