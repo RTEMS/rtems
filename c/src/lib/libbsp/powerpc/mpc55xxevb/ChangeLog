@@ -1,5 +1,9 @@
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* tests/tests.c: Remove C++ style comments.
+
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* startup/bspclean.c: Use C style comment.
 
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
