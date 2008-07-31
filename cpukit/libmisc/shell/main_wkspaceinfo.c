@@ -30,7 +30,6 @@ int rtems_shell_main_wkspace_info(
 )
 {
   Heap_Information_block info;
-  extern void classinfo_tester();
 
   _Protected_heap_Get_information( &_Workspace_Area, &info );
   rtems_shell_print_heap_info( "free", &info.Free );
