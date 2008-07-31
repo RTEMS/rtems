@@ -20,5 +20,5 @@
 
 void bsp_cleanup()
 {
-	// TODO
+	/* TODO - Add something BSP specific here */
 }
