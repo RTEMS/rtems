@@ -51,8 +51,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_clnt.c,v 1.11 2000/01/27 2
 static struct timeval timeout = { 5, 0 };
 static struct timeval tottimeout = { 60, 0 };
 
-void clnt_perror();
-
 #ifndef PORTMAPSOCK
 #define PORTMAPSOCK "/var/run/portmapsock"
 #endif
