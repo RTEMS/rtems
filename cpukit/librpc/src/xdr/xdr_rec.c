@@ -135,13 +135,14 @@ typedef struct rec_strm {
  * calls expect that they take an opaque handle rather than an fd.
  */
 void
-xdrrec_create(xdrs, sendsize, recvsize, tcp_handle, readit, writeit)
-	register XDR *xdrs;
-	register u_int sendsize;
-	register u_int recvsize;
-	caddr_t tcp_handle;
-	int (*readit)();  /* like read, but pass it a tcp_handle, not sock */
-	int (*writeit)();  /* like write, but pass it a tcp_handle, not sock */
+xdrrec_create(
+	XDR *xdrs,
+	u_int sendsize,
+	u_int recvsize,
+	caddr_t tcp_handle,
+	int (*readit)(char*, char*, int),  /* like read, but pass it a tcp_handle, not sock */
+	int (*writeit)(char*, char*, int)  /* like write, but pass it a tcp_handle, not sock */
+)
 {
 	register RECSTREAM *rstrm =
 		(RECSTREAM *)mem_alloc(sizeof(RECSTREAM));
@@ -195,9 +196,9 @@ xdrrec_create(xdrs, sendsize, recvsize, tcp_handle, readit, writeit)
  */
 
 static bool_t
-xdrrec_getlong(xdrs, lp)
-	XDR *xdrs;
-	long *lp;
+xdrrec_getlong(
+	XDR *xdrs,
+	long *lp)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	register int32_t *buflp = (int32_t *)(rstrm->in_finger);
@@ -218,9 +219,9 @@ xdrrec_getlong(xdrs, lp)
 }
 
 static bool_t
-xdrrec_putlong(xdrs, lp)
-	XDR *xdrs;
-	long *lp;
+xdrrec_putlong(
+	XDR *xdrs,
+	long *lp)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	register int32_t *dest_lp = ((int32_t *)(rstrm->out_finger));
@@ -242,10 +243,10 @@ xdrrec_putlong(xdrs, lp)
 }
 
 static bool_t  /* must manage buffers, fragments, and records */
-xdrrec_getbytes(xdrs, addr, len)
-	XDR *xdrs;
-	register caddr_t addr;
-	register u_int len;
+xdrrec_getbytes(
+	XDR *xdrs,
+	register caddr_t addr,
+	register u_int len)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	register int current;
@@ -270,10 +271,10 @@ xdrrec_getbytes(xdrs, addr, len)
 }
 
 static bool_t
-xdrrec_putbytes(xdrs, addr, len)
-	XDR *xdrs;
-	register caddr_t addr;
-	register u_int len;
+xdrrec_putbytes(
+	XDR *xdrs,
+	caddr_t addr,
+	u_int len)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	register long current;
@@ -296,8 +297,8 @@ xdrrec_putbytes(xdrs, addr, len)
 }
 
 static u_int
-xdrrec_getpos(xdrs)
-	register XDR *xdrs;
+xdrrec_getpos(
+	XDR *xdrs)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 	register long pos;
@@ -322,9 +323,9 @@ xdrrec_getpos(xdrs)
 }
 
 static bool_t
-xdrrec_setpos(xdrs, pos)
-	register XDR *xdrs;
-	u_int pos;
+xdrrec_setpos(
+	XDR *xdrs,
+	u_int pos)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 	u_int currpos = xdrrec_getpos(xdrs);
@@ -360,9 +361,9 @@ xdrrec_setpos(xdrs, pos)
 }
 
 static int32_t *
-xdrrec_inline(xdrs, len)
-	register XDR *xdrs;
-	int len;
+xdrrec_inline(
+	XDR *xdrs,
+	int len)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 	int32_t * buf = NULL;
@@ -391,8 +392,8 @@ xdrrec_inline(xdrs, len)
 }
 
 static void
-xdrrec_destroy(xdrs)
-	register XDR *xdrs;
+xdrrec_destroy(
+	XDR *xdrs)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 
@@ -411,8 +412,8 @@ xdrrec_destroy(xdrs)
  * this procedure to guarantee proper record alignment.
  */
 bool_t
-xdrrec_skiprecord(xdrs)
-	XDR *xdrs;
+xdrrec_skiprecord(
+	XDR *xdrs)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 
@@ -433,8 +434,8 @@ xdrrec_skiprecord(xdrs)
  * after consuming the rest of the current record.
  */
 bool_t
-xdrrec_eof(xdrs)
-	XDR *xdrs;
+xdrrec_eof(
+	XDR *xdrs)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 
@@ -457,9 +458,9 @@ xdrrec_eof(xdrs)
  * pipelined procedure calls.)  TRUE => immmediate flush to tcp connection.
  */
 bool_t
-xdrrec_endofrecord(xdrs, sendnow)
-	XDR *xdrs;
-	bool_t sendnow;
+xdrrec_endofrecord(
+	XDR *xdrs,
+	bool_t sendnow)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	register u_long len;  /* fragment length */
@@ -483,9 +484,9 @@ xdrrec_endofrecord(xdrs, sendnow)
  * Internal useful routines
  */
 static bool_t
-flush_out(rstrm, eor)
-	register RECSTREAM *rstrm;
-	bool_t eor;
+flush_out(
+	RECSTREAM *rstrm,
+	bool_t eor)
 {
 	register u_int32_t eormask = (eor == TRUE) ? LAST_FRAG : 0;
 	register u_int32_t len = (uintptr_t)(rstrm->out_finger) -
@@ -502,8 +503,8 @@ flush_out(rstrm, eor)
 }
 
 static bool_t  /* knows nothing about records!  Only about input buffers */
-fill_input_buf(rstrm)
-	register RECSTREAM *rstrm;
+fill_input_buf(
+	RECSTREAM *rstrm)
 {
 	register caddr_t where;
 	u_long i;
@@ -522,10 +523,10 @@ fill_input_buf(rstrm)
 }
 
 static bool_t  /* knows nothing about records!  Only about input buffers */
-get_input_bytes(rstrm, addr, len)
-	register RECSTREAM *rstrm;
-	register caddr_t addr;
-	register int len;
+get_input_bytes(
+	RECSTREAM *rstrm,
+	caddr_t addr,
+	int len)
 {
 	register long current;
 
@@ -546,8 +547,8 @@ get_input_bytes(rstrm, addr, len)
 }
 
 static bool_t  /* next two bytes of the input stream are treated as a header */
-set_input_fragment(rstrm)
-	register RECSTREAM *rstrm;
+set_input_fragment(
+	RECSTREAM *rstrm)
 {
 	u_int32_t header;
 
@@ -570,9 +571,9 @@ set_input_fragment(rstrm)
 }
 
 static bool_t  /* consumes input bytes; knows nothing about records! */
-skip_input_bytes(rstrm, cnt)
-	register RECSTREAM *rstrm;
-	long cnt;
+skip_input_bytes(
+	RECSTREAM *rstrm,
+	long cnt)
 {
 	register long current;
 
@@ -591,8 +592,8 @@ skip_input_bytes(rstrm, cnt)
 }
 
 static u_int
-fix_buf_size(s)
-	register u_int s;
+fix_buf_size(
+	u_int s)
 {
 
 	if (s < 100)
