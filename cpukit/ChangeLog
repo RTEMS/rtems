@@ -5,6 +5,8 @@
 
 2008-07-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/main_netstats.c: Add missing prototypes.
+	* libmisc/shell/main_wkspaceinfo.c: Remove classinfo_tester.
 	* shttpd/compat_rtems.c: Replace C++-comments with C-comments.
 
 2008-07-30	Ralf Corsépius <ralf.corsepius@rtems.org>
