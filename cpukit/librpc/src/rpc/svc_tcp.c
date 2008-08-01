@@ -56,12 +56,12 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_tcp.c,v 1.18 2000/01/27 23:
 /*
  * Ops vector for TCP/IP based rpc service handle
  */
-static bool_t		svctcp_recv();
-static enum xprt_stat	svctcp_stat();
-static bool_t		svctcp_getargs();
-static bool_t		svctcp_reply();
-static bool_t		svctcp_freeargs();
-static void		svctcp_destroy();
+static bool_t		svctcp_recv(SVCXPRT *xprt, struct rpc_msg *msg);
+static enum xprt_stat	svctcp_stat(SVCXPRT *xprt);
+static bool_t		svctcp_getargs(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr);
+static bool_t		svctcp_reply(SVCXPRT *xprt, struct rpc_msg *msg);
+static bool_t		svctcp_freeargs(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr);
+static void		svctcp_destroy(SVCXPRT *xprt);
 
 static struct xp_ops svctcp_op = {
 	svctcp_recv,
@@ -75,15 +75,15 @@ static struct xp_ops svctcp_op = {
 /*
  * Ops vector for TCP/IP rendezvous handler
  */
-static bool_t		rendezvous_request();
-static enum xprt_stat	rendezvous_stat();
+static bool_t		rendezvous_request(SVCXPRT *xprt, struct rpc_msg *msg);
+static enum xprt_stat	rendezvous_stat(SVCXPRT *xprt);
 
 static struct xp_ops svctcp_rendezvous_op = {
 	rendezvous_request,
 	rendezvous_stat,
-	(bool_t (*)())abort,
-	(bool_t (*)())abort,
-	(bool_t (*)())abort,
+	(bool_t (*)(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr))abort,
+	(bool_t (*)(SVCXPRT *xprt, struct rpc_msg *msg))abort,
+	(bool_t (*)(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr))abort,
 	svctcp_destroy
 };
 
@@ -237,7 +237,8 @@ makefd_xprt(
 
 static bool_t
 rendezvous_request(
-	SVCXPRT *xprt)
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	int sock;
 	struct tcp_rendezvous *r;
@@ -279,7 +280,7 @@ rendezvous_request(
 }
 
 static enum xprt_stat
-rendezvous_stat()
+rendezvous_stat(SVCXPRT *xprt)
 {
 
 	return (XPRT_IDLE);
