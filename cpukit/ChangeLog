@@ -1,5 +1,6 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.c: Fix broken prototype.
 	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c:
 	Add missing prototypes.
 
