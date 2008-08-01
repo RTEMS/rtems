@@ -96,9 +96,10 @@ struct svcudp_data {
  * The routines returns NULL if a problem occurred.
  */
 SVCXPRT *
-svcudp_bufcreate(sock, sendsz, recvsz)
-	register int sock;
-	u_int sendsz, recvsz;
+svcudp_bufcreate(
+	int sock,
+	u_int sendsz,
+	u_int recvsz )
 {
 	bool_t madesock = FALSE;
 	register SVCXPRT *xprt;
@@ -154,25 +155,21 @@ svcudp_bufcreate(sock, sendsz, recvsz)
 }
 
 SVCXPRT *
-svcudp_create(sock)
-	int sock;
+svcudp_create(int sock)
 {
 
 	return(svcudp_bufcreate(sock, UDPMSGSIZE, UDPMSGSIZE));
 }
 
 static enum xprt_stat
-svcudp_stat(xprt)
-	SVCXPRT *xprt;
+svcudp_stat(SVCXPRT *xprt)
 {
 
 	return (XPRT_IDLE);
 }
 
 static bool_t
-svcudp_recv(xprt, msg)
-	register SVCXPRT *xprt;
-	struct rpc_msg *msg;
+svcudp_recv(SVCXPRT *xprt, struct rpc_msg *msg)
 {
 	register struct svcudp_data *su = su_data(xprt);
 	register XDR *xdrs = &(su->su_xdrs);
@@ -204,9 +201,7 @@ svcudp_recv(xprt, msg)
 }
 
 static bool_t
-svcudp_reply(xprt, msg)
-	register SVCXPRT *xprt;
-	struct rpc_msg *msg;
+svcudp_reply(SVCXPRT *xprt, struct rpc_msg *msg)
 {
 	register struct svcudp_data *su = su_data(xprt);
 	register XDR *xdrs = &(su->su_xdrs);
@@ -231,20 +226,20 @@ svcudp_reply(xprt, msg)
 }
 
 static bool_t
-svcudp_getargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svcudp_getargs(
+	SVCXPRT *xprt, 
+	xdrproc_t xdr_args, 
+	caddr_t args_ptr)
 {
 
 	return ((*xdr_args)(&(su_data(xprt)->su_xdrs), args_ptr));
 }
 
 static bool_t
-svcudp_freeargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svcudp_freeargs(
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr)
 {
 	register XDR *xdrs = &(su_data(xprt)->su_xdrs);
 
@@ -253,8 +248,7 @@ svcudp_freeargs(xprt, xdr_args, args_ptr)
 }
 
 static void
-svcudp_destroy(xprt)
-	register SVCXPRT *xprt;
+svcudp_destroy(SVCXPRT *xprt)
 {
 	register struct svcudp_data *su = su_data(xprt);
 
@@ -338,9 +332,9 @@ struct udp_cache {
  * Enable use of the cache.
  * Note: there is no disable.
  */
-int svcudp_enablecache(transp, size)
-	SVCXPRT *transp;
-	u_long size;
+int svcudp_enablecache(
+	SVCXPRT *transp,
+	u_long size)
 {
 	struct svcudp_data *su = su_data(transp);
 	struct udp_cache *uc;
@@ -377,9 +371,9 @@ int svcudp_enablecache(transp, size)
  * Set an entry in the cache
  */
 static void
-cache_set(xprt, replylen)
-	SVCXPRT *xprt;
-	u_long replylen;
+cache_set(
+	SVCXPRT *xprt,
+	u_long replylen)
 {
 	register cache_ptr victim;
 	register cache_ptr *vicp;
@@ -442,11 +436,11 @@ cache_set(xprt, replylen)
  * return 1 if found, 0 if not found
  */
 static int
-cache_get(xprt, msg, replyp, replylenp)
-	SVCXPRT *xprt;
-	struct rpc_msg *msg;
-	char **replyp;
-	u_long *replylenp;
+cache_get(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg,
+	char **replyp,
+	u_long *replylenp)
 {
 	u_int loc;
 	register cache_ptr ent;
