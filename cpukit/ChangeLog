@@ -1,5 +1,9 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/xdr_mbuf.c: Add prototypes.
+
+2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/clnt.h: Cleanup.
 	* librpc/include/rpc/svc.h: Cleanup.
 
