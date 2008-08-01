@@ -90,17 +90,17 @@ my_free(void *p)
 #include <stdio.h>
 #endif
 
-static bool_t	xdrmbuf_getlong_aligned();
-static bool_t	xdrmbuf_putlong_aligned();
-static bool_t	xdrmbuf_getlong_unaligned();
-static bool_t	xdrmbuf_putlong_unaligned();
-static bool_t	xdrmbuf_getbytes();
-static bool_t	xdrmbuf_putbytes();
-static u_int	xdrmbuf_getpos(); /* XXX w/64-bit pointers, u_int not enough! */
-static bool_t	xdrmbuf_setpos();
-static int32_t *xdrmbuf_inline_aligned();
-static int32_t *xdrmbuf_inline_unaligned();
-static void	xdrmbuf_destroy();
+static bool_t	xdrmbuf_getlong_aligned(XDR *xdrs, long *lp);
+static bool_t	xdrmbuf_putlong_aligned(XDR *xdrs, const long *lp);
+static bool_t	xdrmbuf_getlong_unaligned(XDR *xdrs, long *lp);
+static bool_t	xdrmbuf_putlong_unaligned(XDR *xdrs, const long *lp);
+static bool_t	xdrmbuf_getbytes(XDR *xdrs, caddr_t addr, u_int len);
+static bool_t	xdrmbuf_putbytes(XDR *xdrs, const char *addr, u_int len);
+static u_int	xdrmbuf_getpos(XDR *xdrs); /* XXX w/64-bit pointers, u_int not enough! */
+static bool_t	xdrmbuf_setpos(XDR *xdrs, u_int pos);
+static int32_t *xdrmbuf_inline_aligned(XDR *xdrs, u_int len);
+static int32_t *xdrmbuf_inline_unaligned(XDR *xdrs, u_int len);
+static void	xdrmbuf_destroy(XDR *);
 
 static struct	xdr_ops xdrmbuf_ops_aligned = {
 	xdrmbuf_getlong_aligned,
@@ -251,9 +251,9 @@ xdrmbuf_getlong_aligned(register XDR *xdrs, register long *lp)
 }
 
 static bool_t
-xdrmbuf_putlong_aligned(xdrs, lp)
-	register XDR *xdrs;
-	long *lp;
+xdrmbuf_putlong_aligned(
+	XDR *xdrs,
+	const long *lp)
 {
 fprintf(stderr,"TODO: xdrmbuf_putlong_aligned() is unimplemented\n");
 	return FALSE;
@@ -358,9 +358,9 @@ done:
 }
 
 static bool_t
-xdrmbuf_putlong_unaligned(xdrs, lp)
-	register XDR *xdrs;
-	long *lp;
+xdrmbuf_putlong_unaligned(
+	XDR *xdrs,
+	const long *lp )
 {
 
 	fprintf(stderr,"TODO: xdrmbuf_putlong_unaligned() is unimplemented\n");
@@ -380,10 +380,10 @@ xdrmbuf_putlong_unaligned(xdrs, lp)
 }
 
 static bool_t
-xdrmbuf_getbytes(xdrs, addr, len)
-	register XDR *xdrs;
-	caddr_t addr;
-	register u_int len;
+xdrmbuf_getbytes(
+	XDR *xdrs,
+	caddr_t addr,
+	u_int len)
 {
 #if DEBUG & DEBUG_VERB
 int	olen=len,bufs=0;
@@ -424,10 +424,10 @@ done:
 }
 
 static bool_t
-xdrmbuf_putbytes(xdrs, addr, len)
-	register XDR *xdrs;
-	caddr_t addr;
-	register u_int len;
+xdrmbuf_putbytes(
+	XDR *xdrs,
+	const char *addr,
+	u_int len )
 {
 
 	fprintf(stderr,"TODO: xdrmbuf_putbytes() is unimplemented\n");
@@ -500,9 +500,9 @@ MBPrivate	mbp   = (MBPrivate)xdrs->x_base;
 }
 
 static int32_t *
-xdrmbuf_inline_aligned(xdrs, len)
-	register XDR *xdrs;
-	int len;
+xdrmbuf_inline_aligned(
+	XDR *xdrs,
+	u_int len)
 {
 int32_t	*buf = 0;
 
@@ -526,9 +526,9 @@ int32_t	*buf = 0;
 }
 
 static int32_t *
-xdrmbuf_inline_unaligned(xdrs, len)
-	register XDR *xdrs;
-	int len;
+xdrmbuf_inline_unaligned(
+	XDR *xdrs,
+	u_int len )
 {
 	return (0);
 }
