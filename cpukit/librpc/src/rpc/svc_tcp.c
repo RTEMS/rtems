@@ -123,10 +123,10 @@ struct tcp_conn {  /* kept in xprt->xp_p1 */
  * 0 => use the system default.
  */
 SVCXPRT *
-svctcp_create(sock, sendsize, recvsize)
-	register int sock;
-	u_int sendsize;
-	u_int recvsize;
+svctcp_create(
+	int sock,
+	u_int sendsize,
+	u_int recvsize)
 {
 	bool_t madesock = FALSE;
 	register SVCXPRT *xprt;
@@ -190,20 +190,20 @@ svctcp_create(sock, sendsize, recvsize)
  * descriptor as its first input.
  */
 SVCXPRT *
-svcfd_create(fd, sendsize, recvsize)
-	int fd;
-	u_int sendsize;
-	u_int recvsize;
+svcfd_create(
+	int fd,
+	u_int sendsize,
+	u_int recvsize)
 {
 
 	return (makefd_xprt(fd, sendsize, recvsize));
 }
 
 static SVCXPRT *
-makefd_xprt(fd, sendsize, recvsize)
-	int fd;
-	u_int sendsize;
-	u_int recvsize;
+makefd_xprt(
+	int fd,
+	u_int sendsize,
+	u_int recvsize)
 {
 	register SVCXPRT *xprt;
 	register struct tcp_conn *cd;
@@ -236,8 +236,8 @@ makefd_xprt(fd, sendsize, recvsize)
 }
 
 static bool_t
-rendezvous_request(xprt)
-	register SVCXPRT *xprt;
+rendezvous_request(
+	SVCXPRT *xprt)
 {
 	int sock;
 	struct tcp_rendezvous *r;
@@ -286,8 +286,8 @@ rendezvous_stat()
 }
 
 static void
-svctcp_destroy(xprt)
-	register SVCXPRT *xprt;
+svctcp_destroy(
+	SVCXPRT *xprt)
 {
 	register struct tcp_conn *cd = (struct tcp_conn *)xprt->xp_p1;
 
@@ -323,10 +323,10 @@ static struct timeval wait_per_try = { 35, 0 };
  * to handle new requests if any are detected.
  */
 static int
-readtcp(xprt, buf, len)
-	register SVCXPRT *xprt;
-	caddr_t buf;
-	register int len;
+readtcp(
+	SVCXPRT *xprt,
+	caddr_t buf,
+	int len)
 {
 	register int sock = xprt->xp_sock;
 	struct timeval start, delta, tv;
@@ -391,10 +391,10 @@ fatal_err:
  * Any error is fatal and the connection is closed.
  */
 static int
-writetcp(xprt, buf, len)
-	register SVCXPRT *xprt;
-	caddr_t buf;
-	int len;
+writetcp(
+	SVCXPRT *xprt,
+	caddr_t buf,
+	int len)
 {
 	register int i, cnt;
 
@@ -409,8 +409,8 @@ writetcp(xprt, buf, len)
 }
 
 static enum xprt_stat
-svctcp_stat(xprt)
-	SVCXPRT *xprt;
+svctcp_stat(
+	SVCXPRT *xprt)
 {
 	register struct tcp_conn *cd =
 	    (struct tcp_conn *)(xprt->xp_p1);
@@ -423,9 +423,9 @@ svctcp_stat(xprt)
 }
 
 static bool_t
-svctcp_recv(xprt, msg)
-	SVCXPRT *xprt;
-	register struct rpc_msg *msg;
+svctcp_recv(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct tcp_conn *cd =
 	    (struct tcp_conn *)(xprt->xp_p1);
@@ -442,20 +442,20 @@ svctcp_recv(xprt, msg)
 }
 
 static bool_t
-svctcp_getargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svctcp_getargs(
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr)
 {
 
 	return ((*xdr_args)(&(((struct tcp_conn *)(xprt->xp_p1))->xdrs), args_ptr));
 }
 
 static bool_t
-svctcp_freeargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svctcp_freeargs(
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr)
 {
 	register XDR *xdrs =
 	    &(((struct tcp_conn *)(xprt->xp_p1))->xdrs);
@@ -465,9 +465,9 @@ svctcp_freeargs(xprt, xdr_args, args_ptr)
 }
 
 static bool_t
-svctcp_reply(xprt, msg)
-	SVCXPRT *xprt;
-	register struct rpc_msg *msg;
+svctcp_reply(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct tcp_conn *cd =
 	    (struct tcp_conn *)(xprt->xp_p1);
