@@ -1,5 +1,10 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/lib/ftpfs.c, libnetworking/libc/rcmd.c,
+	libnetworking/netinet/in_cksum_m68k.h, 
+	libnetworking/netinet/ip_divert.c, libnetworking/rtems/ftpfs.h,
+	libnetworking/rtems/mkrootfs.c, libnetworking/rtems/mkrootfs.h,
+	libnetworking/rtems/rtems_showroute.c: Add missing prototypes.
 	* itron/include/itronsys/types.h: Add missing prototype.
 	* ftpd/ftpd.c: Fix broken prototype.
 	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c:
