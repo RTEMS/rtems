@@ -39,8 +39,8 @@
 #include <sys/wait.h>
 #include <sys/signal.h>
 
-static void reg_service();
-static void callit();
+static void reg_service(struct svc_req *rqstp, SVCXPRT *xprt);
+static void callit(struct svc_req *rqstp, SVCXPRT *xprt);
 static struct pmaplist *pmaplist;
 static int debugging = 0;
 

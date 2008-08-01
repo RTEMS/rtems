@@ -46,7 +46,7 @@ int getdomainname(char *, size_t);
 #define default_domain (rtems_rpc_task_variables->rpcdname_default_domain)
 
 static char *
-get_default_domain()
+get_default_domain(void)
 {
 	char temp[256];
 

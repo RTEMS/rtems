@@ -52,13 +52,13 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_simple.c,v 1.9 1999/08/28 0
 #include <inttypes.h> /* for PRIxx printf formats */
 
 struct prog_lst {
-	char *(*p_progname)();
+	char *(*p_progname)(char *);
 	rpcprog_t  p_prognum;
 	rpcproc_t  p_procnum;
 	xdrproc_t p_inproc, p_outproc;
 	struct prog_lst *p_nxt;
 };
-static void universal();
+static void universal(struct svc_req *, SVCXPRT *);
 #define proglst (rtems_rpc_task_variables->svc_simple_proglst)
 #define pl (rtems_rpc_task_variables->svc_simple_pl)
 #define transp (rtems_rpc_task_variables->svc_simple_transp)
@@ -68,7 +68,7 @@ registerrpc(
 	int prognum,
 	int versnum,
 	int procnum,
-	char *(*progname)(),
+	char *(*progname)(char *),
 	xdrproc_t inproc,
 	xdrproc_t outproc )
 {
