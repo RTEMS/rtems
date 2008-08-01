@@ -1,5 +1,12 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/auth_unix.c: Misc. ansifications. 
+	Add missing prototypes.
+	* librpc/src/rpc/rtime.c, librpc/src/rpc/svc_udp.c:
+	Misc. ansifications.
+
+2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/auth_unix.h, librpc/include/rpc/pmap_clnt.h,
 	librpc/include/rpc/pmap_prot.h, librpc/include/rpc/pmap_rmt.h,
 	librpc/include/rpc/rpc_msg.h, librpc/include/rpc/svc_auth.h,
