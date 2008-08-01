@@ -69,14 +69,12 @@ static int	__yp_nomap = 0;
 extern int _yp_check(char **);
 #endif	/* YP */
 
-static	struct rpcent *interpret();
-struct	hostent *gethostent();
-char	*inet_ntoa();
+static	struct rpcent *interpret(char *val, int len);
 
 static char RPCDB[] = "/etc/rpc";
 
 static struct rpcdata *
-_rpcdata()
+_rpcdata(void)
 {
 	register struct rpcdata *d = rpcdata;
 
@@ -253,9 +251,9 @@ no_yp:
 }
 
 static struct rpcent *
-interpret(val, len)
-	char *val;
-	int len;
+interpret(
+	char *val,
+	int len)
 {
 	register struct rpcdata *d = _rpcdata();
 	char *p;
