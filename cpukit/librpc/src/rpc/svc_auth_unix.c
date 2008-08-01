@@ -52,9 +52,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_auth_unix.c,v 1.8 1999/08/2
  * Unix longhand authenticator
  */
 enum auth_stat
-_svcauth_unix(rqst, msg)
-	register struct svc_req *rqst;
-	register struct rpc_msg *msg;
+_svcauth_unix(
+	struct svc_req *rqst,
+	struct rpc_msg *msg )
 {
 	register enum auth_stat stat;
 	XDR xdrs;
@@ -140,9 +140,9 @@ done:
  */
 /*ARGSUSED*/
 enum auth_stat
-_svcauth_short(rqst, msg)
-	struct svc_req *rqst;
-	struct rpc_msg *msg;
+_svcauth_short(
+	struct svc_req *rqst,
+	struct rpc_msg *msg )
 {
 	return (AUTH_REJECTEDCRED);
 }

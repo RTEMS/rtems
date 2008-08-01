@@ -59,8 +59,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/get_myaddress.c,v 1.17 2000/01/
  * interface only if there are no other possible interfaces.
  */
 int
-get_myaddress(addr)
-	struct sockaddr_in *addr;
+get_myaddress(
+	struct sockaddr_in *addr)
 {
 	int s;
 	char buf[BUFSIZ];
