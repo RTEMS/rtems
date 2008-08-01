@@ -67,11 +67,12 @@ struct svc_callout {
 	struct svc_callout *sc_next;
 	u_long		    sc_prog;
 	u_long		    sc_vers;
-	void		    (*sc_dispatch)();
+	void		    (*sc_dispatch)(struct svc_req *r, SVCXPRT *xprt);
 };
 #define svc_head (rtems_rpc_task_variables->svc_svc_head)
 
-static struct svc_callout *svc_find();
+static struct svc_callout *svc_find(u_long prog, u_long vers, 
+  struct svc_callout **prev);
 
 /* ***************  SVCXPRT related stuff **************** */
 
@@ -160,7 +161,7 @@ svc_register(
 	SVCXPRT *xprt,
 	u_long prog,
 	u_long vers,
-	void (*dispatch)(),
+	void (*dispatch)(struct svc_req *r, SVCXPRT *xprt),
 	int protocol )
 {
 	struct svc_callout *prev;
