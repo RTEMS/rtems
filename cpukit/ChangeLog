@@ -1,5 +1,8 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/getrpcport.c: Misc. ansifications.
+	* librpc/src/rpc/getrpcent.c: Remove stray local decls. 
+	Misc. ansifications.
 	* librpc/src/rpc/clnt_perror.c: Misc. ansifications.
 	* librpc/src/rpc/get_myaddress.c: Misc. ansifications.
 	* librpc/src/rpc/svc_auth_unix.c: Misc. ansifications.
