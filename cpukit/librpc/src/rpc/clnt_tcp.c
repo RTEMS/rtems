@@ -111,13 +111,13 @@ struct ct_data {
  * something more useful.
  */
 CLIENT *
-clnttcp_create(raddr, prog, vers, sockp, sendsz, recvsz)
-	struct sockaddr_in *raddr;
-	u_long prog;
-	u_long vers;
-	register int *sockp;
-	u_int sendsz;
-	u_int recvsz;
+clnttcp_create(
+	struct sockaddr_in *raddr,
+	u_long prog,
+	u_long vers,
+	int *sockp,
+	u_int sendsz,
+	u_int recvsz)
 {
 	CLIENT *h;
 	register struct ct_data *ct = NULL;
@@ -231,14 +231,14 @@ fooy:
 }
 
 static enum clnt_stat
-clnttcp_call(h, proc, xdr_args, args_ptr, xdr_results, results_ptr, timeout)
-	register CLIENT *h;
-	u_long proc;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
-	xdrproc_t xdr_results;
-	caddr_t results_ptr;
-	struct timeval timeout;
+clnttcp_call(
+	CLIENT *h,
+	u_long proc,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr,
+	xdrproc_t xdr_results,
+	caddr_t results_ptr,
+	struct timeval timeout)
 {
 	register struct ct_data *ct = (struct ct_data *) h->cl_private;
 	register XDR *xdrs = &(ct->ct_xdrs);
@@ -328,9 +328,9 @@ call_again:
 }
 
 static void
-clnttcp_geterr(h, errp)
-	CLIENT *h;
-	struct rpc_err *errp;
+clnttcp_geterr(
+	CLIENT *h,
+	struct rpc_err *errp)
 {
 	register struct ct_data *ct =
 	    (struct ct_data *) h->cl_private;
@@ -339,10 +339,10 @@ clnttcp_geterr(h, errp)
 }
 
 static bool_t
-clnttcp_freeres(cl, xdr_res, res_ptr)
-	CLIENT *cl;
-	xdrproc_t xdr_res;
-	caddr_t res_ptr;
+clnttcp_freeres(
+	CLIENT *cl,
+	xdrproc_t xdr_res,
+	caddr_t res_ptr)
 {
 	register struct ct_data *ct = (struct ct_data *)cl->cl_private;
 	register XDR *xdrs = &(ct->ct_xdrs);
@@ -358,10 +358,10 @@ clnttcp_abort()
 
 
 static bool_t
-clnttcp_control(cl, request, info)
-	CLIENT *cl;
-	int request;
-	char *info;
+clnttcp_control(
+	CLIENT *cl,
+	int request,
+	char *info)
 {
 	register struct ct_data *ct = (struct ct_data *)cl->cl_private;
 	register struct timeval *tv;
@@ -468,8 +468,8 @@ clnttcp_control(cl, request, info)
 
 
 static void
-clnttcp_destroy(h)
-	CLIENT *h;
+clnttcp_destroy(
+	CLIENT *h)
 {
 	register struct ct_data *ct =
 	    (struct ct_data *) h->cl_private;
@@ -488,10 +488,10 @@ clnttcp_destroy(h)
  * around for the rpc level.
  */
 static int
-readtcp(ct, buf, len)
-	register struct ct_data *ct;
-	caddr_t buf;
-	register int len;
+readtcp(
+	struct ct_data *ct,
+	caddr_t buf,
+	register int len)
 {
 	fd_set *fds, readfds;
 	struct timeval start, after, duration, delta, tmp, tv;
@@ -563,10 +563,10 @@ readtcp(ct, buf, len)
 }
 
 static int
-writetcp(ct, buf, len)
-	struct ct_data *ct;
-	caddr_t buf;
-	int len;
+writetcp(
+	struct ct_data *ct,
+	caddr_t buf,
+	int len)
 {
 	register int i, cnt;
 
