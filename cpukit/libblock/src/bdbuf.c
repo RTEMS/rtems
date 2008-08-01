@@ -902,7 +902,7 @@ rtems_bdbuf_append_modified (rtems_bdbuf_pool* pool, rtems_bdbuf_buffer* bd)
  * Wait the swapper task.
  */
 static void
-rtems_bdbuf_wake_swapper ()
+rtems_bdbuf_wake_swapper (void)
 {
   rtems_status_code sc = rtems_event_send (rtems_bdbuf_ctx.swapout,
                                            RTEMS_BDBUF_SWAPOUT_SYNC);
@@ -1090,7 +1090,7 @@ rtems_bdbuf_release_pool (rtems_bdpool_id pid)
  *         successfully or error code if error is occured)
  */
 rtems_status_code
-rtems_bdbuf_init ()
+rtems_bdbuf_init (void)
 {
   rtems_bdpool_id   p;
   rtems_status_code sc;

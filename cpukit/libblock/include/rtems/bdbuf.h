@@ -178,7 +178,7 @@ extern rtems_bdbuf_config rtems_bdbuf_configuration;
  *         successfully or error code if error is occured)
  */
 rtems_status_code
-rtems_bdbuf_init ();
+rtems_bdbuf_init (void);
 
 /**
  * Get block buffer for data to be written into. The buffers is set to the
