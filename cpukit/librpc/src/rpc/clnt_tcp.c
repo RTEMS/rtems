@@ -68,12 +68,12 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_tcp.c,v 1.14 2000/01/27 23
 static int	readtcp();
 static int	writetcp();
 
-static enum clnt_stat	clnttcp_call();
-static void		clnttcp_abort();
-static void		clnttcp_geterr();
-static bool_t		clnttcp_freeres();
-static bool_t           clnttcp_control();
-static void		clnttcp_destroy();
+static enum clnt_stat	clnttcp_call(CLIENT *, u_long, xdrproc_t, caddr_t, xdrproc_t, caddr_t, struct timeval);
+static void		clnttcp_abort(void);
+static void		clnttcp_geterr(CLIENT *, struct rpc_err*);
+static bool_t		clnttcp_freeres(CLIENT *, xdrproc_t, caddr_t);
+static bool_t           clnttcp_control(CLIENT *, int, char *);
+static void		clnttcp_destroy(CLIENT *);
 
 static struct clnt_ops tcp_ops = {
 	clnttcp_call,
@@ -352,7 +352,7 @@ clnttcp_freeres(
 }
 
 static void
-clnttcp_abort()
+clnttcp_abort(void)
 {
 }
 
