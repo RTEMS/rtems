@@ -1,5 +1,7 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/thread.h: Add missing prototype.
+	* score/inline/rtems/score/thread.inl: Add missing prototypes.
 	* libfs/src/nfsclient/src/nfs.c: Add missing prototype.
 	* libnetworking/lib/ftpfs.c, libnetworking/libc/rcmd.c,
 	libnetworking/netinet/in_cksum_m68k.h, 
