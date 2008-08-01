@@ -64,7 +64,7 @@ rtems_rootfs_append_host_rec (unsigned long cip,
  */
 
 int
-rtems_create_root_fs ();
+rtems_create_root_fs ( void );
 
 #ifdef __cplusplus
 }

@@ -52,9 +52,8 @@
  * August, 1998
  */
 int
-in_cksum(m, len)
-	struct mbuf *m;
-	int len;
+in_cksum( struct mbuf *m,
+	int len )
 {
 	unsigned short *w;
 	unsigned long sum = 0;

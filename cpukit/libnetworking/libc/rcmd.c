@@ -66,7 +66,7 @@ extern int innetgr( const char *, const char *, const char *, const char * );
 #define max(a, b)	((a > b) ? a : b)
 
 #ifdef __rtems__
-int rresvport();
+int rresvport(int *alport);
 #define bzero(a,s)		memset((a),0,(s))
 #define bcmp			memcmp
 #define bcopy(s,d,i)	memcpy(d,s,i)
@@ -78,11 +78,13 @@ static int __icheckhost(const struct sockaddr *, socklen_t, const char *);
 #endif
 
 int
-rcmd(ahost, rport, locuser, remuser, cmd, fd2p)
-	char **ahost;
-	u_short rport;
-	const char *locuser, *remuser, *cmd;
-	int *fd2p;
+rcmd(
+	char **ahost,
+	u_short rport,
+	const char *locuser,
+	const char *remuser,
+	const char *cmd,
+	int *fd2p )
 {
 	struct hostent *hp;
 	struct sockaddr_in sin, from;
@@ -256,8 +258,7 @@ bad:
 }
 
 int
-rresvport(alport)
-	int *alport;
+rresvport(int *alport )
 {
 	struct sockaddr_in sin;
 	int s;

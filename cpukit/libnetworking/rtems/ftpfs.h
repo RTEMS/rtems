@@ -30,10 +30,10 @@ extern "C" {
 #include <rtems/libio.h>
 
   /* create mount point and mount ftp file system */
-  int rtems_bsdnet_initialize_ftp_filesystem () ;
+extern int rtems_bsdnet_initialize_ftp_filesystem (void);
 
   /* FTP File sysem operations table. */
-  extern rtems_filesystem_operations_table rtems_ftp_ops;
+extern rtems_filesystem_operations_table rtems_ftp_ops;
 
 #ifdef __cplusplus
 }

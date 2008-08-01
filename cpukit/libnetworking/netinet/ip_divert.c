@@ -264,10 +264,12 @@ cantsend:
 
 /*ARGSUSED*/
 int
-div_usrreq(so, req, m, nam, control)
-	register struct socket *so;
-	int req;
-	struct mbuf *m, *nam, *control;
+div_usrreq(
+	struct socket *so,
+	int req,
+	struct mbuf *m,
+	struct mbuf *nam, 
+	struct mbuf *control )
 {
 	register int error = 0;
 	register struct inpcb *inp = sotoinpcb(so);

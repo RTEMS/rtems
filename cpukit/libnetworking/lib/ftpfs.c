@@ -198,7 +198,7 @@ int rtems_ftp_mount_me(
  * Initialize the FTP driver
  */
 
-int rtems_bsdnet_initialize_ftp_filesystem () 
+int rtems_bsdnet_initialize_ftp_filesystem (void) 
 {
  int                                   status;
  rtems_filesystem_mount_table_entry_t *entry;

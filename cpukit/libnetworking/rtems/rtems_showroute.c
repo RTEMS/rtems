@@ -88,9 +88,9 @@ copyAddress (void *to, void *from, int tolen)
  * the printing completes!
  */
 static int
-show_inet_route (rn, vw)
-	struct radix_node *rn;
-	void *vw;
+show_inet_route (
+	struct radix_node *rn,
+	void *vw )
 {
 	struct rtentry *rt = (struct rtentry *)rn;
 	struct ifnet *ifp;
