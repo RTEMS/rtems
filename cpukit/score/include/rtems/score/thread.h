@@ -92,7 +92,7 @@ typedef enum {
 } Thread_Start_types;
 
 /** This type corresponds to a very simple style thread entry point. */
-typedef Thread ( *Thread_Entry )();   /* basic type */
+typedef Thread ( *Thread_Entry )( void );   /* basic type */
 
 /** This type corresponds to a thread entry point which takes a single
  *  unsigned thirty-two bit integer as an argument.

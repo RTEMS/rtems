@@ -39,7 +39,7 @@ typedef uint8_t      VB;      /* unpredictable data type (8-bit size) */
 
 typedef void        *VP;      /* pointer to an unpredictable data type */
 
-typedef void (*FP)();         /* program start address */
+typedef void (*FP)(void);     /* program start address */
 
 /*
  *  6.4 Data Types

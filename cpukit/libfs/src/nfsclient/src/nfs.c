@@ -3441,7 +3441,7 @@ uint32_t	          s,us;
 }
 
 uint32_t
-nfsGetTimeout()
+nfsGetTimeout( void )
 {
 rtems_interrupt_level k;
 uint32_t              s,us;
