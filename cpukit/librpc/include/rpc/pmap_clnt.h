@@ -65,7 +65,7 @@
 #include <rtems/bsd/sys/cdefs.h>
 
 __BEGIN_DECLS
-extern bool_t		pmap_set	(u_long, u_long, int, int));
+extern bool_t		pmap_set	(u_long, u_long, int, int);
 extern bool_t		pmap_unset	(u_long, u_long);
 extern struct pmaplist	*pmap_getmaps	(struct sockaddr_in *);
 extern enum clnt_stat	pmap_rmtcall	(struct sockaddr_in *,
