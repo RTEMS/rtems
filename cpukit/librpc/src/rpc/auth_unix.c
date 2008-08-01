@@ -85,7 +85,7 @@ struct audata {
 };
 #define	AUTH_PRIVATE(auth)	((struct audata *)auth->ah_private)
 
-static void marshal_new_auth();
+static void marshal_new_auth(AUTH *);
 
 /*
  * This goop is here because some servers refuse to accept a
@@ -105,12 +105,12 @@ set_rpc_maxgrouplist(int num)
  * Returns an auth handle with the given stuff in it.
  */
 AUTH *
-authunix_create(machname, uid, gid, len, aup_gids)
-	char *machname;
-	int uid;
-	int gid;
-	int len;
-	int *aup_gids;
+authunix_create(
+	char *machname,
+	int uid,
+	int gid,
+	int len,
+	int *aup_gids)
 {
 	struct authunix_parms aup;
 	char mymem[MAX_AUTH_BYTES];
@@ -189,7 +189,7 @@ authunix_create(machname, uid, gid, len, aup_gids)
  * syscalls.
  */
 AUTH *
-authunix_create_default()
+authunix_create_default(void)
 {
 	register int len;
 	char machname[MAX_MACHINE_NAME + 1];
