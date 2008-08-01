@@ -682,7 +682,7 @@ procedure Message_Queue_Receive (
 @code{@value{RPREFIX}SUCCESSFUL} - message received successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid queue id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{buffer} is NULL@*
-@code{@value{RPREFIX}INVALID_ADDRESS} - @code{count} is NULL@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{size} is NULL@*
 @code{@value{RPREFIX}UNSATISFIED} - queue is empty@*
 @code{@value{RPREFIX}TIMEOUT} - timed out waiting for message@*
 @code{@value{RPREFIX}OBJECT_WAS_DELETED} - queue deleted while waiting
