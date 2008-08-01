@@ -1,5 +1,6 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/xdr/xdr_rec.c: Remove register vars.
 	* librpc/src/xdr/xdr_mem.c: Misc. ansifications.
 	* librpc/src/rpc/svc_tcp.c: Misc. ansifications.
 	* librpc/src/rpc/clnt_tcp.c: Misc. ansifications.
