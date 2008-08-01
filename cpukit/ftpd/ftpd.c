@@ -1906,7 +1906,7 @@ session(rtems_task_argument arg)
  *   NONE
  */
 static void
-daemon(void)
+daemon(rtems_task_argument args)
 {
   int                 s;
   socklen_t	      addrLen;
