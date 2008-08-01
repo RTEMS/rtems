@@ -98,9 +98,9 @@ svcraw_stat()
 }
 
 static bool_t
-svcraw_recv(xprt, msg)
-	SVCXPRT *xprt;
-	struct rpc_msg *msg;
+svcraw_recv(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
@@ -116,9 +116,9 @@ svcraw_recv(xprt, msg)
 }
 
 static bool_t
-svcraw_reply(xprt, msg)
-	SVCXPRT *xprt;
-	struct rpc_msg *msg;
+svcraw_reply(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
@@ -135,10 +135,10 @@ svcraw_reply(xprt, msg)
 }
 
 static bool_t
-svcraw_getargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svcraw_getargs(
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr)
 {
 	register struct svc_raw_private *srp = svcraw_private;
 
@@ -148,10 +148,10 @@ svcraw_getargs(xprt, xdr_args, args_ptr)
 }
 
 static bool_t
-svcraw_freeargs(xprt, xdr_args, args_ptr)
-	SVCXPRT *xprt;
-	xdrproc_t xdr_args;
-	caddr_t args_ptr;
+svcraw_freeargs(
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
+	caddr_t args_ptr)
 {
 	register struct svc_raw_private *srp = svcraw_private;
 	register XDR *xdrs;
