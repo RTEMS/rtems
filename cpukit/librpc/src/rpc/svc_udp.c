@@ -248,7 +248,8 @@ svcudp_freeargs(
 }
 
 static void
-svcudp_destroy(SVCXPRT *xprt)
+svcudp_destroy(
+	SVCXPRT *xprt)
 {
 	register struct svcudp_data *su = su_data(xprt);
 
