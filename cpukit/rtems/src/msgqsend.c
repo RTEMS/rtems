@@ -37,17 +37,17 @@
  *
  *  rtems_message_queue_send
  *
- *  This routine implements the directive rtems_message_queue_sent.  It sends a
+ *  This routine implements the directive rtems_message_queue_send.  It sends a
  *  message to the specified message queue.
  *
  *  Input parameters:
  *    id     - pointer to message queue
  *    buffer - pointer to message buffer
- *    size   - size of message to sent urgently
+ *    size   - size of message to send
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -43,7 +43,7 @@
  *  Input parameters:
  *    id     - pointer to message queue
  *    buffer - pointer to message buffer
- *    size   - size of message to sent urgently
+ *    size   - size of message to send urgently
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
