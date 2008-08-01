@@ -45,9 +45,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/getrpcport.c,v 1.10 1999/08/28 
 #include <sys/socket.h>
 
 int
-getrpcport(host, prognum, versnum, proto)
-	char *host;
-	int prognum, versnum, proto;
+getrpcport(
+	char *host,
+	int prognum, 
+	int versnum, 
+	int proto )
 {
 	struct sockaddr_in addr;
 	struct hostent *hp;
