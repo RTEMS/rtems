@@ -1,3 +1,9 @@
+2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* librpc/src/xdr/xdr_mem.c librpc/src/xdr/xdr_rec.c
+	librpc/src/xdr/xdr_sizeof.c: Misc. ansifications.
+	Add prototypes.
+
 2008-08-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/msgqsend.c, rtems/src/msgqurgent.c: Fix typos.
