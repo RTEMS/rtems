@@ -52,12 +52,12 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_udp.c,v 1.13 2000/01/27 23:
 #define rpc_buffer(xprt) ((xprt)->xp_p1)
 #define MAX(a, b)     ((a > b) ? a : b)
 
-static bool_t		svcudp_recv();
-static bool_t		svcudp_reply();
-static enum xprt_stat	svcudp_stat();
-static bool_t		svcudp_getargs();
-static bool_t		svcudp_freeargs();
-static void		svcudp_destroy();
+static bool_t		svcudp_recv(SVCXPRT *xprt, struct rpc_msg *msg);
+static bool_t		svcudp_reply(SVCXPRT *xprt, struct rpc_msg *msg);
+static enum xprt_stat	svcudp_stat(SVCXPRT *xprt);
+static bool_t		svcudp_getargs(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr);
+static bool_t		svcudp_freeargs(SVCXPRT *xprt, xdrproc_t xdr_args, caddr_t args_ptr);
+static void		svcudp_destroy(SVCXPRT *xprt);
 static void		cache_set (SVCXPRT *, u_long);
 static int		cache_get (SVCXPRT *, struct rpc_msg *, char **, u_long *);
 
