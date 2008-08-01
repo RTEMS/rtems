@@ -182,10 +182,10 @@ xdr_rmtcallres(xdrs, crp)
  */
 
 static int
-getbroadcastnets(addrs, sock, buf)
-	struct in_addr *addrs;
-	int sock;  /* any valid socket will do */
-	char *buf;  /* why allocxate more when we can use existing... */
+getbroadcastnets(
+	struct in_addr *addrs,
+	int sock,  /* any valid socket will do */
+	char *buf  /* why allocxate more when we can use existing... */  )
 {
 	struct ifconf ifc;
 	struct ifreq ifreq, *ifr;
@@ -241,7 +241,7 @@ getbroadcastnets(addrs, sock, buf)
 	return (i);
 }
 
-typedef bool_t (*resultproc_t)();
+typedef bool_t (*resultproc_t)(caddr_t, struct sockaddr_in *);
 
 enum clnt_stat
 clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)

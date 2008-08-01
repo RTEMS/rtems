@@ -58,11 +58,11 @@ struct call_rpc_private {
 #define callrpc_private (rtems_rpc_task_variables->call_rpc_private)
 
 int
-callrpc(host, prognum, versnum, procnum, inproc, in, outproc, out)
-	char *host;
-	int prognum, versnum, procnum;
-	xdrproc_t inproc, outproc;
-	char *in, *out;
+callrpc(
+	char *host,
+	int prognum, int versnum, int procnum,
+	xdrproc_t inproc, char *in,
+	xdrproc_t outproc, char *out )
 {
 	register struct call_rpc_private *crp = callrpc_private;
 	struct sockaddr_in server_addr;
