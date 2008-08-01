@@ -1,5 +1,6 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/svc_raw.c: Misc. ansifications.
 	* librpc/src/xdr/xdr_rec.c: Misc. ansifications.
 	* librpc/src/rpc/svc_simple.c: Add missing prototypes.
 	* librpc/src/rpc/rtems_portmapper.c: Add missing prototypes.
