@@ -491,7 +491,7 @@ static int
 readtcp(
 	struct ct_data *ct,
 	caddr_t buf,
-	register int len)
+	int len)
 {
 	fd_set *fds, readfds;
 	struct timeval start, after, duration, delta, tmp, tv;
