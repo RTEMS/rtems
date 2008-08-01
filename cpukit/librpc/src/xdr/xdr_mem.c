@@ -49,17 +49,17 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_mem.c,v 1.8 1999/08/28 00:0
 #include <rpc/xdr.h>
 #include <netinet/in.h>
 
-static bool_t	xdrmem_getlong_aligned();
-static bool_t	xdrmem_putlong_aligned();
-static bool_t	xdrmem_getlong_unaligned();
-static bool_t	xdrmem_putlong_unaligned();
-static bool_t	xdrmem_getbytes();
-static bool_t	xdrmem_putbytes();
-static u_int	xdrmem_getpos(); /* XXX w/64-bit pointers, u_int not enough! */
-static bool_t	xdrmem_setpos();
-static int32_t *xdrmem_inline_aligned();
-static int32_t *xdrmem_inline_unaligned();
-static void	xdrmem_destroy();
+static bool_t	xdrmem_getlong_aligned(XDR *xdrs, long *lp);
+static bool_t	xdrmem_putlong_aligned(XDR *xdrs, const long *lp);
+static bool_t	xdrmem_getlong_unaligned(XDR *xdrs, long *lp);
+static bool_t	xdrmem_putlong_unaligned(XDR *xdrs, const long *lp);
+static bool_t	xdrmem_getbytes(XDR *xdrs, caddr_t addr, u_int len);
+static bool_t	xdrmem_putbytes(XDR *xdrs, const char *addr, u_int len);
+static u_int	xdrmem_getpos(XDR *xdrs); /* XXX w/64-bit pointers, u_int not enough! */
+static bool_t	xdrmem_setpos(XDR *xdrs, u_int pos);
+static int32_t *xdrmem_inline_aligned(XDR *xdrs, u_int len);
+static int32_t *xdrmem_inline_unaligned(XDR *xdrs, u_int len);
+static void	xdrmem_destroy(XDR *);
 
 static struct	xdr_ops xdrmem_ops_aligned = {
 	xdrmem_getlong_aligned,
@@ -103,8 +103,7 @@ xdrmem_create(
 }
 
 static void
-xdrmem_destroy(/*xdrs*/)
-	/*XDR *xdrs;*/
+xdrmem_destroy(XDR *xdrs)
 {
 
 }
@@ -125,7 +124,7 @@ xdrmem_getlong_aligned(
 static bool_t
 xdrmem_putlong_aligned(
 	XDR *xdrs,
-	long *lp)
+	const long *lp)
 {
 
 	if ((xdrs->x_handy -= sizeof(int32_t)) < 0)
@@ -153,7 +152,7 @@ xdrmem_getlong_unaligned(
 static bool_t
 xdrmem_putlong_unaligned(
 	XDR *xdrs,
-	long *lp)
+	const long *lp)
 {
 	int32_t l;
 
@@ -182,7 +181,7 @@ xdrmem_getbytes(
 static bool_t
 xdrmem_putbytes(
 	XDR *xdrs,
-	caddr_t addr,
+	const char *addr,
 	u_int len)
 {
 
@@ -220,7 +219,7 @@ xdrmem_setpos(
 static int32_t *
 xdrmem_inline_aligned(
 	XDR *xdrs,
-	int len)
+	u_int len)
 {
 	int32_t *buf = 0;
 
@@ -235,7 +234,7 @@ xdrmem_inline_aligned(
 static int32_t *
 xdrmem_inline_unaligned(
 	XDR *xdrs,
-	int len)
+	u_int len)
 {
 	
 	return (0);

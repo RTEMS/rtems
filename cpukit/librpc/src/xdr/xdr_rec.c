@@ -57,20 +57,22 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_rec.c,v 1.12 2000/01/19 06:
 #include <netinet/in.h>
 #include <unistd.h>   /* for lseek() */
 
-static u_int	fix_buf_size();
-static bool_t	flush_out();
-static bool_t	get_input_bytes();
-static bool_t	set_input_fragment();
-static bool_t	skip_input_bytes();
+typedef struct rec_strm RECSTREAM;
 
-static bool_t	xdrrec_getlong();
-static bool_t	xdrrec_putlong();
-static bool_t	xdrrec_getbytes();
-static bool_t	xdrrec_putbytes();
-static u_int	xdrrec_getpos();
-static bool_t	xdrrec_setpos();
-static int32_t *xdrrec_inline();
-static void	xdrrec_destroy();
+static u_int	fix_buf_size(u_int);
+static bool_t	flush_out(RECSTREAM *rstrm, bool_t eor);
+static bool_t	get_input_bytes(RECSTREAM *rstrm, caddr_t addr, int len);
+static bool_t	set_input_fragment(RECSTREAM *rstrm);
+static bool_t	skip_input_bytes(RECSTREAM *rstrm, long cnt);
+
+static bool_t	xdrrec_getlong(XDR *xdrs, long *lp);
+static bool_t	xdrrec_putlong(XDR *xdrs, const long *lp);
+static bool_t	xdrrec_getbytes(XDR *xdrs, caddr_t addr, u_int len);
+static bool_t	xdrrec_putbytes(XDR *xdrs, const char *addr, u_int len);
+static u_int	xdrrec_getpos(XDR *xdrs);
+static bool_t	xdrrec_setpos(XDR *xdrs, u_int pos);
+static int32_t *xdrrec_inline(XDR *xdrs, u_int len);
+static void	xdrrec_destroy(XDR *xdrs);
 
 static struct  xdr_ops xdrrec_ops = {
 	xdrrec_getlong,
@@ -98,7 +100,7 @@ static struct  xdr_ops xdrrec_ops = {
 
 #define LAST_FRAG ((u_int32_t)(1L << 31))
 
-typedef struct rec_strm {
+struct rec_strm {
 	caddr_t tcp_handle;
 	caddr_t the_buffer;
 	/*
@@ -122,7 +124,7 @@ typedef struct rec_strm {
 	bool_t last_frag;
 	u_int sendsize;
 	u_int recvsize;
-} RECSTREAM;
+};
 
 
 /*
@@ -221,7 +223,7 @@ xdrrec_getlong(
 static bool_t
 xdrrec_putlong(
 	XDR *xdrs,
-	long *lp)
+	const long *lp)
 {
 	RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
 	int32_t *dest_lp = ((int32_t *)(rstrm->out_finger));
@@ -273,7 +275,7 @@ xdrrec_getbytes(
 static bool_t
 xdrrec_putbytes(
 	XDR *xdrs,
-	caddr_t addr,
+	const char *addr,
 	u_int len)
 {
 	RECSTREAM *rstrm = (RECSTREAM *)(xdrs->x_private);
@@ -363,7 +365,7 @@ xdrrec_setpos(
 static int32_t *
 xdrrec_inline(
 	XDR *xdrs,
-	int len)
+	u_int len)
 {
 	RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 	int32_t * buf = NULL;
