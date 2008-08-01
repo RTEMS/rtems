@@ -76,15 +76,15 @@ static const char rcsid[] =
  *
  */
 
-enum auth_stat _svcauth_null();	/* no authentication */
-enum auth_stat _svcauth_unix();		/* (system) unix style (uid, gids) */
-enum auth_stat _svcauth_short();	/* short hand unix style */
-enum auth_stat _svcauth_des();		/* des style */
+enum auth_stat _svcauth_null(struct svc_req *rqst, struct rpc_msg *msg);	/* no authentication */
+enum auth_stat _svcauth_unix(struct svc_req *rqst, struct rpc_msg *msg);		/* (system) unix style (uid, gids) */
+enum auth_stat _svcauth_short(struct svc_req *rqst, struct rpc_msg *msg);	/* short hand unix style */
+enum auth_stat _svcauth_des(struct svc_req *rqst, struct rpc_msg *msg);		/* des style */
 
 /* declarations to allow servers to specify new authentication flavors */
 struct authsvc {
 	int	flavor;
-	enum	auth_stat (*handler)();
+	enum	auth_stat (*handler)(struct svc_req *rqst, struct rpc_msg *msg);
 	struct	authsvc	  *next;
 };
 #define Auths (rtems_rpc_task_variables->svc_auths_Auths)
@@ -108,9 +108,9 @@ struct authsvc {
  * invalid.
  */
 enum auth_stat
-_authenticate(rqst, msg)
-	register struct svc_req *rqst;
-	struct rpc_msg *msg;
+_authenticate(
+	struct svc_req *rqst,
+	struct rpc_msg *msg )
 {
 	register int cred_flavor;
 	register struct authsvc *asp;
@@ -155,9 +155,9 @@ _authenticate(rqst, msg)
 
 /*ARGSUSED*/
 enum auth_stat
-_svcauth_null(rqst, msg)
-	struct svc_req *rqst;
-	struct rpc_msg *msg;
+_svcauth_null(
+	struct svc_req *rqst,
+	struct rpc_msg *msg)
 {
 	return (AUTH_OK);
 }
@@ -177,9 +177,9 @@ _svcauth_null(rqst, msg)
  */
 
 int
-svc_auth_reg(cred_flavor, handler)
-	register int cred_flavor;
-	enum auth_stat (*handler)();
+svc_auth_reg(
+	int cred_flavor,
+	enum auth_stat (*handler)(struct svc_req *rqst, struct rpc_msg *msg))
 {
 	register struct authsvc *asp;
 

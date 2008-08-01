@@ -62,12 +62,12 @@ struct clnt_raw_private {
 };
 #define clntraw_private (rtems_rpc_task_variables->clnt_raw_private)
 
-static enum clnt_stat	clntraw_call();
-static void		clntraw_abort();
-static void		clntraw_geterr();
-static bool_t		clntraw_freeres();
-static bool_t		clntraw_control();
-static void		clntraw_destroy();
+static enum clnt_stat	clntraw_call(CLIENT *h, u_long proc, xdrproc_t xargs, caddr_t argsp, xdrproc_t xresults, caddr_t resultsp, struct timeval timeout);
+static void		clntraw_abort(void);
+static void		clntraw_geterr(CLIENT *h, struct rpc_err*);
+static bool_t		clntraw_freeres(CLIENT *, xdrproc_t, caddr_t);
+static bool_t		clntraw_control(CLIENT *, int, char *);
+static void		clntraw_destroy(CLIENT *);
 
 static struct clnt_ops client_ops = {
 	clntraw_call,
@@ -77,8 +77,6 @@ static struct clnt_ops client_ops = {
 	clntraw_destroy,
 	clntraw_control
 };
-
-void	svc_getreq();
 
 /*
  * Create a client handle for memory based rpc.
@@ -202,7 +200,7 @@ call_again:
 }
 
 static void
-clntraw_geterr()
+clntraw_geterr(CLIENT *cl, struct rpc_err *err)
 {
 }
 
@@ -227,17 +225,17 @@ clntraw_freeres(
 }
 
 static void
-clntraw_abort()
+clntraw_abort(void)
 {
 }
 
 static bool_t
-clntraw_control()
+clntraw_control(CLIENT *cl, int request, char *info)
 {
 	return (FALSE);
 }
 
 static void
-clntraw_destroy()
+clntraw_destroy(CLIENT *cl)
 {
 }
