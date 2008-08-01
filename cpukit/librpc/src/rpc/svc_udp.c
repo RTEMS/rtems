@@ -227,8 +227,8 @@ svcudp_reply(SVCXPRT *xprt, struct rpc_msg *msg)
 
 static bool_t
 svcudp_getargs(
-	SVCXPRT *xprt, 
-	xdrproc_t xdr_args, 
+	SVCXPRT *xprt,
+	xdrproc_t xdr_args,
 	caddr_t args_ptr)
 {
 
