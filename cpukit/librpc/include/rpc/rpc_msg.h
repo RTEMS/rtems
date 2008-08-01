@@ -185,7 +185,7 @@ extern bool_t	xdr_callhdr(XDR *, struct rpc_msg *);
  * 	XDR *xdrs;
  * 	struct rpc_msg *rmsg;
  */
-extern bool_t	xdr_replymsg	__P((XDR *, struct rpc_msg *));
+extern bool_t	xdr_replymsg(XDR *, struct rpc_msg *);
 
 /*
  * Fills in the error part of a reply message.

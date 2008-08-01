@@ -97,8 +97,8 @@ struct pmaplist {
 };
 
 __BEGIN_DECLS
-extern bool_t xdr_pmap		__P((XDR *, struct pmap *));
-extern bool_t xdr_pmaplist	__P((XDR *, struct pmaplist **));
+extern bool_t xdr_pmap		(XDR *, struct pmap *);
+extern bool_t xdr_pmaplist	(XDR *, struct pmaplist **);
 __END_DECLS
 
 #endif /* !_RPC_PMAPPROT_H */

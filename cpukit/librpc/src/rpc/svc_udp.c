@@ -58,8 +58,8 @@ static enum xprt_stat	svcudp_stat();
 static bool_t		svcudp_getargs();
 static bool_t		svcudp_freeargs();
 static void		svcudp_destroy();
-static void		cache_set __P((SVCXPRT *, u_long));
-static int		cache_get __P((SVCXPRT *, struct rpc_msg *, char **, u_long *));
+static void		cache_set (SVCXPRT *, u_long);
+static int		cache_get (SVCXPRT *, struct rpc_msg *, char **, u_long *);
 
 static struct xp_ops svcudp_op = {
 	svcudp_recv,

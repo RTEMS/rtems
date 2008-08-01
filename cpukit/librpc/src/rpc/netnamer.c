@@ -57,8 +57,8 @@ static char    *NETID = "netid.byname";
 #endif
 static char    *NETIDFILE = "/etc/netid";
 
-static int getnetid __P(( char *, char * ));
-static int _getgroups __P(( char *, gid_t * ));
+static int getnetid ( char *, char * );
+static int _getgroups ( char *, gid_t * );
 
 #ifndef NGROUPS
 #define NGROUPS 16
