@@ -202,7 +202,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 void _Thread_Enable_dispatch( void );
 #else
 /* inlining of enable dispatching must be true */
-RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch()
+RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
   if ( (--_Thread_Dispatch_disable_level) == 0 )
