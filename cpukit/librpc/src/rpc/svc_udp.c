@@ -155,21 +155,25 @@ svcudp_bufcreate(
 }
 
 SVCXPRT *
-svcudp_create(int sock)
+svcudp_create(
+	int sock)
 {
 
 	return(svcudp_bufcreate(sock, UDPMSGSIZE, UDPMSGSIZE));
 }
 
 static enum xprt_stat
-svcudp_stat(SVCXPRT *xprt)
+svcudp_stat(
+	SVCXPRT *xprt)
 {
 
 	return (XPRT_IDLE);
 }
 
 static bool_t
-svcudp_recv(SVCXPRT *xprt, struct rpc_msg *msg)
+svcudp_recv(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct svcudp_data *su = su_data(xprt);
 	register XDR *xdrs = &(su->su_xdrs);
@@ -201,7 +205,9 @@ svcudp_recv(SVCXPRT *xprt, struct rpc_msg *msg)
 }
 
 static bool_t
-svcudp_reply(SVCXPRT *xprt, struct rpc_msg *msg)
+svcudp_reply(
+	SVCXPRT *xprt,
+	struct rpc_msg *msg)
 {
 	register struct svcudp_data *su = su_data(xprt);
 	register XDR *xdrs = &(su->su_xdrs);
