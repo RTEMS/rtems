@@ -1,5 +1,6 @@
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/nfs.c: Add missing prototype.
 	* libnetworking/lib/ftpfs.c, libnetworking/libc/rcmd.c,
 	libnetworking/netinet/in_cksum_m68k.h, 
 	libnetworking/netinet/ip_divert.c, libnetworking/rtems/ftpfs.h,
