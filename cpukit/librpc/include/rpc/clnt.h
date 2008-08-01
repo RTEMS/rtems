@@ -101,21 +101,21 @@ typedef struct __rpc_client {
 	struct clnt_ops {
 		/* call remote procedure */
 		enum clnt_stat	(*cl_call)(struct __rpc_client *,
-				    rpcproc_t, xdrproc_t, void *, xdrproc_t,
-				        void *, struct timeval);
+				    u_long, xdrproc_t, caddr_t, xdrproc_t,
+				        caddr_t, struct timeval);
 		/* abort a call */
-		void		(*cl_abort)(struct __rpc_client *);
+		void		(*cl_abort)(void);
 		/* get specific error code */
 		void		(*cl_geterr)(struct __rpc_client *,
 					struct rpc_err *);
 		/* frees results */
 		bool_t		(*cl_freeres)(struct __rpc_client *,
-					xdrproc_t, void *);
+					xdrproc_t, caddr_t);
 		/* destroy this structure */
 		void		(*cl_destroy)(struct __rpc_client *);
 		/* the ioctl() of rpc */
-		bool_t          (*cl_control)(struct __rpc_client *, u_int,
-					void *);
+		bool_t          (*cl_control)(struct __rpc_client *, int,
+					char *);
 	} *cl_ops;
 	void			*cl_private;	/* private stuff */
 } CLIENT;

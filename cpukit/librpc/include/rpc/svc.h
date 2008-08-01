@@ -84,12 +84,12 @@ typedef struct __rpc_svcxprt {
 	    enum xprt_stat (*xp_stat)(struct __rpc_svcxprt *);
 	    /* get arguments */
 	    bool_t	(*xp_getargs)(struct __rpc_svcxprt *, xdrproc_t,
-				void *);
+				caddr_t args_ptr);
 	    /* send reply */
 	    bool_t	(*xp_reply)(struct __rpc_svcxprt *, struct rpc_msg *);
 	    /* free mem allocated for args */
 	    bool_t	(*xp_freeargs)(struct __rpc_svcxprt *, xdrproc_t,
-				void *);
+				caddr_t args_ptr);
 	    /* destroy this struct */
 	    void	(*xp_destroy)(struct __rpc_svcxprt *);
 	} *xp_ops;
