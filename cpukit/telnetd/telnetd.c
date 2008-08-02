@@ -57,8 +57,7 @@
 #define PARANOIA
 
 extern char *telnet_get_pty(int socket);
-extern int   telnet_pty_initialize();
-extern int   telnet_pty_finalize();
+extern int   telnet_pty_initialize(void);
 
 struct shell_args {
   char *devname;
@@ -74,7 +73,7 @@ typedef union uni_sa {
 
 static int sockpeername(int sock, char *buf, int bufsz);
 
-static int initialize_telnetd();
+static int initialize_telnetd(void);
 static int telnetd_askForPassword;
 
 void * telnetd_dflt_spawn(
