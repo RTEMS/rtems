@@ -1,5 +1,6 @@
 2008-08-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmd/md4.c, libmd/md5.c: Add missing prototypes.
 	* libmisc/monitor/mon-command.c, libmisc/shell/filemode.c,
 	libmisc/shell/shell_script.c: Add missing prototypes.
 
