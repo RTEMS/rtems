@@ -562,20 +562,17 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
-	uint32_t start_address = r->start << e->block_size_shift;
+	uint32_t start_address = RTEMS_BLKDEV_START_BLOCK (r) << e->block_size_shift;
 	uint32_t i = 0;
 
-	DEBUG_PRINT( "start = %u, count = %u, bufnum = %u\n", r->start, r->count, r->bufnum);
+	DEBUG_PRINT( "start = %u, bufnum = %u\n", r->start, r->bufnum);
 
 #ifdef DEBUG
 	/* Check request */
-	if (r->count != r->bufnum) {
-		SYSLOG_ERROR( "Block count and buffer number are not equal");
-		return -RTEMS_INTERNAL_ERROR;
-	} else if (r->start >= e->block_number) {
+  if (r->bufs[0].block >= e->block_number) {
 		SYSLOG_ERROR( "Start block number out of range");
 		return -RTEMS_INTERNAL_ERROR;
-	} else if (r->count > e->block_number - r->start) {
+	} else if (r->bufnum > e->block_number - RTEMS_BLKDEV_START_BLOCK (r)) {
 		SYSLOG_ERROR( "Block count out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	}
@@ -585,7 +582,7 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 	sc = sd_card_start( e);
 	CLEANUP_SCRV( sc, rv, sd_card_disk_block_read_cleanup, "Start");
 
-	if (r->count == 1) {
+	if (r->bufnum == 1) {
 #ifdef DEBUG
 		/* Check buffer */
 		if (r->bufs [0].length != e->block_size) {
@@ -605,7 +602,7 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 		CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
 
 		/* Multiple block read */
-		for (i = 0; i < r->count; ++i) {
+		for (i = 0; i < r->bufnum; ++i) {
 #ifdef DEBUG
 			/* Check buffer */
 			if (r->bufs [i].length != e->block_size) {
@@ -652,20 +649,17 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
-	uint32_t start_address = r->start << e->block_size_shift;
+	uint32_t start_address = RTEMS_BLKDEV_START_BLOCK (r) << e->block_size_shift;
 	uint32_t i = 0;
 
 	DEBUG_PRINT( "start = %u, count = %u, bufnum = %u\n", r->start, r->count, r->bufnum);
 
 #ifdef DEBUG
 	/* Check request */
-	if (r->count != r->bufnum) {
-		SYSLOG_ERROR( "Block count and buffer number are not equal");
-		return -RTEMS_INTERNAL_ERROR;
-	} else if (r->start >= e->block_number) {
+  if (r->bufs[0].block >= e->block_number) {
 		SYSLOG_ERROR( "Start block number out of range");
 		return -RTEMS_INTERNAL_ERROR;
-	} else if (r->count > e->block_number - r->start) {
+	} else if (r->bufnum > e->block_number - RTEMS_BLKDEV_START_BLOCK (r)) {
 		SYSLOG_ERROR( "Block count out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	}
@@ -675,7 +669,7 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 	sc = sd_card_start( e);
 	CLEANUP_SCRV( sc, rv, sd_card_disk_block_write_cleanup, "Start");
 
-	if (r->count == 1) {
+	if (r->bufnum == 1) {
 #ifdef DEBUG
 		/* Check buffer */
 		if (r->bufs [0].length != e->block_size) {
@@ -695,7 +689,7 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 		CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 		/* Multiple block write */
-		for (i = 0; i < r->count; ++i) {
+		for (i = 0; i < r->bufnum; ++i) {
 #ifdef DEBUG
 			/* Check buffer */
 			if (r->bufs [i].length != e->block_size) {
@@ -758,6 +752,9 @@ static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
  				return sd_card_disk_block_read( e, r);
  			case RTEMS_BLKDEV_REQ_WRITE:
  				return sd_card_disk_block_write( e, r);
+ 			case RTEMS_BLKDEV_CAPABILITIES:
+ 				*((uint32_t*) arg)  = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
+ 				return 0;
  			default:
  				errno = EBADRQC;
  				return -1;

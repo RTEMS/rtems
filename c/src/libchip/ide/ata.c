@@ -26,7 +26,7 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include "ata_internal.h"
 #include <libchip/ata.h>
-//#define DEBUG
+/* #define DEBUG */
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -211,7 +211,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
     }
 
     areq->breq = req;
-    areq->cnt = req->count;
+    areq->cnt = req->bufnum;
     areq->cbuf = 0;
     areq->pos = 0;
 
@@ -239,7 +239,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
         {
 #ifdef DEBUG
             printf("ata_io_data_request: type: READ: %d, %d\n",
-                   req->bufs[0].block, req->count);
+                   req->bufs[0].block, req->bufnum);
 #endif            
             areq->type = ATA_COMMAND_TYPE_PIO_IN;
 
@@ -251,7 +251,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
              */
             areq->regs.regs[IDE_REGISTER_COMMAND] =
                 ((ATA_DEV_INFO(ctrl_minor, dev).max_multiple) &&
-                 (req->count > 1) &&
+                 (req->bufnum > 1) &&
                  (ATA_DEV_INFO(ctrl_minor, dev).current_multiple > 1)) ?
                  ATA_COMMAND_READ_MULTIPLE :
                  ATA_COMMAND_READ_SECTORS;
@@ -260,7 +260,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
         {
 #ifdef DEBUG
             printf("ata_io_data_request: type: WRITE: %d, %d\n",
-                   req->bufs[0].block, req->count);
+                   req->bufs[0].block, req->bufnum);
 #endif            
             areq->type = ATA_COMMAND_TYPE_PIO_OUT;
 
@@ -272,7 +272,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
              */
             areq->regs.regs[IDE_REGISTER_COMMAND] =
               ((ATA_DEV_INFO(ctrl_minor, dev).max_multiple) &&
-               (req->count > 1) &&
+               (req->bufnum > 1) &&
                (ATA_DEV_INFO(ctrl_minor, dev).current_multiple > 1)) ?
                ATA_COMMAND_WRITE_MULTIPLE :
                ATA_COMMAND_WRITE_SECTORS;
@@ -312,7 +312,7 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
     }
 
     /* fill sector count register */
-    areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = areq->breq->count;
+    areq->regs.regs[IDE_REGISTER_SECTOR_COUNT] = areq->breq->bufnum;
 
     /* add request to the queue of awaiting requests to the controller */
     ata_add_to_controller_queue(ctrl_minor, areq);
@@ -1196,7 +1196,6 @@ rtems_ata_initialize(rtems_device_major_number major,
     breq.req.req_done = NULL;
     breq.req.done_arg = &breq;
     breq.req.bufnum = 1;
-    breq.req.count = 1;
     breq.req.bufs[0].length = ATA_SECTOR_SIZE;
     breq.req.bufs[0].buffer = buffer;
 
@@ -1365,7 +1364,7 @@ rtems_ata_initialize(rtems_device_major_number major,
             areq.regs.to_read = ATA_REGISTERS_VALUE(IDE_REGISTER_STATUS);
             areq.breq = (rtems_blkdev_request *)&breq;
 
-            areq.cnt = breq.req.count;
+            areq.cnt = breq.req.bufnum;
 
             areq.regs.regs[IDE_REGISTER_DEVICE_HEAD] |=
                                     (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS);

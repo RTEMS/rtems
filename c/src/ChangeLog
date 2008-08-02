@@ -1,3 +1,9 @@
+2008-08-02	Chris Johns <chrisj@rtems.org>
+
+	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: Remove
+	rtems_blkdev_request count and start references. Use
+	RTEMS_BLKDEV_START_BLOCK.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* libchip/i2c/spi-sd-card.c: Updated to the libblock changes.
