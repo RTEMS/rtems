@@ -1507,7 +1507,10 @@ rtems_bdbuf_read_done (void* arg, rtems_status_code status, int error)
  * and will not be returned to another user until released. If the buffer is
  * already with a user when this call is made the call is blocked until the
  * buffer is returned. The highest priority waiter will obtain the buffer
- * first. 
+ * first.
+ *
+ * @note Read ahead always reads buffers in sequence. All multi-block reads
+ *       read consecutive blocks.
  *
  * @param device Device number (constructed of major and minor device number)
  * @param block  Linear media block number
@@ -1555,7 +1558,6 @@ rtems_bdbuf_read (dev_t                device,
     return RTEMS_INVALID_NUMBER;
   }
 
-  req->count = 0;
   req->bufnum = 0;
 
   /*
@@ -1574,7 +1576,7 @@ rtems_bdbuf_read (dev_t                device,
 
   rtems_bdbuf_lock_pool (pool);
 
-  while (req->count < read_ahead_count)
+  while (req->bufnum < read_ahead_count)
   {
     /*
      * Get the buffer for the requested block. If the block is cached then
@@ -1585,8 +1587,8 @@ rtems_bdbuf_read (dev_t                device,
      * caller.
      */
     bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool,
-                                 block + req->count,
-                                 req->count == 0 ? FALSE : TRUE);
+                                 block + req->bufnum,
+                                 req->bufnum == 0 ? FALSE : TRUE);
 
     /*
      * Read ahead buffer is in the cache or none available. Read what we
@@ -1613,11 +1615,10 @@ rtems_bdbuf_read (dev_t                device,
      *       packs the structs. Why not just place on a list ? The BD has a
      *       node that can be used.
      */
-    req->bufs[req->count].user   = bd;
-    req->bufs[req->count].block  = bd->block;
-    req->bufs[req->count].length = dd->block_size;
-    req->bufs[req->count].buffer = bd->buffer;
-    req->count++;
+    req->bufs[req->bufnum].user   = bd;
+    req->bufs[req->bufnum].block  = bd->block;
+    req->bufs[req->bufnum].length = dd->block_size;
+    req->bufs[req->bufnum].buffer = bd->buffer;
     req->bufnum++;
   }
 
@@ -1625,7 +1626,7 @@ rtems_bdbuf_read (dev_t                device,
    * Transfer any requested buffers. If the request count is 0 we have found
    * the block in the cache so return it.
    */
-  if (req->count)
+  if (req->bufnum)
   {
     /*
      * Unlock the pool. We have the buffer for the block and it will be in the
@@ -1649,7 +1650,6 @@ rtems_bdbuf_read (dev_t                device,
     req->io_task = rtems_task_self ();
     req->status = RTEMS_RESOURCE_IN_USE;
     req->error = 0;
-    req->start = dd->start;
   
     result = dd->ioctl (dd->phys_dev->dev, RTEMS_BLKIO_REQUEST, req);
 
@@ -1676,7 +1676,7 @@ rtems_bdbuf_read (dev_t                device,
 
     rtems_bdbuf_lock_pool (pool);
 
-    for (b = 1; b < req->count; b++)
+    for (b = 1; b < req->bufnum; b++)
     {
       bd = req->bufs[b].user;
       bd->error = req->error;
@@ -2048,10 +2048,38 @@ rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
         if (bd->dev == *dev)
         {
           rtems_chain_node* next_node = node->next;
-          rtems_chain_extract (node);
-          rtems_chain_append (transfer, node);
-          node = next_node;
+          rtems_chain_node* tnode = rtems_chain_tail (transfer);
+    
+          /*
+           * The blocks on the transfer list are sorted in block order. This
+           * means multi-block transfers for drivers that require consecutive
+           * blocks perform better with sorted blocks and for real disks it may
+           * help lower head movement.
+           */
+
           bd->state = RTEMS_BDBUF_STATE_TRANSFER;
+
+          rtems_chain_extract (node);
+
+          tnode = tnode->previous;
+          
+          while (node && !rtems_chain_is_head (transfer, tnode))
+          {
+            rtems_bdbuf_buffer* tbd = (rtems_bdbuf_buffer*) tnode;
+
+            if (bd->block > tbd->block)
+            {
+              rtems_chain_insert (tnode, node);
+              node = NULL;
+            }
+            else
+              tnode = tnode->previous;
+          }
+
+          if (node)
+            rtems_chain_prepend (transfer, node);
+          
+          node = next_node;
         }
         else
         {
@@ -2161,9 +2189,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
        */
 
       write_req->status = RTEMS_RESOURCE_IN_USE;
-      write_req->start = dd->start;
       write_req->error = 0;
-      write_req->count = 0;
       write_req->bufnum = 0;
 
       while (!rtems_chain_is_empty (&transfer))
@@ -2181,7 +2207,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
          */
         
         if ((dd->capabilities & RTEMS_BLKDEV_CAP_MULTISECTOR_CONT) &&
-            write_req->count &&
+            write_req->bufnum &&
             (bd->block != (last_block + 1)))
         {
           rtems_chain_prepend (&transfer, &bd->link);
@@ -2189,11 +2215,10 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
         }
         else
         {
-          write_req->bufs[write_req->count].user   = bd;
-          write_req->bufs[write_req->count].block  = bd->block;
-          write_req->bufs[write_req->count].length = dd->block_size;
-          write_req->bufs[write_req->count].buffer = bd->buffer;
-          write_req->count++;
+          write_req->bufs[write_req->bufnum].user   = bd;
+          write_req->bufs[write_req->bufnum].block  = bd->block;
+          write_req->bufs[write_req->bufnum].length = dd->block_size;
+          write_req->bufs[write_req->bufnum].buffer = bd->buffer;
           write_req->bufnum++;
           last_block = bd->block;
         }
@@ -2204,7 +2229,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
          */
 
         if (rtems_chain_is_empty (&transfer) ||
-            (write_req->count >= rtems_bdbuf_configuration.max_write_blocks))
+            (write_req->bufnum >= rtems_bdbuf_configuration.max_write_blocks))
           write = TRUE;
 
         if (write)
@@ -2223,7 +2248,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
           {
             rtems_bdbuf_lock_pool (pool);
               
-            for (b = 0; b < write_req->count; b++)
+            for (b = 0; b < write_req->bufnum; b++)
             {
               bd = write_req->bufs[b].user;
               bd->state  = RTEMS_BDBUF_STATE_MODIFIED;
@@ -2252,7 +2277,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
 
             rtems_bdbuf_lock_pool (pool);
 
-            for (b = 0; b < write_req->count; b++)
+            for (b = 0; b < write_req->bufnum; b++)
             {
               bd = write_req->bufs[b].user;
               bd->state = RTEMS_BDBUF_STATE_CACHED;
@@ -2274,7 +2299,6 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
 
           write_req->status = RTEMS_RESOURCE_IN_USE;
           write_req->error = 0;
-          write_req->count = 0;
           write_req->bufnum = 0;
         }
       }

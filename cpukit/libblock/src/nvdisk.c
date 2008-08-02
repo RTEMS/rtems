@@ -588,7 +588,7 @@ rtems_nvdisk_read (rtems_nvdisk* nvd, rtems_blkdev_request* req)
   rtems_nvdisk_info (nvd, "read: blocks=%d", req->bufnum);
 #endif
 
-  remains = req->count * nvd->block_size;
+  remains = req->bufnum * nvd->block_size;
   
   for (b = 0; b < req->bufnum; b++, sg++)
   {

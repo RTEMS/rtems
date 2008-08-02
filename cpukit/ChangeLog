@@ -1,3 +1,16 @@
+2008-0802	Chris Johns (chrisj@rtems.org>
+
+	* libblock/include/rtems/blkdev.h: Remove count and start from
+	rtems_blkdev_request. Add RTEMS_BLKDEV_START_BLOCK macro.
+
+	* libblock/src/bdbuf.c: Add read ahead blocks always consecutive
+	comment. Change count to bufnum and remove start references. Sort
+	the transfer list so blocks are consecutive where possible.
+
+	* libblock/src/blkdev.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk.c: Change count to bufnum and remove start
+	references.
+
 2008-08-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/gethostbydns.c,

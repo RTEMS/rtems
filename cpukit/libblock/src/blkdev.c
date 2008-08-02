@@ -232,7 +232,6 @@ rtems_blkdev_generic_ioctl(
         case RTEMS_BLKIO_REQUEST:
         {
             rtems_blkdev_request *req = args->buffer;
-            req->start += dd->start;
             args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
                                            req);
             break;

@@ -99,7 +99,7 @@ ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
                           rd->block_size * req->count);
 #endif
 
-    remains = rd->block_size * req->count;
+    remains = rd->block_size * req->bufnum;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
@@ -137,9 +137,9 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
 #if RTEMS_RAMDISK_TRACE
     rtems_ramdisk_printf (rd, "ramdisk write: start=%d, blocks=%d remains=%d",
                           req->bufs[0].block, req->bufnum,
-                          rd->block_size * req->count);
+                          rd->block_size * req->bufnum);
 #endif
-    remains = rd->block_size * req->count;
+    remains = rd->block_size * req->bufnum;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {

@@ -87,11 +87,7 @@ typedef struct rtems_blkdev_request {
     rtems_status_code status; 
     /* If status != RTEMS_SUCCESSFUL, this field contains error code */
     int error;
-    /* Start block number */
-    rtems_blkdev_bnum start;
-    /* Number of blocks to be exchanged */
-    uint32_t count;
-    /* Number of buffers provided */
+    /* Number of blocks for this request. */
     uint32_t bufnum;
 
     /* The task requesting the IO operation. */
@@ -100,6 +96,10 @@ typedef struct rtems_blkdev_request {
     /* List of scatter/gather buffers */
     rtems_blkdev_sg_buffer bufs[0];
 } rtems_blkdev_request;
+
+/* The start block in a request. Only valid if the driver has returned the
+ * RTEMS_BLKDEV_CAPABILITIES of RTEMS_BLKDEV_CAP_MULTISECTOR_CONT */
+#define RTEMS_BLKDEV_START_BLOCK(_r) (_r->bufs[0].block)
 
 /* Block device IOCTL request codes */
 #define RTEMS_BLKIO_REQUEST      _IOWR('B', 1, rtems_blkdev_request)
