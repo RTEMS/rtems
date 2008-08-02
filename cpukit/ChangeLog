@@ -1,5 +1,18 @@
 2008-08-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/gethostbydns.c,
+	libnetworking/libc/gethostbyht.c,
+	libnetworking/libc/gethostbynis.c,
+	libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/getnetbydns.c,
+	libnetworking/libc/getnetbynis.c,
+	libnetworking/libc/getnetnamadr.c,
+	libnetworking/libc/nsap_addr.c,
+	libnetworking/libc/res_debug.c,
+	libnetworking/libc/res_send.c: Add missing prototypes.
+
+2008-08-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libi2c/libi2c.c, libi2c/libi2c.h: Add missing prototypes.
 	* libmd/md4.c, libmd/md5.c: Add missing prototypes.
 	* libmisc/monitor/mon-command.c, libmisc/shell/filemode.c,
