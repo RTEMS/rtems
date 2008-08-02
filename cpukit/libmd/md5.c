@@ -49,7 +49,7 @@
  */
 
 /* forward declaration */
-static void Transform ();
+static void Transform (UINT4 *buf, UINT4 *in);
 
 static unsigned char PADDING[64] = {
   0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -201,9 +201,9 @@ MD5_CTX *mdContext;
 
 /* Basic MD5 step. Transforms buf based on in.
  */
-static void Transform (buf, in)
-UINT4 *buf;
-UINT4 *in;
+static void Transform (
+  UINT4 *buf,
+  UINT4 *in )
 {
   UINT4 a = buf[0], b = buf[1], c = buf[2], d = buf[3];
 

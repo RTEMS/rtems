@@ -38,9 +38,9 @@ __FBSDID("$FreeBSD: src/lib/libc/string/strmode.c,v 1.5 2007/01/09 00:28:12 imp 
 #include <string.h>
 
 void
-strmode(mode, p)
-	mode_t mode;
-	char *p;
+strmode(
+	mode_t mode,
+	char *p)
 {
 	 /* print type */
 	switch (mode & S_IFMT) {

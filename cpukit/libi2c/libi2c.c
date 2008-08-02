@@ -348,7 +348,7 @@ const rtems_driver_address_table rtems_libi2c_io_ops = {
 };
 
 int
-rtems_libi2c_initialize ()
+rtems_libi2c_initialize (void)
 {
   rtems_status_code sc;
 

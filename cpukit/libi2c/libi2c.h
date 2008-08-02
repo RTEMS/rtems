@@ -58,7 +58,7 @@ extern "C" {
 /* Simple I2C driver API */
 
 /* Initialize the libary - may fail if no semaphore or no driver slot is available */
-int rtems_libi2c_initialize ();
+int rtems_libi2c_initialize (void);
 
 /* Alternatively to rtems_libi2c_initialize() the library can also be
  * initialized by means of a traditional driver table entry containing

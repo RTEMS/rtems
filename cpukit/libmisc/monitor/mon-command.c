@@ -155,7 +155,7 @@ static struct translation_table trans_tab[] =
 #endif
 
 /*
- * Perform a basic tranlation for some ANSI/VT100 key codes.
+ * Perform a basic translation for some ANSI/VT100 key codes.
  * This code could do with a timeout on the ESC as it is
  * now lost from the input stream. It is not* used by the
  * line editor below so considiered not worth the effort.
@@ -163,8 +163,7 @@ static struct translation_table trans_tab[] =
 
 #ifndef RTEMS_UNIX
 static unsigned int
-rtems_monitor_getchar (
-)
+rtems_monitor_getchar (void)
 {
   struct translation_table *translation = 0;
   for (;;)

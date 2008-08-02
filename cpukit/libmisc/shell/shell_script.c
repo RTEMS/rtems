@@ -31,7 +31,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-static void rtems_shell_joel_usage()
+static void rtems_shell_joel_usage(void)
 {
   printf(
     "joel [args] where args may be:\n"
