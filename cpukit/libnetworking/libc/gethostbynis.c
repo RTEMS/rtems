@@ -53,10 +53,10 @@ static char *host_addrs[2];
 #endif /* YP */
 
 static struct hostent *
-_gethostbynis(name, map, af)
-	const char *name;
-	char *map;
-	int af;
+_gethostbynis(
+	const char *name,
+	char *map,
+	int af)
 {
 #ifdef YP
 	register char *cp, **q;
@@ -124,18 +124,18 @@ _gethostbynis(name, map, af)
 }
 
 struct hostent *
-_gethostbynisname(name, af)
-	const char *name;
-	int af;
+_gethostbynisname(
+	const char *name,
+	int af)
 {
 	return _gethostbynis(name, "hosts.byname", af);
 }
 
 struct hostent *
-_gethostbynisaddr(addr, len, af)
-	const char *addr;
-	int len;
-	int af;
+_gethostbynisaddr(
+	const char *addr,
+	int len,
+	int af)
 {
 	return _gethostbynis(inet_ntoa(*(struct in_addr *)addr),"hosts.byaddr", af);
 }

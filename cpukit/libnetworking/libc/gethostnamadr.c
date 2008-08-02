@@ -80,7 +80,7 @@ get_service_name(const char *name) {
 }
 
 static void
-init_services()
+init_services(void)
 {
 	char *cp, *p, buf[BUFSIZ];
 	register int cc = 0;
@@ -246,9 +246,14 @@ static int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned c
   return after-packet;
 }
 
-static int __dns_gethostbyx_r(const char* name, struct hostent* result,
-      char *buf, size_t buflen,
-      struct hostent **RESULT, int *h_errnop, int lookfor) {
+static int __dns_gethostbyx_r(
+    const char* name, 
+    struct hostent* result,
+    char *buf, size_t buflen,
+    struct hostent **RESULT, 
+    int *h_errnop, 
+    int lookfor) 
+{
 
   int names,ips;
   unsigned char *cur;

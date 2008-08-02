@@ -52,10 +52,10 @@ static char *host_aliases[MAXALIASES];
 #endif /* YP */
 
 static struct netent *
-_getnetbynis(name, map, af)
-	const char *name;
-	char *map;
-	int af;
+_getnetbynis(
+	const char *name,
+	char *map,
+	int af)
 {
 #ifdef YP
 	register char *cp, **q;
@@ -122,16 +122,16 @@ _getnetbynis(name, map, af)
 }
 
 struct netent *
-_getnetbynisname(name)
-	const char *name;
+_getnetbynisname(
+	const char *name)
 {
 	return _getnetbynis(name, "networks.byname", AF_INET);
 }
 
 struct netent *
-_getnetbynisaddr(addr, af)
-	unsigned long addr;
-	int af;
+_getnetbynisaddr(
+	unsigned long addr,
+	int af)
 {
 	char *str, *cp;
 	unsigned long net2;

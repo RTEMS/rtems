@@ -119,9 +119,9 @@ int _dns_ttl_;
 
 #ifdef DEBUG
 static void
-debugprintf(msg, num)
-	char *msg;
-	int num;
+debugprintf(
+	char *msg,
+	int num)
 {
 	if (_res.options & RES_DEBUG) {
 		int save = errno;
@@ -152,11 +152,11 @@ debugprintf(msg, num)
 	} while (0)
 
 static struct hostent *
-gethostanswer(answer, anslen, qname, qtype)
-	const querybuf *answer;
-	int anslen;
-	const char *qname;
-	int qtype;
+gethostanswer(
+	const querybuf *answer,
+	int anslen,
+	const char *qname,
+	int qtype)
 {
 	const HEADER *hp;
 	const u_char *cp;
@@ -472,9 +472,9 @@ __dns_getanswer(const char *answer, int anslen, const char *qname, int qtype)
 }
 
 struct hostent *
-_gethostbydnsname(name, af)
-	const char *name;
-	int af;
+_gethostbydnsname(
+	const char *name,
+	int af)
 {
 	querybuf buf;
 	register const char *cp;
@@ -588,9 +588,10 @@ _gethostbydnsname(name, af)
 }
 
 struct hostent *
-_gethostbydnsaddr(addr, len, af)
-	const char *addr;	/* XXX should have been def'd as u_char! */
-	int len, af;
+_gethostbydnsaddr(
+	const char *addr,	/* XXX should have been def'd as u_char! */
+	int len, 
+	int af)
 {
 	const u_char *uaddr = (const u_char *)addr;
 	static const u_char mapped[] = { 0,0, 0,0, 0,0, 0,0, 0,0, 0xff,0xff };
@@ -711,9 +712,9 @@ _gethostbydnsaddr(addr, len, af)
 
 #ifdef RESOLVSORT
 static void
-addrsort(ap, num)
-	char **ap;
-	int num;
+addrsort(
+	char **ap,
+	int num)
 {
 	int i, j;
 	char **p;
@@ -764,7 +765,7 @@ _sethostdnsent(int stayopen)
 }
 
 void
-_endhostdnsent()
+_endhostdnsent(void)
 {
 	_res.options &= ~(RES_STAYOPEN | RES_USEVC);
 	res_close();

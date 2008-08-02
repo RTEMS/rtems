@@ -29,17 +29,17 @@
 #include <resolv.h>
 
 static char
-xtob(c)
-	register int c;
+xtob(
+	int c)
 {
 	return (c - (((c >= '0') && (c <= '9')) ? '0' : '7'));
 }
 
 u_int
-inet_nsap_addr(ascii, binary, maxlen)
-	const char *ascii;
-	u_char *binary;
-	int maxlen;
+inet_nsap_addr(
+	const char *ascii,
+	u_char *binary,
+	int maxlen)
 {
 	u_char c, nib;
 	u_int len = 0;
@@ -72,10 +72,10 @@ inet_nsap_addr(ascii, binary, maxlen)
 }
 
 char *
-inet_nsap_ntoa(binlen, binary, ascii)
-	int binlen;
-	register const u_char *binary;
-	register char *ascii;
+inet_nsap_ntoa(
+	int binlen,
+	const u_char *binary,
+	char *ascii)
 {
 	register int nib;
 	int i;

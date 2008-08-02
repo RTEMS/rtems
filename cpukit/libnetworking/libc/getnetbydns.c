@@ -102,10 +102,10 @@ typedef union {
 } align;
 
 static struct netent *
-getnetanswer(answer, anslen, net_i)
-	querybuf *answer;
-	int anslen;
-	int net_i;
+getnetanswer(
+	querybuf *answer,
+	int anslen,
+	int net_i)
 {
 
 	register HEADER *hp;
@@ -218,9 +218,9 @@ static	char *net_aliases[MAXALIASES], netbuf[PACKETSZ];
 }
 
 struct netent *
-_getnetbydnsaddr(net, net_type)
-	register unsigned long net;
-	register int net_type;
+_getnetbydnsaddr(
+	register unsigned long net,
+	register int net_type )
 {
 	unsigned int netbr[4];
 	int nn, anslen;
@@ -272,8 +272,8 @@ _getnetbydnsaddr(net, net_type)
 }
 
 struct netent *
-_getnetbydnsname(net)
-	register const char *net;
+_getnetbydnsname(
+	register const char *net )
 {
 	int anslen;
 	querybuf buf;
@@ -297,15 +297,15 @@ _getnetbydnsname(net)
 }
 
 void
-_setnetdnsent(stayopen)
-	int stayopen;
+_setnetdnsent(
+	int stayopen)
 {
 	if (stayopen)
 		_res.options |= RES_STAYOPEN | RES_USEVC;
 }
 
 void
-_endnetdnsent()
+_endnetdnsent(void)
 {
 	_res.options &= ~(RES_STAYOPEN | RES_USEVC);
 	res_close();

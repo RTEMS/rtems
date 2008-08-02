@@ -80,7 +80,7 @@ get_service_name(const char *name) {
 }
 
 static void
-init_services()
+init_services(void)
 {
 	char *cp, *p, buf[BUFSIZ];
 	register int cc = 0;

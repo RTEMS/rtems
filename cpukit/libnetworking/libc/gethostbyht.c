@@ -61,6 +61,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <stdlib.h> /* realloc, malloc, free */
 #include <ctype.h>
 #include <errno.h>
 #include <string.h>

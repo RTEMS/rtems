@@ -549,8 +549,8 @@ static uint32_t poweroften[10] = {1, 10, 100, 1000, 10000, 100000,
 
 /* takes an XeY precision/size value, returns a string representation. */
 static const char *
-precsize_ntoa(prec)
-	u_int8_t prec;
+precsize_ntoa(
+	u_int8_t prec)
 {
 	static char retbuf[sizeof "90000000.00"];
 	unsigned long val;
@@ -567,8 +567,8 @@ precsize_ntoa(prec)
 
 /* converts ascii size/precision X * 10**Y(cm) to 0xXY.  moves pointer. */
 static u_int8_t
-precsize_aton(strptr)
-	const char **strptr;
+precsize_aton(
+	const char **strptr)
 {
 	unsigned int mval = 0, cmval = 0;
 	u_int8_t retval = 0;
@@ -609,9 +609,9 @@ precsize_aton(strptr)
 
 /* converts ascii lat/lon to unsigned encoded 32-bit number.  moves pointer. */
 static u_int32_t
-latlon2ul(latlonstrptr,which)
-	char **latlonstrptr;
-	int *which;
+latlon2ul(
+	char **latlonstrptr,
+	int *which )
 {
 	char *cp;
 	u_int32_t retval;
@@ -819,9 +819,9 @@ loc_aton(ascii, binary)
 
 /* takes an on-the-wire LOC RR and formats it in a human readable format. */
 const char *
-loc_ntoa(binary, ascii)
-	const u_char *binary;
-	char *ascii;
+loc_ntoa(
+	const u_char *binary,
+	char *ascii )
 {
 	static char *error = "?";
 	const u_char *cp = binary;
