@@ -1,3 +1,8 @@
+2008-08-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-command.c, libmisc/shell/filemode.c,
+	libmisc/shell/shell_script.c: Add missing prototypes.
+
 2008-08-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/nfsclient/src/xdr_mbuf.c: Add prototypes.
