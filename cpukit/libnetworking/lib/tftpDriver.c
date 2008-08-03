@@ -233,7 +233,7 @@ static int rtems_tftp_mount_me(
  * Initialize the TFTP driver
  */
 
-int rtems_bsdnet_initialize_tftp_filesystem () 
+int rtems_bsdnet_initialize_tftp_filesystem (void) 
 {
     int                                   status;
     rtems_filesystem_mount_table_entry_t *entry;

@@ -557,8 +557,8 @@ struct protocol_list {
  * protocol_name - find a name for a PPP protocol.
  */
 const char *
-protocol_name(proto)
-    int proto;
+protocol_name(
+    int proto)
 {
     struct protocol_list *lp;
 
@@ -657,8 +657,8 @@ get_input(void)
  * new_phase - signal the start of a new phase of pppd's operation.
  */
 void
-new_phase(p)
-    int p;
+new_phase(
+    int p)
 {
     pppd_phase = p;
     if (new_phase_hook)
@@ -669,8 +669,8 @@ new_phase(p)
  * die - clean up state and exit with the specified status.
  */
 void
-die(status)
-    int status;
+die(
+    int status)
 {
     cleanup();
 }
@@ -680,7 +680,7 @@ die(status)
  */
 /* ARGSUSED */
 static void
-cleanup()
+cleanup(void)
 {
     sys_cleanup();
 
@@ -696,7 +696,7 @@ cleanup()
  * close_tty - restore the terminal device and close it.
  */
 static void
-close_tty()
+close_tty(void)
 {
     /* drop dtr to hang up */
     if (!default_device && modem) {
@@ -718,8 +718,8 @@ close_tty()
  * update_link_stats - get stats at link termination.
  */
 void
-update_link_stats(u)
-    int u;
+update_link_stats(
+    int u)
 {
     struct timeval now;
     char numbuf[32];
@@ -752,10 +752,10 @@ static struct timeval timenow;		/* Current time */
  * the kernel).
  */
 void
-ppptimeout(func, arg, time)
-    void (*func)(void *);
-    void *arg;
-    int time;
+ppptimeout(
+    void (*func)(void *),
+    void *arg,
+    int time)
 {
     struct callout *newp, *p, **pp;
   
@@ -789,9 +789,9 @@ ppptimeout(func, arg, time)
  * untimeout - Unschedule a timeout.
  */
 void
-pppuntimeout(func, arg)
-    void (*func)(void *);
-    void *arg;
+pppuntimeout(
+    void (*func)(void *),
+    void *arg)
 {
     struct callout **copp, *freep;
   
@@ -813,7 +813,7 @@ pppuntimeout(func, arg)
  * calltimeout - Call any timeout routines which are now due.
  */
 static void
-calltimeout()
+calltimeout(void)
 {
     struct callout *p;
 
@@ -839,8 +839,8 @@ calltimeout()
  * timeleft - return the length of time until the next timeout is due.
  */
 static struct timeval *
-timeleft(tvp)
-    struct timeval *tvp;
+timeleft(
+    struct timeval *tvp)
 {
     if (callout == NULL)
 	return NULL;
@@ -889,8 +889,8 @@ static int device_script(int fd, int mode, char *program)
  * novm - log an error message saying we ran out of memory, and die.
  */
 void
-novm(msg)
-    char *msg;
+novm(
+    char *msg)
 {
     fatal("Virtual memory exhausted allocating %s\n", msg);
 }

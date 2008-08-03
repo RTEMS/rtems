@@ -338,9 +338,9 @@ local unsigned long crc32_big(crc, buf, len)
 #define GF2_DIM 32      /* dimension of GF(2) vectors (length of CRC) */
 
 /* ========================================================================= */
-local unsigned long gf2_matrix_times(mat, vec)
-    unsigned long *mat;
-    unsigned long vec;
+local unsigned long gf2_matrix_times(
+    unsigned long *mat,
+    unsigned long vec )
 {
     unsigned long sum;
 
@@ -355,9 +355,9 @@ local unsigned long gf2_matrix_times(mat, vec)
 }
 
 /* ========================================================================= */
-local void gf2_matrix_square(square, mat)
-    unsigned long *square;
-    unsigned long *mat;
+local void gf2_matrix_square(
+    unsigned long *square,
+    unsigned long *mat)
 {
     int n;
 
@@ -366,10 +366,10 @@ local void gf2_matrix_square(square, mat)
 }
 
 /* ========================================================================= */
-uLong ZEXPORT crc32_combine(crc1, crc2, len2)
-    uLong crc1;
-    uLong crc2;
-    z_off_t len2;
+uLong ZEXPORT crc32_combine(
+    uLong crc1,
+    uLong crc2,
+    z_off_t len2)
 {
     int n;
     unsigned long row;
