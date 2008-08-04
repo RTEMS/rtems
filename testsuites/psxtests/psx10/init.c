@@ -247,9 +247,14 @@ void *POSIX_Init(
 
   status = pthread_mutex_lock( &Mutex_id );
   assert( !status );
-  status = clock_gettime( CLOCK_REALTIME, &timeout );
-  assert( !status );
-  timeout.tv_nsec -= 1;
+
+  /* ensure we do not catch a 0 nanosecond boundary */
+  do {
+    status = clock_gettime( CLOCK_REALTIME, &timeout );
+    assert( !status );
+    timeout.tv_nsec -= 1;
+  } while ( timeout.tv_nsec < 0);
+
   status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
   if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
