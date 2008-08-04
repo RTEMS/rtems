@@ -145,7 +145,7 @@ void bsp_spurious_initialize()
   uint32_t   level = 15;
   uint32_t   mask;
 
-  sparc_disable_interrupts(level);
+  level = sparc_disable_interrupts();
   mask = ERC32_MEC.Interrupt_Mask;
 
   for ( trap=0 ; trap<256 ; trap++ ) {
