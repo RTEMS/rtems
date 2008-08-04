@@ -1,5 +1,11 @@
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1263/doc
+	* user/part.t: Improve discussion of alignment and minimum buffer
+	sizes.
+
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1288/doc
 	* user/intr.t: Update callable from ISR section.
 

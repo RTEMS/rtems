@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -39,9 +39,9 @@ allocated and deallocated.
 Partitions are managed and maintained as a list of
 buffers.  Buffers are obtained from the front of the partition's
 free buffer chain and returned to the rear of the same chain.
-When a buffer is on the free buffer chain, RTEMS uses eight
-bytes of each buffer as the free buffer chain.  When a buffer is
-allocated, the entire buffer is available for application use.
+When a buffer is on the free buffer chain, RTEMS uses two
+pointers of memory from each buffer as the free buffer chain.  
+When a buffer is allocated, the entire buffer is available for application use.
 Therefore, modifying memory that is outside of an allocated
 buffer could destroy the free buffer chain or the contents of an
 adjacent allocated buffer.
@@ -187,7 +187,7 @@ This directive creates a partition of fixed size
 buffers from a physically contiguous memory space which starts
 at starting_address and is length bytes in size.  Each allocated
 buffer is to be of @code{buffer_size} in bytes.  The assigned
-partition id is returned in id.  This partition id is used to
+partition id is returned in @code{id}.  This partition id is used to
 access the partition with other partition related directives.
 For control and maintenance of the partition, RTEMS allocates a
 PTCB from the local PTCB free pool and initializes it.
@@ -197,8 +197,14 @@ PTCB from the local PTCB free pool and initializes it.
 This directive will not cause the calling task to be
 preempted.
 
-The starting_address and buffer_size parameters must
-be multiples of four.
+The @code{starting_address} must be properly aligned for the
+target architecture.
+
+Th @code{buffer_size} parameter must be a multiple of
+the CPU alignment factor.  Additionally, @code{buffer_size}
+must be large enough to hold two pointers on the target
+architecture.  This is required for RTEMS to manage the
+buffers when they are free.
 
 Memory from the partition is not used by RTEMS to
 store the Partition Control Block.
