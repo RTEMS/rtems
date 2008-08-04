@@ -1,5 +1,10 @@
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c: Fix
+	warnings.
+
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1265/cpukit
 	* score/include/rtems/score/object.h,
 	score/src/objectallocatebyindex.c: Rename index argument to avoid

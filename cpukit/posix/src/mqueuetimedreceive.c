@@ -75,6 +75,7 @@ ssize_t mq_timedreceive(
       do_wait = FALSE;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+    default:  /* only to silence warnings */
       do_wait = TRUE;
       break;
   }
