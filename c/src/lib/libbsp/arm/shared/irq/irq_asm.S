@@ -47,7 +47,7 @@ _ISR_Handler:
 /* BSP specific function to INT handler */
         /* FIXME: I'm not sure why I can't save just r12. I'm also  */
         /*     not sure which of r1-r3 are important.               */
-#if __thumb__
+#ifdef __thumb__
         ldr     r0, =ExecuteITHandler +1
         mov     lr, pc
         bx      r0
@@ -121,7 +121,7 @@ bframe:
                                           /*    we have to emulate that    */
 #ifdef __thumb__
         sub     lr,  #0x1
-#endif        
+#endif
         ldmia   sp!, {r1}                 /* out with the old          */
         stmdb   sp!, {lr}                 /*    in with the new (lr) */
 #ifndef __thumb__
@@ -147,6 +147,7 @@ _ISR_Dispatch:
                                           /*    we don't save lr, since  */
                                           /*    it's just going to get   */
                                           /*    overwritten              */
+        nop                               /* made _ISR_Dispatch_p_4 4-word align */
 #else
         .code 32
         stmdb   sp!, {r0-r3, r12,lr}      /* save regs on SVC stack */
@@ -155,7 +156,7 @@ _ISR_Dispatch:
                                           /*    it's just going to get   */
                                           /*    overwritten              */
 #endif
-        nop                /*made _ISR_Dispatch_p_4 4-word align */
+
 
 _ISR_Dispatch_p_4:
         bl      _Thread_Dispatch
