@@ -1,3 +1,8 @@
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1288/doc
+	* user/intr.t: Update callable from ISR section.
+
 2008-08-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/msg.t: Parameter is size not count. Spotted by Sebastian Huber.
