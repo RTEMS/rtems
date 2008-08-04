@@ -1,3 +1,11 @@
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1265/cpukit
+	* score/include/rtems/score/object.h,
+	score/src/objectallocatebyindex.c: Rename index argument to avoid
+	warning when rtems.h and string.h are included at the same time by
+	user code.
+
 2008-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1291/cpukit
