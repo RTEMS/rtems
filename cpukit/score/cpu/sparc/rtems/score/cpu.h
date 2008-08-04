@@ -726,6 +726,7 @@ extern void sparc_enable_interrupts();
 
 #define _CPU_ISR_Enable( _level ) \
   sparc_enable_interrupts( _level )
+
 /*
  *  This temporarily restores the interrupt to _level before immediately
  *  disabling them again.  This is used to divide long critical
