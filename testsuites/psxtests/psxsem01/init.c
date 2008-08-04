@@ -114,7 +114,6 @@ void *POSIX_Init(
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
   fatal_posix_service_status( errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
 
-
   /*
    * To do this case, we must be blocking when we want the semaphore.
    * POSIX doesn't want you to check the error if you can get the resource.
