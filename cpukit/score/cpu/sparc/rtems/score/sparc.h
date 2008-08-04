@@ -205,50 +205,18 @@ extern "C" {
 
 /*
  *  Manipulate the interrupt level in the psr 
- *
  */
 
-/*
-#define sparc_disable_interrupts( _level ) \
-  do { \
-    register unsigned int _newlevel; \
-    \
-    sparc_get_psr( _level ); \
-    (_newlevel) = (_level) | SPARC_PSR_PIL_MASK; \
-    sparc_set_psr( _newlevel ); \
-  } while ( 0 )
-
-#define sparc_enable_interrupts( _level ) \
-  do { \
-    unsigned int _tmp; \
-    \
-    sparc_get_psr( _tmp ); \
-    _tmp &= ~SPARC_PSR_PIL_MASK; \
-    _tmp |= (_level) & SPARC_PSR_PIL_MASK; \
-    sparc_set_psr( _tmp ); \
-  } while ( 0 ) 
-*/
+uint32_t sparc_disable_interrupts(void);
+void sparc_enable_interrupts(uint32_t);
   
 #define sparc_flash_interrupts( _level ) \
   do { \
     register uint32_t   _ignored = 0; \
     \
     sparc_enable_interrupts( (_level) ); \
-    sparc_disable_interrupts( _ignored ); \
+    _ignored = sparc_disable_interrupts(); \
   } while ( 0 )
-
-/*
-#define sparc_set_interrupt_level( _new_level ) \
-  do { \
-    register uint32_t   _new_psr_level = 0; \
-    \
-    sparc_get_psr( _new_psr_level ); \
-    _new_psr_level &= ~SPARC_PSR_PIL_MASK; \
-    _new_psr_level |= \
-      (((_new_level) << SPARC_PSR_PIL_BIT_POSITION) & SPARC_PSR_PIL_MASK); \
-    sparc_set_psr( _new_psr_level ); \
-  } while ( 0 )
-*/
 
 #define sparc_get_interrupt_level( _level ) \
   do { \
