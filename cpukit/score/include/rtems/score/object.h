@@ -501,12 +501,12 @@ Objects_Control *_Objects_Allocate(
  *  free object control blocks.
  *
  *  @param[in] information points to an object class information block.
- *  @param[in] index is the index of the object to allocate.
+ *  @param[in] the_index is the index of the object to allocate.
  *  @param[in] sizeof_control is the size of the object control block.
  */
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  uint16_t             index,
+  uint16_t             the_index,
   uint16_t             sizeof_control
 );
 
