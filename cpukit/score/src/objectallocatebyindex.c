@@ -41,14 +41,14 @@
 
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  uint16_t             index,
+  uint16_t             the_index,
   uint16_t             sizeof_control
 )
 {
   Objects_Control *the_object;
 
-  if ( index && information->maximum >= index ) {
-    the_object = information->local_table[ index ];
+  if ( the_index && information->maximum >= the_index ) {
+    the_object = information->local_table[ the_index ];
     if ( the_object )
       return NULL;
 
@@ -61,7 +61,7 @@ Objects_Control *_Objects_Allocate_by_index(
 
     the_object = (Objects_Control *) _Addresses_Add_offset(
       information->object_blocks[ 0 ],
-      (sizeof_control * (index - 1))
+      (sizeof_control * (the_index - 1))
     );
     _Chain_Extract( &the_object->Node );
 
