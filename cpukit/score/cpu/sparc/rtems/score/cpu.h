@@ -697,9 +697,6 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 #ifndef ASM
 
-extern unsigned int sparc_disable_interrupts();
-extern void sparc_enable_interrupts();
-
 /*
  *  ISR handler macros
  */

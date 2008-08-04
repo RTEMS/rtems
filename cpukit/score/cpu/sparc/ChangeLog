@@ -1,5 +1,11 @@
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1294/bsps
+	* rtems/score/cpu.h, rtems/score/sparc.h: Correct prototype and usage
+	of sparc_disable_interrupts.
+
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/score/cpu.h: Spacing.
 
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
