@@ -181,52 +181,61 @@ made from an ISR:
 @itemize @bullet
 @item Task Management
 
+Although it is acceptable to operate on the RTEMS_SELF task (e.g.
+the currently executing task), while in an ISR, this will refer
+to the interrupted task.  Most of the time, it is an application
+implementation error to use RTEMS_SELF from an ISR.
+
 @itemize -
-@item task_get_note, task_set_note, task_suspend, task_resume
+@item rtems_task_get_note, rtems_task_set_note, rtems_task_suspend, rtems_task_resume
 @end itemize
 
-@item Clock Management
+@item Clock and Timer Management
 
 @itemize -
-@item clock_get, clock_tick
+@item rtems_clock_get, rtems_clock_tick
+@item rtems_timer_fire_after, rtems_timer_fire_when, rtems_timer_cancel
 @end itemize
 
 @item Message, Event, and Signal Management
 
 @itemize -
-@item message_queue_send, message_queue_urgent
-@item event_send
-@item signal_send
+@item rtems_message_queue_send, rtems_message_queue_urgent
+@item rtems_event_send
+@item rtems_signal_send
 @end itemize
 
 @item Semaphore Management
 
 @itemize -
-@item semaphore_release
+@item rtems_semaphore_release
 @end itemize
 
 @item Dual-Ported Memory Management
 
 @itemize -
-@item port_external_to_internal, port_internal_to_external
+@item rtems_port_external_to_internal, rtems_port_internal_to_external
 @end itemize
 
 @item IO Management
 
+The following services are safe to call from an ISR if and only if
+the device driver service invoked is also safe.  The IO Manager itself
+is safe but the invoked driver entry point may or may not be.
 @itemize -
-@item io_initialize, io_open, io_close, io_read, io_write, io_control
+@item rtems_io_initialize, rtems_io_open, rtems_io_close, rtems_io_read, rtems_io_write, rtems_io_control
 @end itemize
 
 @item Fatal Error Management
 
 @itemize -
-@item fatal_error_occurred
+@item rtems_fatal_error_occurred
 @end itemize
 
 @item Multiprocessing
 
 @itemize -
-@item multiprocessing_announce
+@item rtems_multiprocessing_announce
 @end itemize
 @end itemize
 
