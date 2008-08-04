@@ -1,3 +1,8 @@
+2008-08-04	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>
+
+	PR 1293/tests
+	* psx10/init.c: Make sure we do not let tv_nsec go to -1.
+
 2008-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1291/cpukit
