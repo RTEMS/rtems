@@ -52,7 +52,7 @@ rtemsInterrupt::rtemsInterrupt()
          vec < CPU_INTERRUPT_NUMBER_OF_VECTORS;
          vec++)
     {
-      interrupt_table[vector] = 0;
+      interrupt_table[vec] = 0;
     }
     initialised = true;
   }
@@ -71,8 +71,8 @@ const rtems_status_code rtemsInterrupt::isr_catch(const rtems_vector_number vec)
   if (caught)
     return set_status_code(RTEMS_RESOURCE_IN_USE);
 
-  old_interrupt = interrupt_table[vector];
-  interrupt_table[vector] = this;
+  old_interrupt = interrupt_table[vec];
+  interrupt_table[vec] = this;
   vector = vec;
   
   set_status_code(rtems_interrupt_catch(redirector,
