@@ -1,3 +1,9 @@
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1294/bsps
+	* rtems/score/cpu.h, rtems/score/sparc.h: Correct prototype and usage
+	of sparc_disable_interrupts.
+
 2008-02-20	Alexandru Bugnar <a-bugnar@criticalsoftware.com>
 
 	PR 1278/cpukit
