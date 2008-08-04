@@ -1,3 +1,9 @@
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1294/bsps
+	* startup/spurious.c: Correct prototype and usage of
+	sparc_disable_interrupts.
+
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	PR 1233/bsps
