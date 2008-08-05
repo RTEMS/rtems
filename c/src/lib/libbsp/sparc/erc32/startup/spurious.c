@@ -141,7 +141,7 @@ rtems_isr bsp_spurious_handler(
 
 void bsp_spurious_initialize()
 {
-  uint32_t         trap;
+  uint32_t   trap;
   uint32_t   level = 15;
   uint32_t   mask;
 
