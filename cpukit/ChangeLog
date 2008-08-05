@@ -1,3 +1,12 @@
+2008-08-05	Xudong Guan <xudong.guan@criticalsoftware.com>
+
+	PR 1212/cpukit
+	* rtems/src/taskmode.c, score/src/threadtickletimeslice.c: Time slicing
+	will not happen if the task mode is changed from a non-timeslicing
+	mode to timeslicing mode if it is done by the executing thread (e.g.
+	in its task body). This change includes sp44 to demonstrate the
+	problem and verify the correction.
+
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c: Fix
