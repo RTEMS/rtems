@@ -1,3 +1,8 @@
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 741/networking
+	* libmisc/dummy/dummy.c: Add dummy network configuration.
+
 2008-08-05	Xudong Guan <xudong.guan@criticalsoftware.com>
 
 	PR 1212/cpukit
