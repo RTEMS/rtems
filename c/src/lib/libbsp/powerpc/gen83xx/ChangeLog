@@ -1,3 +1,8 @@
+2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* start/start.S: Clear environment pointer for bootcard.  Fixed wrong
+	address increment in mpc83xx_zero_4().
+
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Add stub for U-Boot support. Hopefully someone more

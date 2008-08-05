@@ -434,8 +434,12 @@ start_code_in_ram:
 	LA r13, _SDA_BASE_
 
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
-        xor     r3, r3, r3
-        xor     r4, r4, r4       /* Clear argc and argv */        
+
+        /* Clear argc, argv and envp */
+        xor r3, r3, r3
+        xor r4, r4, r4
+        xor r5, r5, r5
+
         bl      SYM (boot_card)  /* Call the first C routine */
 	
 twiddle:
@@ -502,7 +506,7 @@ GLOBAL_FUNCTION mpc83xx_zero_4
 mpc83xx_zero_4_head:
 
 	stwx	r0, r3, r5
-	addi	r5, r5, 8
+	addi	r5, r5, 4
 	bdnz	mpc83xx_zero_4_head
 
 mpc83xx_zero_4_more:
