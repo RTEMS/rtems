@@ -1,3 +1,29 @@
+2008-08-05     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/include/rtems/rtems/sem.h, rtems/src/semobtain.c:
+	Changed option set type to rtems_option.
+
+	* score/src/objectgetinfo.c: Check return value of
+	_Objects_API_maximum_class().
+
+	* libmisc/monitor/mon-mpci.c, libmisc/monitor/monitor.h,
+	rtems/include/rtems/rtems/message.h, rtems/src/msgmp.c,
+	rtems/src/msgqallocate.c, rtems/src/msgqbroadcast.c,
+	rtems/src/msgqcreate.c, rtems/src/msgqreceive.c, rtems/src/msgqsend.c,
+	rtems/src/msgqurgent.c, score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/mpci.h, score/include/rtems/score/thread.h,
+	score/inline/rtems/score/coremsg.inl, score/src/coremsg.c,
+	score/src/coremsgbroadcast.c, score/src/coremsgseize.c,
+	score/src/coremsgsubmit.c:
+	Removed parameters of _Message_queue_Allocate().  Changed option set
+	type to rtems_option.  Changed type of maximum message and packet size
+	to size_t.  Changed the input buffer type for message send functions to
+	"const void *".  Changed the pointer to the second return argument in
+	the thread wait information to a union.  This union can contain a
+	pointer to an immutable or a mutable object.  This is somewhat fragile.
+	An alternative would be to add a third pointer for immutable objects,
+	but this would increase the structure size.
+
 2008-08-05	Xudong Guan <xudong.guan@criticalsoftware.com>
 
 	PR 1212/cpukit

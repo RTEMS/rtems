@@ -43,6 +43,7 @@ extern "C" {
 #endif
 
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/attr.h>
@@ -168,7 +169,7 @@ rtems_status_code rtems_semaphore_delete(
  */
 rtems_status_code rtems_semaphore_obtain(
   rtems_id       id,
-  uint32_t       option_set,
+  rtems_option   option_set,
   rtems_interval timeout
 );
 

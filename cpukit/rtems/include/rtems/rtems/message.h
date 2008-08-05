@@ -46,6 +46,7 @@ extern "C" {
 
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/options.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
@@ -117,7 +118,7 @@ void _Message_queue_Manager_initialization(
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,
   uint32_t         count,
-  uint32_t         max_message_size,
+  size_t           max_message_size,
   rtems_attribute  attribute_set,
   Objects_Id      *id
 );
@@ -164,7 +165,7 @@ rtems_status_code rtems_message_queue_delete(
  */
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
-  void                 *buffer,
+  const void           *buffer,
   size_t                size
 );
 
@@ -179,7 +180,7 @@ rtems_status_code rtems_message_queue_send(
  */
 rtems_status_code rtems_message_queue_urgent(
   Objects_Id            id,
-  void                 *buffer,
+  const void           *buffer,
   size_t                size
 );
 
@@ -193,7 +194,7 @@ rtems_status_code rtems_message_queue_urgent(
  */
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
-  void                 *buffer,
+  const void           *buffer,
   size_t                size,
   uint32_t             *count
 );
@@ -213,7 +214,7 @@ rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
   size_t               *size,
-  uint32_t              option_set,
+  rtems_option          option_set,
   rtems_interval        timeout
 );
 
@@ -256,7 +257,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
  */
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
-  void                       *buffer,
+  const void                 *buffer,
   size_t                      size,
   Message_queue_Submit_types  submit_type
 );
@@ -267,10 +268,7 @@ rtems_status_code _Message_queue_Submit(
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
  */
-Message_queue_Control *_Message_queue_Allocate (
-    uint32_t            count,
-    uint32_t            max_message_size
-);
+Message_queue_Control *_Message_queue_Allocate (void);
 
 /**
  *  @brief Message_queue_Translate_core_message_queue_return_code

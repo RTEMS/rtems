@@ -139,7 +139,7 @@ typedef struct {
     rtems_attribute     attributes;
     uint32_t            number_of_pending_messages;
     uint32_t            maximum_pending_messages;
-    uint32_t            maximum_message_size;
+    size_t              maximum_message_size;
 } rtems_monitor_queue_t;
 
 /*
@@ -251,7 +251,7 @@ typedef struct {
     uint32_t    maximum_proxies;        /* maximum # proxies */
 
     uint32_t                 default_timeout;        /* in ticks */
-    uint32_t                 maximum_packet_size;
+    size_t                   maximum_packet_size;
     rtems_monitor_symbol_t   initialization;
     rtems_monitor_symbol_t   get_packet;
     rtems_monitor_symbol_t   return_packet;

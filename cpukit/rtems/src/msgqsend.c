@@ -58,7 +58,7 @@
 
 rtems_status_code rtems_message_queue_send(
   Objects_Id            id,
-  void                 *buffer,
+  const void           *buffer,
   size_t                size
 )
 {

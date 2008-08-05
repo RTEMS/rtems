@@ -56,7 +56,7 @@
 
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
@@ -66,7 +66,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   Thread_Control          *the_thread;
   uint32_t                 number_broadcasted;
   Thread_Wait_information *waitp;
-  uint32_t                 constrained_size;
+  size_t                   constrained_size;
 
   /*
    *  If there are pending messages, then there can't be threads
@@ -98,11 +98,11 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 
     _CORE_message_queue_Copy_buffer(
       buffer,
-      waitp->return_argument,
+      waitp->return_argument_second.mutable_object,
       constrained_size
     );
 
-    *(uint32_t   *)the_thread->Wait.return_argument_1 = size;
+    *(size_t *) the_thread->Wait.return_argument = size;
 
 #if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )

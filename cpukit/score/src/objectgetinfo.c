@@ -24,11 +24,16 @@ Objects_Information *_Objects_Get_information(
 )
 {
   Objects_Information *info;
+  int the_class_api_maximum;
 
   if ( !_Objects_Is_api_valid( the_api ) )
     return NULL;
 
-  if ( !the_class || the_class > _Objects_API_maximum_class(the_api) )
+  if ( !the_class )
+    return NULL;
+
+  the_class_api_maximum = _Objects_API_maximum_class( the_api );
+  if ( the_class_api_maximum < 0 || the_class > (uint32_t) the_class_api_maximum )
     return NULL;
 
   if ( !_Objects_Information_table[ the_api ] )

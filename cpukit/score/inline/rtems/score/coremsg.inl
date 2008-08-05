@@ -32,7 +32,7 @@
  
 RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
  
 RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,

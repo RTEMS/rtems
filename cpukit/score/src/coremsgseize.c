@@ -46,7 +46,7 @@
  *    the_message_queue - pointer to message queue
  *    id                - id of object we are waitig on
  *    buffer            - pointer to message buffer to be filled
- *    size              - pointer to the size of buffer to be filled
+ *    size_p            - pointer to the size of buffer to be filled
  *    wait              - TRUE if wait is allowed, FALSE otherwise
  *    timeout           - time to wait for a message
  *
@@ -63,7 +63,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  size_t                          *size,
+  size_t                          *size_p,
   boolean                          wait,
   Watchdog_Interval                timeout
 )
@@ -81,9 +81,9 @@ void _CORE_message_queue_Seize(
     the_message_queue->number_of_pending_messages -= 1;
     _ISR_Enable( level );
 
-    *size = the_message->Contents.size;
+    *size_p = the_message->Contents.size;
     _Thread_Executing->Wait.count = the_message->priority;
-    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size);
+    _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size_p);
 
     /*
      *  There could be a thread waiting to send a message.  If there
@@ -106,9 +106,9 @@ void _CORE_message_queue_Seize(
      */
 
     the_message->priority  = the_thread->Wait.count;
-    the_message->Contents.size = (uint32_t)the_thread->Wait.option;
+    the_message->Contents.size = (size_t) the_thread->Wait.option;
     _CORE_message_queue_Copy_buffer(
-      the_thread->Wait.return_argument,
+      the_thread->Wait.return_argument_second.immutable_object,
       the_message->Contents.buffer,
       the_message->Contents.size
     );
@@ -128,10 +128,10 @@ void _CORE_message_queue_Seize(
   }
 
   _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-  executing->Wait.queue              = &the_message_queue->Wait_queue;
-  executing->Wait.id                 = id;
-  executing->Wait.return_argument    = buffer;
-  executing->Wait.return_argument_1  = (void *)size;
+  executing->Wait.queue = &the_message_queue->Wait_queue;
+  executing->Wait.id = id;
+  executing->Wait.return_argument_second.mutable_object = buffer;
+  executing->Wait.return_argument = size_p;
   /* Wait.count will be filled in with the message priority */
   _ISR_Enable( level );
 

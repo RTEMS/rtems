@@ -49,12 +49,8 @@
  *    the_message_queue - set if successful, NULL otherwise
  */
 
-Message_queue_Control *_Message_queue_Allocate (
-  uint32_t             count,
-  uint32_t             max_message_size
-)
+Message_queue_Control *_Message_queue_Allocate(void)
 {
-  return
-    (Message_queue_Control *)_Objects_Allocate(&_Message_queue_Information);
-
+  return (Message_queue_Control *)
+    _Objects_Allocate(&_Message_queue_Information);
 }

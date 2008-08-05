@@ -201,7 +201,7 @@ typedef struct {
   /** This is the size in bytes of the largest message which may be
    *  sent via this queue.
    */
-  uint32_t                           maximum_message_size;
+  size_t                             maximum_message_size;
   /** This chain is the set of pending messages.  It may be ordered by
    *  message priority or in FIFO order.
    */
@@ -244,7 +244,7 @@ boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   uint32_t                       maximum_pending_messages,
-  uint32_t                       maximum_message_size
+  size_t                         maximum_message_size
 );
 
 /**
@@ -326,7 +326,7 @@ void _CORE_message_queue_Flush_waiting_threads(
  */
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
@@ -360,7 +360,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  */
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
@@ -396,7 +396,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  size_t                          *size,
+  size_t                          *size_p,
   boolean                          wait,
   Watchdog_Interval                timeout
 );

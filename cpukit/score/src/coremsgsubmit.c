@@ -59,7 +59,7 @@
 
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
-  void                                      *buffer,
+  const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
@@ -85,10 +85,10 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     if ( the_thread ) {
       _CORE_message_queue_Copy_buffer(
         buffer,
-        the_thread->Wait.return_argument,
+        the_thread->Wait.return_argument_second.mutable_object,
         size
       );
-      *(size_t *)the_thread->Wait.return_argument_1 = size;
+      *(size_t *) the_thread->Wait.return_argument = size;
       the_thread->Wait.count = submit_type;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -165,11 +165,11 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 
     _ISR_Disable( level );
     _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-    executing->Wait.queue              = &the_message_queue->Wait_queue;
-    executing->Wait.id                 = id;
-    executing->Wait.return_argument    = buffer;
-    executing->Wait.option             = size;
-    executing->Wait.count              = submit_type;
+    executing->Wait.queue = &the_message_queue->Wait_queue;
+    executing->Wait.id = id;
+    executing->Wait.return_argument_second.immutable_object = buffer;
+    executing->Wait.option = (uint32_t) size;
+    executing->Wait.count = submit_type;
     _ISR_Enable( level );
 
     _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );

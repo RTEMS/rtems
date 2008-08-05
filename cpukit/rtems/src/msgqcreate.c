@@ -57,7 +57,7 @@
 rtems_status_code rtems_message_queue_create(
   rtems_name          name,
   uint32_t            count,
-  uint32_t            max_message_size,
+  size_t              max_message_size,
   rtems_attribute     attribute_set,
   Objects_Id         *id
 )
@@ -101,7 +101,7 @@ rtems_status_code rtems_message_queue_create(
 
   _Thread_Disable_dispatch();              /* protects object pointer */
 
-  the_message_queue = _Message_queue_Allocate( count, max_message_size );
+  the_message_queue = _Message_queue_Allocate();
 
   if ( !the_message_queue ) {
     _Thread_Enable_dispatch();

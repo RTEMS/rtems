@@ -209,6 +209,21 @@ typedef struct {
  */
 #define THREAD_STATUS_PROXY_BLOCKING 0x1111111
 
+/**
+ *  @brief Union type to hold a pointer to an immutable or a mutable object.
+ *
+ *  The main purpose is to enable passing of pointers to read-only send buffers
+ *  in the message passing subsystem.  This approach is somewhat fragile since
+ *  it prevents the compiler to check if the operations on objects are valid
+ *  with respect to the constant qualifier.  An alternative would be to add a
+ *  third pointer argument for immutable objects, but this would increase the
+ *  structure size.
+ */
+typedef union {
+  void       *mutable_object;
+  const void *immutable_object;
+} Thread_Wait_information_Object_argument_type;
+
 /** @brief Thread Blocking Management Information
  *
  *  This contains the information required to manage a thread while it is
@@ -219,10 +234,11 @@ typedef struct {
   Objects_Id            id;
   /** This field is used to return an integer while when blocked. */
   uint32_t              count;
-  /** This field is the first pointer to a user return argument. */
+  /** This field is for a pointer to a user return argument. */
   void                 *return_argument;
-  /** This field is the second pointer to a user return argument. */
-  void                 *return_argument_1;
+  /** This field is for a pointer to a second user return argument. */
+  Thread_Wait_information_Object_argument_type
+                        return_argument_second;
   /** This field contains any options in effect on this blocking operation. */
   uint32_t              option;
   /** This field will contain the return status from a blocking operation.

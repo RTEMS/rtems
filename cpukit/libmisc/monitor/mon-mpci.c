@@ -131,7 +131,7 @@ rtems_monitor_mpci_dump(
     length += rtems_monitor_dump_decimal(monitor_mpci->default_timeout);
 
     length += rtems_monitor_pad(46, length);
-    length += rtems_monitor_dump_decimal(monitor_mpci->maximum_packet_size);
+    length += rtems_monitor_dump_decimal((uint32_t) monitor_mpci->maximum_packet_size);
 
     fprintf(stdout,"\n");
     length = 0;

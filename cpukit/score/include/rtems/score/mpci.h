@@ -122,7 +122,7 @@ typedef struct {
    *  MPCI layer.  This size places a limit on the size of a message 
    *  which can be transmitted over this interface.
    **/
-  uint32_t                   maximum_packet_size;
+  size_t                     maximum_packet_size;
   /** This field points to the MPCI initialization entry point. */
   MPCI_initialization_entry  initialization;
   /** This field points to the MPCI get packet entry point. */

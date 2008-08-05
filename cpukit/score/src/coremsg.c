@@ -56,11 +56,11 @@ boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   uint32_t                       maximum_pending_messages,
-  uint32_t                       maximum_message_size
+  size_t                         maximum_message_size
 )
 {
-  uint32_t message_buffering_required;
-  uint32_t allocated_message_size;
+  size_t message_buffering_required;
+  size_t allocated_message_size;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
@@ -85,7 +85,7 @@ boolean _CORE_message_queue_Initialize(
    *  Calculate how much total memory is required for message buffering and
    *  check for overflow on the multiplication. 
    */
-  message_buffering_required = maximum_pending_messages *
+  message_buffering_required = (size_t) maximum_pending_messages *
        (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
  
   if (message_buffering_required < allocated_message_size)
@@ -107,7 +107,7 @@ boolean _CORE_message_queue_Initialize(
   _Chain_Initialize (
     &the_message_queue->Inactive_messages,
     the_message_queue->message_buffers,
-    maximum_pending_messages,
+    (size_t) maximum_pending_messages,
     allocated_message_size + sizeof( CORE_message_queue_Buffer_control )
   );
  
