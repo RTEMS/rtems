@@ -1,3 +1,8 @@
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 741/networking
+	* libmisc/dummy/dummy.c: Add dummy network configuration.
+
 2008-08-05     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/sem.h, rtems/src/semobtain.c:
