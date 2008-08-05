@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  $Id$
@@ -29,8 +29,5 @@ void bsp_libc_init(
      * Set up for the libc handling.
      */
 
-    if ( rtems_configuration_get_ticks_per_timeslice() > 0 )
-        libc_init(1);                /* reentrant if possible */
-    else
-        libc_init(0);                /* non-reentrant */
+    libc_init();
 }

@@ -1,3 +1,9 @@
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 537/bsps
+	* bsplibc.c: Eliminate vestiges of ticks_per_timeslice controlling
+	newlib reentrancy. The parameter was ignored in libc_init().
+
 2008-07-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* src/irq-legacy.c: Free allocated memory in handler remove.
