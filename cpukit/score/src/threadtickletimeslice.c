@@ -77,7 +77,7 @@ void _Thread_Tickle_timeslice( void )
 
     case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
     case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
-      if ( --executing->cpu_time_budget == 0 ) {
+      if ( (int)(--executing->cpu_time_budget) <= 0 ) {
         _Thread_Reset_timeslice();
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
