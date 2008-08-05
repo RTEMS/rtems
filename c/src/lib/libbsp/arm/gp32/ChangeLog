@@ -1,3 +1,7 @@
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* smc/smc.c: Fix warning.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* smc/smc.c: Updated to the libblock changes.

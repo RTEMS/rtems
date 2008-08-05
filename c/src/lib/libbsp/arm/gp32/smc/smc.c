@@ -58,7 +58,8 @@ struct SMC_INFO
   uint32_t mb;
 };
 
-#ifdef CPU_S3C2410	//different regester map
+/* Ths S3c2410 uses a different register map */
+#ifdef CPU_S3C2410
 #define rPBDAT rGPBDAT
 #define rPBCON rGPBCON
 #define rPDDAT rGPDDAT
@@ -562,7 +563,7 @@ smc_read(rtems_blkdev_request *req)
     rtems_blkdev_sg_buffer *sg;
     uint32_t   remains;
 
-    remains = smc_info.bytes_per_page * req->count;
+    remains = smc_info.bytes_per_page * req->length;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
