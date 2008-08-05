@@ -1,3 +1,7 @@
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest: Strip .exe or .ralf from file names.
+
 2008-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psim-gdb: Change 4.8 to 4.9.

@@ -142,6 +142,7 @@ for tfile in $tests
 do
 
    tname=`basename $tfile .exe`
+   tname=`basename $tname .ralf`
    cpus="1"
    TEST_TYPE="single"
 
