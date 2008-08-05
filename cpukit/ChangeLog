@@ -1,5 +1,13 @@
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 537/bsps
+	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/newlibc.c,
+	libcsupport/src/no_libc.c, libcsupport/src/unixlibc.c: Eliminate
+	vestiges of ticks_per_timeslice controlling newlib reentrancy. The
+	parameter was ignored in libc_init().
+
+2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 741/networking
 	* libmisc/dummy/dummy.c: Add dummy network configuration.
 

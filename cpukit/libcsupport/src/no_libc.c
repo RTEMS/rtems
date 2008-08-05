@@ -23,8 +23,7 @@
 
 #include <stdlib.h>             /* for free() */
 
-void libc_init(
-  int reentrant
+void libc_init(void)
 )
 {
 }

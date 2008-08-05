@@ -188,7 +188,7 @@ rtems_extension libc_delete_hook(
 
 
 void
-libc_init(int reentrant)
+libc_init(void)
 {
   _REENT = &libc_global_reent;
 

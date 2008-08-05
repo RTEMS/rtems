@@ -17,7 +17,7 @@
 
 #if defined(RTEMS_UNIXLIB)
 
-void libc_init(int reentrant)
+void libc_init(void)
 {
 }
 
