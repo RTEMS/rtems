@@ -1,3 +1,7 @@
+2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* start/start.S: Clear environment pointer for bootcard.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization

@@ -1,3 +1,7 @@
+2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* start/start.S: Clear environment pointer for bootcard.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* ide/pcmcia_ide.c: Updated to the libblock changes.

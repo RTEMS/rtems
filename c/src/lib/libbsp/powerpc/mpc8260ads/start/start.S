@@ -139,9 +139,10 @@ text_length:
         /* Set up stack pointer = beginning of text section - 56 */
         addi    r1, r1, -56-4
 
-        /* clear argc and argv */
-        xor     r3, r3, r3
-        xor     r4, r4, r4
+        /* Clear argc, argv and envp */
+        xor r3, r3, r3
+        xor r4, r4, r4
+        xor r5, r5, r5
 
         .extern SYM (boot_card)
         bl       SYM (boot_card)	/* call the first C routine */

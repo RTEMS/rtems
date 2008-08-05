@@ -470,8 +470,11 @@ skip_ROM_start:
 	bl	PPC_HID0_wr			/* Set DPM in HID0 */
 
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
-        xor     r3, r3, r3
-        xor     r4, r4, r4	 		/* Clear argc and argv */
+
+        /* Clear argc, argv and envp */
+        xor r3, r3, r3
+        xor r4, r4, r4
+        xor r5, r5, r5
         
         bl      SYM (boot_card)			/* Call the first C routine */
 
