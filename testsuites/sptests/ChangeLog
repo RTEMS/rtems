@@ -1,3 +1,12 @@
+2008-08-05	Xudong Guan <xudong.guan@criticalsoftware.com>
+
+	PR 1212/cpukit
+	* Makefile.am, configure.ac: Time slicing will not happen if the task
+	mode is changed from a non-timeslicing mode to timeslicing mode if it
+	is done by the executing thread (e.g. in its task body). This change
+	includes sp44 to demonstrate the problem and verify the correction.
+	* sp44/.cvsignore, sp44/Makefile.am, sp44/init.c, sp44/sp44.scn: New files.
+
 2008-07-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp09/screen09.c: Do not use Simple Vectored Interrupt calls on
