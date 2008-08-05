@@ -1,3 +1,9 @@
+2008-08-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/new-exceptions/cpu.h: Changed define
+	CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER to UINT32_MAX to avoid comparison
+	between signed and unsigned.
+
 2008-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Added masks for BOOKE_TCR fields.

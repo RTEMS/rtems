@@ -248,7 +248,7 @@ SCORE_EXTERN struct {
  */
 
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS     (0)
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (-1)
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (UINT32_MAX)
 
 /*
  *  This is defined if the port has a special way to report the ISR nesting
