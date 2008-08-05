@@ -207,12 +207,13 @@ start:
  * Start RTEMS
  */
 
-	/* Clear argc and argv */
-        xor r3, r3, r3
-        xor r4, r4, r4
-        
+	/* Clear argc, argv and envp */
+	xor r3, r3, r3
+	xor r4, r4, r4
+	xor r5, r5, r5
+	
 	/* Start RTEMS */
-        bl SYM (boot_card)
+	bl SYM (boot_card)
 
 	/* Spin around */
 	b twiddle
