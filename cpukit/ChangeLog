@@ -1,3 +1,8 @@
+2008-08-06      Till Straumann <strauman@slac.stanford.edu>
+
+	* libblock/src/diskdevs.c: PR1269. Delete the semaphore rather
+	than release it.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 537/bsps

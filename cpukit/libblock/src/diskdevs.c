@@ -632,7 +632,7 @@ rtems_disk_io_done(void)
     }
     free(disktab);
 
-    rc = rtems_semaphore_release(diskdevs_mutex);
+    rc = rtems_semaphore_delete(diskdevs_mutex);
 
     /* XXX bdbuf should be released too! */
     disk_io_initialized = 0;
