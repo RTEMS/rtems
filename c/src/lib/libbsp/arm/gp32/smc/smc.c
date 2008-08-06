@@ -563,7 +563,7 @@ smc_read(rtems_blkdev_request *req)
     rtems_blkdev_sg_buffer *sg;
     uint32_t   remains;
 
-    remains = smc_info.bytes_per_page * req->length;
+    remains = smc_info.bytes_per_page * req->bufnum;
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {

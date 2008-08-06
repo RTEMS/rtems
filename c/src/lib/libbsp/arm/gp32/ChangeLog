@@ -1,3 +1,7 @@
+2008-08-06      Chris Johns <chrisj@rtems.org>
+
+	* smc/smc.c: Fix the fix. The field is bufnum.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* smc/smc.c: Fix warning.
