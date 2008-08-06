@@ -1451,8 +1451,6 @@ rtems_bdbuf_get (dev_t                device,
 
   pool = rtems_bdbuf_get_pool (dd->phys_dev->pool);
   
-  rtems_disk_release(dd);
-
   rtems_bdbuf_lock_pool (pool);
 
 #if RTEMS_BDBUF_TRACE
@@ -1467,6 +1465,8 @@ rtems_bdbuf_get (dev_t                device,
     bd->state = RTEMS_BDBUF_STATE_ACCESS;
   
   rtems_bdbuf_unlock_pool (pool);
+
+  rtems_disk_release(dd);
 
   *bdp = bd;
   
