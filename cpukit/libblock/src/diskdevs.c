@@ -84,6 +84,7 @@ create_disk_entry(dev_t dev)
         p = realloc(disktab, sizeof(rtems_disk_device_table) * newsize);
         if (p == NULL)
             return NULL;
+        disktab = p;
         p += disktab_size;
         for (i = disktab_size; i < newsize; i++, p++)
         {

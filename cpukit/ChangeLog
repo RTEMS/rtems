@@ -1,3 +1,8 @@
+2008-08-06      Brett Swimley <brett.swimley@aedbozeman.com>
+
+	* libblock/src/diskdevs.c: PR1192. Update the disktap pointer
+	after the realloc.
+
 2008-08-06      Till Straumann <strauman@slac.stanford.edu>
 
 	* libblock/src/diskdevs.c: PR1269. Delete the semaphore rather
