@@ -1,3 +1,12 @@
+2008-08-07      Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/src/_rename_r.c: Fixed return code bug. Add a check
+	to see if the 'to' path was a directory and removed the directory.
+
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Added the mv command.
+
+	* libmisc/shell/main_mv.c, libmisc/shell/pathnames-mv.h: New.
+
 2008-08-06      Chris Johns <chrisj@rtems.org>
 
 	* libblock/src/bdbuf.c: PR1272. Fixed similar possible issues in

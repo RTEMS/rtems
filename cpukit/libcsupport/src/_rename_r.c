@@ -25,16 +25,22 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+#include <sys/stat.h>
+
 int _rename_r(
   struct _reent *ptr,
   const char    *old,
   const char    *new
 )
 {
+  struct stat sb;
   int s;
 
-  s = link( old, new );
-  if ( !s )
+  s = stat( old, &sb);
+  if ( s < 0 )
     return s;
-  return unlink( old );
+  s = link( old, new );
+  if ( s < 0 )
+    return s;
+  return S_ISDIR(sb.st_mode) ? rmdir( old ) : unlink( old );
 }

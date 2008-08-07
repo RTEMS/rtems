@@ -73,7 +73,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
     shell/main_mkdir.c shell/main_mount.c \
     shell/main_mount_msdos.c shell/main_mmove.c shell/main_msdosfmt.c \
-    shell/main_mwdump.c shell/main_perioduse.c shell/main_pwd.c \
+    shell/main_mv.c shell/main_mwdump.c shell/main_perioduse.c shell/main_pwd.c \
     shell/main_rm.c shell/main_rmdir.c shell/main_sleep.c \
     shell/main_stackuse.c shell/main_tty.c shell/main_umask.c \
     shell/main_unmount.c shell/main_blksync.c shell/main_whoami.c \
