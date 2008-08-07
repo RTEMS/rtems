@@ -1,3 +1,9 @@
+2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/datatypes.t: Add rtems_name. Add comment about
+	rtems_task_argument changing from simple unsigned thirty two bit
+	integer to being derived from a C99 uintptr_t in 4.8 and newer.
+
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1263/doc
