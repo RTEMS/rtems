@@ -3,7 +3,8 @@
 	* libcsupport/src/_rename_r.c: Fixed return code bug. Add a check
 	to see if the 'to' path was a directory and removed the directory.
 
-	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Added the mv command.
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Added the mv
+	command.
 
 	* libmisc/shell/main_mv.c, libmisc/shell/pathnames-mv.h: New.
 
@@ -14,6 +15,7 @@
 
 2008-08-06      Brett Swimley <brett.swimley@aedbozeman.com>
 
+	PR 1192/filesystem
 	* libblock/src/diskdevs.c: PR1192. Update the disktap pointer
 	after the realloc.
 
