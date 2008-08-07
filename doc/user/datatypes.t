@@ -169,6 +169,13 @@ the entry point to the send packet routine for an MPCI implementation.
 @item @code{@value{DIRPREFIX}mpci_table} is the data structure
 containing the configuration information for an MPCI.
 
+@findex rtems_name
+@item @code{@value{DIRPREFIX}name} is the data type used to
+contain the name of a Classic API object.  It is an unsigned 
+thirty-two bit integer which can be treated as a numeric
+value or initialized using @code{@value{DIRPREFIX}build_name} to
+contain four ASCII characters.
+
 @findex rtems_option
 @item @code{@value{DIRPREFIX}option} is the data type
 used to specify which behavioral options the caller desires.
@@ -224,7 +231,11 @@ RTEMS Task.
 
 @findex rtems_task_argument
 @item @code{@value{DIRPREFIX}task_argument} is the data
-type for the argument passed to each RTEMS task. 
+type for the argument passed to each RTEMS task. In RTEMS 4.7
+and older, this is an unsigned thirty-two bit integer.  In
+RTEMS 4.8 and newer, this is based upon the C99 type @code{uintptr_t}
+which is guaranteed to be an integer large enough to hold a 
+pointer on the target architecture.
 
 @findex rtems_task_begin_extension
 @item @code{@value{DIRPREFIX}task_begin_extension} is the 
