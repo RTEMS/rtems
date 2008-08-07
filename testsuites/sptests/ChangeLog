@@ -1,3 +1,9 @@
+2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spsize/size.c: Make _System_state_Is_multiprocessing unused when
+	multiprocessing is not enabled. Saves one more variable from single
+	processor configuration.
+
 2008-08-05	Xudong Guan <xudong.guan@criticalsoftware.com>
 
 	PR 1212/cpukit

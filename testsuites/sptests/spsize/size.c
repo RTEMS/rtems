@@ -336,8 +336,10 @@ uninitialized =
 
 /*status.h*/    0                                         +
 
-/*sysstate.h*/  (sizeof _System_state_Is_multiprocessing) +
-                (sizeof _System_state_Current)            +
+/*sysstate.h*/  (sizeof _System_state_Current)            +
+#if defined(RTEMS_MULTIPROCESSING)
+                (sizeof _System_state_Is_multiprocessing) +
+#endif
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*taskmp.h*/    0                                         +
