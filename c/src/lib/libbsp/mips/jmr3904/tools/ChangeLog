@@ -1,3 +1,7 @@
+2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest: Major update. Now more likely not to run away.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Strip .exe or .ralf from file names.

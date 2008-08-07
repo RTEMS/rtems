@@ -215,32 +215,45 @@ do
 
      # Spin off the simulator in the background
 
-       ${simulator} --board=jmr3904 $tfile | \
-         sed -e 's///' -e '/^$/d' > ${logfile} 2>&1 &
-       pid=$!
+     ${simulator} --board=jmr3904 $tfile | \
+       sed -e 's///' -e '/^$/d' > ${logfile} 2>&1 &
+     pid=$!
 
-       # Make sure it won't run forever...
-       time_run=0
-       while [ $time_run -lt $max_run_time ]
-       do
-           # sleep 5s at a time waiting for job to finish or timer to expire
-           # if job has exited, then we exit, too.
-           sleep 5
-           kill -0 $pid 2> /dev/null
-           running=$?
-           if [ $running -eq 0 ]
-           then
-               time_run=$((time_run + 5))
-               if [ $time_run -ge $max_run_time ]
-               then
-                   kill -9 $pid 2> /dev/null
-                   ran_too_long="yes"
-               fi
-           else
-               ran_too_long="no"
-               break
-           fi
-       done
+     # Make sure it won't run forever...
+     millilimit=`expr ${max_run_time} \* 1000`
+     milliseconds=0
+     while :
+     do
+       # sleep 10ms at a time waiting for job to finish or timer to expire
+       # if job has exited, then we exit, too.
+       usleep 10000  # ten milliseconds
+       milliseconds=`expr ${milliseconds} + 10`
+       kill -0 $pid 2> /dev/null
+       running=$?
+       if [ $running -eq 0 ] ; then
+	 if [ ${milliseconds} -ge ${millilimit} ]; then
+	   kill -9 $pid 2> /dev/null
+	   cat ${logfile}
+	   echo "${testname} killed after running ${max_run_time} seconds"
+	   break
+	 fi
+	 grep "^Unhandled exception" ${logfile} >/dev/null
+	 exceptionExit=$?
+	 grep "^mips-core: " ${logfile} >/dev/null
+	 badAccessExit=$?
+	 if [ $badAccessExit -eq 0 -o $exceptionExit -eq 0 ] ; then
+	   kill -9 ${pid} >/dev/null 2>&1
+	   cat ${logfile}
+	   echo Ran in ${milliseconds} milliseconds
+	 fi
+
+       else
+	 # done normally
+	 cat ${logfile}
+	 echo "${testname} ran in ${milliseconds} milliseconds"
+	 break
+       fi
+     done
    fi
 
    # Create the info files
