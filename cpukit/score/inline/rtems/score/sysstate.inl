@@ -33,7 +33,9 @@ RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
 )
 {
   _System_state_Current = SYSTEM_STATE_BEFORE_INITIALIZATION;
-  _System_state_Is_multiprocessing = is_multiprocessing;
+  #if defined(RTEMS_MULTIPROCESSING)
+    _System_state_Is_multiprocessing = is_multiprocessing;
+  #endif
 }
  
 /**

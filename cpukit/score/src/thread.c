@@ -99,7 +99,11 @@ void _Thread_Handler_initialization(
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
+#if defined(RTEMS_MULTIPROCESSING)
     ( _System_state_Is_multiprocessing ) ?  2 : 1,
+#else
+    1,
+#endif
     sizeof( Thread_Control ),
                                 /* size of this object's control block */
     TRUE,                       /* TRUE if names for this object are strings */

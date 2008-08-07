@@ -1,3 +1,10 @@
+2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/sysstate.h,
+	score/inline/rtems/score/sysstate.inl, score/src/thread.c: Make
+	_System_state_Is_multiprocessing unused when multiprocessing is not
+	enabled. Saves one more variable from single processor configuration.
+
 2008-08-07      Chris Johns <chrisj@rtems.org>
 
 	* libcsupport/src/_rename_r.c: Fixed return code bug. Add a check

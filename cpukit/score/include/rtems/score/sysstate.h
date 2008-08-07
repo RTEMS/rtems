@@ -64,11 +64,13 @@ typedef enum {
 /** This defines the highest value system state. */
 #define SYSTEM_STATE_CODES_LAST  SYSTEM_STATE_FAILED
 
+#if defined(RTEMS_MULTIPROCESSING)
 /**
  *  The following variable indicates whether or not this is
  *  an multiprocessing system.
  */
 SCORE_EXTERN boolean _System_state_Is_multiprocessing;
+#endif
 
 /**
  *  The following variable contains the current system state.
