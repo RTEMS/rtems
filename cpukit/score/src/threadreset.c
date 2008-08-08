@@ -41,9 +41,9 @@
  */
 
 void _Thread_Reset(
-  Thread_Control      *the_thread,
-  void                *pointer_argument,
-  uint32_t             numeric_argument
+  Thread_Control            *the_thread,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
 )
 {
   the_thread->resource_count   = 0;

@@ -78,6 +78,17 @@ extern "C" {
 typedef void *Thread;
 
 /**
+ *  @brief Type of the numeric argument of a thread entry function with at
+ *  least one numeric argument. 
+ *
+ *  This numeric argument type designates an unsigned integer type with the
+ *  property that any valid pointer to void can be converted to this type and
+ *  then converted back to a pointer to void.  The result will compare equal to
+ *  the original pointer.
+ */
+typedef uintptr_t Thread_Entry_numeric_type;
+
+/**
  *  The following defines the ways in which the entry point for a
  *  thread can be invoked.  Basically, it can be passed any
  *  combination/permutation of a pointer and an uint32_t   value.
@@ -97,7 +108,7 @@ typedef Thread ( *Thread_Entry )( void );   /* basic type */
 /** This type corresponds to a thread entry point which takes a single
  *  unsigned thirty-two bit integer as an argument.
  */
-typedef Thread ( *Thread_Entry_numeric )( uint32_t   );
+typedef Thread ( *Thread_Entry_numeric )( Thread_Entry_numeric_type );
 
 /** This type corresponds to a thread entry point which takes a single
  *  untyped pointer as an argument.
@@ -107,13 +118,13 @@ typedef Thread ( *Thread_Entry_pointer )( void * );
 /** This type corresponds to a thread entry point which takes a single
  *  untyped pointer and an unsigned thirty-two bit integer as arguments.
  */
-typedef Thread ( *Thread_Entry_both_pointer_first )( void *, uint32_t   );
+typedef Thread ( *Thread_Entry_both_pointer_first )( void *, Thread_Entry_numeric_type );
 
 /** This type corresponds to a thread entry point which takes a single
  *  unsigned thirty-two bit integer and an untyped pointer and an
  *  as arguments.
  */
-typedef Thread ( *Thread_Entry_both_numeric_first )( uint32_t  , void * );
+typedef Thread ( *Thread_Entry_both_numeric_first )( Thread_Entry_numeric_type, void * );
 
 /**
  *  The following lists the algorithms used to manage the thread cpu budget.
@@ -169,39 +180,39 @@ typedef struct {
  */
 typedef struct {
   /** This field is the starting address for the thread. */
-  Thread_Entry         entry_point;
+  Thread_Entry                         entry_point;
   /** This field indicates the how task is invoked. */
-  Thread_Start_types   prototype;
+  Thread_Start_types                   prototype;
   /** This field is the pointer argument passed at thread start. */
-  void                *pointer_argument;
+  void                                *pointer_argument;
   /** This field is the numeric argument passed at thread start. */
-  uint32_t             numeric_argument;
+  Thread_Entry_numeric_type            numeric_argument;
   /*-------------- initial execution modes ----------------- */
   /** This field indicates whether the thread was preemptible when
     * it started.
     */
-  boolean              is_preemptible;
+  boolean                              is_preemptible;
   /** This field indicates the CPU budget algorith. */
-  Thread_CPU_budget_algorithms          budget_algorithm;
+  Thread_CPU_budget_algorithms         budget_algorithm;
   /** This field is the routine to invoke when the CPU allotment is
    *  consumed.
    */
-  Thread_CPU_budget_algorithm_callout   budget_callout;
+  Thread_CPU_budget_algorithm_callout  budget_callout;
   /** This field is the initial ISR disable level of this thread. */
-  uint32_t             isr_level;
+  uint32_t                             isr_level;
   /** This field is the initial priority. */
-  Priority_Control     initial_priority;
+  Priority_Control                     initial_priority;
   /** This field indicates whether the SuperCore allocated the stack. */
-  boolean              core_allocated_stack;
+  boolean                              core_allocated_stack;
   /** This field is the stack information. */
-  Stack_Control        Initial_stack;
+  Stack_Control                        Initial_stack;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   /** This field is the initial FP context area address. */
-  Context_Control_fp  *fp_context;
+  Context_Control_fp                  *fp_context;
 #endif
   /** This field is the initial stack area address. */
-  void                *stack;
-}   Thread_Start_information;
+  void                                *stack;
+} Thread_Start_information;
 
 /**
  *  The following structure contains the information necessary to manage
@@ -579,11 +590,11 @@ boolean _Thread_Initialize(
  *  thread competes with all other threads for CPU time.
  */
 boolean _Thread_Start(
-  Thread_Control           *the_thread,
-  Thread_Start_types        the_prototype,
-  void                     *entry_point,
-  void                     *pointer_argument,
-  uint32_t                  numeric_argument
+  Thread_Control            *the_thread,
+  Thread_Start_types         the_prototype,
+  void                      *entry_point,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
 );
 
 /**
@@ -594,9 +605,9 @@ boolean _Thread_Start(
  *  TODO:  multiple task arg profiles
  */
 boolean _Thread_Restart(
-  Thread_Control           *the_thread,
-  void                     *pointer_argument,
-  uint32_t                  numeric_argument
+  Thread_Control            *the_thread,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
 );
 
 /**
@@ -604,9 +615,9 @@ boolean _Thread_Restart(
  *  not restart it.
  */
 void _Thread_Reset(
-  Thread_Control      *the_thread,
-  void                *pointer_argument,
-  uint32_t             numeric_argument
+  Thread_Control            *the_thread,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
 );
 
 /**

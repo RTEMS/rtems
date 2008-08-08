@@ -41,11 +41,11 @@
  */
 
 boolean _Thread_Start(
-  Thread_Control       *the_thread,
-  Thread_Start_types    the_prototype,
-  void                 *entry_point,
-  void                 *pointer_argument,
-  uint32_t              numeric_argument
+  Thread_Control            *the_thread,
+  Thread_Start_types         the_prototype,
+  void                      *entry_point,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {

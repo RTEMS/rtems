@@ -94,22 +94,22 @@ typedef struct {
  * Task
  */
 typedef struct {
-    rtems_id            id;
-    rtems_name          name;
+    rtems_id                   id;
+    rtems_name                 name;
   /* end of common portion */
-    Thread_Entry        entry;
-    uint32_t            argument;
-    void               *stack;
-    uint32_t            stack_size;
-    rtems_task_priority priority;
-    States_Control      state;
-    rtems_event_set     events;
-    rtems_mode          modes;
-    rtems_attribute     attributes;
-    uint32_t            notepad[RTEMS_NUMBER_NOTEPADS];
-    rtems_id            wait_id;
-    uint32_t            wait_args;
-    uint32_t            ticks;
+    Thread_Entry               entry;
+    Thread_Entry_numeric_type  argument;
+    void                      *stack;
+    uint32_t                   stack_size;
+    rtems_task_priority        priority;
+    States_Control             state;
+    rtems_event_set            events;
+    rtems_mode                 modes;
+    rtems_attribute            attributes;
+    uint32_t                   notepad[RTEMS_NUMBER_NOTEPADS];
+    rtems_id                   wait_id;
+    uint32_t                   wait_args;
+    uint32_t                   ticks;
 } rtems_monitor_task_t;
 
 /*

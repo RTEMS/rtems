@@ -1,3 +1,8 @@
+2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c: Fix
+	warnings.
+
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/sysstate.h,
