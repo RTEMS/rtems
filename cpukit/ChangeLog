@@ -1,3 +1,7 @@
+2008-08-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems/rtems/msgmp.h: Fix MP code missed by Sebastian.
+
 2008-08-08     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
         * libmisc/monitor/monitor.h, rtems/include/rtems/rtems/tasks.h,

@@ -96,10 +96,10 @@ void _Message_queue_MP_Send_process_packet (
 rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
-  void                               *buffer,
+  const void                         *buffer,
   size_t                             *size_p,
   rtems_option                        option_set,
-  Watchdog_Interval                   timeout
+  rtems_interval                      timeout
 );
 
 /**
