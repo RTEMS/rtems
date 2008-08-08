@@ -1,7 +1,10 @@
-2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+2008-08-08     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c: Fix
-	warnings.
+        * libmisc/monitor/monitor.h, rtems/include/rtems/rtems/tasks.h,
+        score/include/rtems/score/thread.h, score/src/threadreset.c,
+        score/src/threadrestart.c, score/src/threadstart.c: New type
+        Thread_Entry_numeric_type for numeric arguments in thread entry
+        functions with at least one numeric argument.
 
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
