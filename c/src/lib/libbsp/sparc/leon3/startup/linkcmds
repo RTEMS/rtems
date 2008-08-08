@@ -82,6 +82,11 @@ MEMORY
 }
 
 /*
+ * SPARC monitor assumes this is present to provide proper RTEMS awareness.
+ */
+EXTERN(rtems_get_version_string);
+
+/*
  * stick everything in ram (of course)
  */
 SECTIONS
