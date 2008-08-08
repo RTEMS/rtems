@@ -628,7 +628,7 @@ reclaimed when the semaphore is deleted.
 @example
 rtems_status_code rtems_semaphore_obtain(
   rtems_id        id,
-  uint32_t        option_set,
+  rtems_option    option_set,
   rtems_interval  timeout
 );
 @end example
@@ -812,7 +812,7 @@ id.  Since there are tasks blocked on the semaphore, the semaphore's
 count is not changed by this directive and thus is zero before and
 after this directive is executed.  Tasks which are unblocked as the
 result of this directive will return from the 
-@code{@value{DIRPREFIX}semaphore_release} directive with a
+@code{@value{DIRPREFIX}semaphore_obtain} directive with a
 status code of @code{@value{RPREFIX}UNSATISFIED} to indicate
 that the semaphore was not obtained.
 

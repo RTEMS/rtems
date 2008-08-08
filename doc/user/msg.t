@@ -232,7 +232,7 @@ constants, usage, and status codes.
 rtems_status_code rtems_message_queue_create(
   rtems_name        name,
   uint32_t          count,
-  uint32_t          max_message_size,
+  size_t            max_message_size,
   rtems_attribute   attribute_set,
   rtems_id         *id
 );
@@ -454,9 +454,9 @@ reclaimed when the message queue is deleted.
 @findex rtems_message_queue_send
 @example
 rtems_status_code rtems_message_queue_send(
-  rtems_id  id,
-  void     *buffer,
-  size_t    size
+  rtems_id   id,
+  cons void *buffer,
+  size_t     size
 );
 @end example
 @end ifset
@@ -519,9 +519,9 @@ proxy used to represent the task is reclaimed.
 @findex rtems_message_queue_urgent
 @example
 rtems_status_code rtems_message_queue_urgent(
-  rtems_id  id,
-  void     *buffer,
-  size_t    size
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
 );
 @end example
 @end ifset
@@ -585,10 +585,10 @@ proxy used to represent the task is reclaimed.
 @findex rtems_message_queue_broadcast
 @example
 rtems_status_code rtems_message_queue_broadcast(
-  rtems_id  id,
-  void     *buffer,
-  size_t    size,
-  uint32_t *count
+  rtems_id    id,
+  const void *buffer,
+  size_t      size,
+  uint32_t   *count
 );
 @end example
 @end ifset
@@ -659,7 +659,7 @@ rtems_status_code rtems_message_queue_receive(
   rtems_id        id,
   void           *buffer,
   size_t         *size,
-  uint32_t        option_set,
+  rtems_option    option_set,
   rtems_interval  timeout
 );
 @end example
@@ -696,7 +696,8 @@ wait for a message to become available or return immediately.
 For either option, if there is at least one message in the
 queue, then it is copied to buffer, size is set to return the
 length of the message in bytes, and this directive returns
-immediately with a successful return code.
+immediately with a successful return code.  The buffer has to be big enough to
+receive a message of the maximum length with respect to this message queue.
 
 If the calling task chooses to return immediately and
 the queue is empty, then a status code indicating this condition

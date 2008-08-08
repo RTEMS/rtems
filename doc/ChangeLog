@@ -1,3 +1,8 @@
+2008-08-08     Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* user/msg.t, user/sem.t, user/task.t: Update to new parameter types.
+	Emphasize that you can use a pointer for task arguments.
+
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/datatypes.t: Add rtems_name. Add comment about

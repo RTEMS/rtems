@@ -948,8 +948,11 @@ This directive readies the task, specified by tid, for execution
 based on the priority and execution mode specified when the task
 was created.  The starting address of the task is given in
 entry_point.  The task's starting argument is contained in
-argument.  This argument can be a single value or used as an
-index into an array of parameter blocks.
+argument.  This argument can be a single value or used as an index into an
+array of parameter blocks.  The type of this numeric argument is an unsigned
+integer type with the property that any valid pointer to void can be converted
+to this type and then converted back to a pointer to void.  The result will
+compare equal to the original pointer.
 
 @subheading NOTES:
 The calling task will be preempted if its preemption mode is
@@ -1001,9 +1004,12 @@ the task is currently blocked, RTEMS automatically makes the
 task ready.  A task can be restarted from any state, except the
 dormant state.
 
-The task's starting argument is contained in argument.  This
-argument can be a single value or an index into an array of
-parameter blocks.  This new argument may be used to distinguish
+The task's starting argument is contained in argument.  This argument can be a
+single value or an index into an array of parameter blocks.  The type of this
+numeric argument is an unsigned integer type with the property that any valid
+pointer to void can be converted to this type and then converted back to a
+pointer to void.  The result will compare equal to the original pointer.  This
+new argument may be used to distinguish
 between the initial @code{@value{DIRPREFIX}task_start}
 of the task and any ensuing calls
 to @code{@value{DIRPREFIX}task_restart}
