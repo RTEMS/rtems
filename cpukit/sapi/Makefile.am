@@ -26,7 +26,8 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/extensiondelete.c src/extensionident.c src/fatal.c src/exinit.c \
-    src/io.c src/itronapi.c src/posixapi.c src/rtemsapi.c
+    src/io.c src/itronapi.c src/posixapi.c src/rtemsapi.c \
+    src/getversionstring.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

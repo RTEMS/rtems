@@ -68,6 +68,15 @@ extern "C" {
 #include <rtems/rtems/support.h>
 #include <rtems/score/sysstate.h>
 
+/*
+ *  Obtain the RTEMS Version String
+ *
+ *  This method may be used to obtain the RTEMS version string.
+ *
+ *  This method returns a pointer to the version string.
+ */
+const char *rtems_get_version_string(void);
+
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
 /*

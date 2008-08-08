@@ -1,3 +1,9 @@
+2008-08-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems.h, sapi/Makefile.am: Add Add simple helper to get
+	RTEMS version string.
+	* sapi/src/getversionstring.c: New file.
+
 2008-08-06	Brett Swimley <brett.swimley@aedbozeman.com>
 
 	PR 1192/filesystem
