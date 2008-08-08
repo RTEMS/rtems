@@ -89,16 +89,16 @@ void DEBUG_puts(
 )
 {
   char *s;
-  /* unsigned32 old_level; */
+  uint32_t level;
 
   /* LEON_Disable_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level ); */
-  sparc_disable_interrupts();
+  level = sparc_disable_interrupts();
   LEON3_Console_Uart[0]->ctrl = LEON_REG_UART_CTRL_TE;
     for ( s = string ; *s ; s++ ) 
       console_outbyte_polled( 0, *s );
 
     console_outbyte_polled( 0, '\r' );
     console_outbyte_polled( 0, '\n' );
-  sparc_enable_interrupts();  
+  sparc_enable_interrupts(level);
     /* LEON_Restore_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level ); */
 }
