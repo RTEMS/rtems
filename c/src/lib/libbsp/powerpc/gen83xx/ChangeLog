@@ -1,3 +1,7 @@
+2008-08-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c: Fixed calculation of bsp_click_per_usec.
+
 2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* start/start.S: Clear environment pointer for bootcard.  Fixed wrong
