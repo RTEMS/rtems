@@ -1,3 +1,9 @@
+2008-08-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: All SPARC executables should include
+	rtems_get_version_string so the monitor used can provide RTEMS
+	awareness based upon the version.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1294/bsps
