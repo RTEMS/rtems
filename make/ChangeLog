@@ -1,3 +1,8 @@
+2008-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/rbtx4925.cfg, custom/rbtx4938.cfg: Fix so all C++ example code
+	compiles and links.
+
 2007-11-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/mvme5500.cfg: Fix typo.
