@@ -1,3 +1,9 @@
+2008-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am: Add dummy linkcmds so autoconf tests work
+	on installed BSP.
+	* startup/linkcmds: New file.
+
 2008-08-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/bspstart.c: Fixed calculation of bsp_click_per_usec.
