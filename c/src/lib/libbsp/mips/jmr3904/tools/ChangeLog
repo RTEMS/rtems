@@ -1,3 +1,7 @@
+2008-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest: Major update. Now more likely not to run away.
+
 2007-09-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Add capture to list of interative tests to skip in batch
