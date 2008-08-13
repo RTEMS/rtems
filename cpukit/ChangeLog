@@ -4,11 +4,11 @@
 
 2008-08-08     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-        * libmisc/monitor/monitor.h, rtems/include/rtems/rtems/tasks.h,
-        score/include/rtems/score/thread.h, score/src/threadreset.c,
-        score/src/threadrestart.c, score/src/threadstart.c: New type
-        Thread_Entry_numeric_type for numeric arguments in thread entry
-        functions with at least one numeric argument.
+	* libmisc/monitor/monitor.h, rtems/include/rtems/rtems/tasks.h,
+	score/include/rtems/score/thread.h, score/src/threadreset.c,
+	score/src/threadrestart.c, score/src/threadstart.c: New type
+	Thread_Entry_numeric_type for numeric arguments in thread entry
+	functions with at least one numeric argument.
 
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -359,7 +359,7 @@
 	* libmisc/shell/main_ls.c, libmisc/shell/main_rm.c: Updated to BSD
 	commands with more features.
 	
-	* score/src/coremutex.c: Fix the strick order mutex code.
+	* score/src/coremutex.c: Fix the strict order mutex code.
 
 	* libmisc/shell/shell.c: Change shell tasks mode to be timeslice
 	and no ASR.
