@@ -1,3 +1,8 @@
+2008-08-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/hurricane.cfg, custom/simsh4.cfg: Now build and link class
+	examples.
+
 2008-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/rbtx4925.cfg, custom/rbtx4938.cfg: Fix so all C++ example code
