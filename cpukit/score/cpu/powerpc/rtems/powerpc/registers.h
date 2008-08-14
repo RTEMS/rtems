@@ -40,10 +40,6 @@
 #define MSR_RI		(1<<1)		/* Recoverable Exception */
 #define MSR_LE		(1<<0)		/* Little-Endian enable */
 
-#define MSR_		MSR_ME|MSR_RI
-#define MSR_KERNEL      MSR_|MSR_IR|MSR_DR
-#define MSR_USER	MSR_KERNEL|MSR_PR|MSR_EE
-
 /* Bit encodings for Hardware Implementation Register (HID0)
    on PowerPC 603, 604, etc. processors (not 601). */
 
@@ -349,17 +345,19 @@ static inline void ppc_interrupt_set_disable_mask( uint32_t mask)
   );
 }
 
-static inline uint32_t ppc_interrupt_get_disable_mask()
+static inline uint32_t ppc_interrupt_get_disable_mask( void)
 {
-uint32_t mask;
+  uint32_t mask;
+
   asm volatile (
-    "mfspr %0,272"
+    "mfspr %0, 272"
     : "=r" (mask)
   );
+
   return mask;
 }
 
-static inline uint32_t ppc_interrupt_disable()
+static inline uint32_t ppc_interrupt_disable( void)
 {
   uint32_t level;
   uint32_t mask;

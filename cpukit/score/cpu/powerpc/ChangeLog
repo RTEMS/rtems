@@ -1,3 +1,8 @@
+2008-08-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Removed obsolete defines MSR_, MSR_KERNEL
+	and MSR_USER.  Added missing prototypes.
+
 2008-08-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/new-exceptions/cpu.h: Changed define
