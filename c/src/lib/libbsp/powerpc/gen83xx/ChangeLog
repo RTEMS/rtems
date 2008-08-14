@@ -1,3 +1,8 @@
+2008-08-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Time was running too slow with it taking 10
+	seconds for RTEMS to advance 5.
+
 2008-08-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am: Add dummy linkcmds so autoconf tests work
