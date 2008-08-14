@@ -169,7 +169,7 @@ typedef enum {
    *
    *  @note This status will @b NOT be returned to the user.
    */
-  RTEMS_PROXY_BLOCKING           = 28,
+  RTEMS_PROXY_BLOCKING           = 28
 } rtems_status_code;
 
 /**

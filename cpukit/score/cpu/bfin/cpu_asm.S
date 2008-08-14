@@ -4,9 +4,14 @@
  *  in the Blackfin port of RTEMS.  These algorithms must be implemented
  *  in assembly language
  *
+ *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
+ *             written by Allan Hessenflow <allanh@kallisti.com>
+ *
+ *  Based on earlier version:
+ *
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
- *             written by Alain Schaefer <alain.schaefer@easc.ch>
- *                    and Antonio Giovanini <antonio@atos.com.br>
+ *			 written by Alain Schaefer <alain.schaefer@easc.ch>
+ *					and Antonio Giovanini <antonio@atos.com.br>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -14,8 +19,8 @@
  *
  *  $Id$
  */
- 
- 
+
+
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 #include <rtems/score/bfin.h>
@@ -24,6 +29,201 @@
 #define LO(con32) ((con32) & 0xFFFF)
 #define HI(con32) (((con32) >> 16) & 0xFFFF)
 
+
+#if 0
+/* some debug routines */
+	.globl __CPU_write_char;
+__CPU_write_char:
+	p0.h = 0xffc0;
+	p0.l = 0x0400;
+txWaitLoop:
+	r1 = w[p0 + 0x14];
+	cc = bittst(r1, 5);
+	if !cc jump txWaitLoop;
+	w[p0 + 0x00] = r0;
+	rts;
+
+	.globl __CPU_write_crlf;
+__CPU_write_crlf:
+	r0 = '\r';
+	[--sp] = rets;
+	call __CPU_write_char;
+	rets = [sp++];
+	r0 = '\n';
+	jump __CPU_write_char;
+
+__CPU_write_space:
+	r0 = ' ';
+	jump __CPU_write_char;
+
+	.globl __CPU_write_nybble;
+__CPU_write_nybble:
+	r1 = 0x0f;
+	r0 = r0 & r1;
+	r0 += '0';
+	r1 = '9';
+	cc = r0 <= r1;
+	if cc jump __CPU_write_char;
+	r0 += 'a' - '0' - 10;
+	jump __CPU_write_char;
+
+	.globl __CPU_write_byte;
+__CPU_write_byte:
+	[--sp] = r0;
+	[--sp] = rets;
+	r0 >>= 4;
+	call __CPU_write_nybble;
+	rets = [sp++];
+	r0 = [sp++];
+	jump __CPU_write_nybble;
+
+__CPU_write_chawmp:
+	[--sp] = r0;
+	[--sp] = rets;
+	r0 >>= 8;
+	call __CPU_write_byte;
+	rets = [sp++];
+	r0 = [sp++];
+	jump __CPU_write_byte;
+
+__CPU_write_gawble:
+	[--sp] = r0;
+	[--sp] = rets;
+	r0 >>= 16;
+	call __CPU_write_chawmp;
+	rets = [sp++];
+	r0 = [sp++];
+	jump __CPU_write_chawmp;
+
+__CPU_dump_registers:
+	[--sp] = rets;
+	[--sp] = r0;
+	[--sp] = r1;
+	[--sp] = p0;
+	r0 = [sp + 8];
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = [sp + 4];
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r2;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r3;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r4;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r5;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r6;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = r7;
+	call __CPU_write_gawble;
+	call __CPU_write_crlf;
+	r0 = [sp];
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = p1;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = p2;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = p3;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = p4;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = p5;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = fp;
+	call __CPU_write_gawble;
+	call __CPU_write_space;
+	r0 = sp;
+	r0 += 16;
+	call __CPU_write_gawble;
+	call __CPU_write_crlf;
+
+	p0 = [sp++];
+	r1 = [sp++];
+	r0 = [sp++];
+	rets = [sp++];
+	rts;
+
+	.globl __CPU_Exception_handler;
+__CPU_Exception_handler:
+	usp = sp;
+	sp.h = 0xffb0;
+	sp.l = 0x1000;
+	[--sp] = (r7:0,p5:0);
+
+	r0 = 'x';
+	call __CPU_write_char;
+	jump hcf;
+
+
+	.globl __CPU_Emulation_handler;
+__CPU_Emulation_handler:
+	usp = sp;
+	sp.h = 0xffb0;
+	sp.l = 0x1000;
+	[--sp] = (r7:0,p5:0);
+
+	r0 = 'e';
+	call __CPU_write_char;
+	jump hcf;
+
+	.globl __CPU_Reset_handler;
+__CPU_Reset_handler:
+	usp = sp;
+	sp.h = 0xffb0;
+	sp.l = 0x1000;
+	[--sp] = (r7:0,p5:0);
+
+	r0 = 'r';
+	call __CPU_write_char;
+	jump hcf;
+
+	.globl __CPU_NMI_handler;
+__CPU_NMI_handler:
+	usp = sp;
+	sp.h = 0xffb0;
+	sp.l = 0x1000;
+	[--sp] = (r7:0,p5:0);
+
+	r0 = 'n';
+	call __CPU_write_char;
+	jump hcf;
+
+	.globl __CPU_Unhandled_Interrupt_handler;
+__CPU_Unhandled_Interrupt_handler:
+	usp = sp;
+	sp.h = 0xffb0;
+	sp.l = 0x1000;
+	[--sp] = (r7:0,p5:0);
+
+	call __CPU_write_crlf;
+	r0 = 'i';
+	call __CPU_write_char;
+	p0.h = HI(IPEND);
+	p0.l = LO(IPEND);
+	r0 = [p0];
+	call __CPU_write_chawmp;
+	jump hcf;
+
+hcf:
+	idle;
+	jump hcf;
+
+#endif
+
+
 /*  _CPU_Context_switch
  *
  *  This routine performs a normal non-FP context switch.
@@ -31,187 +231,84 @@
  *  bfin Specific Information:
  *
  *  For now we simply save all registers.
- *  
+ *
  */
 
-.globl __CPU_Context_switch
+/* make sure this sequence stays in sync with the definition for
+   Context_Control in rtems/score/cpu.h */
+	.globl __CPU_Context_switch
 __CPU_Context_switch:
-    /* Start saving context R0 = current, R1=heir */
-    /*save P0 first*/
-    [FP+0x8] = P0;
-    P0 = R0;
-    [ P0 + R0_OFFSET ] = R0;
-    [ P0 + R1_OFFSET] = R1;
-    [ P0 + R2_OFFSET] = R2;
-    [ P0 + R4_OFFSET] = R4;
-    [ P0 + R3_OFFSET] = R3;
-    [ P0 + R5_OFFSET] = R5;
-    [ P0 + R6_OFFSET] = R6;
-    [ P0 + R7_OFFSET] = R7;
-    [ P0 + P1_OFFSET] = P1;
-    /* save the original value of P0 */
-    P1 = [FP+0x8];
-    [ P0 + P0_OFFSET] = P1;
-    [ P0 + P2_OFFSET] = P2;
-    [ P0 + P3_OFFSET] = P3;
-    [ P0 + P4_OFFSET] = P4;
-    [ P0 + P5_OFFSET] = P5;
-    [ P0 + FP_OFFSET] = FP; 
-    [ P0 + SP_OFFSET] = SP;
-    
-    /* save ASTAT */
-    R0 = ASTAT;
-    [P0 + ASTAT_OFFSET] = R0;
+	/* Start saving context R0 = current, R1=heir */
+	p0 = r0;
+	[p0++] = r4;
+	[p0++] = r5;
+	[p0++] = r6;
+	[p0++] = r7;
 
-    /* save Loop Counters */
-    R0 = LC0;
-    [P0 + LC0_OFFSET] = R0;
-    R0 = LC1;
-    [P0 + LC1_OFFSET] = R0;
+	/* save pointer registers */
+	[p0++] = p3;
+	[p0++] = p4;
+	[p0++] = p5;
+	[p0++] = fp;
+	[p0++] = sp;
 
-    /* save Accumulators */
-    R0 = A0.W;
-    [P0 + A0W_OFFSET] = R0;
-    R0 = A0.X;
-    [P0 + A0X_OFFSET] = R0;
-    R0 = A1.W;
-    [P0 + A1W_OFFSET] = R0;
-    R0 = A1.X;
-    [P0 + A1X_OFFSET] = R0;
-    
-    /* save Index Registers */
-    R0 = I0;
-    [P0 + I0_OFFSET] = R0;
-    R0 = I1;
-    [P0 + I1_OFFSET] = R0;
-    R0 = I2;
-    [P0 + I2_OFFSET] = R0;
-    R0 = I3;
-    [P0 + I3_OFFSET] = R0;
+	/* save length registers */
+	r0 = l0;
+	[p0++] = r0;
+	r0 = l1;
+	[p0++] = r0;
+	r0 = l2;
+	[p0++] = r0;
+	r0 = l3;
+	[p0++] = r0;
 
-    /* save Modifier Registers */
-    R0 = M0;
-    [P0 + M0_OFFSET] = R0;
-    R0 = M1;
-    [P0 + M1_OFFSET] = R0;
-    R0 = M2;
-    [P0 + M2_OFFSET] = R0;
-    R0 = M3;
-    [P0 + M3_OFFSET] = R0;
+	/* save rets */
+	r0 = rets;
+	[p0++] = r0;
 
-    /* save Length Registers */
-    R0 = L0;
-    [P0 + L0_OFFSET] = R0;
-    R0 = L1;
-    [P0 + L1_OFFSET] = R0;
-    R0 = L2;
-    [P0 + L2_OFFSET] = R0;
-    R0 = L3;
-    [P0 + L3_OFFSET] = R0;
+	/* save IMASK */
+	p1.h = HI(IMASK);
+	p1.l = LO(IMASK);
+	r0 = [p1];
+	[p0++] = r0;
 
-    /* Base Registers */
-    R0 = B0;
-    [P0 + B0_OFFSET] = R0;
-    R0 = B1;
-    [P0 + B1_OFFSET] = R0;
-    R0 = B2;
-    [P0 + B2_OFFSET] = R0;
-    R0 = B3;
-    [P0 + B3_OFFSET] = R0;
-    
-    /* save RETS */
-    R0 = RETS;
-    [ P0 + RETS_OFFSET] = R0; 
-
+	p0 = r1;
 restore:
-    P0 = R1;
-    R1 = [P0 + R1_OFFSET];  
-    R2 = [P0 + R2_OFFSET];
-    R3 = [P0 + R3_OFFSET];
-    R4 = [P0 + R4_OFFSET];
-    R5 = [P0 + R5_OFFSET];
-    R6 = [P0 + R6_OFFSET];
-    R7 = [P0 + R7_OFFSET];
-        
-    P2 = [P0 + P2_OFFSET];
-    P3 = [P0 + P3_OFFSET];
-    P4 = [P0 + P4_OFFSET];
-    P5 = [P0 + P5_OFFSET];
+	/* restore data registers */
+	r4 = [p0++];
+	r5 = [p0++];
+	r6 = [p0++];
+	r7 = [p0++];
 
-    /* might have to be placed more to the end */
-    FP = [P0 + FP_OFFSET];
-    SP = [P0 + SP_OFFSET];
+	/* restore pointer registers */
+	p3 = [p0++];
+	p4 = [p0++];
+	p5 = [p0++];
+	fp = [p0++];
+	sp = [p0++];
 
-    /* save ASTAT */
-    R0 = [P0 + ASTAT_OFFSET];
-    ASTAT = R0;
+	/* restore length registers */
+	r0 = [p0++];
+	l0 = r0;
+	r0 = [p0++];
+	l1 = r0;
+	r0 = [p0++];
+	l2 = r0;
+	r0 = [p0++];
+	l3 = r0;
 
-    /* save Loop Counters */
-    R0 = [P0 + LC0_OFFSET];
-    LC0 = R0;
-    R0 = [P0 + LC1_OFFSET];
-    LC1 = R0;
+	/* restore rets */
+	r0 = [p0++];
+	rets = r0;
 
-    /* save Accumulators */
-    R0 = [P0 + A0W_OFFSET];
-    A0.W = R0;
-    R0 = [P0 + A0X_OFFSET];
-    A0.X = R0;
-    R0 = [P0 + A1W_OFFSET];
-    A1.W = R0;
-    R0 = [P0 + A1X_OFFSET];
-    A1.X = R0;
+	/* restore IMASK */
+	r0 = [p0++];
+	p1.h = HI(IMASK);
+	p1.l = LO(IMASK);
+	[p1] = r0;
 
-    /* save Index Registers */
-    R0 = [P0 + I0_OFFSET];
-    I0 = R0;
-    R0 = [P0 + I1_OFFSET];
-    I1 = R0;
-    R0 = [P0 + I2_OFFSET];
-    I2 = R0;
-    R0 = [P0 + I3_OFFSET];
-    I3 = R0;
+	rts;
 
-    /* save Modifier Registers */
-    R0 = [P0 + M0_OFFSET];
-    M0 = R0;
-    R0 = [P0 + M1_OFFSET];
-    M1 = R0;
-    R0 = [P0 + M2_OFFSET];
-    M2 = R0;
-    R0 = [P0 + M3_OFFSET];
-    M3 = R0;
-
-    /* save Length Registers */
-    R0 = [P0 + L0_OFFSET];
-    L0 = R0;
-    R0 = [P0 + L1_OFFSET];
-    L1 = R0;
-    R0 = [P0 + L2_OFFSET];
-    L2 = R0;
-    R0 = [P0 + L3_OFFSET];
-    L3 = R0;
-
-    /* Base Registers */
-    R0 = [P0 + B0_OFFSET];
-    B0 = R0;
-    R0 = [P0 + B1_OFFSET];
-    B1 = R0;
-    R0 = [P0 + B2_OFFSET];
-    B2 = R0;
-    R0 = [P0 + B3_OFFSET];
-    B3 = R0;
-
-    /* restore RETS */
-    P1 = [P0 + RETS_OFFSET];
-    RETS = P1;
-
-    /* now restore the P1 + P0 */
-    P1 = [P0 + R1_OFFSET];    
-    P0 = [P0 + P0_OFFSET];
-    
-    rts;
-    
 
 /*
  *  _CPU_Context_restore
@@ -226,194 +323,276 @@ restore:
  *  none
  *
  */
-.globl __CPU_Context_restore
+	.globl __CPU_Context_restore
 __CPU_Context_restore:
-    jump restore;
+	p0 = r0;
+	jump restore;
 
 
-
-.globl __ISR_Thread_Dispatch
-__ISR_Thread_Dispatch:
-
-    .extern __Thread_Dispatch
-    R0.l = __Thread_Dispatch;
-    R0.h = __Thread_Dispatch;
-  
-    /* Puts the address of th Thread_Dispatch function on Stack
-     * Where it will be restored to the RTI register
-     */
-    P0 = [FP];
-    /* save the old reti */
-    R1 = [P0+0xc];
-    [P0+0xc] = R0;
-    /*
-     * Overwriting the RETS Register is save because Thread_Dispatch is
-     * disabled when we are between call/link or unlink/rts
-     */
-    [P0+0x8] = R1;
-  
-    /* save old rets */
-  
-    rts;
-
-
-.globl __ISR_Handler
+	.globl __ISR_Handler
+	.extern __CPU_Interrupt_stack_high;
+	.extern __ISR_Nest_level
+	.extern __Thread_Dispatch_disable_level
+	.extern __Context_Switch_necessary
+	.extern __ISR_Signals_to_thread_executing
 __ISR_Handler:
-    /* First of all check the Stackpointer and */
-    /* switch to Scratchpad if necessary        */
-     
-    /* save P0 and R0 in the scratchpad */
-    USP = P0;
-    
-    /* load base adress of scratchpad */
-    P0.H = HI(SCRATCH);
-    P0.L = LO(SCRATCH);
- 
- 	[--SP] = ASTAT; /*  save cc flag*/
-    /* if SP is already inside the SCRATCHPAD */ 
-    CC=SP<P0 (iu)
-    if !CC jump continue;
-    
-    /* set PO to top of scratchpad */   
-    P0.h=HI(SCRATCH_TOP);
-    P0.l=LO(SCRATCH_TOP);
-    /*save the old SP*/ 
-    [P0] = SP;
-    /*P0 += -4;*/
-    /*set the new Stackpointer*/
-    SP = P0;
-    /*restore the old PO*/
-    
-    /* The Stackpointer is now setup as we want */  
-    continue:
-    /* restore P0 and save some context */
-    P0 = USP;
-    /* save some state on the isr stack (scratchpad), this enables interrupt nesting */
-    [--SP] = RETI;
-    [--SP] = RETS;
-    [--SP] = ASTAT;
-    [--SP] = FP;
-    FP = SP;
-    [--SP] = (R7:0, P5:0) ;
-    
-    
-    /* Context is saved, now check which Instruction we were executing
-     * If we were between a call and link or between a unlink and rts
-     * we have to disable Thread_Dispatch because correct restore of context after
-     * Thread_Dispatch would not be possible. */
-    
-    P0 = RETI;
-    R0 = P0;
-    R0.L = 0x0000;
-    R1.H = 0xffa0;
-    R1.L = 0x0000;
-    CC = R0 == R1;
-    if CC jump disablethreaddispatch;
-        
-    R0 = W[P0](Z);    
-    
-    /* shift 16 bits to the right (select the high nibble ) */
-    /*R0 >>= 16;*/
-    
-    R3 = 0;
-    /* Check if RETI is a LINK instruction */
-    R1.h = HI(0x0000);
-    R1.l = LO(0xE800);
-    CC=R0==R1; 
-    if cc jump disablethreaddispatch;
-    
-    /* Check if RETI is a RTS instruction */
-    R1.h = HI(0x0000);
-    R1.l = LO(0x0010);
-    CC=R0==R1; 
-    if cc jump disablethreaddispatch;
-    
-    jump afterthreaddispatch;
-    
-    disablethreaddispatch:
-    /*  _Thread_Dispatch_disable_level++   */
-    .extern _Thread_Dispatch_disable_level
-    P0.H = __Thread_Dispatch_disable_level;
-    P0.L = __Thread_Dispatch_disable_level;
-    R0 = [P0];
-    R0 += 1;
-    [P0] = R0;
-    R3 = 1;
-    
-    afterthreaddispatch:
-    /* Put R3 on the stack */
-    [--SP] = R3;
+	/* all interrupts are disabled at this point */
+	/* the following few items are pushed onto the task stack for at
+	   most one interrupt; nested interrupts will be using the interrupt
+	   stack for everything. */
+	[--sp] = astat;
+	[--sp] = p1;
+	[--sp] = p0;
+	[--sp] = r1;
+	[--sp] = r0;
+	p0.h = __ISR_Nest_level;
+	p0.l = __ISR_Nest_level;
+	r0 = [p0];
+	r0 += 1;
+	[p0] = r0;
+	cc = r0 <= 1 (iu);
+	if !cc jump noStackSwitch;
+	/* setup interrupt stack */
+	r0 = sp;
+	p0.h = __CPU_Interrupt_stack_high;
+	p0.l = __CPU_Interrupt_stack_high;
+	sp = [p0];
+	[--sp] = r0;
+noStackSwitch:
+	/* disable thread dispatch */
+	p0.h = __Thread_Dispatch_disable_level;
+	p0.l = __Thread_Dispatch_disable_level;
+	r0 = [p0];
+	r0 += 1;
+	[p0] = r0;
 
-    /* Obtain a bitlist of the pending interrupts. */
-    P0.H = HI(IPEND);
-    P0.L = LO(IPEND);   
-    R1 = [P0];
-    
-    /*
-     * Search through the bit list stored in R0 to find the first enabled
-     * bit. The offset of this bit is the index of the interrupt that is
-     * to be handled.
-     */
-    R0 = -1;
-    intloop:
-        R0 += 1;
-        R1 = ROT R1 by -1;
-        if !cc jump intloop;
-     
+	[--sp] = reti;	/* interrupts are now enabled */
 
-    /* pass SP as parameter to the C function */
-    R1 = SP
+	/* figure out what vector we are */
+	p0.h = HI(IPEND);
+	p0.l = LO(IPEND);
+	r1 = [p0];
+	/* we should only get here for events that require RTI to return */
+	r1 = r1 >> 5;
+	r0 = 4;
+	/* at least one bit must be set, so this loop will exit */
+vectorIDLoop:
+	r0 += 1;
+	r1 = rot r1 by -1;
+	if !cc jump vectorIDLoop;
 
-    /* pass values by register as well as by stack */
-    /* to comply with the c calling conventions    */
-    [--SP] = R0;
-    [--SP] = R1;
-    
-    .extern _ISR_Handler2
-    call    _ISR_Handler2
+	[--sp] = r2;
+	p0.h = __ISR_Vector_table;
+	p0.l = __ISR_Vector_table;
+	r2 = [p0];
+	r1 = r0 << 2;
+	r1 = r1 + r2;
+	p0 = r1;
+	p0 = [p0];
+	cc = p0 == 0;
+	if cc jump noHandler;
 
-    /* inc 2 to compensate the passing of arguments */
-    R3 = [SP++];
-    R3 = [SP++];
-    /* check if _Thread_Dispatch_disable_level has been incremented */
-    R3 = [SP++]
-    CC=R3==0
-    if cc jump dont_decrement;
-    .extern _Thread_Dispatch_disable_level
-    P0.H = __Thread_Dispatch_disable_level;
-    P0.L = __Thread_Dispatch_disable_level;
-    R0 = [P0];
-    R0 += -1;
-    [P0] = R0;
-    
-    dont_decrement:
-    
-    (R7:0, P5:0) = [SP++];
-    FP =    [SP++];
-    ASTAT = [SP++];
-    RETS =  [SP++];
-    RETI =  [SP++];
-    /* Interrupts are now disabled again */
-    
-    /*should restore the old stack !!!*/
-    /*if sp now points to SCRATCH_TOP */
-    
-    /* load base adress of scratchpad */
-    USP = P0;
-    P0.H = HI(SCRATCH_TOP);
-    P0.L = LO(SCRATCH_TOP);
-    
-    CC=SP==P0
-    if !cc jump restoreP0
-    /* restore the stack */
-    SP=[P0];
-    
-    restoreP0:
-    P0 = USP;
-    ASTAT = [SP++]; /* restore cc flag */
-        
-    /*now we should be on the old "user-stack" again */ 
-        
-    /* return from interrupt, will jump to adress stored in RETI */
-    RTI;
+	/* r2, r0, r1, p0, p1, astat are already saved */
+	[--sp] = a1.x;
+	[--sp] = a1.w;
+	[--sp] = a0.x;
+	[--sp] = a0.w;
+	[--sp] = r3;
+	[--sp] = p3;
+	[--sp] = p2;
+	[--sp] = lt1;
+	[--sp] = lt0;
+	[--sp] = lc1;
+	[--sp] = lc0;
+	[--sp] = lb1;
+	[--sp] = lb0;
+	[--sp] = i3;
+	[--sp] = i2;
+	[--sp] = i1;
+	[--sp] = i0;
+	[--sp] = m3;
+	[--sp] = m2;
+	[--sp] = m1;
+	[--sp] = m0;
+	[--sp] = l3;
+	[--sp] = l2;
+	[--sp] = l1;
+	[--sp] = l0;
+	[--sp] = b3;
+	[--sp] = b2;
+	[--sp] = b1;
+	[--sp] = b0;
+	[--sp] = rets;
+	r1 = fp; /* is this really what should be passed here? */
+	/* call user isr; r0 = vector number, r1 = frame pointer */
+	sp += -12; /* bizarre abi... */
+	call (p0);
+	sp += 12;
+	rets = [sp++];
+	b0 = [sp++];
+	b1 = [sp++];
+	b2 = [sp++];
+	b3 = [sp++];
+	l0 = [sp++];
+	l1 = [sp++];
+	l2 = [sp++];
+	l3 = [sp++];
+	m0 = [sp++];
+	m1 = [sp++];
+	m2 = [sp++];
+	m3 = [sp++];
+	i0 = [sp++];
+	i1 = [sp++];
+	i2 = [sp++];
+	i3 = [sp++];
+	lb0 = [sp++];
+	lb1 = [sp++];
+	lc0 = [sp++];
+	lc1 = [sp++];
+	lt0 = [sp++];
+	lt1 = [sp++];
+	p2 = [sp++];
+	p3 = [sp++];
+	r3 = [sp++];
+	a0.w = [sp++];
+	a0.x = [sp++];
+	a1.w = [sp++];
+	a1.x = [sp++];
+
+noHandler:
+	r2 = [sp++];
+	/* this disables interrupts again */
+	reti = [sp++];
+
+	p0.h = __ISR_Nest_level;
+	p0.l = __ISR_Nest_level;
+	r0 = [p0];
+	r0 += -1;
+	[p0] = r0;
+	cc = r0 == 0;
+	if !cc jump noStackRestore;
+	sp = [sp];
+noStackRestore:
+
+	/* check this stuff to insure context_switch_necessary and
+	   isr_signals_to_thread_executing are being handled appropriately. */
+	p0.h = __Thread_Dispatch_disable_level;
+	p0.l = __Thread_Dispatch_disable_level;
+	r0 = [p0];
+	r0 += -1;
+	[p0] = r0;
+	cc = r0 == 0;
+	if !cc jump noDispatch
+
+	/* do thread dispatch if necessary */
+	p0.h = __Context_Switch_necessary;
+	p0.l = __Context_Switch_necessary;
+	r0 = [p0];
+	cc = r0 == 0;
+	p0.h = __ISR_Signals_to_thread_executing;
+	p0.l = __ISR_Signals_to_thread_executing;
+	if !cc jump doDispatch
+	r0 = [p0];
+	cc = r0 == 0;
+	if cc jump noDispatch
+doDispatch:
+	r0 = 0;
+	[p0] = r0;
+	raise 15;
+noDispatch:
+	r0 = [sp++];
+	r1 = [sp++];
+	p0 = [sp++];
+	p1 = [sp++];
+	astat = [sp++];
+	rti
+
+
+/* the approach here is for the main interrupt handler, when a dispatch is
+   wanted, to do a "raise 15".  when the main interrupt handler does its
+   "rti", the "raise 15" takes effect and we end up here.  we can now
+   safely call _Thread_Dispatch, and do an "rti" to get back to the
+   original interrupted function.  this does require self-nesting to be
+   enabled; the maximum nest depth is the number of tasks. */
+	.global __ISR15_Handler
+	.extern __Thread_Dispatch
+__ISR15_Handler:
+	[--sp] = reti;
+	[--sp] = rets;
+	[--sp] = astat;
+	[--sp] = a1.x;
+	[--sp] = a1.w;
+	[--sp] = a0.x;
+	[--sp] = a0.w;
+	[--sp] = r3;
+	[--sp] = r2;
+	[--sp] = r1;
+	[--sp] = r0;
+	[--sp] = p3;
+	[--sp] = p2;
+	[--sp] = p1;
+	[--sp] = p0;
+	[--sp] = lt1;
+	[--sp] = lt0;
+	[--sp] = lc1;
+	[--sp] = lc0;
+	[--sp] = lb1;
+	[--sp] = lb0;
+	[--sp] = i3;
+	[--sp] = i2;
+	[--sp] = i1;
+	[--sp] = i0;
+	[--sp] = m3;
+	[--sp] = m2;
+	[--sp] = m1;
+	[--sp] = m0;
+	[--sp] = l3;
+	[--sp] = l2;
+	[--sp] = l1;
+	[--sp] = l0;
+	[--sp] = b3;
+	[--sp] = b2;
+	[--sp] = b1;
+	[--sp] = b0;
+	sp += -12; /* bizarre abi... */
+	call __Thread_Dispatch;
+	sp += 12;
+	b0 = [sp++];
+	b1 = [sp++];
+	b2 = [sp++];
+	b3 = [sp++];
+	l0 = [sp++];
+	l1 = [sp++];
+	l2 = [sp++];
+	l3 = [sp++];
+	m0 = [sp++];
+	m1 = [sp++];
+	m2 = [sp++];
+	m3 = [sp++];
+	i0 = [sp++];
+	i1 = [sp++];
+	i2 = [sp++];
+	i3 = [sp++];
+	lb0 = [sp++];
+	lb1 = [sp++];
+	lc0 = [sp++];
+	lc1 = [sp++];
+	lt0 = [sp++];
+	lt1 = [sp++];
+	p0 = [sp++];
+	p1 = [sp++];
+	p2 = [sp++];
+	p3 = [sp++];
+	r0 = [sp++];
+	r1 = [sp++];
+	r2 = [sp++];
+	r3 = [sp++];
+	a0.w = [sp++];
+	a0.x = [sp++];
+	a1.w = [sp++];
+	a1.x = [sp++];
+	astat = [sp++];
+	rets = [sp++];
+	reti = [sp++];
+	rti;
 

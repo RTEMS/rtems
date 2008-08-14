@@ -105,7 +105,20 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
+#define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
+
+/*
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  BFIN Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
 
 /*
  *  Does the CPU follow the simple vectored interrupt model?
@@ -152,7 +165,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_ALLOCATE_INTERRUPT_STACK FALSE
+#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /**
  *  Does the RTEMS invoke the user's ISR with the vector number and
@@ -305,7 +318,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 
 /**
  *  Does the stack grow up (toward higher addresses) or down
@@ -453,89 +466,29 @@ extern "C" {
  *  that must be saved during a voluntary context switch from one thread
  *  to another.
  */
+
+/* make sure this stays in sync with the assembly function
+   __CPU_Context_switch in cpu_asm.S  */
 typedef struct {
-    /* we are saving all registers, maybe we should not */
-    
-    uint32_t   register_r0;
-    uint32_t   register_r1;
-    uint32_t   register_r2;
-    uint32_t   register_r3;
     uint32_t   register_r4;
     uint32_t   register_r5;
     uint32_t   register_r6;
     uint32_t   register_r7;
-    uint32_t   register_p0;
-    uint32_t   register_p1;
-    uint32_t   register_p2;
+
     uint32_t   register_p3;
     uint32_t   register_p4;
     uint32_t   register_p5;                         
     uint32_t   register_fp;
     uint32_t   register_sp;
     
-    uint32_t   register_i0;                         
-    uint32_t   register_i1;
-    uint32_t   register_i2;
-    uint32_t   register_i3;
-    
-    uint32_t   register_m0;
-    uint32_t   register_m1;
-    uint32_t   register_m2;
-    uint32_t   register_m3;
-
-    uint32_t   register_b0;
-    uint32_t   register_b1;
-    uint32_t   register_b2;
-    uint32_t   register_b3;
-
     uint32_t   register_l0;
     uint32_t   register_l1;
     uint32_t   register_l2;
     uint32_t   register_l3;    
     
-    uint32_t   register_a0dotx;
-    uint32_t   register_a0dotw;
-    uint32_t   register_a1dotx;
-    uint32_t   register_a1dotw;
-    uint32_t   register_astat;
     uint32_t   register_rets;
-    uint32_t   register_lc0;
-    uint32_t   register_lt0;
-    uint32_t   register_lb0;
-    uint32_t   register_lc1;
-    uint32_t   register_lt1;
-    uint32_t   register_lb1;
-  
-  /*BFIN_CYCLES_REGNUM,
-  BFIN_CYCLES2_REGNUM, */
-  
-    uint32_t   register_usp;
-    uint32_t   register_seqstat;
-    uint32_t   register_syscfg;
-    uint32_t   register_reti;
-    uint32_t   register_retx;
-    uint32_t   register_retn;
-    uint32_t   register_rete;
 
-    uint32_t   register_pc;
-
-  /*
-  Pseudo Registers
-  BFIN_PC_REGNUM,
-  BFIN_CC_REGNUM,
-  BFIN_EXTRA1,       Address of .text section. 
-  BFIN_EXTRA2,       Address of .data section. 
-  BFIN_EXTRA3,       Address of .bss section.  
-
-  BFIN_FDPIC_EXEC_REGNUM,
-  BFIN_FDPIC_INTERP_REGNUM,
-
-  MMRs
-  BFIN_IPEND_REGNUM,
-
-  LAST ENTRY SHOULD NOT BE CHANGED. 
-  BFIN_NUM_REGS      The number of all registers. 
-  */  
+    uint32_t   imask;  
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -624,7 +577,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  XXX document implementation including references if appropriate
  */
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
+/* SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();*/
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
@@ -790,9 +743,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 #define _CPU_ISR_Disable( _level ) \
   {                                     \
-       asm volatile ("cli %0 \n"       \
-                : "=d" (_level) );     \
-                                        \
+       asm volatile ("cli %0 \n" : "=d" (_level) );     \
   }
   
 
@@ -808,10 +759,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_ISR_Enable( _level )  \
-  {                                    \
-    asm volatile ("STI %0 \n"                  \
-                   : : "d" (_level) );         \
+#define _CPU_ISR_Enable( _level ) { \
+    __asm__ __volatile__ ("sti %0 \n" : : "d" (_level) );   \
   }
 
 /**
@@ -827,13 +776,10 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_ISR_Flash( _level ) 
-/*  { \
-    asm volatile ("cli %0;\n"          \
-                  "ssync; \n"           \
-                  "sti %1; \n"          \
-                   : "=r" (_level) : "0"(_level) );  \
-  }*/
+#define _CPU_ISR_Flash( _level ) { \
+    __asm__ __volatile__ ("sti %0; ssync; sti %1" \
+                          : : "d"(0xffff), "d"(_level)); \
+  }
 
 /**
  *  @ingroup CPUInterrupt
@@ -854,9 +800,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 #define _CPU_ISR_Set_level( _new_level ) \
   { \
-    if ( _new_level ) asm volatile ( "cli R0;" : : : "R0" ); \
-    else              asm volatile ( "R0.l = 0xFFFF;\n"\
-                                     "sti R0;" : : : "R0" ); \
+    __asm__ __volatile__ ( "sti %0" : : "d"(_new_level ? 0 : 0xffff) ); \
   }
 
 
@@ -1001,8 +945,9 @@ void _CPU_Context_Initialize(
     asm volatile ( "cli R1; \
                     R1 = %0; \
                     _halt: \
+                    idle; \
                     jump _halt;"\
-                    : "=r" (_error) ); \
+                    : : "r" (_error) ); \
   }
 
 /* end of Fatal Error manager macros */

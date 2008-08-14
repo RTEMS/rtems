@@ -119,7 +119,7 @@ typedef enum {
    * has expired.  The owner is still executing and has taken too much
    * all time to complete this iteration of the period.
    */
-  RATE_MONOTONIC_EXPIRED,
+  RATE_MONOTONIC_EXPIRED
 }   rtems_rate_monotonic_period_states;
 
 /**

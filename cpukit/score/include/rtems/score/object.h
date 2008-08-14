@@ -291,11 +291,11 @@ typedef enum {
  *  an object with the specified ID.
  */
 typedef enum {
-  OBJECTS_LOCAL  = 0,         /* object is local */
-  OBJECTS_ERROR  = 1,         /* id was invalid */
 #if defined(RTEMS_MULTIPROCESSING)
   OBJECTS_REMOTE = 2,         /* object is remote */
 #endif
+  OBJECTS_LOCAL  = 0,         /* object is local */
+  OBJECTS_ERROR  = 1          /* id was invalid */
 } Objects_Locations;
 
 /**

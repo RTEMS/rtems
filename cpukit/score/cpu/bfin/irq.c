@@ -11,6 +11,8 @@
  *  $Id$
  */
  
+
+#if 0 /* this file no longer used */
  
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
@@ -104,3 +106,6 @@ uint32_t SIC_IAR_Value ( uint8_t Vector )
       return 0x88888888;
   }
 }
+
+#endif /* 0 */
+

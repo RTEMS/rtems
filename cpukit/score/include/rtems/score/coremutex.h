@@ -113,7 +113,7 @@ typedef enum {
   /** This status indicates that a thread of logically greater importance
    *  than the ceiling priority attempted to lock this mutex.
    */
-  CORE_MUTEX_STATUS_CEILING_VIOLATED,
+  CORE_MUTEX_STATUS_CEILING_VIOLATED
 
 }   CORE_mutex_Status;
 
