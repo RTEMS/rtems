@@ -1,3 +1,9 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1297/cpukit
+	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Fix NULL attribute
+	pointer handling.
+
 2008-08-04	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>
 
 	PR 1293/tests

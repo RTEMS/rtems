@@ -164,10 +164,6 @@ int main(
   status = pthread_rwlock_init(NULL, &attr);
   assert( status == EINVAL );
 
-  puts( "pthread_rwlock_init(&rwlock, NULL) -- EINVAL" );
-  status = pthread_rwlock_init(&rwlock, NULL);
-  assert( status == EINVAL );
-
   puts( "pthread_rwlock_destroy(NULL) -- EINVAL" );
   status = pthread_rwlock_destroy(NULL);
   assert( status == EINVAL );
