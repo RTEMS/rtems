@@ -8,6 +8,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
 [# account for "aliased" bsps which share source code
   case $1 in
     bare*)        $2=bare             ;; # EXP: bare-aliases
+
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
     pgh360)       $2=gen68360         ;; # m68k - 68360 custom board

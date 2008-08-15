@@ -180,7 +180,7 @@ arm             : csb336 csb337 edb7312 gba gp32 rtl22x
 
 avr:            : none
 
-bfin            : eZKit533
+bfin            : eZKit533 bf537Stamp
 
 c4x             : c3xsim c4xsim
 
