@@ -1,3 +1,7 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* runtest: Attempt to prevent runaways.
+
 2008-08-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Major update. Now more likely not to run away.

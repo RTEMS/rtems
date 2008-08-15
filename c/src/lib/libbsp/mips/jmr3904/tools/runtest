@@ -128,7 +128,7 @@ args=$*
 tests="$args"
 if [ ! "$tests" ]
 then
-     set -- `echo *.exe`
+     set -- `ls -1 *.exe *.ralf 2>/dev/null`
      tests="$*"
 fi
 
@@ -215,7 +215,7 @@ do
 
      # Spin off the simulator in the background
 
-     ${simulator} --board=jmr3904 $tfile | \
+     ${simulator} --board=jmr3904 $tfile </dev/null | \
        sed -e 's///' -e '/^$/d' > ${logfile} 2>&1 &
      pid=$!
 
@@ -233,8 +233,8 @@ do
        if [ $running -eq 0 ] ; then
 	 if [ ${milliseconds} -ge ${millilimit} ]; then
 	   kill -9 $pid 2> /dev/null
-	   cat ${logfile}
-	   echo "${testname} killed after running ${max_run_time} seconds"
+	   #cat ${logfile}
+	   echo "${tname} killed after running ${max_run_time} seconds"
 	   break
 	 fi
 	 grep "^Unhandled exception" ${logfile} >/dev/null
@@ -243,14 +243,14 @@ do
 	 badAccessExit=$?
 	 if [ $badAccessExit -eq 0 -o $exceptionExit -eq 0 ] ; then
 	   kill -9 ${pid} >/dev/null 2>&1
-	   cat ${logfile}
-	   echo Ran in ${milliseconds} milliseconds
+	   #cat ${logfile}
+	   # echo Ran in ${milliseconds} milliseconds
 	 fi
 
        else
 	 # done normally
-	 cat ${logfile}
-	 echo "${testname} ran in ${milliseconds} milliseconds"
+	 # cat ${logfile}
+	 # echo "${tname} ran in ${milliseconds} milliseconds"
 	 break
        fi
      done
