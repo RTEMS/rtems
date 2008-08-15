@@ -1,3 +1,8 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1297/cpukit
+	* posix/src/prwlockinit.c: Fix NULL attribute pointer handling.
+
 2008-08-14     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/ratemon.h,

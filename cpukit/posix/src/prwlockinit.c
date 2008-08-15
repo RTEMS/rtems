@@ -65,10 +65,10 @@ int pthread_rwlock_init(
   /*
    * Now start error checking the attributes that we are going to use
    */
-  if ( !attr->is_initialized )
+  if ( !the_attr->is_initialized )
     return EINVAL;
 
-  switch ( attr->process_shared ) {
+  switch ( the_attr->process_shared ) {
     case PTHREAD_PROCESS_PRIVATE:    /* only supported values */
       break;
     case PTHREAD_PROCESS_SHARED:
