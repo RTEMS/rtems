@@ -1,0 +1,16 @@
+2008-08-15	Allan Hessenflow <allanh@kallisti.com>
+
+	* ChangeLog, Makefile.am, README, configure.ac, preinstall.am,
+	cache/cache.c, cache/cache_.h, clock/clock.c, clock/rtc.c,
+	clock/tod.h, include/bf533.h, include/bf537.h, include/cecRegs.h,
+	include/coreTimerRegs.h, include/dmaRegs.h, include/ebiuRegs.h,
+	include/ethernetRegs.h, include/gpioRegs.h, include/memoryRegs.h,
+	include/mmuRegs.h, include/ppiRegs.h, include/rtcRegs.h,
+	include/sicRegs.h, include/spiRegs.h, include/sportRegs.h,
+	include/timerRegs.h, include/twiRegs.h, include/uartRegs.h,
+	include/wdogRegs.h, interrupt/interrupt.c, interrupt/interrupt.h,
+	mmu/mmu.c, mmu/mmu.h, network/ethernet.c, network/ethernet.h,
+	serial/spi.c, serial/spi.h, serial/sport.c, serial/sport.h,
+	serial/twi.c, serial/twi.h, serial/uart.c, serial/uart.h,
+	timer/timer.c: New files.
+
