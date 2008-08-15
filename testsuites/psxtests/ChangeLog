@@ -1,3 +1,9 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1297/cpukit
+	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Fix NULL attribute
+	pointer handling.
+
 2008-08-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxsem01/init.c: Spacing.

@@ -16,7 +16,6 @@ pthread_rwlockattr_getpshared( &attr, &p ) -- OK
 pthread_rwlockattr_destroy( &attr ) -- OK
 pthread_rwlockattr_getpshared( &attr, &p ) destroyed -- EINVAL
 pthread_rwlock_init(NULL, &attr) -- EINVAL
-pthread_rwlock_init(&rwlock, NULL) -- EINVAL
 pthread_rwlock_destroy(NULL) -- EINVAL
 pthread_rwlock_rdlock(NULL) -- EINVAL
 pthread_rwlock_timedrdlock( NULL, &abstime) -- EINVAL
