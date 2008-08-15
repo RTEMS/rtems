@@ -1,3 +1,7 @@
+2008-08-15	Allan Hessenflow <allanh@kallisti.com>
+
+	* acinclude.m4: Add bf537Stamp.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/clock/clockdrv.c: Eliminate copies of the Configuration Table.
