@@ -17,6 +17,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#include <libcpu/bf533.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
