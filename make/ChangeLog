@@ -1,3 +1,7 @@
+2008-08-15	Allan Hessenflow <allanh@kallisti.com>
+
+	* custom/bf537Stamp.cfg: New file.
+
 2008-07-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* custom/mpc5566evb.cfg, custom/mpc55xx.cfg, custom/mpc8313erdb.cfg:
