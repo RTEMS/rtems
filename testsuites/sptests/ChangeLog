@@ -1,3 +1,7 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp43/init.c: Fix derefence of uninitialized pointer.
+
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spsize/size.c: Make _System_state_Is_multiprocessing unused when
