@@ -1,3 +1,7 @@
+2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* README.mpc8313erdb: Some first cut notes on running with U-Boot.
+
 2008-08-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Time was running too slow with it taking 10
