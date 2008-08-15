@@ -1,0 +1,7 @@
+2008-08-15	Allan Hessenflow <allanh@kallisti.com>
+
+	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	preinstall.am, console/console.c, include/bsp.h,
+	network/networkconfig.c, start/start.S, startup/bspstart.c,
+	startup/linkcmds: New files.
+
