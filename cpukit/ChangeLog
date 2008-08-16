@@ -1,3 +1,8 @@
+2008-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Add -Wimplicit-function-declaration 
+	-Wstrict-prototypes to RTEMS_CFLAGS.
+
 2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1297/cpukit
