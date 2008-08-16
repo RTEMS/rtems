@@ -1,5 +1,9 @@
 2008-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/librtemsNfs.h: Add missing prototype.
+
+2008-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/prog-cc.m4: Add -Wimplicit-function-declaration 
 	-Wstrict-prototypes to RTEMS_CFLAGS.
 
