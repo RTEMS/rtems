@@ -173,5 +173,5 @@ nfsSetTimeout(uint32_t timeout_ms);
 
 /* Read current timeout (in milliseconds) */
 uint32_t
-nfsGetTimeout();
+nfsGetTimeout(void);
 #endif
