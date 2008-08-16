@@ -336,7 +336,7 @@ extern "C" {
 #define _CPU_MSR_SET( _msr_value ) \
 { asm volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
 
-static inline void ppc_interrupt_set_disable_mask( uint32_t mask)
+static inline void ppc_interrupt_set_disable_mask( uint32_t mask )
 {
   asm volatile (
     "mtspr 272, %0"
@@ -345,7 +345,7 @@ static inline void ppc_interrupt_set_disable_mask( uint32_t mask)
   );
 }
 
-static inline uint32_t ppc_interrupt_get_disable_mask( void)
+static inline uint32_t ppc_interrupt_get_disable_mask( void )
 {
   uint32_t mask;
 
@@ -357,7 +357,7 @@ static inline uint32_t ppc_interrupt_get_disable_mask( void)
   return mask;
 }
 
-static inline uint32_t ppc_interrupt_disable( void)
+static inline uint32_t ppc_interrupt_disable( void )
 {
   uint32_t level;
   uint32_t mask;
@@ -373,7 +373,7 @@ static inline uint32_t ppc_interrupt_disable( void)
   return level;
 }
 
-static inline void ppc_interrupt_enable( uint32_t level)
+static inline void ppc_interrupt_enable( uint32_t level )
 {
   asm volatile (
     "mtmsr %0"
@@ -382,7 +382,7 @@ static inline void ppc_interrupt_enable( uint32_t level)
   );
 }
 
-static inline void ppc_interrupt_flash( uint32_t level)
+static inline void ppc_interrupt_flash( uint32_t level )
 {
   uint32_t current_level;
 
@@ -407,7 +407,7 @@ static inline void ppc_interrupt_flash( uint32_t level)
  */
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
-  ppc_interrupt_enable( _isr_cookie)
+  ppc_interrupt_enable(_isr_cookie)
 
 /*
  *  This temporarily restores the interrupt to _isr_cookie before immediately
@@ -421,7 +421,7 @@ static inline void ppc_interrupt_flash( uint32_t level)
  */
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  ppc_interrupt_flash( _isr_cookie)
+  ppc_interrupt_flash(_isr_cookie)
 
 /* end of ISR handler macros */
 
