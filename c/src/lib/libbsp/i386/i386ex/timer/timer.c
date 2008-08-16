@@ -30,7 +30,7 @@
 int Ttimer_val;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-extern void timerisr();
+extern void timerisr(void);
 extern int ClockIsOn(const rtems_raw_irq_connect_data*);
 
 #define TMR0	  0xF040
@@ -73,7 +73,7 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
   ClockIsOn
 };
 
-void Timer_exit()
+void Timer_exit(void)
 {
  if (!i386_delete_idt_entry(&timer_raw_irq_data)) {
       printk("Timer_exit:Timer raw handler removal failed\n");
@@ -81,7 +81,7 @@ void Timer_exit()
  }
 }
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
 
   static rtems_boolean First = TRUE;
@@ -107,7 +107,7 @@ void Timer_initialize()
                              /* (3 ticks) to start/stop the timer. */
 #define LEAST_VALID       4  /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer(void)
 {
   register uint32_t         clicks;
   register uint32_t         total;
