@@ -1,3 +1,7 @@
+2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Add missing prototypes.
+
 2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c: Eliminate copies of switches to convert termios
