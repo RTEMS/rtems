@@ -1,3 +1,7 @@
+2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cache.c, displayCpu.c, page.c: Add missing prototypes.
+
 2007-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* page.c: Redo print to not have cvs conflict marker.
