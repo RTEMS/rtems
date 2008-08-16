@@ -172,7 +172,7 @@ static const char * getmodel(int x86, int model)
         return nbuf;
 }
 
-void printCpuInfo()
+void printCpuInfo(void)
 {
   int i;
   static const char *x86_cap_flags[] = {

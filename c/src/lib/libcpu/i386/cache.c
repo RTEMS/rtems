@@ -8,7 +8,7 @@
 #include <rtems/score/registers.h>
 #include "cache_.h"
 
-void _CPU_disable_cache() {
+void _CPU_disable_cache(void) {
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();
@@ -22,7 +22,7 @@ void _CPU_disable_cache() {
  * Enable the entire cache
  */
 
-void _CPU_enable_cache() {
+void _CPU_enable_cache(void) {
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();

@@ -42,7 +42,7 @@ extern uint32_t   rtemsFreeMemStart;
 /*
  * Disable the paging
  */
-void _CPU_disable_paging() {
+void _CPU_disable_paging(void) {
   cr0 regCr0;
 
   rtems_cache_flush_entire_data();
@@ -54,7 +54,7 @@ void _CPU_disable_paging() {
 /*
  * Enable the paging
  */
-void _CPU_enable_paging() {
+void _CPU_enable_paging(void) {
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();
@@ -68,7 +68,7 @@ void _CPU_enable_paging() {
  * Initialize the paging with 1-to-1 mapping
  */
 
-int init_paging() {
+int init_paging(void) {
 
   int memorySize;
   int nbPages;

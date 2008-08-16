@@ -149,7 +149,7 @@ static inline uint16_t i386_swap_u16(
  * Added for pagination management
  */
 
-static inline unsigned int i386_get_cr0()
+static inline unsigned int i386_get_cr0(void)
 {
   register unsigned int segment = 0;
 
@@ -163,7 +163,7 @@ static inline void i386_set_cr0(unsigned int segment)
   asm volatile ( "movl %0,%%cr0" : "=r" (segment) : "0" (segment) );
 }
 
-static inline unsigned int i386_get_cr2()
+static inline unsigned int i386_get_cr2(void)
 {
   register unsigned int segment = 0;
 
@@ -172,7 +172,7 @@ static inline unsigned int i386_get_cr2()
   return segment;
 }
 
-static inline unsigned int i386_get_cr3()
+static inline unsigned int i386_get_cr3(void)
 {
   register unsigned int segment = 0;
 
