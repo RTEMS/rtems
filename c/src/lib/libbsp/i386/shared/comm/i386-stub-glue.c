@@ -134,8 +134,8 @@ int getDebugChar(void)
   return val;
 }
 
-static void nop(){}
-static int isOn() {return 1;}
+static void nop(void){}
+static int isOn(void) {return 1;}
 
 void exceptionHandler(int vector, void (*handler)(void))
 {

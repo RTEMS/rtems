@@ -16,7 +16,7 @@ typedef int		         COORD;		/* device coordinates*/
 typedef unsigned int	   BUTTON;		/* mouse button mask*/
 
 /* local routines */
-int  	   MOU_Init();
+int  	   MOU_Init(void);
 int      MOU_Data( int ch, COORD *dx, COORD *dy, COORD *dz, BUTTON *bptr );
 
 /* Mouse Interface */

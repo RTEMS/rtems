@@ -117,10 +117,10 @@ extern void exceptionHandler (int, void (*handler) (void));
 
 static char initialized;	/* boolean flag. != 0 means we've been initialized */
 
-int remote_debug;
+extern int remote_debug;
 /*  debug >  0 prints ill-formed commands in valid packets & checksum errors */
 
-void waitabit ();
+extern void waitabit (void);
 
 static const char hexchars[] = "0123456789abcdef";
 

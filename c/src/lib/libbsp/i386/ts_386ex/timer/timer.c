@@ -30,7 +30,7 @@
 volatile uint32_t          Ttimer_val;  /* Updated from ISR!!! */
 rtems_boolean Timer_driver_Find_average_overhead;
 
-extern void timerisr();
+extern void timerisr(void);
 
 /*
  * Number of us per timer interrupt. Note: 1 us == 1 tick.
@@ -88,7 +88,7 @@ static rtems_raw_irq_connect_data old_raw_irq_data = {
   BSP_PERIODIC_TIMER + BSP_IRQ_VECTOR_BASE,
 };
 
-void Timer_exit()
+void Timer_exit(void)
 {
  if (!i386_delete_idt_entry(&timer_raw_irq_data)) {
       printk("Timer_exit:Timer raw handler removal failed\n");

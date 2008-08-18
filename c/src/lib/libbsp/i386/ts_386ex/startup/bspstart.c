@@ -76,7 +76,7 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  void rtems_irq_mngt_init();
+  extern void rtems_irq_mngt_init(void);
 
   Configuration.work_space_start = (void *)
      RAM_END - rtems_configuration_get_work_space_size();

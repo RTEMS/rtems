@@ -91,7 +91,7 @@ extern void ps2_set_driver_handler( int port, void ( *handler )( void *,  char *
  * Open up the mouse device.
  * Returns the fd if successful, or negative if unsuccessful.
  */
-int MOU_Init()
+int MOU_Init(void)
 {
 	char	*type;
 

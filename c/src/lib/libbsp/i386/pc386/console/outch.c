@@ -78,7 +78,7 @@ doCRNL(int cr, int nl)
 int (*videoHook)(char, int *)=0;
 
 static void
-advanceCursor()
+advanceCursor(void)
 {
   if (++column == maxCol)
 	doCRNL(1,1);
