@@ -50,8 +50,7 @@
 
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
-struct _reent    libc_global_reent
-    __ATTRIBUTE_IMPURE_PTR__ = _REENT_INIT(libc_global_reent);
+extern struct _reent    libc_global_reent __ATTRIBUTE_IMPURE_PTR__;
 
 /*
  * reent struct allocation moved here from libc_start_hook() to avoid
@@ -171,28 +170,6 @@ rtems_extension libc_delete_hook(
   if ( current_task == deleted_task ) {
     _REENT = 0;
   }
-}
-
-/*
- *  Init libc for CYGNUS newlib
- * 
- *  Set up _REENT to use our global libc_global_reent.
- *  (newlib provides a global of its own, but we prefer our own name for it)
- *
- *  If reentrancy is desired (which it should be), then
- *  we install the task extension hooks to maintain the
- *  newlib reentrancy global variable _REENT on task
- *  create, delete, switch, exit, etc.
- *
- */
-
-
-void
-libc_init(void)
-{
-  _REENT = &libc_global_reent;
-
-  _Thread_Set_libc_reent (&_REENT);
 }
 
 #endif

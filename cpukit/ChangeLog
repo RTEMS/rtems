@@ -1,3 +1,10 @@
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/src/newlibc.c: Split libc_init()
+	into a separate file to avoid linkage dependencies on newlibc.c which
+	in turn pulls in fclose() and other C library methods.
+	* libcsupport/src/newlibc_init.c: New file.
+
 2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Add -Wnested-externs.
