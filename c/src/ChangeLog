@@ -1,3 +1,7 @@
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/serial/ns16550.c: Fix warning.
+
 2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Add -Wnested-externs.

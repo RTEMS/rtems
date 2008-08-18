@@ -593,26 +593,24 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 }
 #else
 
-static void null_fun(){}
-
 NS16550_STATIC void ns16550_initialize_interrupts(int minor)
 {
 #ifdef BSP_SHARED_HANDLER_SUPPORT
   rtems_irq_connect_data IrqData = {0,
                                     ns16550_isr,
                                     &Console_Port_Data[minor],
-                                    (rtems_irq_enable)null_fun,
-                                    (rtems_irq_disable)null_fun,
-                                    (rtems_irq_is_enabled)null_fun,
+                                    NULL,
+                                    NULL,
+                                    NULL,
                                     NULL
                                    };
 #else
   rtems_irq_connect_data IrqData = {0,
                                     ns16550_isr,
                                     &Console_Port_Data[minor],
-                                    (rtems_irq_enable)null_fun,
-                                    (rtems_irq_disable)null_fun,
-                                    (rtems_irq_is_enabled)null_fun
+                                    NULL,
+                                    NULL,
+                                    NULL
                                    };
 #endif
 
