@@ -1,5 +1,6 @@
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* serial/twi.c: Remove unused var.
 	* clock/tod.h: Add missing prototypes.
 
 2008-08-15	Allan Hessenflow <allanh@kallisti.com>
