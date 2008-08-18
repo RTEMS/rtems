@@ -41,20 +41,20 @@ void getRealTime(
  *  Read real time from RTC and set it to RTEMS' clock manager
  */
 
-void setRealTimeToRTEMS();
+void setRealTimeToRTEMS(void);
 
 /*
  *  Read time from RTEMS' clock manager and set it to RTC
  */
 
-void setRealTimeFromRTEMS();
+void setRealTimeFromRTEMS(void);
 
 /*
  *  Return the difference between RTC and RTEMS' clock manager time in minutes.
  *  If the difference is greater than 1 day, this returns 9999.
  */
 
-int checkRealTime();
+int checkRealTime(void);
 
 #ifdef __cplusplus
 }
