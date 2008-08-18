@@ -36,7 +36,7 @@ rtems_boolean Timer_driver_Is_initialized = FALSE;
 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
@@ -57,7 +57,7 @@ void Timer_initialize()
                              /*     to start/stop the timer. */
 #define LEAST_VALID       2  /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t total;
 

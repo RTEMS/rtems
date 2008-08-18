@@ -90,7 +90,7 @@ int uarts = 0;
 static int isinit = 0;
 volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
-int scan_uarts() {
+int scan_uarts(void) {
   int i;
   amba_apb_device apbuarts[LEON3_APBUARTS];
 

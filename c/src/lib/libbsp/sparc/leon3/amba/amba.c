@@ -33,7 +33,7 @@ int LEON3_Cpu_Index = 0;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
-unsigned int getasr17();
+unsigned int getasr17(void);
 
 asm(" .text  \n"
     "getasr17:   \n"
@@ -47,7 +47,6 @@ extern rtems_configuration_table Configuration;
 void bsp_predriver_hook(void)
 {
   int i;
-  unsigned int tmp;
   amba_apb_device dev;
 
   /* Scan the AMBA Plug&Play info at the default LEON3 area */

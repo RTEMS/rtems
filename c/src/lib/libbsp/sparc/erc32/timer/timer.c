@@ -26,7 +26,7 @@ rtems_boolean Timer_driver_Find_average_overhead;
 
 rtems_boolean Timer_driver_Is_initialized = FALSE;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
@@ -63,7 +63,7 @@ void Timer_initialize()
 #define LEAST_VALID      13  /* Don't trust a value lower than this */
 #endif
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t          total;
 
