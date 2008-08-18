@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/bspstart.c: Remove bogus local declaration.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/bspstart.c: Changed bsp_get_workarea() to
