@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* smc/smc.c, startup/exit.c: Add missing prototypes.
+
 2008-08-06      Chris Johns <chrisj@rtems.org>
 
 	* smc/smc.c: Fix the fix. The field is bufnum.

@@ -19,7 +19,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
 
-void bsp_reset();
+void bsp_reset(void);
 
 void bsp_cleanup(void)
 {

@@ -93,7 +93,7 @@ static void sm_write( uint8_t data)
   rPEDAT |= 0x08;
 }
 
-static uint8_t sm_read()
+static uint8_t sm_read(void)
 {
   uint8_t data;
   
@@ -239,7 +239,7 @@ void smc_read_spare( uint32_t page, uint8_t* buf, uint8_t length)
 
 }
 
-void smc_make_l2p()
+void smc_make_l2p(void)
 {
   uint32_t pblock, i, j, lblock, zone, count, cnt1, cnt2, cnt3;
   uint8_t data[512];
