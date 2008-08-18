@@ -1,5 +1,7 @@
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shared/comm/i386-stub-glue.c, shared/comm/i386-stub.c:
+	Add missing prototypes.
 	* shared/irq/irq_init.c: Add missing prototypes.
 
 2008-05-23	Joel Sherrill <joel.sherrill@OARcorp.com>
