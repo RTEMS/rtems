@@ -56,8 +56,6 @@
  */
 void bsp_pretasking_hook(void)
 {
-  extern void bsp_spurious_initialize();
-
   bsp_spurious_initialize();
 }
 
