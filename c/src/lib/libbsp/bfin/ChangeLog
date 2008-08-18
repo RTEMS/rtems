@@ -1,3 +1,8 @@
+2008-08-18	Allan Hessenflow <allanh@kallisti.com>
+
+	* shared/clock/clockdrv.c, shared/clock/rtc.c, shared/clock/tod.h,
+	shared/console/console.c, shared/timer/timer.c: Removed.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/clock/tod.h: Add missing prototypes.
