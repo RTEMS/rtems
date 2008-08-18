@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/ps2_mouse.c, timer/timer.c: Add missing prototypes.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* tools/configure.ac: Add CFLAGS to workaround building errors on
