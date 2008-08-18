@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Add missing prototypes.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/bspstart.c: Changed bsp_get_workarea() to

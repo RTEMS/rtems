@@ -25,7 +25,7 @@ rtems_boolean Timer_driver_Find_average_overhead;
 #define TIMER_VECTOR MONGOOSEV_IRQ_TIMER2
 #endif
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   /*
    *  Programming the compare register as the maximum value should let
@@ -56,7 +56,7 @@ void Timer_initialize()
                              /* mongoose-v can count cycles. :) */
 #include <rtems/bspIo.h>
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t          clicks;
   uint32_t          total;

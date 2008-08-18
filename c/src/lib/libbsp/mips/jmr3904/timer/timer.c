@@ -19,7 +19,7 @@
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   /*
    *  Programming the compare register as the maximum value should let
@@ -45,7 +45,7 @@ void Timer_initialize()
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* tx39 simulator can count instructions. :) */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t          total;
 

@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Add missing prototypes.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/bspstart.c: Add capability for bootcard.c BSP Initialization
