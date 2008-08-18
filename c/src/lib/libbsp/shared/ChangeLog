@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tod.c: Add missing prototypes.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 537/bsps
