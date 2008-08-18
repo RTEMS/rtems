@@ -48,6 +48,13 @@ typedef struct {
   void       *area;
 }   Stack_Control;
 
+/**
+ *  This variable contains the the minimum stack size;
+ *
+ *  @note It is instantiated and set by User Configuration via confdefs.h.
+ */
+extern uint32_t rtems_minimum_stack_size;
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/stack.inl>
 #endif

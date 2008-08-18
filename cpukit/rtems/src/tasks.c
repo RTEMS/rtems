@@ -302,7 +302,6 @@ void _RTEMS_tasks_Manager_initialization(
 
 void _RTEMS_tasks_Initialize_user_tasks( void )
 {
-  extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
   if ( _RTEMS_tasks_Initialize_user_tasks_p )
     (*_RTEMS_tasks_Initialize_user_tasks_p)();
 }

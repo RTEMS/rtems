@@ -150,15 +150,19 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
 #if defined(RTEMS_HEAVY_STACK_DEBUG) || defined(RTEMS_HEAVY_MALLOC_DEBUG)
   #include <rtems/bspIo.h>
   #include <rtems/fatal.h>
+  #include <rtems/stackchk.h>
   #include <rtems/score/sysstate.h>
   #include <rtems/score/heap.h>
+
+  /*
+   * This is currently not defined in any .h file, so we have to
+   * extern it here.
+   */
+  extern Heap_Control  RTEMS_Malloc_Heap;
 #endif
 
 RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 {
-  extern boolean rtems_stack_checker_is_blown( void );
-  extern void malloc_walk(size_t, size_t);
-
   /*
    *  This check is very brutal to system performance but is very helpful
    *  at finding blown stack problems.  If you have a stack problem and
@@ -184,7 +188,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
    */
   #if defined(RTEMS_HEAVY_MALLOC_DEBUG)
     if ( _Thread_Dispatch_disable_level == 1 ) {
-      extern Heap_Control  RTEMS_Malloc_Heap;
       _Heap_Walk( &RTEMS_Malloc_Heap,99, FALSE );
     }
   #endif

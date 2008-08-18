@@ -1,5 +1,17 @@
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/task.h, itron/src/def_cyc.c,
+	itron/src/task.c, libcsupport/src/newlibc_exit.c,
+	libcsupport/src/sync.c, libfs/src/imfs/imfs_fchmod.c,
+	posix/include/rtems/posix/pthread.h, posix/src/pthread.c,
+	posix/src/sysconf.c, rtems/include/rtems/rtems/tasks.h,
+	rtems/src/tasks.c, score/include/rtems/score/stack.h,
+	score/inline/rtems/score/stack.inl,
+	score/inline/rtems/score/thread.inl, score/src/threadhandler.c: Fix
+	various nested-externs warnings.
+
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/src/newlibc.c: Split libc_init()
 	into a separate file to avoid linkage dependencies on newlibc.c which
 	in turn pulls in fclose() and other C library methods.

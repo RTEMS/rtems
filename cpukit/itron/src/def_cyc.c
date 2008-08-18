@@ -40,12 +40,13 @@ ER def_cyc(
 #if 0
   timeInterval = pk_dcyc->cyctim / 1000;
   object->delta_interval = timeInterval;
-#endif
   _Watchdog_Initialize(
-         object,
-         pk_dcyc->cychdr,
-         cycno,
-         pk_dcyc->exinf);
+    object,
+    pk_dcyc->cychdr,
+    cycno,
+    pk_dcyc->exinf
+  );
+#endif
   _Watchdog_Deactivate(object);
 
   return E_OK;

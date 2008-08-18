@@ -20,6 +20,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/tod.h>
+#include <rtems/libio_.h>
 
 #include <sys/param.h>
 
@@ -38,7 +39,6 @@ long sysconf(
       return (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick);
 
     case _SC_OPEN_MAX: {
-        extern uint32_t   rtems_libio_number_iops;
         return rtems_libio_number_iops;
       }
 

@@ -121,6 +121,10 @@ void libc_wrapup(void)
 
 #if !defined(RTEMS_UNIX)
   #define EXIT_SYMBOL _exit
+
+  #if defined(__USE_INIT_FINI__)
+    extern void _fini( void );
+  #endif
 #else
   #define EXIT_SYMBOL exit
 #endif
@@ -132,7 +136,6 @@ void EXIT_SYMBOL(int status)
    *  run the global destructors now.
    */
   #if defined(__USE_INIT_FINI__)
-    extern void _fini( void );
     _fini();
   #endif
 

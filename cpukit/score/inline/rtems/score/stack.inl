@@ -47,7 +47,6 @@ RTEMS_INLINE_ROUTINE void _Stack_Initialize (
  */
 RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
 {
-  extern uint32_t rtems_minimum_stack_size;
   return rtems_minimum_stack_size;
 }
 

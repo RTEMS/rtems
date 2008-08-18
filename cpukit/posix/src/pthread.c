@@ -272,7 +272,6 @@ User_extensions_routine _POSIX_Threads_Exitted_extension(
 
 void _POSIX_Threads_Initialize_user_threads( void )
 {
-  extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
   if ( _POSIX_Threads_Initialize_user_threads_p )
     (*_POSIX_Threads_Initialize_user_threads_p)();
 }

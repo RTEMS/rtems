@@ -228,6 +228,15 @@ typedef struct {
 RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
 
 /**
+ *  When the user configures a set of Classic API initialization tasks,
+ *  This variable will point to the method used to initialize them.
+ *  
+ *  @note It is instantiated and initialized by confdefs.h based upon
+ *        application requirements.
+ */
+extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
+
+/**
  *  @brief _RTEMS_tasks_Manager_initialization
  *
  *  This routine initializes all Task Manager related data structures.

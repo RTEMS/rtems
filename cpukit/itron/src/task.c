@@ -96,7 +96,6 @@ User_extensions_routine _ITRON_Task_Delete_extension(
 
 void _ITRON_Task_Initialize_user_tasks( void )
 {
-  extern void (*_ITRON_Initialize_user_tasks_p)(void);
   if ( _ITRON_Initialize_user_tasks_p )
     (*_ITRON_Initialize_user_tasks_p)();
 }

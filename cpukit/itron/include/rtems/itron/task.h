@@ -64,6 +64,14 @@ ITRON_EXTERN itron_initialization_tasks_table
                *_ITRON_Task_User_initialization_tasks;
 ITRON_EXTERN uint32_t     _ITRON_Task_Number_of_initialization_tasks;
 
+/**
+ *  When the user configures a set of ITRON API initialization tasks,
+ *  This variable will point to the method used to initialize them.
+ *  
+ *  @note It is instantiated and initialized by confdefs.h based upon
+ *        application requirements.
+ */
+extern void (*_ITRON_Initialize_user_tasks_p)(void);
 
 /*
  *  _ITRON_Task_Manager_initialization

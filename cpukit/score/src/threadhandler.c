@@ -34,6 +34,13 @@
 #include <stdlib.h> /* for atexit() */
 #endif
 
+#if defined(__USE_INIT_FINI__)
+  extern void _init(void);
+#endif
+#if defined(__USE__MAIN__)
+  extern void _main(void);
+#endif
+
 /*PAGE
  *
  *  _Thread_Handler
@@ -69,12 +76,6 @@ void _Thread_Handler( void )
 #if defined(__USE_INIT_FINI__) || defined(__USE__MAIN__)
   static char doneConstructors;
   char doneCons;
-#endif
-#if defined(__USE_INIT_FINI__)
-  extern void _init(void);
-#endif
-#if defined(__USE__MAIN__)
-  extern void _main(void);
 #endif
 
   executing = _Thread_Executing;

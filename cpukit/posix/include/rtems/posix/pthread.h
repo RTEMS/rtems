@@ -49,6 +49,15 @@ POSIX_EXTERN uint32_t     _POSIX_Threads_Number_of_initialization_threads;
 
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
 
+/**
+ *  When the user configures a set of POSIX API initialization threads,
+ *  This variable will point to the method used to initialize them.
+ *  
+ *  @note It is instantiated and initialized by confdefs.h based upon
+ *        application requirements.
+ */
+extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
+
 /*
  *  _POSIX_Threads_Manager_initialization
  *

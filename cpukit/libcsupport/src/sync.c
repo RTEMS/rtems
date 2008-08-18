@@ -70,9 +70,14 @@ static void sync_per_thread(Thread_Control *t)
    }
 }
 
+/*
+ * libc_global_reent is not prototyped in any .h files.
+ * We have to extern it here.
+ */
+extern struct _reent libc_global_reent;
+
 void sync(void)
 {
-  extern struct _reent libc_global_reent;
 
   /*
    *  Walk the one used initially by RTEMS.
