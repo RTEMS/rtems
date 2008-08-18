@@ -1,5 +1,9 @@
 2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-cc.m4: Add -Wnested-externs.
+
+2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/ppp_tty.c: Remove bogus local decl of
 	termios_baud_to_number(int).
 	* libnetworking/netinet/in_cksum_i386.h: Add missing prototype.
