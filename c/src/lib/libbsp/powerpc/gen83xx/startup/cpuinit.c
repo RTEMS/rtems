@@ -220,6 +220,12 @@ void cpu_init(void)
 
   SET_DBAT(2,dbat.batu,dbat.batl);
 
+#ifdef MPC8313ERDB
+  /* Enhanced Local Bus Controller (eLBC) */
+  calc_dbat_regvals( &dbat, 0xfa000000, 128 * 1024, 0, 1, 0, 1, BPP_RW);
+  SET_DBAT( 3, dbat.batu, dbat.batl);
+#endif /* MPC8313ERDB */
+
   /*
    * enable data/instruction MMU in MSR
    */

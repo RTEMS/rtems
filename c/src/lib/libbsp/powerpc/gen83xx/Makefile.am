@@ -43,8 +43,7 @@ dist_project_lib_DATA += startup/linkcmds \
 
 mpc83xx_regs_SOURCES = startup/mpc83xx_regs.c
 
-startup_SOURCES = ../../shared/bspclean.c \
-	../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bootcard.c \
 	../../shared/bsppredriverhook.c \
