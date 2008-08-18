@@ -80,7 +80,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_IRQ_TIMER3,
  *  @param  None
  *  @return None
  */
-void Clock_driver_support_initialize_hardware()
+void Clock_driver_support_initialize_hardware(void)
 {
   int tmreload = ((rtems_configuration_get_microseconds_per_tick()*1000)/__TimTickTime_ns);
 
