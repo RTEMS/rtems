@@ -1,5 +1,6 @@
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/dec21140.c: Add missing prototype.
 	* libchip/ide/ata.c, libchip/network/elnk.c: Add missing prototypes.
 
 2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
