@@ -32,7 +32,7 @@ unsigned long           free_mem_end;
 /* Function prototypes */
 extern void rtems_irq_mngt_init(void);
 void bsp_libc_init( void *, uint32_t, int );
-static void fix_mac_addr();
+static void fix_mac_addr(void);
 
 /**************************************************************************/
 /*                                                                        */
@@ -127,7 +127,7 @@ void bsp_start_default( void )
  * reverse the MAC address. This function tests for that,
  * and fixes the MAC address.
  */
-static void fix_mac_addr()
+static void fix_mac_addr(void)
 {
     uint8_t addr[6];
 
