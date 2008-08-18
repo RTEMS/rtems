@@ -29,9 +29,9 @@
     ("adcl         $0, %0" : "=r" (sum) : "0" (sum))
 
 int
-in_cksum(m, len)
-	register struct mbuf *m;
-	register int len;
+in_cksum(
+	struct mbuf *m,
+	int len )
 {
 	register u_short *w;
 	register unsigned sum = 0;
