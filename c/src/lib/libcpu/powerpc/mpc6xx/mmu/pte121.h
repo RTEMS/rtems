@@ -219,20 +219,17 @@ triv121PgTblSDR1(Triv121PgTbl pgTbl);
  *       may have to switch overlapping BATs OFF in order
  *       for the page table mappings to take effect.
  */
-void
-triv121PgTblActivate(Triv121PgTbl pgTbl);
+void triv121PgTblActivate(Triv121PgTbl pgTbl);
 
 /* Find the PTE for a EA and print its contents to stdout
  * RETURNS: pte for EA or NULL if no entry was found.
  */
-APte
-triv121DumpEa(unsigned long ea);
+APte triv121DumpEa(unsigned long ea);
 
 /* Find and return a PTE for a vsid/pi combination
  * RETURNS: pte or NULL if no entry was found
  */
-APte
-triv121FindPte(unsigned long vsid, unsigned long pi);
+APte triv121FindPte(unsigned long vsid, unsigned long pi);
 
 /* 
  * Unmap an effective address
@@ -240,8 +237,7 @@ triv121FindPte(unsigned long vsid, unsigned long pi);
  * RETURNS: pte that mapped the ea or NULL if no
  *          mapping existed.
  */
-APte
-triv121UnmapEa(unsigned long ea);
+APte triv121UnmapEa(unsigned long ea);
 
 /* 
  * Change the WIMG and PP attributes of the page containing 'ea'
@@ -251,24 +247,20 @@ triv121UnmapEa(unsigned long ea);
  *
  * RETURNS: Pointer to modified PTE or NULL if 'ea' is not mapped.
  */
-APte
-triv121ChangeEaAttributes(unsigned long ea, int wimg, int pp);
+APte triv121ChangeEaAttributes(unsigned long ea, int wimg, int pp);
 
 /* Make the whole page table writable
  * NOTES:   If the page table has not been initialized yet,
  *          this routine has no effect (i.e., after
  *          initialization the page table will still be read-only).
  */
-void
-triv121MakePgTblRW();
+void triv121MakePgTblRW(void);
 
 /* Make the whole page table read-only
  */
-void
-triv121MakePgTblRO();
+void triv121MakePgTblRO(void);
 
 /* Dump a pte to stdout */
-long
-triv121DumpPte(APte pte);
+long triv121DumpPte(APte pte);
 
 #endif

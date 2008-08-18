@@ -28,7 +28,7 @@ unsigned clicks_overhead = 0;
  * Timer Get overhead
  */
 
-int Timer_get_clicks_overhead()
+int Timer_get_clicks_overhead(void)
 {
   uint64_t    clicks;
 
@@ -42,7 +42,7 @@ int Timer_get_clicks_overhead()
 /*
  * Timer_initialize 
  */
-void Timer_initialize()
+void Timer_initialize(void)
 {
 
   /*
@@ -58,7 +58,7 @@ void Timer_initialize()
  *  Read_timer
  */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint64_t    total64;
   uint32_t    total;
@@ -77,7 +77,7 @@ int Read_timer()
   return (int) BSP_Convert_decrementer(total - clicks_overhead);
 }
 
-unsigned long long Read_long_timer()
+unsigned long long Read_long_timer(void)
 {
   uint64_t    total64;
 

@@ -4,7 +4,7 @@
  *  This include file describe the data structure and the functions implemented
  *  by rtems to handle exceptions.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
@@ -56,7 +56,7 @@ SPR_RO(DAR)
 SPR_RO(DEAR_BOOKE)
 SPR_RO(DEAR_405)
 
-uint32_t ppc_exc_get_DAR_dflt()
+uint32_t ppc_exc_get_DAR_dflt(void)
 {
 	if ( ppc_cpu_is_60x() )
 		return _read_DAR();
@@ -71,7 +71,7 @@ uint32_t ppc_exc_get_DAR_dflt()
 	return 0xdeadbeef;
 }
 
-uint32_t (*ppc_exc_get_DAR)() = ppc_exc_get_DAR_dflt;
+uint32_t (*ppc_exc_get_DAR)(void) = ppc_exc_get_DAR_dflt;
 
 void
 BSP_printStackTrace(BSP_Exception_frame* excPtr)

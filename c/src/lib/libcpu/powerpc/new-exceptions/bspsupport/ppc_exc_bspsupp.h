@@ -109,24 +109,24 @@ extern unsigned ppc_exc_min_prolog_size[];
 extern unsigned ppc_exc_tgpr_clr_prolog_size[];
 
 /* Templates for ppc_exc_min_prolog_expand() which fills-in the vector information */
-extern void ppc_exc_min_prolog_async_tmpl_std();
-extern void ppc_exc_min_prolog_sync_tmpl_std();
-extern void ppc_exc_min_prolog_async_tmpl_p405_crit();
-extern void ppc_exc_min_prolog_sync_tmpl_p405_crit();
-extern void ppc_exc_min_prolog_async_tmpl_bookE_crit();
-extern void ppc_exc_min_prolog_sync_tmpl_bookE_crit();
-extern void ppc_exc_min_prolog_sync_tmpl_e500_mchk();
-extern void ppc_exc_min_prolog_async_tmpl_e500_mchk();
+extern void ppc_exc_min_prolog_async_tmpl_std(void);
+extern void ppc_exc_min_prolog_sync_tmpl_std(void);
+extern void ppc_exc_min_prolog_async_tmpl_p405_crit(void);
+extern void ppc_exc_min_prolog_sync_tmpl_p405_crit(void);
+extern void ppc_exc_min_prolog_async_tmpl_bookE_crit(void);
+extern void ppc_exc_min_prolog_sync_tmpl_bookE_crit(void);
+extern void ppc_exc_min_prolog_sync_tmpl_e500_mchk(void);
+extern void ppc_exc_min_prolog_async_tmpl_e500_mchk(void);
 
 /* Special prologue for handling register shadowing on 603-style CPUs */
-extern void ppc_exc_tgpr_clr_prolog();
+extern void ppc_exc_tgpr_clr_prolog(void);
 /* Classic prologue which determines the vector dynamically from
  * the offset address. This must only be used for classic, synchronous
  * exceptions with a vector offset aligned on a 256-byte boundary.
  */
-extern void ppc_exc_min_prolog_auto();
+extern void ppc_exc_min_prolog_auto(void);
 
-extern void ppc_exc_min_prolog_auto_packed();
+extern void ppc_exc_min_prolog_auto_packed(void);
 
 
 /* CPU support may store the address of a function here
@@ -136,7 +136,7 @@ extern void ppc_exc_min_prolog_auto_packed();
  * across PPC families so we need assistance from
  * CPU support
  */
-extern uint32_t (*ppc_exc_get_DAR)();
+extern uint32_t (*ppc_exc_get_DAR)(void);
 
 #ifdef __cplusplus
 };

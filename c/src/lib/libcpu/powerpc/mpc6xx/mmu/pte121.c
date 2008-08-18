@@ -231,7 +231,7 @@ dumpPteg (unsigned long vsid, unsigned long pi, unsigned long hash);
 unsigned long
 triv121IsRangeMapped (long vsid, unsigned long start, unsigned long end);
 
-static void do_dssall ();
+static void do_dssall (void);
 
 /**************************** STATIC VARIABLES ****************************/
 
@@ -899,7 +899,7 @@ triv121UnmapEa (unsigned long ea)
  * Just do it to be on the safe side...
  */
 static void
-do_dssall ()
+do_dssall (void)
 {
   /* Before changing BATs, 'dssall' must be issued.
    * We check MSR for MSR_VE and issue a 'dssall' if

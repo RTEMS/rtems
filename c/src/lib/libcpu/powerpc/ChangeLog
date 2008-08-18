@@ -1,3 +1,10 @@
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h, mpc6xx/timer/timer.c,
+	new-exceptions/e500_raw_exc_init.c,
+	new-exceptions/bspsupport/ppc_exc_bspsupp.h,
+	new-exceptions/bspsupport/vectors_init.c: Fix warnings.
+
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove doxygen comments.

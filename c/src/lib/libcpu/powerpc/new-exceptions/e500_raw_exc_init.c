@@ -6,7 +6,7 @@
 
 /* Use during early init for initializing the e500 IVOR/IVPR registers */
 void
-e500_setup_raw_exceptions()
+e500_setup_raw_exceptions(void)
 {
 	unsigned c;
 	if ( ! (c = ppc_cpu_is_bookE()) || PPC_BOOKE_405 == c )
