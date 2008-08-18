@@ -18,14 +18,15 @@
  *  $Id$
  */
 
-/* must be identical to STACK_SIZE in start.S */
-#define STACK_SIZE 16 * 1024
 
 #include <string.h>
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
+
+/* must be identical to STACK_SIZE in start.S */
+#define STACK_SIZE 16 * 1024
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
@@ -65,8 +66,6 @@ static inline int set_snooping(void)
 
 void bsp_pretasking_hook(void)
 {
-  extern void bsp_spurious_initialize();
-
   bsp_spurious_initialize();
 }
 
@@ -84,8 +83,6 @@ void bsp_get_work_area(
 {
   /* Tells us where to put the workspace in case remote debugger is present.  */
   extern uint32_t rdb_start;
-  /* must be identical to STACK_SIZE in start.S */
-  #define STACK_SIZE (16 * 1024)
 
   *work_area_start       = &end;
   *work_area_size       = (void *)rdb_start - (void *)&end - STACK_SIZE;
