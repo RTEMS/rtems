@@ -1,5 +1,6 @@
 2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_cksum_i386.h: Add missing prototype.
 	* libnetworking/netinet/in_cksum.c: Add missing prototypes.
 	* librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/svc_tcp.c:
 	Add missing prototypes.
