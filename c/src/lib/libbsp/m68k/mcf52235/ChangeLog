@@ -1,3 +1,9 @@
+2008-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, console/console.c: Split debug IO code into separate
+	file.
+	* console/debugio.c: New file.
+
 2008-06-19	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* startup/cfinit.c, startup/init52235.c: Missed the last patch.

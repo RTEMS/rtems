@@ -35,6 +35,7 @@ startup_SOURCES = startup/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clock.c
 console_SOURCES = console/console.c
+debugio_SOURCES = console/debugio.c
 timer_SOURCES = timer/timer.c
 
 #if HAS_NETWORKING
@@ -48,7 +49,7 @@ timer_SOURCES = timer/timer.c
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+    $(debugio_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
