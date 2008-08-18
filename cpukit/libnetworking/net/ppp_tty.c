@@ -195,7 +195,6 @@ pppopen(struct rtems_termios_tty *tty)
     int                        i;
     register struct ppp_softc *sc;
     struct mbuf *m = (struct mbuf *)0;
-    extern int termios_baud_to_number(int);
 
     if (tty->t_line == PPPDISC) {
 	sc = (struct ppp_softc *)tty->t_sc;
