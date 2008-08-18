@@ -188,7 +188,7 @@ int init_pcif(void){
 #ifndef GAISLER_FTAHBRAM
  #define GAISLER_FTAHBRAM 0x50
 #endif
-int init_onboard_sram(){
+int init_onboard_sram(void){
 	amba_ahb_device ahb;
 	amba_apb_device apb;
 	unsigned int conf, size;
