@@ -1,5 +1,7 @@
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Remove bogus local declarations.
+	* gnatsupp/gnatsupp.c: Add missing prototypes.
 	* amba/amba.c, console/console.c, timer/timer.c: Add missing 
 	prototypes.
 
