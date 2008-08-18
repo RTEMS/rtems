@@ -211,7 +211,7 @@ extern void _exc_data_abort();
 
 
 /* FIXME: put comments here */
-void rtems_exception_init_mngt()
+void rtems_exception_init_mngt(void)
 {
         ISR_Level level;
       

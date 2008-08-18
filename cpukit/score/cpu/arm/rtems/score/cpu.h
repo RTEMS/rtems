@@ -372,7 +372,7 @@ typedef struct {
 
 typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
 extern cpuExcHandlerType _currentExcHandler;
-extern void rtems_exception_init_mngt();
+extern void rtems_exception_init_mngt(void);
   
 /*
  *  The following structure defines the set of information saved
