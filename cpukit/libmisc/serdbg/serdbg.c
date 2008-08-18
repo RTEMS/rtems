@@ -53,8 +53,6 @@ int serdbg_init_dbg
   static boolean is_initialized = FALSE;
 
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  extern void set_debug_traps(void);
-  extern void breakpoint(void);
 
   if (is_initialized) {
     return RTEMS_SUCCESSFUL;

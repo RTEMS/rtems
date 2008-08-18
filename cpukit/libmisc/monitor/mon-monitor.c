@@ -555,7 +555,6 @@ rtems_monitor_task(
 
     for (;;)
     {
-        extern rtems_tcb * _Thread_Executing;
         rtems_monitor_command_entry_t *command;
 
         debugee = _Thread_Executing;

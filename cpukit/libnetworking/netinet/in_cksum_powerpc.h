@@ -38,9 +38,10 @@
 
 
 int
-in_cksum(m, len)
-	register struct mbuf *m;
-	register int len;
+in_cksum(
+	struct mbuf *m,
+	int len
+)
 {
 	u_char junk;
 	register u_short *w;

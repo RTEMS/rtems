@@ -1,5 +1,13 @@
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/scandir.c,
+	libmisc/cpuuse/cpuusagereset.c, libmisc/monitor/mon-monitor.c,
+	libmisc/serdbg/serdbg.c, libmisc/serdbg/serdbg.h,
+	libnetworking/netinet/in_cksum_powerpc.h, shttpd/compat_rtems.h: Fix
+	warnings.
+
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/include/rtems/itron/task.h, itron/src/def_cyc.c,
 	itron/src/task.c, libcsupport/src/newlibc_exit.c,
 	libcsupport/src/sync.c, libfs/src/imfs/imfs_fchmod.c,

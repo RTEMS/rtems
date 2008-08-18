@@ -174,6 +174,11 @@ int getDebugChar
 |    received character                                                     |
 \*=========================================================================*/
 
+/*
+ * Assumed to be provided by the BSP
+ */
+extern void set_debug_traps(void);
+extern void breakpoint(void);
 #ifdef __cplusplus
 }
 #endif

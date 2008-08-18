@@ -13,6 +13,7 @@
 
 #include <rtems.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <netinet/in.h>
 #include <dirent.h>
 #include <arpa/inet.h>

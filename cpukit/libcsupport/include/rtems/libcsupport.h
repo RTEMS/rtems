@@ -40,6 +40,7 @@ extern void libc_init(void);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);
 extern size_t malloc_free_space(void);
+extern void open_dev_console(void);
 
 /*
  *  Prototypes required to install newlib reentrancy user extension
