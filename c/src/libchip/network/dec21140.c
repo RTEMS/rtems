@@ -375,7 +375,7 @@ dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
 }
 
 static rtems_isr
-dec21140Enet_interrupt_handler_entry()
+dec21140Enet_interrupt_handler_entry(void)
 {
    int i;
 
