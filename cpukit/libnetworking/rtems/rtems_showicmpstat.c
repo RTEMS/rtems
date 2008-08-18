@@ -31,12 +31,16 @@ showicmpstat (const char *name, unsigned long n)
 		printf ("%35s%12lu\n", name, n);
 }
 
+/*
+ * External data we peek at during statistics reporting
+ */
+extern unsigned int icmplenPanicAvoided;
+
 void
 rtems_bsdnet_show_icmp_stats (void)
 {
 	int i;
 	char cbuf[20];
-	extern unsigned int icmplenPanicAvoided;
 
 	printf ("************ ICMP Statistics ************\n");
 	showicmpstat ("Calls to icmp_error()", icmpstat.icps_error);

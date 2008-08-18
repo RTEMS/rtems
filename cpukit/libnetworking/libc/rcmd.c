@@ -54,6 +54,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <rpc/rpc.h>
+#include <sys/select.h>
 #ifdef YP
 #include <rpcsvc/yp_prot.h>
 #include <rpcsvc/ypclnt.h>

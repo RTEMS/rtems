@@ -1,5 +1,14 @@
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libnetworking/lib/ftpfs.c, libnetworking/libc/inet_ntoa.c,
+	libnetworking/libc/rcmd.c, libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_glue.c,
+	libnetworking/rtems/rtems_malloc_mbuf.c,
+	libnetworking/rtems/rtems_showicmpstat.c, libnetworking/sys/malloc.h:
+	Fix some warnings.
+
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/include/rtems/libcsupport.h, libcsupport/src/scandir.c,
 	libmisc/cpuuse/cpuusagereset.c, libmisc/monitor/mon-monitor.c,
 	libmisc/serdbg/serdbg.c, libmisc/serdbg/serdbg.h,

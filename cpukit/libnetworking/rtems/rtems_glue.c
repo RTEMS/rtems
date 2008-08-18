@@ -138,6 +138,12 @@ rtems_bsdnet_free (void *addr, int type)
 }
 
 /*
+ * Externs for BSD data we have to access during initialization
+ */
+extern struct domain routedomain;
+extern struct domain inetdomain;
+
+/*
  * Do the initializations required by the BSD code
  */
 static int
@@ -192,8 +198,6 @@ bsd_init (void)
 	 * Set up domains
 	 */
 	{
-	extern struct domain routedomain;
-	extern struct domain inetdomain;
 
 	routedomain.dom_next = domains;
 	domains = &routedomain;
@@ -215,15 +219,19 @@ bsd_init (void)
 }
 
 /*
+ * RTEMS Specific Helper Routines
+ */
+extern void rtems_set_udp_buffer_sizes( u_long, u_long );
+extern void rtems_set_tcp_buffer_sizes( u_long, u_long );
+extern void rtems_set_sb_efficiency( u_long );
+
+/*
  * Initialize and start network operations
  */
 static int
 rtems_bsdnet_initialize (void)
 {
 	rtems_status_code sc;
-        extern void rtems_set_udp_buffer_sizes( u_long, u_long );
-        extern void rtems_set_tcp_buffer_sizes( u_long, u_long );
-        extern void rtems_set_sb_efficiency( u_long );
 
 	/*
 	 * Set the priority of all network tasks

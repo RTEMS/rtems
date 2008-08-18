@@ -633,7 +633,6 @@ int rtems_ftp_open(
     }
     else if (1 != inet_aton(hostname,&(fsp->farCtrlAddress.sin_addr))) {
       struct hostent *hent;
-      struct hostent *gethostbyname(const char *name);
       
       hent = gethostbyname(hostname);
       if (hent != NULL) {

@@ -347,6 +347,9 @@ extern struct kmembuckets bucket[];
 
 void	free (void *addr, int type);
 void	*malloc (size_t size, int type, int flags);
+/* standard realloc but we cannot include stdlib.h */
+void	*realloc(void * __r, size_t __size);
+
 #endif /* _KERNEL */
 
 #endif /* !_SYS_MALLOC_H_ */

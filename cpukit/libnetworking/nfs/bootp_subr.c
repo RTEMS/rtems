@@ -268,7 +268,6 @@ void bootpboot_p_iflist(void)
 void *bootp_strdup_realloc(char *dst,const char *src)
 {
   size_t len;
-  void *realloc(void * __r, size_t __size);
 
   if (dst == NULL) {
     /* first allocation, simply use strdup */
