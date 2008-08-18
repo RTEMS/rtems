@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/irq/irq_init.c: Add missing prototypes.
+
 2008-08-04	Ray Xu <rayx.cn@gmail.com>
 
 	* shared/irq/irq_asm.S: Correct minor mistakes in adding Thumb code

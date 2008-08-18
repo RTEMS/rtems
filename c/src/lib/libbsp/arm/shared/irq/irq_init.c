@@ -20,14 +20,14 @@
 /*
  * default int vector
  */
-extern void _ISR_Handler();
+extern void _ISR_Handler(void);
 
-void default_int_handler()
+void default_int_handler(void)
 {
   printk("raw_idt_notify has been called \n");
 }
 
-void  rtems_irq_mngt_init()
+void  rtems_irq_mngt_init(void)
 {
     rtems_interrupt_level       level;
 
