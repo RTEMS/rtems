@@ -1,3 +1,7 @@
+2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsppost.c: Fix warning by moving prototype to libcsupport.h.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tod.c: Add missing prototypes.

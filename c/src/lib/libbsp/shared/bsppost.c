@@ -15,12 +15,10 @@
  */
 
 #include <rtems.h>
-#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 #include <fcntl.h>
 
 void bsp_postdriver_hook(void)
 {
-  extern void open_dev_console(void);
-
   open_dev_console();
 }
