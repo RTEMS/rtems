@@ -23,7 +23,7 @@
 #include <cplb.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
-
+#include <libcpu/interrupt.h>
 
 const unsigned int dcplbs_table[16][2] = {  
 	{ 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) },
@@ -103,6 +103,8 @@ void bsp_pretasking_hook(void)
     extern int HeapSize;
     void         *heapStart = &HeapBase;
     unsigned long heapSize = (unsigned long)&HeapSize;
+
+    bfin_interrupt_init();
 
     bsp_libc_init(heapStart, heapSize, 0);
 }

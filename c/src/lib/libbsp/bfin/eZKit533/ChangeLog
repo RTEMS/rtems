@@ -1,3 +1,9 @@
+2008-08-18	Allan Hessenflow <allanh@kallisti.com>
+
+	* Makefile.am, console/console-io.c, startup/bspstart.c: Update to use
+	shared libcpu version of code implemented as part of bf537Stamp
+	effort.
+
 2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Fix CVS Id.
