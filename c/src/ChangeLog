@@ -1,4 +1,8 @@
-2008-08-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/ide/ata.c, libchip/network/elnk.c: Add missing prototypes.
+
+2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Add -Wimplicit-function-declaration 
 	-Wstrict-prototypes to RTEMS_CFLAGS.
