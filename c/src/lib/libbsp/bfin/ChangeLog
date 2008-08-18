@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/clock/tod.h: Add missing prototypes.
+
 2008-08-15	Allan Hessenflow <allanh@kallisti.com>
 
 	* acinclude.m4: Add bf537Stamp.
