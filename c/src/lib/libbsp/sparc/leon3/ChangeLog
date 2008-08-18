@@ -1,3 +1,8 @@
+2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* amba/amba.c, console/console.c, timer/timer.c: Add missing 
+	prototypes.
+
 2008-08-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: All SPARC executables should include
