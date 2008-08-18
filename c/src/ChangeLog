@@ -1,3 +1,7 @@
+2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Add -Wnested-externs.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/dec21140.c: Add missing prototype.
