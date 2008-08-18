@@ -136,7 +136,6 @@ void bfin_twi_isr(int source) {
   int i;
   uint16_t r;
   uint16_t stat;
-  uint8_t data;
 
   for (i = 0; i < N_BFIN_TWI; i++) {
     base = twi[i].base;
