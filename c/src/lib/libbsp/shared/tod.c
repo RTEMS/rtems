@@ -18,8 +18,8 @@
 extern size_t                     RTC_Count;
 extern rtems_device_minor_number  RTC_Minor;
 
-int RTC_Present;
-void setRealTimeToRTEMS(void);
+extern int RTC_Present;
+extern void setRealTimeToRTEMS(void);
 
 /*
  *  rtc_initialize
@@ -138,7 +138,7 @@ void setRealTimeToRTEMS()
  *  Return values: NONE
  */
 
-void setRealTimeFromRTEMS()
+void setRealTimeFromRTEMS(void)
 {
   rtems_time_of_day rtems_tod;
 
@@ -222,7 +222,7 @@ int setRealTime(
 /* XXX this routine should be part of the public RTEMS interface */
 uint32_t   _TOD_To_seconds( rtems_time_of_day *tod );
 
-int checkRealTime()
+int checkRealTime(void)
 {
   rtems_time_of_day rtems_tod;
   rtems_time_of_day rtc_tod;

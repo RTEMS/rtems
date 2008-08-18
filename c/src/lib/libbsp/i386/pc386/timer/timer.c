@@ -76,7 +76,7 @@ extern int x86_capability;
  * forward declarations
  */
 
-void Timer_exit();
+void Timer_exit(void);
 
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
@@ -310,13 +310,13 @@ Timer_initialize(void)
 }
 
 uint32_t
-Read_timer()
+Read_timer(void)
 {
     return (*Read_timer_function)();
 }
 
 void
-Timer_exit()
+Timer_exit(void)
 {
     return (*Timer_exit_function)();
 }
@@ -365,7 +365,7 @@ void loadTimerValue( unsigned short loadedValue )
 |			   number of ticks to micro-seconds.
 | Returns: number of clock bits elapsed since last load.
 +--------------------------------------------------------------------------*/
-unsigned int readTimer0()
+unsigned int readTimer0(void)
 {
   unsigned short lsb, msb;
   unsigned char  status;
@@ -382,7 +382,7 @@ unsigned int readTimer0()
   return (2*lastLoadedValue - count);
 }
 
-void Timer0Reset()
+void Timer0Reset(void)
 {
   loadTimerValue(0xffff);
   readTimer0();

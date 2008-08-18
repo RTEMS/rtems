@@ -58,7 +58,7 @@ static unsigned char mouse_reply_expected = 0;
 #define AUX_INTS_ON  (KBD_MODE_KCC | KBD_MODE_SYS | KBD_MODE_MOUSE_INT | KBD_MODE_KBD_INT)
 #define MAX_RETRIES	60		/* some aux operations take long time*/
 
-static void ps2_mouse_interrupt();
+static void ps2_mouse_interrupt(void);
 
 static void ( *driver_input_handler_ps2 )( void *,  char *, int ) = 0;
 
@@ -230,7 +230,7 @@ static unsigned char handle_kbd_event(void)
 	return status;
 }
 
-static void ps2_mouse_interrupt()
+static void ps2_mouse_interrupt(void)
 {
 	handle_kbd_event();
 }
@@ -421,7 +421,7 @@ static int queue_empty(void)
  */
 #define AUX_DEV ((void *)queue)
 
-static int release_aux()
+static int release_aux(void)
 {
 	if (--aux_count)
 		return 0;
@@ -436,7 +436,7 @@ static int release_aux()
  * Enable auxiliary device.
  */
 
-static int open_aux()
+static int open_aux(void)
 {
   rtems_status_code status;
 
