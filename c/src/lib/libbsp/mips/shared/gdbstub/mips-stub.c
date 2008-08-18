@@ -1440,7 +1440,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
     */
 
    {
-      extern void clear_cache();
+      extern void clear_cache(void);
       clear_cache();
    }
 

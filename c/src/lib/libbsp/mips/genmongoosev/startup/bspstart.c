@@ -65,7 +65,7 @@ void bsp_start( void )
 {
    extern void _sys_exit(int);
    extern int WorkspaceBase;
-   extern void mips_install_isr_entries();
+   extern void mips_install_isr_entries(void);
    extern void mips_gdb_stub_install(void);
 
    /* HACK -- tied to value linkcmds */
