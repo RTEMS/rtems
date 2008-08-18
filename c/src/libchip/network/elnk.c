@@ -1026,8 +1026,7 @@ inline unsigned char CSR_READ_1( struct elnk_softc *sc, int reg)
  * to make it a function.
  */
 static void
-xl_wait(sc)
-   struct elnk_softc	*sc;
+xl_wait(struct elnk_softc	*sc)
 {
    register int		i;
 
@@ -1068,8 +1067,8 @@ xl_wait(sc)
  * Sync the PHYs by setting data bit and strobing the clock 32 times.
  */
 static void
-xl_mii_sync(sc)
-   struct elnk_softc		*sc;
+xl_mii_sync(
+   struct elnk_softc		*sc)
 {
    register int		i;
 
@@ -1090,10 +1089,10 @@ xl_mii_sync(sc)
  * Clock a series of bits through the MII.
  */
 static void
-xl_mii_send(sc, bits, cnt)
-   struct elnk_softc		*sc;
-   u_int32_t		bits;
-   int			cnt;
+xl_mii_send(
+   struct elnk_softc		*sc,
+   u_int32_t		bits,
+   int			cnt )
 {
    int			i;
 
@@ -1115,10 +1114,9 @@ xl_mii_send(sc, bits, cnt)
  * Read an PHY register through the MII.
  */
 static int
-xl_mii_readreg(sc, frame)
-   struct elnk_softc		*sc;
-   struct xl_mii_frame	*frame;
-
+xl_mii_readreg(
+   struct elnk_softc	*sc,
+   struct xl_mii_frame	*frame )
 {
    int			i, ack;
 
@@ -1199,10 +1197,9 @@ xl_mii_readreg(sc, frame)
  * Write to a PHY register through the MII.
  */
 static int
-xl_mii_writereg(sc, frame)
-   struct elnk_softc		*sc;
-   struct xl_mii_frame	*frame;
-
+xl_mii_writereg(
+   struct elnk_softc	*sc,
+   struct xl_mii_frame	*frame )
 {
    /*
     * Set up frame for TX.
@@ -1244,9 +1241,10 @@ xl_mii_writereg(sc, frame)
 }
 
 static int
-xl_miibus_readreg(sc, phy, reg)
-   struct elnk_softc	*sc;
-   int			phy, reg;
+xl_miibus_readreg(
+   struct elnk_softc	*sc,
+   int			phy, 
+   int			reg )
 {
    struct xl_mii_frame	frame;
 
@@ -1273,9 +1271,11 @@ xl_miibus_readreg(sc, phy, reg)
 }
 
 static int
-xl_miibus_writereg(sc, phy, reg, data)
-   struct elnk_softc		*sc;
-   int			phy, reg, data;
+xl_miibus_writereg(
+   struct elnk_softc		*sc,
+   int			phy, 
+   int			reg, 
+   int			data )
 {
    struct xl_mii_frame	frame;
 
@@ -1309,8 +1309,7 @@ xl_miibus_writereg(sc, phy, reg, data)
  * it a command.
  */
 static int
-xl_eeprom_wait(sc)
-   struct elnk_softc		*sc;
+xl_eeprom_wait(struct elnk_softc *sc)
 {
    int			i;
 
@@ -1334,12 +1333,12 @@ xl_eeprom_wait(sc)
  * data is stored in the EEPROM in network byte order.
  */
 static int
-xl_read_eeprom(sc, dest, off, cnt, swap)
-   struct elnk_softc		*sc;
-   caddr_t			dest;
-   int			off;
-   int			cnt;
-   int			swap;
+xl_read_eeprom(
+   struct elnk_softc		*sc,
+   caddr_t			dest,
+   int			off,
+   int			cnt,
+   int			swap)
 {
    int			err = 0, i;
    u_int16_t		word = 0, *ptr;
@@ -1382,9 +1381,9 @@ xl_read_eeprom(sc, dest, off, cnt, swap)
 
 
 static void
-xl_stats_update(timerid,xsc)
-   rtems_id timerid;
-   void *xsc;
+xl_stats_update(
+   rtems_id timerid,
+   void *xsc)
 {
    struct elnk_softc	*sc = (struct elnk_softc *)xsc;
    struct ifnet         *ifp = &sc->arpcom.ac_if;
@@ -1468,8 +1467,7 @@ xl_stats_update(timerid,xsc)
 
 
 static void
-xl_reset(sc)
-   struct elnk_softc		*sc;
+xl_reset(struct elnk_softc *sc)
 {
    register int		i;
 
@@ -1520,8 +1518,7 @@ xl_reset(sc)
 
 
 static void
-xl_stop(sc)
-   struct elnk_softc		*sc;
+xl_stop(struct elnk_softc *sc)
 {
    struct ifnet		*ifp;
 
@@ -1561,8 +1558,7 @@ xl_stop(sc)
 
 
 static void
-xl_setcfg(sc)
-   struct elnk_softc		*sc;
+xl_setcfg(struct elnk_softc *sc)
 {
    u_int32_t		icfg;
 
@@ -1587,9 +1583,9 @@ xl_setcfg(sc)
 
 
 static void
-xl_setmode(sc, media)
-   struct elnk_softc	*sc;
-   int			media;
+xl_setmode(
+   struct elnk_softc	*sc,
+   int			media)
 {
    u_int32_t		icfg;
    u_int16_t		mediastat;
@@ -1690,9 +1686,9 @@ xl_setmode(sc, media)
 
 
 static void
-xl_choose_xcvr(sc, verbose)
-   struct elnk_softc	*sc;
-   int			verbose;
+xl_choose_xcvr(
+   struct elnk_softc	*sc,
+   int			verbose)
 {
    u_int16_t		devid;
 
@@ -1802,8 +1798,7 @@ xl_choose_xcvr(sc, verbose)
  * possible manufacturing defect with his adapter/system/whatever.
  */
 static void
-xl_mediacheck(sc)
-   struct elnk_softc		*sc;
+xl_mediacheck(struct elnk_softc		*sc)
 {
 
    xl_choose_xcvr(sc, 1);
@@ -2053,7 +2048,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
 
 
 static rtems_isr
-elnk_interrupt_handler_entry()
+elnk_interrupt_handler_entry(void)
 {
    int i;
 

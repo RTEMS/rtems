@@ -87,8 +87,8 @@ static struct xp_ops svctcp_rendezvous_op = {
 	svctcp_destroy
 };
 
-static int readtcp(), writetcp();
-static SVCXPRT *makefd_xprt();
+static int readtcp(char *, char*, int), writetcp(char *, char*, int);
+static SVCXPRT *makefd_xprt( int fd, u_int sendsize, u_int recvsize);
 
 struct tcp_rendezvous { /* kept in xprt->xp_p1 */
 	u_int sendsize;
@@ -325,10 +325,11 @@ static struct timeval wait_per_try = { 35, 0 };
  */
 static int
 readtcp(
-	SVCXPRT *xprt,
-	caddr_t buf,
+	char *_xprt,
+	char *buf,
 	int len)
 {
+	SVCXPRT *xprt = (SVCXPRT*) _xprt;
 	register int sock = xprt->xp_sock;
 	struct timeval start, delta, tv;
 	struct timeval tmp1, tmp2;
@@ -393,10 +394,11 @@ fatal_err:
  */
 static int
 writetcp(
-	SVCXPRT *xprt,
-	caddr_t buf,
+	char *_xprt,
+	char *buf,
 	int len)
 {
+	SVCXPRT *xprt = (SVCXPRT *) _xprt;
 	register int i, cnt;
 
 	for (cnt = len; cnt > 0; cnt -= i, buf += i) {

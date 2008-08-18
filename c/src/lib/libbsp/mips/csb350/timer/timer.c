@@ -19,7 +19,7 @@
 rtems_boolean Timer_driver_Find_average_overhead;
 uint32_t tstart;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
     asm volatile ("mfc0 %0, $9\n" : "=r" (tstart));
     /* tick time in picooseconds */
@@ -30,7 +30,7 @@ void Timer_initialize()
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* tx39 simulator can count instructions. :) */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t  total;
   uint32_t  cnt;

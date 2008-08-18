@@ -63,7 +63,7 @@ int ata_irq_chain_cnt = 0;
 #ifdef SAFE_MUTEX
 static rtems_id ata_lock;
 static void
-rtems_ata_lock ()
+rtems_ata_lock (void)
 {
   rtems_status_code sc = rtems_semaphore_obtain (ata_lock,
                                                  RTEMS_WAIT,
@@ -73,7 +73,7 @@ rtems_ata_lock ()
 }
 
 static void
-rtems_ata_unlock ()
+rtems_ata_unlock (void)
 {
   rtems_status_code sc = rtems_semaphore_release (ata_lock);
   if (sc != RTEMS_SUCCESSFUL)

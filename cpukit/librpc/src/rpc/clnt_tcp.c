@@ -65,8 +65,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_tcp.c,v 1.14 2000/01/27 23
 
 #define MCALL_MSG_SIZE 24
 
-static int	readtcp();
-static int	writetcp();
+static int	readtcp(char *, char*, int);
+static int	writetcp(char *, char*, int);
 
 static enum clnt_stat	clnttcp_call(CLIENT *, u_long, xdrproc_t, caddr_t, xdrproc_t, caddr_t, struct timeval);
 static void		clnttcp_abort(void);
@@ -489,10 +489,11 @@ clnttcp_destroy(
  */
 static int
 readtcp(
-	struct ct_data *ct,
-	caddr_t buf,
+	char *_ct,
+	char *buf,
 	int len)
 {
+	struct ct_data *ct = (struct ct_data*) _ct;
 	fd_set *fds, readfds;
 	struct timeval start, after, duration, delta, tmp, tv;
 	int r, save_errno;
@@ -564,10 +565,11 @@ readtcp(
 
 static int
 writetcp(
-	struct ct_data *ct,
-	caddr_t buf,
+	char *_ct,
+	char *buf,
 	int len)
 {
+	struct ct_data *ct = (struct ct_data *) _ct;
 	register int i, cnt;
 
 	for (cnt = len; cnt > 0; cnt -= i, buf += i) {

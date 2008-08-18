@@ -74,9 +74,9 @@
   {l_util.l = sum; sum = l_util.s[0] + l_util.s[1];  ADDCARRY(sum);}
 
 int
-in_cksum(m, len)
-	register struct mbuf *m;
-	register uint32_t len;
+in_cksum(
+	struct mbuf *m,
+	uint32_t len )
 {
 	register u_short *w;
 	register int32_t sum = 0;
