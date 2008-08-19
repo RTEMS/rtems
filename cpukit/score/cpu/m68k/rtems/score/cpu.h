@@ -442,18 +442,18 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #if (defined(__mcoldfire__) && ( M68K_HAS_FPU == 1 ))
 #define _CPU_Context_Initialize_fp( _fp_area ) \
-   { uint32_t   *_fp_context = (uint32_t   *)*(_fp_area); \
+   { uint32_t   *_fp_context = (uint32_t *)*(_fp_area); \
      \
      *(--(_fp_context)) = 0; \
-     *(_fp_area) = (uint8_t   *)(_fp_context); \
+     *(_fp_area) = (void *)(_fp_context); \
      asm volatile("movl %0,%%macsr": : "d" (0) ); \
    }
 #else
 #define _CPU_Context_Initialize_fp( _fp_area ) \
-   { uint32_t   *_fp_context = (uint32_t   *)*(_fp_area); \
+   { uint32_t   *_fp_context = (uint32_t *)*(_fp_area); \
      \
      *(--(_fp_context)) = 0; \
-     *(_fp_area) = (uint8_t   *)(_fp_context); \
+     *(_fp_area) = (void *)(_fp_context); \
    }
 #endif
 #endif

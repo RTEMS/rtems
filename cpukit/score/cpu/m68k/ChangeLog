@@ -1,5 +1,9 @@
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/score/cpu.h: Fix type when initializing FP context.
+
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* cpu.c, rtems/score/cpu.h: Add extern for bfffo table and rename it to
 	indicate that it is specific to this architecture.
 
