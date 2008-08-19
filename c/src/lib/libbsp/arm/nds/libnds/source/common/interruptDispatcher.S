@@ -22,6 +22,24 @@
 		distribution.
 
 	$Log$
+	Revision 1.1  2008/04/17 23:09:41  joel
+	2008-04-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+	
+		* Makefile.am: Move .s files to .S
+		* dswifi/common/source/spinlock.S, libfat/source/disc_io/io_dldi.S,
+		libfat/source/disc_io/io_scsd_s.S, libnds/source/arm9/COS.S,
+		libnds/source/arm9/SIN.S, libnds/source/arm9/TAN.S,
+		libnds/source/arm9/dcache.S, libnds/source/arm9/default_font.S,
+		libnds/source/arm9/icache.S, libnds/source/common/biosCalls.S,
+		libnds/source/common/interruptDispatcher.S: New files.
+		* dswifi/common/source/spinlock.s, libfat/source/disc_io/io_dldi.s,
+		libfat/source/disc_io/io_scsd_s.s, libnds/source/arm9/COS.s,
+		libnds/source/arm9/SIN.s, libnds/source/arm9/TAN.s,
+		libnds/source/arm9/dcache.s, libnds/source/arm9/default_font.s,
+		libnds/source/arm9/exceptionHandler.s, libnds/source/arm9/icache.s,
+		libnds/source/common/biosCalls.s,
+		libnds/source/common/interruptDispatcher.s: Removed.
+	
 	Revision 1.1  2008/04/16 18:37:33  joel
 	2008-04-16	Matthieu Bucchianeri <mbucchia@gmail.com>
 	

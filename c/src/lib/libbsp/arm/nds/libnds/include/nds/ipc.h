@@ -97,10 +97,10 @@ typedef struct sTransferRegion {
 
 
 static inline
-TransferRegion volatile * getIPC(); // __attribute__ ((deprecated));
+TransferRegion volatile * getIPC(void); // __attribute__ ((deprecated));
 
 static inline
-TransferRegion volatile * getIPC() {
+TransferRegion volatile * getIPC(void) {
 	return (TransferRegion volatile *)(0x027FF000);
 }
 
@@ -128,7 +128,7 @@ static inline void IPC_SendSync(unsigned int sync) {
 }
 
 //---------------------------------------------------------------------------------
-static inline int IPC_GetSync() {
+static inline int IPC_GetSync(void) {
 //---------------------------------------------------------------------------------
 	return REG_IPC_SYNC & 0x0f;
 }

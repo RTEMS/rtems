@@ -110,7 +110,7 @@ uint8 cardEepromCommand(uint8 command, uint32 address);
 int cardEepromGetType(void);
 
 // Returns the size in bytes of EEPROM
-uint32 cardEepromGetSize();
+uint32 cardEepromGetSize(void);
 
 // Erases the entire chip. TYPE 3 chips MUST be erased before writing to them. (I think?)
 void cardEepromChipErase(void);

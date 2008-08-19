@@ -160,7 +160,7 @@ enum ARM7_power
 #define POWER_UNKNOWN     BIT(1)
 #endif /* DOXYGEN */
 
-void readUserSettings();
+void readUserSettings(void);
 
 #endif /* ARM7 */
 

@@ -59,7 +59,7 @@ typedef struct UnpackStruct {
 } PACKED TUnpackStruct, * PUnpackStruct;
 
 
-/*! \fn swiSoftReset()
+/*! \fn swiSoftReset(void)
 	\brief reset the DS.
 
 */
@@ -97,7 +97,7 @@ void swiDelay(uint32 duration);
 
 void swiIntrWait(int waitForSet, uint32 flags);
 
-/*! \fn  swiWaitForVBlank()
+/*! \fn  swiWaitForVBlank(void)
 	\brief Wait for vblank interrupt
 
 	Waits for a vertical blank interrupt

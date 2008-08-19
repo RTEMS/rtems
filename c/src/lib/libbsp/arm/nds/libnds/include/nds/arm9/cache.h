@@ -40,10 +40,10 @@ extern "C" {
 #include "nds/jtypes.h"
 
 
-/*! \fn IC_InvalidateAll()
+/*! \fn IC_InvalidateAll(void)
 	\brief invalidate entire instruction cache.
 */
-void	IC_InvalidateAll();
+void	IC_InvalidateAll(void);
 
 	
 /*! \fn IC_InvalidateRange(const void *base, u32 size)
@@ -54,10 +54,10 @@ void	IC_InvalidateAll();
 void	IC_InvalidateRange(const void *base, u32 size);
 
 
-/*! \fn DC_FlushAll()
+/*! \fn DC_FlushAll(void)
 	\brief flush the entire data cache to memory.
 */
-void	DC_FlushAll();
+void	DC_FlushAll(void);
 
 
 /*! \fn DC_FlushRange(const void *base, u32 size)
@@ -68,10 +68,10 @@ void	DC_FlushAll();
 void	DC_FlushRange(const void *base, u32 size);
 
 
-/*! \fn DC_InvalidateAll()
+/*! \fn DC_InvalidateAll(void)
 	\brief invalidate the entire data cache.
 */
-void	DC_InvalidateAll();
+void	DC_InvalidateAll(void);
 
 
 /*! \fn DC_InvalidateRange(const void *base, u32 size)

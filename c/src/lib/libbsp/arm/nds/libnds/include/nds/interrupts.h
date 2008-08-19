@@ -127,14 +127,14 @@ extern	vuint32	__irq_flags[];
 
 struct IntTable{IntFn handler; u32 mask;};
 
-/*! \fn irqInit()
+/*! \fn irqInit(void)
 	\brief Initialise the libnds interrupt system.
 
 	Call this function at the start of any application which requires interrupt support.
 	This function should be used in preference to irqInitHandler.
 	 
 */
-void irqInit();
+void irqInit(void);
 /*! \fn irqSet(IRQ_MASK irq, VoidFunctionPointer handler)
 	\brief Add a handler for the given interrupt mask.
 

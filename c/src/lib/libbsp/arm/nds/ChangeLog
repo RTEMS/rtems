@@ -1,3 +1,28 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* dswifi/arm7/makefile, dswifi/include/netinet/in.h,
+	libnds/basicARM7/source/defaultARM7.c, libnds/include/gbfs.h,
+	libnds/include/nds/bios.h, libnds/include/nds/card.h,
+	libnds/include/nds/dma.h, libnds/include/nds/interrupts.h,
+	libnds/include/nds/ipc.h, libnds/include/nds/jtypes.h,
+	libnds/include/nds/registers_alt.h, libnds/include/nds/system.h,
+	libnds/include/nds/timers.h, libnds/include/nds/arm7/audio.h,
+	libnds/include/nds/arm7/clock.h, libnds/include/nds/arm7/serial.h,
+	libnds/include/nds/arm7/touch.h, libnds/include/nds/arm9/boxtest.h,
+	libnds/include/nds/arm9/cache.h, libnds/include/nds/arm9/console.h,
+	libnds/include/nds/arm9/ndsmotion.h, libnds/include/nds/arm9/video.h,
+	libnds/include/nds/arm9/videoGL.h, libnds/source/arm7/audio.c,
+	libnds/source/arm7/clock.c, libnds/source/arm7/microphone.c,
+	libnds/source/arm7/touch.c, libnds/source/arm7/userSettings.c,
+	libnds/source/arm9/boxtest.c, libnds/source/arm9/gurumeditation.c,
+	libnds/source/arm9/ndsmotion.c, libnds/source/arm9/videoGL.c,
+	libnds/source/common/card.c,
+	libnds/source/common/interruptDispatcher.S, touchscreen/reco.c: Fix
+	various warnings by fixing prototypes. Remove unused .bin files.
+	Convert all files to UNIX CF/LF.
+	* libnds/source/arm9/COS.bin, libnds/source/arm9/SIN.bin,
+	libnds/source/arm9/TAN.bin, libnds/source/arm9/default_font.bin: Removed.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* block/block.c: Update to the libblock changes.
