@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 extern void _wr_vbr(uint32_t);
-extern void init_main();
+extern void init_main(void);
 extern int boot_card(int, char **, char **);
 
 /*

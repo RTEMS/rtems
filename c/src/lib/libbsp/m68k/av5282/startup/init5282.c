@@ -70,7 +70,7 @@ void Init5282 (void)
     
     /* Copy the interrupt vector table to address 0x0 in SDRAM */
     {
-        extern void INTERRUPT_VECTOR();
+        extern void INTERRUPT_VECTOR(void);
         uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
         uint32_t *intvec = (uint32_t *)0x0;
         register int i;

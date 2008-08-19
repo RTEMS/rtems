@@ -200,7 +200,7 @@ Init5206e(void)
                              MCF5206E_CSCR_RD;
 
     {
-        extern void INTERRUPT_VECTOR();
+        extern void INTERRUPT_VECTOR(void);
         uint32_t         *inttab = (uint32_t*)&INTERRUPT_VECTOR;
         uint32_t         *intvec = (uint32_t*)BSP_MEM_ADDR_ESRAM;
         register int i;

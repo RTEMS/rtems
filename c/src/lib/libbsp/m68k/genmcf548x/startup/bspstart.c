@@ -188,7 +188,7 @@ for(way_cnt=0; way_cnt<4; way_cnt++)
  *  Use the shared implementations of the following routines
  */
 
-void bsp_predriver_hook()
+void bsp_predriver_hook(void)
 {
 	/* Do nothing */
 }
@@ -197,7 +197,7 @@ void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);		/* m68k version */
 
-void bsp_calc_mem_layout()
+void bsp_calc_mem_layout(void)
 {
   /*
    * these labels (!) are defined in the linker command file

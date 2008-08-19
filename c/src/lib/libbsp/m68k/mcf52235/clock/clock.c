@@ -54,7 +54,7 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 /*
  * Turn off the clock
  */
-static void Clock_driver_support_shutdown_hardware()
+static void Clock_driver_support_shutdown_hardware(void)
 {
   MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN;
 }
@@ -64,7 +64,7 @@ static void Clock_driver_support_shutdown_hardware()
  *
  * We need to have 1 interrupt every BSP_Configuration.microseconds_per_tick
  */
-static void Clock_driver_support_initialize_hardware()
+static void Clock_driver_support_initialize_hardware(void)
 {
   int level;
   uint32_t pmr;
