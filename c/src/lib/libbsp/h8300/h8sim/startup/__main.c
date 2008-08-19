@@ -4,12 +4,12 @@
  *  $Id$
  */
 
-void __main ()
+void __main (void)
 {
   static int initialized;
   if (! initialized)
     {
-      typedef void (*pfunc) ();
+      typedef void (*pfunc) (void);
       extern pfunc __ctors[];
       extern pfunc __ctors_end[];
       pfunc *p;
