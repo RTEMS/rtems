@@ -592,7 +592,7 @@ typedef struct stat gstat_t;
 #if (defined (ASSERT) || defined (ASSERT_CE))
 	#define a_assert(C)		if (C) ; else error(E_L, E_ASSERT, T("%s"), T(#C))
 #else
-	#define a_assert(C)		if (1) ; else
+	#define a_assert(C)		if (1) ; else {}
 #endif /* ASSERT || ASSERT_CE */
 
 /******************************************************************************/

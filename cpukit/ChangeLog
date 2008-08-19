@@ -1,3 +1,7 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* httpd/uemf.h: Add empty braces to macro.
+
 2008-08-19	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>
 
 	PR 1296/cpukit.
