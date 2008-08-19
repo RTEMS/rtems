@@ -1,5 +1,13 @@
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libfs/src/nfsclient/src/nfs.c, libfs/src/nfsclient/src/rpcio.c:
+	Remove some warnings. Using ASSERT/assert macros confuses gcc who is
+	unsure actions take place. More importantly if you ever compiled with
+	NDEBUG set wrong, intended actions would not occur. Likely I did not
+	catch all of these.
+
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* httpd/uemf.h: Add empty braces to macro.
 
 2008-08-19	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>

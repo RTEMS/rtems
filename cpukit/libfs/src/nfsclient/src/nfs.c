@@ -961,6 +961,7 @@ nfsInit(int smallPoolDepth, int bigPoolDepth)
 {
 static int initialised = 0;
 entry	dummy;
+rtems_status_code status;
 
 	if (initialised)
 		return;
@@ -997,37 +998,40 @@ entry	dummy;
 	dummy.name        = "somename"; /* guess average length of a filename */
 	dirres_entry_size = xdr_sizeof((xdrproc_t)xdr_entry, &dummy);
 
-	assert( smallPool = rpcUdpXactPoolCreate(
-							NFS_PROGRAM,
-							NFS_VERSION_2,
-							CONFIG_NFS_SMALL_XACT_SIZE,
-							smallPoolDepth) );
+	smallPool = rpcUdpXactPoolCreate(
+		NFS_PROGRAM,
+		NFS_VERSION_2,
+		CONFIG_NFS_SMALL_XACT_SIZE,
+		smallPoolDepth);
+	assert( smallPool );
 
-	assert( bigPool   = rpcUdpXactPoolCreate(
-							NFS_PROGRAM,
-							NFS_VERSION_2,
-							CONFIG_NFS_BIG_XACT_SIZE,
-							bigPoolDepth) );
+	bigPool = rpcUdpXactPoolCreate(
+		NFS_PROGRAM,
+		NFS_VERSION_2,
+		CONFIG_NFS_BIG_XACT_SIZE,
+		bigPoolDepth);
+	assert( bigPool );
 
-	assert( RTEMS_SUCCESSFUL == rtems_semaphore_create(
-							rtems_build_name('N','F','S','l'),
-							1,
-							MUTEX_ATTRIBUTES,
-							0,
-							&nfsGlob.llock) );
-
-	assert( RTEMS_SUCCESSFUL == rtems_semaphore_create(
-							rtems_build_name('N','F','S','m'),
-							1,
-							MUTEX_ATTRIBUTES,
-							0,
-							&nfsGlob.lock) );
+	status = rtems_semaphore_create(
+		rtems_build_name('N','F','S','l'),
+		1,
+		MUTEX_ATTRIBUTES,
+		0,
+		&nfsGlob.llock);
+	assert( status == RTEMS_SUCCESSFUL );
+	status = rtems_semaphore_create(
+		rtems_build_name('N','F','S','m'),
+		1,
+		MUTEX_ATTRIBUTES,
+		0,
+		&nfsGlob.lock);
+	assert( status == RTEMS_SUCCESSFUL );
 
 	if (sizeof(ino_t) < sizeof(u_int)) {
 		fprintf(stderr,
-				"WARNING: Using 'short st_ino' hits performance and may fail to access/find correct files\n");
+			"WARNING: Using 'short st_ino' hits performance and may fail to access/find correct files\n");
 		fprintf(stderr,
-				"you should fix newlib's sys/stat.h - for now I'll enable a hack...\n");
+			"you should fix newlib's sys/stat.h - for now I'll enable a hack...\n");
 
 	}
 }
@@ -1981,7 +1985,8 @@ char				*path     = mt_entry->dev;
 		goto cleanup;
 	}
 
-	assert( nfs = nfsCreate(nfsServer) );
+	nfs = nfsCreate(nfsServer);
+	assert( nfs );
 	nfsServer = 0;
 
 	nfs->uid  = uid;
@@ -1990,7 +1995,8 @@ char				*path     = mt_entry->dev;
 	/* that seemed to work - we now create the root node
 	 * and we also must obtain the root node attributes
 	 */
-	assert( rootNode = nfsNodeCreate(nfs, &fhstat.fhstatus_u.fhs_fhandle) );
+	rootNode = nfsNodeCreate(nfs, &fhstat.fhstatus_u.fhs_fhandle);
+	assert( rootNode );
 
 	if ( updateAttr(rootNode, 1 /* force */) ) {
 		e = errno;
@@ -2039,9 +2045,10 @@ STATIC int nfs_fsunmount_me(
 {
 enum clnt_stat		stat;
 struct sockaddr_in	saddr;
-char				*path = mt_entry->dev;
-int					nodesInUse;
-u_long				uid,gid;
+char			*path = mt_entry->dev;
+int			nodesInUse;
+u_long			uid,gid;
+int			status;
 
 LOCK(nfsGlob.llock);
 	nodesInUse = ((Nfs)mt_entry->fs_info)->nodesInUse;
@@ -2054,7 +2061,8 @@ LOCK(nfsGlob.llock);
 		rtems_set_errno_and_return_minus_one(EBUSY);
 	}
 
-	assert( 0 == buildIpAddr(&uid, &gid, 0, &saddr, &path) );
+	status = buildIpAddr(&uid, &gid, 0, &saddr, &path);
+	assert( !status );
 	
 	stat = mntcall( &saddr,
 					MOUNTPROC_UMNT,

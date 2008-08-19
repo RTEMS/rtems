@@ -828,8 +828,9 @@ enum clnt_stat
 rpcUdpRcv(RpcUdpXact xact)
 {
 int					refresh;
-XDR					reply_xdrs;
+XDR			reply_xdrs;
 struct rpc_msg		reply_msg;
+rtems_status_code	status;
 rtems_event_set		gotEvents;
 
 	refresh = 0;
@@ -837,12 +838,12 @@ rtems_event_set		gotEvents;
 	do {
 
 	/* block for the reply */
-	ASSERT( RTEMS_SUCCESSFUL ==
-			rtems_event_receive(
-					RTEMS_RPC_EVENT,
-					RTEMS_WAIT | RTEMS_EVENT_ANY,
-					RTEMS_NO_TIMEOUT,
-					&gotEvents) );
+	status = rtems_event_receive(
+		RTEMS_RPC_EVENT,
+		RTEMS_WAIT | RTEMS_EVENT_ANY,
+		RTEMS_NO_TIMEOUT,
+		&gotEvents);
+	ASSERT( status == RTEMS_SUCCESSFUL );
 
 	if (xact->status.re_status) {
 #ifdef MBUF_RX
@@ -924,7 +925,9 @@ rtems_event_send((rtems_id)arg, RPCIOD_RX_EVENT);
 int
 rpcUdpInit(void)
 {
-int					noblock = 1;
+int			s;
+rtems_status_code	status;
+int			noblock = 1;
 struct sockwakeup	wkup;
 
 	if (ourSock < 0) {
@@ -935,11 +938,11 @@ struct sockwakeup	wkup;
 		ourSock=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 		if (ourSock>=0) {
 			bindresvport(ourSock,(struct sockaddr_in*)0);
-			assert( 0==ioctl(ourSock, FIONBIO, (char*)&noblock) );
+			s = ioctl(ourSock, FIONBIO, (char*)&noblock);
+			assert( s == 0 );
 			/* assume nobody tampers with the clock !! */
-			assert( RTEMS_SUCCESSFUL == rtems_clock_get(
-											RTEMS_CLOCK_GET_TICKS_PER_SECOND,
-											&ticksPerSec));
+			status = rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSec);
+			assert( status == RTEMS_SUCCESSFUL );
 			MU_CREAT( &hlock );
 			MU_CREAT( &llock );
 
@@ -949,27 +952,28 @@ struct sockwakeup	wkup;
 					rpciodPriority = RPCIOD_PRIO;	/* fallback value */
 			}
 
-			assert( RTEMS_SUCCESSFUL == rtems_task_create(
+			status = rtems_task_create(
 											rtems_build_name('R','P','C','d'),
 											rpciodPriority,
 											RPCIOD_STACK,
 											RTEMS_DEFAULT_MODES,
 											/* fprintf saves/restores FP registers on PPC :-( */
 											RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,
-											&rpciod) );
+											&rpciod);
+			assert( status = RTEMS_SUCCESSFUL );
+
 			wkup.sw_pfn = rxWakeupCB;
 			wkup.sw_arg = (caddr_t)rpciod;
 			assert( 0==setsockopt(ourSock, SOL_SOCKET, SO_RCVWAKEUP, &wkup, sizeof(wkup)) );
-			assert( RTEMS_SUCCESSFUL == rtems_message_queue_create(
+			status = rtems_message_queue_create(
 											rtems_build_name('R','P','C','q'),
 											RPCIOD_QDEPTH,
 											sizeof(RpcUdpXact),
 											RTEMS_DEFAULT_ATTRIBUTES,
-											&msgQ) );
-			assert( RTEMS_SUCCESSFUL == rtems_task_start(
-											rpciod,
-											rpcio_daemon,
-											0 ) );
+											&msgQ);
+			assert( status = RTEMS_SUCCESSFUL );
+			status = rtems_task_start( rpciod, rpcio_daemon, 0 );
+			assert( status = RTEMS_SUCCESSFUL );
 
 		} else {
 			return -1;
@@ -1140,18 +1144,19 @@ rtems_status_code stat;
 RpcUdpXact        xact;
 RpcUdpServer      srv;
 rtems_interval    next_retrans, then, unow;
-long			  now;	/* need to do signed comparison with age! */
+long			  			now;	/* need to do signed comparison with age! */
 rtems_event_set   events;
 ListNode          newList;
 size_t            size;
 rtems_id          q          =  0;
 ListNodeRec       listHead   = {0};
 unsigned long     epoch      = RPCIOD_EPOCH_SECS * ticksPerSec;
-unsigned long	  max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
+unsigned long			max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
+rtems_status_code	status;
 
-	assert( RTEMS_SUCCESSFUL == rtems_clock_get(
-									RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-									&then) );
+
+	status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then );
+	assert( status == RTEMS_SUCCESSFUL );
 
 	for (next_retrans = epoch;;) {
 
@@ -1194,9 +1199,8 @@ unsigned long	  max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
 			}
 		}
 
-		ASSERT( RTEMS_SUCCESSFUL == rtems_clock_get(
-										RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-										&unow ) );
+		status = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &unow );
+		assert( status == RTEMS_SUCCESSFUL );
 
 		/* measure everything relative to then to protect against
 		 * rollover
@@ -1344,8 +1348,8 @@ unsigned long	  max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
 
 						/* wakeup requestor */
 						fprintf(stderr,"RPCIO: SEND failure\n");
-						ASSERT( RTEMS_SUCCESSFUL ==
-									rtems_event_send(xact->requestor, RTEMS_RPC_EVENT) );
+						status = rtems_event_send(xact->requestor, RTEMS_RPC_EVENT);
+						assert( status == RTEMS_SUCCESSFUL );
 
 					} else {
 						/* send successful; calculate retransmission time
@@ -1511,14 +1515,17 @@ rpcUdpXactPoolCreate(
 	int xactsize,	int poolsize)
 {
 RpcUdpXactPool	rval = MY_MALLOC(sizeof(*rval));
+rtems_status_code	status;
 
-	ASSERT( rval &&
-			RTEMS_SUCCESSFUL == rtems_message_queue_create(
-									rtems_build_name('R','P','C','p'),
-									poolsize,
-									sizeof(RpcUdpXact),
-									RTEMS_DEFAULT_ATTRIBUTES,
-									&rval->box) );
+	ASSERT( rval );
+	status = rtems_message_queue_create(
+					rtems_build_name('R','P','C','p'),
+					poolsize,
+					sizeof(RpcUdpXact),
+					RTEMS_DEFAULT_ATTRIBUTES,
+					&rval->box);
+	assert( status == RTEMS_SUCCESSFUL );
+
 	rval->prog     = prog;
 	rval->version  = version;
 	rval->xactSize = xactsize;
@@ -1569,7 +1576,10 @@ void
 rpcUdpXactPoolPut(RpcUdpXact xact)
 {
 RpcUdpXactPool pool;
-	ASSERT( pool=xact->pool );
+
+	pool = xact->pool;
+	ASSERT( pool );
+
 	if (RTEMS_SUCCESSFUL != rtems_message_queue_send(
 								pool->box,
 								&xact,
