@@ -1,3 +1,7 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/clockdrv.h: Add Clock_Exit prototype.
+
 2008-08-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/inline/rtems/rtems/asr.inl,

@@ -46,6 +46,8 @@ rtems_device_driver Clock_control(
   void *pargp
 );
 
+void Clock_exit(void);
+
 #ifdef __cplusplus
 }
 #endif
