@@ -58,15 +58,15 @@ static unsigned char mouse_reply_expected = 0;
 #define AUX_INTS_ON  (KBD_MODE_KCC | KBD_MODE_SYS | KBD_MODE_MOUSE_INT | KBD_MODE_KBD_INT)
 #define MAX_RETRIES	60		/* some aux operations take long time*/
 
-static void ps2_mouse_interrupt(void);
+static void ps2_mouse_interrupt(rtems_irq_hdl_param);
 
-static void ( *driver_input_handler_ps2 )( void *,  char *, int ) = 0;
+static void ( *driver_input_handler_ps2 )( void *,  unsigned char *, int ) = 0;
 
 /*
  * This routine sets the handler to handle the characters received
  * from the serial port.
  */
-void ps2_set_driver_handler( int port, void ( *handler )( void *,  char *, int ) )
+void ps2_set_driver_handler( int port, void ( *handler )( void *,  unsigned char *, int ) )
 {
    driver_input_handler_ps2 = handler;
 }
@@ -190,7 +190,7 @@ static inline void handle_mouse_event(unsigned char scancode)
       else
       {
          /* post this byte to termios */
-  	      rtems_termios_enqueue_raw_characters( termios_ttyp_paux, &scancode, 1 );
+  	      rtems_termios_enqueue_raw_characters( termios_ttyp_paux, (char *)&scancode, 1 );
       }
 	}
 }
@@ -230,7 +230,7 @@ static unsigned char handle_kbd_event(void)
 	return status;
 }
 
-static void ps2_mouse_interrupt(void)
+static void ps2_mouse_interrupt(rtems_irq_hdl_param ignored)
 {
 	handle_kbd_event();
 }

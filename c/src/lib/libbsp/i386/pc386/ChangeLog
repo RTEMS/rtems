@@ -1,5 +1,9 @@
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* console/ps2_mouse.c: Fix ps2 mouse interrupt.
+
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* clock/ckinit.c, console/serial_mouse.c, ne2000/ne2000.c,
 	startup/bspstart.c: Fix warnings for prototypes, types, etc.
 
