@@ -517,6 +517,13 @@ void *_CPU_Thread_Idle_body( uint32_t );
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE
 #define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
+#if ( M68K_HAS_BFFFO != 1 )
+/*
+ *  Lookup table for BFFFO simulation
+ */
+extern const unsigned char _CPU_m68k_BFFFO_table[256];
+#endif
+
 #if ( M68K_HAS_BFFFO == 1 )
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
@@ -537,9 +544,9 @@ void *_CPU_Thread_Idle_body( uint32_t );
    _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
 #if ( defined(__mcoldfire__) )
+
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    extern const unsigned char __BFFFOtable[256]; \
     register int dumby; \
     \
     asm volatile ( \
@@ -554,13 +561,12 @@ void *_CPU_Thread_Idle_body( uint32_t );
        "   addq.l  #8,%0\n"      \
        "0: and.l   #0xff,%0\n"   \
        : "=&d" ((_output)), "=&d" ((dumby))    \
-       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "d" ((_value)), "ao" ((_CPU_m68k_BFFFO_table)) \
        : "cc" ) ; \
   }
 #elif ( M68K_HAS_EXTB_L == 1 )
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    extern const unsigned char __BFFFOtable[256]; \
     register int dumby; \
     \
     asm volatile ( "   move.w  %2,%1\n"        \
@@ -573,13 +579,12 @@ void *_CPU_Thread_Idle_body( uint32_t );
        "   add.b   (%3,%2.w),%0\n" \
        "0:\n"                      \
        : "=&d" ((_output)), "=&d" ((dumby)) \
-       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "d" ((_value)), "ao" ((_CPU_m68k_BFFFO_table)) \
        : "cc" ) ; \
   }
 #else
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    extern const unsigned char __BFFFOtable[256]; \
     register int dumby; \
     \
     asm volatile ( "   move.w  %2,%1\n"        \
@@ -592,7 +597,7 @@ void *_CPU_Thread_Idle_body( uint32_t );
        "   add.b   (%3,%2.w),%0\n" \
        "0:\n"                      \
        : "=&d" ((_output)), "=&d" ((dumby)) \
-       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "d" ((_value)), "ao" ((_CPU_m68k_BFFFO_table)) \
        : "cc" ) ; \
   }
 #endif

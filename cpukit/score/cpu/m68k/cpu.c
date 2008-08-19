@@ -159,7 +159,7 @@ void _CPU_Install_interrupt_stack( void )
 /*
  * Returns table for duplication of the BFFFO instruction (16 bits only)
  */
-const unsigned char __BFFFOtable[256] = {
+const unsigned char _CPU_m68k_BFFFO_table[256] = {
     8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
