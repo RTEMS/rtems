@@ -91,7 +91,7 @@
 #define SET_IBAT(n,uv,lv) {IBAT_MTSPR(lv,IBAT##n##L);IBAT_MTSPR(uv,IBAT##n##U);}
 #endif
 
-void calc_dbat_regvals(BAT *bat_ptr,
+static void calc_dbat_regvals(BAT *bat_ptr,
 		       uint32_t base_addr,
 		       uint32_t size,
 		       boolean flg_w,
@@ -107,7 +107,7 @@ void calc_dbat_regvals(BAT *bat_ptr,
    * determine block mask, that overlaps the whole block
    */
   end_addr = base_addr+size-1;
-  block_mask = ~0;
+  block_mask = 0xffffffff;
   while ((end_addr & block_mask) != (base_addr & block_mask)) {
     block_mask <<= 1;
   }
@@ -125,7 +125,7 @@ void calc_dbat_regvals(BAT *bat_ptr,
   bat_ptr->batl.pp = flg_bpp; 
 }
 
-void clear_mmu_regs(void)
+static void clear_mmu_regs(void)
 {
   uint32_t i;
   /*

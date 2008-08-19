@@ -19,8 +19,8 @@
 #if defined(HAS_UBOOT)
 /* XXX TODO fill in with real information */
 /* Base address of U-Boot environment variables */
-const uint8_t *uboot_environment      = (const char *)0x00000000;
+const uint8_t *uboot_environment      = (const uint8_t *) 0x00000000;
 
 /* Length of area reserved for U-Boot environment variables */
-const size_t  *uboot_environment_size = 0x10000;
+const size_t  *uboot_environment_size = (const size_t *) 0x00010000;
 #endif

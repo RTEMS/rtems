@@ -296,7 +296,7 @@ rtems_status_code bsp_register_spi
 \*=========================================================================*/
 {
   int ret_code;
-  int spi_busno;
+  unsigned spi_busno;
 
   /*
    * init I2C library (if not already done)
@@ -369,7 +369,7 @@ rtems_status_code bsp_register_spi
   if (ret_code < 0) {
     return -ret_code;
   }
-  spi_busno = ret_code;
+  spi_busno = (unsigned) ret_code;
 
 #if defined( MPC8313ERDB)
 

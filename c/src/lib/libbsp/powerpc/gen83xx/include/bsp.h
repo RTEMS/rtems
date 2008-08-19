@@ -215,6 +215,8 @@ extern uint32_t bsp_clicks_per_usec;
 
 void mpc83xx_zero_4( void *dest, size_t n);
 
+void cpu_init( void);
+
 #ifdef __cplusplus
 }
 #endif

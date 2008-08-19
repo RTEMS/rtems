@@ -1,3 +1,8 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bsp.h, network/network.c, spi/spi_init.c, startup/cpuinit.c,
+	startup/uboot_support.c: Fixed warnings.
+
 2008-08-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, startup/bspstart.c, startup/cpuinit.c: For the

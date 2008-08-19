@@ -156,9 +156,11 @@ int BSP_tsec_attach
   /*
    * set interrupt number for given interface
    */
-  config->irno = ((unitNumber == 1)
-		  ? BSP_IPIC_IRQ_TSEC1_TX
-		  : BSP_IPIC_IRQ_TSEC2_TX);
+  config->irno = (unsigned) (
+      unitNumber == 1
+      ? BSP_IPIC_IRQ_TSEC1_TX
+      : BSP_IPIC_IRQ_TSEC2_TX
+    );
   /*
    * call attach function of board independent driver
    */
