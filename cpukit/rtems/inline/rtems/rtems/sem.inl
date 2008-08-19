@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_SEM_H
+# error "Never use <rtems/rtems/sem.inl> directly; include <rtems/rtems/sem.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_SEM_INL
 #define _RTEMS_RTEMS_SEM_INL
 

@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_TASKS_H
+# error "Never use <rtems/rtems/tasks.inl> directly; include <rtems/rtems/tasks.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_TASKS_INL
 #define _RTEMS_RTEMS_TASKS_INL
 

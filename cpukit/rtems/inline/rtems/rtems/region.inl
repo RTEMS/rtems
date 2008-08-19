@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_REGION_H
+# error "Never use <rtems/rtems/region.inl> directly; include <rtems/rtems/region.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_REGION_INL
 #define _RTEMS_RTEMS_REGION_INL
 

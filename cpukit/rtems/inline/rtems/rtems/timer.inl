@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_TIMER_H
+# error "Never use <rtems/rtems/timer.inl> directly; include <rtems/rtems/timer.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_TIMER_INL
 #define _RTEMS_RTEMS_TIMER_INL
 

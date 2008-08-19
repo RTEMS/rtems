@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_BARRIER_H
+# error "Never use <rtems/rtems/barrier.inl> directly; include <rtems/rtems/barrier.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_BARRIER_INL
 #define _RTEMS_RTEMS_BARRIER_INL
 

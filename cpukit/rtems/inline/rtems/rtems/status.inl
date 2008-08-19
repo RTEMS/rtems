@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_STATUS_H
+# error "Never use <rtems/rtems/status.inl> directly; include <rtems/rtems/status.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_STATUS_INL
 #define _RTEMS_RTEMS_STATUS_INL
 

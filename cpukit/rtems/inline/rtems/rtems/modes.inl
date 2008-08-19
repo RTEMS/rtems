@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_MODES_H
+# error "Never use <rtems/rtems/modes.inl> directly; include <rtems/rtems/modes.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_MODES_INL
 #define _RTEMS_RTEMS_MODES_INL
 

@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_PART_H
+# error "Never use <rtems/rtems/part.inl> directly; include <rtems/rtems/part.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_PART_INL
 #define _RTEMS_RTEMS_PART_INL
 

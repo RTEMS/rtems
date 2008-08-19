@@ -15,6 +15,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_RTEMS_SUPPORT_H
+# error "Never use <rtems/rtems/support.inl> directly; include <rtems/rtems/support.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_SUPPORT_INL
 #define _RTEMS_RTEMS_SUPPORT_INL
 

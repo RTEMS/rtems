@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_RATEMON_H
+# error "Never use <rtems/rtems/ratemon.inl> directly; include <rtems/rtems/ratemon.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_RATEMON_INL
 #define _RTEMS_RTEMS_RATEMON_INL
 

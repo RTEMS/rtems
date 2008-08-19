@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_MESSAGE_H
+# error "Never use <rtems/rtems/message.inl> directly; include <rtems/rtems/message.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_MESSAGE_INL
 #define _RTEMS_RTEMS_MESSAGE_INL
 

@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_ASR_H
+# error "Never use <rtems/rtems/asr.inl> directly; include <rtems/rtems/asr.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_ASR_INL
 #define _RTEMS_RTEMS_ASR_INL
 

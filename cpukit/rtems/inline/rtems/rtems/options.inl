@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_OPTIONS_H
+# error "Never use <rtems/rtems/options.inl> directly; include <rtems/rtems/options.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_OPTIONS_INL
 #define _RTEMS_RTEMS_OPTIONS_INL
 

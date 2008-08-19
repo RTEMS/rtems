@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_EVENT_H
+# error "Never use <rtems/rtems/event.inl> directly; include <rtems/rtems/event.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_EVENT_INL
 #define _RTEMS_RTEMS_EVENT_INL
 

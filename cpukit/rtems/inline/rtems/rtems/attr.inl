@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_RTEMS_ATTR_H
+# error "Never use <rtems/rtems/attr.inl> directly; include <rtems/rtems/attr.h> instead."
+#endif
+
 #ifndef _RTEMS_RTEMS_ATTR_INL
 #define _RTEMS_RTEMS_ATTR_INL
 
