@@ -1,5 +1,17 @@
 2008-08-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* posix/inline/rtems/posix/barrier.inl,
+	posix/inline/rtems/posix/cond.inl,
+	posix/inline/rtems/posix/key.inl,
+	posix/inline/rtems/posix/mqueue.inl,
+	posix/inline/rtems/posix/mutex.inl,
+	posix/inline/rtems/posix/priority.inl,
+	posix/inline/rtems/posix/pthread.inl,
+	posix/inline/rtems/posix/rwlock.inl,
+	posix/inline/rtems/posix/semaphore.inl,
+	posix/inline/rtems/posix/spinlock.inl,
+	posix/inline/rtems/posix/timer.inl:
+	Add header guard to force indirect inclusion.
 	* itron/inline/rtems/itron/eventflags.inl,
 	itron/inline/rtems/itron/fmempool.inl,
 	itron/inline/rtems/itron/intr.inl,
