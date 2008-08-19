@@ -85,7 +85,7 @@ static rtems_status_code disp_hcms29xx_font_struct_size
   
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   size_t font_size = 0;
-  int glyph_idx;
+  size_t glyph_idx;
   /*
    * check parameters
    */
@@ -102,7 +102,7 @@ static rtems_status_code disp_hcms29xx_font_struct_size
 	 (glyph_idx < (sizeof(src->latin1)/sizeof(src->latin1[0])))) {
     if (src->latin1[glyph_idx] != NULL) {
       font_size += sizeof(*(src->latin1[glyph_idx]))
-	+src->latin1[glyph_idx]->bb.w;
+	+ (size_t) src->latin1[glyph_idx]->bb.w;
     }
     glyph_idx++;
   }	 
@@ -135,7 +135,7 @@ static inline unsigned char disp_hcms29xx_bitswap
        smsk < 0x100; 
        smsk<<=1   ,dmsk>>=1) {
     if ((byte & smsk) != 0) {
-      result |= dmsk;
+      result |= (unsigned char) dmsk;
     }
   }
   return result;
@@ -144,7 +144,7 @@ static inline unsigned char disp_hcms29xx_bitswap
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_status_code disp_hcms29xx_copy_font
+static rtems_status_code disp_hcms29xx_copy_font
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -165,7 +165,7 @@ rtems_status_code disp_hcms29xx_copy_font
   
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   char *alloc_next = (char *)dst;
-  int glyph_idx = 0;
+  size_t glyph_idx = 0;
   int glyph_size;
   unsigned char byte;
   int bcnt;
@@ -221,7 +221,7 @@ rtems_status_code disp_hcms29xx_copy_font
       /*
        * allocate space for glyph_bitmap
        */
-      dst->latin1[glyph_idx]->bitmap = alloc_next;
+      dst->latin1[glyph_idx]->bitmap = (const unsigned char *) alloc_next;
       alloc_next += glyph_size;
       /*
        * copy/transform bitmap
@@ -251,7 +251,7 @@ rtems_status_code disp_hcms29xx_copy_font
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_status_code disp_hcms29xx_alloc_copy_font
+static rtems_status_code disp_hcms29xx_alloc_copy_font
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -311,7 +311,7 @@ rtems_status_code disp_hcms29xx_alloc_copy_font
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_status_code disp_hcms29xx_send_to_display
+static rtems_status_code disp_hcms29xx_send_to_display
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -416,7 +416,7 @@ rtems_status_code disp_hcms29xx_send_to_display
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_status_code disp_hcms29xx_send_to_control
+static rtems_status_code disp_hcms29xx_send_to_control
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -507,7 +507,7 @@ rtems_status_code disp_hcms29xx_send_to_control
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_timer_service_routine disp_hcms29xx_timer_sr
+static rtems_timer_service_routine disp_hcms29xx_timer_sr
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
 |   this task updates the string in the display                             |
@@ -536,7 +536,7 @@ rtems_timer_service_routine disp_hcms29xx_timer_sr
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_task disp_hcms29xx_update_task
+static rtems_task disp_hcms29xx_update_task
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -607,8 +607,8 @@ rtems_task disp_hcms29xx_update_task
 		softc_ptr->disp_param.trns_buffer,
 		sizeof(softc_ptr->disp_param.disp_buffer));
 	softc_ptr->disp_param.disp_buffer[sizeof(softc_ptr->disp_param.disp_buffer)-1] = '\0';
-	softc_ptr->disp_param.disp_buf_cnt = 
-	  strlen(softc_ptr->disp_param.disp_buffer);	
+	softc_ptr->disp_param.disp_buf_cnt =
+	  (int) strlen(softc_ptr->disp_param.disp_buffer);	
       }
       if (rc == RTEMS_SUCCESSFUL) {
 	rc = rtems_semaphore_release(softc_ptr->disp_param.trns_sema_id);
@@ -673,7 +673,7 @@ rtems_task disp_hcms29xx_update_task
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_status_code disp_hcms29xx_update
+static rtems_status_code disp_hcms29xx_update
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -726,7 +726,7 @@ rtems_status_code disp_hcms29xx_update
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_device_driver disp_hcms29xx_dev_initialize
+static rtems_device_driver disp_hcms29xx_dev_initialize
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -817,7 +817,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_device_driver disp_hcms29xx_dev_open
+static rtems_device_driver disp_hcms29xx_dev_open
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -849,7 +849,7 @@ rtems_device_driver disp_hcms29xx_dev_open
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_device_driver disp_hcms29xx_dev_write
+static rtems_device_driver disp_hcms29xx_dev_write
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -867,7 +867,7 @@ rtems_device_driver disp_hcms29xx_dev_write
 \*=========================================================================*/
 {
   rtems_libio_rw_args_t *args = arg;
-  int cnt;
+  uint32_t cnt;
   disp_hcms29xx_drv_t *softc_ptr;
   /*
    * FIXME: get softc_ptr
@@ -882,7 +882,7 @@ rtems_device_driver disp_hcms29xx_dev_write
 	   || (args->buffer[cnt] == '\0'))
 	 )
 	||( softc_ptr->disp_param.dev_buf_cnt >= 
-	    sizeof(softc_ptr->disp_param.dev_buffer) - 1)) {
+	    (int) sizeof(softc_ptr->disp_param.dev_buffer) - 1)) {
       softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] = '\0';
       /*
        * transfer string to display string, redisplay it... 
@@ -907,7 +907,7 @@ rtems_device_driver disp_hcms29xx_dev_write
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_device_driver disp_hcms29xx_dev_close
+static rtems_device_driver disp_hcms29xx_dev_close
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -924,10 +924,13 @@ rtems_device_driver disp_hcms29xx_dev_close
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  disp_hcms29xx_drv_t *softc_ptr;
+  disp_hcms29xx_drv_t *softc_ptr = NULL;
+
   /*
    * FIXME: get softc_ptr
    */
+  return RTEMS_NOT_IMPLEMENTED;
+
   /* flush buffer, if not empty */
   if (softc_ptr->disp_param.dev_buf_cnt > 0) {
       softc_ptr->disp_param.dev_buffer[softc_ptr->disp_param.dev_buf_cnt] = 

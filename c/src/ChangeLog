@@ -1,3 +1,8 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/display/disp_hcms29xx.c: Fixed warnings. Initialized
+	variables and made methods static.
+
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/serial/ns16550.c: Fix warning.
