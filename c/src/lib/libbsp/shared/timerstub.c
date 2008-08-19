@@ -13,10 +13,11 @@
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
 }
-int Read_timer()
+
+int Read_timer(void)
 {
   if (Timer_driver_Find_average_overhead)
     return 1;
