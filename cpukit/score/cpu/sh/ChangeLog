@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Add missing prototype.
+
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Correct prototype of Idle threads.
