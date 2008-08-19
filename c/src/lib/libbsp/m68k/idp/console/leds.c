@@ -6,8 +6,8 @@
  */
 #include "leds.h"
 
-void zylons();
-void clear_leds();
+void zylons(void);
+void clear_leds(void);
 
 /*
  * led_putnum --

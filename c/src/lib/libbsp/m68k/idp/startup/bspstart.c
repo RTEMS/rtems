@@ -25,7 +25,7 @@ extern struct duart_regs duart_info;
 
 #define DELAY 5000
 
-void led_putnum();
+void led_putnum(void);
 
 /*
  *  Use the shared implementations of the following routines

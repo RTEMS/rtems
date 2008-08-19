@@ -54,10 +54,10 @@
 
 #define max(a,b) (((a)>(b)) ? (a) : (b))
 
-void (*Restart_Fifo_Full_A_Timer)();
-void (*Restart_Check_A_Timer)();
-void (*Restart_Fifo_Full_B_Timer)();
-void (*Restart_Check_B_Timer)();
+void (*Restart_Fifo_Full_A_Timer)(void);
+void (*Restart_Check_A_Timer)(void);
+void (*Restart_Fifo_Full_B_Timer)(void);
+void (*Restart_Check_B_Timer)(void);
 
 int preload = 0;
 

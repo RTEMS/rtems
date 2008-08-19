@@ -34,8 +34,8 @@ volatile uint32_t         Clock_driver_ticks;
 rtems_isr_entry  Old_ticker;
 
 extern rtems_configuration_table Configuration;
-extern void led_putnum();
-void Disable_clock();
+extern void led_putnum(void);
+void Disable_clock(void);
 
 #define CLOCK_VECTOR 0x4D
 
@@ -83,14 +83,14 @@ rtems_isr Clock_isr(
     Clock_isrs -= 1;
 }
 
-void Disable_clock()
+void Disable_clock(void)
 {
 	/* Disable timer */
 	MC68230_WRITE (MC68230_TCR, 0x00);
 }
 
-void Install_clock( clock_isr )
-rtems_isr_entry clock_isr;
+void Install_clock(
+  rtems_isr_entry clock_isr )
 {
   Clock_driver_ticks = 0;
   Clock_isrs = (int)(Configuration.microseconds_per_tick / 1000);

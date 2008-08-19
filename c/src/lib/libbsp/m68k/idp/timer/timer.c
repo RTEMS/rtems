@@ -34,9 +34,9 @@
 int Ttimer_val;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+rtems_isr timerisr(void);
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );  /* install ISR */
 
@@ -64,7 +64,7 @@ void Timer_initialize()
 #define AVG_OVERHEAD      9  /* may not be right -- do this later */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint8_t         data;
   uint8_t          msb, osb, lsb;

@@ -11,8 +11,7 @@
  * rtems_bsp_delay -- delay execution. This is an ugly hack. It should
  *          use the timer, but I'm waiting for docs. (sigh)
  */
-void rtems_bsp_delay(num)
-int num;
+void rtems_bsp_delay(int num)
 {
   while (num--)
     {

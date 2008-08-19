@@ -42,7 +42,7 @@ uint32_t         Timer_interrupts;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+rtems_isr timerisr(void);
 
 void Timer_initialize( void )
 {

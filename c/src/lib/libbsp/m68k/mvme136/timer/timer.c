@@ -31,9 +31,9 @@
 int Ttimer_val;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+rtems_isr timerisr(void);
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   (void) set_vector( timerisr, 66, 0 );       /* install ISR */
 
@@ -65,7 +65,7 @@ void Timer_initialize()
                              /* (6 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer(void)
 {
 /*
   uint8_t          msb, lsb;
