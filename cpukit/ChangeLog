@@ -1,5 +1,18 @@
 2008-08-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itron/inline/rtems/itron/eventflags.inl,
+	itron/inline/rtems/itron/fmempool.inl,
+	itron/inline/rtems/itron/intr.inl,
+	itron/inline/rtems/itron/mbox.inl,
+	itron/inline/rtems/itron/msgbuffer.inl,
+	itron/inline/rtems/itron/network.inl,
+	itron/inline/rtems/itron/port.inl,
+	itron/inline/rtems/itron/semaphore.inl,
+	itron/inline/rtems/itron/sysmgmt.inl,
+	itron/inline/rtems/itron/task.inl,
+	itron/inline/rtems/itron/time.inl,
+	itron/inline/rtems/itron/vmempool.inl:
+	Add header guard to force indirect inclusion.
 	* sapi/inline/rtems/chain.inl: 
 	Add header guard to force indirect inclusion.
 
