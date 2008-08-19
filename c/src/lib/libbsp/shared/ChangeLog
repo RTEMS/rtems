@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timerstub.c: Add missing prototypes.
+
 2008-08-15      Allan Hessenflow <allanh@kallisti.com>
 
 	* src/lib/libbsp/mips/jmr3904/tools/runtest: Add bf537Stamp.
