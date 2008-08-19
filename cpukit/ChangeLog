@@ -1,3 +1,8 @@
+2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/in_cksum_arm.h, score/cpu/arm/cpu.c
+	score/cpu/h8300/rtems/score/cpu.h: Add missing prototypes.
+
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/lib/ftpfs.c, libnetworking/libc/inet_ntoa.c,
