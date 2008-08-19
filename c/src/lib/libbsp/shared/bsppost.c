@@ -14,9 +14,12 @@
  *  $Id$
  */
 
+#include <fcntl.h>
+
 #include <rtems.h>
 #include <rtems/libcsupport.h>
-#include <fcntl.h>
+
+#include <bsp/bootcard.h>
 
 void bsp_postdriver_hook(void)
 {

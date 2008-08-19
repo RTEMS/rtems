@@ -52,18 +52,18 @@ static inline void bsp_interrupt_set_handler_unique( rtems_vector_number index, 
 	rtems_vector_number i = index / 8;
 	rtems_vector_number s = index % 8;
 	if (unique) {
-		bsp_interrupt_handler_unique_table [i] |= 0x1 << s;
+		bsp_interrupt_handler_unique_table [i] |= (uint8_t) 0x1 << s;
 	} else {
 		bsp_interrupt_handler_unique_table [i] &= ~((uint8_t) 0x1 << s);
 	}
 }
 
-static inline bool bsp_interrupt_is_initialized()
+static inline bool bsp_interrupt_is_initialized(void)
 {
 	return bsp_interrupt_is_handler_unique( BSP_INTERRUPT_HANDLER_TABLE_SIZE);
 }
 
-static inline void bsp_interrupt_set_initialized()
+static inline void bsp_interrupt_set_initialized(void)
 {
 	bsp_interrupt_set_handler_unique( BSP_INTERRUPT_HANDLER_TABLE_SIZE, true);
 }

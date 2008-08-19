@@ -1,3 +1,16 @@
+2008-08-15      Allan Hessenflow <allanh@kallisti.com>
+
+	* src/lib/libbsp/mips/jmr3904/tools/runtest: Add bf537Stamp.
+
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bootcard.h, bootcard.c, bsplibc.c: Changed parameter types of
+	bsp_libc_init() to match RTEMS_Malloc_Initialize().
+
+	* bsppost.c, bsppredriverhook.c: Include bootcard.h.
+
+	* src/irq-generic.c: Fixed warnings.
+
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsppost.c: Fix warning by moving prototype to libcsupport.h.

@@ -36,15 +36,15 @@
 extern "C" {
 #endif /* __cplusplus */
 
-void bsp_start( void);
+void bsp_start(void);
 
-void bsp_pretasking_hook( void);
+void bsp_pretasking_hook(void);
 
-void bsp_predriver_hook( void);
+void bsp_predriver_hook(void);
 
-void bsp_postdriver_hook( void);
+void bsp_postdriver_hook(void);
 
-void bsp_cleanup( void);
+void bsp_cleanup(void);
 
 #ifdef BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
   #define BSP_BOOTCARD_HEAP_USES_WORK_AREA NULL
@@ -61,12 +61,7 @@ void bsp_cleanup( void);
 
 int boot_card( int argc, char **argv, char **envp);
 
-/*
- * FIXME: Nearly every BSP declares this function in the BSP startup file
- * separately and uses the implementation in bsplibc.c.
- * Why differ the parameter types from RTEMS_Malloc_Initialize()?
- */
-void bsp_libc_init( void *heap_start, uint32_t heap_size, int use_sbrk);
+void bsp_libc_init( void *heap_start, size_t heap_size, size_t sbrk_amount);
 
 #ifdef __cplusplus
 }

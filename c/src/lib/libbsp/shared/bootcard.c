@@ -81,8 +81,8 @@ char *rtems_progname;
        * For the default heap size use the free space from the start of the
        * work area up to the work space start as heap area.
        */
-      heap_size_default = (char *) Configuration.work_space_start
-        - (char *) work_area_start;
+      heap_size_default = (size_t) ((char *) Configuration.work_space_start
+        - (char *) work_area_start);
 
       /* Keep it as a multiple of 16 bytes */
       heap_size_default &= ~((size_t) 0xf);
@@ -98,7 +98,7 @@ char *rtems_progname;
       }
     }
 
-    bsp_libc_init( heap_start, (uint32_t) heap_size, 0);
+    bsp_libc_init( heap_start, heap_size, 0);
 
     return RTEMS_SUCCESSFUL;
   }

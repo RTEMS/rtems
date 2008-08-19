@@ -11,6 +11,8 @@
  *  $Id$
  */
 
+#include <bsp/bootcard.h>
+
 void bsp_predriver_hook( void )
 {
 }

@@ -9,13 +9,15 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
+#include <bsp/bootcard.h>
+
 void bsp_libc_init(
-  void       *heap_start,
-  uint32_t    heap_size,
-  int         use_sbrk
+  void   *heap_start,
+  size_t  heap_size,
+  size_t  sbrk_amount
 )
 {
-    RTEMS_Malloc_Initialize( heap_start, heap_size, use_sbrk );
+    RTEMS_Malloc_Initialize( heap_start, heap_size, sbrk_amount );
 
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
