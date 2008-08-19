@@ -41,6 +41,9 @@ int main(int argc, char* argv[])
   int      size1, size2, len1, len2, len, imageCnt, cnt;
   char     *ofile, *ifile, *end;
 
+  len2 = 0;   /* avoid warning */
+  size2 = 0;  /* avoid warning */
+  addr2 = 0;  /* avoid warning */
   verbose = 0;
 
   /* parse command line options */
