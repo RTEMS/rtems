@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/bspspuriousinit.c: Add missing prototypes.
+
 2008-07-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/m68kbspgetworkarea.c: Changed bsp_get_workarea() to
