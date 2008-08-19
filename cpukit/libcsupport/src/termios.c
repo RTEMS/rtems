@@ -1021,7 +1021,8 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 		/*
 		 * Process characters read from raw queue
 		 */
-		while (tty->rawInBuf.Head != tty->rawInBuf.Tail) {
+		while ((tty->rawInBuf.Head != tty->rawInBuf.Tail) && 
+                       (tty->ccount < (CBUFSIZE-1))) {
 			unsigned char c;
 			unsigned int newHead;
 
