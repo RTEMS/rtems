@@ -1,3 +1,7 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/clock/clock.c: Fixed warnings.
+
 2008-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/clock/clock.c: Update due to powerpc-utilty.h changes.

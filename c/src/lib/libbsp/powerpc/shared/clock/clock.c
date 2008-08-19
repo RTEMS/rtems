@@ -40,22 +40,22 @@ extern uint32_t bsp_clicks_per_usec;
 
 volatile uint32_t Clock_driver_ticks = 0;
 
-rtems_device_major_number rtems_clock_major = -1;
+rtems_device_major_number rtems_clock_major = UINT32_MAX;
 
-rtems_device_minor_number rtems_clock_minor = -1;
+rtems_device_minor_number rtems_clock_minor = UINT32_MAX;
 
 static uint32_t ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
 
 static uint32_t ppc_clock_next_time_base = 0;
 
-static void ppc_clock_no_tick()
+static void ppc_clock_no_tick(void)
 {
 	/* Do nothing */
 }
 
-static void (*ppc_clock_tick)() = ppc_clock_no_tick;
+static void (*ppc_clock_tick)(void) = ppc_clock_no_tick;
 
-int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned number)
+static int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
 	uint32_t reg1;
 	uint32_t reg2;
@@ -89,7 +89,7 @@ int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned number)
 	return 0;
 }
 
-int ppc_clock_exception_handler_classic( BSP_Exception_frame *frame, unsigned number)
+static int ppc_clock_exception_handler_classic( BSP_Exception_frame *frame, unsigned number)
 {
 	uint32_t reg1;
 	uint32_t reg2;
@@ -119,7 +119,7 @@ int ppc_clock_exception_handler_classic( BSP_Exception_frame *frame, unsigned nu
 	return 0;
 }
 
-int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned number)
+static int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned number)
 {
 	uint32_t msr;
 
@@ -141,7 +141,7 @@ int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned numb
 	return 0;
 }
 
-int ppc_clock_exception_handler_e300( BSP_Exception_frame *frame, unsigned number)
+static int ppc_clock_exception_handler_e300( BSP_Exception_frame *frame, unsigned number)
 {
 	uint32_t msr;
 
@@ -160,12 +160,12 @@ int ppc_clock_exception_handler_e300( BSP_Exception_frame *frame, unsigned numbe
 	return 0;
 }
 
-uint32_t ppc_clock_nanoseconds_since_last_tick()
+static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
 {
 	return ((ppc_clock_decrementer_value - ppc_decrementer_register()) * 1000) / bsp_clicks_per_usec;
 }
 
-void Clock_exit()
+void Clock_exit(void)
 {
 	/* Set the decrementer to the maximum value */
 	ppc_set_decrementer_register( PPC_CLOCK_DECREMENTER_MAX);
@@ -190,7 +190,7 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	 * will be discarded since the RTEMS documentation claims that it is
 	 * always successful.
 	 */
-	ppc_clock_tick = (void (*)()) rtems_clock_tick;
+	ppc_clock_tick = (void (*)(void)) rtems_clock_tick;
 
 	/* Set the decrementer to the maximum value */
 	ppc_set_decrementer_register( PPC_CLOCK_DECREMENTER_MAX);
