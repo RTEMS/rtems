@@ -39,6 +39,19 @@ FPSP_install_raw_handler (uint32_t   vector, proc_ptr new_handler, proc_ptr *old
 }
 
 /*
+ *  Exception handlers provided by FPSP package.
+ */
+extern void _fpspEntry_fline(void);
+extern void _fpspEntry_bsun(void);
+extern void _fpspEntry_inex(void);
+extern void _fpspEntry_dz(void);
+extern void _fpspEntry_unfl(void);
+extern void _fpspEntry_ovfl(void);
+extern void _fpspEntry_operr(void);
+extern void _fpspEntry_snan(void);
+extern void _fpspEntry_unsupp(void);
+
+/*
  * Attach floating point exception vectors to M68040FPSP entry points
  *
  *  NOTE: Uses M68K rather than M68040 in the name so all CPUs having
@@ -47,18 +60,9 @@ FPSP_install_raw_handler (uint32_t   vector, proc_ptr new_handler, proc_ptr *old
 void
 M68KFPSPInstallExceptionHandlers (void)
 {
-  extern void _fpspEntry_fline();
-  extern void _fpspEntry_bsun();
-  extern void _fpspEntry_inex();
-  extern void _fpspEntry_dz();
-  extern void _fpspEntry_unfl();
-  extern void _fpspEntry_ovfl();
-  extern void _fpspEntry_operr();
-  extern void _fpspEntry_snan();
-  extern void _fpspEntry_unsupp();
   static struct {
     int  vector_number;
-    void  (*handler)();
+    void  (*handler)(void);
   } fpspHandlers[] = {
     { 11,  _fpspEntry_fline },
     { 48,  _fpspEntry_bsun },
