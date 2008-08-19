@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2004.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,8 @@
 #ifndef _RTEMS_SCORE_THREADMP_H
 # error "Never use <rtems/score/threadmp.inl> directly; include <rtems/score/threadmp.h> instead."
 #endif
+
+#include <rtems/score/mpci.h>
 
 #ifndef _RTEMS_SCORE_THREADMP_INL
 #define _RTEMS_SCORE_THREADMP_INL
@@ -37,7 +39,6 @@ RTEMS_INLINE_ROUTINE boolean _Thread_MP_Is_receive (
   Thread_Control *the_thread
 )
 {
-  extern Thread_Control *_MPCI_Receive_server_tcb;
   return the_thread == _MPCI_Receive_server_tcb;
 }
 

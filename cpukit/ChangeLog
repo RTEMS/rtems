@@ -1,3 +1,8 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/inline/rtems/score/threadmp.inl: Add include of
+	rtems/score/mpci.h and remove extern.
+
 2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/clockdrv.h: Add Clock_Exit prototype.
