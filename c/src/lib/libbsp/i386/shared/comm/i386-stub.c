@@ -275,7 +275,7 @@ asm ("iret");
  *   old eip
  *
  */
-extern void _catchException3 ();
+extern void _catchException3 (void);
 asm (".text");
 asm (".globl _catchException3");
 asm ("_catchException3:");
@@ -285,7 +285,7 @@ asm ("pushl $3");
 CALL_HOOK ();
 
 /* Same thing for exception 1.  */
-extern void _catchException1 ();
+extern void _catchException1 (void);
 asm (".text");
 asm (".globl _catchException1");
 asm ("_catchException1:");
@@ -295,7 +295,7 @@ asm ("pushl $1");
 CALL_HOOK ();
 
 /* Same thing for exception 0.  */
-extern void _catchException0 ();
+extern void _catchException0 (void);
 asm (".text");
 asm (".globl _catchException0");
 asm ("_catchException0:");
@@ -305,7 +305,7 @@ asm ("pushl $0");
 CALL_HOOK ();
 
 /* Same thing for exception 4.  */
-extern void _catchException4 ();
+extern void _catchException4 (void);
 asm (".text");
 asm (".globl _catchException4");
 asm ("_catchException4:");
@@ -315,7 +315,7 @@ asm ("pushl $4");
 CALL_HOOK ();
 
 /* Same thing for exception 5.  */
-extern void _catchException5 ();
+extern void _catchException5 (void);
 asm (".text");
 asm (".globl _catchException5");
 asm ("_catchException5:");
@@ -325,7 +325,7 @@ asm ("pushl $5");
 CALL_HOOK ();
 
 /* Same thing for exception 6.  */
-extern void _catchException6 ();
+extern void _catchException6 (void);
 asm (".text");
 asm (".globl _catchException6");
 asm ("_catchException6:");
@@ -335,7 +335,7 @@ asm ("pushl $6");
 CALL_HOOK ();
 
 /* Same thing for exception 7.  */
-extern void _catchException7 ();
+extern void _catchException7 (void);
 asm (".text");
 asm (".globl _catchException7");
 asm ("_catchException7:");
@@ -345,7 +345,7 @@ asm ("pushl $7");
 CALL_HOOK ();
 
 /* Same thing for exception 8.  */
-extern void _catchException8 ();
+extern void _catchException8 (void);
 asm (".text");
 asm (".globl _catchException8");
 asm ("_catchException8:");
@@ -356,7 +356,7 @@ asm ("pushl $8");
 CALL_HOOK ();
 
 /* Same thing for exception 9.  */
-extern void _catchException9 ();
+extern void _catchException9 (void);
 asm (".text");
 asm (".globl _catchException9");
 asm ("_catchException9:");
@@ -366,7 +366,7 @@ asm ("pushl $9");
 CALL_HOOK ();
 
 /* Same thing for exception 10.  */
-extern void _catchException10 ();
+extern void _catchException10 (void);
 asm (".text");
 asm (".globl _catchException10");
 asm ("_catchException10:");
@@ -377,7 +377,7 @@ asm ("pushl $10");
 CALL_HOOK ();
 
 /* Same thing for exception 12.  */
-extern void _catchException12 ();
+extern void _catchException12 (void);
 asm (".text");
 asm (".globl _catchException12");
 asm ("_catchException12:");
@@ -388,7 +388,7 @@ asm ("pushl $12");
 CALL_HOOK ();
 
 /* Same thing for exception 16.  */
-extern void _catchException16 ();
+extern void _catchException16 (void);
 asm (".text");
 asm (".globl _catchException16");
 asm ("_catchException16:");
@@ -400,7 +400,7 @@ CALL_HOOK ();
 /* For 13, 11, and 14 we have to deal with the CHECK_FAULT stuff.  */
 
 /* Same thing for exception 13.  */
-extern void _catchException13 ();
+extern void _catchException13 (void);
 asm (".text");
 asm (".globl _catchException13");
 asm ("_catchException13:");
@@ -412,7 +412,7 @@ asm ("pushl $13");
 CALL_HOOK ();
 
 /* Same thing for exception 11.  */
-extern void _catchException11 ();
+extern void _catchException11 (void);
 asm (".text");
 asm (".globl _catchException11");
 asm ("_catchException11:");
@@ -424,7 +424,7 @@ asm ("pushl $11");
 CALL_HOOK ();
 
 /* Same thing for exception 14.  */
-extern void _catchException14 ();
+extern void _catchException14 (void);
 asm (".text");
 asm (".globl _catchException14");
 asm ("_catchException14:");
@@ -439,6 +439,7 @@ CALL_HOOK ();
  * remcomHandler is a front end for handle_exception.  It moves the
  * stack pointer into an area reserved for debugger use.
  */
+extern void remcomHandler (void);
 asm ("_remcomHandler:");
 asm ("           popl %eax");	/* pop off return address     */
 asm ("           popl %eax");	/* get the exception number   */
@@ -930,8 +931,6 @@ handle_exception (int exceptionVector)
 void
 set_debug_traps (void)
 {
-  extern void remcomHandler ();
-
   stackPtr = &remcomStack[STACKSIZE / sizeof (int) - 1];
 
   exceptionHandler (0, _catchException0);

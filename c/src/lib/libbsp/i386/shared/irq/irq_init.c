@@ -40,14 +40,6 @@ extern void rtems_irq_prologue_15(void);
  * default idt vector
  */
 extern void default_raw_idt_handler(void);
-/*
- * default on/off function
- */
-static void nop_func(void){}
-/*
- * default isOn function
- */
-static int not_connected(void) {return 0;}
 
 static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
 
@@ -76,13 +68,13 @@ static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
 };
 
 static rtems_raw_irq_connect_data 	defaultRawIrq = {
-  /* vectorIdex,	 hdl			      , on	, off 		, isOn */
-  0, 			default_raw_idt_handler ,nop_func	, nop_func,	not_connected
+  /* vectorIdex, hdl			 , on	, off , isOn */
+  0, 		 default_raw_idt_handler ,NULL	, NULL,	NULL
 };
 
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
-  0, 			 nop_func	, 0		, nop_func	, nop_func	, not_connected
+  /* vectorIdex, hdl	, handle, on,   off,  isOn */
+  0, 		 NULL	, 0	, NULL, NULL, NULL
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={

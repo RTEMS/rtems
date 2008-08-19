@@ -1,3 +1,8 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/comm/i386-stub.c, shared/irq/irq_init.c: Fix warnings for
+	prototypes, types, etc.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/i386-stub-glue.c, shared/comm/i386-stub.c:
