@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Add missing prototypes.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/console.c, include/m340uart.h: Use new shared
