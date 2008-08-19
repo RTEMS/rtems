@@ -39,7 +39,7 @@ extern uint32_t bsp_clicks_per_second;
 
 #define TIMER_VECTOR SH7750_EVT_TO_NUM(SH7750_EVT_TUNI1)
 
-rtems_isr timerisr();
+extern rtems_isr timerisr(void);
 
 static uint32_t   Timer_interrupts;
 

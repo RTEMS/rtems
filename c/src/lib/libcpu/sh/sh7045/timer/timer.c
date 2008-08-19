@@ -55,7 +55,7 @@ extern uint32_t bsp_clicks_per_second;
 
 #define MTU1_VECTOR 86
 
-rtems_isr timerisr();
+extern rtems_isr timerisr(void);
 
 static uint32_t   Timer_interrupts;
 

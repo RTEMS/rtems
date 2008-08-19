@@ -64,7 +64,7 @@ extern uint32_t bsp_clicks_per_second;
 
 #define ITU1_VECTOR OVI1_ISP_V
 
-rtems_isr timerisr();
+extern rtems_isr timerisr(void);
 
 static uint32_t   Timer_interrupts;
 

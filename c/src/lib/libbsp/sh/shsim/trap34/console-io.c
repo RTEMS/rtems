@@ -70,7 +70,7 @@ int console_inbyte_nonblocking(
 }
 
 /* XXX wrong place for this */
-_sys_exit (n)
+int _sys_exit (int n)
 {
   return __trap34 (SYS_exit, n, 0, 0);
 }
