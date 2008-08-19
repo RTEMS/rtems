@@ -749,7 +749,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   static char *devname = {"/dev/disp"};
-  disp_hcms29xx_drv_t *softc_ptr;
+  disp_hcms29xx_drv_t *softc_ptr = NULL;
   /*
    * FIXME: get softc_ptr
    */
@@ -834,7 +834,7 @@ rtems_device_driver disp_hcms29xx_dev_open
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  disp_hcms29xx_drv_t *softc_ptr;
+  disp_hcms29xx_drv_t *softc_ptr = NULL;
   /*
    * FIXME: get softc_ptr
    */
@@ -868,7 +868,7 @@ rtems_device_driver disp_hcms29xx_dev_write
 {
   rtems_libio_rw_args_t *args = arg;
   uint32_t cnt;
-  disp_hcms29xx_drv_t *softc_ptr;
+  disp_hcms29xx_drv_t *softc_ptr = NULL;
   /*
    * FIXME: get softc_ptr
    */

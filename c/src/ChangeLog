@@ -1,5 +1,10 @@
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libchip/display/disp_hcms29xx.c: Initialize softc_ptr to NULL.
+	* libchip/network/dec21140.c, libchip/network/if_dc.c: Use uint32_t.
+
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libchip/display/disp_hcms29xx.c: Do not make these static. They
 	appear to be unused that way.
 

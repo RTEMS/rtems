@@ -95,7 +95,7 @@
 #define DEC_DEBUG
 
 /* note: the 21143 isn't really a DEC, it's an Intel chip */
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
+#define PCI_INVALID_VENDORDEVICEID      0xffffffff
 #define PCI_VENDOR_ID_DEC               0x1011
 #define PCI_DEVICE_ID_DEC_21140         0x0009
 #define PCI_DEVICE_ID_DEC_21143         0x0019
@@ -106,40 +106,40 @@
 #define MEM_MASK  0xF
 
 /* command and status registers, 32-bit access, only if IO-ACCESS */
-#define ioCSR0  0x00	/* bus mode register */
-#define ioCSR1  0x08	/* transmit poll demand */
-#define ioCSR2  0x10	/* receive poll demand */
-#define ioCSR3  0x18	/* receive list base address */
-#define ioCSR4  0x20	/* transmit list base address */
-#define ioCSR5  0x28	/* status register */
-#define ioCSR6  0x30	/* operation mode register */
-#define ioCSR7  0x38	/* interrupt mask register */
-#define ioCSR8  0x40	/* missed frame counter */
-#define ioCSR9  0x48	/* Ethernet ROM register */
-#define ioCSR10 0x50	/* reserved */
-#define ioCSR11 0x58	/* full-duplex register */
-#define ioCSR12 0x60	/* SIA status register */
+#define ioCSR0  0x00    /* bus mode register */
+#define ioCSR1  0x08    /* transmit poll demand */
+#define ioCSR2  0x10    /* receive poll demand */
+#define ioCSR3  0x18    /* receive list base address */
+#define ioCSR4  0x20    /* transmit list base address */
+#define ioCSR5  0x28    /* status register */
+#define ioCSR6  0x30    /* operation mode register */
+#define ioCSR7  0x38    /* interrupt mask register */
+#define ioCSR8  0x40    /* missed frame counter */
+#define ioCSR9  0x48    /* Ethernet ROM register */
+#define ioCSR10 0x50    /* reserved */
+#define ioCSR11 0x58    /* full-duplex register */
+#define ioCSR12 0x60    /* SIA status register */
 #define ioCSR13 0x68
 #define ioCSR14 0x70
-#define ioCSR15 0x78	/* SIA general register */
+#define ioCSR15 0x78    /* SIA general register */
 
 /* command and status registers, 32-bit access, only if MEMORY-ACCESS */
-#define memCSR0  0x00	/* bus mode register */
-#define memCSR1  0x02	/* transmit poll demand */
-#define memCSR2  0x04	/* receive poll demand */
-#define memCSR3  0x06	/* receive list base address */
-#define memCSR4  0x08	/* transmit list base address */
-#define memCSR5  0x0A	/* status register */
-#define memCSR6  0x0C	/* operation mode register */
-#define memCSR7  0x0E	/* interrupt mask register */
-#define memCSR8  0x10	/* missed frame counter */
-#define memCSR9  0x12	/* Ethernet ROM register */
-#define memCSR10 0x14	/* reserved */
-#define memCSR11 0x16	/* full-duplex register */
-#define memCSR12 0x18	/* SIA status register */
+#define memCSR0  0x00    /* bus mode register */
+#define memCSR1  0x02    /* transmit poll demand */
+#define memCSR2  0x04    /* receive poll demand */
+#define memCSR3  0x06    /* receive list base address */
+#define memCSR4  0x08    /* transmit list base address */
+#define memCSR5  0x0A    /* status register */
+#define memCSR6  0x0C    /* operation mode register */
+#define memCSR7  0x0E    /* interrupt mask register */
+#define memCSR8  0x10    /* missed frame counter */
+#define memCSR9  0x12    /* Ethernet ROM register */
+#define memCSR10 0x14    /* reserved */
+#define memCSR11 0x16    /* full-duplex register */
+#define memCSR12 0x18    /* SIA status register */
 #define memCSR13 0x1A
 #define memCSR14 0x1C
-#define memCSR15 0x1E	/* SIA general register */
+#define memCSR15 0x1E    /* SIA general register */
 
 #define DEC_REGISTER_SIZE    0x100   /* to reserve virtual memory */
 
@@ -187,20 +187,20 @@ struct MD {
 **   rtems_bsdnet_config.mbuf_cluster_bytecount   = 256*1024;
 */
 
-#define NRXBUFS 16	/* number of receive buffers */
-#define NTXBUFS 16	/* number of transmit buffers */
+#define NRXBUFS 16    /* number of receive buffers */
+#define NTXBUFS 16    /* number of transmit buffers */
 
 /*
  * Number of DEC boards supported by this driver
  */
-#define NDECDRIVER	8
+#define NDECDRIVER    8
 
 /*
  * Receive buffer size -- Allow for a full ethernet packet including CRC
  */
-#define RBUF_SIZE	1536
+#define RBUF_SIZE    1536
 
-#define	ET_MINLEN       60	/* minimum message length */
+#define ET_MINLEN       60    /* minimum message length */
 
 /*
 ** Events, one per unit.  The event is sent to the rx task from the isr
@@ -239,71 +239,71 @@ extern void Wait_X_ms( unsigned int timeToWait );
  */
 struct dec21140_softc {
 
-      struct arpcom		arpcom;
+      struct arpcom             arpcom;
 
       rtems_irq_connect_data    irqInfo;
       rtems_event_set           ioevent;
 
       int                       numRxbuffers, numTxbuffers;
 
-      volatile struct MD	*MDbase;
+      volatile struct MD        *MDbase;
       volatile struct MD        *nextRxMD;
-      volatile unsigned char	*bufferBase;
-      int			acceptBroadcast;
+      volatile unsigned char   *bufferBase;
+      int                       acceptBroadcast;
 
-      volatile struct MD   *TxMD;
-      volatile struct MD   *SentTxMD;
-      int         PendingTxCount;
-      int         TxSuspended;
+      volatile struct MD       *TxMD;
+      volatile struct MD       *SentTxMD;
+      int                       PendingTxCount;
+      int                       TxSuspended;
 
-      unsigned int 			port;
-      volatile unsigned int		*base;
+      unsigned int              port;
+      volatile uint32_t        *base;
 
       /*
        * Statistics
        */
-      unsigned long	rxInterrupts;
-      unsigned long	rxNotFirst;
-      unsigned long	rxNotLast;
-      unsigned long	rxGiant;
-      unsigned long	rxNonOctet;
-      unsigned long	rxRunt;
-      unsigned long	rxBadCRC;
-      unsigned long	rxOverrun;
-      unsigned long	rxCollision;
+      unsigned long     rxInterrupts;
+      unsigned long     rxNotFirst;
+      unsigned long     rxNotLast;
+      unsigned long     rxGiant;
+      unsigned long     rxNonOctet;
+      unsigned long     rxRunt;
+      unsigned long     rxBadCRC;
+      unsigned long     rxOverrun;
+      unsigned long     rxCollision;
 
-      unsigned long	txInterrupts;
-      unsigned long	txDeferred;
-      unsigned long	txHeartbeat;
-      unsigned long	txLateCollision;
-      unsigned long	txRetryLimit;
-      unsigned long	txUnderrun;
-      unsigned long	txLostCarrier;
-      unsigned long	txRawWait;
+      unsigned long     txInterrupts;
+      unsigned long     txDeferred;
+      unsigned long     txHeartbeat;
+      unsigned long     txLateCollision;
+      unsigned long     txRetryLimit;
+      unsigned long     txUnderrun;
+      unsigned long     txLostCarrier;
+      unsigned long     txRawWait;
 };
 
 static struct dec21140_softc dec21140_softc[NDECDRIVER];
-static rtems_id	rxDaemonTid;
-static rtems_id	txDaemonTid;
+static rtems_id rxDaemonTid;
+static rtems_id txDaemonTid;
 
 /*
  * This routine reads a word (16 bits) from the serial EEPROM.
  */
 /*  EEPROM_Ctrl bits. */
-#define EE_SHIFT_CLK		0x02	/* EEPROM shift clock. */
-#define EE_CS			0x01	/* EEPROM chip select. */
-#define EE_DATA_WRITE		0x04	/* EEPROM chip data in. */
-#define EE_WRITE_0		0x01
-#define EE_WRITE_1		0x05
-#define EE_DATA_READ		0x08	/* EEPROM chip data out. */
-#define EE_ENB			(0x4800 | EE_CS)
+#define EE_SHIFT_CLK    0x02    /* EEPROM shift clock. */
+#define EE_CS           0x01    /* EEPROM chip select. */
+#define EE_DATA_WRITE   0x04    /* EEPROM chip data in. */
+#define EE_WRITE_0      0x01
+#define EE_WRITE_1      0x05
+#define EE_DATA_READ    0x08    /* EEPROM chip data out. */
+#define EE_ENB          (0x4800 | EE_CS)
 
 /* The EEPROM commands include the alway-set leading bit. */
-#define EE_WRITE_CMD	(5 << 6)
-#define EE_READ_CMD	(6 << 6)
-#define EE_ERASE_CMD	(7 << 6)
+#define EE_WRITE_CMD    (5 << 6)
+#define EE_READ_CMD     (6 << 6)
+#define EE_ERASE_CMD    (7 << 6)
 
-static int eeget16(volatile unsigned int *ioaddr, int location)
+static int eeget16(volatile uint32_t *ioaddr, int location)
 {
    int i;
    unsigned short retval = 0;
@@ -397,7 +397,7 @@ static void
 dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 {
    int i,st;
-   volatile unsigned int  *tbase;
+   volatile uint32_t      *tbase;
    volatile unsigned char *cp, *setup_frm, *eaddrs;
    volatile unsigned char *buffer;
    volatile struct MD     *rmd;
@@ -554,7 +554,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 static void
 dec21140_rxDaemon (void *arg)
 {
-   volatile unsigned int *tbase;
+   volatile uint32_t     *tbase;
    volatile struct MD    *rmd;
    struct dec21140_softc *sc;
    struct ifnet          *ifp;
@@ -626,7 +626,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
    volatile unsigned char  *temp;
    struct mbuf             *n;
    unsigned int            len;
-   volatile unsigned int   *tbase;
+   volatile uint32_t      *tbase;
 
    tbase = dp->base;
    /*
@@ -729,7 +729,7 @@ dec21140_init (void *arg)
 {
    struct dec21140_softc *sc = arg;
    struct ifnet *ifp = &sc->arpcom.ac_if;
-   volatile unsigned int *tbase;
+   volatile uint32_t *tbase;
 
    /*
     * Set up DEC21140 hardware if its not already been done
@@ -745,7 +745,7 @@ dec21140_init (void *arg)
    tbase = sc->base;
    st_le32( (tbase+memCSR5), IT_SETUP);
    st_le32( (tbase+memCSR7), IT_SETUP);
-   st_le32( (unsigned int*)(tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
+   st_le32( (tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
 
    /*
     * Tell the world that we're running.
@@ -759,7 +759,7 @@ dec21140_init (void *arg)
 static void
 dec21140_stop (struct dec21140_softc *sc)
 {
-  volatile unsigned int *tbase;
+  volatile uint32_t *tbase;
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
   ifp->if_flags &= ~IFF_RUNNING;
@@ -780,24 +780,24 @@ dec21140_stop (struct dec21140_softc *sc)
 static void
 dec21140_stats (struct dec21140_softc *sc)
 {
-	printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
-	printf ("       Not First:%-8lu", sc->rxNotFirst);
-	printf ("        Not Last:%-8lu\n", sc->rxNotLast);
-	printf ("              Giant:%-8lu", sc->rxGiant);
-	printf ("            Runt:%-8lu", sc->rxRunt);
-	printf ("       Non-octet:%-8lu\n", sc->rxNonOctet);
-	printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
-	printf ("         Overrun:%-8lu", sc->rxOverrun);
-	printf ("       Collision:%-8lu\n", sc->rxCollision);
+  printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
+  printf ("       Not First:%-8lu", sc->rxNotFirst);
+  printf ("        Not Last:%-8lu\n", sc->rxNotLast);
+  printf ("              Giant:%-8lu", sc->rxGiant);
+  printf ("            Runt:%-8lu", sc->rxRunt);
+  printf ("       Non-octet:%-8lu\n", sc->rxNonOctet);
+  printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
+  printf ("         Overrun:%-8lu", sc->rxOverrun);
+  printf ("       Collision:%-8lu\n", sc->rxCollision);
 
-	printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
-	printf ("        Deferred:%-8lu", sc->txDeferred);
-	printf (" Missed Hearbeat:%-8lu\n", sc->txHeartbeat);
-	printf ("         No Carrier:%-8lu", sc->txLostCarrier);
-	printf ("Retransmit Limit:%-8lu", sc->txRetryLimit);
-	printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
-	printf ("           Underrun:%-8lu", sc->txUnderrun);
-	printf (" Raw output wait:%-8lu\n", sc->txRawWait);
+  printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
+  printf ("        Deferred:%-8lu", sc->txDeferred);
+  printf (" Missed Hearbeat:%-8lu\n", sc->txHeartbeat);
+  printf ("         No Carrier:%-8lu", sc->txLostCarrier);
+  printf ("Retransmit Limit:%-8lu", sc->txRetryLimit);
+  printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
+  printf ("           Underrun:%-8lu", sc->txUnderrun);
+  printf (" Raw output wait:%-8lu\n", sc->txRawWait);
 }
 
 /*
@@ -881,13 +881,13 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    int          mtu;
    unsigned char cvalue;
 #if defined(__i386__)
-   uint32_t	value;
-   uint8_t	interrupt;
+   uint32_t     value;
+   uint8_t      interrupt;
 #endif
    int          pbus, pdev, pfun;
 #if defined(__PPC__)
-   int		tmp;
-   uint32_t	lvalue;
+   int          tmp;
+   uint32_t     lvalue;
 #endif
 
    /*
@@ -974,7 +974,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                             DEC_REGISTER_SIZE ,
                             PTE_CACHE_DISABLE | PTE_WRITABLE);
    else
-      sc->base = (unsigned int *)(value & ~MEM_MASK);
+      sc->base = (uint32_t *)(value & ~MEM_MASK);
 
    pci_read_config_byte(pbus, pdev, pfun, 60, &interrupt);
    cvalue = interrupt;

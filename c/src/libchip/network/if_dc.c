@@ -1604,7 +1604,7 @@ static
 struct dc_type *dc_devtype( int unitnum )
 {
 	struct dc_type		*t;
-	unsigned int		rev;
+	uint32_t		rev;
 	int 			rc;
 
 	
@@ -1908,13 +1908,13 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	char		        *unitName;
 	int          		unitNumber;
 	
-	unsigned int		command;
+	uint32_t		command;
 	struct dc_softc		*sc;
 	struct ifnet		*ifp;
 	struct dc_type		*t;
-	unsigned int		revision;
+	uint32_t		revision;
 	int			error = 0, mac_offset;
-	unsigned int		value;
+	uint32_t		value;
 	
 	/*
 	 * Get the instance number for the board we're going to configure
