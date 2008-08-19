@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c, startup/init52235.c: Add missing prototypes.
+
 2008-08-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, console/console.c: Split debug IO code into separate
