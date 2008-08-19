@@ -12,8 +12,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_CLASSINFO_H
-#define _RTEMS_CLASSINFO_H
+#ifndef _RTEMS_RTEMS_OBJECT_H
+#define _RTEMS_RTEMS_OBJECT_H
 
 #ifdef __cplusplus
 extern "C" {
