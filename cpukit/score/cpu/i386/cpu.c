@@ -135,24 +135,24 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
 
 cpuExcHandlerType _currentExcHandler = _defaultExcHandler;
 
-extern void rtems_exception_prologue_0();
-extern void rtems_exception_prologue_1();
-extern void rtems_exception_prologue_2();
-extern void rtems_exception_prologue_3();
-extern void rtems_exception_prologue_4();
-extern void rtems_exception_prologue_5();
-extern void rtems_exception_prologue_6();
-extern void rtems_exception_prologue_7();
-extern void rtems_exception_prologue_8();
-extern void rtems_exception_prologue_9();
-extern void rtems_exception_prologue_10();
-extern void rtems_exception_prologue_11();
-extern void rtems_exception_prologue_12();
-extern void rtems_exception_prologue_13();
-extern void rtems_exception_prologue_14();
-extern void rtems_exception_prologue_16();
-extern void rtems_exception_prologue_17();
-extern void rtems_exception_prologue_18();
+extern void rtems_exception_prologue_0(void);
+extern void rtems_exception_prologue_1(void);
+extern void rtems_exception_prologue_2(void);
+extern void rtems_exception_prologue_3(void);
+extern void rtems_exception_prologue_4(void);
+extern void rtems_exception_prologue_5(void);
+extern void rtems_exception_prologue_6(void);
+extern void rtems_exception_prologue_7(void);
+extern void rtems_exception_prologue_8(void);
+extern void rtems_exception_prologue_9(void);
+extern void rtems_exception_prologue_10(void);
+extern void rtems_exception_prologue_11(void);
+extern void rtems_exception_prologue_12(void);
+extern void rtems_exception_prologue_13(void);
+extern void rtems_exception_prologue_14(void);
+extern void rtems_exception_prologue_16(void);
+extern void rtems_exception_prologue_17(void);
+extern void rtems_exception_prologue_18(void);
 
 static rtems_raw_irq_hdl tbl[] = {
 	 rtems_exception_prologue_0,

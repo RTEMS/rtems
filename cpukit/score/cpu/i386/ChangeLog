@@ -1,3 +1,9 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c: Fix prototypes.
+	* rtems/score/cpu.h: Use memcpy() initialize FP structure and avoid
+	many casts and potential warnings.
+
 2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/cpu.h, rtems/score/i386.h: Add missing prototypes.

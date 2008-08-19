@@ -19,6 +19,8 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
+#include <string.h> /* for memcpy */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -313,12 +315,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Context_Initialize_fp( _fp_area ) \
   { \
-    uint32_t   *_source      = (uint32_t   *) &_CPU_Null_fp_context; \
-    uint32_t   *_destination = *(_fp_area); \
-    uint32_t    _index; \
-    \
-    for ( _index=0 ; _index < CPU_CONTEXT_FP_SIZE/4 ; _index++ ) \
-      *_destination++ = *_source++; \
+    memcpy( *_fp_area, &_CPU_Null_fp_context, CPU_CONTEXT_FP_SIZE ); \
   }
 
 /* end of Context handler macros */
