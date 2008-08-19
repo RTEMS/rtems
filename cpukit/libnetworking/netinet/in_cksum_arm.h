@@ -236,10 +236,11 @@ in_cksum(m, len)
 }
 
 int
-in4_cksum(m, nxt, off, len)
-    struct mbuf *m;
-    u_int8_t nxt;
-    int off, len;
+in4_cksum(
+    struct mbuf *m,
+    u_int8_t nxt,
+    int off, 
+    int len )
 {
 	u_int sum = 0;
 	

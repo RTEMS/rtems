@@ -459,7 +459,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  XXX
  */
 
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
+SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)(void);
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.

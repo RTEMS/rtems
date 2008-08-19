@@ -204,9 +204,9 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
 
 cpuExcHandlerType _currentExcHandler = _defaultExcHandler;
 
-extern void _Exception_Handler_Undef_Swi(); 
-extern void _Exception_Handler_Abort(); 
-extern void _exc_data_abort(); 
+extern void _Exception_Handler_Undef_Swi(void); 
+extern void _Exception_Handler_Abort(void); 
+extern void _exc_data_abort(void); 
 
 
 
