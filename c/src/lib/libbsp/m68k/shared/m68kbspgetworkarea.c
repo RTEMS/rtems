@@ -17,6 +17,14 @@
 #include <bsp/bootcard.h>
 
 /*
+ *  These are provided by the linkcmds of ALL M68K BSPs which use this file.
+ */
+extern char         _RamBase[];
+extern char         _WorkspaceBase[];
+extern char         _HeapSize[];
+extern char         _RamSize[];
+
+/*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
@@ -28,11 +36,6 @@ void bsp_get_work_area(
   size_t  *heap_size
 )
 {
-  extern char         _RamBase[];
-  extern char         _WorkspaceBase[];
-  extern char         _HeapSize[];
-  extern char         _RamSize[];
-
   *work_area_start       = _WorkspaceBase;
   *work_area_size       = (unsigned long)_RamBase + (unsigned long) _RamSize -
        (unsigned long)_WorkspaceBase;
