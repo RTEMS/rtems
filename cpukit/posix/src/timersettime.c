@@ -36,14 +36,17 @@ int timer_settime(
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
   boolean              activated;
+  uint32_t             initial_period;
   struct itimerspec    normalize;
 
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   /* First, it verifies if the structure "value" is correct */
-  if ( ( value->it_value.tv_nsec > TOD_NANOSECONDS_PER_SECOND ) ||
-       ( value->it_value.tv_nsec < 0 ) ) {
+  if ( ( value->it_value.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) ||
+       ( value->it_value.tv_nsec < 0 ) ||
+       ( value->it_interval.tv_nsec >= TOD_NANOSECONDS_PER_SECOND) ||
+       ( value->it_interval.tv_nsec < 0 )) {
     /* The number of nanoseconds is not correct */
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
@@ -57,7 +60,7 @@ int timer_settime(
   /* Convert absolute to relative time */
   if (flags == TIMER_ABSTIME) {
     /* Check for seconds in the past */
-    if ( _Timespec_Greater_than( &normalize.it_value, &_TOD_Now ) ) 
+    if ( _Timespec_Greater_than( &_TOD_Now, &normalize.it_value ) ) 
       rtems_set_errno_and_return_minus_one( EINVAL ); 
     _Timespec_Subtract( &_TOD_Now, &normalize.it_value, &normalize.it_value );
   }
@@ -88,11 +91,13 @@ int timer_settime(
        }
 
        /* Convert from seconds and nanoseconds to ticks */
-       ptimer->ticks = _Timespec_To_ticks( &normalize.it_value );
+       ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
+       initial_period = _Timespec_To_ticks( &normalize.it_value );
+       
         
        activated = _POSIX_Timer_Insert_helper(
          &ptimer->Timer,
-         ptimer->ticks,
+         initial_period,
          ptimer->Object.id,
          _POSIX_Timer_TSR,
          ptimer
