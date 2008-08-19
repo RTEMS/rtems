@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/init5235.c: Add missing prototypes.
+
 2008-07-04	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* startup/bspstart.c: Do not disable interrupts twice.
