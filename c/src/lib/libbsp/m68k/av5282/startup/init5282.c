@@ -14,9 +14,14 @@
 #define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
 #define MM_SDRAM_BASE		(0x00000000)
 
+/*
+ * External methods used by this file
+ */
+extern void CopyDataClearBSSAndStart (void);
+extern void INTERRUPT_VECTOR(void);
+
 void Init5282 (void)
 {
-    extern void CopyDataClearBSSAndStart (void);
     int x;
     int temp = 0;
     
@@ -70,7 +75,6 @@ void Init5282 (void)
     
     /* Copy the interrupt vector table to address 0x0 in SDRAM */
     {
-        extern void INTERRUPT_VECTOR(void);
         uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
         uint32_t *intvec = (uint32_t *)0x0;
         register int i;

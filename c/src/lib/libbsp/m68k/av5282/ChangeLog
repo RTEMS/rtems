@@ -1,3 +1,7 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c, startup/init5282.c: Fixed warnings.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/init5282.c: Add missing prototypes.

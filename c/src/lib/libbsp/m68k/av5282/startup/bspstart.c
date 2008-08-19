@@ -142,9 +142,11 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 }
 
 /*
- *  Use the shared implementations of the following routines
+ *  These are used by bsp_start
  */
-void bsp_pretasking_hook(void);      /* m68k version */
+extern char _WorkspaceBase[];
+extern char _RamSize[];
+extern unsigned long  _M68k_Ramsize;
 
 /*
  *  bsp_start
@@ -153,10 +155,6 @@ void bsp_pretasking_hook(void);      /* m68k version */
  */
 void bsp_start( void )
 {
-  extern char _WorkspaceBase[];
-  extern char _RamSize[];
-  extern unsigned long  _M68k_Ramsize;
-
   _M68k_Ramsize = (unsigned long)_RamSize;    /* RAM size set in linker script */
 
   /*
@@ -197,8 +195,9 @@ void bsp_start( void )
   m68k_set_cacr(cacr_mode);
 }
 
+extern char _CPUClockSpeed[];
+
 uint32_t get_CPU_clock_speed(void)
 {
-  extern char _CPUClockSpeed[];
   return( (uint32_t)_CPUClockSpeed);
 }
