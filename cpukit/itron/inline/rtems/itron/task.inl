@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_TASK_H
+# error "Never use <rtems/itron/task.inl> directly; include <rtems/itron/task.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_TASK_INL
 #define _RTEMS_ITRON_TASK_INL
 

@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_POSIX_BARRIER_H
+# error "Never use <rtems/posix/barrier.inl> directly; include <rtems/posix/barrier.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_BARRIER_INL
 #define _RTEMS_POSIX_BARRIER_INL
 

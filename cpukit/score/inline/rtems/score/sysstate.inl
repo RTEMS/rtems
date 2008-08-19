@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_SYSSTATE_H
+# error "Never use <rtems/score/sysstate.inl> directly; include <rtems/score/sysstate.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_SYSSTATE_INL
 #define _RTEMS_SCORE_SYSSTATE_INL
 

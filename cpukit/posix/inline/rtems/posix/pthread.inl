@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_PTHREAD_H
+# error "Never use <rtems/posix/pthread.inl> directly; include <rtems/posix/pthread.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_PTHREAD_INL
 #define _RTEMS_POSIX_PTHREAD_INL
  

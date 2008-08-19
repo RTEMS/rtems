@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_THREADQ_H
+# error "Never use <rtems/score/threadq.inl> directly; include <rtems/score/threadq.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_THREADQ_INL
 #define _RTEMS_SCORE_THREADQ_INL
 

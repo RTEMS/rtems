@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_CORERWLOCK_H
+# error "Never use <rtems/score/corerwlock.inl> directly; include <rtems/score/corerwlock.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_CORERWLOCK_INL
 #define _RTEMS_SCORE_CORERWLOCK_INL
 

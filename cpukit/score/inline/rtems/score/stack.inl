@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_STACK_H
+# error "Never use <rtems/score/stack.inl> directly; include <rtems/score/stack.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_STACK_INL
 #define _RTEMS_SCORE_STACK_INL
 

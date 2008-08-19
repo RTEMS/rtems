@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_SEMAPHORE_H
+# error "Never use <rtems/posix/semaphore.inl> directly; include <rtems/posix/semaphore.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_SEMAPHORE_INL
 #define _RTEMS_POSIX_SEMAPHORE_INL
  

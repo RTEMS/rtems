@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_FMEMPOOL_H
+# error "Never use <rtems/itron/fmempool.inl> directly; include <rtems/itron/fmempool.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_FMEMPOOL_INL
 #define _RTEMS_ITRON_FMEMPOOL_INL
 

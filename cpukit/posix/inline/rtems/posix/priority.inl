@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_POSIX_PRIORITY_H
+# error "Never use <rtems/posix/priority.inl> directly; include <rtems/posix/priority.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_PRIORITY_INL
 #define _RTEMS_POSIX_PRIORITY_INL
 

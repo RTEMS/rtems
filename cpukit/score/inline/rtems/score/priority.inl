@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_PRIORITY_H
+# error "Never use <rtems/score/priority.inl> directly; include <rtems/score/priority.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_PRIORITY_INL
 #define _RTEMS_SCORE_PRIORITY_INL
 

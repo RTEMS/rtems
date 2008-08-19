@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_INTR_H
+# error "Never use <rtems/itron/intr.inl> directly; include <rtems/itron/intr.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_INTR_INL
 #define _RTEMS_ITRON_INTR_INL
 

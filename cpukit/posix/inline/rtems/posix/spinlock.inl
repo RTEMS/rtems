@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_POSIX_SPINLOCK_H
+# error "Never use <rtems/posix/spinlock.inl> directly; include <rtems/posix/spinlock.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_SPINLOCK_INL
 #define _RTEMS_POSIX_SPINLOCK_INL
 

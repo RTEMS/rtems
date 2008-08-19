@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_MSGBUFFER_H
+# error "Never use <rtems/itron/msgbuffer.inl> directly; include <rtems/itron/msgbuffer.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_MSGBUFFER_INL
 #define _RTEMS_ITRON_MSGBUFFER_INL
 

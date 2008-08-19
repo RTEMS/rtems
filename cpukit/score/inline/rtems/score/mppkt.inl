@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_MPPKT_H
+# error "Never use <rtems/score/mppkt.inl> directly; include <rtems/score/mppkt.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_MPPKT_INL
 #define _RTEMS_SCORE_MPPKT_INL
 

@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_THREADMP_H
+# error "Never use <rtems/score/threadmp.inl> directly; include <rtems/score/threadmp.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_THREADMP_INL
 #define _RTEMS_SCORE_THREADMP_INL
 

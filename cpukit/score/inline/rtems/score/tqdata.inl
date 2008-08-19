@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_TQDATA_H
+# error "Never use <rtems/score/tqdata.inl> directly; include <rtems/score/tqdata.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_TQDATA_INL
 #define _RTEMS_SCORE_TQDATA_INL
 

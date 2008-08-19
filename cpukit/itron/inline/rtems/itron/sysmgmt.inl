@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_SYSMGMT_H
+# error "Never use <rtems/itron/sysmgmt.inl> directly; include <rtems/itron/sysmgmt.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_SYSMGMT_INL
 #define _RTEMS_ITRON_SYSMGMT_INL
 

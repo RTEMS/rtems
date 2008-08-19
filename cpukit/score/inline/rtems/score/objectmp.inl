@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_OBJECTMP_H
+# error "Never use <rtems/score/objectmp.inl> directly; include <rtems/score/objectmp.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_OBJECTMP_INL
 #define _RTEMS_SCORE_OBJECTMP_INL
 

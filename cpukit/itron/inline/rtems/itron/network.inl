@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_NETWORK_H
+# error "Never use <rtems/itron/network.inl> directly; include <rtems/itron/network.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_NETWORK_INL
 #define _RTEMS_ITRON_NETWORK_INL
 

@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_TIME_H
+# error "Never use <rtems/itron/time.inl> directly; include <rtems/itron/time.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_TIME_INL
 #define _RTEMS_ITRON_TIME_INL
 

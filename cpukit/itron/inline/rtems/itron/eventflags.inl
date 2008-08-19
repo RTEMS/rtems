@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_EVENTFLAGS_H
+# error "Never use <rtems/itron/eventflags.inl> directly; include <rtems/itron/eventflags.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_EVENTFLAGS_INL
 #define _RTEMS_ITRON_EVENTFLAGS_INL
 

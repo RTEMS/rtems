@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_KEY_H
+# error "Never use <rtems/posix/key.inl> directly; include <rtems/posix/key.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_KEY_INL
 #define _RTEMS_POSIX_KEY_INL
  

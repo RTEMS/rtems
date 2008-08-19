@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_COREBARRIER_H
+# error "Never use <rtems/score/corebarrier.inl> directly; include <rtems/score/corebarrier.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_COREBARRIER_INL
 #define _RTEMS_SCORE_COREBARRIER_INL
 

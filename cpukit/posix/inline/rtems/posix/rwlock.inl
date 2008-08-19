@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_POSIX_RWLOCK_H
+# error "Never use <rtems/posix/rwlock.inl> directly; include <rtems/posix/rwlock.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_RWLOCK_INL
 #define _RTEMS_POSIX_RWLOCK_INL
 

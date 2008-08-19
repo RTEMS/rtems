@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_COND_H
+# error "Never use <rtems/posix/cond.inl> directly; include <rtems/posix/cond.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_COND_INL
 #define _RTEMS_POSIX_COND_INL
  

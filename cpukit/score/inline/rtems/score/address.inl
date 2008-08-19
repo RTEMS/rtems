@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_ADDRESS_H
+# error "Never use <rtems/score/address.inl> directly; include <rtems/score/address.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_ADDRESS_INL
 #define _RTEMS_SCORE_ADDRESS_INL
 

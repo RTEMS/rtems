@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_PORT_H
+# error "Never use <rtems/itron/port.inl> directly; include <rtems/itron/port.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_PORT_INL
 #define _RTEMS_ITRON_PORT_INL
 

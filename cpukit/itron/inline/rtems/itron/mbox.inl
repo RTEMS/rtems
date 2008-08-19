@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_MBOX_H
+# error "Never use <rtems/itron/mbox.inl> directly; include <rtems/itron/mbox.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_MBOX_INL
 #define _RTEMS_ITRON_MBOX_INL
 

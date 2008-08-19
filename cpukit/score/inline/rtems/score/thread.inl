@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_THREAD_H
+# error "Never use <rtems/score/thread.inl> directly; include <rtems/score/thread.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_THREAD_INL
 #define _RTEMS_SCORE_THREAD_INL
 

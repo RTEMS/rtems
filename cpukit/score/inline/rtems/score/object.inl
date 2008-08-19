@@ -17,6 +17,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_OBJECT_H
+# error "Never use <rtems/score/object.inl> directly; include <rtems/score/object.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_OBJECT_INL
 #define _RTEMS_SCORE_OBJECT_INL
 

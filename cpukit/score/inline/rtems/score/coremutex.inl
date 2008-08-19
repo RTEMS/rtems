@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_COREMUTEX_H
+# error "Never use <rtems/score/coremutex.inl> directly; include <rtems/score/coremutex.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_COREMUTEX_INL
 #define _RTEMS_SCORE_COREMUTEX_INL
 

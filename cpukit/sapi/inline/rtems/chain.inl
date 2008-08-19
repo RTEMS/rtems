@@ -27,6 +27,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_CHAIN_H
+# error "Never use <rtems/chain.inl> directly; include <rtems/chain.h> instead."
+#endif
+
 #ifndef _RTEMS_CHAIN_INL
 #define _RTEMS_CHAIN_INL
 

@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_MUTEX_H
+# error "Never use <rtems/posix/mutex.inl> directly; include <rtems/posix/mutex.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_MUTEX_INL
 #define _RTEMS_POSIX_MUTEX_INL
  

@@ -17,6 +17,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_POSIX_TIMER_H
+# error "Never use <rtems/posix/timer.inl> directly; include <rtems/posix/timer.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_TIMER_INL
 #define _RTEMS_POSIX_TIMER_INL
 

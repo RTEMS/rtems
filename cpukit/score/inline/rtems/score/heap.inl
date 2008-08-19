@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_HEAP_H
+# error "Never use <rtems/score/heap.inl> directly; include <rtems/score/heap.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_HEAP_INL
 #define _RTEMS_SCORE_HEAP_INL
 

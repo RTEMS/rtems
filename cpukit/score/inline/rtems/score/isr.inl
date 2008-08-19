@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_ISR_H
+# error "Never use <rtems/score/isr.inl> directly; include <rtems/score/isr.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_ISR_INL
 #define _RTEMS_SCORE_ISR_INL
 

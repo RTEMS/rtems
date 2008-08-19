@@ -17,6 +17,10 @@
  *  $Id$
  */
  
+#ifndef _RTEMS_POSIX_MQUEUE_H
+# error "Never use <rtems/posix/mqueue.inl> directly; include <rtems/posix/mqueue.h> instead."
+#endif
+
 #ifndef _RTEMS_POSIX_MQUEUE_INL
 #define _RTEMS_POSIX_MQUEUE_INL
  

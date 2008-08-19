@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_WATCHDOG_H
+# error "Never use <rtems/score/watchdog.inl> directly; include <rtems/score/watchdog.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_WATCHDOG_INL
 #define _RTEMS_SCORE_WATCHDOG_INL
 

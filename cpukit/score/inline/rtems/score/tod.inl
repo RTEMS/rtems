@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_TOD_H
+# error "Never use <rtems/score/tod.inl> directly; include <rtems/score/tod.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_TOD_INL
 #define _RTEMS_SCORE_TOD_INL
 

@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_CORESEM_H
+# error "Never use <rtems/score/coresem.inl> directly; include <rtems/score/coresem.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_CORESEM_INL
 #define _RTEMS_SCORE_CORESEM_INL
 

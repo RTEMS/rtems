@@ -20,6 +20,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_CHAIN_H
+# error "Never use <rtems/score/chain.inl> directly; include <rtems/score/chain.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_CHAIN_INL
 #define _RTEMS_SCORE_CHAIN_INL
 

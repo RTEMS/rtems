@@ -13,6 +13,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_ITRON_SEMAPHORE_H
+# error "Never use <rtems/itron/semaphore.inl> directly; include <rtems/itron/semaphore.h> instead."
+#endif
+
 #ifndef _RTEMS_ITRON_SEMAPHORE_INL
 #define _RTEMS_ITRON_SEMAPHORE_INL
 

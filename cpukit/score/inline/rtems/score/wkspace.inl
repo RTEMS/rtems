@@ -16,6 +16,10 @@
  *  $Id$
  */
 
+#ifndef _RTEMS_SCORE_WKSPACE_H
+# error "Never use <rtems/score/wkspace.inl> directly; include <rtems/score/wkspace.h> instead."
+#endif
+
 #ifndef _RTEMS_SCORE_WKSPACE_INL
 #define _RTEMS_SCORE_WKSPACE_INL
 
