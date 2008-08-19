@@ -48,7 +48,7 @@ uint32_t            Ttimer_val;
  */
 rtems_boolean       Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+rtems_isr timerisr(void);
 
 /*
  *  This routine initializes the Tick Timer 1 on the MVME167 board.
@@ -70,7 +70,7 @@ rtems_isr timerisr();
  *  boot ROM to provide a 1 MHz clock to the timers. For a 25 MHz MVME167, the
  *  prescaler value should be 0xE7 (page 2-63).
  */
-void Timer_initialize()
+void Timer_initialize(void)
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );
 
@@ -105,7 +105,7 @@ void Timer_initialize()
  *  LEAST_VALID is the lowest number this routine should trust.  Numbers
  *  below this are "noise" and zero is returned.
  */
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t            total;
 

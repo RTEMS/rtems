@@ -49,7 +49,7 @@ extern int RAM_SIZE, RAM_BASE;
 #define _RAM_SIZE ((unsigned int)&RAM_SIZE)
 #define _RAM_BASE ((unsigned int)&RAM_BASE)
 
-void boot_phase_1()
+void boot_phase_1(void)
 {
   M302_SCR = SCR_DEFAULT;
 

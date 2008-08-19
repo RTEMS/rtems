@@ -24,7 +24,7 @@
 #include <rtems/zilog/z8036.h>
 #include <page_table.h>
 
-void bsp_return_to_monitor_trap()
+void bsp_return_to_monitor_trap(void)
 {
   extern void start( void  );
 

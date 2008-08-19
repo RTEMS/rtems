@@ -19,7 +19,7 @@
 #include <bsp.h>
 #include <rtems/clockdrv.h>
 
-void bsp_return_to_monitor_trap()
+void bsp_return_to_monitor_trap(void)
 {
   extern void start( void  );
 

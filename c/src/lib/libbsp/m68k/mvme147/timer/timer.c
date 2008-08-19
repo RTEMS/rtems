@@ -34,9 +34,9 @@
 int Ttimer_val;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-rtems_isr timerisr();
+rtems_isr timerisr(void);
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   (void) set_vector(timerisr, TIMER_1_VECTOR, 0); /* install ISR */
 
@@ -56,7 +56,7 @@ void Timer_initialize()
 				synchronized whith the counter updates*/
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer()
+int Read_timer(void)
 {
   uint32_t         total;
   uint16_t         counter_value;

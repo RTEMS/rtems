@@ -35,7 +35,7 @@ static void	setTod(int n, unsigned char d)
     tod[n] = ((d/10)<<4)+(d%10);
 }
 
-void	setRealTimeToRTEMS()
+void	setRealTimeToRTEMS(void)
 {
     rtems_time_of_day	t;
 
