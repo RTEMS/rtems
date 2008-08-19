@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspstart.c: Add missing prototypes.
+
 2008-08-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/init548x.c: Converted to UNIX line endings.
