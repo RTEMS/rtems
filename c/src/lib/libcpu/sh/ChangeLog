@@ -1,3 +1,8 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7032/timer/timer.c, sh7045/timer/timer.c, sh7750/timer/timer.c:
+	 Add missing prototypes.
+
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sh7750/sci/console.c: Remove all references to
