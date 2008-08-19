@@ -1,3 +1,14 @@
+2008-08-19	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>
+
+	PR 1296/cpukit.
+	* psxtimer01/psxtimer.c, psxtimer01/psxtimer01.scn: POSIX timers use
+	incorrect repeat interval. This patch fixes the following problems in
+	the test.
+	  (1) Adds test for value of it_interval.tv_nsec.
+	  (2) Corrects test for absolute timer in past.
+	  (3) Modifies test to use different initial and repeat periods.
+	  (4) Updates psxtimer01.scn to match results.
+
 2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1297/cpukit

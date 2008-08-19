@@ -97,6 +97,7 @@ void * task_a (void *arg)
    /* set the timer in periodic mode */
    timerdata.it_interval = my_period;
    timerdata.it_value    = my_period;
+   timerdata.it_value.tv_sec *= 2;
    if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,&timergetdata) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
@@ -186,7 +187,7 @@ void * task_b (void *arg)
 
      pthread_mutex_lock (&data.mutex);
      clock = time(NULL);
-     printf("Executing task B with count = %2i %s\n", 
+     printf("Executing task B with count = %2i %s", 
        params->count, ctime(&clock) 
      );
      data.updated = TRUE;
@@ -234,6 +235,7 @@ void * task_c (void *arg)
    /* set the timer in periodic mode */
    timerdata.it_interval = my_period;
    timerdata.it_value    = my_period;
+   timerdata.it_value.tv_sec *= 2;
    if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
@@ -257,7 +259,7 @@ void * task_c (void *arg)
        pthread_cond_wait (&data.sync,&data.mutex);
      }
      clock = time(NULL);
-     printf("Executing task C with count = %2i %s\n", 
+     printf("Executing task C with count = %2i %s", 
        params->count, ctime(&clock) 
      );
 
