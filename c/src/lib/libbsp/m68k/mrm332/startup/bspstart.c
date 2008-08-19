@@ -33,7 +33,7 @@ void bsp_pretasking_hook(void);               /* m68k version */
 
 void bsp_predriver_hook(void)
 {
-  void Spurious_Initialize();
+  extern void Spurious_Initialize(void);
   Spurious_Initialize();
 }
 

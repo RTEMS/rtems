@@ -23,7 +23,7 @@
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
-extern rtems_isr Clock_isr();
+extern rtems_isr Clock_isr(void);
 
 void Timer_initialize( void )
 {

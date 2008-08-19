@@ -18,9 +18,9 @@ void  boot_card(int argc, char * const argv[]);
  *  that causes a warning. Not sure how to fix that.
  */
 /* void dumby_start ()  __attribute__ ((noreturn)); */
-void start_c ();
+void start_c(void);
 
-void  start_c() {
+void start_c(void) {
 
   /* Synthesizer Control Register */
   /*    see section(s) 4.8 */

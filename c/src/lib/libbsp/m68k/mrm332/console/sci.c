@@ -191,14 +191,14 @@ uint8_t   inline SciReadCharNoWait( void );             /* hardware routine */
 
 void SciSendBreak( void );                              /* test routine */
 
-static int8_t   SciRcvBufGetChar();                     /* circular rcv buf */
+static int8_t   SciRcvBufGetChar(void);                 /* circular rcv buf */
 static void    SciRcvBufPutChar( uint8_t);              /* circular rcv buf */
 #if 0
 static void    SciRcvBufFlush( void );                  /* unused routine */
 #endif
 
-void SciUnitTest();                                     /* test routine */
-void SciPrintStats();                                   /* test routine */
+void SciUnitTest(void);                                 /* test routine */
+void SciPrintStats(void);                               /* test routine */
 
 
 /*****************************************************************************
@@ -416,7 +416,7 @@ rtems_isr SciIsr( rtems_vector_number vector )
 * Scope:    private
 ****************************************************************************/
 
-static int8_t   SciRcvBufGetChar()
+static int8_t   SciRcvBufGetChar(void)
 {
     rtems_interrupt_level level;
     uint8_t   ch;

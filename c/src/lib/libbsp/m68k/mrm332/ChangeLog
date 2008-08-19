@@ -1,3 +1,8 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/sci.c, startup/bspstart.c, startup/start_c.c,
+	timer/timer.c: Add missing prototypes.
+
 2008-06-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* misc/interr.c: Convention calls for leading underscore on private
