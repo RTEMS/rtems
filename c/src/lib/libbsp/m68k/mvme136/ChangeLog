@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspclean.c, timer/timer.c: Add missing prototypes.
+
 2008-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac, startup/bspstart.c: Add capability for
