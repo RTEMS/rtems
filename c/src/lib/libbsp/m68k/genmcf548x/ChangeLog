@@ -1,3 +1,7 @@
+2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c: Fixed nested extern declarations.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c: Add missing prototypes.

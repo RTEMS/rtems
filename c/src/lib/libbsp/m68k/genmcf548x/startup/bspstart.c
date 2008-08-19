@@ -53,12 +53,24 @@ unsigned long _HeapSize;
 
 extern uint32_t _CPU_cacr_shadow;
 
+extern unsigned long  _M68k_Ramsize;
+
+/*
+* These labels (!) are defined in the linker command file or when the linker is
+* invoked.
+* NOTE: The information (size) is the address of the object, not the object
+* itself.
+*/
+
 extern char _SdramBase[];
 extern char _BootFlashBase[];
 extern char _CodeFlashBase[];
 extern char _SdramSize[];
 extern char _BootFlashSize[];
 extern char _CodeFlashSize[];
+extern char _TopRamReserved [];
+extern char _WorkspaceBase [];
+extern char _RamSize[];
 
 /*
  * CPU-space access
@@ -200,15 +212,6 @@ void bsp_pretasking_hook(void);		/* m68k version */
 void bsp_calc_mem_layout(void)
 {
   /*
-   * these labels (!) are defined in the linker command file
-   * or when the linker is invoked
-   * NOTE: the information(size) is the address of the object,
-   * not the object otself
-   */
-  extern char _TopRamReserved [];
-  extern char _WorkspaceBase [];
-
-  /*
    * compute the memory layout:
    * - first unused address is Workspace start
    * - Heap starts at end of workspace
@@ -285,9 +288,6 @@ void bsp_calc_mem_layout(void)
  */
 void bsp_start( void )
 {
-  extern char _RamSize[];
-  extern unsigned long  _M68k_Ramsize;
-
   _M68k_Ramsize = (unsigned long)_RamSize;		/* RAM size set in linker script */
 
   /*
