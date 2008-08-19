@@ -726,7 +726,7 @@ static rtems_status_code disp_hcms29xx_update
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_device_driver disp_hcms29xx_dev_initialize
+rtems_device_driver disp_hcms29xx_dev_initialize
   (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -817,7 +817,7 @@ static rtems_device_driver disp_hcms29xx_dev_initialize
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_device_driver disp_hcms29xx_dev_open
+rtems_device_driver disp_hcms29xx_dev_open
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -849,7 +849,7 @@ static rtems_device_driver disp_hcms29xx_dev_open
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_device_driver disp_hcms29xx_dev_write
+rtems_device_driver disp_hcms29xx_dev_write
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -907,7 +907,7 @@ static rtems_device_driver disp_hcms29xx_dev_write
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_device_driver disp_hcms29xx_dev_close
+rtems_device_driver disp_hcms29xx_dev_close
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
