@@ -1,5 +1,10 @@
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libnetworking/kern/kern_sysctl.c, libnetworking/libc/res_debug.c: Fix
+	warnings.
+
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libfs/src/nfsclient/src/nfs.c, libfs/src/nfsclient/src/rpcio.c:
 	Remove some warnings. Using ASSERT/assert macros confuses gcc who is
 	unsure actions take place. More importantly if you ever compiled with

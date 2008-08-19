@@ -726,9 +726,9 @@ loc_aton(ascii, binary)
 	cp = ascii;
 	maxcp = cp + strlen(ascii);
 
-	lltemp1 = latlon2ul(&cp, &which1);
+	lltemp1 = latlon2ul((char **)&cp, &which1);
 
-	lltemp2 = latlon2ul(&cp, &which2);
+	lltemp2 = latlon2ul((char **)&cp, &which2);
 
 	switch (which1 + which2) {
 	case 3:			/* 1 + 2, the only valid combination */
