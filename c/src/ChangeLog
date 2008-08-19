@@ -1,3 +1,7 @@
+2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libchip/shmdr/shm_driver.h: Correct prototypes.
+
 2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/display/disp_hcms29xx.c: Fixed warnings. Initialized

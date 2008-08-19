@@ -423,7 +423,7 @@ struct shm_config_info {
   vol_u32           *base;     /* base address of SHM         */
   vol_u32            length;   /* length (in bytes) of SHM    */
   vol_u32            format;   /* SHM is big or little endian */
-  uint32_t         (*convert)();/* neutral conversion routine */
+  uint32_t         (*convert)( uint32_t );/* neutral conversion routine */
   vol_u32            poll_intr;/* POLLED or INTR driven mode  */
   void             (*cause_intr)( uint32_t);
   Shm_Interrupt_information   Intr;     /* cause intr information      */
@@ -478,12 +478,12 @@ void           Shm_Locked_queue_Initialize(
             /* Shm_Unlock is CPU dependent */
 
 /* portable routines */
-void           Init_env_pool();
+void           Init_env_pool( void );
 void           Shm_Print_statistics( void );
 void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t);
-rtems_task     Shm_Cause_interrupt( uint32_t);
-void           Shm_Poll();
-void           Shm_setclockvec();
+rtems_task     Shm_Cause_interrupt( uint32_t );
+void           Shm_Poll( void );
+void           Shm_setclockvec( void );
 void           Shm_Convert_packet( rtems_packet_prefix * );
 
 /* CPU specific routines are inlined in shmcpu.h */
@@ -491,7 +491,7 @@ void           Shm_Convert_packet( rtems_packet_prefix * );
 /* target specific routines */
 void          *Shm_Convert_address( void * );
 void           Shm_Get_configuration( uint32_t, shm_config_table ** );
-void           Shm_isr();
+void           Shm_isr( void );
 void           Shm_setvec( void );
 
 void           Shm_Initialize_lock( Shm_Locked_queue_Control * );
