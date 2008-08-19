@@ -1,3 +1,8 @@
+2008-08-19	Cedric Aubert <cedric_aubert@yahoo.fr>
+
+	PR 500/misc
+	* libcsupport/src/termios.c: Avoid potential buffer overflow.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libnetworking/kern/kern_sysctl.c, libnetworking/libc/res_debug.c: Fix
