@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <rtems/termiostypes.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>

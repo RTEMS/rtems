@@ -42,12 +42,13 @@ uint32_t pc386_clock_click_count;
   do { \
   } while(0)
 
+extern volatile uint32_t Clock_driver_isrs;
+
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t                 usecs, clicks, isrs;
   uint32_t                 usecs1, usecs2;
   uint8_t                  lsb, msb;
-  extern volatile uint32_t Clock_driver_isrs;
   rtems_interrupt_level    level;
 
   /*

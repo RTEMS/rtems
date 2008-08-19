@@ -146,6 +146,11 @@ void bsp_pretasking_hook(void)
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 } /* bsp_pretasking_hook */
 
+/*
+ *  External but essentially private method
+ */
+void Calibrate_loop_1ms(void);
+
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
 |      Description: Called before main is invoked.
@@ -156,7 +161,6 @@ void bsp_pretasking_hook(void)
 void bsp_start_default( void )
 {
   int pci_init_retval;
-  void Calibrate_loop_1ms(void);
 
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
