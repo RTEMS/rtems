@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/init5206e.c: Add missing prototypes.
+
 2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rework to avoid .rel files.
