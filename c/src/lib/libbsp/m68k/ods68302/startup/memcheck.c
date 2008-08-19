@@ -13,21 +13,21 @@
 /*****************************************************************************/
 
 void
-production_memory_test()
+production_memory_test(void)
 {
 }
 
 void
-boot_memory_test()
+boot_memory_test(void)
 {
 }
 
 void
-reset_partial_memory_test()
+reset_partial_memory_test(void)
 {
 }
 
 void
-partial_memory_test()
+partial_memory_test(void)
 {
 }

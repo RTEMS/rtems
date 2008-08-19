@@ -29,7 +29,7 @@ void bsp_pretasking_hook(void);               /* m68k version */
 
 void bsp_predriver_hook(void)
 {
-  void bsp_spurious_initialize();
+  extern void bsp_spurious_initialize(void);
   bsp_spurious_initialize();
 }
 

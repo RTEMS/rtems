@@ -28,7 +28,7 @@ rtems_isr bsp_spurious_handler(
    CPU_Interrupt_frame *isf */
 );
 
-void bsp_spurious_initialize()
+void bsp_spurious_initialize(void)
 {
   uint32_t         vector;
 

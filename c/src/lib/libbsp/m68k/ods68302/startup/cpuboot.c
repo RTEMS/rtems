@@ -119,9 +119,9 @@ void boot_phase_2(void)
   static constructors have not been called, and RTEMS is not initialised.
   */
 
-void boot_card();
-void set_debug_traps();
-void breakpoint();
+void boot_card(void);
+void set_debug_traps(void);
+void breakpoint(void);
 
 void boot_phase_3(void)
 {
