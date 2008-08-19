@@ -1,3 +1,7 @@
+2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c, startup/init5329.c: Add missing prototypes.
+
 2008-07-04	Matthew Riek <matthew.riek@ibiscomputer.com.au>
 
 	* Makefile.am, README, include/coverhd.h, network/network.c,
