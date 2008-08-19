@@ -1,3 +1,8 @@
+2008-08-19	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/include/rtems/rtems/object.h: Use _RTEMS_RTEMS_OBJECT_H as
+	header guard.
+
 2008-08-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/netinet/in_cksum_arm.h, score/cpu/arm/cpu.c
