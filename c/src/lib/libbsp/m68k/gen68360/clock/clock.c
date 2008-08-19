@@ -81,10 +81,11 @@ static unsigned long nsec;
  *     For a 25 MHz external clock the basic clock rate is
  *        40 nsec * 128 * 4 = 20.48 usec/tick
  */
+extern int m360_clock_rate;
+
 #define Clock_driver_support_initialize_hardware() \
     do {                                                                      \
         unsigned int divisor;                                                 \
-        extern int m360_clock_rate;                                           \
         unsigned long nsec_per_chip_tick = 1000000000 / m360_clock_rate;      \
         unsigned long nsec_per_pit_tick = 512 * nsec_per_chip_tick;           \
         rtems_nsec_per_tick = rtems_configuration_get_microseconds_per_tick() * 1000; \
