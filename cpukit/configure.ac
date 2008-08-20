@@ -69,6 +69,8 @@ AS_IF([test x"${ac_cv_header_stdint_h}" = xyes],
 AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
 [AC_MSG_ERROR([Required header inttypes.h not found])])
 
+AC_HEADER_STDBOOL
+
 AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
 AC_CHECK_TYPES([uint32_t, int32_t])
