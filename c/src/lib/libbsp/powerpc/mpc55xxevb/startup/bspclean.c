@@ -18,6 +18,8 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
+#include <bsp/bootcard.h>
+
 void bsp_cleanup(void)
 {
 	/* TODO - Add something BSP specific here */

@@ -3,19 +3,17 @@
  *
  * @ingroup mpc55xx
  *
- * @brief Documentation for this file
+ * @brief Empty file.
+ */
+
+/*
+ * Copyright (c) 2008
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
  *
- * More details.
- * 
- * @par Copyright
- * Copyright (c) 2008<br>
- * Embedded Brains GmbH<br>
- * Obere Lagerstr. 30<br>
- * D-82178 Puchheim<br>
- * Germany<br>
- * rtems@embedded-brains.de<br>
- *
- * @par License
  * The license and distribution terms for this file may be found in the file
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */

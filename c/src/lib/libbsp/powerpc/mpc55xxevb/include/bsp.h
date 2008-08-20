@@ -43,7 +43,7 @@ extern unsigned int bsp_clock_speed;
 /** @brief Time base clicks per micro second */
 extern uint32_t bsp_clicks_per_usec;
 
-rtems_status_code mpc55xx_sd_card_init();
+rtems_status_code mpc55xx_sd_card_init( void);
 
 #endif /* ASM */
 

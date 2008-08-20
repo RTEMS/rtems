@@ -1,3 +1,23 @@
+/**
+ * @file
+ *
+ * @ingroup mpc55xx
+ *
+ * @brief SD Card initialization code.
+ */
+
+/*
+ * Copyright (c) 2008
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
+ *
+ * The license and distribution terms for this file may be found in the file
+ * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ */
+
 #include  <stdio.h>
 
 #include <mpc55xx/mpc55xx.h>
@@ -60,7 +80,7 @@ static rtems_status_code mpc55xx_dspi_init(void)
 
 	mpc55xx_dspi_bus_table [3].master = 0;
 	for (i = 0; i < MPC55XX_DSPI_NUMBER; ++i) {
-		device_name [8] = '0' + i;
+		device_name [8] = (char) ('0' + i);
 		rv = rtems_libi2c_register_bus( device_name, (rtems_libi2c_bus_t *) &mpc55xx_dspi_bus_table [i]);
 		CHECK_RVSC( rv, device_name);
 	}
