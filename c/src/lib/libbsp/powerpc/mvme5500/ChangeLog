@@ -1,5 +1,10 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* GT64260/GT64260TWSI.c, network/if_100MHz/GT64260eth.c,
+	network/if_1GHz/if_wm.c: Add missing prototypes.
+
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* GT64260/GT64260TWSI.c, irq/irq_init.c,
 	network/if_100MHz/GT64260eth.c, network/if_1GHz/if_wm.c,
 	pci/pci.c, pci/pci_interface.c, startup/bspstart.c,
