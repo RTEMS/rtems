@@ -162,7 +162,7 @@ void dump_irq_masks(void )
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_SIU_IvectMask_from_prio ()
+static void compute_SIU_IvectMask_from_prio (void)
 {
 	/*
 	 * The actual masks defined

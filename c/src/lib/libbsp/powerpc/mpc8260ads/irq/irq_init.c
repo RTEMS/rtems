@@ -22,9 +22,9 @@
 */
 
 extern unsigned int external_exception_vector_prolog_code_size;
-extern void external_exception_vector_prolog_code();
+extern void external_exception_vector_prolog_code(void);
 extern unsigned int decrementer_exception_vector_prolog_code_size;
-extern void decrementer_exception_vector_prolog_code();
+extern void decrementer_exception_vector_prolog_code(void);
 
 extern void BSP_panic(char *s);
 extern void _BSP_Fatal_error(unsigned int v);
@@ -35,15 +35,15 @@ volatile unsigned int ppc_cached_irq_mask;
 /*
  * default on/off function
  */
-static void nop_func(){}
+static void nop_func(void){}
 /*
  * default isOn function
  */
-static int not_connected() {return 0;}
+static int not_connected(void) {return 0;}
 /*
  * default possible isOn function
  */
-static int connected() {return 1;}
+static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings   	initial_config;
