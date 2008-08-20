@@ -1,3 +1,8 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* GT64260/MVME5500I2C.c: Once again eliminate u32, unchar.
+	Add CVS Id, fix typo.
+
 2008-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Rework to avoid .rel files.

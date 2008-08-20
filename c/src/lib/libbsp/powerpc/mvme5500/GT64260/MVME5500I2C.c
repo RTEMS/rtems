@@ -7,29 +7,29 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
  *
- * To read inoformation of the EEPROM via the I2C
+ * To read information of the EEPROM via the I2C
  *
+ * $Id$
  */
 
 #include <rtems/bspIo.h>	    /* printk */
+#include <rtems/stdint.h>           /* uint32_t */
 #include "bsp/GT64260TWSI.h"
 
 /* #define I2C_DEBUG*/
-typedef unsigned int u32;
-typedef unsigned char unchar;
 
-unchar I2cAddrPack(unchar busAddr,u32 offset)
+unsigned char I2cAddrPack(unsigned char busAddr,uint32_t offset)
 {
   return(busAddr | ((offset & 0x700) >> 7));
 }
-unchar I2cDevByteAddr(u32 devA2A1A0, unchar byteNum)
+unsigned char I2cDevByteAddr(uint32_t devA2A1A0, unsigned char byteNum)
 {
   return(( devA2A1A0 >>(byteNum*8)) & 0xff);
 }
 /****************************************************************************
 * I2Cread_eeprom - read EEPROM VPD from the I2C
 */
-int I2Cread_eeprom(unchar I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,unchar *pBuff,u32 numBytes)
+int I2Cread_eeprom(unsigned char I2cBusAddr,uint32_t devA2A1A0,uint32_t AddrBytes,unsigned char *pBuff,uint32_t numBytes)
 {
   int status=0, lastByte=0;
 
