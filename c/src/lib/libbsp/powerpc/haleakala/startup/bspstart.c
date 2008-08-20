@@ -156,7 +156,7 @@ EarlyUARTInit(int baudRate)
 
 
 static void
-InitUARTClock()
+InitUARTClock(void)
 {
 	uint32_t reg;
 	mfsdr(SDR0_UART0,reg);
@@ -184,7 +184,7 @@ void GPIO_AlternateSelect(int bitnum, int source)
 	}
 }
 
-void Init_FPGA()
+void Init_FPGA(void)
 {
 	/* Have to write to the FPGA to enable the UART drivers */
 	/* Have to enable CS2 as an output in GPIO to get the FPGA working */

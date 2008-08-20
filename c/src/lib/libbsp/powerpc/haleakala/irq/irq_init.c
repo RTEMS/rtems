@@ -21,14 +21,14 @@
 /*
  * default on/off function
  */
-static void nop_func()
+static void nop_func(void)
 {
 }
 
 /*
  * default isOn function
  */
-static int not_connected()
+static int not_connected(void)
 {
 	return 0;
 }

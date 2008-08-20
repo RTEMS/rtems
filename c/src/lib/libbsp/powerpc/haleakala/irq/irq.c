@@ -66,7 +66,7 @@ static inline int IsUICIRQ(const rtems_irq_number irqLine)
 	 );
 }
 
-static void WriteIState()
+static void WriteIState(void)
 /* Write the gEnabledInts state masked by gIntInhibited to the hardware */
 {
 	PPC_SET_DEVICE_CONTROL_REGISTER(UIC0_ER, 
