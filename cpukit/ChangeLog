@@ -1,5 +1,6 @@
-2008-08-2008	Ralf Corsépius <ralf.corsepius@rtems.org>
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add AC_HEADER_STDBOOL.
 	* libblock/src/nvdisk.c: Remove bool, true, false (unused, clashes
 	with C99/POSIX).
 
