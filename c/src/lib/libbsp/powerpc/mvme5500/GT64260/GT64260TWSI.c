@@ -30,7 +30,7 @@
 
 int TWSI_initFlg = 0;	/* TWSI Initialization Flag */
 
-void GT64260TWSIinit()
+void GT64260TWSIinit(void)
 {
 
   if ( !TWSI_initFlg) {

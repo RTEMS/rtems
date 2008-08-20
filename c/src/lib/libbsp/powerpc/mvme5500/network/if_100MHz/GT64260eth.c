@@ -534,7 +534,7 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
 #endif
 }
 
-void GT64260eth_printStats()
+void GT64260eth_printStats(void)
 {
   GT64260eth_stats(root_GT64260eth_dev);
 }

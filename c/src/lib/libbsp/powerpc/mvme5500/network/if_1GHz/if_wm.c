@@ -236,7 +236,9 @@ static void wm_set_filter(struct wm_softc *sc);
 
 static void i82544EI_isr(void);
 static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m);
-extern int  pci_mem_find(), pci_io_find(), pci_get_capability(void);
+extern int pci_mem_find(int b, int d, int f, int reg, unsigned *basep,unsigned *sizep);
+extern int pci_io_find(int b, int d, int f, int reg,unsigned *basep,unsigned *sizep);
+extern int pci_get_capability(int b, int d, int f, int capid,int *offset,uint32_t *value);
 extern char * ether_sprintf1(void);
 
 static void i82544EI_irq_on(const rtems_irq_connect_data *irq)
