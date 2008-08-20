@@ -36,26 +36,26 @@
 
 static inline uint16_t sd_card_get_uint16( const uint8_t *s)
 {
-	return ((uint16_t) s [0] << 8) | ((uint16_t) s [1]);
+	return (uint16_t) ((s [0] << 8) | s [1]);
 }
 
 static inline uint32_t sd_card_get_uint32( const uint8_t *s)
 {
-	return ((uint32_t) s [0] << 24) | ((uint32_t) s [1] << 16) | ((uint32_t) s [2] << 8) | ((uint32_t) s [3]);
+	return ((uint32_t) s [0] << 24) | ((uint32_t) s [1] << 16) | ((uint32_t) s [2] << 8) | (uint32_t) s [3];
 }
 
 static inline void sd_card_put_uint16( uint16_t v, uint8_t *s)
 {
-	*s++ = v >> 8;
-	*s   = v;
+	*s++ = (uint8_t) (v >> 8);
+	*s   = (uint8_t) (v);
 }
 
 static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 {
-	*s++ = v >> 24;
-	*s++ = v >> 16;
-	*s++ = v >> 8;
-	*s   = v;
+	*s++ = (uint8_t) (v >> 24);
+	*s++ = (uint8_t) (v >> 16);
+	*s++ = (uint8_t) (v >> 8);
+	*s   = (uint8_t) (v);
 }
 
 /** @} */
@@ -116,7 +116,7 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
  * @{
  */
 
-#define SD_CARD_COMMAND_SET_COMMAND( c, cmd) (c) [1] = 0x40 + ((cmd) & 0x3f)
+#define SD_CARD_COMMAND_SET_COMMAND( c, cmd) (c) [1] = (uint8_t) (0x40 + ((cmd) & 0x3f))
 #define SD_CARD_COMMAND_SET_ARGUMENT( c, arg) sd_card_put_uint32( (arg), &((c) [2]))
 #define SD_CARD_COMMAND_SET_CRC7( c, crc7) ((c) [6] = (crc7) << 1)
 
@@ -168,11 +168,11 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 #define SD_CARD_CSD_GET_CSD_STRUCTURE( csd) ((csd) [0] >> 6)
 #define SD_CARD_CSD_GET_SPEC_VERS( csd) (((csd) [0] >> 2) & 0xf)
 #define SD_CARD_CSD_GET_TAAC( csd) ((csd) [1])
-#define SD_CARD_CSD_GET_NSAC( csd) ((csd) [2])
+#define SD_CARD_CSD_GET_NSAC( csd) ((uint32_t) (csd) [2])
 #define SD_CARD_CSD_GET_TRAN_SPEED( csd) ((csd) [3])
-#define SD_CARD_CSD_GET_C_SIZE( csd) ((((csd) [6] & 0x3) << 10) + ((csd) [7] << 2) + (((csd) [8] >> 6) & 0x3))
+#define SD_CARD_CSD_GET_C_SIZE( csd) ((((uint32_t) (csd) [6] & 0x3) << 10) + ((uint32_t) (csd) [7] << 2) + (((uint32_t) (csd) [8] >> 6) & 0x3))
 #define SD_CARD_CSD_GET_C_SIZE_MULT( csd) ((((csd) [9] & 0x3) << 1) + (((csd) [10] >> 7) & 0x1))
-#define SD_CARD_CSD_GET_READ_BLK_LEN( csd) ((csd) [5] & 0xf)
+#define SD_CARD_CSD_GET_READ_BLK_LEN( csd) ((uint32_t) (csd) [5] & 0xf)
 #define SD_CARD_CSD_GET_WRITE_BLK_LEN( csd) ((((csd) [12] & 0x3) << 2) + (((csd) [13] >> 6) & 0x3))
 
 /** @} */
@@ -200,13 +200,13 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 static inline uint32_t sd_card_block_number( const uint8_t *csd)
 {
 	uint32_t size = SD_CARD_CSD_GET_C_SIZE( csd);
-	uint32_t mult = 1 << (SD_CARD_CSD_GET_C_SIZE_MULT( csd) + 2);
+	uint32_t mult = 1U << (SD_CARD_CSD_GET_C_SIZE_MULT( csd) + 2);
 	return (size + 1) * mult;
 }
 
 static inline uint32_t sd_card_capacity( const uint8_t *csd)
 {
-	uint32_t block_size = 1 << SD_CARD_CSD_GET_READ_BLK_LEN( csd);
+	uint32_t block_size = 1U << SD_CARD_CSD_GET_READ_BLK_LEN( csd);
 	return sd_card_block_number( csd) * block_size;
 }
 
@@ -283,9 +283,9 @@ static inline uint32_t sd_card_access_time( const uint8_t *csd)
 static inline uint32_t sd_card_max_access_time( const uint8_t *csd, uint32_t transfer_speed)
 {
 	uint64_t ac = sd_card_access_time( csd);
-	ac = (ac * (uint64_t) transfer_speed) / 8000000000ULL;
 	uint32_t n = SD_CARD_CSD_GET_NSAC( csd) * 100;
-	return n + ac;
+	ac = (ac * transfer_speed) / 8000000000ULL;
+	return n + (uint32_t) ac;
 }
 
 /** @} */
@@ -330,7 +330,11 @@ static int sd_card_wait( sd_card_driver_entry *e)
 static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint32_t argument)
 {
 	int rv = 0;
-	rtems_libi2c_read_write_t rw = { rd_buf : e->response, wr_buf : e->command, byte_cnt : SD_CARD_COMMAND_SIZE };
+	rtems_libi2c_read_write_t rw = {
+		.rd_buf = e->response,
+		.wr_buf = e->command,
+		.byte_cnt = SD_CARD_COMMAND_SIZE
+	};
 	int r = 0;
 
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
@@ -594,7 +598,7 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 		/* Single block read */
 		rv = sd_card_send_command( e, SD_CARD_CMD_READ_SINGLE_BLOCK, start_address);
 		CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
-		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) r->bufs [0].buffer, e->block_size);
+		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) r->bufs [0].buffer, (int) e->block_size);
 		CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
 	} else {
 		/* Start multiple block read */
@@ -611,7 +615,7 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 			DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
 #endif /* DEBUG */
 
-			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) r->bufs [i].buffer, e->block_size);
+			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) r->bufs [i].buffer, (int) e->block_size);
 			CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Read block");
 		}
 
@@ -681,7 +685,7 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 		/* Single block write */
 		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_BLOCK, start_address);
 		CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
-		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) r->bufs [0].buffer, e->block_size);
+		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) r->bufs [0].buffer, (int) e->block_size);
 		CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
 	} else {
 		/* Start multiple block write */
@@ -698,7 +702,7 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 			DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
 #endif /* DEBUG */
 
-			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) r->bufs [i].buffer, e->block_size);
+			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) r->bufs [i].buffer, (int) e->block_size);
 			CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Write block");
 		}
 
@@ -916,9 +920,9 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	transfer_speed = sd_card_transfer_speed( block);
 	e->transfer_mode.baudrate = transfer_speed;
 	e->n_ac_max = sd_card_max_access_time( block, transfer_speed);
-	read_block_size = 1 << SD_CARD_CSD_GET_READ_BLK_LEN( block);
+	read_block_size = 1U << SD_CARD_CSD_GET_READ_BLK_LEN( block);
 	e->block_size_shift = SD_CARD_CSD_GET_READ_BLK_LEN( block);
-	write_block_size = 1 << e->block_size_shift;
+	write_block_size = 1U << e->block_size_shift;
 	if (read_block_size < write_block_size) {
 		SYSLOG_ERROR( "Read block size smaller than write block size\n");
 		return -RTEMS_IO_ERROR;
@@ -944,10 +948,10 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SET_BLOCKLEN");
 
 	/* Create disk device */
-	dev = rtems_filesystem_make_dev_t( sd_card_disk_major, e->table_index);
+	dev = rtems_filesystem_make_dev_t( sd_card_disk_major, (rtems_device_minor_number) e->table_index);
 	sc = rtems_disk_io_initialize();
 	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Initialize RTEMS disk IO");
-	sc = rtems_disk_create_phys( dev, e->block_size, e->block_number, sd_card_disk_ioctl, e->disk_device_name);
+	sc = rtems_disk_create_phys( dev, (int) e->block_size, (int) e->block_number, sd_card_disk_ioctl, e->disk_device_name);
 	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Create disk device");
 
 	/* Stop */
@@ -988,8 +992,8 @@ static rtems_status_code sd_card_driver_read( rtems_device_major_number major, r
 
 	/* Check arguments */
 	block_size_mask = e->block_size - 1;
-	block_count = rw->count >> e->block_size_shift;
-	start_block = rw->offset >> e->block_size_shift;
+	block_count = (uint32_t) rw->count >> e->block_size_shift;
+	start_block = (uint32_t) rw->offset >> e->block_size_shift;
 	if (rw->offset & block_size_mask) {
 		DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_read_cleanup, "Invalid offset");
 	} else if ((rw->count & block_size_mask) || (start_block >= e->block_number) || (block_count > e->block_number - start_block)) {
@@ -1000,25 +1004,25 @@ static rtems_status_code sd_card_driver_read( rtems_device_major_number major, r
 		/* Do nothing */
 	} else if (block_count == 1) {
 		/* Single block read */
-		rv = sd_card_send_command( e, SD_CARD_CMD_READ_SINGLE_BLOCK, rw->offset);
+		rv = sd_card_send_command( e, SD_CARD_CMD_READ_SINGLE_BLOCK, (uint32_t) rw->offset);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
-		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) rw->buffer, e->block_size);
+		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) rw->buffer, (int) e->block_size);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
 
 		/* Set moved bytes counter */
-		rw->bytes_moved = rv;
+		rw->bytes_moved = (uint32_t) rv;
 	} else {
 		/* Start multiple block read */
-		rv = sd_card_send_command( e, SD_CARD_CMD_READ_MULTIPLE_BLOCK, rw->offset);
+		rv = sd_card_send_command( e, SD_CARD_CMD_READ_MULTIPLE_BLOCK, (uint32_t) rw->offset);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
 
 		/* Multiple block read */
 		for (i = 0; i < block_count; ++i) {
-			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) rw->buffer + (i << e->block_size_shift), e->block_size);
+			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) rw->buffer + (i << e->block_size_shift), (int) e->block_size);
 			CLEANUP_RVSC( rv, sc, sd_card_driver_read_stop_cleanup, "Read block");
 
 			/* Update moved bytes counter */
-			rw->bytes_moved += rv;
+			rw->bytes_moved += (uint32_t) rv;
 		}
 
 		/* Stop multiple block read */
@@ -1069,8 +1073,8 @@ static rtems_status_code sd_card_driver_write( rtems_device_major_number major, 
 
 	/* Check arguments */
 	block_size_mask = e->block_size - 1;
-	block_count = rw->count >> e->block_size_shift;
-	start_block = rw->offset >> e->block_size_shift;
+	block_count = (uint32_t) rw->count >> e->block_size_shift;
+	start_block = (uint32_t) rw->offset >> e->block_size_shift;
 	if (rw->offset & block_size_mask) {
 		DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_write_cleanup, "Invalid offset");
 	} else if ((rw->count & block_size_mask) || (start_block >= e->block_number) || (block_count > e->block_number - start_block)) {
@@ -1081,25 +1085,25 @@ static rtems_status_code sd_card_driver_write( rtems_device_major_number major, 
 		/* Do nothing */
 	} else if (block_count == 1) {
 		/* Single block write */
-		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_BLOCK, rw->offset);
+		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_BLOCK, (uint32_t) rw->offset);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
-		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) rw->buffer, e->block_size);
+		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) rw->buffer, (int) e->block_size);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
 
 		/* Set moved bytes counter */
-		rw->bytes_moved = rv;
+		rw->bytes_moved = (uint32_t) rv;
 	} else {
 		/* Start multiple block write */
-		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_MULTIPLE_BLOCK, rw->offset);
+		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_MULTIPLE_BLOCK, (uint32_t) rw->offset);
 		CLEANUP_RVSC( rv, sc, sd_card_driver_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 		/* Multiple block write */
 		for (i = 0; i < block_count; ++i) {
-			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) rw->buffer + (i << e->block_size_shift), e->block_size);
+			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) rw->buffer + (i << e->block_size_shift), (int) e->block_size);
 			CLEANUP_RVSC( rv, sc, sd_card_driver_write_stop_cleanup, "Write: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 			/* Update moved bytes counter */
-			rw->bytes_moved += rv;
+			rw->bytes_moved += (uint32_t) rv;
 		}
 
 		/* Stop multiple block write */
