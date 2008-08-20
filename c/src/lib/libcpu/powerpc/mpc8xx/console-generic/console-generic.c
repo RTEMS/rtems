@@ -59,7 +59,7 @@
 int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
 
 /* BSP supplied routine */
-extern int mbx8xx_console_get_configuration();
+extern int mbx8xx_console_get_configuration(void);
 
 /*
  * Interrupt-driven input buffer

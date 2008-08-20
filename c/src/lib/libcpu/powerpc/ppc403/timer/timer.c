@@ -47,13 +47,13 @@ extern uint32_t bsp_timer_average_overhead;
 static volatile uint32_t	startedAt;
 static rtems_boolean		subtractOverhead;
 
-void Timer_initialize()
+void Timer_initialize(void)
 {
   /* We are going to rely on clock.c to sort out where the clock comes from */
   startedAt = ppc_time_base();
 }
 
-int Read_timer()
+int Read_timer(void)
 {
 	uint32_t   clicks, total;
 

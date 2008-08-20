@@ -207,58 +207,58 @@ void _CPU_cache_disable_instruction ( void )
 
 #warning Most cache functions are not implemented
 
-void _CPU_cache_flush_entire_data()
+void _CPU_cache_flush_entire_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_invalidate_entire_data()
+void _CPU_cache_invalidate_entire_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_freeze_data()
+void _CPU_cache_freeze_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_unfreeze_data()
+void _CPU_cache_unfreeze_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_enable_data()
+void _CPU_cache_enable_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_disable_data()
+void _CPU_cache_disable_data(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_invalidate_entire_instruction()
+void _CPU_cache_invalidate_entire_instruction(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_freeze_instruction()
+void _CPU_cache_freeze_instruction(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_unfreeze_instruction()
+void _CPU_cache_unfreeze_instruction(void)
 {
 	/* Void */
 }
 
 
-void _CPU_cache_enable_instruction()
+void _CPU_cache_enable_instruction(void)
 {
 	/* Void */
 }
 
-void _CPU_cache_disable_instruction()
+void _CPU_cache_disable_instruction(void)
 {
 	/* Void */
 }
