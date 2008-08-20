@@ -64,8 +64,11 @@ int main( int, char **, char **);
       "127.0.0.1",            /* Log host */
       {"127.0.0.1" },         /* Name server(s) */
       {"127.0.0.1" },         /* NTP server(s) */
-      NULL,                   /* hardware address */
       1,                      /* sb_efficiency */
+      0,                      /* udp_tx_buf_size */
+      0,                      /* udp_rx_buf_size */
+      0,                      /* tcp_tx_buf_size */
+      0                       /* tcp_rx_buf_size */
   };
 #endif
 

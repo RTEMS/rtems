@@ -169,7 +169,7 @@ boolean _Thread_Initialize(
    */
 
   if ( the_thread->extensions ) {
-    int i;
+    uint32_t i;
     for ( i = 0; i < (_Thread_Maximum_extensions + 1); i++ )
       the_thread->extensions[i] = NULL;
   }
