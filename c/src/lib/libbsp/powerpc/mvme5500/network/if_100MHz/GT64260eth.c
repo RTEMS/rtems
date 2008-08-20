@@ -125,7 +125,7 @@ static int GT64260eth_rx(struct GTeth_softc *sc);
 static void GTeth_rx_setup(struct GTeth_softc *sc);
 static void GTeth_rxprio_setup(struct GTeth_softc *sc);
 static void GTeth_rx_stop(struct GTeth_softc *dc);
-static void GT64260eth_isr();
+static void GT64260eth_isr(void);
 static int GTeth_hash_compute(struct GTeth_softc *sc,unsigned char eaddr[ETHER_ADDR_LEN]);
 static int GTeth_hash_entry_op(struct GTeth_softc *sc, enum GTeth_hash_op op,
 	enum GTeth_rxprio prio,unsigned char eaddr[ETHER_ADDR_LEN]);
@@ -158,7 +158,7 @@ static int GT64260eth_irq_is_on(const rtems_irq_connect_data *irq)
   return(inl(ETH0_EICR) & ETH_IR_EtherIntSum);
 }
 
-static void GT64260eth_isr()
+static void GT64260eth_isr(void)
 {
   struct GTeth_softc *sc = root_GT64260eth_dev;
   rtems_event_set  events=0;

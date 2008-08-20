@@ -24,15 +24,15 @@
 /*
  * default on/off function
  */
-static void nop_func(){}
+static void nop_func(void){}
 /*
  * default isOn function
  */
-static int not_connected() {return 0;}
+static int not_connected(void) {return 0;}
 /*
  * default possible isOn function
  */
-static int connected() {return 1;}
+static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;

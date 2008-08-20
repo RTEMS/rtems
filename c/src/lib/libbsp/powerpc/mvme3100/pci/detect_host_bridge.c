@@ -75,7 +75,7 @@ void BSP_motload_pci_fixup()
   BSP_pciScan(0, fixup_irq_line, 0);
 }
 
-void detect_host_bridge()
+void detect_host_bridge(void)
 {
   OpenPIC = (volatile struct OpenPIC *) (BSP_8540_CCSR_BASE + BSP_OPEN_PIC_BASE_OFFSET);
 }
@@ -108,7 +108,7 @@ dump_dev_cb(
 }
 
 void
-BSP_pciConfigDump_early()
+BSP_pciConfigDump_early(void)
 {
 	printk("BUS:SLOT:FUN  VENDOR-DEV_ID: COMMAND STATUS BASE_ADDR0 BASE_ADDR1 IRQ_PIN -> IRQ_LINE\n");
 	BSP_pciScan(0, dump_dev_cb, 0);

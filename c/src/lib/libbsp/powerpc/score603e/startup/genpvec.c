@@ -50,9 +50,9 @@ typedef struct
   rtems_chain_control ISR_Array  [NUM_LIRQ];
 
 /* XXX */
-void init_irq_data_register();
+void init_irq_data_register(void);
 
-void initialize_external_exception_vector ()
+void initialize_external_exception_vector (void)
 {
   int i;
   rtems_isr_entry previous_isr;

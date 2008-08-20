@@ -58,7 +58,7 @@ void GT64260TWSIinit()
 }
 
 /* return the interrupt flag */
-int GT64260TWSIintFlag() 
+int GT64260TWSIintFlag(void) 
 {
   unsigned int loop;
 
@@ -70,7 +70,7 @@ int GT64260TWSIintFlag()
   return(0);
 }
 
-int GT64260TWSIstop() 
+int GT64260TWSIstop(void) 
 {
 
 #if TWSI_DEBUG
@@ -95,7 +95,7 @@ int GT64260TWSIstop()
   return(-1);
 }
 
-int GT64260TWSIstart()
+int GT64260TWSIstart(void)
 {
   unsigned int loop;	
   unsigned int status;	

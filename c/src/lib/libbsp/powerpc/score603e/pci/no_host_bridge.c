@@ -1,5 +1,7 @@
 /*
  *  detect_host_bridge.c
+ *
+ * $Id$
  */
                                                                                 
 #include <libcpu/io.h>
@@ -18,6 +20,6 @@
  * Open PIC device is built into the processor chip.
  */
 
-void detect_host_bridge()
+void detect_host_bridge(void)
 {
 }

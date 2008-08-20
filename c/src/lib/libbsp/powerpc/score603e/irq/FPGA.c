@@ -7,7 +7,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id:
+ *  $Id$
  */
 
 #include <bsp.h>
@@ -22,7 +22,7 @@
 /*
  *  initialize FPGA
  */
-void initialize_PCI_bridge ()
+void initialize_PCI_bridge (void)
 {
 #if (!SCORE603E_USE_DINK)
   uint16_t         mask, shift, data;
@@ -52,7 +52,7 @@ void set_irq_mask(
   *loc = value;
 }
 
-uint16_t         get_irq_mask()
+uint16_t         get_irq_mask(voi)
 {
   uint16_t          *loc;
   uint16_t          value;
@@ -90,7 +90,7 @@ void unmask_irq(
   set_irq_mask( value );
 }
 
-void init_irq_data_register()
+void init_irq_data_register(void)
 {
   uint32_t         index;
   uint32_t         i;
@@ -148,7 +148,7 @@ rtems_boolean Is_PMC_IRQ(
   return result;
 }
 
-uint16_t         read_and_clear_irq()
+uint16_t         read_and_clear_irq(void)
 {
   uint16_t            irq;
 

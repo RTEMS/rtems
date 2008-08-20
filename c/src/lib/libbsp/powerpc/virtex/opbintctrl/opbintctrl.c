@@ -37,7 +37,7 @@ RTEMS_INLINE_ROUTINE void set_ier(uint32_t mask)
 /*
  * Retrieve contents of Interrupt Pending Register
  */
-RTEMS_INLINE_ROUTINE uint32_t get_ipr()
+RTEMS_INLINE_ROUTINE uint32_t get_ipr(void)
 {
   uint32_t c = *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_IPR));
   return c;

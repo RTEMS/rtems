@@ -356,7 +356,7 @@ void outputChar(char ch)
    xlite_write_char_polled( 0, ch );
 }
 
-char inputChar()
+char inputChar(void)
 {
    return (char)xlite_read_polled(0);
 }

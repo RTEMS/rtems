@@ -420,7 +420,7 @@ void tsec_dump_rring(struct tsec_private *mp);
 /********** Memory Barriers *********************/
 
 #ifdef __PPC__
-static inline void membarrier()
+static inline void membarrier(void)
 {
 	asm volatile("sync":::"memory");
 }

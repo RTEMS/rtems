@@ -234,10 +234,10 @@ static int  wm_read_eeprom(struct wm_softc *sc,int word,int wordcnt, uint16_t *d
 static void i82544EI_daemon(void *arg);
 static void wm_set_filter(struct wm_softc *sc);
 
-static void i82544EI_isr();
+static void i82544EI_isr(void);
 static void i82544EI_sendpacket(struct wm_softc *sc, struct mbuf *m);
-extern int  pci_mem_find(), pci_io_find(), pci_get_capability();
-extern char * ether_sprintf1();
+extern int  pci_mem_find(), pci_io_find(), pci_get_capability(void);
+extern char * ether_sprintf1(void);
 
 static void i82544EI_irq_on(const rtems_irq_connect_data *irq)
 {

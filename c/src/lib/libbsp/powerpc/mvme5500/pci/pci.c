@@ -13,8 +13,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/rtems/license.html.
  *
- *  pci.c,v 1.2 2002/05/14 17:10:16 joel Exp
- *
  *  Copyright 2004, Brookhaven National Laboratory and
  *                  Shuchen K. Feng, <feng1@bnl.gov>, 2004
  *   - modified and added support for MVME5500 board
@@ -62,7 +60,7 @@
 #define pci	BSP_pci_configuration
 
 static int		  numPCIDevs=0;
-extern void pci_interface();
+extern void pci_interface(void);
 
 /* Pack RegNum,FuncNum,DevNum,BusNum,and ConfigEnable for
  * PCI Configuration Address Register
@@ -247,7 +245,7 @@ pci_config BSP_pci_configuration = {(volatile unsigned char*) PCI_CONFIG_ADDR,
  * it's not used.
  *
  */
-int pci_initialize()
+int pci_initialize(void)
 {
   int deviceFound;
   unsigned char ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;

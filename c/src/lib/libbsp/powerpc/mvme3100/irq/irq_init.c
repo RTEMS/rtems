@@ -28,7 +28,7 @@
 #include <libcpu/raw_exception.h>
 #include <rtems/bspIo.h>
 
-static void nop_func()
+static void nop_func(void)
 {
 	printk("Unhandled IRQ\n");
 }

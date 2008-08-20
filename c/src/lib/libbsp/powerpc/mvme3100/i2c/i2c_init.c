@@ -83,7 +83,7 @@ safe_perror(const char *s)
 
 
 int
-BSP_i2c_initialize()
+BSP_i2c_initialize(void)
 {
 int busno, succ = 0;
 

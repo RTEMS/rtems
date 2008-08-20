@@ -86,9 +86,9 @@
 
 #define ADDR_PIPELINE 0x00020000
 
-void  pciAccessInit();
+void  pciAccessInit(void);
 
-void pci_interface()
+void pci_interface(void)
 {
 
 #ifdef PCI_DEADLOCK
@@ -107,7 +107,7 @@ void pci_interface()
 }
 /* Use MOTLoad default for Writeback Priority and Buffer Depth 
  */
-void pciAccessInit()
+void pciAccessInit(void)
 {
   unsigned int PciLocal, data;
 

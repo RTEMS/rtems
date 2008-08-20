@@ -100,7 +100,7 @@ SPR_RO(TBRL)
  */
 static rtems_id syncsem = 0;
 
-static inline int ok_to_block()
+static inline int ok_to_block(void)
 {
 	return syncsem && _System_state_Is_up( _System_state_Get() );
 }
@@ -254,7 +254,7 @@ rtems_status_code sc;
  */
 
 static void
-rd1byte_noack()
+rd1byte_noack(void)
 {
 uint8_t dum;
 uint8_t ccr;

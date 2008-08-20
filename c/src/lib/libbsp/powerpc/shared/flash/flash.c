@@ -132,7 +132,7 @@ rd_par(struct bankdesc *b, union bconv *pv, uint32_t a)
 
 /* 'flush' input buffer and get an upper-case char from stdin */
 STATIC int
-getUc()
+getUc(void)
 {
 	fseek(stdin, 0, SEEK_END);
 	return toupper(getchar());

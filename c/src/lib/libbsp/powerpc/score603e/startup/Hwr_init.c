@@ -1,6 +1,6 @@
 /*  Hwr_init.c
  *
- *  $Id:
+ *  $Id$
  */
 
 #include <bsp.h>
@@ -69,7 +69,7 @@ typedef struct {
   uint32_t          command_register;
 }Harris_RTC;
 
-void init_RTC()
+void init_RTC(void)
 {
   volatile Harris_RTC *the_RTC;
 
@@ -78,7 +78,7 @@ void init_RTC()
   the_RTC->command_register = 0x0;
 }
 
-void init_PCI()
+void init_PCI(void)
 {
 #if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
   uint32_t         value;

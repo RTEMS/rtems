@@ -60,11 +60,11 @@
 #define SRR1_TEA_EXC	(1<<(31-13))
 #define SRR1_MCP_EXC	(1<<(31-12))
 
-void
-BSP_printStackTrace();
+extern void
+BSP_printStackTrace(BSP_Exception_frame* excPtr);
 
 
-void
+extern void
 rtemsReboot(void);
 
 static volatile BSP_ExceptionExtension	BSP_exceptionExtension = 0;

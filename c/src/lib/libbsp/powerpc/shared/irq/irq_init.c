@@ -49,7 +49,7 @@ static void nop_func(void){}
 static int not_connected(void) {return 0;}
 /*
  * default possible isOn function
-static int connected() {return 1;}
+static int connected(void) {return 1;}
  */
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
