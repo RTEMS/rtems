@@ -1,3 +1,8 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/bspclean.c, startup/sd-card-init.c, tests/tests.c:
+	Add missing prototypes.
+
 2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/start.S: Clear environment pointer for bootcard.
