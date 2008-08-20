@@ -1,3 +1,8 @@
+2008-08-2008	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libblock/src/nvdisk.c: Remove bool, true, false (unused, clashes
+	with C99/POSIX).
+
 2008-08-19	Cedric Aubert <cedric_aubert@yahoo.fr>
 
 	PR 500/misc

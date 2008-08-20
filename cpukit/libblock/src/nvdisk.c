@@ -55,13 +55,6 @@
 #endif
 
 /**
- * Provide a basic boolean type.
- */
-#define bool  int
-#define true  (1)
-#define false (0)
-
-/**
  * NV Device Control holds the segment controls
  */
 typedef struct rtems_nvdisk_device_ctl
