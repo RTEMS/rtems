@@ -49,16 +49,16 @@ rtems_status_code mpc83xx_gtm_initialize( int timer, int clock)
 
 	MPC83XX_GTM_VARIABLES( timer);
 
-	uint8_t mask = 0xf << (low * 4);
-	uint8_t flags = 0x3 << (low * 4);
-	uint16_t reg = 0;
+	unsigned mask = 0xfU << (low * 4);
+	unsigned flags = 0x3U << (low * 4);
+	uint8_t reg = 0;
 
 	MPC83XX_GTM_CHECK_INDEX( timer);
 
 	rtems_interrupt_disable( level);
 
 	reg = mpc83xx.gtm [module].gtcfr [high].reg;
-	mpc83xx.gtm [module].gtcfr [high].reg = (reg & ~mask) | flags;
+	mpc83xx.gtm [module].gtcfr [high].reg = (uint8_t) ((reg & ~mask) | flags);
 
 	mpc83xx.gtm [module].gt_tim_regs [high].gtmdr [low] = 0;
 

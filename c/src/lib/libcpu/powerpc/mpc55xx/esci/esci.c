@@ -257,6 +257,9 @@ static int mpc55xx_esci_termios_write( int minor, const char *out, int n)
 	return 0;
 }
 
+/* FIXME, TODO */
+extern uint32_t bsp_clock_speed;
+
 /**
  * @brief Sets attributes of port @a minor according to termios attributes @a t.
  *
@@ -337,9 +340,6 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 		default: br = 0; break;
 	}
 	if (br > 0) {
-		// FIXME, TODO
-		extern uint32_t bsp_clock_speed;
-
 		br = bsp_clock_speed / (16 * br);
 		br = (br > 8191) ? 8191 : br;
 	} else {
@@ -452,7 +452,7 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int console_done = 0; 
 	int termios_do_init = 1; 
-	int i = 0;
+	rtems_device_minor_number i = 0;
 	mpc55xx_esci_driver_entry *e = NULL;
 	
 	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
@@ -488,7 +488,7 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 				CHECK_SC( sc, "Install IRQ handler");
 			}
 		}
-		mpc55xx_esci_termios_set_attributes( minor, &mpc55xx_esci_termios_default);
+		mpc55xx_esci_termios_set_attributes( (int) i, &mpc55xx_esci_termios_default);
 	}
 
 	return RTEMS_SUCCESSFUL;
@@ -613,7 +613,7 @@ rtems_device_driver console_control( rtems_device_major_number major, rtems_devi
  *
  * The correct value will be set by mpc55xx_esci_output_char_init().
  */
-static unsigned mpc55xx_esci_output_char_minor = 0;
+static int mpc55xx_esci_output_char_minor = 0;
 
 /**
  * @name BSP Character Output
@@ -637,7 +637,7 @@ static void mpc55xx_esci_output_char_nop( char c)
 static void mpc55xx_esci_output_char_init( char c)
 {
 	int console_found = 0;
-	unsigned i = 0;
+	int i = 0;
 	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
 		if (mpc55xx_esci_driver_table [i].console) {
 			console_found = 1;

@@ -25,7 +25,18 @@ SPR_RO(PVR)
 
 ppc_cpu_id_t       current_ppc_cpu      = PPC_UNKNOWN;
 ppc_cpu_revision_t current_ppc_revision = 0xff;
-ppc_feature_t      current_ppc_features = {0};
+ppc_feature_t      current_ppc_features = {
+  .has_altivec = 0,
+  .has_fpu = 0,
+  .has_hw_ptbl_lkup = 0,
+  .is_bookE = 0,
+  .has_16byte_clne = 0,
+  .is_60x = 0,
+  .has_8_bats = 0,
+  .has_epic = 0,
+  .has_shadowed_gprs = 0,
+  .has_ivpr_and_ivor = 0
+};
 
 char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {

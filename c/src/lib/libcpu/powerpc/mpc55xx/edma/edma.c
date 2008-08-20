@@ -31,7 +31,7 @@
 #include <rtems/status-checks.h>
 
 #define MPC55XX_EDMA_CHANNEL_NUMBER 64
-#define MPC55XX_EDMA_INVALID_CHANNEL -1
+#define MPC55XX_EDMA_INVALID_CHANNEL UINT8_MAX
 #define MPC55XX_EDMA_IS_CHANNEL_INVALID( i) ((i) < 0 || (i) >= MPC55XX_EDMA_CHANNEL_NUMBER)
 
 #define MPC55XX_EDMA_IRQ_PRIORITY MPC55XX_INTC_MIN_PRIORITY
@@ -67,7 +67,7 @@ static void mpc55xx_edma_irq_handler( rtems_vector_number vector, void *data)
 	SYSLOG_WARNING_SC( sc, "Transfer update semaphore release");
 }
 
-static void mpc55xx_edma_irq_update_error_table( uint8_t *link_table, uint8_t *error_table, uint8_t channel)
+static void mpc55xx_edma_irq_update_error_table( uint8_t *link_table, uint8_t *error_table, int channel)
 {
 	int i = 0;
 	error_table [channel] = 1;
@@ -82,8 +82,8 @@ static void mpc55xx_edma_irq_error_handler( rtems_vector_number vector, void *da
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	uint8_t channel_start = *((uint8_t *) data);
-	uint8_t channel_end = channel_start + 32;
-	uint8_t i = 0;
+	uint8_t channel_end = (uint8_t) (channel_start + 32);
+	int i = 0;
 	uint32_t mask = 0x1;
 	uint32_t error_register = 0;
 	uint8_t channel_link_table [MPC55XX_EDMA_CHANNEL_NUMBER];
@@ -100,7 +100,7 @@ static void mpc55xx_edma_irq_error_handler( rtems_vector_number vector, void *da
 	/* Fill channel link table */
 	for (i = 0; i < MPC55XX_EDMA_CHANNEL_NUMBER; ++i) {
 		if (EDMA.TCD [i].BITERE_LINK && EDMA.TCD [i].CITER != EDMA.TCD [i].BITER) {
-			channel_link_table [i] = EDMA_TCD_BITER_LINK( i);
+			channel_link_table [i] = (uint8_t) EDMA_TCD_BITER_LINK( i);
 		} else if (EDMA.TCD [i].MAJORE_LINK && EDMA.TCD [i].CITER == EDMA.TCD [i].BITER) {
 			channel_link_table [i] = EDMA.TCD [i].MAJORLINKCH;
 		} else {
@@ -135,7 +135,7 @@ static void mpc55xx_edma_irq_error_handler( rtems_vector_number vector, void *da
 	/* Clear the error interrupt requests */
 	for (i = 0; i < MPC55XX_EDMA_CHANNEL_NUMBER; ++i) {
 		if (channel_error_table [i]) {
-			EDMA.CER.R = i;
+			EDMA.CER.R = (uint8_t) i;
 		}
 	}
 }
@@ -146,9 +146,9 @@ rtems_status_code mpc55xx_edma_enable_hardware_requests( int channel, bool enabl
 		return RTEMS_INVALID_NUMBER;
 	}
 	if (enable) {
-		EDMA.SERQR.R = channel;
+		EDMA.SERQR.R = (uint8_t) channel;
 	} else {
-		EDMA.CERQR.R = channel;
+		EDMA.CERQR.R = (uint8_t) channel;
 	}
 	return RTEMS_SUCCESSFUL;
 }

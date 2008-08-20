@@ -317,12 +317,13 @@ static rtems_status_code mpc55xx_dspi_send_addr( rtems_libi2c_bus_t *bus, uint32
 	return RTEMS_SUCCESSFUL;
 }
 
+/* FIXME, TODO */
+extern uint32_t bsp_clock_speed;
+
 static int mpc55xx_dspi_set_transfer_mode( rtems_libi2c_bus_t *bus, const rtems_libi2c_tfr_mode_t *mode)
 {
 	mpc55xx_dspi_bus_entry *e = (mpc55xx_dspi_bus_entry *) bus;
 	union DSPI_CTAR_tag ctar = MPC55XX_ZERO_FLAGS;
-	// FIXME, TODO
-	extern uint32_t bsp_clock_speed;
 	uint32_t scaler = bsp_clock_speed / mode->baudrate;
 	mpc55xx_dspi_baudrate_scaler_entry bse = mpc55xx_dspi_search_baudrate_scaler( scaler, 0, MPC55XX_DSPI_BAUDRATE_SCALER_TABLE_SIZE / 2, MPC55XX_DSPI_BAUDRATE_SCALER_TABLE_SIZE);
 
@@ -336,11 +337,6 @@ static int mpc55xx_dspi_set_transfer_mode( rtems_libi2c_bus_t *bus, const rtems_
 
 	ctar.B.PBR = bse.pbr;
 	ctar.B.BR = bse.br;
-
-	// ctar.B.PCSSCK = bse.pbr;
-	// ctar.B.CSSCK = bse.br;
-	// ctar.B.PASC = bse.pbr;
-	// ctar.B.ASC = bse.br;
 
 	ctar.B.PCSSCK = 0;
 	ctar.B.CSSCK = 0;
@@ -425,8 +421,8 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 	}
 
 	if (n > MPC55XX_DSPI_EDMA_MAGIC_SIZE) {
-		n_nc = mpc55xx_non_cache_aligned_size( in);
-		n_c = mpc55xx_cache_aligned_size( in, n);
+		n_nc = (int) mpc55xx_non_cache_aligned_size( in);
+		n_c = (int) mpc55xx_cache_aligned_size( in, (size_t) n);
 		if (n_c > EDMA_TCD_BITER_LINKED_SIZE) {
 			SYSLOG_WARNING( "Buffer size out of range, cannot use eDMA\n");
 			n_nc = n;
@@ -462,8 +458,7 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 			/* Read */
 			if (r < n_nc && sr.B.RXCTR != 0) {
 				pop_data.R = ppc_read_word( pop);
-				in [r] = pop_data.B.RXDATA;
-				// printk( "[%03u]: 0x%02x -> 0x%02x\n", r, out [r], in [r]);
+				in [r] = (unsigned char) pop_data.B.RXDATA;
 				++r;
 			}
 		}
@@ -484,7 +479,6 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 			/* Read */
 			if (r < n_nc && sr.B.RXCTR != 0) {
 				pop_data.R = ppc_read_word( pop);
-				// printk( "[%03u]: 0x%02x -> 0x%02x\n", r, out [r], in [r]);
 				++r;
 			}
 		}
@@ -505,8 +499,7 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 			/* Read */
 			if (r < n_nc && sr.B.RXCTR != 0) {
 				pop_data.R = ppc_read_word( pop);
-				in [r] = pop_data.B.RXDATA;
-				// printk( "[%03u]: 0x%02x -> 0x%02x\n", r, out [r], in [r]);
+				in [r] = (unsigned char) pop_data.B.RXDATA;
 				++r;
 			}
 		}
@@ -521,8 +514,8 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 		struct tcd_t tcd_receive = MPC55XX_EDMA_TCD_DEFAULT;
 
 		/* Cache operations */
-		rtems_cache_flush_multiple_data_lines( out_c, n_c);
-		rtems_cache_invalidate_multiple_data_lines( in_c, n_c);
+		rtems_cache_flush_multiple_data_lines( out_c, (size_t) n_c);
+		rtems_cache_invalidate_multiple_data_lines( in_c, (size_t) n_c);
 
 		/* Set transmit TCD */
 		if (out == NULL) {

@@ -1,3 +1,10 @@
+2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc55xx/fec/fec.c: Added copyright information.
+	* mpc55xx/dspi/dspi.c, mpc55xx/edma/edma.c, mpc55xx/esci/esci.c:
+	Fixed nexted extern declarations.  Fixed integer conversion warnings.
+	* shared/include/cpuIdent.c: Added missing initializers.
+
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc8260/clock/clock.c, mpc8260/console-generic/console-generic.c:
