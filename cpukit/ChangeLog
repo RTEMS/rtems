@@ -1,3 +1,7 @@
+2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/rtems/status-checks.h: Fixed integer conversion warning.
+
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Abort if stdbool.h is not c99 compliant.

@@ -83,7 +83,7 @@ extern "C" {
 #define CHECK_SCRV( sc, hint ) \
   if ((sc) != RTEMS_SUCCESSFUL) { \
     SYSLOG_ERROR( "SC = %i: %s\n", sc, hint ); \
-    return -(sc); \
+    return -((int) (sc)); \
   } else { \
     DEBUG_PRINT( "Ok: %s\n", hint ); \
   }
@@ -149,7 +149,7 @@ extern "C" {
 #define CLEANUP_SCRV( sc, rv, label, hint ) \
   if ((sc) != RTEMS_SUCCESSFUL) { \
     SYSLOG_ERROR( "SC = %i: %s\n", sc, hint ); \
-    rv = -(sc); \
+    rv = -((int) (sc)); \
     goto label; \
   } else { \
     DEBUG_PRINT( "Ok: %s\n", hint ); \
