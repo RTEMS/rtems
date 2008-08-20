@@ -1,3 +1,9 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* at91rm9200/irq/bsp_irq_init.c, lpc22xx/irq/bsp_irq_init.c, 
+	mc9328mxl/irq/bsp_irq_init.c, s3c24xx/irq/bsp_irq_init.c: 
+	Add missing prototypes.
+
 2008-05-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* s3c24xx/clock/clockdrv.c: Use
