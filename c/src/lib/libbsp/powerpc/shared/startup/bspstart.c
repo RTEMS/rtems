@@ -38,20 +38,20 @@
 #include <bsp/motorola.h>
 #include <rtems/powerpc/powerpc.h>
 
-extern void _return_to_ppcbug();
+extern void _return_to_ppcbug(void);
 extern unsigned long __rtems_end[];
-extern void L1_caches_enables();
-extern unsigned get_L2CR();
+extern void L1_caches_enables(void);
+extern unsigned get_L2CR(void);
 extern void set_L2CR(unsigned);
 extern void bsp_cleanup(void);
-extern Triv121PgTbl BSP_pgtbl_setup();
-extern void			BSP_pgtbl_activate();
-extern void			BSP_vme_config();
+extern Triv121PgTbl BSP_pgtbl_setup(unsigned long);
+extern void			BSP_pgtbl_activate(Triv121PgTbl);
+extern void			BSP_vme_config(void);
 
 SPR_RW(SPRG1)
 
 #if defined(DEBUG_BATS)
-extern void ShowBATS();`
+extern void ShowBATS(void);
 #endif
 
 /*
@@ -132,7 +132,7 @@ unsigned int EUMBBAR;
  * Register (EUMBBAR) as read from the processor configuration register using
  * Processor Address Map B (CHRP).
  */ 
-unsigned int get_eumbbar() {
+unsigned int get_eumbbar(void) {
   out_le32( (uint32_t*)0xfec00000, 0x80000078 );
   return in_le32( (uint32_t*)0xfee00000 );
 }

@@ -30,7 +30,7 @@ static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      (rtems_irq_disable)clockOff,
 					      (rtems_irq_is_enabled)clockIsOn};
 
-int BSP_get_clock_irq_level()
+int BSP_get_clock_irq_level(void)
 {
   /*
    * Caution : if you change this, you must change the

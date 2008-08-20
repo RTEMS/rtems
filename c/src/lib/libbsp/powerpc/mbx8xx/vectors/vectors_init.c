@@ -88,7 +88,7 @@ int except_always_enabled(const rtems_raw_except_connect_data* ptr)
   return 1;
 }
 
-void initialize_exceptions()
+void initialize_exceptions(void)
 {
   int i;
 

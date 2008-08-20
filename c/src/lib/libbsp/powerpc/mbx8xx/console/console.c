@@ -528,7 +528,7 @@ bd_t fakeEppcBugInfo = {
 static cpm8xx_t	*cpmp = (cpm8xx_t *)&(((immap_t *)IMAP_ADDR)->im_cpm);
 
 void
-serial_init()
+serial_init(void)
 {
 	volatile smc_t		*sp;
 	volatile smc_uart_t	*up;
@@ -692,7 +692,7 @@ serial_putchar(const char c)
 }
 
 char
-serial_getc()
+serial_getc(void)
 {
 	volatile cbd_t		*rbdf;
 	volatile char		*buf;
@@ -713,7 +713,7 @@ serial_getc()
 }
 
 int
-serial_tstc()
+serial_tstc(void)
 {
 	volatile cbd_t		*rbdf;
 	volatile smc_uart_t	*up;

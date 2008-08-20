@@ -19,9 +19,9 @@
 #include <bsp/commproc.h>
 
 extern unsigned int external_exception_vector_prolog_code_size;
-extern void external_exception_vector_prolog_code();
+extern void external_exception_vector_prolog_code(void);
 extern unsigned int decrementer_exception_vector_prolog_code_size;
-extern void decrementer_exception_vector_prolog_code();
+extern void decrementer_exception_vector_prolog_code(void);
 
 volatile unsigned int ppc_cached_irq_mask;
 
@@ -29,16 +29,16 @@ volatile unsigned int ppc_cached_irq_mask;
  * default on/off function
  */
 static void nop_func1(void *unused){}
-static void nop_func2(){}
+static void nop_func2(void){}
 
 /*
  * default isOn function
  */
-static int not_connected() {return 0;}
+static int not_connected(void) {return 0;}
 /*
  * default possible isOn function
  */
-static int connected() {return 1;}
+static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
@@ -67,7 +67,7 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   0
 };
 
-void BSP_SIU_irq_init()
+void BSP_SIU_irq_init(void)
 {
   /*
    * In theory we should initialize two registers at least :

@@ -42,11 +42,11 @@ static pci_isa_bridge_device bridge;
 /*
  * default on/off function
  */
-static void nop_func(){}
+static void nop_func(void){}
 /*
  * default isOn function
  */
-static int not_connected() {return 0;}
+static int not_connected(void) {return 0;}
 /*
  * default possible isOn function
 static int connected() {return 1;}

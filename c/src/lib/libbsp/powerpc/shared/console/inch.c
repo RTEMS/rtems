@@ -196,7 +196,7 @@ _IBMPC_scankey(char *outChar)
 |        Arguments: vector - standard RTEMS argument - see documentation.
 |          Returns: standard return value - see documentation.
 +--------------------------------------------------------------------------*/
-void _IBMPC_keyboard_isr()
+void _IBMPC_keyboard_isr(void)
 {
   if (_IBMPC_scankey(&kbd_buffer[kbd_last]))
   {

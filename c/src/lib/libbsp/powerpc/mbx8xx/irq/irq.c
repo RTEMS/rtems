@@ -94,7 +94,7 @@ const static unsigned int SIU_IvectMask[BSP_SIU_IRQ_NUMBER] =
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_SIU_IvectMask_from_prio ()
+static void compute_SIU_IvectMask_from_prio (void)
 {
   /*
    * In theory this is feasible. No time to code it yet. See i386/shared/irq.c

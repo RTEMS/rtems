@@ -44,9 +44,9 @@
 #include <bsp/irq.h>
 
 volatile uint32_t   Clock_driver_ticks;
-extern int BSP_get_clock_irq_level();
+extern int BSP_get_clock_irq_level(void);
 extern int BSP_connect_clock_handler(rtems_isr_entry);
-extern int BSP_disconnect_clock_handler();
+extern int BSP_disconnect_clock_handler(void);
 
 void Clock_exit( void );
 

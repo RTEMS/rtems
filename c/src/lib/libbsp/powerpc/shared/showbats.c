@@ -40,7 +40,7 @@ void printBAT( int bat, uint32_t upper, uint32_t lower )
   );
 }
 
-void ShowBATS(){
+void ShowBATS(void){
   uint32_t lower;
   uint32_t upper;
 

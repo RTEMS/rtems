@@ -39,7 +39,7 @@ extern const pci_config_access_functions pci_indirect_functions;
 
 extern unsigned int EUMBBAR;
 
-void detect_host_bridge()
+void detect_host_bridge(void)
 {
   /*
    * If the processor is an 8240 or an 8245 then the PIC is built
@@ -101,7 +101,7 @@ unsigned merst;
 }
 #endif
 
-void detect_host_bridge()
+void detect_host_bridge(void)
 {
   PPC_DEVICE *hostbridge;
   uint32_t id0;

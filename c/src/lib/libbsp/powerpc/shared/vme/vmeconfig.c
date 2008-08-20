@@ -57,8 +57,8 @@
 #endif
 #include <rtems/bspIo.h>
 
-extern int BSP_VMEInit();
-extern int BSP_VMEIrqMgrInstall();
+extern int BSP_VMEInit(void);
+extern int BSP_VMEIrqMgrInstall(void);
 
 /* Use a weak alias for the VME configuration.
  * This permits individual applications to override

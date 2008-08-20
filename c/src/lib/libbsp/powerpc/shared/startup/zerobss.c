@@ -16,7 +16,7 @@
 
 #include <string.h>
 
-void zero_bss()
+void zero_bss(void)
 {
   /* prevent these from being accessed in the short data areas */
   extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
