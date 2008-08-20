@@ -35,15 +35,15 @@
 #include <rtems/powerpc/powerpc.h>
 
 extern unsigned long __rtems_end[];
-extern void L1_caches_enables();
-extern unsigned get_L2CR();
+extern void L1_caches_enables(void);
+extern unsigned get_L2CR(void);
 extern void set_L2CR(unsigned);
 extern void bsp_cleanup(void);
-extern Triv121PgTbl BSP_pgtbl_setup();
-extern void BSP_pgtbl_activate();
-extern void BSP_vme_config();
-extern void ShowBATS();
-unsigned int rsPMCQ1Init();
+extern Triv121PgTbl BSP_pgtbl_setup(void);
+extern void BSP_pgtbl_activate(Triv121PgTbl);
+extern void BSP_vme_config(void);
+extern void ShowBATS(void);
+unsigned int rsPMCQ1Init(void);
 
 uint32_t bsp_clicks_per_usec;
 
@@ -51,7 +51,7 @@ SPR_RW(SPRG1)
 
 uint8_t LightIdx = 0;
 
-void BSP_Increment_Light(){
+void BSP_Increment_Light(void){
   uint8_t data;
   data = *GENERAL_REGISTER1;
   data &= 0xf0;
@@ -59,7 +59,7 @@ void BSP_Increment_Light(){
   *GENERAL_REGISTER1 = data;
 }
 
-void BSP_Fatal_Fault_Light() {
+void BSP_Fatal_Fault_Light(void) {
   uint8_t data;
   data = *GENERAL_REGISTER1;
   data &= 0xf0;

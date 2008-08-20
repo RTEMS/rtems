@@ -143,6 +143,6 @@ extern PPMCQ1BoardData  pmcq1BoardData;
  */
 extern unsigned int rsPMCQ1QuiccIntConnect( 
   unsigned long busNo, unsigned long slotNo,unsigned long funcNo, rtems_irq_hdl routine,rtems_irq_hdl_param arg );
-unsigned int rsPMCQ1Init();
+extern unsigned int rsPMCQ1Init(void);
 
 #endif				/* __INCPMCQ1H */

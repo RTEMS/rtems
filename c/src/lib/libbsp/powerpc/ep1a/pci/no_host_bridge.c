@@ -25,7 +25,7 @@
  * Open PIC device is built into the processor chip.
  */
 
-void detect_host_bridge()
+void detect_host_bridge(void)
 {
   OpenPIC=(volatile struct OpenPIC *) (EUMBBAR + BSP_OPEN_PIC_BASE_OFFSET );
 }

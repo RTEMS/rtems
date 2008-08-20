@@ -80,7 +80,7 @@ static unsigned char rsPMCQ1eeprom[] =
     0x00	/* Byte 22 - PCI_BST */
 };
 
-void MsDelay()
+void MsDelay(void)
 {
   printk(".");
 }
@@ -102,7 +102,7 @@ int read32( int addr){
 }
 
 
-void rsPMCQ1_scc_nullFunc() {}
+void rsPMCQ1_scc_nullFunc(void) {}
   
 /*******************************************************************************
 * rsPMCQ1Int - handle a PMCQ1 interrupt
@@ -299,7 +299,7 @@ unsigned int rsPMCQ1QuiccIntDisconnect(
 * RETURNS: OK if PMCQ1 found, ERROR if not.
 */
 
-unsigned int rsPMCQ1Init()
+unsigned int rsPMCQ1Init(void)
 {
   int busNo;
   int slotNo;

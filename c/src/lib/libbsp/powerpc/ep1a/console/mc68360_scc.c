@@ -29,7 +29,7 @@
 int mc68360_length_array[ MC68360_LENGHT_SIZE ];
 int mc68360_length_count=0;
 
-void mc68360_Show_length_array() {
+void mc68360_Show_length_array(void) {
   int i;
   for (i=0; i<MC68360_LENGHT_SIZE; i++)
     printf(" %d", mc68360_length_array[i] );
@@ -40,7 +40,7 @@ M68360_t    M68360_chips = NULL;
 
 #define SYNC     eieio
 
-void mc68360_scc_nullFunc() {}
+void mc68360_scc_nullFunc(void) {}
 
 uint8_t scc_read8(
   const char       *name,
