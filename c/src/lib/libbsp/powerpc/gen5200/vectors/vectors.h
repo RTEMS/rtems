@@ -81,7 +81,7 @@
  * default raw exception handlers
  */
 
-extern	void default_exception_vector_code_prolog();
+extern	void default_exception_vector_code_prolog(void);
 extern	int  default_exception_vector_code_prolog_size;
 
 /* codemove is like memmove, but it also gets the cache line size
@@ -92,7 +92,7 @@ extern	int  default_exception_vector_code_prolog_size;
  * next mutiple of 4.
  */
 extern void * codemove(void *, const void *, unsigned int, unsigned long);
-extern void initialize_exceptions();
+extern void initialize_exceptions(void);
 
 typedef struct {
   unsigned 	EXC_SRR0;

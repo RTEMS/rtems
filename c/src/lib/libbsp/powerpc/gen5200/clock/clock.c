@@ -257,7 +257,7 @@ int clockIsOn(const rtems_irq_connect_data* irq)
 }
 
 
-int BSP_get_clock_irq_level()
+int BSP_get_clock_irq_level(void)
 {
   /*
    * Caution : if you change this, you must change the
