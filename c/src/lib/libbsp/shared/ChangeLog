@@ -1,3 +1,7 @@
+2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* src/irq-generic.c: Fixed integer conversion warnings.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* timerstub.c: Add missing prototypes.

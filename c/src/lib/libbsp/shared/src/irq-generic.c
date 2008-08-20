@@ -52,9 +52,9 @@ static inline void bsp_interrupt_set_handler_unique( rtems_vector_number index, 
 	rtems_vector_number i = index / 8;
 	rtems_vector_number s = index % 8;
 	if (unique) {
-		bsp_interrupt_handler_unique_table [i] |= (uint8_t) 0x1 << s;
+		bsp_interrupt_handler_unique_table [i] |= (uint8_t) (0x1U << s);
 	} else {
-		bsp_interrupt_handler_unique_table [i] &= ~((uint8_t) 0x1 << s);
+		bsp_interrupt_handler_unique_table [i] &= (uint8_t) ~(0x1U << s);
 	}
 }
 
