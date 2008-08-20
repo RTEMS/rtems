@@ -1,3 +1,7 @@
+2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Correct prototype of _CPU_Thread_dispatch_pointer.
+
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Correct prototype of Idle threads.
