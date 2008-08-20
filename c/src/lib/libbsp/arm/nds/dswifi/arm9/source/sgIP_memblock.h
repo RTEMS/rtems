@@ -46,7 +46,7 @@ typedef struct SGIP_MEMBLOCK {
 extern "C" {
 #endif
 
-	extern void sgIP_memblock_Init();
+	extern void sgIP_memblock_Init(void);
 	extern sgIP_memblock * sgIP_memblock_alloc(int packetsize);
 	extern sgIP_memblock * sgIP_memblock_allocHW(int headersize, int packetsize);
 	extern void sgIP_memblock_free(sgIP_memblock * mb);

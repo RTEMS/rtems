@@ -60,7 +60,7 @@ static inline void _Neo_CloseSPI ( void )
 	CARD_CR1 = 0;
 }
 
-static inline void _Neo_MK2GameMode()	{
+static inline void _Neo_MK2GameMode(void)	{
 	_Neo_OpenSPI(_NMMC_spi_freq);				// Enable DS Card's SPI port
 	_Neo_SPI(0xF1);				// Switch to game mode
 	_Neo_CloseSPI();				// Disable DS Card's SPI port
@@ -147,7 +147,7 @@ static bool _Neo_CheckMMCResponse( u8 response, u8 mask )	{
 
 // Neo MMC functions
 
-static bool _Neo_InitMMC()	{
+static bool _Neo_InitMMC(void)	{
 	_Neo_MK2GameMode();
 	_Neo_WriteMK2Config( MK2_CONFIG_ZIP_RAM_CLOSE | MK2_CONFIG_GAME_FLASH_CLOSE);
 	

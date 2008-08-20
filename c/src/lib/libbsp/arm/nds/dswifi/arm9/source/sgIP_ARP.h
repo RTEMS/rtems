@@ -58,8 +58,8 @@ typedef struct SGIP_HEADER_ARP {
 extern "C" {
 #endif
 
-	extern void	sgIP_ARP_Init();
-	extern void sgIP_ARP_Timer100ms();
+	extern void	sgIP_ARP_Init(void);
+	extern void sgIP_ARP_Timer100ms(void);
 	extern void sgIP_ARP_FlushInterface(sgIP_Hub_HWInterface * hw);
 
 	extern int sgIP_ARP_ProcessIPFrame(sgIP_Hub_HWInterface * hw, sgIP_memblock * mb);

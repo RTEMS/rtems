@@ -52,7 +52,7 @@ extern "C" {
 
 	extern int sgIP_IP_ReceivePacket(sgIP_memblock * mb);
 	extern int sgIP_IP_MaxContentsSize(unsigned long destip);
-	extern int sgIP_IP_RequiredHeaderSize();
+	extern int sgIP_IP_RequiredHeaderSize(void);
 	extern int sgIP_IP_SendViaIP(sgIP_memblock * mb, int protocol, unsigned long srcip, unsigned long destip);
 	extern unsigned long sgIP_IP_GetLocalBindAddr(unsigned long srcip, unsigned long destip);
 

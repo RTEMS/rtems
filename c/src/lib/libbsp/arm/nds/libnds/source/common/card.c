@@ -118,7 +118,7 @@ int cardReadID(uint32 flags) {
 
 
 //---------------------------------------------------------------------------------
-static inline void EepromWaitBusy()	{
+static inline void EepromWaitBusy(void)	{
 //---------------------------------------------------------------------------------
 	while (CARD_CR1 & /*BUSY*/0x80);
 }

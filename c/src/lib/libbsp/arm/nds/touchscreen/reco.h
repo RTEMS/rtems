@@ -134,4 +134,4 @@ return angle;
 }
 
 
-#endif RECO_H
+#endif /* RECO_H */

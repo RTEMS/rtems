@@ -64,7 +64,7 @@ unsigned char motion_spi(unsigned char in_byte){
 }
 
 
-void motion_MK6_sensor_mode() {
+void motion_MK6_sensor_mode(void) {
 	// send some commands on the SPI bus
 	SPI_On()
 	motion_spi(0xFE);
@@ -80,7 +80,7 @@ void motion_MK6_sensor_mode() {
 	SPI_Off()
 }
 
-void motion_MK6_EEPROM_mode() {
+void motion_MK6_EEPROM_mode(void) {
 	// send some commands on the SPI bus
 	SPI_On()
 	motion_spi(0xFE);
@@ -97,7 +97,7 @@ void motion_MK6_EEPROM_mode() {
 }
 
 // checks whether a DS Motion Pak is plugged in
-int motion_pak_is_inserted(){
+int motion_pak_is_inserted(void){
     int motion_pak = 0;
 	unsigned char return_byte = V_SRAM[10]; // read first byte of DS Motion Pak check
 	swiDelay(WAIT_CYCLES);
@@ -116,7 +116,7 @@ int motion_pak_is_inserted(){
 // checks whether a DS Motion Card is plugged in
 // this only works after motion_init()
 // it will return false if it is run before motion_init()
-int motion_card_is_inserted(){
+int motion_card_is_inserted(void){
 	// send 0x03 to read from DS Motion Card control register
 	SPI_On()
 	motion_spi(0x03); // command to read from control register
@@ -167,7 +167,7 @@ int motion_enable(int card_type) {
 // Determines which DS Motion Sensor is present
 // Turns it on
 // Does not require knowing which type is present
-int motion_init() {
+int motion_init(void) {
 	sysSetBusOwners(true, true);
 	// first, check for the DS Motion Pak - type 1
 	if( motion_pak_is_inserted() == 1 )
@@ -195,7 +195,7 @@ int motion_init() {
 // In the case of a DS Motion Pak, do nothing - there is nothing to de-init
 // In the case of a DS Motion Card, turns off the accelerometer
 // In the case of an MK6, turns off accelerometer and switches out of sensor mode into EEPROM mode
-void motion_deinit() {
+void motion_deinit(void) {
 	// DS Motion Card - turn off accelerometer
 	SPI_On()
 	motion_spi(0x04); // command to write to control register
@@ -245,7 +245,7 @@ signed int motion_read_x(void) {
 }
 
 // read the Y acceleration
-signed int motion_read_y() {
+signed int motion_read_y(void) {
 	unsigned char High_byte = 0;
 	unsigned char Low_byte = 0;
 	signed int output = 0;
@@ -432,7 +432,7 @@ void motion_set_offs_gyro(void){
 	calibration.goff = motion_read_gyro();
 }
 
-MotionCalibration* motion_get_calibration(){
+MotionCalibration* motion_get_calibration(void){
 	return &calibration;
 }
 
@@ -448,21 +448,21 @@ void motion_set_calibration(MotionCalibration* cal){
 }
 
 // enable analog input number 1 (ain_1)
-void motion_enable_ain_1(){
+void motion_enable_ain_1(void){
 	unsigned char return_byte;
     return_byte = V_SRAM[16];
 	swiDelay(WAIT_CYCLES);
 }
 
 // enable analog input number 2 (ain_2)
-void motion_enable_ain_2(){
+void motion_enable_ain_2(void){
 	unsigned char return_byte;
     return_byte = V_SRAM[18];
 	swiDelay(WAIT_CYCLES);
 }
 
 // read from the analog input number 1 - requires enabling ain_1 first
-int motion_read_ain_1(){
+int motion_read_ain_1(void){
 	unsigned char High_byte = V_SRAM[12]; // Command to load AIN_1 High onto bus
 	swiDelay(WAIT_CYCLES); // wait for data ready
 	High_byte = V_SRAM[0]; // get the high byte
@@ -474,7 +474,7 @@ int motion_read_ain_1(){
 }
 
 // read from the analog input number 2 - requires enabling ain_2 first
-int motion_read_ain_2(){
+int motion_read_ain_2(void){
 	unsigned char High_byte = V_SRAM[14]; // Command to load AIN_1 High onto bus
 	swiDelay(WAIT_CYCLES); // wait for data ready
 	High_byte = V_SRAM[0]; // get the high byte

@@ -44,7 +44,7 @@ sgIP_free (void *ptr)
  */
 
 void
-sgIP_Init ()
+sgIP_Init (void)
 {
 }
 
@@ -80,13 +80,13 @@ sgIP_Hub_AddHardwareInterface (int (*TransmitFunction)
  * translate memblock to mbuf
  */
 
+extern void wifi_signal (struct mbuf *);
 int
 sgIP_Hub_ReceiveHardwarePacket (sgIP_Hub_HWInterface * hw,
                                 sgIP_memblock * packet)
 {
   struct mbuf *m;
   unsigned char *p;
-  extern void wifi_signal (struct mbuf *);
 
   /* reserve the mbuf */
   MGETHDR (m, M_WAIT, MT_DATA);
@@ -114,7 +114,6 @@ void
 compat_wifi_output (struct mbuf *m)
 {
   sgIP_memblock *packet;
-  unsigned char *p;
   size_t size = 0;
   struct mbuf *l;
 
@@ -191,7 +190,7 @@ sgIP_DHCP_Start (sgIP_Hub_HWInterface * interface, int getDNS)
  */
 
 int
-sgIP_DHCP_Update ()
+sgIP_DHCP_Update (void)
 {
   return SGIP_DHCP_STATUS_SUCCESS;
 }
@@ -214,7 +213,7 @@ sgIP_ARP_SendGratARP (sgIP_Hub_HWInterface * hw)
 /* ----------------- unused things ------------------------ */
 
 sgIP_DNS_Record *
-sgIP_DNS_GetUnusedRecord ()
+sgIP_DNS_GetUnusedRecord (void)
 {
   static sgIP_DNS_Record rec;
 

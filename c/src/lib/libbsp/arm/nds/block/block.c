@@ -77,6 +77,7 @@ int
 nds_flash_control (int minor, uint32_t cmd, void *arg)
 {
   printk ("nds_flash_control\n");
+  return 0;
 }
 
 rtems_status_code

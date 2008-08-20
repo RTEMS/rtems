@@ -50,7 +50,7 @@
 #define _IO_ALLOW_UNALIGNED
 
 #if defined _IO_USE_DMA && defined _IO_ALLOW_UNALIGNED
- #error You can't use both DMA and unaligned memory
+ #error "You cannot use both DMA and unaligned memory"
 #endif
 
 #define FEATURE_MEDIUM_CANREAD		0x00000001

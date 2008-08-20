@@ -38,7 +38,7 @@ typedef struct SGIP_HEADER_ICMP {
 extern "C" {
 #endif
 
-   extern void sgIP_ICMP_Init();
+   extern void sgIP_ICMP_Init(void);
 
    extern int sgIP_ICMP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned long destip);
 

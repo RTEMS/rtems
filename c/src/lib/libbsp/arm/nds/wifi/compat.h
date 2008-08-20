@@ -93,11 +93,11 @@ extern sgIP_Hub_HWInterface *wifi_hw;
 
 /* prototypes */
 
-sgIP_DNS_Record *sgIP_DNS_GetUnusedRecord ();
+sgIP_DNS_Record *sgIP_DNS_GetUnusedRecord (void);
 void sgIP_DHCP_Start (sgIP_Hub_HWInterface * interface, int getDNS);
-int sgIP_DHCP_Update ();
+int sgIP_DHCP_Update (void);
 int sgIP_ARP_SendGratARP (sgIP_Hub_HWInterface * hw);
-void sgIP_Init ();
+void sgIP_Init (void);
 void sgIP_Timer (int num_ms);
 sgIP_Hub_HWInterface
   *sgIP_Hub_AddHardwareInterface (int (*TransmitFunction)

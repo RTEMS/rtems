@@ -44,7 +44,7 @@ extern unsigned long volatile sgIP_timems;
 extern "C" {
 #endif
 
-   void sgIP_Init();
+   void sgIP_Init(void);
    void sgIP_Timer(int num_ms);
 
 

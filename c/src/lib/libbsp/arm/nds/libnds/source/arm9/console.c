@@ -278,7 +278,6 @@ int con_write(struct _reent *r,int fd,const char *ptr,int len) {
 
 const devoptab_t dotab_stdout = {
 	"con",
-	0,
 	NULL,
 	NULL,
 	con_write,
@@ -401,7 +400,7 @@ void consoleInitDefault(u16* map, u16* charBase, u8 bitDepth) {
 //}
 
 //---------------------------------------------------------------------------------
-static void newRow() {
+static void newRow(void) {
 //---------------------------------------------------------------------------------
 	int i;
 	row++;

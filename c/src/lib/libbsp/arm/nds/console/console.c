@@ -32,6 +32,8 @@
  * printk support.
  */
 
+/* from NDS support library */
+extern void consolePrintChar(char c);
 void
 nds_putch (char c)
 {

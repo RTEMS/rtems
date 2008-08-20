@@ -55,7 +55,7 @@ sound_initialize (rtems_device_major_number major,
 
   /* reset IPCs structs */
   IPC->soundData = NULL;
-  memset (my_IPC, 0, sizeof (*my_IPC));
+  memset ((void *)my_IPC, 0, sizeof (*my_IPC));
   DC_FlushAll ();
 
   return RTEMS_SUCCESSFUL;
@@ -102,7 +102,7 @@ sound_read (rtems_device_major_number major,
   }
 
   /* read buffer */
-  memcpy (rw_args->buffer, my_IPC->record_buffer + offset, rw_args->count);
+  memcpy ((void *)rw_args->buffer, (void *)my_IPC->record_buffer + offset, rw_args->count);
   offset += rw_args->count;
   rw_args->bytes_moved = rw_args->count;
   return RTEMS_SUCCESSFUL;

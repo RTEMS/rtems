@@ -25,7 +25,7 @@ typedef struct
 } my_TransferRegion;
 
 static inline my_TransferRegion volatile *
-getmy_IPC ()
+getmy_IPC (void)
 {
   return (my_TransferRegion volatile *) (0x027FF000 +
                                          sizeof (TransferRegion));

@@ -228,9 +228,9 @@ extern int sgIP_errno;
 #ifdef __cplusplus
 extern "C" {
 #endif
-	extern int sgIP_DisableInterrupts();
+	extern int sgIP_DisableInterrupts(void);
 	extern void sgIP_RestoreInterrupts(int);
-   extern void sgIP_IntrWaitEvent();
+   extern void sgIP_IntrWaitEvent(void);
 #ifdef __cplusplus
 };
 #endif

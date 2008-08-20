@@ -1,3 +1,23 @@
+2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* block/block.c, console/console.c, dswifi/arm9/source/sgIP.h,
+	dswifi/arm9/source/sgIP_ARP.h, dswifi/arm9/source/sgIP_Config.h,
+	dswifi/arm9/source/sgIP_DHCP.h, dswifi/arm9/source/sgIP_DNS.h,
+	dswifi/arm9/source/sgIP_Hub.h, dswifi/arm9/source/sgIP_ICMP.h,
+	dswifi/arm9/source/sgIP_IP.h, dswifi/arm9/source/sgIP_TCP.h,
+	dswifi/arm9/source/sgIP_UDP.h, dswifi/arm9/source/sgIP_memblock.h,
+	dswifi/arm9/source/wifi_arm9.c, dswifi/arm9/source/wifi_arm9.h,
+	dswifi/include/dswifi7.h, dswifi/include/dswifi9.h, fb/fb.c,
+	include/my_ipc.h, libfat/source/disc_io/disc_io.h,
+	libfat/source/disc_io/io_nmmc.c,
+	libnds/include/nds/arm9/exceptions.h,
+	libnds/include/nds/arm9/input.h, libnds/include/nds/arm9/ndsmotion.h,
+	libnds/include/nds/arm9/videoGL.h, libnds/source/arm9/console.c,
+	libnds/source/arm9/gurumeditation.c, libnds/source/arm9/ndsmotion.c,
+	libnds/source/common/card.c, libnds/source/common/interrupts.c,
+	sound/sound.c, startup/start.c, touchscreen/reco.h, wifi/compat.c,
+	wifi/compat.h: Fix most warnings.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* dswifi/arm7/makefile, dswifi/include/netinet/in.h,

@@ -378,7 +378,7 @@ void glTexParameter(	uint8 sizeX, uint8 sizeY,
 						uint32 param) ;
 
 /*! \brief Returns the active texture parameter (constructed from internal call to glTexParameter) */
-u32 glGetTexParameter();
+u32 glGetTexParameter(void);
 
 /*! \brief returns the address alocated to the texure named by name 
 \param name the name of the texture to get a pointer to */
@@ -415,7 +415,7 @@ void glMaterialf(GL_MATERIALS_ENUM mode, rgb color);
 void glInit_C(void);
 
 // This returns a pointer to the globals for videoGL
-gl_hidden_globals* glGetGlobals();
+gl_hidden_globals* glGetGlobals(void);
 
 
 #ifdef __cplusplus
@@ -1085,7 +1085,7 @@ GL_STATIC_INL void glAlphaFunc(int alphaThreshold) { GFX_ALPHA_TEST = alphaThres
 GL_STATIC_INL void glCutoffDepth(fixed12d3 wVal) { GFX_CUTOFF_DEPTH = wVal; }
 
 /*! \brief Initializes the gl state machine (must be called once before using gl calls) */
-GL_STATIC_INL void glInit() {
+GL_STATIC_INL void glInit(void) {
 	glGlob = glGetGlobals(); // make sure globals are synced between compilation units
 	glInit_C(); // actually does the initialization
 }

@@ -81,7 +81,7 @@ extern "C" {
 #endif
 
 
-extern void sgIP_Hub_Init();
+extern void sgIP_Hub_Init(void);
 
 
 extern sgIP_Hub_Protocol * sgIP_Hub_AddProtocolInterface(int protocolID, int (*ReceivePacket)(sgIP_memblock *), int (*InterfaceInit)(sgIP_Hub_Protocol *));
@@ -96,7 +96,7 @@ extern int sgIP_Hub_SendRawPacket(sgIP_Hub_HWInterface * hw, sgIP_memblock * pac
 extern int sgIP_Hub_IPMaxMessageSize(unsigned long ipaddr);
 unsigned long sgIP_Hub_GetCompatibleIP(unsigned long destIP);
 
-extern sgIP_Hub_HWInterface * sgIP_Hub_GetDefaultInterface();
+extern sgIP_Hub_HWInterface * sgIP_Hub_GetDefaultInterface(void);
 
 unsigned short htons(unsigned short num);
 unsigned long htonl(unsigned long num);

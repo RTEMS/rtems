@@ -175,7 +175,7 @@ typedef void (*WifiPacketHandler)(int, int);
 
 // Wifi Sync Handler function: Callback function that is called when the arm7 needs to be told to synchronize with new fifo data.
 // If this callback is used (see Wifi_SetSyncHandler()), it should send a message via the fifo to the arm7, which will call Wifi_Sync() on arm7.
-typedef void (*WifiSyncHandler)();
+typedef void (*WifiSyncHandler)(void);
 
 
 #ifdef __cplusplus
@@ -192,15 +192,15 @@ extern unsigned long Wifi_Init(int initflags);
 
 // Wifi_CheckInit: Verifies when the ARM7 has been successfully initialized
 //  Returns: 1 if the arm7 is ready for wifi, 0 otherwise
-extern int Wifi_CheckInit();
+extern int Wifi_CheckInit(void);
 
 // Wifi_DisableWifi: Instructs the ARM7 to disengage wireless and stop receiving or
 //   transmitting.
-extern void Wifi_DisableWifi();
+extern void Wifi_DisableWifi(void);
 
 // Wifi_EnableWifi: Instructs the ARM7 to go into a basic "active" mode, not actually
 //   associated to an AP, but actively receiving and potentially transmitting
-extern void Wifi_EnableWifi();
+extern void Wifi_EnableWifi(void);
 
 // Wifi_SetPromiscuousMode: Allows the DS to enter or leave a "promsicuous" mode, in which 
 //   all data that can be received is forwarded to the arm9 for user processing.
@@ -211,7 +211,7 @@ extern void Wifi_SetPromiscuousMode(int enable);
 
 // Wifi_ScanMode: Instructs the ARM7 to periodically rotate through the channels to
 //   pick up and record information from beacons given off by APs
-extern void Wifi_ScanMode();
+extern void Wifi_ScanMode(void);
 
 // Wifi_SetChannel: If the wifi system is not connected or connecting to an access point, instruct
 //   the chipset to change channel
@@ -220,7 +220,7 @@ extern void Wifi_SetChannel(int channel);
 
 // Wifi_GetNumAP: 
 //  Returns: the current number of APs that are known about and tracked internally
-extern int Wifi_GetNumAP();
+extern int Wifi_GetNumAP(void);
 
 // Wifi_GetAPData: Grabs data from internal structures for user code (always succeeds)
 //  int apnum:					the 0-based index of the access point record to fetch
@@ -245,15 +245,15 @@ extern int Wifi_FindMatchingAP(int numaps, Wifi_AccessPoint * apdata, Wifi_Acces
 extern int Wifi_ConnectAP(Wifi_AccessPoint * apdata, int wepmode, int wepkeyid, unsigned char * wepkey);
 
 // Wifi_AutoConnect: Connect to an access point specified by the WFC data in the firmware
-extern void Wifi_AutoConnect();
+extern void Wifi_AutoConnect(void);
 
 // Wifi_AssocStatus: Returns information about the status of connection to an AP
 //  Returns: a value from the WIFI_ASSOCSTATUS enum, continue polling until you 
 //            receive ASSOCSTATUS_CONNECTED or ASSOCSTATUS_CANNOTCONNECT
-extern int Wifi_AssocStatus();
+extern int Wifi_AssocStatus(void);
 
 // Wifi_DisconnectAP: Disassociate from the Access Point
-extern int Wifi_DisconnectAP();
+extern int Wifi_DisconnectAP(void);
 
 // Wifi_Timer: This function should be called in a periodic interrupt. It serves as the basis
 //   for all updating in the sgIP library, all retransmits, timeouts, and etc are based on this
@@ -263,7 +263,7 @@ extern void Wifi_Timer(int num_ms);
 
 // Wifi_GetIP: 
 //  Returns:  The current IP address of the DS (may not be valid before connecting to an AP, or setting the IP manually.)
-extern unsigned long Wifi_GetIP(); // get local ip
+extern unsigned long Wifi_GetIP(void); // get local ip
 
 // Wifi_GetIPInfo: (values may not be valid before connecting to an AP, or setting the IP manually.)
 //  unsigned long * pGateway:	pointer to receive the currently configured gateway IP
@@ -317,11 +317,11 @@ extern int Wifi_RxRawReadPacket(long packetID, long readlength, unsigned short *
 
 // Wifi_Update: Checks for new data from the arm7 and initiates routing if data
 //   is available.
-extern void Wifi_Update();
+extern void Wifi_Update(void);
 
 // Wifi_Sync: Call this function when requested to sync by the arm7 side of the 
 //   wifi lib
-extern void Wifi_Sync();
+extern void Wifi_Sync(void);
 
 // Wifi_SetSyncHandler: Call this function to request notification of when the
 //   ARM7-side Wifi_Sync function should be called.

@@ -280,7 +280,7 @@ int Wifi_CmpMacAddr(volatile void * mac1,volatile  void * mac2) {
 
 
 
-u32 Wifi_TxBufferWordsAvailable() {
+u32 Wifi_TxBufferWordsAvailable(void) {
 	s32 size=WifiData->txbufIn-WifiData->txbufOut-1;
 	if(size<0) size += WIFI_TXBUFFER_SIZE/2;
 	return size;
@@ -482,7 +482,7 @@ int Wifi_ConnectAP(Wifi_AccessPoint * apdata, int wepmode, int wepkeyid, u8 * we
 	}
 	return 0;
 }
-void Wifi_AutoConnect() {
+void Wifi_AutoConnect(void) {
 	if(!(WifiData->wfc_enable[0]&0x80)) {
 		wifi_connect_state=ASSOCSTATUS_CANNOTCONNECT;
 	} else {
@@ -492,7 +492,7 @@ void Wifi_AutoConnect() {
 }
 
 static
-void sgIP_DNS_Record_Localhost()
+void sgIP_DNS_Record_Localhost(void)
 {
     sgIP_DNS_Record *rec;
     const unsigned char * resdata_c = (unsigned char *)&(wifi_hw->ipaddr);
@@ -955,7 +955,7 @@ void Wifi_SetIP(u32 IPaddr, u32 gateway, u32 subnetmask, u32 dns1, u32 dns2) {
 	}
 }
 
-void Wifi_SetDHCP() {
+void Wifi_SetDHCP(void) {
 
 
 }
@@ -989,7 +989,7 @@ u32 Wifi_GetStats(int statnum) {
 //////////////////////////////////////////////////////////////////////////
 // sync functions
 
-void Wifi_Sync() {
+void Wifi_Sync(void) {
    Wifi_Update();
 }
 

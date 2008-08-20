@@ -69,14 +69,14 @@ enum SGIP_DHCP_STATUS {
 extern "C" {
 #endif
 
-   void sgIP_DHCP_Init();
+   void sgIP_DHCP_Init(void);
 
    void sgIP_DHCP_SetHostName(char * s); // just for the fun of it.
    int sgIP_DHCP_IsDhcpIp(unsigned long ip); // check if the IP address was assigned via dhcp.
    void sgIP_DHCP_Start(sgIP_Hub_HWInterface * interface, int getDNS); // begin dhcp transaction to get IP and maybe DNS data.
-   void sgIP_DHCP_Release(); // call to dump our DHCP address and leave.
-   int  sgIP_DHCP_Update(); // MUST be called periodicly after _Start; returns status - call until it returns something other than SGIP_DHCP_STATUS_WORKING
-   void sgIP_DHCP_Terminate(); // kill the process where it stands; deallocate all DHCP resources.
+   void sgIP_DHCP_Release(void); // call to dump our DHCP address and leave.
+   int  sgIP_DHCP_Update(void); // MUST be called periodicly after _Start; returns status - call until it returns something other than SGIP_DHCP_STATUS_WORKING
+   void sgIP_DHCP_Terminate(void); // kill the process where it stands; deallocate all DHCP resources.
 
 #ifdef __cplusplus
 };

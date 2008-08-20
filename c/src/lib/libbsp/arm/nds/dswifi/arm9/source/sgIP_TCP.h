@@ -109,14 +109,14 @@ typedef struct SGIP_TCP_SYNCOOKIE {
 extern "C" {
 #endif
 
-	extern void sgIP_TCP_Init();
-   extern void sgIP_TCP_Timer();
+	extern void sgIP_TCP_Init(void);
+   extern void sgIP_TCP_Timer(void);
 
 	extern int sgIP_TCP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned long destip);
 	extern int sgIP_TCP_SendPacket(sgIP_Record_TCP * rec, int flags, int datalength); // data sent is taken directly from the TX fifo.
    extern int sgIP_TCP_SendSynReply(int flags,unsigned long seq, unsigned long ack, unsigned long srcip, unsigned long destip, int srcport, int destport, int windowlen);
 
-	extern sgIP_Record_TCP * sgIP_TCP_AllocRecord();
+	extern sgIP_Record_TCP * sgIP_TCP_AllocRecord(void);
 	extern void sgIP_TCP_FreeRecord(sgIP_Record_TCP * rec);
 	extern int sgIP_TCP_Bind(sgIP_Record_TCP * rec, int srcport, unsigned long srcip);
    extern int sgIP_TCP_Listen(sgIP_Record_TCP * rec, int maxlisten);

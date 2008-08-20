@@ -60,13 +60,13 @@ typedef struct SGIP_RECORD_UDP {
 extern "C" {
 #endif
 
-	void sgIP_UDP_Init();
+	void sgIP_UDP_Init(void);
 
 	int sgIP_UDP_CalcChecksum(sgIP_memblock * mb, unsigned long srcip, unsigned long destip, int totallength);
 	int sgIP_UDP_ReceivePacket(sgIP_memblock * mb, unsigned long srcip, unsigned long destip);
 	int sgIP_UDP_SendPacket(sgIP_Record_UDP * rec, const char * data, int datalen, unsigned long destip, int destport);
 
-	sgIP_Record_UDP * sgIP_UDP_AllocRecord();
+	sgIP_Record_UDP * sgIP_UDP_AllocRecord(void);
 	void sgIP_UDP_FreeRecord(sgIP_Record_UDP * rec);
 
 	int sgIP_UDP_Bind(sgIP_Record_UDP * rec, int srcport, unsigned long srcip);

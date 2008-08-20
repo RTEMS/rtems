@@ -32,6 +32,7 @@
 #include <nds/arm9/background.h>
 
 #include <stdio.h>
+#include <inttypes.h>
 
 //---------------------------------------------------------------------------------
 unsigned long ARMShift(unsigned long value,unsigned char shift) {
@@ -206,7 +207,7 @@ static const char *registerNames[] =
 
 extern const char __itcm_start[];
 //---------------------------------------------------------------------------------
-static void defaultHandler() {
+static void defaultHandler(void) {
 //---------------------------------------------------------------------------------
 	videoSetMode(0);
 	videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE);
@@ -246,18 +247,18 @@ static void defaultHandler() {
 		exceptionAddress = codeAddress;
 	}
 
-	iprintf("  pc: %08X addr: %08X\n\n",codeAddress,exceptionAddress);
+	iprintf("  pc: %08" PRIX32 " addr: %08" PRIX32 "\n\n",codeAddress,exceptionAddress);
 
 	int i;
 	for ( i=0; i < 8; i++ ) {
-		iprintf(	"  %s: %08X   %s: %08X\n",
+		iprintf(	"  %s: %08" PRIX32 "   %s: %08" PRIX32 "\n",
 					registerNames[i], exceptionRegisters[i],
 					registerNames[i+8],exceptionRegisters[i+8]);
 	}
 	iprintf("\n");
 	u32 *stack = (u32 *)exceptionRegisters[13];
 	for ( i=0; i<10; i++ ) {
-		iprintf( "\x1b[%d;2H%08X: %08X %08X", i + 14, (u32)&stack[i*2],stack[i*2], stack[(i*2)+1] );
+		iprintf( "\x1b[%d;2H%08" PRIX32 ": %08" PRIX32 " %08" PRIX32 "", i + 14, (u32)&stack[i*2],stack[i*2], stack[(i*2)+1] );
 	}
 	while(1);
 

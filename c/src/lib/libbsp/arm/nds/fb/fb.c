@@ -166,11 +166,11 @@ fbds_control (rtems_device_major_number major,
         if (!minor) {
           videoSetMode (MODE_FB0);
           vramSetBankA (VRAM_A_LCD);
-          memset (fb_info.smem_start, 0, fb_info.smem_len);
+          memset ((void *)fb_info.smem_start, 0, fb_info.smem_len);
         } else {
           videoSetModeSub (MODE_FB0);
           vramSetBankB (VRAM_B_LCD);
-          memset (fb_info2.smem_start, 0, fb_info2.smem_len);
+          memset ((void *)fb_info2.smem_start, 0, fb_info2.smem_len);
         }
         break;
 
@@ -178,9 +178,9 @@ fbds_control (rtems_device_major_number major,
         /* leave graphics mode, in fact we only clear screen */
         printk ("[#] leaving graphic mode on fb%d\n", minor);
         if (!minor) {
-          memset (fb_info.smem_start, 0, fb_info.smem_len);
+          memset ((void *)fb_info.smem_start, 0, fb_info.smem_len);
         } else {
-          memset (fb_info2.smem_start, 0, fb_info2.smem_len);
+          memset ((void *)fb_info2.smem_start, 0, fb_info2.smem_len);
           /* back to console */
           videoSetModeSub (MODE_0_2D | DISPLAY_BG0_ACTIVE);
           vramSetBankC (VRAM_C_SUB_BG);

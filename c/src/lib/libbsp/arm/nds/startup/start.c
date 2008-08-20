@@ -21,6 +21,12 @@
 extern unsigned int arm_cpu_mode;
 
 /*
+ *  These are from the linker script.
+ */
+extern uint8_t _end;
+extern uint8_t __ewram_end;
+
+/*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
  *  Heap.
@@ -32,9 +38,6 @@ void bsp_get_work_area(
   size_t  *heap_size
 )
 {
-  extern uint8_t _end;
-  extern uint8_t __ewram_end;
-
   *work_area_start       = &_end;
   *work_area_size       = (void *)&__ewram_end - (void *)&_end;
   *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
