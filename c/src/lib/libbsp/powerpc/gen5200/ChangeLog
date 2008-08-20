@@ -1,3 +1,8 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clock.c, irq/irq_init.c, vectors/vectors.h,
+	vectors/vectors_init.c: Add missing prototypes.
+
 2008-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* start/start.S: Clear environment pointer for bootcard.
