@@ -21,6 +21,8 @@
  *   - added 2nd PCI support for the mvme5500/GT64260 PCI bridge
  *   - added bus support for the expansion of PMCSpan, thanks to 
  *     Peter Dufault (dufault@hda.com) for inputs.
+ *
+ * $Id$
  */
 #define PCI_MAIN
 
