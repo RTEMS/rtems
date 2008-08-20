@@ -1,3 +1,9 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/mc68360_scc.c, console/rsPMCQ1.c, console/rsPMCQ1.h,
+	irq/irq_init.c, pci/no_host_bridge.c, startup/bspstart.c:
+	Add missing prototypes.
+
 2008-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/mc68360_scc.c: Remove explicit switch and call
