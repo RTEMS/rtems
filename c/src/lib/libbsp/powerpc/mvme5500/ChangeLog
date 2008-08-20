@@ -1,5 +1,12 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* GT64260/GT64260TWSI.c, irq/irq_init.c,
+	network/if_100MHz/GT64260eth.c, network/if_1GHz/if_wm.c,
+	pci/pci.c, pci/pci_interface.c, startup/bspstart.c,
+	vectors/exceptionhandler.c: Add missing prototypes.
+
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* pci/pci.c: Add CVS Id.
 	* GT64260/MVME5500I2C.c: Once again eliminate u32, unchar.
 	Add CVS Id, fix typo.
