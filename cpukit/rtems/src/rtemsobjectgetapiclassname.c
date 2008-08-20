@@ -22,50 +22,50 @@
 #include <rtems/assoc.h>
 
 rtems_assoc_t rtems_object_api_internal_assoc[] = {
-  { "Thread",                  OBJECTS_INTERNAL_THREADS},
-  { "Mutex",                   OBJECTS_INTERNAL_MUTEXES},
+  { "Thread",                  OBJECTS_INTERNAL_THREADS, 0},
+  { "Mutex",                   OBJECTS_INTERNAL_MUTEXES, 0},
 };
 
 rtems_assoc_t rtems_object_api_classic_assoc[] = {
-  { "Task",                    OBJECTS_RTEMS_TASKS},
-  { "Timer",                   OBJECTS_RTEMS_TIMERS},
-  { "Semaphore",               OBJECTS_RTEMS_SEMAPHORES},
-  { "Message Queue",           OBJECTS_RTEMS_MESSAGE_QUEUES},
-  { "Partition",               OBJECTS_RTEMS_PARTITIONS},
-  { "Region",                  OBJECTS_RTEMS_REGIONS},
-  { "Port",                    OBJECTS_RTEMS_PORTS},
-  { "Period",                  OBJECTS_RTEMS_PERIODS},
-  { "Extension",               OBJECTS_RTEMS_EXTENSIONS},
-  { "Barrier",                 OBJECTS_RTEMS_BARRIERS},
+  { "Task",                    OBJECTS_RTEMS_TASKS, 0},
+  { "Timer",                   OBJECTS_RTEMS_TIMERS, 0},
+  { "Semaphore",               OBJECTS_RTEMS_SEMAPHORES, 0},
+  { "Message Queue",           OBJECTS_RTEMS_MESSAGE_QUEUES, 0},
+  { "Partition",               OBJECTS_RTEMS_PARTITIONS, 0},
+  { "Region",                  OBJECTS_RTEMS_REGIONS, 0},
+  { "Port",                    OBJECTS_RTEMS_PORTS, 0},
+  { "Period",                  OBJECTS_RTEMS_PERIODS, 0},
+  { "Extension",               OBJECTS_RTEMS_EXTENSIONS, 0},
+  { "Barrier",                 OBJECTS_RTEMS_BARRIERS, 0},
 };
 
 #ifdef RTEMS_POSIX_API
 rtems_assoc_t rtems_object_api_posix_assoc[] = {
-  { "Thread",                  OBJECTS_POSIX_THREADS},
-  { "Key",                     OBJECTS_POSIX_KEYS},
-  { "Interrupt",               OBJECTS_POSIX_INTERRUPTS},
-  { "Queued fd",               OBJECTS_POSIX_MESSAGE_QUEUE_FDS},
-  { "Message Queue",           OBJECTS_POSIX_MESSAGE_QUEUES},
-  { "Mutex",                   OBJECTS_POSIX_MUTEXES},
-  { "Semaphore",               OBJECTS_POSIX_SEMAPHORES},
-  { "Condition Variable",      OBJECTS_POSIX_CONDITION_VARIABLES},
-  { "Timer",                   OBJECTS_POSIX_TIMERS},
-  { "Barrier",                 OBJECTS_POSIX_BARRIERS},
-  { "Spinlock",                OBJECTS_POSIX_SPINLOCKS},
-  { "RWLock",                  OBJECTS_POSIX_RWLOCKS},
+  { "Thread",                  OBJECTS_POSIX_THREADS, 0},
+  { "Key",                     OBJECTS_POSIX_KEYS, 0},
+  { "Interrupt",               OBJECTS_POSIX_INTERRUPTS, 0},
+  { "Queued fd",               OBJECTS_POSIX_MESSAGE_QUEUE_FDS, 0},
+  { "Message Queue",           OBJECTS_POSIX_MESSAGE_QUEUES, 0},
+  { "Mutex",                   OBJECTS_POSIX_MUTEXES, 0},
+  { "Semaphore",               OBJECTS_POSIX_SEMAPHORES, 0},
+  { "Condition Variable",      OBJECTS_POSIX_CONDITION_VARIABLES, 0},
+  { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
+  { "Barrier",                 OBJECTS_POSIX_BARRIERS, 0},
+  { "Spinlock",                OBJECTS_POSIX_SPINLOCKS, 0},
+  { "RWLock",                  OBJECTS_POSIX_RWLOCKS, 0},
 };
 #endif
 
 #ifdef RTEMS_ITRON_API
 rtems_assoc_t rtems_object_api_itron_assoc[] = {
-  { "Task",                    OBJECTS_ITRON_TASKS},
-  { "Event Flag",              OBJECTS_ITRON_EVENTFLAGS},
-  { "Mailbox",                 OBJECTS_ITRON_MAILBOXES},
-  { "Message Buffer",          OBJECTS_ITRON_MESSAGE_BUFFERS},
-  { "Port",                    OBJECTS_ITRON_PORTS},
-  { "Semaphore",               OBJECTS_ITRON_SEMAPHORES},
-  { "Variable Memory Pool",    OBJECTS_ITRON_VARIABLE_MEMORY_POOLS},
-  { "Fixed Memory Pool",       OBJECTS_ITRON_FIXED_MEMORY_POOLS},
+  { "Task",                    OBJECTS_ITRON_TASKS, 0},
+  { "Event Flag",              OBJECTS_ITRON_EVENTFLAGS, 0},
+  { "Mailbox",                 OBJECTS_ITRON_MAILBOXES, 0},
+  { "Message Buffer",          OBJECTS_ITRON_MESSAGE_BUFFERS, 0},
+  { "Port",                    OBJECTS_ITRON_PORTS, 0},
+  { "Semaphore",               OBJECTS_ITRON_SEMAPHORES, 0},
+  { "Variable Memory Pool",    OBJECTS_ITRON_VARIABLE_MEMORY_POOLS, 0},
+  { "Fixed Memory Pool",       OBJECTS_ITRON_FIXED_MEMORY_POOLS, 0},
 };
 #endif
 

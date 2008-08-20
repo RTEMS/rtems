@@ -1,3 +1,9 @@
+2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libcsupport/src/error.c, libmisc/dummy/dummy.c,
+	rtems/src/rtemsobjectgetapiclassname.c,
+	rtems/src/rtemsobjectgetapiname.c: Add 0 for missing initializers.
+
 2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/rtems/status-checks.h: Fixed integer conversion warning.

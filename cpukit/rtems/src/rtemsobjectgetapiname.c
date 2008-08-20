@@ -22,10 +22,10 @@
 #include <rtems/assoc.h>
 
 rtems_assoc_t rtems_objects_api_assoc[] = {
-  { "Internal", OBJECTS_INTERNAL_API}, 
-  { "Classic",  OBJECTS_CLASSIC_API}, 
-  { "POSIX",    OBJECTS_POSIX_API}, 
-  { "ITRON",    OBJECTS_ITRON_API}, 
+  { "Internal", OBJECTS_INTERNAL_API, 0}, 
+  { "Classic",  OBJECTS_CLASSIC_API, 0}, 
+  { "POSIX",    OBJECTS_POSIX_API, 0}, 
+  { "ITRON",    OBJECTS_ITRON_API, 0}, 
   { 0, 0, 0 }
 };
 

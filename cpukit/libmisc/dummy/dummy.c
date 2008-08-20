@@ -64,6 +64,8 @@ int main( int, char **, char **);
       "127.0.0.1",            /* Log host */
       {"127.0.0.1" },         /* Name server(s) */
       {"127.0.0.1" },         /* NTP server(s) */
+      NULL,                   /* hardware address */
+      1,                      /* sb_efficiency */
   };
 #endif
 
