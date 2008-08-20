@@ -15,13 +15,13 @@
 #include <bsp.h>
 #include <at91rm9200.h>
 
-extern void default_int_handler();
+extern void default_int_handler(void);
 
 /* 
  * Interrupt system initialization. Disable interrupts, clear 
  * any that are pending.
  */
-void BSP_rtems_irq_mngt_init()
+void BSP_rtems_irq_mngt_init(void)
 {
     long *vectorTable;
     int i;
