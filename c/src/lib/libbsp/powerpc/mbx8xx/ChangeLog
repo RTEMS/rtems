@@ -1,3 +1,8 @@
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/p_clock.c, console/console.c, irq/irq.c, irq/irq_init.c,
+	vectors/vectors_init.c: Add missing prototypes.
+
 2008-07-29	Chris Johns <chrisj@rtems.org>
 
 	* ide/pcmcia_ide.c: Updated to the libblock changes.
