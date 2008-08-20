@@ -22,6 +22,7 @@
 #ifndef __PPPD_H__
 #define __PPPD_H__
 
+#include <stdbool.h>		/* bool */
 #include <stdio.h>		/* for FILE */
 #include <limits.h>		/* for NGROUPS_MAX */
 #include <sys/param.h>		/* for MAXPATHLEN and BSD4_4, if defined */
@@ -58,8 +59,6 @@
 /*
  * Option descriptor structure.
  */
-
-typedef unsigned char	bool;
 
 enum opt_type {
 	o_special_noarg = 0,
