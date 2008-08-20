@@ -1,5 +1,7 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mpc8260/clock/clock.c, mpc8260/console-generic/console-generic.c:
+	Add missing prototypes.
 	* mpc8xx/clock/clock.c, mpc8xx/console-generic/console-generic.c,
 	ppc403/timer/timer.c, shared/src/cache.c: Add missing prototypes.
 
