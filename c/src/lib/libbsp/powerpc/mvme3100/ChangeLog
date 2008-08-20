@@ -1,5 +1,11 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* i2c/i2c_init.c, i2c/mpc8540_i2c.c, irq/irq_init.c,
+	network/tsec.c, pci/detect_host_bridge.c, startup/bspstart.c:
+	Add missing prototypes.
+
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Cleanup.
 
 2008-07-18	Till Straumann <strauman@slac.stanford.edu>
