@@ -1,5 +1,9 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Abort if stdbool.h is not c99 compliant.
+
+2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* pppd/pppd.h: Use stdbool.h. Remove local bool.
 
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
