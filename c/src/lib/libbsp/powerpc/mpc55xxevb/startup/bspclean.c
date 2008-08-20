@@ -18,7 +18,7 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-void bsp_cleanup()
+void bsp_cleanup(void)
 {
 	/* TODO - Add something BSP specific here */
 }

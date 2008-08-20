@@ -187,7 +187,7 @@ rtems_task test_sd_card( rtems_task_argument arg);
 
 static rtems_task test_mpc55xx_intc( rtems_task_argument arg);
 
-rtems_status_code mpc55xx_dspi_register()
+rtems_status_code mpc55xx_dspi_register(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
@@ -547,7 +547,7 @@ rtems_task test_sd_card( rtems_task_argument arg)
 static char inbuf [BUFSIZE];
 static char outbuf [BUFSIZE];
 
-static rtems_status_code test_mpc55xx_edma()
+static rtems_status_code test_mpc55xx_edma(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;

@@ -12,7 +12,7 @@
 
 #include <bsp.h>
 
-static rtems_status_code mpc55xx_dspi_init()
+static rtems_status_code mpc55xx_dspi_init(void)
 {
 	int rv = 0;
 	int i = 0;
@@ -122,7 +122,7 @@ sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = { {
 	}
 };
 
-rtems_status_code mpc55xx_sd_card_init()
+rtems_status_code mpc55xx_sd_card_init(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
