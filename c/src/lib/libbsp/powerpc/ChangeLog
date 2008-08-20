@@ -1,5 +1,7 @@
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shared/flash/flash.c, shared/irq/irq_init.c: Add missing
+	prototypes.
 	* shared/showbats.c, shared/console/inch.c, shared/irq/irq_init.c,
 	shared/pci/detect_raven_bridge.c, shared/startup/bspstart.c,
 	shared/startup/zerobss.c, shared/vme/vmeconfig.c,
