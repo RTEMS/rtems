@@ -1,63 +1,63 @@
+/**
+ * @file
+ *
+ * @brief Support file for Timer Test 27.
+ */
+
 /*
- *  tm27.h
+ * Copyright (c) 2008
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  tm27.h,v 1.2 2004/04/23 04:47:38 ralf Exp
+ * The license and distribution terms for this file may be found in the file
+ * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_TMTEST27
-#error "This is an RTEMS internal file you must not include directly."
-#endif
+  #error "This is an RTEMS internal file you must not include directly."
+#endif /* _RTEMS_TMTEST27 */
 
-#ifndef __tm27_h
-#define __tm27_h
+#ifndef TMTESTS_TM27_H
+#define TMTESTS_TM27_H
 
-#include <bsp/irq.h>
+#include <libcpu/powerpc-utility.h>
+#include <libcpu/raw_exception.h>
 
-/*
- *  Stuff for Time Test 27
- */
+#include <bsp/ppc_exc_bspsupp.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-void nullFunc() {}
+static rtems_isr_entry tm27_interrupt_handler = NULL;
 
-static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
-                                              0,
-                                              (rtems_irq_enable)nullFunc,
-                                              (rtems_irq_disable)nullFunc,
-                                              (rtems_irq_is_enabled) nullFunc};
-void Install_tm27_vector(void (*_handler)())
+static int tm27_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
-  clockIrqData.hdl = _handler;
-  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
-        printk("Error installing clock interrupt handler!\n");
-        rtems_fatal_error_occurred(1);
+	tm27_interrupt_handler( 0);
+
+	return 0;
+}
+
+void Install_tm27_vector( rtems_isr_entry handler)
+{
+  int rv = 0;
+
+  tm27_interrupt_handler = handler;
+
+  rv = ppc_exc_set_handler( ASM_DEC_VECTOR, tm27_exception_handler);
+  if (rv < 0) {
+    printk( "Error installing clock interrupt handler!\n");
   }
 }
 
-#define Cause_tm27_intr()  \
-  do { \
-    uint32_t   _clicks = 8; \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
+#define Cause_tm27_intr() \
+  ppc_set_decrementer_register( 8)
 
 #define Clear_tm27_intr() \
-  do { \
-    uint32_t   _clicks = 0xffffffff; \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
+  ppc_set_decrementer_register( UINT32_MAX)
 
 #define Lower_tm27_intr() \
-  do { \
-    uint32_t   _msr = 0; \
-    _ISR_Set_level( 0 ); \
-    asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-    _msr |=  0x8002; \
-    asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-  } while (0)
+  (void) ppc_external_exceptions_enable()
 
-#endif
+#endif /* TMTESTS_TM27_H */

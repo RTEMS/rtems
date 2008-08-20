@@ -1,3 +1,9 @@
+2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/tm27.h: Uses now a decrementer exception handler.  Replaces
+	previous file.
+	* startup/bspstart.c: Install a default decrementer exception handler.
+
 2008-08-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/bsp.h, network/network.c, spi/spi_init.c, startup/cpuinit.c,

@@ -27,6 +27,7 @@
 #include <rtems/score/thread.h>
 
 #include <libcpu/powerpc-utility.h>
+#include <libcpu/raw_exception.h>
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
@@ -52,11 +53,13 @@ unsigned int BSP_bus_frequency;
 /* Configuration parameters for clock driver, ... */
 uint32_t bsp_clicks_per_usec;
 
-/*
- *  Use the shared implementations of the following routines.
- *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
- */
-extern void cpu_init( void);
+/* Default decrementer exception handler */
+static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, unsigned number)
+{
+	ppc_set_decrementer_register( UINT32_MAX);
+
+	return 0;
+}
 
 void BSP_panic( char *s)
 {
@@ -105,6 +108,9 @@ void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **h
 
 void bsp_start( void)
 {
+	rtems_status_code sc = RTEMS_SUCCESSFUL;
+	int rv = 0;
+
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
 
@@ -155,9 +161,16 @@ void bsp_start( void)
 		interrupt_stack_size
 	);
 
+	/* Install default handler for the decrementer exception */
+	rv = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);
+	if (rv < 0) {
+		BSP_panic( "Cannot install decrementer exception handler!\n");
+	}
+
 	/* Initalize interrupt support */
-	if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-		BSP_panic("Cannot intitialize interrupt support\n");
+	sc = bsp_interrupt_initialize();
+	if (sc != RTEMS_SUCCESSFUL) {
+		BSP_panic( "Cannot intitialize interrupt support\n");
 	}
 
 #ifdef SHOW_MORE_INIT_SETTINGS
