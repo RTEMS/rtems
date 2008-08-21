@@ -64,6 +64,22 @@ extern "C" {
 #define CPU_MODEL_NAME  "avr5"
 #define AVR_HAS_FPU     1
 
+#elif __AVR_ARCH__ == 25
+#define CPU_MODEL_NAME  "avr25"
+#define AVR_HAS_FPU     1
+
+#elif __AVR_ARCH__ == 31
+#define CPU_MODEL_NAME  "avr31"
+#define AVR_HAS_FPU     1
+
+#elif __AVR_ARCH__ == 35
+#define CPU_MODEL_NAME  "avr35"
+#define AVR_HAS_FPU     1
+
+#elif __AVR_ARCH__ == 51
+#define CPU_MODEL_NAME  "avr51"
+#define AVR_HAS_FPU     1
+
 #else
 #error "Unsupported __AVR_ARCH__"
 #endif
