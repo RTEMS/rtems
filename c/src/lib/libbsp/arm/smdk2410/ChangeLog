@@ -1,3 +1,8 @@
+2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: No BSP should use exit.c as a file name. exit() is POSIX
+	routine.
+
 2008-06-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Need tm27.h

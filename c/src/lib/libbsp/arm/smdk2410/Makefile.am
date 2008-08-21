@@ -26,7 +26,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../gp32/startup/bspstart.c ../gp32/startup/exit.c startup/memmap.c \
+    ../gp32/startup/bspstart.c ../gp32/startup/bspclean.c startup/memmap.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/bsppredriverhook.c ../../shared/gnatinstallhandler.c
 console_SOURCES = ../gp32/console/uart.c ../../shared/console.c
