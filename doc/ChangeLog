@@ -1,5 +1,9 @@
 2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* index.html.in: Reorder manuals.
+
+2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bsp_howto/Makefile.am, bsp_howto/linkcmds.t, bsp_howto/makefiles.t,
 	bsp_howto/target.t: Update some of this manual.
 	* bsp_howto/Developer-User-Timeline.eps,
