@@ -56,125 +56,125 @@ uint32_t bsp_clicks_per_usec;
 /* Default decrementer exception handler */
 static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
-	ppc_set_decrementer_register( UINT32_MAX);
+  ppc_set_decrementer_register(UINT32_MAX);
 
-	return 0;
+  return 0;
 }
 
-void BSP_panic( char *s)
+void BSP_panic(char *s)
 {
-	rtems_interrupt_level level;
+  rtems_interrupt_level level;
 
-	rtems_interrupt_disable( level);
+  rtems_interrupt_disable(level);
 
-	printk( "%s PANIC %s\n", _RTEMS_version, s);
+  printk("%s PANIC %s\n", rtems_get_version_string(), s);
 
-	while (1) {
-		/* Do nothing */
-	}
+  while (1) {
+    /* Do nothing */
+  }
 }
 
-void _BSP_Fatal_error( unsigned n)
+void _BSP_Fatal_error(unsigned n)
 {
-	rtems_interrupt_level level;
+  rtems_interrupt_level level;
 
-	rtems_interrupt_disable( level);
+  rtems_interrupt_disable( level);
 
-	printk( "%s PANIC ERROR %u\n", _RTEMS_version, n);
+  printk( "%s PANIC ERROR %u\n", rtems_get_version_string(), n);
 
-	while (1) {
-		/* Do nothing */
-	}
+  while (1) {
+    /* Do nothing */
+  }
 }
 
-void bsp_pretasking_hook( void)
-{
-	/* Do noting */
-}
-
-void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size)
 {
 #ifdef HAS_UBOOT
-	char *ram_end = (char *) mpc83xx_uboot_board_info.bi_memstart + mpc83xx_uboot_board_info.bi_memsize;
+  char *ram_end = (char *) mpc83xx_uboot_board_info.bi_memstart +
+                                 mpc83xx_uboot_board_info.bi_memsize;
 #else /* HAS_UBOOT */
-	char *ram_end = bsp_ram_end;
+  char *ram_end = bsp_ram_end;
 #endif /* HAS_UBOOT */
 
-	*work_area_start = bsp_work_area_start;
-	*work_area_size = ram_end - bsp_work_area_start;
-	*heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-	*heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
+  *work_area_start = bsp_work_area_start;
+  *work_area_size = ram_end - bsp_work_area_start;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 void bsp_start( void)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	int rv = 0;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  int rv = 0;
 
-	ppc_cpu_id_t myCpu;
-	ppc_cpu_revision_t myCpuRevision;
+  ppc_cpu_id_t myCpu;
+  ppc_cpu_revision_t myCpuRevision;
 
-	uint32_t interrupt_stack_start = (uint32_t) bsp_interrupt_stack_start;
-	uint32_t interrupt_stack_size = (uint32_t) bsp_interrupt_stack_size;
+  uint32_t interrupt_stack_start = (uint32_t) bsp_interrupt_stack_start;
+  uint32_t interrupt_stack_size = (uint32_t) bsp_interrupt_stack_size;
 
-	/*
-	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-	 * store the result in global variables so that it can be used latter...
-	 */
-	myCpu = get_ppc_cpu_type();
-	myCpuRevision = get_ppc_cpu_revision();
+  /*
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
+   * store the result in global variables so that it can be used latter...
+   */
+  myCpu = get_ppc_cpu_type();
+  myCpuRevision = get_ppc_cpu_revision();
 
-	/* Basic CPU initialization */
-	cpu_init();
+  /* Basic CPU initialization */
+  cpu_init();
 
-	/*
-	 * Enable instruction and data caches. Do not force writethrough mode.
-	 */
+  /*
+   * Enable instruction and data caches. Do not force writethrough mode.
+   */
 
 #if INSTRUCTION_CACHE_ENABLE
-	rtems_cache_enable_instruction();
+  rtems_cache_enable_instruction();
 #endif
 
 #if DATA_CACHE_ENABLE
-	rtems_cache_enable_data();
+  rtems_cache_enable_data();
 #endif
 
-	/*
-	 * This is evaluated during runtime, so it should be ok to set it
-	 * before we initialize the drivers.
-	 */
+  /*
+   * This is evaluated during runtime, so it should be ok to set it
+   * before we initialize the drivers.
+   */
 
-	/* Initialize some device driver parameters */
+  /* Initialize some device driver parameters */
 
 #ifdef HAS_UBOOT
-	BSP_bus_frequency = mpc83xx_uboot_board_info.bi_busfreq;
-	bsp_clicks_per_usec = mpc83xx_uboot_board_info.bi_intfreq / 8000000;
+  BSP_bus_frequency = mpc83xx_uboot_board_info.bi_busfreq;
+  bsp_clicks_per_usec = mpc83xx_uboot_board_info.bi_intfreq / 8000000;
 #else /* HAS_UBOOT */
-	BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
-	bsp_clicks_per_usec = BSP_bus_frequency / 1000000;
+  BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
+  bsp_clicks_per_usec = BSP_bus_frequency / 1000000;
 #endif /* HAS_UBOOT */
 
-	/* Initialize exception handler */
-	ppc_exc_initialize(
-		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-		interrupt_stack_start,
-		interrupt_stack_size
-	);
+  /* Initialize exception handler */
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    interrupt_stack_start,
+    interrupt_stack_size
+  );
 
-	/* Install default handler for the decrementer exception */
-	rv = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);
-	if (rv < 0) {
-		BSP_panic( "Cannot install decrementer exception handler!\n");
-	}
+  /* Install default handler for the decrementer exception */
+  rv = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);
+  if (rv < 0) {
+    BSP_panic( "Cannot install decrementer exception handler!\n");
+  }
 
-	/* Initalize interrupt support */
-	sc = bsp_interrupt_initialize();
-	if (sc != RTEMS_SUCCESSFUL) {
-		BSP_panic( "Cannot intitialize interrupt support\n");
-	}
+  /* Initalize interrupt support */
+  sc = bsp_interrupt_initialize();
+  if (sc != RTEMS_SUCCESSFUL) {
+    BSP_panic( "Cannot intitialize interrupt support\n");
+  }
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-	printk("Exit from bspstart\n");
+  printk("Exit from bspstart\n");
 #endif
 }
 
@@ -188,42 +188,17 @@ void bsp_start( void)
 Thread _Thread_Idle_body( uint32_t ignored)
 {
 
-	while (1) {
-		asm volatile (
-			"mfmsr 3;"
-			"oris 3, 3, 4;"
-			"sync;"
-			"mtmsr 3;"
-			"isync;"
-			"ori 3, 3, 0;"
-			"ori 3, 3, 0"
-		);
-	}
+  while (1) {
+    asm volatile (
+      "mfmsr 3;"
+      "oris 3, 3, 4;"
+      "sync;"
+      "mtmsr 3;"
+      "isync;"
+      "ori 3, 3, 0;"
+      "ori 3, 3, 0"
+    );
+  }
 
-	return NULL;
-}
-
-void bsp_cleanup( void)
-{
-#ifdef MPC8313ERDB
-
-	/* Set Reset Protection Register (RPR) to "RSTE" */
-	mpc83xx.res.rpr = 0x52535445;
-
-	/*
-	 * Wait for Control Register Enabled in the
-	 * Reset Control Enable Register (RCER).
-	 */
-	while (mpc83xx.res.rcer != 0x00000001) {
-		/* Wait */
-	}
-
-	/* Set Software Hard Reset in the Reset Control Register (RCR) */
-	mpc83xx.res.rcr = 0x00000002;
-
-#else /* MPC8313ERDB */
-
-	/* Do nothing */
-
-#endif /* MPC8313ERDB */
+  return NULL;
 }

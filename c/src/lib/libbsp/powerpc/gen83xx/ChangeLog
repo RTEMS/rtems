@@ -1,3 +1,12 @@
+2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Added bspclean.c and use shared bsppretaskinghook.c.
+	* console/console.c: Added poll for char helper.
+	* include/bsp.h: Add macro definitions for optional reset behavior.
+	* startup/bspstart.c: Split out bsp_cleanup(). Clean up.
+	* startup/bspclean.c: New file.  Not can press any key on normal
+	shutdown to reset board when on MPC8313erdb.
+
 2008-08-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/cpuinit.h: Uses now powerpc-utility.h.  Changed invalid usage

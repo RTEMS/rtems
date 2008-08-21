@@ -273,3 +273,7 @@ void debug_putc_onlcr(const char c)
 BSP_output_char_function_type   BSP_output_char = debug_putc_onlcr;
 /* const char arg to be compatible with BSP_output_char decl. */
 
+int bsp_uart_pollRead(int minor)
+{
+  return Console_Port_Tbl [0].pDeviceFns->deviceRead(0);
+}

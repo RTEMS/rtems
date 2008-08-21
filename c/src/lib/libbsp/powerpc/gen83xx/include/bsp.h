@@ -32,6 +32,10 @@
 #define CONFIG_MPC83XX
 #define CONFIG_HAS_ETH1
 
+/* We want to prompt for a reset and then reset the board */
+#define BSP_PRESS_KEY_FOR_RESET 1
+#define BSP_RESET_BOARD_AT_EXIT 1
+
 #endif /* MPC8313ERDB */
 
 #include <libcpu/powerpc-utility.h> 
@@ -42,33 +46,33 @@
  * Some symbols defined in the linker command file.
  */
 
-LINKER_SYMBOL( bsp_ram_start);
-LINKER_SYMBOL( bsp_ram_end);
-LINKER_SYMBOL( bsp_ram_size);
+LINKER_SYMBOL(bsp_ram_start);
+LINKER_SYMBOL(bsp_ram_end);
+LINKER_SYMBOL(bsp_ram_size);
 
-LINKER_SYMBOL( bsp_rom_start);
-LINKER_SYMBOL( bsp_rom_end);
-LINKER_SYMBOL( bsp_rom_size);
+LINKER_SYMBOL(bsp_rom_start);
+LINKER_SYMBOL(bsp_rom_end);
+LINKER_SYMBOL(bsp_rom_size);
 
-LINKER_SYMBOL( bsp_section_text_start);
-LINKER_SYMBOL( bsp_section_text_end);
-LINKER_SYMBOL( bsp_section_text_size);
+LINKER_SYMBOL(bsp_section_text_start);
+LINKER_SYMBOL(bsp_section_text_end);
+LINKER_SYMBOL(bsp_section_text_size);
 
-LINKER_SYMBOL( bsp_section_data_start);
-LINKER_SYMBOL( bsp_section_data_end);
-LINKER_SYMBOL( bsp_section_data_size);
+LINKER_SYMBOL(bsp_section_data_start);
+LINKER_SYMBOL(bsp_section_data_end);
+LINKER_SYMBOL(bsp_section_data_size);
 
-LINKER_SYMBOL( bsp_section_bss_start);
-LINKER_SYMBOL( bsp_section_bss_end);
-LINKER_SYMBOL( bsp_section_bss_size);
+LINKER_SYMBOL(bsp_section_bss_start);
+LINKER_SYMBOL(bsp_section_bss_end);
+LINKER_SYMBOL(bsp_section_bss_size);
 
-LINKER_SYMBOL( bsp_interrupt_stack_start);
-LINKER_SYMBOL( bsp_interrupt_stack_end);
-LINKER_SYMBOL( bsp_interrupt_stack_size);
+LINKER_SYMBOL(bsp_interrupt_stack_start);
+LINKER_SYMBOL(bsp_interrupt_stack_end);
+LINKER_SYMBOL(bsp_interrupt_stack_size);
 
-LINKER_SYMBOL( bsp_work_area_start);
+LINKER_SYMBOL(bsp_work_area_start);
 
-LINKER_SYMBOL( IMMRBAR);
+LINKER_SYMBOL(IMMRBAR);
 
 #ifndef ASM
 
