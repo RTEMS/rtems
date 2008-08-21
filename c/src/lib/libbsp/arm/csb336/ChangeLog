@@ -1,3 +1,10 @@
+2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: No BSP should use exit.c as a file name. exit() is POSIX
+	routine.
+	* startup/bspclean.c: New file.
+	* startup/exit.c: Removed.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/exit.c: Add missing prototypes.

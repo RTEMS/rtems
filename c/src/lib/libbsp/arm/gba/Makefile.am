@@ -38,7 +38,7 @@ gbaoverrides_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gbaoverrides_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c startup/exit.c \
+    ../../shared/bsppredriverhook.c startup/bspclean.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clockdrv.c

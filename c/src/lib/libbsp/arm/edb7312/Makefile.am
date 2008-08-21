@@ -29,7 +29,7 @@ dist_project_lib_DATA += startup/linkcmds
 include_HEADERS += ../../arm/shared/comm/uart.h
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c \
-    startup/bspstart.c startup/exit.c ../../shared/bootcard.c \
+    startup/bspstart.c startup/bspclean.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/uart.c ../../shared/console.c
