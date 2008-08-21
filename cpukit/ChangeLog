@@ -1,5 +1,9 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.c: Don't use annonymous unions.
+
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/flashdisk.c: Remove bool, true, false.
 
 2008-08-20	Joel Sherrill <joel.sherrill@OARcorp.com>
