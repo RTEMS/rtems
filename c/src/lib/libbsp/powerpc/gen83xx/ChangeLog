@@ -1,3 +1,9 @@
+2008-08-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/cpuinit.h: Uses now powerpc-utility.h.  Changed invalid usage
+	of a boolean type to a proper integer type in calc_dbat_regvals().
+	Througout code formatting.
+
 2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/tm27.h: Uses now a decrementer exception handler.  Replaces
