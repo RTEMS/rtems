@@ -49,10 +49,10 @@ int rtems_shell_main_ifconfig(
   int                 rc;
   int                 flags;
 
-  bzero((void*) &ipaddr, sizeof(ipaddr));
-  bzero((void*) &dstaddr, sizeof(dstaddr));
-  bzero((void*) &netmask, sizeof(netmask));
-  bzero((void*) &broadcast, sizeof(broadcast));
+  memset(&ipaddr, 0, sizeof(ipaddr));
+  memset(&dstaddr, 0, sizeof(dstaddr));
+  memset(&netmask, 0, sizeof(netmask));
+  memset(&broadcast, 0, sizeof(broadcast));
     
   ipaddr.sin_len = sizeof(ipaddr);
   ipaddr.sin_family = AF_INET;
