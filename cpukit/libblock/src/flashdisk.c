@@ -128,13 +128,6 @@
 #endif
 
 /**
- * Provide a basic boolean type.
- */
-#define bool  int
-#define true  (1)
-#define false (0)
-
-/**
  * The start of a segment has a segment control table. This hold the CRC and
  * block number for the page.
  *
