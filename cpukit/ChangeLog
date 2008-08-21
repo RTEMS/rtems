@@ -1,5 +1,9 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-network.c: Use memset instead of bzero.
+
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/internal.h: Don't include "config.h".
 	Adjust header guard.
 	* libmisc/shell/cmp-ls.c, libmisc/shell/err.c, 
