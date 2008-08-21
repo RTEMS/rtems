@@ -1,5 +1,19 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/cmp-ls.c, libmisc/shell/err.c, 
+	libmisc/shell/errx.c, libmisc/shell/filemode.c, 
+	libmisc/shell/fts.c, libmisc/shell/main_cp.c, 
+	libmisc/shell/main_ls.c, libmisc/shell/main_mv.c,
+	libmisc/shell/main_rm.c, libmisc/shell/print-ls.c,
+	libmisc/shell/pwcache.c, libmisc/shell/shellconfig.c,
+	libmisc/shell/utils-cp.c, libmisc/shell/utils-ls.c,
+	libmisc/shell/verr.c, libmisc/shell/verrx.c,
+	libmisc/shell/vis.c, libmisc/shell/vwarn.c,
+	libmisc/shell/vwarnx.c, libmisc/shell/warn.c,
+	libmisc/shell/warnx.c: Include "config.h".
+
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/monitor/mon-network.c, libmisc/monitor/mon-part.c,
 	libmisc/monitor/mon-region.c, libmisc/monitor/mon-sema.c:
 	Include "config.h".
