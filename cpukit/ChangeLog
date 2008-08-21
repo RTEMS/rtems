@@ -1,5 +1,11 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-network.c, libmisc/monitor/mon-part.c,
+	libmisc/monitor/mon-region.c, libmisc/monitor/mon-sema.c:
+	Include "config.h".
+
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/main_ifconfig.c: Use memset instead of bzero.
 	* ftpd/ftpd.c: Don't use annonymous unions.
 
