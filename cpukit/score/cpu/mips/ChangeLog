@@ -1,3 +1,8 @@
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Include stdbool.h.
+	Use bool as base-type for boolean.
+
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Correct prototype of Idle threads.

@@ -1,3 +1,8 @@
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Include stdbool.h.
+	Use bool as base-type for boolean.
+
 2008-08-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Removed obsolete defines MSR_, MSR_KERNEL
