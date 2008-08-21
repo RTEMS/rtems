@@ -27,6 +27,10 @@
  * SUCH DAMAGE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if 0
 #ifndef lint
 static const char copyright[] =

@@ -29,6 +29,10 @@
  * SUCH DAMAGE.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if HAVE_NBTOOL_CONFIG_H
 #include "nbtool_config.h"
 #endif
