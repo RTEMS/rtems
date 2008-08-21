@@ -1,5 +1,7 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/internal.h: Don't include "config.h".
+	Adjust header guard.
 	* libmisc/shell/cmp-ls.c, libmisc/shell/err.c, 
 	libmisc/shell/errx.c, libmisc/shell/filemode.c, 
 	libmisc/shell/fts.c, libmisc/shell/main_cp.c, 

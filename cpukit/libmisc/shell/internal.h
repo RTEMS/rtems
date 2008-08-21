@@ -8,12 +8,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_SHELL_INTERNAL_h
-#define _RTEMS_SHELL_INTERNAL_h
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#ifndef _RTEMS_SHELL_INTERNAL_H
+#define _RTEMS_SHELL_INTERNAL_H
 
 struct rtems_shell_topic_tt;
 typedef struct rtems_shell_topic_tt rtems_shell_topic_t;
