@@ -19,6 +19,12 @@ GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
+PNG_FILES = Developer-User-Timeline.png
+
+if USE_HTML
+html_project_DATA += $(PNG_FILES)
+endif
+
 FILES =
 
 info_TEXINFOS = bsp_howto.texi
@@ -124,4 +130,4 @@ CLEANFILES += bsp_howto.info bsp_howto.info-?
 
 EXTRA_DIST = adaintr.t analog.t ata.t clock.t console.t discrete.t \
     ide-ctrl.t init.t intro.t linkcmds.t makefiles.t nvmem.t rtc.t shmsupp.t \
-    support.t target.t timer.t
+    support.t target.t timer.t $(PNG_FILES) $(EPS_IMAGES)

@@ -36,6 +36,22 @@ dependent on a particular CPU model.  For example, the MC68000 and MC68020
 processors are both members of the m68k CPU family but there are significant
 differences between these CPU models which RTEMS must take into account.
 
+The source code found in the @code{cpukit/score/cpu} is required to
+only depend upon the CPU model variations that GCC distinguishes
+for the purposes of multilib'ing.  Multilib is the term the GNU
+community uses to refer to building a single library source multiple
+times with different compiler options so the binary code generated
+is compatible.  As an example, from GCC's perspective, many PowerPC
+CPU models are just a PPC603e.  Remember that GCC only cares about
+the CPU code itself and need not be aware of any peripherals.  In
+the embedded community, we are exposed to thousands of CPU models
+which are all based upon only a relative small number of CPU cores.
+
+Similarly for the SPARC/ERC32 BSP, the @code{RTEMS_CPU} is specified as
+@code{erc32} which is the name of the CPU model and BSP for this SPARC V7
+system on chip.  But the multilib variant used is actually @code{v7}
+which indicates the ERC32 CPU core is a SPARC V7.
+
 @section Board Dependent
 
 This class of code provides the most specific glue between RTEMS and
@@ -140,9 +156,14 @@ CPU model dependent support code is found in the following directory:
 c/src/lib/libcpu/@i{CPU}/@i{CPU_MODEL}
 @end example
 
+@i{CPU_MODEL} may be a specific CPU model name or a name indicating a CPU
+core or a set of related CPU models.  The file @code{configure.ac} in each
+@code{c/src/lib/libcpu/@i{CPU}} directory contains the logic which enables
+the appropriate subdirectories for the specific CPU model your BSP has.
+
 @section Board Support Package Structure
 
-The BSPs are all under the c/src/lib/libbsp directory.  Below this
+The BSPs are all under the @code{c/src/lib/libbsp} directory.  Below this
 directory, there is a subdirectory for each CPU family.  Each BSP
 is found under the subdirectory for the appropriate processor
 family (m68k, powerpc, etc.).  In addition, there is source code
@@ -174,7 +195,7 @@ support for the clock tick -- a regular time basis to the kernel.
 @item @b{timer}:
 support of timer devices.
 
-@item @b{rtc}:
+@item @b{rtc} or @code{tod}:
 support for the hardware real-time clock.
 
 @item @b{nvmem}:
@@ -189,10 +210,16 @@ support of shared memory driver MPCI layer in a multiprocessor system,
 @item @b{include}:
 include files for this BSP.
 
-@item @b{wrapup}:
-bundles all the components necessary to construct the BSP library.
+@item @b{gnatsupp}:
+BSP specific support for the GNU Ada run-time.  Each BSP that wishes
+to have the possibility to map faults or exceptions into Ada language
+exceptions or hardware interrupts into Ada interrupt tasks must provide
+this support.
 
 @end itemize
+
+There may be other directories in the BSP tree and the name should
+be indicative of the functionality of the code within that directory.
 
 The build order of the BSP is determined by the Makefile structure.
 This structure is discussed in more detail in the @ref{Makefiles}

@@ -15,6 +15,13 @@ time.  This file describes the memory configuration of the board as needed
 to link the program.  Specifically it specifies where the code and data
 for the application will reside in memory.
 
+The format of the linker script is defined by the GNU Loader @code{ld}
+which is included as a component of the GNU Binary Utilities.  If you
+are using GNU/Linux, then you probably have the documentation installed
+already and are using these same tools configured for @b{native} use.
+Please visit the Binutils project @uref{http://sourceware.org/binutils/}
+if you need more information.
+
 @section Program Sections
 
 An embedded systems programmer must be much more aware of the
