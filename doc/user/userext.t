@@ -466,7 +466,7 @@ This extension should have a prototype similar to the following:
 rtems_extension user_fatal_error(
   Internal_errors_Source  the_source,
   rtems_boolean           is_internal,
-  rtems_unsigned32        the_error
+  uint32_t                the_error
 );
 @end example
 @end ifset

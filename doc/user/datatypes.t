@@ -194,29 +194,25 @@ that is expected to be used by the MPCI layer.
 type used to manage and manipulate RTEMS signal sets
 with the Signal Manager.
 
-@findex rtems_signed8
-@item @code{@value{DIRPREFIX}signed8} is the data
-type that corresponds to signed eight bit integers.
-This data type is defined by RTEMS in a manner that
+@findex int8_t
+@item @code{int8_t} is the C99 data type that corresponds to signed eight
+bit integers.  This data type is defined by RTEMS in a manner that
 ensures it is portable across different target processors.
 
-@findex rtems_signed16
-@item @code{@value{DIRPREFIX}signed16} is the data
-type that corresponds to signed sixteen bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
+@findex int16_t
+@item @code{int16_t} is the C99 data type that corresponds to signed
+sixteen bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
 
-@findex rtems_signed32
-@item @code{@value{DIRPREFIX}signed32} is the data
-type that corresponds to signed thirty-two bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
+@findex int32_t
+@item @code{int32_t} is the C99 data type that corresponds to signed
+thirty-two bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
 
-@findex rtems_signed64
-@item @code{@value{DIRPREFIX}signed64} is the data
-type that corresponds to signed sixty-four bit integers.
-This data type is defined by RTEMS in a manner that
-ensures it is portable across different target processors.
+@findex int64_t
+@item @code{int64_t} is the C99 data type that corresponds to signed
+sixty-four bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
 
 @findex rtems_single
 @item @code{@value{DIRPREFIX}single} is the RTEMS data

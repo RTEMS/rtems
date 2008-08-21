@@ -27,7 +27,7 @@ structure:
 
 @example
 @group
-typedef volatile rtems_unsigned32 vol_u32;
+typedef volatile uint32_t vol_u32;
 
 typedef struct @{
   vol_u32 *address;        /* write here for interrupt    */
@@ -41,7 +41,7 @@ struct shm_config_info @{
   vol_u32            format;     /* SHM is big or little endian */
   vol_u32          (*convert)(); /* neutral conversion routine  */
   vol_u32            poll_intr;  /* POLLED or INTR driven mode  */
-  void             (*cause_intr)( rtems_unsigned32 );
+  void             (*cause_intr)( uint32_t );
   Shm_Interrupt_information   Intr; /* cause intr information   */
 @};
 
@@ -123,7 +123,7 @@ Shared Memory Configuration Table passed to it.
 @example
 @group
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 @{

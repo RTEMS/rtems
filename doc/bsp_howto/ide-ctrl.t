@@ -113,11 +113,13 @@ overhead. This routine is not allowed to be called from an application.
 
 @example
 @group
-void ide_controller_read_data_block(rtems_device_minor_number  minor,
-                                    unsigned16                 block_size,
-                                    blkdev_sg_buffer          *bufs,
-                                    rtems_unsigned32          *cbuf,
-                                    rtems_unsigned32          *pos)
+void ide_controller_read_data_block(
+  rtems_device_minor_number  minor,
+  unsigned16                 block_size,
+  blkdev_sg_buffer          *bufs,
+  uint32_t                  *cbuf,
+  uint32_t                  *pos
+)
 @{
   get IDE Controller chip configuration information from
   IDE_Controller_Table by minor number
@@ -138,11 +140,13 @@ overhead. This routine is not allowed to be called from an application.
 
 @example
 @group
-void ide_controller_write_data_block(rtems_device_minor_number  minor,
-                                     unsigned16                 block_size,
-                                     blkdev_sg_buffer          *bufs,
-                                     rtems_unsigned32          *cbuf,
-                                     rtems_unsigned32          *pos)
+void ide_controller_write_data_block(
+  rtems_device_minor_number  minor,
+  unsigned16                 block_size,
+  blkdev_sg_buffer          *bufs,
+  uint32_t                  *cbuf,
+  uint32_t                  *pos
+)
 @{
   get IDE Controller chip configuration information from
   IDE_Controller_Table by minor number

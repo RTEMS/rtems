@@ -47,7 +47,7 @@ routines that have occured.  This information is valuable when debugging
 a system.  This variable is declared as follows:
 
 @example
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t Clock_driver_ticks;
 @end example
 
 @section Initialization

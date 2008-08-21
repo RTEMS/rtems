@@ -101,9 +101,9 @@ typedef struct ata_req_s @{
     Chain_Node        link;   /* link in requests chain */
     char              type;   /* request type */
     ata_registers_t   regs;   /* ATA command */
-    rtems_unsigned32  cnt;    /* Number of sectors to be exchanged */
-    rtems_unsigned32  cbuf;   /* number of current buffer from breq in use */
-    rtems_unsigned32  pos;    /* current position in 'cbuf' */
+    uint32_t          cnt;    /* Number of sectors to be exchanged */
+    uint32_t          cbuf;   /* number of current buffer from breq in use */
+    uint32_t          pos;    /* current position in 'cbuf' */
     blkdev_request   *breq;   /* blkdev_request which corresponds to the
                                * ata request
                                */

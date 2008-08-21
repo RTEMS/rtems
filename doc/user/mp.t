@@ -410,7 +410,7 @@ following prototype:
 @example
 @group
 rtems_mpci_entry user_mpci_send_packet(
-  rtems_unsigned32       node,
+  uint32_t               node,
   rtems_packet_prefix  **packet
 );
 @end group
@@ -433,7 +433,7 @@ of the packet to avoid sending unnecessary data.  This is especially
 useful if the media connecting the nodes is relatively slow.
 
 The to_convert field of the MP_packet_prefix portion of the packet indicates
-how much of the packet (in @code{rtems_unsigned32}'s) may require
+how much of the packet (in @code{uint32_t}'s) may require
 conversion in a heterogeneous system.
 
 @subsection Supporting Heterogeneous Environments

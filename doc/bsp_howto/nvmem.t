@@ -184,10 +184,10 @@ structure type:
 @example
 @group
 typedef struct @{
-  rtems_unsigned32   offset;
-  void              *buffer;
-  rtems_unsigned32   length;
-  rtems_unsigned32   status;
+  uint32_t  offset;
+  void     *buffer;
+  uint32_t  length;
+  uint32_t  status;
 @}   Non_volatile_memory_Driver_arguments;
 @end group
 @end example
@@ -211,10 +211,10 @@ the following structure type:
 @example
 @group
 typedef struct @{
-  rtems_unsigned32   offset;
-  void              *buffer;
-  rtems_unsigned32   length;
-  rtems_unsigned32   status;
+  uint32_t   offset;
+  void      *buffer;
+  uint32_t   length;
+  uint32_t   status;
 @}   Non_volatile_memory_Driver_arguments;
 @end group
 @end example

@@ -1,3 +1,10 @@
+2008-08-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bsp_howto/ata.t, bsp_howto/clock.t, bsp_howto/ide-ctrl.t,
+	bsp_howto/nvmem.t, bsp_howto/shmsupp.t, user/datatypes.t, user/mp.t,
+	user/userext.t: Eliminate all references to rtems_signedXX and
+	rtems_unsignedXX.
+
 2008-08-08     Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* user/msg.t, user/sem.t, user/task.t: Update to new parameter types.
