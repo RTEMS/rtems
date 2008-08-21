@@ -1,5 +1,11 @@
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/score/avr.h: Add avr25, avr31, avr35, avr51 to 
+	CPU_NAME cascade.
+	* rtems/score/cpu.h: Add missing prototypes.h.
+
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/score/types.h: Include stdbool.h.
 	Use bool as base-type for boolean.
 
