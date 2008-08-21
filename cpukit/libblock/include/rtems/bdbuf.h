@@ -86,8 +86,8 @@ typedef struct rtems_bdbuf_buffer
  */
 typedef struct rtems_bdbuf_pool
 {
-  int                 blksize;           /*< The size of the blocks (in bytes) */
-  int                 nblks;             /*< Number of blocks in this pool */
+  uint32_t            blksize;           /*< The size of the blocks (in bytes) */
+  uint32_t            nblks;             /*< Number of blocks in this pool */
 
   uint32_t            flags;             /*< Configuration flags */
 
@@ -144,8 +144,8 @@ extern int                     rtems_bdbuf_pool_configuration_size;
  * structure.
  */
 typedef struct rtems_bdbuf_config {
-  int                 max_read_ahead_blocks; /*< Number of blocks to read ahead. */
-  int                 max_write_blocks;      /*< Number of blocks to write at once. */
+  uint32_t            max_read_ahead_blocks; /*< Number of blocks to read ahead. */
+  uint32_t            max_write_blocks;      /*< Number of blocks to write at once. */
   rtems_task_priority swapout_priority;      /*< Priority of the swap out task. */
   uint32_t            swapout_period;        /*< Period swapout checks buf timers. */
   uint32_t            swap_block_hold;       /*< Period a buffer is held. */
@@ -317,7 +317,7 @@ rtems_bdbuf_syncdev (dev_t dev);
  *         is not configured.
  */
 rtems_status_code
-rtems_bdbuf_find_pool (int block_size, rtems_bdpool_id *pool);
+rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool);
 
 /**
  * Obtain characteristics of buffer pool with specified number.

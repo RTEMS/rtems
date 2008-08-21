@@ -1,3 +1,9 @@
+2008-08-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/diskdevs.h,
+	libblock/src/bdbuf.c, libblock/src/blkdev.c, libblock/src/diskdevs.c,
+	libblock/src/ramdisk.c: Eliminate sign mismatch warnings.
+
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/monitor/mon-network.c: Use memset instead of bzero.

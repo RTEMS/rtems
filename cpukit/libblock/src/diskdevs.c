@@ -25,14 +25,14 @@
 /* Table of disk devices having the same major number */
 typedef struct rtems_disk_device_table {
     rtems_disk_device **minor; /* minor-indexed disk device table */
-    int size;            /* Number of entries in the table */
+    uint32_t            size;            /* Number of entries in the table */
 } rtems_disk_device_table;
 
 /* Pointer to [major].minor[minor] indexed array of disk devices */
 static rtems_disk_device_table *disktab;
 
 /* Number of allocated entries in disktab table */
-static int disktab_size;
+static uint32_t disktab_size;
 
 /* Mutual exclusion semaphore for disk devices table */
 static rtems_id diskdevs_mutex;
@@ -76,8 +76,8 @@ create_disk_entry(dev_t dev)
     if (major >= disktab_size)
     {
         rtems_disk_device_table *p;
-        int newsize;
-        int i;
+        uint32_t newsize;
+        uint32_t i;
         newsize = disktab_size * 2;
         if (major >= newsize)
             newsize = major + 1;
@@ -97,10 +97,10 @@ create_disk_entry(dev_t dev)
     if ((disktab[major].minor == NULL) ||
         (minor >= disktab[major].size))
     {
-        int newsize;
+        uint32_t            newsize;
         rtems_disk_device **p;
-        int i;
-        int s = disktab[major].size;
+        uint32_t            i;
+        uint32_t            s = disktab[major].size;
 
         if (s == 0)
             newsize = DISKTAB_INITIAL_SIZE;

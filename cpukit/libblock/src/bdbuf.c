@@ -927,7 +927,7 @@ rtems_bdbuf_initialize_pool (rtems_bdbuf_pool_config* config,
   rtems_bdbuf_pool*   pool;
   rtems_bdbuf_buffer* bd;
   rtems_status_code   sc;
-  int                 b;
+  uint32_t            b;
 
   pool = rtems_bdbuf_get_pool (pid);
   
@@ -1296,7 +1296,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
           if (!rtems_chain_is_empty (&pool->modified))
           {
             rtems_chain_node* node = rtems_chain_head (&pool->modified);
-            int               write_blocks = 0;
+            uint32_t          write_blocks = 0;
             
             node = node->next;
             while ((write_blocks < rtems_bdbuf_configuration.max_write_blocks) &&
@@ -1527,7 +1527,7 @@ rtems_bdbuf_read (dev_t                device,
   rtems_disk_device*    dd;
   rtems_bdbuf_pool*     pool;
   rtems_bdbuf_buffer*   bd = NULL;
-  int                   read_ahead_count;
+  uint32_t              read_ahead_count;
   rtems_blkdev_request* req;
   
   /*
@@ -1639,8 +1639,8 @@ rtems_bdbuf_read (dev_t                device,
      * enabled and the pool unlocked. This is a change to the previous version
      * of the bdbuf code.
      */
-    int result;
-    int b;
+    int      result;
+    uint32_t b;
     
     rtems_bdbuf_unlock_pool (pool);
 
@@ -2042,7 +2042,7 @@ rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
          * assumption. Cannot use the transfer list being empty the sync dev
          * calls sets the dev to use.
          */
-        if (*dev == -1)
+        if (*dev == (dev_t)-1)
           *dev = bd->dev;
 
         if (bd->dev == *dev)
@@ -2235,7 +2235,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
         if (write)
         {
           int result;
-          int b;
+          uint32_t b;
 
           /*
            * Perform the transfer. No pool locks, no preemption, only the disk
@@ -2435,13 +2435,13 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
  *         is not configured.
  */
 rtems_status_code
-rtems_bdbuf_find_pool (int block_size, rtems_bdpool_id *pool)
+rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
 {
   rtems_bdbuf_pool* p;
   rtems_bdpool_id   i;
   rtems_bdpool_id   curid = -1;
   rtems_boolean     found = FALSE;
-  int               cursize = INT_MAX;
+  uint32_t          cursize = UINT_MAX;
   int               j;
 
   for (j = block_size; (j != 0) && ((j & 1) == 0); j >>= 1);

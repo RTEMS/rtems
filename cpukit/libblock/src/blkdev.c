@@ -58,8 +58,8 @@ rtems_blkdev_generic_read(
     while (count > 0)
     {
         rtems_bdbuf_buffer *diskbuf;
-        int copy;
-        rtems_status_code rc;
+        uint32_t            copy;
+        rtems_status_code   rc;
 
         rc = rtems_bdbuf_read(dev, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
@@ -91,12 +91,12 @@ rtems_blkdev_generic_write(
     void                    * arg)
 {
     rtems_libio_rw_args_t *args = arg;
-    int block_size_log2;
-    int block_size;
+    int           block_size_log2;
+    uint32_t      block_size;
     char         *buf;
-    unsigned int count;
-    unsigned int block;
-    unsigned int blkofs;
+    uint32_t      count;
+    uint32_t      block;
+    uint32_t      blkofs;
     dev_t dev;
     rtems_status_code rc;
     rtems_disk_device *dd;
@@ -119,7 +119,7 @@ rtems_blkdev_generic_write(
     while (count > 0)
     {
         rtems_bdbuf_buffer *diskbuf;
-        int copy;
+        uint32_t            copy;
 
         if ((blkofs == 0) && (count >= block_size))
             rc = rtems_bdbuf_get(dev, block, &diskbuf);

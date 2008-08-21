@@ -46,7 +46,7 @@ struct ramdisk {
 };
 
 static struct ramdisk *ramdisk;
-static int nramdisks;
+static uint32_t        nramdisks;
 
 #if RTEMS_RAMDISK_TRACE
 /**
@@ -103,7 +103,7 @@ ramdisk_read(struct ramdisk *rd, rtems_blkdev_request *req)
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
-        int count = sg->length;
+        uint32_t count = sg->length;
         from = ((char *)rd->area + (sg->block * rd->block_size));
         if (count > remains)
             count = remains;
@@ -143,7 +143,7 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
     sg = req->bufs;
     for (i = 0; (remains > 0) && (i < req->bufnum); i++, sg++)
     {
-        int count = sg->length;
+        uint32_t count = sg->length;
         to = ((char *)rd->area + (sg->block * rd->block_size));
         if (count > remains)
             count = remains;

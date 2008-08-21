@@ -47,16 +47,16 @@ typedef struct rtems_disk_device {
     char                     *name;         /* Disk device name */
     int                       uses;         /* Use counter. Device couldn't be
                                                removed if it is in use. */
-    int                       start;        /* Starting block number (0 for
+    uint32_t                  start;        /* Starting block number (0 for
                                                physical devices, block offset
                                                on the related physical device
                                                for logical device) */
-    int                       size;         /* Size of physical or logical disk
+    uint32_t                  size;         /* Size of physical or logical disk
                                                in disk blocks */
-    int                       block_size;   /* Size of device block (minimum
+    uint32_t                  block_size;   /* Size of device block (minimum
                                                transfer unit) in bytes
                                                (must be power of 2) */
-    int                 block_size_log2;    /* log2 of block_size */
+    uint32_t            block_size_log2;    /* log2 of block_size */
     rtems_bdpool_id     pool;               /* Buffer pool assigned to this
                                                device */
     rtems_block_device_ioctl  ioctl;        /* ioctl handler for this block
