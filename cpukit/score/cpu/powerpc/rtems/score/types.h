@@ -38,6 +38,7 @@
 
 #ifndef ASM
 
+#include <stdbool.h>
 #include <rtems/stdint.h>
 
 #ifdef __cplusplus
@@ -50,7 +51,7 @@ extern "C" {
 
 typedef uint32_t     Priority_Bit_map_control;
 
-typedef uint32_t boolean;     /* Boolean value   */
+typedef bool boolean;     /* Boolean value   */
 
 typedef float          single_precision;     /* single precision float */
 typedef double         double_precision;     /* double precision float */

@@ -22,6 +22,7 @@
 
 #ifndef ASM
 
+#include <stdbool.h>
 #include <rtems/stdint.h>
 
 #ifdef __cplusplus
@@ -32,7 +33,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint32_t         boolean;            /* Boolean value   */
+typedef bool             boolean;            /* Boolean value   */
 typedef uint16_t         Priority_Bit_map_control;
 
 typedef float              single_precision;   /* single precision float */
