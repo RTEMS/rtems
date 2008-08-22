@@ -244,107 +244,52 @@ file:
 c/src/lib/libbsp/CPU/BSP/startup/bspstart.c
 @end example
 
-This routine is also responsible for overriding the default settings
-in the CPU Configuration Table and setting port specific entries
-in this table.  This may include increasing the maximum number
-of some types of RTEMS system objects to reflect the needs of 
-the BSP and the base set of device drivers. This routine will
-typically also install routines for one or more of the following
-initialization hooks:
+On older BSPs not using @code{boot_card()}'s support for allocating memory
+to the C Program Heap and RTEMS Workspace, one of the most important
+functions performed by this routine is determining where the RTEMS
+Workspace is to be located in memory.  All RTEMS objects and task stacks
+will be allocated from this Workspace.  The RTEMS Workspace is distinct
+from the application heap used for @code{malloc()}.  Many BSPs place
+the RTEMS Workspace area at the end of RAM although this is certainly
+not a requirement.
 
-@itemize @bullet
-@item BSP Pretasking Hook
-@item BSP Predriver Hook
-@item BSP Postdriver Hook
-@end itemize
-
-One of the most important functions performed by this routine
-is determining where the RTEMS Workspace is to be
-located in memory.  All RTEMS objects and task stacks will be
-allocated from this Workspace.  The RTEMS Workspace is distinct
-from the application heap used for @code{malloc()}.  Many BSPs
-place the RTEMS Workspace area at the end of RAM although this is
-certainly not a requirement.
-
-After completing execution, this routine returns to the
-@code{boot_card()} routine.
-
-@subsection main() - C Main
-
-This routine is the C main entry point.  This is a special routine 
-and the GNU Compiler Suite treats it as such.  The GNU C Compiler
-recognizes @code{main()} and automatically inserts a call to the
-compiler run-time support routine @code{__main()} as the first
-code executed in @code{main()}.
-
-The routine @code{__main()} initializes the compiler's basic run-time
-support library and, most importantly, invokes the C++ global 
-constructors.  
-
-The precise placement of when @code{main()} is invoked in the 
-RTEMS initialization sequence ensures that C Library and non-blocking
-calls can be made in global C++ constructors.
-
-The shared implementation of this routine is located in the following file:
-
-@example
-c/src/lib/libbsp/shared/main.c
-@end example
-
-In addition to the implicit invocation of @code{__main}, this 
-routine performs some explicit initialization.  This routine 
-sets the variable @code{rtems_progname} and initiates 
-multitasking via a call to the RTEMS directive
-@code{rtems_initialize_executive_late}.  It is important to note
-that the executive does not return to this routine until the
-RTEMS directive @code{rtems_shutdown_executive} is invoked.
-
-The RTEMS initialization procedure is described in the @b{Initialization
-Manager} chapter of the @b{RTEMS Application C User's Guide}.
-Please refer to that manual for more information.
+After completing execution, this routine returns to the @code{boot_card()}
+routine.
 
 @subsection RTEMS Pretasking Callback
 
-The @code{pretasking_hook} entry in the RTEMS CPU Configuration
-Table may be the address of a user provided routine that is
+The method @code{bsp_pretasking_hook()} is the BSP specific routine
 invoked once RTEMS API initialization is complete but before interrupts
 and tasking are enabled.  No tasks -- not even the IDLE task -- have
-been created when this hook is invoked.  The pretasking hook is optional.
-
-Although optional, most of the RTEMS BSPs provide a pretasking hook
-callback.  This routine is usually called @code{bsp_pretasking_hook}
-and is found in the file:
-
-@example
-c/src/lib/libbsp/CPU/BSP/startup/bspstart.c
-@end example
+been created when this hook is invoked.  The pretasking hook is optional
+and the user may use the shared version.
 
 The @code{bsp_pretasking_hook()} routine is the appropriate place to
 initialize any support components which depend on the RTEMS APIs.
-Most BSPs set the debug level for the system and initialize the
-RTEMS C Library support in their
-implementation of @code{bsp_pretasking_hook()}.  This initialization
-includes the application heap used by the @code{malloc} family
-of routines as well as the reentrancy support for the C Library.
+Older BSPs that do not take full advantage of @code{boot_card()}
+may initialize the RTEMS C Library in their implementation of
+@code{bsp_pretasking_hook()}.  This initialization includes the
+application heap used by the @code{malloc} family of routines as well
+as the reentrancy support for the C Library.
 
 The routine @code{bsp_libc_init} routine invoked from the
-@code{bsp_pretasking_hook()} routine is passed the starting
-address, length, and growth amount passed to @code{sbrk}.  
-This "sbrk amount" is only used if the heap runs out of
-memory.  In this case, the RTEMS malloc implementation will
-invoked @code{sbrk} to obtain more memory.  See
-@ref{Miscellaneous Support Files sbrk() Implementation} for more details.
+either @code{boot_card()} or (less preferable) the BSP specific
+@code{bsp_pretasking_hook()} routine is passed the starting address,
+length, and growth amount passed to @code{sbrk}.  This "sbrk amount"
+is only used if the heap runs out of memory.  In this case, the RTEMS
+malloc implementation will invoked @code{sbrk} to obtain more memory.
+See @ref{Miscellaneous Support Files sbrk() Implementation} for more
+details.
 
 @subsection RTEMS Predriver Callback
 
-The @code{predriver_hook} entry in the RTEMS CPU Configuration
-Table may be the address of a user provided routine that is
-is invoked immediately before the the device drivers and MPCI
-are initialized. RTEMS
-initialization is complete but interrupts and tasking are disabled.
-This field may be NULL to indicate that the hook is not utilized.
+The @code{bsp_predriver_hook()} method is the BSP specific routine that
+is is invoked immediately before the the device drivers and MPCI are
+initialized. RTEMS initialization is complete but interrupts and tasking
+are disabled.
 
-Most BSPs do not use this callback.
+The BSP may use the shared version of this routine which is empty.
+Most BSPs do not provide a specific implementation of this callback.
 
 @subsection Device Driver Initialization
 
@@ -378,25 +323,15 @@ channels in the UART).
 
 @subsection RTEMS Postdriver Callback
 
-The @code{postdriver_hook} entry in the RTEMS CPU Configuration
-Table may be the address of a user provided routine that is
-invoked immediately after the the device drivers and MPCI are initialized.
-Interrupts and tasking are disabled.  The postdriver hook is optional.
+The @code{bsp_postdriver_hook()} BSP specific routine is invoked
+immediately after the the device drivers and MPCI are initialized.
+Interrupts and tasking are disabled.
 
-Although optional, most of the RTEMS BSPs provide a postdriver hook
-callback.  This routine is usually called @code{bsp_postdriver_hook}
-and is found in the file:
+Most BSPs use the shared implementation of this routine which is responsible for opening the device @code{/dev/console} for standard input, output and error if the application has configured the Console Device Driver.  This file is located at:
 
 @example
-c/src/lib/libbsp/CPU/BSP/startup/bsppost.c
+c/src/lib/libbsp/shared/bsppost.c
 @end example
-
-The @code{bsp_postdriver_hook()} routine is the appropriate place to
-perform initialization that must be performed before the first task 
-executes but requires that a device driver be initialized.  The 
-shared implementation of the postdriver hook opens the default 
-standard in, out, and error files and associates them with 
-@code{/dev/console}.
 
 @section The Interrupt Vector Table
 
@@ -500,22 +435,21 @@ semaphores, etc.). It's used to allocate the size for the RTEMS inner data
 structures. 
 
 The RTEMS configuration table is application dependent, which means that
-one has to provide one per application. It is usually defined
-by defining macros and including the header file @code{<rtems/confdefs.h>}.
-In simple applications such as the tests provided with RTEMS, it is
-commonly found in the main module of the application.  For more complex
-applications, it may be in a file by itself.
+one has to provide one per application. It is usually defined by defining
+macros and including the header file @code{<rtems/confdefs.h>}.  In simple
+applications such as the tests provided with RTEMS, it is commonly found
+in the main module of the application.  For more complex applications,
+it may be in a file by itself.
 
-The header file @code{<rtems/confdefs.h>} defines a constant table named
-@code{Configuration}.  With RTEMS 4.8 and older, it was
-accepted practice for the BSP to copy this table into a modifiable
-copy named @code{BSP_Configuration}.  This copy of the table was modified
-to define the base address of the RTEMS Executive Workspace as well as
-to reflect any BSP and device driver requirements not automatically
-handled by the application.  In 4.9 and newer, we have eliminated
-the BSP copies of the configuration tables and are making efforts
-to make the configuration information generated by @code{<rtems/confdefs.h>}
-constant and read only.
+The header file @code{<rtems/confdefs.h>} defines a constant table
+named @code{Configuration}.  With RTEMS 4.8 and older, it was accepted
+practice for the BSP to copy this table into a modifiable copy named
+@code{BSP_Configuration}.  This copy of the table was modified to define
+the base address of the RTEMS Executive Workspace as well as to reflect
+any BSP and device driver requirements not automatically handled by the
+application.  In 4.9 and newer, we have eliminated the BSP copies of the
+configuration tables and are making efforts to make the configuration
+information generated by @code{<rtems/confdefs.h>} constant and read only.
 
 For more information on the RTEMS Configuration Table, refer to the
 @b{RTEMS Application C User's Guide}.

@@ -1,5 +1,9 @@
 2008-08-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bsp_howto/init.t: Complete update.
+
+2008-08-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bsp_howto/Makefile.am, bsp_howto/init.t, bsp_howto/intro.t,
 	bsp_howto/makefiles.t, bsp_howto/support.t: Update initialization
 	sequence. Add another figure.
