@@ -80,7 +80,7 @@ pci_SOURCES = ../../i386/shared/pci/pcibios.c \
 include_HEADERS += ../../i386/shared/comm/uart.h
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c \
-    startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
+    startup/bspstart.c startup/bspclean.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
