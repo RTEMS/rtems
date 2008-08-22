@@ -282,9 +282,10 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
 		rtems_interrupt_disable( level); \
 		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
-		val |= bits; \
+		val |= mybits; \
 		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)
@@ -300,10 +301,12 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
+		uint32_t mymask = mask; \
 		rtems_interrupt_disable( level); \
 		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
-		val &= ~mask; \
-		val |= bits; \
+		val &= ~mymask; \
+		val |= mybits; \
 		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)
@@ -318,9 +321,10 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
 		rtems_interrupt_disable( level); \
 		val = PPC_SPECIAL_PURPOSE_REGISTER( spr); \
-		val &= ~bits; \
+		val &= ~mybits; \
 		PPC_SET_SPECIAL_PURPOSE_REGISTER( spr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)
@@ -367,9 +371,10 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
 		rtems_interrupt_disable( level); \
 		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
-		val |= bits; \
+		val |= mybits; \
 		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)
@@ -385,10 +390,12 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
+		uint32_t mymask = mask; \
 		rtems_interrupt_disable( level); \
 		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
-		val &= ~mask; \
-		val |= bits; \
+		val &= ~mymask; \
+		val |= mybits; \
 		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)
@@ -403,9 +410,10 @@ static inline void ppc_set_decrementer_register( uint32_t dec)
 	do { \
 		rtems_interrupt_level level; \
 		uint32_t val; \
+		uint32_t mybits = bits; \
 		rtems_interrupt_disable( level); \
 		val = PPC_DEVICE_CONTROL_REGISTER( dcr); \
-		val &= ~bits; \
+		val &= ~mybits; \
 		PPC_SET_DEVICE_CONTROL_REGISTER( dcr, val); \
 		rtems_interrupt_enable( level); \
 	} while (0)

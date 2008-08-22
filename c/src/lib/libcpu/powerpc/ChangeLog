@@ -1,3 +1,8 @@
+2008-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h: Fixed parameter evaluation in
+	special purpose register macros.
+
 2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc55xx/fec/fec.c: Added copyright information.
