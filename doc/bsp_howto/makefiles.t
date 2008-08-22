@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -27,11 +27,9 @@ of four phases as shown here:
 @end example
 @end ifset
 
-
 @ifset use-tex
 @image{Developer-User-Timeline,6in,,Developer User Timeline,.png}
 @c      @image{FILENAME[, WIDTH[, HEIGHT[, ALTTEXT[, EXTENSION]]]]}
-
 @end ifset
 
 @ifset use-html

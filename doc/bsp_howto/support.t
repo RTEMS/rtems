@@ -18,29 +18,19 @@ file from the PowerPC psim BSP:
 
 @example
 @group
-%rename cpp old_cpp
-%rename lib old_lib
 %rename endfile old_endfile
 %rename startfile old_startfile
 %rename link old_link
 
-*cpp:
-%(old_cpp) %@{qrtems: -D__embedded__@} -Asystem(embedded)
-
-*lib:
-%@{!qrtems: %(old_lib)@} %@{qrtems: --start-group \
-%@{!qrtems_debug: -lrtemsall@} %@{qrtems_debug: -lrtemsall_g@} \
--lc -lgcc --end-group  ecrtn%O%s \
-%@{!qnolinkcmds: -T linkcmds%s@}@}
-
 *startfile:
-%@{!qrtems: %(old_startfile)@} %@{qrtems:  ecrti%O%s \
-%@{!qrtems_debug: startsim.o%s@} \
-%@{qrtems_debug: startsim_g.o%s@}@}
+%@{!qrtems: %(old_startfile)@} \
+%@{!nostdlib: %@{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s start.o%s@}@}
 
 *link:
-%@{!qrtems: %(old_link)@} %@{qrtems: -Qy -dp -Bstatic \
--T linkcmds%s -e _start -u __vectors@}
+%@{!qrtems: %(old_link)@} %@{qrtems: -Qy -dp -Bstatic -e _start -u __vectors@}
+
+*endfile:
+%@{!qrtems: %(old_endfile)@} %@{qrtems: crtend.o%s ecrtn.o%s@}
 @end group
 @end example
 
@@ -50,26 +40,19 @@ embedded their original definition.  The subsequent sections
 specify what behavior is expected when the @code{-qrtems} or
 @code{-qrtems_debug} option is specified.  
 
-The @code{*cpp} definition specifies that when @code{-qrtems}
-is specified, predefine the preprocessor symbol @code{__embedded__}.
-
-The @code{*lib} section insures that the RTEMS library, BSP specific
-linker script, gcc support library, and the EABI specific @code{ecrtn}
-file are used.
-
 The @code{*startfile} section specifies that the BSP specific file
-@code{startsim.o} will be used instead of @code{crt0.o}.  In addition,
-the EABI specific file @code{ecrti.o} will be linked in with the
-executable.
+@code{start.o} will be used instead of @code{crt0.o}.  In addition,
+various EABI support files (@code{ecrti.o} etc.) will be linked in with
+the executable.
 
-The @code{*link} section specifies the arguments that will be passed to
-the linker.
+The @code{*link} section adds some arguments to the linker when it is
+invoked by GCC to link an application for this BSP.
 
 The format of this file is specific to the GNU Compiler Suite.  The
 argument used to override and extend the compiler built-in specifications
-is relatively new to the toolset.  The @code{-specs} option is present
-in all @code{egcs} distributions and @code{gcc} distributions starting
-with version 2.8.0.
+is available in all recent GCC versions.  The @code{-specs} option is
+present in all @code{egcs} distributions and @code{gcc} distributions
+starting with version 2.8.0.
 
 @section README Files
 
@@ -126,16 +109,11 @@ as a starting point.
 Many @code{bsp.h} files provide prototypes of variables defined
 in the linker script (@code{linkcmds}).
 
-There are a number of fields in this file that are used only by the 
-RTEMS Test Suites.  The following is a list of these:
+@section tm27.h Include File
+
+The @code{tm27} test from the RTEMS Timing Test Suite is designed to measure the length of time required to vector to and return from an interrupt handler. This test requires some help from the BSP to know how to cause and manipulate the interrupt source used for this measurement.  The following is a list of these:
 
 @itemize @bullet
-@item @code{MAX_LONG_TEST_DURATION} - the longest length of time a 
-"long running" test should run.
-
-@item @code{MAX_SHORT_TEST_DURATION} - the longest length of time a
-"short running" test should run.
-
 @item @code{MUST_WAIT_FOR_INTERRUPT} - modifies behavior of @code{tm27}.
 
 @item @code{Install_tm27_vector} - installs the interrupt service 
@@ -153,6 +131,14 @@ can generate a nested interrupt.
 
 @end itemize
 
+All members of the Timing Test Suite are designed to run @b{WITHOUT}
+the Clock Device Driver installed.  This increases the predictability
+of the tests' execution as well as avoids occassionally including the
+overhead of a clock tick interrupt in the time reported.  Because of
+this it is sometimes possible to use the clock tick interrupt source
+as the source of this test interrupt.  On other architectures, it is
+possible to directly force an interrupt to occur.
+
 @section Calling Overhead File
 
 The file @code{include/coverhd.h} contains the overhead associated
@@ -168,40 +154,35 @@ The numbers in this file are obtained by running the "Timer Overhead"
 overhead is subtracted from the directive execution times reported by
 the Timing Suite.
 
+There is a shared implementation of @code{coverhd.h} which sets all of
+the overhead constants to 0.  On faster processors, this is usually the
+best alternative for the BSP as the calling overhead is extremely small.
+This file is located at:
+
+@example
+c/src/lib/libbsp/shared/include/coverhd.h
+@end example
+
 @section sbrk() Implementation
 
-If the BSP wants to dynamically extend the heap used by the
-C Library memory allocation routines (i.e. @code{malloc} family),
-then this routine must be functional.  The following is the 
-prototype for this routine:
+Although nearly all BSPs give all possible memory to the C Program Heap
+at initialization, it is possible for a BSP to configure the initial
+size of the heap small and let it grow on demand.  If the BSP wants
+to dynamically extend the heap used by the C Library memory allocation
+routines (i.e. @code{malloc} family), then the@code{sbrk} routine must
+be functional.  The following is the prototype for this routine:
 
 @example
 void * sbrk(size_t increment)
 @end example
 
 The @code{increment} amount is based upon the @code{sbrk_amount}
-parameter passed to the @code{RTEMS_Malloc_Initialize} during system
-initialization.
-See @ref{Initialization Code RTEMS Pretasking Callback} for more
-information.
+parameter passed to the @code{bsp_libc_init} during system initialization.
+Historically initialization of the C Library was done as part of the
+BSP's Pretasking Hook but now the BSP Boot Card Framework can perform
+this operation.
 
-There is a default implementation which returns an error to indicate
-that the heap can not be extended.  This implementation can be
-found in @code{c/src/lib/libbsp/shared/sbrk.c}.  Many of the BSPs
-use this shared implementation.  In order to use this implementation,
-the file @code{Makefile.am} in the BSP's @code{startup} directory
-must be modified so that the @code{$VPATH} variable searches
-both the @code{startup} directory and the shared directory.  The following
-illustates the @code{VPATH} setting in the PowerPC psim BSP's 
-@code{startup/Makefile.am}:
-
-@example
-VPATH = @@srcdir@@:@@srcdir@@/../../../shared
-@end example
-
-This instructs make to look in all of the directories in the @code{VPATH}
-for the source files.  The directories will be examined in the order
-they are specified.
+If your BSP does not want to support dynamic heap extension, then you do not have to do anything special.  However, if you want to support @code{sbrk}, you must provide an implementation of this method and define @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} in @code{bsp.h}.  This informs @code{rtems/confdefs.h} to configure the Malloc Family Extensions which support @code{sbrk}.
 
 @section bsp_cleanup() - Cleanup the Hardware
 
@@ -215,20 +196,28 @@ c/src/lib/libbsp/shared/bspclean.c
 
 The @code{bsp_cleanup()} routine can be used to return to a ROM monitor,
 insure that interrupt sources are disabled, etc..  This routine is the
-last place to insure a clean shutdown of the hardware.
+last place to insure a clean shutdown of the hardware.  On some BSPs,
+it prints a message indicating that the application completed execution
+and waits for the user to press a key before resetting the board.
+The PowerPC/gen83xx and PowerPC/gen5200 BSPs do this when they are built
+to support the FreeScale evaluation boards.  This is convenient when
+using the boards in a development environment and may be disabled for
+production use.
 
 @section set_vector() - Install an Interrupt Vector
 
-The @code{set_vector} routine is responsible for installing an interrupt
-vector.  It invokes the support routines necessary to install an
-interrupt handler as either a "raw" or an RTEMS interrupt handler.  Raw
-handlers bypass the RTEMS interrupt structure and are responsible for 
-saving and restoring all their own registers.  Raw handlers are useful
-for handling traps, debug vectors, etc..
+On targets with Simple Vectored Interrupts, the BSP must provide
+an implementation of the @code{set_vector} routine.  This routine is
+responsible for installing an interrupt vector.  It invokes the support
+routines necessary to install an interrupt handler as either a "raw"
+or an RTEMS interrupt handler.  Raw handlers bypass the RTEMS interrupt
+structure and are responsible for saving and restoring all their own
+registers.  Raw handlers are useful for handling traps, debug vectors,
+etc..
 
-The @code{set_vector} routine is a central place to perform 
-interrupt controller manipulation and encapsulate that information.  
-It is usually implemented as follows:
+The @code{set_vector} routine is a central place to perform interrupt
+controller manipulation and encapsulate that information.  It is usually
+implemented as follows:
 
 @example
 @group
@@ -251,7 +240,8 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 @end group
 @end example
 
-
-@b{NOTE:}  @code{set_vector} is provided by the majority of BSPs but
-not all.  In particular, the i386 BSPs use a different scheme.  
+@b{NOTE:}  The i386, PowerPC and ARM ports use a Programmable
+Interrupt Controller model which does not require the BSP to implement
+@code{set_vector}.  BSPs for these architectures must provide a different
+set of support routines.
 
