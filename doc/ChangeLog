@@ -1,5 +1,9 @@
 2008-08-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bsp_howto/init.t: Eliminate empty section.
+
+2008-08-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bsp_howto/init.t: Complete update.
 
 2008-08-22	Joel Sherrill <joel.sherrill@oarcorp.com>

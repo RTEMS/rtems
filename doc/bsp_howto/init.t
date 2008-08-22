@@ -425,9 +425,7 @@ data will take value 0).
 
 @end itemize
 
-@section RTEMS-Specific Initialization
-
-@section The RTEMS configuration table
+@section The RTEMS Configuration Table
 
 The RTEMS configuration table contains the maximum number of objects RTEMS
 can handle during the application (e.g. maximum number of tasks,
