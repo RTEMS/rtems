@@ -37,11 +37,51 @@ extern void rtems_irq_prologue_13(void);
 extern void rtems_irq_prologue_14(void);
 extern void rtems_irq_prologue_15(void);
 /*
- * default idt vector
+ * default vectors
  */
 extern void default_raw_idt_handler(void);
 
+/*
+ * default raw on/off function
+ */
+static void raw_nop_func(const struct __rtems_raw_irq_connect_data__ *unused)
+{
+}
+
+/*
+ * default raw isOn function
+ */
+static int raw_not_connected(
+  const struct __rtems_raw_irq_connect_data__ *unused
+)
+{
+  return 0;
+}
+
 static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
+
+/*
+ * default IRQ handler
+ */
+static void irq_default_handler(rtems_irq_hdl_param unused)
+{
+}
+
+/*
+ * default IRQ on/off function
+ */
+static void irq_nop_func(const struct __rtems_irq_connect_data__ *unused)
+{
+}
+
+/*
+ * default irq isOn function
+ */
+static int irq_not_connected( const struct __rtems_irq_connect_data__ *unused)
+{
+  return 0;
+}
+
 
 /*
  * Table used to store rtems managed interrupt handlers.
@@ -68,13 +108,20 @@ static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
 };
 
 static rtems_raw_irq_connect_data 	defaultRawIrq = {
-  /* vectorIdex, hdl			 , on	, off , isOn */
-  0, 		 default_raw_idt_handler ,NULL	, NULL,	NULL
+  0,                       /* vectorIdex */
+  default_raw_idt_handler, /* hdl */
+  raw_nop_func,            /* on */
+  raw_nop_func,            /* off */
+  raw_not_connected        /* isOn */
 };
 
 static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex, hdl	, handle, on,   off,  isOn */
-  0, 		 NULL	, 0	, NULL, NULL, NULL
+  0,                     /* vectorIdex */
+  irq_default_handler,   /* hdl */
+  0,                     /* handle */
+  irq_nop_func,          /* on */
+  irq_nop_func,          /* off */
+  irq_not_connected      /* isOn */
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={

@@ -1,3 +1,8 @@
+2008-08-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq_init.c: Reverse previous incorrect changes. Correct
+	warnings and ensure BSP still works.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/comm/i386-stub.c, shared/irq/irq_init.c: Fix warnings for
