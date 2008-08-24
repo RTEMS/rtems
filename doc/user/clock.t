@@ -112,8 +112,9 @@ type Clock_Time_Value is
 @end example
 @end ifset
 
-The seconds field in this @value{STRUCTURE} is the number of
-seconds since the RTEMS epoch of January 1, 1988.
+The seconds field in this @value{STRUCTURE} is the number of seconds
+since the POSIX epoch of January 1, 1970 but will never be prior to
+the RTEMS epoch of January 1, 1988.
 
 @subsection Clock Tick and Timeslicing
 
