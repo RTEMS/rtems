@@ -1,3 +1,7 @@
+2008-08-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/clock.t: Correct discussion of timeval.
+
 2008-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/datatypes.t: Add rtems_name. Add comment about
