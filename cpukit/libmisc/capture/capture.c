@@ -1074,7 +1074,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
  * resources.
  */
 rtems_status_code
-rtems_capture_close ()
+rtems_capture_close (void)
 {
   rtems_interrupt_level    level;
   rtems_capture_task_t*    task;
@@ -1413,7 +1413,7 @@ rtems_capture_watch_global (rtems_boolean enable)
  * This function returns the global watch state.
  */
 rtems_boolean
-rtems_capture_watch_global_on ()
+rtems_capture_watch_global_on (void)
 {
   return capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH ? 1 : 0;
 }
@@ -1443,7 +1443,7 @@ rtems_capture_watch_ceiling (rtems_task_priority ceiling)
  * This function gets the watch ceiling.
  */
 rtems_task_priority
-rtems_capture_watch_get_ceiling ()
+rtems_capture_watch_get_ceiling (void)
 {
   return capture_ceiling;
 }
@@ -1473,7 +1473,7 @@ rtems_capture_watch_floor (rtems_task_priority floor)
  * This function gets the watch floor.
  */
 rtems_task_priority
-rtems_capture_watch_get_floor ()
+rtems_capture_watch_get_floor (void)
 {
   return capture_floor;
 }
@@ -1857,7 +1857,7 @@ rtems_capture_release (uint32_t count)
  * This function returns the tick period in nano-seconds.
  */
 uint32_t
-rtems_capture_tick_time ()
+rtems_capture_tick_time (void)
 {
   return capture_tick_period;
 }
@@ -1888,7 +1888,7 @@ rtems_capture_event_text (int event)
  * capture engine has detected.
  */
 rtems_capture_task_t*
-rtems_capture_get_task_list ()
+rtems_capture_get_task_list (void)
 {
   return capture_tasks;
 }
@@ -1938,7 +1938,7 @@ rtems_capture_task_stack_usage (rtems_capture_task_t* task)
  * capture engine.
  */
 rtems_capture_control_t*
-rtems_capture_get_control_list ()
+rtems_capture_get_control_list (void)
 {
   return capture_controls;
 }

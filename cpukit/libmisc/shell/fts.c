@@ -98,10 +98,10 @@ static int	 fts_safe_changedir __P((const FTS *, const FTSENT *, int,
 #endif
 
 FTS *
-fts_open(argv, options, compar)
-	char * const *argv;
-	int options;
-	int (*compar) __P((const FTSENT **, const FTSENT **));
+fts_open(
+	char * const *argv,
+	int options,
+	int (*compar) (const FTSENT **, const FTSENT **) )
 {
 	FTS *sp;
 	FTSENT *p, *root;
@@ -215,9 +215,9 @@ mem1:	free(sp);
 }
 
 static void
-fts_load(sp, p)
-	FTS *sp;
-	FTSENT *p;
+fts_load(
+	FTS *sp,
+	FTSENT *p)
 {
 	size_t len;
 	char *cp;
@@ -244,8 +244,8 @@ fts_load(sp, p)
 }
 
 int
-fts_close(sp)
-	FTS *sp;
+fts_close(
+	FTS *sp)
 {
 	FTSENT *freep, *p;
 	int saved_errno = 0;
@@ -303,8 +303,8 @@ fts_close(sp)
 	    ? p->fts_pathlen - 1 : p->fts_pathlen)
 
 FTSENT *
-fts_read(sp)
-	FTS *sp;
+fts_read(
+	FTS *sp )
 {
 	FTSENT *p, *tmp;
 	int instr;
@@ -506,10 +506,10 @@ name:		t = sp->fts_path + NAPPEND(p->fts_parent);
  */
 /* ARGSUSED */
 int
-fts_set(sp, p, instr)
-	FTS *sp;
-	FTSENT *p;
-	int instr;
+fts_set(
+	FTS *sp,
+	FTSENT *p,
+	int instr)
 {
 
 	_DIAGASSERT(sp != NULL);
@@ -525,9 +525,9 @@ fts_set(sp, p, instr)
 }
 
 FTSENT *
-fts_children(sp, instr)
-	FTS *sp;
-	int instr;
+fts_children(
+	FTS *sp,
+	int instr )
 {
 	FTSENT *p;
 	int fd;
@@ -611,9 +611,9 @@ fts_children(sp, instr)
  * been found, cutting the stat calls by about 2/3.
  */
 static FTSENT *
-fts_build(sp, type)
-	FTS *sp;
-	int type;
+fts_build(
+	FTS *sp,
+	int type)
 {
 	struct dirent *dp;
 	FTSENT *p, *head;
@@ -860,10 +860,10 @@ mem1:				saved_errno = errno;
 }
 
 static u_short
-fts_stat(sp, p, follow)
-	FTS *sp;
-	FTSENT *p;
-	int follow;
+fts_stat(
+	FTS *sp,
+	FTSENT *p,
+	int follow )
 {
 	FTSENT *t;
 	dev_t dev;
@@ -946,10 +946,10 @@ err:		memset(sbp, 0, sizeof(*sbp));
 }
 
 static FTSENT *
-fts_sort(sp, head, nitems)
-	FTS *sp;
-	FTSENT *head;
-	size_t nitems;
+fts_sort(
+	FTS *sp,
+	FTSENT *head,
+	size_t nitems )
 {
 	FTSENT **ap, *p;
 
@@ -983,10 +983,10 @@ fts_sort(sp, head, nitems)
 }
 
 static FTSENT *
-fts_alloc(sp, name, namelen)
-	FTS *sp;
-	const char *name;
-	size_t namelen;
+fts_alloc(
+	FTS *sp,
+	const char *name,
+	size_t namelen )
 {
 	FTSENT *p;
 	size_t len;
@@ -1037,8 +1037,8 @@ fts_alloc(sp, name, namelen)
 }
 
 static void
-fts_lfree(head)
-	FTSENT *head;
+fts_lfree(
+	FTSENT *head )
 {
 	FTSENT *p;
 
@@ -1057,8 +1057,8 @@ fts_lfree(head)
 }
 
 static size_t
-fts_pow2(x)
-	size_t x;
+fts_pow2(
+	size_t x )
 {
 
 	x--;
@@ -1084,9 +1084,9 @@ fts_pow2(x)
  * so we don't realloc the path 2 bytes at a time. 
  */
 static int
-fts_palloc(sp, size)
-	FTS *sp;
-	size_t size;
+fts_palloc(
+	FTS *sp,
+	size_t size )
 {
 	char *new;
 
@@ -1113,9 +1113,9 @@ fts_palloc(sp, size)
  * already returned.
  */
 static void
-fts_padjust(sp, head)
-	FTS *sp;
-	FTSENT *head;
+fts_padjust(
+	FTS *sp,
+	FTSENT *head )
 {
 	FTSENT *p;
 	char *addr;
@@ -1143,8 +1143,8 @@ fts_padjust(sp, head)
 }
 
 static size_t
-fts_maxarglen(argv)
-	char * const *argv;
+fts_maxarglen(
+	char * const *argv )
 {
 	size_t len, max;
 
@@ -1162,11 +1162,11 @@ fts_maxarglen(argv)
  * Assumes p->fts_dev and p->fts_ino are filled in.
  */
 static int
-fts_safe_changedir(sp, p, fd, path)
-	const FTS *sp;
-	const FTSENT *p;
-	int fd;
-	const char *path;
+fts_safe_changedir(
+	const FTS *sp,
+	const FTSENT *p,
+	int fd,
+	const char *path)
 {
 	int oldfd = fd, ret = -1;
 	__fts_stat_t sb;
