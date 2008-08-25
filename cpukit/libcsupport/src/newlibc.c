@@ -59,7 +59,7 @@ extern struct _reent    libc_global_reent __ATTRIBUTE_IMPURE_PTR__;
  * Memory is also now allocated from the workspace rather than the heap.
  *  -- ptorre 9/30/03
  */
-rtems_boolean libc_create_hook(
+bool libc_create_hook(
   rtems_tcb *current_task,
   rtems_tcb *creating_task
 )

@@ -254,7 +254,7 @@ cleanup_and_bail:
  *  mount table chain.
  */
 
-int init_fs_mount_table()
+int init_fs_mount_table(void)
 {
   rtems_chain_initialize_empty ( &rtems_filesystem_mount_table_control );
   return 0;

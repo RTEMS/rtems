@@ -73,9 +73,9 @@ static char sccsid[] = "@(#)getcwd.c	5.11 (Berkeley) 2/24/91";
 #ifndef _REENT_ONLY
 
 char *
-getcwd (pt, size)
-     char *pt;
-     size_t size;
+getcwd (
+     char *pt,
+     size_t size)
 {
   register struct dirent *dp;
   register DIR *dir = 0;

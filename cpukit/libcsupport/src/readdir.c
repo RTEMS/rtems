@@ -57,8 +57,8 @@ int getdents(
  * get next entry in a directory.
  */
 struct dirent *
-readdir(dirp)
-register DIR *dirp; {
+readdir( DIR *dirp )
+{
   register struct dirent *dp;
 
   if ( !dirp )

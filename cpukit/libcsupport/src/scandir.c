@@ -73,11 +73,11 @@ static char sccsid[] = "@(#)scandir.c	5.10 (Berkeley) 2/23/91";
     ((sizeof (struct dirent) - (NAME_MAX+1)) + (((dp)->d_namlen+1 + 3) &~ 3))
 
 int
-scandir(dirname, namelist, select, dcomp)
-	const char *dirname;
-	struct dirent ***namelist;
-	int (*select)(struct dirent *);
-	int (*dcomp)(const struct dirent **, const struct dirent **);
+scandir(
+	const char *dirname,
+	struct dirent ***namelist,
+	int (*select)(struct dirent *),
+	int (*dcomp)(const struct dirent **, const struct dirent **))
 {
 	register struct dirent *d = NULL;
 	register struct dirent *p = NULL;

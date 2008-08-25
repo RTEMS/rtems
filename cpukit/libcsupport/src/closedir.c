@@ -57,8 +57,8 @@ static char sccsid[] = "@(#)closedir.c	5.9 (Berkeley) 2/23/91";
  * close a directory.
  */
 int
-closedir(dirp)
-	register DIR *dirp;
+closedir(
+	DIR *dirp )
 {
 	int fd;
 
