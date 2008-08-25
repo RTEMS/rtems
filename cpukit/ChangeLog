@@ -1,5 +1,6 @@
 2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/malloc_boundary.c: Use %zi to print size_t.
 	* libmisc/capture/capture.c, libmisc/shell/fts.c:
 	Stop using old-style function-definitions.
 
