@@ -1,3 +1,8 @@
+2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/capture/capture.c, libmisc/shell/fts.c:
+	Stop using old-style function-definitions.
+
 2008-08-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/diskdevs.h,
