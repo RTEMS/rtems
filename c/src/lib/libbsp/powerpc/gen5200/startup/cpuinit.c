@@ -65,57 +65,51 @@
 /*                                                                     */
 /***********************************************************************/
 
-#include <bsp.h>
-#include <rtems/powerpc/registers.h>
-#include "../include/mpc5200.h"
-
-#include <libcpu/mmu.h>
-#include <libcpu/spr.h>
+#include <stdbool.h>
 #include <string.h>
 
-/* Macros for HID0 access */
-#define SET_HID0(r)   __asm__ volatile ("mtspr 0x3F0,%0\n" ::"r"(r))
-#define GET_HID0(r)   __asm__ volatile ("mfspr %0,0x3F0\n" :"=r"(r))
+#include <libcpu/powerpc-utility.h>
+#include <libcpu/mmu.h>
 
-#define DBAT_MTSPR(val,name) __MTSPR(val,name);
-#define SET_DBAT(n,uv,lv) {DBAT_MTSPR(uv,DBAT##n##U);DBAT_MTSPR(lv,DBAT##n##L);}
-void calc_dbat_regvals(BAT *bat_ptr,
-		       uint32_t base_addr,
-		       uint32_t size,
-		       boolean flg_w,
-		       boolean flg_i,
-		       boolean flg_m,
-		       boolean flg_g,
-		       boolean flg_bpp)
+#include <bsp.h>
+#include <bsp/mpc5200.h>
+
+#define SET_DBAT( n, uv, lv) \
+  do { \
+    PPC_SET_SPECIAL_PURPOSE_REGISTER( DBAT##n##L, lv); \
+    PPC_SET_SPECIAL_PURPOSE_REGISTER( DBAT##n##U, uv); \
+  } while (0)
+
+static void calc_dbat_regvals(
+  BAT *bat_ptr,
+  uint32_t base_addr,
+  uint32_t size,
+  bool flg_w,
+  bool flg_i,
+  bool flg_m,
+  bool flg_g,
+  uint32_t flg_bpp
+)
 {
-  uint32_t block_mask;
-  uint32_t end_addr;
+  uint32_t block_mask = 0xffffffff;
+  uint32_t end_addr = base_addr + size - 1;
 
-  /*
-   * clear dbat
-   */
-  memset(bat_ptr, 0,sizeof(BAT));
-
-  /*
-   * determine block mask, that overlaps the whole block
-   */
-  end_addr = base_addr+size-1;
-  block_mask = ~0;
+  /* Determine block mask, that overlaps the whole block */
   while ((end_addr & block_mask) != (base_addr & block_mask)) {
     block_mask <<= 1;
   }
   
-  bat_ptr->batu.bepi  = base_addr  >> (32-15); 
-  bat_ptr->batu.bl    = ~(block_mask >> (28-11));
-  bat_ptr->batu.vs    = 1;
-  bat_ptr->batu.vp    = 1;
+  bat_ptr->batu.bepi = base_addr >> (32 - 15); 
+  bat_ptr->batu.bl   = ~(block_mask >> (28 - 11));
+  bat_ptr->batu.vs   = 1;
+  bat_ptr->batu.vp   = 1;
   
-  bat_ptr->batl.brpn  = base_addr  >> (32-15); 
-  bat_ptr->batl.w  = flg_w; 
-  bat_ptr->batl.i  = flg_i; 
-  bat_ptr->batl.m  = flg_m; 
-  bat_ptr->batl.g  = flg_g; 
-  bat_ptr->batl.pp = flg_bpp; 
+  bat_ptr->batl.brpn = base_addr  >> (32 - 15); 
+  bat_ptr->batl.w    = flg_w; 
+  bat_ptr->batl.i    = flg_i; 
+  bat_ptr->batl.m    = flg_m; 
+  bat_ptr->batl.g    = flg_g; 
+  bat_ptr->batl.pp   = flg_bpp; 
 }
 
 #if defined (BRS5L)
@@ -190,22 +184,14 @@ void cpu_init_bsp(void)
 #warning "Using BAT register values set by environment"
 #endif
 
-
-
 void cpu_init(void)
 {
-  register unsigned long reg;
+  uint32_t msr;
 
-  /*
-   * Enable instruction cache
-   */
-  GET_HID0(reg);
-  reg |= HID0_ICE;
-  SET_HID0(reg);
+  /* Enable instruction cache */
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICE);
 
-  /*
-   * set up DBAT registers in MMU
-   */
+  /* Set up DBAT registers in MMU */
   cpu_init_bsp();
 
   #if defined(SHOW_MORE_INIT_SETTINGS)
@@ -214,17 +200,19 @@ void cpu_init(void)
     }
   #endif
 
-  /*
-   * enable data MMU in MSR
-   */
-  _write_MSR(_read_MSR() | MSR_DR);
+  /* Read MSR */
+  msr = ppc_machine_state_register();
+
+  /* Enable data MMU in MSR */
+  msr |= MSR_DR;
+
+  /* Update MSR */
+  ppc_set_machine_state_register( msr);
 
   /* 
-   * enable data cache 
+   * Enable data cache.
    *
-   * NOTE: TRACE32 now supports data cache for MGT5x00
+   * NOTE: TRACE32 now supports data cache for MGT5x00.
    */
-  GET_HID0(reg);
-  reg |= HID0_DCE;
-  SET_HID0(reg);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_DCE);
 }

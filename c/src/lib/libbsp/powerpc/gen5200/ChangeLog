@@ -1,3 +1,8 @@
+2008-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/cpuinit.h: Uses now powerpc-utility.h.  Changed invalid usage
+	of a boolean type to a proper integer type in calc_dbat_regvals().
+
 2008-08-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/clock.c, irq/irq_init.c, vectors/vectors.h,
