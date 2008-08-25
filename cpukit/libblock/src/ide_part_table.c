@@ -91,7 +91,7 @@ get_sector(dev_t dev, uint32_t sector_num, rtems_sector_data_t **sector)
  * RETURNS:
  *      TRUE if sector has msdos signature, FALSE otherwise
  */
-static rtems_boolean
+static bool
 msdos_signature_check (rtems_sector_data_t *sector)
 {
     uint8_t *p = sector->data + RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_OFFSET;
@@ -111,7 +111,7 @@ msdos_signature_check (rtems_sector_data_t *sector)
  * RETURNS:
  *      TRUE if partition type is extended, FALSE otherwise
  */
-static rtems_boolean
+static bool
 is_extended(uint8_t type)
 {
     return ((type == EXTENDED_PARTITION) || (type == LINUX_EXTENDED));
@@ -127,7 +127,7 @@ is_extended(uint8_t type)
  * RETURNS:
  *      TRUE if partition type is extended, FALSE otherwise
  */
-static rtems_boolean
+static bool
 is_fat_partition(uint8_t type)
 {
   static const uint8_t fat_part_types[] = {

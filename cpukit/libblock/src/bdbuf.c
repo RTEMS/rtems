@@ -2440,7 +2440,7 @@ rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
   rtems_bdbuf_pool* p;
   rtems_bdpool_id   i;
   rtems_bdpool_id   curid = -1;
-  rtems_boolean     found = FALSE;
+  bool              found = FALSE;
   uint32_t          cursize = UINT_MAX;
   int               j;
 

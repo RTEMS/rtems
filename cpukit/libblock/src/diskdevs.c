@@ -51,7 +51,7 @@ static boolean disk_io_initialized = FALSE;
  * semaphore-protected code. If it is not set (very-very frequent case),
  * we can do lookup safely, enable interrupts and return result.
  */
-static volatile rtems_boolean diskdevs_protected;
+static volatile bool diskdevs_protected;
 
 /* create_disk_entry --
  *     Return pointer to the disk_entry structure for the specified device, or

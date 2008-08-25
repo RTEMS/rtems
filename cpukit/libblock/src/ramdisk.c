@@ -37,8 +37,8 @@ struct ramdisk {
     int           block_size; /* RAM disk block size */
     int           block_num;  /* Number of blocks on this RAM disk */
     void         *area;       /* RAM disk memory area */
-    rtems_boolean initialized;/* RAM disk is initialized */
-    rtems_boolean malloced;   /* != 0, if memory allocated by malloc for this
+    bool          initialized;/* RAM disk is initialized */
+    bool          malloced;   /* != 0, if memory allocated by malloc for this
                                  RAM disk */
 #if RTEMS_RAMDISK_TRACE
     int           info_level; /* Trace level */
