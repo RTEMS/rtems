@@ -1,5 +1,11 @@
 2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/bdbuf.c, libblock/src/diskdevs.c,
+	libblock/src/ide_part_table.c, libblock/src/ramdisk.c:
+	s/rtems_boolean/bool/g.
+
+2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmd/md4.c, libmd/md5.c:
 	Stop using old-style function-definitions.
 	* libcsupport/src/closedir.c, libcsupport/src/getcwd.c,
