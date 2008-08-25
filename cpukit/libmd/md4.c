@@ -88,8 +88,8 @@
 ** This is a user-callable routine.
 */
 void
-MD4Print(MDp)
-MD4_CTX *MDp;
+MD4Print(
+  MD4_CTX *MDp)
 {
   int i,j;
   for (i=0;i<4;i++)
@@ -102,8 +102,8 @@ MD4_CTX *MDp;
 ** This is a user-callable routine.
 */
 void
-MD4Init(MDp)
-MD4_CTX *MDp;
+MD4Init(
+  MD4_CTX *MDp)
 {
   int i;
   MDp->buffer[0] = I0;
