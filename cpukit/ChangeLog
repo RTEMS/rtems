@@ -1,5 +1,7 @@
 2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmd/md4.c, libmd/md5.c:
+	Stop using old-style function-definitions.
 	* libcsupport/src/closedir.c, libcsupport/src/getcwd.c,
 	libcsupport/src/mount.c, libcsupport/src/newlibc.c,
 	libcsupport/src/opendir.c, libcsupport/src/readdir.c,
