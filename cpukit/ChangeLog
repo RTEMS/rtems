@@ -1,3 +1,8 @@
+2008-08-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* libbcsupport/src/printk_plugin.c: properly terminate va_list
+	processing with va_end
+
 2008-08-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* pppd/auth.c, pppd/ccp.c, pppd/chap.c, pppd/chat.c,

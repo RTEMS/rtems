@@ -259,6 +259,20 @@ void cpu_init( void)
   );
   SET_DBAT( 2, dbat.batu, dbat.batl);
 
+#if defined(HSC_CM01)
+  calc_dbat_regvals(
+    &dbat,
+    FPGA_START,
+    FPGA_SIZE,
+    true,
+    true,
+    true,
+    false,
+    BPP_RW
+  );
+  SET_DBAT(3,dbat.batu,dbat.batl);
+#endif
+
 #ifdef MPC8313ERDB
   /* Enhanced Local Bus Controller (eLBC) */
   calc_dbat_regvals(

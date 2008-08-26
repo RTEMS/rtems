@@ -67,7 +67,7 @@ typedef struct m83xxSysConRegisters_ {
   volatile uint32_t sicrl;                /* 0x0_0114 I/O configuration register low (SICRL) R/W 0x0000_0000 5.3.2.5/5-21 */
   volatile uint32_t sicrh;                /* 0x0_0118 I/O configuration register high (SICRH) R/W 0x0000_00007 5.3.2.6/5-24 */
   uint8_t reserved0_011C[0x00128-0x0011C];/* 0x0_011C--0x0_0128  Reserved    */
-  volatile uint32_t ddrcdr;               /* 0x0_0128 control driver register (DDRCDR) R/W 0x0004_0000 5.3.2.8/5-28 */
+  volatile uint32_t ddrcdr;               /* 0x0_0128 control driver register (DDRCDR) R/W 0x7304_0001 5.3.2.8/5-28 */
   volatile uint32_t ddrdsr;               /* 0x0_012C debug status register (DDRDSR) R 0x3300_0000 5.3.2.9/5-30 */
   uint8_t reserved0_0130[0x00200-0x00130];/* 0x0_0130--0x0_01FC  Reserved    */
 } m83xxSysConRegisters_t;
@@ -421,7 +421,7 @@ typedef struct m83xxDMARegisters_ {
   volatile uint32_t imisr;                /* 0x0_8080 Inbound message interrupt status register R/W 0x0000_0000 12.4.6/12-9 */
   volatile uint32_t imimr;                /* 0x0_8084 Inbound message interrupt mask register R/W 0x0000_0000 12.4.7/12-11 */
   uint8_t reserved0_8088[0x080A8-0x08088];/* 0x0_8088-0x0_80A7 Reserved */
-  struct {
+  struct m83xxDMAChannelRegisters_ {
     uint8_t reserved0_80A8[0x08100-0x080A8];/* 0x0_80A8-0x0_80FF Reserved */
     volatile uint32_t dmamr0;               /* 0x0_8100 DMA 0 mode register R/W 0x0000_0000 12.4.8.1/12-12 */
     volatile uint32_t dmasr0;               /* 0x0_8104 DMA 0 status register R/W 0x0000_0000 12.4.8.2/12-14 */
@@ -437,6 +437,65 @@ typedef struct m83xxDMARegisters_ {
   volatile uint32_t dmagsr;                 /* 0x0_82A8 DMA general status register R 0x0000_0000 12.4.8.8/12-18 */
   uint8_t reserved0_82AC[0x082FF-0x082AC];  /* 0x0_82AC-0x0_82FF Reserved, should be cleared */
 } m83xxDMARegisters_t;
+
+/* Registers in DMA section use little-endian byte order */
+
+/* DMA mode register */
+#define MPC83XX_DMAMR_DRCNT_1               (5 << 24)
+#define MPC83XX_DMAMR_DRCNT_2               (6 << 24)
+#define MPC83XX_DMAMR_DRCNT_4               (7 << 24)
+#define MPC83XX_DMAMR_DRCNT_8               (8 << 24)
+#define MPC83XX_DMAMR_DRCNT_16              (9 << 24)
+#define MPC83XX_DMAMR_DRCNT_32              (0xA << 24)
+
+#define MPC83XX_DMAMR_BWC_1                 (0 << 21)
+#define MPC83XX_DMAMR_BWC_2                 (1 << 21)
+#define MPC83XX_DMAMR_BWC_4                 (2 << 21)
+#define MPC83XX_DMAMR_BWC_8                 (3 << 21)
+#define MPC83XX_DMAMR_BWC_16                (4 << 21)
+
+#define MPC83XX_DMAMR_DMSEN                 (1 << 20)
+#define MPC83XX_DMAMR_IRQS                  (1 << 19)
+#define MPC83XX_DMAMR_EMSEN                 (1 << 18)
+
+#define MPC83XX_DMAMR_DAHTS_1               (0 << 16)
+#define MPC83XX_DMAMR_DAHTS_2               (1 << 16)
+#define MPC83XX_DMAMR_DAHTS_4               (2 << 16)
+#define MPC83XX_DMAMR_DAHTS_8               (3 << 16)
+
+#define MPC83XX_DMAMR_SAHTS_1               (0 << 14)
+#define MPC83XX_DMAMR_SAHTS_2               (1 << 14)
+#define MPC83XX_DMAMR_SAHTS_4               (2 << 14)
+#define MPC83XX_DMAMR_SAHTS_8               (3 << 14)
+
+#define MPC83XX_DMAMR_DAHE                  (1 << 13)
+#define MPC83XX_DMAMR_SAHE                  (1 << 12)
+
+#define MPC83XX_DMAMR_PRC_PCI_READ          (0 << 10)
+#define MPC83XX_DMAMR_PRC_PCI_READ_LINE     (1 << 10)
+#define MPC83XX_DMAMR_PRC_PCI_READ_MULTIPLE (2 << 10)
+
+#define MPC83XX_DMAMR_EOIIE                 (1 <<  7)
+#define MPC83XX_DMAMR_TEM                   (1 <<  3)
+#define MPC83XX_DMAMR_CTM                   (1 <<  2)
+#define MPC83XX_DMAMR_CC                    (1 <<  1)
+#define MPC83XX_DMAMR_CS                    (1 <<  0)
+
+/* DMA status register */
+#define MPC83XX_DMASR_TE                    (1 << 7)
+#define MPC83XX_DMASR_CB                    (1 << 2)
+#define MPC83XX_DMASR_EOSI                  (1 << 1)
+#define MPC83XX_DMASR_EOCDI                 (1 << 0)
+
+/* DMA current descriptor address register */
+#define MPC83XX_DMACDAR_SNEN                (1 << 4)
+#define MPC83XX_DMACDAR_EOSIE               (1 << 3)
+
+/* DMA next descriptor address register */
+#define MPC83XX_DMANDAR_NSNEN               (1 << 4)
+#define MPC83XX_DMANDAR_NEOSIE              (1 << 3)
+#define MPC83XX_DMANDAR_EOTD                (1 << 0)
+
 
 typedef struct m83xxPCICfgRegisters_ {
   /* PCI1 Software Configuration Registers */

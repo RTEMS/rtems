@@ -1,3 +1,10 @@
+2008-08-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+	
+	* include/hwreg_vals.h: added some settings for HSC_CM01
+	* network/network.c: changed initialization code for HSC_CM01
+	* startup/cpuinit.c: changed initialization code for HSC_CM01
+	* startup/linkcmds.hsc_cm01: adapted memory map to HSC_CM01
+
 2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Added bspclean.c and use shared bsppretaskinghook.c.

@@ -173,6 +173,11 @@ static void mpc83xx_i2c_irq_handler
   mpc83xx_i2c_softc_t *softc_ptr = (mpc83xx_i2c_softc_t *)handle;
   
   /*
+   * clear IRQ flag
+   */
+  softc_ptr->reg_ptr->i2csr &= ~MPC83XX_I2CSR_MIF;
+
+  /*
    * disable interrupt mask 
    */
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MIEN;
@@ -561,6 +566,12 @@ static int mpc83xx_i2c_read_bytes
     *p++ = softc_ptr->reg_ptr->i2cdr;
       
   }
+
+ /*
+  * wait 'til end of last transfer
+  */
+  rc = mpc83xx_i2c_wait(softc_ptr, MPC83XX_I2CSR_MCF, MPC83XX_I2CSR_MCF);
+
 #if defined(DEBUG)
   printk("... exit OK, rc=%d\r\n",p-buf);
 #endif

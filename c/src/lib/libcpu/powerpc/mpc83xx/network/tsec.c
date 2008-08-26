@@ -203,6 +203,10 @@ static void mpc83xx_tsec_hwinit
   uint8_t *mac_addr;
   size_t i;
 
+  /* Clear interrupt mask and all pending events */
+  reg_ptr->imask = 0;
+  reg_ptr->ievent = 0xffffffff;
+
   /*
    * init ECNTL register
    * - clear statistics counters
@@ -211,7 +215,8 @@ static void mpc83xx_tsec_hwinit
    */
   reg_ptr->ecntrl = ((reg_ptr->ecntrl & ~M83xx_TSEC_ECNTRL_AUTOZ)
 		     | M83xx_TSEC_ECNTRL_CLRCNT 
-		     | M83xx_TSEC_ECNTRL_STEN);
+		     | M83xx_TSEC_ECNTRL_STEN
+		     | M83xx_TSEC_ECNTRL_R100M);
 
   /*
    * init DMA control register:
@@ -281,9 +286,9 @@ static void mpc83xx_tsec_hwinit
   /*
    * init MACCFG2 register
    */
-  reg_ptr->maccfg2 = (reg_ptr->maccfg2 & M83xx_TSEC_MACCFG2_IFMODE_MSK)
-                     | M83xx_TSEC_MACCFG2_PRELEN( 7)
-                     | M83xx_TSEC_MACCFG2_FULLDUPLEX;
+  reg_ptr->maccfg2 = ((reg_ptr->maccfg2 & M83xx_TSEC_MACCFG2_IFMODE_MSK)
+		      | M83xx_TSEC_MACCFG2_PRELEN( 7)
+		      | M83xx_TSEC_MACCFG2_FULLDUPLEX);
 
   /*
    * init station address register
@@ -1508,9 +1513,7 @@ static void mpc83xx_tsec_init
    * for HSC CM01: we need to configure the PHY to use maximum skew adjust
    */
   
-  mpc83xx_tsec_mdio_write(-1,sc,31,1);
-  mpc83xx_tsec_mdio_write(-1,sc,28,0xf000);
-  mpc83xx_tsec_mdio_write(-1,sc,31,0);
+  mpc83xx_tsec_mdio_write(-1,sc,23,0x0100);
 #endif
 
   /*

@@ -77,6 +77,14 @@ int BSP_tsec_attach
   }
   if (attaching) {
 #if (TSEC_IFMODE==TSEC_IFMODE_GMII)
+#if !defined(HSC_CM01)
+
+      /*
+       * do not change system I/O configuration registers on HSC board
+       * because should initialize from RCW
+       */
+
+
     if (unitNumber == 1) {
       /*
        * init system I/O configuration registers 
@@ -101,6 +109,7 @@ int BSP_tsec_attach
       mpc83xx.gpio[0].gpdir = ((mpc83xx.gpio[0].gpdir & ~0x000FFFFF)
 			       |                         0x00087881);
     }
+#endif /* !defined(HSC_CM01) */
 #endif
 #if (TSEC_IFMODE==TSEC_IFMODE_RGMII)
 

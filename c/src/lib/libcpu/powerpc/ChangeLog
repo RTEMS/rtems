@@ -1,3 +1,13 @@
+2008-08-26	Thomas Doerfler <Thomas.Doerflerr@embedded-brains.de>
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c: wait for proper end of transfer
+	* mpc83xx/include/mpc83xx.h: add some register definitions
+	
+2008-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc83xx/network/tsec.c: Clear the interrupt mask and all pending
+	events during the hardware initialization.
+
 2008-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/powerpc-utility.h: Fixed parameter evaluation in

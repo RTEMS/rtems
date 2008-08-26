@@ -28,6 +28,8 @@ int printk_plugin(
 
   vprintk( format, arg_pointer );
 
+  va_end(arg_pointer); /* clean up when done */
+  
   return 0;
 }
 

@@ -21,7 +21,7 @@
 #define __GEN83xx_HWREG_VALS_h
 
 #include <mpc83xx/mpc83xx.h>
-
+#include <bsp.h>
 /*
  * distinguish board characteristics
  */
@@ -92,8 +92,8 @@
 
 #define RESET_CONF_WRD_H (RCWHR_PCI_HOST     |	\
 			  RCWHR_PCI_32       |	\
-			  RCWHR_PCI1ARB_EN   |	\
-			  RCWHR_PCI2ARB_EN   |	\
+			  RCWHR_PCI1ARB_DIS  |	\
+			  RCWHR_PCI2ARB_DIS  |	\
 			  RCWHR_CORE_EN      |	\
 			  RCWHR_BMS_LOW      |	\
 			  RCWHR_BOOTSEQ_NONE |	\
@@ -102,8 +102,8 @@
 			  RCWHR_TSEC1M_RGMII |	\
 			  RCWHR_TSEC2M_GMII  |	\
 			  RCWHR_ENDIAN_BIG   |	\
-			  RCWHR_LALE_NORM    |	\
-			  RCWHR_LDP_PAR)
+			  RCWHR_LALE_EARLY   |	\
+			  RCWHR_LDP_SPC)
 
 #elif defined( HAS_UBOOT)
 
@@ -175,9 +175,29 @@
  * for JPK HSC_CM01
  */
 
+/* fpga BCSR register */
+#define FPGA_START 0xF8000000
+#define FPGA_SIZE  0x8000
+#define FPGA_END   (FPGA_START+FPGA_SIZE-1)
+
 /*
  * working values for various registers, used in start/start.S
  */
+
+/* fpga config 16 MB size */
+#define FPGA_CONFIG_START       0xF8000000
+#define FPGA_CONFIG_SIZE        0x01000000
+/* fpga register 8 MB size */
+#define FPGA_REGISTER_START     0xF9000000
+#define FPGA_REGISTER_SIZE      0x00800000
+/* fpga fifo 8 MB size */
+#define FPGA_FIFO_START         0xF9800000
+#define FPGA_FIFO_SIZE          0x00800000
+
+#define FPGA_START (FPGA_CONFIG_START)
+// fpga window size 32 MByte
+#define FPGA_SIZE  (0x02000000)
+#define FPGA_END   (FPGA_START+FPGA_SIZE-1)
 
 /*
  * Local Access Windows
@@ -186,7 +206,7 @@
 
 #define LBLAWBAR0_VAL  bsp_rom_start
 #define LBLAWAR0_VAL   0x80000018
-#define LBLAWBAR1_VAL  0xF8000000
+#define LBLAWBAR1_VAL  (FPGA_CONFIG_START)
 #define LBLAWAR1_VAL   0x80000015
 #define DDRLAWBAR0_VAL bsp_ram_start
 #define DDRLAWAR0_VAL  0x8000001B
@@ -196,13 +216,25 @@
  */
 #define BR0_VAL 0xFE001001
 #define OR0_VAL 0xFE000E54
-#define BR3_VAL 0xF8001881
-#define OR3_VAL 0xFFC01100
+// fpga config access range (UPM_A) (32 kByte)
+#define BR2_VAL (FPGA_CONFIG_START | 0x01881)
+#define OR2_VAL 0xFFF80100
+
+// fpga register access range (UPM_B) (8 MByte)
+#define BR3_VAL (FPGA_REGISTER_START | 0x018A1)
+#define OR3_VAL 0xFF800100
+
+// fpga fifo access range (UPM_B) (8 MByte)
+#define BR4_VAL (FPGA_FIFO_START | 0x018A1)
+#define OR4_VAL 0xFF800100
+
 /*
- * Local (memory) bus divider
- * FIXME: decode bit settings 
+ * SDRAM registers
  */
-#define LCRR_VAL  0x00010004
+#define MRPTR_VAL 0x20000000
+#define LSRT_VAL  0x32000000
+#define LSDMR_VAL 0x4062D733
+#define LCRR_VAL  0x80010004
 
 /*
  * DDR-SDRAM registers
