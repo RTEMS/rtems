@@ -1,3 +1,11 @@
+2008-08-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* pppd/auth.c, pppd/ccp.c, pppd/chap.c, pppd/chat.c,
+	pppd/demand.c, pppd/fsm.c, pppd/ipcp.c, pppd/lcp.c,
+	pppd/magic.c, pppd/options.c, pppd/rtemsmain.c, 
+	pppd/sys-rtems.c, pppd/upap.c, pppd/utils.c:
+	Stop using old-style function-definitions.
+
 2008-08-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/src/bdbuf.c, libblock/src/diskdevs.c,
