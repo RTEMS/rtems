@@ -126,7 +126,7 @@ int rtems_fsmount
   int tmp_rc;
   int fstab_idx = 0;
   rtems_filesystem_mount_table_entry_t *tmp_mt_entry;
-  boolean terminate = FALSE;
+  bool terminate = false;
 
   /*
    * scan through all fstab entries;
@@ -146,7 +146,7 @@ int rtems_fsmount
 		 strerror(errno));
 	}
 	if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNTPNT_CRTERR)) {
-	  terminate = TRUE;
+	  terminate = true;
 	  rc = tmp_rc;
 	}
       }
@@ -169,7 +169,7 @@ int rtems_fsmount
 		 strerror(errno));
 	}
 	if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNT_FAILED)) {
-	  terminate = TRUE;
+	  terminate = true;
 	  rc = tmp_rc;
 	}
       }
@@ -181,7 +181,7 @@ int rtems_fsmount
 		 fstab_ptr->mount_point);
 	}
 	if (0 != (fstab_ptr->abort_reasons & FSMOUNT_MNT_OK)) {
-	  terminate = TRUE;
+	  terminate = true;
 	}
       }
     }
