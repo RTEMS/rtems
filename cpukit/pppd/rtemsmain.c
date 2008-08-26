@@ -160,9 +160,9 @@ struct protent *protocols[] = {
 };
 
 int
-pppdmain(argc, argv)
-    int argc;
-    char *argv[];
+pppdmain(
+    int argc,
+    char *argv[])
 {
     int i, fdflags, t;
     char *connector;
@@ -478,8 +478,8 @@ pppdmain(argc, argv)
  * holdoff_end - called via a timeout when the holdoff period ends.
  */
 static void
-holdoff_end(arg)
-    void *arg;
+holdoff_end(
+    void *arg)
 {
     new_phase(PHASE_DORMANT);
 }

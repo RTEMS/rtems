@@ -38,7 +38,7 @@ static const char rcsid[] = RCSID;
  * and current time, currently.
  */
 void
-magic_init()
+magic_init(void)
 {
     long seed;
     struct timeval t;
@@ -52,7 +52,7 @@ magic_init()
  * magic - Returns the next magic number.
  */
 uint32_t
-magic()
+magic(void)
 {
     return (uint32_t) mrand48();
 }

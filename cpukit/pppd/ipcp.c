@@ -217,8 +217,8 @@ static void ipcp_clear_addrs(int, uint32_t, uint32_t);
  * Make a string representation of a network IP address.
  */
 char *
-ip_ntoa(ipaddr)
-uint32_t ipaddr;
+ip_ntoa(
+  uint32_t ipaddr)
 {
     static char b[64];
 
@@ -234,8 +234,8 @@ uint32_t ipaddr;
  * setvjslots - set maximum number of connection slots for VJ compression
  */
 static int
-setvjslots(argv)
-    char **argv;
+setvjslots(
+    char **argv)
 {
     int value;
 
@@ -254,8 +254,8 @@ setvjslots(argv)
  * setdnsaddr - set the dns address(es)
  */
 static int
-setdnsaddr(argv)
-    char **argv;
+setdnsaddr(
+    char **argv)
 {
     uint32_t dns;
     struct hostent *hp;
@@ -286,8 +286,8 @@ setdnsaddr(argv)
  * the caller to the existing WINS server on a Windows NT platform.
  */
 static int
-setwinsaddr(argv)
-    char **argv;
+setwinsaddr(
+    char **argv)
 {
     uint32_t wins;
     struct hostent *hp;
@@ -317,8 +317,8 @@ setwinsaddr(argv)
  * ipcp_init - Initialize IPCP.
  */
 static void
-ipcp_init(unit)
-    int unit;
+ipcp_init(
+    int unit)
 {
     fsm *f = &ipcp_fsm[unit];
     ipcp_options *wo = &ipcp_wantoptions[unit];
@@ -360,8 +360,8 @@ ipcp_init(unit)
  * ipcp_open - IPCP is allowed to come up.
  */
 static void
-ipcp_open(unit)
-    int unit;
+ipcp_open(
+    int unit)
 {
     fsm_open(&ipcp_fsm[unit]);
 }
@@ -371,9 +371,9 @@ ipcp_open(unit)
  * ipcp_close - Take IPCP down.
  */
 static void
-ipcp_close(unit, reason)
-    int unit;
-    char *reason;
+ipcp_close(
+    int unit,
+    char *reason)
 {
     fsm_close(&ipcp_fsm[unit], reason);
 }
@@ -383,8 +383,8 @@ ipcp_close(unit, reason)
  * ipcp_lowerup - The lower layer is up.
  */
 static void
-ipcp_lowerup(unit)
-    int unit;
+ipcp_lowerup(
+    int unit)
 {
     fsm_lowerup(&ipcp_fsm[unit]);
 }
@@ -394,8 +394,8 @@ ipcp_lowerup(unit)
  * ipcp_lowerdown - The lower layer is down.
  */
 static void
-ipcp_lowerdown(unit)
-    int unit;
+ipcp_lowerdown(
+    int unit)
 {
     fsm_lowerdown(&ipcp_fsm[unit]);
 }
@@ -405,10 +405,10 @@ ipcp_lowerdown(unit)
  * ipcp_input - Input IPCP packet.
  */
 static void
-ipcp_input(unit, p, len)
-    int unit;
-    u_char *p;
-    int len;
+ipcp_input(
+    int unit,
+    u_char *p,
+    int len)
 {
     fsm_input(&ipcp_fsm[unit], p, len);
 }
@@ -420,8 +420,8 @@ ipcp_input(unit, p, len)
  * Pretend the lower layer went down, so we shut up.
  */
 static void
-ipcp_protrej(unit)
-    int unit;
+ipcp_protrej(
+    int unit)
 {
     fsm_lowerdown(&ipcp_fsm[unit]);
 }
@@ -432,8 +432,8 @@ ipcp_protrej(unit)
  * Called by fsm_sconfreq, Send Configure Request.
  */
 static void
-ipcp_resetci(f)
-    fsm *f;
+ipcp_resetci(
+    fsm *f)
 {
     ipcp_options *wo = &ipcp_wantoptions[f->unit];
     ipcp_options *go = &ipcp_gotoptions[f->unit];
@@ -456,8 +456,8 @@ ipcp_resetci(f)
  * Called by fsm_sconfreq, Send Configure Request.
  */
 static int
-ipcp_cilen(f)
-    fsm *f;
+ipcp_cilen(
+    fsm *f)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     ipcp_options *wo = &ipcp_wantoptions[f->unit];
@@ -498,10 +498,10 @@ ipcp_cilen(f)
  * Called by fsm_sconfreq, Send Configure Request.
  */
 static void
-ipcp_addci(f, ucp, lenp)
-    fsm *f;
-    u_char *ucp;
-    int *lenp;
+ipcp_addci(
+    fsm *f,
+    u_char *ucp,
+    int *lenp)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     int len = *lenp;
@@ -576,10 +576,10 @@ ipcp_addci(f, ucp, lenp)
  *	1 - Ack was good.
  */
 static int
-ipcp_ackci(f, p, len)
-    fsm *f;
-    u_char *p;
-    int len;
+ipcp_ackci(
+    fsm *f,
+    u_char *p,
+    int len)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     u_short cilen, citype, cishort;
@@ -686,10 +686,10 @@ bad:
  *	1 - Nak was good.
  */
 static int
-ipcp_nakci(f, p, len)
-    fsm *f;
-    u_char *p;
-    int len;
+ipcp_nakci(
+    fsm *f,
+    u_char *p,
+    int len)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     u_char cimaxslotindex, cicflag;
@@ -873,10 +873,10 @@ bad:
  * Callback from fsm_rconfnakrej.
  */
 static int
-ipcp_rejci(f, p, len)
-    fsm *f;
-    u_char *p;
-    int len;
+ipcp_rejci(
+    fsm *f,
+    u_char *p,
+    int len)
 {
     ipcp_options *go = &ipcp_gotoptions[f->unit];
     u_char cimaxslotindex, ciflag, cilen;
@@ -989,11 +989,11 @@ bad:
  * CONFNAK; returns CONFREJ if it can't return CONFACK.
  */
 static int
-ipcp_reqci(f, inp, len, reject_if_disagree)
-    fsm *f;
-    u_char *inp;		/* Requested CIs */
-    int *len;			/* Length of requested CIs */
-    int reject_if_disagree;
+ipcp_reqci(
+    fsm *f,
+    u_char *inp,		/* Requested CIs */
+    int *len,			/* Length of requested CIs */
+    int reject_if_disagree)
 {
     ipcp_options *wo = &ipcp_wantoptions[f->unit];
     ipcp_options *ho = &ipcp_hisoptions[f->unit];
@@ -1280,7 +1280,7 @@ endswitch:
  * and assign appropriate defaults.
  */
 static void
-ip_check_options()
+ip_check_options(void)
 {
     struct hostent *hp;
     uint32_t local;
@@ -1311,8 +1311,8 @@ ip_check_options()
  * IPCP were up, for use with dial-on-demand.
  */
 static int
-ip_demand_conf(u)
-    int u;
+ip_demand_conf(
+    int u)
 {
     ipcp_options *wo = &ipcp_wantoptions[u];
 
@@ -1353,8 +1353,8 @@ ip_demand_conf(u)
  * Configure the IP network interface appropriately and bring it up.
  */
 static void
-ipcp_up(f)
-    fsm *f;
+ipcp_up(
+    fsm *f)
 {
     uint32_t mask;
     ipcp_options *ho = &ipcp_hisoptions[f->unit];
@@ -1504,8 +1504,8 @@ ipcp_up(f)
  * and delete routes through it.
  */
 static void
-ipcp_down(f)
-    fsm *f;
+ipcp_down(
+    fsm *f)
 {
     IPCPDEBUG(("ipcp: down"));
     /* XXX a bit IPv4-centric here, we only need to get the stats
@@ -1539,10 +1539,10 @@ ipcp_down(f)
  * proxy arp entries, etc.
  */
 static void
-ipcp_clear_addrs(unit, ouraddr, hisaddr)
-    int unit;
-    uint32_t ouraddr;  /* local address */
-    uint32_t hisaddr;  /* remote address */
+ipcp_clear_addrs(
+    int unit,
+    uint32_t ouraddr,  /* local address */
+    uint32_t hisaddr  /* remote address */)
 {
     if (proxy_arp_set[unit]) {
 	cifproxyarp(unit, hisaddr);
@@ -1560,8 +1560,8 @@ ipcp_clear_addrs(unit, ouraddr, hisaddr)
  * ipcp_finished - possibly shut down the lower layers.
  */
 static void
-ipcp_finished(f)
-    fsm *f;
+ipcp_finished(
+    fsm *f)
 {
     np_finished(f->unit, PPP_IP);
 }
@@ -1570,8 +1570,8 @@ ipcp_finished(f)
  * create_resolv - create the replacement resolv.conf file
  */
 static void
-create_resolv(peerdns1, peerdns2)
-    uint32_t peerdns1, peerdns2;
+create_resolv(
+    uint32_t peerdns1, uint32_t peerdns2)
 {
   /* initialize values */
   rtems_bsdnet_nameserver_count = 0;
@@ -1601,11 +1601,11 @@ static char *ipcp_codenames[] = {
 };
 
 static int
-ipcp_printpkt(p, plen, printer, arg)
-    u_char *p;
-    int plen;
-    void (*printer)(void *, char *, ...);
-    void *arg;
+ipcp_printpkt(
+    u_char *p,
+    int plen,
+    void (*printer)(void *, char *, ...),
+    void *arg)
 {
     int code, id, len, olen;
     u_char *pstart, *optend;
@@ -1743,9 +1743,9 @@ ipcp_printpkt(p, plen, printer, arg)
 #define get_tcpflags(x)	(((unsigned char *)(x))[13])
 
 static int
-ip_active_pkt(pkt, len)
-    u_char *pkt;
-    int len;
+ip_active_pkt(
+    u_char *pkt,
+    int len)
 {
     u_char *tcp;
     int hlen;

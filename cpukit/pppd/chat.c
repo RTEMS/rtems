@@ -200,9 +200,9 @@ char *expect_strtok(char *, char *);
 int chatmain(int, int, char *);
 
 
-void *dup_mem(b, c)
-void *b;
-size_t c;
+void *dup_mem(
+  void *b,
+  size_t c)
 {
     void *ans = malloc (c);
     if (!ans)
@@ -212,8 +212,8 @@ size_t c;
     return ans;
 }
 
-void *copy_of (s)
-char *s;
+void *copy_of(
+  char *s)
 {
     return dup_mem(s, strlen (s) + 1);
 }
@@ -273,7 +273,7 @@ int chatmain(int fd, int mode, char *pScript)
   return ( exit_code );
 }
 
-void break_sequence()
+void break_sequence(void)
 {
   tcsendbreak(ttyfd, 0);
 }
@@ -281,9 +281,9 @@ void break_sequence()
 /*
  *	'Clean up' this string.
  */
-static char *clean(s, sending)
-register char *s;
-int sending;  /* set to 1 when sending (putting) this string. */
+static char *clean(
+  char *s,
+  int sending )  /* set to 1 when sending (putting) this string. */
 {
     char temp[STR_LEN], env_str[STR_LEN], cur_chr;
     register char *s1, *phchar;
@@ -453,8 +453,8 @@ int sending;  /* set to 1 when sending (putting) this string. */
 /*
  * A modified version of 'strtok'. This version skips \ sequences.
  */
-char *expect_strtok (s, term)
-     char *s, *term;
+char *expect_strtok (
+     char *s, char *term)
 {
     static  char *str   = "";
     int	    escape_flag = 0;
@@ -507,8 +507,8 @@ char *expect_strtok (s, term)
 /*
  * Process the expect string
  */
-void chat_expect (s)
-char *s;
+void chat_expect (
+  char *s)
 {
     char *expect;
     char *reply;
@@ -588,8 +588,8 @@ char *s;
  * the data.
  */
 
-static char *character(c)
-int c;
+static char *character(
+  int c)
 {
     static char string[10];
     char *meta;
@@ -611,8 +611,8 @@ int c;
 /*
  *  process the reply string
  */
-void chat_send (s)
-register char *s;
+void chat_send (
+  char *s)
 {
 /*  char file_data[STR_LEN];  */
 
@@ -687,7 +687,7 @@ register char *s;
 	}
 }
 
-static int get_char()
+static int get_char(void)
 {
     int status;
     char c;
@@ -706,16 +706,16 @@ static int get_char()
 	return -1;						
 }
 
-static int put_char(c)
-int c;
+static int put_char(
+  int c)
 {
   char ch = c;
 
   return(write(ttyfd, &ch, 1));
 }
 
-static int write_char (c)
-int c;
+static int write_char (
+  int c)
 {
     if (put_char(c) < 1) {
 		return (0);
@@ -723,8 +723,8 @@ int c;
     return (1);
 }
 
-static int put_string (s)
-register char *s;
+static int put_string (
+  char *s)
 {
 	char *out,*free_ptr=0;
 	
@@ -776,8 +776,8 @@ register char *s;
 /*
  *	'Wait for' this string to appear on this file descriptor.
  */
-static int get_string(in_string)
-register char *in_string;
+static int get_string(
+    char *in_string)
 {
     int c, len, minlen;
     register char *s = temp2, *end = s + STR_LEN;

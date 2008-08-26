@@ -302,9 +302,9 @@ See pppd(8) for more options.\n\
  * processing a few options, so error messages are suppressed.
  */
 int
-parse_args(argc, argv)
-    int argc;
-    char **argv;
+parse_args(
+    int argc,
+    char **argv)
 {
     char *arg;
     option_t *opt;
@@ -392,11 +392,11 @@ scan_args(argc, argv)
  * and interpret them.
  */
 int
-options_from_file(filename, must_exist, check_prot, priv)
-    char *filename;
-    int must_exist;
-    int check_prot;
-    int priv;
+options_from_file(
+    char *filename,
+    int must_exist,
+    int check_prot,
+    int priv)
 {
     FILE *f;
     int i, newline, ret, err;
@@ -478,7 +478,7 @@ err:
  * and if so, interpret options from it.
  */
 int
-options_from_user()
+options_from_user(void)
 {
     return 0;
 }
@@ -488,7 +488,7 @@ options_from_user()
  * device, and if so, interpret options from it.
  */
 int
-options_for_tty()
+options_for_tty(void)
 {
     char *dev, *path, *p;
     int ret;
@@ -517,9 +517,9 @@ options_for_tty()
  * options_from_list - process a string of options in a wordlist.
  */
 int
-options_from_list(w, priv)
-    struct wordlist *w;
-    int priv;
+options_from_list(
+    struct wordlist *w,
+    int priv)
 {
     char *argv[MAXARGS];
     option_t *opt;
@@ -579,8 +579,7 @@ err:
  * This could be optimized by using a hash table.
  */
 static option_t *
-find_option(name)
-    char *name;
+find_option(char *name)
 {
     option_t *opt;
     struct option_list *list;
@@ -608,9 +607,9 @@ find_option(name)
  * process_option - process one new-style option.
  */
 static int
-process_option(opt, argv)
-    option_t *opt;
-    char **argv;
+process_option(
+    option_t *opt,
+    char **argv)
 {
     uint32_t v;
     int iv, a;
@@ -743,8 +742,8 @@ process_option(opt, argv)
  * n_arguments - tell how many arguments an option takes
  */
 static int
-n_arguments(opt)
-    option_t *opt;
+n_arguments(
+    option_t *opt)
 {
     return (opt->type == o_bool || opt->type == o_special_noarg
 	    || (opt->flags & OPT_NOARG))? 0: 1;
@@ -754,8 +753,8 @@ n_arguments(opt)
  * add_options - add a list of options to the set we grok.
  */
 void
-add_options(opt)
-    option_t *opt;
+add_options(
+    option_t *opt)
 {
     struct option_list *list;
 
@@ -771,7 +770,7 @@ add_options(opt)
  * usage - print out a message telling how to use the program.
  */
 static void
-usage()
+usage(void)
 {
     if (pppd_phase == PHASE_INITIALIZE)
 	fprintf(stderr, usage_string, VERSION, PATCHLEVEL, IMPLEMENTATION,
@@ -813,11 +812,11 @@ option_error __V((char *fmt, ...))
  * \<newline> is ignored.
  */
 int
-getword(f, word, newlinep, filename)
-    FILE *f;
-    char *word;
-    int *newlinep;
-    char *filename;
+getword(
+    FILE *f,
+    char *word,
+    int *newlinep,
+    char *filename)
 {
     int c, len, escape;
     int quoted, comment;
@@ -1056,10 +1055,10 @@ getword(f, word, newlinep, filename)
  * number_option - parse an unsigned numeric parameter for an option.
  */
 static int
-number_option(str, valp, base)
-    char *str;
-    uint32_t *valp;
-    int base;
+number_option(
+    char *str,
+    uint32_t *valp,
+    int base)
 {
     char *ptr;
 
@@ -1079,9 +1078,9 @@ number_option(str, valp, base)
  * if there is an error.
  */
 int
-int_option(str, valp)
-    char *str;
-    int *valp;
+int_option(
+    char *str,
+    int *valp)
 {
     uint32_t v;
 
@@ -1100,8 +1099,8 @@ int_option(str, valp)
  * readfile - take commands from a file.
  */
 static int
-readfile(argv)
-    char **argv;
+readfile(
+    char **argv)
 {
     return options_from_file(*argv, 1, 1, privileged_option);
 }
@@ -1111,8 +1110,8 @@ readfile(argv)
  * Name may not contain /../, start with / or ../, or end in /..
  */
 static int
-callfile(argv)
-    char **argv;
+callfile(
+    char **argv)
 {
     char *fname, *arg, *p;
     int l, ok;
@@ -1154,8 +1153,8 @@ callfile(argv)
  * setpdebug - Set libpcap debugging level.
  */
 static int
-setpdebug(argv)
-    char **argv;
+setpdebug(
+    char **argv)
 {
     return int_option(*argv, &dflag);
 }
@@ -1164,8 +1163,8 @@ setpdebug(argv)
  * setpassfilter - Set the pass filter for packets
  */
 static int
-setpassfilter(argv)
-    char **argv;
+setpassfilter(
+    char **argv)
 {
     pc.linktype = DLT_PPP;
     pc.snapshot = PPP_HDRLEN;
@@ -1180,8 +1179,8 @@ setpassfilter(argv)
  * setactivefilter - Set the active filter for packets
  */
 static int
-setactivefilter(argv)
-    char **argv;
+setactivefilter(
+    char **argv)
 {
     pc.linktype = DLT_PPP;
     pc.snapshot = PPP_HDRLEN;
@@ -1197,8 +1196,8 @@ setactivefilter(argv)
  * noopt - Disable all options.
  */
 static int
-noopt(argv)
-    char **argv;
+noopt(
+    char **argv)
 {
     BZERO((char *) &lcp_wantoptions[0], sizeof (struct lcp_options));
     BZERO((char *) &lcp_allowoptions[0], sizeof (struct lcp_options));
@@ -1212,8 +1211,8 @@ noopt(argv)
  * setdomain - Set domain name to append to hostname 
  */
 static int
-setdomain(argv)
-    char **argv;
+setdomain(
+    char **argv)
 {
     if (!privileged_option) {
 	option_error("using the domain option requires root privilege");
@@ -1234,8 +1233,8 @@ setdomain(argv)
  * setspeed - Set the speed.
  */
 static int
-setspeed(arg)
-    char *arg;
+setspeed(
+    char *arg)
 {
   long     spd;
   uint32_t ret      = 1;
@@ -1289,8 +1288,8 @@ setspeed(arg)
  * setdevname - Set the device name.
  */
 static int
-setdevname(cp)
-    char *cp;
+setdevname(
+    char *cp)
 {
     struct stat statbuf;
     char dev[MAXPATHLEN];
@@ -1345,8 +1344,8 @@ setdevname(cp)
  * setipaddr - Set the IP address
  */
 static int
-setipaddr(arg)
-    char *arg;
+setipaddr(
+    char *arg)
 {
     struct hostent *hp;
     char *colon;
@@ -1413,8 +1412,8 @@ setipaddr(arg)
  * setnetmask - set the netmask to be used on the interface.
  */
 static int
-setnetmask(argv)
-    char **argv;
+setnetmask(
+    char **argv)
 {
     uint32_t mask, b;
     int n, ok;
@@ -1458,8 +1457,8 @@ setnetmask(argv)
 }
 
 static int
-setxonxoff(argv)
-    char **argv;
+setxonxoff(
+    char **argv)
 {
     lcp_wantoptions[0].asyncmap |= 0x000A0000;	/* escape ^S and ^Q */
     lcp_wantoptions[0].neg_asyncmap = 1;
@@ -1469,8 +1468,8 @@ setxonxoff(argv)
 }
 
 static int
-setlogfile(argv)
-    char **argv;
+setlogfile(
+    char **argv)
 {
     int fd, err;
 
@@ -1492,8 +1491,8 @@ setlogfile(argv)
 
 #ifdef PLUGIN
 static int
-loadplugin(argv)
-    char **argv;
+loadplugin(
+    char **argv)
 {
     char *arg = *argv;
     void *handle;

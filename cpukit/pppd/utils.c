@@ -93,11 +93,11 @@ slprintf __V((char *buf, int buflen, char *fmt, ...))
 #define OUTCHAR(c)	(buflen > 0? (--buflen, *buf++ = (c)): 0)
 
 int
-vslprintf(buf, buflen, fmt, args)
-    char *buf;
-    int buflen;
-    char *fmt;
-    va_list args;
+vslprintf(
+    char *buf,
+    int buflen,
+    char *fmt,
+    va_list args)
 {
     int c, i, n;
     int width, prec, fillch;
@@ -371,11 +371,11 @@ char line[256];			/* line to be logged accumulated here */
 char *linep;
 
 void
-log_packet(p, len, prefix, level)
-    u_char *p;
-    int len;
-    char *prefix;
-    int level;
+log_packet(
+    u_char *p,
+    int len,
+    char *prefix,
+    int level)
 {
     strlcpy(line, prefix, sizeof(line));
     linep = line + strlen(line);
@@ -387,11 +387,11 @@ log_packet(p, len, prefix, level)
  * calling `printer(arg, format, ...)' to output it.
  */
 static void
-format_packet(p, len, printer, arg)
-    u_char *p;
-    int len;
-    void (*printer)(void *, char *, ...);
-    void *arg;
+format_packet(
+    u_char *p,
+    int len,
+    void (*printer)(void *, char *, ...),
+    void *arg)
 {
     int i, n;
     u_short proto;
@@ -464,11 +464,11 @@ pr_log __V((void *arg, char *fmt, ...))
  * printer.
  */
 void
-print_string(p_arg, len, printer, arg)
-    void *p_arg;
-    int len;
-    void (*printer)(void *, char *, ...);
-    void *arg;
+print_string(
+    void *p_arg,
+    int len,
+    void (*printer)(void *, char *, ...),
+    void *arg)
 {
     int c;
     unsigned char *p = (unsigned char *)p_arg;
@@ -503,10 +503,10 @@ print_string(p_arg, len, printer, arg)
  * logit - does the hard work for fatal et al.
  */
 static void
-logit(level, fmt, args)
-    int level;
-    char *fmt;
-    va_list args;
+logit(
+    int level,
+    char *fmt,
+    va_list args)
 {
     int n;
     char buf[256];
@@ -662,8 +662,7 @@ static char lock_file[MAXPATHLEN];
  * lock - create a lock file for the named device
  */
 int
-lock(dev)
-    char *dev;
+lock(char *dev)
 {
 #ifdef LOCKLIB
     int result;
@@ -780,8 +779,7 @@ lock(dev)
  * between when the parent died and the child rewrote the lockfile).
  */
 int
-relock(pid)
-    int pid;
+relock(int pid)
 {
 #ifdef LOCKLIB
     /* XXX is there a way to do this? */
@@ -816,7 +814,7 @@ relock(pid)
  * unlock - remove our lockfile
  */
 void
-unlock()
+unlock(void)
 {
     if (lock_file[0]) {
 #ifdef LOCKLIB

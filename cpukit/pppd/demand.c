@@ -67,7 +67,7 @@ static int active_packet(unsigned char *, int);
  * demand_conf - configure the interface for doing dial-on-demand.
  */
 void
-demand_conf()
+demand_conf(void)
 {
     int i;
     struct protent *protp;
@@ -106,7 +106,7 @@ demand_conf()
  * demand_block - set each network protocol to block further packets.
  */
 void
-demand_block()
+demand_block(void)
 {
     int i;
     struct protent *protp;
@@ -122,7 +122,7 @@ demand_block()
  * with an error.
  */
 void
-demand_discard()
+demand_discard(void)
 {
     struct packet *pkt, *nextpkt;
     int i;
@@ -149,7 +149,7 @@ demand_discard()
  * demand_unblock - set each enabled network protocol to pass packets.
  */
 void
-demand_unblock()
+demand_unblock(void)
 {
     int i;
     struct protent *protp;
@@ -203,9 +203,9 @@ static u_short fcstab[256] = {
  * Return value is 1 if we need to bring up the link, 0 otherwise.
  */
 int
-loop_chars(p, n)
-    unsigned char *p;
-    int n;
+loop_chars(
+    unsigned char *p,
+    int n)
 {
     int c, rv;
 
@@ -255,9 +255,9 @@ loop_chars(p, n)
  * bring up the link.
  */
 int
-loop_frame(frame, len)
-    unsigned char *frame;
-    int len;
+loop_frame(
+    unsigned char *frame,
+    int len)
 {
     struct packet *pkt;
 
@@ -288,8 +288,8 @@ loop_frame(frame, len)
  * loopback, now that the real serial link is up.
  */
 void
-demand_rexmit(proto)
-    int proto;
+demand_rexmit(
+    int proto)
 {
     struct packet *pkt, *prev, *nextpkt;
 
@@ -319,9 +319,9 @@ demand_rexmit(proto)
  * that is, whether it is worth bringing up the link for.
  */
 static int
-active_packet(p, len)
-    unsigned char *p;
-    int len;
+active_packet(
+    unsigned char *p,
+    int len)
 {
     int proto, i;
     struct protent *protp;

@@ -236,8 +236,8 @@ option_t auth_options[] = {
  * Do what's necessary to bring the physical layer up.
  */
 void
-link_required(unit)
-    int unit;
+link_required(
+    int unit )
 {
 }
 
@@ -246,8 +246,8 @@ link_required(unit)
  * physical layer down.
  */
 void
-link_terminated(unit)
-    int unit;
+link_terminated(
+    int unit)
 {
     if (pppd_phase == PHASE_DEAD)
 	return;
@@ -262,8 +262,8 @@ link_terminated(unit)
  * LCP has gone down; it will either die or try to re-establish.
  */
 void
-link_down(unit)
-    int unit;
+link_down(
+    int unit)
 {
     int i;
     struct protent *protp;
@@ -292,8 +292,8 @@ link_down(unit)
  * Proceed to the Dead, Authenticate or Network phase as appropriate.
  */
 void
-link_established(unit)
-    int unit;
+link_established(
+    int unit )
 {
     int auth;
     lcp_options *wo = &lcp_wantoptions[unit];
@@ -359,8 +359,8 @@ link_established(unit)
  * Proceed to the network phase.
  */
 static void
-network_phase(unit)
-    int unit;
+network_phase(
+    int unit )
 {
 #ifdef CBCP_SUPPORT
     lcp_options *go = &lcp_gotoptions[unit];
@@ -395,7 +395,7 @@ network_phase(unit)
 }
 
 void
-start_networks()
+start_networks(void)
 {
     int i;
     struct protent *protp;
@@ -418,8 +418,9 @@ start_networks()
  * The peer has failed to authenticate himself using `protocol'.
  */
 void
-auth_peer_fail(unit, protocol)
-    int unit, protocol;
+auth_peer_fail(
+    int unit, 
+    int protocol)
 {
     /*
      * Authentication failure: take the link down
@@ -432,10 +433,11 @@ auth_peer_fail(unit, protocol)
  * The peer has been successfully authenticated using `protocol'.
  */
 void
-auth_peer_success(unit, protocol, name, namelen)
-    int unit, protocol;
-    char *name;
-    int namelen;
+auth_peer_success(
+    int unit, 
+    int protocol,
+    char *name,
+    int namelen)
 {
     int bit;
 
@@ -471,8 +473,9 @@ auth_peer_success(unit, protocol, name, namelen)
  * We have failed to authenticate ourselves to the peer using `protocol'.
  */
 void
-auth_withpeer_fail(unit, protocol)
-    int unit, protocol;
+auth_withpeer_fail(
+    int unit, 
+    int protocol )
 {
     if (passwd_from_file)
 	BZERO(passwd, MAXSECRETLEN);
@@ -490,8 +493,9 @@ auth_withpeer_fail(unit, protocol)
  * We have successfully authenticated ourselves with the peer using `protocol'.
  */
 void
-auth_withpeer_success(unit, protocol)
-    int unit, protocol;
+auth_withpeer_success(
+    int unit, 
+    int protocol )
 {
     int bit;
 
@@ -522,8 +526,9 @@ auth_withpeer_success(unit, protocol)
  * np_up - a network protocol has come up.
  */
 void
-np_up(unit, proto)
-    int unit, proto;
+np_up(
+    int unit, 
+    int proto )
 {
     int tlim;
 
@@ -556,8 +561,9 @@ np_up(unit, proto)
  * np_down - a network protocol has gone down.
  */
 void
-np_down(unit, proto)
-    int unit, proto;
+np_down(
+    int unit,
+    int proto)
 {
     if (--num_np_up == 0) {
 	UNTIMEOUT(check_idle, NULL);
@@ -569,8 +575,9 @@ np_down(unit, proto)
  * np_finished - a network protocol has finished using the link.
  */
 void
-np_finished(unit, proto)
-    int unit, proto;
+np_finished(
+    int unit, 
+    int proto )
 {
     if (--num_np_open <= 0) {
 	/* no further use for the link: shut up shop. */
@@ -583,8 +590,8 @@ np_finished(unit, proto)
  * enough that we can shut it down.
  */
 static void
-check_idle(arg)
-    void *arg;
+check_idle(
+    void *arg )
 {
     struct ppp_idle idle;
     time_t itime;
@@ -613,8 +620,8 @@ check_idle(arg)
  * connect_time_expired - log a message and close the connection.
  */
 static void
-connect_time_expired(arg)
-    void *arg;
+connect_time_expired(
+    void *arg)
 {
     info("Connect time expired");
     lcp_close(0, "Connect time expired");	/* Close connection */
@@ -625,7 +632,7 @@ connect_time_expired(arg)
  * auth_check_options - called to check authentication options.
  */
 int
-auth_check_options()
+auth_check_options(void)
 {
     lcp_options *wo = &lcp_wantoptions[0];
     int status      = 1;
@@ -700,8 +707,8 @@ auth_check_options()
  * to use for authenticating ourselves and/or the peer.
  */
 void
-auth_reset(unit)
-    int unit;
+auth_reset(
+    int unit)
 {
     lcp_options *go = &lcp_gotoptions[unit];
     lcp_options *ao = &lcp_allowoptions[0];
@@ -733,13 +740,13 @@ auth_reset(unit)
  * In either case, msg points to an appropriate message.
  */
 int
-check_passwd(unit, auser, userlen, apasswd, passwdlen, msg)
-    int unit;
-    char *auser;
-    int userlen;
-    char *apasswd;
-    int passwdlen;
-    char **msg;
+check_passwd(
+    int unit,
+    char *auser,
+    int userlen,
+    char *apasswd,
+    int passwdlen,
+    char **msg)
 {
     char passwd[64], user[64];
 
@@ -772,8 +779,8 @@ check_passwd(unit, auser, userlen, apasswd, passwdlen, msg)
  * and return 1.
  */
 static int
-null_login(unit)
-    int unit;
+null_login(
+    int unit)
 {
     return 0;
 }
@@ -786,8 +793,8 @@ null_login(unit)
  * Assumes passwd points to MAXSECRETLEN bytes of space (if non-null).
  */
 static int
-get_pap_passwd(passwd)
-    char *passwd;
+get_pap_passwd(
+    char *passwd)
 {
     int ret = (int)0;
 
@@ -807,8 +814,8 @@ get_pap_passwd(passwd)
  * secrets that we could possibly use for authenticating the peer.
  */
 static int
-have_pap_secret(lacks_ipp)
-    int *lacks_ipp;
+have_pap_secret(
+    int *lacks_ipp)
 {
     return 1;
 
@@ -833,11 +840,11 @@ have_pap_secret(lacks_ipp)
  * know the identity yet.
  */
 static int
-have_chap_secret(client, server, need_ip, lacks_ipp)
-    char *client;
-    char *server;
-    int need_ip;
-    int *lacks_ipp;
+have_chap_secret(
+    char *client,
+    char *server,
+    int need_ip,
+    int *lacks_ipp)
 {
     return 0;
 }
@@ -849,13 +856,13 @@ have_chap_secret(client, server, need_ip, lacks_ipp)
  * (We could be either client or server).
  */
 int
-get_secret(unit, client, server, secret, secret_len, am_server)
-    int unit;
-    char *client;
-    char *server;
-    unsigned char *secret;
-    int *secret_len;
-    int am_server;
+get_secret(
+    int unit,
+    char *client,
+    char *server,
+    unsigned char *secret,
+    int *secret_len,
+    int am_server)
 {
     int len;
     char secbuf[MAXWORDLEN];
@@ -884,10 +891,10 @@ get_secret(unit, client, server, secret, secret_len, am_server)
  * and leaves the following words in extra_options.
  */
 static void
-set_allowed_addrs(unit, addrs, opts)
-    int unit;
-    struct wordlist *addrs;
-    struct wordlist *opts;
+set_allowed_addrs(
+    int unit,
+    struct wordlist *addrs,
+    struct wordlist *opts)
 {
     int n;
     struct wordlist *ap, **pap;
@@ -1028,9 +1035,9 @@ set_allowed_addrs(unit, addrs, opts)
  * a given IP address.  Returns 1 if authorized, 0 otherwise.
  */
 int
-auth_ip_addr(unit, addr)
-    int unit;
-    uint32_t addr;
+auth_ip_addr(
+    int unit,
+    uint32_t addr)
 {
 #if 0
     int ok;
@@ -1056,9 +1063,9 @@ auth_ip_addr(unit, addr)
 
 #if 0
 static int
-ip_addr_check(addr, addrs)
-    uint32_t addr;
-    struct permitted_ip *addrs;
+ip_addr_check(
+    uint32_t addr,
+    struct permitted_ip *addrs)
 {
     for (; ; ++addrs)
 	if ((addr & addrs->mask) == addrs->base)
@@ -1072,8 +1079,8 @@ ip_addr_check(addr, addrs)
  * addr is in network byte order.
  */
 int
-bad_ip_adrs(addr)
-    uint32_t addr;
+bad_ip_adrs(
+    uint32_t addr)
 {
     addr = ntohl(addr);
     return (addr >> IN_CLASSA_NSHIFT) == IN_LOOPBACKNET
@@ -1084,8 +1091,8 @@ bad_ip_adrs(addr)
  * free_wordlist - release memory allocated for a wordlist.
  */
 static void
-free_wordlist(wp)
-    struct wordlist *wp;
+free_wordlist(
+    struct wordlist *wp)
 {
     struct wordlist *next;
 
@@ -1101,8 +1108,8 @@ free_wordlist(wp)
  * interface-name peer-name real-user tty speed
  */
 static void
-auth_script(s)
-    enum script_state s;
+auth_script(
+    enum script_state s)
 {
     switch (s) {
     case s_up:

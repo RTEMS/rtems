@@ -99,7 +99,7 @@ static int get_ether_addr(uint32_t, struct sockaddr_dl *);
  * sys_init - System-dependent initialization.
  */
 void
-sys_init()
+sys_init(void)
 {
     /* Get an internet socket for doing socket ioctl's on. */
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -112,7 +112,7 @@ sys_init()
  * This should call die() because it's called from die().
  */
 void
-sys_cleanup()
+sys_cleanup(void)
 {
     struct ifreq ifr;
 
@@ -136,7 +136,7 @@ sys_cleanup()
  * sys_close - Clean up in a child process before execing.
  */
 void
-sys_close()
+sys_close(void)
 {
     close(sockfd);
     if (loop_slave >= 0) {
@@ -149,7 +149,7 @@ sys_close()
  * sys_check_options - check the options that the user specified
  */
 int
-sys_check_options()
+sys_check_options(void)
 {
     return 1;
 }
@@ -159,7 +159,7 @@ sys_check_options()
  * (in fact we check whether we can do an ioctl on ppp0).
  */
 int
-ppp_available()
+ppp_available(void)
 {
     int s, ok;
     struct ifreq ifr;
@@ -178,8 +178,8 @@ ppp_available()
  * establish_ppp - Turn the serial port into a ppp interface.
  */
 int
-establish_ppp(fd)
-    int fd;
+establish_ppp(
+    int fd)
 {
     int taskid  = (int)rtems_pppd_taskid;
     int pppdisc = PPPDISC;
@@ -252,7 +252,7 @@ establish_ppp(fd)
  * restore_loop - reattach the ppp unit to the loopback.
  */
 void
-restore_loop()
+restore_loop(void)
 {
     int x;
 
@@ -281,8 +281,8 @@ restore_loop()
  * This shouldn't call die() because it's called from die().
  */
 void
-disestablish_ppp(fd)
-    int fd;
+disestablish_ppp(
+    int fd)
 {
     int taskid = (int)0;
 
@@ -307,7 +307,7 @@ disestablish_ppp(fd)
  * Check whether the link seems not to be 8-bit clean.
  */
 void
-clean_check()
+clean_check(void)
 {
     int x;
     char *s;
@@ -343,8 +343,8 @@ clean_check()
  * For *BSD, we assume that speed_t values numerically equal bits/second.
  */
 void
-set_up_tty(fd, local)
-    int fd, local;
+set_up_tty(
+    int fd, int local)
 {
     struct termios     tios;
 
@@ -412,8 +412,8 @@ set_up_tty(fd, local)
  * restore_tty - restore the terminal to the saved settings.
  */
 void
-restore_tty(fd)
-    int fd;
+restore_tty(
+    int fd)
 {
     if (restore_term) {
 	if (!default_device) {
@@ -440,8 +440,8 @@ restore_tty(fd)
  * This is called from die(), so it shouldn't call die().
  */
 void
-setdtr(fd, on)
-int fd, on;
+setdtr(
+  int fd, int on )
 {
     int modembits = TIOCM_DTR;
 
@@ -453,11 +453,11 @@ int fd, on;
  * to the uid given.  Assumes slave_name points to >= 12 bytes of space.
  */
 int
-get_pty(master_fdp, slave_fdp, slave_name, uid)
-    int *master_fdp;
-    int *slave_fdp;
-    char *slave_name;
-    int uid;
+get_pty(
+    int *master_fdp,
+    int *slave_fdp,
+    char *slave_name,
+    int uid)
 {
     return 1;
 }
@@ -469,7 +469,7 @@ get_pty(master_fdp, slave_fdp, slave_name, uid)
  * Here we use a pty.
  */
 int
-open_ppp_loopback()
+open_ppp_loopback(void)
 {
     return loop_master;
 }
@@ -479,10 +479,10 @@ open_ppp_loopback()
  * output - Output PPP packet.
  */
 void
-output(unit, p, len)
-    int unit;
-    u_char *p;
-    int len;
+output(
+    int unit,
+    u_char *p,
+    int len)
 {
     if (debug);
 	dbglog("sent %P", p, len);
@@ -510,8 +510,8 @@ ppp_delay(void)
  * if timo is NULL).
  */
 void
-wait_input(timo)
-    struct timeval *timo;
+wait_input(
+    struct timeval *timo)
 {
   rtems_event_set    events;
   rtems_interval     ticks = 0;
@@ -534,8 +534,8 @@ wait_input(timo)
  * read_packet - get a PPP packet from the serial device.
  */
 int
-read_packet(buf)
-    u_char *buf;
+read_packet(
+    u_char *buf)
 {
     int len;
 
@@ -555,7 +555,7 @@ read_packet(buf)
  * Return value is 1 if we need to bring up the link, 0 otherwise.
  */
 int
-get_loop_output()
+get_loop_output(void)
 {
     int rv = 0;
     int n;
@@ -579,10 +579,12 @@ get_loop_output()
  * the ppp interface.
  */
 void
-ppp_send_config(unit, mtu, asyncmap, pcomp, accomp)
-    int unit, mtu;
-    uint32_t asyncmap;
-    int pcomp, accomp;
+ppp_send_config(
+    int unit,
+    int mtu,
+    uint32_t asyncmap,
+    int pcomp, 
+    int accomp)
 {
     u_int x;
     struct ifreq ifr;
@@ -609,9 +611,9 @@ ppp_send_config(unit, mtu, asyncmap, pcomp, accomp)
  * ppp_set_xaccm - set the extended transmit ACCM for the interface.
  */
 void
-ppp_set_xaccm(unit, accm)
-    int unit;
-    ext_accm accm;
+ppp_set_xaccm(
+    int unit,
+    ext_accm accm)
 {
     if (ioctl(ppp_fd, PPPIOCSXASYNCMAP, accm) < 0 && errno != ENOTTY)
 	warn("ioctl(set extended ACCM): %m");
@@ -623,10 +625,11 @@ ppp_set_xaccm(unit, accm)
  * the ppp interface.
  */
 void
-ppp_recv_config(unit, mru, asyncmap, pcomp, accomp)
-    int unit, mru;
-    uint32_t asyncmap;
-    int pcomp, accomp;
+ppp_recv_config(
+    int unit, 
+    int mru,
+    uint32_t asyncmap,
+    int pcomp, int accomp)
 {
     int x;
 
@@ -648,9 +651,8 @@ ppp_recv_config(unit, mru, asyncmap, pcomp, accomp)
  * (e.g. code size should be reduced), or -1 if the method is unknown.
  */
 int
-ccp_test(unit, opt_ptr, opt_len, for_transmit)
-    int unit, opt_len, for_transmit;
-    u_char *opt_ptr;
+ccp_test(
+    int unit, u_char *opt_ptr, int opt_len, int for_transmit)
 {
     struct ppp_option_data data;
 
@@ -666,8 +668,8 @@ ccp_test(unit, opt_ptr, opt_len, for_transmit)
  * ccp_flags_set - inform kernel about the current state of CCP.
  */
 void
-ccp_flags_set(unit, isopen, isup)
-    int unit, isopen, isup;
+ccp_flags_set(
+    int unit, int isopen, int isup)
 {
     int x;
 
@@ -687,8 +689,8 @@ ccp_flags_set(unit, isopen, isup)
  * 0 otherwise.  This is necessary because of patent nonsense.
  */
 int
-ccp_fatal_error(unit)
-    int unit;
+ccp_fatal_error(
+    int unit)
 {
     int x;
 
@@ -703,9 +705,9 @@ ccp_fatal_error(unit)
  * get_idle_time - return how long the link has been idle.
  */
 int
-get_idle_time(u, ip)
-    int u;
-    struct ppp_idle *ip;
+get_idle_time(
+    int u,
+    struct ppp_idle *ip)
 {
     return ioctl(ppp_fd, PPPIOCGIDLE, ip) >= 0;
 }
@@ -714,9 +716,9 @@ get_idle_time(u, ip)
  * get_ppp_stats - return statistics for the link.
  */
 int
-get_ppp_stats(u, stats)
-    int u;
-    struct pppd_stats *stats;
+get_ppp_stats(
+    int u,
+    struct pppd_stats *stats)
 {
     struct ifpppstatsreq req;
 
@@ -737,8 +739,8 @@ get_ppp_stats(u, stats)
  * set_filters - transfer the pass and active filters to the kernel.
  */
 int
-set_filters(pass, active)
-    struct bpf_program *pass, *active;
+set_filters(
+    struct bpf_program *pass, struct bpf_program *active)
 {
     int ret = 1;
 
@@ -762,8 +764,8 @@ set_filters(pass, active)
  * sifvjcomp - config tcp header compression
  */
 int
-sifvjcomp(u, vjcomp, cidcomp, maxcid)
-    int u, vjcomp, cidcomp, maxcid;
+sifvjcomp(
+    int u, int vjcomp, int cidcomp, int maxcid)
 {
     u_int x;
 
@@ -788,8 +790,8 @@ sifvjcomp(u, vjcomp, cidcomp, maxcid)
  * sifup - Config the interface up and enable IP packets to pass.
  */
 int
-sifup(u)
-    int u;
+sifup(
+    int u)
 {
     struct ifreq ifr;
 
@@ -811,10 +813,10 @@ sifup(u)
  * sifnpmode - Set the mode for handling packets for a given NP.
  */
 int
-sifnpmode(u, proto, mode)
-    int u;
-    int proto;
-    enum NPmode mode;
+sifnpmode(
+    int u,
+    int proto,
+    enum NPmode mode)
 {
     struct npioctl npi;
 
@@ -831,8 +833,8 @@ sifnpmode(u, proto, mode)
  * sifdown - Config the interface down and disable IP.
  */
 int
-sifdown(u)
-    int u;
+sifdown(
+    int u)
 {
     struct ifreq ifr;
     int rv;
@@ -872,9 +874,9 @@ sifdown(u)
  * sifaddr - Config the interface IP addresses and netmask.
  */
 int
-sifaddr(u, o, h, m)
-    int u;
-    uint32_t o, h, m;
+sifaddr(
+    int u,
+    uint32_t o, uint32_t h, uint32_t m )
 {
     struct ifaliasreq ifra;
     struct ifreq ifr;
@@ -912,9 +914,9 @@ sifaddr(u, o, h, m)
  * through the interface if possible.
  */
 int
-cifaddr(u, o, h)
-    int u;
-    uint32_t o, h;
+cifaddr(
+    int u,
+    uint32_t o, uint32_t h )
 {
     struct ifaliasreq ifra;
 
@@ -937,9 +939,9 @@ cifaddr(u, o, h)
  * sifdefaultroute - assign a default route through the address given.
  */
 int
-sifdefaultroute(u, l, g)
-    int u;
-    uint32_t l, g;
+sifdefaultroute(
+    int u,
+    uint32_t l, uint32_t g)
 {
     return dodefaultroute(g, 's');
 }
@@ -948,9 +950,9 @@ sifdefaultroute(u, l, g)
  * cifdefaultroute - delete a default route through the address given.
  */
 int
-cifdefaultroute(u, l, g)
-    int u;
-    uint32_t l, g;
+cifdefaultroute(
+    int u,
+    uint32_t l, uint32_t g)
 {
     return dodefaultroute(g, 'c');
 }
@@ -959,9 +961,9 @@ cifdefaultroute(u, l, g)
  * dodefaultroute - talk to a routing socket to add/delete a default route.
  */
 static int
-dodefaultroute(g, cmd)
-    uint32_t g;
-    int cmd;
+dodefaultroute(
+    uint32_t g,
+    int cmd)
 {
 /*    int    status;  */
     struct sockaddr_in address;
@@ -1023,9 +1025,9 @@ static struct {
 static int arpmsg_valid;
 
 int
-sifproxyarp(unit, hisaddr)
-    int unit;
-    uint32_t hisaddr;
+sifproxyarp(
+    int unit,
+    uint32_t hisaddr)
 {
     int routes;
 
@@ -1073,9 +1075,9 @@ sifproxyarp(unit, hisaddr)
  * cifproxyarp - Delete the proxy ARP entry for the peer.
  */
 int
-cifproxyarp(unit, hisaddr)
-    int unit;
-    uint32_t hisaddr;
+cifproxyarp(
+    int unit,
+    uint32_t hisaddr)
 {
     int routes;
 
@@ -1108,9 +1110,9 @@ cifproxyarp(unit, hisaddr)
  * sifproxyarp - Make a proxy ARP entry for the peer.
  */
 int
-sifproxyarp(unit, hisaddr)
-    int unit;
-    uint32_t hisaddr;
+sifproxyarp(
+    int unit,
+    uint32_t hisaddr)
 {
     struct arpreq arpreq;
     struct {
@@ -1148,9 +1150,9 @@ sifproxyarp(unit, hisaddr)
  * cifproxyarp - Delete the proxy ARP entry for the peer.
  */
 int
-cifproxyarp(unit, hisaddr)
-    int unit;
-    uint32_t hisaddr;
+cifproxyarp(
+    int unit,
+    uint32_t hisaddr)
 {
     struct arpreq arpreq;
 
@@ -1174,9 +1176,9 @@ cifproxyarp(unit, hisaddr)
 #define MAX_IFS		32
 
 static int
-get_ether_addr(ipaddr, hwaddr)
-    uint32_t ipaddr;
-    struct sockaddr_dl *hwaddr;
+get_ether_addr(
+    uint32_t ipaddr,
+    struct sockaddr_dl *hwaddr)
 {
     struct ifreq *ifr, *ifend, *ifp;
     uint32_t ina, mask;
@@ -1259,8 +1261,8 @@ get_ether_addr(ipaddr, hwaddr)
  * user-specified netmask.
  */
 uint32_t
-GetMask(addr)
-    uint32_t addr;
+GetMask(
+    uint32_t addr)
 {
     uint32_t mask, nmask, ina;
     struct ifreq *ifr, *ifend, ifreq;
@@ -1332,7 +1334,7 @@ int have_route_to(uint32_t addr)
  * Use the hostid as part of the random number seed.
  */
 int
-get_host_seed()
+get_host_seed(void)
 {
     return 17;
 }
