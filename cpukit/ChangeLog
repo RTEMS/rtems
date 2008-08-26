@@ -1,3 +1,7 @@
+2008-08-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/fsmount/fsmount.c: Convert to using bool.
+
 2008-08-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* libbcsupport/src/printk_plugin.c: properly terminate va_list
