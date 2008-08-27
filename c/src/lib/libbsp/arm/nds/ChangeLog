@@ -1,5 +1,6 @@
 2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* timer/timer.c: Eliminate rtems_boolean.
 	* libnds/include/nds/jtypes.h: Use bool/stdbool.h instead of 
 	local (non-POSIX compliant) "bool".
 
