@@ -1,3 +1,7 @@
+2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove stray include_HEADERS += irq/irq.h.
+
 2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: No BSP should use exit.c as a file name. exit() is POSIX

@@ -53,8 +53,6 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES) $(abort_SOURCES) $(irq_SOURCES)
 
-include_HEADERS += irq/irq.h
-
 # libcpu libraries could go here
 libbsp_a_LIBADD = 
 if HAS_NETWORKING
