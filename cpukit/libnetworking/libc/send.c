@@ -43,10 +43,11 @@
 #include <stddef.h>
 
 ssize_t
-send(s, msg, len, flags)
-	int s, flags;
-	size_t len;
-	const void *msg;
+send(
+	int s, 
+	const void *msg,
+	size_t len,
+	int flags )
 {
 	return (sendto(s, msg, len, flags, NULL, 0));
 }

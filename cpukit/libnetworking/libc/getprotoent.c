@@ -53,8 +53,8 @@ static char *proto_aliases[MAXALIASES];
 int _proto_stayopen;
 
 void
-setprotoent(f)
-	int f;
+setprotoent(
+	int f)
 {
 	if (protof == NULL)
 		protof = fopen(_PATH_PROTOCOLS, "r" );
@@ -64,7 +64,7 @@ setprotoent(f)
 }
 
 void
-endprotoent()
+endprotoent(void)
 {
 	if (protof) {
 		fclose(protof);
@@ -74,7 +74,7 @@ endprotoent()
 }
 
 struct protoent *
-getprotoent()
+getprotoent(void)
 {
 	char *p;
 	register char *cp, **q;

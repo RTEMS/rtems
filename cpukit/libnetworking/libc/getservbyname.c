@@ -62,8 +62,9 @@ int getservbyname_r(
 
 
 struct servent *
-getservbyname(name, proto)
-	const char *name, *proto;
+getservbyname(
+	const char *name, 
+	const char *proto )
 {
 	register struct servent *p;
 	register char **cp;

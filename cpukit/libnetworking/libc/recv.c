@@ -43,10 +43,11 @@
 #include <stddef.h>
 
 ssize_t
-recv(s, buf, len, flags)
-	int s, flags;
-	size_t len;
-	void *buf;
+recv(
+	int s,
+	void *buf,
+	size_t len,
+	int flags )
 {
 	return (recvfrom(s, buf, len, flags, NULL, 0));
 }

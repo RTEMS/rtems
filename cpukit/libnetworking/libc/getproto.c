@@ -44,8 +44,8 @@ extern int _proto_stayopen;
 extern struct protoent * getprotobynumber_static(int);
 
 struct protoent *
-getprotobynumber(proto)
-	register int proto;
+getprotobynumber(
+	int proto )
 {
 	register struct protoent *p;
 
