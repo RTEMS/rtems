@@ -178,7 +178,6 @@ AC_CONFIG_FILES([rtems4.9/mipstx39/Makefile])
 AC_CONFIG_FILES([rtems4.9/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.9/sh/Makefile])
 AC_CONFIG_FILES([rtems4.9/sparc/Makefile])
-AC_CONFIG_FILES([rtems4.9/tic4x/Makefile])
 
 AC_CONFIG_FILES([rtems4.10/Makefile])
 AC_CONFIG_FILES([rtems4.10/arm/Makefile])
