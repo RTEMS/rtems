@@ -55,7 +55,7 @@
  #define GBA_TM0CNT_PS    0x0003
 #endif
 
-rtems_boolean  Timer_driver_Find_average_overhead;
+bool Timer_driver_Find_average_overhead;
 
 /**
  *  @brief Timer_initialize start TM0 and TM1
@@ -143,7 +143,7 @@ rtems_status_code Empty_function( void )
  *  @param  find_flag boolean find_flag
  *  @return None
 */
-void Set_find_average_overhead(rtems_boolean find_flag)
+void Set_find_average_overhead(bool find_flag)
 {
    Timer_driver_Find_average_overhead = find_flag;
 }

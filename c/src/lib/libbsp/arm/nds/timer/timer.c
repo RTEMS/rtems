@@ -15,7 +15,7 @@
 #include <bsp.h>
 #include <nds.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
+bool Timer_driver_Find_average_overhead;
 
 void
 Timer_initialize (void)
@@ -56,7 +56,7 @@ Empty_function (void)
 }
 
 void
-Set_find_average_overhead (rtems_boolean find_flag)
+Set_find_average_overhead (bool find_flag)
 {
   Timer_driver_Find_average_overhead = find_flag;
 }
