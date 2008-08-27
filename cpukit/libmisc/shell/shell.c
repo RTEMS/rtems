@@ -652,22 +652,6 @@ rtems_task rtems_shell_task(rtems_task_argument task_argument)
   rtems_task_delete( RTEMS_SELF );
 }
 
-void rtems_shell_get_prompt(
-  rtems_shell_env_t *shell_env,
-  char              *prompt,
-  int                size)
-{
-  char curdir[256];
-  
-  /* XXX: show_prompt user adjustable */
-  getcwd(curdir,sizeof(curdir));
-  snprintf(prompt, size - 1, "%s%s[%s] %c ",
-          ((shell_env->taskname) ? shell_env->taskname : ""),
-          ((shell_env->taskname) ? " " : ""),
-          curdir,
-          geteuid()?'$':'#');
-}
-
 #define RTEMS_SHELL_MAXIMUM_ARGUMENTS (128)
 #define RTEMS_SHELL_CMD_SIZE          (128)
 #define RTEMS_SHELL_CMD_COUNT         (32)

@@ -225,6 +225,25 @@ struct rtems_shell_filesystems_tt {
   rtems_shell_filesystems_mounter_t  mounter;
 };
 
+/**
+ *  This method dynamically builds the command line prompt string
+ *  and places it in @a prompt.
+ *
+ *  @param[in] shell_env is the shell execution environment
+ *  @param[in] prompt is a pointer to a string buffer area
+ *  @param[in] size is length of the prompt buffer area
+ *
+ *  @return This method fills in the memory pointed to by @a prompt.
+ *
+ *  @note An application specific implementation can be provided
+ *        by the user.
+ */
+void rtems_shell_get_prompt(
+  rtems_shell_env_t *shell_env,
+  char              *prompt,
+  size_t             size
+);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,3 +1,10 @@
+2008-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/shell.c, libmisc/shell/shell.h:
+	Split out rtems_shell_get_prompt() so it can be overridden by the
+	user.
+	* libmisc/shell/shell_getprompt.c: New file.
+
 2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/libc/getproto.c, libnetworking/libc/getprotoent.c,
