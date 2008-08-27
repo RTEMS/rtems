@@ -122,12 +122,8 @@ typedef struct touchPosition {
 } touchPosition;
 
 
-#ifndef __cplusplus
-/** C++ compatible bool for C
-
-*/
-typedef enum { false, true } bool;
-#endif
+/** C++ compatible bool for C */
+#include <stdbool.h>
 
 // Handy function pointer typedefs
 typedef void ( * IntFn)(void);
