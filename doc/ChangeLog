@@ -1,3 +1,7 @@
+2008-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/object.t: Correct order of arguments.
+
 2008-08-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/clock.t: Correct discussion of timeval.

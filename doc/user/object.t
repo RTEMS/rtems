@@ -806,8 +806,8 @@ or free it.
 @findex rtems_object_get_api_class_name
 @example
 const char *rtems_object_get_api_class_name(
-  uint32_t the_class,
-  uint32_t the_api
+  uint32_t the_api,
+  uint32_t the_class
 );
 @end example
 @end ifset
