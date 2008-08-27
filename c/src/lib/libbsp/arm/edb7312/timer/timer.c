@@ -25,7 +25,7 @@
 #include <ep7312.h>
 
 uint16_t         tstart;
-rtems_boolean Timer_driver_Find_average_overhead;
+bool Timer_driver_Find_average_overhead;
 
 void Timer_initialize( void )
 {
@@ -85,7 +85,7 @@ rtems_status_code Empty_function( void )
 }
 
 void Set_find_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   Timer_driver_Find_average_overhead = find_flag;
