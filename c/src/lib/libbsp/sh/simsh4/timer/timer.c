@@ -22,7 +22,7 @@
 
 uint32_t         Timer_interrupts;
 
-rtems_boolean Timer_driver_Find_average_overhead;
+bool Timer_driver_Find_average_overhead;
 
 /* External assembler interrupt handler routine */
 extern rtems_isr timerisr(rtems_vector_number vector);
@@ -103,7 +103,7 @@ Empty_function(void)
  *     none
  */
 void
-Set_find_average_overhead(rtems_boolean find_flag)
+Set_find_average_overhead(bool find_flag)
 {
   Timer_driver_Find_average_overhead = find_flag;
 }
