@@ -29,13 +29,6 @@
 uint32_t g_start;
 uint32_t g_freq;
 
-#ifndef __cplusplus
-#define bool	int
-#define true	1
-#define false	0
-
-#endif/* __cplusplus */
-
 rtems_boolean Timer_driver_Find_average_overhead;
 
     
@@ -64,9 +57,6 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  uint32_t t;
-  unsigned long long total;
-  
   return (T0TC/(LPC22xx_Fpclk/1000000));
   /*
    *  Total is calculated by taking into account the number of timer overflow
