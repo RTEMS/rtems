@@ -1,3 +1,12 @@
+2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/getproto.c, libnetworking/libc/getprotoent.c,
+	libnetworking/libc/getprotoname.c,
+	libnetworking/libc/getservbyname.c,
+	libnetworking/libc/inet_makeaddr.c, libnetworking/libc/recv.c,
+	libnetworking/libc/send.c: Stop using old-style
+	function-definitions.
+
 2008-08-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/fsmount/fsmount.c: Convert to using bool.
