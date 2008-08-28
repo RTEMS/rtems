@@ -100,6 +100,7 @@ typedef struct {
 	int				(*inbound_p_cfg) (unsigned long, unsigned long, unsigned long, unsigned long, unsigned long);
 	void			(*outbound_p_show)(FILE*);
 	void			(*inbound_p_show) (FILE*);
+	void            (*reset_bus)(void);
 	int				(*install_irq_mgr)(int, int, int, ...);
 	int             irq_mgr_flags;
 } VMEOpsRec, *VMEOps;
@@ -126,6 +127,7 @@ static VMEOpsRec uniOpsRec = {
 	inbound_p_cfg:		vmeUniverseSlavePortCfg,
 	outbound_p_show:	vmeUniverseMasterPortsShow,
 	inbound_p_show:		vmeUniverseSlavePortsShow,
+	reset_bus:          vmeUniverseResetBus,
 	install_irq_mgr:	vmeUniverseInstallIrqMgrAlt,
 	irq_mgr_flags:      VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |
 	                    VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,
@@ -155,6 +157,7 @@ static VMEOpsRec tsiOpsRec = {
 	inbound_p_cfg:		vmeTsi148InboundPortCfg,
 	outbound_p_show:	vmeTsi148OutboundPortsShow,
 	inbound_p_show:		vmeTsi148InboundPortsShow,
+	reset_bus:          vmeTsi148ResetBus,
 	install_irq_mgr:	vmeTsi148InstallIrqMgrAlt,
 	irq_mgr_flags:      VMETSI148_IRQ_MGR_FLAG_SHARED,
 };
@@ -254,6 +257,12 @@ void
 BSP_VMEInboundPortsShow(FILE *f)
 {
 	theOps->inbound_p_show(f);
+}
+
+void
+BSP_VMEResetBus(void)
+{
+	theOps->reset_bus();
 }
 
 int
