@@ -33,7 +33,7 @@ Name:		rtems-4.10-sh-rtems4.10-binutils
 Summary:	Binutils for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -56,7 +56,7 @@ Requires:	rtems-4.10-binutils-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{binutils_version}" == "2.18"
-Patch0:		binutils-2.18-rtems4.9-20080211.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.18-rtems4.9-20080211.diff
 %endif
 
 %description
@@ -134,6 +134,9 @@ cd ..
   fi
   if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/sh-rtems4.10-windres%{_exeext}; then 
     rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/sh-rtems4.10-windres*
+  fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/sh-rtems4.10-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/sh-rtems4.10-windmc*
   fi
 
   cd ..
