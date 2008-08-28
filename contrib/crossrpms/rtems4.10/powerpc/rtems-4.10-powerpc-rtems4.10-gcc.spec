@@ -26,9 +26,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.1
-%define gcc_version 4.3.1
-%define gcc_rpmvers %{expand:%(echo "4.3.1" | tr - _ )}
+%define gcc_pkgvers 4.3.2
+%define gcc_version 4.3.2
+%define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -40,7 +40,7 @@ Summary:      	powerpc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -92,12 +92,19 @@ Requires:	rtems-4.10-powerpc-rtems4.10-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
+%if "%{gcc_version}" == "4.3.2"
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-20080828.diff
+%endif
 %if "%{gcc_version}" == "4.3.1"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.3.1-rtems4.9-20080628.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.1-rtems4.9-20080628.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
+%if "%{gcc_version}" == "4.3.2" 
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
 %if "%{gcc_version}" == "4.3.1" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
@@ -105,7 +112,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080430.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.16.0-rtems4.10-20080827.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -191,6 +198,7 @@ cd ..
     --disable-win32-registry \
     --enable-version-specific-runtime-libs \
     --enable-threads \
+    --enable-newlib-io-c99-formats \
     --enable-languages="$languages" $optargs
 
 %if "%_host" != "%_build"
