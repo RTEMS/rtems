@@ -110,4 +110,8 @@ BSP_VMEOutboundPortsShow(FILE *f);
 void
 BSP_VMEInboundPortsShow(FILE *f);
 
+/* Assert VME SYSRESET */
+void
+BSP_VMEResetBus(void);
+
 #endif

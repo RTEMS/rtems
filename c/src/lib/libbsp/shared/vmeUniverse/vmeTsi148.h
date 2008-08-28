@@ -108,15 +108,23 @@ vmeTsi148InitInstance(unsigned instance);
 int
 vmeTsi148Init(void);
 
-/* setup the tsi148 chip, i.e. disable most of its
+/* Setup the tsi148 chip, i.e. disable most of its
  * mappings, reset interrupts etc.
  */
 void
 vmeTsi148ResetXX(BERegister *base);
 
-/* setup the tsi148 connected to the first driver slot */
+/* Setup the tsi148 connected to the first driver slot */
 void
 vmeTsi148Reset();
+
+/* Pull VME SYSRESET line */
+void
+vmeTsi148ResetBusXX(BERegister *base);
+
+/* Pull VME SYSRESET line of the 1st controller */
+void
+vmeTsi148ResetBus(void);
 
 /* NOTE: all non-'XX' versions of driver entry points which
  *       have an associated 'XX' entry point operate on the

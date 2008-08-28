@@ -1,3 +1,12 @@
+2008-08-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.h, vmeUniverse/vmeTsi148.c:
+	added vmeTsi148ResetBusXX(), vmeTsi148ResetBus().
+
+2008-08-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/VME.h: added BSP_VMEResetBus().
+
 2008-08-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* src/irq-generic.c: Fixed integer conversion warnings.

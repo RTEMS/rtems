@@ -168,6 +168,18 @@
 #	define TSI_VMCTRL_VREQL_MSK	(3<< 0)
 #	define TSI_VMCTRL_VREQL(x)	((x)&3)
 
+#define TSI_VCTRL_REG		0x238
+#define TSI_VCTRL_DLT_MSK		(0xf<<24)
+#define TSI_VCTRL_NELBB			(1<<20)
+#define TSI_VCTRL_SRESET		(1<<17)
+#define TSI_VCTRL_LRESET		(1<<16)
+#define TSI_VCTRL_SFAILAI		(1<<15)
+#define TSI_VCTRL_BID_MSK		(0x1f<<8)
+#define TSI_VCTRL_ATOEN			(1<< 7)
+#define TSI_VCTRL_ROBIN			(1<< 6)
+#define TSI_VCTRL_GTO_MSK		(7<< 0)
+
+
 #define TSI_VSTAT_REG		0x23c
 #	define TSI_VSTAT_CPURST		(1<<15)	/* clear power-up reset bit */
 #	define TSI_VSTAT_BDFAIL		(1<<14)
@@ -529,6 +541,25 @@ vmeTsi148Reset()
 {
 	vmeTsi148ResetXX(THEBASE);
 }
+
+void
+vmeTsi148ResetBusXX(BERegister *base)
+{
+unsigned long flags;
+uint32_t      v;
+
+	rtems_interrupt_disable(flags);
+	v = TSI_RD(base, TSI_VCTRL_REG);
+	TSI_WR(base, TSI_VCTRL_REG, v | TSI_VCTRL_SRESET);
+	rtems_interrupt_enable(flags);
+}
+
+void
+vmeTsi148ResetBus(void)
+{
+	vmeTsi148ResetBusXX(THEBASE);
+}
+
 
 /* convert an address space selector to a corresponding
  * Tsi148 control mode word
