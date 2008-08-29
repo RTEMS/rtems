@@ -40,10 +40,9 @@ dist_project_lib_DATA += startup/linkcmds
 noinst_LIBRARIES = libbsp.a
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bsppredriverhook.c \
-    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppredriverhook.c startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 
 pclock_SOURCES = ../shared/clock/p_clock.c
 console_SOURCES = ../../shared/console-polled.c
