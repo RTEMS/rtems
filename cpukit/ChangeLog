@@ -1,3 +1,7 @@
+2008-08-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ftpd/ftpd.c: Fix prototype.
+
 2008-08-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libmisc/Makefile.am, libmisc/shell/shell.c, libmisc/shell/shell.h:
