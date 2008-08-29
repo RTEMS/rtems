@@ -1,3 +1,7 @@
+2008-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove duplicate reference.
+
 2008-08-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/irq_init.c: Fix warnings.
