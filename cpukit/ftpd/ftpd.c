@@ -1998,7 +1998,7 @@ daemon(rtems_task_argument args)
  *    returns RTEMS_SUCCESSFUL on successful start of the daemon.
  */
 int
-rtems_initialize_ftpd()
+rtems_initialize_ftpd(void)
 {
   rtems_status_code   sc;
   rtems_id            tid;
