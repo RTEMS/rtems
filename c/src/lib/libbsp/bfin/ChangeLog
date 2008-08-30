@@ -1,3 +1,7 @@
+2008-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* acinclude.m4: Add bf537Stamp. Regenerate.
+
 2008-08-18	Allan Hessenflow <allanh@kallisti.com>
 
 	* shared/clock/clockdrv.c, shared/clock/rtc.c, shared/clock/tod.h,

@@ -2,6 +2,8 @@
 AC_DEFUN([RTEMS_CHECK_BSPDIR],
 [
   case "$1" in
+  bf537Stamp )
+    AC_CONFIG_SUBDIRS([bf537Stamp]);;
   eZKit533 )
     AC_CONFIG_SUBDIRS([eZKit533]);;
   *)
