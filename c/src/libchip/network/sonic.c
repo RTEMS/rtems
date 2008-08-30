@@ -1103,7 +1103,6 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
   void *rp = sc->sonic;
   int i;
   unsigned char *hwaddr;
-  rtems_isr_entry old_handler;
   TransmitDescriptorPointer_t tdp;
   ReceiveDescriptorPointer_t ordp, rdp;
   ReceiveResourcePointer_t rwp;
@@ -1406,7 +1405,9 @@ SONIC_STATIC void sonic_initialize_hardware(struct sonic_softc *sc)
 /* XXX
   (*sc->write_register)( rp, SONIC_REG_IMR, 0 );
 */
-  old_handler = set_vector(sonic_interrupt_handler, sc->vector, 1);
+
+  /* Ignore returned old handler */
+  (void) set_vector(sonic_interrupt_handler, sc->vector, 1);
 
   /*
    * Remainder of hardware initialization is
