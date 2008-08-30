@@ -81,8 +81,7 @@ libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
 
 ## KEY_C_FILES
 libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
-    src/keygetspecific.c \
-    src/keyrundestructors.c src/keysetspecific.c
+    src/keygetspecific.c src/keyrundestructors.c src/keysetspecific.c
 
 ## MEMORY_C_FILES
 libposix_a_SOURCES += src/mprotect.c

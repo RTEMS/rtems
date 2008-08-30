@@ -1,3 +1,8 @@
+2008-08-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am, rtems/src/tasksetpriority.c: Improve comments and
+	wrapping.
+
 2008-08-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ftpd/ftpd.c: Fix prototype.
