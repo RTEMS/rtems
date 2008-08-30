@@ -1,3 +1,7 @@
+2008-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* acinclude.m4: Add mcf52235 and mcf5329. Regenerate.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/m68kbspgetworkarea.c: Move extern of global symbols from
