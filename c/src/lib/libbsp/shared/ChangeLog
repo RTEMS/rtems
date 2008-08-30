@@ -1,3 +1,8 @@
+2008-08-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c: Fix formatting.
+	* console-polled.c: Error if minor < 2 not just <= 2.
+
 2008-08-28	Till Straumann <strauman@slac.stanford.edu>
 
 	* vmeUniverse/vmeTsi148.h, vmeUniverse/vmeTsi148.c:

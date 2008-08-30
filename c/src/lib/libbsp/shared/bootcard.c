@@ -98,7 +98,7 @@ char *rtems_progname;
       }
     }
 
-    bsp_libc_init( heap_start, heap_size, 0);
+    bsp_libc_init(heap_start, heap_size, 0);
 
     return RTEMS_SUCCESSFUL;
   }

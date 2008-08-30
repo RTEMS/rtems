@@ -103,7 +103,7 @@ rtems_device_driver console_open(
   };
 
   assert( minor <= 1 );
-  if ( minor > 2 )
+  if ( minor > 1 )
     return RTEMS_INVALID_NUMBER;
 
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks );
