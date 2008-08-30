@@ -42,7 +42,7 @@ include_bsp_HEADERS = include/mpc55xxevb.h \
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../shared/src/tictac.c startup/bspclean.c \
-    startup/bspstart.c
+    startup/bspstart.c ../../shared/bsppretaskinghook.c
 
 clock_SOURCES = ../shared/clock/clock.c
 

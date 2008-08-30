@@ -87,13 +87,6 @@ void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **h
 	*heap_size = (size_t) bsp_external_ram_size;
 }
 
-void bsp_pretasking_hook()
-{
-#ifdef STACK_CHECKER_ON
-	Stack_check_Initialize();
-#endif
-}
-
 void bsp_predriver_hook()
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
