@@ -1,3 +1,7 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/src/tmtests_empty_function.c: New file.
+
 2008-07-02 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: Require AC_DISABLE_OPTION_CHECKING.
