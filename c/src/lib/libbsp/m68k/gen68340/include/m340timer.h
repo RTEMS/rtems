@@ -25,7 +25,7 @@
 #ifndef __m340timer_H__
 #define __m340timer_H__
 
-extern void Fifo_Full_benchmark_timerinitialize (void);
+extern void Fifo_Full_benchmark_timer_initialize (void);
 
 extern void (*Restart_Fifo_Full_A_Timer)();
 extern void (*Restart_Check_A_Timer)();

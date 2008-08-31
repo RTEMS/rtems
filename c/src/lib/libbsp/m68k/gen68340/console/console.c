@@ -553,7 +553,7 @@ rtems_device_driver console_initialize(
 	 */
         Init_UART_Table();
 	dbugInitialise ();
-	Fifo_Full_benchmark_timerinitialize();
+	Fifo_Full_benchmark_timer_initialize();
 
 	/*
 	 * Register the devices
