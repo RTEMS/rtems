@@ -2,7 +2,7 @@
  *
  *  This ISR is used to bump a count of interval "overflow" interrupts which
  *  have occurred since the timer was started. The number of overflows is taken
- *  into account in the Read_timer() routine.
+ *  into account in the benchmark_timerread() routine.
  *
  *  Input parameters:  NONE
  *
