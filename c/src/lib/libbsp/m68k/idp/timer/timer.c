@@ -32,11 +32,11 @@
 #define TIMER_VECTOR 0x4D
 
 int Ttimer_val;
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
 rtems_isr timerisr(void);
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );  /* install ISR */
 
@@ -64,7 +64,7 @@ void Timer_initialize(void)
 #define AVG_OVERHEAD      9  /* may not be right -- do this later */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint8_t         data;
   uint8_t          msb, osb, lsb;
@@ -93,7 +93,7 @@ int Read_timer(void)
   MC68230_WRITE (MC68230_TCR, 0xA1);
 
   /* do not restore old vector */
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in countdown units */
 
   if ( total < LEAST_VALID )
@@ -105,14 +105,14 @@ int Read_timer(void)
   return (total - AVG_OVERHEAD);
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

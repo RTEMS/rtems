@@ -18,8 +18,8 @@
  * Notes:
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
- *  Timer_initialize() and Read_timer().  Read_timer() usually returns
- *  the number of microseconds since Timer_initialize() exitted.
+ *  benchmark_timerinitialize() and benchmark_timerread().  benchmark_timerread() usually returns
+ *  the number of microseconds since benchmark_timerinitialize() exitted.
  *
  *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
@@ -55,15 +55,15 @@
  #define GBA_TM0CNT_PS    0x0003
 #endif
 
-bool Timer_driver_Find_average_overhead;
+bool benchmark_timerfind_average_overhead;
 
 /**
- *  @brief Timer_initialize start TM0 and TM1
+ *  @brief benchmark_timerinitialize start TM0 and TM1
  *
  *  @param  None
  *  @return None
  */
-void Timer_initialize( void )
+void benchmark_timerinitialize( void )
 {
   GBA_REG_TM1CNT =  0x0000;                /* Stop Counters         */
   GBA_REG_TM0CNT =  0x0000;
@@ -75,7 +75,7 @@ void Timer_initialize( void )
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timerread().
  *
  *  AVG_OVEREHAD is the overhead for starting and stopping the timer.  It
  *  is usually deducted from the number returned.
@@ -88,14 +88,14 @@ void Timer_initialize( void )
 #define LEAST_VALID     1  /**< Don't trust a clicks value lower than this */
 
 /**
- *  @brief Read_timer return timer countervalue in microseconds.
+ *  @brief benchmark_timerread return timer countervalue in microseconds.
  *
  *  Used in Timing Test Suite.
  *
  *  @param  None
  *  @return Timer value in microseconds
  */
-uint32_t Read_timer( void )
+uint32_t benchmark_timerread( void )
 {
   uint32_t  ticks;
   uint32_t  total;
@@ -110,7 +110,7 @@ uint32_t Read_timer( void )
   }
   /* convert to uS */
   total = ((ticks * __TickTime_ns) / 1000);
-  if ( Timer_driver_Find_average_overhead == 1 ) {
+  if ( benchmark_timerfind_average_overhead == 1 ) {
       return total;          /* in microseconds */
   }
   else {
@@ -130,20 +130,20 @@ uint32_t Read_timer( void )
  *  @param  None
  *  @return RTEMS_SUCCESSFUL
 */
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
    return RTEMS_SUCCESSFUL;
 }
 
 /**
- *  @brief Set Timer_driver_Find_average_overhead flag.
+ *  @brief Set benchmark_timerfind_average_overhead flag.
  *
  *  Used in Timing Test Suite.
  *
  *  @param  find_flag boolean find_flag
  *  @return None
 */
-void Set_find_average_overhead(bool find_flag)
+void benchmark_timerdisable_subtracting_average_overhead(bool find_flag)
 {
-   Timer_driver_Find_average_overhead = find_flag;
+   benchmark_timerfind_average_overhead = find_flag;
 }

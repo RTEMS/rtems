@@ -17,9 +17,9 @@
 
 #include <bsp.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   /*
    *  Programming the compare register as the maximum value should let
@@ -45,13 +45,13 @@ void Timer_initialize(void)
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* tx39 simulator can count instructions. :) */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint32_t          total;
 
   total = TX3904_TIMER_READ( TX3904_TIMER1_BASE, TX3904_TIMER_TRR );
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -60,14 +60,14 @@ int Read_timer(void)
   return total - AVG_OVERHEAD;
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

@@ -28,7 +28,7 @@
 #include <stdlib.h>
 
 int Ttimer_val;
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
 extern void timerisr(void);
 extern int ClockIsOn(const rtems_raw_irq_connect_data*);
@@ -81,7 +81,7 @@ void Timer_exit(void)
  }
 }
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
 
   static rtems_boolean First = TRUE;
@@ -92,7 +92,7 @@ void Timer_initialize(void)
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
     if (!i386_set_idt_entry (&timer_raw_irq_data)) {
-      printk("Timer_initialize: raw handler installation failed\n");
+      printk("benchmark_timerinitialize: raw handler installation failed\n");
       rtems_fatal_error_occurred(1);
     }
   }
@@ -107,7 +107,7 @@ void Timer_initialize(void)
                              /* (3 ticks) to start/stop the timer. */
 #define LEAST_VALID       4  /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   register uint32_t         clicks;
   register uint32_t         total;
@@ -124,7 +124,7 @@ int Read_timer(void)
 
   /* ??? Is "do not restore old vector" causing problems? */
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one microsecond units */
 
   else {
@@ -134,14 +134,14 @@ int Read_timer(void)
   }
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

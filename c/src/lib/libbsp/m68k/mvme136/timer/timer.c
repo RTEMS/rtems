@@ -29,11 +29,11 @@
 #define TIMER 0xfffb0000   /* address of Z8036 on MVME136 */
 
 int Ttimer_val;
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
 rtems_isr timerisr(void);
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   (void) set_vector( timerisr, 66, 0 );       /* install ISR */
 
@@ -65,7 +65,7 @@ void Timer_initialize(void)
                              /* (6 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
 /*
   uint8_t          msb, lsb;
@@ -82,7 +82,7 @@ remaining = 0xffff - *((uint16_t*) 0xfffb0010);
 */
   total = (Ttimer_val * 0x10000) + remaining;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one-half microsecond units */
 
   else {
@@ -92,14 +92,14 @@ remaining = 0xffff - *((uint16_t*) 0xfffb0010);
   }
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

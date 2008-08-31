@@ -15,10 +15,10 @@
 #include <bsp.h>
 #include <nds.h>
 
-bool Timer_driver_Find_average_overhead;
+bool benchmark_timerfind_average_overhead;
 
 void
-Timer_initialize (void)
+benchmark_timerinitialize (void)
 {
   TIMER_CR (1) = 0x0000;
   TIMER_CR (2) = 0x0000;
@@ -36,7 +36,7 @@ Timer_initialize (void)
 #define LEAST_VALID     1
 
 uint32_t
-Read_timer (void)
+benchmark_timerread (void)
 {
   uint32_t ticks;
 
@@ -50,13 +50,13 @@ Read_timer (void)
 }
 
 rtems_status_code
-Empty_function (void)
+benchmark_timerempty_function (void)
 {
   return RTEMS_SUCCESSFUL;
 }
 
 void
-Set_find_average_overhead (bool find_flag)
+benchmark_timerdisable_subtracting_average_overhead (bool find_flag)
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

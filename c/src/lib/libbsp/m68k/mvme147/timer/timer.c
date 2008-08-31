@@ -32,11 +32,11 @@
 /* Each tick is 6.25 us */
 
 int Ttimer_val;
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
 rtems_isr timerisr(void);
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   (void) set_vector(timerisr, TIMER_1_VECTOR, 0); /* install ISR */
 
@@ -56,7 +56,7 @@ void Timer_initialize(void)
 				synchronized whith the counter updates*/
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint32_t         total;
   uint16_t         counter_value;
@@ -70,14 +70,14 @@ int Read_timer(void)
 
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

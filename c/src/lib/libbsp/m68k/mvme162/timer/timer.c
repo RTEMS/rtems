@@ -38,11 +38,11 @@
 #define TIMER_INT_LEVEL       6
 
 uint32_t            Ttimer_val;
-rtems_boolean       Timer_driver_Find_average_overhead;
+rtems_boolean       benchmark_timerfind_average_overhead;
 
 rtems_isr timerisr(void);
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   (void) set_vector( timerisr, VBR0 * 0x10 + 0x8, 0 );
 
@@ -63,13 +63,13 @@ void Timer_initialize(void)
                                 /* (3 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10U   /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint32_t            total;
 
   total = (Ttimer_val * TICK_INTERVAL) + lcsr->timer_cnt_1;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one-half microsecond units */
 
   if ( total < LEAST_VALID )
@@ -78,14 +78,14 @@ int Read_timer(void)
   return (total-AVG_OVERHEAD) >> 1;
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

@@ -16,10 +16,10 @@
 
 #include <bsp.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 uint32_t tstart;
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
     asm volatile ("mfc0 %0, $9\n" : "=r" (tstart));
     /* tick time in picooseconds */
@@ -30,7 +30,7 @@ void Timer_initialize(void)
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* tx39 simulator can count instructions. :) */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint32_t  total;
   uint32_t  cnt;
@@ -41,7 +41,7 @@ int Read_timer(void)
   total = (total * 1000) / 396; /* convert to nanoseconds */
 
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -50,14 +50,14 @@ int Read_timer(void)
   return total - AVG_OVERHEAD;
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

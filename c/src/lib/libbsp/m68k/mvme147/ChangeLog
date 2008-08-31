@@ -1,3 +1,8 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* timer/timer.c: Rename timer driver methods to follow RTEMS
+	programming conventions.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspclean.c, timer/timer.c: Add missing prototypes.
