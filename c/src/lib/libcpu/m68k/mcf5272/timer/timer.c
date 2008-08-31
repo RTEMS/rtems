@@ -140,23 +140,6 @@ benchmark_timer_read( void )
     return (total - AVG_OVERHEAD);
 }
 
-
-/* benchmark_timer_empty_function --
- *     Empty function call used in loops to measure basic cost of looping
- *     in Timing Test Suite.
- *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL
- */
-rtems_status_code
-benchmark_timer_empty_function(void)
-{
-    return RTEMS_SUCCESSFUL;
-}
-
 /* benchmark_timer_disable_subtracting_average_overhead --
  *     This routine is invoked by the "Check Timer" (tmck) test in the
  *     RTEMS Timing Test Suite. It makes the benchmark_timer_read routine not

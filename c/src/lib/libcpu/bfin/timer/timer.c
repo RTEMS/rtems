@@ -88,16 +88,6 @@ int benchmark_timer_read( void )
     }
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-
-rtems_status_code benchmark_timer_empty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
 void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )

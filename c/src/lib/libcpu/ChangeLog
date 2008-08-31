@@ -1,3 +1,11 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* arm/at91rm9200/timer/timer.c, arm/lpc22xx/timer/timer.c,
+	arm/mc9328mxl/timer/timer.c, arm/s3c2400/timer/timer.c,
+	arm/s3c24xx/timer/timer.c, bfin/timer/timer.c,
+	m68k/mcf5206/timer/timer.c, m68k/mcf5272/timer/timer.c: Rename timer
+	driver methods to follow RTEMS programming conventions.
+
 2006-08-09	Kolja Waschk <waschk@telos.de>
 
 	* nios2/Makefile.am, nios2/configure.ac, nios2/preinstall.am,
