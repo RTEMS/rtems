@@ -22,12 +22,12 @@
 
 uint32_t         Timer_interrupts;
 
-bool Timer_driver_Find_average_overhead;
+bool benchmark_timerfind_average_overhead;
 
 /* External assembler interrupt handler routine */
 extern rtems_isr timerisr(rtems_vector_number vector);
 
-/* Timer_initialize --
+/* benchmark_timerinitialize --
  *     Initialize timer 2 for accurate time measurement.
  *
  * PARAMETERS:
@@ -37,13 +37,13 @@ extern rtems_isr timerisr(rtems_vector_number vector);
  *     none
  */
 void
-Timer_initialize(void)
+benchmark_timerinitialize(void)
 {
     return;
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timerread().
  *
  *  FIND_AVG_OVERHEAD *  instructs the routine to return the "raw" count.
  *
@@ -59,7 +59,7 @@ Timer_initialize(void)
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-/* Read_timer --
+/* benchmark_timerread --
  *     Read timer value in microsecond units since timer start.
  *
  * PARAMETERS:
@@ -69,12 +69,12 @@ Timer_initialize(void)
  *     number of microseconds since timer has been started
  */
 int
-Read_timer( void )
+benchmark_timerread( void )
 {
     return 0;
 }
 
-/* Empty_function --
+/* benchmark_timerempty_function --
  *     Empty function call used in loops to measure basic cost of looping
  *     in Timing Test Suite.
  *
@@ -85,14 +85,14 @@ Read_timer( void )
  *     RTEMS_SUCCESSFUL
  */
 rtems_status_code
-Empty_function(void)
+benchmark_timerempty_function(void)
 {
     return RTEMS_SUCCESSFUL;
 }
 
-/* Set_find_average_overhead --
+/* benchmark_timerdisable_subtracting_average_overhead --
  *     This routine is invoked by the "Check Timer" (tmck) test in the
- *     RTEMS Timing Test Suite. It makes the Read_timer routine not
+ *     RTEMS Timing Test Suite. It makes the benchmark_timerread routine not
  *     subtract the overhead required to initialize and read the benchmark
  *     timer.
  *
@@ -103,7 +103,7 @@ Empty_function(void)
  *     none
  */
 void
-Set_find_average_overhead(bool find_flag)
+benchmark_timerdisable_subtracting_average_overhead(bool find_flag)
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

@@ -17,7 +17,7 @@
 #include <bsp.h>
 
 void
-Timer_initialize(void)
+benchmark_timerinitialize(void)
 {
     int preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;
     int div = MCF5282_TIMER_DTMR_CLK_DIV1;
@@ -35,7 +35,7 @@ Timer_initialize(void)
  * Return timer value in microsecond units
  */
 int
-Read_timer(void)
+benchmark_timerread(void)
 {
     return MCF5282_TIMER3_DTCN;
 }
@@ -45,12 +45,12 @@ Read_timer(void)
  *  in Timing Test Suite.
  */
 rtems_status_code
-Empty_function(void)
+benchmark_timerempty_function(void)
 {
     return RTEMS_SUCCESSFUL;
 }
 
 void
-Set_find_average_overhead(rtems_boolean find_flag)
+benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
 {
 }

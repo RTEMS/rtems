@@ -22,24 +22,24 @@
 
 #include <bsp.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
-rtems_boolean Timer_driver_Is_initialized = FALSE;
+rtems_boolean benchmark_timeris_initialized = FALSE;
 
-void Timer_initialize(void)
+void benchmark_timerinitialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
-  if ( Timer_driver_Is_initialized == FALSE ) {
+  if ( benchmark_timeris_initialized == FALSE ) {
 
     /* approximately 1 us per countdown */
     LEON_REG.Timer_Counter_2 = 0xffffff;
     LEON_REG.Timer_Reload_2 = 0xffffff;
 
   } else {
-    Timer_driver_Is_initialized = TRUE;
+    benchmark_timeris_initialized = TRUE;
   }
 
   LEON_REG.Timer_Control_2 = ( 
@@ -53,7 +53,7 @@ void Timer_initialize(void)
                              /*     to start/stop the timer. */
 #define LEAST_VALID       2  /* Don't trust a value lower than this */
 
-int Read_timer(void)
+int benchmark_timerread(void)
 {
   uint32_t total;
 
@@ -61,7 +61,7 @@ int Read_timer(void)
 
   total = 0xffffff - total;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -70,14 +70,14 @@ int Read_timer(void)
   return total - AVG_OVERHEAD;
 }
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }
