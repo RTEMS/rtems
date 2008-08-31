@@ -40,11 +40,11 @@
 
 uint32_t         Timer_interrupts;
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
 rtems_isr timerisr(void);
 
-void Timer_initialize( void )
+void benchmark_timerinitialize( void )
 {
     m302.reg.tmr2 = 0;			/* disable timer */
 
@@ -56,7 +56,7 @@ void Timer_initialize( void )
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timerread().
  *
  *  FIND_AVG_OVERHEAD *  instructs the routine to return the "raw" count.
  *
@@ -75,7 +75,7 @@ void Timer_initialize( void )
 /*
  * Return timer value in 1/2-microsecond units
  */
-int Read_timer( void )
+int benchmark_timerread( void )
 {
   uint16_t         clicks;
   uint32_t         total;
@@ -95,7 +95,7 @@ int Read_timer( void )
 
   total = (Timer_interrupts * TRR2_VAL) + clicks;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timerfind_average_overhead == 1 )
     return total;          /* in XXX microsecond units */
 
   if ( total < LEAST_VALID )
@@ -113,14 +113,14 @@ int Read_timer( void )
  *  in Timing Test Suite.
  */
 
-rtems_status_code Empty_function(void)
+rtems_status_code benchmark_timerempty_function(void)
 {
     return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }

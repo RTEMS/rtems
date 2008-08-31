@@ -4,7 +4,7 @@
  * All code in this routine is pure overhead which can perturb the
  * accuracy of RTEMS' timing test suite.
  *
- * See also:	Read_timer()
+ * See also:	benchmark_timerread()
  *
  * To reduce overhead this is best to be the "rawest" hardware interupt
  * handler you can write.  This should be the only interrupt which can
