@@ -113,12 +113,12 @@ void __do_nothing (void)
 #define Fifo_Full_on_B (m340_uart_config[UART_CHANNEL_B].rx_mode==UART_FIFO_FULL && m340_uart_config[UART_CHANNEL_B].enable && m340_uart_config[UART_CHANNEL_B].mode==UART_INTERRUPTS)
 
 /******************************************************
-  Name: Fifo_Full_Timer_initialize
+  Name: Fifo_Full_benchmark_timerinitialize
   Input parameters: -
   Output parameters: -
   Description: initialize Timer 1 for FIFO full mode
  *****************************************************/
-void Fifo_Full_Timer_initialize (void)
+void Fifo_Full_benchmark_timerinitialize (void)
 {
    float max_baud_rate;
    int prescaler_output_tap = -1;
@@ -218,12 +218,12 @@ void Fifo_Full_Timer_initialize (void)
 }
 
 /******************************************************
-  Name: Timer_initialize
+  Name: benchmark_timerinitialize
   Input parameters: -
   Output parameters: -
   Description: init Timer for timing test suites
  *****************************************************/
-void Timer_initialize (void)
+void benchmark_timerinitialize (void)
 {
 	/* Disable the timer */
 	TCR2 &= ~m340_SWR;
@@ -250,20 +250,20 @@ void Timer_initialize (void)
 }
 
 /******************************************************
-  Name: Read_timer
+  Name: benchmark_timerread
   Input parameters: -
   Output parameters: -
   Description: Return timer value in microsecond units
  *****************************************************/
 int
-Read_timer (void)
+benchmark_timerread (void)
 {
  /* there's CLOCK_SPEED / 16 micro seconds between two timer register decrement */
  return (((0xFFFF - TCNTR2) * CLOCK_SPEED) / 16);
 }
 
 /******************************************************
-  Name: Empty_function
+  Name: benchmark_timerempty_function
   Input parameters: -
   Output parameters: -
   Description: Empty function call used in loops to
@@ -271,18 +271,18 @@ Read_timer (void)
                in Timing Test Suite.
  *****************************************************/
 rtems_status_code
-Empty_function (void)
+benchmark_timerempty_function (void)
 {
 	return RTEMS_SUCCESSFUL;
 }
 
 /******************************************************
-  Name: Set_find_average_overhead
+  Name: benchmark_timerdisable_subtracting_average_overhead
   Input parameters: -
   Output parameters: -
   Description: -
  *****************************************************/
 void
-Set_find_average_overhead(rtems_boolean find_flag)
+benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
 {
 }
