@@ -1,9 +1,9 @@
 /*  timer.c
  *
  *  This file manages the benchmark timer used by the RTEMS Timing Test Suite.
- *  Each measured time period is demarcated by calls to benchmark_timerinitialize() and
- *  benchmark_timerread().  benchmark_timerread() usually returns the number of microseconds
- *  since benchmark_timerinitialize() exitted.
+ *  Each measured time period is demarcated by calls to benchmark_timer_initialize() and
+ *  benchmark_timer_read().  benchmark_timer_read() usually returns the number of microseconds
+ *  since benchmark_timer_initialize() exitted.
  *
  *  These functions are prototyped in rtems/c/src/lib/include/timerdrv.h and
  *  must be implemented as part of the BSP.
@@ -46,7 +46,7 @@ uint32_t            Ttimer_val;
  *  in the .bss section and on that section being explicitly zeroed at boot
  *  time.
  */
-rtems_boolean       benchmark_timerfind_average_overhead;
+rtems_boolean       benchmark_timer_find_average_overhead;
 
 rtems_isr timerisr(void);
 
@@ -70,7 +70,7 @@ rtems_isr timerisr(void);
  *  boot ROM to provide a 1 MHz clock to the timers. For a 25 MHz MVME167, the
  *  prescaler value should be 0xE7 (page 2-63).
  */
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );
 
@@ -105,13 +105,13 @@ void benchmark_timerinitialize(void)
  *  LEAST_VALID is the lowest number this routine should trust.  Numbers
  *  below this are "noise" and zero is returned.
  */
-int benchmark_timerread(void)
+int benchmark_timer_read(void)
 {
   uint32_t            total;
 
   total = (Ttimer_val * TICK_INTERVAL) + lcsr->timer_cnt_1;
 
-  if ( benchmark_timerfind_average_overhead )
+  if ( benchmark_timer_find_average_overhead )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -121,29 +121,16 @@ int benchmark_timerread(void)
 }
 
 /*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  time in microseconds
- */
-rtems_status_code benchmark_timerempty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-/*
- *  This routine sets the benchmark_timerfind_average_overhead flag in this
+ *  This routine sets the benchmark_timer_find_average_overhead flag in this
  *  module.
  *
  *  Input parameters:  NONE
  *
  *  Output parameters:  time in microseconds
  */
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
