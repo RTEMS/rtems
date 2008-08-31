@@ -1,3 +1,9 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc505/timer/timer.c, mpc5xx/timer/timer.c, mpc6xx/timer/timer.c,
+	mpc8260/timer/timer.c, mpc8xx/timer/timer.c, ppc403/timer/timer.c:
+	Rename timer driver methods to follow RTEMS programming conventions.
+
 2008-08-26	Thomas Doerfler <Thomas.Doerflerr@embedded-brains.de>
 
 	* mpc83xx/i2c/mpc83xx_i2cdrv.c: wait for proper end of transfer

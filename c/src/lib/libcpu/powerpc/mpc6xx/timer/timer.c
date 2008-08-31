@@ -21,7 +21,7 @@
 
 uint64_t   Timer_driver_Start_time;
 
-rtems_boolean Timer_driver_Find_average_overhead = 0;
+rtems_boolean benchmark_timer_find_average_overhead = 0;
 unsigned clicks_overhead = 0;
 
 /*
@@ -40,9 +40,9 @@ int Timer_get_clicks_overhead(void)
 }
 
 /*
- * Timer_initialize 
+ * benchmark_timer_initialize 
  */
-void Timer_initialize(void)
+void benchmark_timer_initialize(void)
 {
 
   /*
@@ -55,10 +55,10 @@ void Timer_initialize(void)
 
 
 /*
- *  Read_timer
+ *  benchmark_timer_read
  */
 
-int Read_timer(void)
+int benchmark_timer_read(void)
 {
   uint64_t    total64;
   uint32_t    total;
@@ -71,7 +71,7 @@ int Read_timer(void)
 
   total = (uint32_t) total64;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in "clicks" of the decrementer units */
 
   return (int) BSP_Convert_decrementer(total - clicks_overhead);
@@ -85,14 +85,9 @@ unsigned long long Read_long_timer(void)
   return BSP_Convert_decrementer(total64 - clicks_overhead);
 }
 
-rtems_status_code Empty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

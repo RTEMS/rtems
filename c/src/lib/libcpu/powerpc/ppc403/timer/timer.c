@@ -47,13 +47,13 @@ extern uint32_t bsp_timer_average_overhead;
 static volatile uint32_t	startedAt;
 static rtems_boolean		subtractOverhead;
 
-void Timer_initialize(void)
+void benchmark_timer_initialize(void)
 {
   /* We are going to rely on clock.c to sort out where the clock comes from */
   startedAt = ppc_time_base();
 }
 
-int Read_timer(void)
+int benchmark_timer_read(void)
 {
 	uint32_t   clicks, total;
 
@@ -67,12 +67,7 @@ int Read_timer(void)
 		return (total - bsp_timer_average_overhead);
 }
 
-rtems_status_code Empty_function( void )
-{
-	return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead( rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead( rtems_boolean find_flag)
 {
 	subtractOverhead = find_flag;
 }

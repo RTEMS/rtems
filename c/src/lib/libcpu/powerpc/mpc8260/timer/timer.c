@@ -51,7 +51,7 @@
 #include <mpc8260.h>
 
 static volatile uint32_t   Timer_starting;
-static rtems_boolean Timer_driver_Find_average_overhead;
+static rtems_boolean benchmark_timer_find_average_overhead;
 
 /*
  *  This is so small that this code will be reproduced where needed.
@@ -65,7 +65,7 @@ static inline uint32_t   get_itimer(void)
    return ret;
 }
 
-void Timer_initialize(void)
+void benchmark_timer_initialize(void)
 {
   /* set interrupt level and enable timebase. This should never */
   /*  generate an interrupt however. */
@@ -78,7 +78,7 @@ void Timer_initialize(void)
   Timer_starting = get_itimer();
 }
 
-int Read_timer(void)
+int benchmark_timer_read(void)
 {
   uint32_t   clicks;
   uint32_t   total;
@@ -89,7 +89,7 @@ int Read_timer(void)
 
   total = clicks - Timer_starting;
 
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in XXX microsecond units */
 
   else {
@@ -100,12 +100,7 @@ int Read_timer(void)
   }
 }
 
-rtems_status_code Empty_function(void)
+void benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
-  return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead(rtems_boolean find_flag)
-{
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
