@@ -22,24 +22,24 @@
 
 #include <bsp.h>
 
-rtems_boolean benchmark_timerfind_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
-rtems_boolean benchmark_timeris_initialized = FALSE;
+rtems_boolean benchmark_timer_is_initialized = FALSE;
 
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
-  if ( benchmark_timeris_initialized == FALSE ) {
+  if ( benchmark_timer_is_initialized == FALSE ) {
 
     /* approximately 1 us per countdown */
     ERC32_MEC.General_Purpose_Timer_Scalar  = CLOCK_SPEED - 1;
     ERC32_MEC.General_Purpose_Timer_Counter = 0xffffffff;
 
   } else {
-    benchmark_timeris_initialized = TRUE;
+    benchmark_timer_is_initialized = TRUE;
   }
 
   ERC32_MEC_Set_General_Purpose_Timer_Control(
@@ -63,7 +63,7 @@ void benchmark_timerinitialize(void)
 #define LEAST_VALID      13  /* Don't trust a value lower than this */
 #endif
 
-int benchmark_timerread(void)
+int benchmark_timer_read(void)
 {
   uint32_t          total;
 
@@ -71,7 +71,7 @@ int benchmark_timerread(void)
 
   total = 0xffffffff - total;
 
-  if ( benchmark_timerfind_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -80,14 +80,9 @@ int benchmark_timerread(void)
   return total - AVG_OVERHEAD;
 }
 
-rtems_status_code benchmark_timerempty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

@@ -23,9 +23,9 @@ struct timeval  Timer_start;
 struct timeval  Timer_stop;
 struct timezone Time_zone;
 
-rtems_boolean   benchmark_timerfind_average_overhead;
+rtems_boolean   benchmark_timer_find_average_overhead;
 
-void benchmark_timerinitialize()
+void benchmark_timer_initialize()
 {
    gettimeofday( &Timer_start, &Time_zone );
 }
@@ -34,7 +34,7 @@ void benchmark_timerinitialize()
                              /* (XX countdowns) to start/stop the timer. */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int benchmark_timerread()
+int benchmark_timer_read()
 {
   int total;
 
@@ -48,7 +48,7 @@ int benchmark_timerread()
     total += Timer_stop.tv_usec;
   }
 
-  if ( benchmark_timerfind_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
       return total;          /* in countdown units */
   else {
     if ( total < LEAST_VALID )
@@ -57,14 +57,9 @@ int benchmark_timerread()
   }
 }
 
-rtems_status_code benchmark_timerempty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

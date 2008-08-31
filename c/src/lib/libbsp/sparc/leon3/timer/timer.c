@@ -30,24 +30,24 @@
   #define LEON3_TIMER_INDEX 0
 #endif
 
-rtems_boolean benchmark_timerfind_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
-rtems_boolean benchmark_timeris_initialized = FALSE;
+rtems_boolean benchmark_timer_is_initialized = FALSE;
 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
 
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
   if (LEON3_Timer_Regs) {
-    if ( benchmark_timeris_initialized == FALSE ) {
+    if ( benchmark_timer_is_initialized == FALSE ) {
       /* approximately 1 us per countdown */
       LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].reload = 0xffffff;
       LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value = 0xffffff;
     } else {
-      benchmark_timeris_initialized = TRUE;
+      benchmark_timer_is_initialized = TRUE;
     }
     LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].conf = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
   }
@@ -57,7 +57,7 @@ void benchmark_timerinitialize(void)
                              /*     to start/stop the timer. */
 #define LEAST_VALID       2  /* Don't trust a value lower than this */
 
-int benchmark_timerread(void)
+int benchmark_timer_read(void)
 {
   uint32_t total;
 
@@ -66,7 +66,7 @@ int benchmark_timerread(void)
     
     total = 0xffffff - total;
     
-    if ( benchmark_timerfind_average_overhead == 1 )
+    if ( benchmark_timer_find_average_overhead == 1 )
       return total;          /* in one microsecond units */
     
     if ( total < LEAST_VALID )
@@ -77,14 +77,9 @@ int benchmark_timerread(void)
   return 0;
 }
 
-rtems_status_code benchmark_timerempty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
