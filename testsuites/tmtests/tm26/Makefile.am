@@ -5,7 +5,8 @@
 MANAGERS = io semaphore semaphore
 
 rtems_tests_PROGRAMS = tm26.exe
-tm26_exe_SOURCES = task1.c system.h fptest.h ../include/timesys.h ../include/timesys.h
+tm26_exe_SOURCES = task1.c system.h fptest.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tm26.doc
 

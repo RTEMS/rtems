@@ -91,9 +91,9 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_clock_tick();
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_clock_tick",

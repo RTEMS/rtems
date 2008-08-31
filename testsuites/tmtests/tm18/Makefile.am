@@ -5,7 +5,8 @@
 MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = tm18.exe
-tm18_exe_SOURCES = task1.c system.h ../include/timesys.h
+tm18_exe_SOURCES = task1.c system.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tm18.doc
 

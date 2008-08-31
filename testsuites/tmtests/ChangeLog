@@ -1,5 +1,25 @@
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* tm01/Makefile.am, tm01/task1.c, tm02/Makefile.am, tm02/task1.c,
+	tm03/Makefile.am, tm03/task1.c, tm04/Makefile.am, tm04/task1.c,
+	tm05/Makefile.am, tm05/task1.c, tm06/Makefile.am, tm06/task1.c,
+	tm07/Makefile.am, tm07/task1.c, tm08/Makefile.am, tm08/task1.c,
+	tm09/Makefile.am, tm09/task1.c, tm10/Makefile.am, tm10/task1.c,
+	tm11/Makefile.am, tm11/task1.c, tm12/Makefile.am, tm12/task1.c,
+	tm13/Makefile.am, tm13/task1.c, tm14/Makefile.am, tm14/task1.c,
+	tm15/Makefile.am, tm15/task1.c, tm16/Makefile.am, tm16/task1.c,
+	tm17/Makefile.am, tm17/task1.c, tm18/Makefile.am, tm18/task1.c,
+	tm19/Makefile.am, tm19/task1.c, tm20/Makefile.am, tm20/task1.c,
+	tm21/Makefile.am, tm21/task1.c, tm22/Makefile.am, tm22/task1.c,
+	tm23/Makefile.am, tm23/task1.c, tm24/Makefile.am, tm24/task1.c,
+	tm25/Makefile.am, tm25/task1.c, tm26/Makefile.am, tm26/task1.c,
+	tm27/Makefile.am, tm27/task1.c, tm28/Makefile.am, tm28/task1.c,
+	tm29/Makefile.am, tm29/task1.c, tmck/Makefile.am, tmck/task1.c,
+	tmoverhd/Makefile.am, tmoverhd/testtask.c: Eliminate empty function
+	from every benchmark timer driver. Fix spelling.
+
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm04/task1.c, tm05/task1.c,
 	tm06/task1.c, tm07/task1.c, tm08/task1.c, tm09/task1.c, tm10/task1.c,
 	tm11/task1.c, tm12/task1.c, tm13/task1.c, tm14/task1.c, tm15/task1.c,

@@ -5,7 +5,8 @@
 MANAGERS = io message semaphore
 
 rtems_tests_PROGRAMS = tm24.exe
-tm24_exe_SOURCES = task1.c system.h ../include/timesys.h
+tm24_exe_SOURCES = task1.c system.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tm24.doc
 

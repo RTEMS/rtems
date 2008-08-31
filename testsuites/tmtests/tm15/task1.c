@@ -78,12 +78,12 @@ void test_init()
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
     {
         (void) rtems_event_receive(
@@ -94,7 +94,7 @@ void test_init()
                );
     }
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_receive: obtain current events",
@@ -105,7 +105,7 @@ void test_init()
   );
 
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
     {
       (void) rtems_event_receive(
@@ -115,7 +115,7 @@ void test_init()
                &event_out
              );
     }
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_receive: not available -- NO_WAIT",
@@ -133,7 +133,7 @@ rtems_task Low_task(
   uint32_t    index;
   rtems_event_set   event_out;
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_receive: not available -- caller blocks",
@@ -143,15 +143,15 @@ rtems_task Low_task(
     CALLING_OVERHEAD_EVENT_RECEIVE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_event_send( RTEMS_SELF, RTEMS_EVENT_16 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_send: no task readied",
@@ -161,14 +161,14 @@ rtems_task Low_task(
     CALLING_OVERHEAD_EVENT_SEND
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_event_receive(
              RTEMS_EVENT_16,
              RTEMS_DEFAULT_OPTIONS,
              RTEMS_NO_TIMEOUT,
              &event_out
            );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_receive: available",
@@ -178,10 +178,10 @@ rtems_task Low_task(
     CALLING_OVERHEAD_EVENT_RECEIVE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_event_send( Task_id[ index ], RTEMS_EVENT_16 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_event_send: task readied -- returns to caller",
@@ -210,7 +210,7 @@ rtems_task High_tasks(
     );
   else {
     time_set = 1;
-    benchmark_timerinitialize();            /* start blocking rtems_event_receive time */
+    benchmark_timer_initialize();            /* start blocking rtems_event_receive time */
     status = rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,

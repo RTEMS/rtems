@@ -5,7 +5,8 @@
 MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = tmoverhd.exe
-tmoverhd_exe_SOURCES = testtask.c empty.c system.h dumrtems.h ../include/timesys.h
+tmoverhd_exe_SOURCES = testtask.c empty.c system.h dumrtems.h \
+    ../include/timesys.h ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tmoverhd.doc
 

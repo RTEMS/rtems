@@ -105,7 +105,7 @@ rtems_task test_init(
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
 }
 
@@ -140,7 +140,7 @@ rtems_task High_task(
            RTEMS_NO_TIMEOUT
          );
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_urgent: task readied -- preempts caller",

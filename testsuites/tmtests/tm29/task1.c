@@ -39,9 +39,9 @@ rtems_task Init(
 
   Period_name = rtems_build_name( 'P', 'R', 'D', ' ' );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_rate_monotonic_create( Period_name, &id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_create",
@@ -51,9 +51,9 @@ rtems_task Init(
     CALLING_OVERHEAD_RATE_MONOTONIC_CREATE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_rate_monotonic_period( id, 10 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_period: initiate period -- returns to caller",
@@ -63,9 +63,9 @@ rtems_task Init(
     CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_rate_monotonic_period( id, RTEMS_PERIOD_STATUS );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_period: obtain status",
@@ -75,9 +75,9 @@ rtems_task Init(
     CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_rate_monotonic_cancel( id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_cancel",
@@ -87,9 +87,9 @@ rtems_task Init(
     CALLING_OVERHEAD_RATE_MONOTONIC_CANCEL
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_rate_monotonic_delete( id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_delete: inactive",
@@ -105,9 +105,9 @@ rtems_task Init(
   status = rtems_rate_monotonic_period( id, 10 );
   directive_failed( status, "rtems_rate_monotonic_period" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_rate_monotonic_delete( id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_delete: active",
@@ -175,7 +175,7 @@ rtems_task Tasks(
   Task_count++;
 
   if ( Task_count == 1 )
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
 
   (void) rtems_rate_monotonic_period( id, 100 );
 }
@@ -186,12 +186,12 @@ rtems_task Low_task(
 {
   uint32_t   index;
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
   put_time(
     "rtems_rate_monotonic_period: conclude periods -- caller blocks",

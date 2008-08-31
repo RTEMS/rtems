@@ -5,7 +5,8 @@
 MANAGERS = io partition region semaphore
 
 rtems_tests_PROGRAMS = tm20.exe
-tm20_exe_SOURCES = task1.c system.h ../include/timesys.h
+tm20_exe_SOURCES = task1.c system.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tm20.doc
 

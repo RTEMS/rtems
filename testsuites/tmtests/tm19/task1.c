@@ -90,7 +90,7 @@ rtems_asr Process_asr_for_pass_1(
   rtems_signal_set signals
 )
 {
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_signal_send: signal to self",
@@ -100,7 +100,7 @@ rtems_asr Process_asr_for_pass_1(
     CALLING_OVERHEAD_SIGNAL_SEND
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 }
 
 rtems_asr Process_asr_for_pass_2(
@@ -112,7 +112,7 @@ rtems_asr Process_asr_for_pass_2(
   status = rtems_task_resume( Task_id[ 3 ] );
   directive_failed( status, "rtems_task_resume" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 }
 
 rtems_task Task_1(
@@ -121,9 +121,9 @@ rtems_task Task_1(
 {
   rtems_status_code status;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_signal_catch( Process_asr_for_pass_1, RTEMS_DEFAULT_MODES );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_signal_catch",
@@ -133,9 +133,9 @@ rtems_task Task_1(
     CALLING_OVERHEAD_SIGNAL_CATCH
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_signal_send( Task_id[ 2 ], 1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_signal_send: returns to caller",
@@ -145,12 +145,12 @@ rtems_task Task_1(
     CALLING_OVERHEAD_SIGNAL_SEND
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
 
   /* end time is done is RTEMS_ASR */
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "exit ASR overhead: returns to calling task",
@@ -163,7 +163,7 @@ rtems_task Task_1(
   status = rtems_signal_catch( Process_asr_for_pass_2, RTEMS_NO_PREEMPT );
   directive_failed( status, "rtems_signal_catch" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
 }
 
@@ -192,7 +192,7 @@ rtems_task Task_3(
 {
   (void) rtems_task_suspend( RTEMS_SELF );
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "exit ASR overhead: returns to preempting task",

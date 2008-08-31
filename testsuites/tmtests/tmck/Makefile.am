@@ -5,7 +5,8 @@
 MANAGERS = io semaphore
 
 rtems_tests_PROGRAMS = tmck.exe
-tmck_exe_SOURCES = task1.c system.h ../include/timesys.h
+tmck_exe_SOURCES = task1.c system.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tmck.doc
 

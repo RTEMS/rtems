@@ -80,7 +80,7 @@ rtems_task High_task(
 )
 {
   if ( argument != 0 ) {
-    end_time = benchmark_timerread();
+    end_time = benchmark_timer_read();
 
     put_time(
       "rtems_task_restart: suspended task -- preempts caller",
@@ -114,6 +114,6 @@ rtems_task Low_task(
 {
   task_index = 1;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
   (void) rtems_task_restart( Task_id[ task_index ], 0xffffffff );
 }

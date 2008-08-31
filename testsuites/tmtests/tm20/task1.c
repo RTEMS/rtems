@@ -97,7 +97,7 @@ rtems_task Task_1(
 
   Partition_name = rtems_build_name( 'P', 'A', 'R', 'T' );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_partition_create(
       Partition_name,
       Partition_area,
@@ -106,7 +106,7 @@ rtems_task Task_1(
       RTEMS_DEFAULT_ATTRIBUTES,
       &Partition_id
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_partition_create",
@@ -118,7 +118,7 @@ rtems_task Task_1(
 
   Region_name = rtems_build_name( 'R', 'E', 'G', 'N' );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_region_create(
       Region_name,
       Region_area,
@@ -127,7 +127,7 @@ rtems_task Task_1(
       RTEMS_DEFAULT_ATTRIBUTES,
       &Region_id
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_create",
@@ -137,9 +137,9 @@ rtems_task Task_1(
     CALLING_OVERHEAD_REGION_CREATE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_partition_get_buffer: available",
@@ -164,9 +164,9 @@ rtems_task Task_1(
     assert( buffer_count < PARTITION_BUFFER_POINTERS );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_partition_get_buffer( Partition_id, &Buffer_address_2 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_partition_get_buffer: not available",
@@ -176,9 +176,9 @@ rtems_task Task_1(
     CALLING_OVERHEAD_PARTITION_GET_BUFFER
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_partition_return_buffer( Partition_id, Buffer_address_1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_partition_return_buffer",
@@ -198,9 +198,9 @@ rtems_task Task_1(
 
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_partition_delete( Partition_id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_partition_delete",
@@ -219,7 +219,7 @@ rtems_task Task_1(
            );
   directive_failed( status, "region_get_segment" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_get_segment(
       Region_id,
       400,
@@ -227,7 +227,7 @@ rtems_task Task_1(
       RTEMS_NO_TIMEOUT,
       &Buffer_address_3
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_get_segment: available",
@@ -237,7 +237,7 @@ rtems_task Task_1(
     CALLING_OVERHEAD_REGION_GET_SEGMENT
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_get_segment(
       Region_id,
       1998,
@@ -245,7 +245,7 @@ rtems_task Task_1(
       RTEMS_NO_TIMEOUT,
       &Buffer_address_4
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_get_segment: not available -- NO_WAIT",
@@ -258,9 +258,9 @@ rtems_task Task_1(
   status = rtems_region_return_segment( Region_id, Buffer_address_3 );
   directive_failed( status, "rtems_region_return_segment" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_return_segment( Region_id, Buffer_address_2 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_return_segment: no waiting tasks",
@@ -279,7 +279,7 @@ rtems_task Task_1(
   );
   directive_failed( status, "rtems_region_get_segment" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_get_segment(
       Region_id,
       1998,
@@ -290,7 +290,7 @@ rtems_task Task_1(
 
   /* execute Task_2 */
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_return_segment: task readied -- preempts caller",
@@ -336,9 +336,9 @@ rtems_task Task_1(
   status = rtems_region_return_segment( Region_id, Buffer_address_2 );
   directive_failed( status, "rtems_region_return_segment" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_delete( Region_id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_delete",
@@ -348,15 +348,15 @@ rtems_task Task_1(
     CALLING_OVERHEAD_REGION_DELETE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_initialize( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_initialize",
@@ -366,10 +366,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_INITIALIZE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_open( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_open",
@@ -379,10 +379,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_OPEN
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_close( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_close",
@@ -392,10 +392,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_CLOSE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_read( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_read",
@@ -405,10 +405,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_READ
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_write( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_write",
@@ -418,10 +418,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_WRITE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_io_control( _STUB_major, 0, NULL );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_io_control",
@@ -441,7 +441,7 @@ rtems_task Task_2(
 {
   rtems_status_code status;
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_get_segment: not available -- caller blocks",
@@ -451,14 +451,14 @@ rtems_task Task_2(
     CALLING_OVERHEAD_REGION_GET_SEGMENT
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
 
   /* preempt back to Task_1 */
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_region_return_segment( Region_id, Buffer_address_1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_region_return_segment: task readied -- returns to caller",

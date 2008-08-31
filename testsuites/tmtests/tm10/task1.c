@@ -87,12 +87,12 @@ void test_init()
   );
   directive_failed( status, "rtems_message_queue_create" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_message_queue_receive(
                Queue_id,
@@ -101,7 +101,7 @@ void test_init()
                RTEMS_NO_WAIT,
                RTEMS_NO_TIMEOUT
              );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_receive: not available -- NO_WAIT",
@@ -119,7 +119,7 @@ rtems_task High_task(
 {
   size_t  size;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
      (void) rtems_message_queue_receive(
               Queue_id,
               (long (*)[4]) Buffer,
@@ -149,7 +149,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_receive: not available -- caller blocks",

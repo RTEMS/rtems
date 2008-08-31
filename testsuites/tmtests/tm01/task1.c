@@ -75,7 +75,7 @@ rtems_task Test_task(
 
   /* Time one invocation of rtems_semaphore_create */
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_semaphore_create(
       name,
       OPERATION_COUNT,
@@ -83,7 +83,7 @@ rtems_task Test_task(
       RTEMS_NO_PRIORITY,
       &smid
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
   put_time(
     "rtems_semaphore_create",
     end_time,
@@ -94,9 +94,9 @@ rtems_task Test_task(
 
   /* Time one invocation of rtems_semaphore_delete */
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_semaphore_delete( smid );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
   put_time(
     "rtems_semaphore_delete",
     end_time,
@@ -115,46 +115,46 @@ rtems_task Test_task(
 
   for ( iterations=OPERATION_COUNT ; iterations ; iterations-- ) {
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
-        (void) benchmark_timerempty_function();
-    end_time = benchmark_timerread();
+        (void) benchmark_timer_empty_function();
+    end_time = benchmark_timer_read();
 
     semaphore_obtain_loop_time  += end_time;
     semaphore_release_loop_time += end_time;
 
     /* rtems_semaphore_obtain (available) */
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
         (void) rtems_semaphore_obtain(
           smid,
           RTEMS_DEFAULT_OPTIONS,
           RTEMS_NO_TIMEOUT
         );
-    end_time = benchmark_timerread();
+    end_time = benchmark_timer_read();
 
     semaphore_obtain_time += end_time;
 
     /* rtems_semaphore_release */
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
         (void) rtems_semaphore_release( smid );
-    end_time = benchmark_timerread();
+    end_time = benchmark_timer_read();
 
     semaphore_release_time += end_time;
 
     /* semaphore obtain (RTEMS_NO_WAIT) */
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
         rtems_semaphore_obtain( smid, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT );
-    semaphore_obtain_no_wait_time += benchmark_timerread();
+    semaphore_obtain_no_wait_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index = 1 ; index<=OPERATION_COUNT ; index++ )
         rtems_semaphore_release( smid );
-    end_time = benchmark_timerread();
+    end_time = benchmark_timer_read();
 
     semaphore_release_time += end_time;
   }

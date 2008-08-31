@@ -90,7 +90,7 @@ rtems_task Highest_task(
 
   if ( argument == 1 ) {
 
-    end_time = benchmark_timerread();
+    end_time = benchmark_timer_read();
 
     put_time(
       "rtems_task_restart: blocked task -- preempts caller",
@@ -109,7 +109,7 @@ rtems_task Highest_task(
 
  } else if ( argument == 2 ) {
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
     put_time(
       "rtems_task_restart: ready task -- preempts caller",
@@ -140,23 +140,23 @@ rtems_task High_task(
   rtems_name          name;
   rtems_task_priority old_priority;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_task_restart( Highest_id, 1 );
   /* preempted by Higher_task */
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     (void) rtems_task_restart( Highest_id, 2 );
   /* preempted by Higher_task */
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       rtems_semaphore_release( Semaphore_id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_semaphore_release: task readied -- returns to caller",
@@ -173,7 +173,7 @@ rtems_task High_task(
     directive_failed( status, "rtems_task_delete" );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
      rtems_task_create(
         name,
@@ -183,7 +183,7 @@ rtems_task High_task(
         RTEMS_DEFAULT_ATTRIBUTES,
         &Task_id[ index ]
       );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_create",
@@ -193,11 +193,11 @@ rtems_task High_task(
     CALLING_OVERHEAD_TASK_CREATE
   );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       rtems_task_start( Task_id[ index ], Low_tasks, 0 );
 
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_start",
@@ -230,10 +230,10 @@ rtems_task High_task(
     directive_failed( status, "rtems_task_suspend LOOP" );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_restart( Task_id[ index ], 0 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_restart: suspended task -- returns to caller",
@@ -246,10 +246,10 @@ rtems_task High_task(
   for ( index=1 ; index <= OPERATION_COUNT ; index++ )
     (void) rtems_task_suspend( Task_id[ index ] );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_delete( Task_id[ index ] );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_delete: suspended task",
@@ -274,10 +274,10 @@ rtems_task High_task(
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_restart( Task_id[ index ], 1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_restart: ready task -- returns to caller",
@@ -296,10 +296,10 @@ rtems_task High_task(
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_restart( Task_id[ index ], 1 );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_restart: blocked task -- returns to caller",
@@ -313,10 +313,10 @@ rtems_task High_task(
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_delete( Task_id[ index ] );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_task_delete: blocked task",

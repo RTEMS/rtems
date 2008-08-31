@@ -194,33 +194,33 @@ rtems_task High_task(
 {
   rtems_interrupt_level level;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_interrupt_disable( level );
-  isr_disable_time = benchmark_timerread();
+  isr_disable_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_interrupt_flash( level );
-  isr_flash_time = benchmark_timerread();
+  isr_flash_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_interrupt_enable( level );
-  isr_enable_time = benchmark_timerread();
+  isr_enable_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Disable_dispatch();
-  thread_disable_dispatch_time = benchmark_timerread();
+  thread_disable_dispatch_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Enable_dispatch();
-  thread_enable_dispatch_time = benchmark_timerread();
+  thread_enable_dispatch_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
-  thread_set_state_time = benchmark_timerread();
+  thread_set_state_time = benchmark_timer_read();
 
   _Context_Switch_necessary = TRUE;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Dispatch();           /* dispatches Middle_task */
 }
 
@@ -228,7 +228,7 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
-  thread_dispatch_no_fp_time = benchmark_timerread();
+  thread_dispatch_no_fp_time = benchmark_timer_read();
 
   _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
 
@@ -243,10 +243,10 @@ rtems_task Middle_task(
 
   _Thread_Disable_dispatch();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Context_Switch( &Middle_tcb->Registers, &_Thread_Executing->Registers );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Context_Switch(&Middle_tcb->Registers, &Low_tcb->Registers);
 }
 
@@ -256,20 +256,20 @@ rtems_task Low_task(
 {
   Thread_Control *executing;
 
-  context_switch_no_fp_time = benchmark_timerread();
+  context_switch_no_fp_time = benchmark_timer_read();
 
   executing    = _Thread_Executing;
 
   Low_tcb = executing;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Context_Switch( &executing->Registers, &executing->Registers );
 
-  context_switch_self_time = benchmark_timerread();
+  context_switch_self_time = benchmark_timer_read();
 
   _Context_Switch(&executing->Registers, &Middle_tcb->Registers);
 
-  context_switch_another_task_time = benchmark_timerread();
+  context_switch_another_task_time = benchmark_timer_read();
 
   _Thread_Executing =
         (Thread_Control *) _Thread_Ready_chain[201].first;
@@ -280,7 +280,7 @@ rtems_task Low_task(
 
   _Thread_Disable_dispatch();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Restore_fp( &_Thread_Executing->fp_context );
 #endif
@@ -294,7 +294,7 @@ rtems_task Floating_point_task_1(
   Thread_Control *executing;
   FP_DECLARE;
 
-  context_switch_restore_1st_fp_time = benchmark_timerread();
+  context_switch_restore_1st_fp_time = benchmark_timer_read();
 
   executing = _Thread_Executing;
 
@@ -307,7 +307,7 @@ rtems_task Floating_point_task_1(
 
   _Thread_Disable_dispatch();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -315,7 +315,7 @@ rtems_task Floating_point_task_1(
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_2 */
 
-  context_switch_save_idle_restore_initted_time = benchmark_timerread();
+  context_switch_save_idle_restore_initted_time = benchmark_timer_read();
 
   FP_LOAD( 1.0 );
 
@@ -330,7 +330,7 @@ rtems_task Floating_point_task_1(
 
   _Thread_Disable_dispatch();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -346,7 +346,7 @@ rtems_task Floating_point_task_2(
   Thread_Control *executing;
   FP_DECLARE;
 
-  context_switch_save_restore_idle_time = benchmark_timerread();
+  context_switch_save_restore_idle_time = benchmark_timer_read();
 
   executing = _Thread_Executing;
 
@@ -361,7 +361,7 @@ rtems_task Floating_point_task_2(
 
   _Thread_Disable_dispatch();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -369,7 +369,7 @@ rtems_task Floating_point_task_2(
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_1 */
 
-  context_switch_save_restore_initted_time = benchmark_timerread();
+  context_switch_save_restore_initted_time = benchmark_timer_read();
 
   complete_test();
 }
@@ -379,43 +379,43 @@ void complete_test( void )
   uint32_t    index;
   rtems_id          task_id;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Resume( Middle_tcb, TRUE );
-  thread_resume_time = benchmark_timerread();
+  thread_resume_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Unblock( Middle_tcb );
-  thread_unblock_time = benchmark_timerread();
+  thread_unblock_time = benchmark_timer_read();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     _Thread_Ready( Middle_tcb );
-  thread_ready_time = benchmark_timerread();
+  thread_ready_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) benchmark_timerempty_function();
-  overhead = benchmark_timerread();
+      (void) benchmark_timer_empty_function();
+  overhead = benchmark_timer_read();
 
   task_id = Middle_tcb->Object.id;
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) _Thread_Get( task_id, &location );
-  thread_get_time = benchmark_timerread();
+  thread_get_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) _Semaphore_Get( Semaphore_id, &location );
-  semaphore_get_time = benchmark_timerread();
+  semaphore_get_time = benchmark_timer_read();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) _Thread_Get( 0x3, &location );
-  thread_get_invalid_time = benchmark_timerread();
+  thread_get_invalid_time = benchmark_timer_read();
 
   /*
    *  This is the running task and we have tricked RTEMS out enough where

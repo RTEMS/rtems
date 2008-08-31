@@ -53,7 +53,7 @@ rtems_task Test_task (
   rtems_task_argument argument
 )
 {
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_message_queue_create(
       1,
       OPERATION_COUNT,
@@ -61,7 +61,7 @@ rtems_task Test_task (
       RTEMS_DEFAULT_ATTRIBUTES,
       &Queue_id
     );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_create",
@@ -73,9 +73,9 @@ rtems_task Test_task (
 
   queue_test();
 
-  benchmark_timerinitialize();
+  benchmark_timer_initialize();
     rtems_message_queue_delete( Queue_id );
-  end_time = benchmark_timerread();
+  end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_delete",
@@ -120,27 +120,27 @@ void queue_test()
 
   for ( iterations = 1 ; iterations <= OPERATION_COUNT ; iterations++ ) {
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timerempty_function();
-    send_loop_time += benchmark_timerread();
+        (void) benchmark_timer_empty_function();
+    send_loop_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timerempty_function();
-    urgent_loop_time += benchmark_timerread();
+        (void) benchmark_timer_empty_function();
+    urgent_loop_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-        (void) benchmark_timerempty_function();
-    receive_loop_time += benchmark_timerread();
+        (void) benchmark_timer_empty_function();
+    receive_loop_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
         (void) rtems_message_queue_send( Queue_id, buffer, MESSAGE_SIZE );
-    send_time += benchmark_timerread();
+    send_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
         (void) rtems_message_queue_receive(
                  Queue_id,
@@ -149,14 +149,14 @@ void queue_test()
                  RTEMS_DEFAULT_OPTIONS,
                  RTEMS_NO_TIMEOUT
                );
-    receive_time += benchmark_timerread();
+    receive_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
         (void) rtems_message_queue_urgent( Queue_id, buffer, MESSAGE_SIZE );
-    urgent_time += benchmark_timerread();
+    urgent_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       for ( index=1 ; index <= OPERATION_COUNT ; index++ )
         (void) rtems_message_queue_receive(
                  Queue_id,
@@ -165,11 +165,11 @@ void queue_test()
                  RTEMS_DEFAULT_OPTIONS,
                  RTEMS_NO_TIMEOUT
                );
-    receive_time += benchmark_timerread();
+    receive_time += benchmark_timer_read();
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       rtems_message_queue_flush( Queue_id, &empty_flush_count );
-    empty_flush_time += benchmark_timerread();
+    empty_flush_time += benchmark_timer_read();
 
     /* send one message to flush */
     status = rtems_message_queue_send(
@@ -179,9 +179,9 @@ void queue_test()
     );
     directive_failed( status, "rtems_message_queue_send" );
 
-    benchmark_timerinitialize();
+    benchmark_timer_initialize();
       rtems_message_queue_flush( Queue_id, &flush_count );
-    flush_time += benchmark_timerread();
+    flush_time += benchmark_timer_read();
   }
 
   put_time(

@@ -5,7 +5,8 @@
 MANAGERS = io event semaphore
 
 rtems_tests_PROGRAMS = tm15.exe
-tm15_exe_SOURCES = task1.c system.h ../include/timesys.h
+tm15_exe_SOURCES = task1.c system.h ../include/timesys.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tm15.doc
 
