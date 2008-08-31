@@ -5,7 +5,8 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = tmitronsem01.exe
-tmitronsem01_exe_SOURCES = init.c system.h
+tmitronsem01_exe_SOURCES = init.c system.h \
+    ../../support/src/tmtests_empty_function.c
 
 dist_rtems_tests_DATA = tmitronsem01.doc
 

@@ -1,3 +1,8 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tmitronsem01/Makefile.am, tmitronsem01/init.c: Eliminate empty
+	function from every benchmark timer driver. Fix spelling.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* tmitronsem01/init.c: Change TEST_INIT to CONFIGURE_INIT. Make
