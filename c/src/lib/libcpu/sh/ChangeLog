@@ -1,3 +1,8 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sh7032/timer/timer.c, sh7045/timer/timer.c, sh7750/timer/timer.c:
+	Rename timer driver methods to follow RTEMS programming conventions.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sh7032/timer/timer.c, sh7045/timer/timer.c, sh7750/timer/timer.c:

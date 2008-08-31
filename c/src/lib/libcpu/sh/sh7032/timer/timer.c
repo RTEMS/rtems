@@ -3,8 +3,8 @@
  *
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
- *  Timer_initialize() and Read_timer().  Read_timer() usually returns
- *  the number of microseconds since Timer_initialize() exitted.
+ *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
+ *  the number of microseconds since benchmark_timer_initialize() exitted.
  *
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
@@ -68,11 +68,11 @@ extern rtems_isr timerisr(void);
 
 static uint32_t   Timer_interrupts;
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
 static uint32_t   Timer_HZ ;
 
-void Timer_initialize( void )
+void benchmark_timer_initialize( void )
 {
   uint8_t                temp8;
   uint16_t               temp16;
@@ -135,7 +135,7 @@ void Timer_initialize( void )
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timer_read().
  *
  *  AVG_OVERHEAD is the overhead for starting and stopping the timer.  It
  *  is usually deducted from the number returned.
@@ -149,7 +149,7 @@ void Timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       0 /* 20 */ /* Don't trust a clicks value lower than this */
 
-int Read_timer( void )
+int benchmark_timer_read( void )
 {
   uint32_t   cclicks;
   uint32_t   total ;
@@ -168,7 +168,7 @@ int Read_timer( void )
 
   total = cclicks + Timer_interrupts * 65536;
 
-  if ( Timer_driver_Find_average_overhead )
+  if ( benchmark_timer_find_average_overhead )
     return total / CLOCK_SCALE;          /* in XXX microsecond units */
   else
   {
@@ -181,21 +181,11 @@ int Read_timer( void )
   }
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-
-rtems_status_code Empty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
 
 /* Timer 1 is used */
