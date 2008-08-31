@@ -1,3 +1,10 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* at91rm9200/timer/timer.c, lpc22xx/timer/timer.c,
+	mc9328mxl/timer/timer.c, s3c2400/timer/timer.c,
+	s3c24xx/timer/timer.c: Rename timer driver methods to follow RTEMS
+	programming conventions.
+
 2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* lpc22xx/timer/timer.c: Remove broken bool implementation.

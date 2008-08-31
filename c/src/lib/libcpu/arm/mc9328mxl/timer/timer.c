@@ -14,8 +14,8 @@
  * Notes:
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
- *  Timer_initialize() and Read_timer().  Read_timer() usually returns
- *  the number of microseconds since Timer_initialize() exitted.
+ *  benchmark_timerinitialize() and benchmark_timerread().  benchmark_timerread() usually returns
+ *  the number of microseconds since benchmark_timerinitialize() exitted.
  *
  *  It is important that the timer start/stop overhead be determined 
  *  when porting or modifying this code.
@@ -30,13 +30,13 @@
 uint32_t g_start;
 uint32_t g_freq;
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timerfind_average_overhead;
 
     
 /*
  * Set up Timer 1
  */
-void Timer_initialize( void )
+void benchmark_timerinitialize( void )
 {
     MC9328MXL_TMR2_TCTL = (MC9328MXL_TMR_TCTL_CLKSRC_PCLK1 | 
                             MC9328MXL_TMR_TCTL_FRR |
@@ -51,7 +51,7 @@ void Timer_initialize( void )
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timerread().
  *
  *  AVG_OVEREHAD is the overhead for starting and stopping the timer.  It
  *  is usually deducted from the number returned.
@@ -65,7 +65,7 @@ void Timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int Read_timer( void )
+int benchmark_timerread( void )
 {
   uint32_t t;
   unsigned long long total;
@@ -82,7 +82,7 @@ int Read_timer( void )
   /* convert to nanoseconds */
   total = (total * 1000)/ g_freq; 
 
-  if ( Timer_driver_Find_average_overhead == 1 ) {
+  if ( benchmark_timerfind_average_overhead == 1 ) {
     return (int) total; 
   } else if ( total < LEAST_VALID ) {
       return 0;       
@@ -99,15 +99,15 @@ int Read_timer( void )
  *  in Timing Test Suite.
  */
 
-rtems_status_code Empty_function( void )
+rtems_status_code benchmark_timerempty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
 
-void Set_find_average_overhead(
+void benchmark_timerdisable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timerfind_average_overhead = find_flag;
 }
 
