@@ -11,27 +11,22 @@
 
 #include <bsp.h>
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
-void Timer_initialize(void)
+void benchmark_timer_initialize(void)
 {
 }
 
-int Read_timer(void)
+int benchmark_timer_read(void)
 {
-  if (Timer_driver_Find_average_overhead)
+  if (benchmark_timer_find_average_overhead)
     return 1;
   return 0;
 }
 
-rtems_status_code Empty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

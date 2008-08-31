@@ -1,3 +1,8 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* timerstub.c: Eliminate empty function from every benchmark timer
+	driver. Fix spelling.
+
 2008-08-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Fix formatting.
