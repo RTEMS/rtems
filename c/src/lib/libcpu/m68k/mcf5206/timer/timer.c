@@ -30,13 +30,13 @@
 
 uint32_t   Timer_interrupts;
 
-rtems_boolean Timer_driver_Find_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
 /* External assembler interrupt handler routine */
 extern rtems_isr timerisr(rtems_vector_number vector);
 
 
-/* Timer_initialize --
+/* benchmark_timer_initialize --
  *     Initialize timer 2 for accurate time measurement.
  *
  * PARAMETERS:
@@ -46,7 +46,7 @@ extern rtems_isr timerisr(rtems_vector_number vector);
  *     none
  */
 void
-Timer_initialize(void)
+benchmark_timer_initialize(void)
 {
     /* Catch timer2 interrupts */
     set_vector(timerisr, BSP_INTVEC_TIMER2, 0);
@@ -77,7 +77,7 @@ Timer_initialize(void)
 }
 
 /*
- *  The following controls the behavior of Read_timer().
+ *  The following controls the behavior of benchmark_timer_read().
  *
  *  FIND_AVG_OVERHEAD *  instructs the routine to return the "raw" count.
  *
@@ -93,7 +93,7 @@ Timer_initialize(void)
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-/* Read_timer --
+/* benchmark_timer_read --
  *     Read timer value in microsecond units since timer start.
  *
  * PARAMETERS:
@@ -103,7 +103,7 @@ Timer_initialize(void)
  *     number of microseconds since timer has been started
  */
 int
-Read_timer( void )
+benchmark_timer_read( void )
 {
     uint16_t   clicks;
     uint32_t   total;
@@ -126,7 +126,7 @@ Read_timer( void )
 
     total = (Timer_interrupts * TRR2_VAL) + clicks;
 
-    if ( Timer_driver_Find_average_overhead == 1 )
+    if ( benchmark_timer_find_average_overhead == 1 )
         return total;          /* in XXX microsecond units */
 
     if ( total < LEAST_VALID )
@@ -139,7 +139,7 @@ Read_timer( void )
 }
 
 
-/* Empty_function --
+/* benchmark_timer_empty_function --
  *     Empty function call used in loops to measure basic cost of looping
  *     in Timing Test Suite.
  *
@@ -150,14 +150,14 @@ Read_timer( void )
  *     RTEMS_SUCCESSFUL
  */
 rtems_status_code
-Empty_function(void)
+benchmark_timer_empty_function(void)
 {
     return RTEMS_SUCCESSFUL;
 }
 
-/* Set_find_average_overhead --
+/* benchmark_timer_disable_subtracting_average_overhead --
  *     This routine is invoked by the "Check Timer" (tmck) test in the
- *     RTEMS Timing Test Suite. It makes the Read_timer routine not
+ *     RTEMS Timing Test Suite. It makes the benchmark_timer_read routine not
  *     subtract the overhead required to initialize and read the benchmark
  *     timer.
  *
@@ -168,7 +168,7 @@ Empty_function(void)
  *     none
  */
 void
-Set_find_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

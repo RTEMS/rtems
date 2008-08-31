@@ -1,3 +1,9 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mcf5206/timer/timer.c, mcf5206/timer/timerisr.S,
+	mcf5272/timer/timer.c, mcf5272/timer/timerisr.S: Rename timer driver
+	methods to follow RTEMS programming conventions.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* m68040/fpsp/rtems_fpsp.c: Move extern outside of braces.
