@@ -16,7 +16,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
   uint32_t preScaleDivisor = bsp_get_CPU_clock_speed() / 1000000;
 
@@ -28,20 +28,11 @@ void benchmark_timerinitialize(void)
 /*
  * Return timer value in microsecond units
  */
-int benchmark_timerread(void)
+int benchmark_timer_read(void)
 {
   return MCF_DTIM3_DTCN;
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-rtems_status_code benchmark_timerempty_function(void)
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
 }

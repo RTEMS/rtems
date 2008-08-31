@@ -39,7 +39,7 @@
 #include <rtems/m68k/m68360.h>
 
 void
-benchmark_timerinitialize (void)
+benchmark_timer_initialize (void)
 {
 	/*
 	 * Reset timers 1 and 2
@@ -73,22 +73,12 @@ benchmark_timerinitialize (void)
  * Return timer value in microsecond units
  */
 int
-benchmark_timerread (void)
+benchmark_timer_read (void)
 {
 	return *(uint32_t*)&m360.tcn1;
 }
 
-/*
- * Empty function call used in loops to measure basic cost of looping
- * in Timing Test Suite.
- */
-rtems_status_code
-benchmark_timerempty_function (void)
-{
-	return RTEMS_SUCCESSFUL;
-}
-
 void
-benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
 }

@@ -15,7 +15,7 @@
 
 #include <bsp.h>
 
-rtems_boolean benchmark_timerfind_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
 #if defined(USE_TIMER2_FOR_CLOCK)
 #define TIMER_BASE   MONGOOSEV_TIMER1_BASE
@@ -25,7 +25,7 @@ rtems_boolean benchmark_timerfind_average_overhead;
 #define TIMER_VECTOR MONGOOSEV_IRQ_TIMER2
 #endif
 
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
   /*
    *  Programming the compare register as the maximum value should let
@@ -56,7 +56,7 @@ void benchmark_timerinitialize(void)
                              /* mongoose-v can count cycles. :) */
 #include <rtems/bspIo.h>
 
-int benchmark_timerread(void)
+int benchmark_timer_read(void)
 {
   uint32_t          clicks;
   uint32_t          total;
@@ -75,7 +75,7 @@ int benchmark_timerread(void)
   if ( tcr & MONGOOSEV_TIMER_CONTROL_TIMEOUT )
     printk( "MG5 timer overran\n" );
 
-  if ( benchmark_timerfind_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in cycle units */
 
   if ( total < LEAST_VALID )
@@ -84,16 +84,11 @@ int benchmark_timerread(void)
   return (total - AVG_OVERHEAD) / CPU_CLOCK_RATE_MHZ;
 }
 
-rtems_status_code benchmark_timerempty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
 
 /* eof */

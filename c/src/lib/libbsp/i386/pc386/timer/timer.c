@@ -59,10 +59,10 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 volatile uint32_t         Ttimer_val;
-rtems_boolean    	  benchmark_timerfind_average_overhead = TRUE;
+rtems_boolean    	  benchmark_timer_find_average_overhead = TRUE;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
-void (*benchmark_timerinitialize_function)(void) = 0;
-uint32_t (*benchmark_timerread_function)(void) = 0;
+void (*benchmark_timer_initialize_function)(void) = 0;
+uint32_t (*benchmark_timer_read_function)(void) = 0;
 void (*Timer_exit_function)(void) = 0;
 
 /*-------------------------------------------------------------------------+
@@ -112,7 +112,7 @@ tsc_timer_exit(void)
 } /* tsc_timer_exit */
 
 /*-------------------------------------------------------------------------+
-|         Function: benchmark_timerinitialize
+|         Function: benchmark_timer_initialize
 |      Description: Timer initialization routine.
 | Global Variables: Ttimer_val.
 |        Arguments: None.
@@ -133,9 +133,9 @@ tsc_timer_initialize(void)
 } /* tsc_timer_initialize */
 
 /*-------------------------------------------------------------------------+
-|         Function: benchmark_timerread
+|         Function: benchmark_timer_read
 |      Description: Read hardware timer value.
-| Global Variables: Ttimer_val, benchmark_timerfind_average_overhead.
+| Global Variables: Ttimer_val, benchmark_timer_find_average_overhead.
 |        Arguments: None.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
@@ -146,7 +146,7 @@ tsc_read_timer(void)
 
   total =  (uint32_t)(rdtsc() - Ttimer_val);
 
-  if (benchmark_timerfind_average_overhead)
+  if (benchmark_timer_find_average_overhead)
     return total;
   else if (total < LEAST_VALID)
     return 0; /* below timer resolution */
@@ -222,7 +222,7 @@ i386_timer_exit(void)
 } /* Timer_exit */
 
 /*-------------------------------------------------------------------------+
-|         Function: benchmark_timerinitialize
+|         Function: benchmark_timer_initialize
 |      Description: Timer initialization routine.
 | Global Variables: Ttimer_val.
 |        Arguments: None.
@@ -248,12 +248,12 @@ i386_timer_initialize(void)
   while (Ttimer_val == 0)
     continue;
   Ttimer_val = 0;
-} /* benchmark_timerinitialize */
+} /* benchmark_timer_initialize */
 
 /*-------------------------------------------------------------------------+
-|         Function: benchmark_timerread
+|         Function: benchmark_timer_read
 |      Description: Read hardware timer value.
-| Global Variables: Ttimer_val, benchmark_timerfind_average_overhead.
+| Global Variables: Ttimer_val, benchmark_timer_find_average_overhead.
 |        Arguments: None.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
@@ -269,7 +269,7 @@ i386_read_timer(void)
   clicks = (msb << 8) | lsb;
   total  = (Ttimer_val * US_PER_ISR) + (US_PER_ISR - TICK_TO_US(clicks));
 
-  if (benchmark_timerfind_average_overhead)
+  if (benchmark_timer_find_average_overhead)
     return total;
   else if (total < LEAST_VALID)
     return 0; /* below timer resolution */
@@ -283,7 +283,7 @@ i386_read_timer(void)
  */
 
 void
-benchmark_timerinitialize(void)
+benchmark_timer_initialize(void)
 {
     static rtems_boolean First = TRUE;
 
@@ -292,27 +292,27 @@ benchmark_timerinitialize(void)
 #if defined(DEBUG)
             printk("TSC: timer initialization\n");
 #endif /* DEBUG */
-            benchmark_timerinitialize_function = &tsc_timer_initialize;
-            benchmark_timerread_function = &tsc_read_timer;
+            benchmark_timer_initialize_function = &tsc_timer_initialize;
+            benchmark_timer_read_function = &tsc_read_timer;
             Timer_exit_function = &tsc_timer_exit;
         }
         else {
 #if defined(DEBUG)
             printk("ISR: timer initialization\n");
 #endif /* DEBUG */
-            benchmark_timerinitialize_function = &i386_timer_initialize;
-            benchmark_timerread_function = &i386_read_timer;
+            benchmark_timer_initialize_function = &i386_timer_initialize;
+            benchmark_timer_read_function = &i386_read_timer;
             Timer_exit_function = &i386_timer_exit;
         }
         First = FALSE;
     }
-    (*benchmark_timerinitialize_function)();
+    (*benchmark_timer_initialize_function)();
 }
 
 uint32_t
-benchmark_timerread(void)
+benchmark_timer_read(void)
 {
-    return (*benchmark_timerread_function)();
+    return (*benchmark_timer_read_function)();
 }
 
 void
@@ -322,29 +322,17 @@ Timer_exit(void)
 }
 
 /*-------------------------------------------------------------------------+
-|         Function: benchmark_timerempty_function
-|      Description: Empty function used in time tests.
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-rtems_status_code benchmark_timerempty_function(void)
-{
-  return RTEMS_SUCCESSFUL;
-} /* Empty function */
-
-/*-------------------------------------------------------------------------+
-|         Function: benchmark_timerdisable_subtracting_average_overhead
-|      Description: Set internal benchmark_timerfind_average_overhead flag value.
-| Global Variables: benchmark_timerfind_average_overhead.
+|         Function: benchmark_timer_disable_subtracting_average_overhead
+|      Description: Set internal benchmark_timer_find_average_overhead flag value.
+| Global Variables: benchmark_timer_find_average_overhead.
 |        Arguments: find_flag - new value of the flag.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
-  benchmark_timerfind_average_overhead = find_flag;
-} /* benchmark_timerdisable_subtracting_average_overhead */
+  benchmark_timer_find_average_overhead = find_flag;
+} /* benchmark_timer_disable_subtracting_average_overhead */
 
 static unsigned short lastLoadedValue;
 

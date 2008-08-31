@@ -21,16 +21,16 @@
 
 #include <bsp.h>
 
-rtems_boolean benchmark_timerfind_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 
 extern rtems_isr Clock_isr(void);
 
-void benchmark_timerinitialize( void )
+void benchmark_timer_initialize( void )
 {
 }
 
 /*
- *  The following controls the behavior of benchmark_timerread().
+ *  The following controls the behavior of benchmark_timer_read().
  *
  *  FIND_AVG_OVERHEAD *  instructs the routine to return the "raw" count.
  *
@@ -49,12 +49,12 @@ void benchmark_timerinitialize( void )
 /*
  * Return timer value in 1/2-microsecond units
  */
-int benchmark_timerread( void )
+int benchmark_timer_read( void )
 {
   uint32_t         total;
   total = 0;
 
-  if ( benchmark_timerfind_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in XXX microsecond units */
 
   if ( total < LEAST_VALID )
@@ -63,19 +63,9 @@ int benchmark_timerread( void )
   return (total - AVG_OVERHEAD);
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-
-rtems_status_code benchmark_timerempty_function(void)
-{
-    return RTEMS_SUCCESSFUL;
-}
-
-void benchmark_timerdisable_subtracting_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   rtems_boolean find_flag
 )
 {
-  benchmark_timerfind_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }

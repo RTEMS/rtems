@@ -54,10 +54,10 @@
 #include <bsp.h>
 #include <mcf548x/mcf548x.h>
 
-rtems_boolean benchmark_timerfind_average_overhead;
+rtems_boolean benchmark_timer_find_average_overhead;
 static uint32_t microsecond_timer_value = 0;
 
-void benchmark_timerinitialize(void)
+void benchmark_timer_initialize(void)
 {
 MCF548X_SLT_SLTCNT1 = 0xFFFFFFFF;
 MCF548X_SLT_SCR1 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN);
@@ -68,27 +68,14 @@ MCF548X_SLT_SCR1 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN);
  * XLB clock 100 MHz / 1us is equal to 100 counts
  */
 int
-benchmark_timerread(void)
+benchmark_timer_read(void)
 {
 	microsecond_timer_value = (0xFFFFFFFF - MCF548X_SLT_SCNT1)/100;
     return microsecond_timer_value;
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-rtems_status_code
-benchmark_timerempty_function(void)
-{
-    return RTEMS_SUCCESSFUL;
-}
-
 void
-benchmark_timerdisable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
 {
-benchmark_timerfind_average_overhead = find_flag;
+benchmark_timer_find_average_overhead = find_flag;
 }
-
-
-
