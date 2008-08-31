@@ -80,7 +80,7 @@ rtems_task First_task(
   rtems_task_argument argument
 )
 {
-  Timer_initialize();
+  benchmark_timerinitialize();
 
   (void) rtems_task_delete( RTEMS_SELF );
 }
@@ -96,7 +96,7 @@ rtems_task Last_task(
   rtems_task_argument argument
 )
 {
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_delete: calling task",

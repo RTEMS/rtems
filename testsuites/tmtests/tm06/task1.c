@@ -72,19 +72,19 @@ rtems_task Task_1(
   uint32_t    index;
 
   if ( Task_restarted == OPERATION_COUNT )
-     Timer_initialize();
+     benchmark_timerinitialize();
 
   Task_restarted--;
 
   if ( Task_restarted != 0 )
     (void) rtems_task_restart( RTEMS_SELF, 0 );
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
   put_time(
     "rtems_task_restart: calling task",
@@ -109,10 +109,10 @@ rtems_task Task_1(
     directive_failed( status, "rtems_task_start loop" );
   }
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_suspend( Task_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_suspend: returns to caller",
@@ -122,10 +122,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_TASK_SUSPEND
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_resume( Task_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_resume: task readied -- returns to caller",
@@ -135,10 +135,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_TASK_RESUME
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_delete( Task_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_delete: ready task",

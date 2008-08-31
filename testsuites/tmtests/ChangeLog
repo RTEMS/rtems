@@ -1,3 +1,14 @@
+2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm04/task1.c, tm05/task1.c,
+	tm06/task1.c, tm07/task1.c, tm08/task1.c, tm09/task1.c, tm10/task1.c,
+	tm11/task1.c, tm12/task1.c, tm13/task1.c, tm14/task1.c, tm15/task1.c,
+	tm16/task1.c, tm17/task1.c, tm18/task1.c, tm19/task1.c, tm20/task1.c,
+	tm21/task1.c, tm22/task1.c, tm23/task1.c, tm24/task1.c, tm25/task1.c,
+	tm26/task1.c, tm27/task1.c, tm28/task1.c, tm29/task1.c, tmck/task1.c,
+	tmoverhd/testtask.c: Rename timer driver methods to follow RTEMS
+	programming conventions.
+
 2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* tm02/system.h, tm10/system.h: Make configurations more accurate.

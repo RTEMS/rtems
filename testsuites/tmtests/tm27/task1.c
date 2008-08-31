@@ -78,10 +78,10 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
   directive_failed( status, "rtems_task_start of Task_2" );
 
-  Timer_initialize();
-  Read_timer();
-  Timer_initialize();
-  timer_overhead = Read_timer();
+  benchmark_timerinitialize();
+  benchmark_timerread();
+  benchmark_timerinitialize();
+  timer_overhead = benchmark_timerread();
 
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
@@ -103,14 +103,14 @@ rtems_task Task_1(
 
   Interrupt_occurred = 0;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   Cause_tm27_intr();
   /* goes to Isr_handler */
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
 #endif
-  Interrupt_return_time = Read_timer();
+  Interrupt_return_time = benchmark_timerread();
 
   put_time(
     "interrupt entry overhead: returns to interrupted task",
@@ -137,14 +137,14 @@ rtems_task Task_1(
   Interrupt_nest = 1;
 
   Interrupt_occurred = 0;
-  Timer_initialize();
+  benchmark_timerinitialize();
   Cause_tm27_intr();
   /* goes to Isr_handler */
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
 #endif
-  Interrupt_return_time = Read_timer();
+  Interrupt_return_time = benchmark_timerread();
 
   _Thread_Dispatch_disable_level = 0;
 
@@ -175,7 +175,7 @@ rtems_task Task_1(
   _Context_Switch_necessary = 1;
 
   Interrupt_occurred = 0;
-  Timer_initialize();
+  benchmark_timerinitialize();
   Cause_tm27_intr();
 
   /*
@@ -201,7 +201,7 @@ rtems_task Task_2(
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
 #endif
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "interrupt entry overhead: returns to preempting task",
@@ -246,7 +246,7 @@ rtems_isr Isr_handler(
   rtems_vector_number vector
 )
 {
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   Interrupt_occurred = 1;
   Isr_handler_inner();
@@ -266,18 +266,18 @@ void Isr_handler_inner( void )
       Interrupt_nest = 2;
       Interrupt_occurred = 0;
       Lower_tm27_intr();
-      Timer_initialize();
+      benchmark_timerinitialize();
       Cause_tm27_intr();
       /* goes to a nested copy of Isr_handler */
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
        while ( Interrupt_occurred == 0 );
 #endif
-      Interrupt_return_nested_time = Read_timer();
+      Interrupt_return_nested_time = benchmark_timerread();
       break;
     case 2:
       Interrupt_enter_nested_time = end_time;
       break;
   }
 
-  Timer_initialize();
+  benchmark_timerinitialize();
 }

@@ -50,10 +50,10 @@ rtems_task Init(
 
   puts( "\n\n*** TIME TEST 23 ***" );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
   priority = 5;
 
@@ -97,15 +97,15 @@ rtems_task High_task(
   rtems_status_code status;
   int i;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_create( index, &Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_create",
@@ -115,10 +115,10 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_CREATE
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_fire_after: inactive",
@@ -128,10 +128,10 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_FIRE_AFTER
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_fire_after( Timer_id[ index ], 500, null_delay, NULL );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_fire_after: active",
@@ -141,10 +141,10 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_FIRE_AFTER
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_cancel( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_cancel: active",
@@ -154,11 +154,11 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_CANCEL
   );
 
-  for ( Timer_initialize(), i=0 ; i<OPERATION_COUNT ; i++ )
-  Timer_initialize();
+  for ( benchmark_timerinitialize(), i=0 ; i<OPERATION_COUNT ; i++ )
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_cancel( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_cancel: inactive",
@@ -168,11 +168,11 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_CANCEL
   );
 
-  for ( Timer_initialize(), i=0 ; i<OPERATION_COUNT ; i++ )
-  Timer_initialize();
+  for ( benchmark_timerinitialize(), i=0 ; i<OPERATION_COUNT ; i++ )
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_reset( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_reset: inactive",
@@ -182,10 +182,10 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_RESET
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_reset( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_reset: active",
@@ -205,11 +205,11 @@ rtems_task High_task(
 
   time_of_day.year = 1989;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_fire_when(
          Timer_id[ index ], &time_of_day, null_delay, NULL );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_fire_when: inactive",
@@ -219,11 +219,11 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_FIRE_WHEN
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_fire_when(
          Timer_id[ index ], &time_of_day, null_delay, NULL );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_fire_when: active",
@@ -233,10 +233,10 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_FIRE_WHEN
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_delete( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_delete: active",
@@ -246,7 +246,7 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_DELETE
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_timer_create( index, &Timer_id[ index ] );
     directive_failed( status, "rtems_timer_create" );
@@ -258,10 +258,10 @@ rtems_task High_task(
     directive_failed( status, "rtems_timer_cancel" );
   }
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_delete( Timer_id[ index ] );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_delete: inactive",
@@ -271,7 +271,7 @@ rtems_task High_task(
     CALLING_OVERHEAD_TIMER_DELETE
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     (void) rtems_task_wake_when( &time_of_day );
 }
 
@@ -286,7 +286,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_wake_when",

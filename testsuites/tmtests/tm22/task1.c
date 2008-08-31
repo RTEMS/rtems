@@ -88,14 +88,14 @@ rtems_task High_task(
   uint32_t    count;
   rtems_status_code status;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     (void) rtems_message_queue_broadcast(
              Queue_id,
              Buffer,
              MESSAGE_SIZE,
              &count
            );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_message_queue_broadcast: task readied -- returns to caller",
@@ -141,7 +141,7 @@ rtems_task Low_task(
   );
   directive_failed( status, "message_queu_receive" );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_message_queue_broadcast(
                Queue_id,
@@ -149,7 +149,7 @@ rtems_task Low_task(
                MESSAGE_SIZE,
                &count
              );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_message_queue_broadcast: no waiting tasks",
@@ -169,7 +169,7 @@ rtems_task Low_task(
 
   /* should go to Preempt_task here */
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_message_queue_broadcast: task readied -- preempts caller",
@@ -189,7 +189,7 @@ rtems_task Preempt_task(
 {
   uint32_t    count;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     (void) rtems_message_queue_broadcast(
              Queue_id,
              Buffer,

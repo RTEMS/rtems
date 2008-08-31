@@ -123,15 +123,15 @@ rtems_task Task_1(
     directive_failed( status, "rtems_rate_monotonic_create" );
   }
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_task_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_ident",
@@ -141,10 +141,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_TASK_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_message_queue_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_message_queue_ident",
@@ -154,10 +154,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_MESSAGE_QUEUE_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_semaphore_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_semaphore_ident",
@@ -167,10 +167,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_SEMAPHORE_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_partition_ident( index, RTEMS_SEARCH_ALL_NODES, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_partition_ident",
@@ -180,10 +180,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_PARTITION_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_region_ident( index, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_region_ident",
@@ -193,10 +193,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_REGION_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_port_ident( index, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_port_ident",
@@ -206,10 +206,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_PORT_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_timer_ident( index, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_timer_ident",
@@ -219,10 +219,10 @@ rtems_task Task_1(
     CALLING_OVERHEAD_TIMER_IDENT
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_rate_monotonic_ident( index, &id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_rate_monotonic_ident",

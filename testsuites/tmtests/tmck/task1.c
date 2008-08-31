@@ -38,7 +38,7 @@ rtems_task Init(
    *  Tell the Timer Driver what we are doing
    */
 
-  Set_find_average_overhead( 1 );
+  benchmark_timerdisable_subtracting_average_overhead( 1 );
 
   Print_Warning();
 
@@ -72,8 +72,8 @@ rtems_task Task_1(
   check_read_timer();
 rtems_test_pause();
 
-  Timer_initialize();
-  end_time = Read_timer();
+  benchmark_timerinitialize();
+  end_time = benchmark_timerread();
 
   put_time(
     "NULL timer stopped at",
@@ -83,10 +83,10 @@ rtems_test_pause();
     0
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   for ( index = 1 ; index <= 1000 ; index++ )
-    (void) Empty_function();
-  end_time = Read_timer();
+    (void) benchmark_timerempty_function();
+  end_time = benchmark_timerread();
 
   put_time(
     "LOOP (1000) timer stopped at",
@@ -96,10 +96,10 @@ rtems_test_pause();
     0
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   for ( index = 1 ; index <= 10000 ; index++ )
-    (void) Empty_function();
-  end_time = Read_timer();
+    (void) benchmark_timerempty_function();
+  end_time = benchmark_timerread();
 
   put_time(
     "LOOP (10000) timer stopped at",
@@ -109,10 +109,10 @@ rtems_test_pause();
     0
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   for ( index = 1 ; index <= 50000 ; index++ )
-    (void) Empty_function();
-  end_time = Read_timer();
+    (void) benchmark_timerempty_function();
+  end_time = benchmark_timerread();
 
   put_time(
     "LOOP (50000) timer stopped at",
@@ -122,10 +122,10 @@ rtems_test_pause();
     0
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
   for ( index = 1 ; index <= 100000 ; index++ )
-    (void) Empty_function();
-  end_time = Read_timer();
+    (void) benchmark_timerempty_function();
+  end_time = benchmark_timerread();
 
   put_time(
     "LOOP (100000) timer stopped at",
@@ -148,8 +148,8 @@ void check_read_timer()
     Distribution[ index ] = 0;
 
   for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
-    Timer_initialize();
-    end_time = Read_timer();
+    benchmark_timerinitialize();
+    end_time = benchmark_timerread();
     if ( end_time > MAXIMUM_DISTRIBUTION ) {
       /*
        *  Under UNIX a simple process swap takes longer than we

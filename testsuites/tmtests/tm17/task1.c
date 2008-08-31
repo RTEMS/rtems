@@ -72,7 +72,7 @@ rtems_task First_task(
 {
   rtems_task_priority previous_priority;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
 
   Task_priority--;
   Task_count++;
@@ -106,12 +106,12 @@ rtems_task Last_task(
 {
   uint32_t   index;
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
   put_time(
     "rtems_task_set_priority: preempts caller",

@@ -93,7 +93,7 @@ rtems_task test_init(
 
   Task_count = 0;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     (void) rtems_event_send( Task_id[ Task_count ], RTEMS_EVENT_16 );
   /* preempts task */
 }
@@ -132,7 +132,7 @@ rtems_task High_task(
             &event_out
           );
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_event_send: task readied -- preempts caller",

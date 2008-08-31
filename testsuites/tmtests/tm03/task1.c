@@ -104,7 +104,7 @@ rtems_task test_init(
   status = rtems_task_start( task_id, High_task, 0 );
   directive_failed( status, "rtems_task_start of high task" );
 
-  Timer_initialize();                          /* start the timer */
+  benchmark_timerinitialize();                          /* start the timer */
   status = rtems_semaphore_release( Semaphore_id );
 }
 
@@ -135,7 +135,7 @@ rtems_task High_task(
     RTEMS_NO_TIMEOUT
   );
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_semaphore_release: task readied -- preempts caller",

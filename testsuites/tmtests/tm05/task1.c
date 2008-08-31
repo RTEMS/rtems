@@ -82,11 +82,11 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  Timer_initialize();
+  benchmark_timerinitialize();
 
   (void) rtems_task_suspend( RTEMS_SELF );
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_resume: task readied -- preempts caller",
@@ -115,7 +115,7 @@ rtems_task Low_task(
 )
 {
 
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_task_suspend: calling task",
@@ -126,6 +126,6 @@ rtems_task Low_task(
   );
 
   Task_index = 1;
-  Timer_initialize();
+  benchmark_timerinitialize();
   (void) rtems_task_resume( Task_id[ Task_index ] );
 }

@@ -57,14 +57,14 @@ rtems_task Test_task (
   uint32_t     index;
   void              *converted;
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) Empty_function();
-  overhead = Read_timer();
+      (void) benchmark_timerempty_function();
+  overhead = benchmark_timerread();
 
   name = rtems_build_name( 'P', 'O', 'R', 'T' ),
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     rtems_port_create(
       name,
       Internal_area,
@@ -72,7 +72,7 @@ rtems_task Test_task (
       0xff,
       &Port_id
     );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_port_create",
@@ -82,14 +82,14 @@ rtems_task Test_task (
     CALLING_OVERHEAD_PORT_CREATE
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_port_external_to_internal(
                Port_id,
                &External_area[ 0xf ],
                &converted
              );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_port_external_to_internal",
@@ -99,14 +99,14 @@ rtems_task Test_task (
     CALLING_OVERHEAD_PORT_EXTERNAL_TO_INTERNAL
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) rtems_port_internal_to_external(
                Port_id,
                &Internal_area[ 0xf ],
                &converted
              );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_port_internal_to_external",
@@ -116,9 +116,9 @@ rtems_task Test_task (
     CALLING_OVERHEAD_PORT_INTERNAL_TO_EXTERNAL
   );
 
-  Timer_initialize();
+  benchmark_timerinitialize();
     rtems_port_delete( Port_id );
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_port_delete",

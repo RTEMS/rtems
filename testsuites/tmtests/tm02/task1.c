@@ -117,7 +117,7 @@ rtems_task High_task(
 {
   rtems_status_code status;
 
-  Timer_initialize();           /* start blocking rtems_semaphore_obtain time */
+  benchmark_timerinitialize();           /* start blocking rtems_semaphore_obtain time */
   status = rtems_semaphore_obtain(
     Semaphore_id,
     RTEMS_DEFAULT_OPTIONS,
@@ -142,7 +142,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  end_time = Read_timer();
+  end_time = benchmark_timerread();
 
   put_time(
     "rtems_semaphore_obtain: not available -- caller blocks",
