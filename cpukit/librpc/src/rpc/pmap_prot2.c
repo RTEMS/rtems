@@ -84,9 +84,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_prot2.c,v 1.7 1999/08/28 0
  * this sounds like a job for xdr_reference!
  */
 bool_t
-xdr_pmaplist(xdrs, rp)
-	register XDR *xdrs;
-	register struct pmaplist **rp;
+xdr_pmaplist(
+	XDR *xdrs,
+	struct pmaplist **rp)
 {
 	/*
 	 * more_elements is pre-computed in case the direction is

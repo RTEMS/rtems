@@ -86,8 +86,7 @@ _rpcdata(void)
 }
 
 struct rpcent *
-getrpcbynumber(number)
-	register int number;
+getrpcbynumber(int number)
 {
 	register struct rpcdata *d = _rpcdata();
 	register struct rpcent *p;
@@ -131,8 +130,7 @@ no_yp:
 }
 
 struct rpcent *
-getrpcbyname(name)
-	char *name;
+getrpcbyname(char *name)
 {
 	struct rpcent *rpc = NULL;
 	char **rp;
@@ -152,8 +150,7 @@ done:
 }
 
 void
-setrpcent(f)
-	int f;
+setrpcent(int f)
 {
 	register struct rpcdata *d = _rpcdata();
 
@@ -177,7 +174,7 @@ setrpcent(f)
 }
 
 void
-endrpcent()
+endrpcent(void)
 {
 	register struct rpcdata *d = _rpcdata();
 
@@ -200,7 +197,7 @@ endrpcent()
 }
 
 struct rpcent *
-getrpcent()
+getrpcent(void)
 {
 	register struct rpcdata *d = _rpcdata();
 #ifdef	YP

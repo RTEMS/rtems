@@ -50,9 +50,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/authunix_prot.c,v 1.6 1999/08/2
  * XDR for unix authentication parameters.
  */
 bool_t
-xdr_authunix_parms(xdrs, p)
-	register XDR *xdrs;
-	register struct authunix_parms *p;
+xdr_authunix_parms(
+	XDR *xdrs,
+	struct authunix_parms *p)
 {
 
 	if (xdr_u_long(xdrs, &(p->aup_time))

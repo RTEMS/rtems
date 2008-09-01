@@ -60,8 +60,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getmaps.c,v 1.11 2000/01/2
  * Calls the pmap service remotely to do get the maps.
  */
 struct pmaplist *
-pmap_getmaps(address)
-	 struct sockaddr_in *address;
+pmap_getmaps(struct sockaddr_in *address)
 {
 	struct pmaplist *head = (struct pmaplist *)NULL;
 	int socket = -1;

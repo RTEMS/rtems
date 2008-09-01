@@ -114,9 +114,9 @@ static struct sgl_limits {
 
 
 bool_t
-xdr_float(xdrs, fp)
-	register XDR *xdrs;
-	register float *fp;
+xdr_float(
+	register XDR *xdrs,
+	register float *fp)
 {
 #ifdef IEEEFP
 	bool_t rv;
@@ -221,9 +221,9 @@ static struct dbl_limits {
 
 
 bool_t
-xdr_double(xdrs, dp)
-	register XDR *xdrs;
-	double *dp;
+xdr_double(
+	register XDR *xdrs,
+	double *dp)
 {
 #ifdef IEEEFP
 	register int32_t *i32p;

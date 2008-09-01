@@ -49,9 +49,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/rpc_callmsg.c,v 1.9 1999/08/28 
  * XDR a call message
  */
 bool_t
-xdr_callmsg(xdrs, cmsg)
-	register XDR *xdrs;
-	register struct rpc_msg *cmsg;
+xdr_callmsg(
+	XDR *xdrs,
+	struct rpc_msg *cmsg)
 {
 	register int32_t *buf;
 	register struct opaque_auth *oa;

@@ -46,9 +46,9 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_prot.c,v 1.6 1999/08/28 00
 
 
 bool_t
-xdr_pmap(xdrs, regs)
-	XDR *xdrs;
-	struct pmap *regs;
+xdr_pmap(
+	XDR *xdrs,
+	struct pmap *regs)
 {
 
 	if (xdr_u_long(xdrs, &regs->pm_prog) &&

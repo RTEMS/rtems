@@ -48,11 +48,11 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_generic.c,v 1.9 1999/08/28
  * change using the rpc equivalent of ioctl()'s.
  */
 CLIENT *
-clnt_create(hostname, prog, vers, proto)
-	char *hostname;
-	u_long prog;
-	u_long vers;
-	char *proto;
+clnt_create(
+	char *hostname,
+	u_long prog,
+	u_long vers,
+	char *proto)
 {
 	struct hostent *h;
 	struct protoent *p;

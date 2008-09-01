@@ -58,13 +58,13 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_array.c,v 1.8 1999/08/28 00
  * xdr procedure to call to handle each element of the array.
  */
 bool_t
-xdr_array(xdrs, addrp, sizep, maxsize, elsize, elproc)
-	register XDR *xdrs;
-	caddr_t *addrp;		/* array pointer */
-	u_int *sizep;		/* number of elements */
-	u_int maxsize;		/* max numberof elements */
-	u_int elsize;		/* size in bytes of each element */
-	xdrproc_t elproc;	/* xdr routine to handle each element */
+xdr_array(
+	register XDR *xdrs,
+	caddr_t *addrp,		/* array pointer */
+	u_int *sizep,		/* number of elements */
+	u_int maxsize,		/* max numberof elements */
+	u_int elsize,		/* size in bytes of each element */
+	xdrproc_t elproc)	/* xdr routine to handle each element */
 {
 	register u_int i;
 	register caddr_t target = *addrp;
@@ -135,12 +135,12 @@ xdr_array(xdrs, addrp, sizep, maxsize, elsize, elproc)
  * > xdr_elem: routine to XDR each element
  */
 bool_t
-xdr_vector(xdrs, basep, nelem, elemsize, xdr_elem)
-	register XDR *xdrs;
-	register char *basep;
-	register u_int nelem;
-	register u_int elemsize;
-	register xdrproc_t xdr_elem;
+xdr_vector(
+	register XDR *xdrs,
+	register char *basep,
+	register u_int nelem,
+	register u_int elemsize,
+	register xdrproc_t xdr_elem)
 {
 	register u_int i;
 	register char *elptr;

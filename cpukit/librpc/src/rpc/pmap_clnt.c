@@ -60,11 +60,11 @@ static struct timeval tottimeout = { 60, 0 };
  * Calls the pmap service remotely to do the mapping.
  */
 bool_t
-pmap_set(program, version, protocol, port)
-	u_long program;
-	u_long version;
-	int protocol;
-	int port;    /* was u_short but changed to match prototype */
+pmap_set(
+	u_long program,
+	u_long version,
+	int protocol,
+	int port)    /* was u_short but changed to match prototype */
 {
 	struct sockaddr_in myaddress;
 	int socket = -1;
@@ -109,9 +109,9 @@ pmap_set(program, version, protocol, port)
  * Calls the pmap service remotely to do the un-mapping.
  */
 bool_t
-pmap_unset(program, version)
-	u_long program;
-	u_long version;
+pmap_unset(
+	u_long program,
+	u_long version)
 {
 	struct sockaddr_in myaddress;
 	int socket = -1;

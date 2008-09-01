@@ -106,14 +106,14 @@ struct cu_data {
  * sent and received.
  */
 CLIENT *
-clntudp_bufcreate(raddr, program, version, wait, sockp, sendsz, recvsz)
-	struct sockaddr_in *raddr;
-	u_long program;
-	u_long version;
-	struct timeval wait;
-	register int *sockp;
-	u_int sendsz;
-	u_int recvsz;
+clntudp_bufcreate(
+	struct sockaddr_in *raddr,
+	u_long program,
+	u_long version,
+	struct timeval wait,
+	int *sockp,
+	u_int sendsz,
+	u_int recvsz)
 {
 	CLIENT *cl;
 	register struct cu_data *cu = NULL;
@@ -200,12 +200,12 @@ fooy:
 }
 
 CLIENT *
-clntudp_create(raddr, program, version, wait, sockp)
-	struct sockaddr_in *raddr;
-	u_long program;
-	u_long version;
-	struct timeval wait;
-	register int *sockp;
+clntudp_create(
+	struct sockaddr_in *raddr,
+	u_long program,
+	u_long version,
+	struct timeval wait,
+	int *sockp)
 {
 
 	return(clntudp_bufcreate(raddr, program, version, wait, sockp,
