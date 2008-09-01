@@ -1,5 +1,17 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/res_comp.c,
+	libnetworking/netinet/igmp.c,
+	libnetworking/netinet/in_cksum.c,
+	libnetworking/netinet/in_proto.c,
+	libnetworking/netinet/tcp_debug.c,
+	libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/tcp_output.c,
+	libnetworking/netinet/tcp_timer.c: 
+	Remove BSD "Add clause" (From FreeBSD).
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if_ethersubr.c, libnetworking/net/if_loop.c,
 	libnetworking/net/if_ppp.c, libnetworking/net/ppp_tty.c,
 	libnetworking/net/radix.c, libnetworking/net/raw_cb.c,
