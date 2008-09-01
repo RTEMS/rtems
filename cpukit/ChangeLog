@@ -1,5 +1,15 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
+	libmisc/capture/capture.h:
+	Convert to using "bool".
+	* libmisc/serdbg/serdbg.c, libmisc/serdbg/serdbg.h,
+	libmisc/serdbg/serdbgcnf.h, libmisc/serdbg/serdbgio.c,
+	libmisc/serdbg/termios_printk.c:
+	Convert to using "bool".
+	* libmisc/shell/main_logoff.c, libmisc/shell/shell.c,
+	libmisc/shell/shell.h:
+	Convert to using "bool".
 	* libmisc/monitor/mon-command.c, libmisc/monitor/mon-config.c,
 	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-extension.c,
 	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
