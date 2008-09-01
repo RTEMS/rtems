@@ -29,7 +29,7 @@ int rtems_shell_main_logoff(
 {
   printf("logoff from the system...");
 
-  rtems_current_shell_env->exit_shell = TRUE;
+  rtems_current_shell_env->exit_shell = true;
 
   return 0;
 }

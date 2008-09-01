@@ -28,12 +28,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 typedef struct {
   uint32_t   baudrate;      /* debug baud rate, e.g. 57600            */
   void (*callout)(void);    /* callout pointer during polling         */
-  int  (*open_io)(const char *dev_name,uint32_t   baudrate); /* I/O open fnc */
+  int  (*open_io)(const char *dev_name, uint32_t baudrate); /* I/O open fnc */
   const char *devname;      /* debug device, e.g. "/dev/tty01"        */
-  uint8_t   skip_init_bkpt; /* if TRUE, do not stop when initializing */
+  bool      skip_init_bkpt; /* if TRUE, do not stop when initializing */
 } serdbg_conf_t;
 
 /*

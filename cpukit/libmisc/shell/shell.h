@@ -181,8 +181,8 @@ typedef struct  {
   char       *devname;
   char       *taskname;
   /* user extensions */
-  int         exit_shell; /* logout */
-  int         forever   ; /* repeat login */
+  bool        exit_shell; /* logout */
+  bool        forever   ; /* repeat login */
   int         errorlevel;
   int         echo;
   char        cwd[256];
@@ -192,7 +192,7 @@ typedef struct  {
   rtems_id    wake_on_end;
 } rtems_shell_env_t;
 
-rtems_boolean rtems_shell_main_loop(
+bool rtems_shell_main_loop(
   rtems_shell_env_t *rtems_shell_env
 );
 

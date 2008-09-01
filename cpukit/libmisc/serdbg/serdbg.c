@@ -50,14 +50,14 @@ int serdbg_init_dbg
 |    rtems_status_code                                                      |
 \*=========================================================================*/
 {
-  static boolean is_initialized = FALSE;
+  static bool is_initialized = false;
 
   rtems_status_code rc = RTEMS_SUCCESSFUL;
 
   if (is_initialized) {
     return RTEMS_SUCCESSFUL;
   }
-  is_initialized = TRUE;
+  is_initialized = true;
   /*
    * try to open serial device
    */

@@ -65,9 +65,9 @@ serdbg_conf_t serdbg_conf = {
   CONFIGURE_SERDBG_DEVNAME,
 
 #ifdef CONFIGURE_SERDBG_SKIP_INIT_BKPT
-  TRUE,
+  true,
 #else
-  FALSE,
+  false,
 #endif
 };
 

@@ -286,7 +286,7 @@ rtems_capture_close (void);
  * This function allows control of tracing at a global level.
  */
 rtems_status_code
-rtems_capture_control (rtems_boolean enable);
+rtems_capture_control (bool enable);
 
 /**
  * rtems_capture_monitor
@@ -298,7 +298,7 @@ rtems_capture_control (rtems_boolean enable);
  * to profile the load on a system.
  */
 rtems_status_code
-rtems_capture_monitor (rtems_boolean enable);
+rtems_capture_monitor (bool enable);
 
 /*
  * rtems_capture_flush
@@ -309,7 +309,7 @@ rtems_capture_monitor (rtems_boolean enable);
  * capture engine to also be primed again.
  */
 rtems_status_code
-rtems_capture_flush (rtems_boolean prime);
+rtems_capture_flush (bool prime);
 
 /**
  * rtems_capture_watch_add
@@ -347,7 +347,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id);
 rtems_status_code
 rtems_capture_watch_ctrl (rtems_name    name,
                           rtems_id      id,
-                          rtems_boolean enable);
+                          bool enable);
 
 /**
  * rtems_capture_watch_global
@@ -359,7 +359,7 @@ rtems_capture_watch_ctrl (rtems_name    name,
  * the ceiling and above the floor to be traced.
  */
 rtems_status_code
-rtems_capture_watch_global (rtems_boolean enable);
+rtems_capture_watch_global (bool enable);
 
 /**
  * rtems_capture_watch_global_on
@@ -368,7 +368,7 @@ rtems_capture_watch_global (rtems_boolean enable);
  *
  * This function returns the global watch state.
  */
-rtems_boolean
+bool
 rtems_capture_watch_global_on (void);
 
 /**
@@ -570,7 +570,7 @@ rtems_capture_next_task (rtems_capture_task_t* task)
  * This function returns true if the task control block points to
  * a valid task.
  */
-static inline rtems_boolean
+static inline bool
 rtems_capture_task_valid (rtems_capture_task_t* task)
 {
   return task->tcb != NULL;

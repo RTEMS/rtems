@@ -446,13 +446,14 @@ int rtems_shell_scanline(
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
 
-void rtems_shell_init_issue(void) {
-  static char issue_inited=FALSE;
+void rtems_shell_init_issue(void)
+{
+  static bool issue_inited=false;
   struct stat buf;
 
   if (issue_inited)
     return;
-  issue_inited = TRUE;
+  issue_inited = true;
 
   /* dummy call to init /etc dir */
   getpwnam("root");
@@ -657,7 +658,7 @@ rtems_task rtems_shell_task(rtems_task_argument task_argument)
 #define RTEMS_SHELL_CMD_COUNT         (32)
 #define RTEMS_SHELL_PROMPT_SIZE       (128)
 
-rtems_boolean rtems_shell_main_loop(
+bool rtems_shell_main_loop(
   rtems_shell_env_t *shell_env_arg
 )
 {
@@ -673,8 +674,8 @@ rtems_boolean rtems_shell_main_loop(
   char              *cmd_argv;
   int                argc;
   char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
-  rtems_boolean      result = TRUE;
-  rtems_boolean      input_file = FALSE;
+  bool               result = true;
+  bool               input_file = true;
   int                line = 0;
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
@@ -698,7 +699,7 @@ rtems_boolean rtems_shell_main_loop(
   );
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
-    return FALSE;
+    return false;
   }
 
   setuid(0);
@@ -723,7 +724,7 @@ rtems_boolean rtems_shell_main_loop(
       if (!output) {
         fprintf(stderr, "shell: open output %s failed: %s\n",
                 shell_env_arg->output, strerror(errno));
-        return FALSE;
+        return false;
       }
       stdout = output;
       stdoutToClose = output;
@@ -735,12 +736,12 @@ rtems_boolean rtems_shell_main_loop(
     if (!input) {
       fprintf(stderr, "shell: open input %s failed: %s\n",
               shell_env_arg->input, strerror(errno));
-      return FALSE;
+      return false;
     }
     stdin = input;
     stdinToClose = input;
-    shell_env->forever = FALSE;
-    input_file = TRUE;
+    shell_env->forever = false;
+    input_file =true;
   }
   else {
     /* make a raw terminal,Linux Manuals */
@@ -796,7 +797,7 @@ rtems_boolean rtems_shell_main_loop(
       sc = rtems_libio_set_private_env();
       if (sc != RTEMS_SUCCESSFUL) {
         rtems_error(sc,"rtems_libio_set_private_env():");
-        result = FALSE;
+        result = false;
         break;
       }
 
@@ -806,10 +807,10 @@ rtems_boolean rtems_shell_main_loop(
        *  keep on trucking.
        */
       if ( input_file ) {
-        result = TRUE;
+        result = true;
       } else {
-        if (rtems_shell_login(stdin,stdout)) result = FALSE;
-        else                                 result = TRUE;
+        if (rtems_shell_login(stdin,stdout)) result = false;
+        else                                 result = true;
       }
 
       if (result)  {
@@ -828,7 +829,7 @@ rtems_boolean rtems_shell_main_loop(
         else
           chdir("/"); /* XXX: chdir to getpwent homedir */
         
-        shell_env->exit_shell = FALSE;
+        shell_env->exit_shell = false;
 
         for (;;) {
           int cmd;
@@ -981,7 +982,7 @@ static rtems_status_code   rtems_shell_run (
   }
   shell_env->devname       = devname;
   shell_env->taskname      = task_name;
-  shell_env->exit_shell    = FALSE;
+  shell_env->exit_shell    = false;
   shell_env->forever       = forever;
   shell_env->echo          = echo;
   shell_env->input         = strdup (input);

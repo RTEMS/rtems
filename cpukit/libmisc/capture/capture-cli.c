@@ -66,10 +66,10 @@ static void
 rtems_capture_cli_open (int                          argc,
                         char**                       argv,
                         rtems_monitor_command_arg_t* command_arg,
-                        boolean                      verbose)
+                        bool                         verbose)
 {
   uint32_t          size = 0;
-  rtems_boolean     enable = 0;
+  bool              enable = false;
   rtems_status_code sc;
   int               arg;
 
@@ -84,7 +84,7 @@ rtems_capture_cli_open (int                          argc,
     if (argv[arg][0] == '-')
     {
       if (argv[arg][1] == 'i')
-        enable = 1;
+        enable = true;
       else
         fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
@@ -137,7 +137,7 @@ static void
 rtems_capture_cli_close (int                          argc,
                          char**                       argv,
                          rtems_monitor_command_arg_t* command_arg,
-                         boolean                      verbose)
+                         bool                         verbose)
 {
   rtems_status_code sc;
 
@@ -165,7 +165,7 @@ static void
 rtems_capture_cli_enable (int                          argc,
                           char**                       argv,
                           rtems_monitor_command_arg_t* command_arg,
-                          boolean                      verbose)
+                          bool                         verbose)
 {
   rtems_status_code sc;
 
@@ -193,7 +193,7 @@ static void
 rtems_capture_cli_disable (int                          argc,
                            char**                       argv,
                            rtems_monitor_command_arg_t* command_arg,
-                           boolean                      verbose)
+                           bool                         verbose)
 {
   rtems_status_code sc;
 
@@ -221,7 +221,7 @@ static void
 rtems_capture_cli_task_list (int                          argc,
                              char**                       argv,
                              rtems_monitor_command_arg_t* command_arg,
-                             boolean                      verbose)
+                             bool                         verbose)
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
@@ -460,7 +460,7 @@ static void
 rtems_capture_cli_task_load (int                          argc,
                              char**                       argv,
                              rtems_monitor_command_arg_t* command_arg,
-                             boolean                      verbose)
+                             bool                         verbose)
 {
   rtems_status_code   sc;
   rtems_task_priority priority;
@@ -533,7 +533,7 @@ static void
 rtems_capture_cli_watch_list (int                          argc,
                               char**                       argv,
                               rtems_monitor_command_arg_t* command_arg,
-                              boolean                      verbose)
+                              bool                         verbose)
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
@@ -619,10 +619,10 @@ rtems_capture_cli_watch_list (int                          argc,
  *
  */
 
-static rtems_boolean
+static bool
 rtems_capture_cli_get_name_id (char*          arg,
-                               rtems_boolean* valid_name,
-                               rtems_boolean* valid_id,
+                               bool*          valid_name,
+                               bool*          valid_id,
                                rtems_name*    name,
                                rtems_id*      id)
 {
@@ -648,7 +648,7 @@ rtems_capture_cli_get_name_id (char*          arg,
   if (i == l)
   {
     *id = strtoul (arg, 0, 16);
-    *valid_id = 1;
+    *valid_id = true;
   }
   else
   {
@@ -663,7 +663,7 @@ rtems_capture_cli_get_name_id (char*          arg,
     
     rname = rtems_build_name(arg[0], arg[1], arg[2], arg[3]);
     *name = rname;
-    *valid_name = 1;
+    *valid_name = true;
   }
 
   return 1;
@@ -685,14 +685,14 @@ static void
 rtems_capture_cli_watch_add (int                          argc,
                              char**                       argv,
                              rtems_monitor_command_arg_t* command_arg,
-                             boolean                      verbose)
+                             bool                         verbose)
 {
   rtems_status_code sc;
   int               arg;
   rtems_name        name = 0;
   rtems_id          id = 0;
-  rtems_boolean     valid_name = 0;
-  rtems_boolean     valid_id = 0;
+  bool              valid_name = false;
+  bool              valid_id = false;
 
   if (argc <= 1)
   {
@@ -748,14 +748,14 @@ static void
 rtems_capture_cli_watch_del (int                          argc,
                              char**                       argv,
                              rtems_monitor_command_arg_t* command_arg,
-                             boolean                      verbose)
+                             bool                         verbose)
 {
   rtems_status_code sc;
   int               arg;
   rtems_name        name = 0;
   rtems_id          id = 0;
-  rtems_boolean     valid_name = 0;
-  rtems_boolean     valid_id = 0;
+  bool              valid_name = false;
+  bool              valid_id = false;
 
   if (argc <= 1)
   {
@@ -810,15 +810,15 @@ static void
 rtems_capture_cli_watch_control (int                          argc,
                                  char**                       argv,
                                  rtems_monitor_command_arg_t* command_arg,
-                                 boolean                      verbose)
+                                 bool                         verbose)
 {
   rtems_status_code sc;
   int               arg;
   rtems_name        name = 0;
   rtems_id          id = 0;
-  rtems_boolean     valid_name = 0;
-  rtems_boolean     valid_id = 0;
-  rtems_boolean     enable = 0;
+  bool              valid_name = false;
+  bool              valid_id = false;
+  bool              enable = false;
 
   if (argc <= 2)
   {
@@ -835,9 +835,9 @@ rtems_capture_cli_watch_control (int                          argc,
     else
     {
       if (strcmp (argv[arg], "on") == 0)
-        enable = 1;
+        enable = true;
       else if (strcmp (argv[arg], "off") == 0)
-        enable = 0;
+        enable = false;
       else if (!rtems_capture_cli_get_name_id (argv[arg], &valid_name,
                                                &valid_id, &name, &id))
         return;
@@ -877,11 +877,11 @@ static void
 rtems_capture_cli_watch_global (int                          argc,
                                 char**                       argv,
                                 rtems_monitor_command_arg_t* command_arg,
-                                boolean                      verbose)
+                                bool                         verbose)
 {
   rtems_status_code sc;
   int               arg;
-  rtems_boolean     enable = 0;
+  bool              enable = false;
 
   if (argc <= 1)
   {
@@ -898,9 +898,9 @@ rtems_capture_cli_watch_global (int                          argc,
     else
     {
       if (strcmp (argv[arg], "on") == 0)
-        enable = 1;
+        enable = true;
       else if (strcmp (argv[arg], "off") == 0)
-        enable = 0;
+        enable = false;
     }
   }
 
@@ -931,7 +931,7 @@ static void
 rtems_capture_cli_watch_ceiling (int                          argc,
                                  char**                       argv,
                                  rtems_monitor_command_arg_t* command_arg,
-                                 boolean                      verbose)
+                                 bool                         verbose)
 {
   rtems_status_code   sc;
   int                 arg;
@@ -982,7 +982,7 @@ static void
 rtems_capture_cli_watch_floor (int                          argc,
                                char**                       argv,
                                rtems_monitor_command_arg_t* command_arg,
-                               boolean                      verbose)
+                               bool                         verbose)
 {
   rtems_status_code   sc;
   int                 arg;
@@ -1082,20 +1082,20 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
   int                          arg;
   int                          trigger = 0; /* switch */
   rtems_capture_trigger_mode_t trigger_mode = rtems_capture_from_any;
-  rtems_boolean                trigger_set = 0;
-  rtems_boolean                is_from = 0;
+  bool                         trigger_set = false;
+  bool                         is_from = false;
   rtems_name                   name = 0;
   rtems_id                     id = 0;
-  rtems_boolean                valid_name = 0;
-  rtems_boolean                valid_id = 0;
+  bool                         valid_name = false;
+  bool                         valid_id = false;
   rtems_name                   from_name = 0;
   rtems_id                     from_id = 0;
-  rtems_boolean                from_valid_name = 0;
-  rtems_boolean                from_valid_id = 0;
+  bool                         from_valid_name = false;
+  bool                         from_valid_id = false;
   rtems_name                   to_name = 0;
   rtems_id                     to_id = 0;
-  rtems_boolean                to_valid_name = 0;
-  rtems_boolean                to_valid_id = 0;
+  bool                         to_valid_name = false;
+  bool                         to_valid_id = false;
 
   for (arg = 1; arg < argc; arg++)
   {
@@ -1116,18 +1116,18 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
     {
       if (!trigger_set)
       {
-        rtems_boolean found = 0;
-        int           t;
+        bool found = false;
+        int  t;
         
         for (t = 0; t < RTEMS_CAPTURE_CLI_TRIGGERS_NUM; t++)
           if (strcmp (argv[arg], rtems_capture_cli_triggers[t].name) == 0)
           {
             trigger = t;
-            found = 1;
+            found = true;
             break;
           }
 
-        trigger_set = 1;
+        trigger_set = true;
 
         /*
          * If a trigger was not found assume the default and
@@ -1156,7 +1156,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         {
           if (!from_valid_name && !from_valid_id)
           {
-            from_valid_name = 1;
+            from_valid_name = true;
             from_name       = name;
           }
           else
@@ -1164,7 +1164,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         }
         else if (!to_valid_name && !to_valid_id)
         {
-          to_valid_name = 1;
+          to_valid_name = true;
           to_name       = name;
         }
         else
@@ -1177,7 +1177,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         {
           if (!from_valid_name && !from_valid_id)
           {
-            from_valid_id = 1;
+            from_valid_id = true;
             from_id       = id;
           }
           else
@@ -1185,7 +1185,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         }
         else if (!to_valid_name && !to_valid_id)
         {
-          to_valid_id = 1;
+          to_valid_id = true;
           to_id       = id;
         }
         else
@@ -1260,7 +1260,7 @@ static void
 rtems_capture_cli_trigger_set (int                          argc,
                                char**                       argv,
                                rtems_monitor_command_arg_t* command_arg,
-                               boolean                      verbose)
+                               bool                         verbose)
 {
   rtems_capture_cli_trigger_worker (1, argc, argv);
 }
@@ -1278,7 +1278,7 @@ static void
 rtems_capture_cli_trigger_clear (int                          argc,
                                  char**                       argv,
                                  rtems_monitor_command_arg_t* command_arg,
-                                 boolean                      verbose)
+                                 bool                         verbose)
 {
   rtems_capture_cli_trigger_worker (0, argc, argv);
 }
@@ -1296,10 +1296,10 @@ static void
 rtems_capture_cli_trace_records (int                          argc,
                                  char**                       argv,
                                  rtems_monitor_command_arg_t* command_arg,
-                                 boolean                      verbose)
+                                 bool                         verbose)
 {
   rtems_status_code       sc;
-  rtems_boolean           csv = 0;
+  bool                    csv = false;
   static int              dump_total = 22;
   int                     total;
   int                     count;
@@ -1312,14 +1312,14 @@ rtems_capture_cli_trace_records (int                          argc,
     if (argv[arg][0] == '-')
     {
       if (argv[arg][1] == 'c')
-        csv = 1;
+        csv = true;
       else
         fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
     else
     {
-      int i;
-      int l;
+      size_t i;
+      size_t l;
 
       l = strlen (argv[arg]);
 
@@ -1427,10 +1427,10 @@ static void
 rtems_capture_cli_flush (int                          argc,
                          char**                       argv,
                          rtems_monitor_command_arg_t* command_arg,
-                         boolean                      verbose)
+                         bool                         verbose)
 {
   rtems_status_code sc;
-  rtems_boolean     prime = 1;
+  bool              prime = true;
   int               arg;
 
   for (arg = 1; arg < argc; arg++)
@@ -1438,7 +1438,7 @@ rtems_capture_cli_flush (int                          argc,
     if (argv[arg][0] == '-')
     {
       if (argv[arg][1] == 'n')
-        prime = 0;
+        prime = false;
       else
         fprintf (stdout, "warning: option -%c ignored\n", argv[arg][1]);
     }
@@ -1609,7 +1609,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
 rtems_status_code
 rtems_capture_cli_init (rtems_capture_timestamp timestamp)
 {
-  int cmd;
+  size_t cmd;
 
   capture_timestamp = timestamp;
 

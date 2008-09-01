@@ -152,7 +152,7 @@ int termios_printk_open
 |    0 on success, -1 and errno otherwise                                   |
 \*=========================================================================*/
 {
-  boolean err_occurred = FALSE;
+  bool err_occurred = false;
   rtems_libio_t *iop = NULL;
   struct termios act_termios;
   tcflag_t baudcode = B0;
@@ -186,7 +186,7 @@ int termios_printk_open
   case 115200: baudcode = B115200; break;
   case 230400: baudcode = B230400; break;
   case 460800: baudcode = B460800; break;
-  default    :   err_occurred = TRUE; errno = EINVAL; break;
+  default    :   err_occurred = true; errno = EINVAL; break;
   }
  /*
   * open device for serdbg operation
@@ -196,7 +196,7 @@ int termios_printk_open
       (dev_name[0] != '\0')) {
     termios_printk_fd = open(dev_name,O_RDWR);
     if (termios_printk_fd < 0) {
-      err_occurred = TRUE;
+      err_occurred = true;
     }
   }
   /*
@@ -216,7 +216,7 @@ int termios_printk_open
    */
   if (!err_occurred &&
       (0 != tcgetattr(termios_printk_fd,&act_termios))) {
-      err_occurred = TRUE;
+      err_occurred = true;
   }
   if (!err_occurred) {
 
@@ -224,7 +224,7 @@ int termios_printk_open
     cfsetispeed(&act_termios,baudcode);
 
     if (0 != tcsetattr(termios_printk_fd,TCSANOW,&act_termios)) {
-	err_occurred = TRUE;
+	err_occurred = true;
     }
   }
   if (!err_occurred) {

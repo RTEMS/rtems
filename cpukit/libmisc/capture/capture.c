@@ -138,7 +138,7 @@ static inline void rtems_capture_get_time (uint32_t* ticks,
  * in RTEMS.
  *
  */
-static inline rtems_boolean
+static inline bool
 rtems_capture_match_names (rtems_name lhs, rtems_name rhs)
 {
   return lhs == rhs;
@@ -154,7 +154,7 @@ rtems_capture_match_names (rtems_name lhs, rtems_name rhs)
  * in RTEMS.
  *
  */
-static inline rtems_boolean
+static inline bool
 rtems_capture_match_ids (rtems_id lhs, rtems_id rhs)
 {
   return lhs == rhs;
@@ -167,7 +167,7 @@ rtems_capture_match_ids (rtems_id lhs, rtems_id rhs)
  *
  * This function matches a name and/or id.
  */
-static inline rtems_boolean
+static inline bool
 rtems_capture_match_name_id (rtems_name lhs_name,
                              rtems_id   lhs_id,
                              rtems_name rhs_name,
@@ -212,7 +212,7 @@ rtems_capture_dup_name (rtems_name* dst, rtems_name src)
  * tasks is the number of bits in uint32_t.
  *
  */
-static inline rtems_boolean
+static inline bool
 rtems_capture_by_in_to (uint32_t                 events,
                         rtems_capture_task_t*    by,
                         rtems_capture_control_t* to)
@@ -582,7 +582,7 @@ rtems_capture_record (rtems_capture_task_t* task,
  * See if we have triggered and if not see if this event is a
  * cause of a trigger.
  */
-rtems_boolean
+bool
 rtems_capture_trigger (rtems_capture_task_t* ft,
                        rtems_capture_task_t* tt,
                        uint32_t              events)
@@ -655,7 +655,7 @@ rtems_capture_trigger (rtems_capture_task_t* ft,
  * This function is called when a task is created.
  *
  */
-static rtems_boolean
+static bool
 rtems_capture_create_task (rtems_tcb* current_task,
                            rtems_tcb* new_task)
 {
@@ -1146,7 +1146,7 @@ rtems_capture_close (void)
  * This function allows control of tracing at a global level.
  */
 rtems_status_code
-rtems_capture_control (rtems_boolean enable)
+rtems_capture_control (bool enable)
 {
   rtems_interrupt_level level;
 
@@ -1178,7 +1178,7 @@ rtems_capture_control (rtems_boolean enable)
  * to profile the load on a system.
  */
 rtems_status_code
-rtems_capture_monitor (rtems_boolean enable)
+rtems_capture_monitor (bool enable)
 {
   rtems_interrupt_level level;
 
@@ -1209,7 +1209,7 @@ rtems_capture_monitor (rtems_boolean enable)
  * capture engine to also be primed again.
  */
 rtems_status_code
-rtems_capture_flush (rtems_boolean prime)
+rtems_capture_flush (bool prime)
 {
   rtems_interrupt_level level;
   rtems_capture_task_t* task;
@@ -1293,7 +1293,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
   rtems_capture_control_t*  control;
   rtems_capture_control_t** prev_control;
   rtems_capture_task_t*     task;
-  rtems_boolean             found = 0;
+  bool                      found = false;
 
   /*
    * Should this test be for wildcards ?
@@ -1318,7 +1318,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
 
       control = *prev_control;
 
-      found = 1;
+      found = true;
     }
     else
     {
@@ -1342,11 +1342,11 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
  * disabled.
  */
 rtems_status_code
-rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable)
+rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
 {
   rtems_interrupt_level    level;
   rtems_capture_control_t* control;
-  rtems_boolean            found = 0;
+  bool                     found = false;
 
   /*
    * Find the control and then set the watch. It must exist before it can
@@ -1365,7 +1365,7 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable)
 
       rtems_interrupt_enable (level);
 
-      found = 1;
+      found = true;
     }
   }
 
@@ -1385,7 +1385,7 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable)
  * the floor to be traced.
  */
 rtems_status_code
-rtems_capture_watch_global (rtems_boolean enable)
+rtems_capture_watch_global (bool enable)
 {
   rtems_interrupt_level level;
 
@@ -1412,7 +1412,7 @@ rtems_capture_watch_global (rtems_boolean enable)
  *
  * This function returns the global watch state.
  */
-rtems_boolean
+bool
 rtems_capture_watch_global_on (void)
 {
   return capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH ? 1 : 0;
@@ -1564,8 +1564,8 @@ rtems_capture_set_trigger (rtems_name                   from_name,
       control->to_triggers |= flags;
     else
     {
-      rtems_boolean done = 0;
-      int           i;
+      bool done = false;
+      int  i;
       
       control->by_triggers |= flags;
       
@@ -1576,7 +1576,7 @@ rtems_capture_set_trigger (rtems_name                   from_name,
              (from_id && (control->by[i].id == from_id))))
         {
           control->by[i].trigger |= flags;
-          done = 1;
+          done = true;
           break;
         }
       }
@@ -1591,7 +1591,7 @@ rtems_capture_set_trigger (rtems_name                   from_name,
             control->by[i].name = from_name;
             control->by[i].id = from_id;
             control->by[i].trigger = flags;
-            done = 1;
+            done = true;
             break;
           }
         }
@@ -1648,8 +1648,8 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
       control->to_triggers &= ~flags;
     else
     {
-      rtems_boolean done = 0;
-      int           i;
+      bool done = false;
+      int  i;
       
       control->by_triggers &= ~flags;
       
@@ -1662,7 +1662,7 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
           control->by[i].trigger &= ~trigger;
           if (control->by[i].trigger == 0)
             control->by_valid &= ~RTEMS_CAPTURE_CONTROL_FROM_MASK (i);
-          done = 1;
+          done = true;
           break;
         }
       }
