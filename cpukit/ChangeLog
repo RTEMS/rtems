@@ -1,6 +1,15 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
+	* libmisc/monitor/mon-command.c, libmisc/monitor/mon-config.c,
+	libmisc/monitor/mon-driver.c, libmisc/monitor/mon-extension.c,
+	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-monitor.c,
+	libmisc/monitor/mon-mpci.c, libmisc/monitor/mon-network.c,
+	libmisc/monitor/mon-object.c, libmisc/monitor/mon-part.c,
+	libmisc/monitor/mon-queue.c, libmisc/monitor/mon-region.c,
+	libmisc/monitor/mon-sema.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/mon-task.c, libmisc/monitor/monitor.h:
+	Convert to using "bool".
+	* libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
 	libmisc/stackchk/stackchk.h:
 	Convert to using "bool".
 	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c,
