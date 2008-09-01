@@ -37,7 +37,7 @@ static char_t	*websCondenseMultipleChars(char_t *strToCondense, char_t cCondense
  *	Initialize the URL handler module
  */
 
-int websUrlHandlerOpen()
+int websUrlHandlerOpen(void)
 {
 	if (++urlHandlerOpenCount == 1) {
 		websAspOpen();
@@ -52,7 +52,7 @@ int websUrlHandlerOpen()
  *	Close the URL handler module
  */
 
-void websUrlHandlerClose()
+void websUrlHandlerClose(void)
 {
 	websUrlHandlerType *sp;
 

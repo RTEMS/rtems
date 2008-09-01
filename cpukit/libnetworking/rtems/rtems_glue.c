@@ -378,8 +378,7 @@ rtems_bsdnet_semaphore_release (void)
  * Wait for something to happen to a socket buffer
  */
 int
-sbwait(sb)
-	struct sockbuf *sb;
+sbwait(struct sockbuf *sb)
 {
 	rtems_event_set events;
 	rtems_id tid;
@@ -433,9 +432,9 @@ sbwait(sb)
  * Wake up the task waiting on a socket buffer.
  */
 void
-sowakeup(so, sb)
-	register struct socket *so;
-	register struct sockbuf *sb;
+sowakeup(
+	struct socket *so,
+	struct sockbuf *sb)
 {
 	if (sb->sb_flags & SB_WAIT) {
 		sb->sb_flags &= ~SB_WAIT;
@@ -450,8 +449,7 @@ sowakeup(so, sb)
  * For now, a socket can be used by only one task at a time.
  */
 int
-sb_lock(sb)
-	register struct sockbuf *sb;
+sb_lock(struct sockbuf *sb)
 {
 	rtems_panic ("Socket buffer is already in use.");
 	return 0;
@@ -958,7 +956,7 @@ rtems_bsdnet_setup (void)
  * Initialize the network
  */
 int
-rtems_bsdnet_initialize_network (void)
+rtems_bsdnet_initialize_network(void)
 {
 	struct rtems_bsdnet_ifconfig *ifp;
 
@@ -989,7 +987,7 @@ rtems_bsdnet_initialize_network (void)
 /*
  * Attach a network interface.
  */
-void rtems_bsdnet_attach (struct rtems_bsdnet_ifconfig *ifp)
+void rtems_bsdnet_attach(struct rtems_bsdnet_ifconfig *ifp)
 {
 	if (ifp) {
 		rtems_bsdnet_semaphore_obtain ();
@@ -1013,7 +1011,7 @@ void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifp)
 /*
  * Interface Configuration.
  */
-int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param)
+int rtems_bsdnet_ifconfig(const char *ifname, uint32_t cmd, void *param)
 {
 	int s, r = 0;
 	struct ifreq ifreq;
@@ -1208,7 +1206,7 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
  *      more than a minute or so?
  */
 int
-m_mballoc (int nmb, int nowait)
+m_mballoc(int nmb, int nowait)
 {
 	if (nowait)
 		return 0;
@@ -1237,7 +1235,7 @@ m_mballoc (int nmb, int nowait)
 }
 
 int
-m_clalloc(ncl, nowait)
+m_clalloc(int ncl, int nowait)
 {
 	if (nowait)
 		return 0;

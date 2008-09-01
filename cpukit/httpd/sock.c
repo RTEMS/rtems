@@ -688,7 +688,7 @@ socket_t *socketPtr(int sid)
  *	Get the operating system error code
  */
 
-int socketGetError()
+int socketGetError(void)
 {
 #if (defined (WIN) || defined (CE))
 	switch (WSAGetLastError()) {

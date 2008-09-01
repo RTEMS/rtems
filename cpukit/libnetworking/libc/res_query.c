@@ -104,11 +104,11 @@
  * Caller must parse answer and determine whether it answers the question.
  */
 int
-res_query(name, class, type, answer, anslen)
-	const char *name;	/* domain name */
-	int class, type;	/* class and type of query */
-	u_char *answer;		/* buffer to put answer */
-	int anslen;		/* size of answer buffer */
+res_query(
+	const char *name,	/* domain name */
+	int class, int type,	/* class and type of query */
+	u_char *answer,		/* buffer to put answer */
+	int anslen)		/* size of answer buffer */
 {
 	u_char buf[MAXPACKET];
 	HEADER *hp = (HEADER *) answer;
@@ -180,11 +180,11 @@ res_query(name, class, type, answer, anslen)
  * is detected.  Error code, if any, is left in h_errno.
  */
 int
-res_search(name, class, type, answer, anslen)
-	const char *name;	/* domain name */
-	int class, type;	/* class and type of query */
-	u_char *answer;		/* buffer to put answer */
-	int anslen;		/* size of answer */
+res_search(
+	const char *name,	/* domain name */
+	int class, int type,	/* class and type of query */
+	u_char *answer,		/* buffer to put answer */
+	int anslen)		/* size of answer */
 {
 	const char *cp, * const *domain;
 	HEADER *hp = (HEADER *) answer;
@@ -318,11 +318,11 @@ res_search(name, class, type, answer, anslen)
  * removing a trailing dot from name if domain is NULL.
  */
 int
-res_querydomain(name, domain, class, type, answer, anslen)
-	const char *name, *domain;
-	int class, type;	/* class and type of query */
-	u_char *answer;		/* buffer to put answer */
-	int anslen;		/* size of answer */
+res_querydomain(
+	const char *name, const char *domain,
+	int class, int type,	/* class and type of query */
+	u_char *answer,		/* buffer to put answer */
+	int anslen)		/* size of answer */
 {
 	char nbuf[MAXDNAME];
 	const char *longname = nbuf;
@@ -366,8 +366,7 @@ res_querydomain(name, domain, class, type, answer, anslen)
 }
 
 const char *
-hostalias(name)
-	const char *name;
+hostalias(const char *name)
 {
 	register char *cp1, *cp2;
 	FILE *fp;

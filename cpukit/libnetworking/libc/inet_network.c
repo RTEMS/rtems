@@ -48,8 +48,8 @@
  * network numbers.
  */
 in_addr_t
-inet_network(cp)
-	const char *cp;
+inet_network(
+	const char *cp)
 {
 	register u_long val, base, n, i;
 	register char c;

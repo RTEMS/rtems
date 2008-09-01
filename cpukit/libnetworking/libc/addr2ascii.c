@@ -62,11 +62,11 @@
  * naming and the poor choice of arguments.
  */
 char *
-addr2ascii(af, addrp, len, buf)
-	int af;
-	const void *addrp;
-	int len;		/* should be size_t XXX */
-	char *buf;		/* XXX should pass length of buffer */
+addr2ascii(
+	int af,
+	const void *addrp,
+	int len,		/* should be size_t XXX */
+	char *buf)		/* XXX should pass length of buffer */
 {
 	static char staticbuf[64]; /* 64 for AF_LINK > 16 for AF_INET */
 

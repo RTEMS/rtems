@@ -173,7 +173,7 @@ void emfUnschedCallback(int schedid)
  *	Take the tasks off the queue in a round robin fashion.
  */
 
-void emfSchedProcess()
+void emfSchedProcess(void)
 {
 	sched_t		*s;
 	int			schedid;

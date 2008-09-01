@@ -156,7 +156,7 @@ void emfInstSet(int inst)
  *	Get the instance handle
  */
 
-int emfInstGet()
+int emfInstGet(void)
 {
 	return emfInst;
 }
@@ -271,12 +271,12 @@ char_t *stritoa(int n, char_t *string, int width)
  *	Stubs
  */
 
-char_t *basicGetProduct()
+char_t *basicGetProduct(void)
 {
 	return T("uemf");
 }
 
-char_t *basicGetAddress()
+char_t *basicGetAddress(void)
 {
 	return T("localhost");
 }

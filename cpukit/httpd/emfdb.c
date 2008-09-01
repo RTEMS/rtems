@@ -1038,7 +1038,7 @@ void basicSetProductDir(char_t *proddir)
  *	Return the prefix-directory
  */
 
-char_t *basicGetProductDir()
+char_t *basicGetProductDir(void)
 {
 	if (basicProdDir) {
 		return basicProdDir;

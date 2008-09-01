@@ -49,8 +49,8 @@
  * to base 256 d.d.d.d representation.
  */
 char *
-inet_ntoa(in)
-	struct in_addr in;
+inet_ntoa(
+	struct in_addr in)
 {
 	static char ret[18];
 

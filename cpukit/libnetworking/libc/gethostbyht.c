@@ -86,8 +86,7 @@ static char *cur;
 #endif
 
 void
-_sethosthtent(f)
-	int f;
+_sethosthtent(int f)
 {
 	if (!hostf)
 		hostf = fopen(_PATH_HOSTS, "r" );
@@ -97,7 +96,7 @@ _sethosthtent(f)
 }
 
 void
-_endhosthtent()
+_endhosthtent(void)
 {
 	if (hostf && !stayopen) {
 		(void) fclose(hostf);
@@ -106,7 +105,7 @@ _endhosthtent()
 }
 
 struct hostent *
-gethostent()
+gethostent(void)
 {
 	char *p;
 	register char *cp, **q;
@@ -171,9 +170,9 @@ gethostent()
 }
 
 struct hostent *
-_gethostbyhtname(name, af)
-	const char *name;
-	int af;
+_gethostbyhtname(
+	const char *name,
+	int af)
 {
 	register struct hostent *p;
 	register char **cp;
@@ -194,9 +193,10 @@ found:
 }
 
 struct hostent *
-_gethostbyhtaddr(addr, len, af)
-	const char *addr;
-	int len, af;
+_gethostbyhtaddr(
+	const char *addr,
+	int len, 
+	int af)
 {
 	register struct hostent *p;
 

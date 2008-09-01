@@ -367,7 +367,7 @@ static void websDefaultWriteEvent(webs_t wp)
  *	Closing down. Free resources.
  */
 
-void websDefaultClose()
+void websDefaultClose(void)
 {
 	if (websDefaultPage) {
 		bfree(B_L, websDefaultPage);
@@ -384,7 +384,7 @@ void websDefaultClose()
  *	Get the default page for URL requests ending in "/"
  */
 
-char_t *websGetDefaultPage()
+char_t *websGetDefaultPage(void)
 {
 	return websDefaultPage;
 }
@@ -394,7 +394,7 @@ char_t *websGetDefaultPage()
  *	Get the default web directory
  */
 
-char_t *websGetDefaultDir()
+char_t *websGetDefaultDir(void)
 {
 	return websDefaultDir;
 }

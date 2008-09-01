@@ -192,7 +192,7 @@ int bopen(void *buf, int bufsize, int flags)
  *	Close down the balloc module and free all malloced memory.
  */
 
-void bclose()
+void bclose(void)
 {
 #ifdef B_VERIFY_CAUSES_SEVERE_OVERHEAD
 	verifyBallocSpace();

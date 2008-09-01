@@ -52,7 +52,7 @@ static int		calcPrime(int size);
  *	Open the symbol table subSystem.
  */
 
-int symSubOpen()
+int symSubOpen(void)
 {
 	if (++symOpenCount == 1) {
 		symMax = 0;
@@ -66,7 +66,7 @@ int symSubOpen()
  *	Close the symbol table subSystem.
  */
 
-void symSubClose()
+void symSubClose(void)
 {
 	if (--symOpenCount <= 0) {
 		symOpenCount = 0;

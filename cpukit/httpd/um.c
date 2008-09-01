@@ -149,7 +149,7 @@ static bool_t umCheckName(char_t *name);
  *	umOpen() registers the UM tables in the fake emf-database 
  */
 
-int umOpen()
+int umOpen(void)
 {
 	if (++umOpenCount != 1) {
 		return didUM;
@@ -178,7 +178,7 @@ int umOpen()
  *	umClose() frees up the UM tables in the fake emf-database 
  */
 
-void umClose()
+void umClose(void)
 {
 	if (--umOpenCount > 0) {
 		return;
@@ -464,7 +464,7 @@ int	umDeleteUser(char_t *user)
  *						"users" table.
  */
 
-char_t *umGetFirstUser()
+char_t *umGetFirstUser(void)
 {
 	return umGetFirstRowData(UM_USER_TABLENAME, UM_NAME);
 }
@@ -830,7 +830,7 @@ bool_t umGetGroupInUse(char_t *group)
  *	umGetFirstGroup() - return a pointer to the first non-blank group name
  */
 
-char_t *umGetFirstGroup()
+char_t *umGetFirstGroup(void)
 {
 	return umGetFirstRowData(UM_GROUP_TABLENAME, UM_NAME);
 }
@@ -1078,7 +1078,7 @@ int	umDeleteAccessLimit(char_t *url)
  *	umGetFirstGroup() - return a pointer to the first non-blank access limit
  */
 
-char_t *umGetFirstAccessLimit()
+char_t *umGetFirstAccessLimit(void)
 {
 	return umGetFirstRowData(UM_ACCESS_TABLENAME, UM_NAME);
 }

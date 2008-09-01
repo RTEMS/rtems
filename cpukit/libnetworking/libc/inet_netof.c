@@ -46,8 +46,8 @@
  * address; handles class a/b/c network #'s.
  */
 in_addr_t
-inet_netof(in)
-	struct in_addr in;
+inet_netof(
+	struct in_addr in)
 {
 	register u_long i = ntohl(in.s_addr);
 

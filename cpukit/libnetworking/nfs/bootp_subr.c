@@ -287,10 +287,10 @@ void *bootp_strdup_realloc(char *dst,const char *src)
 }
 
 int
-bootpc_call(call,reply,procp)
-     struct bootp_packet *call;
-     struct bootp_packet *reply;	/* output */
-     struct proc *procp;
+bootpc_call(
+     struct bootp_packet *call,
+     struct bootp_packet *reply,	/* output */
+     struct proc *procp)
 {
 	struct socket *so;
 	struct sockaddr_in *sin;

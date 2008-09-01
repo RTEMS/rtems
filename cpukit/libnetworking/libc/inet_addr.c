@@ -67,8 +67,8 @@
  * The value returned is in network order.
  */
 in_addr_t
-inet_addr(cp)
-	const char *cp;
+inet_addr(
+	const char *cp)
 {
 	struct in_addr val;
 
@@ -85,9 +85,9 @@ inet_addr(cp)
  * cannot distinguish between failure and a local broadcast address.
  */
 int
-inet_aton(cp, addr)
-	const char *cp;
-	struct in_addr *addr;
+inet_aton(
+	const char *cp,
+	struct in_addr *addr)
 {
 	in_addr_t val;
 	register int base, n;

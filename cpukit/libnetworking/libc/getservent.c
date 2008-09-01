@@ -189,8 +189,8 @@ _getservent_yp(line)
 #endif
 
 void
-setservent(f)
-	int f;
+setservent(
+	int f)
 {
 	if (servf == NULL)
 		servf = fopen(_PATH_SERVICES, "r" );
@@ -200,7 +200,7 @@ setservent(f)
 }
 
 void
-endservent()
+endservent(void)
 {
 	if (servf) {
 		fclose(servf);
@@ -210,7 +210,7 @@ endservent()
 }
 
 struct servent *
-getservent()
+getservent(void)
 {
 	char *p;
 	register char *cp, **q;

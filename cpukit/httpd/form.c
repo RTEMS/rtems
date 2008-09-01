@@ -111,7 +111,7 @@ int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path,
  *	Open the symbol table for forms.
  */
 
-void websFormOpen()
+void websFormOpen(void)
 {
 	formSymtab = symOpen(WEBS_SYM_INIT);
 }
@@ -121,7 +121,7 @@ void websFormOpen()
  *	Close the symbol table for forms.
  */
 
-void websFormClose()
+void websFormClose(void)
 {
 	if (formSymtab != -1) {
 		symClose(formSymtab);

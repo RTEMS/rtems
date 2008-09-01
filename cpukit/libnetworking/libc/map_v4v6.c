@@ -96,10 +96,10 @@ _map_v4v6_address(const char *src, char *dst)
 }
 
 void
-_map_v4v6_hostent(hp, bpp, lenp)
-	struct hostent *hp;
-	char **bpp;
-	int *lenp;
+_map_v4v6_hostent(
+	struct hostent *hp,
+	char **bpp,
+	int *lenp)
 {
 	char **ap;
 

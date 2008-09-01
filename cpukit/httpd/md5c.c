@@ -100,8 +100,8 @@ Rotation is separate from addition to prevent recomputation.
 
 /* MD5 initialization. Begins an MD5 operation, writing a new context.
  */
-void MD5Init (context)
-MD5_CONTEXT *context;                                        /* context */
+void MD5Init (
+MD5_CONTEXT *context)                                        /* context */
 {
   context->count[0] = context->count[1] = 0;
   /* Load magic initialization constants.
@@ -116,10 +116,10 @@ MD5_CONTEXT *context;                                        /* context */
   operation, processing another message block, and updating the
   context.
  */
-void MD5Update (context, input, inputLen)
-MD5_CONTEXT *context;                                        /* context */
-unsigned char *input;                                /* input block */
-unsigned int inputLen;                     /* length of input block */
+void MD5Update (
+MD5_CONTEXT *context,                                        /* context */
+unsigned char *input,                                /* input block */
+unsigned int inputLen)                     /* length of input block */
 {
   unsigned int i, index, partLen;
 
@@ -158,9 +158,9 @@ unsigned int inputLen;                     /* length of input block */
 /* MD5 finalization. Ends an MD5 message-digest operation, writing the
   the message digest and zeroizing the context.
  */
-void MD5Final (digest, context)
-unsigned char digest[16];                         /* message digest */
-MD5_CONTEXT *context;                                       /* context */
+void MD5Final (
+unsigned char digest[16],                         /* message digest */
+MD5_CONTEXT *context )                                    /* context */
 {
   unsigned char bits[8];
   unsigned int index, padLen;
@@ -186,9 +186,9 @@ MD5_CONTEXT *context;                                       /* context */
 
 /* MD5 basic transformation. Transforms state based on block.
  */
-static void MD5Transform (state, block)
-UINT4 state[4];
-unsigned char block[64];
+static void MD5Transform (
+UINT4 state[4],
+unsigned char block[64])
 {
   UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -279,10 +279,10 @@ unsigned char block[64];
 /* Encodes input (UINT4) into output (unsigned char). Assumes len is
   a multiple of 4.
  */
-static void Encode (output, input, len)
-unsigned char *output;
-UINT4 *input;
-unsigned int len;
+static void Encode (
+unsigned char *output,
+UINT4 *input,
+unsigned int len)
 {
   unsigned int i, j;
 
@@ -297,10 +297,10 @@ unsigned int len;
 /* Decodes input (unsigned char) into output (UINT4). Assumes len is
   a multiple of 4.
  */
-static void Decode (output, input, len)
-UINT4 *output;
-unsigned char *input;
-unsigned int len;
+static void Decode (
+UINT4 *output,
+unsigned char *input,
+unsigned int len)
 {
   unsigned int i, j;
 
@@ -312,10 +312,10 @@ unsigned int len;
 /* Note: Replace "for loop" with standard memcpy if possible.
  */
 
-static void MD5_memcpy (output, input, len)
-POINTER output;
-POINTER input;
-unsigned int len;
+static void MD5_memcpy (
+POINTER output,
+POINTER input,
+unsigned int len)
 {
 	unsigned int i;
 
@@ -325,10 +325,10 @@ unsigned int len;
 
 /* Note: Replace "for loop" with standard memset if possible.
  */
-static void MD5_memset (output, value, len)
-POINTER output;
-int value;
-unsigned int len;
+static void MD5_memset (
+POINTER output,
+int value,
+unsigned int len)
 {
   unsigned int i;
 

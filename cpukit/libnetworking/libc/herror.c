@@ -76,8 +76,7 @@ int	h_errno;
  *	print the error indicated by the h_errno value.
  */
 void
-herror(s)
-	const char *s;
+herror(const char *s)
 {
 #if defined(HERROR_USE_WRITEV)
 	struct iovec iov[4];
@@ -112,8 +111,7 @@ herror(s)
 }
 
 const char *
-hstrerror(err)
-	int err;
+hstrerror(int err)
 {
 	if (err < 0)
 		return ("Resolver internal error");

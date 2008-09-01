@@ -61,9 +61,9 @@ int getservbyport_r(
 }
 
 struct servent *
-getservbyport(port, proto)
-	int port;
-	const char *proto;
+getservbyport(
+	int port,
+	const char *proto)
 {
 	register struct servent *p;
 

@@ -148,8 +148,7 @@ dn_skipname(const u_char *ptr, const u_char *eom) {
 #define	domainchar(c) ((c) > 0x20 && (c) < 0x7f)
 
 int
-res_hnok(dn)
-	const char *dn;
+res_hnok(const char *dn)
 {
 	int ppch = '\0', pch = PERIOD, ch = *dn++;
 
@@ -178,8 +177,7 @@ res_hnok(dn)
  * but must otherwise be as a host name.
  */
 int
-res_ownok(dn)
-	const char *dn;
+res_ownok(const char *dn)
 {
 	if (asterchar(dn[0])) {
 		if (periodchar(dn[1]))
@@ -195,8 +193,7 @@ res_ownok(dn)
  * label, but the rest of the name has to look like a host name.
  */
 int
-res_mailok(dn)
-	const char *dn;
+res_mailok(const char *dn)
 {
 	int ch, escaped = 0;
 
@@ -225,8 +222,7 @@ res_mailok(dn)
  * recommendations.
  */
 int
-res_dnok(dn)
-	const char *dn;
+res_dnok(const char *dn)
 {
 	int ch;
 

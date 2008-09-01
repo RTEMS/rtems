@@ -46,10 +46,10 @@
 #include <arpa/inet.h>
 
 int
-ascii2addr(af, ascii, result)
-	int af;
-	const char *ascii;
-	void *result;
+ascii2addr(
+	int af,
+	const char *ascii,
+	void *result)
 {
 	struct in_addr *ina;
 	char strbuf[4*sizeof("123")]; /* long enough for V4 only */

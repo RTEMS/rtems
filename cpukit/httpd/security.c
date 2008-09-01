@@ -204,7 +204,7 @@ int websSecurityHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  *	Delete the default security handler
  */
 
-void websSecurityDelete()
+void websSecurityDelete(void)
 {
 	websUrlHandlerDelete(websSecurityHandler);
 }
@@ -227,7 +227,7 @@ void websSetPassword(char_t *password)
  *	Get password, return the decoded form
  */
 
-char_t *websGetPassword()
+char_t *websGetPassword(void)
 {
 	return bstrdup(B_L, websPassword);
 }

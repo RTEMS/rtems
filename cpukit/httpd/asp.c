@@ -35,7 +35,7 @@ static char_t	*skipWhite(char_t *s);
  *	Create script spaces and commands
  */
 
-int websAspOpen()
+int websAspOpen(void)
 {
 	if (++aspOpenCount == 1) {
 /*
@@ -56,7 +56,7 @@ int websAspOpen()
  *	Close Asp symbol table.
  */
 
-void websAspClose()
+void websAspClose(void)
 {
 	if (--aspOpenCount <= 0) {
 		if (websAspFunctions != -1) {

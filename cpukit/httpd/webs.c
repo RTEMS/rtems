@@ -140,7 +140,7 @@ int websOpenServer(int port, int retries)
  *	Close the GoAhead WebServer
  */
 
-void websCloseServer()
+void websCloseServer(void)
 {
 	webs_t	wp;
 	int		wid;
@@ -236,7 +236,7 @@ int websOpenListen(int port, int retries)
  *	Close webs listen port
  */
 
-void websCloseListen()
+void websCloseListen(void)
 {
 	if (websListenSock >= 0) {
 		socketCloseConnection(websListenSock);
@@ -2364,7 +2364,7 @@ void websSetRealm(char_t *realmName)
  *	Return the realm name (used for authorization)
  */
 
-char_t *websGetRealm()
+char_t *websGetRealm(void)
 {
 	return websRealm;
 }

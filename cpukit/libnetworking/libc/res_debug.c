@@ -300,11 +300,12 @@ p_cdname(const u_char *cp, const u_char *msg, FILE *file) {
    length supplied).  */
 
 const u_char *
-p_fqnname(cp, msg, msglen, name, namelen)
-	const u_char *cp, *msg;
-	int msglen;
-	char *name;
-	int namelen;
+p_fqnname(
+	const u_char *cp, 
+	const u_char *msg,
+	int msglen,
+	char *name,
+	int namelen)
 {
 	int n, newlen;
 
@@ -708,9 +709,9 @@ latlon2ul(
 /* converts a zone file representation in a string to an RDATA on-the-wire
  * representation. */
 int
-loc_aton(ascii, binary)
-	const char *ascii;
-	u_char *binary;
+loc_aton(
+	const char *ascii,
+	u_char *binary)
 {
 	const char *cp, *maxcp;
 	u_char *bcp;

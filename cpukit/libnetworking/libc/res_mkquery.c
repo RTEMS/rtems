@@ -88,15 +88,15 @@
  * Returns the size of the result or -1.
  */
 int
-res_mkquery(op, dname, class, type, data, datalen, newrr_in, buf, buflen)
-	int op;			/* opcode of query */
-	const char *dname;	/* domain name */
-	int class, type;	/* class and type of query */
-	const u_char *data;	/* resource record data */
-	int datalen;		/* length of data */
-	const u_char *newrr_in;	/* new rr for modify or append */
-	u_char *buf;		/* buffer to put query */
-	int buflen;		/* size of buffer */
+res_mkquery(
+	int op,			/* opcode of query */
+	const char *dname,	/* domain name */
+	int class, int type,	/* class and type of query */
+	const u_char *data,	/* resource record data */
+	int datalen,		/* length of data */
+	const u_char *newrr_in,	/* new rr for modify or append */
+	u_char *buf,		/* buffer to put query */
+	int buflen)		/* size of buffer */
 {
 	register HEADER *hp;
 	register u_char *cp;

@@ -54,9 +54,9 @@
 #define LETTER	(4*3)
 
 void
-link_addr(addr, sdl)
-	const char *addr;
-	struct sockaddr_dl *sdl;
+link_addr(
+	const char *addr,
+	struct sockaddr_dl *sdl)
 {
 	char *cp = sdl->sdl_data;
 	char *cplim = sdl->sdl_len + (char *)sdl;
@@ -126,8 +126,8 @@ link_addr(addr, sdl)
 static char hexlist[] = "0123456789abcdef";
 
 char *
-link_ntoa(sdl)
-	const struct sockaddr_dl *sdl;
+link_ntoa(
+	const struct sockaddr_dl *sdl)
 {
 	static char obuf[64];
 	char *out = obuf;

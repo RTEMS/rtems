@@ -488,7 +488,7 @@ void defaultTraceHandler(int level, char_t *buf)
  *	This filename must eventually be deleted with bfree();
  */
 
-char_t *websGetCgiCommName()
+char_t *websGetCgiCommName(void)
 {
 	char_t	*pname1, *pname2;
 

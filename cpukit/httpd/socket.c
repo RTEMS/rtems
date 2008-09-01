@@ -54,7 +54,7 @@ static int	tryAlternateConnect(int sock, struct sockaddr *sockaddr);
  *	Open socket module
  */
 
-int socketOpen()
+int socketOpen(void)
 {
 #if CE || WIN
     WSADATA 	wsaData;
@@ -85,7 +85,7 @@ int socketOpen()
  *	Close the socket module, by closing all open connections
  */
 
-void socketClose()
+void socketClose(void)
 {
 	int		i;
 

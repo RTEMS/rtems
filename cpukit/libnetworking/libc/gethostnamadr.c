@@ -199,15 +199,14 @@ gethostbyaddr(const void *addr, socklen_t len, int type)
 }
 
 void
-sethostent(stayopen)
-	int stayopen;
+sethostent(int stayopen)
 {
 	_sethosthtent(stayopen);
 	_sethostdnsent(stayopen);
 }
 
 void
-endhostent()
+endhostent(void)
 {
 	_endhosthtent();
 	_endhostdnsent();
