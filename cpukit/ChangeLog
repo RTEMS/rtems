@@ -1,5 +1,8 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	libmisc/stackchk/check.c, libmisc/stackchk/internal.h,
+	libmisc/stackchk/stackchk.h:
+	Convert to using "bool".
 	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c,
 	libblock/src/diskdevs.c, libblock/src/ide_part_table.c,
 	libblock/src/ramdisk.c, libblock/src/show_bdbuf.c:
