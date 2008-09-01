@@ -176,7 +176,7 @@ static struct rtems_termios_linesw pppdisc = {
 };
 
 void
-pppasyncattach()
+pppasyncattach(void)
 {
     rtems_termios_linesw[PPPDISC] = pppdisc;
 }
@@ -278,8 +278,7 @@ pppclose(struct rtems_termios_tty *tty)
  * Relinquish the interface unit to another device.
  */
 static void
-pppasyncrelinq(sc)
-    struct ppp_softc *sc;
+pppasyncrelinq(struct ppp_softc *sc)
 {
 #ifdef XXX_XXX
     if (sc->sc_outm) {
@@ -544,8 +543,8 @@ void pppasyncstart(struct ppp_softc *sc)
  * the inq, at splsoftnet.
  */
 static void
-pppasyncctlp(sc)
-    struct ppp_softc *sc;
+pppasyncctlp(
+    struct ppp_softc *sc)
 {
   /* check to see if task id was set */
   if ( sc->sc_pppdtask != 0 ) {
@@ -656,8 +655,7 @@ pppstart(struct rtems_termios_tty *tp)
  * Timeout routine - try to start some more output.
  */
 static void
-ppp_timeout(x)
-    void *x;
+ppp_timeout(void *x)
 {
     struct rtems_termios_tty *tty = (struct rtems_termios_tty *)x;
     struct ppp_softc         *sc  = tty->t_sc;
@@ -673,8 +671,7 @@ ppp_timeout(x)
  */
 #ifdef XXX_XXX
 static void
-pppgetm(sc)
-    register struct ppp_softc *sc;
+pppgetm(struct ppp_softc *sc)
 {
     struct mbuf *m, **mp;
     int len;
@@ -914,9 +911,7 @@ pppinput(int c, struct rtems_termios_tty *tp)
 #define MAX_DUMP_BYTES	128
 
 static void
-ppplogchar(sc, c)
-    struct ppp_softc *sc;
-    int c;
+ppplogchar(struct ppp_softc *sc, int c)
 {
     if (c >= 0)
 	sc->sc_rawin[sc->sc_rawin_count++] = c;
@@ -929,9 +924,7 @@ ppplogchar(sc, c)
 }
 
 static void
-pppdumpb(b, l)
-    u_char *b;
-    int l;
+pppdumpb(u_char *b, int l)
 {
     char buf[3*MAX_DUMP_BYTES+4];
     char *bp = buf;

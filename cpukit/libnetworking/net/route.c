@@ -216,8 +216,7 @@ rtfree(struct rtentry *rt)
 }
 
 void
-ifafree(ifa)
-	register struct ifaddr *ifa;
+ifafree(struct ifaddr *ifa)
 {
 	if (ifa == NULL)
 		panic("ifafree");
@@ -237,12 +236,9 @@ ifafree(ifa)
  *
  */
 void
-rtredirect(struct sockaddr *dst, 
-	struct sockaddr *gateway, 
-	struct sockaddr *netmask, 
-	int flags,
-	struct sockaddr *src,
-	struct rtentry **rtp)
+rtredirect(struct sockaddr *dst, struct sockaddr *gateway,
+    struct sockaddr *netmask, int flags, struct sockaddr *src,
+    struct rtentry **rtp)
 {
 	struct rtentry *rt;
 	int error = 0;
@@ -330,10 +326,7 @@ out:
 * Routing table ioctl interface.
 */
 int
-rtioctl(req, data, p)
-	int req;
-	caddr_t data;
-	struct proc *p;
+rtioctl(int req, caddr_t data, struct proc *p)
 {
 #ifdef INET
 	/* Multicast goop, grrr... */
@@ -407,12 +400,8 @@ struct rtfc_arg {
  * all the bits of info needed
  */
 int
-rtrequest(int req,
-	struct sockaddr *dst,
-	struct sockaddr *gateway,
-	struct sockaddr *netmask,
-	int flags,
-	struct rtentry **ret_nrt)
+rtrequest(int req, struct sockaddr *dst, struct sockaddr *gateway,
+    struct sockaddr *netmask, int flags, struct rtentry **ret_nrt)
 {
 	int s = splnet(); int error = 0;
 	register struct rtentry *rt;
@@ -708,9 +697,7 @@ rt_fixchange(struct radix_node *rn, void *vp)
 }
 
 int
-rt_setgate(rt0, dst, gate)
-	struct rtentry *rt0;
-	struct sockaddr *dst, *gate;
+rt_setgate(struct rtentry *rt0, struct sockaddr *dst, struct sockaddr *gate)
 {
 	caddr_t new, old;
 	int dlen = ROUNDUP(dst->sa_len), glen = ROUNDUP(gate->sa_len);
@@ -791,8 +778,8 @@ rt_setgate(rt0, dst, gate)
 }
 
 static void
-rt_maskedcopy(src, dst, netmask)
-	struct sockaddr *src, *dst, *netmask;
+rt_maskedcopy(struct sockaddr *src, struct sockaddr *dst,
+    struct sockaddr *netmask)
 {
 	register u_char *cp1 = (u_char *)src;
 	register u_char *cp2 = (u_char *)dst;
@@ -815,9 +802,7 @@ rt_maskedcopy(src, dst, netmask)
  * for an interface.
  */
 int
-rtinit(ifa, cmd, flags)
-	register struct ifaddr *ifa;
-	int cmd, flags;
+rtinit(struct ifaddr *ifa, int cmd, int flags)
 {
 	register struct rtentry *rt;
 	register struct sockaddr *dst;

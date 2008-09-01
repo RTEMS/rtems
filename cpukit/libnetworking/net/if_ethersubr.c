@@ -308,10 +308,7 @@ bad:
  * the ether header, which is provided separately.
  */
 void
-ether_input(ifp, eh, m)
-	struct ifnet *ifp;
-	register struct ether_header *eh;
-	struct mbuf *m;
+ether_input(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m)
 {
 	register struct ifqueue *inq;
 	u_short ether_type;
@@ -575,9 +572,7 @@ static u_char ether_ipmulticast_max[6] =
  * given interface.
  */
 int
-ether_addmulti(ifr, ac)
-	struct ifreq *ifr;
-	register struct arpcom *ac;
+ether_addmulti(struct ifreq *ifr, struct arpcom *ac)
 {
 	register struct ether_multi *enm;
 	struct sockaddr_in *sin;
@@ -668,9 +663,7 @@ ether_addmulti(ifr, ac)
  * Delete a multicast address record.
  */
 int
-ether_delmulti(ifr, ac)
-	struct ifreq *ifr;
-	register struct arpcom *ac;
+ether_delmulti(struct ifreq *ifr, struct arpcom *ac)
 {
 	register struct ether_multi *enm;
 	register struct ether_multi **p;

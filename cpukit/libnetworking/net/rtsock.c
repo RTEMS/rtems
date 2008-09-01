@@ -77,10 +77,8 @@ static void	rt_setmetrics(u_long which, const struct rt_metrics *in,
 
 /*ARGSUSED*/
 static int
-route_usrreq(so, req, m, nam, control)
-	struct socket *so;
-	int req;
-	struct mbuf *m, *nam, *control;
+route_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *nam,
+    struct mbuf *control)
 {
 	int error = 0;
 	struct rawcb *rp = sotorawcb(so);

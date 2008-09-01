@@ -64,9 +64,7 @@
 #define BCOPY(p1, p2, n) bcopy((void *)(p1), (void *)(p2), (int)(n))
 
 void
-sl_compress_init(comp, max_state)
-	struct slcompress *comp;
-	int max_state;
+sl_compress_init(struct slcompress *comp, int max_state)
 {
 	register u_int i;
 	register struct cstate *tstate = comp->tstate;
@@ -156,11 +154,8 @@ sl_compress_init(comp, max_state)
  * if m is an M_PKTHDR mbuf.
  */
 u_int
-sl_compress_tcp(m, ip, comp, compress_cid)
-	struct mbuf *m;
-	register struct ip *ip;
-	struct slcompress *comp;
-	int compress_cid;
+sl_compress_tcp(struct mbuf *m, struct ip *ip, struct slcompress *comp,
+	int compress_cid)
 {
 	register struct cstate *cs = comp->last_cs->cs_next;
 	register u_int hlen = ip->ip_hl;
@@ -416,11 +411,7 @@ uncompressed:
 
 
 int
-sl_uncompress_tcp(bufp, len, type, comp)
-	u_char **bufp;
-	int len;
-	u_int type;
-	struct slcompress *comp;
+sl_uncompress_tcp(u_char **bufp, int len, u_int type, struct slcompress *comp)
 {
 	u_char *hdr, *cp;
 	u_int hlen;
@@ -465,13 +456,9 @@ sl_uncompress_tcp(bufp, len, type, comp)
  * in *hdrp and its length in *hlenp.
  */
 int
-sl_uncompress_tcp_core(buf, buflen, total_len, type, comp, hdrp, hlenp)
-	u_char *buf;
-	int buflen, total_len;
-	u_int type;
-	struct slcompress *comp;
-	u_char **hdrp;
-	u_int *hlenp;
+sl_uncompress_tcp_core(u_char *buf, int buflen, int total_len,
+	u_int type, struct slcompress *comp,
+	u_char **hdrp, u_int *hlenp)
 {
 	register u_char *cp;
 	register uint32_t hlen, changes;

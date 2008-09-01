@@ -101,10 +101,8 @@ PSEUDO_SET(loopattach, if_loop);
 
 struct	ifnet loif[NLOOP];
 
-/* ARGSUSED */
 void
-rtems_bsdnet_loopattach(dummy)
-	void *dummy;
+rtems_bsdnet_loopattach(void *dummy)
 {
 	register struct ifnet *ifp;
 	register int i = 0;
@@ -129,11 +127,8 @@ rtems_bsdnet_loopattach(dummy)
 }
 
 int
-looutput(ifp, m, dst, rt)
-	struct ifnet *ifp;
-	register struct mbuf *m;
-	struct sockaddr *dst;
-	register struct rtentry *rt;
+looutput(struct ifnet *ifp, struct mbuf *m, struct sockaddr *dst,
+    struct rtentry *rt)
 {
 	int s, isr;
 	register struct ifqueue *ifq = 0;
@@ -218,12 +213,8 @@ looutput(ifp, m, dst, rt)
 	return (0);
 }
 
-/* ARGSUSED */
 static void
-lortrequest(cmd, rt, sa)
-	int cmd;
-	struct rtentry *rt;
-	struct sockaddr *sa;
+lortrequest(int cmd, struct rtentry *rt, struct sockaddr *sa)
 {
 	if (rt) {
 		rt->rt_rmx.rmx_mtu = rt->rt_ifp->if_mtu; /* for ISO */
@@ -240,12 +231,8 @@ lortrequest(cmd, rt, sa)
 /*
  * Process an ioctl request.
  */
-/* ARGSUSED */
 static int
-loioctl(ifp, cmd, data)
-	register struct ifnet *ifp;
-	ioctl_command_t cmd;
-	caddr_t data;
+loioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 {
 	register struct ifaddr *ifa;
 	register struct ifreq *ifr = (struct ifreq *)data;

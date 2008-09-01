@@ -53,7 +53,7 @@
  * Initialize raw connection block q.
  */
 void
-raw_init()
+raw_init(void)
 {
 
 	LIST_INIT(&rawcb_list);
@@ -69,10 +69,8 @@ raw_init()
  * Raw protocol interface.
  */
 void
-raw_input(m0, proto, src, dst)
-	struct mbuf *m0;
-	register struct sockproto *proto;
-	struct sockaddr *src, *dst;
+raw_input(struct mbuf *m0, struct sockproto *proto, struct sockaddr *src, 
+    struct sockaddr *dst)
 {
 	register struct rawcb *rp;
 	register struct mbuf *m = m0;
@@ -125,12 +123,8 @@ raw_input(m0, proto, src, dst)
 		m_freem(m);
 }
 
-/*ARGSUSED*/
 void
-raw_ctlinput(cmd, arg, dummy)
-	int cmd;
-	struct sockaddr *arg;
-	void *dummy;
+raw_ctlinput(int cmd, struct sockaddr *arg, void *dummy)
 {
 
 	if (cmd < 0 || cmd > PRC_NCMDS)
@@ -138,12 +132,9 @@ raw_ctlinput(cmd, arg, dummy)
 	/* INCOMPLETE */
 }
 
-/*ARGSUSED*/
 int
-raw_usrreq(so, req, m, nam, control)
-	struct socket *so;
-	int req;
-	struct mbuf *m, *nam, *control;
+raw_usrreq( struct socket *so, int req, struct mbuf *m, struct mbuf *nam,
+    struct mbuf *control)
 {
 	register struct rawcb *rp = sotorawcb(so);
 	register int error = 0;
