@@ -411,7 +411,7 @@ struct tcpiphdr *
 	 tcp_template(struct tcpcb *);
 struct tcpcb *
 	 tcp_timers(struct tcpcb *, int);
-void	 tcp_trace(int, int, struct tcpcb *, struct tcpiphdr *, int);
+void	 tcp_trace(short, short, struct tcpcb *, struct tcpiphdr *, int);
 
 extern	struct pr_usrreqs tcp_usrreqs;
 extern	u_long tcp_sendspace;
