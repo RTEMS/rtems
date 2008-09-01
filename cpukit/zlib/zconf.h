@@ -1,9 +1,9 @@
 /* zconf.h -- configuration of the zlib compression library
- * Copyright (C) 1995-2004 Jean-loup Gailly.
+ * Copyright (C) 1995-2005 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* $Id$ */
+/* @(#) $Id$ */
 
 #ifndef ZCONF_H
 #define ZCONF_H
@@ -70,8 +70,10 @@
 #if defined(_WINDOWS) && !defined(WINDOWS)
 #  define WINDOWS
 #endif
-#if (defined(_WIN32) || defined(__WIN32__)) && !defined(WIN32)
-#  define WIN32
+#if defined(_WIN32) || defined(_WIN32_WCE) || defined(__WIN32__)
+#  ifndef WIN32
+#    define WIN32
+#  endif
 #endif
 #if (defined(MSDOS) || defined(OS2) || defined(WINDOWS)) && !defined(WIN32)
 #  if !defined(__GNUC__) && !defined(__FLAT__) && !defined(__386__)

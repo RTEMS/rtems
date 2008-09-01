@@ -1,9 +1,9 @@
 /* zutil.c -- target dependent utility functions for the compression library
- * Copyright (C) 1995-2004 Jean-loup Gailly.
+ * Copyright (C) 1995-2005 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* $Id$ */
+/* @(#) $Id$ */
 
 #include "zutil.h"
 
@@ -74,38 +74,38 @@ uLong ZEXPORT zlibCompileFlags()
     flags += 1 << 13;
 #endif
 #ifdef NO_GZCOMPRESS
-    flags += 1 << 16;
+    flags += 1L << 16;
 #endif
 #ifdef NO_GZIP
-    flags += 1 << 17;
+    flags += 1L << 17;
 #endif
 #ifdef PKZIP_BUG_WORKAROUND
-    flags += 1 << 20;
+    flags += 1L << 20;
 #endif
 #ifdef FASTEST
-    flags += 1 << 21;
+    flags += 1L << 21;
 #endif
 #ifdef STDC
 #  ifdef NO_vsnprintf
-        flags += 1 << 25;
+        flags += 1L << 25;
 #    ifdef HAS_vsprintf_void
-        flags += 1 << 26;
+        flags += 1L << 26;
 #    endif
 #  else
 #    ifdef HAS_vsnprintf_void
-        flags += 1 << 26;
+        flags += 1L << 26;
 #    endif
 #  endif
 #else
-        flags += 1 << 24;
+        flags += 1L << 24;
 #  ifdef NO_snprintf
-        flags += 1 << 25;
+        flags += 1L << 25;
 #    ifdef HAS_sprintf_void
-        flags += 1 << 26;
+        flags += 1L << 26;
 #    endif
 #  else
 #    ifdef HAS_snprintf_void
-        flags += 1 << 26;
+        flags += 1L << 26;
 #    endif
 #  endif
 #endif
@@ -299,8 +299,8 @@ extern void   free   OF((voidpf ptr));
 
 voidpf zcalloc (opaque, items, size)
     voidpf opaque;
-    uInt items;
-    uInt size;
+    unsigned items;
+    unsigned size;
 {
     if (opaque) items += size - size; /* make compiler happy */
     return sizeof(uInt) > 2 ? (voidpf)malloc(items * size) :

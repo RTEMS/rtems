@@ -1,5 +1,5 @@
 /* crc32.c -- compute the CRC-32 of a data stream
- * Copyright (C) 1995-2004 Mark Adler
+ * Copyright (C) 1995-2005 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Thanks to Rodney Brown <rbrown64@csc.com.au> for his contribution of faster
@@ -9,7 +9,7 @@
  * factor of two increase in speed on a Power PC G4 (PPC7455) using gcc -O3.
  */
 
-/* $Id$ */
+/* @(#) $Id$ */
 
 /*
   Note on the use of DYNAMIC_CRC_TABLE: there is no mutex or semaphore
@@ -64,6 +64,11 @@
 #  define TBLS 1
 #endif /* BYFOUR */
 
+/* Local functions for crc concatenation */
+local unsigned long gf2_matrix_times OF((unsigned long *mat,
+                                         unsigned long vec));
+local void gf2_matrix_square OF((unsigned long *square, unsigned long *mat));
+
 #ifdef DYNAMIC_CRC_TABLE
 
 local volatile int crc_table_empty = 1;
@@ -72,10 +77,6 @@ local void make_crc_table OF((void));
 #ifdef MAKECRCH
    local void write_table OF((FILE *, const unsigned long FAR *));
 #endif /* MAKECRCH */
-local unsigned long gf2_matrix_times OF((unsigned long *mat,
-                                         unsigned long vec));
-local void gf2_matrix_square OF((unsigned long *square, unsigned long *mat));
-
 /*
   Generate tables for a byte-wise 32-bit CRC calculation on the polynomial:
   x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1.
@@ -201,13 +202,13 @@ local void write_table(out, table)
 /* =========================================================================
  * This function can be used by asm versions of crc32()
  */
-const uLongf * ZEXPORT get_crc_table()
+const unsigned long FAR * ZEXPORT get_crc_table()
 {
 #ifdef DYNAMIC_CRC_TABLE
     if (crc_table_empty)
         make_crc_table();
 #endif /* DYNAMIC_CRC_TABLE */
-    return (const uLongf *)crc_table;
+    return (const unsigned long FAR *)crc_table;
 }
 
 /* ========================================================================= */
@@ -215,10 +216,10 @@ const uLongf * ZEXPORT get_crc_table()
 #define DO8 DO1; DO1; DO1; DO1; DO1; DO1; DO1; DO1
 
 /* ========================================================================= */
-uLong ZEXPORT crc32(crc, buf, len)
-    uLong crc;
-    const Bytef *buf;
-    uInt len;
+unsigned long ZEXPORT crc32(crc, buf, len)
+    unsigned long crc;
+    const unsigned char FAR *buf;
+    unsigned len;
 {
     if (buf == Z_NULL) return 0UL;
 
@@ -273,7 +274,7 @@ local unsigned long crc32_little(crc, buf, len)
         len--;
     }
 
-    buf4 = (const u4 FAR *)buf;
+    buf4 = (const u4 FAR *)(const void FAR *)buf;
     while (len >= 32) {
         DOLIT32;
         len -= 32;
@@ -313,7 +314,7 @@ local unsigned long crc32_big(crc, buf, len)
         len--;
     }
 
-    buf4 = (const u4 FAR *)buf;
+    buf4 = (const u4 FAR *)(const void FAR *)buf;
     buf4--;
     while (len >= 32) {
         DOBIG32;
@@ -338,9 +339,9 @@ local unsigned long crc32_big(crc, buf, len)
 #define GF2_DIM 32      /* dimension of GF(2) vectors (length of CRC) */
 
 /* ========================================================================= */
-local unsigned long gf2_matrix_times(
-    unsigned long *mat,
-    unsigned long vec )
+local unsigned long gf2_matrix_times(mat, vec)
+    unsigned long *mat;
+    unsigned long vec;
 {
     unsigned long sum;
 
@@ -355,9 +356,9 @@ local unsigned long gf2_matrix_times(
 }
 
 /* ========================================================================= */
-local void gf2_matrix_square(
-    unsigned long *square,
-    unsigned long *mat)
+local void gf2_matrix_square(square, mat)
+    unsigned long *square;
+    unsigned long *mat;
 {
     int n;
 
@@ -366,10 +367,10 @@ local void gf2_matrix_square(
 }
 
 /* ========================================================================= */
-uLong ZEXPORT crc32_combine(
-    uLong crc1,
-    uLong crc2,
-    z_off_t len2)
+uLong ZEXPORT crc32_combine(crc1, crc2, len2)
+    uLong crc1;
+    uLong crc2;
+    z_off_t len2;
 {
     int n;
     unsigned long row;

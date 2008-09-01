@@ -1,5 +1,5 @@
 /* zutil.h -- internal interface and configuration of the compression library
- * Copyright (C) 1995-2004 Jean-loup Gailly.
+ * Copyright (C) 1995-2005 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -8,7 +8,7 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* $Id$ */
+/* @(#) $Id$ */
 
 #ifndef ZUTIL_H
 #define ZUTIL_H
@@ -17,7 +17,9 @@
 #include "zlib.h"
 
 #ifdef STDC
-#  include <stddef.h>
+#  ifndef _WIN32_WCE
+#    include <stddef.h>
+#  endif
 #  include <string.h>
 #  include <stdlib.h>
 #endif
@@ -32,7 +34,9 @@
 #   endif
     extern int errno;
 #else
-#   include <errno.h>
+#  ifndef _WIN32_WCE
+#    include <errno.h>
+#  endif
 #endif
 
 #ifndef local
@@ -113,6 +117,9 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 
 #ifdef OS2
 #  define OS_CODE  0x06
+#  ifdef M_I86
+     #include <malloc.h>
+#  endif
 #endif
 
 #if defined(MACOS) || defined(TARGET_OS_MAC)
@@ -251,7 +258,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 
-voidpf zcalloc OF((voidpf opaque, uInt items, uInt size));
+voidpf zcalloc OF((voidpf opaque, unsigned items, unsigned size));
 void   zcfree  OF((voidpf opaque, voidpf ptr));
 
 #define ZALLOC(strm, items, size) \
