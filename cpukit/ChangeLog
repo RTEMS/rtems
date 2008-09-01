@@ -1,3 +1,18 @@
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if_ethersubr.c, libnetworking/net/if_loop.c,
+	libnetworking/net/if_ppp.c, libnetworking/net/ppp_tty.c,
+	libnetworking/net/radix.c, libnetworking/net/raw_cb.c,
+	libnetworking/net/raw_usrreq.c, libnetworking/net/route.c,
+	libnetworking/net/rtsock.c, libnetworking/net/slcompress.c:
+	Stop using old-style function definitions.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/kern/uipc_domain.c, libnetworking/kern/uipc_mbuf.c
+	libnetworking/kern/uipc_socket.c, libnetworking/kern/uipc_socket2.c:
+	Stop using old-style function definitions.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/include/timerdrv.h: Rename timer driver methods to follow
