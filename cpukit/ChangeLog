@@ -1,5 +1,25 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/if_ether.c, 
+	libnetworking/netinet/igmp.c,
+	libnetworking/netinet/in.c,
+	libnetworking/netinet/in_pcb.c,
+	libnetworking/netinet/ip_icmp.c,
+	libnetworking/netinet/ip_input.c,
+	libnetworking/netinet/ip_mroute.c,
+	libnetworking/netinet/ip_output.c,
+	libnetworking/netinet/raw_ip.c,
+	libnetworking/netinet/tcp_debug.c,
+	libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/tcp_output.c,
+	libnetworking/netinet/tcp_subr.c,
+	libnetworking/netinet/tcp_timer.c,
+	libnetworking/netinet/tcp_usrreq.c,
+	libnetworking/netinet/udp_usrreq.c:
+	Stop using old-style function definitions.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/tcp_var.h: Fix broken declaration of
 	tcp_trace().
 
