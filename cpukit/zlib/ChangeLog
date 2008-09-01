@@ -1,3 +1,10 @@
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ChangeLog.zlib, README, adler32.c, compress.c, crc32.c, deflate.c,
+	deflate.h, gzio.c, infback.c, inflate.c, inftrees.c, inftrees.h,
+	trees.c, uncompr.c, zconf.h, zlib.3, zlib.h, zutil.c, zutil.h:
+	Upgrade to zlib-1.2.3.
+
 2005-10-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* zconf.h: Hard-code using unistd.h.
