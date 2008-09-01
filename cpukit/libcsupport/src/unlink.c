@@ -31,7 +31,7 @@ int unlink(
    * Get the node to be unlinked.
    */
 
-  result = rtems_filesystem_evaluate_path( path, 0, &loc, FALSE );
+  result = rtems_filesystem_evaluate_path( path, 0, &loc, false );
   if ( result != 0 )
      return -1;
 

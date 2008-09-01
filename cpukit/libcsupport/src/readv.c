@@ -35,7 +35,7 @@ ssize_t readv(
   int            v;
   int            bytes;
   rtems_libio_t *iop;
-  boolean        all_zeros;
+  bool           all_zeros;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
@@ -67,7 +67,7 @@ ssize_t readv(
    *  that we do not do anything if there is an argument error.
    */
 
-  all_zeros = TRUE;
+  all_zeros = true;
   for ( total=0, v=0 ; v < iovcnt ; v++ ) {
     ssize_t old;
 
@@ -84,7 +84,7 @@ ssize_t readv(
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     if ( iov[v].iov_len )
-      all_zeros = FALSE;
+      all_zeros = false;
   }
 
   /*
@@ -92,7 +92,7 @@ ssize_t readv(
    *  OpenGroup didn't address this case as they did with writev(),
    *  we will handle it the same way for symmetry.
    */
-  if ( all_zeros == TRUE ) {
+  if ( all_zeros == true ) {
     return 0;
   }
    

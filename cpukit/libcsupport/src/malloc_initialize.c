@@ -93,7 +93,7 @@ void RTEMS_Malloc_Initialize(
     rtems_fatal_error_occurred( status );
 
   #if defined(RTEMS_HEAP_DEBUG)
-    if ( _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE ) ) {
+    if ( _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, false ) ) {
       printk( "Malloc heap not initialized correctly\n" );
       rtems_print_buffer( start, 32 );
       printk( "\n" );

@@ -29,7 +29,7 @@ void free(
     return;
 
   #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, FALSE );
+    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, false );
   #endif
 
   /*

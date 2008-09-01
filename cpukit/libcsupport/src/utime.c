@@ -30,7 +30,7 @@ int utime(
   rtems_filesystem_location_info_t   temp_loc;
   int                                result;
 
-  if ( rtems_filesystem_evaluate_path( path, 0x00, &temp_loc, TRUE ) )
+  if ( rtems_filesystem_evaluate_path( path, 0x00, &temp_loc, true ) )
     return -1;
 
   if ( !temp_loc.ops->utime_h ){

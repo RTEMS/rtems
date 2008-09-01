@@ -35,7 +35,7 @@ int rmdir(
    *  Get the node where we wish to go.
    */
 
-  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, FALSE );
+  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, false );
   if ( result != 0 )
      return -1;
 

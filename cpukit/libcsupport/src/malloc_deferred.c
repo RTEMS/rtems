@@ -24,15 +24,15 @@
 
 rtems_chain_control RTEMS_Malloc_GC_list;
 
-boolean malloc_is_system_state_OK(void)
+bool malloc_is_system_state_OK(void)
 {
   if ( _Thread_Dispatch_disable_level > 0 )
-    return FALSE;
+    return false;
 
   if ( _ISR_Nest_level > 0 )
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }
 
 void malloc_deferred_frees_initialize(void)

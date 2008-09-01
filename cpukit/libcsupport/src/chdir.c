@@ -35,7 +35,7 @@ int chdir(
    */
 
   result = rtems_filesystem_evaluate_path(
-    pathname, RTEMS_LIBIO_PERMS_SEARCH, &loc, TRUE );
+    pathname, RTEMS_LIBIO_PERMS_SEARCH, &loc, true );
   if ( result != 0 )
      return -1;
 

@@ -111,7 +111,7 @@ int open(
    */
 
   status = rtems_filesystem_evaluate_path(
-     pathname, eval_flags, &loc, TRUE );
+     pathname, eval_flags, &loc, true );
 
   if ( status == -1 ) {
     if ( errno != ENOENT ) {
@@ -133,7 +133,7 @@ int open(
     }
 
     /* Sanity check to see if the file name exists after the mknod() */
-    status = rtems_filesystem_evaluate_path( pathname, 0x0, &loc, TRUE );
+    status = rtems_filesystem_evaluate_path( pathname, 0x0, &loc, true );
     if ( status != 0 ) {   /* The file did not exist */
       rc = EACCES;
       goto done;

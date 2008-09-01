@@ -1144,7 +1144,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	unsigned int newTail;
 	char c;
 	int dropped = 0;
-	boolean flow_rcv = FALSE; /* TRUE, if flow control char received */
+	bool flow_rcv = false; /* true, if flow control char received */
 	rtems_interrupt_level level;
 
 	if (rtems_termios_linesw[tty->t_line].l_rint != NULL) {
@@ -1180,13 +1180,13 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		/* stop output                             */
 		tty->flow_ctrl |= FL_ORCVXOF;
 	      }
-	      flow_rcv = TRUE;
+	      flow_rcv = true;
 	    }
 	    else if (c == tty->termios.c_cc[VSTART]) {
 	      /* VSTART received */
 	      /* restart output  */
 	      tty->flow_ctrl &= ~FL_ORCVXOF;
-	      flow_rcv = TRUE;
+	      flow_rcv = true;
 	    }
 	  }
 	  if (flow_rcv) {

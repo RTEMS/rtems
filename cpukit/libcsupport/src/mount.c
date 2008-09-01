@@ -40,7 +40,7 @@ rtems_chain_control rtems_filesystem_mount_table_control;
  */
 
 int init_fs_mount_table( void );
-static int Is_node_fs_root(
+static bool Is_node_fs_root(
   rtems_filesystem_location_info_t  *loc
 );
 
@@ -139,7 +139,7 @@ int mount(
   if ( mount_point ) {
 
     if ( rtems_filesystem_evaluate_path(
-            mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE ) == -1 )
+            mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
       goto cleanup_and_bail;
 
     loc_to_free = &loc;
@@ -271,7 +271,7 @@ int init_fs_mount_table(void)
  *
  */
 
-static int Is_node_fs_root(
+static bool Is_node_fs_root(
   rtems_filesystem_location_info_t  *loc
 )
 {
@@ -287,7 +287,7 @@ static int Is_node_fs_root(
         the_node = the_node->next ) {
      the_mount_entry = (rtems_filesystem_mount_table_entry_t *) the_node;
      if ( the_mount_entry->mt_fs_root.node_access  == loc->node_access )
-        return TRUE;
+        return true;
   }
-  return FALSE;
+  return false;
 }

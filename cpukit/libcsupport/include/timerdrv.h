@@ -32,7 +32,7 @@ uint32_t   benchmark_timer_read( void );
 rtems_status_code benchmark_timer_empty_function( void );
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 );
 
 #ifdef __cplusplus

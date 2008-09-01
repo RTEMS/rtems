@@ -84,10 +84,10 @@ bool libc_create_hook(
 
       _REENT_INIT_PTR((ptr)); /* GCC extension: structure constants */
       creating_task->libc_reent = ptr;
-      return TRUE;
+      return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 /*

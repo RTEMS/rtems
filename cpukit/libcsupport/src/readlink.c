@@ -30,7 +30,7 @@ ssize_t readlink(
   if (!buf)
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, FALSE );
+  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, false );
   if ( result != 0 )
      return -1;
 

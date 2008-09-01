@@ -45,7 +45,7 @@ extern void open_dev_console(void);
 /*
  *  Prototypes required to install newlib reentrancy user extension
  */
-rtems_boolean libc_create_hook(
+bool libc_create_hook(
   rtems_tcb *current_task,
   rtems_tcb *creating_task
 );

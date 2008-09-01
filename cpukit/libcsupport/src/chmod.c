@@ -34,7 +34,7 @@ int chmod(
   rtems_filesystem_location_info_t loc;
   int                              result;
 
-  status = rtems_filesystem_evaluate_path( path, 0, &loc, TRUE );
+  status = rtems_filesystem_evaluate_path( path, 0, &loc, true );
   if ( status != 0 )
     return -1;
 

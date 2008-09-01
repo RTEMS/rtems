@@ -43,7 +43,7 @@ int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
 );
 
-rtems_boolean rtems_filesystem_nodes_equal(
+bool rtems_filesystem_nodes_equal(
   const rtems_filesystem_location_info_t   *loc1,
   const rtems_filesystem_location_info_t   *loc2
 ){
@@ -63,7 +63,7 @@ rtems_boolean rtems_filesystem_nodes_equal(
  *  the root node of the file system being unmounted.
  */
 
-rtems_boolean file_systems_below_this_mountpoint(
+bool file_systems_below_this_mountpoint(
   const char                            *path,
   rtems_filesystem_location_info_t      *fs_root_loc,
   rtems_filesystem_mount_table_entry_t  *fs_to_unmount
@@ -82,11 +82,11 @@ rtems_boolean file_systems_below_this_mountpoint(
         the_node = the_node->next ) {
      the_mount_entry = ( rtems_filesystem_mount_table_entry_t * )the_node;
      if (the_mount_entry->mt_point_node.mt_entry  == fs_root_loc->mt_entry ) {
-        return TRUE;
+        return true;
      }
   }
 
-  return FALSE;
+  return false;
 }
 
 /*
@@ -113,7 +113,7 @@ int unmount(
    *    The mount entry that is being refered to.
    */
 
-  if ( rtems_filesystem_evaluate_path( path, 0x0, &loc, TRUE ) )
+  if ( rtems_filesystem_evaluate_path( path, 0x0, &loc, true ) )
     return -1;
 
   mt_entry     = loc.mt_entry;

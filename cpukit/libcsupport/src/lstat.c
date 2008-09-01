@@ -17,6 +17,6 @@
 
 #define _STAT_NAME         lstat
 #define _STAT_R_NAME       _lstat_r
-#define _STAT_FOLLOW_LINKS FALSE
+#define _STAT_FOLLOW_LINKS false
 
 #include "stat.c"

@@ -36,7 +36,7 @@ ssize_t writev(
   int            bytes;
   rtems_libio_t *iop;
   ssize_t        old;
-  boolean        all_zeros;
+  bool           all_zeros;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
@@ -73,7 +73,7 @@ ssize_t writev(
    *  The variable "all_zero" is used as an early exit point before
    *  entering the write loop.
    */
-  all_zeros = TRUE;
+  all_zeros = true;
   for ( old=0, total=0, v=0 ; v < iovcnt ; v++ ) {
 
     if ( !iov[v].iov_base )
@@ -83,7 +83,7 @@ ssize_t writev(
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     if ( iov[v].iov_len )
-      all_zeros = FALSE;
+      all_zeros = false;
    
     /* check for wrap */
     old    = total;
@@ -95,7 +95,7 @@ ssize_t writev(
   /*
    * A writev with all zeros is supposed to have no effect per OpenGroup.
    */
-  if ( all_zeros == TRUE ) {
+  if ( all_zeros == true ) {
     return 0;
   }
    

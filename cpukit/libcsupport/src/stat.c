@@ -25,7 +25,7 @@
 #ifndef _STAT_NAME
 #define _STAT_NAME         stat
 #define _STAT_R_NAME       _stat_r
-#define _STAT_FOLLOW_LINKS TRUE
+#define _STAT_FOLLOW_LINKS true
 #endif
 
 
