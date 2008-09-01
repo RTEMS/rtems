@@ -248,22 +248,22 @@ ramdisk_initialize(
         r->block_num = c->block_num;
         if (c->location == NULL)
         {
-            r->malloced = TRUE;
+            r->malloced = true;
             r->area = malloc(r->block_size * r->block_num);
             if (r->area == NULL) /* No enough memory for this disk */
             {
-                r->initialized = FALSE;
+                r->initialized = false;
                 continue;
             }
             else
             {
-                r->initialized = TRUE;
+                r->initialized = true;
             }
         }
         else
         {
-            r->malloced = FALSE;
-            r->initialized = TRUE;
+            r->malloced = false;
+            r->initialized = true;
             r->area = c->location;
         }
         rc = rtems_disk_create_phys(dev, c->block_size, c->block_num,
@@ -274,7 +274,7 @@ ramdisk_initialize(
             {
                 free(r->area);
             }
-            r->initialized = FALSE;
+            r->initialized = false;
         }
     }
     nramdisks = rtems_ramdisk_configuration_size;

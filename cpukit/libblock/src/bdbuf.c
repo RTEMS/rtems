@@ -117,7 +117,7 @@ typedef struct rtems_bdbuf_context {
   rtems_bdbuf_pool* pool;      /*< Table of buffer pools */
   int               npools;    /*< Number of entries in pool table */
   rtems_id          swapout;   /*< Swapout task ID */
-  boolean           swapout_enabled;
+  bool              swapout_enabled;
 } rtems_bdbuf_context;
 
 /**
@@ -191,7 +191,7 @@ static rtems_bdbuf_context rtems_bdbuf_ctx;
  * @return int The number of bytes written to the output.
  */
 #if RTEMS_BDBUF_TRACE
-boolean rtems_bdbuf_tracer;
+bool rtems_bdbuf_tracer;
 static void
 rtems_bdbuf_printf (const char *format, ...)
 {
@@ -268,7 +268,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
   rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
   rtems_bdbuf_buffer** buf_prev = buf_stack;
 
-  boolean modified = FALSE;
+  bool modified = false;
 
   if (p == NULL)
   {
@@ -315,7 +315,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
 
   q->avl.left = q->avl.right = NULL;
   q->avl.bal = 0;
-  modified = TRUE;
+  modified = true;
   buf_prev--;
 
   while (modified)
@@ -326,7 +326,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
       {
         case 1:
           p->avl.bal = 0;
-          modified = FALSE;
+          modified = false;
           break;
 
         case 0:
@@ -354,7 +354,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
             p = p2;
           }
           p->avl.bal = 0;
-          modified = FALSE;
+          modified = false;
           break;
 
         default:
@@ -367,7 +367,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
       {
         case -1:
           p->avl.bal = 0;
-          modified = FALSE;
+          modified = false;
           break;
 
         case 0:
@@ -395,7 +395,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
             p = p2;
           }
           p->avl.bal = 0;
-          modified = FALSE;
+          modified = false;
           break;
 
         default:
@@ -451,7 +451,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
   rtems_bdbuf_buffer*  buf_stack[RTEMS_BDBUF_AVL_MAX_HEIGHT];
   rtems_bdbuf_buffer** buf_prev = buf_stack;
 
-  boolean modified = FALSE;
+  bool modified = false;
 
   memset (buf_stack, 0, sizeof(buf_stack));
 
@@ -555,7 +555,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
     *root = q;
   }
 
-  modified = TRUE;
+  modified = true;
 
   while (modified)
   {
@@ -578,7 +578,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
           break;
         case  0:
           p->avl.bal = 1;
-          modified = FALSE;
+          modified = false;
           break;
 
         case +1:
@@ -592,7 +592,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
             if (p1->avl.bal == 0)
             {
               p1->avl.bal = -1;
-              modified = FALSE;
+              modified = false;
             }
             else
             {
@@ -633,7 +633,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
 
         case  0:
           p->avl.bal = -1;
-          modified = FALSE;
+          modified = false;
           break;
 
         case -1:
@@ -646,7 +646,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
             if (p1->avl.bal == 0)
             {
               p1->avl.bal = 1;
-              modified = FALSE;
+              modified = false;
             }
             else
             {
@@ -934,7 +934,7 @@ rtems_bdbuf_initialize_pool (rtems_bdbuf_pool_config* config,
   pool->blksize        = config->size;
   pool->nblks          = config->num;
   pool->flags          = 0;
-  pool->sync_active    = FALSE;
+  pool->sync_active    = false;
   pool->sync_device    = -1;
   pool->sync_requester = 0;
   pool->tree           = NULL;
@@ -1135,7 +1135,7 @@ rtems_bdbuf_init (void)
    * Create and start swapout task
    */
 
-  rtems_bdbuf_ctx.swapout_enabled = TRUE;
+  rtems_bdbuf_ctx.swapout_enabled = true;
   
   sc = rtems_task_create (rtems_build_name('B', 'S', 'W', 'P'),
                           (rtems_bdbuf_configuration.swapout_priority ?
@@ -1221,11 +1221,11 @@ static rtems_bdbuf_buffer*
 rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
                         rtems_bdbuf_pool*  pool,
                         rtems_blkdev_bnum  block,
-                        boolean            read_ahead)
+                        bool               read_ahead)
 {
   dev_t               device = pdd->dev;
   rtems_bdbuf_buffer* bd;
-  boolean             available;
+  bool                available;
 
   /*
    * Loop until we get a buffer. Under load we could find no buffers are
@@ -1363,7 +1363,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
    * Loop waiting for the buffer to enter the cached state. If the buffer is in
    * the access or transfer state then wait until it is not.
    */
-  available = FALSE;
+  available = false;
   while (!available)
   {
     switch (bd->state)
@@ -1371,7 +1371,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
       case RTEMS_BDBUF_STATE_CACHED:
       case RTEMS_BDBUF_STATE_MODIFIED:
       case RTEMS_BDBUF_STATE_READ_AHEAD:
-        available = TRUE;
+        available = true;
         break;
 
       case RTEMS_BDBUF_STATE_ACCESS:
@@ -1457,7 +1457,7 @@ rtems_bdbuf_get (dev_t                device,
   rtems_bdbuf_printf ("get: %d (dev = %08x)\n", block, device);
 #endif
 
-  bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool, block, FALSE);
+  bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool, block, false);
 
   if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
     bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
@@ -1588,7 +1588,7 @@ rtems_bdbuf_read (dev_t                device,
      */
     bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool,
                                  block + req->bufnum,
-                                 req->bufnum == 0 ? FALSE : TRUE);
+                                 req->bufnum == 0 ? false : true);
 
     /*
      * Read ahead buffer is in the cache or none available. Read what we
@@ -1838,7 +1838,7 @@ rtems_status_code
 rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
 {
   rtems_bdbuf_pool* pool;
-  boolean           available;
+  bool              available;
 
 #if RTEMS_BDBUF_TRACE
   rtems_bdbuf_printf ("sync: %d\n", bd->block);
@@ -1857,7 +1857,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
 
   rtems_bdbuf_wake_swapper ();
 
-  available = FALSE;
+  available = false;
   while (!available)
   {
     switch (bd->state)
@@ -1867,7 +1867,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
       case RTEMS_BDBUF_STATE_MODIFIED:
       case RTEMS_BDBUF_STATE_ACCESS:
       case RTEMS_BDBUF_STATE_ACCESS_MODIFIED:
-        available = TRUE;
+        available = true;
         break;
 
       case RTEMS_BDBUF_STATE_SYNC:
@@ -1936,7 +1936,7 @@ rtems_bdbuf_syncdev (dev_t dev)
    * The swap out task will negate the sync active flag when no more buffers
    * for the device are held on the modified for sync queues.
    */
-  pool->sync_active    = TRUE;
+  pool->sync_active    = true;
   pool->sync_requester = rtems_task_self ();
   pool->sync_device    = dev;
   
@@ -1985,9 +1985,9 @@ rtems_bdbuf_write_done(void *arg, rtems_status_code status, int error)
  *            device of the first buffer to be written to disk.
  * @param chain The modified chain to process.
  * @param transfer The chain to append buffers to be written too.
- * @param sync_active If TRUE this is a sync operation so expire all timers.
- * @param update_timers If TRUE update the timers.
- * @param timer_delta It update_timers is TRUE update the timers by this
+ * @param sync_active If true this is a sync operation so expire all timers.
+ * @param update_timers If true update the timers.
+ * @param timer_delta It update_timers is true update the timers by this
  *                    amount.
  */
 static void
@@ -1995,8 +1995,8 @@ rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
                                          dev_t*               dev,
                                          rtems_chain_control* chain,
                                          rtems_chain_control* transfer,
-                                         boolean              sync_active,
-                                         boolean              update_timers,
+                                         bool                 sync_active,
+                                         bool                 update_timers,
                                          uint32_t             timer_delta)
 {
   if (!rtems_chain_is_empty (chain))
@@ -2099,25 +2099,25 @@ rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
  * the buffers are beign written to disk.
  *
  * @param pid The pool id to process modified buffers on.
- * @param timer_delta It update_timers is TRUE update the timers by this
+ * @param timer_delta It update_timers is true update the timers by this
  *                    amount.
- * @param update_timers If TRUE update the timers.
+ * @param update_timers If true update the timers.
  * @param write_req The write request structure. There is only one.
  *
- * @retval TRUE Buffers where written to disk so scan again.
- * @retval FALSE No buffers where written to disk.
+ * @retval true Buffers where written to disk so scan again.
+ * @retval false No buffers where written to disk.
  */
-static boolean
+static bool
 rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
                                      unsigned long         timer_delta,
-                                     boolean               update_timers,
+                                     bool                  update_timers,
                                      rtems_blkdev_request* write_req)
 {
   rtems_bdbuf_pool*   pool = rtems_bdbuf_get_pool (pid);
   rtems_chain_control transfer;
   dev_t               dev = -1;
   rtems_disk_device*  dd;
-  boolean             transfered_buffers = TRUE;
+  bool                transfered_buffers = true;
 
   rtems_chain_initialize_empty (&transfer);
     
@@ -2137,7 +2137,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
    */
   rtems_bdbuf_swapout_modified_processing (pid, &dev,
                                            &pool->sync, &transfer,
-                                           TRUE, FALSE,
+                                           true, false,
                                            timer_delta);
 
   /*
@@ -2160,7 +2160,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
    * If there are buffers to transfer to the media tranfer them.
    */
   if (rtems_chain_is_empty (&transfer))
-    transfered_buffers = FALSE;
+    transfered_buffers = false;
   else
   {
     /*
@@ -2169,7 +2169,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
      */
     dd = rtems_disk_obtain (dev);
     if (dd == NULL)
-       transfered_buffers = FALSE;
+       transfered_buffers = false;
     else
     {
       /*
@@ -2197,7 +2197,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
         rtems_bdbuf_buffer* bd =
           (rtems_bdbuf_buffer*) rtems_chain_get (&transfer);
 
-        boolean write = FALSE;
+        bool write = true;
         
         /*
          * If the device only accepts sequential buffers and this is not the
@@ -2211,7 +2211,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
             (bd->block != (last_block + 1)))
         {
           rtems_chain_prepend (&transfer, &bd->link);
-          write = TRUE;
+          write = true;
         }
         else
         {
@@ -2230,7 +2230,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
 
         if (rtems_chain_is_empty (&transfer) ||
             (write_req->bufnum >= rtems_bdbuf_configuration.max_write_blocks))
-          write = TRUE;
+          write = true;
 
         if (write)
         {
@@ -2310,7 +2310,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
   if (pool->sync_active && !  transfered_buffers)
   {
     rtems_id sync_requester = pool->sync_requester;
-    pool->sync_active = FALSE;
+    pool->sync_active = false;
     pool->sync_requester = 0;
     if (sync_requester)
       rtems_event_send (sync_requester, RTEMS_BDBUF_TRANSFER_SYNC);
@@ -2367,20 +2367,20 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
     /*
      * Only update the timers once in the processing cycle.
      */
-    boolean update_timers = TRUE;
+    bool update_timers = true;
     
     /*
      * If we write buffers to any disk perform a check again. We only write a
      * single device at a time and a pool may have more than one devices
      * buffers modified waiting to be written.
      */
-    boolean transfered_buffers;
+    bool transfered_buffers;
 
     do
     {
       rtems_bdpool_id pid;
     
-      transfered_buffers = FALSE;
+      transfered_buffers = false;
 
       /*
        * Loop over each pool extacting all the buffers we find for a specific
@@ -2394,14 +2394,14 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
                                                  update_timers,
                                                  write_req))
         {
-          transfered_buffers = TRUE;
+          transfered_buffers = true;
         }
       }
 
       /*
        * Only update the timers once.
        */
-      update_timers = FALSE;
+      update_timers = false;
     }
     while (transfered_buffers);
 
@@ -2440,7 +2440,7 @@ rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
   rtems_bdbuf_pool* p;
   rtems_bdpool_id   i;
   rtems_bdpool_id   curid = -1;
-  bool              found = FALSE;
+  bool              found = false;
   uint32_t          cursize = UINT_MAX;
   int               j;
 
@@ -2456,7 +2456,7 @@ rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
     {
       curid = i;
       cursize = p->blksize;
-      found = TRUE;
+      found = true;
     }
   }
 

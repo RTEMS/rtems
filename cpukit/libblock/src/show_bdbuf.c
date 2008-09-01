@@ -48,24 +48,24 @@
 #include <inttypes.h>
 
 typedef struct {
-  boolean bdbuf_modified;
-  boolean bdbuf_in_progress;
-  boolean bdbuf_actual;
-  boolean bdbuf_used;
-  boolean bdbuf_all;
+  bool bdbuf_modified;
+  bool bdbuf_in_progress;
+  bool bdbuf_actual;
+  bool bdbuf_used;
+  bool bdbuf_all;
   rtems_bdpool_id pool_id;
 } show_bdbuf_filter_t;
 
 typedef struct {
-  boolean show_all;
-  boolean show_node_chain;
-  boolean show_dev;
-  boolean show_blocknum;
-  boolean show_error;
-  boolean show_state;
-  boolean show_use_count;
-  boolean show_pool_id;
-  boolean show_sema;
+  bool show_all;
+  bool show_node_chain;
+  bool show_dev;
+  bool show_blocknum;
+  bool show_error;
+  bool show_state;
+  bool show_use_count;
+  bool show_pool_id;
+  bool show_sema;
 } show_bdbuf_selector_t;
 
 typedef enum {bdbuf_chain_ident_none,
@@ -81,9 +81,9 @@ typedef struct {
   blkdev_bnum blknum;
   rtems_status_code status;
   int error;
-  boolean modified;
-  boolean in_progress;
-  boolean actual;  
+  bool modified;
+  bool in_progress;
+  bool actual;  
   int use_count;
   const CORE_mutex_Control *sema;
 } show_bdbuf_bdbuf_info_t;
@@ -122,7 +122,7 @@ rtems_status_code rtems_bdbuf_show_follow_chain_node_to_head
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   preemption_key_t preempt_key;
-  boolean preempt_disabled = FALSE;
+  bool preempt_disabled = false;
   /*
    * disable preemption
    */
@@ -226,9 +226,9 @@ rtems_status_code rtems_bdbuf_show_getargs
    * set filter and selector to default
    */
   memset(filter,0,sizeof(*filter));
-  filter->bdbuf_all  = TRUE;
+  filter->bdbuf_all  = true;
   memset(selector,0,sizeof(*selector));
-  selector->show_all = TRUE;
+  selector->show_all = true;
 
   /*
    * scan arguments 
@@ -245,61 +245,61 @@ rtems_status_code rtems_bdbuf_show_getargs
 	 * selection, which bdbufs to show
 	 */
       case 'm': /* only show bdbufs modified */
-	filter->bdbuf_modified = TRUE ;
-	filter->bdbuf_all      = FALSE;
+	filter->bdbuf_modified = true ;
+	filter->bdbuf_all      = false;
 	break;
       case 'i': /* only show bdbufs in progress*/
-	filter->bdbuf_in_progress = TRUE ;
-	filter->bdbuf_all         = FALSE;
+	filter->bdbuf_in_progress = true ;
+	filter->bdbuf_all         = false;
 	break;
       case 'v': /* only show bdbufs, which have valid data*/
-	filter->bdbuf_actual   = TRUE ;
-	filter->bdbuf_all      = FALSE;
+	filter->bdbuf_actual   = true ;
+	filter->bdbuf_all      = false;
 	break;
       case 'u': /* only show bdbufs, which are in use */
-	filter->bdbuf_used     = TRUE ;
-	filter->bdbuf_all      = FALSE;
+	filter->bdbuf_used     = true ;
+	filter->bdbuf_all      = false;
 	break;
       case 'p': /* only show bdbufs, which belong to pool <n> */
 	filter->pool_id = strtol(argv[i]+2,&tmp_ptr,0);
 	if (tmp_ptr == argv[i]+2) { /* no conversion performed... */
 	  arg_error = i;
 	}
-	filter->bdbuf_all      = FALSE;
+	filter->bdbuf_all      = false;
 	break;
 	/*
 	 * selection, what fields to show
 	 */
       case 'n': /* show bdbuf node_chain */
-	selector->show_node_chain = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_node_chain = true ;
+	selector->show_all        = false;
 	break;
       case 'd': /* show device           */
-	selector->show_dev        = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_dev        = true ;
+	selector->show_all        = false;
 	break;
       case 'b': /* show blocknum         */
-	selector->show_blocknum   = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_blocknum   = true ;
+	selector->show_all        = false;
 	break;
       case 'e': /* show bdbuf error status */
-	selector->show_error      = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_error      = true ;
+	selector->show_all        = false;
 	break;
       case 's': /* show bdbuf state */
-	selector->show_state      = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_state      = true ;
+	selector->show_all        = false;
 	break;
       case 'c': /* show bdbuf use count */
-	selector->show_use_count  = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_use_count  = true ;
+	selector->show_all        = false;
 	break;
       case 'l': /* show bdbuf pool id   */
-	selector->show_pool_id    = TRUE ;
-	selector->show_all        = FALSE;
+	selector->show_pool_id    = true ;
+	selector->show_all        = false;
 	break;
       case 't': /* show bdbuf transfer sema */
-	selector->show_sema       = TRUE ;
+	selector->show_sema       = true ;
 	break;
       default:
 	arg_error = i;
@@ -496,7 +496,7 @@ rtems_status_code rtems_show_bdbuf_match_filter
 \*-------------------------------------------------------------------------*/
  const show_bdbuf_bdbuf_info_t *bdbuf_info, /* struct to  store info of bdbuf */
  const show_bdbuf_filter_t *filter,
- boolean *is_match
+ bool *is_match
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -505,11 +505,11 @@ rtems_status_code rtems_show_bdbuf_match_filter
 {
   
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  boolean unmatch = FALSE;
+  bool unmatch = false;
   
   if (rc == RTEMS_SUCCESSFUL) {
     if (filter->bdbuf_all) {
-      unmatch = FALSE;
+      unmatch = false;
     }
     else {
       unmatch = ((filter->bdbuf_modified    && !bdbuf_info->modified) ||
@@ -594,7 +594,7 @@ rtems_status_code rtems_show_bdbuf_print
 \*-------------------------------------------------------------------------*/
  const show_bdbuf_bdbuf_info_t *bdbuf_info, /* info of bdbuf               */
  show_bdbuf_selector_t * selector,          /* selector, what to show      */
- boolean       print_header             /* TRUE: print header, not info    */
+ bool       print_header             /* true: print header, not info    */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -748,7 +748,7 @@ void rtems_bdbuf_show_fnc
     int     argc,
     char  **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean verbose
+    bool verbose
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -763,7 +763,7 @@ void rtems_bdbuf_show_fnc
   bdbuf_pool *curr_pool,*pool_base;
   int pool_cnt,pool_idx;
   int bdbuf_idx;
-  boolean bdbuf_matches;
+  bool bdbuf_matches;
   int matched_cnt,un_matched_cnt;
 
   /*
@@ -806,7 +806,7 @@ void rtems_bdbuf_show_fnc
 	 */
 	  if (rc == RTEMS_SUCCESSFUL) {
 	    rc = rtems_show_bdbuf_print(NULL,&selector,
-					TRUE);
+					true);
 	  }
 	/*
 	 * for all bdbufs in this pool
@@ -838,7 +838,7 @@ void rtems_bdbuf_show_fnc
 	  if (rc == RTEMS_SUCCESSFUL) {
 	    if (bdbuf_matches) {
 	      rc = rtems_show_bdbuf_print(&bdbuf_info,&selector,
-					  FALSE);
+					  false);
 	      if ((rc == RTEMS_SUCCESSFUL) && 
 		  selector.show_sema) {
 		rc = rtems_show_bdbuf_print_wait_chain(&(curr_pool->bdbufs[bdbuf_idx]));

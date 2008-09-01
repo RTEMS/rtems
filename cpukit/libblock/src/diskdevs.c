@@ -38,7 +38,7 @@ static uint32_t disktab_size;
 static rtems_id diskdevs_mutex;
 
 /* Flag meaning that disk I/O, buffering etc. already has been initialized. */
-static boolean disk_io_initialized = FALSE;
+static bool disk_io_initialized = false;
 
 /* diskdevs data structures protection flag.
  * Normally, only table lookup operations performed. It is quite fast, so
@@ -257,12 +257,12 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
-    diskdevs_protected = TRUE;
+    diskdevs_protected = true;
 
     rc = rtems_bdbuf_find_pool(block_size, &pool);
     if (rc != RTEMS_SUCCESSFUL)
     {
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
@@ -270,7 +270,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
     rc = create_disk(dev, name, &dd);
     if (rc != RTEMS_SUCCESSFUL)
     {
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
@@ -291,7 +291,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
                  &dd->capabilities) < 0)
       dd->capabilities = 0;
     
-    diskdevs_protected = FALSE;
+    diskdevs_protected = false;
     rtems_semaphore_release(diskdevs_mutex);
 
     return rc;
@@ -335,12 +335,12 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
-    diskdevs_protected = TRUE;
+    diskdevs_protected = true;
 
     pdd = get_disk_entry(phys);
     if (pdd == NULL)
     {
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return RTEMS_INVALID_NUMBER;
     }
@@ -348,7 +348,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
     rc = create_disk(dev, name, &dd);
     if (rc != RTEMS_SUCCESSFUL)
     {
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
@@ -363,7 +363,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
 
     rc = rtems_io_register_name(name, major, minor);
 
-    diskdevs_protected = FALSE;
+    diskdevs_protected = false;
     rc = rtems_semaphore_release(diskdevs_mutex);
 
     return rc;
@@ -394,7 +394,7 @@ rtems_disk_delete(dev_t dev)
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
-    diskdevs_protected = TRUE;
+    diskdevs_protected = true;
 
     /* Check if this device is in use -- calculate usage counter */
     used = 0;
@@ -414,7 +414,7 @@ rtems_disk_delete(dev_t dev)
 
     if (used != 0)
     {
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return RTEMS_RESOURCE_IN_USE;
     }
@@ -439,7 +439,7 @@ rtems_disk_delete(dev_t dev)
         }
     }
 
-    diskdevs_protected = FALSE;
+    diskdevs_protected = false;
     rc = rtems_semaphore_release(diskdevs_mutex);
     return rc;
 }
@@ -469,10 +469,10 @@ rtems_disk_obtain(dev_t dev)
                                     RTEMS_NO_TIMEOUT);
         if (rc != RTEMS_SUCCESSFUL)
             return NULL;
-        diskdevs_protected = TRUE;
+        diskdevs_protected = true;
         dd = get_disk_entry(dev);
         dd->uses++;
-        diskdevs_protected = FALSE;
+        diskdevs_protected = false;
         rtems_semaphore_release(diskdevs_mutex);
         return dd;
     }
@@ -531,7 +531,7 @@ rtems_disk_next(dev_t dev)
         return NULL;
 
     dtab = disktab + major;
-    while (TRUE)
+    while (true)
     {
         if ((dtab == NULL) || (minor > dtab->size))
         {
@@ -573,7 +573,7 @@ rtems_disk_io_initialize(void)
     if (disktab == NULL)
         return RTEMS_NO_MEMORY;
 
-    diskdevs_protected = FALSE;
+    diskdevs_protected = false;
     rc = rtems_semaphore_create(
         rtems_build_name('D', 'D', 'E', 'V'), 1,
         RTEMS_FIFO | RTEMS_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |

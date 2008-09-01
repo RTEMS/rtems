@@ -18,16 +18,17 @@
 #ifndef _RTEMS_BDBUF_H
 #define _RTEMS_BDBUF_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/chain.h>
 
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /**
  * State of a buffer in the cache.
@@ -94,7 +95,7 @@ typedef struct rtems_bdbuf_pool
   rtems_id            lock;              /*< The pool lock. Lock this data and
                                           * all BDs. */
   rtems_id            sync_lock;         /*< Sync calls lock writes. */
-  boolean             sync_active;       /*< True if a sync is active. */
+  bool                sync_active;       /*< True if a sync is active. */
   rtems_id            sync_requester;    /*< The sync requester. */
   dev_t               sync_device;       /*< The device to sync */
 

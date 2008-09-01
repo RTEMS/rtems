@@ -89,7 +89,7 @@ get_sector(dev_t dev, uint32_t sector_num, rtems_sector_data_t **sector)
  *      sector - sector to check
  *
  * RETURNS:
- *      TRUE if sector has msdos signature, FALSE otherwise
+ *      true if sector has msdos signature, false otherwise
  */
 static bool
 msdos_signature_check (rtems_sector_data_t *sector)
@@ -109,7 +109,7 @@ msdos_signature_check (rtems_sector_data_t *sector)
  *      type - type of partition to check
  *
  * RETURNS:
- *      TRUE if partition type is extended, FALSE otherwise
+ *      true if partition type is extended, false otherwise
  */
 static bool
 is_extended(uint8_t type)
@@ -125,7 +125,7 @@ is_extended(uint8_t type)
  *      type - type of partition to check
  *
  * RETURNS:
- *      TRUE if partition type is extended, FALSE otherwise
+ *      true if partition type is extended, false otherwise
  */
 static bool
 is_fat_partition(uint8_t type)
