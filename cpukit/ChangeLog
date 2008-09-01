@@ -1,3 +1,8 @@
+2008-09-01      Ralf Corsépius <ralf.corsepius@rtems.org>
+
+        * libnetworking/netinet/tcp_var.h: Fix broken declaration of
+        tcp_trace().
+
 2008-08-19	Cedric Aubert <cedric_aubert@yahoo.fr>
 
 	PR 500/misc
