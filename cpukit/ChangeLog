@@ -1,5 +1,14 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* httpd/asp.c, httpd/balloc.c, httpd/default.c,
+	httpd/emfdb.c, httpd/form.c, httpd/handler.c,
+	httpd/md5c.c, httpd/security.c, httpd/sock.c,
+	httpd/socket.c, httpd/sym.c, httpd/uemf.c, httpd/um.c,
+	httpd/webmain.c, httpd/webs.c, httpd/websuemf.c:
+	Stop using old-style function definitions.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/libc/addr2ascii.c,
 	libnetworking/libc/ascii2addr.c,
 	libnetworking/libc/base64.c,
