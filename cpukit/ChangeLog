@@ -1,5 +1,22 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/timerdrv.h, 
+	libcsupport/include/rtems/libcsupport.h,
+	libcsupport/src/chdir.c, libcsupport/src/chmod.c,
+	libcsupport/src/chown.c, libcsupport/src/free.c,
+	libcsupport/src/link.c, libcsupport/src/lstat.c,
+	libcsupport/src/malloc.c, libcsupport/src/malloc_deferred.c,
+	libcsupport/src/malloc_initialize.c, libcsupport/src/malloc_p.h,
+	libcsupport/src/mount.c, libcsupport/src/newlibc.c,
+	libcsupport/src/open.c, libcsupport/src/readlink.c,
+	libcsupport/src/readv.c, libcsupport/src/rmdir.c,
+	libcsupport/src/stat.c, libcsupport/src/termios.c,
+	libcsupport/src/unlink.c, libcsupport/src/unmount.c,
+	libcsupport/src/utime.c, libcsupport/src/writev.c:
+	Convert using "bool".
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* librpc/src/rpc/auth_none.c, librpc/src/rpc/authunix_prot.c,
 	librpc/src/rpc/bindresvport.c, librpc/src/rpc/clnt_generic.c,
 	librpc/src/rpc/clnt_udp.c, librpc/src/rpc/getrpcent.c,
