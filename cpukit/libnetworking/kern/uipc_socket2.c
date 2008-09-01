@@ -105,8 +105,7 @@ SYSCTL_INT(_kern, OID_AUTO, sockbuf_waste_factor, CTLFLAG_RW, &sb_efficiency,
  */
 
 void
-soisconnecting(so)
-	register struct socket *so;
+soisconnecting(struct socket *so)
 {
 
 	so->so_state &= ~(SS_ISCONNECTED|SS_ISDISCONNECTING);
@@ -114,8 +113,7 @@ soisconnecting(so)
 }
 
 void
-soisconnected(so)
-	register struct socket *so;
+soisconnected(struct socket *so)
 {
 	register struct socket *head = so->so_head;
 
@@ -137,8 +135,7 @@ soisconnected(so)
 }
 
 void
-soisdisconnecting(so)
-	register struct socket *so;
+soisdisconnecting(struct socket *so)
 {
 
 	so->so_state &= ~SS_ISCONNECTING;
@@ -149,8 +146,7 @@ soisdisconnecting(so)
 }
 
 void
-soisdisconnected(so)
-	register struct socket *so;
+soisdisconnected(struct socket *so)
 {
 
 	so->so_state &= ~(SS_ISCONNECTING|SS_ISCONNECTED|SS_ISDISCONNECTING);
@@ -171,8 +167,7 @@ soisdisconnected(so)
  * congestion routines.
  */
 struct socket *
-sodropablereq(head)
-	register struct socket *head;
+sodropablereq(struct socket *head)
 {
 	register struct socket *so;
 	uint32_t i, j, qlen, m;
@@ -215,9 +210,7 @@ sodropablereq(head)
  * to catch calls that are missing the (new) second parameter.
  */
 struct socket *
-sonewconn1(head, connstatus)
-	register struct socket *head;
-	int connstatus;
+sonewconn1(struct socket *head, int connstatus)
 {
 	register struct socket *so;
 
@@ -276,8 +269,7 @@ sonewconn1(head, connstatus)
  */
 
 void
-socantsendmore(so)
-	struct socket *so;
+socantsendmore(struct socket *so)
 {
 
 	so->so_state |= SS_CANTSENDMORE;
@@ -285,8 +277,7 @@ socantsendmore(so)
 }
 
 void
-socantrcvmore(so)
-	struct socket *so;
+socantrcvmore(struct socket *so)
 {
 
 	so->so_state |= SS_CANTRCVMORE;
@@ -326,9 +317,7 @@ socantrcvmore(so)
  */
 
 int
-soreserve(so, sndcc, rcvcc)
-	register struct socket *so;
-	u_long sndcc, rcvcc;
+soreserve(struct socket *so, u_long sndcc, u_long rcvcc)
 {
 
 	if (sbreserve(&so->so_snd, sndcc) == 0)
@@ -354,9 +343,7 @@ bad:
  * if buffering efficiency is near the normal case.
  */
 int
-sbreserve(sb, cc)
-	struct sockbuf *sb;
-	u_long cc;
+sbreserve(struct sockbuf *sb, u_long cc)
 {
 
 	if (cc > sb_max * MCLBYTES / (MSIZE + MCLBYTES))
@@ -372,8 +359,7 @@ sbreserve(sb, cc)
  * Free mbufs held by a socket, and reserved mbuf space.
  */
 void
-sbrelease(sb)
-	struct sockbuf *sb;
+sbrelease(struct sockbuf *sb)
 {
 
 	sbflush(sb);
@@ -412,9 +398,7 @@ sbrelease(sb)
  * discarded and mbufs are compacted where possible.
  */
 void
-sbappend(sb, m)
-	struct sockbuf *sb;
-	struct mbuf *m;
+sbappend(struct sockbuf *sb, struct mbuf *m)
 {
 	register struct mbuf *n;
 
@@ -436,8 +420,7 @@ sbappend(sb, m)
 
 #ifdef SOCKBUF_DEBUG
 void
-sbcheck(sb)
-	register struct sockbuf *sb;
+sbcheck(struct sockbuf *sb)
 {
 	register struct mbuf *m;
 	register int len = 0, mbcnt = 0;
@@ -463,9 +446,7 @@ sbcheck(sb)
  * begins a new record.
  */
 void
-sbappendrecord(sb, m0)
-	register struct sockbuf *sb;
-	register struct mbuf *m0;
+sbappendrecord(struct sockbuf *sb, struct mbuf *m0)
 {
 	register struct mbuf *m;
 
@@ -499,9 +480,7 @@ sbappendrecord(sb, m0)
  * but after any other OOB data.
  */
 void
-sbinsertoob(sb, m0)
-	register struct sockbuf *sb;
-	register struct mbuf *m0;
+sbinsertoob(struct sockbuf *sb, struct mbuf *m0)
 {
 	register struct mbuf *m;
 	register struct mbuf **mp;
@@ -546,10 +525,8 @@ sbinsertoob(sb, m0)
  * Returns 0 if no space in sockbuf or insufficient mbufs.
  */
 int
-sbappendaddr(sb, asa, m0, control)
-	register struct sockbuf *sb;
-	struct sockaddr *asa;
-	struct mbuf *m0, *control;
+sbappendaddr(struct sockbuf *sb, struct sockaddr *asa,
+    struct mbuf *m0, struct mbuf *control)
 {
 	register struct mbuf *m, *n;
 	int space = asa->sa_len;
@@ -590,9 +567,8 @@ panic("sbappendaddr");
 }
 
 int
-sbappendcontrol(sb, m0, control)
-	struct sockbuf *sb;
-	struct mbuf *control, *m0;
+sbappendcontrol(struct sockbuf *sb, struct mbuf *m0,
+    struct mbuf *control)
 {
 	register struct mbuf *m, *n;
 	int space = 0;
@@ -628,9 +604,7 @@ sbappendcontrol(sb, m0, control)
  * is null, the buffer is presumed empty.
  */
 void
-sbcompress(sb, m, n)
-	register struct sockbuf *sb;
-	register struct mbuf *m, *n;
+sbcompress(struct sockbuf *sb, struct mbuf *m, struct mbuf *n)
 {
 	register int eor = 0;
 	register struct mbuf *o;
@@ -677,8 +651,7 @@ sbcompress(sb, m, n)
  * Check that all resources are reclaimed.
  */
 void
-sbflush(sb)
-	register struct sockbuf *sb;
+sbflush(struct sockbuf *sb)
 {
 
 	if (sb->sb_flags & SB_LOCK)
@@ -693,9 +666,7 @@ sbflush(sb)
  * Drop data from (the front of) a sockbuf.
  */
 void
-sbdrop(sb, len)
-	register struct sockbuf *sb;
-	register int len;
+sbdrop(struct sockbuf *sb, int len)
 {
 	register struct mbuf *m, *mn;
 	struct mbuf *next;
@@ -737,8 +708,7 @@ sbdrop(sb, len)
  * and move the next record to the front.
  */
 void
-sbdroprecord(sb)
-	register struct sockbuf *sb;
+sbdroprecord(struct sockbuf *sb)
 {
 	register struct mbuf *m, *mn;
 
@@ -758,10 +728,7 @@ sbdroprecord(sb)
  * with the specified type for presentation on a socket buffer.
  */
 struct mbuf *
-sbcreatecontrol(p, size, type, level)
-	caddr_t p;
-	register int size;
-	int type, level;
+sbcreatecontrol(caddr_t p, int size, int type, int level)
 {
 	register struct cmsghdr *cp;
 	struct mbuf *m;

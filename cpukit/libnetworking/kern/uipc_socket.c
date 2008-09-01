@@ -59,12 +59,8 @@ SYSCTL_INT(_kern, KIPC_SOMAXCONN, somaxconn, CTLFLAG_RW, &somaxconn, 0, "");
  */
 /*ARGSUSED*/
 int
-socreate(dom, aso, type, proto, p)
-	int dom;
-	struct socket **aso;
-	register int type;
-	int proto;
-	struct proc *p;
+socreate(int dom, struct socket **aso, int type, int proto,
+    struct proc *p)
 {
 	register struct protosw *prp;
 	register struct socket *so;
@@ -97,9 +93,7 @@ socreate(dom, aso, type, proto, p)
 }
 
 int
-sobind(so, nam)
-	struct socket *so;
-	struct mbuf *nam;
+sobind(struct socket *so, struct mbuf *nam)
 {
 	int s = splnet();
 	int error;
@@ -110,9 +104,7 @@ sobind(so, nam)
 }
 
 int
-solisten(so, backlog)
-	register struct socket *so;
-	int backlog;
+solisten(struct socket *so, int backlog)
 {
 	int s = splnet(), error;
 
@@ -131,8 +123,7 @@ solisten(so, backlog)
 }
 
 void
-sofree(so)
-	register struct socket *so;
+sofree(struct socket *so)
 {
 	struct socket *head = so->so_head;
 
@@ -162,8 +153,7 @@ sofree(so)
  * Free socket when disconnect complete.
  */
 int
-soclose(so)
-	register struct socket *so;
+soclose(struct socket *so)
 {
 	int s = splnet();		/* conservative */
 	int error = 0;
@@ -216,17 +206,14 @@ discard:
  * Must be called at splnet...
  */
 int
-soabort(so)
-	struct socket *so;
+soabort(struct socket *so)
 {
 
 	return (*so->so_proto->pr_usrreqs->pru_abort)(so);
 }
 
 int
-soaccept(so, nam)
-	register struct socket *so;
-	struct mbuf *nam;
+soaccept(struct socket *so, struct mbuf *nam)
 {
 	int s = splnet();
 	int error;
@@ -240,9 +227,7 @@ soaccept(so, nam)
 }
 
 int
-soconnect(so, nam)
-	register struct socket *so;
-	struct mbuf *nam;
+soconnect(struct socket *so, struct mbuf *nam)
 {
 	int s;
 	int error;
@@ -267,9 +252,7 @@ soconnect(so, nam)
 }
 
 int
-soconnect2(so1, so2)
-	register struct socket *so1;
-	struct socket *so2;
+soconnect2(struct socket *so1,struct socket *so2)
 {
 	int s = splnet();
 	int error;
@@ -280,8 +263,7 @@ soconnect2(so1, so2)
 }
 
 int
-sodisconnect(so)
-	register struct socket *so;
+sodisconnect(struct socket *so)
 {
 	int s = splnet();
 	int error;
@@ -319,13 +301,8 @@ bad:
  * Data and control buffers are freed on return.
  */
 int
-sosend(so, addr, uio, top, control, flags)
-	register struct socket *so;
-	struct mbuf *addr;
-	struct uio *uio;
-	struct mbuf *top;
-	struct mbuf *control;
-	int flags;
+sosend(struct socket *so, struct mbuf *addr, struct uio *uio,
+    struct mbuf *top, struct mbuf *control, int flags)
 {
 	struct mbuf **mp;
 	register struct mbuf *m;
@@ -512,13 +489,8 @@ out:
  * only for the count in uio_resid.
  */
 int
-soreceive(so, paddr, uio, mp0, controlp, flagsp)
-	register struct socket *so;
-	struct mbuf **paddr;
-	struct uio *uio;
-	struct mbuf **mp0;
-	struct mbuf **controlp;
-	int *flagsp;
+soreceive(struct socket *so, struct mbuf **paddr, struct uio *uio,
+    struct mbuf **mp0, struct mbuf **controlp, int *flagsp)
 {
 	register struct mbuf *m, **mp;
 	register int flags, len, error, s, offset;
@@ -809,9 +781,7 @@ release:
 }
 
 int
-soshutdown(so, how)
-	register struct socket *so;
-	register int how;
+soshutdown(struct socket *so, int how )
 {
 	register struct protosw *pr = so->so_proto;
 
@@ -824,8 +794,7 @@ soshutdown(so, how)
 }
 
 void
-sorflush(so)
-	register struct socket *so;
+sorflush(struct socket *so)
 {
 	register struct sockbuf *sb = &so->so_rcv;
 	register struct protosw *pr = so->so_proto;
@@ -846,10 +815,7 @@ sorflush(so)
 }
 
 int
-sosetopt(so, level, optname, m0)
-	register struct socket *so;
-	int level, optname;
-	struct mbuf *m0;
+sosetopt(struct socket *so, int level, int optname, struct mbuf *m0)
 {
 	int error = 0;
 	register struct mbuf *m = m0;
@@ -1020,10 +986,7 @@ bad:
 }
 
 int
-sogetopt(so, level, optname, mp)
-	register struct socket *so;
-	int level, optname;
-	struct mbuf **mp;
+sogetopt(struct socket *so, int level, int optname, struct mbuf **mp)
 {
 	register struct mbuf *m;
 
@@ -1127,8 +1090,7 @@ sogetopt(so, level, optname, mp)
 }
 
 void
-sohasoutofband(so)
-	register struct socket *so;
+sohasoutofband(struct socket *so)
 {
 #if 0	/* FIXME: For now we just ignore out of band data */
 	struct proc *p;

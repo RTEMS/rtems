@@ -80,8 +80,7 @@ extern struct linker_set domain_set;
 
 /* ARGSUSED*/
 void
-domaininit(dummy)
-	void *dummy;
+domaininit(void *dummy)
 {
 	register struct domain *dp;
 	register struct protosw *pr;
@@ -125,8 +124,7 @@ domaininit(dummy)
  * to this does not also take place at splimp by default.
  */
 static void
-kludge_splimp(udata)
-	void *udata;
+kludge_splimp(void *udata)
 {
 	int	*savesplp = udata;
 
@@ -134,8 +132,7 @@ kludge_splimp(udata)
 }
 
 static void
-kludge_splx(udata)
-	void *udata;
+kludge_splx(void *udata)
 {
 	int	*savesplp = udata;
 
@@ -186,9 +183,7 @@ found:
 }
 
 void
-pfctlinput(cmd, sa)
-	int cmd;
-	struct sockaddr *sa;
+pfctlinput(int cmd, struct sockaddr *sa)
 {
 	register struct domain *dp;
 	register struct protosw *pr;
@@ -200,8 +195,7 @@ pfctlinput(cmd, sa)
 }
 
 static void
-pfslowtimo(arg)
-	void *arg;
+pfslowtimo(void *arg)
 {
 	register struct domain *dp;
 	register struct protosw *pr;
@@ -214,8 +208,7 @@ pfslowtimo(arg)
 }
 
 static void
-pffasttimo(arg)
-	void *arg;
+pffasttimo(void *arg)
 {
 	register struct domain *dp;
 	register struct protosw *pr;

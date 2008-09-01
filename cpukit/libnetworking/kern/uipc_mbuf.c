@@ -47,7 +47,7 @@
 #include <vm/vm_extern.h>
 
 #if !defined(__rtems__)
-static void mbinit __P((void *))  __attribute__ ((unused));
+static void mbinit (void *) __attribute__ ((unused));
 SYSINIT(mbuf, SI_SUB_MBUF, SI_ORDER_FIRST, mbinit, NULL)
 #endif
 
@@ -71,8 +71,7 @@ int	max_datalen;
  * then re-attempt to allocate an mbuf.
  */
 struct mbuf *
-m_retry(i, t)
-	int i, t;
+m_retry(int i, int t)
 {
 	register struct mbuf *m;
 
@@ -91,8 +90,7 @@ m_retry(i, t)
  * As above; retry an MGETHDR.
  */
 struct mbuf *
-m_retryhdr(i, t)
-	int i, t;
+m_retryhdr(int i, int t)
 {
 	register struct mbuf *m;
 
@@ -128,8 +126,7 @@ m_reclaim(void)
  * for critical paths.
  */
 struct mbuf *
-m_get(nowait, type)
-	int nowait, type;
+m_get(int nowait, int type)
 {
 	register struct mbuf *m;
 
@@ -138,8 +135,7 @@ m_get(nowait, type)
 }
 
 struct mbuf *
-m_gethdr(nowait, type)
-	int nowait, type;
+m_gethdr(int nowait, int type)
 {
 	register struct mbuf *m;
 
@@ -148,8 +144,7 @@ m_gethdr(nowait, type)
 }
 
 struct mbuf *
-m_getclr(nowait, type)
-	int nowait, type;
+m_getclr(int nowait, int type)
 {
 	register struct mbuf *m;
 
@@ -693,11 +688,7 @@ m_devget(char *buf, int totlen, int off0, struct ifnet *ifp,
  * chain if necessary.
  */
 int
-m_copyback(m0, off, len, cp)
-	struct	mbuf *m0;
-	register int off;
-	register int len;
-	caddr_t cp;
+m_copyback(struct mbuf *m0, int off, int len, caddr_t cp)
 {
 	int mlen;
 	struct mbuf *m = m0, *n;
