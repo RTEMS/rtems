@@ -56,7 +56,7 @@ Stack_check_Control Stack_check_Pattern;
  *
  * NOTE: This uses a GCC specific method.
  */
-static inline boolean Stack_check_Frame_pointer_in_range(
+static inline bool Stack_check_Frame_pointer_in_range(
   Stack_Control *the_stack
 )
 {
@@ -64,15 +64,15 @@ static inline boolean Stack_check_Frame_pointer_in_range(
 
   #if defined(__GNUC__)
     if ( sp < the_stack->area ) {
-      return FALSE;
+      return false;
     }
     if ( sp > (the_stack->area + the_stack->size) ) {
-      return FALSE;
+      return false;
     }
   #else
     #error "How do I check stack bounds on a non-GNU compiler?"
   #endif
-  return TRUE;
+  return true;
 }
 
 /*
@@ -166,7 +166,7 @@ void Stack_check_Initialize( void )
 /*
  *  rtems_stack_checker_create_extension
  */
-boolean rtems_stack_checker_create_extension(
+bool rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 )
@@ -176,7 +176,7 @@ boolean rtems_stack_checker_create_extension(
   if (the_thread)
     Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
 
-  return TRUE;
+  return true;
 }
 
 /*
@@ -207,7 +207,7 @@ void rtems_stack_checker_begin_extension(
  */
 void Stack_check_report_blown_task(
   Thread_Control *running,
-  boolean         pattern_ok
+  bool         pattern_ok
 )
 {
   Stack_Control *stack = &running->Start.Initial_stack;
@@ -238,9 +238,9 @@ void Stack_check_report_blown_task(
 
   if ( !pattern_ok ) {
     printk(
-      "  Damaged pattern begins at 0x%08lx and is %ld bytes long\n",
+      "  Damaged pattern begins at 0x%08lx and is %zd bytes long\n",
       (unsigned long) Stack_check_Get_pattern_area(stack),
-      (long) PATTERN_SIZE_BYTES);
+      PATTERN_SIZE_BYTES);
   }
 
   rtems_fatal_error_occurred( 0x81 );
@@ -256,8 +256,8 @@ void rtems_stack_checker_switch_extension(
 {
   Stack_Control *the_stack = &running->Start.Initial_stack;
   void          *pattern;
-  boolean        sp_ok;
-  boolean        pattern_ok = TRUE;
+  bool        sp_ok;
+  bool        pattern_ok = true;
 
   pattern = (void *) Stack_check_Get_pattern_area(the_stack)->pattern;
 
@@ -277,11 +277,11 @@ void rtems_stack_checker_switch_extension(
 /*
  *  Check if blown
  */
-boolean rtems_stack_checker_is_blown( void )
+bool rtems_stack_checker_is_blown( void )
 {
   Stack_Control *the_stack = &_Thread_Executing->Start.Initial_stack;
-  boolean        sp_ok;
-  boolean        pattern_ok = TRUE;
+  bool           sp_ok;
+  bool           pattern_ok = true;
 
   /*
    *  Check for an out of bounds stack pointer
@@ -302,16 +302,16 @@ boolean rtems_stack_checker_is_blown( void )
   }
 
   /*
-   * The Stack Pointer and the Pattern Area are OK so return FALSE.
+   * The Stack Pointer and the Pattern Area are OK so return false.
    */
   if ( sp_ok && pattern_ok )
-    return FALSE;
+    return false;
 
   /*
    * Let's report as much as we can.
    */
   Stack_check_report_blown_task( _Thread_Executing, pattern_ok );
-  return TRUE;
+  return true;
 }
 
 /*
@@ -440,7 +440,7 @@ void Stack_check_Dump_threads_usage(
 #ifndef DONT_USE_FATAL_EXTENSION
   void rtems_stack_checker_fatal_extension(
     Internal_errors_Source  source,
-    boolean                 is_internal,
+    bool                    is_internal,
     uint32_t                status
   )
   {

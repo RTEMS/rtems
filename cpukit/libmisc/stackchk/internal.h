@@ -49,7 +49,7 @@ typedef struct {
  *  rtems_stack_checker_create_extension
  */
 
-boolean rtems_stack_checker_create_extension(
+bool rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );
@@ -77,7 +77,7 @@ void rtems_stack_checker_switch_extension(
 
 void rtems_stack_checker_fatal_extension(
     Internal_errors_Source  source,
-    boolean                 is_internal,
+    bool                    is_internal,
     uint32_t                status
 );
 

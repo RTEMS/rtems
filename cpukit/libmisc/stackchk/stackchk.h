@@ -33,7 +33,7 @@ extern "C" {
  *  has blown its stack.
  *
  */
-boolean rtems_stack_checker_is_blown( void );
+bool rtems_stack_checker_is_blown( void );
 
 /** @brief Print Stack Usage Report
  *
@@ -75,7 +75,7 @@ void rtems_stack_checker_report_usage_with_plugin(
  * @note If this this the first task created, the stack checker
  *       will automatically intialize itself.
  */
-boolean rtems_stack_checker_create_extension(
+bool rtems_stack_checker_create_extension(
   Thread_Control *running,
   Thread_Control *the_thread
 );
