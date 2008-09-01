@@ -1,5 +1,9 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c,
+	libblock/src/diskdevs.c, libblock/src/ide_part_table.c,
+	libblock/src/ramdisk.c, libblock/src/show_bdbuf.c:
+	Convert to using "bool".
 	* libblock/src/nvdisk-sram.c: Add missing HAVE_CONFIG_H.
 
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
