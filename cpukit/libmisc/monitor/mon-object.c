@@ -297,7 +297,7 @@ void
 rtems_monitor_object_dump_1(
     rtems_monitor_object_info_t *info,
     rtems_id                     id,
-    boolean                      verbose
+    bool                         verbose
 )
 {
     rtems_id next_id;
@@ -330,7 +330,7 @@ rtems_monitor_object_dump_1(
 void
 rtems_monitor_object_dump_all(
     rtems_monitor_object_info_t *info,
-    boolean                      verbose
+    bool                         verbose
 )
 {
     rtems_id next_id;
@@ -352,7 +352,7 @@ rtems_monitor_object_cmd(
     int        argc,
     char     **argv,
     rtems_monitor_command_arg_t	*command_arg,
-    boolean    verbose
+    bool       verbose
 )
 {
     int arg;

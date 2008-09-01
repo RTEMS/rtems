@@ -43,7 +43,7 @@ rtems_monitor_extension_canonical(
 
 void
 rtems_monitor_extension_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -62,7 +62,7 @@ rtems_monitor_extension_dump_header(
 void
 rtems_monitor_extension_dump(
     rtems_monitor_extension_t *monitor_extension,
-    boolean  verbose
+    bool                       verbose
 )
 {
     uint32_t             length = 0;

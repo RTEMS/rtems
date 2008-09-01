@@ -68,7 +68,7 @@ rtems_symbol_t *
 rtems_symbol_create(
     rtems_symbol_table_t *table,
     char                 *name,
-    uint32_t       value
+    uint32_t              value
     )
 {
     size_t symbol_length;
@@ -172,7 +172,7 @@ rtems_symbol_sort(rtems_symbol_table_t *table)
 rtems_symbol_t *
 rtems_symbol_value_lookup(
     rtems_symbol_table_t *table,
-    uint32_t        value
+    uint32_t              value
   )
 {
     rtems_symbol_t *sp;
@@ -234,7 +234,7 @@ rtems_symbol_value_lookup(
 const rtems_symbol_t *
 rtems_symbol_value_lookup_exact(
     rtems_symbol_table_t *table,
-    uint32_t        value
+    uint32_t              value
   )
 {
     uint32_t   s;
@@ -384,7 +384,7 @@ rtems_monitor_symbol_canonical_by_value(
 uint32_t
 rtems_monitor_symbol_dump(
     rtems_monitor_symbol_t *canonical_symbol,
-    boolean                 verbose
+    bool                    verbose
 )
 {
     uint32_t   length = 0;
@@ -419,7 +419,7 @@ rtems_monitor_symbol_dump(
 void
 rtems_monitor_symbol_dump_all(
     rtems_symbol_table_t *table,
-    boolean               verbose
+    bool                  verbose
 )
 {
     uint32_t   s;
@@ -440,7 +440,7 @@ rtems_monitor_symbol_dump_all(
         rtems_monitor_symbol_t canonical_symbol;
 
         rtems_monitor_symbol_canonical(&canonical_symbol, sp);
-        rtems_monitor_symbol_dump(&canonical_symbol, TRUE);
+        rtems_monitor_symbol_dump(&canonical_symbol, true);
         fprintf(stdout,"\n");
     }
 }
@@ -455,7 +455,7 @@ rtems_monitor_symbol_cmd(
     int        argc,
     char     **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean    verbose
+    bool       verbose
 )
 {
     int arg;

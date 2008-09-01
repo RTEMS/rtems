@@ -735,7 +735,7 @@ rtems_monitor_help_cmd(
     int          argc,
     char       **argv,
     rtems_monitor_command_arg_t *command_arg,
-    boolean verbose
+    bool         verbose
 )
 {
   int arg;

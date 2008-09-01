@@ -33,7 +33,7 @@ rtems_monitor_region_canonical(
 
 void
 rtems_monitor_region_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     printf("\
@@ -50,7 +50,7 @@ rtems_monitor_region_dump_header(
 void
 rtems_monitor_region_dump(
     rtems_monitor_region_t *monitor_region,
-    boolean  verbose
+    bool  verbose
 )
 {
     int length = 0;

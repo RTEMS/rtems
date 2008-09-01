@@ -27,7 +27,7 @@ rtems_monitor_queue_canonical(
 
 void
 rtems_monitor_queue_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -47,7 +47,7 @@ rtems_monitor_queue_dump_header(
 void
 rtems_monitor_queue_dump(
     rtems_monitor_queue_t *monitor_queue,
-    boolean  verbose
+    bool  verbose
 )
 {
     uint32_t              length = 0;

@@ -299,7 +299,7 @@ rtems_monitor_debugger_cmd(
     int        argc,
     char     **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean    verbose
+    bool       verbose
 )
 {
 #ifdef CPU_INVOKE_DEBUGGER
@@ -312,7 +312,7 @@ rtems_monitor_pause_cmd(
     int        argc,
     char     **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean    verbose
+    bool       verbose
 )
 {
     if (argc == 1)
@@ -326,7 +326,7 @@ rtems_monitor_fatal_cmd(
     int     argc,
     char  **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean verbose
+    bool    verbose
 )
 {
     if (argc == 1)
@@ -340,7 +340,7 @@ rtems_monitor_continue_cmd(
     int     argc,
     char  **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean verbose
+    bool    verbose
 )
 {
     rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
@@ -351,7 +351,7 @@ rtems_monitor_node_cmd(
     int     argc,
     char  **argv,
     rtems_monitor_command_arg_t* command_arg,
-    boolean verbose
+    bool    verbose
 )
 {
     uint32_t   new_node = rtems_monitor_default_node;
@@ -512,7 +512,7 @@ rtems_monitor_task(
     char command_buffer[513];
     int argc;
     char *argv[64];
-    boolean verbose = FALSE;
+    bool  verbose = false;
     struct termios term;
 
     /*

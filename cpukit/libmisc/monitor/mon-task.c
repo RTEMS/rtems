@@ -57,7 +57,7 @@ rtems_monitor_task_canonical(
 
 void
 rtems_monitor_task_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -75,7 +75,7 @@ rtems_monitor_task_dump_header(
 void
 rtems_monitor_task_dump(
     rtems_monitor_task_t *monitor_task,
-    boolean  verbose
+    bool                  verbose
 )
 {
     int length = 0;

@@ -82,7 +82,7 @@ failed:
 
 void
 rtems_monitor_config_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -96,7 +96,7 @@ INITIAL (startup) Configuration Info\n");
 int
 rtems_monitor_config_dump(
     rtems_monitor_config_t *monitor_config,
-    boolean                 verbose
+    bool                 verbose
 )
 {
     int     length = 0;

@@ -332,7 +332,7 @@ typedef void ( *rtems_monitor_command_function_t )(
                  int         argc,
                  char      **argv,
                  rtems_monitor_command_arg_t *command_arg,
-                 boolean     verbose
+                 bool        verbose
              );
 
 union _rtems_monitor_command_arg_t {
@@ -355,8 +355,8 @@ struct rtems_monitor_command_entry_s {
 
 typedef void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);
 typedef void (*rtems_monitor_object_canonical_fn)(void *, void *);
-typedef void (*rtems_monitor_object_dump_header_fn)(boolean);
-typedef void (*rtems_monitor_object_dump_fn)(void *, boolean);
+typedef void (*rtems_monitor_object_dump_header_fn)(bool);
+typedef void (*rtems_monitor_object_dump_fn)(void *, bool);
 
 typedef struct {
     rtems_monitor_object_type_t         type;
@@ -373,11 +373,11 @@ typedef struct {
 void    rtems_monitor_kill(void);
 void    rtems_monitor_init(uint32_t  );
 void    rtems_monitor_wakeup(void);
-void    rtems_monitor_pause_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
-void    rtems_monitor_fatal_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
-void    rtems_monitor_continue_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
-void    rtems_monitor_debugger_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
-void    rtems_monitor_node_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void    rtems_monitor_pause_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
+void    rtems_monitor_fatal_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
+void    rtems_monitor_continue_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
+void    rtems_monitor_debugger_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
+void    rtems_monitor_node_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_symbols_loadup(void);
 int     rtems_monitor_insert_cmd(rtems_monitor_command_entry_t *);
 int     rtems_monitor_erase_cmd(rtems_monitor_command_entry_t *);
@@ -396,7 +396,7 @@ int     rtems_monitor_command_read(char *, int *, char **);
 rtems_monitor_command_entry_t *rtems_monitor_command_lookup(
     rtems_monitor_command_entry_t * table, int argc, char **argv);
 void    rtems_monitor_command_usage(rtems_monitor_command_entry_t *, char *);
-void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, boolean);
+void    rtems_monitor_help_cmd(int, char **, rtems_monitor_command_arg_t *, bool);
 
 /* prmisc.c */
 void       rtems_monitor_separator(void);
@@ -419,7 +419,7 @@ rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems
 rtems_id   rtems_monitor_object_canonical_next(rtems_monitor_object_info_t *, rtems_id, void *);
 void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
 rtems_id   rtems_monitor_object_canonical(rtems_id, void *);
-void       rtems_monitor_object_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+void       rtems_monitor_object_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
 
 /* manager.c */
 void      *rtems_monitor_manager_next(void *, void *, rtems_id *);
@@ -427,58 +427,58 @@ void      *rtems_monitor_manager_next(void *, void *, rtems_id *);
 /* config.c */
 void       rtems_monitor_config_canonical(rtems_monitor_config_t *, void *);
 void      *rtems_monitor_config_next(void *, rtems_monitor_config_t *, rtems_id *);
-void       rtems_monitor_config_dump_header(boolean);
-int        rtems_monitor_config_dump(rtems_monitor_config_t *, boolean verbose);
+void       rtems_monitor_config_dump_header(bool);
+int        rtems_monitor_config_dump(rtems_monitor_config_t *, bool verbose);
 
 /* mpci.c */
 #if defined(RTEMS_MULTIPROCESSING)
 void       rtems_monitor_mpci_canonical(rtems_monitor_mpci_t *, void *);
 void      *rtems_monitor_mpci_next(void *, rtems_monitor_mpci_t *, rtems_id *);
-void       rtems_monitor_mpci_dump_header(boolean);
-void       rtems_monitor_mpci_dump(rtems_monitor_mpci_t *, boolean verbose);
+void       rtems_monitor_mpci_dump_header(bool);
+void       rtems_monitor_mpci_dump(rtems_monitor_mpci_t *, bool verbose);
 #endif
 
 /* itask.c */
 void       rtems_monitor_init_task_canonical(rtems_monitor_init_task_t *, void *);
 void      *rtems_monitor_init_task_next(void *, rtems_monitor_init_task_t *, rtems_id *);
-void       rtems_monitor_init_task_dump_header(boolean);
-void       rtems_monitor_init_task_dump(rtems_monitor_init_task_t *, boolean verbose);
+void       rtems_monitor_init_task_dump_header(bool);
+void       rtems_monitor_init_task_dump(rtems_monitor_init_task_t *, bool verbose);
 
 /* extension.c */
 void       rtems_monitor_extension_canonical(rtems_monitor_extension_t *, void *);
-void       rtems_monitor_extension_dump_header(boolean verbose);
-void       rtems_monitor_extension_dump(rtems_monitor_extension_t *, boolean);
+void       rtems_monitor_extension_dump_header(bool verbose);
+void       rtems_monitor_extension_dump(rtems_monitor_extension_t *, bool);
 
 /* task.c */
 void    rtems_monitor_task_canonical(rtems_monitor_task_t *, void *);
-void    rtems_monitor_task_dump_header(boolean verbose);
-void    rtems_monitor_task_dump(rtems_monitor_task_t *, boolean);
+void    rtems_monitor_task_dump_header(bool verbose);
+void    rtems_monitor_task_dump(rtems_monitor_task_t *, bool);
 
 /* sema.c */
 void    rtems_monitor_sema_canonical(rtems_monitor_sema_t *, void *);
-void    rtems_monitor_sema_dump_header(boolean verbose);
-void    rtems_monitor_sema_dump(rtems_monitor_sema_t *, boolean);
+void    rtems_monitor_sema_dump_header(bool verbose);
+void    rtems_monitor_sema_dump(rtems_monitor_sema_t *, bool);
 
 /* queue.c */
 void    rtems_monitor_queue_canonical(rtems_monitor_queue_t *, void *);
-void    rtems_monitor_queue_dump_header(boolean verbose);
-void    rtems_monitor_queue_dump(rtems_monitor_queue_t *, boolean);
+void    rtems_monitor_queue_dump_header(bool verbose);
+void    rtems_monitor_queue_dump(rtems_monitor_queue_t *, bool);
 
 /* region.c */
 void    rtems_monitor_region_canonical(rtems_monitor_region_t *, void *);
-void    rtems_monitor_region_dump_header(boolean verbose);
-void    rtems_monitor_region_dump(rtems_monitor_region_t *, boolean);
+void    rtems_monitor_region_dump_header(bool verbose);
+void    rtems_monitor_region_dump(rtems_monitor_region_t *, bool);
 
 /* partition.c */
 void    rtems_monitor_part_canonical(rtems_monitor_part_t *, void *);
-void    rtems_monitor_part_dump_header(boolean verbose);
-void    rtems_monitor_part_dump(rtems_monitor_part_t *, boolean);
+void    rtems_monitor_part_dump_header(bool verbose);
+void    rtems_monitor_part_dump(rtems_monitor_part_t *, bool);
 
 /* driver.c */
 void    *rtems_monitor_driver_next(void *, rtems_monitor_driver_t *, rtems_id *);
 void     rtems_monitor_driver_canonical(rtems_monitor_driver_t *, void *);
-void     rtems_monitor_driver_dump_header(boolean);
-void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, boolean);
+void     rtems_monitor_driver_dump_header(bool);
+void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, bool);
 
 /* symbols.c */
 rtems_symbol_table_t *rtems_symbol_table_create(void);
@@ -492,21 +492,21 @@ void   *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, r
 void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t *);
 void    rtems_monitor_symbol_canonical_by_name(rtems_monitor_symbol_t *, char *);
 void    rtems_monitor_symbol_canonical_by_value(rtems_monitor_symbol_t *, void *);
-uint32_t   rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, boolean);
-void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, boolean);
+uint32_t   rtems_monitor_symbol_dump(rtems_monitor_symbol_t *, bool);
+void    rtems_monitor_symbol_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
 
 #if defined(RTEMS_NETWORKING)
 void mon_ifconfig(
   int argc,
   char *argv[],
   uint32_t command_arg,
-  boolean verbose
+  bool verbose
 );
 void mon_route(
   int argc,
   char *argv[],
   uint32_t command_arg,
-  boolean verbose
+  bool verbose
 );
 #endif
 

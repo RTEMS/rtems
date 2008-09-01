@@ -32,7 +32,7 @@ rtems_monitor_part_canonical(
 
 void
 rtems_monitor_part_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     printf("\
@@ -49,7 +49,7 @@ rtems_monitor_part_dump_header(
 void
 rtems_monitor_part_dump(
     rtems_monitor_part_t *monitor_part,
-    boolean  verbose
+    bool  verbose
 )
 {
     int length = 0;

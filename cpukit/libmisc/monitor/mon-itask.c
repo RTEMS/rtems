@@ -72,7 +72,7 @@ failed:
 
 void
 rtems_monitor_init_task_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -88,7 +88,7 @@ rtems_monitor_init_task_dump_header(
 void
 rtems_monitor_init_task_dump(
     rtems_monitor_init_task_t *monitor_itask,
-    boolean  verbose
+    bool  verbose
 )
 {
     int length = 0;

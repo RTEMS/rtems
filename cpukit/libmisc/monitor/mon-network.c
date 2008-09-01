@@ -28,7 +28,7 @@
 
 
 void mon_ifconfig(int argc, char *argv[],  uint32_t command_arg,
-                  boolean verbose)
+                  bool verbose)
 {
     struct sockaddr_in  ipaddr;
     struct sockaddr_in  dstaddr;
@@ -232,7 +232,7 @@ void mon_ifconfig(int argc, char *argv[],  uint32_t command_arg,
 
 
 void mon_route(int argc, char *argv[],  uint32_t command_arg,
-               boolean verbose)
+               bool verbose)
 {
     int                cmd;
     struct sockaddr_in dst;

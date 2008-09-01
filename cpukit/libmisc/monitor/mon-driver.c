@@ -93,7 +93,7 @@ failed:
 
 void
 rtems_monitor_driver_dump_header(
-    boolean verbose
+    bool verbose
 )
 {
     fprintf(stdout,"\
@@ -106,7 +106,7 @@ rtems_monitor_driver_dump_header(
 void
 rtems_monitor_driver_dump(
     rtems_monitor_driver_t *monitor_driver,
-    boolean                 verbose
+    bool                    verbose
 )
 {
     uint32_t            length = 0;
