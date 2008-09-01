@@ -78,8 +78,7 @@ SYSCTL_INT(_net_inet_ip, OID_AUTO, subnets_are_local, CTLFLAG_RW,
  * Otherwise, it includes only the directly-connected (sub)nets.
  */
 int
-in_localaddr(in)
-	struct in_addr in;
+in_localaddr(struct in_addr in)
 {
 	register u_long i = ntohl(in.s_addr);
 	register struct in_ifaddr *ia;
@@ -102,8 +101,7 @@ in_localaddr(in)
  * may be forwarded.
  */
 int
-in_canforward(in)
-	struct in_addr in;
+in_canforward(struct in_addr in)
 {
 	register u_long i = ntohl(in.s_addr);
 	register u_long net;
@@ -122,8 +120,7 @@ in_canforward(in)
  * Trim a mask in a sockaddr
  */
 static void
-in_socktrim(ap)
-struct sockaddr_in *ap;
+in_socktrim(struct sockaddr_in *ap)
 {
     register char *cplim = (char *) &ap->sin_addr;
     register char *cp = (char *) (&ap->sin_addr + 1);
@@ -142,13 +139,8 @@ static int in_interfaces;	/* number of external internet interfaces */
  * Generic internet control operations (ioctl's).
  * Ifp is 0 if not an interface-specific ioctl.
  */
-/* ARGSUSED */
 int
-in_control(so, cmd, data, ifp)
-	struct socket *so;
-	u_long cmd;
-	caddr_t data;
-	register struct ifnet *ifp;
+in_control(struct socket *so, u_long cmd, caddr_t data, struct ifnet *ifp)
 {
 	register struct ifreq *ifr = (struct ifreq *)data;
 	register struct in_ifaddr *ia = 0, *iap;
@@ -449,9 +441,7 @@ in_control(so, cmd, data, ifp)
  * Delete any existing route for an interface.
  */
 static void
-in_ifscrub(ifp, ia)
-	register struct ifnet *ifp;
-	register struct in_ifaddr *ia;
+in_ifscrub(struct ifnet *ifp, struct in_ifaddr *ia)
 {
 
 	if ((ia->ia_flags & IFA_ROUTE) == 0)
@@ -468,11 +458,8 @@ in_ifscrub(ifp, ia)
  * and routing table entry.
  */
 static int
-in_ifinit(ifp, ia, sin, scrub)
-	register struct ifnet *ifp;
-	register struct in_ifaddr *ia;
-	struct sockaddr_in *sin;
-	int scrub;
+in_ifinit(struct ifnet *ifp, struct in_ifaddr *ia, struct sockaddr_in *sin,
+	int scrub)
 {
 	register u_long i = ntohl(sin->sin_addr.s_addr);
 	struct sockaddr_in oldaddr;
@@ -580,9 +567,7 @@ in_ifinit(ifp, ia, sin, scrub)
  * Return 1 if the address might be a local broadcast address.
  */
 int
-in_broadcast(in, ifp)
-	struct in_addr in;
-        struct ifnet *ifp;
+in_broadcast(struct in_addr in, struct ifnet *ifp)
 {
 	register struct ifaddr *ifa;
 	u_long t;
@@ -620,9 +605,7 @@ in_broadcast(in, ifp)
  * Add an address to the list of IP multicast addresses for a given interface.
  */
 struct in_multi *
-in_addmulti(ap, ifp)
-	register struct in_addr *ap;
-	register struct ifnet *ifp;
+in_addmulti(struct in_addr *ap, struct ifnet *ifp)
 {
 	register struct in_multi *inm;
 	struct ifreq ifr;
@@ -690,8 +673,7 @@ in_addmulti(ap, ifp)
  * Delete a multicast address record.
  */
 void
-in_delmulti(inm)
-	register struct in_multi *inm;
+in_delmulti(struct in_multi *inm)
 {
 	struct ifreq ifr;
 	int s = splnet();

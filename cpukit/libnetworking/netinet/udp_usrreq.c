@@ -92,7 +92,7 @@ static	int udp_output(struct inpcb *, struct mbuf *, struct mbuf *,
 static	void udp_notify(struct inpcb *, int);
 
 void
-udp_init()
+udp_init(void)
 {
 	LIST_INIT(&udb);
 	udbinfo.listhead = &udb;
@@ -100,9 +100,7 @@ udp_init()
 }
 
 void
-udp_input(m, iphlen)
-	register struct mbuf *m;
-	int iphlen;
+udp_input(struct mbuf *m, int iphlen)
 {
 	register struct ip *ip;
 	register struct udphdr *uh;
@@ -327,9 +325,7 @@ bad:
  * just wake up so that he can collect error status.
  */
 static void
-udp_notify(inp, errnum)
-	register struct inpcb *inp;
-	int errnum;
+udp_notify(struct inpcb *inp, int errnum)
 {
 	inp->inp_socket->so_error = errnum;
 	sorwakeup(inp->inp_socket);
@@ -337,10 +333,7 @@ udp_notify(inp, errnum)
 }
 
 void
-udp_ctlinput(cmd, sa, vip)
-	int cmd;
-	struct sockaddr *sa;
-	void *vip;
+udp_ctlinput(int cmd, struct sockaddr *sa, void *vip)
 {
 	register struct ip *ip = vip;
 	register struct udphdr *uh;
@@ -357,10 +350,8 @@ udp_ctlinput(cmd, sa, vip)
 }
 
 static int
-udp_output(inp, m, addr, control)
-	register struct inpcb *inp;
-	register struct mbuf *m;
-	struct mbuf *addr, *control;
+udp_output(struct inpcb *inp, struct mbuf *m, struct mbuf *addr,
+    struct mbuf *control)
 {
 	register struct udpiphdr *ui;
 	register int len = m->m_pkthdr.len;
@@ -580,24 +571,19 @@ SYSCTL_INT(_net_inet_udp, UDPCTL_RECVSPACE, recvspace, CTLFLAG_RW,
 	&udp_recvspace, 0, "");
 
 #if defined(__rtems__)
-  void rtems_set_udp_buffer_sizes(
-    u_long sendspace,
-    u_long recvspace
-  )
-  {
+void rtems_set_udp_buffer_sizes(u_long sendspace, u_long recvspace)
+{
     if ( sendspace != 0 )
       udp_sendspace = sendspace;
     if ( recvspace != 0 )
       udp_recvspace = recvspace;
-  }
+}
 #endif
 
 /*ARGSUSED*/
 int
-udp_usrreq(so, req, m, addr, control)
-	struct socket *so;
-	int req;
-	struct mbuf *m, *addr, *control;
+udp_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *addr,
+    struct mbuf *control)
 {
 	struct inpcb *inp = sotoinpcb(so);
 	int error = 0;
@@ -731,8 +717,7 @@ release:
 }
 
 static void
-udp_detach(inp)
-	struct inpcb *inp;
+udp_detach(struct inpcb *inp)
 {
 	int s = splnet();
 

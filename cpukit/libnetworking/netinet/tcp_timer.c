@@ -95,7 +95,7 @@ static	int tcp_maxpersistidle;
  * Fast timeout routine for processing delayed acks
  */
 void
-tcp_fasttimo()
+tcp_fasttimo(void)
 {
 	register struct inpcb *inp;
 	register struct tcpcb *tp;
@@ -121,7 +121,7 @@ tcp_fasttimo()
  * causes finite state machine actions if timers expire.
  */
 void
-tcp_slowtimo()
+tcp_slowtimo(void)
 {
 	register struct inpcb *ip, *ipnxt;
 	register struct tcpcb *tp;
@@ -186,8 +186,7 @@ tpgone:
  * Cancel all timers for TCP tp.
  */
 void
-tcp_canceltimers(tp)
-	struct tcpcb *tp;
+tcp_canceltimers(struct tcpcb *tp)
 {
 	register int i;
 
@@ -204,9 +203,7 @@ static int tcp_totbackoff = 511;	/* sum of tcp_backoff[] */
  * TCP timer processing.
  */
 struct tcpcb *
-tcp_timers(tp, timer)
-	register struct tcpcb *tp;
-	int timer;
+tcp_timers(struct tcpcb *tp, int timer)
 {
 	register int rexmt;
 

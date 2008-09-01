@@ -122,8 +122,7 @@ static void	in_arpinput(struct mbuf *);
  */
 /* ARGSUSED */
 static void
-arptimer(ignored_arg)
-	void *ignored_arg;
+arptimer(void *ignored_arg)
 {
 	int s = splnet();
 	struct llinfo_arp *la, *ola;
@@ -143,10 +142,7 @@ arptimer(ignored_arg)
  * Parallel to llc_rtrequest.
  */
 static void
-arp_rtrequest(req, rt, sa)
-	int req;
-	struct rtentry *rt;
-	struct sockaddr *sa;
+arp_rtrequest(int req, struct rtentry *rt, struct sockaddr *sa)
 {
 	struct sockaddr *gate;
 	struct llinfo_arp *la;
@@ -278,10 +274,7 @@ arp_rtrequest(req, rt, sa)
  *	- arp header source ethernet address
  */
 static void
-arprequest(ac, sip, tip, enaddr)
-	struct arpcom *ac;
-	u_long *sip, *tip;
-	u_char *enaddr;
+arprequest(struct arpcom *ac, u_long *sip, u_long *tip, u_char *enaddr)
 {
 	struct mbuf *m;
 	struct ether_header *eh;
@@ -322,13 +315,13 @@ arprequest(ac, sip, tip, enaddr)
  * taken over here, either now or for later transmission.
  */
 int
-arpresolve(ac, rt, m, dst, desten, rt0)
-	struct arpcom *ac;
-	struct rtentry *rt;
-	struct mbuf *m;
-	struct sockaddr *dst;
-	u_char *desten;
-	struct rtentry *rt0;
+arpresolve(
+	struct arpcom *ac,
+	struct rtentry *rt,
+	struct mbuf *m,
+	struct sockaddr *dst,
+	u_char *desten,
+	struct rtentry *rt0)
 {
 	struct llinfo_arp *la = 0;
 	struct sockaddr_dl *sdl;
@@ -442,8 +435,7 @@ NETISR_SET(NETISR_ARP, arpintr);
  * but formerly didn't normally send requests.
  */
 static void
-in_arpinput(m)
-	struct mbuf *m;
+in_arpinput(struct mbuf *m)
 {
 	struct ether_arp *ea;
 	struct arpcom *ac = (struct arpcom *)m->m_pkthdr.rcvif;
@@ -583,8 +575,7 @@ reply:
  * Free an arp entry.
  */
 static void
-arptfree(la)
-	struct llinfo_arp *la;
+arptfree(struct llinfo_arp *la)
 {
 	struct rtentry *rt = la->la_rt;
 	struct sockaddr_dl *sdl;
@@ -604,9 +595,7 @@ arptfree(la)
  * Lookup or enter a new address in arptab.
  */
 static struct llinfo_arp *
-arplookup(addr, create, proxy)
-	u_long addr;
-	int create, proxy;
+arplookup(u_long addr, int create, int proxy)
 {
 	struct rtentry *rt;
 	static struct sockaddr_inarp sin = {sizeof(sin), AF_INET };
@@ -639,9 +628,7 @@ arplookup(addr, create, proxy)
 }
 
 void
-arp_ifinit(ac, ifa)
-	struct arpcom *ac;
-	struct ifaddr *ifa;
+arp_ifinit(struct arpcom *ac, struct ifaddr *ifa)
 {
 	if (ntohl(IA_SIN(ifa)->sin_addr.s_addr) != INADDR_ANY)
 		arprequest(ac, &(IA_SIN(ifa)->sin_addr.s_addr),

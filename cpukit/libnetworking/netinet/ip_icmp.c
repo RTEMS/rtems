@@ -108,11 +108,8 @@ unsigned int icmplenPanicAvoided;
  * in response to bad packet ip.
  */
 void
-icmp_error(n, type, code, dest, destifp)
-	struct mbuf *n;
-	int type, code;
-	n_long dest;
-	struct ifnet *destifp;
+icmp_error(struct mbuf *n, int type, int code, n_long dest,
+	struct ifnet *destifp)
 {
 	register struct ip *oip = mtod(n, struct ip *), *nip;
 #ifdef _IP_VHL
@@ -226,9 +223,7 @@ static struct sockaddr_in icmpgw = { sizeof (struct sockaddr_in), AF_INET };
  * Process a received ICMP message.
  */
 void
-icmp_input(m, off)
-	struct mbuf *m;
-	int off;
+icmp_input(struct mbuf *m, int off)
 {
 	struct icmp *icp;
 	struct in_ifaddr *ia;
@@ -550,8 +545,7 @@ freeit:
  * Reflect the ip packet back to the source
  */
 static void
-icmp_reflect(m)
-	struct mbuf *m;
+icmp_reflect(struct mbuf *m)
 {
 	struct ip *ip = mtod(m, struct ip *);
 	struct in_ifaddr *ia;
@@ -686,9 +680,7 @@ done:
  * after supplying a checksum.
  */
 static void
-icmp_send(m, opts)
-	register struct mbuf *m;
-	struct mbuf *opts;
+icmp_send(struct mbuf *m, struct mbuf *opts)
 {
 	register struct ip *ip = mtod(m, struct ip *);
 	register int hlen;
@@ -722,7 +714,7 @@ icmp_send(m, opts)
 }
 
 n_time
-iptime()
+iptime(void)
 {
 	struct timeval atv;
 	u_long t;
@@ -738,9 +730,7 @@ iptime()
  * is returned; otherwise, a smaller value is returned.
  */
 int
-ip_next_mtu(mtu, dir)
-	int mtu;
-	int dir;
+ip_next_mtu(int mtu, int dir)
 {
 	static int mtutab[] = {
 		65535, 32000, 17914, 8166, 4352, 2002, 1492, 1280, 1006, 508,

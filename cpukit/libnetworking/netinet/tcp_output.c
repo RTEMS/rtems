@@ -69,8 +69,8 @@ extern struct mbuf *m_copypack();
  * Tcp output routine: figure out what should be sent and send it.
  */
 int
-tcp_output(tp)
-	register struct tcpcb *tp;
+tcp_output(
+	register struct tcpcb *tp)
 {
 	register struct socket *so = tp->t_inpcb->inp_socket;
 	register long len, win;
@@ -733,8 +733,8 @@ out:
 }
 
 void
-tcp_setpersist(tp)
-	register struct tcpcb *tp;
+tcp_setpersist(
+	register struct tcpcb *tp)
 {
 	register int t = ((tp->t_srtt >> 2) + tp->t_rttvar) >> 1;
 

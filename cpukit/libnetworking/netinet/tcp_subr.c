@@ -98,7 +98,7 @@ static void	tcp_notify(struct inpcb *, int);
  * Tcp initialization
  */
 void
-tcp_init()
+tcp_init(void)
 {
 
 	tcp_iss = random();	/* wrong, but better than a constant */
@@ -119,8 +119,7 @@ tcp_init()
  * necessary when the connection is used.
  */
 struct tcpiphdr *
-tcp_template(tp)
-	struct tcpcb *tp;
+tcp_template(struct tcpcb *tp)
 {
 	register struct inpcb *inp = tp->t_inpcb;
 	register struct mbuf *m;
@@ -168,12 +167,8 @@ tcp_template(tp)
  * NOTE: If m != NULL, then ti must point to *inside* the mbuf.
  */
 void
-tcp_respond(tp, ti, m, ack, seq, flags)
-	struct tcpcb *tp;
-	register struct tcpiphdr *ti;
-	register struct mbuf *m;
-	tcp_seq ack, seq;
-	int flags;
+tcp_respond(struct tcpcb *tp, struct tcpiphdr *ti, struct mbuf *m,
+    tcp_seq ack, tcp_seq seq, int flags)
 {
 	register int tlen;
 	int win = 0;
@@ -248,8 +243,7 @@ tcp_respond(tp, ti, m, ack, seq, flags)
  * protocol control block.
  */
 struct tcpcb *
-tcp_newtcpcb(inp)
-	struct inpcb *inp;
+tcp_newtcpcb(struct inpcb *inp)
 {
 	struct tcpcb *tp;
 
@@ -285,9 +279,7 @@ tcp_newtcpcb(inp)
  * then send a RST to peer.
  */
 struct tcpcb *
-tcp_drop(tp, errnum)
-	register struct tcpcb *tp;
-	int errnum;
+tcp_drop(struct tcpcb *tp, int errnum)
 {
 	struct socket *so = tp->t_inpcb->inp_socket;
 
@@ -310,8 +302,7 @@ tcp_drop(tp, errnum)
  *	wake up any sleepers
  */
 struct tcpcb *
-tcp_close(tp)
-	struct tcpcb *tp;
+tcp_close(struct tcpcb *tp)
 {
 	register struct tcpiphdr *t;
 	struct inpcb *inp = tp->t_inpcb;
@@ -410,7 +401,7 @@ tcp_close(tp)
 }
 
 void
-tcp_drain()
+tcp_drain(void)
 {
 
 }
@@ -421,9 +412,7 @@ tcp_drain()
  * (for now, won't do anything until can select for soft error).
  */
 static void
-tcp_notify(inp, error)
-	struct inpcb *inp;
-	int error;
+tcp_notify(struct inpcb *inp, int error)
 {
 	struct tcpcb *tp = (struct tcpcb *)inp->inp_ppcb;
 	struct socket *so = inp->inp_socket;
@@ -574,10 +563,7 @@ SYSCTL_PROC(_net_inet_tcp, TCPCTL_PCBLIST, pcblist, CTLFLAG_RD, 0, 0,
 	    tcp_pcblist, "S,xtcpcb", "List of active TCP connections");
 
 void
-tcp_ctlinput(cmd, sa, vip)
-	int cmd;
-	struct sockaddr *sa;
-	void *vip;
+tcp_ctlinput(int cmd, struct sockaddr *sa, void *vip)
 {
 	struct ip *ip = vip;
 	struct tcphdr *th;
@@ -611,9 +597,7 @@ tcp_ctlinput(cmd, sa, vip)
  * to one segment.  We will gradually open it again as we proceed.
  */
 void
-tcp_quench(inp, errnum)
-	struct inpcb *inp;
-	int errnum;
+tcp_quench( struct inpcb *inp, int errnum)
 {
 	struct tcpcb *tp = intotcpcb(inp);
 
@@ -628,9 +612,7 @@ tcp_quench(inp, errnum)
  * This duplicates some code in the tcp_mss() function in tcp_input.c.
  */
 void
-tcp_mtudisc(inp, errnum)
-	struct inpcb *inp;
-	int errnum;
+tcp_mtudisc(struct inpcb *inp, int errnum)
 {
 	struct tcpcb *tp = intotcpcb(inp);
 	struct rtentry *rt;
@@ -703,8 +685,7 @@ tcp_mtudisc(inp, errnum)
  * to get the interface MTU.
  */
 struct rtentry *
-tcp_rtlookup(inp)
-	struct inpcb *inp;
+tcp_rtlookup(struct inpcb *inp)
 {
 	struct route *ro;
 	struct rtentry *rt;
@@ -731,8 +712,7 @@ tcp_rtlookup(inp)
  * the route metrics.
  */
 struct rmxp_tao *
-tcp_gettaocache(inp)
-	struct inpcb *inp;
+tcp_gettaocache(struct inpcb *inp)
 {
 	struct rtentry *rt = tcp_rtlookup(inp);
 

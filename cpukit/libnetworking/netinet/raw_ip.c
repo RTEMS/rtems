@@ -86,7 +86,7 @@ static struct inpcbinfo ripcbinfo;
  * Initialize raw connection block q.
  */
 void
-rip_init()
+rip_init(void)
 {
 	LIST_INIT(&ripcb);
 	ripcbinfo.listhead = &ripcb;
@@ -226,11 +226,8 @@ rip_output(struct mbuf *m, struct socket *so, u_long dst)
  * Raw IP socket option processing.
  */
 int
-rip_ctloutput(op, so, level, optname, m)
-	int op;
-	struct socket *so;
-	int level, optname;
-	struct mbuf **m;
+rip_ctloutput(int op, struct socket *so, int level, int optname,
+	struct mbuf **m)
 {
 	struct inpcb *inp = sotoinpcb(so);
 	int error;
@@ -327,10 +324,8 @@ static u_long	rip_recvspace = RIPRCVQ; /* XXX sysctl ? */
 
 /*ARGSUSED*/
 int
-rip_usrreq(so, req, m, nam, control)
-	register struct socket *so;
-	int req;
-	struct mbuf *m, *nam, *control;
+rip_usrreq(struct socket *so, int req, struct mbuf *m, struct mbuf *nam,
+	struct mbuf *control)
 {
 	register int error = 0;
 	register struct inpcb *inp = sotoinpcb(so);

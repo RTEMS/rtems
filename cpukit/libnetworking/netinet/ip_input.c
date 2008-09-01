@@ -184,7 +184,7 @@ void	ipintr(void);
  * All protocols not implemented in kernel go to raw IP protocol handler.
  */
 void
-ip_init()
+ip_init(void)
 {
 	register struct protosw *pr;
 	register int i;
@@ -619,10 +619,7 @@ NETISR_SET(NETISR_IP, ipintr);
  * is given as fp; otherwise have to make a chain.
  */
 static struct ip *
-ip_reass(ip, fp, where)
-	register struct ipasfrag *ip;
-	register struct ipq *fp;
-	struct   ipq    *where;
+ip_reass(struct ipasfrag *ip, struct ipq *fp, struct ipq *where)
 {
 	register struct mbuf *m = dtom(ip);
 	register struct ipasfrag *q;
@@ -800,8 +797,7 @@ dropfrag:
  * associated datagrams.
  */
 static void
-ip_freef(fp)
-	struct ipq *fp;
+ip_freef(struct ipq *fp)
 {
 	register struct ipasfrag *q, *p;
 
@@ -820,8 +816,7 @@ ip_freef(fp)
  * Like insque, but pointers in middle of structure.
  */
 static void
-ip_enq(p, prev)
-	register struct ipasfrag *p, *prev;
+ip_enq(struct ipasfrag *p, struct ipasfrag *prev)
 {
 
 	p->ipf_prev = prev;
@@ -834,8 +829,7 @@ ip_enq(p, prev)
  * To ip_enq as remque is to insque.
  */
 static void
-ip_deq(p)
-	register struct ipasfrag *p;
+ip_deq(struct ipasfrag *p)
 {
 
 	p->ipf_prev->ipf_next = p->ipf_next;
@@ -848,7 +842,7 @@ ip_deq(p)
  * queue, discard it.
  */
 void
-ip_slowtimo()
+ip_slowtimo(void)
 {
 	register struct ipq *fp;
 	int s = splnet();
@@ -874,7 +868,7 @@ ip_slowtimo()
  * Drain off all datagram fragments.
  */
 void
-ip_drain()
+ip_drain(void)
 {
 	int     i;
 
@@ -895,8 +889,7 @@ ip_drain()
  * 0 if the packet should be processed further.
  */
 static int
-ip_dooptions(m)
-	struct mbuf *m;
+ip_dooptions(struct mbuf *m)
 {
 	register struct ip *ip = mtod(m, struct ip *);
 	register u_char *cp;
@@ -1114,8 +1107,7 @@ bad:
  * return internet address info of interface to be used to get there.
  */
 static struct in_ifaddr *
-ip_rtaddr(dst)
-	 struct in_addr dst;
+ip_rtaddr(struct in_addr dst)
 {
 	struct sockaddr_in *sin;
 
@@ -1142,9 +1134,7 @@ ip_rtaddr(dst)
  * to be picked up later by ip_srcroute if the receiver is interested.
  */
 void
-save_rte(option, dst)
-	u_char *option;
-	struct in_addr dst;
+save_rte(u_char *option, struct in_addr dst)
 {
 	unsigned olen;
 
@@ -1166,7 +1156,7 @@ save_rte(option, dst)
  * The first hop is placed before the options, will be removed later.
  */
 struct mbuf *
-ip_srcroute()
+ip_srcroute(void)
 {
 	register struct in_addr *p, *q;
 	register struct mbuf *m;
@@ -1237,9 +1227,7 @@ ip_srcroute()
  * XXX should be deleted; last arg currently ignored.
  */
 void
-ip_stripoptions(m, mopt)
-	register struct mbuf *m;
-	struct mbuf *mopt;
+ip_stripoptions(struct mbuf *m, struct mbuf *mopt)
 {
 	register int i;
 	struct ip *ip = mtod(m, struct ip *);
@@ -1422,11 +1410,8 @@ ip_forward(struct mbuf *m, int srcrt)
 }
 
 void
-ip_savecontrol(inp, mp, ip, m)
-	register struct inpcb *inp;
-	register struct mbuf **mp;
-	register struct ip *ip;
-	register struct mbuf *m;
+ip_savecontrol(struct inpcb *inp, struct mbuf **mp, struct ip *ip,
+	struct mbuf *m)
 {
 	if (inp->inp_socket->so_options & SO_TIMESTAMP) {
 		struct timeval tv;

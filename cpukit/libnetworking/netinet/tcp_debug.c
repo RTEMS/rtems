@@ -76,11 +76,8 @@ static int	tcp_debx;
  * Tcp debug routines
  */
 void
-tcp_trace(act, ostate, tp, ti, req)
-	short act, ostate;
-	struct tcpcb *tp;
-	struct tcpiphdr *ti;
-	int req;
+tcp_trace(short act, short ostate, struct tcpcb *tp, struct tcpiphdr *ti,
+	int req)
 {
 #ifdef TCPDEBUG
 	tcp_seq seq, ack;

@@ -143,10 +143,7 @@ static void	 tcp_xmit_timer(struct tcpcb *, int);
 #ifndef TUBA_INCLUDE
 
 static int
-tcp_reass(tp, ti, m)
-	register struct tcpcb *tp;
-	register struct tcpiphdr *ti;
-	struct mbuf *m;
+tcp_reass(struct tcpcb *tp, struct tcpiphdr *ti, struct mbuf *m)
 {
 	register struct tcpiphdr *q;
 	struct socket *so = tp->t_inpcb->inp_socket;
@@ -270,9 +267,7 @@ present:
  * protocol specification dated September, 1981 very closely.
  */
 void
-tcp_input(m, iphlen)
-	register struct mbuf *m;
-	int iphlen;
+tcp_input(struct mbuf *m, int iphlen)
 {
 	register struct tcpiphdr *ti;
 	register struct inpcb *inp;
@@ -1732,12 +1727,8 @@ drop:
 }
 
 static void
-tcp_dooptions(tp, cp, cnt, ti, to)
-	struct tcpcb *tp;
-	u_char *cp;
-	int cnt;
-	struct tcpiphdr *ti;
-	struct tcpopt *to;
+tcp_dooptions(struct tcpcb *tp, u_char *cp, int cnt, struct tcpiphdr *ti,
+	struct tcpopt *to)
 {
 	u_short mss = 0;
 	int opt, optlen;
@@ -1849,10 +1840,7 @@ tcp_dooptions(tp, cp, cnt, ti, to)
  * sequencing purposes.
  */
 static void
-tcp_pulloutofband(so, ti, m)
-	struct socket *so;
-	struct tcpiphdr *ti;
-	register struct mbuf *m;
+tcp_pulloutofband(struct socket *so, struct tcpiphdr *ti, struct mbuf *m)
 {
 	int cnt = ti->ti_urp - 1;
 
@@ -1880,11 +1868,9 @@ tcp_pulloutofband(so, ti, m)
  * and update averages and current timeout.
  */
 static void
-tcp_xmit_timer(tp, rtt)
-	register struct tcpcb *tp;
-	short rtt;
+tcp_xmit_timer(struct tcpcb *tp, int rtt)
 {
-	register int delta;
+	int delta;
 
 	tcpstat.tcps_rttupdated++;
 	tp->t_rttupdated++;
@@ -1982,9 +1968,7 @@ tcp_xmit_timer(tp, rtt)
  * MSS of our peer.
  */
 void
-tcp_mss(tp, offer)
-	struct tcpcb *tp;
-	int offer;
+tcp_mss(struct tcpcb *tp, int offer)
 {
 	register struct rtentry *rt;
 	struct ifnet *ifp;
@@ -2147,8 +2131,7 @@ tcp_mss(tp, offer)
  * Determine the MSS option to send on an outgoing SYN.
  */
 int
-tcp_mssopt(tp)
-	struct tcpcb *tp;
+tcp_mssopt(struct tcpcb *tp)
 {
 	struct rtentry *rt;
 

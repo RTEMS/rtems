@@ -75,10 +75,7 @@ struct socket  *ip_mrouter  = NULL;
 u_int		rsvpdebug = 0;
 
 int
-_ip_mrouter_set(cmd, so, m)
-	int cmd;
-	struct socket *so;
-	struct mbuf *m;
+_ip_mrouter_set(int cmd, struct socket *so, struct mbuf *m)
 {
 	return(EOPNOTSUPP);
 }
@@ -87,10 +84,7 @@ int (*ip_mrouter_set)(int, struct socket *, struct mbuf *) = _ip_mrouter_set;
 
 
 int
-_ip_mrouter_get(cmd, so, m)
-	int cmd;
-	struct socket *so;
-	struct mbuf **m;
+_ip_mrouter_get(int cmd, struct socket *so, struct mbuf **m)
 {
 	return(EOPNOTSUPP);
 }
@@ -98,7 +92,7 @@ _ip_mrouter_get(cmd, so, m)
 int (*ip_mrouter_get)(int, struct socket *, struct mbuf **) = _ip_mrouter_get;
 
 int
-_ip_mrouter_done()
+_ip_mrouter_done(void)
 {
 	return(0);
 }
@@ -106,11 +100,8 @@ _ip_mrouter_done()
 int (*ip_mrouter_done)(void) = _ip_mrouter_done;
 
 int
-_ip_mforward(ip, ifp, m, imo)
-	struct ip *ip;
-	struct ifnet *ifp;
-	struct mbuf *m;
-	struct ip_moptions *imo;
+_ip_mforward(struct ip *ip, struct ifnet *ifp, struct mbuf *m,
+	struct ip_moptions *imo)
 {
 	return(0);
 }
@@ -127,9 +118,7 @@ _mrt_ioctl(int req, caddr_t data, struct proc *p)
 int (*mrt_ioctl)(int, caddr_t, struct proc *) = _mrt_ioctl;
 
 void
-rsvp_input(m, iphlen)		/* XXX must fixup manually */
-	struct mbuf *m;
-	int iphlen;
+rsvp_input(struct mbuf *m, int iphlen)
 {
     /* Can still get packets with rsvp_on = 0 if there is a local member
      * of the group to which the RSVP packet is addressed.  But in this
@@ -150,7 +139,8 @@ rsvp_input(m, iphlen)		/* XXX must fixup manually */
     m_freem(m);
 }
 
-void ipip_input(struct mbuf *m, int iphlen) { /* XXX must fixup manually */
+void ipip_input(struct mbuf *m, int iphlen)
+{ /* XXX must fixup manually */
 	rip_input(m, iphlen);
 }
 
@@ -166,24 +156,19 @@ _ip_mcast_src(int vifi) { return INADDR_ANY; }
 u_long (*ip_mcast_src)(int) = _ip_mcast_src;
 
 int
-ip_rsvp_vif_init(so, m)
-    struct socket *so;
-    struct mbuf *m;
+ip_rsvp_vif_init(struct socket *so, struct mbuf *m)
 {
     return(EINVAL);
 }
 
 int
-ip_rsvp_vif_done(so, m)
-    struct socket *so;
-    struct mbuf *m;
+ip_rsvp_vif_done(struct socket *so, struct mbuf *m)
 {
     return(EINVAL);
 }
 
 void
-ip_rsvp_force_done(so)
-    struct socket *so;
+ip_rsvp_force_done(struct socket *so)
 {
     return;
 }
@@ -389,10 +374,7 @@ static void collate(struct timeval *);
  * Handle MRT setsockopt commands to modify the multicast routing tables.
  */
 static int
-X_ip_mrouter_set(cmd, so, m)
-    int cmd;
-    struct socket *so;
-    struct mbuf *m;
+X_ip_mrouter_set(int cmd, struct socket *so, struct mbuf *m)
 {
    if (cmd != MRT_INIT && so != ip_mrouter) return EACCES;
 
@@ -416,10 +398,7 @@ int (*ip_mrouter_set)(int, struct socket *, struct mbuf *) = X_ip_mrouter_set;
  * Handle MRT getsockopt commands
  */
 static int
-X_ip_mrouter_get(cmd, so, m)
-    int cmd;
-    struct socket *so;
-    struct mbuf **m;
+X_ip_mrouter_get(int cmd, struct socket *so, struct mbuf **m)
 {
     struct mbuf *mb;
 
@@ -442,9 +421,7 @@ int (*ip_mrouter_get)(int, struct socket *, struct mbuf **) = X_ip_mrouter_get;
  * Handle ioctl commands to obtain information from the cache
  */
 static int
-X_mrt_ioctl(cmd, data)
-    int cmd;
-    caddr_t data;
+X_mrt_ioctl(int cmd, caddr_t data)
 {
     int error = 0;
 
@@ -470,8 +447,7 @@ int (*mrt_ioctl)(int, caddr_t) = X_mrt_ioctl;
  * returns the packet, byte, rpf-failure count for the source group provided
  */
 static int
-get_sg_cnt(req)
-    register struct sioc_sg_req *req;
+get_sg_cnt(struct sioc_sg_req *req)
 {
     register struct mfc *rt;
     int s;
@@ -493,8 +469,7 @@ get_sg_cnt(req)
  * returns the input and output packet and byte counts on the vif provided
  */
 static int
-get_vif_cnt(req)
-    register struct sioc_vif_req *req;
+get_vif_cnt(struct sioc_vif_req *req)
 {
     register vifi_t vifi = req->vifi;
 
@@ -512,9 +487,7 @@ get_vif_cnt(req)
  * Enable multicast routing
  */
 static int
-ip_mrouter_init(so, m)
-	struct socket *so;
-	struct mbuf *m;
+ip_mrouter_init(struct socket *so, struct mbuf *m)
 {
     int *v;
 
@@ -553,7 +526,7 @@ ip_mrouter_init(so, m)
  * Disable multicast routing
  */
 static int
-X_ip_mrouter_done()
+X_ip_mrouter_done(void)
 {
     vifi_t vifi;
     int i;
@@ -630,8 +603,7 @@ int (*ip_mrouter_done)(void) = X_ip_mrouter_done;
 #endif
 
 static int
-get_version(mb)
-    struct mbuf *mb;
+get_version(struct mbuf *mb)
 {
     int *v;
 
@@ -647,8 +619,7 @@ get_version(mb)
  * Set PIM assert processing global
  */
 static int
-set_assert(i)
-    int *i;
+set_assert(int *i)
 {
     if ((*i != 1) && (*i != 0))
 	return EINVAL;
@@ -662,8 +633,7 @@ set_assert(i)
  * Get PIM assert processing global
  */
 static int
-get_assert(m)
-    struct mbuf *m;
+get_assert(struct mbuf *m)
 {
     int *i;
 
@@ -678,8 +648,7 @@ get_assert(m)
  * Add a vif to the vif table
  */
 static int
-add_vif(vifcp)
-    register struct vifctl *vifcp;
+add_vif(struct vifctl *vifcp)
 {
     register struct vif *vifp = viftable + vifcp->vifc_vifi;
     static struct sockaddr_in sin = {sizeof sin, AF_INET};
@@ -782,8 +751,7 @@ add_vif(vifcp)
  * Delete a vif from the vif table
  */
 static int
-del_vif(vifip)
-    vifi_t *vifip;
+del_vif(vifi_t *vifip)
 {
     register struct vif *vifp = viftable + *vifip;
     register vifi_t vifi;
@@ -838,8 +806,7 @@ del_vif(vifip)
  * Add an mfc entry
  */
 static int
-add_mfc(mfccp)
-    struct mfcctl *mfccp;
+add_mfc(struct mfcctl *mfccp)
 {
     struct mfc *rt;
     register struct mbuf *mb_rt;
@@ -992,8 +959,7 @@ add_mfc(mfccp)
 /*
  * collect delay statistics on the upcalls 
  */
-static void collate(t)
-register struct timeval *t;
+static void collate(struct timeval *t)
 {
     register u_long d;
     register struct timeval tp;
@@ -1018,8 +984,7 @@ register struct timeval *t;
  * Delete an mfc entry
  */
 static int
-del_mfc(mfccp)
-    struct mfcctl *mfccp;
+del_mfc(struct mfcctl *mfccp)
 {
     struct in_addr 	origin;
     struct in_addr 	mcastgrp;
@@ -1065,10 +1030,7 @@ del_mfc(mfccp)
  * Send a message to mrouted on the multicast routing socket
  */
 static int
-socket_send(s, mm, src)
-	struct socket *s;
-	struct mbuf *mm;
-	struct sockaddr_in *src;
+socket_send(struct socket *s, struct mbuf *mm, struct sockaddr_in *src)
 {
 	if (s) {
 		if (sbappendaddr(&s->so_rcv,
@@ -1097,11 +1059,8 @@ socket_send(s, mm, src)
 #define TUNNEL_LEN  12  /* # bytes of IP option for tunnel encapsulation  */
 
 static int
-X_ip_mforward(ip, ifp, m, imo)
-    register struct ip *ip;
-    struct ifnet *ifp;
-    struct mbuf *m;
-    struct ip_moptions *imo;
+X_ip_mforward(struct ip *ip, struct ifnet *ifp, struct mbuf *m,
+    struct ip_moptions *imo)
 {
     register struct mfc *rt;
     register u_char *ipoptions;
@@ -1386,11 +1345,8 @@ expire_upcalls(void *unused)
  * Packet forwarding routine once entry in the cache is made
  */
 static int
-ip_mdq(m, ifp, rt, xmt_vif)
-    register struct mbuf *m;
-    register struct ifnet *ifp;
-    register struct mfc *rt;
-    register vifi_t xmt_vif;
+ip_mdq(struct mbuf *m, struct ifnet *ifp, struct mfc *rt,
+    vifi_t xmt_vif)
 {
     register struct ip  *ip = mtod(m, struct ip *);
     register vifi_t vifi;
@@ -1505,8 +1461,7 @@ ip_mdq(m, ifp, rt, xmt_vif)
  * numvifs there, 
  */
 static int
-X_legal_vif_num(vif)
-    int vif;
+X_legal_vif_num(int vif)
 {
     if (vif >= 0 && vif < numvifs)
        return(1);
@@ -1522,8 +1477,7 @@ int (*legal_vif_num)(int) = X_legal_vif_num;
  * Return the local address used by this vif
  */
 static u_long
-X_ip_mcast_src(vifi)
-    int vifi;
+X_ip_mcast_src(int vifi)
 {
     if (vifi >= 0 && vifi < numvifs)
 	return viftable[vifi].v_lcl_addr.s_addr;
@@ -1536,10 +1490,7 @@ u_long (*ip_mcast_src)(int) = X_ip_mcast_src;
 #endif
 
 static void
-phyint_send(ip, vifp, m)
-    struct ip *ip;
-    struct vif *vifp;
-    struct mbuf *m;
+phyint_send(struct ip *ip, struct vif *vifp, struct mbuf *m)
 {
     register struct mbuf *mb_copy;
     register int hlen = ip->ip_hl << 2;
@@ -1562,10 +1513,7 @@ phyint_send(ip, vifp, m)
 }
 
 static void
-encap_send(ip, vifp, m)
-    register struct ip *ip;
-    register struct vif *vifp;
-    register struct mbuf *m;
+encap_send(struct ip *ip, struct vif *vifp, struct mbuf *m)
 {
     register struct mbuf *mb_copy;
     register struct ip *ip_copy;
@@ -1629,12 +1577,10 @@ encap_send(ip, vifp, m)
  */
 void
 #ifdef MROUTE_LKM
-X_ipip_input(m, iphlen)
+X_ipip_input(struct mbuf *m, int iphlen)
 #else
-ipip_input(m, iphlen)
+ipip_input(struct mbuf *m, int iphlen)
 #endif
-	register struct mbuf *m;
-	int iphlen;
 {
     struct ifnet *ifp = m->m_pkthdr.rcvif;
     register struct ip *ip = mtod(m, struct ip *);
@@ -1715,11 +1661,7 @@ ipip_input(m, iphlen)
  */
 
 static void
-tbf_control(vifp, m, ip, p_len)
-	register struct vif *vifp;
-	register struct mbuf *m;
-	register struct ip *ip;
-	register u_long p_len;
+tbf_control(struct vif *vifp, struct mbuf *m, struct ip *ip, u_long p_len)
 {
     register struct tbf *t = vifp->v_tbf;
 
@@ -1769,9 +1711,7 @@ tbf_control(vifp, m, ip, p_len)
  * adds a packet to the queue at the interface
  */
 static void
-tbf_queue(vifp, m) 
-	register struct vif *vifp;
-	register struct mbuf *m;
+tbf_queue(struct vif *vifp, struct mbuf *m)
 {
     register int s = splnet();
     register struct tbf *t = vifp->v_tbf;
@@ -1804,8 +1744,7 @@ tbf_queue(vifp, m)
  * processes the queue at the interface
  */
 static void
-tbf_process_q(vifp)
-    register struct vif *vifp;
+tbf_process_q(struct vif *vifp)
 {
     register struct mbuf *m;
     register int len;
@@ -1841,8 +1780,7 @@ tbf_process_q(vifp)
 }
 
 static void
-tbf_reprocess_q(xvifp)
-	void *xvifp;
+tbf_reprocess_q(void *xvifp)
 {
     register struct vif *vifp = xvifp;
     if (ip_mrouter == NULL) 
@@ -1860,9 +1798,7 @@ tbf_reprocess_q(xvifp)
  * based on the precedence value and the priority
  */
 static int
-tbf_dq_sel(vifp, ip)
-    register struct vif *vifp;
-    register struct ip *ip;
+tbf_dq_sel(struct vif *vifp, struct ip *ip)
 {
     register int s = splnet();
     register u_int p;
@@ -1897,9 +1833,7 @@ tbf_dq_sel(vifp, ip)
 }
 
 static void
-tbf_send_packet(vifp, m)
-    register struct vif *vifp;
-    register struct mbuf *m;
+tbf_send_packet(struct vif *vifp, struct mbuf *m)
 {
     struct ip_moptions imo;
     int error;
@@ -1937,8 +1871,7 @@ tbf_send_packet(vifp, m)
  * in milliseconds & update the no. of tokens in the bucket
  */
 static void
-tbf_update_tokens(vifp)
-    register struct vif *vifp;
+tbf_update_tokens(struct vif *vifp)
 {
     struct timeval tp;
     register u_long tm;
@@ -1968,9 +1901,7 @@ tbf_update_tokens(vifp)
 }
 
 static int
-priority(vifp, ip)
-    register struct vif *vifp;
-    register struct ip *ip;
+priority(struct vif *vifp, struct ip *ip)
 {
     register int prio;
 
@@ -2012,9 +1943,7 @@ priority(vifp, ip)
  */
 
 int
-ip_rsvp_vif_init(so, m)
-    struct socket *so;
-    struct mbuf *m;
+ip_rsvp_vif_init(struct socket *so, struct mbuf *m)
 {
     int i;
     register int s;
@@ -2063,9 +1992,7 @@ ip_rsvp_vif_init(so, m)
 }
 
 int
-ip_rsvp_vif_done(so, m)
-    struct socket *so;
-    struct mbuf *m;
+ip_rsvp_vif_done(struct socket *so, struct mbuf *m)
 {
 	int i;
 	register int s;
@@ -2109,8 +2036,7 @@ ip_rsvp_vif_done(so, m)
 }
 
 void
-ip_rsvp_force_done(so)
-    struct socket *so;
+ip_rsvp_force_done(struct socket *so)
 {
     int vifi;
     register int s;
@@ -2142,9 +2068,7 @@ ip_rsvp_force_done(so)
 }
 
 void
-rsvp_input(m, iphlen)
-	struct mbuf *m;
-	int iphlen;
+rsvp_input(struct mbuf *m, int iphlen)
 {
     int vifi;
     register struct ip *ip = mtod(m, struct ip *);

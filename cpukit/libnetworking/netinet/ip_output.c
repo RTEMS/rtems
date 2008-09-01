@@ -86,12 +86,8 @@ extern	struct protosw inetsw[];
  * The mbuf opt, if present, will not be freed.
  */
 int
-ip_output(m0, opt, ro, flags, imo)
-	struct mbuf *m0;
-	struct mbuf *opt;
-	struct route *ro;
-	int flags;
-	struct ip_moptions *imo;
+ip_output(struct mbuf *m0, struct mbuf *opt, struct route *ro, int flags,
+	struct ip_moptions *imo)
 {
 	struct ip *ip, *mhip;
 	struct ifnet *ifp;
@@ -537,10 +533,7 @@ bad:
  * XXX This routine assumes that the packet has no options in place.
  */
 static struct mbuf *
-ip_insertoptions(m, opt, phlen)
-	register struct mbuf *m;
-	struct mbuf *opt;
-	int *phlen;
+ip_insertoptions(struct mbuf *m, struct mbuf *opt, int *phlen)
 {
 	register struct ipoption *p = mtod(opt, struct ipoption *);
 	struct mbuf *n;
@@ -588,8 +581,7 @@ ip_insertoptions(m, opt, phlen)
  * omitting those not copied during fragmentation.
  */
 static int
-ip_optcopy(ip, jp)
-	struct ip *ip, *jp;
+ip_optcopy(struct ip *ip, struct ip *jp)
 {
 	register u_char *cp, *dp;
 	int opt, optlen, cnt;
@@ -629,11 +621,8 @@ ip_optcopy(ip, jp)
  * IP socket option processing.
  */
 int
-ip_ctloutput(op, so, level, optname, mp)
-	int op;
-	struct socket *so;
-	int level, optname;
-	struct mbuf **mp;
+ip_ctloutput(int op, struct socket *so, int level, int optname,
+	struct mbuf **mp)
 {
 	struct	inpcb *inp = sotoinpcb(so);
 	register struct mbuf *m = *mp;
@@ -839,13 +828,10 @@ ip_ctloutput(op, so, level, optname, mp)
  */
 static int
 #ifdef notyet
-ip_pcbopts(optname, pcbopt, m)
-	int optname;
+ip_pcbopts(int optname, struct mbuf **pcbopt, struct mbuf *m)
 #else
-ip_pcbopts(pcbopt, m)
+ip_pcbopts(struct mbuf **pcbopt, struct mbuf *m)
 #endif
-	struct mbuf **pcbopt;
-	register struct mbuf *m;
 {
 	register int cnt, optlen;
 	register u_char *cp;
@@ -943,10 +929,7 @@ bad:
  * Set the IP multicast options in response to user setsockopt().
  */
 static int
-ip_setmoptions(optname, imop, m)
-	int optname;
-	struct ip_moptions **imop;
-	struct mbuf *m;
+ip_setmoptions(int optname, struct ip_moptions **imop, struct mbuf *m)
 {
 	int error = 0;
 	u_char loop;
@@ -1218,10 +1201,8 @@ ip_setmoptions(optname, imop, m)
  * Return the IP multicast options in response to user getsockopt().
  */
 static int
-ip_getmoptions(optname, imo, mp)
-	int optname;
-	register struct ip_moptions *imo;
-	register struct mbuf **mp;
+ip_getmoptions(int optname, struct ip_moptions *imo,
+	struct mbuf **mp)
 {
 	u_char *ttl;
 	u_char *loop;
@@ -1275,8 +1256,7 @@ ip_getmoptions(optname, imo, mp)
  * Discard the IP multicast options.
  */
 void
-ip_freemoptions(imo)
-	register struct ip_moptions *imo;
+ip_freemoptions(struct ip_moptions *imo)
 {
 	register int i;
 
@@ -1295,11 +1275,8 @@ ip_freemoptions(imo)
  * replicating that code here.
  */
 static void
-ip_mloopback(ifp, m, dst, hlen)
-	struct ifnet *ifp;
-	register struct mbuf *m;
-	register struct sockaddr_in *dst;
-	int hlen;
+ip_mloopback(struct ifnet *ifp, struct mbuf *m, struct sockaddr_in *dst,
+	int hlen)
 {
 	register struct ip *ip;
 	struct mbuf *copym;

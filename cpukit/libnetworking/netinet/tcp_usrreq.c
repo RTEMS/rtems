@@ -529,9 +529,7 @@ struct pr_usrreqs tcp_usrreqs = {
  * Initialize connection parameters and enter SYN-SENT state.
  */
 static int
-tcp_connect(tp, nam)
-	register struct tcpcb *tp;
-	struct mbuf *nam;
+tcp_connect(struct tcpcb *tp, struct mbuf *nam)
 {
 	struct inpcb *inp = tp->t_inpcb, *oinp;
 	struct socket *so = inp->inp_socket;
@@ -616,11 +614,8 @@ tcp_connect(tp, nam)
 }
 
 int
-tcp_ctloutput(op, so, level, optname, mp)
-	int op;
-	struct socket *so;
-	int level, optname;
-	struct mbuf **mp;
+tcp_ctloutput(int op, struct socket *so, int level, int optname,
+    struct mbuf **mp)
 {
 	int error = 0, s;
 	struct inpcb *inp;
@@ -731,16 +726,13 @@ SYSCTL_INT(_net_inet_tcp, TCPCTL_RECVSPACE, recvspace,
 	CTLFLAG_RW, &tcp_recvspace , 0, "");
 
 #if defined(__rtems__)
-  void rtems_set_tcp_buffer_sizes(
-    u_long sendspace,
-    u_long recvspace
-  )
-  {
+void rtems_set_tcp_buffer_sizes(u_long sendspace, u_long recvspace)
+{
     if ( sendspace != 0 )
       tcp_sendspace = sendspace;
     if ( recvspace != 0 )
       tcp_recvspace = recvspace;
-  }
+}
 #endif
 
 /*
@@ -749,8 +741,7 @@ SYSCTL_INT(_net_inet_tcp, TCPCTL_RECVSPACE, recvspace,
  * bufer space, and entering LISTEN state if to accept connections.
  */
 static int
-tcp_attach(so)
-	struct socket *so;
+tcp_attach(struct socket *so)
 {
 	register struct tcpcb *tp;
 	struct inpcb *inp;
@@ -787,8 +778,7 @@ tcp_attach(so)
  * send segment to peer (with FIN).
  */
 static struct tcpcb *
-tcp_disconnect(tp)
-	register struct tcpcb *tp;
+tcp_disconnect(struct tcpcb *tp)
 {
 	struct socket *so = tp->t_inpcb->inp_socket;
 
@@ -817,8 +807,7 @@ tcp_disconnect(tp)
  * We can let the user exit from the close as soon as the FIN is acked.
  */
 static struct tcpcb *
-tcp_usrclosed(tp)
-	register struct tcpcb *tp;
+tcp_usrclosed(struct tcpcb *tp)
 {
 
 	switch (tp->t_state) {

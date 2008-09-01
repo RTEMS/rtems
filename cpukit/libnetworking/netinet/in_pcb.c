@@ -113,9 +113,7 @@ SYSCTL_PROC(_net_inet_ip_portrange, OID_AUTO, hilast, CTLTYPE_INT|CTLFLAG_RW,
 	   &ipport_hilastauto, 0, &sysctl_net_ipport_check, "I", "");
 
 int
-in_pcballoc(so, pcbinfo)
-	struct socket *so;
-	struct inpcbinfo *pcbinfo;
+in_pcballoc(struct socket *so, struct inpcbinfo *pcbinfo)
 {
 	register struct inpcb *inp;
 	int s;
@@ -137,9 +135,7 @@ in_pcballoc(so, pcbinfo)
 }
 
 int
-in_pcbbind(inp, nam)
-	register struct inpcb *inp;
-	struct mbuf *nam;
+in_pcbbind(struct inpcb *inp, struct mbuf *nam)
 {
 	register struct socket *so = inp->inp_socket;
 	unsigned short *lastport;
@@ -283,10 +279,7 @@ in_pcbbind(inp, nam)
  */
 
 int
-in_pcbladdr(inp, nam, plocal_sin)
-	register struct inpcb *inp;
-	struct mbuf *nam;
-	struct sockaddr_in **plocal_sin;
+in_pcbladdr(struct inpcb *inp, struct mbuf *nam, struct sockaddr_in **plocal_sin)
 {
 	struct in_ifaddr *ia;
 	register struct sockaddr_in *sin = mtod(nam, struct sockaddr_in *);
@@ -399,9 +392,7 @@ in_pcbladdr(inp, nam, plocal_sin)
  * then pick one.
  */
 int
-in_pcbconnect(inp, nam)
-	register struct inpcb *inp;
-	struct mbuf *nam;
+in_pcbconnect(struct inpcb *inp, struct mbuf *nam)
 {
 	struct sockaddr_in *ifaddr;
 	register struct sockaddr_in *sin = mtod(nam, struct sockaddr_in *);
@@ -429,8 +420,7 @@ in_pcbconnect(inp, nam)
 }
 
 void
-in_pcbdisconnect(inp)
-	struct inpcb *inp;
+in_pcbdisconnect(struct inpcb *inp)
 {
 
 	inp->inp_faddr.s_addr = INADDR_ANY;
@@ -441,8 +431,7 @@ in_pcbdisconnect(inp)
 }
 
 void
-in_pcbdetach(inp)
-	struct inpcb *inp;
+in_pcbdetach(struct inpcb *inp)
 {
 	struct socket *so = inp->inp_socket;
 	struct inpcbinfo *ipi = inp->inp_pcbinfo;
@@ -464,9 +453,7 @@ in_pcbdetach(inp)
 }
 
 void
-in_setsockaddr(inp, nam)
-	register struct inpcb *inp;
-	struct mbuf *nam;
+in_setsockaddr(struct inpcb *inp, struct mbuf *nam)
 {
 	register struct sockaddr_in *sin;
 
@@ -480,9 +467,7 @@ in_setsockaddr(inp, nam)
 }
 
 void
-in_setpeeraddr(inp, nam)
-	struct inpcb *inp;
-	struct mbuf *nam;
+in_setpeeraddr(struct inpcb *inp, struct mbuf *nam)
 {
 	register struct sockaddr_in *sin;
 
@@ -507,13 +492,9 @@ in_setpeeraddr(inp, nam)
  * Must be called at splnet.
  */
 void
-in_pcbnotify(head, dst, fport_arg, laddr, lport_arg, cmd, notify)
-	struct inpcbhead *head;
-	struct sockaddr *dst;
-	u_int fport_arg, lport_arg;
-	struct in_addr laddr;
-	int cmd;
-	void (*notify)(struct inpcb *, int);
+in_pcbnotify(struct inpcbhead *head, struct sockaddr *dst, u_int fport_arg,
+	struct in_addr laddr, u_int lport_arg, int cmd, 
+	void (*notify)(struct inpcb *, int))
 {
 	register struct inpcb *inp, *oinp;
 	struct in_addr faddr;
@@ -566,8 +547,7 @@ in_pcbnotify(head, dst, fport_arg, laddr, lport_arg, cmd, notify)
  * (by a redirect), time to try a default gateway again.
  */
 void
-in_losing(inp)
-	struct inpcb *inp;
+in_losing(struct inpcb *inp)
 {
 	register struct rtentry *rt;
 	struct rt_addrinfo info;
@@ -598,9 +578,7 @@ in_losing(inp)
  * and allocate a (hopefully) better one.
  */
 static void
-in_rtchange(inp, errnum)
-	register struct inpcb *inp;
-	int errnum;
+in_rtchange(struct inpcb *inp, int errnum)
 {
 	if (inp->inp_route.ro_rt) {
 		rtfree(inp->inp_route.ro_rt);
@@ -613,11 +591,10 @@ in_rtchange(inp, errnum)
 }
 
 struct inpcb *
-in_pcblookup(pcbinfo, faddr, fport_arg, laddr, lport_arg, wild_okay)
-	struct inpcbinfo *pcbinfo;
-	struct in_addr faddr, laddr;
-	u_int fport_arg, lport_arg;
-	int wild_okay;
+in_pcblookup(struct inpcbinfo *pcbinfo,
+	struct in_addr faddr, u_int fport_arg,
+	struct in_addr laddr, u_int lport_arg,
+	int wild_okay)
 {
 	register struct inpcb *inp, *match = NULL;
 	int matchwild = 3, wildcard;
@@ -667,11 +644,10 @@ in_pcblookup(pcbinfo, faddr, fport_arg, laddr, lport_arg, wild_okay)
  * Lookup PCB in hash list.
  */
 struct inpcb *
-in_pcblookuphash(pcbinfo, faddr, fport_arg, laddr, lport_arg, wildcard)
-	struct inpcbinfo *pcbinfo;
-	struct in_addr faddr, laddr;
-	u_int fport_arg, lport_arg;
-	int wildcard;
+in_pcblookuphash(struct inpcbinfo *pcbinfo,
+	struct in_addr faddr, u_int fport_arg,
+	struct in_addr laddr, u_int lport_arg,
+	int wildcard)
 {
 	struct inpcbhead *head;
 	register struct inpcb *inp;
@@ -730,8 +706,7 @@ found:
  * Insert PCB into hash chain. Must be called at splnet.
  */
 static void
-in_pcbinshash(inp)
-	struct inpcb *inp;
+in_pcbinshash(struct inpcb *inp)
 {
 	struct inpcbhead *head;
 
@@ -742,8 +717,7 @@ in_pcbinshash(inp)
 }
 
 void
-in_pcbrehash(inp)
-	struct inpcb *inp;
+in_pcbrehash(struct inpcb *inp)
 {
 	struct inpcbhead *head;
 	int s;
