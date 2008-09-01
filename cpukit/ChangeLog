@@ -1,5 +1,9 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/nvdisk-sram.c: Add missing HAVE_CONFIG_H.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* httpd/asp.c, httpd/balloc.c, httpd/default.c,
 	httpd/emfdb.c, httpd/form.c, httpd/handler.c,
 	httpd/md5c.c, httpd/security.c, httpd/sock.c,
