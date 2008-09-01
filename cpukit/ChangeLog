@@ -1,5 +1,34 @@
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/addr2ascii.c,
+	libnetworking/libc/ascii2addr.c,
+	libnetworking/libc/base64.c,
+	libnetworking/libc/gethostbyht.c,
+	libnetworking/libc/gethostnamadr.c,
+	libnetworking/libc/getnetbyht.c,
+	libnetworking/libc/getservbyport.c,
+	libnetworking/libc/getservent.c,
+	libnetworking/libc/herror.c,
+	libnetworking/libc/inet_addr.c,
+	libnetworking/libc/inet_lnaof.c,
+	libnetworking/libc/inet_netof.c,
+	libnetworking/libc/inet_network.c,
+	libnetworking/libc/inet_ntoa.c,
+	libnetworking/libc/inet_ntop.c,
+	libnetworking/libc/inet_pton.c,
+	libnetworking/libc/linkaddr.c,
+	libnetworking/libc/map_v4v6.c,
+	libnetworking/libc/res_comp.c,
+	libnetworking/libc/res_debug.c,
+	libnetworking/libc/res_init.c,
+	libnetworking/libc/res_mkquery.c,
+	libnetworking/libc/res_query.c,
+	libnetworking/nfs/bootp_subr.c,
+	libnetworking/rtems/rtems_glue.c:
+	Stop using old-style function definitions.
+
+2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/if_ether.c, 
 	libnetworking/netinet/igmp.c,
 	libnetworking/netinet/in.c,
