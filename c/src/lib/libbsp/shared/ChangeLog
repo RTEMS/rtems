@@ -1,3 +1,9 @@
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1302/bsps
+	* vmeUniverse/vmeUniverse.h: Remove
+	_VME_UNIVERSE_DECLARE_SHOW_ROUTINES.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timerstub.c: Eliminate empty function from every benchmark timer
