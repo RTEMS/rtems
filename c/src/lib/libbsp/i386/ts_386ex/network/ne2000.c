@@ -140,7 +140,7 @@ struct ne_softc {
   rtems_id rx_daemon_tid;
 
   /* Whether we use byte-transfers with the device. */
-  rtems_boolean byte_transfers;
+  bool byte_transfers;
 
   /* The number of memory buffers which the transmit daemon has loaded
      with data to be sent, but which have not yet been completely
@@ -957,9 +957,9 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
   /* Check whether we do byte-wide or word-wide transfers.  */
 
 #ifdef NE2000_BYTE_TRANSFERS
-  sc->byte_transfers = TRUE;
+  sc->byte_transfers = true;
 #else
-  sc->byte_transfers = FALSE;
+  sc->byte_transfers = false;
 #endif
 
   /* Handle the options passed in by the caller.  */
