@@ -508,7 +508,6 @@ vmeUniverseReset(void);
  *  #define _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
  *  #include <vmeUniverse.h>
  */
-#ifdef _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
 /* print the current configuration of all master ports to 
  * f (stderr if NULL)
  */
@@ -520,12 +519,6 @@ vmeUniverseMasterPortsShow(FILE *f);
  */
 void
 vmeUniverseSlavePortsShow(FILE *f);
-#else
-void
-vmeUniverseMasterPortsShow();
-void
-vmeUniverseSlavePortsShow();
-#endif
 
 /* disable all master or slave ports, respectively */
 void
@@ -691,7 +684,6 @@ vmeUniverseDisableAllMastersXX(volatile LERegister *ubase);
 void
 vmeUniverseDisableAllSlavesXX(volatile LERegister *ubase);
 
-#ifdef _VME_UNIVERSE_DECLARE_SHOW_ROUTINES
 /* print the current configuration of all master ports to 
  * f (stderr if NULL)
  */
@@ -705,12 +697,6 @@ vmeUniverseMasterPortsShowXX(
 void
 vmeUniverseSlavePortsShowXX(
 	volatile LERegister *ubase,FILE *f);
-#else
-void
-vmeUniverseMasterPortsShowXX();
-void
-vmeUniverseSlavePortsShowXX();
-#endif
 
 /* Raise a VME Interrupt at 'level' and respond with 'vector' to a
  * handler on the VME bus. (The handler could be a different board
