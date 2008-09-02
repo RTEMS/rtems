@@ -1,3 +1,9 @@
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c, mpc8xx/clock/clock.c,
+	ppc403/clock/clock.c, ppc403/console/console.c.polled:
+	Eliminate rtems_boolean.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mpc505/timer/timer.c, mpc5xx/timer/timer.c, mpc6xx/timer/timer.c,
