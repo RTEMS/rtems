@@ -1,3 +1,8 @@
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mcf5206/console/mcfuart.c, mcf5206/include/mcfuart.h:
+	Eliminate rtems_boolean.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mcf5206/timer/timer.c, mcf5206/timer/timerisr.S,
