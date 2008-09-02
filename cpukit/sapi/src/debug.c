@@ -61,5 +61,5 @@ boolean _Debug_Is_enabled(
   rtems_debug_control  level
 )
 {
-  return (_Debug_Level & level);
+  return (_Debug_Level & level) ? TRUE : FALSE;
 }
