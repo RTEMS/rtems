@@ -459,8 +459,8 @@ sh4uart_poll_read(sh4uart *uart)
   int break_occured = 0;
   int ch;
 
-  if (uart->parerr_mark_flag == 1) {
-    uart->parerr_mark_flag = 0;
+  if (uart->parerr_mark_flag == true) {
+    uart->parerr_mark_flag = false;
     return 0;
   }
 
@@ -491,7 +491,7 @@ sh4uart_poll_read(sh4uart *uart)
 
   if (parity_error && !(uart->c_iflag & IGNPAR)) {
     if (uart->c_iflag & PARMRK) {
-      uart->parerr_mark_flag = 1;
+      uart->parerr_mark_flag = true;
       return 0xff;
     } else
       return 0;
