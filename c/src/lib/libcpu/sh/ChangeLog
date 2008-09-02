@@ -1,5 +1,6 @@
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sh7750/sci/sh4uart.c: Misc. bool cleanup.
 	* sh7045/include/sci.h, sh7045/sci/sci.c, sh7750/include/sh/sh4uart.h:
 	Convert to using bool.
 
