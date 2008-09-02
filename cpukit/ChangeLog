@@ -1,3 +1,8 @@
+2008-09-02      Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1301/cpukit
+	* sapi/src/debug.c: Let _Debug_Is_enabled return TRUE|FALSE.
+
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/timerdrv.h, 
