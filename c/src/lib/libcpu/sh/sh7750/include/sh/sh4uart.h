@@ -76,15 +76,15 @@ typedef struct sh4uart {
                                        0 if polled I/O */
    void                *tty;        /* termios channel descriptor */
 
-   volatile const char         *tx_buf;     /* Transmit buffer from termios */
-   volatile uint32_t      tx_buf_len; /* Transmit buffer length */
-   volatile uint32_t      tx_ptr;     /* Index of next char to transmit*/
+   volatile const char *tx_buf;     /* Transmit buffer from termios */
+   volatile uint32_t    tx_buf_len; /* Transmit buffer length */
+   volatile uint32_t    tx_ptr;     /* Index of next char to transmit*/
 
    rtems_isr_entry      old_handler_transmit;   /* Saved interrupt handlers */
    rtems_isr_entry      old_handler_receive;
 
    tcflag_t             c_iflag;            /* termios input mode flags */
-   rtems_boolean        parerr_mark_flag;   /* Parity error processing state */
+   bool                 parerr_mark_flag;   /* Parity error processing state */
 } sh4uart;
 
 /*

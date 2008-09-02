@@ -150,10 +150,10 @@ static int _sci_set_cflags(
  * local functions operate SCI ports 0 and 1
  * called from polling routines or ISRs
  */
-rtems_boolean wrtSCI0(unsigned char ch)
+bool wrtSCI0(unsigned char ch)
 {
   uint8_t   temp;
-  rtems_boolean result=FALSE;
+  bool result = false;
 
   if ((read8(SCI_SSR0) & SCI_TDRE) != 0x00) {
     /* Write the character to the TDR */
@@ -161,15 +161,15 @@ rtems_boolean wrtSCI0(unsigned char ch)
     /* Clear the TDRE bit */
     temp = read8(SCI_SSR0) & ~SCI_TDRE;
     write8(temp, SCI_SSR0);
-    result = TRUE;
+    result = true;
   }
   return result;
 } /* wrtSCI0 */
 
-rtems_boolean wrtSCI1(unsigned char ch)
+bool wrtSCI1(unsigned char ch)
 {
   uint8_t   temp;
-  rtems_boolean result=FALSE;
+  bool result = false;
 
   if ((read8(SCI_SSR1) & SCI_TDRE) != 0x00) {
      /* Write the character to the TDR */
@@ -177,7 +177,7 @@ rtems_boolean wrtSCI1(unsigned char ch)
      /* Clear the TDRE bit */
      temp = read8(SCI_SSR1) & ~SCI_TDRE;
      write8(temp, SCI_SSR1);
-     result = TRUE;
+     result = true;
   }
   return result;
 } /* wrtSCI1 */
@@ -188,9 +188,9 @@ void sh_sci_outbyte_polled(
   char ch )
 {
 	if (minor == 0) /* blocks until port ready */
-		while (wrtSCI0(ch) != TRUE); /* SCI0*/
+		while (wrtSCI0(ch) != true); /* SCI0*/
 	else
-		while (wrtSCI1(ch) != TRUE); /* SCI1*/
+		while (wrtSCI1(ch) != true); /* SCI1*/
 } /* sh_sci_outbyte_polled */
 
 /*
@@ -203,10 +203,10 @@ void outbyte(
 	sh_sci_outbyte_polled(minor, (unsigned char)ch);
 } /* outbyte */
 
-rtems_boolean rdSCI0(unsigned char *ch)
+bool rdSCI0(unsigned char *ch)
 {
   uint8_t   temp;
-  rtems_boolean result=FALSE;
+  bool result = false;
 
   if ((read8(SCI_SSR0) & SCI_RDRF) != 0x00) {
     /* read input */
@@ -222,15 +222,15 @@ rtems_boolean rdSCI0(unsigned char *ch)
         temp &= ~(SCI_ORER | SCI_FER | SCI_PER);
         write8(temp, SCI_SSR0);
     }
-    result = TRUE;
+    result = true;
   }
   return result;
 } /* rdSCI0 */
 
-rtems_boolean rdSCI1(unsigned char *ch)
+bool rdSCI1(unsigned char *ch)
 {
   uint8_t   temp;
-  rtems_boolean result=FALSE;
+  bool result = false;
 
   if ((read8(SCI_SSR1) & SCI_RDRF) != 0x00) {
     /* read input */
@@ -246,7 +246,7 @@ rtems_boolean rdSCI1(unsigned char *ch)
         temp &= ~(SCI_ORER | SCI_FER | SCI_PER);
         write8(temp, SCI_SSR1);
     }
-    result = TRUE;
+    result = true;
   }
   return result;
 } /* rdSCI1 */
@@ -258,9 +258,9 @@ char sh_sci_inbyte_polled( rtems_device_minor_number  minor )
   uint8_t ch = 0;
 
   if (minor == 0) /* blocks until char.ready */
-    while (rdSCI0(&ch) != TRUE); /* SCI0 */
+    while (rdSCI0(&ch) != true); /* SCI0 */
   else
-    while (rdSCI1(&ch) != TRUE); /* SCI1 */
+    while (rdSCI1(&ch) != true); /* SCI1 */
   return ch;
 } /* sh_sci_inbyte_polled */
 
@@ -573,7 +573,7 @@ const rtems_termios_callbacks sci_poll_callbacks = {
 /* FIXME: not yet supported */
 const rtems_termios_callbacks sci_interrupt_callbacks;
 
-const rtems_termios_callbacks* sh_sci_get_termios_handlers( rtems_boolean poll )
+const rtems_termios_callbacks* sh_sci_get_termios_handlers( bool poll )
 {
     return poll ?
         &sci_poll_callbacks :

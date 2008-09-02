@@ -80,7 +80,7 @@ extern rtems_device_driver sh_sci_control(
 );
 
 extern const rtems_termios_callbacks * sh_sci_get_termios_handlers(
-  rtems_boolean poll
+  bool poll
 );
 
 
