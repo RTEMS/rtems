@@ -59,7 +59,7 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 volatile uint32_t         Ttimer_val;
-rtems_boolean    	  benchmark_timer_find_average_overhead = TRUE;
+bool    	  benchmark_timer_find_average_overhead = true;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
 void (*benchmark_timer_initialize_function)(void) = 0;
 uint32_t (*benchmark_timer_read_function)(void) = 0;
