@@ -1,3 +1,9 @@
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* adler32.c, compress.c, crc32.c, deflate.c, gzio.c, infback.c, 
+	inflate.c, inffast.c, inftrees.c, trees.c, uncompr.c, zutil.c:
+	Stop using old-style function definitions.
+
 2008-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ChangeLog.zlib, README, adler32.c, compress.c, crc32.c, deflate.c,
