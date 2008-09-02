@@ -1,3 +1,8 @@
+2008-09-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/conf.t: Add CONFIGURE_BSP_PREREQUISITE_DRIVERS and
+	CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS.
+
 2008-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/object.t: Correct order of arguments.

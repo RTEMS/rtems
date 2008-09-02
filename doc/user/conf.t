@@ -442,12 +442,28 @@ This device driver simply provides entry points that return
 successful and is primarily a test fixture.
 By default, this is not defined.
 
+@findex CONFIGURE_BSP_PREREQUISITE_DRIVERS
+@item @code{CONFIGURE_BSP_PREREQUISITE_DRIVERS} is defined if the
+BSP has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the @b{FRONT} of the Device Driver Table
+and initialized before any other drivers @b{INCLUDING} any application
+prerequisite drivers.  By default,this is not defined.
+
+@findex CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+@item @code{CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS} is defined if the
+application has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the @b{FRONT} of the Device Driver Table
+and initialized before any other drivers @b{EXCEPT} any BSP prerequisite
+drivers.  By default,this is not defined.
+
 @findex CONFIGURE_APPLICATION_EXTRA_DRIVERS
-@item @code{CONFIGURE_APPLICATION_EXTRA_DRIVERS}
-is defined if the application has device drivers it needs to
-include in the Device Driver Table.  This should be defined
-to the set of device driver entries that will be placed in
-the table.  By default, this is not defined.
+@item @code{CONFIGURE_APPLICATION_EXTRA_DRIVERS} is defined if the
+application has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the @b{END} of the Device Driver Table.
+By default,this is not defined.
 
 @end itemize
 
