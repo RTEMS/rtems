@@ -66,7 +66,7 @@
 
 volatile uint32_t   Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
-static rtems_boolean auto_restart;
+static bool auto_restart;
 
 void Clock_exit( void );
  
@@ -243,13 +243,13 @@ void ClockOn(
  
     if ((pvr & 0xff00) == 0x0000) /* 403GA */
 #if 0 /* FIXME: in which processor versions will "autoload" work properly? */
-      auto_restart = (pvr & 0x00f0) > 0x0000 ? 1 : 0;
+      auto_restart = (pvr & 0x00f0) > 0x0000 ? true : false;
 #else 
     /* no known chip version supports auto restart of timer... */
-    auto_restart = 0;
+    auto_restart = false;
 #endif
     else if ((pvr & 0xff00) == 0x0100) /* 403GB */
-      auto_restart = 1;
+      auto_restart = true;
  
 #else /* ppc405 */
     asm volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));  /*405GP CPC0_CR1 */
@@ -265,7 +265,7 @@ void ClockOn(
       * Enable auto restart
       */
 
-    auto_restart=1;
+    auto_restart=true;
 
 #endif /* ppc405 */
     pit_value = rtems_configuration_get_microseconds_per_tick() *

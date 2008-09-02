@@ -193,7 +193,7 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch
 )
 {
@@ -202,7 +202,7 @@ rtems_boolean is_character_ready(
   if ((status = port->SPLS) & LSRDataReady)
     {
       *ch = port->SPRB;  
-      return(TRUE);
+      return true;
     }
 
   /* Clean any dodgy status */
@@ -213,7 +213,7 @@ rtems_boolean is_character_ready(
 		 LSRBreakInterrupt);
     }
 
-  return FALSE;
+  return false;
 }
 
 /*  inbyte

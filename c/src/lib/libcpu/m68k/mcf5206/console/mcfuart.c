@@ -351,9 +351,9 @@ mcfuart_poll_read(mcfuart *uart)
 {
     uint8_t   usr;
     int ch;
-    if (uart->parerr_mark_flag == 1)
+    if (uart->parerr_mark_flag == true)
     {
-        uart->parerr_mark_flag = 0;
+        uart->parerr_mark_flag = false;
         return 0;
     }
     usr = *MCF5206E_USR(MBAR,uart->chn);
@@ -365,7 +365,7 @@ mcfuart_poll_read(mcfuart *uart)
             ch = *MCF5206E_URB(MBAR,uart->chn); /* Clear error bits */
             if (uart->c_iflag & PARMRK)
             {
-                uart->parerr_mark_flag = 1;
+                uart->parerr_mark_flag = true;
                 ch = 0xff;
             }
             else

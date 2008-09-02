@@ -73,7 +73,7 @@ void clockOn(void* unused)
   unsigned desiredLevel;
   uint32_t   pit_value;
   uint32_t mf_value;
-  rtems_boolean force_prescaler = FALSE;
+  bool force_prescaler = false;
   extern uint32_t bsp_clicks_per_usec;
   extern uint32_t bsp_clock_speed;
 
@@ -89,7 +89,7 @@ void clockOn(void* unused)
 		 * rtems_configuration_get_microseconds_per_tick()
 		 / 1000);
     m8xx.sccr |=  (1<<23);
-    force_prescaler = TRUE;
+    force_prescaler = true;
   }
   else {
     pit_value = (rtems_configuration_get_microseconds_per_tick() *

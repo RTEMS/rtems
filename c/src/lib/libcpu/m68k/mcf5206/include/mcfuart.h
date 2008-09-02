@@ -43,8 +43,8 @@ typedef struct mcfuart {
    volatile uint32_t        tx_ptr;      /* Index of next char to transmit*/
    rtems_isr_entry          old_handler; /* Saved interrupt handler */
    
-   tcflag_t                  c_iflag;    /* termios input mode flags */
-   rtems_boolean             parerr_mark_flag; /* Parity error processing
+   tcflag_t                 c_iflag;    /* termios input mode flags */
+   bool                     parerr_mark_flag; /* Parity error processing
                                                   state */
 } mcfuart;
 
