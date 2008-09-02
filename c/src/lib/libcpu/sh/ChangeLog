@@ -1,3 +1,8 @@
+2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sh7045/include/sci.h, sh7045/sci/sci.c, sh7750/include/sh/sh4uart.h:
+	Convert to using bool.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sh7032/timer/timer.c, sh7045/timer/timer.c, sh7750/timer/timer.c:
