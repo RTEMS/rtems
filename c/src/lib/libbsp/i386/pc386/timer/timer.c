@@ -121,11 +121,11 @@ tsc_timer_exit(void)
 void
 tsc_timer_initialize(void)
 {
-  static rtems_boolean First = TRUE;
+  static bool First = true;
 
   if (First)
   {
-    First = FALSE;
+    First = false;
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
   }
@@ -285,7 +285,7 @@ i386_read_timer(void)
 void
 benchmark_timer_initialize(void)
 {
-    static rtems_boolean First = TRUE;
+    static bool First = true;
 
     if (First) {
         if (x86_capability & (1 << 4) ) {
@@ -304,7 +304,7 @@ benchmark_timer_initialize(void)
             benchmark_timer_read_function = &i386_read_timer;
             Timer_exit_function = &i386_timer_exit;
         }
-        First = FALSE;
+        First = false;
     }
     (*benchmark_timer_initialize_function)();
 }

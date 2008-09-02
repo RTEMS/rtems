@@ -94,7 +94,7 @@ void rtemsReboot(void)
 |          Returns: TRUE in case a valid character has been read,
 |                   FALSE otherwise.
 +--------------------------------------------------------------------------*/
-static rtems_boolean
+static bool
 _IBMPC_scankey(char *outChar)
 {
   unsigned char inChar;
@@ -104,7 +104,7 @@ _IBMPC_scankey(char *outChar)
   static int caps_pressed  = 0;
   static int extended      = 0;
 
-  *outChar = '\0'; /* default value if we return FALSE */
+  *outChar = '\0'; /* default value if we return false */
 
   /* Read keyboard controller, toggle enable */
   inport_byte(KBD_CTL, inChar);
@@ -115,7 +115,7 @@ _IBMPC_scankey(char *outChar)
   /* See if it has data */
   inport_byte(KBD_STATUS, inChar);
   if ((inChar & 0x01) == 0)
-    return FALSE;
+    return false;
 
   /* Read the data.  Handle nonsense with shift, control, etc. */
   inport_byte(KBD_DATA, inChar);
@@ -127,49 +127,49 @@ _IBMPC_scankey(char *outChar)
   {
     case 0xe0:
       extended = 2;
-      return FALSE;
+      return false;
       break;
 
     case 0x38:
       alt_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xb8:
       alt_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x1d:
       ctrl_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0x9d:
       ctrl_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x2a:
       if (extended)
-        return FALSE;
+        return false;
     case 0x36:
       shift_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xaa:
       if (extended)
-        return FALSE;
+        return false;
     case 0xb6:
       shift_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x3a:
       caps_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xba:
       caps_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x53:
@@ -183,7 +183,7 @@ _IBMPC_scankey(char *outChar)
     default:
       if ((inChar & 0x80) || (inChar > 0x39))
       /* High-bit on means key is being released, not pressed */
-        return FALSE;
+        return false;
       break;
   } /* switch */
 
@@ -206,7 +206,7 @@ _IBMPC_scankey(char *outChar)
     }
   }
 
-  return TRUE;
+  return true;
 } /* _IBMPC_scankey */
 
 /*-------------------------------------------------------------------------+
@@ -217,7 +217,7 @@ _IBMPC_scankey(char *outChar)
 |                   unchanged.
 |          Returns: TRUE if keyboard buffer not empty, FALSE otherwise.
 +--------------------------------------------------------------------------*/
-static rtems_boolean
+static bool
 _IBMPC_chrdy(char *c)
 {
   /* FIX ME!!! It doesn't work without something like the following line.
@@ -230,10 +230,10 @@ _IBMPC_chrdy(char *c)
     *c = kbd_buffer[kbd_first];
 
     kbd_first = (kbd_first + 1) % KBD_BUF_SIZE;
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 } /* _IBMPC_chrdy */
 
 /*-------------------------------------------------------------------------+

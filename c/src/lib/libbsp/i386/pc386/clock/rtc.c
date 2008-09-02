@@ -113,7 +113,7 @@ ytos(uint16_t         y)
 |          Returns: number of seconds since January.
 +--------------------------------------------------------------------------*/
 static inline uint32_t
-mtos(uint8_t         m, rtems_boolean leap)
+mtos(uint8_t         m, bool leap)
 {
   static uint16_t         daysMonth[] = { 0, 0, 31,  59,  90, 120, 151, 181,
 				               212, 243, 273, 304, 334, 365 };
