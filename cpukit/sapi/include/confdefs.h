@@ -511,6 +511,12 @@ extern rtems_configuration_table        Configuration;
 
 #ifdef CONFIGURE_INIT
   rtems_driver_address_table Device_drivers[] = {
+    #ifdef CONFIGURE_BSP_PREREQUISITE_DRIVERS
+      CONFIGURE_BSP_PREREQUISITE_DRIVERS,
+    #endif
+    #ifdef CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+      CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS,
+    #endif
     #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
       CONSOLE_DRIVER_TABLE_ENTRY,
     #endif
