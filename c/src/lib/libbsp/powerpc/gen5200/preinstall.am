@@ -28,6 +28,11 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
+../../../libcpu/@RTEMS_CPU@/$(dirstamp):
+	@$(MKDIR_P) ../../../libcpu/@RTEMS_CPU@
+	@: > ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
+PREINSTALL_DIRS += ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
+
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -47,10 +52,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/u-boot.h
 $(PROJECT_INCLUDE)/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2c.h
-
-$(PROJECT_INCLUDE)/mpc5200.h: include/mpc5200.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc5200.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc5200.h
 
 $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
@@ -85,6 +86,10 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmds.base: startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
+
 $(PROJECT_LIB)/linkcmds.brs5l: startup/linkcmds.brs5l $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.brs5l
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.brs5l
@@ -97,7 +102,23 @@ $(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.pm520
 
-$(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/vectors.h: $(libcpudir)/new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
+
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: $(libcpudir)/new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
+$(PROJECT_INCLUDE)/bsp/irq-config.h: include/irq-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-config.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
@@ -105,17 +126,25 @@ $(PROJECT_INCLUDE)/bsp/i2cdrv.h: include/i2cdrv.h $(PROJECT_INCLUDE)/bsp/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2cdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2cdrv.h
 
-$(PROJECT_INCLUDE)/bsp/mpc5200.h: include/mpc5200.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc5200.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc5200.h
-
 $(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
 
+$(PROJECT_INCLUDE)/bsp/mpc5200.h: include/mpc5200.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc5200.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc5200.h
+
+$(PROJECT_INCLUDE)/bsp/mscan-base.h: include/mscan-base.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mscan-base.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mscan-base.h
+
 $(PROJECT_INCLUDE)/bsp/u-boot.h: include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
+
+$(PROJECT_INCLUDE)/bsp/mscan.h: mscan/mscan.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mscan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mscan.h
 
 $(PROJECT_INCLUDE)/bsp/nvram.h: nvram/nvram.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/nvram.h
@@ -124,8 +153,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/nvram.h
 $(PROJECT_INCLUDE)/bsp/slicetimer.h: slicetimer/slicetimer.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/slicetimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/slicetimer.h
-
-$(PROJECT_INCLUDE)/bsp/vectors.h: vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 

@@ -84,8 +84,8 @@
 /*                                                                     */
 /***********************************************************************/
 
-#ifndef LIBBSP_POWERPC_MPC5200_IRQ_IRQ_H
-#define LIBBSP_POWERPC_MPC5200_IRQ_IRQ_H
+#ifndef LIBBSP_POWERPC_GEN5200_IRQ_H
+#define LIBBSP_POWERPC_GEN5200_IRQ_H
 
 #define CHK_CE_SHADOW(_pmce)	((_pmce) & 0x00000001)
 #define CHK_CSE_STICKY(_pmce)	(((_pmce) >> 10) & 0x00000001)
@@ -141,9 +141,9 @@
 
 #ifndef ASM
 
-/*
-extern volatile unsigned int ppc_cached_irq_mask;
-*/
+#include <rtems.h>
+#include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
 /*
  * index table for the module specific handlers, a few entries are only placeholders
@@ -204,187 +204,8 @@ typedef enum {
 } rtems_irq_symbolic_name;
 
 #define BSP_CRIT_IRQ_PRIO_LEVELS	  		  4
-/*#define BSP_PERIODIC_TIMER                  BSP_DECREMENTER*/
 #define BSP_PERIODIC_TIMER                    BSP_SIU_IRQ_TMR6
-/*#define CPM_INTERRUPT*/
-
-
-/*
- * Type definition for RTEMS managed interrupts
- */
-typedef unsigned char  rtems_irq_prio;
-struct 	__rtems_irq_connect_data__;	/* forward declaratiuon */
-
-typedef unsigned int rtems_irq_number;
-typedef void *rtems_irq_hdl_param;
-typedef void (*rtems_irq_hdl)(rtems_irq_hdl_param);
-typedef void (*rtems_irq_enable)(const struct __rtems_irq_connect_data__*);
-typedef void (*rtems_irq_disable)(const struct __rtems_irq_connect_data__*);
-typedef int  (*rtems_irq_is_enabled)(const struct __rtems_irq_connect_data__*);
-
-typedef struct __rtems_irq_connect_data__ {
-  /*
-   * IRQ line
-   */
-  rtems_irq_number              name;
-  /*
-   * handler. See comment on handler properties below in function prototype.
-   */
-  rtems_irq_hdl                 hdl;
-  /*
-   * Handler handle to store private data
-   */
-  rtems_irq_hdl_param           handle;
-  /*
-   * function for enabling interrupts at device level (ONLY!).
-   * The BSP code will automatically enable it at i8259s level.
-   * RATIONALE : anyway such code has to exist in current driver code.
-   * It is usually called immediately AFTER connecting the interrupt handler.
-   * RTEMS may well need such a function when restoring normal interrupt
-   * processing after a debug session.
-   *
-   */
-  rtems_irq_enable            on;
-  /*
-   * function for disabling interrupts at device level (ONLY!).
-   * The code will disable it at i8259s level. RATIONALE : anyway
-   * such code has to exist for clean shutdown. It is usually called
-   * BEFORE disconnecting the interrupt. RTEMS may well need such
-   * a function when disabling normal interrupt processing for
-   * a debug session. May well be a NOP function.
-   */
-  rtems_irq_disable             off;
-  /*
-   * function enabling to know what interrupt may currently occur
-   * if someone manipulates the i8259s interrupt mask without care...
-   */
-  rtems_irq_is_enabled        isOn;
-
-#ifdef BSP_SHARED_HANDLER_SUPPORT
-  /*
-   *  Set to -1 for vectors forced to have only 1 handler
-   */
-  void *next_handler;
-#endif
-
-} rtems_irq_connect_data;
-
-typedef struct {
-  /*
-   * size of all the table fields (*Tbl) described below.
-   */
-  unsigned int	 		irqNb;
-  /*
-   * Default handler used when disconnecting interrupts.
-   */
-  rtems_irq_connect_data	defaultEntry;
-  /*
-   * Table containing initials/current value.
-   */
-  rtems_irq_connect_data*	irqHdlTbl;
-  /*
-   * actual value of BSP_PER_IRQ_LOWEST_OFFSET...
-   */
-  rtems_irq_symbolic_name	irqBase;
-  /*
-   * software priorities associated with interrupts.
-   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that
-   * interrupt handler hdl connected for interrupt name i
-   * will  not be interrupted by the handler connected for interrupt j
-   * The interrupt source  will be physically masked at i8259 level.
-   */
-    rtems_irq_prio*		irqPrioTbl;
-} rtems_irq_global_settings;
-
-
-
-/*-------------------------------------------------------------------------+
-| Function Prototypes.
-+--------------------------------------------------------------------------*/
-/*
- * ------------------------ PPC CPM Mngt Routines -------
- */
-
-/*
- * function to disable a particular irq. After calling
- * this function, even if the device asserts the interrupt line it will
- * not be propagated further to the processor
- */
-int BSP_irq_disable_at_siu(const rtems_irq_symbolic_name irqLine);
-/*
- * function to enable a particular irq. After calling
- * this function, if the device asserts the interrupt line it will
- * be propagated further to the processor
- */
-int BSP_irq_enable_at_siu(const rtems_irq_symbolic_name irqLine);
-/*
- * function to acknowledge a particular irq. After calling
- * this function, if a device asserts an enabled interrupt line it will
- * be propagated further to the processor. Mainly useful for people
- * writing raw handlers as this is automagically done for rtems managed
- * handlers.
- */
-int BSP_irq_ack_at_siu(const rtems_irq_symbolic_name irqLine);
-/*
- * function to check ifl d  a particular irq is enabled. After calling
- */
-int BSP_irq_enabled_at_siu(const rtems_irq_symbolic_name irqLine);
-
-
-
-/*
- * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
- */
-/*
- * function to connect a particular irq handler. This hanlder will NOT be called
- * directly as the result of the corresponding interrupt. Instead, a RTEMS
- * irq prologue will be called that will :
- *
- *	1) save the C scratch registers,
- *	2) switch to a interrupt stack if the interrupt is not nested,
- *	4) modify them to disable the current interrupt at  SIU level (and may
- *	be others depending on software priorities)
- *	5) aknowledge the SIU',
- *	6) demask the processor,
- *	7) call the application handler
- *
- * As a result the hdl function provided
- *
- *	a) can perfectly be written is C,
- * 	b) may also well directly call the part of the RTEMS API that can be used
- *	from interrupt level,
- *	c) It only responsible for handling the jobs that need to be done at
- *	the device level including (aknowledging/re-enabling the interrupt at device,
- *	level, getting the data,...)
- *
- *	When returning from the function, the following will be performed by
- *	the RTEMS irq epilogue :
- *
- *	1) masks the interrupts again,
- *	2) restore the original SIU interrupt masks
- *	3) switch back on the orinal stack if needed,
- *	4) perform rescheduling when necessary,
- *	5) restore the C scratch registers...
- *	6) restore initial execution flow
- *
- */
-int BSP_install_rtems_irq_handler(const rtems_irq_connect_data*);
-/*
- * function to get the current RTEMS irq handler for ptr->name. It enables to
- * define hanlder chain...
- */
-int BSP_get_current_rtems_irq_handler(rtems_irq_connect_data* ptr);
-/*
- * function to get disconnect the RTEMS irq handler for ptr->name.
- * This function checks that the value given is the current one for safety reason.
- * The user can use the previous function to get it.
- */
-int BSP_remove_rtems_irq_handler(const rtems_irq_connect_data*);
-
-void BSP_rtems_irq_mng_init(unsigned cpuId);
-
-int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
 
 #endif
 
-#endif
+#endif /* LIBBSP_POWERPC_GEN5200_IRQ_H */

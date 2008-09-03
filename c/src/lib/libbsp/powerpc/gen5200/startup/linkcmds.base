@@ -1,0 +1,320 @@
+/**
+ * @file
+ *
+ * Derived from internal linker script of GNU ld (GNU Binutils) 2.18 for elf32ppc emulation.
+ */
+
+OUTPUT_FORMAT ("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
+OUTPUT_ARCH (powerpc)
+ENTRY (start)
+
+bsp_ram_start = ORIGIN (RAM);
+bsp_ram_end = ORIGIN (RAM) + LENGTH (RAM);
+bsp_ram_size = LENGTH (RAM);
+
+bsp_rom_start = ORIGIN (ROM);
+bsp_rom_end = ORIGIN (ROM) + LENGTH (ROM);
+bsp_rom_size = LENGTH (ROM);
+
+bsp_dpram_start = ORIGIN (DPRAM);
+bsp_dpram_end = ORIGIN (DPRAM) + LENGTH (DPRAM);
+bsp_dpram_size = LENGTH (DPRAM);
+
+bsp_section_align = 32;
+
+SECTIONS {
+	/*
+	 * BSP: MPC5200 registers
+	 */
+	.regs (NOLOAD) : { 
+		MBAR = .;
+		mpc5200 = .;
+	} > REGS
+
+	/*
+	 * BSP: Exception vectors
+	 */
+	.vectors 0x100 : {
+		*(.vectors)
+	} > RAM
+
+	/* 
+	 * BSP: The initial stack will live in this area - between the vectors
+	 * and the text section.
+	 */
+
+	.text 0x10000 : {
+		/*
+		 * BSP: Start of text section
+		 */
+		bsp_section_text_start = .;
+
+		/*
+		 * BSP: System startup entry
+		 */
+		KEEP (*(.entry))
+
+		/*
+		 * BSP: Moved into .text from .init
+		 */
+		KEEP (*(.init))
+
+		*(.text .stub .text.* .gnu.linkonce.t.*)
+		KEEP (*(.text.*personality*))
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+		*(.glink)
+		
+		/*
+		 * BSP: Special FreeBSD sysctl sections
+		 */
+		. = ALIGN (16);
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = ABSOLUTE(.);
+		*(set_domain_*);
+		*(set_pseudo_*);
+
+		/*
+		 * BSP: Moved into .text from .*
+		 */
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		*(.rodata1)
+		*(.interp)
+		*(.note.gnu.build-id)
+		*(.hash)
+		*(.gnu.hash)
+		*(.dynsym)
+		*(.dynstr)
+		*(.gnu.version)
+		*(.gnu.version_d)
+		*(.gnu.version_r)
+		*(.eh_frame_hdr)
+
+		/*
+		 * BSP: Magic PPC stuff
+		 */
+		*(.PPC.*)
+
+		/*
+		 * BSP: Required by cpukit/score/src/threadhandler.c
+		 */
+		PROVIDE (_fini = .);
+
+		/*
+		 * BSP: Moved into .text from .fini
+		 */
+		KEEP (*(.fini))
+
+		. = ALIGN (bsp_section_align);
+
+		PROVIDE (__etext = .);
+		PROVIDE (_etext = .);
+		PROVIDE (etext = .);
+	} > RAM
+
+	.sdata2 : {
+		PROVIDE (_SDA2_BASE_ = 32768);
+
+		*(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+
+		. = ALIGN (bsp_section_align);
+	} > RAM
+
+	.sbss2 : {
+		*(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End and size of text section
+		 */
+		bsp_section_text_end = .;
+		bsp_section_text_size = bsp_section_text_end - bsp_section_text_start;
+	} > RAM
+
+	.data : {
+		/*
+		 * BSP: Start of data section
+		 */
+		bsp_section_data_start = .;
+
+		/*
+		 * BSP: Moved into .data from .ctors
+		 */
+		/* gcc uses crtbegin.o to find the start of
+		   the constructors, so we make sure it is
+		   first.  Because this is a wildcard, it
+		   doesn't matter if the user does not
+		   actually link against crtbegin.o; the
+		   linker won't look for a file to match a
+		   wildcard.  The wildcard also means that it
+		   doesn't matter which directory crtbegin.o
+		   is in.  */
+		KEEP (*crtbegin.o(.ctors))
+		KEEP (*crtbegin?.o(.ctors))
+		/* We don't want to include the .ctor section from
+		   the crtend.o file until after the sorted ctors.
+		   The .ctor section from the crtend file contains the
+		   end of ctors marker and it must be last */
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+		KEEP (*(SORT(.ctors.*)))
+		KEEP (*(.ctors))
+
+		/*
+		 * BSP: Moved into .data from .dtors
+		 */
+		KEEP (*crtbegin.o(.dtors))
+		KEEP (*crtbegin?.o(.dtors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+		KEEP (*(SORT(.dtors.*)))
+		KEEP (*(.dtors))
+
+		/*
+		 * BSP: Moved into .data from .*
+		 */
+		*(.tdata .tdata.* .gnu.linkonce.td.*)
+		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+		*(.data1)
+		KEEP (*(.eh_frame))
+		*(.gcc_except_table .gcc_except_table.*)
+		KEEP (*(.jcr))
+		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*) *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+		*(.fixup)
+		*(.got1)
+		*(.got2)
+		*(.dynamic)
+		*(.got)
+		*(.plt)
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array))
+		PROVIDE_HIDDEN (__init_array_end = .);
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(.fini_array))
+		KEEP (*(SORT(.fini_array.*)))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+
+		*(.data .data.* .gnu.linkonce.d.*)
+		KEEP (*(.gnu.linkonce.d.*personality*))
+		SORT(CONSTRUCTORS)
+
+		. = ALIGN (bsp_section_align);
+	} > RAM
+
+	.sdata : {
+		PROVIDE (_SDA_BASE_ = 32768);
+		*(.sdata .sdata.* .gnu.linkonce.s.*)
+
+		. = ALIGN (bsp_section_align);
+
+		_edata = .;
+		PROVIDE (edata = .);
+
+		/*
+		 * BSP: End and size of data section
+		 */
+		bsp_section_data_end = .;
+		bsp_section_data_size = bsp_section_data_end - bsp_section_data_start;
+	} > RAM
+
+	.sbss : {
+		/*
+		 * BSP: Start of bss section
+		 */
+		bsp_section_bss_start = .;
+
+		__bss_start = .;
+
+		PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
+		*(.scommon)
+		*(.dynsbss)
+		*(.sbss .sbss.* .gnu.linkonce.sb.*)
+		PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+
+		. = ALIGN (bsp_section_align);
+	} > RAM
+
+	.bss : {
+		*(COMMON)
+		*(.dynbss)
+		*(.bss .bss.* .gnu.linkonce.b.*)
+
+		. = ALIGN (bsp_section_align);
+
+		__end = .;
+		_end = .;
+		PROVIDE (end = .);
+
+		/*
+		 * BSP: End and size of bss section
+		 */
+		bsp_section_bss_end = .;
+		bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_start;
+	} > RAM
+
+	/*
+	 * BSP: Interrupt stack
+	 */
+	bsp_interrupt_stack_start = .;
+	bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
+	bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
+	. = bsp_interrupt_stack_end;
+
+	/*
+	 * BSP: Work area start
+	 */
+	bsp_work_area_start = .;
+	
+	/* Stabs debugging sections.  */
+	.stab          0 : { *(.stab) }
+	.stabstr       0 : { *(.stabstr) }
+	.stab.excl     0 : { *(.stab.excl) }
+	.stab.exclstr  0 : { *(.stab.exclstr) }
+	.stab.index    0 : { *(.stab.index) }
+	.stab.indexstr 0 : { *(.stab.indexstr) }
+	.comment       0 : { *(.comment) }
+	/* DWARF debug sections.
+	   Symbols in the DWARF debugging sections are relative to the beginning
+	   of the section so we begin them at 0.  */
+	/* DWARF 1 */
+	.debug          0 : { *(.debug) }
+	.line           0 : { *(.line) }
+	/* GNU DWARF 1 extensions */
+	.debug_srcinfo  0 : { *(.debug_srcinfo) }
+	.debug_sfnames  0 : { *(.debug_sfnames) }
+	/* DWARF 1.1 and DWARF 2 */
+	.debug_aranges  0 : { *(.debug_aranges) }
+	.debug_pubnames 0 : { *(.debug_pubnames) }
+	/* DWARF 2 */
+	.debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+	.debug_abbrev   0 : { *(.debug_abbrev) }
+	.debug_line     0 : { *(.debug_line) }
+	.debug_frame    0 : { *(.debug_frame) }
+	.debug_str      0 : { *(.debug_str) }
+	.debug_loc      0 : { *(.debug_loc) }
+	.debug_macinfo  0 : { *(.debug_macinfo) }
+	/* SGI/MIPS DWARF 2 extensions */
+	.debug_weaknames 0 : { *(.debug_weaknames) }
+	.debug_funcnames 0 : { *(.debug_funcnames) }
+	.debug_typenames 0 : { *(.debug_typenames) }
+	.debug_varnames  0 : { *(.debug_varnames) }
+	/* DWARF 3 */
+	.debug_pubtypes 0 : { *(.debug_pubtypes) }
+	.debug_ranges   0 : { *(.debug_ranges) }
+	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+
+	/DISCARD/ : {
+		*(.note.GNU-stack) *(.gnu_debuglink)
+	}
+
+	/*
+	 * BSP: Catch all unknown sections
+	 */
+	.nirvana : {
+		*(*)
+	} > NIRVANA
+}

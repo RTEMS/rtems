@@ -7,10 +7,12 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+libcpudir = ../../../libcpu/@RTEMS_CPU@
+
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h include/i2cdrv.h include/u-boot.h \
-    include/i2c.h include/mpc5200.h
+    include/i2c.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -34,10 +36,11 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
-dist_project_lib_DATA += startup/linkcmds.brs5l
-dist_project_lib_DATA += startup/linkcmds.icecube
-dist_project_lib_DATA += startup/linkcmds.pm520
+dist_project_lib_DATA += startup/linkcmds \
+	startup/linkcmds.base \
+	startup/linkcmds.brs5l \
+	startup/linkcmds.icecube \
+	startup/linkcmds.pm520
 
 noinst_PROGRAMS += bestcomm.rel
 bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
@@ -65,10 +68,25 @@ console_SOURCES = console/console.c
 i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
 ide_SOURCES = ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 
-include_bsp_HEADERS = irq/irq.h include/i2cdrv.h include/mpc5200.h \
-    include/i2c.h include/u-boot.h
-irq_SOURCES = irq/irq.c irq/irq_init.c irq/irq.h irq/irq_asm.S
-mscan_SOURCES = mscan/mscan.c mscan/mscan.h mscan/mscan_int.h
+include_bsp_HEADERS = $(libcpudir)/new-exceptions/bspsupport/vectors.h \
+	$(libcpudir)/new-exceptions/bspsupport/ppc_exc_bspsupp.h \
+	../../shared/include/irq-generic.h \
+	include/irq-config.h \
+	include/irq.h \
+	include/i2cdrv.h \
+	include/i2c.h \
+	include/mpc5200.h \
+	include/mscan-base.h \
+	include/u-boot.h \
+	mscan/mscan.h
+
+irq_SOURCES = include/irq.h \
+	include/irq-config.h \
+	irq/irq.c \
+	../../shared/src/irq-generic.c \
+	../../shared/src/irq-legacy.c
+
+mscan_SOURCES = mscan/mscan.c mscan/mscan-base.c mscan/mscan.h mscan/mscan_int.h
 
 include_bsp_HEADERS += nvram/nvram.h
 nvram_SOURCES = nvram/nvram.c nvram/nvram.h nvram/m93cxx.h
@@ -79,16 +97,19 @@ slicetimer_SOURCES = slicetimer/slicetimer.c slicetimer/slicetimer.h
 tod_SOURCES = tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
     ../../shared/tod.c
 
-include_bsp_HEADERS += vectors/vectors.h
-
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../shared/uboot_dump_bdinfo.c \
-    ../../shared/gnatinstallhandler.c startup/cpuinit.c  \
-    ../shared/showbats.c startup/uboot_support.c ../shared/uboot_getenv.c
-
-vectors_SOURCES = vectors/vectors_init.c vectors/vectors.h \
-    vectors/vectors.S
+startup_SOURCES = ../../shared/bootcard.c \
+	../../shared/bsplibc.c \
+	../../shared/bsppost.c \
+	../../shared/bsppretaskinghook.c \
+	../../shared/gnatinstallhandler.c \
+	../../shared/sbrk.c \
+	../shared/showbats.c \
+	../shared/uboot_dump_bdinfo.c \
+	../shared/uboot_getenv.c \
+	startup/bspclean.c \
+	startup/bspstart.c \
+	startup/cpuinit.c  \
+	startup/uboot_support.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -102,18 +123,17 @@ endif
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(i2c_SOURCES) \
     $(ide_SOURCES) $(irq_SOURCES) $(mscan_SOURCES) $(nvram_SOURCES) \
-    $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES) \
-    $(vectors_SOURCES)
+    $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES)
 
-libbsp_a_LIBADD = \
-    bestcomm.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel
+libbsp_a_LIBADD =  $(libcpudir)/shared/cpuIdent.rel \
+	$(libcpudir)/shared/cache.rel \
+	$(libcpudir)/shared/stack.rel \
+	$(libcpudir)/@exceptions@/rtems-cpu.rel \
+	$(libcpudir)/@exceptions@/raw_exception.rel \
+	$(libcpudir)/@exceptions@/exc_bspsupport.rel \
+	$(libcpudir)/mpc6xx/mmu.rel \
+	$(libcpudir)/mpc6xx/timer.rel \
+	bestcomm.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

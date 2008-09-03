@@ -1,3 +1,28 @@
+2008-09-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* irq/irq.h, irq/irq_asm.h, irq/irq_init.c, vectors/vectors.S,
+	vectors/vectors.h, vectors/vectors_init.c: Removed files.
+
+	* include/irq-config.h, include/irq.h, include/mscan-base.h,
+	mscan/mscan-base.c, startup/linkcmds.base: New files.
+
+	* mscan/mscan.c, mscan/mscan_int.h: Moved general MSCAN functions into
+	separate header and source files (include/mscan-base.h and
+	mscan/mscan-base.c).  Formatted code.
+
+	* bestcomm/bestcomm_glue.c, bestcomm/load_task.c, clock/clock.c,
+	console/console.c, i2c/mpc5200mbus.c, ide/idecfg.c, ide/pcmcia_ide.c,
+	include/bsp.h, irq/irq.c, network_5200/network.c,
+	slicetimer/slicetimer.c, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/cpuinit.c: Converted to use shared
+	exception and interrupt code.
+
+	* startup/linkcmds, startup/linkcmds.brs5l, startup/linkcmds.icecube,
+	startup/linkcmds.pm520: Changed to include new file
+	startup/linkcmds.base.  Supports small data area now.
+
+	* configure.ac, Makefile.am, bsp_specs, preinstall.am: Update.
+
 2008-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/cpuinit.h: Uses now powerpc-utility.h.  Changed invalid usage
