@@ -32,7 +32,7 @@ Name:		rtems-4.8-sparc-rtems4.8-gdb
 Summary:	Gdb for target sparc-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,8 +104,10 @@ rm -f gdb-%{gdb_version}/readline/configure
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
-%if "%{gdb_version}" >= "6.6"
+%if "%{gdb_version}" >= "6.7"
     --with-system-readline \
+%endif
+%if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \

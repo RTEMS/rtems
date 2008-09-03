@@ -13,6 +13,18 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix rtems-4.8-%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
 %define binutils_pkgvers 2.18
 %define binutils_version 2.18
 %define binutils_rpmvers %{expand:%(echo "2.18" | tr - _ )}
@@ -21,10 +33,14 @@ Name:		rtems-4.8-h8300-rtems4.8-binutils
 Summary:	Binutils for target h8300-rtems4.8
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:	rtems-4.8-%{_host}-gcc
+%endif
 
 %if "%{binutils_version}" >= "2.18"
 # Bug in bfd: Doesn't build without texinfo installed
@@ -56,12 +72,16 @@ cd binutils-%{binutils_pkgvers}
 cd ..
 
 %build
+  export PATH="%{_bindir}:${PATH}"
 %if "h8300-rtems4.8" == "i686-pc-cygwin"
 # The cygwin sources are leaking memory
   RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
 %endif
   mkdir -p build
   cd build
+%if "%{_build}" != "%{_host}"
+  CFLAGS_FOR_BUILD="-g -O2 -Wall" \
+%endif
   CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_pkgvers}/configure \
     --build=%_build --host=%_host \
@@ -80,17 +100,11 @@ cd ..
   cd ..
 
 %install
+  export PATH="%{_bindir}:${PATH}"
   rm -rf $RPM_BUILD_ROOT
 
   cd build
-  make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    bindir=$RPM_BUILD_ROOT%{_bindir} \
-    includedir=$RPM_BUILD_ROOT%{_includedir} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} \
-    infodir=$RPM_BUILD_ROOT%{_infodir} \
-    mandir=$RPM_BUILD_ROOT%{_mandir} \
-    exec_prefix=$RPM_BUILD_ROOT%{_exec_prefix} \
-    install
+  make DESTDIR=$RPM_BUILD_ROOT install
 
   make prefix=$RPM_BUILD_ROOT%{_prefix} \
     bindir=$RPM_BUILD_ROOT%{_bindir} \
@@ -168,7 +182,6 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 # %endif
 
 %description -n rtems-4.8-h8300-rtems4.8-binutils
-
 GNU binutils targetting h8300-rtems4.8.
 
 %files -n rtems-4.8-h8300-rtems4.8-binutils

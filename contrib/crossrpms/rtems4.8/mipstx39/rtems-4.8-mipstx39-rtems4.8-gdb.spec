@@ -32,7 +32,7 @@ Name:		rtems-4.8-mipstx39-rtems4.8-gdb
 Summary:	Gdb for target mipstx39-rtems4.8
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	12%{?dist}
+Release:	13%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,8 +104,10 @@ rm -f gdb-%{gdb_version}/readline/configure
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
-%if "%{gdb_version}" >= "6.6"
+%if "%{gdb_version}" >= "6.7"
     --with-system-readline \
+%endif
+%if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
