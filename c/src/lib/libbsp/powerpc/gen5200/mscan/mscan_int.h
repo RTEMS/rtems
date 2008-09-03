@@ -17,7 +17,7 @@
 | http://www.rtems.com/license/LICENSE.                           |
 |                                                                 |
 +-----------------------------------------------------------------+
-| this file has to be included by the mscan driver                |
+| this file has to be included by the m driver                |
 \*===============================================================*/
 #ifndef __MSCAN_INT_H__
 #define __MSCAN_INT_H__
@@ -26,13 +26,9 @@
 extern "C" {
 #endif
 
-#include "../mscan/mscan.h"
+#include <bsp/mscan-base.h>
 
-#define MIN_NO_OF_TQ         7
-#define NO_OF_TABLE_ENTRIES  4
-#define TSEG_1               1
-#define TSEG_2               2
-#define SJW                  3
+#include "../mscan/mscan.h"
 
 #define MSCAN_RX_BUFF_NUM        4
 #define MSCAN_TX_BUFF_NUM        3
@@ -45,12 +41,7 @@ extern "C" {
 
 #define CAN_BIT_RATE_MAX         1000000
 #define CAN_BIT_RATE_MIN         100000
-
 #define CAN_BIT_RATE             100000
-#define CAN_MAX_NO_OF_TQ         25
-#define CAN_MAX_NO_OF_TQ_TSEG1   15
-#define CAN_MAX_NO_OF_TQ_TSEG2   7
-#define CAN_MAX_NO_OF_TQ_SJW     2
 
 #define MSCAN_RX_BUFF_NOACTIVE   (0 << 4)
 #define MSCAN_RX_BUFF_EMPTY      (1 << 6)
@@ -71,74 +62,10 @@ extern "C" {
 #define MSCAN_READ_RXBUFF_2      (1 << 2)
 #define MSCAN_READ_RXBUFF_3      (1 << 2)
 
-#define CTL0_RXFRM               (1 << 7)
-#define CTL0_RXACT               (1 << 6)
-#define CTL0_CSWAI               (1 << 5)
-#define CTL0_SYNCH               (1 << 4)
-#define CTL0_TIME                (1 << 3)
-#define CTL0_WUPE                (1 << 2)
-#define CTL0_SLPRQ               (1 << 1)
-#define CTL0_INITRQ              (1 << 0)
-
-#define CTL1_CANE                (1 << 7)
-#define CTL1_CLKSRC              (1 << 6)
-#define CTL1_LOOPB               (1 << 5)
-#define CTL1_LISTEN              (1 << 4)
-#define CTL1_WUPM                (1 << 2)
-#define CTL1_SLPAK               (1 << 1)
-#define CTL1_INITAK              (1 << 0)
-
-#define BTR0_SJW(btr0)           ((btr0) << 6)
-#define BTR0_BRP(btr0)           ((btr0) << 0)
-
-#define BTR1_SAMP                (1 << 7)
-#define BTR1_TSEG_22_20(btr1)    ((btr1) << 4)
-#define BTR1_TSEG_13_10(btr1)    ((btr1) << 0)
-
-#define RFLG_WUPIF               (1 << 7)
-#define RFLG_CSCIF               (1 << 6)
-#define RFLG_RSTAT               (3 << 4)
-#define RFLG_TSTAT               (3 << 2)
-#define RFLG_OVRIF               (1 << 1)
-#define RFLG_RXF                 (1 << 0)
-#define RFLG_GET_RX_STATE(rflg)  (((rflg) >> 4) & 0x03)
-#define RFLG_GET_TX_STATE(rflg)  (((rflg) >> 2) & 0x03)
-
 #define MSCAN_STATE_OK           0
 #define MSCAN_STATE_ERR          1
 #define MSCAN_STATE_WRN		     2
 #define MSCAN_STATE_BUSOFF       3
-
-#define RIER_WUPIE               (1 << 7)
-#define RIER_CSCIE               (1 << 6)
-#define RIER_RSTAT(rier)         ((rier) << 4)
-#define RIER_TSTAT(rier)         ((rier) << 2)
-#define RIER_OVRIE               (1 << 1)
-#define RIER_RXFIE               (1 << 0)
-
-#define TFLG_TXE2                (1 << 2)
-#define TFLG_TXE1                (1 << 1)
-#define TFLG_TXE0                (1 << 0)
-
-#define TIER_TXEI2               (1 << 2)
-#define TIER_TXEI1               (1 << 1)
-#define TIER_TXEI0               (1 << 0)
-
-#define TARQ_ABTRQ2              (1 << 2)
-#define TARQ_ABTRQ1              (1 << 1)
-#define TARQ_ABTRQ0              (1 << 0)
-
-#define TAAK_ABTRQ2              (1 << 2)
-#define TAAK_ABTRQ1              (1 << 1)
-#define TAAK_ABTRQ0              (1 << 0)
-
-#define BSEL_TX2                 (1 << 2)
-#define BSEL_TX1                 (1 << 1)
-#define BSEL_TX0                 (1 << 0)
-
-#define IDAC_IDAM1               (1 << 5)
-#define IDAC_IDAM0               (1 << 4)
-#define IDAC_IDHIT(idac)         ((idac) & 0x7)
 
 #define TX_MBUF_SEL(buf_no)      (1 << (buf_no))
 #define TX_DATA_LEN(len)         ((len) & 0x0F)
@@ -232,7 +159,7 @@ struct mpc5200_rx_cntrl
 
 struct mscan_channel_info
   {
-  volatile struct mpc5200_mscan *regs;
+  mscan *regs;
   uint32_t   int_rx_err;
   rtems_id   rx_qid;
   uint32_t   rx_qname;
@@ -249,20 +176,11 @@ extern void CanInterrupt_B(int16_t);
 
 /*MSCAN driver internal functions */
 void mscan_hardware_initialize(rtems_device_major_number, uint32_t, void *);
-void mpc5200_mscan_int_enable(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_int_disable(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_enter_sleep_mode(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_exit_sleep_mode(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_enter_init_mode(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_exit_init_mode(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_wait_sync(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_perform_init_mode_settings(volatile struct mpc5200_mscan *);
-void mpc5200_mscan_perform_normal_mode_settings(volatile struct mpc5200_mscan *);
+void mpc5200_mscan_wait_sync(mscan *);
+void mpc5200_mscan_perform_init_mode_settings(mscan *);
+void mpc5200_mscan_perform_normal_mode_settings(mscan *);
 rtems_status_code mpc5200_mscan_set_mode(rtems_device_minor_number, uint8_t);
 rtems_status_code mscan_channel_initialize(rtems_device_major_number, rtems_device_minor_number);
-uint8_t prescaler_calculation(uint32_t, uint32_t, uint8_t *);
-void mpc5200_mscan_perform_bit_time_settings(volatile struct mpc5200_mscan *, uint32_t, uint32_t);
-
 
 #ifdef __cplusplus
 }
