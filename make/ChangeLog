@@ -1,3 +1,7 @@
+2008-09-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* custom/gen5200.cfg: More CPU_CFLAGS: -meabi -msdata -fno-common.
+
 2008-08-15	Allan Hessenflow <allanh@kallisti.com>
 
 	* custom/bf537Stamp.cfg: New file.
