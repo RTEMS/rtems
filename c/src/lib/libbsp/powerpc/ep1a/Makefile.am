@@ -54,7 +54,7 @@ include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-irq_SOURCES = irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../../powerpc/shared/irq/i8259.c 
+irq_SOURCES = irq/irq_init.c irq/openpic_xxx_irq.c ../../powerpc/shared/irq/i8259.c 
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     vme/VMEConfig.h \

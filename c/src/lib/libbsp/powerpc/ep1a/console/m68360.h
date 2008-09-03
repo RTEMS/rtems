@@ -48,15 +48,22 @@ typedef struct m360MEMCRegisters_ {
 
 
 #define M360_GSMR_RFW            0x00000020
+
+#define M360_GSMR_RINV           0x02000000
+#define M360_GSMR_TINV           0x01000000
 #define M360_GSMR_TDCR_16X       0x00020000
 #define M360_GSMR_RDCR_16X       0x00008000
-#define M360_GSMR_MODE_UART      0x00000004
 #define M360_GSMR_DIAG_LLOOP     0x00000040
 #define M360_GSMR_ENR            0x00000020
 #define M360_GSMR_ENT            0x00000010
+#define M360_GSMR_MODE_UART      0x00000004
 
 #define  M360_PSMR_FLC           0x8000
-#define  M360_PSMR_SL            0x4000
+#define  M360_PSMR_SL_1          0x0000
+#define  M360_PSMR_SL_2          0x4000
+#define  M360_PSMR_CL5           0x0000
+#define  M360_PSMR_CL6           0x1000
+#define  M360_PSMR_CL7           0x2000
 #define  M360_PSMR_CL8           0x3000
 #define  M360_PSMR_UM_NORMAL     0x0000
 #define  M360_PSMR_FRZ           0x0200
@@ -969,5 +976,9 @@ void M360SetupMemory( M68360_t ptr );
 void *M360AllocateBufferDescriptors (M68360_t ptr, int count);
 void M360ExecuteRISC( volatile m360_t *m360, uint16_t command);
 int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector );
+
+#if 0
+extern volatile m360_t *m360;
+#endif
 
 #endif /* __MC68360_h */

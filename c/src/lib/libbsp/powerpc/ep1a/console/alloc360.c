@@ -7,7 +7,7 @@
  *  Saskatoon, Saskatchewan, CANADA
  *  eric@skatter.usask.ca
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,11 +24,18 @@
 #include "rsPMCQ1.h"
 #include <rtems/bspIo.h>
 
+
+#define DEBUG_PRINT 1 
+
 void M360SetupMemory( M68360_t ptr ){
   volatile m360_t  *m360;
   
   m360  = ptr->m360;
 
+#if DEBUG_PRINT
+printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n", 
+       (unsigned int)&(m360->mcr), ((unsigned int)m360+Q1_360_SIM_MCR));
+#endif
   ptr->bdregions[0].base = (char *)&m360->dpram1[0];
   ptr->bdregions[0].size = sizeof m360->dpram1;
   ptr->bdregions[0].used = 0;

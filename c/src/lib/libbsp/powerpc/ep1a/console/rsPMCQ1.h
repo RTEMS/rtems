@@ -21,6 +21,9 @@
  *
  */
 
+#include <libcpu/io.h>
+#include <bsp/irq.h>
+
 /*
    modification history
    --------------------
@@ -29,9 +32,6 @@
 
 #ifndef __INCPMCQ1H
 #define __INCPMCQ1H
-
-#include <libcpu/io.h>
-#include <bsp/irq.h>
 
 /*
  * PMCQ1 definitions
@@ -96,8 +96,8 @@
 #define PMCQ1_RAM               0x00200000
 
 /*
-#define PMCQ1_Read_EPLD( _base, _reg ) ( *((unsigned long *) ((uint32_t)_base + _reg)) )
-#define PMCQ1_Write_EPLD( _base, _reg, _data ) *((unsigned long *) ((uint32_t)_base + _reg)) = _data
+#define PMCQ1_Read_EPLD( _base, _reg ) ( *((unsigned long *) ((unsigned32)_base + _reg)) )
+#define PMCQ1_Write_EPLD( _base, _reg, _data ) *((unsigned long *) ((unsigned32)_base + _reg)) = _data
 */
 uint32_t PMCQ1_Read_EPLD( uint32_t base, uint32_t reg );
 void     PMCQ1_Write_EPLD( uint32_t base, uint32_t reg, uint32_t data );
@@ -108,6 +108,7 @@ void     PMCQ1_Write_EPLD( uint32_t base, uint32_t reg, uint32_t data );
 
 #define QSPAN2_INT_STATUS	0x00000600
 
+typedef void (*FUNCION_PTR) (int);
 
 #define PCI_ID(v, d) ((d << 16) | v)
 
@@ -130,10 +131,10 @@ typedef struct _PMCQ1BoardData
     unsigned long			funcNo;
     unsigned long			baseaddr;
     unsigned long			bridgeaddr;
-    rtems_irq_hdl			quiccInt;
-    rtems_irq_hdl_param			quiccArg;
-    rtems_irq_hdl			maInt;
-    rtems_irq_hdl_param			maArg;
+    FUNCION_PTR				quiccInt;
+    int					quiccArg;
+    FUNCION_PTR				maInt;
+    int					maArg;
 } PMCQ1BoardData, *PPMCQ1BoardData;
 
 extern PPMCQ1BoardData  pmcq1BoardData;
@@ -141,8 +142,20 @@ extern PPMCQ1BoardData  pmcq1BoardData;
 /*
  * Function declarations
  */
-extern unsigned int rsPMCQ1QuiccIntConnect( 
-  unsigned long busNo, unsigned long slotNo,unsigned long funcNo, rtems_irq_hdl routine,rtems_irq_hdl_param arg );
-extern unsigned int rsPMCQ1Init(void);
+extern unsigned int rsPMCQ1QuiccIntConnect(
+  unsigned long         busNo, 
+  unsigned long         slotNo, 
+  unsigned long         funcNo, 
+  FUNCION_PTR           routine, 
+  int                   arg
+);
+unsigned int rsPMCQ1Init();
+unsigned int rsPMCQ1MaIntConnect (
+    unsigned long       busNo,  /* Pci Bus number of PMCQ1 */
+    unsigned long       slotNo, /* Pci Slot number of PMCQ1 */
+    unsigned long       funcNo, /* Pci Function number of PMCQ1 */
+    FUNCION_PTR         routine,/* interrupt routine */
+    int                 arg     /* argument to pass to interrupt routine */
+);
 
 #endif				/* __INCPMCQ1H */

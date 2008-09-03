@@ -36,12 +36,12 @@
 /* address of our ram on the PCI bus   */
 #define PCI_DRAM_OFFSET         CHRP_PCI_DRAM_OFFSET
 #define PCI_MEM_BASE            0x80000000
-#define PCI_MEM_BASE_ADJUSTMENT 0
-
+#define PCI_MEM_BASE_ADJUSTMENT 0 
 /* address of our ram on the PCI bus   */
 #define	PCI_DRAM_OFFSET		CHRP_PCI_DRAM_OFFSET
 
 /* offset of pci memory as seen from the CPU */
+#undef  PCI_MEM_BASE
 #define PCI_MEM_BASE		0x00000000  
 
 /* Override the default values for the following     DEFAULT */

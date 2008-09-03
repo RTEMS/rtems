@@ -35,6 +35,7 @@
 /*
 #define SHOW_ISA_PCI_BRIDGE_SETTINGS
 */
+#define TRACE_IRQ_INIT
 
 /*
  * default on/off function
@@ -184,6 +185,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     initial_config.irqBase	= BSP_LOWEST_OFFSET;
     initial_config.irqPrioTbl	= irqPrioTable;
 
+printk("Call BSP_rtems_irq_mngt_set\n");
     if (!BSP_rtems_irq_mngt_set(&initial_config)) {
       /*
        * put something here that will show the failure...

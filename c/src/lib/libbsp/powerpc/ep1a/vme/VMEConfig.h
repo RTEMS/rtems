@@ -63,9 +63,9 @@
  */
 #undef   BSP_VME_BAT_IDX
 
-#define _VME_A32_WIN0_ON_PCI	0x10000000
-#define _VME_A24_ON_PCI			0x1f000000
-#define _VME_A16_ON_PCI			0x1fff0000
+#define _VME_A32_WIN0_ON_PCI	0x90000000
+#define _VME_A24_ON_PCI		0x9f000000
+#define _VME_A16_ON_PCI		0x9fff0000
 
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a configuration option
@@ -77,6 +77,16 @@
  * at _VME_DRAM_OFFSET
  */
 #undef  _VME_DRAM_OFFSET
+#define _VME_DRAM_OFFSET                0xc0000000  
+#define _VME_DRAM_32_OFFSET1		0x20000000
+#define _VME_DRAM_32_OFFSET2            0x20b00000
+#define _VME_DRAM_24_OFFSET1            0x00000000
+#define _VME_DRAM_24_OFFSET2            0x00100000
+#define _VME_DRAM_16_OFFSET1            0x00000000
+#define _VME_DRAM_16_OFFSET2            0x00008000
+
+#define _VME_A24_SIZE                   0x00100000 
+#define _VME_A16_SIZE                   0x00008000
 
 #undef _VME_CSR_ON_PCI
 

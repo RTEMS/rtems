@@ -1,6 +1,7 @@
-/*  This file contains the termios TTY driver for the Motorola MC68360 SCC ports.
+/*  This file contains the termios TTY driver for the
+ *  Motorola MC68360 SCC ports.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,23 +23,33 @@
 #include <libchip/sersupp.h>
 #include <stdlib.h>
 #include <rtems/bspIo.h>
-#include <rtems/termiostypes.h>
 #include <string.h>
 
-#define MC68360_LENGHT_SIZE 100
-int mc68360_length_array[ MC68360_LENGHT_SIZE ];
+#if 0
+#define DEBUG_360
+#endif
+
+#if 1   /* XXX */
+int EP1A_READ_LENGTH_GREATER_THAN_1 = 0;
+
+#define MC68360_LENGTH_SIZE 400
+int mc68360_length_array[ MC68360_LENGTH_SIZE ];
 int mc68360_length_count=0;
 
 void mc68360_Show_length_array(void) {
   int i;
-  for (i=0; i<MC68360_LENGHT_SIZE; i++)
+  for (i=0; i<MC68360_LENGTH_SIZE; i++)
     printf(" %d", mc68360_length_array[i] );
   printf("\n\n");
 }
+#endif
+
 
 M68360_t    M68360_chips = NULL;
 
 #define SYNC     eieio
+#define mc68360_scc_Is_422( _minor ) (Console_Port_Tbl[minor].sDeviceName[7] == '4' )
+
 
 void mc68360_scc_nullFunc(void) {}
 
@@ -171,6 +182,20 @@ static int
 mc68360_sccBRGC(int baud, int m360_clock_rate)
 {
    int data;
+#if 0
+   int divisor;
+   int div16;
+
+   div16 = 0;
+   divisor = ((m360_clock_rate / 16) + (baud / 2)) / baud;
+   if (divisor > 4096)
+   {
+      div16   = 1;
+      divisor = (divisor + 8) / 16;
+   }
+   return(M360_BRG_EN | M360_BRG_EXTC_BRGCLK |
+          ((divisor - 1) << 1) | div16);
+#endif
 
   /*
    * configure baud rate generator for 16x bit rate, where.....
@@ -214,7 +239,7 @@ mc68360_sccBRGC(int baud, int m360_clock_rate)
  *    none                                                                *
  *                                                                        *
  **************************************************************************/
-void mc68360_sccInterruptHandler( rtems_irq_hdl_param handle )
+void mc68360_sccInterruptHandler( M68360_t chip )
 {
   volatile m360_t    *m360;
   int                port;
@@ -223,12 +248,21 @@ void mc68360_sccInterruptHandler( rtems_irq_hdl_param handle )
   int                i;
   char               data;
   int                clear_isr;
-  M68360_t           chip = (M68360_t)handle;
 
+
+#ifdef DEBUG_360
+  printk("mc68360_sccInterruptHandler\n");
+#endif
   for (port=0; port<4; port++) {
 
       clear_isr = FALSE;
       m360  = chip->m360;
+
+      /*
+       * XXX - Can we add something here to check if this is our interrupt.
+       * XXX - We need a parameter here so that we know which 360 instead of
+       *       looping through them all!
+       */
 
       /*
        * Handle a RX interrupt.
@@ -241,6 +275,9 @@ void mc68360_sccInterruptHandler( rtems_irq_hdl_param handle )
         while ((status & M360_BD_EMPTY) == 0)
         {
            length= scc_read16("sccRxBd->length",&chip->port[port].sccRxBd->length);
+if (length > 1)
+  EP1A_READ_LENGTH_GREATER_THAN_1 = length;
+
            for (i=0;i<length;i++) {
              data= chip->port[port].rxBuf[i];
              rtems_termios_enqueue_raw_characters(
@@ -265,9 +302,13 @@ void mc68360_sccInterruptHandler( rtems_irq_hdl_param handle )
         if ((status & M360_BD_EMPTY) == 0)
         {
            scc_write16("sccTxBd->status",&chip->port[port].sccTxBd->status,0);
+#if 1
            rtems_termios_dequeue_characters(
              Console_Port_Data[chip->port[port].minor].termios_data, 
              chip->port[port].sccTxBd->length);
+#else
+           mc68360_scc_write_support_int(chip->port[port].minor,"*****", 5); 
+#endif
         }
       }
 
@@ -293,8 +334,55 @@ int mc68360_scc_open(
   void    * arg
 )
 {
+  M68360_serial_ports_t  ptr;
+  volatile m360_t       *m360;
+  uint32_t               data;
+
+#ifdef DEBUG_360
+  printk("mc68360_scc_open %d\n", minor);
+#endif
+
+
+  ptr   = Console_Port_Tbl[minor].pDeviceParams;
+  m360  = ptr->chip->m360;
+
+  /*
+   * Enable the receiver and the transmitter.
+   */
+
+  SYNC();
+  data = scc_read32( "pSCCR->gsmr_l", &ptr->pSCCR->gsmr_l);
+  scc_write32( "pSCCR->gsmr_l", &ptr->pSCCR->gsmr_l,
+    (data | M360_GSMR_ENR | M360_GSMR_ENT) );
+
+  data  = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_MASK );
+  data &= (~PMCQ1_INT_MASK_QUICC);
+  PMCQ1_Write_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_MASK, data );
+
+  data = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_STATUS );
+  data &= (~PMCQ1_INT_STATUS_QUICC);
+  PMCQ1_Write_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_STATUS, data );
 
   return RTEMS_SUCCESSFUL;
+}
+
+uint32_t mc68360_scc_calculate_pbdat( M68360_t chip )
+{
+  uint32_t               i;
+  uint32_t               pbdat_data;
+  int                    minor;
+  uint32_t               type422data[4] = {
+    0x00440,  0x00880,  0x10100,  0x20200
+  };
+
+  pbdat_data = 0x3;
+  for (i=0; i<4; i++) {
+    minor = chip->port[i].minor;
+    if mc68360_scc_Is_422( minor ) 
+      pbdat_data |= type422data[i];
+  }
+
+  return pbdat_data;
 }
 
 /*
@@ -320,6 +408,7 @@ void mc68360_scc_initialize_interrupts(int minor)
 
   ptr   = Console_Port_Tbl[minor].pDeviceParams;
   m360  = ptr->chip->m360;
+  
 #ifdef DEBUG_360
   printk("m360 0x%08x baseaddr 0x%08x\n",
      m360, ptr->chip->board_data->baseaddr);
@@ -337,8 +426,8 @@ void mc68360_scc_initialize_interrupts(int minor)
    */
   data = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_DRIVER_ENABLE );
   SYNC();
-  data |= (PMCQ1_DRIVER_ENABLE_3 | PMCQ1_DRIVER_ENABLE_2 |
-           PMCQ1_DRIVER_ENABLE_1 | PMCQ1_DRIVER_ENABLE_0);
+  data = data & ~(PMCQ1_DRIVER_ENABLE_3 | PMCQ1_DRIVER_ENABLE_2 |
+                  PMCQ1_DRIVER_ENABLE_1 | PMCQ1_DRIVER_ENABLE_0);
   PMCQ1_Write_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_DRIVER_ENABLE, data);
   data = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_DRIVER_ENABLE );
   SYNC();
@@ -383,10 +472,21 @@ void mc68360_scc_initialize_interrupts(int minor)
   /*
    * XXX
    */
+
+#if 0
   scc_write32( "pbpar", &m360->pbpar, 0x00000000 );
   scc_write32( "pbdir", &m360->pbdir, 0x0003ffff );
   scc_write32( "pbdat", &m360->pbdat, 0x0000003f );
   SYNC();
+#else
+  data = mc68360_scc_calculate_pbdat( ptr->chip );
+  scc_write32( "pbpar", &m360->pbpar, 0x00000000 );
+  scc_write32( "pbdat", &m360->pbdat, data );
+  SYNC();
+  scc_write32( "pbdir", &m360->pbdir, 0x0003fc3 );
+  SYNC();
+#endif
+
 
   /*
    * XXX
@@ -529,6 +629,7 @@ void mc68360_scc_initialize_interrupts(int minor)
                (M360_PSMR_CL8 | M360_PSMR_UM_NORMAL | M360_PSMR_TPM_ODD) );
   SYNC();
 
+#if 0          /* XXX - ??? */
   /*
    * Enable the receiver and the transmitter.
    */
@@ -536,7 +637,7 @@ void mc68360_scc_initialize_interrupts(int minor)
   SYNC();
   data = scc_read32( "pSCCR->gsmr_l", &ptr->pSCCR->gsmr_l);
   scc_write32( "pSCCR->gsmr_l", &ptr->pSCCR->gsmr_l,
-               (data | M360_GSMR_ENR | M360_GSMR_ENT) );
+    (data | M360_GSMR_ENR | M360_GSMR_ENT) );
 
   data  = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_MASK );
   data &= (~PMCQ1_INT_MASK_QUICC);
@@ -545,6 +646,7 @@ void mc68360_scc_initialize_interrupts(int minor)
   data = PMCQ1_Read_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_STATUS );
   data &= (~PMCQ1_INT_STATUS_QUICC);
   PMCQ1_Write_EPLD(ptr->chip->board_data->baseaddr, PMCQ1_INT_STATUS, data );
+#endif 
 }
 
 /*
@@ -562,10 +664,12 @@ int mc68360_scc_write_support_int(
   rtems_interrupt_level  Irql;
   M68360_serial_ports_t  ptr;
 
+#if 1
   mc68360_length_array[ mc68360_length_count ] = len;
   mc68360_length_count++;
-  if ( mc68360_length_count >= MC68360_LENGHT_SIZE )
+  if ( mc68360_length_count >= MC68360_LENGTH_SIZE )
     mc68360_length_count=0;
+#endif
 
   ptr   = Console_Port_Tbl[minor].pDeviceParams;
 
@@ -634,18 +738,88 @@ int mc68360_scc_set_attributes(
    int                    baud;
    volatile m360_t        *m360;
    M68360_serial_ports_t  ptr;
+   uint16_t               value;
+
+#ifdef DEBUG_360
+printk("mc68360_scc_set_attributes\n");
+#endif
 
    ptr   = Console_Port_Tbl[minor].pDeviceParams;
    m360  = ptr->chip->m360;
 
-  baud = termios_baud_to_number(t->c_cflag & CBAUD);
-   if (baud > 0) {
+   switch (t->c_cflag & CBAUD)
+   {
+      case B50:      baud = 50;      break;
+      case B75:      baud = 75;      break;
+      case B110:     baud = 110;     break;
+      case B134:     baud = 134;     break;
+      case B150:     baud = 150;     break;
+      case B200:     baud = 200;     break;
+      case B300:     baud = 300;     break;
+      case B600:     baud = 600;     break;
+      case B1200:    baud = 1200;    break;
+      case B1800:    baud = 1800;    break;
+      case B2400:    baud = 2400;    break;
+      case B4800:    baud = 4800;    break;
+      case B9600:    baud = 9600;    break;
+      case B19200:   baud = 19200;   break;
+      case B38400:   baud = 38400;   break;
+      case B57600:   baud = 57600;   break;
+      case B115200:  baud = 115200;  break;
+      case B230400:  baud = 230400;  break;
+      case B460800:  baud = 460800;  break;
+      default:       baud = -1;      break;
+   }
+
+   if (baud > 0)
+   {
       scc_write32(
         "pBRGC",
         ptr->pBRGC,
         mc68360_sccBRGC(baud, ptr->chip->m360_clock_rate)
       );
    }
+
+  /* Initial value of PSMR should be 0 */
+  value = M360_PSMR_UM_NORMAL;
+
+  /* set the number of data bits, 8 is most common */
+  if (t->c_cflag & CSIZE)                     /* was it specified? */
+  {
+    switch (t->c_cflag & CSIZE) {
+      case CS5: value |= M360_PSMR_CL5; break;
+      case CS6: value |= M360_PSMR_CL6; break;
+      case CS7: value |= M360_PSMR_CL7; break;
+      case CS8: value |= M360_PSMR_CL8; break;
+    }
+  } else {
+    value |= M360_PSMR_CL8;         /* default to 8 data bits */
+  }
+
+  /* the number of stop bits */
+  if (t->c_cflag & CSTOPB)
+    value |= M360_PSMR_SL_2;   /* Two stop bits */
+  else
+    value |= M360_PSMR_SL_1;   /* One stop bit  */
+
+  /* Set Parity M360_PSMR_PEN bit should be clear on no parity so 
+   * do nothing in that case 
+   */
+  if (t->c_cflag & PARENB)                /* enable parity detection? */
+  {
+    value |= M360_PSMR_PEN;                
+    if (t->c_cflag & PARODD){
+      value |= M360_PSMR_RPM_ODD;        /* select odd parity */
+      value |= M360_PSMR_TPM_ODD; 
+    } else {
+      value |= M360_PSMR_RPM_EVEN;       /* select even parity */
+      value |= M360_PSMR_TPM_EVEN; 
+    }
+  }
+
+  SYNC();
+  scc_write16( "pSCCR->psmr", &ptr->pSCCR->psmr, value );
+  SYNC();
 
   return 0;
 }

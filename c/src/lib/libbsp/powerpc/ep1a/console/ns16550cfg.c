@@ -1,4 +1,4 @@
-/*
+/*  
  *  This include file contains all console driver definations for the nc16550
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -26,7 +26,7 @@ uint8_t Read_ns16550_register(
   uint8_t   ucRegNum
 )
 {
-  struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
+volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
   uint8_t  ucData;
   ucData = p[ucRegNum].reg;
   asm volatile("sync");
@@ -39,9 +39,12 @@ void  Write_ns16550_register(
   uint8_t   ucData
 )
 {
-  struct uart_reg *p = (struct uart_reg *)ulCtrlPort;
+  volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
   volatile int i;
   p[ucRegNum].reg = ucData; 
   asm volatile("sync");
-  for (i=0;i<0x08ff;i++);
+  asm volatile("isync");
+  asm volatile("eieio");
+  for (i=0;i<0x08ff;i++)
+    asm volatile("isync");
 }

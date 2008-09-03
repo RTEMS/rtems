@@ -41,7 +41,7 @@ call rsPMCQ1Init() to perform ba  sic initialisation of the PMCQ1's.
 #include "m68360.h"
 
 /* defines */
-#if 0
+#if 1
 #define DEBUG_360
 #endif
 
@@ -115,9 +115,10 @@ void rsPMCQ1_scc_nullFunc(void) {}
 
 void rsPMCQ1Int( void *ptr )
 {
-  unsigned long status;
-  unsigned long status1;
-  unsigned long mask;
+  unsigned long   status;
+  unsigned long   status1;
+  unsigned long   mask;
+  uint32_t        data;
   PPMCQ1BoardData boardData = ptr;
 
   status = PMCQ1_Read_EPLD(boardData->baseaddr, PMCQ1_INT_STATUS );
@@ -129,7 +130,7 @@ void rsPMCQ1Int( void *ptr )
     if (boardData->quiccInt) {
       boardData->quiccInt(boardData->quiccArg);
     } else {
-      *(unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_QUICC;
+      *(volatile unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_QUICC;
     }
   }
 
@@ -138,16 +139,25 @@ void rsPMCQ1Int( void *ptr )
     /* If there is a handler call it otherwise mask the interrupt */
     if (boardData->maInt) {
       boardData->maInt(boardData->maArg);
+
+      data = PMCQ1_Read_EPLD(boardData->baseaddr, PMCQ1_INT_STATUS );
+      data &= (~PMCQ1_INT_STATUS_MA);
+      PMCQ1_Write_EPLD(boardData->baseaddr, PMCQ1_INT_STATUS, data );
+
     } else {
-     *(unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_MA;
+     *(volatile unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_MA;
     }
   }
 
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
   /* Clear Interrupt on QSPAN */
-  *(unsigned long *)(boardData->bridgeaddr + 0x600) = 0x00001000;
+  *(volatile unsigned long *)(boardData->bridgeaddr + 0x600) = 0x00001000;
 
   /* read back the status register to ensure that the pci write has completed */
   status1 = *(volatile unsigned long *)(boardData->bridgeaddr + 0x600);
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
 }
 
 
@@ -165,12 +175,13 @@ unsigned int rsPMCQ1MaIntConnect (
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo,	/* Pci Function number of PMCQ1 */
-    rtems_irq_hdl	routine,/* interrupt routine */
-    rtems_irq_hdl_param	arg	/* argument to pass to interrupt routine */
+    FUNCION_PTR	routine,/* interrupt routine */
+    int		arg	/* argument to pass to interrupt routine */
 )
 {
   PPMCQ1BoardData boardData;
-  unsigned int status = RTEMS_IO_ERROR;
+  uint32_t        data;
+  unsigned int    status = RTEMS_IO_ERROR;
 
   for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext)
   {
@@ -179,6 +190,15 @@ unsigned int rsPMCQ1MaIntConnect (
     {
       boardData->maInt = routine;
       boardData->maArg = arg;
+
+      data  = PMCQ1_Read_EPLD(boardData->baseaddr, PMCQ1_INT_MASK );
+      data &= (~PMCQ1_INT_MASK_MA);
+      PMCQ1_Write_EPLD(boardData->baseaddr, PMCQ1_INT_MASK, data );
+
+      data = PMCQ1_Read_EPLD(boardData->baseaddr, PMCQ1_INT_STATUS );
+      data &= (~PMCQ1_INT_STATUS_MA);
+      PMCQ1_Write_EPLD(boardData->baseaddr, PMCQ1_INT_STATUS, data );
+
       status = RTEMS_SUCCESSFUL;
       break;
     }
@@ -234,8 +254,8 @@ unsigned int rsPMCQ1QuiccIntConnect(
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo,	/* Pci Function number of PMCQ1 */
-    rtems_irq_hdl	routine,/* interrupt routine */
-    rtems_irq_hdl_param	arg	/* argument to pass to interrupt routine */
+    FUNCION_PTR	routine,/* interrupt routine */
+    int		arg	/* argument to pass to interrupt routine */
 )
 {
   PPMCQ1BoardData boardData;
@@ -303,20 +323,19 @@ unsigned int rsPMCQ1Init(void)
 {
   int busNo;
   int slotNo;
-  uint32_t baseaddr = 0;
-  uint32_t bridgeaddr = 0;
+  unsigned int baseaddr = 0;
+  unsigned int bridgeaddr = 0;
   unsigned long pbti0_ctl;
   int i;
   unsigned char int_vector;
   int fun;
-  uint32_t temp;
+  int temp;
   PPMCQ1BoardData       boardData;
   rtems_irq_connect_data IrqData = {0,
                                     rsPMCQ1Int,
-                                    NULL,
-                                    (rtems_irq_enable)rsPMCQ1_scc_nullFunc,
-                                    (rtems_irq_disable)rsPMCQ1_scc_nullFunc,
-                                    (rtems_irq_is_enabled)rsPMCQ1_scc_nullFunc,
+                                    rsPMCQ1_scc_nullFunc,
+                                    rsPMCQ1_scc_nullFunc,
+                                    rsPMCQ1_scc_nullFunc,
                                     NULL};
 
   if (rsPMCQ1Initialized)
@@ -436,7 +455,7 @@ unsigned int rsPMCQ1Init(void)
 #ifdef DEBUG_360
     printk("PMCQ1 int_vector %d\n", int_vector);
 #endif
-    IrqData.name  = (rtems_irq_number)((unsigned int)BSP_PCI_IRQ0 + int_vector);
+    IrqData.name  = ((unsigned int)BSP_PCI_IRQ0 + int_vector);
     IrqData.handle = boardData;
     if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
         printk("Error installing interrupt handler!\n");
@@ -474,7 +493,7 @@ unsigned int rsPMCQ1Init(void)
 unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
 {
   unsigned int status = RTEMS_IO_ERROR;
-  uint32_t bridgeaddr = 0;
+  uint32_t     bridgeaddr = 0;
   unsigned long val;
   int i;
   uint32_t venId1;
