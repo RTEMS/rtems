@@ -675,7 +675,7 @@ bool rtems_shell_main_loop(
   int                argc;
   char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
   bool               result = true;
-  bool               input_file = true;
+  bool               input_file = false;
   int                line = 0;
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
