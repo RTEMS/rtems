@@ -30,9 +30,9 @@
   #define LEON3_TIMER_INDEX 0
 #endif
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
-rtems_boolean benchmark_timer_is_initialized = FALSE;
+bool benchmark_timer_is_initialized = FALSE;
 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
 
@@ -78,7 +78,7 @@ int benchmark_timer_read(void)
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;
