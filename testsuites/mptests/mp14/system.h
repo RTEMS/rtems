@@ -106,7 +106,7 @@ TEST_EXTERN uint32_t   Msg_buffer[ 4 ][ 4 ];
 
 extern rtems_multiprocessing_table Multiprocessing_configuration;
 
-TEST_EXTERN volatile rtems_boolean Stop_Test;
+TEST_EXTERN volatile bool Stop_Test;
 TEST_EXTERN rtems_id timer_id;
 
 #define EVENT_TASK_DOT_COUNT        100

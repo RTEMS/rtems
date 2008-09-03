@@ -39,8 +39,8 @@ rtems_task Delayed_events_task(
   status = rtems_timer_create( Timer_name[ 1 ], &Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_create" );
 
-  while ( Stop_Test == FALSE ) {
-    for ( count=DELAYED_EVENT_DOT_COUNT; Stop_Test == FALSE && count; count-- ){
+  while ( Stop_Test == false ) {
+    for ( count=DELAYED_EVENT_DOT_COUNT; Stop_Test == false && count; count-- ){
       status = rtems_timer_fire_after(
         Timer_id[ 1 ],
         1,

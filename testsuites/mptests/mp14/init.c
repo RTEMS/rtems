@@ -31,7 +31,7 @@ rtems_timer_service_routine Stop_Test_TSR(
   void     *ignored_address
 )
 {
-  Stop_Test = TRUE;
+  Stop_Test = true;
 }
 
 rtems_task Init(
@@ -46,7 +46,7 @@ rtems_task Init(
     Multiprocessing_configuration.node
   );
 
-  Stop_Test = FALSE;
+  Stop_Test = false;
 
   status = rtems_timer_create(
     rtems_build_name('S', 'T', 'O', 'P'),

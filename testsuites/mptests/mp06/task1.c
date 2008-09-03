@@ -33,7 +33,7 @@ rtems_timer_service_routine Stop_Test_TSR(
   void     *ignored_address
 )
 {
-  Stop_Test = TRUE;
+  Stop_Test = true;
 }
 
 /*PAGE
@@ -92,7 +92,7 @@ rtems_task Test_task(
   rtems_event_set   event_out;
   rtems_event_set   event_for_this_iteration;
 
-  Stop_Test = FALSE;
+  Stop_Test = false;
 
   remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
@@ -124,7 +124,7 @@ rtems_task Test_task(
   count = 0;
 
   for ( ; ; ) {
-    if ( Stop_Test == TRUE )
+    if ( Stop_Test == true )
       break;
 
     event_for_this_iteration = Event_set_table[ count % 32 ];

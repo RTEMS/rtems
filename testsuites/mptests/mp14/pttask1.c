@@ -48,15 +48,15 @@ rtems_task Partition_task(
 
   yield_count = 100;
 
-  while ( Stop_Test == FALSE ) {
-    for ( count=PARTITION_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
+  while ( Stop_Test == false ) {
+    for ( count=PARTITION_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
       status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer );
       directive_failed( status, "rtems_partition_get_buffer" );
 
       status = rtems_partition_return_buffer( Partition_id[ 1 ], buffer );
       directive_failed( status, "rtems_partition_return_buffer" );
 
-      if (Stop_Test == FALSE)
+      if (Stop_Test == false)
         if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( 1 );
           directive_failed( status, "rtems_task_wake_after" );

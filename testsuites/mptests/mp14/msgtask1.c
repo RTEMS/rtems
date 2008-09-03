@@ -65,10 +65,10 @@ rtems_task Message_queue_task(
       buffer_count   = &Msg_buffer[ index ][3];
   }
 
-  while ( Stop_Test == FALSE ) {
+  while ( Stop_Test == false ) {
     yield_count = 100;
 
-    for ( count=MESSAGE_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
+    for ( count=MESSAGE_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
       status = rtems_message_queue_receive(
         Queue_id[ 1 ],
         (long (*)[4])Msg_buffer[ index ],
@@ -91,7 +91,7 @@ rtems_task Message_queue_task(
       );
       directive_failed( status, "rtems_message_queue_send" );
 
-      if (Stop_Test == FALSE)
+      if (Stop_Test == false)
         if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
           directive_failed( status, "rtems_task_wake_after" );

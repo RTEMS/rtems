@@ -47,6 +47,6 @@ TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 TEST_EXTERN rtems_id   Timer_id[ 4 ];     /* array of timer ids */
 TEST_EXTERN rtems_name Timer_name[ 4 ];   /* array of timer names */
 
-TEST_EXTERN volatile rtems_boolean Stop_Test;
+TEST_EXTERN volatile bool Stop_Test;
 
 /* end of include file */

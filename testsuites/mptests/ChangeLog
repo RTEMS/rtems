@@ -1,3 +1,10 @@
+2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mp05/system.h, mp05/task1.c, mp06/system.h, mp06/task1.c,
+	mp07/system.h, mp07/task1.c, mp14/evtask1.c, mp14/evtmtask.c,
+	mp14/init.c, mp14/msgtask1.c, mp14/pttask1.c, mp14/smtask1.c,
+	mp14/system.h: Convert to bool type.
+
 2008-01-31	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mp01/init.c, mp02/init.c, mp03/init.c, mp04/init.c, mp05/init.c,

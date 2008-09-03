@@ -28,7 +28,7 @@ rtems_timer_service_routine Stop_Test_TSR(
   void     *ignored_address
 )
 {
-  Stop_Test = TRUE;
+  Stop_Test = true;
 }
 
 rtems_task Test_task(
@@ -41,7 +41,7 @@ rtems_task Test_task(
   rtems_id          remote_tid;
   rtems_event_set   event_out;
 
-  Stop_Test = FALSE;
+  Stop_Test = false;
 
   remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
@@ -70,8 +70,8 @@ rtems_task Test_task(
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
-  while ( Stop_Test == FALSE ) {
-    for ( count=DOT_COUNT ; count && (Stop_Test == FALSE) ; count-- ) {
+  while ( Stop_Test == false ) {
+    for ( count=DOT_COUNT ; count && (Stop_Test == false) ; count-- ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,

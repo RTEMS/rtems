@@ -44,9 +44,9 @@ rtems_task Semaphore_task(
 
   yield_count = 100;
 
-  while ( Stop_Test == FALSE ) {
+  while ( Stop_Test == false ) {
 
-    for ( count=SEMAPHORE_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
+    for ( count=SEMAPHORE_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
       status = rtems_semaphore_obtain(
         Semaphore_id[ 1 ],
         RTEMS_DEFAULT_OPTIONS,
@@ -57,7 +57,7 @@ rtems_task Semaphore_task(
       status = rtems_semaphore_release( Semaphore_id[ 1 ] );
       directive_failed( status, "rtems_semaphore_release" );
 
-      if ( Stop_Test == FALSE )
+      if ( Stop_Test == false )
         if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
           directive_failed( status, "rtems_task_wake_after" );

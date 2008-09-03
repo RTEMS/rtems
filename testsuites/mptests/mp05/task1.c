@@ -30,7 +30,7 @@ rtems_timer_service_routine Stop_Test_TSR(
   void     *ignored_address
 )
 {
-  Stop_Test = TRUE;
+  Stop_Test = true;
 }
 
 rtems_task Test_task(
@@ -39,7 +39,7 @@ rtems_task Test_task(
 {
   rtems_status_code status;
 
-  Stop_Test = FALSE;
+  Stop_Test = false;
 
   signal_caught = 0;
   signal_count  = 0;

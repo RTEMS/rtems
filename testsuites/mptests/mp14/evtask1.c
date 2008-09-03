@@ -59,8 +59,8 @@ rtems_task Test_task(
 
   if ( Multiprocessing_configuration.node == 1 ) {
     puts( "Sending events to remote task" );
-    while ( Stop_Test == FALSE ) {
-      for ( count=EVENT_TASK_DOT_COUNT; Stop_Test == FALSE && count; count-- ) {
+    while ( Stop_Test == false ) {
+      for ( count=EVENT_TASK_DOT_COUNT; Stop_Test == false && count; count-- ) {
         status = rtems_event_send( remote_tid, RTEMS_EVENT_16 );
         directive_failed( status, "rtems_event_send" );
      }
@@ -69,8 +69,8 @@ rtems_task Test_task(
   }
 
   puts( "Receiving events from remote task" );
-  while ( Stop_Test == FALSE ) {
-    for ( count=EVENT_TASK_DOT_COUNT ; Stop_Test == FALSE && count ; count-- ) {
+  while ( Stop_Test == false ) {
+    for ( count=EVENT_TASK_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,
