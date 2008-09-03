@@ -1,3 +1,10 @@
+2008-09-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, bestcomm/load_task.c,
+	bestcomm/task_api/tasksetup_general.h: Eliminate requirement to build
+	bestcomm as a relocatable lump. This should reduce the minimum
+	footprint considerably.
+
 2008-09-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* irq/irq.h, irq/irq_asm.h, irq/irq_init.c, vectors/vectors.S,

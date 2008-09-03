@@ -42,8 +42,7 @@ dist_project_lib_DATA += startup/linkcmds \
 	startup/linkcmds.icecube \
 	startup/linkcmds.pm520
 
-noinst_PROGRAMS += bestcomm.rel
-bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
+bestcomm_SOURCES = bestcomm/include/ppctypes.h \
     bestcomm/include/mgt5200/mgt5200.h bestcomm/include/mgt5200/sdma.h \
     bestcomm/bestcomm_api.c bestcomm/bestcomm_api.h bestcomm/bestcomm_glue.c \
     bestcomm/bestcomm_glue.h bestcomm/dma_image.c bestcomm/dma_image.capi.h \
@@ -60,8 +59,6 @@ bestcomm_rel_SOURCES = bestcomm/include/ppctypes.h \
     bestcomm/task_api/bestcomm_api_mem.h bestcomm/task_api/bestcomm_cntrl.h \
     bestcomm/task_api/tasksetup_bdtable.h \
     bestcomm/task_api/tasksetup_general.h
-bestcomm_rel_CPPFLAGS = $(AM_CPPFLAGS) -DMPC5200_BAPI_LIBC_HEADERS
-bestcomm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 clock_SOURCES = clock/clock.c
 console_SOURCES = console/console.c
@@ -123,7 +120,7 @@ endif
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(i2c_SOURCES) \
     $(ide_SOURCES) $(irq_SOURCES) $(mscan_SOURCES) $(nvram_SOURCES) \
-    $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES)
+    $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES) $(bestcomm_SOURCES)
 
 libbsp_a_LIBADD =  $(libcpudir)/shared/cpuIdent.rel \
 	$(libcpudir)/shared/cache.rel \
@@ -132,8 +129,7 @@ libbsp_a_LIBADD =  $(libcpudir)/shared/cpuIdent.rel \
 	$(libcpudir)/@exceptions@/raw_exception.rel \
 	$(libcpudir)/@exceptions@/exc_bspsupport.rel \
 	$(libcpudir)/mpc6xx/mmu.rel \
-	$(libcpudir)/mpc6xx/timer.rel \
-	bestcomm.rel
+	$(libcpudir)/mpc6xx/timer.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

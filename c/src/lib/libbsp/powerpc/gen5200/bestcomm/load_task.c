@@ -22,7 +22,7 @@
 *
 ******************************************************************************/
 
-#ifdef MPC5200_BAPI_LIBC_HEADERS
+#if defined(__rtems__) || defined(MPC5200_BAPI_LIBC_HEADERS)
 #include <string.h>
 #endif
 
