@@ -18,7 +18,8 @@
 extern size_t                     RTC_Count;
 extern rtems_device_minor_number  RTC_Minor;
 
-extern int RTC_Present;
+int RTC_Present;
+
 extern void setRealTimeToRTEMS(void);
 
 /*

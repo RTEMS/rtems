@@ -1,3 +1,7 @@
+2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* tod.c: Remove extern. RTC_Present is not defined anywhere.
+
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1302/bsps
