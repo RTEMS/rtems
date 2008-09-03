@@ -1,0 +1,125 @@
+#
+# Run the tests
+#
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `echo *.exe`
+     tests="$*"
+fi
+
+[ -d $logdir ] ||
+  mkdir $logdir || fatal "could not create log directory ($logdir)"
+
+# where the tmp files go
+trap "test_exit" 1 2 3 13 14 15
+
+for tfile in $tests
+do
+   echo $tfile | grep "exe$" >/dev/null
+   if [ $? -eq 0 ] ; then
+     ext=.exe
+   else
+     ext=.ralf
+   fi
+   tname=`basename $tfile ${ext}`
+   cpus="1"
+   TEST_TYPE="single"
+
+   case $tname in
+       # size is no longer interactive.
+       capture* | monitor* | termios* | fileio* | pppd*)
+            warn "Skipping $tname; it is interactive"
+            continue
+            ;;
+       *-node2*)
+           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
+           continue;;
+       *-node1*)
+           warn "Running both nodes associated with $tname"
+           variant=`echo $tname | sed 's/.*-node[12]//' | sed 's/\.exe//'`
+           tname=`echo $tname | sed 's/-node.*//'`
+           TEST_TYPE="mp"
+           ;;
+       minimum*|stackchk*|*fatal*|termio*)
+           continue           ;;
+   esac
+
+   if [ $TEST_TYPE = "mp" ]
+   then
+       cpus="1 2"
+
+       logfile1=$logdir/${tname}_1${variant}
+       logfile2=$logdir/${tname}_2${variant}
+       infofile1=$logfile1.info
+       infofile2=$logfile2.info
+
+       rm -f ${logfile1} ${logfile2}
+
+       date=`date`
+       echo "Starting $tname at $date"
+
+       # XXX -c ${instruction_limit} 
+
+       runone ${tname}-node1${variant}.${ext} ${max_run_time} | \
+         sed -e 's/^M//' -e '/^$/d' > ${logfile1} &
+       runone ${tname}-node2${variant}.${ext} ${max_run_time} | \
+         sed -e 's/^M//' -e '/^$/d' > ${logfile2} &
+       wait
+
+   fi
+
+   if [ $TEST_TYPE = "single" ]
+   then
+     logfile=$logdir/${tname}_1
+     infofile=$logfile.info
+
+     rm -f ${logfile}.tmp*
+
+     date=`date`
+     echo "Starting $tname at $date"
+
+     # Spin off the simulator in the background
+     #   -c could be used to set an instruction limit
+     runone ${tfile} ${max_run_time} | \
+       sed -e 's/^M//' -e '/^$/d' > ${logfile}
+   fi
+
+   # Create the info files
+   for cpu in $cpus
+   do
+   {
+       echo "$date"
+       echo "Test run on: `uname -n`"
+       echo "Host Information:"
+       echo `uname -a`
+       echo
+
+       cat ${logdir}/${tname}_${cpu}
+
+       if [ "$ran_too_long" = "yes" ]
+       then
+         echo "Test did NOT finish normally; killed after $max_run_time seconds"
+       fi
+
+       echo
+       date;
+   } > ${logdir}/${tname}_${cpu}.info
+   done
+
+   if [ "$cpus" = "1" ]
+   then
+        mv ${infofile} $logdir/${tname}.info
+        mv ${logfile}  $logdir/${tname}
+   fi
+
+done
+
+echo "Tests completed at " `date`
+test_exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+

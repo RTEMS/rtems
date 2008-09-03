@@ -1,0 +1,41 @@
+#! @KSH@ -p
+#
+#  Shell script to ease invocation of the powerpc simulator
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+#  $Id$
+#
+
+TREE_FILE=psim_tree.${LOGNAME}
+RUN=@target_alias@-run
+
+
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+	-v	   -- verbose
+        -l limit   -- specify time limit (default is 'no limit')
+"
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}

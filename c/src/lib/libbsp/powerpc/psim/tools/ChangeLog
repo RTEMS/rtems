@@ -1,3 +1,14 @@
+2008-09-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Rework psim scripts to share code for
+	creating device trees and actually running the tests. Overhaul the
+	device tree generated to always include a block of Flash and a
+	Real-Time Clock. When running MP tests enable the shared memory and
+	semaphore devices.
+	* psim-bottom, psim-gdb-bottom, psim-gdb-top.in, psim-shared,
+	psim-top.in, runtest-bottom, runtest-top.in: New files.
+	* psim, psim-gdb, runtest: Removed.
+
 2008-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Strip .exe or .ralf from file names.

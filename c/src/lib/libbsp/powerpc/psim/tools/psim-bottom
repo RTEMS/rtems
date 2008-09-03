@@ -1,0 +1,35 @@
+#
+# process the options
+#
+# defaults for getopt vars
+#
+
+verbose=""
+limit="0"
+
+## TODO: may want command line ability to turn on some psim tracing
+while getopts vl: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        l)
+            limit="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+shiftcount=`expr $OPTIND - 1`
+shift $shiftcount
+
+args=$*
+
+if [ $# -eq 0 ] ; then
+  fatal
+fi
+
+gen_device_tree ${1} >${TREE_FILE}
+runone ${1} ${limit}
+rm -f ${TREE_FILE}
+exit $?
+

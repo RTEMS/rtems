@@ -1,0 +1,104 @@
+#!@KSH@ -p
+#
+# Run rtems tests on the powerpc simulator
+# This program generates a simulator script to run each test
+# Typically the test is then run, although it can be generated
+# and left as a file using -s
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+#  $Id$
+#
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+RUN=@target_alias@-run 
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+        -o options  -- specify options to be passed to simulator
+	-v	    -- verbose
+        -d          -- generate device tree file (as 'test'.device) and exit
+        -l logdir   -- specify log directory (default is 'logdir')
+
+  Specify test as 'test' or 'test.exe'.
+  All multiprocessing tests *must* be specified simply as 'mp01', etc.
+"
+
+# export everything
+set -a
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+# print args, 1 per line
+ml_echo()
+{
+    for l
+    do
+       echo "$l"
+    done
+}
+
+# run at normal and signalled exit
+test_exit()
+{
+    exit_code=$1
+
+    rm -f ${logfile}.tmp*
+    [ "$sim_pid" ] && kill -9 $sim_pid
+
+    exit $exit_code
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+# max_run_time is defaulted to 5 minutes
+#
+
+verbose=""
+logdir=log
+update_on_tick="no"
+max_run_time=$((5 * 60))
+instruction_limit=1000000000
+
+while getopts vl: OPT
+do
+    case "$OPT" in
+	v) verbose="yes";;
+        l) logdir="$OPTARG";;
+        *) fatal;;
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+#  Check some parameters
+#
+
+# XXX nothing to check so far

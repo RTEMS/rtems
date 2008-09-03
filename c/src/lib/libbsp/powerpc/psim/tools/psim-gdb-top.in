@@ -1,0 +1,18 @@
+#! @KSH@ -p
+#
+#  Shell script to ease invocation of the powerpc simulator with gdb
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+#  $Id$
+#
+
+GDB=@target_alias@-gdb
+
+GDB_FILE=gdb_tree.${LOGNAME}
+

@@ -1,0 +1,98 @@
+
+TREE_FILE=psim_tree.${LOGNAME}
+
+### Generate the PSIM device tree based upon the type of application being run
+gen_device_tree()
+{
+  case ${1} in 
+    *mp*)
+      if [ X${RTEMS_SHM_SEMAPHORE_KEY} = X -o X${RTEMS_SHM_KEY} = X ] ; then
+	fatal  RTEMS_SHM_SEMAPHORE_KEY and/or RTEMS_SHM_KEY not set
+      fi
+
+      use_sysv_devices=yes
+      case ${1} in
+        *node1*) value=1 ;;
+        *)       value=-1 ;;
+      esac
+      ;;
+    *)
+      use_sysv_devices=no
+      ;;
+  esac
+
+cat <<EOF
+#
+#  Device Tree for PSIM
+#
+#  Automatically Generated -- DO NOT EDIT!!
+#
+/#address-cells 1
+/openprom/init/register/pvr 0xfffe0000
+/openprom/options/oea-memory-size 8388608
+##### EEPROM @ 0x0c000000 for 512K
+/eeprom@0x0c000000/reg 0x0c000000 0x80000
+/eeprom@0x0c000000/nr-sectors 8
+/eeprom@0x0c000000/sector-size 0x10000
+/eeprom@0x0c000000/byte-write-delay 1000
+/eeprom@0x0c000000/sector-start-delay 100
+/eeprom@0x0c000000/erase-delay 1000
+/eeprom@0x0c000000/manufacture-code 0x01
+/eeprom@0x0c000000/device-code 0xa4
+
+##### NVRAM/RTC NVRAM Portion is 0x0c080000 for 512K
+##### NVRAM/RTC RTC   Portion is 0x0c100000 for 12
+/nvram@0x0c080000/reg 0x0c080000 524300
+/nvram@0x0c080000/timezone -3600
+EOF
+
+  if [ ${use_sysv_devices} = yes ] ; then
+    echo "##### System V IPC (Semaphore) 0x0c100010 for 12"
+    echo "/sem@0x0c100010/reg 0x0c100010 12"
+    echo "/sem@0x0c100010/key ${RTEMS_SHM_SEMAPHORE_KEY}"
+    echo "/sem@0x0c100010/value ${value}"
+    $@
+    echo "##### System V IPC (Shared Memory) 0x0c110000 for 128K"
+    echo "/shm@0x0c110000/reg 0x0c110000 0x20000"
+    echo "/shm@0x0c110000/key ${RTEMS_SHM_KEY}"
+  fi
+
+}
+
+### run the specified test with the time limit
+runone()
+{
+  testname=${1}
+  max_run_time=${2}
+  if [ ${max_run_time} -eq 0 ] ; then
+    #echo run ${testname} forever
+    ${RUN} -f ${TREE_FILE} ${RUN_DEBUG} ${testname}
+  else
+    #echo run ${testname} for maximum ${max_run_time} seconds
+    ${RUN} -f ${TREE_FILE} ${RUN_DEBUG} ${testname} &
+    pid=$!
+
+    # Make sure it won't run forever...
+    time_run=0
+    while [ $time_run -lt $max_run_time ]
+    do
+      # sleep 5s at a time waiting for job to finish or timer to expire
+      # if job has exited, then we exit, too.
+      sleep 1
+      kill -0 $pid 2> /dev/null
+      running=$?
+      if [ $running -eq 0 ] ; then
+        time_run=$((time_run + 5))
+        if [ $time_run -ge $max_run_time ]; then
+	  kill -9 $pid 2> /dev/null
+	  ran_too_long="yes"
+          echo "${testname} killed after running ${max_run_time} seconds"
+        fi
+      else
+        ran_too_long="no"
+        break
+      fi
+    done
+  fi
+}
+

@@ -1,0 +1,24 @@
+
+## TODO: may want command line ability to turn on some psim tracing
+
+## Generate the GDB Command Script
+gen_gdb_script()
+{
+  echo "tar sim -f ${TREE_FILE}"
+  echo "load"
+  echo "b _Internal_error_Occurred"
+  echo "b rtems_fatal_error_occurred"
+  echo "b __assert"
+  echo "printf \"Use run to start the RTEMS application\\n\""
+}
+
+GDB=powerpc-rtems4.9-gdb
+
+gen_device_tree ${1} >${TREE_FILE}
+gen_gdb_script       >${GDB_FILE}
+
+${GDB} -x ${GDB_FILE} $*
+
+rm -f ${GDB_FILE} ${TREEFILE}
+exit $?
+
