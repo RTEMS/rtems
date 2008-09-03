@@ -1,0 +1,948 @@
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/inttypes.h newlib-1.15.0/newlib/libc/include/inttypes.h
+--- newlib-1.15.0.orig/newlib/libc/include/inttypes.h	2005-12-16 20:03:12.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/inttypes.h	2008-09-03 10:27:41.000000000 +0200
+@@ -242,9 +242,12 @@
+ #define SCNxMAX		__SCNMAX(x)
+ 
+ /* ptr types */
+-#if __have_longlong64
+-#define __PRIPTR(x) __STRINGIFY(ll##x)
+-#define __SCNPTR(x) __STRINGIFY(ll##x)
++#if __ptrint_t_long_defined
++#define __PRIPTR(x) __STRINGIFY(l##x)
++#define __SCNPTR(x) __STRINGIFY(l##x)
++#elif __ptrint_t_int_defined
++#define __PRIPTR(x) __STRINGIFY(x)
++#define __SCNPTR(x) __STRINGIFY(x)
+ #elif __have_long64
+ #define __PRIPTR(x) __STRINGIFY(l##x)
+ #define __SCNPTR(x) __STRINGIFY(l##x)
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/machine/ieeefp.h newlib-1.15.0/newlib/libc/include/machine/ieeefp.h
+--- newlib-1.15.0.orig/newlib/libc/include/machine/ieeefp.h	2006-11-08 20:26:43.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/machine/ieeefp.h	2008-09-03 10:29:27.000000000 +0200
+@@ -62,8 +62,12 @@
+ #  define __IEEE_BIG_ENDIAN
+ # endif
+ #else
+-# define __IEEE_BIG_ENDIAN
+ # ifdef __ARMEL__
++#  define __IEEE_LITTLE_ENDIAN
++# else
++#  define __IEEE_BIG_ENDIAN
++# endif
++# ifdef __ARMWEL__
+ #  define __IEEE_BYTES_LITTLE_ENDIAN
+ # endif
+ #endif
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.15.0/newlib/libc/include/machine/setjmp.h
+--- newlib-1.15.0.orig/newlib/libc/include/machine/setjmp.h	2006-12-18 17:48:03.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/machine/setjmp.h	2008-09-03 10:27:41.000000000 +0200
+@@ -27,7 +27,7 @@
+ 
+ /* necv70 was 9 as well. */
+ 
+-#ifdef __mc68000__
++#if defined(__m68k__) || defined(__mc68000__)
+ /*
+  * onsstack,sigmask,sp,pc,psl,d2-d7,a2-a6,
+  * fp2-fp7	for 68881.
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/stdint.h newlib-1.15.0/newlib/libc/include/stdint.h
+--- newlib-1.15.0.orig/newlib/libc/include/stdint.h	2006-08-16 23:39:43.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/stdint.h	2008-09-03 10:27:41.000000000 +0200
+@@ -348,8 +348,7 @@
+ #endif
+ 
+ /* This must match size_t in stddef.h, currently long unsigned int */
+-#define SIZE_MIN (-__STDINT_EXP(LONG_MAX) - 1L)
+-#define SIZE_MAX __STDINT_EXP(LONG_MAX)
++#define SIZE_MAX (__STDINT_EXP(LONG_MAX) * 2UL + 1)
+ 
+ /* This must match sig_atomic_t in <signal.h> (currently int) */
+ #define SIG_ATOMIC_MIN (-__STDINT_EXP(INT_MAX) - 1)
+@@ -393,6 +392,9 @@
+ #define UINTMAX_C(x)	x##UL
+ #endif
+ 
++#ifdef __rtems__
++#include <machine/stdint.h>
++#endif
+ 
+ #ifdef __cplusplus
+ }
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/sys/errno.h newlib-1.15.0/newlib/libc/include/sys/errno.h
+--- newlib-1.15.0.orig/newlib/libc/include/sys/errno.h	2002-09-24 16:10:12.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/errno.h	2008-09-03 10:27:41.000000000 +0200
+@@ -148,6 +148,7 @@
+ #define ECASECLASH 137  /* Filename exists with different case */
+ #define EILSEQ 138
+ #define EOVERFLOW 139	/* Value too large for defined data type */
++#define ECANCELED 140	/* Operation canceled. */
+ 
+ /* From cygwin32.  */
+ #define EWOULDBLOCK EAGAIN	/* Operation would block */
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/sys/features.h newlib-1.15.0/newlib/libc/include/sys/features.h
+--- newlib-1.15.0.orig/newlib/libc/include/sys/features.h	2006-09-14 00:09:27.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/features.h	2008-09-03 10:27:41.000000000 +0200
+@@ -38,6 +38,7 @@
+ #define _POSIX_MEMLOCK_RANGE		1
+ #define _POSIX_MEMORY_PROTECTION	1
+ #define _POSIX_MESSAGE_PASSING		1
++#define _POSIX_MONOTONIC_CLOCK		200112L
+ #define _POSIX_PRIORITIZED_IO		1
+ #define _POSIX_PRIORITY_SCHEDULING	1
+ #define _POSIX_REALTIME_SIGNALS		1
+@@ -81,17 +82,97 @@
+ #endif
+ 
+ #ifdef __CYGWIN__
+-# define _POSIX_JOB_CONTROL			1
+-# define _POSIX_SAVED_IDS			0
+-# define _POSIX_VERSION				199009L
+-# define _POSIX_THREADS                         1
+-# define _POSIX_THREAD_PROCESS_SHARED           1
+-# define _POSIX_THREAD_SAFE_FUNCTIONS           1
+-# define _POSIX_THREAD_PRIORITY_SCHEDULING      1
+-# define _POSIX_THREAD_ATTR_STACKSIZE           1
+-# define _POSIX_SEMAPHORES                      1
+-# define _POSIX_TIMERS				1
+-# define _POSIX_MEMLOCK_RANGE			1
++
++#if !defined(__STRICT_ANSI__) || defined(__cplusplus) || __STDC_VERSION__ >= 199901L
++#define _POSIX_VERSION				200112L
++#define _POSIX2_VERSION				200112L
++#define _XOPEN_VERSION				   600
++
++#define _POSIX_ADVISORY_INFO			200112L
++/* #define _POSIX_ASYNCHRONOUS_IO		    -1 */
++/* #define _POSIX_BARRIERS			    -1 */
++#define _POSIX_CHOWN_RESTRICTED			     1
++/* #define _POSIX_CLOCK_SELECTION		    -1 */
++/* #define _POSIX_CPUTIME			    -1 */
++#define _POSIX_FSYNC				200112L
++#define _POSIX_IPV6				200112L
++#define _POSIX_JOB_CONTROL			     1
++#define _POSIX_MAPPED_FILES			200112L
++/* #define _POSIX_MEMLOCK			    -1 */
++#define _POSIX_MEMLOCK_RANGE			200112L
++#define _POSIX_MEMORY_PROTECTION		200112L
++#define _POSIX_MESSAGE_PASSING			200112L
++/* #define _POSIX_MONOTONIC_CLOCK		    -1 */
++#define _POSIX_NO_TRUNC				     1
++/* #define _POSIX_PRIORITIZED_IO		    -1 */
++#define _POSIX_PRIORITY_SCHEDULING		200112L
++#define _POSIX_RAW_SOCKETS			200112L
++#define _POSIX_READER_WRITER_LOCKS		200112L
++#define _POSIX_REALTIME_SIGNALS			200112L
++#define _POSIX_REGEXP				     1
++#define _POSIX_SAVED_IDS			     1
++#define _POSIX_SEMAPHORES			200112L
++#define _POSIX_SHARED_MEMORY_OBJECTS		200112L 
++#define _POSIX_SHELL				     1
++/* #define _POSIX_SPAWN				    -1 */
++/* #define _POSIX_SPIN_LOCKS			    -1 */
++/* #define _POSIX_SPORADIC_SERVER		    -1 */
++#define _POSIX_SYNCHRONIZED_IO			200112L
++/* #define _POSIX_THREAD_ATTR_STACKADDR		    -1 */
++#define _POSIX_THREAD_ATTR_STACKSIZE		200112L
++/* #define _POSIX_THREAD_CPUTIME		    -1 */
++/* #define _POSIX_THREAD_PRIO_INHERIT		    -1 */
++/* #define _POSIX_THREAD_PRIO_PROTECT		    -1 */
++#define _POSIX_THREAD_PRIORITY_SCHEDULING	200112L
++#define _POSIX_THREAD_PROCESS_SHARED		200112L
++#define _POSIX_THREAD_SAFE_FUNCTIONS		200112L
++/* #define _POSIX_THREAD_SPORADIC_SERVER	    -1 */
++#define _POSIX_THREADS				200112L
++/* #define _POSIX_TIMEOUTS			    -1 */
++#define _POSIX_TIMERS				     1
++/* #define _POSIX_TRACE				    -1 */
++/* #define _POSIX_TRACE_EVENT_FILTER		    -1 */
++/* #define _POSIX_TRACE_INHERIT			    -1 */
++/* #define _POSIX_TRACE_LOG			    -1 */
++/* #define _POSIX_TYPED_MEMORY_OBJECTS		    -1 */
++#define _POSIX_VDISABLE				   '\0'
++#define _POSIX2_C_BIND				200112L
++#define _POSIX2_C_DEV				200112L
++#define _POSIX2_CHAR_TERM			200112L
++/* #define _POSIX2_FORT_DEV			    -1 */
++/* #define _POSIX2_FORT_RUN			    -1 */
++/* #define _POSIX2_LOCALEDEF			    -1 */
++/* #define _POSIX2_PBS				    -1 */
++/* #define _POSIX2_PBS_ACCOUNTING		    -1 */
++/* #define _POSIX2_PBS_CHECKPOINT		    -1 */
++/* #define _POSIX2_PBS_LOCATE			    -1 */
++/* #define _POSIX2_PBS_MESSAGE			    -1 */
++/* #define _POSIX2_PBS_TRACK			    -1 */
++#define _POSIX2_SW_DEV				200112L
++#define _POSIX2_UPE				200112L
++/* #define _POSIX_V6_ILP32_OFF32		    -1 */
++#define _XBS5_ILP32_OFF32			_POSIX_V6_ILP32_OFF32
++#define _POSIX_V6_ILP32_OFFBIG			     1
++#define _XBS5_ILP32_OFFBIG			_POSIX_V6_ILP32_OFFBIG
++/* #define _POSIX_V6_LP64_OFF64			    -1 */
++#define _XBS5_LP64_OFF64			_POSIX_V6_LP64_OFF64
++/* #define _POSIX_V6_LPBIG_OFFBIG		    -1 */
++#define _XBS5_LPBIG_OFFBIG			_POSIX_V6_LPBIG_OFFBIG
++#define _XOPEN_CRYPT				     1
++#define _XOPEN_ENH_I18N				     1
++/* #define _XOPEN_LEGACY			    -1 */
++/* #define _XOPEN_REALTIME			    -1 */
++/* #define _XOPEN_REALTIME_THREADS		    -1 */
++#define _XOPEN_SHM				     1
++/* #define _XOPEN_STREAMS			    -1 */
++/* #define _XOPEN_UNIX				    -1 */
++
++#endif /* !__STRICT_ANSI__ || __cplusplus || __STDC_VERSION__ >= 199901L */
++#endif /* __CYGWIN__ */
++
++#ifdef __SPU__
++/* Not much for now! */
++#define _POSIX_TIMERS				     1
+ #endif
+ 
+ #ifdef __cplusplus
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/sys/time.h newlib-1.15.0/newlib/libc/include/sys/time.h
+--- newlib-1.15.0.orig/newlib/libc/include/sys/time.h	2006-02-15 11:26:30.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/time.h	2008-09-03 10:27:41.000000000 +0200
+@@ -70,7 +70,7 @@
+   } while (0)
+ #endif /* defined (__rtems__) || defined (__CYGWIN__) */
+ 
+-int _EXFUN(gettimeofday, (struct timeval *__p, struct timezone *__z));
++int _EXFUN(gettimeofday, (struct timeval *__p, void *__tz));
+ int _EXFUN(settimeofday, (const struct timeval *, const struct timezone *));
+ int _EXFUN(utimes, (const char *__path, const struct timeval *__tvp));
+ int _EXFUN(getitimer, (int __which, struct itimerval *__value));
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/sys/_types.h newlib-1.15.0/newlib/libc/include/sys/_types.h
+--- newlib-1.15.0.orig/newlib/libc/include/sys/_types.h	2004-06-11 22:37:09.000000000 +0200
++++ newlib-1.15.0/newlib/libc/include/sys/_types.h	2008-09-03 10:27:41.000000000 +0200
+@@ -39,4 +39,7 @@
+ /* Iconv descriptor type */
+ typedef void *_iconv_t;
+ 
++typedef long * __intptr_t;
++typedef unsigned long* __uintptr_t;
++
+ #endif	/* _SYS__TYPES_H */
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h newlib-1.15.0/newlib/libc/include/sys/unistd.h
+--- newlib-1.15.0.orig/newlib/libc/include/sys/unistd.h	2006-11-07 16:33:40.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/sys/unistd.h	2008-09-03 10:27:41.000000000 +0200
+@@ -27,6 +27,9 @@
+ int     _EXFUN(chroot, (const char *__path ));
+ #endif
+ int     _EXFUN(close, (int __fildes ));
++#if defined(__CYGWIN__)
++size_t	_EXFUN(confstr, (int __name, char *__buf, size_t __len));
++#endif
+ char    _EXFUN(*ctermid, (char *__s ));
+ char    _EXFUN(*cuserid, (char *__s ));
+ #if defined(__CYGWIN__)
+@@ -151,6 +154,7 @@
+ int     _EXFUN(ttyname_r, (int, char *, size_t)); 
+ #endif
+ int     _EXFUN(unlink, (const char *__path ));
++int 	_EXFUN(usleep, (useconds_t __useconds));
+ int     _EXFUN(vhangup, (void ));
+ _READ_WRITE_RETURN_TYPE _EXFUN(write, (int __fd, const void *__buf, size_t __nbyte ));
+ 
+@@ -196,23 +200,21 @@
+ int     _EXFUN(truncate, (const char *, off_t __length));
+ #endif
+ #endif
++
+ #if defined(__CYGWIN__) || defined(__rtems__)
+ int	_EXFUN(getdtablesize, (void));
+ int	_EXFUN(setdtablesize, (int));
+ useconds_t _EXFUN(ualarm, (useconds_t __useconds, useconds_t __interval));
+-unsigned _EXFUN(usleep, (unsigned int __useconds));
+ #if !(defined  (_WINSOCK_H) || defined (__USE_W32_SOCKETS))
+ /* winsock[2].h defines as __stdcall, and with int as 2nd arg */
+  int	_EXFUN(gethostname, (char *__name, size_t __len));
+ #endif
+ char *	_EXFUN(mktemp, (char *));
+-#if defined(__CYGWIN__)
++#if defined(__CYGWIN__) || defined(__rtems__)
+ void    _EXFUN(sync, (void));
+-#else /* defined(__rtems__) */
+-int     _EXFUN(sync, (void));
+ #endif
+ #endif
+-int     _EXFUN(readlink, (const char *__path, char *__buf, int __buflen));
++ssize_t _EXFUN(readlink, (const char *__path, char *__buf, size_t __buflen));
+ int     _EXFUN(symlink, (const char *__name1, const char *__name2));
+ 
+ #define	F_OK	0
+@@ -231,63 +233,55 @@
+ #define STDERR_FILENO   2       /* standard error file descriptor */
+ 
+ /*
+- *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 96
+- *
+- *  NOTE: Table 4-2, Configurable System Variables, p. 96
+- */
+-
+-#define _SC_ARG_MAX                 0
+-#define _SC_CHILD_MAX               1
+-#define _SC_CLK_TCK                 2
+-#define _SC_NGROUPS_MAX             3
+-#define _SC_OPEN_MAX                4
+-  /* no _SC_STREAM_MAX */
+-#define _SC_JOB_CONTROL             5
+-#define _SC_SAVED_IDS               6
+-#define _SC_VERSION                 7
+-#define _SC_PAGESIZE                8
+-/* CYGWIN-specific values .. do not touch */
+-#define _SC_NPROCESSORS_CONF        9
+-#define _SC_NPROCESSORS_ONLN       10
+-#define _SC_PHYS_PAGES             11
+-#define _SC_AVPHYS_PAGES           12
+-/* end of CYGWIN-specific values */
+-#define _SC_MQ_OPEN_MAX            13
+-#define _SC_MQ_PRIO_MAX            14
+-#define _SC_RTSIG_MAX              15
+-#define _SC_SEM_NSEMS_MAX          16
+-#define _SC_SEM_VALUE_MAX          17
+-#define _SC_SIGQUEUE_MAX           18
+-#define _SC_TIMER_MAX              19
+-#define _SC_TZNAME_MAX             20
+-
+-#define _SC_ASYNCHRONOUS_IO        21
+-#define _SC_FSYNC                  22
+-#define _SC_MAPPED_FILES           23
+-#define _SC_MEMLOCK                24
+-#define _SC_MEMLOCK_RANGE          25
+-#define _SC_MEMORY_PROTECTION      26
+-#define _SC_MESSAGE_PASSING        27
+-#define _SC_PRIORITIZED_IO         28
+-#define _SC_REALTIME_SIGNALS       29
+-#define _SC_SEMAPHORES             30
+-#define _SC_SHARED_MEMORY_OBJECTS  31
+-#define _SC_SYNCHRONIZED_IO        32
+-#define _SC_TIMERS                 33
+-#define _SC_AIO_LISTIO_MAX         34
+-#define _SC_AIO_MAX                35
+-#define _SC_AIO_PRIO_DELTA_MAX     36
+-#define _SC_DELAYTIMER_MAX         37
+-
+-/*
+- *  P1003.1c/D10, p. 52 adds the following.
++ *  sysconf values per IEEE Std 1003.1, 2004 Edition
+  */
+ 
++#define _SC_ARG_MAX                       0
++#define _SC_CHILD_MAX                     1
++#define _SC_CLK_TCK                       2
++#define _SC_NGROUPS_MAX                   3
++#define _SC_OPEN_MAX                      4
++#define _SC_JOB_CONTROL                   5
++#define _SC_SAVED_IDS                     6
++#define _SC_VERSION                       7
++#define _SC_PAGESIZE                      8
++#define _SC_PAGE_SIZE                     _SC_PAGESIZE
++/* These are non-POSIX values we accidentally introduced in 2000 without
++   guarding them.  Keeping them unguarded for backward compatibility. */
++#define _SC_NPROCESSORS_CONF              9
++#define _SC_NPROCESSORS_ONLN             10
++#define _SC_PHYS_PAGES                   11
++#define _SC_AVPHYS_PAGES                 12
++/* End of non-POSIX values. */
++#define _SC_MQ_OPEN_MAX                  13
++#define _SC_MQ_PRIO_MAX                  14
++#define _SC_RTSIG_MAX                    15
++#define _SC_SEM_NSEMS_MAX                16
++#define _SC_SEM_VALUE_MAX                17
++#define _SC_SIGQUEUE_MAX                 18
++#define _SC_TIMER_MAX                    19
++#define _SC_TZNAME_MAX                   20
++#define _SC_ASYNCHRONOUS_IO              21
++#define _SC_FSYNC                        22
++#define _SC_MAPPED_FILES                 23
++#define _SC_MEMLOCK                      24
++#define _SC_MEMLOCK_RANGE                25
++#define _SC_MEMORY_PROTECTION            26
++#define _SC_MESSAGE_PASSING              27
++#define _SC_PRIORITIZED_IO               28
++#define _SC_REALTIME_SIGNALS             29
++#define _SC_SEMAPHORES                   30
++#define _SC_SHARED_MEMORY_OBJECTS        31
++#define _SC_SYNCHRONIZED_IO              32
++#define _SC_TIMERS                       33
++#define _SC_AIO_LISTIO_MAX               34
++#define _SC_AIO_MAX                      35
++#define _SC_AIO_PRIO_DELTA_MAX           36
++#define _SC_DELAYTIMER_MAX               37
+ #define _SC_THREAD_KEYS_MAX              38
+ #define _SC_THREAD_STACK_MIN             39
+ #define _SC_THREAD_THREADS_MAX           40
+ #define _SC_TTY_NAME_MAX                 41
+-
+ #define _SC_THREADS                      42
+ #define _SC_THREAD_ATTR_STACKADDR        43
+ #define _SC_THREAD_ATTR_STACKSIZE        44
+@@ -302,40 +296,143 @@
+ #define _SC_GETPW_R_SIZE_MAX             51
+ #define _SC_LOGIN_NAME_MAX               52
+ #define _SC_THREAD_DESTRUCTOR_ITERATIONS 53
++#define _SC_ADVISORY_INFO                54
++#define _SC_ATEXIT_MAX                   55
++#define _SC_BARRIERS                     56
++#define _SC_BC_BASE_MAX                  57
++#define _SC_BC_DIM_MAX                   58
++#define _SC_BC_SCALE_MAX                 59
++#define _SC_BC_STRING_MAX                60
++#define _SC_CLOCK_SELECTION              61
++#define _SC_COLL_WEIGHTS_MAX             62
++#define _SC_CPUTIME                      63
++#define _SC_EXPR_NEST_MAX                64
++#define _SC_HOST_NAME_MAX                65
++#define _SC_IOV_MAX                      66
++#define _SC_IPV6                         67
++#define _SC_LINE_MAX                     68
++#define _SC_MONOTONIC_CLOCK              69
++#define _SC_RAW_SOCKETS                  70
++#define _SC_READER_WRITER_LOCKS          71
++#define _SC_REGEXP                       72
++#define _SC_RE_DUP_MAX                   73
++#define _SC_SHELL                        74
++#define _SC_SPAWN                        75
++#define _SC_SPIN_LOCKS                   76
++#define _SC_SPORADIC_SERVER              77
++#define _SC_SS_REPL_MAX                  78
++#define _SC_SYMLOOP_MAX                  79
++#define _SC_THREAD_CPUTIME               80
++#define _SC_THREAD_SPORADIC_SERVER       81
++#define _SC_TIMEOUTS                     82
++#define _SC_TRACE                        83
++#define _SC_TRACE_EVENT_FILTER           84
++#define _SC_TRACE_EVENT_NAME_MAX         85
++#define _SC_TRACE_INHERIT                86
++#define _SC_TRACE_LOG                    87
++#define _SC_TRACE_NAME_MAX               88
++#define _SC_TRACE_SYS_MAX                89
++#define _SC_TRACE_USER_EVENT_MAX         90
++#define _SC_TYPED_MEMORY_OBJECTS         91
++#define _SC_V6_ILP32_OFF32               92
++#define _SC_XBS5_ILP32_OFF32             _SC_V6_ILP32_OFF32
++#define _SC_V6_ILP32_OFFBIG              93
++#define _SC_XBS5_ILP32_OFFBIG            _SC_V6_ILP32_OFFBIG
++#define _SC_V6_LP64_OFF64                94
++#define _SC_XBS5_LP64_OFF64              _SC_V6_LP64_OFF64
++#define _SC_V6_LPBIG_OFFBIG              95
++#define _SC_XBS5_LPBIG_OFFBIG            _SC_V6_LPBIG_OFFBIG
++#define _SC_XOPEN_CRYPT                  96
++#define _SC_XOPEN_ENH_I18N               97
++#define _SC_XOPEN_LEGACY                 98
++#define _SC_XOPEN_REALTIME               99
++#define _SC_STREAM_MAX                  100
++#define _SC_PRIORITY_SCHEDULING         101
++#define _SC_XOPEN_REALTIME_THREADS      102
++#define _SC_XOPEN_SHM                   103
++#define _SC_XOPEN_STREAMS               104
++#define _SC_XOPEN_UNIX                  105
++#define _SC_XOPEN_VERSION               106
++#define _SC_2_CHAR_TERM                 107
++#define _SC_2_C_BIND                    108
++#define _SC_2_C_DEV                     109
++#define _SC_2_FORT_DEV                  110
++#define _SC_2_FORT_RUN                  111
++#define _SC_2_LOCALEDEF                 112
++#define _SC_2_PBS                       113
++#define _SC_2_PBS_ACCOUNTING            114
++#define _SC_2_PBS_CHECKPOINT            115
++#define _SC_2_PBS_LOCATE                116
++#define _SC_2_PBS_MESSAGE               117
++#define _SC_2_PBS_TRACK                 118
++#define _SC_2_SW_DEV                    119
++#define _SC_2_UPE                       120
++#define _SC_2_VERSION                   121
+ 
+-#if !defined(__rtems__)
+-#define _SC_STREAM_MAX			100
+-#endif
+-#if !defined(__CYGWIN__) && !defined(__rtems__)
+-#define _SC_PRIORITY_SCHEDULING		101
+-#endif
+-  
+-# define	_PC_LINK_MAX	        0
+-# define	_PC_MAX_CANON	        1
+-# define	_PC_MAX_INPUT	        2
+-# define	_PC_NAME_MAX	        3
+-# define	_PC_PATH_MAX	        4
+-# define	_PC_PIPE_BUF	        5
+-# define	_PC_CHOWN_RESTRICTED   	6
+-# define	_PC_NO_TRUNC	        7
+-# define	_PC_VDISABLE	        8
+-# define	_PC_ASYNC_IO            9
+-# define	_PC_PRIO_IO            10
+-# define	_PC_SYNC_IO            11
+-# define	_PC_FILESIZEBITS       12
+-# define	_PC_2_SYMLINKS         13
+-# define	_PC_SYMLINK_MAX        14
++/*
++ *  pathconf values per IEEE Std 1003.1, 2004 Edition
++ */
++
++#define _PC_LINK_MAX                      0
++#define _PC_MAX_CANON                     1
++#define _PC_MAX_INPUT                     2
++#define _PC_NAME_MAX                      3
++#define _PC_PATH_MAX                      4
++#define _PC_PIPE_BUF                      5
++#define _PC_CHOWN_RESTRICTED              6
++#define _PC_NO_TRUNC                      7
++#define _PC_VDISABLE                      8
++#define _PC_ASYNC_IO                      9
++#define _PC_PRIO_IO                      10
++#define _PC_SYNC_IO                      11
++#define _PC_FILESIZEBITS                 12
++#define _PC_2_SYMLINKS                   13
++#define _PC_SYMLINK_MAX                  14
+ #ifdef __CYGWIN__
+ /* Ask for POSIX permission bits support. */
+-# define	_PC_POSIX_PERMISSIONS   90
++#define _PC_POSIX_PERMISSIONS            90
+ /* Ask for full POSIX permission support including uid/gid settings. */
+-# define	_PC_POSIX_SECURITY     91
++#define _PC_POSIX_SECURITY               91
+ #endif
+ 
+-/* FIXME: This is temporary until winsup gets sorted out.  */
+-#ifdef __CYGWIN__
+-#define MAXPATHLEN (260 - 1 /* NUL */)
+-#else
++/*
++ *  confstr values per IEEE Std 1003.1, 2004 Edition
++ */
++
++#ifdef __CYGWIN__	/* Only defined on Cygwin for now. */
++#define _CS_PATH                               0
++#define _CS_POSIX_V6_ILP32_OFF32_CFLAGS        1
++#define _CS_XBS5_ILP32_OFF32_CFLAGS           _CS_POSIX_V6_ILP32_OFF32_CFLAGS
++#define _CS_POSIX_V6_ILP32_OFF32_LDFLAGS       2
++#define _CS_XBS5_ILP32_OFF32_LDFLAGS          _CS_POSIX_V6_ILP32_OFF32_LDFLAGS
++#define _CS_POSIX_V6_ILP32_OFF32_LIBS          3
++#define _CS_XBS5_ILP32_OFF32_LIBS             _CS_POSIX_V6_ILP32_OFF32_LIBS
++#define _CS_XBS5_ILP32_OFF32_LINTFLAGS         4
++#define _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS       5
++#define _CS_XBS5_ILP32_OFFBIG_CFLAGS          _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS
++#define _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS      6
++#define _CS_XBS5_ILP32_OFFBIG_LDFLAGS         _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS
++#define _CS_POSIX_V6_ILP32_OFFBIG_LIBS         7
++#define _CS_XBS5_ILP32_OFFBIG_LIBS            _CS_POSIX_V6_ILP32_OFFBIG_LIBS
++#define _CS_XBS5_ILP32_OFFBIG_LINTFLAGS        8
++#define _CS_POSIX_V6_LP64_OFF64_CFLAGS         9
++#define _CS_XBS5_LP64_OFF64_CFLAGS            _CS_POSIX_V6_LP64_OFF64_CFLAGS
++#define _CS_POSIX_V6_LP64_OFF64_LDFLAGS       10
++#define _CS_XBS5_LP64_OFF64_LDFLAGS           _CS_POSIX_V6_LP64_OFF64_LDFLAGS
++#define _CS_POSIX_V6_LP64_OFF64_LIBS          11
++#define _CS_XBS5_LP64_OFF64_LIBS              _CS_POSIX_V6_LP64_OFF64_LIBS
++#define _CS_XBS5_LP64_OFF64_LINTFLAGS         12
++#define _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS      13
++#define _CS_XBS5_LPBIG_OFFBIG_CFLAGS          _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS
++#define _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS     14
++#define _CS_XBS5_LPBIG_OFFBIG_LDFLAGS         _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS
++#define _CS_POSIX_V6_LPBIG_OFFBIG_LIBS        15
++#define _CS_XBS5_LPBIG_OFFBIG_LIBS            _CS_POSIX_V6_LPBIG_OFFBIG_LIBS
++#define _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS       16
++#define _CS_POSIX_V6_WIDTH_RESTRICTED_ENVS    17
++#endif
++
++#ifndef __CYGWIN__
+ # define	MAXPATHLEN	1024
+ #endif
+ 
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/tar.h newlib-1.15.0/newlib/libc/include/tar.h
+--- newlib-1.15.0.orig/newlib/libc/include/tar.h	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/tar.h	2008-09-03 10:27:41.000000000 +0200
+@@ -0,0 +1,39 @@
++/*
++ * tar.h
++ */
++
++#ifndef _TAR_H
++#define _TAR_H
++
++/* General definitions */
++#define TMAGIC 		"ustar" /* ustar plus null byte. */
++#define TMAGLEN 	6 	/* Length of the above. */
++#define TVERSION 	"00"	/* 00 without a null byte. */
++#define TVERSLEN	2	/* Length of the above. */
++
++/* Typeflag field definitions */
++#define REGTYPE 	'0'	/* Regular file. */
++#define AREGTYPE	'\0'	/* Regular file. */
++#define LNKTYPE		'1'	/* Link. */
++#define SYMTYPE		'2'	/* Symbolic link. */
++#define CHRTYPE		'3'	/* Character special. */
++#define BLKTYPE		'4'	/* Block special. */
++#define DIRTYPE		'5'	/* Directory. */
++#define FIFOTYPE	'6'	/* FIFO special. */
++#define CONTTYPE	'7'	/* Reserved. */
++
++/* Mode field bit definitions (octal) */
++#define	TSUID		04000	/* Set UID on execution. */
++#define	TSGID		02000	/* Set GID on execution. */
++#define	TSVTX		01000	/* On directories, restricted deletion flag. */
++#define	TUREAD		00400	/* Read by owner. */
++#define	TUWRITE		00200	/* Write by owner. */
++#define	TUEXEC		00100	/* Execute/search by owner. */
++#define	TGREAD		00040	/* Read by group. */
++#define	TGWRITE		00020	/* Write by group. */
++#define	TGEXEC		00010	/* Execute/search by group. */
++#define	TOREAD		00004	/* Read by other. */
++#define	TOWRITE		00002	/* Write by other. */
++#define	TOEXEC		00001	/* Execute/search by other. */
++
++#endif
+diff -Naur newlib-1.15.0.orig/newlib/libc/include/time.h newlib-1.15.0/newlib/libc/include/time.h
+--- newlib-1.15.0.orig/newlib/libc/include/time.h	2005-11-18 16:57:24.000000000 +0100
++++ newlib-1.15.0/newlib/libc/include/time.h	2008-09-03 10:27:41.000000000 +0200
+@@ -226,6 +226,16 @@
+ 
+ #endif
+ 
++#if defined(_POSIX_MONOTONIC_CLOCK)
++
++/*  The identifier for the system-wide monotonic clock, which is defined
++    as a clock whose value cannot be set via clock_settime() and which 
++    cannot have backward clock jumps. */
++
++#define CLOCK_MONOTONIC (clockid_t)4
++
++#endif
++
+ #if defined(_POSIX_CPUTIME)
+ 
+ /* Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55 */
+diff -Naur newlib-1.15.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.15.0/newlib/libc/machine/arm/machine/endian.h
+--- newlib-1.15.0.orig/newlib/libc/machine/arm/machine/endian.h	2004-05-07 22:29:24.000000000 +0200
++++ newlib-1.15.0/newlib/libc/machine/arm/machine/endian.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,12 +0,0 @@
+-/* ARM configuration file */
+-
+-#ifndef _MACHINE_ENDIAN_H
+-# define _MACHINE_ENDIAN_H
+-
+-#ifdef __ARMEB__
+-#define BYTE_ORDER BIG_ENDIAN
+-#else
+-#define BYTE_ORDER LITTLE_ENDIAN
+-#endif
+-
+-#endif
+diff -Naur newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S
+--- newlib-1.15.0.orig/newlib/libc/machine/powerpc/setjmp.S	2002-04-19 21:16:17.000000000 +0200
++++ newlib-1.15.0/newlib/libc/machine/powerpc/setjmp.S	2008-09-03 10:27:41.000000000 +0200
+@@ -5,13 +5,14 @@
+ #include "ppc-asm.h"
+ 
+ FUNC_START(setjmp)
+-#ifdef __ALTIVEC__
+-	addi	3,3,15		# align Altivec to 16 byte boundary
++      mfmsr   4
++      rlwinm. 4,4,0,6,6       # check MSR_VE
++      addi    3,3,7
++      rlwinm  3,3,0,0,28  # align to 8 byte boundary
++      beq             1f
++    addi      3,3,15          # VE is enabled; align to 16 byte bdry
+ 	rlwinm	3,3,0,0,27
+-#else
+-	addi	3,3,7		# align to 8 byte boundary
+-	rlwinm	3,3,0,0,28
+-#endif
++1:
+ 	stw	1,0(3)		# offset 0
+ 	stwu	2,4(3)		# offset 4
+ 	stwu	13,4(3)		# offset 8
+@@ -39,6 +40,12 @@
+ 	stwu	4,4(3)		# offset 88
+ 				# one word pad to get floating point aligned on 8 byte boundary
+ #ifndef _SOFT_FLOAT
++      mfmsr   4
++      rlwinm. 4,4,0,18,18
++      bne             1f                      # only save FPregs if FPU is enabled
++      addi    3,3,18*8        # skip FPregs
++      b               2f
++1:
+ 	stfdu	14,8(3)		# offset 96
+ 	stfdu	15,8(3)		# offset 104
+ 	stfdu	16,8(3)		# offset 112
+@@ -57,12 +64,20 @@
+ 	stfdu	29,8(3)		# offset 216
+ 	stfdu	30,8(3)		# offset 224
+ 	stfdu	31,8(3)		# offset 232
++2:
+ #endif
+ 
+ 	/* This requires a total of 21 * 4 + 18 * 8 + 4 + 4 + 4
+ 	   bytes == 60 * 4 bytes == 240 bytes.  */
+ 
+-#ifdef __ALTIVEC__
++#if defined(__ALTIVEC__)
++      /* could reuse r4 but I reload it just in case the code changes... */
++      mfmsr   4
++      rlwinm. 4,4,0,6,6       # check MSR_VE
++      bne             1f                      # only save vector regs if altivec is enabled
++      addi    3,3,(8 + 12*16) # skip vector regs
++      b               2f
++1:
+ 	/* save Altivec vrsave and vr20-vr31 registers */
+ 	mfspr	4,256		# vrsave register
+ 	stwu	4,16(3)		# offset 248
+@@ -90,6 +105,7 @@
+ 	stvx	30,0,3		# offset 416
+ 	addi	3,3,16
+ 	stvx	31,0,3		# offset 432
++2:
+ 
+ 	/* This requires a total of 240 + 8 + 8 + 12 * 16 == 448 bytes. */
+ #endif
+@@ -99,13 +115,14 @@
+ 
+ 
+ FUNC_START(longjmp)
+-#ifdef __ALTIVEC__
+-	addi	3,3,15		# align Altivec to 16 byte boundary
++      mfmsr   4
++      rlwinm. 4,4,0,6,6       # check MSR_VE
++      addi    3,3,7
++      rlwinm  3,3,0,0,28  # align to 8 byte boundary
++      beq             1f
++    addi      3,3,15          # VE is enabled; align to 16 byte bdry
+ 	rlwinm	3,3,0,0,27
+-#else
+-	addi	3,3,7		# align to 8 byte boundary
+-	rlwinm	3,3,0,0,28
+-#endif
++1:
+ 	lwz	1,0(3)		# offset 0 
+ 	lwzu	2,4(3)		# offset 4 
+ 	lwzu	13,4(3)		# offset 8 
+@@ -129,10 +146,17 @@
+ 	lwzu	31,4(3)		# offset 80
+ 	lwzu	5,4(3)		# offset 84
+ 	mtlr	5
++#if !defined(_SOFT_FLOAT)
++      mfmsr   5
++      rlwinm. 5,5,0,18,18 # is MSR_FP set?
++#endif
+ 	lwzu	5,4(3)		# offset 88
+-	mtcrf	255,5
+ 				# one word pad to get floating point aligned on 8 byte boundary
+ #ifndef _SOFT_FLOAT
++      bne             1f
++      addi    3,3,18*8                # skip FPregs
++      b               2f
++1:
+ 	lfdu	14,8(3)         # offset 96 
+ 	lfdu	15,8(3)         # offset 104
+ 	lfdu	16,8(3)         # offset 112
+@@ -151,9 +175,17 @@
+ 	lfdu	29,8(3)         # offset 216
+ 	lfdu	30,8(3)         # offset 224
+ 	lfdu	31,8(3)         # offset 232
++2:
+ #endif
++      mtcrf   255,5
+ 
+-#ifdef __ALTIVEC__
++#if defined(__ALTIVEC__)
++      mfmsr   5
++      rlwinm. 5,5,0,6,6       # is MSR_FP set?
++      bne             1f
++      addi    3,3,(8+12*16)   # skip vector regs
++      b               2f
++1:
+ 	/* restore Altivec vrsave and v20-v31 registers */
+ 	lwzu	5,16(3)		# offset 248
+ 	mtspr	256,5		# vrsave
+@@ -181,6 +213,7 @@
+ 	lvx	30,0,3		# offset 416
+ 	addi	3,3,16
+ 	lvx	31,0,3		# offset 432
++2:
+ #endif
+ 
+ 	mr.	3,4
+diff -Naur newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h
+--- newlib-1.15.0.orig/newlib/libc/sys/rtems/machine/stdint.h	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.15.0/newlib/libc/sys/rtems/machine/stdint.h	2008-09-03 10:27:41.000000000 +0200
+@@ -0,0 +1,31 @@
++/*
++ *
++ */
++#ifndef _MACHINE_STDINT_H
++#define _MACHINE_STDINT_H
++
++#ifndef _STDINT_H
++#error machine/stdint.h is an internal file and  must not be directly included
++#endif
++
++#if defined(__sparc__) \
++  || defined(__powerpc__) || defined(__PPC__) \
++  || defined(__mips__) \
++  || defined(__sh__) \
++  || defined(__AVR__) \
++  || defined(_C4x) || defined(_C3x) \
++  || defined(__H8300__)
++/* PTRDIFF_TYPE = int */
++#define __ptrint_t_int_defined 1
++#endif
++
++#if defined(__i386__) \
++  || defined(__m68k__) \
++  || defined(__bfin__) \
++  || defined(__arm__) \
++  || defined(__H8300S__) || defined(__H8300H__)
++/* PTRDIFF_TYPE = long */
++#define __ptrint_t_long_defined 1
++#endif
++
++#endif
+diff -Naur newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h
+--- newlib-1.15.0.orig/newlib/libc/sys/rtems/sys/param.h	2004-05-07 22:29:24.000000000 +0200
++++ newlib-1.15.0/newlib/libc/sys/rtems/sys/param.h	2008-09-03 10:27:41.000000000 +0200
+@@ -93,7 +93,6 @@
+ #include <sys/resource.h>
+ #include <sys/ucred.h>
+ #include <sys/uio.h>
+-#include <sys/rtprio.h>
+ 
+ #ifndef FALSE
+ #define	FALSE	0
+diff -Naur newlib-1.15.0.orig/newlib/Makefile.am newlib-1.15.0/newlib/Makefile.am
+--- newlib-1.15.0.orig/newlib/Makefile.am	2006-06-05 19:42:57.000000000 +0200
++++ newlib-1.15.0/newlib/Makefile.am	2008-09-03 10:27:41.000000000 +0200
+@@ -81,7 +81,7 @@
+ 	libc.a
+ endif
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ 
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+@@ -186,9 +186,6 @@
+ 
+ $(CRT1_DIR)$(CRT1): ; @true
+ 
+-
+-all-recursive: stmp-targ-include
+-
+ # The targ-include directory just holds the includes files for the
+ # particular system and machine we have been configured for.  It is
+ # used while building.
+diff -Naur newlib-1.15.0.orig/newlib/Makefile.in newlib-1.15.0/newlib/Makefile.in
+--- newlib-1.15.0.orig/newlib/Makefile.in	2006-12-18 21:32:41.000000000 +0100
++++ newlib-1.15.0/newlib/Makefile.in	2008-09-03 10:27:41.000000000 +0200
+@@ -103,7 +103,7 @@
+ 	pdf-recursive ps-recursive uninstall-info-recursive \
+ 	uninstall-recursive
+ toollibDATA_INSTALL = $(INSTALL_DATA)
+-DATA = $(noinst_DATA) $(toollib_DATA)
++DATA = $(toollib_DATA)
+ ETAGS = etags
+ CTAGS = ctags
+ DEJATOOL = $(PACKAGE)
+@@ -205,12 +205,7 @@
+ USE_LIBTOOL_FALSE = @USE_LIBTOOL_FALSE@
+ USE_LIBTOOL_TRUE = @USE_LIBTOOL_TRUE@
+ VERSION = @VERSION@
+-ac_ct_AR = @ac_ct_AR@
+-ac_ct_AS = @ac_ct_AS@
+ ac_ct_CC = @ac_ct_CC@
+-ac_ct_RANLIB = @ac_ct_RANLIB@
+-ac_ct_READELF = @ac_ct_READELF@
+-ac_ct_STRIP = @ac_ct_STRIP@
+ aext = @aext@
+ am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
+ am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
+@@ -226,12 +221,16 @@
+ build_os = @build_os@
+ build_vendor = @build_vendor@
+ datadir = @datadir@
++datarootdir = @datarootdir@
++docdir = @docdir@
++dvidir = @dvidir@
+ exec_prefix = @exec_prefix@
+ host = @host@
+ host_alias = @host_alias@
+ host_cpu = @host_cpu@
+ host_os = @host_os@
+ host_vendor = @host_vendor@
++htmldir = @htmldir@
+ includedir = @includedir@
+ infodir = @infodir@
+ install_sh = @install_sh@
+@@ -240,6 +239,7 @@
+ libdir = @libdir@
+ libexecdir = @libexecdir@
+ libm_machine_dir = @libm_machine_dir@
++localedir = @localedir@
+ localstatedir = @localstatedir@
+ lpfx = @lpfx@
+ machine_dir = @machine_dir@
+@@ -248,8 +248,10 @@
+ newlib_basedir = @newlib_basedir@
+ oext = @oext@
+ oldincludedir = @oldincludedir@
++pdfdir = @pdfdir@
+ prefix = @prefix@
+ program_transform_name = @program_transform_name@
++psdir = @psdir@
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+ subdirs = @subdirs@
+@@ -323,7 +325,7 @@
+ @USE_LIBTOOL_FALSE@toollib_LIBRARIES = libm.a \
+ @USE_LIBTOOL_FALSE@	libc.a
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+ # The functions ldexp, frexp and modf are traditionally supplied in
+@@ -382,7 +384,7 @@
+ 
+ # dejagnu support
+ RUNTESTFLAGS = 
+-all: newlib.h
++all: $(BUILT_SOURCES) newlib.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 
+ .SUFFIXES:
+@@ -687,14 +689,16 @@
+ 	done
+ check-am:
+ 	$(MAKE) $(AM_MAKEFLAGS) check-DEJAGNU
+-check: check-recursive
++check: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) check-recursive
+ all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(DATA) newlib.h
+ installdirs: installdirs-recursive
+ installdirs-am:
+ 	for dir in "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)"; do \
+ 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+ 	done
+-install: install-recursive
++install: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+ install-exec: install-exec-recursive
+ install-data: install-data-recursive
+ uninstall: uninstall-recursive
+@@ -719,6 +723,7 @@
+ maintainer-clean-generic:
+ 	@echo "This command is intended for maintainers to use"
+ 	@echo "it deletes files that may require special tools to rebuild."
++	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+ clean: clean-recursive
+ 
+ clean-am: clean-generic clean-libtool clean-toollibLIBRARIES \
+@@ -837,8 +842,6 @@
+ 
+ $(CRT1_DIR)$(CRT1): ; @true
+ 
+-all-recursive: stmp-targ-include
+-
+ # The targ-include directory just holds the includes files for the
+ # particular system and machine we have been configured for.  It is
+ # used while building.
