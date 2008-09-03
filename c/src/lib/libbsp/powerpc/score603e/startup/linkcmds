@@ -193,6 +193,7 @@ SECTIONS
     . =  ALIGN(8) + 0x8000;
     PROVIDE (__stack = .);
     _end = . ;
+    __rtems_end = . ;
     PROVIDE (end = .);
   } >RAM
 

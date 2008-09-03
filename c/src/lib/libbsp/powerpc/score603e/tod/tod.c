@@ -107,7 +107,7 @@ void ICM7170_GetTOD(
 {
   int year;
   int usec;
-  static rtems_boolean init = TRUE;
+  static bool init = TRUE;
 
   /* Initialize the clock at once prior to reading */
   if (init ) {

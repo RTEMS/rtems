@@ -89,6 +89,8 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_interrupt_level   level;
     rtems_irq_connect_data* vchain;
 
+printk(" BSP_install_rtems_shared_irq_handler %d\n", irq->name );
+
     if (!isValidInterrupt(irq->name)) {
       printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
@@ -145,6 +147,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level       level;
 
+printk(" BSP_install_rtems_irq_handler %d\n", irq->name );
+
     if (!isValidInterrupt(irq->name)) {
       printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
@@ -196,6 +200,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
     rtems_interrupt_level       level;
 
+printk(" BSP_get_current_rtems_irq_handler %d\n", irq->name );
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -210,6 +215,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
     rtems_interrupt_level       level;
 
+printk(" BSP_remove_rtems_irq_handler %d\n", irq->name );
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -319,6 +325,8 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
     default_rtems_entry 	= config->defaultEntry;
     rtems_hdl_tbl 		= config->irqHdlTbl;
 
+printk(" BSP_rtems_irq_mngt_set\n");
+
     rtems_interrupt_disable(level);
     /*
      * set up internal tables used by rtems interrupt prologue
@@ -397,6 +405,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 }
 
 unsigned BSP_spuriousIntr = 0;
+
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
@@ -406,6 +415,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned msr;
   register unsigned new_msr;
 
+printk(" C_dispatch_irq_handler %d\n", excNum);
   if (excNum == ASM_DEC_VECTOR) {
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
@@ -417,6 +427,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     return 0;
 
   }
+
   irq = read_and_clear_irq();
   _CPU_MSR_GET(msr);
   new_msr = msr | MSR_EE;
@@ -440,6 +451,7 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
+printk(" _ThreadProcessSignalsFromIrq \n");
   /*
    * Process pending signals that have not already been
    * processed by _Thread_Displatch. This happens quite

@@ -1,3 +1,12 @@
+2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, README, configure.ac, console/85c30.c,
+	console/console.c, console/consolebsp.h, include/bsp.h,
+	include/gen2.h, irq/FPGA.c, irq/irq.c, irq/irq.h, irq/irq_init.c,
+	start/start.S, startup/bspstart.c, startup/genpvec.c,
+	startup/linkcmds, timer/timer.c, tod/tod.c: Initiate update and
+	testing. Runs hello but does not run ticker yet.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timer/timer.c: Eliminate empty function from every benchmark timer

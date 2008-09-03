@@ -188,7 +188,7 @@ uint16_t         read_and_clear_PMC_irq(
   uint16_t            irq
 );
 
-rtems_boolean Is_PMC_IRQ(
+bool Is_PMC_IRQ(
   uint32_t           pmc_irq,
   uint16_t           status_word
 );

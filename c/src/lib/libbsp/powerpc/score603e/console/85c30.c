@@ -4,7 +4,7 @@
  *
  *  Currently only polled mode is supported.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -94,9 +94,7 @@ static void  Write_85c30_register(
   *csr = register_number;
 
   rtems_bsp_delay_in_bus_cycles( 40 );
-
   *csr = data;
-
   rtems_bsp_delay_in_bus_cycles( 40 );
 }
 
@@ -131,6 +129,8 @@ void initialize_85c30_port(
   Console_Protocol        *Setup;
   uint16_t                baud_constant;
 
+printk("initialize_85c30_port start\n");
+
   Setup = Port->Protocol;
   ctrl  = Port->ctrl;
 
@@ -155,17 +155,20 @@ void initialize_85c30_port(
   /*
    *  Set Write Register 2 to contain the interrupt vector
    */
+printk("initialize_85c30_port 2, %d\n", Port->Chip->vector );
   Write_85c30_register( ctrl, 2, Port->Chip->vector );
 #endif
 
   /*
    *  Set Write Register 3 to disable the Receiver
    */
+printk("initialize_85c30_port 0x03, 0x00\n");
   Write_85c30_register( ctrl, 0x03, 0x00 );
 
   /*
    *  Set Write Register 5 to disable the Transmitter
    */
+printk("initialize_85c30_port 5, 0x00\n");
   Write_85c30_register( ctrl, 5, 0x00 );
 
   /* WR 6 -- unneeded in asynchronous mode */
@@ -175,11 +178,13 @@ void initialize_85c30_port(
   /*
    *  Set Write Register 9 to disable all interrupt sources
    */
+printk("initialize_85c30_port 9, 0x00\n");
   Write_85c30_register( ctrl, 9, 0x00 );
 
   /*
    *  Set Write Register 10 for simple Asynchronous operation
    */
+printk("initialize_85c30_port 0x0a, 0x00\n");
   Write_85c30_register( ctrl, 0x0a, 0x00 );
 
   /*
@@ -187,6 +192,7 @@ void initialize_85c30_port(
    * clock as BRG output and the transmit clock
    * as the output source for TRxC pin via register 11
    */
+printk("initialize_85c30_port 0x0b, 0x56\n");
   Write_85c30_register( ctrl, 0x0b, 0x56 );
 
   value = baud_constant;
@@ -196,12 +202,14 @@ void initialize_85c30_port(
    * If the time constans = 1E, then the desire
    * baud rate will be equilvalent to 9600, via register 12.
    */
+printk("initialize_85c30_port 0x0c, 0x%x\n", value & 0xff);
   Write_85c30_register( ctrl, 0x0c, value & 0xff );
 
   /*
    * using register 13
    * Setup the upper 8 bits time constants = 0
    */
+printk("initialize_85c30_port 0x0d, 0x%x\n", value>>8);
   Write_85c30_register( ctrl, 0x0d, value>>8 );
 
   /*
@@ -210,6 +218,7 @@ void initialize_85c30_port(
    * rate generator enable with clock from the
    * SCC's PCLK input via register 14.
    */
+printk("initialize_85c30_port 0x0e, 0x07\n");
   Write_85c30_register( ctrl, 0x0e, 0x07 );
 
   /*
@@ -225,6 +234,7 @@ void initialize_85c30_port(
   value = 0x01;
   value = value | Char_size_85c30[ Setup->read_char_bits ].read_setup;
 
+printk("initialize_85c30_port 0x03, 0x%x\n", value);
   Write_85c30_register( ctrl, 0x03, value );
 
   /*
@@ -239,18 +249,21 @@ void initialize_85c30_port(
    */
   value = 0x8a;
   value = value |  Char_size_85c30[ Setup->write_char_bits ].write_setup;
+printk("initialize_85c30_port 0x05, 0x%x\n", value);
   Write_85c30_register( ctrl, 0x05, value );
 
   /*
    * Reset Tx UNDERRUN/EOM LATCH and ERROR
    * via register 0
    */
+printk("initialize_85c30_port 0x00, 0xf0\n");
    Write_85c30_register( ctrl, 0x00, 0xf0 );
 
 #if CONSOLE_USE_INTERRUPTS
   /*
    *  Set Write Register 1 to interrupt on Rx characters or special condition.
    */
+printk("initialize_85c30_port 1, 0x10\n");
   Write_85c30_register( ctrl, 1, 0x10 );
 #endif
 
@@ -258,11 +271,13 @@ void initialize_85c30_port(
    *  Set Write Register 15 to disable extended functions.
    */
 
+printk("initialize_85c30_port 15, 0x00\n");
   Write_85c30_register( ctrl, 15, 0x00 );
 
   /*
    *  Set the Command Register to Reset Ext/STATUS.
    */
+printk("initialize_85c30_port 0x00, 0x10\n");
   Write_85c30_register( ctrl, 0x00, 0x10 );
 
 #if CONSOLE_USE_INTERRUPTS
@@ -273,12 +288,14 @@ void initialize_85c30_port(
    *    Enables parity as a special condition.
    *    Enables Tx interrupt.
    */
+printk("initialize_85c30_port 1, 0x16\n");
   Write_85c30_register( ctrl, 1, 0x16 );
 
   /*
    *  Set Write Register 9 to enable all interrupt sources
    *  Changed from 0 to a
    */
+printk("initialize_85c30_port 9, 0x0A\n");
   Write_85c30_register( ctrl, 9, 0x0A );
 
   /* XXX */
@@ -286,10 +303,12 @@ void initialize_85c30_port(
   /*
    *  Issue reset highest Interrupt Under Service (IUS) command.
    */
+printk("initialize_85c30_port STATUS_REGISTER, 0X38\n");
   Write_85c30_register( Port->ctrl, STATUS_REGISTER, 0x38 );
 
 #endif
 
+printk("initialize_85c30_port end of method\n");
 }
 
 /* PAGE
@@ -377,7 +396,7 @@ rtems_isr ISR_85c30_Async(
   uint16_t                   status;
   volatile Console_Protocol *Protocol;
   unsigned char              data;
-  rtems_boolean              did_something = FALSE;
+  bool                       did_something = FALSE;
 
   Protocol = Port->Protocol;
 

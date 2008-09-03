@@ -29,6 +29,10 @@
 #include <bsp/motorola.h>
 #include <rtems/bspIo.h>
 
+#define SHOW_ISA_PCI_BRIDGE_SETTINGS 1
+#define SCAN_PCI_PRINT               1
+#define TRACE_IRQ_INIT               1
+
 typedef struct {
   unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
   unsigned char device;

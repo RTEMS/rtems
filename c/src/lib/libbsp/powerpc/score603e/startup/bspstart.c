@@ -21,6 +21,13 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <libcpu/cpuIdent.h>
+#define DEBUG 1
+
+/*
+ * Where the heap starts; is used by bsp_pretasking_hook;
+ */
+unsigned int BSP_heap_start;
 
 /*
  * PCI Bus Frequency
@@ -36,6 +43,14 @@ unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score boa
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
+
+/*
+ * system init stack
+ */
+#define INIT_STACK_SIZE 0x1000
+
+extern unsigned long __rtems_end[];
+
 
 /*
  *  Driver configuration parameters
@@ -75,6 +90,9 @@ void bsp_pretasking_hook(void)
   uint32_t         heap_start;
   uint32_t         heap_size;
 
+  #if DEBUG
+    printk("bsp_pretasking_hook: Set Heap\n");
+  #endif
   heap_start = (uint32_t) &end;
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
@@ -82,7 +100,13 @@ void bsp_pretasking_hook(void)
   heap_size = Configuration.work_space_start - (void *)&end;
   heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
 
+  #if DEBUG
+    printk("bsp_pretasking_hook: bsp_libc_init\n");
+  #endif
   bsp_libc_init((void *) heap_start, heap_size, 0);
+  #if DEBUG
+    printk("bsp_pretasking_hook: End of routine\n");
+  #endif
 }
 
 /*PAGE
@@ -97,30 +121,51 @@ void initialize_PMC();
 
 void bsp_predriver_hook(void)
 {
+  #if DEBUG
+    printk("bsp_predriver_hook: init_RTC\n");
+  #endif
   init_RTC();
-/*   XXX - What Does this now ????
   init_PCI();
   initialize_universe();
-*/
 
+  #if DEBUG
+    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
+  #endif
   initialize_PCI_bridge ();
 
 #if (HAS_PMC_PSC8)
+  #if DEBUG
+    printk("bsp_predriver_hook: initialize_PMC\n");
+  #endif
   initialize_PMC();
 #endif
 
+#if 0
  /*
   * Initialize Bsp General purpose vector table.
   */
+  #if DEBUG
+    printk("bsp_predriver_hook: initialize_external_exception_vector\n");
+  #endif
  initialize_external_exception_vector();
+#endif
 
 #if (0)
   /*
    * XXX - Modify this to write a 48000000 (loop to self) command
    *       to each interrupt location.  This is better for debug.
    */
+  #if DEBUG
+    printk("bsp_predriver_hook: bsp_spurious_initialize\n");
+  #endif
  bsp_spurious_initialize();
 #endif
+
+  ShowBATS();
+
+  #if DEBUG
+    printk("bsp_predriver_hook: End of routine\n");
+  #endif
 
 }
 
@@ -162,16 +207,27 @@ void initialize_PMC() {
   /*
    * Clear status, enable SERR and memory space only.
    */
+  #if DEBUG
+    printk("initialize_PMC: set Device Address 0x4 \n");
+  ShowBATS();
+  #endif
   PMC_addr = BSP_PCI_DEVICE_ADDRESS( 0x4 );
   *PMC_addr = 0x020080cc;
 
   /*
    * set PMC base address.
    */
+  #if DEBUG
+    printk("initialize_PMC: set Device Address 0x14 \n");
+  ShowBATS();
+  #endif
   PMC_addr  = BSP_PCI_DEVICE_ADDRESS( 0x14 );
   *PMC_addr = (BSP_PCI_REGISTER_BASE >> 24) & 0x3f;
 
-  PMC_addr = (volatile uint32_t*)
+  #if DEBUG
+    printk("initialize_PMC: set PMC Serial Address 0x100000\n");
+  #endif
+   PMC_addr = (volatile uint32_t*)
       BSP_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
   *PMC_addr = data & 0xfc;
@@ -191,9 +247,20 @@ void bsp_postdriver_hook(void)
   extern void Init_EE_mask_init(void);
   extern void open_dev_console(void);
 
+  #if DEBUG
+    printk("bsp_postdriver_hook: open_dev_console\n");
+  #endif
   open_dev_console();
+  ShowBATS();
 
+  #if DEBUG
+    printk("bsp_postdriver_hook: Init_EE_mask_init\n");
+  #endif
   Init_EE_mask_init();
+  ShowBATS();
+  #if DEBUG
+    printk("bsp_postdriver_hook: Finished procedure\n");
+  #endif
 }
 
 void bsp_set_trap_vectors( void );
@@ -209,13 +276,21 @@ void bsp_start( void )
 {
   unsigned char *work_space_start;
   unsigned int  msr_value = 0x0000;
+  uint32_t      intrStackStart;
+  uint32_t      intrStackSize;
   volatile uint32_t         *ptr;
-
+  ppc_cpu_id_t myCpu;
+  ppc_cpu_revision_t myCpuRevision;
+ 
   rtems_bsp_delay( 1000 );
 
   /*
    *  Zero out lots of memory
    */
+  #if DEBUG
+    printk("bsp_start: Zero out lots of memory\n");
+    ShowBATS();
+  #endif
 
   memset(
     &end,
@@ -227,9 +302,38 @@ void bsp_start( void )
   BSP_bus_frequency       =  66000000;
 
   /*
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables so that it can be used 
+   * later...
+   */
+  myCpu         = get_ppc_cpu_type();
+  myCpuRevision = get_ppc_cpu_revision();
+
+  /*
+   * Initialize the interrupt related settings.
+   */
+  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  BSP_heap_start = intrStackStart + intrStackSize;
+
+  /*
+   * Initialize default raw exception handlers.
+   */
+printk("ppc_exc_initialize\n");
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    intrStackStart,
+    intrStackSize
+  );
+
+  /*
    *  There are multiple ROM monitors available for this board.
    */
 #if (SCORE603E_USE_SDS)
+  #if DEBUG
+    printk("bsp_start: USE SDS\n");
+  #endif
+
 
   /*
    * Write instruction for Unconditional Branch to ROM vector.
@@ -251,14 +355,23 @@ void bsp_start( void )
   msr_value = 0x2030;
 
 #elif (SCORE603E_USE_OPEN_FIRMWARE)
+  #if DEBUG
+    printk("bsp_start: USE OPEN FIRMWARE\n");
+  #endif
   msr_value = 0x2030;
 
 #elif (SCORE603E_USE_NONE)
+  #if DEBUG
+    printk("bsp_start: USE NONE\n");
+  #endif
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
   bsp_set_trap_vectors();
 
 #elif (SCORE603E_USE_DINK)
+  #if DEBUG
+    printk("bsp_start: USE DINK\n");
+  #endif
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
 
@@ -270,6 +383,9 @@ void bsp_start( void )
   *ptr = 0x4c000064;
 
 #else
+  #if DEBUG
+    printk("bsp_start: ERROR unknow ROM Monitor\n");
+  #endif
 #error "SCORE603E BSPSTART.C -- what ROM monitor are you using"
 #endif
 
@@ -281,6 +397,9 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
+  #if DEBUG
+    printk("bsp_start: Calculate Wrokspace\n");
+  #endif
   work_space_start =
     (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
 
@@ -294,10 +413,23 @@ void bsp_start( void )
   /*
    *  initialize the device driver parameters
    */
+  #if DEBUG
+    printk("bsp_start: set clicks poer usec\n");
+  #endif
   bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
 
 #if ( PPC_USE_DATA_CACHE )
+  #if DEBUG
+    printk("bsp_start: cache_enable\n");
+  #endif
   instruction_cache_enable ();
   data_cache_enable ();
+  #if DEBUG
+    printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+  #endif
 #endif
+  #if DEBUG
+    printk("bsp_start: end BSPSTART\n");
+  ShowBATS();
+  #endif
 }

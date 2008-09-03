@@ -104,6 +104,10 @@ past_constants:
 	mr	sp,r0			/* use user defined stack */
 
 .Lnostack:
+
+        lis	r13,_SDA_BASE_@ha
+	la	r13,_SDA_BASE_@l(r13)  		/* Read-write small data */
+
 	/* set up initial stack frame */
 	addi	sp,sp,-4		/* make sure we don't overwrite debug mem */
 	lis	r0,0

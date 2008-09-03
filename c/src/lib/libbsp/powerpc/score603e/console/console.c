@@ -210,6 +210,8 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number  console;
   int                        port, chip, p0,p1;
 
+printk("console_initialize start\n");
+
   /*
    * initialize the termio interface.
    */
@@ -264,15 +266,18 @@ rtems_device_driver console_initialize(
    *        2,3 are on the second ....
    */
 
-  for (port=0; port<NUM_Z85C30_PORTS; port++) {
-    chip = port >> 1;
+  for (port=1; port<NUM_Z85C30_PORTS; port++) {
+   chip = port >> 1;
+printk("console_initialize initialize_85c30_port %d\n", port);
     initialize_85c30_port( &Ports_85C30[port] );
   }
 
 #if CONSOLE_USE_INTERRUPTS
+printk("console_initialize console_initialize_interrupts\n");
   console_initialize_interrupts();
 #endif
 
+printk("console_initialize end\n");
   return RTEMS_SUCCESSFUL;
 }
 
@@ -440,6 +445,13 @@ debug_putc_onlcr(const char c)
 
   console = USE_FOR_CONSOLE;
   csr = Ports_85C30[ console ].ctrl;
+
+  if ('\n'==c){
+    rtems_interrupt_disable( isrlevel );
+    outbyte_polled_85c30( csr, '\r' );
+    rtems_interrupt_enable( isrlevel );
+    asm volatile("isync");
+  }
 
   rtems_interrupt_disable( isrlevel );
   outbyte_polled_85c30( csr, c );

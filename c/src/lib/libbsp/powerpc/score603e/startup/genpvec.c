@@ -52,6 +52,7 @@ typedef struct
 /* XXX */
 void init_irq_data_register(void);
 
+#if 0
 void initialize_external_exception_vector (void)
 {
   int i;
@@ -76,6 +77,7 @@ void initialize_external_exception_vector (void)
   status = rtems_interrupt_catch( external_exception_ISR,
            PPC_IRQ_EXTERNAL, (rtems_isr_entry *) &previous_isr );
 }
+#endif
 
 void Init_EE_mask_init() {
 ;
@@ -164,7 +166,7 @@ rtems_isr external_exception_ISR (
         node = (EE_ISR_Type *)(ISR_Array[ index ].first);
 
         if ( rtems_chain_is_tail( &ISR_Array[ index ], (void *)node ) ) {
-          printk"ERROR:: check %d interrupt %02d has no isr\n", check_irq, index);
+          printk ("ERROR:: check %d interrupt %02d has no isr\n", check_irq, index);
           value = get_irq_mask();
           printk("        Mask = %02x\n", value);
 	}

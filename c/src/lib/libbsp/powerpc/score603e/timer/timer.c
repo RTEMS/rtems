@@ -23,7 +23,7 @@
 
 uint64_t         Timer_driver_Start_time;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 /*
  * benchmark_timer_initialize
@@ -71,7 +71,7 @@ int benchmark_timer_read()
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

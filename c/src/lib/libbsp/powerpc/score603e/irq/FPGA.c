@@ -120,12 +120,12 @@ uint16_t         read_and_clear_PMC_irq(
   return status_word;
 }
 
-rtems_boolean Is_PMC_IRQ(
+bool Is_PMC_IRQ(
   uint32_t           pmc_irq,
   uint16_t           status_word
 )
 {
-  rtems_boolean   result= FALSE;
+  bool   result = FALSE;
 
   switch(pmc_irq) {
     case SCORE603E_85C30_4_IRQ:

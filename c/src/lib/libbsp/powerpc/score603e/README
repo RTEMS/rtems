@@ -42,13 +42,15 @@ STOP BITS:          1
 
 Notes
 =====
+This BSP has been modified to use the latest exception model.
+However, the modifications were never verified.  This version
+has been partially verified in that Hello.ralf will load and
+run on the board.
 
-This BSP has been tested using any Rom monitor.  There have
+This BSP has been tested using DINK Rom monitor.  There have
 been three rom chips loaded on the boards.  One with the SDS
 debug monitor, one with the firmworks monitor, and one with
-the OAR Boot chip.  The OAR Boot chip contains the basic 
-initialization from the SDS debugger and a jump to flash
-location 0x04001200.
+the DINK monitor.
 
 The SCORE603e first generation board is no longer available,
 does not appear to be in use by any RTEMS users, and thus

@@ -17,6 +17,7 @@
 
 #include <rtems.h>
 #include <rtems/ringbuf.h>
+#include <bsp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +35,7 @@ extern "C" {
  */
 
 #if (HAS_PMC_PSC8)
+#warning "HAS_PMC_PSC8 is Defined"
 #define NUM_Z85C30_CHIPS_ON_MEZZANINE  4
 #else
 #define NUM_Z85C30_CHIPS_ON_MEZZANINE  0
@@ -77,7 +79,7 @@ typedef struct {
 
 #if CONSOLE_USE_INTERRUPTS
   volatile Ring_buffer_t  TX_Buffer;         /* Transmit Buffer    */
-  volatile rtems_boolean  Is_TX_active;      /* Transmitting       */
+  volatile bool           Is_TX_active;      /* Transmitting       */
   void          *console_termios_data;
 #endif
 

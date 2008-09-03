@@ -18,8 +18,8 @@
  *  $Id$
  */
 
-#ifndef LIBBSP_POWERPC_IRQ_H
-#define LIBBSP_POWERPC_IRQ_H
+#ifndef BSP_POWERPC_IRQ_H
+#define BSP_POWERPC_IRQ_H
 
 #define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
@@ -65,54 +65,131 @@ extern "C" {
 #endif
 
 /*
- * Symbolic IRQ names and related definitions
+ * rtems_irq_number Definitions
  */
 
-  /*
-   * ISA IRQ handler related definitions
-   */
+/*
+ * ISA IRQ handler related definitions
+ */
 #define BSP_ISA_IRQ_NUMBER		(16)
 #define BSP_ISA_IRQ_LOWEST_OFFSET	(0)
-#define BSP_ISA_IRQ_MAX_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET+BSP_ISA_IRQ_NUMBER-1)
-  /*
-   * PCI IRQ handlers related definitions
-   * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
-   */
+#define BSP_ISA_IRQ_MAX_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER - 1)
+/*
+ * PCI IRQ handlers related definitions
+ * CAUTION : BSP_PCI_IRQ_LOWEST_OFFSET should be equal to OPENPIC_VEC_SOURCE
+ */
 #define BSP_PCI_IRQ_NUMBER		(16)
 #define BSP_PCI_IRQ_LOWEST_OFFSET	(BSP_ISA_IRQ_NUMBER)
-#define BSP_PCI_IRQ_MAX_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET+BSP_PCI_IRQ_NUMBER-1)
-  /*
-   * PowerPC exceptions handled as interrupt where an RTEMS managed interrupt
-   * handler might be connected
-   */
+#define BSP_PCI_IRQ_MAX_OFFSET		(BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER - 1)
+/*
+ * PowerPC exceptions handled as interrupt where an RTEMS managed interrupt
+ * handler might be connected
+ */
 #define BSP_PROCESSOR_IRQ_NUMBER	(1)
 #define BSP_PROCESSOR_IRQ_LOWEST_OFFSET (BSP_PCI_IRQ_MAX_OFFSET + 1)
-#define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET+BSP_PROCESSOR_IRQ_NUMBER-1)
-  /* Misc vectors for OPENPIC irqs (IPI, timers)
-   */
+#define BSP_PROCESSOR_IRQ_MAX_OFFSET	(BSP_PROCESSOR_IRQ_LOWEST_OFFSET + BSP_PROCESSOR_IRQ_NUMBER - 1)
+/* Misc vectors for OPENPIC irqs (IPI, timers)
+ */
 #define BSP_MISC_IRQ_NUMBER		(8)
 #define BSP_MISC_IRQ_LOWEST_OFFSET	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
-#define BSP_MISC_IRQ_MAX_OFFSET		(BSP_MISC_IRQ_LOWEST_OFFSET+BSP_MISC_IRQ_NUMBER-1)
-  /*
-   * Summary
-   */
+#define BSP_MISC_IRQ_MAX_OFFSET		(BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1)
+/*
+ * Summary
+ */
 #define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
 #define BSP_LOWEST_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET)
-#define BSP_MAX_OFFSET		        (BSP_MISC_IRQ_MAX_OFFSET)
-    /*
-     * Some PCI IRQ symbolic name definition
-     */
+#define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
+/*
+ * Some ISA IRQ symbolic name definition
+ */
+#define BSP_ISA_PERIODIC_TIMER      	(0)
+#define BSP_ISA_KEYBOARD          	(1)
+#define BSP_ISA_UART_COM2_IRQ		(3)
+#define BSP_ISA_UART_COM1_IRQ		(4)
+#define BSP_ISA_RT_TIMER1	      	(8)
+#define BSP_ISA_RT_TIMER3		(10)
+/*
+ * Some PCI IRQ symbolic name definition
+ */
 #define BSP_PCI_IRQ0			(BSP_PCI_IRQ_LOWEST_OFFSET)
+#define BSP_PCI_ISA_BRIDGE_IRQ		(BSP_PCI_IRQ0)
 
-    /*
-     * Some Processor execption handled as RTEMS IRQ symbolic name definition
-     */
+#if defined(mvme2100)
+#define BSP_DEC21143_IRQ                (BSP_PCI_IRQ_LOWEST_OFFSET + 1)
+#define BSP_PMC_PCMIP_TYPE1_SLOT0_IRQ   (BSP_PCI_IRQ_LOWEST_OFFSET + 2)
+#define BSP_PCMIP_TYPE1_SLOT1_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 3)
+#define BSP_PCMIP_TYPE2_SLOT0_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 4)
+#define BSP_PCMIP_TYPE2_SLOT1_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 5)
+#define BSP_PCI_INTA_UNIVERSE_LINT0_IRQ (BSP_PCI_IRQ_LOWEST_OFFSET + 7)
+#define BSP_PCI_INTB_UNIVERSE_LINT1_IRQ (BSP_PCI_IRQ_LOWEST_OFFSET + 8)
+#define BSP_PCI_INTC_UNIVERSE_LINT2_IRQ (BSP_PCI_IRQ_LOWEST_OFFSET + 9)
+#define BSP_PCI_INTD_UNIVERSE_LINT3_IRQ (BSP_PCI_IRQ_LOWEST_OFFSET + 10)
+#define BSP_UART_COM1_IRQ               (BSP_PCI_IRQ_LOWEST_OFFSET + 13)
+#define BSP_FRONT_PANEL_ABORT_IRQ       (BSP_PCI_IRQ_LOWEST_OFFSET + 14)
+#define BSP_RTC_IRQ                     (BSP_PCI_IRQ_LOWEST_OFFSET + 15)
+#else
+#define BSP_UART_COM1_IRQ		BSP_ISA_UART_COM1_IRQ
+#define BSP_UART_COM2_IRQ		BSP_ISA_UART_COM2_IRQ
+#endif
+
+/*
+ * Some Processor execption handled as RTEMS IRQ symbolic name definition
+ */
 #define BSP_DECREMENTER			(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 
+
+/*
+ * Type definition for RTEMS managed interrupts
+ */
+typedef unsigned short rtems_i8259_masks;
+
+extern  volatile rtems_i8259_masks i8259s_cache;
+
+/*-------------------------------------------------------------------------+
+| Function Prototypes.
++--------------------------------------------------------------------------*/
+/*
+ * ------------------------ Intel 8259 (or emulation) Mngt Routines -------
+ */
+void BSP_i8259s_init(void);
+
+/*
+ * function to disable a particular irq at 8259 level. After calling
+ * this function, even if the device asserts the interrupt line it will
+ * not be propagated further to the processor
+ *
+ * RETURNS: 1/0 if the interrupt was enabled/disabled originally or
+ *          a value < 0 on error.
+ */
+int BSP_irq_disable_at_i8259s        (const rtems_irq_number irqLine);
+/*
+ * function to enable a particular irq at 8259 level. After calling
+ * this function, if the device asserts the interrupt line it will
+ * be propagated further to the processor
+ */
+int BSP_irq_enable_at_i8259s		(const rtems_irq_number irqLine);
+/*
+ * function to acknowledge a particular irq at 8259 level. After calling
+ * this function, if a device asserts an enabled interrupt line it will
+ * be propagated further to the processor. Mainly usefull for people
+ * writing raw handlers as this is automagically done for RTEMS managed
+ * handlers.
+ */
+int BSP_irq_ack_at_i8259s           	(const rtems_irq_number irqLine);
+/*
+ * function to check if a particular irq is enabled at 8259 level. After calling
+ */
+int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
+
+extern void BSP_rtems_irq_mng_init(unsigned cpuId);
+extern void BSP_i8259s_init(void);
+
+/* Stuff in irq_supp.h should eventually go into <rtems/irq.h> */
+/* #include <bsp/irq_supp.h> */
+
 #ifdef __cplusplus
-}
+};
 #endif
 
 #endif
-
 #endif

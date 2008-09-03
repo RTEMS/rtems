@@ -28,20 +28,26 @@ dist_project_lib_DATA += startup/linkcmds
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/Hwr_init.c \
-    startup/genpvec.c ../../shared/gnatinstallhandler.c
+    startup/genpvec.c ../../shared/gnatinstallhandler.c \
+    ../../powerpc/shared/showbats.c
+
 pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 console_SOURCES = console/85c30.c console/85c30.h console/console.c \
     console/tbl85c30.c console/consolebsp.h
 
 include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
+    PCI_bus/PCI.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/console/consoleIo.h
 pci_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
-    ../../powerpc/shared/pci/pcifinddevice.c
+    ../../powerpc/shared/pci/pcifinddevice.c  PCI_bus/PCI.c  PCI_bus/universe.c
 
-include_bsp_HEADERS += irq/irq.h
+include_bsp_HEADERS += irq/irq.h \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 irq_SOURCES = irq/FPGA.c irq/irq.c ../../powerpc/shared/irq/irq_asm.S
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
@@ -56,11 +62,10 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vmeUniverseDMA.h\
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
-vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
+vme_SOURCES = \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vme_am_defs.h \
-	../shared/vme/vmeconfig.c \
-	../shared/vme/vme_universe.c 
+	../shared/vme/vmeconfig.c 
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
@@ -81,8 +86,9 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
+     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
 include $(srcdir)/preinstall.am
