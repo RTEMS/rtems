@@ -26,9 +26,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.0
-%define gcc_version 4.3.0
-%define gcc_rpmvers %{expand:%(echo "4.3.0" | tr - _ )}
+%define gcc_pkgvers 4.3.2
+%define gcc_version 4.3.2
+%define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
@@ -40,7 +40,7 @@ Summary:      	arm-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	12%{?dist}
+Release:      	15%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -55,7 +55,7 @@ BuildRequires:  gmp-devel >= 4.1
 BuildRequires:  %{_host_rpmprefix}gmp-devel
 BuildRequires:  %{_host_rpmprefix}mpfr-devel
 %endif
-%if "%{?fedora}" >= "8"
+%if 0%{?fedora} >= 8
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 %if "%{?suse}" > "10.3"
@@ -92,27 +92,27 @@ Requires:	rtems-4.9-arm-rtems4.9-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.3.0"
+%if "%{gcc_version}" == "4.3.2"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.9-20080501.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.2-rtems4.9-20080828.diff
 %endif
-%if "%{gcc_version}" == "4.2.3"
+%if "%{gcc_version}" == "4.3.1"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.3-rtems4.9-20080205.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.1-rtems4.9-20080628.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
-%if "%{gcc_version}" == "4.3.0" 
+%if "%{gcc_version}" == "4.3.2" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
-%if  "%{gcc_version}" == "4.2.3"
-Source1: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%if "%{gcc_version}" == "4.3.1" 
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	newlib-1.16.0-rtems4.9-20080430.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-20080827.diff
 %endif
 %{?_without_sources:NoSource:	50}
 

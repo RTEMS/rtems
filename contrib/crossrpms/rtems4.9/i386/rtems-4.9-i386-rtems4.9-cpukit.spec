@@ -13,6 +13,18 @@
 %define _exeext %{nil}
 %endif
 
+%ifos cygwin cygwin32
+%define optflags -O3 -pipe -march=i486 -funroll-loops
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
+%endif
+
+%if "%{_build}" != "%{_host}"
+%define _host_rpmprefix rtems-4.9-%{_host}-
+%else
+%define _host_rpmprefix %{nil}
+%endif
+
 
 %define cpukit_pkgvers 4.7.99.1-20070510
 %define cpukit_version 4.7.99.1

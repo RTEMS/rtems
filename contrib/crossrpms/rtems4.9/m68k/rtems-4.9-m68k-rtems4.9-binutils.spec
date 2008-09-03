@@ -56,7 +56,7 @@ Requires:	rtems-4.9-binutils-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{binutils_version}" == "2.18"
-Patch0:		binutils-2.18-rtems4.9-20080211.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/binutils-2.18-rtems4.9-20080211.diff
 %endif
 
 %description
@@ -134,6 +134,9 @@ cd ..
   fi
   if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m68k-rtems4.9-windres%{_exeext}; then 
     rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m68k-rtems4.9-windres*
+  fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m68k-rtems4.9-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m68k-rtems4.9-windmc*
   fi
 
   cd ..

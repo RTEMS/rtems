@@ -71,7 +71,7 @@ Requires:	rtems-4.9-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.8"
-Patch0:		gdb-6.8-rtems4.9-20080429.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.8-rtems4.9-20080429.diff
 %endif
 
 %description
@@ -104,8 +104,10 @@ rm -f gdb-%{gdb_version}/readline/configure
     --disable-win32-registry \
     --disable-werror \
     --enable-sim \
-%if "%{gdb_version}" >= "6.6"
+%if "%{gdb_version}" >= "6.7"
     --with-system-readline \
+%endif
+%if "%{gdb_version}" >= "6.6"
     --with-expat \
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
