@@ -14,7 +14,8 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <bsp.h>
-#include <mpc5200.h>
+#include <bsp/mpc5200.h>
+#include <bsp/bootcard.h>
 
 extern int mpc5200_uart_pollRead(int minor);
 

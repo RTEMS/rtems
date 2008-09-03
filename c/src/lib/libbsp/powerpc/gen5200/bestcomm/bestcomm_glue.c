@@ -19,7 +19,7 @@
 #include <rtems.h>
 #include <rtems/error.h>
 #include <bsp.h>
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 #include "../include/mpc5200.h"
 #include "include/ppctypes.h"			/* uint32, et. al.		   */
 #include "dma_image.h"

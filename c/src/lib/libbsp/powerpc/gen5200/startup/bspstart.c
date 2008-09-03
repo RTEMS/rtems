@@ -96,41 +96,30 @@
 
 #warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
-#include <bsp.h>
+#include <string.h>
 
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
-#include <rtems/powerpc/powerpc.h>
 #include <rtems/score/thread.h>
 
-#include <rtems/bspIo.h>
-#include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
-#include "../irq/irq.h"
+#include <libcpu/powerpc-utility.h>
+#include <libcpu/raw_exception.h>
 
-#include <string.h>
+#include <bsp.h>
+#include <bsp/bootcard.h>
+#include <bsp/ppc_exc_bspsupp.h>
+
+#include <bsp/irq.h>
 
 #if defined(HAS_UBOOT)
 bd_t *uboot_bdinfo_ptr = (bd_t *)1; /* will be overwritten from startup code */
 bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo */
 #endif
 
-SPR_RW(SPRG1)
-
-extern unsigned long intrStackPtr;
-
 /*
  *  Driver configuration parameters
  */
 uint32_t   bsp_clicks_per_usec;
-
-/*
- *  Use the shared implementations of the following routines.
- *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
- */
-void bsp_libc_init( void *, uint32_t, int );
-extern void initialize_exceptions(void);
-extern void cpu_init(void);
 
 void BSP_panic(char *s)
   {
@@ -144,48 +133,23 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
   }
 
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
-
-void
-bsp_pretasking_hook(void)
+void bsp_get_work_area(
+  void   **work_area_start,
+  size_t  *work_area_size,
+  void   **heap_start,
+  size_t  *heap_size)
 {
-  /*
-   *  These are assigned addresses in the linkcmds file for the BSP. This
-   *  approach is better than having these defined as manifest constants and
-   *  compiled into the kernel, but it is still not ideal when dealing with
-   *  multiprocessor configuration in which each board as a different memory
-   *  map. A better place for defining these symbols might be the makefiles.
-   *  Consideration should also be given to developing an approach in which
-   *  the kernel and the application can be linked and burned into ROM
-   *  independently of each other.
-   */
+#ifdef HAS_UBOOT
+  char *ram_end = (char *) uboot_bdinfo_ptr->bi_memstart +
+                                 uboot_bdinfo_ptr->bi_memsize;
+#else /* HAS_UBOOT */
+  char *ram_end = bsp_ram_end;
+#endif /* HAS_UBOOT */
 
-#if defined(HAS_UBOOT)
-    extern unsigned char _HeapStart;
-
-    bsp_libc_init( &_HeapStart, 
-		   uboot_bdinfo_ptr->bi_memstart 
-		   + uboot_bdinfo_ptr->bi_memsize 
-		   - (uint32_t)&_HeapStart
-		   , 0 );
-#else
-    extern unsigned char _HeapStart;
-    extern unsigned char _HeapEnd;
-
-    bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-#endif
+  *work_area_start = bsp_work_area_start;
+  *work_area_size = ram_end - bsp_work_area_start;
+  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 void bsp_predriver_hook(void)
@@ -219,10 +183,8 @@ void bsp_predriver_hook(void)
 
 void bsp_start(void)
 {
-  extern void *_WorkspaceBase;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
-  register unsigned char* intrStack;
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
@@ -246,21 +208,7 @@ void bsp_start(void)
 
   cpu_init();
 
-  /*
-   * Initialize some SPRG registers related to irq handling
-   */
-
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
-
-  _write_SPRG1((unsigned int)intrStack);
-
  bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
-
- /*
-  * Install our own set of exception vectors
-  */
-
-  initialize_exceptions();
 
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
@@ -272,21 +220,18 @@ void bsp_start(void)
     rtems_cache_enable_data();
   #endif
 
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-  Configuration.work_space_start = (void *)&_WorkspaceBase;
-  #ifdef SHOW_MORE_INIT_SETTINGS
-    printk( "workspace=%p\n", Configuration.work_space_start );
-    printk( "workspace size=%d\n", Configuration.work_space_size );
-  #endif
+  /* Initialize exception handler */
+  ppc_exc_cache_wb_check = 0;
+  ppc_exc_initialize(
+    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+    (uint32_t) bsp_interrupt_stack_start,
+    (uint32_t) bsp_interrupt_stack_size
+  );
 
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
+  /* Initalize interrupt support */
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    BSP_panic( "Cannot intitialize interrupt support\n");
+  }
 
   /*
    *  If the BSP was built with IRQ benchmarking enabled,

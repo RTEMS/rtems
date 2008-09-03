@@ -34,7 +34,7 @@
  */
 #include "mpc5200mbus.h"
 #include "../include/mpc5200.h"
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 #include "../include/i2c.h"
 
 /* Events of I2C machine */

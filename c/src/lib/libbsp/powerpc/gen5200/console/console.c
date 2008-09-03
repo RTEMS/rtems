@@ -98,7 +98,7 @@
 #include <rtems.h>
 #include "../include/mpc5200.h"
 #include <bsp.h>
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>

@@ -18,7 +18,7 @@
 \*===============================================================*/
 #include <rtems.h>
 #include <bsp.h>
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 #include "../include/mpc5200.h"
 #include "./pcmcia_ide.h"
 

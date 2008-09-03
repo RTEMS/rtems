@@ -23,6 +23,44 @@
 #ifndef __GEN5200_BSP_h
 #define __GEN5200_BSP_h
 
+#include <libcpu/powerpc-utility.h> 
+
+/*
+ * Some symbols defined in the linker command file.
+ */
+
+LINKER_SYMBOL(bsp_ram_start);
+LINKER_SYMBOL(bsp_ram_end);
+LINKER_SYMBOL(bsp_ram_size);
+
+LINKER_SYMBOL(bsp_rom_start);
+LINKER_SYMBOL(bsp_rom_end);
+LINKER_SYMBOL(bsp_rom_size);
+
+LINKER_SYMBOL(bsp_dpram_start);
+LINKER_SYMBOL(bsp_dpram_end);
+LINKER_SYMBOL(bsp_dpram_size);
+
+LINKER_SYMBOL(bsp_section_text_start);
+LINKER_SYMBOL(bsp_section_text_end);
+LINKER_SYMBOL(bsp_section_text_size);
+
+LINKER_SYMBOL(bsp_section_data_start);
+LINKER_SYMBOL(bsp_section_data_end);
+LINKER_SYMBOL(bsp_section_data_size);
+
+LINKER_SYMBOL(bsp_section_bss_start);
+LINKER_SYMBOL(bsp_section_bss_end);
+LINKER_SYMBOL(bsp_section_bss_size);
+
+LINKER_SYMBOL(bsp_interrupt_stack_start);
+LINKER_SYMBOL(bsp_interrupt_stack_end);
+LINKER_SYMBOL(bsp_interrupt_stack_size);
+
+LINKER_SYMBOL(bsp_work_area_start);
+
+LINKER_SYMBOL(MBAR);
+
 /*
  * distinguish board characteristics
  */
@@ -56,27 +94,6 @@
 #define GPIOPCR_INITVAL  0x91050444
 /* we have PSC1/2/3 */
 #define GEN5200_UART_AVAIL_MASK 0x07
-/*
- * address range definitions
- */
-/* ROM definitions (2 MB) */
-#define	ROM_START	0xFFE00000
-#define ROM_SIZE        0x00200000
-#define	ROM_END		(ROM_START+ROM_SIZE-1)
-#define	BOOT_START      ROM_START
-#define	BOOT_END        ROM_END
-
-/* SDRAM definitions (256 MB) */
-#define	RAM_START       0x00000000
-#define RAM_SIZE        0x10000000
-#define	RAM_END		(RAM_START+RAM_SIZE-1)
-
-/* DPRAM definitions (64 KB) */
-#define	DPRAM_START  0xFF000000
-#define	DPRAM_END    0xFF0003FF
-
-/* internal memory map definitions (64 KB) */
-#define	MBAR         0xF0000000
 
 /* we need the low level initialization in start.S*/
 #define NEED_LOW_LEVEL_INIT
@@ -84,10 +101,6 @@
 #define HAS_NVRAM_93CXX
 #elif defined (PM520)
 
-/* 
- * MicroSys PM520 internal memory map definitions
- */
-#define	MBAR         0xF0000000
 #define HAS_UBOOT
 
 #elif defined (icecube)
@@ -106,8 +119,6 @@
 
 /* we only have PSC1 */
 #define GEN5200_UART_AVAIL_MASK 0x01
-
-#define	MBAR         0xF0000000
 
 /* We want to prompt for a reset and then reset the board */
 #define BSP_PRESS_KEY_FOR_RESET 1
@@ -268,6 +279,8 @@ void BSP_IRQ_Benchmarking_Report(void);
     const char *name
   );
 #endif
+
+void cpu_init(void);
 
 #ifdef __cplusplus
 }

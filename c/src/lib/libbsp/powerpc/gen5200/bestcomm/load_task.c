@@ -39,7 +39,7 @@ __declspec(section ".text") extern const uint32 taskTableBytes;
 __declspec(section ".text") extern const uint32 taskTableTasks;
 __declspec(section ".text") extern const uint32 offsetEntry;
 #else
-extern const uint32 taskTable;
+extern const uint32 taskTable [];
 extern const uint32 taskTableBytes;
 extern const uint32 taskTableTasks;
 extern const uint32 offsetEntry;
@@ -71,7 +71,7 @@ void TasksLoadImage(sdma_regs *sdma)
 	SCTDT_T *tt;
 
 	/* copy task table from source to destination */
-	memcpy((void *)((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal), &taskTable, taskTableBytes);
+	memcpy((void *)((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal), taskTable, taskTableBytes);
 	/* adjust addresses in task table */
 	for (i=0; i < (uint32) taskTableTasks; i++) {
 		tt = (SCTDT_T *)(((uint8 *)(sdma->taskBar) - MBarPhysOffsetGlobal) + (uint32) offsetEntry + (i * sizeof (SCTDT_T)));

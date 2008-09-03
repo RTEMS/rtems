@@ -99,13 +99,13 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/libio.h>
 
-#include "../irq/irq.h"
+#include <bsp/irq.h>
 #include "../include/mpc5200.h"
 #include "../slicetimer/slicetimer.h"
 #include <stdio.h>

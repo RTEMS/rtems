@@ -117,30 +117,73 @@ void cpu_init_bsp(void)
 {
   BAT dbat;
 
-  calc_dbat_regvals(&dbat,RAM_START,RAM_SIZE,1,0,0,0,BPP_RW);
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) bsp_ram_start,
+    (uint32_t) bsp_ram_size,
+    true,
+    false,
+    false,
+    false,
+    BPP_RW
+  );
   SET_DBAT(0,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,ROM_START,ROM_SIZE,1,0,0,0,BPP_RX);
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) bsp_rom_start,
+    (uint32_t) bsp_rom_size,
+    true,
+    false,
+    false,
+    false,
+    BPP_RX
+  );
   SET_DBAT(1,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,MBAR,128*1024,1,1,1,1,BPP_RW);
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) MBAR,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
   SET_DBAT(2,dbat.batu,dbat.batl);
 
-  calc_dbat_regvals(&dbat,DPRAM_START,128*1024,1,1,1,1,BPP_RW);
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) bsp_dpram_start,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
   SET_DBAT(3,dbat.batu,dbat.batl);
 }
 #elif defined (HAS_UBOOT)
 void cpu_init_bsp(void)
 {
   BAT dbat;
+  uint32_t start = 0;
   
   /*
    * Program BAT0 for RAM
    */
-  calc_dbat_regvals(&dbat,
-		    uboot_bdinfo_ptr->bi_memstart,
-		    uboot_bdinfo_ptr->bi_memsize,
-		    1,0,0,0,BPP_RW);
+  calc_dbat_regvals(
+    &dbat,
+    uboot_bdinfo_ptr->bi_memstart,
+    uboot_bdinfo_ptr->bi_memsize,
+    true,
+    false,
+    false,
+    false,
+    BPP_RW
+  );
   SET_DBAT(0,dbat.batu,dbat.batl);
 
   /*
@@ -150,33 +193,53 @@ void cpu_init_bsp(void)
    * U-Boot that lies about the starting address of Flash.  This check
    * corrects that.
    */
-  if ( (uboot_bdinfo_ptr->bi_flashstart + uboot_bdinfo_ptr->bi_flashsize) <
-	uboot_bdinfo_ptr->bi_flashstart ) {
-    uint32_t start = 0 - uboot_bdinfo_ptr->bi_flashsize;
-    calc_dbat_regvals(&dbat,
-		      start, uboot_bdinfo_ptr->bi_flashsize, 1,0,0,0,BPP_RX);
+  if ((uboot_bdinfo_ptr->bi_flashstart + uboot_bdinfo_ptr->bi_flashsize)
+    < uboot_bdinfo_ptr->bi_flashstart) {
+    start = 0 - uboot_bdinfo_ptr->bi_flashsize;
   } else {
-    calc_dbat_regvals(&dbat,
-		      uboot_bdinfo_ptr->bi_flashstart,
-		      uboot_bdinfo_ptr->bi_flashsize,
-		      1,0,0,0,BPP_RX);
+    start = uboot_bdinfo_ptr->bi_flashstart;
   }
+  calc_dbat_regvals(
+    &dbat,
+    start,
+    uboot_bdinfo_ptr->bi_flashsize,
+    true,
+    false,
+    false,
+    false,
+    BPP_RX
+  );
   SET_DBAT(1,dbat.batu,dbat.batl);
 
   /*
    * Program BAT2 for the MBAR
    */
-  calc_dbat_regvals(&dbat,MBAR,128*1024,1,1,1,1,BPP_RW);
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) MBAR,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
   SET_DBAT(2,dbat.batu,dbat.batl);
 
   /*
    * If there is SRAM, program BAT3 for that memory
    */
   if (uboot_bdinfo_ptr->bi_sramsize != 0) {
-    calc_dbat_regvals(&dbat,
-		      uboot_bdinfo_ptr->bi_sramstart,
-		      uboot_bdinfo_ptr->bi_sramsize,
-		      0,1,1,1,BPP_RW);
+    calc_dbat_regvals(
+      &dbat,
+      uboot_bdinfo_ptr->bi_sramstart,
+      uboot_bdinfo_ptr->bi_sramsize,
+      false,
+      true,
+      true,
+      true,
+      BPP_RW
+    );
     SET_DBAT(3,dbat.batu,dbat.batl);
   }
 }

@@ -90,56 +90,10 @@
 /*                                                                     */
 /***********************************************************************/
    
-#include <rtems/asm.h> 
 #include <rtems/powerpc/cache.h>
-#include <rtems/powerpc/registers.h>
-#include "../include/mpc5200.h"
-#include "../include/bsp.h"
 
-/* Macro definitions to load a register with a 32-bit address.
-   Both functions identically.  Sometimes one mnemonic is more
-   appropriate than the other.
-   reg 		-> register to load
-   value 	-> value to be loaded
-   LA  reg,value    ("Load Address")
-   LWI reg,value    ("Load Word Immediate") */
-
-.macro LA reg, value
-	lis \reg , \value@h
-	ori \reg , \reg, \value@l
-	sync
-.endm
-
-.macro LWI reg, value
-	lis \reg , (\value)@h
-	ori \reg , \reg, (\value)@l
-	sync
-.endm 
-
-/* Macro definitions to test, set or clear a single 
-   bit or bit pattern in a given 32bit GPR. 
-   reg1		-> register content to be tested
-   reg2		-> 2nd register only needed for computation
-   mask		-> any bit pattern */
-
-.macro	TSTBITS	reg1, reg2, mask	/* Match is indicated by EQ=0 (CR) */ 
-	LWI 	\reg2, \mask		/* Unmatch is indicated by EQ=1 (CR) */
-	and	\reg1, \reg1, \reg2
-	cmplw	\reg1, \reg2
-	sync
-.endm	
-	
-.macro 	SETBITS reg1, reg2, mask
-	LWI 	\reg2, \mask
-	or	\reg1, \reg1, \reg2 
-	sync
-.endm
-
-.macro 	CLRBITS reg1, reg2, mask
-	LWI 	\reg2, \mask
-	andc	\reg1, \reg1, \reg2
-	sync
-.endm
+#include <bsp.h>
+#include <bsp/mpc5200.h>
 
 /* Some register offsets of MPC5x00 memory map registers */
 .set	CS0STR,			0x04
@@ -200,15 +154,7 @@
 .set    CSCONTROL_VAL,		0x91000000
 .set	CFG_VAL,		0x00000100
 
-.extern	_bss_start
-.extern	_bss_size
-.extern	_data_start
-.extern	_data_size
-.extern	_text_start
-.extern	_text_size
-/*.extern _s_got*/
 .extern boot_card
-.extern MBAR   
 
 .section ".entry"  
 PUBLIC_VAR (start)
@@ -262,7 +208,7 @@ start:
    	
 #if defined(NEED_LOW_LEVEL_INIT)
 /* detect RAM/ROM startup (common for RAM/ROM startup) */
-   	LWI     r20, ROM_START			/* set the relocation offset */
+   	LWI     r20, bsp_rom_start		/* set the relocation offset */
    	
    	
 	LWI     r30, CFG_VAL			/* get CFG register content */
@@ -295,12 +241,11 @@ start:
 	
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
-	LWI	r30, ROM_START
+	LWI	r30, bsp_rom_start
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STR(r31) 		/* Set CS0STR */	
 			
-	lis	r30, ROM_END@h
-	ori	r30, r30, ROM_END@l
+	LWI	r30, bsp_rom_end
 	
 	rlwinm	r30, r30,17,15,31
 	stw	r30, CS0STP(r31) 		/* Set CS0STP */
@@ -311,9 +256,9 @@ start:
 	isync
 	/* jump to same code in final BOOT ROM location */
 	LWI	r30, reloc_in_CS0
-	LWI	r29, RAM_START
+	LWI	r29, bsp_ram_start
 	sub	r30,r30,r29
-	LWI	r29, ROM_START
+	LWI	r29, bsp_rom_start
 	add	r30,r30,r29
 	mtctr	r30
 	bctr
@@ -325,12 +270,13 @@ reloc_in_CS0:
 	stw	r30, ADREN(r31)			/* disable BOOT mapping */
 	
 	/* init SDRAM */
-	LWI	r30, RAM_START
-	ori	r30,r30,0x1a                    /* size code: bank is 128MByte */
-	stw	r30,SDRAMCS0(r31) 		/* Set SDRAMCS0 */
+	LWI	r30, bsp_ram_start
+	ori	r30, r30, 0x1a			/* size code: bank is 128MByte */
+	stw	r30, SDRAMCS0(r31) 		/* Set SDRAMCS0 */
 
-	LWI	r30,(RAM_SIZE)>>1 
-	ori	r30,r30,0x1a                    /* size code: bank is 128MByte */
+	LWI	r30, bsp_ram_size
+	srawi	r30, r30, 1
+	ori	r30, r30, 0x1a			/* size code: bank is 128MByte */
 	stw	r30, SDRAMCS1(r31) 		/* Set SDRAMCS1 */
 	
 	bl	SDRAM_init			/* Initialize SDRAM controller */
@@ -348,32 +294,32 @@ reloc_in_CS0:
 	LWI	r30, 0x0000001e
 	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */	
 /* copy .text section from ROM to RAM location (unique for ROM startup) */
-	LA	r30, _text_start		/* get start address of text section in RAM */
+	LA	r30, bsp_section_text_start	/* get start address of text section in RAM */
 	
 	
 	add	r30, r20, r30			/* get start address of text section in ROM (add reloc offset) */
 	
 	
-	LA	r29, _text_start		/* get start address of text section in RAM */
+	LA	r29, bsp_section_text_start	/* get start address of text section in RAM */
 	
 
-	LA	r28, _text_size          	/* get size of RAM image */
+	LA	r28, bsp_section_text_size	/* get size of RAM image */
 		
 	
 	bl	copy_image			/* copy text section from ROM to RAM location */
 	
 
 /* copy .data section from ROM to RAM location (unique for ROM startup) */
-	LA	r30, _data_start		/* get start address of data section in RAM */
+	LA	r30, bsp_section_data_start	/* get start address of data section in RAM */
 	
 		
 	add	r30, r20, r30			/* get start address of data section in ROM (add reloc offset) */
 	
 		
-	LA	r29, _data_start		/* get start address of data section in RAM */
+	LA	r29, bsp_section_data_start	/* get start address of data section in RAM */
 	
 	
-	LA	r28, _data_size  		/* get size of RAM image */
+	LA	r28, bsp_section_data_size  	/* get size of RAM image */
 		
 	
 	bl	copy_image			/* copy initialized data section from ROM to RAM location */
@@ -425,43 +371,46 @@ remap_rom:
 
 skip_ROM_start:
 /* configure external DPRAM CS1 */
-    LWI r30,0xFFFFFB10
-	stw r30,CS1CONF(r31)
+	LWI	r30, 0xFFFFFB10
+	stw	r30, CS1CONF(r31)
 
 /* map external DPRAM (CS1) */
-    LWI r30,(DPRAM_START>>16)
-	stw r30,CS1STR(r31)
+	LWI	r30, bsp_dpram_start
+	srawi	r30, r30, 16
+	stw	r30, CS1STR(r31)
 
-    LWI r30,((DPRAM_END)>>16)
-	stw r30,CS1STP(r31)
+	LWI	r30, bsp_dpram_end
+	srawi	r30, r30, 16
+	stw	r30, CS1STP(r31)
 
 	lwz	r30, ADREN(r31)			/* get content of ADREN */
 			
 	LWI	r29, ADREN_CS1_EN		/* unmask ADREN_CS1_EN */
-	or	r30,r30,r29	
+	or	r30, r30,r29	
 	
-	stw	r30,ADREN(r31)			/* enable CS1 */
+	stw	r30, ADREN(r31)			/* enable CS1 */
 
 /* clear entire on chip SRAM (unique for ROM startup) */
 	lis	r30, (MBAR+ONCHIP_SRAM_OFFSET)@h	/* get start address of onchip SRAM */
-	ori	r30,r30,(MBAR+ONCHIP_SRAM_OFFSET)@l
+	ori	r30, r30,(MBAR+ONCHIP_SRAM_OFFSET)@l
         LWI	r29, ONCHIP_SRAM_SIZE		/* get size of onchip SRAM */
 	
         bl      clr_mem				/* Clear onchip SRAM */
 	
 #endif /* defined(BRS5L) */
 /* clear .bss section (unique for ROM startup) */
-	LWI	r30, _bss_start			/* get start address of bss section */
-        LWI	r29, _bss_size  		/* get size of bss section */
+	LWI	r30, bsp_section_bss_start	/* get start address of bss section */
+        LWI	r29, bsp_section_bss_size  	/* get size of bss section */
         
 
         bl      clr_mem				/* Clear the bss section */
 	
 
 /* set stack pointer (common for RAM/ROM startup) */
-	LA	r1, _text_start  
+	LA	r1, bsp_section_text_start  
         addi    r1, r1, -0x10			/* Set up stack pointer = beginning of text section - 0x10 */
-        
+
+	bl	__eabi				/* Set up EABI and SYSV environment */
      
 /* enable dynamic power management(common for RAM/ROM startup) */
 	bl	PPC_HID0_rd			/* Get the content of HID0 */
@@ -622,7 +571,7 @@ FID_DCache:
         bne     FID_DCache_exit			/* If data cache is switched of, skip further actions */
 
 	li   	r29, PPC_D_CACHE		/* 16 Kb data cache on 603e */
-	LWI	r28, _text_start		/* Load base address (begin of RAM) */
+	LWI	r28, bsp_section_text_start	/* Load base address (begin of RAM) */
 
 FID_DCache_loop_1:
         lwz     r27, 0(r28)			/* Load data at address */
@@ -633,7 +582,7 @@ FID_DCache_loop_1:
         bne     FID_DCache_loop_1		/* Loop until cache size is reached */
 
 	li   	r29, PPC_D_CACHE		/* 16 Kb data cache on 603e */
-	LWI	r28, _text_start		/* Reload base address (begin of RAM) */
+	LWI	r28, bsp_section_text_start	/* Reload base address (begin of RAM) */
 	xor	r27, r27, r27
 FID_DCache_loop_2:
                                     
@@ -697,7 +646,7 @@ FPU_init:
 	mtmsr	r30				/* enable FPU and FPU exceptions */
 	
 #if 0	
-	LA	r29, RAM_START
+	LA	r29, bsp_ram_start
 	stw	r29, 0x0(r29)
 #endif	
 	
