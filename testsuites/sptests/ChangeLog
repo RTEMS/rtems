@@ -1,3 +1,7 @@
+2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp07/system.h, sp07/tcreate.c: Convert to bool type.
+
 2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp43/init.c: Fix derefence of uninitialized pointer.

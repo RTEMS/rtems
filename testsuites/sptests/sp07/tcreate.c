@@ -20,7 +20,7 @@
 
 #include "system.h"
 
-rtems_boolean Task_create_extension(
+bool Task_create_extension(
   rtems_tcb *unused,
   rtems_tcb *created_task
 )
