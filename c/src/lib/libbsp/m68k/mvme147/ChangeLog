@@ -1,3 +1,8 @@
+2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1304/bsps
+	* Makefile.am: Add ../../shared/bsppredriverhook.c.
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timer/timer.c: Eliminate empty function from every benchmark timer
