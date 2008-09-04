@@ -1,3 +1,15 @@
+2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
+	libfs/src/dosfs/msdos_format.c, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/ioman.c:
+	Use "bool" instead of "rtems_boolean|boolean".
+	* libfs/src/imfs/imfs_eval.c: Change "done" to bool.
+	* libfs/src/nfsclient/src/xdr_mbuf.c: Stop using old-style
+	  definitions.
+
 2008-09-03	Cindy Cicalese <cicalese@mitre.org>
 
 	* libmisc/shell/shell.c: FALSE accidentally changed to true in switch
