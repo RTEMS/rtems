@@ -1,5 +1,23 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* itron/include/rtems/itron/mbox.h,
+	itron/include/rtems/itron/msgbuffer.h,
+	itron/include/rtems/itron/semaphore.h,
+	itron/inline/rtems/itron/eventflags.inl,
+	itron/inline/rtems/itron/fmempool.inl,
+	itron/inline/rtems/itron/mbox.inl,
+	itron/inline/rtems/itron/msgbuffer.inl,
+	itron/inline/rtems/itron/port.inl,
+	itron/inline/rtems/itron/semaphore.inl,
+	itron/inline/rtems/itron/task.inl,
+	itron/inline/rtems/itron/vmempool.inl,
+	itron/src/cre_tsk.c, itron/src/sta_tsk.c,
+	itron/src/task.c, itron/src/trcv_mbf.c,
+	itron/src/trcv_mbx.c, itron/src/tsnd_mbf.c,
+	itron/src/twai_sem.c: Convert to "bool".
+
+2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/cond.h, 
 	posix/include/rtems/posix/key.h,
 	posix/include/rtems/posix/mqueue.h,
