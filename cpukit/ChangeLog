@@ -1,5 +1,21 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/inline/rtems/rtems/asr.inl,
+	rtems/inline/rtems/rtems/attr.inl,
+	rtems/inline/rtems/rtems/barrier.inl,
+	rtems/inline/rtems/rtems/dpmem.inl,
+	rtems/inline/rtems/rtems/eventset.inl,
+	rtems/inline/rtems/rtems/message.inl,
+	rtems/inline/rtems/rtems/modes.inl,
+	rtems/inline/rtems/rtems/options.inl,
+	rtems/inline/rtems/rtems/part.inl,
+	rtems/inline/rtems/rtems/ratemon.inl,
+	rtems/inline/rtems/rtems/region.inl,
+	rtems/inline/rtems/rtems/sem.inl,
+	rtems/inline/rtems/rtems/status.inl,
+	rtems/inline/rtems/rtems/support.inl,
+	rtems/inline/rtems/rtems/tasks.inl,
+	rtems/inline/rtems/rtems/timer.inl: Convert to "bool".
 	* rtems/include/rtems/rtems/asr.h,
 	rtems/include/rtems/rtems/clock.h,
 	rtems/include/rtems/rtems/config.h,
