@@ -1,5 +1,27 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/debug.h,
+	score/include/rtems/score/context.h,
+	score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/corespinlock.h,
+	score/include/rtems/score/heap.h,
+	score/include/rtems/score/interr.h,
+	score/include/rtems/score/isr.h,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/protectedheap.h,
+	score/include/rtems/score/sysstate.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadq.h,
+	score/include/rtems/score/timespec.h,
+	score/include/rtems/score/tod.h,
+	score/include/rtems/score/userext.h,
+	score/include/rtems/score/wkspace.h:
+	Convert to "bool".
 	* score/src/object.c: Stop using old-style function definitions.
 
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
