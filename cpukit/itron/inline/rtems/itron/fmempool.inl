@@ -146,7 +146,7 @@ RTEMS_INLINE_ROUTINE ITRON_Fixed_memory_pool_Control
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Fixed_memory_pool_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Fixed_memory_pool_Is_null (
   ITRON_Fixed_memory_pool_Control *the_fixed_memory_pool
 )
 {

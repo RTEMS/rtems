@@ -145,7 +145,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_ITRON_Task_Get (
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Task_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Task_Is_null (
   Thread_Control *the_task
 )
 {

@@ -32,18 +32,18 @@ ER trcv_msg(
 {
   register ITRON_Mailbox_Control *the_mailbox;
   Watchdog_Interval               interval;
-  boolean                         wait;
+  bool                            wait;
   Objects_Locations               location;
-  uint32_t                        size;
+  size_t                          size;
 
   if (!ppk_msg)
     return E_PAR;
 
   interval = 0;
   if ( tmout == TMO_POL ) {
-    wait = FALSE;
+    wait = false;
   } else {
-    wait = TRUE;
+    wait = true;
     if ( tmout != TMO_FEVR )
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);
   }

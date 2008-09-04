@@ -33,13 +33,13 @@ ER twai_sem(
   ITRON_Semaphore_Control  *the_semaphore;
   Objects_Locations         location;
   Watchdog_Interval         interval;
-  boolean                   blocking;
+  bool                      blocking;
 
   interval = 0;
   if ( tmout == TMO_POL ) {
-    blocking = FALSE;
+    blocking = false;
   } else {
-    blocking = TRUE;
+    blocking = true;
 
     if ( tmout != TMO_FEVR )
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);

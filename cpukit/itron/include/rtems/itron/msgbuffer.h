@@ -16,12 +16,12 @@
 #ifndef _RTEMS_ITRON_MSGBUFFER_H
 #define _RTEMS_ITRON_MSGBUFFER_H
 
+#include <rtems/itron/object.h>
+#include <rtems/score/coremsg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/itron/object.h>
-#include <rtems/score/coremsg.h>
 
 /*
  *  The following defines the control block used to manage each
@@ -30,7 +30,7 @@ extern "C" {
 
 typedef struct {
     ITRON_Objects_Control               Object;
-    boolean                             is_priority_blocking;
+    bool                                is_priority_blocking;
     CORE_message_queue_Control          message_queue;
 }   ITRON_Message_buffer_Control;
 

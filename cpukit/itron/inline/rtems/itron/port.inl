@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE ITRON_Port_Control *_ITRON_Port_Get (
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Port_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Port_Is_null (
   ITRON_Port_Control *the_port
 )
 {

@@ -149,7 +149,7 @@ RTEMS_INLINE_ROUTINE ITRON_Variable_memory_pool_Control
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Variable_memory_pool_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Variable_memory_pool_Is_null (
   ITRON_Variable_memory_pool_Control *the_variable_memory_pool
 )
 {

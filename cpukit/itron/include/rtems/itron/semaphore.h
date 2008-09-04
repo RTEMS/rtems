@@ -16,12 +16,12 @@
 #ifndef _RTEMS_ITRON_SEMAPHORE_H
 #define _RTEMS_ITRON_SEMAPHORE_H
 
+#include <rtems/itron/object.h>
+#include <rtems/score/coresem.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/itron/object.h>
-#include <rtems/score/coresem.h>
 
 /*
  *  The following defines the control block used to manage each semaphore.
@@ -29,7 +29,7 @@ extern "C" {
 
 typedef struct {
   ITRON_Objects_Control   Object;
-  boolean                 is_priority_blocking;
+  bool                    is_priority_blocking;
   CORE_semaphore_Control  semaphore;
 }   ITRON_Semaphore_Control;
 

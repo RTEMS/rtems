@@ -36,7 +36,7 @@ ER tsnd_mbf(
   ITRON_Message_buffer_Control  *the_message_buffer;
   Objects_Locations              location;
   Watchdog_Interval              interval;
-  boolean                        wait;
+  bool                           wait;
   CORE_message_queue_Status      msg_status;
 
   if (msgsz <= 0 || !msg)
@@ -44,9 +44,9 @@ ER tsnd_mbf(
 
   interval = 0;
   if ( tmout == TMO_POL ) {
-    wait = FALSE;
+    wait = false;
   } else {
-    wait = TRUE;
+    wait = true;
     if ( tmout != TMO_FEVR )
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);
   }

@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE ITRON_Eventflags_Control *_ITRON_Eventflags_Get (
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Eventflags_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Eventflags_Is_null (
   ITRON_Eventflags_Control *the_eventflags
 )
 {

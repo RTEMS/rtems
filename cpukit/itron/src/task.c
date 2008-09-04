@@ -35,7 +35,7 @@
  *  area.
  */
 
-boolean _ITRON_Task_Create_extension(
+bool _ITRON_Task_Create_extension(
   Thread_Control *executing,
   Thread_Control *created
 )
@@ -50,7 +50,7 @@ boolean _ITRON_Task_Create_extension(
   api = _Workspace_Allocate( sizeof( ITRON_API_Control ) );
 
   if ( !api )
-    return FALSE;
+    return false;
 
   created->API_Extensions[ THREAD_API_ITRON ] = api;
 #else
@@ -61,7 +61,7 @@ boolean _ITRON_Task_Create_extension(
    *  Initialize the ITRON API extension
    */
 
-  return TRUE;
+  return true;
 }
 
 /*

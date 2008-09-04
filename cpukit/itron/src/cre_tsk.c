@@ -35,7 +35,7 @@ ER cre_tsk(
 )
 {
   register Thread_Control     *the_thread;
-  boolean                      status;
+  bool                         status;
   Priority_Control             core_priority;
   Objects_Name                 name;
 
@@ -117,7 +117,7 @@ ER cre_tsk(
    *  NOTE:  Since the thread starts with all unblocked, this is necessary.
    */
 
-  the_thread->do_post_task_switch_extension = TRUE;
+  the_thread->do_post_task_switch_extension = true;
 
   the_thread->Start.entry_point = (Thread_Entry) pk_ctsk->task;
 

@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE ITRON_Semaphore_Control *_ITRON_Semaphore_Get (
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Semaphore_Is_null (
   ITRON_Semaphore_Control *the_semaphore
 )
 {

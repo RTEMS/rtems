@@ -35,7 +35,7 @@ ER sta_tsk(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
-  boolean                  status;
+  bool                     status;
 
   the_thread = _ITRON_Task_Get( tskid, &location );
   switch ( location ) {

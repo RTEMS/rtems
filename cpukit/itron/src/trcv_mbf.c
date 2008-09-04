@@ -34,15 +34,15 @@ ER trcv_mbf(
   ITRON_Message_buffer_Control   *the_message_buffer;
   Objects_Locations               location;
   CORE_message_queue_Status       status;
-  boolean                         wait;
+  bool                            wait;
   Watchdog_Interval               interval;
   size_t                          msgsz;
 
   interval = 0;
   if (tmout == TMO_POL) {
-    wait = FALSE;
+    wait = false;
   } else {
-    wait = TRUE;
+    wait = true;
     if (tmout != TMO_FEVR)
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);
   }

@@ -144,7 +144,7 @@ RTEMS_INLINE_ROUTINE ITRON_Message_buffer_Control *_ITRON_Message_buffer_Get (
  *    FALSE - otherwise
  */
 
-RTEMS_INLINE_ROUTINE boolean _ITRON_Message_buffer_Is_null (
+RTEMS_INLINE_ROUTINE bool _ITRON_Message_buffer_Is_null (
   ITRON_Message_buffer_Control *the_message_buffer
 )
 {

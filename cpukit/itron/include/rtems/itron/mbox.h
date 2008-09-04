@@ -16,12 +16,12 @@
 #ifndef _RTEMS_ITRON_MBOX_H
 #define _RTEMS_ITRON_MBOX_H
 
+#include <rtems/itron/object.h>
+#include <rtems/score/coremsg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/itron/object.h>
-#include <rtems/score/coremsg.h>
 
 /*
  *  The following defines the control block used to manage each mailbox.
@@ -30,7 +30,7 @@ extern "C" {
 typedef struct {
   ITRON_Objects_Control       Object;
   uint32_t                    count;
-  boolean                     do_message_priority;
+  bool                        do_message_priority;
   CORE_message_queue_Control  message_queue;
 }   ITRON_Mailbox_Control;
 
