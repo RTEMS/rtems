@@ -42,13 +42,14 @@
  *  Output parameters:  NONE
  */
 
-void _Objects_Handler_initialization(
 #if defined(RTEMS_MULTIPROCESSING)
+void _Objects_Handler_initialization(
   uint32_t   node,
   uint32_t   maximum_nodes,
-  uint32_t   maximum_global_objects
+  uint32_t   maximum_global_objects )
+#else
+void _Objects_Handler_initialization(void)
 #endif
-)
 {
 #if defined(RTEMS_MULTIPROCESSING)
   if ( node < 1 || node > maximum_nodes )
