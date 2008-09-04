@@ -1,5 +1,26 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/inline/rtems/score/address.inl,
+	score/inline/rtems/score/chain.inl,
+	score/inline/rtems/score/corebarrier.inl,
+	score/inline/rtems/score/coremsg.inl,
+	score/inline/rtems/score/coremutex.inl,
+	score/inline/rtems/score/coresem.inl,
+	score/inline/rtems/score/corespinlock.inl,
+	score/inline/rtems/score/heap.inl,
+	score/inline/rtems/score/isr.inl,
+	score/inline/rtems/score/mppkt.inl,
+	score/inline/rtems/score/object.inl,
+	score/inline/rtems/score/objectmp.inl,
+	score/inline/rtems/score/priority.inl,
+	score/inline/rtems/score/stack.inl,
+	score/inline/rtems/score/states.inl,
+	score/inline/rtems/score/sysstate.inl,
+	score/inline/rtems/score/thread.inl,
+	score/inline/rtems/score/threadmp.inl,
+	score/inline/rtems/score/tqdata.inl,
+	score/inline/rtems/score/watchdog.inl:
+	Convert to "bool".
 	* score/include/rtems/debug.h,
 	score/include/rtems/score/context.h,
 	score/include/rtems/score/corebarrier.h,
