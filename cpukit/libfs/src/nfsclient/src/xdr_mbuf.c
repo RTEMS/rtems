@@ -267,9 +267,9 @@ fprintf(stderr,"TODO: xdrmbuf_putlong_aligned() is unimplemented\n");
 }
 
 static bool_t
-xdrmbuf_getlong_unaligned(xdrs, lp)
-	register XDR *xdrs;
-	long *lp;
+xdrmbuf_getlong_unaligned(
+	XDR *xdrs,
+	long *lp)
 {
 union {
 	int32_t l;
@@ -442,8 +442,8 @@ xdrmbuf_putbytes(
 }
 
 static u_int
-xdrmbuf_getpos(xdrs)
-	register XDR *xdrs;
+xdrmbuf_getpos(
+	XDR *xdrs)
 {
 #if 1
 MBPrivate	mbp  = (MBPrivate)xdrs->x_base;
@@ -469,9 +469,9 @@ MBPrivate	mbp  = (MBPrivate)xdrs->x_base;
 }
 
 static bool_t
-xdrmbuf_setpos(xdrs, pos)
-	register XDR *xdrs;
-	u_int pos;
+xdrmbuf_setpos(
+	XDR *xdrs,
+	u_int pos)
 {
 struct		mbuf *m;
 MBPrivate	mbp   = (MBPrivate)xdrs->x_base;
