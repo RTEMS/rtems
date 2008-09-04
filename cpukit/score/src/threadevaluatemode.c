@@ -37,7 +37,7 @@
  *  XXX
  */
 
-boolean _Thread_Evaluate_mode( void )
+bool _Thread_Evaluate_mode( void )
 {
   Thread_Control     *executing;
 

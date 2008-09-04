@@ -38,7 +38,7 @@
  *  @param[in] the_attribute is the attribute set to test
  *  @return TRUE if the priority attribute is enabled
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_barrier_Is_automatic(
+RTEMS_INLINE_ROUTINE bool _CORE_barrier_Is_automatic(
   CORE_barrier_Attributes *the_attribute
 )
 {

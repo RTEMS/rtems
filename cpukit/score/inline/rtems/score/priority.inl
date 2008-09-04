@@ -48,7 +48,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
  *  user task, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Priority_Is_valid (
+RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
   Priority_Control the_priority
 )
 {
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
  *  FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Priority_Is_group_empty (
+RTEMS_INLINE_ROUTINE bool _Priority_Is_group_empty (
   Priority_Control      the_priority
 )
 {

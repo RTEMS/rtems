@@ -35,7 +35,7 @@
  *  multiprocessing receive thread.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_MP_Is_receive (
+RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_receive (
   Thread_Control *the_thread
 )
 {

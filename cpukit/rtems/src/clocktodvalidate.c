@@ -46,7 +46,7 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
  *  NOTE: This routine only works for leap-years through 2099.
  */
 
-boolean _TOD_Validate(
+bool _TOD_Validate(
   rtems_time_of_day *the_tod
 )
 {
@@ -62,7 +62,7 @@ boolean _TOD_Validate(
       (the_tod->month  >  TOD_MONTHS_PER_YEAR)    ||
       (the_tod->year   <  TOD_BASE_YEAR)          ||
       (the_tod->day    == 0) )
-     return FALSE;
+     return false;
 
   if ( (the_tod->year % 4) == 0 )
     days_in_month = _TOD_Days_per_month[ 1 ][ the_tod->month ];
@@ -70,7 +70,7 @@ boolean _TOD_Validate(
     days_in_month = _TOD_Days_per_month[ 0 ][ the_tod->month ];
 
   if ( the_tod->day > days_in_month )
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }

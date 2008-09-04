@@ -62,11 +62,11 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
  *  This function returns TRUE if the floating point attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_floating_point(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_FLOATING_POINT );
+   return ( attribute_set & RTEMS_FLOATING_POINT ) ? true : false;
 }
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -76,11 +76,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
  *  This function returns TRUE if the global object attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_global(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_GLOBAL );
+   return ( attribute_set & RTEMS_GLOBAL ) ? true : false;
 }
 #endif
 
@@ -90,11 +90,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_PRIORITY );
+   return ( attribute_set & RTEMS_PRIORITY ) ? true : false;
 }
 
 /**
@@ -103,7 +103,7 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority(
  *  This function returns TRUE if the binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_binary_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -116,7 +116,7 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_binary_semaphore(
  *  This function returns TRUE if the simple binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_simple_binary_semaphore(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_simple_binary_semaphore(
   rtems_attribute attribute_set
 ) 
 {
@@ -130,7 +130,7 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_simple_binary_semaphore(
  *  This function returns TRUE if the counting semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_counting_semaphore(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_counting_semaphore(
   rtems_attribute attribute_set
 )
 {
@@ -143,11 +143,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_counting_semaphore(
  *  This function returns TRUE if the priority inheritance attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_inherit_priority(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_inherit_priority(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_INHERIT_PRIORITY );
+   return ( attribute_set & RTEMS_INHERIT_PRIORITY ) ? true : false;
 }
 
 /**
@@ -156,11 +156,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_inherit_priority(
  *  This function returns TRUE if the priority ceiling attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority_ceiling(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_PRIORITY_CEILING );
+   return ( attribute_set & RTEMS_PRIORITY_CEILING ) ? true : false;
 }
 
 /**
@@ -169,11 +169,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
  *  This function returns TRUE if the barrier automatic release
  *  attribute is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_barrier_automatic(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_barrier_automatic(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_BARRIER_AUTOMATIC_RELEASE );
+   return ( attribute_set & RTEMS_BARRIER_AUTOMATIC_RELEASE ) ? true : false;
 }
 
 /**
@@ -182,11 +182,11 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_barrier_automatic(
  *  This function returns TRUE if the system task attribute
  *  is enabled in the attribute_set and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Attributes_Is_system_task(
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_system_task(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_SYSTEM_TASK );
+   return ( attribute_set & RTEMS_SYSTEM_TASK ) ? true : false;
 }
 
 /**@}*/

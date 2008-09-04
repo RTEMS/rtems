@@ -245,7 +245,7 @@ rtems_status_code rtems_clock_get_uptime(
  *
  *  @return This method returns TRUE if the TOD is valid and FALSE otherwise.
  */
-boolean _TOD_Validate(
+bool _TOD_Validate(
   rtems_time_of_day *the_tod
 );
 

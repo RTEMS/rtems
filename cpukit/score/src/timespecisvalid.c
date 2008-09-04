@@ -23,7 +23,7 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
-boolean _Timespec_Is_valid(
+bool _Timespec_Is_valid(
   const struct timespec *time
 )
 {

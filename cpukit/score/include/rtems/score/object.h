@@ -50,7 +50,7 @@ typedef union {
 /**
  *  Functions which compare names are prototyped like this.
  */
-typedef boolean (*Objects_Name_comparators)(
+typedef bool    (*Objects_Name_comparators)(
   void       * /* name_1 */,
   void       * /* name_2 */,
   uint16_t     /* length */
@@ -334,7 +334,7 @@ typedef struct {
   /** This is the maximum number of objects in this class. */
   Objects_Maximum   maximum;
   /** This is the TRUE if unlimited objects in this class. */
-  boolean           auto_extend;
+  bool              auto_extend;
   /** This is the number of objects in a block. */
   uint32_t          allocation_size;
   /** This is the size in bytes of each object instance. */
@@ -349,8 +349,8 @@ typedef struct {
   uint32_t         *inactive_per_block;
   /** This is a table to the chain of inactive object memory blocks. */
   void            **object_blocks;
-  /** This is the TRUE if names are strings. */
-  boolean           is_string;
+  /** This is true if names are strings. */
+  bool              is_string;
   /** This is the maximum length of names. */
   uint16_t          name_length;
   /** This is this object class' method called when extracting a thread. */
@@ -498,11 +498,11 @@ void _Objects_Initialize_information (
   uint32_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
-  boolean              is_string,
+  bool                 is_string,
   uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  boolean              supports_global,
+  bool                 supports_global,
   Objects_Thread_queue_Extract_callout extract
 #endif
 );
@@ -859,7 +859,7 @@ char *_Objects_Get_name_as_string(
  *
  *  @return If successful, TRUE is returned.  Otherwise FALSE is returned.
  */
-boolean _Objects_Set_name(
+bool _Objects_Set_name(
   Objects_Information *information,
   Objects_Control     *the_object,
   const char          *name

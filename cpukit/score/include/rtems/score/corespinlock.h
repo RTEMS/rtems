@@ -136,7 +136,7 @@ void _CORE_spinlock_Initialize(
  */
 CORE_spinlock_Status _CORE_spinlock_Wait(
   CORE_spinlock_Control  *the_spinlock,
-  boolean                 wait,
+  bool                    wait,
   Watchdog_Interval       timeout
 );
 

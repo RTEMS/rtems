@@ -43,7 +43,7 @@ extern "C" {
  *  @return This method returns true if @a time is valid and 
  *          false otherwise.
  */
-boolean _Timespec_Is_valid(
+bool _Timespec_Is_valid(
   const struct timespec *time
 );
 
@@ -57,7 +57,7 @@ boolean _Timespec_Is_valid(
  *  @return This method returns true if @a lhs is less than the @a rhs and 
  *          false otherwise.
  */
-boolean _Timespec_Less_than(
+bool _Timespec_Less_than(
   const struct timespec *lhs,
   const struct timespec *rhs
 );
@@ -72,7 +72,7 @@ boolean _Timespec_Less_than(
  *  @return This method returns true if @a lhs is greater than the @a rhs and 
  *          false otherwise.
  */
-boolean _Timespec_Greater_than(
+bool _Timespec_Greater_than(
   const struct timespec *lhs,
   const struct timespec *rhs
 );

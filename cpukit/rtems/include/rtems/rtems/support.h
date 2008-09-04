@@ -63,7 +63,7 @@ extern "C" {
  *
  *  @return TRUE if successful
  */
-boolean rtems_workspace_get_information(
+bool rtems_workspace_get_information(
   Heap_Information_block  *the_info
 );
 
@@ -78,7 +78,7 @@ boolean rtems_workspace_get_information(
  *
  *  @return TRUE if successful
  */
-boolean rtems_workspace_allocate(
+bool rtems_workspace_allocate(
   size_t   bytes,
   void   **pointer
 );
@@ -93,7 +93,7 @@ boolean rtems_workspace_allocate(
  *
  *  @return TRUE if successful
  */
-boolean rtems_workspace_free(
+bool rtems_workspace_free(
   void *pointer
 );
 

@@ -22,7 +22,7 @@
 
 #include <string.h>  /* for memset */
 
-boolean rtems_workspace_get_information(
+bool rtems_workspace_get_information(
   Heap_Information_block  *the_info
 )
 {
@@ -30,30 +30,30 @@ boolean rtems_workspace_get_information(
 
   status = _Heap_Get_information( &_Workspace_Area, the_info );
   if ( status == HEAP_GET_INFORMATION_SUCCESSFUL )
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 /*
  *  _Workspace_Allocate
  */
-boolean rtems_workspace_allocate(
+bool rtems_workspace_allocate(
   size_t   bytes,
   void   **pointer
 )
 {
    *pointer =  _Heap_Allocate( &_Workspace_Area, bytes );
    if (!pointer)
-     return FALSE;
+     return false;
    else
-     return TRUE;
+     return true;
 }
 
 /*
  *  _Workspace_Allocate
  */
-boolean rtems_workspace_free(
+bool rtems_workspace_free(
   void *pointer
 )
 {

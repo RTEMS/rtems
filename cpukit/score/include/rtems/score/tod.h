@@ -129,7 +129,7 @@ extern "C" {
  *  This is TRUE if the application has set the current
  *  time of day, and FALSE otherwise.
  */
-SCORE_EXTERN boolean _TOD_Is_set;
+SCORE_EXTERN bool _TOD_Is_set;
 
 /** @brief Current Time of Day (Timespec)
  *  The following contains the current time of day.

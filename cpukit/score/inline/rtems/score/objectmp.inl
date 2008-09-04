@@ -58,7 +58,7 @@ RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
  *  This function returns whether the global object is NULL or not.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Objects_MP_Is_null_global_object (
+RTEMS_INLINE_ROUTINE bool _Objects_MP_Is_null_global_object (
   Objects_MP_Control *the_object
 )
 {

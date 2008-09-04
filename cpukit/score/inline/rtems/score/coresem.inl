@@ -38,7 +38,7 @@
  *  @param[in] the_attribute is the attribute set to test
  *  @return TRUE if the priority attribute is enabled
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_semaphore_Is_priority(
+RTEMS_INLINE_ROUTINE bool _CORE_semaphore_Is_priority(
   CORE_semaphore_Attributes *the_attribute
 )
 {
@@ -76,7 +76,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   CORE_semaphore_Control  *the_semaphore,
   Objects_Id               id,
-  boolean                  wait,
+  bool                  wait,
   Watchdog_Interval        timeout,
   ISR_Level               *level_p
 ) 

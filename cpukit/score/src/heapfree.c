@@ -35,7 +35,7 @@
  *    FALSE - if starting_address is invalid heap address
  */
 
-boolean _Heap_Free(
+bool _Heap_Free(
   Heap_Control        *the_heap,
   void                *starting_address
 )
@@ -45,7 +45,7 @@ boolean _Heap_Free(
   uint32_t         the_size;
   uint32_t         next_size;
   Heap_Statistics *const stats = &the_heap->stats;
-  boolean          next_is_free;
+  bool             next_is_free;
 
   if ( !_Addresses_Is_in_range(
        starting_address, (void *)the_heap->start, (void *)the_heap->final ) ) {

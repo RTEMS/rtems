@@ -54,7 +54,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Id          *id
 )
 {
-  boolean                    search_local_node;
+  bool                       search_local_node;
   Objects_Control           *the_object;
   uint32_t                   index;
   uint32_t                   name_length;

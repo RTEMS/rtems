@@ -181,7 +181,7 @@ void _Partition_MP_Process_packet (
 {
   Partition_MP_Packet *the_packet;
   Thread_Control      *the_thread;
-  boolean              ignored;
+  bool                 ignored;
 
   the_packet = (Partition_MP_Packet *) the_packet_prefix;
 

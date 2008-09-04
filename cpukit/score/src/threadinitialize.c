@@ -41,14 +41,14 @@
  *  thread id are allowed.
  */
 
-boolean _Thread_Initialize(
+bool _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
   void                                 *stack_area,
   size_t                                stack_size,
-  boolean                               is_fp,
+  bool                                  is_fp,
   Priority_Control                      priority,
-  boolean                               is_preemptible,
+  bool                                  is_preemptible,
   Thread_CPU_budget_algorithms          budget_algorithm,
   Thread_CPU_budget_algorithm_callout   budget_callout,
   uint32_t                              isr_level,
@@ -61,7 +61,7 @@ boolean _Thread_Initialize(
   void                *fp_area;
 #endif
   void                *extensions_area;
-  boolean              extension_status;
+  bool                 extension_status;
 
 #if __RTEMS_ADA__
   /*

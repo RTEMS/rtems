@@ -82,7 +82,7 @@ RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get (
  *  This function returns TRUE if the_extension is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Extension_Is_null (
+RTEMS_INLINE_ROUTINE bool _Extension_Is_null (
   Extension_Control *the_extension
 )
 {

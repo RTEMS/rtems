@@ -18,12 +18,12 @@
 #ifndef _RTEMS_RTEMS_CONFIG_H
 #define _RTEMS_RTEMS_CONFIG_H
 
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/tasks.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/tasks.h>
 
 /**
  *  @defgroup ClassicConfig Classic API Configuration
@@ -51,7 +51,7 @@ typedef struct {
    * This field indicates whether Classic API notepads are
    * enabled or disabled.
    */
-  boolean                     notepads_enabled;
+  bool                        notepads_enabled;
 
   /**
    * This field contains the maximum number of Classic API 

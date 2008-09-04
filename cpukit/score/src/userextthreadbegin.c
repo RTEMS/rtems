@@ -70,7 +70,7 @@ void _User_extensions_Thread_exitted (
 
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,
-  boolean                 is_internal,
+  bool                    is_internal,
   uint32_t                the_error
 )
 {

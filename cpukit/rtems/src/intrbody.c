@@ -68,7 +68,7 @@ void rtems_interrupt_flash(
 
 #undef rtems_interrupt_is_in_progress
 
-boolean rtems_interrupt_is_in_progress( void )
+bool rtems_interrupt_is_in_progress( void )
 {
   return _ISR_Is_in_progress();
 }

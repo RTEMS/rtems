@@ -63,7 +63,7 @@ rtems_status_code rtems_message_queue_receive(
 {
   register Message_queue_Control *the_message_queue;
   Objects_Locations               location;
-  boolean                         wait;
+  bool                            wait;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
@@ -76,9 +76,9 @@ rtems_status_code rtems_message_queue_receive(
 
     case OBJECTS_LOCAL:
       if ( _Options_Is_no_wait( option_set ) )
-        wait = FALSE;
+        wait = false;
       else
-        wait = TRUE;
+        wait = true;
 
       _CORE_message_queue_Seize(
         &the_message_queue->message_queue,

@@ -53,11 +53,11 @@ void _Objects_Initialize_information(
   uint32_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
-  boolean              is_string,
+  bool                 is_string,
   uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  boolean              supports_global,
+  bool                 supports_global,
   Objects_Thread_queue_Extract_callout extract
 #endif
 )
@@ -165,7 +165,7 @@ void _Objects_Initialize_information(
 #if defined(RTEMS_MULTIPROCESSING)
   information->extract = extract;
 
-  if ( supports_global == TRUE && _System_state_Is_multiprocessing ) {
+  if ( (supports_global == true) && _System_state_Is_multiprocessing ) {
 
     information->global_table =
       (Chain_Control *) _Workspace_Allocate_or_fatal_error(

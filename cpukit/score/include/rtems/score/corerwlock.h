@@ -151,7 +151,7 @@ void _CORE_RWLock_Initialize(
 void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_Control                 *the_rwlock,
   Objects_Id                           id,
-  boolean                              wait,
+  bool                                 wait,
   Watchdog_Interval                    timeout,
   CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
 );
@@ -172,7 +172,7 @@ void _CORE_RWLock_Obtain_for_reading(
 void _CORE_RWLock_Obtain_for_writing(
   CORE_RWLock_Control                 *the_rwlock,
   Objects_Id                           id,
-  boolean                              wait,
+  bool                                 wait,
   Watchdog_Interval                    timeout,
   CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
 );

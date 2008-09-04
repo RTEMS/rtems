@@ -57,9 +57,9 @@ void rtems_debug_disable (
  *  _Debug_Is_enabled
  */
 
-boolean _Debug_Is_enabled(
+bool _Debug_Is_enabled(
   rtems_debug_control  level
 )
 {
-  return (_Debug_Level & level) ? TRUE : FALSE;
+  return (_Debug_Level & level) ? true : false;
 }

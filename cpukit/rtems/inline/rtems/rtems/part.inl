@@ -60,7 +60,7 @@ RTEMS_INLINE_ROUTINE void _Partition_Free_buffer (
  *  This function returns TRUE if the_buffer is on a valid buffer
  *  boundary for the_partition, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_on_boundary (
+RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_on_boundary (
   void              *the_buffer,
   Partition_Control *the_partition
 )
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_on_boundary (
  *  This function returns TRUE if the_buffer is a valid buffer from
  *  the_partition, otherwise FALSE is returned.
  */
-RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_valid (
+RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_valid (
    Chain_Node        *the_buffer,
    Partition_Control *the_partition
 )
@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_valid (
  *  will result in the allocation of buffers whose first byte is
  *  properly aligned, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_size_aligned (
+RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned (
    uint32_t   buffer_size
 )
 {
@@ -162,7 +162,7 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
  *  This function returns TRUE if the_partition is NULL
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Partition_Is_null (
+RTEMS_INLINE_ROUTINE bool _Partition_Is_null (
    Partition_Control *the_partition
 )
 {

@@ -52,7 +52,7 @@
  *    FALSE  - if the message queue is NOT initialized
  */
 
-boolean _CORE_message_queue_Initialize(
+bool _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   uint32_t                       maximum_pending_messages,
@@ -79,7 +79,7 @@ boolean _CORE_message_queue_Initialize(
   }
    
   if (allocated_message_size < maximum_message_size)
-    return FALSE;
+    return false;
 
   /*
    *  Calculate how much total memory is required for message buffering and
@@ -89,7 +89,7 @@ boolean _CORE_message_queue_Initialize(
        (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
  
   if (message_buffering_required < allocated_message_size)
-    return FALSE;
+    return false;
 
   /*
    *  Attempt to allocate the message memory
@@ -98,7 +98,7 @@ boolean _CORE_message_queue_Initialize(
      _Workspace_Allocate( message_buffering_required );
  
   if (the_message_queue->message_buffers == 0)
-    return FALSE;
+    return false;
  
   /*
    *  Initialize the pool of inactive messages, pending messages,
@@ -121,5 +121,5 @@ boolean _CORE_message_queue_Initialize(
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
   );
 
-  return TRUE;
+  return true;
 }

@@ -16,7 +16,7 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Extend(
+bool _Protected_heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
   size_t        size

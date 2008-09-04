@@ -81,11 +81,11 @@ void _Objects_MP_Open (
  *
  */
 
-boolean _Objects_MP_Allocate_and_open (
+bool _Objects_MP_Allocate_and_open (
   Objects_Information *information,
   uint32_t             the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id,
-  boolean              is_fatal_error
+  bool                 is_fatal_error
 )
 {
   Objects_MP_Control  *the_global_object;

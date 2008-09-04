@@ -75,9 +75,9 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
 /**
  *  @brief Dual_ported_memory_Is_null
  *
- *  This function returns TRUE if the_port is NULL and FALSE otherwise.
+ *  This function returns true if the_port is NULL and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Dual_ported_memory_Is_null(
+RTEMS_INLINE_ROUTINE bool _Dual_ported_memory_Is_null(
   Dual_ported_memory_Control *the_port
 )
 {

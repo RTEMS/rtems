@@ -52,7 +52,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
  *  thread, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing (
+RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
   const Thread_Control *the_thread
 )
 {
@@ -64,7 +64,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing (
  *  thread, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_heir (
+RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
   const Thread_Control *the_thread
 )
 {
@@ -76,7 +76,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_heir (
  *  is also the heir thread, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_executing_also_the_heir( void )
+RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_also_the_heir( void )
 {
   return ( _Thread_Executing == _Thread_Heir );
 }
@@ -127,7 +127,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
  */
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_allocated_fp (
+RTEMS_INLINE_ROUTINE bool _Thread_Is_allocated_fp (
   const Thread_Control *the_thread
 )
 {
@@ -235,7 +235,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
  *  otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_dispatching_enabled( void )
+RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 {
   return ( _Thread_Dispatch_disable_level == 0 );
 }
@@ -245,7 +245,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_dispatching_enabled( void )
  *  otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_context_switch_necessary( void )
+RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
 {
   return ( _Context_Switch_necessary );
 }
@@ -263,7 +263,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
  *  This function returns TRUE if the_thread is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_null (
+RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
   const Thread_Control *the_thread
 )
 {
@@ -274,7 +274,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_Is_null (
  *
  *  status which indicates that a proxy is blocking, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Thread_Is_proxy_blocking (
+RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
   uint32_t   code
 )
 {

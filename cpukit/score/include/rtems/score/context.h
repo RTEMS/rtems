@@ -48,7 +48,7 @@ extern "C" {
  *  currently executing thread and given to the heir thread.
  */
 
-SCORE_EXTERN volatile boolean _Context_Switch_necessary;
+SCORE_EXTERN volatile bool _Context_Switch_necessary;
 
 /**
  *  @brief Initialize Context Area

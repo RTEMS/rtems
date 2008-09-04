@@ -38,7 +38,7 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
   ASR_Information *information
 )
 {
-  information->is_enabled      = TRUE;
+  information->is_enabled      = true;
   information->handler         = NULL;
   information->mode_set        = RTEMS_DEFAULT_MODES;
   information->signals_posted  = 0;
@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE void _ASR_Swap_signals (
  *  This function returns TRUE if the given asr_handler is NULL and
  *  FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _ASR_Is_null_handler (
+RTEMS_INLINE_ROUTINE bool _ASR_Is_null_handler (
   rtems_asr_entry asr_handler
 )
 {
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE boolean _ASR_Is_null_handler (
  *  This function returns TRUE if there are signals pending in the
  *  given RTEMS_ASR information record and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _ASR_Are_signals_pending (
+RTEMS_INLINE_ROUTINE bool _ASR_Are_signals_pending (
   ASR_Information *information
 )
 {

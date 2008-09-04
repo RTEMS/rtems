@@ -333,7 +333,7 @@ void *_Heap_Allocate_aligned(
  *  @return TRUE if successfully able to determine the size, FALSE otherwise
  *  @return *size filled in with the size of the user area for this block
  */
-boolean _Heap_Size_of_user_area(
+bool _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
   size_t              *size
@@ -379,7 +379,7 @@ Heap_Resize_status _Heap_Resize_block(
  *         to free
  *  @return TRUE if successfully freed, FALSE otherwise
  */
-boolean _Heap_Free(
+bool _Heap_Free(
   Heap_Control *the_heap,
   void         *start_address
 );
@@ -393,10 +393,10 @@ boolean _Heap_Free(
  *  @param[in] do_dump is set to TRUE if errors should be printed
  *  @return TRUE if the test passed fine, FALSE otherwise.
  */
-boolean _Heap_Walk(
+bool _Heap_Walk(
   Heap_Control *the_heap,
   int           source,
-  boolean       do_dump
+  bool          do_dump
 );
 
 /**

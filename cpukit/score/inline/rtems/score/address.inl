@@ -99,7 +99,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Addresses_Subtract (
  *  @return This method returns TRUE if the address is aligned and
  *          FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
+RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
   void *address
 )
 {
@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
  *  @return This method returns TRUE if the given @a address is within the
  *  memory range specified and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Addresses_Is_in_range (
+RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
   void *address,
   void *base,
   void *limit

@@ -37,7 +37,7 @@
  *  @return This method will return TRUE if the spinlock is busy
  *          and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_spinlock_Is_busy(
+RTEMS_INLINE_ROUTINE bool _CORE_spinlock_Is_busy(
   CORE_spinlock_Control  *the_spinlock
 )
 {

@@ -65,12 +65,12 @@ rtems_status_code rtems_task_create(
 )
 {
   register Thread_Control *the_thread;
-  boolean                  is_fp;
+  bool                     is_fp;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_MP_Control      *the_global_object = NULL;
-  boolean                  is_global;
+  bool                     is_global;
 #endif
-  boolean                  status;
+  bool                     status;
   rtems_attribute          the_attribute_set;
   Priority_Control         core_priority;
   RTEMS_API_Control       *api;
@@ -102,9 +102,9 @@ rtems_status_code rtems_task_create(
     _Attributes_Clear( the_attribute_set, ATTRIBUTES_NOT_SUPPORTED );
 
   if ( _Attributes_Is_floating_point( the_attribute_set ) )
-    is_fp = TRUE;
+    is_fp = true;
   else
-    is_fp = FALSE;
+    is_fp = false;
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.
@@ -120,13 +120,13 @@ rtems_status_code rtems_task_create(
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( the_attribute_set ) ) {
 
-    is_global = TRUE;
+    is_global = true;
 
     if ( !_System_state_Is_multiprocessing )
       return RTEMS_MP_NOT_CONFIGURED;
 
   } else
-    is_global = FALSE;
+    is_global = false;
 #endif
 
   /*
@@ -200,7 +200,7 @@ rtems_status_code rtems_task_create(
   api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
-  asr->is_enabled = _Modes_Is_asr_disabled(initial_modes) ? FALSE : TRUE;
+  asr->is_enabled = _Modes_Is_asr_disabled(initial_modes) ? false : true;
 
   *id = the_thread->Object.id;
 

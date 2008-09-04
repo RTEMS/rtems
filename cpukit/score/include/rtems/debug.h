@@ -67,7 +67,7 @@ void rtems_debug_disable (
  *  This routine returns TRUE if the requested debug level is
  *  enabled, and FALSE otherwise.
  */
-boolean _Debug_Is_enabled(
+bool _Debug_Is_enabled(
   rtems_debug_control  level
 );
 

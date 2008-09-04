@@ -80,7 +80,7 @@ void *_Workspace_Allocate(
  *  @return TRUE if the free was successful.
  */
 
-boolean _Workspace_Free(
+bool _Workspace_Free(
   void *block
 );
 

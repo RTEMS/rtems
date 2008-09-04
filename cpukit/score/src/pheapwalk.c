@@ -16,13 +16,13 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Walk(
+bool _Protected_heap_Walk(
   Heap_Control *the_heap,
   int           source,
-  boolean       do_dump
+  bool          do_dump
 )
 {
-  boolean status;
+  bool    status;
 
   /*
    * If we are called from within a dispatching critical section,

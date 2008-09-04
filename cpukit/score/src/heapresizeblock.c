@@ -55,7 +55,7 @@ Heap_Resize_status _Heap_Resize_block(
   Heap_Block *the_block;
   Heap_Block *next_block;
   uint32_t   next_block_size;
-  boolean    next_is_used;
+  bool       next_is_used;
   Heap_Block *next_next_block;
   uint32_t   old_block_size;
   uint32_t   old_user_size;

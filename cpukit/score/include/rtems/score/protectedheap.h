@@ -71,7 +71,7 @@ static inline uint32_t _Protected_heap_Initialize(
  *  @param[in] size is the size in bytes of the memory area to add
  *  @return a status indicating success or the reason for failure
  */
-boolean _Protected_heap_Extend(
+bool _Protected_heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
   size_t        size
@@ -125,7 +125,7 @@ void *_Protected_heap_Allocate_aligned(
  *  @return TRUE if successfully able to determine the size, FALSE otherwise
  *  @return *size filled in with the size of the user area for this block
  */
-boolean _Protected_heap_Get_block_size(
+bool _Protected_heap_Get_block_size(
   Heap_Control        *the_heap,
   void                *starting_address,
   size_t              *size
@@ -143,7 +143,7 @@ boolean _Protected_heap_Get_block_size(
  *  @return TRUE if successfully able to resize the block.
  *          FALSE if the block can't be resized in place.
  */
-boolean _Protected_heap_Resize_block(
+bool _Protected_heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
   size_t        size
@@ -159,7 +159,7 @@ boolean _Protected_heap_Resize_block(
  *         to free
  *  @return TRUE if successfully freed, FALSE otherwise
  */
-boolean _Protected_heap_Free(
+bool _Protected_heap_Free(
   Heap_Control *the_heap,
   void         *start_address
 );
@@ -173,10 +173,10 @@ boolean _Protected_heap_Free(
  *  @param[in] do_dump is set to TRUE if errors should be printed
  *  @return TRUE if the test passed fine, FALSE otherwise.
  */
-boolean _Protected_heap_Walk(
+bool _Protected_heap_Walk(
   Heap_Control *the_heap,
   int           source,
-  boolean       do_dump
+  bool          do_dump
 );
 
 /**

@@ -190,7 +190,7 @@ void _RTEMS_tasks_MP_Process_packet (
 {
   RTEMS_tasks_MP_Packet *the_packet;
   Thread_Control   *the_thread;
-  boolean           ignored;
+  bool           ignored;
 
   the_packet = (RTEMS_tasks_MP_Packet *) the_packet_prefix;
 

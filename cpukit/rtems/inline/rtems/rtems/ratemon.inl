@@ -76,7 +76,7 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get (
  *  This function returns TRUE if the_period is in the ACTIVE state,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_active (
+RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_active (
   Rate_monotonic_Control *the_period
 )
 {
@@ -89,7 +89,7 @@ RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_active (
  *  This function returns TRUE if the_period is in the ACTIVE state,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_inactive (
+RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_inactive (
   Rate_monotonic_Control *the_period
 )
 {
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_inactive (
  *  This function returns TRUE if the_period is in the EXPIRED state,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_expired (
+RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_expired (
   Rate_monotonic_Control *the_period
 )
 {
@@ -114,7 +114,7 @@ RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_expired (
  *
  *  This function returns TRUE if the_period is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Rate_monotonic_Is_null (
+RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_null (
   Rate_monotonic_Control *the_period
 )
 {

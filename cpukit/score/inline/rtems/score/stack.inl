@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
  *
  *  @return This method returns TRUE if the stack is large enough.
  */
-RTEMS_INLINE_ROUTINE boolean _Stack_Is_enough (
+RTEMS_INLINE_ROUTINE bool _Stack_Is_enough (
   size_t size
 )
 {

@@ -67,11 +67,11 @@ rtems_status_code rtems_io_register_driver(
    */
 
   if ( major == 0 ) {
-    boolean found = FALSE;
+    bool found = false;
     for ( major = _IO_Number_of_drivers - 1 ; major ; major-- ) {
       if ( !_IO_Driver_address_table[major].initialization_entry &&
            !_IO_Driver_address_table[major].open_entry ) {
-        found = TRUE;
+        found = true;
         break;
       }
     }

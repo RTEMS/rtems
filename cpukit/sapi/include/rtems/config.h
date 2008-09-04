@@ -163,7 +163,7 @@ typedef struct {
    *  environment has ensured that memory was cleared before RTEMS was 
    *  invoked.
    */
-  boolean                        do_zero_of_workspace;
+  bool                           do_zero_of_workspace;
 
   uint32_t                       maximum_drivers;
   uint32_t                       number_of_device_drivers;

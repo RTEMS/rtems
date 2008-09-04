@@ -171,7 +171,7 @@ void _Thread_Dispatch( void )
 
   if ( _Thread_Do_post_task_switch_extension ||
        executing->do_post_task_switch_extension ) {
-    executing->do_post_task_switch_extension = FALSE;
+    executing->do_post_task_switch_extension = false;
     _API_extensions_Run_postswitch();
   }
 

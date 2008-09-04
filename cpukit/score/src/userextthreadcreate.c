@@ -21,13 +21,13 @@
  *  _User_extensions_Thread_create
  */
 
-boolean _User_extensions_Thread_create (
+bool _User_extensions_Thread_create (
   Thread_Control *the_thread
 )
 {
   Chain_Node              *the_node;
   User_extensions_Control *the_extension;
-  boolean                  status;
+  bool                     status;
 
   for ( the_node = _User_extensions_List.first ;
         !_Chain_Is_tail( &_User_extensions_List, the_node ) ;

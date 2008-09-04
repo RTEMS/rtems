@@ -43,11 +43,11 @@ void _Extension_Manager_initialization(
     OBJECTS_RTEMS_EXTENSIONS,
     maximum_extensions,
     sizeof( Extension_Control ),
-    FALSE,                     /* TRUE if the name is a string */
+    false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                     /* TRUE if this is a global object class */
+    false,                     /* true if this is a global object class */
     NULL                       /* Proxy extraction support callout */
 #endif
   );

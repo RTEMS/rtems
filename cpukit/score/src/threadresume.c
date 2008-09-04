@@ -53,7 +53,7 @@
 
 void _Thread_Resume(
   Thread_Control   *the_thread,
-  boolean           force
+  bool              force
 )
 {
 

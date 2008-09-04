@@ -52,7 +52,7 @@
 void _Thread_Change_priority(
   Thread_Control   *the_thread,
   Priority_Control  new_priority,
-  boolean           prepend_it
+  bool              prepend_it
 )
 {
   ISR_Level      level;

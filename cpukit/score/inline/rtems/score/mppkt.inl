@@ -36,7 +36,7 @@
  *        because this enum starts at lower bound of zero.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Mp_packet_Is_valid_packet_class (
+RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
   MP_packet_Classes the_packet_class
 )
 {
@@ -48,7 +48,7 @@ RTEMS_INLINE_ROUTINE boolean _Mp_packet_Is_valid_packet_class (
  *  and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Mp_packet_Is_null (
+RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_null (
   MP_packet_Prefix   *the_packet
 )
 {

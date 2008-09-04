@@ -124,7 +124,7 @@ void _Thread_queue_Extract(
  *  and ensures that if there is a proxy for this task on
  *  another node, it is also dealt with.
  */
-boolean _Thread_queue_Extract_with_proxy(
+bool _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );
 
@@ -192,7 +192,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
 void _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
-  boolean               requeuing 
+  bool                  requeuing 
 );
 
 /**

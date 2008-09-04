@@ -76,7 +76,7 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get (
  *
  *  This function returns TRUE if the_barrier is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Barrier_Is_null (
+RTEMS_INLINE_ROUTINE bool _Barrier_Is_null (
   Barrier_Control *the_barrier
 )
 {

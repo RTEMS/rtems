@@ -69,7 +69,7 @@ typedef enum {
  *  The following variable indicates whether or not this is
  *  an multiprocessing system.
  */
-SCORE_EXTERN boolean _System_state_Is_multiprocessing;
+SCORE_EXTERN bool _System_state_Is_multiprocessing;
 #endif
 
 /**

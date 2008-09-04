@@ -33,12 +33,12 @@
  *  This function returns TRUE if any of the mode flags in mask
  *  are set in mode_set, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Modes_Mask_changed (
+RTEMS_INLINE_ROUTINE bool _Modes_Mask_changed (
   Modes_Control mode_set,
   Modes_Control masks
 )
 {
-   return ( mode_set & masks );
+   return ( mode_set & masks ) ? true : false;
 }
 
 /**
@@ -47,7 +47,7 @@ RTEMS_INLINE_ROUTINE boolean _Modes_Mask_changed (
  *  This function returns TRUE if mode_set indicates that Asynchronous
  *  Signal Processing is disabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Modes_Is_asr_disabled (
+RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
   Modes_Control mode_set
 )
 {
@@ -60,7 +60,7 @@ RTEMS_INLINE_ROUTINE boolean _Modes_Is_asr_disabled (
  *  This function returns TRUE if mode_set indicates that preemption
  *  is enabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Modes_Is_preempt (
+RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
   Modes_Control mode_set
 )
 {
@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE boolean _Modes_Is_preempt (
  *  This function returns TRUE if mode_set indicates that timeslicing
  *  is enabled, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Modes_Is_timeslice (
+RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
   Modes_Control mode_set
 )
 {

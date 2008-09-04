@@ -53,7 +53,7 @@
 void _CORE_semaphore_Seize(
   CORE_semaphore_Control *the_semaphore,
   Objects_Id              id,
-  boolean                 wait,
+  bool                    wait,
   Watchdog_Interval       timeout
 )
 {

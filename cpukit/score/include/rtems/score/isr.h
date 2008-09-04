@@ -79,7 +79,7 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
  *  The following is TRUE if signals have been sent to the currently
  *  executing thread by an ISR handler.
  */
-SCORE_EXTERN boolean    _ISR_Signals_to_thread_executing;
+SCORE_EXTERN bool       _ISR_Signals_to_thread_executing;
 
 /**
  *  The following contains the interrupt service routine nest level.
@@ -201,7 +201,7 @@ void _ISR_Dispatch( void );
  *  that the caller is an interrupt service routine, NOT a thread.  The
  */
 #if (CPU_PROVIDES_ISR_IS_IN_PROGRESS == TRUE)
-boolean _ISR_Is_in_progress( void );
+bool _ISR_Is_in_progress( void );
 #else
 #define _ISR_Is_in_progress() \
         (_ISR_Nest_level != 0)

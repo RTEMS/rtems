@@ -23,7 +23,7 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
-boolean _Timespec_Less_than(
+bool _Timespec_Less_than(
   const struct timespec *lhs,
   const struct timespec *rhs
 )

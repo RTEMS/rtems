@@ -50,7 +50,7 @@
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,
   Objects_Id                           id,
-  boolean                              wait,
+  bool                                 wait,
   Watchdog_Interval                    timeout,
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
 )

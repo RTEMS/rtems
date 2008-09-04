@@ -28,7 +28,7 @@
  *  This method sets the name of an object based upon a C string.
  */
 
-boolean _Objects_Set_name(
+bool _Objects_Set_name(
   Objects_Information *information,
   Objects_Control     *the_object,
   const char          *name

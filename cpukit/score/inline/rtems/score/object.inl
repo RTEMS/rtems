@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_index(
  *  @return This method returns TRUE if the specified api value is valid
  *          and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Objects_Is_api_valid(
+RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
   uint32_t   the_api
 )
 {
@@ -131,7 +131,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_api_valid(
  *  @return This method returns TRUE if the specified node is the local node
  *          and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
+RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
   uint32_t   node
 )
 {
@@ -149,7 +149,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
  *
  *  @note On a single processor configuration, this always returns TRUE.
  */
-RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
+RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
   Objects_Id id
 )
 {
@@ -170,7 +170,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_id(
  *  @return This method returns TRUE if the specified object IDs are equal
  *          and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
+RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
   Objects_Id left,
   Objects_Id right
 )

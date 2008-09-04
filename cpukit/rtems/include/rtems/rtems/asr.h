@@ -19,11 +19,11 @@
 #ifndef _RTEMS_RTEMS_ASR_H
 #define _RTEMS_RTEMS_ASR_H
 
+#include <rtems/rtems/modes.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/modes.h>
 
 /**
  *  @defgroup ClassicASR Classic API ASR Support
@@ -57,7 +57,7 @@ typedef rtems_asr ( *rtems_asr_entry )(
  */
 typedef struct {
   /** This field indicates if are ASRs enabled currently. */
-  boolean           is_enabled;
+  bool              is_enabled;
   /** This field indicates if address of the signal handler function. */
   rtems_asr_entry   handler;
   /** This field indicates if the task mode the signal will run with. */

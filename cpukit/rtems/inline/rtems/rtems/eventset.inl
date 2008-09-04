@@ -32,7 +32,7 @@
  *  This function returns TRUE if on events are posted in the event_set,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Event_sets_Is_empty(
+RTEMS_INLINE_ROUTINE bool _Event_sets_Is_empty(
   rtems_event_set the_event_set
 )
 {

@@ -75,7 +75,7 @@ typedef struct {
   /** This is the source of the error. */
   Internal_errors_Source  the_source;
   /** This indicates if the error is internal of external. */
-  boolean                 is_internal;
+  bool                    is_internal;
   /** This is the error code. */
   uint32_t                the_error;
 } Internal_errors_Information;
@@ -92,7 +92,7 @@ SCORE_EXTERN Internal_errors_Information _Internal_errors_What_happened;
  */
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
-  boolean                 is_internal,
+  bool                    is_internal,
   uint32_t                the_error
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 

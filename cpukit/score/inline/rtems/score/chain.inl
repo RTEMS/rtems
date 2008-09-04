@@ -43,7 +43,7 @@
  *  @return This function returns TRUE if @a left and @a right are equal,
  *          and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
+RTEMS_INLINE_ROUTINE bool _Chain_Are_nodes_equal(
   const Chain_Node *left,
   const Chain_Node *right
 )
@@ -59,7 +59,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Are_nodes_equal(
  *
  *  @return This method returns TRUE if the_chain is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_null(
   const Chain_Control *the_chain
 )
 {
@@ -74,7 +74,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_null(
  *
  *  @return This method returns TRUE if the_node is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_null_node(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_null_node(
   const Chain_Node *the_node
 )
 {
@@ -121,7 +121,7 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
  *  @return This function returns TRUE if there a no nodes on @a the_chain and
  *  FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_empty(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_empty(
   Chain_Control *the_chain
 )
 {
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_empty(
  *  @return This function returns TRUE if @a the_node is the first node on
  *          a chain and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_first(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_first(
   const Chain_Node *the_node
 )
 {
@@ -156,7 +156,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_first(
  *  @return This function returns TRUE if @a the_node is the last node on
  *          a chain and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_last(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_last(
   const Chain_Node *the_node
 )
 {
@@ -173,7 +173,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_last(
  *  @return This function returns TRUE if there is only one node on
  *          @a the_chain and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Has_only_one_node(
+RTEMS_INLINE_ROUTINE bool _Chain_Has_only_one_node(
   const Chain_Control *the_chain
 )
 {
@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Has_only_one_node(
  *  @return This function returns TRUE if @a the_node is the head of
  *          @a the_chain and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_head(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_head(
   Chain_Control *the_chain,
   const Chain_Node    *the_node
 )
@@ -207,7 +207,7 @@ RTEMS_INLINE_ROUTINE boolean _Chain_Is_head(
  *  @param[in] the_chain is the chain to be operated upon.
  *  @param[in] the_node is the node to check for being the Chain Tail.
  */
-RTEMS_INLINE_ROUTINE boolean _Chain_Is_tail(
+RTEMS_INLINE_ROUTINE bool _Chain_Is_tail(
   Chain_Control *the_chain,
   const Chain_Node    *the_node
 )

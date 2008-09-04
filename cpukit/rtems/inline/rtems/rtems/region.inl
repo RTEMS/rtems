@@ -89,7 +89,7 @@ RTEMS_INLINE_ROUTINE void *_Region_Allocate_segment (
  *
  *  This function frees the_segment to the_region.
  */
-RTEMS_INLINE_ROUTINE boolean _Region_Free_segment (
+RTEMS_INLINE_ROUTINE bool _Region_Free_segment (
   Region_Control *the_region,
   void           *the_segment
 )
@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE boolean _Region_Free_segment (
  *
  *  This function returns TRUE if the_region is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Region_Is_null (
+RTEMS_INLINE_ROUTINE bool _Region_Is_null (
   Region_Control *the_region
 )
 {

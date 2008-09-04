@@ -191,7 +191,7 @@ typedef struct {
   /** This field indicates whether the thread was preemptible when
     * it started.
     */
-  boolean                              is_preemptible;
+  bool                                 is_preemptible;
   /** This field indicates the CPU budget algorith. */
   Thread_CPU_budget_algorithms         budget_algorithm;
   /** This field is the routine to invoke when the CPU allotment is
@@ -203,7 +203,7 @@ typedef struct {
   /** This field is the initial priority. */
   Priority_Control                     initial_priority;
   /** This field indicates whether the SuperCore allocated the stack. */
-  boolean                              core_allocated_stack;
+  bool                                 core_allocated_stack;
   /** This field is the stack information. */
   Stack_Control                        Initial_stack;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -351,13 +351,13 @@ struct Thread_Control_struct {
   /** This field is the number of nested suspend calls. */
   uint32_t                              suspend_count;
   /** This field is true if the thread is offered globally */
-  boolean                               is_global;
+  bool                                  is_global;
   /** This field is is true if the post task context switch should be 
    *  executed for this thread at the next context switch.
    */
-  boolean                               do_post_task_switch_extension;
+  bool                                  do_post_task_switch_extension;
   /** This field is true if the thread is preemptible. */
-  boolean                               is_preemptible;
+  bool                                  is_preemptible;
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
   void                                 *rtems_ada_self;
@@ -570,14 +570,14 @@ void _Thread_Stack_Free(
  *  @note If the stack is allocated from the workspace, then it is
  *        guaranteed to be of at least minimum size.
  */
-boolean _Thread_Initialize(
+bool _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
   void                                 *stack_area,
   size_t                                stack_size,
-  boolean                               is_fp,
+  bool                                  is_fp,
   Priority_Control                      priority,
-  boolean                               is_preemptible,
+  bool                                  is_preemptible,
   Thread_CPU_budget_algorithms          budget_algorithm,
   Thread_CPU_budget_algorithm_callout   budget_callout,
   uint32_t                              isr_level,
@@ -589,7 +589,7 @@ boolean _Thread_Initialize(
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
  */
-boolean _Thread_Start(
+bool _Thread_Start(
   Thread_Control            *the_thread,
   Thread_Start_types         the_prototype,
   void                      *entry_point,
@@ -604,7 +604,7 @@ boolean _Thread_Start(
  *
  *  TODO:  multiple task arg profiles
  */
-boolean _Thread_Restart(
+bool _Thread_Restart(
   Thread_Control            *the_thread,
   void                      *pointer_argument,
   Thread_Entry_numeric_type  numeric_argument
@@ -735,7 +735,7 @@ void _Thread_Delay_ended(
 void _Thread_Change_priority (
   Thread_Control   *the_thread,
   Priority_Control  new_priority,
-  boolean           prepend_it
+  bool              prepend_it
 );
 
 /**
@@ -762,7 +762,7 @@ void _Thread_Suspend(
  */
 void _Thread_Resume(
   Thread_Control   *the_thread,
-  boolean           force
+  bool              force
 );
 
 /**
@@ -771,7 +771,7 @@ void _Thread_Resume(
  *  is usually called after changing an execution mode such as preemptability
  *  for a thread.
  */
-boolean _Thread_Evaluate_mode( void );
+bool _Thread_Evaluate_mode( void );
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**

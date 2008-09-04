@@ -40,7 +40,7 @@
  *  thread competes with all other threads for CPU time.
  */
 
-boolean _Thread_Start(
+bool _Thread_Start(
   Thread_Control            *the_thread,
   Thread_Start_types         the_prototype,
   void                      *entry_point,
@@ -62,9 +62,8 @@ boolean _Thread_Start(
 
     _User_extensions_Thread_start( the_thread );
 
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
-
+  return false;
 }

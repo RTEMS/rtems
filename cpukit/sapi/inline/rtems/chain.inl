@@ -53,13 +53,13 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
 /**
  *  @brief Is the Chain Node Pointer NULL
  *
- *  This function returns TRUE if the_node is NULL and FALSE otherwise.
+ *  This function returns true if the_node is NULL and false otherwise.
  *
  *  @param[in] the_node is the node pointer to check.
  *
- *  @return This method returns TRUE if the_node is NULL and FALSE otherwise.
+ *  @return This method returns true if the_node is NULL and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_null_node(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
   const rtems_chain_node *the_node
 )
 {
@@ -101,16 +101,16 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
 /**
  *  @brief Are Two Nodes Equal
  *
- *  This function returns TRUE if @a left and @a right are equal,
- *  and FALSE otherwise.
+ *  This function returns true if @a left and @a right are equal,
+ *  and false otherwise.
  *
  *  @param[in] left is the node on the left hand side of the comparison.
  *  @param[in] right is the node on the left hand side of the comparison.
  *
- *  @return This function returns TRUE if @a left and @a right are equal,
- *          and FALSE otherwise.
+ *  @return This function returns true if @a left and @a right are equal,
+ *          and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_are_nodes_equal(
+RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
   const rtems_chain_node *left,
   const rtems_chain_node *right
 )
@@ -121,15 +121,15 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_are_nodes_equal(
 /**
  *  @brief Is the Chain Empty
  *
- *  This function returns TRUE if there a no nodes on @a the_chain and
- *  FALSE otherwise.
+ *  This function returns true if there a no nodes on @a the_chain and
+ *  false otherwise.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This function returns TRUE if there a no nodes on @a the_chain and
- *  FALSE otherwise.
+ *  @return This function returns true if there a no nodes on @a the_chain and
+ *  false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_empty(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
   rtems_chain_control *the_chain
 )
 {
@@ -139,16 +139,16 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_is_empty(
 /**
  *  @brief Is this the First Node on the Chain
  *
- *  This function returns TRUE if the_node is the first node on a chain and
- *  FALSE otherwise.
+ *  This function returns true if the_node is the first node on a chain and
+ *  false otherwise.
  *
  *  @param[in] the_node is the node the caller wants to know if it is
  *             the first node on a chain.
  *
- *  @return This function returns TRUE if @a the_node is the first node on
- *          a chain and FALSE otherwise.
+ *  @return This function returns true if @a the_node is the first node on
+ *          a chain and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_first(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_first(
   const rtems_chain_node *the_node
 )
 {
@@ -158,15 +158,15 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_is_first(
 /**
  *  @brief Is this the Last Node on the Chain
  *
- *  This function returns TRUE if @a the_node is the last node on a chain and
- *  FALSE otherwise.
+ *  This function returns true if @a the_node is the last node on a chain and
+ *  false otherwise.
  *
  *  @param[in] the_node is the node to check as the last node.
  *
- *  @return This function returns TRUE if @a the_node is the last node on
- *          a chain and FALSE otherwise.
+ *  @return This function returns true if @a the_node is the last node on
+ *          a chain and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_last(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_last(
   const rtems_chain_node *the_node
 )
 {
@@ -176,15 +176,15 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_is_last(
 /**
  *  @brief Does this Chain have only One Node
  *
- *  This function returns TRUE if there is only one node on @a the_chain and
- *  FALSE otherwise.
+ *  This function returns true if there is only one node on @a the_chain and
+ *  false otherwise.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This function returns TRUE if there is only one node on
- *          @a the_chain and FALSE otherwise.
+ *  @return This function returns true if there is only one node on
+ *          @a the_chain and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_has_only_one_node(
+RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
   const rtems_chain_control *the_chain
 )
 {
@@ -194,16 +194,16 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_has_only_one_node(
 /**
  *  @brief Is this Node the Chain Head
  *
- *  This function returns TRUE if @a the_node is the head of the_chain and
- *  FALSE otherwise.
+ *  This function returns true if @a the_node is the head of the_chain and
+ *  false otherwise.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *  @param[in] the_node is the node to check for being the Chain Head.
  *
- *  @return This function returns TRUE if @a the_node is the head of
- *          @a the_chain and FALSE otherwise.
+ *  @return This function returns true if @a the_node is the head of
+ *          @a the_chain and false otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_head(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
   rtems_chain_control    *the_chain,
   const rtems_chain_node *the_node
 )
@@ -214,13 +214,13 @@ RTEMS_INLINE_ROUTINE boolean rtems_chain_is_head(
 /**
  *  @brief Is this Node the Chail Tail
  *
- *  This function returns TRUE if the_node is the tail of the_chain and
- *  FALSE otherwise.
+ *  This function returns true if the_node is the tail of the_chain and
+ *  false otherwise.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *  @param[in] the_node is the node to check for being the Chain Tail.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_chain_is_tail(
+RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
   rtems_chain_control    *the_chain,
   const rtems_chain_node *the_node
 )

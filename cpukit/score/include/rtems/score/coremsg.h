@@ -27,15 +27,15 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <limits.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @brief  Message Queue MP Callback Prototype
@@ -240,7 +240,7 @@ typedef struct {
  *         FALSE will only be returned if memory for the pending 
  *         messages cannot be allocated.
  */
-boolean _CORE_message_queue_Initialize(
+bool _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   uint32_t                       maximum_pending_messages,
@@ -365,7 +365,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   CORE_message_queue_Submit_types            submit_type,
-  boolean                                    wait,
+  bool                                       wait,
   Watchdog_Interval                          timeout
 );
 
@@ -397,7 +397,7 @@ void _CORE_message_queue_Seize(
   Objects_Id                       id,
   void                            *buffer,
   size_t                          *size_p,
-  boolean                          wait,
+  bool                             wait,
   Watchdog_Interval                timeout
 );
 

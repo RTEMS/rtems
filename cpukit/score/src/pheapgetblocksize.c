@@ -16,13 +16,13 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Get_block_size(
+bool _Protected_heap_Get_block_size(
   Heap_Control        *the_heap,
   void                *starting_address,
   size_t              *size
 )
 {
-  boolean status;
+  bool    status;
 
   _RTEMS_Lock_allocator();
     status = _Heap_Size_of_user_area( the_heap, starting_address, size );

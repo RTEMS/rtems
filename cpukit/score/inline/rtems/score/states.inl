@@ -59,7 +59,7 @@ RTEMS_INLINE_ROUTINE States_Control _States_Clear (
  *  state is READY, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_ready (
+RTEMS_INLINE_ROUTINE bool _States_Is_ready (
   States_Control the_states
 )
 {
@@ -71,7 +71,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_ready (
  *  set in the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_only_dormant (
+RTEMS_INLINE_ROUTINE bool _States_Is_only_dormant (
   States_Control the_states
 )
 {
@@ -83,7 +83,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_only_dormant (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_dormant (
+RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
   States_Control the_states
 )
 {
@@ -95,7 +95,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_dormant (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_suspended (
+RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
   States_Control the_states
 )
 {
@@ -107,7 +107,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_suspended (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_transient (
+RTEMS_INLINE_ROUTINE bool _States_Is_transient (
   States_Control the_states
 )
 {
@@ -119,7 +119,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_transient (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_delaying (
+RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
   States_Control the_states
 )
 {
@@ -131,7 +131,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_delaying (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_buffer (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
   States_Control the_states
 )
 {
@@ -143,7 +143,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_buffer (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_segment (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_segment (
   States_Control the_states
 )
 {
@@ -155,7 +155,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_segment (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_message (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_message (
   States_Control the_states
 )
 {
@@ -167,7 +167,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_message (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_event (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
   States_Control the_states
 )
 {
@@ -179,7 +179,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_event (
  *  is set in the_states, and FALSE otherwise.
  */
  
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_mutex (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_mutex (
   States_Control the_states
 )
 {
@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_mutex (
  *  is set in the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_semaphore (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
   States_Control the_states
 )
 {
@@ -203,7 +203,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_semaphore (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_time (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
   States_Control the_states
 )
 {
@@ -215,7 +215,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_time (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_rpc_reply (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
   States_Control the_states
 )
 {
@@ -227,7 +227,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_rpc_reply (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_period (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
   States_Control the_states
 )
 {
@@ -240,7 +240,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_for_period (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_locally_blocked (
+RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
   States_Control the_states
 )
 {
@@ -253,7 +253,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_locally_blocked (
  *  the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_on_thread_queue (
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
   States_Control the_states
 )
 {
@@ -265,7 +265,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_waiting_on_thread_queue (
  *  that a task is blocked is set in the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Is_blocked (
+RTEMS_INLINE_ROUTINE bool _States_Is_blocked (
   States_Control the_states
 )
 {
@@ -277,7 +277,7 @@ RTEMS_INLINE_ROUTINE boolean _States_Is_blocked (
  *  are set in the_states, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _States_Are_set (
+RTEMS_INLINE_ROUTINE bool _States_Are_set (
   States_Control the_states,
   States_Control mask
 )

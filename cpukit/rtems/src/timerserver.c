@@ -147,8 +147,8 @@ rtems_status_code rtems_timer_initiate_server(
   rtems_id            id;
   rtems_status_code   status;
   rtems_task_priority _priority;
-  static boolean      initialized = FALSE;
-  boolean             tmpInitialized;
+  static bool         initialized = false;
+  bool                tmpInitialized;
 
   /*
    *  Make sure the requested priority is valid.  The if is 
@@ -169,7 +169,7 @@ rtems_status_code rtems_timer_initiate_server(
 
   _Thread_Disable_dispatch();
     tmpInitialized  = initialized;
-    initialized = TRUE;
+    initialized = true;
   _Thread_Enable_dispatch();
 
   if ( tmpInitialized )
@@ -201,7 +201,7 @@ rtems_status_code rtems_timer_initiate_server(
     &id                   /* get the id back */
   );
   if (status) {
-    initialized = FALSE;
+    initialized = false;
     return status;
   }
 
@@ -254,7 +254,7 @@ rtems_status_code rtems_timer_initiate_server(
      *  be good.  If this service fails, something is weirdly wrong on the
      *  target such as a stray write in an ISR or incorrect memory layout.
      */
-    initialized = FALSE;
+    initialized = false;
   }
 
   return status;

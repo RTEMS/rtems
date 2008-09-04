@@ -264,7 +264,7 @@ void _Message_queue_MP_Process_packet (
 {
   Message_queue_MP_Packet *the_packet;
   Thread_Control          *the_thread;
-  boolean                  ignored;
+  bool                     ignored;
 
   the_packet = (Message_queue_MP_Packet *) the_packet_prefix;
 

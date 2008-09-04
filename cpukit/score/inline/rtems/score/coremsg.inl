@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  boolean                                    wait,
+  bool                                    wait,
   Watchdog_Interval                          timeout
 )
 {
@@ -70,7 +70,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
   size_t                                     size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  boolean                                    wait,
+  bool                                    wait,
   Watchdog_Interval                          timeout
 )
 {
@@ -150,7 +150,7 @@ RTEMS_INLINE_ROUTINE
  *  enabled in the attribute_set and FALSE otherwise.
  */
  
-RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_priority(
+RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_priority(
   CORE_message_queue_Attributes *the_attribute
 )
 {
@@ -193,7 +193,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend_unprotected (
  *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_null (
+RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
   CORE_message_queue_Control *the_message_queue
 )
 {
@@ -205,7 +205,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_null (
  *  queue and FALSE otherwise.
  */
  
-RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_notify_enabled (
+RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_notify_enabled (
   CORE_message_queue_Control *the_message_queue
 )
 {

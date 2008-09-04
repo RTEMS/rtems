@@ -40,7 +40,7 @@
  *  original starting point.
  */
 
-boolean _Thread_Restart(
+bool _Thread_Restart(
   Thread_Control            *the_thread,
   void                      *pointer_argument,
   Thread_Entry_numeric_type  numeric_argument

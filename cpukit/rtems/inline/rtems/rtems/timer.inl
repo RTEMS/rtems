@@ -75,7 +75,7 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get (
  *  This function returns TRUE if the class is that of an INTERVAL
  *  timer, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
+RTEMS_INLINE_ROUTINE bool _Timer_Is_interval_class (
   Timer_Classes the_class
 )
 {
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_interval_class (
  *  This function returns TRUE if the class is that of an INTERVAL
  *  timer, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Timer_Is_timer_of_day_class (
+RTEMS_INLINE_ROUTINE bool _Timer_Is_timer_of_day_class (
   Timer_Classes the_class
 )
 {
@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_timer_of_day_class (
  *  This function returns TRUE if the class is that of a DORMANT
  *  timer, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Timer_Is_dormant_class (
+RTEMS_INLINE_ROUTINE bool _Timer_Is_dormant_class (
   Timer_Classes the_class
 )
 {
@@ -113,7 +113,7 @@ RTEMS_INLINE_ROUTINE boolean _Timer_Is_dormant_class (
  *
  *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Timer_Is_null (
+RTEMS_INLINE_ROUTINE bool _Timer_Is_null (
   Timer_Control *the_timer
 )
 {

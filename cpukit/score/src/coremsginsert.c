@@ -59,7 +59,7 @@ void _CORE_message_queue_Insert_message(
 )
 {
   ISR_Level  level;
-  boolean    notify = FALSE;
+  bool       notify = false;
 
   the_message->priority = submit_type;
 
@@ -67,14 +67,14 @@ void _CORE_message_queue_Insert_message(
     case CORE_MESSAGE_QUEUE_SEND_REQUEST:
       _ISR_Disable( level );
         if ( the_message_queue->number_of_pending_messages++ == 0 )
-          notify = TRUE;
+          notify = true;
         _CORE_message_queue_Append_unprotected(the_message_queue, the_message);
       _ISR_Enable( level );
       break;
     case CORE_MESSAGE_QUEUE_URGENT_REQUEST:
       _ISR_Disable( level );
         if ( the_message_queue->number_of_pending_messages++ == 0 )
-          notify = TRUE;
+          notify = true;
         _CORE_message_queue_Prepend_unprotected(the_message_queue, the_message);
       _ISR_Enable( level );
       break;
@@ -99,7 +99,7 @@ void _CORE_message_queue_Insert_message(
         }
         _ISR_Disable( level );
           if ( the_message_queue->number_of_pending_messages++ == 0 )
-            notify = TRUE;
+            notify = true;
           _Chain_Insert_unprotected( the_node->previous, &the_message->Node );
         _ISR_Enable( level );
       }

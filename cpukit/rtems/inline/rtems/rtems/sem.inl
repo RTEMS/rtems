@@ -97,7 +97,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
  *
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE bool _Semaphore_Is_null (
   Semaphore_Control *the_semaphore
 )
 {

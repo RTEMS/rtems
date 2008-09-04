@@ -47,19 +47,19 @@ void _Thread_Load_environment(
   Thread_Control *the_thread
 )
 {
-  boolean is_fp;
+  bool is_fp;
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( the_thread->Start.fp_context ) {
     the_thread->fp_context = the_thread->Start.fp_context;
     _Context_Initialize_fp( &the_thread->fp_context );
-    is_fp = TRUE;
+    is_fp = true;
   } else
 #endif
-    is_fp = FALSE;
+    is_fp = false;
 
 
-  the_thread->do_post_task_switch_extension = FALSE;
+  the_thread->do_post_task_switch_extension = false;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;

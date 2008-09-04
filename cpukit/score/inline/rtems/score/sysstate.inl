@@ -33,7 +33,7 @@
  */
  
 RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
-  boolean  is_multiprocessing
+  bool  is_multiprocessing
 )
 {
   _System_state_Current = SYSTEM_STATE_BEFORE_INITIALIZATION;
@@ -68,7 +68,7 @@ RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
  *  "before initialization" state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _System_state_Is_before_initialization (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
   System_state_Codes state
 )
 {
@@ -80,7 +80,7 @@ RTEMS_INLINE_ROUTINE boolean _System_state_Is_before_initialization (
  *  "before multitasking" state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _System_state_Is_before_multitasking (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
   System_state_Codes state
 )
 {
@@ -92,7 +92,7 @@ RTEMS_INLINE_ROUTINE boolean _System_state_Is_before_multitasking (
  *  "begin multitasking" state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _System_state_Is_begin_multitasking (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_begin_multitasking (
   System_state_Codes state
 )
 {
@@ -104,7 +104,7 @@ RTEMS_INLINE_ROUTINE boolean _System_state_Is_begin_multitasking (
  *  "up" state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _System_state_Is_up (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
   System_state_Codes state
 )
 {
@@ -116,7 +116,7 @@ RTEMS_INLINE_ROUTINE boolean _System_state_Is_up (
  *  "failed" state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _System_state_Is_failed (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_failed (
   System_state_Codes state
 )
 {

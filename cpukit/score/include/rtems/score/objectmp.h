@@ -100,11 +100,11 @@ void _Objects_MP_Open (
  *  @todo This method only works for object types with 4 byte object names.
  *        It does not support variable length object names.
  */
-boolean _Objects_MP_Allocate_and_open (
+bool _Objects_MP_Allocate_and_open (
   Objects_Information *information,
   uint32_t             the_name,
   Objects_Id           the_id,
-  boolean              is_fatal_error
+  bool                 is_fatal_error
 );
 
 /** @brief  Objects MP Close

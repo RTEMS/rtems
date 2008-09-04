@@ -45,7 +45,7 @@
 
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
-  boolean                 is_internal,
+  bool                    is_internal,
   uint32_t                the_error
 )
 {

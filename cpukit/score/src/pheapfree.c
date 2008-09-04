@@ -16,12 +16,12 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Free(
+bool _Protected_heap_Free(
   Heap_Control *the_heap,
   void         *start_address
 )
 {
-  boolean status;
+  bool    status;
 
   _RTEMS_Lock_allocator();
     status = _Heap_Free( the_heap, start_address );

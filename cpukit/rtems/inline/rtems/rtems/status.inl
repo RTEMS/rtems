@@ -33,7 +33,7 @@
  *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_is_status_successful(
+RTEMS_INLINE_ROUTINE bool rtems_is_status_successful(
   rtems_status_code code
 )
 {
@@ -46,7 +46,7 @@ RTEMS_INLINE_ROUTINE boolean rtems_is_status_successful(
  *  This function returns TRUE if the status code1 is equal to code2,
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean rtems_are_statuses_equal(
+RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
   rtems_status_code code1,
   rtems_status_code code2
 )

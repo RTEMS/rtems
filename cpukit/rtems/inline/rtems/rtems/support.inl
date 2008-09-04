@@ -32,7 +32,7 @@
  *
  *  This function returns TRUE if the name is valid, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE rtems_boolean rtems_is_name_valid (
+RTEMS_INLINE_ROUTINE bool rtems_is_name_valid (
   rtems_name name
 )
 {

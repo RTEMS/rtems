@@ -31,7 +31,7 @@
 void _CORE_mutex_Seize(
   CORE_mutex_Control  *_the_mutex,
   Objects_Id           _id,
-  boolean              _wait,
+  bool                 _wait,
   Watchdog_Interval    _timeout,
   ISR_Level            _level
 )

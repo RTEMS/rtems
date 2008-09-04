@@ -72,7 +72,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
  *  This function returns TRUE if the_priority is a valid user task priority
  *  and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _RTEMS_tasks_Priority_is_valid (
+RTEMS_INLINE_ROUTINE bool _RTEMS_tasks_Priority_is_valid (
   rtems_task_priority the_priority
 )
 {

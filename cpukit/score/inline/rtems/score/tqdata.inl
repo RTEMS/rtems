@@ -46,7 +46,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
  *  group chain, and FALSE if the search should start at the rear.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Thread_queue_Is_reverse_search (
+RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 )
 {

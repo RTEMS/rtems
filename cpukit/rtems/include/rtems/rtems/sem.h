@@ -202,7 +202,7 @@ rtems_status_code rtems_semaphore_flush(
  *  option_set, then the routine returns.  Otherwise, the calling task
  *  is blocked until a unit becomes available.
  */
-boolean _Semaphore_Seize(
+bool _Semaphore_Seize(
   Semaphore_Control *the_semaphore,
   uint32_t           option_set
 );

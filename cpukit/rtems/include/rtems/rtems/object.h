@@ -15,14 +15,14 @@
 #ifndef _RTEMS_RTEMS_OBJECT_H
 #define _RTEMS_RTEMS_OBJECT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicClassInfo Classic API Class Information
@@ -43,7 +43,7 @@ typedef struct {
   /** This field is the number of object instances configured for this class. */
   uint32_t  maximum;
   /** This field indicates if the class is configured for auto-extend. */
-  boolean   auto_extend;
+  bool      auto_extend;
   /** This field is the number of currently unallocated objects. */
   uint32_t  unallocated;
 } rtems_object_api_class_information;

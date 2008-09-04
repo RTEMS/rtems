@@ -38,7 +38,7 @@
  *
  *  @return This method returns TRUE if the mutex is locked.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   CORE_mutex_Control  *the_mutex
 )
 {
@@ -55,7 +55,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
  *
  *  @return This method returns TRUE if the mutex is using FIFO blocking order.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
  *  @return This method returns TRUE if the mutex is using
  *          priority blocking order.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -91,7 +91,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
  *  @return This method returns TRUE if the mutex is using priority
  *          inheritance.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_inherit_priority(
   CORE_mutex_Attributes *the_attribute
 )
 {
@@ -108,7 +108,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
  *  @return This method returns TRUE if the mutex is using priority
  *          ceiling.
  */
-RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority_ceiling(
   CORE_mutex_Attributes *the_attribute
 )
 {

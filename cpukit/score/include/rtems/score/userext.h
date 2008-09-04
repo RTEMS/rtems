@@ -56,7 +56,7 @@ typedef void User_extensions_routine;
  *  This type defines the prototype of a thread creation extension handler.
  *  The handler is passed the thread executing and the thread being created.
  */
-typedef boolean ( *User_extensions_thread_create_extension )(
+typedef bool    ( *User_extensions_thread_create_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
@@ -130,7 +130,7 @@ typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
  */
 typedef User_extensions_routine ( *User_extensions_fatal_extension )(
                  Internal_errors_Source  /* the_source  */,
-                 boolean                 /* is_internal */,
+                 bool                    /* is_internal */,
                  uint32_t                /* the_error   */
              );
 
@@ -253,7 +253,7 @@ void _User_extensions_Remove_set (
  *  @return This method returns TRUE if the user extension executed
  *          successfully.
  */
-boolean _User_extensions_Thread_create (
+bool _User_extensions_Thread_create (
   Thread_Control *the_thread
 );
 
@@ -337,7 +337,7 @@ void _User_extensions_Thread_exitted (
  */
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,
-  boolean                 is_internal,
+  bool                    is_internal,
   uint32_t                the_error
 );
 

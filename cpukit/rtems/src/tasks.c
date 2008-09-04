@@ -43,7 +43,7 @@
  *  area.
  */
 
-boolean _RTEMS_tasks_Create_extension(
+bool _RTEMS_tasks_Create_extension(
   Thread_Control *executing,
   Thread_Control *created
 )
@@ -63,7 +63,7 @@ boolean _RTEMS_tasks_Create_extension(
   api = _Workspace_Allocate( to_allocate );
 
   if ( !api )
-    return FALSE;
+    return false;
 
   created->API_Extensions[ THREAD_API_RTEMS ] = api;
 
@@ -76,7 +76,7 @@ boolean _RTEMS_tasks_Create_extension(
       api->Notepads[i] = 0;
   }
 
-  return TRUE;
+  return true;
 }
 
 /*PAGE

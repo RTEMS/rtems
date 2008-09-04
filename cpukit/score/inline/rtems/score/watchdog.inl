@@ -52,7 +52,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
  *  state, and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _Watchdog_Is_active(
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_active(
   Watchdog_Control *the_watchdog
 )
 {

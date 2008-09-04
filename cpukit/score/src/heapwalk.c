@@ -39,10 +39,10 @@
 
 #include <stdio.h>
 
-boolean _Heap_Walk(
+bool _Heap_Walk(
   Heap_Control  *the_heap,
   int            source,
-  boolean        do_dump
+  bool           do_dump
 )
 {
   Heap_Block *the_block = the_heap->start;
@@ -89,7 +89,7 @@ boolean _Heap_Walk(
   while ( the_block != end ) {
     uint32_t const the_size = _Heap_Block_size(the_block);
     Heap_Block *const next_block = _Heap_Block_at(the_block, the_size);
-    boolean prev_used = _Heap_Is_prev_used(the_block);
+    bool    prev_used = _Heap_Is_prev_used(the_block);
 
     if (do_dump) {
       printk("PASS: %d block %p size %d(%c)",

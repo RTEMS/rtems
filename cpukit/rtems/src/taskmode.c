@@ -58,8 +58,8 @@ rtems_status_code rtems_task_mode(
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
-  boolean             is_asr_enabled = FALSE;
-  boolean             needs_asr_dispatching = FALSE;
+  bool                is_asr_enabled = false;
+  bool                needs_asr_dispatching = false;
   rtems_mode          old_mode;
 
   if ( !previous_mode_set )
@@ -111,13 +111,13 @@ rtems_status_code rtems_task_mode(
   needs_asr_dispatching = FALSE;
 
   if ( mask & RTEMS_ASR_MASK ) {
-    is_asr_enabled = _Modes_Is_asr_disabled( mode_set ) ? FALSE : TRUE;
+    is_asr_enabled = _Modes_Is_asr_disabled( mode_set ) ? false : true;
     if ( is_asr_enabled != asr->is_enabled ) {
       asr->is_enabled = is_asr_enabled;
       _ASR_Swap_signals( asr );
       if ( _ASR_Are_signals_pending( asr ) ) {
-        needs_asr_dispatching = TRUE;
-        executing->do_post_task_switch_extension = TRUE;
+        needs_asr_dispatching = true;
+        executing->do_post_task_switch_extension = true;
       }
     }
   }

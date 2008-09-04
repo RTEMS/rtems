@@ -33,7 +33,7 @@
  *  for this processor and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _ISR_Is_vector_number_valid (
+RTEMS_INLINE_ROUTINE bool _ISR_Is_vector_number_valid (
   uint32_t   vector
 )
 {
@@ -45,7 +45,7 @@ RTEMS_INLINE_ROUTINE boolean _ISR_Is_vector_number_valid (
  *  use interrupt service routine and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _ISR_Is_valid_user_handler (
+RTEMS_INLINE_ROUTINE bool _ISR_Is_valid_user_handler (
   void *handler
 )
 {

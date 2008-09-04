@@ -39,7 +39,7 @@
  *    FALSE - if starting_address is invalid heap address
  */
 
-boolean _Heap_Size_of_user_area(
+bool _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
   size_t              *size

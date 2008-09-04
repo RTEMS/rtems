@@ -16,7 +16,7 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-boolean _Protected_heap_Resize_block(
+bool _Protected_heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
   size_t        size

@@ -64,7 +64,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   CORE_message_queue_Submit_types            submit_type,
-  boolean                                    wait,
+  bool                                       wait,
   Watchdog_Interval                          timeout
 )
 {

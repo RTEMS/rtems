@@ -181,7 +181,7 @@ typedef struct {
   /** When this field is TRUE, then only the thread that locked the mutex
    *  is allowed to unlock it.
    */
-  boolean                      only_owner_release;
+  bool                         only_owner_release;
   /** This field indicates whether threads waiting on the mutex block in
    *  FIFO or priority order.
    */
@@ -402,7 +402,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   void _CORE_mutex_Seize(
     CORE_mutex_Control  *_the_mutex,
     Objects_Id           _id,
-    boolean              _wait,
+    bool                 _wait,
     Watchdog_Interval    _timeout,
     ISR_Level            _level
   );

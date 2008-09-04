@@ -163,7 +163,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Block_insert_after (
  *  @return This method returns TRUE if the address is aligned and false
  *          otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Heap_Is_aligned (
+RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned (
   uint32_t  value,
   uint32_t  alignment
 )
@@ -217,7 +217,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Align_down (
  *  @return This method returns TRUE if @a ptr is aligned at @a alignment
  *          boundary, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Heap_Is_aligned_ptr (
+RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned_ptr (
   void      *ptr,
   uint32_t  alignment
 )
@@ -329,7 +329,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Start_of_block (
  *  @return This method returns TRUE if the previous block is used and FALSE
  *          if the previous block is free.
  */
-RTEMS_INLINE_ROUTINE boolean _Heap_Is_prev_used (
+RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used (
   Heap_Block *the_block
 )
 {
@@ -360,7 +360,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Heap_Block_size (
  *  @return This method returns TRUE if @a the_block appears to have been
  *          allocated from @a the_heap, and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_in (
+RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in (
   Heap_Control *the_heap,
   Heap_Block   *the_block
 )

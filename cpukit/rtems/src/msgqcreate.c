@@ -65,7 +65,7 @@ rtems_status_code rtems_message_queue_create(
   register Message_queue_Control *the_message_queue;
   CORE_message_queue_Attributes   the_msgq_attributes;
 #if defined(RTEMS_MULTIPROCESSING)
-  boolean                         is_global;
+  bool                            is_global;
 #endif
 
   if ( !rtems_is_name_valid( name ) )

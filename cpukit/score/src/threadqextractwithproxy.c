@@ -36,7 +36,7 @@
  *  XXX
  */
 
-boolean _Thread_queue_Extract_with_proxy(
+bool _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 )
 {

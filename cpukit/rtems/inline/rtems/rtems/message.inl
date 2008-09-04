@@ -35,7 +35,7 @@
  *  This function places the_message at the rear of the outstanding
  *  messages on the_message_queue.
  */
-RTEMS_INLINE_ROUTINE boolean _Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE bool _Message_queue_Is_null (
   Message_queue_Control *the_message_queue
 )
 {
