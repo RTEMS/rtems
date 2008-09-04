@@ -1,5 +1,9 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/object.c: Stop using old-style function definitions.
+
+2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* itron/include/rtems/itron/mbox.h,
 	itron/include/rtems/itron/msgbuffer.h,
 	itron/include/rtems/itron/semaphore.h,
