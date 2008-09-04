@@ -1,5 +1,6 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libi2c/libi2c.c, libi2c/libi2c.h: Use bool instead of boolean.
 	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.c,
 	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h,
 	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c,
