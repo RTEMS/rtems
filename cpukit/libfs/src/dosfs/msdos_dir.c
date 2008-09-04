@@ -490,7 +490,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;
-    rtems_boolean      is_empty = FALSE;
+    bool               is_empty = false;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);

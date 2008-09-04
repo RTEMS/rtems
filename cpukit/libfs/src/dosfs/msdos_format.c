@@ -61,7 +61,7 @@ typedef struct {
   uint8_t  fattype;
   char     OEMName[FAT_BR_OEMNAME_SIZE+1];
   char     VolLabel[FAT_BR_VOLLAB_SIZE+1];
-  boolean  VolLabel_present;
+  bool     VolLabel_present;
   uint32_t vol_id;
 }  msdos_format_param_t;
 
@@ -217,8 +217,8 @@ static int msdos_format_eval_sectors_per_cluster
 \*=========================================================================*/
 {
 
-  boolean finished = FALSE;
-  int ret_val = 0;
+  bool     finished = false;
+  int      ret_val = 0;
   uint32_t fatdata_cluster_cnt;
   uint32_t fat_capacity;
   uint32_t sectors_per_fat;
@@ -264,7 +264,7 @@ static int msdos_format_eval_sectors_per_cluster
       sectors_per_cluster *= 2;
     }
     else {
-      finished = TRUE;
+      finished = true;
     }
     /*
      * when maximum cluster size is exceeded, we have invalid data, abort...
@@ -272,7 +272,7 @@ static int msdos_format_eval_sectors_per_cluster
     if ((sectors_per_cluster * bytes_per_sector) 
 	> MS_BYTES_PER_CLUSTER_LIMIT) {
       ret_val = EINVAL;
-      finished = TRUE;
+      finished = true;
     }
   } while (!finished);
 
@@ -583,7 +583,7 @@ static int msdos_format_determine_fmt_params
     if ((rqdata != NULL) &&
 	(rqdata->VolLabel != NULL)) {
       from = rqdata->VolLabel;
-      fmt_params->VolLabel_present = TRUE;
+      fmt_params->VolLabel_present = true;
     }
     for (cnt = 0;
 	 cnt < (sizeof(fmt_params->VolLabel)-1);

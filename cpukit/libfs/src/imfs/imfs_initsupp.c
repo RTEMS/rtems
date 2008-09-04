@@ -41,7 +41,7 @@ static int IMFS_determine_bytes_per_block(
   int default_bytes_per_block
 )
 {
-  rtems_boolean is_valid = FALSE;
+  bool is_valid = false;
   int bit_mask;
   /*
    * check, whether requested bytes per block is valid
@@ -50,7 +50,7 @@ static int IMFS_determine_bytes_per_block(
        !is_valid && (bit_mask <= 512); 
        bit_mask <<= 1) {
     if (bit_mask == requested_bytes_per_block) {
-      is_valid = TRUE;
+      is_valid = true;
     }
   }
   *dest_bytes_per_block = ((is_valid) 

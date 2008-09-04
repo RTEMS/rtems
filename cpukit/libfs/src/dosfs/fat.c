@@ -32,7 +32,7 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     uint8_t           i;
-    rtems_boolean     sec_of_fat;
+    bool              sec_of_fat;
 
 
     if (fs_info->c.state == FAT_CACHE_EMPTY)
@@ -110,7 +110,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
 {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     uint8_t           i;
-    rtems_boolean     sec_of_fat;
+    bool              sec_of_fat;
 
     if (fs_info->c.state == FAT_CACHE_EMPTY)
         return RC_OK;
@@ -722,7 +722,7 @@ fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
 {
     register fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t                j = 0;
-    rtems_boolean           resrc_unsuff = FALSE;
+    bool                    resrc_unsuff = false;
 
     while (!resrc_unsuff)
     {
@@ -745,10 +745,10 @@ fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
             if (fs_info->uino != NULL)
                 fs_info->index = fs_info->uino_pool_size;
             else
-                resrc_unsuff = TRUE;
+                resrc_unsuff = true;
         }
         else
-            resrc_unsuff = TRUE;
+            resrc_unsuff = true;
     }
     return 0;
 }
@@ -782,9 +782,9 @@ fat_free_unique_ino(
  *     ino   - ino to be tested
  *
  * RETURNS:
- *     TRUE if ino is allocated from unique ino pool, FALSE otherwise
+ *     true if ino is allocated from unique ino pool, false otherwise
  */
-inline rtems_boolean
+inline bool
 fat_ino_is_unique(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              ino

@@ -266,7 +266,7 @@ msdos_eval4make(
     int                               i = 0;
     int                               len;
     char                              token[ MSDOS_NAME_MAX + 1 ];
-    rtems_boolean                     done = 0;
+    bool                              done = false;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -374,7 +374,7 @@ msdos_eval4make(
                         goto error;
                     }
                     else
-                        done = TRUE;
+                        done = true;
                 }
                 break;
 

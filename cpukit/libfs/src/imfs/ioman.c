@@ -80,7 +80,7 @@ rtems_status_code rtems_io_lookup_name(
   int                                result;
   rtems_filesystem_node_types_t      node_type;
 
-  result = rtems_filesystem_evaluate_path( name, 0x00, &loc, TRUE );
+  result = rtems_filesystem_evaluate_path( name, 0x00, &loc, true );
   the_jnode = loc.node_access;
 
   if ( !loc.ops->node_type_h ) {

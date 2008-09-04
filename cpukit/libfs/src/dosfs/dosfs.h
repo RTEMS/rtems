@@ -18,12 +18,12 @@
 #ifndef _RTEMS_DOSFS_H
 #define _RTEMS_DOSFS_H
 
+#include <rtems.h>
+#include <rtems/libio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems.h>
-#include <rtems/libio.h>
 
 extern rtems_filesystem_operations_table  msdos_ops;
 
@@ -44,7 +44,7 @@ typedef struct {
   uint32_t  files_per_root_dir;   /* request value: file entries in root   */
   uint8_t   fattype;              /* request value: MSDOS_FMT_FAT12/16/32  */
   uint8_t   media;                /* media code. default: 0xF8             */
-  boolean   quick_format;         /* TRUE: do not clear out data sectors   */
+  bool      quick_format;         /* true: do not clear out data sectors   */
   uint32_t  cluster_align;        /* requested value: cluster alignment    */
                                   /*   make sector number of first sector  */
                                   /*   of first cluster divisible by this  */

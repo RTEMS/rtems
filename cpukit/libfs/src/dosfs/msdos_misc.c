@@ -689,7 +689,7 @@ int
 msdos_dir_is_empty(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    rtems_boolean                        *ret_val
+    bool                                 *ret_val
     )
 {
     ssize_t          ret = 0;
@@ -697,7 +697,7 @@ msdos_dir_is_empty(
     uint32_t         j = 0, i = 0;
 
     /* dir is not empty */
-    *ret_val = FALSE;
+    *ret_val = false;
 
     while ((ret = fat_file_read(mt_entry, fat_fd, j * fs_info->fat.vol.bps,
                                   fs_info->fat.vol.bps,
@@ -725,14 +725,14 @@ msdos_dir_is_empty(
             if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
             {
-                *ret_val = TRUE;
+                *ret_val = true;
                 return RC_OK;
             }
             return RC_OK;
         }
         j++;
     }
-    *ret_val = TRUE;
+    *ret_val = true;
     return RC_OK;
 }
 

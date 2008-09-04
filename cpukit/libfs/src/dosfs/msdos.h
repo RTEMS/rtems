@@ -15,15 +15,15 @@
 #ifndef __DOSFS_MSDOS_H__
 #define __DOSFS_MSDOS_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio_.h>
 
 #include "fat.h"
 #include "fat_file.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define MSDOS_NAME_NOT_FOUND_ERR  0x7D01
 
@@ -382,7 +382,7 @@ int msdos_set_dir_wrt_time_and_date(
 int msdos_dir_is_empty(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   fat_file_fd_t                        *fat_fd,
-  rtems_boolean                        *ret_val
+  bool                                 *ret_val
 );
 
 int msdos_find_name_in_fat_file(

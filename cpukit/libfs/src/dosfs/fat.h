@@ -17,10 +17,6 @@
 #ifndef __DOSFS_FAT_H__
 #define __DOSFS_FAT_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <string.h>
 
 #include <rtems/seterr.h>
@@ -28,6 +24,10 @@ extern "C" {
 #include <rtems/score/cpu.h>
 #include <errno.h>
 #include <rtems/bdbuf.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef RC_OK
 #define RC_OK 0
@@ -328,7 +328,7 @@ typedef struct fat_vol_s
 typedef struct fat_cache_s
 {
     uint32_t            blk_num;
-    rtems_boolean       modified;
+    bool                modified;
     uint8_t             state;
     rtems_bdbuf_buffer *buf;
 } fat_cache_t;
@@ -413,7 +413,7 @@ fat_cluster_num_to_sector512_num(
 static inline void
 fat_buf_mark_modified(fat_fs_info_t *fs_info)
 {
-    fs_info->c.modified = TRUE;
+    fs_info->c.modified = true;
 }
 
 int
@@ -465,7 +465,7 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry);
 uint32_t
 fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry);
 
-rtems_boolean
+bool
 fat_ino_is_unique(rtems_filesystem_mount_table_entry_t *mt_entry,
                   uint32_t                              ino);
 
