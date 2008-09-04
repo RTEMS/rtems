@@ -1,5 +1,20 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/clocktodvalidate.c,
+	rtems/src/intrbody.c,
+	rtems/src/msgmp.c,
+	rtems/src/msgqcreate.c,
+	rtems/src/msgqreceive.c,
+	rtems/src/partmp.c,
+	rtems/src/regionmp.c,
+	rtems/src/semmp.c,
+	rtems/src/signalsend.c,
+	rtems/src/taskcreate.c,
+	rtems/src/taskmode.c,
+	rtems/src/taskmp.c,
+	rtems/src/tasks.c,
+	rtems/src/timerserver.c,
+	rtems/src/workspace.c: Convert to "bool".
 	* rtems/inline/rtems/rtems/asr.inl,
 	rtems/inline/rtems/rtems/attr.inl,
 	rtems/inline/rtems/rtems/barrier.inl,
