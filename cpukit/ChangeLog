@@ -1,5 +1,11 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sapi/include/rtems/config.h,
+	sapi/inline/rtems/chain.inl,
+	sapi/inline/rtems/extension.inl,
+	sapi/src/debug.c,
+	sapi/src/extension.c,
+	sapi/src/ioregisterdriver.c: Convert to "bool".
 	* rtems/src/clocktodvalidate.c,
 	rtems/src/intrbody.c,
 	rtems/src/msgmp.c,
