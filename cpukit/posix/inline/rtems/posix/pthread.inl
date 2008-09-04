@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get (
  *  _POSIX_Threads_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Threads_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Threads_Is_null (
   Thread_Control *the_pthread
 )
 {

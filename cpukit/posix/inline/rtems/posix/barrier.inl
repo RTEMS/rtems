@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
  *
  *  This function returns TRUE if the_barrier is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _POSIX_Barrier_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Barrier_Is_null (
   POSIX_Barrier_Control *the_barrier
 )
 {

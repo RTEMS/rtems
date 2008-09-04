@@ -35,7 +35,7 @@ int timer_settime(
 {
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
-  boolean              activated;
+  bool                 activated;
   uint32_t             initial_period;
   struct itimerspec    normalize;
 

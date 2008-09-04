@@ -41,7 +41,7 @@ void _POSIX_Keys_Run_destructors(
   uint32_t             thread_index;
   uint32_t             thread_api;
   uint32_t             iterations;
-  boolean              are_all_null;
+  bool                 are_all_null;
   POSIX_Keys_Control  *the_key;
   void                *value;
 

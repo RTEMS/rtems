@@ -36,7 +36,7 @@
  */
 
 /* XXX this routine could probably be cleaned up */
-boolean _POSIX_signals_Unblock_thread(
+bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
   siginfo_t       *info
@@ -70,14 +70,14 @@ boolean _POSIX_signals_Unblock_thread(
       }
 
       _Thread_queue_Extract_with_proxy( the_thread );
-      return TRUE;
+      return true;
     }
 
     /*
      *  This should only be reached via pthread_kill().
      */
 
-    return FALSE;
+    return false;
   }
 
   /*
@@ -98,7 +98,7 @@ boolean _POSIX_signals_Unblock_thread(
      *    + Any other combination, do nothing.
      */
     
-    the_thread->do_post_task_switch_extension = TRUE;
+    the_thread->do_post_task_switch_extension = true;
 
     if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
       the_thread->Wait.return_code = EINTR;
@@ -123,6 +123,5 @@ boolean _POSIX_signals_Unblock_thread(
 	_ISR_Signals_to_thread_executing = TRUE;
     }
   }
-  return FALSE;
-
+  return false;
 }

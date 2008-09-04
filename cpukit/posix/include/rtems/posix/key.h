@@ -33,7 +33,7 @@ extern "C" {
 
 typedef struct {
    Objects_Control     Object;
-   boolean             is_active;
+   bool                is_active;
    void              (*destructor)( void * );
    void              **Values[ OBJECTS_APIS_LAST + 1 ];
 }  POSIX_Keys_Control;
@@ -124,7 +124,7 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
  *  This function returns TRUE if the_key is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 );
 

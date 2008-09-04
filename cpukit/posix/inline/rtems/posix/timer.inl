@@ -87,7 +87,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
  *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Timer_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Timer_Is_null (
   POSIX_Timer_Control *the_timer
 )
 {

@@ -58,7 +58,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
  *  _POSIX_Condition_variables_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
 )
 {

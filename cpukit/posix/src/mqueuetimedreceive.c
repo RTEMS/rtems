@@ -57,7 +57,7 @@ ssize_t mq_timedreceive(
 )
 {
   Watchdog_Interval ticks;
-  boolean           do_wait;
+  bool              do_wait;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take

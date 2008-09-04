@@ -33,7 +33,7 @@
 void pthread_testcancel( void )
 {
   POSIX_API_Control *thread_support;
-  boolean            cancel = FALSE;
+  bool               cancel = false;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
@@ -49,7 +49,7 @@ void pthread_testcancel( void )
   _Thread_Disable_dispatch();
     if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelation_requested )
-      cancel = TRUE;
+      cancel = true;
   _Thread_Enable_dispatch();
 
   if ( cancel )

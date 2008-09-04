@@ -65,7 +65,7 @@ int pthread_sigmask(
 
   if ( ~api->signals_blocked &
        (api->signals_pending | _POSIX_signals_Pending) ) {
-    _Thread_Executing->do_post_task_switch_extension = TRUE;
+    _Thread_Executing->do_post_task_switch_extension = true;
     _Thread_Dispatch();
   }
 

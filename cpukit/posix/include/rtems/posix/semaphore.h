@@ -36,8 +36,8 @@ extern "C" {
 typedef struct {
    Objects_Control         Object;
    int                     process_shared;
-   boolean                 named;
-   boolean                 linked;
+   bool                    named;
+   bool                    linked;
    uint32_t                open_count;
    CORE_semaphore_Control  Semaphore;
 }  POSIX_Semaphore_Control;
@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
   POSIX_Semaphore_Control *the_semaphore
 );
 
@@ -154,7 +154,7 @@ void _POSIX_Semaphore_Delete(
 
 int _POSIX_Semaphore_Wait_support(
   sem_t               *sem,
-  boolean              blocking,
+  bool                 blocking,
   Watchdog_Interval    timeout
 );
 

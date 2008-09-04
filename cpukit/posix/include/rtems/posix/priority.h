@@ -36,7 +36,7 @@
 
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Priority_Is_valid(
+RTEMS_INLINE_ROUTINE bool _POSIX_Priority_Is_valid(
   int priority
 );
 

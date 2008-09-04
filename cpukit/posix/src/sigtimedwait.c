@@ -104,8 +104,8 @@ int sigtimedwait(
       api,
       the_info->si_signo,
       the_info,
-      FALSE,
-      FALSE
+      false,
+      false
     );
     _ISR_Enable( level );
 
@@ -118,7 +118,7 @@ int sigtimedwait(
 
   if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_highest( _POSIX_signals_Pending );
-    _POSIX_signals_Clear_signals( api, signo, the_info, TRUE, FALSE );
+    _POSIX_signals_Clear_signals( api, signo, the_info, true, false );
     _ISR_Enable( level );
 
     the_info->si_signo = signo;
@@ -144,7 +144,7 @@ int sigtimedwait(
    * the signal.
    */
 
-  _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, FALSE, FALSE );
+  _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, false, false );
   errno = _Thread_Executing->Wait.return_code;
   return the_info->si_signo;
 }

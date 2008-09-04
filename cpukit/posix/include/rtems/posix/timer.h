@@ -80,7 +80,7 @@ void _POSIX_Timer_TSR(Objects_Id timer, void *data);
 /*
  *  Watchdog Insert helper
  */
-boolean _POSIX_Timer_Insert_helper(
+bool _POSIX_Timer_Insert_helper(
   Watchdog_Control               *timer,
   Watchdog_Interval               ticks,
   Objects_Id                      id,

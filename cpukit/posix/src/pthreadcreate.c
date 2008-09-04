@@ -47,8 +47,8 @@ int pthread_create(
   Priority_Control                    core_priority;
   Thread_CPU_budget_algorithms        budget_algorithm;
   Thread_CPU_budget_algorithm_callout budget_callout;
-  boolean                             is_fp;
-  boolean                             status;
+  bool                                is_fp;
+  bool                                status;
   Thread_Control                     *the_thread;
   POSIX_API_Control                  *api;
   int                                 schedpolicy = SCHED_RR;
@@ -231,7 +231,7 @@ int pthread_create(
    *  NOTE:  Since the thread starts with all unblocked, this is necessary.
    */
 
-  the_thread->do_post_task_switch_extension = TRUE;
+  the_thread->do_post_task_switch_extension = true;
 
   /*
    *  POSIX threads are allocated and started in one operation.

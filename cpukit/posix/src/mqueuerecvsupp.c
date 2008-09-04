@@ -51,7 +51,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   char               *msg_ptr,
   size_t              msg_len,
   unsigned int       *msg_prio,
-  boolean             wait,
+  bool                wait,
   Watchdog_Interval   timeout
 )
 {
@@ -59,7 +59,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   POSIX_Message_queue_Control_fd  *the_mq_fd;
   Objects_Locations                location;
   size_t                           length_out;
-  boolean                          do_wait;
+  bool                             do_wait;
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {

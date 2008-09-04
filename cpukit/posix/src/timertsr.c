@@ -33,7 +33,7 @@
 void _POSIX_Timer_TSR(Objects_Id timer, void *data)
 {
   POSIX_Timer_Control *ptimer;
-  boolean              activated;
+  bool                 activated;
 
   ptimer = (POSIX_Timer_Control *)data;
 

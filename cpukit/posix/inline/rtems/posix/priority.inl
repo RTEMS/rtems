@@ -28,11 +28,11 @@
  *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Priority_Is_valid(
+RTEMS_INLINE_ROUTINE bool _POSIX_Priority_Is_valid(
   int priority
 )
 {
-  return (boolean) (priority >= 1 && priority <= 254);
+  return (priority >= 1 && priority <= 254);
 }
 
 RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(

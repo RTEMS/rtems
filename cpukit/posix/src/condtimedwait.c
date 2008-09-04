@@ -40,7 +40,7 @@ int pthread_cond_timedwait(
 )
 {
   Watchdog_Interval ticks;
-  boolean           already_timedout;
+  bool              already_timedout;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take

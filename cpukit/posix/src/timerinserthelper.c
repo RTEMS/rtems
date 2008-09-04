@@ -24,7 +24,7 @@
 #include <rtems/posix/timer.h>
 #include <rtems/posix/ptimer.h>
 
-boolean _POSIX_Timer_Insert_helper(
+bool _POSIX_Timer_Insert_helper(
   Watchdog_Control               *timer,
   Watchdog_Interval               ticks,
   Objects_Id                      id,
@@ -43,7 +43,7 @@ boolean _POSIX_Timer_Insert_helper(
      */
     if ( timer->state != WATCHDOG_INACTIVE ) {
       _ISR_Enable( level );
-      return FALSE;
+      return false;
     }
 
     /*
@@ -53,5 +53,5 @@ boolean _POSIX_Timer_Insert_helper(
     _Watchdog_Initialize( timer, TSR, id, arg );
     _Watchdog_Insert_ticks( timer, ticks );
   _ISR_Enable( level );
-  return TRUE;
+  return true;
 }

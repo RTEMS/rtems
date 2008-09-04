@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get (
  *
  *  This function returns TRUE if the_spinlock is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _POSIX_Spinlock_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Spinlock_Is_null (
   POSIX_Spinlock_Control *the_spinlock
 )
 {

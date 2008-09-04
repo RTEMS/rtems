@@ -136,7 +136,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  *  XXX
  */
 
-boolean _POSIX_Threads_Create_extension(
+bool _POSIX_Threads_Create_extension(
   Thread_Control *executing,
   Thread_Control *created
 )
@@ -147,7 +147,7 @@ boolean _POSIX_Threads_Create_extension(
   api = _Workspace_Allocate( sizeof( POSIX_API_Control ) );
 
   if ( !api )
-    return FALSE;
+    return false;
 
   created->API_Extensions[ THREAD_API_POSIX ] = api;
 
@@ -196,7 +196,7 @@ boolean _POSIX_Threads_Create_extension(
     created
   );
 
-  return TRUE;
+  return true;
 }
 
 /*PAGE

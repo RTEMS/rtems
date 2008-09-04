@@ -296,7 +296,7 @@ int killinfo(
 
 process_it:
 
-  the_thread->do_post_task_switch_extension = TRUE;
+  the_thread->do_post_task_switch_extension = true;
 
   /*
    *  Returns TRUE if the signal was synchronously given to a thread

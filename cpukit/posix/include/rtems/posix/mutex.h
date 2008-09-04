@@ -113,7 +113,7 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get (
  *  This function returns TRUE if the_mutex is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
+RTEMS_INLINE_ROUTINE bool    _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 );
 #endif
@@ -129,7 +129,7 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
 
 int _POSIX_Mutex_Lock_support(
   pthread_mutex_t           *mutex,
-  boolean                    blocking,
+  bool                       blocking,
   Watchdog_Interval          timeout
 );
 

@@ -34,23 +34,23 @@
  *  _POSIX_signals_Clear_signals
  */
 
-boolean _POSIX_signals_Clear_signals(
+bool _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
   int                 signo,
   siginfo_t          *info,
-  boolean             is_global,
-  boolean             check_blocked
+  bool                is_global,
+  bool                check_blocked
 )
 {
   sigset_t                    mask;
   sigset_t                    signals_blocked;
   ISR_Level                   level;
-  boolean                     do_callout;
+  bool                        do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
 
   mask = signo_to_mask( signo );
 
-  do_callout = FALSE;
+  do_callout = false;
 
   /* set blocked signals based on if checking for them, SIGNAL_ALL_MASK
    * insures that no signals are blocked and all are checked.
@@ -79,15 +79,15 @@ boolean _POSIX_signals_Clear_signals(
                &psiginfo->Node
              );
            } else
-             do_callout = FALSE;
+             do_callout = false;
          } else
            _POSIX_signals_Clear_process_signals( mask );
-         do_callout = TRUE;
+         do_callout = true;
        }
     } else {
       if ( mask & (api->signals_pending & signals_blocked) ) {
         api->signals_pending &= ~mask;
-        do_callout = TRUE;
+        do_callout = true;
       }
     }
   _ISR_Enable( level );

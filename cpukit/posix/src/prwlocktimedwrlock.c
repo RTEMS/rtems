@@ -43,7 +43,7 @@ int pthread_rwlock_timedwrlock(
   POSIX_RWLock_Control                        *the_rwlock;
   Objects_Locations                            location;
   Watchdog_Interval                            ticks;
-  boolean                                      do_wait;
+  bool                                         do_wait;
   POSIX_Absolute_timeout_conversion_results_t  status;
   
   if ( !rwlock )

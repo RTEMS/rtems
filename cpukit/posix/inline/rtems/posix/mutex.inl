@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
  *  _POSIX_Mutex_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Mutex_Is_null (
   POSIX_Mutex_Control *the_mutex
 )
 {

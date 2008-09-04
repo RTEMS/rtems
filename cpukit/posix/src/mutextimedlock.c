@@ -43,7 +43,7 @@ int pthread_mutex_timedlock(
 )
 {
   Watchdog_Interval                            ticks;
-  boolean                                      do_wait;
+  bool                                         do_wait;
   POSIX_Absolute_timeout_conversion_results_t  status;
   int                                          lock_status;
 

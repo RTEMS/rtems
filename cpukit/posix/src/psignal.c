@@ -131,10 +131,10 @@ void _POSIX_signals_Post_switch_extension(
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
 
-      if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
+      if ( _POSIX_signals_Check_signal( api, signo, false ) )
         goto restart;
 
-      if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
+      if ( _POSIX_signals_Check_signal( api, signo, true ) )
         goto restart;
 
     }
@@ -143,10 +143,10 @@ void _POSIX_signals_Post_switch_extension(
 
     for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
 
-      if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
+      if ( _POSIX_signals_Check_signal( api, signo, false ) )
         goto restart;
 
-      if ( _POSIX_signals_Check_signal( api, signo, TRUE ) )
+      if ( _POSIX_signals_Check_signal( api, signo, true ) )
         goto restart;
 
     }

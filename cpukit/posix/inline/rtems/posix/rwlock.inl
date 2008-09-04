@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
  *
  *  This function returns TRUE if the_RWLock is NULL and FALSE otherwise.
  */
-RTEMS_INLINE_ROUTINE boolean _POSIX_RWLock_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_RWLock_Is_null (
   POSIX_RWLock_Control *the_RWLock
 )
 {

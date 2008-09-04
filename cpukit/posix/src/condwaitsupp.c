@@ -36,7 +36,7 @@ int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
   Watchdog_Interval          timeout,
-  boolean                    already_timedout
+  bool                       already_timedout
 )
 {
   register POSIX_Condition_variables_Control *the_cond;

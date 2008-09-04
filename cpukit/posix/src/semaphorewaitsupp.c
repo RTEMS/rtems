@@ -34,7 +34,7 @@
 
 int _POSIX_Semaphore_Wait_support(
   sem_t             *sem,
-  boolean            blocking,
+  bool               blocking,
   Watchdog_Interval  timeout
 )
 {

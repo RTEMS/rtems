@@ -40,7 +40,7 @@ int sem_timedwait(
 )
 {
   Watchdog_Interval                            ticks;
-  boolean                                      do_wait = TRUE;
+  bool                                         do_wait = true;
   POSIX_Absolute_timeout_conversion_results_t  status;
   int                                          lock_status;
 
@@ -58,10 +58,10 @@ int sem_timedwait(
     case POSIX_ABSOLUTE_TIMEOUT_INVALID:
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
     case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      do_wait = FALSE;
+      do_wait = false;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-      do_wait = TRUE;
+      do_wait = true;
       break;
   }
 

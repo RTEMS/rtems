@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
  *  _POSIX_Semaphore_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Semaphore_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
   POSIX_Semaphore_Control *the_semaphore
 )
 {

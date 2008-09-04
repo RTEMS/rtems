@@ -35,8 +35,8 @@ extern "C" {
 typedef struct {
    Objects_Control             Object;
    int                         process_shared;
-   boolean                     named;
-   boolean                     linked;
+   bool                        named;
+   bool                        linked;
    uint32_t                    open_count;
    CORE_message_queue_Control  Message_queue;
    struct sigevent             notification;
@@ -112,7 +112,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   char               *msg_ptr,
   size_t              msg_len,
   unsigned int       *msg_prio,
-  boolean             wait,
+  bool                wait,
   Watchdog_Interval   timeout
 );
 
@@ -129,7 +129,7 @@ int _POSIX_Message_queue_Send_support(
   const char         *msg_ptr,
   size_t              msg_len,
   uint32_t            msg_prio,
-  boolean             wait,
+  bool                wait,
   Watchdog_Interval   timeout
 );
 
@@ -184,7 +184,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
  *  This function returns TRUE if the_message_queue is NULL and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE bool    _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
 );
 

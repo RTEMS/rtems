@@ -36,18 +36,18 @@
  *  _POSIX_signals_Check_signal
  */
 
-boolean _POSIX_signals_Check_signal(
+bool    _POSIX_signals_Check_signal(
   POSIX_API_Control  *api,
   int                 signo,
-  boolean             is_global
+  bool                is_global
 )
 {
   siginfo_t                   siginfo_struct;
   sigset_t                    saved_signals_blocked;
 
   if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
-                                       is_global, TRUE ) )
-    return FALSE;
+                                       is_global, true ) )
+    return false;
 
   /*
    *  Since we made a union of these, only one test is necessary but this is
@@ -62,7 +62,7 @@ boolean _POSIX_signals_Check_signal(
    *  Just to prevent sending a signal which is currently being ignored.
    */
   if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
-    return FALSE;
+    return false;
 
   /*
    *  Block the signals requested in sa_mask
@@ -91,5 +91,5 @@ boolean _POSIX_signals_Check_signal(
    */
   api->signals_blocked = saved_signals_blocked;
 
-  return TRUE;
+  return true;
 }

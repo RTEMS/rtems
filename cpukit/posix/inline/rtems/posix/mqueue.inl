@@ -118,7 +118,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd
  *  _POSIX_Message_queue_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
 )
 {
@@ -155,4 +155,3 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
 
 #endif
 /*  end of include file */
-

@@ -36,7 +36,7 @@
 
 int _POSIX_Mutex_Lock_support(
   pthread_mutex_t           *mutex,
-  boolean                    blocking,
+  bool                       blocking,
   Watchdog_Interval          timeout
 )
 {

@@ -85,24 +85,24 @@ void _POSIX_signals_Post_switch_extension(
   Thread_Control  *the_thread
 );
 
-boolean _POSIX_signals_Unblock_thread(
+bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
   siginfo_t       *info
 );
 
-boolean _POSIX_signals_Check_signal(
+bool _POSIX_signals_Check_signal(
   POSIX_API_Control  *api,
   int                 signo,
-  boolean             is_global
+  bool                is_global
 );
 
-boolean _POSIX_signals_Clear_signals(
+bool _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
   int                 signo,
   siginfo_t          *info,
-  boolean             is_global,
-  boolean             check_blocked
+  bool                is_global,
+  bool                check_blocked
 );
 
 int killinfo(

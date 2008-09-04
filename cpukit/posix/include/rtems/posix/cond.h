@@ -124,7 +124,7 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variabl
  *  and FALSE otherwise.
  */
 
-RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Condition_variables_Is_null (
   POSIX_Condition_variables_Control *the_condition_variable
 );
 
@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Condition_variables_Is_null (
 
 int _POSIX_Condition_variables_Signal_support(
   pthread_cond_t            *cond,
-  boolean                    is_broadcast
+  bool                       is_broadcast
 );
 
 /*
@@ -155,7 +155,7 @@ int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
   Watchdog_Interval          timeout,
-  boolean                    already_timedout
+  bool                       already_timedout
 );
 
 /*

@@ -50,7 +50,7 @@ int _POSIX_Message_queue_Send_support(
   const char         *msg_ptr,
   size_t              msg_len,
   uint32_t            msg_prio,
-  boolean             wait,
+  bool                wait,
   Watchdog_Interval   timeout
 )
 {
@@ -58,7 +58,7 @@ int _POSIX_Message_queue_Send_support(
   POSIX_Message_queue_Control_fd *the_mq_fd;
   Objects_Locations               location;
   CORE_message_queue_Status       msg_status;
-  boolean                         do_wait;
+  bool                            do_wait;
 
   /*
    * Validate the priority.

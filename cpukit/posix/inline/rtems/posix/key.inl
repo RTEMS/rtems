@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
  *  _POSIX_Keys_Is_null
  */
  
-RTEMS_INLINE_ROUTINE boolean _POSIX_Keys_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 )
 {
