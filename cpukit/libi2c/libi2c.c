@@ -104,7 +104,7 @@
 
 rtems_device_major_number rtems_libi2c_major;
 
-static boolean            is_initialized = FALSE;
+static bool is_initialized = false;
 
 static struct i2cbus
 {
@@ -223,7 +223,7 @@ rtems_i2c_init (rtems_device_major_number major, rtems_device_minor_number minor
   rval = mutexCreate (rtems_build_name ('l', 'I', '2', 'C'), &libmutex);
 
   if ( RTEMS_SUCCESSFUL == rval ) {
-  	is_initialized     = TRUE;
+  	is_initialized     = true;
 	rtems_libi2c_major = major;
   } else {
   	libmutex = 0;
@@ -373,7 +373,7 @@ rtems_libi2c_initialize (void)
 	if ( libmutex )
     	rtems_semaphore_delete (libmutex);
     libmutex = 0;
-	is_initialized = FALSE;
+	is_initialized = false;
     return -1;
   }
 
@@ -576,7 +576,7 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
   va_list            ap;
   int sc = 0;
   void *args;
-  rtems_boolean is_started = FALSE;
+  bool is_started = false;
   DECL_CHECKED_BH (busno, bush, minor, -)
     
   va_start(ap, cmd);

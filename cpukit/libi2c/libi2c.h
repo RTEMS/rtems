@@ -437,10 +437,10 @@ typedef struct {
   uint32_t baudrate;       /* maximum bits per second               */
                            /* only valid for SPI drivers:           */
   uint8_t  bits_per_char;  /* how many bits per byte/word/longword? */
-  boolean  lsb_first;      /* TRUE: send LSB first                  */
-  boolean  clock_inv;      /* TRUE: inverted clock (high active)    */
-  boolean  clock_phs;      /* TRUE: clock starts toggling at start of data tfr */
-  uint32_t  idle_char;      /* This character will be continuously transmitted in read only functions */
+  bool     lsb_first;      /* true: send LSB first                  */
+  bool     clock_inv;      /* true: inverted clock (high active)    */
+  bool     clock_phs;      /* true: clock starts toggling at start of data tfr */
+  uint32_t  idle_char;     /* This character will be continuously transmitted in read only functions */
 } rtems_libi2c_tfr_mode_t;
 
 typedef struct {

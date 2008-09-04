@@ -114,7 +114,7 @@ struct ftpStream {
   /*
    * other stuff to remember
    */
-  boolean eof_reached;
+  bool eof_reached;
 };
 
 /*
@@ -234,7 +234,7 @@ int rtems_ftp_get_message
   size_t rd_size;
   size_t tmp_size;
   int eno = 0;
-  rtems_boolean finished = FALSE;
+  bool finished = false;
   do {
     /*
      * fetch (at least) 4 characters from control connection
@@ -264,7 +264,7 @@ int rtems_ftp_get_message
 	(isdigit((unsigned int)rd_buffer[1])) &&
 	(isdigit((unsigned int)rd_buffer[2])) &&
 	(rd_buffer[3] == ' ')) {
-      finished = TRUE;
+      finished = true;
       rd_buffer[3] = '\0';
       *msg_code = atol(rd_buffer);
     }
@@ -535,8 +535,8 @@ int rtems_ftp_open(
   uint16_t   my_port;
   int eno = 0;
   rtems_status_code rc;
-  rtems_boolean is_write = FALSE;
-  rtems_boolean sema_obtained = FALSE;
+  bool is_write = false;
+  bool sema_obtained = false;
   struct ftpStream *fsp = NULL;
   int msg_tmp = 0;
   socklen_t sockaddr_size;
@@ -569,7 +569,7 @@ int rtems_ftp_open(
   if (eno == 0) {
     rc = rtems_semaphore_obtain (ftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc == RTEMS_SUCCESSFUL) {
-      sema_obtained = TRUE;
+      sema_obtained = true;
     }
     else {
       eno = EBUSY;
@@ -599,7 +599,7 @@ int rtems_ftp_open(
   if (eno == 0) {
     fsp = ftpStreams[s] = malloc (sizeof (struct ftpStream));
     rtems_semaphore_release (ftp_mutex);
-    sema_obtained = FALSE;
+    sema_obtained = false;
     if (fsp == NULL) {
       eno = ENOMEM;
     }
@@ -609,7 +609,7 @@ int rtems_ftp_open(
       fsp->ctrl_socket = -1; /* mark, that sockets not yet created */
       fsp->port_socket = -1;
       fsp->data_socket = -1;
-      fsp->eof_reached = FALSE;
+      fsp->eof_reached = false;
     }
   }
   if (eno == 0) {  
@@ -944,7 +944,7 @@ int rtems_ftp_open(
    */
   if (sema_obtained) {
     rtems_semaphore_release (ftp_mutex);
-    sema_obtained = FALSE;
+    sema_obtained = false;
   }
 #if 0
   if (eno != 0) {
@@ -997,7 +997,7 @@ ssize_t rtems_ftp_read(
     }
     else {
       eno = rtems_ftp_get_message(fsp,&msg_tmp);
-      fsp->eof_reached = TRUE;
+      fsp->eof_reached = true;
       if ((eno == 0) &&
 	  (msg_tmp != FTP_REPLY_TFERCMPL)) {
 	eno = EIO;
