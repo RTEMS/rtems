@@ -289,7 +289,7 @@ int IMFS_evaluate_for_make(
   char                                token[ IMFS_NAME_MAX + 1 ];
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
-  int                                 done = 0;
+  bool                                done = false;
   int                                 result;
 
   /*
@@ -411,7 +411,7 @@ int IMFS_evaluate_for_make(
 	 */
 
         if ( ! node )
-          done = TRUE;
+          done = true;
         else
           pathloc->node_access = node;
 
