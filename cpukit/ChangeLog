@@ -1,5 +1,11 @@
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/asr.h,
+	rtems/include/rtems/rtems/clock.h,
+	rtems/include/rtems/rtems/config.h,
+	rtems/include/rtems/rtems/object.h,
+	rtems/include/rtems/rtems/sem.h,
+	rtems/include/rtems/rtems/support.h: Convert to "bool".
 	* score/src/corebarrierwait.c,
 	score/src/coremsg.c,
 	score/src/coremsginsert.c,
