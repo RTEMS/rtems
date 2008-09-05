@@ -61,21 +61,21 @@ public:
   inline const rtems_status_code set_preemption_state(const rtems_mode preemption);
   inline const rtems_status_code set_preemption_state(const rtems_mode preemption,
                                                       rtems_mode& old_preemption);
-  inline const boolean preemption_set(const rtems_mode preemption);
+  inline const bool preemption_set(const rtems_mode preemption);
 
   // timeslice control
   inline const rtems_status_code get_timeslice_state(rtems_mode& timeslice);
   inline const rtems_status_code set_timeslice_state(const rtems_mode timeslice);
   inline const rtems_status_code set_timeslice_state(const rtems_mode timeslice,
                                                      rtems_mode& old_timeslice);
-  inline const boolean timeslice_set(const rtems_mode preemption);
+  inline const bool timeslice_set(const rtems_mode preemption);
 
   // async-sub-routine control
   inline const rtems_status_code get_asr_state(rtems_mode& asr);
   inline const rtems_status_code set_asr_state(const rtems_mode asr);
   inline const rtems_status_code set_asr_state(const rtems_mode asr,
                                                rtems_mode& old_asr);
-  inline const boolean asr_set(const rtems_mode preemption);
+  inline const bool asr_set(const rtems_mode preemption);
 
   // interrupt mask control
   inline const rtems_status_code get_interrupt_level(rtems_interrupt_level& level);
@@ -124,7 +124,7 @@ const rtems_status_code rtemsTaskMode::set_preemption_state(const rtems_mode pre
   return last_status_code();
 }
 
-const boolean rtemsTaskMode::preemption_set(const rtems_mode preemption)
+const bool rtemsTaskMode::preemption_set(const rtems_mode preemption)
 {
   return (preemption & RTEMS_PREEMPT_MASK) ? false : true;
 }
@@ -150,7 +150,7 @@ const rtems_status_code rtemsTaskMode::set_timeslice_state(const rtems_mode time
   return last_status_code();
 }
 
-const boolean rtemsTaskMode::timeslice_set(const rtems_mode timeslice)
+const bool rtemsTaskMode::timeslice_set(const rtems_mode timeslice)
 {
   return (timeslice & RTEMS_TIMESLICE_MASK) ? true : false;
 }
@@ -176,7 +176,7 @@ const rtems_status_code rtemsTaskMode::set_asr_state(const rtems_mode asr,
   return last_status_code();
 }
 
-const boolean rtemsTaskMode::asr_set(const rtems_mode asr)
+const bool rtemsTaskMode::asr_set(const rtems_mode asr)
 {
   return (asr & RTEMS_ASR_MASK) ? true : false;
 }
