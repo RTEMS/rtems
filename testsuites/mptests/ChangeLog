@@ -1,3 +1,8 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mp03/delay.c, mp06/task1.c, mp06/node2/mp06-node2.scn, mp07/task1.c:
+	Updating and fixing while running them on psim.
+
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mp05/system.h, mp05/task1.c, mp06/system.h, mp06/task1.c,

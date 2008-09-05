@@ -70,16 +70,17 @@ rtems_task Test_task(
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
-  while ( Stop_Test == false ) {
+  while ( true ) {
     for ( count=DOT_COUNT ; count && (Stop_Test == false) ; count-- ) {
       status = rtems_event_receive(
         RTEMS_EVENT_16,
         RTEMS_DEFAULT_OPTIONS,
-        RTEMS_NO_TIMEOUT,
+        TICKS_PER_SECOND,
         &event_out
       );
       if ( status == RTEMS_TIMEOUT ) {
-        puts( "\nTA1 - RTEMS_TIMEOUT .. probably OK if the other node exits" );
+        printf("\nTA1 - RTEMS_TIMEOUT .. probably OK if the other node exits");
+        Stop_Test = true;
         break;
       } else
         directive_failed( status, "rtems_event_receive" );
@@ -87,6 +88,8 @@ rtems_task Test_task(
       status = rtems_event_send( remote_tid, RTEMS_EVENT_16 );
       directive_failed( status, "rtems_event_send" );
     }
+    if ( Stop_Test )
+       break;
     put_dot('.');
   }
 

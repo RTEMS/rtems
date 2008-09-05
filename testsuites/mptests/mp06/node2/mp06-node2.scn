@@ -7,6 +7,8 @@ Getting TID of remote task
 Receiving events from remote task
 ....................................................
 ....................................................
+Flushing RTEMS_EVENT_16
+Waiting for RTEMS_EVENT_16
 rtems_event_receive - correctly returned RTEMS_TIMEOUT
 *** END OF TEST 6 ***
 

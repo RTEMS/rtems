@@ -26,5 +26,6 @@ rtems_timer_service_routine Delayed_send_event(
   rtems_status_code status;
 
   status = rtems_event_send( Task_id[ 1 ], RTEMS_EVENT_16 );
-  directive_failed_with_level( status, "rtems_event_send", 1 );
+  if ( status ) printk( "Delayed_send_event failed %d\n", status );
+  // directive_failed_with_level( status, "rtems_event_send", 1 );
 }

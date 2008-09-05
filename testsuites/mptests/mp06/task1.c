@@ -161,6 +161,11 @@ rtems_task Test_task(
   putchar( '\n' );
 
   if ( Multiprocessing_configuration.node == 2 ) {
+    /* Flush events */
+    puts( "Flushing RTEMS_EVENT_16" );
+    (void) rtems_event_receive(RTEMS_EVENT_16, RTEMS_NO_WAIT, 0, &event_out);
+
+    puts( "Waiting for RTEMS_EVENT_16" );
     status = rtems_event_receive(
       RTEMS_EVENT_16,
       RTEMS_DEFAULT_OPTIONS,
