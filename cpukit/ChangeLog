@@ -1,3 +1,9 @@
+2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h: Make sure
+	CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER is defined to 0 in single
+	processor configurations.
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Account for needed a Classic API Timer when

@@ -713,10 +713,14 @@ extern rtems_configuration_table        Configuration;
   #else
 
     #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
-    #define CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
 
   #endif /* CONFIGURE_MP_APPLICATION */
 #endif /* RTEMS_MULTIPROCESSING */
+
+#ifndef CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER
+  #define CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
+#endif
+
 
 /*
  *  Default Configuration Table.
