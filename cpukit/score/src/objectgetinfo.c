@@ -33,7 +33,8 @@ Objects_Information *_Objects_Get_information(
     return NULL;
 
   the_class_api_maximum = _Objects_API_maximum_class( the_api );
-  if ( the_class_api_maximum < 0 || the_class > (uint32_t) the_class_api_maximum )
+  if ( the_class_api_maximum < 0 ||
+       the_class > (uint32_t) the_class_api_maximum )
     return NULL;
 
   if ( !_Objects_Information_table[ the_api ] )
@@ -43,8 +44,15 @@ Objects_Information *_Objects_Get_information(
   if ( !info )
     return NULL;
 
-  if ( info->maximum == 0 )
-    return NULL;
+  /*
+   *  In a multprocessing configuration, we may access remote objects.
+   *  Thus we may have 0 local instances and still have a valid object
+   *  pointer.
+   */
+  #if !defined(RTEMS_MULTIPROCESSING)
+    if ( info->maximum == 0 )
+      return NULL;
+  #endif
 
   return info;
 }

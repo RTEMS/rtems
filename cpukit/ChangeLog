@@ -1,5 +1,10 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/objectgetinfo.c: Correct for multiprocessor systems when
+	all object instances within a particular class are remote.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/assocnamebad.c: Correct file name in message.
 
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
