@@ -30,7 +30,7 @@ rtems_assoc_name_bad(
 
     sprintf(bad_buffer, "< %" PRId32 "[0x%" PRIx32 " ] >", bad_value, bad_value);
 #else
-    static char bad_buffer[32] = "<assoc.c: BAD NAME>";
+    static char bad_buffer[40] = "<assocnamebad.c: : BAD NAME>";
 #endif
     return bad_buffer;
 }
