@@ -409,7 +409,7 @@ static inline void *MY_MALLOC(int s)
 		MU_LOCK(hlock);
 		assert(nibufs++ < 2000);
 		MU_UNLOCK(hlock);
-		assert(rval = malloc(s));
+		assert((rval = malloc(s)) != 0);
 		return rval;
 	}
 	return 0;
@@ -422,7 +422,7 @@ static inline void *MY_CALLOC(int n, int s)
 		MU_LOCK(hlock);
 		assert(nibufs++ < 2000);
 		MU_UNLOCK(hlock);
-		assert(rval = calloc(n,s));
+		assert((rval = calloc(n,s)) != 0);
 		return rval;
 	}
 	return 0;
@@ -960,7 +960,7 @@ struct sockwakeup	wkup;
 											/* fprintf saves/restores FP registers on PPC :-( */
 											RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,
 											&rpciod);
-			assert( status = RTEMS_SUCCESSFUL );
+			assert( status == RTEMS_SUCCESSFUL );
 
 			wkup.sw_pfn = rxWakeupCB;
 			wkup.sw_arg = (caddr_t)rpciod;
@@ -971,9 +971,9 @@ struct sockwakeup	wkup;
 											sizeof(RpcUdpXact),
 											RTEMS_DEFAULT_ATTRIBUTES,
 											&msgQ);
-			assert( status = RTEMS_SUCCESSFUL );
+			assert( status == RTEMS_SUCCESSFUL );
 			status = rtems_task_start( rpciod, rpcio_daemon, 0 );
-			assert( status = RTEMS_SUCCESSFUL );
+			assert( status == RTEMS_SUCCESSFUL );
 
 		} else {
 			return -1;

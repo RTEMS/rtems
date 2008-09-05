@@ -1,3 +1,8 @@
+2008-09-05	Eric Norum <norume@aps.anl.gov>
+
+	* libfs/src/nfsclient/src/rpcio.c: Correct breakage introduced by Joel
+	removing asserts with side-effects.
+
 2008-09-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sapi/include/rtems/config.h,
