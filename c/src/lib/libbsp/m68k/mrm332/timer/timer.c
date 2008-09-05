@@ -21,7 +21,7 @@
 
 #include <bsp.h>
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 extern rtems_isr Clock_isr(void);
 
@@ -54,7 +54,7 @@ int benchmark_timer_read( void )
   uint32_t         total;
   total = 0;
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in XXX microsecond units */
 
   if ( total < LEAST_VALID )
@@ -64,7 +64,7 @@ int benchmark_timer_read( void )
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

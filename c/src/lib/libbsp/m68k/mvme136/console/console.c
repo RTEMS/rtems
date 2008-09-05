@@ -61,15 +61,15 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch
 )
 {
   if ( !(_Read_m681->srb & RXRDYB) )
-    return(FALSE);
+    return false;
 
   *ch = _Read_m681->rbb;
-  return(TRUE);
+  return true;
 }
 
 /*  inbyte

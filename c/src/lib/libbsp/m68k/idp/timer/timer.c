@@ -32,7 +32,7 @@
 #define TIMER_VECTOR 0x4D
 
 int Ttimer_val;
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 rtems_isr timerisr(void);
 
@@ -93,7 +93,7 @@ int benchmark_timer_read(void)
   MC68230_WRITE (MC68230_TCR, 0xA1);
 
   /* do not restore old vector */
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in countdown units */
 
   if ( total < LEAST_VALID )
@@ -106,7 +106,7 @@ int benchmark_timer_read(void)
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

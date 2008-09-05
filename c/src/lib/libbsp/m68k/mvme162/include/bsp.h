@@ -127,9 +127,9 @@ typedef volatile struct {
 
 enum {portB, portA};
 
-rtems_boolean char_ready(int port, char *ch);
-char char_wait(int port);
-void char_put(int port, char ch);
+extern bool char_ready(int port, char *ch);
+extern char char_wait(int port);
+extern void char_put(int port, char ch);
 
 #define TX_BUFFER_EMPTY   0x04
 #define RX_DATA_AVAILABLE 0x01

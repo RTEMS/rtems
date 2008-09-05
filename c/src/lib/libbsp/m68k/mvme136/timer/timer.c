@@ -29,7 +29,7 @@
 #define TIMER 0xfffb0000   /* address of Z8036 on MVME136 */
 
 int Ttimer_val;
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 rtems_isr timerisr(void);
 
@@ -82,7 +82,7 @@ remaining = 0xffff - *((uint16_t*) 0xfffb0010);
 */
   total = (Ttimer_val * 0x10000) + remaining;
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in one-half microsecond units */
 
   else {
@@ -93,7 +93,7 @@ remaining = 0xffff - *((uint16_t*) 0xfffb0010);
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

@@ -42,11 +42,11 @@
 uint32_t            Ttimer_val;
 
 /*
- *  Set to TRUE to return raw value. Normally zero. Depends on being allocated
+ *  Set to true to return raw value. Normally zero. Depends on being allocated
  *  in the .bss section and on that section being explicitly zeroed at boot
  *  time.
  */
-rtems_boolean       benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 rtems_isr timerisr(void);
 
@@ -129,7 +129,7 @@ int benchmark_timer_read(void)
  *  Output parameters:  time in microseconds
  */
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

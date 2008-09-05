@@ -34,6 +34,6 @@ int benchmark_timer_read(void)
   return MCF_DTIM3_DTCN;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
 }

@@ -40,7 +40,7 @@
 
 uint32_t         Timer_interrupts;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 rtems_isr timerisr(void);
 
@@ -95,7 +95,7 @@ int benchmark_timer_read( void )
 
   total = (Timer_interrupts * TRR2_VAL) + clicks;
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in XXX microsecond units */
 
   if ( total < LEAST_VALID )
@@ -109,7 +109,7 @@ int benchmark_timer_read( void )
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

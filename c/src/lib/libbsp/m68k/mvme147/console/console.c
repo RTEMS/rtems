@@ -65,7 +65,7 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch
 )
 {
@@ -74,10 +74,10 @@ rtems_boolean is_character_ready(
   for ( ; ; ) {
     Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
     if ( !(rr_0 & RR_0_RX_DATA_AVAILABLE) )
-      return( FALSE );
+      return false;
 
     Z8x30_READ_DATA( CONSOLE_DATA, *ch );
-    return( TRUE );
+    return true;
   }
 }
 

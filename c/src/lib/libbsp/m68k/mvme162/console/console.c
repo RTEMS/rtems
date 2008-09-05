@@ -110,14 +110,14 @@ rtems_device_driver console_initialize(
  *   Non-blocking char input
  */
 
-rtems_boolean char_ready(int port, char *ch)
+bool char_ready(int port, char *ch)
 {
   if ( Ring_buffer_Is_empty( &Console_Buffer[port] ) )
-    return FALSE;
+    return false;
 
   Ring_buffer_Remove_character( &Console_Buffer[port], *ch );
 
-  return TRUE;
+  return false;
 }
 
 /*

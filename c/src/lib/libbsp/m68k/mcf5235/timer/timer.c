@@ -28,6 +28,6 @@ benchmark_timer_read(void)
 }
 
 void
-benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
 }

@@ -54,13 +54,13 @@
 #include <bsp.h>
 #include <mcf548x/mcf548x.h>
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 static uint32_t microsecond_timer_value = 0;
 
 void benchmark_timer_initialize(void)
 {
-MCF548X_SLT_SLTCNT1 = 0xFFFFFFFF;
-MCF548X_SLT_SCR1 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN);
+    MCF548X_SLT_SLTCNT1 = 0xFFFFFFFF;
+    MCF548X_SLT_SCR1 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN);
 }
 
 /*
@@ -70,12 +70,13 @@ MCF548X_SLT_SCR1 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN);
 int
 benchmark_timer_read(void)
 {
-	microsecond_timer_value = (0xFFFFFFFF - MCF548X_SLT_SCNT1)/100;
+    microsecond_timer_value = (0xFFFFFFFF - MCF548X_SLT_SCNT1)/100;
+
     return microsecond_timer_value;
 }
 
 void
-benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
-benchmark_timer_find_average_overhead = find_flag;
+    benchmark_timer_find_average_overhead = find_flag;
 }

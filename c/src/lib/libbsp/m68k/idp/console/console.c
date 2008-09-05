@@ -85,16 +85,16 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch,
   int   port
 )
 {
   if ( Ring_buffer_Is_empty( &Console_Buffer[ port ] ) )
-    return FALSE;
+    return false;
 
   Ring_buffer_Remove_character( &Console_Buffer[ port ], *ch );
-  return TRUE;
+  return true;
 }
 
 /*  quick_char_check
@@ -109,14 +109,14 @@ rtems_boolean is_character_ready(
  *  Return values:
  */
 
-rtems_boolean quick_char_check(
+bool quick_char_check(
   int   port
 )
 {
   if ( Ring_buffer_Is_empty( &Console_Buffer[ port ] ) )
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }
 
 /*  inbyte

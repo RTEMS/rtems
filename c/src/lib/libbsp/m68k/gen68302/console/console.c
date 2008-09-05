@@ -104,7 +104,7 @@ rtems_device_driver console_initialize(
  *                      FALSE - no character available
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch				/* -> character  */
 )
 {
@@ -113,12 +113,12 @@ rtems_boolean is_character_ready(
 
     for (;;) {
 	if (RXS & RBIT_HDLC_EMPTY_BIT)
-	    return FALSE;
+	    return false;
 
 	*ch = RXD;
 	RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
 	if ( *ch >= ' ' &&  *ch <= '~' )
-	    return TRUE;
+	    return true;
     }
 }
 

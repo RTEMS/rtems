@@ -64,16 +64,16 @@ rtems_device_driver console_initialize(
  *                      FALSE - no character available
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch				/* -> character  */
 )
 {
   if (debug_port_status(0))
   {
     *ch = debug_port_in();
-    return TRUE;
+    return true;
   }
-  return FALSE;
+  return false;
 }
 
 /*  inbyte

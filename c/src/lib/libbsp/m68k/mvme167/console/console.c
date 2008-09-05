@@ -138,7 +138,7 @@ void cd2401_udelay( unsigned long delay );
 void cd2401_chan_cmd( uint8_t         channel, uint8_t         cmd, uint8_t         wait );
 uint16_t         cd2401_bitrate_divisor( uint32_t         clkrate, uint32_t        * bitrate );
 void cd2401_initialize( void );
-void cd2401_interrupts_initialize( rtems_boolean enable );
+void cd2401_interrupts_initialize( bool enable );
 
 /* ISRs */
 rtems_isr cd2401_modem_isr( rtems_vector_number vector );
@@ -410,7 +410,7 @@ void cd2401_initialize( void )
  *  THE LAST CD2401 CHANNEL CLOSED SHOULD DISABLE INTERRUPTS.
  */
 void cd2401_interrupts_initialize(
-  rtems_boolean enable
+  bool enable
 )
 {
   if ( enable ) {
