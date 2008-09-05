@@ -15,6 +15,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
+include_HEADERS += include/psim.h
 
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
@@ -42,7 +43,8 @@ noinst_LIBRARIES = libbsp.a
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c \
+    startup/psim_registers.c
 
 pclock_SOURCES = ../shared/clock/p_clock.c
 console_SOURCES = ../../shared/console-polled.c

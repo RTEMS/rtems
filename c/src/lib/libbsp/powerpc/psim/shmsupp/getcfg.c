@@ -12,7 +12,7 @@
  *
  *  NOTES:  No interrupt support.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +23,7 @@
  */
 
 #include <rtems.h>
+#include <psim.h>
 #include "shm_driver.h"
 
 #define INTERRUPT 0                   /* PSIM target supports only */
@@ -35,8 +36,8 @@ void Shm_Get_configuration(
   shm_config_table **shmcfg
 )
 {
-   BSP_shm_cfgtbl.base         = (uint32_t*)0xc0000000;
-   BSP_shm_cfgtbl.length       = 64 * 1024;
+   BSP_shm_cfgtbl.base         = (uint32_t*)PSIM.SharedMemory;
+   BSP_shm_cfgtbl.length       = sizeof(PSIM.SharedMemory);
    BSP_shm_cfgtbl.format       = SHM_BIG;
 
    BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt;

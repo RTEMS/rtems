@@ -6,7 +6,7 @@
  *  and deadlock when two tasks poll for the same lock.
  *  previous level.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -19,8 +19,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <shm_driver.h>
-
-typedef volatile unsigned int volint;
+#include <psim.h>
 
 /*
  *  Shm_Initialize_lock
@@ -46,9 +45,7 @@ void Shm_Lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  volint *p = (volint *)0xc0010000;
-
-  (void) p[1];
+  (void) PSIM.Semaphore.lock;
 }
 
 /*
@@ -61,7 +58,5 @@ void Shm_Unlock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  volint *p = (volint *)0xc0010000;
-
-  (void) p[2];
+  (void) PSIM.Semaphore.unlock;
 }

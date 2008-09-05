@@ -1,3 +1,10 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, shmsupp/getcfg.c, shmsupp/lock.c,
+	startup/linkcmds: Now running mptests using new memory layout with
+	updates patches against gdb 6.8.
+	* include/psim.h, startup/psim_registers.c: New files.
+
 2008-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: Remove another duplicate reference.
