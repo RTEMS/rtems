@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems++/rtemsTaskMode.h: Convert to "bool".
+
 2008-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1282/misc
