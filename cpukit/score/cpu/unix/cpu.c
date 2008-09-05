@@ -430,9 +430,9 @@ void *_CPU_Thread_Idle_body( uint32_t ignored )
       }
 
       for (fd = 0; fd < sync_io_nfds; fd++) {
-        boolean read = FD_ISSET(fd, &readfds);
-        boolean write = FD_ISSET(fd, &writefds);
-        boolean except = FD_ISSET(fd, &exceptfds);
+        bool read = FD_ISSET(fd, &readfds);
+        bool write = FD_ISSET(fd, &writefds);
+        bool except = FD_ISSET(fd, &exceptfds);
 
         if (_CPU_Sync_io_handlers[fd] && (read || write || except))
           _CPU_Sync_io_handlers[fd](fd, read, write, except);
@@ -529,7 +529,7 @@ void _CPU_Context_Initialize(
   uint32_t          _size,
   uint32_t          _new_level,
   void             *_entry_point,
-  boolean           _is_fp
+  bool              _is_fp
 )
 {
   uint32_t    *addr;
@@ -784,7 +784,7 @@ void _CPU_ISR_Handler(int vector)
 {
   extern void        _Thread_Dispatch(void);
   extern uint32_t    _Thread_Dispatch_disable_level;
-  extern boolean     _Context_Switch_necessary;
+  extern bool        _Context_Switch_necessary;
 
   if (_ISR_Nest_level++ == 0) {
       /* switch to interrupt stack */
@@ -914,9 +914,9 @@ void _CPU_Fatal_error(uint32_t   error)
 
 int _CPU_Set_sync_io_handler(
   int fd,
-  boolean read,
-  boolean write,
-  boolean except,
+  bool read,
+  bool write,
+  bool except,
   rtems_sync_io_handler handler
 )
 {
@@ -1011,7 +1011,7 @@ int  _CPU_SHM_Semid;
 
 void _CPU_SHM_Init(
   uint32_t     maximum_nodes,
-  boolean      is_master_node,
+  bool         is_master_node,
   void       **shm_address,
   uint32_t    *shm_length
 )

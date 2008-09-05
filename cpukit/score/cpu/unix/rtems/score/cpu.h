@@ -771,7 +771,7 @@ extern void _CPU_Context_Initialize(
   uint32_t          _size,
   uint32_t          _new_level,
   void             *_entry_point,
-  boolean           _is_fp
+  bool              _is_fp
 );
 
 /* end of Context handler macros */
@@ -1028,17 +1028,17 @@ static inline uint32_t CPU_swap_u32(
 
 typedef void ( *rtems_sync_io_handler )(
   int fd,
-  boolean read,
-  boolean wrtie,
-  boolean except
+  bool    read,
+  bool    wrtie,
+  bool    except
 );
 
 /* returns -1 if fd to large, 0 is successful */
 int _CPU_Set_sync_io_handler(
   int fd,
-  boolean read,
-  boolean write,
-  boolean except,
+  bool    read,
+  bool    write,
+  bool    except,
   rtems_sync_io_handler handler
 );
 
@@ -1059,7 +1059,7 @@ void _CPU_Stop_clock( void );
 
 void _CPU_SHM_Init( 
   uint32_t     maximum_nodes,
-  boolean      is_master_node,
+  bool         is_master_node,
   void       **shm_address,
   uint32_t    *shm_length
 );

@@ -530,7 +530,7 @@ void _CPU_Context_Initialize(
   uint32_t          size,
   uint32_t          new_level,
   void             *entry_point,
-  boolean           is_fp
+  bool              is_fp
 );
 
 /*

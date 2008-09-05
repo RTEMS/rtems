@@ -208,10 +208,10 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 #ifndef ASM
   
 SCORE_EXTERN struct {
-  uint32_t   *Disable_level;
-  void *Stack;
-  volatile boolean *Switch_necessary;
-  boolean *Signal;
+  uint32_t      *Disable_level;
+  void          *Stack;
+  volatile bool *Switch_necessary;
+  bool          *Signal;
 
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
 
