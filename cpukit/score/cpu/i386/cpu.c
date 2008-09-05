@@ -175,9 +175,9 @@ static rtems_raw_irq_hdl tbl[] = {
 	 rtems_exception_prologue_18,
 };
 
-void rtems_exception_init_mngt()
+void rtems_exception_init_mngt(void)
 {
-      unsigned int		 i,j;
+      size_t                     i,j;
       interrupt_gate_descriptor	 *currentIdtEntry;
       unsigned			 limit;
       unsigned			 level;
