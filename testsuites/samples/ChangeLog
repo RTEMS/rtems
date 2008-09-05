@@ -1,3 +1,8 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am: Updating and
+	fixing while running mptests on psim.
+
 2008-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: New argument sequence for rtems_shell_init(). Also
