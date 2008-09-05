@@ -1,5 +1,6 @@
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* console/console.c: Remove bogus decl.
 	* timer/timer.c: Convert to "bool".
 
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
