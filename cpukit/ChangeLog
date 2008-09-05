@@ -1,5 +1,10 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h: Account for needed a Classic API Timer when
+	using the Shared Memory MPCI driver.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/mpci.h,
 	score/inline/rtems/score/threadmp.inl, score/src/mpci.c: Eliminate
 	dependencies between MP .h files.
