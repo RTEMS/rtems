@@ -1,5 +1,6 @@
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* interrupt/interrupt.c, network/ethernet.c: Eliminate "boolean".
 	* network/ethernet.c, serial/twi.c, timer/timer.c: Convert to "bool".
 
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
