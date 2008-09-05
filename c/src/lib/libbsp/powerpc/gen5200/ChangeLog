@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* i2c/i2c.c, i2c/i2cdrv.c: Convert to "bool".
+
 2008-09-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/mscan-base.h, mscan/mscan-base.c, mscan/mscan.c,
