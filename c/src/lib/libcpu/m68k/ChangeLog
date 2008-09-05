@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mcf5206/timer/timer.c, mcf5272/timer/timer.c: Convert to "bool".
+
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mcf5206/console/mcfuart.c, mcf5206/include/mcfuart.h:
