@@ -1,5 +1,10 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shmsupp/lock.c: Disable CPU interrupts when we have the shared memory
+	locked. This is necessary to prevent deadlock.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, preinstall.am, shmsupp/getcfg.c, shmsupp/lock.c,
 	startup/linkcmds: Now running mptests using new memory layout with
 	updates patches against gdb 6.8.

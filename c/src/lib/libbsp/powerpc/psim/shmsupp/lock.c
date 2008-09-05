@@ -41,11 +41,14 @@ void Shm_Initialize_lock(
  *  a deadlock condition.
  */
 
+static rtems_interrupt_level level;
+
 void Shm_Lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  (void) PSIM.Semaphore.lock;
+  rtems_interrupt_disable( level );
+    (void) PSIM.Semaphore.lock;
 }
 
 /*
@@ -58,5 +61,6 @@ void Shm_Unlock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-  (void) PSIM.Semaphore.unlock;
+    (void) PSIM.Semaphore.unlock;
+  rtems_interrupt_enable( level );
 }
