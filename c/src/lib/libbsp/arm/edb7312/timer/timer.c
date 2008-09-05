@@ -62,7 +62,7 @@ int benchmark_timer_read( void )
 
   total = (uint32_t)0x0000ffff - t;  /* result is 1/512000 = ~2 uS */
   total = (total * 1953) / 1000;   /* convert to uS */
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in XXX microsecond units */
   else {
     if ( total < LEAST_VALID )
