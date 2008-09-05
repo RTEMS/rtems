@@ -1,5 +1,10 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psim-gdb-bottom: Also break on C_exception_handler so we can see what
+	caused the exception. This indicates an error in the program.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psim-shared, psim-top.in, runtest-bottom, runtest-top.in: Now running
 	mptests.
 
