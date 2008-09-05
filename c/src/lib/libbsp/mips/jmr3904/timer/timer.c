@@ -17,7 +17,7 @@
 
 #include <bsp.h>
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 void benchmark_timer_initialize(void)
 {
@@ -51,7 +51,7 @@ int benchmark_timer_read(void)
 
   total = TX3904_TIMER_READ( TX3904_TIMER1_BASE, TX3904_TIMER_TRR );
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
@@ -61,7 +61,7 @@ int benchmark_timer_read(void)
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;
