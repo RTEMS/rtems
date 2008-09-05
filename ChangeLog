@@ -1,7 +1,3 @@
-2008-08-15      Allan Hessenflow <allanh@kallisti.com>
-
-	* src/lib/libbsp/mips/jmr3904/tools/runtest: Add bf537Stamp.
-
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4 (_RTEMS_OUTPUT_SUBDIRS): Allow empty configdirs.
