@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c, timer/timer.c: Convert to "bool".
+
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1304/bsps
