@@ -27,7 +27,7 @@
 #include <bsp.h>
 
 volatile uint32_t Timer_interrupts;
-rtems_boolean    benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 #define TIMER_REGS ((altera_avalon_timer_regs*)NIOS2_IO_BASE(TIMER_BASE))
 
@@ -133,9 +133,7 @@ int benchmark_timer_read( void )
   return total;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

@@ -71,7 +71,7 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch
 )
 {
@@ -82,10 +82,10 @@ rtems_boolean is_character_ready(
     {
         *ch = (data & ALTERA_AVALON_JTAG_UART_DATA_DATA_MSK)
               >> ALTERA_AVALON_JTAG_UART_DATA_DATA_OFST;
-        return TRUE;
+        return true;
     };
 
-    return FALSE;
+    return false;
 }
 
 /*  inbyte

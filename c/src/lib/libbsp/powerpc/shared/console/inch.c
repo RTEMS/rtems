@@ -71,10 +71,10 @@ static uint16_t         kbd_end   = KBD_BUF_SIZE - 1;
 | Global Variables: key_map, shift_map.
 |        Arguments: outChar - character read in case of a valid reading,
 |                   otherwise unchanged.
-|          Returns: TRUE in case a valid character has been read,
-|                   FALSE otherwise.
+|          Returns: true in case a valid character has been read,
+|                   false otherwise.
 +--------------------------------------------------------------------------*/
-rtems_boolean
+bool
 _IBMPC_scankey(char *outChar)
 {
   unsigned char inChar;
@@ -84,7 +84,7 @@ _IBMPC_scankey(char *outChar)
   static int caps_pressed  = 0;
   static int extended      = 0;
 
-  *outChar = 0; /* default value if we return FALSE */
+  *outChar = 0; /* default value if we return false */
 
   /* Read keyboard controller, toggle enable */
   inChar=kbd_inb(KBD_CTL);
@@ -95,7 +95,7 @@ _IBMPC_scankey(char *outChar)
   /* See if it has data */
   inChar=kbd_inb(KBD_STATUS);
   if ((inChar & 0x01) == 0)
-    return FALSE;
+    return false;
 
   /* Read the data.  Handle nonsense with shift, control, etc. */
   inChar=kbd_inb(KBD_DATA);
@@ -107,49 +107,49 @@ _IBMPC_scankey(char *outChar)
   {
     case 0xe0:
       extended = 2;
-      return FALSE;
+      return false;
       break;
 
     case 0x38:
       alt_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xb8:
       alt_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x1d:
       ctrl_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0x9d:
       ctrl_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x2a:
       if (extended)
-        return FALSE;
+        return false;
     case 0x36:
       shift_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xaa:
       if (extended)
-        return FALSE;
+        return false;
     case 0xb6:
       shift_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x3a:
       caps_pressed = 1;
-      return FALSE;
+      return false;
       break;
     case 0xba:
       caps_pressed = 0;
-      return FALSE;
+      return false;
       break;
 
     case 0x53:
@@ -163,7 +163,7 @@ _IBMPC_scankey(char *outChar)
     default:
       if ((inChar & 0x80) || (inChar > 0x39))
       /* High-bit on means key is being released, not pressed */
-        return FALSE;
+        return false;
       break;
   } /* switch */
 
@@ -186,7 +186,7 @@ _IBMPC_scankey(char *outChar)
     }
   }
 
-  return TRUE;
+  return true;
 } /* _IBMPC_scankey */
 
 /*-------------------------------------------------------------------------+
@@ -216,9 +216,9 @@ void _IBMPC_keyboard_isr(void)
 | Global Variables: kbd_buffer, kbd_first, kbd_last.
 |        Arguments: c - character read if keyboard buffer not empty, otherwise
 |                   unchanged.
-|          Returns: TRUE if keyboard buffer not empty, FALSE otherwise.
+|          Returns: true if keyboard buffer not empty, false otherwise.
 +--------------------------------------------------------------------------*/
-rtems_boolean
+bool
 _IBMPC_chrdy(char *c)
 {
   /* Check buffer our ISR builds */
@@ -227,10 +227,10 @@ _IBMPC_chrdy(char *c)
     *c = kbd_buffer[kbd_first];
 
     kbd_first = (kbd_first + 1) % KBD_BUF_SIZE;
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 } /* _IBMPC_chrdy */
 
 /*-------------------------------------------------------------------------+

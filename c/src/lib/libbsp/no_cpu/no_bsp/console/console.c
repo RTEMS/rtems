@@ -58,12 +58,12 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready(
+bool is_character_ready(
   char *ch
 )
 {
   *ch = '\0';   /* return NULL for no particular reason */
-  return(TRUE);
+  return true;
 }
 
 /*  inbyte

@@ -362,7 +362,8 @@ console_tbl	Console_Port_Tbl[] = {
         }
 };
 
-static boolean config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned long slotNo, int channel){
+static bool config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned long slotNo, int channel)
+{
   M68360_t chip = M68360_chips;
 
   /*
@@ -375,19 +376,19 @@ static boolean config_68360_scc_base_probe(int minor, unsigned long busNo, unsig
   }
 
   if (!chip)
-    return FALSE;
+    return false;
 
   Console_Port_Tbl[minor].pDeviceParams = &chip->port[ channel-1 ];
   chip->port[ channel-1 ].minor         = minor;
-  return (TRUE);
+  return true;
 }
 
-static boolean config_68360_scc_base_probe_1( int minor ) {
-  return config_68360_scc_base_probe( minor, 0, 11, 1);
+static bool config_68360_scc_base_probe_1( int minor ) {
+  return config_68360_scc_base_probe(minor, 0, 11, 1);
 }
                                                                                                                 
-static boolean config_68360_scc_base_probe_2( int minor ) {
-  return config_68360_scc_base_probe( minor, 0, 11, 2);
+static bool config_68360_scc_base_probe_2( int minor ) {
+  return config_68360_scc_base_probe(minor, 0, 11, 2);
 }
                                                                                                                  
 static boolean config_68360_scc_base_probe_3( int minor ) {

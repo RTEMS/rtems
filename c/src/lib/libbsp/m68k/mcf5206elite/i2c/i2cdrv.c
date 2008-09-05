@@ -65,7 +65,7 @@ static volatile int tqueue_head;
 static volatile int tqueue_tail;
 
 /* MBus I2C bus controller busy flag */
-static volatile rtems_boolean mbus_busy;
+static volatile bool mbus_busy;
 
 /* MBus I2C bus controller descriptor */
 static mcfmbus mbus;
@@ -91,7 +91,7 @@ i2cdrv_done(uint32_t         arg)
     qel->done(qel->done_arg);
     rtems_interrupt_disable(level);
     tqueue_tail = (tqueue_tail + 1) % tqueue_size;
-    mbus_busy = 0;
+    mbus_busy = false;
     rtems_interrupt_enable(level);
     i2cdrv_unload();
 }
@@ -109,7 +109,7 @@ i2cdrv_unload(void)
     rtems_interrupt_disable(level);
     if (!mbus_busy && (tqueue_head != tqueue_tail))
     {
-        mbus_busy = 1;
+        mbus_busy = true;
         rtems_interrupt_enable(level);
         qel = tqueue + tqueue_tail;
 
@@ -198,7 +198,7 @@ i2cdrv_initialize(rtems_device_major_number major,
 {
     int i;
     rtems_status_code sc;
-    mbus_busy = 0;
+    mbus_busy = false;
     tqueue_tail = tqueue_head = 0;
     tqueue_size = 32;
     tqueue = calloc(tqueue_size, sizeof(i2c_qel));

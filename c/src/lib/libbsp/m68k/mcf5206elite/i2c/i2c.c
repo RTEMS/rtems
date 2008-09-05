@@ -40,8 +40,8 @@ i2c_transfer_sema_done_func(uint32_t         arg)
 static void
 i2c_transfer_poll_done_func(uint32_t         arg)
 {
-    rtems_boolean *poll_done_flag = (rtems_boolean *)arg;
-    *poll_done_flag = 1;
+    bool *poll_done_flag = (bool *)arg;
+    *poll_done_flag = true;
 }
 
 /* i2c_transfer_wait_sema --
@@ -98,14 +98,14 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
 static rtems_status_code
 i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
 {
-    volatile rtems_boolean poll_done_flag;
+    volatile bool poll_done_flag;
     rtems_status_code sc;
-    poll_done_flag = 0;
+    poll_done_flag = false;
     sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_poll_done_func,
                       (uint32_t)&poll_done_flag);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;
-    while (poll_done_flag == 0)
+    while (poll_done_flag == false)
     {
         i2c_poll(bus);
     }

@@ -56,7 +56,7 @@
 console_data	Console_Port_Data[NUM_CONSOLE_PORTS];
 unsigned long	Console_Port_Count;
 rtems_device_minor_number  Console_Port_Minor;
-rtems_boolean Console_Is_Initialized = FALSE;		
+bool Console_Is_Initialized = false;		
 /* PAGE
  *
  *  console_open
@@ -219,7 +219,7 @@ rtems_device_driver console_initialize(
   if ( Console_Port_Tbl[Console_Port_Minor].pDeviceFns->deviceInitialize ) {
     Console_Port_Tbl[Console_Port_Minor]
       .pDeviceFns->deviceInitialize(Console_Port_Minor);
-    Console_Is_Initialized = TRUE;
+    Console_Is_Initialized = true;
   }
 
   for(minor++;minor<Console_Port_Count;minor++)
