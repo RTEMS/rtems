@@ -28,7 +28,7 @@
 #include <stdlib.h>
 
 int Ttimer_val;
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 extern void timerisr(void);
 extern int ClockIsOn(const rtems_raw_irq_connect_data*);
@@ -84,11 +84,11 @@ void Timer_exit(void)
 void benchmark_timer_initialize(void)
 {
 
-  static rtems_boolean First = TRUE;
+  static bool First = true;
 
   if (First)
   {
-    First = FALSE;
+    First = false;
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
     if (!i386_set_idt_entry (&timer_raw_irq_data)) {
@@ -124,7 +124,7 @@ int benchmark_timer_read(void)
 
   /* ??? Is "do not restore old vector" causing problems? */
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in one microsecond units */
 
   else {
@@ -135,7 +135,7 @@ int benchmark_timer_read(void)
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;
