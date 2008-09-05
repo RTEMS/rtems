@@ -24,10 +24,11 @@ rtems_task Delayed_events_task(
   rtems_task_argument argument
 )
 {
-  uint32_t    count;
-  uint32_t    previous_mode;
+  uint32_t          count;
+  uint32_t          previous_mode;
   rtems_status_code status;
   rtems_event_set   events;
+  rtems_id          self;
 
   status = rtems_task_mode(
     RTEMS_PREEMPT | RTEMS_TIMESLICE,
@@ -39,13 +40,15 @@ rtems_task Delayed_events_task(
   status = rtems_timer_create( Timer_name[ 1 ], &Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_create" );
 
+  self = rtems_task_self();
+
   while ( Stop_Test == false ) {
     for ( count=DELAYED_EVENT_DOT_COUNT; Stop_Test == false && count; count-- ){
       status = rtems_timer_fire_after(
         Timer_id[ 1 ],
         1,
         Delayed_send_event,
-        NULL
+        &self
       );
       directive_failed( status, "rtems_timer_reset" );
 

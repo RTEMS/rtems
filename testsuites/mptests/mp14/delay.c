@@ -20,14 +20,13 @@
 
 rtems_timer_service_routine Delayed_send_event(
   rtems_id  timer_id,
-  void     *ignored
+  void     *id_ptr
 )
 {
   rtems_status_code status;
+  rtems_id          id = *(rtems_id *)id_ptr;
 
-  status = rtems_event_send(
-    Task_id[ rtems_object_id_get_index( timer_id ) ],
-    RTEMS_EVENT_16
-  );
-  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "rtems_event_send" );
+  status = rtems_event_send( id, RTEMS_EVENT_16 );
+  fatal_directive_check_status_only(
+    status, RTEMS_SUCCESSFUL, "rtems_event_send" );
 }

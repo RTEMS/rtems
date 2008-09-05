@@ -19,7 +19,7 @@
 
 rtems_timer_service_routine Delayed_send_event(
   rtems_id  timer_id,
-  void     *ignored_address
+  void     *id_ptr
 );
 
 rtems_task Init(
@@ -78,8 +78,8 @@ void Exit_test( void );
 
 TEST_EXTERN rtems_id   Event_task_id[ 2 ];       /* event task ids */
 
-TEST_EXTERN rtems_id   Semaphore_task_id[ 2 ];   /* semaphore task ids */
-TEST_EXTERN rtems_name Semaphore_task_name[ 2 ]; /* semaphore task names */
+TEST_EXTERN rtems_id   Semaphore_task_id[ 3 ];   /* semaphore task ids */
+TEST_EXTERN rtems_name Semaphore_task_name[ 3 ]; /* semaphore task names */
 
 TEST_EXTERN rtems_id   Queue_task_id[ 3 ];       /* message queue task ids */
 TEST_EXTERN rtems_name Queue_task_name[ 3 ];     /* message queue task names */
