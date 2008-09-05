@@ -593,7 +593,7 @@ static void mpc83xx_tsec_receive_packets
 {
   PQBufferDescriptor_t *BD_ptr;
   struct mbuf *m,*n;
-  boolean finished = FALSE;
+  bool finished = false;
   uint16_t status;
   struct ether_header *eh;
   int bd_idx;
@@ -671,7 +671,7 @@ static void mpc83xx_tsec_refill_rxbds
 {
   PQBufferDescriptor_t *BD_ptr;
   struct mbuf *m,*n;
-  boolean finished = FALSE;
+  bool finished = false;
   int bd_idx;
 
   BD_ptr = sc->Rx_NxtFill_BD;
@@ -689,7 +689,7 @@ static void mpc83xx_tsec_refill_rxbds
       }
     }
     if (m == NULL) {
-      finished = TRUE;
+      finished = true;
     }
     else {
       bd_idx = BD_ptr - sc->Rx_Frst_BD;
@@ -735,7 +735,7 @@ static void mpc83xx_tsec_rxDaemon
 {
   struct mpc83xx_tsec_struct *sc = 
     (struct mpc83xx_tsec_struct *)arg;
-  int finished = FALSE;
+  bool finished = false;
   rtems_event_set events;
 #if !defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
@@ -1070,7 +1070,7 @@ static void mpc83xx_tsec_txDaemon
     (struct mpc83xx_tsec_struct *)arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
-  int finished = FALSE;
+  bool finished = false;
   rtems_event_set events;
 #if !defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
@@ -1376,14 +1376,14 @@ static void mpc83xx_tsec_install_irq_handlers
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
  struct mpc83xx_tsec_struct *sc,        /* ptr to control structure        */
- int install                            /* TRUE: install, FALSE: remove    */
+ bool   install                         /* true: install, false: remove    */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  int i;
+  size_t i;
 
   rtems_irq_connect_data irq_conn_data[3] = {
     {
@@ -1496,7 +1496,7 @@ static void mpc83xx_tsec_init
     /*
      * install interrupt handlers
      */
-    mpc83xx_tsec_install_irq_handlers(sc,1);
+    mpc83xx_tsec_install_irq_handlers(sc,true);
   }
   /*
    * Set flags appropriately
