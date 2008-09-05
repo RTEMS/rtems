@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Convert to "bool".
+
 2008-08-26	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 	
 	* include/hwreg_vals.h: added some settings for HSC_CM01
