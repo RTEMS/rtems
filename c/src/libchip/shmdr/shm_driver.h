@@ -404,8 +404,8 @@ typedef struct {
  *  poll_intr  - The operational mode of the driver.  Some
  *               target boards may not provide hardware for
  *               an interprocessor interrupt.  If POLLED_MODE
- *               is selected, the SHM driver will install a
- *               wrapper around the Clock_isr() to poll for
+ *               is selected, the SHM driver will use a
+ *               Classiv API Timer instance to poll for
  *               incoming packets.  Throughput is dependent
  *               on the time between clock interrupts.
  *               Valid values are POLLED_MODE and INTR_MODE.
@@ -482,8 +482,7 @@ void           Init_env_pool( void );
 void           Shm_Print_statistics( void );
 void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t);
 rtems_task     Shm_Cause_interrupt( uint32_t );
-void           Shm_Poll( void );
-void           Shm_setclockvec( void );
+void           Shm_install_timer( void );
 void           Shm_Convert_packet( rtems_packet_prefix * );
 
 /* CPU specific routines are inlined in shmcpu.h */

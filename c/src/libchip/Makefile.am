@@ -131,8 +131,7 @@ include_HEADERS = shmdr/shm_driver.h shmdr/mpci.h
 project_lib_PROGRAMS = shmdr.rel
 shmdr_rel_SOURCES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
     shmdr/fatal.c shmdr/getpkt.c shmdr/init.c shmdr/initlq.c shmdr/intr.c \
-    shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c \
-    shmdr/setckvec.c
+    shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c
 shmdr_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shmdr_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif

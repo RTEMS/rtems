@@ -126,7 +126,7 @@ rtems_mpci_entry Shm_Initialization( void )
   interrupt_value   = Shm_Convert( Shm_Configuration->Intr.value );
   interrupt_cause   = Shm_Convert( Shm_Configuration->Intr.length );
 
-  if ( Shm_Configuration->poll_intr == POLLED_MODE ) Shm_setclockvec();
+  if ( Shm_Configuration->poll_intr == POLLED_MODE ) Shm_install_timer();
   else                                               Shm_setvec();
 
   if ( Shm_Is_master_node() ) {

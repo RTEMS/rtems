@@ -1,3 +1,12 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/Makefile.am, libchip/shmdr/init.c, libchip/shmdr/mpisr.c,
+	libchip/shmdr/poll.c, libchip/shmdr/shm_driver.h: Update shared
+	memory driver to not use the clock ioctl to install a method to poll
+	for input. It now uses a Class API Timer which means we can eliminate
+	this special IOCTL from all clock drivers.
+	* libchip/shmdr/setckvec.c: Removed.
+
 2008-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libchip/network/sonic.c: Do not declare a variable just to hold an

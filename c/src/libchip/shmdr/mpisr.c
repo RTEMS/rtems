@@ -13,9 +13,7 @@
 #include <rtems.h>
 #include "shm_driver.h"
 
-rtems_isr Shm_isr(
-  rtems_vector_number vector
-)
+void Shm_isr(void)
 {
   Shm_Interrupt_count += 1;
   rtems_multiprocessing_announce();
