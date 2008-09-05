@@ -32,7 +32,7 @@
 
 bool benchmark_timer_find_average_overhead;
 
-bool benchmark_timer_is_initialized = FALSE;
+bool benchmark_timer_is_initialized = false;
 
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
 
@@ -42,12 +42,12 @@ void benchmark_timer_initialize(void)
    *  Timer runs long and accurate enough not to require an interrupt.
    */
   if (LEON3_Timer_Regs) {
-    if ( benchmark_timer_is_initialized == FALSE ) {
+    if ( benchmark_timer_is_initialized == false ) {
       /* approximately 1 us per countdown */
       LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].reload = 0xffffff;
       LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value = 0xffffff;
     } else {
-      benchmark_timer_is_initialized = TRUE;
+      benchmark_timer_is_initialized = true;
     }
     LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].conf = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
   }
@@ -66,7 +66,7 @@ int benchmark_timer_read(void)
     
     total = 0xffffff - total;
     
-    if ( benchmark_timer_find_average_overhead == 1 )
+    if ( benchmark_timer_find_average_overhead == true )
       return total;          /* in one microsecond units */
     
     if ( total < LEAST_VALID )

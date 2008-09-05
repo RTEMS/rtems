@@ -72,7 +72,7 @@ int console_inbyte_nonblocking( int port );
 #include <ringbuf.h>
  
 Ring_buffer_t  TX_Buffer[ 2 ];
-boolean        Is_TX_active[ 2 ];
+bool           Is_TX_active[ 2 ];
  
 void *console_termios_data[ 2 ];
 
@@ -110,7 +110,7 @@ rtems_isr console_isr_a(
       Ring_buffer_Remove_character( &TX_Buffer[ 0 ], ch );
       LEON_REG.UART_Channel_1 = (uint32_t) ch;
     } else
-     Is_TX_active[ 0 ] = FALSE;
+     Is_TX_active[ 0 ] = false;
   }
  
   LEON_Clear_interrupt( LEON_INTERRUPT_UART_1_RX_TX );
@@ -150,7 +150,7 @@ rtems_isr console_isr_b(
       Ring_buffer_Remove_character( &TX_Buffer[ 1 ], ch );
       LEON_REG.UART_Channel_2 = (uint32_t) ch;
     } else
-     Is_TX_active[ 1 ] = FALSE;
+     Is_TX_active[ 1 ] = false;
   }
 
   LEON_Clear_interrupt( LEON_INTERRUPT_UART_2_RX_TX );
@@ -233,8 +233,8 @@ void console_initialize_interrupts( void )
   Ring_buffer_Initialize( &TX_Buffer[ 0 ] );
   Ring_buffer_Initialize( &TX_Buffer[ 1 ] );
 
-  Is_TX_active[ 0 ] = FALSE;
-  Is_TX_active[ 1 ] = FALSE;
+  Is_TX_active[ 0 ] = false;
+  Is_TX_active[ 1 ] = false;
 
   atexit( console_exit );
 
@@ -271,8 +271,8 @@ void console_outbyte_interrupt(
    *  If this is the first character then we need to prime the pump
    */
 
-  if ( Is_TX_active[ port ] == FALSE ) {
-    Is_TX_active[ port ] = TRUE;
+  if ( Is_TX_active[ port ] == false ) {
+    Is_TX_active[ port ] = true;
     console_outbyte_polled( port, ch );
     return;
   }

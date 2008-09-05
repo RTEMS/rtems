@@ -24,7 +24,7 @@
 
 bool benchmark_timer_find_average_overhead;
 
-bool benchmark_timer_is_initialized = FALSE;
+bool benchmark_timer_is_initialized = false;
 
 void benchmark_timer_initialize(void)
 {
@@ -32,14 +32,14 @@ void benchmark_timer_initialize(void)
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
-  if ( benchmark_timer_is_initialized == FALSE ) {
+  if ( benchmark_timer_is_initialized == false ) {
 
     /* approximately 1 us per countdown */
     LEON_REG.Timer_Counter_2 = 0xffffff;
     LEON_REG.Timer_Reload_2 = 0xffffff;
 
   } else {
-    benchmark_timer_is_initialized = TRUE;
+    benchmark_timer_is_initialized = true;
   }
 
   LEON_REG.Timer_Control_2 = ( 
@@ -61,7 +61,7 @@ int benchmark_timer_read(void)
 
   total = 0xffffff - total;
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in one microsecond units */
 
   if ( total < LEAST_VALID )
