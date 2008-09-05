@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timerstub.c, tod.c: Convert to "bool".
+
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* tod.c: Remove extern. RTC_Present is not defined anywhere.
