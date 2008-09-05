@@ -1,3 +1,12 @@
+2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mpc5xx/clock/clock.c, mpc6xx/clock/c_clock.c, mpc8260/clock/clock.c,
+	mpc8xx/clock/clock.c, ppc403/clock/clock.c, ppc403/clock/clock_4xx.c:
+	The Shared Memory Driver no longer requires the special IOCTL in
+	Clock_control. This was a hack which has existed since before the
+	Classic API Timer Manager was implemented. All implementations of and
+	references to Clock_control were removed.
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mpc6xx/clock/c_clock.c: CLOCK_DRIVER_USE_FAST_IDLE must be checked to
