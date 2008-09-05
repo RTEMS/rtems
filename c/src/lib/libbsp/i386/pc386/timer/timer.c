@@ -231,11 +231,11 @@ i386_timer_exit(void)
 void
 i386_timer_initialize(void)
 {
-  static rtems_boolean First = TRUE;
+  static bool First = true;
 
   if (First)
   {
-    First = FALSE;
+    First = false;
 
     atexit(Timer_exit); /* Try not to hose the system at exit. */
     if (!i386_set_idt_entry (&timer_raw_irq_data)) {
@@ -329,7 +329,7 @@ Timer_exit(void)
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
-benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 } /* benchmark_timer_disable_subtracting_average_overhead */

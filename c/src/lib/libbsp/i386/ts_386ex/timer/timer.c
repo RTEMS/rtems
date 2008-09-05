@@ -28,7 +28,7 @@
 #include <stdlib.h>
 
 volatile uint32_t          Ttimer_val;  /* Updated from ISR!!! */
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 extern void timerisr(void);
 
@@ -99,11 +99,11 @@ void Timer_exit(void)
 void benchmark_timer_initialize(void)
 {
 
-  static rtems_boolean First = TRUE;
+  static bool First = true;
 
   if (First)
   {
-    First = FALSE;
+    First = false;
 
     if (!i386_get_current_idt_entry (&old_raw_irq_data)) {
       printk("benchmark_timer_initialize: failed to get old raw irq entry.\n");
@@ -155,7 +155,7 @@ int benchmark_timer_read(void)
   clicks = (msb << 8) | lsb;
   total = Ttimer_val * US_PER_ISR + (US_PER_ISR - clicks);
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in one microsecond units */
   else if ( total < LEAST_VALID )
     return 0;            /* below timer resolution */
@@ -164,7 +164,7 @@ int benchmark_timer_read(void)
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;
