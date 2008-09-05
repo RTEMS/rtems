@@ -51,7 +51,7 @@
 #include <mpc8260.h>
 
 static volatile uint32_t   Timer_starting;
-static rtems_boolean benchmark_timer_find_average_overhead;
+static bool benchmark_timer_find_average_overhead;
 
 /*
  *  This is so small that this code will be reproduced where needed.
@@ -100,7 +100,7 @@ int benchmark_timer_read(void)
   }
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

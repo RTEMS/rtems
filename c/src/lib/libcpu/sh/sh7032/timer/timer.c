@@ -68,7 +68,7 @@ extern rtems_isr timerisr(void);
 
 static uint32_t   Timer_interrupts;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 static uint32_t   Timer_HZ ;
 
@@ -181,9 +181,7 @@ int benchmark_timer_read( void )
   }
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

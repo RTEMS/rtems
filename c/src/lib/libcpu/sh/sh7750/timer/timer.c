@@ -49,7 +49,7 @@ static uint32_t   microseconds_divider;
 /* Interrupt period in microseconds */
 static uint32_t   microseconds_per_int;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 /* benchmark_timer_initialize --
  *     Initialize Timer 1 to operate as a RTEMS benchmark timer:
@@ -246,13 +246,13 @@ benchmark_timer_read(void)
  *     timer.
  *
  * PARAMETERS:
- *     find_flag - boolean flag, TRUE if overhead must not be subtracted.
+ *     find_flag - boolean flag, true if overhead must not be subtracted.
  *
  * RETURNS:
  *     none
  */
 void
-benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
     benchmark_timer_find_average_overhead = find_flag;
 }

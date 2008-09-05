@@ -16,7 +16,7 @@
 
 #include <rtems.h>
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 static unsigned int volatile lastInitValue;
 
@@ -47,9 +47,7 @@ int benchmark_timer_read( void )
   return value - lastInitValue;
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

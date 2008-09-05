@@ -45,7 +45,7 @@ extern uint32_t bsp_timer_least_valid;
 extern uint32_t bsp_timer_average_overhead;
 
 static volatile uint32_t	startedAt;
-static rtems_boolean		subtractOverhead;
+static bool                     subtractOverhead;
 
 void benchmark_timer_initialize(void)
 {
@@ -67,7 +67,7 @@ int benchmark_timer_read(void)
 		return (total - bsp_timer_average_overhead);
 }
 
-void benchmark_timer_disable_subtracting_average_overhead( rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
 	subtractOverhead = find_flag;
 }
