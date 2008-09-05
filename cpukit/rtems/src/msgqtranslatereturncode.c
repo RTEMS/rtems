@@ -65,7 +65,7 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
    *  from the external status codes.
    */
   #if defined(RTEMS_MULTIPROCESSING)
-    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+    if ( _Thread_Is_proxy_blocking(status) )
       return RTEMS_PROXY_BLOCKING;
   #endif
 

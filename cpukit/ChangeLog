@@ -1,5 +1,12 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/src/msgmp.c, rtems/src/msgqtranslatereturncode.c,
+	rtems/src/semmp.c, rtems/src/semtranslatereturncode.c: Correct
+	confusion over SuperCore proxy blocking status and Classic API proxy
+	blocking status constants.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/objectgetinfo.c: Correct for multiprocessor systems when
 	all object instances within a particular class are remote.
 

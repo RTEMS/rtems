@@ -83,7 +83,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
    *  If this thread is blocking waiting for a result on a remote operation.
    */
   #if defined(RTEMS_MULTIPROCESSING)
-    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+    if ( _Thread_Is_proxy_blocking(status) )
       return RTEMS_PROXY_BLOCKING;
   #endif
 
@@ -122,7 +122,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
 )
 {
   #if defined(RTEMS_MULTIPROCESSING)
-    if ( status == THREAD_STATUS_PROXY_BLOCKING )
+    if ( _Thread_Is_proxy_blocking(status) )
       return RTEMS_PROXY_BLOCKING;
   #endif
   /*

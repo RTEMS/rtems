@@ -227,7 +227,7 @@ void _Semaphore_MP_Process_packet (
         the_packet->Prefix.timeout
       );
 
-      if ( ! _Thread_Is_proxy_blocking( the_packet->Prefix.return_code ) )
+      if ( the_packet->Prefix.return_code != RTEMS_PROXY_BLOCKING )
         _Semaphore_MP_Send_response_packet(
            SEMAPHORE_MP_OBTAIN_RESPONSE,
            the_packet->Prefix.id,

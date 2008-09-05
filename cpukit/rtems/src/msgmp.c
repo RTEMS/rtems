@@ -309,7 +309,7 @@ void _Message_queue_MP_Process_packet (
         the_packet->Prefix.timeout
       );
 
-      if (! _Thread_Is_proxy_blocking( the_packet->Prefix.return_code ) )
+      if ( the_packet->Prefix.return_code != RTEMS_PROXY_BLOCKING )
         _Message_queue_MP_Send_response_packet(
           MESSAGE_QUEUE_MP_RECEIVE_RESPONSE,
           the_packet->Prefix.id,
