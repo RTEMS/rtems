@@ -113,7 +113,6 @@ isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
 
-extern char _IBMPC_inch(void);
 extern int  rtems_kbpoll( void );
 
 static int
