@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* timer/timer.c: Convert to "bool".
+
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/rtc.c, network/ne2000.c: Eliminate rtems_boolean.
