@@ -240,24 +240,3 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 
 	return RTEMS_SUCCESSFUL;
 }
-
-rtems_device_driver Clock_control( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
-{
-	rtems_libio_ioctl_args_t *io = arg;
-
-	if (io == NULL) {
-		return RTEMS_SUCCESSFUL;
-	}
-
-	if (io->command == rtems_build_name( 'I', 'S', 'R', ' ')) {
-		ppc_clock_tick();
-	} else if (io->command == rtems_build_name( 'N', 'E', 'W', ' ')) {
-		if (io->buffer != NULL) {
-			ppc_clock_tick = io->buffer;
-		} else {
-			ppc_clock_tick = ppc_clock_no_tick;
-		}
-	}
-
-	return RTEMS_SUCCESSFUL;
-}
