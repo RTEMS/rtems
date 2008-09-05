@@ -118,6 +118,8 @@ int getint( void );
    (STACK_MINIMUM_SIZE + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK + \
     sizeof(Thread_Control) + \
     MPCI_RECEIVE_SERVER_FP)
+
+extern CORE_semaphore_Control _MPCI_Semaphore;
 #else
 #define MP_SYSTEM_TASKS 0
 #endif
