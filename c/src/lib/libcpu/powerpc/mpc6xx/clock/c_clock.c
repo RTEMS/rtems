@@ -97,7 +97,7 @@ rtems_interrupt_level l;
 static void clockHandler(void)
 {
 
-  #if defined(CLOCK_DRIVER_USE_FAST_IDLE)
+  #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
     do {
       rtems_clock_tick();
     } while ( _Thread_Executing == _Thread_Idle &&

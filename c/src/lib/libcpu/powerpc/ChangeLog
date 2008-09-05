@@ -1,3 +1,8 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc6xx/clock/c_clock.c: CLOCK_DRIVER_USE_FAST_IDLE must be checked to
+	be equal to 1 -- not just defined.
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc83xx/network/tsec.c, new-exceptions/raw_exception.c:
