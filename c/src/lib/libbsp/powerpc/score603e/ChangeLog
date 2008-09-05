@@ -1,3 +1,8 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/85c30.c, console/console.c, irq/FPGA.c, timer/timer.c,
+	tod/tod.c: Convert to "bool".
+
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, README, configure.ac, console/85c30.c,
