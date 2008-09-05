@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/config.c: Convert to "bool".
+
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac, console/alloc360.c, console/console.c,
