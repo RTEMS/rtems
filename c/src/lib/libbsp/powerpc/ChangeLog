@@ -1,3 +1,7 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/console/inch.c: Convert to "bool".
+
 2008-08-28	Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/vme/vme_universe.c: added implementation for
