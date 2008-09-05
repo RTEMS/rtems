@@ -23,10 +23,10 @@ size_t RTC_Count = 1;
  * probe for a rtc. we always claim to have one.
  */
 
-boolean
+bool
 nds_rtc_probe (int minor)
 {
-  return TRUE;
+  return true;
 }
 
 /*

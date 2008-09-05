@@ -19,10 +19,10 @@
 
 #include <disc.h>
 
-boolean
+bool
 nds_flash_probe (int minor)
 {
-  return TRUE;
+  return true;
 }
 
 void
