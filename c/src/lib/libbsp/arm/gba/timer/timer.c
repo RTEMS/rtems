@@ -110,7 +110,7 @@ uint32_t benchmark_timer_read( void )
   }
   /* convert to uS */
   total = ((ticks * __TickTime_ns) / 1000);
-  if ( benchmark_timer_find_average_overhead == 1 ) {
+  if ( benchmark_timer_find_average_overhead == true ) {
       return total;          /* in microseconds */
   }
   else {
@@ -126,7 +126,7 @@ uint32_t benchmark_timer_read( void )
  *
  *  Used in Timing Test Suite.
  *
- *  @param  find_flag boolean find_flag
+ *  @param  find_flag bool find_flag
  *  @return None
 */
 void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
