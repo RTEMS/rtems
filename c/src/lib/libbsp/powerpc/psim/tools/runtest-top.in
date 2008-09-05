@@ -17,7 +17,9 @@
 
 # progname=`basename $0`
 progname=${0##*/}        # fast basename hack for ksh, bash
-RUN=@target_alias@-run 
+if [ X${RUN} = X ] ; then
+  RUN=@target_alias@-run
+fi
 
 USAGE=\
 "usage: $progname [ -opts ] test [ test ... ]

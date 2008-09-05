@@ -1,3 +1,8 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psim-shared, psim-top.in, runtest-bottom, runtest-top.in: Now running
+	mptests.
+
 2008-09-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Rework psim scripts to share code for

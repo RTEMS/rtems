@@ -13,7 +13,9 @@
 #
 
 TREE_FILE=psim_tree.${LOGNAME}
-RUN=@target_alias@-run
+if [ X${RUN} = X ] ; then
+  RUN=@target_alias@-run
+fi
 
 
 progname=${0##*/}        # fast basename hack for ksh, bash

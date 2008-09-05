@@ -62,12 +62,18 @@ do
 
        # XXX -c ${instruction_limit} 
 
-       runone ${tname}-node1${variant}.${ext} ${max_run_time} | \
+       gen_device_tree ${tname}-node1${variant}${ext}  >${TREE_FILE}_1
+       gen_device_tree ${tname}-node2${variant}${ext}  >${TREE_FILE}_2
+
+       runone ${tname}-node1${variant}${ext} \
+        ${max_run_time} ${TREE_FILE}_1 | \
          sed -e 's/^M//' -e '/^$/d' > ${logfile1} &
-       runone ${tname}-node2${variant}.${ext} ${max_run_time} | \
+       runone ${tname}-node2${variant}${ext} \
+         ${max_run_time} ${TREE_FILE}_2 | \
          sed -e 's/^M//' -e '/^$/d' > ${logfile2} &
        wait
 
+       #rm -f ${TREE_FILE}_1 ${TREE_FILE}_2
    fi
 
    if [ $TEST_TYPE = "single" ]
@@ -82,8 +88,11 @@ do
 
      # Spin off the simulator in the background
      #   -c could be used to set an instruction limit
+     gen_device_tree ${tfile}  >${TREE_FILE}
      runone ${tfile} ${max_run_time} | \
        sed -e 's/^M//' -e '/^$/d' > ${logfile}
+
+     rm -f ${TREE_FILE}
    fi
 
    # Create the info files

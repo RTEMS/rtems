@@ -51,7 +51,7 @@ EOF
     echo "/sem@0x0c100010/reg 0x0c100010 12"
     echo "/sem@0x0c100010/key ${RTEMS_SHM_SEMAPHORE_KEY}"
     echo "/sem@0x0c100010/value ${value}"
-    $@
+    echo
     echo "##### System V IPC (Shared Memory) 0x0c110000 for 128K"
     echo "/shm@0x0c110000/reg 0x0c110000 0x20000"
     echo "/shm@0x0c110000/key ${RTEMS_SHM_KEY}"
@@ -64,12 +64,17 @@ runone()
 {
   testname=${1}
   max_run_time=${2}
+  if [ $# -eq 3 ] ; then
+    treefile=${3}
+  else
+    treefile=${TREE_FILE}
+  fi
   if [ ${max_run_time} -eq 0 ] ; then
     #echo run ${testname} forever
-    ${RUN} -f ${TREE_FILE} ${RUN_DEBUG} ${testname}
+    ${RUN} -f ${treefile} ${RUN_DEBUG} ${testname}
   else
     #echo run ${testname} for maximum ${max_run_time} seconds
-    ${RUN} -f ${TREE_FILE} ${RUN_DEBUG} ${testname} &
+    ${RUN} -f ${treefile} ${RUN_DEBUG} ${testname} &
     pid=$!
 
     # Make sure it won't run forever...
