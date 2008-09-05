@@ -104,29 +104,7 @@ rtems_isr Clock_isr( rtems_vector_number vector )
 
 @section IO Control
 
-The clock driver must supply a handler for the IO control device driver
-entry point.  This functionality is used by other components -- notably
-the Shared Memory Driver to install a wrapper for the clock interrupt
-service routine.  The following shows the functionality required:
-
-@example
-@group
-rtems_device_driver Clock_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-@{
-  error check the argument pointer parameter
-
-  if the command is "ISR"
-    invoke the clock interrupt service routine
-  else if the command is "NEW"
-    install the requested handler
-@}
-@end group
-@end example
-
-
-
+Prior to RTEMS 4.9, the Shared Memory MPCI Driver required a special
+IOCTL in the Clock Driver.  This is no longer required and the Clock
+Driver does not have to provide an IOCTL method at all.
 
