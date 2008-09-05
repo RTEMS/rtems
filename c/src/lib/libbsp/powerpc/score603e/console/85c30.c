@@ -396,7 +396,7 @@ rtems_isr ISR_85c30_Async(
   uint16_t                   status;
   volatile Console_Protocol *Protocol;
   unsigned char              data;
-  bool                       did_something = FALSE;
+  bool                       did_something = false;
 
   Protocol = Port->Protocol;
 
@@ -412,7 +412,7 @@ rtems_isr ISR_85c30_Async(
 
     rtems_termios_enqueue_raw_characters( Port->Protocol->console_termios_data,
        &data, 1 );
-    did_something = TRUE;
+    did_something = true;
   }
 
   /*
@@ -425,11 +425,11 @@ rtems_isr ISR_85c30_Async(
       Write_85c30_register( Port->ctrl, DATA_REGISTER, data );
 
     } else {
-      Protocol->Is_TX_active = FALSE;
+      Protocol->Is_TX_active = false;
       Write_85c30_register( Port->ctrl, STATUS_REGISTER, 0x28 );
     }
 
-    did_something = TRUE;
+    did_something = true;
   }
 
   /*

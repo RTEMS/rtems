@@ -27,7 +27,7 @@
 uint32_t g_start;
 uint32_t g_freq;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
     
 /*
@@ -101,9 +101,7 @@ int benchmark_timer_read( void )
     return (total - AVG_OVERHEAD);
 }
 
-void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
-)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
     benchmark_timer_find_average_overhead = find_flag;
 }

@@ -37,9 +37,9 @@ static struct {
   bfin_twi_request_t volatile *req;
   uint8_t volatile *dataPtr;
   int volatile count;
-  boolean volatile masterActive;
+  bool volatile masterActive;
   rtems_status_code volatile masterResult;
-  boolean volatile slaveActive;
+  bool volatile slaveActive;
 } twi[N_BFIN_TWI];
 
 
@@ -144,7 +144,7 @@ void bfin_twi_isr(int source) {
       if (stat) {
         BFIN_REG16(base, TWI_INT_STAT_OFFSET) = stat;
         if ((stat & TWI_INT_STAT_SINIT) && !twi[i].slaveActive) {
-          twi[i].slaveActive = TRUE;
+          twi[i].slaveActive = true;
           r = BFIN_REG16(base, TWI_FIFO_CTL_OFFSET);
           BFIN_REG16(base, TWI_FIFO_CTL_OFFSET) = r | TWI_FIFO_CTL_XMTFLUSH;
           BFIN_REG16(base, TWI_FIFO_CTL_OFFSET) = r;
@@ -159,7 +159,7 @@ void bfin_twi_isr(int source) {
 
             r = BFIN_REG16(base, TWI_SLAVE_CTL_OFFSET);
             BFIN_REG16(base, TWI_SLAVE_CTL_OFFSET) = r & ~TWI_SLAVE_CTL_STDVAL;
-            twi[i].slaveActive = FALSE;
+            twi[i].slaveActive = false;
 
 
           }
@@ -230,10 +230,10 @@ rtems_status_code bfin_twi_request(int channel, uint8_t address,
           twi[channel].count--;
         }
       }
-      twi[channel].masterActive = TRUE;
+      twi[channel].masterActive = true;
       BFIN_REG16(base, TWI_MASTER_CTL_OFFSET) = masterMode;
     } else {
-      twi[channel].masterActive = FALSE;
+      twi[channel].masterActive = false;
       twi[channel].masterResult = -1; /* BISON (code should be equiv to lost arbitration) */
     }
     rtems_interrupt_enable(level);

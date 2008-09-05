@@ -125,20 +125,20 @@ bool Is_PMC_IRQ(
   uint16_t           status_word
 )
 {
-  bool   result = FALSE;
+  bool result = false;
 
   switch(pmc_irq) {
     case SCORE603E_85C30_4_IRQ:
-      result = Is_PMC_85C30_4_IRQ( status_word );
+      result = Is_PMC_85C30_4_IRQ( status_word ) ? true : false;
       break;
     case SCORE603E_85C30_2_IRQ:
-      result = Is_PMC_85C30_2_IRQ( status_word );
+      result = Is_PMC_85C30_2_IRQ( status_word ) ? true : false;
       break;
     case SCORE603E_85C30_5_IRQ:
-      result = Is_PMC_85C30_5_IRQ( status_word );
+      result = Is_PMC_85C30_5_IRQ( status_word ) ? true : false;
       break;
     case SCORE603E_85C30_3_IRQ:
-      result = Is_PMC_85C30_3_IRQ( status_word );
+      result = Is_PMC_85C30_3_IRQ( status_word ) ? true : false;
       break;
     default:
       assert( 0 );

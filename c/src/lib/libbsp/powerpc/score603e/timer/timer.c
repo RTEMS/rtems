@@ -61,7 +61,7 @@ int benchmark_timer_read()
 
   total = (uint32_t) total64;
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in "clicks" of the decrementer units */
 
   if ( total < BSP_TIMER_LEAST_VALID )

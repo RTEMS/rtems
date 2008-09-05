@@ -140,7 +140,7 @@ typedef struct {
 typedef struct {
   dmaDescT data;
   dmaDescT status;
-  boolean inUse;
+  bool     inUse;
   union {
     uint32_t dummy; /* try to force 32 bit alignment */
     struct {
@@ -285,19 +285,19 @@ void bfin_ethernet_mac_isr(int vector) {
   }
 }
 
-static boolean txFree(struct bfin_ethernetSoftc *sc, int index) {
-  boolean freed;
+static bool txFree(struct bfin_ethernetSoftc *sc, int index) {
+  bool       freed;
   txStatusT *status;
 
-  freed = FALSE;
+  freed = false;
   if (sc->tx[index].inUse) {
     status = (txStatusT *) sc->tx[index].status.addr;
     rtems_cache_invalidate_multiple_data_lines(status, sizeof(*status));
     if (status->status != 0) {
       /* update statistics */
 
-      sc->tx[index].inUse = FALSE;
-      freed = TRUE;
+      sc->tx[index].inUse = false;
+      freed = true;
     }
   }
 
@@ -363,7 +363,7 @@ static void txDaemon(void *arg) {
           /* setup tx dma */
           status = (txStatusT *) sc->tx[head].status.addr;
           status->status = 0;
-          sc->tx[head].inUse = TRUE;
+          sc->tx[head].inUse = true;
           rtems_cache_flush_multiple_data_lines(status, sizeof(*status));
 
           /* configure dma to stop after sending this packet */
@@ -691,7 +691,7 @@ static void initializeHardware(struct bfin_ethernetSoftc *sc) {
       sc->tx[i].status.next = &(sc->tx[i + 1].data);
     else
       sc->tx[i].status.next = &(sc->tx[0].data);
-    sc->tx[i].inUse = FALSE;
+    sc->tx[i].inUse = false;
     ptr += txStatusSize;
   }
   rtems_cache_flush_multiple_data_lines(sc->tx, sc->txDescCount *

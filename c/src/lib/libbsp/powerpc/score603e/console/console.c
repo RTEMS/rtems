@@ -174,7 +174,7 @@ void console_initialize_interrupts( void )
      */
     buffer = &protocol->TX_Buffer;
     Ring_buffer_Initialize( buffer );
-    protocol->Is_TX_active = FALSE;
+    protocol->Is_TX_active = false;
   }
 
   /*
@@ -418,10 +418,10 @@ void console_outbyte_interrupts(
    *  If this is the first character then we need to prime the pump
    */
 
-  if ( protocol->Is_TX_active == FALSE ) {
+  if ( protocol->Is_TX_active == false ) {
 
     rtems_interrupt_disable( isrlevel );
-    protocol->Is_TX_active = TRUE;
+    protocol->Is_TX_active = true;
     outbyte_polled_85c30( Port->ctrl, ch );
     rtems_interrupt_enable( isrlevel );
 

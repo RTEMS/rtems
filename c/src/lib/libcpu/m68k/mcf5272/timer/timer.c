@@ -30,7 +30,7 @@
 
 uint32_t Timer_interrupts;
 
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 /* External assembler interrupt handler routine */
 extern rtems_isr timerisr(rtems_vector_number vector);
@@ -147,13 +147,13 @@ benchmark_timer_read( void )
  *     timer.
  *
  * PARAMETERS:
- *     find_flag - boolean flag, TRUE if overhead must not be subtracted.
+ *     find_flag - bool flag, true if overhead must not be subtracted.
  *
  * RETURNS:
  *     none
  */
 void
-benchmark_timer_disable_subtracting_average_overhead(rtems_boolean find_flag)
+benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 {
   benchmark_timer_find_average_overhead = find_flag;
 }

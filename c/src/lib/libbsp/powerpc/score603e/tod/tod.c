@@ -107,12 +107,12 @@ void ICM7170_GetTOD(
 {
   int year;
   int usec;
-  static bool init = TRUE;
+  static bool init = true;
 
   /* Initialize the clock at once prior to reading */
   if (init ) {
     ICM7170_SetField( imc1770_regs,  0x11, (0x0c | icm1770_freq) );
-    init = FALSE;
+    init = false;
   }
 
   /* Latch times */
