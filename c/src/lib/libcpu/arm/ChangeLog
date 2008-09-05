@@ -1,3 +1,9 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* at91rm9200/timer/timer.c, lpc22xx/timer/timer.c, 
+	mc9328mxl/timer/timer.c, s3c2400/timer/timer.c, 
+	s3c24xx/timer/timer.c: Convert to "bool".
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* at91rm9200/timer/timer.c, lpc22xx/timer/timer.c,
