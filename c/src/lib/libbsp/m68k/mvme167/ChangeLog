@@ -1,3 +1,10 @@
+2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/ckinit.c: The Shared Memory Driver no longer requires the
+	special IOCTL in Clock_control. This was a hack which has existed
+	since before the Classic API Timer Manager was implemented. All
+	implementations of and references to Clock_control were removed.
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c, fatal/bspfatal.c, include/fatal.h,

@@ -147,35 +147,3 @@ Clock_initialize(
 
 	return RTEMS_SUCCESSFUL;
 }
-
-/******************************************************
-  Name: Clock_control
-  Input parameters: major & minor number
-  Output parameters:
-  Description:
- *****************************************************/
-rtems_device_driver Clock_control(
-	rtems_device_major_number major,
-	rtems_device_minor_number minor,
-	void *pargp
-)
-{
-	uint32_t         isrlevel;
-	rtems_libio_ioctl_args_t *args = pargp;
-
-	if (args) {
-		/*
-		 * This is hokey, but until we get a defined interface
-		 * to do this, it will just be this simple...
-		 */
-		if (args->command == rtems_build_name('I', 'S', 'R', ' ')) {
-			Clock_isr( CLOCK_VECTOR);
-		}
-		else if (args->command == rtems_build_name('N', 'E', 'W', ' ')) {
-			rtems_interrupt_disable( isrlevel );
-			 (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
-			rtems_interrupt_enable( isrlevel );
-		}
-	}
-	return RTEMS_SUCCESSFUL;
-}

@@ -1,6 +1,6 @@
 /*  ckinit.c
  *
- *  Implementation of the Clock_control() and Clock_initialize() functions
+ *  Implementation of the Clock_initialize() functions
  *  prototyped in rtems/c/src/lib/include/clockdrv.h.
  *
  *  This port does not allow the application to select which timer on the
@@ -220,48 +220,4 @@ rtems_device_driver Clock_initialize(
   rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
-}
-
-/*
- *  Clock_control().
- *  Prototyped in rtems/c/src/lib/include/clockdrv.h
- *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
-rtems_device_driver Clock_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp)
-{
-    uint32_t         isrlevel;
-    rtems_libio_ioctl_args_t *args = pargp;
-
-    if ( args == 0 )
-        goto done;
-
-    /*
-     * This is hokey, but until we get a defined interface
-     * to do this, it will just be this simple...
-     */
-    if ( args->command == rtems_build_name('I', 'S', 'R', ' ') )
-    {
-      VMEchip2_T2_isr( CLOCK_VECTOR );
-    }
-    else if ( args->command == rtems_build_name('N', 'E', 'W', ' ') )
-    {
-      rtems_interrupt_disable( isrlevel );
-      set_vector( args->buffer, CLOCK_VECTOR, 1 );
-      rtems_interrupt_enable( isrlevel );
-    }
-
-done:
-    return RTEMS_SUCCESSFUL;
 }

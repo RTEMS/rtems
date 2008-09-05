@@ -147,42 +147,6 @@ rtems_device_driver Clock_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_device_driver Clock_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
-    rtems_libio_ioctl_args_t *args = pargp;
-
-    if (args == 0)
-        goto done;
-
-    /*
-     * This is hokey, but until we get a defined interface
-     * to do this, it will just be this simple...
-     */
-
-    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
-    {
-        Clock_isr();
-    }
-    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
-    {
-      if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
-	printk("Error installing clock interrupt handler!\n");
-	rtems_fatal_error_occurred(1);
-      }
-#ifdef BSP_DEBUG
-      else
-	printk("Clock installed AGAIN\n");
-#endif
-    }
-
-done:
-    return RTEMS_SUCCESSFUL;
-}
-
 void Clock_exit()
 {
   ClockOff(&clockIrqData);
