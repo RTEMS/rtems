@@ -1,5 +1,7 @@
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* mpc83xx/network/tsec.c, new-exceptions/raw_exception.c:
+	Convert to "bool".
 	* mpc505/timer/timer.c, mpc5xx/timer/timer.c, mpc6xx/timer/timer.c,
 	mpc8260/timer/timer.c, mpc8xx/timer/timer.c, ppc403/timer/timer.c:
 	Convert to "bool".
