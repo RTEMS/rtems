@@ -18,9 +18,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 
 void _Thread_blocking_operation_Cancel(
   Thread_blocking_operation_States  sync_state,

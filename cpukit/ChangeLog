@@ -1,5 +1,19 @@
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/corebarrier.c, score/src/corebarrierrelease.c,
+	score/src/corebarrierwait.c, score/src/coremsg.c,
+	score/src/coremsgbroadcast.c, score/src/coremsgclose.c,
+	score/src/coremsgflush.c, score/src/coremsgflushsupp.c,
+	score/src/coremsgflushwait.c, score/src/coremsginsert.c,
+	score/src/coremsgseize.c, score/src/coremsgsubmit.c,
+	score/src/corerwlock.c, score/src/coresem.c,
+	score/src/coresemflush.c, score/src/coresemseize.c,
+	score/src/coresemsurrender.c, score/src/corespinlock.c,
+	score/src/threadblockingoperationcancel.c,
+	score/src/threadqenqueue.c: Remove unnecessary include of mpci.h.
+
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/msgmp.c, rtems/src/msgqtranslatereturncode.c,
 	rtems/src/semmp.c, rtems/src/semtranslatereturncode.c: Correct
 	confusion over SuperCore proxy blocking status and Classic API proxy
