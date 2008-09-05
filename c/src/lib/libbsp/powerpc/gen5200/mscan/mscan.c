@@ -495,7 +495,7 @@ void mpc5200_mscan_perform_initialization_mode_settings(mscan *m)
   mscan_context context;
 
   /* perform all can bit time settings */
-  mscan_set_bit_rate(m, CAN_BIT_RATE);
+  (void) mscan_set_bit_rate(m, MSCAN_BIT_RATE_DEFAULT);
 
   /* Enter initialization mode */
   mscan_initialization_mode_enter( m, &context);
@@ -1185,25 +1185,16 @@ rtems_device_driver mscan_control(rtems_device_major_number major,
 
       /* set can bitrate */
     case MSCAN_SET_BAUDRATE:
-
-      /* check bitrate settings */
-      if (((ctrl_parms->ctrl_can_bitrate) >= CAN_BIT_RATE_MIN)
-          && ((ctrl_parms->ctrl_can_bitrate) <= CAN_BIT_RATE_MAX)) {
-
-        /* perform all can bit time settings */
-        mscan_set_bit_rate(m, ctrl_parms->ctrl_can_bitrate);
-
-        /* enable ints. */
-        mscan_interrupts_enable(m);
-
-        /* wait for bus sync. */
-        mpc5200_mscan_wait_sync(m);
-
-        return RTEMS_SUCCESSFUL;
-      } else {
-
+      /* perform all can bit time settings */
+      if (!mscan_set_bit_rate(m, ctrl_parms->ctrl_can_bitrate)) {
         return RTEMS_UNSATISFIED;
       }
+
+      /* enable ints. */
+      mscan_interrupts_enable(m);
+
+      /* wait for bus sync. */
+      mpc5200_mscan_wait_sync(m);
 
       break;
 

@@ -31,7 +31,11 @@
  * @{
  */
 
-#define MSCAN_BIT_RATE_DEFAULT 100000
+#define MSCAN_BIT_RATE_MIN 10000
+
+#define MSCAN_BIT_RATE_MAX 1000000
+
+#define MSCAN_BIT_RATE_DEFAULT 125000
 
 #define MSCAN_FILTER_NUMBER_MIN 0
 
@@ -231,13 +235,13 @@ typedef struct {
   uint8_t tier;
 } mscan_context;
 
-void mscan_enable( mscan *m, unsigned bit_rate);
+bool mscan_enable( mscan *m, unsigned bit_rate);
 
 void mscan_disable( mscan *m);
 
 void mscan_interrupts_disable( mscan *m);
 
-void mscan_set_bit_rate( mscan *m, unsigned bit_rate);
+bool mscan_set_bit_rate( mscan *m, unsigned bit_rate);
 
 void mscan_initialization_mode_enter( mscan *m, mscan_context *context);
 

@@ -139,20 +139,32 @@ static uint8_t prescaler_calculation(
  * @brief Sets the bit rate for the MSCAN module @a m to @a can_bit_rate
  * in [bits/s].
  */
-void mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
+bool mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
 {
   mscan_context context;
-  uint32_t prescale_val = 0;
+  unsigned prescale_val = 0;
   uint8_t tq_no,
     tseg_1,
     tseg_2,
     sseg;
+
+  if (can_bit_rate < MSCAN_BIT_RATE_MIN || can_bit_rate > MSCAN_BIT_RATE_MAX) {
+    return false;
+  }
 
   /* Enter initialization mode */
   mscan_initialization_mode_enter( m, &context);
 
   /* get optimized prescaler value */
   prescale_val = prescaler_calculation(can_bit_rate, IPB_CLOCK, &tq_no);
+
+  /* Check prescaler value */
+  if (prescale_val > 64) {
+    /* Leave initialization mode */
+    mscan_initialization_mode_leave( m, &context);
+    
+    return false;
+  }
 
   /* get time segment length from time segment table */
   tseg_1 = can_time_segment_table[tq_no - MIN_NO_OF_TQ][TSEG_1];
@@ -185,6 +197,8 @@ void mscan_set_bit_rate( mscan *m, unsigned can_bit_rate)
 
   /* Leave initialization mode */
   mscan_initialization_mode_leave( m, &context);
+
+  return true;
 }
 
 /**
@@ -280,8 +294,10 @@ void mscan_sleep_mode_leave( mscan *m)
  *
  * The module is set to listen only mode.
  */
-void mscan_enable( mscan *m, unsigned bit_rate)
+bool mscan_enable( mscan *m, unsigned bit_rate)
 {
+  bool s = true;
+
   /* Disable the module */
   mscan_disable( m);
 
@@ -295,13 +311,15 @@ void mscan_enable( mscan *m, unsigned bit_rate)
   mscan_filter_clear( m);
 
   /* Set bit rate and leave initialization mode */
-  mscan_set_bit_rate( m, bit_rate);
+  s = mscan_set_bit_rate( m, bit_rate);
 
   /* Clear all flags */
   m->ctl0 = CTL0_RXFRM;
 
   /* Disable interrupts */
   mscan_interrupts_disable( m);
+
+  return s;
 }
 
 /**

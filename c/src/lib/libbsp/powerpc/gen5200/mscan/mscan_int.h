@@ -39,10 +39,6 @@ extern "C" {
 #define MSCAN_NORMAL_MODE            4
 #define MSCAN_SLEEP_MODE             8
 
-#define CAN_BIT_RATE_MAX         1000000
-#define CAN_BIT_RATE_MIN         100000
-#define CAN_BIT_RATE             100000
-
 #define MSCAN_RX_BUFF_NOACTIVE   (0 << 4)
 #define MSCAN_RX_BUFF_EMPTY      (1 << 6)
 #define MSCAN_RX_BUFF_FULL       (1 << 5)

@@ -1,3 +1,8 @@
+2008-09-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/mscan-base.h, mscan/mscan-base.c, mscan/mscan.c,
+	mscan/mscan_int.h: Improved parameter checks for bit rate function.
+
 2008-09-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, bestcomm/load_task.c,
