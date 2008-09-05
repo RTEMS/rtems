@@ -33,6 +33,11 @@
 #include <rtems/score/coresem.h>
 #include <rtems/config.h>
 
+/**
+ *  This is the core semaphore which the MPCI Receive Server blocks on.
+ */
+CORE_semaphore_Control _MPCI_Semaphore;
+
 /*PAGE
  *
  *  _MPCI_Handler_initialization

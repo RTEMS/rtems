@@ -40,7 +40,6 @@ extern "C" {
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/score/coresem.h>
 
 /**
  *  The following defines the node number used when a broadcast is desired.
@@ -167,11 +166,6 @@ typedef struct {
    */
   uint32_t                         maximum_global_objects;
 }    MPCI_Internal_packet;
-
-/**
- *  This is the core semaphore which the MPCI Receive Server blocks on.
- */
-SCORE_EXTERN CORE_semaphore_Control _MPCI_Semaphore;
 
 /**
  *  The following thread queue is used to maintain a list of tasks

@@ -33,14 +33,12 @@
 /**
  *  This function returns true if the thread in question is the
  *  multiprocessing receive thread.
+ *
+ *  @note This is a macro to avoid needing a prototype for 
+ *        _MPCI_Receive_server_tcb until it is used.
  */
-
-RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_receive (
-  Thread_Control *the_thread
-)
-{
-  return the_thread == _MPCI_Receive_server_tcb;
-}
+#define _Thread_MP_Is_receive(_the_thread) \
+  (_the_thread == _MPCI_Receive_server_tcb)
 
 /**
  *  This routine frees a proxy control block to the

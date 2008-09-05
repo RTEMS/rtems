@@ -1,3 +1,9 @@
+2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/mpci.h,
+	score/inline/rtems/score/threadmp.inl, score/src/mpci.c: Eliminate
+	dependencies between MP .h files.
+
 2008-09-05	Eric Norum <norume@aps.anl.gov>
 
 	* libfs/src/nfsclient/src/rpcio.c: Correct breakage introduced by Joel
