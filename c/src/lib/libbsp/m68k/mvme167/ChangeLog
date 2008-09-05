@@ -1,3 +1,8 @@
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c, fatal/bspfatal.c, include/fatal.h,
+	timer/timer.c: Convert to "bool".
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timer/timer.c, timer/timerisr.S: Eliminate empty function from every
