@@ -172,7 +172,7 @@ struct bfin_ethernetSoftc {
   int txDescCount;
   txPacketDescT *tx;
 
-  boolean rmii;
+  bool rmii;
   int phyAddr;
 
   /* statistics */

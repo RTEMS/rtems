@@ -148,7 +148,7 @@ void bfin_interrupt_unregister(bfin_isr_t *isr) {
   rtems_interrupt_enable(isrLevel);
 }
 
-void bfin_interrupt_enable(bfin_isr_t *isr, boolean enable) {
+void bfin_interrupt_enable(bfin_isr_t *isr, bool enable) {
   rtems_interrupt_level isrLevel;
 
   rtems_interrupt_disable(isrLevel);
@@ -157,7 +157,7 @@ void bfin_interrupt_enable(bfin_isr_t *isr, boolean enable) {
   rtems_interrupt_enable(isrLevel);
 }
 
-void bfin_interrupt_enable_all(int source, boolean enable) {
+void bfin_interrupt_enable_all(int source, bool enable) {
   rtems_interrupt_level isrLevel;
   int vector;
   bfin_isr_t *walk;
@@ -177,7 +177,7 @@ void bfin_interrupt_enable_all(int source, boolean enable) {
   }
 }
 
-void bfin_interrupt_enable_global(int source, boolean enable) {
+void bfin_interrupt_enable_global(int source, bool enable) {
   int vector;
   rtems_interrupt_level isrLevel;
 
