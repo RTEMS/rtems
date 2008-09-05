@@ -23,7 +23,7 @@
 #include <rtems/tic4x/c4xio.h>
 
 uint32_t         Timer_interrupts;
-rtems_boolean benchmark_timer_find_average_overhead;
+bool benchmark_timer_find_average_overhead;
 
 static uint32_t   start;
 
@@ -83,7 +83,7 @@ int benchmark_timer_read( void )
 
   total = clicks * 1;
 
-  if ( benchmark_timer_find_average_overhead == 1 ) {
+  if ( benchmark_timer_find_average_overhead == true ) {
     return total;          /* in count units where each count is */
                            /* 1 / (clock frequency/2) */
   } else {
@@ -98,7 +98,7 @@ int benchmark_timer_read( void )
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

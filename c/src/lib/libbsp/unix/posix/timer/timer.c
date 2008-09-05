@@ -23,7 +23,7 @@ struct timeval  Timer_start;
 struct timeval  Timer_stop;
 struct timezone Time_zone;
 
-rtems_boolean   benchmark_timer_find_average_overhead;
+bool   benchmark_timer_find_average_overhead;
 
 void benchmark_timer_initialize()
 {
@@ -48,7 +48,7 @@ int benchmark_timer_read()
     total += Timer_stop.tv_usec;
   }
 
-  if ( benchmark_timer_find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
       return total;          /* in countdown units */
   else {
     if ( total < LEAST_VALID )
@@ -58,7 +58,7 @@ int benchmark_timer_read()
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(
-  rtems_boolean find_flag
+  bool find_flag
 )
 {
   benchmark_timer_find_average_overhead = find_flag;

@@ -188,7 +188,7 @@ void getRealTime(
  */
 
 /* XXX this routine should be part of the public RTEMS interface */
-rtems_boolean _TOD_Validate( rtems_time_of_day *tod );
+extern bool _TOD_Validate( rtems_time_of_day *tod );
 
 int setRealTime(
   rtems_time_of_day *tod
