@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.h: Convert to "bool".
+
 2008-09-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/bspstart.c: Derive time base clicks from bus frequency.
