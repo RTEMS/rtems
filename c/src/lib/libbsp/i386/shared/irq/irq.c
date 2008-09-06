@@ -349,7 +349,7 @@ void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
    */
   if ( _Thread_Do_post_task_switch_extension ||
        _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = FALSE;
+    _Thread_Executing->do_post_task_switch_extension = false;
     _API_extensions_Run_postswitch();
   }
   /*
