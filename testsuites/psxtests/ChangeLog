@@ -1,3 +1,8 @@
+2008-09-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psxcleanup/psxcleanup.c, psxfatal_support/init.c,
+	psxfatal_support/system.h: Convert to "bool".
+
 2008-08-19	Tim FitzGeorge <tim.fitzgeorge@astrium.eads.net>
 
 	PR 1296/cpukit.
