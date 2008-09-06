@@ -1,3 +1,9 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* capture/system.h, capture/test1.c, fileio/init.c,
+	unlimited/init.c, unlimited/system.h, unlimited/test1.c:
+	Convert to "bool".
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am: Updating and
