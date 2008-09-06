@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* spi/mc68360_spidrv.c: Convert to "bool".
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* spi/m360_spi.c, timer/timer.c: Convert to "bool".
