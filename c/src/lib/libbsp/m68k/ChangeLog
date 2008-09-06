@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/gdbstub/m68k-stub.c: Convert to "bool".
+
 2008-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* acinclude.m4: Add mcf52235 and mcf5329. Regenerate.
