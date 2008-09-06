@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/src/test_support.c: Convert to "bool".
+
 2008-08-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* support/src/tmtests_empty_function.c: New file.
