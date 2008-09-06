@@ -81,7 +81,7 @@ static rtems_status_code m360_spi_char_mode
 \*-------------------------------------------------------------------------*/
  m360_spi_softc_t *softc_ptr,            /* handle                         */
  uint32_t bits_per_char,                 /* bits per character             */
- boolean  lsb_first,                     /* TRUE: send LSB first           */
+ bool     lsb_first,                     /* TRUE: send LSB first           */
  uint16_t *spimode                       /* result value                   */
 )
 /*-------------------------------------------------------------------------*\

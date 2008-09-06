@@ -143,7 +143,7 @@ initializeRemcomErrorFrame ();
 /* at least NUMREGBYTES*2 are needed for register packets */
 #define BUFMAX 400
 
-static char initialized;  /* boolean flag. != 0 means we've been initialized */
+static bool initialized = false ;  /* boolean flag. != 0 means we've been initialized */
 
 int     remote_debug;
 /*  debug >  0 prints ill-formed commands in valid packets & checksum errors */
@@ -1279,7 +1279,7 @@ void set_debug_traps()
       exceptionHook    = remcomHandler;
   }
 
-  initialized = 1;
+  initialized = true;
 
 }
 

@@ -26,8 +26,8 @@ extern "C" {
 typedef struct {
   /* parameters provided by bsp */
   uint32_t freq;
-  void *base;
-  boolean fast;
+  void    *base;
+  bool     fast;
   /* internal use */
   rtems_id irq_sema_id;
 } bfin_spi_softc_t;

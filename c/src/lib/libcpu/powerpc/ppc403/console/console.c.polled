@@ -141,8 +141,8 @@ rtems_device_driver console_initialize(
   rtems_status_code status;
   register unsigned tmp;
   extern uint32_t bsp_serial_per_sec;
-  extern boolean bsp_serial_external_clock;
-  extern boolean bsp_serial_cts_rts;
+  extern bool bsp_serial_external_clock;
+  extern bool bsp_serial_cts_rts;
   extern uint32_t bsp_serial_rate;
 
   /* Initialise the serial port */
@@ -265,7 +265,7 @@ void outbyte(
 )
 {
   unsigned char status;
-  extern boolean bsp_serial_xon_xoff;
+  extern bool bsp_serial_xon_xoff;
 
   while (port->SPHS)
     port->SPHS = (HSRDsr | HSRCts);

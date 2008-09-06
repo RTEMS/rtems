@@ -23,7 +23,7 @@ extern "C" {
 typedef struct {
   const char *name;
   void *base_address;
-  boolean use_interrupts;
+  bool  use_interrupts;
   int force_baud;
   /* the following are for internal use */
   void *termios;

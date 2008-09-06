@@ -36,7 +36,7 @@
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-boolean pc386_ide_probe
+bool pc386_ide_probe
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -48,10 +48,10 @@ boolean pc386_ide_probe
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
-|    TRUE, when flash disk available                                        |
+|    true, when flash disk available                                        |
 \*=========================================================================*/
 {
-  boolean ide_card_plugged = TRUE; /* assume: we have a disk here */
+  bool ide_card_plugged = true; /* assume: we have a disk here */
 
   return ide_card_plugged;
 }

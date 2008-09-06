@@ -18,7 +18,7 @@
 #include <ds1307.h>
 
 /* Forward function declaration */
-boolean mcf5206elite_ds1307_probe(int minor);
+bool mcf5206elite_ds1307_probe(int minor);
 
 extern rtc_fns ds1307_fns;
 
@@ -55,7 +55,7 @@ rtems_device_minor_number RTC_Minor;
  * RETURNS:
  *     TRUE, if RTC device is present
  */
-boolean
+bool
 mcf5206elite_ds1307_probe(int minor)
 {
     int try = 0;
@@ -65,7 +65,7 @@ mcf5206elite_ds1307_probe(int minor)
     i2c_address addr;
 
     if (minor >= NUM_RTCS)
-        return FALSE;
+        return false;
 
     rtc = RTC_Table + minor;
 
@@ -74,11 +74,11 @@ mcf5206elite_ds1307_probe(int minor)
     do {
         status = i2c_wrbyte(bus, addr, 0);
         if (status == I2C_NO_DEVICE)
-            return FALSE;
+            return false;
         try++;
     } while ((try < 15) && (status != I2C_SUCCESSFUL));
     if (status == I2C_SUCCESSFUL)
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }

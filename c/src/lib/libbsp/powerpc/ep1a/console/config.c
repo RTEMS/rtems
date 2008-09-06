@@ -27,18 +27,18 @@
 /*
  * Configuration specific probe routines
  */
-static boolean config_68360_scc_base_probe_1(int minor);
-static boolean config_68360_scc_base_probe_2(int minor);
-static boolean config_68360_scc_base_probe_3(int minor);
-static boolean config_68360_scc_base_probe_4(int minor);
-static boolean config_68360_scc_base_probe_5(int minor);
-static boolean config_68360_scc_base_probe_6(int minor);
-static boolean config_68360_scc_base_probe_7(int minor);
-static boolean config_68360_scc_base_probe_8(int minor);
-static boolean config_68360_scc_base_probe_9(int minor);
-static boolean config_68360_scc_base_probe_10(int minor);
-static boolean config_68360_scc_base_probe_11(int minor);
-static boolean config_68360_scc_base_probe_12(int minor);
+static bool config_68360_scc_base_probe_1(int minor);
+static bool config_68360_scc_base_probe_2(int minor);
+static bool config_68360_scc_base_probe_3(int minor);
+static bool config_68360_scc_base_probe_4(int minor);
+static bool config_68360_scc_base_probe_5(int minor);
+static bool config_68360_scc_base_probe_6(int minor);
+static bool config_68360_scc_base_probe_7(int minor);
+static bool config_68360_scc_base_probe_8(int minor);
+static bool config_68360_scc_base_probe_9(int minor);
+static bool config_68360_scc_base_probe_10(int minor);
+static bool config_68360_scc_base_probe_11(int minor);
+static bool config_68360_scc_base_probe_12(int minor);
 
 extern console_fns mc68360_scc_fns;
 
@@ -391,43 +391,43 @@ static bool config_68360_scc_base_probe_2( int minor ) {
   return config_68360_scc_base_probe(minor, 0, 11, 2);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_3( int minor ) {
+static bool config_68360_scc_base_probe_3( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 11, 3);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_4( int minor ) {
+static bool config_68360_scc_base_probe_4( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 11, 4);
 }
                                                                                                                 
-static boolean config_68360_scc_base_probe_5( int minor ) {
+static bool config_68360_scc_base_probe_5( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 1);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_6( int minor ) {
+static bool config_68360_scc_base_probe_6( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 2);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_7( int minor ) {
+static bool config_68360_scc_base_probe_7( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 3);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_8( int minor ) {
+static bool config_68360_scc_base_probe_8( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 16, 4);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_9( int minor ) {
+static bool config_68360_scc_base_probe_9( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 1);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_10( int minor ) {
+static bool config_68360_scc_base_probe_10( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 2);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_11( int minor ) {
+static bool config_68360_scc_base_probe_11( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 3);
 }
                                                                                                                  
-static boolean config_68360_scc_base_probe_12( int minor ) {
+static bool config_68360_scc_base_probe_12( int minor ) {
   return config_68360_scc_base_probe( minor, 0, 15, 4);
 }
 

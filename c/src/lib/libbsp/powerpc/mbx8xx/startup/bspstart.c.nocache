@@ -29,13 +29,13 @@
  */
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
-boolean    bsp_serial_external_clock;
-boolean    bsp_serial_xon_xoff;
-boolean    bsp_serial_cts_rts;
+bool       bsp_serial_external_clock;
+bool       bsp_serial_xon_xoff;
+bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 /*
  *  Use the shared implementations of the following routines.

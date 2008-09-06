@@ -25,12 +25,12 @@ extern "C" {
 typedef struct {
   uint32_t sclk;
   void *base;
-  boolean fast;
+  bool fast;
   int8_t slave_address;
 } bfin_twi_config_t;
 
 typedef struct bfin_twi_request_s {
-  boolean write;
+  bool write;
   int count;
   void *data;
   /* Chained requests are done with repeated start conditions in between.
@@ -42,9 +42,9 @@ typedef struct bfin_twi_request_s {
 
 typedef rtems_status_code (*bfin_twi_callback_t)(int channel,
                                                  void *arg,
-                                                 boolean general_call,
-                                                 boolean write,
-                                                 boolean done,
+                                                 bool general_call,
+                                                 bool write,
+                                                 bool done,
                                                  int read_count,
                                                  uint8_t *data);
 

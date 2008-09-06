@@ -80,13 +80,13 @@ uint32_t _top_of_ram;
  */
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
-boolean    bsp_serial_external_clock;
-boolean    bsp_serial_xon_xoff;
-boolean    bsp_serial_cts_rts;
+bool       bsp_serial_external_clock;
+bool       bsp_serial_xon_xoff;
+bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-boolean    bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 
 /*      Initialize whatever libc we are using
@@ -170,10 +170,10 @@ void bsp_start( void )
   /* timebase register ticks/microsecond */
   bsp_clicks_per_usec = (250000000 / 1000000);
   bsp_serial_per_sec = 14625000;
-  bsp_serial_external_clock = 0;
-  bsp_timer_internal_clock  = 1;
-  bsp_serial_xon_xoff = 0;
-  bsp_serial_cts_rts = 0;
+  bsp_serial_external_clock = false;
+  bsp_timer_internal_clock  = true;
+  bsp_serial_xon_xoff = false;
+  bsp_serial_cts_rts = false;
   bsp_serial_rate = 115200;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid = 3;
@@ -237,4 +237,3 @@ void _BSP_Fatal_error(unsigned int v)
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
   BSP_ask_for_reset();
 }
- 

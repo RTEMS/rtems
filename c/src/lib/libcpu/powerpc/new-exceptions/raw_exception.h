@@ -245,7 +245,7 @@ void e500_setup_raw_exceptions();
  *
  * This should probably go away... (T.S. 2007/11/30)
  */
-extern boolean bsp_exceptions_in_RAM;
+extern bool bsp_exceptions_in_RAM;
 
 /**
  * @brief Vector base address for CPUs (for example e200 and e500) with IVPR

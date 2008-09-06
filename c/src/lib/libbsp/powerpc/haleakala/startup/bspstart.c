@@ -81,7 +81,7 @@
 
 /* Expected by clock.c */
 uint32_t	bsp_clicks_per_usec;
-boolean		bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
+bool		bsp_timer_internal_clock;   /* true, when timer runs with CPU clk */
 uint32_t	bsp_timer_least_valid;
 uint32_t	bsp_timer_average_overhead;
 

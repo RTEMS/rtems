@@ -19,9 +19,9 @@
 #include <stdlib.h>                                     /* for atexit() */
 
 extern uint32_t bsp_serial_per_sec;
-extern boolean bsp_serial_external_clock;
-extern boolean bsp_serial_cts_rts;
-extern boolean bsp_serial_xon_xoff;
+extern bool bsp_serial_external_clock;
+extern bool bsp_serial_cts_rts;
+extern bool bsp_serial_xon_xoff;
 extern uint32_t bsp_serial_rate;
 
 struct ttyasync {
@@ -351,7 +351,7 @@ tty0Initialize(void)
   unsigned char _ier;
   unsigned char _tmp;
   extern uint32_t bsp_serial_rate;
-  extern boolean bsp_serial_external_clock;
+  extern bool bsp_serial_external_clock;
 
   /*
    * Initialise the serial tty0port 

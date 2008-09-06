@@ -39,7 +39,7 @@
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-boolean mbx8xx_pcmciaide_probe
+bool mbx8xx_pcmciaide_probe
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -51,17 +51,17 @@ boolean mbx8xx_pcmciaide_probe
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
-|    TRUE, when flash disk available                                        |
+|    true, when flash disk available                                        |
 \*=========================================================================*/
 {
-  boolean ide_card_plugged = TRUE; /* assume: we have a card plugged in */
+  bool ide_card_plugged = true; /* assume: we have a card plugged in */
 
   /*
    * check, that the CD# pins are low -> a PCMCIA card is plugged in
    */
   if ((m8xx.pipr
        & (M8xx_PCMCIA_PIPR_CACD1 | M8xx_PCMCIA_PIPR_CACD2)) != 0x00) {
-    ide_card_plugged = FALSE;
+    ide_card_plugged = false;
   }
   /*
    * set supply voltage to 3.3V
@@ -77,8 +77,8 @@ boolean mbx8xx_pcmciaide_probe
   if (ide_card_plugged) {
 #define CIS_BYTE(pos) (((uint8_t*)PCMCIA_ATTRB_ADDR)[(pos)*2])
     int cis_pos = 0;
-    boolean fixed_disk_tuple_found = FALSE;
-    boolean ata_disk_tuple_found   = FALSE;
+    bool fixed_disk_tuple_found = false;
+    bool ata_disk_tuple_found   = false;
 
     while ((cis_pos < 256) &&
 	   (CIS_BYTE(cis_pos) != 0xff) &&
@@ -88,12 +88,12 @@ boolean mbx8xx_pcmciaide_probe
        */
       if ((CIS_BYTE(cis_pos  ) == 0x21) &&
 	  (CIS_BYTE(cis_pos+2) == 0x04)) {
-	fixed_disk_tuple_found = TRUE;
+	fixed_disk_tuple_found = true;
       }
       else if ((CIS_BYTE(cis_pos  ) == 0x22) &&
 	       (CIS_BYTE(cis_pos+2) == 0x01) &&
 	       (CIS_BYTE(cis_pos+3) == 0x01)) {
-	ata_disk_tuple_found = TRUE;
+	ata_disk_tuple_found = true;
       }
       /*
        * advance using the length field

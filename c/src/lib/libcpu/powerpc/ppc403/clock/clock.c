@@ -220,7 +220,7 @@ void ClockOn(
     uint32_t   iocr;
     register uint32_t   tcr;
     extern uint32_t bsp_clicks_per_usec;
-    extern boolean bsp_timer_internal_clock;
+    extern bool bsp_timer_internal_clock;
 #ifdef ppc403
     uint32_t   pvr;
 #endif /* ppc403 */

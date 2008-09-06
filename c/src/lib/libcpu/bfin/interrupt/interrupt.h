@@ -65,14 +65,14 @@ void bfin_interrupt_register(bfin_isr_t *isr);
 void bfin_interrupt_unregister(bfin_isr_t *isr);
 
 /* enable/disable specific ISR */
-void bfin_interrupt_enable(bfin_isr_t *isr, boolean enable);
+void bfin_interrupt_enable(bfin_isr_t *isr, bool enable);
 
 /* atomically enable/disable all ISRs attached to specified source */
-void bfin_interrupt_enable_all(int source, boolean enable);
+void bfin_interrupt_enable_all(int source, bool enable);
 
 /* disable a source independently of the individual ISR enables (starts
    out all enabled) */
-void bfin_interrupt_enable_global(int source, boolean enable);
+void bfin_interrupt_enable_global(int source, bool enable);
  
 #ifdef __cplusplus
 }

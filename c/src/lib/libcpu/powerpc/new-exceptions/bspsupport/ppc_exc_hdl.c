@@ -105,7 +105,7 @@ ppc_exc_wrapup( BSP_Exception_frame *f)
 		 */
 		if ( _Thread_Do_post_task_switch_extension ||
 				_Thread_Executing->do_post_task_switch_extension ) {
-			_Thread_Executing->do_post_task_switch_extension = FALSE;
+			_Thread_Executing->do_post_task_switch_extension = false;
 			_API_extensions_Run_postswitch();
 		}
 	}

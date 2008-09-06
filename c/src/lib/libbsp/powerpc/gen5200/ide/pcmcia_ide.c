@@ -129,7 +129,7 @@ static TaskId pcmcia_ide_txTaskId;	/* SDMA TX task ID */
 #define PCMCIA_IDE_RD_SECTOR_SIZE 512   /* FIXME: make this better... */
 #define PCMCIA_IDE_WR_SECTOR_SIZE 512   /* FIXME: make this better... */
 
-boolean mpc5200_dma_task_started[2] = {FALSE,FALSE};
+bool mpc5200_dma_task_started[2] = {false,false};
 #endif /* IDE_USE_DMA */
 
 #if IDE_USE_STATISTICS
@@ -143,13 +143,13 @@ extern volatile uint32_t * mpc5200_ata_drive_regs[];
 extern uint32_t ata_pio_timings[2][6];
 
 void mpc5200_pcmciaide_dma_blockop(
-  boolean, int, uint16_t, rtems_blkdev_sg_buffer *, uint32_t *, uint32_t *);
+  bool, int, uint16_t, rtems_blkdev_sg_buffer *, uint32_t *, uint32_t *);
 /*
  * support functions for PCMCIA IDE IF
  */
-boolean mpc5200_pcmciaide_probe(int minor)
+bool mpc5200_pcmciaide_probe(int minor)
   {
-  boolean ide_card_plugged = FALSE; /* assume: we don't have a card plugged in */
+  bool ide_card_plugged = false; /* assume: we don't have a card plugged in */
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT2]);
 
   /* enable card detection on GPT2 */
@@ -158,10 +158,10 @@ boolean mpc5200_pcmciaide_probe(int minor)
 #if defined (BRS5L)
   /* Check for card detection (-CD0) */
   if((gpt->status) & GPT_STATUS_PIN)
-    ide_card_plugged = FALSE;
+    ide_card_plugged = false;
   else
 #endif
-    ide_card_plugged = TRUE;
+    ide_card_plugged = true;
 
   return ide_card_plugged;
 
@@ -318,7 +318,7 @@ void mpc5200_pcmciaide_dma_init(int minor)
   bestcomm_glue_irq_install(TASK_GEN_DP_BD_0,pcmcia_ide_recv_dmairq_hdl,NULL);
 }
 
-void mpc5200_pcmciaide_dma_blockop(boolean is_write,
+void mpc5200_pcmciaide_dma_blockop(bool is_write,
 				   int minor, 
 				   uint16_t block_size, 
 				   rtems_blkdev_sg_buffer *bufs,
@@ -338,7 +338,7 @@ void mpc5200_pcmciaide_dma_blockop(boolean is_write,
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   rtems_event_set events;
   BDIdx nxt_bd_idx;
-  boolean use_irq = (_System_state_Current == SYSTEM_STATE_UP);
+  bool use_irq = (_System_state_Current == SYSTEM_STATE_UP);
   /*
    * determine number of blocks
    */
@@ -454,7 +454,7 @@ void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, rtems_blkdev_s
   uint16_t  cnt = 0;
   uint16_t *lbuf = (uint16_t*)((uint8_t*)(bufs[(*cbuf)].buffer)+(*pos));
   uint32_t  llength = bufs[(*cbuf)].length;
-  boolean use_dma;
+  bool      use_dma;
   
 #if IDE_USE_STATISTICS
       mpc5200_pcmciaide_read_block_call_cnt++;
@@ -465,10 +465,10 @@ void mpc5200_pcmciaide_read_block(int minor, uint16_t block_size, rtems_blkdev_s
    * then do not use DMA
    * Is this needed?
    */
-  use_dma = TRUE;
-  /* use_dma = FALSE; */
+  use_dma = true;
+  /* use_dma = false; */
 #else
-  use_dma = FALSE;
+  use_dma = false;
 #endif
   if (use_dma) {
     /*
@@ -547,7 +547,7 @@ void mpc5200_pcmciaide_write_block(int minor, uint16_t block_size,
   uint16_t  cnt = 0;
   uint16_t *lbuf = (uint16_t *)((uint8_t *)(bufs[(*cbuf)].buffer) + (*pos));
   uint32_t  llength = bufs[(*cbuf)].length;
-  boolean use_dma;
+  bool use_dma;
 
 #if IDE_USE_STATISTICS
   mpc5200_pcmciaide_write_block_call_cnt++;
@@ -558,9 +558,9 @@ void mpc5200_pcmciaide_write_block(int minor, uint16_t block_size,
    * then do not use DMA
    * Is this needed?
    */
-  use_dma = TRUE;
+  use_dma = true;
 #else
-  use_dma = FALSE;
+  use_dma = false;
 #endif
 
   if (use_dma) {
@@ -577,7 +577,7 @@ void mpc5200_pcmciaide_write_block(int minor, uint16_t block_size,
      * only last (available) DMA BD sends interrupt
      * DMA BDs may get ready as soon as possible
      */
-    mpc5200_pcmciaide_dma_blockop(TRUE, /* write opeartion */
+    mpc5200_pcmciaide_dma_blockop(true, /* write opeartion */
 				  minor,
 				  block_size,bufs,cbuf,pos);
   }

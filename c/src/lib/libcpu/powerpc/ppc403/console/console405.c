@@ -357,7 +357,7 @@ spiInitialize(void)
   register unsigned tmp;
   rtems_isr_entry previous_isr; /* this is a dummy */
   unsigned char _ier;
-  extern boolean bsp_serial_external_clock;
+  extern bool bsp_serial_external_clock;
   extern uint32_t bsp_serial_rate;
 
   /*

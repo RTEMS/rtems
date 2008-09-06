@@ -201,7 +201,7 @@ static rtems_irq_connect_data bestcomm_glue_irq_data =
   (rtems_irq_is_enabled) bestcomm_glue_isOn
   };
 
-static boolean bestcomm_glue_is_initialized = FALSE;
+static bool bestcomm_glue_is_initialized = false;
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -225,7 +225,7 @@ void bestcomm_glue_init
 \*=========================================================================*/
 {
   if (!bestcomm_glue_is_initialized) {
-    bestcomm_glue_is_initialized = TRUE;
+    bestcomm_glue_is_initialized = true;
     /*
      * Set task bar to begin of sram
      */
@@ -259,4 +259,3 @@ void bestcomm_glue_init
 
   }
 }
-

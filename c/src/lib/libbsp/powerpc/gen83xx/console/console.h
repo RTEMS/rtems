@@ -35,4 +35,4 @@ extern console_tbl	Console_Port_Tbl[];
 extern console_data	Console_Port_Data[];
 extern unsigned long	Console_Port_Count;
 
-boolean Console_Port_Tbl_Init_ppc8245(int minor);
+bool Console_Port_Tbl_Init_ppc8245(int minor);
