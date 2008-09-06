@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* misc/interr.c: Convert to "bool".
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/ckinit.c: The Shared Memory Driver no longer requires the
