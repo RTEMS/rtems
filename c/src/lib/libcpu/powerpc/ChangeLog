@@ -1,3 +1,13 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mpc5xx/irq/irq.c, mpc83xx/spi/mpc83xx_spidrv.c,
+	new-exceptions/cpu.c, new-exceptions/raw_exception.h,
+	new-exceptions/bspsupport/ppc_exc_hdl.c,
+	ppc403/clock/clock.c, ppc403/clock/clock_4xx.c,
+	ppc403/console/console.c, ppc403/console/console.c.polled,
+	ppc403/console/console405.c, ppc403/tty_drv/tty_drv.c:
+	Convert to "bool".
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mpc5xx/clock/clock.c, mpc6xx/clock/c_clock.c, mpc8260/clock/clock.c,
