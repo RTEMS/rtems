@@ -44,7 +44,7 @@ const char *Get_Longest_Name()
 
 void Allocate_majority_of_workspace( int smallest )
 { 
-  boolean                result;
+  bool                   result;
   Heap_Information_block info;
   void                   *temp;
 

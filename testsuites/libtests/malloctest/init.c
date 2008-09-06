@@ -155,7 +155,7 @@ void test_heap_extend()
 {
   void     *p1, *p2, *p3, *p4;
   uint32_t  u1, u2;
-  boolean   ret;
+  bool      ret;
 
   /*
    * Easier to hit extend with a dedicated heap.
@@ -165,11 +165,11 @@ void test_heap_extend()
 
   puts( "heap extend - bad address" );
   ret = _Protected_heap_Extend( &TestHeap, TestHeapMemory - 512, 512 );
-  rtems_test_assert( ret == FALSE );
+  rtems_test_assert( ret == false );
 
   puts( "heap extend - OK" );
   ret = _Protected_heap_Extend( &TestHeap, &TestHeapMemory[ 512 ], 512 );
-  rtems_test_assert( ret == TRUE );
+  rtems_test_assert( ret == true );
 }
 
 void test_heap_info(void)

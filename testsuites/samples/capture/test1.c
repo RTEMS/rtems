@@ -111,7 +111,7 @@ static void
 capture_test_1 (int                          argc,
                 char**                       argv,
                 rtems_monitor_command_arg_t* command_arg,
-                boolean                      verbose)
+                bool                         verbose)
 {
   rtems_status_code sc;
   rtems_name        name;

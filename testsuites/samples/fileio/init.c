@@ -278,14 +278,14 @@ void fileio_list_file(void)
 /*
  * convert a size string (like 34K or 12M) to actual byte count
  */
-boolean fileio_str2size(const char *str,uint32_t   *res_ptr)
+bool fileio_str2size(const char *str,uint32_t   *res_ptr)
 {
-  boolean failed = FALSE;
+  bool failed = false;
   unsigned long size;
   char suffix = ' ';
 
   if (1 > sscanf(str,"%lu%c",&size,&suffix)) {
-    failed = TRUE;
+    failed = true;
   }
   else if (toupper(suffix) == 'K') {
     size *= 1024;
@@ -294,7 +294,7 @@ boolean fileio_str2size(const char *str,uint32_t   *res_ptr)
     size *= 1024UL*1024UL;
   }
   else if (isalpha(suffix)) {
-    failed = TRUE;
+    failed = true;
   }
 
   if (!failed) {
@@ -314,7 +314,7 @@ void fileio_write_file(void)
   ssize_t n;
   rtems_interval start_tick,curr_tick,ticks_per_sec;
   char *bufptr = NULL;
-  boolean failed = FALSE;
+  bool failed = false;
   static const char write_test_string[] =
     "The quick brown fox jumps over the lazy dog\n";
   static const char write_block_string[] =
@@ -341,7 +341,7 @@ void fileio_write_file(void)
     }
     if (0 == strlen(fname)) {
       printf("*** no filename entered, aborted\n");
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -380,7 +380,7 @@ void fileio_write_file(void)
     bufptr = malloc(buf_size+1); /* extra space for terminating NUL char */
     if (bufptr == NULL) {
       printf("*** malloc failed, aborted\n");
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -416,7 +416,7 @@ void fileio_write_file(void)
     fd = open(fname,O_WRONLY | O_CREAT | O_TRUNC,S_IREAD|S_IWRITE);
     if (fd < 0) {
       printf("*** file create failed, errno = %d(%s)\n",errno,strerror(errno));
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -440,7 +440,7 @@ void fileio_write_file(void)
     } while ((file_size > curr_pos) && (n > 0));
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
     if (n < 0) {
-      failed = TRUE;
+      failed = true;
       printf("*** file write failed, "
 	     "%lu bytes written, "
 	     "errno = %d(%s)\n",
@@ -477,7 +477,7 @@ void fileio_read_file(void)
   ssize_t n;
   rtems_interval start_tick,curr_tick,ticks_per_sec;
   char *bufptr = NULL;
-  boolean failed = FALSE;
+  bool failed = false;
 
   printf(" =========================\n");
   printf(" READ FILE ...            \n");
@@ -500,7 +500,7 @@ void fileio_read_file(void)
     }
     if (0 == strlen(fname)) {
       printf("*** no filename entered, aborted\n");
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -526,7 +526,7 @@ void fileio_read_file(void)
     bufptr = malloc(buf_size+1); /* extra space for terminating NUL char */
     if (bufptr == NULL) {
       printf("*** malloc failed, aborted\n");
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -537,7 +537,7 @@ void fileio_read_file(void)
     fd = open(fname,O_RDONLY);
     if (fd < 0) {
       printf("*** file open failed, errno = %d(%s)\n",errno,strerror(errno));
-      failed = TRUE;
+      failed = true;
     }
   }
   /*
@@ -557,7 +557,7 @@ void fileio_read_file(void)
     } while (n > 0);
     rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &curr_tick);
     if (n < 0) {
-      failed = TRUE;
+      failed = true;
       printf("*** file read failed, "
 	     "%lu bytes read, "
 	     "errno = %d(%s)\n",

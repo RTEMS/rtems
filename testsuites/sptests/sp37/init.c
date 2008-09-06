@@ -19,7 +19,7 @@
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
-  boolean               in_isr;
+  bool                  in_isr;
 
   puts( "interrupt is in progress (use body)" );
   in_isr = rtems_interrupt_is_in_progress();
@@ -43,7 +43,7 @@ volatile int isr_in_progress_inline;
 
 void check_isr_in_progress_inline(void)
 {
-  boolean    in_isr;
+  bool in_isr;
 
   in_isr = rtems_interrupt_is_in_progress();
   isr_in_progress_inline = ( in_isr ) ? 1 : 2;
@@ -59,7 +59,7 @@ rtems_timer_service_routine test_isr_in_progress(
   void     *arg
 )
 {
-  boolean    in_isr;
+  bool in_isr;
 
   check_isr_in_progress_inline();
 
@@ -116,7 +116,7 @@ rtems_timer_service_routine test_unblock_task(
   void     *arg
 )
 {
-  boolean           in_isr;
+  bool              in_isr;
   rtems_status_code status;
 
   in_isr = rtems_interrupt_is_in_progress();
@@ -147,7 +147,7 @@ rtems_task Init(
   rtems_time_of_day     time;
   rtems_status_code     status;
   rtems_interrupt_level level;
-  boolean               in_isr;
+  bool                  in_isr;
   rtems_id              timer;
   int                   i;
 

@@ -63,7 +63,7 @@ rtems_task Locker_task(
 
 void do_test(
   rtems_attribute attr,
-  boolean         extract  /* TRUE if extract, not release */
+  bool            extract  /* TRUE if extract, not release */
 )
 {
   rtems_status_code status;

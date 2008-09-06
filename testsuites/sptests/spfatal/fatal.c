@@ -57,7 +57,7 @@ void Process_case();
 
 rtems_extension Fatal_extension(
   uint32_t   source,
-  boolean          is_internal,
+  bool       is_internal,
   uint32_t   error
 )
 {

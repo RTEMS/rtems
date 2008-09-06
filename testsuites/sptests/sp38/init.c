@@ -14,8 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-volatile boolean signal_sent;
-volatile boolean signal_processed;
+volatile bool signal_sent;
+volatile bool signal_processed;
 
 rtems_id main_task;
 

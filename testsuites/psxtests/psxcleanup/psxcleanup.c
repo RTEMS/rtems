@@ -34,9 +34,9 @@ typedef struct {
   int waiting_writers; /* Count of waiting writers. */
 } lock_t;
 
-volatile boolean reader_cleanup_ran;
-volatile boolean release_read_lock_ran;
-volatile boolean writer_cleanup_ran;
+volatile bool reader_cleanup_ran;
+volatile bool release_read_lock_ran;
+volatile bool writer_cleanup_ran;
 
 void waiting_reader_cleanup(void *arg)
 {

@@ -96,7 +96,7 @@ void destory_all_tasks(
     }
 }
 
-boolean status_code_bad(
+bool status_code_bad(
   rtems_status_code status_code
   )
 {

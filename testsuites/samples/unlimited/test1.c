@@ -24,9 +24,9 @@
 
 void test1()
 {
-  boolean           auto_extend;
+  bool              auto_extend;
   rtems_status_code result;
-  uint32_t    task_count = 0;
+  uint32_t          task_count = 0;
   Objects_Information *the_information;
 
   char              c1 = 'a';
@@ -44,7 +44,7 @@ void test1()
   the_information =
     _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
   auto_extend = the_information->auto_extend;
-  the_information->auto_extend = FALSE;
+  the_information->auto_extend = false;
 
   while (task_count < MAX_TASKS)
   {

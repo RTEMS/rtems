@@ -112,7 +112,7 @@ rtems_id  RemoteHwAccess_R;          /* Execlusive access to the remote HW */
 
 
 /* The following variable triggers simulated HW activity */
-volatile boolean StartHw = FALSE;
+volatile bool StartHw = false;
 
 rtems_task Medium_Exec(rtems_task_argument TaskArg)
 {

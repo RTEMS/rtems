@@ -50,7 +50,7 @@ void print_class_info(
 void change_name(
   rtems_id    id,
   const char *newName,
-  boolean     printable
+  bool        printable
 )
 {
   rtems_status_code    status;

@@ -14,7 +14,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-volatile boolean case_hit;
+volatile bool case_hit;
 
 rtems_id main_task;
 rtems_id other_task;
