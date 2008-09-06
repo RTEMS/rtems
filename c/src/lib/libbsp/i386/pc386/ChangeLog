@@ -1,3 +1,7 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ide/ide.c: Convert to "bool".
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Remove bogus decl.
