@@ -1,3 +1,10 @@
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp35/priinv.c, sp37/init.c, sp38/init.c, sp39/init.c, sp41/init.c,
+	sp42/init.c, sp43/init.c, spfatal/fatal.c, spfatal/system.h,
+	spfatal_support/init.c, spfatal_support/system.h:
+	Convert to "bool".
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spsize/size.c: Must extern _MPCI_Semaphore because it is no longer
