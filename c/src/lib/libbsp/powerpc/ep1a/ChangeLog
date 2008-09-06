@@ -1,6 +1,6 @@
-2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* console/config.c: Convert to "bool".
+	* console/config.c, console/console.h: Convert to "bool".
 
 2008-09-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
