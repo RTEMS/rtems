@@ -50,7 +50,7 @@ extern "C" {
     
     rtems_id trns_sema_id;  /* ID of disp trns buffer sema   */
     rtems_id task_id;       /* ID of disp task               */
-    rtems_boolean rotate;  /* FLAG: display is upside down       */
+    bool rotate;            /* FLAG: display is upside down       */
   } spi_disp_hcms29xx_param_t;
 
   typedef struct {

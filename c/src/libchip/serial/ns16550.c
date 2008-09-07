@@ -53,7 +53,7 @@ console_fns ns16550_fns = {
   ns16550_initialize_interrupts,  /* deviceInitialize */
   ns16550_write_polled,           /* deviceWritePolled */
   ns16550_set_attributes,         /* deviceSetAttributes */
-  TRUE                            /* deviceOutputUsesInterrupts */
+  true                            /* deviceOutputUsesInterrupts */
 };
 
 console_fns ns16550_fns_polled = {
@@ -65,7 +65,7 @@ console_fns ns16550_fns_polled = {
   ns16550_init,                        /* deviceInitialize */
   ns16550_write_polled,                /* deviceWritePolled */
   ns16550_set_attributes,              /* deviceSetAttributes */
-  FALSE                                /* deviceOutputUsesInterrupts */
+  false                                /* deviceOutputUsesInterrupts */
 };
 
 #if defined(__PPC__)
@@ -460,7 +460,7 @@ NS16550_STATIC void ns16550_process(
     /*
      * Deal with any received characters
      */
-    while(TRUE) {
+    while(true) {
       ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
       if(~ucLineStatus & SP_LSR_RDY) {
         break;
@@ -477,7 +477,7 @@ NS16550_STATIC void ns16550_process(
      *  TX all the characters we can
      */
 
-    while(TRUE) {
+    while(true) {
         ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
         if(~ucLineStatus & SP_LSR_THOLD) {
           /*

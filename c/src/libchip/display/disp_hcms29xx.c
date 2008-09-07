@@ -53,9 +53,9 @@ static disp_font_t disp_hcms29xx_font_rotate;
 const rtems_libi2c_tfr_mode_t spi_disphcms29xx_tfr_mode = {
   .baudrate = 1000000,
   .bits_per_char = 8,
-  .lsb_first = TRUE,
-  .clock_inv = TRUE,
-  .clock_phs = TRUE,
+  .lsb_first = true,
+  .clock_inv = true,
+  .clock_phs = true,
   .idle_char = 0
 };
 
@@ -155,7 +155,7 @@ static rtems_status_code disp_hcms29xx_copy_font
   disp_font_t src,                      /* source font                     */
   struct disp_font_base *dst,           /* ptr to destination font         */
   int shift_cnt,                        /* shift count for font            */
-  boolean do_rotate                     /* rotate font, if TRUE            */
+  bool do_rotate                        /* rotate font, if true            */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -262,7 +262,7 @@ static rtems_status_code disp_hcms29xx_alloc_copy_font
   const disp_font_t src,                /* source font                     */
   disp_font_t *dst,                     /* ptr to destination font         */
   int shift_cnt,                        /* shift count for font            */
-  boolean do_rotate                     /* rotate font, if TRUE            */
+  bool do_rotate                        /* rotate font, if true            */
 )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -329,7 +329,7 @@ static rtems_status_code disp_hcms29xx_send_to_display
 \*=========================================================================*/
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
-  boolean char_avail;
+  bool char_avail;
   const struct disp_font_glyph *glyph_ptr;
   disp_font_t curr_font;
   int i,digit,ret_cnt;
@@ -354,7 +354,7 @@ static rtems_status_code disp_hcms29xx_send_to_display
    * address device
    */
   if (rc == RTEMS_SUCCESSFUL) {
-    rc = rtems_libi2c_send_addr(softc_ptr->disp_param.minor,TRUE);
+    rc = rtems_libi2c_send_addr(softc_ptr->disp_param.minor,true);
   }
 
   /*
@@ -366,7 +366,7 @@ static rtems_status_code disp_hcms29xx_send_to_display
       ? disp_hcms29xx_font_rotate 
       : disp_hcms29xx_font_normal;
 
-    char_avail = TRUE;
+    char_avail = true;
     /*
      * FIXME: for rotated display, write last character first...
      * maybe we should copy everything to a common buffer and use 
@@ -379,7 +379,7 @@ static rtems_status_code disp_hcms29xx_send_to_display
       /* test for end of string... */
       c = disp_buffer[i]; /* perform consistent read of disp_buffer */
       if (char_avail && (c == '\0')) {
-	char_avail = FALSE;
+	char_avail = false;
       }
       glyph_ptr = (char_avail 
 		   ? curr_font->latin1[c]
@@ -478,7 +478,7 @@ static rtems_status_code disp_hcms29xx_send_to_control
        * address device
        */
       if (rc == RTEMS_SUCCESSFUL) {
-	rc = rtems_libi2c_send_addr(softc_ptr->disp_param.minor,TRUE);
+	rc = rtems_libi2c_send_addr(softc_ptr->disp_param.minor,true);
       }
 
       /*
@@ -774,7 +774,7 @@ rtems_device_driver disp_hcms29xx_dev_initialize
     rc = disp_hcms29xx_alloc_copy_font(&FONT_BASE,
 			       &disp_hcms29xx_font_rotate,
 			       0, /* do not shift */
-			       TRUE); /* rotate font */
+			       true); /* rotate font */
   }
   /*
    * create the trns_buffer semaphore

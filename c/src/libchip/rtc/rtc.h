@@ -63,7 +63,7 @@ typedef struct _rtc_tbl {
   char          *sDeviceName;
   rtc_devs       deviceType;
   rtc_fns       *pDeviceFns;
-  boolean      (*deviceProbe)(int minor);
+  bool           (*deviceProbe)(int minor);
   void          *pDeviceParams;
   uint32_t       ulCtrlPort1;
   uint32_t       ulDataPort;
@@ -75,7 +75,7 @@ extern rtc_tbl  RTC_Table[];
 extern size_t   RTC_Count;
 
 
-boolean rtc_probe( int minor );
+extern bool rtc_probe( int minor );
 
 #endif
 /* end of include file */

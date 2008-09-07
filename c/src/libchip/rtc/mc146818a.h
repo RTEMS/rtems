@@ -48,7 +48,7 @@
  *  Driver function table
  */
 extern rtc_fns mc146818a_fns;
-boolean mc146818a_probe(
+bool mc146818a_probe(
   int minor
 );
 

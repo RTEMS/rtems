@@ -13,7 +13,7 @@ int termios_baud_to_number(
   int termios_baud
 );
 
-boolean libchip_serial_default_probe(
+bool libchip_serial_default_probe(
   int minor
 );
 

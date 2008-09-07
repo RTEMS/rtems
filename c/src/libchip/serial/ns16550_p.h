@@ -167,7 +167,7 @@ typedef struct _ns16550_context
  * Driver functions
  */
 
-NS16550_STATIC boolean ns16550_probe(int minor);
+NS16550_STATIC bool ns16550_probe(int minor);
 
 NS16550_STATIC void ns16550_init(int minor);
 

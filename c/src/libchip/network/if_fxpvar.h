@@ -105,7 +105,7 @@ struct fxp_softc {
 	bus_space_handle_t sc_sh;	/* bus space handle */
 #else
         int pci_signature;              /* RTEMS i386 PCI signature */
-        boolean pci_regs_are_io;        /* RTEMS dev regs are I/O mapped */
+        bool pci_regs_are_io;           /* RTEMS dev regs are I/O mapped */
         u_int32_t pci_regs_base;        /* RTEMS i386 register base */
         rtems_id daemonTid;             /* Task ID of deamon        */
         rtems_irq_connect_data	irqInfo;

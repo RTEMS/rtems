@@ -65,7 +65,7 @@ console_fns z85c30_fns = {
   z85c30_initialize_interrupts,  /* deviceInitialize */
   z85c30_write_polled,           /* deviceWritePolled */
   NULL,                          /* deviceSetAttributes */
-  TRUE                           /* deviceOutputUsesInterrupts */
+  true                           /* deviceOutputUsesInterrupts */
 };
 
 console_fns z85c30_fns_polled = {
@@ -77,7 +77,7 @@ console_fns z85c30_fns_polled = {
   z85c30_init,                       /* deviceInitialize */
   z85c30_write_polled,               /* deviceWritePolled */
   NULL,                              /* deviceSetAttributes */
-  FALSE                              /* deviceOutputUsesInterrupts */
+  false                              /* deviceOutputUsesInterrupts */
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
@@ -578,7 +578,7 @@ Z85C30_STATIC void z85c30_process(
    *  in RR3.
    */
 
-  while (TRUE) {
+  while (true) {
     z85c30_status = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
     if (!Z85C30_Status_Is_TX_buffer_empty(z85c30_status)) {
       /*

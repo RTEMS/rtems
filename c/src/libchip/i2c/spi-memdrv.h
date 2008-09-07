@@ -68,7 +68,7 @@ rtems_status_code spi_memdrv_read
 
   typedef struct {
     uint32_t baudrate;           /* tfr rate, bits per second     */
-    boolean  erase_before_program;
+    bool     erase_before_program;
     uint32_t empty_state;        /* value of erased cells         */
     uint32_t page_size;          /* programming page size in byte */
     uint32_t sector_size;        /* erase sector size in byte     */

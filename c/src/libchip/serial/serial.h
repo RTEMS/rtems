@@ -29,7 +29,7 @@ typedef uint8_t   (*getData_f)(uint32_t   port);
 typedef void      (*setData_f)(uint32_t   port, uint8_t   value);
 
 typedef struct _console_fns {
-  boolean (*deviceProbe)(int minor);
+  bool    (*deviceProbe)(int minor);
   int     (*deviceFirstOpen)(int major, int minor, void *arg);
   int     (*deviceLastClose)(int major, int minor, void *arg);
   int     (*deviceRead)(int minor);
@@ -37,7 +37,7 @@ typedef struct _console_fns {
   void    (*deviceInitialize)(int minor);
   void    (*deviceWritePolled)(int minor, char cChar);
   int     (*deviceSetAttributes)(int minor, const struct termios *t);
-  int       deviceOutputUsesInterrupts;
+  bool      deviceOutputUsesInterrupts;
 } console_fns;
 
 typedef struct _console_flow {
@@ -118,7 +118,7 @@ typedef struct _console_tbl {
   char          *sDeviceName;
   console_devs   deviceType;
   console_fns   *pDeviceFns;
-  boolean      (*deviceProbe)(int minor);
+  bool         (*deviceProbe)(int minor);
   console_flow  *pDeviceFlow;
   uint32_t       ulMargin;
   uint32_t       ulHysteresis;
@@ -136,7 +136,7 @@ typedef struct _console_tbl {
 
 typedef struct _console_data {
   void                   *termios_data;
-  volatile boolean        bActive;
+  volatile bool           bActive;
   /*
    * This field may be used for any purpose required by the driver
    */

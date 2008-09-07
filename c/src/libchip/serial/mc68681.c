@@ -39,7 +39,7 @@ console_fns mc68681_fns =
   mc68681_initialize_interrupts,  /* deviceInitialize */
   mc68681_write_polled,           /* deviceWritePolled */
   mc68681_set_attributes,         /* deviceSetAttributes */
-  TRUE                            /* deviceOutputUsesInterrupts */
+  true                            /* deviceOutputUsesInterrupts */
 };
 
 console_fns mc68681_fns_polled =
@@ -52,7 +52,7 @@ console_fns mc68681_fns_polled =
   mc68681_init,                        /* deviceInitialize */
   mc68681_write_polled,                /* deviceWritePolled */
   mc68681_set_attributes,              /* deviceSetAttributes */
-  FALSE,                               /* deviceOutputUsesInterrupts */
+  false,                               /* deviceOutputUsesInterrupts */
 };
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
@@ -652,7 +652,7 @@ MC68681_STATIC void mc68681_process(
   /*
    * Deal with any received characters
    */
-  while(TRUE) {
+  while(true) {
     ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
     if(!(ucLineStatus & MC68681_RX_READY)) {
       break;

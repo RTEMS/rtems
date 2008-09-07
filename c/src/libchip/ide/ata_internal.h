@@ -298,7 +298,7 @@ typedef struct ata_dev_s {
  * structures is indexed by controller minor number
  */
 typedef struct ata_ide_ctrl_s {
-    rtems_boolean present;   /* controller state */
+    bool          present;   /* controller state */
     ata_dev_t     device[2]; /* ata diveces description */
     rtems_chain_control reqs; /* requests chain */
 } ata_ide_ctrl_t;

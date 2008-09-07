@@ -16,11 +16,11 @@
 #ifndef __IDE_CTRL_CFG_H__
 #define __IDE_CTRL_CFG_H__
 
+#include <rtems/blkdev.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/blkdev.h>
 
 /*
  * Avaible drivers for IDE controllers
@@ -57,7 +57,7 @@ typedef enum {
  * is contInit.
  */
 typedef struct ide_ctrl_fns_s {
-    boolean           (*ctrl_probe)(int minor); /* probe routine */
+    bool              (*ctrl_probe)(int minor); /* probe routine */
     void              (*ctrl_initialize)(int minor);
     int               (*ctrl_control)(int minor, uint32_t   command,
                                       void *arg);
@@ -92,12 +92,12 @@ typedef struct ide_controller_bsp_table_s {
     char                *name;  /* device name */
     ide_ctrl_devs_t      type;  /* chip type */
     ide_ctrl_fns_t      *fns;   /* pointer to the set of driver routines */
-    boolean              (*probe)(int minor); /* general probe routine */
+    bool                 (*probe)(int minor); /* general probe routine */
     uint8_t              status; /* initialized/non initialized. Should be set
                                   * to zero by static initialization
                                   */
     uint32_t             port1; /* port number for the port of the device */
-    rtems_boolean        int_driven; /* interrupt/poll driven */
+    bool                 int_driven; /* interrupt/poll driven */
     rtems_vector_number  int_vec; /* the interrupt vector of the device */
     void                *params;  /* contains either device specific data or a
                                    * pointer to s device specific information

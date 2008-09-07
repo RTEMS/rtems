@@ -15,9 +15,9 @@
 #include <libchip/rtc.h>
 
 
-boolean rtc_probe(
+bool rtc_probe(
   int minor
 )
 {
-  return TRUE;
+  return true;
 }

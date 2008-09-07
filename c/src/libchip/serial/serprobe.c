@@ -6,12 +6,12 @@
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 
-boolean libchip_serial_default_probe(int minor)
+bool libchip_serial_default_probe(int minor)
 {
   /*
    * If the configuration dependent probe has located the device then
    * assume it is there
    */
 
-  return TRUE;
+  return true;
 }

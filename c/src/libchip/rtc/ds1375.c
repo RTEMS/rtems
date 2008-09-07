@@ -412,29 +412,29 @@ uint8_t v = value;
 
 }
 
-boolean
+bool
 rtc_ds1375_device_probe( int minor )
 {
 int fd;
 
 	if ( ( fd = getfd( minor ) ) < 0 ) {
 		STDIOSAFE( "ds1375_probe (open): %s\n", strerror( errno ) );
-		return FALSE;
+		return false;
 	}
 
 	/* Try to set file pointer */
 	if ( 0 != wr_bytes( fd, DS1375_SEC_REG, 0, 0 ) ) {
 		STDIOSAFE( "ds1375_probe (wr_bytes): %s\n", strerror( errno ) );
 		close( fd );
-		return FALSE;
+		return false;
 	}
 
 	if ( close( fd ) ) {
 		STDIOSAFE( "ds1375_probe (close): %s\n", strerror( errno ) );
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 rtc_fns rtc_ds1375_fns = {

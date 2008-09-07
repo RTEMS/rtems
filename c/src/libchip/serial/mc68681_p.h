@@ -251,7 +251,7 @@ typedef struct _mc68681_context
 /*
  * Driver functions
  */
-MC68681_STATIC boolean mc68681_probe(int minor);
+MC68681_STATIC bool mc68681_probe(int minor);
 
 MC68681_STATIC int mc68681_set_attributes(
   int minor,

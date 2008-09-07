@@ -30,7 +30,7 @@ static spi_memdrv_t spi_flash_m25p40_rw_drv_t = {
   },
   { /* our private fields */
   baudrate:             2000000,
-  erase_before_program: TRUE,
+  erase_before_program: true,
   empty_state:          0xff,
   page_size:            256, /* programming page size in byte */
   sector_size:          64*1024, /* erase sector size in byte */
@@ -48,7 +48,7 @@ static spi_memdrv_t spi_flash_m25p40_ro_drv_t = {
   },
   { /* our private fields */
   baudrate:             2000000,
-  erase_before_program: TRUE,
+  erase_before_program: true,
   empty_state:          0xff,
   page_size:            256, /* programming page size in byte */
   sector_size:          64*1024, /* erase sector size in byte */

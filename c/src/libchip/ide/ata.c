@@ -105,7 +105,7 @@ typedef rtems_mode preemption_key;
     } while (0)
 #endif
 #else /* !SAFE */
-typedef boolean preemption_key;
+typedef bool preemption_key;
 
 #define PREEMPTION_KEY(key) preemption_key key
 
@@ -145,7 +145,7 @@ static ata_ide_dev_t ata_devs[2 * IDE_CTRL_MAX_MINOR_NUMBER];
 static int ata_devs_number;
 
 /* Flag meaning that ATA driver has already been initialized */
-static rtems_boolean ata_initialized = FALSE;
+static bool ata_initialized = false;
 
 
 /* task and queue used for asynchronous I/O operations */
@@ -525,7 +525,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
         }
         else
         {
-            if (IDE_Controller_Table[ctrl_minor].int_driven == 0)
+            if (IDE_Controller_Table[ctrl_minor].int_driven == false)
             {
                 ide_controller_read_register(
                     ctrl_minor,
@@ -540,7 +540,7 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
         }
     }
 
-    if (IDE_Controller_Table[ctrl_minor].int_driven == 0)
+    if (IDE_Controller_Table[ctrl_minor].int_driven == false)
     {
         do {
             ide_controller_read_register(ctrl_minor, IDE_REGISTER_STATUS,
@@ -801,7 +801,7 @@ ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
     {
         ata_request_done(areq, ctrl_minor, RTEMS_SUCCESSFUL, RTEMS_SUCCESSFUL);
     }
-    else if (IDE_Controller_Table[ctrl_minor].int_driven == 0)
+    else if (IDE_Controller_Table[ctrl_minor].int_driven == false)
     {
         do {
            ide_controller_read_register(ctrl_minor, IDE_REGISTER_STATUS, &val);
@@ -851,7 +851,7 @@ ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
                                         areq->breq->bufs, &areq->cbuf,
                                         &areq->pos);
         areq->cnt -= min_val;
-        if (IDE_Controller_Table[ctrl_minor].int_driven == 0)
+        if (IDE_Controller_Table[ctrl_minor].int_driven == false)
         {
             do {
                 ide_controller_read_register(ctrl_minor, IDE_REGISTER_STATUS,
@@ -1209,7 +1209,7 @@ rtems_ata_initialize(rtems_device_major_number major,
     {
         rtems_chain_initialize_empty(&ata_ide_ctrls[ctrl_minor].reqs);
 
-        if (IDE_Controller_Table[ctrl_minor].int_driven == TRUE)
+        if (IDE_Controller_Table[ctrl_minor].int_driven == true)
         {
             int_st = malloc(sizeof(ata_int_st_t));
             if (int_st == NULL)
@@ -1319,33 +1319,33 @@ rtems_ata_initialize(rtems_device_major_number major,
         /* disassemble returned diagnostic codes */
         if (breq.req.error == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
         {
-            ATA_DEV_INFO(ctrl_minor, 0).present = 1;
-            ATA_DEV_INFO(ctrl_minor,1).present = 1;
+            ATA_DEV_INFO(ctrl_minor, 0).present = true;
+            ATA_DEV_INFO(ctrl_minor,1).present = true;
         }
         else if (breq.req.error == ATA_DEV0_PASSED_DEV1_FAILED)
         {
-            ATA_DEV_INFO(ctrl_minor,0).present = 1;
-            ATA_DEV_INFO(ctrl_minor,1).present = 0;
+            ATA_DEV_INFO(ctrl_minor,0).present = true;
+            ATA_DEV_INFO(ctrl_minor,1).present = false;
         }
         else if (breq.req.error < ATA_DEV1_PASSED_DEV0_FAILED)
         {
-            ATA_DEV_INFO(ctrl_minor,0).present = 0;
-            ATA_DEV_INFO(ctrl_minor,1).present = 1;
+            ATA_DEV_INFO(ctrl_minor,0).present = false;
+            ATA_DEV_INFO(ctrl_minor,1).present = true;
         }
         else
         {
-            ATA_DEV_INFO(ctrl_minor, 0).present = 0;
-            ATA_DEV_INFO(ctrl_minor, 1).present = 0;
+            ATA_DEV_INFO(ctrl_minor, 0).present = false;
+            ATA_DEV_INFO(ctrl_minor, 1).present = false;
         }
 
         /* refine the returned codes */
-        if (ATA_DEV_INFO(ctrl_minor, 1).present != 0)
+        if (ATA_DEV_INFO(ctrl_minor, 1).present != false)
         {
             ide_controller_read_register(ctrl_minor, IDE_REGISTER_ERROR, &ec);
             if (ec & ATA_DEV1_PASSED_DEV0_FAILED)
-                ATA_DEV_INFO(ctrl_minor, 1).present = 1;
+                ATA_DEV_INFO(ctrl_minor, 1).present = true;
             else
-                ATA_DEV_INFO(ctrl_minor, 1).present = 0;
+                ATA_DEV_INFO(ctrl_minor, 1).present = false;
         }
 
         /* for each found ATA device obtain it configuration */
@@ -1457,7 +1457,7 @@ rtems_ata_initialize(rtems_device_major_number major,
             }
             ata_devs_number++;
         }
-        if (IDE_Controller_Table[ctrl_minor].int_driven == TRUE)
+        if (IDE_Controller_Table[ctrl_minor].int_driven == true)
         {
             ide_controller_write_register(ctrl_minor,
                                           IDE_REGISTER_DEVICE_CONTROL_OFFSET,
@@ -1466,7 +1466,7 @@ rtems_ata_initialize(rtems_device_major_number major,
     }
 
     free(buffer);
-    ata_initialized = TRUE;
+    ata_initialized = true;
     return RTEMS_SUCCESSFUL;
 }
 

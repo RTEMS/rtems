@@ -60,7 +60,7 @@ extern "C" {
 
 extern rtc_fns rtc_ds1375_fns;
 
-boolean
+bool
 rtc_ds1375_device_probe( int minor );
 
 uint32_t

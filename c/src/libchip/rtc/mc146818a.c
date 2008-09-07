@@ -32,7 +32,7 @@
 /*
  * See if chip is present
  */
-boolean mc146818a_probe(
+bool mc146818a_probe(
   int minor
 )
 {
@@ -47,8 +47,8 @@ boolean mc146818a_probe(
   getReg = RTC_Table[ minor ].getRegister;
   value = (*getReg)( mc146818a, MC146818A_STATUSD );
   if ((value == 0) || (value == 0xFF))
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 /*

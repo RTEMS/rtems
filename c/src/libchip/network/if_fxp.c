@@ -125,7 +125,7 @@ if (DEBUG_OUT >= (LVL)) {                                    \
 
 #define NFXPDRIVER 1
 static struct fxp_softc fxp_softc[NFXPDRIVER];
-static int fxp_is_verbose = TRUE;
+static bool fxp_is_verbose = true;
 /*
  * NOTE!  On the Alpha, we have an alignment constraint.  The
  * card DMAs the packet immediately following the RFA.  However,
@@ -561,14 +561,14 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	pcib_conf_read16(sc->pci_signature, PCI_COMMAND,&val16);
 	DBGLVL_PRINTK(4,"fxp_attach: PCI_COMMAND_read  = 0x%x\n",val16);
 	if((val16 & PCI_COMMAND_IO) != 0) {
-	  sc->pci_regs_are_io = TRUE;
+	  sc->pci_regs_are_io = true;
 	  pcib_conf_read32(sc->pci_signature,
 			   PCI_BASE_ADDRESS_1,
 			   &val32);
 	  sc->pci_regs_base = val32 & PCI_BASE_ADDRESS_IO_MASK;
 	}
 	else {
-	  sc->pci_regs_are_io = FALSE;
+	  sc->pci_regs_are_io = false;
 	  pcib_conf_read32(sc->pci_signature,
 			   PCI_BASE_ADDRESS_0,
 			   &val32);
