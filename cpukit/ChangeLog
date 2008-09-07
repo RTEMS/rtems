@@ -1,5 +1,7 @@
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_cksum_arm.h:
+	Stop using old-style function definitions.
 	* configure.ac: Remove score/cpu/arm/thumb/Makefile.
 
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
