@@ -1,5 +1,6 @@
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* httpd/webrom.c: Add missing initializers.
 	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/diskdevs.h,
 	libblock/include/rtems/ramdisk.h: Use "#include <..>" to include
 	public headers.
