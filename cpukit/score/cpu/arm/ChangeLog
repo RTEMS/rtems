@@ -1,3 +1,8 @@
+2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Merge thumb/Makefile.am.
+	* thumb/Makefile.am: Remove (superfluous).
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu.c, rtems/score/cpu.h: Convert to "bool".
