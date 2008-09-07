@@ -1,5 +1,7 @@
 2008-09-07 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-fram-fm25l256.c,
+	libchip/i2c/spi-memdrv.h: Convert to "bool".
 	* libchip/rtc/ds1375-rtc.h, libchip/rtc/ds1375.c,
 	libchip/rtc/mc146818a.c, libchip/rtc/mc146818a.h,
 	libchip/rtc/rtc.h, libchip/rtc/rtcprobe.c: Convert to "bool".
