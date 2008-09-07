@@ -1,5 +1,7 @@
 2008-09-07 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/display/disp_hcms29xx.c, libchip/display/disp_hcms29xx.h:
+	Convert to "bool".
 	* libchip/network/if_fxp.c, libchip/network/if_fxpvar.h:
 	Convert to "bool".
 	* libchip/shmdr/fatal.c, libchip/shmdr/shm_driver.h:
