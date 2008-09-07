@@ -1,3 +1,8 @@
+2008-09-07 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/shmdr/fatal.c, libchip/shmdr/shm_driver.h:
+	Convert to "bool".
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/Makefile.am, libchip/shmdr/init.c, libchip/shmdr/mpisr.c,
