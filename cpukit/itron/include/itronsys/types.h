@@ -59,7 +59,7 @@ typedef void (*FP)(void);     /* program start address */
 
 typedef int32_t     INT;    /* Signed integer (bit width of processor) */
 typedef uint32_t   UINT;   /* Unsigned integer (bit width of processor) */
-typedef boolean    BOOL;   /* Boolean value.  TRUE (1) or FALSE (0). */
+typedef bool       BOOL;  /* Boolean value.  TRUE (1) or FALSE (0). */
 typedef int16_t     FN;     /* Function code. Signed integer. Maximum 2 bytes. */
 typedef int        ID;     /* Object ID number (???id) */
                            /*   Value range depends on the system.  Usually */
