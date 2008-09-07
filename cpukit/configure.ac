@@ -326,7 +326,6 @@ sapi/Makefile
 score/Makefile
 score/cpu/Makefile
 score/cpu/arm/Makefile
-score/cpu/arm/thumb/Makefile
 score/cpu/bfin/Makefile
 score/cpu/avr/Makefile
 score/cpu/c4x/Makefile
