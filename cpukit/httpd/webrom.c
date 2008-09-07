@@ -11,5 +11,5 @@
 #include "wsIntrn.h"
 
 websRomPageIndexType websRomPageIndex[] = {
-  { 0, 0, 0 },
+  { NULL, NULL, 0, 0 },
 };
