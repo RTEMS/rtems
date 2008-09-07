@@ -13,13 +13,13 @@
 #ifndef _RTEMS_RAMDISK_H
 #define _RTEMS_RAMDISK_H
 
+
+#include <rtems.h>
+#include <rtems/blkdev.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems.h>
-
-#include "rtems/blkdev.h"
 
 /* RAM disk configuration table entry */
 typedef struct rtems_ramdisk_config {

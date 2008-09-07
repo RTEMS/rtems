@@ -24,7 +24,7 @@ extern "C" {
 /* Buffer pool identifier */
 typedef int rtems_bdpool_id;
 
-#include "rtems/blkdev.h"
+#include <rtems/blkdev.h>
 
 /* Driver capabilities. */
 

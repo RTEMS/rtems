@@ -22,8 +22,8 @@
 #include <rtems/libio.h>
 #include <rtems/chain.h>
 
-#include "rtems/blkdev.h"
-#include "rtems/diskdevs.h"
+#include <rtems/blkdev.h>
+#include <rtems/diskdevs.h>
 
 #ifdef __cplusplus
 extern "C" {
