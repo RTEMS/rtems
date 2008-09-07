@@ -1,5 +1,11 @@
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/diskdevs.h,
+	libblock/include/rtems/ramdisk.h: Use "#include <..>" to include
+	public headers.
+
+2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/netinet/in_cksum_arm.h:
 	Stop using old-style function definitions.
 	* configure.ac: Remove score/cpu/arm/thumb/Makefile.
