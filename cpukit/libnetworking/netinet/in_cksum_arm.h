@@ -226,9 +226,9 @@ in_cksum_internal(struct mbuf *m, int off, int len, u_int sum)
 }
 
 int
-in_cksum(m, len)
-    struct mbuf *m;
-    int len;
+in_cksum(
+    struct mbuf *m,
+    int len)
 {
     int cksum;
     cksum =in_cksum_internal(m, 0, len, 0);
