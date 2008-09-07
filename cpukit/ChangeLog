@@ -1,5 +1,9 @@
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove score/cpu/arm/thumb/Makefile.
+
+2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* itron/include/itronsys/types.h: Eliminate "boolean".
 	* libmisc/monitor/mon-prmisc.c: Add missing initializers.
 
