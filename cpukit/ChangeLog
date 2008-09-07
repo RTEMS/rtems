@@ -1,5 +1,6 @@
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* itron/include/itronsys/types.h: Eliminate "boolean".
 	* libmisc/monitor/mon-prmisc.c: Add missing initializers.
 
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
