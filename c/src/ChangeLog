@@ -1,5 +1,10 @@
 2008-09-07 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/serial/mc68681.c, libchip/serial/mc68681_p.h,
+	libchip/serial/ns16550.c, libchip/serial/ns16550_p.h,
+	libchip/serial/serial.h, libchip/serial/serprobe.c,
+	libchip/serial/sersupp.h, libchip/serial/z85c30.c:
+	Convert to "bool".
 	* libchip/i2c/spi-flash-m25p40.c, libchip/i2c/spi-fram-fm25l256.c,
 	libchip/i2c/spi-memdrv.h: Convert to "bool".
 	* libchip/rtc/ds1375-rtc.h, libchip/rtc/ds1375.c,
