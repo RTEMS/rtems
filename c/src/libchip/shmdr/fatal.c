@@ -22,8 +22,8 @@
 
 void MPCI_Fatal(
   Internal_errors_Source  source,
-  boolean                 is_internal,
-  uint32_t          error
+  bool                    is_internal,
+  uint32_t                error
 )
 {
    /*   Eventually need to attempt to broadcast a K_FATAL message

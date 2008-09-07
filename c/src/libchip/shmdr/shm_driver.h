@@ -480,7 +480,7 @@ void           Shm_Locked_queue_Initialize(
 /* portable routines */
 void           Init_env_pool( void );
 void           Shm_Print_statistics( void );
-void           MPCI_Fatal( Internal_errors_Source, boolean, uint32_t);
+void           MPCI_Fatal( Internal_errors_Source, bool, uint32_t);
 rtems_task     Shm_Cause_interrupt( uint32_t );
 void           Shm_install_timer( void );
 void           Shm_Convert_packet( rtems_packet_prefix * );
