@@ -1,3 +1,7 @@
+2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-prmisc.c: Add missing initializers.
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/include/rtems/ramdisk.h, 
