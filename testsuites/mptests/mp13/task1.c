@@ -26,7 +26,7 @@ rtems_task Test_task1(
 )
 {
   char              receive_buffer[16];
-  uint32_t    size;
+  size_t            size;
   rtems_status_code status;
 
   puts( "Getting QID of message queue" );
@@ -43,7 +43,7 @@ rtems_task Test_task1(
     puts( "Receiving message ..." );
     status = rtems_message_queue_receive(
       Queue_id[ 1 ],
-      (long (*)[4])receive_buffer,
+      receive_buffer,
       &size,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT

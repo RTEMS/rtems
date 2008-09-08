@@ -31,7 +31,7 @@ rtems_task Message_queue_task(
   uint32_t     yield_count;
   uint32_t    *buffer_count;
   uint32_t    *overflow_count;
-  uint32_t     size;
+  size_t       size;
 
   Msg_buffer[ index ][0] = 0;
   Msg_buffer[ index ][1] = 0;
@@ -71,14 +71,14 @@ rtems_task Message_queue_task(
     for ( count=MESSAGE_DOT_COUNT ; Stop_Test == false && count ; count-- ) {
       status = rtems_message_queue_receive(
         Queue_id[ 1 ],
-        (long (*)[4])Msg_buffer[ index ],
+        Msg_buffer[ index ],
         &size,
         RTEMS_DEFAULT_OPTIONS,
         RTEMS_NO_TIMEOUT
       );
       directive_failed( status, "rtems_message_queue_receive" );
 
-      if ( *buffer_count == (uint32_t  )0xffffffff ) {
+      if ( *buffer_count == (uint32_t)0xffffffff ) {
         *buffer_count    = 0;
         *overflow_count += 1;
       } else
@@ -86,7 +86,7 @@ rtems_task Message_queue_task(
 
       status = rtems_message_queue_send(
         Queue_id[ 1 ],
-        (long (*)[4])Msg_buffer[ index ],
+        Msg_buffer[ index ],
         16
       );
       directive_failed( status, "rtems_message_queue_send" );

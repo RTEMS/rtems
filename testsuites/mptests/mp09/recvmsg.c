@@ -22,15 +22,15 @@
 void Receive_messages()
 {
  rtems_status_code status;
- uint32_t    index;
- uint32_t    size;
+ uint32_t          index;
+ size_t            size;
  char              receive_buffer[16];
 
  for ( index=1 ; index <=3 ; index++ ) {
    puts( "Receiving message ..." );
    status = rtems_message_queue_receive(
      Queue_id[ 1 ],
-     (long (*)[4])receive_buffer,
+     receive_buffer,
      &size,
      RTEMS_DEFAULT_OPTIONS,
      RTEMS_NO_TIMEOUT

@@ -30,8 +30,8 @@ rtems_task Test_task(
 )
 {
   rtems_status_code status;
-  uint32_t    count;
-  uint32_t    size;
+  uint32_t          count;
+  size_t            size;
   char              receive_buffer[16];
 
   status = rtems_task_wake_after( TICKS_PER_SECOND );
@@ -67,7 +67,7 @@ rtems_task Test_task(
     printf( "%d messages were flushed on the remote queue\n", count );
 
     puts( "Send messages to be flushed from remote queue" );
-    status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4])buffer1, 16 );
+    status = rtems_message_queue_send( Queue_id[ 1 ], buffer1, 16 );
     directive_failed( status, "rtems_message_queue_send" );
 
     puts( "Flushing remote queue" );
@@ -78,7 +78,7 @@ rtems_task Test_task(
     puts( "Waiting for message queue to be deleted" );
     status = rtems_message_queue_receive(
       Queue_id[ 1 ],
-      (long (*)[4])receive_buffer,
+      receive_buffer,
       &size,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT
