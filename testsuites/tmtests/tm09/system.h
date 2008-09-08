@@ -18,6 +18,8 @@
 
 /* functions */
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 rtems_task Init(
   rtems_task_argument argument
 );
@@ -32,6 +34,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS              2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(OPERATION_COUNT, MESSAGE_SIZE)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

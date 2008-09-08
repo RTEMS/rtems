@@ -47,8 +47,6 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 rtems_task Test_task (
   rtems_task_argument argument
 )
