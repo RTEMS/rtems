@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* AUTHORS: Convert to UNIX CR/LF style.
+
 2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
