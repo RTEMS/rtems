@@ -1,3 +1,8 @@
+2008-09-08      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* i2c/i2c.c, i2c/i2cdrv.c, include/i2c.h:
+	converted done_arg to a void pointer 
+	
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* tod/todcfg.c:  Convert to "bool".
