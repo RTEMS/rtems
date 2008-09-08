@@ -1,3 +1,7 @@
+2008-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mcf548x/include/mcf548x.h: Convert to Unix file format.
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mcf5206/clock/ckinit.c, mcf5272/clock/ckinit.c: The Shared Memory
