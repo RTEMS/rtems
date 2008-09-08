@@ -18,7 +18,7 @@ USAGE=\
         -s          -- generate script file (as 'test'.ss) and exit
         -l logdir   -- specify log directory (default is 'logdir')
 
-  Specify test as 'test' or 'test.exe'.
+  Specify test as 'test' or 'test.exe' or 'test.ralf'.
   All multiprocessing tests *must* be specified simply as 'mp01', etc.
 "
 
@@ -109,7 +109,7 @@ args=$*
 tests="$args"
 if [ ! "$tests" ]
 then
-     set -- `echo *.exe`
+     set -- `echo *.exe *.ralf`
      tests="$*"
 fi
 
@@ -127,7 +127,13 @@ trap "test_exit" 1 2 3 13 14 15
 for tfile in $tests
 do
 
-   tname=`basename $tfile .exe`
+   echo $tfile | grep "exe$" >/dev/null
+   if [ $? -eq 0 ] ; then
+     ext=.exe
+   else
+     ext=.ralf
+   fi
+   tname=`basename $tfile ${ext}`
    TEST_TYPE="single"
 
    case $tname in
@@ -144,7 +150,7 @@ do
            continue;;
       *-node1*)
            warn "Running both nodes associated with $tname"
-           variant=`echo $tname | sed 's/.*-node[12]//' | sed 's/\.exe//'`
+           variant=`echo $tname | sed 's/.*-node[12]//' | sed "s/${ext}/"`
            tname=`echo $tname | sed 's/-node.*//'`
            TEST_TYPE="mp"
            ;;
