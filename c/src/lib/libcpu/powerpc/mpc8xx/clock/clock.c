@@ -72,18 +72,52 @@ void clockOn(void* unused)
 {
   unsigned desiredLevel;
   uint32_t   pit_value;
-  uint32_t mf_value;
+  uint32_t   extclk;
   bool force_prescaler = false;
   extern uint32_t bsp_clicks_per_usec;
   extern uint32_t bsp_clock_speed;
+  uint32_t immr_val;
 
   if (bsp_clicks_per_usec == 0) {
     /*
      * oscclk is too low for PIT, compute extclk and derive PIT from there
      */
-    mf_value  = m8xx.plprcr >> 20;    
-    pit_value = (bsp_clock_speed
-		 / (mf_value+1) 
+    /*
+     * determine external input clock by examining the PLL settings
+     * this must be done differently depending on type of PLL
+     */
+    _mfspr(immr_val,M8xx_IMMR);
+    if (8 == ((immr_val & 0x0000FF00) >> 8)) {
+      /*
+       * for MPC866: complex PLL
+       */
+      uint32_t plprcr_val;
+      uint32_t mfn_value;
+      uint32_t mfd_value;
+      uint32_t mfi_value;
+      uint32_t pdf_value;
+      uint32_t s_value;
+
+      plprcr_val = m8xx.plprcr;
+      mfn_value  = (plprcr_val & (0xf8000000)) >> (31- 4);
+      mfd_value  = (plprcr_val & (0x07c00000)) >> (31- 9);
+      s_value    = (plprcr_val & (0x00300000)) >> (31-11);
+      mfi_value  = (plprcr_val & (0x000f0000)) >> (31-15);
+      pdf_value  = (plprcr_val & (0x00000006)) >> (31-30);
+      extclk = (((uint64_t)bsp_clock_speed) 
+		* ((pdf_value + 1) * (mfd_value + 1))
+		/ (mfi_value * (mfd_value + 1) + mfn_value)
+		* (1 << s_value));
+    }
+    else {
+      /*
+       * for MPC860/850 etc: simple PLL
+       */
+      uint32_t mf_value;
+      mf_value  = m8xx.plprcr >> 20;
+      extclk    = bsp_clock_speed / (mf_value+1);
+    }
+    pit_value = (extclk
 		 / 1000
 		 / 4
 		 * rtems_configuration_get_microseconds_per_tick()
