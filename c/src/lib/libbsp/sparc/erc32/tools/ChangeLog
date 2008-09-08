@@ -1,5 +1,9 @@
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* runtest.in: Work on .exe and .ralf files.
+
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* runtest.in: Update to support .exe or .ralf extension.
 
 2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
