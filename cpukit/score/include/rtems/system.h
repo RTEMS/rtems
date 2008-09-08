@@ -182,7 +182,7 @@ typedef void * proc_ptr;
  *  This macro is used to obtain the offset of a field in a structure.
  */
 #define RTEMS_offsetof(type, field) \
-       ((uint32_t  ) &(((type *) 0)->field))
+       ((uint32_t) &(((type *) 0)->field))
 
 /**
  *  The following is the extern for the RTEMS version string.

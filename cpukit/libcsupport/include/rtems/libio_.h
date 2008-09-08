@@ -55,7 +55,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  */
 
 #define rtems_libio_iop(_fd) \
-  ((((uint32_t  )(_fd)) < rtems_libio_number_iops) ? \
+  ((((uint32_t)(_fd)) < rtems_libio_number_iops) ? \
          &rtems_libio_iops[_fd] : 0)
 
 /*
@@ -90,7 +90,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 
 #define rtems_libio_check_fd(_fd) \
   do {                                                     \
-      if ((uint32_t  ) (_fd) >= rtems_libio_number_iops) { \
+      if ((uint32_t) (_fd) >= rtems_libio_number_iops) { \
           errno = EBADF;                                   \
           return -1;                                       \
       }                                                    \

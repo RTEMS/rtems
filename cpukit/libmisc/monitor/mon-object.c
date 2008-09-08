@@ -203,8 +203,8 @@ rtems_monitor_object_canonical_next_remote(
      */
 
     request.command = RTEMS_MONITOR_SERVER_CANONICAL;
-    request.argument0 = (uint32_t  ) type;
-    request.argument1 = (uint32_t  ) id;
+    request.argument0 = (uint32_t) type;
+    request.argument1 = (uint32_t) id;
 
     status = rtems_monitor_server_request(
       rtems_object_id_get_node(id), &request, &response);

@@ -121,7 +121,7 @@ void _Objects_Extend_information(
       object_blocks = (void**)
         _Workspace_Allocate(
           block_count *
-             (sizeof(void *) + sizeof(uint32_t  ) + sizeof(Objects_Name *)) +
+             (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *))
           );
 
@@ -142,7 +142,7 @@ void _Objects_Extend_information(
      *
      */
 
-    inactive_per_block = (uint32_t   *) _Addresses_Add_offset(
+    inactive_per_block = (uint32_t *) _Addresses_Add_offset(
         object_blocks, block_count * sizeof(void*) );
     local_table = (Objects_Control **) _Addresses_Add_offset(
         inactive_per_block, block_count * sizeof(uint32_t) );
@@ -166,7 +166,7 @@ void _Objects_Extend_information(
               block_count * sizeof(void*) );
       memcpy( inactive_per_block,
               information->inactive_per_block,
-              block_count * sizeof(uint32_t  ) );
+              block_count * sizeof(uint32_t) );
       memcpy( local_table,
               information->local_table,
               (information->maximum + minimum_index) * sizeof(Objects_Control *) );

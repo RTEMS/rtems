@@ -438,7 +438,7 @@ rtems_monitor_symbols_loadup(void)
             rtems_symbol_t *sp;
             sp = rtems_symbol_create(rtems_monitor_symbols,
                                      symbol,
-                                     (uint32_t  ) strtoul(value, 0, 16));
+                                     (uint32_t) strtoul(value, 0, 16));
             if (sp == 0)
             {
                 fprintf(stdout,"could not define symbol '%s'\n", symbol);

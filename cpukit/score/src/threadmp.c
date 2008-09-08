@@ -117,7 +117,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
  */
 
 #define _Thread_MP_Proxy_Active_offset \
-     ((uint32_t  )&(((Thread_Proxy_control *)0))->Active)
+     ((uint32_t)&(((Thread_Proxy_control *)0))->Active)
 
 Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id  the_id

@@ -32,7 +32,7 @@ extern "C" {
 #define PATTERN_SIZE_WORDS      (4)
 #endif
 
-#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(uint32_t  ))
+#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(uint32_t))
 
 typedef struct {
    uint32_t    pattern[ PATTERN_SIZE_WORDS ];

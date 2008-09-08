@@ -371,7 +371,7 @@ typedef struct {
 
 /* monitor.c */
 void    rtems_monitor_kill(void);
-void    rtems_monitor_init(uint32_t  );
+void    rtems_monitor_init(uint32_t);
 void    rtems_monitor_wakeup(void);
 void    rtems_monitor_pause_cmd(int, char **, rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_fatal_cmd(int, char **, rtems_monitor_command_arg_t*, bool);

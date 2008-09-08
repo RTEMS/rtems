@@ -76,24 +76,24 @@ extern "C" {
 #define FAT_FAT16              0x02
 #define FAT_FAT32              0x04
 
-#define FAT_UNDEFINED_VALUE     (uint32_t  )0xFFFFFFFF
+#define FAT_UNDEFINED_VALUE     (uint32_t)0xFFFFFFFF
 
 #define FAT_FAT12_EOC          0x0FF8
 #define FAT_FAT16_EOC          0xFFF8
-#define FAT_FAT32_EOC          (uint32_t  )0x0FFFFFF8
+#define FAT_FAT32_EOC          (uint32_t)0x0FFFFFF8
 
 #define FAT_FAT12_FREE         0x0000
 #define FAT_FAT16_FREE         0x0000
 #define FAT_FAT32_FREE         0x00000000
 
-#define FAT_GENFAT_EOC         (uint32_t  )0xFFFFFFFF
-#define FAT_GENFAT_FREE        (uint32_t  )0x00000000
+#define FAT_GENFAT_EOC         (uint32_t)0xFFFFFFFF
+#define FAT_GENFAT_FREE        (uint32_t)0x00000000
 
 #define FAT_FAT12_SHIFT        0x04
 
 #define FAT_FAT12_MASK         0x00000FFF
 #define FAT_FAT16_MASK         0x0000FFFF
-#define FAT_FAT32_MASK         (uint32_t  )0x0FFFFFFF
+#define FAT_FAT32_MASK         (uint32_t)0x0FFFFFFF
 
 #define FAT_MAX_BPB_SIZE       90
 #define FAT_TOTAL_MBR_SIZE    512

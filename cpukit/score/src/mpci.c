@@ -231,8 +231,7 @@ void _MPCI_Send_process_packet (
 {
   the_packet->source_tid = _Thread_Executing->Object.id;
   the_packet->to_convert =
-     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
-       sizeof(uint32_t  );
+     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
@@ -254,8 +253,7 @@ uint32_t   _MPCI_Send_request_packet (
   the_packet->source_tid      = _Thread_Executing->Object.id;
   the_packet->source_priority = _Thread_Executing->current_priority;
   the_packet->to_convert =
-     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) /
-       sizeof(uint32_t  );
+     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 
   _Thread_Executing->Wait.id = the_packet->id;
 

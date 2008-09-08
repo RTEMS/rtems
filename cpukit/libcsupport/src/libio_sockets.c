@@ -32,7 +32,7 @@ struct socket *rtems_bsdnet_fdToSocket(
   rtems_libio_t *iop;
 
   /* same as rtems_libio_check_fd(_fd) but different return */
-  if ((uint32_t  )fd >= rtems_libio_number_iops) {
+  if ((uint32_t)fd >= rtems_libio_number_iops) {
     errno = EBADF;
     return NULL;
   }

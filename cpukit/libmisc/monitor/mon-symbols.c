@@ -362,7 +362,7 @@ rtems_monitor_symbol_canonical_by_value(
     void                   *value_void_p
 )
 {
-    uint32_t   value = (uint32_t  ) value_void_p;
+    uint32_t   value = (uint32_t) value_void_p;
     rtems_symbol_t *sp;
 
     sp = rtems_symbol_value_lookup(0, value);

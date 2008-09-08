@@ -83,22 +83,22 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
  */
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
 
-#define MSDOS_DIR_NAME(x)                 (char      *)((x) + 0)
-#define MSDOS_DIR_ATTR(x)                 (uint8_t   *)((x) + 11)
-#define MSDOS_DIR_NT_RES(x)               (uint8_t   *)((x) + 12)
-#define MSDOS_DIR_CRT_TIME_TENTH(x)       (uint8_t   *)((x) + 13)
-#define MSDOS_DIR_CRT_TIME(x)             (uint16_t   *)((x) + 14)
-#define MSDOS_DIR_CRT_DATE(x)             (uint16_t   *)((x) + 16)
-#define MSDOS_DIR_LAST_ACCESS_DATE(x)     (uint16_t   *)((x) + 18)
-#define MSDOS_DIR_FIRST_CLUSTER_HI(x)     (uint16_t   *)((x) + 20)
-#define MSDOS_DIR_WRITE_TIME(x)           (uint16_t   *)((x) + 22)
-#define MSDOS_DIR_WRITE_DATE(x)           (uint16_t   *)((x) + 24)
-#define MSDOS_DIR_FIRST_CLUSTER_LOW(x)    (uint16_t   *)((x) + 26)
-#define MSDOS_DIR_FILE_SIZE(x)            (uint32_t   *)((x) + 28)
+#define MSDOS_DIR_NAME(x)                 (char     *)((x) + 0)
+#define MSDOS_DIR_ATTR(x)                 (uint8_t  *)((x) + 11)
+#define MSDOS_DIR_NT_RES(x)               (uint8_t  *)((x) + 12)
+#define MSDOS_DIR_CRT_TIME_TENTH(x)       (uint8_t  *)((x) + 13)
+#define MSDOS_DIR_CRT_TIME(x)             (uint16_t *)((x) + 14)
+#define MSDOS_DIR_CRT_DATE(x)             (uint16_t *)((x) + 16)
+#define MSDOS_DIR_LAST_ACCESS_DATE(x)     (uint16_t *)((x) + 18)
+#define MSDOS_DIR_FIRST_CLUSTER_HI(x)     (uint16_t *)((x) + 20)
+#define MSDOS_DIR_WRITE_TIME(x)           (uint16_t *)((x) + 22)
+#define MSDOS_DIR_WRITE_DATE(x)           (uint16_t *)((x) + 24)
+#define MSDOS_DIR_FIRST_CLUSTER_LOW(x)    (uint16_t *)((x) + 26)
+#define MSDOS_DIR_FILE_SIZE(x)            (uint32_t *)((x) + 28)
 
 #define MSDOS_EXTRACT_CLUSTER_NUM(p)                                         \
-            (uint32_t  )( (CF_LE_W(*MSDOS_DIR_FIRST_CLUSTER_LOW(p))) |       \
-                          ((uint32_t  )(CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
+            (uint32_t)( (CF_LE_W(*MSDOS_DIR_FIRST_CLUSTER_LOW(p))) |       \
+                          ((uint32_t)(CF_LE_W((*MSDOS_DIR_FIRST_CLUSTER_HI(p))))<<16) )
 
 /*
  * Fields offset in 32 bytes long FAT Directory Entry
