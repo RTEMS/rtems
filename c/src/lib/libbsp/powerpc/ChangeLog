@@ -1,3 +1,7 @@
+2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* tqm8xx: New BSP.
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/irq/irq.c: Convert to "bool".
