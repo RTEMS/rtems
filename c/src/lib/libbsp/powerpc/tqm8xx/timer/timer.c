@@ -87,7 +87,6 @@ Timer_initialize (void)
 int
 Read_timer (void)
 {
-  extern unsigned int BSP_bus_frequency;
   int retval;
   retval = *(uint32_t*)&m8xx.tcn1;
   retval = retval * 1000000LL / BSP_bus_frequency;

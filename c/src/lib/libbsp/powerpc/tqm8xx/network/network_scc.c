@@ -160,10 +160,12 @@ static void  m8xx_scc1_ethernet_off(const rtems_irq_connect_data* ptr)
    */
 }
 
-static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
+static int  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
 {
-  int BSP_irq_enabled_at_cpm(const rtems_irq_number );
-  BSP_irq_enabled_at_cpm (ptr->name);
+  /*
+   * Assume, that we are on
+   */
+  return 1;
 }
 
 /*
@@ -192,10 +194,10 @@ static void m8xx_scc1_interrupt_handler (void *unused)
 static rtems_irq_connect_data ethernetSCC1IrqData = {
   BSP_CPM_IRQ_SCC1,
   (rtems_irq_hdl) m8xx_scc1_interrupt_handler,
-  0,
-  (rtems_irq_enable) m8xx_scc1_ethernet_on,
-  (rtems_irq_disable) m8xx_scc1_ethernet_off,
-  (rtems_irq_is_enabled)m8xx_scc1_ethernet_isOn
+  NULL,
+  m8xx_scc1_ethernet_on,
+  m8xx_scc1_ethernet_off,
+  m8xx_scc1_ethernet_isOn
 };
 
 /*

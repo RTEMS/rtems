@@ -45,7 +45,10 @@ unsigned int BSP_bus_frequency;
 /* Configuration parameters for clock driver, ... */
 uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
 uint32_t bsp_clock_speed    ; /* needed for PIT driver  */
-
+/* for timer: */
+uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
+uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
+bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 /*
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
@@ -191,6 +194,8 @@ void bsp_start( void)
 			    * PIT clock driver from EXTCLK
 			    */
   bsp_clock_speed     = BSP_bus_frequency;
+  bsp_timer_least_valid = 3; 
+  bsp_timer_average_overhead = 3;
 
   /* Initialize exception handler */
   ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT,

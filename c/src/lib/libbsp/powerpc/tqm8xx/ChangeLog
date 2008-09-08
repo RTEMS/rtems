@@ -1,4 +1,15 @@
-2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
-	* ChangeLog: New file.
+	* network/network_scc.c, network/network_fec.c: fixed some data
+	type issues
 
+	* clock/p_clock.c: added misssing clock driver
+	
+	* startup/bspstart.c, timer/timer.c: 
+	added misssing timer variables
+	
+	* ChangeLog: added changelog
+	
+2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* New BSP -- tqm8xx boards

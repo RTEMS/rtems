@@ -155,7 +155,7 @@ static struct m8xx_fec_enet_struct enet_driver[NIFACES];
 /*
  * FEC interrupt handler
  */
-static void m8xx_fec_interrupt_handler ()
+static void m8xx_fec_interrupt_handler (void *unused)
 {
   /*
    * Frame received?
@@ -180,19 +180,20 @@ static void m8xx_fec_interrupt_handler ()
  * Please organize FEC controller code better by moving code from
  * m860_fec_initialize_hardware to m8xx_fec_ethernet_on
  */
-static void m8xx_fec_ethernet_on(){};
-static void m8xx_fec_ethernet_off(){};
+static void m8xx_fec_ethernet_on(const rtems_irq_connect_data* ptr){};
+static void m8xx_fec_ethernet_off(const rtems_irq_connect_data* ptr){};
 static int m8xx_fec_ethernet_isOn (const rtems_irq_connect_data* ptr)
 {
-  return BSP_irq_enabled_at_siu (ptr->name);
+  return 1;
 }
 
 static rtems_irq_connect_data ethernetFECIrqData = {
   BSP_FAST_ETHERNET_CTRL,
-  (rtems_irq_hdl) m8xx_fec_interrupt_handler,
-  (rtems_irq_enable) m8xx_fec_ethernet_on,
-  (rtems_irq_disable) m8xx_fec_ethernet_off,
-  (rtems_irq_is_enabled)m8xx_fec_ethernet_isOn
+  m8xx_fec_interrupt_handler,
+  NULL,
+  m8xx_fec_ethernet_on,
+  m8xx_fec_ethernet_off,
+  m8xx_fec_ethernet_isOn
 };
 
 static void
@@ -633,7 +634,7 @@ static void fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
       /*
        * Flush the buffer for this descriptor
        */
-      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
+      rtems_cache_flush_multiple_data_lines((void *)txBd->buffer, txBd->length);
 
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;
@@ -795,7 +796,8 @@ static void fec_enet_stats (struct m8xx_fec_enet_struct *sc)
   printf (" Raw output wait:%-8lu\n", sc->txRawWait);
 }
 
-static int fec_ioctl (struct ifnet *ifp, int command, caddr_t data)
+static int fec_ioctl (struct ifnet *ifp, 
+		      ioctl_command_t command, caddr_t data)
 {
   struct m8xx_fec_enet_struct *sc = ifp->if_softc;
   int error = 0;
