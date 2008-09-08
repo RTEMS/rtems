@@ -189,7 +189,7 @@ mcfmbus_machine(mcfmbus *bus, i2c_event event)
                         next_state(bus, STATE_IDLE);
                         bus->msg = bus->cmsg = NULL;
                         bus->nmsg = bus->byte = 0;
-                        bus->done(bus->done_arg);
+                        bus->done(bus->done_arg_ptr);
                         break;
                     }
                     
@@ -553,7 +553,7 @@ mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base)
  *     nmsg - number of messages
  *     msg - pointer to messages array
  *     done - function which is called when transfer is finished
- *     done_arg - arbitrary argument passed to done funciton
+ *     done_arg_ptr - arbitrary argument ptr passed to done funciton
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if transfer initiated successfully, or error
@@ -561,13 +561,13 @@ mcfmbus_initialize(mcfmbus *i2c_bus, uint32_t   base)
  */
 rtems_status_code
 mcfmbus_i2c_transfer(mcfmbus *bus, int nmsg, i2c_message *msg,
-                     i2c_transfer_done done, uint32_t   done_arg)
+                     i2c_transfer_done done, void *done_arg_ptr)
 {
     if (bus != mbus)
         return RTEMS_NOT_CONFIGURED;
     
     bus->done = done;
-    bus->done_arg = done_arg;
+    bus->done_arg_ptr = done_arg_ptr;
     bus->cmsg = bus->msg = msg;
     bus->nmsg = nmsg;
     bus->byte = 0;

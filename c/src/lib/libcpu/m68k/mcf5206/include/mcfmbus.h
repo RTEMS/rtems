@@ -38,7 +38,7 @@ typedef struct mcfmbus {
     rtems_isr_entry        oldisr; /* Old interrupt handler */
     rtems_id               sema; /* MBUS semaphore */
     i2c_transfer_done      done; /* Transfer done function */
-    uint32_t         done_arg; /* Done function argument */
+    uint32_t       done_arg_ptr; /* Done function argument ptr */
 } mcfmbus;
 
 /* mcfmbus_initialize --
@@ -80,7 +80,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider);
  *     nmsg - number of messages
  *     msg - pointer to messages array
  *     done - function which is called when transfer is finished
- *     done_arg - arbitrary argument passed to done funciton
+ *     done_arg_ptr - arbitrary argument ptr passed to done funciton
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if transfer initiated successfully, or error
@@ -88,7 +88,7 @@ mcfmbus_select_clock_divider(mcfmbus *i2c_bus, int divider);
  */
 rtems_status_code
 mcfmbus_i2c_transfer(mcfmbus *bus, int nmsg, i2c_message *msg,
-                     i2c_transfer_done done, uint32_t   done_arg);
+                     i2c_transfer_done done, void *done_arg_ptr);
 
 /* mcfmbus_i2c_done --
  *     Close ColdFire MBUS I2C bus controller and release all resources.
