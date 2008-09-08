@@ -18,6 +18,7 @@ AC_MSG_CHECKING([for available BSPs])
         # Now account for BSPs with build variants
           c4xsim)            bsps="c4xsim c3xsim";;
           gen68360)          bsps="gen68360 gen68360_040 pgh360";;
+          tqm8xx)            bsps="pghplus tqm8xx_stk8xx";;
           genmcf548x)        bsps="m5484FireEngine";;
           p4000)             bsps="p4600 p4650";;
           mvme162)           bsps="mvme162 mvme162lx";;

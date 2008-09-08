@@ -1,3 +1,10 @@
+2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* make/custom/pghplus.cfg, make/custom/tqm8xx_stk8xx.cfg, 
+	* make/custom/tqm8xx.cfg,
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4:
+	added MPC8xx based tqm8xx BSP family
+
 2008-07-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* acinclude.m4 (_RTEMS_OUTPUT_SUBDIRS): Allow empty configdirs.
