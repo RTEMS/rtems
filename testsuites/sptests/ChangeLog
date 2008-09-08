@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp34/sp34.scn, sp35/sp35.scn: Convert to UNIX CR/LF style.
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp35/priinv.c, sp37/init.c, sp38/init.c, sp39/init.c, sp41/init.c,
