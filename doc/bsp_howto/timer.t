@@ -34,7 +34,7 @@ is used in the RTEMS Timing Test Suite so follow the naming convention.
 Initialize the timer source.
 
 @example
-void Timer_initialize(void)
+void benchmark_timer_initialize(void)
 @{
   initialize the benchmark timer
 @}
@@ -42,12 +42,12 @@ void Timer_initialize(void)
 
 @subsection Read_timer
 
-The @code{Read_timer} routine 
-returns the number of benchmark time units (typically microseconds)
-that have elapsed since the last call to @code{Timer_initialize}. 
+The @code{benchmark_timer_read} routine returns the number of benchmark
+time units (typically microseconds) that have elapsed since the last
+call to @code{benchmark_timer_initialize}.
 
 @example
-int Read_timer(void)
+int benchmark_timer_read(void)
 @{
   stop time = read the hardware timer
   if the subtract overhead feature is enabled
@@ -64,36 +64,24 @@ Some implementations report 0 if the harware timer value change is
 sufficiently small.  This is intended to indicate that the execution time 
 is below the resolution of the timer.
 
-@subsection An Empty Function
-
-This routine is invoked by the RTEMS Timing Test Suite to measure 
-the cost of invoking a subroutine.
-
-@example
-rtems_status_code Empty_function (void)
-@{
-  return RTEMS_SUCCESSFUL;
-@}
-@end example
-
-@subsection Set_find_average_overhead
+@subsection benchmark_timer_disable_subtracting_average_overhead
 
 This routine is invoked by the "Check Timer" (@code{tmck}) test in the 
-RTEMS Timing Test Suite.  It makes the @code{Read_timer}
+RTEMS Timing Test Suite.  It makes the @code{benchmark_timer_read}
 routine NOT subtract the overhead required
 to initialize and read the benchmark timer.  This is used
 by the @code{tmoverhd} test to determine the overhead
 required to initialize and read the timer.
 
 @example
-void Set_find_average_overhead(rtems_boolean find_flag)
+void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
 @{
     disable the subtract overhead feature
 @}
 @end example
 
-The @code{Timer_driver_Find_average_overhead} variable is usually
-used to indicate the state of the "subtract overhead feature".
+The @code{benchmark_timer_find_average_overhead} variable is used to
+indicate the state of the "subtract overhead feature".
 
 @section gen68340 UART FIFO Full Mode
 
@@ -116,6 +104,3 @@ entered, set a long delay,
 receipt. 
 
 @end itemize
-
-
-
