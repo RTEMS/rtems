@@ -70,7 +70,7 @@ typedef struct i2c_qel {
     i2c_message      *msg;      /* pointer to the transfer' messages array */
     int               nmsg;     /* number of messages in transfer */
     i2c_transfer_done done;     /* transfer done callback function */
-    uint32_t          done_arg; /* arbitrary argument to done callback */
+    void *    done_arg_ptr;     /* arbitrary arg pointer to done callback */
 } i2c_qel;
 
 /* Memory for I2C transfer queue. This queue represented like a ring buffer */
@@ -105,11 +105,11 @@ static void i2cdrv_unload(void);
  *     transfer is finished.
  */
 static void
-i2cdrv_done(uint32_t         arg)
+i2cdrv_done(void * arg_ptr)
 {
     rtems_interrupt_level level;
     i2c_qel *qel = tqueue + tqueue_tail;
-    qel->done(qel->done_arg);
+    qel->done(qel->done_arg_ptr);
     rtems_interrupt_disable(level);
     tqueue_tail = (tqueue_tail + 1) % tqueue_size;
     mbus_busy = false;
@@ -140,8 +140,8 @@ i2cdrv_unload(void)
             i2cdrv_bus_clock_div_current = i2cdrv_bus_clock_div[qel->bus];
             mpc5200mbus_select_clock_divider(&mbus[qel->bus], i2cdrv_bus_clock_div_current);
         }
-        sc = mpc5200mbus_i2c_transfer(&mbus[qel->bus], qel->nmsg, qel->msg, i2cdrv_done,
-                                  (uint32_t)qel);
+        sc = mpc5200mbus_i2c_transfer(&mbus[qel->bus], qel->nmsg, qel->msg, 
+				      i2cdrv_done,qel);
         if (sc != RTEMS_SUCCESSFUL)
         {
             int i;
@@ -149,7 +149,7 @@ i2cdrv_unload(void)
             {
                 qel->msg[i].status = I2C_RESOURCE_NOT_AVAILABLE;
             }
-            i2cdrv_done((uint32_t)qel);
+            i2cdrv_done(qel);
         }
     }
     else
@@ -168,7 +168,7 @@ i2cdrv_unload(void)
  *     nmsg - number of messages
  *     msg - pointer to messages array
  *     done - function which is called when transfer is finished
- *     done_arg - arbitrary argument passed to done funciton
+ *     done_arg_ptr - arbitrary argument pointer passed to done funciton
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if transfer initiated successfully, or error
@@ -176,7 +176,7 @@ i2cdrv_unload(void)
  */
 rtems_status_code
 i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
-             i2c_transfer_done done, uint32_t         done_arg)
+             i2c_transfer_done done, void *     done_arg_ptr)
 {
     i2c_qel qel;
     rtems_interrupt_level level;
@@ -195,7 +195,7 @@ i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
     qel.msg = msg;
     qel.nmsg = nmsg;
     qel.done = done;
-    qel.done_arg = done_arg;
+    qel.done_arg_ptr = done_arg_ptr;
     rtems_interrupt_disable(level);
     if ((tqueue_head + 1) % tqueue_size == tqueue_tail)
     {

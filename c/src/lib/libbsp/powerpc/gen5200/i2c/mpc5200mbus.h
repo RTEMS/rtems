@@ -56,7 +56,7 @@ typedef struct mpc5200_mbus {
     int                    byte; /* Byte number in current message */
     rtems_id               sema; /* MBUS semaphore */
     i2c_transfer_done      done; /* Transfer done function */
-    uint32_t         done_arg; /* Done function argument */
+    void *         done_arg_ptr; /* Done function argument pointer */
   int              bus_idx;  /* bus index: 0 or 1 */
 } mpc5200mbus;
 
@@ -98,7 +98,7 @@ mpc5200mbus_select_clock_divider(mpc5200mbus *i2c_bus, int divider);
  *     nmsg - number of messages
  *     msg - pointer to messages array
  *     done - function which is called when transfer is finished
- *     done_arg - arbitrary argument passed to done funciton
+ *     done_arg_ptr - arbitrary argument ptr passed to done funciton
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if transfer initiated successfully, or error
@@ -106,7 +106,7 @@ mpc5200mbus_select_clock_divider(mpc5200mbus *i2c_bus, int divider);
  */
 rtems_status_code
 mpc5200mbus_i2c_transfer(mpc5200mbus *bus, int nmsg, i2c_message *msg,
-                     i2c_transfer_done done, uint32_t   done_arg);
+                     i2c_transfer_done done, void * done_arg_ptr);
 
 /* mpc5200mbus_i2c_done --
  *     Close ColdFire MBUS I2C bus controller and release all resources.

@@ -67,7 +67,7 @@ typedef struct i2c_message {
 #define I2C_MSG_ERRSKIP (0x04)  /* Skip message if last transfered message
                                    is failed */
 /* Type for function which is called when transfer over I2C bus is finished */
-typedef void (*i2c_transfer_done) (uint32_t         arg);
+typedef void (*i2c_transfer_done) (void * arg);
 
 /* i2c_initialize --
  *     I2C driver initialization. This function usually called on device
@@ -116,7 +116,7 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps);
  *     nmsg - number of messages
  *     msg - pointer to messages array
  *     done - function which is called when transfer is finished
- *     done_arg - arbitrary argument passed to done funciton
+ *     done_arg_ptr - arbitrary argument ptr passed to done funciton
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if transfer initiated successfully, or error
@@ -124,7 +124,7 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps);
  */
 rtems_status_code
 i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
-             i2c_transfer_done done, uint32_t         done_arg);
+             i2c_transfer_done done, void *done_arg);
 
 /* i2c_transfer_wait --
  *     Initiate I2C bus transfer and block until this transfer will be

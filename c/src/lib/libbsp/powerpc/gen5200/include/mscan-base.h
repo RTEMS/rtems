@@ -90,8 +90,14 @@
  * @{
  */
 
-#define BTR0_SJW(btr0)           ((btr0) << 6)
-#define BTR0_BRP(btr0)           ((btr0) << 0)
+#define BTR0_SJW_MASK            0xc0
+#define BTR0_BRP_MASK            0x3f
+
+#define BTR0_SJW( btr0)          ((btr0) << 6)
+#define BTR0_BRP( btr0)          ((btr0) << 0)
+
+#define BTR0_GET_SJW( btr0)      (((btr0) & BTR0_SJW_MASK) >> 6)
+#define BTR0_GET_BRP( btr0)      (((btr0) & BTR0_BRP_MASK) >> 0)
 
 /** @} */
 
@@ -101,9 +107,16 @@
  * @{
  */
 
+#define BTR1_SAMP_MASK           0x80
+#define BTR1_TSEG1_MASK          0x0f
+#define BTR1_TSEG2_MASK          0x70
+
 #define BTR1_SAMP                (1 << 7)
-#define BTR1_TSEG2(btr1)    ((btr1) << 4)
-#define BTR1_TSEG1(btr1)    ((btr1) << 0)
+#define BTR1_TSEG1( btr1)        ((btr1) << 0)
+#define BTR1_TSEG2( btr1)        ((btr1) << 4)
+
+#define BTR1_GET_TSEG1( btr0)    (((btr0) & BTR1_TSEG1_MASK) >> 0)
+#define BTR1_GET_TSEG2( btr0)    (((btr0) & BTR1_TSEG2_MASK) >> 4)
 
 /** @} */
 

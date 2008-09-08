@@ -23,9 +23,9 @@
  *     arg - done function argument; it is RTEMS semaphore ID.
  */
 static void
-i2c_transfer_sema_done_func(uint32_t         arg)
+i2c_transfer_sema_done_func(void * arg)
 {
-    rtems_id sema = (rtems_id)arg;
+    rtems_id sema = *(rtems_id *)arg;
     rtems_semaphore_release(sema);
 }
 
@@ -38,7 +38,7 @@ i2c_transfer_sema_done_func(uint32_t         arg)
  *     arg - done function argument; address of poll_done_flag
  */
 static void
-i2c_transfer_poll_done_func(uint32_t         arg)
+i2c_transfer_poll_done_func(void *arg)
 {
     bool *poll_done_flag = (bool *)arg;
     *poll_done_flag = true;
@@ -72,7 +72,8 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
     );
     if (sc != RTEMS_SUCCESSFUL)
         return I2C_RESOURCE_NOT_AVAILABLE;
-    sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_sema_done_func, sema);
+    sc = i2c_transfer(bus, nmsg, msg, 
+		      i2c_transfer_sema_done_func, &sema);
     if (sc != RTEMS_SUCCESSFUL)
     {
         rtems_semaphore_delete(sema);
@@ -98,11 +99,16 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
 static rtems_status_code
 i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
 {
-    volatile bool poll_done_flag;
+  /*
+   * this looks nasty, but is correct:
+   * we wait in this function, until the poll_done_flag is
+   * set deep inside the i2c_poll() function
+   */
+    volatile rtems_boolean poll_done_flag;
     rtems_status_code sc;
     poll_done_flag = false;
-    sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_poll_done_func,
-                      (uint32_t)&poll_done_flag);
+    sc = i2c_transfer(bus, nmsg, msg, 
+		      i2c_transfer_poll_done_func,(void *)&poll_done_flag);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;
     while (poll_done_flag == false)

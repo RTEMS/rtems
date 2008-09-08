@@ -1,3 +1,13 @@
+2008-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/mscan-base.h: Added bit timing macros.
+
+2008-09-08      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* i2c/i2c.c, i2c/i2cdrv.c, i2c/mpc5200mbus.c, i2c/mpc5200mbus.h,
+	include/i2c.h:
+	converted done_arg to a void pointer 
+	
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bestcomm/bestcomm_glue.c, ide/pcmcia_ide.c, tod/todcfg.c:
