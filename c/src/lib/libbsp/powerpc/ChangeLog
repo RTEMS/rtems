@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* acinclude.m4: Add tqm8xx.
+
 2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* tqm8xx: New BSP.
