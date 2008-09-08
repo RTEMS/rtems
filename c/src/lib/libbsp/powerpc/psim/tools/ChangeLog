@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* runtest-bottom: Work on .exe and .ralf files.
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psim-gdb-bottom: Also break on C_exception_handler so we can see what

@@ -5,7 +5,7 @@
 tests="$args"
 if [ ! "$tests" ]
 then
-     set -- `echo *.exe`
+     set -- `ls -1 *.exe *.ralf 2>/dev/null`
      tests="$*"
 fi
 
