@@ -55,6 +55,9 @@
     --enable-version-specific-runtime-libs \
     --enable-threads \
     --with-sysroot=%{_exec_prefix}/@tool_target@/sys-root \
+%if %build_newlib
+    --enable-newlib-io-c99-formats \
+%endif
     --enable-languages="$languages" $optargs
 
 %if "%_host" != "%_build"
