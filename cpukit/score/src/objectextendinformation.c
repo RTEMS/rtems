@@ -224,7 +224,6 @@ void _Objects_Extend_information(
   if ( information->auto_extend ) {
     information->object_blocks[ block ] =
       _Workspace_Allocate(
-        (information->allocation_size * information->name_length) +
         (information->allocation_size * information->size)
       );
 
@@ -234,7 +233,6 @@ void _Objects_Extend_information(
   else {
     information->object_blocks[ block ] =
       _Workspace_Allocate_or_fatal_error(
-        (information->allocation_size * information->name_length) +
         (information->allocation_size * information->size)
       );
   }
