@@ -1,3 +1,8 @@
+2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* mcf548x/include/Freescale_license.txt: Convert to UNIX CR/LF style,
+	eliminate characters with 8th bit set.
+
 2008-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mcf548x/include/mcf548x.h: Convert to Unix file format.
