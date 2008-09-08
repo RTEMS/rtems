@@ -1,5 +1,10 @@
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/threadinitialize.c: _Stack_Ensure_minimum was being called
+	here and in _Thread_Stack_Allocate.
+
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/include/rtems/libio_.h, libcsupport/src/libio_sockets.c,
 	libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h,
 	libfs/src/imfs/deviceio.c, libmisc/monitor/mon-monitor.c,

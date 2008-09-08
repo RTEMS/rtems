@@ -78,9 +78,7 @@ bool _Thread_Initialize(
 
   if ( !stack_area ) {
 
-    actual_stack_size = _Stack_Ensure_minimum( stack_size );
-
-    actual_stack_size = _Thread_Stack_Allocate( the_thread, actual_stack_size );
+    actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
 
     if ( !actual_stack_size || actual_stack_size < stack_size )
       return FALSE;                     /* stack allocation failed */
