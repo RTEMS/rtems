@@ -1,0 +1,15 @@
+/**
+ * @file
+ *
+ * TQM8xx
+ */
+
+TopRamReserved = DEFINED(TopRamReserved) ? TopRamReserved : 0;	
+MEMORY {
+	RAM   : ORIGIN = 0x0, LENGTH = 128M
+	immr  : org = 0xfa200000,  l = 16K
+	ROM : ORIGIN = 0x40000000, LENGTH = 8M
+	NIRVANA : ORIGIN = 0x0, LENGTH = 0
+}
+
+INCLUDE linkcmds.base
