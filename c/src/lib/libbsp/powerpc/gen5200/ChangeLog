@@ -1,3 +1,7 @@
+2008-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* i2c/i2c.c: Remove rtems_boolean having crept in again.
+
 2008-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/mscan-base.h: Added bit timing macros.
