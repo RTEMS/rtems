@@ -1,3 +1,8 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mpc8xx/clock/clock.c, mpc8xx/console-generic/console-generic.c,
+	mpc8xx/timer/timer.c: Fix nested extern declaration warnings.
+
 2008-09-08	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* mpc8xx/clock/clock.c: adapt PIT driver to more complex PLL in

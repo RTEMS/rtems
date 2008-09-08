@@ -48,6 +48,8 @@ extern volatile m8xx_t m8xx;
 extern int BSP_get_clock_irq_level(void);
 extern int BSP_connect_clock_handler(rtems_isr_entry);
 extern int BSP_disconnect_clock_handler(void);
+extern uint32_t bsp_clicks_per_usec;
+extern uint32_t bsp_clock_speed;
 
 void Clock_exit( void );
 
@@ -74,8 +76,6 @@ void clockOn(void* unused)
   uint32_t   pit_value;
   uint32_t   extclk;
   bool force_prescaler = false;
-  extern uint32_t bsp_clicks_per_usec;
-  extern uint32_t bsp_clock_speed;
   uint32_t immr_val;
 
   if (bsp_clicks_per_usec == 0) {

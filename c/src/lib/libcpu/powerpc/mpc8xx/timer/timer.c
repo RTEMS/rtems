@@ -47,6 +47,8 @@
 
 static volatile uint32_t   Timer_starting;
 static bool benchmark_timer_find_average_overhead;
+extern uint32_t bsp_timer_least_valid;
+extern uint32_t bsp_timer_average_overhead;
 
 /*
  *  This is so small that this code will be reproduced where needed.
@@ -73,8 +75,6 @@ int benchmark_timer_read(void)
 {
   uint32_t   clicks;
   uint32_t   total;
-  extern uint32_t bsp_timer_least_valid;
-  extern uint32_t bsp_timer_average_overhead;
 
   clicks = get_itimer();
 

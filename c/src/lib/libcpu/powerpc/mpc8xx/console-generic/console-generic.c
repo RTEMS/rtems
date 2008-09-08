@@ -61,6 +61,8 @@ int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
 /* BSP supplied routine */
 extern int mbx8xx_console_get_configuration(void);
 
+extern uint32_t bsp_clock_speed;
+
 /*
  * Interrupt-driven input buffer
  */
@@ -109,7 +111,6 @@ m8xx_get_brg_cd (int baud)
 {
   int divisor;
   int div16 = 0;
-  extern uint32_t bsp_clock_speed;
 
   divisor = ((bsp_clock_speed / 16) + (baud / 2)) / baud;
   if (divisor > 4096) {
