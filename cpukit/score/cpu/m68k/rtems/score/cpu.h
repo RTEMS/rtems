@@ -378,7 +378,7 @@ uint32_t   _CPU_ISR_Get_level( void );
      uint32_t   _stack; \
      \
      (_the_context)->sr      = 0x3000 | ((_isr) << 8); \
-     _stack                  = (uint32_t  )(_stack_base) + (_size) - 4; \
+     _stack                  = (uint32_t)(_stack_base) + (_size) - 4; \
      (_the_context)->a7_msp  = (void *)_stack; \
      *(void **)_stack        = (void *)(_entry_point); \
      (_the_context)->fpu_dis = (_is_fp == TRUE) ? 0x00 : 0x10;          \

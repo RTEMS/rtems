@@ -39,7 +39,7 @@ void _CPU_Initialize(
     _CPU_ISR_jump_table[slot].move_a7 = M68K_MOVE_A7;
     _CPU_ISR_jump_table[slot].format_id = slot << 2;
     _CPU_ISR_jump_table[slot].jmp = M68K_JMP;
-    _CPU_ISR_jump_table[slot].isr_handler = (uint32_t  ) 0xDEADDEAD;
+    _CPU_ISR_jump_table[slot].isr_handler = (uint32_t) 0xDEADDEAD;
   }
 #endif /* M68K_HAS_VBR */
 }
@@ -104,8 +104,8 @@ void _CPU_ISR_install_raw_handler(
    */
 
   *old_handler = (proc_ptr) _CPU_ISR_jump_table[vector].isr_handler;
-  _CPU_ISR_jump_table[vector].isr_handler = (uint32_t  ) new_handler;
-  if ( (uint32_t  ) interrupt_table != 0xFFFFFFFF )
+  _CPU_ISR_jump_table[vector].isr_handler = (uint32_t) new_handler;
+  if ( (uint32_t) interrupt_table != 0xFFFFFFFF )
     interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
 #endif /* M68K_HAS_VBR */
 }
