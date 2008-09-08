@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c: Remove extraneous spaces.
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cpu.c, rtems/score/cpu.h: Convert to "bool".

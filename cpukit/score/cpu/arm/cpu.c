@@ -146,8 +146,8 @@ void _CPU_Context_Initialize(
   bool              is_fp
 )
 {
-    the_context->register_sp = (uint32_t  )stack_base + size ;
-    the_context->register_lr = (uint32_t  )entry_point;
+    the_context->register_sp = (uint32_t)stack_base + size ;
+    the_context->register_lr = (uint32_t)entry_point;
     the_context->register_cpsr = new_level | arm_cpu_mode;
 }
 
@@ -261,7 +261,7 @@ void rtems_exception_init_mngt(void)
 #define GET_U(x)              ((x & 0x00800000) >> 23)
 #define GET_I(x)              ((x & 0x02000000) >> 25)
 
-#define GET_REG(r, ctx)      (((uint32_t   *)ctx)[r])
-#define SET_REG(r, ctx, v)   (((uint32_t   *)ctx)[r] = v)
+#define GET_REG(r, ctx)      (((uint32_t *)ctx)[r])
+#define SET_REG(r, ctx, v)   (((uint32_t *)ctx)[r] = v)
 #define GET_OFFSET(insn)     (insn & 0xfff)
 

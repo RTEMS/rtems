@@ -202,7 +202,7 @@ void _CPU_Context_Initialize(
 )
 {
     uint32_t     stack_high;  /* highest "stack aligned" address */
-    stack_high = ((uint32_t  )(stack_base) + size);
+    stack_high = ((uint32_t)(stack_base) + size);
 
     the_context->register_sp = stack_high;
     the_context->register_rets = (uint32_t) entry_point;

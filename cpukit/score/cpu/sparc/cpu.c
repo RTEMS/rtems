@@ -186,7 +186,7 @@ void _CPU_ISR_install_raw_handler(
 
   *slot = _CPU_Trap_slot_template;
 
-  u32_handler = (uint32_t  ) new_handler;
+  u32_handler = (uint32_t) new_handler;
 
   slot->mov_vector_l3 |= vector;
   slot->sethi_of_handler_to_l4 |= 
@@ -288,7 +288,7 @@ void _CPU_Context_Initialize(
      *  based on the stack_high address.  
      */
  
-    stack_high = ((uint32_t  )(stack_base) + size);
+    stack_high = ((uint32_t)(stack_base) + size);
     stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
  
     the_size = size & ~(CPU_STACK_ALIGNMENT - 1);
@@ -297,7 +297,7 @@ void _CPU_Context_Initialize(
      *  See the README in this directory for a diagram of the stack.
      */
  
-    the_context->o7    = ((uint32_t  ) entry_point) - 8;
+    the_context->o7    = ((uint32_t) entry_point) - 8;
     the_context->o6_sp = stack_high - CPU_MINIMUM_STACK_FRAME_SIZE;
     the_context->i6_fp = 0;
 
