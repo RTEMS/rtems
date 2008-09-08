@@ -899,7 +899,7 @@ uint32_t   _CPU_ISR_Get_level( void );
                                  _isr, _entry_point, _is_fp ) \
    do { \
      extern char _gp[]; \
-     uint32_t _stack = (uint32_t  )(_stack_base) + (_size) - 4; \
+     uint32_t _stack = (uint32_t)(_stack_base) + (_size) - 4; \
      (_the_context)->gp = (void *)_gp; \
      (_the_context)->fp = (void *)_stack; \
      (_the_context)->sp = (void *)_stack; \

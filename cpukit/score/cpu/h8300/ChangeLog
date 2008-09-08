@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Remove extraneous spaces.
+
 2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Include stdbool.h.

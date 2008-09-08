@@ -300,7 +300,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     if ( (_isr) ) (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_OFF; \
     else          (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_ON; \
     \
-    _stack = ((uint32_t  )(_stack_base)) + (_size) - 4; \
+    _stack = ((uint32_t)(_stack_base)) + (_size) - 4; \
     \
     *((proc_ptr *)(_stack)) = (_entry_point); \
     (_the_context)->ebp     = (void *) _stack; \
