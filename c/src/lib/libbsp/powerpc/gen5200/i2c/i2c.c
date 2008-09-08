@@ -104,7 +104,7 @@ i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
    * we wait in this function, until the poll_done_flag is
    * set deep inside the i2c_poll() function
    */
-    volatile rtems_boolean poll_done_flag;
+    volatile bool poll_done_flag;
     rtems_status_code sc;
     poll_done_flag = false;
     sc = i2c_transfer(bus, nmsg, msg, 
