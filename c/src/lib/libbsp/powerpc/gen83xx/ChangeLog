@@ -6,7 +6,7 @@
 
 	* startup/bspstart.c: Derive time base clicks from bus frequency.
 
-08-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.c: Convert to "bool".
 
