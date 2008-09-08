@@ -59,16 +59,16 @@ static const char rcsid[] = RCSID;
  */
 static option_t chap_option_list[] = {
     { "chap-restart", o_int, &chap[0].timeouttime,
-      "Set timeout for CHAP" },
+      "Set timeout for CHAP", 0, NULL, 0, 0 },
     { "chap-max-challenge", o_int, &chap[0].max_transmits,
-      "Set max #xmits for challenge" },
+      "Set max #xmits for challenge", 0, NULL, 0, 0 },
     { "chap-interval", o_int, &chap[0].chal_interval,
-      "Set interval for rechallenge" },
+      "Set interval for rechallenge", 0, NULL, 0, 0 },
 #ifdef MSLANMAN
     { "ms-lanman", o_bool, &ms_lanman,
-      "Use LanMan passwd when using MS-CHAP", 1 },
+      "Use LanMan passwd when using MS-CHAP", 1, NULL, 0, 0 },
 #endif
-    { NULL }
+    { NULL, 0, NULL, NULL, 0,  NULL, 0, 0 }
 };
 
 /*
