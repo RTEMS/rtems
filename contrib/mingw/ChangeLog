@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* AUTHORS, COPYING, README: Convert to UNIX CR/LF style.
+
 2007-0823	Chris Johns <chisj@rtems.org>
 
 	* mingw-path.nsi: Change the forward slashes to back slashes for
