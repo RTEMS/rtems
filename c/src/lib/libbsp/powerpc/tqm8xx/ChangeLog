@@ -1,3 +1,7 @@
+2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, include/.cvsignore: New files.
+
 2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* network/network_scc.c, network/network_fec.c: fixed some data
