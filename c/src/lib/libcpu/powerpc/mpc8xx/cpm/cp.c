@@ -22,7 +22,7 @@
 
 void m8xx_cp_execute_cmd( uint16_t   command )
 {
-  uint16_t   lvl;
+  rtems_interrupt_level lvl;
   
   rtems_interrupt_disable(lvl);
   while (m8xx.cpcr & M8xx_CR_FLG) {
