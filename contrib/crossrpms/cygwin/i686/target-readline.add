@@ -1,6 +1,0 @@
-%files
-%defattr(-,root,root,-)
-%dir %{_prefix}/@tool_target@
-%{_prefix}/@tool_target@/sys-root
-
-
