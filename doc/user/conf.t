@@ -894,7 +894,7 @@ typedef struct @{
   uint32_t                        interrupt_stack_size;
   void *                        (*stack_allocate_hook)( uint32_t );
   void                          (*stack_free_hook)( void * );
-  boolean                         do_zero_of_workspace;
+  bool                            do_zero_of_workspace;
   uint32_t                        maximum_drivers;
   uint32_t                        number_of_device_drivers;
   rtems_driver_address_table     *Device_driver_table;
@@ -1599,7 +1599,7 @@ typedef rtems_extension (*rtems_task_exitted_extension)(
 );
 typedef rtems_extension (*rtems_fatal_extension)(
    Internal_errors_Source /* the_source */,
-   boolean                /* is_internal */,
+   bool                   /* is_internal */,
    uint32_t               /* the_error */
 );
 

@@ -210,7 +210,7 @@ following:
 @findex rtems_extension
 @ifset is-C
 @example
-boolean user_task_create(
+bool user_task_create(
   rtems_tcb *current_task,
   rtems_tcb *new_task
 );
@@ -235,11 +235,11 @@ completely initialized, but before it is placed on a ready TCB
 chain.
 
 The user extension is expected to return the boolean
-value @code{TRUE} if it successfully executed and
-@code{FALSE} otherwise.  A task create user extension
+value @code{true} if it successfully executed and
+@code{false} otherwise.  A task create user extension
 will frequently attempt to allocate resources.  If this
 allocation fails, then the extension should return
-@code{FALSE} and the entire task create operation
+@code{false} and the entire task create operation
 will fail.
 
 @subsubsection TASK_START Extension

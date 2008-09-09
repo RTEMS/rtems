@@ -895,7 +895,7 @@ typedef struct @{
   rtems_id  minimum_id;
   rtems_id  maximum_id;
   uint32_t  maximum;
-  boolean   auto_extend;
+  bool      auto_extend;
   uint32_t  unallocated;
 @} rtems_object_api_class_information;
 @end example

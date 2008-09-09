@@ -246,12 +246,12 @@ bool @value{DIRPREFIX}chain_is_null_node(
 
 @subheading RETURNS
 
-Returns true is the node point is NULL and false if the node is not
+Returns @code{true} is the node point is NULL and @code{false} if the node is not
 NULL.
 
 @subheading DESCRIPTION:
 
-Tests the node to see if it is a NULL returning true if a null.
+Tests the node to see if it is a NULL returning @code{true} if a null.
 
 @c
 @c
@@ -329,13 +329,13 @@ bool @value{DIRPREFIX}chain_are_nodes_equal(
 
 @subheading RETURNS
 
-This function returns true if the left node and the right node are
-equal, and false otherwise.
+This function returns @code{true} if the left node and the right node are
+equal, and @code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if the left node and the right node are
-equal, and false otherwise.
+This function returns @code{true} if the left node and the right node are
+equal, and @code{false} otherwise.
 
 @c
 @c
@@ -358,12 +358,12 @@ bool @value{DIRPREFIX}chain_is_empty(
 
 @subheading RETURNS
 
-This function returns true if there a no nodes on the chain and false
+This function returns @code{true} if there a no nodes on the chain and @code{false}
 otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if there a no nodes on the chain and false
+This function returns @code{true} if there a no nodes on the chain and @code{false}
 otherwise.
 
 @c
@@ -387,13 +387,13 @@ bool @value{DIRPREFIX}chain_is_first(
 
 @subheading RETURNS
 
-This function returns true if the node is the first node on a chain
-and false otherwise.
+This function returns @code{true} if the node is the first node on a chain
+and @code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if the node is the first node on a chain
-and false otherwise.
+This function returns @code{true} if the node is the first node on a chain
+and @code{false} otherwise.
 
 @c
 @c
@@ -416,13 +416,13 @@ bool @value{DIRPREFIX}chain_is_last(
 
 @subheading RETURNS
 
-This function returns true if the node is the last node on a chain and
-false otherwise.
+This function returns @code{true} if the node is the last node on a chain and
+@code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if the node is the last node on a chain and
-false otherwise.
+This function returns @code{true} if the node is the last node on a chain and
+@code{false} otherwise.
 
 @c
 @c
@@ -445,13 +445,13 @@ bool @value{DIRPREFIX}chain_has_only_one_node(
 
 @subheading RETURNS
 
-This function returns true if there is only one node on the chain and
-false otherwise.
+This function returns @code{true} if there is only one node on the chain and
+@code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if there is only one node on the chain and
-false otherwise.
+This function returns @code{true} if there is only one node on the chain and
+@code{false} otherwise.
 
 @c
 @c
@@ -475,13 +475,13 @@ bool @value{DIRPREFIX}chain_is_head(
 
 @subheading RETURNS
 
-This function returns true if the node is the head of the chain and
-false otherwise.
+This function returns @code{true} if the node is the head of the chain and
+@code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if the node is the head of the chain and
-false otherwise.
+This function returns @code{true} if the node is the head of the chain and
+@code{false} otherwise.
 
 @c
 @c
@@ -505,13 +505,13 @@ bool @value{DIRPREFIX}chain_is_tail(
 
 @subheading RETURNS
 
-This function returns true if the node is the tail of the chain and
-false otherwise.
+This function returns @code{true} if the node is the tail of the chain and
+@code{false} otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns true if the node is the tail of the chain and
-false otherwise.
+This function returns @code{true} if the node is the tail of the chain and
+@code{false} otherwise.
 
 @c
 @c
