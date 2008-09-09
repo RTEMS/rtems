@@ -1,5 +1,7 @@
 2008-09-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* user/chains.t, user/conf.t, user/object.t, user/userext.t:
+	More "bool" cleanup.
 	* bsp_howto/ata.t, bsp_howto/rtc.t, networking/networkapp.t,
 	user/chains.t, user/stackchk.t: Convert to "bool".
 
