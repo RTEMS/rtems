@@ -1,3 +1,7 @@
+2008-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README.configure: Updated list of BSPs.
+
 2008-09-08	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* make/custom/pghplus.cfg, make/custom/tqm8xx_stk8xx.cfg, 

@@ -88,20 +88,18 @@ within a target architecture.  Remember that the target specifies the
 CPU family while the BSP specifies the precise board you will be using. 
 The following targets are supported:
 
-      (none)			will build the host-based version on Linux,
-			      Solaris and HPUX.
+      (none)	will build the host-based version on Linux, Solaris and HPUX.
 
-      arm-rtems
-      c4x-rtems
-      h8300-rtems
-      i386-rtems
-      m68k-rtems
-      mips-rtems
-      no_cpu-rtems
-      or32-rtems
-      powerpc-rtems
-      sh-rtems
-      sparc-rtems
+      arm-rtems4.9
+      tic4x-rtems4.9
+      h8300-rtems4.9
+      i386-rtems4.9
+      m68k-rtems4.9
+      mips-rtems4.9
+      no_cpu-rtems4.9
+      powerpc-rtems4.9
+      sh-rtems4.9
+      sparc-rtems4.9
       bare                    see notes
 
 The cross-compiler is set to $(target)-gcc by default. This can be
@@ -126,21 +124,13 @@ As an example, to build and install the mvme136 and mvme162 bsps for m68k do:
       
       make install RTEMS_BSP="mvme136 mvme162"
 
-The sample tests are built by 'make all', do a 'make test' to build the full
+The sample tests are built by 'make all' when configured with
+--enable-tests=samples.  Use --enable-tests=all to build the full
 test suite.
 
-By default, --enable-docs is disabled and documentation is not built.
+Documentation is built separately from the source code.
 
-2.2 Build with Cygnus one-tree release
-
-[NOTE: This section does not apply anymore.]
-
-To build and install RTEMS with the one-tree structure, just copy the rtems
-directory to the tree. The one-tree configure.in and Makefile.in has to be 
-replaced with the RTEMS-aware versions. The build options are the same as 
-for the standalone build.
-
-2.3 Target Dependent Notes
+2.2 Target Dependent Notes
 
 bare:
 
@@ -176,7 +166,8 @@ The following bsps are supported:
 
 host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 
-arm             : csb336 csb337 edb7312 gba gp32 rtl22x
+arm             : csb336 csb337 edb7312 gba gp32 nds rtl22x rtl22xx_t
+                  smdk2410
 
 avr:            : none
 
@@ -186,34 +177,35 @@ c4x             : c3xsim c4xsim
 
 h8300           : h8sim
 
-i386		: 386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
+i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 		NOTE: The "pc386" BSP can be compiled to support a 
 		      variety of PC configurations including PC-104
 		      based solutions.
 
-m68k		: gen68360 gen68360_040 mvme136 mvme147s mvme162 mvme162lx
-		mvme167 ods68302 sim68000 mcf5206elite uC5282 
-		gen68302 csb360 simcpu32 mrm332 av5282 gen68340 mcf5235 idp
-		m5484FireEngine
+m68k		: av5282 csb360 gen68302 gen68360 gen68360_040 
+		genmcf548x idp mcf5206elite mcf52235 mcf5235 mcf5239
+		m5484FireEngine mrm332 mvme136 mvme147s mvme162 mvme162lx
+		mvme167 ods68302 pgh360 sim68000 simcpu32 uC5282 
 
 no_cpu          : no_bsp  (porting example)
 
 mips            : csb350 genmongoosev hurricane jmr3904 rbtx4925 rbtx4938
+		p4600 p4650
 
-powerpc		: psim score603e mcp750 mvme2100 mvme2307 mpc8260ads ss555
-                  mvme5500 ep1a pm520_cr825 pm520_ze30 gen405 helas403
-                  mbx821_001 mbx821_002 mbx821_002b mbx860_001b
-                  mbx860_002 mbx860_005b mtx603e brs5l gen5200 ep5200
-		  virtex gen83xx mpc8349eamds 
-                  mbx860_002 mbx860_005b mtx603e brs5l gen5200 icecube
-		  virtex gen83xx mpc8349eamds hsc_cm01 mpc8313erdb
-		  tqm8xx_stk8xx pghplus
+powerpc		: brs5l ep1a gen5200 gen83xx haleakala hsc_cm01 icecube
+		mbx821_001 mbx821_002 mbx821_002b mbx860_001b mbx860_002
+		mbx860_005b mcp750 mvme2100 mvme2307 mtx603e
+		mvme5500 mpc55xxevb mpc8260ads mpc8313erdb mpc8349eamds 
+		pghplus pm520_cr825 pm520_ze30 psim score603e ss555
+		tqm8xx_stk8xx virtex
 
                   NOTE: The "motorola_powerpc" BSP is a single BSP which
                   can be conditionally compiled to support most Motorola
                   VMEbus, CompactPCI, and MTX boards.)
 
-                  NOTE: The ep5200 is a clone of the 5200Lite a.k.a. IceCube.
+                  NOTE: The mbx8xx, gen5200, gen83xx, and tqm8xx BSPs are
+		  designed to handle a variety of boards based on the same
+		  family of system on chips CPUs
 
 sh              : gensh1 gensh2 gensh4 shsim simsh4 simsh7045
 
