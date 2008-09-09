@@ -1,3 +1,7 @@
+2008-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsp_howto/Developer-User-Timeline.png: Correct figure.
+
 2008-09-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* user/chains.t, user/conf.t, user/object.t, user/userext.t:
