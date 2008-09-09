@@ -100,6 +100,7 @@ int m8xx_clock_rate	= 0;
 #define CONS_CHN_SCC4 3
 #define CONS_CHN_SMC1 4
 #define CONS_CHN_SMC2 5
+#define CONS_CHN_NONE -1
 
 /*
  * possible identifiers for bspopts.h: CONS_SxCy_MODE
@@ -114,12 +115,6 @@ int m8xx_clock_rate	= 0;
 
 #define MAX_IDL_DEFAULT 10
 #define DEVICEPREFIX "tty"
-
-/*
- * printk basic support
- */
-static void _BSP_null_char( char c ) {return;}
-BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 /*
  * Interrupt-driven callback
@@ -818,11 +813,11 @@ sccInterruptWrite (int minor, const char *buf, int len)
 static int
 sccPollWrite (int minor, const char *buf, int len)
 {
+  static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
   int chan = minor;
   int bd_used;
-
+  
   while (len--) {
-    static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
     while (sccPrepTxBd[chan]->status & M8xx_BD_READY)
       continue;
     bd_used = sccPrepTxBd[chan]-sccFrstTxBd[chan];
@@ -844,6 +839,30 @@ sccPollWrite (int minor, const char *buf, int len)
   }
   return 0;
 }
+
+/*
+ * printk basic support
+ */
+int BSP_output_chan = CONS_CHN_NONE; /* channel used for printk operation */
+
+static void console_debug_putc_onlcr(const char c)
+{
+  rtems_interrupt_level irq_level;
+  static char cr_chr = '\r';
+
+  if (BSP_output_chan != CONS_CHN_NONE) {
+    rtems_interrupt_disable(irq_level);
+    
+    if (c == '\n') {
+      sccPollWrite (BSP_output_chan,&cr_chr,1);
+    }
+    sccPollWrite (BSP_output_chan,&c,1);
+    rtems_interrupt_enable(irq_level);
+  }
+}
+
+BSP_output_char_function_type BSP_output_char = console_debug_putc_onlcr;
+
 
 /*
 ***************
@@ -930,8 +949,10 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
     rtems_fatal_error_occurred (status);
   }
   /*
-   * FIXME: enable printk support
+   * enable printk support
    */
+  BSP_output_chan = PRINTK_CHN;
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -1028,8 +1049,6 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
   rtems_status_code rc                = RTEMS_SUCCESSFUL;
   con360_io_trm_char_t *trm_char_info = ioa->buffer;
 
-  printf("ioctl called: maxidl=%d\n",trm_char_info->max_idl);
-  printf("ioctl called: char_cnt=%d\n",trm_char_info->char_cnt);
   /*
    * check, that parameter is non-NULL
    */
@@ -1042,7 +1061,6 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
    */
   if (rc == RTEMS_SUCCESSFUL) {
     if (trm_char_info->max_idl >= 0x10000) {
-      printf("ioctl called: invalid number for maxidl\n");
       rc = RTEMS_INVALID_NUMBER;
     }
     else if (trm_char_info->max_idl > 0) {
@@ -1057,7 +1075,6 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
    */
   if (rc == RTEMS_SUCCESSFUL) {
     if (trm_char_info->char_cnt > CON8XX_TRM_CHAR_CNT) {
-      printf("ioctl called: invalid number for char_cnt\n");
       rc = RTEMS_TOO_MANY;
     }
     else if (trm_char_info->char_cnt >= 0) {
@@ -1066,7 +1083,6 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
        */
       if ((rc == RTEMS_SUCCESSFUL) && 
 	  !m8xx_console_chan_desc[minor].is_scc) {
-	printf("ioctl called: not an scc:%d\n",minor);
 	rc = RTEMS_UNSATISFIED;
       }
       else {
@@ -1083,7 +1099,6 @@ static int scc_io_set_trm_char(rtems_device_minor_number minor,
     }
   }
 
-  printf("ioctl called: return code: %d\n",rc);
   return rc;
 }
 #endif

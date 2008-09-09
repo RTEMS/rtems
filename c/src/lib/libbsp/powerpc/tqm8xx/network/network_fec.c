@@ -54,6 +54,7 @@
 #include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems_mii_ioctl.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -110,6 +111,7 @@
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
 
+#define FEC_WATCHDOG_TIMEOUT 5 /* check media every 5 seconds */
 /*
  * Per-device data
  */
@@ -128,6 +130,12 @@ struct m8xx_fec_enet_struct {
   rtems_id                rxDaemonTid;
   rtems_id                txDaemonTid;
 
+  /*
+   * MDIO/Phy info
+   */
+  struct rtems_mdio_info mdio_info;
+  int phy_default;
+  int media_state; /* (last detected) state of media */
   /*
    * Statistics
    */
@@ -151,6 +159,167 @@ struct m8xx_fec_enet_struct {
   unsigned long   txRawWait;
 };
 static struct m8xx_fec_enet_struct enet_driver[NIFACES];
+
+/* declare ioctl function for internal use */
+static int fec_ioctl (struct ifnet *ifp, 
+		      ioctl_command_t command, caddr_t data);
+/***************************************************************************\
+|  MII Management access functions                                          |
+\***************************************************************************/
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static void fec_mdio_init
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   initialize the MII interface                                            |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ struct m8xx_fec_enet_struct *sc     /* control structure                */
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    <none>                                                                 |
+\*=========================================================================*/
+{
+
+  /* Set FEC registers for MDIO communication */
+  /*
+   * set clock divider
+   */
+  m8xx.fec.mii_speed = BSP_bus_frequency / 25000000 / 2 + 1;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+int fec_mdio_read
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   read register of a phy                                                  |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ int phy,                              /* PHY number to access or -1       */
+ void *uarg,                           /* unit argument                    */
+ unsigned reg,                         /* register address                 */
+ uint32_t *pval                        /* ptr to read buffer               */
+ )
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    0, if ok, else error                                                   |
+\*=========================================================================*/
+{
+  struct m8xx_fec_enet_struct *sc = uarg;/* control structure            */
+
+  /*
+   * make sure we work with a valid phy
+   */
+  if (phy == -1) {
+    /*
+     * set default phy number: 0 
+     */
+    phy = sc->phy_default;
+  }
+  if ( (phy < 0) || (phy > 31)) {
+    /*
+     * invalid phy number
+     */
+    return EINVAL;
+  }
+  /*
+   * clear MII transfer event bit
+   */
+  m8xx.fec.ievent = M8xx_FEC_IEVENT_MII;
+  /*
+   * set access command, data, start transfer
+   */
+  m8xx.fec.mii_data = (M8xx_FEC_MII_DATA_ST    |
+		       M8xx_FEC_MII_DATA_OP_RD |
+		       M8xx_FEC_MII_DATA_PHYAD(phy) |
+		       M8xx_FEC_MII_DATA_PHYRA(reg) |
+		       M8xx_FEC_MII_DATA_WDATA(0));
+
+  /*
+   * wait for cycle to terminate
+   */
+  do {
+    rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+  }  while (0 == (m8xx.fec.ievent & M8xx_FEC_IEVENT_MII));
+
+  /*
+   * fetch read data, if available
+   */
+  if (pval != NULL) {
+    *pval = M8xx_FEC_MII_DATA_RDATA(m8xx.fec.mii_data);
+  }
+  return 0;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+int fec_mdio_write
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   write register of a phy                                                 |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ int phy,                              /* PHY number to access or -1       */
+ void *uarg,                           /* unit argument                    */
+ unsigned reg,                         /* register address                 */
+ uint32_t val                          /* write value                      */
+ )
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    0, if ok, else error                                                   |
+\*=========================================================================*/
+{
+  struct m8xx_fec_enet_struct *sc = uarg;/* control structure            */
+
+  /*
+   * make sure we work with a valid phy
+   */
+  if (phy == -1) {
+    /*
+     * set default phy number: 0 
+     */
+    phy = sc->phy_default;
+  }
+  if ( (phy < 0) || (phy > 31)) {
+    /*
+     * invalid phy number
+     */
+    return EINVAL;
+  }
+  /*
+   * clear MII transfer event bit
+   */
+  m8xx.fec.ievent = M8xx_FEC_IEVENT_MII;
+  /*
+   * set access command, data, start transfer
+   */
+  m8xx.fec.mii_data = (M8xx_FEC_MII_DATA_ST    |
+		       M8xx_FEC_MII_DATA_OP_WR |
+		       M8xx_FEC_MII_DATA_PHYAD(phy) |
+		       M8xx_FEC_MII_DATA_PHYRA(reg) |
+		       M8xx_FEC_MII_DATA_WDATA(val));
+
+  /*
+   * wait for cycle to terminate
+   */
+  do {
+    rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+  }  while (0 == (m8xx.fec.ievent & M8xx_FEC_IEVENT_MII));
+
+  return 0;
+}
 
 /*
  * FEC interrupt handler
@@ -286,10 +455,10 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
 
   /*
    * Set up Transmit Control Register:
-   *   Half duplex
+   *   Full duplex
    *   No heartbeat
    */
-  m8xx.fec.x_cntrl = 0x00000000;
+  m8xx.fec.x_cntrl = M8xx_FEC_X_CNTRL_FDEN;
 
   /*
    * Set up DMA function code:
@@ -306,12 +475,6 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
    *   RISC arbitration ID = 1 => U-bus arbitration = 5
    */
   m8xx.sdcr = 1;
-
-  /*
-   * Set MII speed to 2.5 MHz for 25 Mhz system clock
-   */
-  m8xx.fec.mii_speed = 0x0a;
-  m8xx.fec.mii_data = 0x58021000;
 
   /*
    * Set up receive buffer descriptors
@@ -516,11 +679,6 @@ m8xx_fec_Enet_retire_tx_bd (struct m8xx_fec_enet_struct *sc)
         if (status & M8xx_BD_UNDERRUN)
           enet_driver[0].txUnderrun++;
 
-        /*
-         * Restart the transmitter
-         */
-        /* FIXME: this should get executed only if using the SCC */
-        m8xx_cp_execute_cmd (M8xx_CR_OP_RESTART_TX | M8xx_CR_CHAN_SCC1);
       }
       if (status & M8xx_BD_DEFER)
         enet_driver[0].txDeferred++;
@@ -715,9 +873,14 @@ static void fec_init (void *arg)
   if (sc->txDaemonTid == 0) {
 
     /*
-     * Set up SCC hardware
+     * Set up FEC hardware
      */
     m8xx_fec_initialize_hardware (sc);
+
+    /*
+     * init access to phy
+     */
+    fec_mdio_init(sc);
 
     /*
      * Start driver tasks
@@ -734,6 +897,11 @@ static void fec_init (void *arg)
     m8xx.fec.r_cntrl |= 0x8;
   else
     m8xx.fec.r_cntrl &= ~0x8;
+
+  /*
+   * init timer so the "watchdog function gets called periodically
+   */
+  ifp->if_timer    = 1;
 
   /*
    * Tell the world that we're running.
@@ -775,6 +943,21 @@ static void fec_stop (struct m8xx_fec_enet_struct *sc)
  */
 static void fec_enet_stats (struct m8xx_fec_enet_struct *sc)
 {
+  int media;
+  int result;
+  /*
+   * fetch/print media info
+   */
+  media = IFM_MAKEWORD(0,0,0,sc->phy_default); /* fetch from default phy */
+
+  result = fec_ioctl(&(sc->arpcom.ac_if),
+		     SIOCGIFMEDIA,
+		     (caddr_t)&media);
+  if (result == 0) {
+    rtems_ifmedia2str(media,NULL,0);
+    printf ("\n");
+  }
+
   printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
   printf ("       Not First:%-8lu", sc->rxNotFirst);
   printf ("        Not Last:%-8lu\n", sc->rxNotLast);
@@ -784,7 +967,6 @@ static void fec_enet_stats (struct m8xx_fec_enet_struct *sc)
   printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
   printf ("         Overrun:%-8lu", sc->rxOverrun);
   printf ("       Collision:%-8lu\n", sc->rxCollision);
-  printf ("          Discarded:%-8lu\n", (unsigned long)m8xx.scc1p.un.ethernet.disfc);
 
   printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
   printf ("        Deferred:%-8lu", sc->txDeferred);
@@ -803,6 +985,13 @@ static int fec_ioctl (struct ifnet *ifp,
   int error = 0;
 
   switch (command) {
+    /*
+     * access PHY via MII
+     */
+  case SIOCGIFMEDIA:
+  case SIOCSIFMEDIA:
+    rtems_mii_ioctl (&(sc->mdio_info),sc,command,(void *)data);
+    break;
   case SIOCGIFADDR:
   case SIOCSIFADDR:
     ether_ioctl (ifp, command, data);
@@ -841,6 +1030,115 @@ static int fec_ioctl (struct ifnet *ifp,
   }
   return error;
 }
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+int fec_mode_adapt
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   init the PHY and adapt FEC settings                                     |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ struct ifnet *ifp
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    0, if success                                                          |
+\*=========================================================================*/
+{
+  int result = 0;
+  struct m8xx_fec_enet_struct *sc = ifp->if_softc;
+  int media = IFM_MAKEWORD( 0, 0, 0, sc->phy_default);
+
+#ifdef DEBUG
+  printf("c");
+#endif
+  /*
+   * fetch media status
+   */
+  result = fec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+  if (result != 0) {
+    return result;
+  }
+#ifdef DEBUG
+  printf("C");
+#endif
+  /*
+   * status is unchanged? then do nothing
+   */
+  if (media == sc->media_state) {
+    return 0;
+  }
+  /*
+   * otherwise: for the first call, try to negotiate mode
+   */
+  if (sc->media_state == 0) {
+    /*
+     * set media status: set auto negotiation -> start auto-negotiation
+     */
+    media = IFM_MAKEWORD(0,IFM_AUTO,0,sc->phy_default);
+    result = fec_ioctl(ifp,SIOCSIFMEDIA,(caddr_t)&media);
+    if (result != 0) {
+      return result;
+    }
+    /*
+     * wait for auto-negotiation to terminate
+     */
+    do {
+      media = IFM_MAKEWORD(0,0,0,sc->phy_default);
+      result = fec_ioctl(ifp,SIOCGIFMEDIA,(caddr_t)&media);
+      if (result != 0) {
+	return result;
+      }
+    } while (IFM_NONE == IFM_SUBTYPE(media));
+  }
+
+  /*
+   * now set HW according to media results:
+   */
+  /*
+   * if we are half duplex then switch to half duplex
+   */
+  if (0 == (IFM_FDX & IFM_OPTIONS(media))) {
+    m8xx.fec.x_cntrl &= ~M8xx_FEC_X_CNTRL_FDEN;
+  }
+  else {
+    m8xx.fec.x_cntrl |=  M8xx_FEC_X_CNTRL_FDEN;
+  }    
+  /*
+   * store current media state for future compares
+   */
+  sc->media_state = media;
+
+  return 0;
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static void fec_watchdog
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|   periodically poll the PHY. if mode has changed,                         |
+|  then adjust the FEC settings                                             |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ struct ifnet *ifp
+)
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    1, if success                                                          |
+\*=========================================================================*/
+{
+  fec_mode_adapt(ifp);
+  ifp->if_timer    = FEC_WATCHDOG_TIMEOUT; 
+}
+
 int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
 {
   struct m8xx_fec_enet_struct *sc;
@@ -860,13 +1158,13 @@ int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
    * Is driver free?
    */
   if ((unitNumber <= 0) || (unitNumber > NIFACES)) {
-    printf ("Bad SCC unit number.\n");
+    printk ("Bad FEC unit number.\n");
     return 0;
   }
   sc = &enet_driver[unitNumber - 1];
   ifp = &sc->arpcom.ac_if;
   if (ifp->if_softc != NULL) {
-    printf ("Driver already in use.\n");
+    printk ("Driver already in use.\n");
     return 0;
   }
 
@@ -899,6 +1197,17 @@ int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   sc->acceptBroadcast = !config->ignore_broadcast;
 
   /*
+   * setup info about mdio interface
+   */
+  sc->mdio_info.mdio_r   = fec_mdio_read;
+  sc->mdio_info.mdio_w   = fec_mdio_write;
+  sc->mdio_info.has_gmii = 0; /* we do not support gigabit IF */
+  /*
+   * assume: IF 1 -> PHY 0
+   */
+  sc->phy_default = unitNumber-1; 
+
+  /*
    * Set up network interface values
    */
   ifp->if_softc = sc;
@@ -909,6 +1218,7 @@ int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   ifp->if_ioctl = fec_ioctl;
   ifp->if_start = m8xx_fec_enet_start;
   ifp->if_output = ether_output;
+  ifp->if_watchdog =  fec_watchdog; /* XXX: timer is set in "init" */
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
   if (ifp->if_snd.ifq_maxlen == 0)
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
@@ -924,5 +1234,13 @@ int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
 int rtems_fec_enet_driver_attach(struct rtems_bsdnet_ifconfig *config, 
 				 int attaching)
 {
+  /*
+   * enable FEC functionality at hardware pins*
+   * PD[3-15] are FEC pins
+   */
+  if (attaching) {
+    m8xx.pdpar |= 0x1fff;
+    m8xx.pddir |= 0x1fff;
+  }
   return rtems_fec_driver_attach(config);
 }

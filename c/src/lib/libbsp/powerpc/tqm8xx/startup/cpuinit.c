@@ -128,7 +128,6 @@ void _InitTQM8xx (void)
  */
 void cpu_init(void)
 {
-  /*
-   * none up to now
-   */
+  /* mmu initialization */
+  mmu_init();
 }
