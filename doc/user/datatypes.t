@@ -51,6 +51,8 @@ characteristics of the new object.
 @item @code{@value{DIRPREFIX}boolean} may only take on the
 values of @code{TRUE} and @code{FALSE}.
 
+This type is deprecated. Use "bool" instead.
+
 @findex rtems_context
 @item @code{@value{DIRPREFIX}context} is the CPU dependent
 data structure used to manage the integer and system
@@ -81,6 +83,8 @@ data type used to manage device minor numbers.
 @item @code{@value{DIRPREFIX}double} is the RTEMS data
 type that corresponds to double precision floating point
 on the target hardware. 
+
+This type is deprecated. Use "double" instead.
 
 @findex rtems_event_set
 @item @code{@value{DIRPREFIX}event_set} is the data
@@ -218,6 +222,8 @@ that ensures it is portable across different target processors.
 @item @code{@value{DIRPREFIX}single} is the RTEMS data
 type that corresponds to single precision floating point
 on the target hardware. 
+
+This type is deprecated. Use "float" instead.
 
 @findex rtems_status_codes
 @item @code{@value{DIRPREFIX}status_codes} is the 
