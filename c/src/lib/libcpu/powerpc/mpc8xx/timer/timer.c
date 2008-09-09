@@ -82,7 +82,6 @@ int benchmark_timer_read(void)
 
   if ( benchmark_timer_find_average_overhead == 1 )
     return total;          /* in XXX microsecond units */
-
   else {
     if ( total < bsp_timer_least_valid ) {
       return 0;            /* below timer resolution */

@@ -424,7 +424,12 @@ static rtems_status_code mpc83xx_i2c_send_stop
   printk("mpc83xx_i2c_send_stop called... ");
 #endif
   softc_ptr->reg_ptr->i2ccr &= ~MPC83XX_I2CCR_MSTA;
-
+  /*
+   * wait, 'til stop has been executed
+   */
+  while (0 != (softc_ptr->reg_ptr->i2csr & MPC83XX_I2CSR_MBB)) {
+    rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+  }
 #if defined(DEBUG)
   printk("... exit OK\r\n");
 #endif

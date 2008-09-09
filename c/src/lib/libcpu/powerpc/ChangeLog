@@ -1,3 +1,9 @@
+2008-09-09	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
+
+	* mpc8xx/mpc8xx.h, mpc8xx/timer/timer.c: minor additions
+
+	* mpc83xx/i2c/mpc83xx_i2cdrv.c: wait, 'til STOP has been executed
+
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mpc8xx/clock/clock.c, mpc8xx/console-generic/console-generic.c,
@@ -9,7 +15,7 @@
 	MPC866 and firends
 
 	* mpc8xx/cpm/cp.c: use correct type for interrupt level
-	
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc5xx/irq/irq.c, mpc83xx/spi/mpc83xx_spidrv.c,

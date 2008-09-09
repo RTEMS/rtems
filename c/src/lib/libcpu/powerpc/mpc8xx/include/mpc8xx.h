@@ -278,6 +278,23 @@ typedef struct m8xxFECRegisters_ {
 #define M8xx_FEC_IMASK_MIIEN   (1 << 23)
 #define M8xx_FEC_IMASK_EBERREN (1 << 22)
 
+  /*
+   * access macros to write to mii_data register
+   */
+#define M8xx_FEC_MII_DATA_ST       ( 1           << (31- 1))
+#define M8xx_FEC_MII_DATA_OP_RD    ( 2           << (31- 3))
+#define M8xx_FEC_MII_DATA_OP_WR    ( 1           << (31- 3))
+#define M8xx_FEC_MII_DATA_PHYAD(n) (((n) & 0x3f) << (31- 8))
+#define M8xx_FEC_MII_DATA_PHYRA(n) (((n) & 0x3f) << (31-13))
+#define M8xx_FEC_MII_DATA_TA       ( 2           << (31-15))
+#define M8xx_FEC_MII_DATA_WDATA(n) ((n) & 0xffff           )
+#define M8xx_FEC_MII_DATA_RDATA(reg) ((reg) & 0xffff       )
+  /*
+   * bits for FEC X_CNTRL register
+   */
+#define M8xx_FEC_X_CNTRL_FDEN       ( 1           << (31-29))
+#define M8xx_FEC_X_CNTRL_HBC        ( 1           << (31-30))
+#define M8xx_FEC_X_CNTRL_GTS        ( 1           << (31-31))
 /*
 *************************************************************************
 *                         Miscellaneous Parameters                      *
