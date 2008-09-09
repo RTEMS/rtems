@@ -1,5 +1,10 @@
 2008-09-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* bsp_howto/ata.t, bsp_howto/rtc.t, networking/networkapp.t,
+	user/chains.t, user/stackchk.t: Convert to "bool".
+
+2008-09-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* user/datatypes.t: Add deprecation notices to 
 	"rtems_boolean", "rtems_single", "rtems_double".
 	* user/intr.t, user/userext.t: Convert to "bool".
