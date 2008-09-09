@@ -127,7 +127,7 @@ information about controller's queue and devices attached to the controller:
  * controller and chain of ATA requests to the controller.
  */
 typedef struct ata_ide_ctrl_s @{
-    rtems_boolean present;   /* controller state */
+    bool          present;   /* controller state */
     ata_dev_t     device[2]; /* ata devices description */
     Chain_Control reqs;      /* requests chain */
 @} ata_ide_ctrl_t;

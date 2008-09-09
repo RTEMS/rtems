@@ -46,7 +46,7 @@ the DMV177's @code{RTC_Table} configuration table is below:
 #include <libchip/rtc.h>
 #include <libchip/icm7170.h>
 
-boolean dmv177_icm7170_probe(int minor);
+bool dmv177_icm7170_probe(int minor);
 
 rtc_tbl	RTC_Table[] = @{
   @{ "/dev/rtc0",                /* sDeviceName */
@@ -64,7 +64,7 @@ rtc_tbl	RTC_Table[] = @{
 unsigned long  RTC_Count = (sizeof(RTC_Table)/sizeof(rtc_tbl));
 rtems_device_minor_number  RTC_Minor;
 
-boolean dmv177_icm7170_probe(int minor)
+bool dmv177_icm7170_probe(int minor)
 @{
   volatile unsigned16 *card_resource_reg;
 

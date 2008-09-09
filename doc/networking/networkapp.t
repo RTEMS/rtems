@@ -557,7 +557,7 @@ the command @code{route add default gw yyy.yyy.yyy.yyy}:
 
 @example
 void mon_ifconfig(int argc, char *argv[],  unsigned32 command_arg,
-                  boolean verbose)
+                  bool verbose)
 @{
     struct sockaddr_in  ipaddr;
     struct sockaddr_in  dstaddr;
@@ -761,7 +761,7 @@ void mon_ifconfig(int argc, char *argv[],  unsigned32 command_arg,
 
 
 void mon_route(int argc, char *argv[],  unsigned32 command_arg,
-               boolean verbose)
+               bool verbose)
 @{
     int                cmd;
     struct sockaddr_in dst;

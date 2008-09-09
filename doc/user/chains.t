@@ -238,7 +238,7 @@ This call will discard any nodes on the chain.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_null_node
 @example
-boolean @value{DIRPREFIX}chain_is_null_node(
+bool @value{DIRPREFIX}chain_is_null_node(
   const @value{DIRPREFIX}chain_node *the_node
 );
 @end example
@@ -246,7 +246,7 @@ boolean @value{DIRPREFIX}chain_is_null_node(
 
 @subheading RETURNS
 
-Returns TRUE is the node point is NULL and FALSE if the node is not
+Returns true is the node point is NULL and false if the node is not
 NULL.
 
 @subheading DESCRIPTION:
@@ -320,7 +320,7 @@ This function returns a pointer to the last node on the chain.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_are_nodes_equal
 @example
-boolean @value{DIRPREFIX}chain_are_nodes_equal(
+bool @value{DIRPREFIX}chain_are_nodes_equal(
   const @value{DIRPREFIX}chain_node *left,
   const @value{DIRPREFIX}chain_node *right
 );
@@ -329,13 +329,13 @@ boolean @value{DIRPREFIX}chain_are_nodes_equal(
 
 @subheading RETURNS
 
-This function returns TRUE if the left node and the right node are
-equal, and FALSE otherwise.
+This function returns true if the left node and the right node are
+equal, and false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if the left node and the right node are
-equal, and FALSE otherwise.
+This function returns true if the left node and the right node are
+equal, and false otherwise.
 
 @c
 @c
@@ -350,7 +350,7 @@ equal, and FALSE otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_empty
 @example
-boolean @value{DIRPREFIX}chain_is_empty(
+bool @value{DIRPREFIX}chain_is_empty(
   @value{DIRPREFIX}chain_control *the_chain
 );
 @end example
@@ -358,12 +358,12 @@ boolean @value{DIRPREFIX}chain_is_empty(
 
 @subheading RETURNS
 
-This function returns TRUE if there a no nodes on the chain and FALSE
+This function returns true if there a no nodes on the chain and false
 otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if there a no nodes on the chain and FALSE
+This function returns true if there a no nodes on the chain and false
 otherwise.
 
 @c
@@ -379,7 +379,7 @@ otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_first
 @example
-boolean @value{DIRPREFIX}chain_is_first(
+bool @value{DIRPREFIX}chain_is_first(
   const @value{DIRPREFIX}chain_node *the_node
 );
 @end example
@@ -387,13 +387,13 @@ boolean @value{DIRPREFIX}chain_is_first(
 
 @subheading RETURNS
 
-This function returns TRUE if the node is the first node on a chain
-and FALSE otherwise.
+This function returns true if the node is the first node on a chain
+and false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if the node is the first node on a chain
-and FALSE otherwise.
+This function returns true if the node is the first node on a chain
+and false otherwise.
 
 @c
 @c
@@ -408,7 +408,7 @@ and FALSE otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_last
 @example
-boolean @value{DIRPREFIX}chain_is_last(
+bool @value{DIRPREFIX}chain_is_last(
   const @value{DIRPREFIX}chain_node *the_node
 );
 @end example
@@ -416,13 +416,13 @@ boolean @value{DIRPREFIX}chain_is_last(
 
 @subheading RETURNS
 
-This function returns TRUE if the node is the last node on a chain and
-FALSE otherwise.
+This function returns true if the node is the last node on a chain and
+false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if the node is the last node on a chain and
-FALSE otherwise.
+This function returns true if the node is the last node on a chain and
+false otherwise.
 
 @c
 @c
@@ -437,7 +437,7 @@ FALSE otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_has_only_one_node
 @example
-boolean @value{DIRPREFIX}chain_has_only_one_node(
+bool @value{DIRPREFIX}chain_has_only_one_node(
   const @value{DIRPREFIX}chain_control *the_chain
 );
 @end example
@@ -445,13 +445,13 @@ boolean @value{DIRPREFIX}chain_has_only_one_node(
 
 @subheading RETURNS
 
-This function returns TRUE if there is only one node on the chain and
-FALSE otherwise.
+This function returns true if there is only one node on the chain and
+false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if there is only one node on the chain and
-FALSE otherwise.
+This function returns true if there is only one node on the chain and
+false otherwise.
 
 @c
 @c
@@ -466,7 +466,7 @@ FALSE otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_head
 @example
-boolean @value{DIRPREFIX}chain_is_head(
+bool @value{DIRPREFIX}chain_is_head(
   @value{DIRPREFIX}chain_control    *the_chain,
   @value{DIRPREFIX}const chain_node *the_node
 );
@@ -475,13 +475,13 @@ boolean @value{DIRPREFIX}chain_is_head(
 
 @subheading RETURNS
 
-This function returns TRUE if the node is the head of the chain and
-FALSE otherwise.
+This function returns true if the node is the head of the chain and
+false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if the node is the head of the chain and
-FALSE otherwise.
+This function returns true if the node is the head of the chain and
+false otherwise.
 
 @c
 @c
@@ -496,7 +496,7 @@ FALSE otherwise.
 @ifset is-C
 @findex @value{DIRPREFIX}chain_is_tail
 @example
-boolean @value{DIRPREFIX}chain_is_tail(
+bool @value{DIRPREFIX}chain_is_tail(
   @value{DIRPREFIX}chain_control    *the_chain,
   const @value{DIRPREFIX}chain_node *the_node
 )
@@ -505,13 +505,13 @@ boolean @value{DIRPREFIX}chain_is_tail(
 
 @subheading RETURNS
 
-This function returns TRUE if the node is the tail of the chain and
-FALSE otherwise.
+This function returns true if the node is the tail of the chain and
+false otherwise.
 
 @subheading DESCRIPTION:
 
-This function returns TRUE if the node is the tail of the chain and
-FALSE otherwise.
+This function returns true if the node is the tail of the chain and
+false otherwise.
 
 @c
 @c

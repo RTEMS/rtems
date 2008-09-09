@@ -167,7 +167,7 @@ and status codes.
 
 @ifset is-C
 @example
-boolean rtems_stack_checker_is_blown( void );
+bool rtems_stack_checker_is_blown( void );
 @end example
 @end ifset
 
