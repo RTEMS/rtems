@@ -1,3 +1,9 @@
+2008-09-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* user/datatypes.t: Add deprecation notices to 
+	"rtems_boolean", "rtems_single", "rtems_double".
+	* user/intr.t, user/userext.t: Convert to "bool".
+
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_howto/timer.t: Update documentation to reflect Timer Driver
