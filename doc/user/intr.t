@@ -441,7 +441,7 @@ This directive will not cause the calling task to be preempted.
 @ifset is-C
 @findex rtems_interrupt_is_in_progress
 @example
-rtems_boolean rtems_interrupt_is_in_progress( void );
+bool rtems_interrupt_is_in_progress( void );
 @end example
 @end ifset
 
