@@ -1,3 +1,38 @@
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* c4x/.cvsignore, c4x/ChangeLog, c4x/Makefile.am, c4x/acinclude.m4,
+	c4x/configure.ac, c4x/c4xsim/.cvsignore, c4x/c4xsim/ChangeLog,
+	c4x/c4xsim/Makefile.am, c4x/c4xsim/README, c4x/c4xsim/bsp_specs,
+	c4x/c4xsim/configure.ac, c4x/c4xsim/preinstall.am,
+	c4x/c4xsim/clock/clock.c, c4x/c4xsim/console/console.c,
+	c4x/c4xsim/console/consolereserveresources.c,
+	c4x/c4xsim/console/debugio.c, c4x/c4xsim/console/simio.c,
+	c4x/c4xsim/include/.cvsignore, c4x/c4xsim/include/bsp.h,
+	c4x/c4xsim/include/simio.h, c4x/c4xsim/include/tm27.h,
+	c4x/c4xsim/start/start.S, c4x/c4xsim/startup/bspstart.c,
+	c4x/c4xsim/startup/linkcmds, c4x/c4xsim/startup/spurious.c,
+	c4x/c4xsim/timer/timer.c, c4x/c4xsim/tools/.cvsignore,
+	c4x/c4xsim/tools/ChangeLog, c4x/c4xsim/tools/Makefile.am,
+	c4x/c4xsim/tools/configure.ac, c4x/c4xsim/tools/runtest.in,
+	c4x/shared/bspspuriousinit.c, c4x/shared/c3xspurious.c,
+	c4x/shared/c4xspurious.c, nios2/.cvsignore, nios2/ChangeLog,
+	nios2/Makefile.am, nios2/README, nios2/acinclude.m4,
+	nios2/configure.ac, nios2/nios2_iss/.cvsignore,
+	nios2/nios2_iss/ChangeLog, nios2/nios2_iss/Makefile.am,
+	nios2/nios2_iss/bsp_specs, nios2/nios2_iss/configure.ac,
+	nios2/nios2_iss/nios2_iss.ptf, nios2/nios2_iss/nios2_iss.sh,
+	nios2/nios2_iss/preinstall.am, nios2/nios2_iss/times,
+	nios2/nios2_iss/clock/clock.c, nios2/nios2_iss/console/console.c,
+	nios2/nios2_iss/include/.cvsignore, nios2/nios2_iss/include/bsp.h,
+	nios2/nios2_iss/include/coverhd.h, nios2/nios2_iss/include/tm27.h,
+	nios2/nios2_iss/shmsupp/addrconv.c, nios2/nios2_iss/shmsupp/getcfg.c,
+	nios2/nios2_iss/shmsupp/lock.c, nios2/nios2_iss/shmsupp/mpisr.c,
+	nios2/nios2_iss/start/crtnn.s, nios2/nios2_iss/start/start.S,
+	nios2/nios2_iss/startup/bspclean.c,
+	nios2/nios2_iss/startup/bspstart.c, nios2/nios2_iss/startup/linkcmds,
+	nios2/nios2_iss/startup/main.c, nios2/nios2_iss/startup/setvec.c,
+	nios2/nios2_iss/timer/timer.c: Removed.
+
 2008-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* preinstall.am: New file.
