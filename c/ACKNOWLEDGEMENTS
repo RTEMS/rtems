@@ -153,7 +153,7 @@ The following persons/organizations have made contributions:
   interrupt management API that reduces interrupt latency while making
   it easier to support external interrupt controllers.
 
-+ Joel Sherrill <joel@OARcorp.com> for the BSPs that work with 
++ Joel Sherrill <joel.sherrill@OARcorp.com> for the BSPs that work with 
   numerous simulators including psim, c4xsim, h8sim, armulator,
   sim68000, and simcpu32.  Most of these BSPs work with instruction
   set simulators in gdb.

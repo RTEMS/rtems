@@ -1,3 +1,8 @@
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* ACKNOWLEDGEMENTS, TOOL_TARGETS: Remove TI C4x and NIOS2 ports from
+	4.9 branch.
+
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use MKDIR_P instead of mkdir_p.

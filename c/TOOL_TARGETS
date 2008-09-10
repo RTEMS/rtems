@@ -5,48 +5,32 @@
 The following are targets for the GNU tools (gcc, binutils, newlib, and gdb)
 that are for RTEMS, their object format, and status notes
 
-arm:
-        arm-rtems               ELF
+arm: arm-rtems               ELF
 
-c4x:
-        c4x-rtems               COFF           Requires patches
+h8300: h8300-rtems             COFF
 
-h8300:
-        h8300-rtems             COFF
+i386: i386-rtems		ELF
 
-i386:
-	i386-rtems		ELF
+m68k: m68k-rtems		ELF
 
-m68k:
-	m68k-rtems		ELF
-
-
-mips:
-	mips*-rtems		ELF		Big endian
-	mips*el-rtems		ELF		Little endian
+mips: mips*-rtems		ELF		Big endian
+      mips*el-rtems		ELF		Little endian
 
 	NOTE: Little endian configuration is not in all tools and 
 	      is untested for RTEMS itself.
 
-nios2: 
-    nios2-elf           ELF     Little endian
+nios2: nios2-elf           ELF     Little endian
 
     NOTE: Currently there is no native nios2-rtems toolchain;
       Altera's nios2-elf-tools can be used with wrapper scripts.
 
-powerpc:
-	powerpc-rtems		ELF
-	powerpcle-rtems		ELF		Little endian
+powerpc: powerpc-rtems		ELF
+	 powerpcle-rtems		ELF		Little endian
 
 	NOTE: Little endian configuration is not in all tools and 
 	      is untested for RTEMS itself.
 
-sh:
-	sh-rtems		COFF
-	sh-rtemscoff		COFF
-	sh-rtemself		ELF
-
-	NOTE:  ELF is not completely stable for SH yet.
+sh: sh-rtems		ELF
 
 sparc:
 	sparc-rtems		ELF
