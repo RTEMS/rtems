@@ -1,3 +1,7 @@
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/c3xsim.cfg, custom/c4xsim.cfg: Removed.
+
 2008-09-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* leaf.cfg, compilers/gcc-target-default.cfg, custom/bf537Stamp.cfg,
