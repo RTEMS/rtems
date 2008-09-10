@@ -91,7 +91,6 @@ The following targets are supported:
       (none)	will build the host-based version on Linux, Solaris and HPUX.
 
       arm-rtems4.9
-      tic4x-rtems4.9
       h8300-rtems4.9
       i386-rtems4.9
       m68k-rtems4.9
@@ -173,8 +172,6 @@ avr:            : none
 
 bfin            : eZKit533 bf537Stamp
 
-c4x             : c3xsim c4xsim
-
 h8300           : h8sim
 
 i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
@@ -242,22 +239,12 @@ Please refer to the BSP and Device Driver Guide.
 7. Tested configurations
 ========================
 
-All gnu-based bsps have been built on Linux. 
-
-The native (posix) ports have been built and run only on Linux.
-
-The following configurations have NOT been tested:
-
-    + Anything on Nextstep, HPUX and Irix.
-    + The C4x and OR32 ports (requires specially patched toolchain)
+All BSPs have been built on GNU/Linux if the target architecture
+is supported in the FSF tools distribution. 
 
 8. Prerequisites
 ================
 
-Gawk version 2 or higher.
-GNU make version 3.72 or higher.
+GNU make
 Bash.
-gcc version > 2.8
-
-NOTE: These prerequisites are probably out of date but autoconf should detect
-      any problems.
+binutils, gcc, newlib and gdb versions matching those in the RPMs.

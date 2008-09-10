@@ -1,3 +1,9 @@
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* MAINTAINERS, README.configure, aclocal/bsp-alias.m4,
+	aclocal/canonical-target-name.m4, aclocal/check-bsps.m4: Remove TI
+	C4x and NIOS2 ports from 4.9 branch.
+
 2008-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README.configure: Updated list of BSPs.
