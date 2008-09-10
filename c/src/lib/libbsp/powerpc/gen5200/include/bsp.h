@@ -214,8 +214,6 @@ extern rtems_device_driver rtc_initialize(
 
 /* functions */
 
-void bsp_cleanup(void);
-
 /* console modes (only termios) */
 #ifdef  PRINTK_MINOR
 #undef  PRINTK_MINOR

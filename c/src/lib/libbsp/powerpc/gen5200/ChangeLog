@@ -1,3 +1,10 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h, startup/bspclean.c: Review of all bsp_cleanup()
+	implementations. In this phase, all prototypes were removed from
+	bsp.h and empty implementations were removed and made to use the
+	shared stub.
+
 2008-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* i2c/i2c.c: Remove rtems_boolean having crept in again.
