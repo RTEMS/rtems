@@ -44,9 +44,9 @@ startup_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/m68302scc.c startup/m68k-stub.c \
     ../../m68k/shared/m68kpretaskinghook.c startup/memcheck.c \
     startup/trace.c ../../shared/gnatinstallhandler.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bsppost.c startup/bspstart.c startup/bspclean.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c
+    ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
+    startup/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
+    ../../m68k/shared/setvec.c
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 timer_SOURCES = timer/timer.c timer/timerisr.S

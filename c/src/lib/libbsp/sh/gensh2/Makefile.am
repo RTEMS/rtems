@@ -36,8 +36,8 @@ CLEANFILES = scitab.c
 
 startup_SOURCES = startup/hw_init.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    startup/bspstart.c startup/bspclean.c ../../shared/sbrk.c \
-    ../../shared/bootcard.c ../../shared/gnatinstallhandler.c
+    startup/bspstart.c ../../shared/sbrk.c ../../shared/bootcard.c \
+    ../../shared/gnatinstallhandler.c ../../shared/bspclean.c
 scitab_SOURCES = scitab.c
 console_SOURCES = ../../sh/shared/console.c console/config.c
 debugio_SOURCES = ../../shared/dummy_printk_support.c

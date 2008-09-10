@@ -211,8 +211,6 @@ extern rtems_isr (*rtems_clock_hook)(rtems_vector_number);
 
 /* functions */
 
-void bsp_cleanup( void );
-
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,

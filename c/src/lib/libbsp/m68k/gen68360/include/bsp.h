@@ -83,8 +83,6 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */
 
-void bsp_cleanup( void );
-
 void M360ExecuteRISC( uint16_t         command );
 void *M360AllocateBufferDescriptors( int count );
 void *M360AllocateRiscTimers( int count );

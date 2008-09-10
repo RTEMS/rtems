@@ -36,7 +36,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
     startup/linkcmds.flash
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c ../../m68k/shared/m68kpretaskinghook.c \
     startup/bspstart.c startup/init5206e.c ../../shared/bootcard.c \

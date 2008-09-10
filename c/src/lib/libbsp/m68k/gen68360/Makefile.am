@@ -25,7 +25,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.prom \
     startup/linkcmds.bootp
 
-startup_SOURCES = startup/alloc360.c startup/bspclean.c \
+startup_SOURCES = startup/alloc360.c ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../m68k/shared/m68kpretaskinghook.c startup/bspstart.c \

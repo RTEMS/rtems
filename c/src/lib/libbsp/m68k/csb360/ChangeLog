@@ -1,3 +1,11 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, include/bsp.h: Review of all bsp_cleanup()
+	implementations. In this phase, all prototypes were removed from
+	bsp.h and empty implementations were removed and made to use the
+	shared stub.
+	* startup/bspclean.c: Removed.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/init5272.c: Add missing prototypes.
