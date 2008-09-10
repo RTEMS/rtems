@@ -85,10 +85,6 @@ extern uint32_t         WorkSpaceEnd ;
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
-/* miscellaneous stuff assumed to exist */
-
-extern void bsp_cleanup( void );
-
 /*
  *  Device Driver Table Entries
  */

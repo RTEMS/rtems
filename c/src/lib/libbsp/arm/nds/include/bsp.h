@@ -33,10 +33,6 @@ extern "C"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"dswifi0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_wifi_driver_attach
 
-  void bsp_start (void);
-  void bsp_cleanup (void);
-
-
 #define RTC_DRIVER_TABLE_ENTRY \
     { rtc_initialize, NULL, NULL, NULL, NULL, NULL }
   extern rtems_device_driver rtc_initialize (rtems_device_major_number major,

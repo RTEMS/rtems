@@ -146,8 +146,6 @@ altera_avalon_jtag_uart_regs;
 
 /* functions */
 
-void bsp_cleanup( void );
-
 nios2_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */

@@ -101,7 +101,6 @@ extern rtems_configuration_table BSP_Configuration;
 /* functions */
 
 uint32_t get_CPU_clock_speed(void);
-void bsp_cleanup(void);
 
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,

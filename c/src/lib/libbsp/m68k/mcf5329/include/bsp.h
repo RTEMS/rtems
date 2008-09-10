@@ -62,7 +62,6 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 uint32_t bsp_get_CPU_clock_speed(void);
 uint32_t bsp_get_BUS_clock_speed(void);
 
-void bsp_cleanup(void);
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,

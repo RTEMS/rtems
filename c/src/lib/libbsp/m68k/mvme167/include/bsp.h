@@ -304,8 +304,6 @@ typedef volatile struct cd2401_regs_ {
 
 /* BSP-wide functions */
 
-void bsp_cleanup( void );
-
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,

@@ -77,10 +77,6 @@ extern int   end;        /* last address in the program */
 #define Processor_Synchronize() \
   asm(" eieio ")
 
-/* functions */
-
-void bsp_cleanup( void );
-
 #endif /* ASM */
 
 #ifdef __cplusplus

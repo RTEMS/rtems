@@ -60,10 +60,6 @@ extern "C" {
  * NOTE: Use the standard Clock driver entry
  */
 
-/* functions */
-
-void bsp_cleanup( void );
-
 #ifdef __cplusplus
 }
 #endif

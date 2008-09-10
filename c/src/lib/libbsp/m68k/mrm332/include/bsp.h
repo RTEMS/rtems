@@ -110,8 +110,6 @@ extern int stack_start;
 
 /* functions */
 
-void bsp_cleanup( void );
-
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,

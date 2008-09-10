@@ -95,16 +95,6 @@ extern volatile cpld_t cpld;              /* defined in linkcmds */
 
 #define BSP_LIBIO_MAX_FDS       20
 
-/* functions */
-
-void bsp_cleanup( void );
-
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
 #ifdef __cplusplus
 }
 #endif

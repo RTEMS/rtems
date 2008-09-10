@@ -50,10 +50,6 @@ extern "C" {
 
 /* functions */
 
-void bsp_start( void );
-
-void bsp_cleanup( void );
-
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */

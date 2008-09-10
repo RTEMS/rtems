@@ -80,10 +80,6 @@ extern uint32_t   boot_mode;
 #define SH4_BOOT_MODE_FLASH 0
 #define SH4_BOOT_MODE_IPL   1
 
-/* miscellaneous stuff assumed to exist */
-
-extern void bsp_cleanup( void );
-
 /*
  *  Device Driver Table Entries
  */

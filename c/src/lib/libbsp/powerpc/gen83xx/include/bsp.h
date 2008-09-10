@@ -140,7 +140,6 @@ extern const size_t mpc83xx_uboot_board_info_size;
 
 /* functions */
 
-void bsp_cleanup(void);
 rtems_status_code bsp_register_i2c(void);
 rtems_status_code bsp_register_spi(void);
 

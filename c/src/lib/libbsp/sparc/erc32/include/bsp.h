@@ -93,10 +93,6 @@ extern int   end;        /* last address in the program */
 
 /* miscellaneous stuff assumed to exist */
 
-void bsp_cleanup( void );
-
-void bsp_start( void );
-
 rtems_isr_entry set_vector(                     /* returns old vector */
     rtems_isr_entry     handler,                /* isr routine        */
     rtems_vector_number vector,                 /* vector number      */

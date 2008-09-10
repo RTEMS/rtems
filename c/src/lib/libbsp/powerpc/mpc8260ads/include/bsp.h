@@ -98,8 +98,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 
 /* functions */
 
-void bsp_cleanup( void );
-
 #if 0
 void M8260ExecuteRISC( uint32_t         command );
 void *M8260AllocateBufferDescriptors( int count );

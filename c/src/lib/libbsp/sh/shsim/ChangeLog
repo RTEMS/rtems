@@ -1,3 +1,9 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Review of all bsp_cleanup() implementations. In this
+	phase, all prototypes were removed from bsp.h and empty
+	implementations were removed and made to use the shared stub.
+
 2008-08-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* trap34/console-io.c: Add missing prototypes.

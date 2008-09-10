@@ -94,16 +94,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 
 #define BSP_LIBIO_MAX_FDS       20
 
-/* functions */
-
-void bsp_cleanup( void );
-
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
 #ifdef __cplusplus
 }
 #endif
