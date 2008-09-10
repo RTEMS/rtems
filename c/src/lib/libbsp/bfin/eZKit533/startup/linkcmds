@@ -101,10 +101,7 @@ SECTIONS
         _stack_init = .;
         . += _StackSize;
         _clear_end = .;
-        _WorkspaceBase = .;
-        . += 512K;      /* reserve some memory for workspace */
-        _HeapBase = .;
-        . += _HeapSize; /* reserve some memory for heap */
+        _WorkArea = .;
          _end = .;
          __end = .;
     } > sdram
@@ -148,8 +145,6 @@ SECTIONS
   /* These must appear regardless of  .  */   
 }
 
-__HeapBase = _HeapBase;
 __HeapSize = _HeapSize;
-__WorkspaceBase = _WorkspaceBase;
 __edata = _edata;
 __etext = _etext;

@@ -1,3 +1,9 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds:
+	Split out bsp_get_work_area() into its own file and user BSP
+	Framework to perform more initialization.
+
 2008-08-15	Allan Hessenflow <allanh@kallisti.com>
 
 	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,

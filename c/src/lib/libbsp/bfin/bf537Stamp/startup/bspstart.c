@@ -33,11 +33,6 @@ static bfin_mmu_region_t mmuRegions[] = {
 };
 #endif
 
-/*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_postdriver_hook(void);
 void bsp_libc_init(void *, uint32_t, int);
 
 void Init_RTC(void);
@@ -47,46 +42,20 @@ static void initEBIU(void);
 static void initGPIO(void);
 
 /*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
+ *  BSP pretasking hook.
  */
-
-void bsp_pretasking_hook(void) {
-  extern int HeapBase;
-  extern int RamBase;
-  extern int RamSize;
-  unsigned long heapSize;
-  void *heapStart;
-
+void bsp_pretasking_hook(void)
+{
   bfin_interrupt_init();
-
-  heapStart = &HeapBase;
-  heapSize  = (unsigned long) &RamBase;
-  heapSize += (unsigned long) &RamSize;
-  heapSize -= (unsigned long) &HeapBase;
-
-  bsp_libc_init(heapStart, heapSize, 0);
-
 }
 
 /*
  *  bsp_start
  *
- *  This routine does the bulk of the system initialization.
+ *  This routine does the bulk of the BSP initialization.
  */
-void bsp_start(void) {
-    
-  extern void *_WorkspaceBase;
-
+void bsp_start(void)
+{
   /* BSP Hardware Initialization*/
 
   /*bfin_mmu_init(sizeof(mmuRegions) / sizeof(mmuRegions[0]), mmuRegions);*/
@@ -96,23 +65,6 @@ void bsp_start(void) {
   initPLL();   /* PLL initialization */
   initEBIU();  /* EBIU initialization */
   initGPIO();  /* GPIO initialization */
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *) &_WorkspaceBase;
-
 }
 
  /*

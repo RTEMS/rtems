@@ -30,7 +30,8 @@ noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
 	../../shared/bsppredriverhook.c startup/bspstart.c \
 	../../shared/bspclean.c ../../shared/sbrk.c ../../shared/setvec.c \
-	../../shared/bootcard.c ../../shared/gnatinstallhandler.c
+	../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
+	../shared/bspgetworkarea.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
