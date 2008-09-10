@@ -51,7 +51,6 @@ extern  void __bss_start;
 extern  void __bss_end;
 
 /* External Prototypes */
-extern void bsp_cleanup( void );
 extern void rtems_irq_mngt_init(void);
 extern void bsp_libc_init( void *, uint32_t, int );
 

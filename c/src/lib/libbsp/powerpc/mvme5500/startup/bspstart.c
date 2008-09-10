@@ -68,7 +68,6 @@ BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 extern void _return_to_ppcbug(void);
 extern unsigned long __rtems_end[];
 extern unsigned get_L1CR(void), get_L2CR(void), get_L3CR(void);
-extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned long);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern int I2Cread_eeprom(unsigned char I2cBusAddr, uint32_t devA2A1A0, uint32_t AddrBytes, unsigned char *pBuff, uint32_t numBytes);

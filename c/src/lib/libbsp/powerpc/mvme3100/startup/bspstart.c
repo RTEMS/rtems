@@ -48,8 +48,7 @@
 #endif
 
 extern unsigned long __rtems_end[];
-extern void          bsp_cleanup(void);
-extern void			 BSP_vme_config(void);
+extern void	     BSP_vme_config(void);
 
 SPR_RW(SPRG1)
 

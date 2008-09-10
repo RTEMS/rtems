@@ -1,3 +1,9 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Review of all bsp_cleanup() implementations. In
+	this phase, all prototypes were removed from bsp.h and empty
+	implementations were removed and made to use the shared stub.
+
 2008-09-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* irq/irq.c: Minor "bool" fixes.
