@@ -161,7 +161,6 @@ It has been ported to the following processor families:
 @item SPARC
 @item Hitachi SH
 @item Hitachi H8/300
-@item Texas Instruments C3x/C4x
 @item OpenCores OR32
 @item UNIX
 @end itemize

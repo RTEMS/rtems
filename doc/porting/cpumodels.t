@@ -47,8 +47,6 @@ has been ported to a variety of microprocessor families including:
 @item SPARC
 @item Hitachi H8/300
 @item Hitachi SH
-@item OpenCores OR32
-@item Texas Instruments C3x/C4x
 
 @end itemize
 
