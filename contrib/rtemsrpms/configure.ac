@@ -78,7 +78,7 @@ AC_MSG_CHECKING([for targets])
 AC_ARG_ENABLE([targets],
   AS_HELP_STRING([--enable-targets=<targets>],[build for targets <targets>]),
   [targets="$enable_targets"],
-  [targets="arm i386 m68k mips powerpc sh sparc tic4x"]
+  [targets="arm i386 m68k mips powerpc sh sparc"]
 )
 AC_MSG_RESULT([$targets])
 

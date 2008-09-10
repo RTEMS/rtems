@@ -1,3 +1,7 @@
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Remove TI C4x and NIOS2 ports from 4.9 branch.
+
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* AUTHORS: Convert to UNIX CR/LF style.
