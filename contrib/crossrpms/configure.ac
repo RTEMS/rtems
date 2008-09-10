@@ -1,6 +1,6 @@
 ## $Id$
 
-m4_define([RTEMS_API],[4.9])
+m4_define([RTEMS_API],[4.10])
 
 AC_PREREQ(2.61)
 AC_INIT([crossrpms],[0.20080306.1],[http://www.rtems.org/bugzilla])
