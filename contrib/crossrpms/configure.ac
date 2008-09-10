@@ -179,19 +179,6 @@ AC_CONFIG_FILES([rtems4.9/powerpc/Makefile])
 AC_CONFIG_FILES([rtems4.9/sh/Makefile])
 AC_CONFIG_FILES([rtems4.9/sparc/Makefile])
 
-AC_CONFIG_FILES([rtems4.10/Makefile])
-AC_CONFIG_FILES([rtems4.10/arm/Makefile])
-AC_CONFIG_FILES([rtems4.10/avr/Makefile])
-AC_CONFIG_FILES([rtems4.10/bfin/Makefile])
-AC_CONFIG_FILES([rtems4.10/h8300/Makefile])
-AC_CONFIG_FILES([rtems4.10/i386/Makefile])
-AC_CONFIG_FILES([rtems4.10/m68k/Makefile])
-AC_CONFIG_FILES([rtems4.10/mips/Makefile])
-AC_CONFIG_FILES([rtems4.10/mipstx39/Makefile])
-AC_CONFIG_FILES([rtems4.10/powerpc/Makefile])
-AC_CONFIG_FILES([rtems4.10/sh/Makefile])
-AC_CONFIG_FILES([rtems4.10/sparc/Makefile])
-
 AC_CONFIG_FILES([autotools/Makefile])
 
 AC_OUTPUT
