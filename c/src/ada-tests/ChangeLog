@@ -1,3 +1,7 @@
+2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/timer_driver.ads: Switch to new names.
+
 2008-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* samples/hello/config.h, sptests/spname01/config.h: These needed

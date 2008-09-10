@@ -32,7 +32,7 @@ package Timer_Driver is
 --
 
    procedure Initialize;
-   pragma Import (C, Initialize, "Timer_initialize");
+   pragma Import (C, Initialize, "benchmark_timer_initialize");
 
 --
 --  Read_Timer
@@ -46,7 +46,7 @@ package Timer_Driver is
 
    function Read_Timer 
    return RTEMS.Unsigned32;
-   pragma Import (C, Read_Timer, "Read_timer");
+   pragma Import (C, Read_Timer, "benchmark_timer_read");
 
 --
 --  Empty_Function
@@ -74,6 +74,8 @@ package Timer_Driver is
    procedure Set_Find_Average_Overhead (
       Find_Flag : in     Standard.Boolean
    );
+   pragma Import (C, Set_Find_Average_Overhead,
+      "benchmark_timer_disable_subtracting_average_overhead");
 
 private
 
