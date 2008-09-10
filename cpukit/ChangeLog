@@ -1,5 +1,25 @@
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* configure.ac, aclocal/canonical-target-name.m4: Readd NIOS2 and TI
+	C4x. Accidentally not done on 4.9 branch. :(
+	* score/cpu/c4x/.cvsignore, score/cpu/c4x/ChangeLog,
+	score/cpu/c4x/Makefile.am, score/cpu/c4x/cpu.c,
+	score/cpu/c4x/cpu_asm.S, score/cpu/c4x/irq.c,
+	score/cpu/c4x/preinstall.am, score/cpu/c4x/rtems/asm.h,
+	score/cpu/c4x/rtems/score/c4x.h, score/cpu/c4x/rtems/score/cpu.h,
+	score/cpu/c4x/rtems/score/cpu_asm.h,
+	score/cpu/c4x/rtems/score/types.h, score/cpu/c4x/rtems/tic4x/c4xio.h,
+	score/cpu/nios2/.cvsignore, score/cpu/nios2/ChangeLog,
+	score/cpu/nios2/Makefile.am, score/cpu/nios2/cpu.c,
+	score/cpu/nios2/cpu_asm.S, score/cpu/nios2/irq.c,
+	score/cpu/nios2/preinstall.am, score/cpu/nios2/rtems/asm.h,
+	score/cpu/nios2/rtems/score/cpu.h,
+	score/cpu/nios2/rtems/score/cpu_asm.h,
+	score/cpu/nios2/rtems/score/nios2.h,
+	score/cpu/nios2/rtems/score/types.h: New files.
+
+2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* configure.ac, aclocal/canonical-target-name.m4,
 	score/cpu/Makefile.am: Remove TI C4x and NIOS2 ports from 4.9 branch.
 	* score/cpu/c4x/.cvsignore, score/cpu/c4x/ChangeLog,

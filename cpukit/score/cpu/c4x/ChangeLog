@@ -1,0 +1,402 @@
+2008-08-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Include stdbool.h.
+	Use bool as base-type for boolean.
+
+2008-07-31	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c, rtems/score/cpu.h: Correct prototype of Idle threads.
+
+2008-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Add CPU_SIMPLE_VECTORED_INTERRUPTS porting
+	parameter to indicate that the port uses the Simple Vectored
+	Interrupt model or the Programmable Interrupt Controller Model. The
+	PIC model is implemented primarily in the BSP and it is responsible
+	for all memory allocation.
+
+2007-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Add _CPU_Context_Get_SP() for stack check utility.
+
+2007-12-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/tic4x/c4xio.h: Sweep to make sure grep for COPYRIGHT passes.
+
+2007-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cpu.c, rtems/score/cpu.h: Move interrupt_stack_size field from CPU
+	Table to Configuration Table. Eliminate CPU Table from all ports.
+	Delete references to CPU Table in all forms.
+
+2007-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/score/cpu.h: Moved most of the remaining CPU Table fields to
+	the Configuration Table. This included pretasking_hook,
+	predriver_hook, postdriver_hook, idle_task, do_zero_of_workspace,
+	extra_mpci_receive_server_stack, stack_allocate_hook, and
+	stack_free_hook. As a side-effect of this effort some multiprocessing
+	code was made conditional and some style clean up occurred.
+
+2007-05-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: Remove CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES.
+
+2007-04-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h:
+	  Use Context_Control_fp* instead of void* for fp_contexts.
+	  Eliminate evil casts.
+
+2007-01-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Use uint_least16_t for
+	Priority_Bit_map_control;
+
+2006-11-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Remove unsigned64, signed64.
+
+2006-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Part of a large patch to improve Doxygen output.
+	As a side-effect, grammar and spelling errors were corrected, spacing
+	errors were address, and some variable names were improved.
+
+2005-11-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Eliminate unsigned16, unsigned32.
+
+2005-10-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/asm.h: Remove private version of CONCAT macros.
+	Include <rtems/concat.h> instead.
+
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Split out preinstallation rules.
+	* preinstall.am: New (Split out from Makefile.am).
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 754/rtems
+	* rtems/asm.h: New (relocated from .).
+	* asm.h: Remove (moved to rtems/asm.h).
+	* Makefile.am: Reflect changes above.
+
+2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR rtems/752
+	* rtems/tic4x/c4xio.h: New (relocated from .).
+	New header guard.
+	* c4xio.h: Remove.
+	* Makefile.am: Reflect changes above.
+
+2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	* asm.h, rtems/score/c4x.h, rtems/score/cpu.h,
+	rtems/score/cpu_asm.h, rtems/score/types.h: New header guards.
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Remove signed8, signed16, signed32,
+	unsigned8, unsigned16, unsigned32.
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/cpu.h: *_swap_u32( uint32_t ).
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: #include <rtems/stdint.h>.
+
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
+
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build-variant support.
+
+2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/types.h: Use __rtems_score_types_h as preprocessor
+	guard.
+
+2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* asm.h: Add doxygen preamble.
+
+2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/score/c4x.h: Add doxygen preamble.
+	* rtems/score/cpu.h: Add doxygen preamble.
+	* rtems/score/cpu_asm.h: Add doxygen preamble.
+	* rtems/score/types.h: Add doxygen preamble.
+
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: i960 obsoleted and all references removed.
+
+2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).
+	* Makefile.am: Don't include multilib.am.
+	Reflect merging configure.ac into $(top_srcdir)/configure.ac.
+
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Install c4xio.h to $(includedir)/rtems/c4x.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Install asm.h to $(includedir)/rtems.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* cpu_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* c4xio.h, cpu.c, irq.c, rtems/score/cpu.h: Convert to using c99
+	fixed size types.
+
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: RTEMS_TOP([../../../..]).
+
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Move RTEMS_TOP one subdir down.
+
+2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_DIRS.
+
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
+	Add PREINSTALL_FILES to CLEANFILES.
+
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Requires automake >= 1.8.1.
+
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include compile.am, again.
+
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Convert to using automake compilation rules.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use mkdir_p. Remove dirs from PREINSTALL_FILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove TMPINSTALL_FILES.
+
+2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add $(dirstamp) to preinstallation rules.
+
+2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Don't use gmake rules for preinstallation.
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_CPU.
+
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Obsoleting HP PA-RISC port and removing all
+	references.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, cpu_asm.S, irq.c, rtems/score/c4x.h, rtems/score/cpu.h,
+	rtems/score/cpu_asm.h, rtems/score/types.h: URL for license changed.
+
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* irq.c: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru>
+	determined that _ISR_Signals_to_thread_executing was not being
+	honored and/or cleared properly.
+
+2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Require autoconf-2.57 + automake-1.7.2.
+	* Makefile.am: Eliminate C_O_FILES, S_O_FILES, libscorecpu_a_OBJECTS.
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Fix package name.
+
+2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+
+2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Reformat.
+	Add autom4te*cache.
+	Remove autom4te.cache.
+
+2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Build libscorecpu.a instead of rtems-cpu.rel.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use . instead of .o.
+
+2002-07-05	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, irq.c, rtems/score/cpu.h: Filled in something that was
+	marked XXX.
+
+2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_TOP(../../../..).
+
+2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems.c: Remove.
+	* Makefile.am: Reflect changes above.
+
+2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_PROJECT_ROOT.
+
+2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_PROG_CCAS
+
+2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AC_CONFIG_AUX_DIR(../../../..).
+	Add AC_PROG_RANLIB.
+
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include $(top_srcdir)/../../../automake/*.am.
+	Use ../../../aclocal.
+
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* rtems/score/c4xtypes.h: Removed.
+	* rtems/score/types.h: New file via CVS magic.
+	* Makefile.am, rtems/score/cpu.h: Account for name change.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/Makefile.am: Removed.
+	* rtems/score/Makefile.am: Removed.
+	* configure.ac: Reflect changes above.
+	* Makefile.am: Reflect changes above.
+
+2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* asm.h: Remove #include <rtems/score/targopts.h>.
+	Add #include <rtems/score/cpuopts.h>.
+
+
+
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+
+2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use RTEMS_ENV_RTEMSCPU.
+
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add multilib support.
+
+2001-11-28	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR91.
+	* rtems/score/cpu.h: Added CPU_PROVIDES_ISR_IS_IN_PROGRESS macro which
+	is used to specify if the port uses the standard macro for this (FALSE).
+	A TRUE setting indicates the port provides its own implementation.
+
+2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* configure.in: Remove.
+	* configure.ac: New file, generated from configure.in by autoupdate.
+
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* Makefile.am: Use 'PREINSTALL_FILES ='.
+
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, rtems/score/Makefile.am: 
+	Apply include_*HEADERS instead of H_FILES.
+
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().
+
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+
+2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.
+
+2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/c4x.h: Modified to properly multilib.  This required
+	using only macros predefined by gcc.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include compile.am, formatting.
+	* rtems/Makefile.am: formatting.
+	* rtems/score/Makefile.am: formatting.
+
+2000-08-10	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: New file.

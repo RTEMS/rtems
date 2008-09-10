@@ -28,6 +28,9 @@ case "${host}" in
   sparc-sun-solaris*)           # unix "simulator" port
 	RTEMS_CPU=unix
 	;;
+  tic4x-*rtems*)          	# gcc changed the name
+	RTEMS_CPU=c4x
+	;;
   *) 
 	RTEMS_CPU=`echo $host | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
 	;;
