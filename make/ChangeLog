@@ -1,3 +1,7 @@
+2008-09-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/nios2_iss.cfg: Remove.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/c3xsim.cfg, custom/c4xsim.cfg: Removed.
