@@ -1,3 +1,7 @@
+2008-09-10 	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Remove pre-production testing CFLAGS.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/cpu/c4x/.cvsignore, score/cpu/c4x/ChangeLog,

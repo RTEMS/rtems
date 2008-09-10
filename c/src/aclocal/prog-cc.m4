@@ -37,8 +37,6 @@ AC_SUBST(GCCSPECS)
 
 AS_IF([test "$GCC" = yes],[
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
-# FIXME: This should be removed in production releases
-RTEMS_CFLAGS="$RTEMS_CFLAGS -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs"
 m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
 ])
 AC_SUBST(RTEMS_CFLAGS)
