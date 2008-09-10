@@ -187,6 +187,7 @@ cd ..
     --disable-win32-registry \
     --enable-version-specific-runtime-libs \
     --enable-threads \
+    --enable-newlib-io-c99-formats \
     --enable-languages="$languages" $optargs
 
 %if "%_host" != "%_build"
