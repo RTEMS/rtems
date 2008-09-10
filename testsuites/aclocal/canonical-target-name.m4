@@ -34,10 +34,6 @@ case "${host}" in
 	RTEMS_CPU=unix
         RTEMS_HOST=Solaris
 	;;
-  tic4x-*rtems*)          	# gcc changed the name
-	RTEMS_CPU=c4x
-	RTEMS_HOST=$host_os
-	;;
   *) 
 	RTEMS_CPU=`echo $host | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
 	RTEMS_HOST=$host_os
