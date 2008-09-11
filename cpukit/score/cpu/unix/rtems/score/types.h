@@ -40,17 +40,15 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-
 typedef uint16_t     Priority_Bit_map_control;
-
-typedef bool boolean;     /* Boolean value   */
-
-typedef float          single_precision;     /* single precision float */
-typedef double         double_precision;     /* double precision float */
-
 typedef void unix_isr;
-
 typedef unix_isr ( *unix_isr_entry )( void );
+
+#ifdef RTEMS_DEPRECATED_TYPES
+typedef bool	boolean;     		/* Boolean value   */
+typedef float	single_precision;	/* single precision float */
+typedef double	double_precision;	/* double precision float */
+#endif
 
 #ifdef __cplusplus
 }
