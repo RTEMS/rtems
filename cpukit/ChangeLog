@@ -1,3 +1,8 @@
+2008-09-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/include/rtems/rtems/types.h: Do not define rtems_boolean,
+	rtems_single, rtems_double unless RTEMS_DEPRECATED_TYPES is given.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* configure.ac, aclocal/canonical-target-name.m4: Readd NIOS2 and TI
