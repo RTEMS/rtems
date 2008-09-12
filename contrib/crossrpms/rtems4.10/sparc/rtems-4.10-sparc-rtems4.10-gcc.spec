@@ -40,7 +40,7 @@ Summary:      	sparc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -96,16 +96,9 @@ Requires:	rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-%{release}
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-20080828.diff
 %endif
-%if "%{gcc_version}" == "4.3.1"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.1-rtems4.9-20080628.diff
-%endif
 %{?_without_sources:NoSource:	0}
 
 %if "%{gcc_version}" == "4.3.2" 
-Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
-%if "%{gcc_version}" == "4.3.1" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}

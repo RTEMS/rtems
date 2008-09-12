@@ -32,7 +32,7 @@ Name:		rtems-4.10-bfin-rtems4.10-gdb
 Summary:	Gdb for target bfin-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,7 +70,7 @@ Requires:	rtems-4.10-gdb-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
-Patch0:		gdb-6.5-bfinrtems-20071114.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.5-bfinrtems-20071114.diff
 
 %description
 GDB for target bfin-rtems4.10
