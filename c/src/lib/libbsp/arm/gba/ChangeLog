@@ -1,3 +1,10 @@
+2008-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, startup/bspstart.c: Now support
+	bsp_get_work_area() and used shared implementation of it and
+	bsp_pretasking_hook. Ticker runs.
+	* startup/bspgetworkarea.c: New file.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Review of all bsp_cleanup() implementations. In
