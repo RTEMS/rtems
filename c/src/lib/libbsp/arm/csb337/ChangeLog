@@ -1,3 +1,9 @@
+2008-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, startup/bspclean.c, startup/bspstart.c:
+	Now support bsp_get_work_area() and used shared implementation of it
+	and bsp_pretasking_hook.
+
 2008-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: No BSP should use exit.c as a file name. exit() is POSIX

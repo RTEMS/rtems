@@ -10,7 +10,8 @@
  *
  *
  *  $Id$
-*/
+ */
+
 #include <stdio.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
