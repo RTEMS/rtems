@@ -1,3 +1,10 @@
+2008-09-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Split out bsp_get_work_area() into its own file and user
+	BSP Framework to perform more initialization. Let edb7312 and csb336
+	shared the implementation.
+	* startup/bspgetworkarea.c: Removed.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, startup/bspstart.c: Split out
