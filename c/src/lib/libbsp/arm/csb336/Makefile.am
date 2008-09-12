@@ -26,9 +26,9 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c \
-    startup/bspstart.c startup/bspclean.c startup/memmap.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppredriverhook.c startup/bspstart.c startup/bspclean.c \
+    startup/memmap.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 console_SOURCES = console/uart.c 
 abort_SOURCES = ../shared/abort/abort.c
