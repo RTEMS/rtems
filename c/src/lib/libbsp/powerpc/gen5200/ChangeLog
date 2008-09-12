@@ -1,3 +1,7 @@
+2008-09-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* network_5200/network.c: Remove use of boolean.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h, startup/bspclean.c: Review of all bsp_cleanup()
