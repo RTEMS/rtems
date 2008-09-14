@@ -32,8 +32,9 @@ include_rtems_HEADERS = fb/fb.h touchscreen/touchscreen.h sound/sound.h
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    startup/start.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bootcard.c
+    startup/bspstart.c startup/bspclean.c startup/bspgetworkarea.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bootcard.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

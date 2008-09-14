@@ -21,35 +21,10 @@
 extern unsigned int arm_cpu_mode;
 
 /*
- *  These are from the linker script.
- */
-extern uint8_t _end;
-extern uint8_t __ewram_end;
-
-/*
- *  This method returns the base address and size of the area which
- *  is to be allocated between the RTEMS Workspace and the C Program
- *  Heap.
- */
-void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size
-)
-{
-  *work_area_start       = &_end;
-  *work_area_size       = (void *)&__ewram_end - (void *)&_end;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
-}
-
-/*
  * start the platform.
  */
 
-void
-bsp_start (void)
+void bsp_start (void)
 {
   /* initialize irq management */
   BSP_rtems_irq_mngt_init ();
@@ -86,28 +61,6 @@ bss_reset (void)
   extern uint8_t __bss_end;
 
   memset (&__bss_start, 0, (uint32_t) & __bss_end - (uint32_t) & __bss_start);
-}
-
-/*
- * reset the platform using bios call.
- */
-
-void
-bsp_reset (void)
-{
-  swiSoftReset ();
-}
-
-/*
- * clean up platform before reset.
- */
-
-void
-bsp_cleanup (void)
-{
-  printk ("[!] executive ended, rebooting\n");
-
-  bsp_reset ();
 }
 
 /*

@@ -25,6 +25,8 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 ## $srcdir/mk_libnds.sh $srcdir
 
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -1,3 +1,11 @@
+2008-09-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Split out bsp_cleanup() and
+	bsp_get_work_area() into their own files.
+	* startup/bspclean.c, startup/bspgetworkarea.c,
+	startup/bspstart.c: New files.
+	* startup/start.c: Removed.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Review of all bsp_cleanup() implementations. In this
