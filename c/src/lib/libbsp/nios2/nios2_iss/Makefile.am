@@ -31,6 +31,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c \
+    ../../shared/bsppretaskinghook.c startup/bspgetworkarea.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clock.c
