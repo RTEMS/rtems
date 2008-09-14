@@ -149,7 +149,7 @@ extern unsigned int rsPMCQ1QuiccIntConnect(
   FUNCION_PTR           routine, 
   int                   arg
 );
-unsigned int rsPMCQ1Init();
+unsigned int rsPMCQ1Init(void);
 unsigned int rsPMCQ1MaIntConnect (
     unsigned long       busNo,  /* Pci Bus number of PMCQ1 */
     unsigned long       slotNo, /* Pci Slot number of PMCQ1 */

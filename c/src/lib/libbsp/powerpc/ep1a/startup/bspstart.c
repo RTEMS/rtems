@@ -19,7 +19,6 @@
 #include <string.h>
 
 #include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>
@@ -84,15 +83,6 @@ printk("0x%x ==> %d\n", offset, data );
 uint32_t VME_Slot1 = FALSE;
 
 /*
- * Total memory.
- * Note: RAM_END is defined in linkcmds.  We want to verify that the application
- *       is only using 10M of memory, and we do this by only accounting for this
- *       much memory.
- */
-extern int   RAM_END;  
-unsigned int BSP_mem_size = (unsigned int)&RAM_END;
-
-/*
  * PCI Bus Frequency
  */
 unsigned int BSP_bus_frequency; 
@@ -106,11 +96,6 @@ unsigned int BSP_processor_frequency;
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
-
-/*
- * system init stack 
- */
-#define INIT_STACK_SIZE 0x1000
 
 void BSP_panic(char *s)
 {
@@ -164,48 +149,12 @@ void BSP_FLASH_set_page(
 }
 
 /*
- *  Use the shared implementations of the following routines
+ *  bsp_pretasking_hook
+ *
+ *  BSP pretasking hook.  Called just before drivers are initialized.
  */
- 
-void bsp_libc_init( void *, uint32_t, int );
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
- 
 void bsp_pretasking_hook(void)
 {
-  uint32_t        heap_start;    
-  uint32_t        heap_size;
-  uint32_t        heap_sbrk_spared;
-
-  extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
-  
-  heap_start = ((uint32_t) __rtems_end) +
-    INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size();
-  if (heap_start & (CPU_ALIGNMENT-1))
-    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  heap_size = (BSP_mem_size - heap_start) - rtems_configuration_get_work_space_size();
-
-  heap_sbrk_spared=_bsp_sbrk_init(heap_start, &heap_size);
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", 
-    heap_start, heap_size, heap_sbrk_spared);
-#endif    
-
-  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
   rsPMCQ1Init();
 }
 
@@ -329,14 +278,14 @@ void bsp_start( void )
   unsigned char *stack;
   uint32_t intrStackStart;
   uint32_t intrStackSize;
-  unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl	pt=0;   /*  R = e; */
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables so that it can be used
+   * latter...
    */
   BSP_Increment_Light();
   myCpu         = get_ppc_cpu_type();
@@ -367,7 +316,8 @@ ShowBATS();
    * so there is no need to set it in r1 again... It is just for info
    * so that It can be printed without accessing R1.
    */
-  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+  stack = ((unsigned char*) __rtems_end) + BSP_INIT_STACK_SIZE
+          - PPC_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t *)stack) = 0;
@@ -375,7 +325,7 @@ ShowBATS();
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
   /*
@@ -417,21 +367,6 @@ ShowBATS();
   printk("Testing exception handling Part 2\n");
   __asm__ __volatile ("sc");
 #endif  
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("rtems_configuration_get_work_space_size() = %x\n", 
-     rtems_configuration_get_work_space_size());
-#endif  
-  work_space_start = 
-    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
-
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + 
-        INIT_STACK_SIZE + rtems_configuration_get_interrupt_stack_size()) {
-    printk( "bspstart: Not enough RAM!!!\n" );
-    bsp_cleanup();
-  }
-
-  Configuration.work_space_start = work_space_start;
 
   /*
    * Initalize RTEMS IRQ system
