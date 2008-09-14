@@ -15,8 +15,9 @@ ENTRY(start)
  *      number used there is not constant.  If this happens to you, edit
  *      the lines marked XXX below to use a constant value.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x100000;	/* 1M Heap */
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+RamBase = DEFINED(RamBase) ? RamBase : 0;
+RamSize = DEFINED(RamSized) ? RamSize : 4M;
  
 MEMORY
 	{
@@ -262,17 +263,8 @@ SECTIONS
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
 
-  _HeapStart = .;
-  __HeapStart = .;
-  . += HeapSize;  /* XXX -- Old gld can't handle this */
-  /* . += 0x80000; */ /* HeapSize for old gld */
-  _HeapEnd = .;
-  __HeapEnd = .;
-  clear_end = .;
-        
-  _WorkspaceBase = .;
-  __WorkspaceBase = .;
-	
+  WorkspaceBase = .;
+
   dpram : 
   {
   m8xx = .;

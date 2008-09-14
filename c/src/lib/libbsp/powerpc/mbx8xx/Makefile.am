@@ -35,6 +35,7 @@ vectors_SOURCES = vectors/vectors.h vectors/vectors_init.c \
     vectors/vectors.S
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+    ../../shared/bsppretaskinghook.c startup/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S
