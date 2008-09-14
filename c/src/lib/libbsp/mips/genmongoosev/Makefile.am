@@ -26,11 +26,11 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c \
-    ../../shared/setvec.c
+    ../../shared/setvec.c startup/bspgetworkarea.c
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/conscfg.c ../../shared/console.c
 timer_SOURCES = timer/timer.c
