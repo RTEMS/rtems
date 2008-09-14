@@ -424,10 +424,12 @@ static inline uint32_t CPU_swap_u32(
     asm volatile( "mfspr %0,268" : "=r" (_value) )
 #endif
 
+/* Must be provided for rtems_bsp_delay to work */
+extern     uint32_t bsp_clicks_per_usec;
+
 #define rtems_bsp_delay( _microseconds ) \
   do { \
     uint32_t   start, ticks, now; \
-    extern     uint32_t bsp_clicks_per_usec; \
     CPU_Get_timebase_low( start ) ; \
     ticks = (_microseconds) * bsp_clicks_per_usec; \
     do \
