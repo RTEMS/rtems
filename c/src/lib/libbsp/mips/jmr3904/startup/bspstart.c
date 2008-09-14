@@ -18,27 +18,6 @@
 #include <bsp/bootcard.h>
 
 /*
- *  This method returns the base address and size of the area which
- *  is to be allocated between the RTEMS Workspace and the C Program
- *  Heap.
- */
-void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size
-)
-{
-  extern int WorkspaceBase;
-  extern int end;
-
-  *work_area_start       = &WorkspaceBase;
-  *work_area_size       = (void *)&end - (void *)&WorkspaceBase;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
-}
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
@@ -61,7 +40,8 @@ void clear_cache( void *address, size_t n )
 }
 
 /* Structure filled in by get_mem_info.  Only the size field is
-   actually used (to clear bss), so the others aren't even filled in.  */
+ * actually used (to clear bss), so the others aren't even filled in.
+ */
 
 struct s_mem
 {
