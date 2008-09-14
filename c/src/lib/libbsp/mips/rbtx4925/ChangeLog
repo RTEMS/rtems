@@ -1,3 +1,10 @@
+2008-09-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, startup/bspstart.c: Create
+	bsp_get_work_area() into its own file and use BSP Framework to
+	perform more initialization.
+	* startup/bspgetworkarea.c: New file.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Review of all bsp_cleanup() implementations. In this
