@@ -1,3 +1,9 @@
+2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspstart.c: Use shared bsp_get_work_area() in its own file and
+	rely on BSP Framework to perform more initialization.
+	* shared/bspgetworkarea.c: New file.
+
 2008-08-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/bspstart.c: Remove bogus local declaration.
