@@ -52,8 +52,9 @@ dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    ../../sparc/shared/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c startup/setvec.c startup/spurious.c
+    ../../sparc/shared/bspgetworkarea.c ../../sparc/shared/bspstart.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
+    startup/spurious.c
 gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 console_SOURCES = console/console.c console/debugputs.c
 clock_SOURCES = clock/ckinit.c
