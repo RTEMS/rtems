@@ -1,3 +1,7 @@
+2008-09-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp19/system.h: Use "double" instead of "rtems_double".
+
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp34/sp34.scn, sp35/sp35.scn: Convert to UNIX CR/LF style.
