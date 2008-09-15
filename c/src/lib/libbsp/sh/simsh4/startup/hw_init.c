@@ -41,7 +41,7 @@ extern void early_hw_init (void);
 void
 early_hw_init (void)
 {
-};
+}
 
 /* bsp_hw_init --
  *     Part of hardware initialization called from bspstart.c
