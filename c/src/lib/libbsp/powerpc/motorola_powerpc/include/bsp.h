@@ -30,6 +30,9 @@
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #endif
 
+#define CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+
+
 /*
  * diagram illustrating the role of the configuration
  * constants
