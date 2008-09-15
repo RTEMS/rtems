@@ -29,9 +29,10 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.rom \
     startup/linkcmds.rom2ram
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c \
+    ../../shared/bsppredriverhook.c ../shared/bspstart.c \
+    ../../shared/bsppretaskinghook.c ../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
 console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 hw_init_SOURCES = hw_init/hw_init.c
 

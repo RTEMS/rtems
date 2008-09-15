@@ -35,8 +35,9 @@ BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c startup/bspclean.c \
-    ../../shared/sbrk.c ../../shared/bootcard.c \
+    ../../shared/bsppredriverhook.c ../shared/bspstart.c startup/bspclean.c \
+    ../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
+    ../../shared/sbrk.c ../../shared/bootcard.c ../shared/bsphwinit.c \
     ../../shared/gnatinstallhandler.c
 scitab_SOURCES = scitab.c
 console_SOURCES = ../../sh/shared/console.c

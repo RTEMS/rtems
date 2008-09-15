@@ -60,11 +60,6 @@ extern "C" {
  * Defined in the linker script 'linkcmds'
  */
 
-extern uint32_t         HeapStart ;
-extern uint32_t         HeapEnd ;
-extern uint32_t         WorkSpaceStart ;
-extern uint32_t         WorkSpaceEnd ;
-
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 

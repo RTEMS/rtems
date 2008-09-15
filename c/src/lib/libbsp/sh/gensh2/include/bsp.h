@@ -76,31 +76,12 @@ extern "C" {
  * Defined in the linker script 'linkcmds'
  */
 
-extern uint32_t         HeapStart ;
-extern uint32_t         HeapEnd ;
-extern uint32_t         WorkSpaceStart ;
-extern uint32_t         WorkSpaceEnd ;
-
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
 /*
  *  Device Driver Table Entries
  */
-
-/*
- * We redefine CONSOLE_DRIVER_TABLE_ENTRY to redirect /dev/console
- *
- * FIXME: Since console driver works properly this is not
- * necessary. When enabled - causes error in console_initialize.
- */
-#if 0
-#undef CONSOLE_DRIVER_TABLE_ENTRY
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
-  { console_initialize, console_open, console_close, \
-      console_read, console_write, console_control }
-#endif
 
 /*
  * NOTE: Use the standard Clock driver entry
