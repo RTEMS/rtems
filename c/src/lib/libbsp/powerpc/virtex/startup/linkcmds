@@ -17,14 +17,14 @@ OUTPUT_ARCH(powerpc)
 ENTRY(download_entry)
 
 
-_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 8M;
-
+RamBase = DEFINED(RamBase) ? RamBase : 0x0;
+RamSize = DEFINED(RamSize) ? RamSize : 128M;
 
 MEMORY
-  {
-        RAM : ORIGIN = 0, LENGTH = 128M
-        /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
-  }
+{
+  RAM : ORIGIN = 0, LENGTH = 128M
+  /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
+}
 SECTIONS
 {
   .text 0x10000:
@@ -247,6 +247,7 @@ SECTIONS
     IntrStack_end = .;
  
     PROVIDE(_end = . );
+    WorkSpaceStart = .;
 
 
     .gzipmalloc : {

@@ -32,9 +32,10 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = startup/bspclean.c startup/bspgetworkarea.c \
+    ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/bsppredriverhook.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
 dlentry_SOURCES = dlentry/dlentry.S

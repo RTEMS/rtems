@@ -41,6 +41,8 @@ RTEMS_BSPOPTS_SET([RTEMS_XPPC_BASE],[*],[.])
 RTEMS_BSPOPTS_HELP([RTEMS_XPPC_BASE],[Defines path to Xilinx XPS PPC libraries.])
 #RSG End
 
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 

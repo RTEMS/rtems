@@ -62,13 +62,6 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 
-/* Constants */
-
-extern uint32_t _HeapSize;
-extern uint32_t _heap_start;
-extern uint32_t _heap_end;
-extern uint32_t _top_of_ram;
-
 /* miscellaneous stuff assumed to exist */
 
 /* Network Defines */
