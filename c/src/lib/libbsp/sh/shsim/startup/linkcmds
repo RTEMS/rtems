@@ -22,6 +22,9 @@
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x00040000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 512K;
+
 MEMORY
 {
 /* Real memory layout submitted
@@ -39,7 +42,7 @@ MEMORY
 SECTIONS
 {
   /* boot vector table */
-  .monvects 0x00000000 (NOLOAD) :
+  .monvects (NOLOAD) :
   { 
     _monvects = . ;
   } > rom
@@ -101,6 +104,7 @@ SECTIONS
   .plt      	 : { *(.plt)	}
   .text   .   	 :
   {
+    _start = .;
     *(.text*)
     *(.stub)
 
@@ -173,13 +177,7 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
-  _HeapStart = . ;
-  . = . + 1024 * 20 ;
-  PROVIDE( _HeapEnd = . );
-
   _WorkSpaceStart = . ;
-  /* XXX . = 0x00080000 ; */
-  PROVIDE(_WorkSpaceEnd = .);
 
   _CPU_Interrupt_stack_low  = 0x00080000 ;
   _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
