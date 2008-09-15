@@ -31,8 +31,6 @@
 #include <ctype.h>
 
 #include <rtems/system.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/powerpc/powerpc.h>
 
 #include <libcpu/spr.h>   /* registers.h is included here */
@@ -143,12 +141,6 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc"); 
 }
  
-/*
- *  Use the shared implementations of the following routines
- */
- 
-extern void bsp_libc_init( void *, uint32_t, int );
-
 void zero_bss()
 {
   /* prevent these from being accessed in the short data areas */
