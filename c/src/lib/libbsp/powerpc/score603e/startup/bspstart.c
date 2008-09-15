@@ -18,8 +18,6 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
 #define DEBUG 1
@@ -44,13 +42,7 @@ unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score boa
  */
 unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
 
-/*
- * system init stack
- */
-#define INIT_STACK_SIZE 0x1000
-
 extern unsigned long __rtems_end[];
-
 
 /*
  *  Driver configuration parameters
@@ -70,47 +62,6 @@ void _BSP_Fatal_error(unsigned int v)
 }
 
 /*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, uint32_t, int );
-
-/*PAGE
- *
- *  bsp_pretasking_hook
- *
- *  BSP pretasking hook.  Called just before drivers are initialized.
- *  Used to setup libc and install any BSP extensions.
- */
-
-void bsp_pretasking_hook(void)
-{
-  extern int end;
-  uint32_t         heap_start;
-  uint32_t         heap_size;
-
-  #if DEBUG
-    printk("bsp_pretasking_hook: Set Heap\n");
-  #endif
-  heap_start = (uint32_t) &end;
-  if (heap_start & (CPU_ALIGNMENT-1))
-    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  heap_size = Configuration.work_space_start - (void *)&end;
-  heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
-
-  #if DEBUG
-    printk("bsp_pretasking_hook: bsp_libc_init\n");
-  #endif
-  bsp_libc_init((void *) heap_start, heap_size, 0);
-  #if DEBUG
-    printk("bsp_pretasking_hook: End of routine\n");
-  #endif
-}
-
-/*PAGE
- *
  *  bsp_predriver_hook
  *
  *  Before drivers are setup initialize interupt vectors.
@@ -312,7 +263,7 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
   BSP_heap_start = intrStackStart + intrStackSize;
 
@@ -390,25 +341,6 @@ printk("ppc_exc_initialize\n");
 #endif
 
   _CPU_MSR_SET( msr_value );
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  #if DEBUG
-    printk("bsp_start: Calculate Wrokspace\n");
-  #endif
-  work_space_start =
-    (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
-
-  if ( work_space_start <= (unsigned char *)&end ) {
-    printk( "bspstart: Not enough RAM!!!\n" );
-    bsp_cleanup();
-  }
-
-  Configuration.work_space_start = work_space_start;
 
   /*
    *  initialize the device driver parameters

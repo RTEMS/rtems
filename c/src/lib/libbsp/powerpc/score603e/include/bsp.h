@@ -97,18 +97,16 @@ extern "C" {
  *  Information placed in the linkcmds file.
  */
 
-extern int   RAM_START;
-extern int   RAM_END;
-extern int   RAM_SIZE;
-
-extern int   PROM_START;
-extern int   PROM_END;
-extern int   PROM_SIZE;
+extern void *RAM_END;
+extern void *end;
 
 extern int   CLOCK_SPEED;
 extern int   CPU_PPC_CLICKS_PER_MS;
 
-extern int   end;        /* last address in the program */
+/*
+ * system init stack
+ */
+#define BSP_INIT_STACK_SIZE 0x1000
 
 /*
  * How many libio files we want
