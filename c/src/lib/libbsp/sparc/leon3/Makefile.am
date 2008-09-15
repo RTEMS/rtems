@@ -34,8 +34,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
+    ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
+    ../../sparc/shared/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/ithread.S
 
 gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
