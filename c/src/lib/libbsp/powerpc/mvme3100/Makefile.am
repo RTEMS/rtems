@@ -57,7 +57,7 @@ build_date.c::
 	echo 'const char *BSP_build_date="'`date`'";' > $@
 
 startup_SOURCES = startup/bspstart.c build_date.c \
-    startup/misc.c \
+    startup/misc.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \

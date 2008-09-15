@@ -70,10 +70,6 @@ uint32_t bsp_clicks_per_usec         = 0;
  * Total memory using RESIDUAL DATA
  */
 unsigned int BSP_mem_size            = 0;
-/*
- * Where the heap starts; is used by bsp_pretasking_hook;
- */
-unsigned int BSP_heap_start          = 0;
 /* 
  * PCI Bus Frequency
  */
@@ -110,11 +106,6 @@ int i;
 	printk("\n");
 }
 
-/*
- * system init stack and soft ir stack size
- */
-#define INIT_STACK_SIZE 0x1000
-#define INTR_STACK_SIZE rtems_configuration_get_interrupt_stack_size()
 
 BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
 
@@ -238,7 +229,6 @@ void bsp_start( void )
 unsigned char       *stack;
 uint32_t            intrStackStart;
 uint32_t            intrStackSize;
-unsigned char       *work_space_start;
 char                *chpt;
 ppc_cpu_id_t        myCpu;
 ppc_cpu_revision_t  myCpuRevision;
@@ -286,9 +276,8 @@ VpdBufRec          vpdData [] = {
 	/*
 	 * Initialize the interrupt related settings.
 	 */
-	intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
-	intrStackSize = INTR_STACK_SIZE;
-	BSP_heap_start = intrStackStart + intrStackSize;
+	intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
+	intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
 	/*
 	 * Initialize default raw exception handlers.
@@ -433,29 +422,7 @@ VpdBufRec          vpdData [] = {
 	 */
 	_BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
 
-	/*
-	 * Set up our hooks
-	 * Make sure libc_init is done before drivers initialized so that
-	 * they can use atexit()
-	 */
-
-	bsp_clicks_per_usec            = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-	printk("Configuration.work_space_size = %x\n",
-			Configuration.work_space_size);
-#endif
-
-	work_space_start =
-		(unsigned char *)BSP_mem_size - Configuration.work_space_size;
-
-	if ( work_space_start <=
-			((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
-		printk( "bspstart: Not enough RAM!!!\n" );
-		bsp_cleanup();
-	}
-
-	Configuration.work_space_start = work_space_start;
+	bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 	/*
 	 * Initalize RTEMS IRQ system
