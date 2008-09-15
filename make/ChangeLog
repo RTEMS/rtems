@@ -1,3 +1,9 @@
+2008-09-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* leaf.cfg: LINK.c and LINK.cc include LDFLAGS so do not include it in
+	make-exe and make-cxx-exe definitions. This was resulting in the
+	linker script being processed twice and breaking some BSPs.
+
 2008-09-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* custom/nios2_iss.cfg: Remove.
