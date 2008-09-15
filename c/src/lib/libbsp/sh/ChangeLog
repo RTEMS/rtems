@@ -1,3 +1,8 @@
+2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspgetworkarea.c, shared/bsphwinit.c, shared/bspstart.c:
+	New files.
+
 2007-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* simsh4/tools/runtest.in: Do not run pppd.exe from batch mode script.
