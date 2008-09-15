@@ -22,8 +22,6 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
@@ -76,10 +74,7 @@ char *BSP_commandline_string = loaderParam;
  * Total memory using RESIDUAL DATA
  */
 unsigned int BSP_mem_size;
-/*
- * Where the heap starts; is used by bsp_pretasking_hook;
- */
-unsigned int BSP_heap_start;
+
 /*
  * PCI Bus Frequency
  */
@@ -113,9 +108,12 @@ void _BSP_Fatal_error(unsigned int v)
  *  Use the shared implementations of the following routines
  */
 
-void bsp_libc_init( void *, uint32_t, int );
-
-void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
+void save_boot_params(
+  RESIDUAL *r3,
+  void     *r4,
+  void     *r5,
+  char     *additional_boot_options
+)
 {
 
   residualCopy = *r3;
@@ -151,7 +149,6 @@ void bsp_start( void )
 #endif
   uint32_t intrStackStart;
   uint32_t intrStackSize;
-  unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   prep_t boardManufacturer;
@@ -230,7 +227,6 @@ void bsp_start( void )
    */
   intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
-  BSP_heap_start = intrStackStart + intrStackSize;
 
   /*
    * Initialize default raw exception handlers.
@@ -357,22 +353,6 @@ void bsp_start( void )
    *  initialize the device driver parameters
    */
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("rtems_configuration_get_work_space_size() = %x\n",
-          rtems_configuration_get_work_space_size());
-#endif
-
-  work_space_start =
-    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
-
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + 
-        rtems_configuration_get_interrupt_stack_size()) {
-    printk( "bspstart: Not enough RAM!!!\n" );
-    bsp_cleanup();
-  }
-
-  Configuration.work_space_start = work_space_start;
 
   /*
    * Initalize RTEMS IRQ system
