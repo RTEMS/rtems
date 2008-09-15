@@ -235,9 +235,8 @@ SECTIONS
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
 
-  _WorkspaceBase = .;
-  __WorkspaceBase = .;
-	
+  WorkspaceBase = .;
+
   /*
    * Heap
    *
@@ -246,10 +245,8 @@ SECTIONS
    * the external RAM.
    */
   . = DEFINED(RTEMS_DEBUG) ? 0 + ext_ram_size : int_ram_top + ext_ram_size;
-  _HeapEnd = .;
-  __HeapEnd = .;
+  RamEnd = .;
  
-        
   /* 
    * Internal I/O devices 
    */

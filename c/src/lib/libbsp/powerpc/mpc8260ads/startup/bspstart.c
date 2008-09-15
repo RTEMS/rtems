@@ -44,8 +44,6 @@
 */
 
 #include <mpc8260.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/score/thread.h>
 #include <rtems/powerpc/powerpc.h>
 
@@ -72,13 +70,6 @@ uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
-/*
- *  Use the shared implementations of the following routines.
- *  Look in rtems/c/src/lib/libbsp/shared/bsppost.c and
- *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
- */
-void bsp_libc_init( void *, uint32_t, int );
 
 void  _BSP_GPLED1_on(void);
 void  _BSP_GPLED0_on(void);
@@ -157,39 +148,6 @@ void _BSP_Uart2_disable()
 
 }
 
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
- */
-
-void
-bsp_pretasking_hook(void)
-{
-  /*
-   *  These are assigned addresses in the linkcmds file for the BSP. This
-   *  approach is better than having these defined as manifest constants and
-   *  compiled into the kernel, but it is still not ideal when dealing with
-   *  multiprocessor configuration in which each board as a different memory
-   *  map. A better place for defining these symbols might be the makefiles.
-   *  Consideration should also be given to developing an approach in which
-   *  the kernel and the application can be linked and burned into ROM
-   *  independently of each other.
-   */
-  extern unsigned char _HeapStart;
-  extern unsigned char _HeapEnd;
-
-  bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-}
-
 void bsp_start(void)
 {
   extern void *_WorkspaceBase;
@@ -244,22 +202,6 @@ void bsp_start(void)
 #if DATA_CACHE_ENABLE
   rtems_cache_enable_data();
 #endif
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *)&_WorkspaceBase;
 
   /*
    *  initialize the device driver parameters

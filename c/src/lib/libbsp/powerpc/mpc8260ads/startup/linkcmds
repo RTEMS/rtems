@@ -8,7 +8,7 @@
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
               "elf32-powerpc")
 OUTPUT_ARCH(powerpc)
- 
+
 ENTRY(start)
 
 /*
@@ -17,27 +17,28 @@ ENTRY(start)
  *      number used there is not constant.  If this happens to you, edit
  *      the lines marked XXX below to use a constant value.
  */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x400000; /* 4M Heap */
-StackSize = DEFINED(StackSize) ? StackSize : 0x8000;
-WorkSpaceSize = DEFINED(WorkSpaceSize) ? WorkSpaceSize : 0x80000; /* 512k */
+StackSize   = DEFINED(StackSize) ? StackSize : 0x8000;
+RamBase     = DEFINED(RamBase) ? RamBase : 0x0;
+RamSize     = DEFINED(RamSize) ? RamDiskSize : 0x0800000; /* 8M program ram */
+RamDiskBase = DEFINED(RamDiskBase) ? RamDiskBase : 0x0800000;
 RamDiskSize = DEFINED(RamDiskSize) ? RamDiskSize : 0x0800000; /* 8M ram disk */
- 
+
 MEMORY
-	{
-	ram : org = 0x0, l = 16M
-	dpram : org = 0x04700000, l = 128K
-	flash : org = 0xff800000, l = 8M
-	}
+{
+  ram : org = 0x0, l = 8M
+  ramdisk : org = 0x0800000, l = 8M
+  dpram : org = 0x04700000, l = 128K
+  flash : org = 0xff800000, l = 8M
+}
 
 
 SECTIONS
 {
-
-    /* 
+    /*
      * The stack will live in this area - between the vectors and
      * the text section.
      */
-	
+
     .text 0x10000:
     {
     _textbase = .;
@@ -80,33 +81,33 @@ SECTIONS
      *  doesn't matter if the user does not actually link against ecrti.o and
      *  ecrtn.o; the linker won't look for a file to match a wildcard.  The
      *  wildcard also means that it doesn't matter which directory ecrti.o
-     *  and ecrtn.o are in. 
+     *  and ecrtn.o are in.
      */
     PROVIDE (_init = .);
     *ecrti.o(.init)
     *(.init)
     *ecrtn.o(.init)
-    
+
     PROVIDE (_fini = .);
     *ecrti.o(.fini)
     *(.fini)
     *ecrtn.o(.init)
 
-    /* 
+    /*
      *  C++ constructors and destructors for static objects.
      *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
      *  constructor and destructor lists that begin with the list lenght
      *  end terminate with a NULL entry.
      */
-     
-    PROVIDE (__CTOR_LIST__ = .);	     
+
+    PROVIDE (__CTOR_LIST__ = .);	
     /* LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2) */
     *crtbegin.o(.ctors)
     *(.ctors)
     *crtend.o(.ctors)
     LONG(0)
     PROVIDE (__CTOR_END__ = .);
-	
+
     PROVIDE (__DTOR_LIST__ = .);
     /* LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2) */
     *crtbegin.o(.dtors)
@@ -114,7 +115,7 @@ SECTIONS
     *crtend.o(.dtors)
     LONG(0)
     PROVIDE (__DTOR_END__ = .);
-	
+
     /* Exception frame info */
     *(.eh_frame)
 
@@ -137,7 +138,7 @@ SECTIONS
     text.end = .;
     PROVIDE (etext = .);
     PROVIDE (__etext = .);
- 
+
     } > ram
 
 
@@ -193,28 +194,28 @@ SECTIONS
       *(.got.plt) *(.got)
     } > ram
     __GOT_END__ = .;
-	
+
     .got1		  : { *(.got1) 		} >ram
     PROVIDE (__GOT2_START__ = .);
     PROVIDE (_GOT2_START_ = .);
     .got2		  :  { *(.got2) 	} >ram
     PROVIDE (__GOT2_END__ = .);
     PROVIDE (_GOT2_END_ = .);
-	
+
     PROVIDE (__FIXUP_START__ = .);
     PROVIDE (_FIXUP_START_ = .);
     .fixup	  : { *(.fixup) 	} >ram
     PROVIDE (_FIXUP_END_ = .);
     PROVIDE (__FIXUP_END__ = .);
-	 
+
     PROVIDE (__SDATA2_START__ = .);
     .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >ram
     .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >ram
     PROVIDE (__SBSS2_END__ = .);
-	
+
     .sbss2   	  : { *(.sbss2) 	} >ram
     PROVIDE (__SBSS2_END__ = .);
-	
+
     __SBSS_START__ = .;
     .bss :
     {
@@ -256,7 +257,7 @@ SECTIONS
 	. = ALIGN (16);
         _startmalloc = .;
      } >ram
-          	
+
 
     /*
      * Interrupt stack setup
@@ -267,26 +268,9 @@ SECTIONS
     PROVIDE(intrStackPtr = intrStack);
 
 
-    _HeapStart = .;
-    __HeapStart = .;
-    . += HeapSize;
-    _HeapEnd = .;
-    __HeapEnd = .;
-
     clear_end = .;
 
-
-    _WorkspaceBase = .;
-    __WorkspaceBase = .;
-    . += WorkSpaceSize;
-
-
-    _RamDiskBase = .;
-    __RamDiskBase = .;
-    . += RamDiskSize;
-    _RamDiskEnd  = .;
-    __RamDiskEnd = .;
-    PROVIDE( _RamDiskSize = _RamDiskEnd - _RamDiskBase );
+    WorkspaceBase = .;
 
     /* Sections for compressed .text and .data         */
     /* after the .datarom section is an int specifying */
