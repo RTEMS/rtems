@@ -98,12 +98,14 @@ startup_SOURCES = ../../shared/bootcard.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bsppretaskinghook.c \
+	../../shared/bsppredriverhook.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \
 	../shared/showbats.c \
 	../shared/uboot_dump_bdinfo.c \
 	../shared/uboot_getenv.c \
 	startup/bspclean.c \
+	startup/bspgetworkarea.c \
 	startup/bspstart.c \
 	startup/cpuinit.c  \
 	startup/uboot_support.c

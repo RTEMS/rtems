@@ -122,63 +122,15 @@ bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo *
 uint32_t   bsp_clicks_per_usec;
 
 void BSP_panic(char *s)
-  {
+{
   printk("%s PANIC %s\n",_RTEMS_version, s);
   __asm__ __volatile ("sc");
-  }
-
-void _BSP_Fatal_error(unsigned int v)
-  {
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-  }
-
-void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size)
-{
-#ifdef HAS_UBOOT
-  char *ram_end = (char *) uboot_bdinfo_ptr->bi_memstart +
-                                 uboot_bdinfo_ptr->bi_memsize;
-#else /* HAS_UBOOT */
-  char *ram_end = bsp_ram_end;
-#endif /* HAS_UBOOT */
-
-  *work_area_start = bsp_work_area_start;
-  *work_area_size = ram_end - bsp_work_area_start;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
-void bsp_predriver_hook(void)
-  {
-#if 0
-  init_RTC();
-
-  init_PCI();
-  initialize_universe();
-  initialize_PCI_bridge ();
-
-#if (HAS_PMC_PSC8)
-  initialize_PMC();
-#endif
-
- /*
-  * Initialize Bsp General purpose vector table.
-  */
- initialize_external_exception_vector();
-
-#if (0)
-  /*
-   * XXX - Modify this to write a 48000000 (loop to self) command
-   *       to each interrupt location.  This is better for debug.
-   */
- bsp_spurious_initialize();
-#endif
-
-#endif
+void _BSP_Fatal_error(unsigned int v)
+{
+  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  __asm__ __volatile ("sc");
 }
 
 void bsp_start(void)
