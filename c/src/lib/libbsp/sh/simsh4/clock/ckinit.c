@@ -17,7 +17,6 @@
 
 #include <stdlib.h>
 #include <bsp.h>
-#include <rtems/libio.h>
 
 extern uint32_t bsp_clicks_per_second;
 
