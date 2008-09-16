@@ -29,7 +29,7 @@ dist_project_lib_DATA += startup/linkcmds
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c ../../shared/bootcard.c \
     startup/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
-    ../../m68k/shared/m68kbspgetworkarea.c ../../shared/sbrk.c \
+    ../../shared/bspgetworkarea.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c ../../shared/gnatinstallhandler.c \
     ../../m68k/shared/bspspuriousinit.c ../../m68k/shared/m68000spurious.c \
     startup/spurious_assistant.c

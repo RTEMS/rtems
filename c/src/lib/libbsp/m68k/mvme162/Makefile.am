@@ -39,7 +39,7 @@ startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bootcard.c  \
     ../../shared/bsppretaskinghook.c startup/page_table.c \
-    ../../m68k/shared/m68kbspgetworkarea.c startup/page_table.c \
+    ../../shared/bspgetworkarea.c startup/page_table.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c

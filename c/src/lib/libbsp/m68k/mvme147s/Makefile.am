@@ -30,7 +30,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppretaskinghook.c ../../m68k/shared/setvec.c \
-    ../../m68k/shared/m68kbspgetworkarea.c ../../m68k/shared/setvec.c \
+    ../../shared/bspgetworkarea.c ../../m68k/shared/setvec.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = ../mvme147/clock/ckinit.c
 console_SOURCES = ../mvme147/console/console.c \

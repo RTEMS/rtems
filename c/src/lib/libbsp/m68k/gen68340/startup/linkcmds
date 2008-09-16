@@ -20,15 +20,15 @@
 /*
  * Declare some sizes.
  */
-_RamBase = DEFINED(_RamBase) ? _RamBase : 0x10000000;
-_RamSize = DEFINED(_RamSize) ? _RamSize : 4M;
-_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
+RamBase = DEFINED(RamBase) ? RamBase : 0x10000000;
+RamSize = DEFINED(RamSize) ? RamSize : 4M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /*
  * Declare on-board memory.
  * It would be nice if the ram length could be given as
- * LENGTH=_RamSize, but gld doesn't allow non-constant
+ * LENGTH=RamSize, but gld doesn't allow non-constant
  * values in the LENGTH expression.  
  */
 MEMORY {
@@ -169,7 +169,7 @@ SECTIONS {
                 _stack_init = .;
                 _clear_end = .;
 
-                _WorkspaceBase = .;
+                WorkAreaBase = .;
         } >ram
 
        /*

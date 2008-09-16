@@ -29,7 +29,7 @@ dist_project_lib_DATA += startup/linkcmds
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/bsppretaskinghook.c ../../m68k/shared/m68kbspgetworkarea.c \
+    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c
