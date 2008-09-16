@@ -107,7 +107,6 @@
 
 #include <rtems.h>
 #include <rtems/clockdrv.h>
-#include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */
 #include "../include/mpc5200.h"

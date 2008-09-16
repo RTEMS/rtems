@@ -96,12 +96,7 @@
 
 #warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
-#include <string.h>
-
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <rtems/score/thread.h>
-
+#include <rtems.h>
 #include <libcpu/powerpc-utility.h>
 #include <libcpu/raw_exception.h>
 
