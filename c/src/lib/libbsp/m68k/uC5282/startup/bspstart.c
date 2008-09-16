@@ -31,8 +31,8 @@
 /*
  * Linker Script Defined Variables
  */
-extern char _RamSize[];
-extern char _RamBase[];
+extern char RamSize[];
+extern char RamBase[];
 
 /*
  * CPU-space access
@@ -203,8 +203,8 @@ static void handler(int pc)
     for(;;) {
         int *nfp = (int *)*fp;
         if ((nfp <= fp)
-         || ((char *)nfp >= _RamSize)
-         || ((char *)(nfp[1]) >= _RamSize))
+         || ((char *)nfp >= RamSize)
+         || ((char *)(nfp[1]) >= RamSize))
             break;
         printk("FP:%x -> %x    PC:%x\n", fp, nfp, nfp[1]);
         fp = nfp;
@@ -240,8 +240,8 @@ void bsp_start( void )
   /*
    * Cache SDRAM
    */
-  mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
-                      MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
+  mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)RamBase)     |
+                      MCF5XXX_ACR_AM((uint32_t)RamSize-1)   |
                       MCF5XXX_ACR_EN                         |
                       MCF5XXX_ACR_BWE                        |
                       MCF5XXX_ACR_SM_IGNORE;
