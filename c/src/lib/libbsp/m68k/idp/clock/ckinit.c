@@ -26,9 +26,8 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
 
-uint32_t         Clock_isrs;        /* ISRs until next tick */
+uint32_t                  Clock_isrs;        /* ISRs until next tick */
 volatile uint32_t         Clock_driver_ticks;
                                     /* ticks since initialization */
 rtems_isr_entry  Old_ticker;

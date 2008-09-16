@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
 
 #define MS_COUNT          65376    /* 1ms */
 /* MS_COUNT = 0x10000 - 1e-3/6.25e-6 */
