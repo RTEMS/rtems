@@ -14,7 +14,6 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
 
 #if defined(CLOCK_DRIVER_USE_FAST_IDLE) && defined(CLOCK_DRIVER_ISRS_PER_TICK)
 #error "clockdrv_shell.c: fast idle and N ISRs per tick is not supported"

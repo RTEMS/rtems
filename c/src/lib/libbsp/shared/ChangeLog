@@ -1,3 +1,9 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clockdrv_shell.c: Remove unnecessary includes of rtems/libcsupport.h
+	and rtems/libio.h.
+	* bspstart.c: New file.
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clockdrv_shell.c: The Shared Memory Driver no longer requires the
