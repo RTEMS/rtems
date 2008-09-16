@@ -392,8 +392,6 @@ ZEROLOOPTEST:
 	cmpl	a1,a0			| Done?
 	bcs.s	ZEROLOOP		| No, skip
 
-	movel	4(a7),_M68k_Ramsize	| Set RAM size
-
 	movel	#_stack_init,a7		| set master stack pointer
 	pea	env			| envp
 	pea	arg			| argv

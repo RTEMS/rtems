@@ -26,9 +26,9 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.prom \
     startup/linkcmds.bootp
 
 startup_SOURCES = startup/alloc360.c ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../m68k/shared/m68kpretaskinghook.c startup/bspstart.c \
+    ../../m68k/shared/m68kbspgetworkarea.c ../../shared/bspstart.c \
     startup/init68360.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
