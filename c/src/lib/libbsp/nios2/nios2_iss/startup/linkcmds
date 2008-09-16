@@ -21,6 +21,10 @@ DO NOT MODIFY THIS FILE
 
 */
 
+RamBase = DEFINED(RamBase) ? RamBase : 0x00000000;
+RamSize = DEFINED(RamSize) ? RamSize : 0x00800000;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+
 MEMORY
 {
     reset : ORIGIN = 0x00000000, LENGTH = 0x00000600

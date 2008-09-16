@@ -44,9 +44,6 @@ extern "C" {
 
 #define SYSTEM_BUS_WIDTH 32
 
-#define RAM_BASE 0
-#define RAM_BYTES 0x00800000
-
 #define JTAG_UART_BASE 0x08000000
 #define JTAG_UART_IRQ 2
 
