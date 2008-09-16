@@ -30,7 +30,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c \
-    ../../shared/setvec.c startup/bspgetworkarea.c
+    ../../shared/setvec.c ../../shared/bspgetworkarea.c
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/conscfg.c ../../shared/console.c
 timer_SOURCES = timer/timer.c

@@ -1,5 +1,11 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, startup/linkcmds: Use top level shared
+	bsp_get_work_area() implementation.
+	* startup/bspgetworkarea.c: Removed.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* clock/ckinit.c, startup/bspstart.c: Remove unnecessary includes of
 	rtems/libcsupport.h and rtems/libio.h.
 
