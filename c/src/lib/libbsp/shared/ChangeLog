@@ -1,5 +1,10 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bspgetworkarea.c: New file.  This implementation should be useable
+	by most BSPs if they provide the proper support in their linker script.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* clockdrv_shell.c: Remove unnecessary includes of rtems/libcsupport.h
 	and rtems/libio.h.
 	* bspstart.c: New file.
