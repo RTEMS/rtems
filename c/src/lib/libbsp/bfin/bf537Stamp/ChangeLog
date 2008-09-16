@@ -1,3 +1,9 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Remove unnecessary includes of
+	rtems/libcsupport.h and rtems/libio.h.
+	* startup/linkcmds: Remove unused _HeapBase.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds:

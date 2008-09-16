@@ -17,23 +17,17 @@
  */
 
 
-#include <string.h>
-
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
+#include <bsp.h>
 #include <libcpu/bf537.h>
 #include <libcpu/gpioRegs.h>
 #include <libcpu/mmu.h>
 #include <libcpu/interrupt.h>
-#include <bsp.h>
 
 
 #if 0
 static bfin_mmu_region_t mmuRegions[] = {
 };
 #endif
-
-void bsp_libc_init(void *, uint32_t, int);
 
 void Init_RTC(void);
 

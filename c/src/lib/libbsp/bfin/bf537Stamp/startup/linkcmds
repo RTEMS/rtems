@@ -157,6 +157,5 @@ SECTIONS
 
 __RamBase = _RamBase;
 __RamSize = _RamSize;
-__HeapBase = _HeapBase;
 __edata = _edata;
 __etext = _etext;
