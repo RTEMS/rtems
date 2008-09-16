@@ -33,7 +33,7 @@ startup_SOURCES = startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
     startup/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c ../../shared/bsppretaskinghook.c \
-    ../../m68k/shared/m68kbspgetworkarea.c ../../shared/gnatinstallhandler.c \
+    ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c \
     startup/except_vect_332_ROM.S
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c console/sci.c console/sci.h
