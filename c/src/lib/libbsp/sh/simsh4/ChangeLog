@@ -1,5 +1,11 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, startup/linkcmds, startup/linkcmds-le,
+	startup/linkcmds-le.coff: Use top level shared bsp_get_work_area()
+	implementation.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* clock/ckinit.c: Add use of bsp_get_work_area() in its own file and
 	rely on BSP Framework to perform more initialization. Remove
 	unnecessary includes of rtems/libio.h and rtems/libcsupport.h. All
