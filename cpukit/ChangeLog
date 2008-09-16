@@ -1,3 +1,9 @@
+2008-09-16	Gene Smith <gene.smith@siemens.com>
+
+	PR 564/cpukit
+	* sapi/include/confdefs.h: Fix incorrect name. Was missed in an earlier
+	renaming sweep.
+
 2008-09-10 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Remove pre-production testing CFLAGS.
