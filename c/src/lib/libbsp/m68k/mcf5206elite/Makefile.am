@@ -37,7 +37,7 @@ dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
     startup/linkcmds.flash
 
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c ../../m68k/shared/m68kbspgetworkarea.c \
+    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspstart.c startup/init5206e.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
