@@ -146,7 +146,7 @@ typedef struct _HEADER {
   void* 		OSAreaAddress;
   unsigned long 	OSAreaLength;
 
-  /* Date&Time from RTC of last change to OSAreaArea */
+  /* Date&Time from RTC of last change to OSArea */
   unsigned long 	OSAreaLastWriteDT[2];
 } HEADER;
 

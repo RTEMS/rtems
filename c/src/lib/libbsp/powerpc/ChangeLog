@@ -1,5 +1,9 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shared/include/nvram.h: Fix typo.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shared/clock/clock.c: Remove unnecessary includes of
 	rtems/libcsupport.h and rtems/libio.h.
 
