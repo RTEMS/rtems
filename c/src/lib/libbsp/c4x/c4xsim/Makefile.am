@@ -32,7 +32,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c \
+    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
     ../../c4x/shared/c3xspurious.c ../../c4x/shared/c4xspurious.c \
