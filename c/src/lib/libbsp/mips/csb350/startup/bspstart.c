@@ -18,8 +18,6 @@
 
 #include <bsp.h>
 #include <libcpu/au1x00.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 
 au1x00_uart_t *uart0 = (au1x00_uart_t *)AU1X00_UART0_ADDR;
 au1x00_uart_t *uart3 = (au1x00_uart_t *)AU1X00_UART3_ADDR;

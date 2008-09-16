@@ -1,3 +1,8 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Remove unnecessary includes of
+	rtems/libcsupport.h and rtems/libio.h.
+
 2008-09-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Split out bsp_get_work_area() into its own file and user

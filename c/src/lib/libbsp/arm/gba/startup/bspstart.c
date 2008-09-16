@@ -21,8 +21,6 @@
 #include <stdio.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <gba.h>
 #include <conio.h>
 

@@ -12,9 +12,7 @@
  */
 
 #include <bsp.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
-#include <rtems/libio.h>
 #include <mc9328mxl.h>
 
 extern void rtems_irq_mngt_init(void);

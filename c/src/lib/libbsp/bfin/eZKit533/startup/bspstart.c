@@ -17,12 +17,8 @@
  */
 
 
-#include <string.h>
-
 #include <bsp.h>
 #include <cplb.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <libcpu/interrupt.h>
 
 const unsigned int dcplbs_table[16][2] = {  

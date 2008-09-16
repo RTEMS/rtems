@@ -11,8 +11,6 @@
  */
 
 #include <bsp.h>
-#include <rtems/libcsupport.h>
-#include <rtems/libio.h>
 #include <ep7312.h>
 #include <uart.h>
 

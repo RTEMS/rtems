@@ -22,7 +22,6 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <rtems/libio.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>

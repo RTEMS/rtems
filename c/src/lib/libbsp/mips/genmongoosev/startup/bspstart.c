@@ -21,8 +21,6 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <libcpu/mongoose-v.h>
 
 extern void _sys_exit(int);

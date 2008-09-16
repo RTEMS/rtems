@@ -14,10 +14,7 @@
  *  bspstart.c,v 1.4.2.1 2003/09/04 18:44:49 joel Exp
  */
 
-#include <string.h>
-
 #include <bsp.h>
-#include <rtems/libio.h>
  
 /*
  *  bsp_start

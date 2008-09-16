@@ -13,8 +13,6 @@
  *  $Id$
 */
 #include <bsp.h>
-#include <rtems/libcsupport.h>
-#include <rtems/libio.h>
 #include <at91rm9200.h>
 #include <at91rm9200_pmc.h>
 #include <at91rm9200_emac.h>

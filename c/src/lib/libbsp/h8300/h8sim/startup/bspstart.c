@@ -17,8 +17,6 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 
 /*
  *  bsp_start

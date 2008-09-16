@@ -14,17 +14,13 @@
  *  bspstart.c,v 1.4.2.1 2003/09/04 18:44:49 joel Exp
  */
 
-#include <string.h>
-
 #include <bsp.h>
-#include <rtems/libio.h>
 
 /*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
   extern void mips_install_isr_entries(void);
