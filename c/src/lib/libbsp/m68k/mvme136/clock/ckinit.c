@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <rtems/libio.h>
 #include <rtems/zilog/z8036.h>
 
 #define MICRVAL     0xe2            /* disable lower chain, no vec */

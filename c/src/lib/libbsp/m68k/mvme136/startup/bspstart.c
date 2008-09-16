@@ -14,11 +14,7 @@
  *  $Id$
  */
 
-#include <string.h>
-
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/zilog/z8036.h>
 
 /*
