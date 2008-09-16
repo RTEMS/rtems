@@ -110,9 +110,9 @@ uint32_t   rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
 #ifdef CONFIGURE_INIT
-int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
+int rtems_pty_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
 #else
-extern int rtems_telnetd_maximum_ptys;
+extern int rtems_pty_maximum_ptys;
 #endif
 
 /*
