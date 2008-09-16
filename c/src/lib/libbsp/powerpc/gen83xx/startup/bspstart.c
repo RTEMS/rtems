@@ -20,12 +20,6 @@
  * $Id$
  */
 
-#include <string.h>
-
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <rtems/score/thread.h>
-
 #include <libcpu/powerpc-utility.h>
 #include <libcpu/raw_exception.h>
 
@@ -85,25 +79,6 @@ void _BSP_Fatal_error(unsigned n)
   while (1) {
     /* Do nothing */
   }
-}
-
-void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size)
-{
-#ifdef HAS_UBOOT
-  char *ram_end = (char *) mpc83xx_uboot_board_info.bi_memstart +
-                                 mpc83xx_uboot_board_info.bi_memsize;
-#else /* HAS_UBOOT */
-  char *ram_end = bsp_ram_end;
-#endif /* HAS_UBOOT */
-
-  *work_area_start = bsp_work_area_start;
-  *work_area_size = ram_end - bsp_work_area_start;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 void bsp_start( void)

@@ -23,8 +23,6 @@
 #include <mpc55xx/edma.h>
 
 #include <rtems.h>
-#include <rtems/bspIo.h>
-#include <rtems/libcsupport.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -43,11 +41,11 @@
 #define MPC55XX_INTERRUPT_STACK_SIZE 0x1000
 
 /* Symbols defined in linker command file */
-LINKER_SYMBOL( bsp_ram_start);
-LINKER_SYMBOL( bsp_ram_end);
-LINKER_SYMBOL( bsp_external_ram_start);
-LINKER_SYMBOL( bsp_external_ram_size);
-LINKER_SYMBOL( bsp_section_bss_end);
+LINKER_SYMBOL(bsp_ram_start);
+LINKER_SYMBOL(bsp_ram_end);
+LINKER_SYMBOL(bsp_external_ram_start);
+LINKER_SYMBOL(bsp_external_ram_size);
+LINKER_SYMBOL(bsp_section_bss_end);
 
 unsigned int bsp_clock_speed = 0;
 
@@ -77,14 +75,6 @@ void _BSP_Fatal_error( unsigned n)
 	while (1) {
 		/* Do nothing */
 	}
-}
-
-void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
-{
-	*work_area_start = bsp_section_bss_end;
-	*work_area_size = bsp_ram_end - 2 * MPC55XX_INTERRUPT_STACK_SIZE - bsp_section_bss_end;
-	*heap_start = bsp_external_ram_start;
-	*heap_size = (size_t) bsp_external_ram_size;
 }
 
 void bsp_predriver_hook()
@@ -193,7 +183,11 @@ void bsp_start(void)
 	
 	/* Initialize exceptions */
 	DEBUG_PRINT( "Initialize exceptions ...\n");
-	ppc_exc_initialize( PPC_INTERRUPT_DISABLE_MASK_DEFAULT, interrupt_stack_start, interrupt_stack_size);
+	ppc_exc_initialize(
+          PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+          interrupt_stack_start,
+          interrupt_stack_size
+        );
 	DEBUG_DONE();
 
 	/* Initialize interrupts */

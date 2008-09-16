@@ -1,3 +1,11 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, startup/bspstart.c: Add use of bsp_get_work_area() in
+	its own file and rely on BSP Framework to perform more
+	initialization. Remove unnecessary includes of rtems/libio.h and
+	rtems/libcsupport.h.
+	* startup/bspgetworkarea.c: New file.
+
 2008-09-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Review of all bsp_cleanup() implementations. In this

@@ -19,8 +19,6 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/bootcard.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <rtems/powerpc/powerpc.h>
 
@@ -64,24 +62,6 @@ void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
   __asm__ __volatile ("sc");
-}
-
-/*
- *  This method returns the base address and size of the area which
- *  is to be allocated between the RTEMS Workspace and the C Program
- *  Heap.
- */
-void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size
-)
-{
-  *work_area_start       = &end;
-  *work_area_size       = (void *)&RAM_END - (void *)&end;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 /*
