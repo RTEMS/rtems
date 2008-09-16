@@ -20,8 +20,6 @@
 #include <stdlib.h>			/* for atexit() */
 
 #include <bsp.h>
-#include <rtems/libio.h>
-
 #include <rtems/m68k/m68302.h>
 
 #define CLOCK_VECTOR 137

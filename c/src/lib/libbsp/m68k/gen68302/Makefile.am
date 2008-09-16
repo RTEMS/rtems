@@ -29,11 +29,10 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../m68k/shared/m68kpretaskinghook.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppost.c ../../shared/bspstart.c ../../shared/bootcard.c \
+    ../../m68k/shared/m68kbspgetworkarea.c ../../shared/sbrk.c \
+    ../../m68k/shared/setvec.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 timer_SOURCES = timer/timer.c timer/timerisr.S

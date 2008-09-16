@@ -30,7 +30,6 @@
 
 #include <stdlib.h>			/* for atexit() */
 #include <bsp.h>
-#include <rtems/libio.h>
 #include <m68340.h>
 
 #define CLOCK_VECTOR	120		/* clock isr routine vector in the vbr */

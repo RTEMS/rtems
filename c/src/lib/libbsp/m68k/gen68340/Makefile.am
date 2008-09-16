@@ -31,9 +31,9 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bsppost.c startup/bspstart.c startup/init68340.c \
-    ../../shared/bootcard.c ../../m68k/shared/m68kpretaskinghook.c \
+    ../../shared/bsppredriverhook.c ../../m68k/shared/m68kbspgetworkarea.c \
+    ../../shared/bsppost.c ../../shared/bspstart.c startup/init68340.c \
+    ../../shared/bootcard.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     startup/dumpanic.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c
