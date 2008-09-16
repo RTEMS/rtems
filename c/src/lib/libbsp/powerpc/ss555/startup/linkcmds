@@ -28,6 +28,9 @@ int_ram_org	= 0x003F9800;		/* base of internal RAM */
 int_ram_top	= 0x00400000;		/* top of internal RAM */
 ext_ram_size	= 0x00080000;		/* size of external RAM */
 
+RamBase = DEFINED(_RamBase) ? RamBase : 0x003F9800;
+RamSize = DEFINED(_RamSize) ? RamSize : 0x00486800;
+HeapSize = DEFINED(_HeapSize) ? HeapSize : 0x0;
 
 SECTIONS
 {
@@ -235,17 +238,16 @@ SECTIONS
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
 
-  WorkspaceBase = .;
-
   /*
-   * Heap
+   * Work Area
    *
-   * The heap is configured at run-time to use all available memory.  It
+   * The Work Area is configured at run-time to use all available memory.  It
    * begins just after the end of the Workspace and continues to the end of
    * the external RAM.
    */
   . = DEFINED(RTEMS_DEBUG) ? 0 + ext_ram_size : int_ram_top + ext_ram_size;
-  RamEnd = .;
+  WorkAreaBase = .;
+
  
   /* 
    * Internal I/O devices 

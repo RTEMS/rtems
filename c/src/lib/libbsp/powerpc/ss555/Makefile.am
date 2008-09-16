@@ -32,7 +32,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c startup/iss555.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S \
-    ../../shared/bsppretaskinghook.c startup/bspgetworkarea.c
+    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c
 tm27supp_SOURCES = startup/tm27supp.c
 
 noinst_LIBRARIES = libbsp.a
