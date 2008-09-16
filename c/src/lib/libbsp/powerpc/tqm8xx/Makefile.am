@@ -56,9 +56,9 @@ console_SOURCES = console/console.c
 timer_SOURCES = timer/timer.c
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    startup/bspstart.c ../../shared/bootcard.c \
-    startup/mmutlbtab.c startup/cpuinit.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+    ../../shared/bsppretaskinghook.c startup/bspstart.c \
+    startup/bspgetworkarea.c ../../shared/bootcard.c startup/mmutlbtab.c \
+    startup/cpuinit.c ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

@@ -20,11 +20,7 @@
  * $Id$
  */
 
-#include <string.h>
-
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <rtems/score/thread.h>
+#include <rtems.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -81,11 +77,6 @@ void _BSP_Fatal_error( unsigned n)
   }
 }
 
-void bsp_pretasking_hook( void)
-{
-  /* Do noting */
-}
-
 const char *bsp_tqm_get_cib_string( const char *cib_id)
 {
   char srch_pattern[10] = "";
@@ -130,16 +121,6 @@ rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
    */
   *result = strtoul(item_ptr,&end_ptr,10);
   return RTEMS_SUCCESSFUL;
-}
-
-void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
-{
-  char *ram_end = (char *) (TQM_BD_INFO.sdram_size - (uint32_t)TopRamReserved);
-
-  *work_area_start = bsp_work_area_start;
-  *work_area_size = ram_end - bsp_work_area_start;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 }
 
 void bsp_start( void)
