@@ -28,7 +28,6 @@
 
 #include <stdlib.h>
 #include <bsp.h>
-#include <rtems/libio.h>
 
 #define MS_COUNT          1000              /* T2's countdown constant (1 ms) */
 #define CLOCK_INT_LEVEL   6                 /* T2's interrupt level */
