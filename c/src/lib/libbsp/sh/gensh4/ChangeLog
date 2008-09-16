@@ -1,3 +1,9 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, startup/linkcmds, startup/linkcmds.rom,
+	startup/linkcmds.rom2ram: Use top level shared bsp_get_work_area()
+	implementation.
+
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, include/bsp.h, startup/linkcmds: Use
