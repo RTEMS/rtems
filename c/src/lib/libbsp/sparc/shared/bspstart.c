@@ -19,12 +19,8 @@
  *  $Id$
  */
 
-#include <string.h>
-
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 
 /*
