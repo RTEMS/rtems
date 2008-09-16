@@ -24,6 +24,8 @@ RTEMS_BSPOPTS_SET([BSP_CPU_CLOCK_SPEED],[*],[100000000])
 RTEMS_BSPOPTS_HELP([BSP_CPU_CLOCK_SPEED],
 [Use a clock speed of 100000000 for the m5484FireEngine board])
 
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

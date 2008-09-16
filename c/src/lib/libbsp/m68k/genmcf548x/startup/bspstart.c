@@ -44,16 +44,8 @@
 \*===============================================================*/
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <string.h>
-
-char *HeapStart, *HeapEnd;
-unsigned long _HeapSize;
 
 extern uint32_t _CPU_cacr_shadow;
-
-extern unsigned long  _M68k_Ramsize;
 
 /*
 * These labels (!) are defined in the linker command file or when the linker is
@@ -70,7 +62,6 @@ extern char _BootFlashSize[];
 extern char _CodeFlashSize[];
 extern char _TopRamReserved [];
 extern char _WorkspaceBase [];
-extern char _RamSize[];
 
 /*
  * CPU-space access
@@ -197,38 +188,6 @@ for(way_cnt=0; way_cnt<4; way_cnt++)
 }
 
 /*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_predriver_hook(void)
-{
-	/* Do nothing */
-}
-
-void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);		/* m68k version */
-
-void bsp_calc_mem_layout(void)
-{
-  /*
-   * compute the memory layout:
-   * - first unused address is Workspace start
-   * - Heap starts at end of workspace
-   * - Heap ends at end of memory - reserved memory area
-   */
-  Configuration.work_space_start = _WorkspaceBase;
-
-  HeapStart = ((char *)Configuration.work_space_start +
-                    Configuration.work_space_size);
-
-  HeapEnd = (void *)(RAM_END - (uint32_t)_TopRamReserved);
-
-  _HeapSize = HeapEnd - HeapStart;
-}
-
-
-/*
  * Coldfire acr and mmu settings
  */
  void acr_mmu_mapping(void)
@@ -288,17 +247,6 @@ void bsp_calc_mem_layout(void)
  */
 void bsp_start( void )
 {
-  _M68k_Ramsize = (unsigned long)_RamSize;		/* RAM size set in linker script */
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space and Heap.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-  bsp_calc_mem_layout();
-
   /*
    * do mapping of acr's and/or mmu
    */

@@ -48,38 +48,38 @@
 /* 
  * Location and size of on-chip devices
  */
-_SdramBase          = DEFINED(_SdramBase)        ? _SdramBase        : 0x00000000;
-_SdramSize	    = DEFINED(_SdramSize)        ? _SdramSize        : (64 * 1024 * 1024);
-_SysSramBase        = DEFINED(_SysSramBase)      ? _SysSramBase      : __MBAR + 0x00010000;
-_SysSramSize	    = DEFINED(_SysSramSize)      ? _SysSramSize      : (32 * 1024);
-_McdapiBase         = DEFINED(_McdapiBase)       ? _McdapiBase       : _SysSramBase;                 
-_McdapiSize         = DEFINED(_McdapiSize)       ? _McdapiSize       : (12 * 1024);                  
-_CoreSramBase0      = DEFINED(_CoreSramBase0)    ? _CoreSramBase0    : 0x20000000;
-_CoreSramBase1      = DEFINED(_CoreSramBase1)    ? _CoreSramBase1    : 0x20001000;
-_CoreSramSize0      = DEFINED(_CoreSramSize0)    ? _CoreSramSize0    : (4 * 1024);
-_CoreSramSize1      = DEFINED(_CoreSramSize1)    ? _CoreSramSize1    : (4 * 1024);
-_BootFlashBase      = DEFINED(_BootFlashBase)    ? _BootFlashBase    : 0xFF800000;
-_BootFlashSize      = DEFINED(_BootFlashSize)    ? _BootFlashSize    : (2 * 1024 * 1024);
-_CodeFlashBase      = DEFINED(_CodeFlashBase)    ? _CodeFlashBase    : 0xE0000000;
-_CodeFlashSize      = DEFINED(_CodeFlashSize)    ? _CodeFlashSize    : (16 * 1024 * 1024);
+_SdramBase     = DEFINED(_SdramBase)      ? _SdramBase     : 0x00000000;
+_SdramSize     = DEFINED(_SdramSize)      ? _SdramSize     : (64 * 1024 * 1024);
+_SysSramBase   = DEFINED(_SysSramBase)    ? _SysSramBase   : __MBAR + 0x00010000;
+_SysSramSize   = DEFINED(_SysSramSize)    ? _SysSramSize   : (32 * 1024);
+_McdapiBase    = DEFINED(_McdapiBase)     ? _McdapiBase    : _SysSramBase;                 
+_McdapiSize    = DEFINED(_McdapiSize)     ? _McdapiSize    : (12 * 1024);                  
+_CoreSramBase0 = DEFINED(_CoreSramBase0)  ? _CoreSramBase0 : 0x20000000;
+_CoreSramBase1 = DEFINED(_CoreSramBase1)  ? _CoreSramBase1 : 0x20001000;
+_CoreSramSize0 = DEFINED(_CoreSramSize0)  ? _CoreSramSize0 : (4 * 1024);
+_CoreSramSize1 = DEFINED(_CoreSramSize1)  ? _CoreSramSize1 : (4 * 1024);
+_BootFlashBase = DEFINED(_BootFlashBase)  ? _BootFlashBase : 0xFF800000;
+_BootFlashSize = DEFINED(_BootFlashSize)  ? _BootFlashSize : (2 * 1024 * 1024);
+_CodeFlashBase = DEFINED(_CodeFlashBase)  ? _CodeFlashBase : 0xE0000000;
+_CodeFlashSize = DEFINED(_CodeFlashSize)  ? _CodeFlashSize : (16 * 1024 * 1024);
 
-_VectorRam          = DEFINED(_VectorRam)        ? _VectorRam        : _SdramBase;
-_DataRam            = DEFINED(_DataRam)          ? _DataRam          : _data_dest_start;
-_DataRom            = DEFINED(_DataRom)          ? _DataRom          : _data_src_start;
-_DataEnd            = DEFINED(_DataEnd)          ? _DataEnd          : _data_dest_end;
-_BssStart           = DEFINED(_BssStart)         ? _BssStart         : _clear_start;
-_BssEnd             = DEFINED(_BssEnd)           ? _BssEnd           : _clear_end;
-_SpInit             = DEFINED(_SpInit)           ? _SpInit           : _EndInitStackSpace;
-_InitPc             = DEFINED(_InitPc)           ? _InitPc           : _SdramBase + 0x400;
+_VectorRam     = DEFINED(_VectorRam)      ? _VectorRam     : _SdramBase;
+_DataRam       = DEFINED(_DataRam)        ? _DataRam       : _data_dest_start;
+_DataRom       = DEFINED(_DataRom)        ? _DataRom       : _data_src_start;
+_DataEnd       = DEFINED(_DataEnd)        ? _DataEnd       : _data_dest_end;
+_BssStart      = DEFINED(_BssStart)       ? _BssStart      : _clear_start;
+_BssEnd        = DEFINED(_BssEnd)         ? _BssEnd        : _clear_end;
+_SpInit        = DEFINED(_SpInit)         ? _SpInit        : _EndInitStackSpace;
+_InitPc        = DEFINED(_InitPc)         ? _InitPc        : _SdramBase + 0x400;
+_InitStackSize = DEFINED(StackSize)       ? StackSize      : 0x2000;  /* 8 kB   */
+_TopRamReserved= DEFINED(_TopRamReserved) ? _TopRamReserved : 0;
 
-_InitStackSize      = DEFINED(StackSize)         ? StackSize         : 0x2000;  /* 8 kB   */
-_TopRamReserved     = DEFINED(_TopRamReserved)   ? _TopRamReserved   : 0;
+_RamBase       = DEFINED(_SdramBase)      ? _SdramBase      : _SdramBase;
+_RamSize       = DEFINED(_SdramSize)      ? _SdramSize      : _SdramSize;
+_HeapSize      = DEFINED(_HeapSize)       ? _HeapSize       : 0x0;
+_VBR           = DEFINED(_VBR)            ? _VBR            : _RamBase;
 
-_RamBase            = DEFINED(_SdramBase)        ? _SdramBase        : _SdramBase;
-_RamSize            = DEFINED(_SdramSize)        ? _SdramSize        : _SdramSize;
-_VBR                = DEFINED(_VBR)              ? _VBR              : _RamBase;
-
-__MBAR	            = DEFINED(__MBAR)            ? __MBAR            : 0x10000000;
+__MBAR         = DEFINED(__MBAR)          ? __MBAR          : 0x10000000;
 
 ENTRY(start)
 MEMORY
