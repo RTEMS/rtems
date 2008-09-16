@@ -29,9 +29,9 @@ dist_project_lib_DATA += startup/linkcmds
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c \
-    ../../m68k/shared/m68kpretaskinghook.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/bsppretaskinghook.c ../../m68k/shared/setvec.c \
+    ../../m68k/shared/m68kbspgetworkarea.c ../../m68k/shared/setvec.c \
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = ../mvme147/clock/ckinit.c
 console_SOURCES = ../mvme147/console/console.c \
     ../../shared/dummy_printk_support.c

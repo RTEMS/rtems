@@ -19,11 +19,7 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
 #include <rtems/error.h>
-#include <rtems/libcsupport.h>
-#include <stdio.h>
-#include <string.h>
 #include <errno.h>
  
 /*
@@ -31,6 +27,12 @@
  */
 #define VME_ONE_BASE    0x30000000
 #define VME_TWO_BASE    0x31000000
+
+/*
+ * Linker Script Defined Variables
+ */
+extern char _RamSize[];
+extern char _RamBase[];
 
 /*
  * CPU-space access
@@ -171,12 +173,6 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 }
 
 /*
- *  Use the shared implementations of the following routines
- */
-void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);         /* m68k version */
-
-/*
  * The Arcturus boot ROM prints exception information improperly
  * so use this default exception handler instead.  This one also
  * prints a call backtrace
@@ -185,7 +181,6 @@ static void handler(int pc)
 {
     int level;
     static volatile int reent;
-    extern char _RamSize[];
 
     rtems_interrupt_disable(level);
     if (reent++) bsp_reset(0);
@@ -227,34 +222,13 @@ static void handler(int pc)
 void bsp_start( void )
 {
   int i;
-  extern char _WorkspaceBase[];
-  extern char _RamBase[], _RamSize[];
-  extern unsigned long  _M68k_Ramsize;
-
-  _M68k_Ramsize = (unsigned long)_RamSize;      /* RAM size set in linker script */
 
   /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
+   * Set up default exception handler
    */
-
-    /*
-     * Set up default exception handler
-     */
-    for (i = 2 ; i < 256 ; i++)
-        if (i != (32+2)) /* Catch all but bootrom system calls */
-            *((void (**)(int))(i * 4)) = handler;
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *)_WorkspaceBase;
+  for (i = 2 ; i < 256 ; i++)
+      if (i != (32+2)) /* Catch all but bootrom system calls */
+          *((void (**)(int))(i * 4)) = handler;
 
   /*
    * Invalidate the cache and disable it
@@ -301,9 +275,10 @@ void bsp_start( void )
   MCF5282_GPIO_PJPAR |= 0x06;
 }
 
+extern char _CPUClockSpeed[];
+
 uint32_t bsp_get_CPU_clock_speed(void)
 {
-  extern char _CPUClockSpeed[];
   return( (uint32_t)_CPUClockSpeed);
 }
 

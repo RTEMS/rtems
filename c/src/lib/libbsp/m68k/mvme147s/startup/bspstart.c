@@ -18,35 +18,18 @@
  *  $Id$
  */
 
-#include <string.h>
-
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-
-/*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_libc_init( void *, uint32_t, int );
-void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
   m68k_isr_entry       *monitors_vector_table;
   int                   index;
   uint8_t               node_number;
-  extern void          *_WorkspaceBase;
-  extern void          *_RamSize;
-  extern unsigned long  _M68k_Ramsize;
-
-  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* 147Bug Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
@@ -129,6 +112,4 @@ void bsp_start( void )
 
   rtems_cache_enable_instruction();
   rtems_cache_enable_data();
-
-  Configuration.work_space_start = (void *) &_WorkspaceBase;
 }
