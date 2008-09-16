@@ -15,8 +15,6 @@
 #include <fcntl.h>
 #include <assert.h>
 
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 
 /*
