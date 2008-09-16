@@ -352,7 +352,6 @@ ZEROLOOPTEST:
 	cmpl	a1,a0			| Done?
 	bcs.s	ZEROLOOP		| No, skip
 	move	4(a7),d0
-	move	d0,_M68k_Ramsize        | Set Ram Size
 
 	/*
 	 * Right : Now we're ready to boot RTEMS

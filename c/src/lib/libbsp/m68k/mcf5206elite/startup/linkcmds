@@ -26,17 +26,21 @@
  *      number used there is not constant.  If this happens to you, edit
  *      the lines marked XXX below to use a constant value.
  */
+
+/*
+ * Declare system clock frequency.
+ */
+_SYS_CLOCK_FREQUENCY = DEFINED(_SYS_CLOCK_FREQUENCY) ?
+                               _SYS_CLOCK_FREQUENCY : 54000000;
+
 /*
  * Declare size of heap.
  * A heap size of 0 means "Use all available memory for the heap".
  * Initial stack located in on-chip SRAM and not declared there.
  */
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
-
-/*
- * Declare system clock frequency.
- */
-_SYS_CLOCK_FREQUENCY = DEFINED(_SYS_CLOCK_FREQUENCY) ? _SYS_CLOCK_FREQUENCY : 54000000;
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x30000000;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 0x00100000;
 
 /*
  * Setup the memory map of the MCF5206eLITE evaluation board
