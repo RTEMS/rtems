@@ -10,10 +10,14 @@
  * Declare some sizes.
  */
 
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
-
 _sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0x80400000;
 _sdram_size = DEFINED(_sdram_size) ? _sdram_size : 12M;
+
+/* standard items provided by RTEMS linkcmds files */
+RamBase = _sdram_base;
+RamSize = _sdram_size;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
 
 
 MEMORY
@@ -170,7 +174,7 @@ SECTIONS
     end = .;
     _end = .;
     . = ALIGN (1024);
-    _bss_free_start = .;
+    WorkAreaBase = .;
     
   } >ram   
 
