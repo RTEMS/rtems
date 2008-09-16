@@ -19,7 +19,6 @@
 
 #include <stdlib.h>
 #include <bsp.h>
-#include <rtems/libio.h>
 #include <mrm332.h>
 
 #define CLOCK_VECTOR   MRM_PIV

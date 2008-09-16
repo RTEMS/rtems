@@ -49,7 +49,7 @@ _RamEnd = _RamBase + _RamSize;
 
 __end_of_ram = 0x080000;
 _copy_data_from_rom = 1;
-_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x10000;
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 /*

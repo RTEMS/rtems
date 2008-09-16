@@ -30,10 +30,11 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds_ROM
 
 startup_SOURCES = startup/start_c.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c startup/bspclean.c \
-    ../../shared/bootcard.c ../../m68k/shared/m68kpretaskinghook.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
-    ../../shared/gnatinstallhandler.c startup/except_vect_332_ROM.S
+    ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
+    startup/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../m68k/shared/setvec.c ../../shared/bsppretaskinghook.c \
+    ../../m68k/shared/m68kbspgetworkarea.c ../../shared/gnatinstallhandler.c \
+    startup/except_vect_332_ROM.S
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c console/sci.c console/sci.h
 spurious_SOURCES = spurious/spinit.c
