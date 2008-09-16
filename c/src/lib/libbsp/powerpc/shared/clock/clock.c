@@ -18,7 +18,7 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/libio.h>
+#include <rtems.h>
 #include <rtems/clockdrv.h>
 
 #include <libcpu/powerpc-utility.h>
