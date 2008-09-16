@@ -61,7 +61,7 @@ extern char _SdramSize[];
 extern char _BootFlashSize[];
 extern char _CodeFlashSize[];
 extern char _TopRamReserved [];
-extern char _WorkspaceBase [];
+extern char WorkAreaBase [];
 
 /*
  * CPU-space access

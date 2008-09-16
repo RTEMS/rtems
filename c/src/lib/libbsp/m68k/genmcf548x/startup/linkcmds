@@ -75,10 +75,10 @@ _InitPc         = DEFINED(_InitPc)         ? _InitPc    : _SdramBase + 0x400;
 _InitStackSize  = DEFINED(StackSize)       ? StackSize  : 0x800;  /* 2 kB   */
 _TopRamReserved = DEFINED(_TopRamReserved) ? _TopRamReserved : 0;
 
-_RamBase        = DEFINED(_SdramBase)      ? _SdramBase : _SdramBase;
-_RamSize        = DEFINED(_SdramSize)      ? _SdramSize : _SdramSize;
-_HeapSize       = DEFINED(_HeapSize)       ? _HeapSize   : 0x0;
-_VBR            = DEFINED(_VBR)            ? _VBR       : _RamBase;
+RamBase        = DEFINED(_SdramBase)      ? _SdramBase : _SdramBase;
+RamSize        = DEFINED(_SdramSize)      ? _SdramSize : _SdramSize;
+HeapSize       = DEFINED(HeapSize)       ? HeapSize   : 0x0;
+_VBR            = DEFINED(_VBR)            ? _VBR       : RamBase;
 
 __MBAR          = DEFINED(__MBAR)          ? __MBAR     : 0x10000000;
 
@@ -218,7 +218,7 @@ SECTIONS
                 /*. = _StartInitStackSpace + _InitStackSize;*/
                 . += _InitStackSize;
                 PROVIDE (_EndInitStackSpace = .);
-                PROVIDE (_WorkspaceBase = .);
+                PROVIDE (WorkAreaBase = .);
         } >sdram
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }

@@ -63,7 +63,7 @@ extern uint8_t _BssStart[];
 extern uint8_t _BssEnd[];
 extern uint8_t _BootFlashBase[];
 extern uint8_t _CodeFlashBase[];
-extern uint8_t _RamBase[];
+extern uint8_t RamBase[];
 extern uint32_t InterruptVectorTable[];
 extern uint32_t _VectorRam[];
 
@@ -207,7 +207,7 @@ sdramc_init (void)
 			| MCF548X_SDRAMC_SDRAMDS_SB_D(MCF548X_SDRAMC_SDRAMDS_DRIVE_8MA)
             );
         MCF548X_SDRAMC_CS0CFG = (0
-            | MCF548X_SDRAMC_CSnCFG_CSBA((uint32_t)(_RamBase))
+            | MCF548X_SDRAMC_CSnCFG_CSBA((uint32_t)(RamBase))
             | MCF548X_SDRAMC_CSnCFG_CSSZ(MCF548X_SDRAMC_CSnCFG_CSSZ_64MBYTE)
             );
         MCF548X_SDRAMC_SDCFG1 = (0

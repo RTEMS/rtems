@@ -1,5 +1,11 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, startup/bspstart.c, startup/init548x.c,
+	startup/linkcmds, startup/linkcmds.m5484FireEngine.flash: Use top
+	level shared bsp_get_work_area() implementation.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, include/bspopts.h.in, startup/bspstart.c,
 	startup/linkcmds, startup/linkcmds.m5484FireEngine.flash: Add use of
 	bsp_get_work_area() in its own file and rely on BSP Framework to
