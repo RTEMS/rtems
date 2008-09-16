@@ -14,7 +14,6 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
 #include <stdlib.h>
 
 void Clock_exit(void);
