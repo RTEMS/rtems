@@ -1,5 +1,11 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/bspgetworkarea.c, startup/linkcmds.base: Do some prep work in
+	anticipation of gen5200 and gen83xx being able to shared
+	bsp_get_work_area() implementation.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* clock/clock.c, startup/bspstart.c: Remove unnecessary includes of
 	rtems/libcsupport.h and rtems/libio.h.
 

@@ -18,6 +18,10 @@ bsp_rom_size = LENGTH (ROM);
 
 bsp_section_align = 32;
 
+RamBase = bsp_ram_start;
+RamSize = bsp_ram_size;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+
 SECTIONS {
 	/*
 	 * BSP: MPC83XX registers
@@ -274,6 +278,7 @@ SECTIONS {
 	 * BSP: Work area start
 	 */
 	bsp_work_area_start = .;
+        WorkAreaBase = .;
 	
 	/* Stabs debugging sections.  */
 	.stab          0 : { *(.stab) }

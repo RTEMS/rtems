@@ -23,6 +23,14 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+/*
+ *  These are provided by the linkcmds for ALL of the BSPs which use this file.
+ */
+extern char RamBase[];
+extern char WorkAreaBase[];
+extern char HeapSize[];
+extern char RamSize[];
+
 #ifdef HAS_UBOOT
   extern bd_t mpc83xx_uboot_board_info;
 #endif /* HAS_UBOOT */
@@ -37,11 +45,11 @@ void bsp_get_work_area(
     char *ram_end = (char *) mpc83xx_uboot_board_info.bi_memstart +
 				   mpc83xx_uboot_board_info.bi_memsize;
   #else /* HAS_UBOOT */
-    char *ram_end = bsp_ram_end;
+    char *ram_end = RamBase + (uintptr_t)RamSize;
   #endif /* HAS_UBOOT */
 
   *work_area_start = bsp_work_area_start;
   *work_area_size = ram_end - bsp_work_area_start;
   *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
+  *heap_size = HeapSize;
 }
