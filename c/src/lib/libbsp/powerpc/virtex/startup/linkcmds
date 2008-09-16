@@ -19,6 +19,7 @@ ENTRY(download_entry)
 
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 128M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
 MEMORY
 {
@@ -247,8 +248,7 @@ SECTIONS
     IntrStack_end = .;
  
     PROVIDE(_end = . );
-    WorkSpaceStart = .;
-
+    WorkAreaBase = .;
 
     .gzipmalloc : {
 	. = ALIGN (16);
