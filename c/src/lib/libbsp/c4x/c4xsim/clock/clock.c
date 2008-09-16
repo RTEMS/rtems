@@ -15,7 +15,6 @@
 #include <stdlib.h>
 
 #include <rtems.h>
-#include <rtems/libio.h>
 #include <bsp.h>
 #include <rtems/tic4x/c4xio.h>
 
