@@ -22,9 +22,9 @@ dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c ../../shared/bsppredriverhook.c \
-    startup/bspgetworkarea.c ../../shared/bsppost.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/startup/bspgetworkarea.c ../../shared/bsppost.c \
+    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    startup/setvec.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c
 timer_SOURCES = timer/timer.c timer/timerisr.c
