@@ -41,7 +41,6 @@
 #include <stdlib.h>
 
 #include <rtems.h>
-#include <rtems/libio.h>
 
 extern uint32_t bsp_clicks_per_microsecond;
 

@@ -1,3 +1,8 @@
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/ckinit.c, startup/bspstart.c: Remove unnecessary includes of
+	rtems/libcsupport.h and rtems/libio.h.
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/ckinit.c: The Shared Memory Driver no longer requires the

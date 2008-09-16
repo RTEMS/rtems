@@ -27,8 +27,6 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 
-#include <rtems/libio.h>
-
 #include <stdlib.h>
 
 uint32_t         Clock_isrs;              /* ISRs until next tick */

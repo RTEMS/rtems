@@ -24,8 +24,6 @@ void bsp_clean_up(void);
 
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 
 /*
  *  Tells us where to put the workspace in case remote debugger is present.
