@@ -37,8 +37,8 @@ void bsp_get_work_area(
 )
 {
   *work_area_start       = _WorkspaceBase;
-  *work_area_size       = (unsigned long)_RamBase + (unsigned long) _RamSize -
-       (unsigned long)_WorkspaceBase;
+  *work_area_size       = (uintptr_t)_RamBase + (uintptr_t) _RamSize -
+       (uintptr_t)_WorkspaceBase;
   *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size = (size_t) _HeapSize;
 }
