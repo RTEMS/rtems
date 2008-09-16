@@ -1,5 +1,9 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/bspstart.c: Removed.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, clock/ckinit.c, startup/linkcmds,
 	startup/linkcmds_ROM: Add use of bsp_get_work_area() in its own file
 	and rely on BSP Framework to perform more initialization. Remove
