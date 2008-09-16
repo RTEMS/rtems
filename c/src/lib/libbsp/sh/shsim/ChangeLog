@@ -1,5 +1,10 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, startup/linkcmds, startup/linkcmds.sim: Use top level
+	shared bsp_get_work_area() implementation.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/bspstart.c: Removed.
 
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
