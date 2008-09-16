@@ -22,16 +22,8 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 #include <string.h>
  
-/*
- * Location of 'VME' access
- */
-#define VME_ONE_BASE    0x30000000
-#define VME_TWO_BASE    0x31000000
-
 /*
  * Cacheable areas
  */
@@ -142,37 +134,12 @@ void _CPU_cache_invalidate_1_data_line(const void *addr)
 }
 
 /*
- *  These are used by bsp_start
- */
-extern char _WorkspaceBase[];
-extern char _RamSize[];
-extern unsigned long  _M68k_Ramsize;
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialisation.
  */
 void bsp_start( void )
 {
-  _M68k_Ramsize = (unsigned long)_RamSize;    /* RAM size set in linker script */
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-
-  /*
-   *  Need to "allocate" the memory for the RTEMS Workspace and
-   *  tell the RTEMS configuration where it is.  This memory is
-   *  not malloc'ed.  It is just "pulled from the air".
-   */
-
-  Configuration.work_space_start = (void *)_WorkspaceBase;
-
   /*
    * Invalidate the cache and disable it
    */

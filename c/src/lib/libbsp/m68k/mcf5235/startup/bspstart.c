@@ -22,9 +22,6 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <rtems/libcsupport.h>
-#include <string.h>
  
 /*
  * Cacheable areas
@@ -161,8 +158,9 @@ void bsp_start( void )
   m68k_set_cacr(cacr_mode);
 }
 
+extern char _CPUClockSpeed[];
+
 uint32_t get_CPU_clock_speed(void)
 {
-  extern char _CPUClockSpeed[];
   return( (uint32_t)_CPUClockSpeed);
 }

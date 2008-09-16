@@ -28,10 +28,8 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmdsflash \
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../m68k/shared/m68kpretaskinghook.c \
-    ../../m68k/shared/m68kbspgetworkarea.c \
-    startup/init5235.c startup/bspstart.c \
-    ../../shared/bootcard.c \
+    ../../shared/bsppretaskinghook.c ../../m68k/shared/m68kbspgetworkarea.c \
+    startup/init5235.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clock.c
