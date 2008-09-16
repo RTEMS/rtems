@@ -1,3 +1,8 @@
+2008-09-16	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h: Revert previous patch. Does not apply to
+	head.
+
 2008-09-16	Gene Smith <gene.smith@siemens.com>
 
 	PR 564/cpukit
