@@ -133,9 +133,9 @@ extern rtems_configuration_table        Configuration;
  *  concurrently active.
  */
 #ifdef CONFIGURE_INIT
-  int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
+  size_t rtems_pty_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
 #else
-  extern int rtems_telnetd_maximum_ptys;
+  extern size_t rtems_pty_maximum_ptys;
 #endif
 
 /*
