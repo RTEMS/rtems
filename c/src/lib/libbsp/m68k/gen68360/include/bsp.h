@@ -97,13 +97,6 @@ m68k_isr_entry set_vector(
 );
 
 /*
- * Values assigned by link editor
- */
-extern char _RamBase[];
-extern char _HeapSize[];
-
-
-/*
  * Definitions for Atlas Computer Equipment Inc. High Speed Bridge (HSB)
  */
 #define ATLASHSB_ESR    0x20010000L
@@ -113,9 +106,9 @@ extern char _HeapSize[];
 #define ATLASHSB_ROM_U6 0xFF080000L	/* U6 flash ROM socket */
 
 
-  /*
-   * definitions for PGH360 board
-   */
+/*
+ * definitions for PGH360 board
+ */
 #if defined(PGH360)
 /* 
  * logical SPI addresses of SPI slaves available
