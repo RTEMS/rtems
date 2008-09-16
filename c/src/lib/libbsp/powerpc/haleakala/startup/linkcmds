@@ -18,6 +18,10 @@ ENTRY(download_entry)
 kIntrStackSize = 16K;
 kMainStackSize = 64K;
 
+RamBase = DEFINED(RamBase) ? RamBase : 0;
+RamSize = DEFINED(RamSize) ? RamSize : 256M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+
 MEMORY {
         RAM : ORIGIN = 0, LENGTH = 256M
         /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
@@ -238,10 +242,7 @@ SECTIONS
 	stack.end   = .;
 
 	/* RTEMS workspace: size specified by application */
-	_WorkspaceStart = ALIGN(0x20);
-
-	/* Heap: from end of the workspace to _RAMEnd */
-	_RAMEnd = ORIGIN(RAM) + LENGTH(RAM);
+	WorkAreaBase = ALIGN(0x20);
 
 	/* Debugging information */
     .line 0 : { *(.line) }

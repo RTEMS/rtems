@@ -20,6 +20,7 @@ ENTRY(start)
 StackSize   = DEFINED(StackSize) ? StackSize : 0x8000;
 RamBase     = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize     = DEFINED(RamSize) ? RamDiskSize : 0x0800000; /* 8M program ram */
+HeapSize    = DEFINED(HeapSize) ? HeapSize : 0x0;
 RamDiskBase = DEFINED(RamDiskBase) ? RamDiskBase : 0x0800000;
 RamDiskSize = DEFINED(RamDiskSize) ? RamDiskSize : 0x0800000; /* 8M ram disk */
 
@@ -270,7 +271,7 @@ SECTIONS
 
     clear_end = .;
 
-    WorkspaceBase = .;
+    WorkAreaBase = .;
 
     /* Sections for compressed .text and .data         */
     /* after the .datarom section is an int specifying */

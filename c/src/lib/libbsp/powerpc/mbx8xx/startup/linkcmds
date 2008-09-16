@@ -17,7 +17,8 @@ ENTRY(start)
  */
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 RamBase = DEFINED(RamBase) ? RamBase : 0;
-RamSize = DEFINED(RamSized) ? RamSize : 4M;
+RamSize = DEFINED(RamSize) ? RamSize : 4M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
  
 MEMORY
 	{
@@ -263,7 +264,7 @@ SECTIONS
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
 
-  WorkspaceBase = .;
+  WorkAreaBase = .;
 
   dpram : 
   {
