@@ -355,7 +355,7 @@ SYM(start):
     move.l  d1, d7
 
     /* Initialize RAMBAR: locate SRAM and validate it */
-    move.l  #_RamBase, d0
+    move.l  #RamBase, d0
     add.l   #0x21, d0
     movec   d0, %rambar
 
@@ -405,7 +405,7 @@ _change_flashbar:
     * If running in SRAM, change_flashbar should not be executed 
     */
 
-    move.l  #_RamBase, a0
+    move.l  #RamBase, a0
 
     /* Code "move.l #(__FLASH + 0x61),d0" into SRAM */
     move.w  #0x203C, d0
@@ -425,7 +425,7 @@ _change_flashbar:
     move.l  d0, (a0)+
 
     /* Jump to code segment in internal SRAM */
-    jmp     _RamBase
+    jmp     RamBase
 
 END_CODE
 

@@ -1,5 +1,10 @@
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, start/start.S, startup/linkcmds: Use top level shared
+	bsp_get_work_area() implementation.
+
+2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, startup/bspstart.c: Add use of
 	bsp_get_work_area() in its own file and rely on BSP Framework to
 	perform more initialization. Remove unnecessary includes of
