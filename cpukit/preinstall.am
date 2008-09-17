@@ -146,6 +146,10 @@ $(PROJECT_INCLUDE)/rtems/imfs.h: libfs/src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/imfs.h
 
+$(PROJECT_INCLUDE)/rtems/devfs.h: libfs/src/devfs/devfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/devfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/devfs.h
+
 if LIBDOSFS
 $(PROJECT_INCLUDE)/rtems/dosfs.h: libfs/src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h

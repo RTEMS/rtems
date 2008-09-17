@@ -4,7 +4,7 @@
  *  This file contains the set of handlers used to map operations on
  *  IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

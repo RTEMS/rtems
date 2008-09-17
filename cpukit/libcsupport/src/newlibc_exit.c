@@ -40,7 +40,7 @@ int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
 /* do we think we are reentrant? */
 extern int             libc_reentrant;
-extern struct _reent   libc_global_reent __ATTRIBUTE_IMPURE_PTR__;
+extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
 
 /*
  * CYGNUS newlib routine that does atexit() processing and flushes
@@ -66,15 +66,15 @@ void libc_wrapup(void)
   _wrapup_reent(0);
    */
 
-  if (_REENT != &libc_global_reent) {
-      _wrapup_reent(&libc_global_reent);
+  if (_REENT != _global_impure_ptr) {
+      _wrapup_reent(_global_impure_ptr);
 #if 0
       /*  Don't reclaim this one, just in case we do printfs
        *  on the way out to ROM.
        */
       _reclaim_reent(&libc_global_reent);
 #endif
-      _REENT = &libc_global_reent;
+      _REENT = _global_impure_ptr;
   }
 
   /*

@@ -72,6 +72,37 @@ extern rtems_configuration_table        Configuration;
   #define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
+
+#include <rtems/libio.h>
+
+#ifdef CONFIGURE_INIT
+rtems_libio_init_functions_t rtems_libio_init_helper = 
+    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    NULL;
+    #else
+    rtems_libio_init;
+    #endif
+
+rtems_libio_supp_functions_t rtems_libio_supp_helper = 
+    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    NULL;
+    #else
+    open_dev_console;
+    #endif
+
+rtems_fs_init_functions_t    rtems_fs_init_helper = 
+    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    NULL;
+    #else
+    rtems_filesystem_initialize;
+    #endif
+#endif
+
+
+#ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+  #define CONFIGURE_HAS_OWN_MOUNT_TABLE
+#endif
+
 /**
  *  This macro defines the number of POSIX file descriptors allocated 
  *  and managed by libio.  These are the "integer" file descriptors that
@@ -138,6 +169,22 @@ extern rtems_configuration_table        Configuration;
   extern int rtems_telnetd_maximum_ptys;
 #endif
 
+#ifdef CONFIGURE_INIT
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    extern uint32_t rtems_device_table_size;
+    #define CONFIGURE_MEMORY_FOR_DEVFS  0
+  #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+    #ifndef CONFIGURE_MAXIMUM_DEVICES
+      #define CONFIGURE_MAXIMUM_DEVICES 4
+    #endif
+    #include <rtems/devfs.h>
+    uint32_t rtems_device_table_size = CONFIGURE_MAXIMUM_DEVICES;
+    #define CONFIGURE_MEMORY_FOR_DEVFS _Configure_Object_RAM(CONFIGURE_MAXIMUM_DEVICES, sizeof (rtems_device_name_t))
+  #else
+    #define CONFIGURE_MEMORY_FOR_DEVFS  0
+  #endif
+#endif
+
 /*
  *  Mount Table Configuration
  */
@@ -162,6 +209,8 @@ extern rtems_configuration_table        Configuration;
     const rtems_filesystem_mount_table_t configuration_mount_table = {
       #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
         &IMFS_ops,
+      #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+        &devFS_ops,
       #else  /* using miniIMFS as base filesystem */
         &miniIMFS_ops,
       #endif
@@ -574,16 +623,6 @@ extern rtems_configuration_table        Configuration;
   #define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
 #endif
 
-/**
- *  Default the number of devices per device driver.  This value may be
- *  overridden by the user.
- *
- *  @note This configuration parameter is obsolete. Thus we will warn the
- *        user that it is obsolete.
- */
-#ifdef CONFIGURE_MAXIMUM_DEVICES
-  #warning "CONFIGURE_MAXIMUM_DEVICES is obsolete.  Do not use any longer."
-#endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
   /*
@@ -1681,6 +1720,7 @@ extern rtems_configuration_table        Configuration;
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
+   CONFIGURE_MEMORY_FOR_DEVFS + \
    CONFIGURE_MEMORY_FOR_TASKS( \
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \

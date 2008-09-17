@@ -79,6 +79,9 @@ include_rtems_HEADERS += include/rtems/irq-extension.h
 ## libfs
 include_rtems_HEADERS += libfs/src/imfs/imfs.h
 
+## devfs
+include_rtems_HEADERS += libfs/src/devfs/devfs.h
+
 if LIBDOSFS
 include_rtems_HEADERS += libfs/src/dosfs/dosfs.h
 endif

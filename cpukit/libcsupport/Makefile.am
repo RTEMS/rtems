@@ -47,7 +47,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/libio_init.c \
     src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c \
-    src/open_dev_console.c
+    src/open_dev_console.c src/__usrenv.c
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
@@ -94,7 +94,7 @@ TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c
 
 LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
-    src/newlibc.c src/newlibc_init.c src/newlibc_exit.c src/no_posix.c \
+    src/newlibc_reent.c src/newlibc_init.c src/newlibc_exit.c src/no_posix.c \
     src/no_libc.c src/utsname.c
 
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c

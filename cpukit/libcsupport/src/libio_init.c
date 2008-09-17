@@ -86,5 +86,6 @@ void rtems_libio_init( void )
    *  Initialize the base file system infrastructure.
    */
 
-  rtems_filesystem_initialize();
+  if (rtems_fs_init_helper)
+     (* rtems_fs_init_helper)();
 }

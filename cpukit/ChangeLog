@@ -1,3 +1,26 @@
+2008-09-17	Miao Yan <yanmiaobest@gmail.com>
+
+	* Makefile.am, preinstall.am, libcsupport/Makefile.am,
+	libcsupport/include/rtems/libcsupport.h,
+	libcsupport/include/rtems/libio.h, libcsupport/src/base_fs.c,
+	libcsupport/src/libio_init.c, libcsupport/src/newlibc_exit.c,
+	libcsupport/src/newlibc_init.c, libcsupport/src/sync.c,
+	libfs/Makefile.am, libfs/src/imfs/deviceio.c,
+	sapi/include/confdefs.h: Merge GSOC project code to add simple device
+	only filesystem (devfs), optionally completely drop out filesystem,
+	and to clean up disabling newlib reentrancy support. This dropped 17K
+	from the minimum.exe for sparc/sis and arm/rtl22xx_t now has a 15K
+	code space.
+	* libcsupport/src/__usrenv.c, libcsupport/src/newlibc_reent.c,
+	libfs/src/devfs/devclose.c, libfs/src/devfs/devfs.h,
+	libfs/src/devfs/devfs_eval.c, libfs/src/devfs/devfs_init.c,
+	libfs/src/devfs/devfs_mknod.c, libfs/src/devfs/devfs_node_type.c,
+	libfs/src/devfs/devfs_show.c, libfs/src/devfs/devioctl.c,
+	libfs/src/devfs/devopen.c, libfs/src/devfs/devread.c,
+	libfs/src/devfs/devstat.c, libfs/src/devfs/devwrite.c,
+	libfs/src/imfs/deviceerrno.c: New files.
+	* libcsupport/src/newlibc.c: Removed.
+
 2008-09-16	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Revert previous patch. Does not apply to

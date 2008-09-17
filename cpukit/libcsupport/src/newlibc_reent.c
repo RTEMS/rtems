@@ -1,10 +1,4 @@
 /*
- *  Implementation of hooks for the CYGNUS newlib libc
- *  These hooks set things up so that:
- *       + '_REENT' is switched at task switch time.
- *
- *  COPYRIGHT (c) 1994 by Division Incorporated
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -50,8 +44,7 @@
 
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
-extern struct _reent    libc_global_reent __ATTRIBUTE_IMPURE_PTR__;
-
+extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
 /*
  * reent struct allocation moved here from libc_start_hook() to avoid
  * mutual exclusion problems when memory is allocated from the start hook.
@@ -59,12 +52,19 @@ extern struct _reent    libc_global_reent __ATTRIBUTE_IMPURE_PTR__;
  * Memory is also now allocated from the workspace rather than the heap.
  *  -- ptorre 9/30/03
  */
-bool libc_create_hook(
+bool newlib_create_hook(
   rtems_tcb *current_task,
   rtems_tcb *creating_task
 )
 {
   struct _reent *ptr;
+
+  if (_Thread_libc_reent == 0)
+  {
+    _REENT = _global_impure_ptr;
+
+    _Thread_Set_libc_reent (&_REENT);
+  }
 
   /*  NOTE: The RTEMS malloc is reentrant without a reent ptr since
    *        it is based on the Classic API Region Manager.
@@ -81,13 +81,12 @@ bool libc_create_hook(
   #endif
 
   if (ptr) {
-
-      _REENT_INIT_PTR((ptr)); /* GCC extension: structure constants */
-      creating_task->libc_reent = ptr;
-      return true;
+    _REENT_INIT_PTR((ptr)); /* GCC extension: structure constants */
+    creating_task->libc_reent = ptr;
+    return TRUE;
   }
-  else
-    return false;
+
+  return FALSE;
 }
 
 /*
@@ -95,7 +94,7 @@ bool libc_create_hook(
  */
 
 #ifdef NEED_SETVBUF
-rtems_extension libc_begin_hook(rtems_tcb *current_task)
+rtems_extension newlib_begin_hook(rtems_tcb *current_task)
 {
   setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
 }
@@ -128,7 +127,7 @@ int newlib_free_buffers(
   return 0;
 }
 
-rtems_extension libc_delete_hook(
+rtems_extension newlib_delete_hook(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
 )
@@ -145,7 +144,7 @@ rtems_extension libc_delete_hook(
     ptr = deleted_task->libc_reent;
   }
 
-  if (ptr && ptr != &libc_global_reent) {
+  if (ptr && ptr != _global_impure_ptr) {
 /*
     _wrapup_reent(ptr);
     _reclaim_reent(ptr);

@@ -634,6 +634,18 @@ typedef struct {
 extern const rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
 extern const int                             rtems_filesystem_mount_table_size;
 
+
+typedef void (*rtems_libio_init_functions_t)(void);
+extern  rtems_libio_init_functions_t rtems_libio_init_helper;
+
+void    open_dev_console(void);
+
+typedef void (*rtems_libio_supp_functions_t)(void);
+extern  rtems_libio_supp_functions_t rtems_libio_supp_helper;
+
+typedef void (*rtems_fs_init_functions_t)(void);
+extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
+
 #ifdef __cplusplus
 }
 #endif

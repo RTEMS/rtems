@@ -7,7 +7,7 @@
  *         fsync()
  *         fdatasync()
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -71,10 +71,10 @@ static void sync_per_thread(Thread_Control *t)
 }
 
 /*
- * libc_global_reent is not prototyped in any .h files.
+ * _global_impure_ptr is not prototyped in any .h files.
  * We have to extern it here.
  */
-extern struct _reent libc_global_reent;
+extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
 
 void sync(void)
 {
@@ -82,7 +82,7 @@ void sync(void)
   /*
    *  Walk the one used initially by RTEMS.
    */
-  _fwalk(&libc_global_reent, sync_wrapper);
+  _fwalk(_global_impure_ptr, sync_wrapper);
 
   /*
    *  XXX Do we walk the one used globally by newlib?
