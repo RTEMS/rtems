@@ -41,7 +41,7 @@ void blow_stack( void );
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define STACK_CHECKER_ON
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #include <rtems/confdefs.h>
 
