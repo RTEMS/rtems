@@ -1,3 +1,7 @@
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Work Area should start on 16 byte boundary.
+
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Use shared bsp_get_work_area() in its own file and rely
