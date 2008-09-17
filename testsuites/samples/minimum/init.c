@@ -78,6 +78,21 @@ rtems_task Init(
 #define CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
 
 /*
+ *  This configures RTEMS to use a single memory pool for the RTEMS Workspace
+ *  and C Program Heap.  If not defined, there will be separate memory pools
+ *  for the RTEMS Workspace and C Program Heap.  Having separate pools
+ *  does haved some advantages in the event a task blows a stack or writes
+ *  outside its memory area. However, in low memory systems the overhead of
+ *  the two pools plus the potential for unused memory in either pool is
+ *  very undesirable.
+ *
+ *  In high memory environments, this is desirable when you want to use
+ *  the RTEMS "unlimited" objects option.  You will be able to create objects
+ *  until you run out of memory.
+ */
+#define CONFIGURE_UNIFIED_WORK_AREAS
+
+/*
  *  In this application, the initialization task performs the system
  *  initialization and then transforms itself into the idle task.
  */

@@ -1,3 +1,9 @@
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* minimum/init.c, unlimited/system.h: Add support for optionally having
+	a unified work area. In other words, the RTEMS Workspace and C
+	Program Heap are the same pool of memory.
+
 2008-09-17	Miao Yan <yanmiaobest@gmail.com>
 
 	* hello/system.h, minimum/Makefile.am, minimum/init.c: Merge GSOC
