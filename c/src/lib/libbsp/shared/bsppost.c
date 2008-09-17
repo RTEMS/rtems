@@ -4,7 +4,7 @@
  *  Newlib will automatically associate the file descriptors
  *  with the first thress files opened.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,11 +17,13 @@
 #include <fcntl.h>
 
 #include <rtems.h>
+#include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
 #include <bsp/bootcard.h>
 
 void bsp_postdriver_hook(void)
 {
-  open_dev_console();
+  if (rtems_libio_supp_helper)
+    (*rtems_libio_supp_helper)();
 }

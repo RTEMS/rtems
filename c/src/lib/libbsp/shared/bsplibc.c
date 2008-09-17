@@ -24,8 +24,8 @@ void bsp_libc_init(
      *  calls for use by newlib (ie: provide open, close, etc)
      *  Uses malloc() to get area for the iops, so must be after malloc init
      */
-
-    rtems_libio_init();
+    if (rtems_libio_init_helper)
+	(*rtems_libio_init_helper)();
 
     /*
      * Set up for the libc handling.
