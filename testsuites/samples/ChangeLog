@@ -1,5 +1,10 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* fileio/system.h: Rename STACK_CHECKER_ON to more appropriate
+	CONFIGURE_STACK_CHECKER_ENABLED.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* minimum/init.c, unlimited/system.h: Add support for optionally having
 	a unified work area. In other words, the RTEMS Workspace and C
 	Program Heap are the same pool of memory.
