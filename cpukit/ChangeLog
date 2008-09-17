@@ -1,3 +1,16 @@
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_initialize.c, libcsupport/src/malloc_p.h,
+	libcsupport/src/malloc_sbrk_helpers.c,
+	libcsupport/src/malloc_statistics_helpers.c,
+	libcsupport/src/malloc_walk.c, libcsupport/src/mallocfreespace.c,
+	libcsupport/src/mallocinfo.c, libcsupport/src/realloc.c,
+	libcsupport/src/rtems_memalign.c, sapi/include/confdefs.h,
+	score/inline/rtems/score/thread.inl: Add support for optionally
+	having a unified work area. In other words, the RTEMS Workspace and C
+	Program Heap are the same pool of memory.
+
 2008-09-17	Miao Yan <yanmiaobest@gmail.com>
 
 	* Makefile.am, preinstall.am, libcsupport/Makefile.am,

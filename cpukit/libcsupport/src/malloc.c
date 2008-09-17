@@ -52,7 +52,7 @@ void *malloc(
    *  Walk the heap and verify its integrity
    */
   #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, false );
+    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
   #endif
 
   #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
@@ -70,7 +70,7 @@ void *malloc(
    * If this fails then return a NULL pointer.
    */
 
-  return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
+  return_this = _Protected_heap_Allocate( RTEMS_Malloc_Heap, size );
 
   if ( !return_this ) {
     if (rtems_malloc_sbrk_helpers) 

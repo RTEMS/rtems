@@ -376,6 +376,24 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
+   *  By default, RTEMS uses separate heaps for the RTEMS Workspace and
+   *  the C Program Heap.  On many BSPs, these can be optionally
+   *  combined provided one larger memory pool. This is particularly
+   *  useful in combination with the unlimited objects configuration.
+   */
+  #ifdef CONFIGURE_UNIFIED_WORK_AREAS
+    #include <rtems/score/wkspace.h>
+    Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
+    bool           rtems_unified_work_area = true;
+  #else
+    Heap_Control   RTEMS_Malloc_Area;
+    Heap_Control  *RTEMS_Malloc_Heap = &RTEMS_Malloc_Area;
+    bool           rtems_unified_work_area = false;
+  #endif
+#endif
+
+#ifdef CONFIGURE_INIT
+  /**
    *  This configures the malloc family statistics to be available.
    *  By default only function call counts are kept.
    */

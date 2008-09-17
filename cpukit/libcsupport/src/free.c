@@ -29,7 +29,7 @@ void free(
     return;
 
   #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, false );
+    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
   #endif
 
   /*
@@ -56,11 +56,11 @@ void free(
   if ( rtems_malloc_statistics_helpers )
     (*rtems_malloc_statistics_helpers->at_free)(ptr);
 
-  if ( !_Protected_heap_Free( &RTEMS_Malloc_Heap, ptr ) ) {
+  if ( !_Protected_heap_Free( RTEMS_Malloc_Heap, ptr ) ) {
     printk( "Program heap: free of bad pointer %p -- range %p - %p \n",
       ptr,
-      RTEMS_Malloc_Heap.start,
-      RTEMS_Malloc_Heap.end
+      RTEMS_Malloc_Heap->start,
+      RTEMS_Malloc_Heap->end
     );
   }
 

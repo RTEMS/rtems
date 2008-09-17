@@ -18,10 +18,11 @@
 
 #include <rtems.h>
 #include <rtems/malloc.h>
+#include <rtems/score/wkspace.h>
 #include "malloc_p.h"
 
-Heap_Control              RTEMS_Malloc_Heap;
 rtems_malloc_statistics_t rtems_malloc_statistics;
+extern bool rtems_unified_work_area;
 
 void RTEMS_Malloc_Initialize(
   void   *start,
@@ -62,6 +63,13 @@ void RTEMS_Malloc_Initialize(
       sbrk_amount
     );
   }
+
+  /*
+   *  If this system is configured to use the same heap for
+   *  the RTEMS Workspace and C Program Heap, then we need to
+   *  be very very careful about destroying the initialization
+   *  that has already been done.
+   */
     
   /*
    *  If the BSP is not clearing out the workspace, then it is most likely
@@ -74,7 +82,8 @@ void RTEMS_Malloc_Initialize(
    *  left over from another process.  This would be a security violation.
    */
 
-  if ( rtems_configuration_get_do_zero_of_workspace() )
+  if ( !rtems_unified_work_area &&
+       rtems_configuration_get_do_zero_of_workspace() )
      memset( starting_address, 0, length );
 
   /*
@@ -83,17 +92,19 @@ void RTEMS_Malloc_Initialize(
    *  STDIO cannot work because there will be no buffers.
    */
 
-  status = _Protected_heap_Initialize( 
-    &RTEMS_Malloc_Heap,
-    starting_address,
-    length,
-    CPU_HEAP_ALIGNMENT
-  );
-  if ( !status )
-    rtems_fatal_error_occurred( status );
+  if ( !rtems_unified_work_area ) {
+    status = _Protected_heap_Initialize( 
+      RTEMS_Malloc_Heap,
+      starting_address,
+      length,
+      CPU_HEAP_ALIGNMENT
+    );
+    if ( !status )
+      rtems_fatal_error_occurred( status );
+  }
 
   #if defined(RTEMS_HEAP_DEBUG)
-    if ( _Protected_heap_Walk( &RTEMS_Malloc_Heap, 0, false ) ) {
+    if ( _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false ) ) {
       printk( "Malloc heap not initialized correctly\n" );
       rtems_print_buffer( start, 32 );
       printk( "\n" );

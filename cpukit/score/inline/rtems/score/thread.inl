@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -162,7 +162,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
    * This is currently not defined in any .h file, so we have to
    * extern it here.
    */
-  extern Heap_Control  RTEMS_Malloc_Heap;
+  extern Heap_Control  *RTEMS_Malloc_Heap;
 #endif
 
 RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
    */
   #if defined(RTEMS_HEAVY_MALLOC_DEBUG)
     if ( _Thread_Dispatch_disable_level == 1 ) {
-      _Heap_Walk( &RTEMS_Malloc_Heap,99, FALSE );
+      _Heap_Walk( RTEMS_Malloc_Heap,99, FALSE );
     }
   #endif
 }

@@ -42,7 +42,7 @@ void rtems_malloc_statistics_at_malloc(
   if ( !pointer )
     return;
 
-  _Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, pointer, &actual_size);
+  _Protected_heap_Get_block_size(RTEMS_Malloc_Heap, pointer, &actual_size);
 
   MSBUMP(lifetime_allocated, actual_size);
 
@@ -61,7 +61,7 @@ void rtems_malloc_statistics_at_free(
 {
   size_t size;
 
-  if (_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, pointer, &size) ) {
+  if (_Protected_heap_Get_block_size(RTEMS_Malloc_Heap, pointer, &size) ) {
     MSBUMP(lifetime_freed, size);
   }
 }

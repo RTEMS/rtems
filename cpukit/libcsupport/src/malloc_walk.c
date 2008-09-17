@@ -22,7 +22,7 @@
 
 void malloc_walk(size_t source, size_t printf_enabled)
 {
-  _Protected_heap_Walk( &RTEMS_Malloc_Heap, source, printf_enabled );
+  _Protected_heap_Walk( RTEMS_Malloc_Heap, source, printf_enabled );
 }
 
 #endif

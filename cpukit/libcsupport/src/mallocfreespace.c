@@ -28,7 +28,7 @@
 #include <errno.h>
 #include <string.h>
 
-extern Heap_Control  RTEMS_Malloc_Heap;
+#include "malloc_p.h"
 
 /*
  *  Find amount of free heap remaining
@@ -38,6 +38,6 @@ size_t malloc_free_space( void )
 {
   Heap_Information info;
 
-  _Protected_heap_Get_free_information( &RTEMS_Malloc_Heap, &info );
+  _Protected_heap_Get_free_information( RTEMS_Malloc_Heap, &info );
   return (size_t) info.largest;
 }

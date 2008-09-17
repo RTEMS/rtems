@@ -89,7 +89,7 @@ void *malloc_sbrk_extend_and_allocate(
     return (void *) 0;
 
   if ( !_Protected_heap_Extend(
-          &RTEMS_Malloc_Heap, starting_address, the_size) ) {
+          RTEMS_Malloc_Heap, starting_address, the_size) ) {
     sbrk(-the_size);
     errno = ENOMEM;
     return (void *) 0;
@@ -97,7 +97,7 @@ void *malloc_sbrk_extend_and_allocate(
 
   MSBUMP(space_available, the_size);
 
-  return_this = _Protected_heap_Allocate( &RTEMS_Malloc_Heap, size );
+  return_this = _Protected_heap_Allocate( RTEMS_Malloc_Heap, size );
   return return_this;
 }
 

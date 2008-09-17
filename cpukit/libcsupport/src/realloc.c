@@ -54,7 +54,7 @@ void *realloc(
     return (void *) 0;
   }
 
-  if ( !_Protected_heap_Get_block_size(&RTEMS_Malloc_Heap, ptr, &old_size) ) {
+  if ( !_Protected_heap_Get_block_size(RTEMS_Malloc_Heap, ptr, &old_size) ) {
     errno = EINVAL;
     return (void *) 0;
   }
@@ -69,7 +69,7 @@ void *realloc(
       resize += (*rtems_malloc_boundary_helpers->overhead)();
   #endif
 
-  if ( _Protected_heap_Resize_block( &RTEMS_Malloc_Heap, ptr, resize ) ) {
+  if ( _Protected_heap_Resize_block( RTEMS_Malloc_Heap, ptr, resize ) ) {
     #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
       /*
        *  Successful resize.  Update the boundary on the same block.

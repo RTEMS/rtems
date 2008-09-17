@@ -64,7 +64,7 @@ int rtems_memalign(
    */
 
   return_this = _Protected_heap_Allocate_aligned(
-    &RTEMS_Malloc_Heap,
+    RTEMS_Malloc_Heap,
     size,
     alignment
   );

@@ -21,7 +21,7 @@
 #include <rtems/libcsupport.h>
 #include <rtems/score/protectedheap.h>
 
-extern Heap_Control  RTEMS_Malloc_Heap;
+extern Heap_Control  *RTEMS_Malloc_Heap;
 
 /*
  *  Find amount of free heap remaining
@@ -34,6 +34,6 @@ int malloc_info(
   if ( !the_info )
     return -1;
 
-  _Protected_heap_Get_information( &RTEMS_Malloc_Heap, the_info );
+  _Protected_heap_Get_information( RTEMS_Malloc_Heap, the_info );
   return 0;
 }

@@ -37,7 +37,7 @@
 /*
  * Basic management data
  */
-extern Heap_Control  RTEMS_Malloc_Heap;
+extern Heap_Control  *RTEMS_Malloc_Heap;
 
 /*
  *  Malloc Statistics Structure
