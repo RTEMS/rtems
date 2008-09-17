@@ -1,5 +1,9 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/linkcmds: Add start symbol to eliminate warning.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/linkcmds: Work Area should start on 16 byte boundary.
 
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -94,6 +94,7 @@ SECTIONS
   .text :
   {
     CREATE_OBJECT_SYMBOLS
+    start = .;
     text_start = .;
     _text_start = .;
     *(.text*)
