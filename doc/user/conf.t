@@ -210,6 +210,20 @@ address of the RTEMS RAM Workspace.  By default, this value
 is NULL indicating that the BSP is to determine the location
 of the RTEMS RAM Workspace.
 
+@findex CONFIGURE_UNIFIED_WORK_AREAS
+@item @code{CONFIGURE_UNIFIED_WORK_AREAS} configures RTEMS to use a
+single memory pool for the RTEMS Workspace and C Program Heap.  If not
+defined, there will be separate memory pools for the RTEMS Workspace and
+C Program Heap.  Having separate pools does haved some advantages in the
+event a task blows a stack or writes outside its memory area. However,
+in low memory systems the overhead of the two pools plus the potential
+for unused memory in either pool is very undesirable.
+
+In high memory environments, this is desirable when you want to use the
+RTEMS "unlimited" objects option.  You will be able to create objects
+until you run out of all available memory rather then just until you
+run out of RTEMS Workspace.
+
 @item @code{CONFIGURE_MICROSECONDS_PER_TICK} is the length
 of time between clock ticks.  By default, this is set to
 10000 microseconds.
