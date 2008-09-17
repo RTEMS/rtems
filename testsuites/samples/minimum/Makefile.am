@@ -2,7 +2,7 @@
 ##  $Id$
 ##
 
-MANAGERS = all
+MANAGERS = 
 
 rtems_tests_PROGRAMS = minimum.exe
 minimum_exe_SOURCES = init.c

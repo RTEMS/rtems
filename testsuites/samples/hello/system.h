@@ -33,7 +33,7 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+#define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
 #include <rtems/confdefs.h>
 
