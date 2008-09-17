@@ -1,5 +1,11 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Doxyfile.in, rtems/mainpage.h, score/include/rtems/system.h: Move to
+	generating Doxygen for more of CPU Kit.
+	* rtems/Doxyfile, score/Doxyfile, score/mainpage.h: Removed.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac: Add generated Doxyfile which can process entire set of
 	preinstalled .h files.
 	* Doxyfile.in: New file.

@@ -11,6 +11,10 @@
 
 /**
  *  @mainpage
-
-This is the RTEMS Classic API documentation.
-*/
+ *
+ *  The RTEMS real-time operating systems is a layered system
+ *  with each of the public APIs implemented in terms of a common
+ *  foundation layer called the SuperCore.  This is the Doxygen
+ *  generated documentation for the RTEMS CPU Kit including the
+ *  Classic API, POSIX API, uITRON API and SuperCore.
+ */

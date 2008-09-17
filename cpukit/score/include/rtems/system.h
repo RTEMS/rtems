@@ -20,15 +20,6 @@
 #ifndef _RTEMS_SYSTEM_H
 #define _RTEMS_SYSTEM_H
 
-/**
- *  @mainpage RTEMS SuperCore
- *
- *  The RTEMS real-time operating systems is a layered system
- *  with each of the public APIs implemented in terms of a common
- *  foundation layer called the SuperCore.  This is the Doxygen
- *  generated documentation for the RTEMS SuperCore.
- */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
