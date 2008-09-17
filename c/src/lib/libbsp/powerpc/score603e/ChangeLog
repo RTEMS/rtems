@@ -1,3 +1,11 @@
+2008-09-17	Miao Yan <yanmiaobest@gmail.com>
+
+	* startup/bspstart.c: Merge GSOC project code to add simple device only
+	filesystem (devfs), optionally completely drop out filesystem, and to
+	clean up disabling newlib reentrancy support. This dropped 17K from
+	the minimum.exe for sparc/sis and arm/rtl22xx_t now has a 15K code
+	space.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/FPGA.c: Remove unnecessary includes of rtems/libcsupport.h and

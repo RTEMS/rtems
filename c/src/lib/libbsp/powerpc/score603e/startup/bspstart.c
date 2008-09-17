@@ -199,9 +199,10 @@ void bsp_postdriver_hook(void)
   extern void open_dev_console(void);
 
   #if DEBUG
-    printk("bsp_postdriver_hook: open_dev_console\n");
+    printk("bsp_postdriver_hook: initialize libio\n");
   #endif
-  open_dev_console();
+  if (rtems_libio_supp_helper)
+    (*rtems_libio_supp_helper)();
   ShowBATS();
 
   #if DEBUG
