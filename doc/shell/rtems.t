@@ -166,7 +166,7 @@ This command always succeeds and returns 0.
 
 @subheading NOTES:
 
-The @code{STACK_CHECKER_ON} @code{confdefs.h} constant
+The @code{CONFIGURE_STACK_CHECKER_ENABLED} @code{confdefs.h} constant
 must be defined when the application is configured for this
 command to have any information to report.
 

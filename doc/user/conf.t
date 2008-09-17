@@ -184,12 +184,13 @@ before RTEMS release 4.5.0.  The miniIMFS supports
 only directories and device nodes and is smaller in executable
 code size than the full IMFS.
 
-@findex STACK_CHECKER_ON
-@item @code{STACK_CHECKER_ON} is defined when the application 
-wishes to enable run-time stack bounds checking.  This increases
-the time required to create tasks as well as adding overhead
-to each context switch.  By default, this is not defined and
-thus stack checking is disabled.
+@findex CONFIGURE_STACK_CHECKER_ENABLED
+@item @code{CONFIGURED_STACK_CHECKER_ENABLED} is defined when
+the application wishes to enable run-time stack bounds checking.
+This increases the time required to create tasks as well as adding
+overhead to each context switch.  By default, this is not defined and
+thus stack checking is disabled.  NOTE: In 4.9 and older, this was named
+@code{STACK_CHECKER_ON}
 
 @end itemize
 
