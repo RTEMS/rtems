@@ -1,5 +1,10 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/confdefs.h: Rename STACK_CHECKER_ON to more appropriate
+	CONFIGURE_STACK_CHECKER_ENABLED.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/devfs/devclose.c, libfs/src/devfs/devfs_init.c,
 	libfs/src/devfs/devfs_show.c, libfs/src/devfs/devioctl.c,
 	libfs/src/devfs/devopen.c, libfs/src/devfs/devread.c,

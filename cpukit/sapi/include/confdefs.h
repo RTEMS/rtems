@@ -225,10 +225,18 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
+/*
+ *  STACK_CHECER_ON was still available in 4.9 so give a warning for now.
+ */
+#if defined(STACK_CHECKER_ON)
+  #define CONFIGURE_STACK_CHECKER_ENABLED
+  #warning "STACK_CHECKER_ON deprecated -- use CONFIGURE_STACK_CHECKER_ENABLED"
+#endif
+  
 /**
  *  This configures the stack checker user extension.
  */
-#ifdef STACK_CHECKER_ON
+#ifdef CONFIGURE_STACK_CHECKER_ENABLED
   #define CONFIGURE_STACK_CHECKER_EXTENSION 1
 #else
   #define CONFIGURE_STACK_CHECKER_EXTENSION 0
@@ -926,19 +934,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 
 #ifdef CONFIGURE_INIT
-#ifdef STACK_CHECKER_ON
+#ifdef CONFIGURE_STACK_CHECKER_ENABLED
 #include <rtems/stackchk.h>
 #endif
 #include <rtems/libcsupport.h>
 
 #if defined(CONFIGURE_INITIAL_EXTENSIONS) || \
-    defined(STACK_CHECKER_ON) || \
+    defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
     (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
   rtems_extensions_table Configuration_Initial_Extensions[] = {
     #if !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
       RTEMS_NEWLIB_EXTENSION,
     #endif
-    #if defined(STACK_CHECKER_ON)
+    #if defined(CONFIGURE_STACK_CHECKER_ENABLED)
       RTEMS_STACK_CHECKER_EXTENSION,
     #endif
     #if defined(CONFIGURE_INITIAL_EXTENSIONS)
