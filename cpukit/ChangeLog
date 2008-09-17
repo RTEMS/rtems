@@ -1,5 +1,12 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libfs/src/devfs/devclose.c, libfs/src/devfs/devfs_init.c,
+	libfs/src/devfs/devfs_show.c, libfs/src/devfs/devioctl.c,
+	libfs/src/devfs/devopen.c, libfs/src/devfs/devread.c,
+	libfs/src/devfs/devwrite.c: Fix warnings.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/free.c, libcsupport/src/malloc.c,
 	libcsupport/src/malloc_initialize.c, libcsupport/src/malloc_p.h,
 	libcsupport/src/malloc_sbrk_helpers.c,

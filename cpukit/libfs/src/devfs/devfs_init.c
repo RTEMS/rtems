@@ -10,8 +10,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/seterr.h>
 #include <stdlib.h>
+#include <rtems.h>
+#include <rtems/seterr.h>
+#include <rtems/score/wkspace.h>
 #include "devfs.h"
 
 rtems_filesystem_operations_table devFS_ops = 

@@ -10,6 +10,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/seterr.h>
 #include "devfs.h"
 
 int devFS_Show(void)
