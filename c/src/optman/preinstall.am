@@ -70,11 +70,3 @@ $(PROJECT_LIB)/no-timer.rel: no-timer.rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-timer.rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-timer.rel
 
-$(PROJECT_LIB)/no-filesystem.rel: no-filesystem.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-filesystem.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-filesystem.rel
-
-$(PROJECT_LIB)/no-console.rel: no-console.rel $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_PROGRAM) $< $(PROJECT_LIB)/no-console.rel
-TMPINSTALL_FILES += $(PROJECT_LIB)/no-console.rel
-

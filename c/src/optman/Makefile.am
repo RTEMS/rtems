@@ -73,15 +73,5 @@ no_timer_rel_SOURCES = rtems/no-timer.c
 no_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 no_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-project_lib_PROGRAMS += no-filesystem.rel
-no_filesystem_rel_SOURCES = no-filesystem.c no-libio.c
-no_filesystem_rel_CPPFLAGS = $(AM_CPPFLAGS)
-no_filesystem_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-project_lib_PROGRAMS += no-console.rel
-no_console_rel_SOURCES = no-console.c
-no_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
-no_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
