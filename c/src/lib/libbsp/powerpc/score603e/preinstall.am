@@ -69,6 +69,10 @@ $(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
 
+$(PROJECT_INCLUDE)/bsp/PCI.h: PCI_bus/PCI.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/PCI.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/PCI.h
+
 $(PROJECT_INCLUDE)/bsp/residual.h: ../../powerpc/shared/residual/residual.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/residual.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/residual.h
@@ -88,6 +92,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
 $(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
+
+$(PROJECT_INCLUDE)/bsp/vectors.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
+
+$(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
 
 $(PROJECT_INCLUDE)/bsp/vectors.h: ../../powerpc/shared/vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
