@@ -214,7 +214,7 @@ of the RTEMS RAM Workspace.
 @item @code{CONFIGURE_UNIFIED_WORK_AREAS} configures RTEMS to use a
 single memory pool for the RTEMS Workspace and C Program Heap.  If not
 defined, there will be separate memory pools for the RTEMS Workspace and
-C Program Heap.  Having separate pools does haved some advantages in the
+C Program Heap.  Having separate pools does have some advantages in the
 event a task blows a stack or writes outside its memory area. However,
 in low memory systems the overhead of the two pools plus the potential
 for unused memory in either pool is very undesirable.
