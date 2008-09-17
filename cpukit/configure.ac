@@ -320,6 +320,7 @@ RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
+Doxyfile
 Makefile
 rtems/Makefile
 sapi/Makefile

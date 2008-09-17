@@ -1,5 +1,11 @@
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* configure.ac: Add generated Doxyfile which can process entire set of
+	preinstalled .h files.
+	* Doxyfile.in: New file.
+
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: Rename STACK_CHECKER_ON to more appropriate
 	CONFIGURE_STACK_CHECKER_ENABLED.
 
