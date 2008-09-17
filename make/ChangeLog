@@ -1,3 +1,7 @@
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* compilers/gcc-no_bsp.cfg: Eliminate some obsolete junk.
+
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* leaf.cfg: LINK.c and LINK.cc include LDFLAGS so do not include it in
