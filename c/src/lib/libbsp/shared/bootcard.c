@@ -53,6 +53,11 @@
 char *rtems_progname;
 
 /*
+ * Are we using a single heap for the RTEMS Workspace and C Program Heap?
+ */
+extern bool rtems_unified_work_area;
+
+/*
  *  These are the prototypes and helper routines which are used
  *  when the BSP lets the framework handle RAM allocation between
  *  the RTEMS Workspace and C Program Heap.
@@ -67,7 +72,8 @@ char *rtems_progname;
   {
     size_t heap_size_default = 0;
 
-    if (heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
+    if ( !rtems_unified_work_area && 
+         heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
       /* Use the work area start as heap start */
       heap_start = work_area_start;
 
@@ -165,8 +171,6 @@ int boot_card(
    */
   #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
     {
-      void *work_space_start = NULL;
-    
       bsp_get_work_area(
         &work_area_start,
         &work_area_size,
@@ -174,17 +178,20 @@ int boot_card(
         &heap_size
       );
     
-      work_space_start = (char *) work_area_start + work_area_size
-        - rtems_configuration_get_work_space_size();
-    
-      if ((uintptr_t) work_space_start <= (uintptr_t) work_area_start) {
-        printk( "bootcard: Work space to big for work area!\n");
+      if ( work_area_size <= Configuration.work_space_size ) {
+        printk( "bootcard: Work space too big for work area!\n");
         bsp_cleanup();
         return -1;
       }
     
-      Configuration.work_space_start = work_space_start;
-    
+      if ( rtems_unified_work_area ) {
+        Configuration.work_space_start = work_area_start;
+        Configuration.work_space_size  = work_area_size;
+      } else {
+        Configuration.work_space_start = (char *) work_area_start +
+          work_area_size - rtems_configuration_get_work_space_size();
+      }
+
       #if (BSP_DIRTY_MEMORY == 1)
         memset( work_area_start, 0xCF,  work_area_size);
       #endif
