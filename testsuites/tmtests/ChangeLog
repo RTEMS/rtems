@@ -1,3 +1,8 @@
+2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/timesys.h: Rename STACK_CHECKER_ON to more appropriate
+	CONFIGURE_STACK_CHECKER_ENABLED.
+
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm09/system.h, tm09/task1.c: Account for message buffer memory.

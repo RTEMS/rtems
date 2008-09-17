@@ -41,7 +41,7 @@
       (((_total_time) - (_loop_overhead)) / (_iterations)) - (_overhead) \
     )
 
-#if  defined(STACK_CHECKER_ON) || defined(RTEMS_DEBUG)
+#if  defined(CONFIGURE_STACK_CHECKER_ENABLED) || defined(RTEMS_DEBUG)
 #define Print_Warning() \
   do { \
     puts( \
