@@ -1,3 +1,9 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* unlimited/system.h: Support up to 10K tasks in loop. With 64MB on
+	pc386 and configured for unified workspace, you can get close to
+	this.
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/system.h: Rename STACK_CHECKER_ON to more appropriate

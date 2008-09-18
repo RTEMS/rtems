@@ -60,7 +60,7 @@ void test3();
  * Keep track of the task id's created, use a large array.
  */
 
-#define MAX_TASKS         (1000)
+#define MAX_TASKS         (10000)
 #define TASK_INDEX_OFFSET (1)
 
 extern rtems_id task_id[MAX_TASKS];
