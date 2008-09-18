@@ -1,5 +1,14 @@
 2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* compilers/gcc-no_bsp.cfg, compilers/gcc-target-default.cfg,
+	custom/bare.cfg, custom/c3xsim.cfg, custom/c4xsim.cfg,
+	custom/default.cfg, custom/haleakala.cfg, custom/mbx8xx.cfg,
+	custom/mvme2307.cfg, custom/mvme3100.cfg, custom/mvme5500.cfg,
+	custom/posix.cfg, custom/ss555.cfg, custom/virtex.cfg: Eliminate
+	START_BASE and START_FILE.
+
+2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1314/bsps
 	* custom/mvme3100.cfg: Remove old stuff.
 
