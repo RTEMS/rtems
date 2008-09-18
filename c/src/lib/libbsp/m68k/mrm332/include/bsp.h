@@ -96,18 +96,6 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 extern int stack_size;
 extern int stack_start;
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 m68k_isr_entry set_vector(

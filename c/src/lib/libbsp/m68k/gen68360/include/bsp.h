@@ -61,24 +61,6 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
                   : "0"  (_tmp), "1"  (_delay) ); \
   }
 
-/* Constants */
-
-/* Structures */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/* miscellaneous stuff assumed to exist */
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */

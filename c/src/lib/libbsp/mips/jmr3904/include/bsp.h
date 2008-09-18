@@ -28,22 +28,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/tx3904.h>
 
-/* Constants */
-
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 rtems_isr_entry set_vector(

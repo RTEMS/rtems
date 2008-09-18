@@ -145,22 +145,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
                   : "0"  (_tmp), "1"  (_delay) ); \
   }
 
-/* Constants */
-
-/* Structures */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
- 
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /*
  * Real-Time Clock Driver Table Entry
  * NOTE: put this entry to the device driver table AFTER I2C bus driver!

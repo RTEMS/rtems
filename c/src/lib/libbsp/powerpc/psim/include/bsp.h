@@ -59,18 +59,6 @@ extern "C" {
 extern int   RAM_END;
 extern int   end;        /* last address in the program */
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 #define BSP_Convert_decrementer( _value ) ( (unsigned long long) _value )
 
 /* macros */

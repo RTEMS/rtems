@@ -38,25 +38,6 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 /* define which port the console should use - all other ports are then defined as general purpose */
 #define CONSOLE_PORT        0
 
-/* externals */
-
-/* constants */
-
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
- 
-/*
- * NOTE: Use the standard Console driver entry
- */
- 
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-
 /* functions */
 
 uint32_t bsp_get_CPU_clock_speed(void);

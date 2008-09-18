@@ -75,20 +75,6 @@ typedef struct cpld_ {
 
 extern volatile cpld_t cpld;              /* defined in linkcmds */
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 #ifdef __cplusplus
 }
 #endif

@@ -139,6 +139,7 @@ extern "C" {
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+#include <rtems/rtc.h>
 #include <i2cdrv.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
@@ -172,20 +173,7 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 */
 
 /*
- *  Stuff for Time Test 27
- */
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-/*
  *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
  */
 
 #ifdef HAS_NVRAM_93CXX
@@ -193,14 +181,6 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
   { nvram_driver_initialize, nvram_driver_open, nvram_driver_close, \
     nvram_driver_read, nvram_driver_write, NULL }
 #endif
-
-#define RTC_DRIVER_TABLE_ENTRY \
-    { rtc_initialize, NULL, NULL, NULL, NULL, NULL }
-extern rtems_device_driver rtc_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void *arg
-);
 
 /*
  * indicate, that BSP has IDE driver

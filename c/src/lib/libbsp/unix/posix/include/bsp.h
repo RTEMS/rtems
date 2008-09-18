@@ -31,18 +31,6 @@ extern "C" {
 
 /* miscellaneous stuff assumed to exist */
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);

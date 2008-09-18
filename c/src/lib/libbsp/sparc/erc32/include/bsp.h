@@ -79,19 +79,7 @@ extern int   CLOCK_SPEED;
 
 extern int   end;        /* last address in the program */
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/* miscellaneous stuff assumed to exist */
+/* functions */
 
 rtems_isr_entry set_vector(                     /* returns old vector */
     rtems_isr_entry     handler,                /* isr routine        */

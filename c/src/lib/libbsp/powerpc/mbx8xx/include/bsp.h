@@ -69,20 +69,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  */
 #define NOCACHE_MEM_SIZE 512*1024
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /*
  * indicate, that BSP has IDE driver
  */

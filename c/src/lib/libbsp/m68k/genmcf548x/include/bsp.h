@@ -77,27 +77,6 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 
 #define RAM_END 0x4000000 /* 64 MB */
 
-/* externals */
-
-/* constants */
-
-/* miscellaneous stuff assumed to exist */
-
-extern rtems_configuration_table BSP_Configuration;
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-
 /* functions */
 
 uint32_t get_CPU_clock_speed(void);

@@ -35,20 +35,6 @@ extern "C" {
   { \
   }
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/* functions */
-
 #ifdef __cplusplus
 }
 #endif

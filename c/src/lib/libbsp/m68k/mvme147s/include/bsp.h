@@ -175,17 +175,7 @@ struct vme_gcsr_map {
 #define EXTERN extern
 #endif
 
-/* miscellaneous stuff assumed to exist */
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
 
 /*
  * NOTE: Use the standard Clock driver entry

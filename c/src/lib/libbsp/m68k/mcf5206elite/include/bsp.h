@@ -18,13 +18,6 @@
 
 #include "mcf5206/mcf5206e.h"
 
-#ifndef KB
-#define KB (1024)
-#endif
-#ifndef MB
-#define MB (KB*KB)
-#endif
-
 /*** Board resources allocation ***/
 
 /*
@@ -37,31 +30,31 @@
 /* Memory mapping */
 /* CS0: Boot Flash */
 #define BSP_MEM_ADDR_FLASH    (0xFFE00000)
-#define BSP_MEM_SIZE_FLASH    (1*MB)
+#define BSP_MEM_SIZE_FLASH    (1*1024*1024)
 #define BSP_MEM_MASK_FLASH    (MCF5206E_CSMR_MASK_1M)
 
 /* CS2: External SRAM */
 #define BSP_MEM_ADDR_ESRAM    (0x30000000)
-#define BSP_MEM_SIZE_ESRAM    (1*MB)
+#define BSP_MEM_SIZE_ESRAM    (1*1024*1024)
 #define BSP_MEM_MASK_ESRAM    (MCF5206E_CSMR_MASK_1M)
 
 /* CS3: General-Purpose I/O register */
 #define BSP_MEM_ADDR_GPIO     (0x40000000)
-#define BSP_MEM_SIZE_GPIO     (64*KB)
+#define BSP_MEM_SIZE_GPIO     (64*1024)
 #define BSP_MEM_MASK_GPIO     (MCF5206E_CSMR_MASK_64K)
 
 /* DRAM0: Dynamic RAM */
 #define BSP_MEM_ADDR_DRAM     (0x00000000)
-#define BSP_MEM_SIZE_DRAM     (16*MB)
+#define BSP_MEM_SIZE_DRAM     (16*1024*1024)
 #define BSP_MEM_MASK_DRAM     (MCF5206E_DCMR_MASK_16M)
 
 /* On-chip SRAM */
 #define BSP_MEM_ADDR_SRAM     (0x20000000)
-#define BSP_MEM_SIZE_SRAM     (8*KB)
+#define BSP_MEM_SIZE_SRAM     (8*1024)
 
 /* On-chip peripherial registers */
 #define BSP_MEM_ADDR_IMM      (0x10000000)
-#define BSP_MEM_SIZE_IMM      (1*KB)
+#define BSP_MEM_SIZE_IMM      (1*1024)
 #define MBAR BSP_MEM_ADDR_IMM
 
 /* Interrupt vector assignment */
@@ -135,6 +128,7 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
+#include <rtems/rtc.h>
 
 #include "i2c.h"
 
@@ -175,35 +169,6 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
                   : "0"  (_tmp), "1"  (_delay) ); \
   }
 
-/* Constants */
-
-/* Structures */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/*
- * Real-Time Clock Driver Table Entry
- * NOTE: put this entry to the device driver table AFTER I2C bus driver!
- */
-#define RTC_DRIVER_TABLE_ENTRY \
-    { rtc_initialize, NULL, NULL, NULL, NULL, NULL }
-extern rtems_device_driver rtc_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void *arg
-);
-
-/* miscellaneous stuff assumed to exist */
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 

@@ -30,24 +30,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 
-/* Constants */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/*
- *  Information placed in the linkcmds file.
- */
-
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */

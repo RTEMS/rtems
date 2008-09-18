@@ -90,20 +90,6 @@ extern "C" {
 #define RAM_START 0
 #define RAM_END   0x4000000
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 /*

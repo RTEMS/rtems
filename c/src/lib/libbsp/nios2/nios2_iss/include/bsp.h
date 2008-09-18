@@ -127,20 +127,6 @@ altera_avalon_jtag_uart_regs;
 
 /* ============================================ */
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 nios2_isr_entry set_vector(                    /* returns old vector */

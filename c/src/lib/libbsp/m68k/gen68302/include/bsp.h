@@ -59,18 +59,6 @@ extern "C" {
 #define EXTERN extern
 #endif
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* miscellaneous stuff assumed to exist */
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */

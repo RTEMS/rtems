@@ -37,21 +37,6 @@ extern "C" {
 
 /* constants */
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
- 
-/*
- * NOTE: Use the standard Console driver entry
- */
- 
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-
 /* functions */
 
 uint32_t bsp_get_CPU_clock_speed(void);

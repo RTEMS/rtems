@@ -99,31 +99,10 @@ extern const size_t mpc83xx_uboot_board_info_size;
 
 #endif /* HAS_UBOOT */
 
-/* miscellaneous stuff assumed to exist */
-
-/*
- * We need to decide how much memory will be non-cacheable. This
- * will mainly be memory that will be used in DMA (network and serial
- * buffers).
- */
-/*
- *  Stuff for Time Test 27
- */
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
 #define BSP_UART1_MINOR 0
 #define BSP_UART2_MINOR 1
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
 
 /*
  * indicate, that BSP has no IDE driver

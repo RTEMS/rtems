@@ -27,47 +27,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/tx4925.h>
 
-/*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Following are for XXX and are board independent
- *
- */
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( handler ) \
-  do { \
-  } while(0)
-
-#define Cause_tm27_intr() \
-  do { \
-  } while(0)
-
-#define Clear_tm27_intr() \
-  do { \
-  } while(0)
-
-#define Lower_tm27_intr() \
-  do { \
-  } while(0)
-
-
-/* Constants */
-
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
- 
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 rtems_isr_entry set_vector(

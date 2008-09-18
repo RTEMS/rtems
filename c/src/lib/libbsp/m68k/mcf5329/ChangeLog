@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Remove unnecessary boilerplate comments.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, startup/linkcmds, startup/linkcmdsflash: Use top level

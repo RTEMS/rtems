@@ -76,18 +76,6 @@ extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 
 #define BSP_PPC403_CLOCK_HOOK_EXCEPTION ASM_BOOKE_DEC_VECTOR
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */
