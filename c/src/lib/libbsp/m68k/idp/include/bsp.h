@@ -23,28 +23,6 @@
 #define RAM_START 0
 #define RAM_END   0x200000
 
-#ifdef MIDP_INIT
-#undef EXTERN
-#define EXTERN
-#else
-#undef EXTERN
-#define EXTERN extern
-#endif
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/* miscellaneous stuff assumed to exist */
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */

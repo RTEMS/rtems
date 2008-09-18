@@ -104,31 +104,7 @@ struct pcc_map {
 #define CONSOLE_DATA     0xfffe3001
 #endif
 
-#define FOREVER       1                  /* infinite loop */
-
-#ifdef M147_INIT
-#undef EXTERN
-#define EXTERN
-#else
-#undef EXTERN
-#define EXTERN extern
-#endif
-
-/* miscellaneous stuff assumed to exist */
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
 
 /* functions */
 

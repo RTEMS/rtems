@@ -1,3 +1,8 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Remove unnecessary boilerplate comments. Eliminate use
+	of EXTERN.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, startup/linkcmds: Use top level shared
