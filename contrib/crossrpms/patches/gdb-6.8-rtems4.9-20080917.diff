@@ -1,0 +1,1740 @@
+diff -Naur gdb-6.8.orig/gdb/breakpoint.c gdb-6.8/gdb/breakpoint.c
+--- gdb-6.8.orig/gdb/breakpoint.c	2008-02-26 09:14:11.000000000 +0100
++++ gdb-6.8/gdb/breakpoint.c	2008-09-17 16:32:32.000000000 +0200
+@@ -55,6 +55,7 @@
+ #include "memattr.h"
+ #include "ada-lang.h"
+ #include "top.h"
++#include "wrapper.h"
+ 
+ #include "gdb-events.h"
+ #include "mi/mi-common.h"
+@@ -826,7 +827,65 @@
+ 	  || bpt->type == bp_access_watchpoint);
+ }
+ 
+-/* Assuming that B is a hardware breakpoint:
++/* Find the current value of a watchpoint on EXP.  Return the value in
++   *VALP and *RESULTP and the chain of intermediate and final values
++   in *VAL_CHAIN.  RESULTP and VAL_CHAIN may be NULL if the caller does
++   not need them.
++
++   If an error occurs while evaluating the expression, *RESULTP will
++   be set to NULL.  *RESULTP may be a lazy value, if the result could
++   not be read from memory.  It is used to determine whether a value
++   is user-specified (we should watch the whole value) or intermediate
++   (we should watch only the bit used to locate the final value).
++
++   If the final value, or any intermediate value, could not be read
++   from memory, *VALP will be set to NULL.  *VAL_CHAIN will still be
++   set to any referenced values.  *VALP will never be a lazy value.
++   This is the value which we store in struct breakpoint.
++
++   If VAL_CHAIN is non-NULL, *VAL_CHAIN will be released from the
++   value chain.  The caller must free the values individually.  If
++   VAL_CHAIN is NULL, all generated values will be left on the value
++   chain.  */
++
++static void
++fetch_watchpoint_value (struct expression *exp, struct value **valp,
++			struct value **resultp, struct value **val_chain)
++{
++  struct value *mark, *new_mark, *result;
++
++  *valp = NULL;
++  if (resultp)
++    *resultp = NULL;
++  if (val_chain)
++    *val_chain = NULL;
++
++  /* Evaluate the expression.  */
++  mark = value_mark ();
++  result = NULL;
++  gdb_evaluate_expression (exp, &result);
++  new_mark = value_mark ();
++  if (mark == new_mark)
++    return;
++  if (resultp)
++    *resultp = result;
++
++  /* Make sure it's not lazy, so that after the target stops again we
++     have a non-lazy previous value to compare with.  */
++  if (result != NULL
++      && (!value_lazy (result) || gdb_value_fetch_lazy (result)))
++    *valp = result;
++
++  if (val_chain)
++    {
++      /* Return the chain of intermediate values.  We use this to
++	 decide which addresses to watch.  */
++      *val_chain = new_mark;
++      value_release_to_mark (mark);
++    }
++}
++
++/* Assuming that B is a hardware watchpoint:
+    - Reparse watchpoint expression, is REPARSE is non-zero
+    - Evaluate expression and store the result in B->val
+    - Update the list of values that must be watched in B->loc.
+@@ -837,7 +896,6 @@
+ update_watchpoint (struct breakpoint *b, int reparse)
+ {
+   int within_current_scope;
+-  struct value *mark = value_mark ();
+   struct frame_id saved_frame_id;
+   struct bp_location *loc;
+   bpstat bs;
+@@ -889,9 +947,9 @@
+ 	 to the user when the old value and the new value may actually
+ 	 be completely different objects.  */
+       value_free (b->val);
+-      b->val = NULL;      
++      b->val = NULL;
++      b->val_valid = 0;
+     }
+-  
+ 
+   /* If we failed to parse the expression, for example because
+      it refers to a global variable in a not-yet-loaded shared library,
+@@ -900,43 +958,37 @@
+      is different from out-of-scope watchpoint.  */
+   if (within_current_scope && b->exp)
+     {
+-      struct value *v, *next;
++      struct value *val_chain, *v, *result, *next;
++
++      fetch_watchpoint_value (b->exp, &v, &result, &val_chain);
+ 
+-      /* Evaluate the expression and make sure it's not lazy, so that
+-	 after target stops again, we have a non-lazy previous value
+-	 to compare with. Also, making the value non-lazy will fetch
+-	 intermediate values as needed, which we use to decide which
+-	 addresses to watch.
+-
+-	 The value returned by evaluate_expression is stored in b->val.
+-	 In addition, we look at all values which were created
+-	 during evaluation, and set watchoints at addresses as needed.
+-	 Those values are explicitly deleted here.  */
+-      v = evaluate_expression (b->exp);
+       /* Avoid setting b->val if it's already set.  The meaning of
+ 	 b->val is 'the last value' user saw, and we should update
+ 	 it only if we reported that last value to user.  As it
+ 	 happens, the code that reports it updates b->val directly.  */
+-      if (b->val == NULL)
+-	b->val = v;
+-      value_contents (v);
+-      value_release_to_mark (mark);
++      if (!b->val_valid)
++	{
++	  b->val = v;
++	  b->val_valid = 1;
++	}
+ 
+       /* Look at each value on the value chain.  */
+-      for (; v; v = next)
++      for (v = val_chain; v; v = next)
+ 	{
+ 	  /* If it's a memory location, and GDB actually needed
+ 	     its contents to evaluate the expression, then we
+-	     must watch it.  */
++	     must watch it.  If the first value returned is
++	     still lazy, that means an error occurred reading it;
++	     watch it anyway in case it becomes readable.  */
+ 	  if (VALUE_LVAL (v) == lval_memory
+-	      && ! value_lazy (v))
++	      && (v == val_chain || ! value_lazy (v)))
+ 	    {
+ 	      struct type *vtype = check_typedef (value_type (v));
+ 
+ 	      /* We only watch structs and arrays if user asked
+ 		 for it explicitly, never if they just happen to
+ 		 appear in the middle of some value chain.  */
+-	      if (v == b->val
++	      if (v == result
+ 		  || (TYPE_CODE (vtype) != TYPE_CODE_STRUCT
+ 		      && TYPE_CODE (vtype) != TYPE_CODE_ARRAY))
+ 		{
+@@ -1681,6 +1733,7 @@
+ 	    if (b->val)
+ 	      value_free (b->val);
+ 	    b->val = NULL;
++	    b->val_valid = 0;
+ 	  }
+ 	break;
+       default:
+@@ -2103,6 +2156,17 @@
+   do_cleanups (old_chain);
+ }
+ 
++/* Print out the (old or new) value associated with a watchpoint.  */
++
++static void
++watchpoint_value_print (struct value *val, struct ui_file *stream)
++{
++  if (val == NULL)
++    fprintf_unfiltered (stream, _("<unreadable>"));
++  else
++    value_print (val, stream, 0, Val_pretty_default);
++}
++
+ /* This is the normal print function for a bpstat.  In the future,
+    much of this logic could (should?) be moved to bpstat_stop_status,
+    by having it set different print_it values.
+@@ -2221,26 +2285,21 @@
+ 
+     case bp_watchpoint:
+     case bp_hardware_watchpoint:
+-      if (bs->old_val != NULL)
+-	{
+-	  annotate_watchpoint (b->number);
+-	  if (ui_out_is_mi_like_p (uiout))
+-	    ui_out_field_string
+-	      (uiout, "reason",
+-	       async_reason_lookup (EXEC_ASYNC_WATCHPOINT_TRIGGER));
+-	  mention (b);
+-	  ui_out_chain = make_cleanup_ui_out_tuple_begin_end (uiout, "value");
+-	  ui_out_text (uiout, "\nOld value = ");
+-	  value_print (bs->old_val, stb->stream, 0, Val_pretty_default);
+-	  ui_out_field_stream (uiout, "old", stb);
+-	  ui_out_text (uiout, "\nNew value = ");
+-	  value_print (b->val, stb->stream, 0, Val_pretty_default);
+-	  ui_out_field_stream (uiout, "new", stb);
+-	  do_cleanups (ui_out_chain);
+-	  ui_out_text (uiout, "\n");
+-	  value_free (bs->old_val);
+-	  bs->old_val = NULL;
+-	}
++      annotate_watchpoint (b->number);
++      if (ui_out_is_mi_like_p (uiout))
++	ui_out_field_string
++	  (uiout, "reason",
++	   async_reason_lookup (EXEC_ASYNC_WATCHPOINT_TRIGGER));
++      mention (b);
++      ui_out_chain = make_cleanup_ui_out_tuple_begin_end (uiout, "value");
++      ui_out_text (uiout, "\nOld value = ");
++      watchpoint_value_print (bs->old_val, stb->stream);
++      ui_out_field_stream (uiout, "old", stb);
++      ui_out_text (uiout, "\nNew value = ");
++      watchpoint_value_print (b->val, stb->stream);
++      ui_out_field_stream (uiout, "new", stb);
++      do_cleanups (ui_out_chain);
++      ui_out_text (uiout, "\n");
+       /* More than one watchpoint may have been triggered.  */
+       return PRINT_UNKNOWN;
+       break;
+@@ -2253,7 +2312,7 @@
+       mention (b);
+       ui_out_chain = make_cleanup_ui_out_tuple_begin_end (uiout, "value");
+       ui_out_text (uiout, "\nValue = ");
+-      value_print (b->val, stb->stream, 0, Val_pretty_default);
++      watchpoint_value_print (b->val, stb->stream);
+       ui_out_field_stream (uiout, "value", stb);
+       do_cleanups (ui_out_chain);
+       ui_out_text (uiout, "\n");
+@@ -2261,7 +2320,7 @@
+       break;
+ 
+     case bp_access_watchpoint:
+-      if (bs->old_val != NULL)     
++      if (bs->old_val != NULL)
+ 	{
+ 	  annotate_watchpoint (b->number);
+ 	  if (ui_out_is_mi_like_p (uiout))
+@@ -2271,10 +2330,8 @@
+ 	  mention (b);
+ 	  ui_out_chain = make_cleanup_ui_out_tuple_begin_end (uiout, "value");
+ 	  ui_out_text (uiout, "\nOld value = ");
+-	  value_print (bs->old_val, stb->stream, 0, Val_pretty_default);
++	  watchpoint_value_print (bs->old_val, stb->stream);
+ 	  ui_out_field_stream (uiout, "old", stb);
+-	  value_free (bs->old_val);
+-	  bs->old_val = NULL;
+ 	  ui_out_text (uiout, "\nNew value = ");
+ 	}
+       else 
+@@ -2287,7 +2344,7 @@
+ 	  ui_out_chain = make_cleanup_ui_out_tuple_begin_end (uiout, "value");
+ 	  ui_out_text (uiout, "\nValue = ");
+ 	}
+-      value_print (b->val, stb->stream, 0,Val_pretty_default);
++      watchpoint_value_print (b->val, stb->stream);
+       ui_out_field_stream (uiout, "new", stb);
+       do_cleanups (ui_out_chain);
+       ui_out_text (uiout, "\n");
+@@ -2574,13 +2631,20 @@
+          we might be in the middle of evaluating a function call.  */
+ 
+       struct value *mark = value_mark ();
+-      struct value *new_val = evaluate_expression (b->exp);
+-      if (!value_equal (b->val, new_val))
++      struct value *new_val;
++
++      fetch_watchpoint_value (b->exp, &new_val, NULL, NULL);
++      if ((b->val != NULL) != (new_val != NULL)
++	  || (b->val != NULL && !value_equal (b->val, new_val)))
+ 	{
+-	  release_value (new_val);
+-	  value_free_to_mark (mark);
++	  if (new_val != NULL)
++	    {
++	      release_value (new_val);
++	      value_free_to_mark (mark);
++	    }
+ 	  bs->old_val = b->val;
+ 	  b->val = new_val;
++	  b->val_valid = 1;
+ 	  /* We will stop here */
+ 	  return WP_VALUE_CHANGED;
+ 	}
+@@ -5722,10 +5786,9 @@
+   exp_end = arg;
+   exp_valid_block = innermost_block;
+   mark = value_mark ();
+-  val = evaluate_expression (exp);
+-  release_value (val);
+-  if (value_lazy (val))
+-    value_fetch_lazy (val);
++  fetch_watchpoint_value (exp, &val, NULL, NULL);
++  if (val != NULL)
++    release_value (val);
+ 
+   tok = arg;
+   while (*tok == ' ' || *tok == '\t')
+@@ -5814,6 +5877,7 @@
+   b->exp_valid_block = exp_valid_block;
+   b->exp_string = savestring (exp_start, exp_end - exp_start);
+   b->val = val;
++  b->val_valid = 1;
+   b->loc->cond = cond;
+   if (cond_start)
+     b->cond_string = savestring (cond_start, cond_end - cond_start);
+@@ -7697,11 +7761,11 @@
+       if (bpt->val)
+ 	value_free (bpt->val);
+       mark = value_mark ();
+-      bpt->val = evaluate_expression (bpt->exp);
+-      release_value (bpt->val);
+-      if (value_lazy (bpt->val))
+-	value_fetch_lazy (bpt->val);
+-      
++      fetch_watchpoint_value (bpt->exp, &bpt->val, NULL, NULL);
++      if (bpt->val)
++	release_value (bpt->val);
++      bpt->val_valid = 1;
++
+       if (bpt->type == bp_hardware_watchpoint ||
+ 	  bpt->type == bp_read_watchpoint ||
+ 	  bpt->type == bp_access_watchpoint)
+diff -Naur gdb-6.8.orig/gdb/breakpoint.h gdb-6.8/gdb/breakpoint.h
+--- gdb-6.8.orig/gdb/breakpoint.h	2008-02-01 17:24:46.000000000 +0100
++++ gdb-6.8/gdb/breakpoint.h	2008-09-17 16:32:32.000000000 +0200
+@@ -391,8 +391,13 @@
+     /* The largest block within which it is valid, or NULL if it is
+        valid anywhere (e.g. consists just of global symbols).  */
+     struct block *exp_valid_block;
+-    /* Value of the watchpoint the last time we checked it.  */
++    /* Value of the watchpoint the last time we checked it, or NULL
++       when we do not know the value yet or the value was not
++       readable.  VAL is never lazy.  */
+     struct value *val;
++    /* Nonzero if VAL is valid.  If VAL_VALID is set but VAL is NULL,
++       then an error occurred reading the value.  */
++    int val_valid;
+ 
+     /* Holds the address of the related watchpoint_scope breakpoint
+        when using watchpoints on local variables (might the concept
+diff -Naur gdb-6.8.orig/gdb/NEWS gdb-6.8/gdb/NEWS
+--- gdb-6.8.orig/gdb/NEWS	2008-03-27 19:14:10.000000000 +0100
++++ gdb-6.8/gdb/NEWS	2008-09-17 16:32:32.000000000 +0200
+@@ -1,6 +1,9 @@
+ 		What has changed in GDB?
+ 	     (Organized release by release)
+ 
++* Watchpoints can now be set on unreadable memory locations, e.g. addresses
++which will be allocated using malloc later in program execution.
++
+ *** Changes in GDB 6.8
+ 
+ * New native configurations
+diff -Naur gdb-6.8.orig/gdb/testsuite/gdb.base/watchpoint.c gdb-6.8/gdb/testsuite/gdb.base/watchpoint.c
+--- gdb-6.8.orig/gdb/testsuite/gdb.base/watchpoint.c	2003-03-17 20:51:58.000000000 +0100
++++ gdb-6.8/gdb/testsuite/gdb.base/watchpoint.c	2008-09-17 16:32:32.000000000 +0200
+@@ -39,6 +39,8 @@
+ 
+ int doread = 0;
+ 
++char *global_ptr;
++
+ void marker1 ()
+ {
+ }
+@@ -110,6 +112,14 @@
+   return 73;
+ }
+ 
++void
++func4 ()
++{
++  buf[0] = 3;
++  global_ptr = buf;
++  buf[0] = 7;
++}
++
+ int main ()
+ {
+ #ifdef usestubs
+@@ -185,5 +195,7 @@
+ 
+   func3 ();
+ 
++  func4 ();
++
+   return 0;
+ }
+diff -Naur gdb-6.8.orig/gdb/testsuite/gdb.base/watchpoint.exp gdb-6.8/gdb/testsuite/gdb.base/watchpoint.exp
+--- gdb-6.8.orig/gdb/testsuite/gdb.base/watchpoint.exp	2008-01-01 23:53:19.000000000 +0100
++++ gdb-6.8/gdb/testsuite/gdb.base/watchpoint.exp	2008-09-17 16:32:32.000000000 +0200
+@@ -645,6 +645,30 @@
+     }
+ }
+     
++proc test_inaccessible_watchpoint {} {
++    global gdb_prompt
++
++    # This is a test for watchpoints on currently inaccessible (but later
++    # valid) memory.
++
++    if [runto func4] then {
++	gdb_test "watch *global_ptr" ".*atchpoint \[0-9\]+: \\*global_ptr"
++	gdb_test "next" ".*global_ptr = buf.*"
++	gdb_test_multiple "next" "next over ptr init" {
++	    -re ".*atchpoint \[0-9\]+: \\*global_ptr\r\n\r\nOld value = .*\r\nNew value = 3 .*\r\n.*$gdb_prompt $" {
++		# We can not test for <unknown> here because NULL may be readable.
++		# This test does rely on *NULL != 3.
++		pass "next over ptr init"
++	    }
++	}
++	gdb_test_multiple "next" "next over buffer set" {
++	    -re ".*atchpoint \[0-9\]+: \\*global_ptr\r\n\r\nOld value = 3 .*\r\nNew value = 7 .*\r\n.*$gdb_prompt $" {
++		pass "next over buffer set"
++	    }
++	}
++    }
++}
++    
+ # Start with a fresh gdb.
+ 
+ gdb_exit
+@@ -797,6 +821,8 @@
+       }
+     }
+ 
++    test_inaccessible_watchpoint
++
+     # See above.
+     if [istarget "mips-idt-*"] then {
+ 	gdb_exit
+diff -Naur gdb-6.8.orig/sim/common/aclocal.m4 gdb-6.8/sim/common/aclocal.m4
+--- gdb-6.8.orig/sim/common/aclocal.m4	2006-06-13 10:06:48.000000000 +0200
++++ gdb-6.8/sim/common/aclocal.m4	2008-09-17 16:33:00.000000000 +0200
+@@ -18,7 +18,7 @@
+ #
+ # SIM_AC_OUTPUT
+ 
+-AC_DEFUN(SIM_AC_COMMON,
++AC_DEFUN([SIM_AC_COMMON],
+ [
+ # autoconf.info says this should be called right after AC_INIT.
+ AC_CONFIG_HEADER(ifelse([$1],,config.h,[$1]):config.in)
+@@ -245,7 +245,7 @@
+ dnl supported.
+ dnl ??? Until there is demonstrable value in doing something more complicated,
+ dnl let's not.
+-AC_DEFUN(SIM_AC_OPTION_ENVIRONMENT,
++AC_DEFUN([SIM_AC_OPTION_ENVIRONMENT],
+ [
+ AC_ARG_ENABLE(sim-environment,
+ [  --enable-sim-environment=environment	Specify mixed, user, virtual or operating environment.],
+@@ -269,7 +269,7 @@
+ dnl Without this option all possible alignment restrictions are accommodated.
+ dnl arg[1] is hardwired target alignment
+ dnl arg[2] is default target alignment
+-AC_DEFUN(SIM_AC_OPTION_ALIGNMENT,
++AC_DEFUN([SIM_AC_OPTION_ALIGNMENT],
+ wire_alignment="[$1]"
+ default_alignment="[$2]"
+ [
+@@ -318,7 +318,7 @@
+ 
+ 
+ dnl Conditionally compile in assertion statements.
+-AC_DEFUN(SIM_AC_OPTION_ASSERT,
++AC_DEFUN([SIM_AC_OPTION_ASSERT],
+ [
+ AC_ARG_ENABLE(sim-assert,
+ [  --enable-sim-assert			Specify whether to perform random assertions.],
+@@ -342,7 +342,7 @@
+ dnl arg[3] is the number of bits in an address
+ dnl arg[4] is the number of bits in an OpenFirmware cell.
+ dnl FIXME: this information should be obtained from bfd/archure
+-AC_DEFUN(SIM_AC_OPTION_BITSIZE,
++AC_DEFUN([SIM_AC_OPTION_BITSIZE],
+ wire_word_bitsize="[$1]"
+ wire_word_msb="[$2]"
+ wire_address_bitsize="[$3]"
+@@ -408,7 +408,7 @@
+ dnl that support both big and little endian targets.
+ dnl arg[1] is hardwired target endianness.
+ dnl arg[2] is default target endianness.
+-AC_DEFUN(SIM_AC_OPTION_ENDIAN,
++AC_DEFUN([SIM_AC_OPTION_ENDIAN],
+ [
+ wire_endian="[$1]"
+ default_endian="[$2]"
+@@ -458,7 +458,7 @@
+ dnl --enable-sim-hostendian is for users of the simulator when
+ dnl they find that AC_C_BIGENDIAN does not function correctly
+ dnl (for instance in a canadian cross)
+-AC_DEFUN(SIM_AC_OPTION_HOSTENDIAN,
++AC_DEFUN([SIM_AC_OPTION_HOSTENDIAN],
+ [
+ AC_ARG_ENABLE(sim-hostendian,
+ [  --enable-sim-hostendian=end		Specify host byte endian orientation.],
+@@ -490,7 +490,7 @@
+ dnl And optionally the bitsize of the floating point register.
+ dnl arg[1] specifies the presence (or absence) of floating point hardware
+ dnl arg[2] specifies the number of bits in a floating point register
+-AC_DEFUN(SIM_AC_OPTION_FLOAT,
++AC_DEFUN([SIM_AC_OPTION_FLOAT],
+ [
+ default_sim_float="[$1]"
+ default_sim_float_bitsize="[$2]"
+@@ -519,7 +519,7 @@
+ 
+ 
+ dnl The argument is the default cache size if none is specified.
+-AC_DEFUN(SIM_AC_OPTION_SCACHE,
++AC_DEFUN([SIM_AC_OPTION_SCACHE],
+ [
+ default_sim_scache="ifelse([$1],,0,[$1])"
+ AC_ARG_ENABLE(sim-scache,
+@@ -539,7 +539,7 @@
+ 
+ 
+ dnl The argument is the default model if none is specified.
+-AC_DEFUN(SIM_AC_OPTION_DEFAULT_MODEL,
++AC_DEFUN([SIM_AC_OPTION_DEFAULT_MODEL],
+ [
+ default_sim_default_model="ifelse([$1],,0,[$1])"
+ AC_ARG_ENABLE(sim-default-model,
+@@ -559,7 +559,7 @@
+ dnl arg[1] Enable sim-hw by default? ("yes" or "no")
+ dnl arg[2] is a space separated list of devices that override the defaults
+ dnl arg[3] is a space separated list of extra target specific devices.
+-AC_DEFUN(SIM_AC_OPTION_HARDWARE,
++AC_DEFUN([SIM_AC_OPTION_HARDWARE],
+ [
+ if test x"[$1]" = x"yes"; then
+   sim_hw_p=yes
+@@ -621,7 +621,7 @@
+ dnl performance by inlining functions.
+ dnl Guarantee that unconfigured simulators do not do any inlining
+ sim_inline="-DDEFAULT_INLINE=0"
+-AC_DEFUN(SIM_AC_OPTION_INLINE,
++AC_DEFUN([SIM_AC_OPTION_INLINE],
+ [
+ default_sim_inline="ifelse([$1],,,-DDEFAULT_INLINE=[$1])"
+ AC_ARG_ENABLE(sim-inline,
+@@ -666,7 +666,7 @@
+ AC_SUBST(sim_inline)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_PACKAGES,
++AC_DEFUN([SIM_AC_OPTION_PACKAGES],
+ [
+ AC_ARG_ENABLE(sim-packages,
+ [  --enable-sim-packages=list		Specify the packages to be included in the build.],
+@@ -692,7 +692,7 @@
+ AC_SUBST(sim_packages)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_REGPARM,
++AC_DEFUN([SIM_AC_OPTION_REGPARM],
+ [
+ AC_ARG_ENABLE(sim-regparm,
+ [  --enable-sim-regparm=nr-parm		Pass parameters in registers instead of on the stack - x86/GCC specific.],
+@@ -709,7 +709,7 @@
+ AC_SUBST(sim_regparm)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_RESERVED_BITS,
++AC_DEFUN([SIM_AC_OPTION_RESERVED_BITS],
+ [
+ default_sim_reserved_bits="ifelse([$1],,1,[$1])"
+ AC_ARG_ENABLE(sim-reserved-bits,
+@@ -726,7 +726,7 @@
+ AC_SUBST(sim_reserved_bits)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_SMP,
++AC_DEFUN([SIM_AC_OPTION_SMP],
+ [
+ default_sim_smp="ifelse([$1],,5,[$1])"
+ AC_ARG_ENABLE(sim-smp,
+@@ -746,7 +746,7 @@
+ AC_SUBST(sim_smp)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_STDCALL,
++AC_DEFUN([SIM_AC_OPTION_STDCALL],
+ [
+ AC_ARG_ENABLE(sim-stdcall,
+ [  --enable-sim-stdcall=type		Use an alternative function call/return mechanism - x86/GCC specific.],
+@@ -763,7 +763,7 @@
+ AC_SUBST(sim_stdcall)
+ 
+ 
+-AC_DEFUN(SIM_AC_OPTION_XOR_ENDIAN,
++AC_DEFUN([SIM_AC_OPTION_XOR_ENDIAN],
+ [
+ default_sim_xor_endian="ifelse([$1],,8,[$1])"
+ AC_ARG_ENABLE(sim-xor-endian,
+@@ -782,7 +782,7 @@
+ 
+ dnl --enable-build-warnings is for developers of the simulator.
+ dnl it enables extra GCC specific warnings.
+-AC_DEFUN(SIM_AC_OPTION_WARNINGS,
++AC_DEFUN([SIM_AC_OPTION_WARNINGS],
+ [
+ # NOTE: Don't add -Wall or -Wunused, they both include
+ # -Wunused-parameter which reports bogus warnings.
+@@ -866,7 +866,7 @@
+ dnl one afterwards.  The two pieces of the common fragment are inserted into
+ dnl the target's fragment at the appropriate points.
+ 
+-AC_DEFUN(SIM_AC_OUTPUT,
++AC_DEFUN([SIM_AC_OUTPUT],
+ [
+ AC_LINK_FILES($sim_link_files, $sim_link_links)
+ dnl Make @cgen_breaks@ non-null only if the sim uses CGEN.
+@@ -895,7 +895,7 @@
+ sinclude(../../config/gettext-sister.m4)
+ 
+ dnl --enable-cgen-maint support
+-AC_DEFUN(SIM_AC_OPTION_CGEN_MAINT,
++AC_DEFUN([SIM_AC_OPTION_CGEN_MAINT],
+ [
+ cgen_maint=no
+ dnl Default is to use one in build tree.
+diff -Naur gdb-6.8.orig/sim/erc32/configure gdb-6.8/sim/erc32/configure
+--- gdb-6.8.orig/sim/erc32/configure	2006-12-20 23:35:51.000000000 +0100
++++ gdb-6.8/sim/erc32/configure	2008-09-17 16:33:00.000000000 +0200
+@@ -309,7 +309,7 @@
+ # include <unistd.h>
+ #endif"
+ 
+-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS sim_environment sim_alignment sim_assert sim_bitsize sim_endian sim_hostendian sim_float sim_scache sim_default_model sim_hw_cflags sim_hw_objs sim_hw sim_inline sim_packages sim_regparm sim_reserved_bits sim_smp sim_stdcall sim_xor_endian WARN_CFLAGS WERROR_CFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CC_FOR_BUILD HDEFINES AR RANLIB ac_ct_RANLIB USE_NLS LIBINTL LIBINTL_DEP INCINTL XGETTEXT GMSGFMT POSUB CATALOGS DATADIRNAME INSTOBJEXT GENCAT CATOBJEXT CPP EGREP MAINT sim_bswap sim_cflags sim_debug sim_stdio sim_trace sim_profile TERMCAP READLINE cgen_breaks LIBOBJS LTLIBOBJS'
++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS sim_environment sim_alignment sim_assert sim_bitsize sim_endian sim_hostendian sim_float sim_scache sim_default_model sim_hw_cflags sim_hw_objs sim_hw sim_inline sim_packages sim_regparm sim_reserved_bits sim_smp sim_stdcall sim_xor_endian WARN_CFLAGS WERROR_CFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CC_FOR_BUILD HDEFINES AR RANLIB ac_ct_RANLIB USE_NLS LIBINTL LIBINTL_DEP INCINTL XGETTEXT GMSGFMT POSUB CATALOGS DATADIRNAME INSTOBJEXT GENCAT CATOBJEXT CPP EGREP MAINT sim_bswap sim_cflags sim_debug sim_stdio sim_trace sim_profile READLINE READLINE_DEPS READLINE_CFLAGS cgen_breaks LIBOBJS LTLIBOBJS'
+ ac_subst_files=''
+ 
+ # Initialize some variables set by options.
+@@ -858,6 +858,11 @@
+   --enable-sim-trace=opts		Enable tracing flags
+   --enable-sim-profile=opts		Enable profiling flags
+ 
++Optional Packages:
++  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
++  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
++  --with-system-readline  use installed readline library
++
+ Some influential environment variables:
+   CC          C compiler command
+   CFLAGS      C compiler flags
+@@ -4493,57 +4498,36 @@
+ done
+ 
+ 
+-# In the Cygwin environment, we need some additional flags.
+-echo "$as_me:$LINENO: checking for cygwin" >&5
+-echo $ECHO_N "checking for cygwin... $ECHO_C" >&6
+-if test "${sim_cv_os_cygwin+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  cat >conftest.$ac_ext <<_ACEOF
+-/* confdefs.h.  */
+-_ACEOF
+-cat confdefs.h >>conftest.$ac_ext
+-cat >>conftest.$ac_ext <<_ACEOF
+-/* end confdefs.h.  */
+ 
+-#ifdef __CYGWIN__
+-lose
+-#endif
+-_ACEOF
+-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "lose" >/dev/null 2>&1; then
+-  sim_cv_os_cygwin=yes
+-else
+-  sim_cv_os_cygwin=no
+-fi
+-rm -f conftest*
++# Check whether --with-system-readline or --without-system-readline was given.
++if test "${with_system_readline+set}" = set; then
++  withval="$with_system_readline"
+ 
+-fi
+-echo "$as_me:$LINENO: result: $sim_cv_os_cygwin" >&5
+-echo "${ECHO_T}$sim_cv_os_cygwin" >&6
++fi;
+ 
+-if test x$sim_cv_os_cygwin = xyes; then
+-  TERMCAP='`if test -r ../../libtermcap/libtermcap.a; then echo ../../libtermcap/libtermcap.a; else echo -ltermcap; fi` -luser32'
+-else
+-  echo "$as_me:$LINENO: checking for main in -ltermcap" >&5
+-echo $ECHO_N "checking for main in -ltermcap... $ECHO_C" >&6
+-if test "${ac_cv_lib_termcap_main+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-ltermcap  $LIBS"
+-cat >conftest.$ac_ext <<_ACEOF
++if test "$with_system_readline" = yes; then
++  echo "$as_me:$LINENO: checking for readline" >&5
++echo $ECHO_N "checking for readline... $ECHO_C" >&6
++  save_LIBS="$LIBS"
++  LIBS="-lreadline $save_LIBS"
++  cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
+-
++/* Override any gcc2 internal prototype to avoid an error.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++/* We use char because int might match the return type of a gcc2
++   builtin and then its argument prototype would still apply.  */
++char add_history ();
+ int
+ main ()
+ {
+-main ();
++add_history ();
+   ;
+   return 0;
+ }
+@@ -4570,41 +4554,13 @@
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+-  ac_cv_lib_termcap_main=yes
++  READLINE=-lreadline
+ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-ac_cv_lib_termcap_main=no
+-fi
+-rm -f conftest.err conftest.$ac_objext \
+-      conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-echo "$as_me:$LINENO: result: $ac_cv_lib_termcap_main" >&5
+-echo "${ECHO_T}$ac_cv_lib_termcap_main" >&6
+-if test $ac_cv_lib_termcap_main = yes; then
+-  TERMCAP=-ltermcap
+-else
+-  TERMCAP=""
+-fi
+-
+-fi
+-
+-
+-# We prefer the in-tree readline.  Top-level dependencies make sure
+-# src/readline (if it's there) is configured before src/sim.
+-if test -r ../../readline/Makefile; then
+-  READLINE=../../readline/libreadline.a
+-else
+-  echo "$as_me:$LINENO: checking for readline in -lreadline" >&5
+-echo $ECHO_N "checking for readline in -lreadline... $ECHO_C" >&6
+-if test "${ac_cv_lib_readline_readline+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $TERMCAP $LIBS"
+-cat >conftest.$ac_ext <<_ACEOF
++ LIBS="-lreadline -lncurses $save_LIBS"
++      cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+@@ -4617,11 +4573,11 @@
+ #endif
+ /* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+-char readline ();
++char add_history ();
+ int
+ main ()
+ {
+-readline ();
++add_history ();
+   ;
+   return 0;
+ }
+@@ -4648,28 +4604,34 @@
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+-  ac_cv_lib_readline_readline=yes
++  READLINE="-lreadline -lncurses"
+ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-ac_cv_lib_readline_readline=no
++{ { echo "$as_me:$LINENO: error: unable to detect readline" >&5
++echo "$as_me: error: unable to detect readline" >&2;}
++   { (exit 1); exit 1; }; }
+ fi
+ rm -f conftest.err conftest.$ac_objext \
+       conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
++
+ fi
+-echo "$as_me:$LINENO: result: $ac_cv_lib_readline_readline" >&5
+-echo "${ECHO_T}$ac_cv_lib_readline_readline" >&6
+-if test $ac_cv_lib_readline_readline = yes; then
+-  READLINE=-lreadline
+-else
+-  { { echo "$as_me:$LINENO: error: the required \"readline\" library is missing" >&5
+-echo "$as_me: error: the required \"readline\" library is missing" >&2;}
+-   { (exit 1); exit 1; }; }
++rm -f conftest.err conftest.$ac_objext \
++      conftest$ac_exeext conftest.$ac_ext
++  LIBS="$save_LIBS"
++  echo "$as_me:$LINENO: result: $READLINE" >&5
++echo "${ECHO_T}$READLINE" >&6
++  READLINE_DEPS=
++  READLINE_CFLAGS=
++else
++  READLINE='$(READLINE_DIR)/libreadline.a'
++  READLINE_DEPS='$(READLINE)'
++  READLINE_CFLAGS='-I$(READLINE_SRC)/..'
+ fi
+ 
+-fi
++
++
+ 
+ 
+ ac_sources="$sim_link_files"
+@@ -5389,8 +5351,9 @@
+ s,@sim_stdio@,$sim_stdio,;t t
+ s,@sim_trace@,$sim_trace,;t t
+ s,@sim_profile@,$sim_profile,;t t
+-s,@TERMCAP@,$TERMCAP,;t t
+ s,@READLINE@,$READLINE,;t t
++s,@READLINE_DEPS@,$READLINE_DEPS,;t t
++s,@READLINE_CFLAGS@,$READLINE_CFLAGS,;t t
+ s,@cgen_breaks@,$cgen_breaks,;t t
+ s,@LIBOBJS@,$LIBOBJS,;t t
+ s,@LTLIBOBJS@,$LTLIBOBJS,;t t
+diff -Naur gdb-6.8.orig/sim/erc32/configure.ac gdb-6.8/sim/erc32/configure.ac
+--- gdb-6.8.orig/sim/erc32/configure.ac	2006-12-20 23:35:51.000000000 +0100
++++ gdb-6.8/sim/erc32/configure.ac	2008-09-17 16:33:00.000000000 +0200
+@@ -11,27 +11,32 @@
+ 
+ AC_CHECK_HEADERS(stdlib.h)
+ 
+-# In the Cygwin environment, we need some additional flags.
+-AC_CACHE_CHECK([for cygwin], sim_cv_os_cygwin,
+-[AC_EGREP_CPP(lose, [
+-#ifdef __CYGWIN__
+-lose
+-#endif],[sim_cv_os_cygwin=yes],[sim_cv_os_cygwin=no])])
++AC_ARG_WITH([system-readline],
++  [AS_HELP_STRING([--with-system-readline],
++                  [use installed readline library])])
+ 
+-if test x$sim_cv_os_cygwin = xyes; then
+-  TERMCAP='`if test -r ../../libtermcap/libtermcap.a; then echo ../../libtermcap/libtermcap.a; else echo -ltermcap; fi` -luser32'
++if test "$with_system_readline" = yes; then
++  AC_MSG_CHECKING([for readline])
++  save_LIBS="$LIBS"
++  LIBS="-lreadline $save_LIBS"
++  AC_LINK_IFELSE([AC_LANG_CALL([],
++    [add_history])], [READLINE=-lreadline], 
++    [ LIBS="-lreadline -lncurses $save_LIBS"
++      AC_LINK_IFELSE([AC_LANG_CALL([],
++        [add_history])], [READLINE="-lreadline -lncurses"],
++        [AC_MSG_ERROR([unable to detect readline])])
++    ])
++  LIBS="$save_LIBS"
++  AC_MSG_RESULT($READLINE)
++  READLINE_DEPS=
++  READLINE_CFLAGS=
+ else
+-  AC_CHECK_LIB(termcap, main, TERMCAP=-ltermcap, TERMCAP="")
+-fi
+-AC_SUBST(TERMCAP)
+-
+-# We prefer the in-tree readline.  Top-level dependencies make sure
+-# src/readline (if it's there) is configured before src/sim.
+-if test -r ../../readline/Makefile; then
+-  READLINE=../../readline/libreadline.a
+-else
+-  AC_CHECK_LIB(readline, readline, READLINE=-lreadline,
+-	       AC_ERROR([the required "readline" library is missing]), $TERMCAP)
++  READLINE='$(READLINE_DIR)/libreadline.a'
++  READLINE_DEPS='$(READLINE)'
++  READLINE_CFLAGS='-I$(READLINE_SRC)/..'
+ fi
+ AC_SUBST(READLINE)
++AC_SUBST(READLINE_DEPS)
++AC_SUBST(READLINE_CFLAGS)
++
+ SIM_AC_OUTPUT
+diff -Naur gdb-6.8.orig/sim/erc32/erc32.c gdb-6.8/sim/erc32/erc32.c
+--- gdb-6.8.orig/sim/erc32/erc32.c	1999-04-16 03:35:00.000000000 +0200
++++ gdb-6.8/sim/erc32/erc32.c	2008-09-17 16:33:00.000000000 +0200
+@@ -24,6 +24,7 @@
+ 
+ #include <sys/types.h>
+ #include <stdio.h>
++#include <string.h>
+ #include <termios.h>
+ #include <sys/fcntl.h>
+ #include <sys/file.h>
+@@ -413,7 +414,7 @@
+     if (rom8) mec_memcfg &= ~0x20000;
+     else mec_memcfg |= 0x20000;
+ 
+-    mem_ramsz = (256 * 1024) << ((mec_memcfg >> 10) & 7);
++    mem_ramsz = (512 * 1024) << ((mec_memcfg >> 10) & 7);
+     mem_romsz = (128 * 1024) << ((mec_memcfg >> 18) & 7);
+ 
+     if (sparclite_board) {
+@@ -1659,7 +1660,7 @@
+ 	errmec = 0;
+ 	return(1);
+     }
+-#endif;
++#endif
+ 
+     if ((addr >= mem_ramstart) && (addr < (mem_ramstart + mem_ramsz))) {
+ 	fetch_bytes (asi, &ramb[addr & mem_rammask], data, sz);
+@@ -1736,7 +1737,7 @@
+ 	errmec = 0;
+ 	return(1);
+     }
+-#endif;
++#endif
+ 
+     if ((addr >= mem_ramstart) && (addr < (mem_ramstart + mem_ramsz))) {
+ 	if (mem_accprot) {
+diff -Naur gdb-6.8.orig/sim/erc32/exec.c gdb-6.8/sim/erc32/exec.c
+--- gdb-6.8.orig/sim/erc32/exec.c	2005-03-07 12:09:05.000000000 +0100
++++ gdb-6.8/sim/erc32/exec.c	2008-09-17 16:33:00.000000000 +0200
+@@ -1713,7 +1713,7 @@
+     	    sregs->fdp[rs2 | 1] = sregs->fs[rs2 & ~1];
+     	    sregs->fdp[rs2 & ~1] = sregs->fs[rs2 | 1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+ 
+@@ -1886,7 +1886,7 @@
+ 	sregs->fs[rd & ~1] = sregs->fdp[rd | 1];
+ 	sregs->fs[rd | 1] = sregs->fdp[rd & ~1];
+     default:
+-      ;
++      break;
+     }
+ #endif
+     if (sregs->fpstate == FP_EXC_PE) {
+diff -Naur gdb-6.8.orig/sim/erc32/Makefile.in gdb-6.8/sim/erc32/Makefile.in
+--- gdb-6.8.orig/sim/erc32/Makefile.in	2008-01-01 23:53:24.000000000 +0100
++++ gdb-6.8/sim/erc32/Makefile.in	2008-09-17 16:33:00.000000000 +0200
+@@ -18,12 +18,12 @@
+ 
+ ## COMMON_PRE_CONFIG_FRAG
+ 
+-TERMCAP_LIB = @TERMCAP@
++# TERMCAP_LIB = -lncurses
+ READLINE_LIB = @READLINE@
+ 
+ SIM_OBJS = exec.o erc32.o func.o help.o float.o interf.o
+ SIM_EXTRA_LIBS = $(READLINE_LIB) $(TERMCAP_LIB) -lm
+-SIM_EXTRA_ALL = sis
++SIM_EXTRA_ALL = sis$(EXEEXT)
+ SIM_EXTRA_INSTALL = install-sis
+ SIM_EXTRA_CLEAN = clean-sis
+ 
+@@ -37,8 +37,8 @@
+ # `sis' doesn't need interf.o.
+ SIS_OFILES = exec.o erc32.o func.o help.o float.o
+ 
+-sis: sis.o $(SIS_OFILES) $(COMMON_OBJS) $(LIBDEPS)
+-	$(CC) $(ALL_CFLAGS) -o sis \
++sis$(EXEEXT): sis.o $(SIS_OFILES) $(COMMON_OBJS) $(LIBDEPS)
++	$(CC) $(ALL_CFLAGS) -o sis$(EXEEXT) \
+ 	  sis.o $(SIS_OFILES) $(COMMON_OBJS) $(EXTRA_LIBS)
+ 
+ # FIXME: This computes the build host's endianness, doesn't it?
+@@ -51,11 +51,11 @@
+ 
+ # Copy the files into directories where they will be run.
+ install-sis: installdirs
+-	n=`echo sis | sed '$(program_transform_name)'`; \
+-	$(INSTALL_PROGRAM) sis$(EXEEXT) $(DESTDIR)$(bindir)/$$n$(EXEEXT)
++	n=`echo sis$(EXEEXT) | sed '$(program_transform_name)'`; \
++	$(INSTALL_PROGRAM) sis$(EXEEXT) $(DESTDIR)$(bindir)/$$n
+ 
+ clean-sis:
+-	rm -f sis end end.h
++	rm -f sis$(EXEEXT) end end.h
+ 
+ configure:
+ 	@echo "Rebuilding configure..."
+diff -Naur gdb-6.8.orig/sim/ppc/configure.ac gdb-6.8/sim/ppc/configure.ac
+--- gdb-6.8.orig/sim/ppc/configure.ac	2008-03-14 22:35:27.000000000 +0100
++++ gdb-6.8/sim/ppc/configure.ac	2008-09-17 16:33:00.000000000 +0200
+@@ -209,10 +209,105 @@
+ esac
+ ])dnl
+ 
++AC_CACHE_CHECK([if union semun defined],
++  ac_cv_HAS_UNION_SEMUN,
++  [AC_TRY_COMPILE([
++#include <sys/types.h>
++#include <sys/ipc.h>
++#include <sys/sem.h>],
++[union semun arg ;],
++[ac_cv_has_union_semun="yes"],
++[ac_cv_has_union_semun="no"])
++AC_MSG_RESULT($ac_cv_has_union_semun)
++])
++
++
++if test "$ac_cv_has_union_semun" = "yes"; then
++  AC_CACHE_CHECK(whether System V semaphores are supported,
++  ac_cv_sysv_sem,
++  [
++  AC_TRY_RUN(
++  [
++  #include <sys/types.h>
++  #include <sys/ipc.h>
++  #include <sys/sem.h>
++  int main () {
++    union semun arg ;
++
++    int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
++    if (id == -1)
++      exit(1);
++    arg.val = 0; /* avoid implicit type cast to union */
++    if (semctl(id, 0, IPC_RMID, arg) == -1)
++      exit(1);
++    exit(0);
++  }
++  ],
++  ac_cv_sysv_sem="yes", ac_cv_sysv_sem="no", :)
++  ])
++else  # semun is not defined
++  AC_CACHE_CHECK(whether System V semaphores are supported,
++  ac_cv_sysv_sem,
++  [
++  AC_TRY_RUN(
++  [
++  #include <sys/types.h>
++  #include <sys/ipc.h>
++  #include <sys/sem.h>
++  union semun {
++    int val;
++    struct semid_ds *buf;
++    ushort *array;
++  };
++  int main () {
++    union semun arg ;
++
++    int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
++    if (id == -1)
++      exit(1);
++    arg.val = 0; /* avoid implicit type cast to union */
++    if (semctl(id, 0, IPC_RMID, arg) == -1)
++      exit(1);
++    exit(0);
++  }
++  ],
++  ac_cv_sysv_sem="yes", ac_cv_sysv_sem="no", :)
++  ])
++fi
++
++AC_CACHE_CHECK(whether System V shared memory is supported,
++ac_cv_sysv_shm,
++[
++AC_TRY_RUN([
++#include <sys/types.h>
++#include <sys/ipc.h>
++#include <sys/shm.h>
++int main () {
++  int id=shmget(IPC_PRIVATE,1,IPC_CREAT|0400);
++  if (id == -1)
++    exit(1);
++  if (shmctl(id, IPC_RMID, 0) == -1)
++    exit(1);
++  exit(0);
++}
++],
++ac_cv_sysv_shm="yes", ac_cv_sysv_shm="no", :)
++])
++
++if test x"$ac_cv_sysv_shm" = x"yes" -a x"$ac_cv_sysv_sem" = x"yes" ; then
++  sim_sysv_ipc_hw=",sem,shm";
++else
++  sim_sysv_ipc_hw="";
++fi
++
++if test x"$ac_cv_has_union_semun" = x"yes" -a x"$ac_cv_sysv_sem" = x"yes" ; then
++  sim_hwflags="-DHAS_UNION_SEMUN";
++fi
++
+ 
+ AC_ARG_ENABLE(sim-hardware,
+ [  --enable-sim-hardware=list		Specify the hardware to be included in the build.],
+-[hardware="cpu,memory,nvram,iobus,htab,disk,trace,register,vm,init,core,pal,com,eeprom,opic,glue,phb,ide"
++[hardware="cpu,memory,nvram,iobus,htab,disk,trace,register,vm,init,core,pal,com,eeprom,opic,glue,phb,ide${sim_sysv_ipc_hw}"
+ case "${enableval}" in
+   yes)	;;
+   no)	AC_MSG_ERROR("List of hardware must be specified for --enable-sim-hardware"); hardware="";;
+@@ -224,14 +319,13 @@
+ sim_hw_obj=`echo $sim_hw_src | sed -e 's/\.c/.o/g'`
+ if test x"$silent" != x"yes" && test x"$hardware" != x""; then
+   echo "Setting hardware to $sim_hw_src, $sim_hw_obj"
+-fi],[hardware="cpu,memory,nvram,iobus,htab,disk,trace,register,vm,init,core,pal,com,eeprom,opic,glue,phb,ide"
++fi],[hardware="cpu,memory,nvram,iobus,htab,disk,trace,register,vm,init,core,pal,com,eeprom,opic,glue,phb,ide${sim_sysv_ipc_hw}"
+ sim_hw_src=`echo $hardware | sed -e 's/,/.c hw_/g' -e 's/^/hw_/' -e s'/$/.c/'`
+ sim_hw_obj=`echo $sim_hw_src | sed -e 's/\.c/.o/g'`
+ if test x"$silent" != x"yes"; then
+   echo "Setting hardware to $sim_hw_src, $sim_hw_obj"
+ fi])dnl
+ 
+-
+ AC_ARG_ENABLE(sim-hostbitsize,
+ [  --enable-sim-hostbitsize=32|64	Specify host bitsize (32 or 64).],
+ [case "${enableval}" in
+diff -Naur gdb-6.8.orig/sim/ppc/debug.c gdb-6.8/sim/ppc/debug.c
+--- gdb-6.8.orig/sim/ppc/debug.c	1999-04-16 03:35:08.000000000 +0200
++++ gdb-6.8/sim/ppc/debug.c	2008-09-17 16:33:00.000000000 +0200
+@@ -70,6 +70,8 @@
+   { trace_pass_device, "pass-device" },
+   { trace_phb_device, "phb-device" },
+   { trace_register_device, "register-device", "Device initializing registers" },
++  { trace_sem_device, "sem-device" },
++  { trace_shm_device, "shm-device" },
+   { trace_stack_device, "stack-device" },
+   { trace_vm_device, "vm-device" },
+   /* packages */
+diff -Naur gdb-6.8.orig/sim/ppc/debug.h gdb-6.8/sim/ppc/debug.h
+--- gdb-6.8.orig/sim/ppc/debug.h	1999-04-16 03:35:08.000000000 +0200
++++ gdb-6.8/sim/ppc/debug.h	2008-09-17 16:33:00.000000000 +0200
+@@ -51,6 +51,8 @@
+   trace_pal_device,
+   trace_pass_device,
+   trace_phb_device,
++  trace_sem_device,
++  trace_shm_device,
+   trace_stack_device,
+   trace_register_device,
+   trace_vm_device,
+diff -Naur gdb-6.8.orig/sim/ppc/hw_sem.c gdb-6.8/sim/ppc/hw_sem.c
+--- gdb-6.8.orig/sim/ppc/hw_sem.c	1970-01-01 01:00:00.000000000 +0100
++++ gdb-6.8/sim/ppc/hw_sem.c	2008-09-17 16:33:00.000000000 +0200
+@@ -0,0 +1,301 @@
++/*  This file is part of the program psim.
++
++    Copyright (C) 1997,2008, Joel Sherrill <joel@OARcorp.com>
++
++    This program is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation; either version 2 of the License, or
++    (at your option) any later version.
++
++    This program is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++ 
++    You should have received a copy of the GNU General Public License
++    along with this program; if not, write to the Free Software
++    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ 
++    */
++
++
++#ifndef _HW_SEM_C_
++#define _HW_SEM_C_
++
++#include "device_table.h"
++
++#ifdef HAVE_STRING_H
++#include <string.h>
++#else
++#ifdef HAVE_STRINGS_H
++#include <strings.h>
++#endif
++#endif
++
++#include <sys/ipc.h>
++#include <sys/sem.h>
++
++#include <errno.h>
++
++/* DEVICE
++
++
++   sem - provide access to a unix semaphore
++
++
++   DESCRIPTION
++
++
++   This device implements an interface to a unix semaphore.
++
++
++   PROPERTIES
++
++
++   reg = <address> <size> (required)
++
++   Determine where the memory lives in the parents address space.
++
++   key = <integer> (required)
++
++   This is the key of the unix semaphore.
++
++   EXAMPLES
++
++
++   Enable tracing of the sem:
++
++   |  bash$ psim -t sem-device \
++
++
++   Configure a UNIX semaphore using key 0x12345678 mapped into psim
++   address space at 0xfff00000:
++
++   |  -o '/sem@0xfff00000/reg 0xfff00000 0x80000' \
++   |  -o '/sem@0xfff00000/key 0x12345678' \
++
++   sim/ppc/run -o '/#address-cells 1' \
++         -o '/sem@0xc0000000/reg 0xc0000000 0x80000' \
++         -o '/sem@0xc0000000/key 0x12345678' ../psim-hello/hello
++
++   REGISTERS
++
++   offset 0 - lock count
++   offset 4 - lock operation
++   offset 8 - unlock operation
++
++   All reads return the current or resulting count.
++
++   BUGS
++
++   None known.
++
++   */
++
++typedef struct _hw_sem_device {
++  unsigned_word  physical_address;
++  key_t          key;
++  int            id;
++  int            initial;
++  int            count;
++} hw_sem_device;
++
++static void
++hw_sem_init_data(device *me)
++{
++  hw_sem_device *sem = (hw_sem_device*)device_data(me);
++  const device_unit *d;
++  int status;
++#if !HAS_UNION_SEMUN
++        union semun {
++          int val;
++          struct semid_ds *buf;
++          unsigned short int *array;
++#if defined(__linux__)
++          struct seminfo *__buf;
++#endif
++        } ;
++#endif
++  union semun help;
++
++  /* initialize the properties of the sem */
++
++  if (device_find_property(me, "key") == NULL)
++    error("sem_init_data() required key property is missing\n");
++
++  if (device_find_property(me, "value") == NULL)
++    error("sem_init_data() required value property is missing\n");
++
++  sem->key = (key_t) device_find_integer_property(me, "key");
++  DTRACE(sem, ("semaphore key (%d)\n", sem->key) );
++
++  sem->initial = (int) device_find_integer_property(me, "value");
++  DTRACE(sem, ("semaphore initial value (%d)\n", sem->initial) );
++
++  d = device_unit_address(me);
++  sem->physical_address = d->cells[ d->nr_cells-1 ];
++  DTRACE(sem, ("semaphore physical_address=0x%x\n", sem->physical_address));
++
++  /* Now to initialize the semaphore */
++
++  if ( sem->initial != -1 ) {
++
++    sem->id = semget(sem->key, 1, IPC_CREAT | 0660);
++    if (sem->id == -1)
++      error("hw_sem_init_data() semget failed\n");
++
++    help.val = sem->initial;
++    status = semctl( sem->id, 0, SETVAL, help );
++    if (status == -1)
++      error("hw_sem_init_data() semctl -- set value failed\n");
++
++  } else {
++    sem->id = semget(sem->key, 1, 0660);
++    if (sem->id == -1)
++      error("hw_sem_init_data() semget failed\n");
++  }
++
++  sem->count = semctl( sem->id, 0, GETVAL, help );
++  if (sem->count == -1)
++    error("hw_sem_init_data() semctl -- get value failed\n");
++  DTRACE(sem, ("semaphore OS value (%d)\n", sem->count) );
++
++  if (sizeof(int) != 4)
++    error("hw_sem_init_data() typing problem\n");
++}
++
++static void
++hw_sem_attach_address_callback(device *me,
++				attach_type attach,
++				int space,
++				unsigned_word addr,
++				unsigned nr_bytes,
++				access_type access,
++				device *client) /*callback/default*/
++{
++  hw_sem_device *sem = (hw_sem_device*)device_data(me);
++
++  if (space != 0)
++    error("sem_attach_address_callback() invalid address space\n");
++
++  if (nr_bytes == 12)
++    error("sem_attach_address_callback() invalid size\n");
++
++  sem->physical_address = addr;
++  DTRACE(sem, ("semaphore physical_address=0x%x\n", addr));
++}
++
++static unsigned
++hw_sem_io_read_buffer(device *me,
++			 void *dest,
++			 int space,
++			 unsigned_word addr,
++			 unsigned nr_bytes,
++			 cpu *processor,
++			 unsigned_word cia)
++{
++  hw_sem_device *sem = (hw_sem_device*)device_data(me);
++  struct sembuf sb;
++  int status;
++  unsigned32 u32;
++#if !HAS_UNION_SEMUN
++        union semun {
++          int val;
++          struct semid_ds *buf;
++          unsigned short int *array;
++#if defined(__linux__)
++          struct seminfo *__buf;
++#endif
++        } ;
++#endif
++  union semun help;
++
++  /* do we need to worry about out of range addresses? */
++
++  DTRACE(sem, ("semaphore read addr=0x%x length=%d\n", addr, nr_bytes));
++
++  if (!(addr >= sem->physical_address && addr <= sem->physical_address + 11))
++    error("hw_sem_io_read_buffer() invalid address - out of range\n");
++
++  if ((addr % 4) != 0)
++    error("hw_sem_io_read_buffer() invalid address - alignment\n");
++
++  if (nr_bytes != 4)
++    error("hw_sem_io_read_buffer() invalid length\n");
++
++  switch ( (addr - sem->physical_address) / 4 ) {
++
++    case 0:  /* OBTAIN CURRENT VALUE */
++      break; 
++
++    case 1:  /* LOCK */
++      sb.sem_num = 0;
++      sb.sem_op  = -1;
++      sb.sem_flg = 0;
++
++      status = semop(sem->id, &sb, 1);
++      if (status == -1) {
++        perror( "hw_sem.c: lock" );
++        error("hw_sem_io_read_buffer() sem lock\n");
++      }
++
++      DTRACE(sem, ("semaphore lock %d\n", sem->count));
++      break; 
++
++    case 2: /* UNLOCK */
++      sb.sem_num = 0;
++      sb.sem_op  = 1;
++      sb.sem_flg = 0;
++
++      status = semop(sem->id, &sb, 1);
++      if (status == -1) {
++        perror( "hw_sem.c: unlock" );
++        error("hw_sem_io_read_buffer() sem unlock\n");
++      }
++      DTRACE(sem, ("semaphore unlock %d\n", sem->count));
++      break; 
++
++    default:
++      error("hw_sem_io_read_buffer() invalid address - unknown error\n");
++      break; 
++  }
++
++  /* assume target is big endian */
++  u32 = H2T_4(semctl( sem->id, 0, GETVAL, help ));
++
++  DTRACE(sem, ("semaphore OS value (%d)\n", u32) );
++  if (u32 == 0xffffffff) {
++    perror( "hw_sem.c: getval" );
++    error("hw_sem_io_read_buffer() semctl -- get value failed\n");
++  }
++
++  memcpy(dest, &u32, nr_bytes);
++  return nr_bytes;
++
++}
++
++static device_callbacks const hw_sem_callbacks = {
++  { generic_device_init_address, hw_sem_init_data },
++  { hw_sem_attach_address_callback, }, /* address */
++  { hw_sem_io_read_buffer, NULL }, /* IO */
++  { NULL, }, /* DMA */
++  { NULL, }, /* interrupt */
++  { NULL, }, /* unit */
++  NULL,
++};
++
++static void *
++hw_sem_create(const char *name,
++		 const device_unit *unit_address,
++		 const char *args)
++{
++  hw_sem_device *sem = ZALLOC(hw_sem_device);
++  return sem;
++}
++
++const device_descriptor hw_sem_device_descriptor[] = {
++  { "sem", hw_sem_create, &hw_sem_callbacks },
++  { NULL },
++};
++
++#endif /* _HW_SEM_C_ */
+diff -Naur gdb-6.8.orig/sim/ppc/hw_shm.c gdb-6.8/sim/ppc/hw_shm.c
+--- gdb-6.8.orig/sim/ppc/hw_shm.c	1970-01-01 01:00:00.000000000 +0100
++++ gdb-6.8/sim/ppc/hw_shm.c	2008-09-17 16:33:00.000000000 +0200
+@@ -0,0 +1,236 @@
++/*  This file is part of the program psim.
++
++    Copyright (C) 1997,2008, Joel Sherrill <joel@OARcorp.com>
++
++    This program is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation; either version 2 of the License, or
++    (at your option) any later version.
++
++    This program is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++ 
++    You should have received a copy of the GNU General Public License
++    along with this program; if not, write to the Free Software
++    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ 
++    */
++
++
++#ifndef _HW_SHM_C_
++#define _HW_SHM_C_
++
++#include "device_table.h"
++
++#ifdef HAVE_STRING_H
++#include <string.h>
++#else
++#ifdef HAVE_STRINGS_H
++#include <strings.h>
++#endif
++#endif
++
++#include <sys/ipc.h>
++#include <sys/shm.h>
++
++
++/* DEVICE
++
++
++   shm - map unix shared memory into psim address space
++
++
++   DESCRIPTION
++
++
++   This device implements an area of memory which is mapped into UNIX
++   shared memory.
++
++
++   PROPERTIES
++
++
++   reg = <address> <size> (required)
++
++   Determine where the memory lives in the parents address space.
++   The SHM area is assumed to be of the same length.
++
++   key = <integer> (required)
++
++   This is the key of the unix shared memory area.
++
++   EXAMPLES
++
++
++   Enable tracing of the shm:
++
++   |  bash$ psim -t shm-device \
++
++
++   Configure a 512 kilobytes of UNIX shared memory with the key 0x12345678
++   mapped into psim address space at 0x0c000000.
++
++   |  -o '/shm@0x0c000000/reg 0x0c000000 0x80000' \
++   |  -o '/shm@0x0c000000/key 0x12345678' \
++
++   sim/ppc/run -o '/#address-cells 1' \
++         -o '/shm@0x0c000000/reg 0x0c000000 0x80000' \
++         -o '/shm@0x0c000000/key 0x12345678' ../psim-hello/hello
++
++   BUGS
++
++   None known.
++
++   */
++
++typedef struct _hw_shm_device {
++  unsigned_word  physical_address;
++  char          *shm_address;
++  unsigned       sizeof_memory;
++  key_t          key;
++  int            id;
++} hw_shm_device;
++
++static void
++hw_shm_init_data(device *me)
++{
++  hw_shm_device *shm = (hw_shm_device*)device_data(me);
++  const device_unit *d;
++  reg_property_spec reg;
++  int i;
++
++  /* Obtain the Key Value */
++  if (device_find_property(me, "key") == NULL)
++    error("shm_init_data() required key property is missing\n");
++
++  shm->key = (key_t) device_find_integer_property(me, "key");
++  DTRACE(shm, ("shm key (0x%08x)\n", shm->key) );
++  
++  /* Figure out where this memory is in address space and how long it is */
++  if ( !device_find_reg_array_property(me, "reg", 0, &reg) )
++    error("hw_shm_init_data() no address registered\n");
++
++  /* Determine the address and length being as paranoid as possible */
++  shm->physical_address = 0xffffffff;
++  shm->sizeof_memory = 0xffffffff;
++
++  for ( i=0 ; i<reg.address.nr_cells; i++ ) {
++    if (reg.address.cells[0] == 0 && reg.size.cells[0] == 0)
++      continue;
++
++    if ( shm->physical_address != 0xffffffff )
++      device_error(me, "Only single celled address ranges supported\n");
++
++    shm->physical_address = reg.address.cells[i];
++    DTRACE(shm, ("shm physical_address=0x%x\n", shm->physical_address));
++
++    shm->sizeof_memory = reg.size.cells[i];
++    DTRACE(shm, ("shm length=0x%x\n", shm->sizeof_memory));
++  }
++
++  if ( shm->physical_address == 0xffffffff )
++    device_error(me, "Address not specified\n" );
++
++  if ( shm->sizeof_memory == 0xffffffff )
++    device_error(me, "Length not specified\n" );
++
++  /* Now actually attach to or create the shared memory area */
++  shm->id = shmget(shm->key, shm->sizeof_memory, IPC_CREAT | 0660);
++  if (shm->id == -1)
++    error("hw_shm_init_data() shmget failed\n");
++
++  shm->shm_address = shmat(shm->id, (char *)0, SHM_RND);
++  if (shm->shm_address == (void *)-1)
++    error("hw_shm_init_data() shmat failed\n");
++}
++
++static void
++hw_shm_attach_address_callback(device *me,
++				attach_type attach,
++				int space,
++				unsigned_word addr,
++				unsigned nr_bytes,
++				access_type access,
++				device *client) /*callback/default*/
++{
++  hw_shm_device *shm = (hw_shm_device*)device_data(me);
++
++  if (space != 0)
++    error("shm_attach_address_callback() invalid address space\n");
++
++  if (nr_bytes == 0)
++    error("shm_attach_address_callback() invalid size\n");
++}
++
++
++static unsigned
++hw_shm_io_read_buffer(device *me,
++			 void *dest,
++			 int space,
++			 unsigned_word addr,
++			 unsigned nr_bytes,
++			 cpu *processor,
++			 unsigned_word cia)
++{
++  hw_shm_device *shm = (hw_shm_device*)device_data(me);
++
++  /* do we need to worry about out of range addresses? */
++
++  DTRACE(shm, ("read %p %x %x %x\n", \
++     shm->shm_address, shm->physical_address, addr, nr_bytes) );
++
++  memcpy(dest, &shm->shm_address[addr - shm->physical_address], nr_bytes);
++  return nr_bytes;
++}
++
++
++static unsigned
++hw_shm_io_write_buffer(device *me,
++			  const void *source,
++			  int space,
++			  unsigned_word addr,
++			  unsigned nr_bytes,
++			  cpu *processor,
++			  unsigned_word cia)
++{
++  hw_shm_device *shm = (hw_shm_device*)device_data(me);
++
++  /* do we need to worry about out of range addresses? */
++
++  DTRACE(shm, ("write %p %x %x %x\n", \
++     shm->shm_address, shm->physical_address, addr, nr_bytes) );
++
++  memcpy(&shm->shm_address[addr - shm->physical_address], source, nr_bytes);
++  return nr_bytes;
++}
++
++static device_callbacks const hw_shm_callbacks = {
++  { generic_device_init_address, hw_shm_init_data },
++  { hw_shm_attach_address_callback, }, /* address */
++  { hw_shm_io_read_buffer,
++    hw_shm_io_write_buffer }, /* IO */
++  { NULL, }, /* DMA */
++  { NULL, }, /* interrupt */
++  { NULL, }, /* unit */
++  NULL,
++};
++
++static void *
++hw_shm_create(const char *name,
++		 const device_unit *unit_address,
++		 const char *args)
++{
++  hw_shm_device *shm = ZALLOC(hw_shm_device);
++  return shm;
++}
++
++
++
++const device_descriptor hw_shm_device_descriptor[] = {
++  { "shm", hw_shm_create, &hw_shm_callbacks },
++  { NULL },
++};
++
++#endif /* _HW_SHM_C_ */
+diff -Naur gdb-6.8.orig/sim/ppc/Makefile.in gdb-6.8/sim/ppc/Makefile.in
+--- gdb-6.8.orig/sim/ppc/Makefile.in	2006-05-31 17:14:45.000000000 +0200
++++ gdb-6.8/sim/ppc/Makefile.in	2008-09-17 16:33:00.000000000 +0200
+@@ -834,6 +834,8 @@
+ hw_pal.o: hw_pal.c $(DEVICE_TABLE_H) $(CPU_H)
+ hw_phb.o: hw_phb.c $(DEVICE_TABLE_H) $(HW_PHB_H) $(COREFILE_H)
+ hw_register.o: hw_register.c $(DEVICE_TABLE_H) $(PSIM_H)
++hw_sem.o: hw_sem.c $(DEVICE_TABLE_H) $(PSIM_H)
++hw_shm.o: hw_shm.c $(DEVICE_TABLE_H) $(PSIM_H)
+ hw_trace.o: hw_trace.c $(DEVICE_TABLE_H)
+ hw_vm.o: hw_vm.c $(DEVICE_TABLE_H) $(CPU_H)
+ # ignore this line, it stops make from getting confused
+diff -Naur gdb-6.8.orig/sim/ppc/ppc-instructions gdb-6.8/sim/ppc/ppc-instructions
+--- gdb-6.8.orig/sim/ppc/ppc-instructions	2006-11-29 16:20:55.000000000 +0100
++++ gdb-6.8/sim/ppc/ppc-instructions	2008-09-17 16:33:00.000000000 +0200
+@@ -3402,6 +3402,14 @@
+ 	    case spr_dec:
+ 	      *rT = cpu_get_decrementer(processor);
+ 	      break;
++		case spr_tbrl:
++	  	  if (is_64bit_implementation) *rT = TB;
++	  	  else                         *rT = EXTRACTED64(TB, 32, 63);
++		break;
++		case spr_tbru:
++	  	  if (is_64bit_implementation) *rT = EXTRACTED64(TB, 0, 31);
++		  else                         *rT = EXTRACTED64(TB, 0, 31);
++		break;
+ 	    case spr_tbu:
+ 	    case spr_tbl:
+ 	      /* NOTE - these SPR's are not readable. Use mftb[ul] */
+diff -Naur gdb-6.8.orig/sim/ppc/ppc-spr-table gdb-6.8/sim/ppc/ppc-spr-table
+--- gdb-6.8.orig/sim/ppc/ppc-spr-table	2003-06-22 18:48:12.000000000 +0200
++++ gdb-6.8/sim/ppc/ppc-spr-table	2008-09-17 16:33:00.000000000 +0200
+@@ -32,6 +32,8 @@
+ SRR0:26:0:0
+ SRR1:27:0:0
+ VRSAVE:256:0:0
++TBRL:268:0:0
++TBRU:269:0:0
+ SPRG0:272:0:0
+ SPRG1:273:0:0
+ SPRG2:274:0:0
