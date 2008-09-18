@@ -42,7 +42,7 @@ int devFS_evaluate_path(
             pathloc->node_access = (void *)&device_name_table[i];
             pathloc->handlers = &devFS_file_handlers;
             pathloc->ops = &devFS_ops;
-            pathloc->mt_entry = &rtems_filesystem_root;
+            pathloc->mt_entry = rtems_filesystem_root.mt_entry;
             return 0;
         }
     }

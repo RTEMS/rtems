@@ -1,3 +1,9 @@
+2008-09-18	Miao Yan <yanmiaobest@gmail.com>
+
+	* libfs/src/devfs/devclose.c, libfs/src/devfs/devfs_eval.c,
+	libfs/src/devfs/devioctl.c, libfs/src/devfs/devopen.c,
+	libfs/src/devfs/devread.c, libfs/src/devfs/devwrite.c: Fix warnings.
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Doxyfile.in, rtems/mainpage.h, score/include/rtems/system.h: Move to

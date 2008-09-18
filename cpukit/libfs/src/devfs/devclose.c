@@ -21,9 +21,9 @@ int devFS_close(
 {
   rtems_libio_open_close_args_t  args;
   rtems_status_code              status;
-  rtems_driver_name_t           *np;
+  rtems_device_name_t           *np;
 
-  np         = (rtems_driver_name_t *)iop->file_info;
+  np         = (rtems_device_name_t *)iop->file_info;
 
   args.iop   = iop;
   args.flags = 0;
