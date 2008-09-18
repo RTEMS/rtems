@@ -19,6 +19,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/libio.h>
 #include <libcpu/cpuIdent.h>
 #define DEBUG 1
 

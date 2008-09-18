@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/bspstart.c: Add include of rtems/libio.h.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Eliminate definitions of BSP_LIBIO_MAX_FDS since this
