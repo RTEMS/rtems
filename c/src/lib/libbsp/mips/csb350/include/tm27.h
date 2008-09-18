@@ -19,20 +19,33 @@
  *  Define the interrupt mechanism for Time Test 27
  */
 
-#define MUST_WAIT_FOR_INTERRUPT 1
+int assert_sw_irw(uint32_t irqnum);
+int negate_sw_irw(uint32_t irqnum);
 
-#define Install_tm27_vector( handler )
+#define MUST_WAIT_FOR_INTERRUPT 0
+
+#define Install_tm27_vector( handler ) \
+   (void) set_vector(handler, AU1X00_IRQ_SW0, 1);
 
 #define Cause_tm27_intr() \
   do { \
-    ; \
+     assert_sw_irq(0); \
   } while(0)
 
 #define Clear_tm27_intr() \
   do { \
-    ; \
+     negate_sw_irq(0); \
   } while(0)
 
-#define Lower_tm27_intr()
+#if 0
+#define Lower_tm27_intr() \
+  mips_enable_in_interrupt_mask( 0xff01 );
+#else
+#define Lower_tm27_intr() \
+  do { \
+     continue;\
+  } while(0)
+#endif
+#endif
 
 #endif

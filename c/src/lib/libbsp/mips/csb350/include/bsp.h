@@ -28,52 +28,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/au1x00.h>
 
-/*
- *  Define the interrupt mechanism for Time Test 27
- */
-int assert_sw_irw(uint32_t irqnum);
-int negate_sw_irw(uint32_t irqnum);
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) \
-   (void) set_vector(handler, AU1X00_IRQ_SW0, 1);
-
-#define Cause_tm27_intr() \
-  do { \
-     assert_sw_irq(0); \
-  } while(0)
-
-#define Clear_tm27_intr() \
-  do { \
-     negate_sw_irq(0); \
-  } while(0)
-
-#if 0
-#define Lower_tm27_intr() \
-  mips_enable_in_interrupt_mask( 0xff01 );
-#else
-#define Lower_tm27_intr() \
-  do { \
-     continue;\
-  } while(0)
-#endif
-
-/* Constants */
-
-/* miscellaneous stuff assumed to exist */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
- 
-/*
- * NOTE: Use the standard Clock driver entry
- */
 
 /*
  * Network driver configuration
