@@ -1,3 +1,8 @@
+2008-09-18	Miao Yan <yanmiaobest@gmail.com>
+
+	* user/conf.t: Add CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM and
+	CONFIGURE_APPLICATION_DISABLE_FILESYSTEM.
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/rtems.t, user/conf.t, user/stackchk.t: Rename STACK_CHECKER_ON

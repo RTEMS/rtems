@@ -184,6 +184,18 @@ before RTEMS release 4.5.0.  The miniIMFS supports
 only directories and device nodes and is smaller in executable
 code size than the full IMFS.
 
+@findex CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+@item @code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is defined
+if the application wished to use the device-only filesytem. The 
+device-only filesystem supports only device nodes and is smaller 
+in executable code size than the full IMFS and miniIMFS.
+
+@findex CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+@item @code{CONFIGURE_APPLICATION_DISABLE_FILESYSTEM} is defined
+if the application dose not intend to use any kind of filesystem
+supports(including printf family). 
+
+
 @findex CONFIGURE_STACK_CHECKER_ENABLED
 @item @code{CONFIGURED_STACK_CHECKER_ENABLED} is defined when
 the application wishes to enable run-time stack bounds checking.
@@ -406,7 +418,7 @@ set to 10.
 @findex CONFIGURE_MAXIMUM_DEVICES
 @item @code{CONFIGURE_MAXIMUM_DEVICES} is defined
 to the number of individual devices that may be registered
-in the system.  By default, this is set to 20.
+in the system.  By default, this is set to 4.
 
 @findex CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
