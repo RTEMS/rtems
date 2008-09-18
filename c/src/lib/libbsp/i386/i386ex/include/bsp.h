@@ -76,18 +76,6 @@ extern "C" {
 #define BSP_EXTERN extern
 #endif
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 #define IDT_SIZE 256
 #define GDT_SIZE 8192
 

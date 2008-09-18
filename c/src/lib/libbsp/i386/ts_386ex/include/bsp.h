@@ -118,20 +118,6 @@ extern void Wait_X_ms (unsigned);
 #define BSP_EXTERN extern
 #endif
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/* miscellaneous stuff assumed to exist */
-
 #define IDT_SIZE 256
 #define GDT_SIZE 3
 
