@@ -1,5 +1,9 @@
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/bsp.h: Remove prototypes of routines in bootcard.h.
+
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, startup/bspstart.c: Add
 	bsp_get_work_area() implementation and use more of the BSP
 	Initialization Framework.

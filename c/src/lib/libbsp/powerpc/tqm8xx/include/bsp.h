@@ -27,7 +27,7 @@
  *
  *  This file includes definitions for the MBX860 and MBX821.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -135,8 +135,6 @@ extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 extern unsigned int BSP_bus_frequency;
 
 /* functions */
-
-void bsp_cleanup( void );
 
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
