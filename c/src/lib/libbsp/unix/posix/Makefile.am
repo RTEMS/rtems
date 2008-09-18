@@ -40,7 +40,8 @@ noinst_LIBRARIES =
 ## endif
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c \
+    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    startup/bspstart.c startup/bsppost.c startup/bspgetworkarea.c \
     startup/setvec.c ../../shared/bootcard.c
 ## for now always using main.c style startup
 ##if !HAS_CXX

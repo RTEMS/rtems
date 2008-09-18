@@ -22,19 +22,6 @@
 
 #include <bsp.h>
 #include <rtems/libcsupport.h>
-#include <rtems/libio.h>
-
-uint32_t                     Heap_size;
-int                          rtems_argc;
-char                       **rtems_argv;
-
-/*
- * May be overridden by RTEMS_WORKSPACE_SIZE and RTEMS_HEAPSPACE_SIZE
- * environment variables; see below.
- */
-
-#define DEFAULT_WORKSPACE_SIZE (WORKSPACE_MB * (1024 * 1024))
-#define DEFAULT_HEAPSPACE_SIZE (HEAPSPACE_MB * (1024 * 1024))
 
 /*
  * Amount to increment itimer by each pass
@@ -45,57 +32,12 @@ char                       **rtems_argv;
 uint32_t         CPU_CLICKS_PER_TICK;
 
 /*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_libc_init( void *, uint32_t, int );
-
-/*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
- *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- */
-
-void bsp_pretasking_hook(void)
-{
-    void *heap_start;
-
-    if (getenv("RTEMS_HEAPSPACE_SIZE"))
-        Heap_size = strtol(getenv("RTEMS_HEAPSPACE_SIZE"), 0, 0);
-    else
-        Heap_size = DEFAULT_HEAPSPACE_SIZE;
-
-    heap_start = 0;
-
-    bsp_libc_init((void *)heap_start, Heap_size, 1024 * 1024);
-}
-
-/*
- *  DO NOT Use the shared bsp_postdriver_hook() implementation
- */
-
-void bsp_postdriver_hook(void)
-{
-  return;
-}
-
-/*
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start(void)
 {
-  uintptr_t   workspace_ptr;
-
   cpu_number = 0;
 
   #if defined(RTEMS_MULTIPROCESSING)
@@ -126,23 +68,5 @@ void bsp_start(void)
         cpu_number = Configuration.User_multiprocessing_table->node - 1;
    #endif
 
-    if (getenv("RTEMS_WORKSPACE_SIZE"))
-        rtems_configuration_get_work_space_size() =
-           strtol(getenv("RTEMS_WORKSPACE_SIZE"), 0, 0);
-    else
-        rtems_configuration_get_work_space_size() = DEFAULT_WORKSPACE_SIZE;
-
-    /*
-     * Allocate workspace memory, ensuring it is properly aligned
-     */
-
-    workspace_ptr =
-      (uintptr_t) sbrk(rtems_configuration_get_work_space_size() + CPU_ALIGNMENT);
-    workspace_ptr += CPU_ALIGNMENT - 1;
-    workspace_ptr &= ~(CPU_ALIGNMENT - 1);
-
-    Configuration.work_space_start = (void *) workspace_ptr;
-
     CPU_CLICKS_PER_TICK = 1;
-
 }
