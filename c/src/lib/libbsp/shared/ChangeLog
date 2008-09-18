@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c: Perform bsp_start() before bsp_get_work_area().
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Add support for optionally having a unified work area. In

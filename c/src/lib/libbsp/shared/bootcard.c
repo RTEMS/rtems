@@ -166,6 +166,11 @@ int boot_card(
     rtems_progname = "RTEMS";
 
   /*
+   * Invoke Board Support Package initialization routine written in C.
+   */
+  bsp_start();
+
+  /*
    *  Find out where the block of memory the BSP will use for
    *  the RTEMS Workspace and the C Program Heap is.
    */
@@ -197,11 +202,6 @@ int boot_card(
       #endif
     }
   #endif
-
-  /*
-   * Invoke Board Support Package initialization routine written in C.
-   */
-  bsp_start();
 
   /*
    *  Initialize RTEMS data structures
