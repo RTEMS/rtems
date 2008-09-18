@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Remove unnecessary include of bsp.h
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Use top level shared bsp_get_work_area() implementation.

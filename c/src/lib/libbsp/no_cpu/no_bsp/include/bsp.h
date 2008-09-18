@@ -36,23 +36,6 @@ extern "C" {
   { \
   }
 
-/* Constants */
-
-#define RAM_START 0
-#define RAM_END   0x100000
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
 /* functions */
 
 no_cpu_isr_entry set_vector(                    /* returns old vector */
