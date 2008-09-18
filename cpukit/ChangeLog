@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/Makefile.am: Do not build nfsclient if no networking.
+
 2008-09-18	Miao Yan <yanmiaobest@gmail.com>
 
 	* libfs/src/devfs/devclose.c, libfs/src/devfs/devfs_eval.c,
