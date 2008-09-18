@@ -1,5 +1,4 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all board IO definitions.
  *
  *  BARE : Allows you to build RTEMS with-out any BSP specific stuff
@@ -47,12 +46,6 @@ extern "C" {
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 

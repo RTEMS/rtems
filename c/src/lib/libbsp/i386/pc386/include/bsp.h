@@ -91,7 +91,6 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 /*-------------------------------------------------------------------------+
 | Constants
 +--------------------------------------------------------------------------*/
-#define BSP_LIBIO_MAX_FDS 20             /* Number of libio files we want.    */
 
 /*-------------------------------------------------------------------------+
 | Video (console) related constants.

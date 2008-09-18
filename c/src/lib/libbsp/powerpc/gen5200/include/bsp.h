@@ -207,11 +207,6 @@ extern rtems_device_driver rtc_initialize(
  */
 #define RTEMS_BSP_HAS_IDE_DRIVER
 
-/*
- * How many libio files we want
- */
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 /* console modes (only termios) */

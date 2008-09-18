@@ -89,12 +89,6 @@ extern volatile cpld_t cpld;              /* defined in linkcmds */
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 #ifdef __cplusplus
 }
 #endif

@@ -144,12 +144,6 @@ extern int rtems_scc_enet_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #undef RTEMS_BSP_HAS_IDE_DRIVER
 
 /*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
-/*
  * our bus frequency
  */
 extern unsigned int BSP_bus_frequency;

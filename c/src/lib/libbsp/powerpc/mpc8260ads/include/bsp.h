@@ -90,12 +90,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 #if 0

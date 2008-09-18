@@ -1,8 +1,7 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all board IO definitions.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -108,15 +107,7 @@ extern int   CPU_PPC_CLICKS_PER_MS;
  */
 #define BSP_INIT_STACK_SIZE 0x1000
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
-
-void bsp_start( void );
 
 /*
  * spurious.c

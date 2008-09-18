@@ -1,3 +1,8 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Eliminate definitions of BSP_LIBIO_MAX_FDS since this
+	is NOT used anywhere.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Eliminate copies of the Configuration Table. Use the

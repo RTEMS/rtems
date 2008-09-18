@@ -130,11 +130,6 @@ extern const size_t mpc83xx_uboot_board_info_size;
  */
 #undef RTEMS_BSP_HAS_IDE_DRIVER
 
-/*
- * How many libio files we want
- */
-#define BSP_LIBIO_MAX_FDS       20
-
 /* misc macros */
 #define BSP_ARRAY_CNT(arr) (sizeof(arr)/sizeof(arr[0]))
 

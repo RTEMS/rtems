@@ -88,12 +88,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  */
 #define RTEMS_BSP_HAS_IDE_DRIVER
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 #ifdef __cplusplus
 }
 #endif
