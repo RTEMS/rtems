@@ -24,10 +24,6 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  *  RTEMS basic type definitions
  */
@@ -44,7 +40,12 @@ extern "C" {
 #include <rtems/score/mppkt.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** This type defines a single precision float. */
+#ifdef RTEMS_DEPRECATED_TYPES
 typedef single_precision rtems_single;
 
 /** This type defines a double precision float. */
@@ -52,6 +53,7 @@ typedef double_precision rtems_double;
 
 /** This type defines the RTEMS boolean type . */
 typedef boolean          rtems_boolean;
+#endif
 
 /** This type defines is for Classic API object names. */
 typedef uint32_t         rtems_name;
