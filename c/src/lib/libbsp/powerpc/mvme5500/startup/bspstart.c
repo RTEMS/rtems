@@ -124,11 +124,6 @@ unsigned char ConfVPD_buff[200];
 static char cmdline_buf[CMDLINE_BUF_SIZE];
 char *BSP_commandline_string = cmdline_buf;
 
-/*
- * system init stack
- */
-#define INIT_STACK_SIZE 0x1000
-
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
@@ -243,7 +238,6 @@ void bsp_start( void )
 #endif
   uint32_t intrStackStart;
   uint32_t intrStackSize;
-  unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl  pt=0;
@@ -283,7 +277,7 @@ void bsp_start( void )
    * so that it can be printed without accessing R1.
    */
   stack = ((unsigned char*) __rtems_end) +
-          INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
+          BSP_INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((uint32_t *)stack) = 0;
@@ -296,7 +290,7 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
   BSP_heap_start = intrStackStart + intrStackSize;
 
@@ -368,22 +362,6 @@ void bsp_start( void )
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
 
   bsp_clicks_per_usec    = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
-
-  printk(
-    "rtems_configuration_get_work_space_size() = %x\n",
-     rtems_configuration_get_work_space_size()
-  ); 
-
-  work_space_start = 
-    (unsigned char *)BSP_mem_size - rtems_configuration_get_work_space_size();
-
-  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + 
-        rtems_configuration_get_interrupt_stack_size()) {
-    printk( "bspstart: Not enough RAM!!!\n" );
-    bsp_cleanup();
-  }
-
-  Configuration.work_space_start = work_space_start;
 
   /*
    * Initalize RTEMS IRQ system

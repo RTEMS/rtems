@@ -78,6 +78,11 @@
 #define BSP_UART_BAUD_BASE		115200
 
 /*
+ * system init stack
+ */
+#define BSP_INIT_STACK_SIZE 0x1000
+
+/*
  * Vital Board data Start using DATA RESIDUAL
  */
 /*

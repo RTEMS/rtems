@@ -1,3 +1,8 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, include/bsp.h, startup/bspstart.c: Use
+	PowerPC level shared bsp_get_work_area() implementation.
+
 2008-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Add use of bsp_get_work_area() in its own file

@@ -32,6 +32,7 @@ EXTRA_DIST = startup/bootpstuff.c
 startup_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
+    ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c startup/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
