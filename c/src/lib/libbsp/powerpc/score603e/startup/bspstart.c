@@ -227,13 +227,12 @@ void bsp_set_trap_vectors( void );
 
 void bsp_start( void )
 {
-  unsigned char *work_space_start;
-  unsigned int  msr_value = 0x0000;
-  uint32_t      intrStackStart;
-  uint32_t      intrStackSize;
-  volatile uint32_t         *ptr;
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
+  unsigned int         msr_value = 0x0000;
+  uint32_t             intrStackStart;
+  uint32_t             intrStackSize;
+  volatile uint32_t   *ptr;
+  ppc_cpu_id_t         myCpu;
+  ppc_cpu_revision_t   myCpuRevision;
  
   rtems_bsp_delay( 1000 );
 
