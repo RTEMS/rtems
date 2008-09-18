@@ -34,9 +34,8 @@ dist_project_lib_DATA += startup/linkcmds
 include_HEADERS += ../../i386/shared/comm/uart.h
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
-    ../../shared/bspgetworkarea.c ../../shared/bspclean.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
+    ../../shared/bspgetworkarea.c ../../shared/bsppost.c startup/bspstart.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \

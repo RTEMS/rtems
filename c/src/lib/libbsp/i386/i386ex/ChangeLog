@@ -1,5 +1,9 @@
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am: Add use of shared bsppost.c
+
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds: Use
 	top level shared bsp_get_work_area() implementation.
 
