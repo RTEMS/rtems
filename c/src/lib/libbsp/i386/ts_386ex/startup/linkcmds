@@ -19,7 +19,11 @@
  * 0x0100000 -> 0x0200000 : bss section, stack space, heap storage
  */
 
-	ENTRY(_init_i386ex) ;
+RamBase = DEFINED(RamBase) ? RamBase : 0x00100000;
+RamSize = DEFINED(RamSize) ? RamSize : 512K;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+
+ENTRY(_init_i386ex);
 
 SECTIONS
 {
@@ -169,6 +173,8 @@ SECTIONS
         stack_size  = 0x8000 ;
 	stack_origin = _ebss + stack_size ;
 	heap_bottom  = stack_origin + 4 ;  
+        . = ALIGN(0x10);
+        WorkAreaBase = .;
 
 
 

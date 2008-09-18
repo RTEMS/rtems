@@ -40,6 +40,8 @@ RTEMS_BSPOPTS_SET([UARTDEBUG],[*],[])
 RTEMS_BSPOPTS_HELP([UARTDEBUG],
 [Enables some debugging in the BSP's uart.])
 
+RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
