@@ -41,6 +41,10 @@ SECTIONS
 	_ram_data_offset    = 0x0;
 	_ram_data_location  = _ram_data_segment * 16 + _ram_data_offset;
 
+RamBase = DEFINED(RamBase) ? RamBase : _ram_data_location;
+RamSize = DEFINED(RamSize) ? RamSize : 1M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+
   	.init : { _init = .; *(.init) } = 0x9090 
   	.fini : { _fini = .; *(.fini) } = 0x9090 
         .data  : 
@@ -73,6 +77,9 @@ SECTIONS
 	__end = end;
 	}
         _bss_size   = _ebss - _bss_start ;
+
+	. = ALIGN(0x10);
+        WorkAreaBase = .;
 
 /**************************************************************************************
  * General variables:
