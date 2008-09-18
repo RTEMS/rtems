@@ -1,3 +1,7 @@
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mcf5206/timer/timerisr.S: Remove unnecessary include of bsp.h
+
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mcf548x/include/Freescale_license.txt: Convert to UNIX CR/LF style,
