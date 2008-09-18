@@ -80,34 +80,7 @@ struct w_m681_info {
   char ivr;                              /* interrupt vector register */
 };
 
-#ifdef M136_INIT
-#undef EXTERN
-#define EXTERN
-#else
-#undef EXTERN
-#define EXTERN extern
-#endif
-
-/* miscellaneous stuff assumed to exist */
-
-/* M68681 DUART chip register variables */
-
-EXTERN volatile struct r_m681_info *_Read_m681;  /* M68681 read registers */
-EXTERN volatile struct w_m681_info *_Write_m681; /* M68681 write registers */
-
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * NOTE: Use the standard Console driver entry
- */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
 
 /* functions */
 

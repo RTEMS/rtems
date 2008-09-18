@@ -11,10 +11,13 @@
  *  $Id$
  */
 
-#define M136_INIT
-
 #include <bsp.h>
 #include <rtems/libio.h>
+
+volatile struct r_m681_info *_Read_m681;  /* M68681 read registers */
+volatile struct w_m681_info *_Write_m681; /* M68681 write registers */
+
+
 
 /*  console_initialize
  *
