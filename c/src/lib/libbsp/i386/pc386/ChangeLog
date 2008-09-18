@@ -1,5 +1,12 @@
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac, startup/bspstart.c, startup/linkcmds: Add
+	bsp_get_work_area() implementation and use more of the BSP
+	Initialization Framework.
+	* startup/bspgetworkarea.c: New file.
+
+2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* include/bsp.h: Eliminate definitions of BSP_LIBIO_MAX_FDS since this
 	is NOT used anywhere.
 
