@@ -1,3 +1,7 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspgetworkarea.c: Removed.
+
 2008-09-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: New file.
