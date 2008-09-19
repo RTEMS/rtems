@@ -97,12 +97,24 @@ if mcf5223x
 ## mcf5223x/include
 include_mcf5223xdir = $(includedir)/mcf5223x
 include_mcf5223x_HEADERS = mcf5223x/include/mcf5223x.h
+
+## mcf5223x/cache
+noinst_PROGRAMS += mcf5223x/cachepd.rel
+mcf5223x_cachepd_rel_SOURCES = mcf5223x/cache/cachepd.c
+mcf5223x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5223x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf5235
 ## mcf5235/include
 include_mcf5235dir = $(includedir)/mcf5235
 include_mcf5235_HEADERS = mcf5235/include/mcf5235.h
+
+## mcf5235/cache
+noinst_PROGRAMS += mcf5235/cachepd.rel
+mcf5235_cachepd_rel_SOURCES = mcf5235/cache/cachepd.c
+mcf5235_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS)
+mcf5235_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf532x

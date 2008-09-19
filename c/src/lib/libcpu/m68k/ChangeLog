@@ -1,3 +1,9 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Split out various BSPs bspstart.c contents. Move cache
+	management code here.
+	* mcf5223x/cache/cachepd.c, mcf5235/cache/cachepd.c: New files.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mcf5206/timer/timerisr.S: Remove unnecessary include of bsp.h
