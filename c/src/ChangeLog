@@ -1,3 +1,8 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/dec21140.c, libchip/network/elnk.c,
+	libchip/network/if_dc.c: Eliminate vestiges of mpc603e define.
+
 2008-09-17	Miao Yan <yanmiaobest@gmail.com>
 
 	* optman/Makefile.am, optman/preinstall.am: Merge GSOC project code to

@@ -48,7 +48,7 @@
 #if defined(__i386__)
   #define DEC21140_SUPPORTED
 #endif
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
+#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))
   #define DEC21140_SUPPORTED
 #endif
 
