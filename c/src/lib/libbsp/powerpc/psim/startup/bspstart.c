@@ -43,14 +43,15 @@ extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 unsigned int BSP_bus_frequency;
 
 /*
+ * Memory on this board.
+ */
+extern char RamSize[];
+uint32_t BSP_mem_size;
+
+/*
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor;
-
-/*
- * system init stack
- */
-#define INIT_STACK_SIZE 0x1000
 
 void BSP_panic(char *s)
 {
@@ -97,8 +98,10 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
+
+  BSP_mem_size = RamSize;
 
   /*
    * Initialize default raw exception handlers.

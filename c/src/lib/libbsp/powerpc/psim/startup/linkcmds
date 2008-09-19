@@ -15,6 +15,10 @@ ENTRY(_start)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
+
+RamBase = DEFINED(RamBase) ? RamBase : 0x0;
+RamSize = DEFINED(RamSize) ? RamSize : 8M;
+
 MEMORY
   {
         RAM       : ORIGIN = 0, LENGTH = 8M
@@ -200,7 +204,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
   _edata  =  .;
   PROVIDE (edata = .);
 
-  PROVIDE (RAM_END = 0x7f0000);
+  PROVIDE (RAM_END = 8M);
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
@@ -217,9 +221,11 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
    *(.bss .bss* .gnu.linkonce.b*)
    *(COMMON)
   } >RAM
+  . = ALIGN(16);
+  . += 0x1000;
+  PROVIDE(__stack = .);
   __rtems_end = . ;
   . =  ALIGN(8) + 0x8000;
-  PROVIDE(__stack = .);
   PROVIDE(_end = .);
   PROVIDE(end = .);
 

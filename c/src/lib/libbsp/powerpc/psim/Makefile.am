@@ -43,8 +43,8 @@ noinst_LIBRARIES = libbsp.a
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
-    startup/bspgetworkarea.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c \
+    ../../powerpc/shared/startup/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c \
     startup/psim_registers.c
 
 pclock_SOURCES = ../shared/clock/p_clock.c
