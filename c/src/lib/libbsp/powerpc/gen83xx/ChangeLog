@@ -1,3 +1,8 @@
+2008-09-19	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/bspstart.c: correct bsp_clicks_per_usec initialization
+	for non-U-Boot case
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/console.h: Convert to "bool".

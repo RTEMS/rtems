@@ -151,7 +151,7 @@ void bsp_start( void)
   bsp_clicks_per_usec = mpc83xx_uboot_board_info.bi_busfreq / 4000000;
 #else /* HAS_UBOOT */
   BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
-  bsp_clicks_per_usec = BSP_bus_frequency / 1000000;
+  bsp_clicks_per_usec = BSP_bus_frequency / 4000000;
 #endif /* HAS_UBOOT */
 
   /* Initialize exception handler */
