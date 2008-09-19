@@ -23,6 +23,7 @@
 #include "internal.h"
 
 extern int malloc_info( region_information_block * );
+extern void rtems_shell_print_unified_work_area_message(void);
 
 int rtems_shell_main_malloc_info(
   int   argc,
@@ -30,6 +31,8 @@ int rtems_shell_main_malloc_info(
 )
 {
   if ( argc == 2 ) {
+    rtems_shell_print_unified_work_area_message();
+
     if ( !strcmp( argv[1], "info" ) ) {
       region_information_block info;
 

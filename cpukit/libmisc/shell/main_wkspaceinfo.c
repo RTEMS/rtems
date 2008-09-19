@@ -24,12 +24,23 @@
 #include <rtems/score/protectedheap.h>
 #include "internal.h"
 
+extern bool rtems_unified_work_area;
+
+void rtems_shell_print_unified_work_area_message(void)
+{
+  printf( "\nC Program Heap and RTEMS Workspace are %s.\n",
+    ((rtems_unified_work_area) ? "the same" : "separate")
+  );
+}
+
 int rtems_shell_main_wkspace_info(
   int   argc,
   char *argv[]
 )
 {
   Heap_Information_block info;
+
+  rtems_shell_print_unified_work_area_message();
 
   _Protected_heap_Get_information( &_Workspace_Area, &info );
   rtems_shell_print_heap_info( "free", &info.Free );

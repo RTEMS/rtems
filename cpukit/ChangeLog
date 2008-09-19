@@ -1,3 +1,9 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_mallocinfo.c, libmisc/shell/main_wkspaceinfo.c:
+	Include information on whether C Program Heap and RTEMS Workspace are
+	separate.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/Makefile.am: Do not build nfsclient if no networking.
