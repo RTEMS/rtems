@@ -61,11 +61,6 @@ extern int   RAM_END;
 
 extern uint32_t   BSP_mem_size;
 
-/*
- * system init stack
- */
-#define BSP_INIT_STACK_SIZE 0x1000
-
 #define BSP_Convert_decrementer( _value ) ( (unsigned long long) _value )
 
 /* macros */
