@@ -414,6 +414,13 @@ extern void*                     _VBR;
 #endif
 
 /*
+ *  Access Control Registers
+ */
+#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
+#define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
+
+/*
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  */
