@@ -1,5 +1,10 @@
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/bsp.h, startup/bspstart.c: Remove unused BSP_INIT_STACK_SIZE
+	now that the linkcmds accounts for the starting stack.
+
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, include/bsp.h, startup/bspstart.c, startup/linkcmds: Use
 	PowerPC level shared bsp_get_work_area() implementation.
 	* startup/bspgetworkarea.c: Removed.
