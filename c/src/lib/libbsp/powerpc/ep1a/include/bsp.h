@@ -202,11 +202,6 @@ void BSP_FLASH_set_page( uint8_t  page );
 #define BSP_FLASH_DISABLE_WRITES(_area) BSP_FLASH_Disable_writes( _area )
 #define BSP_FLASH_SET_PAGE(_page)       BSP_FLASH_set_page( _page )
 
-/*
- * system init stack 
- */
-#define BSP_INIT_STACK_SIZE 0x1000
-
 /* clear hostbridge errors
  *
  * enableMCP: whether to enable MCP checkstop / machine check interrupts
