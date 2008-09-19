@@ -1,3 +1,8 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, startup/linkcmds: Use top level shared
+	bsp_get_work_area() implementation.
+
 2008-09-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, include/bspopts.h.in: Split out

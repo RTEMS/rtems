@@ -28,6 +28,9 @@ MEMORY {
 _sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0xc000000;
 _sdram_size = DEFINED(_sdram_size) ? _sdram_size : 7M;
 
+RamBase = _sdram_base;
+RamSize = _sdram_size;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
 _irq_stack_size = DEFINED(_irq_stack_size) ? _irq_stack_size : 0x1000;
 _fiq_stack_size = DEFINED(_fiq_stack_size) ? _fiq_stack_size : 0x400;
@@ -225,6 +228,7 @@ SECTIONS
 
 	. = ALIGN (1024);
 	_bss_free_start = .;
+	WorkAreaBase = .;
 
   } > sdram
   _axf_bss_end = . ;

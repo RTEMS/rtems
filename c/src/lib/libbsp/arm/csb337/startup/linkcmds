@@ -29,6 +29,9 @@ MEMORY
 _sdram_base = DEFINED(_sdram_base) ? _sdram_base : 0x20100000;
 _sdram_size = DEFINED(_sdram_size) ? _sdram_size : 15M;
 
+RamBase = _sdram_base;
+RamSize = _sdram_size;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
 _sram_base = DEFINED(_sram_base) ? _sram_base : 0x00000000;
 _sram_size = DEFINED(_sram_size) ? _sram_size : 16K;
@@ -183,6 +186,7 @@ SECTIONS
 
 	. = ALIGN (1024);
 	_bss_free_start = .;
+	WorkAreaBase = .;
 
     } > sdram
 
