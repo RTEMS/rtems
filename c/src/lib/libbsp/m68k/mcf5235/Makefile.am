@@ -28,9 +28,9 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmdsflash \
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    startup/init5235.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
+    startup/bspgetcpuclockspeed.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bspgetworkarea.c startup/init5235.c startup/bspstart.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clock.c
 console_SOURCES = console/console.c
@@ -51,6 +51,7 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/mcf5235/cachepd.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
