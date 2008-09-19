@@ -1,5 +1,10 @@
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* shared/startup/bspgetworkarea.c, shared/startup/sbrk.c: Remove
+	warnings by switching to uintptr_t.
+
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shared/start/start.S, shared/startup/bspgetworkarea.c,
 	shared/startup/bspstart.c, shared/startup/linkcmds: Modifications
 	which reflect those tested on psim. Hopefully they work on all

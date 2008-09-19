@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 extern void *__rtems_end;
-extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
+extern uintptr_t _bsp_sbrk_init(uintptr_t, uintptr_t*);
 
 /*
  *  This method returns the base address and size of the area which
@@ -25,16 +25,18 @@ void bsp_get_work_area(
   size_t  *heap_size
 )
 {
-  uintptr_t size;
-  uintptr_t reserve;
+  uintptr_t work_size;
   uintptr_t spared;
+  uintptr_t work_area;
 
-  reserve  = rtems_configuration_get_interrupt_stack_size();
-  size     = (uintptr_t)BSP_mem_size - (uintptr_t)&__rtems_end - reserve;
+  work_area = (uintptr_t)&__rtems_end +
+              rtems_configuration_get_interrupt_stack_size();
+  work_size = (uintptr_t)BSP_mem_size - work_area;
 
-  *work_area_start = (void *)((uintptr_t) &__rtems_end + reserve);
-  *work_area_size  = size;
-  spared = _bsp_sbrk_init( *work_area_start, work_area_size );
+  spared = _bsp_sbrk_init( work_area, &work_size );
+
+  *work_area_start = (void *)work_area,
+  *work_area_size  = work_size;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size       = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 
@@ -43,10 +45,10 @@ void bsp_get_work_area(
    *  you are allocating the Work Area in a new BSP.
    */
   #if 0
-    printk( "Work Area Base %d %x\n", *work_area_start, *work_area_start );
-    printk( "Work Area Size %d %x\n", *work_area_size, *work_area_size );
+    printk( "Work Area Base %d %x\n", work_area, work_area );
+    printk( "Work Area Size %d %x\n", work_size, work_size );
     printk( "Work Area End %d %x\n",
-      *work_area_start + size, *work_area_start + size );
+      work_area + work_size, work_area + work_size );
   #endif
 }
 

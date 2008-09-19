@@ -75,10 +75,12 @@ static uint32_t         remaining_size=0;
 
 #define LIMIT_32M  0x02000000
 
-uint32_t
-_bsp_sbrk_init(uint32_t         heap_start, uint32_t         *heap_size_p)
+uintptr_t _bsp_sbrk_init(
+  uintptr_t         heap_start,
+  uintptr_t         *heap_size_p
+)
 {
-  uint32_t         rval=0;
+  uintptr_t         rval=0;
 
   remaining_start =  heap_start;
   remaining_size  =*  heap_size_p;
