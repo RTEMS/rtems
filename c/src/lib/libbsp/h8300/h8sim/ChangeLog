@@ -1,3 +1,10 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Split out bspstart contents. Use shared stub for
+	bsp_start.
+	* startup/h8bdinstallirq.c: New file.
+	* startup/bspstart.c: Removed.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Remove unnecessary boilerplate comments.
