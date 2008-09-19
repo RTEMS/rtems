@@ -1,3 +1,7 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Eliminate tm27 items from bsp.h
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Remove unnecessary boilerplate comments.

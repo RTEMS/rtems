@@ -1,10 +1,5 @@
-/*  bsp.h
- *
- *  This include file contains all board IO definitions.
- *
- *  XXX : put yours in here
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,20 +25,6 @@ extern "C" {
 #include <libcpu/rm5231.h>
 
 extern void WriteDisplay( char * string );
-
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), 0, 1 )
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
 
 extern uint32_t mips_get_timer( void );
 
