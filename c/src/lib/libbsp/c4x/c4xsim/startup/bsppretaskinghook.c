@@ -10,9 +10,10 @@
  */
 
 #include <bsp.h>
-#include <rtems/bspIo.h>
 
-extern void C4X_BSP_output_char(char c);
+extern void bsp_spurious_initialize();
 
-BSP_output_char_function_type 		BSP_output_char = C4X_BSP_output_char;
-BSP_polling_getchar_function_type 	BSP_poll_char;
+void bsp_pretasking_hook(void)
+{
+  bsp_spurious_initialize();
+}
