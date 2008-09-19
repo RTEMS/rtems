@@ -93,6 +93,11 @@ extern int   CPU_PPC_CLICKS_PER_MS;
  */
 #define BSP_INIT_STACK_SIZE 0x1000
 
+/*
+ * Total RAM available
+ */
+extern unsigned int BSP_mem_size;
+
 /* functions */
 
 /*

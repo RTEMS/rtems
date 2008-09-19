@@ -12,6 +12,9 @@ ENTRY(_start)
 
 PROVIDE(CPU_PPC_CLICKS_PER_MS = 16500);
 
+RamBase = DEFINED(RamBase) ? RamBase : 0x0;
+RamSize = DEFINED(RamSize) ? RamSize : 31M;
+
 MEMORY
   {
         VECTORS : ORIGIN = 0, LENGTH = 64K

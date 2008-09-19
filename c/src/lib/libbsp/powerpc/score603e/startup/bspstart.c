@@ -29,6 +29,12 @@
 unsigned int BSP_heap_start;
 
 /*
+ * Total RAM available and associated linker symbol
+ */
+unsigned int BSP_mem_size;
+extern char  RamSize[];
+
+/*
  * PCI Bus Frequency
  */
 unsigned int BSP_bus_frequency;  /* XXX - Set this based upon the Score board */
@@ -266,7 +272,9 @@ void bsp_start( void )
    */
   intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
+
   BSP_heap_start = intrStackStart + intrStackSize;
+  BSP_mem_size = (uintptr_t) RamSize;
 
   /*
    * Initialize default raw exception handlers.

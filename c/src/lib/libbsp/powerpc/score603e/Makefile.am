@@ -26,9 +26,9 @@ include_HEADERS += include/coverhd.h include/gen2.h
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    startup/bspstart.c startup/bspgetworkarea.c ../../shared/bootcard.c \
-    startup/Hwr_init.c ../../powerpc/shared/startup/sbrk.c \
-    startup/genpvec.c ../../shared/gnatinstallhandler.c \
+    startup/bspstart.c ../../powerpc/shared/startup/bspgetworkarea.c \
+    ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
+    startup/Hwr_init.c startup/genpvec.c ../../shared/gnatinstallhandler.c \
     ../../powerpc/shared/showbats.c \
     ../../shared/bsppretaskinghook.c
 
