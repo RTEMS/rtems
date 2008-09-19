@@ -1,3 +1,9 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/ep1a.cfg, custom/mtx603e.cfg, custom/mvme2100.cfg,
+	custom/psim.cfg, custom/score603e.cfg: Eliminate vestiges of mpc603e
+	define.
+
 2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* compilers/gcc-no_bsp.cfg, compilers/gcc-target-default.cfg,
