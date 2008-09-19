@@ -224,6 +224,8 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
    PROVIDE (__bss_end = .);
   } > CODE
   . = ALIGN(16);
+  . += 0x1000;
+  __stack = .;
   _end = . ;
   __rtems_end = . ;
   PROVIDE (end = .);

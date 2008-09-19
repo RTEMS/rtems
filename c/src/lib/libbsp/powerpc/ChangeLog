@@ -1,3 +1,11 @@
+2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/start/start.S, shared/startup/bspgetworkarea.c,
+	shared/startup/bspstart.c, shared/startup/linkcmds: Modifications
+	which reflect those tested on psim. Hopefully they work on all
+	boards. The initialization stack is explicitly declared in the
+	linkcmds memory layout rather than magic math.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/include/nvram.h: Fix typo.

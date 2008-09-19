@@ -105,8 +105,8 @@ enter_C_code:
 	/*
 	 * stack = &__rtems_end + 4096
 	 */
-	addis	r9,r0, __rtems_end+(4096-PPC_MINIMUM_STACK_FRAME_SIZE)@ha
-        addi	r9,r9, __rtems_end+(4096-PPC_MINIMUM_STACK_FRAME_SIZE)@l
+	addis	r9,r0, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@ha
+        addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
 	mr	r1, r9
 	/*
 	 * We are now in a environment that is totally independent from 

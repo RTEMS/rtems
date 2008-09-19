@@ -87,10 +87,6 @@ unsigned int BSP_processor_frequency;
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor;
-/*
- * system init stack
- */
-#define INIT_STACK_SIZE 0x1000
 
 void BSP_panic(char *s)
 {
@@ -143,7 +139,6 @@ unsigned int get_eumbbar(void) {
 
 void bsp_start( void )
 {
-  unsigned char *stack;
 #if !defined(mvme2100)
   unsigned l2cr;
 #endif
@@ -212,20 +207,9 @@ void bsp_start( void )
 #endif
 
   /*
-   * the initial stack  has aready been set to this value in start.S
-   * so there is no need to set it in r1 again... It is just for info
-   * so that It can be printed without accessing R1.
-   */
-  stack = ((unsigned char*) __rtems_end) +
-               INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
-
-  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((uint32_t*)stack) = 0;
-
-  /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
   /*
