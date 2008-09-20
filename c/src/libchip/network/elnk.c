@@ -78,6 +78,10 @@
 #define ELNK_SUPPORTED
 #endif
 
+#if !defined(PCI_DRAM_OFFSET)
+  #undef ELNK_SUPPORTED
+#endif
+
 /* #undef ELNK_SUPPORTED */
 
 

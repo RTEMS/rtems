@@ -52,6 +52,12 @@
   #define DEC21140_SUPPORTED
 #endif
 
+#if !defined(PCI_DRAM_OFFSET)
+  #undef DEC21140_SUPPORTED
+#endif
+
+#define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
+
 #if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
 #include <rtems/pci.h>

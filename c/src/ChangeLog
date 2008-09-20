@@ -1,3 +1,9 @@
+2008-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/dec21140.c, libchip/network/elnk.c: Detect when there
+	is no PCI bus based upon the BSP not having a base address defined.
+	This means this driver cannot be supported on that board.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/dec21140.c, libchip/network/elnk.c,
