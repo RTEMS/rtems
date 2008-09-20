@@ -105,7 +105,7 @@ startup_SOURCES = ../../shared/bootcard.c \
 	../shared/uboot_dump_bdinfo.c \
 	../shared/uboot_getenv.c \
 	startup/bspclean.c \
-	startup/bspgetworkarea.c \
+	../../shared/bspgetworkarea.c \
 	startup/bspstart.c \
 	startup/cpuinit.c  \
 	startup/uboot_support.c

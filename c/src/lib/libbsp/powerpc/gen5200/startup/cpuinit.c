@@ -176,8 +176,8 @@ void cpu_init_bsp(void)
    */
   calc_dbat_regvals(
     &dbat,
-    uboot_bdinfo_ptr->bi_memstart,
-    uboot_bdinfo_ptr->bi_memsize,
+    bsp_uboot_board_info.bi_memstart,
+    bsp_uboot_board_info.bi_memsize,
     true,
     false,
     false,
@@ -193,16 +193,16 @@ void cpu_init_bsp(void)
    * U-Boot that lies about the starting address of Flash.  This check
    * corrects that.
    */
-  if ((uboot_bdinfo_ptr->bi_flashstart + uboot_bdinfo_ptr->bi_flashsize)
-    < uboot_bdinfo_ptr->bi_flashstart) {
-    start = 0 - uboot_bdinfo_ptr->bi_flashsize;
+  if ((bsp_uboot_board_info.bi_flashstart + bsp_uboot_board_info.bi_flashsize)
+    < bsp_uboot_board_info.bi_flashstart) {
+    start = 0 - bsp_uboot_board_info.bi_flashsize;
   } else {
-    start = uboot_bdinfo_ptr->bi_flashstart;
+    start = bsp_uboot_board_info.bi_flashstart;
   }
   calc_dbat_regvals(
     &dbat,
     start,
-    uboot_bdinfo_ptr->bi_flashsize,
+    bsp_uboot_board_info.bi_flashsize,
     true,
     false,
     false,
@@ -229,11 +229,11 @@ void cpu_init_bsp(void)
   /*
    * If there is SRAM, program BAT3 for that memory
    */
-  if (uboot_bdinfo_ptr->bi_sramsize != 0) {
+  if (bsp_uboot_board_info.bi_sramsize != 0) {
     calc_dbat_regvals(
       &dbat,
-      uboot_bdinfo_ptr->bi_sramstart,
-      uboot_bdinfo_ptr->bi_sramsize,
+      bsp_uboot_board_info.bi_sramstart,
+      bsp_uboot_board_info.bi_sramsize,
       false,
       true,
       true,

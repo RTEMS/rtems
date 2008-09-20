@@ -1769,7 +1769,11 @@ int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   if ((sc->arpcom.ac_enaddr[0] == 0) &&
       (sc->arpcom.ac_enaddr[1] == 0) &&
       (sc->arpcom.ac_enaddr[2] == 0)) {
-      memcpy((void *)sc->arpcom.ac_enaddr, uboot_bdinfo_ptr->bi_enetaddr, ETHER_ADDR_LEN);    
+      memcpy(
+        (void *)sc->arpcom.ac_enaddr,
+        bsp_uboot_board_info.bi_enetaddr,
+        ETHER_ADDR_LEN
+      );
   }
 #endif
   if(config->mtu)

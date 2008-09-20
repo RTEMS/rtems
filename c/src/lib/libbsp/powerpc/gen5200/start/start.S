@@ -167,7 +167,7 @@ start:
 	
 #if defined(HAS_UBOOT)
 /* store pointer to UBoot bd_info board info structure */	
-	LWI	r31,uboot_bdinfo_ptr
+	LWI	r31,bsp_uboot_board_info_ptr
 	stw	r3,0(r31)
 #endif /* defined(HAS_UBOOT) */
 

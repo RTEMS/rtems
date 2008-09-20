@@ -149,8 +149,7 @@ extern "C" {
 #define CONFIG_MPC5xxx
 #include <u-boot.h>
 
-extern bd_t *uboot_bdinfo_ptr;
-extern bd_t uboot_bdinfo_copy;
+extern bd_t bsp_uboot_board_info;
 #endif
 
 /*
@@ -205,9 +204,9 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 
 /* clock settings */
 #if defined(HAS_UBOOT)
-#define IPB_CLOCK (uboot_bdinfo_ptr->bi_ipbfreq)
-#define XLB_CLOCK (uboot_bdinfo_ptr->bi_busfreq)
-#define G2_CLOCK  (uboot_bdinfo_ptr->bi_intfreq)
+#define IPB_CLOCK (bsp_uboot_board_info.bi_ipbfreq)
+#define XLB_CLOCK (bsp_uboot_board_info.bi_busfreq)
+#define G2_CLOCK  (bsp_uboot_board_info.bi_intfreq)
 #else
 #define IPB_CLOCK 33000000   /* 33 MHz */
 #define XLB_CLOCK 66000000   /* 66 MHz */
@@ -215,7 +214,7 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 #endif
 
 #if defined(HAS_UBOOT)
-#define GEN5200_CONSOLE_BAUD (uboot_bdinfo_ptr->bi_baudrate)
+#define GEN5200_CONSOLE_BAUD (bsp_uboot_board_info.bi_baudrate)
 #else
 #define GEN5200_CONSOLE_BAUD 9600
 #endif

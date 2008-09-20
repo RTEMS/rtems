@@ -107,8 +107,10 @@
 #include <bsp/irq.h>
 
 #if defined(HAS_UBOOT)
-bd_t *uboot_bdinfo_ptr = (bd_t *)1; /* will be overwritten from startup code */
-bd_t uboot_bdinfo_copy;             /* will be overwritten with copy of bdinfo */
+/* will be overwritten from startup code */
+bd_t *bsp_uboot_board_info_ptr = (bd_t *)1;
+/* will be overwritten with copy of board information */
+bd_t bsp_uboot_board_info;
 #endif
 
 /*
@@ -142,14 +144,13 @@ void bsp_start(void)
   myCpuRevision = get_ppc_cpu_revision();
 
   #if defined(HAS_UBOOT)
-    uboot_bdinfo_copy = *uboot_bdinfo_ptr;
-    uboot_bdinfo_ptr = &uboot_bdinfo_copy;
+    bsp_uboot_board_info = *bsp_uboot_board_info_ptr;
   #endif  
 
   #if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
     {
       void dumpUBootBDInfo( bd_t * );
-      dumpUBootBDInfo( uboot_bdinfo_ptr );
+      dumpUBootBDInfo( bsp_uboot_board_info_ptr );
     }
   #endif
 
