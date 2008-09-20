@@ -54,7 +54,7 @@ startup_SOURCES = ../../shared/bsplibc.c \
 	startup/cpuinit.c \
 	startup/bspstart.c \
 	startup/bspclean.c \
-	startup/bspgetworkarea.c \
+	../../shared/bspgetworkarea.c \
         startup/uboot_support.c \
         ../shared/uboot_getenv.c
 

@@ -1,3 +1,10 @@
+2008-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, include/bsp.h, start/start.S, startup/bspstart.c,
+	startup/cpuinit.c: Use top level shared bsp_get_work_area()
+	implementation. Augment it to know about U-Boot.
+	* startup/bspgetworkarea.c: Removed.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Remove unnecessary boilerplate comments.

@@ -167,8 +167,8 @@ void cpu_init( void)
   calc_dbat_regvals(
     &ibat,
     #ifdef HAS_UBOOT
-      mpc83xx_uboot_board_info.bi_memstart,
-      mpc83xx_uboot_board_info.bi_memsize,
+      bsp_uboot_board_info.bi_memstart,
+      bsp_uboot_board_info.bi_memsize,
     #else /* HAS_UBOOT */
       (uint32_t) bsp_ram_start,
       (uint32_t) bsp_ram_size,
@@ -184,8 +184,8 @@ void cpu_init( void)
   calc_dbat_regvals(
     &ibat,
     #ifdef HAS_UBOOT
-      mpc83xx_uboot_board_info.bi_flashstart,
-      mpc83xx_uboot_board_info.bi_flashsize,
+      bsp_uboot_board_info.bi_flashstart,
+      bsp_uboot_board_info.bi_flashsize,
     #else /* HAS_UBOOT */
       (uint32_t) bsp_rom_start,
       (uint32_t) bsp_rom_size,
@@ -212,8 +212,8 @@ void cpu_init( void)
   calc_dbat_regvals(
     &dbat,
     #ifdef HAS_UBOOT
-      mpc83xx_uboot_board_info.bi_memstart,
-      mpc83xx_uboot_board_info.bi_memsize,
+      bsp_uboot_board_info.bi_memstart,
+      bsp_uboot_board_info.bi_memsize,
     #else /* HAS_UBOOT */
       (uint32_t) bsp_ram_start,
       (uint32_t) bsp_ram_size,
@@ -229,8 +229,8 @@ void cpu_init( void)
   calc_dbat_regvals(
     &dbat,
     #ifdef HAS_UBOOT
-      mpc83xx_uboot_board_info.bi_flashstart,
-      mpc83xx_uboot_board_info.bi_flashsize,
+      bsp_uboot_board_info.bi_flashstart,
+      bsp_uboot_board_info.bi_flashsize,
     #else /* HAS_UBOOT */
       (uint32_t) bsp_rom_start,
       (uint32_t) bsp_rom_size,
@@ -246,7 +246,7 @@ void cpu_init( void)
   calc_dbat_regvals(
     &dbat,
     #ifdef HAS_UBOOT
-      mpc83xx_uboot_board_info.bi_immrbar,
+      bsp_uboot_board_info.bi_immrbar,
     #else /* HAS_UBOOT */
       (uint32_t) IMMRBAR,
     #endif /* HAS_UBOOT */

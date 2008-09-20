@@ -34,10 +34,10 @@
  * We want this in the data section, because the startup code clears the BSS
  * section after the initialization of the board info.
  */
-bd_t mpc83xx_uboot_board_info = { .bi_baudrate = 123 };
+bd_t bsp_uboot_board_info = { .bi_baudrate = 123 };
 
 /* Size in words */
-const size_t mpc83xx_uboot_board_info_size = (sizeof( bd_t) + 3) / 4;
+const size_t bsp_uboot_board_info_size = (sizeof( bd_t) + 3) / 4;
 
 #endif /* HAS_UBOOT */
 
@@ -122,8 +122,8 @@ void bsp_start( void)
   /* Initialize some device driver parameters */
 
 #ifdef HAS_UBOOT
-  BSP_bus_frequency = mpc83xx_uboot_board_info.bi_busfreq;
-  bsp_clicks_per_usec = mpc83xx_uboot_board_info.bi_busfreq / 4000000;
+  BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq;
+  bsp_clicks_per_usec = bsp_uboot_board_info.bi_busfreq / 4000000;
 #else /* HAS_UBOOT */
   BSP_bus_frequency = BSP_CLKIN_FRQ * BSP_SYSPLL_MF / BSP_SYSPLL_CKID;
   bsp_clicks_per_usec = BSP_bus_frequency / 1000000;

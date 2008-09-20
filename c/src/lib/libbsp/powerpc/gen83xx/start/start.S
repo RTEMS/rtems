@@ -59,8 +59,8 @@ start:
 
 #ifdef HAS_UBOOT
 
-.extern mpc83xx_uboot_board_info
-.extern mpc83xx_uboot_board_info_size
+.extern bsp_uboot_board_info
+.extern bsp_uboot_board_info_size
 
 	/* Reset time base */
 	li	r0, 0
@@ -68,8 +68,8 @@ start:
 	mtspr	TBWL, r0
 
 	/* Copy board info */
-	LA	r6, mpc83xx_uboot_board_info
-	LW	r5, mpc83xx_uboot_board_info_size
+	LA	r6, bsp_uboot_board_info
+	LW	r5, bsp_uboot_board_info_size
         mtctr   r5
 
 copy_uboot_board_info:
