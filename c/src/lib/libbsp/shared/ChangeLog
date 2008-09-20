@@ -1,3 +1,7 @@
+2008-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bspgetworkarea.c: Augment to optionally know U-Boot.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Perform bsp_start() before bsp_get_work_area().

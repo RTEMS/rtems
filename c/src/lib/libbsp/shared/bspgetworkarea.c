@@ -19,10 +19,18 @@
 /*
  *  These are provided by the linkcmds for ALL of the BSPs which use this file.
  */
-extern char RamBase[];
 extern char WorkAreaBase[];
 extern char HeapSize[];
-extern char RamSize[];
+
+/*
+ *  We may get the size information from U-Boot or the linker scripts.
+ */
+#ifdef HAS_UBOOT
+  extern bd_t bsp_uboot_board_info;
+#else
+  extern char RamBase[];
+  extern char RamSize[];
+#endif /* HAS_UBOOT */
 
 /*
  *  This method returns the base address and size of the area which
@@ -36,9 +44,17 @@ void bsp_get_work_area(
   size_t  *heap_size
 )
 {
-  *work_area_start       = WorkAreaBase;
-  *work_area_size       = (uintptr_t) RamBase + (uintptr_t) RamSize -
-       (uintptr_t) WorkAreaBase;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = (size_t) HeapSize;
+  uintptr_t ram_end;
+
+  #ifdef HAS_UBOOT
+    ram_end = (uintptr_t) bsp_uboot_board_info.bi_memstart +
+                          bsp_uboot_board_info.bi_memsize;
+  #else
+    ram_end = RamBase + (uintptr_t)RamSize;
+  #endif
+
+  *work_area_start = WorkAreaBase;
+  *work_area_size  = ram_end = (uintptr_t) WorkAreaBase;
+  *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size       = (size_t) HeapSize;
 }
