@@ -1,6 +1,6 @@
 /*
  *  This routine is an implementation of the bsp_get_work_area()
- *  that can be used by all m68k BSPs following linkcmds conventions
+ *  that can be used by all BSPs following linkcmds conventions
  *  regarding heap, stack, and workspace allocation.
  *
  *  COPYRIGHT (c) 1989-2008.
@@ -13,8 +13,13 @@
  *  $Id$
  */
 
+/* #define BSP_GET_WORK_AREA_DEBUG */
+
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#ifdef BSP_GET_WORK_AREA_DEBUG
+  #include <rtems/bspIo.h>
+#endif
 
 /*
  *  These are provided by the linkcmds for ALL of the BSPs which use this file.
@@ -50,11 +55,19 @@ void bsp_get_work_area(
     ram_end = (uintptr_t) bsp_uboot_board_info.bi_memstart +
                           bsp_uboot_board_info.bi_memsize;
   #else
-    ram_end = RamBase + (uintptr_t)RamSize;
+    ram_end = (uintptr_t)RamBase + (uintptr_t)RamSize;
   #endif
 
   *work_area_start = WorkAreaBase;
-  *work_area_size  = ram_end = (uintptr_t) WorkAreaBase;
+  *work_area_size  = ram_end - (uintptr_t) WorkAreaBase;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
   *heap_size       = (size_t) HeapSize;
+
+  #ifdef BSP_GET_WORK_AREA_DEBUG
+    printk( "work_area_start = %p\n", *work_area_start );
+    printk( "work_area_size = %d 0x%08x\n", *work_area_size, *work_area_size );
+    printk( "end = %p\n", *work_area_start + *work_area_size );
+    printk( "heap_start = %p\n", *heap_start );
+    printk( "heap_size = %d\n", *heap_size );
+ #endif
 }

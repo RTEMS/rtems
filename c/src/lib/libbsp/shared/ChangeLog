@@ -1,3 +1,7 @@
+2008-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bspgetworkarea.c: Fix typo. Add debug printk statements.
+
 2008-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bspgetworkarea.c: Augment to optionally know U-Boot.
