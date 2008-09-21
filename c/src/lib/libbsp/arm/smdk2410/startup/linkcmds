@@ -228,7 +228,7 @@ SECTIONS
 
 	. = ALIGN (1024);
 	_bss_free_start = .;
-	_bss_free_start = .;
+	WorkAreaBase = .;
 
   } > sdram
   _axf_bss_end = . ;
