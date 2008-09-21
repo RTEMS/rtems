@@ -1,3 +1,7 @@
+2008-09-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/bsp.h: Remove define of BSP_ZERO_WORKSPACE_AUTOMATICALLY.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, startup/linkcmds: Use top level shared

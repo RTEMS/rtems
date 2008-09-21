@@ -133,11 +133,6 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	cs8900_driver_attach
 
-/*
- *  BSP Configuration Default Overrides
- */
-#define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
-
 #ifdef __cplusplus
 }
 #endif
