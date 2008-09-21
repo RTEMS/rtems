@@ -228,7 +228,6 @@ SECTIONS
 
 	. = ALIGN (1024);
 	_bss_free_start = .;
-	WorkAreaBase = .;
 
   } > sdram
   _axf_bss_end = . ;
@@ -236,6 +235,7 @@ SECTIONS
   _end = . ;
   __end__ = . ;
   PROVIDE (end = _end);
+  WorkAreaBase = .;
 
 
 /* Debugging stuff follows? */

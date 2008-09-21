@@ -1,5 +1,9 @@
 2008-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/linkcmds: Move WorkAreaBase to be closer to end definition.
+
+2008-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* startup/linkcmds: Add WorkAreaBase.
 
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
