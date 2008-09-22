@@ -63,11 +63,6 @@ void bsp_start( void)
   }
 }
 
-void bsp_reset( void)
-{
-  /* Do nothing */
-}
-
 #define ULSR_THRE 0x00000020U
 
 static void my_BSP_output_char( char c)

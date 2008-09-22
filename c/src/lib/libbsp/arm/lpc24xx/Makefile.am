@@ -51,6 +51,7 @@ dist_project_lib_DATA = ../shared/startup/linkcmds.base \
 
 shared_SOURCES = ../../shared/bootcard.c \
 	../../shared/bspclean.c \
+	../../shared/bspreset.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
