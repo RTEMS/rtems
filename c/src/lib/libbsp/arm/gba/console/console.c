@@ -28,9 +28,6 @@
 #include <gba.h>
 #include <conio.h>
 
-extern void rtemsReboot(void);
-
-
 /**
  *  @brief gba_pollRead function read char
  *

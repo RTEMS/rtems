@@ -39,8 +39,8 @@ gbaoverrides_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
-    ../../shared/bsppredriverhook.c startup/bspclean.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/bsppredriverhook.c ../../shared/bspclean.c \
+    startup/bspreset.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/conio.c console/console.c \
