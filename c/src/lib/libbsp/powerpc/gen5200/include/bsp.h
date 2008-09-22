@@ -120,10 +120,6 @@ LINKER_SYMBOL(MBAR);
 /* we only have PSC1 */
 #define GEN5200_UART_AVAIL_MASK 0x01
 
-/* We want to prompt for a reset and then reset the board */
-#define BSP_PRESS_KEY_FOR_RESET 1
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 #else
 #error "board type not defined"
 #endif

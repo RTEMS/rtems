@@ -156,7 +156,7 @@ void bsp_start(void)
 
   cpu_init();
 
- bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
+  bsp_clicks_per_usec    = (IPB_CLOCK/1000000);
 
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
@@ -192,7 +192,6 @@ void bsp_start(void)
   #ifdef SHOW_MORE_INIT_SETTINGS
     printk("Exit from bspstart\n");
   #endif
-
 }
 
 /*
@@ -213,4 +212,3 @@ Thread _Thread_Idle_body(uint32_t ignored)
   }
   return 0;
 }
-

@@ -142,7 +142,10 @@ uint32_t mpc5200_uart_avail_mask = GEN5200_UART_AVAIL_MASK;
 #endif
 
 static void A_BSP_output_char(char c);
+static int A_BSP_get_char(void);
 BSP_output_char_function_type BSP_output_char = A_BSP_output_char;
+
+BSP_polling_getchar_function_type BSP_poll_char = A_BSP_get_char;
 
 /* Used to handle premature outputs of printk */
 uint32_t console_initialized = FALSE;
@@ -625,7 +628,7 @@ static void A_BSP_output_char(
    *  and we can just poll bytes out at any time.
    */
   #if !defined(HAS_UBOOT)
-    if (console_initialized == FALSE )
+    if (console_initialized == FALSE)
      return;
   #endif
 
@@ -635,6 +638,20 @@ static void A_BSP_output_char(
 
     if( c == '\n' )
       PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
+}
+
+static int A_BSP_get_char(void)
+{
+  /*
+   *  If we are using U-Boot, then the console is already initialized
+   *  and we can just poll bytes in at any time.
+   */
+  #if !defined(HAS_UBOOT)
+    if (console_initialized == FALSE)
+     return;
+  #endif
+
+  return mpc5200_uart_pollRead(0);
 }
 
 /*
