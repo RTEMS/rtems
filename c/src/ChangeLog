@@ -2,6 +2,10 @@
 
 	* libchip/serial/ns16550.c: Fix typo.
 
+2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/serial/ns16550.c: Fix typo.
+
 2008-09-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libchip/serial/ns16550.c: Add not supported on arm even though it is

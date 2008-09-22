@@ -595,7 +595,7 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         rtems_irq_connect_data cd = {
           c->ulIntVector,
           ns16550_isr,
-          (void *) minor
+          (void *) minor,
           NULL,
           NULL,
           NULL,
