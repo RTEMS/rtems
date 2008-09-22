@@ -1,3 +1,7 @@
+2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, include/bspopts.h.in: New files.
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bsp_specs, clock/clock-config.c, configure.ac,
