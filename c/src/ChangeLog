@@ -1,3 +1,8 @@
+2008-09-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libchip/serial/ns16550.c: Not currently supported on architectures
+	with simple vectored interrupt model.
+
 2008-09-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/version.m4: Bump RTEMS_API to 4.10.
