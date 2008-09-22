@@ -187,7 +187,6 @@ extern unsigned int BSP_time_base_divisor;
   asm(" eieio ")
 
 extern void BSP_panic(char *s);
-extern void rtemsReboot(void);
 extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);
 
