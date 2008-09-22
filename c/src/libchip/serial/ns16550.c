@@ -32,7 +32,7 @@
 
 #include "ns16550_p.h"
 
-#if !defined(CPU_SIMPLE_VECTORED_INTERRUPTS)
+#if !defined(CPU_SIMPLE_VECTORED_INTERRUPTS) &&!define(__arm__)
   #include <bsp/irq.h>
   #define NS16650_SUPPORTED
 #endif
