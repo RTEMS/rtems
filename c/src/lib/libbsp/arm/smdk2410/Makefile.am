@@ -26,7 +26,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../gp32/startup/bspstart.c ../gp32/startup/bspclean.c startup/memmap.c \
+    ../gp32/startup/bspstart.c ../../shared/bspclean.c \
+    ../gp32/startup/bspreset.c startup/memmap.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/bsppretaskinghook.c  \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
