@@ -42,7 +42,7 @@ http://www.nsls.bnl.gov/facility/expsys/software/EPICS/FAQ.txt
    site [snapshot area] )
 
 6) To reboot the RTEMS-MVME5500 (board reset), one can invoke the
-   rtemsReboot() command at Cexp> prompt.
+   bsp_reset() command at Cexp> prompt.
  
 7) Please reference http://www.slac.stanford.edu/~strauman/rtems
 for the source code and installation guidance of cexp, GeSys and

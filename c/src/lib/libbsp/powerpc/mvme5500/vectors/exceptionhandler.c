@@ -63,10 +63,6 @@
 extern void
 BSP_printStackTrace(BSP_Exception_frame* excPtr);
 
-
-extern void
-rtemsReboot(void);
-
 static volatile BSP_ExceptionExtension	BSP_exceptionExtension = 0;
 
 BSP_ExceptionExtension
@@ -236,7 +232,7 @@ int			quiet=0;
 			rtems_task_suspend(id);
 		} else {
 			printk("PANIC, rebooting...\n");
-			rtemsReboot();
+			bsp_reset();
 		}
     }
 }

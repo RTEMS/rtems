@@ -36,7 +36,7 @@ startup_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c startup/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/gnatinstallhandler.c startup/reboot.c
+    ../../shared/gnatinstallhandler.c startup/bspreset.c
 pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
