@@ -53,7 +53,7 @@ void Clock_exit( void );
  *  Major and minor number.
  */
 
-rtems_device_major_number rtems_clock_major = ~0;
+rtems_device_major_number rtems_clock_major = UINT32_MAX;
 rtems_device_minor_number rtems_clock_minor;
 
 /*
@@ -135,7 +135,7 @@ rtems_isr Clock_isr(
  *
  */
 
-void Install_clock(
+static void Install_clock(
   rtems_isr_entry clock_isr
 )
 {

@@ -1,3 +1,8 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* clockdrv_shell.c: Install_clock has now static linkage.  Initialize
+	rtems_clock_major with unsigned integer literal.
+
 2008-09-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bspgetworkarea.c: Fix typo. Add debug printk statements.
