@@ -277,3 +277,10 @@ int bsp_uart_pollRead(int minor)
 {
   return Console_Port_Tbl [0].pDeviceFns->deviceRead(0);
 }
+
+int bsp_get_char(void)
+{
+  return bsp_uart_pollRead(0);
+}
+
+BSP_polling_getchar_function_type BSP_poll_char = bsp_get_char;

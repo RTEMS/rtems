@@ -53,7 +53,8 @@ startup_SOURCES = ../../shared/bsplibc.c \
 	../shared/src/tictac.c \
 	startup/cpuinit.c \
 	startup/bspstart.c \
-	startup/bspclean.c \
+	../../shared/bspclean.c \
+	startup/bspreset.c \
 	../../shared/bspgetworkarea.c \
         startup/uboot_support.c \
         ../shared/uboot_getenv.c

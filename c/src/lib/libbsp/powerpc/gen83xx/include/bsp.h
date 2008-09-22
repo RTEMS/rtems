@@ -32,10 +32,6 @@
 #define CONFIG_MPC83XX
 #define CONFIG_HAS_ETH1
 
-/* We want to prompt for a reset and then reset the board */
-#define BSP_PRESS_KEY_FOR_RESET 1
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 #endif /* MPC8313ERDB */
 
 #include <libcpu/powerpc-utility.h> 
@@ -97,8 +93,6 @@ extern bd_t bsp_uboot_board_info;
 extern const size_t bsp_uboot_board_info_size;
 
 #endif /* HAS_UBOOT */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
 
 #define BSP_UART1_MINOR 0
 #define BSP_UART2_MINOR 1
