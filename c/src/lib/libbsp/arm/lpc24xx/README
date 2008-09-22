@@ -1,0 +1,6 @@
+Development Board: QVGA Base Board from Embedded Artists
+
+Drivers:
+	o Console
+	o Clock
+	o RTC

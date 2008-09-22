@@ -1,0 +1,7 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, clock/clock-config.c, configure.ac,
+	console/console-config.c, include/bsp.h, include/irq-config.h,
+	include/irq.h, include/lpc24xx.h, include/system-clocks.h, irq/irq.c,
+	Makefile.am, misc/system-clocks.c, preinstall.am, README,
+	rtc/rtc-config.c, startup/bspstart.c, startup/linkcmds: New files.
