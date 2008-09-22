@@ -1,3 +1,7 @@
+2008-09-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't install files from shared/.
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/utility.h: New file.
