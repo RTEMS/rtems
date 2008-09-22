@@ -1,3 +1,7 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds.base: Fixed wrong section size symbols.
+
 2008-09-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, include/bsp.h, network_5200/network.c, start/start.S,
