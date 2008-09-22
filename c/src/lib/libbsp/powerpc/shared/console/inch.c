@@ -20,6 +20,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #ifdef BSP_KBD_IOBASE
 #include <bsp/irq.h>
 
@@ -154,7 +155,7 @@ _IBMPC_scankey(char *outChar)
 
     case 0x53:
       if (ctrl_pressed && alt_pressed)
-        rtemsReboot(); /* ctrl+alt+del -> reboot */
+        bsp_reset(); /* ctrl+alt+del -> reboot */
       break;
 
     /*

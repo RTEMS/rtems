@@ -5,13 +5,13 @@
 #include <libcpu/stackTrace.h>
 
 /*-------------------------------------------------------------------------+
-|         Function: rtemsReboot
+|         Function: bsp_reset
 |      Description: Reboot the PC.
 | Global Variables: None.
 |        Arguments: None.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-void rtemsReboot(void)
+void bsp_reset(void)
 {
   printk("Printing a stack trace for your convenience :-)\n");
   CPU_print_stack();
@@ -22,4 +22,4 @@ void rtemsReboot(void)
 #if defined(mvme2100)
   *(unsigned char*)0xffe00000 |= 0x80;
 #endif
-} /* rtemsReboot */
+} /* bsp_reset */

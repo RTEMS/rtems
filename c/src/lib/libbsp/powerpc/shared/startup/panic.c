@@ -1,5 +1,6 @@
 #include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/uart.h>
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
@@ -10,7 +11,7 @@ rebootQuestion()
 {
 	printk("Press a key to reboot\n");
 	BSP_poll_char_via_serial();
-	rtemsReboot();
+	bsp_reset();
 }
 
 void BSP_panic(char *s)
