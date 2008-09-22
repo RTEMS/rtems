@@ -1,3 +1,8 @@
+2008-09-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/version.m4: Bump RTEMS_API to 4.10.
+	Bump _RTEMS_VERSION to 4.9.99.0.
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* c/src/libchip/rtc/icm7170.c, c/src/libchip/rtc/m48t08.c,
