@@ -82,6 +82,11 @@ void csb250_output_char(char c)
     }
 }
 
+int csb250_get_char(void)
+{
+  return console_inbyte_nonblocking(0);
+}
+
 BSP_output_char_function_type           BSP_output_char = csb250_output_char;
-BSP_polling_getchar_function_type       BSP_poll_char = NULL;
+BSP_polling_getchar_function_type       BSP_poll_char = csb250_get_char;
 
