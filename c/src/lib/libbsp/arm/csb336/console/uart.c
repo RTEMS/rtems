@@ -442,13 +442,14 @@ void _BSP_output_char(char c)
         poll_write('\r');
     }
 }
-BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
+BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
 char _BSP_poll_char()
 {
     return poll_read();
 }
+
 BSP_polling_getchar_function_type BSP_poll_char = _BSP_poll_char;
 
 

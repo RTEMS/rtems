@@ -126,18 +126,3 @@ int get_perclk1_freq(void)
  */
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
 
-/**
- *  Reset the system.
- *
- *  This functions enables the watchdog and waits for it to
- *  fire, thus resetting the system.
- */
-void bsp_reset(void)
-{
-  rtems_interrupt_level level;
-
-  _CPU_ISR_Disable(level);
-
-  printk("\n\rI should reset here.\n\r");
-  while(1);
-}
