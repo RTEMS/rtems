@@ -10,6 +10,7 @@
 #include "i386kbd.h"
 #include <rtems/kd.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 #define SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
@@ -30,7 +31,6 @@
 #endif
 
 extern void add_to_queue( unsigned short );
-extern void rtemsReboot( void );
 
 int set_bit(int nr, unsigned long * addr)
 {
@@ -134,14 +134,14 @@ static void show_state(void)
 }
 
 static void_fn do_null, enter, show_ptregs, send_intr, lastcons, caps_toggle,
-  num, hold, scroll_forw, scroll_back, boot_it, caps_on, compose,
+  num, hold, scroll_forw, scroll_back, caps_on, compose,
   SAK, decr_console, incr_console, spawn_console, bare_num;
 
 static void_fnp spec_fn_table[] = {
   do_null,  enter,    show_ptregs,  show_mem,
   show_state,  send_intr,  lastcons,  caps_toggle,
   num,    hold,    scroll_forw,  scroll_back,
-  boot_it,  caps_on,  compose,  SAK,
+  bsp_reset,  caps_on,  compose,  SAK,
   decr_console,  incr_console,  spawn_console,  bare_num
 };
 
@@ -453,12 +453,6 @@ static void scroll_forw(void)
 
 static void scroll_back(void)
 {
-}
-
-static void boot_it(void)
-{
-   printk( "boot_it() " );
-   rtemsReboot();
 }
 
 static void compose(void)

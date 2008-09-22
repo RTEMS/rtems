@@ -175,8 +175,6 @@ void          _IBMPC_outch    (char);    /* from 'outch.c'  */
 char          _IBMPC_inch     (void);    /* from 'inch.c'   */
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 
-void rtemsReboot(void);                  /* from 'exit.c'   */
-
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
 
 /* Definitions for BSPConsolePort */

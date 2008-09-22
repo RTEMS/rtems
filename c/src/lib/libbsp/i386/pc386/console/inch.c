@@ -30,6 +30,7 @@
 +--------------------------------------------------------------------------*/
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/irq.h>
 
 /*-------------------------------------------------------------------------+
@@ -70,19 +71,6 @@ static unsigned short   kbd_buffer[KBD_BUF_SIZE];
 static uint16_t         kbd_first = 0;
 static uint16_t         kbd_last  = 0;
 static uint16_t         kbd_end   = KBD_BUF_SIZE - 1;
-
-/*-------------------------------------------------------------------------+
-|         Function: rtemsReboot
-|      Description: Reboot the PC.
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-void rtemsReboot(void)
-{
-  /* shutdown and reboot */
-  outport_byte(0x64, 0xFE);      /* use keyboard controler to do the job... */
-} /* rtemsReboot */
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_scankey
@@ -174,7 +162,7 @@ _IBMPC_scankey(char *outChar)
 
     case 0x53:
       if (ctrl_pressed && alt_pressed)
-        rtemsReboot(); /* ctrl+alt+del -> reboot */
+        bsp_reset(); /* ctrl+alt+del -> reboot */
       break;
 
     /*
