@@ -8,6 +8,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([csb337]);;
   edb7312 )
     AC_CONFIG_SUBDIRS([edb7312]);;
+  gba-base )
+    AC_CONFIG_SUBDIRS([gba-base]);;
   gba )
     AC_CONFIG_SUBDIRS([gba]);;
   gp32 )

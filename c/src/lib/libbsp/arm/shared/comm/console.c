@@ -49,7 +49,6 @@ int BSPBaseBaud    = 115200;
 +--------------------------------------------------------------------------*/
 extern char BSP_wait_polled_input(void);
 extern BSP_polling_getchar_function_type BSP_poll_char;
-extern void rtemsReboot(void);
 
 static int  conSetAttr(int minor, const struct termios *);
 static void isr_on(const rtems_irq_connect_data *);
