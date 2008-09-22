@@ -8,6 +8,11 @@
 
 	* mcf5206/timer/timerisr.S: Remove unnecessary include of bsp.h
 
+2008-09-08      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* mcf5206/include/mcfmbus.h,mcf5206/mbus/mcfmbus.c: 
+	converted done_arg to a void pointer 
+	
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mcf548x/include/Freescale_license.txt: Convert to UNIX CR/LF style,
