@@ -1,3 +1,10 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* lpc24xx: New BSP.
+
+	* shared/startup/linkcmds.base, shared/include/linker-symbols.h,
+	shared/include/start.h, shared/start/start.S: New files.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: Removed.
