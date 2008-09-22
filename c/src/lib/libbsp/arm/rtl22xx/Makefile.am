@@ -29,7 +29,8 @@ dist_project_lib_DATA += startup/linkcmds
 include_HEADERS += ../../arm/shared/comm/uart.h
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
-    ../../shared/bspgetworkarea.c startup/bspstart.c startup/bspclean.c \
+    ../../shared/bspgetworkarea.c startup/bspstart.c \
+    ../../shared/bspclean.c startup/bspreset.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 console_SOURCES = ../../shared/console.c

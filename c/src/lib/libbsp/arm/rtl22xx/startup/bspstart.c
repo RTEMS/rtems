@@ -17,7 +17,6 @@
  * Function prototypes
  */
 extern void rtems_irq_mngt_init(void);
-void bsp_libc_init( void *, uint32_t, int );
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
 
@@ -98,22 +97,6 @@ void bsp_start_default( void )
    */
   rtems_irq_mngt_init();
 } /* bsp_start */
-
-
-/**
- *  Reset the system.
- *
- *  This functions enables the watchdog and waits for it to 
- *  fire, thus resetting the system.
- */
-void bsp_reset(void)
-{
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-
-    while(1);
-}
 
 /*
  *  By making this a weak alias for bsp_start_default, a brave soul
