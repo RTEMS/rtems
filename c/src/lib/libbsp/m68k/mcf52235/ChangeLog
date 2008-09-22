@@ -1,3 +1,12 @@
+2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, include/bspopts.h.in: Use standardized
+	bsp_cleanup() which can optionally print a message, poll for user to
+	press key, and call bsp_reset(). Using this eliminates the various
+	bsp_cleanup() implementations which had their own implementation and
+	variety of string constants.
+	* startup/bspclean.c: Removed.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Split out bspstart contents. Move cache code to libcpu.
