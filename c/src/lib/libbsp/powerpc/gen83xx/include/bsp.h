@@ -94,7 +94,7 @@ extern "C" {
 #include <bsp/u-boot.h>
 
 extern bd_t bsp_uboot_board_info;
-extern const size_t mpc83xx_uboot_board_info_size;
+extern const size_t bsp_uboot_board_info_size;
 
 #endif /* HAS_UBOOT */
 

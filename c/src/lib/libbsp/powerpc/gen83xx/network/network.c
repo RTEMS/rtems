@@ -128,24 +128,24 @@ int BSP_tsec_attach
 
     switch (unitNumber) {
       case 1:
-        config->hardware_address = mpc83xx_uboot_board_info.bi_enetaddr;
+        config->hardware_address = bsp_uboot_board_info.bi_enetaddr;
         break;
 
 #ifdef CONFIG_HAS_ETH1
       case 2:
-        config->hardware_address = mpc83xx_uboot_board_info.bi_enet1addr;
+        config->hardware_address = bsp_uboot_board_info.bi_enet1addr;
         break;
 #endif /* CONFIG_HAS_ETH1 */
 
 #ifdef CONFIG_HAS_ETH2
       case 3:
-        config->hardware_address = mpc83xx_uboot_board_info.bi_enet2addr;
+        config->hardware_address = bsp_uboot_board_info.bi_enet2addr;
         break;
 #endif /* CONFIG_HAS_ETH2 */
 
 #ifdef CONFIG_HAS_ETH3
       case 4:
-        config->hardware_address = mpc83xx_uboot_board_info.bi_enet3addr;
+        config->hardware_address = bsp_uboot_board_info.bi_enet3addr;
         break;
 #endif /* CONFIG_HAS_ETH3 */
 
