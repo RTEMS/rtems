@@ -1,3 +1,7 @@
+2008-09-22	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/bspstart.c: correct DEC click rate for non-U-Boot case
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds.base: Fixed wrong section size symbols.
