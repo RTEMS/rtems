@@ -32,9 +32,9 @@
 
 #include "ns16550_p.h"
 
-#if !defined(CPU_SIMPLE_VECTORED_INTERRUPTS) &&!define(__arm__)
+#if !defined(CPU_SIMPLE_VECTORED_INTERRUPTS) && !defined(__arm__)
   #include <bsp/irq.h>
-  #define NS16650_SUPPORTED
+  #define NS16550_SUPPORTED
 #endif
 
 #ifdef BSP_FEATURE_IRQ_EXTENSION
@@ -606,7 +606,7 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         rtems_irq_connect_data cd = {
           c->ulIntVector,
           ns16550_isr,
-          (void *) minor
+          (void *) minor,
           NULL,
           NULL,
           NULL
