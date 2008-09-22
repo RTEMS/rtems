@@ -179,7 +179,7 @@ static void dbgu_init(int minor)
     dbgu->cr = (DBGU_CR_TXEN | DBGU_CR_RXEN);
 }
 
-/* I'm not sure this is needed for the shared console driver. */
+/* This is used for getchark support */
 static void dbgu_write_polled(int minor, char c)
 {
     dbgu_write(minor, &c, 1);
@@ -218,4 +218,9 @@ static void _BSP_put_char( char c ) {
 
 BSP_output_char_function_type BSP_output_char = _BSP_put_char;
 
+int _BSP_poll_char()
+{
+  return dbgu_poll_read(0);
+}
 
+BSP_polling_getchar_function_type BSP_poll_char = _BSP_poll_char;

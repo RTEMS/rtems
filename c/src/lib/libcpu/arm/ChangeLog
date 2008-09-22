@@ -1,3 +1,12 @@
+2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* at91rm9200/dbgu/dbgu.c: Use standardized bsp_cleanup() which can
+	optionally print a message, poll for user to press key, and call
+	bsp_reset(). Using this eliminates the various bsp_cleanup()
+	implementations which had their own implementation and variety of
+	string constants. This driver had to support the standard poll
+	key input method.
+
 2008-09-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* at91rm9200/timer/timer.c, lpc22xx/timer/timer.c, 
