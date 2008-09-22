@@ -16,6 +16,8 @@
 #ifndef __LIBCHIP_SERIAL_h
 #define __LIBCHIP_SERIAL_h
 
+#include <stdint.h>
+#include <stdbool.h>
 #include <termios.h>
 
 /*

@@ -20,15 +20,32 @@
  *  This driver uses the termios pseudo driver.
  */
 
+#include <stdlib.h>
+
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <stdlib.h>
 #include <rtems/ringbuf.h>
+#include <rtems/bspIo.h>
 
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
-#include <rtems/bspIo.h>
+
+#include <bsp/irq.h>
+
 #include "ns16550_p.h"
+
+#ifdef BSP_FEATURE_IRQ_EXTENSION
+  /* Nothing to do */
+#elif defined BSP_FEATURE_IRQ_LEGACY
+  /* Nothing to do */
+#elif defined __PPC__
+  #define BSP_FEATURE_IRQ_LEGACY
+  #ifdef BSP_SHARED_HANDLER_SUPPORT
+    #define BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
+  #endif
+#else
+  #warning No interrupt support available
+#endif
 
 /*
  * Flow control is only supported when using interrupts
@@ -68,14 +85,6 @@ console_fns ns16550_fns_polled = {
   false                                /* deviceOutputUsesInterrupts */
 };
 
-#if defined(__PPC__)
-#ifdef _OLD_EXCEPTIONS
-extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
-#else
-#include <bsp/irq.h>
-#endif
-#endif
-
 /*
  *  ns16550_init
  */
@@ -91,6 +100,11 @@ NS16550_STATIC void ns16550_init(int minor)
   getRegister_f           getReg;
 
   pns16550Context=(ns16550_context *)malloc(sizeof(ns16550_context));
+
+  if (pns16550Context == NULL) {
+    printk( "%s: Error: Not enough memory\n", __func__);
+    rtems_fatal_error_occurred( 0xdeadbeef);
+  }
 
   Console_Port_Data[minor].pDeviceContext=(void *)pns16550Context;
   pns16550Context->ucModemCtrl=SP_MODEM_IRQ;
@@ -117,8 +131,8 @@ NS16550_STATIC void ns16550_init(int minor)
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
 
   /* XXX */
-  (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
-  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
+  (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, (uint8_t) (ulBaudDivisor & 0xffU));
+  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (uint8_t) ((ulBaudDivisor >> 8) & 0xffU));
 
   /* Clear the divisor latch and set the character size to eight bits */
   /* with one stop bit and no parity checking. */
@@ -441,10 +455,11 @@ NS16550_STATIC int ns16550_set_attributes(
  *  This routine is the console interrupt handler for A port.
  */
 
-NS16550_STATIC void ns16550_process(
-        int             minor
-)
+NS16550_STATIC void ns16550_process( int minor)
 {
+  console_tbl *c = &Console_Port_Tbl [minor];
+  console_data *d = &Console_Port_Data [minor];
+
   uint32_t                pNS16550;
   volatile uint8_t        ucLineStatus;
   volatile uint8_t        ucInterruptId;
@@ -452,22 +467,22 @@ NS16550_STATIC void ns16550_process(
   getRegister_f           getReg;
   setRegister_f           setReg;
 
-  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor].getRegister;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  pNS16550 = c->ulCtrlPort1;
+  getReg   = c->getRegister;
+  setReg   = c->setRegister;
 
   do {
     /*
      * Deal with any received characters
      */
-    while(true) {
+    while (true) {
       ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-      if(~ucLineStatus & SP_LSR_RDY) {
+      if (~ucLineStatus & SP_LSR_RDY) {
         break;
       }
       cChar = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER);
       rtems_termios_enqueue_raw_characters(
-        Console_Port_Data[minor].termios_data,
+        d->termios_data,
         &cChar,
         1
       );
@@ -477,81 +492,30 @@ NS16550_STATIC void ns16550_process(
      *  TX all the characters we can
      */
 
-    while(true) {
-        ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-        if(~ucLineStatus & SP_LSR_THOLD) {
-          /*
-           * We'll get another interrupt when
-           * the transmitter holding reg. becomes
-           * free again
-           */
-          break;
-        }
-
-#if 0
-        /* XXX flow control not completely supported in libchip */
-
-        if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
-          ns16550_negate_RTS(minor);
-        }
-#endif
-
-    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
-    if (rtems_termios_dequeue_characters(
-         Console_Port_Data[minor].termios_data, 1)) {
-        if (Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
-          ns16550_negate_RTS(minor);
-        }
-        Console_Port_Data[minor].bActive = FALSE;
-        ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+    while (true) {
+      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
+      if (~ucLineStatus & SP_LSR_THOLD) {
+        /*
+         * We'll get another interrupt when
+         * the transmitter holding reg. becomes
+         * free again
+         */
         break;
       }
 
-      ucInterruptId = (*getReg)(pNS16550, NS16550_INTERRUPT_ID);
+      if (rtems_termios_dequeue_characters( d->termios_data, 1) == 0) {
+        if (c->pDeviceFlow != &ns16550_flow_RTSCTS) {
+          ns16550_negate_RTS(minor);
+        }
+        d->bActive = false;
+        ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+        break;
+      }
     }
+
+    ucInterruptId = (*getReg)(pNS16550, NS16550_INTERRUPT_ID);
   } while((ucInterruptId&0xf)!=0x1);
 }
-
-#if defined(__PPC__)
-#ifdef _OLD_EXCEPTIONS 
-
-/*
- *  ns16550_isr
- */
-
-NS16550_STATIC rtems_isr ns16550_isr(
-  rtems_vector_number vector
-)
-{
-  int     minor;
-
-  for(minor=0;minor<Console_Port_Count;minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector &&
-       Console_Port_Tbl[minor].deviceType == SERIAL_NS16550 ) {
-      ns16550_process(minor);
-    }
-  }
-}
-
-#else
-
-NS16550_STATIC rtems_isr ns16550_isr(
-  void *entry 
-)
-{
-  console_tbl *ptr = entry;
-  int         minor;
-
-  for(minor=0;minor<Console_Port_Count;minor++) {
-    if( &Console_Port_Tbl[minor] == ptr ) {
-      ns16550_process(minor);
-    }
-  }
-
-}
-
-#endif
-#endif
 
 /*
  *  ns16550_enable_interrupts
@@ -573,67 +537,87 @@ NS16550_STATIC void ns16550_enable_interrupts(
   (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, mask);
 }
 
+#ifdef BSP_FEATURE_IRQ_EXTENSION
+  NS16550_STATIC void ns16550_isr( rtems_vector_number vector, void *arg)
+  {
+    int minor = (int) arg;
+
+    ns16550_process( minor);
+  }
+#elif defined BSP_FEATURE_IRQ_LEGACY
+  NS16550_STATIC rtems_isr ns16550_isr( void *arg)
+  {
+    int minor = (int) arg;
+
+    ns16550_process( minor);
+  }
+#endif
+
 /*
  *  ns16550_initialize_interrupts
  *
  *  This routine initializes the port to operate in interrupt driver mode.
  */
-
-#if defined(__PPC__)
-#ifdef _OLD_EXCEPTIONS
-NS16550_STATIC void ns16550_initialize_interrupts(int minor)
+NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 {
-  ns16550_init(minor);
+  console_tbl *c = &Console_Port_Tbl [minor];
+  console_data *d = &Console_Port_Data [minor];
 
-  Console_Port_Data[minor].bActive = FALSE;
+  ns16550_init( minor);
 
-  set_vector(ns16550_isr, Console_Port_Tbl[minor].ulIntVector, 1);
+  d->bActive = false;
+
+  #ifdef BSP_FEATURE_IRQ_EXTENSION
+    {
+      rtems_status_code sc = RTEMS_SUCCESSFUL;
+      sc = rtems_interrupt_handler_install(
+        c->ulIntVector,
+        "NS16550",
+        RTEMS_INTERRUPT_SHARED,
+        ns16550_isr,
+        (void *) minor
+      );
+      if (sc != RTEMS_SUCCESSFUL) {
+        /* FIXME */
+        printk( "%s: Error: Install interrupt handler\n", __func__);
+        rtems_fatal_error_occurred( 0xdeadbeef);
+      }
+    }
+  #elif defined BSP_FEATURE_IRQ_LEGACY
+    {
+      int rv = 0;
+      #ifdef BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
+        rtems_irq_connect_data cd = {
+          c->ulIntVector,
+          ns16550_isr,
+          (void *) minor
+          NULL,
+          NULL,
+          NULL,
+          NULL
+        };
+        rv = BSP_install_rtems_shared_irq_handler( &cd);
+      #else
+        rtems_irq_connect_data cd = {
+          c->ulIntVector,
+          ns16550_isr,
+          (void *) minor
+          NULL,
+          NULL,
+          NULL
+        };
+        rv = BSP_install_rtems_irq_handler( &cd);
+      #endif
+      if (rv == 0) {
+        /* FIXME */
+        printk( "%s: Error: Install interrupt handler\n", __func__);
+        rtems_fatal_error_occurred( 0xdeadbeef);
+      }
+    }
+  #endif
   
-  ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
+  ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
 }
-#else
-
-NS16550_STATIC void ns16550_initialize_interrupts(int minor)
-{
-#ifdef BSP_SHARED_HANDLER_SUPPORT
-  rtems_irq_connect_data IrqData = {0,
-                                    ns16550_isr,
-                                    &Console_Port_Data[minor],
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL
-                                   };
-#else
-  rtems_irq_connect_data IrqData = {0,
-                                    ns16550_isr,
-                                    &Console_Port_Data[minor],
-                                    NULL,
-                                    NULL,
-                                    NULL
-                                   };
-#endif
-
-  ns16550_init(minor);
-
-  Console_Port_Data[minor].bActive = FALSE;
-
-  IrqData.name  = (rtems_irq_number)(Console_Port_Tbl[minor].ulIntVector );
-
-#ifdef BSP_SHARED_HANDLER_SUPPORT
-  if (!BSP_install_rtems_shared_irq_handler (&IrqData)) {
-#else
-  if (!BSP_install_rtems_irq_handler(&IrqData)) {
-#endif
-    printk("Error installing interrupt handler!\n");
-    rtems_fatal_error_occurred(1);
-  }
-
-  ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
-}
-
-#endif
-#endif
 
 /*
  *  ns16550_write_support_int
@@ -667,8 +651,8 @@ NS16550_STATIC int ns16550_write_support_int(
   }
 
   rtems_interrupt_disable(Irql);
-    if ( Console_Port_Data[minor].bActive == FALSE) {
-      Console_Port_Data[minor].bActive = TRUE;
+    if ( Console_Port_Data[minor].bActive == false) {
+      Console_Port_Data[minor].bActive = true;
       ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
     }
     (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, *buf);
