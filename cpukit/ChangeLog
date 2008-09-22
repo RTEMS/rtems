@@ -1,3 +1,8 @@
+2008-09-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/version.m4: Bump RTEMS_API to 4.10.
+	Bump _RTEMS_VERSION to 4.9.99.0.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/main_mallocinfo.c, libmisc/shell/main_wkspaceinfo.c:
