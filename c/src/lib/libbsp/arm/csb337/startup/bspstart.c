@@ -101,21 +101,3 @@ static void fix_mac_addr(void)
  *  can override the actual bsp_start routine used.
  */
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
-
-/*
- *  Reset the system.
- *
- *  This functions enables the watchdog and waits for it to 
- *  fire, thus resetting the system.
- */
-void bsp_reset(void)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-
-  /* Enable the watchdog timer, then wait for the world to end. */
-  ST_REG(ST_WDMR) = ST_WDMR_RSTEN | 1;
-
-  while(1);
-}
