@@ -30,8 +30,8 @@ include_HEADERS += ../../arm/shared/comm/uart.h
 startup_SOURCES = ../../shared/bsppost.c ../../shared/bsplibc.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
-    startup/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    startup/bspreset.c ../../shared/gnatinstallhandler.c
 
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/uart.c ../../shared/console.c

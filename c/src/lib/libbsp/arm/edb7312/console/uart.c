@@ -5,12 +5,12 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *
  *  http://www.rtems.com/license/LICENSE.
  *
  *
  *  $Id$
-*/
+ */
+
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 #include <termios.h>
@@ -107,9 +107,6 @@ int uart_poll_read(int minor)
     return c;
 }
 
-static void _BSP_null_char( char c ) {uart_write_polled(0, c);}
-BSP_output_char_function_type BSP_output_char = _BSP_null_char;
-
 static int uart_write(int minor, const char *buf, int len)
 {
     volatile uint32_t   *data_reg;
@@ -156,3 +153,20 @@ static void uart_init(int minor)
                  0x17);              /* 9600 baud */
 
 }
+
+/*
+ * Debug IO support
+ */
+static void _BSP_null_char(char c)
+{
+  uart_write_polled(0, c);
+}
+
+static int _BSP_get_char(void)
+{
+  return uart_poll_read(0);
+}
+
+BSP_output_char_function_type BSP_output_char = _BSP_null_char;
+
+BSP_polling_getchar_function_type BSP_poll_char = _BSP_get_char;
