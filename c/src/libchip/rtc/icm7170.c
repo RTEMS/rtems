@@ -37,7 +37,7 @@
  *  icm7170_initialize
  */
 
-void icm7170_initialize(
+static void icm7170_initialize(
   int minor
 )
 {
@@ -60,7 +60,7 @@ void icm7170_initialize(
  *  icm7170_get_time
  */
 
-int icm7170_get_time(
+static int icm7170_get_time(
   int                minor,
   rtems_time_of_day *time
 )
@@ -113,9 +113,9 @@ int icm7170_get_time(
  *  icm7170_set_time
  */
 
-int icm7170_set_time(
+static int icm7170_set_time(
   int                minor,
-  rtems_time_of_day *time
+  const rtems_time_of_day *time
 )
 {
   uint32_t       icm7170;

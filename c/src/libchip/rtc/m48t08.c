@@ -39,7 +39,7 @@
  *  m48t08_initialize
  */
 
-void m48t08_initialize(
+static void m48t08_initialize(
   int minor
 )
 {
@@ -52,7 +52,7 @@ void m48t08_initialize(
 #define From_BCD( _x ) ((((_x) >> 4) * 10) + ((_x) & 0x0F))
 #define To_BCD( _x )   ((((_x) / 10) << 4) + ((_x) % 10))
 
-int m48t08_get_time(
+static int m48t08_get_time(
   int                minor,
   rtems_time_of_day *time
 )
@@ -112,9 +112,9 @@ int m48t08_get_time(
  *  m48t08_set_time
  */
 
-int m48t08_set_time(
+static int m48t08_set_time(
   int                minor,
-  rtems_time_of_day *time
+  const rtems_time_of_day *time
 )
 {
   uint32_t       m48t08;

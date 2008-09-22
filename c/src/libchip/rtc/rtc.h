@@ -15,6 +15,11 @@
 #ifndef __LIBCHIP_RTC_h
 #define __LIBCHIP_RTC_h
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include <rtems.h>
+
 /*
  *  Types for get and set register routines
  */
@@ -26,7 +31,7 @@ typedef void       (*setRegister_f)(
 typedef struct _rtc_fns {
   void    (*deviceInitialize)(int minor);
   int     (*deviceGetTime)(int minor, rtems_time_of_day *time);
-  int     (*deviceSetTime)(int minor, rtems_time_of_day *time);
+  int     (*deviceSetTime)(int minor, const rtems_time_of_day *time);
 } rtc_fns;
 
 typedef enum {
@@ -50,8 +55,6 @@ typedef enum {
  *
  * ulCtrlPort1  This is the primary control port number for the device.
  *
- * ulCtrlPort2  This is the secondary control port number.
- *
  * ulDataPort   This is the port number for the data port of the device
  *
  * getRegister  This is the routine used to read register values.
@@ -60,9 +63,9 @@ typedef enum {
  */
 
 typedef struct _rtc_tbl {
-  char          *sDeviceName;
+  const char    *sDeviceName;
   rtc_devs       deviceType;
-  rtc_fns       *pDeviceFns;
+  const rtc_fns *pDeviceFns;
   bool           (*deviceProbe)(int minor);
   void          *pDeviceParams;
   uint32_t       ulCtrlPort1;
