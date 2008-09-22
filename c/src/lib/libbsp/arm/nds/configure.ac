@@ -25,6 +25,15 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 ## $srcdir/mk_libnds.sh $srcdir
 
+RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
+[If defined, print a message and wait until pressed before resetting
+ board when application exits.])
+
+RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
+[If defined, reset the board when the application exits.])
+
 RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
 
 # Explicitly list all Makefiles here

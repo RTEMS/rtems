@@ -26,8 +26,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmdsflash \
 	startup/linkcmdsram
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsplibc.c ../../shared/bsppost.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
+    ../../shared/bsplibc.c ../../shared/bsppost.c ../../shared/bspreset_loop.c \
     startup/bspgetcpuclockspeed.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c startup/init5235.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c ../../m68k/shared/setvec.c \
