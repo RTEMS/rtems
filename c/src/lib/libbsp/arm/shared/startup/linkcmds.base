@@ -1,0 +1,385 @@
+/**
+ * @file
+ *
+ * @brief Linker command base file for configuration with internal and external
+ * RAM and optional ROM load.
+ *
+ * You need to add a linker command file to your board support package that
+ * includes this file at the end and provides the following definitions.
+ *
+ * Compulsory are the memory regions RAM_INT, RAM_EXT and NIRVANA.
+ * <pre>
+ * MEMORY {
+ *   RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
+ *   RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 32M
+ *   NIRVANA : ORIGIN = 0, LENGTH = 0
+ * }
+ * </pre>
+ *
+ * You may optionally provide ROM start and size values.
+ * <pre>
+ * bsp_rom_start = 0x80000000;
+ * bsp_rom_size = 0x01000000;
+ * </pre>
+ *
+ * Optionally you can enable the load to ROM.  It is enabled then
+ * bsp_enable_rom_load is defined.  The value is arbitrary.
+ * <pre>
+ * bsp_enable_rom_load = 1;
+ * </pre>
+ *
+ * Include the linker command base file.  This file has to be installed in the
+ * same directory than your linker command file.
+ * <pre>
+ * INCLUDE linkcmds.base
+ * </pre>
+ *
+ * You may define optionally values for the following sizes:
+ *   - bsp_ram_int_size
+ *   - bsp_ram_ext_size
+ *   - bsp_stack_abt_size
+ *   - bsp_stack_fiq_size
+ *   - bsp_stack_irq_size
+ *   - bsp_stack_svc_size
+ *   - bsp_stack_undef_size
+ */
+
+/*
+ * Copyright (c) 2008
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
+ *
+ * The license and distribution terms for this file may be found in the file
+ * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ */
+
+OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
+
+OUTPUT_ARCH (arm)
+
+ENTRY (start)
+
+/*
+ * BSP: Symbols that may be defined externally.  The minimum alignment
+ * requirement for regions is bsp_section_align.
+ */
+bsp_ram_int_size = DEFINED (bsp_ram_int_size) ? bsp_ram_int_size : LENGTH (RAM_INT);
+
+bsp_ram_ext_size = DEFINED (bsp_ram_ext_size) ? bsp_ram_ext_size : LENGTH (RAM_EXT);
+
+bsp_rom_start = DEFINED (bsp_rom_start) ? bsp_rom_start : 0;
+
+bsp_rom_size = DEFINED (bsp_rom_size) ? bsp_rom_size : 0;
+
+bsp_ram_ext_load_start = DEFINED (bsp_enable_rom_load) ? bsp_rom_start : bsp_ram_ext_start;
+
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
+
+bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 128;
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 256;
+
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 256;
+
+bsp_stack_undef_size = DEFINED (bsp_stack_undef_size) ? bsp_stack_undef_size : 128;
+
+/*
+ * BSP: Global symbols
+ */
+bsp_ram_int_start = ORIGIN (RAM_INT);
+bsp_ram_int_end = bsp_ram_int_start + bsp_ram_int_size;
+
+bsp_ram_ext_start = ORIGIN (RAM_EXT);
+bsp_ram_ext_end = bsp_ram_ext_start + bsp_ram_ext_size;
+
+bsp_rom_end = bsp_rom_start + bsp_rom_size;
+
+bsp_section_align = 16;
+
+bsp_stack_align = 16;
+
+SECTIONS {
+	.vector : {
+		/*
+		 * BSP: Start of vector section
+		 */
+		bsp_section_vector_start = .;
+
+		/*
+		 * BSP: Reserve space for the the exception vector table and
+		 * the pointers to the default exceptions handlers.
+		 */
+		. = . + 64;
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of vector section
+		 */
+		bsp_section_vector_end = .;
+	} > RAM_INT
+
+	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_start;
+
+	.text : AT (bsp_ram_ext_load_start) {
+		/*
+		 * BSP: Start of text section
+		 */
+		bsp_section_text_start = .;
+
+		/*
+		 * BSP: System startup entry
+		 */
+		KEEP (*(.entry))
+
+		/*
+		 * BSP: Moved into .text from .init
+		 */
+		KEEP (*(.init))
+
+		*(.text .stub .text.* .gnu.linkonce.t.*)
+		KEEP (*(.text.*personality*))
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+
+		/*
+		 * BSP: Magic ARM stuff
+		 */
+		*(.ARM.*)
+		*(.glue_7)
+		*(.glue_7t)
+		*(.vfp11_veneer)
+		
+		/*
+		 * BSP: Special FreeBSD sysctl sections
+		 */
+		. = ALIGN (16);
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = ABSOLUTE(.);
+		*(set_domain_*);
+		*(set_pseudo_*);
+
+		/*
+		 * BSP: Moved into .text from .*
+		 */
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		*(.rodata1)
+		*(.eh_frame_hdr)
+
+		/*
+		 * BSP: Required by cpukit/score/src/threadhandler.c
+		 */
+		PROVIDE (_fini = .);
+
+		/*
+		 * BSP: Moved into .text from .fini
+		 */
+		KEEP (*(.fini))
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of text section
+		 */
+		bsp_section_text_end = .;
+	} > RAM_EXT
+
+	bsp_section_text_size = bsp_section_text_end - bsp_section_text_start;
+
+	.data : {
+		/*
+		 * BSP: Start of data section
+		 */
+		bsp_section_data_start = .;
+
+		/*
+		 * BSP: Moved into .data from .ctors
+		 */
+		/* gcc uses crtbegin.o to find the start of
+		   the constructors, so we make sure it is
+		   first.  Because this is a wildcard, it
+		   doesn't matter if the user does not
+		   actually link against crtbegin.o; the
+		   linker won't look for a file to match a
+		   wildcard.  The wildcard also means that it
+		   doesn't matter which directory crtbegin.o
+		   is in.  */
+		KEEP (*crtbegin.o(.ctors))
+		KEEP (*crtbegin?.o(.ctors))
+		/* We don't want to include the .ctor section from
+		   the crtend.o file until after the sorted ctors.
+		   The .ctor section from the crtend file contains the
+		   end of ctors marker and it must be last */
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+		KEEP (*(SORT(.ctors.*)))
+		KEEP (*(.ctors))
+
+		/*
+		 * BSP: Moved into .data from .dtors
+		 */
+		KEEP (*crtbegin.o(.dtors))
+		KEEP (*crtbegin?.o(.dtors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+		KEEP (*(SORT(.dtors.*)))
+		KEEP (*(.dtors))
+
+		/*
+		 * BSP: Moved into .data from .*
+		 */
+		*(.data1)
+		KEEP (*(.eh_frame))
+		*(.gcc_except_table .gcc_except_table.*)
+		KEEP (*(.jcr))
+
+		*(.data .data.* .gnu.linkonce.d.*)
+		KEEP (*(.gnu.linkonce.d.*personality*))
+		SORT(CONSTRUCTORS)
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of data section
+		 */
+		bsp_section_data_end = .;
+	} > RAM_EXT
+
+	bsp_section_data_size = bsp_section_data_end - bsp_section_data_start;
+
+	.bss : {
+		/*
+		 * BSP: Start of bss section
+		 */
+		bsp_section_bss_start = .;
+
+		*(COMMON)
+		*(.dynbss)
+		*(.bss .bss.* .gnu.linkonce.b.*)
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of bss section
+		 */
+		bsp_section_bss_end = .;
+	} > RAM_EXT
+
+	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_start;
+
+	.stack : {
+		/*
+		 * BSP: Start of stack section
+		 */
+		bsp_section_stack_start = .;
+
+		. = ALIGN (bsp_stack_align);
+		bsp_stack_abt_start = .;
+		. = . + bsp_stack_abt_size;
+
+		. = ALIGN (bsp_stack_align);
+		bsp_stack_fiq_start = .;
+		. = . + bsp_stack_fiq_size;
+
+		. = ALIGN (bsp_stack_align);
+		bsp_stack_irq_start = .;
+		. = . + bsp_stack_irq_size;
+
+		. = ALIGN (bsp_stack_align);
+		bsp_stack_svc_start = .;
+		. = . + bsp_stack_svc_size;
+
+		. = ALIGN (bsp_stack_align);
+		bsp_stack_undef_start = .;
+		. = . + bsp_stack_undef_size;
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of stack section
+		 */
+		bsp_section_stack_end = .;
+	} > RAM_INT
+
+	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_start;
+
+	.work_area : {
+		/*
+		 * BSP: Start of work area.  The work area will occupy the remaining
+		 * RAM_EXT region and contains the RTEMS work space and heap.  We cannot
+		 * assign the region end directly since this leads to a region full
+		 * warning.
+		 */
+		bsp_section_work_area_start = .;
+
+		. = bsp_ram_ext_end - 4;
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of work area
+		 */
+		bsp_section_work_area_end = .;
+	} > RAM_EXT
+
+	bsp_section_work_area_size = bsp_section_work_area_end - bsp_section_work_area_start;
+
+	/*
+	 * BSP: External symbols (FIXME)
+	 */
+	RamBase = bsp_ram_ext_start;
+	RamSize = bsp_ram_ext_size;
+	WorkAreaBase = bsp_section_work_area_start;
+	HeapSize = 0;
+	
+	/* Stabs debugging sections.  */
+	.stab          0 : { *(.stab) }
+	.stabstr       0 : { *(.stabstr) }
+	.stab.excl     0 : { *(.stab.excl) }
+	.stab.exclstr  0 : { *(.stab.exclstr) }
+	.stab.index    0 : { *(.stab.index) }
+	.stab.indexstr 0 : { *(.stab.indexstr) }
+	.comment       0 : { *(.comment) }
+	/* DWARF debug sections.
+	   Symbols in the DWARF debugging sections are relative to the beginning
+	   of the section so we begin them at 0.  */
+	/* DWARF 1 */
+	.debug          0 : { *(.debug) }
+	.line           0 : { *(.line) }
+	/* GNU DWARF 1 extensions */
+	.debug_srcinfo  0 : { *(.debug_srcinfo) }
+	.debug_sfnames  0 : { *(.debug_sfnames) }
+	/* DWARF 1.1 and DWARF 2 */
+	.debug_aranges  0 : { *(.debug_aranges) }
+	.debug_pubnames 0 : { *(.debug_pubnames) }
+	/* DWARF 2 */
+	.debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+	.debug_abbrev   0 : { *(.debug_abbrev) }
+	.debug_line     0 : { *(.debug_line) }
+	.debug_frame    0 : { *(.debug_frame) }
+	.debug_str      0 : { *(.debug_str) }
+	.debug_loc      0 : { *(.debug_loc) }
+	.debug_macinfo  0 : { *(.debug_macinfo) }
+	/* SGI/MIPS DWARF 2 extensions */
+	.debug_weaknames 0 : { *(.debug_weaknames) }
+	.debug_funcnames 0 : { *(.debug_funcnames) }
+	.debug_typenames 0 : { *(.debug_typenames) }
+	.debug_varnames  0 : { *(.debug_varnames) }
+	/* DWARF 3 */
+	.debug_pubtypes 0 : { *(.debug_pubtypes) }
+	.debug_ranges   0 : { *(.debug_ranges) }
+	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+
+	/DISCARD/ : {
+		*(.note.GNU-stack) *(.gnu_debuglink)
+	}
+
+	/*
+	 * BSP: Catch all unknown sections
+	 */
+	.nirvana : {
+		*(*)
+	} > NIRVANA
+}
