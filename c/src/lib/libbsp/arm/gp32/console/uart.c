@@ -245,5 +245,9 @@ static void _BSP_put_char( char c ) {
 
 BSP_output_char_function_type BSP_output_char = _BSP_put_char;
 
+static int _BSP_get_char(void)
+{
+  return uart_poll_read(0);
+}
 
-
+BSP_polling_getchar_function_type BSP_poll_char = _BSP_get_char;
