@@ -25,7 +25,7 @@ extern "C" {
  * functionnality described after the next command.
  */
 typedef void 	(*BSP_output_char_function_type) 	(char c);
-typedef char 	(*BSP_polling_getchar_function_type) 	(void);
+typedef int 	(*BSP_polling_getchar_function_type) 	(void);
 
 extern 	BSP_output_char_function_type 		BSP_output_char;
 extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
@@ -38,6 +38,17 @@ extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
  */
 #include <stdarg.h>
 
+/**
+ *  This method polls for a key in the simplest possible fashion
+ *  from whatever the debug console device is.
+ *
+ *  @return If a character is available, it is returned.  Otherwise
+ *          this method returns -1.
+ *
+ *  @note This method uses the BSP_poll_char pointer to a BSP
+ *        provided method.
+ */
+extern int getchark(void);
 extern void vprintk(const char *fmt, va_list ap);
 extern void printk(const char *fmt, ...);
 
