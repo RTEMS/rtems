@@ -1,3 +1,8 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added defines for
+	LPC2478 BSP.
+
 2008-09-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README.configure: Updated list of BSPs.

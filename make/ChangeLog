@@ -1,3 +1,7 @@
+2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* custom/lpc2478.cfg: New file.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/ep1a.cfg, custom/mtx603e.cfg, custom/mvme2100.cfg,
