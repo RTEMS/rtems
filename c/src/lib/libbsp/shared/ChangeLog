@@ -1,3 +1,12 @@
+2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bspclean.c, include/bootcard.h: Use standardized bsp_cleanup() which
+	can optionally print a message, poll for user to press key, and call
+	bsp_reset(). Using this eliminates the various bsp_cleanup()
+	implementations which had their own implementation and variety of
+	string constants.
+	* bspreset.c, bspreset_fatal.c, bspreset_loop.c: New files.
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* clockdrv_shell.c: Install_clock has now static linkage.  Initialize

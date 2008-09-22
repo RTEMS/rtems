@@ -46,6 +46,8 @@ void bsp_postdriver_hook(void);
 
 void bsp_cleanup(void);
 
+void bsp_reset(void);
+
 #ifdef BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
   #define BSP_BOOTCARD_HEAP_USES_WORK_AREA NULL
 

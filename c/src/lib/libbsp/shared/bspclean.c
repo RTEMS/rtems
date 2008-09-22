@@ -11,6 +11,31 @@
  *  $Id$
  */
 
+#include <rtems.h>
+#include <rtems/bspIo.h>
+#include <bsp.h>
+#include <bspopts.h>
+#include <bsp/bootcard.h>
+
 void bsp_cleanup( void )
 {
+  #if (BSP_PRESS_KEY_FOR_RESET)
+    printk( "\nEXECUTIVE SHUTDOWN! Any key to reboot..." );
+
+    /*
+     * Wait for a key to be pressed
+     */
+    while ( getchark() == -1 )
+      ;
+
+    printk("\n");
+  #endif
+
+  /*
+   *  Check both conditions -- if you want to ask for reboot, then
+   *  you must have meant to reset the board.
+   */
+  #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
+    bsp_reset();
+  #endif 
 }
