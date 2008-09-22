@@ -71,7 +71,7 @@ console_SOURCES = \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/inch.c \
-    ../../powerpc/shared/console/reboot.c \
+    ../../powerpc/shared/console/bspreset.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/keyboard.h \
     ../../powerpc/shared/console/uart.h
