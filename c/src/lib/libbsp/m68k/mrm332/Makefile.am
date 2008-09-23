@@ -31,7 +31,7 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds_ROM
 
 startup_SOURCES = startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
-    startup/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c \
     startup/except_vect_332_ROM.S
