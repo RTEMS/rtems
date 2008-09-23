@@ -29,8 +29,8 @@ project_lib_DATA = start.$(OBJEXT) crtnn.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+    ../../shared/bspreset_loop.c ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
