@@ -1,3 +1,10 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, include/bsp.h, startup/bspstart.c: Rename
+	existing bsp_reset() to bsp_sysReset() since the prototype did not
+	match the standard one. Add standard bsp_reset().
+	* startup/bspreset.c: New file.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Remove unnecessary boilerplate comments.

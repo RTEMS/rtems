@@ -64,7 +64,7 @@ typedef struct {
 
 uint32_t bsp_get_CPU_clock_speed(void);
 rtems_status_code bsp_allocate_interrupt(int level, int priority);
-int bsp_reset(int flags);
+int bsp_sysReset(int flags);
 int bsp_program(bsp_mnode_t *chain, int flags);
 unsigned const char *bsp_gethwaddr(int a);
 const char *bsp_getbenv(const char *a);

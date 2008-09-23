@@ -183,7 +183,7 @@ static void handler(int pc)
     static volatile int reent;
 
     rtems_interrupt_disable(level);
-    if (reent++) bsp_reset(0);
+    if (reent++) bsp_sysReset(0);
     {
     int *p = &pc;
     int info = p[-1];
@@ -363,14 +363,14 @@ type bsp_##name(d1type d1, d2type d2, d3type d3)            \
    syscall_return(type,ret);                                \
 }
 
-#define SysCode_reset              0 /* reset */
+#define SysCode_sysReset           0 /* system reset */
 #define SysCode_program            5 /* program flash memory */
 #define SysCode_gethwaddr         12 /* get hardware address */
 #define SysCode_getbenv           14 /* get bootloader environment variable */
 #define SysCode_setbenv           15 /* set bootloader environment variable */
 #define SysCode_flash_erase_range 19 /* erase a section of flash */
 #define SysCode_flash_write_range 20 /* write a section of flash */
-syscall_1(int, reset, int, flags)
+syscall_1(int, sysReset, int, flags)
 syscall_1(unsigned const char *, gethwaddr, int, a)
 syscall_1(const char *, getbenv, const char *, a)
 syscall_1(int, setbenv, const char *, a)
