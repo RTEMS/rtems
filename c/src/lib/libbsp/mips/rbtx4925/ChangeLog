@@ -1,3 +1,7 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspclean.c: Removed.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Remove unnecessary boilerplate comments.
