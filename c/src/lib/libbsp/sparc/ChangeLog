@@ -1,3 +1,7 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/bspclean.c: Removed.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspstart.c: Remove unnecessary includes of rtems/libcsupport.h
