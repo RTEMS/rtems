@@ -1,3 +1,8 @@
+2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/lpc2478.cfg: Comment out use of U-Boot specific mkimage since
+	we do not reliably know it is installed.
+
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* custom/lpc2478.cfg: New file.
