@@ -53,8 +53,6 @@ bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
  *  Use the shared implementations of the following routines.
  *  Look in rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
-extern void cpu_init( void);
-
 void BSP_panic( char *s)
 {
   rtems_interrupt_level level;
@@ -156,9 +154,6 @@ void bsp_start( void)
    */
   myCpu = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
-
-  /* Basic CPU initialization */
-  cpu_init();
 
   /*
    * Enable instruction and data caches. Do not force writethrough mode.

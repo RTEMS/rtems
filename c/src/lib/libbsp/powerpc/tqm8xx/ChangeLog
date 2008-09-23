@@ -1,3 +1,8 @@
+2008-09-23	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* startup/cpuinit.c, startup/bspstart.c: initialize mmu, make sure
+	cache is ENABLED when MMU is disabled
+
 2008-09-09	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* console/console.c: added printk support
