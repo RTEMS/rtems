@@ -1,3 +1,8 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/bsp-bootcard-options.m4: New file.
+	* aclocal/bsp-bootcards-handles-ram-allocation.m4: Removed.
+
 2008-09-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Enable interrupt code only for PowerPC or
