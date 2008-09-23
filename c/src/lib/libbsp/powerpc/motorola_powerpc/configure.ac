@@ -41,6 +41,8 @@ RTEMS_BSPOPTS_SET([mpc8240],[*],[])
 RTEMS_BSPOPTS_HELP([mpc8240],
 [Defined for boards with MPC8240 -- undefined for others])
 
+BSP_BOOTCARD_OPTIONS
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 bootloader/Makefile])

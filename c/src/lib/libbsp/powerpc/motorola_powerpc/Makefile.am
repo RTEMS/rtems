@@ -45,6 +45,7 @@ project_lib_DATA += vectors_entry.$(OBJEXT)
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
 startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
+ 	../../powerpc/shared/startup/bspgetworkarea.c \
  	../../powerpc/shared/showbats.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
         ../../shared/bsppredriverhook.c \
