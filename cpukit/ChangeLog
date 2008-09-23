@@ -1,3 +1,8 @@
+2008-09-23	Eric Norum <norume@aps.anl.gov>
+
+	* libnetworking/lib/rtems_bsdnet_ntp.c: Let TCP/IP stack pick port
+	rather than hard coding selection.
+
 2008-09-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/include/rtems/rtems/types.h: Do not define rtems_boolean,
