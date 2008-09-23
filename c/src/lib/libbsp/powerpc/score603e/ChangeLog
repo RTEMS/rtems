@@ -1,3 +1,9 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Make letting boot_card() handle work area allocation
+	mandatory. Rename RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION to
+	BSP_BOOTCARD_OPTIONS.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Remove unused BSP_INIT_STACK_SIZE

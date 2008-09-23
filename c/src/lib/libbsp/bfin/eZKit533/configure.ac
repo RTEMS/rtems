@@ -20,7 +20,7 @@ RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 [The console driver can operate in either polled or interrupt mode.])
 
-RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

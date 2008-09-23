@@ -44,7 +44,7 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
  I/O.  Don't open the printk port from RTEMS unless also using polled I/O
  for the SCI ports.])
 
-RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+BSP_BOOTCARD_OPTIONS
 
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile])

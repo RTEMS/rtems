@@ -1,5 +1,11 @@
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* configure.ac: Make letting boot_card() handle work area allocation
+	mandatory. Rename RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION to
+	BSP_BOOTCARD_OPTIONS.
+
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* start/start.S: bsp_cleanup() had the same code which was executed
 	when you returned from boot_card() to start.S. So just use the stub
 	bsp_cleanup() implementation and remove a file.

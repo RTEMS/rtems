@@ -35,7 +35,7 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
  a clock ISR occurs while the IDLE thread is executing.  This can
  significantly reduce simulation times.])
 
-RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

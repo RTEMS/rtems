@@ -17,6 +17,8 @@ RTEMS_PROG_CCAS
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
+BSP_BOOTCARD_OPTIONS
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
