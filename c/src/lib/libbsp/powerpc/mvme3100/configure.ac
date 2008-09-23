@@ -35,7 +35,7 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  of PowerPC 603e revisions and emulator versions.
  The BSP actually contains the call that enables this.])
 
-RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
+BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

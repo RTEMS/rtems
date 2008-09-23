@@ -1,14 +1,9 @@
 /* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
 
-/* BSP uses shared logic in bootcard.c */
-#undef BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
-
 /* Use a clock speed of 100000000 for the m5484FireEngine board */
 #undef BSP_CPU_CLOCK_SPEED
 
-/* If defined, then PSIM will put a non-zero pattern into the RTEMS Workspace
-   and C program heap. This should assist in finding code that assumes memory
-   starts set to zero. */
+/* If defined */
 #undef BSP_DIRTY_MEMORY
 
 /* If defined, print a message and wait until pressed before resetting board

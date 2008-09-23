@@ -1,11 +1,6 @@
 /* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
 
-/* BSP uses shared logic in bootcard.c */
-#undef BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
-
-/* If defined, then PSIM will put a non-zero pattern into the RTEMS Workspace
-   and C program heap. This should assist in finding code that assumes memory
-   starts set to zero. */
+/* If defined */
 #undef BSP_DIRTY_MEMORY
 
 /* Define to the address where bug reports for this package should be sent. */
