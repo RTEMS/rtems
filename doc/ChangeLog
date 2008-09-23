@@ -1,3 +1,7 @@
+2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bsp_howto/BSPInitFlowchart-49.png: Update figure.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
