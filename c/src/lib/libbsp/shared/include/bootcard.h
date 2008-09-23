@@ -30,7 +30,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <bspopts.h> /* for BSP_BOOTCARD_HANDLES_RAM_ALLOCATION */
+#include <bspopts.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,18 +48,16 @@ void bsp_cleanup(void);
 
 void bsp_reset(void);
 
-#ifdef BSP_BOOTCARD_HANDLES_RAM_ALLOCATION
-  #define BSP_BOOTCARD_HEAP_USES_WORK_AREA NULL
+#define BSP_BOOTCARD_HEAP_USES_WORK_AREA NULL
 
-  #define BSP_BOOTCARD_HEAP_SIZE_DEFAULT 0
+#define BSP_BOOTCARD_HEAP_SIZE_DEFAULT 0
 
-  void bsp_get_work_area(
-    void **work_area_start,
-    size_t *work_area_size,
-    void **heap_start,
-    size_t *heap_size
-  );
-#endif
+void bsp_get_work_area(
+  void **work_area_start,
+  size_t *work_area_size,
+  void **heap_start,
+  size_t *heap_size
+);
 
 int boot_card( int argc, char **argv, char **envp);
 

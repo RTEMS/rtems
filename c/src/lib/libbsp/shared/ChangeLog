@@ -1,3 +1,9 @@
+2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c, include/bootcard.h: Make letting boot_card() handle work
+	area allocation mandatory. Rename
+	RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION to BSP_BOOTCARD_OPTIONS.
+
 2008-09-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: New file.

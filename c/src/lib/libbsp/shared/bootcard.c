@@ -62,53 +62,51 @@ extern bool rtems_unified_work_area;
  *  when the BSP lets the framework handle RAM allocation between
  *  the RTEMS Workspace and C Program Heap.
  */
-#if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-  static rtems_status_code bootcard_bsp_libc_helper(
-    void   *work_area_start,
-    size_t  work_area_size,
-    void   *heap_start,
-    size_t  heap_size
-  )
-  {
-    size_t heap_size_default = 0;
+static rtems_status_code bootcard_bsp_libc_helper(
+  void   *work_area_start,
+  size_t  work_area_size,
+  void   *heap_start,
+  size_t  heap_size
+)
+{
+  size_t heap_size_default = 0;
 
-    if ( !rtems_unified_work_area && 
-         heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
-      /* Use the work area start as heap start */
-      heap_start = work_area_start;
+  if ( !rtems_unified_work_area && 
+       heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
+    /* Use the work area start as heap start */
+    heap_start = work_area_start;
 
-      /* Ensure proper alignement */
-      if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
-        heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT)
-	  & ~(CPU_ALIGNMENT - 1));
-      }
-
-      /*
-       * For the default heap size use the free space from the start of the
-       * work area up to the work space start as heap area.
-       */
-      heap_size_default = (size_t) ((char *) Configuration.work_space_start
-        - (char *) work_area_start);
-
-      /* Keep it as a multiple of 16 bytes */
-      heap_size_default &= ~((size_t) 0xf);
-
-      /* Use default heap size if requested */
-      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
-        heap_size = heap_size_default;
-      }
-		
-      /* Check heap size */
-      if (heap_size > heap_size_default) {
-        return RTEMS_INVALID_SIZE;
-      }
+    /* Ensure proper alignement */
+    if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
+      heap_start = (void *) (((uintptr_t) heap_start + CPU_ALIGNMENT)
+	& ~(CPU_ALIGNMENT - 1));
     }
 
-    bsp_libc_init(heap_start, heap_size, 0);
+    /*
+     * For the default heap size use the free space from the start of the
+     * work area up to the work space start as heap area.
+     */
+    heap_size_default = (size_t) ((char *) Configuration.work_space_start
+      - (char *) work_area_start);
 
-    return RTEMS_SUCCESSFUL;
+    /* Keep it as a multiple of 16 bytes */
+    heap_size_default &= ~((size_t) 0xf);
+
+    /* Use default heap size if requested */
+    if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
+      heap_size = heap_size_default;
+    }
+	      
+    /* Check heap size */
+    if (heap_size > heap_size_default) {
+      return RTEMS_INVALID_SIZE;
+    }
   }
-#endif
+
+  bsp_libc_init(heap_start, heap_size, 0);
+
+  return RTEMS_SUCCESSFUL;
+}
 
 /*
  *  This is the initialization framework routine that weaves together
@@ -122,18 +120,16 @@ int boot_card(
   char **envp
 )
 {
-  static char  *argv_pointer = NULL;
-  static char  *envp_pointer = NULL;
-  char **argv_p = &argv_pointer;
-  char **envp_p = &envp_pointer;
-  rtems_interrupt_level bsp_isr_level;
-  #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    rtems_status_code sc = RTEMS_SUCCESSFUL;
-    void   *work_area_start = NULL;
-    size_t  work_area_size = 0;
-    void   *heap_start = NULL;
-    size_t  heap_size = 0;
-  #endif
+  static char            *argv_pointer = NULL;
+  static char            *envp_pointer = NULL;
+  char                  **argv_p = &argv_pointer;
+  char                  **envp_p = &envp_pointer;
+  rtems_interrupt_level   bsp_isr_level;
+  rtems_status_code       sc = RTEMS_SUCCESSFUL;
+  void                   *work_area_start = NULL;
+  size_t                  work_area_size = 0;
+  void                   *heap_start = NULL;
+  size_t                  heap_size = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -174,33 +170,24 @@ int boot_card(
    *  Find out where the block of memory the BSP will use for
    *  the RTEMS Workspace and the C Program Heap is.
    */
-  #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    {
-      bsp_get_work_area(
-        &work_area_start,
-        &work_area_size,
-        &heap_start,
-        &heap_size
-      );
-    
-      if ( work_area_size <= Configuration.work_space_size ) {
-        printk( "bootcard: Work space too big for work area!\n");
-        bsp_cleanup();
-        return -1;
-      }
-    
-      if ( rtems_unified_work_area ) {
-        Configuration.work_space_start = work_area_start;
-        Configuration.work_space_size  = work_area_size;
-      } else {
-        Configuration.work_space_start = (char *) work_area_start +
-          work_area_size - rtems_configuration_get_work_space_size();
-      }
+  bsp_get_work_area(&work_area_start, &work_area_size, &heap_start, &heap_size);
 
-      #if (BSP_DIRTY_MEMORY == 1)
-        memset( work_area_start, 0xCF,  work_area_size);
-      #endif
-    }
+  if ( work_area_size <= Configuration.work_space_size ) {
+    printk( "bootcard: Work space too big for work area!\n");
+    bsp_cleanup();
+    return -1;
+  }
+
+  if ( rtems_unified_work_area ) {
+    Configuration.work_space_start = work_area_start;
+    Configuration.work_space_size  = work_area_size;
+  } else {
+    Configuration.work_space_start = (char *) work_area_start +
+      work_area_size - rtems_configuration_get_work_space_size();
+  }
+
+  #if (BSP_DIRTY_MEMORY == 1)
+    memset( work_area_start, 0xCF,  work_area_size );
   #endif
 
   /*
@@ -212,19 +199,17 @@ int boot_card(
    *  Initialize the C library for those BSPs using the shared
    *  framework.
    */
-  #if defined(BSP_BOOTCARD_HANDLES_RAM_ALLOCATION)
-    sc = bootcard_bsp_libc_helper(
-      work_area_start,
-      work_area_size,
-      heap_start,
-      heap_size
-    );
-    if (sc != RTEMS_SUCCESSFUL) {
-      printk( "bootcard: Cannot initialize C library!\n");
-      bsp_cleanup();
-      return -1;
-    }
-  #endif
+  sc = bootcard_bsp_libc_helper(
+    work_area_start,
+    work_area_size,
+    heap_start,
+    heap_size
+  );
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    printk( "bootcard: Cannot initialize C library!\n");
+    bsp_cleanup();
+    return -1;
+  }
 
   /*
    *  All BSP to do any required initialization now that RTEMS
@@ -295,6 +280,5 @@ int boot_card(
   /*
    *  Now return to the start code.
    */
-
   return 0;
 }
