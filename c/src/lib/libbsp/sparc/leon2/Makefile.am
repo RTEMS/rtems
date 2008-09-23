@@ -50,7 +50,7 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = ../../sparc/shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../sparc/shared/bspgetworkarea.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
