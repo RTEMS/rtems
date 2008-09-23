@@ -24,7 +24,8 @@ include_HEADERS = include/bsp.h
 
 nodist_include_HEADERS = include/bspopts.h
 
-include_bsp_HEADERS = ../../shared/include/irq-generic.h \
+include_bsp_HEADERS = ../../shared/include/utility.h \
+	../../shared/include/irq-generic.h \
 	../../shared/tod.h \
 	../shared/include/linker-symbols.h \
 	../shared/include/start.h \

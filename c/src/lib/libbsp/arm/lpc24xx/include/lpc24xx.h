@@ -23,7 +23,7 @@
 
 #include <stdint.h>
 
-#include <libcpu/utility.h>
+#include <bsp/utility.h>
 
 /* Vectored Interrupt Controller (VIC) */
 #define VIC_BASE_ADDR	0xFFFFF000

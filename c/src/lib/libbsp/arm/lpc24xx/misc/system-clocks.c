@@ -18,9 +18,8 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-#include <libcpu/utility.h>
-
 #include <bsp.h>
+#include <bsp/utility.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/system-clocks.h>
 
