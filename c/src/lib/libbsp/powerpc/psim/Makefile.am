@@ -40,7 +40,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../powerpc/shared/startup/bspgetworkarea.c ../../shared/bootcard.c \

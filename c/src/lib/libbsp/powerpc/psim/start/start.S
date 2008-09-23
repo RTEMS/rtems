@@ -113,8 +113,8 @@ _start:
 	/* Let her rip */
 	bl	FUNC_NAME(boot_card)
 
-	/* return value from boot_card is argument to exit */
-	bl	FUNC_NAME(exit)
-	trap
+	li  10,99			/* 0x63 */
+  	sc
+
 .Lstart:
 	.size	_start,.Lstart-_start
