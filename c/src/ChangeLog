@@ -1,3 +1,8 @@
+2008-09-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c: Enable interrupt code only for PowerPC or
+	BSPs that support this feature.
+
 2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/serial/ns16550.c: Fix typo.

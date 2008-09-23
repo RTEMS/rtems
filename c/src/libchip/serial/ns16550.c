@@ -30,27 +30,21 @@
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 
+#include <bsp.h>
+
 #include "ns16550_p.h"
 
-#if !defined(CPU_SIMPLE_VECTORED_INTERRUPTS) && !defined(__arm__)
-  #include <bsp/irq.h>
-  #define NS16550_SUPPORTED
-#endif
-
 #ifdef BSP_FEATURE_IRQ_EXTENSION
-  /* Nothing to do */
+  #include <bsp/irq.h>
 #elif defined BSP_FEATURE_IRQ_LEGACY
-  /* Nothing to do */
+  #include <bsp/irq.h>
 #elif defined __PPC__
+  #include <bsp/irq.h>
   #define BSP_FEATURE_IRQ_LEGACY
   #ifdef BSP_SHARED_HANDLER_SUPPORT
     #define BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
   #endif
-#else
-  #undef NS16650_SUPPORTED
 #endif
-
-#if defined(NS16550_SUPPORTED)
 
 /*
  * Flow control is only supported when using interrupts
@@ -724,4 +718,3 @@ NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
     return -1;
   }
 }
-#endif /* defined(NS16550_SUPPORTED) */
