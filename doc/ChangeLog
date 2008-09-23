@@ -1,3 +1,7 @@
+2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bsp_howto/BSPInitFlowchart-49.png: Update figure.
+
 2008-09-18	Miao Yan <yanmiaobest@gmail.com>
 
 	* user/conf.t: Add CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM and
