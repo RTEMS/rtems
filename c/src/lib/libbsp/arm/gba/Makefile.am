@@ -55,9 +55,6 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES) $(irq_SOURCES)
 
 libbsp_a_LIBADD = gbaoverrides.rel
-if HAS_NETWORKING
-##
-endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
