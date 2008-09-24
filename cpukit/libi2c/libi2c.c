@@ -542,7 +542,7 @@ rtems_libi2c_read_bytes (rtems_device_minor_number minor,
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
 
-    if (not_started (busno))
+  if (not_started (busno))
     return -RTEMS_NOT_OWNER_OF_RESOURCE;
 
   sc = bush->ops->read_bytes (bush, bytes, nbytes);
@@ -559,7 +559,7 @@ rtems_libi2c_write_bytes (rtems_device_minor_number minor,
   int sc;
   DECL_CHECKED_BH (busno, bush, minor, -)
 
-    if (not_started (busno))
+  if (not_started (busno))
     return -RTEMS_NOT_OWNER_OF_RESOURCE;
 
   sc = bush->ops->write_bytes (bush, (unsigned char *)bytes, nbytes);
@@ -643,8 +643,9 @@ do_s_rw (rtems_device_minor_number minor,
 	 int nbytes, 
 	 int rw)
 {
-  rtems_status_code sc;
+  rtems_status_code   sc;
   rtems_libi2c_bus_t *bush;
+  int                 status;
 
   if ((sc = rtems_libi2c_send_start (minor)))
     return -sc;
@@ -658,14 +659,14 @@ do_s_rw (rtems_device_minor_number minor,
   }
 
   if (rw)
-    sc = bush->ops->read_bytes (bush, bytes, nbytes);
+    status = bush->ops->read_bytes (bush, bytes, nbytes);
   else
-    sc = bush->ops->write_bytes (bush, bytes, nbytes);
+    status = bush->ops->write_bytes (bush, bytes, nbytes);
 
-  if (sc < 0) {
+  if (status < 0) {
     rtems_libi2c_send_stop (minor);
   }
-  return sc;
+  return status;
 }
 
 int

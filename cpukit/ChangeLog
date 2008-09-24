@@ -1,3 +1,9 @@
+2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1326/cpukit
+	* libi2c/libi2c.c: Use int for return value when negative values
+	possible.
+
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/lib/ftpfs.c: Use ssize_t for read retval (Fix
