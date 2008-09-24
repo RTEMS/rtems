@@ -131,7 +131,6 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += ne2000.rel wd8003.rel 3c509.rel
 endif
 
-
 EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
 
 include $(srcdir)/preinstall.am
