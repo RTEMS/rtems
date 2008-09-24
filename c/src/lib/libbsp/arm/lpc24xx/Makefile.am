@@ -25,6 +25,7 @@ libcpudir = ../../../libcpu/@RTEMS_CPU@
 include_HEADERS = include/bsp.h
 
 nodist_include_HEADERS = include/bspopts.h
+DISTCLEANFILES = include/bspopts.h
 
 include_bsp_HEADERS = ../../shared/include/utility.h \
 	../../shared/include/irq-generic.h \
