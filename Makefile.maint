@@ -31,7 +31,7 @@ TAG_SUFFIX = -test1
 
 rtems_version := $(shell cat VERSION | sed -n '/.* Version /{s/^.*Version[ ]*\([0-9\.]\+\)/\1/p};')
 rtems_tag     := $(shell echo "rtems-$(rtems_version)" | tr . -)
-rtems_api     := 4.8
+rtems_api     := 4.9
 PATH          := /opt/rtems-$(rtems_api)/bin:$(PATH)
 
 # -----------------
