@@ -1,5 +1,9 @@
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove NETWORKING (Sources are missing).
+
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Add DISTCLEANFILES = include/bspopts.h.
 
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>

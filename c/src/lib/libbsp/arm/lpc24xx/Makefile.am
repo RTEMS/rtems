@@ -92,22 +92,6 @@ libbsp_a_SOURCES = $(clock_SOURCES) \
 	$(startup_SOURCES)
 
 ###############################################################################
-#                  Network                                                    #
-###############################################################################
-
-if HAS_NETWORKING
-
-noinst_PROGRAMS = network.rel
-
-network_rel_SOURCES = network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-libbsp_a_LIBADD = network.rel
-
-endif
-
-###############################################################################
 #                  Special Rules                                              #
 ###############################################################################
 
