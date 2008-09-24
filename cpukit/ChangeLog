@@ -1,3 +1,8 @@
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/lib/ftpfs.c: Use ssize_t for read retval (Fix
+	  comparision of unsigned < 0).
+
 2008-09-23	Eric Norum <norume@aps.anl.gov>
 
 	* libnetworking/lib/rtems_bsdnet_ntp.c: Let TCP/IP stack pick port
