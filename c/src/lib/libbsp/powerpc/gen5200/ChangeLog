@@ -1,5 +1,9 @@
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Eliminates libcpudir.
+
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Cosmetics.
 
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>

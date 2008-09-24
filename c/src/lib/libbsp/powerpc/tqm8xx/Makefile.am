@@ -12,8 +12,6 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 
-libcpudir = ../../../libcpu/@RTEMS_CPU@
-
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 
@@ -25,8 +23,8 @@ include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     include/irq.h include/irq-config.h \
     ../../shared/include/irq-generic.h\
-    $(libcpudir)/@exceptions@/bspsupport/vectors.h \
-    $(libcpudir)/@exceptions@/bspsupport/ppc_exc_bspsupp.h
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
 EXTRA_DIST = times-tqm866
 
@@ -73,16 +71,16 @@ libbsp_a_SOURCES = $(irq_SOURCES) \
     $(p_clock_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
-    $(libcpudir)/shared/cpuIdent.rel \
-    $(libcpudir)/shared/cache.rel \
-    $(libcpudir)/@exceptions@/rtems-cpu.rel \
-    $(libcpudir)/@exceptions@/raw_exception.rel \
-    $(libcpudir)/@exceptions@/exc_bspsupport.rel \
-    $(libcpudir)/mpc8xx/console-generic.rel \
-    $(libcpudir)/mpc8xx/cpm.rel \
-    $(libcpudir)/mpc8xx/clock.rel \
-    $(libcpudir)/mpc8xx/mmu.rel \
-    $(libcpudir)/mpc8xx/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
