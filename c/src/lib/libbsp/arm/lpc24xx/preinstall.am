@@ -6,7 +6,7 @@ $(srcdir)/preinstall.am: Makefile.am
 endif
 
 PREINSTALL_DIRS =
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 all-local: $(TMPINSTALL_FILES)
 
@@ -27,6 +27,10 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
+PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp
@@ -93,8 +97,4 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
-
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
