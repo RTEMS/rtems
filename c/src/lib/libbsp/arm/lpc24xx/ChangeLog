@@ -1,5 +1,9 @@
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Add bsp_specs.
+
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1322/bsps
 	* include/bspopts.h.in: Remove.
 
