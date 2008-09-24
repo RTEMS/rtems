@@ -1,3 +1,7 @@
+2008-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove empty HAS_NETWORKING conditional.
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Make letting boot_card() handle work area allocation
