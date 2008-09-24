@@ -178,6 +178,13 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
+  .stack : { 
+    . += 0x1000;
+    *(.stack)
+    _stack = .;
+  } > ram
+  _stack = .;
+
   _WorkAreaBase = . ;
 
   _CPU_Interrupt_stack_low  = 0x00080000 ;
@@ -217,6 +224,8 @@ SECTIONS
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
 
-  .stack /* 0x00081ff0 */: { _stack = .; *(.stack) } > ram /* > onchip_ram */
+/*
+  .stack 0x00081ff0 : { _stack = .; *(.stack) } > onchip_ram
+*/
   /* These must appear regardless of  .  */
 }

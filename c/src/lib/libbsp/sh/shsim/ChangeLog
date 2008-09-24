@@ -1,3 +1,11 @@
+2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, clock/clockdrv.c, include/bsp.h,
+	start/start.S, startup/linkcmds: Now runs ticker and hello on
+	sh-rtems4.10-gdb. The SH simulator in gdb has no hardware IO or
+	interrupt simulation so we use the trap interface to print.
+	* gdbsci/gdbsci.c: Removed.
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Make letting boot_card() handle work area allocation

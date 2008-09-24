@@ -42,6 +42,9 @@ extern "C" {
 
 /* Constants */
 
+Thread clock_driver_sim_idle_body(uintptr_t);
+#define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
+
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
@@ -58,23 +61,6 @@ extern "C" {
 
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
-
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * Redefine CONSOLE_DRIVER_TABLE_ENTRY to redirect /dev/console
- */
-#undef CONSOLE_DRIVER_TABLE_ENTRY
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
-  { console_initialize, console_open, console_close, \
-      console_read, console_write, console_control }
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
 
 #ifdef __cplusplus
 }

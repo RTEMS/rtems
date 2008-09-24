@@ -40,17 +40,14 @@ startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
 clock_SOURCES = clock/clockdrv.c
-scitab_SOURCES = scitab.c
-gdbsci_SOURCES = gdbsci/gdbsci.c
 
-# FIXME: trap34 is unused
 trap34_SOURCES = trap34/console-io.c trap34/console-support.S \
     ../../shared/dummy_printk_support.c
-console_SOURCES = ../../sh/shared/console.c
+console_SOURCES = ../../shared/console-polled.c
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(gdbsci_SOURCES) $(scitab_SOURCES) $(trap34_SOURCES)
+    $(scitab_SOURCES) $(trap34_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel

@@ -77,7 +77,7 @@ end_k:
 main_k:
 	.long	SYM(boot_card)
 exit_k:
-	.long	SYM(exit)
+	.long	SYM(_sys_exit)
 
 vects_k:
 	.long	SYM(vectab)

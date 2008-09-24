@@ -15,38 +15,6 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-## bsp-specific options
-RTEMS_BSP_ARG_ENABLE([console],
-[  --enable-console=[[null|gdbsci1]]],[
-  case $enable_console in
-  null)
-    BSP_CONSOLE_DEVNAME=\"/dev/null\"
-    BSP_CONSOLE_DRIVER_TABLE_ENTRY=DEVNULL_DRIVER_TABLE_ENTRY
-    ;;
-# Not yet
-#  trap34)
-#    BSP_CONSOLE_DEVNAME=\"/dev/trap34\"
-#    BSP_CONSOLE_DRIVER_TABLE_ENTRY=DEVTRAP34_DRIVER_TABLE_ENTRY
-#    ;;
-  yes|gdbsci1)
-    BSP_CONSOLE_DEVNAME=\"/dev/gdbsci1\"
-    BSP_CONSOLE_DRIVER_TABLE_ENTRY=DEVGDBSCI_DRIVER_TABLE_ENTRY
-    ;;
-  *) AC_MSG_WARN([bad value $enable_console for --enable-console=<value>])
-    ;;
-  esac],[
-    BSP_CONSOLE_DEVNAME=\"/dev/gdbsci1\"
-    BSP_CONSOLE_DRIVER_TABLE_ENTRY=DEVGDBSCI_DRIVER_TABLE_ENTRY
-])
-AC_DEFINE_UNQUOTED(
-  [BSP_CONSOLE_DEVNAME],
-  [${BSP_CONSOLE_DEVNAME}],
-  [device name to redirect the console to])
-AC_DEFINE_UNQUOTED(
-  [BSP_CONSOLE_DRIVER_TABLE_ENTRY],
-  [${BSP_CONSOLE_DRIVER_TABLE_ENTRY}],
-  [Driver table entry for the console device])
-
 ##
 RTEMS_BSP_ARG_ENABLE([iomem-patch],
 [  --enable-iomem-patch=[[yes|no]]])
