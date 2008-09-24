@@ -27,6 +27,10 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+/* support for simulated clock tick */
+Thread clock_driver_sim_idle_body(uintptr_t);
+#define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
+
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.

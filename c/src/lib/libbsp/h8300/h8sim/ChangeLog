@@ -1,3 +1,7 @@
+2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, console/console-io.c, include/bsp.h:
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Make letting boot_card() handle work area allocation

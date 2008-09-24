@@ -34,14 +34,21 @@ void console_initialize_hardware(void)
  *
  *  This routine transmits a character using polling.
  */
-
+ssize_t _sys_write(int fd, const void *buf, size_t count);
 void console_outbyte_polled(
   int  port,
   char ch
 )
 {
-  asm volatile( "mov.b #0,r1l ;  mov.b %0l,r2l ; jsr @@0xc4"
-       :  : "r" (ch)  : "r1", "r2");
+  _sys_write( 1, &ch, 1 );
+/*
+  typedef void (*_write_p_t)(int, char *, int);
+  _write_p_t _write_p = (_write_p_t)0xc7;
+  _write_p( 1, &ch, 1 );
+
+  asm volatile( "mov.b #1,r1l ;  mov.b %0l,r2l ; mov.b #1,r3l; jsr @@0xc7"
+       :  : "r" (&ch)  : "r1", "r2");
+*/
 }
 
 /*

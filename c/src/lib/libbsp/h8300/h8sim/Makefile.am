@@ -31,8 +31,9 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspstart.c startup/h8bdinstallirq.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/__main.c
-clock_SOURCES = ../../shared/clock_driver_stub.c
-console_SOURCES = ../../shared/console-polled.c console/console-io.c
+clock_SOURCES = ../../shared/clock_driver_simidle.c
+console_SOURCES = ../../shared/console-polled.c console/console-io.c \
+   console/syscalls.S
 timer_SOURCES = ../../shared/timerstub.c
 
 noinst_LIBRARIES = libbsp.a
