@@ -45,9 +45,8 @@ EXTRA_DIST = ../shared/start/start.S
 
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA = ../shared/startup/linkcmds.base \
-	startup/linkcmds \
-	bsp_specs
+dist_project_lib_DATA += ../shared/startup/linkcmds.base \
+	startup/linkcmds
 
 ###############################################################################
 #                  LibBSP                                                     #
