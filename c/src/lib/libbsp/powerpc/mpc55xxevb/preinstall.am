@@ -28,11 +28,6 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-../../../libcpu/@RTEMS_CPU@/$(dirstamp):
-	@$(MKDIR_P) ../../../libcpu/@RTEMS_CPU@
-	@: > ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-PREINSTALL_DIRS += ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs

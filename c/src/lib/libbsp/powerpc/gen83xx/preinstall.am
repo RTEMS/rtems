@@ -40,11 +40,6 @@ $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
-../../../libcpu/@RTEMS_CPU@/$(dirstamp):
-	@$(MKDIR_P) ../../../libcpu/@RTEMS_CPU@
-	@: > ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-PREINSTALL_DIRS += ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
