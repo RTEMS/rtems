@@ -1,3 +1,8 @@
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1322/bsps
+	* include/bspopts.h.in: Remove.
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, include/bspopts.h.in: Make letting boot_card() handle
