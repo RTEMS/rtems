@@ -29,7 +29,7 @@ AC_MSG_CHECKING([for available BSPs])
                              ;;
           gen5200)           bsps="pm520_cr825 pm520_ze30 brs5l";;
           mpc55xxevb)        bsps="mpc5566evb";;
-          gen83xx)           bsps="mpc8349eamds hsc_cm01 mpc8313erdb";;
+          gen83xx)           bsps="mpc8349eamds hsc_cm01 mpc8313erdb icecube";;
 	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
           erc32)             bsps="erc32 sis";;
