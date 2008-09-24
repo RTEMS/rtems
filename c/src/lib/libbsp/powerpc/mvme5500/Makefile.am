@@ -7,9 +7,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-#prevent the compiler from generating FP instructions
-AM_CFLAGS      += -msoft-float
-
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
