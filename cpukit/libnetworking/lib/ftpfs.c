@@ -232,7 +232,7 @@ int rtems_ftp_get_message
 {
   char rd_buffer[4];
   size_t rd_size;
-  size_t tmp_size;
+  ssize_t tmp_size;
   int eno = 0;
   bool finished = false;
   do {
