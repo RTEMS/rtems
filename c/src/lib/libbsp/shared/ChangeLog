@@ -1,3 +1,15 @@
+2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock_driver_simidle.c: New file.
+	This implementation is for BSPs for simulators without a clock tick
+	ISR.  It provides a special IDLE task that calls rtems_clock_tick()
+	repeatedly when the application ends up in the IDLE task.  This
+	simulates time advancing.  It is enough to run many tests but 
+	will not result in the correct behavior when you want timeslicing.
+	This is because timeslicing assumes that a tick ISR determines
+	that the currently executing thread must be switched out.  Without
+	a clock tick ISR, this will not occur.
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c, include/bootcard.h: Make letting boot_card() handle work
