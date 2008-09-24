@@ -7,9 +7,9 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-libcpudir = ../../../libcpu/@RTEMS_CPU@
-
 dist_project_lib_DATA = bsp_specs
+
+libcpudir = ../../../libcpu/@RTEMS_CPU@
 
 include_HEADERS = include/bsp.h include/i2cdrv.h include/u-boot.h \
     include/i2c.h

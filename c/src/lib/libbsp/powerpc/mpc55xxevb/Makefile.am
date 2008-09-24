@@ -7,14 +7,13 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+dist_project_lib_DATA = bsp_specs
+
 libcpudir = ../../../libcpu/@RTEMS_CPU@
 
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
-
-# Compiler specs
-dist_project_lib_DATA = bsp_specs
 
 # Object files
 EXTRA_DIST = startup/start.S

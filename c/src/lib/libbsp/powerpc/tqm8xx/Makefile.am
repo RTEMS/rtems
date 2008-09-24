@@ -28,7 +28,6 @@ include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     $(libcpudir)/@exceptions@/bspsupport/vectors.h \
     $(libcpudir)/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
-
 EXTRA_DIST = times-tqm866
 
 EXTRA_DIST += startup/start.S
