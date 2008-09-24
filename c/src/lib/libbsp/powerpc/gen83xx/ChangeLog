@@ -1,3 +1,7 @@
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Eliminates libcpudir.
+
 2008-09-19	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* startup/bspstart.c: correct bsp_clicks_per_usec initialization

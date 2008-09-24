@@ -1,3 +1,7 @@
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Eliminates libcpudir.
+
 2008-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, startup/bspstart.c: Use default bsp_pretasking_hook().

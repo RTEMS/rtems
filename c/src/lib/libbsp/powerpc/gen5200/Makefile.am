@@ -7,8 +7,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-libcpudir = ../../../libcpu/@RTEMS_CPU@
-
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h include/i2cdrv.h include/u-boot.h \
@@ -65,8 +63,8 @@ console_SOURCES = console/console.c
 i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
 ide_SOURCES = ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 
-include_bsp_HEADERS = $(libcpudir)/new-exceptions/bspsupport/vectors.h \
-	$(libcpudir)/new-exceptions/bspsupport/ppc_exc_bspsupp.h \
+include_bsp_HEADERS = ../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/vectors.h \
+	../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/ppc_exc_bspsupp.h \
 	../../shared/include/irq-generic.h \
 	include/irq-config.h \
 	include/irq.h \
@@ -122,14 +120,14 @@ libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(i2c_SOURCES) \
     $(ide_SOURCES) $(irq_SOURCES) $(mscan_SOURCES) $(nvram_SOURCES) \
     $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES) $(bestcomm_SOURCES)
 
-libbsp_a_LIBADD =  $(libcpudir)/shared/cpuIdent.rel \
-	$(libcpudir)/shared/cache.rel \
-	$(libcpudir)/shared/stack.rel \
-	$(libcpudir)/@exceptions@/rtems-cpu.rel \
-	$(libcpudir)/@exceptions@/raw_exception.rel \
-	$(libcpudir)/@exceptions@/exc_bspsupport.rel \
-	$(libcpudir)/mpc6xx/mmu.rel \
-	$(libcpudir)/mpc6xx/timer.rel
+libbsp_a_LIBADD =  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+	../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
+	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

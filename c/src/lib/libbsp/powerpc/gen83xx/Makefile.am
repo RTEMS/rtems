@@ -12,8 +12,6 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h 
 include_HEADERS += include/tm27.h
 
-libcpudir = ../../../libcpu/@RTEMS_CPU@
-
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 
@@ -89,20 +87,20 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(irq_SOURCES) $(mpc83xx_regs_SOURCES) \
     $(bsp_i2c_SOURCES) $(bsp_spi_SOURCES)
 
-libbsp_a_LIBADD = $(libcpudir)/shared/cpuIdent.rel \
-	$(libcpudir)/shared/cache.rel \
-	$(libcpudir)/@exceptions@/rtems-cpu.rel \
-	$(libcpudir)/@exceptions@/raw_exception.rel \
-	$(libcpudir)/@exceptions@/exc_bspsupport.rel \
-	$(libcpudir)/mpc6xx/mmu.rel   \
-	$(libcpudir)/mpc6xx/timer.rel \
-	$(libcpudir)/mpc83xx/i2c.rel  \
-	$(libcpudir)/mpc83xx/spi.rel \
-	$(libcpudir)/mpc83xx/gtm.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
+	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
+	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
+	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
+	../../../libcpu/@RTEMS_CPU@/mpc83xx/gtm.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
-libbsp_a_LIBADD += $(libcpudir)/mpc83xx/tsec.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
 endif
 
 EXTRA_DIST += README.mpc8349eamds
