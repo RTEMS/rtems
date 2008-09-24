@@ -1,8 +1,8 @@
 /*
  *  Instantiate the clock driver shell.
  *
- *  Since there is no clock source on the simulator, all we do is
- *  make sure it will build.
+ *  Since there is no clock source on the simulator, we fake
+ *  it with a special IDLE task.
  *
  *  $Id$
  */
@@ -29,7 +29,6 @@ volatile bool clock_driver_enabled;
   } while (0)
 
 #include "../../../shared/clockdrv_shell.c"
-
 
 /*
  *  Since there is no interrupt on this simulator, let's just

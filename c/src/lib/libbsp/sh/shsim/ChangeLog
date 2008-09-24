@@ -1,3 +1,7 @@
+2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock/clockdrv.c: Fix comment.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac, clock/clockdrv.c, include/bsp.h,
