@@ -7,12 +7,12 @@ OUTPUT_ARCH(h8300h)
  * Declare some sizes.
  */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x0;
-_RamSize = DEFINED(_RamSize) ? _RamSize : 256K;
+_RamSize = DEFINED(_RamSize) ? _RamSize : 16M;
 _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 ENTRY("_start")
-/* The memory size is 256KB to coincide with the simulator.
+/* The memory size is 16M to coincide with the simulator.
    Don't change either without considering the other.  */
 MEMORY
 {
@@ -21,9 +21,9 @@ MEMORY
   vectors : o = 0x0000, l = 0xc4
   magicvectors : o = 0xc4, l = 0x3c
   /* We still only use 256k as the main ram size.  */
-  ram    : o = 0x0100, l = 0xffefc /* 256K RAM --> 0x3fefc */
+  ram    : o = 0x0100, l = 0xfffefc /* 16MB RAM --> 0x3fefc */
   /* The stack starts at the top of main ram.  */
-  topram : o = 0xffffc, l = 0x4  /* 256K RAM --> 0x3fffc */
+  topram : o = 0xfffffc, l = 0x4  /* 256K RAM --> 0x3fffc */
   /* This holds variables in the "tiny" sections.  */
   tiny   : o = 0xff8000, l = 0x7f00
   /* At the very top of the address space is the 8-bit area.  */
