@@ -1,3 +1,8 @@
+2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1324/bsps
+	* aclocal/check-bsps.m4: Add missing icecube.
+
 2008-09-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* MAINTAINERS, README.configure, aclocal/bsp-alias.m4,
