@@ -20,6 +20,11 @@ RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 [The console driver can operate in either polled or interrupt mode.])
 
+RTEMS_BSPOPTS_SET([BFIN_ON_SKYEYE],[*],[0])
+RTEMS_BSPOPTS_HELP([BFIN_ON_SKYEYE],
+[(BSP--Skyeye)
+ If defined, disable features which are not supported on Skyeye.])
+
 BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
