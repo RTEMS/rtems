@@ -28,11 +28,6 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
-../../../libcpu/@RTEMS_CPU@/$(dirstamp):
-	@$(MKDIR_P) ../../../libcpu/@RTEMS_CPU@
-	@: > ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-PREINSTALL_DIRS += ../../../libcpu/@RTEMS_CPU@/$(dirstamp)
-
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -102,11 +97,11 @@ $(PROJECT_LIB)/linkcmds.pm520: startup/linkcmds.pm520 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.pm520
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.pm520
 
-$(PROJECT_INCLUDE)/bsp/vectors.h: $(libcpudir)/new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/vectors.h: ../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
-$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: $(libcpudir)/new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h: ../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/ppc_exc_bspsupp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ppc_exc_bspsupp.h
 

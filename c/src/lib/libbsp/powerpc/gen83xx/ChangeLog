@@ -1,3 +1,7 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* preinstall.am: Regenerated.
+
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminates libcpudir.
