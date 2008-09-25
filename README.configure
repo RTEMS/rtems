@@ -207,7 +207,7 @@ powerpc		: brs5l ep1a gen5200 gen83xx haleakala hsc_cm01 icecube
 		  designed to handle a variety of boards based on the same
 		  family of system on chips CPUs
 
-sh              : gensh1 gensh2 gensh4 shsim simsh4 simsh7045
+sh              : gensh1 gensh2 gensh4 simsh1 simsh2 simsh4
 
 sparc 		: erc32 sis leon2 leon3
 

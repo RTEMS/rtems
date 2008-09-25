@@ -1,3 +1,10 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README.configure, aclocal/bsp-alias.m4, aclocal/check-bsps.m4:
+	Recognize the the GDB SuperH simulator is just an architectural
+	simulator and does not include devices. Rename existing simulator BSP
+	configurations to simsh1 and simsh2 and add simsh4.
+
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1324/bsps

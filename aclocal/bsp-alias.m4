@@ -38,8 +38,9 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     rtl22xx_t)    $2=rtl22xx          ;; # rtl22xx bsp in thumb mode
     lpc2478)      $2=lpc24xx          ;; # LPC2478 (QVGA Base Board from Embedded Artists)
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
-    simsh7032)    $2=shsim            ;; # SH7032 simulator
-    simsh7045)    $2=shsim            ;; # SH7045 simulator
+    simsh1)       $2=shsim            ;; # SH1 simulator in GDB
+    simsh2)       $2=shsim            ;; # SH2 simulator in GDB
+    simsh4)       $2=shsim            ;; # SH4 simulator in GDB
     sis)          $2=erc32            ;; # erc32 SIS simulator
     *)            $2=$1;;
   esac]
