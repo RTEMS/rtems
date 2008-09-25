@@ -1,3 +1,9 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/bf537Stamp.cfg, custom/erc32.cfg: Add skyeye alias for
+	bf537stamp.
+	* custom/bf537skyeye.cfg: New file.
+
 2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/lpc2478.cfg: Comment out use of U-Boot specific mkimage since
