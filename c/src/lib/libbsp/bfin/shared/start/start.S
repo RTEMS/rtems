@@ -2,6 +2,8 @@
 
 #include <rtems/bfin/bfin.h>   
 
+#include <bspopts.h>
+
 #ifndef LO
 #define LO(con32) ((con32) & 0xFFFF)
 #endif
@@ -20,7 +22,11 @@ __init:
 __fini:
 
 
+#if (BFIN_ON_SKYEYE)
+    .section .init
+#else
     .section .l1code
+#endif
     .align  4
 
     .global __start

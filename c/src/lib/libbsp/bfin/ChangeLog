@@ -1,3 +1,8 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/start/start.S: Add BFIN_ON_SKYEYE define to disable features
+	not supported on simulator.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: Removed.
