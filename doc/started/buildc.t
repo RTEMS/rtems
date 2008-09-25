@@ -92,7 +92,7 @@ of each component as well as any required RTEMS specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
+    Directory:   @value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
 @ifset BINUTILSPATCHVERSION
     File:        @value{BINUTILSRTEMSPATCH}
 @end ifset
@@ -103,8 +103,8 @@ of each component as well as any required RTEMS specific patches.
     File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset use-html
-    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES,,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES}
-@c    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}}
+@c    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
 @end ifset
 @end example
 
@@ -676,7 +676,7 @@ of each component as well as any required RTEMS specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMSFTPSITE}
-    Directory:   @value{RTEMSFTPDIR}/SOURCES
+    Directory:   @value{RTEMSFTPDIR}/SOURCES/@value{RTEMSAPI}
 @ifset GDBPATCHVERSION
     File:        @value{GDBRTEMSPATCH}
     URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/SOURCES/@value{GDBRTEMSPATCH}}
