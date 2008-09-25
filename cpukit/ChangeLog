@@ -2,6 +2,10 @@
 
 	* libnetworking/lib/rtems_bsdnet_ntp.c: Revert previous patch.
 
+2008-09-25	Eric Norum <norume@aps.anl.gov>
+
+	* libnetworking/lib/rtems_bsdnet_ntp.c: Revert previous patch.
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/imfs/deviceio.c: Eliminate duplicate implementation.
