@@ -1,3 +1,8 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console-io.c: Add missing file and remove junk code.
+	* console/syscalls.S: New file.
+
 2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: Simulator now appears to have 16M RAM support by

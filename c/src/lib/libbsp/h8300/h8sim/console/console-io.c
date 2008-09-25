@@ -2,7 +2,7 @@
  *  This file contains the hardware specific portions of the TTY driver
  *  for the serial ports on the erc32.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,14 +41,6 @@ void console_outbyte_polled(
 )
 {
   _sys_write( 1, &ch, 1 );
-/*
-  typedef void (*_write_p_t)(int, char *, int);
-  _write_p_t _write_p = (_write_p_t)0xc7;
-  _write_p( 1, &ch, 1 );
-
-  asm volatile( "mov.b #1,r1l ;  mov.b %0l,r2l ; mov.b #1,r3l; jsr @@0xc7"
-       :  : "r" (&ch)  : "r1", "r2");
-*/
 }
 
 /*
