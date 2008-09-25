@@ -1,0 +1,2780 @@
+diff -urN gcc-4.3.2-orig/gcc/ada/gsocket.h gcc-4.3.2/gcc/ada/gsocket.h
+--- gcc-4.3.2-orig/gcc/ada/gsocket.h	2008-02-13 13:04:53.000000000 -0600
++++ gcc-4.3.2/gcc/ada/gsocket.h	2008-09-09 13:07:24.000000000 -0500
+@@ -175,7 +175,7 @@
+ 
+ #if defined (_AIX) || defined (__FreeBSD__) || defined (__hpux__) || defined (__osf__) || defined (_WIN32) || defined (__APPLE__)
+ # define HAVE_THREAD_SAFE_GETxxxBYyyy 1
+-#elif defined (sgi) || defined (linux) || (defined (sun) && defined (__SVR4) && !defined (__vxworks))
++#elif defined (sgi) || defined (linux) || (defined (sun) && defined (__SVR4) && !defined (__vxworks)) || defined(__rtems__)
+ # define HAVE_GETxxxBYyyy_R 1
+ #endif
+ 
+diff -urN gcc-4.3.2-orig/gcc/ada/Makefile.in gcc-4.3.2/gcc/ada/Makefile.in
+--- gcc-4.3.2-orig/gcc/ada/Makefile.in	2008-02-13 13:04:53.000000000 -0600
++++ gcc-4.3.2/gcc/ada/Makefile.in	2008-09-09 13:07:24.000000000 -0500
+@@ -392,7 +392,7 @@
+   a-intnam.ads<a-intnam-vxworks.ads \
+   a-numaux.ads<a-numaux-vxworks.ads \
+   s-inmaop.adb<s-inmaop-posix.adb \
+-  s-interr.adb<s-interr-vxworks.adb \
++  s-interr.adb<s-interr-hwint.adb \
+   s-intman.ads<s-intman-vxworks.ads \
+   s-intman.adb<s-intman-vxworks.adb \
+   s-osinte.adb<s-osinte-vxworks.adb \
+@@ -473,7 +473,7 @@
+     EXTRA_GNATRTL_NONTASKING_OBJS=s-vxwexc.o
+   else
+     LIBGNAT_TARGET_PAIRS += \
+-    s-interr.adb<s-interr-vxworks.adb \
++    s-interr.adb<s-interr-hwint.adb \
+     s-tpopsp.adb<s-tpopsp-vxworks.adb \
+     system.ads<system-vxworks-ppc.ads
+ 
+@@ -506,7 +506,7 @@
+   g-io.adb<g-io-vxworks-ppc-cert.adb \
+   g-io.ads<g-io-vxworks-ppc-cert.ads \
+   s-inmaop.adb<s-inmaop-posix.adb \
+-  s-interr.adb<s-interr-vxworks.adb \
++  s-interr.adb<s-interr-hwint.adb \
+   s-intman.ads<s-intman-vxworks.ads \
+   s-intman.adb<s-intman-vxworks.adb \
+   s-osinte.adb<s-osinte-vxworks.adb \
+@@ -553,7 +553,7 @@
+   a-intnam.ads<a-intnam-vxworks.ads \
+   a-numaux.ads<a-numaux-vxworks.ads \
+   s-inmaop.adb<s-inmaop-posix.adb \
+-  s-interr.adb<s-interr-vxworks.adb \
++  s-interr.adb<s-interr-hwint.adb \
+   s-intman.ads<s-intman-vxworks.ads \
+   s-intman.adb<s-intman-vxworks.adb \
+   s-osinte.adb<s-osinte-vxworks.adb \
+@@ -628,7 +628,7 @@
+     EXTRA_GNATRTL_NONTASKING_OBJS=s-vxwexc.o
+   else
+     LIBGNAT_TARGET_PAIRS += \
+-    s-interr.adb<s-interr-vxworks.adb \
++    s-interr.adb<s-interr-hwint.adb \
+     s-tpopsp.adb<s-tpopsp-vxworks.adb \
+     system.ads<system-vxworks-x86.ads
+ 
+@@ -656,7 +656,7 @@
+   a-intnam.ads<a-intnam-vxworks.ads \
+   a-numaux.ads<a-numaux-vxworks.ads \
+   s-inmaop.adb<s-inmaop-posix.adb \
+-  s-interr.adb<s-interr-vxworks.adb \
++  s-interr.adb<s-interr-hwint.adb \
+   s-intman.ads<s-intman-vxworks.ads \
+   s-intman.adb<s-intman-vxworks.adb \
+   s-osinte.adb<s-osinte-vxworks.adb \
+@@ -1148,7 +1148,8 @@
+   s-taspri.ads<s-taspri-posix.ads \
+   s-tpopsp.adb<s-tpopsp-rtems.adb \
+   g-soccon.ads<g-soccon-rtems.ads \
+-  s-stchop.adb<s-stchop-rtems.adb
++  s-stchop.adb<s-stchop-rtems.adb \
++  s-interr.adb<s-interr-hwint.adb
+ endif
+ 
+ ifeq ($(strip $(filter-out alpha% dec osf%,$(targ))),)
+diff -urN gcc-4.3.2-orig/gcc/ada/s-interr-hwint.adb gcc-4.3.2/gcc/ada/s-interr-hwint.adb
+--- gcc-4.3.2-orig/gcc/ada/s-interr-hwint.adb	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.3.2/gcc/ada/s-interr-hwint.adb	2008-09-09 13:07:24.000000000 -0500
+@@ -0,0 +1,1139 @@
++------------------------------------------------------------------------------
++--                                                                          --
++--                 GNAT RUN-TIME LIBRARY (GNARL) COMPONENTS                 --
++--                                                                          --
++--                     S Y S T E M . I N T E R R U P T S                    --
++--                                                                          --
++--                                  B o d y                                 --
++--                                                                          --
++--         Copyright (C) 1992-2008, Free Software Foundation, Inc.          --
++--                                                                          --
++-- GNARL is free software; you can  redistribute it  and/or modify it under --
++-- terms of the  GNU General Public License as published  by the Free Soft- --
++-- ware  Foundation;  either version 2,  or (at your option) any later ver- --
++-- sion. GNARL is distributed in the hope that it will be useful, but WITH- --
++-- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
++-- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
++-- for  more details.  You should have  received  a copy of the GNU General --
++-- Public License  distributed with GNARL; see file COPYING.  If not, write --
++-- to  the  Free Software Foundation,  51  Franklin  Street,  Fifth  Floor, --
++-- Boston, MA 02110-1301, USA.                                              --
++--                                                                          --
++-- As a special exception,  if other files  instantiate  generics from this --
++-- unit, or you link  this unit with other files  to produce an executable, --
++-- this  unit  does not  by itself cause  the resulting  executable  to  be --
++-- covered  by the  GNU  General  Public  License.  This exception does not --
++-- however invalidate  any other reasons why  the executable file  might be --
++-- covered by the  GNU Public License.                                      --
++--                                                                          --
++-- GNARL was developed by the GNARL team at Florida State University.       --
++-- Extensive contributions were provided by Ada Core Technologies, Inc.     --
++--                                                                          --
++------------------------------------------------------------------------------
++
++--  Invariants:
++
++--  All user-handleable signals are masked at all times in all tasks/threads
++--  except possibly for the Interrupt_Manager task.
++
++--  When a user task wants to have the effect of masking/unmasking an signal,
++--  it must call Block_Interrupt/Unblock_Interrupt, which will have the effect
++--  of unmasking/masking the signal in the Interrupt_Manager task. These
++--  comments do not apply to vectored hardware interrupts, which may be masked
++--  or unmasked using routined interfaced to the relevant embedded RTOS system
++--  calls.
++
++--  Once we associate a Signal_Server_Task with an signal, the task never goes
++--  away, and we never remove the association. On the other hand, it is more
++--  convenient to terminate an associated Interrupt_Server_Task for a vectored
++--  hardware interrupt (since we use a binary semaphore for synchronization
++--  with the umbrella handler).
++
++--  There is no more than one signal per Signal_Server_Task and no more than
++--  one Signal_Server_Task per signal. The same relation holds for hardware
++--  interrupts and Interrupt_Server_Task's at any given time. That is, only
++--  one non-terminated Interrupt_Server_Task exists for a give interrupt at
++--  any time.
++
++--  Within this package, the lock L is used to protect the various status
++--  tables. If there is a Server_Task associated with a signal or interrupt,
++--  we use the per-task lock of the Server_Task instead so that we protect the
++--  status between Interrupt_Manager and Server_Task. Protection among
++--  service requests are ensured via user calls to the Interrupt_Manager
++--  entries.
++
++--  This is reasonably generic version of this package, supporting vectored
++--  hardware interrupts using non-RTOS specific adapter routines which
++--  should easily implemented on any RTOS capable of supporting GNAT.
++
++with Unchecked_Conversion;
++
++with System.OS_Interface; use System.OS_Interface;
++
++with Ada.Task_Identification;
++--  used for Task_Id type
++
++with Ada.Exceptions;
++--  used for Raise_Exception
++
++with System.Interrupt_Management;
++--  used for Reserve
++
++with System.Task_Primitives.Operations;
++--  used for Write_Lock
++--           Unlock
++--           Abort
++--           Wakeup_Task
++--           Sleep
++--           Initialize_Lock
++
++with System.Storage_Elements;
++--  used for To_Address
++--           To_Integer
++--           Integer_Address
++
++with System.Tasking.Utilities;
++--  used for Make_Independent
++
++with System.Tasking.Rendezvous;
++--  used for Call_Simple
++pragma Elaborate_All (System.Tasking.Rendezvous);
++
++package body System.Interrupts is
++
++   use Tasking;
++   use Ada.Exceptions;
++
++   package POP renames System.Task_Primitives.Operations;
++
++   function To_Ada is new Unchecked_Conversion
++     (System.Tasking.Task_Id, Ada.Task_Identification.Task_Id);
++
++   function To_System is new Unchecked_Conversion
++     (Ada.Task_Identification.Task_Id, Task_Id);
++
++   -----------------
++   -- Local Tasks --
++   -----------------
++
++   --  WARNING: System.Tasking.Stages performs calls to this task with
++   --  low-level constructs. Do not change this spec without synchronizing it.
++
++   task Interrupt_Manager is
++      entry Detach_Interrupt_Entries (T : Task_Id);
++
++      entry Attach_Handler
++        (New_Handler : Parameterless_Handler;
++         Interrupt   : Interrupt_ID;
++         Static      : Boolean;
++         Restoration : Boolean := False);
++
++      entry Exchange_Handler
++        (Old_Handler : out Parameterless_Handler;
++         New_Handler : Parameterless_Handler;
++         Interrupt   : Interrupt_ID;
++         Static      : Boolean);
++
++      entry Detach_Handler
++        (Interrupt : Interrupt_ID;
++         Static    : Boolean);
++
++      entry Bind_Interrupt_To_Entry
++        (T         : Task_Id;
++         E         : Task_Entry_Index;
++         Interrupt : Interrupt_ID);
++
++      pragma Interrupt_Priority (System.Interrupt_Priority'First);
++   end Interrupt_Manager;
++
++   task type Interrupt_Server_Task
++     (Interrupt : Interrupt_ID; Int_Sema : Binary_Semaphore_Id) is
++      --  Server task for vectored hardware interrupt handling
++      pragma Interrupt_Priority (System.Interrupt_Priority'First + 2);
++   end Interrupt_Server_Task;
++
++   type Interrupt_Task_Access is access Interrupt_Server_Task;
++
++   -------------------------------
++   -- Local Types and Variables --
++   -------------------------------
++
++   type Entry_Assoc is record
++      T : Task_Id;
++      E : Task_Entry_Index;
++   end record;
++
++   type Handler_Assoc is record
++      H      : Parameterless_Handler;
++      Static : Boolean;   --  Indicates static binding;
++   end record;
++
++   User_Handler : array (Interrupt_ID) of Handler_Assoc :=
++     (others => (null, Static => False));
++   pragma Volatile_Components (User_Handler);
++   --  Holds the protected procedure handler (if any) and its Static
++   --  information  for each interrupt or signal. A handler is static
++   --  iff it is specified through the pragma Attach_Handler.
++
++   User_Entry : array (Interrupt_ID) of Entry_Assoc :=
++     (others => (T => Null_Task, E => Null_Task_Entry));
++   pragma Volatile_Components (User_Entry);
++   --  Holds the task and entry index (if any) for each interrupt / signal
++
++   --  Type and Head, Tail of the list containing Registered Interrupt
++   --  Handlers. These definitions are used to register the handlers
++   --  specified by the pragma Interrupt_Handler.
++
++   type Registered_Handler;
++   type R_Link is access all Registered_Handler;
++
++   type Registered_Handler is record
++      H    : System.Address := System.Null_Address;
++      Next : R_Link := null;
++   end record;
++
++   Registered_Handler_Head : R_Link := null;
++   Registered_Handler_Tail : R_Link := null;
++
++   Server_ID : array (Interrupt_ID) of System.Tasking.Task_Id :=
++     (others => System.Tasking.Null_Task);
++   pragma Atomic_Components (Server_ID);
++   --  Holds the Task_Id of the Server_Task for each interrupt / signal.
++   --  Task_Id is needed to accomplish locking per interrupt base. Also
++   --  is needed to determine whether to create a new Server_Task.
++
++   Semaphore_ID_Map : array
++     (Interrupt_ID range 0 .. System.OS_Interface.Max_HW_Interrupt)
++      of Binary_Semaphore_Id := (others => 0);
++   --  Array of binary semaphores associated with vectored interrupts
++   --  Note that the last bound should be Max_HW_Interrupt, but this will raise
++   --  Storage_Error if Num_HW_Interrupts is null, so use an extra 4 bytes
++   --  instead.
++
++   Interrupt_Access_Hold : Interrupt_Task_Access;
++   --  Variable for allocating an Interrupt_Server_Task
++
++   Default_Handler : array (HW_Interrupt) of
++      System.OS_Interface.Interrupt_Handler;
++   --  Vectored interrupt handlers installed prior to program startup.
++   --  These are saved only when the umbrella handler is installed for
++   --  a given interrupt number.
++
++   -----------------------
++   -- Local Subprograms --
++   -----------------------
++
++   procedure Check_Reserved_Interrupt (Interrupt : Interrupt_ID);
++   --  Check if Id is a reserved interrupt, and if so raise Program_Error
++   --  with an appropriate message, otherwise return.
++
++   procedure Finalize_Interrupt_Servers;
++   --  Unbind the handlers for hardware interrupt server tasks at program
++   --  termination.
++
++   function Is_Registered (Handler : Parameterless_Handler) return Boolean;
++   --  See if Handler has been "pragma"ed using Interrupt_Handler.
++   --  Always consider a null handler as registered.
++
++   procedure Notify_Interrupt (Param : System.Address);
++   pragma Convention (C, Notify_Interrupt);
++   --  Umbrella handler for vectored interrupts (not signals)
++
++   procedure Install_Default_Action (Interrupt : HW_Interrupt);
++   --  Restore a handler that was in place prior to program execution
++
++   procedure Install_Umbrella_Handler
++     (Interrupt : HW_Interrupt;
++      Handler   : System.OS_Interface.Interrupt_Handler);
++   --  Install the runtime umbrella handler for a vectored hardware
++   --  interrupt
++
++   procedure Unimplemented (Feature : String);
++   pragma No_Return (Unimplemented);
++   --  Used to mark a call to an unimplemented function. Raises Program_Error
++   --  with an appropriate message noting that Feature is unimplemented.
++
++   --------------------
++   -- Attach_Handler --
++   --------------------
++
++   --  Calling this procedure with New_Handler = null and Static = True
++   --  means we want to detach the current handler regardless of the
++   --  previous handler's binding status (ie. do not care if it is a
++   --  dynamic or static handler).
++
++   --  This option is needed so that during the finalization of a PO, we
++   --  can detach handlers attached through pragma Attach_Handler.
++
++   procedure Attach_Handler
++     (New_Handler : Parameterless_Handler;
++      Interrupt   : Interrupt_ID;
++      Static      : Boolean := False) is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      Interrupt_Manager.Attach_Handler (New_Handler, Interrupt, Static);
++   end Attach_Handler;
++
++   -----------------------------
++   -- Bind_Interrupt_To_Entry --
++   -----------------------------
++
++   --  This procedure raises a Program_Error if it tries to
++   --  bind an interrupt to which an Entry or a Procedure is
++   --  already bound.
++
++   procedure Bind_Interrupt_To_Entry
++     (T       : Task_Id;
++      E       : Task_Entry_Index;
++      Int_Ref : System.Address)
++   is
++      Interrupt : constant Interrupt_ID :=
++        Interrupt_ID (Storage_Elements.To_Integer (Int_Ref));
++
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      Interrupt_Manager.Bind_Interrupt_To_Entry (T, E, Interrupt);
++   end Bind_Interrupt_To_Entry;
++
++   ---------------------
++   -- Block_Interrupt --
++   ---------------------
++
++   procedure Block_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Unimplemented ("Block_Interrupt");
++   end Block_Interrupt;
++
++   ------------------------------
++   -- Check_Reserved_Interrupt --
++   ------------------------------
++
++   procedure Check_Reserved_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      if Is_Reserved (Interrupt) then
++         Raise_Exception
++           (Program_Error'Identity,
++            "Interrupt" & Interrupt_ID'Image (Interrupt) & " is reserved");
++      else
++         return;
++      end if;
++   end Check_Reserved_Interrupt;
++
++   ---------------------
++   -- Current_Handler --
++   ---------------------
++
++   function Current_Handler
++     (Interrupt : Interrupt_ID) return Parameterless_Handler
++   is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++
++      --  ??? Since Parameterless_Handler is not Atomic, the
++      --  current implementation is wrong. We need a new service in
++      --  Interrupt_Manager to ensure atomicity.
++
++      return User_Handler (Interrupt).H;
++   end Current_Handler;
++
++   --------------------
++   -- Detach_Handler --
++   --------------------
++
++   --  Calling this procedure with Static = True means we want to Detach the
++   --  current handler regardless of the previous handler's binding status
++   --  (i.e. do not care if it is a dynamic or static handler).
++
++   --  This option is needed so that during the finalization of a PO, we can
++   --  detach handlers attached through pragma Attach_Handler.
++
++   procedure Detach_Handler
++     (Interrupt : Interrupt_ID;
++      Static    : Boolean := False) is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      Interrupt_Manager.Detach_Handler (Interrupt, Static);
++   end Detach_Handler;
++
++   ------------------------------
++   -- Detach_Interrupt_Entries --
++   ------------------------------
++
++   procedure Detach_Interrupt_Entries (T : Task_Id) is
++   begin
++      Interrupt_Manager.Detach_Interrupt_Entries (T);
++   end Detach_Interrupt_Entries;
++
++   ----------------------
++   -- Exchange_Handler --
++   ----------------------
++
++   --  Calling this procedure with New_Handler = null and Static = True
++   --  means we want to detach the current handler regardless of the
++   --  previous handler's binding status (ie. do not care if it is a
++   --  dynamic or static handler).
++
++   --  This option is needed so that during the finalization of a PO, we
++   --  can detach handlers attached through pragma Attach_Handler.
++
++   procedure Exchange_Handler
++     (Old_Handler : out Parameterless_Handler;
++      New_Handler : Parameterless_Handler;
++      Interrupt   : Interrupt_ID;
++      Static      : Boolean := False)
++   is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      Interrupt_Manager.Exchange_Handler
++        (Old_Handler, New_Handler, Interrupt, Static);
++   end Exchange_Handler;
++
++   --------------
++   -- Finalize --
++   --------------
++
++   procedure Finalize (Object : in out Static_Interrupt_Protection) is
++   begin
++      --  ??? loop to be executed only when we're not doing library level
++      --  finalization, since in this case all interrupt / signal tasks are
++      --  gone.
++
++      if not Interrupt_Manager'Terminated then
++         for N in reverse Object.Previous_Handlers'Range loop
++            Interrupt_Manager.Attach_Handler
++              (New_Handler => Object.Previous_Handlers (N).Handler,
++               Interrupt   => Object.Previous_Handlers (N).Interrupt,
++               Static      => Object.Previous_Handlers (N).Static,
++               Restoration => True);
++         end loop;
++      end if;
++
++      Tasking.Protected_Objects.Entries.Finalize
++        (Tasking.Protected_Objects.Entries.Protection_Entries (Object));
++   end Finalize;
++
++   --------------------------------
++   -- Finalize_Interrupt_Servers --
++   --------------------------------
++
++   --  Restore default handlers for interrupt servers
++
++   --  This is called by the Interrupt_Manager task when it receives the abort
++   --  signal during program finalization.
++
++   procedure Finalize_Interrupt_Servers is
++      HW_Interrupts : constant Boolean := HW_Interrupt'Last >= 0;
++
++   begin
++      if HW_Interrupts then
++         for Int in HW_Interrupt loop
++            if Server_ID (Interrupt_ID (Int)) /= null
++              and then
++                not Ada.Task_Identification.Is_Terminated
++                 (To_Ada (Server_ID (Interrupt_ID (Int))))
++            then
++               Interrupt_Manager.Attach_Handler
++                 (New_Handler => null,
++                  Interrupt => Interrupt_ID (Int),
++                  Static => True,
++                  Restoration => True);
++            end if;
++         end loop;
++      end if;
++   end Finalize_Interrupt_Servers;
++
++   -------------------------------------
++   -- Has_Interrupt_Or_Attach_Handler --
++   -------------------------------------
++
++   function Has_Interrupt_Or_Attach_Handler
++     (Object : access Dynamic_Interrupt_Protection)
++      return   Boolean
++   is
++      pragma Unreferenced (Object);
++   begin
++      return True;
++   end Has_Interrupt_Or_Attach_Handler;
++
++   function Has_Interrupt_Or_Attach_Handler
++     (Object : access Static_Interrupt_Protection)
++      return   Boolean
++   is
++      pragma Unreferenced (Object);
++   begin
++      return True;
++   end Has_Interrupt_Or_Attach_Handler;
++
++   ----------------------
++   -- Ignore_Interrupt --
++   ----------------------
++
++   procedure Ignore_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Unimplemented ("Ignore_Interrupt");
++   end Ignore_Interrupt;
++
++   ----------------------------
++   -- Install_Default_Action --
++   ----------------------------
++
++   procedure Install_Default_Action (Interrupt : HW_Interrupt) is
++   begin
++      --  Restore original interrupt handler
++
++      Interrupt_Vector_Set
++        (System.OS_Interface.Interrupt_Number_To_Vector (int (Interrupt)),
++         Default_Handler (Interrupt));
++      Default_Handler (Interrupt) := null;
++   end Install_Default_Action;
++
++   ----------------------
++   -- Install_Handlers --
++   ----------------------
++
++   procedure Install_Handlers
++     (Object       : access Static_Interrupt_Protection;
++      New_Handlers : New_Handler_Array)
++   is
++   begin
++      for N in New_Handlers'Range loop
++
++         --  We need a lock around this ???
++
++         Object.Previous_Handlers (N).Interrupt := New_Handlers (N).Interrupt;
++         Object.Previous_Handlers (N).Static    := User_Handler
++           (New_Handlers (N).Interrupt).Static;
++
++         --  We call Exchange_Handler and not directly Interrupt_Manager.
++         --  Exchange_Handler so we get the Is_Reserved check.
++
++         Exchange_Handler
++           (Old_Handler => Object.Previous_Handlers (N).Handler,
++            New_Handler => New_Handlers (N).Handler,
++            Interrupt   => New_Handlers (N).Interrupt,
++            Static      => True);
++      end loop;
++   end Install_Handlers;
++
++   ------------------------------
++   -- Install_Umbrella_Handler --
++   ------------------------------
++
++   procedure Install_Umbrella_Handler
++     (Interrupt : HW_Interrupt;
++      Handler   : System.OS_Interface.Interrupt_Handler)
++   is
++      Vec : constant Interrupt_Vector :=
++              Interrupt_Number_To_Vector (int (Interrupt));
++
++      Old_Handler : constant System.OS_Interface.Interrupt_Handler :=
++         Interrupt_Vector_Get (Interrupt_Number_To_Vector (int (Interrupt)));
++
++      Status : int;
++      pragma Unreferenced (Status);
++      --  ??? shouldn't we test Stat at least in a pragma Assert?
++   begin
++      --  Only install umbrella handler when no Ada handler has already been
++      --  installed. Note that the interrupt number is passed as a parameter
++      --  when an interrupt occurs, so the umbrella handler has a different
++      --  wrapper generated by intConnect for each interrupt number.
++
++      if Default_Handler (Interrupt) = null then
++         Status := Interrupt_Connect
++            (Vec, Handler, System.Address (Interrupt));
++         Default_Handler (Interrupt) := Old_Handler;
++      end if;
++   end Install_Umbrella_Handler;
++
++   ----------------
++   -- Is_Blocked --
++   ----------------
++
++   function Is_Blocked (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      Unimplemented ("Is_Blocked");
++      return False;
++   end Is_Blocked;
++
++   -----------------------
++   -- Is_Entry_Attached --
++   -----------------------
++
++   function Is_Entry_Attached (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      return User_Entry (Interrupt).T /= Null_Task;
++   end Is_Entry_Attached;
++
++   -------------------------
++   -- Is_Handler_Attached --
++   -------------------------
++
++   function Is_Handler_Attached (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      return User_Handler (Interrupt).H /= null;
++   end Is_Handler_Attached;
++
++   ----------------
++   -- Is_Ignored --
++   ----------------
++
++   function Is_Ignored (Interrupt : Interrupt_ID) return Boolean is
++   begin
++      Unimplemented ("Is_Ignored");
++      return False;
++   end Is_Ignored;
++
++   -------------------
++   -- Is_Registered --
++   -------------------
++
++   function Is_Registered (Handler : Parameterless_Handler) return Boolean is
++      type Fat_Ptr is record
++         Object_Addr  : System.Address;
++         Handler_Addr : System.Address;
++      end record;
++
++      function To_Fat_Ptr is new Unchecked_Conversion
++        (Parameterless_Handler, Fat_Ptr);
++
++      Ptr : R_Link;
++      Fat : Fat_Ptr;
++
++   begin
++      if Handler = null then
++         return True;
++      end if;
++
++      Fat := To_Fat_Ptr (Handler);
++
++      Ptr := Registered_Handler_Head;
++
++      while Ptr /= null loop
++         if Ptr.H = Fat.Handler_Addr then
++            return True;
++         end if;
++
++         Ptr := Ptr.Next;
++      end loop;
++
++      return False;
++   end Is_Registered;
++
++   -----------------
++   -- Is_Reserved --
++   -----------------
++
++   function Is_Reserved (Interrupt : Interrupt_ID) return Boolean is
++      use System.Interrupt_Management;
++   begin
++      return Reserve (System.Interrupt_Management.Interrupt_ID (Interrupt));
++   end Is_Reserved;
++
++   ----------------------
++   -- Notify_Interrupt --
++   ----------------------
++
++   --  Umbrella handler for vectored hardware interrupts (as opposed to
++   --  signals and exceptions).  As opposed to the signal implementation,
++   --  this handler is only installed in the vector table while there is
++   --  an active association of an Ada handler to the interrupt.
++
++   --  Otherwise, the handler that existed prior to program startup is
++   --  in the vector table.  This ensures that handlers installed by
++   --  the BSP are active unless explicitly replaced in the program text.
++
++   --  Each Interrupt_Server_Task has an associated binary semaphore
++   --  on which it pends once it's been started.  This routine determines
++   --  The appropriate semaphore and and issues a Binary_Semaphore_Release
++   --  call, waking the server task.  When a handler is unbound,
++   --  System.Interrupts.Unbind_Handler issues a Binary_Semaphore_Flush,
++   --  and the server task deletes its semaphore and terminates.
++
++   procedure Notify_Interrupt (Param : System.Address) is
++      Interrupt : constant Interrupt_ID := Interrupt_ID (Param);
++
++      Status : int;
++      pragma Unreferenced (Status);
++      --  ??? shouldn't we test Stat at least in a pragma Assert?
++   begin
++      Status := Binary_Semaphore_Release (Semaphore_ID_Map (Interrupt));
++   end Notify_Interrupt;
++
++   ---------------
++   -- Reference --
++   ---------------
++
++   function Reference (Interrupt : Interrupt_ID) return System.Address is
++   begin
++      Check_Reserved_Interrupt (Interrupt);
++      return Storage_Elements.To_Address
++        (Storage_Elements.Integer_Address (Interrupt));
++   end Reference;
++
++   --------------------------------
++   -- Register_Interrupt_Handler --
++   --------------------------------
++
++   procedure Register_Interrupt_Handler (Handler_Addr : System.Address) is
++      New_Node_Ptr : R_Link;
++
++   begin
++      --  This routine registers a handler as usable for dynamic
++      --  interrupt handler association. Routines attaching and detaching
++      --  handlers dynamically should determine whether the handler is
++      --  registered. Program_Error should be raised if it is not registered.
++
++      --  Pragma Interrupt_Handler can only appear in a library
++      --  level PO definition and instantiation. Therefore, we do not need
++      --  to implement an unregister operation. Nor do we need to
++      --  protect the queue structure with a lock.
++
++      pragma Assert (Handler_Addr /= System.Null_Address);
++
++      New_Node_Ptr := new Registered_Handler;
++      New_Node_Ptr.H := Handler_Addr;
++
++      if Registered_Handler_Head = null then
++         Registered_Handler_Head := New_Node_Ptr;
++         Registered_Handler_Tail := New_Node_Ptr;
++
++      else
++         Registered_Handler_Tail.Next := New_Node_Ptr;
++         Registered_Handler_Tail := New_Node_Ptr;
++      end if;
++   end Register_Interrupt_Handler;
++
++   -----------------------
++   -- Unblock_Interrupt --
++   -----------------------
++
++   procedure Unblock_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Unimplemented ("Unblock_Interrupt");
++   end Unblock_Interrupt;
++
++   ------------------
++   -- Unblocked_By --
++   ------------------
++
++   function Unblocked_By
++     (Interrupt : Interrupt_ID) return System.Tasking.Task_Id
++   is
++   begin
++      Unimplemented ("Unblocked_By");
++      return Null_Task;
++   end Unblocked_By;
++
++   ------------------------
++   -- Unignore_Interrupt --
++   ------------------------
++
++   procedure Unignore_Interrupt (Interrupt : Interrupt_ID) is
++   begin
++      Unimplemented ("Unignore_Interrupt");
++   end Unignore_Interrupt;
++
++   -------------------
++   -- Unimplemented --
++   -------------------
++
++   procedure Unimplemented (Feature : String) is
++   begin
++      Raise_Exception
++        (Program_Error'Identity,
++         Feature & " not implemented for hardware interrupts");
++   end Unimplemented;
++
++   -----------------------
++   -- Interrupt_Manager --
++   -----------------------
++
++   task body Interrupt_Manager is
++
++      --------------------
++      -- Local Routines --
++      --------------------
++
++      procedure Bind_Handler (Interrupt : Interrupt_ID);
++      --  This procedure does not do anything if a signal is blocked.
++      --  Otherwise, we have to interrupt Server_Task for status change through
++      --  a wakeup signal.
++
++      procedure Unbind_Handler (Interrupt : Interrupt_ID);
++      --  This procedure does not do anything if a signal is blocked.
++      --  Otherwise, we have to interrupt Server_Task for status change
++      --  through an abort signal.
++
++      procedure Unprotected_Exchange_Handler
++        (Old_Handler : out Parameterless_Handler;
++         New_Handler : Parameterless_Handler;
++         Interrupt   : Interrupt_ID;
++         Static      : Boolean;
++         Restoration : Boolean := False);
++
++      procedure Unprotected_Detach_Handler
++        (Interrupt : Interrupt_ID;
++         Static    : Boolean);
++
++      ------------------
++      -- Bind_Handler --
++      ------------------
++
++      procedure Bind_Handler (Interrupt : Interrupt_ID) is
++      begin
++         Install_Umbrella_Handler
++           (HW_Interrupt (Interrupt), Notify_Interrupt'Access);
++      end Bind_Handler;
++
++      --------------------
++      -- Unbind_Handler --
++      --------------------
++
++      procedure Unbind_Handler (Interrupt : Interrupt_ID) is
++         Status : int;
++         pragma Unreferenced (Status);
++         --  ??? shouldn't we test Stat at least in a pragma Assert?
++      begin
++         --  Hardware interrupt
++
++         Install_Default_Action (HW_Interrupt (Interrupt));
++
++         --  Flush server task off semaphore, allowing it to terminate
++
++         Status := Binary_Semaphore_Flush (Semaphore_ID_Map (Interrupt));
++      end Unbind_Handler;
++
++      --------------------------------
++      -- Unprotected_Detach_Handler --
++      --------------------------------
++
++      procedure Unprotected_Detach_Handler
++        (Interrupt : Interrupt_ID;
++         Static    : Boolean)
++      is
++         Old_Handler : Parameterless_Handler;
++      begin
++         if User_Entry (Interrupt).T /= Null_Task then
++            --  If an interrupt entry is installed raise
++            --  Program_Error. (propagate it to the caller).
++
++            Raise_Exception (Program_Error'Identity,
++              "An interrupt entry is already installed");
++         end if;
++
++         --  Note : Static = True will pass the following check. This is the
++         --  case when we want to detach a handler regardless of the static
++         --  status of the Current_Handler.
++
++         if not Static and then User_Handler (Interrupt).Static then
++
++            --  Trying to detach a static Interrupt Handler. raise
++            --  Program_Error.
++
++            Raise_Exception (Program_Error'Identity,
++              "Trying to detach a static Interrupt Handler");
++         end if;
++
++         Old_Handler := User_Handler (Interrupt).H;
++
++         --  The new handler
++
++         User_Handler (Interrupt).H := null;
++         User_Handler (Interrupt).Static := False;
++
++         if Old_Handler /= null then
++            Unbind_Handler (Interrupt);
++         end if;
++      end Unprotected_Detach_Handler;
++
++      ----------------------------------
++      -- Unprotected_Exchange_Handler --
++      ----------------------------------
++
++      procedure Unprotected_Exchange_Handler
++        (Old_Handler : out Parameterless_Handler;
++         New_Handler : Parameterless_Handler;
++         Interrupt   : Interrupt_ID;
++         Static      : Boolean;
++         Restoration : Boolean := False)
++      is
++      begin
++         if User_Entry (Interrupt).T /= Null_Task then
++
++            --  If an interrupt entry is already installed, raise
++            --  Program_Error. (propagate it to the caller).
++
++            Raise_Exception
++              (Program_Error'Identity,
++               "An interrupt is already installed");
++         end if;
++
++         --  Note : A null handler with Static = True will
++         --  pass the following check. This is the case when we want to
++         --  detach a handler regardless of the Static status
++         --  of Current_Handler.
++         --  We don't check anything if Restoration is True, since we
++         --  may be detaching a static handler to restore a dynamic one.
++
++         if not Restoration and then not Static
++           and then (User_Handler (Interrupt).Static
++
++            --  Trying to overwrite a static Interrupt Handler with a
++            --  dynamic Handler
++
++            --  The new handler is not specified as an
++            --  Interrupt Handler by a pragma.
++
++           or else not Is_Registered (New_Handler))
++         then
++            Raise_Exception
++              (Program_Error'Identity,
++               "Trying to overwrite a static Interrupt Handler with a " &
++               "dynamic Handler");
++         end if;
++
++         --  Save the old handler
++
++         Old_Handler := User_Handler (Interrupt).H;
++
++         --  The new handler
++
++         User_Handler (Interrupt).H := New_Handler;
++
++         if New_Handler = null then
++
++            --  The null handler means we are detaching the handler
++
++            User_Handler (Interrupt).Static := False;
++
++         else
++            User_Handler (Interrupt).Static := Static;
++         end if;
++
++         --  Invoke a corresponding Server_Task if not yet created.
++         --  Place Task_Id info in Server_ID array.
++
++         if New_Handler /= null
++           and then
++            (Server_ID (Interrupt) = Null_Task
++              or else
++                Ada.Task_Identification.Is_Terminated
++                  (To_Ada (Server_ID (Interrupt))))
++         then
++            Interrupt_Access_Hold :=
++              new Interrupt_Server_Task (Interrupt, Binary_Semaphore_Create);
++            Server_ID (Interrupt) :=
++              To_System (Interrupt_Access_Hold.all'Identity);
++         end if;
++
++         if (New_Handler = null) and then Old_Handler /= null then
++
++            --  Restore default handler
++
++            Unbind_Handler (Interrupt);
++
++         elsif Old_Handler = null then
++
++            --  Save default handler
++
++            Bind_Handler (Interrupt);
++         end if;
++      end Unprotected_Exchange_Handler;
++
++      --  Start of processing for Interrupt_Manager
++
++   begin
++      --  By making this task independent of any master, when the process
++      --  goes away, the Interrupt_Manager will terminate gracefully.
++
++      System.Tasking.Utilities.Make_Independent;
++
++      loop
++         --  A block is needed to absorb Program_Error exception
++
++         declare
++            Old_Handler : Parameterless_Handler;
++
++         begin
++            select
++               accept Attach_Handler
++                 (New_Handler : Parameterless_Handler;
++                  Interrupt   : Interrupt_ID;
++                  Static      : Boolean;
++                  Restoration : Boolean := False)
++               do
++                  Unprotected_Exchange_Handler
++                    (Old_Handler, New_Handler, Interrupt, Static, Restoration);
++               end Attach_Handler;
++
++            or
++               accept Exchange_Handler
++                 (Old_Handler : out Parameterless_Handler;
++                  New_Handler : Parameterless_Handler;
++                  Interrupt   : Interrupt_ID;
++                  Static      : Boolean)
++               do
++                  Unprotected_Exchange_Handler
++                    (Old_Handler, New_Handler, Interrupt, Static);
++               end Exchange_Handler;
++
++            or
++               accept Detach_Handler
++                  (Interrupt   : Interrupt_ID;
++                   Static      : Boolean)
++               do
++                  Unprotected_Detach_Handler (Interrupt, Static);
++               end Detach_Handler;
++            or
++               accept Bind_Interrupt_To_Entry
++                 (T       : Task_Id;
++                  E       : Task_Entry_Index;
++                  Interrupt : Interrupt_ID)
++               do
++                  --  If there is a binding already (either a procedure or an
++                  --  entry), raise Program_Error (propagate it to the caller).
++
++                  if User_Handler (Interrupt).H /= null
++                    or else User_Entry (Interrupt).T /= Null_Task
++                  then
++                     Raise_Exception
++                       (Program_Error'Identity,
++                        "A binding for this interrupt is already present");
++                  end if;
++
++                  User_Entry (Interrupt) := Entry_Assoc'(T => T, E => E);
++
++                  --  Indicate the attachment of interrupt entry in the ATCB.
++                  --  This is needed so when an interrupt entry task terminates
++                  --  the binding can be cleaned. The call to unbinding must be
++                  --  make by the task before it terminates.
++
++                  T.Interrupt_Entry := True;
++
++                  --  Invoke a corresponding Server_Task if not yet created.
++                  --  Place Task_Id info in Server_ID array.
++
++                  if Server_ID (Interrupt) = Null_Task
++                    or else
++                      Ada.Task_Identification.Is_Terminated
++                        (To_Ada (Server_ID (Interrupt)))
++                  then
++                     Interrupt_Access_Hold := new Interrupt_Server_Task
++                       (Interrupt, Binary_Semaphore_Create);
++                     Server_ID (Interrupt) :=
++                       To_System (Interrupt_Access_Hold.all'Identity);
++                  end if;
++
++                  Bind_Handler (Interrupt);
++               end Bind_Interrupt_To_Entry;
++
++            or
++               accept Detach_Interrupt_Entries (T : Task_Id) do
++                  for Int in Interrupt_ID'Range loop
++                     if not Is_Reserved (Int) then
++                        if User_Entry (Int).T = T then
++                           User_Entry (Int) :=
++                             Entry_Assoc'
++                               (T => Null_Task, E => Null_Task_Entry);
++                           Unbind_Handler (Int);
++                        end if;
++                     end if;
++                  end loop;
++
++                  --  Indicate in ATCB that no interrupt entries are attached
++
++                  T.Interrupt_Entry := False;
++               end Detach_Interrupt_Entries;
++            end select;
++
++         exception
++            --  If there is a Program_Error we just want to propagate it to
++            --  the caller and do not want to stop this task.
++
++            when Program_Error =>
++               null;
++
++            when others =>
++               pragma Assert (False);
++               null;
++         end;
++      end loop;
++
++   exception
++      when Standard'Abort_Signal =>
++         --  Flush interrupt server semaphores, so they can terminate
++         Finalize_Interrupt_Servers;
++         raise;
++   end Interrupt_Manager;
++
++   ---------------------------
++   -- Interrupt_Server_Task --
++   ---------------------------
++
++   --  Server task for vectored hardware interrupt handling
++
++   task body Interrupt_Server_Task is
++      Self_Id         : constant Task_Id := Self;
++      Tmp_Handler     : Parameterless_Handler;
++      Tmp_ID          : Task_Id;
++      Tmp_Entry_Index : Task_Entry_Index;
++
++      Status : int;
++      pragma Unreferenced (Status);
++      --  ??? shouldn't we test Stat at least in a pragma Assert?
++   begin
++      System.Tasking.Utilities.Make_Independent;
++      Semaphore_ID_Map (Interrupt) := Int_Sema;
++
++      loop
++         --  Pend on semaphore that will be triggered by the
++         --  umbrella handler when the associated interrupt comes in
++
++         Status := Binary_Semaphore_Obtain (Int_Sema);
++
++         if User_Handler (Interrupt).H /= null then
++
++            --  Protected procedure handler
++
++            Tmp_Handler := User_Handler (Interrupt).H;
++            Tmp_Handler.all;
++
++         elsif User_Entry (Interrupt).T /= Null_Task then
++
++            --  Interrupt entry handler
++
++            Tmp_ID := User_Entry (Interrupt).T;
++            Tmp_Entry_Index := User_Entry (Interrupt).E;
++            System.Tasking.Rendezvous.Call_Simple
++              (Tmp_ID, Tmp_Entry_Index, System.Null_Address);
++
++         else
++            --  Semaphore has been flushed by an unbind operation in
++            --  the Interrupt_Manager. Terminate the server task.
++
++            --  Wait for the Interrupt_Manager to complete its work
++
++            POP.Write_Lock (Self_Id);
++
++            --  Delete the associated semaphore
++
++            Status := Binary_Semaphore_Delete (Int_Sema);
++
++            --  Set status for the Interrupt_Manager
++
++            Semaphore_ID_Map (Interrupt) := 0;
++            Server_ID (Interrupt) := Null_Task;
++            POP.Unlock (Self_Id);
++
++            exit;
++         end if;
++      end loop;
++   end Interrupt_Server_Task;
++
++begin
++   --  Get Interrupt_Manager's ID so that Abort_Interrupt can be sent
++
++   Interrupt_Manager_ID := To_System (Interrupt_Manager'Identity);
++end System.Interrupts;
+diff -urN gcc-4.3.2-orig/gcc/ada/s-interr-vxworks.adb gcc-4.3.2/gcc/ada/s-interr-vxworks.adb
+--- gcc-4.3.2-orig/gcc/ada/s-interr-vxworks.adb	2007-06-06 05:13:44.000000000 -0500
++++ gcc-4.3.2/gcc/ada/s-interr-vxworks.adb	1969-12-31 18:00:00.000000000 -0600
+@@ -1,1147 +0,0 @@
+-------------------------------------------------------------------------------
+---                                                                          --
+---                 GNAT RUN-TIME LIBRARY (GNARL) COMPONENTS                 --
+---                                                                          --
+---                     S Y S T E M . I N T E R R U P T S                    --
+---                                                                          --
+---                                  B o d y                                 --
+---                                                                          --
+---         Copyright (C) 1992-2007, Free Software Foundation, Inc.          --
+---                                                                          --
+--- GNARL is free software; you can  redistribute it  and/or modify it under --
+--- terms of the  GNU General Public License as published  by the Free Soft- --
+--- ware  Foundation;  either version 2,  or (at your option) any later ver- --
+--- sion. GNARL is distributed in the hope that it will be useful, but WITH- --
+--- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
+--- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
+--- for  more details.  You should have  received  a copy of the GNU General --
+--- Public License  distributed with GNARL; see file COPYING.  If not, write --
+--- to  the  Free Software Foundation,  51  Franklin  Street,  Fifth  Floor, --
+--- Boston, MA 02110-1301, USA.                                              --
+---                                                                          --
+--- As a special exception,  if other files  instantiate  generics from this --
+--- unit, or you link  this unit with other files  to produce an executable, --
+--- this  unit  does not  by itself cause  the resulting  executable  to  be --
+--- covered  by the  GNU  General  Public  License.  This exception does not --
+--- however invalidate  any other reasons why  the executable file  might be --
+--- covered by the  GNU Public License.                                      --
+---                                                                          --
+--- GNARL was developed by the GNARL team at Florida State University.       --
+--- Extensive contributions were provided by Ada Core Technologies, Inc.     --
+---                                                                          --
+-------------------------------------------------------------------------------
+-
+---  Invariants:
+-
+---  All user-handleable signals are masked at all times in all tasks/threads
+---  except possibly for the Interrupt_Manager task.
+-
+---  When a user task wants to have the effect of masking/unmasking an signal,
+---  it must call Block_Interrupt/Unblock_Interrupt, which will have the effect
+---  of unmasking/masking the signal in the Interrupt_Manager task. These
+---  comments do not apply to vectored hardware interrupts, which may be masked
+---  or unmasked using routined interfaced to the relevant VxWorks system
+---  calls.
+-
+---  Once we associate a Signal_Server_Task with an signal, the task never goes
+---  away, and we never remove the association. On the other hand, it is more
+---  convenient to terminate an associated Interrupt_Server_Task for a vectored
+---  hardware interrupt (since we use a binary semaphore for synchronization
+---  with the umbrella handler).
+-
+---  There is no more than one signal per Signal_Server_Task and no more than
+---  one Signal_Server_Task per signal. The same relation holds for hardware
+---  interrupts and Interrupt_Server_Task's at any given time. That is, only
+---  one non-terminated Interrupt_Server_Task exists for a give interrupt at
+---  any time.
+-
+---  Within this package, the lock L is used to protect the various status
+---  tables. If there is a Server_Task associated with a signal or interrupt,
+---  we use the per-task lock of the Server_Task instead so that we protect the
+---  status between Interrupt_Manager and Server_Task. Protection among
+---  service requests are ensured via user calls to the Interrupt_Manager
+---  entries.
+-
+---  This is the VxWorks version of this package, supporting vectored hardware
+---  interrupts.
+-
+-with Ada.Unchecked_Conversion;
+-
+-with System.OS_Interface; use System.OS_Interface;
+-
+-with Interfaces.VxWorks;
+-
+-with Ada.Task_Identification;
+---  used for Task_Id type
+-
+-with Ada.Exceptions;
+---  used for Raise_Exception
+-
+-with System.Interrupt_Management;
+---  used for Reserve
+-
+-with System.Task_Primitives.Operations;
+---  used for Write_Lock
+---           Unlock
+---           Abort
+---           Wakeup_Task
+---           Sleep
+---           Initialize_Lock
+-
+-with System.Storage_Elements;
+---  used for To_Address
+---           To_Integer
+---           Integer_Address
+-
+-with System.Tasking.Utilities;
+---  used for Make_Independent
+-
+-with System.Tasking.Rendezvous;
+---  used for Call_Simple
+-pragma Elaborate_All (System.Tasking.Rendezvous);
+-
+-package body System.Interrupts is
+-
+-   use Tasking;
+-   use Ada.Exceptions;
+-
+-   package POP renames System.Task_Primitives.Operations;
+-
+-   function To_Ada is new Ada.Unchecked_Conversion
+-     (System.Tasking.Task_Id, Ada.Task_Identification.Task_Id);
+-
+-   function To_System is new Ada.Unchecked_Conversion
+-     (Ada.Task_Identification.Task_Id, Task_Id);
+-
+-   -----------------
+-   -- Local Tasks --
+-   -----------------
+-
+-   --  WARNING: System.Tasking.Stages performs calls to this task with
+-   --  low-level constructs. Do not change this spec without synchronizing it.
+-
+-   task Interrupt_Manager is
+-      entry Detach_Interrupt_Entries (T : Task_Id);
+-
+-      entry Attach_Handler
+-        (New_Handler : Parameterless_Handler;
+-         Interrupt   : Interrupt_ID;
+-         Static      : Boolean;
+-         Restoration : Boolean := False);
+-
+-      entry Exchange_Handler
+-        (Old_Handler : out Parameterless_Handler;
+-         New_Handler : Parameterless_Handler;
+-         Interrupt   : Interrupt_ID;
+-         Static      : Boolean);
+-
+-      entry Detach_Handler
+-        (Interrupt : Interrupt_ID;
+-         Static    : Boolean);
+-
+-      entry Bind_Interrupt_To_Entry
+-        (T         : Task_Id;
+-         E         : Task_Entry_Index;
+-         Interrupt : Interrupt_ID);
+-
+-      pragma Interrupt_Priority (System.Interrupt_Priority'First);
+-   end Interrupt_Manager;
+-
+-   task type Interrupt_Server_Task
+-     (Interrupt : Interrupt_ID; Int_Sema : SEM_ID) is
+-      --  Server task for vectored hardware interrupt handling
+-      pragma Interrupt_Priority (System.Interrupt_Priority'First + 2);
+-   end Interrupt_Server_Task;
+-
+-   type Interrupt_Task_Access is access Interrupt_Server_Task;
+-
+-   -------------------------------
+-   -- Local Types and Variables --
+-   -------------------------------
+-
+-   type Entry_Assoc is record
+-      T : Task_Id;
+-      E : Task_Entry_Index;
+-   end record;
+-
+-   type Handler_Assoc is record
+-      H      : Parameterless_Handler;
+-      Static : Boolean;   --  Indicates static binding;
+-   end record;
+-
+-   User_Handler : array (Interrupt_ID) of Handler_Assoc :=
+-     (others => (null, Static => False));
+-   pragma Volatile_Components (User_Handler);
+-   --  Holds the protected procedure handler (if any) and its Static
+-   --  information  for each interrupt or signal. A handler is static
+-   --  iff it is specified through the pragma Attach_Handler.
+-
+-   User_Entry : array (Interrupt_ID) of Entry_Assoc :=
+-     (others => (T => Null_Task, E => Null_Task_Entry));
+-   pragma Volatile_Components (User_Entry);
+-   --  Holds the task and entry index (if any) for each interrupt / signal
+-
+-   --  Type and Head, Tail of the list containing Registered Interrupt
+-   --  Handlers. These definitions are used to register the handlers
+-   --  specified by the pragma Interrupt_Handler.
+-
+-   type Registered_Handler;
+-   type R_Link is access all Registered_Handler;
+-
+-   type Registered_Handler is record
+-      H    : System.Address := System.Null_Address;
+-      Next : R_Link := null;
+-   end record;
+-
+-   Registered_Handler_Head : R_Link := null;
+-   Registered_Handler_Tail : R_Link := null;
+-
+-   Server_ID : array (Interrupt_ID) of System.Tasking.Task_Id :=
+-     (others => System.Tasking.Null_Task);
+-   pragma Atomic_Components (Server_ID);
+-   --  Holds the Task_Id of the Server_Task for each interrupt / signal.
+-   --  Task_Id is needed to accomplish locking per interrupt base. Also
+-   --  is needed to determine whether to create a new Server_Task.
+-
+-   Semaphore_ID_Map : array
+-     (Interrupt_ID range 0 .. System.OS_Interface.Max_HW_Interrupt)
+-      of SEM_ID := (others => 0);
+-   --  Array of binary semaphores associated with vectored interrupts
+-   --  Note that the last bound should be Max_HW_Interrupt, but this will raise
+-   --  Storage_Error if Num_HW_Interrupts is null, so use an extra 4 bytes
+-   --  instead.
+-
+-   Interrupt_Access_Hold : Interrupt_Task_Access;
+-   --  Variable for allocating an Interrupt_Server_Task
+-
+-   Default_Handler : array (HW_Interrupt) of Interfaces.VxWorks.VOIDFUNCPTR;
+-   --  Vectored interrupt handlers installed prior to program startup.
+-   --  These are saved only when the umbrella handler is installed for
+-   --  a given interrupt number.
+-
+-   -----------------------
+-   -- Local Subprograms --
+-   -----------------------
+-
+-   procedure Check_Reserved_Interrupt (Interrupt : Interrupt_ID);
+-   --  Check if Id is a reserved interrupt, and if so raise Program_Error
+-   --  with an appropriate message, otherwise return.
+-
+-   procedure Finalize_Interrupt_Servers;
+-   --  Unbind the handlers for hardware interrupt server tasks at program
+-   --  termination.
+-
+-   function Is_Registered (Handler : Parameterless_Handler) return Boolean;
+-   --  See if Handler has been "pragma"ed using Interrupt_Handler.
+-   --  Always consider a null handler as registered.
+-
+-   procedure Notify_Interrupt (Param : System.Address);
+-   --  Umbrella handler for vectored interrupts (not signals)
+-
+-   procedure Install_Default_Action (Interrupt : HW_Interrupt);
+-   --  Restore a handler that was in place prior to program execution
+-
+-   procedure Install_Umbrella_Handler
+-     (Interrupt : HW_Interrupt;
+-      Handler   : Interfaces.VxWorks.VOIDFUNCPTR);
+-   --  Install the runtime umbrella handler for a vectored hardware
+-   --  interrupt
+-
+-   procedure Unimplemented (Feature : String);
+-   pragma No_Return (Unimplemented);
+-   --  Used to mark a call to an unimplemented function. Raises Program_Error
+-   --  with an appropriate message noting that Feature is unimplemented.
+-
+-   --------------------
+-   -- Attach_Handler --
+-   --------------------
+-
+-   --  Calling this procedure with New_Handler = null and Static = True
+-   --  means we want to detach the current handler regardless of the
+-   --  previous handler's binding status (ie. do not care if it is a
+-   --  dynamic or static handler).
+-
+-   --  This option is needed so that during the finalization of a PO, we
+-   --  can detach handlers attached through pragma Attach_Handler.
+-
+-   procedure Attach_Handler
+-     (New_Handler : Parameterless_Handler;
+-      Interrupt   : Interrupt_ID;
+-      Static      : Boolean := False) is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      Interrupt_Manager.Attach_Handler (New_Handler, Interrupt, Static);
+-   end Attach_Handler;
+-
+-   -----------------------------
+-   -- Bind_Interrupt_To_Entry --
+-   -----------------------------
+-
+-   --  This procedure raises a Program_Error if it tries to
+-   --  bind an interrupt to which an Entry or a Procedure is
+-   --  already bound.
+-
+-   procedure Bind_Interrupt_To_Entry
+-     (T       : Task_Id;
+-      E       : Task_Entry_Index;
+-      Int_Ref : System.Address)
+-   is
+-      Interrupt : constant Interrupt_ID :=
+-        Interrupt_ID (Storage_Elements.To_Integer (Int_Ref));
+-
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      Interrupt_Manager.Bind_Interrupt_To_Entry (T, E, Interrupt);
+-   end Bind_Interrupt_To_Entry;
+-
+-   ---------------------
+-   -- Block_Interrupt --
+-   ---------------------
+-
+-   procedure Block_Interrupt (Interrupt : Interrupt_ID) is
+-   begin
+-      Unimplemented ("Block_Interrupt");
+-   end Block_Interrupt;
+-
+-   ------------------------------
+-   -- Check_Reserved_Interrupt --
+-   ------------------------------
+-
+-   procedure Check_Reserved_Interrupt (Interrupt : Interrupt_ID) is
+-   begin
+-      if Is_Reserved (Interrupt) then
+-         Raise_Exception
+-           (Program_Error'Identity,
+-            "Interrupt" & Interrupt_ID'Image (Interrupt) & " is reserved");
+-      else
+-         return;
+-      end if;
+-   end Check_Reserved_Interrupt;
+-
+-   ---------------------
+-   -- Current_Handler --
+-   ---------------------
+-
+-   function Current_Handler
+-     (Interrupt : Interrupt_ID) return Parameterless_Handler
+-   is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-
+-      --  ??? Since Parameterless_Handler is not Atomic, the
+-      --  current implementation is wrong. We need a new service in
+-      --  Interrupt_Manager to ensure atomicity.
+-
+-      return User_Handler (Interrupt).H;
+-   end Current_Handler;
+-
+-   --------------------
+-   -- Detach_Handler --
+-   --------------------
+-
+-   --  Calling this procedure with Static = True means we want to Detach the
+-   --  current handler regardless of the previous handler's binding status
+-   --  (i.e. do not care if it is a dynamic or static handler).
+-
+-   --  This option is needed so that during the finalization of a PO, we can
+-   --  detach handlers attached through pragma Attach_Handler.
+-
+-   procedure Detach_Handler
+-     (Interrupt : Interrupt_ID;
+-      Static    : Boolean := False) is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      Interrupt_Manager.Detach_Handler (Interrupt, Static);
+-   end Detach_Handler;
+-
+-   ------------------------------
+-   -- Detach_Interrupt_Entries --
+-   ------------------------------
+-
+-   procedure Detach_Interrupt_Entries (T : Task_Id) is
+-   begin
+-      Interrupt_Manager.Detach_Interrupt_Entries (T);
+-   end Detach_Interrupt_Entries;
+-
+-   ----------------------
+-   -- Exchange_Handler --
+-   ----------------------
+-
+-   --  Calling this procedure with New_Handler = null and Static = True
+-   --  means we want to detach the current handler regardless of the
+-   --  previous handler's binding status (ie. do not care if it is a
+-   --  dynamic or static handler).
+-
+-   --  This option is needed so that during the finalization of a PO, we
+-   --  can detach handlers attached through pragma Attach_Handler.
+-
+-   procedure Exchange_Handler
+-     (Old_Handler : out Parameterless_Handler;
+-      New_Handler : Parameterless_Handler;
+-      Interrupt   : Interrupt_ID;
+-      Static      : Boolean := False)
+-   is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      Interrupt_Manager.Exchange_Handler
+-        (Old_Handler, New_Handler, Interrupt, Static);
+-   end Exchange_Handler;
+-
+-   --------------
+-   -- Finalize --
+-   --------------
+-
+-   procedure Finalize (Object : in out Static_Interrupt_Protection) is
+-   begin
+-      --  ??? loop to be executed only when we're not doing library level
+-      --  finalization, since in this case all interrupt / signal tasks are
+-      --  gone.
+-
+-      if not Interrupt_Manager'Terminated then
+-         for N in reverse Object.Previous_Handlers'Range loop
+-            Interrupt_Manager.Attach_Handler
+-              (New_Handler => Object.Previous_Handlers (N).Handler,
+-               Interrupt   => Object.Previous_Handlers (N).Interrupt,
+-               Static      => Object.Previous_Handlers (N).Static,
+-               Restoration => True);
+-         end loop;
+-      end if;
+-
+-      Tasking.Protected_Objects.Entries.Finalize
+-        (Tasking.Protected_Objects.Entries.Protection_Entries (Object));
+-   end Finalize;
+-
+-   --------------------------------
+-   -- Finalize_Interrupt_Servers --
+-   --------------------------------
+-
+-   --  Restore default handlers for interrupt servers
+-
+-   --  This is called by the Interrupt_Manager task when it receives the abort
+-   --  signal during program finalization.
+-
+-   procedure Finalize_Interrupt_Servers is
+-      HW_Interrupts : constant Boolean := HW_Interrupt'Last >= 0;
+-
+-   begin
+-      if HW_Interrupts then
+-         for Int in HW_Interrupt loop
+-            if Server_ID (Interrupt_ID (Int)) /= null
+-              and then
+-                not Ada.Task_Identification.Is_Terminated
+-                 (To_Ada (Server_ID (Interrupt_ID (Int))))
+-            then
+-               Interrupt_Manager.Attach_Handler
+-                 (New_Handler => null,
+-                  Interrupt => Interrupt_ID (Int),
+-                  Static => True,
+-                  Restoration => True);
+-            end if;
+-         end loop;
+-      end if;
+-   end Finalize_Interrupt_Servers;
+-
+-   -------------------------------------
+-   -- Has_Interrupt_Or_Attach_Handler --
+-   -------------------------------------
+-
+-   function Has_Interrupt_Or_Attach_Handler
+-     (Object : access Dynamic_Interrupt_Protection)
+-      return   Boolean
+-   is
+-      pragma Unreferenced (Object);
+-   begin
+-      return True;
+-   end Has_Interrupt_Or_Attach_Handler;
+-
+-   function Has_Interrupt_Or_Attach_Handler
+-     (Object : access Static_Interrupt_Protection)
+-      return   Boolean
+-   is
+-      pragma Unreferenced (Object);
+-   begin
+-      return True;
+-   end Has_Interrupt_Or_Attach_Handler;
+-
+-   ----------------------
+-   -- Ignore_Interrupt --
+-   ----------------------
+-
+-   procedure Ignore_Interrupt (Interrupt : Interrupt_ID) is
+-   begin
+-      Unimplemented ("Ignore_Interrupt");
+-   end Ignore_Interrupt;
+-
+-   ----------------------------
+-   -- Install_Default_Action --
+-   ----------------------------
+-
+-   procedure Install_Default_Action (Interrupt : HW_Interrupt) is
+-   begin
+-      --  Restore original interrupt handler
+-
+-      Interfaces.VxWorks.intVecSet
+-        (Interfaces.VxWorks.INUM_TO_IVEC (Integer (Interrupt)),
+-         Default_Handler (Interrupt));
+-      Default_Handler (Interrupt) := null;
+-   end Install_Default_Action;
+-
+-   ----------------------
+-   -- Install_Handlers --
+-   ----------------------
+-
+-   procedure Install_Handlers
+-     (Object       : access Static_Interrupt_Protection;
+-      New_Handlers : New_Handler_Array)
+-   is
+-   begin
+-      for N in New_Handlers'Range loop
+-
+-         --  We need a lock around this ???
+-
+-         Object.Previous_Handlers (N).Interrupt := New_Handlers (N).Interrupt;
+-         Object.Previous_Handlers (N).Static    := User_Handler
+-           (New_Handlers (N).Interrupt).Static;
+-
+-         --  We call Exchange_Handler and not directly Interrupt_Manager.
+-         --  Exchange_Handler so we get the Is_Reserved check.
+-
+-         Exchange_Handler
+-           (Old_Handler => Object.Previous_Handlers (N).Handler,
+-            New_Handler => New_Handlers (N).Handler,
+-            Interrupt   => New_Handlers (N).Interrupt,
+-            Static      => True);
+-      end loop;
+-   end Install_Handlers;
+-
+-   ------------------------------
+-   -- Install_Umbrella_Handler --
+-   ------------------------------
+-
+-   procedure Install_Umbrella_Handler
+-     (Interrupt : HW_Interrupt;
+-      Handler   : Interfaces.VxWorks.VOIDFUNCPTR)
+-   is
+-      use Interfaces.VxWorks;
+-
+-      Vec : constant Interrupt_Vector :=
+-              INUM_TO_IVEC (Interfaces.VxWorks.int (Interrupt));
+-
+-      Old_Handler : constant VOIDFUNCPTR :=
+-                      intVecGet
+-                        (INUM_TO_IVEC (Interfaces.VxWorks.int (Interrupt)));
+-
+-      Stat : Interfaces.VxWorks.STATUS;
+-      pragma Unreferenced (Stat);
+-      --  ??? shouldn't we test Stat at least in a pragma Assert?
+-
+-   begin
+-      --  Only install umbrella handler when no Ada handler has already been
+-      --  installed. Note that the interrupt number is passed as a parameter
+-      --  when an interrupt occurs, so the umbrella handler has a different
+-      --  wrapper generated by intConnect for each interrupt number.
+-
+-      if Default_Handler (Interrupt) = null then
+-         Stat :=
+-           intConnect (Vec, Handler, System.Address (Interrupt));
+-         Default_Handler (Interrupt) := Old_Handler;
+-      end if;
+-   end Install_Umbrella_Handler;
+-
+-   ----------------
+-   -- Is_Blocked --
+-   ----------------
+-
+-   function Is_Blocked (Interrupt : Interrupt_ID) return Boolean is
+-   begin
+-      Unimplemented ("Is_Blocked");
+-      return False;
+-   end Is_Blocked;
+-
+-   -----------------------
+-   -- Is_Entry_Attached --
+-   -----------------------
+-
+-   function Is_Entry_Attached (Interrupt : Interrupt_ID) return Boolean is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      return User_Entry (Interrupt).T /= Null_Task;
+-   end Is_Entry_Attached;
+-
+-   -------------------------
+-   -- Is_Handler_Attached --
+-   -------------------------
+-
+-   function Is_Handler_Attached (Interrupt : Interrupt_ID) return Boolean is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      return User_Handler (Interrupt).H /= null;
+-   end Is_Handler_Attached;
+-
+-   ----------------
+-   -- Is_Ignored --
+-   ----------------
+-
+-   function Is_Ignored (Interrupt : Interrupt_ID) return Boolean is
+-   begin
+-      Unimplemented ("Is_Ignored");
+-      return False;
+-   end Is_Ignored;
+-
+-   -------------------
+-   -- Is_Registered --
+-   -------------------
+-
+-   function Is_Registered (Handler : Parameterless_Handler) return Boolean is
+-      type Fat_Ptr is record
+-         Object_Addr  : System.Address;
+-         Handler_Addr : System.Address;
+-      end record;
+-
+-      function To_Fat_Ptr is new Ada.Unchecked_Conversion
+-        (Parameterless_Handler, Fat_Ptr);
+-
+-      Ptr : R_Link;
+-      Fat : Fat_Ptr;
+-
+-   begin
+-      if Handler = null then
+-         return True;
+-      end if;
+-
+-      Fat := To_Fat_Ptr (Handler);
+-
+-      Ptr := Registered_Handler_Head;
+-
+-      while Ptr /= null loop
+-         if Ptr.H = Fat.Handler_Addr then
+-            return True;
+-         end if;
+-
+-         Ptr := Ptr.Next;
+-      end loop;
+-
+-      return False;
+-   end Is_Registered;
+-
+-   -----------------
+-   -- Is_Reserved --
+-   -----------------
+-
+-   function Is_Reserved (Interrupt : Interrupt_ID) return Boolean is
+-      use System.Interrupt_Management;
+-   begin
+-      return Reserve (System.Interrupt_Management.Interrupt_ID (Interrupt));
+-   end Is_Reserved;
+-
+-   ----------------------
+-   -- Notify_Interrupt --
+-   ----------------------
+-
+-   --  Umbrella handler for vectored hardware interrupts (as opposed to
+-   --  signals and exceptions).  As opposed to the signal implementation,
+-   --  this handler is only installed in the vector table while there is
+-   --  an active association of an Ada handler to the interrupt.
+-
+-   --  Otherwise, the handler that existed prior to program startup is
+-   --  in the vector table.  This ensures that handlers installed by
+-   --  the BSP are active unless explicitly replaced in the program text.
+-
+-   --  Each Interrupt_Server_Task has an associated binary semaphore
+-   --  on which it pends once it's been started.  This routine determines
+-   --  The appropriate semaphore and and issues a semGive call, waking
+-   --  the server task.  When a handler is unbound,
+-   --  System.Interrupts.Unbind_Handler issues a semFlush, and the
+-   --  server task deletes its semaphore and terminates.
+-
+-   procedure Notify_Interrupt (Param : System.Address) is
+-      Interrupt : constant Interrupt_ID := Interrupt_ID (Param);
+-
+-      Discard_Result : STATUS;
+-      pragma Unreferenced (Discard_Result);
+-
+-   begin
+-      Discard_Result := semGive (Semaphore_ID_Map (Interrupt));
+-   end Notify_Interrupt;
+-
+-   ---------------
+-   -- Reference --
+-   ---------------
+-
+-   function Reference (Interrupt : Interrupt_ID) return System.Address is
+-   begin
+-      Check_Reserved_Interrupt (Interrupt);
+-      return Storage_Elements.To_Address
+-        (Storage_Elements.Integer_Address (Interrupt));
+-   end Reference;
+-
+-   --------------------------------
+-   -- Register_Interrupt_Handler --
+-   --------------------------------
+-
+-   procedure Register_Interrupt_Handler (Handler_Addr : System.Address) is
+-      New_Node_Ptr : R_Link;
+-
+-   begin
+-      --  This routine registers a handler as usable for dynamic
+-      --  interrupt handler association. Routines attaching and detaching
+-      --  handlers dynamically should determine whether the handler is
+-      --  registered. Program_Error should be raised if it is not registered.
+-
+-      --  Pragma Interrupt_Handler can only appear in a library
+-      --  level PO definition and instantiation. Therefore, we do not need
+-      --  to implement an unregister operation. Nor do we need to
+-      --  protect the queue structure with a lock.
+-
+-      pragma Assert (Handler_Addr /= System.Null_Address);
+-
+-      New_Node_Ptr := new Registered_Handler;
+-      New_Node_Ptr.H := Handler_Addr;
+-
+-      if Registered_Handler_Head = null then
+-         Registered_Handler_Head := New_Node_Ptr;
+-         Registered_Handler_Tail := New_Node_Ptr;
+-
+-      else
+-         Registered_Handler_Tail.Next := New_Node_Ptr;
+-         Registered_Handler_Tail := New_Node_Ptr;
+-      end if;
+-   end Register_Interrupt_Handler;
+-
+-   -----------------------
+-   -- Unblock_Interrupt --
+-   -----------------------
+-
+-   procedure Unblock_Interrupt (Interrupt : Interrupt_ID) is
+-   begin
+-      Unimplemented ("Unblock_Interrupt");
+-   end Unblock_Interrupt;
+-
+-   ------------------
+-   -- Unblocked_By --
+-   ------------------
+-
+-   function Unblocked_By
+-     (Interrupt : Interrupt_ID) return System.Tasking.Task_Id
+-   is
+-   begin
+-      Unimplemented ("Unblocked_By");
+-      return Null_Task;
+-   end Unblocked_By;
+-
+-   ------------------------
+-   -- Unignore_Interrupt --
+-   ------------------------
+-
+-   procedure Unignore_Interrupt (Interrupt : Interrupt_ID) is
+-   begin
+-      Unimplemented ("Unignore_Interrupt");
+-   end Unignore_Interrupt;
+-
+-   -------------------
+-   -- Unimplemented --
+-   -------------------
+-
+-   procedure Unimplemented (Feature : String) is
+-   begin
+-      Raise_Exception
+-        (Program_Error'Identity,
+-         Feature & " not implemented on VxWorks");
+-   end Unimplemented;
+-
+-   -----------------------
+-   -- Interrupt_Manager --
+-   -----------------------
+-
+-   task body Interrupt_Manager is
+-
+-      --------------------
+-      -- Local Routines --
+-      --------------------
+-
+-      procedure Bind_Handler (Interrupt : Interrupt_ID);
+-      --  This procedure does not do anything if a signal is blocked.
+-      --  Otherwise, we have to interrupt Server_Task for status change through
+-      --  a wakeup signal.
+-
+-      procedure Unbind_Handler (Interrupt : Interrupt_ID);
+-      --  This procedure does not do anything if a signal is blocked.
+-      --  Otherwise, we have to interrupt Server_Task for status change
+-      --  through an abort signal.
+-
+-      procedure Unprotected_Exchange_Handler
+-        (Old_Handler : out Parameterless_Handler;
+-         New_Handler : Parameterless_Handler;
+-         Interrupt   : Interrupt_ID;
+-         Static      : Boolean;
+-         Restoration : Boolean := False);
+-
+-      procedure Unprotected_Detach_Handler
+-        (Interrupt : Interrupt_ID;
+-         Static    : Boolean);
+-
+-      ------------------
+-      -- Bind_Handler --
+-      ------------------
+-
+-      procedure Bind_Handler (Interrupt : Interrupt_ID) is
+-      begin
+-         Install_Umbrella_Handler
+-           (HW_Interrupt (Interrupt), Notify_Interrupt'Access);
+-      end Bind_Handler;
+-
+-      --------------------
+-      -- Unbind_Handler --
+-      --------------------
+-
+-      procedure Unbind_Handler (Interrupt : Interrupt_ID) is
+-         S : STATUS;
+-         use type STATUS;
+-
+-      begin
+-         --  Hardware interrupt
+-
+-         Install_Default_Action (HW_Interrupt (Interrupt));
+-
+-         --  Flush server task off semaphore, allowing it to terminate
+-
+-         S := semFlush (Semaphore_ID_Map (Interrupt));
+-         pragma Assert (S = 0);
+-      end Unbind_Handler;
+-
+-      --------------------------------
+-      -- Unprotected_Detach_Handler --
+-      --------------------------------
+-
+-      procedure Unprotected_Detach_Handler
+-        (Interrupt : Interrupt_ID;
+-         Static    : Boolean)
+-      is
+-         Old_Handler : Parameterless_Handler;
+-      begin
+-         if User_Entry (Interrupt).T /= Null_Task then
+-            --  If an interrupt entry is installed raise
+-            --  Program_Error. (propagate it to the caller).
+-
+-            Raise_Exception (Program_Error'Identity,
+-              "An interrupt entry is already installed");
+-         end if;
+-
+-         --  Note : Static = True will pass the following check. This is the
+-         --  case when we want to detach a handler regardless of the static
+-         --  status of the Current_Handler.
+-
+-         if not Static and then User_Handler (Interrupt).Static then
+-
+-            --  Trying to detach a static Interrupt Handler. raise
+-            --  Program_Error.
+-
+-            Raise_Exception (Program_Error'Identity,
+-              "Trying to detach a static Interrupt Handler");
+-         end if;
+-
+-         Old_Handler := User_Handler (Interrupt).H;
+-
+-         --  The new handler
+-
+-         User_Handler (Interrupt).H := null;
+-         User_Handler (Interrupt).Static := False;
+-
+-         if Old_Handler /= null then
+-            Unbind_Handler (Interrupt);
+-         end if;
+-      end Unprotected_Detach_Handler;
+-
+-      ----------------------------------
+-      -- Unprotected_Exchange_Handler --
+-      ----------------------------------
+-
+-      procedure Unprotected_Exchange_Handler
+-        (Old_Handler : out Parameterless_Handler;
+-         New_Handler : Parameterless_Handler;
+-         Interrupt   : Interrupt_ID;
+-         Static      : Boolean;
+-         Restoration : Boolean := False)
+-      is
+-      begin
+-         if User_Entry (Interrupt).T /= Null_Task then
+-
+-            --  If an interrupt entry is already installed, raise
+-            --  Program_Error. (propagate it to the caller).
+-
+-            Raise_Exception
+-              (Program_Error'Identity,
+-               "An interrupt is already installed");
+-         end if;
+-
+-         --  Note : A null handler with Static = True will
+-         --  pass the following check. This is the case when we want to
+-         --  detach a handler regardless of the Static status
+-         --  of Current_Handler.
+-         --  We don't check anything if Restoration is True, since we
+-         --  may be detaching a static handler to restore a dynamic one.
+-
+-         if not Restoration and then not Static
+-           and then (User_Handler (Interrupt).Static
+-
+-            --  Trying to overwrite a static Interrupt Handler with a
+-            --  dynamic Handler
+-
+-            --  The new handler is not specified as an
+-            --  Interrupt Handler by a pragma.
+-
+-           or else not Is_Registered (New_Handler))
+-         then
+-            Raise_Exception
+-              (Program_Error'Identity,
+-               "Trying to overwrite a static Interrupt Handler with a " &
+-               "dynamic Handler");
+-         end if;
+-
+-         --  Save the old handler
+-
+-         Old_Handler := User_Handler (Interrupt).H;
+-
+-         --  The new handler
+-
+-         User_Handler (Interrupt).H := New_Handler;
+-
+-         if New_Handler = null then
+-
+-            --  The null handler means we are detaching the handler
+-
+-            User_Handler (Interrupt).Static := False;
+-
+-         else
+-            User_Handler (Interrupt).Static := Static;
+-         end if;
+-
+-         --  Invoke a corresponding Server_Task if not yet created.
+-         --  Place Task_Id info in Server_ID array.
+-
+-         if New_Handler /= null
+-           and then
+-            (Server_ID (Interrupt) = Null_Task
+-              or else
+-                Ada.Task_Identification.Is_Terminated
+-                  (To_Ada (Server_ID (Interrupt))))
+-         then
+-            Interrupt_Access_Hold :=
+-              new Interrupt_Server_Task
+-                (Interrupt, semBCreate (SEM_Q_FIFO, SEM_EMPTY));
+-            Server_ID (Interrupt) :=
+-              To_System (Interrupt_Access_Hold.all'Identity);
+-         end if;
+-
+-         if (New_Handler = null) and then Old_Handler /= null then
+-
+-            --  Restore default handler
+-
+-            Unbind_Handler (Interrupt);
+-
+-         elsif Old_Handler = null then
+-
+-            --  Save default handler
+-
+-            Bind_Handler (Interrupt);
+-         end if;
+-      end Unprotected_Exchange_Handler;
+-
+-      --  Start of processing for Interrupt_Manager
+-
+-   begin
+-      --  By making this task independent of any master, when the process
+-      --  goes away, the Interrupt_Manager will terminate gracefully.
+-
+-      System.Tasking.Utilities.Make_Independent;
+-
+-      loop
+-         --  A block is needed to absorb Program_Error exception
+-
+-         declare
+-            Old_Handler : Parameterless_Handler;
+-
+-         begin
+-            select
+-               accept Attach_Handler
+-                 (New_Handler : Parameterless_Handler;
+-                  Interrupt   : Interrupt_ID;
+-                  Static      : Boolean;
+-                  Restoration : Boolean := False)
+-               do
+-                  Unprotected_Exchange_Handler
+-                    (Old_Handler, New_Handler, Interrupt, Static, Restoration);
+-               end Attach_Handler;
+-
+-            or
+-               accept Exchange_Handler
+-                 (Old_Handler : out Parameterless_Handler;
+-                  New_Handler : Parameterless_Handler;
+-                  Interrupt   : Interrupt_ID;
+-                  Static      : Boolean)
+-               do
+-                  Unprotected_Exchange_Handler
+-                    (Old_Handler, New_Handler, Interrupt, Static);
+-               end Exchange_Handler;
+-
+-            or
+-               accept Detach_Handler
+-                  (Interrupt   : Interrupt_ID;
+-                   Static      : Boolean)
+-               do
+-                  Unprotected_Detach_Handler (Interrupt, Static);
+-               end Detach_Handler;
+-            or
+-               accept Bind_Interrupt_To_Entry
+-                 (T       : Task_Id;
+-                  E       : Task_Entry_Index;
+-                  Interrupt : Interrupt_ID)
+-               do
+-                  --  If there is a binding already (either a procedure or an
+-                  --  entry), raise Program_Error (propagate it to the caller).
+-
+-                  if User_Handler (Interrupt).H /= null
+-                    or else User_Entry (Interrupt).T /= Null_Task
+-                  then
+-                     Raise_Exception
+-                       (Program_Error'Identity,
+-                        "A binding for this interrupt is already present");
+-                  end if;
+-
+-                  User_Entry (Interrupt) := Entry_Assoc'(T => T, E => E);
+-
+-                  --  Indicate the attachment of interrupt entry in the ATCB.
+-                  --  This is needed so when an interrupt entry task terminates
+-                  --  the binding can be cleaned. The call to unbinding must be
+-                  --  make by the task before it terminates.
+-
+-                  T.Interrupt_Entry := True;
+-
+-                  --  Invoke a corresponding Server_Task if not yet created.
+-                  --  Place Task_Id info in Server_ID array.
+-
+-                  if Server_ID (Interrupt) = Null_Task
+-                    or else
+-                      Ada.Task_Identification.Is_Terminated
+-                        (To_Ada (Server_ID (Interrupt)))
+-                  then
+-                     Interrupt_Access_Hold := new Interrupt_Server_Task
+-                       (Interrupt, semBCreate (SEM_Q_FIFO, SEM_EMPTY));
+-                     Server_ID (Interrupt) :=
+-                       To_System (Interrupt_Access_Hold.all'Identity);
+-                  end if;
+-
+-                  Bind_Handler (Interrupt);
+-               end Bind_Interrupt_To_Entry;
+-
+-            or
+-               accept Detach_Interrupt_Entries (T : Task_Id) do
+-                  for Int in Interrupt_ID'Range loop
+-                     if not Is_Reserved (Int) then
+-                        if User_Entry (Int).T = T then
+-                           User_Entry (Int) :=
+-                             Entry_Assoc'
+-                               (T => Null_Task, E => Null_Task_Entry);
+-                           Unbind_Handler (Int);
+-                        end if;
+-                     end if;
+-                  end loop;
+-
+-                  --  Indicate in ATCB that no interrupt entries are attached
+-
+-                  T.Interrupt_Entry := False;
+-               end Detach_Interrupt_Entries;
+-            end select;
+-
+-         exception
+-            --  If there is a Program_Error we just want to propagate it to
+-            --  the caller and do not want to stop this task.
+-
+-            when Program_Error =>
+-               null;
+-
+-            when others =>
+-               pragma Assert (False);
+-               null;
+-         end;
+-      end loop;
+-
+-   exception
+-      when Standard'Abort_Signal =>
+-         --  Flush interrupt server semaphores, so they can terminate
+-         Finalize_Interrupt_Servers;
+-         raise;
+-   end Interrupt_Manager;
+-
+-   ---------------------------
+-   -- Interrupt_Server_Task --
+-   ---------------------------
+-
+-   --  Server task for vectored hardware interrupt handling
+-
+-   task body Interrupt_Server_Task is
+-      Self_Id         : constant Task_Id := Self;
+-      Tmp_Handler     : Parameterless_Handler;
+-      Tmp_ID          : Task_Id;
+-      Tmp_Entry_Index : Task_Entry_Index;
+-      S               : STATUS;
+-
+-      use type STATUS;
+-
+-   begin
+-      System.Tasking.Utilities.Make_Independent;
+-      Semaphore_ID_Map (Interrupt) := Int_Sema;
+-
+-      loop
+-         --  Pend on semaphore that will be triggered by the
+-         --  umbrella handler when the associated interrupt comes in
+-
+-         S := semTake (Int_Sema, WAIT_FOREVER);
+-         pragma Assert (S = 0);
+-
+-         if User_Handler (Interrupt).H /= null then
+-
+-            --  Protected procedure handler
+-
+-            Tmp_Handler := User_Handler (Interrupt).H;
+-            Tmp_Handler.all;
+-
+-         elsif User_Entry (Interrupt).T /= Null_Task then
+-
+-            --  Interrupt entry handler
+-
+-            Tmp_ID := User_Entry (Interrupt).T;
+-            Tmp_Entry_Index := User_Entry (Interrupt).E;
+-            System.Tasking.Rendezvous.Call_Simple
+-              (Tmp_ID, Tmp_Entry_Index, System.Null_Address);
+-
+-         else
+-            --  Semaphore has been flushed by an unbind operation in
+-            --  the Interrupt_Manager. Terminate the server task.
+-
+-            --  Wait for the Interrupt_Manager to complete its work
+-
+-            POP.Write_Lock (Self_Id);
+-
+-            --  Delete the associated semaphore
+-
+-            S := semDelete (Int_Sema);
+-
+-            pragma Assert (S = 0);
+-
+-            --  Set status for the Interrupt_Manager
+-
+-            Semaphore_ID_Map (Interrupt) := 0;
+-            Server_ID (Interrupt) := Null_Task;
+-            POP.Unlock (Self_Id);
+-
+-            exit;
+-         end if;
+-      end loop;
+-   end Interrupt_Server_Task;
+-
+-begin
+-   --  Get Interrupt_Manager's ID so that Abort_Interrupt can be sent
+-
+-   Interrupt_Manager_ID := To_System (Interrupt_Manager'Identity);
+-end System.Interrupts;
+diff -urN gcc-4.3.2-orig/gcc/ada/s-osinte-rtems.ads gcc-4.3.2/gcc/ada/s-osinte-rtems.ads
+--- gcc-4.3.2-orig/gcc/ada/s-osinte-rtems.ads	2008-02-13 13:04:53.000000000 -0600
++++ gcc-4.3.2/gcc/ada/s-osinte-rtems.ads	2008-09-09 13:07:24.000000000 -0500
+@@ -37,15 +37,20 @@
+ 
+ --  This is the RTEMS version of this package
+ 
+---  These are guesses based on what I think the GNARL team will want to
+---  call the rtems configurations.  We use CPU-rtems for the rtems
+---  configurations.
++--
++--  RTEMS target names are of the form CPU-rtems.
++--  This implementation is designed to work on ALL RTEMS targets.
++--  The RTEMS implementation is primarily based upon the POSIX threads
++--  API but there are also bindings to GNAT/RTEMS support routines
++--  to insulate this code from C API specific details and, in some
++--  cases, obtain target architecture and BSP specific information
++--  that is unavailable at the time this package is built.
+ 
+ --  This package encapsulates all direct interfaces to OS services
+ --  that are needed by children of System.
+ 
+ --  PLEASE DO NOT add any with-clauses to this package
+---  or remove the pragma Elaborate_Body.
++--  or remove the pragma Preelaborate.
+ --  It is designed to be a bottom-level (leaf) package.
+ 
+ with Interfaces.C;
+@@ -84,7 +89,13 @@
+    -- Signals --
+    -------------
+ 
+-   Max_Interrupt : constant := 31;
++   Num_HW_Interrupts : constant := 256;
++
++   Max_HW_Interrupt : constant := Num_HW_Interrupts - 1;
++   type HW_Interrupt is new int range 0 .. Max_HW_Interrupt;
++
++   Max_Interrupt : constant := Max_HW_Interrupt;
++
+    type Signal is new int range 0 .. Max_Interrupt;
+ 
+    SIGXCPU     : constant := 0; --  XCPU
+@@ -475,6 +486,79 @@
+       destructor : destructor_pointer) return int;
+    pragma Import (C, pthread_key_create, "pthread_key_create");
+ 
++   ------------------------------------------------------------
++   --   Binary Semaphore Wrapper to Support Interrupt Tasks  --
++   ------------------------------------------------------------
++
++   type Binary_Semaphore_Id is new rtems_id;
++
++   function Binary_Semaphore_Create return Binary_Semaphore_Id;
++   pragma Import (
++      C,
++      Binary_Semaphore_Create,
++      "__gnat_binary_semaphore_create");
++
++   function Binary_Semaphore_Delete (ID : Binary_Semaphore_Id) return int;
++   pragma Import (
++      C,
++      Binary_Semaphore_Delete,
++      "__gnat_binary_semaphore_delete");
++
++   function Binary_Semaphore_Obtain (ID : Binary_Semaphore_Id) return int;
++   pragma Import (
++      C,
++      Binary_Semaphore_Obtain,
++      "__gnat_binary_semaphore_obtain");
++
++   function Binary_Semaphore_Release (ID : Binary_Semaphore_Id) return int;
++   pragma Import (
++      C,
++      Binary_Semaphore_Release,
++      "__gnat_binary_semaphore_release");
++
++   function Binary_Semaphore_Flush (ID : Binary_Semaphore_Id) return int;
++   pragma Import (
++      C,
++      Binary_Semaphore_Flush,
++      "__gnat_binary_semaphore_flush");
++
++   ------------------------------------------------------------
++   -- Hardware Interrupt Wrappers to Support Interrupt Tasks --
++   ------------------------------------------------------------
++
++   type Interrupt_Handler is access procedure (parameter : System.Address);
++   pragma Convention (C, Interrupt_Handler);
++   type Interrupt_Vector is new System.Address;
++
++   function Interrupt_Connect
++     (Vector    : Interrupt_Vector;
++      Handler   : Interrupt_Handler;
++      Parameter : System.Address := System.Null_Address) return int;
++   pragma Import (C, Interrupt_Connect, "__gnat_interrupt_connect");
++   --  Use this to set up an user handler. The routine installs a
++   --  a user handler which is invoked after RTEMS has saved enough
++   --  context for a high-level language routine to be safely invoked.
++
++   function Interrupt_Vector_Get
++     (Vector : Interrupt_Vector) return Interrupt_Handler;
++   pragma Import (C, Interrupt_Vector_Get, "__gnat_interrupt_get");
++   --  Use this to get the existing handler for later restoral.
++
++   procedure Interrupt_Vector_Set
++     (Vector  : Interrupt_Vector;
++      Handler : Interrupt_Handler);
++   pragma Import (C, Interrupt_Vector_Set, "__gnat_interrupt_set");
++   --  Use this to restore a handler obtained using Interrupt_Vector_Get.
++
++   function Interrupt_Number_To_Vector (intNum : int) return Interrupt_Vector;
++   --  Convert a logical interrupt number to the hardware interrupt vector
++   --  number used to connect the interrupt.
++   pragma Import (
++      C,
++      Interrupt_Number_To_Vector,
++      "__gnat_interrupt_number_to_vector"
++   );
++
+ private
+ 
+    type sigset_t is new int;
+@@ -507,12 +591,13 @@
+       schedpolicy     : int;
+       schedparam      : struct_sched_param;
+       cputime_clocked_allowed : int;
+-      deatchstate     : int;
++      detatchstate    : int;
+    end record;
+    pragma Convention (C, pthread_attr_t);
+ 
+    type pthread_condattr_t is record
+-      flags        : int;
++      is_initialized  : int;
++      process_shared  : int;
+    end record;
+    pragma Convention (C, pthread_condattr_t);
+ 
+diff -urN gcc-4.3.2-orig/gcc/ada/s-osinte-vxworks.adb gcc-4.3.2/gcc/ada/s-osinte-vxworks.adb
+--- gcc-4.3.2-orig/gcc/ada/s-osinte-vxworks.adb	2007-08-14 03:42:09.000000000 -0500
++++ gcc-4.3.2/gcc/ada/s-osinte-vxworks.adb	2008-09-09 13:07:24.000000000 -0500
+@@ -239,4 +239,92 @@
+       return int (Ticks);
+    end To_Clock_Ticks;
+ 
++   -----------------------------
++   -- Binary_Semaphore_Create --
++   -----------------------------
++
++   function Binary_Semaphore_Create return Binary_Semaphore_Id is
++   begin
++      return semBCreate (SEM_Q_FIFO, SEM_EMPTY);
++   end Binary_Semaphore_Create;
++
++   -----------------------------
++   -- Binary_Semaphore_Delete --
++   -----------------------------
++
++   function Binary_Semaphore_Delete (ID : Binary_Semaphore_Id) return int is
++   begin
++      return semDelete (ID);
++   end Binary_Semaphore_Obtain;
++
++   -----------------------------
++   -- Binary_Semaphore_Obtain --
++   -----------------------------
++
++   function Binary_Semaphore_Obtain (ID : Binary_Semaphore_Id) return int is
++   begin
++      return semTake (ID, WAIT_FOREVER);
++   end Binary_Semaphore_Obtain;
++
++   ------------------------------
++   -- Binary_Semaphore_Release --
++   ------------------------------
++
++   function Binary_Semaphore_Release (ID : Binary_Semaphore_Id) return int is
++   begin
++      return semGive (ID);
++   end Binary_Semaphore_Release;
++
++   ----------------------------
++   -- Binary_Semaphore_Flush --
++   ----------------------------
++
++   function Binary_Semaphore_Flush (ID : Binary_Semaphore_Id) return int is
++   begin
++      return semFlush (ID);
++   end Binary_Semaphore_Flush;
++
++
++   ----------------------------
++   -- Interrupt_Connect --
++   ----------------------------
++
++   function Interrupt_Connect
++     (Vector    : Interrupt_Vector;
++      Handler   : Interrupt_Handler;
++      Parameter : System.Address := System.Null_Address) return int is
++   begin
++     return intConnect (Vector, Handler, Parameter);
++   end Interrupt_Connect;
++
++   ----------------------------
++   -- Interrupt_Vector_Get --
++   ----------------------------
++
++   function Interrupt_Vector_Get
++     (Vector : Interrupt_Vector) return Interrupt_Handler is
++   begin
++     return intVecGet (Vector);
++   end Interrupt_Get;
++
++   ----------------------------
++   -- Interrupt_Vector_Set --
++   ----------------------------
++
++   procedure Interrupt_Vector_Set
++     (Vector  : Interrupt_Vector;
++      Handler : Interrupt_Handler) is
++   begin
++      intVecSet (Interfaces.VxWorks.INUM_TO_IVEC (Vector), Handler);
++   end Interrupt_Vector_Set;
++
++   ----------------------------r --
++   -- Interrupt_Number_To_Vector --
++   ----------------------------r --
++
++   function Interrupt_Number_To_Vector (intNum : int) return Interrupt_Vector is
++   begin
++      return INUM_TO_IVEC (Interfaces.VxWorks.int (Interrupt));
++   end Interrupt_Number_To_Vector;
++
+ end System.OS_Interface;
+diff -urN gcc-4.3.2-orig/gcc/ada/s-osinte-vxworks.ads gcc-4.3.2/gcc/ada/s-osinte-vxworks.ads
+--- gcc-4.3.2-orig/gcc/ada/s-osinte-vxworks.ads	2007-12-13 04:19:04.000000000 -0600
++++ gcc-4.3.2/gcc/ada/s-osinte-vxworks.ads	2008-09-09 13:07:24.000000000 -0500
+@@ -393,6 +393,50 @@
+    pragma Import (C, semFlush, "semFlush");
+    --  Release all threads blocked on the semaphore
+ 
++   ------------------------------------------------------------
++   --   Binary Semaphore Wrapper to Support Interrupt Tasks  --
++   ------------------------------------------------------------
++
++   type Binary_Semaphore_Id is new SEM_ID;
++
++   function Binary_Semaphore_Create return Binary_Semaphore_Id;
++
++   function Binary_Semaphore_Delete (ID : Binary_Semaphore_Id) return int;
++
++   function Binary_Semaphore_Obtain (ID : Binary_Semaphore_Id) return int;
++
++   function Binary_Semaphore_Release (ID : Binary_Semaphore_Id) return int;
++
++   function Binary_Semaphore_Flush (ID : Binary_Semaphore_Id) return int;
++
++   ------------------------------------------------------------
++   -- Hardware Interrupt Wrappers to Support Interrupt Tasks --
++   ------------------------------------------------------------
++
++   type Interrupt_Handler is access procedure (parameter : System.Address);
++   type Interrupt_Vector is new System.Address;
++
++   function Interrupt_Connect
++     (Vector    : Interrupt_Vector;
++      Handler   : Interrupt_Handler;
++      Parameter : System.Address := System.Null_Address) return int;
++   --  Use this to set up an user handler. The routine installs a
++   --  a user handler which is invoked after RTEMS has saved enough
++   --  context for a high-level language routine to be safely invoked.
++
++   function Interrupt_Vector_Get
++     (Vector : Interrupt_Vector) return Interrupt_Handler;
++   --  Use this to get the existing handler for later restoral.
++
++   procedure Interrupt_Vector_Set
++     (Vector  : Interrupt_Vector;
++      Handler : Interrupt_Handler);
++   --  Use this to restore a handler obtained using Interrupt_Vector_Get.
++
++   function Interrupt_Number_To_Vector (intNum : int) return Interrupt_Vector;
++   --  Convert a logical interrupt number to the hardware interrupt vector
++   --  number used to connect the interrupt.
++
+ private
+    type sigset_t is new long;
+ 
+diff -urN gcc-4.3.2-orig/gcc/ada/s-stchop-rtems.adb gcc-4.3.2/gcc/ada/s-stchop-rtems.adb
+--- gcc-4.3.2-orig/gcc/ada/s-stchop-rtems.adb	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.3.2/gcc/ada/s-stchop-rtems.adb	2008-09-09 13:07:24.000000000 -0500
+@@ -0,0 +1,114 @@
++------------------------------------------------------------------------------
++--                                                                          --
++--                 GNAT RUN-TIME LIBRARY (GNARL) COMPONENTS                 --
++--                                                                          --
++--     S Y S T E M . S T A C K _ C H E C K I N G . O P E R A T I O N S      --
++--                                                                          --
++--                                  B o d y                                 --
++--                                                                          --
++--          Copyright (C) 1999-2008, Free Software Foundation, Inc.         --
++--                                                                          --
++-- GNARL is free software; you can  redistribute it  and/or modify it under --
++-- terms of the  GNU General Public License as published  by the Free Soft- --
++-- ware  Foundation;  either version 2,  or (at your option) any later ver- --
++-- sion. GNARL is distributed in the hope that it will be useful, but WITH- --
++-- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
++-- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License --
++-- for  more details.  You should have  received  a copy of the GNU General --
++-- Public License  distributed with GNARL; see file COPYING.  If not, write --
++-- to  the  Free Software Foundation,  51  Franklin  Street,  Fifth  Floor, --
++-- Boston, MA 02110-1301, USA.                                              --
++--                                                                          --
++-- As a special exception,  if other files  instantiate  generics from this --
++-- unit, or you link  this unit with other files  to produce an executable, --
++-- this  unit  does not  by itself cause  the resulting  executable  to  be --
++-- covered  by the  GNU  General  Public  License.  This exception does not --
++-- however invalidate  any other reasons why  the executable file  might be --
++-- covered by the  GNU Public License.                                      --
++--                                                                          --
++-- GNARL was developed by the GNARL team at Florida State University.       --
++-- Extensive contributions were provided by Ada Core Technologies, Inc.     --
++--                                                                          --
++------------------------------------------------------------------------------
++
++--  This is the RTEMS version of this package.
++--  This file should be kept synchronized with the general implementation
++--  provided by s-stchop.adb.
++
++pragma Restrictions (No_Elaboration_Code);
++--  We want to guarantee the absence of elaboration code because the
++--  binder does not handle references to this package.
++
++with Ada.Exceptions;
++
++with Interfaces.C; use Interfaces.C;
++
++package body System.Stack_Checking.Operations is
++
++   ----------------------------
++   -- Invalidate_Stack_Cache --
++   ----------------------------
++
++   procedure Invalidate_Stack_Cache (Any_Stack : Stack_Access) is
++      pragma Warnings (Off, Any_Stack);
++   begin
++      Cache := Null_Stack;
++   end Invalidate_Stack_Cache;
++
++   -----------------------------
++   -- Notify_Stack_Attributes --
++   -----------------------------
++
++   procedure Notify_Stack_Attributes
++     (Initial_SP : System.Address;
++      Size       : System.Storage_Elements.Storage_Offset)
++   is
++
++      --  RTEMS keeps all the information we need.
++
++      pragma Unreferenced (Size);
++      pragma Unreferenced (Initial_SP);
++
++   begin
++      null;
++   end Notify_Stack_Attributes;
++
++   -----------------
++   -- Stack_Check --
++   -----------------
++
++   function Stack_Check
++     (Stack_Address : System.Address) return Stack_Access
++   is
++      pragma Unreferenced (Stack_Address);
++
++      --  RTEMS has a routine to check this.  So use it.
++      function rtems_stack_checker_is_blown return Interfaces.C.int;
++      pragma Import (C,
++         rtems_stack_checker_is_blown, "rtems_stack_checker_is_blown");
++
++   begin
++      --  RTEMS has a routine to check this.  So use it.
++
++      if rtems_stack_checker_is_blown /= 0 then
++         Ada.Exceptions.Raise_Exception
++           (E       => Storage_Error'Identity,
++            Message => "stack overflow detected");
++      end if;
++
++      return null;
++
++   end Stack_Check;
++
++   ------------------------
++   -- Update_Stack_Cache --
++   ------------------------
++
++   procedure Update_Stack_Cache (Stack : Stack_Access) is
++   begin
++      if not Multi_Processor then
++         Cache := Stack;
++      end if;
++   end Update_Stack_Cache;
++
++end System.Stack_Checking.Operations;

@@ -23,7 +23,7 @@ GDB_RPMREL = 3%{?dist}
 include ../gdb.am
 GDB_OPTS +=
 
-CPUKIT_VERS = 4.7.99.1
+CPUKIT_VERS = 4.9.99.1
 CPUKIT_PKGVERS = $(CPUKIT_VERS)-20070510
 CPUKIT_RPMREL = 1%{?dist}
 include ../cpukit.am
