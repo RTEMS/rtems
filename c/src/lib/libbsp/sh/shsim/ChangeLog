@@ -1,5 +1,9 @@
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/linkcmds: GDB Simulator has 16MB RAM.
+
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am: Now runs using fake clock ticker.
 	* clock/clockdrv.c: Removed.
 
