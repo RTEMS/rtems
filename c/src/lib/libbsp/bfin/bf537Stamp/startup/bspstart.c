@@ -116,7 +116,7 @@ static void initEBIU(void) {
   * Enable LEDs port
   */
 static void initGPIO(void) {
-
+#if (!BFIN_ON_SKYEYE)
   *(uint16_t volatile *) PORT_MUX = 0;
 
   /* port f bits 0, 1: uart0 tx, rx */
@@ -152,6 +152,7 @@ static void initGPIO(void) {
   *(uint16_t volatile *) (PORTHIO_BASE_ADDRESS + PORTIO_MASKA_OFFSET) = 0x0000;
   *(uint16_t volatile *) (PORTHIO_BASE_ADDRESS + PORTIO_MASKB_OFFSET) = 0x0000;
   *(uint16_t volatile *) (PORTHIO_BASE_ADDRESS + PORTIO_DIR_OFFSET) = 0x0000;
+#endif
 }
 
 /*

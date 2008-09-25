@@ -1,3 +1,7 @@
+2008-09-25	Allan Hessenflow <allanh@kallisti.com>
+
+	* include/bsp.h, startup/bspstart.c:
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, console/console.c: Add BFIN_ON_SKYEYE define to disable
