@@ -300,7 +300,7 @@ FRAME(start,sp,0,ra)
 	nop
 
 	# jump to the "exit" routine
-	jal	_idtsim_exit
+	jal	idtsim__exit
 	move	a0,v0				# pass through the exit code
 
 
