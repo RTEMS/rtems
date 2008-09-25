@@ -39,7 +39,7 @@ startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
-clock_SOURCES = clock/clockdrv.c
+clock_SOURCES = ../../shared/clock_driver_simidle.c
 
 trap34_SOURCES = trap34/console-io.c trap34/console-support.S \
     ../../shared/dummy_printk_support.c

@@ -1,3 +1,8 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Now runs using fake clock ticker.
+	* clock/clockdrv.c: Removed.
+
 2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock/clockdrv.c: Fix comment.
