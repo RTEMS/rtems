@@ -1,3 +1,7 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/deviceio.c: Eliminate duplicate implementation.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1326/cpukit
