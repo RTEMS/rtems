@@ -17,12 +17,17 @@
 
 #define SIC_IMASK                (SIC_BASE_ADDRESS + 0x000c)
 #define SIC_IAR_BASE_ADDRESS     (SIC_BASE_ADDRESS + 0x0010)
-#define SIC_IAR_COUNT                                      4
 #define SIC_IAR_PITCH                                   0x04 
 #define SIC_IAR0                 (SIC_BASE_ADDRESS + 0x0010)
+#if SIC_IAR_COUNT > 1
 #define SIC_IAR1                 (SIC_BASE_ADDRESS + 0x0014)
+#endif
+#if SIC_IAR_COUNT > 2
 #define SIC_IAR2                 (SIC_BASE_ADDRESS + 0x0018)
+#endif
+#if SIC_IAR_COUNT > 3
 #define SIC_IAR3                 (SIC_BASE_ADDRESS + 0x001c)
+#endif
 #define SIC_ISR                  (SIC_BASE_ADDRESS + 0x0020)
 #define SIC_IWR                  (SIC_BASE_ADDRESS + 0x0024)
 

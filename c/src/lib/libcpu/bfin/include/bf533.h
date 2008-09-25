@@ -109,6 +109,8 @@
 
 /* System Interrupt Controller vectors */
 
+#define SIC_IAR_COUNT                                      3
+
 #define SIC_PLL_WAKEUP_VECTOR                              0
 #define SIC_DMA_ERROR_VECTOR                               1
 #define SIC_PPI_ERROR_VECTOR                               2

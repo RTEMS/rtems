@@ -19,6 +19,9 @@
 #include <libcpu/cecRegs.h>
 #include <libcpu/coreTimerRegs.h>
 
+#if (BFIN_ON_SKYEYE)
+#define CLOCK_DRIVER_USE_FAST_IDLE
+#endif
 
 volatile uint32_t Clock_driver_ticks;
 

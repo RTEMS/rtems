@@ -1,3 +1,7 @@
+2008-09-25	Allan Hessenflow <allanh@kallisti.com>
+
+	* clock/clock.c, include/bf533.h, include/bf537.h, include/sicRegs.h:
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* interrupt/interrupt.h, serial/spi.h, serial/twi.h, serial/uart.h:

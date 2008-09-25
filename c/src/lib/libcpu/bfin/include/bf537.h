@@ -173,6 +173,8 @@
 
 /* System Interrupt Controller vectors */
 
+#define SIC_IAR_COUNT                                      4
+
 #define SIC_PLL_WAKEUP_VECTOR                              0
 #define SIC_DMA_ERROR_VECTOR                               1
 #define SIC_DMAR0_BLOCK_DONE_VECTOR                        1
