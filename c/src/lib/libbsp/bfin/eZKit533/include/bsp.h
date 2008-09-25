@@ -31,9 +31,6 @@ extern "C" {
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bf533.h> 
 
-
-#define CLOCK_DRIVER_USE_FAST_IDLE
-
 /* 
  * PLL and clock setup values:
  */

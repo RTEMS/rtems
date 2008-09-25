@@ -1,5 +1,10 @@
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/bsp.h: Rely on clock driver to determine when we should use
+	fast idle.
+
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac: Add BFIN_ON_SKYEYE define to disable features not
 	supported on simulator.
 
