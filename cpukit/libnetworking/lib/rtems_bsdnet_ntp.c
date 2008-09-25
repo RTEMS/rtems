@@ -111,7 +111,7 @@ tryServer (int i, int s, rtems_bsdnet_ntp_callback_t callback, void *usr_data)
 	if (i >= 0) {
 		memset (&farAddr, 0, sizeof farAddr);
 		farAddr.sin_family = AF_INET;
-		farAddr.sin_port = htons (0);
+		farAddr.sin_port = htons (123);
 		farAddr.sin_addr = rtems_bsdnet_ntpserver[i];
 		memset (&packet, 0, sizeof packet);
 		packet.li_vn_mode = (3 << 3) | 3; /* NTP version 3, client */
