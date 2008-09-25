@@ -1,3 +1,7 @@
+2008-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* setup.def, started/buildc.t: Update versions and patches.
+
 2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsp_howto/BSPInitFlowchart-49.png: Update figure.
