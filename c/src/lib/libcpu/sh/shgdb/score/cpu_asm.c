@@ -1,21 +1,7 @@
 /*
- *  This file contains the basic algorithms for all assembly code used
- *  in an specific CPU port of RTEMS.  These algorithms must be implemented
- *  in assembly language
+ *  Support for SuperH Simulator in GDB
  *
- *  NOTE:  This port uses a C file with inline assembler instructions
- *
- *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
- *           Bernd Becker (becker@faw.uni-ulm.de)
- *
- *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *
- *
- *  COPYRIGHT (c) 1998.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,24 +11,11 @@
  *  $Id$
  */
 
-/*
- *  This is supposed to be an assembly file.  This means that system.h
- *  and cpu.h should not be included in a "real" cpu_asm file.  An
- *  implementation in assembly should include "cpu_asm.h"
- */
-
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/sh.h>
-#include <rtems/score/ispsh7750.h>
-#include <rtems/score/iosh7750.h>
-#include <rtems/score/sh4_regs.h>
-#include <rtems/score/sh_io.h>
-
-/* from cpu_isps.c */
-extern proc_ptr         _Hardware_isr_Table[];
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   unsigned long    *_old_stack_ptr;

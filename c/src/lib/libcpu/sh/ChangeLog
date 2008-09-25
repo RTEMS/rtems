@@ -1,3 +1,13 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, sh7032/score/cpu_asm.c,
+	sh7045/score/cpu_asm.c, sh7750/score/cpu_asm.c: Move duplicated
+	context switch code to score/cpu and provide an interrupt handling
+	stub for the GDB SuperH simulator since it does not support
+	interrupts or devices. This has been used to run tests on the
+	simulator BSP as SH1, SH2, and SH4.
+	* shgdb/score/cpu_asm.c, shgdb/score/ispshgdb.c: New files.
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sh7032/clock/ckinit.c, sh7045/clock/ckinit.c, sh7750/clock/ckinit.c:

@@ -119,5 +119,13 @@ sh7750_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 sh7750_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if shgdb
+## sh7045/score
+noinst_PROGRAMS += shgdb/score.rel
+shgdb_score_rel_SOURCES = shgdb/score/cpu_asm.c shgdb/score/ispshgdb.c
+shgdb_score_rel_CPPFLAGS = $(AM_CPPFLAGS)
+shgdb_score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am
