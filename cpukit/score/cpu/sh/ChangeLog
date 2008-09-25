@@ -1,3 +1,9 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Move duplicated context switch code to score/cpu. This
+	has been used to run tests on the simulator BSP as SH1, SH2, and SH4.
+	* context.c: New file.
+
 2008-09-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Do not define boolean, single_precision,
