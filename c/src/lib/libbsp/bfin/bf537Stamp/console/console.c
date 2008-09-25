@@ -35,13 +35,17 @@ static bfin_uart_channel_t channels[] = {
    0,
 #endif
    NULL,
-   0},
+   0}
+
+#if (!BF537_ON_SKYEYE)
+,
   {"/dev/tty1",
    (char *) UART1_BASE_ADDRESS,
    CONSOLE_USE_INTERRUPTS,
    0,
    NULL,
    0}
+#endif
 };
 
 static bfin_uart_config_t config = {

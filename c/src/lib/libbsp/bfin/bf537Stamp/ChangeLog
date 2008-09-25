@@ -1,3 +1,7 @@
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, console/console.c: Add skyeye alias for bf537stamp.
+
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Make letting boot_card() handle work area allocation
