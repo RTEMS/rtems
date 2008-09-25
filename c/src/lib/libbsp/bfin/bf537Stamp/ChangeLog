@@ -1,5 +1,10 @@
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* configure.ac, console/console.c: Add BFIN_ON_SKYEYE define to disable
+	features not supported on simulator.
+
+2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac, console/console.c: Add skyeye alias for bf537stamp.
 
 2008-09-23	Joel Sherrill <joel.sherrill@oarcorp.com>

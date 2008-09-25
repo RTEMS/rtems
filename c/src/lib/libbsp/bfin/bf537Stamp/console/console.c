@@ -37,7 +37,7 @@ static bfin_uart_channel_t channels[] = {
    NULL,
    0}
 
-#if (!BF537_ON_SKYEYE)
+#if (!BFIN_ON_SKYEYE)
 ,
   {"/dev/tty1",
    (char *) UART1_BASE_ADDRESS,
