@@ -1,3 +1,8 @@
+2008-09-25	Eric Norum <norume@aps.anl.gov>
+
+	* libnetworking/lib/rtems_bsdnet_ntp.c: Let TCP/IP stack pick port
+	rather than hard coding selection.  Correction of 2008-09-23.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1326/cpukit
