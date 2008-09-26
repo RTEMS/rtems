@@ -1,3 +1,9 @@
+2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Don't install files from shared/.
+	Remove references to preinstall.am.
+	* preinstall.am: Remove.
+
 2008-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* preinstall.am: New file.
