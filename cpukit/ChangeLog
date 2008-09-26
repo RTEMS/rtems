@@ -1,3 +1,9 @@
+2008-09-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1316/cpukit
+	* score/src/coremsgbroadcast.c: Give error when message is too large
+	like when sending a message. This was the documented behavior.
+
 2008-09-26	Eric Norum <norume@aps.anl.gov>
 
 	* libnetworking/lib/rtems_bsdnet_ntp.c: Final resolution of this "small" port number change.
