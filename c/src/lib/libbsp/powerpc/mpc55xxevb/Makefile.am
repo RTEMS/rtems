@@ -7,8 +7,11 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+include_bspdir = $(includedir)/bsp
+
 dist_project_lib_DATA = bsp_specs
 
+nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
@@ -31,7 +34,6 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
 include_HEADERS = include/bsp.h
 
 nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h
-include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS = include/mpc55xxevb.h \
     include/irq-config.h \
     ../../shared/include/irq-generic.h \

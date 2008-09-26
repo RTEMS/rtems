@@ -1,3 +1,7 @@
+2008-09-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Cleanup ../../shared/include/bootcard.h handling.
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* start/start.S: Fix name of idtsim__exit.
