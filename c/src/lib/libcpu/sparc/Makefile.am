@@ -9,7 +9,7 @@ include $(top_srcdir)/../../../automake/compile.am
 noinst_PROGRAMS =
 
 include_libcpudir = $(includedir)/libcpu
-include_libcpu_HEADERS = $(top_srcdir)/../shared/include/cache.h
+include_libcpu_HEADERS = ../shared/include/cache.h
 
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache.c cache/cache_.h \
