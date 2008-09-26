@@ -7,6 +7,8 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
+include_bspdir = $(includedir)/bsp
+
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
@@ -14,6 +16,7 @@ include_HEADERS += smc/smc.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
+nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
