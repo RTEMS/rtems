@@ -66,7 +66,10 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   Thread_Control          *the_thread;
   uint32_t                 number_broadcasted;
   Thread_Wait_information *waitp;
-  uint32_t                 constrained_size;
+
+  if ( size > the_message_queue->maximum_message_size ) {
+    return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
+  }
 
   /*
    *  If there are pending messages, then there can't be threads
@@ -92,14 +95,10 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
     waitp = &the_thread->Wait;
     number_broadcasted += 1;
 
-    constrained_size = size;
-    if ( size > the_message_queue->maximum_message_size )
-        constrained_size = the_message_queue->maximum_message_size;
-
     _CORE_message_queue_Copy_buffer(
       buffer,
       waitp->return_argument,
-      constrained_size
+      size
     );
 
     *(uint32_t   *)the_thread->Wait.return_argument_1 = size;
