@@ -7,7 +7,7 @@
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,7 +63,10 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   Thread_Control          *the_thread;
   uint32_t                 number_broadcasted;
   Thread_Wait_information *waitp;
-  size_t                   constrained_size;
+
+  if ( size > the_message_queue->maximum_message_size ) {
+    return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
+  }
 
   /*
    *  If there are pending messages, then there can't be threads
@@ -89,14 +92,10 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
     waitp = &the_thread->Wait;
     number_broadcasted += 1;
 
-    constrained_size = size;
-    if ( size > the_message_queue->maximum_message_size )
-        constrained_size = the_message_queue->maximum_message_size;
-
     _CORE_message_queue_Copy_buffer(
       buffer,
       waitp->return_argument_second.mutable_object,
-      constrained_size
+      size
     );
 
     *(size_t *) the_thread->Wait.return_argument = size;
