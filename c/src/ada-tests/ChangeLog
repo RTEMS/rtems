@@ -1,3 +1,23 @@
+2008-09-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/timer_driver.adb, support/timer_driver.ads,
+	tmtests/tm01/tmtest.adb, tmtests/tm02/tmtest.adb,
+	tmtests/tm03/tmtest.adb, tmtests/tm04/tmtest.adb,
+	tmtests/tm05/tmtest.adb, tmtests/tm06/tmtest.adb,
+	tmtests/tm07/tmtest.adb, tmtests/tm08/tmtest.adb,
+	tmtests/tm09/tmtest.adb, tmtests/tm10/tmtest.adb,
+	tmtests/tm11/tmtest.adb, tmtests/tm12/tmtest.adb,
+	tmtests/tm13/tmtest.adb, tmtests/tm14/tmtest.adb,
+	tmtests/tm15/tmtest.adb, tmtests/tm16/tmtest.adb,
+	tmtests/tm17/tmtest.adb, tmtests/tm18/tmtest.adb,
+	tmtests/tm19/tmtest.adb, tmtests/tm20/config.h,
+	tmtests/tm20/tmtest.adb, tmtests/tm21/tmtest.adb,
+	tmtests/tm22/tmtest.adb, tmtests/tm23/tmtest.adb,
+	tmtests/tm24/tmtest.adb, tmtests/tm25/tmtest.adb,
+	tmtests/tm28/tmtest.adb, tmtests/tm29/tmtest.adb,
+	tmtests/tmck/tmtest.adb, tmtests/tmoverhd/tmtest.adb: Clean up.
+	Verified to run on psim with gcc 4.3.2.
+
 2008-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* samples/hello/config.h, sptests/spname01/config.h: These needed

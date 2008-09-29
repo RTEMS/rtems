@@ -389,6 +389,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.TASK_WAKE_WHEN
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 23 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;

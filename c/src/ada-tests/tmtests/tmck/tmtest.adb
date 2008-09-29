@@ -152,6 +152,7 @@ TEST_SUPPORT.PAUSE;
          0
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST CHECK ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
    
    end TASK_1;

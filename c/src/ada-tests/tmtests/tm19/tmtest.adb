@@ -277,6 +277,7 @@ package body TMTEST is
          0
      );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 19 ***" );
      RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end TASK_3;

@@ -180,6 +180,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_URGENT 
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 14 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end HIGH_TASK;

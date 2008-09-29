@@ -120,6 +120,7 @@ package body TMTEST is
          RTEMS.TASK_SUSPEND( RTEMS.SELF, STATUS );
       end if;
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 07 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end HIGH_TASK;

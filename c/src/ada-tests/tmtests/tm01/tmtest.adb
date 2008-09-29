@@ -266,6 +266,8 @@ package body TMTEST is
          SEMAPHORE_RELEASE_LOOP_TIME * 2,
          RTEMS_CALLING_OVERHEAD.SEMAPHORE_RELEASE 
       );
+
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 1 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
    
    end TASK_1;

@@ -293,6 +293,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.RATE_MONOTONIC_IDENT
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 21 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end TASK_1;

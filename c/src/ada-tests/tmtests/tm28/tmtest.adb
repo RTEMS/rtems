@@ -167,6 +167,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.PORT_DELETE
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 28 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
  
    end TEST_TASK;

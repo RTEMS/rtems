@@ -199,6 +199,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.SEMAPHORE_OBTAIN 
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 2 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;
