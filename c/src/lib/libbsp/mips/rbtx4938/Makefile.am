@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -22,15 +21,13 @@ noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = start/start.S
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -44,7 +41,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
 
 # FIXME: clockdrv.c and clockdrv_shell.c are structurally flawed
 clock_CPPFLAGS = -I$(srcdir)/../../shared
-EXTRA_DIST += ../../mips/shared/clockdrv_shell.c
+EXTRA_DIST = ../../mips/shared/clockdrv_shell.c
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clockdrv.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(clock_CPPFLAGS)

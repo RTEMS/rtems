@@ -1,5 +1,10 @@
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 
+	of building libbspstart.a, using automake-rules.
+
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* start/regs.S: Remove (Renamed into start/regs.h).
 	* start/regs.h: New (Renamed from start/regs.S).
 	* Makefile.am, start/start.S: Reflect renamer.

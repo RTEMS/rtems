@@ -9,7 +9,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 SUBDIRS = . tools
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -24,14 +23,13 @@ DISTCLEANFILES = include/bspopts.h
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = start/start.S start/regs.h
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S start/regs.h
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
