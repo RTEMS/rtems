@@ -1,6 +1,6 @@
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* liblnk/regs.S: Remove (Rename into liblnk.h).
+	* liblnk/regs.S: Remove (Rename into liblnk/regs.h).
 	* liblnk/regs.h: New (Renamed from liblnk/regs.S).
 	* Makefile.am, liblnk/pmon.S: Reflect renamer.
 
