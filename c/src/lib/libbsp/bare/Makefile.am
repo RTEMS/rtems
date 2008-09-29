@@ -19,5 +19,4 @@ nodist_include_HEADERS += ../shared/include/coverhd.h
 EXTRA_DIST = build-tools do-bare-bsp-build
 
 include $(srcdir)/preinstall.am
-
 include $(top_srcdir)/../../../automake/local.am
