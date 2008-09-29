@@ -29,7 +29,7 @@
   #define SUBU dsubu
 #endif
 
-#include "regs.S"
+#include "regs.h"
 
 	.text
 	.align	2

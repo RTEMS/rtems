@@ -18,7 +18,7 @@ DISTCLEANFILES = include/bspopts.h
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = start/start.S start/regs.h
+EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
@@ -35,7 +35,7 @@ startup_SOURCES = ../../shared/bspclean.c \
     startup/idtmem.S startup/idttlb.S startup/exception.S
 clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c
-liblnk_SOURCES = liblnk/lnklib.S liblnk/pmon.S
+liblnk_SOURCES = liblnk/lnklib.S liblnk/pmon.S liblnk/regs.h
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
