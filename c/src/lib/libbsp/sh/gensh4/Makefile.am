@@ -30,6 +30,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.rom \
     startup/linkcmds.rom2ram
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../shared/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
@@ -38,7 +40,6 @@ startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
 console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 hw_init_SOURCES = hw_init/hw_init.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(hw_init_SOURCES) $(console_SOURCES)
 
 libbsp_a_LIBADD = \

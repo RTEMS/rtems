@@ -24,6 +24,8 @@ include_HEADERS += include/coverhd.h include/gen2.h
 ###
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
@@ -77,7 +79,6 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(irq_SOURCES) \
     $(pci_SOURCES) $(vectors_SOURCES) $(startup_SOURCES) $(vme_SOURCES)
 

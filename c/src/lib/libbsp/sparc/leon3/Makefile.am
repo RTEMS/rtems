@@ -36,6 +36,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
@@ -115,7 +117,6 @@ shmsupp_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(amba_SOURCES) \
     $(console_SOURCES) $(debugio_SOURCES) $(clock_SOURCES) $(pci_SOURCES) \
     $(brm_SOURCES) $(can_SOURCES) $(spw_SOURCES) $(uart_SOURCES) \

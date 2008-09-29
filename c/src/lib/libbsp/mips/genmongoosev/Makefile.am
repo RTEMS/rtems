@@ -29,6 +29,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
@@ -45,7 +47,6 @@ gdbstub_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
 gdbstub_rel_CPPFLAGS = $(AM_CPPFLAGS) $(gdbstub_CPPFLAGS)
 gdbstub_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES) $(gdbstub_SOURCES)
 

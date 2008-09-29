@@ -44,12 +44,12 @@ EXTRA_DIST = ../shared/start/start.S
 
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += ../shared/startup/linkcmds.base \
-	startup/linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base startup/linkcmds
 
 ###############################################################################
 #                  LibBSP                                                     #
 ###############################################################################
+noinst_LIBRARIES = libbsp.a
 
 shared_SOURCES = ../../shared/bootcard.c \
 	../../shared/bspclean.c \
@@ -79,8 +79,6 @@ rtc_SOURCES = ../../shared/tod.c \
 	rtc/rtc-config.c
 
 misc_SOURCES = misc/system-clocks.c
-
-noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES = $(clock_SOURCES) \
 	$(console_SOURCES) \

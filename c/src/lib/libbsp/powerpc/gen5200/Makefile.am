@@ -36,10 +36,12 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds \
-	startup/linkcmds.base \
-	startup/linkcmds.brs5l \
-	startup/linkcmds.icecube \
-	startup/linkcmds.pm520
+    startup/linkcmds.base \
+    startup/linkcmds.brs5l \
+    startup/linkcmds.icecube \
+    startup/linkcmds.pm520
+
+noinst_LIBRARIES = libbsp.a
 
 bestcomm_SOURCES = bestcomm/include/ppctypes.h \
     bestcomm/include/mgt5200/mgt5200.h bestcomm/include/mgt5200/sdma.h \
@@ -119,7 +121,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(i2c_SOURCES) \
     $(ide_SOURCES) $(irq_SOURCES) $(mscan_SOURCES) $(nvram_SOURCES) \
     $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES) $(bestcomm_SOURCES)

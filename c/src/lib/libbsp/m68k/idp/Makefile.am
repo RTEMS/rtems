@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
@@ -42,7 +44,6 @@ timer_SOURCES = timer/timer.c timer/timerisr.S
 EXTRA_DIST += include/README
 EXTRA_DIST += times
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 

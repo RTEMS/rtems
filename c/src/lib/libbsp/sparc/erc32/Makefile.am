@@ -32,6 +32,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../sparc/shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../sparc/shared/bspstart.c \
@@ -51,7 +53,6 @@ erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(console_SOURCES) \
     $(debugio_SOURCES) $(clock_SOURCES) $(timer_SOURCES)
 

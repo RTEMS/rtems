@@ -30,6 +30,8 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 # Link commands
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
 
+noinst_LIBRARIES = libbsp.a
+
 # Includes
 include_HEADERS = include/bsp.h
 
@@ -59,7 +61,6 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 # BSP library
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(irq_generic_SOURCES) \
     $(tests_SOURCES)
 

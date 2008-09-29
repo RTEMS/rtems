@@ -27,6 +27,8 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspreset_fatal.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bootcard.c \
@@ -48,7 +50,6 @@ include_bsp_HEADERS += irq/irq.h \
 
 irq_SOURCES = irq/irq_init.c irq/irq.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) $(console_SOURCES) \
     $(irq_SOURCES)
 

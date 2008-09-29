@@ -25,6 +25,8 @@ EXTRA_DIST = times
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 pclock_SOURCES = clock/p_clock.c
 console_SOURCES = console/console.c
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
@@ -34,7 +36,6 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c
 tm27supp_SOURCES = startup/tm27supp.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(startup_SOURCES) \
     $(tm27supp_SOURCES)
 

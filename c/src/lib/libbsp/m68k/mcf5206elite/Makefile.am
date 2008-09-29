@@ -38,6 +38,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
     startup/linkcmds.flash
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
@@ -49,7 +51,6 @@ i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c
 tod_SOURCES = tod/ds1307.c tod/todcfg.c ../../shared/tod.c
 nvram_SOURCES = nvram/nvram.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) \
     $(i2c_SOURCES) $(tod_SOURCES) $(nvram_SOURCES)
 

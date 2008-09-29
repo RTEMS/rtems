@@ -54,6 +54,8 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 build_date.c::
 	echo 'const char *BSP_build_date="'`date`'";' > $@
 
@@ -130,7 +132,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
     $(openpic_SOURCES) $(pci_SOURCES) $(irq_SOURCES) $(i2c_SOURCES) \
     $(tod_SOURCES) $(vpd_SOURCES) $(vme_SOURCES) $(flash_SOURCES)

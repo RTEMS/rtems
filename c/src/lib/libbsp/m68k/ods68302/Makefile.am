@@ -42,6 +42,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/rom startup/debugger
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/gdb-hooks.c ../../shared/bootcard.c \
     startup/m68302scc.c startup/m68k-stub.c \
@@ -55,7 +57,6 @@ clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
 timer_SOURCES = timer/timer.c timer/timerisr.S
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 

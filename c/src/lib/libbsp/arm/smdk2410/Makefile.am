@@ -27,6 +27,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../gp32/startup/bspstart.c ../../shared/bspclean.c \
     ../gp32/startup/bspreset.c startup/memmap.c \
@@ -38,7 +40,6 @@ console_SOURCES = ../gp32/console/uart.c ../../shared/console.c
 abort_SOURCES = ../shared/abort/abort.c
 smc_SOURCES = ../gp32/smc/smc.c ../gp32/smc/smc.h
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) $(abort_SOURCES) \
     $(smc_SOURCES)
 

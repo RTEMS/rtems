@@ -22,6 +22,8 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 ###
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../powerpc/shared/startup/bspgetworkarea.c ../../shared/bsplibc.c \
@@ -80,7 +82,6 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
     $(openpic_SOURCES) $(pci_SOURCES) $(irq_SOURCES) $(vme_SOURCES)
 

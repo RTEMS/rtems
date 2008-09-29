@@ -23,6 +23,8 @@ include_HEADERS += include/coverhd.h
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c ../../shared/bsppredriverhook.c \
     ../../shared/startup/bspgetworkarea.c ../../shared/bsppost.c \
@@ -34,7 +36,6 @@ timer_SOURCES = timer/timer.c timer/timerisr.c
 shmsupp_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES) $(shmsupp_SOURCES)
 

@@ -39,8 +39,10 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds.base\
-                         startup/linkcmds.tqm8xx
+dist_project_lib_DATA += startup/linkcmds.base \
+    startup/linkcmds.tqm8xx
+
+noinst_LIBRARIES = libbsp.a
 
 irq_SOURCES = include/irq-config.h \
 	irq/irq.c \
@@ -66,7 +68,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(irq_SOURCES) \
     $(startup_SOURCES) $(console_SOURCES) \
     $(p_clock_SOURCES) $(timer_SOURCES)

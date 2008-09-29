@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
 scitab.c: $(SHGEN)
@@ -45,7 +47,6 @@ scitab_SOURCES = scitab.c
 console_SOURCES = ../../sh/shared/console.c
 debugio_SOURCES = ../../shared/dummy_printk_support.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(scitab_SOURCES) $(console_SOURCES) \
     $(debugio_SOURCES)
 

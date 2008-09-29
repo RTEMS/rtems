@@ -35,10 +35,12 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds \
-                         startup/linkcmds.base \
-                         startup/linkcmds.mpc8313erdb \
-                         startup/linkcmds.mpc8349eamds \
-                         startup/linkcmds.hsc_cm01
+    startup/linkcmds.base \
+    startup/linkcmds.mpc8313erdb \
+    startup/linkcmds.mpc8349eamds \
+    startup/linkcmds.hsc_cm01
+
+noinst_LIBRARIES = libbsp.a
 
 mpc83xx_regs_SOURCES = startup/mpc83xx_regs.c
 
@@ -85,7 +87,6 @@ network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(irq_SOURCES) $(mpc83xx_regs_SOURCES) \
     $(bsp_i2c_SOURCES) $(bsp_spi_SOURCES)

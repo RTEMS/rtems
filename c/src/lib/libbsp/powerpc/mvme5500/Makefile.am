@@ -24,6 +24,8 @@ noinst_PROGRAMS =
 ###
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 # UNUSED
 EXTRA_DIST = startup/bootpstuff.c
 
@@ -100,7 +102,6 @@ mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 project_lib_DATA += mvme5500start.$(OBJEXT)
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(irq_SOURCES) \
     $(pci_SOURCES) $(startup_SOURCES) $(tod_SOURCES) $(vectors_SOURCES) \
     $(GT64260_SOURCES) $(vme_SOURCES)

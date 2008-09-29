@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
@@ -45,7 +47,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) $(abort_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \

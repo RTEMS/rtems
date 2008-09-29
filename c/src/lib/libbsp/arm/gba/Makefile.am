@@ -32,6 +32,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 # some objects have to be forced together to ensure they are ALWAYS
 # the ones linked into the application executable.  Every application
 # needs startup/bspstart.c, so we will force in the others
@@ -54,7 +56,6 @@ include_HEADERS += irq/irq.h
 irq_SOURCES = irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
     irq/bsp_irq_asm.S irq/irq_asm.S
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES) $(irq_SOURCES)
 

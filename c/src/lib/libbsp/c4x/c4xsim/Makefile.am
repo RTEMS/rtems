@@ -29,6 +29,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c startup/bsppretaksinghook.c ../../shared/bspstart.c \
@@ -42,7 +44,6 @@ console_SOURCES = console/consolereserveresources.c console/debugio.c \
 debugio_SOURCES = console/debugio.c
 timer_SOURCES = timer/timer.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(debugio_SOURCES) $(timer_SOURCES)
 

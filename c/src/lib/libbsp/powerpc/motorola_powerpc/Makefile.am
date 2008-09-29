@@ -45,6 +45,8 @@ project_lib_DATA += vectors_entry.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/startup/bspgetworkarea.c \
  	../../powerpc/shared/showbats.c \
@@ -124,7 +126,6 @@ vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../powerpc/shared/vme/vme_universe.c \
     ../../powerpc/shared/vme/VMEConfig.h
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
     $(irq_SOURCES) $(openpic_SOURCES) $(pci_SOURCES) $(residual_SOURCES) \
     $(motorola_SOURCES) $(tod_SOURCES) $(vme_SOURCES)

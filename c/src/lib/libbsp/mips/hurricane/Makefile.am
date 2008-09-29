@@ -29,6 +29,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
@@ -41,7 +43,6 @@ clock_SOURCES = clock/ckinit.c
 console_SOURCES = console/console.c
 liblnk_SOURCES = liblnk/lnklib.S liblnk/pmon.S
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(liblnk_SOURCES)
 

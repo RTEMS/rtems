@@ -30,6 +30,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
 	../../shared/bsppredriverhook.c startup/bspstart.c \
@@ -44,7 +46,6 @@ console_rel_SOURCES = console/console-io.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel console.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mmu.rel

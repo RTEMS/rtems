@@ -33,6 +33,8 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bspreset_fatal.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
@@ -61,7 +63,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) \
     $(bspconsole_SOURCES) $(opbintctrl_SOURCES) $(vectors_SOURCES) \
     $(irq_SOURCES)

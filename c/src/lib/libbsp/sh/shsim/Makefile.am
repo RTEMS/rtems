@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.sim
 
+noinst_LIBRARIES = libbsp.a
+
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
 scitab.c: $(SHGEN)
@@ -46,7 +48,6 @@ trap34_SOURCES = trap34/console-io.c trap34/console-support.S \
     ../../shared/dummy_printk_support.c
 console_SOURCES = ../../shared/console-polled.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(scitab_SOURCES) $(trap34_SOURCES)
 

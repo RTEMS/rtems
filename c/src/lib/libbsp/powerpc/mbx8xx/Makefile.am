@@ -28,6 +28,8 @@ EXTRA_DIST = times-mbx821 times-mbx860
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 pclock_SOURCES = clock/p_clock.c
 console_SOURCES = console/console.c
 irq_SOURCES = irq/irq.c irq/irq_asm.S irq/irq_init.c
@@ -49,7 +51,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(pclock_SOURCES) $(irq_SOURCES) $(ide_SOURCES) \
     $(startup_SOURCES) $(console_SOURCES) $(vectors_SOURCES)
 

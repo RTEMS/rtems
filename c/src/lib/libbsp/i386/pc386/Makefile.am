@@ -56,6 +56,8 @@ project_lib_DATA += start16.bin
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 clock_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
 
 include_rtemsdir = $(includedir)/rtems
@@ -120,7 +122,6 @@ noinst_PROGRAMS += 3c509.rel
 3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(gdb_SOURCES) \
     $(gnat_SOURCES) $(pci_SOURCES) $(startup_SOURCES) $(timer_SOURCES) \
     $(ide_SOURCES)

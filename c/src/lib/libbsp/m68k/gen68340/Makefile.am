@@ -33,6 +33,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/init68340.c \
@@ -44,7 +46,6 @@ console_SOURCES = console/Modif_cpu_asm.S console/console.c \
     console/m340uart.c ../../shared/dummy_printk_support.c
 timer_SOURCES = timer/timer.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 

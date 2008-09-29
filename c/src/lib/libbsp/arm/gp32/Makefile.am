@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
@@ -38,7 +40,6 @@ console_SOURCES = console/uart.c ../../shared/console.c
 abort_SOURCES = ../shared/abort/abort.c
 smc_SOURCES = smc/smc.c smc/smc.h
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) $(abort_SOURCES) \
     $(smc_SOURCES)
 

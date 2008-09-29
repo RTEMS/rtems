@@ -31,6 +31,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds_ROM
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
     ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
@@ -42,7 +44,6 @@ console_SOURCES = console/console.c console/sci.c console/sci.h
 spurious_SOURCES = spurious/spinit.c
 timer_SOURCES = timer/timer.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(spurious_SOURCES) $(timer_SOURCES)
 

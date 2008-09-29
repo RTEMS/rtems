@@ -29,6 +29,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c ../../shared/bootcard.c \
     startup/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
@@ -41,7 +43,6 @@ console_SOURCES = console/conscfg.c ../../shared/console.c
 debugio_SOURCES = console/debugio.c
 timer_SOURCES = ../../shared/timerstub.c
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(debugio_SOURCES) $(timer_SOURCES)
 libbsp_a_LIBADD = \

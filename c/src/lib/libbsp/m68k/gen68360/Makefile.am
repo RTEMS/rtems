@@ -28,6 +28,8 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.prom \
     startup/linkcmds.bootp
 
+noinst_LIBRARIES = libbsp.a
+
 startup_SOURCES = startup/alloc360.c ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
@@ -47,7 +49,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 
