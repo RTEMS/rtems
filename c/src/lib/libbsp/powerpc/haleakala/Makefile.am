@@ -18,8 +18,6 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
-noinst_PROGRAMS =
-
 include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = ../../powerpc/shared/start/rtems_crti.S
@@ -50,14 +48,6 @@ include_bsp_HEADERS += irq/irq.h \
 
 irq_SOURCES = irq/irq_init.c irq/irq.c
 
-## if HAS_NETWORKING
-## network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-## noinst_PROGRAMS += network.rel
-## network_rel_SOURCES = network/network.c
-## network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-## network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-## endif
-
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) $(console_SOURCES) \
     $(irq_SOURCES)
@@ -69,10 +59,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel 
-
-## if HAS_NETWORKING
-## libbsp_a_LIBADD += network.rel
-## endif
 
 EXTRA_DIST += times
 

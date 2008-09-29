@@ -18,8 +18,6 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
-noinst_PROGRAMS =
-
 include_HEADERS += ../../shared/tod.h
 include_HEADERS += include/coverhd.h include/gen2.h
 

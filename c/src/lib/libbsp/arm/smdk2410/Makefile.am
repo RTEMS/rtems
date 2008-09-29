@@ -18,7 +18,6 @@ include_HEADERS += ../../shared/include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
-noinst_PROGRAMS =
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = ../gp32/start/start.S
