@@ -1,3 +1,7 @@
+2008-09-29     Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Cleanup.
+
 2007-12-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/bsp.h: Eliminate copies of the Configuration Table. Use the
