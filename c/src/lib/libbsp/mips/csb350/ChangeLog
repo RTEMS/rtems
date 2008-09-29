@@ -1,5 +1,11 @@
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* start/regs.S: Remove (Renamed into start/regs.h).
+	* start/regs.h: New (Renamed from start/regs.S).
+	* Makefile.am, start/start.S: Reflect renamer.
+
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Eliminate *_SOURCES.
 
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
