@@ -1,3 +1,7 @@
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove noinst_PROGRAMS (Unused).
+
 2008-09-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR 1322/bsps

@@ -1,3 +1,7 @@
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove noinst_PROGRAMS (Unused).
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/config.c, console/console.h: Convert to "bool".

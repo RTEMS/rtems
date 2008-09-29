@@ -1,3 +1,7 @@
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove noinst_PROGRAMS (Unused).
+
 2008-09-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shmsupp/lock.c: Disable CPU interrupts when we have the shared memory

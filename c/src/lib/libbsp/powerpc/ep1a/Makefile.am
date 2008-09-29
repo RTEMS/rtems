@@ -16,8 +16,6 @@ nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-noinst_PROGRAMS =
-
 include_bspdir = $(includedir)/bsp
 
 ###

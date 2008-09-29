@@ -15,8 +15,6 @@ include_HEADERS += include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 
-noinst_PROGRAMS =
-
 include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = start/start.S
