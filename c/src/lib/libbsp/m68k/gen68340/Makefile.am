@@ -34,20 +34,22 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/init68340.c \
     ../../shared/bootcard.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     startup/dumpanic.c ../../shared/gnatinstallhandler.c
-clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/Modif_cpu_asm.S console/console.c \
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# console
+libbsp_a_SOURCES += console/Modif_cpu_asm.S console/console.c \
     console/m340uart.c ../../shared/dummy_printk_support.c
-timer_SOURCES = timer/timer.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

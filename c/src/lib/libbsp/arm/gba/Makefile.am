@@ -33,6 +33,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 # some objects have to be forced together to ensure they are ALWAYS
 # the ones linked into the application executable.  Every application
@@ -42,22 +43,24 @@ gbaoverrides_rel_SOURCES = startup/bspstart.c startup/cpu.c startup/cpu_asm.S
 gbaoverrides_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gbaoverrides_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c ../../shared/bspclean.c \
     startup/bspreset.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
-clock_SOURCES = clock/clockdrv.c
-console_SOURCES = console/conio.c console/console.c \
+# clock
+libbsp_a_SOURCES += clock/clockdrv.c
+# console
+libbsp_a_SOURCES += console/conio.c console/console.c \
     console/defaultfont.c
-timer_SOURCES = timer/timer.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 include_HEADERS += irq/irq.h
-irq_SOURCES = irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
+# irq
+libbsp_a_SOURCES += irq/irq.c irq/bsp_irq_init.c irq/irq_init.c \
     irq/bsp_irq_asm.S irq/irq_asm.S
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES) $(irq_SOURCES)
 
 libbsp_a_LIBADD = gbaoverrides.rel
 

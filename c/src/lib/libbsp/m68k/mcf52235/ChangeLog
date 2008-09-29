@@ -1,5 +1,9 @@
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Eliminate *_SOURCES.
+
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Move noinst_LIBRARIES = libbsp.a before its
 	components.
 

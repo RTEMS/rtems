@@ -57,32 +57,39 @@ project_lib_DATA += start16.bin
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-clock_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = console/keyboard.h console/kd.h \
     console/serial_mouse.h console/ps2_drv.h console/fb_vga.h
 
 include_HEADERS += ../../i386/shared/comm/i386_io.h
-console_SOURCES = console/console.c console/inch.c console/outch.c \
+# console
+libbsp_a_SOURCES += console/console.c console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
     console/serial_mouse.c console/vgainit.c console/vt.c console/videoAsm.S \
     ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c
 
-gdb_SOURCES = ../../i386/shared/comm/i386-stub.c \
+# gdb
+libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c \
     ../../i386/shared/comm/gdb_glue.c
 
-gnat_SOURCES = ../../shared/gnatinstallhandler.c
+# gnat
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 include_HEADERS += ../../i386/shared/pci/pcibios.h
-pci_SOURCES = ../../i386/shared/pci/pcibios.c \
+# pci
+libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c \
     ../../i386/shared/pci/pcibios.h
 
 include_HEADERS += ../../i386/shared/comm/uart.h
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c startup/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c ../../i386/shared/irq/idt.c \
@@ -90,9 +97,11 @@ startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
 
-timer_SOURCES = timer/timer.c timer/timerisr.S
+# timer
+libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
-ide_SOURCES = ide/idecfg.c ide/ide.c
+# ide
+libbsp_a_SOURCES += ide/idecfg.c ide/ide.c
 
 if HAS_NETWORKING
 ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -121,10 +130,6 @@ noinst_PROGRAMS += 3c509.rel
 3c509_rel_CPPFLAGS = $(AM_CPPFLAGS) $(3c509_CPPFLAGS)
 3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(gdb_SOURCES) \
-    $(gnat_SOURCES) $(pci_SOURCES) $(startup_SOURCES) $(timer_SOURCES) \
-    $(ide_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/page.rel \

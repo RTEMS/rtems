@@ -28,20 +28,22 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppost.c \
     ../../shared/bspstart.c startup/h8bdinstallirq.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/__main.c
-clock_SOURCES = ../../shared/clock_driver_simidle.c
-console_SOURCES = ../../shared/console-polled.c console/console-io.c \
+# clock
+libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+# console
+libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c \
    console/syscalls.S
-timer_SOURCES = ../../shared/timerstub.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+# timer
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
 EXTRA_DIST += times
 

@@ -30,21 +30,25 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c ../../shared/bootcard.c \
     startup/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c ../../shared/gnatinstallhandler.c \
     ../../m68k/shared/bspspuriousinit.c ../../m68k/shared/m68000spurious.c \
     startup/spurious_assistant.c
-clock_SOURCES = clock/clockdrv.c
-console_SOURCES = console/conscfg.c ../../shared/console.c
-debugio_SOURCES = console/debugio.c
-timer_SOURCES = ../../shared/timerstub.c
+# clock
+libbsp_a_SOURCES += clock/clockdrv.c
+# console
+libbsp_a_SOURCES += console/conscfg.c ../../shared/console.c
+# debugio
+libbsp_a_SOURCES += console/debugio.c
+# timer
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(debugio_SOURCES) $(timer_SOURCES)
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel

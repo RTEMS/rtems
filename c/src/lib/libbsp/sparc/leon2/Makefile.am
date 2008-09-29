@@ -54,44 +54,59 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../sparc/shared/bspgetworkarea.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c
-gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-console_SOURCES = console/console.c console/debugputs.c
-clock_SOURCES = clock/ckinit.c
+# gnatsupp
+libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+# console
+libbsp_a_SOURCES += console/console.c console/debugputs.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
 # AMBA PnP Scanning
-amba_SOURCES = ../../sparc/shared/amba/ambapp.c
+# amba
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 # PCI
-pci_SOURCES = pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
+# pci
+libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 # RASTA Kit
-rasta_SOURCES = rasta/rasta.c
+# rasta
+libbsp_a_SOURCES += rasta/rasta.c
 # Companion Chip Kit
-cchip_SOURCES = cchip/cchip.c
+# cchip
+libbsp_a_SOURCES += cchip/cchip.c
 # B1553BRM
-brm_SOURCES = ../../sparc/shared/1553/b1553brm.c \
+# brm
+libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
     ../../sparc/shared/1553/b1553brm_pci.c \
     ../../sparc/shared/1553/b1553brm_rasta.c
 # CAN
-can_SOURCES = ../../sparc/shared/can/occan.c \
+# can
+libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
     ../../sparc/shared/can/occan_pci.c \
     ../../sparc/shared/can/grcan.c \
     ../../sparc/shared/can/grcan_rasta.c
 # SpaceWire
-spw_SOURCES = ../../sparc/shared/spw/grspw.c \
+# spw
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
     ../../sparc/shared/spw/grspw_pci.c ../../sparc/shared/spw/grspw_rasta.c
 # UART (RAW)
-uart_SOURCES = ../../sparc/shared/uart/apbuart.c \
+# uart
+libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
     ../../sparc/shared/uart/apbuart_pci.c \
     ../../sparc/shared/uart/apbuart_rasta.c
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
-i2cmst_SOURCES = ../../sparc/shared/i2c/i2cmst.c
+# i2cmst
+libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
-timer_SOURCES = timer/timer.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
@@ -108,11 +123,6 @@ leon_open_eth_rel_CPPFLAGS = $(AM_CPPFLAGS)
 leon_open_eth_rel_CPPFLAGS +=  -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(console_SOURCES) \
-    $(clock_SOURCES) $(amba_SOURCES) $(pci_SOURCES) $(rasta_SOURCES) \
-    $(cchip_SOURCES) $(brm_SOURCES) $(can_SOURCES) $(spw_SOURCES) \
-    $(uart_SOURCES) $(i2cmst_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/cache.rel \

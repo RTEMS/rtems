@@ -42,8 +42,10 @@ dist_project_lib_DATA += startup/linkcmds \
     startup/linkcmds.pm520
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-bestcomm_SOURCES = bestcomm/include/ppctypes.h \
+# bestcomm
+libbsp_a_SOURCES += bestcomm/include/ppctypes.h \
     bestcomm/include/mgt5200/mgt5200.h bestcomm/include/mgt5200/sdma.h \
     bestcomm/bestcomm_api.c bestcomm/bestcomm_api.h bestcomm/bestcomm_glue.c \
     bestcomm/bestcomm_glue.h bestcomm/dma_image.c bestcomm/dma_image.capi.h \
@@ -61,10 +63,14 @@ bestcomm_SOURCES = bestcomm/include/ppctypes.h \
     bestcomm/task_api/tasksetup_bdtable.h \
     bestcomm/task_api/tasksetup_general.h
 
-clock_SOURCES = clock/clock.c
-console_SOURCES = console/console.c
-i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
-ide_SOURCES = ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
+# clock
+libbsp_a_SOURCES += clock/clock.c
+# console
+libbsp_a_SOURCES += console/console.c
+# i2c
+libbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
+# ide
+libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
 
 include_bsp_HEADERS = ../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/ppc_exc_bspsupp.h \
@@ -78,24 +84,30 @@ include_bsp_HEADERS = ../../../libcpu/@RTEMS_CPU@/new-exceptions/bspsupport/vect
 	include/u-boot.h \
 	mscan/mscan.h
 
-irq_SOURCES = include/irq.h \
+# irq
+libbsp_a_SOURCES += include/irq.h \
 	include/irq-config.h \
 	irq/irq.c \
 	../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c
 
-mscan_SOURCES = mscan/mscan.c mscan/mscan-base.c mscan/mscan.h mscan/mscan_int.h
+# mscan
+libbsp_a_SOURCES += mscan/mscan.c mscan/mscan-base.c mscan/mscan.h mscan/mscan_int.h
 
 include_bsp_HEADERS += nvram/nvram.h
-nvram_SOURCES = nvram/nvram.c nvram/nvram.h nvram/m93cxx.h
+# nvram
+libbsp_a_SOURCES += nvram/nvram.c nvram/nvram.h nvram/m93cxx.h
 
 include_bsp_HEADERS += slicetimer/slicetimer.h
-slicetimer_SOURCES = slicetimer/slicetimer.c slicetimer/slicetimer.h
+# slicetimer
+libbsp_a_SOURCES += slicetimer/slicetimer.c slicetimer/slicetimer.h
 
-tod_SOURCES = tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
+# tod
+libbsp_a_SOURCES += tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
     ../../shared/tod.c
 
-startup_SOURCES = ../../shared/bootcard.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bsppretaskinghook.c \
@@ -120,10 +132,6 @@ network_rel_SOURCES = network_5200/network.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(clock_SOURCES) $(console_SOURCES) $(i2c_SOURCES) \
-    $(ide_SOURCES) $(irq_SOURCES) $(mscan_SOURCES) $(nvram_SOURCES) \
-    $(slicetimer_SOURCES) $(tod_SOURCES) $(startup_SOURCES) $(bestcomm_SOURCES)
 
 libbsp_a_LIBADD =  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

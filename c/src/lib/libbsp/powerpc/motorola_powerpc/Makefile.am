@@ -46,8 +46,10 @@ project_lib_DATA += vectors_entry.$(OBJEXT)
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
+# startup
+libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/startup/bspgetworkarea.c \
  	../../powerpc/shared/showbats.c \
  	../../powerpc/shared/startup/pretaskinghook.c \
@@ -58,8 +60,10 @@ startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
-tod_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
-pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
+# tod
+libbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
+# pclock
+libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
 include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
@@ -71,7 +75,8 @@ polledIO_rel_SOURCES = ../../powerpc/shared/console/polled_io.c
 polledIO_rel_CPPFLAGS = $(AM_CPPFLAGS) $(polledIO_CPPFLAGS)
 polledIO_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-console_SOURCES = \
+# console
+libbsp_a_SOURCES += \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/inch.c \
@@ -85,28 +90,33 @@ include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
-irq_SOURCES = ../../powerpc/shared/irq/irq_init.c \
+# irq
+libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c \
     ../../powerpc/shared/irq/openpic_i8259_irq.c \
     ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
 
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
-motorola_SOURCES = ../../powerpc/shared/motorola/motorola.h \
+# motorola
+libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/motorola/motorola.c
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
-openpic_SOURCES = ../../powerpc/shared/openpic/openpic.h \
+# openpic
+libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
 
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
-pci_SOURCES = ../../powerpc/shared/pci/pci.c \
+# pci
+libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/detect_raven_bridge.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
 include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h
-residual_SOURCES = ../../powerpc/shared/residual/pnp.h \
+# residual
+libbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/residual.c
 
@@ -117,7 +127,8 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vmeUniverseDMA.h\
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
-vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
+# vme
+libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -125,10 +136,6 @@ vme_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/vme_universe.c \
     ../../powerpc/shared/vme/VMEConfig.h
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
-    $(irq_SOURCES) $(openpic_SOURCES) $(pci_SOURCES) $(residual_SOURCES) \
-    $(motorola_SOURCES) $(tod_SOURCES) $(vme_SOURCES)
 
 libbsp_a_LIBADD = \
     polledIO.rel \

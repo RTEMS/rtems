@@ -28,19 +28,23 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspreset_fatal.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 
-dlentry_SOURCES = dlentry/dlentry.S
+# dlentry
+libbsp_a_SOURCES += dlentry/dlentry.S
 
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
     ../../powerpc/shared/console/consoleIo.h
-console_SOURCES = ../../powerpc/shared/console/uart.c \
+# console
+libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c
 
 include_bsp_HEADERS += irq/irq.h \
@@ -48,10 +52,8 @@ include_bsp_HEADERS += irq/irq.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
-irq_SOURCES = irq/irq_init.c irq/irq.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) $(console_SOURCES) \
-    $(irq_SOURCES)
+# irq
+libbsp_a_SOURCES += irq/irq_init.c irq/irq.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/raw_exception.rel \

@@ -37,55 +37,69 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/ithread.S
 
-gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+# gnatsupp
+libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
 
-amba_SOURCES = amba/amba.c ../../sparc/shared/amba/ambapp.c
-console_SOURCES = console/console.c
-debugio_SOURCES = console/debugputs.c
-clock_SOURCES = clock/ckinit.c
+# amba
+libbsp_a_SOURCES += amba/amba.c ../../sparc/shared/amba/ambapp.c
+# console
+libbsp_a_SOURCES += console/console.c
+# debugio
+libbsp_a_SOURCES += console/debugputs.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
 
 # PCI
 include_HEADERS += ../../sparc/shared/include/pci.h
-pci_SOURCES = pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
+# pci
+libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 
 # B1553BRM
 include_HEADERS += ../../sparc/shared/include/b1553brm.h \
     ../../sparc/shared/include/b1553brm_pci.h
-brm_SOURCES = ../../sparc/shared/1553/b1553brm.c \
+# brm
+libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
     ../../sparc/shared/1553/b1553brm_pci.c
 
 # CAN
 include_HEADERS += ../../sparc/shared/include/occan.h \
     ../../sparc/shared/include/occan_pci.h ../../sparc/shared/include/grcan.h
-can_SOURCES = ../../sparc/shared/can/occan.c \
+# can
+libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
     ../../sparc/shared/can/occan_pci.c  ../../sparc/shared/can/grcan.c
 
 # SpaceWire
 include_HEADERS += ../../sparc/shared/include/grspw.h \
     ../../sparc/shared/include/grspw_pci.h
-spw_SOURCES = ../../sparc/shared/spw/grspw.c \
+# spw
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
     ../../sparc/shared/spw/grspw_pci.c
 
 # UART
 include_HEADERS += ../../sparc/shared/include/apbuart.h \
     ../../sparc/shared/include/apbuart_pci.h
-uart_SOURCES = ../../sparc/shared/uart/apbuart.c \
+# uart
+libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
     ../../sparc/shared/uart/apbuart_pci.c
 
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
-i2cmst_SOURCES = ../../sparc/shared/i2c/i2cmst.c
+# i2cmst
+libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
-timer_SOURCES = timer/timer.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_smc91111.rel
@@ -113,14 +127,10 @@ endif
 
 if HAS_MP
 EXTRA_DIST += shmsupp/README
-shmsupp_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
+# shmsupp
+libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(amba_SOURCES) \
-    $(console_SOURCES) $(debugio_SOURCES) $(clock_SOURCES) $(pci_SOURCES) \
-    $(brm_SOURCES) $(can_SOURCES) $(spw_SOURCES) $(uart_SOURCES) \
-    $(i2cmst_SOURCES) $(timer_SOURCES) $(shmsupp_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \

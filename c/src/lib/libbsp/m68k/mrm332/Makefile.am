@@ -32,20 +32,23 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds_ROM
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = startup/start_c.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
     ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c \
     startup/except_vect_332_ROM.S
-clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/console.c console/sci.c console/sci.h
-spurious_SOURCES = spurious/spinit.c
-timer_SOURCES = timer/timer.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(spurious_SOURCES) $(timer_SOURCES)
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# console
+libbsp_a_SOURCES += console/console.c console/sci.c console/sci.h
+# spurious
+libbsp_a_SOURCES += spurious/spinit.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

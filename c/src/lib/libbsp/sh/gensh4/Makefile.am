@@ -31,16 +31,18 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.rom \
     startup/linkcmds.rom2ram
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../shared/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
-console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-hw_init_SOURCES = hw_init/hw_init.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(hw_init_SOURCES) $(console_SOURCES)
+# console
+libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+# hw_init
+libbsp_a_SOURCES += hw_init/hw_init.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \

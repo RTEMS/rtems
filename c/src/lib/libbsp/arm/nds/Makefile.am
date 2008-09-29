@@ -31,6 +31,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = fb/fb.h touchscreen/touchscreen.h sound/sound.h
@@ -259,7 +260,6 @@ coproc.bin: coproc/coproc.S coproc/coproc.c libnds7.rel
 endif
 project_lib_DATA += coproc.bin
 
-libbsp_a_SOURCES =
 libbsp_a_LIBADD = clock.rel console.rel gnatsupp.rel startup.rel irq.rel \
     timer.rel libnds9.rel rtc.rel fb.rel touchscreen.rel sound.rel \
     block.rel libdldi.rel

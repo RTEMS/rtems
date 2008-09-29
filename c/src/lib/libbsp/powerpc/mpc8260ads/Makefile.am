@@ -30,21 +30,27 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-pclock_SOURCES = clock/p_clock.c
-console_SOURCES = console/console.c
+# pclock
+libbsp_a_SOURCES += clock/p_clock.c
+# console
+libbsp_a_SOURCES += console/console.c
 
 include_bsp_HEADERS = irq/irq.h
-irq_SOURCES = irq/irq.c irq/irq_init.c irq/irq.h irq/irq_asm.S
+# irq
+libbsp_a_SOURCES += irq/irq.c irq/irq_init.c irq/irq.h irq/irq_asm.S
 
 include_bsp_HEADERS += vectors/vectors.h
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/cpuinit.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c
 
-vectors_SOURCES = vectors/vectors_init.c vectors/vectors.h \
+# vectors
+libbsp_a_SOURCES += vectors/vectors_init.c vectors/vectors.h \
     vectors/vectors.S
 
 if HAS_NETWORKING
@@ -55,9 +61,6 @@ network_rel_SOURCES = network/network.c network/if_hdlcsubr.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(pclock_SOURCES) $(irq_SOURCES) $(startup_SOURCES) \
-    $(console_SOURCES) $(vectors_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

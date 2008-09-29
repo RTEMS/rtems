@@ -39,20 +39,23 @@ dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
     startup/linkcmds.flash
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspstart.c startup/init5206e.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-i2c_SOURCES = i2c/i2c.c i2c/i2cdrv.c
-tod_SOURCES = tod/ds1307.c tod/todcfg.c ../../shared/tod.c
-nvram_SOURCES = nvram/nvram.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) \
-    $(i2c_SOURCES) $(tod_SOURCES) $(nvram_SOURCES)
+# console
+libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+# i2c
+libbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c
+# tod
+libbsp_a_SOURCES += tod/ds1307.c tod/todcfg.c ../../shared/tod.c
+# nvram
+libbsp_a_SOURCES += nvram/nvram.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

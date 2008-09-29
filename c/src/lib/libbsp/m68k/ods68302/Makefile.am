@@ -43,8 +43,10 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/rom startup/debugger
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
+# startup
+libbsp_a_SOURCES += startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/gdb-hooks.c ../../shared/bootcard.c \
     startup/m68302scc.c startup/m68k-stub.c \
     ../../shared/bsppretaskinghook.c startup/memcheck.c \
@@ -53,12 +55,12 @@ startup_SOURCES = startup/cpuboot.c startup/crc.c startup/debugport.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
     ../../m68k/shared/setvec.c
-clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-timer_SOURCES = timer/timer.c timer/timerisr.S
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# console
+libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+# timer
+libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

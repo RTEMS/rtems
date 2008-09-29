@@ -25,16 +25,20 @@ include_HEADERS += include/coverhd.h include/gen2.h
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/Hwr_init.c startup/genpvec.c ../../shared/gnatinstallhandler.c \
     ../../powerpc/shared/showbats.c \
     ../../shared/bsppretaskinghook.c
 
-pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
-console_SOURCES = console/85c30.c console/85c30.h console/console.c \
+# pclock
+libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+# console
+libbsp_a_SOURCES += console/85c30.c console/85c30.h console/console.c \
     console/tbl85c30.c console/consolebsp.h
 
 include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
@@ -43,17 +47,20 @@ include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
     ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/console/consoleIo.h
-pci_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
+# pci
+libbsp_a_SOURCES += pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c  PCI_bus/PCI.c  PCI_bus/universe.c
 
 include_bsp_HEADERS += irq/irq.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-irq_SOURCES = irq/FPGA.c irq/irq.c ../../powerpc/shared/irq/irq_asm.S
+# irq
+libbsp_a_SOURCES += irq/FPGA.c irq/irq.c ../../powerpc/shared/irq/irq_asm.S
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
-vectors_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
+# vectors
+libbsp_a_SOURCES += ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
@@ -64,7 +71,8 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vmeUniverseDMA.h\
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
-vme_SOURCES = \
+# vme
+libbsp_a_SOURCES += \
     ../../shared/vmeUniverse/bspVmeDmaList.c \
     ../../shared/vmeUniverse/vme_am_defs.h \
 	../shared/vme/vmeconfig.c 
@@ -78,9 +86,6 @@ EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
-
-libbsp_a_SOURCES = $(pclock_SOURCES) $(console_SOURCES) $(irq_SOURCES) \
-    $(pci_SOURCES) $(vectors_SOURCES) $(startup_SOURCES) $(vme_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \

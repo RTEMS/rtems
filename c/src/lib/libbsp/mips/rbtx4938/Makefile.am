@@ -31,8 +31,10 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
@@ -48,10 +50,11 @@ clock_rel_SOURCES = clock/clockdrv.c
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(clock_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-console_SOURCES = console/console-io.c
-liblnk_SOURCES = liblnk/lnklib.S liblnk/pmon.S
+# console
+libbsp_a_SOURCES += console/console-io.c
+# liblnk
+libbsp_a_SOURCES += liblnk/lnklib.S liblnk/pmon.S
 
-libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) $(liblnk_SOURCES)
 libbsp_a_LIBADD = \
     clock.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

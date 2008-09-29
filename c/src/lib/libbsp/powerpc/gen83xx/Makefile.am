@@ -41,10 +41,13 @@ dist_project_lib_DATA += startup/linkcmds \
     startup/linkcmds.hsc_cm01
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-mpc83xx_regs_SOURCES = startup/mpc83xx_regs.c
+# mpc83xx_regs
+libbsp_a_SOURCES += startup/mpc83xx_regs.c
 
-startup_SOURCES = ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bootcard.c \
 	../../shared/bsppredriverhook.c \
@@ -60,7 +63,8 @@ startup_SOURCES = ../../shared/bsplibc.c \
         startup/uboot_support.c \
         ../shared/uboot_getenv.c
 
-clock_SOURCES = ../shared/clock/clock.c
+# clock
+libbsp_a_SOURCES += ../shared/clock/clock.c
 
 include_bsp_HEADERS = include/irq.h \
 	include/irq-config.h \
@@ -69,15 +73,19 @@ include_bsp_HEADERS = include/irq.h \
 	../shared/include/u-boot.h \
 	../shared/include/tictac.h
 
-irq_SOURCES = include/irq.h \
+# irq
+libbsp_a_SOURCES += include/irq.h \
 	include/irq-config.h \
 	irq/irq.c \
 	../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c
 
-console_SOURCES = console/console.c console/ns16550cfg.c 
-bsp_i2c_SOURCES   = i2c/i2c_init.c 
-bsp_spi_SOURCES   = spi/spi_init.c 
+# console
+libbsp_a_SOURCES += console/console.c console/ns16550cfg.c 
+# bsp_i2c
+libbsp_a_SOURCES += i2c/i2c_init.c 
+# bsp_spi
+libbsp_a_SOURCES += spi/spi_init.c 
 
 if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
@@ -86,10 +94,6 @@ network_rel_CPPFLAGS  = $(AM_CPPFLAGS)
 network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(irq_SOURCES) $(mpc83xx_regs_SOURCES) \
-    $(bsp_i2c_SOURCES) $(bsp_spi_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

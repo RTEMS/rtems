@@ -40,9 +40,11 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 include_HEADERS += ../../i386/shared/comm/uart.h
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
@@ -52,12 +54,16 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \
     ../../shared/gnatinstallhandler.c ../../i386/shared/comm/gdb_glue.c \
     ../../i386/shared/comm/tty_drv.c ../../i386/shared/irq/irq_asm.S
-clock_SOURCES = clock/ckinit.c clock/rtc.c
-console_SOURCES = console/console.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c clock/rtc.c
+# console
+libbsp_a_SOURCES += console/console.c
 include_HEADERS += ../../i386/shared/pci/pcibios.h
-pci_SOURCES = ../../i386/shared/pci/pcibios.c \
+# pci
+libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c \
     ../../i386/shared/pci/pcibios.h
-timer_SOURCES = timer/timer.c timer/timerisr.S
+# timer
+libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
 if HAS_NETWORKING
 include_HEADERS += include/wd80x3.h
@@ -70,9 +76,6 @@ network_rel_SOURCES = network/ne2000.c network/wd80x3.h
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(pci_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/cache.rel \

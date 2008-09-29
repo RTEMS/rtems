@@ -43,18 +43,24 @@ dist_project_lib_DATA += startup/linkcmds.base \
     startup/linkcmds.tqm8xx
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-irq_SOURCES = include/irq-config.h \
+# irq
+libbsp_a_SOURCES += include/irq-config.h \
 	irq/irq.c \
 	../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c
 
-# clock_SOURCES = ../shared/clock/clock.c
-p_clock_SOURCES = clock/p_clock.c
+# clock
+libbsp_a_SOURCES += ../shared/clock/clock.c
+libbsp_a_SOURCES += clock/p_clock.c
 
-console_SOURCES = console/console.c
-timer_SOURCES = timer/timer.c
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# console
+libbsp_a_SOURCES += console/console.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
     startup/bspgetworkarea.c ../../shared/bootcard.c startup/mmutlbtab.c \
@@ -67,10 +73,6 @@ network_rel_SOURCES = network/network_scc.c network/network_fec.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(irq_SOURCES) \
-    $(startup_SOURCES) $(console_SOURCES) \
-    $(p_clock_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \

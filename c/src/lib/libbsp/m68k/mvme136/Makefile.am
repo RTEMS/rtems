@@ -30,25 +30,30 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c  \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c
-gnatsupp_SOURCES = ../../shared/gnatinstallhandler.c
-clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/console.c
-debugio_SOURCES = ../../shared/dummy_printk_support.c
-timer_SOURCES = timer/timer.c timer/timerisr.S
+# gnatsupp
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# console
+libbsp_a_SOURCES += console/console.c
+# debugio
+libbsp_a_SOURCES += ../../shared/dummy_printk_support.c
+# timer
+libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
 if HAS_MP
-shmsupp_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
+# shmsupp
+libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(clock_SOURCES) \
-    $(console_SOURCES) $(debugio_SOURCES) $(timer_SOURCES) $(shmsupp_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

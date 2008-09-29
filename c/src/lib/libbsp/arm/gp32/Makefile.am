@@ -29,19 +29,21 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c \
     startup/memmap.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
-console_SOURCES = console/uart.c ../../shared/console.c
-abort_SOURCES = ../shared/abort/abort.c
-smc_SOURCES = smc/smc.c smc/smc.h
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(console_SOURCES) $(abort_SOURCES) \
-    $(smc_SOURCES)
+# console
+libbsp_a_SOURCES += console/uart.c ../../shared/console.c
+# abort
+libbsp_a_SOURCES += ../shared/abort/abort.c
+# smc
+libbsp_a_SOURCES += smc/smc.c smc/smc.h
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \

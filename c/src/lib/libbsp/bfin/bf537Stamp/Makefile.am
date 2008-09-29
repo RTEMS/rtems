@@ -30,6 +30,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 noinst_PROGRAMS += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
@@ -53,7 +54,6 @@ networkconfig_rel_CPPFLAGS = $(AM_CPPFLAGS) $(networkconfig_CPPFLAGS)
 networkconfig_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel console.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += networkconfig.rel

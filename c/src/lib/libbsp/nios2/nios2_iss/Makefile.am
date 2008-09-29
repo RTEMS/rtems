@@ -27,20 +27,23 @@ project_lib_DATA = start.$(OBJEXT) crtnn.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspreset_loop.c ../../shared/bsppost.c startup/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
-clock_SOURCES = clock/clock.c
-console_SOURCES = console/console.c
-timer_SOURCES = timer/timer.c
-shmsupp_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
+# clock
+libbsp_a_SOURCES += clock/clock.c
+# console
+libbsp_a_SOURCES += console/console.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
+# shmsupp
+libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES) $(shmsupp_SOURCES)
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

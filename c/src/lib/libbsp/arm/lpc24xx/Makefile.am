@@ -50,8 +50,10 @@ dist_project_lib_DATA += ../shared/startup/linkcmds.base startup/linkcmds
 #                  LibBSP                                                     #
 ###############################################################################
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-shared_SOURCES = ../../shared/bootcard.c \
+# shared
+libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bspclean.c \
 	../../shared/bspreset.c \
 	../../shared/bspgetworkarea.c \
@@ -63,30 +65,28 @@ shared_SOURCES = ../../shared/bootcard.c \
 	../../shared/sbrk.c \
 	../shared/abort/simple_abort.c
 
-startup_SOURCES = startup/bspstart.c
+# startup
+libbsp_a_SOURCES += startup/bspstart.c
 
-irq_SOURCES = ../../shared/src/irq-generic.c \
+# irq
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c \
 	../shared/irq/irq_asm.S \
 	irq/irq.c
 
-console_SOURCES = ../../shared/console.c \
+# console
+libbsp_a_SOURCES += ../../shared/console.c \
 	console/console-config.c
 
-clock_SOURCES = clock/clock-config.c
+# clock
+libbsp_a_SOURCES += clock/clock-config.c
 
-rtc_SOURCES = ../../shared/tod.c \
+# rtc
+libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
-misc_SOURCES = misc/system-clocks.c
-
-libbsp_a_SOURCES = $(clock_SOURCES) \
-	$(console_SOURCES) \
-	$(irq_SOURCES) \
-	$(misc_SOURCES) \
-	$(rtc_SOURCES) \
-	$(shared_SOURCES) \
-	$(startup_SOURCES)
+# misc
+libbsp_a_SOURCES += misc/system-clocks.c
 
 ###############################################################################
 #                  Special Rules                                              #

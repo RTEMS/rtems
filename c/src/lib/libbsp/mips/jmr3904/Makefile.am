@@ -32,18 +32,20 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c
-clock_SOURCES = clock/clockdrv.c
-console_SOURCES = ../../shared/console-polled.c console/console-io.c
-timer_SOURCES = timer/timer.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+# clock
+libbsp_a_SOURCES += clock/clockdrv.c
+# console
+libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \

@@ -38,23 +38,30 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../powerpc/shared/startup/bspgetworkarea.c ../../shared/bootcard.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c \
     startup/psim_registers.c
 
-pclock_SOURCES = ../shared/clock/p_clock.c
-console_SOURCES = ../../shared/console-polled.c
-debugio_SOURCES = console/console-io.c console/consupp.S
+# pclock
+libbsp_a_SOURCES += ../shared/clock/p_clock.c
+# console
+libbsp_a_SOURCES += ../../shared/console-polled.c
+# debugio
+libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 include_bsp_HEADERS = irq/irq.h
-irq_SOURCES = irq/irq_init.c irq/no_pic.c
+# irq
+libbsp_a_SOURCES += irq/irq_init.c irq/no_pic.c
 
 EXTRA_DIST += vectors/README
-vectors_SOURCES = vectors/align_h.S
+# vectors
+libbsp_a_SOURCES += vectors/align_h.S
 
 include_bsp_HEADERS += \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h	\
@@ -64,12 +71,10 @@ include_bsp_HEADERS += \
 if HAS_MP
 EXTRA_DIST += shmsupp/README
 
-shmdr_SOURCES = \
+# shmdr
+libbsp_a_SOURCES += \
     shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c shmsupp/mpisr.c
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(pclock_SOURCES) $(console_SOURCES) \
-    $(debugio_SOURCES) $(irq_SOURCES) $(vectors_SOURCES) $(shmdr_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \

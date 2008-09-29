@@ -29,18 +29,24 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c ../../shared/bspreset_loop.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/init52235.c ../../shared/bspstart.c startup/cfinit.c \
     startup/bspgetcpuclockspeed.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-clock_SOURCES = clock/clock.c
-console_SOURCES = console/console.c
-debugio_SOURCES = console/debugio.c
-timer_SOURCES = timer/timer.c
+# clock
+libbsp_a_SOURCES += clock/clock.c
+# console
+libbsp_a_SOURCES += console/console.c
+# debugio
+libbsp_a_SOURCES += console/debugio.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 #if HAS_NETWORKING
 #network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -50,9 +56,6 @@ timer_SOURCES = timer/timer.c
 #    $(network_CPPFLAGS)
 #network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 #endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(debugio_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

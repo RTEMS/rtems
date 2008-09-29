@@ -34,21 +34,27 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bspreset_fatal.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
-dlentry_SOURCES = dlentry/dlentry.S
-bspconsole_SOURCES = console/consolelite.c ../../shared/console.c
+# dlentry
+libbsp_a_SOURCES += dlentry/dlentry.S
+# bspconsole
+libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c
 
 include_bsp_HEADERS = include/opbintctrl.h
-opbintctrl_SOURCES = opbintctrl/opbintctrl.c
+# opbintctrl
+libbsp_a_SOURCES += opbintctrl/opbintctrl.c
 
 include_bsp_HEADERS += irq/irq.h
-irq_SOURCES = irq/irq_init.c
+# irq
+libbsp_a_SOURCES += irq/irq_init.c
 
 include_bsp_HEADERS +=  \
   ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
@@ -62,10 +68,6 @@ network_rel_SOURCES = network/xiltemac.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(dlentry_SOURCES) \
-    $(bspconsole_SOURCES) $(opbintctrl_SOURCES) $(vectors_SOURCES) \
-    $(irq_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \

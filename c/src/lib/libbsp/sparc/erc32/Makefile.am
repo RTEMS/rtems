@@ -33,17 +33,24 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../sparc/shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../sparc/shared/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/erc32mec.c startup/boardinit.S
-gnatsupp_SOURCES = gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-console_SOURCES = console/console.c
-debugio_SOURCES = console/debugputs.c
-clock_SOURCES = clock/ckinit.c
-timer_SOURCES = timer/timer.c
+# gnatsupp
+libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+# console
+libbsp_a_SOURCES += console/console.c
+# debugio
+libbsp_a_SOURCES += console/debugputs.c
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 if HAS_NETWORKING
 erc32sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -52,9 +59,6 @@ erc32sonic_rel_SOURCES = erc32sonic/erc32sonic.c
 erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(gnatsupp_SOURCES) $(console_SOURCES) \
-    $(debugio_SOURCES) $(clock_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \

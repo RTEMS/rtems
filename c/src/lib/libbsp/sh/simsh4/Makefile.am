@@ -36,19 +36,21 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds-le \
     startup/linkcmds-le.coff
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = startup/hw_init.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += startup/hw_init.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../shared/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
     ../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
     ../shared/bsphwinit.c
-clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/console.c ../../shared/dummy_printk_support.c
-timer_SOURCES = timer/timer.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+# clock
+libbsp_a_SOURCES += clock/ckinit.c
+# console
+libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel

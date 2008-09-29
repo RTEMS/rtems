@@ -29,15 +29,20 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c startup/bspreset.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c
-clock_SOURCES = clock/clockdrv.c
-console_SOURCES = console/console-io.c ../../shared/console-polled.c
-timer_SOURCES = timer/timer.c
+# clock
+libbsp_a_SOURCES += clock/clockdrv.c
+# console
+libbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
+# timer
+libbsp_a_SOURCES += timer/timer.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -46,9 +51,6 @@ network_rel_SOURCES = network/network.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/mips/shared/cache.rel \

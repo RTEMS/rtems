@@ -29,6 +29,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.sim
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
@@ -37,19 +38,20 @@ scitab.c: $(SHGEN)
 BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../shared/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
-clock_SOURCES = ../../shared/clock_driver_simidle.c
+# clock
+libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 
-trap34_SOURCES = trap34/console-io.c trap34/console-support.S \
+# trap34
+libbsp_a_SOURCES += trap34/console-io.c trap34/console-support.S \
     ../../shared/dummy_printk_support.c
-console_SOURCES = ../../shared/console-polled.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(scitab_SOURCES) $(trap34_SOURCES)
+# console
+libbsp_a_SOURCES += ../../shared/console-polled.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel

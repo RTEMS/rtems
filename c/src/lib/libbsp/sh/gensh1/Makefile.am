@@ -29,6 +29,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
@@ -37,18 +38,19 @@ scitab.c: $(SHGEN)
 BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../shared/bspstart.c \
     ../../shared/bspclean.c ../../shared/bspreset_fatal.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c ../../shared/bootcard.c ../shared/bsphwinit.c \
     ../../shared/gnatinstallhandler.c
-scitab_SOURCES = scitab.c
-console_SOURCES = ../../sh/shared/console.c
-debugio_SOURCES = ../../shared/dummy_printk_support.c
-
-libbsp_a_SOURCES = $(startup_SOURCES) $(scitab_SOURCES) $(console_SOURCES) \
-    $(debugio_SOURCES)
+# scitab
+libbsp_a_SOURCES += scitab.c
+# console
+libbsp_a_SOURCES += ../../sh/shared/console.c
+# debugio
+libbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \

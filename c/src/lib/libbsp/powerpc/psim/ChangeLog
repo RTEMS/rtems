@@ -1,5 +1,9 @@
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Eliminate *_SOURCES.
+
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Remove noinst_PROGRAMS (Unused).
 
 2008-09-26	Ralf Corsépius <ralf.corsepius@rtems.org>

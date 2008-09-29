@@ -31,6 +31,7 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_SOURCES =
 
 # Includes
 include_HEADERS = include/bsp.h
@@ -41,16 +42,20 @@ include_bsp_HEADERS = include/mpc55xxevb.h \
     ../../shared/include/irq-generic.h \
     ../shared/include/tictac.h
 
-startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+# startup
+libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../shared/src/tictac.c ../../shared/bspclean.c \
     startup/bspstart.c startup/bspgetworkarea.c ../../shared/bsppretaskinghook.c
 
-clock_SOURCES = ../shared/clock/clock.c
+# clock
+libbsp_a_SOURCES += ../shared/clock/clock.c
 
-irq_generic_SOURCES = ../../shared/src/irq-generic.c \
+# irq_generic
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
     ../../shared/src/irq-legacy.c
 
-tests_SOURCES = tests/tests.c startup/sd-card-init.c
+# tests
+libbsp_a_SOURCES += tests/tests.c startup/sd-card-init.c
 
 # Network
 if HAS_NETWORKING
@@ -61,8 +66,6 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 # BSP library
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(irq_generic_SOURCES) \
-    $(tests_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
