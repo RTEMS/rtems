@@ -38,7 +38,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include "regs.S"
+#include "regs.h"
 #include "mg5.h"
 
 #ifdef __mips16
