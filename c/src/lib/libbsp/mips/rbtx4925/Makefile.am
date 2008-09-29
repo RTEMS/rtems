@@ -22,7 +22,7 @@ noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = start/start.S start/regs.S
+EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
@@ -54,7 +54,7 @@ clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libbsp_a_SOURCES += console/console-io.c
 
 # liblnk
-libbsp_a_SOURCES += liblnk/lnklib.S liblnk/pmon.S
+libbsp_a_SOURCES += liblnk/lnklib.S liblnk/pmon.S liblnk/regs.h
 
 libbsp_a_LIBADD = \
     clock.rel \
