@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -16,21 +15,17 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-# Object files
-EXTRA_DIST = startup/start.S
-start.$(OBJEXT): startup/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = startup/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../shared/start/rtems_crti.S
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -o $@ -c $<
+libbspstart_a_SOURCES += ../shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # Includes

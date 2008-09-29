@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -24,14 +23,11 @@ include_HEADERS += include/coverhd.h
 
 nodist_include_HEADERS += ../../shared/tod.h
 
-EXTRA_DIST = start/start.S
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -o $@ -c $<
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds \
@@ -40,7 +36,7 @@ dist_project_lib_DATA += startup/linkcmds \
     startup/linkcmds.mpc8349eamds \
     startup/linkcmds.hsc_cm01
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # mpc83xx_regs
@@ -111,7 +107,7 @@ libbsp_a_LIBADD += network.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
 endif
 
-EXTRA_DIST += README.mpc8349eamds
+EXTRA_DIST = README.mpc8349eamds
 EXTRA_DIST += times.mpc8349eamds
 ### XXX
 

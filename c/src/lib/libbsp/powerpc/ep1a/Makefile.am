@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -22,7 +21,14 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 ###
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
+project_lib_DATA = start.$(OBJEXT)
+
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
+project_lib_DATA += rtems_crti.$(OBJEXT)
+
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -79,16 +85,6 @@ libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c \
     ../shared/vme/vmeconfig.c \
     ../shared/vme/vme_universe.c \
     ../../shared/vmeUniverse/vme_am_defs.h
-
-EXTRA_DIST = start/start.S
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-project_lib_DATA = start.$(OBJEXT)
-
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -o $@ -c $<
-project_lib_DATA += rtems_crti.$(OBJEXT)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \

@@ -4,12 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-# wrapup is the one that actually builds and installs the library
-# from the individual .rel files built in other directories
 SUBDIRS = . tools
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -25,19 +22,16 @@ DISTCLEANFILES = include/bspopts.h
 
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST = start/start.S
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -o $@ -c $<
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -55,11 +49,11 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 # debugio
 libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
-include_bsp_HEADERS = irq/irq.h
 # irq
+include_bsp_HEADERS = irq/irq.h
 libbsp_a_SOURCES += irq/irq_init.c irq/no_pic.c
 
-EXTRA_DIST += vectors/README
+EXTRA_DIST = vectors/README
 # vectors
 libbsp_a_SOURCES += vectors/align_h.S
 
@@ -68,9 +62,8 @@ include_bsp_HEADERS += \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h	\
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
-if HAS_MP
 EXTRA_DIST += shmsupp/README
-
+if HAS_MP
 # shmdr
 libbsp_a_SOURCES += \
     shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c shmsupp/mpisr.c
