@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -25,14 +24,13 @@ SUBDIRS = . tools
 include_HEADERS += include/erc32.h
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST = ../../sparc/shared/start.S
-start.$(OBJEXT): ../../sparc/shared/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../sparc/shared/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -67,7 +65,7 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += erc32sonic.rel
 endif
 
-EXTRA_DIST += times
+EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

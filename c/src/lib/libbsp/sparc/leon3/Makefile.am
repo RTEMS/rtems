@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -28,15 +27,13 @@ SUBDIRS = . tools
 include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST = ../../sparc/shared/start.S
-start.$(OBJEXT): ../../sparc/shared/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../sparc/shared/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -62,40 +59,34 @@ libbsp_a_SOURCES += clock/ckinit.c
 
 # PCI
 include_HEADERS += ../../sparc/shared/include/pci.h
-# pci
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 
 # B1553BRM
 include_HEADERS += ../../sparc/shared/include/b1553brm.h \
     ../../sparc/shared/include/b1553brm_pci.h
-# brm
 libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
     ../../sparc/shared/1553/b1553brm_pci.c
 
 # CAN
 include_HEADERS += ../../sparc/shared/include/occan.h \
     ../../sparc/shared/include/occan_pci.h ../../sparc/shared/include/grcan.h
-# can
 libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
     ../../sparc/shared/can/occan_pci.c  ../../sparc/shared/can/grcan.c
 
 # SpaceWire
 include_HEADERS += ../../sparc/shared/include/grspw.h \
     ../../sparc/shared/include/grspw_pci.h
-# spw
 libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
     ../../sparc/shared/spw/grspw_pci.c
 
 # UART
 include_HEADERS += ../../sparc/shared/include/apbuart.h \
     ../../sparc/shared/include/apbuart_pci.h
-# uart
 libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
     ../../sparc/shared/uart/apbuart_pci.c
 
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
-# i2cmst
 libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
 # timer
@@ -125,8 +116,8 @@ leon_greth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_greth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+EXTRA_DIST = shmsupp/README
 if HAS_MP
-EXTRA_DIST += shmsupp/README
 # shmsupp
 libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c

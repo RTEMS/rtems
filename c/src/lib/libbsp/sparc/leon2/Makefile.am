@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -45,15 +44,13 @@ SUBDIRS = . tools
 include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST = ../../sparc/shared/start.S
-start.$(OBJEXT): ../../sparc/shared/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../sparc/shared/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -69,40 +66,31 @@ libbsp_a_SOURCES += console/console.c console/debugputs.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # AMBA PnP Scanning
-# amba
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 # PCI
-# pci
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 # RASTA Kit
-# rasta
 libbsp_a_SOURCES += rasta/rasta.c
 # Companion Chip Kit
-# cchip
 libbsp_a_SOURCES += cchip/cchip.c
 # B1553BRM
-# brm
 libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
     ../../sparc/shared/1553/b1553brm_pci.c \
     ../../sparc/shared/1553/b1553brm_rasta.c
 # CAN
-# can
 libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
     ../../sparc/shared/can/occan_pci.c \
     ../../sparc/shared/can/grcan.c \
     ../../sparc/shared/can/grcan_rasta.c
 # SpaceWire
-# spw
 libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
     ../../sparc/shared/spw/grspw_pci.c ../../sparc/shared/spw/grspw_rasta.c
 # UART (RAW)
-# uart
 libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
     ../../sparc/shared/uart/apbuart_pci.c \
     ../../sparc/shared/uart/apbuart_rasta.c
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
-# i2cmst
 libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
 # timer
@@ -134,7 +122,7 @@ libbsp_a_LIBADD += leon_open_eth.rel
 libbsp_a_LIBADD += leon_smc91111.rel
 endif
 
-EXTRA_DIST += times
+EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
