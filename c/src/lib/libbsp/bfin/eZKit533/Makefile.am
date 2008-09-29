@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -23,14 +22,13 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = ../shared/start/start.S
-start.$(OBJEXT): ../shared/start/start.S
-	$(CPPASCOMPILE) -DASM -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 noinst_PROGRAMS += startup.rel
@@ -56,7 +54,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/clock.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rtc.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/timer.rel
 
-EXTRA_DIST += times
+EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
