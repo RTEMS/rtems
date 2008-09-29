@@ -1,3 +1,7 @@
+2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/simsh1.cfg, custom/simsh2.cfg: Remove Author notice.
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, custom/simsh4.cfg: Recognize the the GDB SuperH
