@@ -224,6 +224,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.RATE_MONOTONIC_PERIOD
       );
    
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 29 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;

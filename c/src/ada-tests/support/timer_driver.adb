@@ -20,8 +20,20 @@
 --
 
 with RTEMS;
+with Interfaces.C;
 
 package body Timer_Driver is
+
+--PAGE
+--
+--  Empty_function
+--
+--
+   procedure Empty_Function 
+   is
+   begin
+      Null;
+   end Empty_Function;
 
 --PAGE
 --
@@ -33,12 +45,18 @@ package body Timer_Driver is
       Find_Flag : in     Standard.Boolean
    ) is
       procedure Set_Find_Average_Overhead_base (
-         Find_Flag : in     RTEMS.Boolean
+         Find_Flag : in     Interfaces.Unsigned_8
       );
       pragma Import (C, Set_Find_Average_Overhead_base,
-         "Set_find_average_overhead");
+         "benchmark_timer_disable_subtracting_average_overhead");
+      c: Interfaces.Unsigned_8;
    begin
-      Set_Find_Average_Overhead_base (RTEMS.From_Ada_Boolean (Find_Flag));
+      if Find_Flag then
+        c := 1;
+      else
+        c := 0;
+      end if;
+      Set_Find_Average_Overhead_base (c);
    end Set_Find_Average_Overhead;
 
 end Timer_Driver;

@@ -109,6 +109,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_DELETE
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 9 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end TEST_TASK;

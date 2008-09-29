@@ -145,6 +145,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.TASK_DELETE 
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 18 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LAST_TASK;

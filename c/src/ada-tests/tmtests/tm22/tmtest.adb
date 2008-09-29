@@ -218,6 +218,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_BROADCAST
       );
 
+      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 22 ***" );
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;

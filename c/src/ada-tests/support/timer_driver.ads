@@ -60,7 +60,6 @@ package Timer_Driver is
 --
 
    procedure Empty_Function;
-   pragma Import (C, Empty_Function, "Empty_function");
 
 --
 --  Set_Find_Average_Overhead
@@ -74,8 +73,6 @@ package Timer_Driver is
    procedure Set_Find_Average_Overhead (
       Find_Flag : in     Standard.Boolean
    );
-   pragma Import (C, Set_Find_Average_Overhead,
-      "benchmark_timer_disable_subtracting_average_overhead");
 
 private
 
