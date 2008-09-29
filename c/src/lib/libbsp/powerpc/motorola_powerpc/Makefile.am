@@ -9,7 +9,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 SUBDIRS = . bootloader
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -28,24 +27,19 @@ include_HEADERS += ../../powerpc/shared/include/nvram.h
 include_HEADERS += ../../shared/include/coverhd.h
 include_HEADERS += ../../shared/tod.h
 
-EXTRA_DIST = ../../powerpc/shared/start/start.S
-start.$(OBJEXT): ../../powerpc/shared/start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../powerpc/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
-	$(CPPASCOMPILE) -o $@ -c $<
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/vectors_entry.S
-vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
-	$(CPPASCOMPILE) -o $@ -c $<
+libbspstart_a_SOURCES += ../../powerpc/shared/start/vectors_entry.S
 project_lib_DATA += vectors_entry.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -149,7 +143,7 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
-EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
+EXTRA_DIST = BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
               README.MVME2400 \
     README.OTHERBOARDS README.mcp750 README.MVME2307 README.dec21140
 EXTRA_DIST += times.mcp750 times.mvme2307
