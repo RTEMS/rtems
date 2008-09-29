@@ -10,7 +10,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -40,8 +39,8 @@ include_bsp_HEADERS = ../../shared/include/utility.h \
 #                  Data                                                       #
 ###############################################################################
 
-EXTRA_DIST = ../shared/start/start.S
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds.base startup/linkcmds
@@ -49,7 +48,7 @@ dist_project_lib_DATA += ../shared/startup/linkcmds.base startup/linkcmds
 ###############################################################################
 #                  LibBSP                                                     #
 ###############################################################################
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # shared
