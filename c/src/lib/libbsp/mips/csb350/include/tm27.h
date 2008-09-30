@@ -46,6 +46,5 @@ int negate_sw_irw(uint32_t irqnum);
      continue;\
   } while(0)
 #endif
-#endif
 
 #endif

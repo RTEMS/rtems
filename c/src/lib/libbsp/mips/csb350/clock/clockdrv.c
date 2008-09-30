@@ -1,7 +1,7 @@
 /*
  *  Instantiate the clock driver shell.
  *
- *  This usese the TOY (Time of Year) timer to implement the clock.
+ *  This uses the TOY (Time of Year) timer to implement the clock.
  *
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
