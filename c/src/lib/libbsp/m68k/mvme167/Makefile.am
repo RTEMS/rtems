@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -25,15 +24,13 @@ include_HEADERS += include/fatal.h
 
 nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 
-EXTRA_DIST = ../../m68k/shared/start.S
-start.$(OBJEXT): ../../m68k/shared/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../m68k/shared/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -69,7 +66,7 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-EXTRA_DIST += times
+EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

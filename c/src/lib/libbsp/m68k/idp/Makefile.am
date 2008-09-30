@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -21,14 +20,13 @@ DISTCLEANFILES = include/bspopts.h
 include_HEADERS += include/leds.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = ../../m68k/shared/start.S
-start.$(OBJEXT): ../../m68k/shared/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../m68k/shared/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
@@ -46,7 +44,7 @@ libbsp_a_SOURCES += console/console.c console/leds.c console/mc68ec.c \
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
-EXTRA_DIST += include/README
+EXTRA_DIST = include/README
 EXTRA_DIST += times
 
 libbsp_a_LIBADD = \
