@@ -23,7 +23,6 @@
 #include "consolebsp.h"
 #include <rtems/bspIo.h>
 
-#if (1)
 /*
  * The Port Used for the Console interface is based upon which
  * debugger is being used.  The SDS debugger uses a binary
@@ -31,28 +30,7 @@
  * not be used as the console port for the SDS debugger.
  */
 
-#if (SCORE603E_USE_SDS)
-#define USE_FOR_CONSOLE_DEF  1
-
-#elif (SCORE603E_USE_OPEN_FIRMWARE)
 #define USE_FOR_CONSOLE_DEF  0
-
-#elif (SCORE603E_USE_NONE)
-#define USE_FOR_CONSOLE_DEF  0
-
-#elif (SCORE603E_USE_DINK)
-#define USE_FOR_CONSOLE_DEF  0
-
-#else
-#error "SCORE603E CONSOLE.C -- what ROM monitor are you using"
-#endif
-
-#endif
-
-#if (0)
-extern int USE_FOR_CONSOLE;
-#endif
-
 int USE_FOR_CONSOLE = USE_FOR_CONSOLE_DEF;
 
 /*
@@ -134,12 +112,6 @@ rtems_isr console_isr(
 
   for (i=0; i < NUM_Z85C30_PORTS; i++){
       ISR_85c30_Async( &Ports_85C30[i] );
-
-#if (0) /* XXX - TO TEST LOOP BACKS comment this out. */
-    if ( Ports_85C30[i].Chip->vector == vector ) {
-      ISR_85c30_Async( &Ports_85C30[i] );
-    }
-#endif
   }
 }
 
@@ -191,7 +163,6 @@ void console_outbyte_interrupts(
   char ch
 );
 
-/* XXXXXX */
 #endif
 
 /* PAGE

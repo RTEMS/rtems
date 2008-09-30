@@ -157,15 +157,14 @@ void initialize_universe()
 {
   uint32_t         jumper_selection;
   uint32_t         pci_id;
-#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
-  volatile uint32_t         universe_temp_value;
-#endif
 
   /*
    * Read the VME jumper location to determine the VME base address
    */
   jumper_selection = PCI_bus_read(
                      (volatile uint32_t*)SCORE603E_VME_JUMPER_ADDR );
+  printk("initialize_universe: Read 0x%x = 0x%x\n", 
+          SCORE603E_VME_JUMPER_ADDR, jumper_selection);
   jumper_selection = (jumper_selection >> 3) & 0x1f;
 
   /*
@@ -179,67 +178,14 @@ void initialize_universe()
    if (pci_id !=  SCORE603E_UNIVERSE_CHIP_ID ){
      printk ("Invalid SCORE603E_UNIVERSE_CHIP_ID: 0x08%" PRId32 "\n", pci_id);
      rtems_fatal_error_occurred( 0x603e0bad );
+   } else {
+     printk("initialize_universe: Reg 0x%x read 0x%x\n", 
+     SCORE603E_IO_VME_UNIVERSE_BASE, pci_id );
    }
 
-#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
-
-   /*
-    * Set the UNIVERSE PCI Configuration Base Address Register with 0x30001
-    * to specifies the 64 Kbyte aligned base address of the UNIVERSE register
-    * space on PCI to be 0x30000 + 0x80000000 (IO_BASE)
-    */
-   Write_pci_device_register( SCORE603E_IO_VME_UNIVERSE_BASE+0x10,0x30001 );
-
-   /*
-    * Set the UNIVERSE PCI Configuration Space Control and Status Register to
-    * medium speed device, Target Back to Back Capable, Master Enable, Target
-    * Memory Enable and Target IO Enable
-    */
-   Write_pci_device_register( SCORE603E_IO_VME_UNIVERSE_BASE+0x4, 0x2800007 );
-
-   /*
-    * Turn off the sysfail by setting SYSFAIL bit to 1 on the VCSR_CLR register
-    */
-   PCI_bus_write( &UNIVERSE->VCSR_CLR, 0x40000000 );
-
-   /*
-    * Set the VMEbus Master Control register with retry forever, 256 bytes
-    * posted write transfer count, VMEbus request level 3, RWD, PCI 32 bytes
-    * aligned burst size and PCI bus number to be zero
-    */
-   PCI_bus_write( &UNIVERSE->MAST_CTL, 0x01C00000 );
-
-   /*
-    * VMEbus DMA Transfer Control register with 32 bit VMEbus Maximum Data
-    * width, A32 VMEbus Address Space, AM code to be data, none-privilleged,
-    * single and BLT cycles on VME bus and 64-bit PCI Bus Transactions enable
-    PCI_bus_write( &UNIVERSE->DCTL, 0x00820180 );
-    */
-
-   PCI_bus_write( &UNIVERSE->LSI0_CTL, 0x80700040 );
-   PCI_bus_write( &UNIVERSE->LSI0_BS,  0x04000000 );
-   PCI_bus_write( &UNIVERSE->LSI0_BD,  0x05000000 );
-   PCI_bus_write( &UNIVERSE->LSI0_TO,  0x7C000000 );
-
-   /*
-    * Remove the Universe from VMEbus BI-Mode (bus-isolation).  Once out of
-    * BI-Mode VMEbus accesses can be made.
-    */
-
-   universe_temp_value = PCI_bus_read( &UNIVERSE->MISC_CTL );
-
-   if (universe_temp_value & 0x100000)
-     PCI_bus_write( &UNIVERSE->MISC_CTL,(universe_temp_value | ~0xFF0FFFFF));
-
-#elif (SCORE603E_USE_DINK)
    /*
     * Do not modify the DINK setup of the universe chip.
     */
-
-#else
-#error "SCORE603E BSPSTART.C -- what ROM monitor are you using"
-#endif
-
 }
 
 /*

@@ -1,3 +1,12 @@
+2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* Makefile.am, preinstall.am, PCI_bus/universe.c, console/console.c,
+	include/bsp.h, irq/FPGA.c, irq/irq.c, startup/Hwr_init.c,
+	startup/bspstart.c, startup/vmeintr.c: Modifications required to run
+	on hardware. Some cleanup.
+	* include/irq-config.h: New file.
+	* startup/spurious.c: Removed.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove noinst_PROGRAMS (Unused).

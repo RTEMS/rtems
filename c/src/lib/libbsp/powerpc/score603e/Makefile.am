@@ -34,25 +34,32 @@ console_SOURCES = console/85c30.c console/85c30.h console/console.c \
     console/tbl85c30.c console/consolebsp.h
 
 include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
-    PCI_bus/PCI.h \
-    ../../powerpc/shared/residual/residual.h \
-    ../../powerpc/shared/residual/pnp.h \
-    ../../powerpc/shared/openpic/openpic.h \
-    ../../powerpc/shared/console/consoleIo.h
+	PCI_bus/PCI.h \
+	../../powerpc/shared/residual/residual.h \
+	../../powerpc/shared/residual/pnp.h \
+	../../powerpc/shared/openpic/openpic.h \
+	../../powerpc/shared/console/consoleIo.h \
+	../../shared/include/irq-generic.h \
+	include/irq-config.h 
+
 pci_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c  PCI_bus/PCI.c  PCI_bus/universe.c
 
 include_bsp_HEADERS += irq/irq.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-irq_SOURCES = irq/FPGA.c irq/irq.c ../../powerpc/shared/irq/irq_asm.S
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
+	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+irq_SOURCES = include/irq-config.h \
+    irq/FPGA.c irq/irq.c       \
+    ../../shared/src/irq-generic.c       \
+    ../../powerpc/shared/irq/irq_asm.S
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
 vectors_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
+    ../../shared/include/irq-generic.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
     ../../shared/vmeUniverse/VME.h \
     vme/VMEConfig.h \

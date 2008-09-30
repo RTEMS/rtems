@@ -80,70 +80,10 @@ void init_RTC(void)
 
 void init_PCI(void)
 {
-#if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
-  uint32_t         value;
-
- /*
-  * NOTE:  Accessing any memory location not mapped by the BAT
-  * registers will cause a TLB miss exception.
-  * Set the DBAT1 to be configured for 256M of PCI MEM
-  * at 0xC0000000 with Write-through and Guarded Attributed and
-  * read/write access allowed
-  */
-
- /* load DBAT1U (spr538) - 256Mbytes, User, Super */
-  value = SCORE603E_PCI_MEM_BASE | 0x1FFF;
-  asm volatile(
-    "isync;"
-    "mtspr 538, %0"
-    : "=r" (value)
-    : "0" (value)
-  );
-
-  /* load DBAT1L (spr539) - Write-through, Guarded and Read/Write */
-  value = SCORE603E_PCI_MEM_BASE | 0x0002;
-  asm volatile (
-      "mtspr 539, %0;"
-      "isync"
-      : "=r" (value)
-      : "0" (value)
-  );
-
-#elif (SCORE603E_USE_DINK)
   /* DINK Monitor setsup and uses all 4 BAT registers.  */
   /* The fourth BAT register can be modified to access this area */
 
-#if (0)
- /*
-  * NOTE:  Accessing any memory location not mapped by the BAT
-  * registers will cause a TLB miss exception.
-  * Set the DBAT3 to be configured for 256M of PCI MEM
-  * at 0xC0000000 with Write-through and Guarded Attributed and
-  * read/write access allowed
-  */
-
- /* load DBAT3U (spr542) - 256Mbytes, User, Super */
-  value = SCORE603E_PCI_MEM_BASE | 0x1FFF;
-  asm volatile(
-    "isync;"
-    "mtspr 542, %0"
-    : "=r" (value)
-    : "0" (value)
-  );
-
-  /* load DBAT3L (spr543) - Write-through, Guarded and Read/Write */
-  value = SCORE603E_PCI_MEM_BASE | 0x0002;
-  asm volatile (
-      "mtspr 543, %0;"
-      "isync"
-      : "=r" (value)
-      : "0" (value)
-  );
-#endif
-
-#else
-#error "SCORE603E BSPSTART.C -- what ROM monitor are you using"
-#endif
+  printk("init_PCI:\n");
 }
 
 #define PPC_Get_HID0( _value ) \
