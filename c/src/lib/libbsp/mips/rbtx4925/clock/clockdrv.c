@@ -109,4 +109,4 @@
   } while(0)
 
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

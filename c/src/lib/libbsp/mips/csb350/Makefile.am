@@ -36,7 +36,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c
 # clock
-libbsp_a_SOURCES += clock/clockdrv.c
+libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
 # timer

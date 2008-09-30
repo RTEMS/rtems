@@ -39,12 +39,10 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     startup/inittlb.c \
     startup/idtmem.S startup/idttlb.S startup/exception.S
 
-# FIXME: clockdrv.c and clockdrv_shell.c are structurally flawed
-clock_CPPFLAGS = -I$(srcdir)/../../shared
-EXTRA_DIST = ../../mips/shared/clockdrv_shell.c
+# clock
 noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(clock_CPPFLAGS)
+clock_rel_SOURCES = clock/clockdrv.c ../../../shared/clockdrv_shell.h
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # console

@@ -78,4 +78,4 @@ void au1x00_clock_init(void)
 
 #define Clock_driver_support_shutdown_hardware()
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
