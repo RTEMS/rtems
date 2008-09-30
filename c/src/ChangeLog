@@ -41,12 +41,12 @@
 
 2008-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* c/src/libchip/rtc/icm7170.c, c/src/libchip/rtc/m48t08.c,
+	* libchip/rtc/icm7170.c, libchip/rtc/m48t08.c,
 	c/src/libchip/rtc/rtc.h:  Include required header files.  Some internal
 	functions have now static linkage type.  Added constant qualifier to
 	operations table and read-only function parameters.
 
-	* c/src/libchip/serial/ns16550.c, c/src/libchip/serial/ns16550_p.h,
+	* libchip/serial/ns16550.c, libchip/serial/ns16550_p.h,
 	c/src/libchip/serial/serial.h:  Include required header files.  Removed
 	support for old PowerPC exception handling.  Various fixes for
 	interrupt related routines.  Added support for BSPs with IRQ extension
