@@ -1,3 +1,7 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shgdb/score/ispshgdb.c: Add dummy _CPU_ISR_install_vector.
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, sh7032/score/cpu_asm.c,
