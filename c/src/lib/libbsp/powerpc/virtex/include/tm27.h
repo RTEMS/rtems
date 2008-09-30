@@ -21,7 +21,7 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) set_vector( (handler), PPC_IRQ_SCALL, 1 )
+#define Install_tm27_vector( handler ) /* set_vector( (handler), PPC_IRQ_SCALL, 1 ) */
 
 #define Cause_tm27_intr()  asm volatile ("sc")
 
