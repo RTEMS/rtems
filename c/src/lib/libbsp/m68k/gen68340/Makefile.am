@@ -23,7 +23,7 @@ include_HEADERS += include/m68340.h
 include_HEADERS += include/m68340.inc
 include_HEADERS += include/m68349.inc
 
-EXTRA_DIST = start/start.S start/startfor340only.S
+EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
