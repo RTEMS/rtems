@@ -1,5 +1,10 @@
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sh7750/score/ispsh7750.c, shgdb/score/ispshgdb.c: Fine tune
+	conditional so _CPU_ISR_install_vector is in CPU Kit now.
+
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* shgdb/score/ispshgdb.c: Add dummy _CPU_ISR_install_vector.
 
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>

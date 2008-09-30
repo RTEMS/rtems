@@ -56,32 +56,6 @@
  * agent */
 void *_VBR_Saved;
 
-/*PAGE
- *
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-   *old_handler = _ISR_Vector_table[vector];
-   _ISR_Vector_table[vector] = new_handler;
-}
-
-
 #define __STRINGIFY1__(x) #x
 #define __STRINGIFY__(x) __STRINGIFY1__(x)
 
