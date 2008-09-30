@@ -22,21 +22,10 @@
  */
 void initialize_PCI_bridge (void)
 {
-#if (!SCORE603E_USE_DINK)
-  uint16_t         mask, shift, data;
-
-  shift = SCORE603E_85C30_0_IRQ - Score_IRQ_First;
-  mask = 1 << shift;
-
-  shift = SCORE603E_85C30_1_IRQ - Score_IRQ_First;
-  mask  = mask & (1 << shift);
-
-  data = *SCORE603E_FPGA_MASK_DATA;
-  data = ~mask;
-
-  *SCORE603E_FPGA_MASK_DATA = data;
-#endif
-
+  /* Note: Accept DINKs setup of the PCI Bridge and don't 
+   *       change anything.
+   */
+  printk("initialize_PCI_bridge: \n");
 }
 
 void set_irq_mask(
@@ -93,9 +82,7 @@ void init_irq_data_register(void)
   uint32_t         index;
   uint32_t         i;
 
-#if (SCORE603E_USE_DINK)
   set_irq_mask( 0xffff );
-#endif
 
   /*
    * Clear any existing interupts from the vector data register.

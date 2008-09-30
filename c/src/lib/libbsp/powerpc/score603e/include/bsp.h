@@ -34,6 +34,8 @@ extern "C" {
 #if (HAS_PMC_PSC8)
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4 + 4)
 #else
+/* XXXXX FIX THIS */
+#error "MUST HAVE PSC8 SET FOR BOEING CODE"
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4)
 #endif
 
@@ -75,7 +77,7 @@ extern "C" {
                                SCORE603E_BRD_FLASH_DISABLE_MASK) 
 
 #define Processor_Synchronize() \
-  asm(" eieio ")
+  asm volatile(" eieio ")
 
 
 /*
@@ -94,17 +96,6 @@ extern int   CPU_PPC_CLICKS_PER_MS;
 extern unsigned int BSP_mem_size;
 
 /* functions */
-
-/*
- * spurious.c
- */
-rtems_isr bsp_stub_handler(
-   rtems_vector_number trap
-);
-rtems_isr bsp_spurious_handler(
-   rtems_vector_number trap
-);
-void bsp_spurious_initialize();
 
 /*
  * genvec.c

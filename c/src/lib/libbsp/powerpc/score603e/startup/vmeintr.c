@@ -26,18 +26,12 @@ void VME_interrupt_Disable (
   VME_interrupt_Mask                mask                        /* IN  */
 )
 {
-  volatile uint8_t          *VME_interrupt_enable;
-  uint8_t          value;
+  volatile uint8_t  *VME_interrupt_enable;
+  uint8_t           value;
 
-#if 0
-  VME_interrupt_enable = ACC_VIE;
-#else
   VME_interrupt_enable = 0;
-#endif
   value = *VME_interrupt_enable;
-
   value &= ~mask;  /* turn off interrupts for all levels in mask */
-
   *VME_interrupt_enable = value;
 }
 
@@ -54,14 +48,8 @@ void VME_interrupt_Enable (
   volatile uint8_t          *VME_interrupt_enable;
   uint8_t          value;
 
-#if 0
-  VME_interrupt_enable = ACC_VIE;
-#else
   VME_interrupt_enable = 0;
-#endif
   value = *VME_interrupt_enable;
-
   value |= mask;  /* turn on interrupts for all levels in mask */
-
   *VME_interrupt_enable = value;
 }

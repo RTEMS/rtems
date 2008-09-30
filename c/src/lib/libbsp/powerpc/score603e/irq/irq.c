@@ -140,6 +140,27 @@ printk(" BSP_install_rtems_shared_irq_handler %d\n", irq->name );
 }
 
 /*
+ * This function disables a given XXX interrupt
+ */
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqLine)
+{
+  /* XXX FIX ME!!!! */
+
+  printk("bsp_interrupt_vector_disable: 0x%x\n", irqLine );
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqLine)
+{
+  /* XXX FIX ME!!!! */
+  printk("bsp_interrupt_vector_enable: 0x%x\n", irqLine );
+
+  return RTEMS_SUCCESSFUL;
+}
+
+
+
+/*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
  */
 
@@ -178,18 +199,23 @@ printk(" BSP_install_rtems_irq_handler %d\n", irq->name );
       /*
        * Enable interrupt 
        */
+      printk("is_pci_irq = TRUE - FIX THIS!\n");
     }
 
     if (is_processor_irq(irq->name)) {
       /*
        * Enable exception at processor level
        */
+      printk("is_processor_irq = TRUE : Fix This\n");
     }
+
     /*
      * Enable interrupt on device
      */
-	if (irq->on)
+    if (irq->on) {
+        printk("Call 0x%x\n", irq->on );
     	irq->on(irq);
+    }
 
     rtems_interrupt_enable(level);
 
@@ -415,7 +441,6 @@ int C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned msr;
   register unsigned new_msr;
 
-printk(" C_dispatch_irq_handler %d\n", excNum);
   if (excNum == ASM_DEC_VECTOR) {
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
@@ -468,3 +493,21 @@ printk(" _ThreadProcessSignalsFromIrq \n");
    * This will include DEBUG session requested from keyboard...
    */
 }
+
+rtems_status_code bsp_interrupt_facility_initialize( void)
+{
+  /* Install exception handler */
+  if (ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+  if (ppc_exc_set_handler( ASM_DEC_VECTOR, C_dispatch_irq_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+  if (ppc_exc_set_handler( ASM_E300_SYSMGMT_VECTOR, C_dispatch_irq_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+
+  return RTEMS_SUCCESSFUL;
+}
+
+

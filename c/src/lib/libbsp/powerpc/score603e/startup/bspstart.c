@@ -47,7 +47,7 @@ unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score boa
 /*
  * Time base divisior (how many tick for 1 second).
  */
-unsigned int BSP_time_base_divisor = 1000;  /* XXX - Just a guess */
+unsigned int BSP_time_base_divisor = 4000;
 
 extern unsigned long __rtems_end[];
 
@@ -79,17 +79,6 @@ void initialize_PMC();
 
 void bsp_predriver_hook(void)
 {
-  #if DEBUG
-    printk("bsp_predriver_hook: init_RTC\n");
-  #endif
-  init_RTC();
-  init_PCI();
-  initialize_universe();
-
-  #if DEBUG
-    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
-  #endif
-  initialize_PCI_bridge ();
 
 #if (HAS_PMC_PSC8)
   #if DEBUG
@@ -97,29 +86,6 @@ void bsp_predriver_hook(void)
   #endif
   initialize_PMC();
 #endif
-
-#if 0
- /*
-  * Initialize Bsp General purpose vector table.
-  */
-  #if DEBUG
-    printk("bsp_predriver_hook: initialize_external_exception_vector\n");
-  #endif
- initialize_external_exception_vector();
-#endif
-
-#if (0)
-  /*
-   * XXX - Modify this to write a 48000000 (loop to self) command
-   *       to each interrupt location.  This is better for debug.
-   */
-  #if DEBUG
-    printk("bsp_predriver_hook: bsp_spurious_initialize\n");
-  #endif
- bsp_spurious_initialize();
-#endif
-
-  ShowBATS();
 
   #if DEBUG
     printk("bsp_predriver_hook: End of routine\n");
@@ -133,64 +99,35 @@ void bsp_predriver_hook(void)
  */
 
 void initialize_PMC() {
-  volatile uint32_t         *PMC_addr;
-  uint8_t          data;
-
-#if (0) /* First Values sent */
-  /*
-   * set PMC base address.
-   */
-  PMC_addr  = BSP_PCI_DEVICE_ADDRESS( 0x14 );
-  *PMC_addr = (BSP_PCI_REGISTER_BASE >> 24) & 0x3f;
+  volatile uint32_t     *PMC_addr;
+  uint32_t               data;
 
   /*
    * Clear status, enable SERR and memory space only.
    */
-  PMC_addr = BSP_PCI_DEVICE_ADDRESS( 0x4 );
-  *PMC_addr = 0x0201ff37;
-
-  /*
-   * Bit 0 and 1 HI cause Medium Loopback to occur.
-   */
-  PMC_addr = (volatile uint32_t*)
-        BSP_PMC_SERIAL_ADDRESS( 0x100000 );
-  data = *PMC_addr;
-  /*   *PMC_addr = data | 0x3;  */
-  *PMC_addr = data & 0xfc;
-
-#endif
-
-#if (1)
-
-  /*
-   * Clear status, enable SERR and memory space only.
-   */
-  #if DEBUG
-    printk("initialize_PMC: set Device Address 0x4 \n");
-  ShowBATS();
-  #endif
   PMC_addr = BSP_PCI_DEVICE_ADDRESS( 0x4 );
   *PMC_addr = 0x020080cc;
+  #if DEBUG
+    printk("initialize_PMC: 0x%x = 0x%x\n", PMC_addr, 0x020080cc);
+  #endif
 
   /*
    * set PMC base address.
    */
-  #if DEBUG
-    printk("initialize_PMC: set Device Address 0x14 \n");
-  ShowBATS();
-  #endif
   PMC_addr  = BSP_PCI_DEVICE_ADDRESS( 0x14 );
   *PMC_addr = (BSP_PCI_REGISTER_BASE >> 24) & 0x3f;
-
   #if DEBUG
-    printk("initialize_PMC: set PMC Serial Address 0x100000\n");
+    printk("initialize_PMC: 0x%x = 0x%x\n", PMC_addr, ((BSP_PCI_REGISTER_BASE >> 24) & 0x3f));
   #endif
+
    PMC_addr = (volatile uint32_t*)
       BSP_PMC_SERIAL_ADDRESS( 0x100000 );
   data = *PMC_addr;
+  #if DEBUG
+    printk("initialize_PMC: Read 0x%x (0x%x)\n", PMC_addr, data );
+    printk("initialize_PMC: Read 0x%x (0x%x)\n", PMC_addr, data & 0xfc );
+  #endif
   *PMC_addr = data & 0xfc;
-
-#endif
 }
 
 /*PAGE
@@ -247,7 +184,6 @@ void bsp_start( void )
    */
   #if DEBUG
     printk("bsp_start: Zero out lots of memory\n");
-    ShowBATS();
   #endif
 
   memset(
@@ -266,6 +202,8 @@ void bsp_start( void )
    */
   myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
+  printk("Cpu: 0x%x  Revision: %d\n", myCpu, myCpuRevision);
+  printk("Cpu %s\n", get_ppc_cpu_type_name(myCpu) );
 
   /*
    * Initialize the interrupt related settings.
@@ -279,75 +217,27 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-printk("ppc_exc_initialize\n");
   ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
-
-  /*
-   *  There are multiple ROM monitors available for this board.
-   */
-#if (SCORE603E_USE_SDS)
   #if DEBUG
-    printk("bsp_start: USE SDS\n");
+    printk("bsp_predriver_hook: init_RTC\n");
   #endif
 
+/*   init_RTC(); */
+  init_PCI();
+  initialize_universe();
 
-  /*
-   * Write instruction for Unconditional Branch to ROM vector.
-   */
-
-   Code = 0x4bf00002;
-   for (Address = 0x100; Address <= 0xe00; Address += 0x100) {
-     A_Vector = (uint32_t*)Address;
-     Code = 0x4bf00002 + Address;
-     *A_Vector = Code;
-   }
-
-   for (Address = 0x1000; Address <= 0x1400; Address += 0x100) {
-     A_Vector = (uint32_t*)Address;
-     Code = 0x4bf00002 + Address;
-     *A_Vector = Code;
-   }
-
-  msr_value = 0x2030;
-
-#elif (SCORE603E_USE_OPEN_FIRMWARE)
   #if DEBUG
-    printk("bsp_start: USE OPEN FIRMWARE\n");
+    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
   #endif
-  msr_value = 0x2030;
+  initialize_PCI_bridge ();
 
-#elif (SCORE603E_USE_NONE)
-  #if DEBUG
-    printk("bsp_start: USE NONE\n");
-  #endif
-  msr_value = 0x2030;
-  _CPU_MSR_SET( msr_value );
-  bsp_set_trap_vectors();
-
-#elif (SCORE603E_USE_DINK)
-  #if DEBUG
-    printk("bsp_start: USE DINK\n");
-  #endif
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
 
-  /*
-   * Override the DINK error on a Decrementor interrupt.
-   */
-  /* org    dec_vector  - rfi */
-  ptr = (uint32_t*)0x900;
-  *ptr = 0x4c000064;
-
-#else
-  #if DEBUG
-    printk("bsp_start: ERROR unknow ROM Monitor\n");
-  #endif
-#error "SCORE603E BSPSTART.C -- what ROM monitor are you using"
-#endif
 
   _CPU_MSR_SET( msr_value );
 
@@ -369,6 +259,12 @@ printk("ppc_exc_initialize\n");
     printk("bsp_start: END PPC_USE_DATA_CACHE\n");
   #endif
 #endif
+
+  /* Initalize interrupt support */
+  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
+    BSP_panic( "Cannot intitialize interrupt support\n");
+  }
+
   #if DEBUG
     printk("bsp_start: end BSPSTART\n");
   ShowBATS();

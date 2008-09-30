@@ -93,6 +93,14 @@ $(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
 
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
+$(PROJECT_INCLUDE)/bsp/irq-config.h: include/irq-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-config.h
+
 $(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
@@ -116,6 +124,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 $(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
+
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
 
 $(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
