@@ -126,4 +126,4 @@ int rtems_bsp_cpu_load_percentage(void)
            0;
 }
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

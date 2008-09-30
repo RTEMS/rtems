@@ -40,7 +40,7 @@ libbsp_a_SOURCES += startup/alloc360.c ../../shared/bspclean.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
-libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
 # timer

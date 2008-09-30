@@ -40,7 +40,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
-libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/console.c
 # debugio
@@ -48,22 +48,10 @@ libbsp_a_SOURCES += console/debugio.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
-#if HAS_NETWORKING
-#network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-#noinst_PROGRAMS += network.rel
-#network_rel_SOURCES = network/network.c
-#network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-#    $(network_CPPFLAGS)
-#network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-#endif
-
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5223x/cachepd.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
-#if HAS_NETWORKING
-#libbsp_a_LIBADD += network.rel
-#endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

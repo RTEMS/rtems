@@ -60,4 +60,4 @@
                             MCF5235_PIT_PCSR_EN;                         \
     } while (0)
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

@@ -95,4 +95,4 @@ static void Clock_driver_support_initialize_hardware(void)
   s_pcntrAtTick = MCF_PIT1_PCNTR;
 }
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

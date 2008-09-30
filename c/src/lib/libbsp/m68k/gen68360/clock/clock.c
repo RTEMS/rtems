@@ -100,4 +100,4 @@ extern int m360_clock_rate;
         m360.pitr |= divisor;                                                 \
     } while (0)
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
