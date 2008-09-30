@@ -1,5 +1,9 @@
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* acinclude.m4: simsh4 folded into shsim.
+
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* simsh4/.cvsignore, simsh4/ChangeLog, simsh4/Makefile.am,
 	simsh4/README, simsh4/bsp_specs, simsh4/configure.ac,
 	simsh4/preinstall.am, simsh4/clock/ckinit.c,

@@ -10,8 +10,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([gensh4]);;
   shsim )
     AC_CONFIG_SUBDIRS([shsim]);;
-  simsh4 )
-    AC_CONFIG_SUBDIRS([simsh4]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
