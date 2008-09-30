@@ -1,5 +1,10 @@
 2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* clock/clockdrv.c: include "../../../shared/clockdrv_shell.h".
+	* Makefile.am: Reflect changes above.
+
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* console/defaultfont.c: Remove (Renamed into console/defaultfont.h).
 	* console/defaultfont.h: New (Renamed from console/defaultfont.c).
 	* Makefile.am, console/conio.c: Reflect renamer.

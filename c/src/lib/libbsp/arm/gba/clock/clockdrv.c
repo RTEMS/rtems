@@ -124,4 +124,4 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 }
 
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

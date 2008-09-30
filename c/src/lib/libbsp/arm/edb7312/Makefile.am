@@ -39,7 +39,7 @@ libbsp_a_SOURCES += ../../shared/bsppost.c ../../shared/bsplibc.c \
     startup/bspreset.c ../../shared/gnatinstallhandler.c
 
 # clock
-libbsp_a_SOURCES += clock/clockdrv.c
+libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/uart.c ../../shared/console.c
 # timer
