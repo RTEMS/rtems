@@ -1,3 +1,8 @@
+2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* custom/score603e.cfg: Modifications required to run on hardware. Some
+	cleanup.
+
 2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1314/bsps
