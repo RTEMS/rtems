@@ -21,7 +21,7 @@
 | this file contains the console driver                           |
 \*===============================================================*/
 /*
- * Timer_init()
+ * benchmark_timer_initialize()
  *
  * Use TIMER 1 and TIMER 2 for Timing Test Suite
  *
@@ -52,8 +52,10 @@
 #include <bsp.h>
 #include <mpc8xx.h>
 
+bool benchmark_timer_find_average_overhead;
+
 void
-Timer_initialize (void)
+benchmark_timer_initialize (void)
 {
 	/*
 	 * Reset timers 1 and 2
@@ -84,8 +86,7 @@ Timer_initialize (void)
 /*
  * Return timer value in microsecond units
  */
-int
-Read_timer (void)
+int benchmark_timer_read(void)
 {
   int retval;
   retval = *(uint32_t*)&m8xx.tcn1;
@@ -93,17 +94,9 @@ Read_timer (void)
   return retval;
 }
 
-/*
- * Empty function call used in loops to measure basic cost of looping
- * in Timing Test Suite.
- */
-rtems_status_code
-Empty_function (void)
+void benchmark_timer_disable_subtracting_average_overhead(
+  bool find_flag
+)
 {
-	return RTEMS_SUCCESSFUL;
-}
-
-void
-Set_find_average_overhead(bool find_flag)
-{
+  benchmark_timer_find_average_overhead = find_flag;
 }

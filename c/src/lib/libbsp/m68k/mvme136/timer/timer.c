@@ -1,18 +1,4 @@
-/*  Timer_init()
- *
- *  This routine initializes the Z8036 timer on the MVME136 board.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: This routine will not work if the optimizer is enabled
- *        for some compilers.  The multiple writes to the Z8036
- *        may be optimized away.
- *
- *        It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -53,11 +53,11 @@
 extern uint32_t   mips_read_timer( void );
 
 static bool benchmark_timer_find_average_overhead;
-static uint32_t   Timer_initial_value = 0;
+static uint32_t   benchmark_timer_initial_value = 0;
 
 void benchmark_timer_initialize( void )
 {
-   Timer_initial_value = mips_read_timer();
+   benchmark_timer_initial_value = mips_read_timer();
   /*
    *  Somehow start the timer
    */
@@ -90,11 +90,11 @@ int benchmark_timer_read( void )
    */
 
   clicks = mips_read_timer();   /* XXX: read some HW here */
-  if (clicks < Timer_initial_value)
+  if (clicks < benchmark_timer_initial_value)
   {
       clicks += TIMER_MAX_VALUE;
   }
-  clicks -= Timer_initial_value;
+  clicks -= benchmark_timer_initial_value;
 
   /*
    *  Total is calculated by taking into account the number of timer overflow

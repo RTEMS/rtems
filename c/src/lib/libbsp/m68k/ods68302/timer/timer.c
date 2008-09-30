@@ -1,13 +1,6 @@
-/*  Timer_init()
+/*
  *
  *  This routine initializes TIMER 2 for an MC68302.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

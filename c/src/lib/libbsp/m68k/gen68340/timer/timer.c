@@ -1,6 +1,4 @@
 /*
- * Timer_init()
- *
  * ATTENTION: AS MC68349 has no built-in Timer, the following code doesn't work
  * 	      in a MC68349. You can't use FIFO full mode for the moment, but
  *	      it should be easy to fix this by using an external timer

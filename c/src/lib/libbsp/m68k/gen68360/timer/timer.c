@@ -1,8 +1,5 @@
 /*
- * Timer_init()
- *
  * Use TIMER 1 and TIMER 2 for Timing Test Suite
- *
  * The hardware on the MC68360 makes these routines very simple.
  *
  * Based on the `gen68302' board support package, and covered by the

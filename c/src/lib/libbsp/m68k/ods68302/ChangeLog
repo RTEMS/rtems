@@ -1,3 +1,7 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* timer/timer.c: Eliminate uses of old benchmark timer names.
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/m68k-stub.c: Convert to "bool".

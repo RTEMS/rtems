@@ -1,17 +1,5 @@
-/*  Timer_init()
- *
+/*
  *  This routine initializes the Tick Timer 1 on the MVME162 board.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: This routine will not work if the optimizer is enabled
- *        for some compilers.  The multiple writes
- *        may be optimized away.
- *
- *        It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
