@@ -1,3 +1,18 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* simsh4/.cvsignore, simsh4/ChangeLog, simsh4/Makefile.am,
+	simsh4/README, simsh4/bsp_specs, simsh4/configure.ac,
+	simsh4/preinstall.am, simsh4/clock/ckinit.c,
+	simsh4/console/console.c, simsh4/include/.cvsignore,
+	simsh4/include/bsp.h, simsh4/include/coverhd.h,
+	simsh4/include/ramdisk.h, simsh4/include/syscall.h,
+	simsh4/include/tm27.h, simsh4/start/start.S,
+	simsh4/startup/hw_init.c, simsh4/startup/linkcmds,
+	simsh4/startup/linkcmds-le, simsh4/startup/linkcmds-le.coff,
+	simsh4/timer/timer.c, simsh4/tools/.cvsignore,
+	simsh4/tools/ChangeLog, simsh4/tools/Makefile.am,
+	simsh4/tools/configure.ac, simsh4/tools/runtest.in: Removed.
+
 2008-09-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: Removed.
