@@ -1,3 +1,8 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c: Fine tune conditional so _CPU_ISR_install_vector is in CPU Kit
+	now.
+
 2008-09-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Move duplicated context switch code to score/cpu. This
