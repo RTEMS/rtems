@@ -57,11 +57,8 @@ dist_project_lib_DATA += ../shared/startup/linkcmds
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
-build_date.c::
-	echo 'const char *BSP_build_date="'`date`'";' > $@
-
 # startup
-libbsp_a_SOURCES += startup/bspstart.c build_date.c \
+libbsp_a_SOURCES += startup/bspstart.c \
     startup/misc.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/zerobss.c \
