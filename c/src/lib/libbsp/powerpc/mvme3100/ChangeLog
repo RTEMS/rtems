@@ -1,3 +1,8 @@
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove build_date.c.
+	* startup/bspstart.c: Remove BSP_build_date.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate *_SOURCES.
