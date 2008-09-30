@@ -1,3 +1,8 @@
+2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* custom/score603e.cfg: Modifications required to run on hardware. Some
+	cleanup.
+
 2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/m5484FireEngine.cfg:
