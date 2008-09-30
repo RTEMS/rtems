@@ -1,3 +1,7 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am: Add timer driver stub.
+
 2008-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* ssp/ssp.c, misc/dma.c, include/dma.h, include/ssp.h: New files.

@@ -24,6 +24,7 @@ include_HEADERS = include/bsp.h
 nodist_include_HEADERS = include/bspopts.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
+nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 include_bsp_HEADERS = ../../shared/include/utility.h \
 	../../shared/include/irq-generic.h \
@@ -91,6 +92,8 @@ libbsp_a_SOURCES += clock/clock-config.c \
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
+# Timer
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
 # Misc
 libbsp_a_SOURCES += misc/system-clocks.c \
