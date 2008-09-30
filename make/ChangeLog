@@ -1,5 +1,10 @@
 2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/m5484FireEngine.cfg:
+	Eliminate RTEMS_54XX_DERIVATE (Unused).
+
+2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/pghplus.cfg, custom/tqm8xx.cfg, custom/tqm8xx_stk8xx.cfg:
 	Eliminate RTEMS_TQM_MODEL (Unused).
 
