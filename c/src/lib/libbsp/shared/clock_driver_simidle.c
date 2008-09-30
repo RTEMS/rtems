@@ -28,7 +28,7 @@ volatile bool clock_driver_enabled;
     clock_driver_enabled = false; \
   } while (0)
 
-#include "clockdrv_shell.c"
+#include "clockdrv_shell.h"
 
 /*
  *  Since there is no interrupt on this simulator, let's just

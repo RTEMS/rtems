@@ -1,5 +1,10 @@
 2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* clockdrv_shell.c: Empty file. Add warning to not use this file.
+	* clock_driver_simidle.c: include clockdrv_shell.h.
+
+2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* clockdrv_shell.h: New (Copied from clockdrv_shell.c).
 
 2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
