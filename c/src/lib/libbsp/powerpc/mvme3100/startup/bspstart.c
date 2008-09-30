@@ -60,8 +60,6 @@ SPR_RW(SPRG1)
 static char cmdline_buf[CMDLINE_BUF_SIZE] = {0};
 char *BSP_commandline_string         = cmdline_buf;
 
-extern const char *BSP_build_date;
-
 /*
  * Vital Board data Start using DATA RESIDUAL
  */
@@ -340,8 +338,6 @@ VpdBufRec          vpdData [] = {
 		/* enable checking for memory-select errors */
 		_ccsr_wr32(0x2e44, _ccsr_rd32(0x2e44) & ~1 );
 	}
-
-	printk("Build Date: %s\n",BSP_build_date);
 
 	BSP_vpdRetrieveFields( vpdData );
 
