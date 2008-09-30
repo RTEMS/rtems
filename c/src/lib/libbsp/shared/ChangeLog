@@ -1,3 +1,7 @@
+2008-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: Renamed various macros.
+
 2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* clockdrv_shell.c: Empty file. Add warning to not use this file.

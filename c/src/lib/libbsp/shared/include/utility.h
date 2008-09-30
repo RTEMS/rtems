@@ -23,29 +23,38 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GET_REG_FIELD( reg, mask, shift) \
-  (((reg) & (mask)) >> (shift))
+#define GET_FIELD( val, mask, shift) \
+  (((val) & (mask)) >> (shift))
 
-#define SET_REG_FIELD( reg, val, mask, shift) \
-  (((reg) & ~(mask)) | (((val) << (shift)) & (mask)))
+#define SET_FIELD( val, field, mask, shift) \
+  (((val) & ~(mask)) | (((field) << (shift)) & (mask)))
 
-#define REG_FLAG_IS_SET( reg, flag) \
-  (((reg) & (flag)) != 0)
+#define CLEAR_FIELD( val, mask) \
+  ((val) & ~(mask))
 
-#define REG_FLAG_IS_CLEARED( reg, flag) \
-  (((reg) & (flag)) == 0)
+#define IS_FLAG_SET( val, flag) \
+  (((val) & (flag)) != 0)
 
-#define SET_REG_FLAG( reg, flag) \
-  ((reg) | (flag))
+#define IS_FLAG_CLEARED( val, flag) \
+  (((val) & (flag)) == 0)
 
-#define CLEAR_REG_FLAG( reg, flag) \
-  ((reg) & ~(flag))
+#define ARE_FLAGS_SET( val, flags) \
+  (((val) & (flags)) == (flags))
 
-#define SET_REG_FLAGS( reg, flags, mask) \
-  (((reg) & ~(mask)) | (flags))
+#define ARE_FLAGS_CLEARED( val, flags) \
+  (((val) & (flags)) == 0)
 
-#define CLEAR_REG_FLAGS( reg, flags) \
-  ((reg) & ~(flags))
+#define SET_FLAG( val, flag) \
+  ((val) | (flag))
+
+#define CLEAR_FLAG( val, flag) \
+  ((val) & ~(flag))
+
+#define SET_FLAGS( val, flags) \
+  ((val) | (flags))
+
+#define CLEAR_FLAGS( val, flags) \
+  ((val) & ~(flags))
 
 #ifdef __cplusplus
 }
