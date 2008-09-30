@@ -60,7 +60,8 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # clock
-libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c
+libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c \
+    ../../../shared/clockdrv_shell.h
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = console/keyboard.h console/kd.h \
