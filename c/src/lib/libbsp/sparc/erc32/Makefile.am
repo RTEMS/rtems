@@ -46,7 +46,7 @@ libbsp_a_SOURCES += console/console.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
 # timer
 libbsp_a_SOURCES += timer/timer.c
 

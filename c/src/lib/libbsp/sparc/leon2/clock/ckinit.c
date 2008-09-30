@@ -72,4 +72,4 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

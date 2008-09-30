@@ -64,7 +64,7 @@ libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
 libbsp_a_SOURCES += console/console.c console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
 # AMBA PnP Scanning
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 # PCI

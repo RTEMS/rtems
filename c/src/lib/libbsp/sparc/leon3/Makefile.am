@@ -45,17 +45,16 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 
+# amba
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
-
-# amba
 libbsp_a_SOURCES += amba/amba.c ../../sparc/shared/amba/ambapp.c
 # console
 libbsp_a_SOURCES += console/console.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += clock/ckinit.c ../../../shared/clockdrv_shell.h
 
 # PCI
 include_HEADERS += ../../sparc/shared/include/pci.h

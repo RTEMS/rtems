@@ -87,5 +87,5 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
     ); \
   } while (0)
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
 
