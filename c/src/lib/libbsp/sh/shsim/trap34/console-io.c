@@ -19,11 +19,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define SYS_exit        1
-#define SYS_read        3
-#define SYS_write       4
+#include <syscall.h>
 
-int errno ;
+int errno;
 
 extern int __trap34(int, int, void*, int );
 

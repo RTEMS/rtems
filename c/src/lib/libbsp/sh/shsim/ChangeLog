@@ -1,3 +1,11 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, include/bsp.h, include/tm27.h,
+	trap34/console-io.c: Now builds cleanly for runs for SH1, SH2, and
+	SH4.
+	* include/syscall.h: New file.
+	* include/gdbsci.h: Removed.
+
 2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 

@@ -11,13 +11,13 @@ include_bspdir = $(includedir)/bsp
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
+include_HEADERS += include/syscall.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
-include_HEADERS += include/gdbsci.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
@@ -50,6 +50,8 @@ libbsp_a_SOURCES += trap34/console-io.c trap34/console-support.S \
     ../../shared/dummy_printk_support.c
 # console
 libbsp_a_SOURCES += ../../shared/console-polled.c
+# timer
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel

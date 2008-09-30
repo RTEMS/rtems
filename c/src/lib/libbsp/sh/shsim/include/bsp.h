@@ -37,7 +37,6 @@ extern "C" {
 /*
  * FIXME: One of these would be enough.
  */
-#include <gdbsci.h>
 #include <rtems/devnull.h>
 
 /* Constants */

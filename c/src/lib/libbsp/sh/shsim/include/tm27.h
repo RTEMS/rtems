@@ -27,5 +27,6 @@
 
 #define Cause_tm27_intr() /* empty */
 #define Clear_tm27_intr() /* empty */
+#define Lower_tm27_intr() /* empty */
 
 #endif
