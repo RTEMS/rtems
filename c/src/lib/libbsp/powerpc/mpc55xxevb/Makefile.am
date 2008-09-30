@@ -30,8 +30,10 @@ libbsp_a_SOURCES =
 
 # Includes
 include_HEADERS = include/bsp.h
+include_HEADERS += include/tm27.h
 
-nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h
+nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
+    ../../shared/include/coverhd.h
 include_bsp_HEADERS = include/mpc55xxevb.h \
     include/irq-config.h \
     ../../shared/include/irq-generic.h \
@@ -48,6 +50,9 @@ libbsp_a_SOURCES += ../shared/clock/clock.c
 # irq_generic
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
     ../../shared/src/irq-legacy.c
+
+# tests
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
 # tests
 libbsp_a_SOURCES += tests/tests.c startup/sd-card-init.c
