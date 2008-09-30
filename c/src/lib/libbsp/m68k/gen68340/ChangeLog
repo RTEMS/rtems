@@ -1,3 +1,9 @@
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 
+	of building libbspstart.a, using automake-rules.
+	* start/startfor340only.S: Remove (Unused).
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate *_SOURCES.
