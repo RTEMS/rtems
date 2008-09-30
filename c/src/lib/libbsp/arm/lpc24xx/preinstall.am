@@ -85,6 +85,14 @@ $(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
 
+$(PROJECT_INCLUDE)/bsp/ssp.h: include/ssp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ssp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ssp.h
+
+$(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h
+
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)

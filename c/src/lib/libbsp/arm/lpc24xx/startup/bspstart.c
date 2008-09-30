@@ -22,6 +22,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/dma.h>
 #include <bsp/irq.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/lpc24xx.h>
@@ -61,23 +62,26 @@ void bsp_start( void)
       /* Spin forever */
     }
   }
+
+  /* DMA */
+  lpc24xx_dma_initialize();
 }
 
 #define ULSR_THRE 0x00000020U
 
-static void my_BSP_output_char( char c)
+static void lpc24xx_BSP_output_char( char c)
 {
-  while (REG_FLAG_IS_CLEARED( U0LSR, ULSR_THRE)) {
+  while (IS_FLAG_CLEARED( U0LSR, ULSR_THRE)) {
     /* Wait */
   }
   U0THR = c;
 
   if (c == '\n') {
-    while (REG_FLAG_IS_CLEARED( U0LSR, ULSR_THRE)) {
+    while (IS_FLAG_CLEARED( U0LSR, ULSR_THRE)) {
       /* Wait */
     }
     U0THR = '\r';
   }
 }
 
-BSP_output_char_function_type BSP_output_char = my_BSP_output_char;
+BSP_output_char_function_type BSP_output_char = lpc24xx_BSP_output_char;

@@ -1,3 +1,17 @@
+2008-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* ssp/ssp.c, misc/dma.c, include/dma.h, include/ssp.h: New files.
+
+	* Makefile.am, preinstall.am, README: Update.
+
+	* include/irq.h: Fixed typos.
+
+	* include/lpc24xx.h: New defines and types.  Converted to UNIX line
+	endings.
+
+	* misc/system-clocks.c, startup/bspstart.c: Update for utility.h
+	changes.
+
 2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/clock-config.c: include "../../../shared/clockdrv_shell.h".

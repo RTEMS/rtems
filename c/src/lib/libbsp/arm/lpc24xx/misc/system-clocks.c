@@ -71,7 +71,7 @@ unsigned lpc24xx_cclk( void)
   }
 
   /* Get PLL output frequency */
-  if (REG_FLAG_IS_SET( PLLSTAT, PLLSTAT_PLLC)) {
+  if (IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLC)) {
     uint32_t pllcfg = PLLCFG;
     unsigned n = GET_PLLCFG_NSEL( pllcfg) + 1;
     unsigned m = GET_PLLCFG_MSEL( pllcfg) + 1;
@@ -110,10 +110,10 @@ static void lpc24xx_pll_config( uint32_t val)
  */
 void lpc24xx_set_pll( unsigned clksrc, unsigned nsel, unsigned msel, unsigned cclksel)
 {
-  bool pll_enabled = REG_FLAG_IS_SET( PLLSTAT, PLLSTAT_PLLE);
+  bool pll_enabled = IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLE);
 
   /* Disconnect PLL if necessary */
-  if (REG_FLAG_IS_SET( PLLSTAT, PLLSTAT_PLLC)) {
+  if (IS_FLAG_SET( PLLSTAT, PLLSTAT_PLLC)) {
     if (pll_enabled) {
       lpc24xx_pll_config( PLLCON_PLLE);
     } else {
@@ -139,7 +139,7 @@ void lpc24xx_set_pll( unsigned clksrc, unsigned nsel, unsigned msel, unsigned cc
   lpc24xx_pll_config( PLLCON_PLLE);
 
   /* Wait for lock */
-  while (REG_FLAG_IS_CLEARED( PLLSTAT, PLLSTAT_PLOCK)) {
+  while (IS_FLAG_CLEARED( PLLSTAT, PLLSTAT_PLOCK)) {
     /* Wait */
   }
 
