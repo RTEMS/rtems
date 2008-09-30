@@ -32,6 +32,7 @@
  */
 
 #include <rtems/asm.h>
+#include "bsp.h"
 #include "mcf5206/mcf5206e.h"
 
 BEGIN_CODE

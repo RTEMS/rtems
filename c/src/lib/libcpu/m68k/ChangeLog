@@ -1,3 +1,7 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* mcf5206/timer/timerisr.S: Make compile again.
+
 2008-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Split out various BSPs bspstart.c contents. Move cache
