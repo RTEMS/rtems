@@ -50,5 +50,5 @@ void Clock_driver_support_initialize_hardware(void)
   NIOS2_IENABLE(1 << CLOCK_VECTOR);
 }
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
 

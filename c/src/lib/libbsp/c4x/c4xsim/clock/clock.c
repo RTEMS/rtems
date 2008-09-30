@@ -59,4 +59,4 @@ void Clock_driver_support_initialize_hardware()
 
 #define Clock_driver_support_shutdown_hardware()
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

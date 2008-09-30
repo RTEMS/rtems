@@ -39,7 +39,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../c4x/shared/bspspuriousinit.c startup/spurious.c \
     ../../shared/gnatinstallhandler.c
 # clock
-libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/consolereserveresources.c console/debugio.c \
     console/simio.c ../../shared/console.c
