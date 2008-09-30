@@ -92,7 +92,7 @@ int  _textattr;              /**< Text attribute      */
 /*---------------------------------------------------------------------------*
  *  Defaultfont                                                              *
  *---------------------------------------------------------------------------*/
-#include "defaultfont.c"
+#include "defaultfont.h"
 
 /**
  *  @brief gba_gotoxy function set screeen xy-coordinates

@@ -43,7 +43,7 @@ startup_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/clockdrv.c
 console_SOURCES = console/conio.c console/console.c \
-    console/defaultfont.c
+    console/defaultfont.h
 timer_SOURCES = timer/timer.c
 
 include_HEADERS += irq/irq.h

@@ -1,3 +1,9 @@
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/defaultfont.c: Remove (Renamed into console/defaultfont.h).
+	* console/defaultfont.h: New (Renamed from console/defaultfont.c).
+	* Makefile.am, console/conio.c: Reflect renamer.
+
 2008-09-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove empty HAS_NETWORKING conditional.
