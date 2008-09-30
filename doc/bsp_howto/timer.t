@@ -29,7 +29,7 @@ This section describes the routines which are assumed to exist by
 the RTEMS Timing Test Suite.  The names used are @b{EXACTLY} what
 is used in the RTEMS Timing Test Suite so follow the naming convention.
 
-@subsection Timer_initialize
+@subsection benchmark_timer_initialize
 
 Initialize the timer source.
 
