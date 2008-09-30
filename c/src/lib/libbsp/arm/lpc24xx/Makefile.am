@@ -78,7 +78,7 @@ libbsp_a_SOURCES += ../../shared/console.c \
 	console/console-config.c
 
 # clock
-libbsp_a_SOURCES += clock/clock-config.c
+libbsp_a_SOURCES += clock/clock-config.c ../../../shared/clockdrv_shell.h
 
 # rtc
 libbsp_a_SOURCES += ../../shared/tod.c \

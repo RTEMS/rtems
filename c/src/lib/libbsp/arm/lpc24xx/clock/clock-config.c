@@ -27,7 +27,7 @@
 #include <bsp/irq.h>
 #include <bsp/system-clocks.h>
 
-/* This is defined in ../../../shared/clockdrv_shell.c */
+/* This is defined in ../../../shared/clockdrv_shell.h */
 rtems_isr Clock_isr( rtems_vector_number vector);
 
 #define Clock_driver_support_at_tick() \
@@ -122,4 +122,4 @@ static uint32_t lpc24xx_clock_nanoseconds_since_last_tick( void)
 #define Clock_driver_nanoseconds_since_last_tick lpc24xx_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
-#include "../../../../libbsp/shared/clockdrv_shell.c"
+#include "../../../../libbsp/shared/clockdrv_shell.h"
