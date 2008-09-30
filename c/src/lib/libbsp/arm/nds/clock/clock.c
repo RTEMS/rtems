@@ -19,7 +19,7 @@
 #define CLOCK_VECTOR  IRQ_TIMER0
 
 /*
- * forward declaration for clock isr in clockdrv_shell.c
+ * forward declaration for clock isr in clockdrv_shell.h
  */
 
 rtems_isr Clock_isr (rtems_vector_number vector);
@@ -85,4 +85,4 @@ Clock_driver_support_initialize_hardware (void)
   TIMER_DATA (0) = TIMER_FREQ_64 ((uint16_t) freq);
 }
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"

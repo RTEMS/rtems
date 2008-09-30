@@ -48,7 +48,7 @@ gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
 gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clock.c
+clock_rel_SOURCES = clock/clock.c ../../../shared/clockdrv_shell.h
 clock_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

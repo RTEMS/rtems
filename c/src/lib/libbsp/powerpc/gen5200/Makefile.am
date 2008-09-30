@@ -60,7 +60,7 @@ libbsp_a_SOURCES += bestcomm/include/ppctypes.h \
     bestcomm/task_api/tasksetup_general.h
 
 # clock
-libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/console.c
 # i2c

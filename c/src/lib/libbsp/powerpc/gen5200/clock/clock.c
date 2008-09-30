@@ -11,7 +11,7 @@
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 |                                                                 |
-| Reworked by Joel Sherrill to use clockdrv_shell.c               |
+| Reworked by Joel Sherrill to use clockdrv_shell.h               |
 +-----------------------------------------------------------------+
 | The license and distribution terms for this file may be         |
 | found in the file LICENSE in this distribution or at            |
@@ -339,5 +339,5 @@ int BSP_connect_clock_handler (unsigned gpt_no)
     (void) BSP_disconnect_clock_handler (GPT); \
   } while (0)
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
 
