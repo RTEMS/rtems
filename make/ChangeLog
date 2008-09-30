@@ -1,3 +1,12 @@
+2008-09-30	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/brs5l.cfg, custom/gen5200.cfg, custom/gen83xx.cfg,
+	custom/genmcf548x.cfg, custom/hsc_cm01.cfg, custom/icecube.cfg,
+	custom/lpc2478.cfg, custom/m5484FireEngine.cfg,
+	custom/mpc5566evb.cfg, custom/mpc55xx.cfg, custom/mpc8313erdb.cfg,
+	custom/mpc8349eamds.cfg, custom/pgh360.cfg, custom/pm520_cr825.cfg
+	custom/pm520_ze30.cfg: Remove RTEMS_BOARD_MODEL.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/simsh1.cfg, custom/simsh2.cfg, custom/simsh4.cfg: Make all use
