@@ -1,3 +1,8 @@
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* clock/clockdrv.c: include "../../../shared/clockdrv_shell.h".
+	* Makefile.am: Reflect changes above.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate *_SOURCES.

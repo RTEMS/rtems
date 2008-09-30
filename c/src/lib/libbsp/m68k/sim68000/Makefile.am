@@ -41,7 +41,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../m68k/shared/bspspuriousinit.c ../../m68k/shared/m68000spurious.c \
     startup/spurious_assistant.c
 # clock
-libbsp_a_SOURCES += clock/clockdrv.c
+libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/conscfg.c ../../shared/console.c
 # debugio

@@ -50,4 +50,4 @@ void Clock_driver_support_shutdown_hardware(void)
   t->cr  = 0xA0;  /* initialize with timer disabled */
 }
 
-#include "../../../shared/clockdrv_shell.c"
+#include "../../../shared/clockdrv_shell.h"
