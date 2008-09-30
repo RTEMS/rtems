@@ -1,18 +1,4 @@
-/*  Timer_init()
- *
- *  This routine initializes the MC68230 timer on the Motorola IDP board.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: This routine will not work if the optimizer is enabled
- *        for some compilers.  The multiple writes to the MC68230
- *        may be optimized away.
- *
- *        It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
+/* 
  *  Code Modified for the MC68230 by Doug McBride, Colorado Space Grant College
  *
  *  COPYRIGHT (c) 1989-1999.
