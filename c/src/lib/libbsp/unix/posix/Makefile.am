@@ -11,7 +11,6 @@ EXEEXT =
 SUBDIRS = . tools
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -26,7 +25,6 @@ DISTCLEANFILES = include/bspopts.h
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-project_lib_DATA =
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
