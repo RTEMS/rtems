@@ -414,6 +414,7 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  */
 
 #define RTEMS_LIBI2C_IOCTL_GET_DRV_T 4
+
 /*
  * retval = rtems_libi2c_ioctl(rtems_device_minor_number minor,
  *                             RTEMS_LIBI2C_IOCTL_GET_DRV_T,
@@ -423,6 +424,15 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
  * including its private data appended to it during creation of the entry
  * 
  */
+
+/**
+ * @brief IO control command for asynchronous read and write.
+ *
+ * @see rtems_libi2c_read_write_done_t and rtems_libi2c_read_write_async_t.
+ *
+ * @warning This is work in progress!
+ */
+#define RTEMS_LIBI2C_IOCTL_READ_WRITE_ASYNC 5
 
 /*
  * argument data structures for IOCTLs defined above
@@ -448,6 +458,32 @@ typedef struct {
   rtems_libi2c_read_write_t rd_wr;
 } rtems_libi2c_tfm_read_write_t;
 
+/**
+ * @brief Notification function type for asynchronous read and write.
+ *
+ * @see RTEMS_LIBI2C_IOCTL_READ_WRITE_ASYNC and
+ * rtems_libi2c_read_write_async_t.
+ *
+ * @warning This is work in progress!
+ */
+typedef void (*rtems_libi2c_read_write_done_t) \
+  ( int /* return value */, int /* nbytes */, void * /* arg */);
+
+/**
+ * @brief IO command data for asynchronous read and write.
+ *
+ * @see RTEMS_LIBI2C_IOCTL_READ_WRITE_ASYNC and
+ * rtems_libi2c_read_write_done_t.
+ *
+ * @warning This is work in progress!
+ */
+typedef struct {
+  unsigned char                 *rd_buf;
+  const unsigned char           *wr_buf;
+  int                            byte_cnt;
+  rtems_libi2c_read_write_done_t done;
+  void                          *arg;
+} rtems_libi2c_read_write_async_t;
 
 #ifdef __cplusplus
 }
