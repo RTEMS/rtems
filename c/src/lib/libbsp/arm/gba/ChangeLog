@@ -1,3 +1,9 @@
+2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/defaultfont.c: Remove (Renamed into console/defaultfont.h).
+	* console/defaultfont.h: New (Renamed from console/defaultfont.c).
+	* Makefile.am, console/conio.c: Reflect renamer.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 

@@ -51,7 +51,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
 libbsp_a_SOURCES += clock/clockdrv.c
 # console
 libbsp_a_SOURCES += console/conio.c console/console.c \
-    console/defaultfont.c
+    console/defaultfont.h
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
