@@ -1,3 +1,7 @@
+2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsp_howto/timer.t: Eliminate uses of old benchmark timer names.
+
 2008-09-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* setup.def, started/buildc.t: Update versions and patches.
