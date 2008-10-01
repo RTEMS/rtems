@@ -1,3 +1,9 @@
+2008-10-01	Gene Smith <gene.smith@siemens.com>
+
+	PR 1328/cpukit
+	* libmisc/shell/main_mdump.c, libmisc/shell/main_mwdump.c: Fix printing
+	of more than 256 bytes.
+
 2008-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libi2c/libi2c.h: Added definitions for asynchronous read and write IO
