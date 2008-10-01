@@ -34,7 +34,9 @@ int rtems_shell_main_mdump(
   char *argv[]
 )
 {
-  unsigned char  n, m, max=20;
+  unsigned char  n, m;
+  int            max;
+  int            res;
   uintptr_t      addr = 0;
   unsigned char *pb;
 
@@ -43,19 +45,34 @@ int rtems_shell_main_mdump(
 
   if (argc>2) {
     max = rtems_shell_str2int(argv[2]);
-    max /= 16;
+    if (max <= 0) {
+      max = 1;      /* print 1 item if 0 or neg. */ 
+      res = 0;
+    }
+    else {
+      max--;
+      res = max & 0xf;/* num bytes in last row */
+      max >>= 4;      /* div by 16 */
+      max++;          /* num of rows to print */
+      if (max > 20) { /* limit to 20 */
+        max = 20;
+        res = 0xf;    /* 16 bytes print in last row */
+      }
+    }
   }
-
-
-  if (!max)
-    max = 1;
+  else {
+    max = 20;
+    res = 0xf;
+  }
 
   for (m=0; m<max; m++) {
     printf("0x%08" PRIXPTR " ", addr);
     pb = (unsigned char*) addr;
-    for (n=0;n<16;n++)
-      printf("%02X%c", pb[n], (n == 7) ? '-' : ' ');
-    for (n=0;n<16;n++) {
+    for (n=0;n<=(m==(max-1)?res:0xf);n++)
+      printf("%02X%c",pb[n],n==7?'-':' ');
+    for (;n<=0xf;n++)
+      printf("  %c",n==7?'-':' ');
+    for (n=0;n<=(m==(max-1)?res:0xf);n++) {
       printf("%c", isprint(pb[n]) ? pb[n] : '.');
     }
     printf("\n");
