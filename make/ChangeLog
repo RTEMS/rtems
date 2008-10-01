@@ -1,3 +1,7 @@
+2008-10-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/gen83xx.cfg, custom/lpc2478.cfg: Remove warning flags.
+
 2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
 
 	* custom/score603e.cfg: Modifications required to run on hardware. Some
