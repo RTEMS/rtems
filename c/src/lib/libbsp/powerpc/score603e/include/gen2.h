@@ -9,7 +9,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id:
+ *  $Id$
  */
 
 #ifndef __SCORE_GENERATION_2_h

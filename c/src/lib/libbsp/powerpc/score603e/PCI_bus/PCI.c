@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994, 1997.
+ *  COPYRIGHT (c) 1989-2004
  *  On-Line Applications Research Corporation (OAR).
  *
  * $Id$

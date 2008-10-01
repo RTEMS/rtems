@@ -1,3 +1,13 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, PCI_bus/PCI.c, PCI_bus/PCI.h,
+	PCI_bus/universe.c, console/85c30.c, console/85c30.h,
+	console/consolebsp.h, console/tbl85c30.c, include/gen2.h,
+	startup/Hwr_init.c, startup/bspstart.c, startup/genpvec.c,
+	startup/setvec.c, startup/vmeintr.c, timer/timer.c, tod/tod.c,
+	vme/VMEConfig.h: Some clean up.
+	* include/coverhd.h: Removed.
+
 2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
 
 	* include/irq-config.h: New file.

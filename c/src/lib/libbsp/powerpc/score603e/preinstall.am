@@ -57,7 +57,7 @@ $(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
@@ -68,6 +68,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/gen2.h
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
+
+$(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 
 $(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
@@ -156,12 +164,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
 $(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEDMA.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
-
-$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
-
-$(PROJECT_LIB)/rtems_crti.$(OBJEXT): rtems_crti.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/rtems_crti.$(OBJEXT)
 

@@ -3,7 +3,7 @@
  *  These routines handle the external exception.  Multiple ISRs occur off
  *  of this one interrupt.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in

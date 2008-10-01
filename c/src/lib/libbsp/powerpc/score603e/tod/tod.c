@@ -1,7 +1,10 @@
 /*
- * Real Time Clock (Harris ICM7170) for RTEMS
+ *  Real Time Clock (Harris ICM7170) for RTEMS
  *
  *  This part is found on the second generation of this board.
+ *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

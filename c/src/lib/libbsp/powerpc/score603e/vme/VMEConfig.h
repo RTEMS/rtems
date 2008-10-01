@@ -1,5 +1,6 @@
 #ifndef RTEMS_BSP_VME_CONFIG_H
 #define RTEMS_BSP_VME_CONFIG_H
+
 /* $Id$ */
 
 /* BSP specific address space configuration parameters */

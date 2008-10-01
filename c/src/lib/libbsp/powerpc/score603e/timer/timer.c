@@ -1,5 +1,4 @@
-/*  timer.c
- *
+/*
  *  This file implements a benchmark timer using the General Purpose Timer.
  *
  *  Notes:
@@ -7,7 +6,7 @@
  *  BSP_TIMER_AVG_OVERHEAD and BSP_TIMER_LEAST_VALID are required to be
  *  provided in bsp.h
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
