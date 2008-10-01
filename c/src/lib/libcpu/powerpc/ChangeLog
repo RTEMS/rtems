@@ -1,3 +1,8 @@
+2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mpc83xx/include/mpc83xx.h: #include <bspopts.h> to make sure 
+	defines from bspopts.h get propagated.
+
 2008-09-09	Thomas Doerfler <thomas.doerfler@embedded-brains.de>
 
 	* mpc8xx/mpc8xx.h, mpc8xx/timer/timer.c: minor additions

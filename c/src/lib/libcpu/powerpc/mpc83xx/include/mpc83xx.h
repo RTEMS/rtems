@@ -5,6 +5,8 @@
 #ifndef _MPC83XX_MPC83XX_H
 #define _MPC83XX_MPC83XX_H
 
+#include <bspopts.h>
+
 #if defined(MPC8343)
 #define M83xx_HAS_PCI      TRUE
 #define M83xx_HAS_USB1     TRUE
