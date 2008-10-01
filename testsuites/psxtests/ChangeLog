@@ -1,3 +1,7 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx01/psx01.scn: Bump version to 4.9.99.0
+
 2008-09-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
 
 	* psxcleanup/psxcleanup.c, psxfatal_support/init.c,
