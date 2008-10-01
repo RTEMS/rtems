@@ -1,3 +1,8 @@
+2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1324/bsps
+        * aclocal/check-bsps.m4: Adopt icecube changes from CVS-HEAD.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.maint: Bump rtems_api to 4.9.
