@@ -79,8 +79,8 @@ void initialize_external_exception_vector (void)
 }
 #endif
 
-void Init_EE_mask_init() {
-;
+void Init_EE_mask_init(void)
+{
 }
 
 /*

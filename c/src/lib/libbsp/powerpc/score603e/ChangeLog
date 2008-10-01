@@ -1,5 +1,10 @@
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, PCI_bus/PCI.c, PCI_bus/universe.c, startup/genpvec.c:
+	Fix warnings.
+
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, preinstall.am, PCI_bus/PCI.c, PCI_bus/PCI.h,
 	PCI_bus/universe.c, console/85c30.c, console/85c30.h,
 	console/consolebsp.h, console/tbl85c30.c, include/gen2.h,

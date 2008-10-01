@@ -156,7 +156,7 @@ volatile Universe_Memory *UNIVERSE =
  * a complete SCORE603e VME initialization is required.
  */
 
-void initialize_universe()
+void initialize_universe(void)
 {
   uint32_t         jumper_selection;
   uint32_t         pci_id;

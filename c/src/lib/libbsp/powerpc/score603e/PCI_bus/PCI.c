@@ -22,7 +22,7 @@
  * an UNIVERSE register, without sufficient delay, the second access will
  * not work correctly.
  */
-void PCI_bus_delay ()
+void PCI_bus_delay (void)
 {
   asm("	nop");
   asm(" nop");

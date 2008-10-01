@@ -59,7 +59,6 @@ libbsp_a_SOURCES += pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
 
 include_bsp_HEADERS += irq/irq.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 # irq
 libbsp_a_SOURCES += include/irq-config.h irq/FPGA.c irq/irq.c  \
@@ -71,7 +70,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
-    ../../shared/include/irq-generic.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
     ../../shared/vmeUniverse/VME.h \
     vme/VMEConfig.h \
