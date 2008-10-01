@@ -1,3 +1,7 @@
+2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Remove scitab.c (Not applicable).
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am, include/bsp.h, include/tm27.h,

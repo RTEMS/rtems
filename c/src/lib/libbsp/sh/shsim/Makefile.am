@@ -29,13 +29,6 @@ dist_project_lib_DATA += startup/linkcmds startup/linkcmds.sim
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
-SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
-
-scitab.c: $(SHGEN)
-	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
-BUILT_SOURCES = scitab.c
-CLEANFILES = scitab.c
-
 # startup
 libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../shared/bspstart.c \
