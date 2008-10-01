@@ -1,3 +1,7 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp43/sp43.scn: Bump version to 4.9.99.0
+
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp34/sp34.scn, sp35/sp35.scn: Convert to UNIX CR/LF style.

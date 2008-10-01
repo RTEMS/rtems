@@ -1,7 +1,7 @@
 
 
 *** TEST 43 ***
-RTEMS Version: rtems-4.8.99.0(PowerPC/Generic (classic FPU)/psim)
+RTEMS Version: rtems-4.9.99.0(PowerPC/Generic (classic FPU)/psim)
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
