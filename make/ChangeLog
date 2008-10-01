@@ -1,3 +1,7 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/erc32.cfg: Revert accidental commit.
+
 2008-10-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/brs5l.cfg, custom/gen5200.cfg, custom/gen83xx.cfg,
