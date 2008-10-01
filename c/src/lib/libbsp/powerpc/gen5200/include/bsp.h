@@ -23,6 +23,8 @@
 #ifndef __GEN5200_BSP_h
 #define __GEN5200_BSP_h
 
+#include <bspopts.h>
+
 #include <libcpu/powerpc-utility.h> 
 
 /*
@@ -130,7 +132,6 @@ LINKER_SYMBOL(MBAR);
 extern "C" {
 #endif
 
-#include "bspopts.h"
 
 #include <rtems.h>
 #include <rtems/console.h>

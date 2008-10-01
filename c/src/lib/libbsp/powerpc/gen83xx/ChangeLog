@@ -1,3 +1,7 @@
+2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/bsp.h: #include <bspopts.h> first.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 

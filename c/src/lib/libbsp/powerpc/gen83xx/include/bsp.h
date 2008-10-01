@@ -20,6 +20,8 @@
 #ifndef __GEN83xx_BSP_h
 #define __GEN83xx_BSP_h
 
+#include <bspopts.h>
+
 /*
  * MPC8313E Reference Design Board
  */
@@ -76,7 +78,6 @@ LINKER_SYMBOL(IMMRBAR);
 extern "C" {
 #endif
 
-#include "bspopts.h"
 
 #include <rtems.h>
 #include <rtems/console.h>
