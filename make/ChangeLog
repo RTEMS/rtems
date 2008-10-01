@@ -1,5 +1,15 @@
 2008-10-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/brs5l.cfg, custom/gen5200.cfg, custom/gen83xx.cfg,
+	custom/genmcf548x.cfg, custom/hsc_cm01.cfg, custom/icecube.cfg,
+	custom/m5484FireEngine.cfg, custom/mpc5566evb.cfg,
+	custom/mpc55xx.cfg, custom/mpc8313erdb.cfg, custom/mpc8349eamds.cfg,
+	custom/pgh360.cfg, custom/pghplus.cfg, custom/pm520_cr825.cfg,
+	custom/pm520_ze30.cfg, custom/tqm8xx.cfg, custom/tqm8xx_stk8xx.cfg:
+	Back out parts of yesterdays changes.
+
+2008-10-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/gen83xx.cfg, custom/lpc2478.cfg: Remove warning flags.
 
 2008-09-30	Jennifer Averett <jennifer.averett@oarcorp.com>
