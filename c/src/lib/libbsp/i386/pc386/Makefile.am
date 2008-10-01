@@ -10,7 +10,6 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 CLEANFILES =
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -33,13 +32,11 @@ include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
 include_HEADERS += include/crt.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-EXTRA_DIST = start/start.S
-start.$(OBJEXT): start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
-
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += start/start16.S
+EXTRA_DIST = start/start16.S
 start16.$(OBJEXT): start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 

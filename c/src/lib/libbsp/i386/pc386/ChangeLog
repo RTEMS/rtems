@@ -1,3 +1,8 @@
+2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 
+	of building libbspstart.a, using automake-rules.
+
 2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* clock/ckinit.c: include "../../../shared/clockdrv_shell.h".
