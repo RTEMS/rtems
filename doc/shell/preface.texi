@@ -26,7 +26,7 @@ Shell provides to an application, consider the following
 example which hints at some of the capabilities available:
 
 @smallexample
-Welcome to rtems-4.8.99.0(SPARC/w/FPU/sis)
+Welcome to rtems-4.9.99.0(SPARC/w/FPU/sis)
 COPYRIGHT (c) 1989-2008.
 On-Line Applications Research Corporation (OAR).
 

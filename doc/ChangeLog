@@ -1,3 +1,7 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/preface.texi: Bump version to 4.9.99.0
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_howto/timer.t: Eliminate uses of old benchmark timer names.
