@@ -90,25 +90,20 @@ The following targets are supported:
 
       (none)	will build the host-based version on Linux, Solaris and HPUX.
 
-      arm-rtems4.9
-      tic4x-rtems4.9
-      h8300-rtems4.9
-      i386-rtems4.9
-      m68k-rtems4.9
-      mips-rtems4.9
-      no_cpu-rtems4.9
-      powerpc-rtems4.9
-      sh-rtems4.9
-      sparc-rtems4.9
+      arm-rtems4.10
+      bfin-rtems4.10
+      h8300-rtems4.10
+      i386-rtems4.10
+      m32c-rtems4.10
+      m68k-rtems4.10
+      mips-rtems4.10
+      no_cpu-rtems4.10
+      powerpc-rtems4.10
+      sh-rtems4.10
+      sparc-rtems4.10
       bare                    see notes
 
-The cross-compiler is set to $(target)-gcc by default. This can be
-overridden by:
-
-+ using the --program-prefix option to configure to specify the
-  string which will prepended to the tool names.  Be sure to include
-  a trailing "-".  For example, to use a m68k-coff toolset, use the
-  --program-prefix=m68k-coff- option.
+The cross-compiler is set to $(target)-gcc by default.
 
 To build, run make in the build directory. To specify which bsps to build,
 add the RTEMS_BSP="bsp1 bsp2 .." to the make command.  Specifying multiple
@@ -181,6 +176,8 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 		NOTE: The "pc386" BSP can be compiled to support a 
 		      variety of PC configurations including PC-104
 		      based solutions.
+
+m32c		: m32csim
 
 m68k		: av5282 csb360 gen68302 gen68360 gen68360_040 
 		genmcf548x idp mcf5206elite mcf52235 mcf5235 mcf5239

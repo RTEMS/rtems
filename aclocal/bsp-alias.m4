@@ -21,6 +21,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     mvme162lx)    $2=mvme162          ;; # m68k - mvme162 board variant
     mvme2100)     $2=motorola_powerpc ;; # Motorola PPC board variant
     mvme2307)     $2=motorola_powerpc ;; # Motorola PPC board variant
+    m32csim)      $2=m32cbsp          ;; # M32C on gdb simulator
     p4600)        $2=p4000            ;; # mips - p4000 board w/IDT 4600
     p4650)        $2=p4000            ;; # mips - p4000 board w/IDT 4650
     pc386dx)      $2=pc386            ;; # i386 - PC w/o FPU

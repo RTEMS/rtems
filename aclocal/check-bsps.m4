@@ -37,6 +37,7 @@ AC_MSG_CHECKING([for available BSPs])
           lpc24xx)           bsps="lpc2478";;
 	  sim68000)          bsps="sim68000 simcpu32";;
 	  shsim)             bsps="simsh1 simsh2 simsh4";;
+	  m32cbsp)           bsps="m32csim";;
 	  *) 		     bsps="$bsp_family";;
     esac;
     $1="[$]$1 $bsps"

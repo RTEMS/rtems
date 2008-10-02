@@ -1,3 +1,8 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* README.configure, aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Add
+	M32C port and m32csim BSP.
+
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* VERSION: Bump version to 4.9.99.0
