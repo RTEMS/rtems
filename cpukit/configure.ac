@@ -298,7 +298,15 @@ AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
 
-AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+#case "${RTEMS_CPU}" in
+#  m32c)
+#    AM_CONDITIONAL([LIBSHELL],["no"])
+#    ;;
+#  *) 
+    AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+#    ;;
+#esac
+
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 AM_CONDITIONAL([LIBGNAT],[test x"$rtems_cv_HAS_POSIX_API" = x"yes" \
 && test x"$enable_ada" = x"yes"])
@@ -333,6 +341,7 @@ score/cpu/c4x/Makefile
 score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
 score/cpu/m68k/Makefile
+score/cpu/m32c/Makefile
 score/cpu/mips/Makefile
 score/cpu/nios2/Makefile
 score/cpu/powerpc/Makefile
