@@ -22,7 +22,7 @@ noinst_PROGRAMS =
 SUBDIRS = . tools
 
 include_HEADERS += include/erc32.h
-include_HEADERS += include/coverhd.h
+include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../sparc/shared/start.S
