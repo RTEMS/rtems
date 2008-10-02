@@ -70,7 +70,7 @@ rtems_task Init(
   rtems_event_set       out;
   int                   i;
   int                   max;
-  int                   iterations = 0;
+  uint32_t              iterations = 0;
 
   puts( "\n\n*** TEST 39 ***" );
 
@@ -116,7 +116,7 @@ rtems_task Init(
     max += 2;
 
     /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4 * 1000 * 30)
+    if ( ++iterations >= 4L * 1000L * 30L)
       break;
   }
 
@@ -150,7 +150,7 @@ rtems_task Init(
     max += 2;
 
     /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4 * 1000 * 30)
+    if ( ++iterations >= 4L * 1000L * 30L)
       break;
   }
 
@@ -183,7 +183,7 @@ rtems_task Init(
       max = 0;
 
     /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4 * 1000 * 30)
+    if ( ++iterations >= 4L * 1000L * 30L)
       break;
 
   }

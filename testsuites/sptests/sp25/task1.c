@@ -33,7 +33,7 @@ rtems_task Task_1(
   void                   *address_8;
   rtems_id                region_id;
   Heap_Information_block  region_info;
-  size_t                  segment_size;
+  ssize_t                 segment_size;
   rtems_status_code       status;
 
   /* Obtain the region id */

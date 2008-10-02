@@ -12,7 +12,7 @@
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
 rtems_initialization_tasks_table Initialization_tasks[] = {
   { rtems_build_name('I', 'N', 'I', ' '),
-    64 * 1024 * 1024,
+    32UL * 1024UL,
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
     Init,

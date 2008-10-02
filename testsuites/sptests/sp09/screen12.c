@@ -26,7 +26,7 @@ void Screen12()
   uint32_t                good_back_flag;
   uint32_t                good_front_flag;
   uint32_t                offset;
-  size_t                  segment_size;
+  ssize_t                 segment_size;
   rtems_status_code       status;
   Heap_Information_block  the_info;
 

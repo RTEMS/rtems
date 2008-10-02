@@ -35,7 +35,7 @@ volatile int nDeleted;
 rtems_task
 subtask (rtems_task_argument arg)
 {
-  int localvar = arg;
+  uintptr_t localvar = arg;
   int i;
   rtems_status_code sc;
 
@@ -49,10 +49,11 @@ subtask (rtems_task_argument arg)
   while (localvar < 1000) {
     localvar++;
     rtems_task_wake_after (0);
-    taskvar = (void *)((int)taskvar + 1);
+    taskvar = (void *)((uintptr_t)taskvar + 1);
     rtems_task_wake_after (0);
-    if ((int)taskvar != localvar) {
-      printf ("Task:%d taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
+    if ((uintptr_t)taskvar != localvar) {
+      printf ("Task:%d taskvar:%d localvar:%d\n",
+        arg, (uintptr_t)taskvar, localvar);
       rtems_task_suspend (RTEMS_SELF);
     }
   }
@@ -60,8 +61,9 @@ subtask (rtems_task_argument arg)
   nDeleted++;
   directive_failed( sc, "task variable delete" );
 
-  if ((int)taskvar == localvar) {
-    printf("Task:%d deleted taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
+  if ((uintptr_t)taskvar == localvar) {
+    printf("Task:%d deleted taskvar:%d localvar:%d\n",
+      arg, (uintptr_t)taskvar, localvar);
     nRunning--;
     rtems_task_suspend (RTEMS_SELF);
   }
@@ -72,8 +74,9 @@ subtask (rtems_task_argument arg)
     rtems_task_wake_after(0);
     if (nRunning <= 1)
       break;
-    if ((int)taskvar == localvar) {
-      printf("Task:%d taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
+    if ((uintptr_t)taskvar == localvar) {
+      printf("Task:%d taskvar:%d localvar:%d\n",
+        arg, (uintptr_t)taskvar, localvar);
       nRunning--;
       rtems_task_suspend(RTEMS_SELF);
     }

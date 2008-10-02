@@ -62,7 +62,7 @@ void Screen1()
   puts( "TA1 - rtems_task_get_note - RTEMS_INVALID_ID" );
 
   status = rtems_task_get_note(
-    _RTEMS_tasks_Information.minimum_id + (3<<OBJECTS_API_START_BIT),
+    _RTEMS_tasks_Information.minimum_id + (3L<<OBJECTS_API_START_BIT),
     RTEMS_NOTEPAD_LAST,
     &notepad_value
   );

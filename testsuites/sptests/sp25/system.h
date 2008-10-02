@@ -44,7 +44,7 @@ TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
 TEST_EXTERN rtems_id   Region_id[ 2 ];    /* array of region ids */
 TEST_EXTERN rtems_name Region_name[ 2 ];  /* array of region names */
 
-TEST_EXTERN uint8_t   Area_1[64000]  CPU_STRUCTURE_ALIGNMENT;
+TEST_EXTERN uint8_t   Area_1[1024]  CPU_STRUCTURE_ALIGNMENT;
 
 #define BASE_PRIORITY 140
 

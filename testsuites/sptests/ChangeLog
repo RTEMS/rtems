@@ -1,3 +1,12 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen01.c, sp09/screen12.c, sp25/system.h, sp25/task1.c,
+	sp28/init.c, sp39/init.c, sp41/init.c, spfatal01/testcase.h,
+	spfatal08/testcase.h: Change size_t to ssize_t on all Heap, Workspace
+	and Region calls. On 16-bit architectures, size_t can be 16-bits
+	which would limit sizes to 64K. Also address constants which
+	overflowed on 16-bit integer targets.
+
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp43/sp43.scn: Bump version to 4.9.99.0
