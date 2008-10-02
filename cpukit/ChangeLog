@@ -1,5 +1,10 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/priority.inl: Use simple integer as loop
+	counter.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/monitor/mon-monitor.c, rtems/include/rtems/rtems/types.h: Do
 	not have fp context type when no hardware or software floating point
 	is available.

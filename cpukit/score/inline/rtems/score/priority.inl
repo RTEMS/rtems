@@ -36,7 +36,7 @@
 
 RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
 {
-  size_t index;
+  int index;
 
   _Priority_Major_bit_map = 0;
   for ( index=0 ; index <16 ; index++ )
