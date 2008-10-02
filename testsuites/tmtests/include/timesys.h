@@ -14,6 +14,7 @@
  */
 
 #include <tmacros.h>
+#include <inttypes.h>
 
 /*
  *  This constant determines the maximum number of a resource
@@ -36,7 +37,7 @@
 #define put_time( _message, _total_time, \
                   _iterations, _loop_overhead, _overhead ) \
     printf( \
-      "%s %d\n", \
+      "%s %" PRId32 "\n", \
       (_message), \
       (((_total_time) - (_loop_overhead)) / (_iterations)) - (_overhead) \
     )

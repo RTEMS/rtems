@@ -14,12 +14,12 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#define MAXIMUM_DISTRIBUTION 10000
+#define MAXIMUM_DISTRIBUTION 1000
 
 #undef OPERATION_COUNT
 #define OPERATION_COUNT    100000
 
-int Distribution[ MAXIMUM_DISTRIBUTION + 1 ];
+uint32_t Distribution[ MAXIMUM_DISTRIBUTION + 1 ];
 
 rtems_task Task_1(
   rtems_task_argument argument
@@ -172,8 +172,8 @@ void check_read_timer()
   for ( index = 0 ; index <= MAXIMUM_DISTRIBUTION ; index++ ) {
     time += (Distribution[ index ] * index);
     if ( Distribution[ index ] != 0 )
-      printf( "%d %d\n", index, Distribution[ index ] );
+      printf( "%" PRId32 " %" PRId32 "\n", index, Distribution[ index ] );
   }
-  printf( "Total time = %d\n", time );
-  printf( "Average time = %d\n", time / OPERATION_COUNT );
+  printf( "Total time = %" PRId32 "\n", time );
+  printf( "Average time = %" PRId32 "\n", time / OPERATION_COUNT );
 }

@@ -1,3 +1,8 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/timesys.h: Use inttypes.h.
+	* tmck/task1.c: Use uint32_t for count.
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/timesys.h: Rename STACK_CHECKER_ON to more appropriate
