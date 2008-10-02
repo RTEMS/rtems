@@ -1,6 +1,6 @@
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
-	* Makefile.am, startup/bspgetworkarea.c: Turn = into +=.
+	* Makefile.am: Turn = into +=.
 
 2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
