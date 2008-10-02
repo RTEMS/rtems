@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/rtems-cpu-subdirs.m4: Add new M32C port.
+
 2008-09-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* aclocal/bsp-bootcard-options.m4: Generalize and correct comment.
