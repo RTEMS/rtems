@@ -1,5 +1,10 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* fileio/init.c: When USE_SHELL not defined, do not attempt to
+	configure shell.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* unlimited/system.h: 10000 task ids is too many for some targets.
 
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>

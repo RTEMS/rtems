@@ -654,6 +654,7 @@ Init (rtems_task_argument ignored)
   fileio_menu();
 }
 
+#if defined(USE_SHELL)
 /*
  *  RTEMS Shell Configuration -- Add a command and an alias for it
  */
@@ -689,4 +690,5 @@ rtems_shell_alias_t Shell_USERECHO_Alias = {
 #define CONFIGURE_SHELL_MOUNT_MSDOS
 
 #include <rtems/shellconfig.h>
+#endif
 
