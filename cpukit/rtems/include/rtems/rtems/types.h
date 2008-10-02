@@ -75,10 +75,12 @@ typedef Objects_Id       rtems_id;
  */
 typedef Context_Control            rtems_context;
 
+#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
 /**
  * This type is the public name for task floating point context area.
  */
 typedef Context_Control_fp         rtems_context_fp;
+#endif
 
 /**
  * This type is the public name for the architecture specific
