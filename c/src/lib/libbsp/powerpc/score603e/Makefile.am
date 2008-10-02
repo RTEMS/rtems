@@ -34,7 +34,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/Hwr_init.c startup/genpvec.c ../../shared/gnatinstallhandler.c \
@@ -50,7 +50,6 @@ libbsp_a_SOURCES += console/85c30.c console/85c30.h console/console.c \
 include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
     PCI_bus/PCI.h ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h \
-    ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/console/consoleIo.h \
     ../../shared/include/irq-generic.h include/irq-config.h
 # pci
