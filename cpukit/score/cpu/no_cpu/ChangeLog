@@ -1,3 +1,8 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_asm.c, rtems/score/cpu.h, rtems/score/types.h: Corrections and
+	updates.
+
 2008-09-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Do not define boolean, single_precision,

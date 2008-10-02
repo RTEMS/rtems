@@ -44,7 +44,7 @@
  */
 
 void _CPU_Context_save_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 )
 {
 }
@@ -67,7 +67,7 @@ void _CPU_Context_save_fp(
  */
 
 void _CPU_Context_restore_fp(
-  void **fp_context_ptr
+  Context_Control_fp **fp_context_ptr
 )
 {
 }
@@ -116,7 +116,7 @@ void _CPU_Context_restore(
  *  XXX document implementation including references if appropriate
  */
 
-void _ISR_Handler()
+void _ISR_Handler(void)
 {
    /*
     *  This discussion ignores a lot of the ugly details in a real
