@@ -1171,12 +1171,20 @@ int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   /*
    * Process options
    */
-  if (config->hardware_address) {
+  if ((config->hardware_address) &&
+      (0 != memcmp(maczero,config->hardware_address,ETHER_ADDR_LEN))) {
     memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
   }
 #ifdef BSP_HAS_TQMMON
   else if(0 != memcmp(maczero,TQM_BD_INFO.eth_addr,ETHER_ADDR_LEN)) {
     memcpy (sc->arpcom.ac_enaddr, TQM_BD_INFO.eth_addr, ETHER_ADDR_LEN);
+  }
+#endif
+#ifdef BSP_HAS_UBOOT
+  else if(0 != memcmp(maczero,mpc8xx_uboot_board_info.bi_enetaddr,
+		      ETHER_ADDR_LEN)) {
+    memcpy (sc->arpcom.ac_enaddr, 
+	    mpc8xx_uboot_board_info.bi_enetaddr, ETHER_ADDR_LEN);
   }
 #endif
   else {

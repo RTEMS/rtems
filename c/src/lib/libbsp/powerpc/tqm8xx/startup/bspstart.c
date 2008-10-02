@@ -39,11 +39,24 @@
  */
 #endif /* BSP_HAS_TQMMON */
 
+#ifdef BSP_HAS_UBOOT
+
+/*
+ * We want this in the data section, because the startup code clears the BSS
+ * section after the initialization of the board info.
+ */
+bd_t mpc8xx_uboot_board_info = { .bi_baudrate = 123 };
+
+/* Size in words */
+const size_t mpc8xx_uboot_board_info_size = (sizeof( bd_t) + 3) / 4;
+
+#endif /* BSP_HAS_UBOOT */
+
 /* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;
 
 /* Configuration parameters for clock driver, ... */
-uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
+uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK, for DEC: core clock */
 uint32_t bsp_clock_speed    ; /* needed for PIT driver  */
 /* for timer: */
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
@@ -84,6 +97,7 @@ void bsp_pretasking_hook( void)
   /* Do noting */
 }
 
+#if defined(BSP_HAS_TQMMON)
 const char *bsp_tqm_get_cib_string( const char *cib_id)
 {
   char srch_pattern[10] = "";
@@ -129,10 +143,23 @@ rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
   *result = strtoul(item_ptr,&end_ptr,10);
   return RTEMS_SUCCESSFUL;
 }
+#endif /* BSP_HAS_TQMMON */
 
 void bsp_get_work_area( void **work_area_start, size_t *work_area_size, void **heap_start, size_t *heap_size)
 {
+#ifdef BSP_HAS_TQMMON
   char *ram_end = (char *) (TQM_BD_INFO.sdram_size - (uint32_t)TopRamReserved);
+#endif
+
+#ifdef BSP_HAS_UBOOT
+  char *ram_end = (char *) (mpc8xx_uboot_board_info.bi_memstart
+			    + mpc8xx_uboot_board_info.bi_memsize
+			    - (uint32_t)TopRamReserved);
+  /*
+   * make sure that the memory size is properly aligned
+   */
+  ram_end = ram_end - (((uint32_t) ram_end) % CPU_ALIGNMENT);
+#endif
 
   *work_area_start = bsp_work_area_start;
   *work_area_size = ram_end - bsp_work_area_start;
@@ -179,15 +206,28 @@ void bsp_start( void)
    * but this does not concern the internal units like PIT, 
    * DEC, baudrate generator etc)
    */
+#ifdef BSP_HAS_UBOOT
+  /* internal !!! bus frequency */
+  BSP_bus_frequency = mpc8xx_uboot_board_info.bi_intfreq;
+#endif /* BSP_HAS_UBOOT */
+
+#ifdef BSP_HAS_TQMMON
   if (RTEMS_SUCCESSFUL != 
       bsp_tqm_get_cib_uint32("cu",
 			     &BSP_bus_frequency)) {
     BSP_panic("Cannot determine BUS frequency\n");
   }
+#endif
 
+#if 0
+  /* for PIT timer */
   bsp_clicks_per_usec = 0; /* force to zero to control 
 			    * PIT clock driver from EXTCLK
 			    */
+#else
+  /* for DEC timer */
+  bsp_clicks_per_usec = BSP_bus_frequency/16000000;
+#endif
   bsp_clock_speed     = BSP_bus_frequency;
   bsp_timer_least_valid = 3; 
   bsp_timer_average_overhead = 3;

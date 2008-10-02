@@ -40,11 +40,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-/*
- * indicate, that BSP is booted via TQMMon
- */
-#define BSP_HAS_TQMMON
-
 LINKER_SYMBOL(TopRamReserved);
 
 LINKER_SYMBOL( bsp_ram_start);
@@ -73,12 +68,24 @@ LINKER_SYMBOL( bsp_interrupt_stack_size);
 
 LINKER_SYMBOL( bsp_work_area_start);
 
+/*
+ * NOTE: start.S also needs to know, whether we use U-Boot
+ */
+#include <bspopts.h>
+/*
+ * indicate, that BSP is booted via TQMMon
+ * (unless we use U-Boot)
+ */
+#if !defined(BSP_HAS_UBOOT)
+#define BSP_HAS_TQMMON
+
+#include <bsp/tqm.h>
+#endif
+
 #ifndef ASM
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <bspopts.h>
 
 #include <rtems.h>
 #include <rtems/console.h>
@@ -88,8 +95,18 @@ extern "C" {
 #include <mpc8xx/mmu.h>
 #include <mpc8xx/console.h>
 #include <bsp/vectors.h>
-#include <bsp/tqm.h>
 #include <libcpu/powerpc-utility.h> 
+
+
+#ifdef BSP_HAS_TQMMON
+#endif
+
+#ifdef BSP_HAS_UBOOT
+#define CONFIG_8xx  /* select the proper U-Boot configuration */
+#include <bsp/u-boot.h>
+extern bd_t mpc8xx_uboot_board_info;
+extern const size_t mpc8xx_uboot_board_info_size;
+#endif /* BSP_HAS_UBOOT */
 
 /*
  * Network driver configuration

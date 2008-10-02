@@ -102,6 +102,10 @@ RTEMS_BSPOPTS_HELP([BSP_USE_NETWORK_SCC],
 [If defined, then the BSP will use the Serial Communications Controller (SCC1)
  for 10MBit networking.])
 
+RTEMS_BSPOPTS_SET([BSP_HAS_UBOOT],[*],[0])
+RTEMS_BSPOPTS_HELP([BSP_HAS_UBOOT],
+[If defined, then the BSP assumes it is booted via U-Boot (not TQMon)])
+
 
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile])

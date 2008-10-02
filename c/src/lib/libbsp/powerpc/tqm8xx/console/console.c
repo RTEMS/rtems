@@ -274,27 +274,7 @@ static void sccBRGinit(void)
     scc_brg_state[brg_idx].reg_content = 0;
     scc_brg_state[brg_idx].link_cnt    = 0;
   }
-#ifndef MDE360
-  /*
-   * on ZEM40, init CLK4/5 inputs
-   */
-  m8xx.papar |=  ((1 << 11) | (1 << 12));
-  m8xx.padir &= ~((1 << 11) | (1 << 12));
-#endif
 }
-
-/*
- * input clock frq for CPM clock inputs
- */
-static uint32_t clkin_frq[2][4] = {
-#ifdef MDE360
-  {0,0,0,0},
-  {0,0,0,0}
-#else
-  {0,0,0,1843000},
-  {1843000,0,0,0}
-#endif
-};
 
 /*
  * allocate, set and connect baud rate generators
@@ -310,29 +290,10 @@ static int sccBRGalloc(int chan,int baud)
   int old_brg;
   int new_brg = -1;
   int brg_idx;
-#if 0 /* we do not support external clocked console */
-  int clk_group;
-  int clk_sel;
-#endif
 
   old_brg = chan_desc->brg_used;
   /* compute brg register contents needed */
   reg_val = sccBRGval(baud);
-
-#if 0 /* we do not support external clocked console */
-  /* search for clock input with this frq */
-  clk_group = ((chan == CONS_CHN_SCC3) ||
-	       (chan == CONS_CHN_SCC4) ||
-	       (chan == CONS_CHN_SMC2)) ? 1 : 0;
-
-  for (clk_sel = 0, new_brg = -1;
-       (clk_sel < 4) && (new_brg < 0);
-       clk_sel++) {
-    if (baud == (clkin_frq[clk_group][clk_sel] / 16)) {
-      new_brg = clk_sel + 4;
-    }
-  }
-#endif
 
   rtems_interrupt_disable(level);  
 
@@ -392,8 +353,9 @@ static int sccBRGalloc(int chan,int baud)
     }
     else {
       /* connect SMC to BRGx or CLKx... */
-      m8xx.simode = ((m8xx.simode & ~(M8xx_SIMODE_SMCCS_MSK(chan - CONS_CHN_SMC1)))|
-		     M8xx_SIMODE_SMCCS(chan - CONS_CHN_SMC1,new_brg));
+      m8xx.simode = ((m8xx.simode 
+		      & ~(M8xx_SIMODE_SMCCS_MSK(chan - CONS_CHN_SMC1)))
+		     | M8xx_SIMODE_SMCCS(chan - CONS_CHN_SMC1,new_brg));
     }
   }
   return (new_brg < 0);
@@ -649,8 +611,11 @@ sccInitialize (int chan)
   /*
    * allocate and connect BRG 
    */
+#if defined(BSP_HAS_UBOOT)
+  sccBRGalloc(chan,mpc8xx_uboot_board_info.bi_baudrate);
+#else
   sccBRGalloc(chan,9600);
-  
+#endif
   
   /*
    * Set up SCCx parameter RAM common to all protocols
@@ -685,7 +650,7 @@ sccInitialize (int chan)
       sccFrstRxBd[chan][i].status |= M8xx_BD_WRAP;
     }
     sccFrstRxBd[chan][i].length = 0;
-    sccFrstRxBd[chan][i].buffer = rxBuf[chan][i];
+    sccFrstRxBd[chan][i].buffer = (*rxBuf[chan])[i];
   }
   /*
    * Setup the Transmit Buffer Descriptor
@@ -997,6 +962,10 @@ rtems_device_driver console_open(
     status = rtems_termios_open (major, minor, arg, &pollCallbacks);
     sccttyp[chan] = args->iop->data1;
   }
+#if defined(BSP_HAS_UBOOT)  
+  rtems_termios_set_initial_baud(sccttyp[chan],
+				 mpc8xx_uboot_board_info.bi_baudrate);
+#endif
   return status;
 }
  

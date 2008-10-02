@@ -22,7 +22,8 @@ include_bspdir = $(includedir)/bsp
 include_HEADERS += include/coverhd.h
 include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     include/irq.h include/irq-config.h \
-    ../../shared/include/irq-generic.h\
+	../shared/include/u-boot.h     \
+    ../../shared/include/irq-generic.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/ppc_exc_bspsupp.h
 
@@ -46,8 +47,7 @@ irq_SOURCES = include/irq-config.h \
 	../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c
 
-# clock_SOURCES = ../shared/clock/clock.c
-p_clock_SOURCES = clock/p_clock.c
+clock_SOURCES = ../shared/clock/clock.c
 
 console_SOURCES = console/console.c
 timer_SOURCES = timer/timer.c
@@ -68,7 +68,7 @@ endif
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(irq_SOURCES) \
     $(startup_SOURCES) $(console_SOURCES) \
-    $(p_clock_SOURCES) $(timer_SOURCES)
+    $(clock_SOURCES) $(timer_SOURCES)
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
@@ -78,7 +78,6 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
 

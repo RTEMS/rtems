@@ -30,6 +30,25 @@
 PUBLIC_VAR (start)
 start:
 
+#ifdef BSP_HAS_UBOOT
+
+.extern mpc8xx_uboot_board_info
+.extern mpc8xx_uboot_board_info_size
+
+	/* Copy board info */
+	LA	r6, mpc8xx_uboot_board_info
+	LW	r5, mpc8xx_uboot_board_info_size
+        mtctr   r5
+
+copy_uboot_board_info:
+
+	lwz     r5, 0(r3)
+        addi    r3, r3, 4
+        stw     r5, 0(r6)
+        addi    r6, r6, 4
+        bdnz    copy_uboot_board_info
+
+#endif /* BSP_HAS_UBOOT */
 	/*
 	 * basic CPU setup:	
 	 * init MSR
