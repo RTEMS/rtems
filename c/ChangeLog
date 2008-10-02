@@ -1,3 +1,9 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* src/aclocal/rtems-cpu-subdirs.m4: Add new M32R port. It is just a
+	beginning but the BSP is functional enough to initialize and shutdown
+	RTEMS.
+
 2007-03-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Use MKDIR_P instead of mkdir_p.
