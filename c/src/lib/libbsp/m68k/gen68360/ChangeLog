@@ -1,3 +1,8 @@
+2008-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Move PGH360, GEN68360, GEN68360_040
+	defines from *.cfg into bspopts.h.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* timer/timer.c: Eliminate uses of old benchmark timer names.
