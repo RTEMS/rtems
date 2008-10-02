@@ -1,0 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, context_init.c, context_switch.S,
+	cpu.c, cpu_asm.c, preinstall.am, varvects.S, varvects.h, rtems/asm.h,
+	rtems/score/cpu.h, rtems/score/cpu_asm.h, rtems/score/m32c.h,
+	rtems/score/types.h: New files.
+
