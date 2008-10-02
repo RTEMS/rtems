@@ -1,5 +1,10 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/cpu/Makefile.am: Add new M32R port. It is just a beginning but
+	the BSP is functional enough to initialize and shutdown RTEMS.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac: Revert trash committed. Shell builds with m32c now.
 
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
