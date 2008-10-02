@@ -45,6 +45,23 @@ RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[0])
 RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 [If defined, reset the board when the application exits.])
 
+RTEMS_BSPOPTS_SET([PM520_ZE30],[pm520_ze30],[1])
+RTEMS_BSPOPTS_HELP([PM520_ZE30],
+[If defined, use custom settings of for the pm520_ze30 BSP])
+
+RTEMS_BSPOPTS_SET([PM520_CR825],[pm520_cr825],[1])
+RTEMS_BSPOPTS_HELP([PM520_CR825],
+[If defined, use custom settings of for the pm520_cr825 BSP])
+
+RTEMS_BSPOPTS_SET([icecube],[icecube],[1])
+RTEMS_BSPOPTS_HELP([icecube],
+[If defined, use custom settings of for the icecube BSP])
+
+RTEMS_BSPOPTS_SET([BRS5L],[brs5l],[1])
+RTEMS_BSPOPTS_HELP([BRS5L],
+[If defined, use custom settings of for the brs5l BSP])
+
+
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
