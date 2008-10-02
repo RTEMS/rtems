@@ -1,3 +1,10 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c, bspgetworkarea.c, bsppretaskinghook.c,
+	include/bootcard.h: Change size_t to ssize_t on bsp_get_work_area().
+	On 16-bit architectures, size_t can be 16-bits which would limit the
+	work area to 64K.
+
 2008-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/utility.h: Renamed various macros.

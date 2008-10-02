@@ -43,10 +43,10 @@ extern char HeapSize[];
  *  Heap.
  */
 void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size
+  void    **work_area_start,
+  ssize_t  *work_area_size,
+  void    **heap_start,
+  ssize_t  *heap_size
 )
 {
   uintptr_t ram_end;
@@ -61,7 +61,7 @@ void bsp_get_work_area(
   *work_area_start = WorkAreaBase;
   *work_area_size  = ram_end - (uintptr_t) WorkAreaBase;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size       = (size_t) HeapSize;
+  *heap_size       = (ssize_t) HeapSize;
 
   #ifdef BSP_GET_WORK_AREA_DEBUG
     printk( "work_area_start = %p\n", *work_area_start );
