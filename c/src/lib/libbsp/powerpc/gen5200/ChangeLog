@@ -1,3 +1,8 @@
+2008-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Move MPC8313ERDB, MPC8349EAMDS, HSC_CM01, MPC8349
+	defines from *.cfg into bspopts.h.
+
 2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h: #include <bspopts.h> first.
