@@ -55,6 +55,7 @@ __RCSID("$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $");
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#define __need_getopt_newlib
 #include <getopt.h>
 
 #include <sys/types.h>

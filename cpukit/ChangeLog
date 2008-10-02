@@ -1,3 +1,11 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_cp.c, libmisc/shell/main_ls.c,
+	libmisc/shell/main_mv.c, libmisc/shell/main_netstats.c,
+	libmisc/shell/main_rm.c, libmisc/shell/shell_script.c: Newlib >
+	1.16.0 requires __need_getopt_newlib to be defined to get visibility
+	on the reentrancy extensions.
+
 2008-10-01	Gene Smith <gene.smith@siemens.com>
 
 	PR 1328/cpukit

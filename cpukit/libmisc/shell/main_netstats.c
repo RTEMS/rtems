@@ -16,6 +16,7 @@
 #endif
 
 #include <stdio.h>
+#define __need_getopt_newlib
 #include <getopt.h>
 
 #include <rtems.h>

@@ -55,6 +55,7 @@ __RCSID("$NetBSD: mv.c,v 1.41 2008/07/20 00:52:40 lukem Exp $");
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#define __need_getopt_newlib
 #include <getopt.h>
 
 #include <sys/param.h>

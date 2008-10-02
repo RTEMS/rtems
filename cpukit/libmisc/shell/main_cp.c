@@ -69,6 +69,7 @@ __RCSID("$NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $");
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#define __need_getopt_newlib
 #include <getopt.h>
 
 #include <sys/param.h>

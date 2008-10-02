@@ -50,6 +50,7 @@ __FBSDID("$FreeBSD: src/bin/rm/rm.c,v 1.58 2006/10/31 02:22:36 delphij Exp $");
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#define __need_getopt_newlib
 #include <getopt.h>
 
 #include <sys/stat.h>
