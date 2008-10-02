@@ -33,6 +33,11 @@ RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 [If defined, reset the board when the application exits.])
 
+
+RTEMS_BSPOPTS_SET([M5484FIREENGINE],[m5484FireEngine],[1])
+RTEMS_BSPOPTS_HELP([M5484FIREENGINE],
+[If defined, use custom settings for the m5484FireEngine BSP.])
+
 BSP_BOOTCARD_OPTIONS
 
 # Explicitly list all Makefiles here
