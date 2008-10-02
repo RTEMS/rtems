@@ -14,7 +14,7 @@ include_HEADERS += include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 
-include_HEADERS += include/coverhd.h
+include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = times
 noinst_LIBRARIES = libbspstart.a

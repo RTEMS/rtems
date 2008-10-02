@@ -19,7 +19,7 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += include/coverhd.h
+include_HEADERS += ../../shared/include/coverhd.h
 
 nodist_include_HEADERS += ../../shared/tod.h
 
