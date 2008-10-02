@@ -1,0 +1,226 @@
+#!@KSH@ -p
+#
+#  $Id$
+#
+# Run rtems tests on the M32C simulator includeed with GDB
+#
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+        -o options  -- specify options to be passed to simulator
+	-v	    -- verbose
+        -l logdir   -- specify log directory (default is 'logdir')
+
+  Specify test as 'test' or 'test.exe' or 'test.ralf'.
+  All multiprocessing tests *must* be specified simply as 'mp01', etc.
+"
+
+# export everything
+set -a
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+# print args, 1 per line
+ml_echo()
+{
+    for l
+    do
+       echo "$l"
+    done
+}
+
+# run at normal and signalled exit
+test_exit()
+{
+    exit_code=$1
+
+    rm -f ${statfile}* ${logfile}.tmp*
+    [ "$sim_pid" ] && kill -9 $sim_pid
+
+    exit $exit_code
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+# max_run_time is defaulted to 3 minutes
+#
+
+verbose=""
+extra_options=""
+stdio_setup="yes"
+run_to_completion="yes"
+logdir=log
+update_on_tick="no"
+max_run_time=$((30))
+using_print_buffer="yes"
+
+while getopts vhr12o:c:sl:t OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        l)
+            logdir="$OPTARG";;
+        o)
+            extra_options="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+# Run the tests
+#
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `ls -1 *.exe *.ralf 2>/dev/null`
+     tests="$*"
+fi
+
+[ -d $logdir ] ||
+  mkdir $logdir || fatal "could not create log directory ($logdir)"
+
+# where the tmp files go
+statfile=/tmp/stats$$
+
+trap "test_exit" 1 2 3 13 14 15
+
+for tfile in $tests
+do
+
+   echo $tfile | grep "exe$" >/dev/null
+   if [ $? -eq 0 ] ; then
+     ext=.exe
+   else
+     ext=.ralf
+   fi
+   tname=`basename $tfile ${ext}`
+   TEST_TYPE="single"
+
+   case $tname in
+       capture* | monitor* | termios* | fileio* | pppd*)
+           if [ $run_to_completion = "yes" ]
+           then
+                warn "Skipping $tname; it is interactive"
+                continue
+           fi
+           ;;
+       *-node2*)
+           fatal "MP tests not supported"
+           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
+           continue;;
+      *-node1*)
+           warn "Running both nodes associated with $tname"
+           variant=`echo $tname | sed 's/.*-node[12]//' | sed "s/${ext}/"`
+           tname=`echo $tname | sed 's/-node.*//'`
+           TEST_TYPE="mp"
+           ;;
+       sp39*|sp41*)
+           warn "Skipping $tname; it does not complete long on sis"
+           continue
+           ;;
+       minimum*|stackchk*|*fatal*|termio*)
+           warn "Skipping $tname; it locks up or takes a VERY long time to run"
+           continue
+           ;;
+   esac
+
+   # Change the title bar to indicate which test we are running
+   # The simulator screen doesn't provide any indication
+
+   logfile=$logdir/$tname
+   infofile=$logfile.info
+
+   rm -f ${statfile}* ${logfile}.tmp*
+
+   date=`date`
+   echo "Starting $tname at $date"
+
+   # Spin off the simulator in the background
+   @target_alias@-run ${tfile} >${logfile}.tmp 2>&1 &
+   sim_pid=$!
+
+   # Make sure it won't run forever...
+   {
+       time_run=0
+       while [ $time_run -lt $max_run_time ]
+       do
+           # sleep 1s at a time waiting for job to finish or timer to expire
+           # if job has exited, then we exit, too.
+           sleep 1
+           if kill -0 $sim_pid 2>/dev/null
+           then
+                grep "Memory exception " ${logfile}.tmp >/dev/null
+                if [ $? -eq 0 ] ; then
+                  break
+                fi
+
+                time_run=$((time_run + 1))
+           else
+                exit 0
+           fi
+       done
+
+       kill -2 $sim_pid 2>/dev/null
+       { sleep 5; kill -9 $sim_pid 2>/dev/null; } &
+   } &
+
+   wait $sim_pid
+   status=$?
+   if [ $status -ne 0 ]
+   then
+       ran_too_long="yes"
+   else
+       ran_too_long="no"
+   fi
+
+   sim_pid=""
+
+   # fix up the printf output from the test
+   case $TEST_TYPE in
+       mp)
+           fatal "MP not supported"
+           ;;
+       *)
+           output_it=1
+           cat ${logfile}.tmp > ${logfile}
+           ;;
+   esac
+
+   rm -f ${logfile}.tmp*
+
+done
+
+test_exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+
