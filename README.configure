@@ -95,6 +95,7 @@ The following targets are supported:
       h8300-rtems4.10
       i386-rtems4.10
       m32c-rtems4.10
+      m32r-rtems4.10
       m68k-rtems4.10
       mips-rtems4.10
       no_cpu-rtems4.10
@@ -178,6 +179,8 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 		      based solutions.
 
 m32c		: m32csim
+
+m32r		: m32rsim
 
 m68k		: av5282 csb360 gen68302 gen68360 gen68360_040 
 		genmcf548x idp mcf5206elite mcf52235 mcf5235 mcf5239
