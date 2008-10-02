@@ -1,5 +1,9 @@
 2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/pgh360.cfg: Remove RTEMS_BOARD_MODEL.
+
+2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/m5484FireEngine.cfg: Remove RTEMS_BOARD_MODEL.
 	Remove RTEMS_54XX_DERIVATE (Unused).
 	* custom/genmcf548x.cfg: Remove RTEMS_BOARD_MODEL.
