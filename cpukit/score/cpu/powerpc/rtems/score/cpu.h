@@ -412,6 +412,11 @@ static inline uint32_t CPU_swap_u32(
  * we run in supervisory mode so that should work on
  * all CPUs. In user mode we'd have a problem...
  * 2007/11/30, T.S.
+ * 
+ * Things _are_ even worse. MPC8xx does not support the SPRs, 
+ * so we need a way to fetch the timebase either with a mftb or a mfspr
+ * Sigh.
+ * 2008/09/30 Th. Doerfler.
  *
  * OTOH, PSIM currently lacks support for reading
  * SPRs 268/269. You need GDB patch sim/2376 to avoid
@@ -419,9 +424,24 @@ static inline uint32_t CPU_swap_u32(
  */
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mftb  %0" : "=r" (_value) )
-#else
+#elif 0
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mfspr %0,268" : "=r" (_value) )
+#else
+#define CPU_Get_timebase_low( _value )				\
+do {								\
+  uint32_t _pvr;						\
+								\
+  asm volatile( "mfpvr %0" : "=r" (_pvr) );			\
+  if ((_pvr >> 16) == 0x0050) {					\
+    /* we are on a MPC8xx, so use "mftb" */			\
+    asm volatile( "mftb  %0" : "=r" (_value) );			\
+  }								\
+  else {							\
+    /* we are on a different PPC flavour, so use "mfspr" */	\
+    asm volatile( "mfspr %0,268" : "=r" (_value) );		\
+  }								\
+ }  while (0)
 #endif
 
 #define rtems_bsp_delay( _microseconds ) \
@@ -474,16 +494,20 @@ static inline uint64_t PPC_Get_timebase_register( void )
   uint64_t tbr;
 
   do {
-#if 0
-/* See comment above (CPU_Get_timebase_low) */
-    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
-    asm volatile( "mftb  %0" : "=r" (tbr_low));
-    asm volatile( "mftbu %0" : "=r" (tbr_high));
-#else
-    asm volatile( "mfspr %0, 269" : "=r" (tbr_high_old));
-    asm volatile( "mfspr %0, 268" : "=r" (tbr_low));
-    asm volatile( "mfspr %0, 269" : "=r" (tbr_high));
-#endif
+    uint32_t _pvr;
+								
+    asm volatile( "mfpvr %0" : "=r" (_pvr) );			
+    if ((_pvr >> 16) == 0x0050) {
+      /* we are on a MPC8xx and can't access TB via SPRs */
+      asm volatile( "mftbu %0" : "=r" (tbr_high_old));
+      asm volatile( "mftb  %0" : "=r" (tbr_low));
+      asm volatile( "mftbu %0" : "=r" (tbr_high));
+    }
+    else {
+      asm volatile( "mfspr %0, 269" : "=r" (tbr_high_old));
+      asm volatile( "mfspr %0, 268" : "=r" (tbr_low));
+      asm volatile( "mfspr %0, 269" : "=r" (tbr_high));
+    }
   } while ( tbr_high_old != tbr_high );
 
   tbr = tbr_high;

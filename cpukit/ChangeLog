@@ -1,3 +1,8 @@
+2008-10-02	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* score/cpu/powerpc/rtems/score/cpu.h: adapt timebase macros to
+	support MPC8xx again
+
 2008-10-01	Gene Smith <gene.smith@siemens.com>
 
 	PR 1328/cpukit
