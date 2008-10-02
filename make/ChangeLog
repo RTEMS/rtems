@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/m32csim.cfg: New file.
+
 2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* custom/virtex.cfg: Remove -Dvirtex.
