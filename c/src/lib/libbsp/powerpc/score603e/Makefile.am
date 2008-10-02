@@ -23,7 +23,7 @@ include_HEADERS += include/coverhd.h include/gen2.h
 ###
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/Hwr_init.c \
     startup/genpvec.c ../../shared/gnatinstallhandler.c \
@@ -37,7 +37,6 @@ include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
 	PCI_bus/PCI.h \
 	../../powerpc/shared/residual/residual.h \
 	../../powerpc/shared/residual/pnp.h \
-	../../powerpc/shared/openpic/openpic.h \
 	../../powerpc/shared/console/consoleIo.h \
 	../../shared/include/irq-generic.h \
 	include/irq-config.h 
