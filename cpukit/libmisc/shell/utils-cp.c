@@ -69,6 +69,9 @@ __RCSID("$NetBSD: utils.c,v 1.29 2005/10/15 18:22:18 christos Exp $");
 
 #define cp_pct(x, y)    ((y == 0) ? 0 : (int)(100.0 * (x) / (y)))
 
+/* original was MAXBSIZE which results in 64K on the stack */
+#define MAX_READ 1024
+
 int
 set_utimes(const char *file, struct stat *fs)
 {
@@ -87,7 +90,7 @@ set_utimes(const char *file, struct stat *fs)
 int
 copy_file(rtems_shell_cp_globals* cp_globals, FTSENT *entp, int dne)
 {
-	static char buf[MAXBSIZE];
+	static char buf[MAX_READ];
 	struct stat *fs;
 	ssize_t wcount;
 	size_t wresid;
@@ -204,7 +207,7 @@ copy_file(rtems_shell_cp_globals* cp_globals, FTSENT *entp, int dne)
 #endif
 		{
 			wtotal = 0;
-			while ((rcount = read(from_fd, buf, MAXBSIZE)) > 0) {
+			while ((rcount = read(from_fd, buf, MAX_READ)) > 0) {
 				for (bufp = buf, wresid = rcount; ;
 			    	bufp += wcount, wresid -= wcount) {
 					wcount = write(to_fd, bufp, wresid);

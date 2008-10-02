@@ -1,5 +1,9 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/utils-cp.c: Do not put a 64K buffer on the stack.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/priority.inl: Use simple integer as loop
 	counter.
 
