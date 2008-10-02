@@ -26,10 +26,10 @@
 #include <bsp/bootcard.h>
 
 void bsp_get_work_area(
-  void **work_area_start,
-  size_t *work_area_size,
-  void **heap_start,
-  size_t *heap_size
+  void    **work_area_start,
+  ssize_t  *work_area_size,
+  void    **heap_start,
+  ssize_t  *heap_size
 )
 {
   char *ram_end = (char *) (TQM_BD_INFO.sdram_size - (uint32_t)TopRamReserved);

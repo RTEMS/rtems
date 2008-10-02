@@ -111,16 +111,12 @@ void bsp_size_memory(void)
  *  Heap.
  */
 void bsp_get_work_area(
-  void   **work_area_start,
-  size_t  *work_area_size,
-  void   **heap_start,
-  size_t  *heap_size
 )
 {
   *work_area_start = (void *) rtemsFreeMemStart;
   *work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsFreeMemStart;
   *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size       = (size_t) HeapSize;
+  *heap_size       = (ssize_t) HeapSize;
 
   #if 0
     printk( "WorkArea Base = %p\n", *work_area_start );
