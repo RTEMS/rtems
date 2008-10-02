@@ -1,5 +1,9 @@
 2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* custom/virtex.cfg: Remove -Dvirtex.
+
+2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* custom/pghplus.cfg, custom/tqm8xx.cfg, custom/tqm8xx_stk8xx.cfg:
 	Remove RTEMS_TQM_MODEL.
 
