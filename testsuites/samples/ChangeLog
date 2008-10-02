@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* unlimited/system.h: 10000 task ids is too many for some targets.
+
 2008-09-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* unlimited/system.h: Support up to 10K tasks in loop. With 64MB on

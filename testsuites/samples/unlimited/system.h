@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -60,7 +60,7 @@ void test3();
  * Keep track of the task id's created, use a large array.
  */
 
-#define MAX_TASKS         (10000)
+#define MAX_TASKS         (1000)
 #define TASK_INDEX_OFFSET (1)
 
 extern rtems_id task_id[MAX_TASKS];
