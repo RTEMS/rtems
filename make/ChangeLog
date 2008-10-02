@@ -1,3 +1,9 @@
+2008-10-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/gen83xx.cfg, custom/hsc_cm01.cfg, custom/mpc8313erdb.cfg,
+	custom/mpc8349eamds.cfg: Remove RTEMS_BOARD_MODEL,
+	RTEMS_83XX_DERIVATE.
+
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/erc32.cfg: Revert accidental commit.
