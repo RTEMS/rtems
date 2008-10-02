@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, startup/bspgetworkarea.c: Turn = into +=.
+
 2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 
