@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/region.t: Change size_t to ssize_t.
+
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shell/preface.texi: Bump version to 4.9.99.0

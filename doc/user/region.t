@@ -639,7 +639,7 @@ is less than or equal to the size of the segment returned.
 rtems_status_code rtems_region_get_segment_size(
   rtems_id  id,
   void     *segment,
-  size_t   *size
+  ssize_t  *size
 );
 @end example
 @end ifset
@@ -689,8 +689,8 @@ a multiple of the region's page size.
 rtems_status_code rtems_region_resize_segment(
   rtems_id     id,
   void        *segment,
-  size_t       size,
-  size_t      *old_size
+  ssize_t      size,
+  ssize_t     *old_size
 );
 @end example
 @end ifset
