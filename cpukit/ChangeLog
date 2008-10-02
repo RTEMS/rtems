@@ -1,5 +1,22 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/malloc_statistics_helpers.c,
+	libcsupport/src/realloc.c, rtems/include/rtems/rtems/region.h,
+	rtems/include/rtems/rtems/support.h,
+	rtems/src/regiongetsegmentsize.c, rtems/src/regionresizesegment.c,
+	rtems/src/workspace.c, sapi/include/confdefs.h,
+	score/include/rtems/score/heap.h,
+	score/include/rtems/score/protectedheap.h,
+	score/include/rtems/score/wkspace.h, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapallocatealigned.c,
+	score/src/heapextend.c, score/src/heapresizeblock.c,
+	score/src/heapsizeofuserarea.c, score/src/pheapgetblocksize.c,
+	score/src/wkspace.c: Change size_t to ssize_t on all Heap, Workspace
+	and Region calls. On 16-bit architectures, size_t can be 16-bits
+	which would limit sizes to 64K.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/main_cp.c, libmisc/shell/main_ls.c,
 	libmisc/shell/main_mv.c, libmisc/shell/main_netstats.c,
 	libmisc/shell/main_rm.c, libmisc/shell/shell_script.c: Newlib >

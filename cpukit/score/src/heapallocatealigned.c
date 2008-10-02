@@ -131,7 +131,7 @@ Heap_Block *block_allocate(
 
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  size_t        size,
+  ssize_t       size,
   uint32_t      alignment
 )
 {

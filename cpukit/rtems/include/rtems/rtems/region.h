@@ -240,7 +240,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  size_t            *size
+  ssize_t           *size
 );
 
 /**
@@ -282,8 +282,8 @@ rtems_status_code rtems_region_return_segment(
 rtems_status_code rtems_region_resize_segment(
   Objects_Id  id,
   void       *segment,
-  size_t      size,
-  size_t     *old_size
+  ssize_t     size,
+  ssize_t    *old_size
 );
 
 #ifndef __RTEMS_APPLICATION__

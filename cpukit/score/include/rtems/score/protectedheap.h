@@ -54,7 +54,7 @@ extern "C" {
 static inline uint32_t _Protected_heap_Initialize(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size,
+  ssize_t       size,
   uint32_t      page_size
 )
 {
@@ -128,7 +128,7 @@ void *_Protected_heap_Allocate_aligned(
 bool _Protected_heap_Get_block_size(
   Heap_Control        *the_heap,
   void                *starting_address,
-  size_t              *size
+  ssize_t             *size
 );
 
 /**

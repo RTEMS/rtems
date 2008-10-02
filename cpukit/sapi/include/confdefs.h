@@ -449,7 +449,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  may be applied.
  */
 #define _Configure_From_workspace(_size) \
-  ((_size) + (2 * sizeof(uint32_t)) + CPU_ALIGNMENT)
+  (ssize_t)((_size) + (2 * sizeof(uint32_t)) + CPU_ALIGNMENT)
 
 /**
  *  This macro accounts for how memory for a set of configured objects is 

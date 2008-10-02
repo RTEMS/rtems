@@ -38,7 +38,7 @@
 Heap_Extend_status _Heap_Extend(
   Heap_Control        *the_heap,
   void                *starting_address,
-  size_t               size,
+  ssize_t              size,
   uint32_t            *amount_extended
 )
 {

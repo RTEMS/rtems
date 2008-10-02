@@ -27,7 +27,7 @@
  */
 void _Workspace_Handler_initialization(
   void       *starting_address,
-  size_t      size
+  ssize_t     size
 )
 {
   uint32_t    memory_available;
@@ -61,7 +61,7 @@ void _Workspace_Handler_initialization(
  *  _Workspace_Allocate
  */
 void *_Workspace_Allocate(
-  size_t   size
+  ssize_t   size
 )
 {
    return _Heap_Allocate( &_Workspace_Area, size );
@@ -81,7 +81,7 @@ bool _Workspace_Free(
  *  _Workspace_Allocate_or_fatal_error
  */
 void *_Workspace_Allocate_or_fatal_error(
-  size_t      size
+  ssize_t      size
 )
 {
   void        *memory;

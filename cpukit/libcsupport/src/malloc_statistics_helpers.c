@@ -35,7 +35,7 @@ void rtems_malloc_statistics_at_malloc(
   void *pointer
 )
 {
-  size_t     actual_size = 0;
+  ssize_t    actual_size = 0;
   uint32_t   current_depth;
   rtems_malloc_statistics_t *s = &rtems_malloc_statistics;
 
@@ -59,7 +59,7 @@ void rtems_malloc_statistics_at_free(
   void *pointer
 )
 {
-  size_t size;
+  ssize_t size;
 
   if (_Protected_heap_Get_block_size(RTEMS_Malloc_Heap, pointer, &size) ) {
     MSBUMP(lifetime_freed, size);

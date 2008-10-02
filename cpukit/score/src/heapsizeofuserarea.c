@@ -42,7 +42,7 @@
 bool _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
-  size_t              *size
+  ssize_t             *size
 )
 {
   Heap_Block        *the_block;

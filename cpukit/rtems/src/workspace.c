@@ -39,8 +39,8 @@ bool rtems_workspace_get_information(
  *  _Workspace_Allocate
  */
 bool rtems_workspace_allocate(
-  size_t   bytes,
-  void   **pointer
+  ssize_t   bytes,
+  void    **pointer
 )
 {
    *pointer =  _Heap_Allocate( &_Workspace_Area, bytes );

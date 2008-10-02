@@ -52,7 +52,7 @@ SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
  */
 void _Workspace_Handler_initialization(
   void       *starting_address,
-  size_t      size
+  ssize_t     size
 );
 
 /** @brief Allocate Memory from Workspace
@@ -66,7 +66,7 @@ void _Workspace_Handler_initialization(
  *  @return a pointer to the requested memory or NULL.
  */
 void *_Workspace_Allocate(
-  size_t   size
+  ssize_t   size
 );
 
 /** @brief Free Memory to the Workspace
@@ -94,7 +94,7 @@ bool _Workspace_Free(
  *  @return If successful, the starting address of the allocated memory
  */
 void *_Workspace_Allocate_or_fatal_error(
-  size_t  size
+  ssize_t  size
 );
 
 #ifndef __RTEMS_APPLICATION__

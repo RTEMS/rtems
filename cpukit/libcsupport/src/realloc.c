@@ -25,9 +25,9 @@ void *realloc(
   size_t size
 )
 {
-  size_t  old_size;
-  char   *new_area;
-  size_t  resize;
+  ssize_t  old_size;
+  char    *new_area;
+  ssize_t  resize;
 
   MSBUMP(realloc_calls, 1);
 
