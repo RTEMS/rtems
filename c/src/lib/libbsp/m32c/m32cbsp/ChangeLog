@@ -1,5 +1,9 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* README: New file.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* .cvsignore, ChangeLog, Makefile.am, bsp_specs, configure.ac,
 	preinstall.am, console/console-io.c, console/syscalls.S,
 	include/.cvsignore, include/bsp.h, start/start.S, startup/bspstart.c,
