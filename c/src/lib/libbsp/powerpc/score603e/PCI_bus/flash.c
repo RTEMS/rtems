@@ -1,7 +1,11 @@
 /*
  *
- *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994, 1997.
+ *  COPYRIGHT (c) 1989-2008
  *  On-Line Applications Research Corporation (OAR).
+ *  
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  * $Id$
  */

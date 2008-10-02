@@ -1,5 +1,4 @@
-/* irq_init.c
- *
+/*
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
  *

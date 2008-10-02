@@ -2,7 +2,7 @@
  *  This file contains the table for the z85c30 port
  *  used by the console driver.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

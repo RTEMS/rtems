@@ -1,8 +1,7 @@
-/*  85c30.h
- *
+/*
  *  This include file contains z85c30 chip information.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in

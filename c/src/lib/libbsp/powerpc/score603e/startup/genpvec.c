@@ -1,5 +1,4 @@
-/*  genpvec.c
- *
+/*
  *  These routines handle the external exception.  Multiple ISRs occur off
  *  of this one interrupt.
  *

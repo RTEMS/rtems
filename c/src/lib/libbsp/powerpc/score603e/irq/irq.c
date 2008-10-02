@@ -1,5 +1,4 @@
 /*
- *
  *  This file contains the implementation of the function described in irq.h
  *
  *  Copyright (C) 1998, 1999 valette@crf.canon.fr

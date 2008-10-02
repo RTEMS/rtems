@@ -1,11 +1,10 @@
-/*  bspstart.c
- *
+/*
  *  This set of routines starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
