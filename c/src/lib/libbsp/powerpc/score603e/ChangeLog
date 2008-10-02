@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* preinstall.am: Regenerated.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am: bsp_cleanup() was wrong. Use stub. openpic.h not needed.
