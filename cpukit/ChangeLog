@@ -1,5 +1,9 @@
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* configure.ac: Revert trash committed. Shell builds with m32c now.
+
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac, score/cpu/Makefile.am: Initial addition of M32C port.
 	This is still a work in process but most tests do run on simulator.
 
