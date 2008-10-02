@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* preinstall.am: Regenerated.
+
 2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove scitab.c (Not applicable).

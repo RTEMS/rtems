@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* preinstall.am: Regenerated.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* PCI_bus/PCI.c, PCI_bus/PCI.h, PCI_bus/flash.c, console/85c30.h,

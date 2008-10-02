@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* preinstall.am: Regenerated.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 
