@@ -25,6 +25,25 @@ RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
 [If defined, the instruction cache will be enabled after address translation
  is turned on.])
 
+RTEMS_BSPOPTS_SET([MPC8313ERDB],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_HELP([MPC8313ERDB],
+[If defined, use custom settings for the mpc8313erdb BSP.])
+
+RTEMS_BSPOPTS_SET([MPC8349EAMDS],[mpc8349eamds],[1])
+RTEMS_BSPOPTS_HELP([MPC8349EAMDS],
+[If defined, use custom settings for the mpc8349eamds BSP.])
+
+RTEMS_BSPOPTS_SET([HSC_CM01],[hsc_cm01],[1])
+RTEMS_BSPOPTS_HELP([HSC_CM01],
+[If defined, use custom settings for the hsc_cm01 BSP.])
+
+RTEMS_BSPOPTS_SET([MPC8349],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_SET([MPC8349],[mpc8349eamds],[1])
+RTEMS_BSPOPTS_SET([MPC8349],[hsc_cm01],[1])
+RTEMS_BSPOPTS_HELP([MPC8349],
+[If defined, use custom settings for the MPC8349 libcpu family.])
+
+
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
