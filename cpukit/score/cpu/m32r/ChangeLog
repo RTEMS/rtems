@@ -1,0 +1,6 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore, ChangeLog, Makefile.am, preinstall.am, rtems/asm.h,
+	rtems/score/cpu.h, rtems/score/cpu_asm.h, rtems/score/m32r.h,
+	rtems/score/types.h: New files.
+
