@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* console/init68360.c: Delete unused code.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/config.c, console/console.c, console/console.h,
