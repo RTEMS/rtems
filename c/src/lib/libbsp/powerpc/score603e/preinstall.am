@@ -81,10 +81,6 @@ $(PROJECT_INCLUDE)/bsp/pnp.h: ../../powerpc/shared/residual/pnp.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pnp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pnp.h
 
-$(PROJECT_INCLUDE)/bsp/openpic.h: ../../powerpc/shared/openpic/openpic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
-
 $(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
