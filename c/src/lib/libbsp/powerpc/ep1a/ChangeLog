@@ -1,3 +1,11 @@
+2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/config.c, console/console.c, console/console.h,
+	console/ns16550cfg.c, console/ns16550cfg.h, include/bsp.h,
+	include/tm27.h, irq/irq_init.c, irq/openpic_xxx_irq.c,
+	pci/no_host_bridge.c: File head clean up.
+	* console/debugio.c: Removed.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am: Regenerated.

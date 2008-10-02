@@ -1,6 +1,6 @@
 /*
- *
- *  This file contains the i8259/openpic-specific implementation of the function described in irq.h
+ *  This file contains the i8259/openpic-specific implementation of
+ *  the function described in irq.h
  *
  *  Copyright (C) 1998, 1999 valette@crf.canon.fr
  *

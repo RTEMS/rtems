@@ -1,7 +1,7 @@
 /*  
  *  This include file contains all console driver definations for the nc16550
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,8 +17,8 @@
                                                             
 typedef struct uart_reg
 {
-        unsigned char reg;
-        unsigned char pad[7];
+  unsigned char reg;
+  unsigned char pad[7];
 } uartReg;
 
 uint8_t Read_ns16550_register(

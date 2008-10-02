@@ -1,5 +1,4 @@
-/* irq_init.c
- *
+/*
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
  *
@@ -11,7 +10,7 @@
  * Till Straumann <strauman@slac.stanford.edu>, 12/20/2001:
  * Use the new interface to openpic_init
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

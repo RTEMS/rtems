@@ -1,4 +1,4 @@
-/*XXX
+/*
  *  This file contains the TTY driver for the ep1a 
  *
  *  This driver uses the termios pseudo driver.
@@ -241,83 +241,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-#if 0
-/* PAGE
- *
- *  DEBUG_puts
- *
- *  This should be safe in the event of an error.  It attempts to ensure
- *  that no TX empty interrupts occur while it is doing polled IO.  Then
- *  it restores the state of that external interrupt.
- *
- *  Input parameters:
- *    string  - pointer to debug output string
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-
-void DEBUG_puts(
-	char *string
-)
-{
-	char *s;
-	unsigned32	Irql;
-
-	rtems_interrupt_disable(Irql);
-
-	for ( s = string ; *s ; s++ ) 
-	{
-		Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
-			deviceWritePolled(Console_Port_Minor, *s);
-	}
-
-	rtems_interrupt_enable(Irql);
-}
-
-/* PAGE
- *
- *  DEBUG_puth
- *
- *  This should be safe in the event of an error.  It attempts to ensure
- *  that no TX empty interrupts occur while it is doing polled IO.  Then
- *  it restores the state of that external interrupt.
- *
- *  Input parameters:
- *    ulHexNum - value to display
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- */
-void
-DEBUG_puth(
-    unsigned32 ulHexNum
-    )
-{
-	unsigned long i,d;
-	unsigned32 Irql;
-
-	rtems_interrupt_disable(Irql);
-	
-	Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
-		deviceWritePolled(Console_Port_Minor, '0');
-	Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
-		deviceWritePolled(Console_Port_Minor, 'x');
-
-	for(i=32;i;)
-	{
-		i-=4;
-		d=(ulHexNum>>i)&0xf;
-		Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
-			deviceWritePolled(Console_Port_Minor,
-					  (d<=9) ? d+'0' : d+'a'-0xa);
-	}
-
-	rtems_interrupt_enable(Irql);
-}
-#endif
 
 /* const char arg to be compatible with BSP_output_char decl. */
 void
