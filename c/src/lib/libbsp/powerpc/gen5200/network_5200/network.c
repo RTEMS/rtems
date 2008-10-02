@@ -441,7 +441,7 @@ int mpc5200_eth_mii_read(struct mpc5200_enet_struct *sc, unsigned char phyAddr, 
     printf ("Read MDIO failed..." "\r\n");
 #endif
 
-	return FALSE;
+	return false;
 
 	}
 
@@ -455,7 +455,7 @@ int mpc5200_eth_mii_read(struct mpc5200_enet_struct *sc, unsigned char phyAddr, 
   */
   *retVal = (unsigned short)mpc5200.mii_data;
 
-  return TRUE;
+  return true;
 
   }
 
@@ -494,7 +494,7 @@ static int mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char p
     printf ("Write MDIO failed..." "\r\n");
 #endif
 
-    return FALSE;
+    return false;
 
     }
 
@@ -503,7 +503,7 @@ static int mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char p
   */
   mpc5200.ievent = 0x00800000;
 
-  return TRUE;
+  return true;
 
   }
 
@@ -546,7 +546,7 @@ static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
    */
   for (delay = 0;delay < 16*4;delay++) {};
   
-  return TRUE;
+  return true;
 }
 
 
@@ -720,7 +720,7 @@ void mpc5200_smartcomm_tx_irq_handler(rtems_irq_hdl_param unused)
   *
   */
 static void mpc5200_fec_retire_tbd(struct mpc5200_enet_struct *sc,
-				   boolean force)
+				   bool force)
 {
   struct mbuf *n;
   TaskBD1_t   *bdRing = (TaskBD1_t *)TaskGetBDRing( txTaskId );;
@@ -794,7 +794,7 @@ static void mpc5200_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
  /*
   * Free up buffer descriptors
   */
-  mpc5200_fec_retire_tbd(sc,FALSE);
+  mpc5200_fec_retire_tbd(sc,false);
 
  /*
   * Set up the transmit buffer descriptors.
@@ -829,14 +829,14 @@ static void mpc5200_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
        * last buffer descriptor in a frame can generate
        * an interrupt.
        */
-      mpc5200_fec_retire_tbd(sc,FALSE);
+      mpc5200_fec_retire_tbd(sc,false);
       
       while((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
 	bestcomm_glue_irq_enable(FEC_XMIT_TASK_NO);
 	rtems_bsdnet_event_receive(INTERRUPT_EVENT, 
 				   RTEMS_WAIT | RTEMS_EVENT_ANY, 
 				   RTEMS_NO_TIMEOUT, &events);
-        mpc5200_fec_retire_tbd(sc,FALSE);
+        mpc5200_fec_retire_tbd(sc,false);
       }
     }
 
@@ -1220,7 +1220,7 @@ static void mpc5200_fec_initialize_phy(struct mpc5200_enet_struct *sc)
 
       }
 
-    if(mpc5200_eth_mii_read(sc, phyAddr, 0x1, &phyStatus) != TRUE)
+    if(mpc5200_eth_mii_read(sc, phyAddr, 0x1, &phyStatus) != true)
       {
 
 #if defined(ETH_DEBUG)
@@ -1507,7 +1507,7 @@ static void mpc5200_fec_restart(struct mpc5200_enet_struct *sc)
 #if 0
   mpc5200_fec_tx_bd_requeue(sc);
 #else
-  mpc5200_fec_retire_tbd(sc,TRUE);
+  mpc5200_fec_retire_tbd(sc,true);
 #endif
 #endif
   /*

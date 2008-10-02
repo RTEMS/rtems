@@ -1,3 +1,8 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1329/bsps
+	* network_5200/network.c: Eliminate use of boolean so this compiles.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am: Regenerated.
