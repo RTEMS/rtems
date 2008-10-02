@@ -1,3 +1,8 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Use shared tm27.h stub.
+	* include/tm27.h: Removed.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/tm27.h: Remove reference to set_vector.

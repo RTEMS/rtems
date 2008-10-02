@@ -15,7 +15,7 @@ include_HEADERS += include/arm_mode_bits.h
 include_HEADERS += include/asm_macros.h
 include_HEADERS += include/gba_registers.h
 include_HEADERS += include/conio.h
-include_HEADERS += include/tm27.h
+include_HEADERS += ../../shared/include/tm27.h
 include_HEADERS += include/gba.h
 
 nodist_include_HEADERS = include/bspopts.h
