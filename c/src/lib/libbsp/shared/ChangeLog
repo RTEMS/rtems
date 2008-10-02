@@ -1,3 +1,7 @@
+2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/tm27.h: Use shared tm27.h stub.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c, bspgetworkarea.c, bsppretaskinghook.c,

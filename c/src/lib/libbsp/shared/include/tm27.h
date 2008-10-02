@@ -19,7 +19,7 @@
  *  Stuff for Time Test 27
  */
 
-#define MUST_WAIT_FOR_INTERRUPT 1
+#define MUST_WAIT_FOR_INTERRUPT 0
 
 void Install_tm27_vector(void (*_handler)())
 {
