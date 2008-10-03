@@ -1,0 +1,44 @@
+diff -Naur binutils-2.18.91.orig/bfd/config.bfd binutils-2.18.91/bfd/config.bfd
+--- binutils-2.18.91.orig/bfd/config.bfd	2008-04-16 20:02:01.000000000 +0200
++++ binutils-2.18.91/bfd/config.bfd	2008-10-03 04:25:43.000000000 +0200
+@@ -721,7 +721,7 @@
+     targ_defvec=bfd_elf32_iq2000_vec
+     ;;
+ 
+-  m32c-*-elf)
++  m32c-*-elf | m32c-*-rtems*)
+     targ_defvec=bfd_elf32_m32c_vec
+     ;;
+ 
+diff -Naur binutils-2.18.91.orig/gas/configure.tgt binutils-2.18.91/gas/configure.tgt
+--- binutils-2.18.91.orig/gas/configure.tgt	2008-07-07 18:43:06.000000000 +0200
++++ binutils-2.18.91/gas/configure.tgt	2008-10-03 04:25:43.000000000 +0200
+@@ -244,9 +244,10 @@
+ 
+   iq2000-*-elf)         		fmt=elf ;;
+ 
+-  m32c-*-elf)         			fmt=elf ;;
++  m32c-*-elf | m32c-*-rtems*)		fmt=elf ;;
+ 
+   m32r-*-elf*)				fmt=elf ;;
++  m32r-*-rtems*)			fmt=elf ;;
+   m32r-*-linux*)			fmt=elf em=linux;;
+ 
+   m68hc11-*-* | m6811-*-*)		fmt=elf ;;
+diff -Naur binutils-2.18.91.orig/ld/configure.tgt binutils-2.18.91/ld/configure.tgt
+--- binutils-2.18.91.orig/ld/configure.tgt	2008-08-09 07:35:13.000000000 +0200
++++ binutils-2.18.91/ld/configure.tgt	2008-10-03 04:25:43.000000000 +0200
+@@ -301,10 +301,12 @@
+ 			;;
+ iq2000-*-elf)           targ_emul=elf32iq2000 ; targ_extra_emuls="elf32iq10"
+ 			;;
+-m32c-*-elf)		targ_emul=elf32m32c
++m32c-*-elf|m32c-*-rtems*)
++			targ_emul=elf32m32c
+ 			;;
+ m32r*le-*-elf*)         targ_emul=m32rlelf ;;
+ m32r*-*-elf*)           targ_emul=m32relf ;;
++m32r*-*-rtems*)         targ_emul=m32relf ;;
+ m32r*le-*-linux-*)      targ_emul=m32rlelf_linux ;;
+ m32r*-*-linux-*)        targ_emul=m32relf_linux
+ 			;;
