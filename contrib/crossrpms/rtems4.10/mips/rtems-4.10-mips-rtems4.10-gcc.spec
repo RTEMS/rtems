@@ -40,7 +40,7 @@ Summary:      	mips-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	5%{?dist}
+Release:      	6%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -94,7 +94,7 @@ Requires:	rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.3.2"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-20080917.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-20081003.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -105,7 +105,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.16.0-rtems4.10-20080925.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.16.0-rtems4.10-20081003.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
