@@ -29,8 +29,8 @@
 %define binutils_version 2.18.91
 %define binutils_rpmvers %{expand:%(echo "2.18.91" | tr - _ )}
 
-Name:		rtems-4.10-arm-rtems4.10-binutils
-Summary:	Binutils for target arm-rtems4.10
+Name:		rtems-4.10-m32c-rtems4.10-binutils
+Summary:	Binutils for target m32c-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
 Release:	2%{?dist}
@@ -57,7 +57,7 @@ Source0: ftp://sourceware.redhat.com/pub/binutils/snapshots/binutils-2.18.91.tar
 Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.18.91-rtems4.10-20081003.diff
 
 %description
-Cross binutils for target arm-rtems4.10
+Cross binutils for target m32c-rtems4.10
 %prep
 %setup -q -c -T -n %{name}-%{version}
 
@@ -68,7 +68,7 @@ cd ..
 
 %build
   export PATH="%{_bindir}:${PATH}"
-%if "arm-rtems4.10" == "i686-pc-cygwin"
+%if "m32c-rtems4.10" == "i686-pc-cygwin"
 # The cygwin sources are leaking memory
   RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
 %endif
@@ -80,7 +80,7 @@ cd ..
   CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_pkgvers}/configure \
     --build=%_build --host=%_host \
-    --target=arm-rtems4.10 \
+    --target=m32c-rtems4.10 \
     --verbose --disable-nls \
     --without-included-gettext \
     --disable-win32-registry \
@@ -123,17 +123,17 @@ cd ..
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
 # manpages without corresponding tools
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/arm-rtems4.10-dlltool%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/arm-rtems4.10-dlltool*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m32c-rtems4.10-dlltool%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m32c-rtems4.10-dlltool*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/arm-rtems4.10-nlmconv%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/arm-rtems4.10-nlmconv*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m32c-rtems4.10-nlmconv%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m32c-rtems4.10-nlmconv*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/arm-rtems4.10-windres%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/arm-rtems4.10-windres*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m32c-rtems4.10-windres%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m32c-rtems4.10-windres*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/arm-rtems4.10-windmc%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/arm-rtems4.10-windmc*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/m32c-rtems4.10-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/m32c-rtems4.10-windmc*
   fi
 
   cd ..
@@ -170,33 +170,33 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
   rm -rf $RPM_BUILD_ROOT
 
 # ==============================================================
-# arm-rtems4.10-binutils
+# m32c-rtems4.10-binutils
 # ==============================================================
-# %package -n rtems-4.10-arm-rtems4.10-binutils
-# Summary:      rtems binutils for arm-rtems4.10
+# %package -n rtems-4.10-m32c-rtems4.10-binutils
+# Summary:      rtems binutils for m32c-rtems4.10
 # Group: Development/Tools
 # %if %build_infos
 # Requires: rtems-4.10-binutils-common
 # %endif
 
-%description -n rtems-4.10-arm-rtems4.10-binutils
-GNU binutils targetting arm-rtems4.10.
+%description -n rtems-4.10-m32c-rtems4.10-binutils
+GNU binutils targetting m32c-rtems4.10.
 
-%files -n rtems-4.10-arm-rtems4.10-binutils
+%files -n rtems-4.10-m32c-rtems4.10-binutils
 %defattr(-,root,root)
 %dir %{_mandir}
 %dir %{_mandir}/man1
-%{_mandir}/man1/arm-rtems4.10-*.1*
+%{_mandir}/man1/m32c-rtems4.10-*.1*
 
 %dir %{_bindir}
-%{_bindir}/arm-rtems4.10-*
+%{_bindir}/m32c-rtems4.10-*
 
-%dir %{_exec_prefix}/arm-rtems4.10
-%dir %{_exec_prefix}/arm-rtems4.10/bin
-%{_exec_prefix}/arm-rtems4.10/bin/*
+%dir %{_exec_prefix}/m32c-rtems4.10
+%dir %{_exec_prefix}/m32c-rtems4.10/bin
+%{_exec_prefix}/m32c-rtems4.10/bin/*
 
-%dir %{_exec_prefix}/arm-rtems4.10/lib
-%{_exec_prefix}/arm-rtems4.10/lib/ldscripts
+%dir %{_exec_prefix}/m32c-rtems4.10/lib
+%{_exec_prefix}/m32c-rtems4.10/lib/ldscripts
 # ==============================================================
 # rtems-4.10-binutils-common
 # ==============================================================

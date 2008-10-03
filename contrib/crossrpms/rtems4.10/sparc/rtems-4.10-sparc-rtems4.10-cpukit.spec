@@ -26,9 +26,9 @@
 %endif
 
 
-%define cpukit_pkgvers 4.7.99.1-20070510
-%define cpukit_version 4.7.99.1
-%define cpukit_rpmvers %{expand:%(echo "4.7.99.1" | tr - _ )}
+%define cpukit_pkgvers 4.9.99.1-20070510
+%define cpukit_version 4.9.99.1
+%define cpukit_rpmvers %{expand:%(echo "4.9.99.1" | tr - _ )}
 
 Name:         	rtems-4.10-sparc-rtems4.10-cpukit
 Summary:      	sparc-rtems4.10 cpukit
