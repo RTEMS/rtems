@@ -111,6 +111,10 @@ void bsp_size_memory(void)
  *  Heap.
  */
 void bsp_get_work_area(
+  void    **work_area_start,
+  ssize_t  *work_area_size,
+  void    **heap_start,
+  ssize_t  *heap_size
 )
 {
   *work_area_start = (void *) rtemsFreeMemStart;
