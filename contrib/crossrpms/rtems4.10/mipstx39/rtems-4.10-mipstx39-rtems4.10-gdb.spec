@@ -32,7 +32,7 @@ Name:		rtems-4.10-mipstx39-rtems4.10-gdb
 Summary:	Gdb for target mipstx39-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

@@ -28,8 +28,8 @@
 %define gdb_version 6.8
 %define gdb_rpmvers %{expand:%(echo 6.8 | tr - _)} 
 
-Name:		rtems-4.10-i386-rtems4.10-gdb
-Summary:	Gdb for target i386-rtems4.10
+Name:		rtems-4.10-m32c-rtems4.10-gdb
+Summary:	Gdb for target m32c-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
 Release:	4%{?dist}
@@ -72,7 +72,7 @@ Source0: ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20081003.diff
 
 %description
-GDB for target i386-rtems4.10
+GDB for target m32c-rtems4.10
 %prep
 %setup -q -c -T -n %{name}-%{version}
 
@@ -95,7 +95,7 @@ rm -f gdb-%{gdb_version}/readline/configure
   CFLAGS="$RPM_OPT_FLAGS" \
   ../gdb-%{gdb_version}/configure \
     --build=%_build --host=%_host \
-    --target=i386-rtems4.10 \
+    --target=m32c-rtems4.10 \
     --verbose --disable-nls \
     --without-included-gettext \
     --disable-win32-registry \
@@ -134,7 +134,7 @@ rm -f gdb-%{gdb_version}/readline/configure
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
 # host library, installed to a bogus directory
-  rm -f ${RPM_BUILD_ROOT}%{_libdir}/libi386-rtems4.10-sim.a
+  rm -f ${RPM_BUILD_ROOT}%{_libdir}/libm32c-rtems4.10-sim.a
 
   cd ..
 
@@ -170,26 +170,26 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
   rm -rf $RPM_BUILD_ROOT
 
 # ==============================================================
-# i386-rtems4.10-gdb
+# m32c-rtems4.10-gdb
 # ==============================================================
-# %package -n rtems-4.10-i386-rtems4.10-gdb
-# Summary:      rtems gdb for i386-rtems4.10
+# %package -n rtems-4.10-m32c-rtems4.10-gdb
+# Summary:      rtems gdb for m32c-rtems4.10
 # Group: Development/Tools
 # %if %build_infos
 # Requires: rtems-4.10-gdb-common
 # %endif
 
-%description -n rtems-4.10-i386-rtems4.10-gdb
-GNU gdb targetting i386-rtems4.10.
+%description -n rtems-4.10-m32c-rtems4.10-gdb
+GNU gdb targetting m32c-rtems4.10.
 
-%files -n rtems-4.10-i386-rtems4.10-gdb
+%files -n rtems-4.10-m32c-rtems4.10-gdb
 %defattr(-,root,root)
 %dir %{_mandir}
 %dir %{_mandir}/man1
-%{_mandir}/man1/i386-rtems4.10-*.1*
+%{_mandir}/man1/m32c-rtems4.10-*.1*
 
 %dir %{_bindir}
-%{_bindir}/i386-rtems4.10-*
+%{_bindir}/m32c-rtems4.10-*
 
 # ==============================================================
 # rtems-4.10-gdb-common
