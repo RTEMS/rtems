@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -272,7 +272,7 @@ RTEMS_INLINE_ROUTINE void _Heap_Align_down_uptr (
  */
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
   void     *base,
-  uint32_t  offset
+  int32_t   offset
 )
 {
   return (Heap_Block *) _Addresses_Add_offset( base, offset );

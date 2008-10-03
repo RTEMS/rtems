@@ -113,7 +113,7 @@ void vprintk(
         case 'd': case 'D': base = 10; sign = 1; break;
         case 'u': case 'U': base = 10; sign = 0; break;
         case 'x': case 'X': base = 16; sign = 0; break;
-        case 'p':           base = 16; sign = 0; break;
+        case 'p':           base = 16; sign = 0; lflag = 1; break;
         case 's':
           { int i, len;
             char *s;

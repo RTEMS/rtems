@@ -1,5 +1,16 @@
 2008-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/printk.c: Addresses can be larger than integers
+	so use long for %p formats.
+	* score/inline/rtems/score/address.inl: Offsets can be positive or
+	negative, so use int32_t.  Also do math with intptr_t since there
+	are cases where the number of bits in an address do not equal the
+	number of bits in an integer.
+	* score/inline/rtems/score/heap.inl: Offsets can be positive or
+	negative, so use int32_t.
+
+2008-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* configure.ac: Add m32r.
 	* libcsupport/src/newlibc_exit.c: For some odd reason, the fini
 	symbol for the m32r in C needs an extra leading _.

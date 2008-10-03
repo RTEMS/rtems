@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,12 +39,13 @@
  *
  *  @return This method returns the resulting address.
  */
+#include <rtems/bspIo.h>
 RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   void       *base,
-  uint32_t    offset
+  int32_t    offset
 )
 {
-  return (void *)((char *)base + offset);
+  return (void *)((intptr_t)base + offset);
 }
 
 /** @brief Subtract Offset from Offset
@@ -61,10 +62,10 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   void       *base,
-  uint32_t    offset
+  int32_t    offset
 )
 {
-  return (void *)((char *)base - offset);
+  return (void *)((intptr_t)base - offset);
 }
 
 /** @brief Subtract Two Offsets
