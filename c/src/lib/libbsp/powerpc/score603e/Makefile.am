@@ -41,7 +41,7 @@ include_bsp_HEADERS = ../../powerpc/shared/pci/pci.h \
 	../../shared/include/irq-generic.h \
 	include/irq-config.h 
 
-pci_SOURCES = pci/no_host_bridge.c ../../powerpc/shared/pci/pci.c \
+pci_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/pcifinddevice.c  PCI_bus/PCI.c  PCI_bus/universe.c
 
 include_bsp_HEADERS += irq/irq.h \

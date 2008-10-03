@@ -1,3 +1,8 @@
+2008-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Remove unused file.
+	* pci/no_host_bridge.c: Removed.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am: Regenerated.
