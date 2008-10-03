@@ -1,3 +1,9 @@
+2008-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Add m32r.
+	* libcsupport/src/newlibc_exit.c: For some odd reason, the fini
+	symbol for the m32r in C needs an extra leading _.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/cpu/Makefile.am: Add new M32R port. It is just a beginning but

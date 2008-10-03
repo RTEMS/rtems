@@ -123,7 +123,13 @@ void libc_wrapup(void)
   #define EXIT_SYMBOL _exit
 
   #if defined(__USE_INIT_FINI__)
-    extern void _fini( void );
+    #if defined(__m32r__)
+      #define FINI_SYMBOL __fini
+    #else
+      #define FINI_SYMBOL _fini
+    #endif
+ 
+    extern void FINI_SYMBOL( void );
   #endif
 #else
   #define EXIT_SYMBOL exit
@@ -136,7 +142,7 @@ void EXIT_SYMBOL(int status)
    *  run the global destructors now.
    */
   #if defined(__USE_INIT_FINI__)
-    _fini();
+    FINI_SYMBOL();
   #endif
 
   /*
