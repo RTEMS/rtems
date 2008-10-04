@@ -4,9 +4,9 @@ TARGET = avr-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.18.91
+BINUTILS_VERS = 2.18.92
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 2%{?dist}
+BINUTILS_RPMREL = 1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
