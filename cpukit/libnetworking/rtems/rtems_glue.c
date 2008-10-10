@@ -1148,8 +1148,14 @@ int rtems_bsdnet_ifconfig(const char *ifname, uint32_t cmd, void *param)
 	return r;
 }
 
-/*
- * Parse a network driver name into a name and a unit number
+/**
+ * @brief Splits a network interface name with interface configuration @a
+ * config into the unit name and number parts.
+ *
+ * Memory for the unit name will be allocated from the heap and copied to @a
+ * namep.  If @a namep is NULL nothing will be allocated and copied.
+ *
+ * Returns the unit number or -1 on error.
  */
 int
 rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char **namep)
@@ -1171,14 +1177,16 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 				unitNumber = (unitNumber * 10) + (c - '0');
 				c = *cp++;
 				if (c == '\0') {
-					char *unitName = malloc (len);
-					if (unitName == NULL) {
-						printf ("No memory.\n");
-						return -1;
+					if (namep != NULL) {
+						char *unitName = malloc (len);
+						if (unitName == NULL) {
+							printf ("No memory.\n");
+							return -1;
+						}
+						strncpy (unitName, config->name, len - 1);
+						unitName[len-1] = '\0';
+						*namep = unitName;
 					}
-					strncpy (unitName, config->name, len - 1);
-					unitName[len-1] = '\0';
-					*namep = unitName;
 					return unitNumber;
 				}
 				if ((c < '0') || (c > '9'))
