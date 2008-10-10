@@ -103,7 +103,7 @@ rtems_status_code mpc55xx_interrupt_handler_install(
 
 	if (MPC55XX_IRQ_IS_VALID( vector) && MPC55XX_INTC_IS_VALID_PRIORITY( priority)) {
 		sc = rtems_interrupt_handler_install( vector, info, options, handler, arg);
-		CHECK_SC( sc, "Install interrupt handler");
+		RTEMS_CHECK_SC( sc, "Install interrupt handler");
 		return mpc55xx_intc_set_priority( vector, priority);
 	} else {
 		return RTEMS_INVALID_NUMBER;

@@ -162,10 +162,10 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 		RTEMS_NO_PRIORITY,
 		&e->edma_channel_receive_update
 	);
-	CHECK_SC( sc, "Create receive update semaphore");
+	RTEMS_CHECK_SC( sc, "Create receive update semaphore");
 
 	sc = mpc55xx_edma_obtain_channel( e->edma_channel_receive, &e->edma_channel_receive_error, e->edma_channel_receive_update);
-	CHECK_SC( sc, "Obtain receive eDMA channel");
+	RTEMS_CHECK_SC( sc, "Obtain receive eDMA channel");
 
 	/* eDMA transmit */
 	sc = rtems_semaphore_create (
@@ -175,13 +175,13 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 		RTEMS_NO_PRIORITY,
 		&e->edma_channel_transmit_update
 	);
-	CHECK_SC( sc, "Create transmit update semaphore");
+	RTEMS_CHECK_SC( sc, "Create transmit update semaphore");
 
 	sc = mpc55xx_edma_obtain_channel( e->edma_channel_transmit, &e->edma_channel_transmit_error, e->edma_channel_transmit_update);
-	CHECK_SC( sc, "Obtain transmit eDMA channel");
+	RTEMS_CHECK_SC( sc, "Obtain transmit eDMA channel");
 
 	sc = mpc55xx_edma_obtain_channel( e->edma_channel_push, NULL, RTEMS_ID_NONE);
-	CHECK_SC( sc, "Obtain push eDMA channel");
+	RTEMS_CHECK_SC( sc, "Obtain push eDMA channel");
 
 	tcd_push.SADDR = mpc55xx_dspi_push_data_address( e);
 	tcd_push.SSIZE = 2;
@@ -424,11 +424,11 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 		n_nc = (int) mpc55xx_non_cache_aligned_size( in);
 		n_c = (int) mpc55xx_cache_aligned_size( in, (size_t) n);
 		if (n_c > EDMA_TCD_BITER_LINKED_SIZE) {
-			SYSLOG_WARNING( "Buffer size out of range, cannot use eDMA\n");
+			RTEMS_SYSLOG_WARNING( "Buffer size out of range, cannot use eDMA\n");
 			n_nc = n;
 			n_c = 0;
 		} else if (n_nc + n_c != n) {
-			SYSLOG_WARNING( "Input buffer not proper cache aligned, cannot use eDMA\n");
+			RTEMS_SYSLOG_WARNING( "Input buffer not proper cache aligned, cannot use eDMA\n");
 			n_nc = n;
 			n_c = 0;
 		}
@@ -436,7 +436,7 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 
 #ifdef DEBUG
 	if (e->regs->SR.B.TXCTR != e->regs->SR.B.RXCTR) {
-		SYSLOG_WARNING( "FIFO counter not equal\n");
+		RTEMS_SYSLOG_WARNING( "FIFO counter not equal\n");
 	}
 #endif /* DEBUG */
 
@@ -577,24 +577,24 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 
 		/* Enable hardware requests */
 		sc = mpc55xx_edma_enable_hardware_requests( e->edma_channel_receive, true);
-		CHECK_SCRV( sc, "Enable receive hardware requests");
+		RTEMS_CHECK_SC_RV( sc, "Enable receive hardware requests");
 		sc = mpc55xx_edma_enable_hardware_requests( e->edma_channel_transmit, true);
-		CHECK_SCRV( sc, "Enable transmit hardware requests");
+		RTEMS_CHECK_SC_RV( sc, "Enable transmit hardware requests");
 
 		/* Wait for transmit update */
 		sc = rtems_semaphore_obtain( e->edma_channel_transmit_update, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-		CHECK_SCRV( sc, "Transmit update");
+		RTEMS_CHECK_SC_RV( sc, "Transmit update");
 		if (e->edma_channel_transmit_error != 0) {
-			SYSLOG_ERROR( "Transmit error status: 0x%08x\n", e->edma_channel_transmit_error);
+			RTEMS_SYSLOG_ERROR( "Transmit error status: 0x%08x\n", e->edma_channel_transmit_error);
 			e->edma_channel_transmit_error = 0;
 			return -RTEMS_IO_ERROR;
 		}
 
 		/* Wait for receive update */
 		sc = rtems_semaphore_obtain( e->edma_channel_receive_update, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-		CHECK_SCRV( sc, "Receive update");
+		RTEMS_CHECK_SC_RV( sc, "Receive update");
 		if (e->edma_channel_receive_error != 0) {
-			SYSLOG_ERROR( "Receive error status: 0x%08x\n", e->edma_channel_receive_error);
+			RTEMS_SYSLOG_ERROR( "Receive error status: 0x%08x\n", e->edma_channel_receive_error);
 			e->edma_channel_receive_error = 0;
 			return -RTEMS_IO_ERROR;
 		}

@@ -60,11 +60,11 @@ static void mpc55xx_edma_irq_handler( rtems_vector_number vector, void *data)
 	mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) data;
 #ifdef DEBUG
 	uint32_t citer = EDMA.TCD [e->channel].CITERE_LINK ? EDMA.TCD [e->channel].CITER & EDMA_TCD_BITER_LINKED_MASK : EDMA.TCD [e->channel].CITER;
-	DEBUG_PRINT( "Channel %i (CITER = %i)\n", e->channel, citer);
+	RTEMS_DEBUG_PRINT( "Channel %i (CITER = %i)\n", e->channel, citer);
 #endif /* DEBUG */
 	EDMA.CIRQR.R = e->channel;
 	sc = rtems_semaphore_release( e->transfer_update);
-	SYSLOG_WARNING_SC( sc, "Transfer update semaphore release");
+	RTEMS_SYSLOG_WARNING_SC( sc, "Transfer update semaphore release");
 }
 
 static void mpc55xx_edma_irq_update_error_table( uint8_t *link_table, uint8_t *error_table, int channel)
@@ -95,7 +95,7 @@ static void mpc55xx_edma_irq_error_handler( rtems_vector_number vector, void *da
 	} else if (channel_start < 64) {
 		error_register = EDMA.ERH.R;
 	}
-	DEBUG_PRINT( "Error register %s: 0x%08x\n", channel_start < 32 ? "low" : "high", error_register);
+	RTEMS_DEBUG_PRINT( "Error register %s: 0x%08x\n", channel_start < 32 ? "low" : "high", error_register);
 
 	/* Fill channel link table */
 	for (i = 0; i < MPC55XX_EDMA_CHANNEL_NUMBER; ++i) {
@@ -126,9 +126,9 @@ static void mpc55xx_edma_irq_error_handler( rtems_vector_number vector, void *da
 				*e->error_status = error_register;
 			}
 			sc = mpc55xx_edma_enable_hardware_requests( i, false);
-			SYSLOG_ERROR_SC( sc, "Disable hardware requests, channel = %i", i);
+			RTEMS_SYSLOG_ERROR_SC( sc, "Disable hardware requests");
 			sc = rtems_semaphore_release( e->transfer_update);
-			SYSLOG_WARNING_SC( sc, "Transfer update semaphore release, channel = %i", i);
+			RTEMS_SYSLOG_WARNING_SC( sc, "Transfer update semaphore release");
 		}
 	}
 
@@ -179,7 +179,7 @@ rtems_status_code mpc55xx_edma_init()
 		RTEMS_NO_PRIORITY,
 		&mpc55xx_edma_channel_occupation_mutex
 	);
-	CHECK_SC( sc, "Create channel occupation mutex");
+	RTEMS_CHECK_SC( sc, "Create channel occupation mutex");
 
 	/* Arbitration mode: round robin */
 	EDMA.CR.B.ERCA = 1;
@@ -204,7 +204,7 @@ rtems_status_code mpc55xx_edma_init()
 		mpc55xx_edma_irq_error_handler,
 		&mpc55xx_edma_irq_error_low_channel
 	);
-	CHECK_SC( sc, "Install low error interrupt handler");
+	RTEMS_CHECK_SC( sc, "Install low error interrupt handler");
 	sc = mpc55xx_interrupt_handler_install(
 		MPC55XX_IRQ_EDMA_ERROR_HIGH,
 		MPC55XX_EDMA_IRQ_PRIORITY,
@@ -213,7 +213,7 @@ rtems_status_code mpc55xx_edma_init()
 		mpc55xx_edma_irq_error_handler,
 		&mpc55xx_edma_irq_error_high_channel
 	);
-	CHECK_SC( sc, "Install high error interrupt handler");
+	RTEMS_CHECK_SC( sc, "Install high error interrupt handler");
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -229,7 +229,7 @@ rtems_status_code mpc55xx_edma_obtain_channel( int channel, uint32_t *error_stat
 
 	/* Check occupation */
 	sc = rtems_semaphore_obtain( mpc55xx_edma_channel_occupation_mutex, RTEMS_WAIT, 0);
-	CHECK_SC( sc, "Obtain channel occupation mutex");
+	RTEMS_CHECK_SC( sc, "Obtain channel occupation mutex");
 	if (channel < 32) {
 		channel_occupied = mpc55xx_edma_channel_occupation_low & (0x1 << channel);
 		if (!channel_occupied) {
@@ -243,11 +243,11 @@ rtems_status_code mpc55xx_edma_obtain_channel( int channel, uint32_t *error_stat
 	}
 	if (channel_occupied) {
 		sc = rtems_semaphore_release( mpc55xx_edma_channel_occupation_mutex);
-		SYSLOG_WARNING_SC( sc, "Release occupation mutex");
+		RTEMS_SYSLOG_WARNING_SC( sc, "Release occupation mutex");
 		return RTEMS_RESOURCE_IN_USE;
 	} else {
 		sc = rtems_semaphore_release( mpc55xx_edma_channel_occupation_mutex);
-		CHECK_SC( sc, "Release channel occupation mutex");
+		RTEMS_CHECK_SC( sc, "Release channel occupation mutex");
 	}
 
 	/* Channel data */
@@ -263,11 +263,11 @@ rtems_status_code mpc55xx_edma_obtain_channel( int channel, uint32_t *error_stat
 		mpc55xx_edma_irq_handler,
 		&mpc55xx_edma_channel_table [channel]
 	);
-	CHECK_SC( sc, "Install channel interrupt handler");
+	RTEMS_CHECK_SC( sc, "Install channel interrupt handler");
 
 	/* Enable error interrupts */
 	sc = mpc55xx_edma_enable_error_interrupts( channel, true);
-	CHECK_SC( sc, "Enable error interrupts");
+	RTEMS_CHECK_SC( sc, "Enable error interrupts");
 
 	return RTEMS_SUCCESSFUL;
 }

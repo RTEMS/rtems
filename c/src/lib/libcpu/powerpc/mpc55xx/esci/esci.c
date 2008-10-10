@@ -458,17 +458,17 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
 		e = &mpc55xx_esci_driver_table [i];
 		sc = rtems_io_register_name ( e->device_name, major, i);
-		CHECK_SC( sc, "Register IO device");
+		RTEMS_CHECK_SC( sc, "Register IO device");
 		if (e->console) {
 			if (console_done) {
-				SYSLOG_WARNING( "Multiple console ports defined\n");
+				RTEMS_SYSLOG_WARNING( "Multiple console ports defined\n");
 			} else {
 				console_done = 1;
 				if (e->use_interrupts) {
-					SYSLOG_WARNING( "Cannot use interrupts for console port\n");
+					RTEMS_SYSLOG_WARNING( "Cannot use interrupts for console port\n");
 				}
 				sc = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, i);
-				CHECK_SC( sc, "Register IO device");
+				RTEMS_CHECK_SC( sc, "Register IO device");
 			}
 		}
 		if (e->use_termios && termios_do_init) {
@@ -485,7 +485,7 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 					mpc55xx_esci_termios_interrupt_handler,
 					e
 				);
-				CHECK_SC( sc, "Install IRQ handler");
+				RTEMS_CHECK_SC( sc, "Install IRQ handler");
 			}
 		}
 		mpc55xx_esci_termios_set_attributes( (int) i, &mpc55xx_esci_termios_default);

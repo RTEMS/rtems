@@ -1,3 +1,12 @@
+2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/include/powerpc-utility.h: Use constraint "b" for address
+	base registers in inline assembler statements.
+
+	* mpc55xx/dspi/dspi.c, mpc55xx/edma/edma.c, mpc55xx/esci/esci.c,
+	mpc55xx/irq/irq.c, mpc83xx/gtm/gtm.c: Update for status-checks.h
+	changes.
+
 2008-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* mpc83xx/include/mpc83xx.h: #include <bspopts.h> to make sure 

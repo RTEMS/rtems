@@ -65,16 +65,16 @@ rtems_status_code mpc83xx_gtm_initialize( int timer, int clock)
 	rtems_interrupt_enable( level);
 
 	sc = mpc83xx_gtm_set_clock( timer, clock);
-	CHECK_SC( sc, "Set clock");
+	RTEMS_CHECK_SC( sc, "Set clock");
 
 	sc = mpc83xx_gtm_set_value( timer, 0);
-	CHECK_SC( sc, "Set value");
+	RTEMS_CHECK_SC( sc, "Set value");
 
 	sc = mpc83xx_gtm_set_reference( timer, 0);
-	CHECK_SC( sc, "Set reference");
+	RTEMS_CHECK_SC( sc, "Set reference");
 
 	sc = mpc83xx_gtm_set_prescale( timer, 0);
-	CHECK_SC( sc, "Set prescale");
+	RTEMS_CHECK_SC( sc, "Set prescale");
 
 	return RTEMS_SUCCESSFUL;
 }

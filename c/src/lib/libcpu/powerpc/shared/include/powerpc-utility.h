@@ -53,7 +53,7 @@ static inline uint8_t ppc_read_byte( const volatile void *src)
 	asm volatile (
 		"lbz %0, 0(%1)"
 		: "=r" (value)
-		: "r" (src)
+		: "b" (src)
 	);
 
 	return value;
@@ -69,7 +69,7 @@ static inline uint16_t ppc_read_half_word( const volatile void *src)
 	asm volatile (
 		"lhz %0, 0(%1)"
 		: "=r" (value)
-		: "r" (src)
+		: "b" (src)
 	);
 
 	return value;
@@ -85,7 +85,7 @@ static inline uint32_t ppc_read_word( const volatile void *src)
 	asm volatile (
 		"lwz %0, 0(%1)"
 		: "=r" (value)
-		: "r" (src)
+		: "b" (src)
 	);
 
 	return value;
@@ -99,7 +99,7 @@ static inline void ppc_write_byte( uint8_t value, volatile void *dest)
 	asm volatile (
 		"stb %0, 0(%1)"
 		:
-		: "r" (value), "r" (dest)
+		: "r" (value), "b" (dest)
 	);
 }
 
@@ -111,7 +111,7 @@ static inline void ppc_write_half_word( uint16_t value, volatile void *dest)
 	asm volatile (
 		"sth %0, 0(%1)"
 		:
-		: "r" (value), "r" (dest)
+		: "r" (value), "b" (dest)
 	);
 }
 
@@ -122,7 +122,7 @@ static inline void ppc_write_word( uint32_t value, volatile void *dest)
 {
 	asm volatile (
 		"stw %0, 0(%1)" :
-		: "r" (value), "r" (dest)
+		: "r" (value), "b" (dest)
 	);
 }
 
