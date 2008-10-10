@@ -308,7 +308,7 @@ static int sd_card_wait( sd_card_driver_entry *e)
 	while (e->busy) {
 		/* Query busy tokens */
 		rv = sd_card_query( e, e->response, n);
-		CHECK_RV( rv, "Busy");
+		RTEMS_CHECK_RV( rv, "Busy");
 
 		/* Search for non busy tokens */
 		for (r = 0; r < n; ++r) {
@@ -341,44 +341,44 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 
 	/* Wait until card is not busy */
 	rv = sd_card_wait( e);
-	CHECK_RV( rv, "Wait");
+	RTEMS_CHECK_RV( rv, "Wait");
 
 	/* Write command and read response */
 	SD_CARD_COMMAND_SET_COMMAND( e->command, command);
 	SD_CARD_COMMAND_SET_ARGUMENT( e->command, argument);
 	rv = rtems_libi2c_ioctl( e->minor, RTEMS_LIBI2C_IOCTL_READ_WRITE, &rw);
-	CHECK_RV( rv, "Write command and read response");
+	RTEMS_CHECK_RV( rv, "Write command and read response");
 
 	/* Check respose */
 	for (r = SD_CARD_COMMAND_RESPONSE_START; r < SD_CARD_COMMAND_SIZE; ++r) {
-		DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
+		RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
 		e->response_index = r;
 		if (SD_CARD_IS_RESPONSE( e->response [r])) {
 			if (SD_CARD_IS_ERRORLESS_RESPONSE( e->response [r])) {
 				return 0;
 			} else {
-				SYSLOG_ERROR( "Command error [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+				RTEMS_SYSLOG_ERROR( "Command error [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				goto sd_card_send_command_error;
 			}
 		} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-			SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+			RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 			goto sd_card_send_command_error;
 		}
 	}
 
-	SYSLOG_ERROR( "Timeout\n");
+	RTEMS_SYSLOG_ERROR( "Timeout\n");
 
 sd_card_send_command_error:
 
-	SYSLOG_ERROR( "Response:");
+	RTEMS_SYSLOG_ERROR( "Response:");
 	for (r = 0; r < SD_CARD_COMMAND_SIZE; ++r) {
 		if (e->response_index == r) {
-			SYSLOG_PRINT( " %02" PRIx8 ":[%02" PRIx8 "]", e->command [r], e->response [r]);
+			RTEMS_SYSLOG_PRINT( " %02" PRIx8 ":[%02" PRIx8 "]", e->command [r], e->response [r]);
 		} else {
-			SYSLOG_PRINT( " %02" PRIx8 ":%02" PRIx8 "", e->command [r], e->response [r]);
+			RTEMS_SYSLOG_PRINT( " %02" PRIx8 ":%02" PRIx8 "", e->command [r], e->response [r]);
 		}
 	}
-	SYSLOG_PRINT( "\n");
+	RTEMS_SYSLOG_PRINT( "\n");
 
 	return -RTEMS_IO_ERROR;
 }
@@ -389,7 +389,7 @@ static int sd_card_stop_multiple_block_read( sd_card_driver_entry *e)
 
 	SD_CARD_COMMAND_SET_COMMAND( e->command, SD_CARD_CMD_STOP_TRANSMISSION);
 	rv = rtems_libi2c_write_bytes( e->minor, e->command, SD_CARD_COMMAND_SIZE);
-	CHECK_RV( rv, "Write stop transfer token");
+	RTEMS_CHECK_RV( rv, "Write stop transfer token");
 
 	return 0;
 }
@@ -401,11 +401,11 @@ static int sd_card_stop_multiple_block_write( sd_card_driver_entry *e)
 
 	/* Wait until card is not busy */
 	rv = sd_card_wait( e);
-	CHECK_RV( rv, "Wait");
+	RTEMS_CHECK_RV( rv, "Wait");
 
 	/* Send stop token */
 	rv = rtems_libi2c_write_bytes( e->minor, stop_transfer, 3);
-	CHECK_RV( rv, "Write stop transfer token");
+	RTEMS_CHECK_RV( rv, "Write stop transfer token");
 
 	/* Card is now busy */
 	e->busy = true;
@@ -435,23 +435,23 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
 	while (1) {
-		DEBUG_PRINT( "Search from %u to %u\n", r, response_size - 1);
+		RTEMS_DEBUG_PRINT( "Search from %u to %u\n", r, response_size - 1);
 
 		/* Search the data start token in in current response buffer */
 		while (r < response_size) {
-			DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
+			RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
 			if (n_ac > e->n_ac_max) {
-				SYSLOG_ERROR( "Timeout\n");
+				RTEMS_SYSLOG_ERROR( "Timeout\n");
 				return -RTEMS_IO_ERROR;
 			} else if (e->response [r] == start_token) {
 				/* Discard data start token */
 				++r;
 				goto sd_card_read_start;
 			} else if (SD_CARD_IS_DATA_ERROR( e->response [r])) {
-				SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+				RTEMS_SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				return -RTEMS_IO_ERROR;
 			} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-				SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+				RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
 				return -RTEMS_IO_ERROR;
 			}
 			++n_ac;
@@ -460,7 +460,7 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 
 		/* Query more */
 		rv = sd_card_query( e, e->response, next_response_size);
-		CHECK_RV( rv, "Query data start token");
+		RTEMS_CHECK_RV( rv, "Query data start token");
 
 		/* Set standard query size */
 		response_size = next_response_size;
@@ -480,13 +480,13 @@ sd_card_read_start:
 	/* Read more data? */
 	if (i < n) {
 		rv = sd_card_query( e, &in [i], n - i);
-		CHECK_RV( rv, "Read data");
+		RTEMS_CHECK_RV( rv, "Read data");
 		i += rv;
 	}
 
 	/* Read CRC 16 and N_RC */
 	rv = sd_card_query( e, e->response, 3);
-	CHECK_RV( rv, "Read CRC 16");
+	RTEMS_CHECK_RV( rv, "Read CRC 16");
 
 	return i;
 }
@@ -501,25 +501,25 @@ static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t 
 
 	/* Wait until card is not busy */
 	rv = sd_card_wait( e);
-	CHECK_RV( rv, "Wait");
+	RTEMS_CHECK_RV( rv, "Wait");
 
 	/* Write data start token */
 	rv = rtems_libi2c_write_bytes( e->minor, &start_token, 1);
-	CHECK_RV( rv, "Write data start token");
+	RTEMS_CHECK_RV( rv, "Write data start token");
 
 	/* Write data */
 	o = rtems_libi2c_write_bytes( e->minor, out, n);
-	CHECK_RV( o, "Write data");
+	RTEMS_CHECK_RV( o, "Write data");
 
 	/* Write CRC 16 */
 	rv = rtems_libi2c_write_bytes( e->minor, crc16, 2);
-	CHECK_RV( rv, "Write CRC 16");
+	RTEMS_CHECK_RV( rv, "Write CRC 16");
 
 	/* Read data response */
 	rv = sd_card_query( e, e->response, 2);
-	CHECK_RV( rv, "Read data response");
+	RTEMS_CHECK_RV( rv, "Read data response");
 	if (SD_CARD_IS_DATA_REJECTED( e->response [0])) {
-		SYSLOG_ERROR( "Data rejected: 0x%02" PRIx8 "\n", e->response [0]);
+		RTEMS_SYSLOG_ERROR( "Data rejected: 0x%02" PRIx8 "\n", e->response [0]);
 		return -RTEMS_IO_ERROR;
 	}
 
@@ -535,13 +535,13 @@ static inline rtems_status_code sd_card_start( sd_card_driver_entry *e)
 	int rv = 0;
 
 	sc = rtems_libi2c_send_start( e->minor);
-	CHECK_SC( sc, "Send start");
+	RTEMS_CHECK_SC( sc, "Send start");
 
 	rv = rtems_libi2c_ioctl( e->minor, RTEMS_LIBI2C_IOCTL_SET_TFRMODE, &e->transfer_mode);
-	CHECK_RVSC( rv, "Set transfer mode");
+	RTEMS_CHECK_RV_SC( rv, "Set transfer mode");
 
 	sc = rtems_libi2c_send_addr( e->minor, 1);
-	CHECK_SC( sc, "Send address");
+	RTEMS_CHECK_SC( sc, "Send address");
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -551,7 +551,7 @@ static inline rtems_status_code sd_card_stop( sd_card_driver_entry *e)
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
 	sc = rtems_libi2c_send_stop( e->minor);
-	CHECK_SC( sc, "Send stop");
+	RTEMS_CHECK_SC( sc, "Send stop");
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -569,64 +569,64 @@ static int sd_card_disk_block_read( sd_card_driver_entry *e, rtems_blkdev_reques
 	uint32_t start_address = RTEMS_BLKDEV_START_BLOCK (r) << e->block_size_shift;
 	uint32_t i = 0;
 
-	DEBUG_PRINT( "start = %u, bufnum = %u\n", r->start, r->bufnum);
+	RTEMS_DEBUG_PRINT( "start = %u, bufnum = %u\n", r->start, r->bufnum);
 
 #ifdef DEBUG
 	/* Check request */
   if (r->bufs[0].block >= e->block_number) {
-		SYSLOG_ERROR( "Start block number out of range");
+		RTEMS_SYSLOG_ERROR( "Start block number out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	} else if (r->bufnum > e->block_number - RTEMS_BLKDEV_START_BLOCK (r)) {
-		SYSLOG_ERROR( "Block count out of range");
+		RTEMS_SYSLOG_ERROR( "Block count out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	}
 #endif /* DEBUG */
 
 	/* Start */
 	sc = sd_card_start( e);
-	CLEANUP_SCRV( sc, rv, sd_card_disk_block_read_cleanup, "Start");
+	RTEMS_CLEANUP_SC_RV( sc, rv, sd_card_disk_block_read_cleanup, "Start");
 
 	if (r->bufnum == 1) {
 #ifdef DEBUG
 		/* Check buffer */
 		if (r->bufs [0].length != e->block_size) {
-			DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_read_cleanup, "Buffer and disk block size are not equal");
+			RTEMS_DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_read_cleanup, "Buffer and disk block size are not equal");
 		}
-		DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", 0, r->bufs [0].buffer, r->bufs [0].length);
+		RTEMS_DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", 0, r->bufs [0].buffer, r->bufs [0].length);
 #endif /* DEBUG */
 
 		/* Single block read */
 		rv = sd_card_send_command( e, SD_CARD_CMD_READ_SINGLE_BLOCK, start_address);
-		CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
 		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) r->bufs [0].buffer, (int) e->block_size);
-		CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
 	} else {
 		/* Start multiple block read */
 		rv = sd_card_send_command( e, SD_CARD_CMD_READ_MULTIPLE_BLOCK, start_address);
-		CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
 
 		/* Multiple block read */
 		for (i = 0; i < r->bufnum; ++i) {
 #ifdef DEBUG
 			/* Check buffer */
 			if (r->bufs [i].length != e->block_size) {
-				DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_read_stop_cleanup, "Buffer and disk block size are not equal");
+				RTEMS_DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_read_stop_cleanup, "Buffer and disk block size are not equal");
 			}
-			DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
+			RTEMS_DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
 #endif /* DEBUG */
 
 			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) r->bufs [i].buffer, (int) e->block_size);
-			CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Read block");
+			RTEMS_CLEANUP_RV( rv, sd_card_disk_block_read_stop_cleanup, "Read block");
 		}
 
 		/* Stop multiple block read */
 		rv = sd_card_stop_multiple_block_read( e);
-		CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Stop multiple block read");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_read_cleanup, "Stop multiple block read");
 	}
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SCRV( sc, "Stop");
+	RTEMS_CHECK_SC_RV( sc, "Stop");
 
 	/* Done */
 	r->req_done( r->done_arg, RTEMS_SUCCESSFUL, 0);
@@ -656,68 +656,68 @@ static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_reque
 	uint32_t start_address = RTEMS_BLKDEV_START_BLOCK (r) << e->block_size_shift;
 	uint32_t i = 0;
 
-	DEBUG_PRINT( "start = %u, count = %u, bufnum = %u\n", r->start, r->count, r->bufnum);
+	RTEMS_DEBUG_PRINT( "start = %u, count = %u, bufnum = %u\n", r->start, r->count, r->bufnum);
 
 #ifdef DEBUG
 	/* Check request */
   if (r->bufs[0].block >= e->block_number) {
-		SYSLOG_ERROR( "Start block number out of range");
+		RTEMS_SYSLOG_ERROR( "Start block number out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	} else if (r->bufnum > e->block_number - RTEMS_BLKDEV_START_BLOCK (r)) {
-		SYSLOG_ERROR( "Block count out of range");
+		RTEMS_SYSLOG_ERROR( "Block count out of range");
 		return -RTEMS_INTERNAL_ERROR;
 	}
 #endif /* DEBUG */
 
 	/* Start */
 	sc = sd_card_start( e);
-	CLEANUP_SCRV( sc, rv, sd_card_disk_block_write_cleanup, "Start");
+	RTEMS_CLEANUP_SC_RV( sc, rv, sd_card_disk_block_write_cleanup, "Start");
 
 	if (r->bufnum == 1) {
 #ifdef DEBUG
 		/* Check buffer */
 		if (r->bufs [0].length != e->block_size) {
-			DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_write_cleanup, "Buffer and disk block size are not equal");
+			RTEMS_DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_write_cleanup, "Buffer and disk block size are not equal");
 		}
-		DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", 0, r->bufs [0].buffer, r->bufs [0].length);
+		RTEMS_DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", 0, r->bufs [0].buffer, r->bufs [0].length);
 #endif /* DEBUG */
 
 		/* Single block write */
 		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_BLOCK, start_address);
-		CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
 		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) r->bufs [0].buffer, (int) e->block_size);
-		CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
 	} else {
 		/* Start multiple block write */
 		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_MULTIPLE_BLOCK, start_address);
-		CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 		/* Multiple block write */
 		for (i = 0; i < r->bufnum; ++i) {
 #ifdef DEBUG
 			/* Check buffer */
 			if (r->bufs [i].length != e->block_size) {
-				DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_write_stop_cleanup, "Buffer and disk block size are not equal");
+				RTEMS_DO_CLEANUP_RV( -RTEMS_INTERNAL_ERROR, rv, sd_card_disk_block_write_stop_cleanup, "Buffer and disk block size are not equal");
 			}
-			DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
+			RTEMS_DEBUG_PRINT( "[%02u]: buffer = 0x%08x, size = %u\n", i, r->bufs [i].buffer, r->bufs [i].length);
 #endif /* DEBUG */
 
 			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) r->bufs [i].buffer, (int) e->block_size);
-			CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Write block");
+			RTEMS_CLEANUP_RV( rv, sd_card_disk_block_write_stop_cleanup, "Write block");
 		}
 
 		/* Stop multiple block write */
 		rv = sd_card_stop_multiple_block_write( e);
-		CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Stop multiple block write");
+		RTEMS_CLEANUP_RV( rv, sd_card_disk_block_write_cleanup, "Stop multiple block write");
 	}
 
 	/* Get card status */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
-	CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
+	RTEMS_CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SCRV( sc, "Stop");
+	RTEMS_CHECK_SC_RV( sc, "Stop");
 
 	/* Done */
 	r->req_done( r->done_arg, RTEMS_SUCCESSFUL, 0);
@@ -733,7 +733,7 @@ sd_card_disk_block_write_cleanup:
 
 	/* Get card status */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
-	CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
+	RTEMS_CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
 
 	/* Stop */
 	sd_card_stop( e);
@@ -746,7 +746,7 @@ sd_card_disk_block_write_cleanup:
 
 static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 {
-	DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
+	RTEMS_DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
  	if (req == RTEMS_BLKIO_REQUEST) {
  		rtems_device_minor_number minor = rtems_filesystem_dev_minor_t( dev);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
@@ -814,11 +814,11 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 
 	/* Get driver entry */
 	rv = sd_card_driver_get_entry( minor, &e);
-	CHECK_RVSC( rv, "Get driver entry");
+	RTEMS_CHECK_RV_SC( rv, "Get driver entry");
 
 	/* Start */
 	sc = sd_card_start( e);
-	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Start");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Start");
 
 	/* Save minor number for disk operations */
 	e->minor = minor;
@@ -827,37 +827,37 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	if (sd_card_driver_first) {
 		sd_card_driver_first = 0;
 		sc = rtems_io_register_driver( 0, &sd_card_disk_ops, &sd_card_disk_major);
-		CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Register disk IO driver");
+		RTEMS_CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Register disk IO driver");
 	}
 
 	/* Wait until card is not busy */
 	rv = sd_card_wait( e);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Wait");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Wait");
 
 	/* Send idle tokens for at least 74 clock cycles with active chip select */
 	memset( block, SD_CARD_IDLE_TOKEN, SD_CARD_BLOCK_SIZE_DEFAULT);
 	rv = rtems_libi2c_write_bytes( e->minor, block, SD_CARD_BLOCK_SIZE_DEFAULT);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Active chip select delay");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Active chip select delay");
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SC( sc, "Stop");
+	RTEMS_CHECK_SC( sc, "Stop");
 
 	/* Start with inactive chip select */
 	sc = rtems_libi2c_send_start( e->minor);
-	CHECK_SC( sc, "Send start");
+	RTEMS_CHECK_SC( sc, "Send start");
 
 	/* Set transfer mode */
 	rv = rtems_libi2c_ioctl( e->minor, RTEMS_LIBI2C_IOCTL_SET_TFRMODE, &e->transfer_mode);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Set transfer mode");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Set transfer mode");
 
 	/* Send idle tokens with inactive chip select */
 	rv = sd_card_query( e, e->response, SD_CARD_COMMAND_SIZE);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Inactive chip select delay");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Inactive chip select delay");
 
 	/* Activate chip select */
 	sc = rtems_libi2c_send_addr( e->minor, 1);
-	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Send address");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Send address");
 
 	/* Stop multiple block write */
 	sd_card_stop_multiple_block_write( e);
@@ -870,14 +870,14 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 
 	/* Switch to SPI mode */
 	rv = sd_card_send_command( e, SD_CARD_CMD_GO_IDLE_STATE, 0);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_GO_IDLE_STATE");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_GO_IDLE_STATE");
 
 	/* Initialize card */
 	while (1) {
 		rv = sd_card_send_command( e, SD_CARD_CMD_APP_CMD, 0);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_APP_CMD");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_APP_CMD");
 		rv = sd_card_send_command( e, SD_CARD_ACMD_SD_SEND_OP_COND, 0);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_ACMD_SD_SEND_OP_COND");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_ACMD_SD_SEND_OP_COND");
 	
 		/* Not idle? */
 		if (SD_CARD_IS_NOT_IDLE_RESPONSE( e->response [e->response_index])) {
@@ -891,13 +891,13 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	/* Card Identification */
 	if (e->verbose) {
 		rv = sd_card_send_command( e, SD_CARD_CMD_SEND_CID, 0);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SEND_CID");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SEND_CID");
 		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CID_SIZE);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CID");
-		SYSLOG( "*** Card Identification ***\n");
-		SYSLOG( "Manufacturer ID          : %" PRIu8 "\n", SD_CARD_CID_GET_MID( block));
-		SYSLOG( "OEM/Application ID       : %" PRIu16 "\n", SD_CARD_CID_GET_OID( block));
-		SYSLOG(
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CID");
+		RTEMS_SYSLOG( "*** Card Identification ***\n");
+		RTEMS_SYSLOG( "Manufacturer ID          : %" PRIu8 "\n", SD_CARD_CID_GET_MID( block));
+		RTEMS_SYSLOG( "OEM/Application ID       : %" PRIu16 "\n", SD_CARD_CID_GET_OID( block));
+		RTEMS_SYSLOG(
 			"Product name             : %c%c%c%c%c%c\n",
 			SD_CARD_CID_GET_PNM( block, 0),
 			SD_CARD_CID_GET_PNM( block, 1),
@@ -906,17 +906,17 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 			SD_CARD_CID_GET_PNM( block, 4),
 			SD_CARD_CID_GET_PNM( block, 5)
 		);
-		SYSLOG( "Product revision         : %" PRIu8 "\n", SD_CARD_CID_GET_PRV( block));
-		SYSLOG( "Product serial number    : %" PRIu32 "\n", SD_CARD_CID_GET_PSN( block));
-		SYSLOG( "Manufacturing date       : %" PRIu8 "\n", SD_CARD_CID_GET_MDT( block));
-		SYSLOG( "7-bit CRC checksum       : %" PRIu8 "\n",  SD_CARD_CID_GET_CRC7( block));
+		RTEMS_SYSLOG( "Product revision         : %" PRIu8 "\n", SD_CARD_CID_GET_PRV( block));
+		RTEMS_SYSLOG( "Product serial number    : %" PRIu32 "\n", SD_CARD_CID_GET_PSN( block));
+		RTEMS_SYSLOG( "Manufacturing date       : %" PRIu8 "\n", SD_CARD_CID_GET_MDT( block));
+		RTEMS_SYSLOG( "7-bit CRC checksum       : %" PRIu8 "\n",  SD_CARD_CID_GET_CRC7( block));
 	}
 
 	/* Card Specific Data */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_CSD, 0);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SEND_CSD");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SEND_CSD");
 	rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CSD_SIZE);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CSD");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CSD");
 	transfer_speed = sd_card_transfer_speed( block);
 	e->transfer_mode.baudrate = transfer_speed;
 	e->n_ac_max = sd_card_max_access_time( block, transfer_speed);
@@ -924,39 +924,39 @@ static rtems_status_code sd_card_driver_init( rtems_device_major_number major, r
 	e->block_size_shift = SD_CARD_CSD_GET_READ_BLK_LEN( block);
 	write_block_size = 1U << e->block_size_shift;
 	if (read_block_size < write_block_size) {
-		SYSLOG_ERROR( "Read block size smaller than write block size\n");
+		RTEMS_SYSLOG_ERROR( "Read block size smaller than write block size\n");
 		return -RTEMS_IO_ERROR;
 	}
 	e->block_size = write_block_size;
 	e->block_number = sd_card_block_number( block);
 	if (e->verbose) {
-		SYSLOG( "*** Card Specific Data ***\n");
-		SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
-		SYSLOG( "Spec version             : %" PRIu8 "\n", SD_CARD_CSD_GET_SPEC_VERS( block));
-		SYSLOG( "Access time [ns]         : %" PRIu32 "\n", sd_card_access_time( block));
-		SYSLOG( "Max access time [N]      : %" PRIu32 "\n", e->n_ac_max);
-		SYSLOG( "Max read block size [B]  : %" PRIu32 "\n", read_block_size);
-		SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
-		SYSLOG( "Block size [B]           : %" PRIu32 "\n", e->block_size);
-		SYSLOG( "Block number             : %" PRIu32 "\n", e->block_number);
-		SYSLOG( "Capacity [B]             : %" PRIu32 "\n", sd_card_capacity( block));
-		SYSLOG( "Max transfer speed [b/s] : %" PRIu32 "\n", transfer_speed);
+		RTEMS_SYSLOG( "*** Card Specific Data ***\n");
+		RTEMS_SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
+		RTEMS_SYSLOG( "Spec version             : %" PRIu8 "\n", SD_CARD_CSD_GET_SPEC_VERS( block));
+		RTEMS_SYSLOG( "Access time [ns]         : %" PRIu32 "\n", sd_card_access_time( block));
+		RTEMS_SYSLOG( "Max access time [N]      : %" PRIu32 "\n", e->n_ac_max);
+		RTEMS_SYSLOG( "Max read block size [B]  : %" PRIu32 "\n", read_block_size);
+		RTEMS_SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
+		RTEMS_SYSLOG( "Block size [B]           : %" PRIu32 "\n", e->block_size);
+		RTEMS_SYSLOG( "Block number             : %" PRIu32 "\n", e->block_number);
+		RTEMS_SYSLOG( "Capacity [B]             : %" PRIu32 "\n", sd_card_capacity( block));
+		RTEMS_SYSLOG( "Max transfer speed [b/s] : %" PRIu32 "\n", transfer_speed);
 	}
 
 	/* Set read block size */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SET_BLOCKLEN, e->block_size);
-	CLEANUP_RVSC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SET_BLOCKLEN");
+	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SET_BLOCKLEN");
 
 	/* Create disk device */
 	dev = rtems_filesystem_make_dev_t( sd_card_disk_major, (rtems_device_minor_number) e->table_index);
 	sc = rtems_disk_io_initialize();
-	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Initialize RTEMS disk IO");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Initialize RTEMS disk IO");
 	sc = rtems_disk_create_phys( dev, (int) e->block_size, (int) e->block_number, sd_card_disk_ioctl, e->disk_device_name);
-	CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Create disk device");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_init_cleanup, "Create disk device");
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SC( sc, "Stop");
+	RTEMS_CHECK_SC( sc, "Stop");
 
 	return RTEMS_SUCCESSFUL;
 
@@ -984,20 +984,20 @@ static rtems_status_code sd_card_driver_read( rtems_device_major_number major, r
 
 	/* Get driver entry */
 	rv = sd_card_driver_get_entry( minor, &e);
-	CHECK_RVSC( rv, "Get driver entry");
+	RTEMS_CHECK_RV_SC( rv, "Get driver entry");
 
 	/* Start */
 	sc = sd_card_start( e);
-	CLEANUP_SC( sc, sd_card_driver_read_cleanup, "Start");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_read_cleanup, "Start");
 
 	/* Check arguments */
 	block_size_mask = e->block_size - 1;
 	block_count = (uint32_t) rw->count >> e->block_size_shift;
 	start_block = (uint32_t) rw->offset >> e->block_size_shift;
 	if (rw->offset & block_size_mask) {
-		DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_read_cleanup, "Invalid offset");
+		RTEMS_DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_read_cleanup, "Invalid offset");
 	} else if ((rw->count & block_size_mask) || (start_block >= e->block_number) || (block_count > e->block_number - start_block)) {
-		DO_CLEANUP_SC( RTEMS_INVALID_NUMBER, sc, sd_card_driver_read_cleanup, "Invalid count or out of range");
+		RTEMS_DO_CLEANUP_SC( RTEMS_INVALID_NUMBER, sc, sd_card_driver_read_cleanup, "Invalid count or out of range");
 	}
 
 	if (block_count == 0) {
@@ -1005,21 +1005,21 @@ static rtems_status_code sd_card_driver_read( rtems_device_major_number major, r
 	} else if (block_count == 1) {
 		/* Single block read */
 		rv = sd_card_send_command( e, SD_CARD_CMD_READ_SINGLE_BLOCK, (uint32_t) rw->offset);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_read_cleanup, "Send: SD_CARD_CMD_READ_SINGLE_BLOCK");
 		rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, (uint8_t *) rw->buffer, (int) e->block_size);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_read_cleanup, "Read: SD_CARD_CMD_READ_SINGLE_BLOCK");
 
 		/* Set moved bytes counter */
 		rw->bytes_moved = (uint32_t) rv;
 	} else {
 		/* Start multiple block read */
 		rv = sd_card_send_command( e, SD_CARD_CMD_READ_MULTIPLE_BLOCK, (uint32_t) rw->offset);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_read_stop_cleanup, "Send: SD_CARD_CMD_READ_MULTIPLE_BLOCK");
 
 		/* Multiple block read */
 		for (i = 0; i < block_count; ++i) {
 			rv = sd_card_read( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_READ, (uint8_t *) rw->buffer + (i << e->block_size_shift), (int) e->block_size);
-			CLEANUP_RVSC( rv, sc, sd_card_driver_read_stop_cleanup, "Read block");
+			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_read_stop_cleanup, "Read block");
 
 			/* Update moved bytes counter */
 			rw->bytes_moved += (uint32_t) rv;
@@ -1027,12 +1027,12 @@ static rtems_status_code sd_card_driver_read( rtems_device_major_number major, r
 
 		/* Stop multiple block read */
 		rv = sd_card_stop_multiple_block_read( e);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_read_cleanup, "Stop multiple block read");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_read_cleanup, "Stop multiple block read");
 	}
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SC( sc, "Stop");
+	RTEMS_CHECK_SC( sc, "Stop");
 
 	return RTEMS_SUCCESSFUL;
 
@@ -1065,20 +1065,20 @@ static rtems_status_code sd_card_driver_write( rtems_device_major_number major, 
 
 	/* Get driver entry */
 	rv = sd_card_driver_get_entry( minor, &e);
-	CHECK_RVSC( rv, "Get driver entry");
+	RTEMS_CHECK_RV_SC( rv, "Get driver entry");
 
 	/* Start */
 	sc = sd_card_start( e);
-	CLEANUP_SC( sc, sd_card_driver_write_cleanup, "Start");
+	RTEMS_CLEANUP_SC( sc, sd_card_driver_write_cleanup, "Start");
 
 	/* Check arguments */
 	block_size_mask = e->block_size - 1;
 	block_count = (uint32_t) rw->count >> e->block_size_shift;
 	start_block = (uint32_t) rw->offset >> e->block_size_shift;
 	if (rw->offset & block_size_mask) {
-		DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_write_cleanup, "Invalid offset");
+		RTEMS_DO_CLEANUP_SC( RTEMS_INVALID_ADDRESS, sc, sd_card_driver_write_cleanup, "Invalid offset");
 	} else if ((rw->count & block_size_mask) || (start_block >= e->block_number) || (block_count > e->block_number - start_block)) {
-		DO_CLEANUP_SC( RTEMS_INVALID_NUMBER, sc, sd_card_driver_write_cleanup, "Invalid count or out of range");
+		RTEMS_DO_CLEANUP_SC( RTEMS_INVALID_NUMBER, sc, sd_card_driver_write_cleanup, "Invalid count or out of range");
 	}
 
 	if (block_count == 0) {
@@ -1086,21 +1086,21 @@ static rtems_status_code sd_card_driver_write( rtems_device_major_number major, 
 	} else if (block_count == 1) {
 		/* Single block write */
 		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_BLOCK, (uint32_t) rw->offset);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_write_cleanup, "Send: SD_CARD_CMD_WRITE_BLOCK");
 		rv = sd_card_write( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_WRITE, (uint8_t *) rw->buffer, (int) e->block_size);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_write_cleanup, "Write: SD_CARD_CMD_WRITE_BLOCK");
 
 		/* Set moved bytes counter */
 		rw->bytes_moved = (uint32_t) rv;
 	} else {
 		/* Start multiple block write */
 		rv = sd_card_send_command( e, SD_CARD_CMD_WRITE_MULTIPLE_BLOCK, (uint32_t) rw->offset);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_write_stop_cleanup, "Send: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 		/* Multiple block write */
 		for (i = 0; i < block_count; ++i) {
 			rv = sd_card_write( e, SD_CARD_START_BLOCK_MULTIPLE_BLOCK_WRITE, (uint8_t *) rw->buffer + (i << e->block_size_shift), (int) e->block_size);
-			CLEANUP_RVSC( rv, sc, sd_card_driver_write_stop_cleanup, "Write: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
+			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_write_stop_cleanup, "Write: SD_CARD_CMD_WRITE_MULTIPLE_BLOCK");
 
 			/* Update moved bytes counter */
 			rw->bytes_moved += (uint32_t) rv;
@@ -1108,16 +1108,16 @@ static rtems_status_code sd_card_driver_write( rtems_device_major_number major, 
 
 		/* Stop multiple block write */
 		rv = sd_card_stop_multiple_block_write( e);
-		CLEANUP_RVSC( rv, sc, sd_card_driver_write_cleanup, "Stop multiple block write");
+		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_write_cleanup, "Stop multiple block write");
 	}
 
 	/* Get card status */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
-	CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
+	RTEMS_CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
 
 	/* Stop */
 	sc = sd_card_stop( e);
-	CHECK_SC( sc, "Stop");
+	RTEMS_CHECK_SC( sc, "Stop");
 
 	return RTEMS_SUCCESSFUL;
 
@@ -1130,7 +1130,7 @@ sd_card_driver_write_cleanup:
 
 	/* Get card status */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_STATUS, 0);
-	CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
+	RTEMS_CHECK_RV( rv, "Send: SD_CARD_CMD_SEND_STATUS");
 
 	/* Stop */
 	sd_card_stop( e);
