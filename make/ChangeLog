@@ -1,3 +1,8 @@
+2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* custom/mpc55xx.cfg: Added -msoft-float and removed -funit-at-a-time
+	in CPU_CFLAGS
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/m32rsim.cfg: New file.
