@@ -25,9 +25,9 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.18.92
-%define binutils_version 2.18.92
-%define binutils_rpmvers %{expand:%(echo "2.18.92" | tr - _ )}
+%define binutils_pkgvers 2.18.93
+%define binutils_version 2.18.93
+%define binutils_rpmvers %{expand:%(echo "2.18.93" | tr - _ )}
 
 Name:		rtems-4.10-avr-rtems4.10-binutils
 Summary:	Binutils for target avr-rtems4.10
@@ -53,8 +53,8 @@ BuildRequires:	bison
 
 Requires:	rtems-4.10-binutils-common
 
-Source0: ftp://sourceware.redhat.com/pub/binutils/snapshots/binutils-2.18.92.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.18.92-rtems4.10-20081004.diff
+Source0: ftp://sourceware.redhat.com/pub/binutils/snapshots/binutils-2.18.93.tar.bz2
+Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.18.93-rtems4.10-20081010.diff
 
 %description
 Cross binutils for target avr-rtems4.10
