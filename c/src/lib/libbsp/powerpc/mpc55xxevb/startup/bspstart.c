@@ -36,7 +36,7 @@
 
 #include <rtems/status-checks.h>
 
-#define DEBUG_DONE() DEBUG_PRINT( "Done\n")
+#define DEBUG_DONE() RTEMS_DEBUG_PRINT( "Done\n")
 
 #define MPC55XX_INTERRUPT_STACK_SIZE 0x1000
 
@@ -81,7 +81,7 @@ void bsp_predriver_hook()
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-	DEBUG_PRINT( "Initialize eDMA ...\n");
+	RTEMS_DEBUG_PRINT( "Initialize eDMA ...\n");
 	sc = mpc55xx_edma_init();
 	if (sc != RTEMS_SUCCESSFUL) {
 		BSP_panic( "Cannot initialize eDMA");
@@ -157,15 +157,15 @@ void bsp_start(void)
 	SIU.PCR [89].R = 0x400;
 	SIU.PCR [90].R = 0x400;
 
-	DEBUG_PRINT( "BSP start ...\n");
+	RTEMS_DEBUG_PRINT( "BSP start ...\n");
 
-	DEBUG_PRINT( "System clock          : %i\n", mpc55xx_get_system_clock());
-	DEBUG_PRINT( "Memory start          : 0x%08x\n", bsp_ram_start);
-	DEBUG_PRINT( "Memory end            : 0x%08x\n", bsp_ram_end);
-	DEBUG_PRINT( "Memory size           : 0x%08x\n", bsp_ram_end - bsp_ram_start);
-	DEBUG_PRINT( "Interrupt stack start : 0x%08x\n", interrupt_stack_start);
-	DEBUG_PRINT( "Interrupt stack end   : 0x%08x\n", interrupt_stack_start + interrupt_stack_size);
-	DEBUG_PRINT( "Interrupt stack size  : 0x%08x\n", interrupt_stack_size);
+	RTEMS_DEBUG_PRINT( "System clock          : %i\n", mpc55xx_get_system_clock());
+	RTEMS_DEBUG_PRINT( "Memory start          : 0x%08x\n", bsp_ram_start);
+	RTEMS_DEBUG_PRINT( "Memory end            : 0x%08x\n", bsp_ram_end);
+	RTEMS_DEBUG_PRINT( "Memory size           : 0x%08x\n", bsp_ram_end - bsp_ram_start);
+	RTEMS_DEBUG_PRINT( "Interrupt stack start : 0x%08x\n", interrupt_stack_start);
+	RTEMS_DEBUG_PRINT( "Interrupt stack end   : 0x%08x\n", interrupt_stack_start + interrupt_stack_size);
+	RTEMS_DEBUG_PRINT( "Interrupt stack size  : 0x%08x\n", interrupt_stack_size);
 	
 	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
@@ -182,7 +182,7 @@ void bsp_start(void)
 	mpc55xx_ebi_init();
 	
 	/* Initialize exceptions */
-	DEBUG_PRINT( "Initialize exceptions ...\n");
+	RTEMS_DEBUG_PRINT( "Initialize exceptions ...\n");
 	ppc_exc_initialize(
           PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
           interrupt_stack_start,
@@ -191,14 +191,14 @@ void bsp_start(void)
 	DEBUG_DONE();
 
 	/* Initialize interrupts */
-	DEBUG_PRINT( "Initialize interrupts ...\n");
+	RTEMS_DEBUG_PRINT( "Initialize interrupts ...\n");
 	if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
 		BSP_panic( "Cannot initialize interrupts");
 	} else {
 		DEBUG_DONE();
 	}
 	
-	DEBUG_PRINT( "BSP start done\n");
+	RTEMS_DEBUG_PRINT( "BSP start done\n");
 
 	return;
 

@@ -84,19 +84,19 @@ static rtems_task test_mpc55xx_dspi_writer( rtems_task_argument arg)
 	rtems_libi2c_read_write_t read_and_write = { rd_buf : NULL, wr_buf : NULL, byte_cnt : 0 };
 	int i = 0;
 
-	DEBUG_PRINT( "Task started\n");
+	RTEMS_DEBUG_PRINT( "Task started\n");
 
 	device = rtems_libi2c_register_drv( NULL, &test_mpc55xx_dspi_drv, test_mpc55xx_dspi_bus [2], 0);
-	CHECK_RV_TASK( device, "rtems_libi2c_register_drv");
+	RTEMS_CHECK_RV_TASK( device, "rtems_libi2c_register_drv");
 
 	sc = rtems_libi2c_send_start( device);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_start");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_start");
 
 	rv = rtems_libi2c_ioctl( device, RTEMS_LIBI2C_IOCTL_SET_TFRMODE, &test_mpc55xx_dspi_transfer_mode);
-	CHECK_RV_TASK( rv, "rtems_libi2c_ioctl");
+	RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_ioctl");
 
 	sc = rtems_libi2c_send_addr( device, MPC55XX_TEST_DSPI_ADDRESS);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
 	
 	for (i = 0; i < MPC55XX_TEST_DSPI_BUFSIZE; ++i) {
 		test_mpc55xx_dspi_writer_outbuf [0] [i] = 0xa5;
@@ -113,37 +113,37 @@ static rtems_task test_mpc55xx_dspi_writer( rtems_task_argument arg)
 		tic();
 
 		/* sc = rtems_semaphore_obtain( test_mpc55xx_dspi_pong, RTEMS_WAIT, RTEMS_NO_TIMEOUT); */
-		/* CHECK_SC_TASK( sc, "rtems_semaphore_obtain"); */
+		/* RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_obtain"); */
 
-		DEBUG_PRINT( "Ping\n");
+		RTEMS_DEBUG_PRINT( "Ping\n");
 
 		/* sc = rtems_libi2c_send_start( device); */
-		/* CHECK_SC_TASK( sc, "rtems_libi2c_send_start"); */
+		/* RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_start"); */
 
 		/* sc = rtems_libi2c_send_addr( device, MPC55XX_TEST_DSPI_ADDRESS); */
-		/* CHECK_SC_TASK( sc, "rtems_libi2c_send_addr"); */
+		/* RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_addr"); */
 
 		rv = rtems_libi2c_ioctl( device, RTEMS_LIBI2C_IOCTL_READ_WRITE, &read_and_write);
-		CHECK_RV_TASK( rv, "rtems_libi2c_ioctl: RTEMS_LIBI2C_IOCTL_READ_WRITE");
+		RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_ioctl: RTEMS_LIBI2C_IOCTL_READ_WRITE");
 
 		/* rv = rtems_libi2c_write_bytes( device, test_mpc55xx_dspi_writer_outbuf [0], MPC55XX_TEST_DSPI_BUFSIZE); */
-		/* CHECK_RV_TASK( rv, "rtems_libi2c_write_bytes"); */
+		/* RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_write_bytes"); */
 
 		/* sc = rtems_libi2c_send_stop( device); */
-		/* CHECK_SC_TASK( sc, "rtems_libi2c_send_stop"); */
+		/* RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_stop"); */
 
 		toggle = toggle ? 0 : 1;
 		read_and_write.wr_buf = test_mpc55xx_dspi_writer_outbuf [toggle];
 
 		/* sc = rtems_semaphore_release( test_mpc55xx_dspi_ping); */
-		/* CHECK_SC_TASK( sc, "rtems_semaphore_release"); */
+		/* RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_release"); */
 	}
 
 	sc = rtems_libi2c_send_stop( device);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_stop");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_stop");
 
 	sc = rtems_task_delete( RTEMS_SELF);
-	CHECK_SC_TASK( sc, "rtems_task_delete");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_task_delete");
 }
 
 static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
@@ -153,43 +153,43 @@ static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
 	rtems_device_minor_number device;
 	int i = 0;
 
-	DEBUG_PRINT( "Task started\n");
+	RTEMS_DEBUG_PRINT( "Task started\n");
 
 	device = rtems_libi2c_register_drv( NULL, &test_mpc55xx_dspi_drv, test_mpc55xx_dspi_bus [3], 0);
-	CHECK_RV_TASK( device, "rtems_libi2c_register_drv");
+	RTEMS_CHECK_RV_TASK( device, "rtems_libi2c_register_drv");
 
 	sc = rtems_libi2c_send_start( device);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_start");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_start");
 
 	rv = rtems_libi2c_ioctl( device, RTEMS_LIBI2C_IOCTL_SET_TFRMODE, &test_mpc55xx_dspi_transfer_mode);
-	CHECK_RV_TASK( rv, "rtems_libi2c_ioctl");
+	RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_ioctl");
 
 	sc = rtems_libi2c_send_addr( device, MPC55XX_TEST_DSPI_ADDRESS);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_addr");
 	
 	for (i = 0; i < MPC55XX_TEST_DSPI_BUFSIZE; ++i) {
 		test_mpc55xx_dspi_reader_inbuf [i] = -1;
 	}
 
 	sc = rtems_semaphore_obtain( test_mpc55xx_dspi_ping, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	CHECK_SC_TASK( sc, "rtems_semaphore_obtain");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_obtain");
 
-	DEBUG_PRINT( "Pong\n");
+	RTEMS_DEBUG_PRINT( "Pong\n");
 
 	sc = rtems_semaphore_release( test_mpc55xx_dspi_pong);
-	CHECK_SC_TASK( sc, "rtems_semaphore_release");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_release");
 
 	while (1) {
 		sc = rtems_semaphore_obtain( test_mpc55xx_dspi_ping, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-		CHECK_SC_TASK( sc, "rtems_semaphore_obtain");
+		RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_obtain");
 
-		DEBUG_PRINT( "Pong\n");
+		RTEMS_DEBUG_PRINT( "Pong\n");
 		
 		rv = rtems_libi2c_read_bytes( device, test_mpc55xx_dspi_reader_inbuf, MPC55XX_TEST_DSPI_BUFSIZE);
-		CHECK_RV_TASK( rv, "rtems_libi2c_read_bytes");
+		RTEMS_CHECK_RV_TASK( rv, "rtems_libi2c_read_bytes");
 
 		sc = rtems_semaphore_release( test_mpc55xx_dspi_pong);
-		CHECK_SC_TASK( sc, "rtems_semaphore_release");
+		RTEMS_CHECK_SC_TASK( sc, "rtems_semaphore_release");
 
 		printk( "Time: %i, Value: 0x%02x%02x%02x%02x\n", tac(),
 			test_mpc55xx_dspi_reader_inbuf [0], test_mpc55xx_dspi_reader_inbuf [1],
@@ -197,10 +197,10 @@ static rtems_task test_mpc55xx_dspi_reader( rtems_task_argument arg)
 	}
 
 	sc = rtems_libi2c_send_stop( device);
-	CHECK_SC_TASK( sc, "rtems_libi2c_send_stop");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_libi2c_send_stop");
 
 	sc = rtems_task_delete( RTEMS_SELF);
-	CHECK_SC_TASK( sc, "rtems_task_delete");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_task_delete");
 }
 
 rtems_task test_sd_card( rtems_task_argument arg);
@@ -219,7 +219,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	test_mpc55xx_intc( 0);
 
 	rv = rtems_libi2c_initialize();
-	CHECK_RVSC( rv, "rtems_libi2c_initialize");
+	RTEMS_CHECK_RV_SC( rv, "rtems_libi2c_initialize");
 
 	/* DSPI D inputs are taken from DSPI C */
 	SIU.DISR.R = 0x000000FC;
@@ -261,7 +261,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	for (i = 0; i < MPC55XX_DSPI_NUMBER; ++i) {
 		device_name [8] = '0' + i;
 		rv = rtems_libi2c_register_bus( device_name, (rtems_libi2c_bus_t *) &mpc55xx_dspi_bus_table [i]);
-		CHECK_RVSC( rv, device_name);
+		RTEMS_CHECK_RV_SC( rv, device_name);
 		test_mpc55xx_dspi_bus [i] = rv;
 	}
 
@@ -272,7 +272,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_NO_PRIORITY,
 		&test_mpc55xx_dspi_ping
 	);
-	CHECK_SC( sc, "rtems_semaphore_create");
+	RTEMS_CHECK_SC( sc, "rtems_semaphore_create");
 
 	sc = rtems_semaphore_create (
 		rtems_build_name ( 'P', 'O', 'N', 'G'),
@@ -281,7 +281,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_NO_PRIORITY,
 		&test_mpc55xx_dspi_pong
 	);
-	CHECK_SC( sc, "rtems_semaphore_create");
+	RTEMS_CHECK_SC( sc, "rtems_semaphore_create");
 
 	#if 0
 	rtems_id writer_task_id;
@@ -295,7 +295,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_DEFAULT_ATTRIBUTES,
 		&writer_task_id
 	);
-	CHECK_SC( sc, "rtems_task_create");
+	RTEMS_CHECK_SC( sc, "rtems_task_create");
 	sc = rtems_task_create(
 		rtems_build_name( 'T', 'R', 'D', 'R'),
 		1,
@@ -304,12 +304,12 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_DEFAULT_ATTRIBUTES,
 		&reader_task_id
 	);
-	CHECK_SC( sc, "rtems_task_create");
+	RTEMS_CHECK_SC( sc, "rtems_task_create");
 	
 	sc = rtems_task_start( writer_task_id, test_mpc55xx_dspi_writer, 0);
-	CHECK_SC( sc, "rtems_task_start");
+	RTEMS_CHECK_SC( sc, "rtems_task_start");
 	sc = rtems_task_start( reader_task_id, test_mpc55xx_dspi_reader, 0);
-	CHECK_SC( sc, "rtems_task_start");
+	RTEMS_CHECK_SC( sc, "rtems_task_start");
 	#endif
 
 	rtems_id sd_card_task_id;
@@ -321,9 +321,9 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_DEFAULT_ATTRIBUTES,
 		&sd_card_task_id
 	);
-	CHECK_SC( sc, "rtems_task_create");
+	RTEMS_CHECK_SC( sc, "rtems_task_create");
 	sc = rtems_task_start( sd_card_task_id, test_sd_card, 0);
-	CHECK_SC( sc, "rtems_task_start");
+	RTEMS_CHECK_SC( sc, "rtems_task_start");
 
 	rtems_id intc_id;
 	sc = rtems_task_create(
@@ -334,12 +334,12 @@ rtems_status_code mpc55xx_dspi_register(void)
 		RTEMS_DEFAULT_ATTRIBUTES,
 		&intc_id
 	);
-	CHECK_SC( sc, "rtems_task_create");
+	RTEMS_CHECK_SC( sc, "rtems_task_create");
 	sc = rtems_task_start( intc_id, test_mpc55xx_intc, 0);
-	CHECK_SC( sc, "rtems_task_start");
+	RTEMS_CHECK_SC( sc, "rtems_task_start");
 
 	sc = rtems_task_delete( RTEMS_SELF);
-	CHECK_SC( sc, "rtems_task_delete");
+	RTEMS_CHECK_SC( sc, "rtems_task_delete");
 
 	return RTEMS_SUCCESSFUL;
 }
@@ -388,11 +388,11 @@ static int test_sd_card_print_dir( const char* dirname, unsigned level)
 	/* Open */
 	dir = opendir( dirname);
 	rv = dir == NULL ? -1 : 0;
-	CHECK_RV( rv, "Open directory");
+	RTEMS_CHECK_RV( rv, "Open directory");
 
 	/* Change CWD */
 	rv = chdir( dirname);
-	CHECK_RV( rv, "Change directory");
+	RTEMS_CHECK_RV( rv, "Change directory");
 
 	/* Read */
 	ent = readdir( dir);
@@ -404,7 +404,7 @@ static int test_sd_card_print_dir( const char* dirname, unsigned level)
 			printk( "<%s>\n", ent->d_name);
 			if (S_ISDIR( s.st_mode)) {
 				rv = test_sd_card_print_dir( ent->d_name, level + 1);
-				CHECK_RV( rv, "Next directory");
+				RTEMS_CHECK_RV( rv, "Next directory");
 			}
 		}
 		ent = readdir( dir);
@@ -412,11 +412,11 @@ static int test_sd_card_print_dir( const char* dirname, unsigned level)
 
 	/* Change CWD */
 	rv = chdir( "..");
-	CHECK_RV( rv, "Change directory");
+	RTEMS_CHECK_RV( rv, "Change directory");
 
 	/* Close */
 	rv = closedir( dir);
-	CHECK_RV( rv, "Close directory");
+	RTEMS_CHECK_RV( rv, "Close directory");
 
 	return 0;
 }
@@ -459,10 +459,10 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	char file_name [] = "00000000.TXT";
 	uint8_t *buf = NULL;
 
-	DEBUG_PRINT( "Task started\n");
+	RTEMS_DEBUG_PRINT( "Task started\n");
 
 	minor = rtems_libi2c_register_drv( e->device_name, (rtems_libi2c_drv_t *) e, test_mpc55xx_dspi_bus [0], 0);
-	CHECK_RV_TASK( (int) minor, "rtems_libi2c_register_drv");
+	RTEMS_CHECK_RV_TASK( (int) minor, "rtems_libi2c_register_drv");
 
 	buf = malloc( TEST_SD_CARD_BIGBUF_SIZE);
 	for (i = 0; i < TEST_SD_CARD_BIGBUF_SIZE; ++i) {
@@ -475,38 +475,38 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	buf [i - 1] = '\n';
 
 	rv = test_sd_card_print_dir( "/dev", 0);
-	CHECK_RV_TASK( rv, "Print directory");
+	RTEMS_CHECK_RV_TASK( rv, "Print directory");
 
 	sc = rtems_ide_part_table_initialize( TEST_SD_CARD_DEVICE_FILE);
-	CHECK_SC_TASK( sc, "Initialize IDE partition table");
+	RTEMS_CHECK_SC_TASK( sc, "Initialize IDE partition table");
 
 	rv = test_sd_card_print_dir( "/dev", 0);
-	CHECK_RV_TASK( rv, "Print directory");
+	RTEMS_CHECK_RV_TASK( rv, "Print directory");
 
 	rv = mkdir( TEST_SD_CARD_MOUNT_POINT, S_IRWXU);
-	CHECK_RV_TASK( rv, "Create mount point");
+	RTEMS_CHECK_RV_TASK( rv, "Create mount point");
 
 	rv = rtems_fsmount( test_sd_card_fs_table, sizeof( test_sd_card_fs_table) / sizeof( test_sd_card_fs_table [0]), NULL);
-	CHECK_RV_TASK( rv, "Mount file systems");
+	RTEMS_CHECK_RV_TASK( rv, "Mount file systems");
 
 	/*rv = test_sd_card_print_dir( TEST_SD_CARD_MOUNT_POINT, 0); */
-	/*CHECK_RV_TASK( rv, "Print directory"); */
+	/*RTEMS_CHECK_RV_TASK( rv, "Print directory"); */
 
 	rv = mkdir( TEST_SD_CARD_DIRECTORY, S_IRWXU);
 
 	rv = chdir( TEST_SD_CARD_DIRECTORY);
-	CHECK_RV_TASK( rv, "Change directory");
+	RTEMS_CHECK_RV_TASK( rv, "Change directory");
 
 	i = 0;
 	while (1) {
 		snprintf( file_name, 13, "%08i.TXT", i);
 		tic();
 		fd = creat( file_name, S_IREAD | S_IWRITE);
-		CHECK_RV_TASK( fd, "Create file");
+		RTEMS_CHECK_RV_TASK( fd, "Create file");
 		rv = write( fd, buf, TEST_SD_CARD_BIGBUF_SIZE);
-		CHECK_RV_TASK( rv, "Write file");
+		RTEMS_CHECK_RV_TASK( rv, "Write file");
 		rv = close( fd);
-		CHECK_RV_TASK( rv, "Close file");
+		RTEMS_CHECK_RV_TASK( rv, "Close file");
 		t = tac();
 		avg = ((uint64_t) avg * ((uint64_t) i) + (uint64_t) t) / ((uint64_t) i + 1);
 		printk( "%s: %u (%u)\n", file_name, tac(), avg);
@@ -514,10 +514,10 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	}
 
 	rv = chdir( "..");
-	CHECK_RV_TASK( rv, "Change directory");
+	RTEMS_CHECK_RV_TASK( rv, "Change directory");
 
 	rv = test_sd_card_print_dir( TEST_SD_CARD_DIRECTORY, 0);
-	CHECK_RV_TASK( rv, "Print directory");
+	RTEMS_CHECK_RV_TASK( rv, "Print directory");
 
 
 	#if 0
@@ -526,7 +526,7 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	const char device_name [] = "/dev/spi0.sd-card-0";
 	fd = open( device_name, O_RDWR);
 	
-	CHECK_RV_TASK( fd, "open");
+	RTEMS_CHECK_RV_TASK( fd, "open");
 	while (1) {
 		for (i = 0; i < TEST_SD_CARD_BUF_SIZE; ++i) {
 			test_sd_card_buf [i] = b;
@@ -538,11 +538,11 @@ rtems_task test_sd_card( rtems_task_argument arg)
 		}
 	}
 	rv = close( fd);
-	CHECK_RV_TASK( rv, "close");
+	RTEMS_CHECK_RV_TASK( rv, "close");
 	
 	/* Read */
 	fd = open( device_name, O_RDWR);
-	CHECK_RV_TASK( fd, "open");
+	RTEMS_CHECK_RV_TASK( fd, "open");
 	while (1) {
 		rv = read( fd, test_sd_card_buf, TEST_SD_CARD_BUF_SIZE);
 		if (rv < 0) {
@@ -554,11 +554,11 @@ rtems_task test_sd_card( rtems_task_argument arg)
 		}
 	}
 	rv = close( fd);
-	CHECK_RV_TASK( rv, "close");
+	RTEMS_CHECK_RV_TASK( rv, "close");
 	#endif
 
 	sc = rtems_task_delete( RTEMS_SELF);
-	CHECK_SC_TASK( sc, "rtems_task_delete");
+	RTEMS_CHECK_SC_TASK( sc, "rtems_task_delete");
 }
 
 #define ITER 4
@@ -582,10 +582,10 @@ static rtems_status_code test_mpc55xx_edma(void)
 		RTEMS_NO_PRIORITY,
 		&transfer_update
 	);
-	CHECK_SC( sc, "rtems_semaphore_create");
+	RTEMS_CHECK_SC( sc, "rtems_semaphore_create");
 
 	rv = mpc55xx_edma_obtain_channel( channel, &error_status, transfer_update);
-	CHECK_RV( rv, "mpc55xx_edma_obtain_channel");
+	RTEMS_CHECK_RV( rv, "mpc55xx_edma_obtain_channel");
 
 	int i = 0;
 	for (i = 0; i < BUFSIZE; ++i) {
@@ -620,7 +620,7 @@ static rtems_status_code test_mpc55xx_edma(void)
 			if (sc == RTEMS_TIMEOUT) {
 				continue;
 			}
-			CHECK_SC( sc, "rtems_semaphore_obtain");
+			RTEMS_CHECK_SC( sc, "rtems_semaphore_obtain");
 		}
 		printk( "%s: Error status: 0x%08x\n", __func__, error_status);
 	}

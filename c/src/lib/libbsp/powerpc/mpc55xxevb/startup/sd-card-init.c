@@ -40,7 +40,7 @@ static rtems_status_code mpc55xx_dspi_init(void)
 	union SIU_PCR_tag pcr = MPC55XX_ZERO_FLAGS;
 
 	rv = rtems_libi2c_initialize();
-	CHECK_RVSC( rv, "rtems_libi2c_initialize");
+	RTEMS_CHECK_RV_SC( rv, "rtems_libi2c_initialize");
 
 	/* DSPI D inputs are taken from DSPI C */
 	SIU.DISR.R = 0x000000FC;
@@ -82,7 +82,7 @@ static rtems_status_code mpc55xx_dspi_init(void)
 	for (i = 0; i < MPC55XX_DSPI_NUMBER; ++i) {
 		device_name [8] = (char) ('0' + i);
 		rv = rtems_libi2c_register_bus( device_name, (rtems_libi2c_bus_t *) &mpc55xx_dspi_bus_table [i]);
-		CHECK_RVSC( rv, device_name);
+		RTEMS_CHECK_RV_SC( rv, device_name);
 	}
 
 	return RTEMS_SUCCESSFUL;
@@ -148,22 +148,22 @@ rtems_status_code mpc55xx_sd_card_init(void)
 	int rv = 0;
 	sd_card_driver_entry *e = &sd_card_driver_table [0];
 
-	DEBUG_PRINT( "Task started\n");
+	RTEMS_DEBUG_PRINT( "Task started\n");
 
 	sc = mpc55xx_dspi_init();
-	CHECK_SC( rv, "Intitalize DSPI bus");
+	RTEMS_CHECK_SC( rv, "Intitalize DSPI bus");
 
 	rv = rtems_libi2c_register_drv( e->device_name, (rtems_libi2c_drv_t *) e, mpc55xx_dspi_bus_table [0].bus_number, 0);
-	CHECK_RVSC( rv, "Register SD Card driver");
+	RTEMS_CHECK_RV_SC( rv, "Register SD Card driver");
 
 	sc = rtems_ide_part_table_initialize( MPC55XX_DEVICE_FILE);
-	CHECK_SC( sc, "Initialize IDE partition table");
+	RTEMS_CHECK_SC( sc, "Initialize IDE partition table");
 
 	rv = mkdir( MPC55XX_MOUNT_POINT, S_IRWXU);
-	CHECK_RVSC( rv, "Create mount point");
+	RTEMS_CHECK_RV_SC( rv, "Create mount point");
 
 	rv = rtems_fsmount( mpc55xx_fs_table, sizeof( mpc55xx_fs_table) / sizeof( mpc55xx_fs_table [0]), NULL);
-	CHECK_RVSC( rv, "Mount file systems");
+	RTEMS_CHECK_RV_SC( rv, "Mount file systems");
 
 	return RTEMS_SUCCESSFUL;
 }

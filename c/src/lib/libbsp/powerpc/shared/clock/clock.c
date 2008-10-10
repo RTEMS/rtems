@@ -201,7 +201,7 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	/* Check decrementer value */
 	if (ppc_clock_decrementer_value == 0) {
 		ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
-		SYSLOG_ERROR( "Decrementer value would be zero, will be set to maximum value instead\n");
+		RTEMS_SYSLOG_ERROR( "Decrementer value would be zero, will be set to maximum value instead\n");
 	}
 
 	/* Set the nanoseconds since last tick handler */

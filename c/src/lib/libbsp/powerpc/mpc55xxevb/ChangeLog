@@ -1,3 +1,8 @@
+2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c, startup/sd-card-init.c, tests/tests.c: Update for
+	status-checks.h changes.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared tm27.h stub.
