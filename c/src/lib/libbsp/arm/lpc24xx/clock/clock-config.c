@@ -46,7 +46,7 @@ static void lpc24xx_clock_handler_install( void)
     (rtems_interrupt_handler) Clock_isr,
     NULL
   );
-  CHECK_SC_VOID( sc, "Install clock interrupt handler");
+  RTEMS_CHECK_SC_VOID( sc, "Install clock interrupt handler");
 }
 
 static void lpc24xx_clock_initialize( void)
@@ -101,7 +101,7 @@ static void lpc24xx_clock_cleanup( void)
     (rtems_interrupt_handler) Clock_isr,
     NULL
   );
-  CHECK_SC_VOID( sc, "Remove clock interrupt handler");
+  RTEMS_CHECK_SC_VOID( sc, "Remove clock interrupt handler");
 }
 
 static uint32_t lpc24xx_clock_nanoseconds_since_last_tick( void)

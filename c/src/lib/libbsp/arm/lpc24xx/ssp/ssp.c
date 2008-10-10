@@ -203,7 +203,7 @@ static rtems_status_code lpc24xx_ssp_init( rtems_libi2c_bus_t *bus)
         lpc24xx_ssp_dma_handler,
         &lpc24xx_ssp_dma_data
       );
-      CHECK_SC( sc, "Install DMA interrupt handler");
+      RTEMS_CHECK_SC( sc, "Install DMA interrupt handler");
 
       /* Set DMA support status */
       lpc24xx_ssp_dma_data.status = LPC24XX_SSP_DMA_AVAILABLE;
@@ -258,7 +258,7 @@ static rtems_status_code lpc24xx_ssp_init( rtems_libi2c_bus_t *bus)
     lpc24xx_ssp_handler,
     e
   );
-  CHECK_SC( sc, "Install interrupt handler");
+  RTEMS_CHECK_SC( sc, "Install interrupt handler");
 
   /* Enable receiver overrun interrupts */
   e->regs->imsc = SSP_IMSC_RORIM;
