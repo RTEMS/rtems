@@ -1,3 +1,7 @@
+2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* unlimited/system.h: Tighten configuration for stack space.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: When USE_SHELL not defined, do not attempt to
