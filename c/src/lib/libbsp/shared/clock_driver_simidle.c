@@ -7,7 +7,9 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
+#include <rtems/score/thread.h>
 
 #define CLOCK_VECTOR 0
 
@@ -40,8 +42,13 @@ Thread clock_driver_sim_idle_body(
 )
 {
   for( ; ; ) {
-    if ( clock_driver_enabled )
-      rtems_clock_tick();
+    if ( clock_driver_enabled ) {
+      _Thread_Disable_dispatch();
+      _ISR_Nest_level++;
+	rtems_clock_tick();
+      _ISR_Nest_level--;
+      _Thread_Enable_dispatch();
+    }
   }
   return 0;   /* to avoid warning */
 }

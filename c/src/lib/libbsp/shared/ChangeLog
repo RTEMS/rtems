@@ -1,3 +1,10 @@
+2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* clock_driver_simidle.c: Ensure ISR nest level and Thread Dispatch
+	disable level are in the same state they would be in a true ISR. This
+	ensures that all of the clock tick handling is as similar as possible
+	in this limited environment.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* include/tm27.h: Use shared tm27.h stub.
