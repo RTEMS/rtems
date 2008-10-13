@@ -26,11 +26,13 @@
 #include <rtems/score/cpu.h>
 /* #include "cpu_asm.h> */
 
+#if 0
 void _CPU_Context_restore(
   Context_Control *new_context
 )
 {
 }
+#endif
 
 /*  void __ISR_Handler()
  *

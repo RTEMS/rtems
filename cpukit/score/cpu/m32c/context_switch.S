@@ -28,6 +28,7 @@ __CPU_Context_switch:
 
 	mov.l	ARG_HEIR[fb],a0		; a0 = heir
 
+restore:
 	mov.l	CTXT_SP[a0],a1
 	ldc  	a1,sp			; restore sp
 	mov.l	CTXT_FB[a0],a1
@@ -37,3 +38,12 @@ __CPU_Context_switch:
 	popm 	a0,a1,r0,r1,r2,r3
 	exitd
 	.size	__CPU_Context_switch, .-__CPU_Context_switch
+
+#define ARG_RESTART 8
+
+	.global	__CPU_Context_Restart_self
+	.type	__CPU_Context_Restart_self, @function
+__CPU_Context_Restart_self:
+	enter	#0
+	mov.l	ARG_RESTART[fb],a0	; a0 = heir
+	jmp.s	restore

@@ -1,3 +1,9 @@
+2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* context_switch.S, cpu_asm.c, rtems/score/cpu.h: Add support for
+	restarting the currently executing thread. Fine tune alignment factor
+	as two-byte aligned and use this for critical structures.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, context_init.c, context_switch.S,

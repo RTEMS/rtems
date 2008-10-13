@@ -357,7 +357,8 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STRUCTURE_ALIGNMENT
+#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (2)))
+
 
 /**
  *  @defgroup CPUEndian Processor Dependent Endianness Support
@@ -597,7 +598,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT              2
 
 /**
  *  This number corresponds to the byte alignment requirement for the
@@ -823,8 +824,9 @@ void _CPU_Context_Initialize(
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_Context_Restart_self( _the_context ) \
-   _CPU_Context_restore( (_the_context) );
+void _CPU_Context_Restart_self(
+  Context_Control  *the_context
+);
 
 /**
  *  @ingroup CPUContext
