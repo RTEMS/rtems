@@ -44,7 +44,7 @@ void Screen11()
     Partition_name[ 1 ],
     Partition_good_area,
     0,
-    80,
+    71,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -135,7 +135,7 @@ void Screen11()
     Partition_name[ 1 ],
     Partition_good_area,
     128,
-    34,
+    35,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );

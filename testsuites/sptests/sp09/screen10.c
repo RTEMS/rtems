@@ -106,6 +106,8 @@ void Screen10()
        status,
        "rtems_rate_monotonic_period waiting for timeout"
      );
+
+     rtems_task_wake_after( 1 );
   }
   puts(
     "TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_TIMEOUT"

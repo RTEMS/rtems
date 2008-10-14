@@ -23,6 +23,7 @@ void Screen14()
   rtems_status_code       status;
   rtems_time_of_day       time;
   rtems_timer_information timer_info;
+  bool                    skipUnsatisfied;
 
   status = rtems_timer_create( 0, &Junk_id );
   fatal_directive_status(
@@ -187,17 +188,25 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY" );
 
-  status = rtems_timer_initiate_server(
+  skipUnsatisfied = false;
+  #if defined(__m32c__)
+    skipUnsatisfied = true;
+  #endif
+  if (skipUnsatisfied) {
+    puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED -- SKIPPED" );
+  } else {
+    status = rtems_timer_initiate_server(
       RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
       0x10000000,
       0
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_UNSATISFIED,
-    "rtems_timer_initiate_server too much stack "
-  );
-  puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
+    );
+    fatal_directive_status(
+      status,
+      RTEMS_UNSATISFIED,
+      "rtems_timer_initiate_server too much stack "
+    );
+    puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
+  }
 
   status =
     rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );

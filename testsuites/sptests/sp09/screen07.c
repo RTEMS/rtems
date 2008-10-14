@@ -73,7 +73,7 @@ void Screen7()
   /* not enough memory for messages */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    1000000,                     /* 1 million messages should do it */
+    INT_MAX,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
