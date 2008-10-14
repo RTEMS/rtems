@@ -26,6 +26,7 @@
 #include "system.h"
 
 #include <stdlib.h>
+#include <inttypes.h>
 #include <errno.h>
 #include <rtems/score/protectedheap.h>
 
@@ -227,6 +228,7 @@ void test_posix_memalign(void)
   void *p1, *p2;
   int i;
   int sc;
+  int maximumShift;
 
   puts( "posix_memalign - NULL return pointer -- EINVAL" );
   sc = posix_memalign( NULL, 32, 8 );
@@ -240,8 +242,17 @@ void test_posix_memalign(void)
   sc = posix_memalign( &p1, 2, 8 );
   fatal_posix_service_status( sc, EINVAL, "posix_memalign alignment of 2" );
 
-  for ( i=2 ; i<32 ; i++ ) {
-    printf( "posix_memalign - alignment of %d -- OK\n", 1 << i );
+  if ( sizeof(int) == 4 )
+    maximumShift = 31;
+  else if ( sizeof(int) == 2 )
+    maximumShift = 15;
+  else {
+    printf( "Unsupported int size == %d\n", sizeof(int) );
+    rtems_test_exit(0);
+  }
+  for ( i=2 ; i<maximumShift ; i++ ) {
+    printf( "posix_memalign - alignment of %" PRId32 " -- OK\n",
+      (int32_t) 1 << i );
     sc = posix_memalign( &p1, 1 << i, 8 );
     if ( sc == ENOMEM ) {
       printf( "posix_memalign - ran out of memory trying %d\n", 1<<i );
@@ -250,6 +261,10 @@ void test_posix_memalign(void)
     posix_service_failed( sc, "posix_memalign alignment OK" );
 
     free( p1 );
+  }
+  for ( ; i<maximumShift ; i++ ) {
+    printf( "posix_memalign - alignment of %" PRId32 " -- SKIPPED\n",
+      (int32_t) 1 << i );
   }
 
 }
