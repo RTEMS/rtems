@@ -2,7 +2,6 @@
  *  $Id$
  */
 
-OUTPUT_ARCH(h8300h)
 /*
  * Declare some sizes.
  */

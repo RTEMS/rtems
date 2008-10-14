@@ -1,3 +1,8 @@
+2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Do not specify architecture since the linker gets
+	it right even with multiple variants.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared tm27.h stub.
