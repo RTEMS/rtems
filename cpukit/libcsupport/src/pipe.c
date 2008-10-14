@@ -16,11 +16,17 @@
 #endif
 
 #include <errno.h>
+#include <sys/types.h>
+
+extern int pipe_create(int filsdes[2]);
 
 int pipe(
   int filsdes[2]
 )
 {
-  errno = ENOSYS;
-  return -1;
+  if (filsdes == NULL) {
+    errno = EFAULT;
+    return -1;
+  }
+  return pipe_create(filsdes);
 }

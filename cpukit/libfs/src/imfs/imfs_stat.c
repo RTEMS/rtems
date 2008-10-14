@@ -49,6 +49,10 @@ int IMFS_stat(
       buf->st_size = 0;
       break;
 
+    case IMFS_FIFO:
+      buf->st_size = 0;
+      break;
+
     default:
       rtems_set_errno_and_return_minus_one( ENOTSUP );
       break;

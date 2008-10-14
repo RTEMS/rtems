@@ -25,6 +25,8 @@ extern "C" {
 #include <limits.h>
 #include <rtems/libio.h>
 
+#include <rtems/pipe.h>
+
 /*
  *  File name macros
  */
@@ -59,6 +61,10 @@ typedef struct {
   char *name;
 } IMFS_sym_link_t;
 
+typedef struct {
+  pipe_control_t  *pipe;
+} IMFS_fifo_t;
+
 /*
  *  IMFS "memfile" information
  *
@@ -84,7 +90,7 @@ typedef struct {
   extern int imfs_rq_memfile_bytes_per_block;
   extern int imfs_memfile_bytes_per_block;
 
-#define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block  
+#define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block
 #define IMFS_MEMFILE_BLOCK_SLOTS \
   (IMFS_MEMFILE_BYTES_PER_BLOCK / sizeof(void *))
 
@@ -135,8 +141,9 @@ typedef struct {
 #define IMFS_SYM_LINK      RTEMS_FILESYSTEM_SYM_LINK
 #define IMFS_MEMORY_FILE   RTEMS_FILESYSTEM_MEMORY_FILE
 #define IMFS_LINEAR_FILE   (IMFS_MEMORY_FILE + 1)
+#define IMFS_FIFO          (IMFS_LINEAR_FILE + 1)
 
-#define IMFS_NUMBER_OF_TYPES  (IMFS_LINEAR_FILE + 1)
+#define IMFS_NUMBER_OF_TYPES  (IMFS_FIFO + 1)
 
 typedef union {
   IMFS_directory_t   directory;
@@ -145,6 +152,7 @@ typedef union {
   IMFS_sym_link_t    sym_link;
   IMFS_memfile_t     file;
   IMFS_linearfile_t  linearfile;
+  IMFS_fifo_t        fifo;
 } IMFS_types_union;
 
 /*
@@ -196,12 +204,12 @@ struct IMFS_jnode_tt {
     _jnode->stat_ctime  = (time_t) tv.tv_sec; \
   } while (0)
 
-#define IMFS_atime_mtime_update( _jnode )   \
+#define IMFS_mtime_ctime_update( _jnode )   \
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
     _jnode->stat_mtime  = (time_t) tv.tv_sec; \
-    _jnode->stat_atime  = (time_t) tv.tv_sec; \
+    _jnode->stat_ctime  = (time_t) tv.tv_sec; \
   } while (0)
 
 typedef struct {
@@ -230,6 +238,7 @@ extern const rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_device_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_link_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
+extern const rtems_filesystem_file_handlers_r       IMFS_fifo_handlers;
 extern const rtems_filesystem_operations_table      IMFS_ops;
 extern const rtems_filesystem_operations_table      miniIMFS_ops;
 extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;

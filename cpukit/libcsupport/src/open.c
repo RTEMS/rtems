@@ -164,8 +164,10 @@ int open(
   }
 
   rc = (*iop->handlers->open_h)( iop, pathname, flags, mode );
-  if ( rc )
+  if ( rc ) {
+    rc = errno;
     goto done;
+  }
 
   /*
    *  Optionally truncate the file.

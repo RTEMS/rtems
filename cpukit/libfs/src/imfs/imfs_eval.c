@@ -57,6 +57,9 @@ int IMFS_Set_handlers(
     case IMFS_MEMORY_FILE:
       loc->handlers = fs_info->memfile_handlers;
       break;
+    case IMFS_FIFO:
+      loc->handlers = &IMFS_fifo_handlers;
+      break;
   }
 
   return 0;

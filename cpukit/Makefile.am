@@ -79,6 +79,9 @@ include_rtems_HEADERS += include/rtems/irq-extension.h
 ## libfs
 include_rtems_HEADERS += libfs/src/imfs/imfs.h
 
+## POSIX FIFO/pipe
+include_rtems_HEADERS += libfs/src/pipe/pipe.h
+
 ## devfs
 include_rtems_HEADERS += libfs/src/devfs/devfs.h
 

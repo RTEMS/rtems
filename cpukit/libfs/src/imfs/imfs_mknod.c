@@ -54,7 +54,10 @@ int IMFS_mknod(
   else if ( S_ISBLK(mode) || S_ISCHR(mode) ) {
     type = IMFS_DEVICE;
     rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
-  } else  {
+  }
+  else if (S_ISFIFO(mode))
+    type = IMFS_FIFO;
+  else  {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 

@@ -43,9 +43,6 @@ int mknod(
   if ( !(mode & (S_IFREG|S_IFCHR|S_IFBLK|S_IFIFO) ) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if ( S_ISFIFO(mode) )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
   if ( !temp_loc.ops->evalformake_h ) {

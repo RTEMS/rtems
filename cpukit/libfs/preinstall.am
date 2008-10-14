@@ -5,3 +5,5 @@ $(srcdir)/preinstall.am: Makefile.am
 	$(AMPOLISH3) $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
+if ! UNIX
+endif

@@ -844,7 +844,7 @@ fprintf(stdout, "write %d in %d: %*s\n", to_copy, block, to_copy, src );
     copied += to_copy;
   }
 
-  IMFS_atime_mtime_update( the_jnode );
+  IMFS_mtime_ctime_update( the_jnode );
 
   return copied;
 }

@@ -1,3 +1,15 @@
+2008-10-14	Wei Shen <cquark@gmail.com>
+
+	* Makefile.am, preinstall.am, libcsupport/src/mknod.c,
+	libcsupport/src/open.c, libcsupport/src/pipe.c, libfs/Makefile.am,
+	libfs/preinstall.am, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_eval.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/imfs_stat.c,
+	libfs/src/imfs/memfile.c: Initial commit of POSIX pipe support.
+	* libfs/src/imfs/imfs_fifo.c, libfs/src/pipe/fifo.c,
+	libfs/src/pipe/pipe.c, libfs/src/pipe/pipe.h: New files.
+
 2008-10-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/printk.c: Addresses can be larger than integers

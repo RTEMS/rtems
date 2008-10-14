@@ -28,7 +28,7 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_mknod.c src/imfs/imfs_mount.c src/imfs/imfs_fchmod.c \
     src/imfs/imfs_unlink.c src/imfs/imfs_unmount.c src/imfs/imfs_utime.c \
     src/imfs/imfs_ntype.c src/imfs/imfs_stat.c src/imfs/imfs_getchild.c \
-    src/imfs/memfile.c src/imfs/deviceio.c \
+    src/imfs/memfile.c src/imfs/imfs_fifo.c src/imfs/deviceio.c \
     src/imfs/imfs_handlers_device.c src/imfs/imfs_handlers_directory.c \
     src/imfs/imfs_handlers_link.c src/imfs/imfs_handlers_memfile.c \
     src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
@@ -41,6 +41,11 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/devfs/devopen.c src/devfs/devread.c src/devfs/devwrite.c \
     src/devfs/devclose.c src/devfs/devioctl.c src/devfs/devstat.c \
     src/devfs/devfs.h
+endif
+
+# POSIX FIFO/pipe
+if ! UNIX
+libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h
 endif
 
 # dosfs

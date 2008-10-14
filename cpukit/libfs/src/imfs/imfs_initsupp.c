@@ -47,17 +47,17 @@ static int IMFS_determine_bytes_per_block(
    * check, whether requested bytes per block is valid
    */
   for (bit_mask = 16;
-       !is_valid && (bit_mask <= 512); 
+       !is_valid && (bit_mask <= 512);
        bit_mask <<= 1) {
     if (bit_mask == requested_bytes_per_block) {
       is_valid = true;
     }
   }
-  *dest_bytes_per_block = ((is_valid) 
+  *dest_bytes_per_block = ((is_valid)
 			   ? requested_bytes_per_block
 			   : default_bytes_per_block);
   return 0;
-    
+
 }
 
 
@@ -81,7 +81,7 @@ int IMFS_initialize_support(
   IMFS_determine_bytes_per_block(&imfs_memfile_bytes_per_block,
 				 imfs_rq_memfile_bytes_per_block,
 				 IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK);
-  
+
   /*
    *  Create the root node
    *
@@ -120,6 +120,9 @@ int IMFS_initialize_support(
 
   jnode = temp_mt_entry->mt_fs_root.node_access;
   jnode->st_ino = fs_info->ino_count;
+
+  /* Initialize POSIX FIFO/pipe module */
+  rtems_pipe_initialize();
 
   return 0;
 }

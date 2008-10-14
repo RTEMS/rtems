@@ -112,6 +112,10 @@ IMFS_jnode_t *IMFS_create_node(
       node->info.file.triply_indirect = 0;
       break;
 
+    case IMFS_FIFO:
+      node->info.fifo.pipe = NULL;
+      break;
+
     default:
       assert(0);
       break;

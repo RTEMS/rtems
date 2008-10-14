@@ -98,6 +98,11 @@ void IMFS_print_jnode(
       assert(0);
       break;
 
+    case IMFS_FIFO:
+      fprintf(stdout, " FIFO not printed\n" );
+      assert(0);
+      break;
+
     default:
       fprintf(stdout, " bad type %d\n", the_jnode->type );
       assert(0);
