@@ -1,3 +1,8 @@
+2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Add h8sxsim as variant
+	of h8sim.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README.configure: Add new M32R port. It is just a beginning but the
