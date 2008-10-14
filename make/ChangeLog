@@ -1,3 +1,8 @@
+2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add h8sxsim BSP variant.
+	* custom/h8sxsim.cfg: New file.
+
 2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* custom/mpc55xx.cfg: Added -msoft-float and removed -funit-at-a-time
