@@ -96,7 +96,8 @@
 
 2008-09-26	Eric Norum <norume@aps.anl.gov>
 
-	* libnetworking/lib/rtems_bsdnet_ntp.c: Final resolution of this "small" port number change.
+	* libnetworking/lib/rtems_bsdnet_ntp.c: Final resolution of this
+	"small" port number change.
 
 2008-09-25	Eric Norum <norume@aps.anl.gov>
 
