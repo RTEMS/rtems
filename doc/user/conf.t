@@ -186,7 +186,7 @@ code size than the full IMFS.
 
 @findex CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 @item @code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is defined
-if the application wished to use the device-only filesytem. The 
+if the application wishes to use the device-only filesytem. The 
 device-only filesystem supports only device nodes and is smaller 
 in executable code size than the full IMFS and miniIMFS.
 

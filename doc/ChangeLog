@@ -1,3 +1,7 @@
+2008-10-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/conf.t: Fix typo.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/region.t: Change size_t to ssize_t.
