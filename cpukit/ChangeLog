@@ -1,3 +1,7 @@
+2008-10-14	Tim Cussins <timcussins@eml.cc>
+
+	* libcsupport/src/free.c: Should print begin field not start field.
+
 2008-10-14	Wei Shen <cquark@gmail.com>
 
 	* Makefile.am, preinstall.am, libcsupport/src/mknod.c,
