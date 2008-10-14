@@ -51,7 +51,7 @@
 
 __CPU_Context_switch:
 	/* Save Context */
-#if defined(__H8300H__) || defined(__H8300S__)
+#if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	stc.w	ccr,@(0:16,er0)
 	mov.l	er7,@(2:16,er0)
 	mov.l	er6,@(6:16,er0)
@@ -80,7 +80,7 @@ restore:
 
 __CPU_Context_restore:
 	
-#if defined(__H8300H__) || defined(__H8300S__)
+#if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	mov.l	er0,er1
 	jmp		@restore:24
 #endif
@@ -103,7 +103,7 @@ __CPU_Context_restore:
 
 	
 __ISR_Handler:
-#if defined(__H8300H__) || defined(__H8300S__)
+#if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	mov.l	er1,@-er7
 	mov.l	er2,@-er7
 	mov.l	er3,@-er7
@@ -200,7 +200,7 @@ exit:
 
 _ISR_Dispatch:
 	
-#if defined(__H8300H__) || defined(__H8300S__)
+#if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
 	jsr		@__Thread_Dispatch
 	mov		@er7+,er6
 	mov		@er7+,er5

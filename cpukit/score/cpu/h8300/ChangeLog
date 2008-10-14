@@ -1,3 +1,7 @@
+2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_asm.S: Enable same code paths for SX. Tested on simulator.
+
 2008-10-14	Steven Grunza <grunza@ulticom.com>
 
 	* cpu_asm.S: Use proper diredctive for h8300/sx.
