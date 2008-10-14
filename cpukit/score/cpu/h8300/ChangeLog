@@ -1,3 +1,7 @@
+2008-10-14	Steven Grunza <grunza@ulticom.com>
+
+	* cpu_asm.S: Use proper diredctive for h8300/sx.
+
 2008-09-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Do not define boolean, single_precision,

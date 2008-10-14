@@ -29,6 +29,9 @@
 #if defined(__H8300S__) 
         .h8300s
 #endif
+#if defined(__H8300SX__) 
+        .h8300sx
+#endif
         .text
 
 	.text
