@@ -78,12 +78,12 @@ static
 #endif
 int check_passwd(char *peername)
 {
-char			*pw;
-int				rval = -1, tmp, retries;
-struct termios	t,told;
-int				restore_flags = 0;
-char			buf[30], cryptbuf[21];
-char			salt[3];
+  char			*pw;
+  int			rval = -1, tmp, retries;
+  struct termios	t,told;
+  int			restore_flags = 0;
+  char			buf[30], cryptbuf[21];
+  char			salt[3];
 
   if ( !(pw=getenv("TELNETD_PASSWD")) || 0 == strlen(pw) )
 #ifdef TELNETD_DEFAULT_PASSWD

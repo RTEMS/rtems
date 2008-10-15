@@ -460,12 +460,14 @@ void rtems_shell_init_issue(void)
 
   if (stat("/etc/issue",&buf)) {
     rtems_shell_write_file("/etc/issue",
+                           "\n"
                            "Welcome to @V\\n"
                            "Login into @S\\n");
   }
 
   if (stat("/etc/issue.net",&buf)) {
      rtems_shell_write_file("/etc/issue.net",
+                           "\n"
                             "Welcome to %v\n"
                             "running on %m\n");
   }

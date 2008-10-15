@@ -85,16 +85,25 @@ void * telnetd_dflt_spawn(
 );
 
 /***********************************************************/
-rtems_id            telnetd_task_id      =0;
-uint32_t            telnetd_stack_size   =32000;
-rtems_task_priority telnetd_task_priority=0;
-int                 telnetd_dont_spawn   =0;
-void                (*telnetd_shell)(char *, void*)=0;
-void                *telnetd_shell_arg         =0;
+rtems_id            telnetd_task_id                 = 0;
+uint32_t            telnetd_stack_size              = 32000;
+rtems_task_priority telnetd_task_priority           = 0;
+bool                telnetd_remain_on_caller_stdio  = false;
+void                (*telnetd_shell)(char *, void*) = 0;
+void                *telnetd_shell_arg              = NULL;
 void *              (*telnetd_spawn_task)(
-        const char *, unsigned, unsigned, void (*)(void*), void *) = telnetd_dflt_spawn;
+  const char *,
+  unsigned,
+  unsigned,
+  void (*)(void*),
+  void *) = telnetd_dflt_spawn;
 
-static char *grab_a_Connection(int des_socket, uni_sa *srv, char *peername, int sz)
+static char *grab_a_Connection(
+  int des_socket,
+  uni_sa *srv,
+  char *peername,
+  int sz
+)
 {
   char *rval = 0;
 #if 0
@@ -190,7 +199,7 @@ rtems_task_telnetd(void *task_argument)
   char               peername[16];
   int                i=1;
   int                size_adr;
-  struct shell_args *arg;
+  struct shell_args *arg = NULL;
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
@@ -205,7 +214,7 @@ rtems_task_telnetd(void *task_argument)
   size_adr=sizeof(srv.sin);
   if ((bind(des_socket,&srv.sa,size_adr))<0) {
     perror("telnetd:bind");
-          close(des_socket);
+    close(des_socket);
     telnetd_task_id=0;
     rtems_task_delete(RTEMS_SELF);
   };
@@ -220,17 +229,20 @@ rtems_task_telnetd(void *task_argument)
    * was started from the console anyways..
    */
   do {
-    devname = grab_a_Connection(des_socket, &srv, peername, sizeof(peername));
-
-    if ( !devname ) {
-      /* if something went wrong, sleep for some time */
-      sleep(10);
-      continue;
-    }
-    if ( telnetd_dont_spawn ) {
-      if ( !telnetd_askForPassword || (0 == check_passwd(peername)) )
-        telnetd_shell(devname, telnetd_shell_arg);
+    if ( telnetd_remain_on_caller_stdio ) {
+      char device_name[32];
+      ttyname_r( 1, device_name, sizeof(device_name) );
+      if ( !telnetd_askForPassword || (0 == check_passwd(arg->peername)) )
+	telnetd_shell(device_name, telnetd_shell_arg);
     } else {
+      devname = grab_a_Connection(des_socket, &srv, peername, sizeof(peername));
+
+      if ( !devname ) {
+	/* if something went wrong, sleep for some time */
+	sleep(10);
+	continue;
+      }
+
       arg = malloc( sizeof(*arg) );
 
       arg->devname = devname;
@@ -288,10 +300,10 @@ static int initialize_telnetd(void) {
 int rtems_telnetd_initialize(
   void               (*cmd)(char *, void *),
   void                *arg,
-  int                  dontSpawn,
+  bool                 remainOnCallerSTDIO,
   size_t               stack,
   rtems_task_priority  priority,
-  int                  askForPassword
+  bool                 askForPassword
 )
 {
   rtems_status_code sc;
@@ -328,14 +340,15 @@ int rtems_telnetd_initialize(
   }
   if ( priority < 2 )
     priority = 100;
-  telnetd_task_priority = priority;
-  telnetd_dont_spawn    = dontSpawn;
+  telnetd_task_priority          = priority;
+  telnetd_remain_on_caller_stdio = remainOnCallerSTDIO;
 
   sc = initialize_telnetd();
   if (sc != RTEMS_SUCCESSFUL) return sc;
 
-  printf("rtems_telnetd() started with stacksize=%u,priority=%d\n",
-    (unsigned)telnetd_stack_size,(int)telnetd_task_priority);
+  if ( !telnetd_remain_on_caller_stdio )
+    fprintf(stderr, "rtems_telnetd() started with stacksize=%u,priority=%d\n",
+      (unsigned)telnetd_stack_size,(int)telnetd_task_priority);
   return 0;
 }
 
