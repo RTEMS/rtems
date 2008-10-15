@@ -13,33 +13,7 @@
 
 #include <bsp.h>
 #include <fatal.h>
-
-/*
- *  mystrcat
- *
- *  Can't rely on libc being operational. So we provide our own strcat-like
- *  function.
- *
- *  Input parameters:
- *    destination - string (buffer) to append to
- *    source - string to append to the end of destination
- *
- *  Output parameters:
- *    destination - source is appended to the end
- *
- *  Return values:
- *    Number of characters appended.
- */
-static int mystrcat(
-  char *destination,
-  const char *source
-)
-{
-  int i;
-
-  for ( i = 0; ( *destination++ = *source++) != '\0'; i++ );
-  return i;
-}
+#include <string.h>
 
 /*
  *  bsp_fatal_error_occurred
@@ -73,42 +47,42 @@ User_extensions_routine bsp_fatal_error_occurred(
   } my_p_str;
 
   my_p_str.index = 0;
-  my_p_str.index += mystrcat(
+  my_p_str.index += strcat(
       my_p_str.strbuf + my_p_str.index,
       "\r\nRTEMS Fatal Error Occurred:\r\n    the_source  = " );
 
   switch ( the_source ) {
     case INTERNAL_ERROR_CORE:
-      my_p_str.index += mystrcat(
+      my_p_str.index += strcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_CORE\r\n    is_internal = " );
       break;
 
     case INTERNAL_ERROR_RTEMS_API:
-      my_p_str.index += mystrcat(
+      my_p_str.index += strcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_RTEMS_API\r\n    is_internal = " );
       break;
 
     case INTERNAL_ERROR_POSIX_API:
-      my_p_str.index += mystrcat(
+      my_p_str.index += strcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_POSIX_API\r\n    is_internal = " );
       break;
 
     default:
-      my_p_str.index += mystrcat(
+      my_p_str.index += strcat(
           my_p_str.strbuf + my_p_str.index,
           "UNKNOWN\r\n    is_internal = " );
       break;
   }
 
   if ( is_internal )
-    my_p_str.index += mystrcat(
+    my_p_str.index += strcat(
         my_p_str.strbuf + my_p_str.index,
         "TRUE\r\n    the_error   = 0x|10,8|\r\n" );
   else
-    my_p_str.index += mystrcat(
+    my_p_str.index += strcat(
         my_p_str.strbuf + my_p_str.index,
         "FALSE\r\n    the_error   = 0x|10,8|\r\n" );
 
