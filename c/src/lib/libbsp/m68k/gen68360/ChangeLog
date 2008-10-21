@@ -1,3 +1,8 @@
+2008-10-21      Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	        * spi/mc68360_spidrv.h:
+	        removed orphaned file
+
 2008-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Move PGH360, GEN68360, GEN68360_040
