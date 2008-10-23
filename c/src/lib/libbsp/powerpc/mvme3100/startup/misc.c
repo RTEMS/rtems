@@ -52,7 +52,7 @@
 #include <bsp.h>
 
 void
-rtemsReboot()
+bsp_reset()
 {
 uint8_t v;
 	/*

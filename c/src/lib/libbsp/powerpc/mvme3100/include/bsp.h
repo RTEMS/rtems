@@ -174,8 +174,7 @@ BSP_i2c_initialize();
 
 /* Misc utility definitions and routines */
 
-void
-rtemsReboot();
+void bsp_reset(void);
 
 /* System Control Register */
 #define BSP_MVME3100_SYS_CR				((volatile uint8_t *)0xe2000001)
@@ -301,7 +300,6 @@ extern char *BSP_commandline_string;
 
 extern rtems_configuration_table  BSP_Configuration;
 extern void BSP_panic(char *s);
-extern void rtemsReboot(void);
 /* extern int printk(const char *, ...) __attribute__((format(printf, 1, 2))); */
 extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);

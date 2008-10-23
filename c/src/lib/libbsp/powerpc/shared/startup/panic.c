@@ -10,7 +10,7 @@ rebootQuestion()
 {
 	printk("Press a key to reboot\n");
 	BSP_poll_char_via_serial();
-	rtemsReboot();
+	bsp_reset();
 }
 
 void BSP_panic(char *s)

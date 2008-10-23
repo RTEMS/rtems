@@ -52,7 +52,7 @@ startup_SOURCES = ../../powerpc/shared/startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
 tod_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
 pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c

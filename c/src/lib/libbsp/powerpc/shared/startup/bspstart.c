@@ -43,10 +43,11 @@ extern unsigned long __rtems_end[];
 extern void L1_caches_enables(void);
 extern unsigned get_L2CR(void);
 extern void set_L2CR(unsigned);
-extern void bsp_cleanup(void);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned long);
 extern void			BSP_pgtbl_activate(Triv121PgTbl);
 extern void			BSP_vme_config(void);
+
+void bsp_cleanup(void) { extern void bsp_reset(void); bsp_reset(); }
 
 SPR_RW(SPRG1)
 

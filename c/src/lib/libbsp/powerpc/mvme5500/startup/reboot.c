@@ -4,7 +4,7 @@
 #include <libcpu/io.h>
 #include <libcpu/stackTrace.h>
 
-void rtemsReboot()
+void bsp_reset()
 {
 
   printk("Printing a stack trace for your convenience :-)\n");

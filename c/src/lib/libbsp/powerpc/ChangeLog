@@ -1,3 +1,14 @@
+2008-10-23	Eric Norum <norume@aps.anl.gov>
+
+	* ep1a/include/bsp.h, motorola_powerpc/Makefile.am,
+	motorola_powerpc/include/bsp.h, mvme3100/Makefile.am,
+	mvme3100/include/bsp.h, mvme3100/startup/bspstart.c,
+	mvme3100/startup/misc.c, mvme5500/include/bsp.h,
+	mvme5500/startup/bspclean.c, mvme5500/startup/reboot.c,
+	mvme5500/vectors/exceptionhandler.c, shared/console/inch.c,
+	shared/console/reboot.c, shared/startup/bspstart.c,
+	shared/startup/panic.c: Reset card on RTEMS shutdown
+
 2008-09-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* acinclude.m4: Add tqm8xx.
