@@ -20,7 +20,7 @@ gpgcheck=1
 gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
-[rtems-@RTEMS_API@-debug]
+[rtems-@RTEMS_API@-debuginfo]
 name=Fedora $releasever - $basearch - RTEMS sources
 baseurl=
 	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
