@@ -1,5 +1,5 @@
 [rtems-@RTEMS_API@]
-name=RTEMS $releasever - $basearch - RTEMS
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch
 baseurl=
 	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
 	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
@@ -10,7 +10,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
 [rtems-@RTEMS_API@-source]
-name=Fedora $releasever - $basearch - RTEMS sources
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch - source
 baseurl=
 	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
 	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
@@ -21,7 +21,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
 [rtems-@RTEMS_API@-debuginfo]
-name=Fedora $releasever - $basearch - RTEMS sources
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch - debuginfo
 baseurl=
 	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
 	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
