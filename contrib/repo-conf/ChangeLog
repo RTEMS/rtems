@@ -1,3 +1,7 @@
+2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/version.m4: Bump API to 4.10.
+
 2007-02-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Bump version to 0.5.
