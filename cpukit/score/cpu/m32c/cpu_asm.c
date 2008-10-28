@@ -6,7 +6,10 @@
  *
  *  NOTE:  This is supposed to be a .S or .s file NOT a C file.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  M32C does not yet have interrupt support.  When this functionality
+ *  is written, this file should become obsolete.
+ *
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,15 +27,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
-/* #include "cpu_asm.h> */
-
-#if 0
-void _CPU_Context_restore(
-  Context_Control *new_context
-)
-{
-}
-#endif
 
 /*  void __ISR_Handler()
  *

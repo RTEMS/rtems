@@ -1,3 +1,8 @@
+2008-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* context_init.c, context_switch.S, cpu.c, cpu_asm.c: Correct file
+	headers.
+
 2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* context_switch.S, cpu_asm.c, rtems/score/cpu.h: Add support for
