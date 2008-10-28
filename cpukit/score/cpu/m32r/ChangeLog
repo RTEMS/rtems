@@ -1,3 +1,9 @@
+2008-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am, rtems/score/cpu.h: Now performs context
+	switches and many tests run.
+	* context_init.c, context_switch.S, cpu.c, cpu_asm.c: New files.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, preinstall.am, rtems/asm.h,

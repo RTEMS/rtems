@@ -188,7 +188,7 @@ extern "C" {
  *  If there is a FP coprocessor such as the i387 or mc68881, then
  *  the answer is TRUE.
  *
- *  The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
+ *  The macro name "M32R_HAS_FPU" should be made CPU specific.
  *  It indicates whether or not this CPU model has FP support.  For
  *  example, it would be possible to have an i386_nofp CPU model
  *  which set this to false to indicate that you have an i386 without
@@ -212,7 +212,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#if ( NO_CPU_HAS_FPU == 1 )
+#if ( M32R_HAS_FPU == 1 )
 #define CPU_HARDWARE_FP     TRUE
 #else
 #define CPU_HARDWARE_FP     FALSE
@@ -317,7 +317,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /**
  *  Does the stack grow up (toward higher addresses) or down
@@ -466,19 +466,26 @@ extern "C" {
  *  to another.
  */
 typedef struct {
-    /** This field is a hint that a port will have a number of integer 
-     *  registers that need to be saved at a context switch.
-     */
-    uint32_t   some_integer_register;
-    /** This field is a hint that a port will have a number of system 
-     *  registers that need to be saved at a context switch.
-     */
-    uint32_t   some_system_register;
-
-    /** This field is a hint that a port will have a register that
-     *  is the stack pointer.
-     */
-    uint32_t   stack_pointer;
+  /** r8 -- temporary register */
+  uint32_t r8;
+  /** r9 -- temporary register */
+  uint32_t r9;
+  /** r10 -- temporary register */
+  uint32_t r10;
+  /** r11 -- temporary register */
+  uint32_t r11;
+  /** r12 -- may be global pointer */
+  uint32_t r12;
+  /** r13 -- frame pointer */
+  uint32_t r13_fp;
+  /** r14 -- link register (aka return pointer */
+  uint32_t r14_lr;
+  /** r15 -- stack pointer */
+  uint32_t r15_sp;
+  /** dsp accumulator low order 32-bits */
+  uint32_t acc_low;
+  /** dsp accumulator high order 32-bits */
+  uint32_t acc_high;
 } Context_Control;
 
 /**
@@ -491,7 +498,7 @@ typedef struct {
  *  @return This method returns the stack pointer.
  */
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->stack_pointer
+  (_context)->r15_sp
 
 /**
  *  @ingroup CPUContext Management
@@ -645,7 +652,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)(void);
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          (1024)
 
 /**
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
@@ -848,10 +855,14 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-  { \
-  }
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  size_t            size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+);
 
 /**
  *  This routine is responsible for somehow restarting the currently
@@ -868,8 +879,9 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_Context_Restart_self( _the_context ) \
-   _CPU_Context_restore( (_the_context) );
+void _CPU_Context_Restart_self(
+  Context_Control  *the_context
+);
 
 /**
  *  @ingroup CPUContext
@@ -1141,18 +1153,6 @@ void _CPU_ISR_install_vector(
  *  XXX document implementation including references if appropriate
  */
 void _CPU_Install_interrupt_stack( void );
-
-/**
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  @note  It need only be provided if @ref CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-void *_CPU_Thread_Idle_body( uint32_t );
 
 /**
  *  @ingroup CPUContext
