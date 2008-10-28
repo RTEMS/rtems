@@ -22,6 +22,8 @@ rtems_task Init(
   rtems_task_argument argument
 );
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 #include <timesys.h>
 
 /* configuration information */
@@ -33,6 +35,9 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
 
+
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(100, MESSAGE_SIZE )
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

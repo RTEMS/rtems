@@ -29,8 +29,6 @@ rtems_task Preempt_task(
   rtems_task_argument argument
 );
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 rtems_task Init(
   rtems_task_argument argument
 )
