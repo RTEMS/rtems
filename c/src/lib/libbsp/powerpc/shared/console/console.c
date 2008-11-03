@@ -153,6 +153,15 @@ static int console_first_open(int major, int minor, void *arg)
 				ttyS[minor].name);
 		  rtems_fatal_error_occurred(status);
 		}
+	  /*
+	   * Pass data area info down to driver
+	   */
+	  BSP_uart_termios_set(minor,
+           ((rtems_libio_open_close_args_t *)arg)->iop->data1);
+
+	  /* Enable interrupts  on channel */
+	  BSP_uart_intr_ctrl(minor, BSP_UART_INTR_CTRL_TERMIOS);
+
 	  return 0;
 }
 
@@ -203,14 +212,6 @@ console_open(rtems_device_major_number major,
       printk("Error opening console device\n");
       return status;
     }
-
-  /*
-   * Pass data area info down to driver
-   */
-  BSP_uart_termios_set(minor,
-			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
-  /* Enable interrupts  on channel */
-  BSP_uart_intr_ctrl(minor, BSP_UART_INTR_CTRL_TERMIOS);
 
   return RTEMS_SUCCESSFUL;
 }
