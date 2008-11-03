@@ -200,7 +200,7 @@ preempted.
 The @code{starting_address} must be properly aligned for the
 target architecture.
 
-Th @code{buffer_size} parameter must be a multiple of
+The @code{buffer_size} parameter must be a multiple of
 the CPU alignment factor.  Additionally, @code{buffer_size}
 must be large enough to hold two pointers on the target
 architecture.  This is required for RTEMS to manage the

@@ -119,98 +119,45 @@ void print_name(rtems_id the_object)
 @need 3000
 
 An object ID is a unique unsigned thirty-two bit
-entity composed of three parts: object class, node, and index.
+entity composed of three parts: API, object class, node, and index.
 The data type @code{@value{DIRPREFIX}id} is used to store object IDs.
 
 
 @ifset use-ascii
 @example
 @group
-     31        26 25              16 15                             0
-     +-----------+------------------+-------------------------------+
-     |           |                  |                               |
-     |   Class   |       Node       |             Index             |
-     |           |                  |                               |
-     +-----------+------------------+-------------------------------+
+     31      27 26   24 23          16 15                             0
+     +---------+-------+--------------+-------------------------------+
+     |         |       |              |                               |
+     |  Class  |  API  |     Node     |             Index             |
+     |         |       |              |                               |
+     +---------+-------+--------------+-------------------------------+
 @end group
 @end example
 @end ifset
 
 @ifset use-tex
-@sp 1
-@tex
-\centerline{\vbox{\offinterlineskip\halign{
-\strut#&
-\hbox to 0.50in{\enskip#}&
-\hbox to 0.50in{\enskip#}&
-#&
-\hbox to 0.50in{\enskip#}&
-\hbox to 0.50in{\enskip#}&
-#&
-\hbox to 1.00in{\enskip#}&
-\hbox to 1.00in{\enskip#}&
-#\cr
-\multispan{9}\cr
-\multispan{2}31\hfil&\multispan{2}\hfil26\enskip&
- \multispan{1}\enskip25\hfil&\multispan{2}\hfil16\enskip&
- \multispan{1}\enskip15\hfil&\multispan{2}\hfil0\cr
-&&&&&&&&&\cr
-}}\hfil}
-\centerline{\vbox{\offinterlineskip\halign{
-\strut\vrule#&
-\hbox to 0.50in{\enskip#}&
-\hbox to 0.50in{\enskip#}&
-\vrule#&
-\hbox to 0.50in{\enskip#}&
-\hbox to 0.50in{\enskip#}&
-\vrule#&
-\hbox to 0.50in{\enskip#}&
-\hbox to 0.50in{\enskip#}&
-\vrule#\cr
-\multispan{9}\cr
-\noalign{\hrule}
-&&&&&&&&&\cr
-&\multispan{2}\hfil Class\hfil&&
- \multispan{2}\hfil Node\hfil&&
- \multispan{2}\hfil Index\hfil&\cr
-&&&&&&&&&\cr
-\noalign{\hrule}
-}}\hfil}
-@end tex
+@sp1
+@center{@image{ObjectId-32Bits,,2in}}
 @end ifset
 
 @ifset use-html
 @html
-<CENTER>
-  <TABLE COLS=6 WIDTH="60%" BORDER=0>
-<TR><TD ALIGN=left><STRONG>31</STRONG></TD>
-    <TD ALIGN=right><STRONG>26</STRONG></TD>
-    <TD ALIGN=left><STRONG>25</STRONG></TD>
-    <TD ALIGN=right><STRONG>16</STRONG></TD>
-    <TD ALIGN=left><STRONG>15</STRONG></TD>
-    <TD ALIGN=right><STRONG>0</STRONG></TD></TR>
-  </TABLE>
-</CENTER>
-<CENTER>
-  <TABLE COLS=6 WIDTH="60%" BORDER=2>
-<TR><TD ALIGN=center COLSPAN=2>Class</TD>
-    <TD ALIGN=center COLSPAN=2>Node</TD>
-    <TD ALIGN=center COLSPAN=2>Index</TD></TD>
-  </TABLE>
-</CENTER>
+<IMG SRC="ObjectId-16Bits.png" WIDTH=550 HEIGHT=400 ALT="32 Bit Object Id">
 @end html
 @end ifset
 
-The most significant six bits are the object class.  The next
-ten bits are the number of the node on which this object was
-created.  The node number is always one (1) in a single
+
+The most significant five bits are the object class.  The next
+three bits indicate the API to which the object class belongs.
+The next eight bits (16-23) are the number of the node on which
+this object was created.  The node number is always one (1) in a single
 processor system.  The least significant sixteen bits form an
 identifier within a particular object type.  This identifier,
 called the object index, ranges in value from 1 to the maximum
 number of objects configured for this object type.
 
-
-The three components of an object ID make it possible
+The four components of an object ID make it possible
 to quickly locate any object in even the most complicated
 multiprocessor system.  Object ID's are associated with an
 object by RTEMS when the object is created and the corresponding

@@ -332,7 +332,7 @@ Since memory is a critical resource in many real-time
 embedded systems, RTEMS was specifically designed to automatically
 leave out all services that are not required from the run-time
 environment.  Features such as networking, various fileystems,
-and many other features are completely optionsl.  This allows
+and many other features are completely optional.  This allows
 the application designer the flexibility to tailor RTEMS to most
 efficiently meet system requirements while still satisfying even
 the most stringent memory constraints.  As a result, the size
