@@ -944,10 +944,10 @@ procedure Task_Start (
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot start remote task
 
 @subheading DESCRIPTION:
-This directive readies the task, specified by tid, for execution
+This directive readies the task, specified by @code{id}, for execution
 based on the priority and execution mode specified when the task
 was created.  The starting address of the task is given in
-entry_point.  The task's starting argument is contained in
+@code{entry_point}.  The task's starting argument is contained in
 argument.  This argument can be a single value or used as an index into an
 array of parameter blocks.  The type of this numeric argument is an unsigned
 integer type with the property that any valid pointer to void can be converted
