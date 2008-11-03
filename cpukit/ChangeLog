@@ -1,3 +1,9 @@
+2008-11-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1333/cpukit
+	* libcsupport/include/rtems/termiostypes.h: Typo on type name -- should
+	be rtems_device_minor_number.
+
 2008-10-14	Tim Cussins <timcussins@eml.cc>
 
 	PR 1330/cpukit
