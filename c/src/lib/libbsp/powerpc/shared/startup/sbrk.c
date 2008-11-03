@@ -73,6 +73,16 @@
 static uint32_t         remaining_start=0;
 static uint32_t         remaining_size=0;
 
+/* App. may provide a value by defining the BSP_sbrk_policy
+ * variable.
+ *
+ *  (-1) -> give all memory to the heap at initialization time
+ *  > 0  -> value used as sbrk amount; initially give 32M
+ *    0  -> limit memory effectively to 32M.
+ *
+ */
+extern uint32_t         BSP_sbrk_policy __attribute__((weak));
+
 #define LIMIT_32M  0x02000000
 
 uintptr_t _bsp_sbrk_init(
@@ -83,13 +93,42 @@ uintptr_t _bsp_sbrk_init(
   uintptr_t         rval=0;
 
   remaining_start =  heap_start;
-  remaining_size  =*  heap_size_p;
+  remaining_size  = *heap_size_p;
+
   if (remaining_start < LIMIT_32M &&
       remaining_start + remaining_size > LIMIT_32M) {
     /* clip at LIMIT_32M */
     rval = remaining_start + remaining_size - LIMIT_32M;
     *heap_size_p = LIMIT_32M - remaining_start;
+	remaining_start = LIMIT_32M;
+	remaining_size  = rval;
   }
+
+  if ( 0 != &BSP_sbrk_policy ) {
+  	switch ( BSP_sbrk_policy ) {
+		case (uint32_t)(-1):
+			remaining_start  = heap_start + *heap_size_p;
+			remaining_size   = 0;
+			/* return a nonzero sbrk_amount because the libsupport code
+			 * at some point divides by this number prior to trying an
+			 * sbrk() which will fail.
+			 */
+			rval = 1;
+		break;
+
+		case 0:
+			remaining_size = 0;
+			/* see above for why we return 1 */
+			rval = 1;
+		break;
+
+		default:
+			if ( rval > BSP_sbrk_policy )
+				rval = BSP_sbrk_policy;
+		break;
+	}
+  }
+
   return rval;
 }
 
@@ -97,6 +136,7 @@ void * sbrk(ptrdiff_t incr)
 {
   void *rval=(void*)-1;
 
+  /* FIXME: BEWARE if size >2G */
   if (incr <= remaining_size) {
     remaining_size-=incr;
     rval = (void*)remaining_start;
@@ -104,5 +144,8 @@ void * sbrk(ptrdiff_t incr)
   } else {
     errno = ENOMEM;
   }
+#ifdef DEBUG
+  printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
+#endif
   return rval;
 }
