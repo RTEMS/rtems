@@ -274,6 +274,20 @@ static int console_last_close(int major, int minor, void *arg)
   return 0;
 }
 
+static int ser_console_first_open(int major, int minor, void *arg)
+{
+  /*
+   * Pass data area info down to driver
+   */
+  BSP_uart_termios_set(BSPConsolePort,
+			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
+
+  /* Enable interrupts  on channel */
+  BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
+
+  return 0;
+}
+
 /*-------------------------------------------------------------------------+
 | Console device driver OPEN entry point
 +--------------------------------------------------------------------------*/
@@ -321,6 +335,8 @@ console_open(rtems_device_major_number major,
       cb.write = BSP_uart_termios_write_com2;
     }
 
+  cb.firstOpen = ser_console_first_open;
+
   status = rtems_termios_open (major, minor, arg, &cb);
 
   if(status != RTEMS_SUCCESSFUL)
@@ -328,15 +344,6 @@ console_open(rtems_device_major_number major,
       printk("Error openning console device\n");
       return status;
     }
-
-  /*
-   * Pass data area info down to driver
-   */
-  BSP_uart_termios_set(BSPConsolePort,
-			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
-
-  /* Enable interrupts  on channel */
-  BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
 
   return RTEMS_SUCCESSFUL;
 }
