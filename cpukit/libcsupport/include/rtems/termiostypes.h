@@ -63,7 +63,7 @@ struct rtems_termios_tty {
    * This device
    */
   rtems_device_major_number  major;
-  rtems_device_major_number  minor;
+  rtems_device_minor_number  minor;
 
   /*
    * Mutual-exclusion semaphores
