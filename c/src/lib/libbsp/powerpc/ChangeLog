@@ -1,3 +1,8 @@
+2008-11-03	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/startup/pretaskinghook.c, shared/startup/sbrk.c:
+	Fixed PR#1335.
+
 2008-10-23	Eric Norum <norume@aps.anl.gov>
 
 	* ep1a/include/bsp.h, motorola_powerpc/Makefile.am,

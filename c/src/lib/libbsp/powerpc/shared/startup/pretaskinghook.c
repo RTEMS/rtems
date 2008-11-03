@@ -61,13 +61,9 @@ void bsp_pretasking_hook(void)
              BSP_heap_start, heap_size, heap_sbrk_spared);
 #endif    
 
-  /* Must install sbrk helpers since we rely on sbrk for giving
-   * us even the first chunk of memory (bsp_libc_init(heap start==NULL))
-   */
-
   rtems_malloc_sbrk_helpers = &rtems_malloc_sbrk_helpers_table;
 
-  bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
+  bsp_libc_init((void *)BSP_heap_start, heap_size, heap_sbrk_spared);
 
   /* Note that VME support may be omitted also by
    * providing a no-op  BSP_vme_config routine
