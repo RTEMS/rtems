@@ -32,7 +32,8 @@
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
   CC="%{_host}-gcc ${RPM_OPT_FLAGS}" \
 %else
-  CC="%{__cc} ${RPM_OPT_FLAGS}" \
+# gcc is not ready to be compiled with -std=gnu99
+  CC=$(echo "%{__cc} ${RPM_OPT_FLAGS}" | sed -e 's,-std=gnu99 ,,') \
 %endif
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
