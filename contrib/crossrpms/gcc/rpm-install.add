@@ -47,3 +47,26 @@ EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 
+
+# Extract %%__debug_install_post into debug_install_post~
+cat << \EOF > debug_install_post~
+%__debug_install_post
+EOF
+
+# Generate customized debug_install_post script
+cat debug_install_post~ | while read a x y; do
+case $a in
+# Prevent find-debuginfo.sh* from trying to handle foreign binaries
+*/find-debuginfo.sh)
+  b=$(basename $a)
+  sed -e 's,find "$RPM_BUILD_ROOT" !,find "$RPM_BUILD_ROOT"%_bindir "$RPM_BUILD_ROOT"%_libexecdir !,' $a > $b
+  chmod a+x $b
+  ;;
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
+< debug_install_post~ > debug_install_post 
+%define __debug_install_post . ./debug_install_post
+
+
