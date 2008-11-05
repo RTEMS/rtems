@@ -35,7 +35,13 @@
 #endif
 
 #if defined(__USE_INIT_FINI__)
-  extern void _init(void);
+  #if defined(__M32R__)
+    #define INIT_NAME __init
+  #else
+    #define INIT_NAME _init
+  #endif
+
+  extern void INIT_NAME(void);
 #endif
 #if defined(__USE__MAIN__)
   extern void _main(void);
@@ -131,7 +137,7 @@ void _Thread_Handler( void )
    */
   if (!doneCons) /* && (volatile void *)_init) */
   {
-    _init ();
+    INIT_NAME ();
   }
 #endif
 #if defined(__USE__MAIN__)
