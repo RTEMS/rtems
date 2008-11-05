@@ -154,9 +154,6 @@ AC_CONFIG_FILES([cygwin/i686/Makefile])
 AC_CONFIG_FILES([mingw32/Makefile])
 AC_CONFIG_FILES([mingw32/i686/Makefile])
 
-AC_CONFIG_FILES([solaris2.7/Makefile])
-AC_CONFIG_FILES([solaris2.7/sparc/Makefile])
-
 AC_CONFIG_FILES([freebsd7.0/Makefile])
 AC_CONFIG_FILES([freebsd7.0/i586/Makefile])
 
