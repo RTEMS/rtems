@@ -3,9 +3,21 @@
 # 	http://www.rtems.org/bugzilla
 #
 
-%define _prefix			/opt/rtems-4.10
-%define _infodir		%{_prefix}/info
-%define _mandir			%{_prefix}/man
+%define _prefix                 /opt/rtems-4.10
+%define _exec_prefix            %{_prefix}
+%define _bindir                 %{_exec_prefix}/bin
+%define _sbindir                %{_exec_prefix}/sbin
+%define _libexecdir             %{_exec_prefix}/libexec
+%define _datarootdir            %{_prefix}/share
+%define _datadir                %{_datarootdir}
+%define _sysconfdir             %{_prefix}/etc
+%define _sharedstatedir         %{_prefix}/com
+%define _localstatedir          %{_prefix}/var
+%define _includedir             %{_prefix}/include
+%define _libdir                 %{_exec_prefix}/%{_lib}
+%define _mandir                 %{_datarootdir}/man
+%define _infodir                %{_datarootdir}/info
+%define _localedir              %{_datarootdir}/locale
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
@@ -40,7 +52,7 @@ Summary:      	avr-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	3%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -161,7 +173,8 @@ cd ..
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
   CC="%{_host}-gcc ${RPM_OPT_FLAGS}" \
 %else
-  CC="%{__cc} ${RPM_OPT_FLAGS}" \
+# gcc is not ready to be compiled with -std=gnu99
+  CC=$(echo "%{__cc} ${RPM_OPT_FLAGS}" | sed -e 's,-std=gnu99 ,,') \
 %endif
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
@@ -365,6 +378,29 @@ grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/avr-rtems4.10/(lib|include|sys-roo
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
+
+
+# Extract %%__debug_install_post into debug_install_post~
+cat << \EOF > debug_install_post~
+%__debug_install_post
+EOF
+
+# Generate customized debug_install_post script
+cat debug_install_post~ | while read a x y; do
+case $a in
+# Prevent find-debuginfo.sh* from trying to handle foreign binaries
+*/find-debuginfo.sh)
+  b=$(basename $a)
+  sed -e 's,find "$RPM_BUILD_ROOT" !,find "$RPM_BUILD_ROOT"%_bindir "$RPM_BUILD_ROOT"%_libexecdir !,' $a > $b
+  chmod a+x $b
+  ;;
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
+< debug_install_post~ > debug_install_post 
+%define __debug_install_post . ./debug_install_post
+
 
 %clean
   rm -rf $RPM_BUILD_ROOT

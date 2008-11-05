@@ -45,7 +45,7 @@ Name:		rtems-4.10-sh-rtems4.10-binutils
 Summary:	Binutils for target sh-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -196,6 +196,7 @@ GNU binutils targetting sh-rtems4.10.
 
 %files -n rtems-4.10-sh-rtems4.10-binutils
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/sh-rtems4.10-*.1*
@@ -248,6 +249,7 @@ fi
 
 %files -n rtems-4.10-binutils-common
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/as.info*
