@@ -68,12 +68,16 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
     defined(__ppc__) || defined(__PPC__) || \
     defined(__sh__) || \
     defined(__AVR__) || \
-    defined(__BFIN__)
+    defined(__BFIN__) || \
+    defined(__M32R__)
 
 #include <rtems/endian.h>
 #if !defined(IEEEFP)
 #define IEEEFP
 #endif
+
+#elif defined(__m32c__)
+#error "Reneseas M32C has no FPU"
 
 #elif defined(_TMS320C3x) || defined(_TMS320C4x)
 #error "Texas Instruments C3x/C4x Not supported."

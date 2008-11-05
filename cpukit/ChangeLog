@@ -1,5 +1,9 @@
 2008-11-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* librpc/src/xdr/xdr_float.c: Add M32C, M32R, and Blackfin.
+
+2008-11-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/threadhandler.c: M32R uses different name for init.
 
 2008-11-05	Joel Sherrill <joel.sherrill@oarcorp.com>
