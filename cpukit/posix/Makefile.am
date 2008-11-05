@@ -57,9 +57,9 @@ libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
     src/lio_listio.c src/devctl.c
 
 ## ENOSYS_C_FILES
-libposix_a_SOURCES += src/execl.c src/execle.c src/execlp.c src/execv.c \
-    src/execve.c src/execvp.c src/fork.c src/pthreadatfork.c src/wait.c \
-    src/waitpid.c
+libposix_a_SOURCES += src/_execve.c src/execl.c src/execle.c src/execlp.c \
+    src/execv.c src/execve.c src/execvp.c src/fork.c src/pthreadatfork.c \
+    src/wait.c src/waitpid.c
 
 ## BARRIER_C_FILES
 libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
