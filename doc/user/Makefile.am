@@ -29,10 +29,10 @@ TXT_FILES = rtemsarc.txt rtemspie.txt states.txt
 
 PNG_FILES = rtemsarc.png rtemspie.png states.png ObjectId-32Bits.png
 
-EPS_IMAGES = rtemspie.eps states.eps
+EPS_IMAGES = rtemspie.eps states.eps ObjectId-32Bits.eps
 $(PROJECT).dvi: $(EPS_IMAGES)
 
-PDF_IMAGES = rtemspie.pdf states.pdf
+PDF_IMAGES = rtemspie.pdf states.pdf ObjectId-32Bits.pdf
 CLEANFILES += $(PDF_IMAGES)
 
 if USE_HTML
