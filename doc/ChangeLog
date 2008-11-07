@@ -1,5 +1,10 @@
 2008-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* ada_user/Makefile.am: Make Ada manual build again after adding
+	figure.
+
+2008-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1334/doc
 	* user/Makefile.am, user/concepts.t, user/init.t, user/overview.t,
 	user/part.t, user/task.t: Correct typos and correctly document 4
