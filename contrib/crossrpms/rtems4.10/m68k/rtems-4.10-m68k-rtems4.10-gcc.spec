@@ -52,7 +52,7 @@ Summary:      	m68k-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	8%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -457,6 +457,10 @@ GNU cc compiler for m68k-rtems4.10.
 %dir %{gcclib}/m68k-rtems4.10/%{gcc_version}/include/ssp
 %endif
 %endif
+%endif
+
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/m68k-rtems4.10/%{gcc_version}/include-fixed
 %endif
 
 %dir %{gccexec}
