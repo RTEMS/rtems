@@ -1,3 +1,8 @@
+2008-11-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/ttyname.c: Change third parameter of ttyname to be
+	size_t instead of int.
+
 2008-11-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* librpc/src/xdr/xdr_float.c: Add M32C, M32R, and Blackfin.
