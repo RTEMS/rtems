@@ -165,7 +165,7 @@ C Library.
 
 The effect of calling any blocking RTEMS directives before
 @code{@value{DIRPREFIX}initialize_start_multitasking}
-is unpredictable but guaranteed to be bad.  Afer the
+is unpredictable but guaranteed to be bad.  After the
 directive @code{@value{DIRPREFIX}initialize_data_structures}
 is invoked, it is permissible to allocate RTEMS objects and
 perform non-blocking operations.  But the user should be
