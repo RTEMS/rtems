@@ -44,6 +44,10 @@ GNU cc compiler for @tool_target@.
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/@tool_target@/%{gcc_version}/include-fixed
+%endif
+
 %dir %{gccexec}
 %dir %{gccexec}/@tool_target@
 %dir %{gccexec}/@tool_target@/%{gcc_version}
