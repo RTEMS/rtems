@@ -32,12 +32,17 @@ COMMON_FILES += \
 
 FILES = example.texi
 
+ObjectId-32Bits.eps: $(top_srcdir)/user/ObjectId-32Bits.eps
+	$(LN_S) $<
 rtemspie.eps: $(top_srcdir)/user/rtemspie.eps
 	$(LN_S) $<
 states.eps: $(top_srcdir)/user/states.eps
 	$(LN_S) $<
-CLEANFILES += rtemspie.eps states.eps rtemsarc.png rtemspie.png states.png
+CLEANFILES += rtemspie.eps states.eps rtemsarc.png rtemspie.png states.png \
+    ObjectId-32Bits.png
 
+ObjectId-32Bits.png: $(top_srcdir)/user/ObjectId-32Bits.png
+	$(LN_S) $<
 rtemsarc.png: $(top_srcdir)/user/rtemsarc.png
 	$(LN_S) $<
 rtemspie.png: $(top_srcdir)/user/rtemspie.png
@@ -49,10 +54,10 @@ info_TEXINFOS = ada_user.texi
 ada_user_TEXINFOS = $(FILES) $(COMMON_FILES)
 
 if USE_HTML
-html_project_DATA += rtemsarc.png rtemspie.png states.png
+html_project_DATA += rtemsarc.png rtemspie.png states.png ObjectId-32Bits.png
 endif
 
-$(PROJECT).dvi: rtemspie.eps states.eps
+$(PROJECT).dvi: rtemspie.eps states.eps ObjectId-32Bits.eps
 PDF_IMAGES = rtemspie.pdf states.pdf
 
 CLEANFILES += ada_user.info ada_user.info-? ada_user.info-??
