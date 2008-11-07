@@ -30,7 +30,7 @@ BuildRequires:  gmp-devel >= 4.1
 BuildRequires:  %{_host_rpmprefix}gmp-devel
 BuildRequires:  %{_host_rpmprefix}mpfr-devel
 %endif
-%if "%{?fedora}" >= "8"
+%if 0%{?fedora} >= 8
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 %if "%{?suse}" > "10.3"
@@ -50,7 +50,7 @@ BuildRequires:  @rpmprefix@@tool_target@-gcc
 BuildRequires:	flex bison
 %if %build_f95
 BuildRequires:	gmp-devel >= 4.1
-%if "%{?fedora}" >= "8"
+%if 0%{?fedora} >= 8
 BuildRequires:  mpfr-devel >= 2.2.1
 %endif
 %endif

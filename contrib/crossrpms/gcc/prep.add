@@ -25,7 +25,7 @@
 %endif
 
 %if %build_objc
-%setup -T -D -n %{name}-%{version} -a5
+%setup -q -T -D -n %{name}-%{version} -a5
 %{?PATCH5:%patch5 -p0}
 %endif
 
