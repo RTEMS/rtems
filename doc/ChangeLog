@@ -1,5 +1,9 @@
 2008-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* user/concepts.t: Use 32 bit version centered.
+
+2008-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* ada_user/Makefile.am: Make Ada manual build again after adding
 	figure.
 
