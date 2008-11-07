@@ -143,10 +143,10 @@ The data type @code{@value{DIRPREFIX}id} is used to store object IDs.
 
 @ifset use-html
 @html
-<IMG SRC="ObjectId-16Bits.png" WIDTH=550 HEIGHT=400 ALT="32 Bit Object Id">
+<P ALIGN="center"><IMG SRC="ObjectId-32Bits.png"
+     WIDTH=550 HEIGHT=400 ALT="32 Bit Object Id"></P>
 @end html
 @end ifset
-
 
 The most significant five bits are the object class.  The next
 three bits indicate the API to which the object class belongs.
