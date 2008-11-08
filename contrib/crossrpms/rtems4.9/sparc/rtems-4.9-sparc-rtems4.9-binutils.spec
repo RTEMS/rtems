@@ -3,9 +3,21 @@
 # 	http://www.rtems.org/bugzilla
 #
 
-%define _prefix			/opt/rtems-4.9
-%define _infodir		%{_prefix}/info
-%define _mandir			%{_prefix}/man
+%define _prefix                 /opt/rtems-4.9
+%define _exec_prefix            %{_prefix}
+%define _bindir                 %{_exec_prefix}/bin
+%define _sbindir                %{_exec_prefix}/sbin
+%define _libexecdir             %{_exec_prefix}/libexec
+%define _datarootdir            %{_prefix}/share
+%define _datadir                %{_datarootdir}
+%define _sysconfdir             %{_prefix}/etc
+%define _sharedstatedir         %{_prefix}/com
+%define _localstatedir          %{_prefix}/var
+%define _includedir             %{_prefix}/include
+%define _libdir                 %{_exec_prefix}/%{_lib}
+%define _mandir                 %{_datarootdir}/man
+%define _infodir                %{_datarootdir}/info
+%define _localedir              %{_datarootdir}/locale
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
@@ -33,7 +45,7 @@ Name:		rtems-4.9-sparc-rtems4.9-binutils
 Summary:	Binutils for target sparc-rtems4.9
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -187,6 +199,7 @@ GNU binutils targetting sparc-rtems4.9.
 
 %files -n rtems-4.9-sparc-rtems4.9-binutils
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/sparc-rtems4.9-*.1*
@@ -239,6 +252,7 @@ fi
 
 %files -n rtems-4.9-binutils-common
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/as.info*
