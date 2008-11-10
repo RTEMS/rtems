@@ -52,7 +52,7 @@ Summary:      	powerpc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	8%{?dist}
+Release:      	9%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -387,7 +387,7 @@ EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 
-
+%ifnarch noarch
 # Extract %%__debug_install_post into debug_install_post~
 cat << \EOF > debug_install_post~
 %__debug_install_post
@@ -409,6 +409,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 < debug_install_post~ > debug_install_post 
 %define __debug_install_post . ./debug_install_post
 
+%endif
 
 %clean
   rm -rf $RPM_BUILD_ROOT
