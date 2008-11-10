@@ -467,6 +467,10 @@ GNU cc compiler for m68k-rtems4.9.
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/m68k-rtems4.9/%{gcc_version}/include-fixed
+%endif
+
 %dir %{gccexec}
 %dir %{gccexec}/m68k-rtems4.9
 %dir %{gccexec}/m68k-rtems4.9/%{gcc_version}

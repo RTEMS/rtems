@@ -467,6 +467,10 @@ GNU cc compiler for h8300-rtems4.9.
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/h8300-rtems4.9/%{gcc_version}/include-fixed
+%endif
+
 %dir %{gccexec}
 %dir %{gccexec}/h8300-rtems4.9
 %dir %{gccexec}/h8300-rtems4.9/%{gcc_version}

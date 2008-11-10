@@ -467,6 +467,10 @@ GNU cc compiler for i386-rtems4.9.
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/i386-rtems4.9/%{gcc_version}/include-fixed
+%endif
+
 %dir %{gccexec}
 %dir %{gccexec}/i386-rtems4.9
 %dir %{gccexec}/i386-rtems4.9/%{gcc_version}

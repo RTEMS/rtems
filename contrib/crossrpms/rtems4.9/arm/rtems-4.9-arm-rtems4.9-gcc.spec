@@ -467,6 +467,10 @@ GNU cc compiler for arm-rtems4.9.
 %endif
 %endif
 
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/arm-rtems4.9/%{gcc_version}/include-fixed
+%endif
+
 %dir %{gccexec}
 %dir %{gccexec}/arm-rtems4.9
 %dir %{gccexec}/arm-rtems4.9/%{gcc_version}
