@@ -1,3 +1,7 @@
+2008-11-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/timespecaddto.c: Fix typo.
+
 2008-11-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/ttyname.c: Change third parameter of ttyname to be
