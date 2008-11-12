@@ -1,5 +1,5 @@
-%define rpmvers 2.61
-%define srcvers	2.61
+%define srcvers	@AUTOCONF_VERS@
+%define rpmvers %{expand:%(echo "@AUTOCONF_VERS@" | tr - _ )}
 
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@autoconf
@@ -13,7 +13,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	@AUTOCONF_RPMREL@%{?dist}
+Release:	@AUTOCONF_RPMREL@
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 %if "%{_prefix}" != "/usr"
@@ -24,6 +24,9 @@ Provides:	@rpmprefix@autoconf-rtems = %{version}-%{release}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires: 	perl m4 gawk emacs
+%if "%{version}" >= "2.62"
+BuildRequires:  m4 >= 1.4.5
+%endif
 Requires:     	m4 gawk
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info

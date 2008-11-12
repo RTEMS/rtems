@@ -6,6 +6,7 @@ AUTOCONF_SUBPACKAGES += $(top_srcdir)/autotools/target-autoconf.add
 
 autoconf.spec.in: $(AUTOCONF_SUBPACKAGES) Makefile.in
 	cat $(AUTOCONF_SUBPACKAGES) | sed \
+	  -e "s/[@]AUTOCONF_VERS[@]/$(AUTOCONF_VERS)/" \
 	  -e "s/[@]AUTOCONF_RPMREL[@]/$(AUTOCONF_RPMREL)/" > $@
 CLEANFILES += autoconf.spec.in
 
