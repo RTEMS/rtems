@@ -1,3 +1,8 @@
+2008-11-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspstart.c: Add bsp_clicks_per_usec variable which is used by
+	shared code.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate bsp.am. Build startup files as side-effect 

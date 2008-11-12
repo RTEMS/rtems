@@ -43,6 +43,11 @@ extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 unsigned int BSP_bus_frequency;
 
 /*
+ *  Driver configuration parameters
+ */
+uint32_t   bsp_clicks_per_usec;
+
+/*
  * Memory on this board.
  */
 extern char RamSize[];
@@ -87,6 +92,7 @@ void bsp_start( void )
    *  initialize the device driver parameters
    */
   BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND;
+  bsp_clicks_per_usec      = BSP_bus_frequency;
   BSP_time_base_divisor    = 1;
 
   /*
