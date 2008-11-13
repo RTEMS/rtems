@@ -1,3 +1,9 @@
+2008-11-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1336/cpukit
+	* user/chains.t, user/dirstat.texi: Add rtems_chain_prepend_unprotected
+	and rtems_chain_append_unprotected.
+
 2008-11-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/concepts.t: Use 32 bit version centered.
