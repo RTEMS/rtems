@@ -37,7 +37,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	5
+Release:	6%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 Obsoletes:	rtems-4.8-automake-rtems < %{version}-%{release}

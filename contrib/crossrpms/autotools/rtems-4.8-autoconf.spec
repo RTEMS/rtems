@@ -36,7 +36,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	5
+Release:	6%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 Obsoletes:	rtems-4.8-autoconf-rtems < %{version}-%{release}
