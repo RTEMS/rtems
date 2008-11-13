@@ -137,6 +137,9 @@ cd ..
   if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i386-rtems4.8-windres%{_exeext}; then 
     rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i386-rtems4.8-windres*
   fi
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i386-rtems4.8-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i386-rtems4.8-windmc*
+  fi
 
   cd ..
 
@@ -186,6 +189,7 @@ GNU binutils targetting i386-rtems4.8.
 
 %files -n rtems-4.8-i386-rtems4.8-binutils
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/i386-rtems4.8-*.1*
@@ -238,6 +242,7 @@ fi
 
 %files -n rtems-4.8-binutils-common
 %defattr(-,root,root)
+%dir %{_prefix}
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/as.info*
