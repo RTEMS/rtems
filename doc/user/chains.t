@@ -32,11 +32,13 @@ provided by RTEMS is:
 @item @code{@value{DIRPREFIX}chain_has_only_one_node} - Does the node have one node ?
 @item @code{@value{DIRPREFIX}chain_is_head} - Is the node the head ?
 @item @code{@value{DIRPREFIX}chain_is_tail} - Is the node the tail ?
-@item @code{@value{DIRPREFIX}chain_extract} - Extract the node from the chain ?
-@item @code{@value{DIRPREFIX}chain_get} - Return the first node on the chain ?
-@item @code{@value{DIRPREFIX}chain_insert} - Insert the node into the chain ?
-@item @code{@value{DIRPREFIX}chain_append} - Append the node to chain ?
-@item @code{@value{DIRPREFIX}chain_prepend} - Prepend the node to the end of the chain ?
+@item @code{@value{DIRPREFIX}chain_extract} - Extract the node from the chain
+@item @code{@value{DIRPREFIX}chain_get} - Return the first node on the chain
+@item @code{@value{DIRPREFIX}chain_insert} - Insert the node into the chain
+@item @code{@value{DIRPREFIX}chain_append} - Append the node to chain
+@item @code{@value{DIRPREFIX}chain_append_unprotected} - Append the node to chain (unprotected)
+@item @code{@value{DIRPREFIX}chain_prepend} - Prepend the node to the end of the chain
+@item @code{@value{DIRPREFIX}chain_prepend_unprotected} - Prepend the node to chain (unprotected)
 @end itemize
 
 @section Background
@@ -651,6 +653,39 @@ the operation.
 @c
 @c
 @page
+@subsection Append a Node (unprotected)
+
+@cindex chain append a node unprotected
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex @value{DIRPREFIX}chain_append_unprotected
+@example
+void @value{DIRPREFIX}chain_append_unprotected(
+  @value{DIRPREFIX}chain_control *the_chain,
+  @value{DIRPREFIX}chain_node    *the_node
+);
+@end example
+@end ifset
+
+@subheading RETURNS
+
+Returns nothing.
+
+@subheading DESCRIPTION:
+
+This routine appends a node to the end of a chain.
+
+@subheading NOTES:
+
+Interrupts are NOT disabled during the append to ensure the atomicity of
+the operation.
+
+@c
+@c
+@c
+@page
 @subsection Prepend a Node
 
 @cindex prepend node
@@ -678,4 +713,37 @@ This routine prepends a node to the front of the chain.
 @subheading NOTES:
 
 Interrupts are disabled during the prepend to ensure the atomicity of
+the operation.
+
+@c
+@c
+@c
+@page
+@subsection Prepend a Node (unprotected)
+
+@cindex prepend node
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex @value{DIRPREFIX}chain_prepend_unprotected
+@example
+void @value{DIRPREFIX}chain_prepend_unprotected(
+  @value{DIRPREFIX}chain_control *the_chain,
+  @value{DIRPREFIX}chain_node    *the_node
+);
+@end example
+@end ifset
+
+@subheading RETURNS
+
+Returns nothing.
+
+@subheading DESCRIPTION:
+
+This routine prepends a node to the front of the chain.
+
+@subheading NOTES:
+
+Interrupts are NOT disabled during the prepend to ensure the atomicity of
 the operation.

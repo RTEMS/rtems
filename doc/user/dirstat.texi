@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Directive Status Codes, Example Application, Chains Prepend a Node, Top
+@node Directive Status Codes, Example Application, Chains Prepend a Node (unprotected), Top
 @end ifinfo
 @chapter Directive Status Codes
 @table @b
