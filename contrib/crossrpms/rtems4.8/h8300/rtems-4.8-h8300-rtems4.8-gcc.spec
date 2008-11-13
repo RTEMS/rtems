@@ -40,7 +40,7 @@ Summary:      	h8300-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	31%{?dist}
+Release:      	32%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -55,7 +55,7 @@ BuildRequires:  gmp-devel >= 4.1
 BuildRequires:  %{_host_rpmprefix}gmp-devel
 BuildRequires:  %{_host_rpmprefix}mpfr-devel
 %endif
-%if "%{?fedora}" >= "8"
+%if 0%{?fedora} >= 8
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 %if "%{?suse}" > "10.3"
@@ -179,7 +179,8 @@ cd ..
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
   CC="%{_host}-gcc ${RPM_OPT_FLAGS}" \
 %else
-  CC="%{__cc} ${RPM_OPT_FLAGS}" \
+# gcc is not ready to be compiled with -std=gnu99
+  CC=$(echo "%{__cc} ${RPM_OPT_FLAGS}" | sed -e 's,-std=gnu99 ,,') \
 %endif
   ../gcc-%{gcc_pkgvers}/configure \
     --prefix=%{_prefix} \
@@ -383,6 +384,30 @@ EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 
+%ifnarch noarch
+# Extract %%__debug_install_post into debug_install_post~
+cat << \EOF > debug_install_post~
+%__debug_install_post
+EOF
+
+# Generate customized debug_install_post script
+cat debug_install_post~ | while read a x y; do
+case $a in
+# Prevent find-debuginfo.sh* from trying to handle foreign binaries
+*/find-debuginfo.sh)
+  b=$(basename $a)
+  sed -e 's,find "$RPM_BUILD_ROOT" !,find "$RPM_BUILD_ROOT"%_bindir "$RPM_BUILD_ROOT"%_libexecdir !,' $a > $b
+  chmod a+x $b
+  ;;
+esac
+done
+
+sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
+< debug_install_post~ > debug_install_post 
+%define __debug_install_post . ./debug_install_post
+
+%endif
+
 %clean
   rm -rf $RPM_BUILD_ROOT
 
@@ -430,6 +455,10 @@ GNU cc compiler for h8300-rtems4.8.
 %dir %{gcclib}/h8300-rtems4.8/%{gcc_version}/include/ssp
 %endif
 %endif
+%endif
+
+%if "%{gcc_version}" >= "4.3.0"
+%dir %{gcclib}/h8300-rtems4.8/%{gcc_version}/include-fixed
 %endif
 
 %dir %{gccexec}
