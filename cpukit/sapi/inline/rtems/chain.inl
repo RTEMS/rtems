@@ -296,6 +296,22 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append(
   _Chain_Append( the_chain, the_node );
 }
 
+/**
+ *  @brief Append a node on the end of a chain (unprotected)
+ *
+ *  This routine appends @a the_node onto the end of @a the_chain.
+ *
+ *  @note It does NOT disable interrupts to ensure the atomicity of the
+ *  append operation.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
+  rtems_chain_control *the_chain,
+  rtems_chain_node    *the_node
+)
+{
+  _Chain_Append_unprotected( the_chain, the_node );
+}
+
 /** @brief Prepend a Node
  *
  *  This routine prepends the_node onto the front of the_chain.
@@ -312,6 +328,24 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend(
 )
 {
   _Chain_Prepend( the_chain, the_node );
+}
+
+/** @brief Prepend a Node (unprotected)
+ *
+ *  This routine prepends the_node onto the front of the_chain.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *  @param[in] the_node is the node to be prepended.
+ *
+ *  @note It does NOT disable interrupts to ensure the atomicity of the
+ *        prepend operation.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
+  rtems_chain_control *the_chain,
+  rtems_chain_node    *the_node
+)
+{
+  _Chain_Prepend_unprotected( the_chain, the_node );
 }
 
 #endif
