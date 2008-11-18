@@ -1,3 +1,8 @@
+2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c: Transmit the character in the polled write
+	function within a critical section for printk() compatibility.
+
 2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.c: Update for status-checks.h changes.

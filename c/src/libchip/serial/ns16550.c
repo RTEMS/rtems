@@ -196,44 +196,39 @@ NS16550_STATIC int ns16550_close(
   return(RTEMS_SUCCESSFUL);
 }
 
-/*
- *  ns16550_write_polled
+/**
+ * @brief Polled write for NS16550.
  */
-
-NS16550_STATIC void ns16550_write_polled(
-  int   minor,
-  char  cChar
-)
+NS16550_STATIC void ns16550_write_polled( int minor, char c)
 {
-  uint32_t                pNS16550;
-  unsigned char           ucLineStatus;
-  getRegister_f           getReg;
-  setRegister_f           setReg;
+  uint32_t port = Console_Port_Tbl [minor].ulCtrlPort1;
+  getRegister_f get = Console_Port_Tbl [minor].getRegister;
+  setRegister_f set = Console_Port_Tbl [minor].setRegister;
+  uint32_t status;
+  rtems_interrupt_level level;
 
-  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor].getRegister;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  while (1) {
+    /* Try to transmit the character in a critical section */
+    rtems_interrupt_disable( level);
 
-  /*
-   * wait for transmitter holding register to be empty
-   */
-  ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-  while ((ucLineStatus & SP_LSR_THOLD) == 0) {
-    /*
-     * Yield while we wait
-     */
-#if 0
-     if(_System_state_Is_up(_System_state_Get())) {
-       rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-     }
-#endif
-     ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
+    /* Read the transmitter holding register and check it */
+    status = get( port, NS16550_LINE_STATUS);
+    if ((status & SP_LSR_THOLD) != 0) {
+      /* Transmit character */
+      set( port, NS16550_TRANSMIT_BUFFER, c);
+
+      /* Finished */
+      rtems_interrupt_enable( level);
+      break;
+    } else {
+      rtems_interrupt_enable( level);
+    }
+
+    /* Wait for transmitter holding register to be empty */
+    do {
+      status = get( port, NS16550_LINE_STATUS);
+    } while ((status & SP_LSR_THOLD) == 0);
   }
-
-  /*
-   * transmit character
-   */
-  (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, cChar);
 }
 
 /*
