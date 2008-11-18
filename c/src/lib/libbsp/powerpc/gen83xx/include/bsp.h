@@ -150,7 +150,7 @@ rtems_status_code bsp_register_spi(void);
 #endif
 #define PRINTK_MINOR BSP_UART1_MINOR
 
-#if defined(MPC8249EAMDS)
+#if defined(MPC8249EAMDS) || defined(HSC_CM01)
 #define BSP_USE_UART2 TRUE
 #else
 #define BSP_USE_UART2 FALSE

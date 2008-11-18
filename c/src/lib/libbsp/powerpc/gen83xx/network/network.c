@@ -123,9 +123,24 @@ int BSP_tsec_attach
    * FIXME: get the real address we need
    */
   if (config->hardware_address == NULL) {
+#if !defined(HAS_UBOOT)
+    static char hw_addr [M83xx_TSEC_NIFACES][6];
+    m83xxTSEC_Registers_t  *reg_ptr;
 
-#ifdef HAS_UBOOT
+    /* read MAC address from hardware register */
+    /* we expect it htere from the boot loader */
+    reg_ptr = &mpc83xx.tsec[unitNumber - 1];
+    config->hardware_address = hw_addr[unitNumber-1];
+    
+    hw_addr[unitNumber-1][5] = (reg_ptr->macstnaddr[0] >> 24) & 0xff;
+    hw_addr[unitNumber-1][4] = (reg_ptr->macstnaddr[0] >> 16) & 0xff;
+    hw_addr[unitNumber-1][3] = (reg_ptr->macstnaddr[0] >>  8) & 0xff;
+    hw_addr[unitNumber-1][2] = (reg_ptr->macstnaddr[0] >>  0) & 0xff;
+    hw_addr[unitNumber-1][1] = (reg_ptr->macstnaddr[1] >> 24) & 0xff;
+    hw_addr[unitNumber-1][0] = (reg_ptr->macstnaddr[1] >> 16) & 0xff;
+#endif
 
+#if defined(HAS_UBOOT)
     switch (unitNumber) {
       case 1:
         config->hardware_address = mpc83xx_uboot_board_info.bi_enetaddr;
@@ -152,12 +167,6 @@ int BSP_tsec_attach
       default:
         return 0;
     }
-
-#else /* HAS_UBOOT */
-
-    char hw_addr [6] = { 0x00, 0x04, 0x9f, 0x00, 0x2f, 0xcb};
-
-    config->hardware_address = hw_addr;
 
 #endif /* HAS_UBOOT */
 
