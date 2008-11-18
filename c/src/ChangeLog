@@ -1,3 +1,8 @@
+2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c: Transmit the character in the polled write
+	function within a critical section for printk() compatibility.
+
 2008-09-10 	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Remove pre-production testing CFLAGS.
