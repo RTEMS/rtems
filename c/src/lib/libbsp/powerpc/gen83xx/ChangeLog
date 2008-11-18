@@ -1,3 +1,7 @@
+2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/console.c: Update for new NS16550 polled write function.
+
 2008-09-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am: Regenerated.

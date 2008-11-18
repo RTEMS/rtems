@@ -254,10 +254,7 @@ rtems_device_driver console_initialize(
 
 void debug_putc_onlcr(const char c)
 {
-  uint32_t Irql;
   if (Console_Is_Initialized) {
-    rtems_interrupt_disable(Irql);
-    
     Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
       deviceWritePolled(Console_Port_Minor,c);
 
@@ -265,8 +262,6 @@ void debug_putc_onlcr(const char c)
       Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
         deviceWritePolled(Console_Port_Minor,'\r');
     }
-    
-    rtems_interrupt_enable(Irql);
   }
 }
 
