@@ -1,3 +1,9 @@
+2008-11-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* include/bsp.h, include/hwreg_vals.h, network/network.c:
+	correct some init values for HSC_CM01 boards
+	change strategy to determine MAC address
+
 2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console/console.c: Update for new NS16550 polled write function.

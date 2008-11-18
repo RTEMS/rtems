@@ -249,7 +249,7 @@
 #define DDR_SDRAM_CFG_2_VAL          0x00401000
 #define DDR_SDRAM_MODE_VAL           0x44521632
 #define DDR_SDRAM_CLK_CNTL_VAL       0x01800000
-#define DDR_SDRAM_CFG_VAL            0x43000008
+#define DDR_SDRAM_CFG_VAL            0x63000008
 
 #define DDR_ERR_DISABLE_VAL          0x0000008D
 #define DDR_ERR_DISABLE_VAL2         0x00000089
