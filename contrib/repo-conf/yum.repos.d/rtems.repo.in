@@ -1,8 +1,8 @@
 [rtems-@RTEMS_API@]
-name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch
 baseurl=
-	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
-	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch
 # metadata_expire=0
 enabled=1
 gpgcheck=1
@@ -10,10 +10,10 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
 [rtems-@RTEMS_API@-source]
-name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch - source
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - source
 baseurl=
-	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
-	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/SRPMS
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/SRPMS
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/SRPMS
 # metadata_expire=0
 enabled=0
 gpgcheck=1
@@ -21,10 +21,10 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 	file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-eac29b6f-3fe1f458
 
 [rtems-@RTEMS_API@-debuginfo]
-name=RTEMS-@RTEMS_API@ for @OS_NAME@ $releasever - $basearch - debuginfo
+name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - debuginfo
 baseurl=
-	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
-	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@$releasever/$basearch/debug
+	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
+	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
 # metadata_expire=0
 enabled=0
 gpgcheck=1
