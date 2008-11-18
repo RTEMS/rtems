@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.13],[http://www.rtems.org/bugzilla],
+AC_INIT([rtems-]_RTEMS_API[-repo-conf],[0.14],[http://www.rtems.org/bugzilla],
   [rtems-]_RTEMS_API[-repo-conf])
 RTEMS_VERSIONING
 
@@ -17,19 +17,19 @@ AC_ARG_ENABLE(osname,AS_HELP_STRING(
 [osname="fedora-10"])
 
 case $osname in
-fedora-[89]* | fedora-10* )
+fedora-8* | fedora-9* | fedora-10* )
   os_name="Fedora"
   os_subdir="fedora/"
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
-centos-5* | redhat-el5* | fedora-[7]* )
+centos-5* | redhat-el5* | fedora-7* )
   os_name="CentOS"
   os_subdir="centos/"
   yum_verdir="5"
   apt_verdir="5"
   ;;
-centos-4* | redhat-el4* | fedora-[56]* )
+centos-4* | redhat-el4* | fedora-5* | fedora-6* )
   os_name="CentOS"
   os_subdir="centos/"
   yum_verdir="4"
