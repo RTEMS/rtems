@@ -12,8 +12,9 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.3.2
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 9%{?dist}
+GCC_RPMREL = 11%{?dist}
 NEWLIB_VERS = 1.16.0
+NEWLIB_PKGVERS = $(NEWLIB_VERS).cvs.20081119
 include ../gcc.am
 GCC_OPTS += --disable-infos
 
