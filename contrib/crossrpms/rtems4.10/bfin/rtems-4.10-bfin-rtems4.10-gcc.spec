@@ -52,7 +52,7 @@ Summary:      	bfin-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	9%{?dist}
+Release:      	10%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -110,6 +110,11 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-200
 %endif
 %{?_without_sources:NoSource:	0}
 
+%if "%{gcc_version}" == "4.3.2" 
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%{?_without_sources:NoSource:	1}
+
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
 Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.16.0-rtems4.10-20080827.diff
@@ -129,6 +134,8 @@ Cross gcc for bfin-rtems4.10.
 %setup -q -T -D -n %{name}-%{version} -a0
 %{?PATCH0:%patch0 -p0}
 
+%setup -q -T -D -n %{name}-%{version} -a1
+%{?PATCH1:%patch1 -p0}
 
 
 
@@ -168,6 +175,7 @@ cd ..
   cd build
 
   languages="c"
+  languages="$languages,c++"
   export PATH="%{_bindir}:${PATH}"
 %if "%{_build}" != "%{_host}"
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
@@ -520,6 +528,45 @@ if [ $1 -eq 0 ]; then
 %endif
 fi
 
+# ==============================================================
+# rtems-4.10-bfin-rtems4.10-gcc-c++
+# ==============================================================
+%package -n rtems-4.10-bfin-rtems4.10-gcc-c++
+Summary:	GCC c++ compiler for bfin-rtems4.10
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+License:	GPL
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc-c++
+%endif
+Provides:	rtems-4.10-bfin-rtems4.10-c++ = %{gcc_rpmvers}-%{release}
+Obsoletes:	rtems-4.10-bfin-rtems4.10-c++ < %{gcc_rpmvers}-%{release}
+
+Requires:       rtems-4.10-gcc-common
+Requires:       rtems-4.10-bfin-rtems4.10-gcc = %{gcc_rpmvers}-%{release}
+
+%description -n rtems-4.10-bfin-rtems4.10-gcc-c++
+GCC c++ compiler for bfin-rtems4.10.
+
+%files -n rtems-4.10-bfin-rtems4.10-gcc-c++ -f build/files.g++
+%defattr(-,root,root)
+%{_mandir}/man1/bfin-rtems4.10-g++.1*
+
+%{_bindir}/bfin-rtems4.10-c++%{_exeext}
+%{_bindir}/bfin-rtems4.10-g++%{_exeext}
+
+%dir %{gccexec}
+%dir %{gccexec}/bfin-rtems4.10
+%dir %{gccexec}/bfin-rtems4.10/%{gcc_version}
+%{gccexec}/bfin-rtems4.10/%{gcc_version}/cc1plus%{_exeext}
+
+%dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include
+%if "%{gcc_version}" >= "3.2"
+%{gcclib}/bfin-rtems4.10/%{gcc_version}/include/c++
+%else
+%{gcclib}/bfin-rtems4.10/%{gcc_version}/include/g++
+%endif
 
 
 
