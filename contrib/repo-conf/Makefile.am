@@ -12,6 +12,7 @@ apt/sources.list.d/rtems-@RTEMS_API@.list: apt/sources.list.d/rtems.list.in
 	sed -e 's,[@]RTEMS_API[@],@RTEMS_API@,' \
 	  -e 's,[@]OS_SUBDIR[@],@OS_SUBDIR@,' \
 	  -e 's,[@]OS_NAME[@],@OS_NAME@,' \
+	  -e 's,[@]APT_VERDIR[@],@APT_VERDIR@,' \
 	  < $(srcdir)/apt/sources.list.d/rtems.list.in \
 	  > apt/sources.list.d/rtems-@RTEMS_API@.list
 CLEANFILES += apt/sources.list.d/rtems-@RTEMS_API@.list
@@ -28,6 +29,7 @@ yum.repos.d/rtems-@RTEMS_API@.repo: yum.repos.d/rtems.repo.in
 	  -e 's,[@]RTEMS_API[@],@RTEMS_API@,' \
 	  -e 's,[@]OS_SUBDIR[@],@OS_SUBDIR@,' \
 	  -e 's,[@]OS_NAME[@],@OS_NAME@,' \
+	  -e 's,[@]YUM_VERDIR[@],@YUM_VERDIR@,' \
 	  < $(srcdir)/yum.repos.d/rtems.repo.in \
 	  > yum.repos.d/rtems-@RTEMS_API@.repo
 CLEANFILES += yum.repos.d/rtems-@RTEMS_API@.repo

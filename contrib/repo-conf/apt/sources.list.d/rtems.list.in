@@ -1,10 +1,10 @@
 ## rtems-@RTEMS_API@ sources.list entries for apt-rpm with repomd support,
 ## http://apt-rpm.laiskiainen.org/
 
-repomd ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@$(VERSION)/$(ARCH)
+repomd ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@@APT_VERDIR@/$(ARCH)
 
 ## uncomment the line below if you want to access the *.src.rpms
-# repomd-src ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@$(VERSION)/SRPMS
+# repomd-src ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@@APT_VERDIR@/SRPMS
 
 ## uncomment the line below if you want to access the *-debuginfo*.rpms
-# repomd-debug ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@$(VERSION)/$(ARCH)/debug
+# repomd-debug ftp://ftp.rtems.org/pub/rtems/linux/@RTEMS_API@ @OS_SUBDIR@@APT_VERDIR@/$(ARCH)/debug
