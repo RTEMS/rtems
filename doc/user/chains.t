@@ -21,6 +21,7 @@ provided by RTEMS is:
 @c build_id
 @item @code{@value{DIRPREFIX}chain_node} - Chain node used in user objects
 @item @code{@value{DIRPREFIX}chain_control} - Chain control node
+@item @code{@value{DIRPREFIX}chain_initialize} - initialize the chain with nodes
 @item @code{@value{DIRPREFIX}chain_initialize_empty} - initialize the chain as empty
 @item @code{@value{DIRPREFIX}chain_is_null_node} - Is the node NULL ?
 @item @code{@value{DIRPREFIX}chain_head} - Return the chain's head
@@ -196,12 +197,51 @@ void foobar (const char*          match,
 The section details the Chains directives.
 
 @c
+@c Initialize this Chain With Nodes
+@c
+@page
+@subsection Initialize Chain With Nodes
+
+@cindex chain initialize
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex @value{DIRPREFIX}chain_initialize
+@example
+void @value{DIRPREFIX}chain_initialize(
+  @value{DIRPREFIX}chain_control *the_chain,
+  void                *starting_address,
+  size_t               number_nodes,
+  size_t               node_size
+)
+@end example
+@end ifset
+
+@subheading RETURNS
+
+Returns nothing.
+
+@subheading DESCRIPTION:
+
+This function take in a pointer to a chain control and initializes it
+to contain a set of chain nodes.  The chain will contain @code{number_nodes}
+chain nodes from the memory pointed to by @code{start_address}.  Each node
+is assumed to be @code{node_size} bytes.
+
+@subheading NOTES:
+
+This call will discard any nodes on the chain.
+
+This call does NOT inititialize any user data on each node.
+
+@c
 @c Initialize this Chain as Empty
 @c
 @page
-@subsection Initialise Empty
+@subsection Initialize Empty
 
-@cindex chain initialise empty
+@cindex chain initialize empty
 
 @subheading CALLING SEQUENCE:
 

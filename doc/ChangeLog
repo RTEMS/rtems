@@ -1,3 +1,8 @@
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1340/cpukit
+	* user/chains.t: Add rtems_chain_initialize to public chain API.
+
 2008-11-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1339/Ada
