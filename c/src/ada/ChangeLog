@@ -1,3 +1,8 @@
+2008-11-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1339/Ada
+	* rtems.adb, rtems.ads: Re-add IO Manager to Ada binding.
+
 2008-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems.adb, rtems.ads: Fix prototype.
