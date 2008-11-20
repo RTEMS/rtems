@@ -1,5 +1,11 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1340/cpukit
+	* sapi/inline/rtems/chain.inl: Add rtems_chain_initialize to public
+	chain API.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/heap.h,
 	score/include/rtems/score/protectedheap.h,
 	score/include/rtems/score/wkspace.h, score/src/heap.c,

@@ -37,6 +37,29 @@
 #include <rtems/score/chain.inl>
 
 /**
+ *  @brief Initialize a Chain Header
+ *
+ *  This routine initializes @a the_chain structure to manage the
+ *  contiguous array of @a number_nodes nodes which starts at
+ *  @a starting_address.  Each node is of @a node_size bytes.
+ *
+ *  @param[in] the_chain specifies the chain to initialize
+ *  @param[in] starting_address is the starting address of the array
+ *         of elements
+ *  @param[in] number_nodes is the number of nodes that will be in the chain
+ *  @param[in] node_size is the size of each node
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
+  rtems_chain_control *the_chain,
+  void                *starting_address,
+  size_t               number_nodes,
+  size_t               node_size
+)
+{
+  _Chain_Initialize( the_chain, starting_address, number_nodes, node_size );
+}
+
+/**
  *  @brief Initialize this Chain as Empty
  *
  *  This routine initializes the specified chain to contain zero nodes.
