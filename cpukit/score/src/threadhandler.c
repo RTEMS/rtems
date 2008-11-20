@@ -30,8 +30,8 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-#if defined(__USE_INIT_FINI__)
-#include <stdlib.h> /* for atexit() */
+#if defined(__AVR__)
+  #undef __USE_INIT_FINI__
 #endif
 
 #if defined(__USE_INIT_FINI__)

@@ -122,6 +122,9 @@ void libc_wrapup(void)
 #if !defined(RTEMS_UNIX)
   #define EXIT_SYMBOL _exit
 
+  #if defined(__AVR__)
+    #undef __USE_INIT_FINI__
+  #endif
   #if defined(__USE_INIT_FINI__)
     #if defined(__m32r__)
       #define FINI_SYMBOL __fini
