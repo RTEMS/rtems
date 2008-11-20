@@ -22,7 +22,6 @@
 
 with Ada;
 with Ada.Unchecked_Conversion;
-with System;
 with Interfaces; use Interfaces;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -38,7 +37,7 @@ package body RTEMS is
    ) return RTEMS.Boolean is
    begin
 
-      if Ada_Boolean = Standard.True then
+      if Ada_Boolean then
          return RTEMS.True;
       end if;
 
@@ -1734,6 +1733,145 @@ package body RTEMS is
 
    end Port_Internal_To_External;
 
+   --
+   -- Input/Output Manager
+   --
+
+   procedure IO_Register_Name (
+      Name   : in     String;
+      Major  : in     RTEMS.Device_Major_Number;
+      Minor  : in     RTEMS.Device_Minor_Number;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function IO_Register_Name_Base (
+         Name   : Interfaces.C.Char_Array;
+         Major  : RTEMS.Device_Major_Number;
+         Minor  : RTEMS.Device_Minor_Number
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Register_Name_Base, "rtems_io_register_name");
+   begin
+
+      Result :=
+         IO_Register_Name_Base ( Interfaces.C.To_C (Name), Major, Minor );
+
+   end IO_Register_Name;
+
+   procedure IO_Lookup_Name (
+      Name         : in     String;
+      Device_Info  :    out RTEMS.Driver_Name_t;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Lookup_Name_Base (
+         Name        : Interfaces.C.Char_Array;
+         Device_Info : access RTEMS.Driver_Name_t
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Lookup_Name_Base, "rtems_io_lookup_name");
+      Device_Info_Base : aliased RTEMS.Driver_Name_t;
+   begin
+
+      Result := IO_Lookup_Name_Base (
+         Interfaces.C.To_C (Name),
+         Device_Info_Base'Unchecked_Access
+      );
+      Device_Info := Device_Info_Base;
+
+   end IO_Lookup_Name;
+
+   procedure IO_Open (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Open_Base (
+         Major        : RTEMS.Device_Major_Number;
+         Minor        : RTEMS.Device_Minor_Number;
+         Argument     : RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Open_Base, "rtems_io_open");
+   begin
+ 
+      Result := IO_Open_Base (Major, Minor, Argument);
+ 
+   end IO_Open;
+   pragma Inline (IO_Open);
+ 
+   procedure IO_Close (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Close_Base (
+         Major        : RTEMS.Device_Major_Number;
+         Minor        : RTEMS.Device_Minor_Number;
+         Argument     : RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Close_Base, "rtems_io_close");
+   begin
+ 
+      Result := IO_Close_Base (Major, Minor, Argument);
+ 
+   end IO_Close;
+   pragma Inline (IO_Close);
+ 
+   procedure IO_Read (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Read_Base (
+         Major        : RTEMS.Device_Major_Number;
+         Minor        : RTEMS.Device_Minor_Number;
+         Argument     : RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Read_Base, "rtems_io_read");
+   begin
+ 
+      Result := IO_Read_Base (Major, Minor, Argument);
+ 
+   end IO_Read;
+   pragma Inline (IO_Read);
+ 
+   procedure IO_Write (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Write_Base (
+         Major        : RTEMS.Device_Major_Number;
+         Minor        : RTEMS.Device_Minor_Number;
+         Argument     : RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Write_Base, "rtems_io_write");
+   begin
+ 
+      Result := IO_Write_Base (Major, Minor, Argument);
+ 
+   end IO_Write;
+   pragma Inline (IO_Write);
+ 
+   procedure IO_Control (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   ) is
+      function IO_Control_Base (
+         Major        : RTEMS.Device_Major_Number;
+         Minor        : RTEMS.Device_Minor_Number;
+         Argument     : RTEMS.Address
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, IO_Control_Base, "rtems_io_control");
+   begin
+ 
+      Result := IO_Control_Base (Major, Minor, Argument);
+ 
+   end IO_Control;
+   pragma Inline (IO_Control);
+ 
 
    --
    -- Fatal Error Manager
@@ -2099,7 +2237,7 @@ package body RTEMS is
          Name   : chars_ptr
       )  return RTEMS.Status_Codes;
       pragma Import (C, Object_Set_Name_Base, "rtems_object_set_name");
-      NameAsCString : chars_ptr := New_String(Name);
+      NameAsCString : constant chars_ptr := New_String(Name);
    begin
       Result := Object_Set_Name_Base (ID, NameAsCString);
    end Object_Set_Name;
@@ -2232,8 +2370,8 @@ package body RTEMS is
 	API : RTEMS.Unsigned32
       )  return chars_ptr;
       pragma Import (C, Object_Get_API_Name_Base, "rtems_object_get_api_name");
-      Result : chars_ptr := Object_Get_API_Name_Base (API);
-      APIName : String :=  Value_Without_Exception (Result);
+      Result : constant chars_ptr := Object_Get_API_Name_Base (API);
+      APIName : constant String :=  Value_Without_Exception (Result);
    begin
       Name := APIName;
    end Object_Get_API_Name;
@@ -2249,8 +2387,9 @@ package body RTEMS is
       )  return chars_ptr;
       pragma Import
          (C, Object_Get_API_Class_Name_Base, "rtems_object_get_api_class_name");
-      Result : chars_ptr := Object_Get_API_Class_Name_Base (The_API, The_Class);
-      ClassName : String :=  Value_Without_Exception (Result);
+      Result : constant
+        chars_ptr := Object_Get_API_Class_Name_Base (The_API, The_Class);
+      ClassName : constant String :=  Value_Without_Exception (Result);
    begin
       Name := ClassName;
    end Object_Get_API_Class_Name;

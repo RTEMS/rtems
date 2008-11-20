@@ -99,6 +99,16 @@ pragma Elaborate_Body (RTEMS);
 
    subtype Node                is RTEMS.Unsigned32;
 
+   type Driver_Name_t is
+      record
+         Device_Name        : RTEMS.Address;
+         Device_Name_Length : RTEMS.Unsigned32;
+         Major              : RTEMS.Device_Major_Number;
+         Minor              : RTEMS.Device_Minor_Number;
+
+      end record;
+
+
    --
    --  Task Related Types
    --
@@ -1160,6 +1170,63 @@ pragma Elaborate_Body (RTEMS);
       External :    out RTEMS.Address;
       Result   :    out RTEMS.Status_Codes
    );
+
+   --
+   --  Input/Output Manager
+   --
+
+   procedure IO_Register_Name (
+      Name   : in     String;
+      Major  : in     RTEMS.Device_Major_Number;
+      Minor  : in     RTEMS.Device_Minor_Number;
+      Result :    out RTEMS.Status_Codes
+   );
+
+   procedure IO_Lookup_Name (
+      Name         : in     String;
+      Device_Info  :    out RTEMS.Driver_Name_t;
+      Result       :    out RTEMS.Status_Codes
+   );
+
+   procedure IO_Open (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   );
+   pragma Inline (IO_Open);
+
+   procedure IO_Close (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   );
+   pragma Inline (IO_Close);
+
+   procedure IO_Read (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   );
+   pragma Inline (IO_Read);
+
+   procedure IO_Write (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   );
+   pragma Inline (IO_Write);
+
+   procedure IO_Control (
+      Major        : in     RTEMS.Device_Major_Number;
+      Minor        : in     RTEMS.Device_Minor_Number;
+      Argument     : in     RTEMS.Address;
+      Result       :    out RTEMS.Status_Codes
+   );
+   pragma Inline (IO_Control);
 
    --
    --  Fatal Error Manager
