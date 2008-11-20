@@ -31,8 +31,6 @@
 #ifndef _RTEMS_SCORE_HEAP_H
 #define _RTEMS_SCORE_HEAP_H
 
-#include <sys/types.h>
-
 /**
  *  @defgroup ScoreHeap Heap Handler
  *
@@ -264,7 +262,7 @@ typedef struct {
 uint32_t   _Heap_Initialize(
   Heap_Control *the_heap,
   void         *starting_address,
-  ssize_t       size,
+  size_t        size,
   uint32_t      page_size
 );
 
@@ -283,7 +281,7 @@ uint32_t   _Heap_Initialize(
 Heap_Extend_status _Heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  ssize_t       size,
+  size_t        size,
   uint32_t     *amount_extended
 );
 
@@ -298,7 +296,7 @@ Heap_Extend_status _Heap_Extend(
  */
 void *_Heap_Allocate(
   Heap_Control *the_heap,
-  ssize_t       size
+  size_t        size
 );
 
 /**
@@ -317,7 +315,7 @@ void *_Heap_Allocate(
  */
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  ssize_t       size,
+  size_t        size,
   uint32_t      alignment
 );
 
@@ -338,7 +336,7 @@ void *_Heap_Allocate_aligned(
 bool _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
-  ssize_t             *size
+  size_t              *size
 );
 
 /**
@@ -366,7 +364,7 @@ bool _Heap_Size_of_user_area(
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
-  ssize_t       size,
+  size_t        size,
   uint32_t     *old_mem_size,
   uint32_t     *avail_mem_size
 );
@@ -451,8 +449,8 @@ void _Heap_Get_free_information(
  *
  *  @return This method returns block size on success, 0 if overflow occured.
  */
-extern ssize_t _Heap_Calc_block_size(
-  ssize_t  size,
+extern size_t _Heap_Calc_block_size(
+  size_t   size,
   uint32_t page_size,
   uint32_t min_size
 );

@@ -19,7 +19,7 @@
 bool _Protected_heap_Get_block_size(
   Heap_Control        *the_heap,
   void                *starting_address,
-  ssize_t             *size
+  size_t              *size
 )
 {
   bool    status;

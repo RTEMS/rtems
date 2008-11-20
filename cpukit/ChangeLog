@@ -1,5 +1,19 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/heap.h,
+	score/include/rtems/score/protectedheap.h,
+	score/include/rtems/score/wkspace.h, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapallocatealigned.c,
+	score/src/heapextend.c, score/src/heapresizeblock.c,
+	score/src/heapsizeofuserarea.c, score/src/pheapgetblocksize.c,
+	score/src/wkspace.c: Revert use of ssize_t. This type is not
+	guaranteed to be able to represent a positive number greater than the
+	size of a single allocatable object. We needed a type that is able to
+	represent the size of a pool of multiple allocatable objects or
+	potentially nearly all memory.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Do not
 	think about running init/fini on AVR. We do not know what mechanism
 	it uses but this is not it.

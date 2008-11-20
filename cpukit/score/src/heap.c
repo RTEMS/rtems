@@ -111,10 +111,11 @@ static uint32_t instance = 0;
  *            +--------------------------------+ <- end = begin + size
  *
  */
+
 uint32_t   _Heap_Initialize(
   Heap_Control        *the_heap,
   void                *starting_address,
-  ssize_t              size,
+  size_t               size,
   uint32_t             page_size
 )
 {
@@ -206,10 +207,10 @@ uint32_t   _Heap_Initialize(
  * Convert user requested 'size' of memory block to the block size.
  * Return block size on success, 0 if overflow occured
  */
-ssize_t _Heap_Calc_block_size(
-  ssize_t   size,
-  uint32_t  page_size,
-  uint32_t  min_size)
+size_t _Heap_Calc_block_size(
+  size_t   size,
+  uint32_t page_size,
+  uint32_t min_size)
 {
   uint32_t block_size = size + HEAP_BLOCK_USED_OVERHEAD;
   _Heap_Align_up(&block_size, page_size);
