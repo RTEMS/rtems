@@ -17,8 +17,9 @@ libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
 
 # Some POSIX functions that are nice to always have
-libposix_a_SOURCES += src/sleep.c src/usleep.c src/nanosleep.c \
-    src/clockgettime.c src/clocksettime.c
+## 20 Nov 2008: Now using these from newlib's posix directory
+## libposix_a_SOURCES += src/sleep.c src/usleep.c 
+libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c
 
 if HAS_PTHREADS
 # include

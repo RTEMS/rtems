@@ -1,5 +1,11 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/Makefile.am, posix/Makefile.am: Comment out including
+	files which contain routines which are now provided by the newlib
+	posix subdirectory.  Document a few which come from the unix directory.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1340/cpukit
 	* sapi/inline/rtems/chain.inl: Add rtems_chain_initialize to public
 	chain API.

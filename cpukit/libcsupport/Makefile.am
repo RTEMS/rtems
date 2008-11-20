@@ -71,9 +71,14 @@ if LIBNETWORKING
 SYSTEM_CALL_C_FILES += src/readv.c src/writev.c
 endif
 
-DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
-    src/readdir_r.c src/rewinddir.c src/scandir.c src/seekdir.c \
-    src/telldir.c src/getcwd.c
+DIRECTORY_SCAN_C_FILES = 
+## 20 Nov 2008: Now using these from newlib's posix directory
+## DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
+##     src/rewinddir.c src/scandir.c src/seekdir.c src/telldir.c
+## Newlib SHOULD have provided this one
+DIRECTORY_SCAN_C_FILES += src/readdir_r.c
+## Comment out when using these from newlib's unix directory
+DIRECTORY_SCAN_C_FILES += src/getcwd.c
 
 ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/getlogin.c src/getpgrp.c src/getpid.c src/getppid.c src/getuid.c \
@@ -90,7 +95,11 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
-TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c
+TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c
+## 20 Nov 2008: Now using these from newlib's posix directory
+TERMINAL_IDENTIFICATION_C_FILES += src/isatty.c
+## Comment out when using these from newlib's unix directory
+TERMINAL_IDENTIFICATION_C_FILES += src/ttyname.c
 
 LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
