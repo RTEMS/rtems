@@ -1,3 +1,8 @@
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am: Add dummy vfork() implementation.
+	* posix/src/vfork.c: New file.
+
 2008-11-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1336/cpukit
