@@ -1,0 +1,15 @@
+#
+# $Id$
+#
+
+This BSP is designed to operate on the AVR Mega128 variants.
+
+It has only been run on the AVRTEST simulator.
+
+Download from sourceforge.net:
+
+cvs -d:pserver:anonymous@winavr.cvs.sourceforge.net:/cvsroot/winavr login
+cvs -z3 -d:pserver:anonymous@winavr.cvs.sourceforge.net:/cvsroot/winavr \
+   co -P avrtest
+
+
