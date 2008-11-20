@@ -1,3 +1,9 @@
+2008-11-20	Daron Chabot <daronchabot@gmail.com>
+
+	PR 1337/bsps
+	* custom/pc386.cfg: Stripping .rodata section produces unusable
+	executables for the i386-rtems target.
+
 2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Add h8sxsim BSP variant.
