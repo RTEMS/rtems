@@ -159,12 +159,13 @@ libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
     src/clockgetcpuclockid.c src/clockgetenableattr.c src/clockgetres.c \
     src/clocksetenableattr.c 
 
-# the timer manager needs to be split further but only after its
-# dependence on the Classic API Timer Manager is removed.
 ## TIMER_C_FILES
 libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
     src/timergetoverrun.c src/timergettime.c src/timersettime.c \
     src/timertsr.c src/timerinserthelper.c
+
+## ITIMER_C_FILES
+libposix_a_SOURCES += src/getitimer.c src/setitimer.c
 
 EXTRA_DIST += src/README.mqueue
 

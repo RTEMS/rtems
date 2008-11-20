@@ -23,9 +23,14 @@
  */
 
 #define SIGNAL_EMPTY_MASK  0x00000000
-#define SIGNAL_ALL_MASK    0xffffffff
+#define SIGNAL_ALL_MASK    0xffffffffL
 
-#define signo_to_mask( _sig ) (1 << ((_sig) - 1))
+static inline sigset_t signo_to_mask(
+  uint32_t sig
+)
+{
+  return (1 << sig) - 1;
+}
 
 #define is_valid_signo( _sig ) \
   ((_sig) >= 1 && (_sig) <= 32 )

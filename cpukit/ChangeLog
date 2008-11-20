@@ -1,5 +1,11 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/Makefile.am, posix/include/rtems/posix/psignal.h: Add stubs for
+	gettimer() and setitimer().
+	* posix/src/getitimer.c, posix/src/setitimer.c: New files.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am, posix/Makefile.am: Comment out including
 	files which contain routines which are now provided by the newlib
 	posix subdirectory.  Document a few which come from the unix directory.
