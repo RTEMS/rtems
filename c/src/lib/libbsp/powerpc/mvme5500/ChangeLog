@@ -1,3 +1,7 @@
+2008-11-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* README: Fix typo.
+
 2008-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate *_SOURCES.
