@@ -1,5 +1,11 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1306/cpukit
+	* posix/inline/rtems/posix/priority.inl: Eliminate hard coded numbers
+	in favor of existing macros.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/Makefile.am: Add dummy vfork() implementation.
 	* posix/src/vfork.c: New file.
 
