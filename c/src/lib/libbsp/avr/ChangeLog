@@ -1,4 +1,8 @@
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* .cvsignore: New file.
+
+2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ChangeLog, Makefile.am, acinclude.m4, configure.ac: New files.
 
