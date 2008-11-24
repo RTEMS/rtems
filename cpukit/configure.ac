@@ -52,6 +52,12 @@ AC_CHECK_FUNCS([strdup strndup strncasecmp])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
+# Newlib's posix directory
+AC_CHECK_FUNCS([opendir closedir readdir rewinddir scandir seekdir telldir isatty])
+
+# Newlib's unix/ directory
+AC_CHECK_FUNCS([ttyname getcwd])
+
 ## Check if the installed toolchain has these headers
 AC_CHECK_HEADER([tar.h])
 
