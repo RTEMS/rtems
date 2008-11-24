@@ -1,3 +1,15 @@
+2008-11-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1341/cpukit
+	* sapi/include/confdefs.h: The following macros were missing
+	the _Configure_From_workspace() wrapper on their size estimate:
+	  + CONFIGURE_INTERRUPT_STACK_MEMORY
+	  + CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API
+	  + CONFIGURE_INTERRUPT_VECTOR_TABLE
+	  + CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS
+	In addition, there was a duplicate definition of
+	CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API.
+
 2008-11-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1340/cpukit
