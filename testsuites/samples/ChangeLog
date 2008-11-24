@@ -1,3 +1,7 @@
+2008-11-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* paranoia/paranoia.c: Add missing prototypes.
+
 2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* unlimited/system.h: Tighten configuration for stack space.
