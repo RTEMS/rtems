@@ -346,7 +346,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
   #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
 #else
-  #define CONFIGURE_INTERRUPT_STACK_MEMORY CONFIGURE_INTERRUPT_STACK_SIZE
+  #define CONFIGURE_INTERRUPT_STACK_MEMORY \
+     _Configure_From_workspace( CONFIGURE_INTERRUPT_STACK_SIZE )
 #endif
 
 /**
@@ -809,10 +810,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifndef CONFIGURE_DISABLE_CLASSIC_NOTEPADS
     #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      sizeof(RTEMS_API_Control)
+      _Configure_From_workspace( sizeof(RTEMS_API_Control) )
   #else
     #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      (sizeof(RTEMS_API_Control) - (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
+      _Configure_From_workspace( sizeof(RTEMS_API_Control) - \
+        (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
   #endif
 
   /**
@@ -919,14 +921,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifndef CONFIGURE_TICKS_PER_TIMESLICE
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
-  #endif
-
-  #ifndef CONFIGURE_DISABLE_CLASSIC_NOTEPADS
-    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      sizeof(RTEMS_API_Control)
-  #else
-    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      (sizeof(RTEMS_API_Control) - (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
   #endif
 
 /*
@@ -1486,10 +1480,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  solution.
    */
   #if defined(__mips__)
-    #define CONFIGURE_INTERRUPT_VECTOR_TABLE (sizeof(ISR_Handler_entry) * 256)
+    #define CONFIGURE_INTERRUPT_VECTOR_TABLE \
+      _Configure_From_workspace( (sizeof(ISR_Handler_entry) * 256))
   #else
     #define CONFIGURE_INTERRUPT_VECTOR_TABLE \
-      (sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS)
+      _Configure_From_workspace( \
+        (sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS))
   #endif
 #else
   #define CONFIGURE_INTERRUPT_VECTOR_TABLE 0
@@ -1592,10 +1588,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  user extensions.
  */
 #define CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS \
-   _Configure_From_workspace( \
-     (CONFIGURE_NEWLIB_EXTENSION + CONFIGURE_STACK_CHECKER_EXTENSION) * \
-      sizeof(User_extensions_Control) \
-   )
+     ((CONFIGURE_NEWLIB_EXTENSION * \
+        _Configure_From_workspace( sizeof(User_extensions_Control))) + \
+      (CONFIGURE_STACK_CHECKER_EXTENSION * \
+        _Configure_From_workspace( sizeof(User_extensions_Control))) \
+     )
 
 /**
  *  This macro provides a summation of the memory required by the
