@@ -29,7 +29,7 @@ static inline sigset_t signo_to_mask(
   uint32_t sig
 )
 {
-  return (1 << sig) - 1;
+  return 1 << (sig - 1);
 }
 
 #define is_valid_signo( _sig ) \

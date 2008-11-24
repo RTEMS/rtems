@@ -1,3 +1,8 @@
+2008-11-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/rtems/posix/psignal.h: Fix typo in converting method
+	from macro to static inline.
+
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/Makefile.am, posix/include/rtems/posix/psignal.h: Add stubs for
