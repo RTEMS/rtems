@@ -118,7 +118,7 @@ void _Watchdog_Tickle(
          break;
      }
 
-	 _ISR_Disable( level );
+     _ISR_Disable( level );
 
      the_watchdog = _Watchdog_First( header );
    } while ( !_Chain_Is_empty( header ) &&

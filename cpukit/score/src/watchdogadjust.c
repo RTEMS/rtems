@@ -68,11 +68,11 @@ void _Watchdog_Adjust(
             units -= _Watchdog_First( header )->delta_interval;
             _Watchdog_First( header )->delta_interval = 1;
 
-			_ISR_Enable( level );
+            _ISR_Enable( level );
 
             _Watchdog_Tickle( header );
 
-			_ISR_Disable( level );
+            _ISR_Disable( level );
 
             if ( _Chain_Is_empty( header ) )
               break;
