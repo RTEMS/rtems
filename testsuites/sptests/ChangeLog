@@ -1,3 +1,8 @@
+2008-11-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp25/system.h: Add warning and temporary m32c conditional until size
+	type addressed.
+
 2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp09/screen07.c: Use INT_MAX as number of messages so always
