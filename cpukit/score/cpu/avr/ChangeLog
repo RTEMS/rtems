@@ -1,3 +1,9 @@
+2008-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.c: Add debug printk() calls until the BSP/port can
+	initialize and shutdown completely cleanly. When this works,
+	implement context switch. Testing on avrtest and simulavr.
+
 2008-09-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Do not define boolean, single_precision,

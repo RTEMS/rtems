@@ -33,6 +33,8 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
+  printk( "AVR CPU Initialize\n" );
+
   /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been

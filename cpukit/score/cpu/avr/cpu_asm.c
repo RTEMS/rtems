@@ -86,6 +86,7 @@ void _CPU_Context_switch(
   Context_Control  *heir
 )
 {
+  printk( "AVR _CPU_Context_switch\n" );
 }
 
 /*
@@ -105,6 +106,7 @@ void _CPU_Context_restore(
   Context_Control *new_context
 )
 {
+  printk( "AVR _CPU_Context_restore\n" );
 }
 
 /*  void __ISR_Handler()
