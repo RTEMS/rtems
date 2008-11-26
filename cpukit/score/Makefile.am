@@ -173,7 +173,8 @@ libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
-    src/watchdoginsert.c src/watchdogremove.c src/watchdogtickle.c
+    src/watchdoginsert.c src/watchdogremove.c src/watchdogtickle.c \
+    src/watchdogreport.c src/watchdogreportchain.c
 
 ## USEREXT_C_FILES
 libscore_a_SOURCES += src/userextaddapiset.c src/userextaddset.c \

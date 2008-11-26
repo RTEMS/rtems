@@ -1,3 +1,11 @@
+2008-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Makefile.am, score/include/rtems/score/watchdog.h: Add
+	_Watchdog_Report and _Watchdog_Report_chain as debug assist routines.
+	They are NOT to be used in directives.
+	* score/src/watchdogreport.c, score/src/watchdogreportchain.c:
+	New files.
+
 2008-11-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/watchdogadjust.c, score/src/watchdogtickle.c: Spacing.

@@ -240,9 +240,47 @@ void _Watchdog_Insert (
  *
  *  @param[in] header is the watchdog chain to tickle
  */
-
 void _Watchdog_Tickle (
   Chain_Control *header
+);
+
+/**
+ *  @brief Report Information on a Single Watchdog Instance
+ *
+ *  This method prints a one line report on the watchdog instance
+ *  provided.  The @a name may be used to identify the watchdog and
+ *  a space will be printed after @a name if it is not NULL.
+ *
+ *  @param[in] name is a string to prefix the line with.  If NULL,
+ *             nothing is printed.
+ *  @param[in] watch is the watchdog instance to be printed.
+ *
+ *  @note This is a debug routine.  It uses printk() and prudence should
+ *        exercised when using it.
+ */
+void _Watchdog_Report(
+  const char        *name,
+  Watchdog_Control  *watch
+);
+
+/**
+ *  @brief Report Information on a Watchdog Chain
+ *
+ *  This method prints report on the watchdog chain provided.
+ *  The @a name may be used to identify the watchdog chain and
+ *  a space will be printed after @a name if it is not NULL.
+ *
+ *  @param[in] name is a string to prefix the line with.  If NULL,
+ *             nothing is printed.
+ *  @param[in] watch is the watchdog chain to be printed.
+ *
+ *  @note This is a debug routine.  It uses printk() and prudence should
+ *        exercised when using it.  It also disables interrupts so the
+ *        chain can be traversed in a single atomic pass.
+ */
+void _Watchdog_Report_chain(
+  const char        *name,
+  Chain_Control     *header
 );
 
 #ifndef __RTEMS_APPLICATION__
