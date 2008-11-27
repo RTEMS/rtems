@@ -37,8 +37,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define rpmvers 1.10.1
-%define srcvers	1.10.1
+%define rpmvers 1.10.2
+%define srcvers	1.10.2
 %define amvers  1.10
 
 %define name			rtems-4.10-automake
@@ -49,7 +49,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	3%{?dist}
+Release:	1%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 Obsoletes:	rtems-4.10-automake-rtems < %{version}-%{release}
