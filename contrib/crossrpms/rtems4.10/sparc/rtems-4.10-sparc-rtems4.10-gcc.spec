@@ -42,7 +42,7 @@
 %define gcc_version 4.3.2
 %define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
-%define newlib_pkgvers		1.16.0.cvs.20081127
+%define newlib_pkgvers		1.16.0.cvs.20081128
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
@@ -53,7 +53,7 @@ Summary:      	sparc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	15%{?dist}
+Release:      	16%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -118,7 +118,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 %if "%{newlib_version}" == "1.16.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081127.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081128.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
