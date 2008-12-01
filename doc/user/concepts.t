@@ -119,7 +119,7 @@ void print_name(rtems_id the_object)
 @need 3000
 
 An object ID is a unique unsigned thirty-two bit
-entity composed of three parts: API, object class, node, and index.
+entity composed of four parts: API, object class, node, and index.
 The data type @code{@value{DIRPREFIX}id} is used to store object IDs.
 
 
