@@ -1,5 +1,10 @@
 2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libfs/Makefile.am: Add stub for devide filesystem for unix port.
+	* libfs/src/devfs/devfs_unixstub.c: New file.
+
+2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/include/rtems/rtems/region.h,
 	rtems/include/rtems/rtems/support.h,
 	rtems/src/regiongetsegmentsize.c, rtems/src/regionresizesegment.c,

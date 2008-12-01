@@ -19,7 +19,7 @@ noinst_LIBRARIES = libimfs.a
 libimfs_a_SOURCES =
 
 if UNIX
-libimfs_a_SOURCES += src/imfs/imfs_unixstub.c
+libimfs_a_SOURCES += src/imfs/imfs_unixstub.c src/devfs/devfs_unixstub.c
 else
 libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_directory.c src/imfs/imfs_eval.c \
