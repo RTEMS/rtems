@@ -1,3 +1,7 @@
+2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/datatypes.t: Add C99 uint types.
+
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1340/cpukit
