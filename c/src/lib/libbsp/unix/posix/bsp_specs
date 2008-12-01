@@ -2,7 +2,7 @@
 
 *lib:
 %{!qrtems: %(old_lib)} \
-%{qrtems: -lrtemsbsp -lrtemscpu \
+%{qrtems: --start-group -lrtemsbsp -lrtemscpu --end-group \
 %(old_lib) \
 %{qnolinkcmds: } }
 

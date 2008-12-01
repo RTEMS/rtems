@@ -1,3 +1,7 @@
+2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bsp_specs, startup/bspgetworkarea.c: Links hello again.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspgetworkarea.c: Change size_t to ssize_t on

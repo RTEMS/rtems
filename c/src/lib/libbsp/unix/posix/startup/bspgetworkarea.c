@@ -12,6 +12,7 @@
 #include <bsp.h>
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
+#include <bsp/bootcard.h>
 
 void bsp_get_work_area(
   void    **work_area_start,
