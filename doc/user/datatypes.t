@@ -297,4 +297,30 @@ entry point of the function implementing the TSR.
 @item @code{@value{DIRPREFIX}vector_number} is the data
 type used to manage and manipulate interrupt vector numbers.
 
+@findex uint8_t
+@item @code{uint8_t} is the C99 data type that corresponds to unsigned
+eight bit integers.  This data type is defined by RTEMS in a manner that
+ensures it is portable across different target processors.
+
+@findex uint16_t
+@item @code{uint16_t} is the C99 data type that corresponds to unsigned
+sixteen bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
+
+@findex uint32_t
+@item @code{uint32_t} is the C99 data type that corresponds to unsigned
+thirty-two bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
+
+@findex uint64_t
+@item @code{uint64_t} is the C99 data type that corresponds to unsigned
+sixty-four bit integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
+
+@findex uintptr_t
+@item @code{uintptr_t} is the C99 data type that corresponds to the
+unsigned integer type that is of sufficient size to represent addresses
+as unsigned integers.  This data type is defined by RTEMS in a manner
+that ensures it is portable across different target processors.
+
 @end itemize
