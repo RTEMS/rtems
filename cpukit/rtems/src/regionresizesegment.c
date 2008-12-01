@@ -46,8 +46,8 @@
 rtems_status_code rtems_region_resize_segment(
   Objects_Id  id,
   void       *segment,
-  ssize_t     size,
-  ssize_t    *old_size
+  size_t      size,
+  size_t     *old_size
 )
 {
   uint32_t                 avail_size;

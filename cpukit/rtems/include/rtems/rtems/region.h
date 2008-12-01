@@ -66,53 +66,14 @@ extern "C" {
  */
 
 typedef struct {
-  /**
-   * This field is the object management portion of a Region instance.
-   */
   Objects_Control       Object;
-
-  /**
-   * This is the set of threads blocked waiting on memory.
-   */
-  Thread_queue_Control  Wait_queue;
-
-  /**
-   * This is the physical starting address of the Region area.
-   */
-  void                 *starting_address;
-
-  /**
-   * This is the physical length (in bytes) of the Region memory.
-   */
-  uint32_t              length;
-
-  /**
-   * This is the physical page size (in bytes) of each allocated segment.
-   */
-  uint32_t              page_size;
-
-  /**
-   * This is the maximum segment size (in bytes) that can ever be allocated
-   * from this Region.  It is calculated at creation time.
-   */
-  uint32_t              maximum_segment_size;
-
-  /**
-   *  This is the Classic API attribute provided to the create directive.
-   *  It is translated into behavioral attributes on the SuperCore Heap
-   *  instance.
-   */
+  Thread_queue_Control  Wait_queue;            /* waiting threads        */
+  void                 *starting_address;      /* physical start addr    */
+  uint32_t              length;                /* physical length(bytes) */
+  uint32_t              page_size;             /* in bytes               */
+  uint32_t              maximum_segment_size;  /* in bytes               */
   rtems_attribute       attribute_set;
-
-  /**
-   * This is the number of blocks currently allocated from this Region.
-   */
-  uint32_t              number_of_used_blocks;
-
-  /**
-   * This is the Heap instance which implements the core functionality
-   * of a Region instance.
-   */
+  uint32_t              number_of_used_blocks; /* blocks allocated       */
   Heap_Control          Memory;
 }  Region_Control;
 
@@ -240,7 +201,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  ssize_t           *size
+  size_t            *size
 );
 
 /**
@@ -282,8 +243,8 @@ rtems_status_code rtems_region_return_segment(
 rtems_status_code rtems_region_resize_segment(
   Objects_Id  id,
   void       *segment,
-  ssize_t     size,
-  ssize_t    *old_size
+  size_t      size,
+  size_t     *old_size
 );
 
 #ifndef __RTEMS_APPLICATION__

@@ -79,8 +79,8 @@ bool rtems_workspace_get_information(
  *  @return TRUE if successful
  */
 bool rtems_workspace_allocate(
-  ssize_t   bytes,
-  void    **pointer
+  size_t   bytes,
+  void   **pointer
 );
 
 /**

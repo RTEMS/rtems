@@ -1,3 +1,10 @@
+2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems/rtems/region.h,
+	rtems/include/rtems/rtems/support.h,
+	rtems/src/regiongetsegmentsize.c, rtems/src/regionresizesegment.c,
+	rtems/src/workspace.c: Revert ssize_t patch.
+
 2008-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/Makefile.am, score/include/rtems/score/watchdog.h: Add
