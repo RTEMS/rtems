@@ -24,7 +24,7 @@ COMMON_FILES += \
     $(top_builddir)/user/overview.texi $(top_builddir)/user/part.texi \
     $(top_builddir)/user/preface.texi $(top_builddir)/user/region.texi \
     $(top_builddir)/user/rtmon.texi $(top_builddir)/user/schedule.texi \
-    $(top_builddir)/user/sem.texi $(top_builddir)/user/signal.texi \
+    $(top_builddir)/user/sem.textexii $(top_builddir)/user/signal.texi \
     $(top_builddir)/user/task.texi $(top_builddir)/user/timer.texi \
     $(top_builddir)/user/userext.texi $(top_builddir)/user/stackchk.texi \
     $(top_builddir)/user/cpuuse.texi $(top_srcdir)/common/cpright.texi \
@@ -32,6 +32,8 @@ COMMON_FILES += \
 
 FILES = example.texi
 
+ObjectId-16Bits.eps: $(top_srcdir)/user/ObjectId-16Bits.eps
+	$(LN_S) $<
 ObjectId-32Bits.eps: $(top_srcdir)/user/ObjectId-32Bits.eps
 	$(LN_S) $<
 rtemspie.eps: $(top_srcdir)/user/rtemspie.eps
@@ -41,6 +43,8 @@ states.eps: $(top_srcdir)/user/states.eps
 CLEANFILES += rtemspie.eps states.eps rtemsarc.png rtemspie.png states.png \
     ObjectId-32Bits.png
 
+ObjectId-16Bits.png: $(top_srcdir)/user/ObjectId-16Bits.png
+	$(LN_S) $<
 ObjectId-32Bits.png: $(top_srcdir)/user/ObjectId-32Bits.png
 	$(LN_S) $<
 rtemsarc.png: $(top_srcdir)/user/rtemsarc.png
@@ -54,10 +58,12 @@ info_TEXINFOS = ada_user.texi
 ada_user_TEXINFOS = $(FILES) $(COMMON_FILES)
 
 if USE_HTML
-html_project_DATA += rtemsarc.png rtemspie.png states.png ObjectId-32Bits.png
+html_project_DATA += rtemsarc.png rtemspie.png states.png \
+    ObjectId-16Bits.png ObjectId-32Bits.png
 endif
 
-$(PROJECT).dvi: rtemspie.eps states.eps ObjectId-32Bits.eps
+$(PROJECT).dvi: rtemspie.eps states.eps ObjectId-16Bits.eps \
+    ObjectId-32Bits.eps
 PDF_IMAGES = rtemspie.pdf states.pdf
 
 CLEANFILES += ada_user.info ada_user.info-? ada_user.info-??

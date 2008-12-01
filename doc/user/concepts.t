@@ -118,9 +118,22 @@ void print_name(rtems_id the_object)
 
 @need 3000
 
-An object ID is a unique unsigned thirty-two bit
-entity composed of three parts: API, object class, node, and index.
-The data type @code{@value{DIRPREFIX}id} is used to store object IDs.
+An object ID is a unique unsigned integer value which uniquely identifies
+an object instance.  Object IDs are passed as arguments to many directives
+in RTEMS and RTEMS translates the ID to an internal object pointer. The
+efficient manipulation of object IDs is critical to the performance
+of RTEMS services.  Because of this, there are two object Id formats
+defined.  Each target architecture specifies which format it will use.
+There is a thirty-two bit format which is used for most of the supported
+architectures and supports multiprocessor configurations.  There is also
+a simpler sixteen bit format which is appropriate for smaller target
+architectures and does not support multiprocessor configurations.
+
+@subsubsection Thirty-Two Object ID Format
+
+The thirty-two bit format for an object ID is composed of four parts: API,
+object class, node, and index.  The data type @code{@value{DIRPREFIX}id}
+is used to store object IDs.
 
 
 @ifset use-ascii
@@ -157,7 +170,49 @@ identifier within a particular object type.  This identifier,
 called the object index, ranges in value from 1 to the maximum
 number of objects configured for this object type.
 
-The four components of an object ID make it possible
+@subsubsection Sixteen Bit Object ID Format
+
+The sixteen bit format for an object ID is composed of three parts: API,
+object class, and index.  The data type @code{@value{DIRPREFIX}id}
+is used to store object IDs.
+
+
+@ifset use-ascii
+@example
+@group
+     15      11 10    8 7            0
+     +---------+-------+--------------+
+     |         |       |              |
+     |  Class  |  API  |    Index     |
+     |         |       |              |
+     +---------+-------+--------------+
+@end group
+@end example
+@end ifset
+
+@ifset use-tex
+@sp1
+@center{@image{ObjectId-16Bits,,2in}}
+@end ifset
+
+@ifset use-html
+@html
+<P ALIGN="center"><IMG SRC="ObjectId-16Bits.png"
+     WIDTH=550 HEIGHT=400 ALT="16 Bit Object Id"></P>
+@end html
+@end ifset
+
+The sixteen-bit format is designed to be as similar as possible to the
+thrity-two bit format.  The differences are limited to the eliminatation
+of the node field and reduction of the index field from sixteen-bits
+to 8-bits.  Thus the sixteen bit format only supports up to 255 object
+instances per API/Class combination and single processor systems.
+As this format is typically utilized by sixteen-bit processors with
+limited address space, this is more than enough object instances.
+
+@subsection Object ID Description
+
+The components of an object ID make it possible
 to quickly locate any object in even the most complicated
 multiprocessor system.  Object ID's are associated with an
 object by RTEMS when the object is created and the corresponding
