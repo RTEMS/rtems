@@ -205,6 +205,17 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif /* CONFIGURE_INIT */
 
 #ifdef CONFIGURE_INIT
+  /**
+   *  This disables the inclusion of pipe support in the full IMFS.
+   */
+  #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+    #if defined(CONFIGURE_PIPES_ENABLED)
+      bool rtems_pipe_configured = true;
+    #else
+      bool rtems_pipe_configured = false;
+    #endif
+  #endif
+
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
     const rtems_filesystem_mount_table_t configuration_mount_table = {
       #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM

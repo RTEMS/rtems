@@ -1,3 +1,9 @@
+2008-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Add disable of pipes by default since they
+	use resources which are otherwise not accounted for. Eventually the
+	resources will have to be properly configured.
+
 2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* libfs/Makefile.am: Add stub for devide filesystem for unix port.
