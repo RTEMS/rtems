@@ -461,10 +461,10 @@ typedef struct AuxFrame_ {
 /* MUST make sure this is called in a new frame so it
  * uses the new stack
  */
-static void trampo(void (*pc)(), jmp_buf *pjb)
+void trampo(void (*pc)(), jmp_buf *pjb)
 __attribute__((noinline));
 
-static void trampo(void (*pc)(), jmp_buf *pjb)
+void trampo(void (*pc)(), jmp_buf *pjb)
 {
 	if ( setjmp( *pjb ) )
 		pc();
