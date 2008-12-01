@@ -24,7 +24,7 @@ COMMON_FILES += \
     $(top_builddir)/user/overview.texi $(top_builddir)/user/part.texi \
     $(top_builddir)/user/preface.texi $(top_builddir)/user/region.texi \
     $(top_builddir)/user/rtmon.texi $(top_builddir)/user/schedule.texi \
-    $(top_builddir)/user/sem.textexii $(top_builddir)/user/signal.texi \
+    $(top_builddir)/user/sem.texi $(top_builddir)/user/signal.texi \
     $(top_builddir)/user/task.texi $(top_builddir)/user/timer.texi \
     $(top_builddir)/user/userext.texi $(top_builddir)/user/stackchk.texi \
     $(top_builddir)/user/cpuuse.texi $(top_srcdir)/common/cpright.texi \

@@ -1,5 +1,9 @@
 2008-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* ada_user/Makefile.am: Fix typo.
+
+2008-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* ada_user/Makefile.am, user/Makefile.am, user/concepts.t: Add 16 bit
 	object Id format information.
 	* user/ObjectId-16Bits.eps, user/ObjectId-16Bits.png: New files.
