@@ -1,5 +1,10 @@
 2008-12-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/src/ttyname.c: Correct prototype of ttyname_r() to use
+	size_t for third parameter.
+
+2008-12-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libmisc/shell/main_cp.c, libmisc/shell/main_ls.c,
 	libmisc/shell/main_mv.c, libmisc/shell/main_netstats.c,
 	libmisc/shell/main_rm.c, libmisc/shell/shell_script.c: Add #define

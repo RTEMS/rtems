@@ -59,9 +59,9 @@ static char ttyname_buf[sizeof (_PATH_DEV) + MAXNAMLEN] = _PATH_DEV;
  *  ttyname_r() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name
  */
 int ttyname_r(
-  int   fd,
-  char *name,
-  int   namesize
+  int     fd,
+  char   *name,
+  size_t  namesize
 )
 {
   struct stat sb;
