@@ -1,3 +1,11 @@
+2008-12-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libmisc/shell/main_cp.c, libmisc/shell/main_ls.c,
+	libmisc/shell/main_mv.c, libmisc/shell/main_netstats.c,
+	libmisc/shell/main_rm.c, libmisc/shell/shell_script.c: Add #define
+	__need_getopt_newlib to enable getopt_r() support in newlib as
+	required by 4.10 toolset.
+
 2008-11-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1341/cpukit
