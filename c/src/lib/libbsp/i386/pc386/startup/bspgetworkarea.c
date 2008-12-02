@@ -74,11 +74,9 @@ void bsp_size_memory(void)
        (_boot_multiboot_info.flags & 1) &&
        _boot_multiboot_info.mem_upper ) {
     bsp_mem_size = _boot_multiboot_info.mem_upper * 1024;
-    printk( "multiboot\n" );
   }
 
   if ( (uintptr_t) RamSize == (uintptr_t) 0xFFFFFFFF ) {
-    printk( "sizing\n" );
     /*
      * We have to dynamically size memory. Memory size can be anything
      * between no less than 2M and 2048M.
