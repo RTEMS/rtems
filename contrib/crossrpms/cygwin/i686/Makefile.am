@@ -54,7 +54,7 @@ BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20080604.1%{?dist}
+GCC_RPMREL = 0.20081202.1%{?dist}
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
 GCC_OPTS += --disable-infos
