@@ -47,8 +47,8 @@ include ../mpfr.am
 # Cygwin's binutils' versioning is bizarre
 # Check bfd/configure for the real version number
 BINUTILS_VERS = 2.18.50
-BINUTILS_PKGVERS = 20080523-1
-BINUTILS_RPMREL = 0.20080604.1%{?dist}
+BINUTILS_PKGVERS = 20080624-2
+BINUTILS_RPMREL = 0.20081202.1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
