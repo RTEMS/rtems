@@ -1,3 +1,9 @@
+2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1346/cpukit
+	* rtems/include/rtems/rtems/ratemon.h: Sense of rate monotonic
+	statistics nanoseconds or ticks granularity conditional is backwards.
+
 2008-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/pipe/fifo.c: Actually disable initializing pipes as

@@ -55,7 +55,7 @@ extern "C" {
  *  The user can define this at configure time and go back to ticks
  *  resolution.
  */
-#if defined(__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__)
+#if !defined(__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__)
   /**
    *  Enable the nanosecond accurate statistics
    *
@@ -374,7 +374,7 @@ void _Rate_monotonic_Timeout(
 );
 
 /**
- *  @brief _Rate_monotonic_Reset_statistics
+ *  @brief _Rate_monotonic_Reset_wall_time_statistics
  *
  *  This method resets the statistics information for a period instance.
  */
