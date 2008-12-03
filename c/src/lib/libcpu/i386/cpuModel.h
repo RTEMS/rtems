@@ -31,4 +31,18 @@ extern unsigned char Cx86_step; /* cyrix processor identification */
 
 extern void printCpuInfo(); /* Display this information on console in ascii form */
 
+/* determine if the CPU has a TSC */
+#define x86_has_tsc() \
+  (x86_capability & (1 << 4))
+
+static inline unsigned long long
+rdtsc(void)
+{
+  /* Return the value of the on-chip cycle counter. */
+  unsigned long long result;
+  asm volatile(".byte 0x0F, 0x31" : "=A" (result));
+  return result;
+} /* rdtsc */
+
+
 #endif
