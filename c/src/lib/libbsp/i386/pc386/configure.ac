@@ -46,6 +46,41 @@ RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
  before rebooting the PC.  This is useful for unattended PC deployments
 ])
 
+RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_TSC],[*],[0])
+RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_TSC],
+[If enabled, the clock driver will use the TSC register available
+ with Pentium-class CPUs to report close to nanosecond-accuracy
+ clock times.
+ Enable it, if:
+ - you have nanosecond timing enabled (you do NOT have
+   USE_TICKS_FOR_CPU_USAGE_STATISTICS enabled)
+ - you do NOT have CLOCK_DRIVER_USE_8254 enabled (use one, the other,
+   or neither)
+ - you have a Pentium which supports TSC (all Intels, and probably
+   all or most clones)
+ - you do not have a variable-speed CPU clock. Note that some
+   motherboard BIOS will automatically vary clock speed for thermal
+   control. Note also, however, that really new Pentium-class chips
+   from Intel and AMD will maintain a constant-rate TSC regardless.
+])
+
+RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_8254],[*],[0])
+RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_8254],
+[If enabled, the clock driver will use the good old 8254 chip
+ to report microsecond-accuracy clock times.
+ Enable it, if:
+ - you have nanosecond timing enabled (you do NOT have
+   USE_TICKS_FOR_CPU_USAGE_STATISTICS enabled)
+ - you do NOT have CLOCK_DRIVER_USE_TSC enabled (use one, the other,
+   or neither)
+ - you do not mind adding roughly 5 microseconds to each context switch.
+])
+
+if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
+  AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
+fi
+
+#define CLOCK_DRIVER_USE_8254 $CLOCK_DRIVER_USE_8254
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])
