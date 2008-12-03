@@ -1,0 +1,15 @@
+
+
+*** TEST 45 ***
+INIT - rtems_timer_create - creating timer 1
+INIT - timer 1 has id (0x12010001)
+INIT - rtems_timer_create - creating timer 2
+INIT - timer 2 has id (0x12010002)
+TA1 - rtems_timer_server_fire_after - timer 1 in 1 seconds
+TA1 - rtems_task_wake_after - 2 second
+TSR: calling malloc
+TSR: calling free
+TSR: delaying with rtems_task_wake_after
+TSR appears to have executed OK
+TA1 - timer_deleting - timer 1
+*** END OF TEST 45 *** 

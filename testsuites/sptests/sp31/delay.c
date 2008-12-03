@@ -27,5 +27,5 @@ rtems_timer_service_routine Delayed_resume(
   rtems_status_code status;
 
   status = rtems_task_resume( Task_id[ 1 ] );
-  directive_failed_with_level( status, "rtems_task_resume of self", 1 );
+  directive_failed( status, "rtems_task_resume of self" );
 }
