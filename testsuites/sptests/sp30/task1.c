@@ -36,7 +36,7 @@ rtems_task Task_1_through_3(
       Timer_id[ argument ],
       (task_number( tid ) - 1) * 5 * TICKS_PER_SECOND,
       Resume_task,
-      NULL
+      (void *) tid
     );
     directive_failed( status, "rtems_timer_server_fire_after failed" );
 

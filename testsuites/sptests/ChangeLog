@@ -1,3 +1,12 @@
+2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1347/cpukit
+	* Makefile.am, configure.ac, sp30/resume.c, sp30/task1.c, sp31/delay.c:
+	Rework Timer Server to ensure that the context allows for blocking,
+	allocating memory, and acquiring semaphores and mutexes.
+	* sp45/.cvsignore, sp45/Makefile.am, sp45/sp45.doc, sp45/sp45.scn:
+	New files.
+
 2008-11-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp25/system.h: Add warning and temporary m32c conditional until size
