@@ -1,3 +1,10 @@
+2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+		Michael South <msouth@msouth.org>
+
+	PR 1344/bsps
+	* cpuModel.h: Add use of TSC for nanoseconds granularity. i8254 is very
+	slow on some systems. TSC use is auto-detected by default.
+
 2008-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* cache.c, displayCpu.c, page.c: Add missing prototypes.
