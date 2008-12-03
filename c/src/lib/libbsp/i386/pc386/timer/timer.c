@@ -42,6 +42,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <libcpu/cpuModel.h>
 
 /*-------------------------------------------------------------------------+
 | Constants
@@ -59,18 +60,18 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 volatile uint32_t         Ttimer_val;
-bool    	  benchmark_timer_find_average_overhead = true;
+bool    	          benchmark_timer_find_average_overhead = true;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
-void (*benchmark_timer_initialize_function)(void) = 0;
+
+void     (*benchmark_timer_initialize_function)(void) = 0;
 uint32_t (*benchmark_timer_read_function)(void) = 0;
-void (*Timer_exit_function)(void) = 0;
+void     (*Timer_exit_function)(void) = 0;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
 extern void timerisr(void);
        /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
-extern int x86_capability;
 
 /*
  * forward declarations
@@ -81,22 +82,6 @@ void Timer_exit(void);
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
 +--------------------------------------------------------------------------*/
-
-/*-------------------------------------------------------------------------+
-|         Function: rdtsc
-|      Description: Read the value of PENTIUM on-chip cycle counter.
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Value of PENTIUM on-chip cycle counter.
-+--------------------------------------------------------------------------*/
-static inline unsigned long long
-rdtsc(void)
-{
-  /* Return the value of the on-chip cycle counter. */
-  unsigned long long result;
-  asm volatile(".byte 0x0F, 0x31" : "=A" (result));
-  return result;
-} /* rdtsc */
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
@@ -288,7 +273,7 @@ benchmark_timer_initialize(void)
     static bool First = true;
 
     if (First) {
-        if (x86_capability & (1 << 4) ) {
+        if (x86_has_tsc()) {
 #if defined(DEBUG)
             printk("TSC: timer initialization\n");
 #endif /* DEBUG */
