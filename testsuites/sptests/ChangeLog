@@ -1,3 +1,7 @@
+2008-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp45/init.c: New file.
+
 2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1347/cpukit
