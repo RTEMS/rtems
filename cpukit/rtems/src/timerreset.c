@@ -56,11 +56,12 @@ rtems_status_code rtems_timer_reset(
           _Watchdog_Insert( &_Watchdog_Ticks_chain, &the_timer->Ticker );
           break;
         case TIMER_INTERVAL_ON_TASK:
-          _Timer_Server_stop_ticks_timer();
+          if ( !_Timer_Server_schedule_operation ) {
+            _Thread_Enable_dispatch();
+            return RTEMS_INCORRECT_STATE;
+          }
           _Watchdog_Remove( &the_timer->Ticker );
-          _Timer_Server_process_ticks_chain();
-          _Watchdog_Insert( &_Timer_Ticks_chain, &the_timer->Ticker );
-          _Timer_Server_reset_ticks_timer();
+          (*_Timer_Server_schedule_operation)( the_timer );
           break;
         case TIMER_TIME_OF_DAY:
         case TIMER_TIME_OF_DAY_ON_TASK:

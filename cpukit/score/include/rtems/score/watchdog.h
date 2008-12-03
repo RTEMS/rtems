@@ -220,6 +220,25 @@ void _Watchdog_Adjust (
   Watchdog_Interval           units
 );
 
+/** @brief Watchdog Adjust to Chain
+ *
+ *  This routine adjusts the @a header watchdog chain in the forward
+ *  @a direction for @a units_arg ticks.
+ *
+ *  @param[in] header is the watchdog chain to adjust
+ *  @param[in] units is the number of units to adjust @a header
+ *  @param[in] to_fire is a pointer to an initialized Chain_Control to which
+ *             all watchdog instances that are to be fired will be placed.
+ *
+ *  @note This always adjusts forward.
+ */
+void _Watchdog_Adjust_to_chain(
+  Chain_Control               *header,
+  Watchdog_Interval            units_arg,
+  Chain_Control               *to_fire
+
+);
+
 /** @brief Watchdog Insert
  *
  *  This routine inserts @a the_watchdog into the @a header watchdog chain

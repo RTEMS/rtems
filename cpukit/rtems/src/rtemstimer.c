@@ -62,4 +62,5 @@ void _Timer_Manager_initialization(
    */
 
   _Timer_Server = NULL;
+  _Timer_Server_schedule_operation = NULL;
 }

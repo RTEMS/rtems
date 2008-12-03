@@ -1,5 +1,16 @@
 2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	PR 1347/cpukit
+	* rtems/include/rtems/rtems/timer.h, rtems/src/rtemstimer.c,
+	rtems/src/timerreset.c, rtems/src/timerserver.c,
+	rtems/src/timerserverfireafter.c, rtems/src/timerserverfirewhen.c,
+	score/Makefile.am, score/include/rtems/score/watchdog.h: Rework Timer
+	Server to ensure that the context allows for blocking, allocating
+	memory, and acquiring semaphores and mutexes.
+	* score/src/watchdogadjusttochain.c: New file.
+
+2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	PR 1346/cpukit
 	* rtems/include/rtems/rtems/ratemon.h: Sense of rate monotonic
 	statistics nanoseconds or ticks granularity conditional is backwards.

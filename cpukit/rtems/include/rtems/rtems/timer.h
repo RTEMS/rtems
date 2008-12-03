@@ -58,7 +58,12 @@ extern "C" {
 /**
  *  @defgroup ClassicTimer Classic API Timer
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the Classic API Timer
+ *  Manager.  This manager provides functionality which allows the
+ *  application to schedule the execution of methods at a specified
+ *  time in the future.  These methods may be scheduled based upon
+ *  interval or wall time and may be executed in either the clock tick
+ *  ISR or in a special dedicated timer server task.
  */
 /**@{*/
 
@@ -126,32 +131,6 @@ RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
 RTEMS_TIMER_EXTERN Thread_Control *_Timer_Server;
 
 /**
- *  This chain contains the list of interval timers that are
- *  executed in the context of the Timer Server.
- *
- *  @note This is extern'ed because they do not have to be in the
- *        minimum footprint.  It is only really required when
- *        task-based timers are used.  Since task-based timers can
- *        not be started until the server is initiated, this structure
- *        does not have to be initialized until then.  This is declared
- *        in the same file as _Timer_Server_body.
- */
-extern Chain_Control _Timer_Ticks_chain;
-
-/**
- *  This chain contains the list of time of day timers that are
- *  executed in the context of the Timer Server.
- *
- *  @note This is extern'ed because they do not have to be in the
- *        minimum footprint.  It is only really required when
- *        task-based timers are used.  Since task-based timers can
- *        not be started until the server is initiated, this structure
- *        does not have to be initialized until then.  This is declared
- *        in the same file as _Timer_Server_body.
- */
-extern Chain_Control _Timer_Seconds_chain;
-
-/**
  *  The following records define the control block used to manage
  *  each timer.
  */
@@ -171,18 +150,6 @@ typedef struct {
  */
 void _Timer_Manager_initialization(
   uint32_t   maximum_timers
-);
-
-/**
- *  @brief _Timer_Server_body
- *
- *  This is the server for task based timers.  This task executes whenever
- *  a task-based timer should fire.  It services both "after" and "when"
- *  timers.  It is not created automatically but must be created explicitly
- *  by the application before task-based timers may be initiated.
- */
-Thread _Timer_Server_body(
-  uint32_t   ignored
 );
 
 /**
@@ -353,63 +320,19 @@ rtems_status_code rtems_timer_get_information(
 );
 
 /**
- *  Macros and routines that expose the mechanisms required to service
- *  the Timer Server timer.  These stop the timer, synchronize it with
- *  the current time, and restart it.
+ *  This type defines the method used to schedule the insertion of task
+ *  based timers.
  */
-extern Watchdog_Control _Timer_Seconds_timer;
+typedef void (*Timer_Server_schedule_operation_t)(
+  Timer_Control     *the_timer
+);
 
 /**
- *  This method is used to temporarily disable updates to the 
- *  Ticks Timer Chain managed by the Timer Server.
+ *  This variable will point to the schedule operation method once the
+ *  timer server is initialized.
  */
-#define _Timer_Server_stop_ticks_timer() \
-      _Watchdog_Remove( &_Timer_Server->Timer )
-
-/**
- *  This method is used to temporarily disable updates to the 
- *  Seconds Timer Chain managed by the Timer Server.
- */
-#define _Timer_Server_stop_seconds_timer() \
-      _Watchdog_Remove( &_Timer_Seconds_timer );
-
-/**
- *  This is a helper function which processes the ticks chain when
- *  needed.  It advances time for the ticks chain which results in
- *  timers firing.
- */
-void _Timer_Server_process_ticks_chain(void);
-
-/**
- *  This is a helper function which processes the seconds chain when
- *  needed.  It advances time for the seconds chain which results in
- *  timers firing.
- */
-void _Timer_Server_process_seconds_chain(void);
-
-/**
- *  This method resets a timer and places it on the Ticks chain.  It
- *  is assumed that the timer has already been canceled.
- */
-#define _Timer_Server_reset_ticks_timer() \
-   do { \
-      if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) { \
-        _Watchdog_Insert_ticks( &_Timer_Server->Timer, \
-           ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval ); \
-      } \
-   } while (0)
-
-/**
- *  This method resets a timer and places it on the Seconds chain.  It
- *  is assumed that the timer has already been canceled.
- */
-#define _Timer_Server_reset_seconds_timer() \
-   do { \
-      if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) { \
-        _Watchdog_Insert_seconds( &_Timer_Seconds_timer, \
-          ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval ); \
-      } \
-   } while (0)
+RTEMS_TIMER_EXTERN Timer_Server_schedule_operation_t
+  _Timer_Server_schedule_operation;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/timer.inl>

@@ -92,10 +92,12 @@ rtems_status_code rtems_timer_server_fire_after(
         the_timer->Ticker.initial = ticks;
       _ISR_Enable( level );
 
-      _Timer_Server_stop_ticks_timer();
-      _Timer_Server_process_ticks_chain();
-      _Watchdog_Insert( &_Timer_Ticks_chain, &the_timer->Ticker );
-       _Timer_Server_reset_ticks_timer();
+      /*
+       * _Timer_Server_schedule_operation != NULL because we checked that
+       * _Timer_Server was != NULL above.  Both are set at the same time.
+       */
+
+      (*_Timer_Server_schedule_operation)( the_timer );
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
