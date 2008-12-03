@@ -22,6 +22,7 @@
 
 extern uint16_t rtems_pipe_no;
 static rtems_id rtems_pipe_semaphore = 0;
+extern bool rtems_pipe_configured;
 
 
 #define PIPE_EMPTY(_pipe) (_pipe->Length == 0)
@@ -534,6 +535,9 @@ int pipe_lseek(
  */
 void rtems_pipe_initialize (void)
 {
+  if (!rtems_pipe_configured)
+    return;
+
   if (rtems_pipe_semaphore)
     return;
 

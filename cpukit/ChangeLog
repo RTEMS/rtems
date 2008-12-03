@@ -1,3 +1,8 @@
+2008-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/pipe/fifo.c: Actually disable initializing pipes as
+	requested in confdefs.h.
+
 2008-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Add disable of pipes by default since they
