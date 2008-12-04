@@ -1,6 +1,14 @@
 
 ## TODO: may want command line ability to turn on some psim tracing
 
+# Recognize special argument to force System V IPC support on
+if [ X${1} = "X-psim_sysv" ] ; then
+  use_sysv_ipc="yes"
+  shift
+else
+  use_sysv_ipc="auto"
+fi
+
 ## Generate the GDB Command Script
 gen_gdb_script()
 {
