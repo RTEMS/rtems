@@ -197,7 +197,7 @@ static void calibrate_tsc(void)
   /* Initialize "previous tick" counters */
   pc586_tsc_at_tick = rdtsc();
 
-#if 1
+#if 0
   printk( "CPU clock at %u MHz\n", (uint32_t)(pc586_tsc_per_tick / 1000000));
 #endif
   
@@ -263,7 +263,7 @@ static rtems_irq_connect_data clockIrqData = {
   clockIsOn
 };
 
-void Clock_driver_support_initialize_hardware()
+void Clock_driver_support_initialize_hardware(void)
 {
   bool use_tsc = false;
   bool use_8254 = false;
@@ -282,16 +282,16 @@ void Clock_driver_support_initialize_hardware()
   }
 
   if ( use_8254 ) {
-    printk( "Use 8254\n" );
+    /* printk( "Use 8254\n" ); */
     Clock_driver_support_at_tick = Clock_driver_support_at_tick_empty;
-    bsp_clock_nanoseconds_since_last_tick = 
+    Clock_driver_nanoseconds_since_last_tick = 
       bsp_clock_nanoseconds_since_last_tick_tsc;
 
   } else {
-    printk( "Use TSC\n" );
+    /* printk( "Use TSC\n" ); */
     Clock_driver_support_at_tick = Clock_driver_support_at_tick_tsc;
-    bsp_clock_nanoseconds_since_last_tick = 
-      bsp_clock_nanoseconds_since_last_tick_i88254;
+    Clock_driver_nanoseconds_since_last_tick = 
+      bsp_clock_nanoseconds_since_last_tick_i8254;
   }
 
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
