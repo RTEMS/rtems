@@ -6,17 +6,16 @@
 
 verbose=""
 limit="0"
+use_sysv_ipc="auto"
 
 ## TODO: may want command line ability to turn on some psim tracing
-while getopts vl: OPT
+while getopts vsl: OPT
 do
     case "$OPT" in
-	v)
-	    verbose="yes";;
-        l)
-            limit="$OPTARG";;
-        *)
-            fatal;;
+	v) verbose="yes";;
+        l) limit="$OPTARG";;
+        s) use_sysv_ipc="yes";;
+        *) fatal;;
     esac
 done
 shiftcount=`expr $OPTIND - 1`

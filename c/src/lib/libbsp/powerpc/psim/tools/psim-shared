@@ -4,22 +4,31 @@ TREE_FILE=psim_tree.${LOGNAME}
 ### Generate the PSIM device tree based upon the type of application being run
 gen_device_tree()
 {
-  case ${1} in 
-    *mp*)
-      if [ X${RTEMS_SHM_SEMAPHORE_KEY} = X -o X${RTEMS_SHM_KEY} = X ] ; then
-	fatal  RTEMS_SHM_SEMAPHORE_KEY and/or RTEMS_SHM_KEY not set
-      fi
+  enable_sys_ipc="yes"
 
-      use_sysv_devices=yes
-      case ${1} in
-        *node1*) value=1 ;;
-        *)       value=-1 ;;
-      esac
-      ;;
-    *)
-      use_sysv_devices=no
-      ;;
-  esac
+  if [ ${use_sys_ipc} = "yes" ] ; then
+    enable_sysv_ipc="yes"
+    value=-1               # for now assume we are slave in this mode
+  else
+    case ${1} in 
+      *mp*)
+        enable_sysv_devices="yes"
+        case ${1} in
+          *node1*) value=1 ;;
+          *)       value=-1 ;;
+        esac
+        ;;
+      *)
+        enable_sysv_devices="no"
+        ;;
+    esac
+  fi
+
+  if [ ${enable_sysv_devices} = "yes" ] ; then
+    if [ X${RTEMS_SHM_SEMAPHORE_KEY} = X -o X${RTEMS_SHM_KEY} = X ] ; then
+      fatal  RTEMS_SHM_SEMAPHORE_KEY and/or RTEMS_SHM_KEY not set
+    fi
+  fi
 
 cat <<EOF
 #
@@ -46,7 +55,7 @@ cat <<EOF
 /nvram@0x0c080000/timezone -3600
 EOF
 
-  if [ ${use_sysv_devices} = yes ] ; then
+  if [ ${enable_sysv_devices} = yes ] ; then
     echo "##### System V IPC (Semaphore) 0x0c100010 for 12"
     echo "/sem@0x0c100010/reg 0x0c100010 12"
     echo "/sem@0x0c100010/key ${RTEMS_SHM_SEMAPHORE_KEY}"
@@ -57,6 +66,7 @@ EOF
     echo "/shm@0x0c110000/key ${RTEMS_SHM_KEY}"
   fi
 
+exit 0
 }
 
 ### run the specified test with the time limit
