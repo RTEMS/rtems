@@ -20,13 +20,13 @@
 	.func	__vectors
 __vectors:
 __reset:
-	jmp	__init
+	jmp	__start
 	.endfunc	
 
 	.section .init0,"ax",@progbits
-	.weak	__init
-;	.func	__init
-__init:
+	.weak	__start
+;	.func	__start
+__start:
 	
 	.section .init2,"ax",@progbits
 	clr	r1
