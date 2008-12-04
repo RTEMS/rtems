@@ -1,3 +1,8 @@
+2008-12-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1344/bsps
+	* clock/ckinit.c: Committed code was not final. Corrections.
+
 2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 		Michael South <msouth@msouth.org>
 
