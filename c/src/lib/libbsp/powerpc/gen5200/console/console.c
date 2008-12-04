@@ -148,7 +148,7 @@ BSP_output_char_function_type BSP_output_char = A_BSP_output_char;
 BSP_polling_getchar_function_type BSP_poll_char = A_BSP_get_char;
 
 /* Used to handle premature outputs of printk */
-uint32_t console_initialized = FALSE;
+bool console_initialized = false;
 
 /* per channel info structure */
 struct per_channel_info {
@@ -400,7 +400,7 @@ int mpc5200_psc_isOn(
     psc = (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
     return ((psc->isr_imr & IMR_RX_RDY_FULL) & (psc->isr_imr & IMR_TX_RDY));
   }
-  return FALSE;
+  return false;
 }
 
 
@@ -628,7 +628,7 @@ static void A_BSP_output_char(
    *  and we can just poll bytes out at any time.
    */
   #if !defined(HAS_UBOOT)
-    if (console_initialized == FALSE)
+    if (console_initialized == false)
      return;
   #endif
 
@@ -647,7 +647,7 @@ static int A_BSP_get_char(void)
    *  and we can just poll bytes in at any time.
    */
   #if !defined(HAS_UBOOT)
-    if (console_initialized == FALSE)
+    if (console_initialized == false)
      return;
   #endif
 
@@ -709,7 +709,7 @@ rtems_device_driver console_initialize(
   if(status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
 
-  console_initialized = TRUE;
+  console_initialized = true;
   return RTEMS_SUCCESSFUL;
 }
 
