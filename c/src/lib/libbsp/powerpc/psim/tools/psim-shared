@@ -1,12 +1,19 @@
 
 TREE_FILE=psim_tree.${LOGNAME}
 
+case $0 in
+  *4.8*)  rtemsTarget=powerpc-rtems4.8 ;;
+  *4.9*)  rtemsTarget=powerpc-rtems4.9 ;;
+  *4.10*) rtemsTarget=powerpc-rtems4.10 ;;
+  *) ;;
+esac
+
 ### Generate the PSIM device tree based upon the type of application being run
 gen_device_tree()
 {
   enable_sys_ipc="yes"
 
-  if [ ${use_sys_ipc} = "yes" ] ; then
+  if [ ${use_sysv_ipc} = "yes" ] ; then
     enable_sysv_ipc="yes"
     value=-1               # for now assume we are slave in this mode
   else
@@ -65,8 +72,6 @@ EOF
     echo "/shm@0x0c110000/reg 0x0c110000 0x20000"
     echo "/shm@0x0c110000/key ${RTEMS_SHM_KEY}"
   fi
-
-exit 0
 }
 
 ### run the specified test with the time limit

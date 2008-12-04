@@ -1,5 +1,11 @@
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psim-bottom, psim-gdb-bottom, psim-gdb-top.in, psim-shared,
+	psim-top.in: Clean up and works better. Uses argv[0] to override
+	configured target name.
+
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psim-bottom, psim-gdb-bottom, psim-shared, psim-top.in: Add ability
 	to force psim configuration to include System V IPC devices even when
 	the test does not appear to be multiprocessing. This is used by some
