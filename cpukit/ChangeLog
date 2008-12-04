@@ -1,3 +1,9 @@
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1348/cpukit
+	* rtems/src/ratemonperiod.c: Properly handle period statistics after
+	cpu usage information is reset while a period is running.
+
 2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1347/cpukit
