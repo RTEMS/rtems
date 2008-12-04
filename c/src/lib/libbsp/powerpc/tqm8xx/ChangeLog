@@ -1,3 +1,8 @@
+2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove -e start from %link.
+	Remove start_g.o.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared tm27.h stub.
