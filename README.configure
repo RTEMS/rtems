@@ -91,9 +91,11 @@ The following targets are supported:
       (none)	will build the host-based version on Linux, Solaris and HPUX.
 
       arm-rtems4.10
+      avr-rtems4.10
       bfin-rtems4.10
       h8300-rtems4.10
       i386-rtems4.10
+      lm32-rtems4.10
       m32c-rtems4.10
       m32r-rtems4.10
       m68k-rtems4.10
@@ -165,7 +167,7 @@ host-based	: posix (on Linux, FreeBSD, Cygwin, Solaris, and HPUX)
 arm             : csb336 csb337 edb7312 gba gp32 nds rtl22x rtl22xx_t
                   smdk2410
 
-avr:            : none
+avr:            : avrtest
 
 bfin            : eZKit533 bf537Stamp
 
@@ -177,6 +179,8 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 		NOTE: The "pc386" BSP can be compiled to support a 
 		      variety of PC configurations including PC-104
 		      based solutions.
+
+lm32:		: lm32_evr
 
 m32c		: m32csim
 
