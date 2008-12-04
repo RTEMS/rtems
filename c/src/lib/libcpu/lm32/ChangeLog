@@ -1,0 +1,5 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* ChangeLog, Makefile.am, configure.ac, preinstall.am,
+	shared/cache/cache.c, shared/cache/cache_.h, shared/misc/memcpy.c: New files.
+
