@@ -1,3 +1,8 @@
+2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove -e start from %link. Remove references to 
+	start_g.
+
 2008-11-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* include/bsp.h, include/hwreg_vals.h, network/network.c:
