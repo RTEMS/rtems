@@ -21,8 +21,8 @@ TEXI2WWW_ARGS=\
 -header rtems_header.html \
 -footer rtems_footer.html \
 -icons ../images
-GENERATED_FILES = general.texi arm.texi bfin.texi i386.texi m68k.texi mips.texi \
-    powerpc.texi sh.texi sparc.texi tic4x.texi
+GENERATED_FILES = general.texi arm.texi bfin.texi i386.texi lm32.texi \
+    m68k.texi mips.texi powerpc.texi sh.texi sparc.texi tic4x.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -51,6 +51,11 @@ bfin.texi: bfin.t
 	    -n "" < $< > $@
 
 i386.texi: i386.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+lm32.texi: lm32.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

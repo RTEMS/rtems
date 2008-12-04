@@ -24,6 +24,7 @@ cpu_supplement.vr
 general.texi
 i386.texi
 index.html
+lm32.texi
 m68k.texi
 Makefile
 Makefile.in

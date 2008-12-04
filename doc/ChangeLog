@@ -1,3 +1,9 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
+	cpu_supplement/cpu_supplement.texi: Add Lattice Mico32 support.
+	* cpu_supplement/lm32.t: New file.
+
 2008-12-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ada_user/Makefile.am: Fix typo.

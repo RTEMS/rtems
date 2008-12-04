@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1988-2008.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -16,7 +16,7 @@
 @c
 
 @c
-@c   Master file for the SPARC Applications Supplement
+@c   Master file for the CPU Supplement
 @c
 
 @include version.texi
@@ -63,6 +63,7 @@
 @include arm.texi
 @include bfin.texi
 @include i386.texi
+@include lm32.texi
 @include m68k.texi
 @include mips.texi
 @include powerpc.texi
@@ -81,6 +82,7 @@ This is the online version of the RTEMS CPU Architecture Supplement.
 * ARM Specific Information::
 * Blackfin Specific Information::
 * Intel/AMD x86 Specific Information::
+* Lattice Mico32 Specific Information::
 * M68xxx and Coldfire Specific Information::
 * MIPS Specific Information::
 * PowerPC Specific Information::
