@@ -11,4 +11,4 @@
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn.o%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -u start -e start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N}
