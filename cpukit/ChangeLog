@@ -1,3 +1,8 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* configure.ac, librpc/src/xdr/xdr_float.c, score/cpu/Makefile.am: Add
+	Lattice Mico32 support.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1348/cpukit
