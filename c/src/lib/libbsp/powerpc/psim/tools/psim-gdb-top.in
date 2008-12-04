@@ -12,7 +12,7 @@
 #  $Id$
 #
 
-GDB=@target_alias@-gdb
+rtemsTarget=@target_alias@
 
 GDB_FILE=gdb_tree.${LOGNAME}
 
