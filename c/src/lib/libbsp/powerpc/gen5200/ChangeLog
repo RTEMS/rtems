@@ -1,3 +1,8 @@
+2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove -u start -e start from %link.
+	* console/console.c: Use bool.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared stub coverhd.h
