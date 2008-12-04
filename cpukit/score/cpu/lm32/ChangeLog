@@ -1,0 +1,6 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* ChangeLog, Makefile.am, cpu.c, cpu_asm.S, preinstall.am, rtems/asm.h,
+	rtems/score/cpu.h, rtems/score/cpu_asm.h, rtems/score/lm32.h,
+	rtems/score/types.h: New files.
+
