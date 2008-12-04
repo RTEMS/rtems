@@ -1,0 +1,10 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* ChangeLog, Makefile.am, README, acinclude.m4, configure.ac,
+	shared/clock/ckinit.c, shared/clock/clock.h,
+	shared/console/console.c, shared/console/uart.c,
+	shared/console/uart.h, shared/start/start.S,
+	shared/startup/bspstart.c, shared/startup/setvec.c,
+	shared/timer/timer.c, shared/tsmac/dp83848phy.h,
+	shared/tsmac/tsmac.c, shared/tsmac/tsmac.h: New files.
+
