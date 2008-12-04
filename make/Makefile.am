@@ -26,7 +26,8 @@ EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/gen68340.cfg custom/gen68360.cfg custom/gen68360_040.cfg \
     custom/h8sim.cfg custom/h8sxsim.cfg custom/uC5282.cfg custom/gba.cfg \
     custom/gensh1.cfg custom/helas403.cfg custom/i386ex.cfg custom/idp.cfg \
-    custom/jmr3904.cfg custom/leon2.cfg custom/mcp750.cfg \
+    custom/jmr3904.cfg custom/leon2.cfg custom/lm32_evr.cfg \
+    custom/mcp750.cfg \
     custom/mvme136.cfg custom/mvme147.cfg custom/mvme147s.cfg \
     custom/mvme162.cfg custom/mvme162lx.cfg custom/mvme167.cfg \
     custom/mvme2100.cfg custom/mvme2307.cfg custom/no_bsp.cfg \
