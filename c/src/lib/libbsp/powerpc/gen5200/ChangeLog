@@ -1,5 +1,9 @@
 2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* bsp_specs: Remove references to start_g.o.
+
+2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* bsp_specs: Remove -u start -e start from %link.
 	* console/console.c: Use bool.
 
