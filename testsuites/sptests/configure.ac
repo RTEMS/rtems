@@ -61,6 +61,7 @@ sp33/Makefile
 sp34/Makefile
 sp35/Makefile
 sp44/Makefile
+sp46/Makefile
 spsize/Makefile
 spfatal/Makefile
 ])
