@@ -4,10 +4,10 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: ecrti%O%s}}
+%{!nostdlib: %{qrtems: ecrti%O%s -u __vectors -N -u start -e start}}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -N -u start -e start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp}

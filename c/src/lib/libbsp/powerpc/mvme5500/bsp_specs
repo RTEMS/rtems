@@ -4,10 +4,11 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s mvme5500start.o%s}}
+%{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s \
+  mvme5500start.o%s -e __rtems_entry_point -u __vectors}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -e __rtems_entry_point -u __vectors}
+%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}

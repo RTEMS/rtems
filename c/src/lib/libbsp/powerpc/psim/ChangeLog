@@ -1,3 +1,9 @@
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsp_specs: Move -e start from *link to *startfile to avoid warning
+	for undefined entry symbol when linking relocatables with binutils
+	2.19.
+
 2008-11-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: Most .eh_frame section to make gcc 4.4 SVN happy.

@@ -1,3 +1,9 @@
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsp_specs: Move -e start from *link to *startfile to avoid warning
+	for undefined entry symbol when linking relocatables with binutils
+	2.19.
+
 2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -e start from %link.
