@@ -1,3 +1,11 @@
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1348/cpukit
+	* Makefile.am, configure.ac: Add test of special case of resetting cpu
+	usage information while a period is running.
+	* sp46/.cvsignore, sp46/Makefile.am, sp46/init.c, sp46/sp46.doc,
+	sp46/sp46.scn: New files.
+
 2008-12-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp45/init.c: New file.
