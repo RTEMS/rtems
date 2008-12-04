@@ -164,7 +164,8 @@ do
    echo "Starting $tname at $date"
 
    # Spin off the simulator in the background
-   @target_alias@-run ${tfile} >${logfile}.tmp 2>&1 &
+   # @target_alias@-run ${tfile} >${logfile}.tmp 2>&1 &
+   /home/joel/work-gnat/svn/m32c-install/bin/m32c-elf-run ${tfile} >${logfile}.tmp 2>&1 &
    sim_pid=$!
 
    # Make sure it won't run forever...
