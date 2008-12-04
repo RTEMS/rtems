@@ -1,5 +1,9 @@
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp46/sp46.scn: Add screen missed earlier.
+
+2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1348/cpukit
 	* Makefile.am, configure.ac: Add test of special case of resetting cpu
 	usage information while a period is running.
