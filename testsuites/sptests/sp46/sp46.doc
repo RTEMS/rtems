@@ -1,0 +1,27 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp46
+
+directives:
+
+  rtems_rate_monotonic_period
+  rtems_cpu_usage_reset
+
+concepts:
+
++ resetting the CPU Usage information while a period is partial
+  complete.
+  
+
