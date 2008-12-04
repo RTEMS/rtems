@@ -1,0 +1,7 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* ChangeLog, Makefile.am, bsp_specs, configure.ac, preinstall.am,
+	include/.cvsignore, include/bsp.h, include/coverhd.h,
+	include/irq-config.h, include/system_conf.h, include/tm27.h,
+	startup/linkcmds: New files.
+
