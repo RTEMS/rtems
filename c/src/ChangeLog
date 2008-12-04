@@ -1,3 +1,7 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* aclocal/rtems-cpu-subdirs.m4: Add Lattice Mico32 support.
+
 2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Transmit the character in the polled write
