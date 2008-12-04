@@ -28,6 +28,11 @@ mips:
 	NOTE: Little endian configuration is not in all tools and 
 	      is untested for RTEMS itself.
 
+lm32:
+	lm32-elf		ELF		Big endian
+
+	NOTE: Currently there is no native lm32-rtems toolchain;
+
 nios2: 
     nios2-elf           ELF     Little endian
 

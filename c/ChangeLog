@@ -1,3 +1,7 @@
+2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
+
+	* TOOL_TARGETS: Add Lattice Mico32 support.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* src/aclocal/rtems-cpu-subdirs.m4: Add new M32R port. It is just a
