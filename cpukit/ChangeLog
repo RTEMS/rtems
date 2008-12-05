@@ -1,5 +1,13 @@
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/execl.c, posix/src/execle.c,
+	posix/src/execlp.c, posix/src/execv.c,
+	posix/src/execve.c, posix/src/execvp.c,
+	posix/src/sleep.c, posix/src/usleep.c:
+	Compile contents conditionally.
+
+2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/closedir.c, libcsupport/src/getcwd.c,
 	libcsupport/src/isatty.c, libcsupport/src/opendir.c,
 	libcsupport/src/readdir.c, libcsupport/src/readdir_r.c,
