@@ -1,3 +1,8 @@
+2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/pipe/fifo.c: Do not include .inl files directly. Use .h
+	files with kernel visibility violated until functionality exposed.
+
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for functions in newlib.

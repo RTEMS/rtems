@@ -10,6 +10,15 @@
  * $Id$
  */
 
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef RTEMS_POSIX_API
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+#endif
+
 #include <errno.h>
 #include <stdlib.h>
 #include "pipe.h"
@@ -52,9 +61,10 @@ extern bool rtems_pipe_configured;
 
 
 #ifdef RTEMS_POSIX_API
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 
-#include <rtems/rtems/barrier.inl>
-#include <rtems/score/thread.inl>
+#include <rtems/rtems/barrier.h>
+#include <rtems/score/thread.h>
 
 /* Set barriers to be interruptible by signals. */
 static void pipe_interruptible(pipe_control_t *pipe)
