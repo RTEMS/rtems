@@ -14,6 +14,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_REWINDDIR
+
 #include <sys/types.h>
 #include <assert.h>
 #include <dirent.h>
@@ -37,3 +39,5 @@ void rewinddir(
 
   dirp->dd_loc = 0;
 }
+
+#endif

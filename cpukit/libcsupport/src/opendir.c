@@ -44,6 +44,8 @@ static char sccsid[] = "@(#)opendir.c	5.11 (Berkeley) 2/23/91";
 #include "config.h"
 #endif
 
+#ifndef HAVE_OPENDIR
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -87,3 +89,5 @@ opendir(
 	 */
 	return dirp;
 }
+
+#endif

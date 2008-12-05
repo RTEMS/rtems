@@ -13,6 +13,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_ISATTY
+
 #include <sys/stat.h>
 
 int isatty(
@@ -29,3 +31,5 @@ int isatty(
 
   return 0;
 }
+
+#endif

@@ -40,6 +40,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_GETCWD
+
 /*
  *  Added these when moved to RTEMS
  */
@@ -285,3 +287,5 @@ err:
 }
 
 #endif /* _REENT_ONLY */
+
+#endif

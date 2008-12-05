@@ -14,6 +14,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_SEEKDIR
+
 #include <sys/param.h>
 #include <assert.h>
 #include <dirent.h>
@@ -42,3 +44,5 @@ void seekdir(
 
   dirp->dd_loc = 0;
 }
+
+#endif

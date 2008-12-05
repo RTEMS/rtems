@@ -44,6 +44,8 @@ static char sccsid[] = "@(#)closedir.c	5.9 (Berkeley) 2/23/91";
 #include "config.h"
 #endif
 
+#ifndef HAVE_CLOSEDIR
+
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -72,3 +74,5 @@ closedir(
 	(void)free((void *)dirp);
 	return(close(fd));
 }
+
+#endif

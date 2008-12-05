@@ -39,6 +39,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_TTYNAME
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -98,7 +100,7 @@ int ttyname_r(
 }
 
 /*
- *  ttyname() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name
+ *  ttyname() - POSIX 1003.1b 4.7.2 - Determine Terminal Device Name
  */
 
 char *ttyname(
@@ -109,3 +111,5 @@ char *ttyname(
     return ttyname_buf;
   return NULL;
 }
+
+#endif

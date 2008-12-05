@@ -15,6 +15,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_EXECV
+
 #include <errno.h>
 #include <rtems/seterr.h>
 
@@ -25,3 +27,5 @@ int execv(
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }
+
+#endif

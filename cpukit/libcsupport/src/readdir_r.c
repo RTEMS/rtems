@@ -8,6 +8,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_READDIR_R
+
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
@@ -24,3 +26,5 @@ int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
          *entry = **result;
      return *result ? 0 : errno;
 }
+
+#endif

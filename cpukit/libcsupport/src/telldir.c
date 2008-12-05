@@ -14,6 +14,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_TELLDIR
+
 #include <sys/param.h>
 #include <assert.h>
 #include <dirent.h>
@@ -45,3 +47,5 @@ long telldir(
 
   return (long)( iop->offset );
 }
+
+#endif

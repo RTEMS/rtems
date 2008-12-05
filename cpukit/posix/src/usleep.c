@@ -15,6 +15,8 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_USLEEP
+
 #include <time.h>
 #include <unistd.h>
 
@@ -39,3 +41,5 @@ int usleep(
   remaining += tm.tv_nsec / 1000;
   return remaining;       /* seconds remaining */
 }
+
+#endif

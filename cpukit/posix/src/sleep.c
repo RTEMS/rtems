@@ -15,6 +15,7 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_SLEEP
 #include <time.h>
 #include <unistd.h>
 
@@ -35,3 +36,5 @@ unsigned int sleep(
 
   return tm.tv_sec;       /* seconds remaining */
 }
+
+#endif
