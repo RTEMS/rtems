@@ -11,7 +11,7 @@ esac
 ### Generate the PSIM device tree based upon the type of application being run
 gen_device_tree()
 {
-  enable_sys_ipc="yes"
+  enable_sysv_ipc="yes"
 
   if [ ${use_sysv_ipc} = "yes" ] ; then
     enable_sysv_ipc="yes"

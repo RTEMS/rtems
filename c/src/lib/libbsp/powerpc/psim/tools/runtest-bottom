@@ -9,6 +9,8 @@ then
      tests="$*"
 fi
 
+use_sysv_ipc="auto"
+
 [ -d $logdir ] ||
   mkdir $logdir || fatal "could not create log directory ($logdir)"
 
