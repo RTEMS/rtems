@@ -17,6 +17,7 @@
 #define _RTEMS_POSIX_TIME_H
 
 #include <rtems/score/timespec.h>
+#include <rtems/score/watchdog.h>
 
 /** @brief Absolute Timeout Conversion Results
  *

@@ -31,12 +31,10 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
 
 /** @brief Is Timespec Valid
  *
- *  This method determines the validatity of a timespec.
+ *  This method determines the validity of a timespec.
  *
  *  @param[in] time is the timespec instance to validate.
  *
@@ -52,7 +50,7 @@ bool _Timespec_Is_valid(
  *  This method is the less than operator for timespecs.
  *
  *  @param[in] lhs is the left hand side timespec
- *  @param[in] rhs is the left hand side timespec
+ *  @param[in] rhs is the right hand side timespec
  *
  *  @return This method returns true if @a lhs is less than the @a rhs and 
  *          false otherwise.
@@ -67,7 +65,7 @@ bool _Timespec_Less_than(
  *  This method is the greater than operator for timespecs.
  *
  *  @param[in] lhs is the left hand side timespec
- *  @param[in] rhs is the left hand side timespec
+ *  @param[in] rhs is the right hand side timespec
  *
  *  @return This method returns true if @a lhs is greater than the @a rhs and 
  *          false otherwise.
@@ -82,7 +80,7 @@ bool _Timespec_Greater_than(
  *  This method is the is equal to than operator for timespecs.
  *
  *  @param[in] lhs is the left hand side timespec
- *  @param[in] rhs is the left hand side timespec
+ *  @param[in] rhs is the right hand side timespec
  *
  *  @return This method returns true if @a lhs is equal to  @a rhs and 
  *          false otherwise.
@@ -150,7 +148,7 @@ void _Timespec_Subtract(
   struct timespec       *result
 );
 
-/** @brief Divide Timespec By Integet
+/** @brief Divide Timespec By Integer
  *
  *  This routine divides a timespec by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically 
@@ -174,7 +172,7 @@ void _Timespec_Divide_by_integer(
  *  intended use is for calculating percentages to three decimal points.
  *
  *  @param[in] lhs is the left hand number
- *  @param[in] rhs is the righ hand number
+ *  @param[in] rhs is the right hand number
  *  @param[in] ival_percentage is the integer portion of the average
  *  @param[in] fval_percentage is the thousandths of percentage
  *
