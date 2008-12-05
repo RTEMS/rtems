@@ -73,8 +73,8 @@ endif
 
 DIRECTORY_SCAN_C_FILES = 
 ## 20 Nov 2008: Now using these from newlib's posix directory
-## DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
-##     src/rewinddir.c src/scandir.c src/seekdir.c src/telldir.c
+DIRECTORY_SCAN_C_FILES += src/opendir.c src/closedir.c src/readdir.c \
+     src/rewinddir.c src/scandir.c src/seekdir.c src/telldir.c
 ## Newlib SHOULD have provided this one
 DIRECTORY_SCAN_C_FILES += src/readdir_r.c
 ## Comment out when using these from newlib's unix directory
@@ -95,7 +95,7 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
-TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c
+TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c
 ## 20 Nov 2008: Now using these from newlib's posix directory
 TERMINAL_IDENTIFICATION_C_FILES += src/isatty.c
 ## Comment out when using these from newlib's unix directory

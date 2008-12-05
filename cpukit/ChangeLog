@@ -1,5 +1,10 @@
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/Makefile.am: Unconditionally compile files which now
+	  are in newlib.
+
+2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/execl.c, posix/src/execle.c,
 	posix/src/execlp.c, posix/src/execv.c,
 	posix/src/execve.c, posix/src/execvp.c,
