@@ -1,3 +1,7 @@
+2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psim-shared, runtest-bottom: Tidy up more bugs.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psim-bottom, psim-gdb-bottom, psim-gdb-top.in, psim-shared,
