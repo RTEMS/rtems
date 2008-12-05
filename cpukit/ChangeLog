@@ -1,5 +1,6 @@
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for functions in newlib.
 	* posix/Makefile.am: Unconditionally compile files which now
           are in newlib.
 	* libcsupport/Makefile.am: Unconditionally compile files which now

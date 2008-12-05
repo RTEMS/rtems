@@ -52,11 +52,18 @@ AC_CHECK_FUNCS([strdup strndup strncasecmp])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
-# Newlib's posix directory
-AC_CHECK_FUNCS([opendir closedir readdir rewinddir scandir seekdir telldir isatty])
+# <FIXME>
+#   Check for functions supplied by newlib >= 1.17.0
+# Newlib's posix/ directory
+AC_CHECK_FUNCS([sleep usleep \
+  opendir closedir readdir readdir_r \
+  rewinddir scandir seekdir telldir isatty])
+AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
+AC_CHECK_FUNCS([regcomp regexec regerror regfree])
 
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])
+# </FIXME>
 
 ## Check if the installed toolchain has these headers
 AC_CHECK_HEADER([tar.h])
