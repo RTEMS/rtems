@@ -1,3 +1,7 @@
+2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* .cvsignore: New file.
+
 2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* ChangeLog, Makefile.am, bsp_specs, configure.ac, preinstall.am,
