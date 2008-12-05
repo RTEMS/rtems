@@ -1,3 +1,12 @@
+2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/closedir.c, libcsupport/src/getcwd.c,
+	libcsupport/src/isatty.c, libcsupport/src/opendir.c,
+	libcsupport/src/readdir.c, libcsupport/src/readdir_r.c,
+	libcsupport/src/rewinddir.c, libcsupport/src/seekdir.c,
+	libcsupport/src/telldir.c, libcsupport/src/ttyname.c:
+	Compile contents conditionally.
+
 2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* configure.ac, librpc/src/xdr/xdr_float.c, score/cpu/Makefile.am: Add
