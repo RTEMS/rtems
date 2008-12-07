@@ -8,7 +8,7 @@
   vectors_entry%O%s start.o%s -e __rtems_entry_point -u __vectors}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic}
+%{!qrtems: %(old_link)} %{qrtems: -dp -Bstatic}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}

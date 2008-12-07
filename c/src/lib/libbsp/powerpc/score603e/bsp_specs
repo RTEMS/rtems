@@ -10,4 +10,4 @@
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic}
+%{!qrtems: %(old_link)} %{qrtems: -dp -Bstatic}
