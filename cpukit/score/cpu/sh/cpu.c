@@ -40,7 +40,7 @@ extern proc_ptr _Hardware_isr_Table[];
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *    thread_dispatch - address of dispatching routine
  */
 
 

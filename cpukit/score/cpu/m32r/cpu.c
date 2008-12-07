@@ -19,7 +19,7 @@
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *    thread_dispatch - address of dispatching routine
  *
  *  NO_CPU Specific Information:
  *

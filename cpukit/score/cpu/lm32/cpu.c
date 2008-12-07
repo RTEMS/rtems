@@ -24,7 +24,7 @@
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *    thread_dispatch - address of dispatching routine
  *
  *  LM32 Specific Information:
  *

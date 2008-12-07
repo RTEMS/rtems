@@ -71,7 +71,7 @@ ESF_PTR_TYPE __exceptionStackFrame = 0;
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *    thread_dispatch - address of dispatching routine
  */
 void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */

@@ -272,7 +272,7 @@ uint32_t   _CPU_ISR_Get_level( void )
  *  This routine performs processor dependent initialization.
  *
  *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *    thread_dispatch - address of dispatching routine
  */
 
 
