@@ -1,3 +1,8 @@
+2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/nfsclient/src/nfs.c: Use
+	rtems_clock_get_seconds_since_epoch() from public API.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/nfsclient/Makefile.am: Remove RTEMS_RELLDFLAGS.

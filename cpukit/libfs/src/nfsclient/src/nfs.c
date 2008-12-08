@@ -480,19 +480,9 @@ typedef uint32_t	TimeStamp;
 static inline TimeStamp
 nowSeconds(void)
 {
-register uint32_t	rval;
-#ifndef READ_LONG_IS_ATOMIC
-rtems_interrupt_level		l;
-
-	rtems_interrupt_disable(level);
-#endif
-
-	rval = _TOD_Seconds_since_epoch;
-
-#ifndef READ_LONG_IS_ATOMIC
-	rtems_interrupt_enable(level);
-#endif
-	return rval;
+  rtems_interval rval;
+  rtems_clock_get_seconds_since_epoch( &rval );
+  return rval;
 }
 
 
