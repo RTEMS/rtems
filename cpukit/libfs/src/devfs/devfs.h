@@ -8,11 +8,11 @@
 #ifndef _RTEMS_DEVFS_H
 #define _RTEMS_DEVFS_H
 
+#include <rtems/libio_.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/libio_.h>
 
 /**
  *  This structure define the type of device table
@@ -31,7 +31,7 @@ typedef struct
   /** device creation mode, only device file can be created */
   mode_t                    mode;
 
-}rtems_device_name_t;
+} rtems_device_name_t;
 
 
 
@@ -75,7 +75,7 @@ extern rtems_filesystem_file_handlers_r  devFS_file_handlers;
  *  @retval the same as open
  */
 
-int devFS_open(
+extern int devFS_open(
   rtems_libio_t *iop,
   const char    *pathname,
   uint32_t       flag,
@@ -90,7 +90,7 @@ int devFS_open(
  */
 
 
-int devFS_close(
+extern int devFS_close(
   rtems_libio_t *iop
 );
 
@@ -104,7 +104,7 @@ int devFS_close(
  *  it returns -1 and errno is set to proper value.
  */
 
-ssize_t devFS_read(
+extern ssize_t devFS_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count
@@ -120,7 +120,7 @@ ssize_t devFS_read(
  *  it returns -1 and errno is set to proper value.
  */
 
-ssize_t devFS_write(
+extern ssize_t devFS_write(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
@@ -136,7 +136,7 @@ ssize_t devFS_write(
  *  it returns -1 and errno is set to proper value.
  */
 
-int devFS_ioctl(
+extern int devFS_ioctl(
   rtems_libio_t *iop,
   uint32_t       command,
   void          *buffer
@@ -157,7 +157,7 @@ int devFS_ioctl(
  *  it returns -1 and errno is set to proper value.
  */
 
-int devFS_stat(
+extern int devFS_stat(
   rtems_filesystem_location_info_t *loc,
   struct stat                      *buf
 );
@@ -174,7 +174,7 @@ int devFS_stat(
  *  @retval always returns RTEMS_FILESYSTEM_DEVICE
  */
 
-int devFS_node_type(
+extern int devFS_node_type(
   rtems_filesystem_location_info_t  *pathloc
 );
 
@@ -193,7 +193,7 @@ int devFS_node_type(
  *  is set to EIO; otherwise, it returns -1 and errno is set to ENOENT
  */
 
-int devFS_evaluate_path(
+extern int devFS_evaluate_path(
   const char                        *pathname,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc
@@ -217,7 +217,7 @@ int devFS_evaluate_path(
  *  @retval always returns 0
  */
 
-int devFS_evaluate_for_make(
+extern int devFS_evaluate_for_make(
    const char                         *path,
    rtems_filesystem_location_info_t   *pathloc,
    const char                        **name
@@ -242,7 +242,7 @@ int devFS_evaluate_for_make(
  *  to ENOMEM
  */
 
-int devFS_mknod(
+extern int devFS_mknod(
    const char                        *path,
    mode_t                             mode, 
    dev_t                              dev,  
@@ -262,7 +262,7 @@ int devFS_mknod(
  *  failed, and errno is set to NOMEM.
  */
 
-int devFS_initialize(
+extern int devFS_initialize(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 );
 
@@ -284,7 +284,7 @@ int devFS_initialize(
  *  @retval 0
  */
 
-int devFS_Show(void);
+extern int devFS_Show(void);
 
 #ifdef __cplusplus
 }
