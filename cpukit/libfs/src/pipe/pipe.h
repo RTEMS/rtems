@@ -15,6 +15,10 @@
 
 #include <rtems/libio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Control block to manage each pipe */
 typedef struct pipe_control {
   char *Buffer;
@@ -38,7 +42,7 @@ typedef struct pipe_control {
 /*
  * Called by pipe() to create an anonymous pipe.
  */
-int pipe_create(
+extern int pipe_create(
   int filsdes[2]
 );
 
@@ -48,7 +52,7 @@ int pipe_create(
  * *pipep points to pipe control structure. When the last user releases pipe,
  * it will be set to NULL.
  */
-int pipe_release(
+extern int pipe_release(
   pipe_control_t **pipep,
   rtems_libio_t *iop
 );
@@ -60,7 +64,7 @@ int pipe_release(
  * fifo_open will try allocating and initializing a control structure. If the
  * call succeeds, *pipep will be set to address of new control structure.
  */
-int fifo_open(
+extern int fifo_open(
   pipe_control_t **pipep,
   rtems_libio_t *iop
 );
@@ -68,7 +72,7 @@ int fifo_open(
 /*
  * Interface to file system read.
  */
-ssize_t pipe_read(
+extern ssize_t pipe_read(
   pipe_control_t *pipe,
   void           *buffer,
   size_t          count,
@@ -78,7 +82,7 @@ ssize_t pipe_read(
 /*
  * Interface to file system write.
  */
-ssize_t pipe_write(
+extern ssize_t pipe_write(
   pipe_control_t *pipe,
   const void     *buffer,
   size_t          count,
@@ -88,7 +92,7 @@ ssize_t pipe_write(
 /*
  * Interface to file system ioctl.
  */
-int pipe_ioctl(
+extern int pipe_ioctl(
   pipe_control_t *pipe,
   uint32_t        cmd,
   void           *buffer,
@@ -98,7 +102,7 @@ int pipe_ioctl(
 /*
  * Interface to file system lseek.
  */
-int pipe_lseek(
+extern int pipe_lseek(
   pipe_control_t *pipe,
   off_t           offset,
   int             whence,
@@ -108,6 +112,10 @@ int pipe_lseek(
 /*
  * Initialization of FIFO/pipe module.
  */
-void rtems_pipe_initialize (void);
+extern void rtems_pipe_initialize (void);
 
-#endif  /* #define _RTEMS_PIPE_H */
+#ifdef __cplusplus
+}  
+#endif
+
+#endif
