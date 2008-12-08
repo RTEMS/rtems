@@ -1,3 +1,7 @@
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Backport from CVS-HEAD.
+
 2008-09-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* timer/timer.c: Use "true" instead of "1" for "bool"s.

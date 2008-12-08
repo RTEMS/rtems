@@ -1,3 +1,7 @@
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Backport from CVS-HEAD.
+
 2008-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console/defaultfont.c: Remove (Renamed into console/defaultfont.h).

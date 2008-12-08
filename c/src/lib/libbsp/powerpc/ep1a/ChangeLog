@@ -1,3 +1,7 @@
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Backport from CVS-HEAD.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* console/init68360.c: Delete unused code.

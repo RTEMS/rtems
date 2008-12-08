@@ -4,8 +4,8 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: start.o%s}}
+%{!nostdlib: %{qrtems: start.o%s -e _start}}
 
 *link:
-%(old_link) %{qrtems: -dc -dp -N -e _start}
+%(old_link) %{qrtems: -dc -dp -N}
 
