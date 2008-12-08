@@ -35,4 +35,9 @@ AC_SUBST(RTEMS_CFLAGS)
 
 RTEMS_CPPFLAGS="-I\$(top_builddir) -I\$(PROJECT_INCLUDE)"
 AC_SUBST(RTEMS_CPPFLAGS)
+
+AS_IF([test "$GCC" = yes],[
+  RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -Wl,-r"
+])
+AC_SUBST(RTEMS_RELLDFLAGS)
 ])
