@@ -1,5 +1,7 @@
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/Makefile.am: Remove RTEMS_RELLDFLAGS.
+	* aclocal/prog-cc.m4: Add RTEMS_RELLDFLAGS hack.
 	* libfs/src/nfsclient/src/dirutils.c: #include <limits.h>.
 
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>

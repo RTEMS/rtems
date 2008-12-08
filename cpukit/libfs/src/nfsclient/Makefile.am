@@ -4,8 +4,6 @@
 
 include $(top_srcdir)/automake/compile.am
 
-RTEMS_RELLDFLAGS = -r
-
 #%dirutils.obj: %dirutils.o
 #	$(LD) -r -o $@ $^
 project_lib_PROGRAMS = dirutils.rel
