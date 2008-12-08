@@ -1,3 +1,10 @@
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/devfs/devfs.h: Add missing "extern"s.
+	* libfs/src/imfs/imfs.h: Add missing "extern"s
+	* libfs/src/pipe/pipe.h: Add missing "extern"s.
+	Add extern "C" {}.
+
 2008-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/cpu/arm/cpu.c, score/cpu/avr/cpu.c, score/cpu/bfin/cpu.c,
