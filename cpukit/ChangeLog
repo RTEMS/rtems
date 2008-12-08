@@ -1,5 +1,10 @@
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/include/rpc/rpcent.h: #include <rpc/types.h>.
+	* librpc/include/rpc/xdr.h: #include <rtems/bsd/sys/cdefs.h>.
+
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/devfs/devfs.h: Add missing "extern"s.
 	* libfs/src/imfs/imfs.h: Add missing "extern"s
 	* libfs/src/pipe/pipe.h: Add missing "extern"s.
