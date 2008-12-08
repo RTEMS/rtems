@@ -1,5 +1,9 @@
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/dirutils.c: #include <limits.h>.
+
+2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/include/rtems/rtems/clock.h: #include <sys/time.h>
 	* librpc/include/rpc/rpcent.h: #include <rpc/types.h>.
 	* librpc/include/rpc/xdr.h: #include <rtems/bsd/sys/cdefs.h>.

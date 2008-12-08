@@ -60,6 +60,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <limits.h> /* PATH_MAX */
 
 #ifdef HAVE_CEXP
 #include <cexpHelp.h>
