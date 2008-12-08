@@ -36,6 +36,8 @@ extern "C" {
  *  resolution.
  */
 #ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
+  #include <rtems/score/timestamp.h>
+
   /**
    *  This macro enables the nanosecond accurate statistics
    *
@@ -44,7 +46,7 @@ extern "C" {
    */
   #define RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
 
-  typedef struct timespec rtems_thread_cpu_usage_t;
+  typedef Timestamp_Control rtems_thread_cpu_usage_t;
 
 #else
   typedef uint32_t rtems_thread_cpu_usage_t;
@@ -500,7 +502,7 @@ SCORE_EXTERN struct _reent **_Thread_libc_reent;
    * system initialization and does not need to be known outside this
    * file.
    */
-  SCORE_EXTERN struct timespec _Thread_Time_of_last_context_switch;
+  SCORE_EXTERN Timestamp_Control _Thread_Time_of_last_context_switch;
 #endif
 
 /**

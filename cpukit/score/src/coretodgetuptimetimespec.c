@@ -20,10 +20,9 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
 
 /*
- *  _TOD_Get_uptime
+ *  _TOD_Get_uptime_as_timespec
  *
  *  This routine is used to obtain the system uptime
  *
@@ -33,25 +32,13 @@
  *  Output parameters: NONE
  */
 
-void _TOD_Get_uptime(
-  Timestamp_Control *uptime
+void _TOD_Get_uptime_as_timespec(
+  struct timespec *uptime
 )
 {
-  ISR_Level         level;
-  Timestamp_Control offset;
-  Timestamp_Control up;
-  long              nanoseconds;
+  Timestamp_Control uptime_ts;
 
   /* assume time checked for NULL by caller */
-
-  /* _TOD_Uptime is in native timestamp format */
-  nanoseconds = 0;
-  _ISR_Disable( level );
-    up= _TOD_Uptime;
-    if ( _Watchdog_Nanoseconds_since_tick_handler )
-      nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
-  _ISR_Enable( level );
-
-  _Timestamp_Set( &offset, 0, nanoseconds );
-  _Timestamp_Add_to( &up, &offset );
+  _TOD_Get_uptime( &uptime_ts );
+  _Timestamp_To_timespec( &uptime_ts, uptime );
 }

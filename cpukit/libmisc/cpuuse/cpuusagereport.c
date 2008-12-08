@@ -28,11 +28,11 @@
 #include <rtems/bspIo.h>
 
 #if defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  #include <rtems/score/timespec.h>
+  #include <rtems/score/timestamp.h>
 #endif
 
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  extern struct timespec    CPU_usage_Uptime_at_last_reset;
+  extern Timestamp_Control  CPU_usage_Uptime_at_last_reset;
 #else
   extern uint32_t           CPU_usage_Ticks_at_last_reset;
 #endif
@@ -54,7 +54,7 @@ void rtems_cpu_usage_report_with_plugin(
   char                 name[13];
   uint32_t             ival, fval;
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    struct timespec    uptime, total, ran;
+    Timestamp_Control  uptime, total, ran;
   #else
     uint32_t           total_units = 0;
   #endif
@@ -69,7 +69,7 @@ void rtems_cpu_usage_report_with_plugin(
    */
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     _TOD_Get_uptime( &uptime );
-    _Timespec_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
+    _Timestamp_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
       if ( !_Objects_Information_table[ api_index ] )
@@ -123,13 +123,13 @@ void rtems_cpu_usage_report_with_plugin(
            */
           ran = the_thread->cpu_time_used;
           if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
-            struct timespec used;
-            _Timespec_Subtract(
+            Timestamp_Control used;
+            _Timestamp_Subtract(
               &_Thread_Time_of_last_context_switch, &uptime, &used
             );
-            _Timespec_Add_to( &ran, &used );
+            _Timestamp_Add_to( &ran, &used );
           };
-          _Timespec_Divide( &ran, &total, &ival, &fval );
+          _Timestamp_Divide( &ran, &total, &ival, &fval );
 
           /*
            * Print the information
@@ -137,7 +137,9 @@ void rtems_cpu_usage_report_with_plugin(
 
           (*print)( context,
             "%3" PRId32 ".%06" PRId32 "  %3" PRId32 ".%03" PRId32 "\n",
-            ran.tv_sec, ran.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND,
+            _Timestamp_Get_seconds( &ran ),
+            _Timestamp_Get_nanoseconds( &ran ) /
+               TOD_NANOSECONDS_PER_MICROSECOND,
             ival, fval
           );
         #else
@@ -159,8 +161,8 @@ void rtems_cpu_usage_report_with_plugin(
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     (*print)( context, "Time since last CPU Usage reset %" PRId32
             ".%06" PRId32 " seconds\n",
-       total.tv_sec,
-       total.tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND
+       _Timestamp_Get_seconds( &total ),
+       _Timestamp_Get_nanoseconds( &total ) / TOD_NANOSECONDS_PER_MICROSECOND
     );
   #else
     (*print)( context,

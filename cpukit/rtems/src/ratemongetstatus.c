@@ -65,14 +65,12 @@ rtems_status_code rtems_rate_monotonic_get_status(
 
       if ( status->state == RATE_MONOTONIC_INACTIVE ) {
         #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-          status->since_last_period.tv_sec = 0;
-          status->since_last_period.tv_nsec = 0;
+          _Timestamp_Set_to_zero( &status->since_last_period );
         #else
           status->since_last_period = 0;
         #endif
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          status->executed_since_last_period.tv_sec = 0;
-          status->executed_since_last_period.tv_nsec = 0;
+          _Timestamp_Set_to_zero( &status->executed_since_last_period );
         #else
           status->executed_since_last_period = 0;
         #endif
@@ -83,12 +81,12 @@ rtems_status_code rtems_rate_monotonic_get_status(
          */
         #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
             defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-          struct timespec uptime;
+          Timestamp_Control uptime;
           _TOD_Get_uptime( &uptime );
         #endif
 
         #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-          _Timespec_Subtract(
+          _Timestamp_Subtract(
             &the_period->time_at_period,
             &uptime,
             &status->since_last_period
@@ -99,7 +97,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
         #endif
 
         #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-          _Timespec_Subtract(
+          _Timestamp_Subtract(
             &_Thread_Time_of_last_context_switch,
             &uptime,
             &status->executed_since_last_period

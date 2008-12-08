@@ -31,7 +31,7 @@
 #include <rtems/score/wkspace.h>
 
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  #include <rtems/score/timespec.h>
+  #include <rtems/score/timestamp.h>
 #endif
 
 /*PAGE
@@ -103,10 +103,14 @@ void _Thread_Dispatch( void )
 
     #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
       {
-        struct timespec uptime, ran;
+        Timestamp_Control uptime, ran;
         _TOD_Get_uptime( &uptime );
-        _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
-        _Timespec_Add_to( &executing->cpu_time_used, &ran );
+        _Timestamp_Subtract(
+          &_Thread_Time_of_last_context_switch,
+          &uptime,
+          &ran
+        );
+        _Timestamp_Add_to( &executing->cpu_time_used, &ran );
         _Thread_Time_of_last_context_switch = uptime;
       }
     #else

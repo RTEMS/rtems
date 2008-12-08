@@ -189,7 +189,7 @@ static void _Timer_Server_process_seconds_chain(
    *  of Day (TOD) has not been set backwards.  If it has then
    *  we want to adjust the _Timer_Seconds_chain to indicate this.
    */
-  snapshot =  _TOD_Seconds_since_epoch;
+  snapshot =  _TOD_Seconds_since_epoch();
   if ( snapshot > _Timer_Server_seconds_last_time ) {
     /*
      *  This path is for normal forward movement and cases where the
@@ -232,7 +232,7 @@ Thread _Timer_Server_body(
    *  the server was initiated.
    */
   _Timer_Server_ticks_last_time   = _Watchdog_Ticks_since_boot;
-  _Timer_Server_seconds_last_time = _TOD_Seconds_since_epoch;
+  _Timer_Server_seconds_last_time = _TOD_Seconds_since_epoch();
 
   /*
    *  Insert the timers that were inserted before we got to run.

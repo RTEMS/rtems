@@ -19,7 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/timespec.h>
+#include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
@@ -36,22 +36,21 @@
 
 void _TOD_Tickle_ticks( void )
 {
-  struct timespec tick;
-  uint32_t        seconds;
+  Timestamp_Control tick;
+  uint32_t          seconds;
 
-  /* Convert the tick quantum to a timespec */
-  tick.tv_nsec = _TOD_Microseconds_per_tick * 1000;
-  tick.tv_sec  = 0;
+  /* Convert the tick quantum to a timestamp */
+  _Timestamp_Set( &tick, 0, _TOD_Microseconds_per_tick * 1000 );
 
   /* Update the counter of ticks since boot */
   _Watchdog_Ticks_since_boot += 1;
 
   /* Update the timespec format uptime */
-  (void) _Timespec_Add_to( &_TOD_Uptime, &tick );
+  _Timestamp_Add_to( &_TOD_Uptime, &tick );
   /* we do not care how much the uptime changed */
 
   /* Update the timespec format TOD */
-  seconds = _Timespec_Add_to( &_TOD_Now, &tick );
+  seconds = _Timestamp_Add_to_at_tick( &_TOD_Now, &tick );
   while ( seconds ) {
     _Watchdog_Tickle_seconds();
     seconds--;

@@ -18,6 +18,7 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/timespec.h>
+#include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
@@ -36,20 +37,22 @@ void _TOD_Get(
   struct timespec *time
 )
 {
-  ISR_Level level;
-  struct timespec offset;
+  ISR_Level         level;
+  Timestamp_Control offset;
+  Timestamp_Control now;
+  long              nanoseconds;
 
-  /* assume time checked by caller */
+  /* assume time checked for NULL by caller */
 
-  offset.tv_sec = 0;
-  offset.tv_nsec = 0;
-
-  /* _TOD_Now is a proper POSIX time */
+  /* _TOD_Now is the native current time */
+  nanoseconds = 0;
   _ISR_Disable( level );
-    *time = _TOD_Now;
+    now = _TOD_Now;
     if ( _Watchdog_Nanoseconds_since_tick_handler )
-      offset.tv_nsec = (*_Watchdog_Nanoseconds_since_tick_handler)();
+      nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
-  _Timespec_Add_to( time, &offset );
+  _Timestamp_Set( &offset, 0, nanoseconds );
+  _Timestamp_Add_to( &now, &offset );
+  _Timestamp_To_timespec( &now, time );
 }

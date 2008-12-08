@@ -22,11 +22,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
-    defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  #include <rtems/score/timespec.h>
-  extern struct timespec _Thread_Time_of_last_context_switch;
-#endif
 
 void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
@@ -40,7 +35,7 @@ void _Rate_monotonic_Update_statistics(
   #endif
   #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
       defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-    struct timespec  uptime;
+    Timestamp_Control uptime;
 
     /*
      * Obtain the current time since boot
@@ -60,7 +55,7 @@ void _Rate_monotonic_Update_statistics(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
     period_start               = the_period->time_at_period;
-    _Timespec_Subtract( &period_start, &uptime, &since_last_period );
+    _Timestamp_Subtract( &period_start, &uptime, &since_last_period );
     the_period->time_at_period = uptime;
   #else
     since_last_period = _Watchdog_Ticks_since_boot - the_period->time_at_period;
@@ -75,17 +70,17 @@ void _Rate_monotonic_Update_statistics(
       used = _Thread_Executing->cpu_time_used;
 
       /* partial period, cpu usage info reset while executing.  Throw away */
-      if (_Timespec_Less_than( &used, &the_period->owner_executed_at_period))
+      if (_Timestamp_Less_than( &used, &the_period->owner_executed_at_period))
         return;
 
       /* How much time time since last context switch */
-      _Timespec_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
+      _Timestamp_Subtract(&_Thread_Time_of_last_context_switch, &uptime, &ran);
 
       /* executed += ran */
-      _Timespec_Add_to( &used, &ran );
+      _Timestamp_Add_to( &used, &ran );
 
        /* executed = current cpu usage - value at start of period */
-      _Timespec_Subtract( 
+      _Timestamp_Subtract( 
          &the_period->owner_executed_at_period,
          &used,
          &executed
@@ -112,12 +107,12 @@ void _Rate_monotonic_Update_statistics(
    */
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    _Timespec_Add_to( &stats->total_cpu_time, &executed );
+    _Timestamp_Add_to( &stats->total_cpu_time, &executed );
 
-    if ( _Timespec_Less_than( &executed, &stats->min_cpu_time ) ) 
+    if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) ) 
       stats->min_cpu_time = executed;
 
-    if ( _Timespec_Greater_than( &executed, &stats->max_cpu_time ) ) 
+    if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) ) 
       stats->max_cpu_time = executed;
   #else
     stats->total_cpu_time  += executed;
@@ -142,12 +137,12 @@ void _Rate_monotonic_Update_statistics(
     if ( since_last_period > stats->max_wall_time )
       stats->max_wall_time = since_last_period;
   #else
-    _Timespec_Add_to( &stats->total_wall_time, &since_last_period );
+    _Timestamp_Add_to( &stats->total_wall_time, &since_last_period );
 
-    if ( _Timespec_Less_than( &since_last_period, &stats->min_wall_time ) )
+    if ( _Timestamp_Less_than( &since_last_period, &stats->min_wall_time ) )
       stats->min_wall_time = since_last_period;
 
-    if ( _Timespec_Greater_than( &since_last_period, &stats->max_wall_time ) )
+    if ( _Timestamp_Greater_than( &since_last_period, &stats->max_wall_time ) )
       stats->max_wall_time = since_last_period;
   #endif
 }
@@ -211,7 +206,7 @@ rtems_status_code rtems_rate_monotonic_period(
         case RATE_MONOTONIC_INACTIVE: {
           #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
               defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-            struct timespec uptime;
+            Timestamp_Control uptime;
           #endif
 
           /*
@@ -244,7 +239,7 @@ rtems_status_code rtems_rate_monotonic_period(
                 _Thread_Executing->cpu_time_used;
 
               /* How much time time since last context switch */
-              _Timespec_Subtract(
+              _Timestamp_Subtract(
                 &_Thread_Time_of_last_context_switch,
                 &uptime,
                 &ran
@@ -254,7 +249,7 @@ rtems_status_code rtems_rate_monotonic_period(
                *   
                *     the_period->owner_executed_at_period += ran
                */
-              _Timespec_Add_to( &the_period->owner_executed_at_period, &ran );
+              _Timestamp_Add_to( &the_period->owner_executed_at_period, &ran );
             }
           #else
             the_period->owner_executed_at_period =

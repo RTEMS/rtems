@@ -24,7 +24,7 @@
 
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
     defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  #include <rtems/score/timespec.h>
+  #include <rtems/score/timestamp.h>
 
   /* We print to 1/10's of milliseconds */
   #define NANOSECONDS_DIVIDER 1000
@@ -149,23 +149,22 @@ ididididid NNNN ccccc mmmmmm X
      */
     {
     #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-      struct timespec   cpu_average;
+      Timestamp_Control cpu_average;
+      Timestamp_Control *min_cpu = &the_stats.min_cpu_time;
+      Timestamp_Control *max_cpu = &the_stats.max_cpu_time;
+      Timestamp_Control *total_cpu = &the_stats.total_cpu_time;
 
-      _Timespec_Divide_by_integer(
-         &the_stats.total_cpu_time,
-         the_stats.count,
-         &cpu_average
-      );
+      _Timestamp_Divide_by_integer( total_cpu, the_stats.count, &cpu_average );
       (*print)( context,
         "%" PRId32 "."  NANOSECONDS_FMT "/"        /* min cpu time */
         "%" PRId32 "."  NANOSECONDS_FMT "/"        /* max cpu time */
         "%" PRId32 "."  NANOSECONDS_FMT " ",       /* avg cpu time */
-        the_stats.min_cpu_time.tv_sec, 
-          the_stats.min_cpu_time.tv_nsec / NANOSECONDS_DIVIDER,
-        the_stats.max_cpu_time.tv_sec,
-          the_stats.max_cpu_time.tv_nsec / NANOSECONDS_DIVIDER,
-        cpu_average.tv_sec,
-          cpu_average.tv_nsec / NANOSECONDS_DIVIDER
+        _Timestamp_Get_seconds( min_cpu ),
+	  _Timestamp_Get_nanoseconds( min_cpu ) / NANOSECONDS_DIVIDER,
+        _Timestamp_Get_seconds( max_cpu ),
+	  _Timestamp_Get_nanoseconds( max_cpu ) / NANOSECONDS_DIVIDER,
+        _Timestamp_Get_seconds( &cpu_average ),
+	  _Timestamp_Get_nanoseconds( &cpu_average ) / NANOSECONDS_DIVIDER
        );
     #else
       uint32_t ival_cpu, fval_cpu;
@@ -186,22 +185,22 @@ ididididid NNNN ccccc mmmmmm X
      */
     {
     #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-      struct timespec  wall_average;
-      _Timespec_Divide_by_integer(
-         &the_stats.total_wall_time,
-         the_stats.count,
-         &wall_average
-      );
+      Timestamp_Control  wall_average;
+      Timestamp_Control  *min_wall = &the_stats.min_wall_time;
+      Timestamp_Control  *max_wall = &the_stats.max_wall_time;
+      Timestamp_Control  *total_wall = &the_stats.total_wall_time;
+
+      _Timestamp_Divide_by_integer(total_wall, the_stats.count, &wall_average);
       (*print)( context,
         "%" PRId32 "." NANOSECONDS_FMT "/"        /* min wall time */
         "%" PRId32 "." NANOSECONDS_FMT "/"        /* max wall time */
         "%" PRId32 "." NANOSECONDS_FMT "\n",      /* avg wall time */
-        the_stats.min_wall_time.tv_sec, 
-          the_stats.min_wall_time.tv_nsec / NANOSECONDS_DIVIDER,
-        the_stats.max_wall_time.tv_sec,
-          the_stats.max_wall_time.tv_nsec / NANOSECONDS_DIVIDER,
-        wall_average.tv_sec,
-          wall_average.tv_nsec / NANOSECONDS_DIVIDER
+        _Timestamp_Get_seconds( min_wall ),
+          _Timestamp_Get_nanoseconds( min_wall ) / NANOSECONDS_DIVIDER,
+        _Timestamp_Get_seconds( max_wall ),
+          _Timestamp_Get_nanoseconds( max_wall ) / NANOSECONDS_DIVIDER,
+        _Timestamp_Get_seconds( &wall_average ),
+          _Timestamp_Get_nanoseconds( &wall_average ) / NANOSECONDS_DIVIDER
       );
     #else
       uint32_t  ival_wall, fval_wall;

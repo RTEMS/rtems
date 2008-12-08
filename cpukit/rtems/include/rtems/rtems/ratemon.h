@@ -70,7 +70,9 @@ extern "C" {
  *  statistics.
  */
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
-  typedef struct timespec rtems_rate_monotonic_period_time_t;
+  #include <rtems/score/timestamp.h>
+
+  typedef Timestamp_Control rtems_rate_monotonic_period_time_t;
 #else
   typedef uint32_t rtems_rate_monotonic_period_time_t;
 #endif
@@ -382,8 +384,11 @@ void _Rate_monotonic_Timeout(
   #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
      do { \
         /* set the minimums to a large value */ \
-        (_the_period)->Statistics.min_wall_time.tv_sec = 0x7fffffff; \
-        (_the_period)->Statistics.min_wall_time.tv_nsec = 0x7fffffff; \
+        _Timestamp_Set( \
+          &(_the_period)->Statistics.min_wall_time, \
+          0x7fffffff, \
+          0x7fffffff \
+        ); \
      } while (0)
 #else
   #define _Rate_monotonic_Reset_wall_time_statistics( _the_period )
@@ -398,8 +403,11 @@ void _Rate_monotonic_Timeout(
   #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
      do { \
         /* set the minimums to a large value */ \
-        (_the_period)->Statistics.min_cpu_time.tv_sec = 0x7fffffff; \
-        (_the_period)->Statistics.min_cpu_time.tv_nsec = 0x7fffffff; \
+        _Timestamp_Set( \
+          &(_the_period)->Statistics.min_cpu_time, \
+          0x7fffffff, \
+          0x7fffffff \
+        ); \
      } while (0)
 #else
   #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period )

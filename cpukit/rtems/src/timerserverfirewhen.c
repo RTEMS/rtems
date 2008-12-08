@@ -67,7 +67,7 @@ rtems_status_code rtems_timer_server_fire_when(
     return RTEMS_INVALID_CLOCK;
 
   seconds = _TOD_To_seconds( wall_time );
-  if ( seconds <= _TOD_Seconds_since_epoch )
+  if ( seconds <= _TOD_Seconds_since_epoch() )
     return RTEMS_INVALID_CLOCK;
 
   the_timer = _Timer_Get( id, &location );
@@ -77,7 +77,7 @@ rtems_status_code rtems_timer_server_fire_when(
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_TIME_OF_DAY_ON_TASK;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
-      the_timer->Ticker.initial = seconds - _TOD_Seconds_since_epoch;
+      the_timer->Ticker.initial = seconds - _TOD_Seconds_since_epoch();
 
       /*
        * _Timer_Server_schedule_operation != NULL because we checked that

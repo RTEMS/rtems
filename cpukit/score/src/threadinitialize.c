@@ -206,8 +206,7 @@ bool _Thread_Initialize(
    */
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    the_thread->cpu_time_used.tv_sec  = 0;
-    the_thread->cpu_time_used.tv_nsec = 0;
+    _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
   #else
     the_thread->cpu_time_used         = 0;
   #endif

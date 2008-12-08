@@ -1,7 +1,7 @@
 /*
  *  times() - POSIX 1003.1b 4.5.2 - Get Process Times
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <assert.h>
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  #include <rtems/score/timespec.h>
+  #include <rtems/score/timestamp.h>
 #endif
 
 clock_t _times(
@@ -53,16 +53,17 @@ clock_t _times(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
-      struct timespec per_tick;
-      uint32_t ticks;
-      uint32_t fractional_ticks;
+      Timestamp_Control per_tick;
+      uint32_t          ticks;
+      uint32_t          fractional_ticks;
       
-      per_tick.tv_sec =
-        _TOD_Microseconds_per_tick / TOD_MILLISECONDS_PER_SECOND;
-      per_tick.tv_nsec =
-        (_TOD_Microseconds_per_tick % TOD_MILLISECONDS_PER_SECOND) / 1000;
+      _Timestamp_Set( 
+        &per_tick,
+        _TOD_Microseconds_per_tick / TOD_MILLISECONDS_PER_SECOND,
+        (_TOD_Microseconds_per_tick % TOD_MILLISECONDS_PER_SECOND) / 1000
+      );
 
-      _Timespec_Divide(
+      _Timestamp_Divide(
         &_Thread_Executing->cpu_time_used,
         &per_tick,
         &ticks,

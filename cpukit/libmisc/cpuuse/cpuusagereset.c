@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/score/timestamp.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -28,8 +29,7 @@ static void CPU_usage_Per_thread_handler(
 )
 {
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-    the_thread->cpu_time_used.tv_sec  = 0;
-    the_thread->cpu_time_used.tv_nsec = 0;
+    _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
   #else
     the_thread->cpu_time_used = 0;
   #endif
@@ -40,7 +40,7 @@ static void CPU_usage_Per_thread_handler(
  * External data that is shared by cpu usage code but not declared in .h files.
  */
 #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-  extern struct timespec CPU_usage_Uptime_at_last_reset;
+  extern Timestamp_Control CPU_usage_Uptime_at_last_reset;
 #else
   extern uint32_t   CPU_usage_Ticks_at_last_reset;
 #endif

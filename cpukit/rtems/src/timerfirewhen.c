@@ -63,7 +63,7 @@ rtems_status_code rtems_timer_fire_when(
     return RTEMS_INVALID_ADDRESS;
 
   seconds = _TOD_To_seconds( wall_time );
-  if ( seconds <= _TOD_Seconds_since_epoch )
+  if ( seconds <= _TOD_Seconds_since_epoch() )
     return RTEMS_INVALID_CLOCK;
 
   the_timer = _Timer_Get( id, &location );
@@ -75,7 +75,7 @@ rtems_status_code rtems_timer_fire_when(
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
       _Watchdog_Insert_seconds(
          &the_timer->Ticker,
-         seconds - _TOD_Seconds_since_epoch
+         seconds - _TOD_Seconds_since_epoch()
        );
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;

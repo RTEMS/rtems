@@ -1,5 +1,29 @@
 2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/__times.c, libmisc/cpuuse/cpuusagereport.c,
+	libmisc/cpuuse/cpuusagereset.c, posix/src/clockgettime.c,
+	posix/src/pthread.c, posix/src/timersettime.c,
+	rtems/include/rtems/rtems/ratemon.h,
+	rtems/src/clockgetsecondssinceepoch.c, rtems/src/clockgetuptime.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonperiod.c,
+	rtems/src/ratemonreportstatistics.c, rtems/src/taskwakewhen.c,
+	rtems/src/timerfirewhen.c, rtems/src/timerserver.c,
+	rtems/src/timerserverfirewhen.c, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/score/thread.h,
+	score/include/rtems/score/tod.h, score/src/coretod.c,
+	score/src/coretodget.c, score/src/coretodgetuptime.c,
+	score/src/coretodset.c, score/src/coretodtickle.c,
+	score/src/threaddispatch.c, score/src/threadinitialize.c: Add
+	SuperCore handler Timestamp to provide an opaque class for the
+	representation and manipulation of uptime, time of day, and the
+	difference between two timestamps. By using SuperCore Timestamp, it
+	is clear which methods and APIs really have to be struct timespec and
+	which can be in an optimized native format.
+	* score/include/rtems/score/timestamp.h,
+	score/src/coretodgetuptimetimespec.c: New files.
+
+2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libfs/src/nfsclient/src/nfs.c: Use
 	rtems_clock_get_seconds_since_epoch() from public API.
 

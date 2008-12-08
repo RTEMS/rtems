@@ -33,6 +33,6 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
   if ( !_TOD_Is_set )
     return RTEMS_NOT_DEFINED;
 
-  *the_interval = _TOD_Seconds_since_epoch;
+  *the_interval = _TOD_Seconds_since_epoch();
   return RTEMS_SUCCESSFUL;
 }

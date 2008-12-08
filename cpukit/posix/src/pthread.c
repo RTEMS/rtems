@@ -31,6 +31,7 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/timespec.h>
 
 /*PAGE
  *

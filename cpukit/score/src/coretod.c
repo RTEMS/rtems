@@ -41,12 +41,10 @@ void _TOD_Handler_initialization(
   _TOD_Microseconds_per_tick = microseconds_per_tick;
 
   /* POSIX format TOD (timespec) */
-  _TOD_Now.tv_sec  = TOD_SECONDS_1970_THROUGH_1988;
-  _TOD_Now.tv_nsec = 0;
+  _Timestamp_Set( &_TOD_Now, TOD_SECONDS_1970_THROUGH_1988, 0 );
 
   /* Uptime (timespec) */
-  _TOD_Uptime.tv_sec  = 0;
-  _TOD_Uptime.tv_nsec = 0;
+  _Timestamp_Set_to_zero( &_TOD_Uptime );
 
   /* TOD has not been set */
   _TOD_Is_set = FALSE;

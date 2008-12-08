@@ -59,10 +59,12 @@ int timer_settime(
 
   /* Convert absolute to relative time */
   if (flags == TIMER_ABSTIME) {
+    struct timespec now;
+    _TOD_Get( &now );
     /* Check for seconds in the past */
-    if ( _Timespec_Greater_than( &_TOD_Now, &normalize.it_value ) ) 
+    if ( _Timespec_Greater_than( &now, &normalize.it_value ) ) 
       rtems_set_errno_and_return_minus_one( EINVAL ); 
-    _Timespec_Subtract( &_TOD_Now, &normalize.it_value, &normalize.it_value );
+    _Timespec_Subtract( &now, &normalize.it_value, &normalize.it_value );
   }
 
   /* If the function reaches this point, then it will be necessary to do

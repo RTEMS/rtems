@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/object.h>
+#include <rtems/score/timestamp.h>
 #include <time.h>
 
 /** @defgroup ScoreTODConstants TOD Constants
@@ -134,18 +134,19 @@ SCORE_EXTERN bool _TOD_Is_set;
 /** @brief Current Time of Day (Timespec)
  *  The following contains the current time of day.
  */
-SCORE_EXTERN struct timespec _TOD_Now;
+SCORE_EXTERN Timestamp_Control _TOD_Now;
 
 /** @brief Current Time of Day (Timespec)
  *  The following contains the running uptime.
  */
-SCORE_EXTERN struct timespec _TOD_Uptime;
+SCORE_EXTERN Timestamp_Control _TOD_Uptime;
 
 /** @brief Seconds Since RTEMS Epoch
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
-#define _TOD_Seconds_since_epoch (_TOD_Now.tv_sec)
+#define _TOD_Seconds_since_epoch() \
+  _Timestamp_Get_seconds(&_TOD_Now)
 
 /** @brief Microseconds per Clock Tick
  *
@@ -189,6 +190,17 @@ void _TOD_Get(
  *  @param[in] time is a pointer to the uptime to be returned
  */
 void _TOD_Get_uptime(
+  Timestamp_Control *time
+);
+
+/** @brief _TOD_Get_uptime_as_timespec
+ *
+ *  This routine returns the system uptime with potential accuracy
+ *  to the nanosecond.  
+ *
+ *  @param[in] time is a pointer to the uptime to be returned
+ */
+void _TOD_Get_uptime_as_timespec(
   struct timespec *time
 );
 

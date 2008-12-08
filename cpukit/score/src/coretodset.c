@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
@@ -39,19 +40,21 @@ void _TOD_Set(
   const struct timespec *time
 )
 {
+  long seconds;
+
   _Thread_Disable_dispatch();
   _TOD_Deactivate();
 
-  if ( time->tv_sec < _TOD_Seconds_since_epoch )
-    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD,
-       _TOD_Seconds_since_epoch - time->tv_sec );
+  seconds = _TOD_Seconds_since_epoch();
+
+  if ( time->tv_sec < seconds )
+    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD, seconds - time->tv_sec );
   else
-    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD,
-       time->tv_sec - _TOD_Seconds_since_epoch );
+    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, time->tv_sec - seconds );
 
   /* POSIX format TOD (timespec) */
-  _TOD_Now                 = *time;
-  _TOD_Is_set              = TRUE;
+  _Timestamp_Set( &_TOD_Now, time->tv_sec, time->tv_nsec );
+  _TOD_Is_set = TRUE;
 
   _TOD_Activate();
 
