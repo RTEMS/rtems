@@ -12,6 +12,9 @@
  *
  *  Other POSIX facilities such as timers, condition, .. is also used
  *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -32,6 +35,7 @@ void *POSIX_Init (
 )
 
 {
+  struct timespec   now;
   struct sigevent   event;
   int               status;
   timer_t           timer;
@@ -92,7 +96,8 @@ void *POSIX_Init (
   status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );
   fatal_posix_service_status_errno( status, EINVAL, "bad itimer value #2" );
 
-  itimer.it_value = _TOD_Now;
+  clock_gettime( CLOCK_REALTIME, &now );
+  itimer.it_value = now;
   itimer.it_value.tv_sec = itimer.it_value.tv_sec - 1;
   puts( "timer_settime - bad itimer value - previous time - EINVAL" );
   status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );

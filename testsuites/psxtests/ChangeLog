@@ -1,3 +1,8 @@
+2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxtimer01/psxtimer.c, psxtimer02/psxtimer.c: Obtain TOD with
+	clock_gettime() NOT by reaching into the SuperCore.
+
 2008-10-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx01/psx01.scn: Bump version to 4.9.99.0

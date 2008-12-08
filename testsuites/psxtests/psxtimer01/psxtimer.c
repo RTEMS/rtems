@@ -12,6 +12,9 @@
  *
  *  Other POSIX facilities such as timers, condition, .. is also used
  *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -135,6 +138,7 @@ void * task_a (void *arg)
 void * task_b (void *arg)
 {
    struct   timespec my_period;
+   struct   timespec now;
    int      my_sig, received_sig;
    struct   itimerspec timerdata;
    timer_t  timer_id;
@@ -162,9 +166,10 @@ void * task_b (void *arg)
    pthread_sigmask(SIG_BLOCK,&set,NULL);
 
    /* set the timer in periodic mode */
+   clock_gettime( CLOCK_REALTIME, &now );
    timerdata.it_interval = my_period;
-   timerdata.it_value = _TOD_Now;
-   _Timespec_Add_to( &timerdata.it_value, &my_period);
+   timerdata.it_value = now;
+   _Timespec_Add_to( &timerdata.it_value, &my_period );
    if (timer_settime(timer_id,TIMER_ABSTIME,&timerdata,NULL) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
