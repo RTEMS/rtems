@@ -479,7 +479,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Disptach (NO FP)",
+    "_Thread_Dispatch (NO FP)",
     thread_dispatch_no_fp_time,
     1,
     0,

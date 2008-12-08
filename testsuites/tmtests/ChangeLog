@@ -1,3 +1,7 @@
+2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm26/task1.c: Fix typo.
+
 2008-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm22/system.h, tm22/task1.c: Account for message buffers used.
