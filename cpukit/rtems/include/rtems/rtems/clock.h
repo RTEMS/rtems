@@ -32,6 +32,8 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
+#include <sys/time.h> /* struct timeval */
+
 /**
  *  @defgroup ClassicClock Classic API Clock
  *
