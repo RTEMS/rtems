@@ -32,6 +32,56 @@ extern "C" {
 
 #include <sys/types.h>
 
+/** @brief Set Timespec to Seconds Nanosecond
+ *
+ *  This method sets the timespec to the specified seconds and nanoseconds
+ *  value.
+ *
+ *  @param[in] _time points to the timespec instance to validate.
+ *  @param[in] _seconds is the seconds portion of the timespec
+ *  @param[in] _nanoseconds is the nanoseconds portion of the timespec
+ */
+#define _Timespec_Set( _time, _seconds, _nanoseconds ) \
+	do { \
+	   (_time)->tv_sec = (_seconds); \
+	   (_time)->tv_nsec = (_nanoseconds); \
+	} while (0)
+
+/** @brief Zero Timespec
+ *
+ *  This method sets the timespec to zero.
+ *  value.
+ *
+ *  @param[in] _time points to the timespec instance to zero.
+ */
+#define _Timespec_Set_to_zero( _time ) \
+	do { \
+	   (_time)->tv_sec = 0; \
+	   (_time)->tv_nsec = 0; \
+	} while (0)
+
+/** @brief Get Seconds Portion of Timespec
+ *
+ *  This method returns the seconds portion of the specified timespec
+ *
+ *  @param[in] _time points to the timespec
+ *
+ *  @return The seconds portion of @a _time.
+ */
+#define _Timespec_Get_seconds( _time ) \
+	((_time)->tv_sec)
+
+/** @brief Get Nanoseconds Portion of Timespec
+ *
+ *  This method returns the nanoseconds portion of the specified timespec
+ *
+ *  @param[in] _time points to the timespec
+ *
+ *  @return The nanoseconds portion of @a _time.
+ */
+#define _Timespec_Get_nanoseconds( _time ) \
+	((_time)->tv_nsec)
+
 /** @brief Is Timespec Valid
  *
  *  This method determines the validity of a timespec.

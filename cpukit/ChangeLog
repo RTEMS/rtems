@@ -1,3 +1,17 @@
+2008-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/timespec.h,
+	score/include/rtems/score/timestamp.h: Add 64-bit implementation of
+	SuperCore Timestamps. Tested on PowerPC/psim and SPARC/sis.
+	* score/include/rtems/score/timestamp64.h, score/src/ts64addto.c,
+	score/src/ts64divide.c, score/src/ts64dividebyinteger.c,
+	score/src/ts64equalto.c, score/src/ts64getnanoseconds.c,
+	score/src/ts64getseconds.c, score/src/ts64greaterthan.c,
+	score/src/ts64lessthan.c, score/src/ts64set.c,
+	score/src/ts64settozero.c, score/src/ts64subtract.c,
+	score/src/ts64toticks.c, score/src/ts64totimespec.c: New files.
+
 2008-12-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/bdbuf.c: Fix typo having crept in during

@@ -30,9 +30,10 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
     include/rtems/score/timespec.h include/rtems/score/timestamp.h \
-    include/rtems/score/tod.h include/rtems/score/tqdata.h \
-    include/rtems/score/userext.h include/rtems/score/watchdog.h \
-    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h
+    include/rtems/score/timestamp64.h include/rtems/score/tod.h \
+    include/rtems/score/tqdata.h include/rtems/score/userext.h \
+    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
+    include/rtems/score/cpuopts.h
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
@@ -166,6 +167,14 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
     src/timespecisvalid.c src/timespeclessthan.c src/timespecgreaterthan.c \
     src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c \
     src/timespecdividebyinteger.c
+
+## TIMESTAMP_INT64_C_FILES
+libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
+    src/ts64divide.c src/ts64equalto.c \
+    src/ts64getnanoseconds.c src/ts64getseconds.c \
+    src/ts64greaterthan.c src/ts64lessthan.c \
+    src/ts64set.c src/ts64settozero.c src/ts64subtract.c \
+    src/ts64toticks.c src/ts64totimespec.c
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \

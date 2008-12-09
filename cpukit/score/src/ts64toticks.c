@@ -1,0 +1,39 @@
+/** 
+ *  @file  score/src/ts64toticks.c
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <sys/types.h>
+
+#include <rtems/system.h>
+#include <rtems/score/timestamp.h>
+#include <rtems/score/tod.h>
+
+#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
+    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+uint32_t _Timestamp64_To_ticks(
+  const Timestamp64_Control *time
+)
+{
+  uint32_t ticks;
+
+  ticks = *time / (_TOD_Microseconds_per_tick * 1000);
+  if ( ticks )
+    return ticks;
+  return 1;
+}
+#endif
