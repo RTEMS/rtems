@@ -1,3 +1,7 @@
+2008-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/cpu/unix/cpu.c: Add prototypes, eliminate nested externs.
+
 2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/__times.c, libmisc/cpuuse/cpuusagereport.c,
