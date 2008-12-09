@@ -1,3 +1,8 @@
+2008-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* fileio/init.c: Add explicit creation of /etc/passwd and /etc/group so
+	we have a test case for real password checking.
+
 2008-11-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* paranoia/paranoia.c: Add missing prototypes.

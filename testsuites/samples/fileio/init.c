@@ -99,8 +99,9 @@ fstab_t fs_table[] = {
 #ifdef USE_SHELL
 #include <rtems/shell.h>
 
-void writeScript(
+void writeFile(
   const char *name,
+  int         mode,
   const char *contents
 )
 {
@@ -111,19 +112,51 @@ void writeScript(
   }
 
   rtems_shell_write_file( name, contents );
-  sc = chmod ( name, 0777 );
+
+  sc = chmod ( name, mode );
   if ( sc ) {
     printf( "chmod %s: %s:\n", name, strerror(errno) );
   }
 }
 
+#define writeScript( _name, _contents ) \
+        writeFile( _name, 0777, _contents )
+
 void fileio_start_shell(void)
 {
   int sc;
+
   sc = mkdir("/scripts", 0777);
   if ( sc ) {
     printf( "mkdir /scripts: %s:\n", strerror(errno) );
   }
+
+  sc = mkdir("/etc", 0777);
+  if ( sc ) {
+    printf( "mkdir /etc: %s:\n", strerror(errno) );
+  }
+
+  printf(
+    "Creating /etc/passwd and group with three useable accounts\n"
+    "root/pwd , test/pwd, rtems/NO PASSWORD"
+  );
+
+  writeFile(
+    "/etc/passwd",
+    0644,
+    "root:7QR4o148UPtb.:0:0:root::/:/bin/sh\n"
+    "rtems:*:1:1:RTEMS Application::/:/bin/sh\n"
+    "test:8Yy.AaxynxbLI:2:2:test account::/:/bin/sh\n"
+    "tty:!:3:3:tty owner::/:/bin/false\n"
+  );
+  writeFile(
+    "/etc/group",
+    0644,
+    "root:x:0:root\n"
+    "rtems:x:1:rtems\n"
+    "test:x:2:test\n"
+    "tty:x:3:tty\n"
+  );
 
   writeScript(
     "/scripts/js", 
