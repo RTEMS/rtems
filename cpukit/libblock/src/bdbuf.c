@@ -2197,7 +2197,7 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
         rtems_bdbuf_buffer* bd =
           (rtems_bdbuf_buffer*) rtems_chain_get (&transfer);
 
-        bool write = true;
+        bool write = false;
         
         /*
          * If the device only accepts sequential buffers and this is not the

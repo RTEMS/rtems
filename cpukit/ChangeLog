@@ -1,3 +1,8 @@
+2008-12-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/bdbuf.c: Fix typo having crept in during
+	  boolean->bool transition.
+
 2008-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/cpu/unix/cpu.c: Add prototypes, eliminate nested externs.
