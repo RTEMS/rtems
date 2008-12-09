@@ -40,6 +40,11 @@
 #define SA_RESTART 0
 #endif
 
+extern void        _Thread_Dispatch(void);
+extern uint32_t    _Thread_Dispatch_disable_level;
+extern bool        _Context_Switch_necessary;
+
+
 typedef struct {
   jmp_buf   regs;
   int       isr_level;
@@ -57,7 +62,7 @@ static Context_Control_overlay _CPU_Context_Default_with_ISRs_disabled;
  * Sync IO support, an entry for each fd that can be set
  */
 
-void  _CPU_Sync_io_Init();
+void  _CPU_Sync_io_Init(void);
 
 static rtems_sync_io_handler _CPU_Sync_io_handlers[FD_SETSIZE];
 static int sync_io_nfds;
@@ -184,7 +189,7 @@ void _CPU_Signal_initialize( void )
  *  _CPU_Context_From_CPU_Init
  */
 
-void _CPU_Context_From_CPU_Init()
+void _CPU_Context_From_CPU_Init(void)
 {
 
 #if defined(__hppa__) && defined(RTEMS_UNIXLIB_SETJMP)
@@ -236,7 +241,7 @@ void _CPU_Context_From_CPU_Init()
  *  _CPU_Sync_io_Init
  */
 
-void _CPU_Sync_io_Init()
+void _CPU_Sync_io_Init(void)
 {
   int fd;
 
@@ -392,7 +397,6 @@ void _CPU_Install_interrupt_stack( void )
 void *_CPU_Thread_Idle_body( uint32_t ignored )
 {
 #if CPU_SYNC_IO
-  extern void _Thread_Dispatch(void);
   int fd;
 #endif
 
@@ -453,7 +457,7 @@ void *_CPU_Thread_Idle_body( uint32_t ignored )
 typedef struct AuxFrame_ {
 	/* stack builds down from here */
 	uint32_t	ebx, esi, edi;
-	void       (*eip)();
+	void       (*eip)(void);
 	jmp_buf    *pjb;
 	uint32_t   old_esp;
 } AuxFrame /* __attribute__((may_alias)) ICE when not commented out*/;
@@ -461,10 +465,10 @@ typedef struct AuxFrame_ {
 /* MUST make sure this is called in a new frame so it
  * uses the new stack
  */
-void trampo(void (*pc)(), jmp_buf *pjb)
+void trampo(void (*pc)(void), jmp_buf *pjb)
 __attribute__((noinline));
 
-void trampo(void (*pc)(), jmp_buf *pjb)
+void trampo(void (*pc)(void), jmp_buf *pjb)
 {
 	if ( setjmp( *pjb ) )
 		pc();
@@ -611,7 +615,7 @@ void _CPU_Context_Initialize(
 	  stack_ptr->ebx = 0xFEEDFEED;
       stack_ptr->esi = 0xDEADDEAD;
       stack_ptr->edi = 0xDEAFDEAF;
-	  stack_ptr->eip = (void (*)())jmp_addr;
+	  stack_ptr->eip = (void (*)(void))jmp_addr;
 	  stack_ptr->pjb = &((Context_Control_overlay *)_the_context)->regs;
 
 	  cpy_jmpbuf(stack_ptr);
@@ -782,10 +786,6 @@ void _CPU_ISR_Enable(
 
 void _CPU_ISR_Handler(int vector)
 {
-  extern void        _Thread_Dispatch(void);
-  extern uint32_t    _Thread_Dispatch_disable_level;
-  extern bool        _Context_Switch_necessary;
-
   if (_ISR_Nest_level++ == 0) {
       /* switch to interrupt stack */
   }
