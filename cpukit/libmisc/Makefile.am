@@ -79,7 +79,6 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_unmount.c shell/main_blksync.c shell/main_whoami.c \
     shell/shell.c shell/shell_cmdset.c shell/shell_getchar.c \
     shell/shell_getprompt.c shell/shellconfig.c \
-\
     shell/shellconfig.h shell/shell.h shell/shell_makeargs.c \
     shell/str2int.c shell/filemode.c shell/pwcache.c shell/print-ls.c\
     shell/write_file.c shell/utils-cp.c  shell/utils-ls.c \
