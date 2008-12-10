@@ -1,3 +1,13 @@
+2008-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/include/rtems/rtems/ratemon.h,
+	rtems/include/rtems/rtems/types.h, rtems/src/ratemongetstatistics.c,
+	rtems/src/ratemongetstatus.c, rtems/src/ratemonperiod.c,
+	rtems/src/ratemonreportstatistics.c,
+	score/include/rtems/score/thread.h, score/src/coretodgetuptime.c:
+	Make all Thread and Period Statistics use publicly defined types. Do
+	not leak the SuperCore Timestamp type through the APIs.
+
 2008-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/Makefile.am, score/preinstall.am,

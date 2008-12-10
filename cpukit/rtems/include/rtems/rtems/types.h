@@ -102,6 +102,19 @@ typedef Heap_Information_block region_information_block;
 typedef Watchdog_Interval rtems_interval;
 
 /**
+ *  This is the public type used to represent the CPU usage per thread.
+ *
+ *  @note When using nanosecond granularity timing, RTEMS may internally
+ *        use a variety of represenations.
+ */
+#ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
+  typedef struct timespec rtems_thread_cpu_usage_t;
+#else
+  typedef uint32_t Thread_CPU_usage_t;
+#endif
+
+
+/**
  *  The following record defines the time of control block.  This
  *  control block is used to maintain the current time of day.
  *

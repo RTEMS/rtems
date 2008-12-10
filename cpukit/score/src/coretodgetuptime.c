@@ -47,11 +47,12 @@ void _TOD_Get_uptime(
   /* _TOD_Uptime is in native timestamp format */
   nanoseconds = 0;
   _ISR_Disable( level );
-    up= _TOD_Uptime;
+    up = _TOD_Uptime;
     if ( _Watchdog_Nanoseconds_since_tick_handler )
       nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
   _Timestamp_Set( &offset, 0, nanoseconds );
   _Timestamp_Add_to( &up, &offset );
+  *uptime = up;
 }

@@ -66,15 +66,27 @@ extern "C" {
 #endif
 
 /**
- *  This is the type used to manage the rate monotonic timing
+ *  This is the public type used for the rate monotonic timing
+ *  statistics.
+ */
+#if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
+  #include <rtems/score/timespec.h>
+
+  typedef struct timespec rtems_rate_monotonic_period_time_t;
+#else
+  typedef uint32_t rtems_rate_monotonic_period_time_t;
+#endif
+
+/**
+ *  This is the internal type used for the rate monotonic timing
  *  statistics.
  */
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS)
   #include <rtems/score/timestamp.h>
 
-  typedef Timestamp_Control rtems_rate_monotonic_period_time_t;
+  typedef Timestamp_Control Rate_monotonic_Period_time_t;
 #else
-  typedef uint32_t rtems_rate_monotonic_period_time_t;
+  typedef uint32_t Rate_monotonic_Period_time_t;
 #endif
 
 #include <rtems/score/object.h>
@@ -131,7 +143,11 @@ typedef enum {
 #define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
 
 /**
- *  The following defines the statistics kept on each period instance.
+ *  The following defines the PUBLIC data structure that has the
+ *  statistics kept on each period instance.
+ *
+ *  @note The public structure uses struct timespec while the
+ *        internal one uses Timestamp_Control. 
  */
 typedef struct {
   /** This field contains the number of periods executed. */
@@ -153,6 +169,31 @@ typedef struct {
   /** This field contains the total amount of CPU time used in a period. */
   rtems_rate_monotonic_period_time_t   total_wall_time;
 }  rtems_rate_monotonic_period_statistics;
+
+/**
+ *  The following defines the INTERNAL data structure that has the
+ *  statistics kept on each period instance.
+ */
+typedef struct {
+  /** This field contains the number of periods executed. */
+  uint32_t     count;
+  /** This field contains the number of periods missed. */
+  uint32_t     missed_count;
+
+  /** This field contains the least amount of CPU time used in a period. */
+  Thread_CPU_usage_t                   min_cpu_time;
+  /** This field contains the highest amount of CPU time used in a period. */
+  Thread_CPU_usage_t                   max_cpu_time;
+  /** This field contains the total amount of wall time used in a period. */
+  Thread_CPU_usage_t                   total_cpu_time;
+
+  /** This field contains the least amount of wall time used in a period. */
+  Rate_monotonic_Period_time_t         min_wall_time;
+  /** This field contains the highest amount of wall time used in a period. */
+  Rate_monotonic_Period_time_t         max_wall_time;
+  /** This field contains the total amount of CPU time used in a period. */
+  Rate_monotonic_Period_time_t         total_wall_time;
+}  Rate_monotonic_Statistics;
 
 /**
  *  The following defines the period status structure.
@@ -197,13 +238,13 @@ typedef struct {
    * This field contains the total CPU usage used while executing
    * the body of the loop that is executed each period.
    */
-  rtems_thread_cpu_usage_t                owner_executed_at_period;
+  Thread_CPU_usage_t                      owner_executed_at_period;
 
   /**
    * This field contains the total wall timer that passed while
    * executing the body of the loop that is executed each period.
    */
-  rtems_rate_monotonic_period_time_t      time_at_period;
+  Rate_monotonic_Period_time_t            time_at_period;
 
   /**
    * This field contains the length of the next period to be
@@ -221,7 +262,7 @@ typedef struct {
    * This field contains the statistics which are maintained
    * on each period.
    */
-  rtems_rate_monotonic_period_statistics  Statistics;
+  Rate_monotonic_Statistics               Statistics;
 }   Rate_monotonic_Control;
  
 /**

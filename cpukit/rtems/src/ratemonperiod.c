@@ -27,15 +27,12 @@ void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
 )
 {
-  rtems_rate_monotonic_period_statistics *stats;
-  rtems_thread_cpu_usage_t                executed;
-  rtems_rate_monotonic_period_time_t      since_last_period;
-  #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    rtems_rate_monotonic_period_time_t    period_start;
-  #endif
+  Rate_monotonic_Statistics      *stats;
+  Thread_CPU_usage_t              executed;
+  Rate_monotonic_Period_time_t    since_last_period;
   #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
       defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-    Timestamp_Control uptime;
+    Timestamp_Control             uptime;
 
     /*
      * Obtain the current time since boot
@@ -54,8 +51,11 @@ void _Rate_monotonic_Update_statistics(
    */
 
   #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-    period_start               = the_period->time_at_period;
-    _Timestamp_Subtract( &period_start, &uptime, &since_last_period );
+    _Timestamp_Subtract(
+      &the_period->time_at_period,
+      &uptime,
+      &since_last_period
+    );
     the_period->time_at_period = uptime;
   #else
     since_last_period = _Watchdog_Ticks_since_boot - the_period->time_at_period;
@@ -64,7 +64,7 @@ void _Rate_monotonic_Update_statistics(
 
   #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
     {
-      rtems_thread_cpu_usage_t   ran, used;
+      Thread_CPU_usage_t ran, used;
        
       /* Grab CPU usage when the thread got switched in */
       used = _Thread_Executing->cpu_time_used;
@@ -233,7 +233,7 @@ rtems_status_code rtems_rate_monotonic_period(
 
           #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
             { 
-              rtems_thread_cpu_usage_t ran;
+              Thread_CPU_usage_t ran;
 
               the_period->owner_executed_at_period = 
                 _Thread_Executing->cpu_time_used;

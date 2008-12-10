@@ -21,11 +21,10 @@
 #include <inttypes.h>
 
 #include <rtems/bspIo.h>
+#include <rtems/score/timespec.h>
 
 #if defined(RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS) || \
     defined(RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS)
-  #include <rtems/score/timestamp.h>
-
   /* We print to 1/10's of milliseconds */
   #define NANOSECONDS_DIVIDER 1000
   #define PERCENT_FMT     "%04" PRId32
@@ -149,22 +148,22 @@ ididididid NNNN ccccc mmmmmm X
      */
     {
     #ifdef RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
-      Timestamp_Control cpu_average;
-      Timestamp_Control *min_cpu = &the_stats.min_cpu_time;
-      Timestamp_Control *max_cpu = &the_stats.max_cpu_time;
-      Timestamp_Control *total_cpu = &the_stats.total_cpu_time;
+      struct timespec  cpu_average;
+      struct timespec *min_cpu = &the_stats.min_cpu_time;
+      struct timespec *max_cpu = &the_stats.max_cpu_time;
+      struct timespec *total_cpu = &the_stats.total_cpu_time;
 
-      _Timestamp_Divide_by_integer( total_cpu, the_stats.count, &cpu_average );
+      _Timespec_Divide_by_integer( total_cpu, the_stats.count, &cpu_average );
       (*print)( context,
         "%" PRId32 "."  NANOSECONDS_FMT "/"        /* min cpu time */
         "%" PRId32 "."  NANOSECONDS_FMT "/"        /* max cpu time */
         "%" PRId32 "."  NANOSECONDS_FMT " ",       /* avg cpu time */
-        _Timestamp_Get_seconds( min_cpu ),
-	  _Timestamp_Get_nanoseconds( min_cpu ) / NANOSECONDS_DIVIDER,
-        _Timestamp_Get_seconds( max_cpu ),
-	  _Timestamp_Get_nanoseconds( max_cpu ) / NANOSECONDS_DIVIDER,
-        _Timestamp_Get_seconds( &cpu_average ),
-	  _Timestamp_Get_nanoseconds( &cpu_average ) / NANOSECONDS_DIVIDER
+        _Timespec_Get_seconds( min_cpu ),
+	  _Timespec_Get_nanoseconds( min_cpu ) / NANOSECONDS_DIVIDER,
+        _Timespec_Get_seconds( max_cpu ),
+	  _Timespec_Get_nanoseconds( max_cpu ) / NANOSECONDS_DIVIDER,
+        _Timespec_Get_seconds( &cpu_average ),
+	  _Timespec_Get_nanoseconds( &cpu_average ) / NANOSECONDS_DIVIDER
        );
     #else
       uint32_t ival_cpu, fval_cpu;
@@ -185,22 +184,22 @@ ididididid NNNN ccccc mmmmmm X
      */
     {
     #ifdef RTEMS_ENABLE_NANOSECOND_RATE_MONOTONIC_STATISTICS
-      Timestamp_Control  wall_average;
-      Timestamp_Control  *min_wall = &the_stats.min_wall_time;
-      Timestamp_Control  *max_wall = &the_stats.max_wall_time;
-      Timestamp_Control  *total_wall = &the_stats.total_wall_time;
+      struct timespec  wall_average;
+      struct timespec *min_wall = &the_stats.min_wall_time;
+      struct timespec *max_wall = &the_stats.max_wall_time;
+      struct timespec *total_wall = &the_stats.total_wall_time;
 
-      _Timestamp_Divide_by_integer(total_wall, the_stats.count, &wall_average);
+      _Timespec_Divide_by_integer(total_wall, the_stats.count, &wall_average);
       (*print)( context,
         "%" PRId32 "." NANOSECONDS_FMT "/"        /* min wall time */
         "%" PRId32 "." NANOSECONDS_FMT "/"        /* max wall time */
         "%" PRId32 "." NANOSECONDS_FMT "\n",      /* avg wall time */
-        _Timestamp_Get_seconds( min_wall ),
-          _Timestamp_Get_nanoseconds( min_wall ) / NANOSECONDS_DIVIDER,
-        _Timestamp_Get_seconds( max_wall ),
-          _Timestamp_Get_nanoseconds( max_wall ) / NANOSECONDS_DIVIDER,
-        _Timestamp_Get_seconds( &wall_average ),
-          _Timestamp_Get_nanoseconds( &wall_average ) / NANOSECONDS_DIVIDER
+        _Timespec_Get_seconds( min_wall ),
+          _Timespec_Get_nanoseconds( min_wall ) / NANOSECONDS_DIVIDER,
+        _Timespec_Get_seconds( max_wall ),
+          _Timespec_Get_nanoseconds( max_wall ) / NANOSECONDS_DIVIDER,
+        _Timespec_Get_seconds( &wall_average ),
+          _Timespec_Get_nanoseconds( &wall_average ) / NANOSECONDS_DIVIDER
       );
     #else
       uint32_t  ival_wall, fval_wall;

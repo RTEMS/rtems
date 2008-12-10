@@ -46,10 +46,9 @@ extern "C" {
    */
   #define RTEMS_ENABLE_NANOSECOND_CPU_USAGE_STATISTICS
 
-  typedef Timestamp_Control rtems_thread_cpu_usage_t;
-
+  typedef Timestamp_Control Thread_CPU_usage_t;
 #else
-  typedef uint32_t rtems_thread_cpu_usage_t;
+  typedef uint32_t Thread_CPU_usage_t;
 #endif
 
 #include <rtems/score/context.h>
@@ -376,11 +375,10 @@ struct Thread_Control_struct {
   Thread_CPU_budget_algorithms          budget_algorithm;
   /** This field is the method invoked with the budgeted time is consumed. */
   Thread_CPU_budget_algorithm_callout   budget_callout;
-
   /** This field is the amount of CPU time consumed by this thread
    *  since it was created.
    */
-  rtems_thread_cpu_usage_t              cpu_time_used;
+  Thread_CPU_usage_t                    cpu_time_used;
   /** This field points to the Ready FIFO for this priority. */
   Chain_Control                        *ready;
   /** This field contains precalculated priority map indices. */
