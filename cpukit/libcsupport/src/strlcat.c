@@ -29,10 +29,10 @@
  * always leaves destination null-terminated (for len > 0).
  */
 size_t
-strlcat(dest, src, len)
-    char *dest;
-    const char *src;
-    size_t len;
+strlcat(
+    char *dest,
+    const char *src,
+    size_t len )
 {
     size_t dlen = strlen(dest);
 
