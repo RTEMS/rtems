@@ -1,3 +1,7 @@
+2008-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/Makefile.am: Remove stray "\".
+
 2008-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/ratemon.h,
