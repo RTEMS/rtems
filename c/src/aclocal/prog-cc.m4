@@ -50,7 +50,7 @@ AS_IF([test x"$rtems_cv_gcc_isystem" = xyes],[
 AC_SUBST(RTEMS_CPPFLAGS)
 
 AS_IF([test "$GCC" = yes],[
-  RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -Wl,-r"
+  RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -r"
 ])
 AC_SUBST(RTEMS_RELLDFLAGS)
 ])
