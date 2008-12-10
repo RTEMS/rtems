@@ -1,5 +1,6 @@
 2008-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/strlcat.c: Add prototypes.
 	* libmisc/Makefile.am: Remove stray "\".
 
 2008-12-10	Joel Sherrill <joel.sherrill@oarcorp.com>
