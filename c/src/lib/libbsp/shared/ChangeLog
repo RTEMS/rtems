@@ -1,3 +1,7 @@
+2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* clock_driver_stub.c: Remove (unused).
+
 2008-10-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock_driver_simidle.c: Ensure ISR nest level and Thread Dispatch
