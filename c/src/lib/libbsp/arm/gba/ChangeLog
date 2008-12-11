@@ -1,3 +1,7 @@
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/cpu.c: Add missing prototype.
+
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -Qy from *link.
