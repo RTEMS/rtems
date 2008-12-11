@@ -1,5 +1,10 @@
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_arp.h, libnetworking/net/route.h:
+	Include <sys/socket.h> to make header self contained.
+
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* zlib/zconf.h: #include <stdint.h> instead of <rtems/stdint.h>.
 	* score/cpu/arm/rtems/score/types.h,
 	score/cpu/avr/rtems/score/types.h,
