@@ -19,7 +19,8 @@ GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
-PNG_FILES = Developer-User-Timeline.png BSPInitFlowchart-49.png
+PNG_FILES = Developer-User-Timeline.png BSPInitFlowchart-49.png \
+    TERMIOSFlow.png
 
 if USE_HTML
 html_project_DATA += $(PNG_FILES)
