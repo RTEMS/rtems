@@ -40,7 +40,7 @@
 
 /* ----------------- compat layer ----------------- */
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 typedef uint32_t  CYG_WORD;
 typedef uint8_t   CYG_BYTE;

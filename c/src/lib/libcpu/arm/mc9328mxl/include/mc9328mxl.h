@@ -14,7 +14,7 @@
 #ifndef __MC9328MXL_H__
 #define __MC9328MXL_H__
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 #define bit(_x_) (1 << (_x_))
 

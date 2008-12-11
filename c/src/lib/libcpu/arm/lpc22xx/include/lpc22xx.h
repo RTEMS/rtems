@@ -13,7 +13,7 @@
 #ifndef __LPC22XX_H__
 #define __LPC22XX_H__
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /* EXTERNAL MEMORY CONTROLLER (EMC) */
 #define BCFG0           (*((volatile unsigned int *) 0xFFE00000))       /* lpc22xx only */
