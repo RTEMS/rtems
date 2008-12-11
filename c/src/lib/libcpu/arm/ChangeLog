@@ -1,5 +1,13 @@
 2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* at91rm9200/clock/clock.c, lpc22xx/clock/clockdrv.c,
+	mc9328mxl/clock/clockdrv.c, s3c2400/clock/clockdrv.c,
+	s3c24xx/clock/clockdrv.c: 
+	Include ../../../../libbsp/shared/clockdrv_shell.h 
+	instead of ../../../../libbsp/shared/clockdrv_shell.c.
+
+2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* lpc22xx/include/lpc22xx.h, mc9328mxl/include/mc9328mxl.h: 
 	#include <stdint.h> instead of <rtems/stdint.h>.
 	* at91rm9200/dbgu/dbgu.c: Add missing prototype.
