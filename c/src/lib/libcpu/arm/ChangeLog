@@ -1,5 +1,7 @@
 2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* lpc22xx/include/lpc22xx.h, mc9328mxl/include/mc9328mxl.h: 
+	#include <stdint.h> instead of <rtems/stdint.h>.
 	* at91rm9200/dbgu/dbgu.c: Add missing prototype.
 
 2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
