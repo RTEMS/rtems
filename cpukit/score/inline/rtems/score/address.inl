@@ -42,7 +42,7 @@
 #include <rtems/bspIo.h>
 RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   void       *base,
-  int32_t    offset
+  intptr_t    offset
 )
 {
   return (void *)((intptr_t)base + offset);
@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   void       *base,
-  int32_t    offset
+  intptr_t    offset
 )
 {
   return (void *)((intptr_t)base - offset);

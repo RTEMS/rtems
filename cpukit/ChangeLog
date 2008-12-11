@@ -1,3 +1,8 @@
+2008-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/inline/rtems/score/address.inl: Make offset arguments intptr_t
+	not int32_t.
+
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_arp.h, libnetworking/net/route.h:
