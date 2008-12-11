@@ -1,3 +1,11 @@
+2008-12-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+                Joel Sherrrill <joel.sherrill@oarcorp.com>
+
+	* bsp_howto/Makefile.am, bsp_howto/console.t: Sebastian improved
+	 documentation for termios device drivers.
+	* bsp_howto/TERMIOSFlow.eps, bsp_howto/TERMIOSFlow.png: New files.
+	Joel added Termios Flow figure from RTEMS Open Class material.
+
 2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
