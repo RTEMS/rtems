@@ -37,6 +37,8 @@
 #ifndef _NET_IF_ARP_H_
 #define	_NET_IF_ARP_H_
 
+#include <sys/socket.h> /* struct sockaddr */
+
 /*
  * Address Resolution Protocol.
  *
