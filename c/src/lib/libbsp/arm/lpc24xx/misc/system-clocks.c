@@ -28,18 +28,12 @@
  */
 #define LPC24XX_OSCILLATOR_INTERNAL 4000000U
 
-#ifdef LPC2478
-  /**
-   * @brief Main oscillator frequency in [Hz].
-   */
-  #define LPC24XX_OSCILLATOR_MAIN 12000000U
+#if !defined(LPC24XX_OSCILLATOR_MAIN)
+#error unknown main oscillator frequency
+#endif
 
-  /**
-   * @brief RTC oscillator frequency in [Hz].
-   */
-  #define LPC24XX_OSCILLATOR_RTC 32768
-#else
-  #error Unknown oscillator frequencies
+#if !defined(LPC24XX_OSCILLATOR_RTC)
+#error unknown rtc oscillator frequency
 #endif
 
 /**
