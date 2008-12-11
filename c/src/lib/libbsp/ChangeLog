@@ -1,3 +1,7 @@
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/clockdrv_shell.c: Turn warning into error.
+
 2008-08-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't install files from shared/.
