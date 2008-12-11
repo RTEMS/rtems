@@ -11,6 +11,6 @@
  *  $Id$
  */
 
-#warning "Including obsolete file clockdrv_shell.c; include clockdrv_shell.h, instead"
+#error "Including obsolete file clockdrv_shell.c; include clockdrv_shell.h, instead"
 
 #include "clockdrv_shell.h"
