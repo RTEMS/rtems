@@ -1,3 +1,12 @@
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/readdir.c, libmd/md4.h, libmd/md5.h,
+	libmisc/mw-fb/mw_fb.h, libnetworking/net/ppp_defs.h,
+	libnetworking/net/slcompress.c, libnetworking/rtems/bsdnet/_types.h,
+	libnetworking/sys/sysctl.h, librpc/include/rpc/types.h, pppd/pppd.h,
+	rtems/include/rtems/rtems/types.h, score/include/rtems/system.h:
+	#include <stdint.h> instead of <rtems/stdint.h>.
+
 2008-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Use -r instead of -Wl,-r to build *.rels.
