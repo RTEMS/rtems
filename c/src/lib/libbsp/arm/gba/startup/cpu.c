@@ -132,7 +132,7 @@ extern void _exc_data_abort();
  *
  *  @todo Can't use exception vectors in GBA because they are already in GBA ROM BIOS!!
  */
-extern __inline__ void rtems_exception_init_mngt();
+extern __inline__ void rtems_exception_init_mngt(void);
 
 
 /**
