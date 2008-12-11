@@ -21,6 +21,8 @@
 #ifndef LIBBSP_ARM_LPC24XX_BSP_H
 #define LIBBSP_ARM_LPC24XX_BSP_H
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
