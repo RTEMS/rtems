@@ -1,3 +1,11 @@
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_BSPOPTS(LPC24XX_OSCILLATOR_RTC).
+	Add RTEMS_BSPOPTS(LPC24XX_OSCILLATOR_MAIN).
+	* include/bsp.h: #include <bspopts.h>.
+	* misc/system-clocks.c: Receive LPC24XX_OSCILLATOR_RTC,
+	LPC24XX_OSCILLATOR_MAIN through bspopts.h.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_specs: Move -e start from *link to *startfile to avoid warning
