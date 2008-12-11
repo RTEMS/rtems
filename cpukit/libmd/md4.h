@@ -8,7 +8,7 @@
 ** ********************************************************************
 */
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /* MDstruct is the data structure for a message digest computation.
 */

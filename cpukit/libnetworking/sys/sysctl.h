@@ -36,7 +36,7 @@
 #ifndef _SYS_SYSCTL_H_
 #define	_SYS_SYSCTL_H_
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 #include <rtems/bsd/sys/queue.h>
 
 struct thread;

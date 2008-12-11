@@ -34,7 +34,7 @@
 #ifndef _PPP_DEFS_H_
 #define _PPP_DEFS_H_
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /*
  * The basic PPP frame.

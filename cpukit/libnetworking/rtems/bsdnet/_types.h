@@ -33,7 +33,7 @@
 #ifndef _RTEMS_BSDNET__TYPES_H_
 #define _RTEMS_BSDNET__TYPES_H_
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /*
  * Standard type definitions.

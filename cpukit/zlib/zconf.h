@@ -260,7 +260,7 @@
 #endif
 
 #if defined(__rtems__)
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 typedef uint_least8_t 	Byte;
 typedef uint_least16_t	uInt;

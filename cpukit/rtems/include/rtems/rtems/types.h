@@ -28,7 +28,7 @@
  *  RTEMS basic type definitions
  */
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>

@@ -25,7 +25,7 @@
 #ifndef ASM
 
 #include <stdbool.h>
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {

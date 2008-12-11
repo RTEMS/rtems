@@ -39,7 +39,7 @@
 
 #ifndef __MD5_INCLUDE__
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /* typedef a 32-bit type */
 typedef uint32_t UINT4;

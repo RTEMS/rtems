@@ -10,7 +10,7 @@
 #ifndef _MW_FB_H
 #define _MW_FB_H
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 #ifdef	__cplusplus
 extern "C" {

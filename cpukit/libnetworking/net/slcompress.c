@@ -39,9 +39,7 @@
  *
  */
 
-#if defined(__rtems__)
-#include <rtems/stdint.h>
-#endif
+#include <stdint.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>

@@ -166,7 +166,7 @@ typedef void * proc_ptr;
 #define FALSE     (0)
 #endif
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 #include <rtems/score/cpu.h>        /* processor specific information */
 
 /** 

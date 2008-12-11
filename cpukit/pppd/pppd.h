@@ -30,7 +30,7 @@
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
 #include <rtems/rtemsdialer.h>
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 #if defined(__STDC__)
 #include <stdarg.h>
