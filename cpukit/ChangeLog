@@ -1,5 +1,26 @@
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/cpu/arm/rtems/score/types.h,
+	score/cpu/avr/rtems/score/types.h,
+	score/cpu/bfin/rtems/score/types.h,
+	score/cpu/c4x/rtems/score/types.h,
+	score/cpu/h8300/rtems/score/types.h,
+	score/cpu/i386/rtems/score/types.h,
+	score/cpu/lm32/rtems/score/types.h,
+	score/cpu/m32c/rtems/score/types.h,
+	score/cpu/m32r/rtems/score/types.h,
+	score/cpu/m68k/rtems/score/types.h,
+	score/cpu/mips/rtems/score/types.h,
+	score/cpu/nios2/rtems/score/types.h,
+	score/cpu/no_cpu/rtems/score/types.h,
+	score/cpu/powerpc/rtems/score/types.h,
+	score/cpu/sh/rtems/score/types.h,
+	score/cpu/sparc/rtems/score/types.h,
+	score/cpu/unix/rtems/score/types.h:
+	#include <stdint.h> instead of <rtems/stdint.h>.
+
+2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/readdir.c, libmd/md4.h, libmd/md5.h,
 	libmisc/mw-fb/mw_fb.h, libnetworking/net/ppp_defs.h,
 	libnetworking/net/slcompress.c, libnetworking/rtems/bsdnet/_types.h,
