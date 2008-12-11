@@ -1,3 +1,7 @@
+2008-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.c: Remove warnings -- even if code is just temporary.
+
 2008-11-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, cpu_asm.c: Add debug printk() calls until the BSP/port can

@@ -1,8 +1,8 @@
 /*
- *  XXX CPU Dependent Source
+ *  AVR CPU Dependent Source
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,8 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
+
+#include <rtems/bspIo.h> /* XXX remove me later */
 
 /*  _CPU_Initialize
  *
@@ -180,4 +182,5 @@ void *_CPU_Thread_Idle_body( uint32_t ignored )
 
   for( ; ; )
     /* insert your "halt" instruction here */ ;
+  return (void *) 0;
 }

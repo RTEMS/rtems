@@ -6,7 +6,7 @@
  *
  *  NOTE:  This is supposed to be a .S or .s file NOT a C file.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,6 +25,8 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 /* #include "cpu_asm.h> */
+
+#include <rtems/bspIo.h> /* XXX remove me later */
 
 /*
  *  _CPU_Context_save_fp_context
@@ -118,7 +120,7 @@ void _CPU_Context_restore(
  *  XXX document implementation including references if appropriate
  */
 
-void _ISR_Handler()
+void _ISR_Handler(void)
 {
    /*
     *  This discussion ignores a lot of the ugly details in a real
