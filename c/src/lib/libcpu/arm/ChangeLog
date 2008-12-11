@@ -1,3 +1,7 @@
+2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* at91rm9200/dbgu/dbgu.c: Add missing prototype.
+
 2008-09-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* at91rm9200/dbgu/dbgu.c: Use standardized bsp_cleanup() which can

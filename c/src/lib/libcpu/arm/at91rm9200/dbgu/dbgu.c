@@ -218,7 +218,7 @@ static void _BSP_put_char( char c ) {
 
 BSP_output_char_function_type BSP_output_char = _BSP_put_char;
 
-int _BSP_poll_char()
+int _BSP_poll_char(void)
 {
   return dbgu_poll_read(0);
 }
