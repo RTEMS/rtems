@@ -112,4 +112,4 @@ void Clock_driver_support_shutdown_hardware( void )
     BSP_remove_rtems_irq_handler(&clock_isr_data);
 }
 
-#include "../../../../libbsp/shared/clockdrv_shell.c"
+#include "../../../../libbsp/shared/clockdrv_shell.h"

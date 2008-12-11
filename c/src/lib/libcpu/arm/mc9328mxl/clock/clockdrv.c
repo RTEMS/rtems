@@ -21,7 +21,7 @@
 #include <mc9328mxl.h>
 #include <rtems/bspIo.h>  /* for printk */
 
-/* this is defined in ../../../shared/clockdrv_shell.c */
+/* this is defined in ../../../shared/clockdrv_shell.h */
 rtems_isr Clock_isr(rtems_vector_number vector);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
@@ -145,4 +145,4 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 
 
 /* Make sure to include this, and only at the end of the file */
-#include "../../../../libbsp/shared/clockdrv_shell.c"
+#include "../../../../libbsp/shared/clockdrv_shell.h"

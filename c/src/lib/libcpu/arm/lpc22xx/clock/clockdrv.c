@@ -20,7 +20,7 @@
 #include <lpc22xx.h>
 #include <rtems/bspIo.h>  /* for printk */
 
-/* this is defined in ../../../shared/clockdrv_shell.c */
+/* this is defined in ../../../shared/clockdrv_shell.h */
 rtems_isr Clock_isr(rtems_vector_number vector);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
@@ -42,7 +42,7 @@ rtems_irq_connect_data clock_isr_data = {LPC22xx_INTERRUPT_TIMER0,
 
 
 
- /*use the /shared/clockdrv_shell.c code template */
+/* use the /shared/clockdrv_shell.h code template */
 
 /**
  * When we get the clock interrupt
@@ -155,5 +155,5 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 
 
 /* Make sure to include this, and only at the end of the file */
-#include "../../../../libbsp/shared/clockdrv_shell.c"
+#include "../../../../libbsp/shared/clockdrv_shell.h"
 
