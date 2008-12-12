@@ -141,13 +141,9 @@ The following Figure shows how a Termios driven serial driver works:
 
 @ifset use-html
 @html
-<P ALIGN="center"><IMG SRC="TERMIOSFlow.png"
-     WIDTH=800 HEIGHT=610 ALT="Termios Flow"></P>
+<P ALIGN="center"><IMG SRC="TERMIOSFlow.png" ALT="Termios Flow"></P>
 @end html
 @end ifset
-
-The most significant five bits are the object class.  The next
-three bits indicate the API to which the object class belongs.
 
 The following list describes the basic flow.
 
