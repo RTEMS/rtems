@@ -1,3 +1,8 @@
+2008-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/region.t: Malloc Family is not implemented in termios of Region
+	Manager after 4.7. Correct documentation.
+
 2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/concepts.t: Id has four parts not three.
