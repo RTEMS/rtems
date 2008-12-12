@@ -221,6 +221,184 @@ diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' new
 -#endif
 -
 -#endif
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/fputws.c newlib-1.16.0/newlib/libc/stdio/fputws.c
+--- newlib-1.16.0.orig/newlib/libc/stdio/fputws.c	2008-12-11 00:43:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/fputws.c	2008-12-12 10:47:39.000000000 +0100
+@@ -26,7 +26,7 @@
+ 
+ /*
+ FUNCTION        
+-<<fputs>>---write a wide character string in a file or stream
++<<fputws>>---write a wide character string in a file or stream
+ 
+ INDEX
+ 	fputws   
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/getwc.c newlib-1.16.0/newlib/libc/stdio/getwc.c
+--- newlib-1.16.0.orig/newlib/libc/stdio/getwc.c	2008-12-11 00:43:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/getwc.c	2008-12-12 10:47:39.000000000 +0100
+@@ -24,6 +24,53 @@
+  * SUCH DAMAGE.
+  */
+ 
++/*
++FUNCTION
++<<getwc>>---read a character
++
++INDEX
++	getwc
++INDEX
++	_getwc_r
++
++ANSI_SYNOPSIS
++	#include <wchar.h>
++	wchar_t getwc(FILE *<[fp]>);
++
++	#include <wchar.h>
++	wchar_t _getwc_r(struct _reent *<[ptr]>, FILE *<[fp]>);
++
++TRAD_SYNOPSIS
++	#include <wchar.h>
++	wchar_t getwc(<[fp]>)
++	FILE *<[fp]>;
++
++	#include <wchar.h>
++	wchar_t _getwc_r(<[ptr]>, <[fp]>)
++	struct _reent *<[ptr]>;
++	FILE *<[fp]>;
++
++DESCRIPTION
++The <<getwc>> function or macro is the wide-character equivalent of
++the <<getc>> function. You can use <<getwc>> to get the next
++wide character from the file or stream identified by <[fp]>.  As a 
++side effect, <<getwc>> advances the file's current position indicator.
++
++The alternate function <<_getwc_r>> is a reentrant version.  The
++extra argument <[reent]> is a pointer to a reentrancy structure.
++
++RETURNS
++The next character cast to <<wint_t>>, unless there is no more
++data, or the host system reports a read error; in either of these
++situations, <<getc>> returns <<WEOF>>.
++
++You can distinguish the two situations that cause an <<EOF>> result by
++using the <<ferror>> and <<feof>> functions.
++
++PORTABILITY
++C99
++*/
++
+ #include <_ansi.h>
+ #include <reent.h>
+ #include <stdio.h>
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/getwchar.c newlib-1.16.0/newlib/libc/stdio/getwchar.c
+--- newlib-1.16.0.orig/newlib/libc/stdio/getwchar.c	2008-12-11 00:43:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/getwchar.c	2008-12-12 10:47:39.000000000 +0100
+@@ -56,11 +56,11 @@
+ extra argument <[reent]> is a pointer to a reentrancy structure.
+ 
+ RETURNS
+-The next wide character cast to <<wint_t>>), unless there is no more
++The next wide character cast to <<wint_t>>, unless there is no more
+ data, or the host system reports a read error; in either of these
+-situations, <<getwchar>> returns <<EOF>>.
++situations, <<getwchar>> returns <<WEOF>>.
+ 
+-You can distinguish the two situations that cause an <<EOF>> result by
++You can distinguish the two situations that cause an <<WEOF>> result by
+ using `<<ferror(stdin)>>' and `<<feof(stdin)>>'.
+ 
+ PORTABILITY
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/putwc.c newlib-1.16.0/newlib/libc/stdio/putwc.c
+--- newlib-1.16.0.orig/newlib/libc/stdio/putwc.c	2008-12-11 00:43:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/putwc.c	2008-12-12 10:48:53.000000000 +0100
+@@ -24,6 +24,52 @@
+  * SUCH DAMAGE.
+  */
+ 
++/*
++FUNCTION
++<<putwc>>---write a wide character
++
++INDEX
++	putwc
++INDEX
++	_putwc_r
++
++ANSI_SYNOPSIS
++	#include <wchar.h>
++	wchar_t putwc(wchar_t <[wc]>, FILE *<[fp]>);
++
++	#include <wchar.h>
++	wchar_t _putwc_r(struct _reent *<[ptr]>, wchar_t <[wc]>, FILE *<[fp]>);
++
++TRAD_SYNOPSIS
++	#include <wchar.h>
++	wchar_t putwc(<[wc]>, <[fp]>)
++	wchar_t <[wc]>;
++	FILE *<[fp]>;
++
++	#include <stdio.h>
++	wchar_t _putwc_r(<[ptr]>, <[wc]>, <[fp]>)
++	struct _reent *<[ptr]>;
++	wchar_t <[wc]>;
++	FILE *<[fp]>;
++
++
++DESCRIPTION
++The <<putwc>> function or macro is the wide-character equivalent of
++the <<putc>> function. It writes the wide-character wc to the file or
++stream identified by <[fp]>.
++
++The alternate function <<_putwc_r>> is a reentrant version.  The
++extra argument <[reent]> is a pointer to a reentrancy structure.
++
++RETURNS
++If successful, <<putwc>> returns its argument <[wc]>.  If an error
++intervenes, the result is <<WEOF>>.  You can use `<<ferror(<[fp]>)>>' to
++query for errors.
++
++PORTABILITY
++C99
++*/
++
+ #include <_ansi.h>
+ #include <reent.h>
+ #include <stdio.h>
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/putwchar.c newlib-1.16.0/newlib/libc/stdio/putwchar.c
+--- newlib-1.16.0.orig/newlib/libc/stdio/putwchar.c	2008-12-11 00:43:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/putwchar.c	2008-12-12 10:47:39.000000000 +0100
+@@ -49,7 +49,7 @@
+ 	wchar_t <[wc]>;
+ 
+ DESCRIPTION
+-The <<putwchar(>> function or macro is the wide-character equivalent of
++The <<putwchar>> function or macro is the wide-character equivalent of
+ the <<putchar>> function. It writes the wide character wc to stdout.
+ 
+ The alternate function <<_putwchar_r>> is a reentrant version.  The
+diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/stdio/stdio.tex newlib-1.16.0/newlib/libc/stdio/stdio.tex
+--- newlib-1.16.0.orig/newlib/libc/stdio/stdio.tex	2008-12-12 03:49:40.000000000 +0100
++++ newlib-1.16.0/newlib/libc/stdio/stdio.tex	2008-12-12 10:47:39.000000000 +0100
+@@ -211,6 +211,9 @@
+ @include stdio/getw.def
+ 
+ @page
++@include stdio/getwc.def
++
++@page
+ @include stdio/getwchar.def
+ 
+ @page
+@@ -241,6 +244,9 @@
+ @include stdio/putw.def
+ 
+ @page
++@include stdio/putwc.def
++
++@page
+ @include stdio/putwchar.def
+ 
+ @page
 diff -Naur --exclude=CVS --exclude=.cvsignore --exclude='*~' --exclude='.#*' newlib-1.16.0.orig/newlib/libc/sys/rtems/crt0.c newlib-1.16.0/newlib/libc/sys/rtems/crt0.c
 --- newlib-1.16.0.orig/newlib/libc/sys/rtems/crt0.c	2005-12-19 08:27:19.000000000 +0100
 +++ newlib-1.16.0/newlib/libc/sys/rtems/crt0.c	2008-11-27 12:36:56.000000000 +0100
