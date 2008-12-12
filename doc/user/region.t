@@ -205,12 +205,12 @@ rounding up to a page size boundary.
 
 @subsection Changing the Size of a Segment
 
-The @code{@value{DIRPREFIX}region_resize_segment} directive 
-is used to change the size in bytes of the specified segment.  The
-size may be increased or decreased.  When increasing the
-size of a segment, it is possible that the request cannot be 
-satisfied.  This directive is used to support the @code{realloc()}
-function in the Standard C Library.
+The @code{@value{DIRPREFIX}region_resize_segment} directive is used
+to change the size in bytes of the specified segment.  The size may be
+increased or decreased.  When increasing the size of a segment, it is
+possible that the request cannot be satisfied.  This directive provides
+functionality similar to the @code{realloc()} function in the Standard
+C Library.
 
 @subsection Deleting a Region
 
