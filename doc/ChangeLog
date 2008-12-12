@@ -1,3 +1,8 @@
+2008-12-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_howto/console.t: Remove size constraints on image. Fix a
+	sentence.
+
 2008-12-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
                 Joel Sherrrill <joel.sherrill@oarcorp.com>
 
