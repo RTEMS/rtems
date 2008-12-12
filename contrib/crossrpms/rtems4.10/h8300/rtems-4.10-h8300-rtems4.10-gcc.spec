@@ -42,7 +42,7 @@
 %define gcc_version 4.3.2
 %define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
-%define newlib_pkgvers		1.16.0.cvs.20081205
+%define newlib_pkgvers		1.16.0.cvs.20081212
 %define newlib_version		1.16.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
@@ -53,7 +53,7 @@ Summary:      	h8300-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	17%{?dist}
+Release:      	18%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
