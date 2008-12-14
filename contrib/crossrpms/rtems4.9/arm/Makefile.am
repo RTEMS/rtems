@@ -12,7 +12,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.3.2
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 17%{?dist}
+GCC_RPMREL = 18%{?dist}
 NEWLIB_VERS = 1.16.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx
