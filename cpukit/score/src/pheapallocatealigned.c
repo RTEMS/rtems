@@ -18,7 +18,7 @@
 
 void *_Protected_heap_Allocate_aligned(
   Heap_Control *the_heap,
-  size_t        size,
+  intptr_t      size,
   uint32_t      alignment
 )
 {

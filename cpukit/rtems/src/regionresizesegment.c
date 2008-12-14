@@ -46,13 +46,13 @@
 rtems_status_code rtems_region_resize_segment(
   Objects_Id  id,
   void       *segment,
-  size_t      size,
-  size_t     *old_size
+  intptr_t    size,
+  intptr_t   *old_size
 )
 {
-  uint32_t                 avail_size;
+  intptr_t                 avail_size;
   Objects_Locations        location;
-  uint32_t                 osize;
+  intptr_t                 osize;
   rtems_status_code        return_status = RTEMS_INTERNAL_ERROR;
   Heap_Resize_status       status;
   register Region_Control *the_region;

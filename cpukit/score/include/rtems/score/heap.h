@@ -145,11 +145,11 @@ typedef struct {
   /** instance number of this heap */
   uint32_t instance;
   /** the size of the memory for heap */
-  uint32_t size;
+  intptr_t size;
   /** current free size */
-  uint32_t free_size;
+  intptr_t free_size;
   /** minimum free size ever */
-  uint32_t min_free_size;
+  intptr_t min_free_size;
   /** current number of free blocks */
   uint32_t free_blocks;
   /** maximum number of free blocks ever */
@@ -262,7 +262,7 @@ typedef struct {
 uint32_t   _Heap_Initialize(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size,
+  intptr_t      size,
   uint32_t      page_size
 );
 
@@ -281,8 +281,8 @@ uint32_t   _Heap_Initialize(
 Heap_Extend_status _Heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size,
-  uint32_t     *amount_extended
+  intptr_t      size,
+  intptr_t     *amount_extended
 );
 
 /**
@@ -296,7 +296,7 @@ Heap_Extend_status _Heap_Extend(
  */
 void *_Heap_Allocate(
   Heap_Control *the_heap,
-  size_t        size
+  intptr_t      size
 );
 
 /**
@@ -315,7 +315,7 @@ void *_Heap_Allocate(
  */
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  size_t        size,
+  intptr_t      size,
   uint32_t      alignment
 );
 
@@ -336,7 +336,7 @@ void *_Heap_Allocate_aligned(
 bool _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
-  size_t              *size
+  intptr_t            *size
 );
 
 /**
@@ -364,9 +364,9 @@ bool _Heap_Size_of_user_area(
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size,
-  uint32_t     *old_mem_size,
-  uint32_t     *avail_mem_size
+  intptr_t      size,
+  intptr_t     *old_mem_size,
+  intptr_t     *avail_mem_size
 );
 
 /**

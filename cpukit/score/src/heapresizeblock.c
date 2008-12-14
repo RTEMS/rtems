@@ -47,9 +47,9 @@
 Heap_Resize_status _Heap_Resize_block(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size,
-  uint32_t     *old_mem_size,
-  uint32_t     *avail_mem_size
+  intptr_t      size,
+  intptr_t     *old_mem_size,
+  intptr_t     *avail_mem_size
 )
 {
   Heap_Block *the_block;

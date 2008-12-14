@@ -18,7 +18,7 @@
 
 void *_Protected_heap_Allocate(
   Heap_Control *the_heap,
-  size_t        size
+  intptr_t      size
 )
 {
   void *p;

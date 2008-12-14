@@ -1,5 +1,21 @@
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/realloc.c, rtems/include/rtems/rtems/region.h,
+	rtems/src/regioncreate.c, rtems/src/regionextend.c,
+	rtems/src/regiongetsegment.c, rtems/src/regiongetsegmentsize.c,
+	rtems/src/regionmp.c, rtems/src/regionresizesegment.c,
+	sapi/include/rtems/config.h, score/include/rtems/score/heap.h,
+	score/include/rtems/score/protectedheap.h, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapallocatealigned.c,
+	score/src/heapextend.c, score/src/heapresizeblock.c,
+	score/src/heapsizeofuserarea.c, score/src/pheapallocate.c,
+	score/src/pheapallocatealigned.c, score/src/pheapextend.c,
+	score/src/pheapgetblocksize.c, score/src/pheapresizeblock.c: Change
+	sizes of heap/region and allocated objects in heap to intptr_t so
+	they can be larger than a single allocatable object (e.g. size_t).
+
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/src/chg_pri.c, itron/src/cre_tsk.c, itron/src/rot_rdq.c,
 	posix/Makefile.am, posix/include/rtems/posix/mutex.h,
 	posix/include/rtems/posix/priority.h, posix/src/mutex.c,

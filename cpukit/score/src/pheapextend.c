@@ -19,11 +19,11 @@
 bool _Protected_heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  size_t        size
+  intptr_t      size
 )
 {
   Heap_Extend_status status;
-  uint32_t           amount_extended;
+  intptr_t           amount_extended;
 
   _RTEMS_Lock_allocator();
     status = _Heap_Extend(the_heap, starting_address, size, &amount_extended);

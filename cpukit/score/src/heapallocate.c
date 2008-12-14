@@ -36,7 +36,7 @@
 
 void *_Heap_Allocate(
   Heap_Control        *the_heap,
-  size_t               size
+  intptr_t             size
 )
 {
   uint32_t  the_size;

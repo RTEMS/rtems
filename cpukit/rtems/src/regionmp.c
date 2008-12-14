@@ -83,7 +83,7 @@ rtems_status_code _Region_MP_Send_request_packet (
   Region_MP_Remote_operations  operation,
   Objects_Id                   region_id,
   void                        *segment,
-  uint32_t                     size,
+  intptr_t                     size,
   rtems_option                 option_set,
   rtems_interval               timeout
 )

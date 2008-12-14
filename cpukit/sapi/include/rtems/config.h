@@ -115,7 +115,7 @@ typedef struct {
 
   /** This field specifies the size in bytes of the RTEMS Workspace.
    */
-  uint32_t                       work_space_size;
+  intptr_t                       work_space_size;
 
   /** This field specifies the maximum number of dynamically installed
    *  used extensions.

@@ -23,11 +23,12 @@
 
 static void
 check_result(
-  Heap_Control* the_heap,
-  Heap_Block* the_block,
-  _H_uptr_t user_addr,
-  _H_uptr_t aligned_user_addr,
-  uint32_t size)
+  Heap_Control *the_heap,
+  Heap_Block   *the_block,
+  _H_uptr_t     user_addr,
+  _H_uptr_t     aligned_user_addr,
+  intptr_t      size
+)
 {
   _H_uptr_t const user_area = _H_p2u(_Heap_User_area(the_block));
   _H_uptr_t const block_end = _H_p2u(the_block)
@@ -73,7 +74,8 @@ static
 Heap_Block *block_allocate(
   Heap_Control  *the_heap,
   Heap_Block    *the_block,
-  uint32_t      alloc_size)
+  intptr_t       alloc_size
+)
 {
   Heap_Statistics *const stats = &the_heap->stats;
   uint32_t const block_size = _Heap_Block_size(the_block);
@@ -131,7 +133,7 @@ Heap_Block *block_allocate(
 
 void *_Heap_Allocate_aligned(
   Heap_Control *the_heap,
-  size_t        size,
+  intptr_t      size,
   uint32_t      alignment
 )
 {

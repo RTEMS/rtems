@@ -69,9 +69,9 @@ typedef struct {
   Objects_Control       Object;
   Thread_queue_Control  Wait_queue;            /* waiting threads        */
   void                 *starting_address;      /* physical start addr    */
-  uint32_t              length;                /* physical length(bytes) */
+  intptr_t              length;                /* physical length(bytes) */
   uint32_t              page_size;             /* in bytes               */
-  uint32_t              maximum_segment_size;  /* in bytes               */
+  intptr_t              maximum_segment_size;  /* in bytes               */
   rtems_attribute       attribute_set;
   uint32_t              number_of_used_blocks; /* blocks allocated       */
   Heap_Control          Memory;
@@ -106,7 +106,7 @@ void _Region_Manager_initialization(
 rtems_status_code rtems_region_create(
   rtems_name          name,
   void               *starting_address,
-  uint32_t            length,
+  intptr_t            length,
   uint32_t            page_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
@@ -123,7 +123,7 @@ rtems_status_code rtems_region_create(
 rtems_status_code rtems_region_extend(
   Objects_Id          id,
   void               *starting_address,
-  uint32_t            length
+  intptr_t            length
 );
 
 /**
@@ -186,7 +186,7 @@ rtems_status_code rtems_region_delete(
  */
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
-  uint32_t           size,
+  intptr_t           size,
   rtems_option       option_set,
   rtems_interval     timeout,
   void              **segment
@@ -201,7 +201,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  size_t            *size
+  intptr_t          *size
 );
 
 /**
@@ -243,8 +243,8 @@ rtems_status_code rtems_region_return_segment(
 rtems_status_code rtems_region_resize_segment(
   Objects_Id  id,
   void       *segment,
-  size_t      size,
-  size_t     *old_size
+  intptr_t    size,
+  intptr_t   *old_size
 );
 
 #ifndef __RTEMS_APPLICATION__
