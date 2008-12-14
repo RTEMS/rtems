@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -132,9 +132,10 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_task_create of TA2" );
 
+#define TA3_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4)
   status = rtems_task_create(
     Task_name[ 3 ],
-    250,
+    TA3_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -142,9 +143,10 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_task_create of TA3" );
 
+#define TA4_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1)
   status = rtems_task_create(
     Task_name[ 4 ],
-    254,
+    TA4_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,

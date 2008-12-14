@@ -25,6 +25,7 @@
  * Somewhat randomly sorted to ensure than if discipline is FIFO, run-time
  * behavior won't be the same when released.
  */
+#if (RTEMS_MAXIMUM_PRIORITY >= 64)
 rtems_task_priority Priorities[MAX_TASKS] = {
   37, 37, 37, 37,       /* backward - more 2-n */
   2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
@@ -33,6 +34,16 @@ rtems_task_priority Priorities[MAX_TASKS] = {
   38, 37,               /* backward - search backward arbitrary */
   34, 34, 34, 34,       /* backward - multple on 2-n chain */
 };
+#else
+rtems_task_priority Priorities[MAX_TASKS] = {
+  13, 13, 13, 13,       /* backward - more 2-n */
+  2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
+  4, 3,                 /* forward - search forward arbitrary */
+  3, 3, 3, 3,           /* forward - more 2-n */
+  14, 13,               /* backward - search backward arbitrary */
+  12, 12, 12, 12,       /* backward - multple on 2-n chain */
+};
+#endif
 
 
 rtems_id   Semaphore;

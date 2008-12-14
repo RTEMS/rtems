@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,7 +68,7 @@ TEST_EXTERN uint8_t   Area_2[4096] CPU_STRUCTURE_ALIGNMENT;
 TEST_EXTERN uint8_t   Area_3[4096] CPU_STRUCTURE_ALIGNMENT;
 TEST_EXTERN uint8_t   Area_4[8192] CPU_STRUCTURE_ALIGNMENT;
 
-#define BASE_PRIORITY 140
+#define BASE_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2) + 1)
 
 #define Put_address_from_area_1( _to_be_printed ) \
    printf( "0x%08lx", \

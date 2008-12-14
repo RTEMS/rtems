@@ -410,9 +410,10 @@ rtems_task Init(rtems_task_argument ignored)
 
   /* -- Medium-prio Test Tasks --- */
   for (i = 0; i < NofMediumTask_C; i++) {
+#define MEDIUM_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2) + 1)
     status = rtems_task_create(
       rtems_build_name('M','E','D','0'+i),               /* Name */
-      100,                                               /* Priority */
+      MEDIUM_PRIORITY,                                   /* Priority */
       RTEMS_MINIMUM_STACK_SIZE*2,                        /* Stack size (8KB) */
       RTEMS_DEFAULT_MODES | RTEMS_NO_ASR,                /* Mode */
       RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */
@@ -425,9 +426,10 @@ rtems_task Init(rtems_task_argument ignored)
   }
 
   /* -- High-prio Test Task --- */
+#define HIGH_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2))
   status = rtems_task_create(
     rtems_build_name('H','I','G','H'),                 /* Name */
-    10,                                                /* Priority */
+    HIGH_PRIORITY,                                     /* Priority */
     RTEMS_MINIMUM_STACK_SIZE*2,                        /* Stack size (8KB) */
     RTEMS_DEFAULT_MODES | RTEMS_NO_ASR,                /* Mode */
     RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */
@@ -439,9 +441,10 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_task_start (HIGH)" );
 
   /* -- Low-prio Test Task --- */
+#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1)
   status = rtems_task_create(
     rtems_build_name('L','O','W',' '),                 /* Name */
-    200,                                               /* Priority */
+    LOW_PRIORITY,                                      /* Priority */
     RTEMS_MINIMUM_STACK_SIZE*2,                        /* Stack size (8KB) */
     RTEMS_DEFAULT_MODES | RTEMS_NO_ASR,                /* Mode */
     RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */
@@ -453,9 +456,10 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_task_start (LOW)" );
 
   /* -- HW Simulator Task --- */
+#define HWTASK_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2)
   status = rtems_task_create(
     rtems_build_name('H','W','S','M'),                 /* Name */
-    240,                                               /* Priority */
+    HWTASK_PRIORITY,                                   /* Priority */
     RTEMS_MINIMUM_STACK_SIZE*2,                        /* Stack size (8KB) */
     RTEMS_DEFAULT_MODES | RTEMS_NO_ASR,                /* Mode */
     RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */

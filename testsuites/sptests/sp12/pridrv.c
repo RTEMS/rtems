@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,7 @@ void Priority_test_driver(
 )
 {
   rtems_task_priority previous_priority;
-  uint32_t      index;
+  uint32_t            index;
   rtems_status_code   status;
 
   for ( index = 1 ; index <= 5 ; index++ ) {
@@ -76,7 +76,7 @@ void Priority_test_driver(
       status = rtems_task_wake_after( TICKS_PER_SECOND );
       directive_failed( status, "rtems_task_wake_after loop" );
 
-      if ( priority_base == 64 ) {
+      if ( priority_base == PRIORITY_INHERIT_BASE_PRIORITY ) {
         if ( index == 4 ) {
           status = rtems_task_set_priority(
             Priority_task_id[ 5 ],
@@ -110,7 +110,7 @@ void Priority_test_driver(
     }
   }
 
-  if ( priority_base == 64 ) {
+  if ( priority_base == PRIORITY_INHERIT_BASE_PRIORITY ) {
     puts( "PDRV - rtems_task_resume - PRI5" );
     status = rtems_task_resume( Priority_task_id[ 5 ] );
     directive_failed( status, "rtems_task_resume" );

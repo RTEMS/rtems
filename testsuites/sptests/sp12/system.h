@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,8 @@
  */
 
 #include <tmacros.h>
+
+#define PRIORITY_INHERIT_BASE_PRIORITY 5
 
 /* functions */
 

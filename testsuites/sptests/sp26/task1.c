@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -85,7 +85,7 @@ createTask (char c, rtems_id *tid)
   rtems_status_code sc;
 
   sc = rtems_task_create (rtems_build_name('S','u','b',c),
-    100,
+    RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,

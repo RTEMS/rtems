@@ -49,7 +49,7 @@ startTask (rtems_id arg)
 	rtems_status_code sc;
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', 'A'),
-		100,
+		RTEMS_MAXIMUM_PRIORITY - 1,
 		RTEMS_MINIMUM_STACK_SIZE * 2,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,

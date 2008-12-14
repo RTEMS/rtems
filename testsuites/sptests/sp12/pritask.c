@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,7 +46,7 @@ rtems_task Priority_task(
   );
   directive_failed( status, "rtems_semaphore_obtain of SM2" );
 
-  if ( its_priority < 64 ) {
+  if ( its_priority < PRIORITY_INHERIT_BASE_PRIORITY ) {
     printf( "PRI%d - WHY AM I HERE? (pri=%d)", its_index, its_priority );
     rtems_test_exit( 0 );
   }
