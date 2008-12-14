@@ -1,5 +1,9 @@
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psx05/init.c: Add parameter to call to sched_get_priority_max().
+
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psx05/init.c, psx07/init.c, psx09/init.c, psx11/init.c, psx12/init.c:
 	Run all tests successfully with maxixum number of priorities as 16
 	instead of 256. This was done by temporarily modifying the score

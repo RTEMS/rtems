@@ -468,7 +468,7 @@ void *POSIX_Init(
 
   /* set priority of Task2 to highest priority */
 
-  param.sched_priority = sched_get_priority_max();
+  param.sched_priority = sched_get_priority_max( SCHED_FIFO );
 
   puts( "Init: pthread_setschedparam - Setting Task2 priority to highest" );
   status = pthread_setschedparam( Task2_id, SCHED_FIFO, &param );
