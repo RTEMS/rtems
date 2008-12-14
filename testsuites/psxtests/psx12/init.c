@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -117,8 +117,8 @@ void *POSIX_Init(
   schedparam.ss_initial_budget.tv_sec = 1;
   schedparam.ss_initial_budget.tv_nsec = 0;
 
-  schedparam.sched_priority = 200;
-  schedparam.ss_low_priority = 100;
+  schedparam.sched_priority = sched_get_priority_max( SCHED_FIFO );
+  schedparam.ss_low_priority = sched_get_priority_max( SCHED_FIFO ) - 6;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
   assert( !status );

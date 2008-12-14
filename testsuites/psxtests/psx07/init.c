@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -499,7 +499,7 @@ void *POSIX_Init(
   status = pthread_setschedparam( pthread_self(), SCHED_OTHER, NULL );
   fatal_directive_check_status_only( status, EINVAL, "invalid priority" );
 
-  schedparam.sched_priority = 128;
+  schedparam.sched_priority = sched_get_priority_max(SCHED_OTHER);
 
   puts( "Init: pthread_setschedparam - EINVAL (invalid policy)" );
   status = pthread_setschedparam( pthread_self(), -1, &schedparam );

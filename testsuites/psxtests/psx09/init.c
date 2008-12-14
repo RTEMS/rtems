@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,6 +12,10 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
+
+int HIGH_PRIORITY;
+int MEDIUM_PRIORITY;
+int LOW_PRIORITY;
 
 void print_schedparam(
   char               *prefix,
@@ -70,8 +74,8 @@ void *POSIX_Init(
   schedparam.ss_initial_budget.tv_sec = 0;
   schedparam.ss_initial_budget.tv_nsec = 250000000;    /* 1/4 second */
 
-  schedparam.sched_priority = 200;
-  schedparam.ss_low_priority = 100;
+  schedparam.sched_priority = sched_get_priority_max(SCHED_SPORADIC);
+  schedparam.ss_low_priority = sched_get_priority_max(SCHED_SPORADIC) - 2;
 
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
@@ -111,9 +115,9 @@ void *POSIX_Init(
   schedparam.ss_initial_budget.tv_sec = 0;
   schedparam.ss_initial_budget.tv_nsec = 250000000;    /* 1/4 second */
 
-#define HIGH_PRIORITY 150
-#define MEDIUM_PRIORITY 131
-#define LOW_PRIORITY 100
+  HIGH_PRIORITY = sched_get_priority_max( SCHED_SPORADIC );
+  MEDIUM_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 2;
+  LOW_PRIORITY = sched_get_priority_max( SCHED_SPORADIC ) - 4;
 
   schedparam.sched_priority = HIGH_PRIORITY;
   schedparam.ss_low_priority = LOW_PRIORITY;

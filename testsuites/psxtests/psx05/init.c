@@ -12,6 +12,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
+#include <rtems/posix/priority.h>
 
 #define MUTEX_BAD_ID 0xfffffffe
 
@@ -107,6 +108,7 @@ void *POSIX_Init(
   int                  protocol;
   int                  ceiling;
   int                  old_ceiling;
+  int                  priority;
 
   assert( MUTEX_BAD_ID != PTHREAD_MUTEX_INITIALIZER );
   Mutex_bad_id = MUTEX_BAD_ID;
@@ -277,7 +279,10 @@ void *POSIX_Init(
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
   assert( !status );
 
-  status = pthread_mutexattr_setprioceiling( &attr, 128 );
+  status = pthread_mutexattr_setprioceiling(
+    &attr,
+    (sched_get_priority_max(SCHED_FIFO) / 2) + 1
+  );
   assert( !status );
 
   status = pthread_mutexattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
@@ -463,7 +468,7 @@ void *POSIX_Init(
 
   /* set priority of Task2 to highest priority */
 
-  param.sched_priority = 254;
+  param.sched_priority = sched_get_priority_max();
 
   puts( "Init: pthread_setschedparam - Setting Task2 priority to highest" );
   status = pthread_setschedparam( Task2_id, SCHED_FIFO, &param );
@@ -531,8 +536,11 @@ void *POSIX_Init(
 
   /* normal cases of set priority ceiling */
 
-  puts( "Init: pthread_mutex_setprioceiling - new ceiling = 200" );
-  status = pthread_mutex_setprioceiling( &Mutex2_id, 200, &old_ceiling );
+  priority = sched_get_priority_max( SCHED_FIFO );
+  priority = (priority == 254) ? 200 : 13;
+  
+  printf( "Init: pthread_mutex_setprioceiling - new ceiling = %d", priority );
+  status = pthread_mutex_setprioceiling( &Mutex2_id, priority, &old_ceiling );
   assert( !status );
   printf(
     "Init: pthread_mutex_setprioceiling - old ceiling = %d\n",old_ceiling
@@ -561,7 +569,7 @@ void *POSIX_Init(
 
   /* set priority of Task3 to highest priority */
 
-  param.sched_priority = 199;
+  param.sched_priority = --priority;
 
   status = pthread_setschedparam( Task3_id, SCHED_FIFO, &param );
   assert( !status );
@@ -585,7 +593,7 @@ void *POSIX_Init(
 
   /* set priority of Init to highest priority */
 
-  param.sched_priority = 254;
+  param.sched_priority = sched_get_priority_max(SCHED_FIFO);
 
   status = pthread_setschedparam( Init_id, SCHED_FIFO, &param );
   assert( !status );

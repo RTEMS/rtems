@@ -1,3 +1,13 @@
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx05/init.c, psx07/init.c, psx09/init.c, psx11/init.c, psx12/init.c:
+	Run all tests successfully with maxixum number of priorities as 16
+	instead of 256. This was done by temporarily modifying the score
+	priority.h maximum. This allowed testing of all API code to ensure
+	that it worked properly with a reduced number of priorities. Most
+	modifications were to switch from hard-coded maximum to using the API
+	provided methods to determine maximum number of priority levels.
+
 2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtimer01/psxtimer.c, psxtimer02/psxtimer.c: Obtain TOD with
