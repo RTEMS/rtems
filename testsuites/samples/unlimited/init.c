@@ -37,11 +37,12 @@ rtems_task Init(
 {
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
-  uint32_t      task;
+  uint32_t            task;
 
   /* lower the task priority to allow created tasks to execute */
 
-  rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
+  rtems_task_set_priority(
+    RTEMS_SELF, RTEMS_MAXIMUM_PRIORITY - 1, &old_priority);
   rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
 
   printf( "\n*** UNLIMITED TASK TEST ***\n" );

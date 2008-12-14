@@ -1,3 +1,13 @@
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* unlimited/init.c: Run all tests successfully with maxixum number of
+	priorities as 16 instead of 256. This was done by temporarily
+	modifying the score priority.h maximum. This allowed testing of all
+	API code to ensure that it worked properly with a reduced number of
+	priorities. Most modifications were to switch from hard-coded maximum
+	to using the API provided methods to determine maximum number of
+	priority levels.
+
 2008-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* fileio/init.c: Add explicit creation of /etc/passwd and /etc/group so
