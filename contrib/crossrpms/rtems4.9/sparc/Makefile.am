@@ -4,9 +4,9 @@ TARGET = sparc-rtems4.9
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.18
+BINUTILS_VERS = 2.19
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 5%{?dist}
+BINUTILS_RPMREL = 1%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
