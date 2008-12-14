@@ -52,7 +52,7 @@ Summary:      	bfin-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	16%{?dist}
+Release:      	18%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -106,17 +106,21 @@ Requires:	rtems-4.9-bfin-rtems4.9-newlib = %{newlib_version}-%{release}
 
 %if "%{gcc_version}" == "4.3.2"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.2-rtems4.9-20080828.diff
-%endif
-%if "%{gcc_version}" == "4.3.1"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.1-rtems4.9-20080628.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gcc-core-4.3.2-rtems4.9-20081214.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
+%if "%{gcc_version}" == "4.3.2" 
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%if "%{gcc_version}" == "4.3.1" 
+Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%{?_without_sources:NoSource:	1}
+
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-20080827.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-20081203.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -133,6 +137,8 @@ Cross gcc for bfin-rtems4.9.
 %setup -q -T -D -n %{name}-%{version} -a0
 %{?PATCH0:%patch0 -p0}
 
+%setup -q -T -D -n %{name}-%{version} -a1
+%{?PATCH1:%patch1 -p0}
 
 
 
@@ -172,6 +178,7 @@ cd ..
   cd build
 
   languages="c"
+  languages="$languages,c++"
   export PATH="%{_bindir}:${PATH}"
 %if "%{_build}" != "%{_host}"
   CFLAGS_FOR_BUILD="-g -O2 -Wall" \
@@ -524,6 +531,45 @@ if [ $1 -eq 0 ]; then
 %endif
 fi
 
+# ==============================================================
+# rtems-4.9-bfin-rtems4.9-gcc-c++
+# ==============================================================
+%package -n rtems-4.9-bfin-rtems4.9-gcc-c++
+Summary:	GCC c++ compiler for bfin-rtems4.9
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+License:	GPL
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:  rtems-4.9-bfin-rtems4.9-gcc-c++
+%endif
+Provides:	rtems-4.9-bfin-rtems4.9-c++ = %{gcc_rpmvers}-%{release}
+Obsoletes:	rtems-4.9-bfin-rtems4.9-c++ < %{gcc_rpmvers}-%{release}
+
+Requires:       rtems-4.9-gcc-common
+Requires:       rtems-4.9-bfin-rtems4.9-gcc = %{gcc_rpmvers}-%{release}
+
+%description -n rtems-4.9-bfin-rtems4.9-gcc-c++
+GCC c++ compiler for bfin-rtems4.9.
+
+%files -n rtems-4.9-bfin-rtems4.9-gcc-c++ -f build/files.g++
+%defattr(-,root,root)
+%{_mandir}/man1/bfin-rtems4.9-g++.1*
+
+%{_bindir}/bfin-rtems4.9-c++%{_exeext}
+%{_bindir}/bfin-rtems4.9-g++%{_exeext}
+
+%dir %{gccexec}
+%dir %{gccexec}/bfin-rtems4.9
+%dir %{gccexec}/bfin-rtems4.9/%{gcc_version}
+%{gccexec}/bfin-rtems4.9/%{gcc_version}/cc1plus%{_exeext}
+
+%dir %{gcclib}/bfin-rtems4.9/%{gcc_version}/include
+%if "%{gcc_version}" >= "3.2"
+%{gcclib}/bfin-rtems4.9/%{gcc_version}/include/c++
+%else
+%{gcclib}/bfin-rtems4.9/%{gcc_version}/include/g++
+%endif
 
 
 
