@@ -10,7 +10,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,8 @@
 #include "system.h"
 #include <stdio.h>
 
+#include <rtems.h>
+
 void ITRON_Init( void )
 {
   ER                status;
@@ -31,8 +33,8 @@ void ITRON_Init( void )
 
   puts( "\n\n*** ITRON TASK TEST 4 ***" );
 
-  status = chg_pri( 0, 20 );
-  directive_failed( status, "chg_pri to 20" );
+  status = chg_pri( 0, RTEMS_MAXIMUM_PRIORITY - 2 );
+  directive_failed( status, "chg_pri to MAX - 2" );
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
