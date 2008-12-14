@@ -37,15 +37,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.18
-%define binutils_version 2.18
-%define binutils_rpmvers %{expand:%(echo "2.18" | tr - _ )}
+%define binutils_pkgvers 2.19
+%define binutils_version 2.19
+%define binutils_rpmvers %{expand:%(echo "2.19" | tr - _ )}
 
 Name:		rtems-4.9-mips-rtems4.9-binutils
 Summary:	Binutils for target mips-rtems4.9
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	5%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
