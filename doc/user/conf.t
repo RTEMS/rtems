@@ -912,7 +912,7 @@ The RTEMS Configuration Table is defined in the following C structure:
 @group
 typedef struct @{
   void                           *work_space_start;
-  uint32_t                        work_space_size;
+  intptr_t                        work_space_size;
   uint32_t                        maximum_extensions;
   uint32_t                        microseconds_per_tick;
   uint32_t                        ticks_per_timeslice;

@@ -247,7 +247,7 @@ and status codes.
 rtems_status_code rtems_region_create(
   rtems_name       name,
   void            *starting_address,
-  uint32_t         length,
+  intptr_t         length,
   uint32_t         page_size,
   rtems_attribute  attribute_set,
   rtems_id        *id
@@ -433,7 +433,7 @@ delete the region.
 rtems_status_code rtems_region_extend(
   rtems_id  id,
   void     *starting_address,
-  uint32_t  length
+  intptr_t  length
 );
 @end example
 @end ifset
@@ -484,7 +484,7 @@ extend the region.
 @example
 rtems_status_code rtems_region_get_segment(
   rtems_id         id,
-  uint32_t         size,
+  intptr_t         size,
   rtems_option     option_set,
   rtems_interval   timeout,
   void           **segment
