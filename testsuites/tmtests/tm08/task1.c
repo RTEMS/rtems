@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +44,7 @@ void test_init()
 
   status = rtems_task_create(
     1,
-    128,
+    (RTEMS_MAXIMUM_PRIORITY / 2) + 1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -58,7 +57,7 @@ void test_init()
 
   status = rtems_task_create(
     1,
-    254,
+    RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -105,7 +104,12 @@ rtems_task test_task(
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_set_priority( Test_task_id, 253, &old_priority );
+      (void) rtems_task_set_priority(
+        Test_task_id, 
+        RTEMS_MAXIMUM_PRIORITY - 2,
+        &old_priority
+      );
+     
   end_time = benchmark_timer_read();
 
   put_time(

@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,6 +29,8 @@ rtems_task Low_task(
 
 void test_init();
 
+int operation_count = OPERATION_COUNT;
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -48,16 +49,19 @@ rtems_task Init(
 
 void test_init()
 {
-  uint32_t            index;
+  int                 index;
   size_t              size;
   rtems_task_entry    task_entry;
   rtems_status_code   status;
   rtems_task_priority priority;
   rtems_id            task_id;
 
-  priority = 5;
+  priority = 2;
 
-  for( index = 0; index <= OPERATION_COUNT ; index++ ) {
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+
+  for( index = 0; index < operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -71,7 +75,7 @@ void test_init()
     priority++;
 
     if ( index==0 )                    task_entry = High_task;
-    else if ( index==OPERATION_COUNT ) task_entry = Low_task;
+    else if ( index==operation_count-1 ) task_entry = Low_task;
     else                               task_entry = Middle_tasks;
 
     status = rtems_task_start( task_id, task_entry, 0 );
@@ -80,7 +84,7 @@ void test_init()
 
   status = rtems_message_queue_create(
     1,
-    OPERATION_COUNT,
+    operation_count,
     16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
@@ -88,12 +92,12 @@ void test_init()
   directive_failed( status, "rtems_message_queue_create" );
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+    for ( index=1 ; index < operation_count ; index++ )
       (void) benchmark_timer_empty_function();
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+    for ( index=1 ; index < operation_count ; index++ )
       (void) rtems_message_queue_receive(
                Queue_id,
                (long (*)[4]) Buffer,
@@ -106,7 +110,7 @@ void test_init()
   put_time(
     "rtems_message_queue_receive: not available -- NO_WAIT",
     end_time,
-    OPERATION_COUNT,
+    operation_count,
     overhead,
     CALLING_OVERHEAD_MESSAGE_QUEUE_RECEIVE
   );
@@ -154,7 +158,7 @@ rtems_task Low_task(
   put_time(
     "rtems_message_queue_receive: not available -- caller blocks",
     end_time,
-    OPERATION_COUNT,
+    operation_count - 1,
     0,
     CALLING_OVERHEAD_MESSAGE_QUEUE_RECEIVE
   );

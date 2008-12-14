@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -95,9 +94,10 @@ rtems_task Init(
 
   puts( "\n\n*** TIME TEST 26 ***" );
 
+#define FP1_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 3)      /* 201, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '1', ' ' ),
-    201,
+    FP1_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
@@ -108,9 +108,10 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_1, 0 );
   directive_failed( status, "rtems_task_start of FP1" );
 
+#define FP2_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2)      /* 202, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '2', ' ' ),
-    202,
+    FP2_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
@@ -121,9 +122,10 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_2, 0 );
   directive_failed( status, "rtems_task_start of FP2" );
 
+#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4)   /*  200, */
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
-    200,
+    LOW_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -134,9 +136,10 @@ rtems_task Init(
   status = rtems_task_start( task_id, Low_task, 0 );
   directive_failed( status, "rtems_task_start of LOW" );
 
+#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 5)   /*  128, */
   status = rtems_task_create(
     rtems_build_name( 'M', 'I', 'D', ' ' ),
-    128,
+    MIDDLE_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -172,7 +175,7 @@ rtems_task Init(
   for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'N', 'U', 'L', 'L' ),
-      254,
+      RTEMS_MAXIMUM_PRIORITY - 1,      /* 254, */
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -235,7 +238,7 @@ rtems_task Middle_task(
   Middle_tcb   = _Thread_Executing;
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[200].first;
+        (Thread_Control *) _Thread_Ready_chain[LOW_PRIORITY].first;
 
   /* do not force context switch */
 
@@ -272,7 +275,7 @@ rtems_task Low_task(
   context_switch_another_task_time = benchmark_timer_read();
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[201].first;
+        (Thread_Control *) _Thread_Ready_chain[FP1_PRIORITY].first;
 
   /* do not force context switch */
 
@@ -299,7 +302,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-        (Thread_Control *) _Thread_Ready_chain[202].first;
+        (Thread_Control *) _Thread_Ready_chain[FP2_PRIORITY].first;
 
   /* do not force context switch */
 
@@ -322,7 +325,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-       (Thread_Control *) _Thread_Ready_chain[202].first;
+       (Thread_Control *) _Thread_Ready_chain[FP2_PRIORITY].first;
 
   /* do not force context switch */
 
@@ -351,7 +354,7 @@ rtems_task Floating_point_task_2(
   executing = _Thread_Executing;
 
   _Thread_Executing =
-       (Thread_Control *) _Thread_Ready_chain[201].first;
+       (Thread_Control *) _Thread_Ready_chain[FP1_PRIORITY].first;
 
   FP_LOAD( 1.0 );
 

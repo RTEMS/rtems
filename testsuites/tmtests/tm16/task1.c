@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,6 +26,8 @@ rtems_task High_task(
   rtems_task_argument argument
 );
 
+int operation_count = OPERATION_COUNT;
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -40,7 +41,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'E', 'S', 'T' ),
-    251,
+    RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -61,7 +62,7 @@ rtems_task test_init(
 {
   rtems_task_priority priority;
   rtems_status_code   status;
-  uint32_t      index;
+  uint32_t            index;
   rtems_task_entry    task_entry;
 
 /*  As each task is started, it preempts this task and
@@ -69,9 +70,11 @@ rtems_task test_init(
  *  this loop all created tasks are blocked.
  */
 
-  priority = 250;
+  priority = RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
 
-  for( index = 0 ; index <= OPERATION_COUNT ; index++ ) {
+  for( index = 0 ; index < operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),
       priority,
@@ -82,8 +85,8 @@ rtems_task test_init(
     );
     directive_failed( status, "rtems_task_create LOOP" );
 
-    if (  index == OPERATION_COUNT ) task_entry = High_task;
-    else                             task_entry = Middle_tasks;
+    if (  index == operation_count-1 ) task_entry = High_task;
+    else                               task_entry = Middle_tasks;
 
     status = rtems_task_start( Task_id[ index ], task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -137,7 +140,7 @@ rtems_task High_task(
   put_time(
     "rtems_event_send: task readied -- preempts caller",
     end_time,
-    OPERATION_COUNT,
+    operation_count - 1,
     0,
     CALLING_OVERHEAD_EVENT_SEND
   );

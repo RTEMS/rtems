@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,6 +33,7 @@ rtems_task High_task(
   rtems_task_argument argument
 );
 
+int operation_count = OPERATION_COUNT;
 
 rtems_task Init(
   rtems_task_argument argument
@@ -55,9 +55,11 @@ rtems_task Init(
       (void) benchmark_timer_empty_function();
   overhead = benchmark_timer_read();
 
-  priority = 5;
+  priority = 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
 
-  for( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+  for( index=1 ; index <= operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -69,7 +71,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create LOOP" );
 
     if ( index == 1 )                    task_entry = High_task;
-    else if ( index == OPERATION_COUNT ) task_entry = Low_task;
+    else if ( index == operation_count ) task_entry = Low_task;
     else                                 task_entry = Middle_tasks;
 
     status = rtems_task_start( id, task_entry, 0 );
@@ -291,8 +293,8 @@ rtems_task Low_task(
   put_time(
     "rtems_task_wake_when",
     end_time,
-    OPERATION_COUNT,
-    0,
+    operation_count,
+   0,
     CALLING_OVERHEAD_TASK_WAKE_WHEN
   );
 

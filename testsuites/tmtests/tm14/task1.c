@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,6 +30,8 @@ rtems_task Low_tasks(
 
 #define MESSAGE_SIZE (sizeof(long) * 4)
 
+int operation_count = OPERATION_COUNT;
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -44,7 +45,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     1,
-    251,
+    RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -79,9 +80,11 @@ rtems_task test_init(
   );
   directive_failed( status, "rtems_message_queue_create" );
 
-  priority = 250;
+  priority = RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
 
-  for( index = 0; index <= OPERATION_COUNT ; index++ ) {
+  for( index = 0; index < operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -94,8 +97,8 @@ rtems_task test_init(
 
     priority--;
 
-    if ( index==OPERATION_COUNT ) task_entry = High_task;
-    else                          task_entry = Low_tasks;
+    if ( index==operation_count-1 ) task_entry = High_task;
+    else                            task_entry = Low_tasks;
 
     status = rtems_task_start( task_id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -109,19 +112,19 @@ rtems_task High_task(
   uint32_t    index;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+    for ( index=1 ; index < operation_count ; index++ )
       (void) benchmark_timer_empty_function();
   overhead = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+    for ( index=1 ; index <= operation_count ; index++ )
       (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
   end_time = benchmark_timer_read();
 
   put_time(
     "rtems_message_queue_urgent: task readied -- returns to caller",
     end_time,
-    OPERATION_COUNT,
+    operation_count,
     overhead,
     CALLING_OVERHEAD_MESSAGE_QUEUE_URGENT
   );

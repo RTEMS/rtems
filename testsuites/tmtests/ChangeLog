@@ -1,3 +1,18 @@
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm04/task1.c, tm05/task1.c,
+	tm06/task1.c, tm07/task1.c, tm08/task1.c, tm09/task1.c, tm10/task1.c,
+	tm11/task1.c, tm12/task1.c, tm13/task1.c, tm14/task1.c, tm16/task1.c,
+	tm17/task1.c, tm18/task1.c, tm19/task1.c, tm20/task1.c, tm21/task1.c,
+	tm23/task1.c, tm24/task1.c, tm25/task1.c, tm26/task1.c, tm27/task1.c,
+	tm28/task1.c, tm29/task1.c, tmoverhd/testtask.c: Run all tests
+	successfully with maxixum number of priorities as 16 instead of 256.
+	This was done by temporarily modifying the score priority.h maximum.
+	This allowed testing of all API code to ensure that it worked
+	properly with a reduced number of priorities. Most modifications were
+	to switch from hard-coded maximum to using the API provided methods
+	to determine maximum number of priority levels.
+
 2008-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm26/task1.c: Fix typo.

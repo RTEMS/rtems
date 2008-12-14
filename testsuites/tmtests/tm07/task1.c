@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,6 +28,8 @@ rtems_task Low_task(
 
 void test_init();
 
+int operation_count = OPERATION_COUNT;
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -52,9 +53,12 @@ void test_init()
   rtems_task_entry    task_entry;
   uint32_t      index;
 
-  priority = 250;
+  priority = RTEMS_MAXIMUM_PRIORITY - 1;
 
-  for( index=0 ; index <= OPERATION_COUNT ; index++ ) {
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+
+  for( index=0 ; index <= operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       priority,
@@ -67,7 +71,7 @@ void test_init()
     priority--;
 
     if      ( index == 0 )               task_entry = Low_task;
-    else if ( index == OPERATION_COUNT ) task_entry = High_task;
+    else if ( index == operation_count ) task_entry = High_task;
     else                                 task_entry = Middle_tasks;
 
     status = rtems_task_start( Task_id[index], task_entry, 0 );
@@ -85,7 +89,7 @@ rtems_task High_task(
     put_time(
       "rtems_task_restart: suspended task -- preempts caller",
       end_time,
-      OPERATION_COUNT,
+      operation_count,
       0,
       CALLING_OVERHEAD_TASK_RESTART
     );

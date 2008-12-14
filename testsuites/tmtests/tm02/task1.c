@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,6 +28,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 );
 
+int operation_count = OPERATION_COUNT;
 
 void test_init();
 
@@ -51,10 +51,10 @@ rtems_task Init(
 void test_init()
 {
   rtems_status_code   status;
-  uint32_t      index;
+  uint32_t            index;
   rtems_task_priority priority;
 
-  priority = 5;
+  priority = 2;
 
   status = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
@@ -71,7 +71,9 @@ void test_init()
   status = rtems_task_start( High_id, High_task, 0 );
   directive_failed( status, "rtems_task_start of high task" );
 
-  for ( index=2 ; index <= OPERATION_COUNT ; index++ ) {
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
+    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  for ( index=2 ; index < operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),
       priority,
@@ -147,7 +149,7 @@ rtems_task Low_task(
   put_time(
     "rtems_semaphore_obtain: not available -- caller blocks",
     end_time,
-    OPERATION_COUNT,
+    operation_count - 1,
     0,
     CALLING_OVERHEAD_SEMAPHORE_OBTAIN
   );

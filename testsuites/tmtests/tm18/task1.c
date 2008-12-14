@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,13 +50,13 @@ void test_init()
 {
   rtems_id          id;
   rtems_task_entry  task_entry;
-  uint32_t    index;
+  uint32_t          index;
   rtems_status_code status;
 
   for ( index = 0 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
-      128,
+      (RTEMS_MAXIMUM_PRIORITY / 2) + 1,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,

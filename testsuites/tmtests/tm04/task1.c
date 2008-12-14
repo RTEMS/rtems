@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -102,7 +101,7 @@ rtems_task Highest_task(
 
     status = rtems_task_set_priority(
       RTEMS_CURRENT_PRIORITY,
-      254,
+      RTEMS_MAXIMUM_PRIORITY - 1,
       &old_priority
     );
     directive_failed( status, "rtems_task_set_priority" );
@@ -215,19 +214,19 @@ rtems_task High_task(
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       name,
-      250,
+      RTEMS_MAXIMUM_PRIORITY - 4,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_NO_PREEMPT,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
     );
-    directive_failed( status, "rtems_task_create LOOP" );
+    directive_failed( status, "rtems_task_create LOOP 1" );
 
     status = rtems_task_start( Task_id[ index ], Restart_task, 0 );
-    directive_failed( status, "rtems_task_start LOOP" );
+    directive_failed( status, "rtems_task_start LOOP 1" );
 
     status = rtems_task_suspend( Task_id[ index ] );
-    directive_failed( status, "rtems_task_suspend LOOP" );
+    directive_failed( status, "rtems_task_suspend LOOP 1" );
   }
 
   benchmark_timer_initialize();
@@ -262,16 +261,16 @@ rtems_task High_task(
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       name,
-      250,
+      RTEMS_MAXIMUM_PRIORITY - 4,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
     );
-    directive_failed( status, "rtems_task_create LOOP" );
+    directive_failed( status, "rtems_task_create LOOP 2" );
 
     status = rtems_task_start( Task_id[ index ], Restart_task, 0 );
-    directive_failed( status, "rtems_task_start LOOP" );
+    directive_failed( status, "rtems_task_start LOOP 2" );
   }
 
   benchmark_timer_initialize();
