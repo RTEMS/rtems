@@ -1,3 +1,17 @@
+2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itron/src/chg_pri.c, itron/src/cre_tsk.c, itron/src/rot_rdq.c,
+	posix/Makefile.am, posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/priority.h, posix/src/mutex.c,
+	score/include/rtems/score/priority.h: Run all tests successfully with
+	maxixum number of priorities as 16 instead of 256. This was done by
+	temporarily modifying the score priority.h maximum. This allowed
+	testing of all API code to ensure that it worked properly with a
+	reduced number of priorities. Most modifications were to switch from
+	hard-coded maximum to using the SuperCore variable based upon
+	configured number.
+	* posix/src/mutexdefaultattributes.c: Removed.
+
 2008-12-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/inline/rtems/score/address.inl: Make offset arguments intptr_t

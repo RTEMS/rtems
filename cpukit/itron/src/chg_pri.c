@@ -48,7 +48,7 @@ ER chg_pri(
       if (_States_Is_dormant( the_thread->current_state ))
         _ITRON_return_errorno( E_OBJ );
 
-      if (( tskpri <= 0 ) || ( tskpri >= 256 ))
+      if (( tskpri <= 0 ) || ( tskpri >= PRIORITY_MAXIMUM-1 ))
         _ITRON_return_errorno( E_PAR );
 
       new_priority = _ITRON_Task_Priority_to_Core( tskpri );

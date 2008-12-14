@@ -34,7 +34,7 @@ ER rot_rdq(
   PRI priority;
 
 
-  if (( tskpri <= 0 ) || ( tskpri >= 256 ))
+  if (( tskpri <= 0 ) || ( tskpri >= PRIORITY_MAXIMUM-1 ))
     return E_PAR;
 
   _Thread_Disable_dispatch();

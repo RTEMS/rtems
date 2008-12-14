@@ -54,11 +54,7 @@ extern "C" {
 typedef uint32_t   Priority_Control;
 
 /** This defines the highest (most important) thread priority. */
-#if defined (CPU_PRIORITY_MINIMUM)
-#define PRIORITY_MINIMUM      CPU_PRIORITY_MINIMUM
-#else
 #define PRIORITY_MINIMUM      0
-#endif
 
 /** This defines the default lowest (least important) thread priority. */
 #if defined (CPU_PRIORITY_MAXIMUM)

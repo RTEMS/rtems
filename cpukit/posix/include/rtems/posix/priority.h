@@ -21,7 +21,7 @@
 /*
  *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
  *
- *  "Numericallly higher values represent higher priorities."
+ *  "Numerically higher values represent higher priorities."
  *
  *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
  *
@@ -30,9 +30,12 @@
  *  because GNAT maps the lowest Ada task priority to the lowest thread
  *  priority.  The lowest priority Ada task should get to run, so there is
  *  a fundamental conflict with having 255 priorities.
+ *
+ *  But since RTEMS can be configured with fewer than 256 priorities,
+ *  we use the internal constant.
  */
 
-#define POSIX_SCHEDULER_MAXIMUM_PRIORITY (254)
+#define POSIX_SCHEDULER_MAXIMUM_PRIORITY (PRIORITY_MAXIMUM - 1)
 
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 

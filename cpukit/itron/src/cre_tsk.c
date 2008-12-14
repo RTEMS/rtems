@@ -58,7 +58,7 @@ ER cre_tsk(
       (pk_ctsk->tskatr != TA_COP7))
     return E_RSATR;
 
-  if (( pk_ctsk->itskpri <= 0 ) || ( pk_ctsk->itskpri >= 256 ))
+  if (( pk_ctsk->itskpri <= 0 ) || ( pk_ctsk->itskpri >= PRIORITY_MAXIMUM-1 ))
     return E_PAR;
   if ( pk_ctsk->task == NULL )
     return E_PAR;

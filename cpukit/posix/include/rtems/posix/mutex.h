@@ -47,7 +47,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
  *  The default mutex attributes structure.
  */
 
-extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+POSIX_EXTERN pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 /*
  *  _POSIX_Mutex_Manager_initialization
