@@ -1,6 +1,13 @@
 /*
  * Classic API Init task create failure
  *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -33,12 +40,9 @@ char Workspace[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 
 void force_error()
 {
-  rtems_configuration_table New_Configuration;
-  New_Configuration = *_Configuration_Table;
- 
-  New_Configuration.work_space_start = Workspace;
-  New_Configuration.work_space_size  = 256;
+  Configuration.work_space_start = Workspace;
+  Configuration.work_space_size  = 256;
 
-  rtems_initialize_data_structures( &New_Configuration );
+  rtems_initialize_data_structures();;
   /* we will not run this far */
 }

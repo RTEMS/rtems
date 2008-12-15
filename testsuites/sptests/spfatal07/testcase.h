@@ -1,6 +1,13 @@
 /*
  * Classic API Init task create failure
  *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -31,11 +38,8 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 void force_error()
 {
-  rtems_configuration_table New_Configuration;
-  New_Configuration = *_Configuration_Table;
-
-  New_Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
-  rtems_initialize_data_structures( &New_Configuration );
+  Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
+  rtems_initialize_data_structures();
    
   /* we will not run this far */
 }

@@ -82,6 +82,5 @@ spfatal06/Makefile
 spfatal07/Makefile
 spfatal08/Makefile
 spfatal09/Makefile
-spfatal10/Makefile
 ])
 AC_OUTPUT

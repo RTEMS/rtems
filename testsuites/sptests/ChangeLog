@@ -1,3 +1,17 @@
+2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, spfatal06/testcase.h,
+	spfatal07/testcase.h, spfatal08/testcase.h, spfatal09/testcase.h,
+	spsize/size.c: Eliminate pointers to API configuration tables in the
+	main configuration table. Reference the main configuration table and
+	the API configuration tables directly using the confdefs.h version
+	rather than obtaining a pointer to it. This eliminated some
+	variables, a potential fatal error, some unnecessary default
+	configuration structures. Overall, about a 4.5% reduction in the code
+	size for minimum and hello on the SPARC.
+	* spfatal10/.cvsignore, spfatal10/Makefile.am, spfatal10/spfatal10.scn,
+	spfatal10/testcase.h: Removed.
+
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp07/init.c, sp12/init.c, sp12/pridrv.c, sp12/pritask.c,

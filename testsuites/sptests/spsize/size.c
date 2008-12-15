@@ -3,7 +3,7 @@
  *  This program is run to determine the data space and work space
  *  requirements of the current version of RTEMS.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -222,7 +222,7 @@ uninitialized =
 
 /*clock.h*/     0                                         +
 
-/*config.h*/    (sizeof _Configuration_Table)             +
+/*config.h*/
         #if defined(RTEMS_MULTIPROCESSING)
                 (sizeof _Configuration_MP_table)          +
         #endif

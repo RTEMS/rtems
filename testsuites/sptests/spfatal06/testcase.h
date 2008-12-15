@@ -1,6 +1,13 @@
 /*
  * Classic API Init task create failure
  *
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -29,22 +36,18 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_BAD_STACK_HOOK
 
-void *New_stack_allocate_hook( uint32_t unused)
+void *New_stack_allocate_hook(uint32_t unused)
 {
 }
 
 void force_error()
 {
-  rtems_configuration_table New_Configuration;
-
-  New_Configuration = *_Configuration_Table;
-
-  if (_Configuration_Table->stack_free_hook != NULL)
-    New_Configuration.stack_allocate_hook = NULL;
+  if (Configuration.stack_free_hook != NULL)
+    Configuration.stack_allocate_hook = NULL;
   else
-     New_Configuration.stack_allocate_hook = &New_stack_allocate_hook;
+    Configuration.stack_allocate_hook = &New_stack_allocate_hook;
 
-  rtems_initialize_data_structures( &New_Configuration );
+  rtems_initialize_data_structures();
   /* we will not run this far */
 }
 
