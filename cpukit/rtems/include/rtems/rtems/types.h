@@ -110,7 +110,7 @@ typedef Watchdog_Interval rtems_interval;
 #ifndef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
   typedef struct timespec rtems_thread_cpu_usage_t;
 #else
-  typedef uint32_t Thread_CPU_usage_t;
+  typedef uint32_t rtems_thread_cpu_usage_t;
 #endif
 
 

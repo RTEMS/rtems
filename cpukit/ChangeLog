@@ -1,3 +1,7 @@
+2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/include/rtems/rtems/types.h: Fix incorrect type name.
+
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/realloc.c, rtems/include/rtems/rtems/region.h,
