@@ -64,12 +64,12 @@ extern bool rtems_unified_work_area;
  */
 static rtems_status_code bootcard_bsp_libc_helper(
   void    *work_area_start,
-  ssize_t  work_area_size,
+  intptr_t work_area_size,
   void    *heap_start,
-  ssize_t  heap_size
+  intptr_t heap_size
 )
 {
-  ssize_t heap_size_default = 0;
+  intptr_t heap_size_default = 0;
 
   if ( !rtems_unified_work_area && 
        heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
@@ -86,11 +86,11 @@ static rtems_status_code bootcard_bsp_libc_helper(
      * For the default heap size use the free space from the start of the
      * work area up to the work space start as heap area.
      */
-    heap_size_default = (ssize_t) ((char *) Configuration.work_space_start
+    heap_size_default = (intptr_t) ((char *) Configuration.work_space_start
       - (char *) work_area_start);
 
     /* Keep it as a multiple of 16 bytes */
-    heap_size_default &= ~((ssize_t) 0xf);
+    heap_size_default &= ~((intptr_t) 0xf);
 
     /* Use default heap size if requested */
     if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
@@ -127,9 +127,9 @@ int boot_card(
   rtems_interrupt_level   bsp_isr_level;
   rtems_status_code       sc = RTEMS_SUCCESSFUL;
   void                   *work_area_start = NULL;
-  ssize_t                 work_area_size = 0;
+  intptr_t                work_area_size = 0;
   void                   *heap_start = NULL;
-  ssize_t                 heap_size = 0;
+  intptr_t                heap_size = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -193,7 +193,7 @@ int boot_card(
   /*
    *  Initialize RTEMS data structures
    */
-  rtems_initialize_data_structures( &Configuration );
+  rtems_initialize_data_structures();
 
   /*
    *  Initialize the C library for those BSPs using the shared

@@ -1,3 +1,13 @@
+2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c: Eliminate pointers to API configuration tables in the
+	main configuration table. Reference the main configuration table and
+	the API configuration tables directly using the confdefs.h version
+	rather than obtaining a pointer to it. This eliminated some
+	variables, a potential fatal error, some unnecessary default
+	configuration structures. Overall, about a 4.5% reduction in the code
+	size for minimum and hello on the SPARC.
+
 2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* clock_driver_stub.c: Remove (unused).
