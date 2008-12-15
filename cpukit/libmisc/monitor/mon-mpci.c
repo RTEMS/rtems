@@ -31,7 +31,7 @@ rtems_monitor_mpci_canonical(
     void                  *config_void
 )
 {
-    rtems_configuration_table *c = _Configuration_Table;
+    rtems_configuration_table *c = &Configuration;
     rtems_multiprocessing_table *m;
     rtems_mpci_table *mt;
 
@@ -73,7 +73,7 @@ rtems_monitor_mpci_next(
     rtems_id              *next_id
 )
 {
-    rtems_configuration_table *c = _Configuration_Table;
+    rtems_configuration_table *c = &Configuration;
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)

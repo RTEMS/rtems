@@ -2,7 +2,7 @@
  *  RTEMS Task Manager
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
 #include <rtems/score/object.h>
+#include <rtems/rtems/rtemsapi.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
@@ -55,7 +56,7 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
   rtems_api_configuration_table    *api_configuration;
 
 
-  api_configuration = _Configuration_Table->RTEMS_api_configuration;
+  api_configuration = &Configuration_RTEMS_API;
 
   /*
    *  NOTE:  This is slightly different from the Ada implementation.

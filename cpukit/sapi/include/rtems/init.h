@@ -15,7 +15,7 @@
  */
  
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,9 +52,7 @@ extern const rtems_multiprocessing_table
  *  that involves initializing data structures to a state that scheduling
  *  can occur in a consistent manner.
  */
-void rtems_initialize_data_structures(
-  rtems_configuration_table *configuration_table
-);
+void rtems_initialize_data_structures(void);
 
 /**
  *  @brief rtems_initialize_before_drivers

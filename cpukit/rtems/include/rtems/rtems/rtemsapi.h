@@ -31,11 +31,7 @@
  *  routine for each RTEMS manager with the appropriate parameters
  *  from the configuration_table.
  */
-void _RTEMS_API_Initialize(
-  rtems_configuration_table *configuration_table
-);
-
-/**@}*/
+void _RTEMS_API_Initialize(void);
 
 #endif
 /* end of include file */

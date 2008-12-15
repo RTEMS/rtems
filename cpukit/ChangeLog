@@ -1,5 +1,27 @@
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/itronapi.h, libmisc/capture/capture.c,
+	libmisc/monitor/mon-config.c, libmisc/monitor/mon-driver.c,
+	libmisc/monitor/mon-itask.c, libmisc/monitor/mon-mpci.c,
+	posix/include/rtems/posix/config.h,
+	posix/include/rtems/posix/posixapi.h,
+	rtems/include/rtems/rtems/config.h,
+	rtems/include/rtems/rtems/rtemsapi.h, rtems/src/taskinitusers.c,
+	sapi/include/confdefs.h, sapi/include/rtems/config.h,
+	sapi/include/rtems/init.h, sapi/src/exinit.c, sapi/src/itronapi.c,
+	sapi/src/posixapi.c, sapi/src/rtemsapi.c, score/src/isr.c,
+	score/src/thread.c, score/src/threadcreateidle.c,
+	score/src/threadstackallocate.c, score/src/threadstackfree.c,
+	score/src/wkspace.c: Eliminate pointers to API configuration tables
+	in the main configuration table. Reference the main configuration
+	table and the API configuration tables directly using the confdefs.h
+	version rather than obtaining a pointer to it. This eliminated some
+	variables, a potential fatal error, some unnecessary default
+	configuration structures. Overall, about a 4.5% reduction in the code
+	size for minimum and hello on the SPARC.
+
+2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/include/rtems/rtems/types.h: Fix incorrect type name.
 
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -3,7 +3,7 @@
  *
  *  NOTE:
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,13 +54,15 @@ Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
  *  XXX
  */
 
-void _RTEMS_API_Initialize(
-  rtems_configuration_table *configuration_table
-)
+void _RTEMS_API_Initialize(void)
 {
-  rtems_api_configuration_table *api_configuration;
+  rtems_api_configuration_table *api;
 
-  api_configuration = configuration_table->RTEMS_api_configuration;
+  /*
+   * Install our API Object Management Table and initialize the
+   * various managers.
+   */
+  api = &Configuration_RTEMS_API;
 
   _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
 
@@ -72,29 +74,27 @@ void _RTEMS_API_Initialize(
   _Multiprocessing_Manager_initialization();
 #endif
 
-  _RTEMS_tasks_Manager_initialization( api_configuration->maximum_tasks );
+  _RTEMS_tasks_Manager_initialization( api->maximum_tasks );
 
-  _Timer_Manager_initialization( api_configuration->maximum_timers );
+  _Timer_Manager_initialization( api->maximum_timers );
 
   _Signal_Manager_initialization();
 
   _Event_Manager_initialization();
 
-  _Message_queue_Manager_initialization(
-    api_configuration->maximum_message_queues
-  );
+  _Message_queue_Manager_initialization( api->maximum_message_queues );
 
-  _Semaphore_Manager_initialization( api_configuration->maximum_semaphores );
+  _Semaphore_Manager_initialization( api->maximum_semaphores );
 
-  _Partition_Manager_initialization( api_configuration->maximum_partitions );
+  _Partition_Manager_initialization( api->maximum_partitions );
 
-  _Region_Manager_initialization( api_configuration->maximum_regions );
+  _Region_Manager_initialization( api->maximum_regions );
 
-  _Dual_ported_memory_Manager_initialization( api_configuration->maximum_ports);
+  _Dual_ported_memory_Manager_initialization( api->maximum_ports);
 
-  _Rate_monotonic_Manager_initialization( api_configuration->maximum_periods );
+  _Rate_monotonic_Manager_initialization( api->maximum_periods );
 
-  _Barrier_Manager_initialization( api_configuration->maximum_barriers );
+  _Barrier_Manager_initialization( api->maximum_barriers );
 }
 
 /* end of file */

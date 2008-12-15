@@ -60,7 +60,7 @@ void _Thread_Create_idle( void )
     &_Thread_Internal_information,
     _Thread_Idle,
     NULL,        /* allocate the stack */
-    _Stack_Ensure_minimum( _Configuration_Table->idle_task_stack_size ),
+    _Stack_Ensure_minimum( Configuration.idle_task_stack_size ),
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
     TRUE,        /* preemptable */
@@ -82,7 +82,7 @@ void _Thread_Create_idle( void )
   _Thread_Start(
     _Thread_Idle,
     THREAD_START_NUMERIC,
-    _Configuration_Table->idle_task,
+    Configuration.idle_task,
     NULL,
     0
   );

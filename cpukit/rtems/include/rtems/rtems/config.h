@@ -117,6 +117,16 @@ typedef struct {
 } rtems_api_configuration_table;
 
 /**
+ *  @brief RTEMS API Configuration Table
+ *
+ *  This is the RTEMS API Configuration Table expected to be generated
+ *  by confdefs.h.
+ */
+extern rtems_api_configuration_table Configuration_RTEMS_API;
+
+/**@}*/
+
+/**
  *  This macro returns the value of the notepads enabled field
  *  in the Classic API configuration table.
  */

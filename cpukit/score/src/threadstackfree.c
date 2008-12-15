@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,8 +54,8 @@ void _Thread_Stack_Free(
      * routine properly matches the allocation of the stack.
      */
 
-    if ( _Configuration_Table->stack_free_hook )
-      (*_Configuration_Table->stack_free_hook)(
+    if ( Configuration.stack_free_hook )
+      (*Configuration.stack_free_hook)(
         the_thread->Start.Initial_stack.area
       );
     else

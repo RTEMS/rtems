@@ -805,10 +805,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
 
-  #ifndef CONFIGURE_EXECUTIVE_RAM_WORK_AREA
-    #define CONFIGURE_EXECUTIVE_RAM_WORK_AREA     NULL
-  #endif
-
   #ifndef CONFIGURE_MAXIMUM_TASKS
     #define CONFIGURE_MAXIMUM_TASKS               0
   #endif
@@ -1856,7 +1852,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  This is the primary Configuration Table for this application.
    */
   rtems_configuration_table Configuration = {
-    CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
+    NULL,                                     /* filled in by BSP */
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
@@ -1874,17 +1870,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
     #if defined(RTEMS_MULTIPROCESSING)
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
-    #endif
-    &Configuration_RTEMS_API,                 /* pointer to RTEMS API config */
-    #ifdef RTEMS_POSIX_API
-      &Configuration_POSIX_API,               /* pointer to POSIX API config */
-    #else
-      NULL,                                   /* pointer to POSIX API config */
-    #endif
-    #ifdef RTEMS_ITRON_API
-      &Configuration_ITRON_API                /* pointer to ITRON API config */
-    #else
-      NULL                                    /* pointer to ITRON API config */
     #endif
   };
 #endif

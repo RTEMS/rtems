@@ -1,13 +1,12 @@
 /**
  * @file rtems/posix/config.h
- */
-
-/*  config.h
  *
  *  This include file contains the table of user defined configuration
  *  parameters specific for the POSIX API.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,6 +59,14 @@ typedef struct {
   int                                 number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_threads_table;
 } posix_api_configuration_table;
+
+/**
+ *  @brief POSIX API Cofniguration Table
+ *
+ *  This is the POSIX API Configuration Table expected to be generated
+ *  by confdefs.h.
+ */
+extern posix_api_configuration_table Configuration_POSIX_API;
 
 #ifdef __cplusplus
 }

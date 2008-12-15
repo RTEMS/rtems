@@ -2,7 +2,7 @@
  *  ISR Handler
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,7 +48,7 @@ void _ISR_Handler_initialization( void )
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
-  if ( !_Stack_Is_enough(_Configuration_Table->interrupt_stack_size) )
+  if ( !_Stack_Is_enough(Configuration.interrupt_stack_size) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
@@ -56,12 +56,12 @@ void _ISR_Handler_initialization( void )
     );
 
   _CPU_Interrupt_stack_low = _Workspace_Allocate_or_fatal_error(
-    _Configuration_Table->interrupt_stack_size
+    Configuration.interrupt_stack_size
   );
 
   _CPU_Interrupt_stack_high = _Addresses_Add_offset(
     _CPU_Interrupt_stack_low,
-    _Configuration_Table->interrupt_stack_size
+    Configuration.interrupt_stack_size
   );
 
 #endif

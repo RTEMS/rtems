@@ -1,7 +1,7 @@
 /*
  *  Workspace Handler
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,7 +39,7 @@ void _Workspace_Handler_initialization(
       INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
     );
 
-  if ( _Configuration_Table->do_zero_of_workspace )
+  if ( Configuration.do_zero_of_workspace )
    memset( starting_address, 0, size );
 
   memory_available = _Heap_Initialize(

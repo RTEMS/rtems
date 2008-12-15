@@ -67,7 +67,7 @@ rtems_monitor_driver_next(
     rtems_id              *next_id
 )
 {
-    rtems_configuration_table *c = _Configuration_Table;
+    rtems_configuration_table *c = &Configuration;
     uint32_t   n = rtems_object_id_get_index(*next_id);
 
     if (n >= c->number_of_device_drivers)

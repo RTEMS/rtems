@@ -1039,7 +1039,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
   /*
    * Get the tick period from the BSP Configuration Table.
    */
-  capture_tick_period = _Configuration_Table->microseconds_per_tick;
+  capture_tick_period = Configuration.microseconds_per_tick;
 
   /*
    * Register the user extension handlers for the CAPture Engine.

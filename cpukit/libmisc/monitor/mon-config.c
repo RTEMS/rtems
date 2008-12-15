@@ -33,9 +33,9 @@ rtems_monitor_config_canonical(
 )
 {
     rtems_configuration_table *c = (rtems_configuration_table *) config_void;
-    rtems_api_configuration_table *r = c->RTEMS_api_configuration;
+    rtems_api_configuration_table *r = &Configuration_RTEMS_API;
 
-    canonical_config->work_space_start = c->work_space_start;
+    canonical_config->work_space_start = NULL;  /* no longer in structure */
     canonical_config->work_space_size = c->work_space_size;
     canonical_config->maximum_tasks = r->maximum_tasks;
     canonical_config->maximum_timers = r->maximum_timers;
@@ -63,7 +63,7 @@ rtems_monitor_config_next(
     rtems_id              *next_id
 )
 {
-    rtems_configuration_table *c = _Configuration_Table;
+    rtems_configuration_table *c = &Configuration;
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)

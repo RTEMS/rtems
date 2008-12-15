@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -59,8 +59,8 @@ void _Thread_Handler_initialization(
    * BOTH stacks hooks must be set or both must be NULL.
    * Do not allow mixture.
    */
-    if ( !( (!_Configuration_Table->stack_allocate_hook)
-            == (!_Configuration_Table->stack_free_hook) ) )
+    if ( !( (!Configuration.stack_allocate_hook)
+            == (!Configuration.stack_free_hook) ) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       TRUE,
