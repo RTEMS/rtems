@@ -119,7 +119,7 @@ void test_heap_init()
 void test_heap_cases_1()
 {
   void     *p1, *p2, *p3, *p4;
-  uint32_t  u1, u2;
+  intptr_t  u1, u2;
   Heap_Resize_status rsc;
 
   /*

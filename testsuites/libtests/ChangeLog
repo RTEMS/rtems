@@ -1,3 +1,9 @@
+2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* malloctest/init.c: Change sizes of heap/region and allocated objects
+	in heap to intptr_t so they can be larger than a single allocatable
+	object (e.g. size_t).
+
 2008-10-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Do not generate alignment factors larger that will
