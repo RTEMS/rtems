@@ -211,9 +211,7 @@ constants, usage, and status codes.
 @ifset is-C
 @findex rtems_initialize_data_structures
 @example
-void rtems_initialize_data_structures(
-  rtems_configuration_table *configuration_table
-);
+void rtems_initialize_data_structures(void);
 @end example
 @end ifset
 
