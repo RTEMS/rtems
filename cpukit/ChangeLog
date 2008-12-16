@@ -1,5 +1,10 @@
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/monitor/mon-config.c: Configuration table entry
+	work_space_size was not removed.
+
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libblock/src/bdbuf.c, libmisc/capture/capture-cli.c,
 	libmisc/capture/capture.c, libmisc/mw-fb/mw_uid.c,
 	rtems/include/rtems/rtems/support.h, score/Makefile.am,

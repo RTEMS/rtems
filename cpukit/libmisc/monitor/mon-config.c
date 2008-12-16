@@ -35,7 +35,7 @@ rtems_monitor_config_canonical(
     rtems_configuration_table *c = (rtems_configuration_table *) config_void;
     rtems_api_configuration_table *r = &Configuration_RTEMS_API;
 
-    canonical_config->work_space_start = NULL;  /* no longer in structure */
+    canonical_config->work_space_start = c->work_space_start;
     canonical_config->work_space_size = c->work_space_size;
     canonical_config->maximum_tasks = r->maximum_tasks;
     canonical_config->maximum_timers = r->maximum_timers;
