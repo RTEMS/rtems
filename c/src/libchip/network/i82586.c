@@ -228,7 +228,7 @@ static void print_rbd (struct ie_softc *, int);
 #define min(l,r) ((l) < (r) ? (l) : (r))
 #define max(l,r) ((l) > (r) ? (l) : (r))
 
-#define delay(p) rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (p))
+#define delay(p) rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (p))
 
 #define i82586_WAKE_EVENT RTEMS_EVENT_1
 #define i82586_TX_EVENT   RTEMS_EVENT_2

@@ -114,7 +114,7 @@ typedef uint32_t  CYG_WORD32;
 
 #define CYG_ASSERT(c,p) do { if (!(c)) { while(1) { printf(p);} }; } while(0)
 
-#define HAL_DELAY_US(p) rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (p))
+#define HAL_DELAY_US(p) rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (p))
 
 
 #endif  /* _SMC_91111_CONFIG_H_ */

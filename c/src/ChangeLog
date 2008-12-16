@@ -1,3 +1,8 @@
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/i82586.c, libchip/network/smc91111config.h: Eliminate
+	all public use of TOD conversion routines.
+
 2008-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Use -r instead of -Wl,-r to build *.rels.
