@@ -1,3 +1,7 @@
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems.adb: Use public API not _TOD_Microseconds_per_tick.
+
 2008-12-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1345/Ada

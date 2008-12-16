@@ -70,8 +70,8 @@ package body RTEMS is
    function Microseconds_To_Ticks (
       Microseconds : RTEMS.Unsigned32
    ) return RTEMS.Interval is
-      Microseconds_Per_Tick : RTEMS.Interval;
-      pragma Import (C, Microseconds_Per_Tick, "_TOD_Microseconds_per_tick");
+      function Microseconds_Per_Tick return RTEMS.Unsigned32;
+      pragma Import (C, Microseconds_Per_Tick, "_ada_microseconds_per_tick");
    begin
 
       return Microseconds / Microseconds_Per_Tick;
