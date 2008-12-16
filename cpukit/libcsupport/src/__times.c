@@ -59,8 +59,10 @@ clock_t _times(
       
       _Timestamp_Set( 
         &per_tick,
-        _TOD_Microseconds_per_tick / TOD_MILLISECONDS_PER_SECOND,
-        (_TOD_Microseconds_per_tick % TOD_MILLISECONDS_PER_SECOND) / 1000
+        rtems_configuration_get_microseconds_per_tick() /
+            TOD_MICROSECONDS_PER_SECOND,
+        (rtems_configuration_get_nanoseconds_per_tick() %
+            TOD_NANOSECONDS_PER_SECOND)
       );
 
       _Timestamp_Divide(

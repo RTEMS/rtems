@@ -16,6 +16,7 @@
 #include <time.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 
@@ -26,7 +27,7 @@ void _Timespec_From_ticks(
 {
   uint32_t    usecs;
 
-  usecs = ticks * _TOD_Microseconds_per_tick;
+  usecs = ticks * rtems_configuration_get_microseconds_per_tick();
 
   time->tv_sec  = usecs / TOD_MICROSECONDS_PER_SECOND;
   time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) *

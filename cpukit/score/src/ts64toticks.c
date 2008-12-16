@@ -20,6 +20,7 @@
 #include <sys/types.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 
@@ -31,7 +32,7 @@ uint32_t _Timestamp64_To_ticks(
 {
   uint32_t ticks;
 
-  ticks = *time / (_TOD_Microseconds_per_tick * 1000);
+  ticks = *time / rtems_configuration_get_nanoseconds_per_tick();
   if ( ticks )
     return ticks;
   return 1;

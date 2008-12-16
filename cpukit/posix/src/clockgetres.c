@@ -21,6 +21,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
@@ -51,9 +52,9 @@ int clock_getres(
     case CLOCK_PROCESS_CPUTIME:
     case CLOCK_THREAD_CPUTIME:
       if ( res ) {
-        res->tv_sec = _TOD_Microseconds_per_tick / 1000000;
-        res->tv_nsec = _TOD_Microseconds_per_tick * 1000;
-        /* _TOD_From_ticks( _TOD_Microseconds_per_tick, res );  */
+        res->tv_sec = rtems_configuration_get_microseconds_per_tick() /
+            TOD_MICROSECONDS_PER_SECOND;
+        res->tv_nsec = rtems_configuration_get_nanoseconds_per_tick(); 
       }
       break;
 

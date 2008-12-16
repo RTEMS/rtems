@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/clock.h>
 
 /*
@@ -51,10 +52,12 @@ bool _TOD_Validate(
 )
 {
   uint32_t   days_in_month;
+  uint32_t   ticks_per_second;
 
+  ticks_per_second = TOD_MICROSECONDS_PER_SECOND / 
+	    rtems_configuration_get_microseconds_per_tick();
   if ((!the_tod)                                  ||
-      (the_tod->ticks  >=
-          (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick))  ||
+      (the_tod->ticks  >= ticks_per_second)       ||
       (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||
       (the_tod->minute >= TOD_MINUTES_PER_HOUR)   ||
       (the_tod->hour   >= TOD_HOURS_PER_DAY)      ||

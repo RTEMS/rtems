@@ -36,11 +36,11 @@ long sysconf(
 
   switch (name) {
     case _SC_CLK_TCK:
-      return (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick);
+      return (TOD_MICROSECONDS_PER_SECOND /
+        rtems_configuration_get_microseconds_per_tick());
 
-    case _SC_OPEN_MAX: {
-        return rtems_libio_number_iops;
-      }
+    case _SC_OPEN_MAX:
+      return rtems_libio_number_iops;
 
     case _SC_GETPW_R_SIZE_MAX:
         return 1024;

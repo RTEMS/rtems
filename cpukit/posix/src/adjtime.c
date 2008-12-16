@@ -26,6 +26,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/seterr.h>
 #include <rtems/score/tod.h>
 #include <rtems/posix/time.h>
@@ -65,7 +66,7 @@ int  adjtime(
   adjustment += delta->tv_usec;
 
   /* too small to account for */
-  if ( adjustment < _TOD_Microseconds_per_tick )
+  if ( adjustment < rtems_configuration_get_microseconds_per_tick() )
     return 0;
 
   /*

@@ -17,9 +17,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/timespec.h>
 #include <sys/types.h>
+
+#include <rtems/system.h>
+#include <rtems/config.h>
+#include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
@@ -39,8 +41,7 @@ uint32_t _Timespec_To_ticks(
 
   ticks  = time->tv_sec * TOD_TICKS_PER_SECOND;
 
-  ticks += (time->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) /
-             _TOD_Microseconds_per_tick;
+  ticks += time->tv_nsec / rtems_configuration_get_nanoseconds_per_tick();
 
   if (ticks)
     return ticks;
