@@ -1,5 +1,10 @@
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libgnat/adasupp.c: Add helper method so Ada binding does not
+	reference _TOD_Microseconds_per_tick.
+
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/rtems/config.h: Remove commented out lines. Add macro
 	for rtems_configuration_get_nanoseconds_per_tick().
 
