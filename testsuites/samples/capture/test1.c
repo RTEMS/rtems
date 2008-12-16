@@ -31,7 +31,7 @@ static volatile int capture_CT1c_deleted;
 static void
 capture_wait (uint32_t period)
 {
-  rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (period * 1000));  
+  rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (period * 1000));  
 }
 
 /*
