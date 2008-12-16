@@ -1,5 +1,10 @@
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/rtems++/rtemsTimer.h: Use public API not
+	_TOD_Microseconds_per_tick.
+
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* include/rtems++/rtemsEvent.h, include/rtems++/rtemsMessageQueue.h,
 	include/rtems++/rtemsSemaphore.h, src/rtemsTask.cc: Use public API
 	not _TOD_Microseconds_per_tick.

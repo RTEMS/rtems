@@ -94,9 +94,9 @@ private:
 const rtems_status_code rtemsTimer::fire_after(const rtems_interval micro_secs)
 {
   repeat = false;
-  rtems_interval usecs =
-    micro_secs && (micro_secs < _TOD_Microseconds_per_tick) ?
-    _TOD_Microseconds_per_tick : micro_secs;
+  rtems_interval usecs = micro_secs &&
+    (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
+    rtems_configuration_get_microseconds_per_tick()  : micro_secs;
   return set_status_code(rtems_timer_fire_after(id,
                                                 TOD_MICROSECONDS_TO_TICKS(usecs),
                                                 common_handler,
@@ -106,9 +106,9 @@ const rtems_status_code rtemsTimer::fire_after(const rtems_interval micro_secs)
 const rtems_status_code rtemsTimer::repeat_fire_at(const rtems_interval micro_secs)
 {
   repeat = true;
-  rtems_interval usecs =
-    micro_secs && (micro_secs < _TOD_Microseconds_per_tick) ?
-    _TOD_Microseconds_per_tick : micro_secs;
+  rtems_interval usecs = micro_secs &&
+    (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
+    rtems_configuration_get_microseconds_per_tick()  : micro_secs;
   return set_status_code(rtems_timer_fire_after(id,
                                                 TOD_MICROSECONDS_TO_TICKS(usecs),
                                                 common_handler,
