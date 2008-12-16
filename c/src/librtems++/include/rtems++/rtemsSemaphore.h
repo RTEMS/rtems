@@ -135,7 +135,7 @@ const rtems_status_code rtemsSemaphore::obtain(const bool wait,
   return
     set_status_code(rtems_semaphore_obtain(id,
                                            wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
-                                           TOD_MICROSECONDS_TO_TICKS(usecs)));
+                                           RTEMS_MICROSECONDS_TO_TICKS(usecs)));
 }
 
 const rtems_status_code rtemsSemaphore::release(void)

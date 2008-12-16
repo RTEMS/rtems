@@ -98,7 +98,7 @@ const rtems_status_code rtemsTimer::fire_after(const rtems_interval micro_secs)
     (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
     rtems_configuration_get_microseconds_per_tick()  : micro_secs;
   return set_status_code(rtems_timer_fire_after(id,
-                                                TOD_MICROSECONDS_TO_TICKS(usecs),
+                                                RTEMS_MICROSECONDS_TO_TICKS(usecs),
                                                 common_handler,
                                                 this));
 }
@@ -110,7 +110,7 @@ const rtems_status_code rtemsTimer::repeat_fire_at(const rtems_interval micro_se
     (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
     rtems_configuration_get_microseconds_per_tick()  : micro_secs;
   return set_status_code(rtems_timer_fire_after(id,
-                                                TOD_MICROSECONDS_TO_TICKS(usecs),
+                                                RTEMS_MICROSECONDS_TO_TICKS(usecs),
                                                 common_handler,
                                                 this));
 }

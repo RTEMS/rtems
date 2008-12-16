@@ -161,7 +161,7 @@ const rtems_status_code rtemsMessageQueue::receive(const void *buffer,
                                                      (void*) buffer,
                                                      &size,
                                                      wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
-                                                     TOD_MICROSECONDS_TO_TICKS(usecs)));
+                                                     RTEMS_MICROSECONDS_TO_TICKS(usecs)));
 }
 
 const rtems_status_code rtemsMessageQueue::flush(uint32_t& count)

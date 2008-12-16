@@ -1,5 +1,12 @@
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/rtems++/rtemsEvent.h, include/rtems++/rtemsMessageQueue.h,
+	include/rtems++/rtemsSemaphore.h, include/rtems++/rtemsTimer.h,
+	src/rtemsTask.cc: Eliminate all public use of TOD conversion
+	routines.
+
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* include/rtems++/rtemsTimer.h: Use public API not
 	_TOD_Microseconds_per_tick.
 

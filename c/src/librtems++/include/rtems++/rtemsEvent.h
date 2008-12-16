@@ -114,7 +114,7 @@ const rtems_status_code rtemsEvent::receive(const rtems_event_set event_in,
     rtems_configuration_get_microseconds_per_tick() : micro_secs;
   set_status_code(rtems_event_receive(event_in,
                                       wait | condition,
-                                      TOD_MICROSECONDS_TO_TICKS(usecs),
+                                      RTEMS_MICROSECONDS_TO_TICKS(usecs),
                                       &event_out));
   return last_status_code();
 }

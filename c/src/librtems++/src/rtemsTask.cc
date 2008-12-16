@@ -234,7 +234,7 @@ const rtems_status_code rtemsTask::wake_after(const rtems_interval micro_secs)
   rtems_interval usecs =
     (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
     rtems_configuration_get_microseconds_per_tick() : micro_secs;
-  return set_status_code(rtems_task_wake_after(TOD_MICROSECONDS_TO_TICKS(usecs)));
+  return set_status_code(rtems_task_wake_after(RTEMS_MICROSECONDS_TO_TICKS(usecs)));
 }
 
 const rtems_status_code rtemsTask::wake_when(const rtems_time_of_day& tod)
