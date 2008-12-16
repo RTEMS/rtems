@@ -110,8 +110,8 @@ const rtems_status_code rtemsEvent::receive(const rtems_event_set event_in,
                                             const Condition condition)
 {
   rtems_interval usecs =
-    micro_secs && (micro_secs < _TOD_Microseconds_per_tick) ?
-    _TOD_Microseconds_per_tick : micro_secs;
+    (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
+    rtems_configuration_get_microseconds_per_tick() : micro_secs;
   set_status_code(rtems_event_receive(event_in,
                                       wait | condition,
                                       TOD_MICROSECONDS_TO_TICKS(usecs),

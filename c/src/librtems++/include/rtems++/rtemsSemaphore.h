@@ -128,9 +128,10 @@ private:
 const rtems_status_code rtemsSemaphore::obtain(const bool wait,
                                                const uint32_t micro_secs)
 {
-  rtems_interval usecs =
-    micro_secs && (micro_secs < _TOD_Microseconds_per_tick) ?
-    _TOD_Microseconds_per_tick : micro_secs;
+  rtems_interval usecs = micro_secs &&
+    (micro_secs < rtems_configuration_get_microseconds_per_tick()) ?
+    rtems_configuration_get_microseconds_per_tick() : micro_secs;
+
   return
     set_status_code(rtems_semaphore_obtain(id,
                                            wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
