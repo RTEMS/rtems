@@ -57,12 +57,6 @@ typedef void *itron_api_configuration_table;
 
 #include <rtems/rtems/config.h>
 
-/*  XXX <rtems/rtems/config.h> should cover these
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/tasks.h>
-*/
-
 #include <rtems/extension.h>
 #include <rtems/io.h>
 #if defined(RTEMS_MULTIPROCESSING)
@@ -208,6 +202,8 @@ extern rtems_configuration_table        Configuration;
         (Configuration.microseconds_per_tick)
 #define rtems_configuration_get_milliseconds_per_tick() \
         (Configuration.microseconds_per_tick / 1000)
+#define rtems_configuration_get_nanoseconds_per_tick() \
+      (Configuration.microseconds_per_tick * 1000)
 
 #define rtems_configuration_get_ticks_per_timeslice() \
         (Configuration.ticks_per_timeslice)

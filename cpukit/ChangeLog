@@ -1,3 +1,8 @@
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/rtems/config.h: Remove commented out lines. Add macro
+	for rtems_configuration_get_nanoseconds_per_tick().
+
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* itron/include/rtems/itron/itronapi.h, libmisc/capture/capture.c,
