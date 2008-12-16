@@ -101,14 +101,6 @@ extern "C" {
   (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
   (4 * TOD_SECONDS_PER_DAY))
 
-/**  @brief Ticks per Second
- *  
- *  This macro calculates the number of ticks per second.
- */
-
-#define TOD_TICKS_PER_SECOND \
-           (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick)
-
 /** @brief RTEMS Epoch Year
  *
  *  The following constant define the earliest year to which an
@@ -147,12 +139,6 @@ SCORE_EXTERN Timestamp_Control _TOD_Uptime;
  */
 #define _TOD_Seconds_since_epoch() \
   _Timestamp_Get_seconds(&_TOD_Now)
-
-/** @brief Microseconds per Clock Tick
- *
- *  The following contains the number of microseconds per tick.
- */
-SCORE_EXTERN uint32_t   _TOD_Microseconds_per_tick;
 
 /** @brief _TOD_Handler_initialization
  *
@@ -224,8 +210,9 @@ void _TOD_Tickle_ticks( void );
  *
  *  @note This must be a macro so it can be used in "static" tables.
  */
-#define TOD_MICROSECONDS_TO_TICKS(_us) \
-    ((_us) / _TOD_Microseconds_per_tick)
+uint32_t TOD_MICROSECONDS_TO_TICKS(
+  uint32_t microseconds
+);
 
 /** @brief TOD_MILLISECONDS_TO_TICKS
  *
@@ -233,20 +220,27 @@ void _TOD_Tickle_ticks( void );
  *
  *  @note This must be a macro so it can be used in "static" tables.
  */
-
-#define TOD_MILLISECONDS_TO_TICKS(_ms) \
-    (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
-
+uint32_t TOD_MILLISECONDS_TO_TICKS(
+  uint32_t microseconds
+);
 
 /** @brief How many ticks in a second?
  *
- *  This macro returns the number of ticks in a second.
+ *  This method returns the number of ticks in a second.
  *
  *  @note If the clock tick value does not multiply evenly into a second
  *        then this number of ticks will be slightly shorter than a second.
  */
-#define TOD_TICKS_PER_SECOND \
-  (TOD_MICROSECONDS_PER_SECOND / _TOD_Microseconds_per_tick)
+uint32_t TOD_TICKS_PER_SECOND_method(void);
+
+/** @brief Method to return number of ticks in a second
+ *
+ *  This method exists to hide the fact that TOD_TICKS_PER_SECOND can no
+ *  be implemented as a macro in a .h file due to visibility issues.
+ *  The Configuration Table is not available to SuperCore .h files but
+ *  is available to their .c files.
+ */
+#define TOD_TICKS_PER_SECOND TOD_TICKS_PER_SECOND_method()
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/tod.inl>

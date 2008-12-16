@@ -43,7 +43,8 @@ extern "C" {
  *  This is the public milliseconds to ticks conversion.
  */
 #define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
-        TOD_MILLISECONDS_TO_TICKS(_ms)
+       (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / \
+          rtems_configuration_get_microseconds_per_tick())
 
 /**
  *  @brief microseconds to ticks
@@ -51,7 +52,7 @@ extern "C" {
  *  This is the public microseconds to tick conversion.
  */
 #define RTEMS_MICROSECONDS_TO_TICKS(_ms) \
-        TOD_MICROSECONDS_TO_TICKS(_ms)
+       ((_ms) / rtems_configuration_get_microseconds_per_tick())
 
 /**
  *  @brief get workspace information

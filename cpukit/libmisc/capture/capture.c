@@ -1772,7 +1772,7 @@ rtems_capture_read (uint32_t                 threshold,
 
         sc = rtems_event_receive (RTEMS_EVENT_0,
                                   RTEMS_WAIT | RTEMS_EVENT_ANY,
-                                  TOD_MICROSECONDS_TO_TICKS (timeout),
+                                  RTEMS_MICROSECONDS_TO_TICKS (timeout),
                                   &event_out);
 
         /*

@@ -22,6 +22,7 @@
 #include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -40,7 +41,7 @@ void _TOD_Tickle_ticks( void )
   uint32_t          seconds;
 
   /* Convert the tick quantum to a timestamp */
-  _Timestamp_Set( &tick, 0, _TOD_Microseconds_per_tick * 1000 );
+  _Timestamp_Set( &tick, 0, rtems_configuration_get_nanoseconds_per_tick() );
 
   /* Update the counter of ticks since boot */
   _Watchdog_Ticks_since_boot += 1;

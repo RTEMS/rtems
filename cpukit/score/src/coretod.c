@@ -38,8 +38,6 @@ void _TOD_Handler_initialization(
   uint32_t   microseconds_per_tick
 )
 {
-  _TOD_Microseconds_per_tick = microseconds_per_tick;
-
   /* POSIX format TOD (timespec) */
   _Timestamp_Set( &_TOD_Now, TOD_SECONDS_1970_THROUGH_1988, 0 );
 

@@ -1,5 +1,18 @@
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libblock/src/bdbuf.c, libmisc/capture/capture-cli.c,
+	libmisc/capture/capture.c, libmisc/mw-fb/mw_uid.c,
+	rtems/include/rtems/rtems/support.h, score/Makefile.am,
+	score/include/rtems/score/tod.h, score/src/coretod.c,
+	score/src/coretodtickle.c: Eliminate all public use of TOD conversion
+	routines. Eliminate _TOD_Microseconds_per_tick and let every place
+	use the field directly from the Configuration Table. This required
+	moving some methods from macros to bodies.
+	* score/src/coretodmsecstoticks.c, score/src/coretodtickspersec.c,
+	score/src/coretodusectoticks.c: New files.
+
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/src/__times.c, posix/src/adjtime.c,
 	posix/src/clockgetres.c, posix/src/sysconf.c,
 	rtems/src/clockgettickspersecond.c, rtems/src/clockgettod.c,

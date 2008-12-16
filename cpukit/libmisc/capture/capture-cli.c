@@ -443,7 +443,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 
     cli_load_thread_active = 0;
 
-    rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (5000000));
+    rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (5000000));
   }
 }
 
@@ -509,7 +509,7 @@ rtems_capture_cli_task_load (int                          argc,
       int loops = 20;
 
       while (loops && cli_load_thread_active)
-        rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (100000));
+        rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (100000));
 
       rtems_task_delete (id);
 

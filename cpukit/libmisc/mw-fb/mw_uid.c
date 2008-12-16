@@ -93,7 +93,7 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
                                        (void*)m,
                                        &size,
                                        wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
-                                       TOD_MICROSECONDS_TO_TICKS(micro_secs ) );
+                                       RTEMS_MICROSECONDS_TO_TICKS(micro_secs));
 
   if( status == RTEMS_SUCCESSFUL )
   {

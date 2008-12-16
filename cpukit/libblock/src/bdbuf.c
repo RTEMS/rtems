@@ -2353,7 +2353,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
   write_req->done_arg = write_req;
   write_req->io_task = rtems_task_self ();
 
-  period_in_ticks = TOD_MICROSECONDS_TO_TICKS (period_in_msecs * 1000);
+  period_in_ticks = RTEMS_MICROSECONDS_TO_TICKS (period_in_msecs * 1000);
 
   /*
    * This is temporary. Needs to be changed to use the real time clock.
