@@ -374,7 +374,6 @@ uninitialized =
 
 /*tod.h*/       (sizeof _TOD_Now)                         +
                 (sizeof _TOD_Uptime)                      +
-                (sizeof _TOD_Microseconds_per_tick)       +
 
 /*tqdata.h*/    0                                         +
 

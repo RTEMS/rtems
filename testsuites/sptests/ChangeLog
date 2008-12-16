@@ -1,3 +1,7 @@
+2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spsize/size.c: Eliminate _TOD_Microseconds_per_tick.
+
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, spfatal06/testcase.h,
