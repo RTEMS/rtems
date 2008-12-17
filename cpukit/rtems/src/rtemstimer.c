@@ -2,7 +2,7 @@
  *  Timer Manager
  *
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
@@ -31,21 +32,19 @@
  *
  *  This routine initializes all timer manager related data structures.
  *
- *  Input parameters:
- *    maximum_timers - number of timers to initialize
+ *  Input parameters: NONE
  *
  *  Output parameters:  NONE
  */
 
-void _Timer_Manager_initialization(
-  uint32_t   maximum_timers
-)
+void _Timer_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Timer_Information,       /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */
     OBJECTS_RTEMS_TIMERS,      /* object class */
-    maximum_timers,            /* maximum objects of this class */
+    Configuration_RTEMS_API.maximum_timers ,
+                               /* maximum objects of this class */
     sizeof( Timer_Control ),   /* size of this object's control block */
     FALSE,                     /* TRUE if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */

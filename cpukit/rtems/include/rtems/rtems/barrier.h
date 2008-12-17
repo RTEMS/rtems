@@ -76,13 +76,8 @@ RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
  *  @brief _Barrier_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
- *
- *  @param[in] maximum_barriers is the total number of barriers allowed to
- *             concurrently be active in the system.
  */
-void _Barrier_Manager_initialization(
-  uint32_t   maximum_barriers
-);
+void _Barrier_Manager_initialization(void);
 
 /**
  *  @brief rtems_barrier_create

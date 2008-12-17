@@ -88,9 +88,7 @@ RTEMS_REGION_EXTERN Objects_Information _Region_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Region_Manager_initialization(
-  uint32_t   maximum_regions
-);
+void _Region_Manager_initialization(void);
 
 /**
  *  @brief rtems_region_create

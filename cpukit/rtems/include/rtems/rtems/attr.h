@@ -182,16 +182,6 @@ typedef uint32_t   rtems_attribute;
 #define ATTRIBUTES_REQUIRED            0
 #endif
 
-/**
- *  @brief _Attributes_Handler_initialization
- *
- *  This routine performs initialization for this handler.
- *
- *  NOTE: There is no initialization required in C.  Conditional compilation
- *        takes care of this in C.
- */
-#define _Attributes_Handler_initialization()
-
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/attr.inl>
 #endif

@@ -108,9 +108,7 @@ RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Semaphore_Manager_initialization(
-  uint32_t   maximum_semaphores
-);
+void _Semaphore_Manager_initialization(void);
 
 /**
  *  @brief rtems_semaphore_create

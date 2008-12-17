@@ -278,9 +278,7 @@ RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Rate_monotonic_Manager_initialization(
-  uint32_t   maximum_periods
-);
+void _Rate_monotonic_Manager_initialization(void);
 
 /**
  *  @brief rtems_rate_monotonic_create

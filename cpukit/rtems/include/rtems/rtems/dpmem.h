@@ -81,9 +81,7 @@ RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Dual_ported_memory_Manager_initialization(
-  uint32_t   maximum_ports
-);
+void _Dual_ported_memory_Manager_initialization(void);
 
 /**
  *  @brief rtems_port_create

@@ -1,7 +1,7 @@
 /*
  *  RTEMS Task Manager -- Initialize Manager
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -241,22 +241,19 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
  *
  *  This routine initializes all Task Manager related data structures.
  *
- *  Input parameters:
- *    maximum_tasks       - number of tasks to initialize
+ *  Input parameters: NONE
  *
  *  Output parameters:  NONE
  */
 
-void _RTEMS_tasks_Manager_initialization(
-  uint32_t                          maximum_tasks
-)
+void _RTEMS_tasks_Manager_initialization(void)
 {
-
   _Objects_Initialize_information(
     &_RTEMS_tasks_Information, /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */
     OBJECTS_RTEMS_TASKS,       /* object class */
-    maximum_tasks,             /* maximum objects of this class */
+    Configuration_RTEMS_API.maximum_tasks,
+                               /* maximum objects of this class */
     sizeof( Thread_Control ),  /* size of this object's control block */
     FALSE,                     /* TRUE if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */

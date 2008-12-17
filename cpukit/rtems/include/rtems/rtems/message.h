@@ -101,9 +101,7 @@ RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Message_queue_Manager_initialization(
-  uint32_t   maximum_message_queues
-);
+void _Message_queue_Manager_initialization(void);
 
 /**
  *  @brief rtems_message_queue_create

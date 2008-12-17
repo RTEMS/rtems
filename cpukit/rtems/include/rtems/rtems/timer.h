@@ -148,9 +148,7 @@ typedef struct {
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Timer_Manager_initialization(
-  uint32_t   maximum_timers
-);
+void _Timer_Manager_initialization(void);
 
 /**
  *  @brief rtems_timer_create

@@ -2,7 +2,7 @@
  *  Rate Monotonic Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
@@ -31,8 +32,7 @@
  *  This routine initializes all Rate Monotonic Manager related
  *  data structures.
  *
- *  Input parameters:
- *    maximum_periods - number of periods timers to initialize
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  *
@@ -40,22 +40,21 @@
  *        Handler.
  */
 
-void _Rate_monotonic_Manager_initialization(
-  uint32_t   maximum_periods
-)
+void _Rate_monotonic_Manager_initialization(void)
 {
   _Objects_Initialize_information(
-    &_Rate_monotonic_Information,     /* object information table */
-    OBJECTS_CLASSIC_API,              /* object API */
-    OBJECTS_RTEMS_PERIODS,            /* object class */
-    maximum_periods,                  /* maximum objects of this class */
-    sizeof( Rate_monotonic_Control ), /* size of this object's control block */
-    FALSE,                            /* TRUE if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH         /* maximum length of an object name */
+    &_Rate_monotonic_Information,    /* object information table */
+    OBJECTS_CLASSIC_API,             /* object API */
+    OBJECTS_RTEMS_PERIODS,           /* object class */
+    Configuration_RTEMS_API.maximum_periods,
+                                     /* maximum objects of this class */
+    sizeof( Rate_monotonic_Control ),/* size of this object's control block */
+    FALSE,                           /* TRUE if the name is a string */
+    RTEMS_MAXIMUM_NAME_LENGTH        /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                     /* TRUE if this is a global object class */
-    NULL                       /* Proxy extraction support callout */
+    FALSE,                           /* TRUE if this is a global object class */
+    NULL                             /* Proxy extraction support callout */
 #endif
   );
 }

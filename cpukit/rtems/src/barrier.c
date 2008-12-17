@@ -13,7 +13,7 @@
  *     + acquire a barrier
  *     + release a barrier
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,6 +28,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
@@ -39,21 +40,19 @@
 /**
  *  @brief _Barrier_Manager_initialization
  *
- *  Input parameters:
- *    maximum_barriers - maximum configured barriers
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-void _Barrier_Manager_initialization(
-  uint32_t   maximum_barriers
-)
+void _Barrier_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Barrier_Information,         /* object information table */
     OBJECTS_CLASSIC_API,           /* object API */
     OBJECTS_RTEMS_BARRIERS,        /* object class */
-    maximum_barriers,              /* maximum objects of this class */
+    Configuration_RTEMS_API.maximum_barriers,
+                                   /* maximum objects of this class */
     sizeof( Barrier_Control ),     /* size of this object's control block */
     FALSE,                         /* TRUE if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH      /* maximum length of an object name */

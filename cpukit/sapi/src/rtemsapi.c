@@ -56,45 +56,27 @@ Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 
 void _RTEMS_API_Initialize(void)
 {
-  rtems_api_configuration_table *api;
-
   /*
    * Install our API Object Management Table and initialize the
    * various managers.
    */
-  api = &Configuration_RTEMS_API;
-
   _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
 
-  _Attributes_Handler_initialization();
+  #if defined(RTEMS_MULTIPROCESSING)
+    _Multiprocessing_Manager_initialization();
+  #endif
 
-  _Interrupt_Manager_initialization();
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _Multiprocessing_Manager_initialization();
-#endif
-
-  _RTEMS_tasks_Manager_initialization( api->maximum_tasks );
-
-  _Timer_Manager_initialization( api->maximum_timers );
-
+  _RTEMS_tasks_Manager_initialization();
+  _Timer_Manager_initialization();
   _Signal_Manager_initialization();
-
   _Event_Manager_initialization();
-
-  _Message_queue_Manager_initialization( api->maximum_message_queues );
-
-  _Semaphore_Manager_initialization( api->maximum_semaphores );
-
-  _Partition_Manager_initialization( api->maximum_partitions );
-
-  _Region_Manager_initialization( api->maximum_regions );
-
-  _Dual_ported_memory_Manager_initialization( api->maximum_ports);
-
-  _Rate_monotonic_Manager_initialization( api->maximum_periods );
-
-  _Barrier_Manager_initialization( api->maximum_barriers );
+  _Message_queue_Manager_initialization();
+  _Semaphore_Manager_initialization();
+  _Partition_Manager_initialization();
+  _Region_Manager_initialization();
+  _Dual_ported_memory_Manager_initialization();
+  _Rate_monotonic_Manager_initialization();
+  _Barrier_Manager_initialization();
 }
 
 /* end of file */

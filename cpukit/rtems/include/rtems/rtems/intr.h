@@ -58,11 +58,6 @@ typedef rtems_isr ( *rtems_isr_entry )(
              );
 
 /**
- *  @brief Initializes the Interrupt Manager.
- */
-void _Interrupt_Manager_initialization( void );
-
-/**
  *  @brief Implementation of the rtems_interrupt_catch directive.
  *  
  *  This directive installs @a new_isr_handler as the RTEMS interrupt service

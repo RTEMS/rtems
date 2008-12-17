@@ -88,9 +88,7 @@ RTEMS_PART_EXTERN Objects_Information _Partition_Information;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _Partition_Manager_initialization(
-  uint32_t   maximum_partitions
-);
+void _Partition_Manager_initialization(void);
 
 /**
  *  @brief rtems_partition_create

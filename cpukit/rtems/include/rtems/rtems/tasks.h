@@ -241,9 +241,7 @@ extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
  *
  *  This routine initializes all Task Manager related data structures.
  */
-void _RTEMS_tasks_Manager_initialization(
-  uint32_t     maximum_tasks
-);
+void _RTEMS_tasks_Manager_initialization(void);
 
 /**
  *  @brief rtems_task_create

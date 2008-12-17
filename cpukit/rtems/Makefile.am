@@ -78,7 +78,7 @@ librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
     src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
 
 ## INTR_C_FILES 
-librtems_a_SOURCES += src/intr.c src/intrbody.c src/intrcatch.c
+librtems_a_SOURCES += src/intrbody.c src/intrcatch.c
 
 ## BARRIER_C_FILES
 librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \

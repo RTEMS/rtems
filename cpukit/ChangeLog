@@ -1,3 +1,21 @@
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/Makefile.am, rtems/include/rtems/rtems/attr.h,
+	rtems/include/rtems/rtems/barrier.h,
+	rtems/include/rtems/rtems/dpmem.h, rtems/include/rtems/rtems/intr.h,
+	rtems/include/rtems/rtems/message.h,
+	rtems/include/rtems/rtems/part.h,
+	rtems/include/rtems/rtems/ratemon.h,
+	rtems/include/rtems/rtems/region.h, rtems/include/rtems/rtems/sem.h,
+	rtems/include/rtems/rtems/tasks.h, rtems/include/rtems/rtems/timer.h,
+	rtems/src/barrier.c, rtems/src/dpmem.c, rtems/src/msg.c,
+	rtems/src/part.c, rtems/src/ratemon.c, rtems/src/region.c,
+	rtems/src/rtemstimer.c, rtems/src/sem.c, rtems/src/tasks.c,
+	sapi/src/rtemsapi.c: Convert manager initialization routines to
+	directly pull parameters from configuration table. Eliminate empty
+	routines sportted.
+	* rtems/src/intr.c: Removed.
+
 2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove include/rtems/stdint.h.
