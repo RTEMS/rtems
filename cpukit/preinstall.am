@@ -114,10 +114,6 @@ $(PROJECT_INCLUDE)/rtems/pci.h: include/rtems/pci.h $(PROJECT_INCLUDE)/rtems/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/pci.h
 
-$(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stdint.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
-
 $(PROJECT_INCLUDE)/rtems/concat.h: include/rtems/concat.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/concat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h
