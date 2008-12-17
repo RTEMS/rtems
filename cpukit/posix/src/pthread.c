@@ -19,6 +19,7 @@
 #include <limits.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
@@ -309,23 +310,13 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  *
  *  This routine initializes all threads manager related data structures.
  *
- *  Input parameters:
- *    maximum_pthreads - maximum configured pthreads
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-void _POSIX_Threads_Manager_initialization(
-  uint32_t                            maximum_pthreads,
-  uint32_t                            number_of_initialization_threads,
-  posix_initialization_threads_table *user_threads
-
-)
+void _POSIX_Threads_Manager_initialization(void)
 {
-  _POSIX_Threads_Number_of_initialization_threads =
-                                           number_of_initialization_threads;
-  _POSIX_Threads_User_initialization_threads = user_threads;
-
   /*
    *  There may not be any POSIX initialization threads configured.
    */
@@ -339,11 +330,12 @@ void _POSIX_Threads_Manager_initialization(
     &_POSIX_Threads_Information, /* object information table */
     OBJECTS_POSIX_API,           /* object API */
     OBJECTS_POSIX_THREADS,       /* object class */
-    maximum_pthreads,            /* maximum objects of this class */
+    Configuration_POSIX_API.maximum_threads,
+                                 /* maximum objects of this class */
     sizeof( Thread_Control ),
                                  /* size of this object's control block */
     TRUE,                        /* TRUE if names for this object are strings */
-    _POSIX_PATH_MAX             /* maximum length of each object's name */
+    _POSIX_PATH_MAX              /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
     FALSE,                       /* TRUE if this is a global object class */

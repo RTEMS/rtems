@@ -74,33 +74,17 @@ void _POSIX_API_Initialize(void)
 
   _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
 
-  _POSIX_signals_Manager_Initialization( api->maximum_queued_signals );
-
-  _POSIX_Threads_Manager_initialization(
-    api->maximum_threads,
-    api->number_of_initialization_threads,
-    api->User_initialization_threads_table
-  );
-
-  _POSIX_Condition_variables_Manager_initialization(
-    api->maximum_condition_variables
-  );
-
-  _POSIX_Key_Manager_initialization( api->maximum_keys );
-
-  _POSIX_Mutex_Manager_initialization( api->maximum_mutexes );
-
-  _POSIX_Message_queue_Manager_initialization( api->maximum_message_queues );
-
-  _POSIX_Semaphore_Manager_initialization( api->maximum_semaphores );
-
-  _POSIX_Timer_Manager_initialization( api->maximum_timers );
-
-  _POSIX_Barrier_Manager_initialization( api->maximum_barriers );
-
-  _POSIX_RWLock_Manager_initialization( api->maximum_rwlocks );
-
-  _POSIX_Spinlock_Manager_initialization(api->maximum_spinlocks);
+  _POSIX_signals_Manager_Initialization();
+  _POSIX_Threads_Manager_initialization();
+  _POSIX_Condition_variables_Manager_initialization();
+  _POSIX_Key_Manager_initialization();
+  _POSIX_Mutex_Manager_initialization();
+  _POSIX_Message_queue_Manager_initialization();
+  _POSIX_Semaphore_Manager_initialization();
+  _POSIX_Timer_Manager_initialization();
+  _POSIX_Barrier_Manager_initialization();
+  _POSIX_RWLock_Manager_initialization();
+  _POSIX_Spinlock_Manager_initialization();
 }
 
 #endif

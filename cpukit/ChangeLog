@@ -1,5 +1,25 @@
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/rtems/posix/barrier.h,
+	posix/include/rtems/posix/cond.h, posix/include/rtems/posix/key.h,
+	posix/include/rtems/posix/mqueue.h,
+	posix/include/rtems/posix/mutex.h,
+	posix/include/rtems/posix/psignal.h,
+	posix/include/rtems/posix/pthread.h,
+	posix/include/rtems/posix/ptimer.h,
+	posix/include/rtems/posix/rwlock.h,
+	posix/include/rtems/posix/semaphore.h,
+	posix/include/rtems/posix/spinlock.h,
+	posix/include/rtems/posix/timer.h, posix/src/cond.c, posix/src/key.c,
+	posix/src/mqueue.c, posix/src/mutex.c, posix/src/pbarrier.c,
+	posix/src/prwlock.c, posix/src/psignal.c, posix/src/pspin.c,
+	posix/src/pthread.c, posix/src/pthreadinitthreads.c,
+	posix/src/ptimer.c, posix/src/semaphore.c, sapi/src/posixapi.c:
+	Convert POSIX manager initialization routines to directly pull
+	parameters from configuration table.
+
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/Makefile.am, rtems/include/rtems/rtems/attr.h,
 	rtems/include/rtems/rtems/barrier.h,
 	rtems/include/rtems/rtems/dpmem.h, rtems/include/rtems/rtems/intr.h,

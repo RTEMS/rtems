@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +21,7 @@
 #include <stdlib.h>	/* exit */
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tqdata.h>
@@ -159,11 +160,12 @@ void _POSIX_signals_Post_switch_extension(
  *  _POSIX_signals_Manager_Initialization
  */
 
-void _POSIX_signals_Manager_Initialization(
-  int  maximum_queued_signals
-)
+void _POSIX_signals_Manager_Initialization(void)
 {
   uint32_t   signo;
+  uint32_t   maximum_queued_signals;
+
+  maximum_queued_signals = Configuration_POSIX_API.maximum_queued_signals;
 
   /*
    *  Ensure we have the same number of vectors and default vector entries

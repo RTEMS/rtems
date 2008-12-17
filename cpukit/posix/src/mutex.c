@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,7 @@
 #include <limits.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
 #if defined(RTEMS_MULTIPROCESSING)
@@ -39,9 +40,7 @@
  *  Output parameters:  NONE
  */
 
-void _POSIX_Mutex_Manager_initialization(
-  uint32_t   maximum_mutexes
-)
+void _POSIX_Mutex_Manager_initialization(void)
 {
   pthread_mutexattr_t *default_attr = &_POSIX_Mutex_Default_attributes;
 
@@ -62,7 +61,8 @@ void _POSIX_Mutex_Manager_initialization(
     &_POSIX_Mutex_Information,  /* object information table */
     OBJECTS_POSIX_API,          /* object API */
     OBJECTS_POSIX_MUTEXES,      /* object class */
-    maximum_mutexes,            /* maximum objects of this class */
+    Configuration_POSIX_API.maximum_mutexes,
+                                /* maximum objects of this class */
     sizeof( POSIX_Mutex_Control ),
                                 /* size of this object's control block */
     TRUE,                       /* TRUE if names for this object are strings */

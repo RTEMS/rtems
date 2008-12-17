@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,7 @@
 #include <limits.h>
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
@@ -30,17 +31,20 @@
  *  DESCRIPTION:
  *
  *  This routine performs the initialization necessary for this manager.
+ *
+ *  Input parameters:   NONE
+ *
+ *  Output parameters:  NONE
  */
 
-void _POSIX_Key_Manager_initialization(
-  uint32_t   maximum_keys
-)
+void _POSIX_Key_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_Keys_Information,   /* object information table */
     OBJECTS_POSIX_API,          /* object API */
     OBJECTS_POSIX_KEYS,         /* object class */
-    maximum_keys,               /* maximum objects of this class */
+    Configuration_POSIX_API.maximum_keys,
+                                /* maximum objects of this class */
     sizeof( POSIX_Keys_Control ),
                                 /* size of this object's control block */
     TRUE,                       /* TRUE if names for this object are strings */

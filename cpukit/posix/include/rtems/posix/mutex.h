@@ -6,7 +6,7 @@
  *  This include file contains all the private support information for
  *  POSIX mutex's.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,9 +57,7 @@ POSIX_EXTERN pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Mutex_Manager_initialization(
-  uint32_t   maximum_mutexes
-);
+void _POSIX_Mutex_Manager_initialization(void);
 
 /*
  *  _POSIX_Mutex_Allocate

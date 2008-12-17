@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -82,9 +82,7 @@ typedef struct {
  *  Internal routines
  */
 
-void _POSIX_signals_Manager_Initialization(
-  int  maximum_queued_signals
-);
+void _POSIX_signals_Manager_Initialization(void);
 
 void _POSIX_signals_Post_switch_extension(
   Thread_Control  *the_thread

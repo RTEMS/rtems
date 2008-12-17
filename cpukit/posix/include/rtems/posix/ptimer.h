@@ -34,7 +34,7 @@ extern "C" {
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Timer_Manager_initialization ( int max_timers );
+void _POSIX_Timer_Manager_initialization(void);
 
 /*
  *  14.2.2 Create a Per-Process Timer, P1003.1b-1993, p. 264

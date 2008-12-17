@@ -65,9 +65,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Message_queue_Manager_initialization(
-  uint32_t   maximum_message_queues
-);
+void _POSIX_Message_queue_Manager_initialization(void);
 
 /*
  *

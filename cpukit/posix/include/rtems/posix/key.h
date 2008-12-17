@@ -7,7 +7,7 @@
  *  This include file contains all the private support information for
  *  POSIX key.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,9 +53,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Key_Manager_initialization(
-  uint32_t   maximum_keys
-);
+void _POSIX_Key_Manager_initialization(void);
 
 /*
  *  _POSIX_Keys_Run_destructors

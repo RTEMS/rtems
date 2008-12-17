@@ -57,9 +57,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Semaphore_Manager_initialization(
-  uint32_t   maximum_semaphorees
-);
+void _POSIX_Semaphore_Manager_initialization(void);
 
 /*
  *  _POSIX_Semaphore_Allocate

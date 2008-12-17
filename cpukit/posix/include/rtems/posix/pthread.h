@@ -7,7 +7,7 @@
  *  This include file contains all the private support information for
  *  POSIX threads.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,14 +39,6 @@ extern "C" {
 
 POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
 
-/*
- *  These are used to manage the user initialization threads.
- */
-
-POSIX_EXTERN posix_initialization_threads_table
-                   *_POSIX_Threads_User_initialization_threads;
-POSIX_EXTERN uint32_t     _POSIX_Threads_Number_of_initialization_threads;
-
 extern const pthread_attr_t _POSIX_Threads_Default_attributes;
 
 /**
@@ -66,11 +58,7 @@ extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _POSIX_Threads_Manager_initialization(
-  uint32_t                            maximum_pthreads,
-  uint32_t                            number_of_initialization_threads,
-  posix_initialization_threads_table *user_threads
-);
+void _POSIX_Threads_Manager_initialization(void);
 
 /*
  *  _POSIX_Threads_Allocate

@@ -12,7 +12,7 @@
  *     + delete a spinlock
  *     + wait for a spinlock
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -59,9 +59,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Spinlock_Information;
  *             concurrently be active in the system.
  */
 
-void _POSIX_Spinlock_Manager_initialization(
-  uint32_t   maximum_spinlocks
-);
+void _POSIX_Spinlock_Manager_initialization(void);
 
 /**
  *  @brief _POSIX_Spinlock_Translate_core_spinlock_return_code (

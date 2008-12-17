@@ -70,7 +70,7 @@ typedef struct {
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _POSIX_Timer_Manager_initialization ( int max_timers );
+void _POSIX_Timer_Manager_initialization(void);
 
 /*
  *  Timer TSR

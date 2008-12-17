@@ -12,7 +12,7 @@
  *     + delete a barrier
  *     + wait for a barrier
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -59,9 +59,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Barrier_Information;
  *             concurrently be active in the system.
  */
 
-void _POSIX_Barrier_Manager_initialization(
-  uint32_t   maximum_barriers
-);
+void _POSIX_Barrier_Manager_initialization(void);
 
 /**
  *  @brief _POSIX_Barrier_Translate_core_barrier_return_code (
