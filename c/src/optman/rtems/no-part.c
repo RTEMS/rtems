@@ -2,7 +2,7 @@
  *  Partition Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,8 +20,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
-void _Partition_Manager_initialization(
-  uint32_t   maximum_partitions
-)
+void _Partition_Manager_initialization(void)
 {
 }

@@ -21,8 +21,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
-void _Region_Manager_initialization(
-  uint32_t   maximum_regions
-)
+void _Region_Manager_initialization(void)
 {
 }

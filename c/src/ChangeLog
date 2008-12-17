@@ -1,3 +1,13 @@
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* optman/rtems/no-barrier.c, optman/rtems/no-dpmem.c,
+	optman/rtems/no-event.c, optman/rtems/no-mp.c, optman/rtems/no-msg.c,
+	optman/rtems/no-part.c, optman/rtems/no-region.c,
+	optman/rtems/no-rtmon.c, optman/rtems/no-sem.c,
+	optman/rtems/no-signal.c, optman/rtems/no-timer.c: Convert manager
+	initialization routines to directly pull parameters from
+	configuration table. Eliminate empty routines sportted.
+
 2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/serial/ns16550.c: Add CVS-Id. Fix #define mess.

@@ -2,7 +2,7 @@
  *  Message Queue Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,8 +25,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/interr.h>
 
-void _Message_queue_Manager_initialization(
-  uint32_t   maximum_message_queues
-)
+void _Message_queue_Manager_initialization(void)
 {
 }

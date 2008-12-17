@@ -2,7 +2,7 @@
  *  Multiprocessing Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,7 +30,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/interr.h>
 
-void _Multiprocessing_Manager_initialization ( void )
+void _Multiprocessing_Manager_initialization(void)
 {
 }
 #endif

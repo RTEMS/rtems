@@ -1,7 +1,7 @@
 /*
  *  Barrier Manager Stub
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,8 +17,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/barrier.h>
 
-void _Barrier_Manager_initialization(
-  uint32_t   maximum_barriers
-)
+void _Barrier_Manager_initialization(void)
 {
 }

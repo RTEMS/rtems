@@ -2,7 +2,7 @@
  *  Rate Monotonic Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,8 +22,6 @@
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/ratemon.h>
 
-void _Rate_monotonic_Manager_initialization(
-  uint32_t   maximum_periods
-)
+void _Rate_monotonic_Manager_initialization(void)
 {
 }
