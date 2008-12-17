@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,12 +37,8 @@ void _ITRON_Task_Initialize_user_tasks_body( void )
   ER                                return_value;
   itron_initialization_tasks_table *user_tasks;
 
-  /*
-   *  NOTE:  This is slightly different from the Ada implementation.
-   */
-
-  user_tasks = _ITRON_Task_User_initialization_tasks;
-  maximum    = _ITRON_Task_Number_of_initialization_tasks;
+  user_tasks = Configuration_ITRON_API.User_initialization_tasks_table;
+  maximum    = Configuration_ITRON_API.number_of_initialization_tasks;
 
   if ( !user_tasks || maximum == 0 )
     return;

@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,9 +49,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Mailbox_Information;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _ITRON_Mailbox_Manager_initialization(
-  uint32_t   maximum_mailboxes
-);
+void _ITRON_Mailbox_Manager_initialization(void);
 
 /*
  *  _ITRON_Mailbox_Translate_core_message_queue_return_code

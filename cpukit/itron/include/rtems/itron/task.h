@@ -56,14 +56,6 @@ typedef struct {
 
 ITRON_EXTERN Objects_Information _ITRON_Task_Information;
 
-/*
- *  These are used to manage the user initialization tasks.
- */
-
-ITRON_EXTERN itron_initialization_tasks_table
-               *_ITRON_Task_User_initialization_tasks;
-ITRON_EXTERN uint32_t     _ITRON_Task_Number_of_initialization_tasks;
-
 /**
  *  When the user configures a set of ITRON API initialization tasks,
  *  This variable will point to the method used to initialize them.
@@ -79,11 +71,7 @@ extern void (*_ITRON_Initialize_user_tasks_p)(void);
  *  This routine initializes the ITRON Task Manager.
  */
 
-void _ITRON_Task_Manager_initialization(
-  uint32_t                          maximum_tasks,
-  uint32_t                          number_of_initialization_tasks,
-  itron_initialization_tasks_table *user_tasks
-);
+void _ITRON_Task_Manager_initialization(void);
 
 /*
  * Return a status code and enable dispatching

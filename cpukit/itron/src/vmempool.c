@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,7 @@
 #endif
 
 #include <rtems/itron.h>
-
+#include <rtems/config.h>
 #include <rtems/itron/vmempool.h>
 
 /*
@@ -29,15 +29,14 @@
  *  Output parameters:  NONE
  */
 
-void _ITRON_Variable_memory_pool_Manager_initialization(
-  uint32_t   maximum_variable_memory_pools
-)
+void _ITRON_Variable_memory_pool_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_ITRON_Variable_memory_pool_Information, /* object information table */
     OBJECTS_ITRON_API,                        /* object API */
     OBJECTS_ITRON_VARIABLE_MEMORY_POOLS,      /* object class */
-    maximum_variable_memory_pools, /* maximum objects of this class */
+    Configuration_ITRON_API.maximum_memory_pools,
+                                /* maximum objects of this class */
     sizeof( ITRON_Variable_memory_pool_Control ),
                                 /* size of this object's control block */
     FALSE,                      /* TRUE if names for this object are strings */

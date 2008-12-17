@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,9 +47,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Variable_memory_pool_Information;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _ITRON_Variable_memory_pool_Manager_initialization(
-  uint32_t   maximum_variable_memory_pools
-);
+void _ITRON_Variable_memory_pool_Manager_initialization(void);
 
 /*
  *  XXX insert private stuff here

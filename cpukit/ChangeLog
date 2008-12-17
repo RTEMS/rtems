@@ -1,5 +1,22 @@
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/rtems/itron/config.h,
+	itron/include/rtems/itron/eventflags.h,
+	itron/include/rtems/itron/fmempool.h,
+	itron/include/rtems/itron/mbox.h,
+	itron/include/rtems/itron/msgbuffer.h,
+	itron/include/rtems/itron/port.h,
+	itron/include/rtems/itron/semaphore.h,
+	itron/include/rtems/itron/task.h,
+	itron/include/rtems/itron/vmempool.h, itron/src/eventflags.c,
+	itron/src/fmempool.c, itron/src/itroninittasks.c,
+	itron/src/itronsem.c, itron/src/mbox.c, itron/src/msgbuffer.c,
+	itron/src/port.c, itron/src/task.c, itron/src/vmempool.c,
+	sapi/src/itronapi.c: Convert ITRON manager initialization routines to
+	directly pull parameters from configuration table.
+
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/include/rtems/posix/config.h: Fix typo.
 
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>

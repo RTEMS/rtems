@@ -56,8 +56,6 @@ Objects_Information *_ITRON_Objects[ OBJECTS_ITRON_CLASSES_LAST + 1 ];
 
 void _ITRON_API_Initialize(void)
 {
-  const itron_api_configuration_table *api;
-
   /* XXX need to assert here based on size assumptions */
 
   assert( sizeof(ID) == sizeof(Objects_Id) );
@@ -66,31 +64,16 @@ void _ITRON_API_Initialize(void)
    * Install our API Object Management Table and initialize the
    * various managers.
    */
-  api = &Configuration_ITRON_API;
-
   _Objects_Information_table[OBJECTS_ITRON_API] = _ITRON_Objects;
 
-  _ITRON_Task_Manager_initialization(
-    api->maximum_tasks,
-    api->number_of_initialization_tasks,
-    api->User_initialization_tasks_table
-  );
-
-  _ITRON_Semaphore_Manager_initialization( api->maximum_semaphores );
-
-  _ITRON_Eventflags_Manager_initialization( api->maximum_eventflags );
-
-  _ITRON_Fixed_memory_pool_Manager_initialization(
-    api->maximum_fixed_memory_pools
-  );
-
-  _ITRON_Mailbox_Manager_initialization( api->maximum_mailboxes );
-
-  _ITRON_Message_buffer_Manager_initialization( api->maximum_message_buffers );
-
-  _ITRON_Port_Manager_initialization( api->maximum_ports );
-
-  _ITRON_Variable_memory_pool_Manager_initialization(api->maximum_memory_pools);
+  _ITRON_Task_Manager_initialization();
+  _ITRON_Semaphore_Manager_initialization();
+  _ITRON_Eventflags_Manager_initialization();
+  _ITRON_Fixed_memory_pool_Manager_initialization();
+  _ITRON_Mailbox_Manager_initialization();
+  _ITRON_Message_buffer_Manager_initialization();
+  _ITRON_Port_Manager_initialization();
+  _ITRON_Variable_memory_pool_Manager_initialization();
 }
 
 #endif

@@ -14,7 +14,7 @@
 #endif
 
 #include <rtems/itron.h>
-
+#include <rtems/config.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
@@ -148,21 +148,15 @@ User_extensions_Control _ITRON_Task_User_extensions = {
  *  Output parameters:  NONE
  */
 
-void _ITRON_Task_Manager_initialization(
-  uint32_t                          maximum_tasks,
-  uint32_t                          number_of_initialization_tasks,
-  itron_initialization_tasks_table *user_tasks
-)
+void _ITRON_Task_Manager_initialization(void)
 {
-
-  _ITRON_Task_Number_of_initialization_tasks = number_of_initialization_tasks;
-  _ITRON_Task_User_initialization_tasks = user_tasks;
 
   _Objects_Initialize_information(
     &_ITRON_Task_Information,   /* object information table */
     OBJECTS_ITRON_API,          /* object API */
     OBJECTS_ITRON_TASKS,        /* object class */
-    maximum_tasks,              /* maximum objects of this class */
+    Configuration_ITRON_API.maximum_tasks,
+                                /* maximum objects of this class */
     sizeof( Thread_Control ),   /* size of this object's control block */
     FALSE,                      /* TRUE if names for this object are strings */
     ITRON_MAXIMUM_NAME_LENGTH   /* maximum length of each object's name */

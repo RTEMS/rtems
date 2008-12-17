@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,7 @@
 #endif
 
 #include <rtems/itron.h>
-
+#include <rtems/config.h>
 #include <rtems/itron/port.h>
 
 /*
@@ -22,21 +22,19 @@
  *
  *  This routine initializes all ports manager related data structures.
  *
- *  Input parameters:
- *    maximum_ports - maximum configured ports
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-void _ITRON_Port_Manager_initialization(
-  uint32_t   maximum_ports
-)
+void _ITRON_Port_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_ITRON_Port_Information,     /* object information table */
     OBJECTS_ITRON_API,            /* object API */
     OBJECTS_ITRON_PORTS,          /* object class */
-    maximum_ports,                /* maximum objects of this class */
+    Configuration_ITRON_API.maximum_ports,
+                                  /* maximum objects of this class */
     sizeof( ITRON_Port_Control ), /* size of this object's control block */
     FALSE,                     /* TRUE if names for this object are strings */
     ITRON_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */

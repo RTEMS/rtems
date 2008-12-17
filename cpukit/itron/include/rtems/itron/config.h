@@ -7,7 +7,7 @@
  *  This include file contains the table of user defined configuration
  *  parameters specific for the ITRON API.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,6 +57,14 @@ typedef struct {
   int                                 number_of_initialization_tasks;
   itron_initialization_tasks_table   *User_initialization_tasks_table;
 } itron_api_configuration_table;
+
+/**
+ *  @brief ITRON API Configuration Table
+ *
+ *  This is the ITRON API Configuration Table expected to be generated
+ *  by confdefs.h.
+ */
+extern itron_api_configuration_table Configuration_ITRON_API;
 
 #ifdef __cplusplus
 }

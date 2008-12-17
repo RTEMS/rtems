@@ -1,7 +1,7 @@
 /*
  *  ITRON Message Buffer Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,7 +16,7 @@
 #endif
 
 #include <rtems/itron.h>
-
+#include <rtems/config.h>
 #include <rtems/itron/msgbuffer.h>
 #include <rtems/itron/task.h>
 
@@ -26,21 +26,19 @@
  *  This routine initializes all message buffer manager related data
  *  structures.
  *
- *  Input parameters:
- *    maximum_message_buffers - maximum configured message buffers
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-void _ITRON_Message_buffer_Manager_initialization(
-  uint32_t   maximum_message_buffers
-)
+void _ITRON_Message_buffer_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_ITRON_Message_buffer_Information, /* object information table */
     OBJECTS_ITRON_API,                  /* object API */
     OBJECTS_ITRON_MESSAGE_BUFFERS,      /* object class */
-    maximum_message_buffers,            /* maximum objects of this class */
+    Configuration_ITRON_API.maximum_message_buffers,
+                               /* maximum objects of this class */
     sizeof( ITRON_Message_buffer_Control ),
                                /* size of this object's control block */
     FALSE,                     /* TRUE if names for this object are strings */
