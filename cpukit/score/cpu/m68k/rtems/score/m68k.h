@@ -320,11 +320,6 @@ extern "C" {
 
 #endif
 
-#ifndef ASM
-#include <rtems/score/types.h>
-#include <rtems/stdint.h>
-#endif
-
 /*
  * OBSOLETE: Backward compatibility only - Don't use.
  * Use __mcoldfire__ instead.
