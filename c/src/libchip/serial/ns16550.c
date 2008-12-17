@@ -19,6 +19,10 @@
  *
  *  This driver uses the termios pseudo driver.
  */
+ 
+/*
+ * $Id$
+ */
 
 #include <stdlib.h>
 
@@ -443,6 +447,7 @@ NS16550_STATIC int ns16550_set_attributes(
   return 0;
 }
 
+#if defined(BSP_FEATURE_IRQ_EXTENSION)
 /*
  *  ns16550_process
  *
@@ -516,6 +521,7 @@ NS16550_STATIC void ns16550_process( int minor)
  *
  *  This routine initializes the port to have the specified interrupts masked.
  */
+#endif
 
 NS16550_STATIC void ns16550_enable_interrupts(
   int minor,
@@ -554,7 +560,9 @@ NS16550_STATIC void ns16550_enable_interrupts(
  */
 NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 {
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
   console_tbl *c = &Console_Port_Tbl [minor];
+#endif
   console_data *d = &Console_Port_Data [minor];
 
   ns16550_init( minor);
@@ -577,7 +585,7 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         rtems_fatal_error_occurred( 0xdeadbeef);
       }
     }
-  #elif defined BSP_FEATURE_IRQ_LEGACY
+  #elif defined(BSP_FEATURE_IRQ_LEGACY)
     {
       int rv = 0;
       #ifdef BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
