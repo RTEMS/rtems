@@ -1,3 +1,8 @@
+2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/timespec.h: #include <stdint.h>, 
+	#include <time.h>. Remove bogus #include <sys/types.h>.
+
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/monitor/mon-config.c: Configuration table entry
