@@ -111,67 +111,37 @@ void rtems_initialize_data_structures(void)
    *  Before this is called, we are not allowed to allocate memory
    *  from the Workspace because it is not initialized.
    */
-  _Workspace_Handler_initialization(
-    Configuration.work_space_start,
-    Configuration.work_space_size
-  );
+  _Workspace_Handler_initialization();
 
-  _User_extensions_Handler_initialization(
-    Configuration.number_of_initial_extensions,
-    Configuration.User_extension_table
-  );
-
+  _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
-
-  _Objects_Handler_initialization(
-    #if defined(RTEMS_MULTIPROCESSING)
-      _Configuration_MP_table->node,
-      _Configuration_MP_table->maximum_nodes,
-      _Configuration_MP_table->maximum_global_objects
-    #endif
-  );
-
-  _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
+  _Objects_Handler_initialization();
 
   /*
-   * Initialize the internal allocator Mutex
+   * Initialize the internal support API and allocator Mutex
    */
+  _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
+
   _API_Mutex_Initialization( 1 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
 
   _Priority_Handler_initialization();
-
   _Watchdog_Handler_initialization();
+  _TOD_Handler_initialization();
 
-  _TOD_Handler_initialization( Configuration.microseconds_per_tick );
-
-  _Thread_Handler_initialization(
-    Configuration.ticks_per_timeslice,
-    Configuration.maximum_extensions
-    #if defined(RTEMS_MULTIPROCESSING)
-      ,
-      _Configuration_MP_table->maximum_proxies
-    #endif
-  );
+  _Thread_Handler_initialization();
 
   #if defined(RTEMS_MULTIPROCESSING)
-    _MPCI_Handler_initialization(
-      _Configuration_MP_table->User_mpci_table,
-      RTEMS_TIMEOUT
-    );
+    _MPCI_Handler_initialization( RTEMS_TIMEOUT );
   #endif
 
 /* MANAGERS */
 
   _RTEMS_API_Initialize();
 
-  _Extension_Manager_initialization( Configuration.maximum_extensions );
+  _Extension_Manager_initialization();
 
-  _IO_Manager_initialization(
-    Configuration.Device_driver_table,
-    Configuration.number_of_device_drivers,
-    Configuration.maximum_drivers
-  );
+  _IO_Manager_initialization();
 
   #ifdef RTEMS_POSIX_API
     _POSIX_API_Initialize();

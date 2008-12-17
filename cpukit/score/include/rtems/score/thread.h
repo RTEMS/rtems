@@ -506,21 +506,14 @@ SCORE_EXTERN struct _reent **_Thread_libc_reent;
 /**
  *  This routine performs the initialization necessary for this handler.
  */
-void _Thread_Handler_initialization (
-  uint32_t     ticks_per_timeslice,
-  uint32_t     maximum_extensions
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  uint32_t     maximum_proxies
-#endif
-);
+void _Thread_Handler_initialization(void);
 
 /**
  *  This routine creates the idle thread.
  *
  *  @warning No thread should be created before this one.
  */
-void _Thread_Create_idle( void );
+void _Thread_Create_idle(void);
 
 /**
  *  This routine initiates multitasking.  It is invoked only as

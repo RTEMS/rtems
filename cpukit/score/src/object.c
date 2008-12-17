@@ -2,7 +2,7 @@
  *  Object Handler
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/address.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/object.h>
@@ -34,24 +35,22 @@
  *
  *  This routine initializes the object handler.
  *
- *  Input parameters:
- *    node                   - local node
- *    maximum_nodes          - number of nodes in the system
- *    maximum_global_objects - number of configured global objects
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-#if defined(RTEMS_MULTIPROCESSING)
-void _Objects_Handler_initialization(
-  uint32_t   node,
-  uint32_t   maximum_nodes,
-  uint32_t   maximum_global_objects )
-#else
 void _Objects_Handler_initialization(void)
-#endif
 {
 #if defined(RTEMS_MULTIPROCESSING)
+  uint32_t   node;
+  uint32_t   maximum_nodes;
+  uint32_t   maximum_global_objects;
+
+  node                   = _Configuration_MP_table->node;
+  maximum_nodes          = _Configuration_MP_table->maximum_nodes;
+  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
+  
   if ( node < 1 || node > maximum_nodes )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,

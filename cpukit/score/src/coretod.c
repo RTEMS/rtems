@@ -2,7 +2,7 @@
  *  Time of Day (TOD) Handler
  */
 
-/*  COPYRIGHT (c) 1989-2007.
+/*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,15 +28,12 @@
  *
  *  This routine initializes the time of day handler.
  *
- *  Input parameters:
- *    microseconds_per_tick - microseconds between clock ticks
+ *  Input parameters:  NONE
  *
  *  Output parameters: NONE
  */
 
-void _TOD_Handler_initialization(
-  uint32_t   microseconds_per_tick
-)
+void _TOD_Handler_initialization(void)
 {
   /* POSIX format TOD (timespec) */
   _Timestamp_Set( &_TOD_Now, TOD_SECONDS_1970_THROUGH_1988, 0 );

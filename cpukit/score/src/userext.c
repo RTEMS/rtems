@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 #include <string.h>
@@ -22,13 +23,15 @@
  *  This routine performs the initialization necessary for this handler.
  */
 
-void _User_extensions_Handler_initialization (
-  uint32_t                number_of_extensions,
-  User_extensions_Table  *initial_extensions
-)
+void _User_extensions_Handler_initialization(void)
 {
   User_extensions_Control *extension;
   uint32_t                 i;
+  uint32_t                 number_of_extensions;
+  User_extensions_Table   *initial_extensions;
+
+  number_of_extensions = Configuration.number_of_initial_extensions;
+  initial_extensions   = Configuration.User_extension_table;
 
   _Chain_Initialize_empty( &_User_extensions_List );
   _Chain_Initialize_empty( &_User_extensions_Switches_list );

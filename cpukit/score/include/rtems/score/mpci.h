@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -197,15 +197,11 @@ SCORE_EXTERN MPCI_Packet_processor
 /**
  *  This routine performs the initialization necessary for this handler.
  *
- *  @param[in] users_mpci_table is a pointer to the application configured
- *             MPCI Table.  This table contains pointers to the MPCI Layers
- *             entry points.
  *  @param[in] timeout_status is the value which should be returned to
  *             blocking threads when they timeout on a remote operation.
  */
 void _MPCI_Handler_initialization(
-  MPCI_Control            *users_mpci_table,
-  uint32_t                 timeout_status
+  uint32_t   timeout_status
 );
 
 /**

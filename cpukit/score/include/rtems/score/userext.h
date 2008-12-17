@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -205,14 +205,8 @@ SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 /** @brief User extensions Handler Initialization
  *
  *  This routine performs the initialization necessary for this handler.
- *
- *  @param[in] number_of_extensions is the number of extensions
- *  @param[in] initial_extensions is the initial extension set
  */
-void _User_extensions_Handler_initialization (
-  uint32_t                number_of_extensions,
-  User_extensions_Table  *initial_extensions
-);
+void _User_extensions_Handler_initialization(void);
 
 /** @brief User extensions Add to API extension set
  *

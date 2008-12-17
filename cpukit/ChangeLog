@@ -1,5 +1,18 @@
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sapi/include/rtems/extension.h, sapi/include/rtems/io.h,
+	sapi/src/exinit.c, sapi/src/extension.c, sapi/src/io.c,
+	score/include/rtems/score/mpci.h, score/include/rtems/score/object.h,
+	score/include/rtems/score/thread.h, score/include/rtems/score/tod.h,
+	score/include/rtems/score/userext.h,
+	score/include/rtems/score/wkspace.h, score/src/coretod.c,
+	score/src/mpci.c, score/src/object.c, score/src/thread.c,
+	score/src/userext.c, score/src/wkspace.c: Convert SAPI manager and
+	SuperCore Handler initialization routines to directly pull parameters
+	from configuration table.
+
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/include/rtems/itron/config.h,
 	itron/include/rtems/itron/eventflags.h,
 	itron/include/rtems/itron/fmempool.h,

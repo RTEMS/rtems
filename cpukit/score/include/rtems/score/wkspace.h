@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,15 +45,8 @@ SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 /** @brief Workspace Handler Initialization
  *
  *  This routine performs the initialization necessary for this handler.
- *
- *  @param[in] starting_address is the base address of the RTEMS Executive
- *         Workspace
- *  @param[in] size is the number of bytes in the RTEMS Executive Workspace
  */
-void _Workspace_Handler_initialization(
-  void       *starting_address,
-  size_t      size
-);
+void _Workspace_Handler_initialization(void);
 
 /** @brief Allocate Memory from Workspace
  *

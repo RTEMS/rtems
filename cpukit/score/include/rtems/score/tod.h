@@ -144,9 +144,7 @@ SCORE_EXTERN Timestamp_Control _TOD_Uptime;
  *
  *  This routine performs the initialization necessary for this handler.
  */
-void _TOD_Handler_initialization(
-  uint32_t   microseconds_per_tick
-);
+void _TOD_Handler_initialization(void);
 
 /** @brief _TOD_Set
  *

@@ -17,7 +17,7 @@
  */
  
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -103,11 +103,7 @@ SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _IO_Manager_initialization(
-  rtems_driver_address_table *driver_table,
-  uint32_t                    drivers_in_table,
-  uint32_t                    number_of_drivers
-);
+void _IO_Manager_initialization(void);
 
 /*
  *  rtems_io_register_driver

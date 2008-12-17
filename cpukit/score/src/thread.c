@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/context.h>
 #include <rtems/score/interr.h>
@@ -37,24 +38,25 @@
  *
  *  This routine initializes all thread manager related data structures.
  *
- *  Input parameters:
- *    ticks_per_timeslice - clock ticks per quantum
- *    maximum_proxies     - number of proxies to initialize
+ *  Input parameters:   NONE
  *
  *  Output parameters:  NONE
  */
 
-void _Thread_Handler_initialization(
-  uint32_t     ticks_per_timeslice,
-  uint32_t     maximum_extensions
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  uint32_t     maximum_proxies
-#endif
-)
+void _Thread_Handler_initialization(void)
 {
-  uint32_t        index;
+  uint32_t     index;
+  uint32_t     ticks_per_timeslice;
+  uint32_t     maximum_extensions;
+  #if defined(RTEMS_MULTIPROCESSING)
+    uint32_t   maximum_proxies;
+  #endif
 
+  ticks_per_timeslice = Configuration.ticks_per_timeslice;
+  maximum_extensions  = Configuration.maximum_extensions;
+  #if defined(RTEMS_MULTIPROCESSING)
+    maximum_proxies   =  _Configuration_MP_table->maximum_proxies;
+  #endif
   /*
    * BOTH stacks hooks must be set or both must be NULL.
    * Do not allow mixture.

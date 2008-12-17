@@ -434,26 +434,10 @@ SCORE_EXTERN Objects_Information
  */
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
-#if defined(RTEMS_MULTIPROCESSING)
-/**
- *  This function performs the initialization necessary for this handler.
- *
- *  @param[in] node indicates the identifying number of this node.
- *  @param[in] maximum_nodes is the maximum number of nodes in this system.
- *  @param[in] maximum_global_objects is maximum number of global objects
- *             concurrently offered in the system.
- */
-void _Objects_Handler_initialization(
-  uint32_t   node,
-  uint32_t   maximum_nodes,
-  uint32_t   maximum_global_objects
-);
-#else
 /**
  *  This function performs the initialization necessary for this handler.
  */
 void _Objects_Handler_initialization(void);
-#endif
 
 /**
  *  This function extends an object class information record.

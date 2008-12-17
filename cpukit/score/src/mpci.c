@@ -2,7 +2,7 @@
  *  Multiprocessing Communications Interface (MPCI) Handler
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +21,7 @@
 #include <rtems/score/mpci.h>
 #include <rtems/score/mppkt.h>
 #endif
+#include <rtems/config.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/states.h>
@@ -46,11 +47,13 @@ CORE_semaphore_Control _MPCI_Semaphore;
  */
 
 void _MPCI_Handler_initialization(
-  MPCI_Control            *users_mpci_table,
-  uint32_t                 timeout_status
+  uint32_t   timeout_status
 )
 {
-  CORE_semaphore_Attributes    attributes;
+  CORE_semaphore_Attributes   attributes;
+  MPCI_Control               *users_mpci_table;
+
+  users_mpci_table = _Configuration_MP_table->User_mpci_table;
 
   if ( _System_state_Is_multiprocessing && !users_mpci_table )
     _Internal_error_Occurred(

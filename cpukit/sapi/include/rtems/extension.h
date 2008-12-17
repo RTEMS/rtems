@@ -13,7 +13,7 @@
  *     + get ID of user extension set
  *     + delete user extension set
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -82,9 +82,7 @@ typedef struct {
  *  This routine performs the initialization necessary for this manager.
  */
 
-void _Extension_Manager_initialization(
-  uint32_t   maximum_extensions
-);
+void _Extension_Manager_initialization(void);
 
 /*
  *  rtems_extension_create

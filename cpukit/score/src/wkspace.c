@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/interr.h>
 #include <rtems/config.h>
@@ -25,12 +26,14 @@
 /*
  *  _Workspace_Handler_initialization
  */
-void _Workspace_Handler_initialization(
-  void       *starting_address,
-  size_t      size
-)
+void _Workspace_Handler_initialization(void)
 {
   uint32_t    memory_available;
+  void       *starting_address;
+  size_t      size;
+
+  starting_address = Configuration.work_space_start;
+  size             = Configuration.work_space_size;
 
   if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
     _Internal_error_Occurred(
