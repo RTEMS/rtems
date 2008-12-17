@@ -2,7 +2,7 @@
  *  Input/Output Manager
  *
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,11 +19,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
-void _IO_Manager_initialization(
-  rtems_driver_address_table *driver_table,
-  uint32_t                    drivers_in_table,
-  uint32_t                    number_of_drivers
-)
+void _IO_Manager_initialization(void)
 {
 }
 
