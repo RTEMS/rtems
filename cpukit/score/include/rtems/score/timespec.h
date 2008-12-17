@@ -26,11 +26,12 @@
  */
 /**@{*/
 
+#include <stdint.h> /* uint32_t */
+#include <time.h> /* struct timespec */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <sys/types.h>
 
 /** @brief Set Timespec to Seconds Nanosecond
  *
