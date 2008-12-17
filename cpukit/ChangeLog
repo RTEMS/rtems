@@ -1,5 +1,9 @@
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/rtems/posix/config.h: Fix typo.
+
+2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/include/rtems/posix/barrier.h,
 	posix/include/rtems/posix/cond.h, posix/include/rtems/posix/key.h,
 	posix/include/rtems/posix/mqueue.h,

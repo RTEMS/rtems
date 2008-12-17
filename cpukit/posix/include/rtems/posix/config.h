@@ -61,7 +61,7 @@ typedef struct {
 } posix_api_configuration_table;
 
 /**
- *  @brief POSIX API Cofniguration Table
+ *  @brief POSIX API Configuration Table
  *
  *  This is the POSIX API Configuration Table expected to be generated
  *  by confdefs.h.
