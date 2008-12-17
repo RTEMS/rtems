@@ -1,5 +1,7 @@
 2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Remove include/rtems/stdint.h.
+	* include/rtems/stdint.h: Remove.
 	* configure.ac: Require stdint.h.
 	* score/include/rtems/score/timespec.h: #include <stdint.h>, 
 	#include <time.h>. Remove bogus #include <sys/types.h>.
