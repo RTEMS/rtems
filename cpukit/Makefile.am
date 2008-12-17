@@ -65,7 +65,7 @@ endif
 endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h include/rtems/userenv.h \
-    include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
+    include/rtems/fs.h include/rtems/pci.h \
     include/rtems/concat.h include/rtems/tar.h \
     include/rtems/status-checks.h
 
