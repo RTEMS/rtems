@@ -1,3 +1,8 @@
+2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* GT64260/MVME5500I2C.c: Include <stdint.h> instead of
+	<rtems/stdint.h>.
+
 2008-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -Qy from *link.

@@ -13,7 +13,7 @@
  */
 
 #include <rtems/bspIo.h>	    /* printk */
-#include <rtems/stdint.h>           /* uint32_t */
+#include <stdint.h>           /* uint32_t */
 #include "bsp/GT64260TWSI.h"
 
 /* #define I2C_DEBUG*/
