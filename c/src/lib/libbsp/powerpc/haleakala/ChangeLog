@@ -1,3 +1,8 @@
+2008-12-18	Michael Hamel <nigel@adi.co.nz>
+
+	PR 1349/bsps
+	* startup/bspstart.c: Add missing volatile on UART access pointer.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared tm27.h stub.

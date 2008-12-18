@@ -88,7 +88,7 @@ uint32_t    bsp_timer_average_overhead;
 static void
 EarlyUARTInit(int baudRate)
 {
-  uint8_t* up = (uint8_t*)(BSP_UART_IOBASE_COM1);
+  volatile uint8_t* up = (uint8_t*)(BSP_UART_IOBASE_COM1);
   int divider = BSP_UART_BAUD_BASE / baudRate;
   up[LCR] = DLAB;    /* Access DLM/DLL */
   up[DLL] = divider & 0x0FF;
@@ -151,7 +151,7 @@ void Init_FPGA(void)
 static void
 DirectUARTWrite(const char c)
 {
-  uint8_t* up = (uint8_t*)(BSP_UART_IOBASE_COM1);
+  volatile uint8_t* up = (uint8_t*)(BSP_UART_IOBASE_COM1);
   while ((up[LSR] & THRE) == 0) { ; }
   up[THR] = c;
   if (c=='\n')
