@@ -1,3 +1,7 @@
+2008-12-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* user/cpuuse.t: Reflect change in CPU Usage report format.
+
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/init.t: Eliminate pointers to API configuration tables in the

@@ -61,20 +61,23 @@ The following is an example of the report generated:
 
 @example
 @group
-CPU Usage by thread
-   ID        NAME        TICKS    PERCENT
-0x04010001   IDLE           0     0.000
-0x08010002   TA1         1203     0.748
-0x08010003   TA2          203     0.126
-0x08010004   TA3          202     0.126
-
-Ticks since last reset = 1600
-
-Total Units = 1608
+-------------------------------------------------------------------------------
+                              CPU USAGE BY THREAD
+------------+----------------------------------------+---------------+---------
+ ID         | NAME                                   | SECONDS       | PERCENT
+------------+----------------------------------------+---------------+---------
+ 0x04010001 | IDLE                                   |             0 |   0.000
+ 0x08010002 | TA1                                    |          1203 |   0.748
+ 0x08010003 | TA2                                    |           203 |   0.126
+ 0x08010004 | TA3                                    |           202 |   0.126
+------------+----------------------------------------+---------------+---------
+ TICKS SINCE LAST SYSTEM RESET:                                           1600
+ TOTAL UNITS:                                                             1608
+-------------------------------------------------------------------------------
 @end group
 @end example
 
-Notice that the "Total Units" is greater than the ticks per reset.
+Notice that the "TOTAL UNITS" is greater than the ticks per reset.
 This is an artifact of the way in which RTEMS keeps track of CPU 
 usage.  When a task is context switched into the CPU, the number
 of clock ticks it has executed is incremented.  While the task
