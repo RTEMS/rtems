@@ -54,23 +54,23 @@ extern "C" {
 #define RTEMS_SHELL_KEYS_F9          (16)
 #define RTEMS_SHELL_KEYS_F10         (17)
 
-typedef int (*rtems_shell_command_t)(int argc,char * argv[]);
+typedef int (*rtems_shell_command_t)(int argc, char **argv);
 
 struct rtems_shell_cmd_tt;
 typedef struct rtems_shell_cmd_tt rtems_shell_cmd_t;
 
 struct rtems_shell_cmd_tt {
-  char                  *name;
-  char                  *usage;
-  char                  *topic;
+  const char            *name;
+  const char            *usage;
+  const char            *topic;
   rtems_shell_command_t  command;
   rtems_shell_cmd_t     *alias;
   rtems_shell_cmd_t     *next;
 };
 
 typedef struct {
-  char            *name;
-  char            *alias;
+  const char *name;
+  const char *alias;
 } rtems_shell_alias_t;
 
 /*
@@ -79,22 +79,22 @@ typedef struct {
  */
 unsigned int rtems_shell_getchar(FILE *in);
 
-rtems_shell_cmd_t * rtems_shell_lookup_cmd(char * cmd);
+rtems_shell_cmd_t * rtems_shell_lookup_cmd(const char *cmd);
 
 rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
   rtems_shell_cmd_t *shell_cmd
 );
 
 rtems_shell_cmd_t * rtems_shell_add_cmd(
-  char                  *cmd,
-  char                  *topic,
-  char                  *usage,
+  const char            *cmd,
+  const char            *topic,
+  const char            *usage,
   rtems_shell_command_t  command
 );
 
 rtems_shell_cmd_t * rtems_shell_alias_cmd(
-  char *cmd,
-  char *alias
+  const char *cmd,
+  const char *alias
 );
 
 int rtems_shell_make_args(
@@ -113,7 +113,7 @@ int rtems_shell_scanline(
 
 int rtems_shell_cat_file(
   FILE *out,
-  char *name
+  const char *name
 );
 
 void rtems_shell_write_file(
@@ -122,8 +122,8 @@ void rtems_shell_write_file(
 );
 
 int rtems_shell_script_file(
-  int   argc,
-  char *argv[]
+  int    argc,
+  char **argv
 );
 
 /**
@@ -138,10 +138,10 @@ int rtems_shell_script_file(
  *
  */
 rtems_status_code rtems_shell_init(
-  char                *task_name,
+  const char          *task_name,
   uint32_t             task_stacksize,  /*0 default*/
   rtems_task_priority  task_priority,
-  char                *devname,
+  const char          *devname,
   int                  forever,
   int                  wait
 );
@@ -160,7 +160,7 @@ rtems_status_code rtems_shell_init(
  * @param wait Wait for the script to finish.
  */
 rtems_status_code rtems_shell_script(
-  char                *task_name,
+  const char          *task_name,
   uint32_t             task_stacksize,  /*0 default*/
   rtems_task_priority  task_priority,
   const char          *input,
@@ -174,12 +174,12 @@ rtems_status_code rtems_shell_script(
  *  Things that are useful to external entities developing commands and plugging
  *  them in.
  */
-int rtems_shell_str2int(char * s);
+int rtems_shell_str2int(const char * s);
 
 typedef struct  {
   rtems_name  magic; /* 'S','E','N','V': Shell Environment */
-  char       *devname;
-  char       *taskname;
+  const char *devname;
+  const char *taskname;
   /* user extensions */
   bool        exit_shell; /* logout */
   bool        forever   ; /* repeat login */

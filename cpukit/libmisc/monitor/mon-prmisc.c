@@ -56,8 +56,8 @@ rtems_monitor_dump_hex(uint32_t   num)
 
 int
 rtems_monitor_dump_assoc_bitfield(
-    rtems_assoc_t *ap,
-    char          *separator,
+    const rtems_assoc_t *ap,
+    const char          *separator,
     uint32_t       value
   )
 {
@@ -105,7 +105,7 @@ rtems_monitor_dump_priority(rtems_task_priority priority)
 }
 
 
-rtems_assoc_t rtems_monitor_state_assoc[] = {
+static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "DORM",   STATES_DORMANT, 0 },
     { "SUSP",   STATES_SUSPENDED, 0 },
     { "TRANS",  STATES_TRANSIENT, 0 },
@@ -142,7 +142,7 @@ rtems_monitor_dump_state(States_Control state)
     return length;
 }
 
-rtems_assoc_t rtems_monitor_attribute_assoc[] = {
+static const rtems_assoc_t rtems_monitor_attribute_assoc[] = {
     { "GL",  RTEMS_GLOBAL, 0 },
     { "PR",  RTEMS_PRIORITY, 0 },
     { "FL",  RTEMS_FLOATING_POINT, 0 },
@@ -169,7 +169,7 @@ rtems_monitor_dump_attributes(rtems_attribute attributes)
     return length;
 }
 
-rtems_assoc_t rtems_monitor_modes_assoc[] = {
+static const rtems_assoc_t rtems_monitor_modes_assoc[] = {
     { "nP",     RTEMS_NO_PREEMPT, 0 },
     { "T",      RTEMS_TIMESLICE, 0 },
     { "nA",     RTEMS_NO_ASR, 0 },
@@ -190,7 +190,7 @@ rtems_monitor_dump_modes(rtems_mode modes)
     return length;
 }
 
-rtems_assoc_t rtems_monitor_events_assoc[] = {
+static const rtems_assoc_t rtems_monitor_events_assoc[] = {
     { "0",   RTEMS_EVENT_0, 0 },
     { "1",   RTEMS_EVENT_1, 0 },
     { "2",   RTEMS_EVENT_2, 0 },

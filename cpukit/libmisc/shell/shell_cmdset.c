@@ -50,7 +50,7 @@ rtems_shell_topic_t * rtems_shell_first_topic;
 /*
  *  Find the topic from the set of topics registered.
  */
-rtems_shell_topic_t * rtems_shell_lookup_topic(char * topic) {
+rtems_shell_topic_t * rtems_shell_lookup_topic(const char * topic) {
   rtems_shell_topic_t * shell_topic;
   shell_topic=rtems_shell_first_topic;
 
@@ -65,7 +65,7 @@ rtems_shell_topic_t * rtems_shell_lookup_topic(char * topic) {
 /*
  *  Add a new topic to the list of topics
  */
-rtems_shell_topic_t * rtems_shell_add_topic(char * topic) {
+rtems_shell_topic_t * rtems_shell_add_topic(const char * topic) {
   rtems_shell_topic_t * current,*aux;
 
   if (!rtems_shell_first_topic) {
@@ -93,7 +93,7 @@ rtems_shell_topic_t * rtems_shell_add_topic(char * topic) {
 /*
  *  Find the command in the set
  */
-rtems_shell_cmd_t * rtems_shell_lookup_cmd(char * cmd) {
+rtems_shell_cmd_t * rtems_shell_lookup_cmd(const char * cmd) {
   rtems_shell_cmd_t * shell_cmd;
   shell_cmd=rtems_shell_first_cmd;
   while (shell_cmd) {
@@ -136,33 +136,49 @@ rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
  *  allocate the command structure on the fly.
  */
 rtems_shell_cmd_t * rtems_shell_add_cmd(
-  char                  *cmd,
-  char                  *topic,
-  char                  *usage,
+  const char            *name,
+  const char            *topic,
+  const char            *usage,
   rtems_shell_command_t  command
 )
 {
-  rtems_shell_cmd_t *shell_cmd;
+  rtems_shell_cmd_t *shell_cmd = NULL;
+  char *my_name = NULL;
+  char *my_topic = NULL;
+  char *my_usage = NULL;
 
-  if (!cmd)
-    return (rtems_shell_cmd_t *) NULL;
-  if (!command)
-    return (rtems_shell_cmd_t *) NULL;
+  /* Reject empty commands */
+  if (name == NULL || command == NULL) {
+    return NULL;
+  }
 
-  shell_cmd          = (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
-  shell_cmd->name    = strdup( cmd );
-  shell_cmd->topic   = strdup( topic );
-  shell_cmd->usage   = strdup( usage );
+  /* Allocate command stucture */
+  shell_cmd = (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
+  if (shell_cmd == NULL) {
+    return NULL;
+  }
+
+  /* Allocate strings */
+  my_name  = strdup(name);
+  my_topic = strdup(topic);
+  my_usage = strdup(usage);
+
+  /* Assign values */
+  shell_cmd->name    = my_name;
+  shell_cmd->topic   = my_topic;
+  shell_cmd->usage   = my_usage;
   shell_cmd->command = command;
-  shell_cmd->alias   = (rtems_shell_cmd_t *) NULL;
-  shell_cmd->next    = (rtems_shell_cmd_t *) NULL;
+  shell_cmd->alias   = NULL;
+  shell_cmd->next    = NULL;
 
-  if (rtems_shell_add_cmd_struct( shell_cmd ) == NULL) {
-    free( shell_cmd->usage );
-    free( shell_cmd->topic );
-    free( shell_cmd->name );
-    free( shell_cmd );
-    shell_cmd = NULL;
+  if (rtems_shell_add_cmd_struct(shell_cmd) == NULL) {
+    /* Something is wrong, free allocated resources */
+    free(my_usage);
+    free(my_topic);
+    free(my_name);
+    free(shell_cmd);
+
+    return NULL;
   }
 
   return shell_cmd;
@@ -189,8 +205,8 @@ void rtems_shell_initialize_command_set(void)
  * you can make an alias for every command.
  * ----------------------------------------------- */
 rtems_shell_cmd_t *rtems_shell_alias_cmd(
-  char *cmd,
-  char *alias
+  const char *cmd,
+  const char *alias
 )
 {
   rtems_shell_cmd_t *shell_cmd, *shell_aux;

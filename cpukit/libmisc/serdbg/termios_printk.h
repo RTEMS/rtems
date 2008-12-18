@@ -61,7 +61,7 @@ void termios_printk_outputchar
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-char termios_printk_inputchar
+int termios_printk_inputchar
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
 |    wait for one character from serial port                                |

@@ -1,3 +1,25 @@
+2008-12-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/serdbg/termios_printk.c, libmisc/serdbg/termios_printk.h:
+	Fixed incompatible return value.
+
+	* libmisc/cpuuse/cpuusagereport.c: Changed output format.
+
+	* libmisc/Makefile.am, libmisc/monitor/mon-editor.c: New file.
+
+	* libmisc/capture/capture-cli.c, libmisc/monitor/mon-command.c,
+	libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/mon-prmisc.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/monitor.h, libmisc/shell/cat_file.c,
+	libmisc/shell/cmds.c, libmisc/shell/internal.h,
+	libmisc/shell/main_help.c, libmisc/shell/shell.c,
+	libmisc/shell/shell.h, libmisc/shell/shell_cmdset.c,
+	libmisc/shell/shell_getchar.c, libmisc/shell/str2int.c: Various global
+	data is now read only.  Added 'const' qualifier to many pointer
+	parameters.  It is no longer possible to remove monitor commands.
+	Moved monitor line editor into a separate file to avoid unnecessary
+	dependencies.
+
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/rtems/extension.h, sapi/include/rtems/io.h,

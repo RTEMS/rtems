@@ -41,29 +41,29 @@
 struct translation_table
 {
   char                     expecting;
-  struct translation_table *branch;
+  const struct translation_table *branch;
   unsigned int             key;
 };
 
-static struct translation_table trans_one[] =
+static const struct translation_table trans_one[] =
 {
   { '\x7e', 0, RTEMS_SHELL_KEYS_HOME },
   { 0,      0, 0 }
 };
 
-static struct translation_table trans_two[] =
+static const struct translation_table trans_two[] =
 {
   { '~', 0, RTEMS_SHELL_KEYS_INS },
   { 0,   0, 0 }
 };
 
-static struct translation_table trans_three[] =
+static const struct translation_table trans_three[] =
 {
   { '~', 0, RTEMS_SHELL_KEYS_DEL },
   { 0,   0, 0 }
 };
 
-static struct translation_table trans_tab_csi[] =
+static const struct translation_table trans_tab_csi[] =
 {
   { '1', trans_one,   0 },
   { '2', trans_two,   0 },
@@ -77,7 +77,7 @@ static struct translation_table trans_tab_csi[] =
   { 0,   0,           0 }
 };
 
-static struct translation_table trans_tab_O[] =
+static const struct translation_table trans_tab_O[] =
 {
   { '1', 0, RTEMS_SHELL_KEYS_F1 },
   { '2', 0, RTEMS_SHELL_KEYS_F2 },
@@ -103,7 +103,7 @@ static struct translation_table trans_tab_O[] =
   { 0,   0, 0 }
 };
 
-static struct translation_table trans_tab[] =
+static const struct translation_table trans_tab[] =
 {
   { '[', trans_tab_csi, 0 },    /* CSI command sequences */
   { 'O', trans_tab_O,   0 },    /* O are the fuction keys */
@@ -120,7 +120,7 @@ static struct translation_table trans_tab[] =
 unsigned int
 rtems_shell_getchar (FILE *in)
 {
-  struct translation_table *translation = 0;
+  const struct translation_table *translation = 0;
   for (;;)
   {
     int c = fgetc (in);

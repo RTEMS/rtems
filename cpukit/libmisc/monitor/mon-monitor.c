@@ -31,12 +31,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
 
 #include <rtems/monitor.h>
-
-#define STREQ(a,b)      (strcmp(a,b) == 0)
 
 /* set by trap handler */
 extern rtems_tcb       *debugger_interrupted_task;
@@ -61,16 +57,10 @@ uint32_t   rtems_monitor_default_node;  /* current default for commands */
 rtems_symbol_table_t *rtems_monitor_symbols;
 
 /*
- * User registered commands.
- */
-
-rtems_monitor_command_entry_t rtems_registered_commands;
-
-/*
  * The top-level commands
  */
 
-rtems_monitor_command_entry_t rtems_monitor_commands[] = {
+const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
     { "config",
       "Show the system configuration.",
       0,
@@ -239,15 +229,6 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
       &rtems_monitor_commands[20],
     },
-    { "help",
-      "Provide information about commands. "
-      "Default is show basic command summary.\n"
-      "help [ command [ command ] ]",
-      0,
-      rtems_monitor_help_cmd,
-      { .monitor_command_entry = rtems_monitor_commands },
-      &rtems_monitor_commands[21],
-    },
 #ifdef RTEMS_POSIX_API
     { "pthread",
       "Display information about the specified pthreads. "
@@ -256,8 +237,11 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_object_cmd,
       { RTEMS_MONITOR_OBJECT_PTHREAD },
-      &rtems_monitor_commands[22],
+      &rtems_monitor_commands[21],
     },
+  #define RTEMS_MONITOR_DEBUGGER_NEXT 22
+#else
+  #define RTEMS_MONITOR_DEBUGGER_NEXT 21
 #endif
 #ifdef CPU_INVOKE_DEBUGGER
     { "debugger",
@@ -266,11 +250,26 @@ rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_debugger_cmd,
       { 0 },
-      &rtems_monitor_commands[23],
+      &rtems_monitor_commands[RTEMS_MONITOR_DEBUGGER_NEXT],
     },
 #endif
-    { 0, 0, 0, 0, { 0 }, &rtems_registered_commands },
+    { "help",
+      "Provide information about commands. "
+      "Default is show basic command summary.\n"
+      "help [ command [ command ] ]",
+      0,
+      rtems_monitor_help_cmd,
+      { .monitor_command_entry = rtems_monitor_commands },
+      NULL
+    }
 };
+
+/*
+ * All registered commands.
+ */
+
+static const rtems_monitor_command_entry_t *rtems_monitor_registered_commands =
+  &rtems_monitor_commands [0];
 
 
 rtems_status_code
@@ -294,12 +293,11 @@ rtems_monitor_wakeup(void)
     status = rtems_event_send(rtems_monitor_task_id, MONITOR_WAKEUP_EVENT);
 }
 
-void
-rtems_monitor_debugger_cmd(
-    int        argc,
-    char     **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool       verbose
+void rtems_monitor_debugger_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
 #ifdef CPU_INVOKE_DEBUGGER
@@ -307,12 +305,11 @@ rtems_monitor_debugger_cmd(
 #endif
 }
 
-void
-rtems_monitor_pause_cmd(
-    int        argc,
-    char     **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool       verbose
+void rtems_monitor_pause_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
     if (argc == 1)
@@ -321,12 +318,11 @@ rtems_monitor_pause_cmd(
         rtems_monitor_suspend(strtoul(argv[1], 0, 0));
 }
 
-void
-rtems_monitor_fatal_cmd(
-    int     argc,
-    char  **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool    verbose
+void rtems_monitor_fatal_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
     if (argc == 1)
@@ -335,23 +331,21 @@ rtems_monitor_fatal_cmd(
         rtems_fatal_error_occurred(strtoul(argv[1], 0, 0));
 }
 
-void
-rtems_monitor_continue_cmd(
-    int     argc,
-    char  **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool    verbose
+void rtems_monitor_continue_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
     rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
 }
 
-void
-rtems_monitor_node_cmd(
-    int     argc,
-    char  **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool    verbose
+void rtems_monitor_node_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
     uint32_t   new_node = rtems_monitor_default_node;
@@ -462,172 +456,27 @@ done:
 
 int
 rtems_monitor_insert_cmd (
-    rtems_monitor_command_entry_t *command
+  rtems_monitor_command_entry_t *command
 )
 {
-    rtems_monitor_command_entry_t **p =  &rtems_registered_commands.next;
+  const rtems_monitor_command_entry_t *e = rtems_monitor_registered_commands;
 
-    command->next = 0;
-
-    while (*p) {
-        if ( STREQ(command->command, (*p)->command) )
-            return 0;
-        p = & (*p)->next;
-    }
-    *p = command;
-    return 1;
-}
-
-int
-rtems_monitor_erase_cmd (
-    rtems_monitor_command_entry_t *command
-)
-{
-    rtems_monitor_command_entry_t **p = & rtems_registered_commands.next;
-
-    while (*p) {
-        if ( STREQ(command->command, (*p)->command) ) {
-            *p = (*p)->next;
-            command->next = 0;
-            return 1;
-        }
-        p = & (*p)->next;
-    }
+  /* Reject empty commands */
+  if (command->command == NULL) {
     return 0;
+  }
 
-}
-
-/*
- * Main monitor command loop
- */
-
-void
-rtems_monitor_task(
-    rtems_task_argument monitor_flags
-)
-{
-    rtems_tcb *debugee = 0;
-    rtems_context *rp;
-#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
-    rtems_context_fp *fp;
-#endif
-    char command_buffer[513];
-    int argc;
-    char *argv[64];
-    bool  verbose = false;
-    struct termios term;
-
-    /*
-     * Make the stdin stream characte not line based.
-     */
-
-    if (tcgetattr (STDIN_FILENO, &term) < 0)
-    {
-      fprintf(stdout,"rtems-monitor: cannot get terminal attributes.\n");
-    }
-    else
-    {
-      /*
-       * No echo, no canonical processing.
-       */
-
-      term.c_lflag &= ~(ECHO | ICANON | IEXTEN);
-
-      /*
-       * No sigint on BREAK, CR-to-NL off, input parity off,
-       * don't strip 8th bit on input, output flow control off
-       */
-
-      term.c_lflag    &= ~(INPCK | ISTRIP | IXON);
-      term.c_cc[VMIN]  = 1;
-      term.c_cc[VTIME] = 0;
-
-      if (tcsetattr (STDIN_FILENO, TCSANOW, &term) < 0)
-      {
-        fprintf(stdout,"cannot set terminal attributes\n");
+  /* Reject command if already present */
+  while (e->next != NULL) {
+      if (e->command != NULL && strcmp(command->command, e->command) == 0) {
+        return 0;
       }
-    }
+      e = e->next;
+  }
 
-    if (!(monitor_flags & RTEMS_MONITOR_NOSYMLOAD)) {
-      rtems_monitor_symbols_loadup();
-    }
+  /* Prepend new command */
+  command->next = rtems_monitor_registered_commands;
+  rtems_monitor_registered_commands = command;
 
-    if (monitor_flags & RTEMS_MONITOR_SUSPEND)
-        (void) rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
-
-    for (;;)
-    {
-        rtems_monitor_command_entry_t *command;
-
-        debugee = _Thread_Executing;
-        rp = &debugee->Registers;
-#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
-        fp = debugee->fp_context;  /* possibly 0 */
-#endif
-
-        if (0 == rtems_monitor_command_read(command_buffer, &argc, argv))
-            continue;
-        if ((command = rtems_monitor_command_lookup(rtems_monitor_commands,
-                                                    argc,
-                                                    argv)) == 0)
-        {
-            /* no command */
-            fprintf(stdout,"Unrecognised command; try 'help'\n");
-            continue;
-        }
-
-        command->command_function(argc, argv, &command->command_arg, verbose);
-
-        fflush(stdout);
-    }
-}
-
-
-void
-rtems_monitor_kill(void)
-{
-    if (rtems_monitor_task_id)
-        rtems_task_delete(rtems_monitor_task_id);
-    rtems_monitor_task_id = 0;
-
-    rtems_monitor_server_kill();
-}
-
-void
-rtems_monitor_init(
-    uint32_t   monitor_flags
-)
-{
-    rtems_status_code status;
-
-    rtems_monitor_kill();
-
-    status = rtems_task_create(RTEMS_MONITOR_NAME,
-                               1,
-                               RTEMS_MINIMUM_STACK_SIZE * 2,
-                               RTEMS_INTERRUPT_LEVEL(0),
-                               RTEMS_DEFAULT_ATTRIBUTES,
-                               &rtems_monitor_task_id);
-    if (status != RTEMS_SUCCESSFUL)
-    {
-        rtems_error(status, "could not create monitor task");
-        return;
-    }
-
-    rtems_monitor_node = rtems_object_id_get_node(rtems_monitor_task_id);
-    rtems_monitor_default_node = rtems_monitor_node;
-
-    rtems_monitor_server_init(monitor_flags);
-
-    if (!(monitor_flags & RTEMS_MONITOR_NOTASK)) {
-      /*
-       * Start the monitor task itself
-       */
-      status = rtems_task_start(
-        rtems_monitor_task_id, rtems_monitor_task, monitor_flags);
-      if (status != RTEMS_SUCCESSFUL) {
-        rtems_error(status, "could not start monitor");
-        return;
-      }
-   }
+  return 1;
 }

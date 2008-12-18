@@ -939,10 +939,10 @@ bool rtems_shell_main_loop(
 
 /* ----------------------------------------------- */
 static rtems_status_code   rtems_shell_run (
-  char                *task_name,
+  const char          *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
-  char                *devname,
+  const char          *devname,
   int                  forever,
   int                  wait,
   const char*          input,
@@ -957,7 +957,7 @@ static rtems_status_code   rtems_shell_run (
   rtems_shell_env_t *shell_env;
   rtems_name         name;
 
-  if ( task_name )
+  if ( task_name && strlen(task_name) >= 4)
     name = rtems_build_name(
       task_name[0], task_name[1], task_name[2], task_name[3]);
   else
@@ -1010,10 +1010,10 @@ static rtems_status_code   rtems_shell_run (
 }
 
 rtems_status_code rtems_shell_init(
-  char                *task_name,
+  const char          *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
-  char                *devname,
+  const char          *devname,
   int                  forever,
   int                  wait
 )
@@ -1039,7 +1039,7 @@ rtems_status_code rtems_shell_init(
 }
 
 rtems_status_code   rtems_shell_script (
-  char                *task_name,
+  const char          *task_name,
   uint32_t             task_stacksize,
   rtems_task_priority  task_priority,
   const char*          input,

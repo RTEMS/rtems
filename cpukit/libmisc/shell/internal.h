@@ -15,7 +15,7 @@ struct rtems_shell_topic_tt;
 typedef struct rtems_shell_topic_tt rtems_shell_topic_t;
 
 struct rtems_shell_topic_tt {
-  char                *topic;
+  const char          *topic;
   rtems_shell_topic_t *next;
 };
 
@@ -23,7 +23,7 @@ struct rtems_shell_topic_tt {
 extern rtems_shell_cmd_t   * rtems_shell_first_cmd;
 extern rtems_shell_topic_t * rtems_shell_first_topic;
 
-rtems_shell_topic_t * rtems_shell_lookup_topic(char * topic);
+rtems_shell_topic_t * rtems_shell_lookup_topic(const char *topic);
 
 
 void rtems_shell_register_monitor_commands(void);

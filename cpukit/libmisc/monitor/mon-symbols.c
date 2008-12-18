@@ -67,7 +67,7 @@ rtems_symbol_table_destroy(rtems_symbol_table_t *table)
 rtems_symbol_t *
 rtems_symbol_create(
     rtems_symbol_table_t *table,
-    char                 *name,
+    const char           *name,
     uint32_t              value
     )
 {
@@ -274,7 +274,7 @@ rtems_symbol_value_lookup_exact(
 rtems_symbol_t *
 rtems_symbol_name_lookup(
     rtems_symbol_table_t *table,
-    char                 *name
+    const char           *name
   )
 {
     uint32_t   s;
@@ -343,7 +343,7 @@ rtems_monitor_symbol_canonical(
 void
 rtems_monitor_symbol_canonical_by_name(
     rtems_monitor_symbol_t *canonical_symbol,
-    char                   *name
+    const char             *name
 )
 {
     rtems_symbol_t *sp;
@@ -450,12 +450,11 @@ rtems_monitor_symbol_dump_all(
  * 'symbol' command
  */
 
-void
-rtems_monitor_symbol_cmd(
-    int        argc,
-    char     **argv,
-    rtems_monitor_command_arg_t* command_arg,
-    bool       verbose
+void rtems_monitor_symbol_cmd(
+  int                                argc,
+  char                             **argv,
+  const rtems_monitor_command_arg_t *command_arg,
+  bool                               verbose
 )
 {
     int arg;

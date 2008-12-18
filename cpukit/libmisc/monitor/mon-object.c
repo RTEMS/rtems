@@ -37,7 +37,7 @@
  *     next
  */
 
-rtems_monitor_object_info_t rtems_monitor_object_info[] =
+static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
 {
     { RTEMS_MONITOR_OBJECT_CONFIG,
       (void *) 0,
@@ -170,12 +170,12 @@ rtems_monitor_id_fixup(
 }
 
 
-rtems_monitor_object_info_t *
+const rtems_monitor_object_info_t *
 rtems_monitor_object_lookup(
     rtems_monitor_object_type_t type
 )
 {
-    rtems_monitor_object_info_t *p;
+    const rtems_monitor_object_info_t *p;
     for (p = &rtems_monitor_object_info[0];
          p < &rtems_monitor_object_info[NUMELEMS(rtems_monitor_object_info)];
          p++)
@@ -229,7 +229,7 @@ failed:
 
 rtems_id
 rtems_monitor_object_canonical_next(
-    rtems_monitor_object_info_t *info,
+    const rtems_monitor_object_info_t *info,
     rtems_id                     id,
     void                        *canonical
 )
@@ -276,7 +276,7 @@ rtems_monitor_object_canonical_get(
     size_t              *size_p
 )
 {
-    rtems_monitor_object_info_t *info;
+    const rtems_monitor_object_info_t *info;
     rtems_id                     next_id;
 
     *size_p = 0;
@@ -295,7 +295,7 @@ rtems_monitor_object_canonical_get(
 
 void
 rtems_monitor_object_dump_1(
-    rtems_monitor_object_info_t *info,
+    const rtems_monitor_object_info_t *info,
     rtems_id                     id,
     bool                         verbose
 )
@@ -329,7 +329,7 @@ rtems_monitor_object_dump_1(
 
 void
 rtems_monitor_object_dump_all(
-    rtems_monitor_object_info_t *info,
+    const rtems_monitor_object_info_t *info,
     bool                         verbose
 )
 {
@@ -349,14 +349,14 @@ rtems_monitor_object_dump_all(
 
 void
 rtems_monitor_object_cmd(
-    int        argc,
-    char     **argv,
-    rtems_monitor_command_arg_t	*command_arg,
-    bool       verbose
+    int                                argc,
+    char                             **argv,
+    const rtems_monitor_command_arg_t *command_arg,
+    bool                               verbose
 )
 {
     int arg;
-    rtems_monitor_object_info_t *info = 0;
+    const rtems_monitor_object_info_t *info = 0;
     rtems_monitor_object_type_t  type;
 
     /* what is the default type? */

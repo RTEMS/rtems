@@ -31,7 +31,7 @@ int rtems_shell_help_cmd(
   rtems_shell_cmd_t *shell_cmd
 )
 {
-  char * pc;
+  const char * pc;
   int    col,line;
 
   printf("%-10.10s - ",shell_cmd->name);
