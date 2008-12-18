@@ -213,7 +213,7 @@ local ptr_table table[MAX_PTR];
  * a protected system like OS/2. Use Microsoft C instead.
  */
 
-voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
+voidpf zcalloc (voidpf opaque, uInt items, uInt size)
 {
     voidpf buf = opaque; /* just to make some compilers happy */
     ulg bsize = (ulg)items*size;
@@ -272,7 +272,7 @@ void  zcfree (voidpf opaque, voidpf ptr)
 #  define _hfree   hfree
 #endif
 
-voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
+voidpf zcalloc (voidpf opaque, uInt items, uInt size)
 {
     if (opaque) opaque = 0; /* to make compiler happy */
     return _halloc((long)items, size);
@@ -297,10 +297,7 @@ extern voidp  calloc OF((uInt items, uInt size));
 extern void   free   OF((voidpf ptr));
 #endif
 
-voidpf zcalloc (
-    voidpf opaque,
-    unsigned items,
-    unsigned size)
+voidpf zcalloc (voidpf opaque, uInt items, uInt size)
 {
     if (opaque) items += size - size; /* make compiler happy */
     return sizeof(uInt) > 2 ? (voidpf)malloc(items * size) :

@@ -1,3 +1,7 @@
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* zutil.c, zutil.h: Make code match prototype to eliminate warnings.
+
 2008-09-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* adler32.c, compress.c, crc32.c, deflate.c, gzio.c, infback.c, 
