@@ -1,3 +1,7 @@
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* capture/test1.c: Add const to eliminate warning.
+
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* capture/test1.c: Eliminate all public use of TOD conversion routines.

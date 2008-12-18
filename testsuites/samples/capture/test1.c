@@ -108,10 +108,10 @@ capture_CT1c (rtems_task_argument arg)
 }
 
 static void
-capture_test_1 (int                          argc,
-                char**                       argv,
-                rtems_monitor_command_arg_t* command_arg,
-                bool                         verbose)
+capture_test_1 (int                                argc,
+                char**                             argv,
+                const rtems_monitor_command_arg_t* command_arg,
+                bool                               verbose)
 {
   rtems_status_code sc;
   rtems_name        name;
