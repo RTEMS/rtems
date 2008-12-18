@@ -50,17 +50,8 @@ typedef struct {
  *
  *  This routine intializes the inactive global object chain
  *  based on the maximum number of global objects configured.
- *
- *  @param[in] node is this node's number.
- *  @param[in] maximum_nodes is the maximum number of nodes in the system.
- *  @param[in] maximum_global_objects is the maximum number of concurrently
- *             created global objects.
  */
-void _Objects_MP_Handler_initialization (
-  uint32_t   node,
-  uint32_t   maximum_nodes,
-  uint32_t   maximum_global_objects
-);
+void _Objects_MP_Handler_initialization(void);
 
 /** @brief Objects MP Open
  *

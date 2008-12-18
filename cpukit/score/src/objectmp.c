@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/wkspace.h>
@@ -28,12 +29,26 @@
  *
  */
 
-void _Objects_MP_Handler_initialization (
-  uint32_t   node,
-  uint32_t   maximum_nodes,
-  uint32_t   maximum_global_objects
-)
+void _Objects_MP_Handler_initialization(void)
 {
+  uint32_t   node;
+  uint32_t   maximum_nodes;
+  uint32_t   maximum_global_objects;
+
+  node                   = _Configuration_MP_table->node;
+  maximum_nodes          = _Configuration_MP_table->maximum_nodes;
+  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
+
+  if ( node < 1 || node > maximum_nodes )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      INTERNAL_ERROR_INVALID_NODE
+    );
+
+
+  _Objects_Local_node    = node;
+  _Objects_Maximum_nodes = maximum_nodes;
   _Objects_MP_Maximum_global_objects = maximum_global_objects;
 
   if ( maximum_global_objects == 0 ) {

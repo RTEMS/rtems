@@ -1,5 +1,15 @@
 2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/regionmp.h, sapi/include/rtems/config.h,
+	sapi/src/exinit.c, score/Makefile.am,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/objectmp.h, score/src/objectmp.c: Eliminate
+	Object Handler Initialization routine since it was all for MP
+	configurations.
+	* score/src/object.c: Removed.
+
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/cmds.c: Revert back to public. Used to execute monitor
 	commands in test code.
 

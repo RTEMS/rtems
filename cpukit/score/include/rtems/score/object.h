@@ -435,11 +435,6 @@ SCORE_EXTERN Objects_Information
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
 /**
- *  This function performs the initialization necessary for this handler.
- */
-void _Objects_Handler_initialization(void);
-
-/**
  *  This function extends an object class information record.
  *
  *  @param[in] information points to an object class information block.

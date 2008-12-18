@@ -115,7 +115,6 @@ void rtems_initialize_data_structures(void)
 
   _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
-  _Objects_Handler_initialization();
 
   /*
    * Initialize the internal support API and allocator Mutex
@@ -132,6 +131,7 @@ void rtems_initialize_data_structures(void)
   _Thread_Handler_initialization();
 
   #if defined(RTEMS_MULTIPROCESSING)
+    _Objects_MP_Handler_initialization();
     _MPCI_Handler_initialization( RTEMS_TIMEOUT );
   #endif
 
