@@ -1,3 +1,9 @@
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/shmdr/dump.c, libchip/shmdr/init.c, libchip/shmdr/send.c,
+	libchip/shmdr/shm_driver.h: Cleanup and remove variables which
+	duplicated data.
+
 2008-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* optman/sapi/no-ext.c, optman/sapi/no-io.c: Convert SAPI manager and

@@ -33,33 +33,30 @@
 
 rtems_extensions_table MPCI_Shm_extensions;
 
+/*
+ *  MP configuration table from confdefs.h
+ */
+
 rtems_mpci_entry Shm_Initialization( void )
 
 {
-  uint32_t           i, all_initialized;
-  uint32_t           interrupt_cause, interrupt_value;
+  uint32_t                 i, all_initialized;
+  uint32_t                 interrupt_cause, interrupt_value;
   void                    *interrupt_address;
   Shm_Node_status_control *nscb;
-  uint32_t           extension_id;    /* for installation of MPCI_Fatal */
-  uint32_t           remaining_memory;
-/* XXX these should use "public" methods to set their values.... */
-  rtems_configuration_table   *configuration = _Configuration_Table;
-  rtems_multiprocessing_table *mp_configuration = _Configuration_MP_table;
+  uint32_t                 extension_id;    /* for installation of MPCI_Fatal */
+  uint32_t                 remaining_memory;
+  uint32_t                 local_node;
 
-  Shm_RTEMS_Configuration    = configuration;
-  Shm_RTEMS_MP_Configuration = mp_configuration;
+  local_node = _Configuration_MP_table->node;
 
-  Shm_Local_node    = Shm_RTEMS_MP_Configuration->node;
-  Shm_Maximum_nodes = Shm_RTEMS_MP_Configuration->maximum_nodes;
-
-  Shm_Get_configuration( Shm_Local_node, &Shm_Configuration );
+  Shm_Get_configuration( local_node, &Shm_Configuration );
 
   Shm_Interrupt_table = (Shm_Interrupt_information *) malloc(
-    sizeof(Shm_Interrupt_information) * (Shm_Maximum_nodes + 1)
+    sizeof(Shm_Interrupt_information) * (SHM_MAXIMUM_NODES + 1)
   );
 
   assert( Shm_Interrupt_table );
-
 
   Shm_Receive_message_count = 0;
   Shm_Null_message_count    = 0;
@@ -112,8 +109,8 @@ rtems_mpci_entry Shm_Initialization( void )
    *  processing it.
    */
 
-  Shm_Local_receive_queue  = &Shm_Locked_queues[ Shm_Local_node ];
-  Shm_Local_node_status    = &Shm_Node_statuses[ Shm_Local_node ];
+  Shm_Local_receive_queue  = &Shm_Locked_queues[ local_node ];
+  Shm_Local_node_status    = &Shm_Node_statuses[ local_node ];
 
   /*
    *  Convert local interrupt cause information into the
@@ -150,7 +147,7 @@ rtems_mpci_entry Shm_Initialization( void )
 
     Shm_Locked_queue_Initialize( FREE_ENV_CB, FREE_ENV_POOL );
 
-    for ( i=SHM_FIRST_NODE ; i<=Shm_Maximum_nodes ; i++ ) {
+    for ( i=SHM_FIRST_NODE ; i<=SHM_MAXIMUM_NODES ; i++ ) {
       Shm_Initialize_receive_queue( i );
 
       Shm_Node_statuses[ i ].status = Shm_Pending_initialization;
@@ -185,7 +182,7 @@ rtems_mpci_entry Shm_Initialization( void )
     do {
       all_initialized = 1;
 
-      for ( i = SHM_FIRST_NODE ; i <= Shm_Maximum_nodes ; i++ )
+      for ( i = SHM_FIRST_NODE ; i <= SHM_MAXIMUM_NODES ; i++ )
         if ( Shm_Node_statuses[ i ].status != Shm_Initialization_complete )
           all_initialized = 0;
 
@@ -195,7 +192,7 @@ rtems_mpci_entry Shm_Initialization( void )
      *  Tell the other nodes we think that the system is up.
      */
 
-    for ( i = SHM_FIRST_NODE ; i <= Shm_Maximum_nodes ; i++ )
+    for ( i = SHM_FIRST_NODE ; i <= SHM_MAXIMUM_NODES ; i++ )
       Shm_Node_statuses[ i ].status = Shm_Active_node;
 
   } else {   /* is not MASTER node */
@@ -233,7 +230,7 @@ rtems_mpci_entry Shm_Initialization( void )
    *  Initialize the Interrupt Information Table
    */
 
-  for ( i = SHM_FIRST_NODE ; i <= Shm_Maximum_nodes ; i++ ) {
+  for ( i = SHM_FIRST_NODE ; i <= SHM_MAXIMUM_NODES ; i++ ) {
     nscb = &Shm_Node_statuses[ i ];
 
     Shm_Interrupt_table[i].address = Shm_Convert_address(

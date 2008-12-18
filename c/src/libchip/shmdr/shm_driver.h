@@ -227,9 +227,9 @@ extern "C" {
 
 #define START_NS_CBS     ((void *)Shm_Configuration->base)
 #define START_LQ_CBS     ((START_NS_CBS) + \
-        ( (sizeof (Shm_Node_status_control)) * (Shm_Maximum_nodes + 1) ) )
+        ( (sizeof (Shm_Node_status_control)) * (SHM_MAXIMUM_NODES + 1) ) )
 #define START_ENVELOPES  ( ((void *) START_LQ_CBS) + \
-        ( (sizeof (Shm_Locked_queue_Control)) * (Shm_Maximum_nodes + 1) ) )
+        ( (sizeof (Shm_Locked_queue_Control)) * (SHM_MAXIMUM_NODES + 1) ) )
 #define END_SHMCI_AREA    ( (void *) START_ENVELOPES + \
         ( (sizeof (Shm_Envelope_control)) * Shm_Maximum_envelopes ) )
 #define END_SHARED_MEM   (START_NS_CBS+Shm_Configuration->length)
@@ -237,7 +237,7 @@ extern "C" {
 /* macros */
 
 #define Shm_Is_master_node()  \
-  ( SHM_MASTER == Shm_Local_node )
+  ( SHM_MASTER ==_Configuration_MP_table-> node )
 
 #define Shm_Free_envelope( ecb ) \
   Shm_Locked_queue_Add( FREE_ENV_CB, (ecb) )
@@ -431,6 +431,8 @@ struct shm_config_info {
 
 typedef struct shm_config_info shm_config_table;
 
+#define SHM_MAXIMUM_NODES Multiprocessing_configuration.maximum_nodes
+
 /* global variables */
 
 #ifdef _SHM_INIT
@@ -444,22 +446,18 @@ SHM_EXTERN Shm_Interrupt_information    *Shm_Interrupt_table;
 SHM_EXTERN Shm_Node_status_control      *Shm_Node_statuses;
 SHM_EXTERN Shm_Locked_queue_Control     *Shm_Locked_queues;
 SHM_EXTERN Shm_Envelope_control         *Shm_Envelopes;
-SHM_EXTERN rtems_configuration_table    *Shm_RTEMS_Configuration;
-SHM_EXTERN rtems_multiprocessing_table  *Shm_RTEMS_MP_Configuration;
-SHM_EXTERN uint32_t                Shm_Receive_message_count;
-SHM_EXTERN uint32_t                Shm_Null_message_count;
-SHM_EXTERN uint32_t                Shm_Interrupt_count;
-SHM_EXTERN uint32_t                Shm_Local_node;
-SHM_EXTERN Shm_Locked_queue_Control      *Shm_Local_receive_queue;
-SHM_EXTERN Shm_Node_status_control       *Shm_Local_node_status;
-SHM_EXTERN uint32_t                Shm_isrstat;
+SHM_EXTERN uint32_t                      Shm_Receive_message_count;
+SHM_EXTERN uint32_t                      Shm_Null_message_count;
+SHM_EXTERN uint32_t                      Shm_Interrupt_count;
+SHM_EXTERN Shm_Locked_queue_Control     *Shm_Local_receive_queue;
+SHM_EXTERN Shm_Node_status_control      *Shm_Local_node_status;
+SHM_EXTERN uint32_t                      Shm_isrstat;
                                                      /* reported by shmdr */
 
 SHM_EXTERN uint32_t   Shm_Pending_initialization;
 SHM_EXTERN uint32_t   Shm_Initialization_complete;
 SHM_EXTERN uint32_t   Shm_Active_node;
 
-SHM_EXTERN uint32_t   Shm_Maximum_nodes;
 SHM_EXTERN uint32_t   Shm_Maximum_envelopes;
 
 SHM_EXTERN uint32_t   Shm_Locked_queue_End_of_list;

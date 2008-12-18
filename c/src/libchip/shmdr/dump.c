@@ -31,8 +31,8 @@ Shm_Print_statistics(void)
   uint32_t    seconds;
   int         packets_per_second;
 
-  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );
-  (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
+  ticks            = rtems_clock_get_ticks_since_boot();
+  ticks_per_second = rtems_clock_get_ticks_per_second();
 
   seconds = ticks / ticks_per_second;
   if ( seconds == 0 )
@@ -42,7 +42,8 @@ Shm_Print_statistics(void)
   if ( (Shm_Receive_message_count % seconds) >= (seconds / 2) )
     packets_per_second++;
 
-  printk( "\n\nSHMDR STATISTICS (NODE %" PRId32 ")\n", Shm_Local_node );
+  printk( "\n\nSHMDR STATISTICS (NODE %" PRId32 ")\n",
+    Multiprocessing_configuration.node );
   printk( "TICKS SINCE BOOT = %" PRId32 "\n", ticks );
   printk( "TICKS PER SECOND = %" PRId32 "\n", ticks_per_second );
   printk( "ISRs=%" PRId32 "\n",     Shm_Interrupt_count );
