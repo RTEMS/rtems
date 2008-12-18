@@ -15,6 +15,9 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+/* Tells us where to put the workspace in case remote debugger is present.  */
+extern uint32_t rdb_start;
+
 /*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
@@ -27,8 +30,6 @@ void bsp_get_work_area(
   ssize_t  *heap_size
 )
 {
-  /* Tells us where to put the workspace in case remote debugger is present.  */
-  extern uint32_t rdb_start;
   /* must be identical to STACK_SIZE in start.S */
   #define STACK_SIZE (16 * 1024)
 

@@ -1,5 +1,9 @@
 2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libchip/serial/ns16550_p.h: Remove prototype with no implementation.
+
+2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libchip/shmdr/dump.c, libchip/shmdr/init.c, libchip/shmdr/send.c,
 	libchip/shmdr/shm_driver.h: Cleanup and remove variables which
 	duplicated data.
