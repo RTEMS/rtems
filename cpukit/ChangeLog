@@ -1,3 +1,11 @@
+2008-12-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/ide_part_table.c: Fixed NULL pointer access.
+	* libmisc/monitor/mon-command.c, libmisc/monitor/mon-editor.c,
+	libmisc/monitor/mon-monitor.c, libmisc/monitor/monitor.h,
+	libmisc/shell/cmds.c: The list of registered monitor commands is now
+	private and only accessible via a lookup and iterate function.
+
 2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/include/rtems/rtems/regionmp.h, sapi/include/rtems/config.h,

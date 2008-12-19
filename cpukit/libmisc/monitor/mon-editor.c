@@ -597,12 +597,10 @@ rtems_monitor_task(
         if (0 == rtems_monitor_command_read(command_buffer, &argc, argv))
             continue;
         if (argc < 1
-          || (command = rtems_monitor_command_lookup(rtems_monitor_commands,
-                                                     argv [0])) == 0)
-        {
-            /* no command */
-            fprintf(stdout,"Unrecognised command; try 'help'\n");
-            continue;
+          || (command = rtems_monitor_command_lookup(argv [0])) == 0) {
+          /* no command */
+          fprintf(stdout,"Unrecognised command; try 'help'\n");
+          continue;
         }
 
         command->command_function(argc, argv, &command->command_arg, verbose);

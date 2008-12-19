@@ -368,6 +368,7 @@ typedef struct {
     rtems_monitor_object_dump_fn        dump;
 } rtems_monitor_object_info_t;
 
+typedef bool (*rtems_monitor_per_command_routine)(const rtems_monitor_command_entry_t *, void *);
 
 /* monitor.c */
 void    rtems_monitor_pause_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
@@ -377,8 +378,8 @@ void    rtems_monitor_debugger_cmd(int, char **, const rtems_monitor_command_arg
 void    rtems_monitor_node_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
 void    rtems_monitor_symbols_loadup(void);
 int     rtems_monitor_insert_cmd(rtems_monitor_command_entry_t *);
-int     rtems_monitor_erase_cmd(rtems_monitor_command_entry_t *);
 void    rtems_monitor_wakeup(void);
+void rtems_monitor_command_iterate(rtems_monitor_per_command_routine routine, void *arg);
 rtems_status_code rtems_monitor_suspend(rtems_interval timeout);
 
 /* editor.c */
@@ -395,9 +396,9 @@ void    rtems_monitor_server_init(uint32_t  );
 /* command.c */
 int     rtems_monitor_make_argv(char *, int *, char **);
 int     rtems_monitor_command_read(char *, int *, char **);
-const rtems_monitor_command_entry_t *rtems_monitor_command_lookup(const rtems_monitor_command_entry_t *table, const char *command_name);
 void    rtems_monitor_command_usage(const rtems_monitor_command_entry_t *, const char *);
 void    rtems_monitor_help_cmd(int, char **, const rtems_monitor_command_arg_t *, bool);
+const rtems_monitor_command_entry_t *rtems_monitor_command_lookup(const char *name);
 
 /* prmisc.c */
 void       rtems_monitor_separator(void);
@@ -518,9 +519,6 @@ const rtems_monitor_object_info_t *rtems_monitor_object_lookup(
 
 /* shared data */
 extern rtems_symbol_table_t *rtems_monitor_symbols;
-
-/* FIXME: This should not be here */
-extern const rtems_monitor_command_entry_t rtems_monitor_commands[];
 
 #define MONITOR_WAKEUP_EVENT   RTEMS_EVENT_0
 

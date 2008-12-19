@@ -36,7 +36,7 @@ int rtems_shell_main_monitor(int argc, char **argv) {
     return 1;
   }
 
-  command = rtems_monitor_command_lookup(rtems_monitor_commands, argv [0]);
+  command = rtems_monitor_command_lookup(argv [0]);
 
   if (command == NULL) {
     return 1;
@@ -47,30 +47,31 @@ int rtems_shell_main_monitor(int argc, char **argv) {
   return 0;
 }
 
-void rtems_shell_register_monitor_commands(void)
+static bool rtems_shell_register_command(const rtems_monitor_command_entry_t *e, void *arg)
 {
-  /* Monitor topic */
-  const rtems_monitor_command_entry_t *e = rtems_monitor_commands;
-
-  while (e != NULL) {
-    /* Exclude EXIT (alias quit)*/
-    if (e->command != NULL && strcmp("exit", e->command) != 0) {
-      rtems_shell_cmd_t *shell_cmd =
-        (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
-     
-      if (shell_cmd != NULL) {
-        shell_cmd->name    = e->command;
-        shell_cmd->topic   = "monitor";
-        shell_cmd->usage   = e->usage;
-        shell_cmd->command = rtems_shell_main_monitor;
-        shell_cmd->alias   = NULL;
-        shell_cmd->next    = NULL;
-      
-        if (rtems_shell_add_cmd_struct(shell_cmd) == NULL) {
-          free(shell_cmd);
-        }
+  /* Exclude EXIT (alias quit)*/
+  if (strcmp("exit", e->command) != 0) {
+    rtems_shell_cmd_t *shell_cmd =
+      (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
+   
+    if (shell_cmd != NULL) {
+      shell_cmd->name    = e->command;
+      shell_cmd->topic   = "monitor";
+      shell_cmd->usage   = e->usage;
+      shell_cmd->command = rtems_shell_main_monitor;
+      shell_cmd->alias   = NULL;
+      shell_cmd->next    = NULL;
+    
+      if (rtems_shell_add_cmd_struct(shell_cmd) == NULL) {
+        free(shell_cmd);
       }
     }
-    e = e->next;
   }
+
+  return true;
+}
+
+void rtems_shell_register_monitor_commands(void)
+{
+  rtems_monitor_command_iterate(rtems_shell_register_command, NULL);
 }

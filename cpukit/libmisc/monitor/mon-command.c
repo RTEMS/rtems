@@ -24,49 +24,6 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 
-/*
- * Look up a command in a command table
- *
- */
-
-const rtems_monitor_command_entry_t *rtems_monitor_command_lookup(
-  const rtems_monitor_command_entry_t *table,
-  const char *command_name
-)
-{
-  const rtems_monitor_command_entry_t *found_it = NULL;
-  size_t command_length = 0;
-
-  if (command_name == NULL) {
-    return NULL;
-  }
-
-  command_length = strlen(command_name);
-
-  while (table != NULL) {
-    if (table->command != NULL) {
-      /* Check for ambiguity */
-      if (!strncmp(table->command, command_name, command_length)) {
-        if (found_it == NULL) {
-          found_it = table;
-        } else {
-          return NULL;
-        }
-      }
-    }
-    table = table->next;
-  }
-
-  /* No ambiguity (the possible partial command was unique after all) */
-
-  /* Ignore empty commands */
-  if (found_it == NULL || found_it->command_function == NULL) {
-    return NULL;
-  }
-
-  return found_it;
-}
-
 static void
 rtems_monitor_show_help (
   const rtems_monitor_command_entry_t *help_cmd,
@@ -173,7 +130,7 @@ rtems_monitor_command_usage(
 
   if (command_name && (*command_name != '\0'))
   {
-    command = rtems_monitor_command_lookup (table, command_name);
+    command = rtems_monitor_command_lookup (command_name);
 
     if (command)
       rtems_monitor_show_help (command, strlen (command_name));
@@ -230,4 +187,54 @@ void rtems_monitor_help_cmd(
     for (arg = 1; argv[arg]; arg++)
       rtems_monitor_command_usage(command, argv[arg]);
   }
+}
+
+typedef struct {
+  const char *name;
+  size_t length;
+  const rtems_monitor_command_entry_t *match;
+} rtems_monitor_command_lookup_entry;
+
+static bool rtems_monitor_command_lookup_routine(
+  const rtems_monitor_command_entry_t *e,
+  void *arg
+)
+{
+  rtems_monitor_command_lookup_entry *le =
+    (rtems_monitor_command_lookup_entry *) arg;
+
+  /* Check name */
+  if (strncmp(e->command, le->name, le->length) == 0) {
+    /* Check for ambiguity */
+    if (le->match == NULL) {
+      le->match = e;
+    } else {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * @brief Looks for a command with the name @a name in the list of registered
+ * commands.
+ *
+ * The parameter @a name must not be NULL.
+ *
+ * Returns the corresponding command entry or NULL if no command is found.
+ */
+const rtems_monitor_command_entry_t *rtems_monitor_command_lookup(
+  const char *name
+)
+{
+  rtems_monitor_command_lookup_entry e = {
+    .name = name,
+    .length = strlen( name),
+    .match = NULL
+  };
+
+  rtems_monitor_command_iterate(rtems_monitor_command_lookup_routine, &e);
+
+  return e.match;
 }

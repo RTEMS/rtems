@@ -60,7 +60,7 @@ rtems_symbol_table_t *rtems_monitor_symbols;
  * The top-level commands
  */
 
-const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
+static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
     { "config",
       "Show the system configuration.",
       0,
@@ -479,4 +479,28 @@ rtems_monitor_insert_cmd (
   rtems_monitor_registered_commands = command;
 
   return 1;
+}
+
+/**
+ * @brief Iterates through all registerd commands.
+ *
+ * For each command the interation routine @a routine is called with the
+ * command entry and the user provided argument @a arg.  It is guaranteed that
+ * the command name and function are not NULL.
+ */
+void rtems_monitor_command_iterate(
+  rtems_monitor_per_command_routine routine,
+  void *arg
+)
+{
+  const rtems_monitor_command_entry_t *e = rtems_monitor_registered_commands;
+
+  while (e != NULL) {
+    if (e->command != NULL && e->command_function != NULL) {
+      if (!routine(e, arg)) {
+        break;
+      }
+    }
+    e = e->next;
+  }
 }
