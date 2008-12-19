@@ -26,6 +26,11 @@
 bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table [BSP_INTERRUPT_VECTOR_NUMBER];
 #endif /* BSP_INTERRUPT_USE_INDEX_TABLE */
 
+static void bsp_interrupt_handler_empty( rtems_vector_number vector, void *arg)
+{
+	bsp_interrupt_handler_default( vector);
+}
+
 bsp_interrupt_handler_entry bsp_interrupt_handler_table [BSP_INTERRUPT_HANDLER_TABLE_SIZE] = {
 	[0 ... BSP_INTERRUPT_HANDLER_TABLE_SIZE - 1] = {
 		.handler = bsp_interrupt_handler_empty,
@@ -68,9 +73,9 @@ static inline void bsp_interrupt_set_initialized(void)
 	bsp_interrupt_set_handler_unique( BSP_INTERRUPT_HANDLER_TABLE_SIZE, true);
 }
 
-void bsp_interrupt_handler_empty( rtems_vector_number vector, void *arg)
+static inline bool bsp_interrupt_is_empty_handler_entry( bsp_interrupt_handler_entry *e)
 {
-	/* Do nothing */
+	return e->handler == bsp_interrupt_handler_empty;
 }
 
 static inline void bsp_interrupt_clear_handler_entry( bsp_interrupt_handler_entry *e)
@@ -101,7 +106,7 @@ static inline bool bsp_interrupt_allocate_handler_index( rtems_vector_number vec
 #endif /* BSP_INTERRUPT_USE_INDEX_TABLE */
 }
 
-static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry()
+static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry( void)
 {
 #ifdef BSP_INTERRUPT_NO_HEAP_USAGE
 	rtems_vector_number index = 0;
@@ -124,7 +129,7 @@ static void bsp_interrupt_free_handler_entry( bsp_interrupt_handler_entry *e)
 #endif /* BSP_INTERRUPT_NO_HEAP_USAGE */
 }
 
-static rtems_status_code bsp_interrupt_lock()
+static rtems_status_code bsp_interrupt_lock( void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	if (_System_state_Is_up( _System_state_Get())) {
@@ -167,7 +172,7 @@ static rtems_status_code bsp_interrupt_lock()
 	}
 }
 
-static rtems_status_code bsp_interrupt_unlock()
+static rtems_status_code bsp_interrupt_unlock( void)
 {
 	if (bsp_interrupt_mutex != RTEMS_ID_NONE) {
 		return rtems_semaphore_release( bsp_interrupt_mutex);
@@ -184,10 +189,9 @@ static rtems_status_code bsp_interrupt_unlock()
  * function will be called after all internals are initialized.  Initialization
  * is complete if everything was successful.
  */
-rtems_status_code bsp_interrupt_initialize()
+rtems_status_code bsp_interrupt_initialize( void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	rtems_vector_number index = 0;
 
 	/* Lock */
 	sc = bsp_interrupt_lock();

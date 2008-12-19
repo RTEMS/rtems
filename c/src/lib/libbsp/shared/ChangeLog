@@ -1,3 +1,9 @@
+2008-12-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-info.h, src/irq-info.c, src/irq-shell.c: New files.
+	* include/irq-generic.h, src/irq-generic.c: Improved interrupt handler
+	dispatch function.
+
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Eliminate pointers to API configuration tables in the

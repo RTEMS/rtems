@@ -75,13 +75,6 @@ static inline rtems_vector_number bsp_interrupt_handler_index( rtems_vector_numb
 #endif /* BSP_INTERRUPT_USE_INDEX_TABLE */
 }
 
-void bsp_interrupt_handler_empty( rtems_vector_number vector, void *arg);
-
-static inline bool bsp_interrupt_is_empty_handler_entry( bsp_interrupt_handler_entry *e)
-{
-	return e->handler == bsp_interrupt_handler_empty;
-}
-
 /**
  * @defgroup bsp_interrupt BSP Interrupt Support
  *
@@ -217,17 +210,12 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector);
 static inline void bsp_interrupt_handler_dispatch( rtems_vector_number vector)
 {
 	if (bsp_interrupt_is_valid_vector( vector)) {
-		bsp_interrupt_handler_entry *head = &bsp_interrupt_handler_table [bsp_interrupt_handler_index( vector)];
-		bsp_interrupt_handler_entry *current = head;
+		bsp_interrupt_handler_entry *e = &bsp_interrupt_handler_table [bsp_interrupt_handler_index( vector)];
 
 		do {
-			current->handler( vector, current->arg);
-			current = current->next;
-		} while (current != NULL);
-
-		if (bsp_interrupt_is_empty_handler_entry( head)) {
-			bsp_interrupt_handler_default( vector);
-		}
+			e->handler( vector, e->arg);
+			e = e->next;
+		} while (e != NULL);
 	} else {
 		bsp_interrupt_handler_default( vector);
 	}
