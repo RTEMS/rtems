@@ -135,26 +135,6 @@
                RTEMS POSIX 1003.1 Compliance Guide</A>
             </LI>
 
-        <LI><A HREF="../pdf/rtems_gdb.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/rtems_gdb.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/rtems_gdb.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="rtems_gdb/index.html">
-               RTEMS/GDB User's Guide</A>
-            </LI>
-
-        <LI><A HREF="../pdf/rgdb_specs.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/rgdb_specs.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/rgdb_specs.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="rgdb_specs/index.html">
-               RTEMS Remote Debugger Server Specifications</A>
-            </LI>
-
         <LI><A HREF="../pdf/filesystem.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/filesystem.ps">
