@@ -16,6 +16,8 @@
 #ifndef _ITRONSYS_TYPES_H
 #define _ITRONSYS_TYPES_H
 
+#include <rtems/score/object.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -61,7 +63,7 @@ typedef int32_t     INT;    /* Signed integer (bit width of processor) */
 typedef uint32_t   UINT;   /* Unsigned integer (bit width of processor) */
 typedef bool       BOOL;  /* Boolean value.  TRUE (1) or FALSE (0). */
 typedef int16_t     FN;     /* Function code. Signed integer. Maximum 2 bytes. */
-typedef int        ID;     /* Object ID number (???id) */
+typedef Objects_Id ID;     /* Object ID number (???id) */
                            /*   Value range depends on the system.  Usually */
                            /*   a signed integer.  Certain ID values may */
                            /*   represent objects on other nodes when the */

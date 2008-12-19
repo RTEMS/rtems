@@ -1,5 +1,10 @@
 2008-12-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/include/itronsys/types.h: Derive ITRON ID type from Objects_Id
+	to avoid sizing mismatches.
+
+2008-12-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/src/dpmemcreate.c: Spacing.
 	* rtems/src/timerserver.c: Move error check to RTEMS_DEBUG. Cannot
 	happen under normal circumstances.
