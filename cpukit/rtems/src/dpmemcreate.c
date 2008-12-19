@@ -53,7 +53,7 @@ rtems_status_code rtems_port_create(
 {
   register Dual_ported_memory_Control *the_port;
 
-  if ( !rtems_is_name_valid( name) )
+  if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
   if ( !id )

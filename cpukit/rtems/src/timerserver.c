@@ -465,7 +465,8 @@ rtems_status_code rtems_timer_initiate_server(
     (rtems_task_entry) _Timer_Server_body, /* the timer server entry point */
     0                                      /* there is no argument */
   );
-  if (status) {
+  
+  #if defined(RTEMS_DEBUG)
     /*
      *  One would expect a call to rtems_task_delete() here to clean up
      *  but there is actually no way (in normal circumstances) that the
@@ -473,8 +474,10 @@ rtems_status_code rtems_timer_initiate_server(
      *  be good.  If this service fails, something is weirdly wrong on the
      *  target such as a stray write in an ISR or incorrect memory layout.
      */
-    initialized = false;
-  }
+    if (status) {
+      initialized = false;
+    }
+  #endif
 
   return status;
 }
