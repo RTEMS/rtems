@@ -1,5 +1,10 @@
 2008-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/malloc_statistics_helpers.c: Use intptr_t not
+	ssize_t.
+
+2008-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/object.inl, score/src/objectgetbyindex.c:
 	Fix issues when using 16-bit object Ids.
 
