@@ -45,7 +45,9 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
 {
   return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
          (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
-         (( (Objects_Id) node )      << OBJECTS_NODE_START_BIT)  |
+         #if !defined(RTEMS_USE_16_BIT_OBJECT)
+           (( (Objects_Id) node )    << OBJECTS_NODE_START_BIT)  |
+         #endif
          (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
 }
 
@@ -87,7 +89,15 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
   Objects_Id id
 )
 {
-  return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
+  /*
+   * If using 16-bit Ids, then there is no node field and it MUST
+   * be a single processor system.
+   */
+  #if defined(RTEMS_USE_16_BIT_OBJECT)
+    return 1;
+  #else
+    return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
+  #endif
 }
 
 /**

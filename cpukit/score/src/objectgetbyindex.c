@@ -50,11 +50,14 @@
 
 Objects_Control *_Objects_Get_by_index(
   Objects_Information *information,
-  uint32_t             index,
+  Objects_Id           id,
   Objects_Locations   *location
 )
 {
   Objects_Control *the_object;
+  uint16_t         index;
+
+  index = _Objects_Get_index( id );
 
   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
