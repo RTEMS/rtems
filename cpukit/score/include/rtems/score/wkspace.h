@@ -66,11 +66,11 @@ void *_Workspace_Allocate(
  *
  *  This function frees the specified block of memory.  If the block
  *  belongs to the Workspace and can be successfully freed, then
- *  TRUE is returned.  Otherwise FALSE is returned.
+ *  true is returned.  Otherwise false is returned.
  *
  *  @param block is the memory to free
  *
- *  @return TRUE if the free was successful.
+ *  @return true if the free was successful.
  */
 
 bool _Workspace_Free(

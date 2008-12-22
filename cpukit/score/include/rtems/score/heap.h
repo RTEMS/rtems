@@ -323,14 +323,14 @@ void *_Heap_Allocate_aligned(
  *  This function sets @a *size to the size of the block of user memory
  *  which begins at @a starting_address. The size returned in @a *size could
  *  be greater than the size requested for allocation.
- *  Returns TRUE if the @a starting_address is in the heap, and FALSE
+ *  Returns true if the @a starting_address is in the heap, and false
  *  otherwise.
  *
  *  @param[in] the_heap is the heap to operate upon
  *  @param[in] starting_address is the starting address of the user block
  *         to obtain the size of
  *  @param[in] size points to a user area to return the size in
- *  @return TRUE if successfully able to determine the size, FALSE otherwise
+ *  @return true if successfully able to determine the size, false otherwise
  *  @return *size filled in with the size of the user area for this block
  */
 bool _Heap_Size_of_user_area(
@@ -377,7 +377,7 @@ Heap_Resize_status _Heap_Resize_block(
  *  @param[in] the_heap is the heap to operate upon
  *  @param[in] start_address is the starting address of the user block
  *         to free
- *  @return TRUE if successfully freed, FALSE otherwise
+ *  @return true if successfully freed, false otherwise
  */
 bool _Heap_Free(
   Heap_Control *the_heap,
@@ -390,8 +390,8 @@ bool _Heap_Free(
  *  @param[in] the_heap is the heap to operate upon
  *  @param[in] source is a user specified integer which may be used to
  *         indicate where in the application this was invoked from
- *  @param[in] do_dump is set to TRUE if errors should be printed
- *  @return TRUE if the test passed fine, FALSE otherwise.
+ *  @param[in] do_dump is set to true if errors should be printed
+ *  @return true if the test passed fine, false otherwise.
  */
 bool _Heap_Walk(
   Heap_Control *the_heap,

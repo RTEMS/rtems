@@ -137,7 +137,7 @@ void _CORE_semaphore_Initialize(
 
 /**
  *  This routine attempts to receive a unit from @a the_semaphore.
- *  If a unit is available or if the wait flag is FALSE, then the routine
+ *  If a unit is available or if the wait flag is false, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
@@ -146,7 +146,7 @@ void _CORE_semaphore_Initialize(
  *         with this instance of a SuperCore Semaphore
  *  @param[in] wait indicates if the caller is willing to block
  *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is TRUE.
+ *         to wait if @a wait is true.
  */
 void _CORE_semaphore_Seize(
   CORE_semaphore_Control  *the_semaphore,

@@ -178,7 +178,7 @@ typedef struct {
    *  be when attempting to acquire the mutex when it is already locked.
    */
   CORE_mutex_Nesting_behaviors lock_nesting_behavior;
-  /** When this field is TRUE, then only the thread that locked the mutex
+  /** When this field is true, then only the thread that locked the mutex
    *  is allowed to unlock it.
    */
   bool                         only_owner_release;
@@ -269,7 +269,7 @@ void _CORE_mutex_Initialize(
  *  @brief Seize Mutex with Quick Success Path
  *
  *  This routine attempts to receive a unit from the_mutex.
- *  If a unit is available or if the wait flag is FALSE, then the routine
+ *  If a unit is available or if the wait flag is false, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
@@ -340,7 +340,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *
  *  @param[in] _the_mutex is the mutex to attempt to lock
  *  @param[in] _id is the Id of the owning API level Semaphore object
- *  @param[in] _wait is TRUE if the thread is willing to wait
+ *  @param[in] _wait is true if the thread is willing to wait
  *  @param[in] _timeout is the maximum number of ticks to block
  *  @param[in] _level is a temporary variable used to contain the ISR
  *         disable level cookie
@@ -368,7 +368,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
        ) { \
         _Internal_error_Occurred( \
            INTERNAL_ERROR_CORE, \
-           FALSE, \
+           false, \
            INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE \
            ); \
     } \
@@ -393,7 +393,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *
  *  @param[in] _the_mutex is the mutex to attempt to lock
  *  @param[in] _id is the Id of the owning API level Semaphore object
- *  @param[in] _wait is TRUE if the thread is willing to wait
+ *  @param[in] _wait is true if the thread is willing to wait
  *  @param[in] _timeout is the maximum number of ticks to block
  *  @param[in] _level is a temporary variable used to contain the ISR
  *         disable level cookie

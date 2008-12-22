@@ -43,7 +43,7 @@ extern "C" {
 /**
  *  @brief Is Context Switch Needed?
  *
- *  This variable is set to TRUE when a reschedule operation
+ *  This variable is set to true when a reschedule operation
  *  has determined that the processor should be taken away from the
  *  currently executing thread and given to the heir thread.
  */
@@ -62,7 +62,7 @@ SCORE_EXTERN volatile bool _Context_Switch_necessary;
  *  @param[in] _size is the size in octets of the thread's context
  *  @param[in] _isr is the ISR enable level for this thread
  *  @param[in] _entry is this thread's entry point
- *  @param[in] _is_fp is set to TRUE if this thread has floating point
+ *  @param[in] _is_fp is set to true if this thread has floating point
  *         enabled
  */
 #define _Context_Initialize(_the_context, _stack, _size, _isr, _entry, _is_fp) \

@@ -85,7 +85,7 @@ void _Objects_MP_Open (
  *             object class.
  *  @param[in] the_name is the name of the object being opened.
  *  @param[in] the_id is the Id of the object being opened.
- *  @param[in] is_fatal_error is TRUE if not being able to allocate the
+ *  @param[in] is_fatal_error is true if not being able to allocate the
  *             object is considered a fatal error.
  *
  *  @todo This method only works for object types with 4 byte object names.

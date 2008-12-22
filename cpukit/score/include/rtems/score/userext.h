@@ -244,7 +244,7 @@ void _User_extensions_Remove_set (
  *
  *  @param[in] the_thread is the thread being created.
  *
- *  @return This method returns TRUE if the user extension executed
+ *  @return This method returns true if the user extension executed
  *          successfully.
  */
 bool _User_extensions_Thread_create (
@@ -326,7 +326,7 @@ void _User_extensions_Thread_exitted (
  *  when a fatal error occurs.
  *
  *  @param[in] the_source is the source of the fatal error.
- *  @param[in] is_internal is TRUE if the error originated inside RTEMS.
+ *  @param[in] is_internal is true if the error originated inside RTEMS.
  *  @param[in] the_error is an indication of the actual error.
  */
 void _User_extensions_Fatal (

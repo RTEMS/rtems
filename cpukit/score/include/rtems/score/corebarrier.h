@@ -139,9 +139,9 @@ void _CORE_barrier_Initialize(
  *
  *  @param[in] the_barrier is the barrier to wait for
  *  @param[in] id is the id of the object being waited upon
- *  @param[in] wait is TRUE if the calling thread is willing to wait
+ *  @param[in] wait is true if the calling thread is willing to wait
  *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is TRUE.
+ *         to wait if @a wait is true.
  *  @param[in] api_barrier_mp_support is the routine to invoke if the
  *         thread unblocked is remote
  *

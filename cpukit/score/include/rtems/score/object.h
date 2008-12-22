@@ -333,7 +333,7 @@ typedef struct {
   Objects_Id        maximum_id;
   /** This is the maximum number of objects in this class. */
   Objects_Maximum   maximum;
-  /** This is the TRUE if unlimited objects in this class. */
+  /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
   /** This is the number of objects in a block. */
   uint32_t          allocation_size;
@@ -454,8 +454,8 @@ void _Objects_Shrink_information(
 
 /**
  *  This function initializes an object class information record.
- *  SUPPORTS_GLOBAL is TRUE if the object class supports global
- *  objects, and FALSE otherwise.  Maximum indicates the number
+ *  SUPPORTS_GLOBAL is true if the object class supports global
+ *  objects, and false otherwise.  Maximum indicates the number
  *  of objects required in this class and size indicates the size
  *  in bytes of each control block for this object class.  The
  *  name length and string designator are also set.  In addition,
@@ -468,7 +468,7 @@ void _Objects_Shrink_information(
  *  @param[in] maximum is the maximum number of instances of this object
  *             class which may be concurrently active.
  *  @param[in] size is the size of the data structure for this class.
- *  @param[in] is_string is TRUE if this object uses string style names.
+ *  @param[in] is_string is true if this object uses string style names.
  *  @param[in] maximum_name_length is the maximum length of object names.
  */
 void _Objects_Initialize_information (
@@ -836,7 +836,7 @@ char *_Objects_Get_name_as_string(
  *  @param[in] the_object is the object to operate upon
  *  @param[in] name is a pointer to the name to use
  *
- *  @return If successful, TRUE is returned.  Otherwise FALSE is returned.
+ *  @return If successful, true is returned.  Otherwise false is returned.
  */
 bool _Objects_Set_name(
   Objects_Information *information,

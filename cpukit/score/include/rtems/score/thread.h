@@ -751,7 +751,7 @@ void _Thread_Suspend(
 /**
  *  This routine updates the related suspend fields in the_thread
  *  control block to indicate the current nested level.  A force
- *  parameter of TRUE will force a resume and clear the suspend count.
+ *  parameter of true will force a resume and clear the suspend count.
  */
 void _Thread_Resume(
   Thread_Control   *the_thread,

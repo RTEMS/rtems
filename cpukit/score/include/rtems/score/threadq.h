@@ -202,7 +202,7 @@ void _Thread_queue_Extract_priority_helper(
  */
 
 #define _Thread_queue_Extract_priority( _the_thread_queue, _the_thread ) \
-  _Thread_queue_Extract_priority_helper( _the_thread_queue, _the_thread, FALSE )
+  _Thread_queue_Extract_priority_helper( _the_thread_queue, _the_thread, false )
 
 
 /** @brief  Thread queue First priority

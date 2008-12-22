@@ -76,7 +76,7 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
 #define ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER  CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER
 
 /**
- *  The following is TRUE if signals have been sent to the currently
+ *  The following is true if signals have been sent to the currently
  *  executing thread by an ISR handler.
  */
 SCORE_EXTERN bool       _ISR_Signals_to_thread_executing;
@@ -196,8 +196,8 @@ void _ISR_Handler( void );
 void _ISR_Dispatch( void );
 
 /**
- *  This function returns TRUE if the processor is currently servicing
- *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
+ *  This function returns true if the processor is currently servicing
+ *  and interrupt and false otherwise.   A return value of true indicates
  *  that the caller is an interrupt service routine, NOT a thread.  The
  */
 #if (CPU_PROVIDES_ISR_IS_IN_PROGRESS == TRUE)

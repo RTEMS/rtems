@@ -236,8 +236,8 @@ typedef struct {
  *  @param[in] maximum_message_size is the size of largest message that
  *         may be sent to this message queue instance
  *
- *  @return TRUE if the message queue can be initialized.  In general,
- *         FALSE will only be returned if memory for the pending 
+ *  @return true if the message queue can be initialized.  In general,
+ *         false will only be returned if memory for the pending 
  *         messages cannot be allocated.
  */
 bool _CORE_message_queue_Initialize(
@@ -374,7 +374,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *
  *  This kernel routine dequeues a message, copies the message buffer to
  *  a given destination buffer, and frees the message buffer to the
- *  inactive message pool.  The thread will be blocked if wait is TRUE,
+ *  inactive message pool.  The thread will be blocked if wait is true,
  *  otherwise an error will be given to the thread if no messages are available.
  *
  *  @param[in] the_message_queue points to the message queue

@@ -118,8 +118,8 @@ extern "C" {
 
 /** @brief Is the Time Of Day Set
  *
- *  This is TRUE if the application has set the current
- *  time of day, and FALSE otherwise.
+ *  This is true if the application has set the current
+ *  time of day, and false otherwise.
  */
 SCORE_EXTERN bool _TOD_Is_set;
 
