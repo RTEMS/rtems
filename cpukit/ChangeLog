@@ -1,3 +1,7 @@
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4: Remove tic4x.
+
 2008-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/malloc_statistics_helpers.c: Use intptr_t not

@@ -1,3 +1,7 @@
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4: Remove tic4x.
+
 2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* README.configure: Add Lattice Mico32 support.
