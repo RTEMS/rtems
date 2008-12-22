@@ -50,10 +50,10 @@
 #include <net/route.h>
 #include <net/raw_cb.h>
 
-static struct	sockaddr route_dst = { 2, PF_ROUTE, };
-static struct	sockaddr route_src = { 2, PF_ROUTE, };
-static struct	sockaddr sa_zero   = { sizeof(sa_zero), AF_INET, };
-static struct	sockproto route_proto = { PF_ROUTE, };
+static struct	sockaddr route_dst = { 2, PF_ROUTE, { 0 }  };
+static struct	sockaddr route_src = { 2, PF_ROUTE, { 0 } };
+static struct	sockaddr sa_zero   = { sizeof(sa_zero), AF_INET, { 0 } };
+static struct	sockproto route_proto = { PF_ROUTE, 0 };
 
 struct walkarg {
 	int	w_tmemsize;
@@ -784,12 +784,14 @@ static struct protosw routesw[] = {
 { SOCK_RAW,	&routedomain,	0,		PR_ATOMIC|PR_ADDR,
   0,		route_output,	raw_ctlinput,	0,
   route_usrreq,
-  raw_init
+  raw_init,	NULL,		NULL,		NULL,
+  NULL
 }
 };
 
 struct domain routedomain =
     { PF_ROUTE, "route", route_init, 0, 0,
-      routesw, &routesw[sizeof(routesw)/sizeof(routesw[0])] };
+      routesw, &routesw[sizeof(routesw)/sizeof(routesw[0])],
+      NULL, NULL, 0, 0 };
 
 DOMAIN_SET(route);
