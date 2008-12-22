@@ -1,5 +1,9 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/res_debug.c: Add missing initializers.
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/inline/rtems/score/address.inl,
 	score/inline/rtems/score/chain.inl,
 	score/inline/rtems/score/corebarrier.inl,
