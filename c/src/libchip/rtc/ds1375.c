@@ -56,7 +56,7 @@
 #include <libchip/ds1375-rtc.h>
 
 #include <sys/fcntl.h>
-#include <sys/errno.h>
+#include <errno.h>
 #include <stdio.h>
 #include <inttypes.h>
 
