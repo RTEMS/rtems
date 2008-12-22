@@ -35,7 +35,7 @@ BINUTILS_RPMREL = @VERSION@%{?dist}
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.2.4
+GCC_VERS = 4.3.2
 GCC_PKGVERS = $(GCC_VERS)
 GCC_RPMREL = @VERSION@%{?dist}
 include ../gcc.am
