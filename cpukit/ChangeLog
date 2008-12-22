@@ -1,5 +1,34 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/apimutex.c, score/src/apimutexallocate.c,
+	score/src/apimutexlock.c, score/src/corebarrierwait.c,
+	score/src/coremsg.c, score/src/coremsgseize.c,
+	score/src/coremutexseize.c, score/src/coremutexsurrender.c,
+	score/src/coresemseize.c, score/src/coretod.c,
+	score/src/coretodset.c, score/src/heapfree.c,
+	score/src/heapsizeofuserarea.c, score/src/heapwalk.c,
+	score/src/interr.c, score/src/isr.c,
+	score/src/mpci.c, score/src/objectinitializeinformation.c,
+	score/src/objectmp.c, score/src/objectnametoid.c,
+	score/src/objectnametoidstring.c, score/src/objectsetname.c,
+	score/src/thread.c, score/src/threadblockingoperationcancel.c,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threadcreateidle.c, score/src/threaddispatch.c,
+	score/src/threadevaluatemode.c, score/src/threadhandler.c,
+	score/src/threadinitialize.c, score/src/threadmp.c,
+	score/src/threadqextractpriority.c,
+	score/src/threadqextractwithproxy.c,
+	score/src/threadqrequeue.c, score/src/threadready.c,
+	score/src/threadresettimeslice.c, score/src/threadrestart.c,
+	score/src/threadresume.c, score/src/threadrotatequeue.c,
+	score/src/threadsetstate.c, score/src/threadstartmultitasking.c,
+	score/src/threadsuspend.c, score/src/threadyieldprocessor.c,
+	score/src/timespecgreaterthan.c, score/src/timespecisvalid.c,
+	score/src/timespeclessthan.c, score/src/userextthreadcreate.c,
+	score/src/wkspace.c: Eliminate TRUE/FALSE.
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libi2c/libi2c.h: Change header guard to RTEMS conventions.
 	Add extern's.
 
