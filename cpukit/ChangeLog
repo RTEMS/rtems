@@ -1,5 +1,25 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/context.h,
+	score/include/rtems/score/corebarrier.h,
+	score/include/rtems/score/coremsg.h,
+	score/include/rtems/score/coremutex.h,
+	score/include/rtems/score/corerwlock.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/heap.h,
+	score/include/rtems/score/isr.h,
+	score/include/rtems/score/object.h,
+	score/include/rtems/score/objectmp.h,
+	score/include/rtems/score/protectedheap.h,
+	score/include/rtems/score/thread.h,
+	score/include/rtems/score/threadq.h,
+	score/include/rtems/score/tod.h,
+	score/include/rtems/score/userext.h,
+	score/include/rtems/score/wkspace.h:
+	Eliminate TRUE/FALSE.
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/src/apimutex.c, score/src/apimutexallocate.c,
 	score/src/apimutexlock.c, score/src/corebarrierwait.c,
 	score/src/coremsg.c, score/src/coremsgseize.c,
