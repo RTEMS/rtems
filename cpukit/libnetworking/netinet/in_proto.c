@@ -93,12 +93,14 @@ struct protosw inetsw[] = {
 { 0,		&inetdomain,	0,		0,
   0,		0,		0,		0,
   0,
-  ip_init,	0,		ip_slowtimo,	ip_drain
+  ip_init,	0,		ip_slowtimo,	ip_drain,
+  NULL
 },
 { SOCK_DGRAM,	&inetdomain,	IPPROTO_UDP,	PR_ATOMIC|PR_ADDR,
   udp_input,	0,		udp_ctlinput,	ip_ctloutput,
   udp_usrreq,
-  udp_init
+  udp_init,	0,		0,		0,
+  NULL
 },
 { SOCK_STREAM,	&inetdomain,	IPPROTO_TCP,
 	PR_CONNREQUIRED|PR_IMPLOPCL|PR_WANTRCVD,
@@ -111,31 +113,38 @@ struct protosw inetsw[] = {
   rip_input,	0,		0,		rip_ctloutput,
   rip_usrreq,
   0,		0,		0,		0,
+  NULL
 },
 { SOCK_RAW,	&inetdomain,	IPPROTO_ICMP,	PR_ATOMIC|PR_ADDR,
   icmp_input,	0,		0,		rip_ctloutput,
-  rip_usrreq
+  rip_usrreq,
+  0,		0,		0,		0,
+  NULL
 },
 { SOCK_RAW,	&inetdomain,	IPPROTO_IGMP,	PR_ATOMIC|PR_ADDR,
   igmp_input,	0,		0,		rip_ctloutput,
   rip_usrreq,
-  igmp_init,	igmp_fasttimo,	igmp_slowtimo
+  igmp_init,	igmp_fasttimo,	igmp_slowtimo,	0,
+  NULL
 },
 { SOCK_RAW,	&inetdomain,	IPPROTO_RSVP,	PR_ATOMIC|PR_ADDR,
   rsvp_input,	0,		0,		rip_ctloutput,
   rip_usrreq,
   0,		0,		0,		0,
+  NULL
 },
 { SOCK_RAW,	&inetdomain,	IPPROTO_IPIP,	PR_ATOMIC|PR_ADDR,
   ipip_input,	0,	 	0,		rip_ctloutput,
   rip_usrreq,
   0,		0,		0,		0,
+  NULL
 },
 #ifdef IPDIVERT
 { SOCK_RAW,	&inetdomain,	IPPROTO_DIVERT,	PR_ATOMIC|PR_ADDR,
   div_input,	0,	 	0,		ip_ctloutput,
   div_usrreq,
   div_init,	0,		0,		0,
+  NULL
 },
 #endif
 #ifdef TPIP
@@ -143,6 +152,7 @@ struct protosw inetsw[] = {
   tpip_input,	0,		tpip_ctlinput,	tp_ctloutput,
   tp_usrreq,
   tp_init,	0,		tp_slowtimo,	tp_drain,
+  NULL
 },
 #endif
 /* EON (ISO CLNL over IP) */
@@ -151,6 +161,7 @@ struct protosw inetsw[] = {
   eoninput,	0,		eonctlinput,		0,
   0,
   eonprotoinit,	0,		0,		0,
+  NULL
 },
 #endif
 #ifdef IPXIP
@@ -158,6 +169,7 @@ struct protosw inetsw[] = {
   ipxip_input,	0,		ipxip_ctlinput,	0,
   rip_usrreq,
   0,		0,		0,		0,
+  NULL
 },
 #endif
 #ifdef NSIP
@@ -165,6 +177,7 @@ struct protosw inetsw[] = {
   idpip_input,	0,		nsip_ctlinput,	0,
   rip_usrreq,
   0,		0,		0,		0,
+  NULL
 },
 #endif
 	/* raw wildcard */
@@ -172,6 +185,7 @@ struct protosw inetsw[] = {
   rip_input,	0,		0,		rip_ctloutput,
   rip_usrreq,
   rip_init,	0,		0,		0,
+  NULL
 },
 };
 
