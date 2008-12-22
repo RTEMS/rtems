@@ -1,5 +1,23 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if.c, libnetworking/net/if_ethersubr.c
+	libnetworking/net/if_loop.c, libnetworking/net/raw_cb.c,,
+	libnetworking/net/raw_usrreq.c, libnetworking/netinet/in.c,
+	libnetworking/netinet/in_pcb.c, libnetworking/netinet/ip_divert.c,
+	libnetworking/netinet/ip_input.c, libnetworking/netinet/ip_mroute.c,
+	libnetworking/netinet/ip_output.c, libnetworking/netinet/raw_ip.c,
+	libnetworking/netinet/tcp_debug.c, libnetworking/netinet/tcp_input.c,
+	libnetworking/netinet/tcp_output.c, libnetworking/netinet/tcp_subr.c,
+	libnetworking/netinet/tcp_timer.c, libnetworking/netinet/tcp_usrreq.c,
+	libnetworking/netinet/udp_usrreq.c,
+	libnetworking/rtems/rtems_mii_ioctl_kern.c,
+	libnetworking/rtems/rtems_select.c,
+	libnetworking/rtems/rtems_socketpair.c,
+	libnetworking/rtems/rtems_syscall.c:
+	Include <errno.h> (POSIX,C99) instead of <sys/errno.h> (BSD'ism).
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/include/rtems/score/context.h,
 	score/include/rtems/score/corebarrier.h,
 	score/include/rtems/score/coremsg.h,
