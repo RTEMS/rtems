@@ -69,7 +69,7 @@
 
 #include <rtems/rtems_mii_ioctl.h>
 
-#include <sys/errno.h>
+#include <errno.h>
 
 
 #define DEBUG

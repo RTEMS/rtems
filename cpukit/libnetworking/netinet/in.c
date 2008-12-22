@@ -34,7 +34,7 @@
 #include <rtems/bsd/sys/queue.h>
 #include <sys/systm.h>
 #include <sys/ioctl.h>
-#include <sys/errno.h>
+#include <errno.h>
 #include <sys/malloc.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>

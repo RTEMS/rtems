@@ -17,7 +17,7 @@
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
-#include <sys/errno.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>

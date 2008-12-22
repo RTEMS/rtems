@@ -42,7 +42,7 @@
 #include <sys/socketvar.h>
 #include <sys/domain.h>
 #include <sys/protosw.h>
-#include <sys/errno.h>
+#include <errno.h>
 
 #include <net/if.h>
 #include <net/route.h>

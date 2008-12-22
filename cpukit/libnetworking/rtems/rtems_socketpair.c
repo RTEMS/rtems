@@ -30,7 +30,7 @@
 
 #include <unistd.h>
 #include <sys/socket.h>
-#include <sys/errno.h>
+#include <errno.h>
 
 int socketpair (int domain, int type, int protocol, int *rsv)
 {
