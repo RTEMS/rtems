@@ -20,6 +20,6 @@
 #include <rtems/extension.h>
 #include <rtems/score/interr.h>
 
-void _Extension_Manager_initialization(void)
+void _Extension_Manager_initialization(uint32_t   maximum_extensions)
 {
 }

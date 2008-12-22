@@ -20,6 +20,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
-void _Partition_Manager_initialization(void)
+void _Partition_Manager_initialization(uint32_t   maximum_partitions)
 {
 }

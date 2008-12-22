@@ -22,6 +22,6 @@
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/ratemon.h>
 
-void _Rate_monotonic_Manager_initialization(void)
+void _Rate_monotonic_Manager_initialization(uint32_t   maximum_periods)
 {
 }

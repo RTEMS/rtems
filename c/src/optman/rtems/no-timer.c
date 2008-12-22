@@ -23,7 +23,7 @@
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/timer.h>
 
-void _Timer_Manager_initialization(void)
+void _Timer_Manager_initialization(uint32_t   maximum_timers)
 {
 }
 
