@@ -1,3 +1,7 @@
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* i2c/i2c_init.c: Include <errno.h> instead of <sys/errno.h>.
+
 2008-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -Qy from *link.
