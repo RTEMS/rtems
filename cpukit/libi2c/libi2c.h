@@ -1,5 +1,5 @@
-#ifndef RTEMS_LIBI2C_H
-#define RTEMS_LIBI2C_H
+#ifndef _RTEMS_LIBI2C_H
+#define _RTEMS_LIBI2C_H
 /*$Id$*/
 
 /* 
@@ -58,43 +58,43 @@ extern "C" {
 /* Simple I2C driver API */
 
 /* Initialize the libary - may fail if no semaphore or no driver slot is available */
-int rtems_libi2c_initialize (void);
+extern int rtems_libi2c_initialize (void);
 
 /* Alternatively to rtems_libi2c_initialize() the library can also be
  * initialized by means of a traditional driver table entry containing
  * the following entry points:
  */
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_init (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
     void *arg);
 
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_open (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
     void *arg);
 
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_close (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
     void *arg);
 
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_read (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
     void *arg);
 
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_write (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
     void *arg);
 
-rtems_status_code
+extern rtems_status_code
 rtems_i2c_ioctl (
 	rtems_device_major_number major,
 	rtems_device_minor_number minor,
@@ -196,7 +196,7 @@ typedef struct rtems_libi2c_bus_ops_
  * RETURNS: bus # (>=0) or -1 on error (errno set).
  */
 
-int rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus);
+extern int rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus);
 
 extern rtems_device_major_number rtems_libi2c_major;
 
@@ -296,7 +296,7 @@ typedef struct rtems_libi2c_drv_t_
  *
  * RETURNS minor number (FYI) or -1 on failure
  */
-int
+extern int
 rtems_libi2c_register_drv (const char *name, rtems_libi2c_drv_t * drvtbl,
                            unsigned bus, unsigned i2caddr);
 
@@ -321,39 +321,39 @@ rtems_libi2c_register_drv (const char *name, rtems_libi2c_drv_t * drvtbl,
  *
  * Drivers just pass the minor number on to these routines...
  */
-rtems_status_code rtems_libi2c_send_start (rtems_device_minor_number minor);
+extern rtems_status_code rtems_libi2c_send_start (rtems_device_minor_number minor);
 
-rtems_status_code rtems_libi2c_send_stop (rtems_device_minor_number minor);
+extern rtems_status_code rtems_libi2c_send_stop (rtems_device_minor_number minor);
 
-rtems_status_code
+extern rtems_status_code
 rtems_libi2c_send_addr (rtems_device_minor_number minor, int rw);
 
 /* the read/write routines return the number of bytes transferred
  * or -(status_code) on error.
  */
-int
+extern int
 rtems_libi2c_read_bytes (rtems_device_minor_number minor,
                          unsigned char *bytes, int nbytes);
 
-int
+extern int
 rtems_libi2c_write_bytes (rtems_device_minor_number minor,
                           const unsigned char *bytes, int nbytes);
 
 /* Send start, send address and read bytes */
-int
+extern int
 rtems_libi2c_start_read_bytes (rtems_device_minor_number minor, 
 			       unsigned char *bytes,
                                int nbytes);
 
 /* Send start, send address and write bytes */
-int
+extern int
 rtems_libi2c_start_write_bytes (rtems_device_minor_number minor, 
 				const unsigned char *bytes,
                                 int nbytes);
 
 
 /* call misc iocontrol function */
-int
+extern int
 rtems_libi2c_ioctl (rtems_device_minor_number minor,
 		    int cmd,
 		    ...);
