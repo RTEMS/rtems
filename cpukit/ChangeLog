@@ -1,5 +1,6 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/nfs.c: Add missing initializers.
 	* libnetworking/netinet/ip_divert.c: Add missing initializers.
 	* libnetworking/netinet/if_ether.c: Add missing initializers.
 	* libfs/src/nfsclient/src/rpcio.c: Add missing initializers.
