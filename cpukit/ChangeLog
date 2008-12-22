@@ -1,5 +1,10 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libi2c/libi2c.h: Change header guard to RTEMS conventions.
+	Add extern's.
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/canonical-target-name.m4: Remove tic4x.
 
 2008-12-21	Joel Sherrill <joel.sherrill@oarcorp.com>
