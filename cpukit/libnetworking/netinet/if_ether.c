@@ -92,7 +92,7 @@ struct llinfo_arp {
 
 static	LIST_HEAD(, llinfo_arp) llinfo_arp;
 
-struct	ifqueue arpintrq = {0, 0, 0, 50};
+struct	ifqueue arpintrq = {0, 0, 0, 50, 0};
 static int	arp_inuse, arp_allocated;
 
 static int	arp_maxtries = 5;
@@ -146,7 +146,7 @@ arp_rtrequest(int req, struct rtentry *rt, struct sockaddr *sa)
 {
 	struct sockaddr *gate;
 	struct llinfo_arp *la;
-	static struct sockaddr_dl null_sdl = {sizeof(null_sdl), AF_LINK};
+	static struct sockaddr_dl null_sdl = {sizeof(null_sdl), AF_LINK, 0, 0, 0, 0, 0, { 0 } };
 	static int arpinit_done;
 
 	if (!arpinit_done) {
@@ -598,7 +598,7 @@ static struct llinfo_arp *
 arplookup(u_long addr, int create, int proxy)
 {
 	struct rtentry *rt;
-	static struct sockaddr_inarp sin = {sizeof(sin), AF_INET };
+	static struct sockaddr_inarp sin = {sizeof(sin), AF_INET, 0, { 0 }, { 0 }, 0, 0 };
 	const char *why = 0;
 
 	sin.sin_len = sizeof(sin);

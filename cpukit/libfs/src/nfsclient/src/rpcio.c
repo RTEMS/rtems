@@ -1149,7 +1149,7 @@ rtems_event_set   events;
 ListNode          newList;
 size_t            size;
 rtems_id          q          =  0;
-ListNodeRec       listHead   = {0};
+ListNodeRec       listHead   = {0, 0};
 unsigned long     epoch      = RPCIOD_EPOCH_SECS * ticksPerSec;
 unsigned long			max_period = RPCIOD_RETX_CAP_S * ticksPerSec;
 rtems_status_code	status;

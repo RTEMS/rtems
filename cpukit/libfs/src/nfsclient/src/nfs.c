@@ -717,7 +717,7 @@ static struct nfsstats {
 		 * during the system lifetime
 		 */
 	u_short						fs_ids;
-} nfsGlob = {0/* IMPORTANT */};
+} nfsGlob = {0, 0,  0, 0, 0, 0};
 
 /*
  * Global variable to tune the 'st_blksize' (stat(2)) value this nfs
