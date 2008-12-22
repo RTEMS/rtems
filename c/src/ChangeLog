@@ -1,5 +1,14 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* optman/rtems/no-barrier.c, optman/rtems/no-dpmem.c,
+	optman/rtems/no-msg.c, optman/rtems/no-part.c,
+	optman/rtems/no-region.c, optman/rtems/no-rtmon.c,
+	optman/rtems/no-sem.c, optman/rtems/no-timer.c,
+	optman/sapi/no-ext.c, optman/sapi/no-io.c:
+	Revert previous patch (cvs clash with Joel hacking cpukit).
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libchip/rtc/ds1375.c: Include <errno.h> instead of <sys/errno.h>.
 
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
