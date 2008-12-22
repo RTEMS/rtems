@@ -63,7 +63,7 @@ void _Thread_Create_idle( void )
     _Stack_Ensure_minimum( Configuration.idle_task_stack_size ),
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
-    TRUE,        /* preemptable */
+    true,        /* preemptable */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */

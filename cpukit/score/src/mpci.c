@@ -58,7 +58,7 @@ void _MPCI_Handler_initialization(
   if ( _System_state_Is_multiprocessing && !users_mpci_table )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_NO_MPCI
     );
 
@@ -127,7 +127,7 @@ void _MPCI_Create_server( void )
       _Configuration_MP_table->extra_mpci_receive_server_stack,
     CPU_ALL_TASKS_ARE_FP,
     PRIORITY_MINIMUM,
-    FALSE,       /* no preempt */
+    false,       /* no preempt */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
@@ -190,7 +190,7 @@ MP_packet_Prefix *_MPCI_Get_packet ( void )
   if ( the_packet == NULL )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_OUT_OF_PACKETS
     );
 
@@ -375,7 +375,7 @@ Thread _MPCI_Receive_server(
     executing->receive_packet = NULL;
 
     _Thread_Disable_dispatch();
-    _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, TRUE, WATCHDOG_NO_TIMEOUT );
+    _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, true, WATCHDOG_NO_TIMEOUT );
     _Thread_Enable_dispatch();
 
     for ( ; ; ) {
@@ -394,7 +394,7 @@ Thread _MPCI_Receive_server(
       if ( !the_function )
         _Internal_error_Occurred(
           INTERNAL_ERROR_CORE,
-          TRUE,
+          true,
           INTERNAL_ERROR_BAD_PACKET
         );
 
@@ -497,7 +497,7 @@ void _MPCI_Internal_packets_Process_packet (
 
         _Internal_error_Occurred(
           INTERNAL_ERROR_CORE,
-          TRUE,
+          true,
           INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION
         );
       }

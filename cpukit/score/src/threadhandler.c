@@ -185,7 +185,7 @@ void _Thread_Handler( void )
 
   _Internal_error_Occurred(
     INTERNAL_ERROR_CORE,
-    TRUE,
+    true,
     INTERNAL_ERROR_THREAD_EXITTED
   );
 }

@@ -45,7 +45,7 @@ void _Thread_blocking_operation_Cancel(
          (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
       _Internal_error_Occurred(
         INTERNAL_ERROR_CORE,
-        TRUE,
+        true,
         INTERNAL_ERROR_IMPLEMENTATION_BLOCKING_OPERATION_CANCEL
       );
     }

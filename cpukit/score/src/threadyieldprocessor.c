@@ -37,7 +37,7 @@
  *  This kernel routine will remove the running THREAD from the ready chain
  *  and place it immediatly at the rear of this chain.  Reset timeslice
  *  and yield the processor functions both use this routine, therefore if
- *  reset is TRUE and this is the only thread on the chain then the
+ *  reset is true and this is the only thread on the chain then the
  *  timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
  *
@@ -67,10 +67,10 @@ void _Thread_Yield_processor( void )
 
       if ( _Thread_Is_heir( executing ) )
         _Thread_Heir = (Thread_Control *) ready->first;
-      _Context_Switch_necessary = TRUE;
+      _Context_Switch_necessary = true;
     }
     else if ( !_Thread_Is_heir( executing ) )
-      _Context_Switch_necessary = TRUE;
+      _Context_Switch_necessary = true;
 
   _ISR_Enable( level );
 }

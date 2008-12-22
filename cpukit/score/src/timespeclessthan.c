@@ -29,14 +29,14 @@ bool _Timespec_Less_than(
 )
 {
   if ( lhs->tv_sec < rhs->tv_sec )
-    return TRUE;
+    return true;
 
   if ( lhs->tv_sec > rhs->tv_sec )
-    return FALSE;
+    return false;
 
   /* ASSERT: lhs->tv_sec == rhs->tv_sec */
   if ( lhs->tv_nsec < rhs->tv_nsec )
-    return TRUE; 
+    return true; 
 
-  return FALSE;
+  return false;
 }

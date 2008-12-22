@@ -31,8 +31,8 @@
  *    starting_address - starting address of the memory block to free.
  *
  *  Output parameters:
- *    TRUE  - if starting_address is valid heap address
- *    FALSE - if starting_address is invalid heap address
+ *    true  - if starting_address is valid heap address
+ *    false - if starting_address is invalid heap address
  */
 
 bool _Heap_Free(
@@ -50,27 +50,27 @@ bool _Heap_Free(
   if ( !_Addresses_Is_in_range(
        starting_address, (void *)the_heap->start, (void *)the_heap->final ) ) {
     _HAssert(starting_address != NULL);
-    return( FALSE );
+    return( false );
   }
 
   _Heap_Start_of_block( the_heap, starting_address, &the_block );
 
   if ( !_Heap_Is_block_in( the_heap, the_block ) ) {
-    _HAssert( FALSE );
-    return( FALSE );
+    _HAssert( false );
+    return( false );
   }
 
   the_size = _Heap_Block_size( the_block );
   next_block = _Heap_Block_at( the_block, the_size );
 
   if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
-    _HAssert( FALSE );
-    return( FALSE );
+    _HAssert( false );
+    return( false );
   }
 
   if ( !_Heap_Is_prev_used( next_block ) ) {
-    _HAssert( FALSE );
-    return( FALSE );
+    _HAssert( false );
+    return( false );
   }
 
   next_size = _Heap_Block_size( next_block );
@@ -82,15 +82,15 @@ bool _Heap_Free(
     Heap_Block *const prev_block = _Heap_Block_at( the_block, -prev_size );
 
     if ( !_Heap_Is_block_in( the_heap, prev_block ) ) {
-      _HAssert( FALSE );
-      return( FALSE );
+      _HAssert( false );
+      return( false );
     }
 
     /* As we always coalesce free blocks, the block that preceedes prev_block
        must have been used. */
     if ( !_Heap_Is_prev_used ( prev_block) ) {
-      _HAssert( FALSE );
-      return( FALSE );
+      _HAssert( false );
+      return( false );
     }
 
     if ( next_is_free ) {       /* coalesce both */
@@ -133,5 +133,5 @@ bool _Heap_Free(
   stats->free_size += the_size;
   stats->frees += 1;
 
-  return( TRUE );
+  return( true );
 }

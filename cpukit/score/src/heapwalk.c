@@ -32,7 +32,7 @@
  *  Input parameters:
  *    the_heap  - pointer to heap header
  *    source    - a numeric indicator of the invoker of this routine
- *    do_dump   - when TRUE print the information
+ *    do_dump   - when true print the information
  *
  *  Output parameters: NONE
  */
@@ -51,7 +51,7 @@ bool _Heap_Walk(
   int error = 0;
   int passes = 0;
 
-  do_dump = FALSE;
+  do_dump = false;
   /*
    * We don't want to allow walking the heap until we have
    * transferred control to the user task so we watch the
@@ -60,13 +60,13 @@ bool _Heap_Walk(
 
 /*
   if ( !_System_state_Is_up( _System_state_Get() ) )
-    return TRUE;
+    return true;
 */
 
   if (source < 0)
     source = the_heap->stats.instance;
 
-  if (do_dump == TRUE)
+  if (do_dump == true)
     printk("\nPASS: %d start %p final %p first %p last %p begin %p end %p\n",
       source, the_block, end,
       _Heap_First(the_heap), _Heap_Last(the_heap),
@@ -164,7 +164,7 @@ bool _Heap_Walk(
   }
 
   if(do_dump && error)
-    _Internal_error_Occurred( INTERNAL_ERROR_CORE, TRUE, 0xffff0000 );
+    _Internal_error_Occurred( INTERNAL_ERROR_CORE, true, 0xffff0000 );
 
   return error;
 

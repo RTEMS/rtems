@@ -38,10 +38,10 @@
  *    information         - object information table
  *    maximum             - maximum objects of this class
  *    size                - size of this object's control block
- *    is_string           - TRUE if names for this object are strings
+ *    is_string           - true if names for this object are strings
  *    maximum_name_length - maximum length of each object's name
  *    When multiprocessing is configured,
- *      supports_global     - TRUE if this is a global object class
+ *      supports_global     - true if this is a global object class
  *      extract_callout     - pointer to threadq extract callout
  *
  *  Output parameters:  NONE
@@ -96,7 +96,7 @@ void _Objects_Initialize_information(
    */
 
   information->auto_extend =
-        (maximum & OBJECTS_UNLIMITED_OBJECTS) ? TRUE : FALSE;
+        (maximum & OBJECTS_UNLIMITED_OBJECTS) ? true : false;
   maximum                 &= ~OBJECTS_UNLIMITED_OBJECTS;
 
   /*

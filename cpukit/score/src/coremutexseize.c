@@ -65,7 +65,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
       _Thread_Change_priority(
         the_mutex->holder,
         executing->current_priority,
-        FALSE
+        false
       );
     }
   }

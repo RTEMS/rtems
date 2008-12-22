@@ -54,7 +54,7 @@ void _TOD_Set(
 
   /* POSIX format TOD (timespec) */
   _Timestamp_Set( &_TOD_Now, time->tv_sec, time->tv_nsec );
-  _TOD_Is_set = TRUE;
+  _TOD_Is_set = true;
 
   _TOD_Activate();
 

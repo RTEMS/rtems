@@ -65,11 +65,11 @@ void _Thread_Handler_initialization(void)
             == (!Configuration.stack_free_hook) ) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_BAD_STACK_HOOK
     );
 
-  _Context_Switch_necessary = FALSE;
+  _Context_Switch_necessary = false;
   _Thread_Executing         = NULL;
   _Thread_Heir              = NULL;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -108,11 +108,11 @@ void _Thread_Handler_initialization(void)
 #endif
     sizeof( Thread_Control ),
                                 /* size of this object's control block */
-    TRUE,                       /* TRUE if names for this object are strings */
+    true,                       /* true if names for this object are strings */
     8                           /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                      /* TRUE if this is a global object class */
+    false,                      /* true if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
   );

@@ -40,7 +40,7 @@
  *  Input parameters:
  *    the_thread   - pointer to thread control block
  *    new_priority - ultimate priority
- *    prepend_it   - TRUE if the thread should be prepended to the chain
+ *    prepend_it   - true if the thread should be prepended to the chain
  *
  *  Output parameters:  NONE
  *
@@ -70,7 +70,7 @@ void _Thread_Change_priority(
   if ( prepend_it &&
        _Thread_Is_executing( the_thread ) &&
        new_priority >= the_thread->current_priority )
-    prepend_it = TRUE;
+    prepend_it = true;
 */
 
   /*
@@ -137,6 +137,6 @@ void _Thread_Change_priority(
 
   if ( !_Thread_Is_executing_also_the_heir() &&
        _Thread_Executing->is_preemptible )
-    _Context_Switch_necessary = TRUE;
+    _Context_Switch_necessary = true;
   _ISR_Enable( level );
 }

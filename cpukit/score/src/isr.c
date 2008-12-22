@@ -34,7 +34,7 @@
 
 void _ISR_Handler_initialization( void )
 {
-  _ISR_Signals_to_thread_executing = FALSE;
+  _ISR_Signals_to_thread_executing = false;
 
   _ISR_Nest_level = 0;
 
@@ -51,7 +51,7 @@ void _ISR_Handler_initialization( void )
   if ( !_Stack_Is_enough(Configuration.interrupt_stack_size) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
     );
 

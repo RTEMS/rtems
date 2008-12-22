@@ -35,7 +35,7 @@
  *  Input parameters:
  *    the_thread_queue - pointer to a threadq header
  *    the_thread       - pointer to a thread control block
- *    requeuing        - TRUE if requeuing and should not alter timeout or state
+ *    requeuing        - true if requeuing and should not alter timeout or state
  *
  *  Output parameters: NONE
  *

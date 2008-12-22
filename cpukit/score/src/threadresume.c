@@ -62,7 +62,7 @@ void _Thread_Resume(
 
   _ISR_Disable( level );
 
-  if ( force == TRUE )
+  if ( force == true )
     the_thread->suspend_count = 0;
   else
     the_thread->suspend_count--;
@@ -89,7 +89,7 @@ void _Thread_Resume(
         _Thread_Heir = the_thread;
         if ( _Thread_Executing->is_preemptible ||
              the_thread->current_priority == 0 )
-          _Context_Switch_necessary = TRUE;
+          _Context_Switch_necessary = true;
       }
     }
   }

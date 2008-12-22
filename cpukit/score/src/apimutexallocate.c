@@ -24,7 +24,7 @@ void _API_Mutex_Allocate(
 
   CORE_mutex_Attributes attr =  {
     CORE_MUTEX_NESTING_IS_ERROR,
-    FALSE,
+    false,
     CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
     0
   };

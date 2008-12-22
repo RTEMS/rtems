@@ -61,7 +61,7 @@ bool _Thread_queue_Extract_with_proxy(
     #endif
     _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
 
-    return TRUE;
+    return true;
   }
-  return FALSE;
+  return false;
 }

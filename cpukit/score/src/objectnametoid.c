@@ -62,7 +62,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Name               name_for_mp;
 #endif
 
-  /* ASSERT: information->is_string == FALSE */
+  /* ASSERT: information->is_string == false */
 
   if ( !id )
     return OBJECTS_INVALID_ADDRESS;
@@ -70,14 +70,14 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   if ( name == 0 )
     return OBJECTS_INVALID_NAME;
 
-  search_local_node = FALSE;
+  search_local_node = false;
 
   if ( information->maximum != 0 &&
       (node == OBJECTS_SEARCH_ALL_NODES ||
        node == OBJECTS_SEARCH_LOCAL_NODE ||
        _Objects_Is_local_node( node )
       ))
-   search_local_node = TRUE;
+   search_local_node = true;
 
   if ( search_local_node ) {
     name_length = information->name_length;

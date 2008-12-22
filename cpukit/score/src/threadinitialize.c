@@ -81,14 +81,14 @@ bool _Thread_Initialize(
     actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
 
     if ( !actual_stack_size || actual_stack_size < stack_size )
-      return FALSE;                     /* stack allocation failed */
+      return false;                     /* stack allocation failed */
 
     stack = the_thread->Start.stack;
-    the_thread->Start.core_allocated_stack = TRUE;
+    the_thread->Start.core_allocated_stack = true;
   } else {
     stack = stack_area;
     actual_stack_size = stack_size;
-    the_thread->Start.core_allocated_stack = FALSE;
+    the_thread->Start.core_allocated_stack = false;
   }
 
   _Stack_Initialize(
@@ -107,7 +107,7 @@ bool _Thread_Initialize(
     fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
     if ( !fp_area ) {
       _Thread_Stack_Free( the_thread );
-      return FALSE;
+      return false;
     }
     fp_area = _Context_Fp_start( fp_area, 0 );
 
@@ -151,7 +151,7 @@ bool _Thread_Initialize(
 
       _Thread_Stack_Free( the_thread );
 
-      return FALSE;
+      return false;
     }
   } else
     extensions_area = NULL;
@@ -238,9 +238,9 @@ bool _Thread_Initialize(
 
     _Thread_Stack_Free( the_thread );
 
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 
 }

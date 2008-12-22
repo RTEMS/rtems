@@ -88,10 +88,10 @@ void _Thread_Dispatch( void )
 
   executing   = _Thread_Executing;
   _ISR_Disable( level );
-  while ( _Context_Switch_necessary == TRUE ) {
+  while ( _Context_Switch_necessary == true ) {
     heir = _Thread_Heir;
     _Thread_Dispatch_disable_level = 1;
-    _Context_Switch_necessary = FALSE;
+    _Context_Switch_necessary = false;
     _Thread_Executing = heir;
 #if __RTEMS_ADA__
     executing->rtems_ada_self = rtems_ada_self;

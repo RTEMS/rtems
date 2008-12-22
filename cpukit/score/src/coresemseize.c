@@ -37,7 +37,7 @@
  *  Input parameters:
  *    the_semaphore - pointer to semaphore control block
  *    id            - id of object to wait on
- *    wait          - TRUE if wait is allowed, FALSE otherwise
+ *    wait          - true if wait is allowed, false otherwise
  *    timeout       - number of ticks to wait (0 means forever)
  *
  *  Output parameters:  NONE

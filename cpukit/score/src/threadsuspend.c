@@ -80,7 +80,7 @@ void _Thread_Suspend(
      _Thread_Calculate_heir();
 
   if ( _Thread_Is_executing( the_thread ) )
-    _Context_Switch_necessary = TRUE;
+    _Context_Switch_necessary = true;
 
   _ISR_Enable( level );
 }

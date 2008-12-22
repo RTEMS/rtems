@@ -25,7 +25,7 @@
  *
  *  This kernel routine sets '*size' to the size of the block of memory
  *  which begins at 'starting_address'.
- *  It returns TRUE if the 'starting_address' is in the heap, and FALSE
+ *  It returns true if the 'starting_address' is in the heap, and false
  *  otherwise.
  *
  *  Input parameters:
@@ -35,8 +35,8 @@
  *
  *  Output parameters:
  *    size  - size of area filled in
- *    TRUE  - if starting_address is valid heap address
- *    FALSE - if starting_address is invalid heap address
+ *    true  - if starting_address is valid heap address
+ *    false - if starting_address is invalid heap address
  */
 
 bool _Heap_Size_of_user_area(
@@ -51,13 +51,13 @@ bool _Heap_Size_of_user_area(
 
   if ( !_Addresses_Is_in_range(
          starting_address, (void *)the_heap->start, (void *)the_heap->final ) )
-    return( FALSE );
+    return( false );
 
   _Heap_Start_of_block( the_heap, starting_address, &the_block );
 
   _HAssert(_Heap_Is_block_in( the_heap, the_block ));
   if ( !_Heap_Is_block_in( the_heap, the_block ) )
-    return( FALSE );
+    return( false );
 
   the_size   = _Heap_Block_size( the_block );
   next_block = _Heap_Block_at( the_block, the_size );
@@ -68,7 +68,7 @@ bool _Heap_Size_of_user_area(
     !_Heap_Is_block_in( the_heap, next_block ) ||
     !_Heap_Is_prev_used( next_block )
   )
-    return( FALSE );
+    return( false );
 
   /* 'starting_address' could be greater than 'the_block' address plus
      HEAP_BLOCK_USER_OFFSET as _Heap_Allocate_aligned() may produce such user
@@ -82,6 +82,6 @@ bool _Heap_Size_of_user_area(
   *size = _Addresses_Subtract ( next_block, starting_address )
     + HEAP_BLOCK_HEADER_OFFSET;
 
-  return( TRUE );
+  return( true );
 }
 

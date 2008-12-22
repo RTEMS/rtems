@@ -45,7 +45,7 @@ bool _Objects_Set_name(
 
     d = _Workspace_Allocate( length );
     if ( !d )
-      return FALSE;
+      return false;
 
     if ( the_object->name.name_p ) {
       _Workspace_Free( (void *)the_object->name.name_p );
@@ -64,5 +64,5 @@ bool _Objects_Set_name(
 
   }
 
-  return TRUE;
+  return true;
 }

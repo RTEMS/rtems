@@ -58,7 +58,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
   uint32_t                   index;
   uint32_t                   name_length;
 
-  /* ASSERT: information->is_string == TRUE */
+  /* ASSERT: information->is_string == true */
 
   if ( !id )
     return OBJECTS_INVALID_ADDRESS;

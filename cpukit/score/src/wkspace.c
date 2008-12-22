@@ -38,7 +38,7 @@ void _Workspace_Handler_initialization(void)
   if ( !starting_address || !_Addresses_Is_aligned( starting_address ) )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS
     );
 
@@ -55,7 +55,7 @@ void _Workspace_Handler_initialization(void)
   if ( memory_available == 0 )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
     );
 }
@@ -94,7 +94,7 @@ void *_Workspace_Allocate_or_fatal_error(
   if ( memory == NULL )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
-      TRUE,
+      true,
       INTERNAL_ERROR_WORKSPACE_ALLOCATION
     );
 

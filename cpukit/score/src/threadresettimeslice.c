@@ -69,7 +69,7 @@ void _Thread_Reset_timeslice( void )
     if ( _Thread_Is_heir( executing ) )
       _Thread_Heir = (Thread_Control *) ready->first;
 
-    _Context_Switch_necessary = TRUE;
+    _Context_Switch_necessary = true;
 
   _ISR_Enable( level );
 }

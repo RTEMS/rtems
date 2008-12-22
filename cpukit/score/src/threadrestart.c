@@ -61,8 +61,8 @@ bool _Thread_Restart(
     if ( _Thread_Is_executing ( the_thread ) )
       _Thread_Restart_self();
 
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }

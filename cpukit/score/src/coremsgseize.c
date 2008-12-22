@@ -36,7 +36,7 @@
  *
  *  This kernel routine dequeues a message, copies the message buffer to
  *  a given destination buffer, and frees the message buffer to the
- *  inactive message pool.  The thread will be blocked if wait is TRUE,
+ *  inactive message pool.  The thread will be blocked if wait is true,
  *  otherwise an error will be given to the thread if no messages are available.
  *
  *  Input parameters:
@@ -44,7 +44,7 @@
  *    id                - id of object we are waitig on
  *    buffer            - pointer to message buffer to be filled
  *    size_p            - pointer to the size of buffer to be filled
- *    wait              - TRUE if wait is allowed, FALSE otherwise
+ *    wait              - true if wait is allowed, false otherwise
  *    timeout           - time to wait for a message
  *
  *  Output parameters:  NONE

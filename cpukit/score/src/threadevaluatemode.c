@@ -45,9 +45,9 @@ bool _Thread_Evaluate_mode( void )
 
   if ( !_States_Is_ready( executing->current_state ) ||
        ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) ) {
-    _Context_Switch_necessary = TRUE;
-    return TRUE;
+    _Context_Switch_necessary = true;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }

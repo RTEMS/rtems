@@ -45,8 +45,8 @@
  *    maximum_message_size         - maximum size of each message
  *
  *  Output parameters:
- *    TRUE   - if the message queue is initialized
- *    FALSE  - if the message queue is NOT initialized
+ *    true   - if the message queue is initialized
+ *    false  - if the message queue is NOT initialized
  */
 
 bool _CORE_message_queue_Initialize(

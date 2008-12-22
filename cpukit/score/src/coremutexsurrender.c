@@ -121,11 +121,11 @@ CORE_mutex_Status _CORE_mutex_Surrender(
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
     if(the_mutex->queue.priority_before != holder->current_priority)
-      _Thread_Change_priority(holder,the_mutex->queue.priority_before,TRUE);
+      _Thread_Change_priority(holder,the_mutex->queue.priority_before,true);
 #endif
     if ( holder->resource_count == 0 &&
          holder->real_priority != holder->current_priority ) {
-      _Thread_Change_priority( holder, holder->real_priority, TRUE );
+      _Thread_Change_priority( holder, holder->real_priority, true );
     }
   }
 
@@ -174,7 +174,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
               _Thread_Change_priority(
                 the_thread,
                 the_mutex->Attributes.priority_ceiling,
-                FALSE
+                false
               );
           }
           break;

@@ -42,6 +42,6 @@ void _TOD_Handler_initialization(void)
   _Timestamp_Set_to_zero( &_TOD_Uptime );
 
   /* TOD has not been set */
-  _TOD_Is_set = FALSE;
+  _TOD_Is_set = false;
   _TOD_Activate();
 }

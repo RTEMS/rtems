@@ -41,9 +41,9 @@ bool _User_extensions_Thread_create (
         the_thread
       );
       if ( !status )
-        return FALSE;
+        return false;
     }
   }
 
-  return TRUE;
+  return true;
 }

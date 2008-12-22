@@ -28,16 +28,16 @@ bool _Timespec_Is_valid(
 )
 {
   if ( !time )
-    return FALSE;
+    return false;
 
   if ( time->tv_sec < 0 )
-    return FALSE;
+    return false;
 
   if ( time->tv_nsec < 0 )
-    return FALSE;
+    return false;
 
   if ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }

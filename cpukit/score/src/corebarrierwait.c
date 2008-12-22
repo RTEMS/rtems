@@ -33,7 +33,7 @@
  *  Input parameters:
  *    the_barrier - pointer to barrier control block
  *    id          - id of object to wait on
- *    wait        - TRUE if wait is allowed, FALSE otherwise
+ *    wait        - true if wait is allowed, false otherwise
  *    timeout     - number of ticks to wait (0 means forever)
  *    api_barrier_mp_support - api dependent MP support actions
  *
