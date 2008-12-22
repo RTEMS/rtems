@@ -155,12 +155,12 @@ RTEMS_INLINE_ROUTINE void _Heap_Block_insert_after (
 }
 
 /**
- *  Return TRUE if @a value is a multiple of @a alignment,  FALSE otherwise
+ *  Return true if @a value is a multiple of @a alignment,  false otherwise
  *
  *  @param[in] value is the address to verify alignment of.
  *  @param[in] alignment is the alignment factor to verify.
  *
- *  @return This method returns TRUE if the address is aligned and false
+ *  @return This method returns true if the address is aligned and false
  *          otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned (
@@ -208,14 +208,14 @@ RTEMS_INLINE_ROUTINE void _Heap_Align_down (
 }
 
 /**
- *  Return TRUE if @a ptr is aligned at @a alignment boundary,
- *  FALSE otherwise.
+ *  Return true if @a ptr is aligned at @a alignment boundary,
+ *  false otherwise.
  *
  *  @param[in] ptr is the pointer to verify alignment of.
  *  @param[in] alignment is the alignment factor.
  *
- *  @return This method returns TRUE if @a ptr is aligned at @a alignment
- *          boundary, and FALSE otherwise.
+ *  @return This method returns true if @a ptr is aligned at @a alignment
+ *          boundary, and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned_ptr (
   void      *ptr,
@@ -321,12 +321,12 @@ RTEMS_INLINE_ROUTINE void _Heap_Start_of_block (
 }
 
 /**
- *  This function returns TRUE if the previous block of @a the_block
- *  is in use, and FALSE otherwise.
+ *  This function returns true if the previous block of @a the_block
+ *  is in use, and false otherwise.
  *
  *  @param[in] the_block is the block to operate upon.
  *
- *  @return This method returns TRUE if the previous block is used and FALSE
+ *  @return This method returns true if the previous block is used and false
  *          if the previous block is free.
  */
 RTEMS_INLINE_ROUTINE bool _Heap_Is_prev_used (
@@ -351,14 +351,14 @@ RTEMS_INLINE_ROUTINE uint32_t _Heap_Block_size (
 }
 
 /**
- *  This function returns TRUE if @a the_block is within the memory area
- *  managed by @a the_heap, and FALSE otherwise.
+ *  This function returns true if @a the_block is within the memory area
+ *  managed by @a the_heap, and false otherwise.
  *
  *  @param[in] the_heap points to the heap being operated upon
  *  @param[in] the_block is the block address to check.
  *
- *  @return This method returns TRUE if @a the_block appears to have been
- *          allocated from @a the_heap, and FALSE otherwise.
+ *  @return This method returns true if @a the_block appears to have been
+ *          allocated from @a the_heap, and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in (
   Heap_Control *the_heap,

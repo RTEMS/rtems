@@ -48,8 +48,8 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
 }
 
 /**
- *  This routine returns TRUE if the watchdog timer is in the ACTIVE
- *  state, and FALSE otherwise.
+ *  This routine returns true if the watchdog timer is in the ACTIVE
+ *  state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_active(

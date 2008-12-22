@@ -64,8 +64,8 @@ RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
 }
 
 /**
- *  This function returns TRUE if the state is equal to the
- *  "before initialization" state, and FALSE otherwise.
+ *  This function returns true if the state is equal to the
+ *  "before initialization" state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
@@ -76,8 +76,8 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
 }
 
 /**
- *  This function returns TRUE if the state is equal to the
- *  "before multitasking" state, and FALSE otherwise.
+ *  This function returns true if the state is equal to the
+ *  "before multitasking" state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
@@ -88,8 +88,8 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
 }
 
 /**
- *  This function returns TRUE if the state is equal to the
- *  "begin multitasking" state, and FALSE otherwise.
+ *  This function returns true if the state is equal to the
+ *  "begin multitasking" state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_begin_multitasking (
@@ -100,8 +100,8 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_begin_multitasking (
 }
 
 /**
- *  This function returns TRUE if the state is equal to the
- *  "up" state, and FALSE otherwise.
+ *  This function returns true if the state is equal to the
+ *  "up" state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
@@ -112,8 +112,8 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
 }
 
 /**
- *  This function returns TRUE if the state is equal to the
- *  "failed" state, and FALSE otherwise.
+ *  This function returns true if the state is equal to the
+ *  "failed" state, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_failed (

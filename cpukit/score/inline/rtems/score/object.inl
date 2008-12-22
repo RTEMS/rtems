@@ -115,31 +115,31 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_index(
 }
 
 /**
- *  This function returns TRUE if the api is valid.
+ *  This function returns true if the api is valid.
  *
  *  @param[in] the_api is the api portion of an object ID.
  *
- *  @return This method returns TRUE if the specified api value is valid
- *          and FALSE otherwise.
+ *  @return This method returns true if the specified api value is valid
+ *          and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
   uint32_t   the_api
 )
 {
   if ( !the_api || the_api > OBJECTS_APIS_LAST )
-   return FALSE;
-  return TRUE;
+   return false;
+  return true;
 }
    
 /**
- *  This function returns TRUE if the node is of the local object, and
- *  FALSE otherwise.
+ *  This function returns true if the node is of the local object, and
+ *  false otherwise.
  *
  *  @param[in] node is the node number and corresponds to the node number
  *         portion of an object ID.
  *
- *  @return This method returns TRUE if the specified node is the local node
- *          and FALSE otherwise.
+ *  @return This method returns true if the specified node is the local node
+ *          and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
   uint32_t   node
@@ -149,15 +149,15 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
 }
 
 /**
- *  This function returns TRUE if the id is of a local object, and
- *  FALSE otherwise.
+ *  This function returns true if the id is of a local object, and
+ *  false otherwise.
  *
  *  @param[in] id is an object ID
  *
- *  @return This method returns TRUE if the specified object Id is local
- *          and FALSE otherwise.
+ *  @return This method returns true if the specified object Id is local
+ *          and false otherwise.
  *
- *  @note On a single processor configuration, this always returns TRUE.
+ *  @note On a single processor configuration, this always returns true.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
   Objects_Id id
@@ -166,19 +166,19 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
 #if defined(RTEMS_MULTIPROCESSING)
   return _Objects_Is_local_node( _Objects_Get_node(id) );
 #else
-  return TRUE;
+  return true;
 #endif
 }
 
 /**
- *  This function returns TRUE if left and right are equal,
- *  and FALSE otherwise.
+ *  This function returns true if left and right are equal,
+ *  and false otherwise.
  *
  *  @param[in] left is the Id on the left hand side of the comparison
  *  @param[in] right is the Id on the right hand side of the comparison
  *
- *  @return This method returns TRUE if the specified object IDs are equal
- *          and FALSE otherwise.
+ *  @return This method returns true if the specified object IDs are equal
+ *          and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
   Objects_Id left,
@@ -310,7 +310,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
     the_object
   );
 
-  /* ASSERT: information->is_string == FALSE */ 
+  /* ASSERT: information->is_string == false */ 
   the_object->name.name_u32 = name;
 }
 

@@ -32,11 +32,11 @@
 #include <rtems/score/threadq.h>
 
 /**
- *  This function returns TRUE if the priority attribute is
- *  enabled in the @a attribute_set and FALSE otherwise.
+ *  This function returns true if the priority attribute is
+ *  enabled in the @a attribute_set and false otherwise.
  *
  *  @param[in] the_attribute is the attribute set to test
- *  @return TRUE if the priority attribute is enabled
+ *  @return true if the priority attribute is enabled
  */
 RTEMS_INLINE_ROUTINE bool _CORE_semaphore_Is_priority(
   CORE_semaphore_Attributes *the_attribute
@@ -60,13 +60,13 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
 
 /**
  *  This routine attempts to receive a unit from the_semaphore.
- *  If a unit is available or if the wait flag is FALSE, then the routine
+ *  If a unit is available or if the wait flag is false, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
  *  @param[in] the_semaphore is the semaphore to obtain
  *  @param[in] id is the Id of the owning API level Semaphore object
- *  @param[in] wait is TRUE if the thread is willing to wait
+ *  @param[in] wait is true if the thread is willing to wait
  *  @param[in] timeout is the maximum number of ticks to block
  *  @param[in] level_p is a temporary variable used to contain the ISR
  *         disable level cookie

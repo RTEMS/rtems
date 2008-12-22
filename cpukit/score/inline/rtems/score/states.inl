@@ -55,8 +55,8 @@ RTEMS_INLINE_ROUTINE States_Control _States_Clear (
 }
 
 /**
- *  This function returns TRUE if the_states indicates that the
- *  state is READY, and FALSE otherwise.
+ *  This function returns true if the_states indicates that the
+ *  state is READY, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_ready (
@@ -67,8 +67,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_ready (
 }
 
 /**
- *  This function returns TRUE if the DORMANT state is the ONLY state
- *  set in the_states, and FALSE otherwise.
+ *  This function returns true if the DORMANT state is the ONLY state
+ *  set in the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_only_dormant (
@@ -79,8 +79,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_only_dormant (
 }
 
 /**
- *  This function returns TRUE if the DORMANT state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the DORMANT state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
@@ -91,8 +91,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
 }
 
 /**
- *  This function returns TRUE if the SUSPENDED state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the SUSPENDED state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
@@ -103,8 +103,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
 }
 
 /**
- *  This function returns TRUE if the TRANSIENT state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the TRANSIENT state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_transient (
@@ -115,8 +115,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_transient (
 }
 
 /**
- *  This function returns TRUE if the DELAYING state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the DELAYING state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
@@ -127,8 +127,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_BUFFER state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_BUFFER state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
@@ -139,8 +139,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_SEGMENT state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_SEGMENT state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_segment (
@@ -151,8 +151,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_segment (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_MESSAGE state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_MESSAGE state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_message (
@@ -163,8 +163,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_message (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_EVENT state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_EVENT state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
@@ -175,8 +175,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_MUTEX state
- *  is set in the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_MUTEX state
+ *  is set in the_states, and false otherwise.
  */
  
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_mutex (
@@ -187,8 +187,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_mutex (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_SEMAPHORE state
- *  is set in the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_SEMAPHORE state
+ *  is set in the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
@@ -199,8 +199,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_TIME state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_TIME state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
@@ -211,8 +211,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_TIME state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_TIME state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
@@ -223,8 +223,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
 }
 
 /**
- *  This function returns TRUE if the WAITING_FOR_PERIOD state is set in
- *  the_states, and FALSE otherwise.
+ *  This function returns true if the WAITING_FOR_PERIOD state is set in
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
@@ -235,9 +235,9 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
 }
 
 /**
- *  This function returns TRUE if one of the states which indicates
+ *  This function returns true if one of the states which indicates
  *  that a task is blocked waiting for a local resource is set in
- *  the_states, and FALSE otherwise.
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
@@ -248,9 +248,9 @@ RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
 }
 
 /**
- *  This function returns TRUE if one of the states which indicates
+ *  This function returns true if one of the states which indicates
  *  that a task is blocked waiting for a local resource is set in
- *  the_states, and FALSE otherwise.
+ *  the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
@@ -261,8 +261,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
 }
 
 /**
- *  This function returns TRUE if one of the states which indicates
- *  that a task is blocked is set in the_states, and FALSE otherwise.
+ *  This function returns true if one of the states which indicates
+ *  that a task is blocked is set in the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_blocked (
@@ -273,8 +273,8 @@ RTEMS_INLINE_ROUTINE bool _States_Is_blocked (
 }
 
 /**
- *  This function returns TRUE if any of the states in the mask
- *  are set in the_states, and FALSE otherwise.
+ *  This function returns true if any of the states in the mask
+ *  are set in the_states, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Are_set (

@@ -48,8 +48,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
 }
 
 /**
- *  This function returns TRUE if the_thread is the currently executing
- *  thread, and FALSE otherwise.
+ *  This function returns true if the_thread is the currently executing
+ *  thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
@@ -60,8 +60,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
 }
 
 /**
- *  This function returns TRUE if the_thread is the heir
- *  thread, and FALSE otherwise.
+ *  This function returns true if the_thread is the heir
+ *  thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
@@ -72,8 +72,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
 }
 
 /**
- *  This function returns TRUE if the currently executing thread
- *  is also the heir thread, and FALSE otherwise.
+ *  This function returns true if the currently executing thread
+ *  is also the heir thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_also_the_heir( void )
@@ -121,9 +121,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
 }
 
 /**
- *  This function returns TRUE if the floating point context of
+ *  This function returns true if the floating point context of
  *  the_thread is currently loaded in the floating point unit, and
- *  FALSE otherwise.
+ *  false otherwise.
  */
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
    */
   #if defined(RTEMS_HEAVY_MALLOC_DEBUG)
     if ( _Thread_Dispatch_disable_level == 1 ) {
-      _Heap_Walk( RTEMS_Malloc_Heap,99, FALSE );
+      _Heap_Walk( RTEMS_Malloc_Heap,99, false );
     }
   #endif
 }
@@ -231,7 +231,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 }
 
 /**
- *  This function returns TRUE if dispatching is disabled, and FALSE
+ *  This function returns true if dispatching is disabled, and false
  *  otherwise.
  */
 
@@ -241,7 +241,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 }
 
 /**
- *  This function returns TRUE if dispatching is disabled, and FALSE
+ *  This function returns true if dispatching is disabled, and false
  *  otherwise.
  */
 
@@ -260,7 +260,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 }
 
 /**
- *  This function returns TRUE if the_thread is NULL and FALSE otherwise.
+ *  This function returns true if the_thread is NULL and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
@@ -272,7 +272,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
 
 /** @brief _Thread_Is_proxy_blocking
  *
- *  status which indicates that a proxy is blocking, and FALSE otherwise.
+ *  status which indicates that a proxy is blocking, and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
   uint32_t   code

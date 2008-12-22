@@ -146,8 +146,8 @@ RTEMS_INLINE_ROUTINE
 }
 
 /**
- *  This function returns TRUE if the priority attribute is
- *  enabled in the attribute_set and FALSE otherwise.
+ *  This function returns true if the priority attribute is
+ *  enabled in the attribute_set and false otherwise.
  */
  
 RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_priority(
@@ -190,7 +190,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend_unprotected (
 }
 
 /**
- *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
+ *  This function returns true if the_message_queue is true and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
@@ -201,8 +201,8 @@ RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
 }
 
 /**
- *  This function returns TRUE if notification is enabled on this message
- *  queue and FALSE otherwise.
+ *  This function returns true if notification is enabled on this message
+ *  queue and false otherwise.
  */
  
 RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_notify_enabled (

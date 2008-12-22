@@ -34,8 +34,8 @@
  *
  *  @param[in] the_spinlock will be checked
  *
- *  @return This method will return TRUE if the spinlock is busy
- *          and FALSE otherwise.
+ *  @return This method will return true if the spinlock is busy
+ *          and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_spinlock_Is_busy(
   CORE_spinlock_Control  *the_spinlock

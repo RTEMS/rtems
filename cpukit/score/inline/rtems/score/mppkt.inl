@@ -29,8 +29,8 @@
  */
 
 /**
- *  This function returns TRUE if the the_packet_class is valid,
- *  and FALSE otherwise.
+ *  This function returns true if the the_packet_class is valid,
+ *  and false otherwise.
  *
  *  @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
  *        because this enum starts at lower bound of zero.
@@ -44,8 +44,8 @@ RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
 }
 
 /**
- *  This function returns TRUE if the the_packet_class is null,
- *  and FALSE otherwise.
+ *  This function returns true if the the_packet_class is null,
+ *  and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_null (

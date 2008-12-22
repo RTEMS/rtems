@@ -44,8 +44,8 @@ RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
 }
 
 /**
- *  This function returns TRUE if the_priority if valid for a
- *  user task, and FALSE otherwise.
+ *  This function returns true if the_priority if valid for a
+ *  user task, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
@@ -188,8 +188,8 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
 }
 
 /**
- *  This function returns TRUE if the priority GROUP is empty, and
- *  FALSE otherwise.
+ *  This function returns true if the priority GROUP is empty, and
+ *  false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Priority_Is_group_empty (

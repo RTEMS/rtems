@@ -91,21 +91,21 @@ RTEMS_INLINE_ROUTINE uint32_t   _Addresses_Subtract (
 
 /** @brief Is Address Aligned
  *
- *  This function returns TRUE if the given address is correctly
- *  aligned for this processor and FALSE otherwise.  Proper alignment
+ *  This function returns true if the given address is correctly
+ *  aligned for this processor and false otherwise.  Proper alignment
  *  is based on correctness and efficiency.
  *
  *  @param[in] address is the address being checked for alignment.
  *
- *  @return This method returns TRUE if the address is aligned and
- *          FALSE otherwise.
+ *  @return This method returns true if the address is aligned and
+ *          false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
   void *address
 )
 {
 #if (CPU_ALIGNMENT == 0)
-    return TRUE;
+    return true;
 #else
     return (((uintptr_t)address % CPU_ALIGNMENT) == 0);
 #endif
@@ -113,8 +113,8 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
 
 /** @brief Is Address In Range
  *
- *  This function returns TRUE if the given address is within the
- *  memory range specified and FALSE otherwise.  base is the address
+ *  This function returns true if the given address is within the
+ *  memory range specified and false otherwise.  base is the address
  *  of the first byte in the memory range and limit is the address
  *  of the last byte in the memory range.  The base address is
  *  assumed to be lower than the limit address.
@@ -123,8 +123,8 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
  *  @param[in] base is the lowest address of the range to check against.
  *  @param[in] limit is the highest address of the range to check against.
  *
- *  @return This method returns TRUE if the given @a address is within the
- *  memory range specified and FALSE otherwise.
+ *  @return This method returns true if the given @a address is within the
+ *  memory range specified and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
   void *address,

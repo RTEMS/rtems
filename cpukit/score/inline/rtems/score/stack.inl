@@ -55,12 +55,12 @@ RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
 }
 
 /**
- *  This function returns TRUE if size bytes is enough memory for
- *  a valid stack area on this processor, and FALSE otherwise.
+ *  This function returns true if size bytes is enough memory for
+ *  a valid stack area on this processor, and false otherwise.
  *
  *  @param[in] size is the stack size to check
  *
- *  @return This method returns TRUE if the stack is large enough.
+ *  @return This method returns true if the stack is large enough.
  */
 RTEMS_INLINE_ROUTINE bool _Stack_Is_enough (
   size_t size

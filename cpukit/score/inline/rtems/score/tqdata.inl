@@ -41,9 +41,9 @@ RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
 }
 
 /**
- *  This function returns TRUE if the_priority indicates that the
+ *  This function returns true if the_priority indicates that the
  *  enqueue search should start at the front of this priority
- *  group chain, and FALSE if the search should start at the rear.
+ *  group chain, and false if the search should start at the rear.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_reverse_search (

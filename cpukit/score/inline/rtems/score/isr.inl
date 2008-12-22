@@ -29,8 +29,8 @@
  */
 
 /**
- *  This function returns TRUE if the vector is a valid vector number
- *  for this processor and FALSE otherwise.
+ *  This function returns true if the vector is a valid vector number
+ *  for this processor and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _ISR_Is_vector_number_valid (
@@ -41,8 +41,8 @@ RTEMS_INLINE_ROUTINE bool _ISR_Is_vector_number_valid (
 }
 
 /**
- *  This function returns TRUE if handler is the entry point of a valid
- *  use interrupt service routine and FALSE otherwise.
+ *  This function returns true if handler is the entry point of a valid
+ *  use interrupt service routine and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _ISR_Is_valid_user_handler (
