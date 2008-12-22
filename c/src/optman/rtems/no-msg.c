@@ -25,6 +25,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/interr.h>
 
-void _Message_queue_Manager_initialization(uint32_t   maximum_message_queues)
+void _Message_queue_Manager_initialization(void)
 {
 }

@@ -24,7 +24,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/interr.h>
 
-void _Semaphore_Manager_initialization(uint32_t   maximum_semaphores)
+void _Semaphore_Manager_initialization(void)
 {
 }
 

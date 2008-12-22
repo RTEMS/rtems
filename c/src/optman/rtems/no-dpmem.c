@@ -21,6 +21,6 @@
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/dpmem.h>
 
-void _Dual_ported_memory_Manager_initialization(uint32_t   maximum_ports)
+void _Dual_ported_memory_Manager_initialization(void)
 {
 }

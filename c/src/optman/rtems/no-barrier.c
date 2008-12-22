@@ -17,6 +17,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/barrier.h>
 
-void _Barrier_Manager_initialization(uint32_t   maximum_barriers)
+void _Barrier_Manager_initialization(void)
 {
 }
