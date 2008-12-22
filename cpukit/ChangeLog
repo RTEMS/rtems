@@ -1,5 +1,6 @@
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/netinet/in_proto.c: Add missing initializers.
 	* libnetworking/net/rtsock.c: Add missing initializers.
 	* libnetworking/libc/res_debug.c: Add missing initializers.
 
