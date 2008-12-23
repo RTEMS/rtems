@@ -21,6 +21,7 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package		%{nil}
 %else
 %define _exeext %{nil}
 %endif
@@ -28,7 +29,6 @@
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
 %define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -44,7 +44,7 @@ Name:		rtems-4.10-m32c-rtems4.10-gdb
 Summary:	Gdb for target m32c-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -81,7 +81,7 @@ BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.10-gdb-common
 
 Source0: ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20081003.diff
+Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20081217.diff
 
 %description
 GDB for target m32c-rtems4.10

@@ -21,6 +21,7 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package		%{nil}
 %else
 %define _exeext %{nil}
 %endif
@@ -28,7 +29,6 @@
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
 %define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -42,8 +42,8 @@
 %define gcc_version 4.3.2
 %define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
-%define newlib_pkgvers		1.16.0.cvs.20081216
-%define newlib_version		1.16.0
+%define newlib_pkgvers		1.17.0
+%define newlib_version		1.17.0
 %define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
 %define mpfr_version	2.3.1
@@ -53,7 +53,7 @@ Summary:      	avr-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	19%{?dist}
+Release:      	20%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -113,7 +113,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-200
 
 %if "%{newlib_version}" == "1.16.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081216.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081223.diff
 %endif
 %{?_without_sources:NoSource:	50}
 

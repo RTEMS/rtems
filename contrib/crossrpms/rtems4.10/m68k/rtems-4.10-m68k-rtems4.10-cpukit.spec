@@ -3,12 +3,25 @@
 # 	http://www.rtems.org/bugzilla
 #
 
-%define _prefix			/opt/rtems-4.10
-%define _infodir		%{_prefix}/info
-%define _mandir			%{_prefix}/man
+%define _prefix                 /opt/rtems-4.10
+%define _exec_prefix            %{_prefix}
+%define _bindir                 %{_exec_prefix}/bin
+%define _sbindir                %{_exec_prefix}/sbin
+%define _libexecdir             %{_exec_prefix}/libexec
+%define _datarootdir            %{_prefix}/share
+%define _datadir                %{_datarootdir}
+%define _sysconfdir             %{_prefix}/etc
+%define _sharedstatedir         %{_prefix}/com
+%define _localstatedir          %{_prefix}/var
+%define _includedir             %{_prefix}/include
+%define _libdir                 %{_exec_prefix}/%{_lib}
+%define _mandir                 %{_datarootdir}/man
+%define _infodir                %{_datarootdir}/info
+%define _localedir              %{_datarootdir}/locale
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package		%{nil}
 %else
 %define _exeext %{nil}
 %endif
@@ -16,7 +29,6 @@
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
 %define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
 %endif
 
 %if "%{_build}" != "%{_host}"
