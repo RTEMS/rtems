@@ -55,11 +55,8 @@ extern "C" {
 #define SD_CARD_N_AC_MAX_DEFAULT 8
 
 typedef struct {
-	rtems_libi2c_drv_t driver;
-	int table_index;
-	rtems_device_minor_number minor;
 	const char *device_name;
-	const char *disk_device_name;
+	int bus;
 	rtems_libi2c_tfr_mode_t transfer_mode;
 	uint8_t command [SD_CARD_COMMAND_SIZE];
 	uint8_t response [SD_CARD_COMMAND_SIZE];
@@ -73,9 +70,11 @@ typedef struct {
 	bool schedule_if_busy;
 } sd_card_driver_entry;
 
-extern const rtems_driver_address_table sd_card_driver_ops;
-
 extern sd_card_driver_entry sd_card_driver_table [];
+
+extern size_t sd_card_driver_table_size;
+
+rtems_status_code sd_card_register( void);
 
 #ifdef __cplusplus
 }

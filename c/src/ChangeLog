@@ -1,3 +1,8 @@
+2008-11-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Removed high
+	level LibI2C interface.  Added generic block IO functions.
+
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* optman/rtems/no-barrier.c, optman/rtems/no-dpmem.c,
