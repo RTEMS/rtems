@@ -1,5 +1,6 @@
 2008-12-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/Makefile.am: Move src/malloc_p.h to *_SOURCES.
 	* rtems/include/rtems/rtems/support.h,
 	rtems/include/rtems/rtems/region.h,
 	rtems/include/rtems/rtems/intr.h,
