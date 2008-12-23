@@ -88,7 +88,7 @@ static u_long	div_sendspace = DIVSNDQ;	/* XXX sysctl ? */
 static u_long	div_recvspace = DIVRCVQ;	/* XXX sysctl ? */
 
 /* Optimization: have this preinitialized */
-static struct sockaddr_in divsrc = { sizeof(divsrc), AF_INET, 0, 0, { 0 } };
+static struct sockaddr_in divsrc = { sizeof(divsrc), AF_INET, 0, { 0 }, { 0 } };
 
 /* Internal functions */
 
