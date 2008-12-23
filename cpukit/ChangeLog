@@ -1,5 +1,13 @@
 2008-12-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/support.h,
+	rtems/include/rtems/rtems/region.h,
+	rtems/include/rtems/rtems/intr.h,
+	rtems/include/rtems/rtems/clock.h:
+	Eliminate TRUE/FALSE.
+
+2008-12-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libi2c/libi2c.c: Add missing initializers.
 	* libmisc/dummy/dummy.c: Add missing initializers.
 	* libnetworking/netinet/ip_icmp.c: Add missing initializers.
