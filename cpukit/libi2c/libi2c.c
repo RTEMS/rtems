@@ -113,12 +113,12 @@ static struct i2cbus
   volatile short waiting;
   volatile char started;
   char *name;
-} busses[MAX_NO_BUSSES] = { { 0 } };
+} busses[MAX_NO_BUSSES] = { { 0, 0, 0, 0, 0 } };
 
 static struct
 {
   rtems_libi2c_drv_t *drv;
-} drvs[MAX_NO_DRIVERS] = { { 0} };
+} drvs[MAX_NO_DRIVERS] = { { 0 } };
 
 static rtems_id libmutex = 0;
 

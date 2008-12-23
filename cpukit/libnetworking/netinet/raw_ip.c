@@ -98,7 +98,7 @@ rip_init(void)
 	ripcbinfo.hashbase = hashinit(1, M_PCB, &ripcbinfo.hashmask);
 }
 
-static struct	sockaddr_in ripsrc = { sizeof(ripsrc), AF_INET };
+static struct	sockaddr_in ripsrc = { sizeof(ripsrc), AF_INET, 0, {0}, {0} };
 /*
  * Setup generic address and protocol structures
  * for raw_input routine, then pass them along with

@@ -778,4 +778,5 @@ static const rtems_filesystem_file_handlers_r socket_handlers = {
 	NULL,			/* fsync */
 	NULL,			/* fdatasync */
 	rtems_bsdnet_fcntl,	/* fcntl */
+	0			/* rmnod */
 };

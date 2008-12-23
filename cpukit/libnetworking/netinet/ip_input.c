@@ -224,7 +224,7 @@ ip_init(void)
 
 }
 
-static struct	sockaddr_in ipaddr = { sizeof(ipaddr), AF_INET };
+static struct	sockaddr_in ipaddr = { sizeof(ipaddr), AF_INET, 0, {0}, {0} };
 static struct	route ipforward_rt;
 
 /*

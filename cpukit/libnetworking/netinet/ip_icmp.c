@@ -215,9 +215,9 @@ freeit:
 	m_freem(n);
 }
 
-static struct sockaddr_in icmpsrc = { sizeof (struct sockaddr_in), AF_INET };
-static struct sockaddr_in icmpdst = { sizeof (struct sockaddr_in), AF_INET };
-static struct sockaddr_in icmpgw = { sizeof (struct sockaddr_in), AF_INET };
+static struct sockaddr_in icmpsrc = { sizeof (struct sockaddr_in), AF_INET, 0, {0}, {0} };
+static struct sockaddr_in icmpdst = { sizeof (struct sockaddr_in), AF_INET, 0, {0}, {0} };
+static struct sockaddr_in icmpgw = { sizeof (struct sockaddr_in), AF_INET, 0, {0}, {0} };
 
 /*
  * Process a received ICMP message.

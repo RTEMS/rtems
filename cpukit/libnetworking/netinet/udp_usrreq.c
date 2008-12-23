@@ -84,7 +84,7 @@ struct	inpcbinfo udbinfo;
 SYSCTL_STRUCT(_net_inet_udp, UDPCTL_STATS, stats, CTLFLAG_RD,
 	&udpstat, udpstat, "");
 
-static struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET };
+static struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET, 0, {0}, {0} };
 
 static	void udp_detach(struct inpcb *);
 static	int udp_output(struct inpcb *, struct mbuf *, struct mbuf *,

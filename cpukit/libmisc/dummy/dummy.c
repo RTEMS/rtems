@@ -50,6 +50,10 @@ int main( int, char **, char **);
       NULL,                      /* link to next interface */
       "127.0.0.1",               /* IP address */
       "255.0.0.0",               /* IP net mask */
+      0,                         /* hardware_address */
+      0, 0, 0, 0,
+      0, 0, 0,
+      0
   };
 
   struct rtems_bsdnet_config rtems_bsdnet_config = {

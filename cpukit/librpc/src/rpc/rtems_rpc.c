@@ -13,6 +13,23 @@
  */
 static struct _rtems_rpc_task_variables rpc_default = {
 	-1,		/* svc_maxfd */
+	{{0}},		/* svc_svc_fdset */
+	NULL,		/* svc_xports */
+	0,		/* svc_xportssize */
+	0,		/* svc__svc_fdsetsize */		
+	0,		/* svc__svc_fdset */
+	NULL,		/* svc_svc_head */
+	0,		/* clnt_perror_buf */
+	0,		/* clnt_raw_private */
+	0,		/* call_rpc_private */
+	0,		/* svc_raw_private */
+
+	0,		/* svc_simple_proglst */
+	0,		/* svc_simple_pl */
+	0,		/* svc_simple_transp */
+
+	0,		/* rpcdname_default_domain */
+	0		/* svc_auths_Auths */
 };
 
 /*
@@ -20,6 +37,23 @@ static struct _rtems_rpc_task_variables rpc_default = {
  */
 static const struct _rtems_rpc_task_variables rpc_init = {
 	-1,		/* svc_maxfd */
+	{{0}},		/* svc_svc_fdset */
+	NULL,		/* svc_xports */
+	0,		/* svc_xportssize */
+	0,		/* svc__svc_fdsetsize */		
+	0,		/* svc__svc_fdset */
+	NULL,		/* svc_svc_head */
+	0,		/* clnt_perror_buf */
+	0,		/* clnt_raw_private */
+	0,		/* call_rpc_private */
+	0,		/* svc_raw_private */
+
+	0,		/* svc_simple_proglst */
+	0,		/* svc_simple_pl */
+	0,		/* svc_simple_transp */
+
+	0,		/* rpcdname_default_domain */
+	0		/* svc_auths_Auths */
 };
 
 /*
