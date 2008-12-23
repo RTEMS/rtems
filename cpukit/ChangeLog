@@ -1,3 +1,14 @@
+2008-12-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libi2c/libi2c.c: Add missing initializers.
+	* libmisc/dummy/dummy.c: Add missing initializers.
+	* libnetworking/netinet/ip_icmp.c: Add missing initializers.
+	* libnetworking/netinet/ip_input.c: Add missing initializers.
+	* libnetworking/netinet/raw_ip.c: Add missing initializers.
+	* libnetworking/netinet/udp_usrreq.c: Add missing initializers.
+	* libnetworking/rtems/rtems_syscall.c: Add missing initializers.
+	* librpc/src/rpc/rtems_rpc.c: Add missing initializers.
+
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/nfsclient/src/nfs.c: Add missing initializers.
