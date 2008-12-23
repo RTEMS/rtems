@@ -91,7 +91,7 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
     src/malloc_statistics_helpers.c src/malloc_boundary.c \
     src/posix_memalign.c src/rtems_memalign.c src/malloc_deferred.c \
-    src/malloc_sbrk_helpers.c src/malloc_dirtier.c
+    src/malloc_sbrk_helpers.c src/malloc_dirtier.c src/malloc_p.h
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 
@@ -122,7 +122,7 @@ libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMIOS_C_FILES) src/getpagesize.c src/getrusage.c
 endif
 
-EXTRA_DIST = src/TODO src/CASES src/README src/malloc_p.h
+EXTRA_DIST = src/TODO src/CASES src/README
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
