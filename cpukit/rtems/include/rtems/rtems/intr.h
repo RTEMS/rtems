@@ -98,10 +98,10 @@ rtems_status_code rtems_interrupt_catch(
     _ISR_Flash(_isr_cookie)
 
 /**
- *  @brief Returns TRUE if the processor is currently servicing an interrupt
- *  and FALSE otherwise.
+ *  @brief Returns true if the processor is currently servicing an interrupt
+ *  and false otherwise.
  *  
- *  A return value of TRUE indicates that the caller is an interrupt service
+ *  A return value of true indicates that the caller is an interrupt service
  *  routine and @b not a thread.  The directives available to an interrupt
  *  service routine are restricted.
  */

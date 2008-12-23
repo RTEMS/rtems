@@ -62,7 +62,7 @@ extern "C" {
  *
  *  @param[in] the_info
  *
- *  @return TRUE if successful
+ *  @return true if successful
  */
 bool rtems_workspace_get_information(
   Heap_Information_block  *the_info
@@ -77,7 +77,7 @@ bool rtems_workspace_get_information(
  *  @param[in] bytes is the number of bytes to allocate 
  *  @param[in] pointer is the returned pointer to allocated memory
  *
- *  @return TRUE if successful
+ *  @return true if successful
  */
 bool rtems_workspace_allocate(
   size_t   bytes,
@@ -92,7 +92,7 @@ bool rtems_workspace_allocate(
  *
  *  @param[in] pointer is the allocated workspace
  *
- *  @return TRUE if successful
+ *  @return true if successful
  */
 bool rtems_workspace_free(
   void *pointer

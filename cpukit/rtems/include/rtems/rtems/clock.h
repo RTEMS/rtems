@@ -240,12 +240,12 @@ rtems_status_code rtems_clock_get_uptime(
 /**
  *  @brief _TOD_Validate
  *
- *  This support function returns TRUE if @a the_tod contains
- *  a valid time of day, and FALSE otherwise.
+ *  This support function returns true if @a the_tod contains
+ *  a valid time of day, and false otherwise.
  *
  *  @param[in] the_tod is the TOD structure to validate
  *
- *  @return This method returns TRUE if the TOD is valid and FALSE otherwise.
+ *  @return This method returns true if the TOD is valid and false otherwise.
  */
 bool _TOD_Validate(
   rtems_time_of_day *the_tod
