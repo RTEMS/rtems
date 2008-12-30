@@ -73,13 +73,17 @@ AC_CHECK_HEADER([tar.h])
 AC_CHECK_HEADER([sys/errno.h],[],
   [AC_MSG_ERROR([Missing required header sys/errno.h])])
 
-## if libc provides stdint.h, use it.
+## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
 [AC_MSG_ERROR([Required header stdint.h not found])])
 
-## error out if libc doesn't at least provide inttypes.h
+## error out if libc doesn't provide inttypes.h
 AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
 [AC_MSG_ERROR([Required header inttypes.h not found])])
+
+## error out if libc doesn't provide errno.h
+AS_IF([test x"${ac_cv_header_errno_h}" != xyes],
+[AC_MSG_ERROR([Required header errno.h not found])])
 
 AC_HEADER_STDBOOL
 AS_IF([test x"${ac_cv_header_stdbool_h}" != xyes],

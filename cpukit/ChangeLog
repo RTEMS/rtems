@@ -1,3 +1,8 @@
+2008-12-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Require <errno.h>. Cleanup comments.
+	Remove check for <sys/errno.h>.
+
 2008-12-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/Makefile.am: Move src/malloc_p.h to *_SOURCES.
