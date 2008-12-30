@@ -66,7 +66,7 @@ AC_CHECK_FUNCS([ttyname getcwd])
 # </FIXME>
 
 ## Check if the installed toolchain has these headers
-AC_CHECK_HEADER([tar.h])
+AC_CHECK_HEADERS([tar.h errno.h])
 
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
