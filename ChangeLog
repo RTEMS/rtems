@@ -1,3 +1,7 @@
+2008-12-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-bsps.m4: remove stray ")" from rtl22xx_t alias.
+
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/canonical-target-name.m4: Remove tic4x.

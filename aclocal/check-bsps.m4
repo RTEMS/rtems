@@ -34,7 +34,7 @@ AC_MSG_CHECKING([for available BSPs])
 	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
           erc32)             bsps="erc32 sis";;
-          rtl22xx)           bsps="rtl22xx rtl22xx_t)";;
+          rtl22xx)           bsps="rtl22xx rtl22xx_t";;
           lpc24xx)           bsps="lpc2478";;
 	  sim68000)          bsps="sim68000 simcpu32";;
 	  shsim)             bsps="simsh1 simsh2 simsh4";;
