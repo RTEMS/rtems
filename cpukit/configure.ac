@@ -68,11 +68,6 @@ AC_CHECK_FUNCS([ttyname getcwd])
 ## Check if the installed toolchain has these headers
 AC_CHECK_HEADER([tar.h])
 
-## BSD-ism, should not be used in RTEMS, 
-## nevertheless it still is.
-AC_CHECK_HEADER([sys/errno.h],[],
-  [AC_MSG_ERROR([Missing required header sys/errno.h])])
-
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
 [AC_MSG_ERROR([Required header stdint.h not found])])
