@@ -1,5 +1,10 @@
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/threadblockingoperationcancel.c: Remove nested include.
+	Add __attribute__((unused)) to unused function args.
+
+2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/src/coremutexsurrender.c, score/src/coremsgsubmit.c, 
 	score/src/coremsgbroadcast.c, score/src/corebarrierrelease.c:
 	Add __attribute__((unused)) to unused function args.
