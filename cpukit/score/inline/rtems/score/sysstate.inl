@@ -33,13 +33,17 @@
  */
  
 RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
+#if defined(RTEMS_MULTIPROCESSING)
   bool  is_multiprocessing
+#else
+  bool  is_multiprocessing __attribute__((unused))
+#endif
 )
 {
   _System_state_Current = SYSTEM_STATE_BEFORE_INITIALIZATION;
-  #if defined(RTEMS_MULTIPROCESSING)
+#if defined(RTEMS_MULTIPROCESSING)
     _System_state_Is_multiprocessing = is_multiprocessing;
-  #endif
+#endif
 }
  
 /**

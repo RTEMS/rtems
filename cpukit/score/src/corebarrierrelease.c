@@ -45,8 +45,13 @@
 
 uint32_t _CORE_barrier_Release(
   CORE_barrier_Control                *the_barrier,
+#if defined(RTEMS_MULTIPROCESSING)
   Objects_Id                           id,
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
+#else
+  Objects_Id                           id __attribute__((unused)),
+  CORE_barrier_API_mp_support_callout  api_barrier_mp_support __attribute__((unused))
+#endif
 )
 {
   Thread_Control *the_thread;
