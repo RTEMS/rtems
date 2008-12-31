@@ -1,5 +1,9 @@
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/threaddelayended.c, score/src/threadqextractfifo.c,
+	score/src/threadqextractpriority.c, score/src/threadqflush.c,
+	score/src/threadqtimeout.c:
+	Add __attribute__((unused)) to unused function args.
 	* score/src/threadblockingoperationcancel.c: Remove nested include.
 	Add __attribute__((unused)) to unused function args.
 
