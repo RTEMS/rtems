@@ -45,7 +45,7 @@
 
 void _Thread_Delay_ended(
   Objects_Id  id,
-  void       *ignored
+  void       *ignored __attribute__((unused))
 )
 {
   Thread_Control    *the_thread;

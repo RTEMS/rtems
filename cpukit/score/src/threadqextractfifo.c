@@ -43,7 +43,7 @@
  */
 
 void _Thread_queue_Extract_fifo(
-  Thread_queue_Control *the_thread_queue,
+  Thread_queue_Control *the_thread_queue __attribute__((unused)),
   Thread_Control       *the_thread
 )
 {

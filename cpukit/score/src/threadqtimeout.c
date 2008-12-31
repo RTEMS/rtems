@@ -39,7 +39,7 @@
 
 void _Thread_queue_Timeout(
   Objects_Id  id,
-  void       *ignored
+  void       *ignored __attribute__((unused))
 )
 {
   Thread_Control       *the_thread;

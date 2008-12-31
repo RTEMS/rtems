@@ -41,7 +41,11 @@
 
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
+#if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_Flush_callout  remote_extract_callout,
+#else
+  Thread_queue_Flush_callout  remote_extract_callout __attribute__((unused)),
+#endif
   uint32_t                    status
 )
 {
