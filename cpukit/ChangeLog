@@ -1,3 +1,7 @@
+2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/src/timerserver.c: Remove _Timer_Server_body warnings.
+
 2008-12-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require <errno.h>. Cleanup comments.

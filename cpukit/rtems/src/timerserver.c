@@ -219,8 +219,8 @@ static void _Timer_Server_process_seconds_chain(
  *
  *  @param[in] ignored is the the task argument that is ignored
  */
-Thread _Timer_Server_body(
-  uint32_t   ignored
+rtems_task _Timer_Server_body(
+  rtems_task_argument argument __attribute__((unused))
 )
 {
   Chain_Control to_fire;
@@ -317,8 +317,6 @@ Thread _Timer_Server_body(
       (*watch->routine)( watch->id, watch->user_data );
     }
   }
-
-  return 0;   /* unreached - only to remove warnings */
 }
 
 /**
@@ -462,7 +460,7 @@ rtems_status_code rtems_timer_initiate_server(
    */
   status = rtems_task_start(
     id,                                    /* the id from create */
-    (rtems_task_entry) _Timer_Server_body, /* the timer server entry point */
+    _Timer_Server_body,                    /* the timer server entry point */
     0                                      /* there is no argument */
   );
   
