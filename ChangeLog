@@ -1,3 +1,8 @@
+2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* config-ml.in: Comment out arm/thumb exception (Add arm/thumb
+	multilib).
+
 2008-12-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-bsps.m4: remove stray ")" from rtl22xx_t alias.
