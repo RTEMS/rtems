@@ -1,10 +1,10 @@
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* score/src/coremsgsubmit.c, score/src/coremsgbroadcast.c,
-	  score/src/corebarrierrelease.c:
-	  Add __attribute__((unused)) to unused function args.
+	* score/src/coremutexsurrender.c, score/src/coremsgsubmit.c, 
+	score/src/coremsgbroadcast.c, score/src/corebarrierrelease.c:
+	Add __attribute__((unused)) to unused function args.
 	* score/inline/rtems/score/sysstate.inl:
-	  Add __attribute__((unused)) to unused function args.
+	Add __attribute__((unused)) to unused function args.
 	* rtems/src/timerserver.c: Remove _Timer_Server_body warnings.
 
 2008-12-29	Ralf Corsépius <ralf.corsepius@rtems.org>
