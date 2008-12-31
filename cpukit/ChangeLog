@@ -1,6 +1,7 @@
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* score/src/corebarrierrelease.c:
+	* score/src/coremsgsubmit.c, score/src/coremsgbroadcast.c,
+	  score/src/corebarrierrelease.c:
 	  Add __attribute__((unused)) to unused function args.
 	* score/inline/rtems/score/sysstate.inl:
 	  Add __attribute__((unused)) to unused function args.
