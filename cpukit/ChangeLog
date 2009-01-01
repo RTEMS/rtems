@@ -1,3 +1,24 @@
+2009-01-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* itron/src/acp_por.c, itron/src/act_cyc.c, itron/src/cal_por.c,
+	itron/src/can_wup.c, itron/src/chg_iXX.c, itron/src/clr_flg.c,
+	itron/src/cre_flg.c, itron/src/cre_mpf.c, itron/src/cre_mpl.c,
+	itron/src/cre_por.c, itron/src/def_alm.c, itron/src/def_cyc.c,
+	itron/src/def_int.c, itron/src/del_flg.c, itron/src/del_mpf.c,
+	itron/src/del_mpl.c, itron/src/del_por.c, itron/src/dis_int.c,
+	itron/src/ena_int.c, itron/src/fwd_por.c, itron/src/get_blf.c,
+	itron/src/get_blk.c, itron/src/get_tim.c, itron/src/pacp_por.c,
+	itron/src/pcal_por.c, itron/src/pget_blf.c, itron/src/pget_blk.c,
+	itron/src/pol_flg.c, itron/src/ref_alm.c, itron/src/ref_cyc.c,
+	itron/src/ref_flg.c, itron/src/ref_iXX.c, itron/src/ref_mpf.c,
+	itron/src/ref_mpl.c, itron/src/ref_por.c, itron/src/rel_blf.c,
+	itron/src/rel_blk.c, itron/src/ret_wup.c, itron/src/rpl_rdv.c,
+	itron/src/set_flg.c, itron/src/set_tim.c, itron/src/sta_tsk.c,
+	itron/src/tacp_por.c, itron/src/tcal_por.c, itron/src/tget_blf.c,
+	itron/src/tget_blk.c, itron/src/tslp_tsk.c, itron/src/twai_flg.c,
+	itron/src/wai_flg.c, itron/src/wup_tsk.c:
+	Add __attribute__((unused)) to unused function args.
+
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/src/threaddelayended.c, score/src/threadqextractfifo.c,
