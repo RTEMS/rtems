@@ -22,8 +22,8 @@
  */
 
 ER cre_mpl(
-  ID      mplid,
-  T_CMPL *pk_cmpl
+  ID      mplid __attribute__((unused)),
+  T_CMPL *pk_cmpl __attribute__((unused))
 )
 {
   return E_OK;

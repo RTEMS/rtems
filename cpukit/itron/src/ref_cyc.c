@@ -26,7 +26,7 @@
 
 ER ref_cyc(
   T_RCYC *pk_rcyc,
-  HNO     cycno
+  HNO     cycno __attribute__((unused))
 )
 {
 #if 0

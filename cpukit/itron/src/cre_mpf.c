@@ -22,8 +22,8 @@
  */
 
 ER cre_mpf(
-  ID      mpfid,
-  T_CMPF *pk_cmpf
+  ID      mpfid __attribute__((unused)),
+  T_CMPF *pk_cmpf __attribute__((unused))
 )
 {
   return E_OK;

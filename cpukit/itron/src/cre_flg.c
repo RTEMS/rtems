@@ -22,8 +22,8 @@
  */
 
 ER cre_flg(
-  ID      flgid,
-  T_CFLG *pk_cflg
+  ID      flgid __attribute__((unused)),
+  T_CFLG *pk_cflg __attribute__((unused))
 )
 {
   return E_OK;

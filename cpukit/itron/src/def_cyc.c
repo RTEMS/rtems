@@ -25,7 +25,7 @@
  */
 
 ER def_cyc(
-  HNO     cycno,
+  HNO     cycno __attribute__((unused)),
   T_DCYC *pk_dcyc
 )
 {

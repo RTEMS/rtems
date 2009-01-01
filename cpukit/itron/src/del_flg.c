@@ -22,7 +22,7 @@
  */
 
 ER del_flg(
-  ID flgid
+  ID flgid __attribute__((unused))
 )
 {
   return E_OK;

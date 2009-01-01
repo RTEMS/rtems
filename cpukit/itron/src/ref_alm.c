@@ -25,8 +25,8 @@
  */
 
 ER ref_alm(
-  T_RALM *pk_ralm,
-  HNO     almno
+  T_RALM *pk_ralm __attribute__((unused)),
+  HNO     almno __attribute__((unused))
 )
 {
   return E_OK;

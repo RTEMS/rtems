@@ -22,8 +22,8 @@
  */
 
 ER set_flg(
-  ID   flgid,
-  UINT setptn
+  ID   flgid __attribute__((unused)),
+  UINT setptn __attribute__((unused))
 )
 {
   return E_OK;

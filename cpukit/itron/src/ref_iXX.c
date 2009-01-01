@@ -22,7 +22,7 @@
  */
 
 ER ref_iXX(
-  UINT *p_iXXXX
+  UINT *p_iXXXX __attribute__((unused))
 )
 {
   return E_OK;

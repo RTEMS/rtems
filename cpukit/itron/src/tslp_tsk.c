@@ -29,7 +29,7 @@
  */
 
 ER tslp_tsk(
-  TMO tmout
+  TMO tmout __attribute__((unused))
 )
 {
   return E_OK;

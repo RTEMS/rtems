@@ -22,11 +22,11 @@
  */
 
 ER acp_por(
-  RNO  *p_rdvno,
-  VP    msg,
-  INT  *p_cmsgsz,
-  ID    porid,
-  UINT  acpptn
+  RNO  *p_rdvno __attribute__((unused)),
+  VP    msg __attribute__((unused)),
+  INT  *p_cmsgsz __attribute__((unused)),
+  ID    porid __attribute__((unused)),
+  UINT  acpptn __attribute__((unused))
 )
 {
   return E_OK;

@@ -22,8 +22,8 @@
  */
 
 ER ref_flg(
-  T_RFLG *pk_rflg,
-  ID      flgid
+  T_RFLG *pk_rflg __attribute__((unused)),
+  ID      flgid __attribute__((unused))
 )
 {
   return E_OK;

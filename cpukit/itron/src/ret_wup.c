@@ -22,7 +22,7 @@
  */
 
 void ret_wup(
-  ID tskid
+  ID tskid __attribute__((unused))
 )
 {
 }

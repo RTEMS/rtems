@@ -22,11 +22,11 @@
  */
 
 ER twai_flg(
-  UINT *p_flgptn,
-  ID    flgid,
-  UINT  waiptn,
-  UINT  wfmode,
-  TMO   tmout
+  UINT *p_flgptn __attribute__((unused)),
+  ID    flgid __attribute__((unused)),
+  UINT  waiptn __attribute__((unused)),
+  UINT  wfmode __attribute__((unused)),
+  TMO   tmout __attribute__((unused))
 )
 {
   return E_OK;

@@ -22,12 +22,12 @@
  */
 
 ER tcal_por(
-  VP    msg,
-  INT  *p_rmsgsz,
-  ID    porid,
-  UINT  calptn,
-  INT   cmsgsz,
-  TMO   tmout
+  VP    msg __attribute__((unused)),
+  INT  *p_rmsgsz __attribute__((unused)),
+  ID    porid __attribute__((unused)),
+  UINT  calptn __attribute__((unused)),
+  INT   cmsgsz __attribute__((unused)),
+  TMO   tmout __attribute__((unused))
 )
 {
   return E_OK;

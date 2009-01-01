@@ -22,8 +22,8 @@
  */
 
 ER ref_por(
-  T_RPOR *pk_rpor,
-  ID      porid
+  T_RPOR *pk_rpor __attribute__((unused)),
+  ID      porid __attribute__((unused))
 )
 {
   return E_OK;

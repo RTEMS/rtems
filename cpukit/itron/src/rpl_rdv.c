@@ -22,9 +22,9 @@
  */
 
 ER rpl_rdv(
-  RNO  rdvno,
-  VP   msg,
-  INT rmsgsz
+  RNO  rdvno __attribute__((unused)),
+  VP   msg __attribute__((unused)),
+  INT rmsgsz __attribute__((unused))
 )
 {
   return E_OK;

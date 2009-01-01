@@ -22,9 +22,9 @@
  */
 
 ER tget_blf(
-  VP *p_blf,
-  ID  mpfid,
-  TMO tmout
+  VP *p_blf __attribute__((unused)),
+  ID  mpfid __attribute__((unused)),
+  TMO tmout __attribute__((unused))
 )
 {
   return E_OK;

@@ -29,7 +29,7 @@
  */
 
 ER wup_tsk(
-  ID tskid
+  ID tskid __attribute__((unused))
 )
 {
   return E_OK;

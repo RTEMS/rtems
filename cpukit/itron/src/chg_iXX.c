@@ -22,7 +22,7 @@
  */
 
 ER chg_iXX(
-  UINT iXXXX
+  UINT iXXXX __attribute__((unused))
 )
 {
   return E_OK;

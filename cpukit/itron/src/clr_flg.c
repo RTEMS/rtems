@@ -22,8 +22,8 @@
  */
 
 ER clr_flg(
-  ID   flgid,
-  UINT clrptn
+  ID   flgid __attribute__((unused)),
+  UINT clrptn __attribute__((unused))
 )
 {
   return E_OK;

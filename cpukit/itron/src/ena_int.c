@@ -22,7 +22,7 @@
  */
 
 ER ena_int(
-  UINT eintno
+  UINT eintno __attribute__((unused))
 )
 {
   return E_OK;

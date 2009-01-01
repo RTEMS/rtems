@@ -22,8 +22,8 @@
  */
 
 ER ref_mpl(
-  T_RMPL *pk_rmpl,
-  ID      mplid
+  T_RMPL *pk_rmpl __attribute__((unused)),
+  ID      mplid __attribute__((unused))
 )
 {
   return E_OK;

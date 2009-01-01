@@ -22,8 +22,8 @@
  */
 
 ER cre_por(
-  ID      porid,
-  T_CPOR *pk_cpor
+  ID      porid __attribute__((unused)),
+  T_CPOR *pk_cpor __attribute__((unused))
 )
 {
   return E_OK;

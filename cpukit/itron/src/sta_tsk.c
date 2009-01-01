@@ -30,7 +30,7 @@
 
 ER sta_tsk(
   ID   tskid,
-  INT  stacd
+  INT  stacd __attribute__((unused))
 )
 {
   register Thread_Control *the_thread;

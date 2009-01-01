@@ -22,8 +22,8 @@
  */
 
 ER ref_mpf(
-  T_RMPF *pk_rmpf,
-  ID      mpfid
+  T_RMPF *pk_rmpf __attribute__((unused)),
+  ID      mpfid __attribute__((unused))
 )
 {
   return E_OK;

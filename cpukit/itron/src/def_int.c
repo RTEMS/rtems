@@ -22,8 +22,8 @@
  */
 
 ER def_int(
-  UINT    dintno,
-  T_DINT *pk_dint
+  UINT    dintno __attribute__((unused)),
+  T_DINT *pk_dint __attribute__((unused))
 )
 {
   return E_OK;

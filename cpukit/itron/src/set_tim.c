@@ -25,7 +25,7 @@
  */
 
 ER set_tim(
-  SYSTIME *pk_tim
+  SYSTIME *pk_tim __attribute__((unused))
 )
 {
 #if 0

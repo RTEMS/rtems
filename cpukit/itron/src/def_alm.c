@@ -25,8 +25,8 @@
  */
 
 ER def_alm(
-  HNO     almno,
-  T_DALM *pk_dalm
+  HNO     almno __attribute__((unused)),
+  T_DALM *pk_dalm __attribute__((unused))
 )
 {
 #if 0

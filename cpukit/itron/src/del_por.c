@@ -22,7 +22,7 @@
  */
 
 ER del_por(
-  ID porid
+  ID porid __attribute__((unused))
 )
 {
   return E_OK;

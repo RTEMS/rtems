@@ -22,7 +22,7 @@
  */
 
 ER del_mpl(
-  ID mplid
+  ID mplid __attribute__((unused))
 )
 {
   return E_OK;

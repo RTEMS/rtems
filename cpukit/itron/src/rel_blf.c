@@ -22,8 +22,8 @@
  */
 
 ER rel_blf(
-  ID mpfid,
-  VP blf
+  ID mpfid __attribute__((unused)),
+  VP blf __attribute__((unused))
 )
 {
   return E_OK;

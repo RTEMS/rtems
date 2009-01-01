@@ -22,8 +22,8 @@
  */
 
 ER pget_blf(
-  VP *p_blf,
-  ID  mpfid
+  VP *p_blf __attribute__((unused)),
+  ID  mpfid __attribute__((unused))
 )
 {
   return E_OK;

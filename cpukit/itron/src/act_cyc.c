@@ -25,7 +25,7 @@
  */
 
 ER act_cyc(
-  HNO   cycno,
+  HNO   cycno __attribute__((unused)),
   UINT  cycact
 )
 {

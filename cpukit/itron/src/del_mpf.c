@@ -22,7 +22,7 @@
  */
 
 ER del_mpf(
-  ID mpfid
+  ID mpfid __attribute__((unused))
 )
 {
   return E_OK;

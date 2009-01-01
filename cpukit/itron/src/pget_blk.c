@@ -22,9 +22,9 @@
  */
 
 ER pget_blk(
-  VP  *p_blk,
-  ID   mplid,
-  INT  blksz
+  VP  *p_blk __attribute__((unused)),
+  ID   mplid __attribute__((unused)),
+  INT  blksz __attribute__((unused))
 )
 {
   return E_OK;

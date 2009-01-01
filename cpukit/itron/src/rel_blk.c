@@ -22,8 +22,8 @@
  */
 
 ER rel_blk(
-  ID  mplid,
-  VP  blk
+  ID  mplid __attribute__((unused)),
+  VP  blk __attribute__((unused))
 )
 {
   return E_OK;

@@ -22,11 +22,11 @@
  */
 
 ER fwd_por(
-  ID    porid,
-  UINT  calptn,
-  RNO   rdvno,
-  VP    msg,
-  INT   cmsgsz
+  ID    porid __attribute__((unused)),
+  UINT  calptn __attribute__((unused)),
+  RNO   rdvno __attribute__((unused)),
+  VP    msg __attribute__((unused)),
+  INT   cmsgsz __attribute__((unused))
 )
 {
   return E_OK;

@@ -28,7 +28,7 @@
  */
 
 ER can_wup(
-  INT *p_wupcnt,
+  INT *p_wupcnt __attribute__((unused)),
   ID   tskid
 )
 {

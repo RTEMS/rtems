@@ -25,7 +25,7 @@
  */
 
 ER get_tim(
-  SYSTIME *pk_tim
+  SYSTIME *pk_tim __attribute__((unused))
 )
 {
   return E_OK;
