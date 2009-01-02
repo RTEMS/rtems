@@ -22,7 +22,7 @@
 #include <rtems/seterr.h>
 
 int aio_suspend(
-  struct aiocb  * const   list[],
+  const struct aiocb  * const list[],
   int                     nent,
   const struct timespec  *timeout
 )
