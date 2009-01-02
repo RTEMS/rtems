@@ -1,3 +1,8 @@
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/aio.h, posix/src/aio_suspend.c: Make aio_suspend()
+	POSIX-compliant.
+
 2009-01-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* itron/src/acp_por.c, itron/src/act_cyc.c, itron/src/cal_por.c,
