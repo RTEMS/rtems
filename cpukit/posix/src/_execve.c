@@ -19,9 +19,9 @@
 #include <rtems/seterr.h>
 
 int _execve(
-  const char *path,
-  char *const argv[],
-  char *const envp[]
+  const char *path __attribute__((unused)),
+  char *const argv[] __attribute__((unused)),
+  char *const envp[] __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

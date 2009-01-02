@@ -30,7 +30,9 @@
 /*
  *  This is the operation that is run when a timer expires
  */
-void _POSIX_Timer_TSR(Objects_Id timer, void *data)
+void _POSIX_Timer_TSR(
+  Objects_Id timer __attribute__((unused)),
+  void *data)
 {
   POSIX_Timer_Control *ptimer;
   bool                 activated;

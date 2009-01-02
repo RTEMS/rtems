@@ -37,7 +37,8 @@
 
 sigset_t  _POSIX_signals_Pending;
 
-void _POSIX_signals_Abnormal_termination_handler( int signo )
+void _POSIX_signals_Abnormal_termination_handler(
+  int signo __attribute__((unused)) )
 {
   exit( 1 );
 }

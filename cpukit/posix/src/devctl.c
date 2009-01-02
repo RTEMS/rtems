@@ -25,10 +25,10 @@
  */
 
 int devctl(
-  int     filedes,
-  void   *dev_data_ptr,
-  size_t  nbyte,
-  int    *dev_info_ptr
+  int     filedes __attribute__((unused)),
+  void   *dev_data_ptr  __attribute__((unused)),
+  size_t  nbyte  __attribute__((unused)),
+  int    *dev_info_ptr  __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

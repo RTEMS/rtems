@@ -31,8 +31,8 @@ Watchdog_Control _POSIX_signals_Ualarm_timer;
  */
 
 void _POSIX_signals_Ualarm_TSR(
-  Objects_Id      id,
-  void           *argument
+  Objects_Id      id __attribute__((unused)),
+  void           *argument __attribute__((unused))
 )
 {
   /*

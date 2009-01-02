@@ -27,7 +27,10 @@
  *  way to call this for RTEMS anymore but it doesn't hurt to leave it.
  */
 
-int mprotect(const void *addr, size_t len, int prot)
+int mprotect(
+  const void *addr __attribute__((unused)),
+  size_t len __attribute__((unused)),
+  int prot __attribute__((unused)) )
 {
   return 0;
 }

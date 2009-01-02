@@ -66,7 +66,7 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
  */
 
 void _POSIX_Threads_Sporadic_budget_TSR(
-  Objects_Id      id,
+  Objects_Id      id __attribute__((unused)),
   void           *argument
 )
 {
@@ -139,7 +139,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  */
 
 bool _POSIX_Threads_Create_extension(
-  Thread_Control *executing,
+  Thread_Control *executing __attribute__((unused)),
   Thread_Control *created
 )
 {
@@ -207,7 +207,7 @@ bool _POSIX_Threads_Create_extension(
  */
 
 User_extensions_routine _POSIX_Threads_Delete_extension(
-  Thread_Control *executing,
+  Thread_Control *executing __attribute__((unused)),
   Thread_Control *deleted
 )
 {

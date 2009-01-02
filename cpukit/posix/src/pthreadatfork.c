@@ -28,9 +28,9 @@
 #include <rtems/seterr.h>
 
 int pthread_atfork(
-  void (*prepare)(void),
-  void (*parent)(void),
-  void (*child)(void)
+  void (*prepare)(void) __attribute__((unused)),
+  void (*parent)(void) __attribute__((unused)),
+  void (*child)(void) __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

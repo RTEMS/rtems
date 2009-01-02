@@ -26,7 +26,7 @@
 #include <rtems/posix/time.h>
 
 int sched_getscheduler(
-  pid_t                     pid
+  pid_t                     pid __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

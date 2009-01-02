@@ -22,8 +22,8 @@
 #include <rtems/seterr.h>
 
 int aio_fsync(
-  int            op,
-  struct aiocb  *aiocbp
+  int            op __attribute__((unused)),
+  struct aiocb  *aiocbp __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

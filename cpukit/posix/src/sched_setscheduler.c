@@ -27,9 +27,9 @@
 #include <rtems/posix/time.h>
 
 int sched_setscheduler(
-  pid_t                     pid,
-  int                       policy,
-  const struct sched_param *param
+  pid_t                     pid __attribute__((unused)),
+  int                       policy __attribute__((unused)),
+  const struct sched_param *param __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

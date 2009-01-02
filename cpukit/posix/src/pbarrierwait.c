@@ -52,7 +52,7 @@ int pthread_barrier_wait(
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
         the_barrier->Object.id,
-        TRUE,
+        true,
         0,
         NULL
       );

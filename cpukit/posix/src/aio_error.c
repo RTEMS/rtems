@@ -22,7 +22,7 @@
 #include <rtems/seterr.h>
 
 int aio_error(
-  const struct aiocb  *aiocbp
+  const struct aiocb  *aiocbp __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );
