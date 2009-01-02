@@ -1,5 +1,12 @@
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/blkdev.c, libblock/src/flashdisk.c,
+	libblock/src/nvdisk-sram.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk.c:
+	Add __attribute__((unused)) to unused function args.
+
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/_execve.c, posix/src/aio_cancel.c,
 	posix/src/aio_error.c, posix/src/aio_fsync.c,
 	posix/src/aio_read.c, posix/src/aio_return.c,
