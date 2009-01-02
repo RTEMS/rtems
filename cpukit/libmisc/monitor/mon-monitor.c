@@ -294,10 +294,10 @@ rtems_monitor_wakeup(void)
 }
 
 void rtems_monitor_debugger_cmd(
-  int                                argc,
-  char                             **argv,
-  const rtems_monitor_command_arg_t *command_arg,
-  bool                               verbose
+  int                                argc __attribute__((unused)),
+  char                             **argv __attribute__((unused)),
+  const rtems_monitor_command_arg_t *command_arg __attribute__((unused)),
+  bool                               verbose __attribute__((unused))
 )
 {
 #ifdef CPU_INVOKE_DEBUGGER
@@ -308,8 +308,8 @@ void rtems_monitor_debugger_cmd(
 void rtems_monitor_pause_cmd(
   int                                argc,
   char                             **argv,
-  const rtems_monitor_command_arg_t *command_arg,
-  bool                               verbose
+  const rtems_monitor_command_arg_t *command_arg __attribute__((unused)),
+  bool                               verbose __attribute__((unused))
 )
 {
     if (argc == 1)
@@ -322,7 +322,7 @@ void rtems_monitor_fatal_cmd(
   int                                argc,
   char                             **argv,
   const rtems_monitor_command_arg_t *command_arg,
-  bool                               verbose
+  bool                               verbose __attribute__((unused))
 )
 {
     if (argc == 1)
@@ -332,10 +332,10 @@ void rtems_monitor_fatal_cmd(
 }
 
 void rtems_monitor_continue_cmd(
-  int                                argc,
-  char                             **argv,
-  const rtems_monitor_command_arg_t *command_arg,
-  bool                               verbose
+  int                                argc __attribute__((unused)),
+  char                             **argv __attribute__((unused)),
+  const rtems_monitor_command_arg_t *command_arg __attribute__((unused)),
+  bool                               verbose __attribute__((unused))
 )
 {
     rtems_monitor_suspend(RTEMS_NO_TIMEOUT);
@@ -344,8 +344,8 @@ void rtems_monitor_continue_cmd(
 void rtems_monitor_node_cmd(
   int                                argc,
   char                             **argv,
-  const rtems_monitor_command_arg_t *command_arg,
-  bool                               verbose
+  const rtems_monitor_command_arg_t *command_arg __attribute__((unused)),
+  bool                               verbose __attribute__((unused))
 )
 {
     uint32_t   new_node = rtems_monitor_default_node;

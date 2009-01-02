@@ -47,7 +47,7 @@ int rtems_shell_main_monitor(int argc, char **argv) {
   return 0;
 }
 
-static bool rtems_shell_register_command(const rtems_monitor_command_entry_t *e, void *arg)
+static bool rtems_shell_register_command(const rtems_monitor_command_entry_t *e, void *arg __attribute__((unused)))
 {
   /* Exclude EXIT (alias quit)*/
   if (strcmp("exit", e->command) != 0) {

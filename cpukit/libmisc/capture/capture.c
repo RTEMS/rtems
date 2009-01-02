@@ -996,7 +996,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
  *
  */
 rtems_status_code
-rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp)
+rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribute__((unused)))
 {
   rtems_extensions_table capture_extensions;
   rtems_name             name;

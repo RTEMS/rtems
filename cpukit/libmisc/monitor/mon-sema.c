@@ -47,7 +47,7 @@ rtems_monitor_sema_canonical(
 
 void
 rtems_monitor_sema_dump_header(
-    bool verbose
+    bool verbose __attribute__((unused))
 )
 {
     printf("\
@@ -64,7 +64,7 @@ rtems_monitor_sema_dump_header(
 void
 rtems_monitor_sema_dump(
     rtems_monitor_sema_t *monitor_sema,
-    bool  verbose
+    bool  verbose __attribute__((unused))
 )
 {
     int length = 0;

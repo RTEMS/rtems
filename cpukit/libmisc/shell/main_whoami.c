@@ -27,8 +27,8 @@
 #include "internal.h"
 
 int rtems_shell_main_whoami(
-  int   argc,
-  char *argv[]
+  int   argc __attribute__((unused)),
+  char *argv[] __attribute__((unused))
 )
 {
   struct passwd *pwd;

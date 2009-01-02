@@ -507,7 +507,7 @@ name:		t = sp->fts_path + NAPPEND(p->fts_parent);
 /* ARGSUSED */
 int
 fts_set(
-	FTS *sp,
+	FTS *sp __attribute__((unused)),
 	FTSENT *p,
 	int instr)
 {

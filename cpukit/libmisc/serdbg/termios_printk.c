@@ -45,7 +45,11 @@
 int termios_printk_fd = -1;
 struct rtems_termios_tty *termios_printk_tty;
 
-static void _termios_printk_null_char( char c ) {return;}
+static void _termios_printk_null_char(
+	char c __attribute__((unused)))
+{
+  return;
+}
 
 BSP_output_char_function_type BSP_output_char = _termios_printk_null_char;
 BSP_polling_getchar_function_type BSP_poll_char;

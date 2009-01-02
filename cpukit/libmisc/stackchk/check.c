@@ -167,7 +167,7 @@ void Stack_check_Initialize( void )
  *  rtems_stack_checker_create_extension
  */
 bool rtems_stack_checker_create_extension(
-  Thread_Control *running,
+  Thread_Control *running __attribute__((unused)),
   Thread_Control *the_thread
 )
 {
@@ -250,8 +250,8 @@ void Stack_check_report_blown_task(
  *  rtems_stack_checker_switch_extension
  */
 void rtems_stack_checker_switch_extension(
-  Thread_Control *running,
-  Thread_Control *heir
+  Thread_Control *running __attribute__((unused)),
+  Thread_Control *heir __attribute__((unused))
 )
 {
   Stack_Control *the_stack = &running->Start.Initial_stack;

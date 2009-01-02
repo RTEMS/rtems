@@ -31,8 +31,8 @@ static int
 rtems_shell_nfs_mounter (
   const char*                device,
   const char*                mntpoint,
-  rtems_shell_filesystems_t* fs,
-  rtems_filesystem_options_t options)
+  rtems_shell_filesystems_t* fs __attribute__((unused)),
+  rtems_filesystem_options_t options __attribute__((unused)))
 {
   char* uidhost;
   char* path;

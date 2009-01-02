@@ -23,8 +23,8 @@
 #include "internal.h"
 
 int rtems_shell_main_stackuse(
-  int   argc,
-  char *argv[]
+  int   argc __attribute__((unused)),
+  char *argv[] __attribute__((unused))
 )
 {
   rtems_stack_checker_report_usage_with_plugin(

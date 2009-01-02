@@ -24,8 +24,8 @@
 #include "internal.h"
 
 int rtems_shell_main_pwd(
-  int   argc,
-  char *argv[]
+  int   argc __attribute__((unused)),
+  char *argv[] __attribute__((unused))
 )
 {
   char dir[1024];

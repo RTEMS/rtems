@@ -43,7 +43,7 @@ rtems_monitor_extension_canonical(
 
 void
 rtems_monitor_extension_dump_header(
-    bool verbose
+    bool verbose __attribute__((unused))
 )
 {
     fprintf(stdout,"\

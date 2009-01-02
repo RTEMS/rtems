@@ -32,7 +32,7 @@ static int open_count = 0;
 */
 
 /* open a message queue with the kernel */
-int uid_open_queue( const char *q_name, int flags, size_t max_msgs )
+int uid_open_queue( const char *q_name, int flags __attribute__((unused)), size_t max_msgs )
 {
    static rtems_name queue_name;
 

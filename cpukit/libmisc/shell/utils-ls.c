@@ -92,7 +92,7 @@ safe_print(rtems_shell_ls_globals* globals, const char *src)
 }
 
 int
-printescaped(rtems_shell_ls_globals* globals, const char *src)
+printescaped(rtems_shell_ls_globals* globals __attribute__((unused)), const char *src)
 {
 	unsigned char c;
 	int n;

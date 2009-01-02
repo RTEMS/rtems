@@ -58,8 +58,8 @@ rtems_monitor_config_canonical(
 
 void *
 rtems_monitor_config_next(
-    void                  *object_info,
-    rtems_monitor_config_t *canonical_config,
+    void                  *object_info __attribute__((unused)),
+    rtems_monitor_config_t *canonical_config __attribute__((unused)),
     rtems_id              *next_id
 )
 {
@@ -82,7 +82,7 @@ failed:
 
 void
 rtems_monitor_config_dump_header(
-    bool verbose
+    bool verbose __attribute__((unused))
 )
 {
     fprintf(stdout,"\
@@ -96,7 +96,7 @@ INITIAL (startup) Configuration Info\n");
 int
 rtems_monitor_config_dump(
     rtems_monitor_config_t *monitor_config,
-    bool                 verbose
+    bool                 verbose __attribute__((unused))
 )
 {
     int     length = 0;

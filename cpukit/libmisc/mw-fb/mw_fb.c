@@ -101,10 +101,10 @@
  * device and maps it to the user space address.
  */
  int ufb_mmap_to_user_space(
-    int fd,
+    int fd __attribute__((unused)),
     void **fb_addr,
     void *physical_addr,
-    unsigned long size
+    unsigned long size __attribute__((unused))
  )
  {
  #ifdef __rtems__
@@ -127,7 +127,7 @@
 /*
  * This function unmaps memory of the FB from the user's space
  */
- int ufb_unmmap_from_user_space( int fd, void *addr )
+ int ufb_unmmap_from_user_space( int fd __attribute__((unused)), void *addr __attribute__((unused)))
  {
     return 0;
  }

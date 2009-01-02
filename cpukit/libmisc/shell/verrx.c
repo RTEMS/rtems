@@ -56,7 +56,7 @@ __weak_alias(verrx, _verrx)
 #endif
 
 __dead void
-verrx(jmp_buf* exit_jmp, int eval, const char *fmt, _BSD_VA_LIST_ ap)
+verrx(jmp_buf* exit_jmp, int eval __attribute__((unused)), const char *fmt, _BSD_VA_LIST_ ap)
 {
 #if 0
 	(void)fprintf(stderr, "%s: ", getprogname());

@@ -65,8 +65,8 @@ static const char* open_usage = "usage: copen [-i] size\n";
 static void
 rtems_capture_cli_open (int                          argc,
                         char**                       argv,
-                        const rtems_monitor_command_arg_t* command_arg,
-                        bool                         verbose)
+                        const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                        bool                         verbose __attribute__((unused)))
 {
   uint32_t          size = 0;
   bool              enable = false;
@@ -134,10 +134,10 @@ rtems_capture_cli_open (int                          argc,
  */
 
 static void
-rtems_capture_cli_close (int                          argc,
-                         char**                       argv,
-                         const rtems_monitor_command_arg_t* command_arg,
-                         bool                         verbose)
+rtems_capture_cli_close (int                          argc __attribute__((unused)),
+                         char**                       argv __attribute__((unused)),
+                         const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                         bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
 
@@ -162,10 +162,10 @@ rtems_capture_cli_close (int                          argc,
  */
 
 static void
-rtems_capture_cli_enable (int                          argc,
-                          char**                       argv,
-                          const rtems_monitor_command_arg_t* command_arg,
-                          bool                         verbose)
+rtems_capture_cli_enable (int                          argc __attribute__((unused)),
+                          char**                       argv __attribute__((unused)),
+                          const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                          bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
 
@@ -190,10 +190,10 @@ rtems_capture_cli_enable (int                          argc,
  */
 
 static void
-rtems_capture_cli_disable (int                          argc,
-                           char**                       argv,
-                           const rtems_monitor_command_arg_t* command_arg,
-                           bool                         verbose)
+rtems_capture_cli_disable (int                          argc __attribute__((unused)),
+                           char**                       argv __attribute__((unused)),
+                           const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                           bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
 
@@ -218,10 +218,10 @@ rtems_capture_cli_disable (int                          argc,
  */
 
 static void
-rtems_capture_cli_task_list (int                          argc,
-                             char**                       argv,
-                             const rtems_monitor_command_arg_t* command_arg,
-                             bool                         verbose)
+rtems_capture_cli_task_list (int                          argc __attribute__((unused)),
+                             char**                       argv __attribute__((unused)),
+                             const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                             bool                         verbose __attribute__((unused)))
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
@@ -306,7 +306,7 @@ rtems_capture_cli_task_list (int                          argc,
  */
 
 static void
-rtems_capture_cli_task_load_thread (rtems_task_argument arg)
+rtems_capture_cli_task_load_thread (rtems_task_argument arg __attribute__((unused)))
 {
   rtems_task_priority ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority floor = rtems_capture_watch_get_floor ();
@@ -457,10 +457,10 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
  */
 
 static void
-rtems_capture_cli_task_load (int                          argc,
-                             char**                       argv,
-                             const rtems_monitor_command_arg_t* command_arg,
-                             bool                         verbose)
+rtems_capture_cli_task_load (int                          argc __attribute__((unused)),
+                             char**                       argv __attribute__((unused)),
+                             const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                             bool                         verbose __attribute__((unused)))
 {
   rtems_status_code   sc;
   rtems_task_priority priority;
@@ -530,10 +530,10 @@ rtems_capture_cli_task_load (int                          argc,
  */
 
 static void
-rtems_capture_cli_watch_list (int                          argc,
-                              char**                       argv,
-                              const rtems_monitor_command_arg_t* command_arg,
-                              bool                         verbose)
+rtems_capture_cli_watch_list (int                          argc __attribute__((unused)),
+                              char**                       argv __attribute__((unused)),
+                              const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                              bool                         verbose __attribute__((unused)))
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
@@ -684,8 +684,8 @@ static char const * watch_add_usage = "usage: cwadd [task name] [id]\n";
 static void
 rtems_capture_cli_watch_add (int                          argc,
                              char**                       argv,
-                             const rtems_monitor_command_arg_t* command_arg,
-                             bool                         verbose)
+                             const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                             bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
   int               arg;
@@ -747,8 +747,8 @@ static char const * watch_del_usage = "usage: cwdel [task name] [id]\n";
 static void
 rtems_capture_cli_watch_del (int                          argc,
                              char**                       argv,
-                             const rtems_monitor_command_arg_t* command_arg,
-                             bool                         verbose)
+                             const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                             bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
   int               arg;
@@ -809,8 +809,8 @@ static char const * watch_control_usage = "usage: cwctl [task name] [id] on/off\
 static void
 rtems_capture_cli_watch_control (int                          argc,
                                  char**                       argv,
-                                 const rtems_monitor_command_arg_t* command_arg,
-                                 bool                         verbose)
+                                 const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                                 bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
   int               arg;
@@ -876,8 +876,8 @@ static char const * watch_global_usage = "usage: cwglob on/off\n";
 static void
 rtems_capture_cli_watch_global (int                          argc,
                                 char**                       argv,
-                                const rtems_monitor_command_arg_t* command_arg,
-                                bool                         verbose)
+                                const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                                bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
   int               arg;
@@ -930,8 +930,8 @@ static char const * watch_ceiling_usage = "usage: cwceil priority\n";
 static void
 rtems_capture_cli_watch_ceiling (int                          argc,
                                  char**                       argv,
-                                 const rtems_monitor_command_arg_t* command_arg,
-                                 bool                         verbose)
+                                 const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                                 bool                         verbose __attribute__((unused)))
 {
   rtems_status_code   sc;
   int                 arg;
@@ -981,8 +981,8 @@ static char const * watch_floor_usage = "usage: cwfloor priority\n";
 static void
 rtems_capture_cli_watch_floor (int                          argc,
                                char**                       argv,
-                               const rtems_monitor_command_arg_t* command_arg,
-                               bool                         verbose)
+                               const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                               bool                         verbose __attribute__((unused)))
 {
   rtems_status_code   sc;
   int                 arg;
@@ -1259,8 +1259,8 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
 static void
 rtems_capture_cli_trigger_set (int                          argc,
                                char**                       argv,
-                               const rtems_monitor_command_arg_t* command_arg,
-                               bool                         verbose)
+                               const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                               bool                         verbose __attribute__((unused)))
 {
   rtems_capture_cli_trigger_worker (1, argc, argv);
 }
@@ -1277,8 +1277,8 @@ rtems_capture_cli_trigger_set (int                          argc,
 static void
 rtems_capture_cli_trigger_clear (int                          argc,
                                  char**                       argv,
-                                 const rtems_monitor_command_arg_t* command_arg,
-                                 bool                         verbose)
+                                 const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                                 bool                         verbose __attribute__((unused)))
 {
   rtems_capture_cli_trigger_worker (0, argc, argv);
 }
@@ -1295,8 +1295,8 @@ rtems_capture_cli_trigger_clear (int                          argc,
 static void
 rtems_capture_cli_trace_records (int                          argc,
                                  char**                       argv,
-                                 const rtems_monitor_command_arg_t* command_arg,
-                                 bool                         verbose)
+                                 const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                                 bool                         verbose __attribute__((unused)))
 {
   rtems_status_code       sc;
   bool                    csv = false;
@@ -1426,8 +1426,8 @@ rtems_capture_cli_trace_records (int                          argc,
 static void
 rtems_capture_cli_flush (int                          argc,
                          char**                       argv,
-                         const rtems_monitor_command_arg_t* command_arg,
-                         bool                         verbose)
+                         const rtems_monitor_command_arg_t* command_arg __attribute__((unused)),
+                         bool                         verbose __attribute__((unused)))
 {
   rtems_status_code sc;
   bool              prime = true;

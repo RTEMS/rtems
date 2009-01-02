@@ -299,7 +299,7 @@ rtems_symbol_name_lookup(
 void *
 rtems_monitor_symbol_next(
     void                   *object_info,
-    rtems_monitor_symbol_t *canonical,
+    rtems_monitor_symbol_t *canonical __attribute__((unused)),
     rtems_id               *next_id
 )
 {
@@ -419,7 +419,7 @@ rtems_monitor_symbol_dump(
 void
 rtems_monitor_symbol_dump_all(
     rtems_symbol_table_t *table,
-    bool                  verbose
+    bool                  verbose __attribute__((unused))
 )
 {
     uint32_t   s;

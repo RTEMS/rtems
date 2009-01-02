@@ -27,8 +27,9 @@
 #include <net/route.h>
 
 
-void mon_ifconfig(int argc, char *argv[],  uint32_t command_arg,
-                  bool verbose)
+void mon_ifconfig(int argc, char *argv[],
+  uint32_t command_arg __attribute__((unused)),
+  bool verbose __attribute__((unused)))
 {
     struct sockaddr_in  ipaddr;
     struct sockaddr_in  dstaddr;
@@ -231,8 +232,9 @@ void mon_ifconfig(int argc, char *argv[],  uint32_t command_arg,
 
 
 
-void mon_route(int argc, char *argv[],  uint32_t command_arg,
-               bool verbose)
+void mon_route(int argc, char *argv[],
+  uint32_t command_arg __attribute__((unused)),
+  bool verbose __attribute__((unused)))
 {
     int                cmd;
     struct sockaddr_in dst;

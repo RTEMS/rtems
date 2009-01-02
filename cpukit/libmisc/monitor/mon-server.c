@@ -112,7 +112,7 @@ done:
 
 void
 rtems_monitor_server_task(
-    rtems_task_argument monitor_flags
+    rtems_task_argument monitor_flags __attribute__((unused))
 )
 {
     rtems_monitor_server_request_t  request;
@@ -215,7 +215,7 @@ rtems_monitor_server_kill(void)
 
 void
 rtems_monitor_server_init(
-    uint32_t   monitor_flags
+    uint32_t   monitor_flags __attribute__((unused))
 )
 {
     #if defined(RTEMS_MULTIPROCESSING)

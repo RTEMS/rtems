@@ -213,7 +213,7 @@ rtems_shell_cmd_t rtems_shell_JOEL_Command = {
  *  appears to be a shell script.
  */
 int rtems_shell_script_file(
-  int   argc,
+  int   argc __attribute__((unused)),
   char *argv[]
 )
 {
@@ -326,4 +326,3 @@ int rtems_shell_script_file(
 
   return 0;
 }
-

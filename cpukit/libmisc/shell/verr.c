@@ -58,7 +58,7 @@ __weak_alias(verr, _verr)
 #endif
 
 __dead void
-verr(jmp_buf* exit_jmp, int eval, const char *fmt, _BSD_VA_LIST_ ap)
+verr(jmp_buf* exit_jmp, int eval __attribute__((unused)), const char *fmt, _BSD_VA_LIST_ ap)
 {
 	int sverrno;
 

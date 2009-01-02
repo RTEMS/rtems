@@ -26,8 +26,8 @@
 #include "internal.h"
 
 int rtems_shell_main_tty(
-  int   argc,
-  char *argv[]
+  int   argc __attribute__((unused)),
+  char *argv[] __attribute__((unused))
 )
 {
   printf("%s\n", ttyname(fileno(stdin)));
