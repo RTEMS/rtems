@@ -1,3 +1,8 @@
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/aio.h, posix/src/aio_suspend.c: Make aio_suspend()
+	POSIX-compliant.
+
 2008-12-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/bdbuf.c: Fix typo having crept in during
