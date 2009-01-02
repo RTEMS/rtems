@@ -1,5 +1,27 @@
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
+	libmisc/devnull/devnull.c, libmisc/monitor/mon-command.c,
+	libmisc/monitor/mon-config.c, libmisc/monitor/mon-driver.c,
+	libmisc/monitor/mon-extension.c, libmisc/monitor/mon-itask.c,
+	libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-network.c,
+	libmisc/monitor/mon-part.c, libmisc/monitor/mon-queue.c,
+	libmisc/monitor/mon-region.c, libmisc/monitor/mon-sema.c,
+	libmisc/monitor/mon-server.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/mon-task.c, libmisc/mw-fb/mw_fb.c,
+	libmisc/mw-fb/mw_uid.c, libmisc/serdbg/termios_printk.c,
+	libmisc/shell/cmds.c, libmisc/shell/fts.c, libmisc/shell/main_cp.c
+	libmisc/shell/main_id.c, libmisc/shell/main_logoff.c,
+	libmisc/shell/main_mount_nfs.c, libmisc/shell/main_pwd.c,
+	libmisc/shell/main_stackuse.c, libmisc/shell/main_tty.c,
+	libmisc/shell/main_whoami.c, libmisc/shell/main_wkspaceinfo.c,
+	libmisc/shell/shell_script.c, libmisc/shell/utils-cp.c,
+	libmisc/shell/utils-ls.c, libmisc/shell/verr.c,
+	libmisc/shell/verrx.c, libmisc/stackchk/check.c:
+	Add __attribute__((unused)) to unused function args.
+
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libblock/src/blkdev.c, libblock/src/flashdisk.c,
 	libblock/src/nvdisk-sram.c, libblock/src/nvdisk.c,
 	libblock/src/ramdisk.c:
