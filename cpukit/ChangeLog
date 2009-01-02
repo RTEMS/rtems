@@ -1,5 +1,6 @@
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.c: Add __attribute__((unused)) to unused function args.
 	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
 	libmisc/devnull/devnull.c, libmisc/monitor/mon-command.c,
 	libmisc/monitor/mon-config.c, libmisc/monitor/mon-driver.c,
