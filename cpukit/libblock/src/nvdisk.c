@@ -768,7 +768,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
 rtems_device_driver
 rtems_nvdisk_initialize (rtems_device_major_number major,
                         rtems_device_minor_number minor,
-                        void*                     arg)
+                        void*                     arg __attribute__((unused)))
 {
   const rtems_nvdisk_config* c = rtems_nvdisk_configuration;
   rtems_nvdisk*              nvd;

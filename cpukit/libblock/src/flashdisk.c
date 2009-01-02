@@ -2434,7 +2434,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
 rtems_device_driver
 rtems_fdisk_initialize (rtems_device_major_number major,
                         rtems_device_minor_number minor,
-                        void*                     arg)
+                        void*                     arg __attribute__((unused)))
 {
   const rtems_flashdisk_config* c = rtems_flashdisk_configuration;
   rtems_flashdisk*              fd;

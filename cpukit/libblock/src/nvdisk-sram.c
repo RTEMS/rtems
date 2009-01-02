@@ -25,8 +25,8 @@
 #endif
 
 static int
-rtems_nvdisk_sram_read (uint32_t device,
-                        uint32_t flags,
+rtems_nvdisk_sram_read (uint32_t device __attribute__((unused)),
+                        uint32_t flags __attribute__((unused)),
                         uint32_t base, 
                         uint32_t offset,
                         void*    buffer,
@@ -37,8 +37,8 @@ rtems_nvdisk_sram_read (uint32_t device,
 }
 
 static int
-rtems_nvdisk_sram_write (uint32_t    device,
-                         uint32_t    flags,
+rtems_nvdisk_sram_write (uint32_t    device __attribute__((unused)),
+                         uint32_t    flags __attribute__((unused)),
                          uint32_t    base, 
                          uint32_t    offset,
                          const void* buffer,
@@ -49,8 +49,8 @@ rtems_nvdisk_sram_write (uint32_t    device,
 }
 
 static int
-rtems_nvdisk_sram_verify (uint32_t    device,
-                          uint32_t    flags,
+rtems_nvdisk_sram_verify (uint32_t    device __attribute__((unused)),
+                          uint32_t    flags __attribute__((unused)),
                           uint32_t    base, 
                           uint32_t    offset,
                           const void* buffer,

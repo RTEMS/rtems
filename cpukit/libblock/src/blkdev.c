@@ -153,7 +153,7 @@ rtems_device_driver
 rtems_blkdev_generic_open(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
-    void                    * arg)
+    void                    * arg __attribute__((unused)))
 {
     dev_t dev;
     rtems_disk_device *dd;
@@ -178,7 +178,7 @@ rtems_device_driver
 rtems_blkdev_generic_close(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
-    void                    * arg)
+    void                    * arg __attribute__((unused)))
 {
     dev_t dev;
     rtems_disk_device *dd;
