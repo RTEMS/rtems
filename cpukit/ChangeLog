@@ -1,5 +1,19 @@
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/_execve.c, posix/src/aio_cancel.c,
+	posix/src/aio_error.c, posix/src/aio_fsync.c,
+	posix/src/aio_read.c, posix/src/aio_return.c,
+	posix/src/aio_suspend.c, posix/src/aio_write.c, posix/src/alarm.c,
+	posix/src/devctl.c, posix/src/lio_listio.c, posix/src/mprotect.c,
+	posix/src/pbarrierwait.c, posix/src/psignal.c, posix/src/pthread.c,
+	posix/src/pthreadatfork.c, posix/src/sched_getparam.c,
+	posix/src/sched_getscheduler.c, posix/src/sched_setparam.c,
+	posix/src/sched_setscheduler.c, posix/src/timertsr.c.
+	posix/src/ualarm.c: Add __attribute__((unused)) to unused function
+	args.
+
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/aio.h, posix/src/aio_suspend.c: Make aio_suspend()
 	POSIX-compliant.
 
