@@ -1,3 +1,9 @@
+2009-01-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/in.h: Add in_addr_t.
+	Re-base "struct in_addr" on in_addr_t (mandated by POSIX). 
+	* libnetworking/netinet/in.h: Remove struct ip_opts (unused).
+
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ftpd/ftpd.c: Add __attribute__((unused)) to unused function args.
