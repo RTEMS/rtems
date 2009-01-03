@@ -1,5 +1,6 @@
 2009-01-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/lib/tftpDriver.c: Use INADDR_ANY/INADDR_BROADCAST.
 	* libnetworking/netinet/in.h: Add in_addr_t.
 	Re-base "struct in_addr" on in_addr_t (mandated by POSIX). 
 	* libnetworking/netinet/in.h: Remove struct ip_opts (unused).
