@@ -221,8 +221,7 @@ struct sockaddr_in {
  *
  * The value IP_PORTRANGE_HIGH changes the range of candidate port numbers
  * into the "high" range.  These are reserved for client outbound connections
- * which do not want to be filtered by any firewalls.  Note that by default
- * this is the same as IP_PORTRANGE_DEFAULT.
+ * which do not want to be filtered by any firewalls.
  *
  * The value IP_PORTRANGE_LOW changes the range to the "low" are
  * that is (by convention) restricted to privileged processes.  This
@@ -433,6 +432,7 @@ struct ip_mreq {
 
 
 #ifdef _KERNEL
+
 struct ifnet; struct mbuf;	/* forward declarations for Standard C */
 
 int	 in_broadcast(struct in_addr, struct ifnet *);
