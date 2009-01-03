@@ -421,9 +421,9 @@ releaseStream (int s)
 }
 
 static int rtems_tftp_evaluate_for_make(
-   const char                         *path,       /* IN     */
+   const char                         *path __attribute__((unused)),       /* IN     */
    rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
-   const char                        **name        /* OUT    */
+   const char                        **name __attribute__((unused))        /* OUT    */
 )
 {  
   pathloc->node_access = NULL;
@@ -540,7 +540,7 @@ static int rtems_tftp_open_worker(
     rtems_libio_t *iop,
     char          *full_path_name,
     uint32_t       flags,
-    uint32_t       mode
+    uint32_t       mode __attribute__((unused))
 )
 {
     struct tftpStream    *tp;
@@ -983,8 +983,8 @@ static ssize_t rtems_tftp_write(
  * Dummy version to let fopen(xxxx,"w") work properly.
  */
 static int rtems_tftp_ftruncate(
-    rtems_libio_t   *iop,
-    off_t           count
+    rtems_libio_t   *iop __attribute__((unused)),
+    off_t           count __attribute__((unused))
 )
 {
     return 0;
