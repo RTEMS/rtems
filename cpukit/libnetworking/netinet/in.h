@@ -40,6 +40,11 @@
 #include <rtems/bsdnet/_types.h>
 #include <rtems/endian.h>
 
+#ifndef _IN_ADDR_T_DECLARED
+typedef uint32_t        	in_addr_t;
+#define _IN_ADDR_T_DECLARED
+#endif
+
 /* Protocols common to RFC 1700, POSIX, and X/Open. */
 #define	IPPROTO_IP		0		/* dummy for IP */
 #define	IPPROTO_ICMP		1		/* control message protocol */
@@ -62,7 +67,7 @@ typedef	__sa_family_t		sa_family_t;
 /* Internet address (a structure for historical reasons). */
 #ifndef _STRUCT_IN_ADDR_DECLARED
 struct in_addr {
-	u_long s_addr;
+	in_addr_t s_addr;
 };
 #define _STRUCT_IN_ADDR_DECLARED
 #endif
