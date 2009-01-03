@@ -302,18 +302,6 @@ struct sockaddr_in {
 #define	IN_LOOPBACKNET		(u_int32_t)127			/* official! */
 
 /*
- * Structure used to describe IP options.
- * Used to store options internally, to pass them to a process,
- * or to restore options retrieved earlier.
- * The ip_dst is used for the first-hop gateway when using a source route
- * (this gets put into the header proper).
- */
-struct ip_opts {
-	struct	in_addr ip_dst;		/* first hop, 0 w/o src rt */
-	char	ip_opts[40];		/* actually variable in size */
-};
-
-/*
  * Options for use with [gs]etsockopt at the IP level.
  * First word of comment is data type; bool is stored in int.
  */
