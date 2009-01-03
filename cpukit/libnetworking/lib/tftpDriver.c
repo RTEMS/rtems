@@ -576,7 +576,7 @@ static int rtems_tftp_open_worker(
         farAddress = rtems_bsdnet_bootp_server_address;
     else
         farAddress.s_addr = inet_addr (hostname);
-    if ((farAddress.s_addr == 0) || (farAddress.s_addr == ~0))
+    if ((farAddress.s_addr == INADDR_ANY) || (farAddress.s_addr == INADDR_BROADCAST))
         return ENOENT;
 
     /*
