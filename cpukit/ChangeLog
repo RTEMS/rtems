@@ -1,3 +1,7 @@
+2009-01-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/scandir.c: Use external scandir if available.
+
 2009-01-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/lib/tftpDriver.c: Add __attribute__((unused)) to
