@@ -447,14 +447,14 @@ NS16550_STATIC int ns16550_set_attributes(
   return 0;
 }
 
-#if defined(BSP_FEATURE_IRQ_EXTENSION)
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
 /*
  *  ns16550_process
  *
  *  This routine is the console interrupt handler for A port.
  */
 
-NS16550_STATIC void ns16550_process( int minor)
+NS16550_STATIC void ns16550_process(int minor)
 {
   console_tbl *c = &Console_Port_Tbl [minor];
   console_data *d = &Console_Port_Data [minor];
@@ -538,14 +538,14 @@ NS16550_STATIC void ns16550_enable_interrupts(
 }
 
 #ifdef BSP_FEATURE_IRQ_EXTENSION
-  NS16550_STATIC void ns16550_isr( rtems_vector_number vector, void *arg)
+  NS16550_STATIC void ns16550_isr(rtems_vector_number vector, void *arg)
   {
     int minor = (int) arg;
 
     ns16550_process( minor);
   }
 #elif defined BSP_FEATURE_IRQ_LEGACY
-  NS16550_STATIC rtems_isr ns16550_isr( void *arg)
+  NS16550_STATIC rtems_isr ns16550_isr(void *arg)
   {
     int minor = (int) arg;
 
