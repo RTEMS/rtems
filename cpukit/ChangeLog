@@ -1,5 +1,6 @@
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* pppd/sys-rtems.c: Remove stray ';' introducing unreachable code.
 	* libcsupport/src/error.c: Remove hpux9 anachronism.
 
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
