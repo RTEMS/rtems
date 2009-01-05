@@ -1,3 +1,7 @@
+2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* src/irq-generic.c: #include <stdlib.h>.
+
 2008-12-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-info.h, src/irq-info.c, src/irq-shell.c: New files.
