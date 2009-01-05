@@ -67,7 +67,7 @@ SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
 
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to compile these.  Hopefully this is a temporary situation.
-if LIBNETWORKING
+if NEWLIB
 SYSTEM_CALL_C_FILES += src/readv.c src/writev.c
 endif
 
