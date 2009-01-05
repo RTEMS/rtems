@@ -1,3 +1,7 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* varvects.h: Fix prototype.
+
 2008-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* context_init.c, context_switch.S, cpu.c, cpu_asm.c: Correct file

@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _VARVECTS_H_
 #define _VARVECTS_H_
 
-typedef void (*_m32c_interrupt_func)() __attribute__((mode(SI)));
+typedef void (*_m32c_interrupt_func)(void) __attribute__((mode(SI)));
 extern _m32c_interrupt_func _var_vects[];
 
 #if defined(__r8c_cpu__) || defined (__m16c_cpu__)
