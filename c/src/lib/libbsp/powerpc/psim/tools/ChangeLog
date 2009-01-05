@@ -1,3 +1,8 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psim-shared: Add catching a hardware exception and assertion as
+	reasons to kill simulator.
+
 2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psim-shared, runtest-bottom: Tidy up more bugs.

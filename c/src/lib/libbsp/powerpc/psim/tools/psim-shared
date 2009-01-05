@@ -18,7 +18,7 @@ gen_device_tree()
     value=-1               # for now assume we are slave in this mode
   else
     case ${1} in 
-      *mp*)
+      *node*)
         enable_sysv_devices="yes"
         case ${1} in
           *node1*) value=1 ;;
@@ -88,15 +88,16 @@ runone()
     #echo run ${testname} forever
     ${RUN} -f ${treefile} ${RUN_DEBUG} ${testname}
   else
+    log=`echo ${testname} | sed -e 's/.exe$/.log/' -e 's/.ralf$/.log/'`
     #echo run ${testname} for maximum ${max_run_time} seconds
-    ${RUN} -f ${treefile} ${RUN_DEBUG} ${testname} &
+    ${RUN} -f ${treefile} ${RUN_DEBUG} ${testname} >${log} 2>&1 &
     pid=$!
 
     # Make sure it won't run forever...
     time_run=0
     while [ $time_run -lt $max_run_time ]
     do
-      # sleep 5s at a time waiting for job to finish or timer to expire
+      # sleep 1s at a time waiting for job to finish or timer to expire
       # if job has exited, then we exit, too.
       sleep 1
       kill -0 $pid 2> /dev/null
@@ -108,11 +109,24 @@ runone()
 	  ran_too_long="yes"
           echo "${testname} killed after running ${max_run_time} seconds"
         fi
+        grep "Suspending faulting task" ${log} >/dev/null 2>&1
+        Fault=$?
+        grep "assertion failed" ${log} >/dev/null 2>&1
+        Assert=$?
+        if [ $Fault -eq 0 -o $Assert -eq 0 ] ; then
+	  kill -9 $pid 2> /dev/null
+          echo "${testname} failed after ${max_run_time} seconds"
+          ran_too_long="no"
+          break
+        fi
       else
         ran_too_long="no"
         break
       fi
     done
+    cat ${log}
+    rm -f ${log}
   fi
+
 }
 
