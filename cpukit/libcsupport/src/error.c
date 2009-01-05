@@ -56,11 +56,6 @@
 #include <string.h>
 #include <unistd.h>		/* _exit() */
 
-/* bug in hpux <errno.h>: no prototypes unless you are C++ */
-#ifdef hpux9
-char *strerror(int);
-#endif
-
 int          rtems_panic_in_progress;
 
 const rtems_assoc_t rtems_status_assoc[] = {
