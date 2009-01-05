@@ -62,6 +62,6 @@ TEST_EXTERN volatile uint32_t   end_time;   /* ending time variable */
 TEST_EXTERN volatile uint32_t   overhead;   /* loop overhead variable */
 
 TEST_EXTERN rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
-TEST_EXTERN rtems_id   Task_name[ OPERATION_COUNT+1 ]; /* array of task names */
+TEST_EXTERN rtems_name Task_name[ OPERATION_COUNT+1 ]; /* array of task names */
 
 /* end of include file */

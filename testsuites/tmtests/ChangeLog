@@ -1,3 +1,8 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/timesys.h: Array of task names should be of type rtems_name
+	not rtems_id.
+
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm01/task1.c, tm02/task1.c, tm03/task1.c, tm04/task1.c, tm05/task1.c,
