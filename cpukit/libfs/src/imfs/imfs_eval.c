@@ -107,9 +107,10 @@ int IMFS_evaluate_permission(
     flags_to_test <<= 6;
   else if ( st_gid == jnode->st_gid )
     flags_to_test <<= 3;
-  else
+  else {
     /* must be other - do nothing */;
-
+  }
+  
   /*
    * If all of the flags are set we have permission
    * to do this.
