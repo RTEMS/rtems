@@ -403,10 +403,6 @@ $(PROJECT_INCLUDE)/sys/ucred.h: sys/ucred.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ucred.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ucred.h
 
-$(PROJECT_INCLUDE)/sys/uio.h: sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
-
 $(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/un.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
