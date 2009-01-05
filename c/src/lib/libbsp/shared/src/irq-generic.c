@@ -20,6 +20,8 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
+#include <stdlib.h> /* malloc, free */
+
 #include <bsp/irq-generic.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
