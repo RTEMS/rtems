@@ -1,5 +1,16 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/include/rtems/score/object.h,
+	score/src/objectallocatebyindex.c: Object index should be int.
+	Fix bug when index is negative.
+	* score/src/objectextendinformation.c: Do not allow maximum number
+	of allocated objects to exceed maximum representable in index
+	field of Object Id.
+	* score/src/objectgetisr.c: Use same code that is in _Objects_Get
+	to extract index field of Object Id.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/include/itronsys/types.h: ITRON types should follow native
 	integer size.
 

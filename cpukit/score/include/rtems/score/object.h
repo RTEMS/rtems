@@ -519,7 +519,7 @@ Objects_Control *_Objects_Allocate(
  */
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  uint16_t             the_index,
+  int                  the_index,
   uint16_t             sizeof_control
 );
 
