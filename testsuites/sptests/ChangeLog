@@ -1,5 +1,9 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp30/task1.c: Cast pointer to id as "void *" rather than task Id.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp09/screen05.c, sp09/screen07.c, sp09/screen10.c, sp09/screen11.c,
 	sp09/screen12.c, sp09/screen14.c: Use rtems_build_id rather than
 	hard-coded hex numbers for bad object Ids.
