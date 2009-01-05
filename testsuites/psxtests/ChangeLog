@@ -1,3 +1,9 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxmsgq02/init.c, psxmsgq02/psxmsgq02.scn: Open the message queue
+	with create option so we are sure it will get a control block and
+	proceed to allocate other memory. Clean up screen output.
+
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx05/init.c: Add parameter to call to sched_get_priority_max().

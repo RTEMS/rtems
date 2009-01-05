@@ -1,5 +1,4 @@
 *** POSIX MESSAGE QUEUE 02 TEST ***
 Init's ID is 0x0b010001
-Allocate_majority_of_workspace:
-Init:  ENOMEM (Workspace not available)
+Init: mq_open - Workspace not available - ENOMEM
 *** END POSIX MESSAGE QUEUE 02 TEST ***

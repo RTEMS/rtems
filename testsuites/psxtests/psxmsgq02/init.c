@@ -54,8 +54,8 @@ void *POSIX_Init(
  
   attr.mq_maxmsg  = MAXMSG;
   attr.mq_msgsize = MSGSIZE;
-  puts("Init:  ENOMEM (Workspace not available)");
-  mq = mq_open( Get_Longest_Name(), O_WRONLY, 0x777, &attr );
+  puts("Init: mq_open - Workspace not available - ENOMEM");
+  mq = mq_open( Get_Longest_Name(), O_CREAT, 0x777, &attr );
   fatal_posix_service_status_errno( mq, ENOMEM, "no workspace available" );  
 
   puts( "*** END OF POSIX MESSAGE QUEUE 02 TEST ***" );
