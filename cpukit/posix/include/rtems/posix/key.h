@@ -72,17 +72,6 @@ void _POSIX_Keys_Run_destructors(
 );
 
 /*
- *  _POSIX_Keys_Allocate
- *
- *  DESCRIPTION:
- *
- *  This function allocates a keys control block from
- *  the inactive chain of free keys control blocks.
- */
-
-RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
-
-/*
  *  _POSIX_Keys_Free
  *
  *  DESCRIPTION:
@@ -92,37 +81,6 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void );
  */
 
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
-  POSIX_Keys_Control *the_key
-);
-
-/*
- *  _POSIX_Keys_Get
- *
- *  DESCRIPTION:
- *
- *  This function maps key IDs to key control blocks.
- *  If ID corresponds to a local keys, then it returns
- *  the_key control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the keys ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_key is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_key is undefined.
- */
-
-RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-);
-
-/*
- *  _POSIX_Keys_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_key is NULL and FALSE otherwise.
- */
-
-RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key
 );
 

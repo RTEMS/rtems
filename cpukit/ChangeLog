@@ -1,5 +1,10 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/rtems/posix/key.h: Remove redundant prototypes for
+	inlines.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1351/cpukit
 	* sapi/include/confdefs.h: Mask off unlimited object bit before using
 	configured number in calculations.
