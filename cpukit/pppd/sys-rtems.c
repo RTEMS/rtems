@@ -484,7 +484,7 @@ output(
     u_char *p,
     int len)
 {
-    if (debug);
+    if (debug)
 	dbglog("sent %P", p, len);
 /*    printf("sent packet [%d]\n", len); */
 
