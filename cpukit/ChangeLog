@@ -1,5 +1,11 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1351/cpukit
+	* sapi/include/confdefs.h: Mask off unlimited object bit before using
+	configured number in calculations.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/object.h,
 	score/src/objectallocatebyindex.c: Object index should be int.
 	Fix bug when index is negative.

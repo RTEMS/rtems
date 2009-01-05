@@ -464,6 +464,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   (ssize_t)((_size) + (2 * sizeof(uint32_t)) + CPU_ALIGNMENT)
 
 /**
+ *  Do not use the unlimited bit as part of the multiplication
+ *  for memory usage.
+ */
+#define _Configure_Max_Objects(_max) \
+  ((_max) & ~RTEMS_UNLIMITED_OBJECTS)
+
+/**
  *  This macro accounts for how memory for a set of configured objects is 
  *  allocated from the Executive Workspace.  
  *
@@ -471,9 +478,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *        objects.
  */
 #define _Configure_Object_RAM(_number, _size) \
-  ( _Configure_From_workspace((_number) * (_size)) + \
+  ( _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
     _Configure_From_workspace( \
-      (((_number) + 1) * sizeof(Objects_Control *)) + \
+      ((_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
       (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) \
     ) \
   )
@@ -1406,13 +1413,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
  ( \
   _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
-  ((_tasks) * \
+  (_Configure_Max_Objects(_tasks) * \
    (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
     _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API) + \
     CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB + \
     CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API))  + \
-  _Configure_From_workspace((_number_FP_tasks) * CONTEXT_FP_SIZE) \
+  _Configure_From_workspace( \
+    _Configure_Max_Objects(_number_FP_tasks) * CONTEXT_FP_SIZE) \
  )
 
 /**
@@ -1646,6 +1654,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     uint32_t MEMORY_FOR_IDLE_TASK;
 
     /* Classic API Pieces */
+    uint32_t CLASSIC_TASKS;
     uint32_t TASK_VARIABLES;
     uint32_t TIMERS;
     uint32_t SEMAPHORES;
@@ -1699,6 +1708,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_IDLE_TASK,
 
     /* Classic API Pieces */
+    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
     CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES),
     CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS),
     CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES +
