@@ -1,3 +1,9 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp15/system.h, sp19/system.h: Array of task names should be of type
+	rtems_name not rtems_id. Similarly array of task ids should be
+	rtems_id not rtems_name.
+
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spsize/size.c: Eliminate _TOD_Microseconds_per_tick.

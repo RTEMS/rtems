@@ -43,7 +43,7 @@ rtems_task Task_1(
 TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
-TEST_EXTERN rtems_name Partition_id[ 4 ];   /* array of partition ids */
+TEST_EXTERN rtems_id   Partition_id[ 4 ];   /* array of partition ids */
 TEST_EXTERN rtems_name Partition_name[ 4 ]; /* array of partition names */
 
 TEST_EXTERN uint8_t   Area_1[4096] CPU_STRUCTURE_ALIGNMENT;

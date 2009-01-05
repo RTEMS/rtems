@@ -50,8 +50,8 @@ rtems_task Task_1(
 
 /* global variables */
 
-TEST_EXTERN rtems_id Task_id[ 7 ];     /* array of task ids */
-TEST_EXTERN rtems_id Task_name[ 7 ];   /* array of task names */
+TEST_EXTERN rtems_id   Task_id[ 7 ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
 
 TEST_EXTERN double FP_factors[ 10 ];  /* FP "uniqueness" factors */
 
