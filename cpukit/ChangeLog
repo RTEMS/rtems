@@ -1,3 +1,8 @@
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* itron/include/itronsys/types.h: ITRON types should follow native
+	integer size.
+
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* pppd/sys-rtems.c: Remove stray ';' introducing unreachable code.
