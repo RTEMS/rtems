@@ -1,3 +1,9 @@
+2009-01-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1351/cpukit
+	* sapi/include/confdefs.h: Mask off unlimited object bit before using
+	configured number in calculations.
+
 2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/include/aio.h, posix/src/aio_suspend.c: Make aio_suspend()
