@@ -135,7 +135,7 @@ include_sys_HEADERS = sys/callout.h sys/conf.h sys/domain.h \
     sys/mount.h sys/proc.h sys/protosw.h sys/reboot.h \
     sys/resourcevar.h sys/select.h sys/signalvar.h sys/socket.h \
     sys/socketvar.h sys/sysctl.h sys/syslog.h sys/systm.h sys/ttydefaults.h \
-    sys/ucred.h sys/uio.h sys/un.h
+    sys/ucred.h sys/un.h
 
 # vm
 
