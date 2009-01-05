@@ -176,8 +176,10 @@ RTEMS_INLINE_ROUTINE ER  _ITRON_Semaphore_Translate_core_semaphore_return_code (
       return E_TMOUT;
     case CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED:
       return E_QOVR;
-    case THREAD_STATUS_PROXY_BLOCKING:
-      return THREAD_STATUS_PROXY_BLOCKING;
+    #if defined(RTEMS_MULTIPROCESSING)
+      case THREAD_STATUS_PROXY_BLOCKING:
+        return THREAD_STATUS_PROXY_BLOCKING;
+    #endif
   }
   return E_OK;   /* unreached - only to remove warnings */
 }

@@ -1,5 +1,10 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* itron/inline/rtems/itron/semaphore.inl: THREAD_STATUS_PROXY_BLOCKING
+	should only be defined in multiprocessing configurations.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/include/rtems/posix/key.h: Remove redundant prototypes for
 	inlines.
 
