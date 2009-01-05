@@ -144,7 +144,7 @@ void Screen5()
   );
   puts( "TA1 - rtems_semaphore_delete - RTEMS_INVALID_ID" );
 
-  status = rtems_semaphore_delete( 0x010100 );
+  status = rtems_semaphore_delete( rtems_build_id( 1, 0, 0, 0 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,

@@ -117,7 +117,7 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_delete - unknown RTEMS_INVALID_ID" );
 
-  status = rtems_message_queue_delete( 0x10100 );
+  status = rtems_message_queue_delete( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,

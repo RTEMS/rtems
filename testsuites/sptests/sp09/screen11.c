@@ -155,7 +155,7 @@ void Screen11()
   );
   puts( "TA1 - rtems_partition_delete - unknown RTEMS_INVALID_ID" );
 
-  status = rtems_partition_delete( 0x10100 );
+  status = rtems_partition_delete( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,

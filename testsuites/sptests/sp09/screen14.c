@@ -53,7 +53,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_delete - local RTEMS_INVALID_ID" );
 
-  status = rtems_timer_delete( 0x010100 );
+  status = rtems_timer_delete( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -69,7 +69,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_ident - RTEMS_INVALID_NAME" );
 
-  status = rtems_timer_cancel( 0x010100 );
+  status = rtems_timer_cancel( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -77,7 +77,7 @@ void Screen14()
   );
   puts( "TA1 - rtems_timer_cancel - RTEMS_INVALID_ID" );
 
-  status = rtems_timer_reset( 0x010100 );
+  status = rtems_timer_reset( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -94,7 +94,7 @@ void Screen14()
   puts( "TA1 - rtems_timer_reset - RTEMS_NOT_DEFINED" );
 
   status = rtems_timer_fire_after(
-    0x010100,
+    rtems_build_id( 1, 1, 1, 256 ),
     5 * TICKS_PER_SECOND,
     Delayed_routine,
     NULL
@@ -107,7 +107,12 @@ void Screen14()
   puts( "TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID" );
 
   build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
-  status = rtems_timer_fire_when( 0x010100, &time, Delayed_routine, NULL );
+  status = rtems_timer_fire_when( 
+    rtems_build_id( 1, 1, 1, 256 ),
+    &time,
+    Delayed_routine,
+    NULL
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -214,7 +219,7 @@ void Screen14()
   puts( "TA1 - rtems_timer_initiate_server - SUCCESSFUL" );
 
   status = rtems_timer_server_fire_after(
-    0x010100,
+    rtems_build_id( 1, 1, 1, 256 ),
     5 * TICKS_PER_SECOND,
     Delayed_routine,
     NULL
@@ -227,7 +232,12 @@ void Screen14()
   puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID" );
 
   build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
-  status = rtems_timer_server_fire_when( 0x010100, &time, Delayed_routine, NULL );
+  status = rtems_timer_server_fire_when(
+    rtems_build_id( 1, 1, 1, 256 ),
+    &time,
+    Delayed_routine,
+    NULL
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,

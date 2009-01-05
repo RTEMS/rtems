@@ -68,7 +68,7 @@ void Screen10()
   );
   puts( "TA1 - rtems_rate_monotonic_period - RTEMS_INVALID_ID" );
 
-  status = rtems_rate_monotonic_period( 0x10100, 5 );
+  status = rtems_rate_monotonic_period( rtems_build_id( 1, 1, 1, 256 ), 5 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -135,7 +135,7 @@ void Screen10()
   );
   puts( "TA1 - rtems_rate_monotonic_cancel - RTEMS_INVALID_ID" );
 
-  status = rtems_rate_monotonic_cancel( 0x10100 );
+  status = rtems_rate_monotonic_cancel( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -178,7 +178,7 @@ void Screen10()
   );
   puts( "TA1 - rtems_rate_monotonic_delete - RTEMS_INVALID_ID" );
 
-  status = rtems_rate_monotonic_delete( 0x10100 );
+  status = rtems_rate_monotonic_delete( rtems_build_id( 1, 1, 1, 256 ) );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
