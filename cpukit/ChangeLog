@@ -1,5 +1,10 @@
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am:
+	Install libnetworking/sys/uio.h if building for NEWLIB.
+	* libnetworking/Makefile.am:
+	Remove installation of libnetworking/sys/uio.h.
+	* libcsupport/Makefile.am: Build writev.c/readv.c for NEWLIB.
 	* libfs/src/imfs/imfs_eval.c: Add braces to suppress gcc warning on
 	empty 'else' block.
 
