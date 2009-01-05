@@ -105,12 +105,15 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
  */
  
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd (
-  Objects_Id         id,
+  mqd_t              id,
   Objects_Locations *location
 )
 {
-  return (POSIX_Message_queue_Control_fd *)
-    _Objects_Get( &_POSIX_Message_queue_Information_fds, id, location );
+  return (POSIX_Message_queue_Control_fd *) _Objects_Get(
+    &_POSIX_Message_queue_Information_fds,
+    (Objects_Id)id,
+    location
+  );
 }
  
 /*PAGE

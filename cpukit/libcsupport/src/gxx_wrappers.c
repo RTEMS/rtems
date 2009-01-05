@@ -209,7 +209,7 @@ int rtems_gxx_mutex_lock (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: lock mutex=%X\n", *mutex );
 #endif
-  return ( rtems_semaphore_obtain( (rtems_id)*mutex,
+  return ( rtems_semaphore_obtain( *(rtems_id *)mutex,
             RTEMS_WAIT, RTEMS_NO_TIMEOUT ) ==  RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
@@ -218,7 +218,7 @@ int rtems_gxx_mutex_destroy (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: destroy mutex=%X\n", *mutex );
 #endif
-  return ( rtems_semaphore_delete((rtems_id)*mutex)
+  return ( rtems_semaphore_delete(*(rtems_id *)mutex)
              ==  RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
@@ -227,7 +227,7 @@ int rtems_gxx_mutex_trylock (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: trylock mutex=%X\n", *mutex );
 #endif
-  return (rtems_semaphore_obtain ((rtems_id)*mutex,
+  return (rtems_semaphore_obtain (*(rtems_id *)mutex,
                RTEMS_NO_WAIT, 0) == RTEMS_SUCCESSFUL) ? 0 : -1;
 }
 
@@ -236,7 +236,8 @@ int rtems_gxx_mutex_unlock (__gthread_mutex_t *mutex)
 #ifdef DEBUG_GXX_WRAPPERS
    printk( "gxx_wrappers: unlock mutex=%X\n", *mutex );
 #endif
-  return (rtems_semaphore_release( (rtems_id)*mutex ) ==  RTEMS_SUCCESSFUL) ? 0 :-1;
+  return (rtems_semaphore_release( *(rtems_id *)mutex )
+      == RTEMS_SUCCESSFUL) ? 0 :-1;
 }
 
 void rtems_gxx_recursive_mutex_init(__gthread_recursive_mutex_t *mutex)

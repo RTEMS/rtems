@@ -61,12 +61,10 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get (
   Objects_Locations *location
 )
 {
-  Objects_Id *id = (Objects_Id *)mutex;
-
-  ___POSIX_Mutex_Get_support( id, location );
+  ___POSIX_Mutex_Get_support( mutex, location );
 
   return (POSIX_Mutex_Control *)
-    _Objects_Get( &_POSIX_Mutex_Information, *id, location );
+    _Objects_Get( &_POSIX_Mutex_Information, (Objects_Id) *mutex, location );
 }
 
 POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
@@ -75,10 +73,12 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
   ISR_Level         *level
 )
 {
-  Objects_Id *id = (Objects_Id *)mutex;
+  ___POSIX_Mutex_Get_support( mutex, location );
 
-  ___POSIX_Mutex_Get_support( id, location );
-
-  return (POSIX_Mutex_Control *)
-    _Objects_Get_isr_disable( &_POSIX_Mutex_Information, *id, location, level );
+  return (POSIX_Mutex_Control *) _Objects_Get_isr_disable(
+    &_POSIX_Mutex_Information,
+    (Objects_Id) *mutex,
+    location,
+    level
+  );
 }

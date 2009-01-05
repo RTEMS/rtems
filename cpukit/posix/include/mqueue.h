@@ -34,9 +34,11 @@ extern "C" {
  */
 
 /**
- *  Message queue id type
+ *  Message queue id type.
+ *
+ *  @note Use uint32_t since all POSIX Ids are 32-bit currently.
  */
-typedef Objects_Id  mqd_t;
+typedef uint32_t  mqd_t;
 
 /**
  *  This is the message queue attributes structure.

@@ -70,12 +70,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
  */
 
 RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
-  Objects_Id         id,
+  timer_t            id,
   Objects_Locations *location
 )
 {
   return (POSIX_Timer_Control *)
-    _Objects_Get( &_POSIX_Timer_Information, id, location );
+    _Objects_Get( &_POSIX_Timer_Information, (Objects_Id) id, location );
 }
 
 /*PAGE

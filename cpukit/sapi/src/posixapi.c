@@ -60,18 +60,17 @@ Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
 void _POSIX_API_Initialize(void)
 {
-  const posix_api_configuration_table *api;
-
-  /* XXX need to assert here based on size assumptions */
-
-  assert( sizeof(pthread_t) == sizeof(Objects_Id) );
+  /*
+   * If there are any type size assumptions in the POSIX API, this is
+   * the appropriate place to place them.
+   *
+   * Currently, there are no none type size assumptions.
+   */
 
   /*
    * Install our API Object Management Table and initialize the
    * various managers.
    */
-  api = &Configuration_POSIX_API;
-
   _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
 
   _POSIX_signals_Manager_Initialization();

@@ -56,9 +56,12 @@ Objects_Information *_ITRON_Objects[ OBJECTS_ITRON_CLASSES_LAST + 1 ];
 
 void _ITRON_API_Initialize(void)
 {
-  /* XXX need to assert here based on size assumptions */
-
-  assert( sizeof(ID) == sizeof(Objects_Id) );
+  /*
+   * If there are any type size assumptions in the ITRON API, this is
+   * the appropriate place to place them.
+   *
+   * Currently, there are no none type size assumptions.
+   */
 
   /*
    * Install our API Object Management Table and initialize the

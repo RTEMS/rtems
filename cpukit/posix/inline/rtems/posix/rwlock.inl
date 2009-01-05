@@ -68,7 +68,7 @@ RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
 {
   return (POSIX_RWLock_Control *) _Objects_Get(
       &_POSIX_RWLock_Information,
-      *((Objects_Id *)RWLock),
+      (Objects_Id) *RWLock,
       location
   );
 }

@@ -68,7 +68,7 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
 {
   return (POSIX_Barrier_Control *) _Objects_Get(
       &_POSIX_Barrier_Information,
-      *((Objects_Id *)barrier),
+      (Objects_Id) *barrier,
       location
   );
 }

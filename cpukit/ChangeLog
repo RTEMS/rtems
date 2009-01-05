@@ -1,5 +1,28 @@
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libcsupport/src/gxx_wrappers.c, posix/include/mqueue.h,
+	posix/include/rtems/posix/semaphore.h,
+	posix/inline/rtems/posix/barrier.inl,
+	posix/inline/rtems/posix/key.inl,
+	posix/inline/rtems/posix/mqueue.inl,
+	posix/inline/rtems/posix/rwlock.inl,
+	posix/inline/rtems/posix/semaphore.inl,
+	posix/inline/rtems/posix/spinlock.inl,
+	posix/inline/rtems/posix/timer.inl, posix/src/condget.c,
+	posix/src/mqueuenametoid.c, posix/src/mutexget.c,
+	posix/src/semaphorenametoid.c, posix/src/semopen.c,
+	sapi/src/itronapi.c, sapi/src/posixapi.c: Make changes necessary for
+	all tests to run on SPARC with 16-bit Ids. This required ensuring
+	that all POSIX and compilering binding code makes a distinction
+	between the public Id type (e.g. pthread_t, etc.) and the RTEMS
+	Object_Id type. All POSIX Object Get routines should not take the
+	POSIX Id type as the argument. Sixteen bit RTEMS Ids should be placed
+	into the 32-bits reserved by the POSIX API type in a uniform manner
+	now. This removed all assumptions that the external Id types in POSIX
+	and ITRON are the same as the internal Object Id type.
+
+2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* itron/inline/rtems/itron/semaphore.inl: THREAD_STATUS_PROXY_BLOCKING
 	should only be defined in multiprocessing configurations.
 
