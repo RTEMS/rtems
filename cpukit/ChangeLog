@@ -1,5 +1,9 @@
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/error.c: Remove hpux9 anachronism.
+
+2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am:
 	Install libnetworking/sys/uio.h if building for NEWLIB.
 	* libnetworking/Makefile.am:
