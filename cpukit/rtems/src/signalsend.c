@@ -67,7 +67,7 @@ rtems_status_code rtems_signal_send(
           the_thread->do_post_task_switch_extension = true;
 
           if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-            _ISR_Signals_to_thread_executing = TRUE;
+            _ISR_Signals_to_thread_executing = true;
         } else {
           _ASR_Post_signals( signal_set, &asr->signals_pending );
         }

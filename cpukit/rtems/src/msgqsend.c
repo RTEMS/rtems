@@ -79,7 +79,7 @@ rtems_status_code rtems_message_queue_send(
         size,
         id,
         MESSAGE_QUEUE_MP_HANDLER,
-        FALSE,   /* sender does not block */
+        false,   /* sender does not block */
         0        /* no timeout */
       );
 

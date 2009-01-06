@@ -202,7 +202,7 @@ void _RTEMS_tasks_MP_Process_packet (
                   &_RTEMS_tasks_Information,
                   the_packet->name,
                   the_packet->Prefix.id,
-                  TRUE
+                  true
                 );
 
       _MPCI_Return_packet( the_packet_prefix );

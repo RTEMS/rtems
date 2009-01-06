@@ -77,7 +77,7 @@ rtems_status_code rtems_task_set_priority(
         the_thread->real_priority = new_priority;
         if ( the_thread->resource_count == 0 ||
              the_thread->current_priority > new_priority )
-          _Thread_Change_priority( the_thread, new_priority, FALSE );
+          _Thread_Change_priority( the_thread, new_priority, false );
       }
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;

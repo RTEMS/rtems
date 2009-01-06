@@ -178,7 +178,7 @@ rtems_status_code rtems_task_create(
     stack_size,
     is_fp,
     core_priority,
-    _Modes_Is_preempt(initial_modes)   ? TRUE : FALSE,
+    _Modes_Is_preempt(initial_modes)   ? true : false,
     _Modes_Is_timeslice(initial_modes) ?
       THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE :
       THREAD_CPU_BUDGET_ALGORITHM_NONE,

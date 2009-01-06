@@ -83,7 +83,7 @@ rtems_status_code rtems_semaphore_obtain(
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           id,
-          ((_Options_Is_no_wait( option_set )) ? FALSE : TRUE),
+          ((_Options_Is_no_wait( option_set )) ? false : true),
           timeout,
           level
         );
@@ -95,7 +95,7 @@ rtems_status_code rtems_semaphore_obtain(
       _CORE_semaphore_Seize_isr_disable(
         &the_semaphore->Core_control.semaphore,
         id,
-        ((_Options_Is_no_wait( option_set )) ? FALSE : TRUE),
+        ((_Options_Is_no_wait( option_set )) ? false : true),
         timeout,
         &level
       );

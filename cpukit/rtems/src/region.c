@@ -47,11 +47,11 @@ void _Region_Manager_initialization(void)
     Configuration_RTEMS_API.maximum_regions,
                                /* maximum objects of this class */
     sizeof( Region_Control ),  /* size of this object's control block */
-    FALSE,                     /* TRUE if the name is a string */
+    false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                     /* TRUE if this is a global object class */
+    false,                     /* true if this is a global object class */
     NULL                       /* Proxy extraction support callout */
 #endif
   );

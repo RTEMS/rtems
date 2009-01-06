@@ -91,7 +91,7 @@ rtems_status_code rtems_partition_create(
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) &&
        !( _Objects_MP_Allocate_and_open( &_Partition_Information, name,
-                            the_partition->Object.id, FALSE ) ) ) {
+                            the_partition->Object.id, false ) ) ) {
     _Partition_Free( the_partition );
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;

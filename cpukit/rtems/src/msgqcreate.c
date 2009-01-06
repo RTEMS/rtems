@@ -111,7 +111,7 @@ rtems_status_code rtems_message_queue_create(
 #if defined(RTEMS_MULTIPROCESSING)
   if ( is_global &&
     !( _Objects_MP_Allocate_and_open( &_Message_queue_Information,
-                              name, the_message_queue->Object.id, FALSE ) ) ) {
+                              name, the_message_queue->Object.id, false ) ) ) {
     _Message_queue_Free( the_message_queue );
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;

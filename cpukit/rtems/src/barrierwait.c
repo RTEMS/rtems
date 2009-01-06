@@ -51,7 +51,7 @@ rtems_status_code rtems_barrier_wait(
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
         id,
-        TRUE,
+        true,
         timeout,
         NULL
       );

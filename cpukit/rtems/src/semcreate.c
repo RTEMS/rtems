@@ -126,7 +126,7 @@ rtems_status_code rtems_semaphore_create(
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) &&
        ! ( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
-                            the_semaphore->Object.id, FALSE ) ) ) {
+                            the_semaphore->Object.id, false ) ) ) {
     _Semaphore_Free( the_semaphore );
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;
@@ -158,16 +158,16 @@ rtems_status_code rtems_semaphore_create(
       switch ( the_mutex_attributes.discipline ) {
         case CORE_MUTEX_DISCIPLINES_FIFO:
         case CORE_MUTEX_DISCIPLINES_PRIORITY:
-          the_mutex_attributes.only_owner_release = FALSE;
+          the_mutex_attributes.only_owner_release = false;
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-          the_mutex_attributes.only_owner_release = TRUE;
+          the_mutex_attributes.only_owner_release = true;
           break;
       }
     } else {
       the_mutex_attributes.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
-      the_mutex_attributes.only_owner_release = FALSE;
+      the_mutex_attributes.only_owner_release = false;
     }
 
     the_mutex_attributes.priority_ceiling = priority_ceiling;

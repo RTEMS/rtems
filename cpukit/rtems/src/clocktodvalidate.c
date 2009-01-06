@@ -41,8 +41,8 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
  *    the_tod - pointer to a time and date structure
  *
  *  Output parameters:
- *    TRUE  - if the date, time, and tick are valid
- *    FALSE - if the the_tod is invalid
+ *    true  - if the date, time, and tick are valid
+ *    false - if the the_tod is invalid
  *
  *  NOTE: This routine only works for leap-years through 2099.
  */

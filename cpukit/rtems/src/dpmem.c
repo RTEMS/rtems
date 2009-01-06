@@ -46,11 +46,11 @@ void _Dual_ported_memory_Manager_initialization(void)
                                   /* maximum objects of this class */
     sizeof( Dual_ported_memory_Control ),
                                   /* size of this object's control block */
-    FALSE,                        /* TRUE if names of this object are strings */
+    false,                        /* true if names of this object are strings */
     RTEMS_MAXIMUM_NAME_LENGTH     /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                        /* TRUE if this is a global object class */
+    false,                        /* true if this is a global object class */
     NULL                          /* Proxy extraction support callout */
 #endif
   );

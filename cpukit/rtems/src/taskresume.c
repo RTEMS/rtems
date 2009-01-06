@@ -59,7 +59,7 @@ rtems_status_code rtems_task_resume(
 
     case OBJECTS_LOCAL:
       if ( _States_Is_suspended( the_thread->current_state ) ) {
-        _Thread_Resume( the_thread, TRUE );
+        _Thread_Resume( the_thread, true );
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
       }

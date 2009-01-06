@@ -255,11 +255,11 @@ void _RTEMS_tasks_Manager_initialization(void)
     Configuration_RTEMS_API.maximum_tasks,
                                /* maximum objects of this class */
     sizeof( Thread_Control ),  /* size of this object's control block */
-    FALSE,                     /* TRUE if the name is a string */
+    false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    TRUE,                      /* TRUE if this is a global object class */
+    true,                      /* true if this is a global object class */
     NULL                       /* Proxy extraction support callout */
 #endif
   );
