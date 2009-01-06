@@ -1,4 +1,4 @@
-#!/bin/sh -p
+#!@KSH@ -p
 #
 # Run rtems tests on the powerpc simulator
 # This program generates a simulator script to run each test
@@ -85,7 +85,8 @@ logdir=log
 update_on_tick="no"
 max_run_time=$((5 * 60))
 using_print_buffer="yes"
-simulator=mipstx39-rtems4.9-run 
+txtarget=`echo @target_alias@ | sed -e 's/mips-/mipstx39-/'`
+simulator=${txtarget}-run 
 
 while getopts vdl:o:s: OPT
 do
@@ -155,43 +156,14 @@ do
                  continue
             fi
             ;;
-       *-node2*)
-           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
-           continue;;
-       *-node1*)
-           warn "Running both nodes associated with $tname"
-           variant=`echo $tname | sed 's/.*-node[12]//' | sed 's/\.exe//'`
-           tname=`echo $tname | sed 's/-node.*//'`
-           TEST_TYPE="mp"
+       *-node*)
+           warn "Skipping $tname; MP tests not supported"
+           continue
            ;;
        minimum*|stackchk*|*fatal*|termio*)
            continue
            ;;
    esac
-
-   if [ $TEST_TYPE = "mp" ]
-   then
-       cpus="1 2"
-
-       logfile1=$logdir/${tname}_1${variant}
-       logfile2=$logdir/${tname}_2${variant}
-       infofile1=$logfile1.info
-       infofile2=$logfile2.info
-
-       rm -f ${logfile1} ${logfile2}
-
-       date=`date`
-       echo "Starting $tname at $date"
-
-       ${simulator} --board=jmr3904 ${tname}-node1${variant}.exe | \
-         sed -e 's///' -e '/^$/d' > ${logfile1} &
-
-       ${simulator} --board=jmr3904 ${tname}-node2${variant}.exe | \
-         sed -e 's///' -e '/^$/d' > ${logfile2} &
-
-       wait
-
-   fi
 
    if [ $TEST_TYPE = "single" ]
    then
@@ -207,7 +179,6 @@ do
      # The device file must do the following:
      #
      #       arrange for more memory (2 Mb)
-
      if [ "$device_and_exit" = "yes" ]
      then
           fatal "Cannot currently generate device files"
@@ -215,8 +186,7 @@ do
 
      # Spin off the simulator in the background
 
-     ${simulator} --board=jmr3904 $tfile </dev/null | \
-       sed -e 's///' -e '/^$/d' > ${logfile} 2>&1 &
+     ${simulator} --board=jmr3904 $tfile </dev/null > ${logfile} 2>&1 &
      pid=$!
 
      # Make sure it won't run forever...
@@ -241,7 +211,12 @@ do
 	 exceptionExit=$?
 	 grep "^mips-core: " ${logfile} >/dev/null
 	 badAccessExit=$?
-	 if [ $badAccessExit -eq 0 -o $exceptionExit -eq 0 ] ; then
+	 grep "^Warning, resuming with mismatched" ${logfile} >/dev/null
+	 simExceptExit=$?
+	 grep "^assertion" ${logfile} >/dev/null
+	 assertExit=$?
+	 if [ $badAccessExit -eq 0 -o $exceptionExit -eq 0 -o \
+	      $simExceptExit -eq 0 -o $assertExit -eq 0 ] ; then
 	   kill -9 ${pid} >/dev/null 2>&1
 	   #cat ${logfile}
 	   # echo Ran in ${milliseconds} milliseconds
@@ -281,8 +256,8 @@ do
 
    if [ "$cpus" = "1" ]
    then
-        mv ${infofile} $logdir/${tname}.info
-        mv ${logfile}  $logdir/${tname}
+     sed -e 's///' -e '/^$/d' < ${infofile} >$logdir/${tname}.info
+     sed -e 's///' -e '/^$/d' < ${logfile}  >$logdir/${tname}
    fi
 
 done

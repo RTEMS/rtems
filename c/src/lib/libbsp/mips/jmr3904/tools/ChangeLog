@@ -1,3 +1,11 @@
+2009-01-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* configure.ac: Make runtest an autoconf generated file so we can
+	insert target alias. Also detect more program termination conditions
+	so tests are killed more reliably.
+	* runtest.in: New file.
+	* runtest: Removed.
+
 2008-08-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* runtest: Attempt to prevent runaways.
