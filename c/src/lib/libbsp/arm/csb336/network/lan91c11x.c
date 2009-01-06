@@ -224,9 +224,6 @@ void lan91c11x_write_phy_reg(int reg, uint16_t phydata)
         mask >>= 1;
     }
 
-    /* Final clock bit */
-    bits[clk_idx++] = 0;
-    
     /* Turn off all MII Interface bits */
     lan91c11x_write_reg(LAN91C11X_MGMT, 
                         lan91c11x_read_reg(LAN91C11X_MGMT) & 0xfff0);
