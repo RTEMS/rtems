@@ -1,3 +1,17 @@
+2009-01-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/src/barrier.c, rtems/src/barrierwait.c,
+	rtems/src/clocktodvalidate.c, rtems/src/dpmem.c,
+	rtems/src/msg.c, rtems/src/msgmp.c, rtems/src/msgqcreate.c,
+	rtems/src/msgqsend.c, rtems/src/msgqurgent.c, rtems/src/part.c,
+	rtems/src/partcreate.c, rtems/src/partmp.c, rtems/src/ratemon.c,
+	rtems/src/region.c, rtems/src/regionmp.c, rtems/src/rtemstimer.c,
+	rtems/src/sem.c, rtems/src/semcreate.c, rtems/src/semmp.c,
+	rtems/src/semobtain.c, rtems/src/signalsend.c, rtems/src/taskcreate.c,
+	rtems/src/taskinitusers.c, rtems/src/taskmode.c, rtems/src/taskmp.c,
+	rtems/src/taskresume.c, rtems/src/tasks.c,
+	rtems/src/tasksetpriority.c: Eliminate TRUE/FALSE.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/gxx_wrappers.c, posix/include/mqueue.h,
