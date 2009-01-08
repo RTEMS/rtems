@@ -87,6 +87,7 @@ void _Objects_Extend_information(
     Objects_Control **local_table;
     uint32_t          maximum;
     void             *old_tables;
+    size_t            block_size;
 
     /*
      *  Growing the tables means allocating a new area, doing a copy and
@@ -125,29 +126,16 @@ void _Objects_Extend_information(
      *  Allocate the tables and break it up.
      */
 
-    if ( information->auto_extend ) {
-      object_blocks = (void**)
-        _Workspace_Allocate(
-          block_count *
-             (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) +
-          ((maximum + minimum_index) * sizeof(Objects_Control *))
-          );
+    block_size = block_count *
+           (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) +
+          ((maximum + minimum_index) * sizeof(Objects_Control *));
+    object_blocks = (void**) _Workspace_Allocate( block_size );
 
-      if ( !object_blocks )
-        return;
-    }
-    else {
-      object_blocks = (void**)
-        _Workspace_Allocate_or_fatal_error(
-          block_count *
-             (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) +
-          ((maximum + minimum_index) * sizeof(Objects_Control *))
-        );
-    }
+    if ( !object_blocks )
+      return;
 
     /*
      *  Break the block into the various sections.
-     *
      */
 
     inactive_per_block = (uint32_t *) _Addresses_Add_offset(
