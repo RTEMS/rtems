@@ -1,5 +1,10 @@
 2009-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* librpc/src/xdr/xdr_float.c: M32C has no native float but GCC soft
+	float should be IEEE format.
+
+2009-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/objectextendinformation.c: Fold two paths into one.
 
 2009-01-06	Ralf Corsépius <ralf.corsepius@rtems.org>
