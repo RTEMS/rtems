@@ -1,3 +1,11 @@
+2009-01-16	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to test Watchdog display
+	helper routines. These reach into the SuperCore.
+	* spwatchdog/.cvsignore, spwatchdog/Makefile.am, spwatchdog/delay.c,
+	spwatchdog/init.c, spwatchdog/prtime.c, spwatchdog/spwatchdog.scn,
+	spwatchdog/system.h, spwatchdog/task1.c: New files.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp30/task1.c: Cast pointer to id as "void *" rather than task Id.
