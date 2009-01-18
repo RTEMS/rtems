@@ -1,0 +1,3 @@
+# $Id$
+
+SUBDIRS = i586
