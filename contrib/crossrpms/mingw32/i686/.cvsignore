@@ -1,4 +1,9 @@
 Makefile
 Makefile.in
 *.spec
-*.spec.in
+i686-pc-mingw32-binutils.spec.in
+i686-pc-mingw32-gcc.spec.in
+i686-pc-mingw32-gmp.spec.in
+i686-pc-mingw32-libs.spec.in
+i686-pc-mingw32-mpfr.spec.in
+i686-pc-mingw32-w32api.spec.in
