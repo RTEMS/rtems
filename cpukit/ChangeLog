@@ -1,3 +1,9 @@
+2009-01-21	Nickolay Kolchin <nbkolchin@gmail.com>
+	        Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1357/cpukit
+	* rtems/src/tasks.c: Ensure creating a task with no ASR is honored.
+
 2009-01-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/tasks.c: Initialize event_condition to 0 just because.

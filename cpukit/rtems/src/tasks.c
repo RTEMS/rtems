@@ -98,8 +98,6 @@ User_extensions_routine _RTEMS_tasks_Start_extension(
   api = started->API_Extensions[ THREAD_API_RTEMS ];
 
   api->pending_events = EVENT_SETS_NONE_PENDING;
-
-  _ASR_Initialize( &api->Signal );
 }
 
 /*PAGE
