@@ -1,3 +1,13 @@
+2009-01-21	Frank Ueberschar <frank.ueberschar@dsa-volgmann.de>
+
+	PR 1354/bsps
+	* network/network.c: In some cases it can occur that an empty mbuf is
+	put on the descriptor chain. (We found it especially then when
+	transmitting fragmented IP Packets.) Since the actual buffer
+	descriptor pointer will be incremented after every inserted mbuf
+	(txBd = sc->txBdBase + sc->txBdHead;) even if m->m_len of the current
+	mbuf was zero. This leads to the bug.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_specs: Move -e start from *link to *startfile to avoid warning
