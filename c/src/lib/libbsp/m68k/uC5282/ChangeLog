@@ -1,3 +1,8 @@
+2009-01-21	Eric Norum <norume@aps.anl.gov>
+
+	PR 1358/bsps
+	* clock/clock.c: Fix time-access bug in uc5282 BSP.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

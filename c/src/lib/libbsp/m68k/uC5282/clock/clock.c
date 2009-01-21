@@ -30,15 +30,15 @@ extern int __SRAMBASE[];
 #define IDLE_COUNTER      __SRAMBASE[0]
 #define FILTERED_IDLE     __SRAMBASE[1]
 #define MAX_IDLE_COUNT    __SRAMBASE[2]
-#define PCNTR_AT_TICK     (*(uint16 *)&__SRAMBASE[3])
+#define USEC_PER_TICK     __SRAMBASE[3]
 #define FILTER_SHIFT    6
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
     int i = MCF5282_PIT3_PCNTR;
     if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
-        i = MCF5282_PIT3_PCNTR + MCF5282_PIT3_PMR;
-    return (i - PCNTR_AT_TICK) * 1000;
+        i = MCF5282_PIT3_PCNTR - USEC_PER_TICK;
+    return (USEC_PER_TICK - i) * 1000;
 }
 
 #define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
@@ -53,7 +53,6 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
         if (idle > MAX_IDLE_COUNT)                                           \
             MAX_IDLE_COUNT = idle;                                           \
         FILTERED_IDLE = idle + FILTERED_IDLE - (FILTERED_IDLE>>FILTER_SHIFT);\
-        PCNTR_AT_TICK = MCF5282_PIT3_PCNTR;                                  \
         MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF;                           \
     } while (0)
 
@@ -102,12 +101,12 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
                             MCF5282_PIT_PCSR_OVW |                       \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD;                        \
-        MCF5282_PIT3_PMR = rtems_configuration_get_microseconds_per_tick() - 1;  \
+        USEC_PER_TICK = rtems_configuration_get_microseconds_per_tick(); \
+        MCF5282_PIT3_PMR = USEC_PER_TICK - 1;                            \
         MCF5282_PIT3_PCSR = MCF5282_PIT_PCSR_PRE(preScaleCode) |         \
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \
                             MCF5282_PIT_PCSR_EN;                         \
-        PCNTR_AT_TICK = MCF5282_PIT3_PCNTR;                              \
     } while (0)
 
 /*
