@@ -21,14 +21,22 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -45,7 +53,7 @@ Name:		rtems-4.9-mips-rtems4.9-binutils
 Summary:	Binutils for target mips-rtems4.9
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
