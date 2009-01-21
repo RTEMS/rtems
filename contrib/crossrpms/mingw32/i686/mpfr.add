@@ -1,0 +1,69 @@
+%define mpfr_version @MPFR_VERS@
+%define mpfr_rpmvers %{expand:%(echo @MPFR_VERS@ | tr - _)} 
+%define debug_package %{nil}
+
+Name:         @rpmprefix@@tool_target@-mpfr
+Release:      @MPFR_RPMREL@
+License:      GPL
+Group:        Development/Tools
+
+BuildArch:	noarch
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Version:      	%mpfr_rpmvers
+Summary:      	MinGW MPFR Libraries
+
+Source0:	http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+
+Provides:	@rpmprefix@@tool_target@-mpfr-devel = %{version}-%{release}
+
+%define _mingw32_target          i686-pc-mingw32
+%if 0%{?fedora} >= 9
+# Fedora ships a mingw toolchain installed to /usr
+%define _mingw32_sysroot /usr/%{_mingw32_target}/sys-root
+%else
+%define _mingw32_sysroot %{_prefix}/@tool_target@/sys-root
+%endif
+
+BuildRequires:	@rpmprefix@i686-pc-mingw32-gcc
+BuildRequires:	@rpmprefix@i686-pc-mingw32-gmp-devel
+
+%description
+MinGW MPFR libraries.
+
+%prep
+%setup -c -q
+
+%build
+  %if "%{_prefix}" != "/usr"
+    export PATH="%{_bindir}:${PATH}"
+  %endif
+
+  mkdir -p build
+
+  cd build
+
+  ../mpfr-%{mpfr_version}/configure \
+    --prefix=%{_mingw32_sysroot}/mingw \
+    --bindir=%{_bindir} \
+    --exec_prefix=%{_mingw32_sysroot}/mingw \
+    --includedir=%{_mingw32_sysroot}/mingw/include \
+    --libdir=%{_mingw32_sysroot}/mingw/lib \
+    --libexecdir=%{_mingw32_sysroot}/mingw/libexec \
+    --mandir=%{_mingw32_sysroot}/mingw/share/man \
+    --infodir=%{_mingw32_sysroot}/mingw/share/info \
+    --datadir=%{_mingw32_sysroot}/mingw/share \
+    --build=%_build --host=@tool_target@ \
+    --enable-static \
+    --disable-shared
+
+  cd ..
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+
+  cd build
+
+  make DESTDIR=$RPM_BUILD_ROOT install
+
+  cd ..
