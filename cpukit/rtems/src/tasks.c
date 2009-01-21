@@ -68,6 +68,7 @@ bool _RTEMS_tasks_Create_extension(
   created->API_Extensions[ THREAD_API_RTEMS ] = api;
 
   api->pending_events = EVENT_SETS_NONE_PENDING;
+  api->event_condition = 0;
   _ASR_Initialize( &api->Signal );
   created->task_variables = NULL;
 

@@ -1,3 +1,7 @@
+2009-01-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/tasks.c: Initialize event_condition to 0 just because.
+
 2009-01-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* librpc/src/xdr/xdr_float.c: M32C has no native float but GCC soft
