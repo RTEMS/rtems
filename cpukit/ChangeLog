@@ -1,3 +1,9 @@
+2009-01-21	Nickolay Kolchin <nbkolchin@gmail.com>
+	        Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1357/cpukit
+	* rtems/src/tasks.c: Ensure creating a task with no ASR is honored.
+
 2009-01-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1351/cpukit

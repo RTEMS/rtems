@@ -1,3 +1,12 @@
+2009-01-21	Nickolay Kolchin <nbkolchin@gmail.com>
+	        Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1357/cpukit
+	* Makefile.am, configure.ac: Ensure creating a task with no ASR is
+	honored.
+	* sp47/.cvsignore, sp47/Makefile.am, sp47/init.c, sp47/sp47.doc,
+	sp47/sp47.scn: New files.
+
 2008-12-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp46/sp46.scn: New file.
