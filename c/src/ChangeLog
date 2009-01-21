@@ -1,3 +1,8 @@
+2009-01-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/i2c/spi-sd-card.c: Fixed RTEMS_BLKDEV_CAPABILITIES ioctl
+	which caused invalid multiple block writes.
+
 2008-11-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550.c: Transmit the character in the polled write

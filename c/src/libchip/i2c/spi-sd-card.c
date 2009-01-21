@@ -747,26 +747,26 @@ sd_card_disk_block_write_cleanup:
 static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 {
 	DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
- 	if (req == RTEMS_BLKIO_REQUEST) {
- 		rtems_device_minor_number minor = rtems_filesystem_dev_minor_t( dev);
+	if (req == RTEMS_BLKIO_REQUEST) {
+		rtems_device_minor_number minor = rtems_filesystem_dev_minor_t( dev);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
- 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
- 		switch (r->req) {
- 			case RTEMS_BLKDEV_REQ_READ:
- 				return sd_card_disk_block_read( e, r);
- 			case RTEMS_BLKDEV_REQ_WRITE:
- 				return sd_card_disk_block_write( e, r);
- 			case RTEMS_BLKDEV_CAPABILITIES:
- 				*((uint32_t*) arg)  = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
- 				return 0;
- 			default:
- 				errno = EBADRQC;
- 				return -1;
- 		}
- 	} else {
- 		errno = EBADRQC;
- 		return -1;
- 	}
+		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
+		switch (r->req) {
+			case RTEMS_BLKDEV_REQ_READ:
+				return sd_card_disk_block_read( e, r);
+			case RTEMS_BLKDEV_REQ_WRITE:
+				return sd_card_disk_block_write( e, r);
+			default:
+				errno = EBADRQC;
+				return -1;
+		}
+	} else if (req == RTEMS_BLKDEV_CAPABILITIES) {
+		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
+		return 0;
+	} else {
+		errno = EBADRQC;
+		return -1;
+	}
 }
 
 static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
