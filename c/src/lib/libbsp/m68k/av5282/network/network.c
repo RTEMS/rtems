@@ -548,10 +548,10 @@ fec_sendpacket(struct ifnet *ifp, struct mbuf *m)
 		* The IP fragmentation routine in ip_output
 		* can produce fragments with zero length.
 		*/
-		txBd = sc->txBdBase + sc->txBdHead;
 		if (m->m_len){
 			char *p = mtod(m, char *);
 			int offset = (int) p & 0x3;
+			txBd = sc->txBdBase + sc->txBdHead;
 			if (offset == 0) {
 				txBd->buffer = p;
 				txBd->length = m->m_len;
