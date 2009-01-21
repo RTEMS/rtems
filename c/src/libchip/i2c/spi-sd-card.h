@@ -56,7 +56,7 @@ extern "C" {
 
 typedef struct {
 	const char *device_name;
-	int bus;
+	rtems_device_minor_number bus;
 	rtems_libi2c_tfr_mode_t transfer_mode;
 	uint8_t command [SD_CARD_COMMAND_SIZE];
 	uint8_t response [SD_CARD_COMMAND_SIZE];

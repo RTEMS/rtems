@@ -1,3 +1,9 @@
+2009-01-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Fixed
+	RTEMS_BLKDEV_CAPABILITIES ioctl which caused invalid multiple block
+	writes.  Fixed integer type in device structure.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/serial/ns16550.c: Turn on ns16550_process() for
