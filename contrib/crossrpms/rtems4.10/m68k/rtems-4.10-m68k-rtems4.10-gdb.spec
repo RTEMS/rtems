@@ -21,14 +21,22 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
-%define debug_package		%{nil}
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -44,12 +52,27 @@ Name:		rtems-4.10-m68k-rtems4.10-gdb
 Summary:	Gdb for target m68k-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	5%{?dist}
+Release:	7%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
+
+%define build_sim --enable-sim
+# psim doesn't support Cdn-X
+%if ("m68k-rtems4.10" == "powerpc-rtems4.10") && ("%{_build}" != "%{_host}")
+%define build_sim --disable-sim
+%endif
+%ifos mingw mingw32
+# Mingw lacks functions required by the simulator
+%if "m68k-rtems4.10" == "sparc-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%if "m68k-rtems4.10" == "h8300-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
@@ -81,7 +104,7 @@ BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.10-gdb-common
 
 Source0: ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20081003.diff
+Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20090122.diff
 
 %description
 GDB for target m68k-rtems4.10
@@ -112,7 +135,7 @@ rm -f gdb-%{gdb_version}/readline/configure
     --without-included-gettext \
     --disable-win32-registry \
     --disable-werror \
-    --enable-sim \
+    %{build_sim} \
 %if "%{gdb_version}" >= "6.7"
     --with-system-readline \
 %endif
