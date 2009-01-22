@@ -15,7 +15,7 @@
     --without-included-gettext \
     --disable-win32-registry \
     --disable-werror \
-    --enable-sim \
+    %{build_sim} \
 %if "%{gdb_version}" >= "6.7"
     --with-system-readline \
 %endif
