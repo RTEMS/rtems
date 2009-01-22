@@ -102,6 +102,11 @@ noinst_DATA += @rpmprefix@$(TARGET)-libs-helper.spec
 CLEANFILES += @rpmprefix@$(TARGET)-readline-helper.spec
 noinst_DATA += @rpmprefix@$(TARGET)-readline-helper.spec
 
+@rpmprefix@$(TARGET)-termcap-helper.spec: $(TARGET)-termcap-helper.spec.in  
+	$(MKSPEC) $(TARGET)-termcap-helper.spec.in | $(SPECSTRIP) > $@
+CLEANFILES += @rpmprefix@$(TARGET)-termcap-helper.spec
+noinst_DATA += @rpmprefix@$(TARGET)-termcap-helper.spec
+
 @rpmprefix@$(TARGET)-w32api-helper.spec: $(TARGET)-w32api-helper.spec.in  
 	$(MKSPEC) $(TARGET)-w32api-helper.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-w32api-helper.spec
@@ -111,3 +116,4 @@ noinst_DATA += @rpmprefix@$(TARGET)-w32api-helper.spec
 	$(MKSPEC) $(TARGET)-zlib-helper.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-zlib-helper.spec
 noinst_DATA += @rpmprefix@$(TARGET)-zlib-helper.spec
+
