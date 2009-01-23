@@ -311,7 +311,6 @@ int rtems_shell_line_editor(
           break;
 
         case '\b':
-        case '\x7e':
         case '\x7f':
           if (col > 0)
           {
@@ -353,7 +352,7 @@ int rtems_shell_line_editor(
         return cmd;
 
         default:
-          if ((col < (size - 1)) && (c >= ' ') && (c <= 'z')) {
+          if ((col < (size - 1)) && (c >= ' ') && (c <= '~')) {
             int end = strlen (line);
             if (inserting && (col < end) && (end < size)) {
               int ch, bs;
