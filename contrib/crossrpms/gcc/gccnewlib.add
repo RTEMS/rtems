@@ -7,7 +7,6 @@
 %define newlib_pkgvers		@NEWLIB_PKGVERS@
 %define newlib_version		@NEWLIB_VERS@
 %define newlib_release		@NEWLIB_RPMREL@
-%define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 %endif
 
 %define mpfr_version	2.3.1
