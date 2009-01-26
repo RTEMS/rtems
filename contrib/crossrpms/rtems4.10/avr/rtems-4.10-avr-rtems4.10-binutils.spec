@@ -21,14 +21,22 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
-%define debug_package		%{nil}
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"

@@ -9,7 +9,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  @rpmprefix@@tool_target@-gcc-c++
+BuildRequires:  @rpmprefix@@tool_target@-gcc-c++ = %{gcc_rpmvers}
 %endif
 Provides:	@rpmprefix@@tool_target@-c++ = %{gcc_rpmvers}-%{release}
 Obsoletes:	@rpmprefix@@tool_target@-c++ < %{gcc_rpmvers}-%{release}

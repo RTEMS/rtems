@@ -21,14 +21,22 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
-%define debug_package		%{nil}
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -44,7 +52,7 @@
 
 %define newlib_pkgvers		1.17.0
 %define newlib_version		1.17.0
-%define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
+%define newlib_release		21%{?dist}
 
 %define mpfr_version	2.3.1
 
@@ -53,7 +61,7 @@ Summary:      	bfin-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	20%{?dist}
+Release:      	21%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -76,12 +84,11 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 # These distros ship an insufficient mpfr
 %{?el4:%define 	_build_mpfr 	1}
-%{?suse10_2:%define 	_build_mpfr 	1}
 %{?suse10_3:%define 	_build_mpfr 	1}
 %endif
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc
+BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc = %{gcc_rpmvers}
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
@@ -94,7 +101,7 @@ BuildRequires:	rtems-4.10-bfin-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-bfin-rtems4.10-binutils
-Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-%{release}
+Requires:	rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-%{newlib_release}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -423,7 +430,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-bfin-rtems4.10-binutils
-# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-%{release}
+# Requires:       rtems-4.10-bfin-rtems4.10-newlib = %{newlib_version}-%{newlib_release}
 # License:	GPL
 
 # %if %build_infos
@@ -539,7 +546,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc-c++
+BuildRequires:  rtems-4.10-bfin-rtems4.10-gcc-c++ = %{gcc_rpmvers}
 %endif
 Provides:	rtems-4.10-bfin-rtems4.10-c++ = %{gcc_rpmvers}-%{release}
 Obsoletes:	rtems-4.10-bfin-rtems4.10-c++ < %{gcc_rpmvers}-%{release}
@@ -563,11 +570,7 @@ GCC c++ compiler for bfin-rtems4.10.
 %{gccexec}/bfin-rtems4.10/%{gcc_version}/cc1plus%{_exeext}
 
 %dir %{gcclib}/bfin-rtems4.10/%{gcc_version}/include
-%if "%{gcc_version}" >= "3.2"
 %{gcclib}/bfin-rtems4.10/%{gcc_version}/include/c++
-%else
-%{gcclib}/bfin-rtems4.10/%{gcc_version}/include/g++
-%endif
 
 
 
@@ -579,9 +582,7 @@ Summary:      	C Library (newlib) for bfin-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-
-Provides:	rtems-4.10-bfin-rtems4.10-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.10-bfin-rtems4.10-libc < %{newlib_version}-%{release}
+Release:        %{newlib_release}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -601,6 +602,7 @@ Newlib C Library for bfin-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
+Release:        %{newlib_release}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info

@@ -43,7 +43,7 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  @rpmprefix@@tool_target@-gcc
+BuildRequires:  @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
