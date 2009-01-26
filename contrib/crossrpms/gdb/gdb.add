@@ -35,14 +35,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %if "%{gdb_version}" >= "6.6"
 # suse
-%if "%{?suse}"
-%if "%{?suse}" >= "10.3"
+%if 0%{?suse}
 BuildRequires: libexpat-devel
 %else
-BuildRequires: expat
-%endif
-%else
-# fedora/redhat/cygwin
+# Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
