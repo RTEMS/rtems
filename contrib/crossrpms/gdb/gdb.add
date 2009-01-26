@@ -13,16 +13,22 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
+%if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
-%if ("@tool_target@" == "powerpc-rtems@rtems_api@") && ("%{_build}" != "%{_host}")
+%if "@tool_target@" == "powerpc-rtems@rtems_api@"
 %define build_sim --disable-sim
 %endif
+%endif
+
 %ifos mingw mingw32
 # Mingw lacks functions required by the simulator
 %if "@tool_target@" == "sparc-rtems@rtems_api@"
 %define build_sim --disable-sim
 %endif
 %if "@tool_target@" == "h8300-rtems@rtems_api@"
+%define build_sim --disable-sim
+%endif
+%if "@tool_target@" == "mipstx39-rtems@rtems_api@"
 %define build_sim --disable-sim
 %endif
 %endif
