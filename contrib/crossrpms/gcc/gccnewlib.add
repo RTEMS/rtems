@@ -40,7 +40,6 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 # These distros ship an insufficient mpfr
 %{?el4:%define 	_build_mpfr 	1}
-%{?suse10_2:%define 	_build_mpfr 	1}
 %{?suse10_3:%define 	_build_mpfr 	1}
 %endif
 
