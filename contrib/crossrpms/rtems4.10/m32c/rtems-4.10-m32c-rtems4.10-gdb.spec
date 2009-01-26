@@ -52,7 +52,7 @@ Name:		rtems-4.10-m32c-rtems4.10-gdb
 Summary:	Gdb for target m32c-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	7%{?dist}
+Release:	8%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -60,10 +60,13 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
+%if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
-%if ("m32c-rtems4.10" == "powerpc-rtems4.10") && ("%{_build}" != "%{_host}")
+%if "m32c-rtems4.10" == "powerpc-rtems4.10"
 %define build_sim --disable-sim
 %endif
+%endif
+
 %ifos mingw mingw32
 # Mingw lacks functions required by the simulator
 %if "m32c-rtems4.10" == "sparc-rtems4.10"
@@ -72,18 +75,17 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if "m32c-rtems4.10" == "h8300-rtems4.10"
 %define build_sim --disable-sim
 %endif
+%if "m32c-rtems4.10" == "mipstx39-rtems4.10"
+%define build_sim --disable-sim
+%endif
 %endif
 
 %if "%{gdb_version}" >= "6.6"
 # suse
-%if "%{?suse}"
-%if "%{?suse}" >= "10.3"
+%if 0%{?suse}
 BuildRequires: libexpat-devel
 %else
-BuildRequires: expat
-%endif
-%else
-# fedora/redhat/cygwin
+# Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
