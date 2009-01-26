@@ -46,13 +46,13 @@
 %endif
 
 
-%define gcc_pkgvers 4.3.2
-%define gcc_version 4.3.2
-%define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
+%define gcc_pkgvers 4.3.3
+%define gcc_version 4.3.3
+%define gcc_rpmvers %{expand:%(echo "4.3.3" | tr - _ )}
 
 %define newlib_pkgvers		1.17.0
 %define newlib_version		1.17.0
-%define newlib_release		21%{?dist}
+%define newlib_release		22%{?dist}
 
 %define mpfr_version	2.3.1
 
@@ -61,7 +61,7 @@ Summary:      	i386-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	21%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -112,13 +112,13 @@ Requires:	rtems-4.10-i386-rtems4.10-newlib = %{newlib_version}-%{newlib_release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.3.2"
+%if "%{gcc_version}" == "4.3.3"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.2-rtems4.10-20081205.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.3-rtems4.10-20090125.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
-%if "%{gcc_version}" == "4.3.2" 
+%if "%{gcc_version}" == "4.3.3" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
