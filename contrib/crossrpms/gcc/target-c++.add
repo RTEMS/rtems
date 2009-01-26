@@ -35,10 +35,6 @@ GCC c++ compiler for @tool_target@.
 %{gccexec}/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
 
 %dir %{gcclib}/@tool_target@/%{gcc_version}/include
-%if "%{gcc_version}" >= "3.2"
 %{gcclib}/@tool_target@/%{gcc_version}/include/c++
-%else
-%{gcclib}/@tool_target@/%{gcc_version}/include/g++
-%endif
 %endif
 
