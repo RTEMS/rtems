@@ -370,7 +370,15 @@ static void my_driver_interrupt_handler(
 
 The @code{my_driver_interrupt_write} function is responsible for telling the
 device that the @code{n} characters at @code{buf} are to be transmitted.  The
-return value may be arbitrary since it is not checked from Termios.
+return value may be arbitrary since it is not checked from Termios.  It is
+guaranteed that @code{n} is greater than zero.  This routine is invoked either
+from task context with disabled interrupts to start a new transmission process
+with exactly one character in case of an idle output state or from the
+interrupt handler to refill the transmitter.  If the routine is invoked to
+start the transmit process the output state will become busy and Termios starts
+to fill the output buffer.  If the transmit interrupt arises before Termios was
+able to fill the transmit buffer you will end up with one interrupt per
+character.
 
 @example
 @group
