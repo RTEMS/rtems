@@ -1,3 +1,11 @@
+2009-01-29	 Nickolay Semyonov-Kolchin <nbkolchin@gmail.com>
+
+	PR 1359/cpukit
+	* libcsupport/src/libio.c: rtems_libio_allocate:
+	rtems_libio_iop_freelist incorrectly zeroed on semaphore error. Now
+	checks error and does not modify anything until sure it has created
+	semaphore.
+
 2009-01-29	Gene Smith <gene.smith@siemens.com>
 
 	PR 1363/filesystem
