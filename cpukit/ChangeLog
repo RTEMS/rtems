@@ -1,3 +1,9 @@
+2009-01-29	Gene Smith <gene.smith@siemens.com>
+
+	PR 1363/filesystem
+	* libfs/src/dosfs/fat.h: Fix issue where 32 bit values are not written
+	correctly in FAT f/s data.
+
 2009-01-29	Eric Norum <norume@aps.anl.gov>
 
 	PR 1364/cpukit
