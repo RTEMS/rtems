@@ -1,3 +1,9 @@
+2009-01-29	Eric Norum <norume@aps.anl.gov>
+
+	PR 1364/cpukit
+	* libcsupport/src/gxx_wrappers.c: Fix compilation problems when
+	diagnostics enabled.
+
 2009-01-23	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/shell.c: Fix command line parsing of valid

@@ -52,14 +52,11 @@ typedef void *__gthread_mutex_t;
 typedef void *__gthread_recursive_mutex_t;
 
 /* uncomment this if you need to debug this interface */
-
-/*
-#define DEBUG_GXX_WRAPPERS 1
-*/
+/*#define DEBUG_GXX_WRAPPERS 1*/
 
 #ifdef DEBUG_GXX_WRAPPERS
 /* local function to return the ID of the calling thread */
-static rtems_id get_tid( void )
+static rtems_id gxx_get_tid( void )
 {
    rtems_id id = 0;
    rtems_task_ident( RTEMS_SELF, 0, &id );
@@ -160,7 +157,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
   }
 
 #ifdef DEBUG_GXX_WRAPPERS
-   printk( "gxx_wrappers: getspecific key=%x, ptr=%x, id=%x\n", key, p, get_tid() );
+   printk( "gxx_wrappers: getspecific key=%x, ptr=%x, id=%x\n", key, p, gxx_get_tid() );
 #endif
    return p;
 }
@@ -169,7 +166,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
 int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
 {
 #ifdef DEBUG_GXX_WRAPPERS
-  printk( "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n", key, ptr, get_tid() );
+  printk( "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n", key, ptr, gxx_get_tid() );
 #endif
   /* register with RTEMS the buffer that will hold the key values */
   if( rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor ) == RTEMS_SUCCESSFUL )
@@ -187,16 +184,20 @@ int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
  */
 void rtems_gxx_mutex_init (__gthread_mutex_t *mutex)
 {
+  rtems_status_code s;
 #ifdef DEBUG_GXX_WRAPPERS
   printk( "gxx_wrappers: mutex init =%X\n", *mutex );
 #endif
-  if( rtems_semaphore_create( rtems_build_name ('G', 'C', 'C', '2'),
+  if( (s = rtems_semaphore_create( rtems_build_name ('G', 'C', 'C', '2'),
                               1,
                              RTEMS_PRIORITY|RTEMS_BINARY_SEMAPHORE
                              |RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING|RTEMS_LOCAL,
                              0,
-                             (rtems_id *)mutex ) != RTEMS_SUCCESSFUL )
+                             (rtems_id *)mutex )) != RTEMS_SUCCESSFUL )
   {
+#ifdef DEBUG_GXX_WRAPPERS
+      printk( "gxx_wrappers: mutex init failed %s (%d)\n", rtems_status_text(s), s );
+#endif
       rtems_panic ("rtems_gxx_mutex_init");
   }
 #ifdef DEBUG_GXX_WRAPPERS
