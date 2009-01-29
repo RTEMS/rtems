@@ -130,7 +130,7 @@ extern "C" {
 
 #define FAT_SET_VAL32(x, ofs,val) do {               \
                  uint32_t val1 = val;                \
-                 FAT_SET_VAL16((x),(ofs),(val1)&&0xffff);\
+                 FAT_SET_VAL16((x),(ofs),(val1)&0xffff);\
                  FAT_SET_VAL16((x),(ofs)+2,(val1)>>16);\
                  } while (0)
 
