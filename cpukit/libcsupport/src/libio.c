@@ -149,23 +149,25 @@ rtems_libio_t *rtems_libio_allocate( void )
 {
   rtems_libio_t *iop, *next;
   rtems_status_code rc;
+  rtems_id sema;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
   if (rtems_libio_iop_freelist) {
-    iop = rtems_libio_iop_freelist;
-    next = iop->data1;
-    (void) memset( iop, 0, sizeof(rtems_libio_t) );
-    iop->flags = LIBIO_FLAGS_OPEN;
     rc = rtems_semaphore_create(
-      RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
+      RTEMS_LIBIO_IOP_SEM(rtems_libio_iop_freelist - rtems_libio_iops),
       1,
       RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
       RTEMS_NO_PRIORITY,
-      &iop->sem
+      &sema
     );
     if (rc != RTEMS_SUCCESSFUL)
       goto failed;
+    iop = rtems_libio_iop_freelist;
+    next = iop->data1;
+    (void) memset( iop, 0, sizeof(rtems_libio_t) ); 
+    iop->flags = LIBIO_FLAGS_OPEN;
+    iop->sem = sema;
     rtems_libio_iop_freelist = next;
     goto done;
   }
