@@ -85,9 +85,9 @@ approach would be to name them the binary values one through
 one-hundred, respectively.
 
 @ifset is-C
-@findex rtems_get_object_name
+@findex rtems_object_get_name
 
-RTEMS provides a helper routine, @code{@value{DIRPREFIX}get_object_name},
+RTEMS provides a helper routine, @code{@value{DIRPREFIX}object_get_name},
 which can be used to obtain the name of any RTEMS object using just
 its ID.  This routine attempts to convert the name into a printable string.
 
@@ -103,7 +103,7 @@ void print_name(rtems_id the_object)
   char  buffer[10];   /* name assumed to be 10 characters or less */
   char *result;
 
-  result = rtems_get_object_name( id, sizeof(buffer), buffer ); 
+  result = rtems_object_get_name( id, sizeof(buffer), buffer ); 
   printk( "ID=0x%08x name=%s\n", id, ((result) ? result : "no name") );
 @}
 @end example

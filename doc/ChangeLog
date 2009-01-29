@@ -1,3 +1,8 @@
+2009-01-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_howto/console.t: Clarify interrupt transmit process.
+	* user/concepts.t: Typo.
+
 2008-12-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* index.html.in: Remove manuals that are dead.
