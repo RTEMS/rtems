@@ -1,3 +1,9 @@
+2009-01-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/object.h: Maximum index if 0xffff not 0xff
+	when using 32-bit ids. This resulted in unlimited configurations not
+	being able to create more than 255 objects of a class.
+
 2009-01-29	 Nickolay Semyonov-Kolchin <nbkolchin@gmail.com>
 
 	PR 1359/cpukit

@@ -192,7 +192,7 @@ typedef uint16_t   Objects_Maximum;
 /**
  *  This is the highest value for the index portion of an object Id.
  */
-#define OBJECTS_ID_FINAL_INDEX    (0xff)
+#define OBJECTS_ID_FINAL_INDEX    (0xffff)
 #endif
 
 /**
