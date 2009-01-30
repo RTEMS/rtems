@@ -1,3 +1,11 @@
+2009-01-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add sp48 which tests that configuring for
+	unlimited objects when configured for a unified workspace works as
+	expected.
+	* sp48/.cvsignore, sp48/Makefile.am, sp48/init.c, sp48/sp48.doc,
+	sp48/sp48.scn: New files.
+
 2009-01-21	Nickolay Kolchin <nbkolchin@gmail.com>
 	        Joel Sherrill <joel.sherrill@oarcorp.com>
 

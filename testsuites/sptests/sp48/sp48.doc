@@ -1,0 +1,24 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp48
+
+directives:
+
+  rtems_semaphore_create
+  rtems_semaphore_delete
+
+concepts:
+
++ Ensure that unlimited object configuration works properly when
+  configured for unified C program heap and Executive Workspace.

@@ -1,0 +1,11 @@
+*** TEST 48 ***
+Largest C program heap block available: 4006096
+Created all semaphores allowed in this test
+5000 semaphores created
+Largest C program heap block available: 2376296
+5000 semaphores successfully deleted
+Largest C program heap block available: 2376296
+*** END OF TEST 48 ***
+
+NOTE: Heap block size and maximum objects created vary based upon target.
+      The maximum semaphores that will be created is 5000.
