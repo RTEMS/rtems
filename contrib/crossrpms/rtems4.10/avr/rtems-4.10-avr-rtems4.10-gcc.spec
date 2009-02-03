@@ -52,7 +52,6 @@
 
 %define newlib_pkgvers		1.17.0
 %define newlib_version		1.17.0
-%define newlib_release		22%{?dist}
 
 %define mpfr_version	2.3.1
 
@@ -61,7 +60,7 @@ Summary:      	avr-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -101,7 +100,7 @@ BuildRequires:	rtems-4.10-avr-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-avr-rtems4.10-binutils
-Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-%{newlib_release}
+Requires:	rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-23%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -120,7 +119,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.3-rtems4.10-200
 
 %if "%{newlib_version}" == "1.17.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081223.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20090203.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -422,7 +421,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-avr-rtems4.10-binutils
-# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-%{newlib_release}
+# Requires:       rtems-4.10-avr-rtems4.10-newlib = %{newlib_version}-23%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -539,7 +538,7 @@ Summary:      	C Library (newlib) for avr-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        %{newlib_release}
+Release:        23%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -559,7 +558,7 @@ Newlib C Library for avr-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        %{newlib_release}
+Release:        23%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
