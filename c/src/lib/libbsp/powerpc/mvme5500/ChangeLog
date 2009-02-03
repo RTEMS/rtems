@@ -1,3 +1,7 @@
+2009-02-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* GT64260/GT64260TWSI.h: Add missing prototypes.
+
 2008-12-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* GT64260/MVME5500I2C.c: Include <stdint.h> instead of

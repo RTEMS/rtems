@@ -15,10 +15,10 @@
 #define TWSI_TWSIEN     0x40
 #define TWSI_INTEN      0x80
 
-void GT64260TWSIinit();
-int GT64260TWSIstart();
+void GT64260TWSIinit(void);
+int GT64260TWSIstart(void);
 int GT64260TWSIwrite(unsigned char Data);
 int GT64260TWSIread(unsigned char *, int lastByte);
-int GT64260TWSIstop();
+int GT64260TWSIstop(void);
 
 #endif
