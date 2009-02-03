@@ -60,7 +60,7 @@ Summary:      	i386-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,7 +100,7 @@ BuildRequires:	rtems-4.10-i386-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-i386-rtems4.10-binutils
-Requires:	rtems-4.10-i386-rtems4.10-newlib = %{newlib_version}-23%{?dist}
+Requires:	rtems-4.10-i386-rtems4.10-newlib = %{newlib_version}-24%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -429,7 +429,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-i386-rtems4.10-binutils
-# Requires:       rtems-4.10-i386-rtems4.10-newlib = %{newlib_version}-23%{?dist}
+# Requires:       rtems-4.10-i386-rtems4.10-newlib = %{newlib_version}-24%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -581,7 +581,7 @@ Summary:      	C Library (newlib) for i386-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        23%{?dist}
+Release:        24%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -601,7 +601,7 @@ Newlib C Library for i386-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        23%{?dist}
+Release:        24%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
