@@ -66,7 +66,7 @@ int mq_unlink(
     _Objects_Get_index( the_mq_id )
   );
 
-  the_mq->linked = FALSE;
+  the_mq->linked = false;
   _POSIX_Message_queue_Namespace_remove( the_mq );
   _POSIX_Message_queue_Delete( the_mq );
 

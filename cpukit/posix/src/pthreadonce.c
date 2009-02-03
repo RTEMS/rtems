@@ -34,8 +34,8 @@ int pthread_once(
     rtems_mode saveMode;
     rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &saveMode);
     if ( !once_control->init_executed ) {
-      once_control->is_initialized = TRUE;
-      once_control->init_executed = TRUE;
+      once_control->is_initialized = true;
+      once_control->init_executed = true;
       (*init_routine)();
     }
     rtems_task_mode(saveMode, RTEMS_PREEMPT_MASK, &saveMode);

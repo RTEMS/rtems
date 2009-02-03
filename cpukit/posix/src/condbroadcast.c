@@ -33,5 +33,5 @@ int pthread_cond_broadcast(
   pthread_cond_t   *cond
 )
 {
-  return _POSIX_Condition_variables_Signal_support( cond, TRUE );
+  return _POSIX_Condition_variables_Signal_support( cond, true );
 }

@@ -73,13 +73,13 @@ int _POSIX_Semaphore_Create_support(
   the_semaphore->process_shared  = pshared;
 
   if ( name ) {
-    the_semaphore->named = TRUE;
+    the_semaphore->named = true;
     the_semaphore->open_count = 1;
-    the_semaphore->linked = TRUE;
+    the_semaphore->linked = true;
   } else {
-    the_semaphore->named = FALSE;
+    the_semaphore->named = false;
     the_semaphore->open_count = 0;
-    the_semaphore->linked = FALSE;
+    the_semaphore->linked = false;
   }
 
   the_sem_attr = &the_semaphore->Semaphore.Attributes;

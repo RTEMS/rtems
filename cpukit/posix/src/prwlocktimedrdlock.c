@@ -63,10 +63,10 @@ int pthread_rwlock_timedrdlock(
     case POSIX_ABSOLUTE_TIMEOUT_INVALID:
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
     case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      do_wait = FALSE;
+      do_wait = false;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-      do_wait = TRUE;
+      do_wait = true;
       break;
   }
 

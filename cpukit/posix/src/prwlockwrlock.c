@@ -52,7 +52,7 @@ int pthread_rwlock_wrlock(
       _CORE_RWLock_Obtain_for_writing(
 	&the_rwlock->RWLock,
 	*rwlock,
-	TRUE,          /* do not timeout -- wait forever */
+	true,          /* do not timeout -- wait forever */
 	0,
 	NULL
       );

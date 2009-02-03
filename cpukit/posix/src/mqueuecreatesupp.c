@@ -103,9 +103,9 @@ int _POSIX_Message_queue_Create_support(
   }
 
   the_mq->process_shared  = pshared;
-  the_mq->named = TRUE;
+  the_mq->named = true;
   the_mq->open_count = 1;
-  the_mq->linked = TRUE;
+  the_mq->linked = true;
 
   /*
    * Make a copy of the user's string for name just in case it was

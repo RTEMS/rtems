@@ -56,10 +56,10 @@ int pthread_cond_timedwait(
       return EINVAL;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
     case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-      already_timedout = TRUE;
+      already_timedout = true;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-      already_timedout = FALSE;
+      already_timedout = false;
       break;
   }
 

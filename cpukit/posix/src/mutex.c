@@ -48,11 +48,11 @@ void _POSIX_Mutex_Manager_initialization(void)
    * Since the maximum priority is run-time configured, this
    * structure cannot be initialized statically.
    */
-  default_attr->is_initialized = TRUE;
+  default_attr->is_initialized = true;
   default_attr->process_shared = PTHREAD_PROCESS_PRIVATE;
   default_attr->prio_ceiling   = POSIX_SCHEDULER_MAXIMUM_PRIORITY;
   default_attr->protocol       = PTHREAD_PRIO_NONE;
-  default_attr->recursive      = FALSE;
+  default_attr->recursive      = false;
 
   /*
    * Initialize the POSIX mutex object class information structure.
@@ -65,11 +65,11 @@ void _POSIX_Mutex_Manager_initialization(void)
                                 /* maximum objects of this class */
     sizeof( POSIX_Mutex_Control ),
                                 /* size of this object's control block */
-    TRUE,                       /* TRUE if names for this object are strings */
+    true,                       /* true if names for this object are strings */
     _POSIX_PATH_MAX             /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                      /* TRUE if this is a global object class */
+    false,                      /* true if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
   );

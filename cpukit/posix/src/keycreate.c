@@ -69,7 +69,7 @@ int pthread_key_create(
         if (_Objects_Information_table[ the_api ][ 1 ] == NULL )
           _Internal_error_Occurred(
             INTERNAL_ERROR_CORE,
-            TRUE,
+            true,
             INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY
           );
       #endif 
@@ -96,7 +96,7 @@ int pthread_key_create(
 
   }
 
-  the_key->is_active = TRUE;
+  the_key->is_active = true;
 
   _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->Object, 0 );
 

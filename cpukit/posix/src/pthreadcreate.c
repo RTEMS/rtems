@@ -164,9 +164,9 @@ int pthread_create(
 
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  is_fp = TRUE;
+  is_fp = true;
 #else
-  is_fp = FALSE;
+  is_fp = false;
 #endif
 
   /*
@@ -199,7 +199,7 @@ int pthread_create(
     _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,
     core_priority,
-    TRUE,                 /* preemptible */
+    true,                 /* preemptible */
     budget_algorithm,
     budget_callout,
     0,                    /* isr level */

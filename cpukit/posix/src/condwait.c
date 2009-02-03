@@ -38,6 +38,6 @@ int pthread_cond_wait(
     cond,
     mutex,
     THREAD_QUEUE_WAIT_FOREVER,
-    FALSE
+    false
   );
 }

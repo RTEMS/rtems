@@ -34,9 +34,9 @@ int pthread_condattr_destroy(
   pthread_condattr_t *attr
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || attr->is_initialized == false )
     return EINVAL;
 
-  attr->is_initialized = FALSE;
+  attr->is_initialized = false;
   return 0;
 }

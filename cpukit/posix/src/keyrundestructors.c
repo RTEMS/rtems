@@ -52,7 +52,7 @@ void _POSIX_Keys_Run_destructors(
 
   for ( ; ; ) {
 
-    are_all_null = TRUE;
+    are_all_null = true;
 
     for ( index=1 ; index <= _POSIX_Keys_Information.maximum ; index++ ) {
 
@@ -64,12 +64,12 @@ void _POSIX_Keys_Run_destructors(
         if ( value ) {
           (*the_key->destructor)( value );
           if ( the_key->Values[ thread_api ][ thread_index ] )
-            are_all_null = FALSE;
+            are_all_null = false;
         }
       }
     }
 
-    if ( are_all_null == TRUE )
+    if ( are_all_null == true )
       return;
 
     iterations++;

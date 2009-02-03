@@ -88,7 +88,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
        *  A timed receive with a bad time will do a poll regardless.
        */
       if ( wait )
-        do_wait = (the_mq_fd->oflag & O_NONBLOCK) ? FALSE : TRUE;
+        do_wait = (the_mq_fd->oflag & O_NONBLOCK) ? false : true;
       else
         do_wait = wait;
 

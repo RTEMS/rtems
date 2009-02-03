@@ -120,7 +120,7 @@ bool _POSIX_signals_Unblock_thread(
 	  }
     } else if ( the_thread->current_state == STATES_READY ) {
       if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-	_ISR_Signals_to_thread_executing = TRUE;
+	_ISR_Signals_to_thread_executing = true;
     }
   }
   return false;

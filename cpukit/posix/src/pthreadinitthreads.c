@@ -82,7 +82,7 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
       NULL
     );
     if ( status )
-      _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, status );
+      _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, true, status );
   }
 }
 

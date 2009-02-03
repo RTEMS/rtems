@@ -299,7 +299,7 @@ process_it:
   the_thread->do_post_task_switch_extension = true;
 
   /*
-   *  Returns TRUE if the signal was synchronously given to a thread
+   *  Returns true if the signal was synchronously given to a thread
    *  blocked waiting for the signal.
    */
 

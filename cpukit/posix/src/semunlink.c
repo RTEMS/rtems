@@ -58,7 +58,7 @@ int sem_unlink(
     _Objects_Get_index( the_semaphore_id )
   );
 
-  the_semaphore->linked = FALSE;
+  the_semaphore->linked = false;
   _POSIX_Semaphore_Namespace_remove( the_semaphore );
   _POSIX_Semaphore_Delete( the_semaphore );
 

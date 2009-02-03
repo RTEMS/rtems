@@ -137,7 +137,7 @@ mqd_t mq_open(
 
   status = _POSIX_Message_queue_Create_support(
     name,
-    TRUE,         /* shared across processes */
+    true,         /* shared across processes */
     attr,
     &the_mq
   );

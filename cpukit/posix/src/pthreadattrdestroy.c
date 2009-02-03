@@ -27,6 +27,6 @@ int pthread_attr_destroy(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->is_initialized = FALSE;
+  attr->is_initialized = false;
   return 0;
 }

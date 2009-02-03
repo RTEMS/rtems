@@ -44,7 +44,7 @@
  */
 
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
-  TRUE,                       /* is_initialized */
+  true,                       /* is_initialized */
   NULL,                       /* stackaddr */
   0,                          /* stacksize -- will be adjusted to minimum */
   PTHREAD_SCOPE_PROCESS,      /* contentionscope */
@@ -91,7 +91,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   if ( the_thread->resource_count == 0 ||
        the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority, TRUE );
+    _Thread_Change_priority( the_thread, new_priority, true );
 
   ticks = _Timespec_To_ticks( &api->schedparam.ss_replenish_period );
 
@@ -128,7 +128,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
 
  if ( the_thread->resource_count == 0 ||
       the_thread->current_priority > new_priority )
-    _Thread_Change_priority( the_thread, new_priority, TRUE );
+    _Thread_Change_priority( the_thread, new_priority, true );
 }
 
 /*PAGE
@@ -323,7 +323,7 @@ void _POSIX_Threads_Manager_initialization(void)
 
 #if 0
   if ( user_threads == NULL || number_of_initialization_threads == 0 )
-    _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, EINVAL );
+    _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, true, EINVAL );
 #endif
 
   _Objects_Initialize_information(
@@ -334,11 +334,11 @@ void _POSIX_Threads_Manager_initialization(void)
                                  /* maximum objects of this class */
     sizeof( Thread_Control ),
                                  /* size of this object's control block */
-    TRUE,                        /* TRUE if names for this object are strings */
+    true,                        /* true if names for this object are strings */
     _POSIX_PATH_MAX              /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    FALSE,                       /* TRUE if this is a global object class */
+    false,                       /* true if this is a global object class */
     NULL                         /* Proxy extraction support callout */
 #endif
   );

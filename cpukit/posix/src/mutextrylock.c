@@ -37,5 +37,5 @@ int pthread_mutex_trylock(
   pthread_mutex_t           *mutex
 )
 {
-  return _POSIX_Mutex_Lock_support( mutex, FALSE, THREAD_QUEUE_WAIT_FOREVER );
+  return _POSIX_Mutex_Lock_support( mutex, false, THREAD_QUEUE_WAIT_FOREVER );
 }

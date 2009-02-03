@@ -49,7 +49,7 @@ int pthread_spin_lock(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      status = _CORE_spinlock_Wait( &the_spinlock->Spinlock, TRUE, 0 );
+      status = _CORE_spinlock_Wait( &the_spinlock->Spinlock, true, 0 );
       _Thread_Enable_dispatch();
       return _POSIX_Spinlock_Translate_core_spinlock_return_code( status );
 

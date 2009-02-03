@@ -33,9 +33,9 @@ int pthread_barrierattr_destroy(
   pthread_barrierattr_t *attr
 )
 {
-  if ( !attr || attr->is_initialized == FALSE )
+  if ( !attr || attr->is_initialized == false )
     return EINVAL;
 
-  attr->is_initialized = FALSE;
+  attr->is_initialized = false;
   return 0;
 }

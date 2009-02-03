@@ -52,7 +52,7 @@ int pthread_rwlock_rdlock(
       _CORE_RWLock_Obtain_for_reading(
 	&the_rwlock->RWLock,
 	*rwlock,
-	TRUE,                 /* we are willing to wait forever */
+	true,                 /* we are willing to wait forever */
 	0,
 	NULL
       );

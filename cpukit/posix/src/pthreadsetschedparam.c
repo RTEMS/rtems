@@ -110,7 +110,7 @@ int pthread_setschedparam(
           _Thread_Change_priority(
              the_thread,
              the_thread->real_priority,
-             TRUE
+             true
           );
           break;
 

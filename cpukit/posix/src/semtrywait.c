@@ -38,5 +38,5 @@ int sem_trywait(
   sem_t *sem
 )
 {
-  return _POSIX_Semaphore_Wait_support(sem, FALSE, THREAD_QUEUE_WAIT_FOREVER);
+  return _POSIX_Semaphore_Wait_support(sem, false, THREAD_QUEUE_WAIT_FOREVER);
 }

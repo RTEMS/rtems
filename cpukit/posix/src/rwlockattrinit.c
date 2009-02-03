@@ -30,7 +30,7 @@ int pthread_rwlockattr_init(
   if ( !attr )
     return EINVAL;
 
-  attr->is_initialized = TRUE;
+  attr->is_initialized = true;
   attr->process_shared = PTHREAD_PROCESS_PRIVATE;
   return 0;
 }

@@ -47,7 +47,7 @@ int sem_destroy(
        *  Undefined operation on a named semaphore.
        */
 
-      if ( the_semaphore->named == TRUE ) {
+      if ( the_semaphore->named == true ) {
         _Thread_Enable_dispatch();
         rtems_set_errno_and_return_minus_one( EINVAL );
       }
