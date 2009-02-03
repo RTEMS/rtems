@@ -45,15 +45,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.19
-%define binutils_version 2.19
-%define binutils_rpmvers %{expand:%(echo "2.19" | tr - _ )}
+%define binutils_pkgvers 2.19.1
+%define binutils_version 2.19.1
+%define binutils_rpmvers %{expand:%(echo "2.19.1" | tr - _ )}
 
 Name:		rtems-4.10-m32r-rtems4.10-binutils
 Summary:	Binutils for target m32r-rtems4.10
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,8 +73,8 @@ BuildRequires:	bison
 
 Requires:	rtems-4.10-binutils-common
 
-Source0: http://ftp.gnu.org/gnu/binutils/binutils-2.19.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.19-rtems4.10-20081023.diff
+Source0: http://ftp.gnu.org/gnu/binutils/binutils-2.19.1.tar.bz2
+Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.19.1-rtems4.10-20090203.diff
 
 %description
 Cross binutils for target m32r-rtems4.10
