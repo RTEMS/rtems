@@ -1,3 +1,36 @@
+2009-02-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/barrierattrdestroy.c, posix/src/barrierattrinit.c,
+	posix/src/cond.c, posix/src/condattrdestroy.c,
+	posix/src/condbroadcast.c, posix/src/conddefaultattributes.c,
+	posix/src/condsignal.c, posix/src/condtimedwait.c,
+	posix/src/condwait.c, posix/src/key.c, posix/src/keycreate.c,
+	posix/src/keydelete.c, posix/src/keyrundestructors.c,
+	posix/src/killinfo.c, posix/src/mqueue.c,
+	posix/src/mqueuecreatesupp.c, posix/src/mqueueopen.c,
+	posix/src/mqueuereceive.c, posix/src/mqueuerecvsupp.c,
+	posix/src/mqueuesend.c, posix/src/mqueuesendsupp.c,
+	posix/src/mqueuetimedreceive.c, posix/src/mqueuetimedsend.c,
+	posix/src/mqueueunlink.c, posix/src/mutex.c,
+	posix/src/mutexattrdestroy.c, posix/src/mutexinit.c,
+	posix/src/mutexlock.c, posix/src/mutextimedlock.c,
+	posix/src/mutextrylock.c, posix/src/pbarrier.c,
+	posix/src/prwlock.c, posix/src/prwlockrdlock.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/prwlocktryrdlock.c, posix/src/prwlocktrywrlock.c,
+	posix/src/prwlockwrlock.c, posix/src/psignalunblockthread.c,
+	posix/src/pspin.c, posix/src/pspinlock.c,
+	posix/src/pspintrylock.c, posix/src/pthread.c,
+	posix/src/pthreadattrdestroy.c, posix/src/pthreadcreate.c,
+	posix/src/pthreadinitthreads.c, posix/src/pthreadkill.c,
+	posix/src/pthreadonce.c, posix/src/pthreadsetschedparam.c,
+	posix/src/ptimer.c, posix/src/rwlockattrdestroy.c,
+	posix/src/rwlockattrinit.c, posix/src/semaphore.c,
+	posix/src/semaphorecreatesupp.c, posix/src/semdestroy.c,
+	posix/src/semopen.c, posix/src/semtrywait.c,
+	posix/src/semunlink.c, posix/src/semwait.c:
+	Eliminate TRUE/FALSE.
+
 2009-01-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/object.h: Maximum index if 0xffff not 0xff
