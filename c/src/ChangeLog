@@ -1,3 +1,7 @@
+2009-02-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bspopts.m4: Quoting cosmetics.
+
 2009-01-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/i2c/spi-sd-card.h, libchip/i2c/spi-sd-card.c: Fixed
@@ -22,6 +26,10 @@
 	optman/rtems/no-sem.c, optman/rtems/no-timer.c,
 	optman/sapi/no-ext.c, optman/sapi/no-io.c:
 	Revert previous patch (cvs clash with Joel hacking cpukit).
+
+2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4: Remove tic4x.
 
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 

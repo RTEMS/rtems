@@ -29,7 +29,7 @@ dnl appropriate /bin/sh-magic to "configure" to have VAR set up.
 AC_DEFUN([RTEMS_BSPOPTS_HELP],[
 RTEMS_ARG_VAR([$1],[$2])
 m4_ifdef([_$1],[
-case ${RTEMS_BSP} in
+case "${RTEMS_BSP}" in
 _$1[]dnl
 esac],[])
 if test -n "[$]{$1}"; then[]dnl
