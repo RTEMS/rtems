@@ -7,7 +7,7 @@
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        %{newlib_release}
+Release:        @NEWLIB_RPMREL@
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
