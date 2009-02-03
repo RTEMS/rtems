@@ -34,7 +34,7 @@ Source5:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-objc-%{gcc_pkgvers}.ta
 %if %build_newlib
 %if "%{newlib_version}" == "1.17.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20081223.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-%{newlib_pkgvers}-rtems4.10-20090203.diff
 %endif
 %{?_without_sources:NoSource:	50}
 %endif
