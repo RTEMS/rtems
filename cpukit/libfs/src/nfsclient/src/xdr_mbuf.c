@@ -81,7 +81,7 @@ my_free(void *p)
 
 #define DEBUG			DEBUG_ASSERT
 
-#define KERNEL
+#define _KERNEL
 #include <sys/mbuf.h>
 
 #include <assert.h>

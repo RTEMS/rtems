@@ -1594,7 +1594,6 @@ RpcUdpXactPool pool;
  *             the RTEMS/BSDNET headers redefine those :-(
  */
 
-#define KERNEL
 #define _KERNEL
 #include <sys/mbuf.h>
 
