@@ -61,10 +61,6 @@
  *   the end of the file should be removed
  */
 
-#ifndef _COMPILING_BSD_KERNEL_
-#define _COMPILING_BSD_KERNEL_
-#endif
-
 #ifndef KERNEL
 #define KERNEL
 #endif
@@ -1221,5 +1217,4 @@ rtems_bsdnet_do_dhcp_refresh_only (unsigned long xid,
   dhcp_start_task (sdl, &reply, 150);
 }
 
-#undef D_COMPILING_BSD_KERNEL
 #undef KERNEL
