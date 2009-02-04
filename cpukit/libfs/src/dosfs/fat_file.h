@@ -15,14 +15,14 @@
 #ifndef __DOSFS_FAT_FILE_H__
 #define __DOSFS_FAT_FILE_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio_.h>
 
 #include <time.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* "fat-file" representation
  *

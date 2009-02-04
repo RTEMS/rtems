@@ -16,14 +16,15 @@
 #ifndef __DOSFS_FAT_FAT_OPERATIONS_H__
 #define __DOSFS_FAT_FAT_OPERATIONS_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio_.h>
 
 #include <rtems/bdbuf.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "fat.h"
 
 int
