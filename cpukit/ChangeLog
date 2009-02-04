@@ -1,3 +1,9 @@
+2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/net/if_ppp.h: Eliminate pppattach,  pppintr
+	  (Unused).
+	* libnetworking/net/if_ppp.c: Eliminate pppintr (Unused).
+
 2009-01-29	 Nickolay Semyonov-Kolchin <nbkolchin@gmail.com>
 
 	PR 1359/cpukit
