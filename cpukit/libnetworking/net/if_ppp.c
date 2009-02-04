@@ -1292,14 +1292,6 @@ ppp_dequeue(struct ppp_softc *sc)
     return m;
 }
 
-/*
- * Software interrupt routine, called at splsoftnet.
- */
-void
-pppintr(void)
-{
-}
-
 #ifdef PPP_COMPRESS
 /*
  * Handle a CCP packet.  `rcvd' is 1 if the packet was received,
