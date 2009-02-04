@@ -1,5 +1,8 @@
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/nfsclient/src/rpcio.c,
+	libfs/src/nfsclient/src/sock_mbuf.c, 
+	libfs/src/nfsclient/src/xdr_mbuf.c: Remove #define KERNEL.
 	* libfs/src/dosfs/fat_file.h, libfs/src/dosfs/fat_fat_operations.h:
 	Move extern "C" brace after includes.
 
