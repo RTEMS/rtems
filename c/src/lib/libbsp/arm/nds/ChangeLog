@@ -1,3 +1,7 @@
+2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add -D__BSD_VISIBLE to wifi_rel_CPPFLAGS.
+
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -Qy from *link.

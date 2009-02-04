@@ -99,7 +99,7 @@ if HAS_NETWORKING
 noinst_PROGRAMS += wifi.rel
 wifi_rel_SOURCES =	wifi/wifi.c					\
 			wifi/compat.c
-wifi_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/include -D_KERNEL
+wifi_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/include -D_KERNEL -D__BSD_VISIBLE
 wifi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
