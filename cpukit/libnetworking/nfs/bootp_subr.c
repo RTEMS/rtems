@@ -43,6 +43,7 @@
  */
 
 #include <sys/param.h>
+#include <sys/ucred.h>
 #include <sys/systm.h>
 #include <sys/kernel.h>
 #include <sys/conf.h>
