@@ -1,5 +1,6 @@
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_mii_ioctl.c: Remove #undef KERNEL.
 	* libnetworking/nfs/bootp_subr.c: #include <sys/ucred.h>.
 	* libcsupport/include/sys/ioccom.h: Remove #define KERNEL, 
 	#define _KERNEL.
