@@ -210,7 +210,7 @@ int rtems_bsdnet_initialize_ftp_filesystem (void)
   status = mount( 
      &entry,
      &rtems_ftp_ops,
-     RTEMS_FILESYSTEM_READ_ONLY, 
+     RTEMS_FILESYSTEM_READ_WRITE, 
      NULL,
      FTP_PATHNAME_PREFIX
   );
@@ -1019,7 +1019,7 @@ ssize_t rtems_ftp_write(
   size_t         count
 )
 {
-  int eno = EIO;
+  int eno = 0;
   struct ftpStream *fsp;
   size_t want_cnt;
   ssize_t wr_cnt;

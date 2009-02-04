@@ -1,3 +1,8 @@
+2009-02-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/ftpfs.c: Enable write and mount filesystem
+	with read-write access.
+
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_ppp.h: Eliminate pppattach,  pppintr
