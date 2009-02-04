@@ -1,5 +1,6 @@
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/nfs/bootp_subr.c: #include <sys/ucred.h>.
 	* libcsupport/include/sys/ioccom.h: Remove #define KERNEL, 
 	#define _KERNEL.
 	* libfs/src/nfsclient/src/rpcio.c,
