@@ -1,5 +1,8 @@
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/Makefile.am, libnetworking/rtems/rtems_bsdnet.h,
+	libnetworking/rtems/rtems_dhcp.c:
+	Remove -D_COMPILING_BSD_KERNEL_ (Unused).
 	* libnetworking/Makefile.am: Remove -DKERNEL.
 	* libnetworking/rtems/rtems_mii_ioctl.c: Remove #undef KERNEL.
 	* libnetworking/nfs/bootp_subr.c: #include <sys/ucred.h>.
