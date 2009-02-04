@@ -86,7 +86,7 @@
 #define FIOSETOWN       _IOW('f', 124, int)     /* set owner */
 #define FIOGETOWN       _IOR('f', 123, int)     /* get owner */
 
-#ifndef KERNEL
+#ifndef _KERNEL
 
 #include <rtems/bsd/sys/cdefs.h>
 
