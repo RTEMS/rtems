@@ -17,7 +17,7 @@ UNUSED_FILES += sys/poll.h
 
 if LIBNETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
-libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT -D_KERNEL -D__BSD_VISIBLE
 
 noinst_LIBRARIES = libnetworking.a
