@@ -22,7 +22,6 @@ extern "C" {
  */
 
 #if defined(__INSIDE_RTEMS_BSD_TCPIP_STACK__)
-#undef _COMPILING_BSD_KERNEL_
 #undef _KERNEL
 #undef INET
 #undef NFS
@@ -30,7 +29,6 @@ extern "C" {
 #undef BOOTP_COMPAT
 #undef __BSD_VISIBLE
 
-#define _COMPILING_BSD_KERNEL_
 #define _KERNEL
 #define INET
 #define NFS
