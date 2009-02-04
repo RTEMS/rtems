@@ -57,7 +57,6 @@
 #include <inttypes.h>
 
 #undef _KERNEL
-#undef KERNEL
 
 #include <rtems/rtems_mii_ioctl.h>
 
