@@ -1,3 +1,7 @@
+2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sapi/include/rtems/io.h: Move extern "C" brace after includes.
+
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_ppp.h: Eliminate pppattach,  pppintr
