@@ -1,3 +1,8 @@
+2009-02-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/ftpfs.c: Enable write and mount filesystem
+	with read-write access.
+
 2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ftpd/ftpd.c: Change SIX_MONTHS to time_t.
