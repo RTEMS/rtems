@@ -32,7 +32,7 @@ AC_MSG_CHECKING([for available BSPs])
           mpc55xxevb)        bsps="mpc5566evb";;
           gen83xx)           bsps="mpc8349eamds hsc_cm01 mpc8313erdb";;
 	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
-	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
+	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686";;
           erc32)             bsps="erc32 sis";;
           rtl22xx)           bsps="rtl22xx rtl22xx_t";;
           lpc24xx)           bsps="lpc2478";;
