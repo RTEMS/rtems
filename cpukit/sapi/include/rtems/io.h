@@ -34,11 +34,11 @@
 #define SAPI_IO_EXTERN extern
 #endif
 
+#include <rtems/rtems/status.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/status.h>
 
 /*
  *
