@@ -1,5 +1,6 @@
 2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.c: Change SIX_MONTHS to time_t.
 	* sapi/include/rtems/io.h: Move extern "C" brace after includes.
 
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
