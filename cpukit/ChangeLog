@@ -1,5 +1,11 @@
 2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_ppp.h: Eliminate pppattach,  pppintr
+	  (Unused).
+	* libnetworking/net/if_ppp.c: Eliminate pppintr (Unused).
+
+2009-02-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/rtems_dhcp.c: Remove #define KERNEL.
 	* libnetworking/Makefile.am, libnetworking/rtems/rtems_bsdnet.h,
 	libnetworking/rtems/rtems_dhcp.c:
