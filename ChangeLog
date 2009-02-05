@@ -1,3 +1,7 @@
+2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Remove pck6 BSP.
+
 2008-12-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* config-ml.in: Comment out arm/thumb exception (Add arm/thumb
