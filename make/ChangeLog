@@ -1,3 +1,7 @@
+2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* custom/pck6.cfg: Remove.
+
 2008-12-04	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* Makefile.am: Add Lattice Mico32 support.
