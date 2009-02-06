@@ -1,3 +1,8 @@
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4:
+	Remove comment referring to HPUX9.
+
 2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Remove pck6 BSP.
