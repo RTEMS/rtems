@@ -1,5 +1,10 @@
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/sched.h, posix/src/sched_getparam.c: 
+	Make sched_getparam() POSIX compliant.
+
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* Makefile.am: Don't install libcsupport/include/tar.h.
 
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
