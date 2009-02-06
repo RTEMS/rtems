@@ -131,6 +131,23 @@ new-revision:
 	  $(VERSION_FILES); \
 	sed -i -e "s,\(^RTEMS Version\).*,\1 $$version," VERSION
 
+# -----------------
+# Create a new branch
+# increments the 2nd digit of the version number
+# set the 3rd digit of the version number to 99
+# set the 4rd digit of the version number to 0
+# Example: 4.6.34.4 -> 4.7.99.0
+new-branch:
+	v=$$(echo $(rtems_version) | sed 's,^\([0-9]\+\).*,\1,'); \
+	r=$$(echo $(rtems_version) | sed 's,^[0-9]\+\.\([0-9]\+\).*,\1,'); \
+	r=$$(($$r + 1)); version="$$v.$$r.99.0"; \
+	api="$$v.$$(($$r + 1))"; \
+	echo "New branch release: $$version"; \
+	sed -i -e "s|\[_RTEMS_VERSION\],\[.*\]|\[_RTEMS_VERSION\],\[$$version\]|" \
+	  -e "s|\[RTEMS_API\],\[.*\]|\[RTEMS_API\],\[$$api\]|" \
+	  $(VERSION_FILES); \
+	sed -i -e "s,\(^RTEMS Version\).*,\1 $$version," VERSION
+
 VERSION_FILES += aclocal/version.m4
 VERSION_FILES += cpukit/aclocal/version.m4
 VERSION_FILES += c/src/aclocal/version.m4

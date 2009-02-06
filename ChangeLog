@@ -1,5 +1,9 @@
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.maint: Dump stuff hanging around for much too long.
+
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* aclocal/canonical-target-name.m4:
 	Remove comment referring to HPUX9.
 
