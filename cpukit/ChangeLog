@@ -1,3 +1,8 @@
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/canonical-target-name.m4, aclocal/enable-posix.m4:
+	Remove comment referring to HPUX.
+
 2009-02-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/ftpfs.c: Enable write and mount filesystem
