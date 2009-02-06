@@ -92,7 +92,7 @@ include_bsp_HEADERS += network/if_100MHz/GT64260eth.h \
     network/if_100MHz/GT64260ethreg.h network/if_1GHz/if_wmreg.h \
     network/if_1GHz/pcireg.h
 
-network_CPPFLAGS = -D_KERNEL
+network_CPPFLAGS = -D_KERNEL -D__BSD_VISIBLE
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/if_100MHz/GT64260eth.c \
     network/if_1GHz/if_wm.c network/if_1GHz/pci_map.c
