@@ -1,3 +1,7 @@
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add network_CPPFLAGS += -D__BSD_VISIBLE.
+
 2009-02-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* GT64260/GT64260TWSI.h: Add missing prototypes.
