@@ -13,7 +13,6 @@ AS_HELP_STRING(--enable-posix,enable posix interface),
 esac],[RTEMS_HAS_POSIX_API=yes]) 
 
 case "${host}" in
-  # hpux unix port should go here
   i[[34567]]86-pc-linux*)         # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;

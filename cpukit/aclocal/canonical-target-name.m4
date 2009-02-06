@@ -12,7 +12,6 @@ AC_DEFUN([RTEMS_CANONICAL_TARGET_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])
 AC_MSG_CHECKING(rtems target cpu)
 case "${host}" in
-  # hpux unix port should go here
   i[[34567]]86-*linux*)		# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
