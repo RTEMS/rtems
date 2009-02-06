@@ -46,9 +46,9 @@
 %endif
 
 
-%define cpukit_pkgvers 4.9.99.0-20090206-1
+%define cpukit_pkgvers 4.9.99.0-20090206-2
 %define cpukit_version 4.9.99.0
-%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-1" | tr - . )}
+%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-2" | tr - . )}
 
 Name:         	rtems-4.10-sparc-rtems4.10-cpukit
 Summary:      	sparc-rtems4.10 cpukit
@@ -65,7 +65,7 @@ BuildArch:	noarch
 
 BuildRequires:	rtems-4.10-sparc-rtems4.10-gcc
 
-Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/rtems-%{cpukit_pkgvers}.tar.bz2
+Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/rtems-%{cpukit_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:   0}
 
 %description

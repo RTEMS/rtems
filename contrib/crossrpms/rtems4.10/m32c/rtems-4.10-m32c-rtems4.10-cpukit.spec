@@ -46,9 +46,9 @@
 %endif
 
 
-%define cpukit_pkgvers 4.9.99.0-20090206-1
+%define cpukit_pkgvers 4.9.99.0-20090206-2
 %define cpukit_version 4.9.99.0
-%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-1" | tr - . )}
+%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-2" | tr - . )}
 
 Name:         	rtems-4.10-m32c-rtems4.10-cpukit
 Summary:      	m32c-rtems4.10 cpukit
