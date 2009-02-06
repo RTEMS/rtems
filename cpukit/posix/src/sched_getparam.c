@@ -23,7 +23,7 @@
 
 int sched_getparam(
   pid_t                     pid __attribute__((unused)),
-  const struct sched_param *param __attribute__((unused))
+  struct sched_param       *param __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

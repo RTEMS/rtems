@@ -46,7 +46,7 @@ int sched_setparam(
 
 int sched_getparam(
   pid_t                     pid,
-  const struct sched_param *param
+  struct sched_param       *param
 );
 
 /*
