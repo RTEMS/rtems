@@ -50,8 +50,6 @@ include_sys_HEADERS =
 
 include_HEADERS += libnetworking/memory.h
 
-include_HEADERS += libcsupport/include/tar.h
-
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/filio.h libcsupport/include/sys/ioctl.h \
     libcsupport/include/sys/sockio.h libcsupport/include/sys/ttycom.h \
