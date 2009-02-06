@@ -1,5 +1,6 @@
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.am: Regenerate list of custom/*.cfg.
 	* Makefile.am: Remove custom/HPUX9-posix.cfg.
 	* custom/HPUX9-posix.cfg: Remove.
 
