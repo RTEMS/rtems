@@ -46,22 +46,22 @@
 %endif
 
 
-%define cpukit_pkgvers 4.7.99.1-20070510
-%define cpukit_version 4.7.99.1
-%define cpukit_rpmvers %{expand:%(echo "4.7.99.1" | tr - _ )}
+%define cpukit_pkgvers 4.9.99.0-20090206-1
+%define cpukit_version 4.9.99.0
+%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-1" | tr - . )}
 
 Name:         	rtems-4.10-sh-rtems4.10-cpukit
 Summary:      	sh-rtems4.10 cpukit
 
 Group:	      	Development/Tools
 Version:        %{cpukit_rpmvers}
-Release:      	1%{?dist}%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://cpukit.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 
-%define _use_internal_dependency_generator 0
+%define debug_package %{nil}
 
 BuildRequires:	rtems-4.10-sh-rtems4.10-gcc
 
@@ -81,7 +81,7 @@ RTEMS cpukit for sh-rtems4.10.
   mkdir -p build
 
   cd build
-  ../rtems-%{cpukit_pkgvers}/configure \
+  ../rtems-%{cpukit_version}/configure \
     --prefix=%{_prefix} \
     --target=sh-rtems4.10 \
     --enable-multilib \
@@ -128,29 +128,30 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 %define __os_install_post . ./os_install_post
 
 
-cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
+cat << EOF > %{_builddir}/%{name}-%{version}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/sh-rtems4.10/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/sh-rtems4.10/' | %__find_provides
 EOF
-chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
-%define __find_provides %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
+chmod +x %{_builddir}/%{name}-%{version}/find-provides
+%define __find_provides %{_builddir}/%{name}-%{version}/find-provides
 
-cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
+cat << EOF > %{_builddir}/%{name}-%{version}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/sh-rtems4.10/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/sh-rtems4.10/' | %__find_requires
 EOF
-chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
-%define __find_requires %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
+chmod +x %{_builddir}/%{name}-%{version}/find-requires
+%define __find_requires %{_builddir}/%{name}-%{version}/find-requires
 
 %clean
   rm -rf $RPM_BUILD_ROOT
 
 %description -n rtems-4.10-sh-rtems4.10-cpukit
-GNU cc compiler for sh-rtems4.10.
+RTEMS cpukit for target sh-rtems4.10.
 
 %files -n rtems-4.10-sh-rtems4.10-cpukit
+%defattr(-,root,root)
 %dir %{_prefix}
 %{_prefix}/sh-rtems4.10
 # Violates the FHS

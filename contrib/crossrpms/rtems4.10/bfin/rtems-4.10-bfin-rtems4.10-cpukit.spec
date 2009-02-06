@@ -21,22 +21,14 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
-%define debug_package           %{nil}
-%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%endif
-
-%ifos mingw mingw32
-%if %{defined _mingw32_cflags}
-%define optflags %{_mingw32_cflags}
-%else
-%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
-%endif
+%define _libdir			%{_exec_prefix}/lib
+%define debug_package		%{nil}
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -46,30 +38,30 @@
 %endif
 
 
-%define cpukit_pkgvers 4.9.99.0-20090206-1
-%define cpukit_version 4.9.99.0
-%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-1" | tr - . )}
+%define cpukit_pkgvers 4.7.99.1-20070510
+%define cpukit_version 4.7.99.1
+%define cpukit_rpmvers %{expand:%(echo "4.7.99.1" | tr - _ )}
 
-Name:         	rtems-4.10-m68k-rtems4.10-cpukit
-Summary:      	m68k-rtems4.10 cpukit
+Name:         	rtems-4.10-bfin-rtems4.10-cpukit
+Summary:      	bfin-rtems4.10 cpukit
 
 Group:	      	Development/Tools
 Version:        %{cpukit_rpmvers}
-Release:      	1%{?dist}
+Release:      	1%{?dist}%{?dist}
 License:      	GPL
 URL:		http://cpukit.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 
-%define debug_package %{nil}
+%define _use_internal_dependency_generator 0
 
-BuildRequires:	rtems-4.10-m68k-rtems4.10-gcc
+BuildRequires:	rtems-4.10-bfin-rtems4.10-gcc
 
 Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/rtems-%{cpukit_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:   0}
 
 %description
-RTEMS cpukit for m68k-rtems4.10.
+RTEMS cpukit for bfin-rtems4.10.
 %prep
 %setup -c -T -n %{name}-%{version}
 
@@ -81,9 +73,9 @@ RTEMS cpukit for m68k-rtems4.10.
   mkdir -p build
 
   cd build
-  ../rtems-%{cpukit_version}/configure \
+  ../rtems-%{cpukit_pkgvers}/configure \
     --prefix=%{_prefix} \
-    --target=m68k-rtems4.10 \
+    --target=bfin-rtems4.10 \
     --enable-multilib \
     --disable-rtemsbsp
 
@@ -128,31 +120,30 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 %define __os_install_post . ./os_install_post
 
 
-cat << EOF > %{_builddir}/%{name}-%{version}/find-provides
+cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m68k-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m68k-rtems4.10/' | %__find_provides
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/bfin-rtems4.10/' | %__find_provides
 EOF
-chmod +x %{_builddir}/%{name}-%{version}/find-provides
-%define __find_provides %{_builddir}/%{name}-%{version}/find-provides
+chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
+%define __find_provides %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
 
-cat << EOF > %{_builddir}/%{name}-%{version}/find-requires
+cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m68k-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m68k-rtems4.10/' | %__find_requires
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/bfin-rtems4.10/' | %__find_requires
 EOF
-chmod +x %{_builddir}/%{name}-%{version}/find-requires
-%define __find_requires %{_builddir}/%{name}-%{version}/find-requires
+chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
+%define __find_requires %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
 
 %clean
   rm -rf $RPM_BUILD_ROOT
 
-%description -n rtems-4.10-m68k-rtems4.10-cpukit
-RTEMS cpukit for target m68k-rtems4.10.
+%description -n rtems-4.10-bfin-rtems4.10-cpukit
+GNU cc compiler for bfin-rtems4.10.
 
-%files -n rtems-4.10-m68k-rtems4.10-cpukit
-%defattr(-,root,root)
+%files -n rtems-4.10-bfin-rtems4.10-cpukit
 %dir %{_prefix}
-%{_prefix}/m68k-rtems4.10
+%{_prefix}/bfin-rtems4.10
 # Violates the FHS
 %exclude %{_prefix}/make

@@ -50,8 +50,8 @@
 %define cpukit_version 4.9.99.0
 %define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-1" | tr - . )}
 
-Name:         	rtems-4.10-m68k-rtems4.10-cpukit
-Summary:      	m68k-rtems4.10 cpukit
+Name:         	rtems-4.10-m32r-rtems4.10-cpukit
+Summary:      	m32r-rtems4.10 cpukit
 
 Group:	      	Development/Tools
 Version:        %{cpukit_rpmvers}
@@ -63,13 +63,13 @@ BuildArch:	noarch
 
 %define debug_package %{nil}
 
-BuildRequires:	rtems-4.10-m68k-rtems4.10-gcc
+BuildRequires:	rtems-4.10-m32r-rtems4.10-gcc
 
 Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/rtems-%{cpukit_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:   0}
 
 %description
-RTEMS cpukit for m68k-rtems4.10.
+RTEMS cpukit for m32r-rtems4.10.
 %prep
 %setup -c -T -n %{name}-%{version}
 
@@ -83,7 +83,7 @@ RTEMS cpukit for m68k-rtems4.10.
   cd build
   ../rtems-%{cpukit_version}/configure \
     --prefix=%{_prefix} \
-    --target=m68k-rtems4.10 \
+    --target=m32r-rtems4.10 \
     --enable-multilib \
     --disable-rtemsbsp
 
@@ -130,16 +130,16 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 
 cat << EOF > %{_builddir}/%{name}-%{version}/find-provides
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m68k-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m68k-rtems4.10/' | %__find_provides
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m32r-rtems4.10/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m32r-rtems4.10/' | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{version}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{version}/find-provides
 
 cat << EOF > %{_builddir}/%{name}-%{version}/find-requires
 #!/bin/sh
-grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m68k-rtems4.10/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m68k-rtems4.10/' | %__find_requires
+grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/m32r-rtems4.10/(lib|include|sys-root)' \
+  | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/m32r-rtems4.10/' | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{version}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{version}/find-requires
@@ -147,12 +147,12 @@ chmod +x %{_builddir}/%{name}-%{version}/find-requires
 %clean
   rm -rf $RPM_BUILD_ROOT
 
-%description -n rtems-4.10-m68k-rtems4.10-cpukit
-RTEMS cpukit for target m68k-rtems4.10.
+%description -n rtems-4.10-m32r-rtems4.10-cpukit
+RTEMS cpukit for target m32r-rtems4.10.
 
-%files -n rtems-4.10-m68k-rtems4.10-cpukit
+%files -n rtems-4.10-m32r-rtems4.10-cpukit
 %defattr(-,root,root)
 %dir %{_prefix}
-%{_prefix}/m68k-rtems4.10
+%{_prefix}/m32r-rtems4.10
 # Violates the FHS
 %exclude %{_prefix}/make
