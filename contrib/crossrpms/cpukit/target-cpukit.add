@@ -1,7 +1,8 @@
 %description -n @rpmprefix@@tool_target@-cpukit
-GNU cc compiler for @tool_target@.
+RTEMS cpukit for target @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-cpukit
+%defattr(-,root,root)
 %sysdir %{_prefix}
 %{_prefix}/@tool_target@
 # Violates the FHS

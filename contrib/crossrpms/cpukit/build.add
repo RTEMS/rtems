@@ -5,7 +5,7 @@
   mkdir -p build
 
   cd build
-  ../rtems-%{cpukit_pkgvers}/configure \
+  ../rtems-%{cpukit_version}/configure \
     --prefix=%{_prefix} \
     --target=@tool_target@ \
     --enable-multilib \
