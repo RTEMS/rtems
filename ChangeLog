@@ -1,5 +1,6 @@
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* Makefile.maint: rtems_api=4.10.
 	* Makefile.maint: Dump stuff hanging around for much too long.
 
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
