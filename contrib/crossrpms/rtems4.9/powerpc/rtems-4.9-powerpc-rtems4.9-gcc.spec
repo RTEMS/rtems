@@ -50,8 +50,8 @@
 %define gcc_version 4.3.2
 %define gcc_rpmvers %{expand:%(echo "4.3.2" | tr - _ )}
 
+%define newlib_pkgvers		1.16.0
 %define newlib_version		1.16.0
-%define gccnewlib_version	gcc%{gcc_version}newlib%{newlib_version}
 
 %define mpfr_version	2.3.1
 
@@ -60,7 +60,7 @@ Summary:      	powerpc-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	19%{?dist}
+Release:      	20%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -83,12 +83,11 @@ BuildRequires:  mpfr-devel >= 2.3.0
 %endif
 # These distros ship an insufficient mpfr
 %{?el4:%define 	_build_mpfr 	1}
-%{?suse10_2:%define 	_build_mpfr 	1}
 %{?suse10_3:%define 	_build_mpfr 	1}
 %endif
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  rtems-4.9-powerpc-rtems4.9-gcc
+BuildRequires:  rtems-4.9-powerpc-rtems4.9-gcc = %{gcc_rpmvers}
 %endif
 
 %if "%{gcc_version}" >= "4.2.0"
@@ -101,7 +100,7 @@ BuildRequires:	rtems-4.9-powerpc-rtems4.9-binutils
 
 Requires:	rtems-4.9-gcc-common
 Requires:	rtems-4.9-powerpc-rtems4.9-binutils
-Requires:	rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-%{release}
+Requires:	rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-20%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -128,7 +127,7 @@ Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgve
 
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
 %if "%{newlib_version}" == "1.16.0"
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-20081203.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-20090207.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -433,7 +432,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.9-powerpc-rtems4.9-binutils
-# Requires:       rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-%{release}
+# Requires:       rtems-4.9-powerpc-rtems4.9-newlib = %{newlib_version}-20%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -549,7 +548,7 @@ Version:        %{gcc_rpmvers}
 License:	GPL
 
 %if "%{_build}" != "%{_host}"
-BuildRequires:  rtems-4.9-powerpc-rtems4.9-gcc-c++
+BuildRequires:  rtems-4.9-powerpc-rtems4.9-gcc-c++ = %{gcc_rpmvers}
 %endif
 Provides:	rtems-4.9-powerpc-rtems4.9-c++ = %{gcc_rpmvers}-%{release}
 Obsoletes:	rtems-4.9-powerpc-rtems4.9-c++ < %{gcc_rpmvers}-%{release}
@@ -573,11 +572,7 @@ GCC c++ compiler for powerpc-rtems4.9.
 %{gccexec}/powerpc-rtems4.9/%{gcc_version}/cc1plus%{_exeext}
 
 %dir %{gcclib}/powerpc-rtems4.9/%{gcc_version}/include
-%if "%{gcc_version}" >= "3.2"
 %{gcclib}/powerpc-rtems4.9/%{gcc_version}/include/c++
-%else
-%{gcclib}/powerpc-rtems4.9/%{gcc_version}/include/g++
-%endif
 
 
 
@@ -589,9 +584,7 @@ Summary:      	C Library (newlib) for powerpc-rtems4.9
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-
-Provides:	rtems-4.9-powerpc-rtems4.9-libc = %{newlib_version}-%{release}
-Obsoletes:	rtems-4.9-powerpc-rtems4.9-libc < %{newlib_version}-%{release}
+Release:        20%{?dist}
 
 Requires:	rtems-4.9-newlib-common
 
@@ -611,6 +604,7 @@ Newlib C Library for powerpc-rtems4.9.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
+Release:        20%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
