@@ -21,14 +21,22 @@
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -38,22 +46,22 @@
 %endif
 
 
-%define cpukit_pkgvers 4.7.99.1-20070510
-%define cpukit_version 4.7.99.1
-%define cpukit_rpmvers %{expand:%(echo "4.7.99.1" | tr - _ )}
+%define cpukit_pkgvers 4.9.99.0-20090206-2
+%define cpukit_version 4.9.99.0
+%define cpukit_rpmvers %{expand:%(echo "4.9.99.0-20090206-2" | tr - . )}
 
 Name:         	rtems-4.10-bfin-rtems4.10-cpukit
 Summary:      	bfin-rtems4.10 cpukit
 
 Group:	      	Development/Tools
 Version:        %{cpukit_rpmvers}
-Release:      	1%{?dist}%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://cpukit.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 
-%define _use_internal_dependency_generator 0
+%define debug_package %{nil}
 
 BuildRequires:	rtems-4.10-bfin-rtems4.10-gcc
 
@@ -73,7 +81,7 @@ RTEMS cpukit for bfin-rtems4.10.
   mkdir -p build
 
   cd build
-  ../rtems-%{cpukit_pkgvers}/configure \
+  ../rtems-%{cpukit_version}/configure \
     --prefix=%{_prefix} \
     --target=bfin-rtems4.10 \
     --enable-multilib \
@@ -120,29 +128,30 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 %define __os_install_post . ./os_install_post
 
 
-cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
+cat << EOF > %{_builddir}/%{name}-%{version}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/bfin-rtems4.10/' | %__find_provides
 EOF
-chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
-%define __find_provides %{_builddir}/%{name}-%{cpukit_rpmvers}/find-provides
+chmod +x %{_builddir}/%{name}-%{version}/find-provides
+%define __find_provides %{_builddir}/%{name}-%{version}/find-provides
 
-cat << EOF > %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
+cat << EOF > %{_builddir}/%{name}-%{version}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/bfin-rtems4.10/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{cpukitlib}/bfin-rtems4.10/' | %__find_requires
 EOF
-chmod +x %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
-%define __find_requires %{_builddir}/%{name}-%{cpukit_rpmvers}/find-requires
+chmod +x %{_builddir}/%{name}-%{version}/find-requires
+%define __find_requires %{_builddir}/%{name}-%{version}/find-requires
 
 %clean
   rm -rf $RPM_BUILD_ROOT
 
 %description -n rtems-4.10-bfin-rtems4.10-cpukit
-GNU cc compiler for bfin-rtems4.10.
+RTEMS cpukit for target bfin-rtems4.10.
 
 %files -n rtems-4.10-bfin-rtems4.10-cpukit
+%defattr(-,root,root)
 %dir %{_prefix}
 %{_prefix}/bfin-rtems4.10
 # Violates the FHS
