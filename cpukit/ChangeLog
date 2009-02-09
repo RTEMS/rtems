@@ -1,5 +1,9 @@
-2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+2009-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/socketvar.h: Remove struct file,
+	soo_ioctl, soo_select, soo_stat, getsock (Unused).
+
+2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 	* posix/include/sched.h, posix/src/sched_getparam.c: 
 	Make sched_getparam() POSIX compliant.
 
