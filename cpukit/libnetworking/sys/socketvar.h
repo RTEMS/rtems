@@ -211,20 +211,10 @@ struct filedesc;
 struct mbuf;
 struct sockaddr;
 struct stat;
-struct file;
-
-/*
- * File operations on sockets.
- */
-int	soo_ioctl(struct file *fp, int cmd, caddr_t data,
-	    struct proc *p);
-int	soo_select(struct file *fp, int which, struct proc *p);
-int	soo_stat(struct socket *so, struct stat *ub);
 
 /*
  * From uipc_socket and friends
  */
-int	getsock(struct filedesc *fdp, int fdes, struct file **fpp);
 int	sockargs(struct mbuf **mp, caddr_t buf, int buflen, int type);
 void	sbappend(struct sockbuf *sb, struct mbuf *m);
 int	sbappendaddr(struct sockbuf *sb, struct sockaddr *asa,
