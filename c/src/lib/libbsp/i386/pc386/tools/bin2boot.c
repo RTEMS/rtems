@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <inttypes.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -37,7 +39,7 @@ int main(int argc, char* argv[])
   int      c, verbose;
   extern   int optind;
   FILE     *ofp, *ifp;
-  unsigned long headerAddr, addr1, addr2;
+  uintptr_t headerAddr, addr1, addr2;
   int      size1, size2, len1, len2, len, imageCnt, cnt;
   char     *ofile, *ifile, *end;
 
@@ -183,7 +185,7 @@ int main(int argc, char* argv[])
     {
       /* Areas overlapped */
       printf("area overlapping: \n");
-      printf("header address      0x%08lx, its memory size 0x%08x\n",
+      printf("header address      0x%08lx, its memory size 0x%08zx\n",
 	     headerAddr, sizeof(buf));
       printf("first image address 0x%08lx, its memory size 0x%08x\n",
 	     addr1, size1);
@@ -292,11 +294,11 @@ int main(int argc, char* argv[])
     {
       /* Areas overlapped */
       printf("area overlapping: \n");
-      printf("header address       0x%08lx, its memory size 0x%08x\n",
+      printf("header address       0x%08" PRIxPTR ", its memory size 0x%08zx\n",
 	     headerAddr, sizeof(buf));
-      printf("first  image address 0x%08lx, its memory size 0x%08x\n",
+      printf("first  image address 0x%08" PRIxPTR ", its memory size 0x%08x\n",
 	     addr1, size1);
-      printf("second image address 0x%08lx, its memory size 0x%08x\n",
+      printf("second image address 0x%08" PRIxPTR ", its memory size 0x%08x\n",
 	     addr2, size2);
 
       fclose(ofp);
@@ -390,11 +392,11 @@ writeHeader:
 
   if(verbose)
     {
-      printf("header address       0x%08lx, its memory size 0x%08x\n",
+      printf("header address       0x%08" PRIxPTR ", its memory size 0x%08zx\n",
 	     headerAddr, sizeof(buf));
-      printf("first  image address 0x%08lx, its memory size 0x%08x\n",
+      printf("first  image address 0x%08" PRIxPTR ", its memory size 0x%08x\n",
 	     addr1, size1);
-      printf("second image address 0x%08lx, its memory size 0x%08x\n",
+      printf("second image address 0x%08" PRIxPTR ", its memory size 0x%08x\n",
 	     addr2, size2);
     }
 
