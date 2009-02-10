@@ -91,11 +91,6 @@ struct	sigaltstack {
 	int	ss_flags;		/* SS_DISABLE and/or SS_ONSTACK */
 };
 
-#ifdef _KERNEL
-typedef	int		boolean_t;
-typedef	struct vm_page	*vm_page_t;
-#endif
-
 #ifndef _POSIX_SOURCE
 /*
  * minor() gives a cookie instead of an index since we don't want to
