@@ -121,7 +121,6 @@ struct	proc;
 struct	pgrp;
 struct	ucred;
 struct	rusage;
-struct	file;
 struct	buf;
 struct	tty;
 struct	uio;
