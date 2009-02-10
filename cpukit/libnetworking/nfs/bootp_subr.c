@@ -130,7 +130,7 @@ static int xdr_int_decode(struct mbuf **ptr,int *iptr);
 static void printip(char *prefix,struct in_addr addr);
 
 #ifdef BOOTP_DEBUG
-void bootpboot_p_sa(struct sockaddr *sa,struct sockaddr *ma);
+void bootpboot_p_sa(struct sockaddr *sa, struct sockaddr *ma);
 void bootpboot_p_ma(struct sockaddr *ma);
 void bootpboot_p_rtentry(struct rtentry *rt);
 void bootpboot_p_tree(struct radix_node *rn);
@@ -155,11 +155,11 @@ bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
 void bootpc_init(int update_files);
 
 #ifdef BOOTP_DEBUG
-void bootpboot_p_sa(sa,ma)
-     struct sockaddr *sa;
-     struct sockaddr *ma;
+void
+bootpboot_p_sa(struct sockaddr *sa, struct sockaddr *ma)
 {
-  if (!sa) {
+
+  if (sa == NULL) {
     printf("(sockaddr *) <null>");
     return;
   }
@@ -187,37 +187,41 @@ void bootpboot_p_sa(sa,ma)
     }
   break;
   default:
-    printf("af%d",sa->sa_family);
+  printf("af%d",sa->sa_family);
   }
 }
 
-void bootpboot_p_ma(ma)
-     struct sockaddr *ma;
+void
+bootpboot_p_ma(struct sockaddr *ma)
 {
-  if (!ma) {
+
+  if (ma == NULL) {
     printf("<null>");
     return;
   }
-  printf("%x",*(int*)ma);
+  printf("%x", *(int*)ma);
 }
 
-void bootpboot_p_rtentry(rt)
-     struct rtentry *rt;
+void
+bootpboot_p_rtentry(struct rtentry *rt)
 {
-  bootpboot_p_sa(rt_key(rt),rt_mask(rt));
+
+  bootpboot_p_sa(rt_key(rt), rt_mask(rt));
   printf(" ");
   bootpboot_p_ma(rt->rt_genmask);
   printf(" ");
-  bootpboot_p_sa(rt->rt_gateway,NULL);
+  bootpboot_p_sa(rt->rt_gateway, NULL);
   printf(" ");
-  printf("flags %x",(unsigned short) rt->rt_flags);
-  printf(" %d",rt->rt_rmx.rmx_expire);
-  printf(" %s%d\n",rt->rt_ifp->if_name,rt->rt_ifp->if_unit);
+  printf("flags %x", (unsigned short) rt->rt_flags);
+  printf(" %d", rt->rt_rmx.rmx_expire);
+  printf(" %s%d\n", rt->rt_ifp->if_name,rt->rt_ifp->if_unit);
 }
-void  bootpboot_p_tree(rn)
-     struct radix_node *rn;
+
+void
+bootpboot_p_tree(struct radix_node *rn)
 {
-  while (rn) {
+
+  while (rn != NULL) {
     if (rn->rn_b < 0) {
       if (rn->rn_flags & RNF_ROOT) {
       } else {
@@ -233,13 +237,16 @@ void  bootpboot_p_tree(rn)
   }
 }
 
-void bootpboot_p_rtlist(void)
+void
+bootpboot_p_rtlist(void)
 {
+
   printf("Routing table:\n");
   bootpboot_p_tree(rt_tables[AF_INET]->rnh_treetop);
 }
 
-void bootpboot_p_iflist(void)
+void
+bootpboot_p_iflist(void)
 {
   struct ifnet *ifp;
   struct ifaddr *ifa;
@@ -702,27 +709,6 @@ getdec(char **ptr)
 	}
 	*ptr = p;
 	return(ret);
-}
-#endif
-
-#if !defined(__rtems__)
-static char *
-substr(char *a, char *b)
-{
-	char *loc1;
-	char *loc2;
-
-        while (*a != '\0') {
-                loc1 = a;
-                loc2 = b;
-                while (*loc1 == *loc2++) {
-                        if (*loc1 == '\0') return (0);
-                        loc1++;
-                        if (*loc2 == '\0') return (loc1);
-                }
-        a++;
-        }
-        return (0);
 }
 #endif
 
