@@ -1,3 +1,11 @@
+2009-02-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/nfs/bootp_subr.c, 
+	libnetworking/nfsclient/nfsdiskless.h:
+	Cosmetics from FreeBSD.
+	* libnetworking/rtems/rtems_bsdnet_internal.h:
+	Remove struct file (Unused).
+
 2009-02-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/socketvar.h: Remove struct file,
