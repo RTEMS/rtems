@@ -1,5 +1,7 @@
 2009-02-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Remove struct
+	vm_page, vm_page_t, boolean_t (Unused).
 	* libnetworking/nfs/bootp_subr.c, 
 	libnetworking/nfsclient/nfsdiskless.h:
 	Cosmetics from FreeBSD.
