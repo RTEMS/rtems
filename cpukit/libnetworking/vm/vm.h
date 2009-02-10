@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /*
  * Copyright (c) 1991, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -10,10 +12,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,7 +29,35 @@
  * SUCH DAMAGE.
  *
  *	@(#)vm.h	8.2 (Berkeley) 12/13/93
- * $Id$
+ *	@(#)vm_prot.h	8.1 (Berkeley) 6/11/93
+ *	@(#)vm_inherit.h	8.1 (Berkeley) 6/11/93
+ *
+ * Copyright (c) 1987, 1990 Carnegie-Mellon University.
+ * All rights reserved.
+ *
+ * Authors: Avadis Tevanian, Jr., Michael Wayne Young
+ *
+ * Permission to use, copy, modify and distribute this software and
+ * its documentation is hereby granted, provided that both the copyright
+ * notice and this permission notice appear in all copies of the
+ * software, derivative works or modified versions, and any portions
+ * thereof, and that both notices appear in supporting documentation.
+ *
+ * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
+ * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND
+ * FOR ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
+ *
+ * Carnegie Mellon requests users of this software to return to
+ *
+ *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
+ *  School of Computer Science
+ *  Carnegie Mellon University
+ *  Pittsburgh PA 15213-3890
+ *
+ * any improvements or extensions that they make and grant Carnegie the
+ * rights to redistribute these changes.
+ *
+ * $FreeBSD: src/sys/vm/vm.h,v 1.28 2007/12/27 17:08:11 alc Exp $
  */
 
 #ifndef VM_H
@@ -68,6 +94,6 @@ typedef int boolean_t;
  */
 struct vm_page;
 typedef struct vm_page *vm_page_t;
-#endif
+#endif				/* _KERNEL */
 
 #endif				/* VM_H */
