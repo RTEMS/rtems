@@ -23,7 +23,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 
-extern void rtems_irq_mngt_init();
+extern void rtems_irq_mngt_init(void);
 
 /*
  *  bsp_start
