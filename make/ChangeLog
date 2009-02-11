@@ -1,3 +1,7 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/h8sxsim.cfg: Small H8SX should be optimized for size.
+
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Regenerate list of custom/*.cfg.
