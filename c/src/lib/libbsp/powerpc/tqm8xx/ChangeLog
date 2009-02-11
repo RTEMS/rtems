@@ -1,3 +1,8 @@
+2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove stray % from '*startfile:' having crept in
+	previous change.
+
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Cosmetics.
