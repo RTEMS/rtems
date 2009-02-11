@@ -1,3 +1,9 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, rtems/score/cpu.h: Eliminate _CPU_Thread_dispatch_pointer and
+	passing address of _Thread_Dispatch to _CPU_Initialize. Clean up
+	comments.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c: Fine tune conditional so _CPU_ISR_install_vector is in CPU Kit

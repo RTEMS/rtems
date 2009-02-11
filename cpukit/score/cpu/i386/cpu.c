@@ -25,14 +25,10 @@
  *
  *  This routine performs processor dependent initialization.
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - address of dispatching routine
+ *  INPUT PARAMETERS: NONE
  */
 
-
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
 #if CPU_HARDWARE_FP
   register uint16_t		fp_status asm ("ax");
@@ -65,7 +61,6 @@ void _CPU_Initialize(
                 );
   }
 #endif
-
 }
 
 /*PAGE

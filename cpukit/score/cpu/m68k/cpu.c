@@ -18,15 +18,12 @@
  *
  *  This routine performs processor dependent initialization.
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - entry pointer to thread dispatcher
+ *  INPUT PARAMETERS: NONE
  *
  *  OUTPUT PARAMETERS: NONE
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
 #if ( M68K_HAS_VBR == 0 )
   /* fill the isr redirect table with the code to place the format/id

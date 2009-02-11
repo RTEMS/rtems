@@ -34,15 +34,12 @@ unsigned int arm_cpu_mode = 0x13;
 
 /*  _CPU_Initialize
  *
- *  This routine performs processor dependent initialization.
+ *  INPUT PARAMETERS: NONE
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - address of ISR dispatching routine (unused)
+ *  This routine performs processor dependent initialization.
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
 }
 

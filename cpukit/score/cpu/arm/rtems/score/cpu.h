@@ -699,9 +699,7 @@ void _CPU_Context_Initialize(
  *  This routine performs CPU dependent initialization.
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 typedef enum {
   ARM_EXCEPTION_RESET      = 0,

@@ -38,8 +38,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
  *
  *  This routine performs processor dependent initialization.
  *
- *  Input Parameters:
- *    thread_dispatch - address of dispatching routine
+ *  INPUT PARAMETERS: NONE
  *
  *  Output Parameters: NONE
  * 
@@ -47,9 +46,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
  *        The SPARC's assembly code can reference it directly with no problems.
  */
 
-void _CPU_Initialize(
-  void            (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
 #if (SPARC_HAS_FPU == 1)
   Context_Control_fp *pointer;

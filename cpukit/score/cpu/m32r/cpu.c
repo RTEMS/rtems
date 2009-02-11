@@ -18,16 +18,14 @@
  *
  *  This routine performs processor dependent initialization.
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - address of dispatching routine
+ *  INPUT PARAMETERS: NONE
  *
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+
+void _CPU_Initialize(void)
 {
 }
 

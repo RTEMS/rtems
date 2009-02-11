@@ -1041,15 +1041,11 @@ void _CPU_Context_Restart_self(
 /**
  *  This routine performs CPU dependent initialization.
  *
- *  @param[in] thread_dispatch is the address of @ref _Thread_Dispatch
- *
  *  Port Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /**
  *  @ingroup CPUInterrupt

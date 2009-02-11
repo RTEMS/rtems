@@ -633,23 +633,6 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
- *
-
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
- *
- *  NOTE: Not needed on this port.
- */
-
-
-
-/*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
@@ -1061,9 +1044,7 @@ extern void mips_break( int error );
  *  This routine performs CPU dependent initialization.
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /*
  *  _CPU_ISR_install_raw_handler

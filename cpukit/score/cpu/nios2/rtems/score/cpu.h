@@ -604,22 +604,6 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
  */
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
-/**
- *  @ingroup CPUInterrupt
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine @ref _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
-
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
@@ -1145,16 +1129,11 @@ uint32_t   _CPU_ISR_Get_level( void );
 /**
  *  This routine performs CPU dependent initialization.
  *
- *  @param cpu_table (in) is the CPU Dependent Configuration Table
- *  @param thread_dispatch (in) is the address of @ref _Thread_Dispatch
- *
  *  Port Specific Information:
  *
  *  XXX document implementation including references if appropriate
  */
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /**
  *  @ingroup CPUInterrupt

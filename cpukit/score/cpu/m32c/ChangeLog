@@ -1,5 +1,11 @@
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* cpu.c, rtems/score/cpu.h: Eliminate _CPU_Thread_dispatch_pointer and
+	passing address of _Thread_Dispatch to _CPU_Initialize. Clean up
+	comments.
+
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/score/cpu.h: Use a 16 bit object id on this target.
 
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -581,24 +581,6 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
- *
- *  C4x Specific Information:
- *
- *  This port should not require this.
- */
-
-#if 0
-SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
-#endif
-
-/*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
  *  C4x Specific Information:
@@ -1078,9 +1060,7 @@ void _CPU_Context_Initialize(
  *  XXXanswer
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /*
  *  _CPU_ISR_install_raw_handler

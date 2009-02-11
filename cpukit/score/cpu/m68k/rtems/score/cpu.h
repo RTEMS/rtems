@@ -632,9 +632,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
  *  This routine performs CPU dependent initialization.
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /*
  *  _CPU_ISR_install_raw_handler

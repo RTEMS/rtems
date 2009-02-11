@@ -39,29 +39,12 @@ extern proc_ptr _Hardware_isr_Table[];
  *
  *  This routine performs processor dependent initialization.
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - address of dispatching routine
+ *  INPUT PARAMETERS: NONE
  */
 
-
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
   register uint32_t   level = 0;
-
-  /*
-   *  The thread_dispatch argument is the address of the entry point
-   *  for the routine called at the end of an ISR once it has been
-   *  decided a context switch is necessary.  On some compilation
-   *  systems it is difficult to call a high-level language routine
-   *  from assembly.  This allows us to trick these systems.
-   *
-   *  If you encounter this problem save the entry point in a CPU
-   *  dependent variable.
-   */
-
-  _CPU_Thread_dispatch_pointer = thread_dispatch;
 
   /*
    *  If there is not an easy way to initialize the FP context

@@ -883,9 +883,7 @@ void _CPU_Context_Initialize(
  *  This routine performs CPU dependent initialization.
  */
 
-void _CPU_Initialize(
-  void            (*thread_dispatch)
-);
+void _CPU_Initialize(void);
 
 /*
  *  _CPU_ISR_install_raw_handler
