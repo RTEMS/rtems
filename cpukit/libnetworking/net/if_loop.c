@@ -88,8 +88,7 @@
 static int loioctl(struct ifnet *, ioctl_command_t, caddr_t);
 static void lortrequest(int, struct rtentry *, struct sockaddr *);
 
-       void rtems_bsdnet_loopattach(void *);
-PSEUDO_SET(loopattach, if_loop);
+void rtems_bsdnet_loopattach(void *);
 
 #ifdef TINY_LOMTU
 #define	LOMTU	(1024+512)
