@@ -186,32 +186,4 @@ struct kproc_desc {
 
 void	kproc_start(void *udata);
 
-#ifdef PSEUDO_LKM
-#include <sys/conf.h>
-#include <sys/exec.h>
-#include <sys/sysent.h>
-#include <sys/lkm.h>
-
-#define PSEUDO_SET(init, name) \
-	extern struct linker_set MODVNOPS; \
-	MOD_MISC(name); \
-	static int \
-	name ## _load(struct lkm_table *lkmtp, int cmd) \
-		{ init((void *)NULL /* XXX unused (?) */); return 0; } \
-	static int \
-	name ## _unload(struct lkm_table *lkmtp, int cmd) \
-		{ return EINVAL; } \
-	int \
-	name ## _mod(struct lkm_table *lkmtp, int cmd, int ver) { \
-		DISPATCH(lkmtp, cmd, ver, name ## _load, name ## _unload, \
-			 lkm_nullcmd); }
-#else /* PSEUDO_LKM */
-
-/*
- * Compatibility.  To be deprecated after LKM is updated.
- */
-#define	PSEUDO_SET(sym, name)	SYSINIT(ps, SI_SUB_PSEUDO, SI_ORDER_ANY, sym, 0)
-
-#endif /* PSEUDO_LKM */
-
 #endif /* !_SYS_KERNEL_H_*/
