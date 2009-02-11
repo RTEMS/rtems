@@ -40,7 +40,8 @@ endif
 if m68040
 ## m68040/fpsp
 noinst_PROGRAMS += m68040/fpsp.rel
-m68040_fpsp_rel_SOURCES = m68040/fpsp/rtems_fpsp.c m68040/fpsp/bindec.S \
+noinst_PROGRAMS += m68040/fpsp_tmp.rel
+m68040_fpsp_tmp_rel_SOURCES = m68040/fpsp/rtems_fpsp.c m68040/fpsp/bindec.S \
     m68040/fpsp/binstr.S m68040/fpsp/bugfix.S m68040/fpsp/decbin.S \
     m68040/fpsp/do_func.S m68040/fpsp/gen_except.S m68040/fpsp/get_op.S \
     m68040/fpsp/kernel_ex.S m68040/fpsp/res_func.S m68040/fpsp/round.S \
@@ -55,8 +56,18 @@ m68040_fpsp_rel_SOURCES = m68040/fpsp/rtems_fpsp.c m68040/fpsp/bindec.S \
     m68040/fpsp/x_operr.S m68040/fpsp/x_ovfl.S m68040/fpsp/x_snan.S \
     m68040/fpsp/x_store.S m68040/fpsp/x_unfl.S m68040/fpsp/x_unimp.S \
     m68040/fpsp/x_unsupp.S
-m68040_fpsp_rel_CPPFLAGS = $(AM_CPPFLAGS)
-m68040_fpsp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+m68040_fpsp_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS)
+m68040_fpsp_tmp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# avoid name clashes and modifying the source by
+# prefixing all (global) symbols in the binary
+m68040/fpsp_tmp1.rel: m68040/fpsp_tmp.rel
+	$(OBJCOPY) --prefix-symbols __fpsp_ $^ $@
+
+# Then remove the prefix again on all global
+# symbols we really need:
+m68040/fpsp.rel: m68040/fpsp_tmp1.rel
+	    $(OBJCOPY) --redefine-sym __fpsp_M68KFPSPInstallExceptionHandlers=M68KFPSPInstallExceptionHandlers --redefine-sym __fpsp_M68040FPSPUserExceptionHandlers=M68040FPSPUserExceptionHandlers --redefine-sym __fpsp__CPU_ISR_install_raw_handler=_CPU_ISR_install_raw_handler --redefine-sym __fpsp__FPSP_install_raw_handler=_FPSP_install_raw_handler $^ $@
 
 noinst_HEADERS = m68040/fpsp/fpsp.defs
 endif

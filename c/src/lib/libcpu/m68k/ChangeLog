@@ -1,3 +1,9 @@
+2009-02-11	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1369/bsps
+	* Makefile.am, configure.ac: Fix name clashes when using MC68040 fpsp
+	floating-point emulation.
+
 2008-09-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* mcf5206/timer/timerisr.S: Make compile again.
