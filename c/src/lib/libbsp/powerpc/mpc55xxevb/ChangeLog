@@ -1,3 +1,8 @@
+2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tests/tests.c: Comment out fields having dropped out from
+	sd_card_driver_entry.
+
 2008-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove start_g.o, remove -e start.
