@@ -22,7 +22,7 @@ _StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
 
 MEMORY
 {
-   ram      : ORIGIN = 0x80400000, LENGTH = 4M
+   ram      : ORIGIN = 0x80400000, LENGTH = 12M
 }
 
 SECTIONS
