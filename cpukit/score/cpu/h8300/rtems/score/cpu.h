@@ -77,7 +77,13 @@ extern "C" {
  *  XXX
  */
 
-#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
+#define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
+
+/*
+ *  Should this target use 16 or 32 bit object Ids?
+ *
+ */
+#define RTEMS_USE_16_BIT_OBJECT
 
 /*
  *  Does RTEMS manage a dedicated interrupt stack in software?
