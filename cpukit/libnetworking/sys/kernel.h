@@ -45,6 +45,10 @@
 #ifndef _SYS_KERNEL_H_
 #define _SYS_KERNEL_H_
 
+#include <sys/linker_set.h>
+
+#ifdef _KERNEL
+
 /* Global variables for the kernel. */
 
 /* 1.1 */
@@ -67,33 +71,7 @@ extern int stathz;			/* statistics clock's frequency */
 extern int profhz;			/* profiling clock's frequency */
 extern int ticks;
 
-#if FREEBSD_RELENG_2_2_2_BASE
-/*
- * The following macros are used to declare global sets of objects, which
- * are collected by the linker into a `struct linker_set' as defined below.
- *
- * NB: the constants defined below must match those defined in
- * ld/ld.h.  Since their calculation requires arithmetic, we
- * can't name them symbolically (e.g., 23 is N_SETT | N_EXT).
- */
-#define MAKE_SET(set, sym, type)
-#define TEXT_SET(set, sym) MAKE_SET(set, sym, 23)
-#define DATA_SET(set, sym) MAKE_SET(set, sym, 25)
-#define BSS_SET(set, sym)  MAKE_SET(set, sym, 27)
-#define ABS_SET(set, sym)  MAKE_SET(set, sym, 21)
-
-#else
-
-/*
- * RTEMS specific port using the updated sys/linker_set.h
- * from the lastest FreeBSD (2002-Nov-15). This is a better
- * way.
- *
- * Chris Johns (ccj@acm.org> 18 Nov 2002.
- */
-#include <sys/linker_set.h>
-
-#endif
+#endif /* _KERNEL */
 
 /*
  * Enumerated types for known system startup interfaces.
@@ -171,17 +149,6 @@ enum sysinit_elem_order {
 
 
 /*
- * System initialization call types; currently two are supported... one
- * to do a simple function call and one to cause a process to be started
- * by the kernel on the callers behalf.
- */
-typedef enum sysinit_elem_type {
-	SI_TYPE_DEFAULT		= 0x00000000,	/* No special processing*/
-	SI_TYPE_KTHREAD		= 0x00000001	/* start kernel thread*/
-} si_elem_t;
-
-
-/*
  * A system initialization call instance
  *
  * The subsystem
@@ -191,7 +158,6 @@ struct sysinit {
 	unsigned int	order;			/* init order within subsystem*/
 	void		(*func)(void *);	/* init function*/
 	void		*udata;			/* multiplexer/argument */
-	si_elem_t	type;			/* sysinit_elem_type*/
 };
 
 
@@ -253,7 +219,5 @@ struct linker_set {
 	const void	*ls_items[1];		/* really ls_length of them,
 						 * trailing NULL */
 };
-
-extern struct linker_set execsw_set;
 
 #endif /* !_SYS_KERNEL_H_*/
