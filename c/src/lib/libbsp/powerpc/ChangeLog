@@ -1,3 +1,9 @@
+2009-02-11	Matt Rippa <mrippa@gemini.edu>
+
+	PR 1352/bsps
+	* shared/console/reboot.c, shared/motorola/motorola.c: Include support
+	for mvme2600/mvme2700.
+
 2008-11-03	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1332: call BSP_uart_termios_set()/BSP_uart_intr_ctrl()
