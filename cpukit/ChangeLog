@@ -1,5 +1,6 @@
 2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/kern/uipc_domain.c: Remove domain_set (Unused).
 	* libnetworking/sys/kernel.h: Remove execsw_set,
 	si_elem_t (Unused, not in FreeBSD).
 	#include <sys/linker_set.h>.
