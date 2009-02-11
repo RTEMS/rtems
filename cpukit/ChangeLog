@@ -1,3 +1,8 @@
+2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/kernel.h: Remove hostnamelen, domainnamelen,
+	lbolt, tickdelta, timedelta (Unused, not in FreeBSD).
+
 2009-02-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/vm/vm.h: Cosmetics from FreeBSD.

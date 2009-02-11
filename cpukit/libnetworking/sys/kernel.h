@@ -50,9 +50,7 @@
 /* 1.1 */
 extern long hostid;
 extern char hostname[MAXHOSTNAMELEN];
-extern int hostnamelen;
 extern char domainname[MAXHOSTNAMELEN];
-extern int domainnamelen;
 extern char kernelname[MAXPATHLEN];
 
 /* 1.2 */
@@ -68,9 +66,6 @@ extern int psratio;			/* ratio: prof / stat */
 extern int stathz;			/* statistics clock's frequency */
 extern int profhz;			/* profiling clock's frequency */
 extern int ticks;
-extern int lbolt;			/* once a second sleep address */
-extern int tickdelta;
-extern long timedelta;
 
 #if FREEBSD_RELENG_2_2_2_BASE
 /*
