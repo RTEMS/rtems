@@ -1,3 +1,7 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tod.c: Use rtems_clock_get_tod().
+
 2009-01-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* src/irq-generic.c: #include <stdlib.h>.

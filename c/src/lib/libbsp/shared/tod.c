@@ -146,7 +146,7 @@ void setRealTimeFromRTEMS(void)
   if (!RTC_Present)
     return;
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
+  rtems_clock_get_tod( &rtems_tod );
   RTC_Table[RTC_Minor].pDeviceFns->deviceSetTime(RTC_Minor, &rtems_tod);
 }
 
@@ -233,7 +233,7 @@ int checkRealTime(void)
   if (!RTC_Present)
     return -1;
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
+  rtems_clock_get_tod( &rtems_tod );
   RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, &rtc_tod);
 
   rtems_time = _TOD_To_seconds( &rtems_tod );
