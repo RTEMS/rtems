@@ -214,10 +214,4 @@ void	kproc_start(void *udata);
 
 #endif /* PSEUDO_LKM */
 
-struct linker_set {
-	int		ls_length;
-	const void	*ls_items[1];		/* really ls_length of them,
-						 * trailing NULL */
-};
-
 #endif /* !_SYS_KERNEL_H_*/
