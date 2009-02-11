@@ -1,5 +1,10 @@
 2009-02-11	Matt Rippa <mrippa@gemini.edu>
 
+	PR 1352/bsps
+	* shared/motorola/motorola.c: Include support for mvme2600/mvme2700.
+
+2009-02-11	Matt Rippa <mrippa@gemini.edu>
+
 	PR 1362/bsps
 	* shared/console/bspreset.c: Fix BSP reset on mvme2300 - mvme2700.
 

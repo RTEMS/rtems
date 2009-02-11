@@ -193,6 +193,44 @@ static struct _int_map mvme24xx_intmap[] = {
              NULL_PINMAP}},
    NULL_INTMAP };
 
+static struct _int_map mvme27xx_intmap[] = {
+/* Raven Hostbridge; has int_pin == 0 */
+   {0,  0, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+
+
+/* Winbond PCI/ISA 83c553; has int_pin == 0 */
+   {0, 11, 0, {{0, {-1,-1,-1,-1}}, 
+               NULL_PINMAP}},
+
+   {0, 13, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {11,21,-1,-1}},  /* Universe  ISA/PCI */
+			/* strictly speaking, a non-multi function device
+			 * must only use pin A
+			 */
+			 {2, {22,-1,-1,-1}},  /* Universe          */
+			 {3, {23,-1,-1,-1}},  /* Universe          */
+			 {4, {24,-1,-1,-1}},  /* Universe          */
+             NULL_PINMAP}},
+
+   {0, 14, PCI_FIXUP_OPT_OVERRIDE_NAME,
+			{{1, {10,18,-1,-1}},  /* DEC Tulip enet (ISA/PCI)  */
+             NULL_PINMAP}},
+   {0, 16, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	    {{1, {25,-1,-1,-1}},  /* pci/pmc slot 1   */
+             {2, {26,-1,-1,-1}},
+             {3, {27,-1,-1,-1}},
+             {4, {28,-1,-1,-1}},
+             NULL_PINMAP}},
+
+   {0, 17, PCI_FIXUP_OPT_OVERRIDE_NAME,
+	    {{1, {28,-1,-1,-1}},  /* pci/pmc slot 2   */ /* orig: 0xf */
+             {2, {25,-1,-1,-1}},
+             {3, {26,-1,-1,-1}},
+             {4, {27,-1,-1,-1}},
+             NULL_PINMAP}},
+   NULL_INTMAP };
+
 static struct _int_map mvme2100_intmap[] = {
    {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC  */
                                   /* 0 is unused.  This hushes the init code.  */
@@ -275,7 +313,7 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xF9, PPC_604,     "MVME 2300", mvme23xx_intmap, prep_pci_swizzle},
   {0x1E0, 0xFA, PPC_UNKNOWN, "MVME 2300SC/2600", mvme23xx_intmap, prep_pci_swizzle},
   {0x1E0, 0xFB, PPC_UNKNOWN, "MVME 2600 with MVME712M", NULL, NULL},
-  {0x1E0, 0xFC, PPC_UNKNOWN, "MVME 2600/2700 with MVME761", NULL, NULL},
+  {0x1E0, 0xFC, PPC_750,     "MVME 2600/2700 with MVME761", mvme27xx_intmap, prep_pci_swizzle},
   {0x1E0, 0xFD, PPC_UNKNOWN, "MVME 3600 with MVME712M", NULL, NULL},
   {0x1E0, 0xFE, PPC_UNKNOWN, "MVME 3600 with MVME761", NULL, NULL},
   {0x1E0, 0xFF, PPC_UNKNOWN, "MVME 1600-001 or 1600-011", NULL, NULL},
@@ -339,11 +377,6 @@ motorolaBoard getMotorolaBoard()
        * (here we distinguish a MVME2300 and a MVME2400)
        */
       continue;
-    
-    if (mot_boards[entry].base_type == 0) {
-      mot_entry = entry;
-      break;
-    }
 
     if (mot_boards[entry].base_type != base_mod)
       continue;
