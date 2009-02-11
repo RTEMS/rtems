@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
- * $FreeBSD: src/sys/sys/uio.h,v 1.38 2005/01/07 02:29:24 imp Exp $
+ * $FreeBSD: src/sys/sys/uio.h,v 1.40 2006/11/29 19:08:45 alfred Exp $
  */
 
 /*
@@ -54,7 +54,6 @@ enum	uio_rw { UIO_READ, UIO_WRITE };
 enum uio_seg {
 	UIO_USERSPACE,		/* from user data space */
 	UIO_SYSSPACE,		/* from system space */
-	UIO_USERISPACE,		/* from user I space */
 	UIO_NOCOPY		/* don't copy, already in object */
 };
 #endif
@@ -62,13 +61,17 @@ enum uio_seg {
 #ifdef _KERNEL
 
 struct uio {
-	struct	iovec *uio_iov;
-	int	uio_iovcnt;
-	off_t	uio_offset;
-	int	uio_resid;
-	enum	uio_seg uio_segflg;
-	enum	uio_rw uio_rw;
+	struct	iovec *uio_iov;		/* scatter/gather list */
+	int	uio_iovcnt;		/* length of scatter/gather list */
+	off_t	uio_offset;		/* offset in target object */
+	int	uio_resid;		/* remaining bytes to process */
+	enum	uio_seg uio_segflg;	/* address space */
+	enum	uio_rw uio_rw;		/* operation */
+#if !defined(__rtems__)
+	struct	thread *uio_td;		/* owner */
+#else
 	struct	proc *uio_procp;
+#endif /* !__rtems__ */
 };
 
 /*

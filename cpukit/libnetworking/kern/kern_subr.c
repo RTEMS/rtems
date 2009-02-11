@@ -70,7 +70,6 @@ uiomove(void *cp, int n, struct uio *uio)
 		switch (uio->uio_segflg) {
 
 		case UIO_USERSPACE:
-		case UIO_USERISPACE:
 			if (uio->uio_rw == UIO_READ)
 				error = copyout(cp, iov->iov_base, cnt);
 			else
