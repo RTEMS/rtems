@@ -1,5 +1,6 @@
 2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/sys/kernel.h: Remove struct linker_set (Unused).
 	* libnetworking/net/if_loop.c: Remove PSEUDO_SET (Unused).
 	* libnetworking/kern/uipc_domain.c: Remove domain_set (Unused).
 	* libnetworking/sys/kernel.h: Remove execsw_set,
