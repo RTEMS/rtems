@@ -46,7 +46,7 @@ extern "C" {
      * Interrupt offset in comparison to BSP_ASM_IRQ_VECTOR_BASE
      * NB : 1) Interrupt vector number in IDT = offset + BSP_ASM_IRQ_VECTOR_BASE
      * 	    2) The same name should be defined on all architecture
-     *	       so that handler connexion can be unchanged.
+     *	       so that handler connection can be unchanged.
      */
 #define BSP_PERIODIC_TIMER      0
 #define BSP_KEYBOARD          	1

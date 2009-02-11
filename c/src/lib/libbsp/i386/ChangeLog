@@ -1,3 +1,7 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq.h: Fix spelling error.
+
 2008-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/i386-stub.c: Include stdbool.h.
