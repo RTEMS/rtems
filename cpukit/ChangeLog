@@ -1,3 +1,8 @@
+2009-02-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1374/misc
+	* libmisc/stackchk/check.c: Fix printk formatting string.
+
 2009-02-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ftpd/ftpd.c: Change SIX_MONTHS to time_t.
