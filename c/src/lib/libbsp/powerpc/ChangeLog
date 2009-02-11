@@ -1,3 +1,8 @@
+2009-02-11	Matt Rippa <mrippa@gemini.edu>
+
+	PR 1362/bsps
+	* shared/console/bspreset.c: Fix BSP reset on mvme2300 - mvme2700.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/openpic_i8259_irq.c: Line wrap.
