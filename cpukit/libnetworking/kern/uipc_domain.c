@@ -76,8 +76,6 @@ struct domain *domains;
 	domains = &__CONCAT(x,domain); \
 }
 
-extern struct linker_set domain_set;
-
 /* ARGSUSED*/
 void
 domaininit(void *dummy)
