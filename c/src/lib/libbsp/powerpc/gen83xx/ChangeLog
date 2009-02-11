@@ -1,3 +1,8 @@
+2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* spi/spi_init.c: Comment out fields having dropped out from
+	sd_card_driver_entry.
+
 2008-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -e start from %link. Remove references to 

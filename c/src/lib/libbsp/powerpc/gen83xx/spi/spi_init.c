@@ -248,14 +248,18 @@ static mpc83xx_spi_desc_t bsp_spi_bus_desc = {
 #include <libchip/spi-sd-card.h>
 
 sd_card_driver_entry sd_card_driver_table [1] = { {
+#if 0
                 .driver = {
                         .ops = &sd_card_driver_ops,
                         .size = sizeof( sd_card_driver_entry)
                 },
                 .table_index = 0,
                 .minor = 0,
+#endif
                 .device_name = "sd-card-a",
+#if 0
                 .disk_device_name = "/dev/sd-card-a",
+#endif
                 .transfer_mode = SD_CARD_TRANSFER_MODE_DEFAULT,
                 .command = SD_CARD_COMMAND_DEFAULT,
                 /* .response = whatever, */
