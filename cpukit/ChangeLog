@@ -1,3 +1,8 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/src/exinit.c: Interrupts are guaranteed to be disabled by
+	boot_card(), do not do it here as well.
+
 2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/sys/kernel.h: Remove PSEUDO_* 

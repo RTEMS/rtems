@@ -63,14 +63,14 @@ Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
 void rtems_initialize_data_structures(void)
 {
-  rtems_interrupt_level  bsp_level;
-
   /*
    *  Dispatching and interrupts are disabled until the end of the
    *  initialization sequence.  This prevents an inadvertent context
    *  switch before the executive is initialized.
+   *
+   *  WARNING: Interrupts should have been disabled by the BSP and
+   *           are disabled by boot_card().
    */
-  _ISR_Disable( bsp_level );
 
   /*
    * Initialize any target architecture specific support as early as possible
