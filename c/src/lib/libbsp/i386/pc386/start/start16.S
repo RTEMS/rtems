@@ -52,7 +52,7 @@ _start16:
 	movw	%ax, %es	#
 	movw	%ax, %ss	#
 
-#if defined(RTEMS_VIDEO_80x50)
+#if (RTEMS_VIDEO_80x50 == 1)
 
 	movl	$0x0040,%eax	# use 32 bit constant to ensure 16 MSB=0
 	mov     %ax,%es

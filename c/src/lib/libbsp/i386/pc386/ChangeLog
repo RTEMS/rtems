@@ -1,3 +1,8 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, start/start16.S: Remove duplicate configure option and
+	add support for the configure time variable BSP_VIDEO_80x50.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_specs: Move -e start from *link to *startfile to avoid warning
