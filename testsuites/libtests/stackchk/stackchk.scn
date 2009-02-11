@@ -6,4 +6,7 @@ TA1  - rtems_clock_get - 09:00:05   12/31/1988
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
 TA2  - rtems_clock_get - 09:00:10   12/31/1988
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
----> error indictation
+---> error indication similar to:
+BLOWN STACK!!! Offending task(0x23EE7A0): id=0x0A010002; name=0x54413120
+  stack covers range 0x23F1BD0 - 0x23F4BDF (12304 bytes)
+  Damaged pattern begins at 0x023F1BD8 and is 16 bytes long

@@ -1,3 +1,7 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* stackchk/stackchk.scn: Correct screen to match output.
+
 2008-12-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Change sizes of heap/region and allocated objects
