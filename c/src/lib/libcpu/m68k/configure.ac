@@ -21,6 +21,8 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
+RTEMS_CHECK_TOOL([OBJCOPY],[objcopy])
+
 # At this time all models should use the shared directory so do this
 AM_CONDITIONAL(shared, true)
 

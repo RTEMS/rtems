@@ -1,3 +1,9 @@
+2009-02-11	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1369/bsps
+	* Makefile.am, configure.ac: Fix name clashes when using MC68040 fpsp
+	floating-point emulation.
+
 2008-09-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* mcf548x/include/Freescale_license.txt: Convert to UNIX CR/LF style,
