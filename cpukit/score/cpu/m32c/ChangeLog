@@ -1,3 +1,7 @@
+2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/score/cpu.h: Use a 16 bit object id on this target.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* varvects.h: Fix prototype.

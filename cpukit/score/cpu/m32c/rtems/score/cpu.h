@@ -44,6 +44,8 @@ extern "C" {
 
 /* conditional compilation parameters */
 
+#define RTEMS_USE_16_BIT_OBJECT
+
 /**
  *  Should the calls to @ref _Thread_Enable_dispatch be inlined?
  *
