@@ -72,11 +72,6 @@ void rtems_initialize_data_structures(void)
    *           are disabled by boot_card().
    */
 
-  /*
-   * Initialize any target architecture specific support as early as possible
-   */
-  _CPU_Initialize( _Thread_Dispatch );
-
   #if defined(RTEMS_MULTIPROCESSING)
     /*
      *  Initialize the system state based on whether this is an MP system.
@@ -95,6 +90,11 @@ void rtems_initialize_data_structures(void)
   #else
     _System_state_Handler_initialization( FALSE );
   #endif
+
+  /*
+   * Initialize any target architecture specific support as early as possible
+   */
+  _CPU_Initialize();
 
   /*
    *  Do this as early as possible to ensure no debugging output
