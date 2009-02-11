@@ -1,3 +1,8 @@
+2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove stray % from '*startfile:' having crept in
+	previous patch.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
