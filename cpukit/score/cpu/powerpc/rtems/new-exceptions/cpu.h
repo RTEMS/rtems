@@ -190,18 +190,6 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_MODES_INTERRUPT_MASK   0x00000001 /* interrupt level in mode */
 
 /*
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
- */
-
-/* EXTERN void           (*_CPU_Thread_dispatch_pointer)(); */
-
-/*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
