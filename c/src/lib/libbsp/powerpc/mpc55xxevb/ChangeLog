@@ -1,5 +1,7 @@
 2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* startup/sd-card-init.c: Comment out fields having dropped
+	out from sd_card_driver_entry.
 	* tests/tests.c: Comment out fields having dropped out from
 	sd_card_driver_entry.
 

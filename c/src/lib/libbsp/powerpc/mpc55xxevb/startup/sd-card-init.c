@@ -120,14 +120,18 @@ static fstab_t mpc55xx_fs_table [] = { {
 #define SD_CARD_NUMBER 1
 
 sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = { {
+#if 0
 		.driver = {
 			.ops = &sd_card_driver_ops,
 			.size = sizeof( sd_card_driver_entry)
 		},
 		.table_index = 0,
 		.minor = 0,
+#endif
 		.device_name = "sd-card-a",
+#if 0
 		.disk_device_name = "/dev/sd-card-a",
+#endif
 		.transfer_mode = SD_CARD_TRANSFER_MODE_DEFAULT,
 		.command = SD_CARD_COMMAND_DEFAULT,
 		/* response : whatever, */
