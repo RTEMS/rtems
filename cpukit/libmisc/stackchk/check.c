@@ -238,7 +238,7 @@ void Stack_check_report_blown_task(
 
   if ( !pattern_ok ) {
     printk(
-      "  Damaged pattern begins at 0x%08lx and is %zd bytes long\n",
+      "  Damaged pattern begins at 0x%08lx and is %d bytes long\n",
       (unsigned long) Stack_check_Get_pattern_area(stack),
       PATTERN_SIZE_BYTES);
   }

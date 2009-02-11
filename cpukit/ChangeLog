@@ -1,3 +1,8 @@
+2009-02-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1374/misc
+	* libmisc/stackchk/check.c: Fix printk formatting string.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/src/exinit.c: Interrupts are guaranteed to be disabled by
