@@ -469,7 +469,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *         is TRUE.
  */
 
-void *_CPU_Thread_Idle_body( uint32_t );
+void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /*
  *  Fatal Error manager macros
