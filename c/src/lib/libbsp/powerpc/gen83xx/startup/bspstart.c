@@ -160,7 +160,7 @@ void bsp_start( void)
  * The MSR[POW] bit is set to put the CPU into the low power mode
  * defined in HID0.  HID0 is set during starup in start.S.
  */
-Thread _Thread_Idle_body( uint32_t ignored)
+void *_Thread_Idle_body( uintptr_t ignored )
 {
 
   while (1) {

@@ -217,7 +217,7 @@ void bsp_start(void)
 /**
  * @brief Idle thread body.
  */
-Thread _Thread_Idle_body( uint32_t ignored)
+void *_Thread_Idle_body( uintptr_t ignored )
 {
 
 	while (1) {
