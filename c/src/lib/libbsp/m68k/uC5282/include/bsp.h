@@ -131,7 +131,7 @@ int BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocal
  *  So we prototype it and define the constant confdefs.h expects
  *  to configure a BSP specific one.
  */
-Thread _BSP_Thread_Idle_body(uint32_t);
+void *_BSPThread_Idle_body( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY _BSP_Thread_Idle_body
 
 #ifdef __cplusplus
