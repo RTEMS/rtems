@@ -770,8 +770,8 @@ bool _Thread_Evaluate_mode( void );
 /**
  *  This routine is the body of the system idle thread.
  */
-Thread _Thread_Idle_body(
-  uint32_t   ignored
+void *_Thread_Idle_body(
+  uintptr_t  ignored
 );
 #endif
 

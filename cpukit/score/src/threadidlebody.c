@@ -45,8 +45,8 @@
  */
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
-Thread _Thread_Idle_body(
-  uint32_t   ignored
+void *_Thread_Idle_body(
+  uintptr_t  ignored
 )
 {
   for( ; ; ) ;
