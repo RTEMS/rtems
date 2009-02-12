@@ -29,7 +29,7 @@
  *  Output parameters:  NONE
  */
  
-void *_CPU_Thread_Idle_body( uint32_t ignored )
+void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 #if defined(mcf5272)
   for( ; ; ) {
