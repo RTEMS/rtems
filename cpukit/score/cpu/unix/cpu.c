@@ -377,7 +377,7 @@ void _CPU_Install_interrupt_stack( void )
  *  CPU cycles which is again similar to low power mode.
  */
 
-void *_CPU_Thread_Idle_body( uint32_t ignored )
+void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 #if CPU_SYNC_IO
   int fd;

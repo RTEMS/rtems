@@ -77,7 +77,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-void *_CPU_Thread_Idle_body (uint32_t ignored)
+void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   while(1){
     asm volatile ("hlt");

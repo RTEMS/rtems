@@ -267,7 +267,7 @@ void _CPU_Install_interrupt_stack( void )
  *     hook with caution.
  */
 
-void *_CPU_Thread_Idle_body( uint32_t ignored )
+void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 #if (__mips == 3) || (__mips == 32)
    for( ; ; )

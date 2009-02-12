@@ -1107,7 +1107,7 @@ void _CPU_Install_interrupt_stack( void );
  *
  *  XXX document implementation including references if appropriate
  */
-void *_CPU_Thread_Idle_body( uint32_t );
+void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
  *  @ingroup CPUContext
