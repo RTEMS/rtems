@@ -235,7 +235,7 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 #define USE_SLICETIMER_0     TRUE
 #define USE_SLICETIMER_1     FALSE
 
-Thread _Thread_Idle_body(uint32_t ignored);
+void *_Thread_Idle_body( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY _Thread_Idle_body
 
 /* BSP specific IRQ Benchmarking support */
