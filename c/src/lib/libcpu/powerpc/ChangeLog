@@ -1,3 +1,7 @@
+2009-02-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* new-exceptions/cpu.c: Correct prototype of _CPU_Initialize.
+
 2008-10-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/include/powerpc-utility.h: Use constraint "b" for address

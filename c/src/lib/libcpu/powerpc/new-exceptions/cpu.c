@@ -39,13 +39,10 @@
  *
  *  This routine performs processor dependent initialization.
  *
- *  INPUT PARAMETERS:
- *    thread_dispatch - address of disptaching routine
+ *  INPUT PARAMETERS: NONE
  */
 
-void _CPU_Initialize(
-  void      (*thread_dispatch)      /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
   /* Do nothing */
 }
@@ -54,7 +51,6 @@ void _CPU_Initialize(
  *
  *  _CPU_Context_Initialize
  */
-
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
