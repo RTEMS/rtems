@@ -37,9 +37,13 @@ $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
-$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
+$(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS: include/bsp.include_bsp_HEADERS $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS
+
+$(PROJECT_INCLUDE)/+=: += $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/+=
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/+=
 
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
@@ -96,6 +100,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ssp.h
 $(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h
+
+$(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)

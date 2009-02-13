@@ -1,3 +1,7 @@
+2009-02-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, preinstall.am: Use stub tm27.h.
+
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add RTEMS_BSPOPTS(LPC24XX_OSCILLATOR_RTC).

@@ -19,24 +19,25 @@ dist_project_lib_DATA = bsp_specs
 #                  Header                                                     #
 ###############################################################################
 
-include_HEADERS = include/bsp.h
+include_HEADERS = include/bsp.include_bsp_HEADERS +=
 
 nodist_include_HEADERS = include/bspopts.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-include_bsp_HEADERS = ../../shared/include/utility.h \
-	../../shared/include/irq-generic.h \
-	../../shared/tod.h \
-	../shared/include/linker-symbols.h \
-	../shared/include/start.h \
-	include/irq-config.h \
-	include/irq.h \
-	include/lpc24xx.h \
-	include/system-clocks.h \
-	include/ssp.h \
-	include/dma.h
+include_bsp_HEADERS  = ../../shared/include/utility.h
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/tod.h
+include_bsp_HEADERS += ../shared/include/linker-symbols.h
+include_bsp_HEADERS += ../shared/include/start.h
+include_bsp_HEADERS += include/irq-config.h
+include_bsp_HEADERS += include/irq.h
+include_bsp_HEADERS += include/lpc24xx.h
+include_bsp_HEADERS += include/system-clocks.h
+include_bsp_HEADERS += include/ssp.h
+include_bsp_HEADERS += include/dma.h
+include_HEADERS += ../../shared/include/tm27.h
 
 ###############################################################################
 #                  Data                                                       #
