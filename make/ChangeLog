@@ -1,3 +1,7 @@
+2009-02-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/uC5282.cfg: Add cvs Id.
+
 2008-11-20	Daron Chabot <daronchabot@gmail.com>
 
 	PR 1337/bsps
