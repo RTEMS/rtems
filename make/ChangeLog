@@ -1,3 +1,8 @@
+2009-02-17	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1371/bsps
+	* custom/mvme167.cfg: mvme167 needs to convert ELF -> pure binary RALF.
+
 2009-02-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/uC5282.cfg: Add cvs Id.
