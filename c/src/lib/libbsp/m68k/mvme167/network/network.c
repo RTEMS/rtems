@@ -29,6 +29,10 @@
 #define DBG_PACKETS
 */
 
+#define IGNORE_SPURIOUS_IRQ
+#define IGNORE_NO_RFA
+#define IGNORE_MULTIPLE_RF
+
 /*
  * Default number of buffer descriptors and buffer sizes.
  */
@@ -69,8 +73,8 @@
 #include "uti596.h"
 
 /* If we are running interrupt driven I/O no debug output is printed */
-#if CD2401_POLLED_IO == 1
-   #define printk(arglist) printk arglist;
+#if CD2401_IO_MODE == 0
+   #define printk(arglist) do { printk arglist; printk("\r"); } while (0);
 #else
    #define printk(arglist)
 #endif
@@ -906,7 +910,7 @@ static int uti596_initRFA( int num )
   } /* end for */
 
   uti596_softc.pEndRFA->next = I596_NULL;
-  UTI_596_ASSERT(uti596_softc.countRFD == RX_BUF_COUNT,"INIT:WRONG RFD COUNT\n" )
+  UTI_596_ASSERT(uti596_softc.countRFD == num,"INIT:WRONG RFD COUNT\n" )
 
   #ifdef DBG_INIT
   printk (("uti596_initRFA: Head of RFA is buffer %p \n\
@@ -1029,7 +1033,7 @@ void uti596_initialize(
   /* write the SYSBUS: interrupt pin active high, LOCK disabled,
    * internal triggering, linear mode
    */
-  sc->pScp->sysbus = 0x54;
+  sc->pScp->sysbus = 0x44;
 
   /* provide the iscp to the scp, keep a pointer for our use */
   sc->pScp->iscp_pointer = word_swap((unsigned long)&sc->iscp);
@@ -1219,7 +1223,7 @@ void uti596_reset( void )
     sc-> pLastUnkRFD = I596_NULL;
   }
 
-  sc->pEndRFA->next = sc->pSavedRfdQueue;
+  sc->pEndRFA->next = (i596_rfd*)word_swap((uint32_t)sc->pSavedRfdQueue);
   if ( sc->pSavedRfdQueue != I596_NULL ) {
     sc->pEndRFA = sc->pEndSavedQueue;
     sc->pSavedRfdQueue = sc->pEndSavedQueue = I596_NULL;
@@ -1846,6 +1850,12 @@ void uti596_init(
     printk(("uti596_init: After attach, status of board = 0x%x\n", sc->scb.status ))
     #endif
   }
+ 
+  /*
+   * In case the ISR discovers there are no resources it reclaims
+   * them and restarts
+   */
+  sc->started = 1;
 
   /*
    * Enable receiver
@@ -2132,13 +2142,15 @@ void uti596_resetDaemon(
   rtems_vector_number irq
 )
 {
+int fullStatus;
+
 	#ifdef DBG_ISR
   printk(("uti596_DynamicInterruptHandler: begins"))
 	#endif
 
  uti596_wait (&uti596_softc, UTI596_WAIT_FOR_CU_ACCEPT);
 
- scbStatus = uti596_softc.scb.status & 0xf000;
+ scbStatus = (fullStatus = uti596_softc.scb.status) & 0xf000;
 
  if ( scbStatus ) {
    /* acknowledge interrupts */
@@ -2166,8 +2178,10 @@ void uti596_resetDaemon(
     }
   }
   else {
-    printk(("\n***ERROR: Spurious interrupt. Resetting...\n"))
+#ifndef IGNORE_SPURIOUS_IRQ
+    printk(("\n***ERROR: Spurious interrupt (full status 0x%x). Resetting...\n", fullStatus))
     uti596_softc.nic_reset = 1;
+#endif
   }
 
   if ( (scbStatus & SCB_STAT_CX) && !(scbStatus & SCB_STAT_CNA) ) {
@@ -2217,8 +2231,10 @@ void uti596_resetDaemon(
 		#endif
     if ( uti596_softc.pBeginRFA == I596_NULL ||
        !( uti596_softc.pBeginRFA -> stat & STAT_C)) {
+#ifndef IGNORE_NO_RFA
       uti596_dump_scb();
       uti596_softc.nic_reset = 1;
+#endif
     }
     else {
       while ( uti596_softc.pBeginRFA != I596_NULL &&
@@ -2228,9 +2244,11 @@ void uti596_resetDaemon(
         printk(("uti596_DynamicInterruptHandler: pBeginRFA != NULL\n"))
 				#endif
         count_rx ++;
+#ifndef IGNORE_MULTIPLE_RF
         if ( count_rx > 1) {
-          printk(("****WARNING: Received 2 frames on 1 interrupt \n"))
-                                }
+          printk(("****WARNING: Received %i frames on 1 interrupt \n", count_rx))
+		}
+#endif
        /* Give Received Frame to the ULCS */
         uti596_softc.countRFD--;
 
@@ -2711,7 +2729,7 @@ static void dumpQ( void )
 
   for( pRfd = uti596_softc.pSavedRfdQueue;
        pRfd != I596_NULL;
-       pRfd = pRfd -> next) {
+       pRfd = (i596_rfd*)word_swap((uint32_t)pRfd -> next)) {
       printk(("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd))
   }
 
@@ -2719,7 +2737,7 @@ static void dumpQ( void )
 
   for( pRfd = uti596_softc.pInboundFrameQueue;
        pRfd != I596_NULL;
-       pRfd = pRfd -> next) {
+       pRfd = (i596_rfd*)word_swap((uint32_t)pRfd -> next)) {
     printk(("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd))
   }
 
@@ -2728,7 +2746,7 @@ static void dumpQ( void )
 
   for( pRfd = uti596_softc.pBeginRFA;
        pRfd != I596_NULL;
-       pRfd = pRfd -> next) {
+       pRfd = (i596_rfd*)word_swap((uint32_t)pRfd -> next)) {
     printk(("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd))
   }
 }
@@ -2751,7 +2769,7 @@ static void show_buffers (void)
 
   for ( pRfd = uti596_softc.pBeginRFA;
         pRfd != I596_NULL;
-        pRfd = pRfd->next) {
+        pRfd = (i596_rfd *)word_swap((uint32_t)pRfd->next) ) {
     printk(("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
             pRfd, pRfd->stat, pRfd->cmd))
         }
@@ -2759,7 +2777,7 @@ static void show_buffers (void)
 
   for ( pRfd = uti596_softc.pInboundFrameQueue;
         pRfd != I596_NULL;
-        pRfd = pRfd->next) {
+        pRfd = (i596_rfd *)word_swap((uint32_t)pRfd->next) ) {
     printk(("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
             pRfd, pRfd->stat, pRfd->cmd))
         }
@@ -2768,7 +2786,7 @@ static void show_buffers (void)
 
   for ( pRfd = uti596_softc.pSavedRfdQueue;
         pRfd != I596_NULL;
-        pRfd = pRfd->next) {
+        pRfd = (i596_rfd *)word_swap((uint32_t)pRfd->next) ) {
     printk(("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
              pRfd, pRfd->stat, pRfd->cmd))
   }
@@ -2793,7 +2811,7 @@ static void show_queues(void)
   for ( pRfd = uti596_softc.pSavedRfdQueue;
         pRfd != I596_NULL &&
         pRfd != NULL;
-        pRfd = pRfd->next) {
+        pRfd = (i596_rfd *)word_swap((uint32_t)pRfd->next) ) {
     printk(("0x%p\n", pRfd))
   }
 
@@ -2804,7 +2822,7 @@ static void show_queues(void)
   for ( pRfd = uti596_softc.pBeginRFA;
         pRfd != I596_NULL &&
         pRfd != NULL;
-        pRfd = pRfd->next) {
+        pRfd = (i596_rfd *)word_swap((uint32_t)pRfd->next) ) {
     printk(("0x%p\n", pRfd))
   }
 
