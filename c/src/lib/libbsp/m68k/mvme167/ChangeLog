@@ -1,5 +1,10 @@
 2009-02-17	Till Straumann <strauman@slac.stanford.edu>
 
+	PR 1371/bsps
+	* network/network.c: mvme167 network driver buggy.
+
+2009-02-17	Till Straumann <strauman@slac.stanford.edu>
+
 	PR 1370/bsps
 	* console/console.c: mvme167 console driver BSP_output_char fails to
 	convert \n -> \n\r
