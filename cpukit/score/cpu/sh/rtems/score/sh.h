@@ -46,8 +46,12 @@ extern "C" {
  *  predefines. 
  */
 
-#if defined(__SH2E__) || defined(__SH3E__) || \
-    defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
+#if defined(__SH2E__) || defined(__SH3E__)
+
+/* FIXME: SH-DSP context not currently supported */
+#define SH_HAS_FPU 0
+
+#elif defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
 
 /* 
  * Define this if you want to use XD-registers.
