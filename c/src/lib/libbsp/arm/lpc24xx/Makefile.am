@@ -19,14 +19,15 @@ dist_project_lib_DATA = bsp_specs
 #                  Header                                                     #
 ###############################################################################
 
-include_HEADERS = include/bsp.include_bsp_HEADERS +=
+include_HEADERS = include/bsp.h
 
 nodist_include_HEADERS = include/bspopts.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
-include_bsp_HEADERS  = ../../shared/include/utility.h
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h

@@ -37,13 +37,9 @@ $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
-$(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS: include/bsp.include_bsp_HEADERS $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.include_bsp_HEADERS
-
-$(PROJECT_INCLUDE)/+=: += $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/+=
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/+=
+$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
