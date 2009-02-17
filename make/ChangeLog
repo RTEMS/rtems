@@ -1,3 +1,7 @@
+2009-02-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/uC5282.cfg: Add cvs Id.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* custom/h8sxsim.cfg: Small H8SX should be optimized for size.
