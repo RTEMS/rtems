@@ -97,7 +97,6 @@ int rtems_shell_main_netstats(                       /* command */
     );
   }
 
-#if 0
   if ( doInetRoutes == 1 || doAll == 1 ) {
     rtems_bsdnet_show_inet_routes();
   }
@@ -126,7 +125,6 @@ int rtems_shell_main_netstats(                       /* command */
     rtems_bsdnet_show_tcp_stats();
   }
 
-#endif
   return 0;
 }
 

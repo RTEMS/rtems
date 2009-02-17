@@ -1,3 +1,9 @@
+2009-02-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1377/shell
+	* libmisc/shell/main_netstats.c: Remove #if 0 which should not have
+	been there anyway.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/rtems/config.h, score/include/rtems/score/thread.h,
