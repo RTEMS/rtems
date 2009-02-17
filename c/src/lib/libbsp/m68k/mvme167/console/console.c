@@ -161,6 +161,15 @@ int _167Bug_pollWrite( int minor, const char *buf, int len );
 static void _BSP_output_char( char c );
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
+/* '\r' character in memory. This used to live on
+ * the stack but storing the '\r' character is
+ * optimized away by gcc-4.3.2 (since it seems to
+ * be unused [only referenced from inline assembly
+ * code in _167Bug_pollWrite()]).
+ * Hence we make it a global constant.
+ */
+static const char cr_char = '\r';
+
 /* Channel info */
 /* static */ volatile struct {
   void *tty;                    /* Really a struct rtems_termios_tty * */
@@ -1366,12 +1375,11 @@ rtems_status_code do_poll_write(
 {
   rtems_libio_rw_args_t *rw_args = arg;
   uint32_t   i;
-  char cr ='\r';
 
   for( i = 0; i < rw_args->count; i++ ) {
     _167Bug_pollWrite(minor, &(rw_args->buffer[i]), 1);
     if ( rw_args->buffer[i] == '\n' )
-      _167Bug_pollWrite(minor, &cr, 1);
+      _167Bug_pollWrite(minor, &cr_char, 1);
   }
   rw_args->bytes_moved = i;
   return RTEMS_SUCCESSFUL;
@@ -1385,7 +1393,6 @@ rtems_status_code do_poll_write(
 void _BSP_output_char(char c)
 {
   rtems_device_minor_number printk_minor;
-  char cr ='\r';
 
   /*
    *  Can't rely on console_initialize having been called before this function
@@ -1399,7 +1406,7 @@ void _BSP_output_char(char c)
 
   _167Bug_pollWrite(printk_minor, &c, 1);
   if ( c == '\n' )
-      _167Bug_pollWrite(printk_minor, &cr, 1);
+      _167Bug_pollWrite(printk_minor, &cr_char, 1);
 }
 
 /*

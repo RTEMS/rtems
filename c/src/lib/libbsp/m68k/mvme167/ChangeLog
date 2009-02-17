@@ -1,3 +1,9 @@
+2009-02-17	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1370/bsps
+	* console/console.c: mvme167 console driver BSP_output_char fails to
+	convert \n -> \n\r
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
