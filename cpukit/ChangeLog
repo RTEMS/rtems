@@ -1,5 +1,11 @@
 2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Re-add boolean when
+	building BSD code. This is used by at least one of the BSD NIC
+	drivers I am currently porting. I am trying out
+
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add halt command to
 	shell which results in the shutting RTEMS down.
 	* libmisc/shell/main_halt.c: New file.
