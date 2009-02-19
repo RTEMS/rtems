@@ -1,3 +1,9 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add halt command to
+	shell which results in the shutting RTEMS down.
+	* libmisc/shell/main_halt.c: New file.
+
 2009-02-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1377/shell

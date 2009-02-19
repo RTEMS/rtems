@@ -68,13 +68,13 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_alias.c shell/main_cat.c shell/main_cd.c shell/cmp-ls.c \
     shell/main_chdir.c shell/main_chmod.c shell/main_chroot.c \
     shell/main_cp.c shell/main_cpuuse.c shell/main_date.c shell/main_dir.c \
-    shell/main_echo.c shell/main_exit.c shell/main_help.c shell/main_id.c \
-    shell/main_logoff.c shell/main_ls.c shell/main_mallocinfo.c \
-    shell/main_mdump.c shell/main_medit.c shell/main_mfill.c \
-    shell/main_mkdir.c shell/main_mount.c \
+    shell/main_echo.c shell/main_exit.c shell/main_halt.c shell/main_help.c \
+    shell/main_id.c shell/main_logoff.c shell/main_ls.c \
+    shell/main_mallocinfo.c shell/main_mdump.c shell/main_medit.c \
+    shell/main_mfill.c shell/main_mkdir.c shell/main_mount.c \
     shell/main_mount_msdos.c shell/main_mmove.c shell/main_msdosfmt.c \
-    shell/main_mv.c shell/main_mwdump.c shell/main_perioduse.c shell/main_pwd.c \
-    shell/main_rm.c shell/main_rmdir.c shell/main_sleep.c \
+    shell/main_mv.c shell/main_mwdump.c shell/main_perioduse.c \
+    shell/main_pwd.c shell/main_rm.c shell/main_rmdir.c shell/main_sleep.c \
     shell/main_stackuse.c shell/main_tty.c shell/main_umask.c \
     shell/main_unmount.c shell/main_blksync.c shell/main_whoami.c \
     shell/shell.c shell/shell_cmdset.c shell/shell_getchar.c \

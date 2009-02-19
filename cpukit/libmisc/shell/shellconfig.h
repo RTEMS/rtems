@@ -54,6 +54,7 @@ extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
 
+extern rtems_shell_cmd_t rtems_shell_HALT_Command;
 extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
@@ -304,6 +305,11 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
     /*
      *  RTEMS Related commands
      */
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_HALT)) || \
+        defined(CONFIGURE_SHELL_COMMAND_HALT)
+      &rtems_shell_HALT_Command,
+    #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_CPUUSE)) || \
         defined(CONFIGURE_SHELL_COMMAND_CPUUSE)
