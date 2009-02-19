@@ -65,7 +65,7 @@ BuildArch:	noarch
 
 BuildRequires:	rtems-4.10-sparc-rtems4.10-gcc
 
-Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/rtems-%{cpukit_pkgvers}.tar.bz2
+Source0: 	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/rtems-%{cpukit_pkgvers}.tar.bz2
 %{?_without_sources:NoSource:   0}
 
 %description
