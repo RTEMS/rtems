@@ -1,3 +1,8 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/dec21140.c, libchip/network/elnk.c: Make sure this is
+	enabled on x86.
+
 2009-02-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/bspopts.m4: Quoting cosmetics.

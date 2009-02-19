@@ -72,6 +72,7 @@
 
 #if defined(__i386__)
 #define ELNK_SUPPORTED
+  #define PCI_DRAM_OFFSET 0
 #endif
 
 #if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))

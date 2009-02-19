@@ -47,6 +47,7 @@
 
 #if defined(__i386__)
   #define DEC21140_SUPPORTED
+  #define PCI_DRAM_OFFSET 0
 #endif
 #if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(ppc603e))
   #define DEC21140_SUPPORTED
@@ -55,8 +56,6 @@
 #if !defined(PCI_DRAM_OFFSET)
   #undef DEC21140_SUPPORTED
 #endif
-
-#define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
 
 #if defined(DEC21140_SUPPORTED)
 #include <bsp.h>
