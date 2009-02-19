@@ -1,3 +1,7 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq.c: Spacing.
+
 2009-02-11	Matt Rippa <mrippa@gemini.edu>
 
 	PR 1352/bsps

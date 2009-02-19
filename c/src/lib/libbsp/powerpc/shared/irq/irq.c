@@ -275,8 +275,8 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
    * Store various code accelerators
    */
   internal_config     = config;
-  default_rtems_entry   = config->defaultEntry;
-  rtems_hdl_tbl     = config->irqHdlTbl;
+  default_rtems_entry = config->defaultEntry;
+  rtems_hdl_tbl       = config->irqHdlTbl;
 
   rtems_interrupt_disable(level);
 
