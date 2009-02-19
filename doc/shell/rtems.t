@@ -14,6 +14,7 @@ The RTEMS shell has the following rtems commands:
 
 @itemize @bullet
 
+@item @code{halt} - Shutdown the system
 @item @code{cpuuse} - print or reset per thread cpu usage
 @item @code{stackuse} - print per thread stack usage
 @item @code{perioduse} - print or reset per period usage
@@ -39,6 +40,78 @@ This section details the RTEMS Specific Commands available.  A
 subsection is dedicated to each of the commands and
 describes the behavior and configuration of that
 command as well as providing an example usage.
+
+@c
+@c
+@c
+@page
+@subsection halt - Shutdown the system
+
+@pgindex halt
+
+@subheading SYNOPSYS:
+
+@example
+halt
+@end example
+
+@subheading DESCRIPTION:
+
+This command is used to shutdown the RTEMS application.
+
+@subheading EXIT STATUS:
+
+This command does not return.
+
+@subheading NOTES:
+
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{halt}:
+
+@example
+SHLL [/] $ halt
+@end example
+
+The user will not see another prompt and the system will 
+shutdown.
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_HALT
+@findex CONFIGURE_SHELL_COMMAND_HALT
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_HALT} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_HALT} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_halt
+
+The @code{halt} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_halt(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{halt} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_HALT_Command;
+@end example
+
 @c
 @c
 @c

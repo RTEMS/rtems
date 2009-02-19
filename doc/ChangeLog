@@ -1,3 +1,7 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shell/rtems.t: Add halt command.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* porting/idlethread.t: Change prototype of IDLE thread to consistently
