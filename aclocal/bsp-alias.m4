@@ -41,6 +41,7 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     simsh1)       $2=shsim            ;; # SH1 simulator in GDB
     simsh2)       $2=shsim            ;; # SH2 simulator in GDB
+    simsh2e)       $2=shsim           ;; # SH2e simulator in GDB
     simsh4)       $2=shsim            ;; # SH4 simulator in GDB
     sis)          $2=erc32            ;; # erc32 SIS simulator
     *)            $2=$1;;

@@ -1,3 +1,7 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* aclocal/bsp-alias.m4: Add simsh2e.
+
 2009-02-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.maint: rtems_api=4.10.
