@@ -1,5 +1,10 @@
 2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* include/rtems/irq-extension.h, include/rtems/irq.h: Spelling errors
+	and spacing.
+
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libnetworking/rtems/rtems_bsdnet_internal.h: Re-add boolean when
 	building BSD code. This is used by at least one of the BSD NIC
 	drivers I am currently porting. I am trying out

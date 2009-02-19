@@ -34,7 +34,7 @@ extern "C" {
  *
  * @ingroup ClassicINTR
  *
- * In addition to the classic API interrupt handler with a handle are
+ * In addition to the Classic API interrupt handler with a handle are
  * supported.  You can also install multiple shared handler for one interrupt
  * vector.
  *

@@ -77,7 +77,7 @@ typedef struct __rtems_irq_connect_data__ {
    * function enabling to know what interrupt may currently occur
    * if someone manipulates the i8259s interrupt mask without care...
    */
-    rtems_irq_is_enabled        isOn;
+  rtems_irq_is_enabled        isOn;
 
 #ifdef BSP_SHARED_HANDLER_SUPPORT
   /*
@@ -119,7 +119,7 @@ typedef struct {
 | Function Prototypes.
 +--------------------------------------------------------------------------*/
 /*
- * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
+ * -------------------- RTEMS Single Irq Handler Mngt Routines ----------------
  */
 /*
  * function to connect a particular irq handler. This hanlder will NOT be called
@@ -138,11 +138,11 @@ typedef struct {
  * As a result the hdl function provided
  *
  *      a) can perfectly be written is C,
- *      b) may also well directly call the part of the RTEMS API that can be used
- *      from interrupt level,
+ *      b) may also well directly call the part of the RTEMS API that can be
+ *      used from interrupt level,
  *      c) It only responsible for handling the jobs that need to be done at
- *      the device level including (aknowledging/re-enabling the interrupt at device,
- *      level, getting the data,...)
+ *      the device level including (aknowledging/re-enabling the interrupt at
+ *      device level, getting the data,...)
  *
  *      When returning from the function, the following will be performed by
  *      the RTEMS irq epilogue :
@@ -170,15 +170,14 @@ int BSP_remove_rtems_irq_handler        (const rtems_irq_connect_data*);
 
 
 /*
- * ------------------------ RTEMS Shared Irq Handler Mngt Routines ----------------
+ * ----------------- RTEMS Shared Irq Handler Mngt Routines ----------------
  */
 #ifdef BSP_SHARED_HANDLER_SUPPORT
 int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
 #endif
 
-
 /*
- * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------
+ * ----------------- RTEMS Global Irq Handler Mngt Routines ----------------
  */
 /*
  * (Re) Initialize the RTEMS interrupt management.
@@ -201,13 +200,11 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
  */
 
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
+
 /*
  * (Re) get info on current RTEMS interrupt management.
  */
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
-
-
-
 
 #ifdef __cplusplus
 }
