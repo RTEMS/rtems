@@ -1,3 +1,7 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* custom/simsh2e.cfg: New file.
+
 2009-02-17	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 1371/bsps
