@@ -31,6 +31,7 @@ extern "C" {
 
 #include <bsp/irq_asm.h>
 #include <rtems.h>
+#define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
 
 /*-------------------------------------------------------------------------+

@@ -1,3 +1,8 @@
+2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_asm.S: Add shared
+	interrupt support to i386.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/irq.h: Fix spelling error.
