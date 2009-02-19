@@ -20,7 +20,7 @@ $(TARGET)-cpukit.spec.in: $(CPUKIT_SUBPACKAGES) Makefile.am $(srcdir)/cpukit-sou
 	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]CPUKIT_VERS[@]/$(CPUKIT_VERS)/g" \
 	  -e "s/[@]CPUKIT_PKGVERS[@]/$(CPUKIT_PKGVERS)/g" \
-	  -e "s/[@]CPUKIT_RPMREL[@]/$(CPUKIT_RPMREL)/g" \
+	  -e "s/[@]CPUKIT_RPMREL[@]/$(CPUKIT_RPMREL)%{?dist}/g" \
 	  -e "/--with-sysroot/d" \
 	  -e "/[@]tool_target[@]-sys-root/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \

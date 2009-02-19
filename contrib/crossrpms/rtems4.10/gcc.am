@@ -27,10 +27,10 @@ $(TARGET)-gcc.spec.in: $(GCC_SUBPACKAGES) Makefile.am $(srcdir)/gcc-sources.add 
 	  -e "/[@]PREP[@]/d" \
 	  -e "s/[@]GCC_VERS[@]/$(GCC_VERS)/g" \
 	  -e "s/[@]GCC_PKGVERS[@]/$(GCC_PKGVERS)/g" \
-	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)/g" \
+	  -e "s/[@]GCC_RPMREL[@]/$(GCC_RPMREL)%{?dist}/g" \
 	  -e "s/[@]NEWLIB_VERS[@]/$(NEWLIB_VERS)/g" \
 	  -e "s/[@]NEWLIB_PKGVERS[@]/$(NEWLIB_PKGVERS)/g" \
-	  -e "s/[@]NEWLIB_RPMREL[@]/$(NEWLIB_RPMREL)/g" \
+	  -e "s/[@]NEWLIB_RPMREL[@]/$(NEWLIB_RPMREL)%{?dist}/g" \
 	  -e "/--with-sysroot/d" \
 	  -e "/[@]tool_target[@]-sys-root/d" \
 	  -e "/[@]tool_target[@]-w32api-sys-root/d" \
