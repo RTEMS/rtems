@@ -56,6 +56,7 @@ include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/termios.h libcsupport/include/sys/utsname.h
 
 include_sys_HEADERS += libnetworking/sys/uio.h
+include_sys_HEADERS += include/sys/priority.h
 
 if LIBNETWORKING
 include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
