@@ -1,3 +1,7 @@
+2009-02-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix breakage introduced in 2009-02-13 changes.
+
 2009-02-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, preinstall.am: Use stub tm27.h.
