@@ -1,3 +1,7 @@
+2009-02-21	Michael Walle <michael@walle.cc>
+
+	* startup/linkcmds: Add new sections.
+
 2008-12-09	Jukka Pietarinen <jukka.pietarinen@mrf.fi>
 
 	* bsp_specs: Update to reflect comments.

@@ -142,7 +142,10 @@ SECTIONS
   } > sdram
   .data1   : { *(.data1) }	> sdram
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table) } > sdram
+  .gcc_except_table   : {
+    *(.gcc_except_table)
+    *(.gcc_except_table.*)
+  } > sdram
   PROVIDE (__EXCEPT_END__ = .);
   .got1           : { *(.got1) }	> sdram
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
