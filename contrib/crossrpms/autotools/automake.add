@@ -30,7 +30,7 @@ Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
-Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+@SOURCES@
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -41,6 +41,7 @@ standards.
 
 %prep
 %setup -q -n automake-%{srcvers}
+%{?PATCH0:%patch0 -p1}
 
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov
