@@ -1,0 +1,3 @@
+Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+Patch0:  ftp://ftp.rtems.org/pub/rtems/4.10/SOURCES/automake-1.10.2-rtems4.10-20090222.diff
+

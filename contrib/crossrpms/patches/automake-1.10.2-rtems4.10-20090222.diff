@@ -1,0 +1,133 @@
+diff -Naur automake-1.10.2.orig/lib/config.guess automake-1.10.2/lib/config.guess
+--- automake-1.10.2.orig/lib/config.guess	2008-11-23 09:31:03.000000000 +0100
++++ automake-1.10.2/lib/config.guess	2009-02-22 05:05:20.000000000 +0100
+@@ -4,7 +4,7 @@
+ #   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+ #   Free Software Foundation, Inc.
+ 
+-timestamp='2008-11-15'
++timestamp='2009-02-03'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -337,7 +337,7 @@
+ 	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
+ 	# This test works for both compilers.
+ 	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+-	    if echo '\n#ifdef __amd64\nIS_64BIT_ARCH\n#endif' | \
++	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
+ 		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+ 		grep IS_64BIT_ARCH >/dev/null
+ 	    then
+@@ -1154,6 +1154,16 @@
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+         /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
+           && { echo i486-ncr-sysv4; exit; } ;;
++    NCR*:*:4.2:* | MPRAS*:*:4.2:*)
++	OS_REL='.3'
++	test -r /etc/.relid \
++	    && OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
++	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	    && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep pteron >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
+     m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+ 	exit ;;
+@@ -1340,6 +1350,9 @@
+     i*86:rdos:*:*)
+ 	echo ${UNAME_MACHINE}-pc-rdos
+ 	exit ;;
++    i*86:AROS:*:*)
++	echo ${UNAME_MACHINE}-pc-aros
++	exit ;;
+ esac
+ 
+ #echo '(No uname command or uname output not recognized.)' 1>&2
+diff -Naur automake-1.10.2.orig/lib/config.sub automake-1.10.2/lib/config.sub
+--- automake-1.10.2.orig/lib/config.sub	2008-11-11 07:11:52.000000000 +0100
++++ automake-1.10.2/lib/config.sub	2009-02-22 05:05:17.000000000 +0100
+@@ -4,7 +4,7 @@
+ #   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+ #   Free Software Foundation, Inc.
+ 
+-timestamp='2008-09-08'
++timestamp='2009-02-03'
+ 
+ # This file is (in principle) common to ALL GNU software.
+ # The presence of a machine in this file suggests that SOME GNU software
+@@ -122,6 +122,7 @@
+ case $maybe_os in
+   nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
++  kopensolaris*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
+@@ -249,6 +250,7 @@
+ 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+ 	| i370 | i860 | i960 | ia64 \
+ 	| ip2k | iq2000 \
++	| lm32 \
+ 	| m32c | m32r | m32rle | m68000 | m68k | m88k \
+ 	| maxq | mb | microblaze | mcore | mep | metag \
+ 	| mips | mipsbe | mipseb | mipsel | mipsle \
+@@ -279,7 +281,7 @@
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle | ppcbe \
+ 	| pyramid \
+ 	| score \
+-	| sh | sh[1234] | sh[24]a | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
++	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+ 	| sh64 | sh64le \
+ 	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
+ 	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
+@@ -331,6 +333,7 @@
+ 	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
+ 	| i*86-* | i860-* | i960-* | ia64-* \
+ 	| ip2k-* | iq2000-* \
++	| lm32-* \
+ 	| m32c-* | m32r-* | m32rle-* \
+ 	| m68000-* | m680[012346]0-* | m68360-* | m683?2-* | m68k-* \
+ 	| m88110-* | m88k-* | maxq-* | mcore-* | metag-* \
+@@ -362,7 +365,7 @@
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
+ 	| pyramid-* \
+ 	| romp-* | rs6000-* \
+-	| sh-* | sh[1234]-* | sh[24]a-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
++	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
+ 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
+ 	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
+ 	| sparclite-* \
+@@ -443,6 +446,10 @@
+ 		basic_machine=m68k-apollo
+ 		os=-bsd
+ 		;;
++	aros)
++		basic_machine=i386-pc
++		os=-aros
++		;;
+ 	aux)
+ 		basic_machine=m68k-apple
+ 		os=-aux
+@@ -1182,7 +1189,7 @@
+ 	we32k)
+ 		basic_machine=we32k-att
+ 		;;
+-	sh[1234] | sh[24]a | sh[34]eb | sh[1234]le | sh[23]ele)
++	sh[1234] | sh[24]a | sh[24]aeb | sh[34]eb | sh[1234]le | sh[23]ele)
+ 		basic_machine=sh-unknown
+ 		;;
+ 	sparc | sparcv8 | sparcv9 | sparcv9b | sparcv9v)
+@@ -1254,8 +1261,9 @@
+ 	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
+ 	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -sunos | -sunos[34]*\
+ 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -solaris* | -sym* \
++	      | -kopensolaris* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+-	      | -aos* \
++	      | -aos* | -aros* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+ 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
+ 	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
