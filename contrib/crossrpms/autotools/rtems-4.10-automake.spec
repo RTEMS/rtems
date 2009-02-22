@@ -57,7 +57,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 Obsoletes:	rtems-4.10-automake-rtems < %{version}-%{release}
@@ -71,6 +71,8 @@ Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+Patch0:  ftp://ftp.rtems.org/pub/rtems/4.10/SOURCES/automake-1.10.2-rtems4.10-20090222.diff
+
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -81,6 +83,7 @@ standards.
 
 %prep
 %setup -q -n automake-%{srcvers}
+%{?PATCH0:%patch0 -p1}
 
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov
