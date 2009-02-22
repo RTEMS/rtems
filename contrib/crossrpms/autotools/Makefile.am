@@ -9,5 +9,5 @@ AUTOCONF_RPMREL = 2%{?dist}
 include ./autoconf.am
 
 AUTOMAKE_VERS = 1.10.2
-AUTOMAKE_RPMREL = 1%{?dist}
+AUTOMAKE_RPMREL = 2
 include ./automake.am
