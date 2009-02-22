@@ -3,7 +3,7 @@
 m4_define([RTEMS_API],[4.10])
 
 AC_PREREQ(2.61)
-AC_INIT([crossrpms],[0.20090125.1],[http://www.rtems.org/bugzilla])
+AC_INIT([crossrpms],[0.20090222.1],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([binutils/binutils.add])
 AC_CONFIG_AUX_DIR(.)
 
@@ -171,6 +171,7 @@ AC_CONFIG_FILES([rtems4.10/avr/Makefile])
 AC_CONFIG_FILES([rtems4.10/bfin/Makefile])
 AC_CONFIG_FILES([rtems4.10/h8300/Makefile])
 AC_CONFIG_FILES([rtems4.10/i386/Makefile])
+AC_CONFIG_FILES([rtems4.10/lm32/Makefile])
 AC_CONFIG_FILES([rtems4.10/m32c/Makefile])
 AC_CONFIG_FILES([rtems4.10/m32r/Makefile])
 AC_CONFIG_FILES([rtems4.10/m68k/Makefile])
