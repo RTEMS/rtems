@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
@@ -23,26 +22,38 @@ noinst_PROGRAMS =
 include_HEADERS += include/coverhd.h
 include_HEADERS += include/system_conf.h
 
-EXTRA_DIST = ../shared/start/start.S
-start.$(OBJEXT): ../shared/start/start.S
-	$(CPPASCOMPILE) -o $@ -c $<
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = ../../lm32/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+noinst_LIBRARIES += libbsp.a
+libbsp_a_SOURCES =
+libbsp_a_LIBADD =
+
+# startup
+libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../shared/startup/bspstart.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c ../shared/startup/setvec.c \
+    ../../shared/bootcard.c ../../shared/sbrk.c ../../lm32/shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c
-clock_SOURCES = ../shared/clock/ckinit.c
-console_SOURCES = ../shared/console/console.c ../shared/console/uart.c
-network_SOURCES = ../shared/tsmac/tsmac.c
-timer_SOURCES = ../shared/timer/timer.c
+# clock
+libbsp_a_SOURCES += ../../lm32/shared/clock/ckinit.c
+# console
+libbsp_a_SOURCES += ../../lm32/shared/console/console.c ../../lm32/shared/console/uart.c
+# timer
+libbsp_a_SOURCES += ../../lm32/shared/timer/timer.c
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(network_SOURCES) $(timer_SOURCES)
+if HAS_NETWORKING
+noinst_PROGRAMS += network.rel
+network_rel_SOURCES = ../../lm32/shared/tsmac/tsmac.c
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_LIBADD += network.rel
+endif
+
+
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
