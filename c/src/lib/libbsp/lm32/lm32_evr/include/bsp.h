@@ -31,6 +31,10 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#if defined(RTEMS_NETWORKING)
+#include <rtems/rtems_bsdnet.h>
+#endif
+
 #define BSP_GET_WORK_AREA_DEBUG
 
 #define BSP_DIRTY_MEMORY 1
@@ -42,6 +46,7 @@ extern "C" {
 
 #define CPU_U32_FIX
 
+#if defined(RTEMS_NETWORKING)
 extern int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config,
 				     int attaching);
 
@@ -54,6 +59,7 @@ extern int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config,
    */
 
 #define TSMAC_FORCE_10BASET
+#endif
 
   /*
    *  Simple spin delay in microsecond units for device drivers.
