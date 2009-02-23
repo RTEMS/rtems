@@ -4,21 +4,20 @@ TARGET = lm32-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.19.1
-BINUTILS_PKGVERS = $(BINUTILS_VERS)
+BINUTILS_VERS = 2.19.51-20090222
+BINUTILS_PKGVERS = 2.19.51
 BINUTILS_RPMREL = 1
 include ../binutils.am
-BINUTILS_OPTS +=
+BINUTILS_OPTS += --disable-infos
 
-# NOTREADY
-#GCC_VERS = 4.3.3
-#GCC_PKGVERS = $(GCC_VERS)
-#GCC_RPMREL = 6
-#NEWLIB_VERS = 1.17.0
-#NEWLIB_PKGVERS = $(NEWLIB_VERS)
-#NEWLIB_RPMREL = `expr 21 + $(GCC_RPMREL)`
-#include ../gcc.am
-#GCC_OPTS += --languages=cxx
+GCC_VERS = 4.3.3
+GCC_PKGVERS = $(GCC_VERS)
+GCC_RPMREL = 7
+NEWLIB_VERS = 1.17.0
+NEWLIB_PKGVERS = $(NEWLIB_VERS)
+NEWLIB_RPMREL = `expr 21 + $(GCC_RPMREL)`
+include ../gcc.am
+GCC_OPTS += --languages=cxx
 
 # NOTREADY
 #GDB_VERS = 6.8
