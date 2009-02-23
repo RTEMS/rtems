@@ -1,5 +1,6 @@
 2009-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* include/bsp.h: Conditionally include rtems/rtems_bsdnet.h.
 	* configure.ac: Add RTEMS_CHECK_NETWORKING.
 	* Makefile.am: Rework.
 
