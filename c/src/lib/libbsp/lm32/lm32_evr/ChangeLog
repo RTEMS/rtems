@@ -1,3 +1,8 @@
+2009-02-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add RTEMS_CHECK_NETWORKING.
+	* Makefile.am: Rework.
+
 2009-02-21	Michael Walle <michael@walle.cc>
 
 	* startup/linkcmds: Add new sections.
