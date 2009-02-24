@@ -21,7 +21,7 @@ GCC_OPTS += --languages=cxx
 
 GDB_VERS = 6.5
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 5
+GDB_RPMREL = 6
 include ../gdb.am
 GDB_OPTS +=
 
