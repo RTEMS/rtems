@@ -52,7 +52,7 @@ Name:		rtems-4.10-bfin-rtems4.10-gdb
 Summary:	Gdb for target bfin-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -82,7 +82,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %if "%{gdb_version}" >= "6.6"
 # suse
-%if 0%{?suse}
+%if "%{?suse}" >= "10.3"
 BuildRequires: libexpat-devel
 %else
 # Fedora/CentOS/Cygwin/MinGW
@@ -144,6 +144,9 @@ rm -f gdb-%{gdb_version}/readline/configure
 %endif
 %if "%{gdb_version}" >= "6.6"
     --with-expat \
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+    --without-python \
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
