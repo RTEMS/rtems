@@ -1,0 +1,14 @@
+#
+#  $Id$
+#
+
+To on the simulator included in lm32-gdb use these commands:
+
+tar sim --hw-device lm32cpu \
+  --hw-device "lm32uart/reg 0x80006000 0x100" \
+  --hw-device "/lm32uart > int int0 /lm32cpu" \
+  --hw-device "lm32timer/reg 0x80002000 0x80" \
+  --hw-device "/lm32timer > int int1 /lm32cpu" \
+  --memory-region 0x08000000,0x4000000
+load
+

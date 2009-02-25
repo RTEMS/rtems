@@ -35,8 +35,9 @@ libbsp_a_LIBADD =
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../shared/startup/bspstart.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c ../../lm32/shared/startup/setvec.c \
+    ../../shared/bspreset.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../shared/sbrk.c ../../lm32/shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += ../../lm32/shared/clock/ckinit.c
@@ -52,7 +53,6 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libbsp_a_LIBADD += network.rel
 endif
-
 
 
 include $(srcdir)/preinstall.am
