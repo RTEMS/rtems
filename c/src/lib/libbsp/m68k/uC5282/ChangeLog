@@ -1,3 +1,7 @@
+2009-02-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/clock.c, include/bsp.h: Make bsp idle thread names match.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* clock/clock.c, include/bsp.h: Change prototype of IDLE thread to
