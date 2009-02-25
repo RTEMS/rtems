@@ -1,3 +1,8 @@
 # A copy of a gdb development snapshot having been retrieved from
 # ftp://sources.redhat.com/pub/gdb/snapshots/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
+
+# rtems-4.10 patches
+# + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
+# + misc small fixes to lm32-sim/gdb
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090225.diff
