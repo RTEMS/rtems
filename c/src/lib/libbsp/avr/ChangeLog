@@ -1,3 +1,7 @@
+2009-02-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Rework.
+
 2008-11-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.
