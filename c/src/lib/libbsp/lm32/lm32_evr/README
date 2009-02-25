@@ -12,3 +12,6 @@ tar sim --hw-device lm32cpu \
   --memory-region 0x08000000,0x4000000
 load
 
+The simulator is VERY VERY slow when RTEMS is idle.
+To speed this up, add SIMULATOR_FAST_IDLE=1 to the
+configure command.

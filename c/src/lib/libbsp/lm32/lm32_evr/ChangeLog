@@ -1,5 +1,9 @@
 2009-02-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* README: Add fast idle information.
+
+2009-02-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add SIMULATOR_FAST_IDLE,
 	BSP_PRESS_KEY_FOR_RESET, and BSP_RESET_BOARD_AT_EXIT. Use the standard
 	bsp_cleanup code.
