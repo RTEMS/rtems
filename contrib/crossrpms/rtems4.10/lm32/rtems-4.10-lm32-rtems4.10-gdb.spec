@@ -52,7 +52,7 @@ Name:		rtems-4.10-lm32-rtems4.10-gdb
 Summary:	Gdb for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,6 +73,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %define build_sim --disable-sim
 %endif
 %if "lm32-rtems4.10" == "h8300-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%if "lm32-rtems4.10" == "lm32-rtems4.10"
 %define build_sim --disable-sim
 %endif
 %if "lm32-rtems4.10" == "mipstx39-rtems4.10"
