@@ -1,3 +1,8 @@
+2009-02-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/clock/ckinit.c: Use shared Clock Driver Template and support
+	fast idle on simulator.
+
 2008-12-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* .cvsignore: New file.
