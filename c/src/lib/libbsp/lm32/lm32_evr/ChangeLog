@@ -1,3 +1,8 @@
+2009-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, include/bsp.h: Run better on simulator. Timer is
+	probably not right yet but
+
 2009-02-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* README: Add fast idle information.

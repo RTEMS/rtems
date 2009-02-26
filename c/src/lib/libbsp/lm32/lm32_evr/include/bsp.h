@@ -35,8 +35,6 @@ extern "C" {
 #include <rtems/rtems_bsdnet.h>
 #endif
 
-#define BSP_GET_WORK_AREA_DEBUG
-
 #define BSP_DIRTY_MEMORY 1
 
   /*
