@@ -33,14 +33,8 @@
 
 /**
  *  @brief _CPU_Initialize routine performs processor dependent initialization
- *
- *  @param  cpu_table CPU table to initialize
- *  @param  thread_dispatch address of ISR disptaching routine (unused)
- *  @return None
  */
-void _CPU_Initialize(
-  void      (*thread_dispatch)       /* ignored on this CPU */
-)
+void _CPU_Initialize(void)
 {
 }
 

@@ -1,3 +1,7 @@
+2009-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/cpu.c: Now compiles. Does not run.
+
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/cpu.c: Add missing prototype.
