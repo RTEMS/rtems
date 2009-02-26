@@ -1,3 +1,8 @@
+2009-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/startup/bspgetworkarea.c: Make debug messages same as
+	standard.
+
 2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/irq.c: Spacing.

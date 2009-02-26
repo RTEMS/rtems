@@ -6,9 +6,14 @@
  *  $Id$
  */
 
+/* #define BSP_GET_WORK_AREA_DEBUG */
+
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <stdint.h>
+#ifdef BSP_GET_WORK_AREA_DEBUG
+  #include <rtems/bspIo.h>
+#endif
 
 extern void *__rtems_end;
 extern uintptr_t _bsp_sbrk_init(uintptr_t, uintptr_t*);
@@ -44,11 +49,12 @@ void bsp_get_work_area(
    *  The following may be helpful in debugging what goes wrong when
    *  you are allocating the Work Area in a new BSP.
    */
-  #if 0
-    printk( "Work Area Base %d %x\n", work_area, work_area );
-    printk( "Work Area Size %d %x\n", work_size, work_size );
-    printk( "Work Area End %d %x\n",
-      work_area + work_size, work_area + work_size );
+  #ifdef BSP_GET_WORK_AREA_DEBUG
+    printk( "work_area_start = %p\n", *work_area_start );
+    printk( "work_area_size = %d 0x%08x\n", *work_area_size, *work_area_size );
+    printk( "end = %p\n", *work_area_start + *work_area_size );
+    printk( "heap_start = %p\n", *heap_start );
+    printk( "heap_size = %d\n", *heap_size );
   #endif
 }
 
