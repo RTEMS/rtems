@@ -1,3 +1,7 @@
+2009-02-26	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* irq/irq.c: Add bsp_interrupt_handler_default() so this BSP will link.
+
 2008-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove -Qy from *link.

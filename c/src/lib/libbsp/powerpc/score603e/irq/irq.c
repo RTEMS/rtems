@@ -493,7 +493,7 @@ printk(" _ThreadProcessSignalsFromIrq \n");
    */
 }
 
-rtems_status_code bsp_interrupt_facility_initialize( void)
+rtems_status_code bsp_interrupt_facility_initialize(void)
 {
   /* Install exception handler */
   if (ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler)) {
@@ -509,4 +509,10 @@ rtems_status_code bsp_interrupt_facility_initialize( void)
   return RTEMS_SUCCESSFUL;
 }
 
+void bsp_interrupt_handler_default( rtems_vector_number vector )
+{
+  if (vector != BSP_DECREMENTER) {
+    printk( "Spurious interrupt: 0x%08x\n", vector);
+  }
+}
 
