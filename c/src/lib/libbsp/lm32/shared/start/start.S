@@ -13,6 +13,8 @@
  *  Micro-Research Finland Oy
  */
 
+#include "bspopts.h"
+
      .section .boot,"a",@progbits
      .align    4
 
@@ -145,12 +147,14 @@ crt0:
 	mvi	r2, 0
 	mvi	r3, 0
 	calli	boot_card
+	# boot_card returns when RTEMS is shutdown
+#if ON_SIMULATOR
+	#define	SYS_exit	1
+
+        mvi     r8, SYS_exit
+        scall   
+#endif
+
 .dead_end:
 	bi	.dead_end
-
-	calli    boot_card
-# boot_card should never return
-_stuck_in_start:
-	bi _stuck_in_start
-
 

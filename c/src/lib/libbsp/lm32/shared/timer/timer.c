@@ -29,17 +29,21 @@
 
 static inline int timerread(unsigned int reg)
 {
-#ifdef TIMER1_BASE_ADDRESS
+#if ON_SIMULATOR && defined(TIMER0_BASE_ADDRESS)
+  return *((int*)(TIMER0_BASE_ADDRESS + reg));
+#elif defined(TIMER1_BASE_ADDRESS)
   return *((int*)(TIMER1_BASE_ADDRESS + reg));
 #else
-#warning "Benchmarking timer TIMER1 not available!"
+#warning "Benchmarking timer not available!"
   return 0;
 #endif
 }
 
 static inline void timerwrite(unsigned int reg, int value)
 {
-#ifdef TIMER1_BASE_ADDRESS
+#if ON_SIMULATOR && defined(TIMER0_BASE_ADDRESS)
+  *((int*)(TIMER0_BASE_ADDRESS + reg)) = value;
+#elif defined(TIMER1_BASE_ADDRESS)
   *((int*)(TIMER1_BASE_ADDRESS + reg)) = value;
 #endif
 }

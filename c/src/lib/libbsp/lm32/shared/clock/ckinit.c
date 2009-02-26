@@ -20,7 +20,7 @@
 #include "clock.h"
 #include "bspopts.h"
 
-#if SIMULATOR_FAST_IDLE
+#if ON_SIMULATOR
 #define CLOCK_DRIVER_USE_FAST_IDLE
 #endif
 

@@ -1,3 +1,8 @@
+2009-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/clock/ckinit.c, shared/start/start.S, shared/timer/timer.c:
+	Run better on simulator. Timer is probably not right yet but
+
 2009-02-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/clock/ckinit.c: Use shared Clock Driver Template and support
