@@ -61,11 +61,9 @@ extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
 extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
 #if RTEMS_NETWORKING
-  #if defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING)
-    extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
-    extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
-    extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
-  #endif
+  extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
+  extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
+  extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
 #endif
 
 extern rtems_shell_cmd_t *rtems_shell_Initial_commands[];
@@ -326,7 +324,7 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
       &rtems_shell_PERIODUSE_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-         !defined(CONFIGURE_SHELL_COMMAND_WKSPACE_INFO)) || \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_WKSPACE_INFO)) || \
         defined(CONFIGURE_SHELL_COMMAND_WKSPACE_INFO)
       &rtems_shell_WKSPACE_INFO_Command,
     #endif
@@ -336,7 +334,7 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
      *  Malloc family commands
      */
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-         !defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)) || \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_MALLOC_INFO)) || \
         defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)
       &rtems_shell_MALLOC_INFO_Command,
     #endif
@@ -346,19 +344,19 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
      */
     #if RTEMS_NETWORKING
       #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
-           !defined(CONFIGURE_SHELL_COMMAND_IFCONFIG)) || \
+           !defined(CONFIGURE_SHELL_NO_COMMAND_IFCONFIG)) || \
           defined(CONFIGURE_SHELL_COMMAND_IFCONFIG)
         &rtems_shell_IFCONFIG_Command,
       #endif
 
       #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
-           !defined(CONFIGURE_SHELL_COMMAND_ROUTE)) || \
+           !defined(CONFIGURE_SHELL_NO_COMMAND_ROUTE)) || \
           defined(CONFIGURE_SHELL_COMMAND_ROUTE)
         &rtems_shell_ROUTE_Command,
       #endif
 
       #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
-           !defined(CONFIGURE_SHELL_COMMAND_NETSTATS)) || \
+           !defined(CONFIGURE_SHELL_NO_COMMAND_NETSTATS)) || \
           defined(CONFIGURE_SHELL_COMMAND_NETSTATS)
         &rtems_shell_NETSTATS_Command,
       #endif
@@ -377,8 +375,8 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
    * The mount command's support file system types.
    */
   #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-       !defined(CONFIGURE_SHELL_COMMAND_MOUNT)) || \
-       defined(CONFIGURE_SHELL_COMMAND_UNMOUNT)
+       !defined(CONFIGURE_SHELL_COMMAND_NO_MOUNT)) || \
+       defined(CONFIGURE_SHELL_COMMAND_MOUNT)
     rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[] = {
       #if defined(CONFIGURE_SHELL_MOUNT_MSDOS)
         &rtems_shell_Mount_MSDOS,

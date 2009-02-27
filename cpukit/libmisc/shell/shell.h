@@ -134,16 +134,18 @@ int rtems_shell_script_file(
  * @param task_stacksize The size of the stack. If 0 the default size is used.
  * @param task_priority The priority the shell runs at.
  * @param forever Repeat logins.
- * @param wait Caller should block until shell exits
+ * @param wait Caller should block until shell exits.
+ * @param login Demand user login.
  *
  */
 rtems_status_code rtems_shell_init(
   const char          *task_name,
-  uint32_t             task_stacksize,  /*0 default*/
+  size_t               task_stacksize,  /* 0 default*/
   rtems_task_priority  task_priority,
   const char          *devname,
-  int                  forever,
-  int                  wait
+  bool                 forever,
+  bool                 wait,
+  bool                 login
 );
 
 /**
@@ -161,13 +163,13 @@ rtems_status_code rtems_shell_init(
  */
 rtems_status_code rtems_shell_script(
   const char          *task_name,
-  uint32_t             task_stacksize,  /*0 default*/
+  size_t               task_stacksize,  /* 0 default*/
   rtems_task_priority  task_priority,
   const char          *input,
   const char          *output,
-  int                  output_append,
-  int                  wait,
-  int                  echo
+  bool                 output_append,
+  bool                 wait,
+  bool                 echo
 );
 
 /*
@@ -184,12 +186,13 @@ typedef struct  {
   bool        exit_shell; /* logout */
   bool        forever   ; /* repeat login */
   int         errorlevel;
-  int         echo;
+  bool        echo;
   char        cwd[256];
   const char* input;
   const char* output;
-  int         output_append;
+  bool        output_append;
   rtems_id    wake_on_end;
+  bool        login;
 } rtems_shell_env_t;
 
 bool rtems_shell_main_loop(

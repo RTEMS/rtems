@@ -28,6 +28,7 @@
 #include <rtems/system.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#include <rtems/console.h>
 #include "internal.h"
 
 #include <termios.h>
@@ -39,31 +40,31 @@
 #include <errno.h>
 #include <pwd.h>
 
-rtems_shell_env_t  rtems_global_shell_env;
-rtems_shell_env_t *rtems_current_shell_env;
+rtems_shell_env_t  rtems_global_shell_env = {
+  .magic         = rtems_build_name('S', 'E', 'N', 'V'),
+  .devname       = CONSOLE_DEVICE_NAME,
+  .taskname      = "SHGL",
+  .exit_shell    = false,
+  .forever       = true,
+  .errorlevel    = -1,
+  .echo          = false,
+  .cwd           = "/",
+  .input         = NULL,
+  .output        = NULL,
+  .output_append = false,
+  .wake_on_end   = RTEMS_ID_NONE,
+  .login         = true
+};
+
+rtems_shell_env_t *rtems_current_shell_env = &rtems_global_shell_env;
 
 /*
  *  Initialize the shell user/process environment information
  */
 rtems_shell_env_t *rtems_shell_init_env(
-  rtems_shell_env_t *shell_env_arg
+  rtems_shell_env_t *shell_env
 )
 {
-  rtems_shell_env_t *shell_env;
-  
-  if (rtems_global_shell_env.magic != 0x600D600d) {
-    rtems_global_shell_env.magic         = 0x600D600d;
-    rtems_global_shell_env.devname       = "";
-    rtems_global_shell_env.taskname      = "GLOBAL";
-    rtems_global_shell_env.exit_shell    = 0;
-    rtems_global_shell_env.forever       = TRUE;
-    rtems_global_shell_env.input         = 0;
-    rtems_global_shell_env.output        = 0;
-    rtems_global_shell_env.output_append = 0;
-  }
-
-  shell_env = shell_env_arg;
-
   if ( !shell_env ) {
     shell_env = malloc(sizeof(rtems_shell_env_t));
     if ( !shell_env )
@@ -807,11 +808,10 @@ bool rtems_shell_main_loop(
        *  loop when the connection is dropped during login and
        *  keep on trucking.
        */
-      if ( input_file ) {
-        result = true;
+      if (shell_env->login) {
+        result = rtems_shell_login(stdin,stdout) == 0;
       } else {
-        if (rtems_shell_login(stdin,stdout)) result = false;
-        else                                 result = true;
+        result = true;
       }
 
       if (result)  {
@@ -939,16 +939,17 @@ bool rtems_shell_main_loop(
 /* ----------------------------------------------- */
 static rtems_status_code   rtems_shell_run (
   const char          *task_name,
-  uint32_t             task_stacksize,
+  size_t               task_stacksize,
   rtems_task_priority  task_priority,
   const char          *devname,
-  int                  forever,
-  int                  wait,
+  bool                 forever,
+  bool                 wait,
   const char*          input,
   const char*          output,
-  int                  output_append,
+  bool                 output_append,
   rtems_id             wake_on_end,
-  int                  echo
+  bool                 echo,
+  bool                 login
 )
 {
   rtems_id           task_id;
@@ -990,6 +991,7 @@ static rtems_status_code   rtems_shell_run (
   shell_env->output        = strdup (output);
   shell_env->output_append = output_append;
   shell_env->wake_on_end   = wake_on_end;
+  shell_env->login         = login;
 
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
@@ -1010,14 +1012,15 @@ static rtems_status_code   rtems_shell_run (
 
 rtems_status_code rtems_shell_init(
   const char          *task_name,
-  uint32_t             task_stacksize,
+  size_t               task_stacksize,
   rtems_task_priority  task_priority,
   const char          *devname,
-  int                  forever,
-  int                  wait
+  bool                 forever,
+  bool                 wait,
+  bool                 login
 )
 {
-  rtems_id to_wake = RTEMS_INVALID_ID;
+  rtems_id to_wake = RTEMS_ID_NONE;
 
   if ( wait )
     to_wake = rtems_task_self();
@@ -1031,21 +1034,22 @@ rtems_status_code rtems_shell_init(
     wait,                    /* wait */
     "stdin",                 /* input */
     "stdout",                /* output */
-    0,                       /* output_append */
+    false,                   /* output_append */
     to_wake,                 /* wake_on_end */
-    0                        /* echo */
+    false,                   /* echo */
+    login                    /* login */
   );
 }
 
 rtems_status_code   rtems_shell_script (
   const char          *task_name,
-  uint32_t             task_stacksize,
+  size_t               task_stacksize,
   rtems_task_priority  task_priority,
   const char*          input,
   const char*          output,
-  int                  output_append,
-  int                  wait,
-  int                  echo
+  bool                 output_append,
+  bool                 wait,
+  bool                 echo
 )
 {
   rtems_id          current_task = RTEMS_INVALID_ID;
@@ -1068,7 +1072,8 @@ rtems_status_code   rtems_shell_script (
     output,          /* output */
     output_append,   /* output_append */
     current_task,    /* wake_on_end */
-    echo             /* echo */
+    echo,            /* echo */
+    false            /* login */
   );
   if (sc != RTEMS_SUCCESSFUL)
     return sc;

@@ -1,3 +1,13 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/shell/shell.c, libmisc/shell/shell.h:  Changed type for
+	boolean values from 'int' to 'bool'.  Added option 'login' to enable or
+	disable a login prompt.  Changed intialization of global shell
+	environment to static initialization.  Changed stack size type to
+	'size_t' conforming to classic API.
+
+	* libmisc/shell/shellconfig.h: Fixed some typos.
+
 2009-02-20	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* include/sys/priority.h: New.
