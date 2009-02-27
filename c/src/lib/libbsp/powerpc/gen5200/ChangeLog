@@ -1,3 +1,8 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs: Added crtbegin.o and crtend.o to support global C++
+	constructors and destructors.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h, startup/bspstart.c: Change prototype of IDLE thread to
