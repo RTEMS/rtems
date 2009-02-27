@@ -1,0 +1,14 @@
+/**
+ * @file
+ *
+ * LPC2478 (NCS, code and data in external RAM).
+ */
+
+MEMORY {
+        RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
+        RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 8M
+        ROM_INT (RX)  : ORIGIN = 0x00000000, LENGTH = 512k - 8k
+        NIRVANA : ORIGIN = 0, LENGTH = 0
+}
+
+INCLUDE linkcmds.base

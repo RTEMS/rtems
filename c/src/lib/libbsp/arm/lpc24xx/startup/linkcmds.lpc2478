@@ -1,0 +1,14 @@
+/**
+ * @file
+ *
+ * LPC2478 (QVGA Base Board from Embedded Artists).
+ */
+
+MEMORY {
+        RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
+        RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 32M
+        ROM_INT (RX)  : ORIGIN = 0x00000000, LENGTH = 512k - 8k
+        NIRVANA : ORIGIN = 0, LENGTH = 0
+}
+
+INCLUDE linkcmds.base
