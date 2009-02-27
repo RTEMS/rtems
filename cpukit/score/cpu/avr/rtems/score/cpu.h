@@ -317,7 +317,7 @@ extern "C" {
  *  XXX document implementation including references if appropriate
  */
 
-#define CPU_STACK_GROWS_UP               TRUE
+#define CPU_STACK_GROWS_UP               FALSE
 
 /*
  *  The following is the variable attribute used to force alignment
