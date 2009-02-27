@@ -1,3 +1,9 @@
+2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1387/doc
+	* user/intr.t: Add Interrupt Manager services to list of services
+	callable from ISR.
+
 2008-12-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/region.t: Malloc Family is not implemented in termios of Region

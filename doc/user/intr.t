@@ -185,20 +185,27 @@ to the interrupted task.  Most of the time, it is an application
 implementation error to use RTEMS_SELF from an ISR.
 
 @itemize -
-@item rtems_task_get_note, rtems_task_set_note, rtems_task_suspend, rtems_task_resume
+@item rtems_task_get_note
+@item rtems_task_set_note
+@item rtems_task_suspend
+@item rtems_task_resume
 @end itemize
 
-@item Clock and Timer Management
+@item Interrupt Management
 
 @itemize -
-@item rtems_clock_get, rtems_clock_tick
-@item rtems_timer_fire_after, rtems_timer_fire_when, rtems_timer_cancel
+@item  rtems_interrupt_enable
+@item rtems_interrupt_disable
+@item rtems_interrupt_flash
+@item rtems_interrupt_is_in_progress
+@item rtems_interrupt_catch
 @end itemize
 
 @item Message, Event, and Signal Management
 
 @itemize -
-@item rtems_message_queue_send, rtems_message_queue_urgent
+@item rtems_message_queue_send
+@item rtems_message_queue_urgent
 @item rtems_event_send
 @item rtems_signal_send
 @end itemize
@@ -212,7 +219,8 @@ implementation error to use RTEMS_SELF from an ISR.
 @item Dual-Ported Memory Management
 
 @itemize -
-@item rtems_port_external_to_internal, rtems_port_internal_to_external
+@item rtems_port_external_to_internal
+@item rtems_port_internal_to_external
 @end itemize
 
 @item IO Management
@@ -221,7 +229,12 @@ The following services are safe to call from an ISR if and only if
 the device driver service invoked is also safe.  The IO Manager itself
 is safe but the invoked driver entry point may or may not be.
 @itemize -
-@item rtems_io_initialize, rtems_io_open, rtems_io_close, rtems_io_read, rtems_io_write, rtems_io_control
+@item rtems_io_initialize
+@item rtems_io_open
+@item rtems_io_close
+@item rtems_io_read
+@item rtems_io_write
+@item rtems_io_control
 @end itemize
 
 @item Fatal Error Management
