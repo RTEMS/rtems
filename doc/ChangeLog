@@ -1,3 +1,9 @@
+2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1387/doc
+	* user/intr.t: Add Interrupt Manager services to list of services
+	callable from ISR.
+
 2009-01-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* bsp_howto/console.t: Clarify interrupt transmit process.
