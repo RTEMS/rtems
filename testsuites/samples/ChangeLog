@@ -1,3 +1,6 @@
+2009-02-27	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+	* fileio/init.c: Adapt to modified shell configuration
+
 2008-12-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* capture/test1.c: Add const to eliminate warning.

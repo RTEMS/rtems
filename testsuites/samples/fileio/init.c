@@ -189,8 +189,9 @@ void fileio_start_shell(void)
     RTEMS_MINIMUM_STACK_SIZE * 4,    /* task_stacksize */
     100,                             /* task_priority */
     "/dev/console",                  /* devname */
-    0,                               /* forever */
-    1                                /* wait */
+    false,                           /* forever */
+    true,                            /* wait */
+    true                             /* login */
   );
 }
 
