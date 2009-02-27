@@ -34,3 +34,7 @@ Newlib for more information on the functionality it supplies.
 This manual is still under construction and improvements
 are welcomed from users.
 
+@unnumberedsec Acknowledgements
+
+@include common/opengroup_preface_acknowledgement.texi
+

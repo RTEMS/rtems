@@ -110,3 +110,7 @@ can be integrated into the user's developed command interpreter.
 In either case, it is trivial to add custom commands to the command
 set available.
  
+@unnumberedsec Acknowledgements
+
+@include common/opengroup_preface_acknowledgement.texi
+

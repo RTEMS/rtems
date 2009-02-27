@@ -1,3 +1,11 @@
+2009-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix_users/preface.texi, shell/preface.texi: Add stock
+	acknowledgement paragraphs that are required when excerpting and
+	reusing text from POSIX standards per the agreement at
+	* common/opengroup_manpage_acknowledgement.texi,
+	common/opengroup_preface_acknowledgement.texi: New files.
+
 2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1387/doc
