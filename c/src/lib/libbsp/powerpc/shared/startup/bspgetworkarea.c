@@ -50,11 +50,26 @@ void bsp_get_work_area(
    *  you are allocating the Work Area in a new BSP.
    */
   #ifdef BSP_GET_WORK_AREA_DEBUG
-    printk( "work_area_start = %p\n", *work_area_start );
-    printk( "work_area_size = %d 0x%08x\n", *work_area_size, *work_area_size );
-    printk( "end = %p\n", *work_area_start + *work_area_size );
-    printk( "heap_start = %p\n", *heap_start );
-    printk( "heap_size = %d\n", *heap_size );
+    { 
+      void *sp = __builtin_frame_address(0);
+      void *end = *work_area_start + *work_area_size;
+      printk(
+        "work_area_start = 0x%p\n"
+        "work_area_size = %d 0x%08x\n"
+        "end = 0x%p\n"
+        "heap_start = 0x%p\n"
+        "heap_size = %d\n"
+        "current stack pointer = 0x%p%s\n",
+        *work_area_start,
+        *work_area_size,  /* decimal */
+        *work_area_size,  /* hexadecimal */
+        end,
+        *heap_start,
+        *heap_size,
+        sp,
+        ((sp >= *work_area_start && sp <= end) ? " OVERLAPS!" : "")
+     );
+  }
   #endif
 }
 
