@@ -37,8 +37,8 @@ startup_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     startup/dumpanic.c ../../shared/gnatinstallhandler.c
 clock_SOURCES = clock/ckinit.c
-console_SOURCES = console/Modif_cpu_asm.S console/console.c \
-    console/m340uart.c ../../shared/dummy_printk_support.c
+console_SOURCES = console/console.c console/m340uart.c \
+    ../../shared/dummy_printk_support.c
 timer_SOURCES = timer/timer.c
 
 noinst_LIBRARIES = libbsp.a

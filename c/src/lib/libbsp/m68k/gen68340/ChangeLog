@@ -1,3 +1,8 @@
+2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove unnecessary copy of cpu_asm.S
+	* console/Modif_cpu_asm.S: Removed.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
