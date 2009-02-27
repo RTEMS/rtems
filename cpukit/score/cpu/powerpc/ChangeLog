@@ -1,3 +1,9 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Added Freescale Book E Implementation
+	Standards (EIS) special purpose register definitions for MMU and L1
+	cache.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/score/cpu.h: Eliminate
