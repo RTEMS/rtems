@@ -146,7 +146,7 @@ static inline bool bsp_interrupt_is_valid_vector( rtems_vector_number vector)
  */
 void bsp_interrupt_handler_default( rtems_vector_number vector);
 
-rtems_status_code bsp_interrupt_initialize();
+rtems_status_code bsp_interrupt_initialize( void);
 
 /**
  * @brief BSP specific initialization.
@@ -163,7 +163,7 @@ rtems_status_code bsp_interrupt_initialize();
  *
  * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_facility_initialize();
+rtems_status_code bsp_interrupt_facility_initialize( void);
 
 /**
  * @brief Enables the interrupt vector with number @a vector.

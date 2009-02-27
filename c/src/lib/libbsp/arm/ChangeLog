@@ -1,3 +1,9 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/startup/linkcmds.rom: New file
+	* shared/include/start.h: Added declaration of start().
+	* shared/start/start.S: Fixed vector table for ROM boot.
+
 2008-09-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* acinclude.m4: New BSP -- lpc24xx.

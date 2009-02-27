@@ -22,6 +22,11 @@
 #ifndef ASM
 
   /**
+   * @brief System start entry.
+   */
+  void start( void);
+
+  /**
    * @brief Start entry hook 0.
    *
    * This hook will be called from the start entry code after all modes and

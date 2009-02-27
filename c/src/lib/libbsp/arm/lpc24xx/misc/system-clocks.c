@@ -28,16 +28,49 @@
  */
 #define LPC24XX_OSCILLATOR_INTERNAL 4000000U
 
-#if !defined(LPC24XX_OSCILLATOR_MAIN)
-#error unknown main oscillator frequency
+#ifndef LPC24XX_OSCILLATOR_MAIN
+  #error "unknown main oscillator frequency"
 #endif
 
-#if !defined(LPC24XX_OSCILLATOR_RTC)
-#error unknown rtc oscillator frequency
+#ifndef LPC24XX_OSCILLATOR_RTC
+  #error "unknown RTC oscillator frequency"
 #endif
 
 /**
+ * @brief Delay for @a us micro seconds.
+ *
+ * @note Uses Timer 1.
+ */
+void lpc24xx_micro_seconds_delay( unsigned us)
+{
+  /* Stop and reset timer */
+  T1TCR = 0x02;
+
+  /* Set prescaler to zero */
+  T1PR = 0x00;
+  
+  /* Set match value */
+  T1MR0 = (uint32_t) ((uint64_t) 4000000 * (uint64_t) us / (uint64_t) lpc24xx_cclk()) + 1;
+
+  /* Reset all interrupt flags */
+  T1IR = 0xff;
+
+  /* Stop timer on match */
+  T1MCR = 0x04;
+
+  /* Start timer */
+  T1TCR = 0x01;
+  
+  /* Wait until delay time has elapsed */
+  while ((T1TCR & 0x01) != 0) {
+    /* Wait */
+  }
+}
+
+/**
  * @brief Returns the CPU clock frequency in [Hz].
+ *
+ * Return zero in case of an unexpected PLL input frequency.
  */
 unsigned lpc24xx_cclk( void)
 {
@@ -58,9 +91,6 @@ unsigned lpc24xx_cclk( void)
       pllinclk = LPC24XX_OSCILLATOR_RTC;
       break;
     default:
-      while (1) {
-        /* Spin forever */
-      }
       return 0;
   }
 
@@ -116,7 +146,7 @@ void lpc24xx_set_pll( unsigned clksrc, unsigned nsel, unsigned msel, unsigned cc
   }
 
   /* Set CPU clock divider to a reasonable save value */
-  CCLKCFG = SET_CCLKCFG_CCLKSEL( 0, 1);
+  CCLKCFG = 0;
 
   /* Disable PLL if necessary */
   if (pll_enabled) {

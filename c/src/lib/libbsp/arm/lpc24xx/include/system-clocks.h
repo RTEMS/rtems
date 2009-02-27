@@ -25,6 +25,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+void lpc24xx_micro_seconds_delay( unsigned us);
+
 unsigned lpc24xx_cclk( void);
 
 void lpc24xx_set_pll( unsigned clksrc, unsigned nsel, unsigned msel, unsigned cclksel);

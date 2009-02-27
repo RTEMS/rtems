@@ -1,3 +1,19 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* README: Added NCS.
+	* Makefile.am, configure.ac, preinstall.am: Added BSP variants.
+	* console/console-config.c, clock/clock-config.c, ssp/ssp.c: Fixed
+	register settings.  Cleanup.
+	* include/bsp.h: Added network defines and functions.
+	* include/lpc24xx.h: Added AHB and EMC defines.  Fixed Ethernet status
+	sizes.
+	* include/system-clocks.h, misc/system-clocks.c: Added micro seconds
+	delay function that uses Timer 1.  Changed PLL setup.
+	* network/network.c, startup/bspreset.c, startup/linkcmds.lpc2478,
+	startup/linkcmds.lpc2478_ncs, startup/linkcmds.lpc2478_ncs_ram: New
+	files.
+	* startup/bspstart.c: Added EMC initialization.  Changes for ROM boot.
+
 2009-02-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix breakage introduced in 2009-02-13 changes.

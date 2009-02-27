@@ -35,6 +35,19 @@ extern "C" {
 
 #ifndef ASM
 
+/* Network driver configuration */
+
+struct rtems_bsdnet_ifconfig;
+
+int lpc24xx_eth_attach_detach(
+  struct rtems_bsdnet_ifconfig *config,
+  int attaching
+);
+
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	lpc24xx_eth_attach_detach
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
+
 #endif /* ASM */
 
 #ifdef __cplusplus

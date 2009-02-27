@@ -35,7 +35,7 @@ AC_MSG_CHECKING([for available BSPs])
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686";;
           erc32)             bsps="erc32 sis";;
           rtl22xx)           bsps="rtl22xx rtl22xx_t";;
-          lpc24xx)           bsps="lpc2478";;
+          lpc24xx)           bsps="lpc2478 lpc2478_ncs lpc2478_ncs_ram";;
 	  sim68000)          bsps="sim68000 simcpu32";;
 	  shsim)             bsps="simsh1 simsh2 simsh4";;
 	  m32cbsp)           bsps="m32csim";;

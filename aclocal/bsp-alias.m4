@@ -38,6 +38,8 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     mpc8313erdb)  $2=gen83xx          ;; # MPC83XX based board
     rtl22xx_t)    $2=rtl22xx          ;; # rtl22xx bsp in thumb mode
     lpc2478)      $2=lpc24xx          ;; # LPC2478 (QVGA Base Board from Embedded Artists)
+    lpc2478_ncs)  $2=lpc24xx          ;; # LPC2478 (NCS)
+    lpc2478_ncs_ram) $2=lpc24xx       ;; # LPC2478 (NCS, code and data in external RAM)
     simcpu32)     $2=sim68000         ;; # BSVC CPU32 variant
     simsh1)       $2=shsim            ;; # SH1 simulator in GDB
     simsh2)       $2=shsim            ;; # SH2 simulator in GDB

@@ -21,14 +21,15 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 
-nodist_include_HEADERS = include/bspopts.h
+nodist_include_HEADERS = ../../shared/include/coverhd.h \
+	include/bspopts.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
@@ -38,6 +39,7 @@ include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/system-clocks.h
 include_bsp_HEADERS += include/ssp.h
 include_bsp_HEADERS += include/dma.h
+
 include_HEADERS += ../../shared/include/tm27.h
 
 ###############################################################################
@@ -51,7 +53,10 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds.base \
-	startup/linkcmds
+	../shared/startup/linkcmds.rom \
+	startup/linkcmds.lpc2478 \
+	startup/linkcmds.lpc2478_ncs \
+	startup/linkcmds.lpc2478_ncs_ram
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -64,7 +69,6 @@ libbsp_a_SOURCES =
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bspclean.c \
-	../../shared/bspreset.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
@@ -75,11 +79,14 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../shared/abort/simple_abort.c
 
 # Startup
-libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/bspstart.c \
+	startup/bspreset.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 	../../shared/src/irq-legacy.c \
+	../../shared/src/irq-info.c \
+	../../shared/src/irq-shell.c \
 	../shared/irq/irq_asm.S \
 	irq/irq.c
 
@@ -103,6 +110,22 @@ libbsp_a_SOURCES += misc/system-clocks.c \
 
 # SSP
 libbsp_a_SOURCES += ssp/ssp.c
+
+###############################################################################
+#                  Network                                                    #
+###############################################################################
+
+if HAS_NETWORKING
+
+noinst_PROGRAMS = network.rel
+
+network_rel_SOURCES = network/network.c
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
+network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+libbsp_a_LIBADD = network.rel
+
+endif
 
 ###############################################################################
 #                  Special Rules                                              #

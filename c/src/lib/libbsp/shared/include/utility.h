@@ -41,6 +41,9 @@ extern "C" {
 #define ARE_FLAGS_SET( val, flags) \
   (((val) & (flags)) == (flags))
 
+#define IS_ANY_FLAG_SET( val, flags) \
+  (((val) & (flags)) != 0)
+
 #define ARE_FLAGS_CLEARED( val, flags) \
   (((val) & (flags)) == 0)
 

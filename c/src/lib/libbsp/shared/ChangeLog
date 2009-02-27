@@ -1,3 +1,8 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: Added define.
+	* include/irq-generic.h: Added missing prototypes.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tod.c: Use rtems_clock_get_tod().

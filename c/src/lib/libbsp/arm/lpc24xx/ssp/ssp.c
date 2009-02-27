@@ -217,14 +217,14 @@ static rtems_status_code lpc24xx_ssp_init( rtems_libi2c_bus_t *bus)
   switch ((uintptr_t) regs) {
     case SSP0_BASE_ADDR:
       rtems_interrupt_disable( level);
-      SET_PCLKSEL1_PCLK_SSP0( PCLKSEL1, 1);
+      PCLKSEL1 = SET_PCLKSEL1_PCLK_SSP0( PCLKSEL1, 1);
       rtems_interrupt_enable( level);
 
       vector = LPC24XX_IRQ_SPI_SSP_0;
       break;
     case SSP1_BASE_ADDR:
       rtems_interrupt_disable( level);
-      SET_PCLKSEL0_PCLK_SSP1( PCLKSEL0, 1);
+      PCLKSEL0 = SET_PCLKSEL0_PCLK_SSP1( PCLKSEL0, 1);
       rtems_interrupt_enable( level);
 
       vector = LPC24XX_IRQ_SSP_1;
@@ -402,7 +402,7 @@ static int lpc24xx_ssp_read_write(
   }
 
   /* Disable DMA on SSP */
-  regs->dmacr = SSP_DMACR_RXDMAE | SSP_DMACR_TXDMAE;
+  regs->dmacr = 0;
 
   if (in == NULL) {
     dr = 0;

@@ -57,7 +57,8 @@ static void lpc24xx_clock_initialize( void)
 
   /* Set timer pclk to cclk */
   rtems_interrupt_disable( level);
-  SET_PCLKSEL0_PCLK_TIMER0( PCLKSEL0, 1);
+  PCONP = SET_FLAGS( PCONP, 0x02);
+  PCLKSEL0 = SET_FLAGS( PCLKSEL0, 0x04);
   rtems_interrupt_enable( level);
 
   /* Reset timer */
@@ -106,7 +107,7 @@ static void lpc24xx_clock_cleanup( void)
 
 static uint32_t lpc24xx_clock_nanoseconds_since_last_tick( void)
 {
-  uint64_t clock = lpc24xx_cclk();
+  uint64_t clock = LPC24XX_CCLK;
   uint32_t clicks = T0TC;
   uint64_t ns = ((uint64_t) clicks * 1000000000) / clock;
   

@@ -41,6 +41,10 @@ $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 
+$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
@@ -49,10 +53,6 @@ $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
-$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
 $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
@@ -60,6 +60,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
 $(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
+$(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
 $(PROJECT_INCLUDE)/bsp/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tod.h
@@ -109,7 +113,19 @@ $(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(d
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
 
-$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+$(PROJECT_LIB)/linkcmds.rom: ../shared/startup/linkcmds.rom $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.rom
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom
+
+$(PROJECT_LIB)/linkcmds.lpc2478: startup/linkcmds.lpc2478 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc2478
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc2478
+
+$(PROJECT_LIB)/linkcmds.lpc2478_ncs: startup/linkcmds.lpc2478_ncs $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc2478_ncs
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc2478_ncs
+
+$(PROJECT_LIB)/linkcmds.lpc2478_ncs_ram: startup/linkcmds.lpc2478_ncs_ram $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc2478_ncs_ram
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.lpc2478_ncs_ram
 

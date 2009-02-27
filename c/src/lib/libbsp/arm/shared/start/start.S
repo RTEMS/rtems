@@ -27,14 +27,7 @@
 /* Global symbols */
 
 .globl start
-
-.globl Reset_Handler
-.globl Undefined_Handler
 .globl SWI_Handler
-.globl Prefetch_Handler
-.globl Abort_Handler
-.globl IRQ_Handler
-.globl FIQ_Handler
 
 /* Program Status Register definitions */
 
@@ -49,9 +42,61 @@
 .equ PSR_F,          0x40
 .equ PSR_T,          0x20
 
+.section ".entry"
+
+/*
+ * This is the exception vector table and the pointers to the default
+ * exceptions handlers.
+ */
+
+vector_block:
+
+	ldr	pc, handler_addr_reset
+	ldr	pc, handler_addr_undef
+	ldr	pc, handler_addr_swi
+	ldr	pc, handler_addr_prefetch
+	ldr	pc, handler_addr_abort
+
+	/* Program signature checked by boot loader */
+	.word	0xb8a06f58
+
+	ldr	pc, handler_addr_irq
+	ldr	pc, handler_addr_fiq
+
+handler_addr_reset:
+
+	.word	start
+
+handler_addr_undef:
+
+	.word	twiddle
+
+handler_addr_swi:
+
+	.word	twiddle
+
+handler_addr_prefetch:
+
+	.word	twiddle
+
+handler_addr_abort:
+
+	.word	twiddle
+
+handler_addr_reserved:
+
+	.word	twiddle
+
+handler_addr_irq:
+
+	.word	twiddle
+
+handler_addr_fiq:
+
+	.word	twiddle
+
 /* Start entry */
 
-.section ".entry"
 start:
 
         /*
@@ -112,7 +157,7 @@ start:
 	 * vectors and the pointers to the default exception handlers.
          */
 
-	mov	r0, #0
+	ldr	r0, =bsp_section_vector_start
 	adr	r1, vector_block
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
@@ -131,52 +176,8 @@ start:
 
         /* Spin forever */
 
+SWI_Handler:
+
 twiddle:
 
 	b	twiddle
-
-/*
- * This is the exception vector table and the pointers to the default
- * exceptions handlers.
- */
-
-vector_block:
-
-	ldr	pc, Reset_Handler
-	ldr	pc, Undefined_Handler
-	ldr	pc, SWI_Handler
-	ldr	pc, Prefetch_Handler
-	ldr	pc, Abort_Handler
-	nop
-	ldr	pc, IRQ_Handler
-	ldr	pc, FIQ_Handler
-
-Reset_Handler:
-
-	b	bsp_reset
-
-Undefined_Handler:
-
-	b	Undefined_Handler
-
-SWI_Handler:
-
-	b	SWI_Handler
-
-Prefetch_Handler:
-
-	b	Prefetch_Handler
-
-Abort_Handler:
-
-	b	Abort_Handler
-
-	nop
-
-IRQ_Handler:
-
-	b	IRQ_Handler
-
-FIQ_Handler:
-
-	b	FIQ_Handler

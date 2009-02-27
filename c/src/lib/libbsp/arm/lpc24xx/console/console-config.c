@@ -21,6 +21,7 @@
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
 
+#include <bsp.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/irq.h>
 
@@ -55,7 +56,7 @@ console_tbl Console_Port_Tbl [LPC24XX_UART_NUMBER] = {
     .pDeviceFlow = NULL,
     .ulMargin = 16,
     .ulHysteresis = 8,
-    .pDeviceParams = (void *) 38400,
+    .pDeviceParams = (void *) LPC24XX_UART_BAUD,
     .ulCtrlPort1 = UART0_BASE_ADDR,
     .ulCtrlPort2 = 0,
     .ulDataPort = UART0_BASE_ADDR,
@@ -63,7 +64,7 @@ console_tbl Console_Port_Tbl [LPC24XX_UART_NUMBER] = {
     .setRegister = lpc24xx_uart_set_register,
     .getData = NULL,
     .setData = NULL,
-    .ulClock = 57600000,
+    .ulClock = LPC24XX_CCLK,
     .ulIntVector = LPC24XX_IRQ_UART_0
   }
 };

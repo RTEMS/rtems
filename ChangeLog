@@ -1,3 +1,8 @@
+2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added defines for
+	LPC2478 BSP variants.
+
 2009-02-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* aclocal/bsp-alias.m4: Add simsh2e.
