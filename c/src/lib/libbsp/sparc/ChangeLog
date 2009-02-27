@@ -1,3 +1,9 @@
+2009-02-27	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1386/bsps
+	* shared/start.S: Stack space not correctly initialized. Causes
+	failures on unoptimized applications.
+
 2008-10-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/bspgetworkarea.c: Change size_t to ssize_t on
