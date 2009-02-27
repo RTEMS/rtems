@@ -73,6 +73,7 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 
 #define SD_CARD_CMD_GO_IDLE_STATE 0
 #define SD_CARD_CMD_SEND_OP_COND 1
+#define SD_CARD_CMD_SEND_IF_COND 8
 #define SD_CARD_CMD_SEND_CSD 9
 #define SD_CARD_CMD_SEND_CID 10
 #define SD_CARD_CMD_STOP_TRANSMISSION 12
@@ -112,13 +113,28 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 /** @} */
 
 /**
+ * @name Command Flags
+ * @{
+ */
+
+#define SD_CARD_FLAG_HCS 0x40000000U
+
+#define SD_CARD_FLAG_VHS_2_7_TO_3_3 0x00000100U
+
+#define SD_CARD_FLAG_CHECK_PATTERN 0x000000aaU
+
+/** @} */
+
+/**
  * @name Command Fields
  * @{
  */
 
 #define SD_CARD_COMMAND_SET_COMMAND( c, cmd) (c) [1] = (uint8_t) (0x40 + ((cmd) & 0x3f))
+
 #define SD_CARD_COMMAND_SET_ARGUMENT( c, arg) sd_card_put_uint32( (arg), &((c) [2]))
-#define SD_CARD_COMMAND_SET_CRC7( c, crc7) ((c) [6] = (crc7) << 1)
+
+#define SD_CARD_COMMAND_SET_CRC7( c, crc7) ((c) [6] = ((crc7) << 1) | 1U)
 
 #define SD_CARD_COMMAND_GET_CRC7( c) ((c) [6] >> 1)
 
@@ -170,10 +186,11 @@ static inline void sd_card_put_uint32( uint32_t v, uint8_t *s)
 #define SD_CARD_CSD_GET_TAAC( csd) ((csd) [1])
 #define SD_CARD_CSD_GET_NSAC( csd) ((uint32_t) (csd) [2])
 #define SD_CARD_CSD_GET_TRAN_SPEED( csd) ((csd) [3])
-#define SD_CARD_CSD_GET_C_SIZE( csd) ((((uint32_t) (csd) [6] & 0x3) << 10) + ((uint32_t) (csd) [7] << 2) + (((uint32_t) (csd) [8] >> 6) & 0x3))
+#define SD_CARD_CSD_GET_C_SIZE( csd) ((((uint32_t) (csd) [6] & 0x3) << 10) + (((uint32_t) (csd) [7]) << 2) + ((((uint32_t) (csd) [8]) >> 6) & 0x3))
 #define SD_CARD_CSD_GET_C_SIZE_MULT( csd) ((((csd) [9] & 0x3) << 1) + (((csd) [10] >> 7) & 0x1))
 #define SD_CARD_CSD_GET_READ_BLK_LEN( csd) ((uint32_t) (csd) [5] & 0xf)
-#define SD_CARD_CSD_GET_WRITE_BLK_LEN( csd) ((((csd) [12] & 0x3) << 2) + (((csd) [13] >> 6) & 0x3))
+#define SD_CARD_CSD_GET_WRITE_BLK_LEN( csd) ((((uint32_t) (csd) [12] & 0x3) << 2) + ((((uint32_t) (csd) [13]) >> 6) & 0x3))
+#define SD_CARD_CSD_1_GET_C_SIZE( csd) ((((uint32_t) (csd) [7] & 0x3f) << 16) + (((uint32_t) (csd) [8]) << 8) + (uint32_t) (csd) [9])
 
 /** @} */
 
@@ -383,6 +400,27 @@ sd_card_send_command_error:
 	return -RTEMS_IO_ERROR;
 }
 
+static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t command, uint32_t argument, uint32_t *reg)
+{
+	int rv = 0;
+
+	rv = sd_card_send_command( e, command, argument);
+	RTEMS_CHECK_RV( rv, "Send command");
+
+	if (e->response_index + 5 > SD_CARD_COMMAND_SIZE) {
+		/*
+		 * TODO: If this happens in the wild we need to implement a
+		 * more sophisticated response query.
+		 */
+		RTEMS_SYSLOG_ERROR( "Unexpected response position\n");
+		return -RTEMS_IO_ERROR;
+	}
+
+	*reg = sd_card_get_uint32( e->response + e->response_index + 1);
+
+	return 0;
+}
+
 static int sd_card_stop_multiple_block_read( sd_card_driver_entry *e)
 {
 	int rv = 0;
@@ -564,6 +602,22 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	uint32_t transfer_speed = 0;
 	uint32_t read_block_size = 0;
 	uint32_t write_block_size = 0;
+	uint8_t csd_structure = 0;
+	uint64_t capacity = 0;
+
+	/* Assume first that we have a SD card and not a MMC card */
+	bool assume_sd = true;
+
+	/*
+	 * Assume high capacity until proven wrong (applies to SD and not yet
+	 * existing MMC).
+	 */
+	bool high_capacity = true;
+
+	bool do_cmd58 = true;
+	uint32_t cmd_arg = 0;
+	uint32_t if_cond_test = SD_CARD_FLAG_VHS_2_7_TO_3_3 | SD_CARD_FLAG_CHECK_PATTERN;
+	uint32_t if_cond_reg = if_cond_test;
 
 	/* Start */
 	sc = sd_card_start( e);
@@ -611,21 +665,157 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	rv = sd_card_send_command( e, SD_CARD_CMD_GO_IDLE_STATE, 0);
 	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_GO_IDLE_STATE");
 
+	/*
+	 * Get interface condition, CMD8.  This is new for SD 2.x and enables
+	 * getting the High Capacity Support flag HCS and checks that the
+	 * voltage is right.  Some MMCs accept this command but will still fail
+	 * on ACMD41.  SD 1.x cards will fails this command and do not support
+	 * HCS (> 2G capacity).  SD spec requires the correct CRC7 be sent even
+	 * when in SPI mode.  So this will just change the default CRC7 and
+	 * keep it there for all subsequent commands (which just require a do
+	 * not care CRC byte).  
+	 */	
+	SD_CARD_COMMAND_SET_CRC7( e->command, 0x43U);
+	rv = sd_card_send_register_command( e, SD_CARD_CMD_SEND_IF_COND, if_cond_reg, &if_cond_reg);
+
+	/*
+	 * Regardless of whether CMD8 above passes or fails, send ACMD41.  If
+	 * card is MMC it will fail.  But older SD < 2.0 (which fail CMD8) will
+	 * always stay "idle" if cmd_arg is non-zero, so set to 0 above on
+	 * fail.
+	 */
+	if (rv < 0) {
+		/* Failed CMD8, so SD 1.x or MMC */ 
+		cmd_arg = 0;
+	} else { 
+		cmd_arg = SD_CARD_FLAG_HCS;
+	}
+
 	/* Initialize card */
 	while (true) {
-		rv = sd_card_send_command( e, SD_CARD_CMD_APP_CMD, 0);
-		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_APP_CMD");
-		rv = sd_card_send_command( e, SD_CARD_ACMD_SD_SEND_OP_COND, 0);
-		RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_ACMD_SD_SEND_OP_COND");
+		if (assume_sd) {
+			/* This command (CMD55) supported by SD and (most?) MMCs */
+			rv = sd_card_send_command( e, SD_CARD_CMD_APP_CMD, 0);
+			if (rv < 0) {
+				RTEMS_SYSLOG( "CMD55 failed.  Assume MMC and try CMD1\n");
+				assume_sd = false;
+				continue;
+			}
+
+			/*
+			 * This command (ACMD41) only supported by SD.  Always
+			 * fails if MMC.
+			 */
+			rv = sd_card_send_command( e, SD_CARD_ACMD_SD_SEND_OP_COND, cmd_arg);
+			if (rv < 0) {
+				/*
+				 * This *will* fail for MMC.  If fails, bad/no
+				 * card or card is MMC, do CMD58 then CMD1.
+				 */
+				RTEMS_SYSLOG( "ACMD41 failed.  Assume MMC and do CMD58 (once) then CMD1\n");
+				assume_sd = false;
+				cmd_arg = SD_CARD_FLAG_HCS;
+				do_cmd58 = true;
+				continue;
+			} else {
+				/*
+				 * Passed ACMD41 so SD.  It is now save to
+				 * check if_cond_reg from CMD8.  Reject the
+				 * card in case of a indicated bad voltage.
+				 */
+				if (if_cond_reg != if_cond_test) {
+					RTEMS_CLEANUP_RV_SC( -1, sc, sd_card_driver_init_cleanup, "Bad voltage for SD");
+				}
+			}
+		} else {
+			/* 
+			 * Does not seem to be SD card.  Do init for MMC.
+			 * First send CMD58 once to enable check for HCS
+			 * (similar to CMD8 of SD) with bits 30:29 set to 10b.
+			 * This will work for MMC >= 4.2.  Older cards (<= 4.1)
+			 * may may not respond to CMD1 unless CMD58 is sent
+			 * again with zero argument.
+			 */
+			if (do_cmd58) {
+				rv = sd_card_send_command( e, SD_CARD_CMD_READ_OCR, cmd_arg);
+				RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed CMD58 for MMC");
+
+				/* A one-shot call */
+				do_cmd58 = false;
+			}
+
+			/* Do CMD1 */
+			rv = sd_card_send_command( e, SD_CARD_CMD_SEND_OP_COND, 0);
+			if (rv < 0) {
+				if (cmd_arg != 0) {
+					/*
+					 * Send CMD58 again with zero argument
+					 * value.  Proves card is not
+					 * high_capacity.
+					 */
+					cmd_arg = 0;
+					do_cmd58 = true;
+					high_capacity = false;
+					continue;
+				}
+
+				RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed to initialize MMC");
+			}
+		}
 	
-		/* Not idle? */
+		/*
+		 * Not idle?
+		 *
+		 * This hangs forever if the card remains not idle and sends
+		 * always a valid response.
+		 */
 		if (SD_CARD_IS_NOT_IDLE_RESPONSE( e->response [e->response_index])) {
 			break;
 		}
 
 		/* Invoke the scheduler */
 		rtems_task_wake_after( RTEMS_YIELD_PROCESSOR);
-	};
+	}
+
+	/* Now we know if we are SD or MMC */
+	if (assume_sd) {
+		if (cmd_arg == 0) {
+			/* SD is < 2.0 so never high capacity (<= 2G) */
+			high_capacity = 0;
+		} else {
+			uint32_t reg = 0;
+
+			/*
+			 * SD is definitely 2.x.  Now need to send CMD58 to get
+			 * the OCR to see if the HCS bit is set (capacity > 2G)
+			 * or if bit is off (capacity <= 2G, standard
+			 * capacity).
+			 */
+			rv = sd_card_send_register_command( e, SD_CARD_CMD_READ_OCR, 0, &reg);
+			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed CMD58 for SD 2.x");
+
+			/* Check HCS bit of OCR */
+			high_capacity = (reg & SD_CARD_FLAG_HCS) != 0;
+		}
+	} else {
+		/*
+		 * Card is MMC.  Unless already proven to be not HCS (< 4.2)
+		 * must do CMD58 again to check the OCR bits 30:29.
+		 */ 
+		if (high_capacity) {
+			uint32_t reg = 0;
+
+			/*
+			 * The argument should still be correct since was never
+			 * set to 0
+			 */ 
+			rv = sd_card_send_register_command( e, SD_CARD_CMD_READ_OCR, cmd_arg, &reg);
+			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed CMD58 for MMC 4.2");
+
+			/* Check HCS bit of the OCR */
+			high_capacity = (reg & 0x600000) == SD_CARD_FLAG_HCS;
+		}
+	}
 
 	/* Card Identification */
 	if (e->verbose) {
@@ -652,22 +842,51 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	}
 
 	/* Card Specific Data */
+
+	/* Read CSD */
 	rv = sd_card_send_command( e, SD_CARD_CMD_SEND_CSD, 0);
 	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Send: SD_CARD_CMD_SEND_CSD");
 	rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CSD_SIZE);
 	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CSD");
+
+	/* CSD Structure */
+	csd_structure = SD_CARD_CSD_GET_CSD_STRUCTURE( block);
+
+	/* Transfer speed and access time */
 	transfer_speed = sd_card_transfer_speed( block);
 	e->transfer_mode.baudrate = transfer_speed;
 	e->n_ac_max = sd_card_max_access_time( block, transfer_speed);
-	read_block_size = 1U << SD_CARD_CSD_GET_READ_BLK_LEN( block);
-	e->block_size_shift = SD_CARD_CSD_GET_READ_BLK_LEN( block);
-	write_block_size = 1U << e->block_size_shift;
-	if (read_block_size < write_block_size) {
-		RTEMS_SYSLOG_ERROR( "Read block size smaller than write block size\n");
-		return -RTEMS_IO_ERROR;
+
+	/* Block sizes and capacity */
+	if (csd_structure == 0 || !assume_sd) {
+		/* Treat MMC same as CSD Version 1.0 */
+
+		read_block_size = 1U << SD_CARD_CSD_GET_READ_BLK_LEN( block);
+		e->block_size_shift = SD_CARD_CSD_GET_WRITE_BLK_LEN( block);
+		write_block_size = 1U << e->block_size_shift;
+		if (read_block_size < write_block_size) {
+			RTEMS_SYSLOG_ERROR( "Read block size smaller than write block size\n");
+			return -RTEMS_IO_ERROR;
+		}
+		e->block_size = write_block_size;
+		e->block_number = sd_card_block_number( block);
+		capacity = sd_card_capacity( block);
+	} else if (csd_structure == 1) {
+		uint32_t c_size = SD_CARD_CSD_1_GET_C_SIZE( block);
+
+		/* Block size is fixed in CSD Version 2.0 */
+		e->block_size_shift = 9;
+		e->block_size = 512;
+
+		e->block_number = (c_size + 1) * 1024;
+		capacity = (c_size + 1) * 512 * 1024;
+		read_block_size = 512;
+		write_block_size = 512;
+	} else {
+		RTEMS_DO_CLEANUP_SC( RTEMS_IO_ERROR, sc, sd_card_driver_init_cleanup, "Unexpected CSD Structure number");
 	}
-	e->block_size = write_block_size;
-	e->block_number = sd_card_block_number( block);
+
+	/* Print CSD information */
 	if (e->verbose) {
 		RTEMS_SYSLOG( "*** Card Specific Data ***\n");
 		RTEMS_SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
@@ -678,8 +897,22 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		RTEMS_SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
 		RTEMS_SYSLOG( "Block size [B]           : %" PRIu32 "\n", e->block_size);
 		RTEMS_SYSLOG( "Block number             : %" PRIu32 "\n", e->block_number);
-		RTEMS_SYSLOG( "Capacity [B]             : %" PRIu32 "\n", sd_card_capacity( block));
+		RTEMS_SYSLOG( "Capacity [B]             : %" PRIu64 "\n", capacity);
 		RTEMS_SYSLOG( "Max transfer speed [b/s] : %" PRIu32 "\n", transfer_speed);
+	}
+
+	if (high_capacity) {
+		/* For high capacity cards the address is in blocks */
+		e->block_size_shift = 0;
+	} else if (e->block_size_shift == 10) {
+		/* 
+		 * Low capacity 2GByte cards with reported block size of 1024
+		 * need to be set back to block size of 512 per 'Simplified
+		 * Physical Layer Specification Version 2.0' section 4.3.2.
+		 * Otherwise, CMD16 fails if set to 1024.
+		 */
+		e->block_size_shift = 9;
+		e->block_size = 512;
 	}
 
 	/* Set read block size */
@@ -901,7 +1134,7 @@ static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 				return -1;
 		}
 	} else if (req == RTEMS_BLKDEV_CAPABILITIES) {
-		*(uint32_t*) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
+		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
 		errno = EBADRQC;
@@ -912,22 +1145,20 @@ static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	sd_card_driver_entry *e = NULL;
-	dev_t dev = 0;
 
 	/* Initialize disk IO */
 	sc = rtems_disk_io_initialize();
 	RTEMS_CHECK_SC( sc, "Initialize RTEMS disk IO");
 
 	for (minor = 0; minor < sd_card_driver_table_size; ++minor) {
-		e = &sd_card_driver_table [minor];
+		sd_card_driver_entry *e = &sd_card_driver_table [minor];
+		dev_t dev = rtems_filesystem_make_dev_t( major, minor);
 
 		/* Initialize SD Card */
 		sc = sd_card_init( e);
 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
 
 		/* Create disk device */
-		dev = rtems_filesystem_make_dev_t( major, minor);
 		sc = rtems_disk_create_phys( dev, (int) e->block_size, (int) e->block_number, sd_card_disk_ioctl, e->device_name);
 		RTEMS_CHECK_SC( sc, "Create disk device");
 	}
