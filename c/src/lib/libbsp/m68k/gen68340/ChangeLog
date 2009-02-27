@@ -1,3 +1,8 @@
+2009-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Remove unnecessary copy of cpu_asm.S
+	* console/Modif_cpu_asm.S: Removed.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_specs: Move -e start from *link to *startfile to avoid warning

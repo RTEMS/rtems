@@ -44,8 +44,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console
-libbsp_a_SOURCES += console/Modif_cpu_asm.S console/console.c \
-    console/m340uart.c ../../shared/dummy_printk_support.c
+libbsp_a_SOURCES += console/console.c console/m340uart.c \
+    ../../shared/dummy_printk_support.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
