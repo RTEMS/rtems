@@ -1,3 +1,7 @@
+2009-03-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c: Remove stray semi-colon.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Change prototype of IDLE thread to
