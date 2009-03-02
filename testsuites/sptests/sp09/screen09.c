@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,12 +23,6 @@ void Screen9()
   void              *converted;
   rtems_status_code status;
   rtems_isr_entry   old_service_routine;
-
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  puts( "TRUE" );
-#else
-  puts( "FALSE" );
-#endif
 
   #if ((CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE) || \
        defined(_C3x) || defined(_C4x))
