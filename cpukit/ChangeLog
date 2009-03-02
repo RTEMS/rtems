@@ -1,3 +1,11 @@
+2009-03-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/malloc_initialize.c, score/Makefile.am,
+	score/include/rtems/score/protectedheap.h,
+	score/inline/rtems/score/heap.inl: Get total heap size correct when
+	using unified C Program Heap and RTEMS Workspace.
+	* score/src/pheapgetsize.c: New file.
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1388/cpukit

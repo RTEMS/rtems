@@ -205,6 +205,18 @@ void _Protected_heap_Get_free_information(
   Heap_Information    *info
 );
 
+/**
+ *  This function returns the maximum size of the protected heap.
+ *
+ *  @param[in] the_heap points to the heap being operated upon
+ *
+ *  @return This method returns the total amount of memory
+ *          allocated to the heap.
+ */
+uint32_t _Protected_heap_Get_size(
+  Heap_Control        *the_heap
+);
+
 #ifdef __cplusplus
 }
 #endif

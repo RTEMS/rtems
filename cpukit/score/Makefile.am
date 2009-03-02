@@ -129,9 +129,9 @@ endif
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocatealigned.c src/pheapallocate.c \
-    src/pheapextend.c src/pheapfree.c src/pheapgetblocksize.c \
-    src/pheapgetfreeinfo.c src/pheapgetinfo.c src/pheapinit.c \
-    src/pheapresizeblock.c src/pheapwalk.c
+    src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
+    src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
+    src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \

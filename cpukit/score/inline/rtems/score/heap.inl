@@ -368,6 +368,21 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in (
   return _Addresses_Is_in_range( the_block, the_heap->start, the_heap->final );
 }
 
+/**
+ *  This function returns the maximum size of the heap.
+ *
+ *  @param[in] the_heap points to the heap being operated upon
+ *
+ *  @return This method returns the total amount of memory
+ *          allocated to the heap.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Heap_Get_size (
+  Heap_Control *the_heap
+)
+{
+  return the_heap->final - the_heap->start;
+}
+
 /**@}*/
 
 #endif
