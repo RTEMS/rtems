@@ -1,3 +1,9 @@
+2009-03-02	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1375/bsps
+	* clock/clock.c: Correct implementation of nanoseconds since last tick
+	handler.
+
 2009-02-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clock.c, include/bsp.h: Make bsp idle thread names match.
