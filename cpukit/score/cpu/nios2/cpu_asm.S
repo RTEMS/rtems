@@ -20,12 +20,6 @@
 
     .set noat
 
-    .extern _ISR_Nest_level
-    .extern _ISR_Signals_to_thread_executing
-    .extern _Context_Switch_necessary
-    .extern _Thread_Dispatch
-    .extern _Thread_Dispatch_disable_level
-
 /* ===================================================================== */
 
 /*
