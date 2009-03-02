@@ -1,3 +1,8 @@
+2009-03-02	Ray Xu <rayx.cn@gmail.com>
+
+	PR 1380/bsps
+	* include/bsp.h: Switch to English comments.
+
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds: Add wildcard to gcc_except_table section so
