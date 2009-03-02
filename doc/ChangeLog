@@ -1,3 +1,7 @@
+2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/.cvsignore: Add Object ID PDF files.
+
 2009-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix_users/preface.texi, shell/preface.texi: Add stock
