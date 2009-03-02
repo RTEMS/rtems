@@ -1,3 +1,10 @@
+2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1388/cpukit
+	* rtems/src/semcreate.c: Classic Semaphores allow both priority inherit
+	and ceiling attributes to be set on semaphore create. These
+	attributes are mutually exclusive and this should be an error.
+
 2009-01-29	 Nickolay Semyonov-Kolchin <nbkolchin@gmail.com>
 
 	PR 1359/cpukit
