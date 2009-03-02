@@ -30,12 +30,15 @@ extern "C" {
 /* cclk=cco/(2*P) */
 /* cco = cclk*2*P 	*/
 
-#define	LPC22xx_Fcclk	CONFIG_ARM_CLK  /* system clk frequecy,<=60Mhz, defined in system configuration */
+/* system clk frequecy,<=60Mhz, defined in system configuration */
+#define	LPC22xx_Fcclk	CONFIG_ARM_CLK
 
 /* Fcco 156M~320Mhz*/
-#define	LPC22xx_Fcclk	CONFIG_ARM_CLK  /* system clk frequecy,<=60Mhz, defined in system configuration */
+/* system clk frequecy,<=60Mhz, defined in system configuration */
+#define	LPC22xx_Fcclk	CONFIG_ARM_CLK
 #define LPC22xx_Fcco	LPC22xx_Fcclk * 4
-#define LPC22xx_Fpclk	(LPC22xx_Fcclk /4) *1  /*VPB clk frequency,1,1/2,1/4 times of Fcclk */
+/*VPB clk frequency,1,1/2,1/4 times of Fcclk */
+#define LPC22xx_Fpclk	(LPC22xx_Fcclk /4) *1
 
 
 
@@ -76,14 +79,15 @@ extern "C" {
 /**
 * help file 
 */
-/* 系统设置, Fosc、Fcclk、Fcco、Fpclk必须定义*/
-#define Fosc            11059200                    //晶振频率,10MHz~25MHz，应当与实际一至
-#define Fcclk           (Fosc << 2)                  //系统频率，必须为Fosc的整数倍(1~32)，且<=60MHZ
-#define Fcco            (Fcclk <<2)                 //CCO频率，必须为Fcclk的2、4、8、16倍，范围为156MHz~320MHz
-#define Fpclk           (Fcclk >>2) * 1             //VPB时钟频率，只能为(Fcclk / 4)的1 ~ 4倍
-#define M                Fcclk / Fosc;
-#define P_min         Fcco_MIN / (2*Fcclk) + 1;
-#define P_max        Fcco_MAX / (2*Fcclk);
+/* System configure, Fosc Fcclk Fcco Fpclk must be defined*/
+#define Fosc    11059200          // osc freq,10MHz~25MHz,
+                                  //    change to real one if needed
+#define Fcclk   (Fosc << 2)       //system freq 2^n time of  Fosc(1~32) <=60MHZ
+#define Fcco    (Fcclk <<2)       //CCO freq 2,4,8,16 time of Fcclk 156MHz~320MHz
+#define Fpclk   (Fcclk >>2) * 1   //VPB freq only(Fcclk / 4) 1~4
+#define M       Fcclk / Fosc
+#define P_min   Fcco_MIN / (2*Fcclk) + 1;
+#define P_max   Fcco_MAX / (2*Fcclk);
 
 
 
@@ -106,20 +110,20 @@ extern "C" {
 #define SPI_CS_PIN_FUNC   PINSEL0_bit.SPI_CS_PIN
 
 // Flash definition
-//#define FLASH_SIZE              (0x200000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
-#define FLASH_SIZE              (0x80000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
-//#define FLASH_SIZE              (0x80000-FLASH_BOOT)      // Total area of Flash region in words 8 bit
-#define FLASH_BEGIN             0x80000000
-#define FLASH_BASE              (FLASH_BEGIN+FLASH_BOOT)   //First 0x8000 bytes reserved for boot loader etc.
+//#define FLASH_SIZE      (0x200000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
+#define FLASH_SIZE        (0x80000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
+//#define FLASH_SIZE      (0x80000-FLASH_BOOT)      // Total area of Flash region in words 8 bit
+#define FLASH_BEGIN       0x80000000
+#define FLASH_BASE        (FLASH_BEGIN+FLASH_BOOT)   //First 0x8000 bytes reserved for boot loader etc.
 
 // SRAM definition
-#define SRAM_SIZE               0x100000                  // Total area of Flash region in words 8 bit
-#define SRAM_BASE               0x81000000                //First 0x8000 bytes reserved for boot loader etc.
+#define SRAM_SIZE         0x100000                  // Total area of Flash region in words 8 bit
+#define SRAM_BASE         0x81000000                //First 0x8000 bytes reserved for boot loader etc.
 
 // CS8900A definition
-#define CS8900A_BASE            0x82000000                //
+#define CS8900A_BASE      0x82000000
 // RTL8019AS definition
-#define RTL8019AS_BASE            0x82000000                //
+#define RTL8019AS_BASE    0x82000000
 
 struct rtems_bsdnet_ifconfig;
 int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,

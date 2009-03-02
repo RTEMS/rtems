@@ -1,3 +1,8 @@
+2009-03-02	Ray Xu <rayx.cn@gmail.com>
+
+	PR 1380/bsps
+	* include/bsp.h: Switch to English comments.
+
 2008-12-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bsp_specs: Move -e start from *link to *startfile to avoid warning
