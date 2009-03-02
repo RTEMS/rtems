@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -85,7 +85,37 @@ void Screen5()
     RTEMS_NOT_DEFINED,
     "rtems_semaphore_create of RTEMS_FIFO RTEMS_INHERIT_PRIORITY"
   );
-  puts( "TA1 - rtems_semaphore_create - RTEMS_NOT_DEFINED" );
+  puts( "TA1 - rtems_semaphore_create - FIFO and inherit - RTEMS_NOT_DEFINED" );
+
+  status = rtems_semaphore_create(
+    Semaphore_name[ 1 ],
+    1,
+    RTEMS_PRIORITY_CEILING | RTEMS_BINARY_SEMAPHORE | RTEMS_FIFO,
+    RTEMS_NO_PRIORITY,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_NOT_DEFINED,
+    "rtems_semaphore_create of RTEMS_FIFO RTEMS_CEILING_PRIORITY"
+  );
+  puts( "TA1 - rtems_semaphore_create - FIFO and ceiling - RTEMS_NOT_DEFINED" );
+
+  status = rtems_semaphore_create(
+    Semaphore_name[ 1 ],
+    1,
+    RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING | 
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY,
+    10,
+    &Junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_NOT_DEFINED,
+    "rtems_semaphore_create of binary with ceiling and inherit"
+  );
+  puts(
+    "TA1 - rtems_semaphore_create - ceiling and inherit - RTEMS_NOT_DEFINED" );
 
   status = rtems_semaphore_create(
     Semaphore_name[ 1 ],
