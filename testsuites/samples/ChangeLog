@@ -1,3 +1,8 @@
+2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cdtest/main.cc: Use printk() in global destructors since printf() no
+	longer works.
+
 2009-02-27	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* fileio/init.c: Adapt to modified shell configuration
