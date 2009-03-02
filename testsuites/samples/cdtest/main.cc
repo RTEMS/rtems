@@ -62,11 +62,12 @@ public:
 
     virtual ~AClass()
     {
-        printf(
+	// MUST USE PRINTK -- RTEMS IS SHUTTING DOWN WHEN THIS RUNS
+        printk(
           "%s: Hey I'm in base class destructor number %d for %p.\n",
           ptr, num_inst, this
         );
-	print();
+        printk("Derived class - %s\n", string);
         num_inst--;
     };
 
@@ -97,12 +98,12 @@ public:
 
     ~BClass()
     {
-        printf(
+        printk(
           "%s: Hey I'm in derived class destructor number %d for %p.\n",
           ptr, num_inst,
           this
         );
-	      print();
+        printk("Derived class - %s\n", string);
         num_inst--;
     };
 

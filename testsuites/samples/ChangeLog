@@ -1,3 +1,8 @@
+2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* cdtest/main.cc: Use printk() in global destructors since printf() no
+	longer works.
+
 2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* capture/system.h, capture/test1.c, fileio/init.c,
