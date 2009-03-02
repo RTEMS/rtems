@@ -1,3 +1,9 @@
+2009-03-02	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1375/bsps
+	* clock/clock.c: Correct implementation of nanoseconds since last tick
+	handler.
+
 2009-01-21	Eric Norum <norume@aps.anl.gov>
 
 	PR 1358/bsps
