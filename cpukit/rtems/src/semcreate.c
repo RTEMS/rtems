@@ -15,7 +15,7 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -110,6 +110,10 @@ rtems_status_code rtems_semaphore_create(
       return RTEMS_NOT_DEFINED;
 
   }
+
+  if ( _Attributes_Is_inherit_priority( attribute_set ) &&
+       _Attributes_Is_priority_ceiling( attribute_set ) )
+    return RTEMS_NOT_DEFINED;
 
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) && ( count > 1 ) )
     return RTEMS_INVALID_NUMBER;
