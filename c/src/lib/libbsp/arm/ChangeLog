@@ -1,3 +1,7 @@
+2009-03-02	Ray Xu <rayx.cn@gmail.com>
+
+	* shared/irq/irq_asm.S: Newer compilers handle alignment better.
+
 2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/startup/linkcmds.rom: New file

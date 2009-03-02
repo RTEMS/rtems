@@ -147,7 +147,7 @@ _ISR_Dispatch:
                                           /*    we don't save lr, since  */
                                           /*    it's just going to get   */
                                           /*    overwritten              */
-        nop                               /* made _ISR_Dispatch_p_4 4-word align */
+        //nop                               /* made _ISR_Dispatch_p_4 4-word align */  /*recent compiler have a better support for pad*/
 #else
         .code 32
         stmdb   sp!, {r0-r3, r12,lr}      /* save regs on SVC stack */
