@@ -39,7 +39,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 # clock
 libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
-libbsp_a_SOURCES += console/console.c
+libbsp_a_SOURCES += console/console.c ../../shared/console-polled.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 if HAS_MP
