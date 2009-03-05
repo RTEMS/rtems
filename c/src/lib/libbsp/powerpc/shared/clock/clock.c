@@ -7,18 +7,19 @@
  */
 
 /*
- * Copyright (c) 2008
+ * Copyright (c) 2008, 2009
  * Embedded Brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
  * rtems@embedded-brains.de
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/libio.h>
+#include <rtems.h>
 #include <rtems/clockdrv.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -57,34 +58,40 @@ static void (*ppc_clock_tick)(void) = ppc_clock_no_tick;
 
 static int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
-	uint32_t reg1;
-	uint32_t reg2;
-	uint32_t reg3;
-	uint32_t msr;
+	uint32_t delta = ppc_clock_decrementer_value;
+	uint32_t next = ppc_clock_next_time_base;
+	uint32_t dec = 0;
+	uint32_t now = 0;
+	uint32_t msr = 0;
 
-	/* Set new decrementer value according to a reference time base */
-	asm volatile (
-		"lwz %0, ppc_clock_next_time_base@sdarel(13);"
-		"lwz %1, ppc_clock_decrementer_value@sdarel(13);"
-		"mftb %2;"
-		"add %0, %0, %1;"
-		"subf %1, %2, %0;"
-		"stw %0, ppc_clock_next_time_base@sdarel(13);"
-		"mtdec %1;"
-		: "=r" (reg1), "=r" (reg2), "=r" (reg3)
-	);
+	do {
+		/* Increment clock ticks */
+		Clock_driver_ticks += 1;
 
-	/* Increment clock ticks */
-	Clock_driver_ticks += 1;
+		/* Enable external exceptions */
+		msr = ppc_external_exceptions_enable();
 
-	/* Enable external exceptions */
-	msr = ppc_external_exceptions_enable();
+		/* Call clock ticker  */
+		ppc_clock_tick();
 
-	/* Call clock ticker  */
-	ppc_clock_tick();
+		/* Restore machine state */
+		ppc_external_exceptions_disable( msr);
 
-	/* Restore machine state */
-	ppc_external_exceptions_disable( msr);
+		/* Next time base */
+		next += delta;
+
+		/* Current time */
+		now = ppc_time_base();
+
+		/* New decrementer value */
+		dec = next - now;
+	} while (dec > delta);
+
+	/* Set decrementer */
+	ppc_set_decrementer_register( dec);
+
+	/* Expected next time base */
+	ppc_clock_next_time_base = next;
 
 	return 0;
 }
@@ -201,7 +208,7 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	/* Check decrementer value */
 	if (ppc_clock_decrementer_value == 0) {
 		ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
-		SYSLOG_ERROR( "Decrementer value would be zero, will be set to maximum value instead\n");
+		SYSLOG_ERROR( "decrementer value would be zero, will be set to maximum value instead\n");
 	}
 
 	/* Set the nanoseconds since last tick handler */

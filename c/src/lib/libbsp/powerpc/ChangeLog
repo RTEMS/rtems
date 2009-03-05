@@ -1,3 +1,8 @@
+2009-03-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/clock/clock.c: Standard decrementer exception is now more
+	robust against erroneous external exception disable times.
+
 2009-02-11	Matt Rippa <mrippa@gemini.edu>
 
 	PR 1352/bsps

@@ -23,6 +23,8 @@
 
 #ifndef __TQM_H__
 #define __TQM_H__
+
+#if !defined(ASM)
 #include <rtems.h>
 
 typedef struct {
@@ -40,7 +42,9 @@ typedef struct {
   void (*put_char)(int c); /* function to output characters  */
 } tqm_bd_info_t;
 
+#endif /* !defined(ASM) */
 #define TQM_BD_INFO_ADDR 0x3400
+
 #define TQM_BD_INFO (*(tqm_bd_info_t *)TQM_BD_INFO_ADDR)
 
 #define TQM_CONF_INFO_BLOCK_ADDR 0x4001fe00

@@ -466,12 +466,12 @@ int mpc5200_eth_mii_read(struct mpc5200_enet_struct *sc, unsigned char phyAddr, 
  *				18-wire ethernet tranceiver (PHY). Please see your PHY
  *				documentation for the register map.
  *
- * Returns:		Success (boolean)
+ * Returns:		Success (bool)
  *
  * Notes:
  *
  */
-static int mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short data)
+static bool mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char phyAddr, unsigned char regAddr, unsigned short data)
   {
   unsigned long reg;					/* convenient holder for the PHY register */
   unsigned long phy;					/* convenient holder for the PHY */
@@ -514,12 +514,12 @@ static int mpc5200_eth_mii_write(struct mpc5200_enet_struct *sc, unsigned char p
  * Description:	Reset a running ethernet driver including the hardware
  *				FIFOs and the FEC.
  *
- * Returns:		Success (boolean)
+ * Returns:		Success (bool)
  *
  * Notes:
  *
  */
-static int mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
+static bool mpc5200_fec_reset(struct mpc5200_enet_struct *sc) {
   volatile int delay;
   /*
    * Clear FIFO status registers
