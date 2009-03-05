@@ -35,66 +35,13 @@ extern int __SRAMBASE[];
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
-  uint32_t    tdiff;
-
-  /* Details to consider here:
-   *
-   *  - PIT is 16-bit. To properly handle differences of two
-   *    16-bit numbers (which requires 17-bits) we want to
-   *    do the arithmetic in a wider data type. PIT reading
-   *    is a unsigned 16-bit count.
-   *
-   *  => must make sure PIT is a *unsigned* 16-bit type. Otherwise
-   *     values get sign-extended when converted to wider type
-   *     (regardless of the signedness of wider type):
-   *
-   *       (unsigned)(signed short)0xffff -> 0xffffffff.
-   *
-   *     and thus 
-   *
-   *       (uint32_t)(int16_t)65535 - (uin32_t)(int16_t)1 
-   *
-   *     would yield 0xfffffffe, not 65534!
-   *   
-   *
-   *  - PIT counts backwards from PMR -> zero, hence
-   *
-   *      now - tick_base = (PMR - now) - (PMR - tick_base) = tick_base - now;
-   * 
-   *    result may be negative (if rolled-over).
-   *
-   *  - PIF flag, counter and PCNTR_AT_TICK must all
-   *    be read atomically - otherwise an interrupt may
-   *    have altered their values while we're looking.
-   *
-   *    NOTE: score framework calling this routine disables
-   *          interrupts during execution of this callout.
-   *
-   *  - Last but not least, rollover might have happened
-   *    just between reading counter and PIF flag; hence
-   *    we have to re-read the counter if PIF is set.
-   *
-   */
-
-  /* obtain current value */
-  tdiff     = (uint16_t)MCF5282_PIT3_PCNTR;
-
-  if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF) {
-    /* rollover may just have happened;
-     * must reload PCNTR.
-     */
-    tdiff = + (uint32_t)(uint16_t)MCF5282_PIT3_PMR
-            + (uint32_t)(uint16_t)PCNTR_AT_TICK
-            - (uint32_t)(uint16_t)MCF5282_PIT3_PCNTR;
-  } else {
-    tdiff = + (uint32_t)(uint16_t)PCNTR_AT_TICK - tdiff;
-  }
-
-  return tdiff * 1000;
+    int i = MCF5282_PIT3_PCNTR;
+    if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
+        i = MCF5282_PIT3_PCNTR - USEC_PER_TICK;
+    return (USEC_PER_TICK - i) * 1000;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick \
-    bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
 
 /*
  * Periodic interval timer interrupt handler
@@ -165,7 +112,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 /*
  * Provide our own version of the idle task
  */
-void *_BSP_Thread_Idle_body( uintptr_t ignored )
+Thread _BSP_Thread_Idle_body(uint32_t ignored)
 {
     for(;;)
         asm volatile ("addq.l #1,__SRAMBASE"); /* Atomic increment */
