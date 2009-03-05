@@ -1,3 +1,9 @@
+2009-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/misc.c, flash/flashcfg.c, irq/irq_init.c,
+	pci/detect_host_bridge.c: changed function arguments
+	to silence compiler warnings.
+
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* i2c/i2c_init.c: Include <errno.h> instead of <sys/errno.h>.
