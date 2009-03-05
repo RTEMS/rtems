@@ -1,3 +1,8 @@
+2009-03-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/clock/clock.c: Standard decrementer exception is now more
+	robust against erroneous external exception disable times.
+
 2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* shared/startup/bspgetworkarea.c: Add check to determine if current
