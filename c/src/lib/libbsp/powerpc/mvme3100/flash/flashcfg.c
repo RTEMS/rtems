@@ -103,7 +103,7 @@ uint8_t val;
 }
 
 STATIC uint32_t
-read_us_timer()
+read_us_timer(void)
 {
 uint32_t mhz = BSP_bus_frequency/BSP_time_base_divisor/1000;
 

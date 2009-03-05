@@ -70,7 +70,7 @@ unsigned char line;
 	return 0;
 }
 
-void BSP_motload_pci_fixup()
+void BSP_motload_pci_fixup(void)
 {
   BSP_pciScan(0, fixup_irq_line, 0);
 }

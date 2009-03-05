@@ -52,7 +52,7 @@
 #include <bsp.h>
 
 void
-bsp_reset()
+bsp_reset(void)
 {
 uint8_t v;
 	/*
