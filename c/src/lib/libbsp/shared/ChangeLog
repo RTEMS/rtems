@@ -1,3 +1,9 @@
+2009-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* bootcard.c: use aligned heap_start (instead of
+	original heap_start) when calculating default heap
+	size (to take into account loss due to alignment).
+
 2008-09-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clockdrv_shell.c: The Shared Memory Driver no longer requires the

@@ -82,7 +82,7 @@ char *rtems_progname;
        * work area up to the work space start as heap area.
        */
       heap_size_default = (size_t) ((char *) Configuration.work_space_start
-        - (char *) work_area_start);
+        - (char *) heap_start);
 
       /* Keep it as a multiple of 16 bytes */
       heap_size_default &= ~((size_t) 0xf);
