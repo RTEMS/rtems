@@ -1,3 +1,8 @@
+2009-03-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/malloc_initialize.c: Fixed invalid function
+	parameter.
+
 2009-03-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/malloc_initialize.c, score/Makefile.am,

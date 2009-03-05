@@ -104,7 +104,7 @@ void RTEMS_Malloc_Initialize(
 
   }
 
-  MSBUMP( space_available, _Protected_heap_Get_size(RTEMS_Malloc_Heap->final) );
+  MSBUMP( space_available, _Protected_heap_Get_size(RTEMS_Malloc_Heap) );
 
   #if defined(RTEMS_HEAP_DEBUG)
     if ( _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false ) ) {
