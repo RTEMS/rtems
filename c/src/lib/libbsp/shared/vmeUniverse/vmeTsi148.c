@@ -537,7 +537,7 @@ uint32_t v;
 }
 
 void
-vmeTsi148Reset()
+vmeTsi148Reset(void)
 {
 	vmeTsi148ResetXX(THEBASE);
 }

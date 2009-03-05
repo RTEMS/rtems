@@ -116,7 +116,7 @@ vmeTsi148ResetXX(BERegister *base);
 
 /* Setup the tsi148 connected to the first driver slot */
 void
-vmeTsi148Reset();
+vmeTsi148Reset(void);
 
 /* Pull VME SYSRESET line */
 void

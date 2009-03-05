@@ -1,3 +1,9 @@
+2009-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeTsi148.h, vmeUniverse/vmeTsi148.c:
+	fixed function declarations to silence compiler
+	warnings.
+
 2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bspgetworkarea.c: Add check to determine if current stack pointer is
