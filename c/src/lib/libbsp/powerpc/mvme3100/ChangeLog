@@ -1,3 +1,11 @@
+2009-03-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* startup/bspstart.c: removed legacy code (inherited
+	from old mvme2307 BSP) -- for testing trapping into
+	PPCBug -- which is irrelevant on this BSP.
+	Removed warning about SPRG0 having been reassigned
+	-- this BSP is OK.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

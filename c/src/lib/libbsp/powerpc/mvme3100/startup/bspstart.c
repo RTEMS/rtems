@@ -55,8 +55,6 @@ void bsp_cleanup(void)
     bsp_reset();
 }
 
-SPR_RW(SPRG1)
-
 /*
  * Copy Additional boot param passed by boot loader
  */
@@ -394,29 +392,6 @@ VpdBufRec          vpdData [] = {
 		BSP_pciConfigDump_early();
 	}
 #endif
-
-#ifdef TEST_RAW_EXCEPTION_CODE
-	printk("Testing exception handling Part 1\n");
-	/*
-	 * Cause a software exception
-	 */
-	__asm__ __volatile ("sc");
-	/*
-	 * Check we can still catch exceptions and return coorectly.
-	 */
-	printk("Testing exception handling Part 2\n");
-	__asm__ __volatile ("sc");
-
-	/*
-	 * Somehow doing the above seems to clobber SPRG0 on the mvme2100.  The
-	 * interrupt disable mask is stored in SPRG0. Is this a problem?
-	 */
-	ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT);
-
-#endif
-
-/* See above */
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
 	if ( (chpt = strstr(BSP_commandline_string,"MEMSZ=")) ) {
 		char		*endp;
