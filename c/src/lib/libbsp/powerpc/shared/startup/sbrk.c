@@ -107,6 +107,7 @@ uintptr_t _bsp_sbrk_init(
   if ( 0 != &BSP_sbrk_policy ) {
   	switch ( BSP_sbrk_policy ) {
 		case (uint32_t)(-1):
+			*heap_size_p    += rval;
 			remaining_start  = heap_start + *heap_size_p;
 			remaining_size   = 0;
 			/* return a nonzero sbrk_amount because the libsupport code
