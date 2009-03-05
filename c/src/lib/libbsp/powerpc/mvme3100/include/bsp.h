@@ -318,11 +318,6 @@ rtems_tsec_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "tse1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_tsec_attach
 
-/*
- * system init stack and soft ir stack size
- */
-#define BSP_INIT_STACK_SIZE 0x1000
-
 #ifdef __cplusplus
 }
 #endif

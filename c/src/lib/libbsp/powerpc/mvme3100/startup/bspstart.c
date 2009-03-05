@@ -50,8 +50,6 @@
 extern unsigned long __rtems_end[];
 extern void	     BSP_vme_config(void);
 
-SPR_RW(SPRG1)
-
 /*
  * Copy Additional boot param passed by boot loader
  */
@@ -263,10 +261,6 @@ VpdBufRec          vpdData [] = {
 	 * so that It can be printed without accessing R1.
 	 */
 	asm volatile("mr %0, 1":"=r"(stack));
-#if 0
-	stack = ((unsigned char*) __rtems_end) +
-		INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
-#endif
 
 	/* tag the bottom */
 	*((uint32_t*)stack) = 0;
@@ -274,7 +268,7 @@ VpdBufRec          vpdData [] = {
 	/*
 	 * Initialize the interrupt related settings.
 	 */
-	intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
+	intrStackStart = (uint32_t) __rtems_end;
 	intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
 	/*
@@ -374,29 +368,6 @@ VpdBufRec          vpdData [] = {
 		BSP_pciConfigDump_early();
 	}
 #endif
-
-#ifdef TEST_RAW_EXCEPTION_CODE
-	printk("Testing exception handling Part 1\n");
-	/*
-	 * Cause a software exception
-	 */
-	__asm__ __volatile ("sc");
-	/*
-	 * Check we can still catch exceptions and return coorectly.
-	 */
-	printk("Testing exception handling Part 2\n");
-	__asm__ __volatile ("sc");
-
-	/*
-	 * Somehow doing the above seems to clobber SPRG0 on the mvme2100.  The
-	 * interrupt disable mask is stored in SPRG0. Is this a problem?
-	 */
-	ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT);
-
-#endif
-
-/* See above */
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
 	if ( (chpt = strstr(BSP_commandline_string,"MEMSZ=")) ) {
 		char		*endp;
