@@ -1,5 +1,11 @@
 2009-03-05	Till Straumann <strauman@slac.stanford.edu>
 
+	* bootcard.c: use aligned heap_start (instead of
+	original heap_start) when calculating default heap
+	size (to take into account loss due to alignment).
+
+2009-03-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* vmeUniverse/vmeTsi148.h, vmeUniverse/vmeTsi148.c:
 	fixed function declarations to silence compiler
 	warnings.
