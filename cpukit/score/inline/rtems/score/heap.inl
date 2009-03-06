@@ -380,7 +380,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Heap_Get_size (
   Heap_Control *the_heap
 )
 {
-  return the_heap->final - the_heap->start;
+  return the_heap->end - the_heap->begin;
 }
 
 /**@}*/

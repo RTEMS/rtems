@@ -1,3 +1,8 @@
+2009-03-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/inline/rtems/score/heap.inl: Use the correct fields and do end
+	- begin.
+
 2009-03-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/malloc_initialize.c: Fixed invalid function
