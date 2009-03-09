@@ -45,6 +45,8 @@
  */
 #define BSP_HAS_TQMMON
 
+#include <libcpu/powerpc-utility.h>
+
 LINKER_SYMBOL(TopRamReserved);
 
 LINKER_SYMBOL( bsp_ram_start);

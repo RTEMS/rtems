@@ -1,3 +1,7 @@
+2009-03-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bsp.h: Added missing include.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Change prototype of IDLE thread to consistently
