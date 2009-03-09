@@ -49,7 +49,7 @@ _hash_search(
     fat_file_fd_t			   **ret
 );
 
-static int
+static off_t
 fat_file_lseek(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     fat_file_fd_t                         *fat_fd,
@@ -940,7 +940,7 @@ _hash_search(
     return -1;
 }
 
-static int
+static off_t
 fat_file_lseek(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
     fat_file_fd_t                         *fat_fd,

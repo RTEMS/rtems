@@ -258,7 +258,7 @@ ssize_t msdos_file_write(
   size_t         count            /* IN  */
 );
 
-int msdos_file_lseek(
+off_t msdos_file_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
@@ -308,7 +308,7 @@ ssize_t msdos_dir_read(
   size_t         count             /* IN  */
 );
 
-int msdos_dir_lseek(
+off_t msdos_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */

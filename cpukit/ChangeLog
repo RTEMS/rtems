@@ -1,3 +1,13 @@
+2009-03-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1376/filesystem
+	* libcsupport/include/rtems/libio.h, libfs/src/dosfs/fat_file.c,
+	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_dir.c,
+	libfs/src/dosfs/msdos_file.c, libfs/src/imfs/deviceio.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/memfile.c, libfs/src/nfsclient/src/nfs.c: lseek
+	handlers should return off_t.
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1388/cpukit

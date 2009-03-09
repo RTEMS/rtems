@@ -235,7 +235,7 @@ int device_ioctl(
  *  This handler eats all lseek() operations.
  */
 
-int device_lseek(
+off_t device_lseek(
   rtems_libio_t *iop,
   off_t          offset,
   int            whence
