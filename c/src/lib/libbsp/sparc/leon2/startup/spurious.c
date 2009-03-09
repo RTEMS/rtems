@@ -33,7 +33,7 @@ rtems_isr bsp_spurious_handler(
 
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
 
-  printk( "Unexpected trap (0x%2d) at address 0x%08x\n", real_trap, isf->tpc);
+  printk( "Unexpected trap (%2d) at address 0x%08x\n", real_trap, isf->tpc);
 
   switch (real_trap) {
 
