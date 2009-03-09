@@ -15,6 +15,8 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+#include <rtems/powerpc/powerpc.h>
+
 /*
  *  Stuff for Time Test 27
  */

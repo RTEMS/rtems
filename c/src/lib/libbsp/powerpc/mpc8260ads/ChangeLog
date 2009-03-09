@@ -1,3 +1,7 @@
+2009-03-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* include/tm27.h: Add include rtems/powerpc/powerpc.h
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.
