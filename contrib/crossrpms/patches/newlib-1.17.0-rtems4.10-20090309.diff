@@ -1,10 +1,12 @@
 diff -Naur newlib-1.17.0.orig/newlib/ChangeLog.rtems newlib-1.17.0/newlib/ChangeLog.rtems
 --- newlib-1.17.0.orig/newlib/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
-+++ newlib-1.17.0/newlib/ChangeLog.rtems	2009-03-09 13:34:37.000000000 +0100
-@@ -0,0 +1,44 @@
++++ newlib-1.17.0/newlib/ChangeLog.rtems	2009-03-09 14:54:26.000000000 +0100
+@@ -0,0 +1,46 @@
 +2009-03-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 +
 +	* libc/machine/powerpc/times.c: Remove.
++	* libc/machine/powerpc/Makefile.am: Remove times.c.
++	* libc/machine/powerpc/Makefile.in: Regenerate.
 +
 +2009-02-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 +
@@ -223,6 +225,125 @@ diff -Naur newlib-1.17.0.orig/newlib/libc/machine/lm32/configure.in newlib-1.17.
  
  dnl Can't be done in NEWLIB_CONFIGURE because that confuses automake. 
  AC_CONFIG_AUX_DIR(../../../..)
+diff -Naur newlib-1.17.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.17.0/newlib/libc/machine/powerpc/Makefile.am
+--- newlib-1.17.0.orig/newlib/libc/machine/powerpc/Makefile.am	2007-05-24 19:33:35.000000000 +0200
++++ newlib-1.17.0/newlib/libc/machine/powerpc/Makefile.am	2009-03-09 14:05:35.000000000 +0100
+@@ -10,7 +10,7 @@
+ 
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+ 
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS=$(AM_CCASFLAGS)
+ lib_a_CFLAGS=$(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+diff -Naur newlib-1.17.0.orig/newlib/libc/machine/powerpc/Makefile.in newlib-1.17.0/newlib/libc/machine/powerpc/Makefile.in
+--- newlib-1.17.0.orig/newlib/libc/machine/powerpc/Makefile.in	2008-09-29 17:40:37.000000000 +0200
++++ newlib-1.17.0/newlib/libc/machine/powerpc/Makefile.in	2009-03-09 14:05:46.000000000 +0100
+@@ -39,8 +39,7 @@
+ DIST_COMMON = $(srcdir)/../../../../config.guess \
+ 	$(srcdir)/../../../../config.sub $(srcdir)/Makefile.in \
+ 	$(srcdir)/Makefile.am $(top_srcdir)/configure \
+-	$(am__configure_deps) $(srcdir)/../../../../mkinstalldirs \
+-	$(srcdir)/../../../../compile
++	$(am__configure_deps) $(srcdir)/../../../../mkinstalldirs
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/../../../acinclude.m4 \
+@@ -54,7 +53,7 @@
+ LIBRARIES = $(noinst_LIBRARIES)
+ ARFLAGS = cru
+ lib_a_AR = $(AR) $(ARFLAGS)
+-am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT) lib_a-times.$(OBJEXT)
++am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT)
+ lib_a_OBJECTS = $(am_lib_a_OBJECTS)
+ DEFAULT_INCLUDES = -I. -I$(srcdir)
+ depcomp =
+@@ -128,11 +127,6 @@
+ USE_LIBTOOL_FALSE = @USE_LIBTOOL_FALSE@
+ USE_LIBTOOL_TRUE = @USE_LIBTOOL_TRUE@
+ VERSION = @VERSION@
+-ac_ct_AR = @ac_ct_AR@
+-ac_ct_AS = @ac_ct_AS@
+-ac_ct_RANLIB = @ac_ct_RANLIB@
+-ac_ct_READELF = @ac_ct_READELF@
+-ac_ct_STRIP = @ac_ct_STRIP@
+ aext = @aext@
+ am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
+ am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
+@@ -148,6 +142,9 @@
+ build_os = @build_os@
+ build_vendor = @build_vendor@
+ datadir = @datadir@
++datarootdir = @datarootdir@
++docdir = @docdir@
++dvidir = @dvidir@
+ exec_prefix = @exec_prefix@
+ extra_objs = @extra_objs@
+ extra_sources = @extra_sources@
+@@ -156,12 +153,14 @@
+ host_cpu = @host_cpu@
+ host_os = @host_os@
+ host_vendor = @host_vendor@
++htmldir = @htmldir@
+ includedir = @includedir@
+ infodir = @infodir@
+ install_sh = @install_sh@
+ libdir = @libdir@
+ libexecdir = @libexecdir@
+ libm_machine_dir = @libm_machine_dir@
++localedir = @localedir@
+ localstatedir = @localstatedir@
+ lpfx = @lpfx@
+ machine_dir = @machine_dir@
+@@ -170,8 +169,10 @@
+ newlib_basedir = @newlib_basedir@
+ oext = @oext@
+ oldincludedir = @oldincludedir@
++pdfdir = @pdfdir@
+ prefix = @prefix@
+ program_transform_name = @program_transform_name@
++psdir = @psdir@
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+ sys_dir = @sys_dir@
+@@ -182,7 +183,7 @@
+ AM_CCASFLAGS = $(INCLUDES)
+ noinst_LIBRARIES = lib.a
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS = $(AM_CCASFLAGS)
+ lib_a_CFLAGS = $(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+@@ -193,7 +194,7 @@
+ all: all-am
+ 
+ .SUFFIXES:
+-.SUFFIXES: .S .c .o .obj
++.SUFFIXES: .S .o .obj
+ am--refresh:
+ 	@:
+ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+@@ -252,18 +253,6 @@
+ 
+ lib_a-setjmp.obj: setjmp.S
+ 	$(CCAS) $(lib_a_CCASFLAGS) $(CCASFLAGS) -c -o lib_a-setjmp.obj `if test -f 'setjmp.S'; then $(CYGPATH_W) 'setjmp.S'; else $(CYGPATH_W) '$(srcdir)/setjmp.S'; fi`
+-
+-.c.o:
+-	$(COMPILE) -c $<
+-
+-.c.obj:
+-	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+-
+-lib_a-times.o: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.o `test -f 'times.c' || echo '$(srcdir)/'`times.c
+-
+-lib_a-times.obj: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.obj `if test -f 'times.c'; then $(CYGPATH_W) 'times.c'; else $(CYGPATH_W) '$(srcdir)/times.c'; fi`
+ uninstall-info-am:
+ 
+ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 diff -Naur newlib-1.17.0.orig/newlib/libc/machine/powerpc/times.c newlib-1.17.0/newlib/libc/machine/powerpc/times.c
 --- newlib-1.17.0.orig/newlib/libc/machine/powerpc/times.c	2002-07-22 22:26:51.000000000 +0200
 +++ newlib-1.17.0/newlib/libc/machine/powerpc/times.c	1970-01-01 01:00:00.000000000 +0100
