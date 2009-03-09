@@ -75,6 +75,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if "powerpc-rtems4.10" == "h8300-rtems4.10"
 %define build_sim --disable-sim
 %endif
+%if "powerpc-rtems4.10" == "lm32-rtems4.10"
+%define build_sim --disable-sim
+%endif
 %if "powerpc-rtems4.10" == "mipstx39-rtems4.10"
 %define build_sim --disable-sim
 %endif
