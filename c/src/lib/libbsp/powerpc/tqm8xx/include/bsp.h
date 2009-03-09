@@ -40,6 +40,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#include <libcpu/powerpc-utility.h>
+
 LINKER_SYMBOL(TopRamReserved);
 
 LINKER_SYMBOL( bsp_ram_start);

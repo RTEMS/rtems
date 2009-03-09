@@ -1,3 +1,7 @@
+2009-03-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/bsp.h: Added missing include.
+
 2009-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Remove stray % from '*startfile:' having crept in
