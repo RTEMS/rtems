@@ -82,7 +82,7 @@ typedef int (*rtems_filesystem_ioctl_t)(
   void          *buffer
 );
 
-typedef int (*rtems_filesystem_lseek_t)(
+typedef off_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
   off_t          length,
   int            whence

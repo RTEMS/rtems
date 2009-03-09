@@ -182,7 +182,7 @@ int imfs_dir_close(
  *     SEEK_END - N/A --> This will cause an assert.
  */
 
-int imfs_dir_lseek(
+off_t imfs_dir_lseek(
   rtems_libio_t  *iop,
   off_t           offset,
   int             whence

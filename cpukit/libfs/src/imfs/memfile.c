@@ -214,7 +214,7 @@ int memfile_ioctl(
  *  This routine processes the lseek() system call.
  */
 
-int memfile_lseek(
+off_t memfile_lseek(
   rtems_libio_t   *iop,
   off_t            offset,
   int              whence

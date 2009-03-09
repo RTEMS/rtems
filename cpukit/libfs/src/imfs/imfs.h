@@ -391,7 +391,7 @@ ssize_t imfs_dir_read(
   size_t         count             /* IN  */
 );
 
-int imfs_dir_lseek(
+off_t imfs_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
@@ -435,7 +435,7 @@ int memfile_ioctl(
   void          *buffer           /* IN  */
 );
 
-int memfile_lseek(
+off_t memfile_lseek(
   rtems_libio_t        *iop,        /* IN  */
   off_t                 offset,     /* IN  */
   int                   whence      /* IN  */
@@ -474,7 +474,7 @@ int device_ioctl(
   void          *buffer             /* IN  */
 );
 
-int device_lseek(
+off_t device_lseek(
   rtems_libio_t *iop,               /* IN  */
   off_t          offset,            /* IN  */
   int            whence             /* IN  */

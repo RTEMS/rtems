@@ -223,7 +223,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
  *     new offset on success, or -1 if error occured (errno set
  *     appropriately).
  */
-int
+off_t
 msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
     int                rc = RC_OK;
