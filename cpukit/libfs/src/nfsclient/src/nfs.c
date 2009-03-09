@@ -2737,7 +2737,7 @@ static int nfs_file_ioctl(
 #define nfs_link_ioctl 0
 #endif
 
-static int nfs_file_lseek(
+static off_t nfs_file_lseek(
 	rtems_libio_t *iop,
 	off_t          length,
 	int            whence
@@ -2770,7 +2770,7 @@ static int nfs_file_lseek(
 	return iop->offset;
 }
 
-static int nfs_dir_lseek(
+static off_t nfs_dir_lseek(
 	rtems_libio_t *iop,
 	off_t          length,
 	int            whence
