@@ -1,3 +1,8 @@
+2009-03-10	Ralf Corsépius <ralfcorsepius@rtems.org>
+
+	* configure.ac: Check for creat().
+	* libcsupport/src/creat.c: Build conditionally.
+
 2009-03-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1376/filesystem
