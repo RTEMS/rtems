@@ -28,6 +28,11 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if "@tool_target@" == "h8300-rtems@rtems_api@"
 %define build_sim --disable-sim
 %endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "@tool_target@" == "m32c-rtems@rtems_api@"
+%define build_sim --disable-sim
+%endif
+%endif
 %if "@tool_target@" == "lm32-rtems@rtems_api@"
 %define build_sim --disable-sim
 %endif
