@@ -19,11 +19,11 @@ NEWLIB_RPMREL = `expr 21 + $(GCC_RPMREL)`
 include ../gcc.am
 GCC_OPTS += --disable-infos
 
-GDB_VERS = 6.8
+GDB_VERS = 6.8.50.20090224
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 9
+GDB_RPMREL = 3
 include ../gdb.am
-GDB_OPTS +=
+GDB_OPTS += -disable-infos
 
 CPUKIT_VERS = 4.9.99.0
 CPUKIT_PKGVERS = $(CPUKIT_VERS)-20090206-2
