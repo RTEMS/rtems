@@ -1,3 +1,10 @@
+2009-03-10	Eric Norum <norume@aps.anl.gov>
+
+	* bootcard.c: Swap order of RTEMS Workspace and Malloc Heap. This
+	allows the potential for sbrk() to extend the heap area. This
+	actually is done on PowerPC BSPs with more than 32MB which use
+	dynamic loading.
+
 2009-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* bootcard.c: use aligned heap_start (instead of

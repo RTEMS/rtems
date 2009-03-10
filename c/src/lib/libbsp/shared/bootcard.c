@@ -73,8 +73,8 @@ static rtems_status_code bootcard_bsp_libc_helper(
 
   if ( !rtems_unified_work_area && 
        heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA) {
-    /* Use the work area start as heap start */
-    heap_start = work_area_start;
+    /* Place the heap immediately following the work area */
+    heap_start = work_area_start + rtems_configuration_get_work_space_size();
 
     /* Ensure proper alignement */
     if ((uintptr_t) heap_start & (CPU_ALIGNMENT - 1)) {
@@ -83,11 +83,10 @@ static rtems_status_code bootcard_bsp_libc_helper(
     }
 
     /*
-     * For the default heap size use the free space from the start of the
-     * work area up to the work space start as heap area.
+     * For the default heap size use the free space from the end of the
+     * work space up to the end of the work area as heap.
      */
-    heap_size_default = (intptr_t) ((char *) Configuration.work_space_start
-      - (char *) heap_start);
+    heap_size_default = work_area_size - rtems_configuration_get_work_space_size();
 
     /* Keep it as a multiple of 16 bytes */
     heap_size_default &= ~((intptr_t) 0xf);
@@ -182,8 +181,7 @@ int boot_card(
     Configuration.work_space_start = work_area_start;
     Configuration.work_space_size  = work_area_size;
   } else {
-    Configuration.work_space_start = (char *) work_area_start +
-      work_area_size - rtems_configuration_get_work_space_size();
+    Configuration.work_space_start = (char *) work_area_start;
   }
 
   #if (BSP_DIRTY_MEMORY == 1)
