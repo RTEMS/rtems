@@ -39,6 +39,7 @@ void __assert_func(
   rtems_fatal_error_occurred(0);
 }
 
+#ifndef HAVE___ASSERT
 void __assert(
   const char *file,
   int         line,
@@ -47,3 +48,4 @@ void __assert(
 {
   __assert_func (file, line, NULL, failedexpr);
 }
+#endif
