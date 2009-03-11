@@ -1,3 +1,8 @@
+2009-03-11	Ralf Corsépius <ralfcorsepius@rtems.org>
+
+	* configure.ac: Check of __assert().
+	* libcsupport/src/__assert.c: Conditionally build __assert().
+
 2009-03-10	Ralf Corsépius <ralfcorsepius@rtems.org>
 
 	* configure.ac: Check for creat().
