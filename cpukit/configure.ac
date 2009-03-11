@@ -59,6 +59,7 @@ AC_CHECK_FUNCS([sleep usleep \
   opendir closedir readdir readdir_r \
   rewinddir scandir seekdir telldir isatty])
 AC_CHECK_FUNCS([creat])
+AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
 
