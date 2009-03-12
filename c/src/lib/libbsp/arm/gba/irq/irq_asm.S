@@ -83,13 +83,13 @@ PUBLIC_ARM_FUNCTION(_ISR_Handler)
 
 /* If a task switch is necessary, call scheduler */
         ldr     r0, =_Context_Switch_necessary
-        ldr     r1, [r0]
+        ldrb    r1, [r0]
         cmp     r1, #0
 
         /* since bframe is going to clear _ISR_Signals_to_thread_executing, */
         /*    we need to load it here */
         ldr     r0, =_ISR_Signals_to_thread_executing
-        ldr     r1, [r0]
+        ldrb    r1, [r0]
         bne     bframe
 
 /* If a signals to be sent (_ISR_Signals_to_thread_executing != 0),        */
@@ -99,7 +99,7 @@ PUBLIC_ARM_FUNCTION(_ISR_Handler)
 
 /* _ISR_Signals_to_thread_executing = FALSE */
         mov     r1, #0
-        str     r1, [r0]
+        strb    r1, [r0]
 
 bframe:
 /* Now we need to set up the return from this ISR to be _ISR_Dispatch */

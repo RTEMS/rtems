@@ -268,16 +268,16 @@ nested:
 	 * do something with the current thread...
 	 */
 	addis	r4, 0, _Context_Switch_necessary@ha
-	lwz	r5, _Context_Switch_necessary@l(r4)
+	lbz	r5, _Context_Switch_necessary@l(r4)
 	cmpwi	r5, 0
 	bne	switch
 
 	addis	r6, 0, _ISR_Signals_to_thread_executing@ha
-	lwz	r7, _ISR_Signals_to_thread_executing@l(r6)
+	lbz	r7, _ISR_Signals_to_thread_executing@l(r6)
 	cmpwi	r7, 0
 	li	r8, 0
 	beq	easy_exit
-	stw	r8, _ISR_Signals_to_thread_executing@l(r6)
+	stb	r8, _ISR_Signals_to_thread_executing@l(r6)
 	/*
 	 * going to call _ThreadProcessSignalsFromIrq
 	 * Push a complete exception like frame...
