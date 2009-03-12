@@ -139,17 +139,17 @@ nested:
                                             /* Is dispatch disabled */
         jne       .exit                     /* Yes, then exit */
 
-        cmpl      $0, SYM (_Context_Switch_necessary)
+        cmpb      $0, SYM (_Context_Switch_necessary)
                                             /* Is task switch necessary? */
         jne	  .schedule		    /* Yes, then call the scheduler */
 
-        cmpl      $0, SYM (_ISR_Signals_to_thread_executing)
+        cmpb      $0, SYM (_ISR_Signals_to_thread_executing)
                                             /* signals sent to Run_thread */
                                             /*   while in interrupt handler? */
         je        .exit                     /* No, exit */
 
 .bframe:
-        movl      $0, SYM (_ISR_Signals_to_thread_executing)
+        movb      $0, SYM (_ISR_Signals_to_thread_executing)
 	/*
 	 * This code is the less critical path. In order to have a single
 	 * Thread Context, we take the same frame than the one pushed on
