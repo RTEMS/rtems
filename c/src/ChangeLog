@@ -1,3 +1,9 @@
+2009-03-12	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1392/bsps
+	* libchip/i2c/spi-memdrv.c: SPI Memory driver. Fix but where writes
+	over multiple pages results in extra data being written.
+
 2009-02-27	Gene Smith <gene.smith@siemens.com>
 
 	PR 1356
