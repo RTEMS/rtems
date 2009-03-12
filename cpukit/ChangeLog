@@ -1,3 +1,9 @@
+2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1393/cpukit
+	* posix/src/mutextranslatereturncode.c: Add entry to table for
+	CORE_MUTEX_RELEASE_NOT_ORDER.
+
 2009-03-11	Ralf Corsépius <ralfcorsepius@rtems.org>
 
 	* configure.ac: Check for __assert().

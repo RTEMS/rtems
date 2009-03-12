@@ -39,6 +39,9 @@ static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
   EPERM,                  /* CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE */
   EINVAL,                 /* CORE_MUTEX_WAS_DELETED */
   ETIMEDOUT,              /* CORE_MUTEX_TIMEOUT */
+#ifdef __RTEMS_STRICT_ORDER_MUTEX__
+  EDEADLK,                /* CORE_MUTEX_RELEASE_NOT_ORDER */
+#endif
   EINVAL                  /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
 };
 
