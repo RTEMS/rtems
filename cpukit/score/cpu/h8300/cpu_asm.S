@@ -145,10 +145,10 @@ nested:
 	mov.l	er1,@__Thread_Dispatch_disable_level
 	bne		exit
 	
-	mov.l	@__Context_Switch_necessary,er1
+	mov.b	@__Context_Switch_necessary,er1
 	bne		bframe		; If yes then dispatch next task
 	
-	mov.l	@__ISR_Signals_to_thread_executing,er1
+	mov.b	@__ISR_Signals_to_thread_executing,er1
 	beq		exit		; If no signals waiting
 
 	/* Context switch here through ISR_Dispatch */

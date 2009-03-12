@@ -474,7 +474,7 @@ noHandler:
 	sp = [sp];
 noStackRestore:
 
-	/* check this stuff to insure context_switch_necessary and
+	/* check this stuff to ensure context_switch_necessary and
 	   isr_signals_to_thread_executing are being handled appropriately. */
 	p0.h = __Thread_Dispatch_disable_level;
 	p0.l = __Thread_Dispatch_disable_level;
@@ -487,17 +487,17 @@ noStackRestore:
 	/* do thread dispatch if necessary */
 	p0.h = __Context_Switch_necessary;
 	p0.l = __Context_Switch_necessary;
-	r0 = [p0];
+	r0 = B[p0] (Z);
 	cc = r0 == 0;
 	p0.h = __ISR_Signals_to_thread_executing;
 	p0.l = __ISR_Signals_to_thread_executing;
 	if !cc jump doDispatch
-	r0 = [p0];
+	r0 = B[p0] (Z);
 	cc = r0 == 0;
 	if cc jump noDispatch
 doDispatch:
 	r0 = 0;
-	[p0] = r0;
+	B[p0] = r0;
 	raise 15;
 noDispatch:
 	r0 = [sp++];

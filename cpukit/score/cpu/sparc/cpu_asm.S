@@ -665,7 +665,7 @@ dont_fix_pil2:
          *  return to the interrupt dispatcher.
          */
 
-        ld       [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
+        ldub     [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
 
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
         bnz      SYM(_ISR_Dispatch) ! yes, then invoke the dispatcher
@@ -677,7 +677,7 @@ dont_fix_pil2:
          *  executing task.  If so, we need to invoke the interrupt dispatcher.
          */
 
-        ld       [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
+        ldub     [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
 
         orcc     %l7, %g0, %g0   ! Were signals sent to the currently
                                  !   executing thread?
@@ -734,11 +734,11 @@ isr_dispatch:
          */
 
         sethi    %hi(SYM(_Context_Switch_necessary)), %l4
-        ld       [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
+        ldub     [%l4 + %lo(SYM(_Context_Switch_necessary))], %l5
 
         ! NOTE: Use some of delay slot to start loading this
         sethi    %hi(SYM(_ISR_Signals_to_thread_executing)), %l6
-        ld       [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
+        ldub     [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))], %l7
 
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
         bnz      dispatchAgain   ! yes, then invoke the dispatcher AGAIN
