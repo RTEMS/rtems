@@ -96,8 +96,8 @@ name:;                                          \
 
 EXTERN(_ISR_Nest_level, 4)
 EXTERN(_Thread_Dispatch_disable_level,4)
-EXTERN(_Context_Switch_necessary,4)
-EXTERN(_ISR_Signals_to_thread_executing,4)
+EXTERN(_Context_Switch_necessary,1)
+EXTERN(_ISR_Signals_to_thread_executing,1)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
@@ -321,10 +321,10 @@ _ISR_Handler_cleanup:
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
-        lw	t0,_Context_Switch_necessary
-        lw	t1,_ISR_Signals_to_thread_executing
+        lb	t0,_Context_Switch_necessary
+        lb	t1,_ISR_Signals_to_thread_executing
 	NOP
-        or	t0,t0,t1
+        or 	t0,t0,t1
         beq	t0,zero,_ISR_Handler_exit
         NOP
 
