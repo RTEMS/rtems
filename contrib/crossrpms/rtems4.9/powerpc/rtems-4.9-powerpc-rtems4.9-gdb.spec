@@ -52,23 +52,48 @@ Name:		rtems-4.9-powerpc-rtems4.9-gdb
 Summary:	Gdb for target powerpc-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
+%define build_sim --enable-sim
+%if "%{_build}" != "%{_host}"
+# psim doesn't support Cdn-X
+%if "powerpc-rtems4.9" == "powerpc-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%endif
+
+%ifos mingw mingw32
+# Mingw lacks functions required by the simulator
+%if "powerpc-rtems4.9" == "sparc-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%if "powerpc-rtems4.9" == "h8300-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "powerpc-rtems4.9" == "m32c-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%endif
+%if "powerpc-rtems4.9" == "lm32-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%if "powerpc-rtems4.9" == "mipstx39-rtems4.9"
+%define build_sim --disable-sim
+%endif
+%endif
+
 %if "%{gdb_version}" >= "6.6"
 # suse
-%if "%{?suse}"
 %if "%{?suse}" >= "10.3"
 BuildRequires: libexpat-devel
 %else
-BuildRequires: expat
-%endif
-%else
-# fedora/redhat/cygwin
+# Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
 %endif
@@ -91,7 +116,7 @@ Requires:	rtems-4.9-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.8"
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.8-rtems4.9-20080917.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.8-rtems4.9-20090312.diff
 %endif
 
 %description
@@ -123,12 +148,15 @@ rm -f gdb-%{gdb_version}/readline/configure
     --without-included-gettext \
     --disable-win32-registry \
     --disable-werror \
-    --enable-sim \
+    %{build_sim} \
 %if "%{gdb_version}" >= "6.7"
     --with-system-readline \
 %endif
 %if "%{gdb_version}" >= "6.6"
     --with-expat \
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+    --without-python \
 %endif
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
