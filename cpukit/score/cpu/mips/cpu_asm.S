@@ -584,8 +584,8 @@ ENDFRAME(_CPU_Context_restore)
 	
 ASM_EXTERN(_ISR_Nest_level,4)
 ASM_EXTERN(_Thread_Dispatch_disable_level,4)
-ASM_EXTERN(_Context_Switch_necessary,4)
-ASM_EXTERN(_ISR_Signals_to_thread_executing,4)
+ASM_EXTERN(_Context_Switch_necessary,1)
+ASM_EXTERN(_ISR_Signals_to_thread_executing,1)
 ASM_EXTERN(_Thread_Executing,4)
 	
 .extern _Thread_Dispatch
@@ -964,8 +964,8 @@ _ISR_Handler_1:
    *  if ( !_Context_Switch_necessary && !_ISR_Signals_to_thread_executing )
    *    goto the label "exit interrupt (simple case)"
    */
-        lw	t0,_Context_Switch_necessary
-        lw	t1,_ISR_Signals_to_thread_executing
+        lbu	t0,_Context_Switch_necessary
+        lbu	t1,_ISR_Signals_to_thread_executing
 	NOP
         or	t0,t0,t1
         beq	t0,zero,_ISR_Handler_exit

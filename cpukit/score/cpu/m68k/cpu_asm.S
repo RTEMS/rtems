@@ -337,16 +337,16 @@ SYM (_ISR_Handler):
         beq.b   exit        
   #endif
 #endif
-        tstl    SYM (_Context_Switch_necessary)
+        tstb    SYM (_Context_Switch_necessary)
                                          | Is thread switch necessary?
         bne.b   bframe                   | Yes, invoke dispatcher
 
-        tstl    SYM (_ISR_Signals_to_thread_executing)
+        tstb    SYM (_ISR_Signals_to_thread_executing)
                                          | signals sent to Run_thread
                                          |   while in interrupt handler?
         beq.b   exit                     | No, then exit
 
-bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
+bframe: clrb    SYM (_ISR_Signals_to_thread_executing)
                                          | If sent, will be processed
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   msp,a0                   | a0 = master stack pointer

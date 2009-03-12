@@ -1,3 +1,11 @@
+2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1385/cpukit
+	* cpu_asm.S: When the type rtems_boolean was switched to the C99 bool,
+	the size changed from 4 bytes to 1 byte. The interrupt dispatching
+	code accesses two boolean variables for scheduling purposes and the
+	assembly implementations of this code did not get updated.
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Change prototype of IDLE thread to
