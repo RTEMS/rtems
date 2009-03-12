@@ -7,6 +7,9 @@
 #ifndef _RTEMS_FTPD_H
 #define _RTEMS_FTPD_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define FTPD_CONTROL_PORT   21
 
@@ -52,5 +55,9 @@ struct rtems_ftpd_configuration
 #define ERROR           5       /* permanent negative completion */
 
 int rtems_initialize_ftpd(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  /* _RTEMS_FTPD_H */
