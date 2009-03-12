@@ -241,7 +241,7 @@ off_t device_lseek(
   int            whence
 )
 {
-  return 0;
+  return offset;
 }
 
 /*

@@ -1,3 +1,9 @@
+2009-03-12	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	PR 1378/filesystem
+	* libfs/src/imfs/deviceio.c: IMFS device lseek should return the
+	current offset.
+
 2009-03-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1376/filesystem
