@@ -164,7 +164,7 @@ rtems_status_code spi_memdrv_write
   }
   while ((rc == RTEMS_SUCCESSFUL) && 
 	 (cnt > bytes_sent)) {
-    curr_cnt = cnt;
+    curr_cnt = cnt - bytes_sent;
     if ((mem_param_ptr->page_size > 0) &&
 	(off              / mem_param_ptr->page_size) != 
 	((off+curr_cnt+1) / mem_param_ptr->page_size)) {
