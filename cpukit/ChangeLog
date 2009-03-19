@@ -1,3 +1,7 @@
+2009-03-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/ide_part_table.c: Fixed NULL pointer access.
+
 2009-03-12	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	PR 1378/filesystem

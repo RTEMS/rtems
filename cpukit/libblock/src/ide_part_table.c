@@ -376,10 +376,10 @@ read_mbr(rtems_disk_desc_t *disk_desc)
          part_num < RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER;
          part_num++)
     {
-        if (is_extended(disk_desc->partitions[part_num]->sys_type))
+        part_desc = disk_desc->partitions[part_num];
+        if (part_desc != NULL && is_extended(part_desc->sys_type))
         {
-            read_extended_partition(disk_desc->partitions[part_num]->start,
-                                    disk_desc->partitions[part_num]);
+            read_extended_partition(part_desc->start, part_desc);
         }
     }
 
