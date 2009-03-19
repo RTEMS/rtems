@@ -199,7 +199,18 @@ start_code_in_rom:
 #ifdef OR3_VAL
 	SET_IMM_REGW r31,r30,OR3_OFF,OR3_VAL
 #endif
-	
+#ifdef BR4_VAL
+	SET_IMM_REGW r31,r30,BR4_OFF,BR4_VAL
+#endif
+#ifdef OR4_VAL
+	SET_IMM_REGW r31,r30,OR4_OFF,OR4_VAL
+#endif
+#ifdef BR5_VAL
+	SET_IMM_REGW r31,r30,BR5_OFF,BR5_VAL
+#endif
+#ifdef OR5_VAL
+	SET_IMM_REGW r31,r30,OR5_OFF,OR5_VAL
+#endif
 	/*
 	 * ROM startup: init SDRAM access window
 	 */

@@ -1,3 +1,8 @@
+2009-03-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* start/start.S, include/hwreg_vals.h, startup/cpuinit.c:
+	correct some init values for HSC_CM01 boards
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

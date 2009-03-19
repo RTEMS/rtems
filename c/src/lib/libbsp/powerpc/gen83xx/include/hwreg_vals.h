@@ -207,26 +207,26 @@
 #define LBLAWBAR0_VAL  bsp_rom_start
 #define LBLAWAR0_VAL   0x80000018
 #define LBLAWBAR1_VAL  (FPGA_CONFIG_START)
-#define LBLAWAR1_VAL   0x80000015
+#define LBLAWAR1_VAL   0x80000018
 #define DDRLAWBAR0_VAL bsp_ram_start
 #define DDRLAWAR0_VAL  0x8000001B
 /*
  * Local Bus (Memory) Controller
  * FIXME: decode bit settings 
  */
-#define BR0_VAL 0xFE001001
+#define BR0_VAL (0xFE000000 | 0x01001)
 #define OR0_VAL 0xFE000E54
 // fpga config access range (UPM_A) (32 kByte)
 #define BR2_VAL (FPGA_CONFIG_START | 0x01881)
-#define OR2_VAL 0xFFF80100
+#define OR2_VAL 0xFFFF9100
 
 // fpga register access range (UPM_B) (8 MByte)
 #define BR3_VAL (FPGA_REGISTER_START | 0x018A1)
-#define OR3_VAL 0xFF800100
+#define OR3_VAL 0xFF801100
 
-// fpga fifo access range (UPM_B) (8 MByte)
-#define BR4_VAL (FPGA_FIFO_START | 0x018A1)
-#define OR4_VAL 0xFF800100
+// fpga fifo access range (UPM_C) (8 MByte)
+#define BR4_VAL (FPGA_FIFO_START | 0x018C1)
+#define OR4_VAL 0xFF801100
 
 /*
  * SDRAM registers
