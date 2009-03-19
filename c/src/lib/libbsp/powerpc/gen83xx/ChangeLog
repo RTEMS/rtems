@@ -1,3 +1,8 @@
+2009-03-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* start/start.S, include/hwreg_vals.h, startup/cpuinit.c:
+	correct some init values for HSC_CM01 boards
+
 2009-02-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspstart.c: Change prototype of IDLE thread to consistently

@@ -235,7 +235,7 @@ void cpu_init( void)
       (uint32_t) bsp_rom_start,
       (uint32_t) bsp_rom_size,
     #endif /* HAS_UBOOT */
-    false,
+    true,
     false,
     false,
     false,
