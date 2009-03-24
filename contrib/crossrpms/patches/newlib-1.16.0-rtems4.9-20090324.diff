@@ -1,0 +1,1199 @@
+diff -Naur newlib-1.16.0.orig/newlib/ChangeLog.rtems newlib-1.16.0/newlib/ChangeLog.rtems
+--- newlib-1.16.0.orig/newlib/ChangeLog.rtems	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.16.0/newlib/ChangeLog.rtems	2009-03-24 04:29:55.000000000 +0100
+@@ -0,0 +1,5 @@
++2009-03-09	Ralf Corsépius <ralf.corsepius@rtems.org>
++
++	* libc/machine/powerpc/times.c: Remove.
++	* libc/machine/powerpc/Makefile.am: Remove times.c.
++	* libc/machine/powerpc/Makefile.in: Regenerate.
+diff -Naur newlib-1.16.0.orig/newlib/configure.host newlib-1.16.0/newlib/configure.host
+--- newlib-1.16.0.orig/newlib/configure.host	2007-11-07 22:42:24.000000000 +0100
++++ newlib-1.16.0/newlib/configure.host	2009-03-24 04:29:55.000000000 +0100
+@@ -528,6 +528,7 @@
+ #  NOTE: When newlib malloc uses a semaphore, RTEMS will switch to that.
+   *-*-rtems*)
+ 	default_newlib_io_long_long="yes"
++	default_newlib_io_c99_formats="yes"
+ 	newlib_cflags="${newlib_cflags} -DMALLOC_PROVIDED -DEXIT_PROVIDED -DMISSING_SYSCALL_NAMES -DSIGNAL_PROVIDED -DREENTRANT_SYSCALLS_PROVIDED -DHAVE_OPENDIR -DNO_EXEC -DHAVE_FCNTL"
+ 	;;
+ # VxWorks supplies its own version of malloc, and the newlib one
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/getopt.h newlib-1.16.0/newlib/libc/include/getopt.h
+--- newlib-1.16.0.orig/newlib/libc/include/getopt.h	2006-01-04 22:21:52.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/getopt.h	2009-03-24 04:29:55.000000000 +0100
+@@ -89,31 +89,40 @@
+ 
+ /* include files needed by this include file */
+ 
+-/* macros defined by this include file */
+-#define NO_ARG          0
+-#define REQUIRED_ARG    1
+-#define OPTIONAL_ARG    2
+-
+-/* types defined by this include file */
+-
+-struct option
+-{
+-  char *name;                   /* the name of the long option */
+-  int has_arg;                  /* one of the above macros */
+-  int *flag;                    /* determines if getopt_long() returns a
+-                                 * value for a long option; if it is
+-                                 * non-NULL, 0 is returned as a function
+-                                 * value and the value of val is stored in
+-                                 * the area pointed to by flag.  Otherwise,
+-                                 * val is returned. */
+-  int val;                      /* determines the value to return if flag is
+-                                 * NULL. */
+-};
++  /* These #defines are to keep the namespace clear... */
++#define getopt_r		__getopt_r
++#define getopt_long_r		__getopt_long_r
++#define getopt_long_only_r	__getopt_long_only_r
+ 
+ #ifdef __cplusplus
+ extern "C"
+ {
+-#endif
++
++#endif				/* __cplusplus */
++
++/* types defined by this include file */
++  struct option
++  {
++    char *name;			/* the name of the long option */
++    int has_arg;		/* one of the above macros */
++    int *flag;			/* determines if getopt_long() returns a
++				 * value for a long option; if it is
++				 * non-NULL, 0 is returned as a function
++				 * value and the value of val is stored in
++				 * the area pointed to by flag.  Otherwise,
++				 * val is returned. */
++    int val;			/* determines the value to return if flag is
++				 * NULL. */
++
++  };
++
++  /* The getopt_data structure is for reentrancy. Its members are similar to
++     the externally-defined variables.  */
++  typedef struct getopt_data
++  {
++    char *optarg;
++    int optind, opterr, optopt, optwhere;
++  } getopt_data;
+ 
+   /* externally-defined variables */
+   extern char *optarg;
+@@ -122,14 +131,35 @@
+   extern int optopt;
+ 
+   /* function prototypes */
+-  int _EXFUN (getopt, (int __argc, char *const __argv[], const char *__optstring));
+-  int _EXFUN (getopt_long, (int __argc, char *const __argv[], const char *__shortopts, const struct option *__longopts, int *__longind));
+-  int _EXFUN (getopt_long_only, (int __argc, char *const __argv[], const char *__shortopts, const struct option *__longopts, int *__longind));
++  int _EXFUN (getopt,
++	      (int __argc, char *const __argv[], const char *__optstring));
++
++  int _EXFUN (getopt_long,
++	      (int __argc, char *const __argv[], const char *__shortopts,
++	       const struct option * __longopts, int *__longind));
++
++  int _EXFUN (getopt_long_only,
++	      (int __argc, char *const __argv[], const char *__shortopts,
++	       const struct option * __longopts, int *__longind));
++
++  int _EXFUN (__getopt_r,
++	      (int __argc, char *const __argv[], const char *__optstring,
++	       struct getopt_data * __data));
++
++  int _EXFUN (__getopt_long_r,
++	      (int __argc, char *const __argv[], const char *__shortopts,
++	       const struct option * __longopts, int *__longind,
++	       struct getopt_data * __data));
++
++  int _EXFUN (__getopt_long_only_r,
++	      (int __argc, char *const __argv[], const char *__shortopts,
++	       const struct option * __longopts, int *__longind,
++	       struct getopt_data * __data));
+ 
+ #ifdef __cplusplus
+ };
+ 
+-#endif
++#endif /* __cplusplus  */
+ 
+ #endif /* GETOPT_H */
+ 
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/inttypes.h newlib-1.16.0/newlib/libc/include/inttypes.h
+--- newlib-1.16.0.orig/newlib/libc/include/inttypes.h	2005-12-16 20:03:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/inttypes.h	2009-03-24 04:29:55.000000000 +0100
+@@ -242,9 +242,12 @@
+ #define SCNxMAX		__SCNMAX(x)
+ 
+ /* ptr types */
+-#if __have_longlong64
+-#define __PRIPTR(x) __STRINGIFY(ll##x)
+-#define __SCNPTR(x) __STRINGIFY(ll##x)
++#if __ptrint_t_long_defined
++#define __PRIPTR(x) __STRINGIFY(l##x)
++#define __SCNPTR(x) __STRINGIFY(l##x)
++#elif __ptrint_t_int_defined
++#define __PRIPTR(x) __STRINGIFY(x)
++#define __SCNPTR(x) __STRINGIFY(x)
+ #elif __have_long64
+ #define __PRIPTR(x) __STRINGIFY(l##x)
+ #define __SCNPTR(x) __STRINGIFY(l##x)
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/machine/ieeefp.h newlib-1.16.0/newlib/libc/include/machine/ieeefp.h
+--- newlib-1.16.0.orig/newlib/libc/include/machine/ieeefp.h	2007-11-07 22:42:24.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/machine/ieeefp.h	2009-03-24 04:29:55.000000000 +0100
+@@ -62,8 +62,12 @@
+ #  define __IEEE_BIG_ENDIAN
+ # endif
+ #else
+-# define __IEEE_BIG_ENDIAN
+ # ifdef __ARMEL__
++#  define __IEEE_LITTLE_ENDIAN
++# else
++#  define __IEEE_BIG_ENDIAN
++# endif
++# ifdef __ARMWEL__
+ #  define __IEEE_BYTES_LITTLE_ENDIAN
+ # endif
+ #endif
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h newlib-1.16.0/newlib/libc/include/machine/setjmp.h
+--- newlib-1.16.0.orig/newlib/libc/include/machine/setjmp.h	2007-11-07 22:42:24.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/machine/setjmp.h	2009-03-24 04:29:55.000000000 +0100
+@@ -27,7 +27,7 @@
+ 
+ /* necv70 was 9 as well. */
+ 
+-#ifdef __mc68000__
++#if defined(__m68k__) || defined(__mc68000__)
+ /*
+  * onsstack,sigmask,sp,pc,psl,d2-d7,a2-a6,
+  * fp2-fp7	for 68881.
+@@ -268,6 +268,12 @@
+ # define _CYGWIN_WORKING_SIGSETJMP
+ #endif
+ 
++#ifdef _POSIX_THREADS
++#define __SIGMASK_FUNC pthread_sigmask
++#else
++#define __SIGMASK_FUNC sigprocmask
++#endif
++
+ #if defined(__GNUC__)
+ 
+ #define sigsetjmp(env, savemask) \
+@@ -275,7 +281,7 @@
+             ({ \
+               sigjmp_buf *_sjbuf = &(env); \
+               ((*_sjbuf)[_SAVEMASK] = savemask,\
+-              sigprocmask (SIG_SETMASK, 0, (sigset_t *)((*_sjbuf) + _SIGMASK)),\
++              __SIGMASK_FUNC (SIG_SETMASK, 0, (sigset_t *)((*_sjbuf) + _SIGMASK)),\
+               setjmp (*_sjbuf)); \
+             })
+ 
+@@ -284,7 +290,7 @@
+             ({ \
+               sigjmp_buf *_sjbuf = &(env); \
+               ((((*_sjbuf)[_SAVEMASK]) ? \
+-               sigprocmask (SIG_SETMASK, (sigset_t *)((*_sjbuf) + _SIGMASK), 0)\
++               __SIGMASK_FUNC (SIG_SETMASK, (sigset_t *)((*_sjbuf) + _SIGMASK), 0)\
+                : 0), \
+                longjmp (*_sjbuf, val)); \
+             })
+@@ -292,15 +298,21 @@
+ #else /* !__GNUC__ */
+ 
+ #define sigsetjmp(env, savemask) ((env)[_SAVEMASK] = savemask,\
+-               sigprocmask (SIG_SETMASK, 0, (sigset_t *) ((env) + _SIGMASK)),\
++               __SIGMASK_FUNC (SIG_SETMASK, 0, (sigset_t *) ((env) + _SIGMASK)),\
+                setjmp (env))
+ 
+ #define siglongjmp(env, val) ((((env)[_SAVEMASK])?\
+-               sigprocmask (SIG_SETMASK, (sigset_t *) ((env) + _SIGMASK), 0):0),\
++               __SIGMASK_FUNC (SIG_SETMASK, (sigset_t *) ((env) + _SIGMASK), 0):0),\
+                longjmp (env, val))
+ 
+ #endif
+ 
++/* POSIX _setjmp/_longjmp macros, maintained for XSI compatibility.  These
++   are equivalent to sigsetjmp/siglongjmp when not saving the signal mask.
++   New applications should use sigsetjmp/siglongjmp instead. */
++#define _setjmp(env)		sigsetjmp ((env), 0)
++#define _longjmp(env, val)	siglongjmp ((env), (val))
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/pthread.h newlib-1.16.0/newlib/libc/include/pthread.h
+--- newlib-1.16.0.orig/newlib/libc/include/pthread.h	2006-09-14 00:09:27.000000000 +0200
++++ newlib-1.16.0/newlib/libc/include/pthread.h	2009-03-24 04:29:55.000000000 +0100
+@@ -283,14 +283,6 @@
+ int	_EXFUN(pthread_getcpuclockid,
+ 	(pthread_t __pthread_id, clockid_t *__clock_id));
+  
+-/* CPU-time Clock Thread Creation Attribute, P1003.4b/D8, p. 59 */
+-
+-int	_EXFUN(pthread_attr_setcputime,
+-	(pthread_attr_t *__attr, int __clock_allowed));
+-
+-int	_EXFUN(pthread_attr_getcputime,
+-	(pthread_attr_t *__attr, int *__clock_allowed));
+-
+ #endif /* defined(_POSIX_THREAD_CPUTIME) */
+ 
+ 
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sched.h newlib-1.16.0/newlib/libc/include/sched.h
+--- newlib-1.16.0.orig/newlib/libc/include/sched.h	2007-09-21 23:02:15.000000000 +0200
++++ newlib-1.16.0/newlib/libc/include/sched.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,14 +0,0 @@
+-#ifndef _SCHED_H_
+-#define _SCHED_H_
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-#include <sys/sched.h>
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif /* _SCHED_H_ */
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/stdint.h newlib-1.16.0/newlib/libc/include/stdint.h
+--- newlib-1.16.0.orig/newlib/libc/include/stdint.h	2006-08-16 23:39:43.000000000 +0200
++++ newlib-1.16.0/newlib/libc/include/stdint.h	2009-03-24 04:29:55.000000000 +0100
+@@ -348,8 +348,7 @@
+ #endif
+ 
+ /* This must match size_t in stddef.h, currently long unsigned int */
+-#define SIZE_MIN (-__STDINT_EXP(LONG_MAX) - 1L)
+-#define SIZE_MAX __STDINT_EXP(LONG_MAX)
++#define SIZE_MAX (__STDINT_EXP(LONG_MAX) * 2UL + 1)
+ 
+ /* This must match sig_atomic_t in <signal.h> (currently int) */
+ #define SIG_ATOMIC_MIN (-__STDINT_EXP(INT_MAX) - 1)
+@@ -393,6 +392,9 @@
+ #define UINTMAX_C(x)	x##UL
+ #endif
+ 
++#ifdef __rtems__
++#include <machine/stdint.h>
++#endif
+ 
+ #ifdef __cplusplus
+ }
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/features.h newlib-1.16.0/newlib/libc/include/sys/features.h
+--- newlib-1.16.0.orig/newlib/libc/include/sys/features.h	2007-12-19 19:51:19.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/sys/features.h	2009-03-24 04:29:55.000000000 +0100
+@@ -38,11 +38,12 @@
+ #define _POSIX_MEMLOCK_RANGE		1
+ #define _POSIX_MEMORY_PROTECTION	1
+ #define _POSIX_MESSAGE_PASSING		1
++#define _POSIX_MONOTONIC_CLOCK		200112L
+ #define _POSIX_PRIORITIZED_IO		1
+ #define _POSIX_PRIORITY_SCHEDULING	1
+ #define _POSIX_REALTIME_SIGNALS		1
+ #define _POSIX_SEMAPHORES		1
+-#define _POSIX_SHARED_MEMORY_OBJECTS	1
++/* #define _POSIX_SHARED_MEMORY_OBJECTS	1 */
+ #define _POSIX_SYNCHRONIZED_IO		1
+ #define _POSIX_TIMERS			1
+ #define _POSIX_BARRIERS                 200112L
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/_types.h newlib-1.16.0/newlib/libc/include/sys/_types.h
+--- newlib-1.16.0.orig/newlib/libc/include/sys/_types.h	2007-09-18 22:05:17.000000000 +0200
++++ newlib-1.16.0/newlib/libc/include/sys/_types.h	2009-03-24 04:29:55.000000000 +0100
+@@ -84,4 +84,7 @@
+ typedef void *_iconv_t;
+ #endif
+ 
++typedef long * __intptr_t;
++typedef unsigned long* __uintptr_t;
++
+ #endif	/* _SYS__TYPES_H */
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h newlib-1.16.0/newlib/libc/include/sys/unistd.h
+--- newlib-1.16.0.orig/newlib/libc/include/sys/unistd.h	2007-11-08 17:20:12.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/sys/unistd.h	2009-03-24 04:29:55.000000000 +0100
+@@ -157,7 +157,7 @@
+ pid_t   _EXFUN(tcgetpgrp, (int __fildes ));
+ int     _EXFUN(tcsetpgrp, (int __fildes, pid_t __pgrp_id ));
+ char    _EXFUN(*ttyname, (int __fildes ));
+-#if defined(__CYGWIN__)
++#if defined(__CYGWIN__) || defined(__rtems__)
+ int     _EXFUN(ttyname_r, (int, char *, size_t)); 
+ #endif
+ int     _EXFUN(unlink, (const char *__path ));
+@@ -219,13 +219,11 @@
+ char *	_EXFUN(mktemp, (char *));
+ #endif
+ 
+-#if defined(__CYGWIN__) || defined(__SPU__)
++#if defined(__CYGWIN__) || defined(__SPU__) || defined(__rtems__)
+ void    _EXFUN(sync, (void));
+-#elif defined(__rtems__)
+-int     _EXFUN(sync, (void));
+ #endif
+ 
+-int     _EXFUN(readlink, (const char *__path, char *__buf, int __buflen));
++ssize_t _EXFUN(readlink, (const char *__path, char *__buf, size_t __buflen));
+ int     _EXFUN(symlink, (const char *__name1, const char *__name2));
+ 
+ #define	F_OK	0
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/_syslist.h newlib-1.16.0/newlib/libc/include/_syslist.h
+--- newlib-1.16.0.orig/newlib/libc/include/_syslist.h	2005-08-22 23:13:35.000000000 +0200
++++ newlib-1.16.0/newlib/libc/include/_syslist.h	2009-03-24 04:29:55.000000000 +0100
+@@ -11,6 +11,7 @@
+ #define _fstat fstat
+ #define _getpid getpid
+ #define _gettimeofday gettimeofday
++#define _isatty isatty
+ #define _kill kill
+ #define _link link
+ #define _lseek lseek
+diff -Naur newlib-1.16.0.orig/newlib/libc/include/time.h newlib-1.16.0/newlib/libc/include/time.h
+--- newlib-1.16.0.orig/newlib/libc/include/time.h	2005-11-18 16:57:24.000000000 +0100
++++ newlib-1.16.0/newlib/libc/include/time.h	2009-03-24 04:29:55.000000000 +0100
+@@ -226,6 +226,16 @@
+ 
+ #endif
+ 
++#if defined(_POSIX_MONOTONIC_CLOCK)
++
++/*  The identifier for the system-wide monotonic clock, which is defined
++    as a clock whose value cannot be set via clock_settime() and which 
++    cannot have backward clock jumps. */
++
++#define CLOCK_MONOTONIC (clockid_t)4
++
++#endif
++
+ #if defined(_POSIX_CPUTIME)
+ 
+ /* Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55 */
+diff -Naur newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h newlib-1.16.0/newlib/libc/machine/arm/machine/endian.h
+--- newlib-1.16.0.orig/newlib/libc/machine/arm/machine/endian.h	2004-05-07 22:29:24.000000000 +0200
++++ newlib-1.16.0/newlib/libc/machine/arm/machine/endian.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,12 +0,0 @@
+-/* ARM configuration file */
+-
+-#ifndef _MACHINE_ENDIAN_H
+-# define _MACHINE_ENDIAN_H
+-
+-#ifdef __ARMEB__
+-#define BYTE_ORDER BIG_ENDIAN
+-#else
+-#define BYTE_ORDER LITTLE_ENDIAN
+-#endif
+-
+-#endif
+diff -Naur newlib-1.16.0.orig/newlib/libc/machine/powerpc/Makefile.am newlib-1.16.0/newlib/libc/machine/powerpc/Makefile.am
+--- newlib-1.16.0.orig/newlib/libc/machine/powerpc/Makefile.am	2007-05-24 19:33:35.000000000 +0200
++++ newlib-1.16.0/newlib/libc/machine/powerpc/Makefile.am	2009-03-24 04:29:55.000000000 +0100
+@@ -10,7 +10,7 @@
+ 
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+ 
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS=$(AM_CCASFLAGS)
+ lib_a_CFLAGS=$(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+diff -Naur newlib-1.16.0.orig/newlib/libc/machine/powerpc/Makefile.in newlib-1.16.0/newlib/libc/machine/powerpc/Makefile.in
+--- newlib-1.16.0.orig/newlib/libc/machine/powerpc/Makefile.in	2007-12-19 23:36:34.000000000 +0100
++++ newlib-1.16.0/newlib/libc/machine/powerpc/Makefile.in	2009-03-24 04:29:55.000000000 +0100
+@@ -39,8 +39,7 @@
+ DIST_COMMON = $(srcdir)/../../../../config.guess \
+ 	$(srcdir)/../../../../config.sub $(srcdir)/Makefile.in \
+ 	$(srcdir)/Makefile.am $(top_srcdir)/configure \
+-	$(am__configure_deps) $(srcdir)/../../../../mkinstalldirs \
+-	$(srcdir)/../../../../compile
++	$(am__configure_deps) $(srcdir)/../../../../mkinstalldirs
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/../../../acinclude.m4 \
+@@ -54,7 +53,7 @@
+ LIBRARIES = $(noinst_LIBRARIES)
+ ARFLAGS = cru
+ lib_a_AR = $(AR) $(ARFLAGS)
+-am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT) lib_a-times.$(OBJEXT)
++am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT)
+ lib_a_OBJECTS = $(am_lib_a_OBJECTS)
+ DEFAULT_INCLUDES = -I. -I$(srcdir)
+ depcomp =
+@@ -184,7 +183,7 @@
+ AM_CCASFLAGS = $(INCLUDES)
+ noinst_LIBRARIES = lib.a
+ AM_CFLAGS = -I $(srcdir)/../../stdio -I $(srcdir)/../../stdlib
+-lib_a_SOURCES = setjmp.S times.c
++lib_a_SOURCES = setjmp.S
+ lib_a_CCASFLAGS = $(AM_CCASFLAGS)
+ lib_a_CFLAGS = $(AM_CFLAGS)
+ lib_a_LIBADD = @extra_objs@
+@@ -195,7 +194,7 @@
+ all: all-am
+ 
+ .SUFFIXES:
+-.SUFFIXES: .S .c .o .obj
++.SUFFIXES: .S .o .obj
+ am--refresh:
+ 	@:
+ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+@@ -254,18 +253,6 @@
+ 
+ lib_a-setjmp.obj: setjmp.S
+ 	$(CCAS) $(lib_a_CCASFLAGS) $(CCASFLAGS) -c -o lib_a-setjmp.obj `if test -f 'setjmp.S'; then $(CYGPATH_W) 'setjmp.S'; else $(CYGPATH_W) '$(srcdir)/setjmp.S'; fi`
+-
+-.c.o:
+-	$(COMPILE) -c $<
+-
+-.c.obj:
+-	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+-
+-lib_a-times.o: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.o `test -f 'times.c' || echo '$(srcdir)/'`times.c
+-
+-lib_a-times.obj: times.c
+-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-times.obj `if test -f 'times.c'; then $(CYGPATH_W) 'times.c'; else $(CYGPATH_W) '$(srcdir)/times.c'; fi`
+ uninstall-info-am:
+ 
+ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+diff -Naur newlib-1.16.0.orig/newlib/libc/machine/powerpc/times.c newlib-1.16.0/newlib/libc/machine/powerpc/times.c
+--- newlib-1.16.0.orig/newlib/libc/machine/powerpc/times.c	2002-07-22 22:26:51.000000000 +0200
++++ newlib-1.16.0/newlib/libc/machine/powerpc/times.c	1970-01-01 01:00:00.000000000 +0100
+@@ -1,36 +0,0 @@
+-/* Time support routines for PowerPC.
+- *
+- * Written by Aldy Hernandez.
+- */
+-
+-#include <_ansi.h>
+-#include <reent.h>
+-#include <sys/time.h>
+-#include <sys/times.h>
+-#include <sys/resource.h>
+-
+-clock_t
+-times (struct tms *tp)
+-{
+-  struct rusage usage;
+-  union {
+-    struct rusage r;
+-    /* Newlib's rusage has only 2 fields.  We need to make room for
+-       when we call the system's rusage.  This should be enough.  */
+-    int filler[32];
+-  } host_ru;
+-
+-  getrusage (RUSAGE_SELF, (void *)&host_ru);
+-
+-  if (tp)
+-    {
+-      tp->tms_utime = host_ru.r.ru_utime.tv_sec * 1000
+-	+ host_ru.r.ru_utime.tv_usec;
+-      tp->tms_stime = host_ru.r.ru_stime.tv_sec * 1000
+-	+ host_ru.r.ru_stime.tv_usec;
+-      tp->tms_cutime = 0;	/* user time, children */
+-      tp->tms_cstime = 0;	/* system time, children */
+-    }
+-
+-  return tp->tms_utime;
+-}
+diff -Naur newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c newlib-1.16.0/newlib/libc/stdlib/getopt.c
+--- newlib-1.16.0.orig/newlib/libc/stdlib/getopt.c	2007-05-29 23:26:59.000000000 +0200
++++ newlib-1.16.0/newlib/libc/stdlib/getopt.c	2009-03-24 04:29:55.000000000 +0100
+@@ -90,6 +90,9 @@
+ #include <getopt.h>
+ 
+ /* macros */
++#define NO_ARG          	0
++#define REQUIRED_ARG    	1
++#define OPTIONAL_ARG    	2
+ 
+ /* types */
+ typedef enum GETOPT_ORDERING_T
+@@ -100,16 +103,19 @@
+ } GETOPT_ORDERING_T;
+ 
+ /* globally-defined variables */
+-char *optarg = NULL;
++char *optarg = 0;
+ int optind = 0;
+ int opterr = 1;
+ int optopt = '?';
+ 
++/* static variables */
++static int optwhere = 0;
++
+ /* functions */
+ 
+ /* reverse_argv_elements:  reverses num elements starting at argv */
+ static void
+-reverse_argv_elements (char ** argv, int num)
++reverse_argv_elements (char **argv, int num)
+ {
+   int i;
+   char *tmp;
+@@ -126,281 +132,346 @@
+ static void
+ permute (char *const argv[], int len1, int len2)
+ {
+-  reverse_argv_elements ((char **)argv, len1);
+-  reverse_argv_elements ((char **)argv, len1 + len2);
+-  reverse_argv_elements ((char **)argv, len2);
++  reverse_argv_elements ((char **) argv, len1);
++  reverse_argv_elements ((char **) argv, len1 + len2);
++  reverse_argv_elements ((char **) argv, len2);
+ }
+ 
+ /* is_option: is this argv-element an option or the end of the option list? */
+ static int
+ is_option (char *argv_element, int only)
+ {
+-  return ((argv_element == NULL)
+-          || (argv_element[0] == '-') || (only && argv_element[0] == '+'));
++  return ((argv_element == 0)
++	  || (argv_element[0] == '-') || (only && argv_element[0] == '+'));
++}
++
++/* read_globals: read the values from the globals into a getopt_data 
++   structure */
++static void
++read_globals (struct getopt_data *data)
++{
++  data->optarg = optarg;
++  data->optind = optind;
++  data->opterr = opterr;
++  data->optopt = optopt;
++  data->optwhere = optwhere;
++}
++
++/* write_globals: write the values into the globals from a getopt_data
++   structure */
++static void
++write_globals (struct getopt_data *data)
++{
++  optarg = data->optarg;
++  optind = data->optind;
++  opterr = data->opterr;
++  optopt = data->optopt;
++  optwhere = data->optwhere;
+ }
+ 
+ /* getopt_internal:  the function that does all the dirty work */
+ static int
+ getopt_internal (int argc, char *const argv[], const char *shortopts,
+-                 const struct option *longopts, int *longind, int only)
++		 const struct option *longopts, int *longind, int only,
++		 struct getopt_data *data)
+ {
+   GETOPT_ORDERING_T ordering = PERMUTE;
+-  static size_t optwhere = 0;
+   size_t permute_from = 0;
+   int num_nonopts = 0;
+   int optindex = 0;
+   size_t match_chars = 0;
+-  char *possible_arg = NULL;
++  char *possible_arg = 0;
+   int longopt_match = -1;
+   int has_arg = -1;
+-  char *cp = NULL;
++  char *cp = 0;
+   int arg_next = 0;
+ 
+   /* first, deal with silly parameters and easy stuff */
+-  if (argc == 0 || argv == NULL || (shortopts == NULL && longopts == NULL))
+-    return EOF;
+-  if (optind >= argc || argv[optind] == NULL)
++  if (argc == 0 || argv == 0 || (shortopts == 0 && longopts == 0)
++      || data->optind >= argc || argv[data->optind] == 0)
+     return EOF;
+-  if (strcmp (argv[optind], "--") == 0)
++  if (strcmp (argv[data->optind], "--") == 0)
+     {
+-      optind++;
++      data->optind++;
+       return EOF;
+     }
++
+   /* if this is our first time through */
+-  if (optind == 0)
+-    optind = optwhere = 1;
++  if (data->optind == 0)
++    data->optind = data->optwhere = 1;
+ 
+   /* define ordering */
+-  if (shortopts != NULL && (*shortopts == '-' || *shortopts == '+'))
++  if (shortopts != 0 && (*shortopts == '-' || *shortopts == '+'))
+     {
+       ordering = (*shortopts == '-') ? RETURN_IN_ORDER : REQUIRE_ORDER;
+       shortopts++;
+     }
+   else
+-    ordering = (getenv ("POSIXLY_CORRECT") != NULL) ? REQUIRE_ORDER : PERMUTE;
++    ordering = (getenv ("POSIXLY_CORRECT") != 0) ? REQUIRE_ORDER : PERMUTE;
+ 
+   /*
+    * based on ordering, find our next option, if we're at the beginning of
+    * one
+    */
+-  if (optwhere == 1)
++  if (data->optwhere == 1)
+     {
+       switch (ordering)
+-        {
+-        case PERMUTE:
+-          permute_from = optind;
+-          num_nonopts = 0;
+-          while (!is_option (argv[optind], only))
+-            {
+-              optind++;
+-              num_nonopts++;
+-            }
+-          if (argv[optind] == NULL)
+-            {
+-              /* no more options */
+-              optind = permute_from;
+-              return EOF;
+-            }
+-          else if (strcmp (argv[optind], "--") == 0)
+-            {
+-              /* no more options, but have to get `--' out of the way */
+-              permute (argv + permute_from, num_nonopts, 1);
+-              optind = permute_from + 1;
+-              return EOF;
+-            }
+-          break;
+-        case RETURN_IN_ORDER:
+-          if (!is_option (argv[optind], only))
+-            {
+-              optarg = argv[optind++];
+-              return (optopt = 1);
+-            }
+-          break;
+-        case REQUIRE_ORDER:
+-          if (!is_option (argv[optind], only))
+-            return EOF;
+-          break;
+-        }
++	{
++	default:		/* shouldn't happen */
++	case PERMUTE:
++	  permute_from = data->optind;
++	  num_nonopts = 0;
++	  while (!is_option (argv[data->optind], only))
++	    {
++	      data->optind++;
++	      num_nonopts++;
++	    }
++	  if (argv[data->optind] == 0)
++	    {
++	      /* no more options */
++	      data->optind = permute_from;
++	      return EOF;
++	    }
++	  else if (strcmp (argv[data->optind], "--") == 0)
++	    {
++	      /* no more options, but have to get `--' out of the way */
++	      permute (argv + permute_from, num_nonopts, 1);
++	      data->optind = permute_from + 1;
++	      return EOF;
++	    }
++	  break;
++	case RETURN_IN_ORDER:
++	  if (!is_option (argv[data->optind], only))
++	    {
++	      data->optarg = argv[data->optind++];
++	      return (data->optopt = 1);
++	    }
++	  break;
++	case REQUIRE_ORDER:
++	  if (!is_option (argv[data->optind], only))
++	    return EOF;
++	  break;
++	}
+     }
+   /* we've got an option, so parse it */
+ 
+   /* first, is it a long option? */
+-  if (longopts != NULL
+-      && (memcmp (argv[optind], "--", 2) == 0
+-          || (only && argv[optind][0] == '+')) && optwhere == 1)
++  if (longopts != 0
++      && (memcmp (argv[data->optind], "--", 2) == 0
++	  || (only && argv[data->optind][0] == '+')) && data->optwhere == 1)
+     {
+       /* handle long options */
+-      if (memcmp (argv[optind], "--", 2) == 0)
+-        optwhere = 2;
++      if (memcmp (argv[data->optind], "--", 2) == 0)
++	data->optwhere = 2;
+       longopt_match = -1;
+-      possible_arg = strchr (argv[optind] + optwhere, '=');
+-      if (possible_arg == NULL)
+-        {
+-          /* no =, so next argv might be arg */
+-          match_chars = strlen (argv[optind]);
+-          possible_arg = argv[optind] + match_chars;
+-          match_chars = match_chars - optwhere;
+-        }
++      possible_arg = strchr (argv[data->optind] + data->optwhere, '=');
++      if (possible_arg == 0)
++	{
++	  /* no =, so next argv might be arg */
++	  match_chars = strlen (argv[data->optind]);
++	  possible_arg = argv[data->optind] + match_chars;
++	  match_chars = match_chars - data->optwhere;
++	}
+       else
+-        match_chars = (possible_arg - argv[optind]) - optwhere;
+-      for (optindex = 0; longopts[optindex].name != NULL; optindex++)
+-        {
+-          if (memcmp (argv[optind] + optwhere,
+-                      longopts[optindex].name, match_chars) == 0)
+-            {
+-              /* do we have an exact match? */
+-              if (match_chars == (int) (strlen (longopts[optindex].name)))
+-                {
+-                  longopt_match = optindex;
+-                  break;
+-                }
+-              /* do any characters match? */
+-              else
+-                {
+-                  if (longopt_match < 0)
+-                    longopt_match = optindex;
+-                  else
+-                    {
+-                      /* we have ambiguous options */
+-                      if (opterr)
+-                        fprintf (stderr, "%s: option `%s' is ambiguous "
+-                                 "(could be `--%s' or `--%s')\n",
+-                                 argv[0],
+-                                 argv[optind],
+-                                 longopts[longopt_match].name,
+-                                 longopts[optindex].name);
+-                      return (optopt = '?');
+-                    }
+-                }
+-            }
+-        }
++	match_chars = (possible_arg - argv[data->optind]) - data->optwhere;
++      for (optindex = 0; longopts[optindex].name != 0; ++optindex)
++	{
++	  if (memcmp
++	      (argv[data->optind] + data->optwhere, longopts[optindex].name,
++	       match_chars) == 0)
++	    {
++	      /* do we have an exact match? */
++	      if (match_chars == (int) (strlen (longopts[optindex].name)))
++		{
++		  longopt_match = optindex;
++		  break;
++		}
++	      /* do any characters match? */
++	      else
++		{
++		  if (longopt_match < 0)
++		    longopt_match = optindex;
++		  else
++		    {
++		      /* we have ambiguous options */
++		      if (data->opterr)
++			fprintf (stderr, "%s: option `%s' is ambiguous "
++				 "(could be `--%s' or `--%s')\n",
++				 argv[0],
++				 argv[data->optind],
++				 longopts[longopt_match].name,
++				 longopts[optindex].name);
++		      return (data->optopt = '?');
++		    }
++		}
++	    }
++	}
+       if (longopt_match >= 0)
+-        has_arg = longopts[longopt_match].has_arg;
++	has_arg = longopts[longopt_match].has_arg;
+     }
++
+   /* if we didn't find a long option, is it a short option? */
+-  if (longopt_match < 0 && shortopts != NULL)
++  if (longopt_match < 0 && shortopts != 0)
+     {
+-      cp = strchr (shortopts, argv[optind][optwhere]);
+-      if (cp == NULL)
+-        {
+-          /* couldn't find option in shortopts */
+-          if (opterr)
+-            fprintf (stderr,
+-                     "%s: invalid option -- `-%c'\n",
+-                     argv[0], argv[optind][optwhere]);
+-          optwhere++;
+-          if (argv[optind][optwhere] == '\0')
+-            {
+-              optind++;
+-              optwhere = 1;
+-            }
+-          return (optopt = '?');
+-        }
++      cp = strchr (shortopts, argv[data->optind][data->optwhere]);
++      if (cp == 0)
++	{
++	  /* couldn't find option in shortopts */
++	  if (data->opterr)
++	    fprintf (stderr,
++		     "%s: invalid option -- `-%c'\n",
++		     argv[0], argv[data->optind][data->optwhere]);
++	  data->optwhere++;
++	  if (argv[data->optind][data->optwhere] == '\0')
++	    {
++	      data->optind++;
++	      data->optwhere = 1;
++	    }
++	  return (data->optopt = '?');
++	}
+       has_arg = ((cp[1] == ':')
+-                 ? ((cp[2] == ':') ? OPTIONAL_ARG : REQUIRED_ARG) : NO_ARG);
+-      possible_arg = argv[optind] + optwhere + 1;
+-      optopt = *cp;
++		 ? ((cp[2] == ':') ? OPTIONAL_ARG : REQUIRED_ARG) : NO_ARG);
++      possible_arg = argv[data->optind] + data->optwhere + 1;
++      data->optopt = *cp;
+     }
+-  /* get argument and reset optwhere */
++
++  /* get argument and reset data->optwhere */
+   arg_next = 0;
+   switch (has_arg)
+     {
+     case OPTIONAL_ARG:
+       if (*possible_arg == '=')
+-        possible_arg++;
+-      if (*possible_arg != '\0')
+-        {
+-          optarg = possible_arg;
+-          optwhere = 1;
+-        }
+-      else
+-        optarg = NULL;
++	possible_arg++;
++      data->optarg = (*possible_arg != '\0') ? possible_arg : 0;
++      data->optwhere = 1;
+       break;
+     case REQUIRED_ARG:
+       if (*possible_arg == '=')
+-        possible_arg++;
++	possible_arg++;
+       if (*possible_arg != '\0')
+-        {
+-          optarg = possible_arg;
+-          optwhere = 1;
+-        }
+-      else if (optind + 1 >= argc)
+-        {
+-          if (opterr)
+-            {
+-              fprintf (stderr, "%s: argument required for option `", argv[0]);
+-              if (longopt_match >= 0)
+-                fprintf (stderr, "--%s'\n", longopts[longopt_match].name);
+-              else
+-                fprintf (stderr, "-%c'\n", *cp);
+-            }
+-          optind++;
+-          return (optopt = ':');
+-        }
++	{
++	  data->optarg = possible_arg;
++	  data->optwhere = 1;
++	}
++      else if (data->optind + 1 >= argc)
++	{
++	  if (data->opterr)
++	    {
++	      fprintf (stderr, "%s: argument required for option `", argv[0]);
++	      if (longopt_match >= 0)
++		fprintf (stderr, "--%s'\n", longopts[longopt_match].name);
++	      else
++		fprintf (stderr, "-%c'\n", *cp);
++	    }
++	  data->optind++;
++	  return (data->optopt = ':');
++	}
+       else
+-        {
+-          optarg = argv[optind + 1];
+-          arg_next = 1;
+-          optwhere = 1;
+-        }
++	{
++	  data->optarg = argv[data->optind + 1];
++	  arg_next = 1;
++	  data->optwhere = 1;
++	}
+       break;
++    default:			/* shouldn't happen */
+     case NO_ARG:
+       if (longopt_match < 0)
+-        {
+-          optwhere++;
+-          if (argv[optind][optwhere] == '\0')
+-            optwhere = 1;
+-        }
++	{
++	  data->optwhere++;
++	  if (argv[data->optind][data->optwhere] == '\0')
++	    data->optwhere = 1;
++	}
+       else
+-        optwhere = 1;
+-      optarg = NULL;
++	data->optwhere = 1;
++      data->optarg = 0;
+       break;
+     }
+ 
+-  /* do we have to permute or otherwise modify optind? */
+-  if (ordering == PERMUTE && optwhere == 1 && num_nonopts != 0)
++  /* do we have to permute or otherwise modify data->optind? */
++  if (ordering == PERMUTE && data->optwhere == 1 && num_nonopts != 0)
+     {
+       permute (argv + permute_from, num_nonopts, 1 + arg_next);
+-      optind = permute_from + 1 + arg_next;
++      data->optind = permute_from + 1 + arg_next;
+     }
+-  else if (optwhere == 1)
+-    optind = optind + 1 + arg_next;
++  else if (data->optwhere == 1)
++    data->optind = data->optind + 1 + arg_next;
+ 
+   /* finally return */
+   if (longopt_match >= 0)
+     {
+-      if (longind != NULL)
+-        *longind = longopt_match;
+-      if (longopts[longopt_match].flag != NULL)
+-        {
+-          *(longopts[longopt_match].flag) = longopts[longopt_match].val;
+-          return 0;
+-        }
++      if (longind != 0)
++	*longind = longopt_match;
++      if (longopts[longopt_match].flag != 0)
++	{
++	  *(longopts[longopt_match].flag) = longopts[longopt_match].val;
++	  return 0;
++	}
+       else
+-        return longopts[longopt_match].val;
++	return longopts[longopt_match].val;
+     }
+   else
+-    return optopt;
++    return data->optopt;
+ }
+ 
+ int
+ getopt (int argc, char *const argv[], const char *optstring)
+ {
+-  return getopt_internal (argc, argv, optstring, NULL, NULL, 0);
++  struct getopt_data data;
++  int r;
++
++  read_globals (&data);
++  r = getopt_internal (argc, argv, optstring, 0, 0, 0, &data);
++  write_globals (&data);
++  return r;
+ }
+ 
+ int
+ getopt_long (int argc, char *const argv[], const char *shortopts,
+-             const struct option *longopts, int *longind)
++	     const struct option *longopts, int *longind)
+ {
+-  return getopt_internal (argc, argv, shortopts, longopts, longind, 0);
++  struct getopt_data data;
++  int r;
++
++  read_globals (&data);
++  r = getopt_internal (argc, argv, shortopts, longopts, longind, 0, &data);
++  write_globals (&data);
++  return r;
+ }
+ 
+ int
+ getopt_long_only (int argc, char *const argv[], const char *shortopts,
+-                  const struct option *longopts, int *longind)
++		  const struct option *longopts, int *longind)
++{
++  struct getopt_data data;
++  int r;
++
++  read_globals (&data);
++  r = getopt_internal (argc, argv, shortopts, longopts, longind, 1, &data);
++  write_globals (&data);
++  return r;
++}
++
++int
++__getopt_r (int argc, char *const argv[], const char *optstring,
++	    struct getopt_data *data)
++{
++  return getopt_internal (argc, argv, optstring, 0, 0, 0, data);
++}
++
++int
++__getopt_long_r (int argc, char *const argv[], const char *shortopts,
++	         const struct option *longopts, int *longind,
++	         struct getopt_data *data)
++{
++  return getopt_internal (argc, argv, shortopts, longopts, longind, 0, data);
++}
++
++int
++__getopt_long_only_r (int argc, char *const argv[], const char *shortopts,
++		      const struct option *longopts, int *longind,
++		      struct getopt_data *data)
+ {
+-  return getopt_internal (argc, argv, shortopts, longopts, longind, 1);
++  return getopt_internal (argc, argv, shortopts, longopts, longind, 1, data);
+ }
+ 
+ /* end of file GETOPT.C */
+diff -Naur newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h
+--- newlib-1.16.0.orig/newlib/libc/sys/rtems/machine/stdint.h	1970-01-01 01:00:00.000000000 +0100
++++ newlib-1.16.0/newlib/libc/sys/rtems/machine/stdint.h	2009-03-24 04:29:55.000000000 +0100
+@@ -0,0 +1,35 @@
++/*
++ *
++ */
++#ifndef _MACHINE_STDINT_H
++#define _MACHINE_STDINT_H
++
++#ifndef _STDINT_H
++#error machine/stdint.h is an internal file and must not be directly included
++#endif
++
++#ifndef __rtems__
++#error machine/stdint.h is an RTEMS specific internal file and must not be used otherwise
++#endif
++
++#if defined(__sparc__) \
++  || defined(__powerpc__) || defined(__PPC__) \
++  || defined(__mips__) \
++  || defined(__sh__) \
++  || defined(__AVR__) \
++  || defined(_C4x) || defined(_C3x) \
++  || defined(__H8300__)
++/* PTRDIFF_TYPE = int */
++#define __ptrint_t_int_defined 1
++#endif
++
++#if defined(__i386__) \
++  || defined(__m68k__) \
++  || defined(__bfin__) \
++  || defined(__arm__) \
++  || defined(__H8300S__) || defined(__H8300H__)
++/* PTRDIFF_TYPE = long */
++#define __ptrint_t_long_defined 1
++#endif
++
++#endif
+diff -Naur newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h
+--- newlib-1.16.0.orig/newlib/libc/sys/rtems/sys/param.h	2004-05-07 22:29:24.000000000 +0200
++++ newlib-1.16.0/newlib/libc/sys/rtems/sys/param.h	2009-03-24 04:29:55.000000000 +0100
+@@ -93,7 +93,6 @@
+ #include <sys/resource.h>
+ #include <sys/ucred.h>
+ #include <sys/uio.h>
+-#include <sys/rtprio.h>
+ 
+ #ifndef FALSE
+ #define	FALSE	0
+diff -Naur newlib-1.16.0.orig/newlib/Makefile.am newlib-1.16.0/newlib/Makefile.am
+--- newlib-1.16.0.orig/newlib/Makefile.am	2007-05-24 19:33:29.000000000 +0200
++++ newlib-1.16.0/newlib/Makefile.am	2009-03-24 04:29:55.000000000 +0100
+@@ -81,7 +81,7 @@
+ 	libc.a
+ endif
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ 
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+@@ -186,9 +186,6 @@
+ 
+ $(CRT1_DIR)$(CRT1): ; @true
+ 
+-
+-all-recursive: stmp-targ-include
+-
+ # The targ-include directory just holds the includes files for the
+ # particular system and machine we have been configured for.  It is
+ # used while building.
+diff -Naur newlib-1.16.0.orig/newlib/Makefile.in newlib-1.16.0/newlib/Makefile.in
+--- newlib-1.16.0.orig/newlib/Makefile.in	2007-12-19 23:36:26.000000000 +0100
++++ newlib-1.16.0/newlib/Makefile.in	2009-03-24 04:29:55.000000000 +0100
+@@ -105,7 +105,7 @@
+ 	pdf-recursive ps-recursive uninstall-info-recursive \
+ 	uninstall-recursive
+ toollibDATA_INSTALL = $(INSTALL_DATA)
+-DATA = $(noinst_DATA) $(toollib_DATA)
++DATA = $(toollib_DATA)
+ ETAGS = etags
+ CTAGS = ctags
+ DEJATOOL = $(PACKAGE)
+@@ -339,7 +339,7 @@
+ @USE_LIBTOOL_FALSE@toollib_LIBRARIES = libm.a \
+ @USE_LIBTOOL_FALSE@	libc.a
+ 
+-noinst_DATA = stmp-targ-include
++BUILT_SOURCES = stmp-targ-include
+ toollib_DATA = $(CRT0) $(CRT1)
+ 
+ # The functions ldexp, frexp and modf are traditionally supplied in
+@@ -398,7 +398,7 @@
+ 
+ # dejagnu support
+ RUNTESTFLAGS = 
+-all: newlib.h
++all: $(BUILT_SOURCES) newlib.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 
+ .SUFFIXES:
+@@ -703,14 +703,16 @@
+ 	done
+ check-am:
+ 	$(MAKE) $(AM_MAKEFLAGS) check-DEJAGNU
+-check: check-recursive
++check: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) check-recursive
+ all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(DATA) newlib.h
+ installdirs: installdirs-recursive
+ installdirs-am:
+ 	for dir in "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)" "$(DESTDIR)$(toollibdir)"; do \
+ 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+ 	done
+-install: install-recursive
++install: $(BUILT_SOURCES)
++	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+ install-exec: install-exec-recursive
+ install-data: install-data-recursive
+ uninstall: uninstall-recursive
+@@ -735,6 +737,7 @@
+ maintainer-clean-generic:
+ 	@echo "This command is intended for maintainers to use"
+ 	@echo "it deletes files that may require special tools to rebuild."
++	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+ clean: clean-recursive
+ 
+ clean-am: clean-generic clean-libtool clean-toollibLIBRARIES \
+@@ -853,8 +856,6 @@
+ 
+ $(CRT1_DIR)$(CRT1): ; @true
+ 
+-all-recursive: stmp-targ-include
+-
+ # The targ-include directory just holds the includes files for the
+ # particular system and machine we have been configured for.  It is
+ # used while building.
