@@ -1,3 +1,8 @@
+2009-03-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Start of RTEMS Work Area must be on 16 byte
+	boundary on the SPARC.
+
 2009-03-09	Antoine Lacroix <antoine.lacroix at sodern.fr>
 
 	PR 1391/bsps

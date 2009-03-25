@@ -201,6 +201,7 @@ SECTIONS
     bss_start = .;
     *(.bss .bss* .gnu.linkonce.b*)
     *(COMMON)
+    . = ALIGN (16);
     end = .;
     _end = ALIGN(0x8);
     __end = ALIGN(0x8);
