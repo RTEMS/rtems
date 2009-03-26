@@ -52,6 +52,10 @@ bool is_character_ready(
     return false;
 }
 
+void console_initialize_hardware(void)
+{
+}
+
 /*
  *  This routine reads a character from the SOURCE.
  *

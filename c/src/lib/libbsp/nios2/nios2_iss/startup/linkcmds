@@ -242,6 +242,7 @@ SECTIONS
 
         . = ALIGN(32 / 8);
         __bss_end = ABSOLUTE(.);
+        WorkAreaBase = .;
     } > onchip_memory_0
 
     /*

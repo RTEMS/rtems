@@ -1,3 +1,9 @@
+2009-03-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, console/console.c, startup/linkcmds: Now links but
+	clearly the starting stack overlaps regular memory and needs to be
+	moved.
+
 2009-03-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, console/console.c: Use shared polled console framework.
