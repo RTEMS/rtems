@@ -222,10 +222,10 @@ typedef int (*rtems_shell_filesystems_mounter_t)(
 );
 
 struct rtems_shell_filesystems_tt {
-  const char*                        name;
-  int                                driver_needed;
-  rtems_filesystem_operations_table* fs_ops;
-  rtems_shell_filesystems_mounter_t  mounter;
+  const char                              *name;
+  int                                      driver_needed;
+  const rtems_filesystem_operations_table *fs_ops;
+  rtems_shell_filesystems_mounter_t        mounter;
 };
 
 /**

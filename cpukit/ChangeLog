@@ -1,3 +1,13 @@
+2009-03-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/shell/shell.h: Pointer to
+	oparations table for mount command is now const.
+	* libnetworking/lib/ftpfs.c, libnetworking/rtems/ftpfs.h: Rewrite of
+	the FTP file system which implements now the trivial command state
+	machines of RFC 959.  For the data transfer passive (= default) and
+	active (= fallback) modes are now supported.
+	* libmisc/shell/main_mount_ftp.c: Update for FTP file system changes.
+
 2009-03-12	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	PR 1378/filesystem

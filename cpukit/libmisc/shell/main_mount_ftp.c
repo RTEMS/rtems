@@ -32,6 +32,6 @@
 rtems_shell_filesystems_t rtems_shell_Mount_FTP = {
   name:          "ftp",
   driver_needed: 1,
-  fs_ops:        &rtems_ftp_ops,
+  fs_ops:        &rtems_ftpfs_ops,
   mounter:       rtems_shell_libc_mounter
 };
