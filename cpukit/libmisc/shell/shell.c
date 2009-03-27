@@ -40,7 +40,7 @@
 #include <errno.h>
 #include <pwd.h>
 
-rtems_shell_env_t  rtems_global_shell_env = {
+rtems_shell_env_t rtems_global_shell_env = {
   .magic         = rtems_build_name('S', 'E', 'N', 'V'),
   .devname       = CONSOLE_DEVICE_NAME,
   .taskname      = "SHGL",
@@ -53,7 +53,7 @@ rtems_shell_env_t  rtems_global_shell_env = {
   .output        = NULL,
   .output_append = false,
   .wake_on_end   = RTEMS_ID_NONE,
-  .login         = true
+  .login_check   = NULL
 };
 
 rtems_shell_env_t *rtems_current_shell_env = &rtems_global_shell_env;
@@ -118,23 +118,23 @@ int rtems_shell_line_editor(
   int          up;
   int          cmd = -1;
   int          inserting = 1;
-  
+
   output = (out && isatty(fileno(in)));
 
   col = last_col = 0;
-  
+
   tcdrain(fileno(in));
   if (out)
     tcdrain(fileno(out));
 
   if (output && prompt)
     fprintf(out, "\r%s", prompt);
-  
+
   line[0] = 0;
   new_line[0] = 0;
-  
+
   for (;;) {
-    
+
     if (output)
       fflush(out);
 
@@ -142,16 +142,16 @@ int rtems_shell_line_editor(
 
     if (extended_key == EOF)
       return -2;
-    
+
     c = extended_key & RTEMS_SHELL_KEYS_NORMAL_MASK;
-    
+
     /*
      * Make the extended_key usable as a boolean.
      */
     extended_key &= ~RTEMS_SHELL_KEYS_NORMAL_MASK;
-    
+
     up = 0;
-    
+
     if (extended_key)
     {
       switch (c)
@@ -199,14 +199,14 @@ int rtems_shell_line_editor(
 
           /* drop through */
         case RTEMS_SHELL_KEYS_DARROW:
-          
+
         {
           int last_cmd = cmd;
           int clen = strlen (line);
 
           if (prompt)
             clen += strlen(prompt);
-          
+
           if (up) {
             cmd++;
           } else {
@@ -226,9 +226,9 @@ int rtems_shell_line_editor(
             memcpy (line, new_line, size);
           else
             memcpy (line, cmds[cmd], size);
-          
+
           col = strlen (line);
-          
+
           if (output) {
             fprintf(out,"\r%*c", clen, ' ');
             fprintf(out,"\r%s%s", prompt, line);
@@ -271,7 +271,7 @@ int rtems_shell_line_editor(
           }
           col = 0;
           break;
-          
+
         case 5:/*Control-e*/
           if (output)
             fprintf(out,line + col);
@@ -290,7 +290,7 @@ int rtems_shell_line_editor(
             line[col] = '\0';
           }
           break;
-          
+
         case 0x04:/*Control-d*/
           if (strlen(line))
             break;
@@ -298,7 +298,7 @@ int rtems_shell_line_editor(
           if (output)
             fputc('\n', out);
           return -2;
-        
+
         case '\f':
           if (output) {
             int end;
@@ -334,7 +334,7 @@ int rtems_shell_line_editor(
            */
           if (output)
             fprintf(out,"\n");
-          
+
           /*
            * Only process the command if we have a command and it is not
            * repeated in the history.
@@ -378,68 +378,6 @@ int rtems_shell_line_editor(
   return -2;
 }
 
-int rtems_shell_scanline(
-  char *line,
-  int   size,
-  FILE *in,
-  FILE *out
-)
-{
-  int c;
-  int col;
-  int doEcho;
-
-  doEcho = (out && isatty(fileno(in)));
-
-  col = 0;
-  if (*line) {
-    col = strlen(line);
-    if (doEcho) fprintf(out,"%s",line);
-  }
-  tcdrain(fileno(in));
-  if (out)
-    tcdrain(fileno(out));
-  for (;;) {
-    line[col] = 0;
-    c = fgetc(in);
-    switch (c) {
-      case EOF:
-        return 0;
-      case '\n':
-      case '\r':
-        if (doEcho)
-          fputc('\n',out);
-        return 1;
-      case  127:
-      case '\b':
-        if (col) {
-          if (doEcho) {
-            fputc('\b',out);
-            fputc(' ',out);
-            fputc('\b',out);
-          }
-          col--;
-        } else {
-          if (doEcho) fputc('\a',out);
-        }
-        break;
-     default:
-       if (!iscntrl(c)) {
-         if (col<size-1) {
-            line[col++] = c;
-            if (doEcho) fputc(c,out);
-          } else {
-            if (doEcho) fputc('\a',out);
-          }
-       } else {
-        if (doEcho)
-          if (c=='\a') fputc('\a',out);
-       }
-       break;
-     }
-  }
-}
-  
 /* ----------------------------------------------- *
  * - The shell TASK
  * Poor but enough..
@@ -473,7 +411,7 @@ void rtems_shell_init_issue(void)
   }
 }
 
-int rtems_shell_login(FILE * in,FILE * out) {
+static bool rtems_shell_login(FILE * in,FILE * out) {
   FILE          *fd;
   int            c;
   time_t         t;
@@ -584,41 +522,12 @@ int rtems_shell_login(FILE * in,FILE * out) {
     }
   }
 
-  times=0;
-  strcpy(name,"");
-  strcpy(pass,"");
-  for (;;) {
-    times++;
-    if (times>3) break;
-    if (out) fprintf(out,"\nlogin: ");
-    if (!rtems_shell_scanline(name,sizeof(name),in,out )) break;
-    if (out) fprintf(out,"Password: ");
-    if (!rtems_shell_scanline(pass,sizeof(pass),in,NULL)) break;
-    if (out) fprintf(out,"\n");
-    if ((passwd=getpwnam(name))) {
-      if (strcmp(passwd->pw_passwd,"!")) { /* valid user */
-        setuid(passwd->pw_uid);
-        setgid(passwd->pw_gid);
-        rtems_current_user_env->euid =
-        rtems_current_user_env->egid = 0;
-        chown(rtems_current_shell_env->devname,passwd->pw_uid,0);
-        rtems_current_user_env->euid = passwd->pw_uid;
-        rtems_current_user_env->egid = passwd->pw_gid;
-        if (!strcmp(passwd->pw_passwd,"*")) {
-          /* /etc/shadow */
-          return 0;
-        } else {
-          /* crypt() */
-          return 0;
-        }
-      }
-    }
-    if (out)
-      fprintf(out,"Login incorrect\n");
-    strcpy(name,"");
-    strcpy(pass,"");
-  }
-  return -1;
+  return rtems_shell_login_prompt(
+    in,
+    out,
+    rtems_current_shell_env->devname,
+    rtems_current_shell_env->login_check
+  );
 }
 
 #if defined(SHELL_DEBUG)
@@ -686,7 +595,7 @@ bool rtems_shell_main_loop(
 
   shell_env =
   rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
- 
+
   /*
    * @todo chrisj
    * Remove the use of task variables. Change to have a single
@@ -711,7 +620,7 @@ bool rtems_shell_main_loop(
 
   fileno(stdout);
 
-  /* fprintf( stderr, 
+  /* fprintf( stderr,
      "-%s-%s-\n", shell_env->input, shell_env->output );
   */
 
@@ -732,7 +641,7 @@ bool rtems_shell_main_loop(
       stdoutToClose = output;
     }
   }
-  
+
   if (shell_env->input && strcmp(shell_env_arg->input, "stdin") != 0) {
     FILE *input = fopen(shell_env_arg->input, "r");
     if (!input) {
@@ -772,7 +681,7 @@ bool rtems_shell_main_loop(
   setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
 
   rtems_shell_initialize_command_set();
-  
+
   /*
    * Allocate the command line buffers.
    */
@@ -780,7 +689,7 @@ bool rtems_shell_main_loop(
   if (!cmd_argv) {
     fprintf(stderr, "no memory for command line buffers\n" );
   }
-  
+
   cmds[0] = calloc (cmd_count, RTEMS_SHELL_CMD_SIZE);
   if (!cmds[0]) {
     fprintf(stderr, "no memory for command line buffers\n" );
@@ -793,7 +702,7 @@ bool rtems_shell_main_loop(
     for (cmd = 1; cmd < cmd_count; cmd++) {
       cmds[cmd] = cmds[cmd - 1] + RTEMS_SHELL_CMD_SIZE;
     }
-    
+
     do {
       /* Set again root user and root filesystem, side effect of set_priv..*/
       sc = rtems_libio_set_private_env();
@@ -808,8 +717,8 @@ bool rtems_shell_main_loop(
        *  loop when the connection is dropped during login and
        *  keep on trucking.
        */
-      if (shell_env->login) {
-        result = rtems_shell_login(stdin,stdout) == 0;
+      if (shell_env->login_check != NULL) {
+        result = rtems_shell_login(stdin,stdout);
       } else {
         result = true;
       }
@@ -829,18 +738,18 @@ bool rtems_shell_main_loop(
           chdir(shell_env->cwd);
         else
           chdir("/"); /* XXX: chdir to getpwent homedir */
-        
+
         shell_env->exit_shell = false;
 
         for (;;) {
           int cmd;
-          
+
           /* Prompt section */
           if (prompt) {
             rtems_shell_get_prompt(shell_env, prompt,
                                    RTEMS_SHELL_PROMPT_SIZE);
           }
-        
+
           /* getcmd section */
           cmd = rtems_shell_line_editor(cmds, cmd_count,
                                         RTEMS_SHELL_CMD_SIZE, prompt,
@@ -848,7 +757,7 @@ bool rtems_shell_main_loop(
 
           if (cmd == -1)
             continue; /* empty line */
-          
+
           if (cmd == -2)
             break; /*EOF*/
 
@@ -856,7 +765,7 @@ bool rtems_shell_main_loop(
 
           if (shell_env->echo)
             fprintf(stdout, "%d: %s\n", line, cmds[cmd]);
-          
+
           /* evaluate cmd section */
           c = cmds[cmd];
           while (*c) {
@@ -944,12 +853,12 @@ static rtems_status_code   rtems_shell_run (
   const char          *devname,
   bool                 forever,
   bool                 wait,
-  const char*          input,
-  const char*          output,
+  const char          *input,
+  const char          *output,
   bool                 output_append,
   rtems_id             wake_on_end,
   bool                 echo,
-  bool                 login
+  rtems_login_check    login_check
 )
 {
   rtems_id           task_id;
@@ -991,7 +900,7 @@ static rtems_status_code   rtems_shell_run (
   shell_env->output        = strdup (output);
   shell_env->output_append = output_append;
   shell_env->wake_on_end   = wake_on_end;
-  shell_env->login         = login;
+  shell_env->login_check   = login_check;
 
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
@@ -1017,7 +926,7 @@ rtems_status_code rtems_shell_init(
   const char          *devname,
   bool                 forever,
   bool                 wait,
-  bool                 login
+  rtems_login_check    login_check
 )
 {
   rtems_id to_wake = RTEMS_ID_NONE;
@@ -1037,7 +946,7 @@ rtems_status_code rtems_shell_init(
     false,                   /* output_append */
     to_wake,                 /* wake_on_end */
     false,                   /* echo */
-    login                    /* login */
+    login_check              /* login check */
   );
 }
 
@@ -1060,7 +969,7 @@ rtems_status_code   rtems_shell_script (
     if (sc != RTEMS_SUCCESSFUL)
       return sc;
   }
-  
+
   sc = rtems_shell_run(
     task_name,       /* task_name */
     task_stacksize,  /* task_stacksize */
@@ -1073,7 +982,7 @@ rtems_status_code   rtems_shell_script (
     output_append,   /* output_append */
     current_task,    /* wake_on_end */
     echo,            /* echo */
-    false            /* login */
+    NULL             /* login check */
   );
   if (sc != RTEMS_SUCCESSFUL)
     return sc;

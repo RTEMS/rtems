@@ -24,6 +24,7 @@
 #include <termios.h>
 #include <rtems/fs.h>
 #include <rtems/libio.h>
+#include <rtems/login.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -99,16 +100,9 @@ rtems_shell_cmd_t * rtems_shell_alias_cmd(
 
 int rtems_shell_make_args(
   char  *commandLine,
-  int   *argc_p, 
-  char **argv_p, 
+  int   *argc_p,
+  char **argv_p,
   int    max_args
-);
-
-int rtems_shell_scanline(
-  char *line,
-  int   size,
-  FILE *in,
-  FILE *out
 );
 
 int rtems_shell_cat_file(
@@ -135,7 +129,7 @@ int rtems_shell_script_file(
  * @param task_priority The priority the shell runs at.
  * @param forever Repeat logins.
  * @param wait Caller should block until shell exits.
- * @param login Demand user login.
+ * @param login_check User login check function, NULL disables login checks.
  *
  */
 rtems_status_code rtems_shell_init(
@@ -145,7 +139,7 @@ rtems_status_code rtems_shell_init(
   const char          *devname,
   bool                 forever,
   bool                 wait,
-  bool                 login
+  rtems_login_check    login_check
 );
 
 /**
@@ -179,20 +173,20 @@ rtems_status_code rtems_shell_script(
 int rtems_shell_str2int(const char * s);
 
 typedef struct  {
-  rtems_name  magic; /* 'S','E','N','V': Shell Environment */
-  const char *devname;
-  const char *taskname;
+  rtems_name         magic; /* 'S','E','N','V': Shell Environment */
+  const char        *devname;
+  const char        *taskname;
   /* user extensions */
-  bool        exit_shell; /* logout */
-  bool        forever   ; /* repeat login */
-  int         errorlevel;
-  bool        echo;
-  char        cwd[256];
-  const char* input;
-  const char* output;
-  bool        output_append;
-  rtems_id    wake_on_end;
-  bool        login;
+  bool               exit_shell; /* logout */
+  bool               forever; /* repeat login */
+  int                errorlevel;
+  bool               echo;
+  char               cwd[256];
+  const char        *input;
+  const char        *output;
+  bool               output_append;
+  rtems_id           wake_on_end;
+  rtems_login_check  login_check;
 } rtems_shell_env_t;
 
 bool rtems_shell_main_loop(
@@ -210,7 +204,7 @@ extern rtems_shell_env_t *rtems_current_shell_env;
  * all possible file systems being included it would force the
  * networking stack into the applcation and this may not be
  * required.
- */ 
+ */
 struct rtems_shell_filesystems_tt;
 typedef struct rtems_shell_filesystems_tt rtems_shell_filesystems_t;
 

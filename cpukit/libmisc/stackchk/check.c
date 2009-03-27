@@ -205,45 +205,49 @@ void rtems_stack_checker_begin_extension(
  *  NOTE: The system is in a questionable state... we may not get
  *        the following message out.
  */
-void Stack_check_report_blown_task(
-  Thread_Control *running,
-  bool         pattern_ok
-)
+void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
 {
   Stack_Control *stack = &running->Start.Initial_stack;
+  char *pattern_area = Stack_check_Get_pattern_area(stack);
+  char name [32];
 
+  printk("BLOWN STACK!!!\n");
+  printk("task control block: 0x%08lx\n", (unsigned long) running);
+  printk("task ID: 0x%08lx\n", (unsigned long) running->Object.id);
   printk(
-    "BLOWN STACK!!! Offending task(0x%p): "
-        "id=0x%08" PRIx32 "; name=0x%08" PRIx32,
-    running,
-    running->Object.id,
-    running->Object.name.name_u32
+    "task name: 0x%08lx\n",
+    (unsigned long) running->Object.name.name_u32
   );
+  printk(
+    "task name string: %s\n",
+    rtems_object_get_name(running->Object.id, sizeof(name), name)
+  );
+  printk(
+    "task stack area (%lu Bytes): 0x%08lx .. 0x%08lx\n",
+    (unsigned long) stack->size,
+    (unsigned long) stack->area,
+    (unsigned long) ((char *) stack->area + stack->size)
+  );
+  if (!pattern_ok) {
+    printk(
+      "damaged pattern area (%lu Bytes): 0x%08lx .. 0x%08lx\n",
+      (unsigned long) PATTERN_SIZE_BYTES,
+      (unsigned long) pattern_area,
+      (unsigned long) (pattern_area + PATTERN_SIZE_BYTES)
+    );
+  }
 
   #if defined(RTEMS_MULTIPROCESSING)
     if (rtems_configuration_get_user_multiprocessing_table()) {
       printk(
-        "; node=%d",
-        rtems_configuration_get_user_multiprocessing_table()->node
+        "node: 0x%08lx\n",
+	(unsigned long)
+          rtems_configuration_get_user_multiprocessing_table()->node
       );
     }
   #endif
 
-  printk(
-    "\n  stack covers range 0x%p - 0x%p (%d bytes)\n",
-    stack->area,
-    stack->area + stack->size - 1,
-    stack->size
-  );
-
-  if ( !pattern_ok ) {
-    printk(
-      "  Damaged pattern begins at 0x%08lx and is %d bytes long\n",
-      (unsigned long) Stack_check_Get_pattern_area(stack),
-      PATTERN_SIZE_BYTES);
-  }
-
-  rtems_fatal_error_occurred( 0x81 );
+  rtems_fatal_error_occurred(0x81);
 }
 
 /*

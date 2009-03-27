@@ -5,7 +5,7 @@
  *
  *  Author: 17,may 2001
  *
- *   WORK: fernando.ruiz@ctv.es 
+ *   WORK: fernando.ruiz@ctv.es
  *   HOME: correo@fernando-ruiz.com
  *
  * After start the net you can start this daemon.
@@ -15,7 +15,7 @@
  *
  * With register_telnetd() you add a new command in the shell to start
  * this daemon interactively. (Login in /dev/console of course)
- * 
+ *
  * Sorry but OOB is not still implemented. (This is the first version)
  *
  * Till Straumann <strauman@slac.stanford.edu>
@@ -23,11 +23,20 @@
  *    possible to have 'telnetd' run an arbitrary 'shell'
  *    program.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
- *  $Id$
+ * Copyright (c) 2009
+ * embedded brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * <rtems@embedded-brains.de>
+ *
+ * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -73,10 +82,7 @@ typedef union uni_sa {
 
 static int sockpeername(int sock, char *buf, int bufsz);
 
-static int initialize_telnetd(void);
-static int telnetd_askForPassword;
-
-void * telnetd_dflt_spawn(
+void *telnetd_dflt_spawn(
   const char *name,
   unsigned priority,
   unsigned stackSize,
@@ -85,18 +91,15 @@ void * telnetd_dflt_spawn(
 );
 
 /***********************************************************/
-rtems_id            telnetd_task_id                 = 0;
-uint32_t            telnetd_stack_size              = 32000;
-rtems_task_priority telnetd_task_priority           = 0;
-bool                telnetd_remain_on_caller_stdio  = false;
-void                (*telnetd_shell)(char *, void*) = 0;
-void                *telnetd_shell_arg              = NULL;
-void *              (*telnetd_spawn_task)(
+static rtems_id telnetd_task_id = RTEMS_ID_NONE;
+
+void *(*telnetd_spawn_task)(
   const char *,
   unsigned,
   unsigned,
   void (*)(void*),
-  void *) = telnetd_dflt_spawn;
+  void *
+) = telnetd_dflt_spawn;
 
 static char *grab_a_Connection(
   int des_socket,
@@ -178,14 +181,6 @@ static int sockpeername(int sock, char *buf, int bufsz)
   return rval;
 }
 
-#if 1
-#define INSIDE_TELNETD
-#include "check_passwd.c"
-#else
-#define check_passwd(arg) 0
-#endif
-
-
 static void
 spawned_shell(void *arg);
 
@@ -203,7 +198,7 @@ rtems_task_telnetd(void *task_argument)
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
-    telnetd_task_id=0;
+    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
   setsockopt(des_socket,SOL_SOCKET,SO_KEEPALIVE,&i,sizeof(i));
@@ -215,13 +210,13 @@ rtems_task_telnetd(void *task_argument)
   if ((bind(des_socket,&srv.sa,size_adr))<0) {
     perror("telnetd:bind");
     close(des_socket);
-    telnetd_task_id=0;
+    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
   if ((listen(des_socket,5))<0) {
     perror("telnetd:listen");
           close(des_socket);
-    telnetd_task_id=0;
+    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
 
@@ -229,28 +224,51 @@ rtems_task_telnetd(void *task_argument)
    * was started from the console anyways..
    */
   do {
-    if ( telnetd_remain_on_caller_stdio ) {
-      char device_name[32];
-      ttyname_r( 1, device_name, sizeof(device_name) );
-      if ( !telnetd_askForPassword || (0 == check_passwd(arg->peername)) )
-	telnetd_shell(device_name, telnetd_shell_arg);
+    if (rtems_telnetd_config.keep_stdio) {
+      bool start = true;
+      char device_name [32];
+
+      ttyname_r( 1, device_name, sizeof( device_name));
+      if (rtems_telnetd_config.login_check != NULL) {
+        start = rtems_shell_login_prompt(
+          stdin,
+          stderr,
+          device_name,
+          rtems_telnetd_config.login_check
+        );
+      }
+      if (start) {
+        rtems_telnetd_config.command( device_name, arg->arg);
+      } else {
+        syslog(
+          LOG_AUTHPRIV | LOG_WARNING,
+          "telnetd: to many wrong passwords entered from %s",
+          device_name
+        );
+      }
     } else {
       devname = grab_a_Connection(des_socket, &srv, peername, sizeof(peername));
 
       if ( !devname ) {
-	/* if something went wrong, sleep for some time */
-	sleep(10);
-	continue;
+        /* if something went wrong, sleep for some time */
+        sleep(10);
+        continue;
       }
 
       arg = malloc( sizeof(*arg) );
 
       arg->devname = devname;
-      arg->arg = telnetd_shell_arg;
+      arg->arg = rtems_telnetd_config.arg;
       strncpy(arg->peername, peername, sizeof(arg->peername));
 
-      if ( !telnetd_spawn_task( &devname[5], telnetd_task_priority,
-               telnetd_stack_size, spawned_shell, arg) ) {
+      telnetd_task_id = (rtems_id) telnetd_spawn_task(
+        devname,
+        rtems_telnetd_config.priority,
+        rtems_telnetd_config.stack_size,
+        spawned_shell,
+        arg
+      );
+      if (telnetd_task_id == RTEMS_ID_NONE) {
         FILE *dummy;
 
         if ( telnetd_spawn_task != telnetd_dflt_spawn ) {
@@ -273,83 +291,71 @@ rtems_task_telnetd(void *task_argument)
     }
   } while(1);
 
-  /* TODO: how to free the connection semaphore? But then - 
+  /* TODO: how to free the connection semaphore? But then -
    *       stopping the daemon is probably only needed during
    *       development/debugging.
    *       Finalizer code should collect all the connection semaphore
    *       counts and eventually clean up...
    */
   close(des_socket);
-  telnetd_task_id=0;
+  telnetd_task_id = RTEMS_ID_NONE;
 }
 
-/***********************************************************/
-static int initialize_telnetd(void) {
-  
-  if (telnetd_task_id         ) return RTEMS_RESOURCE_IN_USE;
-  if (telnetd_stack_size<=0   ) telnetd_stack_size   =32000;
-
-  if ( !telnetd_spawn_task("TNTD", telnetd_task_priority,
-          RTEMS_MINIMUM_STACK_SIZE, rtems_task_telnetd, 0) ) {
-    return -1;
-  }
-  return 0;
-}
-
-/***********************************************************/
-int rtems_telnetd_initialize(
-  void               (*cmd)(char *, void *),
-  void                *arg,
-  bool                 remainOnCallerSTDIO,
-  size_t               stack,
-  rtems_task_priority  priority,
-  bool                 askForPassword
-)
+rtems_status_code rtems_telnetd_initialize( void)
 {
-  rtems_status_code sc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-#if 0
-  printf("This is rtems-telnetd (modified by Till Straumann)\n");
-  printf("$Id$\n");
-  printf("Release $Name$\n");
-#endif
-
-  if ( !telnetd_shell && !cmd ) {
-    fprintf(stderr,"startTelnetd(): setup error - NO SHELL; bailing out\n");
-    return 1;
+  if (telnetd_task_id != RTEMS_ID_NONE) {
+    fprintf(stderr, "telnetd already started\n");
+    return RTEMS_RESOURCE_IN_USE;
   }
 
-  if (telnetd_task_id) {
-    fprintf(stderr,"ERROR:telnetd already started\n");
-    return 1;
-  };
+  if (rtems_telnetd_config.command == NULL) {
+    fprintf(stderr, "telnetd setup with invalid command\n");
+    return RTEMS_IO_ERROR;
+  }
 
   if ( !telnet_pty_initialize() ) {
-    fprintf(stderr,"PTY driver probably not properly registered\n");
-    return 1;
+    fprintf(stderr, "telnetd cannot initialize PTY driver\n");
+    return RTEMS_IO_ERROR;
   }
 
-  telnetd_askForPassword = askForPassword;
-
-  if (cmd)
-    telnetd_shell = cmd;
-  telnetd_shell_arg     = arg;
-  telnetd_stack_size    = stack;
-  if ( !priority ) {
-    priority = rtems_bsdnet_config.network_task_priority;
+  /* Check priority */
+  if (rtems_telnetd_config.priority <= 0) {
+    rtems_telnetd_config.priority = rtems_bsdnet_config.network_task_priority;
   }
-  if ( priority < 2 )
-    priority = 100;
-  telnetd_task_priority          = priority;
-  telnetd_remain_on_caller_stdio = remainOnCallerSTDIO;
+  if (rtems_telnetd_config.priority < 2) {
+    rtems_telnetd_config.priority = 100;
+  }
 
-  sc = initialize_telnetd();
-  if (sc != RTEMS_SUCCESSFUL) return sc;
+  /* Check stack size */
+  if (rtems_telnetd_config.stack_size <= 0) {
+    rtems_telnetd_config.stack_size = 32 * 1024;
+  }
 
-  if ( !telnetd_remain_on_caller_stdio )
-    fprintf(stderr, "rtems_telnetd() started with stacksize=%u,priority=%d\n",
-      (unsigned)telnetd_stack_size,(int)telnetd_task_priority);
-  return 0;
+  /* Spawn task */
+  telnetd_task_id = (rtems_id) telnetd_spawn_task(
+    "TNTD",
+    rtems_telnetd_config.priority,
+    RTEMS_MINIMUM_STACK_SIZE,
+    rtems_task_telnetd,
+    0
+  );
+  if (telnetd_task_id == RTEMS_ID_NONE) {
+    return RTEMS_IO_ERROR;
+  }
+
+  /* Print status */
+  if (!rtems_telnetd_config.keep_stdio) {
+    fprintf(
+      stderr,
+      "telnetd started with stacksize = %u and priority = %d\n",
+      (unsigned) rtems_telnetd_config.stack_size,
+      (unsigned) rtems_telnetd_config.priority
+    );
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /* utility wrapper */
@@ -361,6 +367,8 @@ spawned_shell(void *targ)
   FILE                *ostd[3]={ stdin, stdout, stderr };
   int                  i=0;
   struct shell_args  *arg = targ;
+  bool login_failed = false;
+  bool start = true;
 
   sc=rtems_libio_set_private_env();
 
@@ -397,12 +405,30 @@ spawned_shell(void *targ)
   #endif
 
   /* call their routine */
-  if ( !telnetd_askForPassword || (0 == check_passwd(arg->peername)) )
-    telnetd_shell(arg->devname, arg->arg);
+  if (rtems_telnetd_config.login_check != NULL) {
+    start = rtems_shell_login_prompt(
+      stdin,
+      stderr,
+      arg->devname,
+      rtems_telnetd_config.login_check
+    );
+    login_failed = !start;
+  }
+  if (start) {
+    rtems_telnetd_config.command( arg->devname, arg->arg);
+  }
 
   stdin  = ostd[0];
   stdout = ostd[1];
   stderr = ostd[2];
+
+  if (login_failed) {
+    syslog(
+      LOG_AUTHPRIV | LOG_WARNING,
+      "telnetd: to many wrong passwords entered from %s",
+      arg->peername
+    );
+  }
 
 cleanup:
   release_a_Connection(arg->devname, arg->peername, nstd, i);
@@ -433,7 +459,7 @@ void *
 telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSize, void (*fn)(void *), void* fnarg)
 {
   rtems_status_code        sc;
-  rtems_id                 task_id;
+  rtems_id                 task_id = RTEMS_ID_NONE;
   char                     nm[4] = {'X','X','X','X' };
   struct wrap_delete_args *pwa = malloc(sizeof(*pwa));
 
@@ -441,7 +467,7 @@ telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSi
 
   if ( !pwa ) {
     perror("Telnetd: no memory\n");
-    return 0;
+    return (void *) RTEMS_ID_NONE;
   }
 
   pwa->t = fn;
@@ -460,9 +486,9 @@ telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSi
       (rtems_task_argument)pwa))) {
         free(pwa);
         rtems_error(sc,"Telnetd: spawning task failed");
-        return 0;
+        return (void *) RTEMS_ID_NONE;
   }
-  return (void*)task_id;
+  return (void *) task_id;
 }
 
 /* convenience routines for CEXP (retrieve stdio descriptors

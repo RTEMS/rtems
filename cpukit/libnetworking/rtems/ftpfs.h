@@ -56,16 +56,13 @@ extern "C" {
  * To open a file @c file.txt in the directory @c dir (relative to home
  * directory of the server) on a server named @c host using the user name
  * @c user and the password @c pw you must specify the following path:
- *
- * @c /FTP/user:pw@host/dir/file.txt
+ * <tt>/FTP/user:pw@@host/dir/file.txt</tt>.
  *
  * If the server is the default server specified in BOOTP, it can be ommitted:
- *
- * @c /FTP/user:pw/dir/file.txt
+ * <tt>/FTP/user:pw/dir/file.txt</tt>.
  *
  * The user name will be used for the password if it is ommitted:
- *
- * @c /FTP/user@host/dir/file.txt
+ * <tt>/FTP/user@@host/dir/file.txt</tt>.
  *
  * For the data transfer passive (= default) and active (= fallback) mode are
  * supported.

@@ -125,7 +125,8 @@ include_rtems_HEADERS += libmisc/mw-fb/mw_fb.h libmisc/mw-fb/mw_uid.h
 
 ## shell
 if LIBSHELL
-include_rtems_HEADERS += libmisc/shell/shell.h libmisc/shell/shellconfig.h
+include_rtems_HEADERS += libmisc/shell/shell.h libmisc/shell/shellconfig.h \
+  libmisc/shell/login.h
 endif
 
 ## i2c

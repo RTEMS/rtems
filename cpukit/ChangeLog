@@ -1,3 +1,15 @@
+2009-03-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am, libmisc/Makefile.am,
+	libmisc/shell/shell.c, libmisc/shell/shell.h, telnetd/check_passwd.c,
+	telnetd/telnetd.c, telnetd/telnetd.h:
+	Generalized login check.
+	* libmisc/shell/login.h, libmisc/shell/login_check.c,
+	libmisc/shell/login_prompt.c: New files.
+	* libmisc/stackchk/check.c: Changed format for blown stack message.
+	* libcsupport/src/libio_sockets.c: Removed superfluous cast.
+	* libnetworking/rtems/ftpfs.h: Documentation.
+
 2009-03-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmisc/shell/shell.h: Pointer to

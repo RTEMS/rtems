@@ -3,49 +3,111 @@
  *  May 2001
  *  Reworked by Till Straumann and .h overhauled by Joel Sherrill.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * Copyright (c) 2009
+ * embedded brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * <rtems@embedded-brains.de>
  *
- *  $Id$
+ * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #ifndef _RTEMS_TELNETD_H
 #define _RTEMS_TELNETD_H
 
+#include <rtems.h>
+#include <rtems/login.h>
+
 #ifdef __cplusplus
 extern "C" {
-#endif	
+#endif
+
+bool rtems_telnetd_login_check(
+  const char *user,
+  const char *passphrase
+);
 
 /**
- *  This method initializes the telnetd subsystem.
- *
- *  @param[in] cmd is the function which is the "shell" telnetd invokes
- *  @param[in] arg is the context pointer to cmd
- *  @param[in] remainOnCallerSTDIO is set to TRUE if telnetd takes over the
- *    standard in, out and error associated with task.  In this case,
- *    it will be NOT be listening on any sockets.  When this parameters
- *    is FALSE the telnetd will create other tasks for the shell
- *    which listen on sockets.
- *  @param[in] stack is stack size of spawned task.
- *  @param[in] priority is the initial priority of spawned task(s).  If
- *    this parameter is less than 2, then the default priority of 100 is used.
- *  @param[in] askForPassword is set to TRUE if telnetd is to ask for a
- *    password. This is set to FALSE to invoke "cmd" with no password check.
- *    This may be OK if "cmd" includes its own check and indeed the RTEMS Shell
- *    uses a login with a user name and password so this is the usual case.
+ * @brief Telnet command type.
  */
-int rtems_telnetd_initialize(
-  void               (*cmd)(char *, void *),
-  void                *arg,
-  bool                 remainOnCallerSTDIO,
-  size_t               stack,
-  rtems_task_priority  priority,
-  bool                 askForPassword
+typedef void (*rtems_telnetd_command)(
+  char * /* device name */,
+  void * /* arg */
 );
+
+/**
+ * @brief Telnet configuration structure.
+ */
+typedef struct {
+  /**
+   * @brief Function invoked for each Telnet connection.
+   *
+   * The first parameter contains the device name.  The second parameter
+   * contains the argument pointer of this configuration table.
+   */
+  rtems_telnetd_command command;
+
+  /**
+   * @brief Argument for command function.
+   */
+  void *arg;
+
+  /**
+   * @brief Task priority.
+   *
+   * If this parameter is equal to zero, then the priority of network task is
+   * used or 100 if this priority is less than two.
+   */
+  rtems_task_priority priority;
+
+  /**
+   * @brief Task stack size.
+   */
+  size_t stack_size;
+
+  /**
+   * @brief Login check function.
+   *
+   * Method used for login checks.  Use @c NULL to disable a login check.
+   */
+  rtems_login_check login_check;
+
+  /**
+   * @brief Keep standard IO of the caller.
+   *
+   * Telnet takes over the standard input, output and error associated with
+   * task, if this parameter is set to @c true.  In this case, it will @b not
+   * listen on any sockets.  When this parameter is @c false, Telnet will
+   * create other tasks for the shell which listen on sockets.
+   */
+  bool keep_stdio;
+} rtems_telnetd_config_table;
+
+/**
+ * @brief Telnet configuration.
+ *
+ * The application must provide this configuration table.  It is used by
+ * rtems_telnetd_initialize() to configure the Telnet subsystem.  Do not modify
+ * the entries after the intialization since it is used internally.
+ */
+extern rtems_telnetd_config_table rtems_telnetd_config;
+
+/**
+ * @brief Initializes the Telnet subsystem.
+ *
+ * Uses the application provided @ref rtems_telnetd_config configuration table.
+ */
+rtems_status_code rtems_telnetd_initialize( void);
 
 #ifdef __cplusplus
 }
-#endif	
+#endif
 
 #endif
