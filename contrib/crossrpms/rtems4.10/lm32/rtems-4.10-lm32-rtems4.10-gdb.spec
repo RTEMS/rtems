@@ -45,14 +45,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.50.20090224
-%define gdb_rpmvers %{expand:%(echo 6.8.50.20090224 | tr - _)} 
+%define gdb_version 6.8.50.20090329
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090329 | tr - _)} 
 
 Name:		rtems-4.10-lm32-rtems4.10-gdb
 Summary:	Gdb for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	3%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -74,6 +74,11 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 %if "lm32-rtems4.10" == "h8300-rtems4.10"
 %define build_sim --disable-sim
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "lm32-rtems4.10" == "m32c-rtems4.10"
+%define build_sim --disable-sim
+%endif
 %endif
 %if "lm32-rtems4.10" == "lm32-rtems4.10"
 %define build_sim --disable-sim
@@ -104,13 +109,13 @@ BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
 
 # A copy of a gdb development snapshot having been retrieved from
-# ftp://sources.redhat.com/pub/gdb/snapshots/gdb-%{gdb_version}.tar.bz2
+# ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
 Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
 
 # rtems-4.10 patches
 # + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
 # + misc small fixes to lm32-sim/gdb
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}-rtems4.10-20090225.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090224-rtems4.10-20090225.diff
 
 %description
 GDB for target lm32-rtems4.10
