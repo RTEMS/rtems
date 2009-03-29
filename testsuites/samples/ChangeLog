@@ -1,3 +1,8 @@
+2009-03-29  Joel Sherrill <joel.sherrill@gmail.com>
+
+	* fileio/init.c: Change arguments to rtems_shell_init() to match
+	new expectations.
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* cdtest/main.cc: Use printk() in global destructors since printf() no

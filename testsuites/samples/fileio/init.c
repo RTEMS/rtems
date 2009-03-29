@@ -98,6 +98,7 @@ fstab_t fs_table[] = {
 
 #ifdef USE_SHELL
 #include <rtems/shell.h>
+#include <rtems/login.h>
 
 void writeFile(
   const char *name,
@@ -191,10 +192,9 @@ void fileio_start_shell(void)
     "/dev/console",                  /* devname */
     false,                           /* forever */
     true,                            /* wait */
-    true                             /* login */
+    rtems_shell_login_check          /* login */
   );
 }
-
 #endif /* USE_SHELL */
 
 void fileio_print_free_heap(void)
