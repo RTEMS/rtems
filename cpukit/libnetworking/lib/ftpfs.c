@@ -292,10 +292,10 @@ static rtems_ftpfs_reply rtems_ftpfs_send_command_with_parser(
 
   /* Send command argument if necessary */
   if (arg != NULL) {
-	  rv = send( socket, arg, strlen( arg), 0);
-	  if (rv < 0) {
-	    return RTEMS_FTPFS_REPLY_ERROR;
-	  }
+    rv = send( socket, arg, strlen( arg), 0);
+    if (rv < 0) {
+      return RTEMS_FTPFS_REPLY_ERROR;
+    }
     if (verbose) {
       write( STDERR_FILENO, arg, strlen( arg));
     }
@@ -438,8 +438,10 @@ static socklen_t rtems_ftpfs_create_address(
   return sizeof( *sa);
 }
 
-static void rtems_ftpfs_terminate( rtems_ftpfs_entry *e, rtems_libio_t *iop)
+static void rtems_ftpfs_terminate( rtems_libio_t *iop)
 {
+  rtems_ftpfs_entry *e = iop->data1;
+
   if (e != NULL) {
     /* Close data connection if necessary */
     if (e->data_socket >= 0) {
@@ -558,7 +560,6 @@ static int rtems_ftpfs_open_data_connection_active(
   int rv = 0;
   int eno = 0;
   rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
-  struct in_addr address = { .s_addr = 0 };
   struct sockaddr_in sa;
   socklen_t size = 0;
   int port_socket = -1;
@@ -676,7 +677,7 @@ static void rtems_ftpfs_pasv_parser(
   void *arg
 )
 {
-  rtems_ftpfs_pasv_entry *e = (rtems_ftpfs_pasv_entry *) arg;
+  rtems_ftpfs_pasv_entry *e = arg;
   size_t i = 0;
 
   for (i = 0; i < len; ++i) {
@@ -725,7 +726,6 @@ static int rtems_ftpfs_open_data_connection_passive(
   int rv = 0;
   rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
   struct sockaddr_in sa;
-  socklen_t size = 0;
   uint32_t data_address = 0;
   uint16_t data_port = 0;
 
@@ -786,7 +786,6 @@ static int rtems_ftpfs_open(
   uint32_t mode
 )
 {
-  int rv = 0;
   int eno = 0;
   bool ok = false;
   rtems_ftpfs_entry *e = NULL;
@@ -798,9 +797,12 @@ static int rtems_ftpfs_open(
     ? "STOR "
     : "RETR ";
   uint32_t client_address = 0;
-  char *location = strdup( (const char *) iop->file_info);
+  char *location = iop->file_info;
 
-  /* Check allocation */
+  /* Invalidate data handle */
+  iop->data1 = NULL;
+
+  /* Check location, it was allocated during path evaluation */
   if (location == NULL) {
     return ENOMEM;
   }
@@ -810,8 +812,7 @@ static int rtems_ftpfs_open(
     (iop->flags & LIBIO_FLAGS_WRITE) != 0
       && (iop->flags & LIBIO_FLAGS_READ) != 0
   ) {
-    eno = ENOTSUP;
-    goto cleanup;
+    return ENOTSUP;
   }
 
   /* Split location into parts */
@@ -823,8 +824,7 @@ static int rtems_ftpfs_open(
       &filename
   );
   if (!ok) {
-    eno = ENOENT;
-    goto cleanup;
+    return ENOENT;
   }
   DEBUG_PRINTF(
     "user = '%s', password = '%s', filename = '%s'\n",
@@ -836,14 +836,16 @@ static int rtems_ftpfs_open(
   /* Allocate connection entry */
   e = malloc( sizeof( *e));
   if (e == NULL) {
-    eno = ENOMEM;
-    goto cleanup;
+    return ENOMEM;
   }
 
   /* Initialize connection entry */
   e->ctrl_socket = -1;
   e->data_socket = -1;
   e->eof = false;
+
+  /* Save connection state */
+  iop->data1 = e;
 
   /* Open control connection */
   eno = rtems_ftpfs_open_ctrl_connection(
@@ -876,15 +878,9 @@ static int rtems_ftpfs_open(
 
 cleanup:
 
-  /* Free location parts buffer */
-  free( location);
-
-  if (eno == 0) {
-    /* Save connection state */
-    iop->data1 = e;
-  } else {
+  if (eno != 0) {
     /* Free all resources if an error occured */
-    rtems_ftpfs_terminate( e, iop);
+    rtems_ftpfs_terminate( iop);
   }
 
   return eno;
@@ -896,8 +892,8 @@ static ssize_t rtems_ftpfs_read(
   size_t count
 )
 {
-  rtems_ftpfs_entry *e = (rtems_ftpfs_entry *) iop->data1;
-  char *in = (char *) buffer;
+  rtems_ftpfs_entry *e = iop->data1;
+  char *in = buffer;
   size_t todo = count;
 
   if (e->eof) {
@@ -934,8 +930,8 @@ static ssize_t rtems_ftpfs_write(
   size_t count
 )
 {
-  rtems_ftpfs_entry *e = (rtems_ftpfs_entry *) iop->data1;
-  const char *out = (const char *) buffer;
+  rtems_ftpfs_entry *e = iop->data1;
+  const char *out = buffer;
   size_t todo = count;
 
   if (e->eof) {
@@ -968,9 +964,7 @@ static ssize_t rtems_ftpfs_write(
 
 static int rtems_ftpfs_close( rtems_libio_t *iop)
 {
-  rtems_ftpfs_entry *e = (rtems_ftpfs_entry *) iop->data1;
-
-  rtems_ftpfs_terminate( e, iop);
+  rtems_ftpfs_terminate( iop);
 
   return 0;
 }
@@ -990,24 +984,18 @@ static int rtems_ftpfs_eval_path(
   /*
    * The caller of this routine has striped off the mount prefix from the path.
    * We need to store this path here or otherwise we would have to do this job
-   * again.  It is not possible to allocate resources here since there is no
-   * way to free them later in every case.  The path is used in
-   * rtems_ftpfs_open() via iop->file_info.
-   *
-   * FIXME: Avoid to discard the const qualifier.
+   * again.  The path is used in rtems_ftpfs_open() via iop->file_info.
    */
-  pathloc->node_access = (void *) pathname;
+  pathloc->node_access = strdup( pathname);
 
   return 0;
 }
 
-static int rtems_ftpfs_eval_for_make(
-  const char *pathname,
-  rtems_filesystem_location_info_t *pathloc,
-  const char **name
-)
+static int rtems_ftpfs_free_node( rtems_filesystem_location_info_t *pathloc)
 {
-  rtems_set_errno_and_return_minus_one( EIO);
+  free( pathloc->node_access);
+
+  return 0;
 }
 
 static rtems_filesystem_node_types_t rtems_ftpfs_node_type(
@@ -1064,13 +1052,13 @@ static int rtems_ftpfs_fstat(
 
 const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .evalpath_h = rtems_ftpfs_eval_path,
-  .evalformake_h = rtems_ftpfs_eval_for_make,
+  .evalformake_h = NULL,
   .link_h = NULL,
   .unlink_h = NULL,
   .node_type_h = rtems_ftpfs_node_type,
   .mknod_h = NULL,
   .chown_h = NULL,
-  .freenod_h = NULL,
+  .freenod_h = rtems_ftpfs_free_node,
   .mount_h = NULL,
   .fsmount_me_h = rtems_ftpfs_mount_me,
   .unmount_h = NULL,
