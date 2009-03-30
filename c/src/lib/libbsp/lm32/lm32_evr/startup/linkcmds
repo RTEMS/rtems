@@ -231,13 +231,14 @@ SECTIONS
   __rtems_end = . ;
   PROVIDE (end = .);
 
+  . += _StackSize;
+  _fstack = .;
+
   WorkAreaBase = .;
 
-    . += _StackSize;
     . = ALIGN (16);
     _stack_init = .;
     _clear_end = .;
-    _fstack = .;
 
   } > sdram
 

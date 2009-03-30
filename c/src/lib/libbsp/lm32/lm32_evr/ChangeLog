@@ -1,3 +1,7 @@
+2009-03-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Stack was overlapping work area.
+
 2009-02-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, include/bsp.h: Run better on simulator. Timer is
