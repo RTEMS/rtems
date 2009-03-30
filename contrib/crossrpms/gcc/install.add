@@ -63,12 +63,10 @@
   rm -rf ${RPM_BUILD_ROOT}%{gccexec}/@tool_target@/%{gcc_version}/install-tools
 %endif
 
-%if %build_cxx
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits; then
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits
   fi
-%endif
 
   # Collect multilib subdirectories
   f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
