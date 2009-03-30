@@ -1,3 +1,7 @@
+2009-03-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shell/confinit.t: New argument sequence for rtems_shell_init().
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/.cvsignore: Add Object ID PDF files.

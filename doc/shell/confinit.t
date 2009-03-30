@@ -191,12 +191,14 @@ void start_shell(void)
   printf(" starting shell\n");
   printf(" =========================\n");
   rtems_shell_init(
-    "SHLL",                        /* task name */
-    RTEMS_MINIMUM_STACK_SIZE * 4,  /* task stack size */
-    100,                           /* task priority */
-    "/dev/console",                /* device name */
-    0,                             /* run forever */
-    1                              /* wait for shell to terminate */
+    "SHLL",                       /* task name */
+    RTEMS_MINIMUM_STACK_SIZE * 4, /* task stack size */
+    100,                          /* task priority */
+    "/dev/console",               /* device name */
+    false,                        /* run forever */
+    true,                         /* wait for shell to terminate */
+    rtems_shell_login_check       /* login check function,
+                                     use NULL to disable a login check */
   );
 @}
 @end smallexample
@@ -228,13 +230,14 @@ publicly available related to initialization and configuration.
 
 @findex rtems_shell_init
 @example
-rtems_status_code   rtems_shell_init (
-  char                *task_name,
-  uint32_t             task_stacksize,
+rtems_status_code rtems_shell_init(
+  const char          *task_name,
+  size_t               task_stacksize,
   rtems_task_priority  task_priority,
-  char                *devname,
-  tcflag_t             tcflag,
-  int                  forever
+  const char          *devname,
+  bool                 forever,
+  bool                 wait,
+  rtems_login_check    login_check
 );
 @end example
 
