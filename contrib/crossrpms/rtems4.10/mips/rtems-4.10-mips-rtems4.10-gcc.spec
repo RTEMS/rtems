@@ -60,7 +60,7 @@ Summary:      	mips-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	11%{?dist}
+Release:      	12%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -100,7 +100,7 @@ BuildRequires:	rtems-4.10-mips-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-mips-rtems4.10-binutils
-Requires:	rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-32%{?dist}
+Requires:	rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-33%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -434,7 +434,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-mips-rtems4.10-binutils
-# Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-32%{?dist}
+# Requires:       rtems-4.10-mips-rtems4.10-newlib = %{newlib_version}-33%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -586,7 +586,7 @@ Summary:      	C Library (newlib) for mips-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        32%{?dist}
+Release:        33%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -606,7 +606,7 @@ Newlib C Library for mips-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        32%{?dist}
+Release:        33%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
