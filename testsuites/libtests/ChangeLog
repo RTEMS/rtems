@@ -1,3 +1,12 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* cpuuse/Makefile.am, malloctest/Makefile.am,
+	monitor/Makefile.am, monitor02/Makefile.am,
+	putenvtest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am,
+	termios/Makefile.am, tztest/Makefile.am:
+	Eliminate _exe_/.exe.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* stackchk/stackchk.scn: Correct screen to match output.
