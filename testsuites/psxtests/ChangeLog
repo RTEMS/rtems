@@ -1,3 +1,22 @@
+2009-04-03	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+
+	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
+	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
+	psx07/Makefile.am, psx08/Makefile.am, psx09/Makefile.am,
+	psx10/Makefile.am, psx11/Makefile.am, psx12/Makefile.am,
+	psx13/Makefile.am, psx14/Makefile.am, psxbarrier01/Makefile.am,
+	psxcancel/Makefile.am, psxchroot01/Makefile.am,
+	psxcleanup/Makefile.am, psxenosys/Makefile.am,
+	psxfatal01/Makefile.am, psxfatal02/Makefile.am,
+	psxfile01/Makefile.am, psxkey01/Makefile.am,
+	psxmount/Makefile.am, psxmsgq01/Makefile.am,
+	psxmsgq02/Makefile.am, psxrdwrv/Makefile.am,
+	psxreaddir/Makefile.am, psxrwlock01/Makefile.am,
+	psxsem01/Makefile.am, psxsignal01/Makefile.am,
+	psxspin01/Makefile.am, psxstat/Makefile.am, psxsysconf/Makefile.am,
+	psxtime/Makefile.am, psxtimer01/Makefile.am, psxtimer02/Makefile.am,
+	psxualarm/Makefile.am: Eliminate _exe_/.exe.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxmsgq02/init.c, psxmsgq02/psxmsgq02.scn: Open the message queue
