@@ -1,3 +1,8 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Preset ac_cv_exeext=.exe for *-rtems*
+	  toolchains.
+
 2008-12-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/canonical-target-name.m4: Remove tic4x.

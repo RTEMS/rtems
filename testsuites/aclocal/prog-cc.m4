@@ -10,6 +10,10 @@ AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
 AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 
+case "$host" in
+*-*-rtems*) ac_cv_exeext=.exe;;
+esac
+
 RTEMS_CHECK_TOOL(CC,gcc)
 test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
