@@ -1,3 +1,12 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* base_mp/node1/Makefile.am, base_mp/node2/Makefile.am,
+	base_sp/Makefile.am, capture/Makefile.am, cdtest/Makefile.am,
+	fileio/Makefile.am, hello/Makefile.am, iostream/Makefile.am,
+	loopback/Makefile.am, minimum/Makefile.am, nsecs/Makefile.am,
+	paranoia/Makefile.am, pppd/Makefile.am, ticker/Makefile.am,
+	unlimited/Makefile.am: Eliminate _exe_/.exe.
+
 2009-03-29  Joel Sherrill <joel.sherrill@gmail.com>
 
 	* fileio/init.c: Change arguments to rtems_shell_init() to match
