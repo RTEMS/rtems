@@ -1,3 +1,7 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tmitronsem01/Makefile.am: Makefile.am: Eliminate _exe_/.exe.
+
 2008-09-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/timesys.h: Rename STACK_CHECKER_ON to more appropriate
