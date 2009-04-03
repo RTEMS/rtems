@@ -6,8 +6,8 @@ MANAGERS = io message semaphore
 
 if LIBCHIP
 
-rtems_tests_PROGRAMS = fileio.exe
-fileio_exe_SOURCES = init.c system.h
+rtems_tests_PROGRAMS = fileio
+fileio_SOURCES = init.c system.h
 
 dist_rtems_tests_DATA = fileio.doc
 endif
@@ -17,13 +17,13 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 if LIBCHIP
-fileio_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+fileio_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-LINK_OBJS = $(fileio_exe_OBJECTS) $(fileio_exe_LDADD)
-LINK_LIBS = $(fileio_exe_LDLIBS)
+LINK_OBJS = $(fileio_OBJECTS) $(fileio_LDADD)
+LINK_LIBS = $(fileio_LDLIBS)
 
-fileio.exe$(EXEEXT): $(fileio_exe_OBJECTS) $(fileio_exe_DEPENDENCIES)
-	@rm -f fileio.exe$(EXEEXT)
+fileio$(EXEEXT): $(fileio_OBJECTS) $(fileio_DEPENDENCIES)
+	@rm -f fileio$(EXEEXT)
 	$(make-exe)
 endif
 

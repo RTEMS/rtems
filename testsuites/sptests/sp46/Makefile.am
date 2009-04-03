@@ -4,8 +4,8 @@
 
 MANAGERS = all
 
-rtems_tests_PROGRAMS = sp46.exe
-sp46_exe_SOURCES = init.c
+rtems_tests_PROGRAMS = sp46
+sp46_SOURCES = init.c
 
 dist_rtems_tests_DATA = sp46.scn
 dist_rtems_tests_DATA += sp46.doc
@@ -14,15 +14,15 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp46_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+sp46_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp46_exe_OBJECTS) $(sp46_exe_LDADD)
-LINK_LIBS = $(sp46_exe_LDLIBS)
+LINK_OBJS = $(sp46_OBJECTS) $(sp46_LDADD)
+LINK_LIBS = $(sp46_LDLIBS)
 
-sp46.exe$(EXEEXT): $(sp46_exe_OBJECTS) $(sp46_exe_DEPENDENCIES)
-	@rm -f sp46.exe$(EXEEXT)
+sp46$(EXEEXT): $(sp46_OBJECTS) $(sp46_DEPENDENCIES)
+	@rm -f sp46$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

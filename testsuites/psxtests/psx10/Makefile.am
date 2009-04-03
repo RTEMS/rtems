@@ -4,8 +4,8 @@
 
 MANAGERS = all
 
-rtems_tests_PROGRAMS = psx10.exe
-psx10_exe_SOURCES = init.c task.c task2.c task3.c system.h ../include/pmacros.h
+rtems_tests_PROGRAMS = psx10
+psx10_SOURCES = init.c task.c task2.c task3.c system.h ../include/pmacros.h
 
 dist_rtems_tests_DATA = psx10.scn
 
@@ -13,16 +13,16 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psx10_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+psx10_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psx10_exe_OBJECTS) $(psx10_exe_LDADD)
-LINK_LIBS = $(psx10_exe_LDLIBS)
+LINK_OBJS = $(psx10_OBJECTS) $(psx10_LDADD)
+LINK_LIBS = $(psx10_LDLIBS)
 
-psx10.exe$(EXEEXT): $(psx10_exe_OBJECTS) $(psx10_exe_DEPENDENCIES)
-	@rm -f psx10.exe$(EXEEXT)
+psx10$(EXEEXT): $(psx10_OBJECTS) $(psx10_DEPENDENCIES)
+	@rm -f psx10$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

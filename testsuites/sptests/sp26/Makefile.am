@@ -4,8 +4,8 @@
 
 MANAGERS = io event semaphore clock
 
-rtems_tests_PROGRAMS = sp26.exe
-sp26_exe_SOURCES = init.c task1.c system.h
+rtems_tests_PROGRAMS = sp26
+sp26_SOURCES = init.c task1.c system.h
 
 dist_rtems_tests_DATA = sp26.scn
 dist_rtems_tests_DATA += sp26.doc
@@ -14,15 +14,15 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp26_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+sp26_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp26_exe_OBJECTS) $(sp26_exe_LDADD)
-LINK_LIBS = $(sp26_exe_LDLIBS)
+LINK_OBJS = $(sp26_OBJECTS) $(sp26_LDADD)
+LINK_LIBS = $(sp26_LDLIBS)
 
-sp26.exe$(EXEEXT): $(sp26_exe_OBJECTS) $(sp26_exe_DEPENDENCIES)
-	@rm -f sp26.exe$(EXEEXT)
+sp26$(EXEEXT): $(sp26_OBJECTS) $(sp26_DEPENDENCIES)
+	@rm -f sp26$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

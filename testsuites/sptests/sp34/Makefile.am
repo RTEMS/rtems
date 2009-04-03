@@ -4,8 +4,8 @@
 
 MANAGERS = all
 
-rtems_tests_PROGRAMS = sp34.exe
-sp34_exe_SOURCES = changepri.c
+rtems_tests_PROGRAMS = sp34
+sp34_SOURCES = changepri.c
 
 dist_rtems_tests_DATA = sp34.scn
 dist_rtems_tests_DATA += sp34.doc
@@ -16,11 +16,11 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp34_exe_OBJECTS) $(sp34_exe_LDADD)
-LINK_LIBS = $(sp34_exe_LDLIBS)
+LINK_OBJS = $(sp34_OBJECTS) $(sp34_LDADD)
+LINK_LIBS = $(sp34_LDLIBS)
 
-sp34.exe$(EXEEXT): $(sp34_exe_OBJECTS) $(sp34_exe_DEPENDENCIES)
-	@rm -f sp34.exe$(EXEEXT)
+sp34$(EXEEXT): $(sp34_OBJECTS) $(sp34_DEPENDENCIES)
+	@rm -f sp34$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am

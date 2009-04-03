@@ -4,8 +4,8 @@
 
 MANAGERS = all
 
-rtems_tests_PROGRAMS = psxcancel.exe
-psxcancel_exe_SOURCES = init.c ../include/pmacros.h
+rtems_tests_PROGRAMS = psxcancel
+psxcancel_SOURCES = init.c ../include/pmacros.h
 
 dist_rtems_tests_DATA = psxcancel.scn
 
@@ -13,16 +13,16 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxcancel_exe_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+psxcancel_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxcancel_exe_OBJECTS) $(psxcancel_exe_LDADD)
-LINK_LIBS = $(psxcancel_exe_LDLIBS)
+LINK_OBJS = $(psxcancel_OBJECTS) $(psxcancel_LDADD)
+LINK_LIBS = $(psxcancel_LDLIBS)
 
-psxcancel.exe$(EXEEXT): $(psxcancel_exe_OBJECTS) $(psxcancel_exe_DEPENDENCIES)
-	@rm -f psxcancel.exe$(EXEEXT)
+psxcancel$(EXEEXT): $(psxcancel_OBJECTS) $(psxcancel_DEPENDENCIES)
+	@rm -f psxcancel$(EXEEXT)
 	$(make-exe)
 
 include $(top_srcdir)/../automake/local.am
