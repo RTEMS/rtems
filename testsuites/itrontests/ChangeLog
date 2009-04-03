@@ -1,3 +1,12 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* itronhello/Makefile.am, itronmbf01/Makefile.am,
+	itronmbox01/Makefile.am, itronsem01/Makefile.am,
+	itrontask01/Makefile.am, itrontask02/Makefile.am,
+	itrontask03/Makefile.am, itrontask04/Makefile.am,
+	itrontime01/Makefile.am: 
+	Eliminate _exe_/.exe.
+
 2008-12-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* itrontask04/init.c: Run all tests successfully with maxixum number of
