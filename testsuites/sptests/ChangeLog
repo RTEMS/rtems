@@ -1,3 +1,29 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,
+	sp04/Makefile.am, sp05/Makefile.am, sp06/Makefile.am,
+	sp07/Makefile.am, sp08/Makefile.am, sp09/Makefile.am,
+	sp11/Makefile.am, sp12/Makefile.am, sp13/Makefile.am,
+	sp14/Makefile.am, sp15/Makefile.am, sp16/Makefile.am,
+	sp17/Makefile.am, sp19/Makefile.am, sp20/Makefile.am,
+	sp21/Makefile.am, sp22/Makefile.am, sp23/Makefile.am,
+	sp24/Makefile.am, sp25/Makefile.am, sp26/Makefile.am,
+	sp27/Makefile.am, sp28/Makefile.am, sp29/Makefile.am,
+	sp30/Makefile.am, sp31/Makefile.am, sp32/Makefile.am,
+	sp33/Makefile.am, sp34/Makefile.am, sp35/Makefile.am,
+	sp36/Makefile.am, sp37/Makefile.am, sp38/Makefile.am,
+	sp39/Makefile.am, sp40/Makefile.am, sp41/Makefile.am,
+	sp42/Makefile.am, sp43/Makefile.am, sp44/Makefile.am,
+	sp45/Makefile.am, sp46/Makefile.am, sp47/Makefile.am,
+	sp48/Makefile.am, spfatal/Makefile.am,
+	spfatal01/Makefile.am, spfatal02/Makefile.am,
+	spfatal03/Makefile.am, spfatal04/Makefile.am,
+	spfatal05/Makefile.am, spfatal06/Makefile.am,
+	spfatal07/Makefile.am, spfatal08/Makefile.am,
+	spfatal09/Makefile.am, spsize/Makefile.am,
+	spwatchdog/Makefile.am: 
+	Eliminate _exe_/.exe.
+
 2009-03-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1388/cpukit
