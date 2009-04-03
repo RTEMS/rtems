@@ -1,3 +1,17 @@
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tm01/Makefile.am, tm02/Makefile.am, tm03/Makefile.am,
+	tm04/Makefile.am, tm05/Makefile.am, tm06/Makefile.am,
+	tm07/Makefile.am, tm08/Makefile.am, tm09/Makefile.am,
+	tm10/Makefile.am, tm11/Makefile.am, tm12/Makefile.am,
+	tm13/Makefile.am, tm14/Makefile.am, tm15/Makefile.am,
+	tm16/Makefile.am, tm17/Makefile.am, tm18/Makefile.am,
+	tm19/Makefile.am, tm20/Makefile.am, tm21/Makefile.am,
+	tm22/Makefile.am, tm23/Makefile.am, tm24/Makefile.am,
+	tm25/Makefile.am, tm26/Makefile.am, tm27/Makefile.am,
+	tm28/Makefile.am, tm29/Makefile.am, tmck/Makefile.am:
+	tmoverhd/Makefile.am: Eliminate _exe_/.exe.
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/timesys.h: Array of task names should be of type rtems_name
