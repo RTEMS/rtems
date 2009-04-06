@@ -93,9 +93,9 @@ divide_by_zero_handler:
 	nop
 interrupt_handler:
 	.extern _ISR_Handler
-	bi	_ISR_Handler
-	nop
-	nop
+	mvhi	r0, hi(_ISR_Handler)
+	ori	r0, r0, lo(_ISR_Handler)
+	b	r0
 	nop
 	nop
 	nop
@@ -111,7 +111,6 @@ system_call_handler:
 	nop
 	nop
 
-	.text
 crt0:	
 	/* Flush data cache */
 	addi	r1, r0, 1
@@ -146,7 +145,9 @@ crt0:
 	mvi	r1, 0
 	mvi	r2, 0
 	mvi	r3, 0
-	calli	boot_card
+	mvhi	r7, hi(boot_card)
+	ori	r7, r7, lo(boot_card)
+	call	r7
 	# boot_card returns when RTEMS is shutdown
 #if ON_SIMULATOR
 	#define	SYS_exit	1
