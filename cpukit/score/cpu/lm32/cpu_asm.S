@@ -102,6 +102,7 @@ _CPU_Context_restore:
 
     .globl  _ISR_Handler
 _ISR_Handler:
+    xor     r0, r0, r0
     addi    sp, sp, -128
     sw      (sp+4), r1
     sw      (sp+8), r2
