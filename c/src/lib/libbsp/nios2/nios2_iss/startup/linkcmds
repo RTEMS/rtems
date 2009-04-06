@@ -24,6 +24,7 @@ DO NOT MODIFY THIS FILE
 RamBase = DEFINED(RamBase) ? RamBase : 0x00000000;
 RamSize = DEFINED(RamSize) ? RamSize : 0x00800000;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+StackSize = DEFINED(StackSize) ? HeapSize : 1024;
 
 MEMORY
 {
@@ -242,6 +243,9 @@ SECTIONS
 
         . = ALIGN(32 / 8);
         __bss_end = ABSOLUTE(.);
+        _stack_low = ABSOLUTE(.);
+        . += StackSize;
+        _stack_high = ABSOLUTE(.);
         WorkAreaBase = .;
     } > onchip_memory_0
 
@@ -323,8 +327,8 @@ __alt_data_end = 0x00800000;
  * The next two symbols define the location of the default stack.  You can
  * override them to move the stack to a different memory.
  */
-PROVIDE( __alt_stack_pointer = __alt_data_end );
-PROVIDE( __alt_stack_limit   = _end );
+PROVIDE( __alt_stack_pointer = _stack_high );
+PROVIDE( __alt_stack_limit   = _stack_low );
 
 /*
  * This symbol controls where the start of the heap is.  If the stack is

@@ -1,3 +1,7 @@
+2009-04-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Move stack so it does not overlap workarea.
+
 2009-03-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, console/console.c, startup/linkcmds: Now links but
