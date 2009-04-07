@@ -25,7 +25,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 [rtems-@RTEMS_API@-debuginfo]
 name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - debuginfo
 baseurl=
-	ftp://ftp.rtems.eu/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/SRPMS
+	ftp://ftp.rtems.eu/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
 	http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
 	http://www.rtems.info/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
 # metadata_expire=0
