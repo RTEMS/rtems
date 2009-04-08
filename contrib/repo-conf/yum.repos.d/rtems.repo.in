@@ -1,7 +1,7 @@
 [rtems-@RTEMS_API@]
 name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch
 # baseurl=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch
-mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@/mirrorlist
+mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/mirrorlist
 # metadata_expire=0
 enabled=1
 gpgcheck=1
@@ -11,7 +11,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 [rtems-@RTEMS_API@-source]
 name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - source
 # baseurl=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/SRPMS
-mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@/mirrorlist-sources
+mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/mirrorlist-sources
 # metadata_expire=0
 enabled=0
 gpgcheck=1
@@ -21,7 +21,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 [rtems-@RTEMS_API@-debuginfo]
 name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - debuginfo
 # baseurl=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/$basearch/debug
-mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@/mirrorlist-debuginfo
+mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/mirrorlist-debuginfo
 # metadata_expire=0
 enabled=0
 gpgcheck=1
