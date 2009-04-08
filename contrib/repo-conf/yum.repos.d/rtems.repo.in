@@ -11,7 +11,7 @@ gpgkey=file://@sysconfdir@/pki/rpm-gpg/gpg-pubkey-69ce4a83-44cc2b30
 [rtems-@RTEMS_API@-source]
 name=RTEMS-@RTEMS_API@ for @OS_NAME@ @YUM_VERDIR@ - $basearch - source
 # baseurl=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/SRPMS
-mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/mirrorlist-sources
+mirrorlist=http://www.rtems.org/ftp/pub/rtems/linux/@RTEMS_API@/@OS_SUBDIR@@YUM_VERDIR@/mirrorlist-source
 # metadata_expire=0
 enabled=0
 gpgcheck=1
