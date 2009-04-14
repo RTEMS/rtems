@@ -1,3 +1,7 @@
+2009-04-14	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
+
+	* psim-gdb-bottom: Adapt name of assert function for breakpoint
+
 2009-01-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psim-shared: Add catching a hardware exception and assertion as

@@ -15,7 +15,7 @@ gen_gdb_script()
   echo "load"
   echo "b _Internal_error_Occurred"
   echo "b rtems_fatal_error_occurred"
-  echo "b __assert"
+  echo "b __assert_func"
   echo "b C_exception_handler"
   echo "printf \"Use run to start the RTEMS application\\n\""
 }
