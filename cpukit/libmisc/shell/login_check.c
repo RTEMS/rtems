@@ -1,20 +1,21 @@
 /**
  * @file
  *
- * @author Sebastian Huber <sebastian.huber@embedded-brains.de>
- *
  * @brief Shell login check function.
  */
 
 /*
- * Copyright (c) 2009
- * Embedded Brains GmbH
+ * Copyright (c) 2009 embedded brains GmbH and others.
+ *
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
- * rtems@embedded-brains.de
+ * <rtems@embedded-brains.de>
  *
- * Based on work from Chris Johns, Fernando Ruiz and Till Straumann.
+ * Based on work from Chris Johns and Fernando Ruiz.
+ *
+ * Derived from file "cpukit/libmisc/shell/shell.c".
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -25,7 +26,6 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <rtems/login.h>
 #include <rtems/shell.h>
 #include <rtems/userenv.h>
 

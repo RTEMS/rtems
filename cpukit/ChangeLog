@@ -1,3 +1,8 @@
+2009-04-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/ftpfs.c: Fixed return codes of open handler.
+	Request reply after data write connection close.
+
 2009-04-02	Ralf Corsépius <ralfcorsepius@rtems.org>
 
 	* aclocal/check-rtems-debug.m4: Add missing ','.

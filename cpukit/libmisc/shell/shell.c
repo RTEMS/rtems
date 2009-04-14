@@ -846,19 +846,19 @@ bool rtems_shell_main_loop(
 }
 
 /* ----------------------------------------------- */
-static rtems_status_code   rtems_shell_run (
-  const char          *task_name,
-  size_t               task_stacksize,
-  rtems_task_priority  task_priority,
-  const char          *devname,
-  bool                 forever,
-  bool                 wait,
-  const char          *input,
-  const char          *output,
-  bool                 output_append,
-  rtems_id             wake_on_end,
-  bool                 echo,
-  rtems_login_check    login_check
+static rtems_status_code rtems_shell_run (
+  const char *task_name,
+  size_t task_stacksize,
+  rtems_task_priority task_priority,
+  const char *devname,
+  bool forever,
+  bool wait,
+  const char *input,
+  const char *output,
+  bool output_append,
+  rtems_id wake_on_end,
+  bool echo,
+  rtems_shell_login_check_t login_check
 )
 {
   rtems_id           task_id;
@@ -920,13 +920,13 @@ static rtems_status_code   rtems_shell_run (
 }
 
 rtems_status_code rtems_shell_init(
-  const char          *task_name,
-  size_t               task_stacksize,
-  rtems_task_priority  task_priority,
-  const char          *devname,
-  bool                 forever,
-  bool                 wait,
-  rtems_login_check    login_check
+  const char *task_name,
+  size_t task_stacksize,
+  rtems_task_priority task_priority,
+  const char *devname,
+  bool forever,
+  bool wait,
+  rtems_shell_login_check_t login_check
 )
 {
   rtems_id to_wake = RTEMS_ID_NONE;

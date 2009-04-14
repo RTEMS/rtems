@@ -3,14 +3,13 @@
  *  May 2001
  *  Reworked by Till Straumann and .h overhauled by Joel Sherrill.
  *
- * Copyright (c) 2009
+ * Copyright (c) 2009 embedded brains GmbH and others.
+ *
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
  * <rtems@embedded-brains.de>
- *
- * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -23,7 +22,7 @@
 #define _RTEMS_TELNETD_H
 
 #include <rtems.h>
-#include <rtems/login.h>
+#include <rtems/shell.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,7 +76,7 @@ typedef struct {
    *
    * Method used for login checks.  Use @c NULL to disable a login check.
    */
-  rtems_login_check login_check;
+  rtems_shell_login_check_t login_check;
 
   /**
    * @brief Keep standard IO of the caller.
