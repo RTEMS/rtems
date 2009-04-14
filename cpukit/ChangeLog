@@ -1,6 +1,6 @@
 2009-04-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
-	* libmisc/shell/login.h: Removed.
+	* Makefile.am, preinstall.am, libmisc/shell/login.h: Removed login.h.
 	* libmisc/shell/login_check.c, libmisc/shell/login_prompt.c,
 	libmisc/shell/shell.c, libmisc/shell/shell.h:  Changed copyright
 	notices.  Moved shell login declarations to shell.h.

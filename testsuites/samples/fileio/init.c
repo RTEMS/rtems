@@ -98,7 +98,6 @@ fstab_t fs_table[] = {
 
 #ifdef USE_SHELL
 #include <rtems/shell.h>
-#include <rtems/login.h>
 
 void writeFile(
   const char *name,
