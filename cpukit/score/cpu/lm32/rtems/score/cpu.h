@@ -175,7 +175,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER 1
 
 /**
  *  @def CPU_HARDWARE_FP
@@ -462,8 +462,6 @@ extern "C" {
  *  to another.
  */
 typedef struct {
-  uint32_t r9;
-  uint32_t r10;
   uint32_t r11;
   uint32_t r12;
   uint32_t r13;
@@ -483,6 +481,7 @@ typedef struct {
   uint32_t fp;
   uint32_t sp;
   uint32_t ra;
+  uint32_t ie;
 } Context_Control;
 
 /**
@@ -520,9 +519,11 @@ typedef struct {
   uint32_t r6;
   uint32_t r7;
   uint32_t r8;
+  uint32_t r9;
+  uint32_t r10;
   uint32_t ra;
-  uint32_t gp;
   uint32_t ba;
+  uint32_t ea;
 } CPU_Interrupt_frame;
 
 /**
