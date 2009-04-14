@@ -1,3 +1,12 @@
+2009-04-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/shell/login.h: Removed.
+	* libmisc/shell/login_check.c, libmisc/shell/login_prompt.c,
+	libmisc/shell/shell.c, libmisc/shell/shell.h:  Changed copyright
+	notices.  Moved shell login declarations to shell.h.
+	* telnetd/check_passwd.c, telnetd/telnetd.c, telnetd/telnetd.h: Changed
+	copyright notices.  Update for shell login changes.
+
 2009-04-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/ftpfs.c: Fixed return codes of open handler.
