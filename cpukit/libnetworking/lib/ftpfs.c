@@ -438,19 +438,37 @@ static socklen_t rtems_ftpfs_create_address(
   return sizeof( *sa);
 }
 
-static void rtems_ftpfs_terminate( rtems_libio_t *iop)
+static int rtems_ftpfs_terminate( rtems_libio_t *iop)
 {
+  int eno = 0;
+  int rv = 0;
   rtems_ftpfs_entry *e = iop->data1;
 
   if (e != NULL) {
     /* Close data connection if necessary */
     if (e->data_socket >= 0) {
-      close( e->data_socket);
+      rv = close( e->data_socket);
+      if (rv < 0) {
+        eno = errno;
+      }
+
+      /* For write connections we have to obtain the transfer reply  */
+      if ((iop->flags & LIBIO_FLAGS_WRITE) != 0 && e->ctrl_socket >= 0) {
+        rtems_ftpfs_reply reply =
+          rtems_ftpfs_get_reply( e->ctrl_socket, NULL, NULL);
+
+        if (reply != RTEMS_FTPFS_REPLY_2) {
+          eno = EIO;
+        }
+      }
     }
 
     /* Close control connection if necessary */
     if (e->ctrl_socket >= 0) {
-      close( e->ctrl_socket);
+      rv = close( e->ctrl_socket);
+      if (rv < 0) {
+        eno = errno;
+      }
     }
 
     /* Free connection entry */
@@ -459,6 +477,8 @@ static void rtems_ftpfs_terminate( rtems_libio_t *iop)
 
   /* Invalidate IO entry */
   iop->data1 = NULL;
+
+  return eno;
 }
 
 static int rtems_ftpfs_open_ctrl_connection(
@@ -804,7 +824,7 @@ static int rtems_ftpfs_open(
 
   /* Check location, it was allocated during path evaluation */
   if (location == NULL) {
-    return ENOMEM;
+    rtems_set_errno_and_return_minus_one( ENOMEM);
   }
 
   /* Check for either read-only or write-only flags */
@@ -812,7 +832,7 @@ static int rtems_ftpfs_open(
     (iop->flags & LIBIO_FLAGS_WRITE) != 0
       && (iop->flags & LIBIO_FLAGS_READ) != 0
   ) {
-    return ENOTSUP;
+    rtems_set_errno_and_return_minus_one( ENOTSUP);
   }
 
   /* Split location into parts */
@@ -824,7 +844,7 @@ static int rtems_ftpfs_open(
       &filename
   );
   if (!ok) {
-    return ENOENT;
+    rtems_set_errno_and_return_minus_one( ENOENT);
   }
   DEBUG_PRINTF(
     "user = '%s', password = '%s', filename = '%s'\n",
@@ -836,7 +856,7 @@ static int rtems_ftpfs_open(
   /* Allocate connection entry */
   e = malloc( sizeof( *e));
   if (e == NULL) {
-    return ENOMEM;
+    rtems_set_errno_and_return_minus_one( ENOMEM);
   }
 
   /* Initialize connection entry */
@@ -878,12 +898,14 @@ static int rtems_ftpfs_open(
 
 cleanup:
 
-  if (eno != 0) {
+  if (eno == 0) {
+    return 0;
+  } else {
     /* Free all resources if an error occured */
     rtems_ftpfs_terminate( iop);
-  }
 
-  return eno;
+    rtems_set_errno_and_return_minus_one( eno);
+  }
 }
 
 static ssize_t rtems_ftpfs_read(
@@ -934,25 +956,15 @@ static ssize_t rtems_ftpfs_write(
   const char *out = buffer;
   size_t todo = count;
 
-  if (e->eof) {
-    return 0;
-  }
-
   while (todo > 0) {
     ssize_t rv = send( e->data_socket, out, todo, 0);
 
     if (rv <= 0) {
       if (rv == 0) {
-        rtems_ftpfs_reply reply =
-          rtems_ftpfs_get_reply( e->ctrl_socket, NULL, NULL);
-
-        if (reply == RTEMS_FTPFS_REPLY_2) {
-          e->eof = true;
-          break;
-        }
+        break;
+      } else {
+        rtems_set_errno_and_return_minus_one( EIO);
       }
-
-      rtems_set_errno_and_return_minus_one( EIO);
     }
 
     out += rv;
@@ -964,9 +976,13 @@ static ssize_t rtems_ftpfs_write(
 
 static int rtems_ftpfs_close( rtems_libio_t *iop)
 {
-  rtems_ftpfs_terminate( iop);
+  int eno = rtems_ftpfs_terminate( iop);
 
-  return 0;
+  if (eno == 0) {
+    return 0;
+  } else {
+    rtems_set_errno_and_return_minus_one( eno);
+  }
 }
 
 /* Dummy version to let fopen( *,"w") work properly */
