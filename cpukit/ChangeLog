@@ -1,3 +1,8 @@
+2009-04-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* libnetworking/rtems/rtems_mii_ioctl_kern.c: poll BMSR twice
+	to clear latched link-status low.
+
 2009-04-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* Makefile.am, preinstall.am, libmisc/shell/login.h: Removed login.h.

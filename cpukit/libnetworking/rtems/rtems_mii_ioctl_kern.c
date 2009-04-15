@@ -102,6 +102,9 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
   case SIOCGIFMEDIA:
     if (info->mdio_r (phy, uarg, MII_BMCR, &bmcr))
       return EINVAL;
+	/* read BMSR twice to clear latched link status low */
+    if (info->mdio_r (phy, uarg, MII_BMSR, &bmsr))
+      return EINVAL;
     if (info->mdio_r (phy, uarg, MII_BMSR, &bmsr))
       return EINVAL;
     if (info->mdio_r (phy, uarg, MII_ANER, &aner))
@@ -216,6 +219,15 @@ rtems_mii_ioctl (struct rtems_mdio_info *info, void *uarg, int cmd,
 
       if (!(bmsr2 & (tmp ? EXTSR_1000TFDX : EXTSR_1000THDX)))
         return EOPNOTSUPP;
+
+	  /* NOTE: gige standard demands auto-negotiation for gige links.
+	   *       Disabling autoneg did NOT work on the PHYs I tried
+	   *       (BCM5421S, intel 82540).
+	   *       I've seen drivers that simply change what they advertise
+	   *       to the desired gig mode and re-negotiate.
+	   *       We could do that here, too, but we don't see the point -
+	   *       If autoneg works fine then we can as well use it.
+	   */
       bmcr = BMCR_S1000;
       break;
 
