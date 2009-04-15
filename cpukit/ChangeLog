@@ -1,3 +1,8 @@
+2009-04-15	Wei-Tsun Sun <wsun013@gmail.com>
+
+	* libcsupport/src/malloc_initialize.c: Add dummy
+	  RTEMS_Malloc_Initialize.
+
 2009-04-14	Till Straumann <strauman@slac.stanford.edu>
 
 	* libnetworking/rtems/rtems_mii_ioctl_kern.c: poll BMSR twice

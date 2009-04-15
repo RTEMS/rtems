@@ -21,6 +21,16 @@
 #include <rtems/score/wkspace.h>
 #include "malloc_p.h"
 
+/* FIXME: Dummy function */
+#ifndef RTEMS_NEWLIB
+void RTEMS_Malloc_Initialize(
+  void   *start,
+  size_t  length,
+  size_t  sbrk_amount
+)
+{
+}
+#else
 rtems_malloc_statistics_t rtems_malloc_statistics;
 extern bool rtems_unified_work_area;
 
@@ -116,3 +126,4 @@ void RTEMS_Malloc_Initialize(
     }
   #endif
 }
+#endif
