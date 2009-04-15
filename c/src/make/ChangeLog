@@ -1,3 +1,7 @@
+2009-04-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* leaf.cfg: Remove hard-coded .exe.
+
 2008-09-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* leaf.cfg, compilers/gcc-target-default.cfg, custom/default.cfg.in:
