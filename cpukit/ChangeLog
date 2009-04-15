@@ -1,3 +1,7 @@
+2009-04-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Disable LIBSHELL for unix targets.
+
 2009-04-15	Wei-Tsun Sun <wsun013@gmail.com>
 
 	* libcsupport/src/malloc_initialize.c: Add dummy
