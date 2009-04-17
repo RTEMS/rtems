@@ -19,9 +19,9 @@ NEWLIB_RPMREL = `expr 21 + 12 + $(GCC_RPMREL)`
 include ../gcc.am
 GCC_OPTS +=
 
-GDB_VERS = 6.8
+GDB_VERS = 6.8.50.20090329
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 9
+GDB_RPMREL = 2
 include ../gdb.am
 GDB_OPTS +=
 

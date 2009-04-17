@@ -5,4 +5,5 @@ Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
 # rtems-4.10 patches
 # + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
 # + misc small fixes to lm32-sim/gdb
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090224-rtems4.10-20090225.diff
+# + avr simulator
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090329-rtems4.10-20090417.diff

@@ -45,14 +45,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8
-%define gdb_rpmvers %{expand:%(echo 6.8 | tr - _)} 
+%define gdb_version 6.8.50.20090329
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090329 | tr - _)} 
 
 Name:		rtems-4.10-avr-rtems4.10-gdb
 Summary:	Gdb for target avr-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	9%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,6 +73,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %define build_sim --disable-sim
 %endif
 %if "avr-rtems4.10" == "h8300-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "avr-rtems4.10" == "m32c-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%endif
+%if "avr-rtems4.10" == "lm32-rtems4.10"
 %define build_sim --disable-sim
 %endif
 %if "avr-rtems4.10" == "mipstx39-rtems4.10"
@@ -105,8 +113,15 @@ BuildRequires:	texinfo >= 4.2
 
 Requires:	rtems-4.10-gdb-common
 
-Source0: ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20090122.diff
+# A copy of a gdb development snapshot having been retrieved from
+# ftp://sources.redhat.com/pub/gdb/snapshots/current/gdb-%{gdb_version}.tar.bz2
+Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
+
+# rtems-4.10 patches
+# + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
+# + misc small fixes to lm32-sim/gdb
+# + avr simulator
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090329-rtems4.10-20090417.diff
 
 %description
 GDB for target avr-rtems4.10
