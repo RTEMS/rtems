@@ -1,3 +1,9 @@
+2009-04-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
+	cpu_supplement/cpu_supplement.texi: Add shell for Atmel AVR chapter.
+	* cpu_supplement/avr.t: New file.
+
 2009-03-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shell/confinit.t: New argument sequence for rtems_shell_init().
