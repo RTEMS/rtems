@@ -1,3 +1,8 @@
+2009-04-20	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* sp37/init.c, sp37/sp37.scn: Add test case for
+	rtems_interrupt_level_attribute body.
+
 2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,

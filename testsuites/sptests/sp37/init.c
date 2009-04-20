@@ -19,6 +19,7 @@
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
+  rtems_attribute level_attribute, level_attribute_macro;
   bool                  in_isr;
 
   puts( "interrupt is in progress (use body)" );
@@ -36,6 +37,13 @@ void test_interrupt_inline(void)
 
   puts( "interrupt enable (use inline)" );
   rtems_interrupt_enable( level );
+  
+  puts( "interrupt level attribute (use inline)" );
+  level_attribute = rtems_interrupt_level_attribute( level );
+  level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
+  if ( level_attribute_macro == level_attribute ) {
+    puts( "test case working.." );
+  }
 }
 
 volatile int isr_in_progress_body;
@@ -147,6 +155,7 @@ rtems_task Init(
   rtems_time_of_day     time;
   rtems_status_code     status;
   rtems_interrupt_level level;
+  rtems_attribute level_attribute,level_attribute_macro;
   bool                  in_isr;
   rtems_id              timer;
   int                   i;
@@ -250,6 +259,13 @@ rtems_task Init(
 
   puts( "interrupt enable (use body)" );
   rtems_interrupt_enable( level );
+  
+  puts( "interrupt level attribute (use body)" );
+  level_attribute = rtems_interrupt_level_attribute( level );
+  level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
+  if ( level_attribute_macro == level_attribute ) {
+    puts("test seems to work");
+  }
 
   /*
    * Test ISR in progress from actual ISR

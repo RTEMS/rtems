@@ -6,11 +6,15 @@ interrupt is in progress (use body)
 interrupt disable (use inline)
 interrupt flash (use inline)
 interrupt enable (use inline)
+interrupt level attribute (use inline)
+test case working..
 interrupt is in progress (use body)
 interrupt disable (use body)
 interrupt disable (use body)
 interrupt flash (use body)
 interrupt enable (use body)
+interrupt level attribute (use body)
+test seems to work
 isr_in_progress(inline) from ISR -- OK
 isr_in_progress(body) from ISR -- OK
 *** END OF TEST 37 ***
