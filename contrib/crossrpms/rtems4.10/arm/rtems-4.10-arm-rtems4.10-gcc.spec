@@ -53,14 +53,12 @@
 %define newlib_pkgvers		1.17.0
 %define newlib_version		1.17.0
 
-%define mpfr_version	2.3.1
-
 Name:         	rtems-4.10-arm-rtems4.10-gcc
 Summary:      	arm-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	3%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,20 +68,52 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{_host_rpmprefix}gcc
 
 %if "%{gcc_version}" >= "4.3.0"
-BuildRequires:  gmp-devel >= 4.1
+%define _gmp_minvers		4.1
+%else
+%if "%{gcc_version}" >= "4.2.0"
+%endif
+%endif
+
+%if %{defined _gmp_minvers}
+BuildRequires: gmp-devel >= %{_gmp_minvers}
 %if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}gmp-devel
-BuildRequires:  %{_host_rpmprefix}mpfr-devel
+BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 %endif
-%if 0%{?fedora} >= 8
-BuildRequires:  mpfr-devel >= 2.3.0
 %endif
-%if "%{?suse}" > "10.3"
-BuildRequires:  mpfr-devel >= 2.3.0
+
+
+%if "%{gcc_version}" >= "4.4.0"
+%define _mpfr_minvers	2.3.2
+%define mpfr_version	2.4.1
+%else
+%if "%{gcc_version}" >= "4.3.0"
+%define _mpfr_minvers	2.3.1
+%define mpfr_version	2.3.2
+%else
+%if "%{gcc_version}" >= "4.2.0"
 %endif
-# These distros ship an insufficient mpfr
-%{?el4:%define 	_build_mpfr 	1}
-%{?suse10_3:%define 	_build_mpfr 	1}
+%endif
+%endif
+
+%if %{defined _mpfr_minvers}
+%{?suse10_3:%global mpfr_provided 2.2.1}
+%{?fc9:%global mpfr_provided 2.3.1}
+%{?fc10:%global mpfr_provided 2.3.2}
+%{?fc11:%global mpfr_provided 2.4.1}
+
+%if %{defined mpfr_provided}
+%if "%{mpfr_provided}" < "%{_mpfr_minvers}"
+%define _build_mpfr 1
+%else
+BuildRequires: mpfr-devel >= %{_mpfr_minvers}
+%endif
+%else
+%define _build_mpfr 1
+%endif
+
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -100,7 +130,7 @@ BuildRequires:	rtems-4.10-arm-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-arm-rtems4.10-binutils
-Requires:	rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-35%{?dist}
+Requires:	rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-36%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -441,7 +471,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-arm-rtems4.10-binutils
-# Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-35%{?dist}
+# Requires:       rtems-4.10-arm-rtems4.10-newlib = %{newlib_version}-36%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -593,7 +623,7 @@ Summary:      	C Library (newlib) for arm-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        35%{?dist}
+Release:        36%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -613,7 +643,7 @@ Newlib C Library for arm-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        35%{?dist}
+Release:        36%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
