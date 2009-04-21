@@ -149,7 +149,7 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.ta
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.3-rtems4.10-20090125.diff
 %endif
 %if "%{gcc_version}" == "4.4.0"
-Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090421.diff
 %endif
 %{?_without_sources:NoSource:	0}
