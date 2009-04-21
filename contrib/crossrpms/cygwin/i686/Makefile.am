@@ -40,8 +40,8 @@ GMP_VERS = 4.2.1-1
 GMP_RPMREL = 0.20080323.1%{?dist}
 include ../gmp.am
 
-MPFR_VERS = 2.2.1-1
-MPFR_RPMREL = 0.20080323.1%{?dist}
+MPFR_VERS = 2.4.1-1
+MPFR_RPMREL = 0.20090420.1%{?dist}
 include ../mpfr.am
 
 # Cygwin's binutils' versioning is bizarre
