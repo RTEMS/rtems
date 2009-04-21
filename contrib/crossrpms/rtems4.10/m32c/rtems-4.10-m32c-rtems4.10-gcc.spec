@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	3%{?dist}
+Release:      	4%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -96,24 +96,28 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 %endif
 
 %if %{defined _mpfr_minvers}
-%{?suse10_3:%global mpfr_provided 2.2.1}
+# FIXME: This is an ugly cludge
 %{?fc9:%global mpfr_provided 2.3.1}
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
+%{?suse10_3:%global mpfr_provided 2.2.1}
+%{?cygwin:%global mpfr_provided 2.4.1}
+%{?mingw32:%global mpfr_provided %{nil}}
 
 %if %{defined mpfr_provided}
 %if "%{mpfr_provided}" < "%{_mpfr_minvers}"
 %define _build_mpfr 1
 %else
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
+%else
 BuildRequires: mpfr-devel >= %{_mpfr_minvers}
+%endif
 %endif
 %else
 %define _build_mpfr 1
 %endif
 
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{_mpfr_minvers}
-%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -129,7 +133,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-36%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-37%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -460,7 +464,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-36%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-37%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -519,7 +523,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        36%{?dist}
+Release:        37%{?dist}
 
 
 %description -n rtems-4.10-m32c-rtems4.10-newlib
