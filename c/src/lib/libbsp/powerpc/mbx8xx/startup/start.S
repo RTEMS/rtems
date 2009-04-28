@@ -47,6 +47,11 @@
  * Copyright (c) 1999, National Research Council of Canada
  */
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 #include <rtems/asm.h>
 
 /*
@@ -322,9 +327,8 @@ ledblink2:
 #endif
 	lis	r5,environ@ha
         la	r5,environ@l(r5)		/* environp */
-        /* clear argc and argv */
+        /* clear argc command line */
         xor     r3, r3, r3
-        xor     r4, r4, r4
 
         EXTERN_PROC (boot_card)
         bl       PROC (boot_card)	/* call the first C routine */

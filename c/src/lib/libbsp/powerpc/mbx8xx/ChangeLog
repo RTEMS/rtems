@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* startup/start.S: Update for boot_card command line change.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

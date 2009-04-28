@@ -18,6 +18,11 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 /**
  * @defgroup mpc55xx_asm Assembler files
  *
@@ -207,10 +212,8 @@ start:
  * Start RTEMS
  */
 
-	/* Clear argc, argv and envp */
+	/* Clear command line */
 	xor r3, r3, r3
-	xor r4, r4, r4
-	xor r5, r5, r5
 	
 	/* Start RTEMS */
 	bl SYM (boot_card)

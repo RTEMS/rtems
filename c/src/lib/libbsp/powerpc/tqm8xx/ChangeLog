@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* startup/start.S: Update for boot_card command line change.
+
 2009-03-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/bsp.h: Added missing include.
