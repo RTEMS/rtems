@@ -9,7 +9,7 @@
 
 extern void _wr_vbr(uint32_t);
 extern void init_main(void);
-extern int boot_card(int, char **, char **);
+extern int boot_card(const char *);
 
 /*
  * From linkcmds
@@ -77,6 +77,6 @@ void Init5329(void)
    * We have to call some kind of RTEMS function here!
    */
 
-  boot_card(0, 0, 0);
+  boot_card(0);
   for (;;) ;
 }
