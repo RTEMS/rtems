@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* dlentry/dlentry.S: Update for boot_card command line change.
+
 2008-12-18	Michael Hamel <nigel@adi.co.nz>
 
 	PR 1349/bsps
