@@ -1,5 +1,10 @@
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
+	* libblock/src/bdbuf.c: Flush the transfer sync event before
+	blocking in a read.
+
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
 	* libnetworking/nfs/bootp_subr.c: Fixed PR1384. The route set in
 	the initialise pass is not deleted so an exists error is
 	returned. Ignore the error. Print the server address as an IP

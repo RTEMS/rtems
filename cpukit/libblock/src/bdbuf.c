@@ -1639,9 +1639,17 @@ rtems_bdbuf_read (dev_t                device,
      * enabled and the pool unlocked. This is a change to the previous version
      * of the bdbuf code.
      */
-    int      result;
-    uint32_t b;
-    
+    rtems_event_set out;
+    int             result;
+    uint32_t        b;
+
+    /*
+     * Flush any events.
+     */
+    rtems_event_receive (RTEMS_BDBUF_TRANSFER_SYNC,
+                         RTEMS_EVENT_ALL | RTEMS_NO_WAIT,
+                         0, &out);
+                         
     rtems_bdbuf_unlock_pool (pool);
 
     req->req = RTEMS_BLKDEV_REQ_READ;
@@ -1665,7 +1673,7 @@ rtems_bdbuf_read (dev_t                device,
     else
     {
       rtems_status_code sc;
-      rtems_event_set   out;
+      
       sc = rtems_event_receive (RTEMS_BDBUF_TRANSFER_SYNC,
                                 RTEMS_EVENT_ALL | RTEMS_WAIT,
                                 0, &out);
