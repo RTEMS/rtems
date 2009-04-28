@@ -1,3 +1,9 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* sapi/include/confdefs.h: Add a prototype for Init with C linkage
+	and define Init task command line arguments if confdefs.h provides
+	an Init entry point.
+
 2009-04-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Disable LIBSHELL for unix targets.

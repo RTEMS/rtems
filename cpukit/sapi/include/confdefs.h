@@ -518,7 +518,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
+  #ifdef __cplusplus
+  extern "C" {
+  #endif
+    rtems_task Init (rtems_task_argument );
+  #ifdef __cplusplus
+  }
+  #endif
   #define CONFIGURE_INIT_TASK_ENTRY_POINT   Init
+  extern const char* bsp_boot_cmdline;
+  #define CONFIGURE_INIT_TASK_ARGUMENTS     ((rtems_task_argument) &bsp_boot_cmdline)
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
