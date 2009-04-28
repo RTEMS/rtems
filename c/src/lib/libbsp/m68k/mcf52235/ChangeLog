@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>	
+
+	* startup/init52235.c: Update for boot_card command line change.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* startup/linkcmds: Add .data.* for the C++ test.
