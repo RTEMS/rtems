@@ -24,7 +24,7 @@ int main(
   char **argv
 )
 {
-  boot_card();
+  boot_card(0);
 
   return 0;
 }

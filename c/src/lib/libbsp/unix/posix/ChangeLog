@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* startup/main.c: Update for boot_card command line change.
+
 2008-12-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsp_specs, startup/bspgetworkarea.c: Links hello again.
