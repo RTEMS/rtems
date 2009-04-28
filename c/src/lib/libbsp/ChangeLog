@@ -1,3 +1,8 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am: Add bspinit.c, a common Init task that manages
+	command line arguments from a BSP.
+
 2008-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/clockdrv_shell.c: Turn warning into error.
