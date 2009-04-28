@@ -414,14 +414,10 @@ SYM(start_init):
     move.l  #_SpInit,sp		        /* relocate sp */ 
      
     clrl    d0          		/* clear d0 */
-    movel   d0,a7@-                     /* environp == NULL */
-    movel   d0,a7@-                     /* argv == NULL */
-    movel   d0,a7@-                     /* argc == 0 */
+    movel   d0,a7@-                     /* command line == 0 */
  
     jsr     boot_card                   /* boot rtems */
 
-    movel   a7@+,d0
-    movel   a7@+,d0
     movel   a7@+,d0
 
 exit_multitasking:

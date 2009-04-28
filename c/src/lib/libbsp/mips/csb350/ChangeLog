@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* start/start.S: Update for boot_card command line change.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: It appears 16 MB is the configuration.

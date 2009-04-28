@@ -463,11 +463,9 @@ SYM (zero_bss):
 /*
  *  Transfer control to User's Board Support Package
  */
-        pushl   $0                       # environp
-        pushl   $0                       # argv
-        pushl   $0                       # argc
+        pushl   $0                       # command line
 	call SYM(boot_card)
-        addl    $12,esp
+        addl    $4,esp
 
 	LED_RED                          # Indicate RTEMS exited
 /*

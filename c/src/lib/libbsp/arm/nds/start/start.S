@@ -1,3 +1,8 @@
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+
 @---------------------------------------------------------------------------------
 @ DS processor selection
 @---------------------------------------------------------------------------------
@@ -201,8 +206,7 @@ _start:
 	ldr	r3, =initSystem
 	blx	r3			@ jump to user code
 
-	mov	r1, #0		@ argv
-	mov	r0, #0		@ argc
+	mov	r0, #0		@ command line
 
 
 	ldr	r3, =boot_card

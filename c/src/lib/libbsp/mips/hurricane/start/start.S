@@ -294,8 +294,7 @@ FRAME(start,sp,0,ra)
 /***********************  END I/O initialization **********************/
 
 
-	move	a0,zero		/* Set argc passed to main */
-	move	a1,zero		/* Set argv passed to main */
+	move	a0,zero		/* Set command line passed to main */
 	jal	boot_card
 	nop
 

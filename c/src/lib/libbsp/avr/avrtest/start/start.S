@@ -1,3 +1,6 @@
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning Please check and remove these warnings.
 
 #define SPL 0x3d
 #define SPH 0x3e

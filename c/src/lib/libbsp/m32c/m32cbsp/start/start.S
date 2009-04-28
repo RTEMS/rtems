@@ -30,6 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these errors.
+	
 #if defined(__r8c_cpu__) || defined(__m16c_cpu__)
 #define A16
 #define A(n,w) n

@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* start/start.S: Update for boot_card command line change.
+
 2009-03-18	Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
 
 	* start/start.S, include/hwreg_vals.h, startup/cpuinit.c:

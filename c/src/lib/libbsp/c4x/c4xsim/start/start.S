@@ -3,6 +3,11 @@
  *  provided by Herman ...XXX
  */
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+
 	; .file	"crt0.s"
 	.ref	_c_int00
 	.global	start
@@ -65,7 +70,7 @@ _c_int00:
         ldi     @stack_addr,sp
         ldi     sp,ar3
         ldp     .bss		; For the small model, set up the DP to .bss
-	ldi	0,ar2		; make sure argc=0 with regparm
+	ldi	0,ar2		; make sure cmdline=0 with regparm
 	push	ar2		; and memparm
         call    _boot_card
         call	_sim_exit

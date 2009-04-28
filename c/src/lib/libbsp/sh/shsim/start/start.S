@@ -21,6 +21,11 @@
 
 #include <rtems/asm.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 	BEGIN_CODE
 	PUBLIC(start)
 SYM (start):
@@ -54,10 +59,10 @@ SYM (start):
 	ldc     r0,vbr
 
 	! call the mainline
-	mov #0,r4		! argc
+	mov #0,r4		! command line
 	mov.l main_k,r0
 	jsr @r0
-	mov #0,r5		! argv
+	
 
 	! call exit
 	mov	r0,r4

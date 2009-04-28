@@ -142,7 +142,7 @@ END_CODE
   /*
    * Execute main with arguments argc and agrv.
    */
-  boot_card(1,__argv);
+  boot_card((void*)0);
   reboot();
 
 }

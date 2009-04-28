@@ -351,9 +351,7 @@ SYM(start_csb360):
 	 * Right : Now we're ready to boot RTEMS
 	 */
 	clrl	d0			| Pass in null to all boot_card() params
- 	movel	d0,a7@-			| environp
-	movel	d0,a7@-			| argv
-	movel	d0,a7@-			| argc
+	movel	d0,a7@-			| command line
 	jsr	SYM(boot_card)		| Call C boot_card function to startup RTEMS
 
 

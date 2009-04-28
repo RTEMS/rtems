@@ -220,9 +220,7 @@ loop:   movel   d0,a1@+                | to zero out uninitialized
         movec   a0,isp                | set interrupt stack
 #endif
 
-        move.l  #0,a7@-               | environp
-        move.l  #0,a7@-               | argv
-        move.l  #0,a7@-               | argc
+        move.l  #0,a7@-               | command line
         jsr     SYM (boot_card)
 
 	nop

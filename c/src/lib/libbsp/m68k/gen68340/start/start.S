@@ -848,9 +848,7 @@ ZEROLOOPTEST:
 	bcs.s	ZEROLOOP					| No, skip
 
 	movel	#_stack_init,a7					| set master stack pointer
-	movel	d0,a7@-						| environp
-	movel	d0,a7@-						| argv
-	movel	d0,a7@-						| argc
+	movel	d0,a7@-						| command line
 	jsr	SYM(boot_card)					| Call C main
 
 	PUBLIC (_mainDone)

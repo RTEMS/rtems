@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* start/start.S: Update for boot_card command line change.
+
 2009-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Remove unnecessary copy of cpu_asm.S

@@ -33,6 +33,11 @@
 
 #include <rtems/asm.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 /*
  *  The initial stack is set to run BELOW the code base address.
  *  (between the vectors and text sections)
@@ -139,10 +144,8 @@ text_length:
         /* Set up stack pointer = beginning of text section - 56 */
         addi    r1, r1, -56-4
 
-        /* Clear argc, argv and envp */
+        /* Clear cmdline */
         xor r3, r3, r3
-        xor r4, r4, r4
-        xor r5, r5, r5
 
         .extern SYM (boot_card)
         bl       SYM (boot_card)	/* call the first C routine */

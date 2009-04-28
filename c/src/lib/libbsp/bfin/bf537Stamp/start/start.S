@@ -7,6 +7,10 @@
 #include <libcpu/cecRegs.h>
 #include <libcpu/coreTimerRegs.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning Please check and remove these warnings.
+
 #ifndef LO
 #define LO(con32) ((con32) & 0xFFFF)
 #endif

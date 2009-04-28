@@ -467,9 +467,7 @@ SYM (zero_bss):
 /*
  *  Transfer control to User's Board Support Package
  */
-        pushl   $0                       # environp
-        pushl   $0                       # argv
-        pushl   $0                       # argc
+        pushl   $0                       # command line
 
 	movw    $0xFFFB, SYM(i8259s_cache)	# ICU mask values reflect
 						# initial ICU state

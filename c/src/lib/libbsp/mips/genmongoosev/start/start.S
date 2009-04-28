@@ -413,7 +413,7 @@ _initialize_rtems:
    sw		k1,0(a0)
    nop
 
-   move		a0,zero         /* set argc to 0 */
+   move		a0,zero         /* set command line to 0 */
    jal		boot_card           /* call the program start function */
    nop
 

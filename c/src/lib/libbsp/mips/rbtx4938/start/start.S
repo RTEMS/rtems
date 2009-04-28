@@ -35,6 +35,10 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning Please check and remove these warnings.
+
 /* The following include file was deprecated */
 /* #include <idtmon.h>	*/
 
@@ -318,8 +322,7 @@ FRAME(start,sp,0,ra)
 /*
 ** End of CPU initialization, ready to start kernel
 */
-	move	a0,zero		/* Set argc passed to main */
-	move	a1,zero		/* Set argv passed to main */
+	move	a0,zero		/* Set command line passed to boot_card */
 	jal	boot_card
 	nop
 

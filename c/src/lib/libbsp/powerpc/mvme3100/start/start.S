@@ -19,6 +19,11 @@
 
 #include <bspopts.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 #define SYNC \
 	sync; \
 	isync
@@ -82,9 +87,6 @@ __rtems_entry_point:
 	 * We are now in a environment that is totally independent from 
 	 * bootloader setup.
 	 */
-	lis	r5,environ@ha
-	la	r5,environ@l(r5)	/* environp */
-	li	r4, 0			/* argv */
-	li	r3, 0			/* argc */
+	li	r3, 0			/* command line */
 	bl	boot_card
 	/* point of no return: reset board here ? */
