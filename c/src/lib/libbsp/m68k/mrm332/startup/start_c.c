@@ -9,9 +9,8 @@
 
 m68k_isr_entry M68Kvec[256];
 m68k_isr_entry vectors[256];
-char * const __argv[]= {"main", ""};
 
-void  boot_card(int argc, char * const argv[]);
+void  boot_card(const char *cmdline);
 
 /*
  *  This prototype really should have the noreturn attribute but
@@ -119,7 +118,7 @@ void start_c(void) {
   /*
    * Execute main with arguments argc and agrv.
    */
-  boot_card(1,__argv);
+  boot_card((void*)0);
   reboot();
 
 }
