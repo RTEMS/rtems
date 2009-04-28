@@ -20,6 +20,11 @@
 #include <rtems/asm.h>
 #include <bspopts.h>
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 /*
  *  Unexpected trap will halt the processor by forcing it to error state
  */
@@ -329,9 +334,7 @@ zerobss:
         bleu,a zerobss
         nop
 
-        mov     %0, %o2                 ! environ
-        mov     %0, %o1                 ! argv
-        mov     %0, %o0                 ! argc
+        mov     %0, %o0                 ! command line
         call    SYM(boot_card)
         sub     %sp, 0x60, %sp          ! room for boot_card to save args
         nop

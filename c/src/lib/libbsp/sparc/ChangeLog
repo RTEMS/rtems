@@ -1,3 +1,7 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* shared/start/start.S: Update for boot_card command line change.
+
 2009-02-27	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1386/bsps

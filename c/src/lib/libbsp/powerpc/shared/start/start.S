@@ -11,6 +11,11 @@
  *
  */
 
+#warning Call to boot_card has changed and needs checking.
+#warning The call is "void boot_card(const char* cmdline);"
+#warning You need to pass a NULL.
+#warning Please check and remove these warnings.
+	
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <rtems/powerpc/powerpc.h>
@@ -112,10 +117,7 @@ enter_C_code:
 	 * We are now in a environment that is totally independent from 
          * bootloader setup.
 	 */
-        lis	r5,environ@ha
-        la	r5,environ@l(r5)	/* environp */
-	li	r4, 0			/* argv */
-	li	r3, 0			/* argc */
+	li	r3, 0			/* command line */
 	bl	boot_card
 	bl	_return_to_ppcbug
 
