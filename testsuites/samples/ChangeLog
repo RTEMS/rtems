@@ -1,3 +1,8 @@
+2009-04-28    Chris Johns <chrisj@rtems.org>
+
+	* iostream/system.h: Remove the Init prototype. Provide in
+	confdefs.h.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* fileio/init.c, fileio/system.h, iostream/init.cc,

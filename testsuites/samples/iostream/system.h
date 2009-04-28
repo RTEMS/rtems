@@ -15,12 +15,6 @@
 
 #include <rtems.h>
 
-/* functions */
-
-rtems_task Init(
-  rtems_task_argument argument
-);
-
 /* configuration information */
 
 #include <bsp.h> /* for device driver prototypes */
