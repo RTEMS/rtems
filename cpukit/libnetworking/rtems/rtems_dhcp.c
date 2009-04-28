@@ -689,24 +689,31 @@ dhcp_task (rtems_task_argument _sdl)
   int                 error;
   struct proc *procp = NULL;
   int                 disconnected;
+  rtems_status_code   ev_st;
   
   sdl = (struct sockaddr_dl *) _sdl;
   
   count = dhcp_elapsed_time;
   disconnected = 0;
  
-
-  while (TRUE)
+  while (true)
   {
     /*
      * Sleep until the next poll
      */
     timeout = TOD_MILLISECONDS_TO_TICKS (1000);
-    rtems_event_receive (RTEMS_EVENT_0,
-                         RTEMS_WAIT | RTEMS_EVENT_ANY,
-                         timeout, &event_out);
+    ev_st = rtems_event_receive (RTEMS_EVENT_0,
+                                 RTEMS_WAIT | RTEMS_EVENT_ANY,
+                                 timeout, &event_out);
 
-    if(event_out & RTEMS_EVENT_0) break;
+    /*
+     * Check if not a poll timeout. So when ANY event received, exit task.
+     * Actually, only event RTEMS_EVENT_0 sent from rtem_dhcp_failsafe.c
+     * if "failsafe" dhcp enabled when interface down.  Otherwise, no 
+     * event should occur, just timeout.
+     */
+    if(ev_st != RTEMS_TIMEOUT)
+        break;
 
     count++;
 
@@ -714,7 +721,7 @@ dhcp_task (rtems_task_argument _sdl)
     {
       rtems_bsdnet_semaphore_obtain ();
       
-      dhcp_request_req (&call, &dhcp_req, sdl, TRUE);
+      dhcp_request_req (&call, &dhcp_req, sdl, true);
 
       /*
        * Send the Request.
@@ -878,7 +885,7 @@ dhcp_init (int update_files)
   sprintf (ireq.ifr_name, "%s%d", ifp->if_name, ifp->if_unit);
 
   if ((error = socreate (AF_INET, &so, SOCK_DGRAM, 0, procp)) != 0) {
-    printf ("dhcpc_init: socreate, error=%d\n", error);
+    printf ("dhcpc_init: socreate, error: %s\n", strerror(error));
     return -1;
   }
 
@@ -896,11 +903,13 @@ dhcp_init (int update_files)
 
   if (!sdl){
     printf ("dhcpc_init: Unable to find HW address\n");
+    soclose (so);
     return -1;
   }
   if (sdl->sdl_alen != EALEN) {
     printf ("dhcpc_init: HW address len is %d, expected value is %d\n",
            sdl->sdl_alen, EALEN);
+    soclose (so);
     return -1;
   }
 
@@ -914,7 +923,8 @@ dhcp_init (int update_files)
    */
   error = bootpc_call (&call, &reply, procp);
   if (error) {
-    printf ("BOOTP call failed -- error %d\n", error);
+    printf ("BOOTP call failed -- %s\n", strerror(error));
+    soclose (so);
     return -1;
   }
 
@@ -923,6 +933,7 @@ dhcp_init (int update_files)
    */
   if (memcmp (&reply.vend[0], dhcp_magic_cookie, sizeof (dhcp_magic_cookie)) != 0) {
     printf ("DHCP server did not send Magic Cookie.\n");
+    soclose (so);
     return -1;
   }
 
@@ -930,17 +941,19 @@ dhcp_init (int update_files)
   
   if (dhcp_message_type != DHCP_OFFER) {
     printf ("DHCP server did not send a DHCP Offer.\n");
+    soclose (so);
     return -1;
   }
 
   /*
    * Send a DHCP REQUEST 
    */
-  dhcp_request_req (&call, &reply, sdl, TRUE);
+  dhcp_request_req (&call, &reply, sdl, true);
   
   error = bootpc_call (&call, &reply, procp);
   if (error) {
-    printf ("BOOTP call failed -- error %d\n", error);
+    printf ("BOOTP call failed -- %s\n", strerror(error));
+    soclose (so);
     return -1;
   }
 
@@ -949,6 +962,7 @@ dhcp_init (int update_files)
    */
   if (memcmp (&reply.vend[0], dhcp_magic_cookie, sizeof (dhcp_magic_cookie)) != 0) {
     printf ("DHCP server did not send Magic Cookie.\n");
+    soclose (so);
     return -1;
   }
   
@@ -956,6 +970,7 @@ dhcp_init (int update_files)
   
   if (dhcp_message_type != DHCP_ACK) {
     printf ("DHCP server did not accept the DHCP request\n");
+    soclose (so);
     return -1;
   }
 
@@ -1106,8 +1121,10 @@ dhcp_init (int update_files)
  */
 void rtems_bsdnet_do_dhcp (void)
 {
+  bool update = true;
   rtems_bsdnet_semaphore_obtain ();
-  while( dhcp_init (TRUE) < 0 ) {
+  while( dhcp_init (update) < 0 ) {
+    update = false;
     rtems_bsdnet_semaphore_release();
     rtems_task_wake_after(TOD_MILLISECONDS_TO_TICKS(1000));
     rtems_bsdnet_semaphore_obtain ();
@@ -1120,7 +1137,7 @@ int rtems_bsdnet_do_dhcp_timeout( void )
   int return_value;
 
   rtems_bsdnet_semaphore_obtain ();
-  return_value = dhcp_init (FALSE);
+  return_value = dhcp_init (false);
   rtems_bsdnet_semaphore_release ();
 
   return return_value;

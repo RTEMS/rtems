@@ -1,5 +1,15 @@
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
+	* libnetworking/nfs/bootp_subr.c: Fixed PR1384. The route set in
+	the initialise pass is not deleted so an exists error is
+	returned. Ignore the error. Print the server address as an IP
+	address not hex digits.  
+
+	* libnetworking/rtems/rtems_dhcp.c: Fixed
+	PR1338. Close the socket, handle the returned event flags.
+	
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
 	* sapi/include/confdefs.h: Add a prototype for Init with C linkage
 	and define Init task command line arguments if confdefs.h provides
 	an Init entry point.

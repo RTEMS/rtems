@@ -464,10 +464,12 @@ bootpc_call(
 
 		} /* while secs */
 	} /* forever send/receive */
-
-        printf("BOOTP timeout for server 0x%x\n",
-               (int)ntohl(sin->sin_addr.s_addr));
-
+	{
+		uint32_t addr = ntohl(sin->sin_addr.s_addr);
+        printf("BOOTP timeout for server %lu.%lu.%lu.%lu\n",
+               (addr >> 24) & 0xff, (addr >> 16) & 0xff,
+               (addr >> 8) & 0xff, addr & 0xff);
+	}
 	error = ETIMEDOUT;
 	goto out;
 
@@ -518,7 +520,12 @@ bootpc_fakeup_interface(struct ifreq *ireq,struct socket *so,
   sin->sin_family = AF_INET;
   sin->sin_addr.s_addr = INADDR_ANY;
   error = ifioctl(so, SIOCSIFADDR, (caddr_t)ireq, procp);
-  if (error) {
+  /*
+   * Ignore a File already exists (EEXIST) error code. This means a
+   * route for the address is already present and is returned on
+   * a second pass to here.
+   */
+  if (error && (error != EEXIST)) {
     printf("bootpc_fakeup_interface: set if addr, error=%s\n", strerror(error));
     return error;
   }
@@ -549,7 +556,6 @@ bootpc_fakeup_interface(struct ifreq *ireq,struct socket *so,
     return error;
   }
   
-  
   /* Add default route to 0.0.0.0 so we can send data */
   
   bzero((caddr_t) &dst, sizeof(dst));
@@ -573,8 +579,10 @@ bootpc_fakeup_interface(struct ifreq *ireq,struct socket *so,
 		    (struct sockaddr *) &mask, 
 		    RTF_UP | RTF_STATIC
 		    , NULL);
-  if (error)
-    printf("bootpc_fakeup_interface: add default route, error=%d\n", error);
+  if (error && error != EEXIST)
+    printf("bootpc_fakeup_interface: add default route, error=%s\n",
+           strerror(error));
+  
   return error;
 }
 
