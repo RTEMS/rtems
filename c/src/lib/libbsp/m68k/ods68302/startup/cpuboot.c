@@ -119,7 +119,7 @@ void boot_phase_2(void)
   static constructors have not been called, and RTEMS is not initialised.
   */
 
-void boot_card(void);
+void boot_card(const char* cmdline);
 void set_debug_traps(void);
 void breakpoint(void);
 
@@ -136,7 +136,7 @@ void boot_phase_3(void)
   /* FIXME : add RAM and ROM checks */
 
   /* boot the bsp, what ever this means */
-  boot_card();
+  boot_card((void*)0);
 
   WATCHDOG_TRIGGER();
 }
