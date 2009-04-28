@@ -30,6 +30,51 @@
 #include <libchip/ide_ctrl_io.h>
 
 /* #define DEBUG_OUT */
+
+static bool pc386_ide_status_busy (uint32_t port,
+                                   uint32_t timeout,
+                                   uint8_t* status_val)
+{
+  do
+  {
+    inport_byte (port + IDE_REGISTER_STATUS, *status_val);
+    if ((*status_val & IDE_REGISTER_STATUS_BSY) == 0)
+      return true;
+
+    if (timeout)
+    {
+      timeout--;
+      rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (1000));
+    }
+  }
+  while (timeout);
+
+  return false;
+}
+
+static bool pc386_ide_status_data_ready (uint32_t port,
+                                         uint32_t timeout,
+                                         uint8_t* status_val)
+{
+  do
+  {
+    inport_byte (port + IDE_REGISTER_STATUS, *status_val);
+    
+    if (((*status_val & IDE_REGISTER_STATUS_BSY) == 0) &&
+        (*status_val & IDE_REGISTER_STATUS_DRQ))
+      return true;
+
+    if (timeout)
+    {
+      timeout--;
+      rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (1000));
+    }
+  }
+  while (timeout);
+
+  return false;
+}
+
 /*
  * support functions for IDE harddisk IF
  */
@@ -174,18 +219,28 @@ void pc386_ide_read_block
   uint32_t    port = IDE_Controller_Table[minor].port1;
   uint16_t    cnt = 0;
   uint32_t    llength = bufs[(*cbuf)].length;
-  uint8_t   status_val;
+  uint8_t     status_val;
   uint16_t   *lbuf = (uint16_t*)
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 
-  inport_byte(port+IDE_REGISTER_STATUS,status_val);
-  while ((status_val & IDE_REGISTER_STATUS_DRQ) &&
-	 (cnt < block_size)) {
+  while (cnt < block_size)
+  {
+    if (!pc386_ide_status_data_ready (port, 100, &status_val))
+    {
+      printk ("pc386_ide_read_block: status=%02x, cnt=%d bs=%d\n", status_val, cnt, block_size);
+      /* FIXME: add an error here. */
+      return;
+    }
+    
+    if (status_val & IDE_REGISTER_STATUS_ERR)
+      printk("pc386_ide_read_block: error: %02x\n", status_val);
+    
     inport_word(port+IDE_REGISTER_DATA,*lbuf);
 
 #ifdef DEBUG_OUT
     printk("0x%x ",*lbuf);
 #endif
+
     lbuf++;
     cnt    += sizeof(*lbuf);
     (*pos) += sizeof(*lbuf);
@@ -195,11 +250,7 @@ void pc386_ide_read_block
       lbuf = bufs[(*cbuf)].buffer;
       llength = bufs[(*cbuf)].length;
     }
-    inport_byte(port+IDE_REGISTER_STATUS,status_val);
   }
-#ifdef DEBUG_OUT
-  printk("pc386_ide_read_block()\r\n");
-#endif
 }
 
 /*=========================================================================*\
@@ -230,13 +281,23 @@ void pc386_ide_write_block
   uint8_t     status_val;
   uint16_t   *lbuf = (uint16_t*)
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
-
+  
 #ifdef DEBUG_OUT
-  printk("pc386_ide_write_block()\r\n");
+  printk("pc386_ide_write_block()\n");
 #endif
-  inport_byte(port+IDE_REGISTER_STATUS,status_val);
-  while ((status_val & IDE_REGISTER_STATUS_DRQ) &&
-	 (cnt < block_size)) {
+
+  while (cnt < block_size)
+  {
+    if (!pc386_ide_status_data_ready (port, 100, &status_val))
+    {
+      printk ("pc386_ide_write_block: status=%02x, cnt=%d bs=%d\n", status_val, cnt, block_size);
+      /* FIXME: add an error here. */
+      return;
+    }
+    
+    if (status_val & IDE_REGISTER_STATUS_ERR)
+      printk("pc386_ide_write_block: error: %02x\n", status_val);
+    
 #ifdef DEBUG_OUT
     printk("0x%x ",*lbuf);
 #endif
@@ -250,7 +311,6 @@ void pc386_ide_write_block
       lbuf = bufs[(*cbuf)].buffer;
       llength = bufs[(*cbuf)].length;
     }
-    inport_byte(port+IDE_REGISTER_STATUS,status_val);
   }
 }
 

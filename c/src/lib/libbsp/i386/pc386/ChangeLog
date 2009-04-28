@@ -1,3 +1,15 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am: Add bspcmdline.c.
+	* include/bsp.h: Add boot command line interfaces.
+	* start/start.c: Save the multiboot command line. Pass the command
+	line to boot_card.
+	* start/start.S: Update for boot_card command line change.
+	* startup/bspstart.c: Initialise the command line.
+	* startup/bspcmdline.c: New.
+	* console/console.c, ide/idecfg.c: Add boot command line support.
+	* ide/ide.cfg: Add prints for errors to help resolve problems.
+
 2009-02-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, start/start16.S: Remove duplicate configure option and

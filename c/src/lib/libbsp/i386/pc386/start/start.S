@@ -88,21 +88,42 @@ speakl:	jmp	speakl             # and SPIN!!!
         cli			# DISABLE INTERRUPTS!!!
 	cld
 
-		/* Save multiboot info */
-		cmp 	$0x2badb002,eax
-		jne		1f
-		/* We have multiboot info; let's hope DS and ES are OK... */
-		movl	ebx, SYM(_boot_multiboot_info_p)
-		/* Check for memory size info and save */
-		movl	ebx, esi
-		movl	$SYM(_boot_multiboot_info), edi
-		movsd
-		/* only save flag 1 since that's the only data we save */
-		and		$1,-4(edi)
-		je		1f
-		movl	$2,ecx
-		rep movsd
-1:
+	/* Save multiboot info if we detect a multiboot loader */
+	cmp 	$0x2badb002,eax
+	jne	2f
+	
+	/* We have multiboot info; let's hope DS and ES are OK... */
+	movl	ebx, SYM(_boot_multiboot_info_p)
+	/* Check for memory size info and save */
+	movl	ebx, esi
+	movl	(esi), eax
+	movl	eax, ebx
+	movl	$SYM(_boot_multiboot_info), edi
+ 	/* save flags, always present */
+	movsd
+	/* flag 1 is memory */
+	and	$1, eax
+	je	1f
+	movl	$2, ecx
+	rep movsd
+	/* flag 2 is the command line */
+1:	movl	ebx, eax
+	and	$4, eax
+	je	3f
+	movl    (_boot_multiboot_info_p), eax
+	movl    16(eax), esi
+	movl	$255, ecx
+2:	movzbl	(esi), eax
+	test	al, al
+	je	3f
+	movb	al, (edi)
+	inc	edi
+	inc	esi
+	dec	ecx
+	je	3f
+	jmp	2b
+3:	xor	al, al
+	movb	al, (edi)
 #ifdef DEBUG_EARLY_START
 	/*
 	 * Must get video attribute to have a working printk.
@@ -178,11 +199,10 @@ SYM (zero_bss):
 | Transfer control to User's Board Support Package
 +---------------------------------------------------------------------*/
 
-	pushl	$0			# environp
-	pushl	$0			# argv
-        pushl	$0			# argc
+	movl	$SYM(_boot_multiboot_cmdline), eax
+	pushl	eax			# cmdline
 	call	SYM (boot_card)
-	addl	$12, esp
+	addl	$4, esp
 
 /*---------------------------------------------------------------------+
 | Clean up - we do not know anything about it, so we will
@@ -199,11 +219,20 @@ SYM(_boot_multiboot_info_p):
 	.long 0
 
 	PUBLIC(_boot_multiboot_info)
+	PUBLIC(_boot_multiboot_flags)
+	PUBLIC(_boot_multiboot_memory)
+	PUBLIC(_boot_multiboot_cmdline)
 SYM(_boot_multiboot_info):
+SYM(_boot_multiboot_flags):
 	.long 0	/* flags */
+SYM(_boot_multiboot_memory):
 	.long 0 /* mem_lower */
 	.long 0 /* mem_upper */
-
+SYM(_boot_multiboot_cmdline):
+	.rept 256 /* cmd line */
+	.byte 0
+	.endr
+	
 	PUBLIC(_stack_size)
 SYM(_stack_size):
 	.long STACK_SIZE

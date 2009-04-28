@@ -183,6 +183,17 @@ void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
 #define BSP_CONSOLE_PORT_COM2    (BSP_UART_COM2)
 
 /*
+ * Command line.
+ */
+const char* bsp_cmdline(void);
+const char* bsp_cmdline_arg(const char* arg);
+
+/*
+ * IDE command line parsing.
+ */
+void bsp_ide_cmdline_init(void);
+
+/*
  * indicate, that BSP has IDE driver
  */
 #define RTEMS_BSP_HAS_IDE_DRIVER

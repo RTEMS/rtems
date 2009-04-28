@@ -149,7 +149,34 @@ console_initialize(rtems_device_major_number major,
                    void                      *arg)
 {
   rtems_status_code status;
+  const char* mode;
+  
+  /*
+   * Check the command line for the type of mode
+   * the consol is.
+   */
+  mode = bsp_cmdline_arg ("--console=");
 
+  if (mode)
+  {
+    mode += sizeof ("--console=") - 1;
+    if (strncmp (mode, "console", sizeof ("console") - 1) == 0)
+    {
+      BSPConsolePort = BSP_CONSOLE_PORT_CONSOLE;
+      BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
+    }
+    else if (strncmp (mode, "com1", sizeof ("com1") - 1) == 0)
+    {
+      BSPConsolePort = BSP_UART_COM1;
+      BSPPrintkPort  = BSP_UART_COM1;
+    }
+    else if (strncmp (mode, "com2", sizeof ("com2") - 1) == 0)
+    {
+      BSPConsolePort = BSP_UART_COM2;
+      BSPPrintkPort  = BSP_UART_COM2;
+    }
+  }
+  
   /* Initialize the KBD interface */
   kbd_init();
 
