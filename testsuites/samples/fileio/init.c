@@ -36,6 +36,7 @@
 #include <rtems/libcsupport.h>
 #include <rtems/fsmount.h>
 
+#if FILEIO_BUILD
 /*
  * Table of FAT file systems that will be mounted
  * with the "fsmount" function.
@@ -725,3 +726,14 @@ rtems_shell_alias_t Shell_USERECHO_Alias = {
 #include <rtems/shellconfig.h>
 #endif
 
+#else
+/*
+ * RTEMS Startup Task
+ */
+rtems_task
+Init (rtems_task_argument ignored)
+{
+  puts( "\n\n*** FILE I/O SAMPLE AND TEST ***" );
+  puts( "\n\n*** NOT ENOUGH MEMORY TO BUILD AND RUN ***" );
+}
+#endif

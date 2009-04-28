@@ -27,7 +27,13 @@ rtems_task Init(
 /* configuration information */
 
 #include <bsp.h> /* for device driver prototypes */
-#ifdef RTEMS_BSP_HAS_IDE_DRIVER
+
+#define FILEIO_BUILD 1
+#if BSP_SMALL_MEMORY
+#undef FILEIO_BUILD
+#endif
+
+#if defined(RTEMS_BSP_HAS_IDE_DRIVER) && !BSP_SMALL_MEMORY
 #include <libchip/ata.h> /* for ata driver prototype */
 #include <libchip/ide_ctrl.h> /* for general ide driver prototype */
 #endif

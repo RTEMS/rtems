@@ -29,6 +29,8 @@ rtems_task Init(rtems_task_argument argument);
 
 #include <rtems/confdefs.h>
 
+#if !BSP_SMALL_MEMORY
+
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/error.h>
 #include <stdio.h>
@@ -273,3 +275,14 @@ Init (rtems_task_argument ignored)
     puts( "*** END OF LOOPBACK TEST ***" );
     exit( 0 );
 }
+#else
+#include <stdio.h>
+/*
+ * RTEMS Startup Task
+ */
+rtems_task
+Init (rtems_task_argument ignored)
+{
+  printf("NO NETWORKING. MEMORY TOO SMALL");
+}
+#endif

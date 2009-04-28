@@ -1,3 +1,10 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* fileio/init.c, fileio/system.h, iostream/init.cc,
+	loopback/init.c, pppd/init.c, pppd/pppdapp.c: Do not build if
+	BSP_SMALL_MEMORY is defined. Remove this code once a better way is
+	supported by the build system.
+
 2009-04-14	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* fileio/init.c: Removed obsolete header include.

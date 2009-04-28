@@ -23,15 +23,25 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#if BSP_SMALL_MEMORY
+#include <stdio.h>
+#else
 #include <iostream>
+#endif
+
 #include <stdlib.h>
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
+#if BSP_SMALL_MEMORY
+  printf ("NO STDC++. MEMORY TOO SMALL");
+#else
   std::cout << "\n\n*** HELLO WORLD TEST ***" << std::endl;
   std::cout << "Hello World" << std::endl;
   std::cout << "*** END OF HELLO WORLD TEST ***" << std::endl;
+#endif
   exit( 0 );
 }
+
