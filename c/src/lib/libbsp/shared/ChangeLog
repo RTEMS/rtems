@@ -1,3 +1,9 @@
+2009-04-28	Chris Johns <chrisj@rtems.org>
+
+	* bootcard.c, include/bootcard.h: Remove argc/argv/envp and
+	replace with a single BSP boot command line a BSP can optionally
+	support.
+
 2009-03-10	Eric Norum <norume@aps.anl.gov>
 
 	* bootcard.c: Swap order of RTEMS Workspace and Malloc Heap. This

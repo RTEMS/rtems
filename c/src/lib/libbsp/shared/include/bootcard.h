@@ -60,7 +60,7 @@ void bsp_get_work_area(
   ssize_t  *heap_size
 );
 
-int boot_card( int argc, char **argv, char **envp);
+int boot_card( const char *cmdline );
 
 void bsp_libc_init( void *heap_start, size_t heap_size, size_t sbrk_amount);
 

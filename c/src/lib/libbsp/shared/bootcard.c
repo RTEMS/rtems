@@ -48,9 +48,10 @@
 #include <bsp/bootcard.h>
 
 /*
- *  Since there is a forward reference
+ *  At most a single pointer to the cmdline for those target
+ *  short on memory and not supporting a command line.
  */
-char *rtems_progname;
+const char *bsp_boot_cmdline;
 
 /*
  * Are we using a single heap for the RTEMS Workspace and C Program Heap?
@@ -114,21 +115,15 @@ static rtems_status_code bootcard_bsp_libc_helper(
  *  as much as possible.
  */
 int boot_card(
-  int    argc, 
-  char **argv, 
-  char **envp
+  const char *cmdline
 )
 {
-  static char            *argv_pointer = NULL;
-  static char            *envp_pointer = NULL;
-  char                  **argv_p = &argv_pointer;
-  char                  **envp_p = &envp_pointer;
-  rtems_interrupt_level   bsp_isr_level;
-  rtems_status_code       sc = RTEMS_SUCCESSFUL;
-  void                   *work_area_start = NULL;
-  intptr_t                work_area_size = 0;
-  void                   *heap_start = NULL;
-  intptr_t                heap_size = 0;
+  rtems_interrupt_level  bsp_isr_level;
+  rtems_status_code      sc = RTEMS_SUCCESSFUL;
+  void                  *work_area_start = NULL;
+  intptr_t               work_area_size = 0;
+  void                  *heap_start = NULL;
+  intptr_t               heap_size = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -143,22 +138,7 @@ int boot_card(
    */
   rtems_interrupt_disable( bsp_isr_level );
 
-  /*
-   *  Set things up so we have real pointers for argv and envp.
-   *  If the BSP has passed us something useful, then pass it on.
-   *  Somehow we need to eventually make this available to
-   *  a real main() in user land. :)
-   */
-  if ( argv ) argv_p = argv;
-  if ( envp ) envp_p = envp;
-
-  /*
-   *  Set the program name in case some application cares.
-   */
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
+  bsp_boot_cmdline = cmdline;
 
   /*
    * Invoke Board Support Package initialization routine written in C.
@@ -169,7 +149,8 @@ int boot_card(
    *  Find out where the block of memory the BSP will use for
    *  the RTEMS Workspace and the C Program Heap is.
    */
-  bsp_get_work_area(&work_area_start, &work_area_size, &heap_start, &heap_size);
+  bsp_get_work_area(&work_area_start, (ssize_t*) &work_area_size,
+                    &heap_start, (ssize_t*) &heap_size);
 
   if ( work_area_size <= Configuration.work_space_size ) {
     printk( "bootcard: Work space too big for work area!\n");
