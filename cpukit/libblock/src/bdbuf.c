@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * Block device buffer management.
+ */
+
 /*
  * Disk I/O buffering
  * Buffer managment
@@ -15,81 +21,6 @@
  */
 
 /**
- * @file
- *
- * The Buffer Descriptor Buffer code implements a cache between the disk
- * devices and file systems. The code provides read ahead and write queuing to
- * the drivers and fast cache look up using an AVL tree.
- *
- * The buffers are held in pools based on size. Each pool has buffers and the
- * buffers follow this state machine:
- *                                  
- *                   read/read ahead
- *          +-------------------------------+
- *          |                               v
- *     +-----------+ read ahead      +------------+
- *     | READY,    |  complete       |            |---------+
- *     |  READ     |<----------------|  TRANSFER  |         |
- *     |   AHEAD   |   +-------------|            |<--+     |
- *     +-----------+   | read/write  +------------+   |     |
- *              | get  v complete                swap |     |
- *              |    +-----------+ modified  +------------+ |
- *              +--->| ACCESSED, |---------->|  MODIFIED, | |
- *                   | ACCESSED  |<----------|  SYNC      | |
- *              +----|  MODIFIED |<--+   get |            | |
- *              |    +-----------+   |       +------------+ |
- *              | release        get |                      |
- *              |    +-----------+   |                      |
- *              +--->|           |---+        read complete |
- *                   |   CACHED  |           write complete |
- *                   |           |<-------------------------+
- *                   +-----------+
- *         
- * Empty buffers are added to the ready list and removed from this queue when a
- * caller requests a buffer. This is referred to as getting a buffer in the
- * code and the event get in the state diagram. The buffer is assigned to a
- * block and inserted to the AVL based on the block/device key. If the block is
- * to be read by the user and not in the cache (ready) it is transfered from
- * the disk into memory. If no ready buffers exist the buffer is taken from the
- * LRU list. If no buffers are on the LRU list the modified list is check. If
- * no buffers are on the modified list the request blocks. If buffers are on
- * the modified list the buffers hold timer is expired and the swap out task
- * woken.
- *
- * A block being accessed is given to the file system layer and not accessable
- * to another requester until released back to the cache. The same goes to a
- * buffer in the transfer state. The transfer state means being read or
- * written. If the file system has modifed the block and releases it as
- * modified it placed on the pool's modified list and a hold timer
- * initialised. The buffer is held for the hold time before being written to
- * disk. Buffers are held for a configurable period of time on the modified
- * list as a write sets the state to transfer and this locks the buffer out
- * from the file system until the write complete. Buffers are often repeatable
- * accessed and modified in a series of small updates so if sent to the disk
- * when released as modified the user would have to block waiting until it had
- * been written. This would be a performance problem.
- *
- * The code performs mulitple block reads and writes. Multiple block reads or
- * read ahead increases performance with hardware that supports it. It also
- * helps with a large cache as the disk head movement is reduced. It how-ever
- * is a speculative operation so excessive use can remove valuable and needed
- * blocks from the cache. The get call knows if a read is a for the file system
- * or if it is a read ahead get. If the get is for a read ahead block and the
- * block is already in the cache or no ready buffers are available the read
- * ahead is stopped. The transfer occurs with the blocks so far. If a buffer is
- * in the read ahead state and release it is placed on the ready list rather
- * than the LRU list. This means these buffers are used before buffers used by
- * the file system.
- *
- * The pool have the following lists of buffers:
- *
- *   ready        - Empty buffers created when the pool is initialised.
- *   modified     - Buffers waiting to be written to disk.
- *   sync         - Buffers to be synced to disk.
- *   lru          - Accessed buffers released in least recently used order.
- */
-
-/**
  * Set to 1 to enable debug tracing.
  */
 #define RTEMS_BDBUF_TRACE 0
@@ -100,6 +31,7 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
+#include <rtems/malloc.h>
 #include <limits.h>
 #include <errno.h>
 #include <assert.h>
@@ -430,7 +362,7 @@ rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,
 /**
  * Removes the node from the tree.
  *
- * @param root_addr Pointer to pointer to the root node
+ * @param root Pointer to pointer to the root node
  * @param node Pointer to the node to remove
  * @retval 0 Item removed
  * @retval -1 No such item found
@@ -704,7 +636,7 @@ rtems_bdbuf_avl_remove(rtems_bdbuf_buffer**      root,
 /**
  * Get the pool for the device.
  *
- * @param pdd Physical disk device.
+ * @param pid Physical disk device.
  */
 static rtems_bdbuf_pool*
 rtems_bdbuf_get_pool (const rtems_bdpool_id pid)
@@ -923,11 +855,19 @@ static rtems_status_code
 rtems_bdbuf_initialize_pool (rtems_bdbuf_pool_config* config,
                              rtems_bdpool_id          pid)
 {
+  int                 rv = 0;
   unsigned char*      buffer = config->mem_area;
   rtems_bdbuf_pool*   pool;
   rtems_bdbuf_buffer* bd;
   rtems_status_code   sc;
   uint32_t            b;
+  int                 cache_aligment = 32 /* FIXME rtems_cache_get_data_line_size() */;
+
+  /* For unspecified cache alignments we use the CPU alignment */
+  if (cache_aligment <= 0)
+  {
+    cache_aligment = CPU_ALIGNMENT;
+  }
 
   pool = rtems_bdbuf_get_pool (pid);
   
@@ -961,16 +901,21 @@ rtems_bdbuf_initialize_pool (rtems_bdbuf_pool_config* config,
     return RTEMS_NO_MEMORY;
 
   /*
-   * Allocate memory for buffers if required.
+   * Allocate memory for buffers if required.  The pool memory will be cache
+   * aligned.  It is possible to free the memory allocated by rtems_memalign()
+   * with free().
    */
   if (buffer == NULL)
   {
-    buffer = pool->buffers = malloc (config->num * config->size);
-    if (!pool->buffers)
+    rv = rtems_memalign ((void **) &buffer,
+                         cache_aligment,
+                         config->num * config->size);
+    if (rv != 0)
     {
       free (pool->bds);
       return RTEMS_NO_MEMORY;
     }
+    pool->buffers = buffer;
   }
 
   for (b = 0, bd = pool->bds;
@@ -1079,16 +1024,6 @@ rtems_bdbuf_release_pool (rtems_bdpool_id pid)
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * Prepare buffering layer to work - initialize buffer descritors and (if it is
- * neccessary) buffers. Buffers will be allocated accoriding to the
- * configuration table, each entry describes the size of block and the size of
- * the pool. After initialization all blocks is placed into the ready state.
- * lists.
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_init (void)
 {
@@ -1209,7 +1144,7 @@ rtems_bdbuf_init (void)
  * it will make sure the pool is locked when it returns. The pool will be
  * unlocked if the call could block.
  *
- * @param device The physical disk device
+ * @param pdd The physical disk device
  * @param pool The pool reference
  * @param block Absolute media block number
  * @param read_ahead The get is for a read ahead buffer
@@ -1401,30 +1336,6 @@ rtems_bdbuf_get_buffer (rtems_disk_device* pdd,
   return bd;
 }
 
-/**
- * Get block buffer for data to be written into. The buffers is set to the
- * access or modifed access state. If the buffer is in the cache and modified
- * the state is access modified else the state is access. This buffer contents
- * are not initialised if the buffer is not already in the cache. If the block
- * is already resident in memory it is returned how-ever if not in memory the
- * buffer is not read from disk. This call is used when writing the whole block
- * on a disk rather than just changing a part of it. If there is no buffers
- * available this call will block. A buffer obtained with this call will not be
- * involved in a transfer request and will not be returned to another user
- * until released. If the buffer is already with a user when this call is made
- * the call is blocked until the buffer is returned. The highest priority
- * waiter will obtain the buffer first.
- *
- * The block number is the linear block number. This is relative to the start
- * of the partition on the media.
- *
- * @param device Device number (constructed of major and minor device number)
- * @param block  Linear media block number
- * @param bd     Reference to the buffer descriptor pointer.
- *
- * @return       RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *               successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_get (dev_t                device,
                  rtems_blkdev_bnum    block,
@@ -1447,17 +1358,16 @@ rtems_bdbuf_get (dev_t                device,
     return RTEMS_INVALID_NUMBER;
   }
 
-  block += dd->start;
-
   pool = rtems_bdbuf_get_pool (dd->phys_dev->pool);
   
   rtems_bdbuf_lock_pool (pool);
 
 #if RTEMS_BDBUF_TRACE
-  rtems_bdbuf_printf ("get: %d (dev = %08x)\n", block, device);
+  /* Print the block index relative to the physical disk */
+  rtems_bdbuf_printf ("get: %d (dev = %08x)\n", block + dd->start, device);
 #endif
 
-  bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool, block, false);
+  bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool, block + dd->start, false);
 
   if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
     bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
@@ -1494,31 +1404,6 @@ rtems_bdbuf_read_done (void* arg, rtems_status_code status, int error)
   rtems_event_send (req->io_task, RTEMS_BDBUF_TRANSFER_SYNC);
 }
 
-/**
- * Get the block buffer and if not already in the cache read from the disk. If
- * specified block already cached return. The buffer is set to the access or
- * modifed access state. If the buffer is in the cache and modified the state
- * is access modified else the state is access. If block is already being read
- * from disk for being written to disk this call blocks. If the buffer is
- * waiting to be written it is removed from modified queue and returned to the
- * user. If the buffer is not in the cache a new buffer is obtained and the
- * data read from disk. The call may block until these operations complete. A
- * buffer obtained with this call will not be involved in a transfer request
- * and will not be returned to another user until released. If the buffer is
- * already with a user when this call is made the call is blocked until the
- * buffer is returned. The highest priority waiter will obtain the buffer
- * first.
- *
- * @note Read ahead always reads buffers in sequence. All multi-block reads
- *       read consecutive blocks.
- *
- * @param device Device number (constructed of major and minor device number)
- * @param block  Linear media block number
- * @param bd     Reference to the buffer descriptor pointer.
- *
- * @return       RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *               successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_read (dev_t                device,
                   rtems_blkdev_bnum    block,
@@ -1545,18 +1430,16 @@ rtems_bdbuf_read (dev_t                device,
   dd = rtems_disk_obtain (device);
   if (dd == NULL)
     return RTEMS_INVALID_ID;
-
-  block += dd->start;
   
-#if RTEMS_BDBUF_TRACE
-  rtems_bdbuf_printf ("read: %d (dev = %08x)\n", block, device);
-#endif
-  
-  if (block >= dd->size)
-  {
+  if (block >= dd->size) {
     rtems_disk_release(dd);
     return RTEMS_INVALID_NUMBER;
   }
+  
+#if RTEMS_BDBUF_TRACE
+  /* Print the block index relative to the physical disk */
+  rtems_bdbuf_printf ("read: %d (dev = %08x)\n", block + dd->start, device);
+#endif
 
   req->bufnum = 0;
 
@@ -1587,7 +1470,7 @@ rtems_bdbuf_read (dev_t                device,
      * caller.
      */
     bd = rtems_bdbuf_get_buffer (dd->phys_dev, pool,
-                                 block + req->bufnum,
+                                 block + dd->start + req->bufnum,
                                  req->bufnum == 0 ? false : true);
 
     /*
@@ -1711,19 +1594,6 @@ rtems_bdbuf_read (dev_t                device,
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * Release the buffer obtained by a read call back to the cache. If the buffer
- * was obtained by a get call and was not already in the cache the release
- * modified call should be used. A buffer released with this call obtained by a
- * get call may not be in sync with the contents on disk. If the buffer was in
- * the cache and modified before this call it will be returned to the modified
- * queue. The buffers is returned to the end of the LRU list.
- *
- * @param bd Reference to the buffer descriptor.
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
 {
@@ -1785,21 +1655,6 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd)
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * Release the buffer allocated with a get or read call placing it on the
- * modidied list.  If the buffer was not released modified before the hold
- * timer is set to the configuration value. If the buffer had been released
- * modified before but not written to disk the hold timer is not updated. The
- * buffer will be written to disk when the hold timer has expired, there are
- * not more buffers available in the cache and a get or read buffer needs one
- * or a sync call has been made. If the buffer is obtained with a get or read
- * before the hold timer has expired the buffer will be returned to the user.
- *
- * @param bd Reference to the buffer descriptor.
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd)
 {
@@ -1828,20 +1683,6 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd)
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * Release the buffer as modified and wait until it has been synchronized with
- * the disk by writing it. This buffer will be the first to be transfer to disk
- * and other buffers may also be written if the maximum number of blocks in a
- * requests allows it.
- *
- * @note This code does not lock the sync mutex and stop additions to the
- *       modified queue.
- *
- * @param bd Reference to the buffer descriptor.
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
 {
@@ -1895,17 +1736,6 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * Synchronize all modified buffers for this device with the disk and wait
- * until the transfers have completed. The sync mutex for the pool is locked
- * stopping the addition of any further modifed buffers. It is only the
- * currently modified buffers that are written.
- *
- * @param dev Block device number
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- */
 rtems_status_code
 rtems_bdbuf_syncdev (dev_t dev)
 {
@@ -2427,21 +2257,6 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
   rtems_task_delete (RTEMS_SELF);
 }
 
-/**
- * Find first appropriate buffer pool. This primitive returns the index of
- * first buffer pool which block size is greater than or equal to specified
- * size.
- *
- * @param block_size Requested block size
- * @param pool The pool to use for the requested pool size.
- *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- * @retval RTEMS_INVALID_SIZE The specified block size is invalid (not a power
- *         of 2)
- * @retval RTEMS_NOT_DEFINED The buffer pool for this or greater block size
- *         is not configured.
- */
 rtems_status_code
 rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
 {
@@ -2480,23 +2295,11 @@ rtems_bdbuf_find_pool (uint32_t block_size, rtems_bdpool_id *pool)
   }
 }
 
-/**
- * Obtain characteristics of buffer pool with specified number.
- *
- * @param pool Buffer pool number
- * @param block_size Block size for which buffer pool is configured returned
- *                   there
- * @param blocks Number of buffers in buffer pool.
- *
- * RETURNS:
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
- * @retval RTEMS_INVALID_SIZE The appropriate buffer pool is not configured.
- *
- * @note Buffer pools enumerated continuously starting from 0.
- */
-rtems_status_code
-rtems_bdbuf_get_pool_info (rtems_bdpool_id pool, int* block_size, int* blocks)
+rtems_status_code rtems_bdbuf_get_pool_info(
+  rtems_bdpool_id pool,
+  uint32_t *block_size,
+  uint32_t *blocks
+)
 {
   if (pool >= rtems_bdbuf_ctx.npools)
     return RTEMS_INVALID_NUMBER;

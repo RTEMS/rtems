@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * Block device management.
+ */
+ 
 /*
  * blkdev.h - block device driver generic support
  *

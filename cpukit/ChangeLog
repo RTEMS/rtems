@@ -1,3 +1,18 @@
+2009-04-29    Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h, libblock/include/rtems/bdbuf.h: Changed
+	type of rtems_bdbuf_pool_configuration_size to size_t.
+	
+	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/blkdev.h,
+	libblock/include/rtems/diskdevs.h, libblock/src/bdbuf.c,
+	libblock/src/blkdev.c, libblock/src/diskdevs.c: Buffer pool
+	allocation is now cache aligned.  The cache functions are
+	currently not available on all platforms so the cache line size is
+	fixed to 32 bytes for now.  Changed various integer types which
+	refer to block sizes, numbers and indexes.  Fixed logical block
+	indexes in buffer get and read function.  It is now possible to
+	delete logical disks.  Modified documentation
+
 2009-04-29	Chris Johns <chrisj@rtems.org>
 
 	* libcsupport/include/rtems/libio.h: Add rtems_off64_t for

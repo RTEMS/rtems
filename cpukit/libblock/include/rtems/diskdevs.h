@@ -1,6 +1,7 @@
 /**
- * @file rtems/diskdevs.h
- * Physical and logical block devices (disks) support
+ * @file
+ *
+ * Block device disk management.
  */
  
 /*
@@ -13,197 +14,212 @@
 #ifndef _RTEMS_DISKDEVS_H
 #define _RTEMS_DISKDEVS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 
-/* Buffer pool identifier */
+/**
+ * @ingroup rtems_bdbuf
+ *
+ * Buffer pool identifier.
+ */
 typedef int rtems_bdpool_id;
 
 #include <rtems/blkdev.h>
 
-/* Driver capabilities. */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* Block device ioctl handler */
-typedef int (* rtems_block_device_ioctl) (dev_t dev, uint32_t req, void *argp);
+/**
+ * @defgroup rtems_disk Block Device Disk Management
+ *
+ * @ingroup rtems_libblock
+ *
+ * This module provides functions to manage disk devices.  The disk devices are
+ * accessed via the RTEMS block device library.  A disk is a set of blocks
+ * which are identified by a consecutive set of non-negative integers starting
+ * at zero.  There are also logical disks which contain a subset of consecutive
+ * disk blocks.  The logical disks are used to represent the partitions of a
+ * disk.
+ *
+ * @{
+ */
 
-/* rtems_disk_device: Entry of this type created for every disk device
- * (both for logical and physical disks).
- * Array of arrays of pointers to disk_device structures maintained. First
- * table indexed by major number and second table indexed by minor number.
- * Such data organization allow quick lookup using data structure of
- * moderated size.
+/**
+ * Block device IO control handler type.
+ */
+typedef int (*rtems_block_device_ioctl)( dev_t dev, uint32_t req, void *argp);
+
+/**
+ * Description of a disk device (logical and physical disks).
+ *
+ * An array of pointer tables to rtems_disk_device structures is maintained.
+ * The first table will be indexed by the major number and the second table
+ * will be indexed by the minor number.  This allows quick lookup using a data
+ * structure of moderated size.
  */
 typedef struct rtems_disk_device {
-    dev_t                     dev;          /* Device ID (major + minor) */
-    struct rtems_disk_device *phys_dev;     /* Physical device ID (the same
-                                               as dev if this entry specifies
-                                               the physical device) */
-    uint32_t                  capabilities; /* Driver capabilities. */
-    char                     *name;         /* Disk device name */
-    int                       uses;         /* Use counter. Device couldn't be
-                                               removed if it is in use. */
-    uint32_t                  start;        /* Starting block number (0 for
-                                               physical devices, block offset
-                                               on the related physical device
-                                               for logical device) */
-    uint32_t                  size;         /* Size of physical or logical disk
-                                               in disk blocks */
-    uint32_t                  block_size;   /* Size of device block (minimum
-                                               transfer unit) in bytes
-                                               (must be power of 2) */
-    uint32_t            block_size_log2;    /* log2 of block_size */
-    rtems_bdpool_id     pool;               /* Buffer pool assigned to this
-                                               device */
-    rtems_block_device_ioctl  ioctl;        /* ioctl handler for this block
-                                               device */
+  /**
+   * Device identifier (concatenation of major and minor number).
+   */
+  dev_t dev;
+
+  /**
+   * Physical device identifier (equals the @c dev entry if it specifies a
+   * physical device).
+   */
+  struct rtems_disk_device *phys_dev;
+
+  /**
+   * Driver capabilities.
+   */
+  uint32_t capabilities;
+
+  /**
+   * Disk device name.
+   */
+  char *name;
+
+  /**
+   * Usage counter.
+   *
+   * Devices cannot be removed if they are in use.
+   */
+  unsigned uses;
+
+  /**
+   * Start block number.
+   *
+   * Equals zero for physical devices.  It is a block offset to the related
+   * physical device for logical device.
+   */
+  rtems_blkdev_bnum start;
+
+  /**
+   * Size of the physical or logical disk in blocks.
+   */
+  rtems_blkdev_bnum size;
+
+  /**
+   * Device block size in bytes.
+   *
+   * This is the minimum transfer unit and must be power of two.
+   */
+  uint32_t block_size;
+
+  /**
+   * Binary logarithm of the block size.
+   */
+  uint32_t block_size_log2;
+
+  /**
+   * Buffer pool assigned to this disk.
+   */
+  rtems_bdpool_id pool;
+
+  /**
+   * IO control handler for this disk.
+   */
+  rtems_block_device_ioctl ioctl;
 } rtems_disk_device;
 
-/* rtems_disk_create_phys --
- *     Create physical disk entry. This function usually invoked from
- *     block device driver initialization code when physical device
- *     detected in the system. Device driver should provide ioctl handler
- *     to allow block device access operations. This primitive will register
- *     device in rtems (invoke rtems_io_register_name).
+/**
+ * Creates a physical disk with device identifier @a dev.
  *
- * PARAMETERS:
- *     dev        - device identifier (major, minor numbers)
- *     block_size - size of disk block (minimum data transfer unit); must be
- *                  power of 2
- *     disk_size  - number of blocks on device
- *     handler    - IOCTL handler (function providing basic block input/output
- *                  request handling BIOREQUEST and other device management
- *                  operations)
- *     name       - character name of device (e.g. /dev/hda)
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if information about new physical disk added, or
- *     error code if error occured (device already registered, wrong block
- *     size value, no memory available).
+ * The block size @a block_size must be a power of two.  The disk size @a
+ * disk_size is the number of blocks provided by this disk.  The block index
+ * starts with zero.  The associated disk device driver will be invoked via the
+ * IO control handler @a handler.  A device node will be registered in the file
+ * system with absolute path @a name.  This function is usually invoked from a
+ * block device driver during initialization when a physical device is detected
+ * in the system.  The device driver provides an IO control handler to allow
+ * block device operations.
  */
-rtems_status_code
-rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
-                       rtems_block_device_ioctl handler,
-                       const char *name);
+rtems_status_code rtems_disk_create_phys(
+  dev_t dev,
+  uint32_t block_size,
+  rtems_blkdev_bnum disk_size,
+  rtems_block_device_ioctl handler,
+  const char *name
+);
 
-/* rtems_disk_create_log --
- *     Create logical disk entry. Logical disk is contiguous area on physical
- *     disk. Disk may be splitted to several logical disks in several ways:
- *     manually or using information stored in blocks on physical disk
- *     (DOS-like partition table, BSD disk label, etc). This function usually
- *     invoked from application when application-specific splitting are in use,
- *     or from generic code which handle different logical disk organizations.
- *     This primitive will register device in rtems (invoke
- *     rtems_io_register_name).
+/**
+ * Creates a logical disk with device identifier @a dev.
  *
- * PARAMETERS:
- *     dev   - logical device identifier (major, minor numbers)
- *     phys  - physical device (block device which holds this logical disk)
- *             identifier
- *     start - starting block number on the physical device
- *     size  - logical disk size in blocks
- *     name  - logical disk name
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if logical device successfully added, or error code
- *     if error occured (device already registered, no physical device
- *     exists, logical disk is out of physical disk boundaries, no memory
- *     available).
+ * A logical disk manages a subset of consecutive blocks containd in the
+ * physical disk with identifier @a phys.  The start block index of the logical
+ * disk device is @a start.  The block number of the logcal disk will be @a
+ * size.  The blocks must be within the range of blocks managed by the
+ * associated physical disk device.  A device node will be registered in the
+ * file system with absolute path @a name.  The block size and IO control
+ * handler are inherited by the physical disk.
  */
-rtems_status_code
-rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name);
+rtems_status_code rtems_disk_create_log(
+  dev_t dev,
+  dev_t phys,
+  rtems_blkdev_bnum start,
+  rtems_blkdev_bnum size,
+  const char *name
+);
 
-/* rtems_disk_delete --
- *     Delete physical or logical disk device. Device may be deleted if its
- *     use counter (and use counters of all logical devices - if it is
- *     physical device) equal to 0. When physical device deleted,
- *     all logical devices deleted inherently. Appropriate devices removed
- *     from "/dev" filesystem.
+/**
+ * Deletes a physical or logical disk device with identifier @a dev.
  *
- * PARAMETERS:
- *     dev - device identifier (major, minor numbers)
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if block device successfully deleted, or error code
- *     if error occured (device is not defined, device is in use).
+ * Disk devices may be deleted if there usage counter (and the usage counters
+ * of all contained logical disks devices) equals zero.  When a physical disk
+ * device is deleted, all logical disk devices will deleted too.  The
+ * corresponding device nodes will be removed from the file system.
  */
-rtems_status_code
-rtems_disk_delete(dev_t dev);
+rtems_status_code rtems_disk_delete(dev_t dev);
 
-/* rtems_disk_obtain --
- *     Find block device descriptor by its device identifier. This function
- *     increment usage counter to 1. User should release disk_device structure
- *     by invoking rtems_disk_release primitive.
+/**
+ * Returns the disk device descriptor for the device identifier @a dev.
  *
- * PARAMETERS:
- *     dev - device identifier (major, minor numbers)
- *
- * RETURNS:
- *     pointer to the block device descriptor, or NULL if no such device
- *     exists.
+ * Increments usage counter by one.  You should release the disk device
+ * descriptor with rtems_disk_release().  Returns @c NULL if no corresponding
+ * disk exists.
  */
-rtems_disk_device *
-rtems_disk_obtain(dev_t dev);
+rtems_disk_device *rtems_disk_obtain(dev_t dev);
 
-/* rtems_disk_release --
- *     Release disk_device structure (decrement usage counter to 1).
+/**
+ * Releases the disk device description @a dd.
  *
- * PARAMETERS:
- *     dd - pointer to disk device structure
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL
- *
- * NOTE:
- *     It should be implemented as inline function.
+ * Decrements usage counter by one.
  */
-rtems_status_code
-rtems_disk_release(rtems_disk_device *dd);
+rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 
-/* rtems_disk_next --
- *     Disk device enumerator. Looking for device having device number larger
- *     than dev and return disk device descriptor for it. If there are no
- *     such device, NULL value returned.
+/**
+ * Disk device iterator.
  *
- * PARAMETERS:
- *     dev - device number (use -1 to start search)
+ * Returns the next disk device descriptor with a device identifier larger than
+ * @a dev.  If there is no such device, @c NULL will be returned.  Use minus
+ * one to start the search.
  *
- * RETURNS:
- *     Pointer to the disk descriptor for next disk device, or NULL if all
- *     devices enumerated. */
-rtems_disk_device *
-rtems_disk_next(dev_t dev);
-
-/* rtems_diskio_initialize --
- *     Initialization of disk device library (initialize all data structures,
- *     etc.)
+ * @code
+ * rtems_disk_device *dd = rtems_disk_next((dev_t) -1);
  *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if library initialized, or error code if error
- *     occured.
+ * while (dd != NULL) {
+ *   dd = rtems_disk_next(dd->dev);
+ * }
+ * @endcode
  */
-rtems_status_code
-rtems_disk_io_initialize(void);
+rtems_disk_device *rtems_disk_next(dev_t dev);
 
-/* rtems_diskio_done --
- *     Release all resources allocated for disk device interface.
+/**
+ * Initializes the disk device management.
  *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if all resources released, or error code if error
- *     occured.
+ * This functions returns successful if the disk device management is already
+ * initialized.  There is no protection against concurrent access.
  */
-rtems_status_code
-rtems_disk_io_done(void);
+rtems_status_code rtems_disk_io_initialize(void);
+
+/**
+ * Releases all resources allocated for disk device management.
+ */
+rtems_status_code rtems_disk_io_done(void);
+
+/** @} */
 
 #ifdef __cplusplus
 }

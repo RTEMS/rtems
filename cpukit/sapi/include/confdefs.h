@@ -740,7 +740,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       rtems_bdbuf_pool_config rtems_bdbuf_pool_configuration[] = {
         {CONFIGURE_BDBUF_BUFFER_SIZE, CONFIGURE_BDBUF_BUFFER_COUNT, NULL}
       };
-      int rtems_bdbuf_pool_configuration_size = 
+      size_t rtems_bdbuf_pool_configuration_size = 
         (sizeof(rtems_bdbuf_pool_configuration) /
          sizeof(rtems_bdbuf_pool_configuration[0]));
     #endif /* CONFIGURE_INIT */

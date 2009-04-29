@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * Block device disk management.
+ */
+ 
 /*
  * diskdevs.c - Physical and logical block devices (disks) support
  *
@@ -212,32 +218,13 @@ create_disk(dev_t dev, const char *name, rtems_disk_device **diskdev)
     return RTEMS_SUCCESSFUL;
 }
 
-/* rtems_disk_create_phys --
- *     Create physical disk entry. This function usually invoked from
- *     block device driver initialization code when physical device
- *     detected in the system. Device driver should provide ioctl handler
- *     to allow block device access operations. This primitive will register
- *     device in rtems (invoke rtems_io_register_name).
- *
- * PARAMETERS:
- *     dev        - device identifier (major, minor numbers)
- *     block_size - size of disk block (minimum data transfer unit); must be
- *                  power of 2
- *     disk_size  - number of blocks on device
- *     handler    - IOCTL handler (function providing basic block input/output
- *                  request handling BIOREQUEST and other device management
- *                  operations)
- *     name       - character name of device (e.g. /dev/hda)
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if information about new physical disk added, or
- *     error code if error occured (device already registered, wrong block
- *     size value, no memory available).
- */
-rtems_status_code
-rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
-                       rtems_block_device_ioctl handler,
-                       const char *name)
+rtems_status_code rtems_disk_create_phys(
+  dev_t dev,
+  uint32_t block_size,
+  rtems_blkdev_bnum disk_size,
+  rtems_block_device_ioctl handler,
+  const char *name
+)
 {
     int bs_log2;
     int i;
@@ -297,163 +284,138 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
     return rc;
 }
 
-/* rtems_disk_create_log --
- *     Create logical disk entry. Logical disk is contiguous area on physical
- *     disk. Disk may be splitted to several logical disks in several ways:
- *     manually or using information stored in blocks on physical disk
- *     (DOS-like partition table, BSD disk label, etc). This function usually
- *     invoked from application when application-specific splitting are in use,
- *     or from generic code which handle different logical disk organizations.
- *     This primitive will register device in rtems (invoke
- *     rtems_io_register_name).
- *
- * PARAMETERS:
- *     dev   - logical device identifier (major, minor numbers)
- *     phys  - physical device (block device which holds this logical disk)
- *             identifier
- *     start - starting block number on the physical device
- *     size  - logical disk size in blocks
- *     name  - logical disk name
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if logical device successfully added, or error code
- *     if error occured (device already registered, no physical device
- *     exists, logical disk is out of physical disk boundaries, no memory
- *     available).
- */
-rtems_status_code
-rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
+rtems_status_code rtems_disk_create_log(
+  dev_t dev,
+  dev_t phys,
+  rtems_blkdev_bnum start,
+  rtems_blkdev_bnum size,
+  const char *name
+)
 {
-    rtems_disk_device *dd;
-    rtems_disk_device *pdd;
-    rtems_status_code rc;
-    rtems_device_major_number major;
-    rtems_device_minor_number minor;
+  rtems_disk_device *dd = NULL;
+  rtems_disk_device *pdd = NULL;
+  rtems_status_code rc = RTEMS_SUCCESSFUL;
+  rtems_device_major_number major = 0;
+  rtems_device_minor_number minor = 0;
+  rtems_blkdev_bnum end = start + size;
 
-    rtems_filesystem_split_dev_t (dev, major, minor);
+  rtems_filesystem_split_dev_t (dev, major, minor);
 
-    rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
-    diskdevs_protected = true;
-
-    pdd = get_disk_entry(phys);
-    if (pdd == NULL)
-    {
-        diskdevs_protected = false;
-        rtems_semaphore_release(diskdevs_mutex);
-        return RTEMS_INVALID_NUMBER;
-    }
-
-    rc = create_disk(dev, name, &dd);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        diskdevs_protected = false;
-        rtems_semaphore_release(diskdevs_mutex);
-        return rc;
-    }
-
-    dd->phys_dev = pdd;
-    dd->uses = 0;
-    dd->start = start;
-    dd->size = size;
-    dd->block_size = pdd->block_size;
-    dd->block_size_log2 = pdd->block_size_log2;
-    dd->ioctl = pdd->ioctl;
-
-    rc = rtems_io_register_name(name, major, minor);
-
-    diskdevs_protected = false;
-    rc = rtems_semaphore_release(diskdevs_mutex);
-
+  rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (rc != RTEMS_SUCCESSFUL) {
     return rc;
+  }
+
+  diskdevs_protected = true;
+
+  pdd = get_disk_entry(phys);
+  if (
+    pdd == NULL
+      || pdd != pdd->phys_dev
+      || start >= pdd->size
+      || end <= start
+      || end > pdd->size
+  ) {
+    diskdevs_protected = false;
+    rtems_semaphore_release(diskdevs_mutex);
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  rc = create_disk(dev, name, &dd);
+  if (rc != RTEMS_SUCCESSFUL) {
+    diskdevs_protected = false;
+    rtems_semaphore_release(diskdevs_mutex);
+    return rc;
+  }
+
+  dd->phys_dev = pdd;
+  dd->uses = 0;
+  dd->start = start;
+  dd->size = size;
+  dd->block_size = pdd->block_size;
+  dd->block_size_log2 = pdd->block_size_log2;
+  dd->ioctl = pdd->ioctl;
+
+  rc = rtems_io_register_name(name, major, minor);
+
+  diskdevs_protected = false;
+  rc = rtems_semaphore_release(diskdevs_mutex);
+
+  return rc;
 }
 
-/* rtems_disk_delete --
- *     Delete physical or logical disk device. Device may be deleted if its
- *     use counter (and use counters of all logical devices - if it is
- *     physical device) equal to 0. When physical device deleted,
- *     all logical devices deleted inherently. Appropriate devices removed
- *     from "/dev" filesystem.
- *
- * PARAMETERS:
- *     dev - device identifier (major, minor numbers)
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if block device successfully deleted, or error code
- *     if error occured (device is not defined, device is in use).
- */
 rtems_status_code
 rtems_disk_delete(dev_t dev)
 {
-    rtems_status_code rc;
-    int used;
-    rtems_device_major_number maj;
-    rtems_device_minor_number min;
+  rtems_status_code rc = RTEMS_SUCCESSFUL;
+  rtems_device_major_number maj = 0;
+  rtems_device_minor_number min = 0;
+  rtems_disk_device *dd = NULL;
+  bool physical_disk = true;
 
-    rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
-    diskdevs_protected = true;
+  rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (rc != RTEMS_SUCCESSFUL) {
+    return rc;
+  }
+  diskdevs_protected = true;
+
+  /* Check if we have a physical or logical disk */
+  dd = get_disk_entry(dev);
+  if (dd == NULL) {
+    return RTEMS_INVALID_NUMBER;
+  }
+  physical_disk = dd->phys_dev == dd;
+
+  if (physical_disk) {
+    unsigned used = 0;
 
     /* Check if this device is in use -- calculate usage counter */
-    used = 0;
-    for (maj = 0; maj < disktab_size; maj++)
-    {
-        rtems_disk_device_table *dtab = disktab + maj;
-        if (dtab != NULL)
-        {
-            for (min = 0; min < dtab->size; min++)
-            {
-                rtems_disk_device *dd = dtab->minor[min];
-                if ((dd != NULL) && (dd->phys_dev->dev == dev))
-                    used += dd->uses;
-            }
+    for (maj = 0; maj < disktab_size; maj++) {
+      rtems_disk_device_table *dtab = disktab + maj;
+      if (dtab != NULL) {
+        for (min = 0; min < dtab->size; min++) {
+          dd = dtab->minor[min];
+          if ((dd != NULL) && (dd->phys_dev->dev == dev)) {
+            used += dd->uses;
+          }
         }
+      }
     }
 
-    if (used != 0)
-    {
-        diskdevs_protected = false;
-        rtems_semaphore_release(diskdevs_mutex);
-        return RTEMS_RESOURCE_IN_USE;
+    if (used != 0) {
+      diskdevs_protected = false;
+      rtems_semaphore_release(diskdevs_mutex);
+      return RTEMS_RESOURCE_IN_USE;
     }
 
     /* Delete this device and all of its logical devices */
-    for (maj = 0; maj < disktab_size; maj++)
-    {
-        rtems_disk_device_table *dtab = disktab +maj;
-        if (dtab != NULL)
-        {
-            for (min = 0; min < dtab->size; min++)
-            {
-                rtems_disk_device *dd = dtab->minor[min];
-                if ((dd != NULL) && (dd->phys_dev->dev == dev))
-                {
-                    unlink(dd->name);
-                    free(dd->name);
-                    free(dd);
-                    dtab->minor[min] = NULL;
-                }
-            }
+    for (maj = 0; maj < disktab_size; maj++) {
+      rtems_disk_device_table *dtab = disktab + maj;
+      if (dtab != NULL) {
+        for (min = 0; min < dtab->size; min++) {
+          dd = dtab->minor[min];
+          if ((dd != NULL) && (dd->phys_dev->dev == dev)) {
+            unlink(dd->name);
+            free(dd->name);
+            free(dd);
+            dtab->minor[min] = NULL;
+          }
         }
+      }
     }
+  } else {
+    rtems_filesystem_split_dev_t(dev, maj, min);
+    disktab[maj].minor[min] = NULL;
+    unlink(dd->name);
+    free(dd->name);
+    free(dd);
+  }
 
-    diskdevs_protected = false;
-    rc = rtems_semaphore_release(diskdevs_mutex);
-    return rc;
+  diskdevs_protected = false;
+  rc = rtems_semaphore_release(diskdevs_mutex);
+  return rc;
 }
 
-/* rtems_disk_obtain --
- *     Find block device descriptor by its device identifier.
- *
- * PARAMETERS:
- *     dev - device identifier (major, minor numbers)
- *
- * RETURNS:
- *     pointer to the block device descriptor, or NULL if no such device
- *     exists.
- */
 rtems_disk_device *
 rtems_disk_obtain(dev_t dev)
 {
@@ -486,15 +448,6 @@ rtems_disk_obtain(dev_t dev)
     }
 }
 
-/* rtems_disk_release --
- *     Release rtems_disk_device structure (decrement usage counter to 1).
- *
- * PARAMETERS:
- *     dd - pointer to disk device structure
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL
- */
 rtems_status_code
 rtems_disk_release(rtems_disk_device *dd)
 {
@@ -505,18 +458,6 @@ rtems_disk_release(rtems_disk_device *dd)
     return RTEMS_SUCCESSFUL;
 }
 
-/* rtems_disk_next --
- *     Disk device enumerator. Looking for device having device number larger
- *     than dev and return disk device descriptor for it. If there are no
- *     such device, NULL value returned.
- *
- * PARAMETERS:
- *     dev - device number (use -1 to start search)
- *
- * RETURNS:
- *     Pointer to the disk descriptor for next disk device, or NULL if all
- *     devices enumerated.
- */
 rtems_disk_device *
 rtems_disk_next(dev_t dev)
 {
@@ -549,17 +490,6 @@ rtems_disk_next(dev_t dev)
     }
 }
 
-/* rtems_disk_initialize --
- *     Initialization of disk device library (initialize all data structures,
- *     etc.)
- *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if library initialized, or error code if error
- *     occured.
- */
 rtems_status_code
 rtems_disk_io_initialize(void)
 {
@@ -598,16 +528,6 @@ rtems_disk_io_initialize(void)
     return RTEMS_SUCCESSFUL;
 }
 
-/* rtems_disk_io_done --
- *     Release all resources allocated for disk device interface.
- *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     RTEMS_SUCCESSFUL if all resources released, or error code if error
- *     occured.
- */
 rtems_status_code
 rtems_disk_io_done(void)
 {
