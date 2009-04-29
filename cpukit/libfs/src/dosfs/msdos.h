@@ -84,8 +84,10 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
 
 #define MSDOS_DIR_NAME(x)                 (char     *)((x) + 0)
+#define MSDOS_DIR_ENTRY_TYPE(x)           (uint8_t  *)((x) + 0)
 #define MSDOS_DIR_ATTR(x)                 (uint8_t  *)((x) + 11)
 #define MSDOS_DIR_NT_RES(x)               (uint8_t  *)((x) + 12)
+#define MSDOS_DIR_LFN_CHECKSUM(x)         (uint8_t  *)((x) + 13)
 #define MSDOS_DIR_CRT_TIME_TENTH(x)       (uint8_t  *)((x) + 13)
 #define MSDOS_DIR_CRT_TIME(x)             (uint16_t *)((x) + 14)
 #define MSDOS_DIR_CRT_DATE(x)             (uint16_t *)((x) + 16)
@@ -121,6 +123,19 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_ATTR_VOLUME_ID    0x08
 #define MSDOS_ATTR_DIRECTORY    0x10
 #define MSDOS_ATTR_ARCHIVE      0x20
+#define MSDOS_ATTR_LFN          (MSDOS_ATTR_READ_ONLY | \
+                                 MSDOS_ATTR_HIDDEN | \
+                                 MSDOS_ATTR_SYSTEM | \
+                                 MSDOS_ATTR_VOLUME_ID)
+#define MSDOS_ATTR_LFN_MASK     (MSDOS_ATTR_READ_ONLY | \
+                                 MSDOS_ATTR_HIDDEN | \
+                                 MSDOS_ATTR_SYSTEM | \
+                                 MSDOS_ATTR_VOLUME_ID | \
+                                 MSDOS_ATTR_DIRECTORY | \
+                                 MSDOS_ATTR_ARCHIVE)
+
+#define MSDOS_LAST_LONG_ENTRY         0x40
+#define MSDOS_LAST_LONG_ENTRY_MASK    0x3F
 
 #define MSDOS_DT_2SECONDS_MASK        0x1F    /* seconds divided by 2 */
 #define MSDOS_DT_2SECONDS_SHIFT       0
@@ -144,22 +159,35 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_THIS_DIR_ENTRY_EMPTY             0xE5
 #define MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY    0x00
 
+/*
+ * Number of characters per directory entry for a long filename.
+ */
+#define MSDOS_LFN_LEN_PER_ENTRY (13)
 
 /*
  *  Macros for names parsing and formatting
  */
-#define msdos_is_valid_name_char(_ch)    (1)
 #define msdos_is_separator(_ch)          rtems_filesystem_is_separator(_ch)
 
 #define MSDOS_SHORT_BASE_LEN             8  /* 8 characters */
 #define MSDOS_SHORT_EXT_LEN              3  /* 3 characters */
 #define MSDOS_SHORT_NAME_LEN             (MSDOS_SHORT_BASE_LEN+\
                                           MSDOS_SHORT_EXT_LEN) /* 11 chars */
+#define MSDOS_NAME_MAX_LNF_LEN           (255)
 #define MSDOS_NAME_MAX                   MSDOS_SHORT_NAME_LEN
 #define MSDOS_NAME_MAX_WITH_DOT          (MSDOS_NAME_MAX + 1)
+#define MSDOS_NAME_MAX_LFN_WITH_DOT      (260)
 
-#define MSDOS_DOT_NAME     ".          " /* ".", padded to MSDOS_NAME chars */
-#define MSDOS_DOTDOT_NAME  "..         " /* "..", padded to MSDOS_NAME chars */
+
+extern const char const* MSDOS_DOT_NAME;    /* ".", padded to MSDOS_NAME chars */
+extern const char const* MSDOS_DOTDOT_NAME; /* ".", padded to MSDOS_NAME chars */
+
+typedef enum msdos_name_types_e
+{
+    MSDOS_NAME_INVALID = 0, /* Unknown name type. Has invalid characters. */
+    MSDOS_NAME_SHORT,       /* Name can be short. */
+    MSDOS_NAME_LONG         /* Name is long; cannot be short. */
+} msdos_name_type_t;
 
 typedef enum msdos_token_types_e
 {
@@ -258,9 +286,9 @@ ssize_t msdos_file_write(
   size_t         count            /* IN  */
 );
 
-off_t msdos_file_lseek(
+rtems_off64_t msdos_file_lseek(
   rtems_libio_t        *iop,              /* IN  */
-  off_t                 offset,           /* IN  */
+  rtems_off64_t         offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
@@ -272,7 +300,7 @@ int msdos_file_stat(
 int
 msdos_file_ftruncate(
   rtems_libio_t *iop,               /* IN  */
-  off_t          length             /* IN  */
+  rtems_off64_t  length            /* IN  */
 );
 
 int msdos_file_sync(rtems_libio_t *iop);
@@ -283,6 +311,12 @@ int msdos_file_ioctl(
   rtems_libio_t *iop,             /* IN  */
   uint32_t       command,         /* IN  */
   void          *buffer           /* IN  */
+);
+
+int
+msdos_dir_chmod(
+  rtems_filesystem_location_info_t *pathloc, /* IN */
+  mode_t                            mode     /* IN */
 );
 
 int msdos_file_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
@@ -308,10 +342,16 @@ ssize_t msdos_dir_read(
   size_t         count             /* IN  */
 );
 
-off_t msdos_dir_lseek(
+rtems_off64_t msdos_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
-  off_t                 offset,           /* IN  */
+  rtems_off64_t         offset,           /* IN  */
   int                   whence            /* IN  */
+);
+
+int
+msdos_file_chmod(
+  rtems_filesystem_location_info_t *pathloc, /* IN */
+  mode_t                            mode     /* IN */
 );
 
 int msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc /* IN */);
@@ -324,31 +364,39 @@ int msdos_dir_stat(
 );
 
 int msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
-                 msdos_node_type_t                  type,
-                 char                              *name,
-                 mode_t                             mode,
-                 const fat_file_fd_t               *link_fd);
+                     msdos_node_type_t                  type,
+                     const char                        *name,
+                     int                                name_len,
+                     mode_t                             mode,
+                     const fat_file_fd_t               *link_fd);
 
 /* Misc prototypes */
-msdos_token_types_t msdos_get_token(const char *path,
-                                    char       *token,
-                                    int        *token_len);
+msdos_token_types_t msdos_get_token(const char  *path,
+                                    const char **token,
+                                    int         *token_len);
 
 int msdos_find_name(
   rtems_filesystem_location_info_t *parent_loc,
-  char                             *name
+  const char                       *name,
+  int                               name_len
 );
 
 int msdos_get_name_node(
   rtems_filesystem_location_info_t *parent_loc,
-  char                             *name,
-  fat_auxiliary_t                  *paux,
+  bool                              create_node,
+  const char                       *name,
+  int                               name_len,
+  msdos_name_type_t                 name_type,
+  fat_dir_pos_t                    *dir_pos,
   char                             *name_dir_entry
 );
 
 int msdos_dir_info_remove(rtems_filesystem_location_info_t *pathloc);
 
-int msdos_filename_unix2dos(char *un, int unlen, char *dn);
+msdos_name_type_t msdos_long_to_short(const char *lfn, int lfn_len,
+                                      char* sfn, int sfn_len);
+
+int msdos_filename_unix2dos(const char *un, int unlen, char *dn);
 
 void msdos_date_unix2dos(
   unsigned int tsp, unsigned short *ddp,
@@ -368,9 +416,8 @@ int msdos_set_file_size(
 
 int msdos_set_first_char4file_name(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  uint32_t    cl,
-  uint32_t    ofs,
-  unsigned char first_char
+  fat_dir_pos_t                        *dir_pos,
+  unsigned char                         first_char
 );
 
 int msdos_set_dir_wrt_time_and_date(
@@ -388,8 +435,11 @@ int msdos_dir_is_empty(
 int msdos_find_name_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
-    char                                 *name,
-    fat_auxiliary_t                      *paux,
+    bool                                  create_node,
+    const char                           *name,
+    int                                   name_len,
+    msdos_name_type_t                     name_type,
+    fat_dir_pos_t                        *dir_pos,
     char                                 *name_dir_entry
 );
 
@@ -397,14 +447,14 @@ int msdos_find_node_by_cluster_num_in_fat_file(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
     uint32_t                              cl4find,
-    fat_auxiliary_t                      *paux,
+    fat_dir_pos_t                        *dir_pos,
     char                                 *dir_entry
 );
 
 int msdos_get_dotdot_dir_info_cluster_num_and_offset(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     uint32_t                              cln,
-    fat_auxiliary_t                      *paux,
+    fat_dir_pos_t                        *dir_pos,
     char                                 *dir_entry
 );
 

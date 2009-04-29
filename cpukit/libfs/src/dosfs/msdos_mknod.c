@@ -36,7 +36,7 @@
  *     determines type of the node to be created and creates it.
  *
  * PARAMETERS:
- *     token   - non-formatted name of a new node
+ *     name    - file name to create
  *     mode    - node type
  *     dev     - dev
  *     pathloc - parent directory description
@@ -46,7 +46,7 @@
  *
  */
 int msdos_mknod(
-    const char                        *token,
+    const char                        *name,
     mode_t                             mode,
     dev_t                              dev,
     rtems_filesystem_location_info_t  *pathloc
@@ -56,12 +56,7 @@ int msdos_mknod(
     rtems_status_code    sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info;
     msdos_token_types_t  type = 0;
-    char                 new_name[ MSDOS_NAME_MAX + 1 ];
-    int                  len;
-
-    /* check spelling and format new node name */
-    msdos_get_token(token, new_name, &len);
-
+    
     /*
      *  Figure out what type of msdos node this is.
      */
@@ -82,7 +77,7 @@ int msdos_mknod(
         rtems_set_errno_and_return_minus_one(EIO);
 
     /* Create an MSDOS node */
-    rc = msdos_creat_node(pathloc, type, new_name, mode, NULL);
+    rc = msdos_creat_node(pathloc, type, name, strlen(name), mode, NULL);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;

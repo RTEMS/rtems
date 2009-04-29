@@ -32,6 +32,11 @@ extern rtems_filesystem_operations_table  msdos_ops;
 #define MSDOS_FMT_FAT16  2
 #define MSDOS_FMT_FAT32  3
 
+#define MSDOS_FMT_INFO_LEVEL_NONE   (0)
+#define MSDOS_FMT_INFO_LEVEL_INFO   (1)
+#define MSDOS_FMT_INFO_LEVEL_DETAIL (2)
+#define MSDOS_FMT_INFO_LEVEL_DEBUG  (3)
+
 /*
  * data to be filled out for formatter: parameters for format call
  * any parameter set to 0 or NULL will be automatically detected/computed
@@ -51,6 +56,7 @@ typedef struct {
                                   /*   value. This can optimize clusters   */
                                   /*   to be located at start of track     */
                                   /*   or start of flash block             */
+  int       info_level;           /* The amount of info to output          */
 } msdos_format_request_param_t;
 
 /*=========================================================================*\

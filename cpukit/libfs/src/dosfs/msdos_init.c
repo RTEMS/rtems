@@ -42,7 +42,8 @@ const rtems_filesystem_operations_table  msdos_ops = {
 };
 
 /* msdos_initialize --
- *     MSDOS filesystem initialization
+ *     MSDOS filesystem initialization. Called when mounting an
+ *     MSDOS filesystem.
  *
  * PARAMETERS:
  *     temp_mt_entry - mount table entry

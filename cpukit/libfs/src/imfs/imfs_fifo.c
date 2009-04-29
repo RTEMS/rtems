@@ -119,10 +119,10 @@ int IMFS_fifo_ioctl(
   IMFS_FIFO_RETURN(err);
 }
 
-off_t IMFS_fifo_lseek(
+rtems_off64_t IMFS_fifo_lseek(
   rtems_libio_t *iop,
-  off_t         offset,
-  int           whence
+  rtems_off64_t  offset,
+  int            whence
 )
 {
   off_t err = pipe_lseek(LIBIO2PIPE(iop), offset, whence, iop);

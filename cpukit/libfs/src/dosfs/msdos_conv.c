@@ -169,6 +169,39 @@ msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 }
 
 static const uint8_t msdos_map[] = {
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 00-07 */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 08-0f */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 10-17 */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 18-1f */
+    0,    '!',  0,    '#',  '$',  '%',  '&',  '\'', /* 20-27 */
+    '(',  ')',  0,    '+',  0,    '-',  0,    0,    /* 28-2f */
+    '0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',  /* 30-37 */
+    '8',  '9',  0,    0,    0,    0,    0,    0,    /* 38-3f */
+    '@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  /* 40-47 */
+    'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',  /* 48-4f */
+    'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  /* 50-57 */
+    'X',  'Y',  'Z',  0,    0,    0,    '^',  '_',  /* 58-5f */
+    '`',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  /* 60-67 */
+    'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',  /* 68-6f */
+    'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  /* 70-77 */
+    'X',  'Y',  'Z',  '{',  0,    '}',  '~',  0,    /* 78-7f */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 80-87 */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 88-8f */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 90-97 */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 98-9f */
+    0,    0xad, 0xbd, 0x9c, 0xcf, 0xbe, 0xdd, 0xf5, /* a0-a7 */
+    0xf9, 0xb8, 0xa6, 0xae, 0xaa, 0xf0, 0xa9, 0xee, /* a8-af */
+    0xf8, 0xf1, 0xfd, 0xfc, 0xef, 0xe6, 0xf4, 0xfa, /* b0-b7 */
+    0xf7, 0xfb, 0xa7, 0xaf, 0xac, 0xab, 0xf3, 0xa8, /* b8-bf */
+    0xb7, 0xb5, 0xb6, 0xc7, 0x8e, 0x8f, 0x92, 0x80, /* c0-c7 */
+    0xd4, 0x90, 0xd2, 0xd3, 0xde, 0xd6, 0xd7, 0xd8, /* c8-cf */
+    0xd1, 0xa5, 0xe3, 0xe0, 0xe2, 0xe5, 0x99, 0x9e, /* d0-d7 */
+    0x9d, 0xeb, 0xe9, 0xea, 0x9a, 0xed, 0xe8, 0xe1, /* d8-df */
+    0xb7, 0xb5, 0xb6, 0xc7, 0x8e, 0x8f, 0x92, 0x80, /* e0-e7 */
+    0xd4, 0x90, 0xd2, 0xd3, 0xde, 0xd6, 0xd7, 0xd8, /* e8-ef */
+    0xd1, 0xa5, 0xe3, 0xe0, 0xe2, 0xe5, 0x99, 0xf6, /* f0-f7 */
+    0x9d, 0xeb, 0xe9, 0xea, 0x9a, 0xed, 0xe8, 0x98, /* f8-ff */
+#if OLD_TABLE
 /* 00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* 08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* 10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -201,13 +234,14 @@ static const uint8_t msdos_map[] = {
 /* E8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* F0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 /* F8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+#endif
 };
 /*
  * Convert a unix filename to a DOS filename. Return -1 if wrong name is
  * supplied.
  */
 int
-msdos_filename_unix2dos(char *un, int unlen, char *dn)
+msdos_filename_unix2dos(const char *un, int unlen, char *dn)
 {
 	int i;
 	uint8_t c;
@@ -233,6 +267,14 @@ msdos_filename_unix2dos(char *un, int unlen, char *dn)
 		return 0;
 	}
 
+  /*
+   * Remove any dots from the start of a file name.
+   */
+	while (unlen && (*un == '.')) {
+		un++;
+		unlen--;
+	}
+  
 	/*
 	 * Copy the unix filename into the dos filename string upto the end
 	 * of string, a '.', or 8 characters. Whichever happens first stops
@@ -240,8 +282,9 @@ msdos_filename_unix2dos(char *un, int unlen, char *dn)
 	 * upper case.
 	 */
 	for (i = 0; i <= 7 && unlen && (c = *un) && c != '.'; i++) {
-		if ((dn[i] = msdos_map[c]) == 0)
-                        return -1;
+    if (msdos_map[c] == 0)
+      break;
+		dn[i] = msdos_map[c];
 		un++;
 		unlen--;
 	}
@@ -264,8 +307,9 @@ msdos_filename_unix2dos(char *un, int unlen, char *dn)
 	 * Filenames in this form are probably inaccessable under dos.
 	 */
 	for (i = 8; i <= 10 && unlen && (c = *un); i++) {
-		if ((dn[i] = msdos_map[c]) == 0)
-		        return -1;
+    if (msdos_map[c] == 0)
+      break;
+    dn[i] = msdos_map[c];
 		un++;
 		unlen--;
 	}

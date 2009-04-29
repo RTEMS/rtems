@@ -57,6 +57,7 @@ msdos_initialize_support(
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = NULL;
     fat_file_fd_t     *fat_fd = NULL;
+    fat_dir_pos_t      root_pos;
     uint32_t           cl_buf_size;
 
     fs_info = (msdos_fs_info_t *)calloc(1, sizeof(msdos_fs_info_t));
@@ -79,7 +80,9 @@ msdos_initialize_support(
      * open fat-file which correspondes to  root directory
      * (so inode number 0x00000010 is always used for root directory)
      */
-    rc = fat_file_open(temp_mt_entry, FAT_ROOTDIR_CLUSTER_NUM, 0, &fat_fd);
+    fat_dir_pos_init(&root_pos);
+    root_pos.sname.cln = FAT_ROOTDIR_CLUSTER_NUM;
+    rc = fat_file_open(temp_mt_entry, &root_pos, &fat_fd);
     if (rc != RC_OK)
     {
         fat_shutdown_drive(temp_mt_entry);
@@ -90,8 +93,6 @@ msdos_initialize_support(
     /* again: unfortunately "fat-file" is just almost fat file :( */
     fat_fd->fat_file_type = FAT_DIRECTORY;
     fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
-    fat_fd->info_cln = FAT_ROOTDIR_CLUSTER_NUM;
-    fat_fd->info_ofs = 0;
     fat_fd->cln = fs_info->fat.vol.rdir_cl;
 
     fat_fd->map.file_cln = 0;

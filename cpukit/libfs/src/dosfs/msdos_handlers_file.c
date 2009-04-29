@@ -26,7 +26,7 @@ const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_ioctl,
     msdos_file_lseek,
     msdos_file_stat,
-    NULL,
+    msdos_file_chmod,
     msdos_file_ftruncate,
     NULL,
     msdos_file_sync,

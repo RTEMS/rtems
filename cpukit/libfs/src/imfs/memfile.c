@@ -214,9 +214,9 @@ int memfile_ioctl(
  *  This routine processes the lseek() system call.
  */
 
-off_t memfile_lseek(
+rtems_off64_t memfile_lseek(
   rtems_libio_t   *iop,
-  off_t            offset,
+  rtems_off64_t    offset,
   int              whence
 )
 {
@@ -251,7 +251,7 @@ off_t memfile_lseek(
 
 int memfile_ftruncate(
   rtems_libio_t        *iop,
-  off_t                 length
+  rtems_off64_t         length
 )
 {
   IMFS_jnode_t   *the_jnode;

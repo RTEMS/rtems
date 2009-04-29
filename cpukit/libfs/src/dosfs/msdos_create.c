@@ -17,6 +17,7 @@
 
 #include <errno.h>
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/libio_.h>
@@ -29,7 +30,14 @@
 #include "msdos.h"
 
 /* msdos_creat_node --
- *     Create a new node. If a new node is file, FAT 32 Bytes Directory
+ *     Create a new node. Determine if the name is a long name. If long we to
+ *     scan the directory to create a short entry.
+ *
+ *
+
+
+
+ *     If a new node is file, FAT 32 Bytes Directory
  *     Entry Structure is initialized, free space is found in parent
  *     directory and structure is written to the disk. In case of directory,
  *     all above steps present and also new cluster is allocated for a
@@ -48,52 +56,55 @@
  *
  */
 int
-msdos_creat_node(
-    rtems_filesystem_location_info_t  *parent_loc,
-    msdos_node_type_t                  type,
-    char                              *name,
-    mode_t                             mode,
-    const fat_file_fd_t               *link_fd
-    )
+msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
+                 msdos_node_type_t                  type,
+                 const char                        *name,
+                 int                                name_len,
+                 mode_t                             mode,
+                 const fat_file_fd_t               *link_fd)
 {
-    int              rc = RC_OK;
-    ssize_t          ret = 0;
-    msdos_fs_info_t *fs_info = parent_loc->mt_entry->fs_info;
-    fat_file_fd_t   *parent_fat_fd = parent_loc->node_access;
-    fat_file_fd_t   *fat_fd = NULL;
-    time_t           time_ret = 0;
-    uint16_t         time_val = 0;
-    uint16_t         date = 0;
-    fat_auxiliary_t  aux;
-    char             new_node  [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    char             dot_dotdot[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2];
-    char             link_node [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    uint32_t         sec = 0;
-    uint32_t         byte = 0;
+    int               rc = RC_OK;
+    ssize_t           ret = 0;
+    msdos_fs_info_t  *fs_info = parent_loc->mt_entry->fs_info;
+    fat_file_fd_t    *parent_fat_fd = parent_loc->node_access;
+    fat_file_fd_t    *fat_fd = NULL;
+    time_t            time_ret = 0;
+    uint16_t          time_val = 0;
+    uint16_t          date = 0;
+    fat_dir_pos_t     dir_pos;
+    msdos_name_type_t name_type;
+    char              short_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char              dot_dotdot[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2];
+    char              link_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    uint32_t          sec = 0;
+    uint32_t          byte = 0;
 
-    memset(new_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
+    fat_dir_pos_init(&dir_pos);
+    
+    memset(short_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(dot_dotdot, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2);
 
-    /* set up name */
-    strncpy(MSDOS_DIR_NAME(new_node), name, MSDOS_NAME_MAX);
+    name_type = msdos_long_to_short (name, name_len,
+                                     MSDOS_DIR_NAME(short_node),
+                                     MSDOS_NAME_MAX);
 
     /* fill reserved field */
-    *MSDOS_DIR_NT_RES(new_node) = MSDOS_RES_NT_VALUE;
+    *MSDOS_DIR_NT_RES(short_node) = MSDOS_RES_NT_VALUE;
 
     /* set up last write date and time */
     time_ret = time(NULL);
     if ( time_ret == -1 )
         return -1;
 
-    msdos_date_unix2dos(time_ret, &time_val, &date);
-    *MSDOS_DIR_WRITE_TIME(new_node) = CT_LE_W(time_val);
-    *MSDOS_DIR_WRITE_DATE(new_node) = CT_LE_W(date);
+    msdos_date_unix2dos(time_ret, &date, &time_val);
+    *MSDOS_DIR_WRITE_TIME(short_node) = CT_LE_W(time_val);
+    *MSDOS_DIR_WRITE_DATE(short_node) = CT_LE_W(date);
 
     /* initialize directory/file size */
-    *MSDOS_DIR_FILE_SIZE(new_node) = MSDOS_INIT_DIR_SIZE;
+    *MSDOS_DIR_FILE_SIZE(short_node) = MSDOS_INIT_DIR_SIZE;
 
-    if (type == MSDOS_DIRECTORY){
-        *MSDOS_DIR_ATTR(new_node) |= MSDOS_ATTR_DIRECTORY;
+    if (type == MSDOS_DIRECTORY) {
+      *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_DIRECTORY;
     }
     else if (type == MSDOS_HARD_LINK) {
       /*
@@ -105,51 +116,52 @@ msdos_creat_node(
        * read the original directory entry
        */
       sec = fat_cluster_num_to_sector_num(parent_loc->mt_entry,
-					  link_fd->info_cln);
-      sec += (link_fd->info_ofs >> fs_info->fat.vol.sec_log2);
-      byte = (link_fd->info_ofs & (fs_info->fat.vol.bps - 1));
+                                          link_fd->dir_pos.sname.cln);
+      sec += (link_fd->dir_pos.sname.ofs >> fs_info->fat.vol.sec_log2);
+      byte = (link_fd->dir_pos.sname.ofs & (fs_info->fat.vol.bps - 1));
 
       ret = _fat_block_read(parent_loc->mt_entry,
-			    sec, byte, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
+                            sec, byte, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
                             link_node);
       if (ret < 0) {
-	return -1;
+          return -1;
       }
       /*
        * copy various attributes
        */
-      *MSDOS_DIR_ATTR(new_node)          =*MSDOS_DIR_ATTR(link_node);
-      *MSDOS_DIR_CRT_TIME_TENTH(new_node)=*MSDOS_DIR_CRT_TIME_TENTH(link_node);
-      *MSDOS_DIR_CRT_TIME(new_node)      =*MSDOS_DIR_CRT_TIME(link_node);
-      *MSDOS_DIR_CRT_DATE(new_node)      =*MSDOS_DIR_CRT_DATE(link_node);
+      *MSDOS_DIR_ATTR(short_node)          =*MSDOS_DIR_ATTR(link_node);
+      *MSDOS_DIR_CRT_TIME_TENTH(short_node)=*MSDOS_DIR_CRT_TIME_TENTH(link_node);
+      *MSDOS_DIR_CRT_TIME(short_node)      =*MSDOS_DIR_CRT_TIME(link_node);
+      *MSDOS_DIR_CRT_DATE(short_node)      =*MSDOS_DIR_CRT_DATE(link_node);
 
       /*
        * copy/set "file size", "first cluster"
        */
-      *MSDOS_DIR_FILE_SIZE(new_node)     =*MSDOS_DIR_FILE_SIZE(link_node);
+      *MSDOS_DIR_FILE_SIZE(short_node)     =*MSDOS_DIR_FILE_SIZE(link_node);
 
-      *MSDOS_DIR_FIRST_CLUSTER_LOW(new_node) =
+      *MSDOS_DIR_FIRST_CLUSTER_LOW(short_node) =
            *MSDOS_DIR_FIRST_CLUSTER_LOW(link_node);
-      *MSDOS_DIR_FIRST_CLUSTER_HI(new_node) =
+      *MSDOS_DIR_FIRST_CLUSTER_HI(short_node) =
            *MSDOS_DIR_FIRST_CLUSTER_HI(link_node);
       /*
        * set "archive bit" due to changes
        */
-      *MSDOS_DIR_ATTR(new_node) |= MSDOS_ATTR_ARCHIVE;
+      *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_ARCHIVE;
       /*
        * set "last access" date to today
        */
-      *MSDOS_DIR_LAST_ACCESS_DATE(new_node) = CT_LE_W(date);
+      *MSDOS_DIR_LAST_ACCESS_DATE(short_node) = CT_LE_W(date);
     }
     else { /* regular file... */
-        *MSDOS_DIR_ATTR(new_node) |= MSDOS_ATTR_ARCHIVE;
+        *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_ARCHIVE;
     }
 
     /*
      * find free space in the parent directory and write new initialized
      * FAT 32 Bytes Directory Entry Structure to the disk
      */
-    rc = msdos_get_name_node(parent_loc, NULL, &aux, new_node);
+    rc = msdos_get_name_node(parent_loc, true, name, name_len,
+                             name_type, &dir_pos, short_node);
     if ( rc != RC_OK )
         return rc;
 
@@ -160,7 +172,7 @@ msdos_creat_node(
     if (type == MSDOS_DIRECTORY)
     {
         /* open new directory as fat-file */
-        rc = fat_file_open(parent_loc->mt_entry, aux.cln, aux.ofs, &fat_fd);
+        rc = fat_file_open(parent_loc->mt_entry, &dir_pos, &fat_fd);
         if (rc != RC_OK)
             goto err;
 
@@ -168,8 +180,6 @@ msdos_creat_node(
          * we opened fat-file for node we just created, so initialize fat-file
          * descritor
          */
-        fat_fd->info_cln = aux.cln;
-        fat_fd->info_ofs = aux.ofs;
         fat_fd->fat_file_size = 0;
         fat_fd->fat_file_type = FAT_DIRECTORY;
         fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
@@ -178,9 +188,9 @@ msdos_creat_node(
          * dot and dotdot entries are identical to new node except the
          * names
          */
-        memcpy(DOT_NODE_P(dot_dotdot), new_node,
+        memcpy(DOT_NODE_P(dot_dotdot), short_node,
                MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
-        memcpy(DOTDOT_NODE_P(dot_dotdot), new_node,
+        memcpy(DOTDOT_NODE_P(dot_dotdot), short_node,
                MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
         memcpy(MSDOS_DIR_NAME(DOT_NODE_P(dot_dotdot)), MSDOS_DOT_NAME,
                MSDOS_NAME_MAX);
@@ -253,9 +263,8 @@ error:
     fat_file_close(parent_loc->mt_entry, fat_fd);
 
 err:
-    /* mark 32bytes structure on the disk as free */
-    msdos_set_first_char4file_name(parent_loc->mt_entry, aux.cln, aux.ofs,
-                                   0xE5);
+    /* mark the used 32bytes structure on the disk as free */
+    msdos_set_first_char4file_name(parent_loc->mt_entry, &dir_pos, 0xE5);
     return rc;
 }
 
@@ -287,21 +296,21 @@ err:
  */
 int
 msdos_file_link(rtems_filesystem_location_info_t *to_loc,
-		rtems_filesystem_location_info_t *par_loc,
-		const char                       *token
+                rtems_filesystem_location_info_t *par_loc,
+                const char                       *name
 )
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info     = to_loc->mt_entry->fs_info;
     fat_file_fd_t     *to_fat_fd   = to_loc->node_access;
-    char               new_name[ MSDOS_NAME_MAX + 1 ];
+    const char        *token;
     int                len;
 
     /*
      * check spelling and format new node name
      */
-    if (MSDOS_NAME != msdos_get_token(token, new_name, &len)) {
+    if (MSDOS_NAME != msdos_get_token(name, &token, &len)) {
       rtems_set_errno_and_return_minus_one(ENAMETOOLONG);
     }
     /*
@@ -324,8 +333,8 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
      * create new directory entry as "hard link",
      * copying relevant info from existing file
      */
-    rc = msdos_creat_node(par_loc,MSDOS_HARD_LINK,new_name,S_IFREG,
-			  to_loc->node_access);
+    rc = msdos_creat_node(par_loc,MSDOS_HARD_LINK,name,len,S_IFREG,
+                          to_loc->node_access);
     /*
      * set file size and first cluster number of old entry to 0
      */

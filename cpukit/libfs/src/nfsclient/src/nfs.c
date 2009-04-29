@@ -2737,9 +2737,9 @@ static int nfs_file_ioctl(
 #define nfs_link_ioctl 0
 #endif
 
-static off_t nfs_file_lseek(
+static rtems_off64_t nfs_file_lseek(
 	rtems_libio_t *iop,
-	off_t          length,
+	rtems_off64_t  length,
 	int            whence
 )
 {
@@ -2770,9 +2770,9 @@ static off_t nfs_file_lseek(
 	return iop->offset;
 }
 
-static off_t nfs_dir_lseek(
+static rtems_off64_t nfs_dir_lseek(
 	rtems_libio_t *iop,
-	off_t          length,
+	rtems_off64_t  length,
 	int            whence
 )
 {
@@ -2818,29 +2818,29 @@ struct fattr {
 
 struct  stat
 {
-		dev_t     st_dev;
-		ino_t     st_ino;
-		mode_t    st_mode;
-		nlink_t   st_nlink;
-		uid_t     st_uid;
-		gid_t     st_gid;
-		dev_t     st_rdev;
-		off_t     st_size;
+		dev_t         st_dev;
+		ino_t         st_ino;
+		mode_t        st_mode;
+		nlink_t       st_nlink;
+		uid_t         st_uid;
+		gid_t         st_gid;
+		dev_t         st_rdev;
+		rtems_off64_t st_size;
 		/* SysV/sco doesn't have the rest... But Solaris, eabi does.  */
 #if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
-		time_t    st_atime;
-		time_t    st_mtime;
-		time_t    st_ctime;
+		time_t        st_atime;
+		time_t        st_mtime;
+		time_t        st_ctime;
 #else
-		time_t    st_atime;
-		long      st_spare1;
-		time_t    st_mtime;
-		long      st_spare2;
-		time_t    st_ctime;
-		long      st_spare3;
-		long      st_blksize;
-		long      st_blocks;
-		long  st_spare4[2];
+		time_t        st_atime;
+		long          st_spare1;
+		time_t        st_mtime;
+		long          st_spare2;
+		time_t        st_ctime;
+		long          st_spare3;
+		long          st_blksize;
+		long          st_blocks;
+		long      st_spare4[2];
 #endif
 };
 #endif
@@ -3009,7 +3009,7 @@ sattr	arg;
  */
 static int nfs_file_ftruncate(
 	rtems_libio_t *iop,
-	off_t          length
+	rtems_off64_t  length
 )
 {
 sattr					arg;

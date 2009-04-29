@@ -206,12 +206,14 @@ int device_ioctl(
 /*
  *  device_lseek
  *
- *  This handler eats all lseek() operations.
+ *  This handler eats all lseek() operations and does not create
+ *  an error. It assumes all devices can handle the seek. The
+ *  writes fail.
  */
 
-off_t device_lseek(
+rtems_off64_t device_lseek(
   rtems_libio_t *iop,
-  off_t          offset,
+  rtems_off64_t  offset,
   int            whence
 )
 {
@@ -232,7 +234,7 @@ off_t device_lseek(
 
 int device_ftruncate(
   rtems_libio_t *iop,
-  off_t          length
+  rtems_off64_t  length
 )
 {
   return 0;

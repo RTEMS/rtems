@@ -31,6 +31,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 #include <assert.h>
 
@@ -64,6 +65,58 @@ typedef struct {
   bool     VolLabel_present;
   uint32_t vol_id;
 }  msdos_format_param_t;
+
+/*
+ * Formatted output.
+ */
+static void
+msdos_format_printf (const msdos_format_request_param_t *rqdata,
+                     int                                 info_level,
+                     const char                         *format, ...)
+{
+  va_list args;
+  va_start (args, format);
+  if (rqdata->info_level >= info_level)
+  {
+    vfprintf (stdout, format, args);
+    fflush (stdout);
+  }
+}
+
+/*=========================================================================*\
+| Function:                                                                 |
+\*-------------------------------------------------------------------------*/
+static int msdos_format_read_sec
+(
+/*-------------------------------------------------------------------------*\
+| Purpose:                                                                  |
+|     function to read a sector                                             |
++---------------------------------------------------------------------------+
+| Input Parameters:                                                         |
+\*-------------------------------------------------------------------------*/
+ int         fd,                       /* file descriptor index            */
+ uint32_t    start_sector,             /* sector number to write to        */
+ uint32_t    sector_size,              /* size of sector                   */
+ char       *buffer                    /* buffer with read data into       */
+ )
+/*-------------------------------------------------------------------------*\
+| Return Value:                                                             |
+|    0, if success, -1 and errno if failed                                  |
+\*=========================================================================*/
+{
+  int ret_val = 0;
+
+  if (0 > lseek(fd,((off_t)start_sector)*sector_size,SEEK_SET)) {
+    ret_val = -1;
+  }
+  if (ret_val == 0) {
+    if (0 > read(fd,buffer,sector_size)) {
+      ret_val = -1;
+    }
+  }
+
+  return ret_val;
+}
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -100,7 +153,7 @@ static int msdos_format_write_sec
   return ret_val;
 }
 
-/*=========================================================================*\
+/*=========================================================================* \
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
 static int msdos_format_fill_sectors
@@ -111,6 +164,7 @@ static int msdos_format_fill_sectors
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
+ const msdos_format_request_param_t *rqdata,
  int         fd,                       /* file descriptor index            */
  uint32_t    start_sector,             /* sector number to fill to         */
  uint32_t    sector_cnt,               /* number of sectors to fill to     */
@@ -124,7 +178,9 @@ static int msdos_format_fill_sectors
 {
   int ret_val = 0;
   char *fill_buffer = NULL;
-
+  uint32_t total_sectors = sector_cnt;
+  int last_percent = -1;
+  
   /*
    * allocate and fill buffer
    */
@@ -138,15 +194,31 @@ static int msdos_format_fill_sectors
       memset(fill_buffer,fill_byte,sector_size);
     }
   }
+
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                       "Filling : ");
   /*
    * write to consecutive sectors
    */
   while ((ret_val == 0) && 
 	 (sector_cnt > 0)) {
+    int percent = (sector_cnt * 100) / total_sectors;
+    if (percent != last_percent) {
+      if ((percent & 1) == 0)
+        msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL, ".");
+      last_percent = percent;
+    }
     ret_val = msdos_format_write_sec(fd,start_sector,sector_size,fill_buffer);
     start_sector++;
     sector_cnt--;
   }
+  
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL, "\n");
+
+  if (ret_val)
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
+                         "filling error on sector: %d\n", start_sector);
+  
   /*
    * cleanup
    */
@@ -311,7 +383,8 @@ static int msdos_format_determine_fmt_params
   uint32_t fatdata_sect_cnt;
   uint32_t onebit;
   uint32_t sectors_per_cluster_adj = 0;
-
+  uint64_t total_size = 0;
+  
   memset(fmt_params,0,sizeof(*fmt_params));
   /* 
    * this one is fixed in this implementation.
@@ -320,6 +393,10 @@ static int msdos_format_determine_fmt_params
   if (ret_val == 0) {
     fmt_params->bytes_per_sector = dd->block_size;
     fmt_params->totl_sector_cnt  = dd->size;
+    total_size = dd->block_size * dd->size;
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                         "bytes per sector: %d\ntotal sectors: %d\ntotal size: %lu\n",
+                         dd->block_size, dd->size, total_size);
   }
   /*
    * determine number of FATs
@@ -336,6 +413,11 @@ static int msdos_format_determine_fmt_params
       ret_val = EINVAL;
     }
   }
+  
+  if (ret_val == 0)
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                         "number of fats: %d\n", fmt_params->fat_num);
+  
   /*
    * Now we get sort of a loop when determining things:
    * The FAT type (FAT12/16/32) is determined ONLY from the 
@@ -396,21 +478,26 @@ static int msdos_format_determine_fmt_params
        * are a compromise concerning capacity and efficency
        */
       if (fmt_params->totl_sector_cnt 
-	  < ((uint32_t)FAT_FAT12_MAX_CLN)*8) {
-	fmt_params->fattype = FAT_FAT12;
-	/* start trying with small clusters */
-	fmt_params->sectors_per_cluster = 2; 
+          < ((uint32_t)FAT_FAT12_MAX_CLN)*8) {
+        fmt_params->fattype = FAT_FAT12;
+        /* start trying with small clusters */
+        fmt_params->sectors_per_cluster = 2; 
       }
       else if (fmt_params->totl_sector_cnt 
-	       < ((uint32_t)FAT_FAT16_MAX_CLN)*32) {
-	fmt_params->fattype = FAT_FAT16;
-	/* start trying with small clusters */
-	fmt_params->sectors_per_cluster = 2; 
+               < ((uint32_t)FAT_FAT16_MAX_CLN)*32) {
+        fmt_params->fattype = FAT_FAT16;
+        /* start trying with small clusters */
+        fmt_params->sectors_per_cluster = 2; 
       }
       else {
-	fmt_params->fattype = FAT_FAT32;
-	/* start trying with small clusters... */
-	fmt_params->sectors_per_cluster = 1; 
+        uint32_t gigs = (total_size + (1024 * 1024 * 1024)) / (1024 * 1024 * 1024);
+        int b;
+        fmt_params->fattype = FAT_FAT32;
+        /* scale with the size of disk... */
+        for (b = 31; b > 0; b--)
+          if ((gigs & (1 << b)) != 0)
+            break;
+        fmt_params->sectors_per_cluster = 1 << b;
       }
     }
     /*
@@ -428,7 +515,7 @@ static int msdos_format_determine_fmt_params
      * sectors_per_cluster*bytes_per_sector must not be bigger than 32K
      */
     for (onebit = 128;onebit >= 1;onebit = onebit>>1) {
-      if (fmt_params->sectors_per_cluster > onebit) {
+      if (fmt_params->sectors_per_cluster >= onebit) {
 	fmt_params->sectors_per_cluster = onebit;
 	if (fmt_params->sectors_per_cluster 
 	    <= 32768L/fmt_params->bytes_per_sector) {
@@ -440,6 +527,9 @@ static int msdos_format_determine_fmt_params
   }
 
   if (ret_val == 0) {
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                         "sectors per cluster: %d\n", fmt_params->sectors_per_cluster);
+    
     if (fmt_params->fattype == FAT_FAT32) {
       /* recommended: for FAT32, always set reserved sector count to 32 */
       fmt_params->rsvd_sector_cnt = 32;
@@ -649,9 +739,15 @@ static int msdos_format_gen_mbr
     total_sectors_num32 = fmt_params->totl_sector_cnt;
   }
   /*
-   * finally we are there: let's fill in the values into the MBR 
+   * finally we are there: let's fill in the values into the MBR
+   * but first clear the MRB leaving the partition table.
    */
-  memset(mbr,0,FAT_TOTAL_MBR_SIZE);
+#define RTEMS_IDE_PARTITION_TABLE_OFFSET                  0x1be
+#define RTEMS_IDE_PARTITION_TABLE_SIZE                    (4 * 16)
+  memset(mbr,0,RTEMS_IDE_PARTITION_TABLE_OFFSET);
+  memset(mbr + RTEMS_IDE_PARTITION_TABLE_OFFSET + RTEMS_IDE_PARTITION_TABLE_SIZE,
+         0,
+         FAT_TOTAL_MBR_SIZE - (RTEMS_IDE_PARTITION_TABLE_OFFSET + RTEMS_IDE_PARTITION_TABLE_SIZE));
   /*
    * FIXME: fill jmpBoot and Boot code...
    * with 0xEB,....
@@ -672,9 +768,9 @@ static int msdos_format_gen_mbr
   FAT_SET_BR_TOTAL_SECTORS_NUM16(mbr , total_sectors_num16);
   FAT_SET_BR_MEDIA(mbr               , fmt_params->media_code);
 
-  FAT_SET_BR_SECTORS_PER_TRACK(mbr   , 0); /* only needed for INT13... */
-  FAT_SET_BR_NUMBER_OF_HEADS(mbr     , 0); /* only needed for INT13... */
-  FAT_SET_BR_HIDDEN_SECTORS(mbr      , 0); /* only needed for INT13... */
+  FAT_SET_BR_SECTORS_PER_TRACK(mbr   , 255); /* only needed for INT13... */
+  FAT_SET_BR_NUMBER_OF_HEADS(mbr     , 6);   /* only needed for INT13... */
+  FAT_SET_BR_HIDDEN_SECTORS(mbr      , 1);   /* only needed for INT13... */
 
   FAT_SET_BR_TOTAL_SECTORS_NUM32(mbr , total_sectors_num32);
   if (fmt_params->fattype != FAT_FAT32) {
@@ -749,7 +845,6 @@ static int msdos_format_gen_fsinfo
 |    0, if success, -1 and errno if failed                                  |
 \*=========================================================================*/
 {
-
   /*
    * clear fsinfo sector data 
    */
@@ -760,9 +855,9 @@ static int msdos_format_gen_fsinfo
   FAT_SET_FSINFO_LEAD_SIGNATURE (fsinfo,FAT_FSINFO_LEAD_SIGNATURE_VALUE );
   FAT_SET_FSINFO_STRUC_SIGNATURE(fsinfo,FAT_FSINFO_STRUC_SIGNATURE_VALUE);
   FAT_SET_FSINFO_TRAIL_SIGNATURE(fsinfo,FAT_FSINFO_TRAIL_SIGNATURE_VALUE);
-/* 
- * write "empty" values for free cluster count and next cluster number 
- */
+  /* 
+   * write "empty" values for free cluster count and next cluster number 
+   */
   FAT_SET_FSINFO_FREE_CLUSTER_COUNT(fsinfo+FAT_FSI_INFO,
 				    0xffffffff);
   FAT_SET_FSINFO_NEXT_FREE_CLUSTER (fsinfo+FAT_FSI_INFO,
@@ -800,9 +895,13 @@ int msdos_format
   int                  i;
   msdos_format_param_t fmt_params;
 
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
+                       "formating: %s\n", devname);
   /*
    * sanity check on device
    */
+  msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                       "stat check: %s\n", devname);
   if (ret_val == 0) {
     rc = stat(devname, &stat_buf);
     ret_val = rc;
@@ -828,7 +927,9 @@ int msdos_format
    * open device for writing
    */
   if (ret_val == 0) {
-    fd = open(devname, O_WRONLY);
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                         "open device\n");
+    fd = open(devname, O_RDWR);
     if (fd == -1)
     {
       ret_val= -1;
@@ -848,7 +949,8 @@ int msdos_format
       (rqdata != NULL) &&
       !(rqdata->quick_format)) {
     ret_val = msdos_format_fill_sectors
-      (fd,
+      (rqdata,
+       fd,
        0,                            /* start sector */
        fmt_params.totl_sector_cnt,   /* sector count */
        fmt_params.bytes_per_sector,
@@ -858,27 +960,45 @@ int msdos_format
    * create master boot record 
    */
   if (ret_val == 0) {
-    ret_val = msdos_format_gen_mbr(tmp_sec,&fmt_params);
-  }
-  /*
-   * write master boot record to disk
-   * also write copy of MBR to disk
-   */
-  if (ret_val == 0) {
-    ret_val = msdos_format_write_sec(fd, 
-				     0, 
-				     fmt_params.bytes_per_sector,
-				     tmp_sec);
-  }
-  if ((ret_val == 0) && 
-      (fmt_params.mbr_copy_sec != 0)) {
     /*
-     * write copy of MBR
+     * Read the current MBR to obtain the partition table.
      */
-    ret_val = msdos_format_write_sec(fd, 
-				     fmt_params.mbr_copy_sec , 
-				     fmt_params.bytes_per_sector,
-				     tmp_sec);
+    msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                         "read MRB sector\n");
+    ret_val = msdos_format_read_sec(fd,
+                                    0,
+                                    fmt_params.bytes_per_sector,
+                                    tmp_sec);
+    if (ret_val == 0) {
+      msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                           "generate MRB sector\n");
+      ret_val = msdos_format_gen_mbr(tmp_sec,&fmt_params);
+    }
+    
+    /*
+     * write master boot record to disk
+     * also write copy of MBR to disk
+     */
+    if (ret_val == 0) {
+      msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                           "write MRB sector\n");
+      ret_val = msdos_format_write_sec(fd, 
+                                       0, 
+                                       fmt_params.bytes_per_sector,
+                                       tmp_sec);
+    }
+    if ((ret_val == 0) && 
+        (fmt_params.mbr_copy_sec != 0)) {
+      /*
+       * write copy of MBR
+       */
+      msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
+                           "write back up MRB sector\n");
+      ret_val = msdos_format_write_sec(fd, 
+                                       fmt_params.mbr_copy_sec , 
+                                       fmt_params.bytes_per_sector,
+                                       tmp_sec);
+    }
   }
   /*
    * for FAT32: initialize info sector on disk
@@ -903,7 +1023,8 @@ int msdos_format
    */
   if (ret_val == 0) {
     ret_val = msdos_format_fill_sectors
-      (fd,
+      (rqdata,
+       fd,
        fmt_params.rsvd_sector_cnt,                   /* start sector */
        fmt_params.fat_num*fmt_params.sectors_per_fat,/* sector count */
        fmt_params.bytes_per_sector,
@@ -915,7 +1036,8 @@ int msdos_format
    */
   if (ret_val == 0) {
     ret_val = msdos_format_fill_sectors
-      (fd,
+      (rqdata,
+       fd,
        fmt_params.root_dir_start_sec,        /* start sector */
        fmt_params.root_dir_fmt_sec_cnt,      /* sector count */
        fmt_params.bytes_per_sector,

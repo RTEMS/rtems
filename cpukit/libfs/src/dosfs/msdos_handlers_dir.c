@@ -26,7 +26,7 @@ const rtems_filesystem_file_handlers_r msdos_dir_handlers = {
     NULL,             /* msdos_dir_ioctl */
     msdos_dir_lseek,
     msdos_dir_stat,
-    NULL,
+    msdos_dir_chmod,
     NULL,             /* msdos_dir_ftruncate */
     NULL,
     msdos_dir_sync,

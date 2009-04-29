@@ -40,6 +40,11 @@ extern "C" {
 #endif
 
 /*
+ * A 64bit file offset for internal use by RTEMS. Based on the newlib type.
+ */
+typedef _off64_t rtems_off64_t;
+
+/*
  * Valid RTEMS file types.
  */
 
@@ -83,9 +88,9 @@ typedef int (*rtems_filesystem_ioctl_t)(
   void          *buffer
 );
 
-typedef off_t (*rtems_filesystem_lseek_t)(
+typedef rtems_off64_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
-  off_t          length,
+  rtems_off64_t  length,
   int            whence
 );
 
@@ -101,7 +106,7 @@ typedef int (*rtems_filesystem_fchmod_t)(
 
 typedef int (*rtems_filesystem_ftruncate_t)(
   rtems_libio_t *iop,
-  off_t          length
+  rtems_off64_t  length
 );
 
 typedef int (*rtems_filesystem_fpathconf_t)(
@@ -347,8 +352,8 @@ typedef enum
 
 struct rtems_libio_tt {
     rtems_driver_name_t                    *driver;
-    off_t                                   size;      /* size of file */
-    off_t                                   offset;    /* current offset into file */
+    rtems_off64_t                           size;      /* size of file */
+    rtems_off64_t                           offset;    /* current offset into file */
     uint32_t                                flags;
     rtems_filesystem_location_info_t        pathinfo;
     rtems_id                                sem;
@@ -366,7 +371,7 @@ struct rtems_libio_tt {
 
 typedef struct {
     rtems_libio_t          *iop;
-    off_t                   offset;
+    rtems_off64_t           offset;
     char                   *buffer;
     uint32_t                count;
     uint32_t                flags;
@@ -441,10 +446,10 @@ typedef int (*rtems_libio_ioctl_t)(
   void       *buffer
 );
 
-typedef int (*rtems_libio_lseek_t)(
-  int    fd,
-  off_t  offset,
-  int    whence
+typedef rtems_off64_t (*rtems_libio_lseek_t)(
+  int           fd,
+  rtems_off64_t offset,
+  int           whence
 );
 
 /*

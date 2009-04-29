@@ -20,6 +20,8 @@
 
 #include <time.h>
 
+#include "fat.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,29 +59,26 @@ typedef struct fat_file_map_s
  */
 typedef struct fat_file_fd_s
 {
-    Chain_Node      link;          /*
-                                    * fat-file descriptors organized into hash;
-                                    * collision lists are handled via link
-                                    * field
-                                    */
-    uint32_t        links_num;     /*
-                                    * the number of fat_file_open call on
-                                    * this fat-file
-                                    */
-    uint32_t        ino;           /* inode, file serial number :)))) */
-    fat_file_type_t fat_file_type;
-    uint32_t        size_limit;
-    uint32_t        fat_file_size; /* length  */
-    uint32_t        info_cln;
-    uint32_t        cln;
-    uint16_t        info_ofs;
-    unsigned char   first_char;
-    uint8_t         flags;
-    fat_file_map_t  map;
-    time_t          mtime;
+    rtems_chain_node link;          /*
+                                     * fat-file descriptors organized into hash;
+                                     * collision lists are handled via link
+                                     * field
+                                     */
+    uint32_t         links_num;     /*
+                                     * the number of fat_file_open call on
+                                     * this fat-file
+                                     */
+    uint32_t         ino;           /* inode, file serial number :)))) */
+    fat_file_type_t  fat_file_type;
+    uint32_t         size_limit;
+    uint32_t         fat_file_size; /* length  */
+    uint32_t         cln;
+    fat_dir_pos_t    dir_pos;
+    uint8_t          flags;
+    fat_file_map_t   map;
+    time_t           mtime;
 
 } fat_file_fd_t;
-
 
 #define FAT_FILE_REMOVED  0x01
 
@@ -101,8 +100,8 @@ typedef struct fat_file_fd_s
 #define FAT_ROOTDIR_CLUSTER_NUM 0x01
 
 #define FAT_FD_OF_ROOT_DIR(fat_fd)  \
-  ((fat_fd->info_cln == FAT_ROOTDIR_CLUSTER_NUM ) && \
-  (fat_fd->info_ofs == 0))
+  ((fat_fd->dir_pos.sname.cln == FAT_ROOTDIR_CLUSTER_NUM) && \
+  (fat_fd->dir_pos.sname.ofs == 0))
 
 #define FAT_EOF           0x00
 
@@ -122,19 +121,17 @@ typedef struct fat_file_fd_s
 static inline uint32_t
 fat_construct_key(
     rtems_filesystem_mount_table_entry_t *mt_entry,
-    uint32_t                              cl,
-    uint32_t                              ofs)
+    fat_pos_t                            *pos)
 {
-    return ( ((fat_cluster_num_to_sector512_num(mt_entry, cl) +
-              (ofs >> FAT_SECTOR512_BITS)) << 4)              +
-              ((ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
+    return ( ((fat_cluster_num_to_sector512_num(mt_entry, pos->cln) +
+              (pos->ofs >> FAT_SECTOR512_BITS)) << 4)              +
+              ((pos->ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
 }
 
 /* Prototypes for "fat-file" operations */
 int
 fat_file_open(rtems_filesystem_mount_table_entry_t  *mt_entry,
-              uint32_t                               cln,
-              uint32_t                               ofs,
+              fat_dir_pos_t                         *dir_pos,
               fat_file_fd_t                        **fat_fd);
 
 int

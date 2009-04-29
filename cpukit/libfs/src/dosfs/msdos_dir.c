@@ -14,6 +14,7 @@
 #include "config.h"
 #endif
 
+#include <ctype.h> 
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
@@ -145,7 +146,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
   src_tmp = src;
   len = i;
   while (i-- > 0) {
-    *dst++ = *src_tmp++;
+    *dst++ = tolower(*src_tmp++);
   }
   /*
    * find last non-blank character of extension
@@ -164,7 +165,7 @@ msdos_format_dirent_with_dot(char *dst,const char *src)
     len += i + 1; /* extension + dot */
     src_tmp = src + MSDOS_SHORT_BASE_LEN;
     while (i-- > 0) {
-      *dst++ = *src_tmp++;
+      *dst++ = tolower(*src_tmp++);
       len++;
     }
   }
@@ -210,6 +211,9 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     uint32_t           j = 0, i = 0;
     uint32_t           bts2rd = 0;
     uint32_t           cur_cln = 0;
+    uint32_t           lfn_start = FAT_FILE_SHORT_NAME;
+    uint8_t            lfn_checksum = 0;
+    int                lfn_entries = 0;
 
     /*
      * cast start and count - protect against using sizes that are not exact
@@ -253,80 +257,211 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 
         for (i = 0; i < ret; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
-            if ((*MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
+            char* entry = (char*) fs_info->cl_buf + i;
+            
+            /*
+             * Is this directory from here on empty ?
+             */
+            if ((*MSDOS_DIR_ENTRY_TYPE(entry)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
             {
                 rtems_semaphore_release(fs_info->vol_sema);
                 return cmpltd;
             }
 
-            /* have to look at the DIR_NAME as "raw" 8-bit data */
-            if ((*(uint8_t *)MSDOS_DIR_NAME(fs_info->cl_buf + i)) ==
-                MSDOS_THIS_DIR_ENTRY_EMPTY)
+            /* Is the directory entry empty */
+            if ((*MSDOS_DIR_ENTRY_TYPE(entry)) == MSDOS_THIS_DIR_ENTRY_EMPTY)
+                continue;
+
+            /* Is the directory entry empty a volume label */
+            if (((*MSDOS_DIR_ATTR(entry)) & MSDOS_ATTR_VOLUME_ID) &&
+                ((*MSDOS_DIR_ATTR(entry) & MSDOS_ATTR_LFN_MASK) != MSDOS_ATTR_LFN))
                 continue;
 
             /*
-             * skip active entries until get the entry to start from
+             * Check the attribute to see if the entry is for a long file
+             * name.
              */
-            if (start)
+            if ((*MSDOS_DIR_ATTR(entry) & MSDOS_ATTR_LFN_MASK) ==
+                MSDOS_ATTR_LFN)
             {
-                start--;
-                continue;
+                int   o;
+                char* p;
+                int   q;
+                
+                /*
+                 * Is this is the first entry of a LFN ?
+                 */
+                if (lfn_start == FAT_FILE_SHORT_NAME)
+                {
+                    /*
+                     * The first entry must have the last long entry flag set.
+                     */
+                    if ((*MSDOS_DIR_ENTRY_TYPE(entry) &
+                         MSDOS_LAST_LONG_ENTRY) == 0)
+                        continue;
+
+                    /*
+                     * Remember the start location of the long file name.
+                     */
+                    lfn_start =
+                      ((j * bts2rd) + i) / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
+                    
+                    /*
+                     * Get the number of entries so we can count down and
+                     * also the checksum of the short entry.
+                     */
+                    lfn_entries = (*MSDOS_DIR_ENTRY_TYPE(entry) &
+                                   MSDOS_LAST_LONG_ENTRY_MASK);
+                    lfn_checksum = *MSDOS_DIR_LFN_CHECKSUM(entry);
+                    memset (tmp_dirent.d_name, 0, sizeof(tmp_dirent.d_name));
+                }
+
+                /*
+                 * If the entry number or the check sum do not match
+                 * forget this series of long directory entries. These could
+                 * be orphaned entries depending on the history of the
+                 * disk.
+                 */
+                if ((lfn_entries != (*MSDOS_DIR_ENTRY_TYPE(entry) &
+                                     MSDOS_LAST_LONG_ENTRY_MASK)) ||
+                    (lfn_checksum != *MSDOS_DIR_LFN_CHECKSUM(entry)))
+                {
+                    lfn_start = FAT_FILE_SHORT_NAME;
+                    continue;
+                }
+             
+                /*
+                 * Extract the file name into the directory entry. The data is
+                 * stored in UNICODE characters (16bit). No translation is
+                 * currently supported.
+                 *
+                 * The DOS maximum length is 255 characters without the
+                 * trailing nul character. We need to range check the length to
+                 * fit in the directory entry name field.
+                 */
+                
+                lfn_entries--;
+                p = entry + 1;
+                o = lfn_entries * MSDOS_LFN_LEN_PER_ENTRY;
+                
+                for (q = 0; q < MSDOS_LFN_LEN_PER_ENTRY; q++)
+                {
+                    if (o >= (sizeof(tmp_dirent.d_name) - 1))
+                        break;
+                        
+                    tmp_dirent.d_name[o++] = *p;
+
+                    if (*p == '\0')
+                        break;
+
+                    switch (q)
+                    {
+                        case 4:
+                            p += 5;
+                            break;
+                        case 10:
+                            p += 4;
+                            break;
+                        default:
+                            p += 2;
+                            break;
+                    }
+                }
             }
-
-            /*
-             * Move the entry to the return buffer
-             *
-             * unfortunately there is no method to extract ino except to
-             * open fat-file descriptor :( ... so, open it
-             */
-
-            /* get number of cluster we are working with */
-            rc = fat_file_ioctl(iop->pathinfo.mt_entry, fat_fd, F_CLU_NUM,
-                                j * bts2rd, &cur_cln);
-            if (rc != RC_OK)
+            else
             {
-                rtems_semaphore_release(fs_info->vol_sema);
-                return rc;
+                fat_dir_pos_t dir_pos;
+              
+                /*
+                 * Skip active entries until get the entry to start from.
+                 */
+                if (start)
+                {
+                    lfn_start = FAT_FILE_SHORT_NAME;
+                    start--;
+                    continue;
+                }
+
+                /*
+                 * Move the entry to the return buffer
+                 *
+                 * unfortunately there is no method to extract ino except to
+                 * open fat-file descriptor :( ... so, open it
+                 */
+
+                /* get number of cluster we are working with */
+                rc = fat_file_ioctl(iop->pathinfo.mt_entry, fat_fd, F_CLU_NUM,
+                                    j * bts2rd, &cur_cln);
+                if (rc != RC_OK)
+                {
+                    rtems_semaphore_release(fs_info->vol_sema);
+                    return rc;
+                }
+
+                fat_dir_pos_init(&dir_pos);
+                dir_pos.sname.cln = cur_cln;
+                dir_pos.sname.ofs = i;
+                rc = fat_file_open(iop->pathinfo.mt_entry, &dir_pos, &tmp_fat_fd);
+                if (rc != RC_OK)
+                {
+                    rtems_semaphore_release(fs_info->vol_sema);
+                    return rc;
+                }
+
+                /* fill in dirent structure */
+                /* XXX: from what and in what d_off should be computed ?! */
+                tmp_dirent.d_off = start + cmpltd;
+                tmp_dirent.d_reclen = sizeof(struct dirent);
+                tmp_dirent.d_ino = tmp_fat_fd->ino;
+
+                /*
+                 * If a long file name check if the correct number of
+                 * entries have been found and if the checksum is correct.
+                 * If not return the short file name.
+                 */
+                if (lfn_start != FAT_FILE_SHORT_NAME)
+                {
+                    uint8_t  cs = 0;
+                    uint8_t* p = (uint8_t*) entry;
+                    int      i;
+
+                    for (i = 0; i < 11; i++, p++)
+                        cs = ((cs & 1) ? 0x80 : 0) + (cs >> 1) + *p;
+
+                    if (lfn_entries || (lfn_checksum != cs))
+                        lfn_start = FAT_FILE_SHORT_NAME;
+                }
+
+                if (lfn_start == FAT_FILE_SHORT_NAME)
+                {
+                    /*
+                     * convert dir entry from fixed 8+3 format (without dot)
+                     * to 0..8 + 1dot + 0..3 format
+                     */
+                    tmp_dirent.d_namlen = msdos_format_dirent_with_dot(
+                        tmp_dirent.d_name, entry); /* src text */
+                }
+                else
+                {
+                    tmp_dirent.d_namlen = strlen(tmp_dirent.d_name);
+                }
+                
+                memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
+
+                iop->offset = iop->offset + sizeof(struct dirent);
+                cmpltd += (sizeof(struct dirent));
+                count -= (sizeof(struct dirent));
+
+                /* inode number extracted, close fat-file */
+                rc = fat_file_close(iop->pathinfo.mt_entry, tmp_fat_fd);
+                if (rc != RC_OK)
+                {
+                    rtems_semaphore_release(fs_info->vol_sema);
+                    return rc;
+                }
             }
-
-            rc = fat_file_open(iop->pathinfo.mt_entry, cur_cln, i,
-                               &tmp_fat_fd);
-            if (rc != RC_OK)
-            {
-                rtems_semaphore_release(fs_info->vol_sema);
-                return rc;
-            }
-
-            tmp_fat_fd->info_cln = cur_cln;
-            tmp_fat_fd->info_ofs = i;
-
-            /* fill in dirent structure */
-            /* XXX: from what and in what d_off should be computed ?! */
-            tmp_dirent.d_off = start + cmpltd;
-            tmp_dirent.d_reclen = sizeof(struct dirent);
-            tmp_dirent.d_ino = tmp_fat_fd->ino;
-	    /*
-	     * convert dir entry from fixed 8+3 format (without dot)
-	     * to 0..8 + 1dot + 0..3 format
-	     */
-	    tmp_dirent.d_namlen = msdos_format_dirent_with_dot(
-              tmp_dirent.d_name,
-	      (char *) fs_info->cl_buf + i); /* src text */
-            memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
-
-            iop->offset = iop->offset + sizeof(struct dirent);
-            cmpltd += (sizeof(struct dirent));
-            count -= (sizeof(struct dirent));
-
-            /* inode number extracted, close fat-file */
-            rc = fat_file_close(iop->pathinfo.mt_entry, tmp_fat_fd);
-            if (rc != RC_OK)
-            {
-                rtems_semaphore_release(fs_info->vol_sema);
-                return rc;
-            }
-
+            
             if (count <= 0)
                 break;
         }
@@ -363,8 +498,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     RC_OK on success, or -1 if error occured (errno
  *     set apropriately).
  */
-off_t
-msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
+rtems_off64_t
+msdos_dir_lseek(rtems_libio_t *iop, rtems_off64_t offset, int whence)
 {
     switch (whence)
     {
@@ -471,6 +606,24 @@ msdos_dir_sync(rtems_libio_t *iop)
     return rc;
 }
 
+/* msdos_dir_chmod --
+ *     Change the attributes of the directory. This currently does
+ *     nothing and returns no error.
+ *
+ * PARAMETERS:
+ *     pathloc - node description
+ *     mode - the new mode
+ *
+ * RETURNS:
+ *     RC_OK always
+ */
+int
+msdos_dir_chmod(rtems_filesystem_location_info_t *pathloc,
+                mode_t                            mode)
+{
+  return RC_OK;
+}
+
 /* msdos_dir_rmnod --
  *     Remove directory node.
  *
@@ -498,7 +651,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
         rtems_set_errno_and_return_minus_one(EIO);
 
     /*
-     * We deny attemp to delete open directory (if directory is current
+     * We deny attempts to delete open directory (if directory is current
      * directory we assume it is open one)
      */
     if (fat_fd->links_num > 1)
@@ -538,8 +691,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
      */
 
     /* mark file removed */
-    rc = msdos_set_first_char4file_name(pathloc->mt_entry, fat_fd->info_cln,
-                                        fat_fd->info_ofs,
+    rc = msdos_set_first_char4file_name(pathloc->mt_entry, &fat_fd->dir_pos,
                                         MSDOS_THIS_DIR_ENTRY_EMPTY);
     if (rc != RC_OK)
     {

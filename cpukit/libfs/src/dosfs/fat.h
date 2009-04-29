@@ -250,7 +250,7 @@ extern "C" {
 
 #define FAT_GET_FSINFO_TRAIL_SIGNATURE(x)     FAT_GET_VAL32(x,508)
 #define FAT_SET_FSINFO_TRAIL_SIGNATURE(x,val) FAT_SET_VAL32(x,508,val)
-#define FAT_FSINFO_TRAIL_SIGNATURE_VALUE  (0x000055AA)
+#define FAT_FSINFO_TRAIL_SIGNATURE_VALUE  (0xAA550000)
 /* 
  * I read FSInfo sector from offset 484 to access the information, so offsets 
  * of these fields a relative
@@ -351,15 +351,31 @@ typedef struct fat_fs_info_s
 } fat_fs_info_t;
 
 /*
- * if the name we looking for is file we store not only first data cluster
- * number, but and cluster number and offset for directory entry for this
- * name
+ * FAT position is a the cluster and the offset into the
+ * cluster.
  */
-typedef struct fat_auxiliary_s
+typedef struct fat_pos_s
 {
     uint32_t   cln;
     uint32_t   ofs;
-} fat_auxiliary_t;
+} fat_pos_t;
+
+/*
+ * If the name we looking for is file we store not only first data cluster
+ * number, but and cluster number and offset for directory entry for this
+ * name. We also add the LFN start offset so we can delete it the whole
+ * file name. We can then use this to delete the file.
+ */
+typedef struct fat_dir_pos_s
+{
+    fat_pos_t  sname;
+    fat_pos_t  lname;
+} fat_dir_pos_t;
+
+/*
+ * Set the long name entries to this value for a short file name.
+ */
+#define FAT_FILE_SHORT_NAME (0xffffffff)
 
 #define FAT_FAT_OFFSET(fat_type, cln)                  \
     ((fat_type) & FAT_FAT12 ? ((cln) + ((cln) >> 1)) : \
@@ -379,6 +395,17 @@ typedef struct fat_auxiliary_s
 
 #define FAT_OP_TYPE_READ  0x1
 #define FAT_OP_TYPE_GET   0x2
+
+static inline void
+fat_dir_pos_init(
+    fat_dir_pos_t *dir_pos
+    )
+{
+  dir_pos->sname.cln = 0;
+  dir_pos->sname.ofs = 0;
+  dir_pos->lname.cln = FAT_FILE_SHORT_NAME;
+  dir_pos->lname.ofs = FAT_FILE_SHORT_NAME;
+}
 
 static inline uint32_t
 fat_cluster_num_to_sector_num(

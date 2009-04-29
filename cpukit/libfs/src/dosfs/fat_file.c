@@ -33,20 +33,20 @@
 #include "fat_file.h"
 
 static inline void
-_hash_insert(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
+_hash_insert(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el);
 
 static inline void
-_hash_delete(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
+_hash_delete(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el);
 
 static inline int
 _hash_search(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
-    Chain_Control                         *hash,
+    rtems_chain_control                   *hash,
     uint32_t                               key1,
     uint32_t                               key2,
-    fat_file_fd_t			   **ret
+    fat_file_fd_t			                   **ret
 );
 
 static off_t
@@ -75,8 +75,7 @@ fat_file_lseek(
  *
  * PARAMETERS:
  *     mt_entry - mount table entry
- *     cln      - cluster num of the node
- *     ofs      - offset of the node
+ *     pos      - cluster and offset of the node
  *     fat_fd   - placeholder for returned fat-file descriptor
  *
  * RETURNS:
@@ -86,8 +85,7 @@ fat_file_lseek(
 int
 fat_file_open(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
-    uint32_t                               cln,
-    uint32_t                               ofs,
+    fat_dir_pos_t                         *dir_pos,
     fat_file_fd_t                        **fat_fd
     )
 {
@@ -97,7 +95,7 @@ fat_file_open(
     uint32_t       key = 0;
 
     /* construct key */
-    key = fat_construct_key(mt_entry, cln, ofs);
+    key = fat_construct_key(mt_entry, &dir_pos->sname);
 
     /* access "valid" hash table */
     rc = _hash_search(mt_entry, fs_info->vhash, key, 0, &lfat_fd);
@@ -116,9 +114,13 @@ fat_file_open(
     if ( lfat_fd == NULL )
         rtems_set_errno_and_return_minus_one( ENOMEM );
 
+    memset(lfat_fd, 0, sizeof(fat_file_fd_t));
+    
     lfat_fd->links_num = 1;
     lfat_fd->flags &= ~FAT_FILE_REMOVED;
     lfat_fd->map.last_cln = FAT_UNDEFINED_VALUE;
+
+    lfat_fd->dir_pos = *dir_pos;
 
     if ( rc != RC_OK )
         lfat_fd->ino = key;
@@ -137,7 +139,6 @@ fat_file_open(
         }
     }
     _hash_insert(fs_info->vhash, key, lfat_fd->ino, lfat_fd);
-
 
     /*
      * other fields of fat-file descriptor will be initialized on upper
@@ -203,7 +204,7 @@ fat_file_close(
         return rc;
     }
 
-    key = fat_construct_key(mt_entry, fat_fd->info_cln, fat_fd->info_ofs);
+    key = fat_construct_key(mt_entry, &fat_fd->dir_pos.sname);
 
     if (fat_fd->flags & FAT_FILE_REMOVED)
     {
@@ -582,6 +583,8 @@ fat_file_extend(
         }
     }
 
+    fat_fd->fat_file_size = new_length;
+    
     return RC_OK;
 }
 
@@ -736,7 +739,7 @@ fat_file_mark_removed(
     fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t       key = 0;
 
-    key = fat_construct_key(mt_entry, fat_fd->info_cln, fat_fd->info_ofs);
+    key = fat_construct_key(mt_entry, &fat_fd->dir_pos.sname);
 
     _hash_delete(fs_info->vhash, key, fat_fd->ino, fat_fd);
 
@@ -869,10 +872,10 @@ fat_file_size(
  *     None
  */
 static inline void
-_hash_insert(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
+_hash_insert(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el)
 {
-    _Chain_Append((hash) + ((key1) % FAT_HASH_MODULE), &(el)->link);
+    rtems_chain_append((hash) + ((key1) % FAT_HASH_MODULE), &(el)->link);
 }
 
 
@@ -889,10 +892,10 @@ _hash_insert(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
  *     None
  */
 static inline void
-_hash_delete(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
+_hash_delete(rtems_chain_control *hash, uint32_t   key1, uint32_t   key2,
              fat_file_fd_t *el)
 {
-    _Chain_Extract(&(el)->link);
+    rtems_chain_extract(&(el)->link);
 }
 
 /* _hash_search --
@@ -912,20 +915,19 @@ _hash_delete(Chain_Control *hash, uint32_t   key1, uint32_t   key2,
 static inline int
 _hash_search(
     rtems_filesystem_mount_table_entry_t  *mt_entry,
-    Chain_Control                         *hash,
+    rtems_chain_control                   *hash,
     uint32_t                               key1,
     uint32_t                               key2,
     fat_file_fd_t                          **ret
     )
 {
-    uint32_t   mod = (key1) % FAT_HASH_MODULE;
-    Chain_Node *the_node = ((Chain_Control *)((hash) + mod))->first;
+    uint32_t          mod = (key1) % FAT_HASH_MODULE;
+    rtems_chain_node *the_node = ((rtems_chain_control *)((hash) + mod))->first;
 
-    for ( ; !_Chain_Is_tail((hash) + mod, the_node) ; )
+    for ( ; !rtems_chain_is_tail((hash) + mod, the_node) ; )
     {
         fat_file_fd_t *ffd = (fat_file_fd_t *)the_node;
-        uint32_t   ck =
-                fat_construct_key(mt_entry, ffd->info_cln, ffd->info_ofs);
+        uint32_t       ck =  fat_construct_key(mt_entry, &ffd->dir_pos.sname);
 
         if ( (key1) == ck)
         {

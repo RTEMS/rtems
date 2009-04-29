@@ -42,7 +42,8 @@ int rtems_shell_main_msdos_format(
     fattype:             MSDOS_FMT_FATANY,
     media:               0,
     quick_format:        TRUE,
-    cluster_align:       0
+    cluster_align:       0,
+    info_level:          0
   };
   
   const char* driver = NULL;
@@ -51,13 +52,22 @@ int rtems_shell_main_msdos_format(
   for (arg = 1; arg < argc; arg++) {
     if (argv[arg][0] == '-') {
       switch (argv[arg][1]) {
-        case 'v':
+        case 'V':
           arg++;
           if (arg == argc) {
             fprintf (stderr, "error: no volume label.\n");
             return 1;
           }
           rqdata.VolLabel = argv[arg];
+          break;
+
+        case 's':
+          arg++;
+          if (arg == argc) {
+            fprintf (stderr, "error: sectors per cluster count.\n");
+            return 1;
+          }
+          rqdata.sectors_per_cluster = rtems_shell_str2int(argv[arg]);
           break;
           
         case 'r':
@@ -90,6 +100,10 @@ int rtems_shell_main_msdos_format(
           }
           break;
 
+        case 'v':
+          rqdata.info_level++;
+          break;
+          
         default:
           fprintf (stderr, "error: invalid option: %s\n", argv[arg]);
           return 1;
@@ -111,6 +125,19 @@ int rtems_shell_main_msdos_format(
   }
   
   printf ("msdos format: %s\n", driver);
+
+  if (rqdata.info_level)
+  {
+    printf (" %-20s: %s\n", "OEMName", "RTEMS");
+    printf (" %-20s: %s\n", "VolLabel", "RTEMSDisk");
+    printf (" %-20s: %i\n", "sectors per cluster", rqdata.sectors_per_cluster);
+    printf (" %-20s: %i\n", "fats", rqdata.fat_num);
+    printf (" %-20s: %i\n", "files per root dir", rqdata.files_per_root_dir);
+    printf (" %-20s: %i\n", "fat type", rqdata.fattype);
+    printf (" %-20s: %d\n", "media", rqdata.media);
+    printf (" %-20s: %d\n", "quick_format", rqdata.quick_format);
+    printf (" %-20s: %i\n", "cluster align", rqdata.cluster_align);
+  }
   
   if (msdos_format (driver, &rqdata) < 0) {
     fprintf (stderr, "error: format failed: %s\n", strerror (errno));
