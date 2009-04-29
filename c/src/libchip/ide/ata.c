@@ -608,6 +608,10 @@ ata_non_data_request_done(ata_req_t *areq,
                           rtems_device_minor_number ctrl_minor,
                           rtems_status_code status, int error)
 {
+#ifdef DEBUG
+    printf("ata_non_data_request_done: entry\n");
+#endif
+    
     areq->status = status;
     areq->error = error;
     rtems_semaphore_release(areq->sema);
@@ -638,7 +642,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
 
         ata_queue_msg_t msg;
 
-#ifdef DEBUG
+#ifdef DEBUG_DOES_NOT_WORK_WITH_QEMU
 	uint16_t      val;
         /*
          * read IDE_REGISTER_ALTERNATE_STATUS instead IDE_REGISTER_STATUS
@@ -1289,7 +1293,7 @@ rtems_ata_initialize(rtems_device_major_number major,
                                           IDE_REGISTER_DEVICE_CONTROL_OFFSET,
                                           IDE_REGISTER_DEVICE_CONTROL_nIEN);
         }
-
+#if 0
         /*
          * Issue EXECUTE DEVICE DIAGNOSTIC ATA command for explore is
          * there any ATA device on the controller.
@@ -1315,7 +1319,8 @@ rtems_ata_initialize(rtems_device_major_number major,
          */
         if (breq.req.status != RTEMS_SUCCESSFUL)
             continue;
-
+#endif
+        breq.req.error = ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT;
         /* disassemble returned diagnostic codes */
         if (breq.req.error == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
         {

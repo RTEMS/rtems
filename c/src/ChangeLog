@@ -1,3 +1,11 @@
+2009-04-29	Chris Johns <chrisj@rtems.org>
+
+	* libchip/ide/ata.c: Remove a detection test that fails in qemu.
+
+	* libchip/ide/ide_controller.c: Change the status detection and
+	add a message if the transfer fails. There is currently no error
+	handle at the IDE drvier level.
+
 2009-03-12	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1392/bsps

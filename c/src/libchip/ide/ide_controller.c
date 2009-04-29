@@ -25,7 +25,7 @@
 #include <libchip/ide_ctrl_io.h>
 
 #if IDE_CONTROLLER_TRACE
-int ide_controller_trace;
+int ide_controller_trace = 1;
 #endif
 
 /*
