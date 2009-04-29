@@ -1,3 +1,37 @@
+2009-04-29	Chris Johns <chrisj@rtems.org>
+
+	* libcsupport/include/rtems/libio.h: Add rtems_off64_t for
+	internal use. Update the internal off_t to the 64bit offset.
+
+	* libnetworking/lib/ftpfs.c, libnetworking/lib/tftpDriver.c,
+	libfs/src/nfsclient/src/nfs.c, libfs/src/imfs/imfs_fifo.c,
+	libfs/src/imfs/memfile.c, libfs/src/imfs/imfs_directory.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/deviceio.c: Change off_t to
+	rtems_off64_t.
+
+	* libmisc/shell/main_msdosfmt.c: Add an info level so the format
+	code can tell the user what is happening. Add more options to
+	control the format configuration.
+
+	* libfs/src/dosfs/msdos_format.c: Add a print function to display
+	the format progress and print statements. Select a better default
+	cluster size depending on the size of the disk. This lowers the
+	size of the FAT on large disks. Read and maintain the MRB
+	partition information.
+
+	* libfs/src/dosfs/dosfs.h, libfs/src/dosfs/fat.h,
+	libfs/src/dosfs/fat_file.c, libfs/src/dosfs/fat_file.h,
+	libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_conv.c,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_file.c,
+	libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c,
+	libfs/src/dosfs/msdos_init.c, libfs/src/dosfs/msdos_initsupp.c,
+	libfs/src/dosfs/msdos_misc.c, libfs/src/dosfs/msdos_mknod.c: Add
+	long file name support. Change off_t to rtems_off64_t.
+
+	* libblock/include/rtems/ide_part_table.h: Add MRB partition table
+	size.
+	
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* libblock/src/bdbuf.c: Flush the transfer sync event before
