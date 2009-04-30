@@ -20,24 +20,28 @@ case $osname in
 fedora-9* | fedora-10* | fedora-11* )
   os_name="Fedora"
   os_subdir="fedora"
+  os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
 centos-5* | redhat-el5* | fedora-7* | fedora-8* )
   os_name="CentOS"
   os_subdir="centos"
+  os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="5"
   apt_verdir="5"
   ;;
 centos-4* | redhat-el4* | fedora-5* | fedora-6* )
   os_name="CentOS"
   os_subdir="centos"
+  os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="4"
   apt_verdir="4"
   ;;
 suse-*)
   os_name="openSUSE"
   os_subdir="suse"
+  os_vers=`echo $osname| sed -e 's,^.*-,,'`
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
@@ -45,10 +49,11 @@ suse-*)
   AC_MSG_ERROR([Unsupported OS])
 esac
 
+AC_SUBST([OS_NAME],[$os_name])
 AC_SUBST([OS_SUBDIR],[$os_subdir])
+AC_SUBST([OS_VERS],[$os_vers])
 AC_SUBST([YUM_VERDIR],[$yum_verdir])
 AC_SUBST([APT_VERDIR],[$apt_verdir])
-AC_SUBST([OS_NAME],[$os_name])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
