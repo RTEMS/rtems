@@ -19,25 +19,25 @@ AC_ARG_ENABLE(osname,AS_HELP_STRING(
 case $osname in
 fedora-9* | fedora-10* | fedora-11* )
   os_name="Fedora"
-  os_subdir="fedora/"
+  os_subdir="fedora"
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
 centos-5* | redhat-el5* | fedora-7* | fedora-8* )
   os_name="CentOS"
-  os_subdir="centos/"
+  os_subdir="centos"
   yum_verdir="5"
   apt_verdir="5"
   ;;
 centos-4* | redhat-el4* | fedora-5* | fedora-6* )
   os_name="CentOS"
-  os_subdir="centos/"
+  os_subdir="centos"
   yum_verdir="4"
   apt_verdir="4"
   ;;
 suse-*)
   os_name="openSUSE"
-  os_subdir="suse/"
+  os_subdir="suse"
   yum_verdir="\$\$releasever"
   apt_verdir="\$\$(VERSION)"
   ;;
