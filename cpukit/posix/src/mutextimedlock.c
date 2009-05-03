@@ -64,16 +64,12 @@ int pthread_mutex_timedlock(
       do_wait = false;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+    default:  /* only to silence warnings */
       do_wait = true;
       break;
   }
 
-  lock_status = _POSIX_Mutex_Lock_support(
-    mutex,
-    do_wait,
-    ticks
-  );
-
+  lock_status = _POSIX_Mutex_Lock_support( mutex, do_wait, ticks ); 
   /*
    *  This service only gives us the option to block.  We used a polling
    *  attempt to lock if the abstime was not in the future.  If we did

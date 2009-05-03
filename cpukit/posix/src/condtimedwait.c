@@ -59,6 +59,7 @@ int pthread_cond_timedwait(
       already_timedout = true;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+    default:  /* only to silence warnings */
       already_timedout = false;
       break;
   }

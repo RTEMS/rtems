@@ -1,3 +1,9 @@
+2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/condtimedwait.c, posix/src/mutextimedlock.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/semopen.c: Silence warnings.
+
 2009-04-29    Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h, libblock/include/rtems/bdbuf.h: Changed

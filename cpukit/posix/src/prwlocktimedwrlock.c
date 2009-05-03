@@ -66,6 +66,7 @@ int pthread_rwlock_timedwrlock(
       do_wait = false;
       break;
     case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
+    default:  /* only to silence warnings */
       do_wait = true;
       break;
   }

@@ -130,7 +130,7 @@ return_id:
     the_semaphore->Semaphore_id = the_semaphore->Object.id;
     id = &the_semaphore->Semaphore_id;
   #else
-    id = &the_semaphore->Object.id;
+    id = (sem_t *)&the_semaphore->Object.id;
   #endif
   return id;
 }
