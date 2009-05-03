@@ -1,5 +1,9 @@
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/shell.c, libmisc/stackchk/check.c: Eliminate warnings.
+
+2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/condtimedwait.c, posix/src/mutextimedlock.c,
 	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
 	posix/src/semopen.c: Silence warnings.

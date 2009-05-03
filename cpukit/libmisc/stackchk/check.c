@@ -208,7 +208,7 @@ void rtems_stack_checker_begin_extension(
 void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
 {
   Stack_Control *stack = &running->Start.Initial_stack;
-  char *pattern_area = Stack_check_Get_pattern_area(stack);
+  void *pattern_area = Stack_check_Get_pattern_area(stack);
   char name [32];
 
   printk("BLOWN STACK!!!\n");

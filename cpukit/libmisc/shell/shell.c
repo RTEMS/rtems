@@ -415,10 +415,6 @@ static bool rtems_shell_login(FILE * in,FILE * out) {
   FILE          *fd;
   int            c;
   time_t         t;
-  int            times;
-  char           name[128];
-  char           pass[128];
-  struct passwd *passwd;
 
   rtems_shell_init_issue();
   setuid(0);
