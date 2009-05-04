@@ -103,7 +103,7 @@ extern rtems_telnetd_config_table rtems_telnetd_config;
  *
  * Uses the application provided @ref rtems_telnetd_config configuration table.
  */
-rtems_status_code rtems_telnetd_initialize( void);
+rtems_status_code rtems_telnetd_initialize(void);
 
 #ifdef __cplusplus
 }
