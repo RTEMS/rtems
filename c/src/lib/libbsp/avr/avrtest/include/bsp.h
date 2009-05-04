@@ -27,6 +27,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#define BSP_SMALL_MEMORY 1
+
 /* support for simulated clock tick */
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body

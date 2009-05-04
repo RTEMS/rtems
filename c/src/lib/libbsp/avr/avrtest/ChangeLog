@@ -1,3 +1,7 @@
+2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bsp.h: Add BSP_SMALL_MEMORY.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S: Update for boot_card command line change.
