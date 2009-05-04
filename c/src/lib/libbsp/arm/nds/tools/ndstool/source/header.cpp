@@ -171,7 +171,7 @@ void ShowHeaderInfo(Header &header, int romType, unsigned int length = 0x200)
 	printf("0x64\t%-25s\t0x%08X\n", "ROM control info 2", (int)header.rom_control_info2);
 	printf("0x68\t%-25s\t0x%X\n", "Icon/title offset", (int)header.banner_offset);
 	unsigned short secure_area_crc = CalcSecureAreaCRC((romType == ROMTYPE_NDSDUMPED));
-	char *s1, *s2 = "";
+	const char *s1, *s2 = "";
 	if (romType == ROMTYPE_HOMEBREW) s1 = "-";
 	else if (secure_area_crc == header.secure_area_crc) s1 = "OK";
 	else

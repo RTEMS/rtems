@@ -64,8 +64,8 @@ void Title()
  */
 struct HelpLine
 {
-	char *option_char;
-	char *text;
+	const char *option_char;
+	const char *text;
 
 	void Print()
 	{
@@ -133,7 +133,7 @@ void Help(char *specificoption = 0)
 		bool found = false;
 		for (unsigned int i=0; i<(sizeof(helplines) / sizeof(helplines[0])); i++)
 		{
-			for (char *o = helplines[i].option_char; *o; o++)
+			for (const char *o = helplines[i].option_char; *o; o++)
 			{
 				if (*o == *specificoption) { helplines[i].Print(); found = true; }
 			}

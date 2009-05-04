@@ -1,3 +1,11 @@
+2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* ndstool/include/banner.h, ndstool/include/header.h,
+	ndstool/include/ndstree.h, ndstool/source/banner.cpp,
+	ndstool/source/header.cpp, ndstool/source/ndscreate.cpp,
+	ndstool/source/ndstool.cpp, ndstool/source/passme.cpp: Remove
+	warnings for deprecated character conversions.
+
 2008-08-19	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bin2s.c: Fix various warnings by fixing prototypes. Remove unused

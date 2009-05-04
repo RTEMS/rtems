@@ -1,4 +1,4 @@
-inline int cmp(char *a, bool a_isdir, char *b, bool b_isdir)
+inline int cmp(const char *a, bool a_isdir, const char *b, bool b_isdir)
 {
 	// oh... directory sort doesn't matter since we write out dir- and filenames seperately
 	//if (a_isdir && !b_isdir) return -1;
@@ -9,7 +9,7 @@ inline int cmp(char *a, bool a_isdir, char *b, bool b_isdir)
 struct TreeNode
 {
 	unsigned int dir_id;		// directory ID in case of directory entry
-	char *name;					// file or directory name
+	const char *name;		// file or directory name
 	TreeNode *directory;		// nonzero indicates directory. first directory node is a dummy
 	TreeNode *prev, *next;		// linked list
 
@@ -22,7 +22,7 @@ struct TreeNode
 	}
 	
 	// new entry in same directory
-	TreeNode *New(char *name, bool isdir)
+	TreeNode *New(const char *name, bool isdir)
 	{
 		TreeNode *newNode = new TreeNode();
 		newNode->name = strdup(name);

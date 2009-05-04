@@ -72,14 +72,14 @@ struct Header
 
 struct Country
 {
-	char countrycode;
-	char *name;
+	const char countrycode;
+	const char *name;
 };
 
 struct Maker
 {
-	char *makercode;
-	char *name;
+	const char *makercode;
+	const char *name;
 };
 
 extern Country countries[];

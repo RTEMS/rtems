@@ -3,7 +3,7 @@
 #include "banner.h"
 #include "crc.h"
 
-char *bannerLanguages[] = { "Japanese", "English", "French", "German", "Italian", "Spanish" };
+const char *bannerLanguages[] = { "Japanese", "English", "French", "German", "Italian", "Spanish" };
 
 #define RGB16(r,g,b)			((r) | (g<<5) | (b<<10))
 

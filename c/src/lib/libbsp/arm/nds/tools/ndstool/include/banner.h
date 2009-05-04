@@ -12,7 +12,7 @@ struct Banner
 
 #pragma pack()
 
-extern char *bannerLanguages[];
+extern const char *bannerLanguages[];
 
 int InsertTitleString(char *String, FILE *file);
 unsigned short CalcBannerCRC(Banner &banner);

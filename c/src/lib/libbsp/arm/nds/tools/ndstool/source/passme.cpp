@@ -15,7 +15,7 @@ unsigned char *pc_ram;
 /*
  * Find
  */
-template <typename T> unsigned long Find(FILE *f, char *fmt, unsigned long begin, unsigned long end, T data, T mask, int thumb, int armnr)
+template <typename T> unsigned long Find(FILE *f, const char *fmt, unsigned long begin, unsigned long end, T data, T mask, int thumb, int armnr)
 {
 	for (unsigned long i=begin; i<end; i+=sizeof(T))
 	{
