@@ -1,3 +1,8 @@
+2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/include/rtems/rtems/clock.h, rtems/src/clocktodtoseconds.c,
+	rtems/src/clocktodvalidate.c: Add const to parameter.
+
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/shell.c, libmisc/stackchk/check.c: Eliminate warnings.

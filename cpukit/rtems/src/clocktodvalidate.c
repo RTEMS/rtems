@@ -48,7 +48,7 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
  */
 
 bool _TOD_Validate(
-  rtems_time_of_day *the_tod
+  const rtems_time_of_day *the_tod
 )
 {
   uint32_t   days_in_month;

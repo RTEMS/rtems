@@ -248,7 +248,7 @@ rtems_status_code rtems_clock_get_uptime(
  *  @return This method returns true if the TOD is valid and false otherwise.
  */
 bool _TOD_Validate(
-  rtems_time_of_day *the_tod
+  const rtems_time_of_day *the_tod
 );
 
 /**
@@ -262,7 +262,7 @@ bool _TOD_Validate(
  *          by @a the_tod
  */
 Watchdog_Interval _TOD_To_seconds(
-  rtems_time_of_day *the_tod
+  const rtems_time_of_day *the_tod
 );
 
 #ifdef __cplusplus

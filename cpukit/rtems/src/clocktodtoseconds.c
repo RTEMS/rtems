@@ -53,7 +53,7 @@ const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
  */
 
 uint32_t   _TOD_To_seconds(
-  rtems_time_of_day *the_tod
+  const rtems_time_of_day *the_tod
 )
 {
   uint32_t   time;
