@@ -28,6 +28,16 @@
 
 #include <rtems/bspIo.h> /* XXX remove me later */
 
+/* XXX remove me when really implemented */
+int setjmp(void)
+{
+  return 0;
+}
+int longjmp(void)
+{
+  return 0;
+}
+
 /*
  *  _CPU_Context_save_fp_context
  *

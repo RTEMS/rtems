@@ -1,3 +1,7 @@
+2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu_asm.c: Add stub for setjmp/longjmp. Remove when in newlib.
+
 2009-02-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: AVR stack grows down.
