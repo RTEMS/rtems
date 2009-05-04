@@ -1,7 +1,8 @@
 /* GT64260TWSI.c : Two-Wire Serial Interface (TWSI) support for the GT64260
  *
- * Copyright (c) 2004, Brookhaven National Laboratory and
- *                 Shuchen Kate Feng <feng1@bnl.gov>
+ * Copyright (c) 2004, Brookhaven National Laboratory
+ *               and Shuchen Kate Feng <feng1@bnl.gov>
+ *               under the Deaprtment of Energy contract DE-AC02-98CH10886
  * All rights reserved.
  *
  * The license and distribution terms for this file may be

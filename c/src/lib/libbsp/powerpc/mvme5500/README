@@ -1,5 +1,5 @@
 #
-#  $Id: README,v 1.3.1  Shuchen Kate Feng, NSLS, BNL (08/27/07)
+#  $Id: README,v 1.4.1  Shuchen Kate Feng, NSLS, BNL (03/16/2009)
 #
 
 Please reference README.booting for the boot/load process.
@@ -7,7 +7,7 @@ Please reference README.booting for the boot/load process.
 For the priority setting of the Interrupt Requests (IRQs), please
 reference README.irq 
 
-The BSP is built and tested on the 4.7.1 and 4.7.99.2 CVS RTEMS release.
+The BSP is built and tested on the 4.8.0 RTEMS release.
 
 I believe in valuable real-time programming, where technical neatness,
 performance and truth are.  I hope I still believe. Any suggestion,

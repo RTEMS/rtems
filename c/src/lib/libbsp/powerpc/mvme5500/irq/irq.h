@@ -29,7 +29,8 @@
 #ifndef LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H
 
-/*#define BSP_SHARED_HANDLER_SUPPORT      1*/
+#define BSP_SHARED_HANDLER_SUPPORT      1
+
 #include <rtems/irq.h>
 
 #define BSP_ASM_IRQ_VECTOR_BASE 0x0
@@ -84,11 +85,11 @@
   /*
    * Summary
    */
-#define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
+#define BSP_IRQ_NUMBER			(BSP_PIC_IRQ_NUMBER + BSP_PROCESSOR_IRQ_NUMBER)
 #define BSP_MAIN_IRQ_NUMBER             (64)
 #define BSP_PIC_IRQ_NUMBER              (96)
-#define BSP_LOWEST_OFFSET		(BSP_MICL_IRQ_LOWEST_OFFSET)
-#define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
+#define BSP_LOWEST_OFFSET		(0)
+#define BSP_MAX_OFFSET			(BSP_LOWEST_OFFSET + BSP_IRQ_NUMBER - 1)
 
   /* Main CPU interrupt cause (Low) */
 #define BSP_MAIN_TIMER0_1_IRQ         (BSP_MICL_IRQ_LOWEST_OFFSET+8)

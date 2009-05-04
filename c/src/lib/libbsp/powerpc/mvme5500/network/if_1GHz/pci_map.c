@@ -3,6 +3,7 @@
 /*-
  * Copyright (c) 2004, 2005  Brookhaven National  Laboratory
  *               S. Kate Feng <feng1@bnl.gov>
+ *               under the Deaprtment of Energy contract DE-AC02-98CH10886
  *
  * Copyright (c) 1998, 2000 The NetBSD Foundation, Inc.
  * All rights reserved.

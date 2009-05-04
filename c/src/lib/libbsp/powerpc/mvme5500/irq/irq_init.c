@@ -41,10 +41,18 @@ static int connected() {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
+
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+static rtems_irq_connect_data     	defaultIrq = {
+  /* vectorIdex,  hdl	    ,handle  , on	, off	   , isOn      ,next_handler, */
+  0, 		  nop_func  , NULL   , nop_func	, nop_func , not_connected, 0
+};
+#else
 static rtems_irq_connect_data     	defaultIrq = {
   /* vectorIdex,	 hdl	  , handle	, on		, off		, isOn */
   0, 			 nop_func  , NULL	, nop_func	, nop_func	, not_connected
 };
+#endif
 
 rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
   /*
@@ -140,27 +148,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Done setup irq mngt configuration\n");
 #endif      
 
-  /*
-   * We must connect the raw irq handler for the two
-   * expected interrupt sources : decrementer and external interrupts.
-   */
-  vectorDesc.exceptIndex 	= ASM_DEC_VECTOR;
-  vectorDesc.hdl.vector	= ASM_DEC_VECTOR;
-  vectorDesc.hdl.raw_hdl	= decrementer_exception_vector_prolog_code;
-  vectorDesc.hdl.raw_hdl_size	= (unsigned) decrementer_exception_vector_prolog_code_size;
-  vectorDesc.on		= nop_func;
-  vectorDesc.off		= nop_func;
-  vectorDesc.isOn		= connected;
-  if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
-  }
-  vectorDesc.exceptIndex	= ASM_EXT_VECTOR;
-  vectorDesc.hdl.vector	= ASM_EXT_VECTOR;
-  vectorDesc.hdl.raw_hdl	= external_exception_vector_prolog_code;
-  vectorDesc.hdl.raw_hdl_size	= (unsigned) external_exception_vector_prolog_code_size;
-  if (!ppc_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
-    }
 #ifdef TRACE_IRQ_INIT  
   printk("RTEMS IRQ management is now operationnal\n");
 #endif

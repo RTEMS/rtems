@@ -4,6 +4,7 @@
  * All rights reserved.
  * 
  * RTEMS/Mvme5500 port 2004  by S. Kate Feng, <feng1@bnl.gov>,
+ * under the Deaprtment of Energy contract DE-AC02-98CH10886
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +51,7 @@
 #define RX_RING_SIZE	16
 #define HASH_TABLE_SIZE 16
 #define HASH_DRAM_SIZE  HASH_TABLE_SIZE*1024  /* size of DRAM for hash table */
-#define INTR_ERR_SIZE   16
+#define IF_ERR_BUFSZE   16
 		
 enum GTeth_txprio {
 	GE_TXPRIO_HI=1,
@@ -70,9 +71,9 @@ struct GTeth_softc {
   struct mbuf* txq_mbuf[TX_RING_SIZE];	/* transmit buffer memory */
   struct mbuf* rxq_mbuf[RX_RING_SIZE];	/* receive buffer memory */
   struct GTeth_softc *next_module;
-  volatile unsigned int intr_errsts[INTR_ERR_SIZE]; /* capture the right intr_status */
-  unsigned int intr_err_ptr1;   /* ptr used in GTeth_error() */
-  unsigned int intr_err_ptr2;   /* ptr used in ISR */
+  volatile unsigned int if_errsts[IF_ERR_BUFSZE]; /* capture the right intr_status */
+  unsigned int if_err_ptr1;   /* ptr used in GTeth_error() */
+  unsigned int if_err_ptr2;   /* ptr used in ISR */
   struct ifqueue txq_pendq;	/* these are ready to go to the GT */
   unsigned int txq_pending;
   unsigned int txq_lo;		/* next to be given to GT DMA */
@@ -125,13 +126,7 @@ struct GTeth_softc {
   /* statistics */
   struct {
     volatile unsigned long       rxInterrupts;
-
     volatile unsigned long       txInterrupts;
-    unsigned long	txMultiBuffPacket;
-    unsigned long       txMultiMaxLen;
-    unsigned long       txSinglMaxLen;
-    unsigned long       txMultiMaxLoop;
-    unsigned long       txBuffMaxLen;
     unsigned long 	length_errors;
     unsigned long	frame_errors;
     unsigned long	crc_errors;

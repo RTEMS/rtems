@@ -17,10 +17,9 @@
  *  Modified to support the Synergy VGM & Motorola PowerPC boards
  *  (C) by Till Straumann, <strauman@slac.stanford.edu>, 2002, 2004, 2005
  *
- *  Modified to support the MVME5500 board.
- *  Also, the settings of L1, L2, and L3 caches is not necessary here.
- *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003, 2004, 2005
- *  
+ *  Modified to support the mvme5500 BSP 
+ *  (C) S. Kate Feng,Brookhaven National Lab <feng1@bnl.gov>, 2003, 2004, 2005, 2008
+ *
  *  $Id$
  */
 
@@ -42,6 +41,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/bspException.h>
+#include <bsp/VPD.h>
 
 #include <rtems/bspIo.h>
 #include <rtems/sptables.h>
@@ -50,8 +50,7 @@
 #undef __RTEMS_APPLICATION__
 #endif
 
-/*
-#define SHOW_MORE_INIT_SETTINGS
+/*efine SHOW_MORE_INIT_SETTINGS
 #define SHOW_LCR1_REGISTER
 #define SHOW_LCR2_REGISTER
 #define SHOW_LCR3_REGISTER
@@ -74,6 +73,7 @@ extern void BSP_vme_config(void);
 
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
+extern uint32_t probeMemoryEnd();
 
 typedef struct CmdLineRec_ {
 		unsigned long	size;
@@ -95,6 +95,10 @@ typedef struct CmdLineRec_ {
  */
 #define MAX_LOADER_ADD_PARM 80
 char loaderParam[MAX_LOADER_ADD_PARM];
+
+BSP_BoardTypes BSP_boardType=0;
+
+DiscoveryChipVersion BSP_controller_version;
 
 /*
  * Total memory using RESIDUAL DATA
@@ -222,6 +226,11 @@ int		i=cmdline_end-cmdline_start;
 	cmdline_buf[i]=0;
 }
 
+BSP_BoardTypes BSP_getBoardType()
+{
+	return BSP_boardType;
+}
+
 /*
  *  bsp_start
  *
@@ -233,6 +242,7 @@ void bsp_start( void )
 #ifdef CONF_VPD
   int i;
 #endif
+  int x;
   unsigned char *stack;
   unsigned long	 *r1sp;
 #ifdef SHOW_LCR1_REGISTER
@@ -250,6 +260,8 @@ void bsp_start( void )
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl	pt=0;
+  ConfVpdRec_t *pVPD = (ConfVpdRec_t *) &ConfVPD_buff[0];
+
 
   /* Till Straumann: 4/2005
    * Need to map the system registers early, so we can printk...
@@ -260,12 +272,11 @@ void bsp_start( void )
    */
   setdbat(2, PCI0_MEM_BASE, PCI0_MEM_BASE, 0x10000000, IO_PAGE);
 
-  /* Till Straumann: 2004
-   * map the PCI 0, 1 Domain I/O space, GT64260B registers
-   * and the reserved area so that the size is the power of 2.
+  /* map the PCI 0, 1 Domain I/O space, GT64260B registers,
+   * Flash Bank 0 and Flash Bank 2.
    * 
    */
-  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x2000000, IO_PAGE);
+  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x10000000, IO_PAGE);
 
 
   /*
@@ -322,39 +333,33 @@ void bsp_start( void )
    */
   Cpu_table.exceptions_in_RAM = TRUE;
   initialize_exceptions();
+
+  /* <SKF> pci_initialize() before BSP_rtems_irq_mng_init to identify the version of the
+   * Discovery chip.
+   */
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Going to start PCI buses scanning and initialization\n");
+#endif  
+  pci_initialize();
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Number of PCI buses found is : %d\n", pci_bus_count());
+#endif
+
+  /*
+   * Initalize RTEMS IRQ system
+   */
+  BSP_rtems_irq_mng_init(0);
+
   /*
    * Init MMU block address translation to enable hardware
    * access
    * More PCI1 memory mapping to be done after BSP_pgtbl_activate.
    */
   printk("-----------------------------------------\n");
-  printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
+  printk("Welcome to %s on MVME5500\n", _RTEMS_version );
   printk("-----------------------------------------\n");
 
-#ifdef TEST_RETURN_TO_PPCBUG  
-  printk("Hit <Enter> to return to PPCBUG monitor\n");
-  printk("When Finished hit GO. It should print <Back from monitor>\n");
-  debug_getc();
-  _return_to_ppcbug();
-  printk("Back from monitor\n");
-  _return_to_ppcbug();
-#endif /* TEST_RETURN_TO_PPCBUG  */
-
-#ifdef TEST_RAW_EXCEPTION_CODE  
-  printk("Testing exception handling Part 1\n");
-  /*
-   * Cause a software exception
-   */
-  __asm__ __volatile ("sc");
-  /*
-   * Check we can still catch exceptions and returned coorectly.
-   */
-  printk("Testing exception handling Part 2\n");
-  __asm__ __volatile ("sc");
-#endif  
-
-  BSP_mem_size 				=  _512M;
-  /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit of System Status  register */
+  BSP_mem_size 				=  probeMemoryEnd();
   /* rtems_bsp_delay_in_bus_cycles are defined in registers.h */
   BSP_bus_frequency			= 133333333;
   BSP_processor_frequency		= 1000000000;
@@ -401,11 +406,6 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = work_space_start;
 
-  /*
-   * Initalize RTEMS IRQ system
-   */
-   BSP_rtems_irq_mng_init(0);
-
 #ifdef SHOW_LCR2_REGISTER
   l2cr = get_L2CR();
   printk("Initial L2CR value = %x\n", l2cr);
@@ -429,30 +429,7 @@ void bsp_start( void )
     BSP_pgtbl_activate(pt);
   }
 
-  /*
-   * PCI 1 domain memory space
-   */
-  setdbat(1, PCI1_MEM_BASE, PCI1_MEM_BASE, 0x10000000, IO_PAGE);
- 
-
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Going to start PCI buses scanning and initialization\n");
-#endif  
-  pci_initialize();
-#ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Number of PCI buses found is : %d\n", pci_bus_count());
-#endif
-
-  /* Install our own exception handler (needs PCI) */
-  globalExceptHdl = BSP_exceptionHandler;
-
-  /* clear hostbridge errors. MCP signal is not used on the MVME5500
-   * PCI config space scanning code will trip otherwise :-(
-   */
-  _BSP_clear_hostbridge_errors(0, 1 /*quiet*/);
-
-  /* Read Configuration Vital Product Data (VPD) */
-  if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))
+  if ( I2Cread_eeprom(0xa8, 0,2, (void *) pVPD, sizeof(ConfVpdRec_t)))
      printk("I2Cread_eeprom() error \n");
   else {
 #ifdef CONF_VPD
@@ -461,13 +438,27 @@ void bsp_start( void )
       printk("%2x ", ConfVPD_buff[i]);  
       if ((i % 20)==0 ) printk("\n");
     }
-    printk("\n");
 #endif
   }
+
+  /*
+   * PCI 1 domain memory space
+   */
+  setdbat(1, PCI1_MEM_BASE, PCI1_MEM_BASE, 0x10000000, IO_PAGE);
+ 
+  /* Install our own exception handler (needs PCI) */
+  globalExceptHdl = BSP_exceptionHandler;
+
+
+#if 1
+  /* clear hostbridge errors. MCP signal is not used on the MVME5500
+   * PCI config space scanning code will trip otherwise :-(
+   */
+  _BSP_clear_hostbridge_errors(0, 1 /*quiet*/);
+#endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("MSR %x \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
-
 }

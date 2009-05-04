@@ -2,23 +2,16 @@
  *
  * Copyright (c) 2003,2004 Brookhaven National  Laboratory
  *               S. Kate Feng <feng1@bnl.gov>
- * All rights reserved 
+ *               All rights reserved 
  *
  * Acknowledgements:
  * netBSD : Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc. 
  * Marvell : NDA document for the discovery system controller
- * The author referenced two RTEMS network drivers of other NICs.
- * rtems : 1) dec21140.c, a network driver for for TULIP based Ethernet Controller
- *            (C) 1999 Emmanuel Raguet. raguet@crf.canon.fr
- *
- *         2) yellowfin.c, a network driver for the SVGM5 BSP.
- *           Stanford Linear Accelerator Center, Till Straumann 
  *
  * Some notes from the author, S. Kate Feng :
  *
  * 1) Mvme5500 uses Eth0 (controller 0) of the GT64260 to implement
- *    the 10/100 BaseT Ethernet with PCI Master Data Byte Swap\
- *    control.
+ *    the 10/100 BaseT Ethernet with PCI Master Data Byte Swap control.
  * 2) Implemented hardware snoop instead of software snoop
  *    to ensure SDRAM cache coherency. (Copyright : NDA item)
  * 3) Added S/W support for multi mbuf.  (TODO : Let the H/W do it)
@@ -55,6 +48,7 @@
 #include <sys/sockio.h>             /* SIOCADDMULTI, SIOC...     */
 #include <net/if.h>
 #include <net/if_dl.h>
+#include <net/ethernet.h>
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
@@ -110,7 +104,7 @@ enum GTeth_hash_op {
 
 #define	ET_MINLEN 64		/* minimum message length */
 
-static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
+static int GTeth_ifioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data);
 static void GTeth_ifstart (struct ifnet *);
 static void GTeth_ifchange(struct GTeth_softc *sc);
 static void GTeth_init_rx_ring(struct GTeth_softc *sc);
@@ -169,8 +163,8 @@ static void GT64260eth_isr()
   outl( ~cause,ETH0_EICR);  /* clear the ICR */
 
   if ( (!cause) || (cause & 0x803d00)) {
-       sc->intr_errsts[sc->intr_err_ptr2++]=cause;
-       sc->intr_err_ptr2 %=INTR_ERR_SIZE;   /* Till Straumann */
+       sc->if_errsts[sc->if_err_ptr2]=cause;
+       if ( (++sc->if_err_ptr2) == IF_ERR_BUFSZE) sc->if_err_ptr2=0; /* Till Straumann */
        events |= ERR_EVENT;
   }  
 
@@ -201,7 +195,7 @@ static void GT64260eth_isr()
 static rtems_irq_connect_data GT64260ethIrqData={
 	BSP_MAIN_ETH0_IRQ,
 	(rtems_irq_hdl) GT64260eth_isr,
-        NULL,
+        (rtems_irq_hdl_param) NULL,
 	(rtems_irq_enable) GT64260eth_irq_on,
 	(rtems_irq_disable) GT64260eth_irq_off,
 	(rtems_irq_is_enabled) GT64260eth_irq_is_on, 
@@ -330,20 +324,15 @@ static void GT64260eth_ifinit(void *arg)
   GTeth_hash_fill(sc);
 #endif
 
-  sc->intr_err_ptr1=0;
-  sc->intr_err_ptr2=0;
-  for (i=0; i< INTR_ERR_SIZE; i++) sc->intr_errsts[i]=0;
+  sc->if_err_ptr1=0;
+  sc->if_err_ptr2=0;
+  for (i=0; i< IF_ERR_BUFSZE; i++) sc->if_errsts[i]=0;
 
   /* initialize the hardware (we are holding the network semaphore at this point) */
   (void)GT64260eth_init_hw(sc);
 
   /* launch network daemon */
-
-  /* NOTE:
-   * in ss-20011025 (and later) any task created by 'bsdnet_newproc' is
-   * wrapped by code which acquires the network semaphore...
-   */
-   sc->daemonTid = rtems_bsdnet_newproc(GT_ETH_TASK_NAME,4096,GT64260eth_daemon,arg);
+  sc->daemonTid = rtems_bsdnet_newproc(GT_ETH_TASK_NAME,4096,GT64260eth_daemon,arg);
 
   /* Tell the world that we're running */
   sc->arpcom.ac_if.if_flags |= IFF_RUNNING;
@@ -364,9 +353,11 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
 
   unit = rtems_bsdnet_parse_driver_name(config, &name);
   if (unit < 0) return 0;
- 
-  printk("\nEthernet driver name %s unit %d \n",name, unit);
-  printk("(c) 2004, Brookhaven National Lab. <feng1@bnl.gov> (RTEMS/mvme5500 port)\n");
+  if ( !strncmp((const char *)name,"autoz",5))
+     memcpy(name,"gtMHz",5);
+           
+  printk("\nAttaching GT64260 built-in 10/100 MHz NIC%d\n", unit); 
+  printk("RTEMS-mvme5500 BSP Copyright (c) 2004, Brookhaven National Lab., Shuchen Kate Feng\n");
 
   /* Make certain elements e.g. descriptor lists are aligned. */
   softc_mem = rtems_bsdnet_malloc(sizeof(*sc) + SOFTC_ALIGN, M_FREE, M_NOWAIT);
@@ -388,21 +379,16 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
   /* try to read HW address from the device if not overridden
    * by config
    */
-  if (config->hardware_address) {
-     memcpy(hwaddr, config->hardware_address, ETHER_ADDR_LEN);
-  } else {
-    printk("Read EEPROM ");
-     for (i = 0; i < 6; i++)
-       hwaddr[i] = ConfVPD_buff[VPD_ENET0_OFFSET+i];
-  }
+  if (config->hardware_address)
+     memcpy((void *)sc->arpcom.ac_enaddr,(const void *) config->hardware_address, ETHER_ADDR_LEN);
+  else
+    memcpy((void *)sc->arpcom.ac_enaddr, (const void *) &ConfVPD_buff[VPD_ENET0_OFFSET], ETHER_ADDR_LEN);
 
 #ifdef GT_DEBUG
   printk("using MAC addr from device:");
-  for (i = 0; i < ETHER_ADDR_LEN; i++) printk("%x:", hwaddr[i]);
+  for (i = 0; i < ETHER_ADDR_LEN; i++) printk("%x:", sc->arpcom.ac_enaddr[i]);
   printk("\n");
 #endif
-
-  memcpy(sc->arpcom.ac_enaddr, hwaddr, ETHER_ADDR_LEN);
 
   ifp = &sc->arpcom.ac_if;
 
@@ -410,9 +396,8 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
   sc->sc_pcxr = inl(ETH0_EPCXR);
   sc->sc_intrmask = inl(ETH0_EIMR) | ETH_IR_MIIPhySTC;
 
-  printk("address %s\n", ether_sprintf(hwaddr));
-
 #ifdef GT_DEBUG
+  printk("address %s\n", ether_sprintf(hwaddr));
   printk(", pcr %x, pcxr %x ", sc->sc_pcr, sc->sc_pcxr);
 #endif
 
@@ -511,7 +496,6 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
 {
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
-#if 0
   printf("       Rx Interrupts:%-8lu\n", sc->stats.rxInterrupts);
   printf("     Receive Packets:%-8lu\n", ifp->if_ipackets);
   printf("     Receive  errors:%-8lu\n", ifp->if_ierrors);
@@ -520,18 +504,10 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("    Oversized Frames:%-8lu\n", sc->stats.length_errors);
   printf("         Active Rxqs:%-8u\n",  sc->rxq_active); 
   printf("       Tx Interrupts:%-8lu\n", sc->stats.txInterrupts);
-#endif
-  printf("Multi-BuffTx Packets:%-8lu\n", sc->stats.txMultiBuffPacket);
-  printf("Multi-BuffTx max len:%-8lu\n", sc->stats.txMultiMaxLen);
-  printf("SingleBuffTx max len:%-8lu\n", sc->stats.txSinglMaxLen);
-  printf("Multi-BuffTx maxloop:%-8lu\n", sc->stats.txMultiMaxLoop);
-  printf("Tx buffer max len   :%-8lu\n", sc->stats.txBuffMaxLen);
-#if 0
   printf("   Transmitt Packets:%-8lu\n", ifp->if_opackets);
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
   printf("    Tx/Rx collisions:%-8lu\n", ifp->if_collisions);
   printf("         Active Txqs:%-8u\n", sc->txq_nactive); 
-#endif
 }
 
 void GT64260eth_printStats()
@@ -539,7 +515,7 @@ void GT64260eth_printStats()
   GT64260eth_stats(root_GT64260eth_dev);
 }
 
-static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
+static int GTeth_ifioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
 {
   struct GTeth_softc *sc = ifp->if_softc;
   struct ifreq *ifr = (struct ifreq *) data;
@@ -585,7 +561,7 @@ static int GTeth_ifioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
        if (error == ENETRESET) {
 	   if (ifp->if_flags & IFF_RUNNING)
 	      GTeth_ifchange(sc);
-	   else
+           else
 	      error = 0;
        }
        break;
@@ -862,6 +838,7 @@ static void GTeth_txq_free(struct GTeth_softc *sc, unsigned cmdsts)
   --sc->txq_nactive;
 }
 
+#if 0
 static int txq_high_limit(struct GTeth_softc *sc)
 {
   /*
@@ -901,6 +878,7 @@ static int txq_high_limit(struct GTeth_softc *sc)
   } /* end if ( TX_RING_SIZE == sc->txq_nactive + TXQ_HiLmt_OFF) */
   return 0;
 }
+#endif
 
 static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
 {
@@ -916,10 +894,8 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
    */
   intrmask = sc->sc_intrmask;
 
-  if ( !(m->m_next)) {/* single buffer packet */
+  if ( !(m->m_next)) /* single buffer packet */
     sc->txq_mbuf[index]= m;
-    sc->stats.txSinglMaxLen= MAX(m->m_len, sc->stats.txSinglMaxLen);
-  }
   else /* multiple mbufs in this packet */
   { 
     struct mbuf *mtp, *mdest;
@@ -947,9 +923,7 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
     printk("%d ",mtp->m_len);
 #endif
       len += mtp->m_len;
-      sc->stats.txBuffMaxLen=MAX(mtp->m_len,sc->stats.txBuffMaxLen); 
     }
-    sc->stats.txMultiMaxLoop=MAX(loop, sc->stats.txMultiMaxLoop);
 #if 0
     printk("\n");
 #endif
@@ -957,8 +931,6 @@ static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
     /* free old mbuf chain */
     m_freem(m);
     sc->txq_mbuf[index] = m = mdest;
-    sc->stats.txMultiBuffPacket++;
-    sc->stats.txMultiMaxLen= MAX(m->m_len, sc->stats.txMultiMaxLen);
   }
   if (m->m_len < ET_MINLEN) m->m_len = ET_MINLEN;
 
@@ -1137,12 +1109,10 @@ static void GTeth_tx_stop(struct GTeth_softc *sc)
   sc->arpcom.ac_if.if_timer = 0;
 }
 
-/* TOCHECK : Should it be about rx or tx ? */
 static void GTeth_ifchange(struct GTeth_softc *sc)
 {
   if (GTeth_debug>0) printk("GTeth_ifchange(");
   if (GTeth_debug>5) printk("(pcr=%#x,imr=%#x)",inl(ETH0_EPCR),inl(ETH0_EIMR));
-  /*  printk("SIOCADDMULTI (SIOCDELMULTI): is it about rx or tx ?\n");*/
   outl(sc->sc_pcr | ETH_EPCR_EN, ETH0_EPCR);
   outl(sc->sc_intrmask, ETH0_EIMR);
   GTeth_ifstart(&sc->arpcom.ac_if);
@@ -1445,10 +1415,11 @@ static void GTeth_hash_init(struct GTeth_softc *sc)
 #endif
 }
 
+#ifdef GT64260eth_DEBUG
 static void GT64260eth_error(struct GTeth_softc *sc)
 {
   struct ifnet	        *ifp = &sc->arpcom.ac_if;
-  unsigned int		intr_status= sc->intr_errsts[sc->intr_err_ptr1];
+  unsigned int		intr_status= sc->if_errsts[sc->if_err_ptr1];
 
   /* read and reset the status; because this is written
    * by the ISR, we must disable interrupts here
@@ -1471,10 +1442,10 @@ static void GT64260eth_error(struct GTeth_softc *sc)
   else 
     printk("%s%d: Ghost interrupt ?\n",ifp->if_name,
 	   ifp->if_unit);
-  sc->intr_errsts[sc->intr_err_ptr1++]=0;  
-  sc->intr_err_ptr1 %= INTR_ERR_SIZE;   /* Till Straumann */
+  sc->if_errsts[sc->if_err_ptr1]=0;  
+  if ( (++sc->if_err_ptr1) == IF_ERR_BUFSZE) sc->if_err_ptr1=0; /* Till Straumann */
 }
-
+#endif
 
 /* The daemon does all of the work; RX, TX and cleaning up buffers/descriptors */
 static void GT64260eth_daemon(void *arg)
@@ -1483,13 +1454,6 @@ static void GT64260eth_daemon(void *arg)
   rtems_event_set	events;
   struct mbuf	*m=0;
   struct ifnet	*ifp=&sc->arpcom.ac_if;
-
-#if 0	
-  /* see comments in GT64260eth_init(); in newer versions of
-   * rtems, we hold the network semaphore at this point
-   */
-  rtems_semaphore_release(sc->daemonSync);
-#endif
 
   /* NOTE: our creator possibly holds the bsdnet_semaphore.
    *       since that has PRIORITY_INVERSION enabled, our
@@ -1548,7 +1512,9 @@ static void GT64260eth_daemon(void *arg)
        ifp->if_flags &= ~IFF_OACTIVE;
 
        /* Log errors and other uncommon events. */
-       if (events & ERR_EVENT) GT64260eth_error(sc); 
+#ifdef GT64260eth_DEBUG
+	  if (events & ERR_EVENT) GT64260eth_error(sc); 
+#endif
   } /* end for(;;) { rtems_bsdnet_event_receive() .....*/
 
   ifp->if_flags &= ~(IFF_RUNNING|IFF_OACTIVE);

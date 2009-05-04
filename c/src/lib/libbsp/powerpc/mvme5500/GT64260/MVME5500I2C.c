@@ -2,6 +2,7 @@
  *
  * Copyright (c) 2003, 2004 Brookhaven National Laboratory
  * Author:    S. Kate Feng <feng1@bnl.gov>
+ *            under the Deaprtment of Energy contract DE-AC02-98CH10886
  * All rights reserved.
  *
  * The license and distribution terms for this file may be
@@ -29,9 +30,10 @@ unchar I2cDevByteAddr(u32 devA2A1A0, unchar byteNum)
 /****************************************************************************
 * I2Cread_eeprom - read EEPROM VPD from the I2C
 */
-int I2Cread_eeprom(unchar I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,unchar *pBuff,u32 numBytes)
+int I2Cread_eeprom(unchar I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,void *pBuff,u32 numBytes)
 {
   int status=0, lastByte=0;
+  unchar *ptr=(unchar *) pBuff;
 
   switch (AddrBytes) {
     case 1:
@@ -83,12 +85,15 @@ int I2Cread_eeprom(unchar I2cBusAddr,u32 devA2A1A0,u32 AddrBytes,unchar *pBuff,u
      /* read data from device */
      for ( ; numBytes > 0; numBytes-- ) {      
        if ( numBytes == 1) lastByte=1;
-       if (GT64260TWSIread(pBuff,lastByte) == -1) return (-1);
+       if (GT64260TWSIread(ptr,lastByte) == -1) {
+	 printk("numBytes %d\n", numBytes);
+          return (-1);
+       }
 #ifdef I2C_DEBUG
-       printk("%2x ", *pBuff);
+       printk("%2x ", *ptr);
        if ( (numBytes % 20)==0 ) printk("\n");
 #endif
-       pBuff++;	
+       ptr++;	
      }
 #ifdef I2C_DEBUG
      printk("\n");

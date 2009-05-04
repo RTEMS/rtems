@@ -1,3 +1,39 @@
+2009-04-20	Kate Feng <feng1@bnl.gov>
+
+	1396/bsps
+	* pci/pci.c : Updated it to be consistent with the original pci.c
+	* written by Eric Valette.  There is no change in its function.
+	* irq/irq_init.c : set defaultIrq->next_handler to be 0 
+	* for BSP_SHARED_HANDLER_SUPPORT.
+	* network/if_1GHz/if_wm.c : fixed some bugs in the 1GHz driver.
+	* irq/BSP_irq.c : added supports for shared IRQ.
+	* pci/pci_interface.c : Enabled PCI "Read", "Read Line", and
+	"Read Multiple"
+	*  Agressive Prefetch to improve the performance of the PCI based
+	*  applications (e.g. 1GHz NIC).
+	* irq/BSP_irq.c : Replaced the irq/irq.c, and used GT_GPP_Value
+	* register to monitor the cause of the level sensitive interrupts.
+	* This unique solution solves various bugs in the 1GHz network drivers
+	* Fixed bugs in compute_pic_masks_from_prio()
+
+2009-04-20	Kate Feng <feng1@bnl.gov>
+
+	1396/bsps
+	* pci/pci.c : Updated it to be consistent with the original pci.c
+	* written by Eric Valette.  There is no change in its function.
+	* irq/irq_init.c : set defaultIrq->next_handler to be 0 
+	* for BSP_SHARED_HANDLER_SUPPORT.
+	* network/if_1GHz/if_wm.c : fixed some bugs in the 1GHz driver.
+	* irq/BSP_irq.c : added supports for shared IRQ.
+	* pci/pci_interface.c : Enabled PCI "Read", "Read Line", and
+	"Read Multiple"
+	*  Agressive Prefetch to improve the performance of the PCI based
+	*  applications (e.g. 1GHz NIC).
+	* irq/BSP_irq.c : Replaced the irq/irq.c, and used GT_GPP_Value
+	* register to monitor the cause of the level sensitive interrupts.
+	* This unique solution solves various bugs in the 1GHz network drivers
+	* Fixed bugs in compute_pic_masks_from_prio()
+	
 2007-11-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* irq/GT64260Int.c, network/if_100MHz/Makefile.am,
@@ -6,7 +42,7 @@
 2007-09-20	Kate Feng <feng1@bnl.gov>
 
 	* network/if_100MHz/GT64260eth.c: Add else.
-
+   
 2007-09-19	Kate Feng <feng1@bnl.gov>
 
 	* README: Update.

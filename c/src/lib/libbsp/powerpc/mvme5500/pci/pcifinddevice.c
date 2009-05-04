@@ -7,7 +7,7 @@
  *
  * 
  * Kate Feng <feng1@bnl.gov>, modified it to support the mvme5500 board.
- * 
+ * Under the Deaprtment of Energy contract DE-AC02-98CH10886.
  */
 
 #define PCI_INVALID_VENDORDEVICEID	0xffffffff

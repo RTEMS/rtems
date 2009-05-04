@@ -1,5 +1,9 @@
 /*
  *  $Id$
+ * 
+ *  Copyright 2003  S. Kate Feng <feng1@bnl.gov>,
+ *            NSLS, Brookhaven National Laboratory. All rights reserved.
+ *            under the Deaprtment of Energy contract DE-AC02-98CH10886
  */
 
 #ifndef __GT64260TWSI_h

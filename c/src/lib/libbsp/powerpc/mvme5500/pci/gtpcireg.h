@@ -46,7 +46,7 @@
 
 #define PCI_IO_BASE_ADDR  PCI_BASE_ADDRESS_5
 
-#define  PCI_STATUS_CLRERR_MASK 0xf9000000 /* <SKF> */
+#define  PCI_STATUS_CLRERR_MASK 0xf900 /* <SKF> */
 
 #define PCI_BARE_IntMemEn     0x200
 

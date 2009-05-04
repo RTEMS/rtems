@@ -190,7 +190,7 @@
 #define GT_MPP_Control2			0xf008
 #define GT_MPP_Control3			0xf00c
 
-/* <skf> added */
+/* <skf> added for GT64260 */
 #define GT_MPP_SerialPortMultiplex      0xf010
 
 #define	GT_GPP_IO_Control		0xf100
@@ -790,13 +790,25 @@
 #define TWSI_SFT_RST		0xc01c
 
 /* Interrupt Controller - Interrupt Controller Registers */
+/* <skf> added for GT64360 */
+
+#define GT64360_MAIN_INT_CAUSE_LO	0x004 /* read Only */
+#define GT64360_MAIN_INT_CAUSE_HI       0x00c /* read Only */
+#define GT64360_CPU0_INT_MASK_LO 	0x014
+#define GT64360_CPU0_INT_MASK_HI	0x01c
+#define GT64360_CPU0_SEL_CAUSE	        0x024 /* read Only */
+
+#define GT64360_CPU1_INT_MASK_LO 	0x034
+#define GT64360_CPU1_INT_MASK_HI	0x03c
+#define GT64360_CPU1_SEL_CAUSE	        0x044 /* read Only */
+
 /* Section 25.2 : Table 734 <skf> */
 
-#define GT_MAIN_INT_CAUSE_LO	0xc18 /* read Only */
-#define GT_MAIN_INT_CAUSE_HI   0xc68 /* read Only */
-#define GT_CPU_INT_MASK_LO 	0xc1c
-#define GT_CPU_INT_MASK_HI	0xc6c
-#define GT_CPU_SEL_CAUSE	0xc70 /* read Only */
+#define GT64260_MAIN_INT_CAUSE_LO	0xc18 /* read Only */
+#define GT64260_MAIN_INT_CAUSE_HI       0xc68 /* read Only */
+#define GT64260_CPU_INT_MASK_LO 	0xc1c
+#define GT64260_CPU_INT_MASK_HI	        0xc6c
+#define GT64260_CPU_SEL_CAUSE	0xc70 /* read Only */
 #define GT_PCI0_INT_MASK_LO	0xc24
 #define GT_PCI0_INT_MASK_HI	0xc64
 #define GT_PCI0_SEL_CAUSE	0xc74 /* read Only */

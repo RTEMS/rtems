@@ -35,7 +35,8 @@ startup_rel_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/gnatinstallhandler.c startup/reboot.c
+    ../../shared/gnatinstallhandler.c startup/reboot.c \
+    ../../powerpc/shared/startup/probeMemEnd.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -68,8 +69,8 @@ pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_bsp_HEADERS += irq/irq.h
 
 noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq_init.c irq/irq.c \
-    ../../powerpc/shared/irq/irq_asm.S
+irq_rel_SOURCES = irq/irq_init.c irq/BSP_irq.c \
+   ../../powerpc/shared/irq/irq.c ../../powerpc/shared/irq/irq_asm.S
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -108,8 +109,9 @@ include_bsp_HEADERS += network/if_100MHz/GT64260eth.h \
 
 network_CPPFLAGS = -D_KERNEL
 noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/if_100MHz/GT64260eth.c \
-    network/if_1GHz/if_wm.c network/if_1GHz/pci_map.c
+network_rel_SOURCES = network/if_100MHz/GT64260eth.c network/if_1GHz/if_wm.c \
+	network/if_1GHz/pci_map.c
+
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -123,8 +125,8 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/VME.h vme/VMEConfig.h \
 
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c\
-	../shared/vme/vmeconfig.c ../../shared/vmeUniverse/bspVmeDmaList.c\
-	../shared/vme/vme_universe.c ../shared/vme/vme_universe_dma.c
+	vme/vmeconfig.c ../../shared/vmeUniverse/bspVmeDmaList.c\
+	../shared/vme/vme_universe_dma.c
 
 vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
