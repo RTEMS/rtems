@@ -167,7 +167,6 @@ void getRealTime(
   rtems_time_of_day *tod
 )
 {
-
   if (!RTC_Present)
     return;
 
@@ -186,15 +185,10 @@ void getRealTime(
  *
  *  Return values: NONE
  */
-
-/* XXX this routine should be part of the public RTEMS interface */
-extern bool _TOD_Validate( rtems_time_of_day *tod );
-
 int setRealTime(
   rtems_time_of_day *tod
 )
 {
-
   if (!RTC_Present)
     return -1;
 
@@ -219,10 +213,6 @@ int setRealTime(
  *  Return values:
  *    int   The differance between the real time clock and rtems time.
  */
-
-/* XXX this routine should be part of the public RTEMS interface */
-uint32_t   _TOD_To_seconds( rtems_time_of_day *tod );
-
 int checkRealTime(void)
 {
   rtems_time_of_day rtems_tod;

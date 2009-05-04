@@ -1,3 +1,7 @@
+2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* tod.c: Remove warnings and clean up.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* bootcard.c, include/bootcard.h: Remove argc/argv/envp and
