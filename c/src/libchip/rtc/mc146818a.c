@@ -134,8 +134,8 @@ int mc146818a_get_time(
  * Set time into chip
  */
 int mc146818a_set_time(
-  int                minor,
-  rtems_time_of_day *time
+  int                      minor,
+  const rtems_time_of_day *time
 )
 {
   uint32_t     mc146818a;
