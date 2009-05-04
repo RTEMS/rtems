@@ -45,12 +45,7 @@ TEST_EXTERN rtems_id   Region_id[ 2 ];    /* array of region ids */
 TEST_EXTERN rtems_name Region_name[ 2 ];  /* array of region names */
 
 /* test will fail... segment sizes need to be reworked for <=32K buffer */
-#if defined(__m32c__)
-#warning "Address size type of regions"
-TEST_EXTERN uint8_t   Area_1[32000]  CPU_STRUCTURE_ALIGNMENT;
-#else
-TEST_EXTERN uint8_t   Area_1[64000]  CPU_STRUCTURE_ALIGNMENT;
-#endif
+TEST_EXTERN uint8_t   Area_1[20*1024]  CPU_STRUCTURE_ALIGNMENT;
 
 #define BASE_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2) + 1)
 

@@ -1,5 +1,10 @@
 2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp25/init.c, sp25/system.h, sp25/task1.c: Reduce size of array from
+	64k to 20k. No impact on test behavior.
+
+2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp09/screen12.c, sp25/task1.c: Remove warnigns for wrong types.
 
 2009-04-20	Santosh G Vattam <vattam.santosh@gmail.com>
