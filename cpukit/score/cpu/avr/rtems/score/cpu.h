@@ -75,7 +75,7 @@ extern "C" {
  *  XXX document implementation including references if appropriate
  */
 
-#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
+#define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
 
 /*
  *  Does RTEMS manage a dedicated interrupt stack in software?
@@ -532,6 +532,11 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #define CPU_STACK_MINIMUM_SIZE          512
+
+/*
+ *  Maximum priority of a thread. Note based from 0 which is the idle task.
+ */
+#define CPU_PRIORITY_MAXIMUM             15
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
