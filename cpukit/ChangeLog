@@ -12,7 +12,7 @@
 	libmisc/uuid/unparse.c, libmisc/uuid/uuidd.h, libmisc/uuid/uuid.h,
 	libmisc/uuid/uuidP.h, libmisc/uuid/uuid_time.c: New files.
 	* Makefile.am, preinstall.am, libblock/Makefile.am,
-	libmisc/Makefile.am: Update.
+	libmisc/Makefile.am, wrapup/Makefile.am: Update.
 	* libblock/include/rtems/bdpart.h, libblock/src/bdpart.c,
 	libmisc/shell/fdisk.c: New files.
 	* libmisc/shell/shellconfig.h: Added FDISK command.
