@@ -66,7 +66,7 @@ typedef struct {
   /** This field is the physical starting address of the Partition. */
   void               *starting_address;
   /** This field is the size of the Partition in bytes. */
-  uint32_t            length;
+  intptr_t            length;
   /** This field is the size of each buffer in bytes */
   uint32_t            buffer_size;
   /** This field is the attribute set provided at create time. */

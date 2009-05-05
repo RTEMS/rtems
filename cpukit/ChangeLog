@@ -1,5 +1,10 @@
 2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* rtems/include/rtems/rtems/part.h,
+	rtems/inline/rtems/rtems/region.inl: Fix warnings.
+
+2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/include/rtems/score/heap.h,
 	score/inline/rtems/score/address.inl,
 	score/inline/rtems/score/heap.inl,

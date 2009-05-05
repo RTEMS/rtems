@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Get (
  */
 RTEMS_INLINE_ROUTINE void *_Region_Allocate_segment (
   Region_Control *the_region,
-  uint32_t        size
+  intptr_t        size
 )
 {
    return _Heap_Allocate( &the_region->Memory, size );
