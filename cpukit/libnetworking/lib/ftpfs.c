@@ -34,7 +34,6 @@
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <inttypes.h>
 #include <malloc.h>
 #include <netdb.h>
 #include <stdarg.h>
@@ -44,6 +43,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 
@@ -438,7 +438,7 @@ static socklen_t rtems_ftpfs_create_address(
   return sizeof( *sa);
 }
 
-static int rtems_ftpfs_terminate( rtems_libio_t *iop)
+static int rtems_ftpfs_terminate( rtems_libio_t *iop, bool error)
 {
   int eno = 0;
   int rv = 0;
@@ -448,12 +448,16 @@ static int rtems_ftpfs_terminate( rtems_libio_t *iop)
     /* Close data connection if necessary */
     if (e->data_socket >= 0) {
       rv = close( e->data_socket);
-      if (rv < 0) {
-        eno = errno;
+      if (rv != 0) {
+        eno = EIO;
       }
 
       /* For write connections we have to obtain the transfer reply  */
-      if ((iop->flags & LIBIO_FLAGS_WRITE) != 0 && e->ctrl_socket >= 0) {
+      if (
+        e->ctrl_socket >= 0
+          && (iop->flags & LIBIO_FLAGS_WRITE) != 0
+          && !error
+      ) {
         rtems_ftpfs_reply reply =
           rtems_ftpfs_get_reply( e->ctrl_socket, NULL, NULL);
 
@@ -466,8 +470,8 @@ static int rtems_ftpfs_terminate( rtems_libio_t *iop)
     /* Close control connection if necessary */
     if (e->ctrl_socket >= 0) {
       rv = close( e->ctrl_socket);
-      if (rv < 0) {
-        eno = errno;
+      if (rv != 0) {
+        eno = EIO;
       }
     }
 
@@ -585,6 +589,11 @@ static int rtems_ftpfs_open_data_connection_active(
   int port_socket = -1;
   char port_command [] = "PORT 000,000,000,000,000,000";
   uint16_t data_port = 0;
+  fd_set fds;
+  struct timeval timeout = {
+    .tv_sec = 60,
+    .tv_usec = 0
+  };
 
   /* Create port socket to establish a data data connection */
   port_socket = socket( AF_INET, SOCK_STREAM, 0);
@@ -622,13 +631,13 @@ static int rtems_ftpfs_open_data_connection_active(
   snprintf(
     port_command,
     sizeof( port_command),
-    "PORT %" PRIu32 ",%" PRIu32 ",%" PRIu32 ",%" PRIu32 ",%" PRIu16 ",%" PRIu16,
-    (client_address >> 24) & 0xff,
-    (client_address >> 16) & 0xff,
-    (client_address >> 8) & 0xff,
-    (client_address >> 0) & 0xff,
-    (data_port >> 8) & 0xff,
-    (data_port >> 0) & 0xff
+    "PORT %lu,%lu,%lu,%lu,%lu,%lu",
+    (client_address >> 24) & 0xffUL,
+    (client_address >> 16) & 0xffUL,
+    (client_address >> 8) & 0xffUL,
+    (client_address >> 0) & 0xffUL,
+    (data_port >> 8) & 0xffUL,
+    (data_port >> 0) & 0xffUL
   );
   reply = rtems_ftpfs_send_command( e->ctrl_socket, port_command, NULL);
   if (reply != RTEMS_FTPFS_REPLY_2) {
@@ -650,11 +659,16 @@ static int rtems_ftpfs_open_data_connection_active(
     goto cleanup;
   }
 
-  /*
-   * Wait for connect on data connection.
-   *
-   * FIXME: This should become a select instead with a timeout.
-   */
+  /* Wait for connect on data connection  */
+  FD_ZERO( &fds);
+  FD_SET( port_socket, &fds);
+  rv = select( port_socket + 1, &fds, NULL, NULL, &timeout);
+  if (rv <= 0) {
+    eno = EIO;
+    goto cleanup;
+  }
+
+  /* Accept data connection  */
   size = sizeof( sa);
   e->data_socket = accept(
     port_socket,
@@ -666,13 +680,14 @@ static int rtems_ftpfs_open_data_connection_active(
     goto cleanup;
   }
 
-  /* FIXME: Check, that server data address is really from our server  */
-
 cleanup:
 
   /* Close port socket if necessary */
   if (port_socket >= 0) {
-    close( port_socket);
+    rv = close( port_socket);
+    if (rv != 0) {
+      eno = EIO;
+    }
   }
 
   return eno;
@@ -902,7 +917,7 @@ cleanup:
     return 0;
   } else {
     /* Free all resources if an error occured */
-    rtems_ftpfs_terminate( iop);
+    rtems_ftpfs_terminate( iop, true);
 
     rtems_set_errno_and_return_minus_one( eno);
   }
@@ -976,7 +991,7 @@ static ssize_t rtems_ftpfs_write(
 
 static int rtems_ftpfs_close( rtems_libio_t *iop)
 {
-  int eno = rtems_ftpfs_terminate( iop);
+  int eno = rtems_ftpfs_terminate( iop, false);
 
   if (eno == 0) {
     return 0;
@@ -1060,6 +1075,7 @@ static int rtems_ftpfs_fstat(
 
   /* FIXME */
   st->st_ino = ++ino;
+  st->st_dev = rtems_filesystem_make_dev_t( 0xcc494cd6U, 0x1d970b4dU);
 
   st->st_mode = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
 
