@@ -13,11 +13,6 @@
  *  Micro-Research Finland Oy
  */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-	
 #include "bspopts.h"
 
      .section .boot,"a",@progbits

@@ -1,3 +1,7 @@
+2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/start/start.S: Confirmed OK by mwalle.
+
 2009-05-05	Michael Walle <michael@walle.cc>
 
 	* shared/gdbstub/README, shared/gdbstub/gdb_if.h,
