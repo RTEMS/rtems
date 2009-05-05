@@ -231,7 +231,8 @@ extern int ppc_get_exception_config (rtems_raw_except_global_settings** config);
 void* ppc_get_vector_addr(rtems_vector vector);
 
 int ppc_is_e500();
-void e500_setup_raw_exceptions();
+void e200_setup_raw_exceptions(void);
+void e500_setup_raw_exceptions(void);
 
 /* This variable is initialized to 'TRUE' by default;
  * BSPs which have their vectors in ROM should set it

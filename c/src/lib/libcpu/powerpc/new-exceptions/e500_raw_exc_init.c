@@ -38,7 +38,7 @@ e500_setup_raw_exceptions(void)
 	MTIVOR(35, ppc_get_vector_addr(ASM_60X_PERFMON_VECTOR));
 }
 
-void e200_setup_raw_exceptions()
+void e200_setup_raw_exceptions(void)
 {
 	if (current_ppc_cpu != PPC_e200z6) {
 		return;

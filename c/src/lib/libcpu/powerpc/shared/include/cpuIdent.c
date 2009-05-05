@@ -70,7 +70,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
   return "UNKNOWN";
 }
 
-ppc_cpu_id_t get_ppc_cpu_type()
+ppc_cpu_id_t get_ppc_cpu_type(void)
 {
   unsigned int pvr;
 
@@ -185,7 +185,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
   return current_ppc_cpu;
 }
 
-ppc_cpu_revision_t get_ppc_cpu_revision()
+ppc_cpu_revision_t get_ppc_cpu_revision(void)
 {
   ppc_cpu_revision_t rev = (ppc_cpu_revision_t) (_read_PVR() & 0xffff);
   current_ppc_revision = rev;
