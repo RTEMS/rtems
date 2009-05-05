@@ -1,4 +1,4 @@
 Makefile
 Makefile.in
-*.spec
+rtems*.spec
 *.spec.in
