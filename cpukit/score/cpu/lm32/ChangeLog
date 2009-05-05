@@ -1,3 +1,7 @@
+2009-05-05	Michael Walle <michael@walle.cc>
+
+	* cpu_asm.S, irq.c, rtems/score/cpu.h: Add lm32 gdb stub support.
+
 2009-04-14	Michael Walle <michael@walle.cc>
 
 	* cpu.h: corrected the registers in Context_Control and

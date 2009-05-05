@@ -54,6 +54,21 @@ _CPU_Context_switch:
     sw      (r1+72), ra
     rcsr    r3, IE
     sw      (r1+76), r3
+    .extern _exception_stack_frame
+    mvhi    r3, hi(_exception_stack_frame)
+    ori     r3, r3, lo(_exception_stack_frame)
+    lw      r4, (r3+0)
+    be      r4, r0, 2f
+1:
+    lw      r5, (r4+44)
+    sw      (r3+0), r0
+    bi      3f
+2:
+    mvhi    r5, hi(_Thread_Dispatch)
+    ori     r5, r5, lo(_Thread_Dispatch)
+3:
+    sw      (r1+80), r5
+
 _CPU_Context_switch_restore:
     lw      r11, (r2+0)   /* r2 is the second argument */
     lw      r12, (r2+4)

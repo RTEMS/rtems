@@ -482,6 +482,7 @@ typedef struct {
   uint32_t sp;
   uint32_t ra;
   uint32_t ie;
+  uint32_t epc;
 } Context_Control;
 
 /**

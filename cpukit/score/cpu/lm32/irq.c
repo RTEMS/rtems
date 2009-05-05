@@ -28,11 +28,14 @@
   unsigned long    *_old_stack_ptr;
 #endif
 
+unsigned long *_exception_stack_frame;
+
 register unsigned long  *stack_ptr asm("sp");
 
 void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 {
   register uint32_t   level;
+  _exception_stack_frame = NULL;
 
   /* Interrupts are disabled upon entry to this Handler */
 
@@ -77,7 +80,15 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 
   if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
     _ISR_Signals_to_thread_executing = FALSE;
+
+    /* save off our stack frame so the context switcher can get to it */
+    _exception_stack_frame = ifr;
+
     _Thread_Dispatch();
+
+    /* and make sure its clear in case we didn't dispatch. if we did, its
+     * already cleared */
+    _exception_stack_frame = NULL;
   }
 }
 
