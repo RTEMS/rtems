@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	5%{?dist}
+Release:      	6%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -133,7 +133,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-38%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-39%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -150,7 +150,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.3-rtems4.10-200
 %endif
 %if "%{gcc_version}" == "4.4.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090421.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090505.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
@@ -464,7 +464,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-38%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-39%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -523,7 +523,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        38%{?dist}
+Release:        39%{?dist}
 
 
 %description -n rtems-4.10-m32c-rtems4.10-newlib
