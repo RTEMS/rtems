@@ -85,7 +85,8 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/err.c shell/errx.c shell/verr.c shell/vis.c \
     shell/verrx.c shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \
     shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c \
-    shell/shell_script.c shell/login_prompt.c shell/login_check.c
+    shell/shell_script.c shell/login_prompt.c shell/login_check.c \
+    shell/fdisk.c
 if LIBNETWORKING
 libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_tftp.c \
     shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c \
@@ -124,6 +125,21 @@ noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h
 
 EXTRA_DIST += fsmount/README
+
+## uuid
+noinst_LIBRARIES += libuuid.a
+libuuid_a_SOURCES = uuid/clear.c \
+	uuid/compare.c \
+	uuid/copy.c \
+	uuid/gen_uuid.c \
+	uuid/isnull.c \
+	uuid/pack.c \
+	uuid/parse.c \
+	uuid/unpack.c \
+	uuid/unparse.c \
+	uuid/uuid_time.c \
+	uuid/uuidd.h \
+	uuid/uuidP.h
 
 ## ---
 include $(srcdir)/preinstall.am

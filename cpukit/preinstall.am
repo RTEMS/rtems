@@ -41,6 +41,15 @@ $(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h: include/rtems/bsd/sys/cdefs.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsd/sys/cdefs.h
 
+$(PROJECT_INCLUDE)/uuid/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/uuid
+	@: > $(PROJECT_INCLUDE)/uuid/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/uuid/$(dirstamp)
+
+$(PROJECT_INCLUDE)/uuid/uuid.h: libmisc/uuid/uuid.h $(PROJECT_INCLUDE)/uuid/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uuid/uuid.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/uuid/uuid.h
+
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
@@ -191,6 +200,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h
 $(PROJECT_INCLUDE)/rtems/ide_part_table.h: libblock/include/rtems/ide_part_table.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h
+
+$(PROJECT_INCLUDE)/rtems/bdpart.h: libblock/include/rtems/bdpart.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdpart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdpart.h
 endif
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)

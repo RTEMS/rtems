@@ -44,6 +44,9 @@ include_rtems_bsd_sysdir = $(include_rtemsdir)/bsd/sys
 include_rtems_bsd_sys_HEADERS = include/rtems/bsd/sys/queue.h
 include_rtems_bsd_sys_HEADERS += include/rtems/bsd/sys/cdefs.h
 
+include_uuiddir = $(includedir)/uuid
+include_uuid_HEADERS = libmisc/uuid/uuid.h
+
 if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
@@ -96,7 +99,8 @@ include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
     libblock/include/rtems/blkdev.h libblock/include/rtems/diskdevs.h \
     libblock/include/rtems/flashdisk.h libblock/include/rtems/ramdisk.h \
     libblock/include/rtems/nvdisk.h libblock/include/rtems/nvdisk-sram.h \
-    libblock/include/rtems/ide_part_table.h
+    libblock/include/rtems/ide_part_table.h \
+    libblock/include/rtems/bdpart.h
 endif
 
 ## ftpd
