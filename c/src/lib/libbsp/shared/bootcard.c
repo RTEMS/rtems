@@ -153,7 +153,11 @@ int boot_card(
                     &heap_start, (ssize_t*) &heap_size);
 
   if ( work_area_size <= Configuration.work_space_size ) {
-    printk( "bootcard: Work space too big for work area!\n");
+    printk(
+      "bootcard: Work space too big for work area! (%d > %d)\n",
+      Configuration.work_space_size,
+      work_area_size
+    );
     bsp_cleanup();
     return -1;
   }

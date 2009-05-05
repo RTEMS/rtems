@@ -1,3 +1,8 @@
+2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bootcard.c, gdbstub/rtems-stub-glue.c: Add info to not enough memory
+	message.
+
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tod.c: Remove warnings and clean up.

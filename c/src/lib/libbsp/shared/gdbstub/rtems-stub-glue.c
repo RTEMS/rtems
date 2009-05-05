@@ -335,7 +335,7 @@ int rtems_gdb_stub_get_thread_info(
       tmp_buf[8] = 0;
 
       strcat(info->display, tmp_buf);
-      rtems_object_get_name( thread, 5, info->name );
+      rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
       info->more_display[0] = 0; /* Nothing */
 
       return 1;
@@ -367,7 +367,7 @@ int rtems_gdb_stub_get_thread_info(
    tmp_buf[8] = 0;
 
    strcat(info->display, tmp_buf);
-   rtems_object_get_name( thread, 5, info->name );
+   rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
    info->more_display[0] = 0; /* Nothing */
 
    return 1;
@@ -1352,6 +1352,52 @@ int rtems_gdb_stub_get_offsets(
   *data_addr = &_fdata;
   *bss_addr  = &_bss_start;
 */
+  *text_addr = 0;
+  *data_addr = 0;
+  *bss_addr  = 0;
+  return 1;
+}
+
+#elif defined(__lm32__)
+
+void rtems_gdb_stub_get_registers_from_context(
+  unsigned int   *registers,
+  Thread_Control *th
+)
+{
+  registers[LM32_REG_R11] = (uint32_t)th->Registers.r11;
+  registers[LM32_REG_R12] = (uint32_t)th->Registers.r12;
+  registers[LM32_REG_R13] = (uint32_t)th->Registers.r13;
+  registers[LM32_REG_R14] = (uint32_t)th->Registers.r14;
+  registers[LM32_REG_R15] = (uint32_t)th->Registers.r15;
+  registers[LM32_REG_R16] = (uint32_t)th->Registers.r16;
+  registers[LM32_REG_R17] = (uint32_t)th->Registers.r17;
+  registers[LM32_REG_R18] = (uint32_t)th->Registers.r18;
+  registers[LM32_REG_R19] = (uint32_t)th->Registers.r19;
+  registers[LM32_REG_R20] = (uint32_t)th->Registers.r20;
+  registers[LM32_REG_R21] = (uint32_t)th->Registers.r21;
+  registers[LM32_REG_R22] = (uint32_t)th->Registers.r22;
+  registers[LM32_REG_R23] = (uint32_t)th->Registers.r23;
+  registers[LM32_REG_R24] = (uint32_t)th->Registers.r24;
+  registers[LM32_REG_R25] = (uint32_t)th->Registers.r25;
+  registers[LM32_REG_GP] = (uint32_t)th->Registers.gp;
+  registers[LM32_REG_FP] = (uint32_t)th->Registers.fp;
+  registers[LM32_REG_SP] = (uint32_t)th->Registers.sp;
+  registers[LM32_REG_RA] = (uint32_t)th->Registers.ra;
+  registers[LM32_REG_IE] = (uint32_t)th->Registers.ie;
+#if 1
+  registers[LM32_REG_PC] = (uint32_t)th->Registers.epc;
+#else
+  registers[LM32_REG_PC] = (uint32_t)_CPU_Context_switch;
+#endif
+}
+
+int rtems_gdb_stub_get_offsets(
+  unsigned char **text_addr,
+  unsigned char **data_addr,
+  unsigned char **bss_addr
+)
+{
   *text_addr = 0;
   *data_addr = 0;
   *bss_addr  = 0;
