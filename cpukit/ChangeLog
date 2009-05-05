@@ -1,3 +1,30 @@
+2009-05-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/rtems/endian.h:
+	Added functions to translate integers to/from byte streams.
+	* libnetworking/lib/ftpfs.c: Added timeout for active data connection
+	accept.  Return EIO for close() errors.  Changed PORT format string.
+	Fixed connection termination after store errors on passive connections.
+	Added magic device identifier for stat().
+	* libmisc/uuid/clear.c, libmisc/uuid/compare.c, libmisc/uuid/copy.c,
+	libmisc/uuid/COPYING, libmisc/uuid/gen_uuid.c, libmisc/uuid/isnull.c,
+	libmisc/uuid/pack.c, libmisc/uuid/parse.c, libmisc/uuid/unpack.c,
+	libmisc/uuid/unparse.c, libmisc/uuid/uuidd.h, libmisc/uuid/uuid.h,
+	libmisc/uuid/uuidP.h, libmisc/uuid/uuid_time.c: New files.
+	* Makefile.am, preinstall.am, libblock/Makefile.am,
+	libmisc/Makefile.am: Update.
+	* libblock/include/rtems/bdpart.h, libblock/src/bdpart.c,
+	libmisc/shell/fdisk.c: New files.
+	* libmisc/shell/shellconfig.h: Added FDISK command.
+	* libblock/include/rtems/blkdev.h, libblock/include/rtems/diskdevs.h:
+	Documentation.
+	* libblock/include/rtems/ramdisk.h, libblock/src/ramdisk.c,
+	libmisc/fsmount/fsmount.c, libmisc/fsmount/fsmount.h:
+	Documentation.  Changed integer types to match block device types.
+	Added const qualifier whenever possible.  Added
+	rtems_fsmount_create_mount_point() prototype.
+	* libfs/src/dosfs/msdos_format.c: Added check for NULL.
+
 2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* telnetd/telnetd.h: Spacing.
