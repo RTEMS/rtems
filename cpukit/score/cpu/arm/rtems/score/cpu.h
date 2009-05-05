@@ -828,14 +828,14 @@ static inline uint32_t CPU_swap_u32(
 #endif
 }
 
-static inline uint16_t   CPU_swap_u16(uint16_t   value)
+static inline uint16_t CPU_swap_u16(uint16_t value)
 {
     uint16_t   lower;
     uint16_t   upper;
 
-    value = value & (uint16_t  ) 0xffff;
-    lower = (value >> 8) ;
-    upper = (value << 8) ;
+    value = value & (uint16_t) 0xffff;
+    lower = (value >> 8);
+    upper = (value << 8) & 0xff;
 
     return (lower | upper);
 }
