@@ -531,7 +531,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  XXX document implementation including references if appropriate
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          512
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
@@ -542,7 +542,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  XXX document implementation including references if appropriate
  */
 
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT              4
 
 /*
  *  This number corresponds to the byte alignment requirement for the
