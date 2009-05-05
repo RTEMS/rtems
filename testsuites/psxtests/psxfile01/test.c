@@ -135,7 +135,7 @@ int main(
 #endif
 {
   int               status;
-  int               max_size;
+  size_t            max_size;
   int               fd;
   int               i;
   struct stat       buf;
@@ -390,7 +390,7 @@ int main(
    *  triply indirect blocks.
    */
 
-  if ( max_size < 300 * 1024 ) {
+  if ( max_size < (size_t) 300 * 1024 ) {
     test_extend( "/tmp/joel", max_size - 1 );
     test_cat( "/tmp/joel", max_size / 2, 1024 );
   } else {
