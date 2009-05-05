@@ -76,7 +76,7 @@ msdos_format_printf (const msdos_format_request_param_t *rqdata,
 {
   va_list args;
   va_start (args, format);
-  if (rqdata->info_level >= info_level)
+  if (rqdata != NULL && rqdata->info_level >= info_level)
   {
     vfprintf (stdout, format, args);
     fflush (stdout);
