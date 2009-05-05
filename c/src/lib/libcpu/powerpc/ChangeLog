@@ -1,3 +1,8 @@
+2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* new-exceptions/bspsupport/irq_supp.h: Split routine to allow bsps
+	with nonstandard/non-existant pics to call with interrupts off.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit
