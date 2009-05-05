@@ -138,6 +138,17 @@ extern "C" {
   #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
 #endif
 
+/**
+ *  Instructs the compiler to issue a warning whenever a variable or function
+ *  with this attribute will be used.
+ */
+#ifdef __GNUC__
+  #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE \
+     __attribute__ ((deprecated))
+#else
+  #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE
+#endif
+
 #ifdef RTEMS_POSIX_API
 /** The following is used by the POSIX implementation to catch bad paths.  */
 int POSIX_NOT_IMPLEMENTED( void );

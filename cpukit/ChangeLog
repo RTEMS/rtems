@@ -1,5 +1,10 @@
 2009-05-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* score/include/rtems/system.h: Added
+	RTEMS_COMPILER_DEPRECATED_ATTRIBUTE define.
+
+2009-05-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* include/rtems/endian.h:
 	Added functions to translate integers to/from byte streams.
 	* libnetworking/lib/ftpfs.c: Added timeout for active data connection
