@@ -1,3 +1,8 @@
+2009-05-05	Michael Walle <michael@walle.cc>
+
+	* shared/gdbstub/README, shared/gdbstub/gdb_if.h,
+	shared/gdbstub/lm32-debug.S, shared/gdbstub/lm32-stub.c: New files.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* shared/start/start.S: Update for boot_card command line change.
