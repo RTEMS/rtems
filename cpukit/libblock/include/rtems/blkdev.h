@@ -26,7 +26,8 @@ extern "C" {
  *
  * @ingroup rtems_libblock
  *
- * Interface between device drivers and the block device library.
+ * Interface between device drivers and the
+ * @ref rtems_bdbuf "block device buffer module". 
  *
  * The heart of the block device driver is the @ref RTEMS_BLKIO_REQUEST IO
  * control. This call puts IO @ref rtems_blkdev_request "requests" to the block
@@ -97,7 +98,7 @@ typedef struct rtems_blkdev_sg_buffer {
 } rtems_blkdev_sg_buffer;
 
 /**
- * The block device dequest structure is used to read or write a number of
+ * The block device request structure is used to read or write a number of
  * blocks from or to the device.
  */
 typedef struct rtems_blkdev_request {

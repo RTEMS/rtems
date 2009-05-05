@@ -36,12 +36,13 @@ extern "C" {
  *
  * @ingroup rtems_libblock
  *
- * This module provides functions to manage disk devices.  The disk devices are
- * accessed via the RTEMS block device library.  A disk is a set of blocks
- * which are identified by a consecutive set of non-negative integers starting
- * at zero.  There are also logical disks which contain a subset of consecutive
- * disk blocks.  The logical disks are used to represent the partitions of a
- * disk.
+ * This module provides functions to manage disk devices.
+ *
+ * A disk is a set of blocks which are identified by a consecutive set of
+ * non-negative integers starting at zero.  There are also logical disks which
+ * contain a subset of consecutive disk blocks.  The logical disks are used to
+ * represent the partitions of a disk.  The disk devices are accessed via the
+ * @ref rtems_bdbuf "block device buffer module". 
  *
  * @{
  */
