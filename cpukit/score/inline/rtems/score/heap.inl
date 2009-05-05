@@ -376,11 +376,11 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in (
  *  @return This method returns the total amount of memory
  *          allocated to the heap.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Heap_Get_size (
+RTEMS_INLINE_ROUTINE int32_t _Heap_Get_size (
   Heap_Control *the_heap
 )
 {
-  return the_heap->end - the_heap->begin;
+  return _Addresses_Subtract( the_heap->end, the_heap->begin );
 }
 
 /**@}*/

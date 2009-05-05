@@ -100,7 +100,7 @@ struct Heap_Block_struct {
  *  to store the flag.
  */
 
-#define HEAP_PREV_USED    1     /* indicates previous block is in use */
+#define HEAP_PREV_USED    1u    /* indicates previous block is in use */
 
 /**
  *  The following constants reflect various requirements of the

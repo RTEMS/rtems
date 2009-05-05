@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
  *  @note  The cast of an address to an uint32_t makes this code
  *         dependent on an addresses being thirty two bits.
  */
-RTEMS_INLINE_ROUTINE uint32_t   _Addresses_Subtract (
+RTEMS_INLINE_ROUTINE int32_t _Addresses_Subtract (
   void *left,
   void *right
 )

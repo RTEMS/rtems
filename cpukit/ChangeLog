@@ -1,3 +1,12 @@
+2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/heap.h,
+	score/inline/rtems/score/address.inl,
+	score/inline/rtems/score/heap.inl,
+	score/inline/rtems/score/object.inl,
+	score/inline/rtems/score/priority.inl,
+	score/inline/rtems/score/tod.inl: Remove warnings.
+
 2009-05-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* score/include/rtems/system.h: Added

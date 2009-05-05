@@ -107,7 +107,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
  *
  *  @return This method returns the class portion of the specified object ID.
  */
-RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_index(
+RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
   Objects_Id id
 )
 {

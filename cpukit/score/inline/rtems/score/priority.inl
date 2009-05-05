@@ -93,7 +93,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Mask (
   uint32_t   bit_number
 )
 {
-  return (0x8000 >> bit_number);
+  return (0x8000u >> bit_number);
 }
  
  
