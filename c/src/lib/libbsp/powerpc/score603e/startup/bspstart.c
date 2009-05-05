@@ -1,14 +1,15 @@
-/*
+/*  bspstart.c
+ *
  *  This set of routines starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
@@ -17,10 +18,12 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <rtems/bspIo.h>
 #include <rtems/libio.h>
+#include <rtems/libcsupport.h>
+#include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
-#define DEBUG 1
+
+#define DEBUG 0
 
 /*
  * Where the heap starts; is used by bsp_pretasking_hook;
@@ -28,32 +31,32 @@
 unsigned int BSP_heap_start;
 
 /*
- * Total RAM available and associated linker symbol
- */
-unsigned int BSP_mem_size;
-extern char  RamSize[];
-
-/*
  * PCI Bus Frequency
  */
-unsigned int BSP_bus_frequency;  /* XXX - Set this based upon the Score board */
+unsigned int BSP_bus_frequency;  
 
 /*
  * processor clock frequency
  */
-unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score board */
+unsigned int BSP_processor_frequency; 
 
 /*
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor = 4000;
 
-extern unsigned long __rtems_end[];
-
 /*
  *  Driver configuration parameters
  */
 uint32_t   bsp_clicks_per_usec;
+
+/*
+ * Memory on this board.
+ */
+extern char RamSize[];
+uint32_t BSP_mem_size;
+
+extern unsigned long __rtems_end[];
 
 void BSP_panic(char *s)
 {
@@ -68,16 +71,30 @@ void _BSP_Fatal_error(unsigned int v)
 }
 
 /*
+ *  Use the shared implementations of the following routines
+ */
+
+void bsp_libc_init( void *, uint32_t, int );
+
+/*PAGE
+ *
  *  bsp_predriver_hook
  *
  *  Before drivers are setup initialize interupt vectors.
  */
 
-void init_RTC();
-void initialize_PMC();
+void init_RTC(void);
+void initialize_PMC(void);
 
 void bsp_predriver_hook(void)
 {
+  init_PCI();
+  initialize_universe();
+
+  #if DEBUG
+    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
+  #endif
+  initialize_PCI_bridge ();
 
 #if (HAS_PMC_PSC8)
   #if DEBUG
@@ -97,7 +114,7 @@ void bsp_predriver_hook(void)
  *  initialize_PMC
  */
 
-void initialize_PMC() {
+void initialize_PMC(void) {
   volatile uint32_t     *PMC_addr;
   uint32_t               data;
 
@@ -131,37 +148,6 @@ void initialize_PMC() {
 
 /*PAGE
  *
- *  bsp_postdriver_hook
- *
- *  Standard post driver hook plus some BSP specific stuff.
- */
-
-void bsp_postdriver_hook(void)
-{
-  extern void Init_EE_mask_init(void);
-  extern void open_dev_console(void);
-
-  #if DEBUG
-    printk("bsp_postdriver_hook: initialize libio\n");
-  #endif
-  if (rtems_libio_supp_helper)
-    (*rtems_libio_supp_helper)();
-  ShowBATS();
-
-  #if DEBUG
-    printk("bsp_postdriver_hook: Init_EE_mask_init\n");
-  #endif
-  Init_EE_mask_init();
-  ShowBATS();
-  #if DEBUG
-    printk("bsp_postdriver_hook: Finished procedure\n");
-  #endif
-}
-
-void bsp_set_trap_vectors( void );
-
-/*PAGE
- *
  *  bsp_start
  *
  *  This routine does the bulk of the system initialization.
@@ -169,13 +155,14 @@ void bsp_set_trap_vectors( void );
 
 void bsp_start( void )
 {
+  unsigned char        *work_space_start;
   unsigned int         msr_value = 0x0000;
   uint32_t             intrStackStart;
   uint32_t             intrStackSize;
-  volatile uint32_t   *ptr;
+  volatile uint32_t    *ptr;
   ppc_cpu_id_t         myCpu;
   ppc_cpu_revision_t   myCpuRevision;
- 
+
   rtems_bsp_delay( 1000 );
 
   /*
@@ -184,12 +171,6 @@ void bsp_start( void )
   #if DEBUG
     printk("bsp_start: Zero out lots of memory\n");
   #endif
-
-  memset(
-    &end,
-    0,
-    (unsigned char *)&RAM_END - (unsigned char *) &end
-  );
 
   BSP_processor_frequency = 266000000;
   BSP_bus_frequency       =  66000000;
@@ -209,9 +190,13 @@ void bsp_start( void )
    */
   intrStackStart = (uint32_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
+  printk("Interrupt Stack Start: 0x%x Size: 0x%x  Heap Start: 0x%x\n",
+    intrStackStart, intrStackSize, BSP_heap_start
+  );
 
-  BSP_heap_start = intrStackStart + intrStackSize;
-  BSP_mem_size = (uintptr_t) RamSize;
+  BSP_mem_size = RamSize;
+  printk("BSP_mem_size: 0x%x\n", BSP_mem_size );
+ 
 
   /*
    * Initialize default raw exception handlers.
@@ -221,24 +206,10 @@ void bsp_start( void )
     intrStackStart,
     intrStackSize
   );
-  #if DEBUG
-    printk("bsp_predriver_hook: init_RTC\n");
-  #endif
-
-/*   init_RTC(); */
-  init_PCI();
-  initialize_universe();
-
-  #if DEBUG
-    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
-  #endif
-  initialize_PCI_bridge ();
 
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
-
-
-  _CPU_MSR_SET( msr_value );
+  asm volatile("sync; isync");
 
   /*
    *  initialize the device driver parameters
@@ -246,26 +217,29 @@ void bsp_start( void )
   #if DEBUG
     printk("bsp_start: set clicks poer usec\n");
   #endif
-  bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
+  bsp_clicks_per_usec = 66 / 4;
 
-#if ( PPC_USE_DATA_CACHE )
-  #if DEBUG
-    printk("bsp_start: cache_enable\n");
+  #if ( PPC_USE_DATA_CACHE )
+    #if DEBUG
+      printk("bsp_start: cache_enable\n");
+    #endif
+    instruction_cache_enable ();
+    data_cache_enable ();
+    #if DEBUG
+      printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+    #endif
   #endif
-  instruction_cache_enable ();
-  data_cache_enable ();
-  #if DEBUG
-    printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+
+  /*
+   * Initalize RTEMS IRQ system
+   */
+  #if DEBUG  
+    printk("bspstart: Call BSP_rtems_irq_mng_init\n");
   #endif
-#endif
-
-  /* Initalize interrupt support */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    BSP_panic( "Cannot intitialize interrupt support\n");
-  }
-
+  BSP_rtems_irq_mng_init(0);
+  
   #if DEBUG
     printk("bsp_start: end BSPSTART\n");
-  ShowBATS();
+    ShowBATS();
   #endif
 }

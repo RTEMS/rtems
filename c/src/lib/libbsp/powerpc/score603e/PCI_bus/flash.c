@@ -1,8 +1,8 @@
 /*
  *
- *  COPYRIGHT (c) 1989-2008
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
- *  
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -13,9 +13,12 @@
 #include <rtems.h>
 #include <assert.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include "PCI.h"
+
 /*PAGE
  *
  *  SCORE603e_FLASH_Disable
@@ -34,7 +37,7 @@ unsigned int SCORE603e_FLASH_Disable(
   return RTEMS_SUCCESSFUL;
 }
 
-unsigned int SCORE603e_FLASH_verify_enable()
+unsigned int SCORE603e_FLASH_verify_enable( void )
 {
   volatile uint8_t         *Ctrl_Status_Register =
            (void *)SCORE603E_BOARD_CTRL_REG;
@@ -77,7 +80,7 @@ unsigned int SCORE603e_FLASH_pci_reset_reg(
   Write_pci_device_register( reg, pci_value );
   value = Read_pci_device_register(  reg );
   if (value != pci_value) {
-    printf("Error PCI %x wrote %x read %x\n", reg, pci_value, value);
+    printf("Error PCI 0x%2"PRIX8" wrote 0x%8"PRIX32" read %8"PRIX32"\n", reg, pci_value, value);
   }
   return RTEMS_SUCCESSFUL;
 }

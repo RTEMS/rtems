@@ -177,7 +177,6 @@ SECTIONS
   PROVIDE (_edata = .);
   PROVIDE (RAM_END = ADDR(.text) + 10M);
   . =  ALIGN(8) + 0x1000;
-  PROVIDE (__SBSS_START__ = .);
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
@@ -186,19 +185,19 @@ SECTIONS
     *(.gnu.linkonce.sb.*)
     PROVIDE (__sbss_end = .);
   } >RAM
-  PROVIDE (__SBSS_END__ = .);
   .bss       :
   {
     PROVIDE (__bss_start = .);
     *(.dynbss)
     *(.bss .bss* .gnu.linkonce.b*)
     *(COMMON)
-    . =  ALIGN(8) + 0x8000;
-    PROVIDE (__stack = .);
-    _end = . ;
-    __rtems_end = . ;
-    PROVIDE (end = .);
-  } >RAM
+  }  >RAM
+  . = ALIGN(16) + 0x8000;
+  PROVIDE (__stack = .);
+  __rtems_end = . ;
+  . =  ALIGN(8) + 0x8000;
+  PROVIDE(_end = .);
+  PROVIDE(end = .);
 
   /* These are needed for ELF backends which have not yet been
      converted to the new style linker.  */

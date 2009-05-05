@@ -1,7 +1,7 @@
 /*
- *  COPYRIGHT (c) 1989-2008
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
- *  
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -229,7 +229,7 @@ void set_vme_base_address (
 /*
  * Gets the VME base address
  */
-uint32_t         get_vme_base_address ()
+uint32_t         get_vme_base_address (void)
 {
   volatile uint32_t         temp;
 
@@ -238,7 +238,7 @@ uint32_t         get_vme_base_address ()
   return (temp);
 }
 
-uint32_t         get_vme_slave_size()
+uint32_t         get_vme_slave_size(void)
 {
   volatile uint32_t         temp;
   temp  =  PCI_bus_read( &UNIVERSE->VSI0_BD);
