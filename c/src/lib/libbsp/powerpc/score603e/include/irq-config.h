@@ -4,6 +4,8 @@
  * @ingroup bsp_interrupt
  *
  * @brief BSP interrupt support configuration.
+ *
+ * $Id$
  */
 
 /*

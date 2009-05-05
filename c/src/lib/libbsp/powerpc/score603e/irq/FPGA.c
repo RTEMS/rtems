@@ -1,16 +1,17 @@
 /*  FPGA.c -- Bridge for second and subsequent generations
  *
- *  COPYRIGHT (c) 1989-2001.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
@@ -27,14 +28,13 @@ void initialize_PCI_bridge (void)
   /* Note: Accept DINKs setup of the PCI Bridge and don't 
    *       change anything.
    */
-  printk("initialize_PCI_bridge: \n");
 }
 
 void set_irq_mask(
   uint16_t         value
 )
 {
-  uint16_t          *loc;
+  volatile uint16_t   *loc;
 
   loc = (uint16_t*)SCORE603E_FPGA_MASK_DATA;
 
@@ -43,14 +43,40 @@ void set_irq_mask(
 
 uint16_t         get_irq_mask(voi)
 {
-  uint16_t          *loc;
-  uint16_t          value;
+  volatile uint16_t  *loc;
+  uint16_t            value;
 
   loc =  (uint16_t*)SCORE603E_FPGA_MASK_DATA;
 
   value = *loc;
 
   return value;
+}
+
+void mask_irq(
+  uint16_t         irq_idx
+)
+{
+  uint16_t         value;
+  uint32_t         mask_idx = irq_idx;
+
+  value = get_irq_mask();
+
+#if (HAS_PMC_PSC8)
+  switch (irq_idx + Score_IRQ_First ) {
+    case SCORE603E_85C30_4_IRQ:
+    case SCORE603E_85C30_2_IRQ:
+    case SCORE603E_85C30_5_IRQ:
+    case SCORE603E_85C30_3_IRQ:
+      mask_idx = SCORE603E_PCI_IRQ_0 - Score_IRQ_First;
+      break;
+    default:
+      break;
+  }
+#endif
+
+  value |= (0x1 << mask_idx);
+  set_irq_mask( value );
 }
 
 void unmask_irq(
@@ -100,7 +126,7 @@ uint16_t         read_and_clear_PMC_irq(
   uint16_t            irq
 )
 {
-  uint16_t            status_word = irq;
+  uint16_t   status_word = irq;
 
   status_word = (*BSP_PMC_STATUS_ADDRESS);
 
@@ -139,14 +165,15 @@ uint16_t         read_and_clear_irq(void)
 {
   uint16_t            irq;
 
-  irq = (*SCORE603E_FPGA_VECT_DATA);
 
+  irq = (*SCORE603E_FPGA_VECT_DATA);
+  Processor_Synchronize();
   if ((irq & 0xffff0) != 0x10) {
-    printk( "ERROR:: no irq data\n");
+    printk( "read_and_clear_irq:: ERROR==>no irq data 0x%x\n", irq);
     return (irq | 0x80);
   }
 
   irq &=0xf;
-
+  irq += Score_IRQ_First;
   return irq;
 }

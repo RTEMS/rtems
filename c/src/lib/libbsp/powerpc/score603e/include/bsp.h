@@ -2,11 +2,11 @@
  *
  *  This include file contains all board IO definitions.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
@@ -18,6 +18,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 
 #include <bspopts.h>
 #include <rtems.h>
@@ -35,8 +37,6 @@ extern "C" {
 #if (HAS_PMC_PSC8)
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4 + 4)
 #else
-/* XXXXX FIX THIS */
-#error "MUST HAVE PSC8 SET FOR BOEING CODE"
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4)
 #endif
 
@@ -55,6 +55,7 @@ extern "C" {
  */
 
 #include <gen2.h>
+#include <bsp/irq.h>
 
 /*
  * The following macro calculates the Baud constant. For the Z8530 chip.
@@ -170,6 +171,10 @@ void set_irq_mask(
 uint16_t         get_irq_mask();
 
 void unmask_irq(
+  uint16_t         irq_idx
+);
+
+void mask_irq(
   uint16_t         irq_idx
 );
 

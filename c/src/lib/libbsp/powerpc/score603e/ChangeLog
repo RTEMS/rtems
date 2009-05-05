@@ -1,3 +1,16 @@
+2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* Makefile.am, README, configure.ac, preinstall.am, PCI_bus/PCI.c,
+	PCI_bus/PCI.h, PCI_bus/flash.c, PCI_bus/universe.c, console/85c30.c,
+	console/85c30.h, console/console.c, console/consolebsp.h,
+	console/tbl85c30.c, include/bsp.h, include/coverhd.h, include/gen2.h,
+	include/irq-config.h, include/tm27.h, irq/FPGA.c, irq/irq.h,
+	irq/irq_init.c, start/start.S, startup/Hwr_init.c,
+	startup/bspstart.c, timer/timer.c, tod/tod.c: Updated and tested with
+	the latest powerpc isr source
+	* irq/no_pic.c: New file.
+	* irq/irq.c, startup/genpvec.c, startup/setvec.c, startup/vmeintr.c: Removed.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

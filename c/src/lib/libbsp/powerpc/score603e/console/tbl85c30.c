@@ -2,18 +2,19 @@
  *  This file contains the table for the z85c30 port
  *  used by the console driver.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id:
+ *  $Id$
  */
 
 #include "consolebsp.h"
 #include <bsp.h>
+#include <bsp/irq.h>
 
 #define CONSOLE_DEFAULT_BAUD_RATE            9600
 #define CONSOLE_DEFAULT_BAUD_CONSTANT        Score603e_Z8530_Chip0_Baud(9600)

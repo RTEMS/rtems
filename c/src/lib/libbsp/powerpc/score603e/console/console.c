@@ -5,7 +5,7 @@
  *
  *  Currently only polled mode is supported.
  *
- *  COPYRIGHT (c) 1989-1997.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -181,8 +181,6 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number  console;
   int                        port, chip, p0,p1;
 
-printk("console_initialize start\n");
-
   /*
    * initialize the termio interface.
    */
@@ -207,7 +205,6 @@ printk("console_initialize start\n");
  * debugger...)
  */
 #if ( INITIALIZE_COM_PORTS )
-
   /*
    * Force to perform a hardware reset w/o
    * Master interrupt enable via register 9
@@ -239,16 +236,13 @@ printk("console_initialize start\n");
 
   for (port=1; port<NUM_Z85C30_PORTS; port++) {
    chip = port >> 1;
-printk("console_initialize initialize_85c30_port %d\n", port);
     initialize_85c30_port( &Ports_85C30[port] );
   }
 
 #if CONSOLE_USE_INTERRUPTS
-printk("console_initialize console_initialize_interrupts\n");
   console_initialize_interrupts();
 #endif
 
-printk("console_initialize end\n");
   return RTEMS_SUCCESSFUL;
 }
 
@@ -420,12 +414,13 @@ debug_putc_onlcr(const char c)
   if ('\n'==c){
     rtems_interrupt_disable( isrlevel );
     outbyte_polled_85c30( csr, '\r' );
-    rtems_interrupt_enable( isrlevel );
     asm volatile("isync");
+    rtems_interrupt_enable( isrlevel );
   }
 
   rtems_interrupt_disable( isrlevel );
   outbyte_polled_85c30( csr, c );
+  asm volatile("isync");
   rtems_interrupt_enable( isrlevel );
 }
 

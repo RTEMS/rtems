@@ -5,14 +5,14 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id:
+ *  $Id$
  */
 
 #include <string.h>
@@ -22,7 +22,8 @@
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
-#define DEBUG 1
+
+#define DEBUG 0
 
 /*
  * Where the heap starts; is used by bsp_pretasking_hook;
@@ -32,12 +33,12 @@ unsigned int BSP_heap_start;
 /*
  * PCI Bus Frequency
  */
-unsigned int BSP_bus_frequency;  /* XXX - Set this based upon the Score board */
+unsigned int BSP_bus_frequency;  
 
 /*
  * processor clock frequency
  */
-unsigned int BSP_processor_frequency; /* XXX - Set this based upon the Score board */
+unsigned int BSP_processor_frequency; 
 
 /*
  * Time base divisior (how many tick for 1 second).
@@ -90,15 +91,15 @@ void bsp_pretasking_hook(void)
   uint32_t         heap_start;
   uint32_t         heap_size;
 
-  #if DEBUG
-    printk("bsp_pretasking_hook: Set Heap\n");
-  #endif
-  heap_start = (uint32_t) &end;
-  if (heap_start & (CPU_ALIGNMENT-1))
-    heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-
-  heap_size = Configuration.work_space_start - (void *)&end;
+  heap_start = (BSP_heap_start + CPU_ALIGNMENT - 1) & ~(CPU_ALIGNMENT-1);
+  heap_size = (uint32_t) &RAM_END;
+  heap_size = heap_size - heap_start - Configuration.work_space_size;
   heap_size &= 0xfffffff0;  /* keep it as a multiple of 16 bytes */
+  
+
+  #if DEBUG
+    printk("bsp_pretasking_hook: Set Heap start 0x%x size 0x%x\n", heap_start, heap_size);
+  #endif
 
   #if DEBUG
     printk("bsp_pretasking_hook: bsp_libc_init\n");
@@ -121,6 +122,13 @@ void initialize_PMC();
 
 void bsp_predriver_hook(void)
 {
+  init_PCI();
+  initialize_universe();
+
+  #if DEBUG
+    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
+  #endif
+  initialize_PCI_bridge ();
 
 #if (HAS_PMC_PSC8)
   #if DEBUG
@@ -181,17 +189,11 @@ void initialize_PMC() {
 
 void bsp_postdriver_hook(void)
 {
-  extern void Init_EE_mask_init(void);
   extern void open_dev_console(void);
   #if DEBUG
     printk("bsp_postdriver_hook: open_dev_console\n");
   #endif
   open_dev_console();
-
-  #if DEBUG
-    printk("bsp_postdriver_hook: Init_EE_mask_init\n");
-  #endif
-  Init_EE_mask_init();
   #if DEBUG
     printk("bsp_postdriver_hook: Finished procedure\n");
   #endif
@@ -250,6 +252,9 @@ void bsp_start( void )
   intrStackStart = (uint32_t) __rtems_end + INIT_STACK_SIZE;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
   BSP_heap_start = intrStackStart + intrStackSize;
+  printk("Interrupt Stack Start: 0x%x Size: 0x%x  Heap Start: 0x%x\n",
+    intrStackStart, intrStackSize, BSP_heap_start
+  );
 
   /*
    * Initialize default raw exception handlers.
@@ -259,22 +264,9 @@ void bsp_start( void )
     intrStackStart,
     intrStackSize
   );
-  #if DEBUG
-    printk("bsp_predriver_hook: init_RTC\n");
-  #endif
-
-/*   init_RTC(); */
-  init_PCI();
-  initialize_universe();
-
-  #if DEBUG
-    printk("bsp_predriver_hook: initialize_PCI_bridge\n");
-  #endif
-  initialize_PCI_bridge ();
 
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
-
 
   _CPU_MSR_SET( msr_value );
 
@@ -283,12 +275,9 @@ void bsp_start( void )
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-
-  #if DEBUG
-    printk("bsp_start: Calculate Wrokspace\n");
-  #endif
   work_space_start =
     (unsigned char *)&RAM_END - rtems_configuration_get_work_space_size();
+  printk("Work Space Start: 0x%x\n", work_space_start );
 
   if ( work_space_start <= (unsigned char *)&end ) {
     printk( "bspstart: Not enough RAM!!!\n" );
@@ -305,24 +294,27 @@ void bsp_start( void )
   #endif
   bsp_clicks_per_usec = 66 / 4;  /* XXX get from linkcmds */
 
-#if ( PPC_USE_DATA_CACHE )
-  #if DEBUG
-    printk("bsp_start: cache_enable\n");
+  #if ( PPC_USE_DATA_CACHE )
+    #if DEBUG
+      printk("bsp_start: cache_enable\n");
+    #endif
+    instruction_cache_enable ();
+    data_cache_enable ();
+    #if DEBUG
+      printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+    #endif
   #endif
-  instruction_cache_enable ();
-  data_cache_enable ();
-  #if DEBUG
-    printk("bsp_start: END PPC_USE_DATA_CACHE\n");
+
+  /*
+   * Initalize RTEMS IRQ system
+   */
+  #if DEBUG  
+    printk("bspstart: Call BSP_rtems_irq_mng_init\n");
   #endif
-#endif
-
-  /* Initalize interrupt support */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    BSP_panic( "Cannot intitialize interrupt support\n");
-  }
-
+  BSP_rtems_irq_mng_init(0);
+  
   #if DEBUG
     printk("bsp_start: end BSPSTART\n");
-  ShowBATS();
+    ShowBATS();
   #endif
 }

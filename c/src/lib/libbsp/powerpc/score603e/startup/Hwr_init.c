@@ -1,5 +1,12 @@
 /*  Hwr_init.c
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -82,8 +89,6 @@ void init_PCI(void)
 {
   /* DINK Monitor setsup and uses all 4 BAT registers.  */
   /* The fourth BAT register can be modified to access this area */
-
-  printk("init_PCI:\n");
 }
 
 #define PPC_Get_HID0( _value ) \

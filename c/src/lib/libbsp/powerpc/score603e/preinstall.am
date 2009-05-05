@@ -85,14 +85,6 @@ $(PROJECT_INCLUDE)/bsp/consoleIo.h: ../../powerpc/shared/console/consoleIo.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/consoleIo.h
 
-$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
-
-$(PROJECT_INCLUDE)/bsp/irq-config.h: include/irq-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-config.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-config.h
-
 $(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
@@ -108,46 +100,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 $(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
-
-$(PROJECT_INCLUDE)/bsp/vectors.h: ../../powerpc/shared/vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
-
-$(PROJECT_INCLUDE)/bsp/vmeUniverse.h: ../../shared/vmeUniverse/vmeUniverse.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverse.h
-
-$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
-
-$(PROJECT_INCLUDE)/bsp/vme_am_defs.h: ../../shared/vmeUniverse/vme_am_defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vme_am_defs.h
-
-$(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
-
-$(PROJECT_INCLUDE)/bsp/VMEConfig.h: vme/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEConfig.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
-
-$(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
-
-$(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h: ../../shared/vmeUniverse/vmeUniverseDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vmeUniverseDMA.h
-
-$(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h: ../../shared/vmeUniverse/bspVmeDmaList.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bspVmeDmaList.h
-
-$(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEDMA.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)

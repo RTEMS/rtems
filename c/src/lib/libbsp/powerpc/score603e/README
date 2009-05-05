@@ -22,6 +22,9 @@ DMA:                none
 VIDEO:              none
 SCSI:               none
 NETWORKING:         none
+MEZZANINE CARD      optional with HAS_PMC_PSC8
+                    4 Z85C30s
+                    ACE1553
 
 DRIVER INFORMATION
 ==================
@@ -43,9 +46,7 @@ STOP BITS:          1
 Notes
 =====
 This BSP has been modified to use the latest exception model.
-However, the modifications were never verified.  This version
-has been partially verified in that Hello.ralf will load and
-run on the board.
+The modifications were verified.
 
 This BSP has been tested using DINK Rom monitor.  There have
 been three rom chips loaded on the boards.  One with the SDS

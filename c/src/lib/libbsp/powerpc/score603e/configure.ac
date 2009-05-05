@@ -37,7 +37,7 @@ RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 [whether using console interrupts])
 
-RTEMS_BSPOPTS_SET([HAS_PMC_PSC8],[*],[1])
+RTEMS_BSPOPTS_SET([HAS_PMC_PSC8],[*],[0])
 RTEMS_BSPOPTS_HELP([HAS_PMC_PSC8],
 [whether has a PSC8 PMC board attached to PMC slot])
 
