@@ -1,3 +1,7 @@
+2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
+
+	* shared/pci/pci.c: Removed warnings.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* shared/start/start.S: Update for boot_card command line change.

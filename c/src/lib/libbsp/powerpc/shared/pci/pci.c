@@ -54,6 +54,9 @@
 #define PCI_CONFIG_SET_ADDR(addr, bus, slot,function,offset) \
   PCI_CONFIG_WR_ADDR((addr), PCI_CONFIG_ADDR_VAL((bus), (slot), (function), (offset)))
 
+
+extern void detect_host_bridge(void);
+
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
@@ -583,9 +586,8 @@ donesearch:
 /*
  * This routine determines the maximum bus number in the system
  */
-int pci_initialize()
+int pci_initialize(void)
 {
-  extern void detect_host_bridge();
   unsigned char ucSlotNumber, ucFnNumber, ucNumFuncs;
   unsigned char ucHeader;
   unsigned char ucMaxSubordinate;
@@ -637,7 +639,7 @@ int pci_initialize()
 /*
  * Return the number of PCI busses in the system
  */
-unsigned char pci_bus_count()
+unsigned char pci_bus_count(void)
 {
   return (ucMaxPCIBus+1);
 }
