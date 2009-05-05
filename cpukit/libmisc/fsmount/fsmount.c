@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * File system mount functions.
+ */
+
 /*===============================================================*\
 | Project: RTEMS fsmount                                          |
 +-----------------------------------------------------------------+
@@ -38,7 +44,7 @@
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-int rtems_fsmount_create_mountpoint
+int rtems_fsmount_create_mount_point
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -113,9 +119,9 @@ int rtems_fsmount
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- const fstab_t *fstab_ptr,
- int fstab_count,
- int *fail_idx
+ const rtems_fstab_entry *fstab_ptr,
+ size_t fstab_count,
+ size_t *fail_idx
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
@@ -124,7 +130,7 @@ int rtems_fsmount
 {
   int rc = 0;
   int tmp_rc;
-  int fstab_idx = 0;
+  size_t fstab_idx = 0;
   rtems_filesystem_mount_table_entry_t *tmp_mt_entry;
   bool terminate = false;
 
@@ -138,7 +144,7 @@ int rtems_fsmount
      * create mount point
      */
     if (tmp_rc == 0) {
-      tmp_rc = rtems_fsmount_create_mountpoint(fstab_ptr->mount_point);
+      tmp_rc = rtems_fsmount_create_mount_point(fstab_ptr->mount_point);
       if (tmp_rc != 0) {
 	if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNTPNT_CRTERR)) {
 	  fprintf(stdout,"fsmount: creation of mount point \"%s\" failed: %s\n",
@@ -154,13 +160,13 @@ int rtems_fsmount
     /*
      * mount device to given mount point
      */
-    if (tmp_rc == RTEMS_SUCCESSFUL) {
+    if (tmp_rc == 0) {
       tmp_rc = mount(&tmp_mt_entry,
 		     fstab_ptr->fs_ops,
 		     fstab_ptr->mount_options,
 		     fstab_ptr->dev,
 		     fstab_ptr->mount_point);
-      if (tmp_rc != RTEMS_SUCCESSFUL) {
+      if (tmp_rc != 0) {
 	if (0 != (fstab_ptr->report_reasons & FSMOUNT_MNT_FAILED)) {
 	  fprintf(stdout,"fsmount: mounting of \"%s\" to"
 		 " \"%s\" failed: %s\n",

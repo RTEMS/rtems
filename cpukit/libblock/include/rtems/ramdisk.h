@@ -1,6 +1,7 @@
 /**
- * @file rtems/ramdisk.h
- * RAM disk block device implementation
+ * @file
+ *
+ * RAM disk block device.
  */
 
 /*
@@ -21,33 +22,70 @@
 extern "C" {
 #endif
 
-/* RAM disk configuration table entry */
+/**
+ * @defgroup rtems_ramdisk RAM Disk Device
+ *
+ * @ingroup rtems_blkdev
+ *
+ * @{
+ */
+
+/**
+ * RAM disk configuration table entry.
+ */
 typedef struct rtems_ramdisk_config {
-    int   block_size; /* RAM disk block size */
-    int   block_num;  /* Number of blocks on this RAM disk */
-    void *location;   /* RAM disk permanent location (out of RTEMS controlled
-                         memory), or NULL if RAM disk memory should be
-                         allocated dynamically */
+  /**
+   * RAM disk block size (must be a power of two).
+   */
+  uint32_t block_size;
+
+  /**
+   * Number of blocks on this RAM disk.
+   */
+  rtems_blkdev_bnum block_num;
+
+  /**
+   * RAM disk location or @c NULL if RAM disk memory should be allocated
+   * dynamically.
+   */
+  void *location;
 } rtems_ramdisk_config;
 
-/* If application want to use RAM disk, it should specify configuration of
- * available RAM disks.
- * The following is definitions for RAM disk configuration table
+/**
+ * External reference to the RAM disk configuration table describing each RAM
+ * disk in the system.
+ *
+ * The configuration table is provided by the application.
  */
-extern rtems_ramdisk_config rtems_ramdisk_configuration[];
+extern rtems_ramdisk_config rtems_ramdisk_configuration [];
+
+/**
+ * External reference the size of the RAM disk configuration table
+ * @ref rtems_ramdisk_configuration.
+ *
+ * The configuration table size is provided by the application.
+ */
 extern size_t rtems_ramdisk_configuration_size;
 
-/* ramdisk_initialize --
- *     RAM disk driver initialization entry point.
+/**
+ * RAM disk driver initialization entry point.
  */
-rtems_device_driver
-ramdisk_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void *arg);
+rtems_device_driver ramdisk_initialize(
+ rtems_device_major_number major,
+ rtems_device_minor_number minor,
+ void *arg
+);
 
+/**
+ * RAM disk driver table entry.
+ */
 #define RAMDISK_DRIVER_TABLE_ENTRY \
-    { ramdisk_initialize, RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES }
+  { \
+    .initialization_entry = ramdisk_initialize, \
+    RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES \
+  }
+
+/** @} */
 
 #ifdef __cplusplus
 }

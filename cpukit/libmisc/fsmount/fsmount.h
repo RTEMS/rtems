@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * File system mount functions.
+ */
+
 /*===============================================================*\
 | Project: RTEMS fsmount                                          |
 +-----------------------------------------------------------------+
@@ -33,46 +39,179 @@
 extern "C" {
 #endif
 
-/*
- * bits to define, what errors will cause reporting (via printf) and
- * abort of mount processing
- * Use a combination of these bits
- * for the fields "report_reasons" and "abort_reasons"
+/**
+ * @defgroup rtems_fstab File System Mount Support
+ *
+ * @{
  */
-#define FSMOUNT_MNT_OK        0x0001 /* mounted ok                 */
-#define FSMOUNT_MNTPNT_CRTERR 0x0002 /* cannot create mount point  */
-#define FSMOUNT_MNT_FAILED    0x0004 /* mounting failed            */
 
+/**
+ * File system mount report and abort condition flags.
+ *
+ * The flags define, which conditions will cause a report during the mount
+ * process (via printf()) or abort the mount process.
+ *
+ * @see rtems_fstab_entry and rtems_fsmount().
+ */
+typedef enum {
+  /**
+   * No conditions.
+   */
+  RTEMS_FSTAB_NONE = 0U,
+
+  /**
+   * Complete mount process was successful.
+   */
+  RTEMS_FSTAB_OK = 0x1U,
+
+  /**
+   * Mount point creation failed.
+   */
+  RTEMS_FSTAB_ERROR_MOUNT_POINT = 0x2U,
+
+  /**
+   * File system mount failed.
+   */
+  RTEMS_FSTAB_ERROR_MOUNT = 0x4U,
+
+  /**
+   * Something failed.
+   */
+  RTEMS_FSTAB_ERROR = RTEMS_FSTAB_ERROR_MOUNT_POINT | RTEMS_FSTAB_ERROR_MOUNT,
+
+  /**
+   * Any condition.
+   */
+  RTEMS_FSTAB_ANY = RTEMS_FSTAB_OK | RTEMS_FSTAB_ERROR
+} rtems_fstab_conditions;
+
+/**
+ * File system table entry.
+ */
 typedef struct {
-  char *dev;
-  char *mount_point;
-  rtems_filesystem_operations_table *fs_ops;
+  /**
+   * Device file path.
+   */
+  const char *dev;
+
+  /**
+   * Mount point path.
+   */
+  const char *mount_point;
+
+  /**
+   * File system operations.
+   */
+  const rtems_filesystem_operations_table *fs_ops;
+
+  /**
+   * File system mount options.
+   */
   rtems_filesystem_options_t mount_options;
-  uint16_t   report_reasons;
-  uint16_t   abort_reasons;
-} fstab_t;
 
+  /**
+   * Report @ref rtems_fstab_conditions "condition flags".
+   */
+  uint16_t report_reasons;
 
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-int rtems_fsmount
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|  This function will create the mount points listed and mount the file     |
-|   systems listed in the calling parameters                                |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- const fstab_t *fstab_ptr,              /* Ptr to filesystem mount table   */
- int fstab_count,                       /* number of entries in mount table*/
- int *fail_idx                          /* return: index of failed entry   */
- );
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    0, if success, -1 and errno if failed                                  |
-\*=========================================================================*/
+  /**
+   * Abort @ref rtems_fstab_conditions "condition flags".
+   */
+  uint16_t abort_reasons;
+} rtems_fstab_entry;
+
+/**
+ * Creates the mount point with path @a mount_point.
+ *
+ * On success, zero is returned.  On error, -1 is returned, and @c errno is set
+ * appropriately.
+ *
+ * @see rtems_fsmount().
+ */
+int rtems_fsmount_create_mount_point( const char *mount_point);
+
+/**
+ * Mounts the file systems listed in the file system mount table @a fstab of
+ * size @a size.
+ *
+ * Each file system will be mounted according to its table entry parameters.
+ * In case of an abort condition the corresponding table index will be reported
+ * in @a abort_index.  The pointer @a abort_index may be @c NULL.  The mount
+ * point paths will be created with rtems_fsmount_create_mount_point() and need
+ * not exist beforehand.
+ *
+ * On success, zero is returned.  On error, -1 is returned, and @c errno is set
+ * appropriately.
+ *
+ * @see rtems_bdpart_register_from_disk().
+ *
+ * The following example code tries to mount a FAT file system within a SD
+ * Card.  Some cards do not have a partition table so at first it tries to find
+ * a file system inside the hole disk.  If this is successful the mount process
+ * will be aborted because the @ref RTEMS_FSTAB_OK condition is true.  If this
+ * did not work it tries to mount the file system inside the first partition.
+ * If this fails the mount process will not be aborted (this is already the
+ * last entry), but the last error status will be returned.
+ *
+ * @code
+ * #include <stdio.h>
+ * #include <string.h>
+ * #include <errno.h>
+ *
+ * #include <rtems.h>
+ * #include <rtems/bdpart.h>
+ * #include <rtems/dosfs.h>
+ * #include <rtems/error.h>
+ * #include <rtems/fsmount.h>
+ *
+ * static const rtems_fstab_entry fstab [] = {
+ *   {
+ *     .dev = "/dev/sd-card-a",
+ *     .mount_point = "/mnt",
+ *     .fs_ops = &msdos_ops,
+ *     .mount_options = RTEMS_FILESYSTEM_READ_WRITE,
+ *     .report_reasons = RTEMS_FSTAB_ANY,
+ *     .abort_reasons = RTEMS_FSTAB_OK
+ *   }, {
+ *     .dev = "/dev/sd-card-a1",
+ *     .mount_point = "/mnt",
+ *     .fs_ops = &msdos_ops,
+ *     .mount_options = RTEMS_FILESYSTEM_READ_WRITE,
+ *     .report_reasons = RTEMS_FSTAB_ANY,
+ *     .abort_reasons = RTEMS_FSTAB_NONE
+ *   }
+ * };
+ *
+ * static void my_mount(void)
+ * {
+ *   rtems_status_code sc = RTEMS_SUCCESSFUL;
+ *   int rv = 0;
+ *   size_t abort_index = 0;
+ *
+ *   sc = rtems_bdpart_register_from_disk("/dev/sd-card-a");
+ *   if (sc != RTEMS_SUCCESSFUL) {
+ *     printf("read partition table failed: %s\n", rtems_status_text(sc));
+ *   }
+ *
+ *   rv = rtems_fsmount(fstab, sizeof(fstab) / sizeof(fstab [0]), &abort_index);
+ *   if (rv != 0) {
+ *     printf("mount failed: %s\n", strerror(errno));
+ *   }
+ *   printf("mount aborted at %zu\n", abort_index);
+ * }
+ * @endcode
+ */
+int rtems_fsmount( const rtems_fstab_entry *fstab, size_t size, size_t *abort_index);
+
+/** @} */
+
+typedef rtems_fstab_entry fstab_t;
+
+#define FSMOUNT_MNT_OK RTEMS_FSTAB_OK
+
+#define FSMOUNT_MNTPNT_CRTERR RTEMS_FSTAB_ERROR_MOUNT_POINT
+
+#define FSMOUNT_MNT_FAILED RTEMS_FSTAB_ERROR_MOUNT
 
 #ifdef __cplusplus
 }

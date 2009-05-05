@@ -1,5 +1,10 @@
-/* ramdisk.c -- RAM disk block device implementation
+/**
+ * @file
  *
+ * RAM disk block device.
+ */
+
+/*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -18,9 +23,9 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "rtems/blkdev.h"
-#include "rtems/diskdevs.h"
-#include "rtems/ramdisk.h"
+#include <rtems/blkdev.h>
+#include <rtems/diskdevs.h>
+#include <rtems/ramdisk.h>
 
 /**
  * Control tracing. It can be compiled out of the code for small
@@ -30,23 +35,22 @@
 #define RTEMS_RAMDISK_TRACE 0
 #endif
 
-#define RAMDISK_DEVICE_BASE_NAME "/dev/ramdisk"
+#define RAMDISK_DEVICE_BASE_NAME "/dev/rd"
 
 /* Internal RAM disk descriptor */
 struct ramdisk {
-    int           block_size; /* RAM disk block size */
-    int           block_num;  /* Number of blocks on this RAM disk */
-    void         *area;       /* RAM disk memory area */
-    bool          initialized;/* RAM disk is initialized */
-    bool          malloced;   /* != 0, if memory allocated by malloc for this
-                                 RAM disk */
+  uint32_t block_size; /* RAM disk block size */
+  rtems_blkdev_bnum block_num; /* Number of blocks on this RAM disk */
+  void *area; /* RAM disk memory area */
+  bool initialized; /* RAM disk is initialized */
+  bool malloced; /* != 0, if memory allocated by malloc for this RAM disk */
 #if RTEMS_RAMDISK_TRACE
-    int           info_level; /* Trace level */
+  int info_level; /* Trace level */
 #endif
 };
 
 static struct ramdisk *ramdisk;
-static uint32_t        nramdisks;
+static uint32_t nramdisks;
 
 #if RTEMS_RAMDISK_TRACE
 /**
@@ -242,8 +246,8 @@ ramdisk_initialize(
     for (i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++)
     {
         dev_t dev = rtems_filesystem_make_dev_t(major, i);
-        char name[sizeof(RAMDISK_DEVICE_BASE_NAME "0123456789")];
-        snprintf(name, sizeof(name), RAMDISK_DEVICE_BASE_NAME "%" PRIu32, i);
+        char name [] = RAMDISK_DEVICE_BASE_NAME "a";
+        name [sizeof(RAMDISK_DEVICE_BASE_NAME)] += i;
         r->block_size = c->block_size;
         r->block_num = c->block_num;
         if (c->location == NULL)
