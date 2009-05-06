@@ -14,6 +14,9 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#ifdef RTEMS_NETWORKING
+  #include <rtems/rtems_bsdnet.h>
+#endif
 
 /*
  * This routine calls main from a confdefs.h default Init task
