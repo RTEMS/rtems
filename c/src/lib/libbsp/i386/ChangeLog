@@ -1,3 +1,8 @@
+2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/comm/i386-stub-glue.c, shared/comm/uart.c, shared/irq/irq.c,
+	shared/pci/pcibios.c: Fixed warnings.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

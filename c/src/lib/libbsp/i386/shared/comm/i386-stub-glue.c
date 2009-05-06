@@ -134,9 +134,6 @@ int getDebugChar(void)
   return val;
 }
 
-static void nop(void){}
-static int isOn(void) {return 1;}
-
 void exceptionHandler(int vector, void (*handler)(void))
 {
   rtems_raw_irq_connect_data excep_raw_irq_data;
@@ -155,9 +152,9 @@ void exceptionHandler(int vector, void (*handler)(void))
       rtems_fatal_error_occurred(1);
     }
 
-  excep_raw_irq_data.on = nop;
-  excep_raw_irq_data.off = nop;
-  excep_raw_irq_data.isOn = isOn;
+  excep_raw_irq_data.on = NULL;
+  excep_raw_irq_data.off = NULL;
+  excep_raw_irq_data.isOn = NULL;
   excep_raw_irq_data.hdl = handler;
 
   if (!i386_set_idt_entry (&excep_raw_irq_data)) {

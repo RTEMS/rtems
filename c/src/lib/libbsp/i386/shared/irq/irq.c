@@ -11,9 +11,12 @@
  *  $Id$
  */
 
+/* so we can see _API_extensions_Run_postswitch */
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
+
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <rtems/score/thread.h>
+#include <stdlib.h>
 #include <rtems/score/apiext.h>
 
 /*
@@ -162,7 +165,7 @@ int BSP_irq_ack_at_i8259s  	(const rtems_irq_number irqLine)
  * is already set and that the tables it contains are still valid
  * and accessible.
  */
-static void compute_i8259_masks_from_prio ()
+static void compute_i8259_masks_from_prio (void)
 {
   unsigned int i;
   unsigned int j;

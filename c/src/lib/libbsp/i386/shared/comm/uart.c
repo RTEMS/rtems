@@ -736,7 +736,7 @@ BSP_uart_termios_isr_com1(void)
 }
 
 void
-BSP_uart_termios_isr_com2()
+BSP_uart_termios_isr_com2(void)
 {
   unsigned char buf[40];
   unsigned char val;

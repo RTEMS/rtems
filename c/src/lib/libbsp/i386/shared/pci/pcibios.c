@@ -227,7 +227,7 @@ pcib_find_by_class(int classCode, int idx, int *sig)
 static uint8_t ucBusCount = 0xff;
 
 unsigned char
-pci_bus_count()
+pci_bus_count(void)
 {
   if ( ucBusCount == 0xff ) {
     unsigned char bus;
