@@ -335,7 +335,7 @@ int rtems_gdb_stub_get_thread_info(
       tmp_buf[8] = 0;
 
       strcat(info->display, tmp_buf);
-      rtems_object_get_name( thread, 5, info->name );
+      rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
       info->more_display[0] = 0; /* Nothing */
 
       return 1;
@@ -367,7 +367,7 @@ int rtems_gdb_stub_get_thread_info(
    tmp_buf[8] = 0;
 
    strcat(info->display, tmp_buf);
-   rtems_object_get_name( thread, 5, info->name );
+   rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
    info->more_display[0] = 0; /* Nothing */
 
    return 1;

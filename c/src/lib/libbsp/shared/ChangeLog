@@ -1,3 +1,8 @@
+2009-05-06	Michael Walle <michael@walle.cc>
+
+	PR 1409/bsps
+	* gdbstub/rtems-stub-glue.c: Print object names correctly.
+
 2009-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* bootcard.c: use aligned heap_start (instead of
