@@ -42,7 +42,8 @@ extern uint32_t   rtemsFreeMemStart;
 /*
  * Disable the paging
  */
-void _CPU_disable_paging(void) {
+void _CPU_disable_paging(void)
+{
   cr0 regCr0;
 
   rtems_cache_flush_entire_data();
@@ -54,7 +55,8 @@ void _CPU_disable_paging(void) {
 /*
  * Enable the paging
  */
-void _CPU_enable_paging(void) {
+void _CPU_enable_paging(void)
+{
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();
@@ -68,8 +70,8 @@ void _CPU_enable_paging(void) {
  * Initialize the paging with 1-to-1 mapping
  */
 
-int init_paging(void) {
-
+int init_paging(void)
+{
   int memorySize;
   int nbPages;
   int nbInitPages;
@@ -156,7 +158,8 @@ int init_paging(void) {
 /*
  * Is cache enable
  */
-int  _CPU_is_cache_enabled() {
+int  _CPU_is_cache_enabled(void)
+{
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();
@@ -166,7 +169,8 @@ int  _CPU_is_cache_enabled() {
 /*
  * Is paging enable
  */
-int  _CPU_is_paging_enabled() {
+int  _CPU_is_paging_enabled(void)
+{
   cr0 regCr0;
 
   regCr0.i = i386_get_cr0();
@@ -179,9 +183,13 @@ int  _CPU_is_paging_enabled() {
  * the translated address in mappedAddress
  */
 
-int _CPU_map_phys_address
-        (void **mappedAddress, void *physAddress, int size, int flag){ 
-
+int _CPU_map_phys_address(
+  void **mappedAddress,
+  void  *physAddress,
+  int    size,
+  int    flag
+)
+{ 
   page_table *localPageTable;
   unsigned int lastAddress, countAddress;
   char *Tables;
@@ -199,7 +207,7 @@ int _CPU_map_phys_address
   lastAddress = (unsigned int)physAddress + (size - 1);
   virtualAddress.address = 0;
 
-  while (1){
+  while (1) {
 
     if ((countAddress & ~MASK_OFFSET) > (lastAddress & ~MASK_OFFSET))
       break;
@@ -273,7 +281,8 @@ int _CPU_map_phys_address
  * "Compress" the Directory and Page tables to avoid
  * important loss of address range
  */
-static void Paging_Table_Compress() {
+static void Paging_Table_Compress(void)
+{
   unsigned int dirCount, pageCount;
   page_table *localPageTable;
   
@@ -325,7 +334,11 @@ static void Paging_Table_Compress() {
  * (we do not deallocate the table already allocated)
  */
 
-int _CPU_unmap_virt_address(void *mappedAddress, int size){ 
+int _CPU_unmap_virt_address(
+  void *mappedAddress,
+  int   size
+)
+{ 
 
   linear_address linearAddr;
   page_table *localPageTable;
@@ -381,8 +394,13 @@ int _CPU_unmap_virt_address(void *mappedAddress, int size){
  * of the page's descriptor.
  */
 
-int _CPU_change_memory_mapping_attribute
-    (void **newAddress, void *mappedAddress, unsigned int size, unsigned int flag){ 
+int _CPU_change_memory_mapping_attribute(
+  void         **newAddress,
+  void          *mappedAddress,
+  unsigned int   size,
+  unsigned int   flag
+)
+{ 
 
   linear_address linearAddr;
   page_table *localPageTable;
@@ -441,7 +459,8 @@ int _CPU_change_memory_mapping_attribute
 
 #include <rtems/bspIo.h>
 
-int  _CPU_display_memory_attribute(){ 
+int  _CPU_display_memory_attribute(void)
+{ 
   unsigned int dirCount, pageCount;
   cr0 regCr0;
   page_table *localPageTable;
@@ -505,6 +524,6 @@ int  _CPU_display_memory_attribute(){
   }
   if (pagingWasEnabled)
     _CPU_enable_paging();
-  return 0;
 
+  return 0;
 }
