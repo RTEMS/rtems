@@ -34,11 +34,11 @@
 %define binutils_version 2.19
 %define binutils_rpmvers %{expand:%(echo "2.19" | tr - _ )}
 
-Name:		i586-pc-freebsd7.2-binutils
-Summary:	Binutils for target i586-pc-freebsd7.2
+Name:		i586-pc-freebsd7.0-binutils
+Summary:	Binutils for target i586-pc-freebsd7.0
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20090506.1%{?dist}
+Release:	0.20090125.1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -49,7 +49,7 @@ BuildRequires:	%{_host_rpmprefix}gcc
 # Bug in bfd: Doesn't build without texinfo installed
 BuildRequires:	texinfo >= 4.2
 %else
-%if "i586-pc-freebsd7.2" == "i686-pc-cygwin"
+%if "i586-pc-freebsd7.0" == "i686-pc-cygwin"
 BuildRequires:	texinfo >= 4.2
 %endif
 %endif
@@ -60,7 +60,7 @@ Source0: http://ftp.gnu.org/gnu/binutils/binutils-2.19.tar.bz2
 Patch0:  ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/binutils-2.19-rtems4.10-20081023.diff
 
 %description
-Cross binutils for target i586-pc-freebsd7.2
+Cross binutils for target i586-pc-freebsd7.0
 %prep
 %setup -q -c -T -n %{name}-%{version}
 
@@ -70,7 +70,7 @@ cd binutils-%{binutils_pkgvers}
 cd ..
 
 %build
-%if "i586-pc-freebsd7.2" == "i686-pc-cygwin"
+%if "i586-pc-freebsd7.0" == "i686-pc-cygwin"
 # The cygwin sources are leaking memory
   RPM_OPT_FLAGS="$(echo "$RPM_OPT_FLAGS"|sed -e 's; -Wp,-D_FORTIFY_SOURCE=2;;')"
 %endif
@@ -82,12 +82,12 @@ cd ..
   CFLAGS="$RPM_OPT_FLAGS" \
   ../binutils-%{binutils_pkgvers}/configure \
     --build=%_build --host=%_host \
-    --target=i586-pc-freebsd7.2 \
+    --target=i586-pc-freebsd7.0 \
     --verbose --disable-nls \
     --without-included-gettext \
     --disable-win32-registry \
     --disable-werror \
-    --with-sysroot=%{_prefix}/i586-pc-freebsd7.2/sys-root \
+    --with-sysroot=%{_prefix}/i586-pc-freebsd7.0/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --exec-prefix=%{_exec_prefix} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
@@ -110,17 +110,17 @@ cd ..
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
 
 # manpages without corresponding tools
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.2-dlltool%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.2-dlltool*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.0-dlltool%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.0-dlltool*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.2-nlmconv%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.2-nlmconv*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.0-nlmconv%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.0-nlmconv*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.2-windres%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.2-windres*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.0-windres%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.0-windres*
   fi
-  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.2-windmc%{_exeext}; then 
-    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.2-windmc*
+  if test ! -f ${RPM_BUILD_ROOT}%{_bindir}/i586-pc-freebsd7.0-windmc%{_exeext}; then 
+    rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/i586-pc-freebsd7.0-windmc*
   fi
 
   cd ..
@@ -150,28 +150,28 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
   rm -rf $RPM_BUILD_ROOT
 
 # ==============================================================
-# i586-pc-freebsd7.2-binutils
+# i586-pc-freebsd7.0-binutils
 # ==============================================================
-# %package -n i586-pc-freebsd7.2-binutils
-# Summary:      rtems binutils for i586-pc-freebsd7.2
+# %package -n i586-pc-freebsd7.0-binutils
+# Summary:      rtems binutils for i586-pc-freebsd7.0
 # Group: Development/Tools
 # %if %build_infos
 # Requires: binutils-common
 # %endif
 
-%description -n i586-pc-freebsd7.2-binutils
-GNU binutils targetting i586-pc-freebsd7.2.
+%description -n i586-pc-freebsd7.0-binutils
+GNU binutils targetting i586-pc-freebsd7.0.
 
-%files -n i586-pc-freebsd7.2-binutils
+%files -n i586-pc-freebsd7.0-binutils
 %defattr(-,root,root)
-%{_mandir}/man1/i586-pc-freebsd7.2-*.1*
+%{_mandir}/man1/i586-pc-freebsd7.0-*.1*
 
-%{_bindir}/i586-pc-freebsd7.2-*
+%{_bindir}/i586-pc-freebsd7.0-*
 
-%dir %{_exec_prefix}/i586-pc-freebsd7.2
-%dir %{_exec_prefix}/i586-pc-freebsd7.2/bin
-%{_exec_prefix}/i586-pc-freebsd7.2/bin/*
+%dir %{_exec_prefix}/i586-pc-freebsd7.0
+%dir %{_exec_prefix}/i586-pc-freebsd7.0/bin
+%{_exec_prefix}/i586-pc-freebsd7.0/bin/*
 
-%dir %{_exec_prefix}/i586-pc-freebsd7.2/lib
-%{_exec_prefix}/i586-pc-freebsd7.2/lib/ldscripts
+%dir %{_exec_prefix}/i586-pc-freebsd7.0/lib
+%{_exec_prefix}/i586-pc-freebsd7.0/lib/ldscripts
 

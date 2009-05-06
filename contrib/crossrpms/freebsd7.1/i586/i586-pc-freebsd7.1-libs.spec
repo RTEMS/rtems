@@ -97,7 +97,7 @@ i586-pc-freebsd7.1 libraries.
  %SOURCE20 %SOURCE21 %SOURCE22 %SOURCE23 %SOURCE24 \
  %SOURCE25 %SOURCE26 %SOURCE27 %SOURCE28 %SOURCE29 \
  %SOURCE30 %SOURCE31 %SOURCE32 %SOURCE33 %SOURCE34 \
- | %{__tar} --unlink -pxzf - ./lib ./usr/lib ./usr/include
+ | %{__tar} --unlink -pxzf - ./lib ./usr/lib ./usr/include %{?el5:||:}
 
 %build
   # Setup sys-root (Usable for gcc >= 3.4)

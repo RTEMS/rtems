@@ -37,7 +37,7 @@
 %define __debug_install_post %{nil}
 
 Name:		i586-pc-freebsd7.2
-Release:	0.20090505.1%{?dist}
+Release:	0.20090506.1%{?dist}
 License:	FreeBSD
 Group:		Development/Tools
 
@@ -97,7 +97,7 @@ i586-pc-freebsd7.2 libraries.
  %SOURCE20 %SOURCE21 %SOURCE22 %SOURCE23 %SOURCE24 \
  %SOURCE25 %SOURCE26 %SOURCE27 %SOURCE28 %SOURCE29 \
  %SOURCE30 %SOURCE31 %SOURCE32 %SOURCE33 %SOURCE34 \
- | %{__tar} --unlink -pxzf - ./lib ./usr/lib ./usr/include
+ | %{__tar} --unlink -pxzf - ./lib ./usr/lib ./usr/include %{?el5:||:}
 
 %build
   # Setup sys-root (Usable for gcc >= 3.4)
