@@ -1,7 +1,11 @@
+2009-05-06	Michael Walle <michael@walle.cc>
+
+	PR 1409/bsps
+	* gdbstub/rtems-stub-glue.c: Print object names correctly.
+
 2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
-	* bootcard.c, gdbstub/rtems-stub-glue.c: Add info to not enough memory
-	message.
+	* bootcard.c: Add info to not enough memory message.
 
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
