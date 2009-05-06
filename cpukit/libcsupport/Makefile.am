@@ -97,7 +97,7 @@ PASSWORD_GROUP_C_FILES = src/getpwent.c
 
 TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c
 ## 20 Nov 2008: Now using these from newlib's posix directory
-TERMINAL_IDENTIFICATION_C_FILES += src/isatty.c
+TERMINAL_IDENTIFICATION_C_FILES += src/isatty.c src/isatty_r.c
 ## Comment out when using these from newlib's unix directory
 TERMINAL_IDENTIFICATION_C_FILES += src/ttyname.c
 
