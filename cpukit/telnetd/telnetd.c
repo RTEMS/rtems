@@ -302,8 +302,6 @@ rtems_task_telnetd(void *task_argument)
 
 rtems_status_code rtems_telnetd_initialize( void)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
   if (telnetd_task_id != RTEMS_ID_NONE) {
     fprintf(stderr, "telnetd already started\n");
     return RTEMS_RESOURCE_IN_USE;

@@ -177,7 +177,9 @@ static void get_random_bytes(void *buf, int nbytes)
 	int i, n = nbytes, fd = get_random_fd();
 	int lose_counter = 0;
 	unsigned char *cp = (unsigned char *) buf;
+#ifdef DO_JRAND_MIX
 	unsigned short tmp_seed[3];
+#endif
 
 	if (fd >= 0) {
 		while (n > 0) {
@@ -417,6 +419,8 @@ try_again:
 	return 0;
 }
 
+/* unused */
+#if defined(USE_UUIDD) && defined(HAVE_SYS_UN_H)
 static ssize_t read_all(int fd, char *buf, size_t count)
 {
 	ssize_t ret;
@@ -436,6 +440,7 @@ static ssize_t read_all(int fd, char *buf, size_t count)
 	}
 	return c;
 }
+#endif
 
 #if defined(USE_UUIDD) && defined(HAVE_SYS_UN_H)
 

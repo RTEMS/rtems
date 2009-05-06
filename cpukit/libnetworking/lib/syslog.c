@@ -57,7 +57,7 @@ vsyslog (int pri, const char *fmt, va_list ap)
 		pri &= LOG_PRIMASK|LOG_FACMASK;
 	}
 
-	if (!LOG_MASK(LOG_PRI(pri)) & LogMask)
+	if (!(LOG_MASK(LOG_PRI(pri)) & LogMask))
 		return;
 
 	if ((pri & LOG_FACMASK) == 0)

@@ -1,5 +1,10 @@
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/uuid/gen_uuid.c, libnetworking/lib/syslog.c,
+	telnetd/telnetd.c: Fixed warnings.
+
+2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libcsupport/Makefile.am:
 	* libcsupport/src/isatty_r.c: New file.
 
