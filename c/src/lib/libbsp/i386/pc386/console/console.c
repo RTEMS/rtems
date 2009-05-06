@@ -39,6 +39,7 @@
 #include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
+#include <rtems/termiostypes.h>
 #include <uart.h>
 #include <libcpu/cpuModel.h>
 
@@ -78,7 +79,7 @@ extern void kbd_init( void );
 +--------------------------------------------------------------------------*/
 extern void keyboard_interrupt(void );
 extern void keyboard_interrupt_wrapper(void *);
-extern char BSP_wait_polled_input(void);
+extern int BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);
 
 static int  conSetAttr(int minor, const struct termios *);

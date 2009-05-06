@@ -31,6 +31,8 @@
 
 /* #define DEBUG_OUT */
 
+/* Not using this currently */
+#if 0
 static bool pc386_ide_status_busy (uint32_t port,
                                    uint32_t timeout,
                                    uint8_t* status_val)
@@ -51,6 +53,7 @@ static bool pc386_ide_status_busy (uint32_t port,
 
   return false;
 }
+#endif
 
 static bool pc386_ide_status_data_ready (uint32_t port,
                                          uint32_t timeout,

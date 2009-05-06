@@ -245,7 +245,7 @@ _IBMPC_inch(void)
   * Routine that can be used before interrupt management is initialized.
   */
 
-char
+int
 BSP_wait_polled_input(void)
 {
   char c;

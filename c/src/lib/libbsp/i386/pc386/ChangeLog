@@ -1,3 +1,7 @@
+2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console.c, console/inch.c, ide/ide.c: Fixed warnings.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* Makefile.am: Add bspcmdline.c.
