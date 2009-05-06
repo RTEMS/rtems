@@ -1,3 +1,7 @@
+2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/if_dc.c: Fixed warnings.
+
 2009-05-03	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/rtc/ds1375.c, libchip/rtc/mc146818a.c: Fix warnings. Reformat

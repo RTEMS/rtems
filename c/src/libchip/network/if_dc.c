@@ -1190,6 +1190,7 @@ void dc_setfilt_21143(sc)
 	/*struct ifmultiaddr	*ifma;*/
 	struct ifnet		*ifp;
 	int			i;
+	u_int16_t               *ac_enaddr;
 
 	ifp = &sc->arpcom.ac_if;
 
@@ -1233,9 +1234,10 @@ void dc_setfilt_21143(sc)
 	}
 
 	/* Set our MAC address */
-	sp[39] = ((u_int16_t *)sc->arpcom.ac_enaddr)[0];
-	sp[40] = ((u_int16_t *)sc->arpcom.ac_enaddr)[1];
-	sp[41] = ((u_int16_t *)sc->arpcom.ac_enaddr)[2];
+	ac_enaddr = (u_int16_t *)sc->arpcom.ac_enaddr;
+	sp[39] = ac_enaddr[0];
+	sp[40] = ac_enaddr[1];
+	sp[41] = ac_enaddr[2];
 
 	sframe->dc_status = DC_TXSTAT_OWN;
 	CSR_WRITE_4(sc, DC_TXSTART, 0xFFFFFFFF);
@@ -1262,12 +1264,15 @@ void dc_setfilt_admtek(sc)
 	u_int32_t		hashes[2] = { 0, 0 };
 	struct ifmultiaddr	*ifma;
 #endif
+	u_int32_t               *ac_enaddr;
 
 	ifp = &sc->arpcom.ac_if;
 
 	/* Init our MAC address */
-	CSR_WRITE_4(sc, DC_AL_PAR0, *(u_int32_t *)(&sc->arpcom.ac_enaddr[0]));
-	CSR_WRITE_4(sc, DC_AL_PAR1, *(u_int32_t *)(&sc->arpcom.ac_enaddr[4]));
+	ac_enaddr = (u_int32_t *)&sc->arpcom.ac_enaddr[0];
+	CSR_WRITE_4(sc, DC_AL_PAR0, *ac_enaddr);
+	ac_enaddr = (u_int32_t *)&sc->arpcom.ac_enaddr[4];
+	CSR_WRITE_4(sc, DC_AL_PAR1, *ac_enaddr);
 
 	/* If we want promiscuous mode, set the allframes bit. */
 	if (ifp->if_flags & IFF_PROMISC)
@@ -1319,16 +1324,19 @@ void dc_setfilt_asix(sc)
 	u_int32_t		hashes[2] = { 0, 0 };
 	struct ifmultiaddr	*ifma;
 #endif
+	u_int32_t               *ac_enaddr;
 
 	ifp = &sc->arpcom.ac_if;
 
         /* Init our MAC address */
         CSR_WRITE_4(sc, DC_AX_FILTIDX, DC_AX_FILTIDX_PAR0);
-        CSR_WRITE_4(sc, DC_AX_FILTDATA,
-	    *(u_int32_t *)(&sc->arpcom.ac_enaddr[0]));
+	ac_enaddr = (u_int32_t *)&sc->arpcom.ac_enaddr[0];
+        CSR_WRITE_4(sc, DC_AX_FILTDATA, *ac_enaddr);
+	    
         CSR_WRITE_4(sc, DC_AX_FILTIDX, DC_AX_FILTIDX_PAR1);
-        CSR_WRITE_4(sc, DC_AX_FILTDATA,
-	    *(u_int32_t *)(&sc->arpcom.ac_enaddr[4]));
+
+	ac_enaddr = (u_int32_t *)&sc->arpcom.ac_enaddr[4];
+        CSR_WRITE_4(sc, DC_AX_FILTDATA, *ac_enaddr);
 
 	/* If we want promiscuous mode, set the allframes bit. */
 	if (ifp->if_flags & IFF_PROMISC)
