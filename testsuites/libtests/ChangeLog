@@ -1,5 +1,9 @@
 2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* malloctest/init.c: Fix typo.
+
+2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add shell of heap walk test for Santosh.
 	* heapwalk/.cvsignore, heapwalk/Makefile.am, heapwalk/heapwalk.scn,
 	heapwalk/init.c, heapwalk/system.h: New files.
