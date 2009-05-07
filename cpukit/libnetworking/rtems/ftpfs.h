@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief File Transfer Protocol file system (FTP client).
+ * File Transfer Protocol file system (FTP client).
  */
 
 /*
@@ -33,6 +33,9 @@
 
 #ifndef _RTEMS_FTPFS_H
 #define _RTEMS_FTPFS_H
+
+#include <sys/time.h>
+#include <sys/ioctl.h>
 
 #include <rtems/libio.h>
 
@@ -71,52 +74,93 @@ extern "C" {
  */
 
 /**
- * @brief Well-known port number for FTP control connection.
+ * Well-known port number for FTP control connection.
  */
 #define RTEMS_FTPFS_CTRL_PORT 21
 
 /**
- * @brief Default mount point for FTP file system.
+ * Default mount point for FTP file system.
  */
 #define RTEMS_FTPFS_MOUNT_POINT_DEFAULT "/FTP"
 
 /**
- * @brief FTP file system operations table.
+ * FTP file system IO control requests.
+ */
+typedef enum {
+  RTEMS_FTPFS_IOCTL_GET_VERBOSE = _IOR( 'd', 1, bool *),
+  RTEMS_FTPFS_IOCTL_SET_VERBOSE = _IOW( 'd', 1, bool *),
+  RTEMS_FTPFS_IOCTL_GET_TIMEOUT = _IOR( 'd', 2, struct timeval *),
+  RTEMS_FTPFS_IOCTL_SET_TIMEOUT = _IOW( 'd', 2, struct timeval *)
+} rtems_ftpfs_ioctl_numbers;
+
+/**
+ * FTP file system operations table.
  */
 extern const rtems_filesystem_operations_table rtems_ftpfs_ops;
 
 /**
- * @brief Creates the mount point @a mount_point and mounts the FTP file
- * system.
+ * Creates the mount point @a mount_point and mounts the FTP file system.
  *
  * If @a mount_point is @c NULL the default mount point
  * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  *
  * It is mounted with read and write access.
- *
- * @note The parent directories of the mount point have to exist.
  */
 rtems_status_code rtems_ftpfs_mount( const char *mount_point);
 
 /**
- * @brief Enables or disables the verbose mode if @a verbose is @c true or
- * @c false respectively.
+ * Returns in @a verbose if the verbose mode is enabled or disabled for the
+ * file system at @a mount_point.
+ *
+ * If @a mount_point is @c NULL the default mount point
+ * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
+ */
+rtems_status_code rtems_ftpfs_get_verbose( const char *mount_point, bool *verbose);
+
+/**
+ * Enables or disables the verbose mode if @a verbose is @c true or
+ * @c false respectively for the file system at @a mount_point.
  *
  * In the enabled verbose mode the commands and replies of the FTP control
  * connections will be printed to standard error.
+ *
+ * If @a mount_point is @c NULL the default mount point
+ * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
-rtems_status_code rtems_ftpfs_set_verbose( bool verbose);
+rtems_status_code rtems_ftpfs_set_verbose( const char *mount_point, bool verbose);
 
 /**
- * @brief Returns in @a verbose if the verbose mode is enabled or disabled.
+ * Returns the current timeout value in @a timeout for the file system at
+ * @a mount_point.
+ *
+ * If @a mount_point is @c NULL the default mount point
+ * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
  */
-rtems_status_code rtems_ftpfs_get_verbose( bool *verbose);
+rtems_status_code rtems_ftpfs_get_timeout(
+  const char *mount_point,
+  struct timeval *timeout
+);
+
+/**
+ * Sets the timeout value to @a timeout for the file system at @a mount_point.
+ *
+ * The timeout value will be used during connection establishment of active
+ * data connections.  It will be also used for send and receive operations on
+ * data and control connections.
+ *
+ * If @a mount_point is @c NULL the default mount point
+ * @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT will be used.
+ */
+rtems_status_code rtems_ftpfs_set_timeout(
+  const char *mount_point,
+  const struct timeval *timeout
+);
 
 /** @} */
 
 /**
- * @brief Creates the default mount point @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT
- * and mounts the FTP file system.
+ * Creates the default mount point @ref RTEMS_FTPFS_MOUNT_POINT_DEFAULT and
+ * mounts the FTP file system.
  *
  * It is mounted with read and write access.
  *

@@ -1,3 +1,8 @@
+2009-05-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/ftpfs.c, libnetworking/rtems/ftpfs.h: Added
+	timeouts.  Options are now per file system instance.
+
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/uuid/gen_uuid.c, libnetworking/lib/syslog.c,
