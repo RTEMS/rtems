@@ -150,6 +150,25 @@ void test_heap_cases_1()
   /* XXX what should we expect */
   _Heap_Free( &TestHeap, p3 );
   _Heap_Free( &TestHeap, p4 );
+  _Heap_Free( &TestHeap, p1 );
+  
+  /*
+   *  To tackle a special case of resizing a block in order to cover the 
+   *  code in heapresizeblock.c
+   *
+   *  Re-initialise the heap, so that the blocks created from now on 
+   *  are contiguous.
+   */
+  test_heap_init(); 
+  puts( "Heap Initialized" );
+  p1 = _Heap_Allocate( &TestHeap, 500 );
+  rtems_test_assert( p2 != NULL );
+  p2 = _Heap_Allocate( &TestHeap, 500 );
+  rtems_test_assert( p2 != NULL );
+  rsc = _Heap_Resize_block( &TestHeap, p1, 256, &u1, &u2 );
+  rtems_test_assert( rsc == HEAP_RESIZE_SUCCESSFUL );
+  _Heap_Free( &TestHeap, p1 );
+  _Heap_Free( &TestHeap, p2 );  
 }
 
 void test_heap_extend()
