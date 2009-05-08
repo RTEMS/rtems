@@ -1,3 +1,10 @@
+2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add initial test of _Objects_Get_next.
+	* spobjgetnext/.cvsignore, spobjgetnext/Makefile.am,
+	spobjgetnext/init.c, spobjgetnext/spobjgetnext.scn,
+	spobjgetnext/system.h: New files.
+
 2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp25/init.c, sp25/system.h, sp25/task1.c: Reduce size of array from
