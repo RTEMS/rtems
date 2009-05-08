@@ -7,12 +7,6 @@
  * Acknowledgements:
  * netBSD : Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc. 
  * Marvell : NDA document for the discovery system controller
- * The author referenced two RTEMS network drivers of other NICs.
- * rtems : 1) dec21140.c, a network driver for for TULIP based Ethernet Controller
- *            (C) 1999 Emmanuel Raguet. raguet@crf.canon.fr
- *
- *         2) yellowfin.c, a network driver for the SVGM5 BSP.
- *           Stanford Linear Accelerator Center, Till Straumann 
  *
  * Some notes from the author, S. Kate Feng :
  *
@@ -366,8 +360,7 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
   if (unit < 0) return 0;
  
   printk("\nEthernet driver name %s unit %d \n",name, unit);
-  printk("(c) 2004, Brookhaven National Lab. <feng1@bnl.gov> (RTEMS/mvme5500 port)\n");
-
+  printk("RTEMS-mvme5500 BSP Copyright (c) 2004, Brookhaven National Lab., Shuchen Kate Feng \n");
   /* Make certain elements e.g. descriptor lists are aligned. */
   softc_mem = rtems_bsdnet_malloc(sizeof(*sc) + SOFTC_ALIGN, M_FREE, M_NOWAIT);
 
@@ -393,7 +386,7 @@ int rtems_GT64260eth_driver_attach(struct rtems_bsdnet_ifconfig *config, int att
   } else {
     printk("Read EEPROM ");
      for (i = 0; i < 6; i++)
-       hwaddr[i] = ConfVPD_buff[VPD_ENET0_OFFSET+i];
+       hwaddr[i] = ReadConfVPD_buff(VPD_ENET0_OFFSET+i);
   }
 
 #ifdef GT_DEBUG
@@ -1137,7 +1130,6 @@ static void GTeth_tx_stop(struct GTeth_softc *sc)
   sc->arpcom.ac_if.if_timer = 0;
 }
 
-/* TOCHECK : Should it be about rx or tx ? */
 static void GTeth_ifchange(struct GTeth_softc *sc)
 {
   if (GTeth_debug>0) printk("GTeth_ifchange(");
@@ -1445,6 +1437,7 @@ static void GTeth_hash_init(struct GTeth_softc *sc)
 #endif
 }
 
+#ifdef GT64260eth_DEBUG
 static void GT64260eth_error(struct GTeth_softc *sc)
 {
   struct ifnet	        *ifp = &sc->arpcom.ac_if;
@@ -1474,7 +1467,7 @@ static void GT64260eth_error(struct GTeth_softc *sc)
   sc->intr_errsts[sc->intr_err_ptr1++]=0;  
   sc->intr_err_ptr1 %= INTR_ERR_SIZE;   /* Till Straumann */
 }
-
+#endif
 
 /* The daemon does all of the work; RX, TX and cleaning up buffers/descriptors */
 static void GT64260eth_daemon(void *arg)
@@ -1548,7 +1541,9 @@ static void GT64260eth_daemon(void *arg)
        ifp->if_flags &= ~IFF_OACTIVE;
 
        /* Log errors and other uncommon events. */
+#ifdef GT64260eth_DEBUG
        if (events & ERR_EVENT) GT64260eth_error(sc); 
+#endif
   } /* end for(;;) { rtems_bsdnet_event_receive() .....*/
 
   ifp->if_flags &= ~(IFF_RUNNING|IFF_OACTIVE);

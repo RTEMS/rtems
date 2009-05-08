@@ -5,6 +5,9 @@
  * All rights reserved.
  *
  * Written by Jason R. Thorpe for Wasabi Systems, Inc.
+ * Some are added by Shuchen Kate Feng <feng1@bnl.gov>,
+ *            NSLS, Brookhaven National Laboratory. All rights reserved.
+ *            under the Deaprtment of Energy contract DE-AC02-98CH10886
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -56,7 +59,7 @@ typedef struct wiseman_addr {
  * The receive descriptor ring must be aligned to a 4K boundary,
  * and there must be an even multiple of 8 descriptors in the ring.
  */
-typedef struct wiseman_rxdesc {
+typedef volatile struct wiseman_rxdesc {
 	wiseman_addr_t	wrx_addr;	/* buffer address */
 
 	uint16_t	wrx_len;	/* buffer length */
@@ -103,7 +106,7 @@ typedef struct wiseman_tx_fields {
 	uint8_t wtxu_options;		/* options */
 	uint16_t wtxu_vlan;		/* VLAN info */
 } __attribute__((__packed__)) wiseman_txfields_t;
-typedef struct wiseman_txdesc {
+typedef volatile struct wiseman_txdesc {
 	wiseman_addr_t	wtx_addr;	/* buffer address */
 	uint32_t	wtx_cmdlen;	/* command and length */
 	wiseman_txfields_t wtx_fields;	/* fields; see below */

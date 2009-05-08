@@ -18,7 +18,7 @@
 #include <rtems/bspIo.h>
 #include <bsp.h>
 
-int BSP_pciDebug=0;
+static int BSP_pciDebug=0;
 
 int BSP_pciFindDevicePrint(unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )

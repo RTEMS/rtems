@@ -125,8 +125,8 @@ enter_C_code:
 	/*
 	 * stack = &__rtems_end + 4096
 	 */
-	addis	r9,r0, __rtems_end+(4096-PPC_MINIMUM_STACK_FRAME_SIZE)@ha
-        addi	r9,r9, __rtems_end+(4096-PPC_MINIMUM_STACK_FRAME_SIZE)@l
+	addis	r9,r0, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@ha
+        addi	r9,r9, __stack-PPC_MINIMUM_STACK_FRAME_SIZE@l
 	mr	r1, r9
 	/*
 	 * We are know in a environment that is totally independent from bootloader setup.
@@ -139,11 +139,10 @@ enter_C_code:
 	.type	MMUon,@function
 MMUon:	
 	mfmsr	r0
-#if (PPC_HAS_FPU == 0)
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
+#if (PPC_HAS_FPU == 0)
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FP
 #else
-	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
 	xori	r0, r0, MSR_EE | MSR_IP | MSR_FE0 | MSR_FE1
 #endif
 	mflr	r11

@@ -28,7 +28,7 @@
 
 #define TWSI_DEBUG 0
 
-int TWSI_initFlg = 0;	/* TWSI Initialization Flag */
+static int TWSI_initFlg = 0;	/* TWSI Initialization Flag */
 
 void GT64260TWSIinit(void)
 {

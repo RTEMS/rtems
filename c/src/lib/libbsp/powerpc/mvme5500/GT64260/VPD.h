@@ -5,7 +5,5 @@
  *
  */
 
-extern unsigned char ConfVPD_buff[200];
-
 #define VPD_ENET0_OFFSET  0x3c
 #define VPD_ENET1_OFFSET  0x45

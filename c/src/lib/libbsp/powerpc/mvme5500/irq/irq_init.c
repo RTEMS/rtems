@@ -36,10 +36,18 @@ static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
+
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+static rtems_irq_connect_data     	defaultIrq = {
+  /* vectorIdex,  hdl	    ,handle  , on	, off	   , isOn      ,next_handler, */
+  0, 		  nop_func  , NULL   , nop_func	, nop_func , not_connected, 0
+};
+#else
 static rtems_irq_connect_data     	defaultIrq = {
   /* vectorIdex,	 hdl	  , handle	, on		, off		, isOn */
   0, 			 nop_func  , NULL	, nop_func	, nop_func	, not_connected
 };
+#endif
 
 rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
   /*
@@ -135,12 +143,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Done setup irq mngt configuration\n");
 #endif
-  
-  /* I don't really understand why all sources are enable here... (T.S) */
-  for (i= BSP_MAIN_GPP7_0_IRQ; i <= BSP_MAIN_GPP31_24_IRQ; i++) 
-      BSP_enable_pic_irq(i);
-
-  rtems_interrupt_enable(l);
 
 #ifdef TRACE_IRQ_INIT  
   printk("RTEMS IRQ management is now operationnal\n");

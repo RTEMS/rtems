@@ -19,12 +19,10 @@
  *
  *  Modified to support the MVME5500 board.
  *  Also, the settings of L1, L2, and L3 caches is not necessary here.
- *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003-2007
+ *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003-2009
  *  
  *  $Id$
  */
-
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
 #include <string.h>
 #include <stdlib.h>
@@ -103,11 +101,6 @@ unsigned int BSP_mem_size;
 /*
  * PCI Bus Frequency
  */
-/*
- * Start of the heap
- */
-unsigned int BSP_heap_start;
-
 unsigned int BSP_bus_frequency;
 /*
  * processor clock frequency
@@ -117,7 +110,7 @@ unsigned int BSP_processor_frequency;
  * Time base divisior (how many tick for 1 second).
  */
 unsigned int BSP_time_base_divisor;
-unsigned char ConfVPD_buff[200];
+static unsigned char ConfVPD_buff[200];
 
 #define CMDLINE_BUF_SIZE  2048
 
@@ -254,9 +247,10 @@ void bsp_start( void )
   /* Till Straumann: 2004
    * map the PCI 0, 1 Domain I/O space, GT64260B registers
    * and the reserved area so that the size is the power of 2.
+   * 2009 : map the entire 256 M space
    * 
    */
-  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x2000000, IO_PAGE);
+  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x10000000, IO_PAGE);
 
 
   /*
@@ -272,27 +266,10 @@ void bsp_start( void )
 #endif
 
   /*
-   * the initial stack  has aready been set to this value in start.S
-   * so there is no need to set it in r1 again... It is just for info
-   * so that it can be printed without accessing R1.
-   */
-  stack = ((unsigned char*) __rtems_end) +
-          BSP_INIT_STACK_SIZE - PPC_MINIMUM_STACK_FRAME_SIZE;
-
-  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((uint32_t *)stack) = 0;
-
-  /* fill stack with pattern for debugging */
-  __asm__ __volatile__("mr %0, %%r1":"=r"(r1sp));
-  while (--r1sp >= (unsigned long*)__rtems_end)
-    *r1sp=0xeeeeeeee;
-
-  /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uint32_t) __rtems_end + BSP_INIT_STACK_SIZE;
+  intrStackStart = (uint32_t) __rtems_end;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
-  BSP_heap_start = intrStackStart + intrStackSize;
 
   /*
    * Initialize default raw exception handlers.
@@ -312,29 +289,7 @@ void bsp_start( void )
   printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
   printk("-----------------------------------------\n");
 
-#ifdef TEST_RETURN_TO_PPCBUG  
-  printk("Hit <Enter> to return to PPCBUG monitor\n");
-  printk("When Finished hit GO. It should print <Back from monitor>\n");
-  debug_getc();
-  _return_to_ppcbug();
-  printk("Back from monitor\n");
-  _return_to_ppcbug();
-#endif /* TEST_RETURN_TO_PPCBUG  */
-
-#ifdef TEST_RAW_EXCEPTION_CODE  
-  printk("Testing exception handling Part 1\n");
-  /*
-   * Cause a software exception
-   */
-  __asm__ __volatile ("sc");
-  /*
-   * Check we can still catch exceptions and returned coorectly.
-   */
-  printk("Testing exception handling Part 2\n");
-  __asm__ __volatile ("sc");
-#endif  
-
-  BSP_mem_size         =  _512M;
+  BSP_mem_size         =  probeMemoryEnd();
   /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit
    *       of System Status  register
    */
@@ -390,6 +345,19 @@ void bsp_start( void )
 #endif
     BSP_pgtbl_activate(pt);
   }
+  /* Read Configuration Vital Product Data (VPD) */
+  if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))
+     printk("I2Cread_eeprom() error \n");
+  else {
+#ifdef CONF_VPD
+    printk("\n");
+    for (i=0; i<150; i++) {
+      printk("%2x ", ConfVPD_buff[i]);  
+      if ((i % 20)==0 ) printk("\n");
+    }
+    printk("\n");
+#endif
+  }
 
   /*
    * PCI 1 domain memory space
@@ -413,23 +381,14 @@ void bsp_start( void )
    */
   _BSP_clear_hostbridge_errors(0, 1 /*quiet*/);
 
-  /* Read Configuration Vital Product Data (VPD) */
-  if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))
-     printk("I2Cread_eeprom() error \n");
-  else {
-#ifdef CONF_VPD
-    printk("\n");
-    for (i=0; i<150; i++) {
-      printk("%2x ", ConfVPD_buff[i]);  
-      if ((i % 20)==0 ) printk("\n");
-    }
-    printk("\n");
-#endif
-  }
-
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("MSR %x \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
 
+}
+
+unsigned char ReadConfVPD_buff(int offset)
+{
+  return(ConfVPD_buff[offset]);
 }

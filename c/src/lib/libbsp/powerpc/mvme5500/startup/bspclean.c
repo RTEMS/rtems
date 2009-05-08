@@ -1,3 +1,6 @@
+/* Copyright 2003, Shuchen Kate Feng <feng1@bnl.gov>,
+ *                    NSLS,Brookhaven National Laboratory
+ */
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
