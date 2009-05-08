@@ -1,3 +1,7 @@
+2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/objectgetnext.c: Add checks for NULL pointers.
+
 2009-05-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/ftpfs.c, libnetworking/rtems/ftpfs.h: Added

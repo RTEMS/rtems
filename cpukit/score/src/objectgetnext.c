@@ -65,6 +65,15 @@ _Objects_Get_next(
     Objects_Control *object;
     Objects_Id       next_id;
 
+    if ( !information )
+      return NULL;
+
+    if ( !location_p )
+      return NULL;
+
+    if ( !next_id_p )
+      return NULL;
+
     if (_Objects_Get_index(id) == OBJECTS_ID_INITIAL_INDEX)
         next_id = information->minimum_id;
     else
