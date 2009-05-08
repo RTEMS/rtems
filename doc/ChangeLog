@@ -1,3 +1,8 @@
+2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/conf.t: Change work_space_size to uintptr_t since it cannot be
+	negative.
+
 2009-04-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu_supplement/.cvsignore, cpu_supplement/Makefile.am,
