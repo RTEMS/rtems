@@ -30,6 +30,8 @@ extern "C" {
 #include <rtems/m68k/sim.h>
 #include <rtems/m68k/qsm.h>
 
+#define BSP_SMALL_MEMORY 1
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)

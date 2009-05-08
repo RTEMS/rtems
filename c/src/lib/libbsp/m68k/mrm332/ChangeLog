@@ -1,3 +1,8 @@
+2009-05-09	Chris Johns <chrisj@rtems.org>
+
+	* include/bsp.h: Defined as a small memory target. It cannot build
+	one of the sample programs any more.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S, startup/start_c.c: Update for boot_card command
