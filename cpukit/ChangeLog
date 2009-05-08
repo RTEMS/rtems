@@ -1,5 +1,10 @@
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/rtems/posix/psignal.h,
+	rtems/inline/rtems/rtems/support.inl: Remove warnings.
+
+2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/rtems/config.h: Switch from ssize_t to uintptr_t for
 	work space size since it is larger than a single allocatable object.
 

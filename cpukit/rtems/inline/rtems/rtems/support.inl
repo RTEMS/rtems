@@ -53,10 +53,10 @@ RTEMS_INLINE_ROUTINE void rtems_name_to_characters(
   char         *c4
 )
 {
-  *c1 = (name >> 24) & 0xff;
-  *c2 = (name >> 16) & 0xff;
-  *c3 = (name >> 8) & 0xff;
-  *c4 =  name & 0xff;
+  *c1 = (char) ((name >> 24) & 0xff);
+  *c2 = (char) ((name >> 16) & 0xff);
+  *c3 = (char) ((name >> 8) & 0xff);
+  *c4 = (char) ( name & 0xff);
 }
 
 /**@}*/
