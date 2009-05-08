@@ -1,3 +1,8 @@
+2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/rtems/config.h: Switch from ssize_t to uintptr_t for
+	work space size since it is larger than a single allocatable object.
+
 2009-05-08	Chris Johns <chrisj@rtems.org>
 
 	* cpukit/libblock/src/bdpart.c, libmisc/shell/main_msdosfmt.c,
