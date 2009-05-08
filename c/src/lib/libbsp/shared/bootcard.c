@@ -46,6 +46,7 @@
 #include <rtems.h>
 
 #include <bsp/bootcard.h>
+#include <rtems/bspIo.h>
 
 /*
  *  At most a single pointer to the cmdline for those target
@@ -121,9 +122,9 @@ int boot_card(
   rtems_interrupt_level  bsp_isr_level;
   rtems_status_code      sc = RTEMS_SUCCESSFUL;
   void                  *work_area_start = NULL;
-  intptr_t               work_area_size = 0;
+  uintptr_t              work_area_size = 0;
   void                  *heap_start = NULL;
-  intptr_t               heap_size = 0;
+  uintptr_t              heap_size = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -149,14 +150,14 @@ int boot_card(
    *  Find out where the block of memory the BSP will use for
    *  the RTEMS Workspace and the C Program Heap is.
    */
-  bsp_get_work_area(&work_area_start, (ssize_t*) &work_area_size,
-                    &heap_start, (ssize_t*) &heap_size);
+  bsp_get_work_area(&work_area_start, &work_area_size,
+                    &heap_start, &heap_size);
 
-  if ( work_area_size <= Configuration.work_space_size ) {
+  if ( (uint32_t) work_area_size <= (uint32_t) Configuration.work_space_size ) {
     printk(
-      "bootcard: Work space too big for work area! (%d > %d)\n",
-      Configuration.work_space_size,
-      work_area_size
+      "bootcard: Work space too big for work area! (0x%08lx > 0x%08lx)\n",
+      (uint32_t)Configuration.work_space_size,
+      (uint32_t)work_area_size
     );
     bsp_cleanup();
     return -1;
