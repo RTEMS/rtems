@@ -5,8 +5,8 @@
 /*
  * Declare some sizes.
  */
-RamBase = DEFINED(RamBase) ? RamBase : 0;
-RamSize = DEFINED(RamSize) ? RamSize : 256K;
+RamBase = DEFINED(RamBase) ? RamBase : 0x08000000;
+RamSize = DEFINED(RamSize) ? RamSize : 64K;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 

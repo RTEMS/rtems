@@ -1,3 +1,8 @@
+2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Correct to have 65K total RAM (mostly external) and
+	correct base address.
+
 2009-05-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/bsp.h: Add BSP_SMALL_MEMORY.
