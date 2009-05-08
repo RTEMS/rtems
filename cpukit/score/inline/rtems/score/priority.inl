@@ -64,22 +64,22 @@ RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
  *  This function returns the major portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE uint32_t   _Priority_Major (
+RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Major (
   Priority_Control the_priority
 )
 {
-  return ( the_priority / 16 );
+  return (Priority_Bit_map_control)( the_priority / 16 );
 }
 
 /**
  *  This function returns the minor portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE uint32_t   _Priority_Minor (
+RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Minor (
   Priority_Control the_priority
 )
 {
-  return ( the_priority % 16 );
+  return (Priority_Bit_map_control)( the_priority % 16 );
 }
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
@@ -89,13 +89,24 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Minor (
  *  number passed to it.
  */
  
-RTEMS_INLINE_ROUTINE uint32_t   _Priority_Mask (
+RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Mask (
   uint32_t   bit_number
 )
 {
-  return (0x8000u >> bit_number);
+  return (Priority_Bit_map_control)(0x8000u >> bit_number);
 }
  
+/**
+ *  This function returns the mask bit inverted.
+ */
+ 
+RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Mask_invert (
+  uint32_t   mask
+)
+{
+  return (Priority_Bit_map_control)(~mask);
+}
+
  
 /**
  *  This function translates the bit numbers returned by the bit scan
@@ -180,11 +191,13 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
 
   mask = _Priority_Mask( major );
   the_priority_map->ready_major = mask;
-  the_priority_map->block_major = ~mask;
+  /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
+  the_priority_map->block_major = (Priority_Bit_map_control)(~((uint32_t)mask));
 
   mask = _Priority_Mask( minor );
   the_priority_map->ready_minor = mask;
-  the_priority_map->block_minor = ~mask;
+  /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
+  the_priority_map->block_minor = (Priority_Bit_map_control)(~((uint32_t)mask));
 }
 
 /**

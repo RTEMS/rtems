@@ -130,13 +130,13 @@ int rtems_shell_main_msdos_format(
   {
     printf (" %-20s: %s\n", "OEMName", "RTEMS");
     printf (" %-20s: %s\n", "VolLabel", "RTEMSDisk");
-    printf (" %-20s: %i\n", "sectors per cluster", rqdata.sectors_per_cluster);
-    printf (" %-20s: %i\n", "fats", rqdata.fat_num);
-    printf (" %-20s: %i\n", "files per root dir", rqdata.files_per_root_dir);
+    printf (" %-20s: %lu\n", "sectors per cluster", rqdata.sectors_per_cluster);
+    printf (" %-20s: %lu\n", "fats", rqdata.fat_num);
+    printf (" %-20s: %lu\n", "files per root dir", rqdata.files_per_root_dir);
     printf (" %-20s: %i\n", "fat type", rqdata.fattype);
     printf (" %-20s: %d\n", "media", rqdata.media);
     printf (" %-20s: %d\n", "quick_format", rqdata.quick_format);
-    printf (" %-20s: %i\n", "cluster align", rqdata.cluster_align);
+    printf (" %-20s: %lu\n", "cluster align", rqdata.cluster_align);
   }
   
   if (msdos_format (driver, &rqdata) < 0) {

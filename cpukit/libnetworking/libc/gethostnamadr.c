@@ -272,8 +272,8 @@ static int __dns_gethostbyx_r(
   result->h_addr_list=(char**)buf;
   result->h_aliases[0]=0;
 
-  cur=buf+16*sizeof(char*);
-  max=buf+buflen;
+  cur=(unsigned char*)buf+16*sizeof(char*);
+  max=(unsigned char*)buf+buflen;
   names=ips=0;
 
   if ((size=res_query(name,C_IN,lookfor,inpkg,512))<0) {
@@ -282,7 +282,7 @@ invalidpacket:
     return -1;
   }
   {
-    tmp=inpkg+12;
+    tmp=(char*)inpkg+12;
     {
       char Name[257];
       unsigned short q=((unsigned short)inpkg[4]<<8)+inpkg[5];
@@ -296,17 +296,17 @@ invalidpacket:
       q=((unsigned short)inpkg[6]<<8)+inpkg[7];
       if (q<1) goto nodata;
       while (q>0) {
-  int decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+        int decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),(unsigned char*)Name,256,inpkg+size);
   if (decofs<0) break;
-  tmp=inpkg+decofs;
+  tmp=(char*)inpkg+decofs;
   --q;
   if (tmp[0]!=0 || tmp[1]!=lookfor || /* TYPE != A */
       tmp[2]!=0 || tmp[3]!=1) {   /* CLASS != IN */
     if (tmp[1]==5) {  /* CNAME */
       tmp+=10;
-      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),(unsigned char*)Name,256,inpkg+size);
       if (decofs<0) break;
-      tmp=inpkg+decofs;
+      tmp=(char*)inpkg+decofs;
     } else
       break;
     continue;
@@ -318,22 +318,22 @@ invalidpacket:
       slen=strlen(Name);
       if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return -1; }
     } else if (lookfor==12) /* PTR */ {
-      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+      decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),(unsigned char*)Name,256,inpkg+size);
       if (decofs<0) break;
-      tmp=inpkg+decofs;
+      tmp=(char*)inpkg+decofs;
       slen=strlen(Name);
     } else
       slen=strlen(Name);
-    strcpy(cur,Name);
+    strcpy((char*)cur,Name);
     if (names==0)
-      result->h_name=cur;
+      result->h_name=(char*)cur;
     else
-      result->h_aliases[names-1]=cur;
+      result->h_aliases[names-1]=(char*)cur;
     result->h_aliases[names]=0;
     if (names<8) ++names;
 /*    cur+=slen+1; */
     cur+=(slen|3)+1;
-    result->h_addr_list[ips++] = cur;
+    result->h_addr_list[ips++] = (char*)cur;
     if (lookfor==1) /* A */ {
       *(int*)cur=*(int*)tmp;
       cur+=4;

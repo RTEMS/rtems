@@ -579,7 +579,9 @@ check_rm(rtems_shell_rm_globals* globals, char *path, char *name, struct stat *s
 		    group_from_gid(sp->st_gid, 0),
 		    *flagsp ? flagsp : "", *flagsp ? " " : "",
 		    path);
+#if RTEMS_REMOVED
 		free(flagsp);
+#endif
 	}
 	(void)fflush(stderr);
 

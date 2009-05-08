@@ -1,3 +1,10 @@
+2009-05-08	Chris Johns <chrisj@rtems.org>
+
+	* cpukit/libblock/src/bdpart.c, libmisc/shell/main_msdosfmt.c,
+	libmisc/shell/main_rm.c, libnetworking/libc/gethostnamadr.c,
+	score/include/rtems/score/bitfield.h,
+	score/inline/rtems/score/priority.inl: Remove warnings.
+
 2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/objectgetnext.c: Add checks for NULL pointers.
