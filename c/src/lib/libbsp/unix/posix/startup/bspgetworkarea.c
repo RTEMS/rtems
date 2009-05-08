@@ -15,10 +15,10 @@
 #include <bsp/bootcard.h>
 
 void bsp_get_work_area(
-  void    **work_area_start,
-  ssize_t  *work_area_size,
-  void    **heap_start,
-  ssize_t  *heap_size
+  void      **work_area_start,
+  uintptr_t  *work_area_size,
+  void      **heap_start,
+  uintptr_t  *heap_size
 )
 {
   uintptr_t   workspace_ptr;

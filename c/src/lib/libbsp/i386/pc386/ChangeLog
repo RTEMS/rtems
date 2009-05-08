@@ -1,3 +1,9 @@
+2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/bspgetworkarea.c: Switch from ssize_t to uintptr_t for
+	bsp_get_work_area() since the work area is larger than a single
+	allocatable object.
+
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/console.c, console/inch.c, ide/ide.c: Fixed warnings.

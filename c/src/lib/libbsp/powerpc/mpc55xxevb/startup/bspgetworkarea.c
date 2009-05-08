@@ -32,15 +32,15 @@ LINKER_SYMBOL(bsp_external_ram_size);
 LINKER_SYMBOL(bsp_section_bss_end);
 
 void bsp_get_work_area(
-  void    **work_area_start,
-  ssize_t  *work_area_size,
-  void    **heap_start,
-  ssize_t  *heap_size
+  void      **work_area_start,
+  uintptr_t   *work_area_size,
+  void      **heap_start,
+  uintptr_t  *heap_size
 )
 {
   *work_area_start = bsp_section_bss_end;
   *work_area_size = bsp_ram_end - 2 * 
         MPC55XX_INTERRUPT_STACK_SIZE - bsp_section_bss_end;
   *heap_start = bsp_external_ram_start;
-  *heap_size = (ssize_t) bsp_external_ram_size;
+  *heap_size = (uintptr_t) bsp_external_ram_size;
 }
