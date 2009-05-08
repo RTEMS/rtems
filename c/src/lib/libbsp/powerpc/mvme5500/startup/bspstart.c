@@ -24,8 +24,6 @@
  *  $Id$
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -52,12 +50,12 @@
 #undef __RTEMS_APPLICATION__
 #endif
 
-/*
-#define SHOW_MORE_INIT_SETTINGS
+
+/*#define SHOW_MORE_INIT_SETTINGS
+#define CONF_VPD
 #define SHOW_LCR1_REGISTER
 #define SHOW_LCR2_REGISTER
 #define SHOW_LCR3_REGISTER
-#define CONF_VPD
 */
 
 /* there is no public Workspace_Free() variant :-( */
@@ -73,6 +71,7 @@ extern Triv121PgTbl BSP_pgtbl_setup(unsigned long);
 extern void BSP_pgtbl_activate(Triv121PgTbl);
 extern int I2Cread_eeprom(unsigned char I2cBusAddr, uint32_t devA2A1A0, uint32_t AddrBytes, unsigned char *pBuff, uint32_t numBytes);
 extern void BSP_vme_config(void);
+extern uint32_t probeMemoryEnd();
 
 uint32_t bsp_clicks_per_usec;
 
@@ -267,12 +266,10 @@ void bsp_start( void )
   setdbat(2, PCI0_MEM_BASE, PCI0_MEM_BASE, 0x10000000, IO_PAGE);
 
   /* Till Straumann: 2004
-   * map the PCI 0, 1 Domain I/O space, GT64260B registers
-   * and the reserved area so that the size is the power of 2.
-   * 
+   * map the PCI 0, 1 Domain I/O space, GT64260B registers,
+   * Flash Bank 0 and Flash Bank 2.
    */
-  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x2000000, IO_PAGE);
-
+  setdbat(3,PCI0_IO_BASE, PCI0_IO_BASE, 0x10000000, IO_PAGE);
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -327,29 +324,7 @@ void bsp_start( void )
   printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
   printk("-----------------------------------------\n");
 
-#ifdef TEST_RETURN_TO_PPCBUG  
-  printk("Hit <Enter> to return to PPCBUG monitor\n");
-  printk("When Finished hit GO. It should print <Back from monitor>\n");
-  debug_getc();
-  _return_to_ppcbug();
-  printk("Back from monitor\n");
-  _return_to_ppcbug();
-#endif /* TEST_RETURN_TO_PPCBUG  */
-
-#ifdef TEST_RAW_EXCEPTION_CODE  
-  printk("Testing exception handling Part 1\n");
-  /*
-   * Cause a software exception
-   */
-  __asm__ __volatile ("sc");
-  /*
-   * Check we can still catch exceptions and returned coorectly.
-   */
-  printk("Testing exception handling Part 2\n");
-  __asm__ __volatile ("sc");
-#endif  
-
-  BSP_mem_size         =  _512M;
+  BSP_mem_size         =  probeMemoryEnd();
   /* TODO: calculate the BSP_bus_frequency using the REF_CLK bit
    *       of System Status  register
    */
@@ -421,6 +396,19 @@ void bsp_start( void )
 #endif
     BSP_pgtbl_activate(pt);
   }
+  /* Read Configuration Vital Product Data (VPD) */
+  if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))
+     printk("I2Cread_eeprom() error \n");
+  else {
+#ifdef CONF_VPD
+    printk("\n");
+    for (i=0; i<150; i++) {
+      printk("%2x ", ConfVPD_buff[i]);  
+      if ((i % 20)==0 ) printk("\n");
+    }
+    printk("\n");
+#endif
+  }
 
   /*
    * PCI 1 domain memory space
@@ -444,23 +432,14 @@ void bsp_start( void )
    */
   _BSP_clear_hostbridge_errors(0, 1 /*quiet*/);
 
-  /* Read Configuration Vital Product Data (VPD) */
-  if ( I2Cread_eeprom(0xa8, 4,2, &ConfVPD_buff[0], 150))
-     printk("I2Cread_eeprom() error \n");
-  else {
-#ifdef CONF_VPD
-    printk("\n");
-    for (i=0; i<150; i++) {
-      printk("%2x ", ConfVPD_buff[i]);  
-      if ((i % 20)==0 ) printk("\n");
-    }
-    printk("\n");
-#endif
-  }
-
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("MSR %x \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
 
+}
+
+unsigned char ReadConfVPD_buff(int offset)
+{
+  return(ConfVPD_buff[offset]);
 }

@@ -4,6 +4,7 @@
  * Copyright (c) 1995, 1996, 1999, 2000
  *     Christopher G. Demetriou.  All rights reserved.
  * Copyright (c) 1994, 1996 Charles M. Hannum.  All rights reserved.
+ * Copyright (C) 2007 Brookhaven National Laboratory, Shuchen Kate Feng
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +31,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+#include <bsp.h>
 
 /*
  * PCI Class and Revision Register; defines type and revision of device.
@@ -305,7 +307,7 @@
 #define	PCI_MAPREG_MEM64_ADDR_MASK		0xfffffffffffffff0ULL
 
 #define	PCI_MAPREG_IO_ADDR(mr)						\
-	    ((mr) & PCI_MAPREG_IO_ADDR_MASK)
+	    ((mr+PCI0_IO_BASE) & PCI_MAPREG_IO_ADDR_MASK)
 #define	PCI_MAPREG_IO_SIZE(mr)						\
 	    (PCI_MAPREG_IO_ADDR(mr) & -PCI_MAPREG_IO_ADDR(mr))
 #define	PCI_MAPREG_IO_ADDR_MASK			0xfffffffc

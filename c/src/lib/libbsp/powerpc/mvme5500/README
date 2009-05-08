@@ -1,5 +1,5 @@
 #
-#  $Id: README,v 1.3.1  Shuchen Kate Feng, NSLS, BNL (08/27/07)
+#  $Id: README,v 1.4.1  Shuchen Kate Feng, NSLS, BNL (03/16/2009)
 #
 
 Please reference README.booting for the boot/load process.
@@ -7,7 +7,10 @@ Please reference README.booting for the boot/load process.
 For the priority setting of the Interrupt Requests (IRQs), please
 reference README.irq 
 
-The BSP is built and tested on the 4.7.1 and 4.7.99.2 CVS RTEMS release.
+The BSP is built and tested on the RTEMS 4.9.1 release. The
+PR1385 patch for c/src/lib/libbsp/powerpc/shared/irq/irq_asm.S
+is not needed for the mvme5500 BSP because the PowerPC BSPs
+use the shared exception framework in the RTEMS 4.9 release.
 
 I believe in valuable real-time programming, where technical neatness,
 performance and truth are.  I hope I still believe. Any suggestion,

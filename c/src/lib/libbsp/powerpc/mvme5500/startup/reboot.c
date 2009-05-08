@@ -1,3 +1,10 @@
+/* Copyright 2003, Shuchen Kate Feng <feng1@bnl.gov>,
+ *                    NSLS,Brookhaven National Laboratory
+ *
+ * Ported it from powerpc/shared/console/reboot.c for mvme5500
+ *
+ */
+
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
@@ -12,5 +19,5 @@ void bsp_reset()
 
   printk("RTEMS terminated; Rebooting ...\n");
   /* Mvme5500 board reset : 2004 S. Kate Feng <feng1@bnl.gov>  */
-  out_8((volatile unsigned char*) (GT64260_DEV1_BASE +2), 0x80);
+  out_8((volatile unsigned char*) (GT64x60_DEV1_BASE +2), 0x80);
 }

@@ -1,8 +1,9 @@
-README.booting: written by S. Kate Feng <feng1@bnl.gov>, Aug. 28, 2007
+README.booting: written by S. Kate Feng <feng1@bnl.gov>, March 16, 2009
 
-The bootloader is adapted from Till Straumann's Generic Mini-loader,
-which he wrote originally for the SVGM powerpc board. 
-The BSP is built and tested on the 4.7 CVS RTEMS release.
+The BSP is built and tested on the RTEMS 4.9.1 release. The
+PR1385 patch for c/src/lib/libbsp/powerpc/shared/irq/irq_asm.S
+is not needed for the mvme5500 BSP because the PowerPC BSPs
+use the shared exception framework in the RTEMS 4.9 release.
 
 Booting requirement :
 -------------------------
@@ -11,12 +12,7 @@ Booting requirement :
    or /etc/dhcpd.conf (DHCP) properly to boot the system.
    (Note : EPICS needs a NTP server).
  
-2) Please copy the prebuilt RTEMS binary (e.g. misc/rtems5500-cexp.bin)
-   and perhaps others (e.g. misc/st.sys) to the /tftpboot/epics/hostname/bin/
-   directory or the TFTPBOOT one you specified in the 'tftpGet'
-   command of the boot script (as shown in the following example).
-
-3) Example of the boot script setup carried out on the MOTLoad 
+2) Example of the boot script setup carried out on the MOTLoad 
    command line : 
 
 MVME5500> gevEdit mot-script-boot
@@ -32,23 +28,14 @@ MVME5500>
 Note : (cxx.xx.xx.xx is the client IP address and 
         sxx.xx.xx.xx is the server IP address)
 
-4) Other reference web sites for mvme5500 BSP:
-http://lansce.lanl.gov/EPICS/presentations/KateFeng%20RTEMS-mvme55001.ppt
+3) Other reference web sites for mvme5500 BSP:
 http://www.nsls.bnl.gov/facility/expsys/software/EPICS/
-http://www.nsls.bnl.gov/facility/expsys/software/EPICS/FAQ.txt
 
-5) When generating code (especially C++) for this system, one should
-   use at least gcc-3.2 (preferrably a copy downloaded from the RTEMS
-   site [snapshot area] )
 
-6) To reboot the RTEMS-MVME5500 (board reset), one can invoke the
+4) To reboot the RTEMS-MVME5500 (board reset), one can invoke the
    rtemsReboot() command at Cexp> prompt.
  
-7) Please reference http://www.slac.stanford.edu/~strauman/rtems
-for the source code and installation guidance of cexp, GeSys and
-other useful utilities such as telnet, nfs, and so on. 
-
-8) To get started with RTEMS/EPICS and to build development
+5) To get started with RTEMS/EPICS and to build development
 tools and BSP, I would recommend one to reference
 http://www.aps.anl.gov/epics/base/RTEMS/tutorial/
 in additional to the RTEMS document.

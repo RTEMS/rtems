@@ -32,7 +32,9 @@ startup_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c startup/bspclean.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/gnatinstallhandler.c startup/reboot.c
+    ../../shared/gnatinstallhandler.c startup/reboot.c \
+    ../../powerpc/shared/startup/probeMemEnd.c
+
 pclock_SOURCES = ../../powerpc/shared/clock/p_clock.c
 
 include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
@@ -45,7 +47,7 @@ pci_SOURCES = pci/pci.c pci/pci_interface.c pci/detect_host_bridge.c \
     pci/pcifinddevice.c
 
 include_bsp_HEADERS += irq/irq.h
-irq_SOURCES = irq/irq_init.c irq/irq.c 
+irq_SOURCES = irq/irq_init.c irq/BSP_irq.c 
 
 nodist_include_HEADERS += ../../shared/tod.h
 tod_SOURCES = ../../shared/tod.c tod/todcfg.c

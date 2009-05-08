@@ -1,3 +1,21 @@
+2009-05-08	Kate Feng <feng1@bnl.gov>
+
+	PR1395/bsps
+	* Updated the changes from RTEMS-4.8.0, which were made since Oct. 2007.
+	* network/if_1GHz/if_wm.c: fixed some bugs in the 1GHz driver.
+	* pci/pci_interface.c:
+	  + Enabled PCI "Read", "Read Line", and "Read Multiple"
+	  +  Agressive Prefetch to improve the performance of the PCI based
+	     applications (e.g. 1GHz NIC).
+	* irq/BSP_irq.c : Replaced the irq/irq.c, and used GT_GPP_Value
+	register to monitor the cause of the level sensitive interrupts.
+	This unique solution solves various bugs in the 1GHz network drivers
+	Fixed bugs in compute_pic_masks_from_prio()
+	* pci/pci.c : Updated it to be consistent with the original pci.c
+	* written by Eric Valette.  There is no change in its function.
+	* irq/irq_init.c : set defaultIrq->next_handler to be 0 
+	* for BSP_SHARED_HANDLER_SUPPORT.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

@@ -190,7 +190,7 @@
 #define GT_MPP_Control2			0xf008
 #define GT_MPP_Control3			0xf00c
 
-/* <skf> added */
+/* <skf> added for GT64260 */
 #define GT_MPP_SerialPortMultiplex      0xf010
 
 #define	GT_GPP_IO_Control		0xf100
@@ -789,14 +789,13 @@
 #define TWSI_BAUDE_RATE		0xc00c
 #define TWSI_SFT_RST		0xc01c
 
-/* Interrupt Controller - Interrupt Controller Registers */
 /* Section 25.2 : Table 734 <skf> */
 
-#define GT_MAIN_INT_CAUSE_LO	0xc18 /* read Only */
-#define GT_MAIN_INT_CAUSE_HI   0xc68 /* read Only */
-#define GT_CPU_INT_MASK_LO 	0xc1c
-#define GT_CPU_INT_MASK_HI	0xc6c
-#define GT_CPU_SEL_CAUSE	0xc70 /* read Only */
+#define GT64260_MAIN_INT_CAUSE_LO	0xc18 /* read Only */
+#define GT64260_MAIN_INT_CAUSE_HI       0xc68 /* read Only */
+#define GT64260_CPU_INT_MASK_LO 	0xc1c
+#define GT64260_CPU_INT_MASK_HI	        0xc6c
+#define GT64260_CPU_SEL_CAUSE	0xc70 /* read Only */
 #define GT_PCI0_INT_MASK_LO	0xc24
 #define GT_PCI0_INT_MASK_HI	0xc64
 #define GT_PCI0_SEL_CAUSE	0xc74 /* read Only */
