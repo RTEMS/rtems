@@ -149,7 +149,6 @@ void test_heap_cases_1()
   rsc = _Heap_Resize_block( &TestHeap, p1, 41, &u1, &u2 );
   /* XXX what should we expect */
   _Heap_Free( &TestHeap, p3 );
-  _Heap_Free( &TestHeap, p4 );
   _Heap_Free( &TestHeap, p1 );
   
   /*

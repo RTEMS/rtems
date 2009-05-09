@@ -1,3 +1,7 @@
+2009-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* malloctest/init.c: Fix warning.
+
 2009-05-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Fix typo.
