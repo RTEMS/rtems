@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,7 +27,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 );
 
-void test_init();
+void test_init(void);
 
 int operation_count = OPERATION_COUNT;
 
@@ -84,7 +84,7 @@ void test_init()
 
   status = rtems_message_queue_create(
     1,
-    operation_count,
+    (uint32_t)operation_count,
     16,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id

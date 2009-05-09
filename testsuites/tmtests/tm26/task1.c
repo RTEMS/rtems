@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -54,6 +54,10 @@ uint32_t   thread_get_time;
 uint32_t   semaphore_get_time;
 uint32_t   thread_get_invalid_time;
 
+rtems_task null_task(
+  rtems_task_argument argument
+);
+
 rtems_task High_task(
   rtems_task_argument argument
 );
@@ -94,7 +98,7 @@ rtems_task Init(
 
   puts( "\n\n*** TIME TEST 26 ***" );
 
-#define FP1_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 3)      /* 201, */
+#define FP1_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 3u)      /* 201, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '1', ' ' ),
     FP1_PRIORITY,
@@ -108,7 +112,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_1, 0 );
   directive_failed( status, "rtems_task_start of FP1" );
 
-#define FP2_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2)      /* 202, */
+#define FP2_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2u)      /* 202, */
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '2', ' ' ),
     FP2_PRIORITY,
@@ -122,7 +126,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Floating_point_task_2, 0 );
   directive_failed( status, "rtems_task_start of FP2" );
 
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4)   /*  200, */
+#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4u)   /*  200, */
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     LOW_PRIORITY,
@@ -136,7 +140,7 @@ rtems_task Init(
   status = rtems_task_start( task_id, Low_task, 0 );
   directive_failed( status, "rtems_task_start of LOW" );
 
-#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 5)   /*  128, */
+#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 5u)   /*  128, */
   status = rtems_task_create(
     rtems_build_name( 'M', 'I', 'D', ' ' ),
     MIDDLE_PRIORITY,
@@ -175,7 +179,7 @@ rtems_task Init(
   for ( index = 1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'N', 'U', 'L', 'L' ),
-      RTEMS_MAXIMUM_PRIORITY - 1,      /* 254, */
+      RTEMS_MAXIMUM_PRIORITY - 1u,      /* 254, */
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2) + 1,
+    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,

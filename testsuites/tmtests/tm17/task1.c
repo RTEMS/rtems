@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,16 +34,16 @@ rtems_task Init(
 )
 {
   rtems_task_entry  task_entry;
-  uint32_t    index;
+  int               index;
   rtems_status_code status;
 
   Print_Warning();
 
   puts( "\n\n*** TIME TEST 17 ***" );
 
-  Task_priority = RTEMS_MAXIMUM_PRIORITY - 1;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  Task_priority = RTEMS_MAXIMUM_PRIORITY - 1u;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
+    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
 
   for( index = 0; index < operation_count ; index++ ) {
     status = rtems_task_create(
@@ -107,7 +107,7 @@ rtems_task Last_task(
   rtems_task_argument argument
 )
 {
-  uint32_t   index;
+  int index;
 
   end_time = benchmark_timer_read();
 
@@ -119,7 +119,7 @@ rtems_task Last_task(
   put_time(
     "rtems_task_set_priority: preempts caller",
     end_time,
-    operation_count - 1,
+    operation_count - 1u,
     overhead,
     CALLING_OVERHEAD_TASK_SET_PRIORITY
   );

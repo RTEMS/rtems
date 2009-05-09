@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,7 @@ rtems_task Init(
 
   puts( "\n\n*** TIME TEST 27 ***" );
 
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1)
+#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
     LOW_PRIORITY,

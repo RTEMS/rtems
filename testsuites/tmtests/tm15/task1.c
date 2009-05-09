@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +22,7 @@ rtems_task Low_task(
   rtems_task_argument argument
 );
 
-void test_init();
+void test_init(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -41,7 +40,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-void test_init()
+void test_init(void)
 {
   rtems_id          id;
   uint32_t    index;

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     1,
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -64,12 +64,11 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
-  uint32_t       index;
+  int                  index;
   rtems_task_entry     task_entry;
   rtems_task_priority  priority;
   rtems_id             task_id;
   rtems_status_code    status;
-
 
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' ' ),
@@ -80,9 +79,9 @@ rtems_task test_init(
   );
   directive_failed( status, "rtems_message_queue_create" );
 
-  priority = RTEMS_MAXIMUM_PRIORITY - 2;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  priority = RTEMS_MAXIMUM_PRIORITY - 2u;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
+    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
 
   for( index = 0; index < operation_count ; index++ ) {
     status = rtems_task_create(
@@ -109,7 +108,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  uint32_t    index;
+  int  index;
 
   benchmark_timer_initialize();
     for ( index=1 ; index < operation_count ; index++ )

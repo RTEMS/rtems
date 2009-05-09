@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     1,
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -64,7 +64,7 @@ rtems_task test_init(
   rtems_task_argument argument
 )
 {
-  uint32_t       index;
+  int                  index;
   rtems_task_entry     task_entry;
   rtems_task_priority  priority;
   rtems_id             task_id;
@@ -73,14 +73,14 @@ rtems_task test_init(
 
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' ' ),
-    operation_count,
+    (uint32_t) operation_count,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
   );
   directive_failed( status, "rtems_message_queue_create" );
 
-  priority = RTEMS_MAXIMUM_PRIORITY - 1;
+  priority = RTEMS_MAXIMUM_PRIORITY - 1u;
 
   if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
     operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
@@ -98,8 +98,8 @@ rtems_task test_init(
 
     priority--;
 
-    if ( index==operation_count-1 ) task_entry = High_task;
-    else                            task_entry = Low_tasks;
+    if ( index == operation_count-1 ) task_entry = High_task;
+    else                              task_entry = Low_tasks;
 
     status = rtems_task_start( task_id, task_entry, 0 );
     directive_failed( status, "rtems_task_start LOOP" );
@@ -110,7 +110,7 @@ rtems_task High_task(
   rtems_task_argument argument
 )
 {
-  uint32_t    index;
+  int  index;
 
   benchmark_timer_initialize();
     for ( index=1 ; index < operation_count ; index++ )

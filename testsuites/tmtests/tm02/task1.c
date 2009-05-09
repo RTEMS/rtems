@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,7 +30,7 @@ rtems_task Low_task(
 
 int operation_count = OPERATION_COUNT;
 
-void test_init();
+void test_init(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -48,10 +48,10 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete" );
 }
 
-void test_init()
+void test_init(void)
 {
   rtems_status_code   status;
-  uint32_t            index;
+  int                 index;
   rtems_task_priority priority;
 
   priority = 2;
@@ -71,8 +71,8 @@ void test_init()
   status = rtems_task_start( High_id, High_task, 0 );
   directive_failed( status, "rtems_task_start of high task" );
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
+    operation_count = (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
   for ( index=2 ; index < operation_count ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),

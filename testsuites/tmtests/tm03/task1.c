@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,7 +39,7 @@ rtems_task Init(
   puts( "\n\n*** TIME TEST 3 ***" );
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -63,7 +63,7 @@ rtems_task test_init(
   rtems_id            task_id;
   rtems_task_priority priority;
 
-  priority = RTEMS_MAXIMUM_PRIORITY - 2;
+  priority = RTEMS_MAXIMUM_PRIORITY - 2u;
 
   status = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', '\0'),
@@ -74,8 +74,8 @@ rtems_task test_init(
   );
   directive_failed( status, "rtems_semaphore_create of SM1" );
 
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
+    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
   for ( index = 2 ; index < operation_count ; index ++ ) {
     rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),

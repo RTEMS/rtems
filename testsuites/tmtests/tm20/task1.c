@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -57,7 +57,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '1' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2) + 1,
+    (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -70,7 +70,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '2' ),
-    (RTEMS_MAXIMUM_PRIORITY / 2) + 2,
+    (RTEMS_MAXIMUM_PRIORITY / 2u) + 2u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -310,7 +310,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_mode" );
 
   status = rtems_task_set_priority(
-    RTEMS_SELF, RTEMS_MAXIMUM_PRIORITY - 1, &previous_priority );
+    RTEMS_SELF, RTEMS_MAXIMUM_PRIORITY - 1u, &previous_priority );
   directive_failed( status, "rtems_task_set_priority" );
 
   status = rtems_region_get_segment(

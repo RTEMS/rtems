@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,8 @@
 
 uint32_t   taskcount;
 rtems_task_priority taskpri;
+
+void test_init(void);
 
 rtems_task First_task(
   rtems_task_argument argument
@@ -46,7 +48,7 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-void test_init()
+void test_init(void)
 {
   rtems_id          id;
   rtems_task_entry  task_entry;
@@ -56,7 +58,7 @@ void test_init()
   for ( index = 0 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
-      (RTEMS_MAXIMUM_PRIORITY / 2) + 1,
+      (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,

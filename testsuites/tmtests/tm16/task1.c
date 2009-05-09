@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,7 +41,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'E', 'S', 'T' ),
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -62,7 +62,7 @@ rtems_task test_init(
 {
   rtems_task_priority priority;
   rtems_status_code   status;
-  uint32_t            index;
+  int                 index;
   rtems_task_entry    task_entry;
 
 /*  As each task is started, it preempts this task and
@@ -70,9 +70,9 @@ rtems_task test_init(
  *  this loop all created tasks are blocked.
  */
 
-  priority = RTEMS_MAXIMUM_PRIORITY - 2;
-  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2 )
-    operation_count =  RTEMS_MAXIMUM_PRIORITY - 2;
+  priority = RTEMS_MAXIMUM_PRIORITY - 2u;
+  if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
+    operation_count =  (int) (RTEMS_MAXIMUM_PRIORITY - 2u);
 
   for( index = 0 ; index < operation_count ; index++ ) {
     status = rtems_task_create(
@@ -140,8 +140,8 @@ rtems_task High_task(
   put_time(
     "rtems_event_send: task readied -- preempts caller",
     end_time,
-    operation_count - 1,
-    0,
+    operation_count - 1u,
+    0u,
     CALLING_OVERHEAD_EVENT_SEND
   );
 

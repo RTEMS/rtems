@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -116,7 +116,7 @@ rtems_task Init(
     CALLING_OVERHEAD_RATE_MONOTONIC_DELETE
   );
 
-#define LOOP_TASK_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2) + 1)
+#define LOOP_TASK_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u) + 1u)
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
@@ -132,7 +132,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start LOOP" );
   }
 
-#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2)
+#define MIDDLE_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2u)
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     MIDDLE_PRIORITY,

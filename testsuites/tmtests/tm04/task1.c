@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,7 @@
 
 rtems_id         Semaphore_id;
 rtems_id         Task_id[OPERATION_COUNT+1];
-uint32_t   task_count;
+uint32_t         task_count;
 rtems_id         Highest_id;
 
 rtems_task Low_tasks(
@@ -25,11 +25,15 @@ rtems_task High_task(
   rtems_task_argument argument
 );
 
+rtems_task Highest_task(
+  rtems_task_argument argument
+);
+
 rtems_task Restart_task(
   rtems_task_argument argument
 );
 
-void test_init();
+void test_init(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -47,10 +51,10 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-void test_init()
+void test_init(void)
 {
   rtems_status_code status;
-  uint32_t    index;
+  int               index;
 
   task_count = OPERATION_COUNT;
 
@@ -101,7 +105,7 @@ rtems_task Highest_task(
 
     status = rtems_task_set_priority(
       RTEMS_CURRENT_PRIORITY,
-      RTEMS_MAXIMUM_PRIORITY - 1,
+      RTEMS_MAXIMUM_PRIORITY - 1u,
       &old_priority
     );
     directive_failed( status, "rtems_task_set_priority" );
@@ -214,7 +218,7 @@ rtems_task High_task(
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       name,
-      RTEMS_MAXIMUM_PRIORITY - 4,
+      RTEMS_MAXIMUM_PRIORITY - 4u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_NO_PREEMPT,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -261,7 +265,7 @@ rtems_task High_task(
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
     status = rtems_task_create(
       name,
-      RTEMS_MAXIMUM_PRIORITY - 4,
+      RTEMS_MAXIMUM_PRIORITY - 4u,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,

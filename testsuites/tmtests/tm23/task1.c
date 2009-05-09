@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,7 +41,7 @@ rtems_task Init(
 {
 
   rtems_task_priority priority;
-  uint32_t      index;
+  int                 index;
   rtems_id            id;
   rtems_task_entry    task_entry;
   rtems_status_code   status;
@@ -294,7 +294,7 @@ rtems_task Low_task(
     "rtems_task_wake_when",
     end_time,
     operation_count,
-   0,
+    0,
     CALLING_OVERHEAD_TASK_WAKE_WHEN
   );
 
