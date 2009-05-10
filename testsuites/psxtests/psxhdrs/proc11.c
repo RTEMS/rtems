@@ -2,7 +2,7 @@
  *  This test file is used to verify that the header files associated with
  *  invoking this function are correct.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,8 @@
 
 #include <sys/types.h>
 #include <limits.h>   /* for LOGIN_NAME_MAX */
+
+void test( void );
 
 void test( void )
 {

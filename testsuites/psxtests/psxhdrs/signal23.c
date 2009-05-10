@@ -2,7 +2,7 @@
  *  This test file is used to verify that the header files associated with
  *  invoking this function are correct.
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,8 @@
 #include <signal.h>
 
 useconds_t _EXFUN(ualarm, (useconds_t __useconds, useconds_t __interval));
+void test( void );
+
 void test( void )
 {
   useconds_t useconds;

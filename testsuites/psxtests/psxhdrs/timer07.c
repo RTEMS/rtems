@@ -2,7 +2,7 @@
  *  This test file is used to verify that the header files associated with
  *  invoking this function are correct.
  *
- *  COPYRIGHT (c) 1989-2003.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,10 +14,12 @@
 
 #include <unistd.h>
 
+void test( void );
+
 void test( void )
 {
-  unsigned long usec;
-  unsigned      result;
+  useconds_t usec;
+  unsigned   result;
 
   usec = 0;
   result = usleep( usec );
