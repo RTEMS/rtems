@@ -1,3 +1,7 @@
+2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/src/tmtests_empty_function.c: Fix warnings.
+
 2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/prog-cc.m4: Preset ac_cv_exeext=.exe for *-rtems*
