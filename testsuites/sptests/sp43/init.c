@@ -1,7 +1,7 @@
 /*
  *  Exercise Object Manager Services
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,17 @@
 #undef rtems_object_id_get_class
 #undef rtems_object_id_get_index
 #undef rtems_object_id_get_node
+
+void print_class_info(
+  uint32_t                            api,
+  uint32_t                            class,
+  rtems_object_api_class_information *info
+);
+void change_name(
+  rtems_id    id,
+  const char *newName,
+  bool        printable
+);
 
 rtems_id         main_task;
 rtems_name       main_name;

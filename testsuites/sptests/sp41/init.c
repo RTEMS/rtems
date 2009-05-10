@@ -1,7 +1,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,17 @@ volatile bool case_hit;
 
 rtems_id main_task;
 rtems_id Semaphore;
+
+/* prototypes */
+Thread_blocking_operation_States getState(void);
+rtems_timer_service_routine test_release_from_isr(
+  rtems_id  timer,
+  void     *arg
+);
+rtems_timer_service_routine test_release_with_timeout_from_isr(
+  rtems_id  timer,
+  void     *arg
+);
 
 Thread_blocking_operation_States getState(void)
 {

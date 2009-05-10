@@ -3,7 +3,7 @@
  *  This include file contains information that is included in every
  *  function in the test set.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,13 +69,13 @@ TEST_EXTERN volatile uint32_t   Run_count[ 4 ];
  */
 
 struct taskSwitchLog {
-  int               taskIndex;
+  unsigned int      taskIndex;
   rtems_time_of_day when;
 };
 
 extern struct taskSwitchLog taskSwitchLog[];
-extern int taskSwitchLogIndex;
-volatile extern int testsFinished;
+extern unsigned int taskSwitchLogIndex;
+extern volatile int testsFinished;
 
 
 /* end of include file */

@@ -2,7 +2,7 @@
  *  Interrupt Disable/Enable Tests
  *  Clock Tick from task level
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +16,28 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+/* prototypes */
+void test_interrupt_inline(void);
+void check_isr_in_progress_inline(void);
+rtems_task blocked_task(rtems_task_argument argument);
+rtems_timer_service_routine test_unblock_task(
+  rtems_id  timer,
+  void     *arg
+);
+rtems_timer_service_routine test_unblock_task(
+  rtems_id  timer,
+  void     *arg
+);
+void check_isr_worked(
+  char *s,
+  int   result
+);
+rtems_timer_service_routine test_isr_in_progress(
+  rtems_id  timer,
+  void     *arg
+);
+
+/* test bodies */
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;

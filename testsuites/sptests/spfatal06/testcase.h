@@ -1,5 +1,5 @@
 /*
- * Classic API Init task create failure
+ *  Classic API Init task create failure
  *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -35,6 +35,8 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_BAD_STACK_HOOK
+
+void *New_stack_allocate_hook(uint32_t unused);
 
 void *New_stack_allocate_hook(uint32_t unused)
 {

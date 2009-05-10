@@ -8,7 +8,7 @@
  *  Output parameters:
  *    returns - number read
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +21,8 @@
 #include <rtems.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+int getint( void );
 
 int getint( void )
 {

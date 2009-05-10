@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,26 +20,33 @@
 #include "system.h"
 #include <string.h>             /* for memcmp */
 
+void dope_buffer(
+  unsigned char *buff,
+  int            buff_size,
+  unsigned char  v
+);
+
 unsigned char big_send_buffer[2048];
 unsigned char big_receive_buffer[2048];
 
 long buffer[ MESSAGE_SIZE / sizeof(long) ];
 
-void dope_buffer(unsigned char *buff,
-                 int   buff_size,
-                 uint32_t   v)
+void dope_buffer(
+  unsigned char *buff,
+  int            buff_size,
+  unsigned char  v
+)
 {
-    int i;
-    unsigned char ch;
+  int           i;
+  unsigned char ch;
 
-    ch = (' ' + (v % (0x7f - ' ')));
+  ch = (' ' + (v % (0x7f - ' ')));
 
-    for (i=0; i<buff_size; i++)
-    {
-        *buff++ = ch++;
-        if (ch >= 0x7f)
-            ch = ' ';
-    }
+  for (i=0; i<buff_size; i++) {
+      *buff++ = ch++;
+      if (ch >= 0x7f)
+          ch = ' ';
+  }
 }
 
 rtems_task Task_1(

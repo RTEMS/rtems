@@ -1,11 +1,20 @@
 /*
  *  Verify creation of semaphores with unlimited attribute works.
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
 #include <tmacros.h>
 #include <rtems/libcsupport.h>
+
+rtems_task Init(rtems_task_argument ignored);
 
 #define MAX 5000
 rtems_id Semaphores[MAX];

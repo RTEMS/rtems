@@ -1,6 +1,10 @@
 /*
  *  Test for rtems_semaphore_flush
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -26,6 +30,8 @@ rtems_task Init (rtems_task_argument argument);
 #include <stdlib.h>
 
 rtems_interval ticksPerSecond;
+rtems_task subtask(rtems_task_argument arg);
+void startTask(rtems_id arg);
 
 rtems_task
 subtask (rtems_task_argument arg)
@@ -49,7 +55,7 @@ startTask (rtems_id arg)
 	rtems_status_code sc;
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', 'A'),
-		RTEMS_MAXIMUM_PRIORITY - 1,
+		RTEMS_MAXIMUM_PRIORITY - 1u,
 		RTEMS_MINIMUM_STACK_SIZE * 2,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
@@ -172,11 +178,11 @@ rtems_task Init (rtems_task_argument ignored)
 
 		sc = rtems_semaphore_obtain (semnorec, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
-		diff = now - then;
+		diff = (int) (now - then);
 		then = now;
 		if (sc != RTEMS_SUCCESSFUL)
 			printf ("%d: Failed to obtain non-recursive-lock semaphore: %s\n", __LINE__, rtems_status_text (sc));
-		else if (diff < (2 * ticksPerSecond))
+		else if (diff < (int) (2 * ticksPerSecond))
 			printf ("%d: Obtained obtain non-recursive-lock semaphore too quickly -- %d ticks not %d ticks\n", __LINE__, diff, (2 * ticksPerSecond) );
 	}
 

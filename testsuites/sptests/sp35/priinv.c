@@ -7,6 +7,10 @@
  *  e-mail: ulf.ivraeus@space.se
  *  ----------------------------- --- -- -  -   -
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -56,7 +60,10 @@
 volatile uint32_t Iterations = 0;
 #endif
 
+const char *CallerName(void);
+
 /* Task entry point prototypes */
+rtems_task Init(rtems_task_argument ignored);
 rtems_task Medium_Exec(rtems_task_argument TaskArg);
 rtems_task Low_Exec(rtems_task_argument TaskArg);
 rtems_task High_Exec(rtems_task_argument TaskArg);
@@ -69,7 +76,7 @@ rtems_isr  LocalHwIsr(/*in*/ rtems_vector_number   Vector);
 void AccessLocalHw(void);
 void AccessRemoteHw(void);
 
-const char *CallerName()
+const char *CallerName(void)
 {
   static char buffer[32];
 #if defined(TEST_PRINT_TASK_ID)
@@ -410,7 +417,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   /* -- Medium-prio Test Tasks --- */
   for (i = 0; i < NofMediumTask_C; i++) {
-#define MEDIUM_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2) + 1)
+#define MEDIUM_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u) + 1u)
     status = rtems_task_create(
       rtems_build_name('M','E','D','0'+i),               /* Name */
       MEDIUM_PRIORITY,                                   /* Priority */
@@ -421,12 +428,16 @@ rtems_task Init(rtems_task_argument ignored)
     directive_failed( status, "rtems_task_create (MEDn)" );
 
     printf( "TaMedium[%d] Id = 0x%08x\n", i, TaMedium[i] );
-    status = rtems_task_start(TaMedium[i], Medium_Exec, i);
+    status = rtems_task_start(
+      TaMedium[i],
+      Medium_Exec,
+      (rtems_task_argument) i
+    );
     directive_failed( status, "rtems_task_start (MEDn)" );
   }
 
   /* -- High-prio Test Task --- */
-#define HIGH_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2))
+#define HIGH_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u))
   status = rtems_task_create(
     rtems_build_name('H','I','G','H'),                 /* Name */
     HIGH_PRIORITY,                                     /* Priority */
@@ -441,7 +452,7 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_task_start (HIGH)" );
 
   /* -- Low-prio Test Task --- */
-#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1)
+#define LOW_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
   status = rtems_task_create(
     rtems_build_name('L','O','W',' '),                 /* Name */
     LOW_PRIORITY,                                      /* Priority */
@@ -456,7 +467,7 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_task_start (LOW)" );
 
   /* -- HW Simulator Task --- */
-#define HWTASK_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2)
+#define HWTASK_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 2u)
   status = rtems_task_create(
     rtems_build_name('H','W','S','M'),                 /* Name */
     HWTASK_PRIORITY,                                   /* Priority */

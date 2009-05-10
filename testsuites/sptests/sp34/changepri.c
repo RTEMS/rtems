@@ -2,6 +2,10 @@
  *  Test program to demonstrate reordering of threads on thread queues
  *  when their priority changes.
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
@@ -24,11 +28,13 @@
 #include "tmacros.h"
 
 rtems_task BlockingTasks(rtems_task_argument arg);
+rtems_task Init(rtems_task_argument ignored);
+const char *CallerName(void);
 
 /*
  *  CallerName -- print the calling tasks name or id as configured
  */
-const char *CallerName()
+const char *CallerName(void)
 {
   static char buffer[32];
 #if defined(TEST_PRINT_TASK_ID)
@@ -110,7 +116,7 @@ rtems_task Init(rtems_task_argument ignored)
   for (i = 0; i < NUMBER_OF_BLOCKING_TASKS; i++) {
     status = rtems_task_create(
       rtems_build_name('B','L','K','0'+i),               /* Name */
-      2+i,                                               /* Priority */
+      (rtems_task_priority) 2+i,                         /* Priority */
       RTEMS_MINIMUM_STACK_SIZE*2,                        /* Stack size (8KB) */
       RTEMS_DEFAULT_MODES | RTEMS_NO_ASR,                /* Mode */
       RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,   /* Attributes */
@@ -118,7 +124,11 @@ rtems_task Init(rtems_task_argument ignored)
     directive_failed( status, "rtems_task_create (BLKn)" );
   
     printf( "Blockers[%d] Id = 0x%08x\n", i, Blockers[i] );
-    status = rtems_task_start(Blockers[i], BlockingTasks, i);
+    status = rtems_task_start(
+      Blockers[i],
+      BlockingTasks,
+      (rtems_task_argument)i
+    );
     directive_failed( status, "rtems_task_start (BLKn)" );
   }
 
@@ -128,7 +138,9 @@ rtems_task Init(rtems_task_argument ignored)
   puts( "rtems_task_set_priority -- invert priorities of tasks" );
   for (i = 0; i < NUMBER_OF_BLOCKING_TASKS; i++) {
     rtems_task_priority opri;
-    rtems_task_priority npri= 2 + NUMBER_OF_BLOCKING_TASKS - i - 1;
+    rtems_task_priority npri;
+
+    npri = (rtems_task_priority) (2 + NUMBER_OF_BLOCKING_TASKS - i - 1);
 
     status = rtems_task_set_priority(Blockers[i], npri, &opri);
     directive_failed( status, "rtems_task_set_priority" );

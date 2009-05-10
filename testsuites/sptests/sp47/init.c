@@ -6,6 +6,9 @@
 
 #include <tmacros.h>
 
+rtems_task test_asr(rtems_task_argument unused);
+rtems_task Init(rtems_task_argument ignored);
+
 rtems_task test_asr(rtems_task_argument unused)
 {
   rtems_mode mode;

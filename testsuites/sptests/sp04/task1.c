@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,8 +23,8 @@
 static void
 showTaskSwitches (void)
 {
-  int i;
-  int switches = taskSwitchLogIndex;
+  unsigned int i;
+  unsigned int switches = taskSwitchLogIndex;
 
   for (i = 0 ; i < switches ; i++) {
       put_name( Task_name[taskSwitchLog[i].taskIndex], FALSE );

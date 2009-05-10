@@ -1,7 +1,7 @@
 /*
  *  Exercise thread queue enqueue and dequeue priority
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,13 @@
 #include "tmacros.h"
 
 #define MAX_TASKS 20
+
+rtems_task Init(rtems_task_argument argument);
+rtems_task Locker_task(rtems_task_argument unused);
+void do_test(
+  rtems_attribute attr,
+  bool            extract  /* TRUE if extract, not release */
+);
 
 /*
  * Carefully chosen to exercise threadq enqueue/dequeue priority logic.
@@ -108,7 +115,8 @@ void do_test(
     );
     directive_failed( status, "rtems_task_create" ); 
 
-    status = rtems_task_start( Task_id[ i ], Locker_task, i );
+    status = rtems_task_start(
+      Task_id[ i ], Locker_task, (rtems_task_argument)i );
     directive_failed( status, "rtems_task_start" ); 
 
     status = rtems_task_wake_after( 10 );

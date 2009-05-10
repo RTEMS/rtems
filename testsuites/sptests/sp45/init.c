@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -10,6 +10,14 @@
  */
 
 #include <tmacros.h>
+
+rtems_task Init(
+  rtems_task_argument argument
+);
+rtems_timer_service_routine Malloc_From_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
 
 rtems_id   Timer_id[ 3 ];    /* array of timer ids */
 rtems_name Timer_name[ 3 ];  /* array of timer names */

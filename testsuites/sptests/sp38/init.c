@@ -1,7 +1,7 @@
 /*
  *  Classic API Signal to Task from ISR
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,11 @@ volatile bool signal_sent;
 volatile bool signal_processed;
 
 rtems_id main_task;
+void signal_handler(rtems_signal_set signals);
+rtems_timer_service_routine test_signal_from_isr(
+  rtems_id  timer,
+  void     *arg
+);
 
 void signal_handler(
   rtems_signal_set signals

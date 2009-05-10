@@ -15,7 +15,14 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include "system.h"
 
+/* prototypes */
+int scan_objects( 
+  Objects_Information *information,
+  Objects_Id           start
+);
+
 #define MAX_SCAN 10
+
 int scan_objects( 
   Objects_Information *information,
   Objects_Id           start

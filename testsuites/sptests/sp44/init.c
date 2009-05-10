@@ -32,6 +32,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+rtems_task Init(rtems_task_argument ignored);
+rtems_task TaskAB_entry(rtems_task_argument me);
+
 /*** Task priorities ***/
 #define TASK_A_PRIORITY    10
 #define TASK_B_PRIORITY   10

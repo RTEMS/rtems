@@ -1,12 +1,21 @@
 /*
  *  Test for rtems_semaphore_flush
  *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  *  $Id$
  */
 
 #include <bsp.h>
 
 rtems_task Init (rtems_task_argument argument);
+void starttask(int arg);
+rtems_task subtask(rtems_task_argument arg);
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -64,7 +73,7 @@ starttask (int arg)
     printf ("Can't create task: %s\n", rtems_status_text (sc));
     rtems_task_suspend (RTEMS_SELF);
   }
-  sc = rtems_task_start (tid, subtask, arg);
+  sc = rtems_task_start (tid, subtask, (rtems_task_argument) arg);
   if (sc != RTEMS_SUCCESSFUL) {
   	printf ("Can't start task: %s\n", rtems_status_text (sc));
     rtems_task_suspend (RTEMS_SELF);

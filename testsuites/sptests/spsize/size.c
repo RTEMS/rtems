@@ -1,9 +1,8 @@
-/*  main
- *
+/*
  *  This program is run to determine the data space and work space
  *  requirements of the current version of RTEMS.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,6 +51,10 @@
 
 /* external function prototypes */
 int getint( void );
+void size_rtems(int mode);
+void help_size(void);
+void print_formula(void);
+
 
 /* These are always defined by the executive.
  *
@@ -133,9 +136,6 @@ extern CORE_semaphore_Control _MPCI_Semaphore;
      MP_SYSTEM_TASKS)
 
 uint32_t   sys_req;
-
-void help_size();
-void print_formula();
 
 void size_rtems(
   int mode

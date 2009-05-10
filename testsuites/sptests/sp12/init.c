@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -79,7 +79,7 @@ rtems_task Init(
   Priority_test_driver( 0 );
 
   puts( "INIT - Backward priority queue test" );
-  Priority_test_driver( (RTEMS_MAXIMUM_PRIORITY / 2) + 1 );
+  Priority_test_driver( (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u );
 
 rtems_test_pause();
 

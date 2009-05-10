@@ -9,7 +9,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,7 +52,7 @@ rtems_task FP_task(
   printf( " - float base = (NA)\n" );
 #endif
 
-  previous_seconds = -1;
+  previous_seconds = (uint32_t)-1;
 
   while( FOREVER ) {
 

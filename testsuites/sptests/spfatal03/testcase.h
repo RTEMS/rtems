@@ -1,5 +1,12 @@
 /*
- * Classic API Init task create failure
+ *  Classic API Init task create failure
+ *
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -34,11 +41,9 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 rtems_id   Mutex_id[1];
 rtems_name Mutex_name[1];
 
-void force_error()
+void force_error(void)
 {
-  ISR_Level level;
   rtems_status_code status;
-
 
   Mutex_name[0] = rtems_build_name( 'S','0',' ',' ');
   status = rtems_semaphore_create(
@@ -60,7 +65,6 @@ void force_error()
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
   _Thread_Enable_dispatch();
-  _ISR_Enable( level );
   directive_failed( status, "rtems_semaphore_obtain" );
  
   /* we will not run this far */

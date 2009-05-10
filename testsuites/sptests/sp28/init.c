@@ -1,4 +1,7 @@
 /*
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -27,6 +30,17 @@ rtems_task Init(rtems_task_argument argument);
 #include <bsp.h>
 #include <rtems/error.h>
 #include <stdio.h>
+
+rtems_task subtask(rtems_task_argument arg);
+rtems_task Task_variable_deleter(rtems_task_argument ignored);
+void starttask(int arg);
+void test_errors(void);
+void test_dtor(void *pointer);
+void test_multiple_taskvars(void);
+void test_out_of_memory(void);
+rtems_task Other_Task(rtems_task_argument ignored);
+void test_delete_from_other_task(void);
+void test_delete_as_side_effect(void);
 
 volatile void *taskvar;
 volatile int nRunning;
@@ -96,7 +110,7 @@ starttask (int arg)
   rtems_status_code sc;
 
   sc = rtems_task_create(rtems_build_name ('S', 'R', 'V', arg + 'A'),
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
@@ -280,7 +294,7 @@ void test_delete_from_other_task(void)
   directive_failed( sc, "add for other task case" );
 
   sc = rtems_task_create(rtems_build_name ('O', 'T', 'H', 'R'),
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
@@ -327,7 +341,7 @@ void test_delete_as_side_effect(void)
   test_dtor_ran = 0;
 
   sc = rtems_task_create(rtems_build_name ('O', 'T', 'H', 'R'),
-    RTEMS_MAXIMUM_PRIORITY - 1,
+    RTEMS_MAXIMUM_PRIORITY - 1u,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,

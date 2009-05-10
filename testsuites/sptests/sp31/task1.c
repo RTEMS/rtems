@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2002.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,11 @@
  */
 
 #include "system.h"
+
+rtems_timer_service_routine Should_not_fire_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
 
 volatile int TSR_fired;
 

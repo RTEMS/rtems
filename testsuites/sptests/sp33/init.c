@@ -1,8 +1,12 @@
-/* spmonotonic -- sanity check the rate monotonic manager
+/*
+ *  spmonotonic -- sanity check the rate monotonic manager
  *
- * license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE .
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  *
  * $Id$
  */
@@ -21,6 +25,10 @@ rtems_task Init (rtems_task_argument ignored);
 #define CONFIGURE_MAXIMUM_BARRIERS  1
 
 #define CONFIGURE_INIT
+
+rtems_task Waiter(
+  rtems_task_argument number
+);
 
 rtems_id    Barrier;
 
