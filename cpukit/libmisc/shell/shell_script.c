@@ -4,7 +4,7 @@
  *  Pseudo-code from Chris Johns, implemented and debugged
  *  by Joel Sherrill.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -100,6 +100,11 @@ static int findOnPATH(
 int rtems_shell_main_joel(
   int    argc,
   char **argv
+);
+
+int rtems_shell_main_joel(
+  int    argc,
+  char **argv
 )
 {
   int                  option;
@@ -120,10 +125,11 @@ int rtems_shell_main_joel(
         outputFile = getopt_reent.optarg;
         break;
       case 'p':
-        taskPriority = rtems_shell_str2int(getopt_reent.optarg);
+        taskPriority =
+          (rtems_task_priority) rtems_shell_str2int(getopt_reent.optarg);
         break;
       case 's':
-        stackSize = rtems_shell_str2int(getopt_reent.optarg);
+        stackSize = (uint32_t) rtems_shell_str2int(getopt_reent.optarg);
         break;
       case 't':
         taskName = getopt_reent.optarg;

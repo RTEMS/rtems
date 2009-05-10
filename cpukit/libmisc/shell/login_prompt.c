@@ -167,8 +167,8 @@ bool rtems_shell_login_prompt(
   if (tcgetattr( fd_in, &termios_previous) == 0) {
     struct termios termios_new = termios_previous;
 
-    termios_new.c_lflag &= ~ECHO;
-    termios_new.c_lflag &= ~ICANON;
+    termios_new.c_lflag &= (unsigned char) ~ECHO;
+    termios_new.c_lflag &= (unsigned char) ~ICANON;
     termios_new.c_cc [VTIME] = 255;
     termios_new.c_cc [VMIN] = 0;
 

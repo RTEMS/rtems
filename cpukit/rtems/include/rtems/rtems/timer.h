@@ -22,7 +22,7 @@
  *     - cancel a time
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -289,7 +289,7 @@ rtems_status_code rtems_timer_initiate_server(
  *  When given this priority, a special high priority not accessible
  *  via the Classic API is used.
  */
-#define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY -1
+#define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY (uint32_t) -1
 
 /**
  *  This is the structure filled in by the timer get information

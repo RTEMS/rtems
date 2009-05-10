@@ -1,3 +1,8 @@
+2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/login_prompt.c, libmisc/shell/shell_script.c,
+	rtems/include/rtems/rtems/timer.h: Fix warnings.
+
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/include/rtems/posix/psignal.h,
