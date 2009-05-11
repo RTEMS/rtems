@@ -1,3 +1,9 @@
+2009-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/network/i82586.c: Fix warning in manner suggested by 
+	Arnout Vandecappelle <arnout@mind.be> in
+	http://www.rtems.org/pipermail/rtems-users/2009-May/005460.html.
+
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/if_dc.c: Fixed warnings.

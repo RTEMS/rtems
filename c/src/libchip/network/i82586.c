@@ -1719,7 +1719,7 @@ ie_cfg_setup(struct ie_softc *sc, int cmd, int promiscuous, int manchester)
   *IE_CMD_CFG_IFS(buf)       = 0x60;
   *IE_CMD_CFG_SLOT_LOW(buf)  = 0;
   *IE_CMD_CFG_SLOT_HIGH(buf) = 0xf2;
-  *IE_CMD_CFG_PROMISC(buf)   = !!promiscuous | manchester << 2;
+  *IE_CMD_CFG_PROMISC(buf)   = (!!promiscuous) | (manchester << 2);
   *IE_CMD_CFG_CRSCDT(buf)    = 0;
   *IE_CMD_CFG_MINLEN(buf)    = 64;
   *IE_CMD_CFG_JUNK(buf)      = 0xff;
