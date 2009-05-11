@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,7 @@
 
 volatile int Signal_occurred;
 volatile int Signal_count;
+void Signal_handler( int signo );
 
 void Signal_handler(
   int signo

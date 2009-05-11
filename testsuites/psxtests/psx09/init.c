@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,6 +12,11 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
+
+void print_schedparam(
+  char               *prefix,
+  struct sched_param *schedparam
+);
 
 int HIGH_PRIORITY;
 int MEDIUM_PRIORITY;

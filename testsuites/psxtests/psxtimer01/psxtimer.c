@@ -12,7 +12,7 @@
  *
  *  Other POSIX facilities such as timers, condition, .. is also used
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,6 +32,10 @@
 #include <stdio.h>    /* console facilities */
 #include <rtems/score/timespec.h>
 
+void StopTimer(
+  timer_t  timer_id,
+  struct   itimerspec *timerdata
+);
 
 /* temporal parameters of a task */
 

@@ -15,7 +15,7 @@
  *     umask        - test implemented
  *     utime        - test implemented
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,6 +37,18 @@
 
 #include <pmacros.h>
 
+int InitFiles(void);
+int DeviceLSeekTest(void);
+int DupTest(void);
+int Dup2Test(void);
+int FDataSyncTest(void);
+int UMaskTest(void);
+int UTimeTest(void);
+int PipeTest(void);
+int PathConfTest(void);
+int FPathConfTest(void);
+int FSyncTest(void);
+
 /*-------------------------------------------------------------------
  * InitFiles function
  *
@@ -53,8 +65,8 @@
  * ------------------------------------------------------------------
  */
 
-int InitFiles (void) {
-
+int InitFiles (void)
+{
   int count;
   FILE *fp1, *fp2, *fp3;
   char letter;
@@ -117,8 +129,8 @@ int InitFiles (void) {
  * ---------------------------------------------------------------
  */
 
-int DeviceLSeekTest (void) {
-
+int DeviceLSeekTest (void)
+{
   int error = -1, retval = FALSE;
 
   int fd = open ("/dev/console", O_RDONLY);
@@ -133,7 +145,6 @@ int DeviceLSeekTest (void) {
   /* assert (retval == TRUE);*/
 
   return (retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -152,8 +163,8 @@ int DeviceLSeekTest (void) {
  * ---------------------------------------------------------------
  */
 
-int DupTest(void) {
-
+int DupTest(void)
+{
   int fd1, fd2;
 
   int flags = 0, retval = FALSE;
@@ -179,7 +190,6 @@ int DupTest(void) {
   /* assert (retval == TRUE);*/
 
   return (retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -200,8 +210,8 @@ int DupTest(void) {
  * ---------------------------------------------------------------
  */
 
-int Dup2Test(void) {
-
+int Dup2Test(void)
+{
   int fd1, fd2;
 
   int flags = 0, retval = FALSE;
@@ -251,7 +261,6 @@ int Dup2Test(void) {
   /* assert (retval == TRUE);*/
 
   return (retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -266,14 +275,15 @@ int Dup2Test(void) {
  *          attempts to fdatasync an invalid file descriptor (-1).
  *          attempts to fdatasync a perfectly valid fd opened as RDWR
  *
- * returns: TRUE if attempt to fdatasync invalid and read-only filed escriptor fail, and fdatasync succeeds on valid fd.
+ * returns: TRUE if attempt to fdatasync invalid and read-only filed
+ *           descriptor fail, and fdatasync succeeds on valid fd.
  *          FALSE otherwise.
  *
  * ---------------------------------------------------------------
  */
 
-int FDataSyncTest(void) {
-
+int FDataSyncTest(void)
+{
   int fd = -1;
   int error = 0, retval = TRUE;
 
@@ -314,7 +324,6 @@ int FDataSyncTest(void) {
       retval = FALSE;
 
     close (fd);
-
   }
 
   /* assert (retval == TRUE);*/
@@ -338,11 +347,12 @@ int FDataSyncTest(void) {
  * ---------------------------------------------------------------
  */
 
-int UMaskTest (void) {
+int UMaskTest (void)
+{
+  mode_t error = 0;
+  int    retval = FALSE;
 
-  int error = 0, retval = FALSE;
-
-  umask (023);
+  umask(023);
   error = umask(022);
 
   if (error == 023)
@@ -353,7 +363,6 @@ int UMaskTest (void) {
   /* assert (retval == TRUE);*/
 
   return(retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -367,14 +376,15 @@ int UMaskTest (void) {
  * actions: set utime for an invalid filename.
  *          set utime for a valid filename.
  *
- * returns: TRUE if time on valid file is set correctly and utime failed on an invaid filename.
+ * returns: TRUE if time on valid file is set correctly and utime failed on
+ *          an invalid filename.
  *          FALSE otherwise.
  *
  * ---------------------------------------------------------------
  */
 
-int UTimeTest (void) {
-
+int UTimeTest (void)
+{
   int error = 0, retval = FALSE;
   struct utimbuf time;
   struct stat fstat;
@@ -413,7 +423,6 @@ int UTimeTest (void) {
   /* assert (retval == TRUE);*/
 
   return (retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -431,8 +440,8 @@ int UTimeTest (void) {
  * ---------------------------------------------------------------
  */
 
-int PipeTest (void) {
-
+int PipeTest (void)
+{
   int error = 0, retval = FALSE;
   int fd[2];
 
@@ -446,7 +455,6 @@ int PipeTest (void) {
   /* assert (retval == TRUE);*/
 
   return(retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -465,8 +473,8 @@ int PipeTest (void) {
  * ---------------------------------------------------------------
  */
 
-int PathConfTest (void) {
-
+int PathConfTest (void)
+{
   int error = 0, retval = FALSE;
 
   error = pathconf("thisfiledoesnotexist", _PC_LINK_MAX);
@@ -486,7 +494,6 @@ int PathConfTest (void) {
   /* assert (retval == TRUE);*/
 
   return(retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -503,8 +510,8 @@ int PathConfTest (void) {
  * ---------------------------------------------------------------
  */
 
-int FPathConfTest (void) {
-
+int FPathConfTest (void)
+{
   int error = 0, retval = TRUE;
 
   int fd  = -1;
@@ -537,7 +544,6 @@ int FPathConfTest (void) {
   /* assert (retval == TRUE);*/
 
   return(retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -556,8 +562,8 @@ int FPathConfTest (void) {
  * ---------------------------------------------------------------
  */
 
-int FSyncTest (void) {
-
+int FSyncTest (void)
+{
   int error = 0, retval = FALSE;
   int fd = -1;
 
@@ -581,7 +587,6 @@ int FSyncTest (void) {
   /* assert (retval == TRUE);*/
 
   return(retval);
-
 }
 
 /* ---------------------------------------------------------------
@@ -593,6 +598,7 @@ int FSyncTest (void) {
  */
 
 #if defined(__rtems__)
+int test_main(void);
 int test_main(void)
 #else
 int main(

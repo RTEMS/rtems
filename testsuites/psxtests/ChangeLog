@@ -1,5 +1,15 @@
 2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psx01/init.c, psx01/task.c, psx02/init.c, psx02/task.c, psx03/init.c,
+	psx04/init.c, psx04/task1.c, psx04/task3.c, psx05/init.c,
+	psx06/init.c, psx07/init.c, psx08/init.c, psx09/init.c, psx11/task.c,
+	psx12/init.c, psx13/main.c, psx13/test.c, psxbarrier01/test.c,
+	psxcancel/init.c, psxcleanup/psxcleanup.c, psxenosys/init.c,
+	psxmsgq02/init.c, psxtime/main.c, psxtime/test.c,
+	psxtimer01/psxtimer.c, psxtimer02/psxtimer.c: Fix warnings.
+
+2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxhdrs/clock01.c, psxhdrs/clock02.c, psxhdrs/clock03.c,
 	psxhdrs/clock04.c, psxhdrs/clock05.c, psxhdrs/clock06.c,
 	psxhdrs/cond01.c, psxhdrs/cond02.c, psxhdrs/cond03.c,

@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,9 +25,9 @@ void *Task_1_through_3(
   void *argument
 )
 {
-  int seconds;
-  int i;
-  int status;
+  unsigned int seconds;
+  int          i;
+  int          status;
 
   for ( i=0 ; i<5 ; i++ ) {
     print_current_time( "Task1: ", "" );

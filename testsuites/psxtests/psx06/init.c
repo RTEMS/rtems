@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,8 +13,10 @@
 #include "system.h"
 #include <errno.h>
 
+void Key_destructor( void *key_data );
+
 void Key_destructor(
-   void *key_data
+ void *key_data
 )
 {
   Destructor_invoked++;
@@ -73,15 +75,15 @@ void *POSIX_Init(
   assert( status == EAGAIN );
 
   puts( "Init: pthread_setspecific - EINVAL (invalid key)" );
-  status = pthread_setspecific( -1, &Data_array[ 0 ] );
+  status = pthread_setspecific( (pthread_t) -1, &Data_array[ 0 ] );
   assert( status == EINVAL );
 
   puts( "Init: pthread_getspecific - EINVAL (invalid key)" );
-  key_data = pthread_getspecific( -1 );
+  key_data = pthread_getspecific( (pthread_t) -1 );
   assert( !key_data );
 
   puts( "Init: pthread_key_delete - EINVAL (invalid key)" );
-  status = pthread_key_delete( -1 );
+  status = pthread_key_delete( (pthread_t) -1 );
   assert( status == EINVAL );
 
   printf( "Init: Setting the key to %d\n", 0 );

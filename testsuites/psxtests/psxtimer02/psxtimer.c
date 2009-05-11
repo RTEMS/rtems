@@ -12,7 +12,7 @@
  *
  *  Other POSIX facilities such as timers, condition, .. is also used
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,7 +51,7 @@ void *POSIX_Init (
   puts( "\n\n*** POSIX Timers Test 02 ***" );
 
   puts( "timer_create - bad clock id - EINVAL" );
-  status = timer_create( -1, &event, &timer );
+  status = timer_create( (timer_t) -1, &event, &timer );
   fatal_posix_service_status_errno( status, EINVAL, "bad clock id" );
 
   puts( "timer_create - bad timer id pointer - EINVAL" );

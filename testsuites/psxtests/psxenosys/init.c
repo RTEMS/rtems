@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,8 @@
 #include <devctl.h>
 #include <unistd.h>
 #include <sched.h>
+
+void check_enosys(int status);
 
 void check_enosys(int status)
 {

@@ -2,7 +2,7 @@
  *  This test exercises the time of day services via the Classic
  *  and POSIX APIs to make sure they are consistent.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,11 @@
 #include <string.h>
 #include <rtems.h>
 #include <rtems/libio.h>
+
+void test_adjtime(void);
+void check_a_tod(
+  rtems_time_of_day *the_tod
+);
 
 /*
  *  List of dates and times to test.
@@ -86,7 +91,7 @@ void check_a_tod(
   } while( i < 6 );
 }
 
-void test_adjtime()
+void test_adjtime(void)
 {
   int                sc;
   rtems_status_code  status;
@@ -145,6 +150,8 @@ void test_adjtime()
  */
 
 #if defined(__rtems__)
+int test_main(void);
+
 int test_main(void)
 #else
 int main(

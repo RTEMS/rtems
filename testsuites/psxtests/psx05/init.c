@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,17 @@
 #include <rtems/posix/priority.h>
 
 #define MUTEX_BAD_ID 0xfffffffe
+
+void Print_mutexattr(
+  char                *msg,
+  pthread_mutexattr_t *attr
+);
+
+void calculate_abstimeout(
+  struct timespec *times,
+  uint32_t         seconds,
+  uint32_t         nanoseconds
+);
 
 void Print_mutexattr(
   char                *msg,
@@ -89,7 +100,7 @@ void calculate_abstimeout(
 
   while ( times->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
     times->tv_sec++;
-    times->tv_nsec - TOD_NANOSECONDS_PER_SECOND;
+    times->tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
   }
 
 }

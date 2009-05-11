@@ -8,7 +8,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,8 @@
  */
 
 #include "system.h"
+
+void Test_init_routine( void );
 
 void Test_init_routine( void )
 {
@@ -61,11 +63,11 @@ void *Task_1_through_3(
   assert( !status );
 
   puts( "Task_1: pthread_equal - first id bad" );
-  status = pthread_equal( -1, Task_id );
+  status = pthread_equal( (pthread_t) -1, Task_id );
   assert( !status );
 
   puts( "Task_1: pthread_equal - second id bad" );
-  status = pthread_equal( Init_id, -1 );
+  status = pthread_equal( Init_id, (pthread_t) -1 );
   assert( !status );
 
   /* exercise pthread_once */

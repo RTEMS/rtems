@@ -38,6 +38,16 @@ volatile bool reader_cleanup_ran;
 volatile bool release_read_lock_ran;
 volatile bool writer_cleanup_ran;
 
+void waiting_reader_cleanup(void *arg);
+void lock_for_read(void *arg);
+void release_read_lock(void *arg);
+void waiting_writer_cleanup(void *arg);
+void lock_for_write(lock_t *l);
+void release_write_lock(void *arg);
+void initialize_lock_t(lock_t *l);
+void *ReaderThread(void *arg);
+void *WriterThread(void *arg);
+
 void waiting_reader_cleanup(void *arg)
 {
   lock_t *l;
@@ -211,7 +221,7 @@ void *WriterThread(void *arg)
  *  main entry point to the test
  */
 
-void *POSIX_Init (
+void *POSIX_Init(
   void *argument
 )
 {

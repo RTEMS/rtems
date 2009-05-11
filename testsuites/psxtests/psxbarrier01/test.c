@@ -1,7 +1,7 @@
 /*
  *  This test exercises the POSIX Barrier manager.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,7 @@
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
 pthread_barrier_t Barrier;
+void *BarrierThread(void *arg);
 
 void *BarrierThread(void *arg)
 {
@@ -41,6 +42,8 @@ void *BarrierThread(void *arg)
  */
 
 #if defined(__rtems__)
+int test_main(void);
+
 int test_main(void)
 #else
 int main(

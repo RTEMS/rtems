@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,7 @@ void *POSIX_Init(
   printf( "Init's ID is 0x%08x\n", Init_id );
 
   puts( "Init: pthread_detach - ESRCH (invalid id)" );
-  status = pthread_detach( -1 );
+  status = pthread_detach( (pthread_t) -1 );
   assert( status == ESRCH );
 
   /* detach this thread */
@@ -47,7 +47,7 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "Init: pthread_join - ESRCH (invalid id)" );
-  status = pthread_join( -1, &return_pointer );
+  status = pthread_join( (pthread_t) -1, &return_pointer );
   assert( status == ESRCH );
 
   puts( "Init: pthread_join - SUCCESSFUL" );

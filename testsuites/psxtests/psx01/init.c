@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,7 +25,7 @@ void *POSIX_Init(
   pthread_t       thread_id;
   time_t          seconds;
   time_t          seconds1;
-  time_t          remaining;
+  unsigned int    remaining;
   struct tm       tm;
   struct utsname  uts;
   useconds_t      useconds;
@@ -58,12 +58,12 @@ void *POSIX_Init(
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
-  status = clock_gettime( -1, &tv );
+  status = clock_gettime( (clockid_t)-1, &tv );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_settime - EINVAL (invalid clockid)" );
-  status = clock_settime( -1, &tv );
+  status = clock_settime( (clockid_t)-1, &tv );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -79,7 +79,7 @@ void *POSIX_Init(
   /* exercise clock_getres */
 
   puts( "Init: clock_getres - EINVAL (invalid clockid)" );
-  status = clock_getres( -1, &tv );
+  status = clock_getres( (clockid_t) -1, &tv );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
@@ -195,7 +195,7 @@ void *POSIX_Init(
 
   puts( "Init: usleep - 1.35 seconds" );
   useconds = usleep ( 1350000 );
-  rtems_test_assert( useconds < 1350000);
+  rtems_test_assert( useconds < 1350000 );
   
   /* print the current real time again */
   status = clock_gettime( CLOCK_REALTIME, &tv );

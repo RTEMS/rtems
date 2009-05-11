@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +16,12 @@
 
 volatile int Signal_occurred;
 volatile int Signal_count;
+void Signal_handler( int signo );
+void Signal_info_handler(
+  int        signo,
+  siginfo_t *info,
+  void      *context
+);
 
 void Signal_handler(
   int signo
@@ -54,6 +60,7 @@ void *POSIX_Init(
   void *argument
 )
 {
+  unsigned int      remaining;
   int               status;
   struct sigaction  act;
   sigset_t          mask;
@@ -198,7 +205,7 @@ void *POSIX_Init(
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
   puts( "Init: sleep so the other task can block" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
      /* switch to task 1 */
@@ -212,7 +219,7 @@ void *POSIX_Init(
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
 
   puts( "Init: sleep so the other task can catch signal" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
      /* switch to task 1 */
@@ -244,17 +251,17 @@ void *POSIX_Init(
   /* schedule the alarm */
 
   puts( "Init: Firing alarm in 5 seconds" );
-  status = alarm( 5 );
+  remaining = alarm( 5 );
   printf( "Init: %d seconds left on previous alarm\n", status );
   assert( !status );
 
   puts( "Init: Firing alarm in 2 seconds" );
-  status = alarm( 2 );
+  remaining = alarm( 2 );
   printf( "Init: %d seconds left on previous alarm\n", status );
   assert( status );
 
   puts( "Init: Wait 4 seconds for alarm" );
-  status = sleep( 4 );
+  remaining = sleep( 4 );
   printf( "Init: %d seconds left in sleep\n", status );
   assert( status );
 
@@ -324,7 +331,7 @@ void *POSIX_Init(
   sigaction( SIGUSR1, &act, NULL );
 
   puts( "Init: sleep so the Task_3 can sigqueue SIGUSR1" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
      /* switch to task 1 */
@@ -348,7 +355,7 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "Init: sleep so the Task_3 can receive SIGUSR1" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
   /* Send SIGUSR1, Task_3 has issued a sigwait */
@@ -368,7 +375,7 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "Init: sleep so the Task_3 can receive SIGUSR1" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
   /* Send SIGUSR1, Task_3 has issued a sigwaitinfo */
@@ -388,7 +395,7 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "Init: sleep so the Task_3 can receive SIGUSR2" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
   /* Suspend for signal that has already be sent */

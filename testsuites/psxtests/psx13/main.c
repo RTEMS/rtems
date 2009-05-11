@@ -1,7 +1,7 @@
 /*
  *  Simple test program -- simplified version of sample test hello.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,9 @@
 #include <pmacros.h>
 
 void test_main( void );
+rtems_task Init(
+  rtems_task_argument ignored
+);
 
 rtems_task Init(
   rtems_task_argument ignored

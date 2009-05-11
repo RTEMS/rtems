@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,6 +13,11 @@
 #include "system.h"
 #include <errno.h>
 #include "tmacros.h"
+
+void print_schedparam(
+  char               *prefix,
+  struct sched_param *schedparam
+);
 
 void print_schedparam(
   char               *prefix,
@@ -474,7 +479,7 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "NULL schedparam" );
 
   puts( "Init: pthread_getschedparam - ESRCH (bad thread)" );
-  status = pthread_getschedparam( -1, &schedpolicy, &schedparam );
+  status = pthread_getschedparam( (pthread_t) -1, &schedpolicy, &schedparam );
   fatal_directive_check_status_only( status, ESRCH, "bad thread" );
 
   puts( "Init: pthread_getschedparam - SUCCESSFUL" );
@@ -506,7 +511,7 @@ void *POSIX_Init(
   fatal_directive_check_status_only( status, EINVAL, "invalid policy" );
 
   puts( "Init: pthread_setschedparam - ESRCH (invalid thread)" );
-  status = pthread_setschedparam( -1, SCHED_OTHER, &schedparam );
+  status = pthread_setschedparam( (pthread_t) -1, SCHED_OTHER, &schedparam );
   fatal_directive_check_status_only( status, ESRCH, "invalid thread" );
 
   /* now get sporadic server errors */

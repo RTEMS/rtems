@@ -51,7 +51,11 @@ rtems_task Init( rtems_task_argument argument);
 
 #endif /* __rtems__ */
 
-void countTaskDeferred() {
+void countTaskAsync(void);
+void countTaskDeferred(void);
+
+void countTaskDeferred(void)
+{
   int i=0;
   int type,state;
 
@@ -64,7 +68,8 @@ void countTaskDeferred() {
     }
 }
 
-void countTaskAsync() {
+void countTaskAsync(void)
+{
   int i=0;
   int type,state;
 

@@ -7,7 +7,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@ void *Task_3(
   void *argument
 )
 {
+  unsigned int  remaining;
   int           status;
   int           sig;
   union sigval  value;
@@ -105,7 +106,7 @@ void *Task_3(
   assert( !status );
 
   printf( "Task_3: sleep so the Init task can reguest a signal\n" );
-  status = sleep( 1 );
+  remaining = sleep( 1 );
   assert( !status );
 
      /* end of task 3 */
