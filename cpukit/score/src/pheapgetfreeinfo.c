@@ -16,13 +16,19 @@
 #include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
-void _Protected_heap_Get_free_information(
+bool _Protected_heap_Get_free_information(
   Heap_Control        *the_heap,
   Heap_Information    *info
 )
 {
+  /*
+   * TBD: _Heap_Get_free_information does not error check or return status.
+   */
+
   _RTEMS_Lock_allocator();
     _Heap_Get_free_information( the_heap, info );
   _RTEMS_Unlock_allocator();
+
+  return true;
 }
 
