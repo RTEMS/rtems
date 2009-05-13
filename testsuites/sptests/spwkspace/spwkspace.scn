@@ -1,0 +1,10 @@
+*** TEST WORKSPACE CLASSIC API ***
+rtems_workspace_get_information - null pointer
+rtems_workspace_get_information - OK
+rtems_workspace_allocate - null pointer
+rtems_workspace_allocate - 0 bytes
+rtems_workspace_allocate - too many bytes
+rtems_workspace_allocate - 42 bytes
+rtems_workspace_free - NULL
+rtems_workspace_free - previous pointer to 42 bytes
+*** END OF TEST WORKSPACE CLASSIC API ***

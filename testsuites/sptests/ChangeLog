@@ -1,3 +1,10 @@
+2009-05-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: New test to exercise rtems_workspace_XXX
+	methods.
+	* spwkspace/.cvsignore, spwkspace/Makefile.am, spwkspace/init.c,
+	spwkspace/spwkspace.scn, spwkspace/system.h: New files.
+
 2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp04/system.h, sp04/task1.c, sp04/tswitch.c, sp07/init.c,
