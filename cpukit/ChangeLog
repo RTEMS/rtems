@@ -1,3 +1,10 @@
+2009-05-13	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1411/cpukit
+	* rtems/src/workspace.c, score/include/rtems/score/protectedheap.h,
+	score/src/pheapgetfreeinfo.c, score/src/pheapgetinfo.c: Improve
+	workspace wrapper methods.
+
 2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/shell/login_prompt.c, libmisc/shell/shell_script.c,
