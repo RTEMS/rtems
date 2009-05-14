@@ -1,5 +1,9 @@
 2009-05-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spprintk/init.c: More test cases.
+
+2009-05-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp09/screen11.c, sp09/sp09.scn: Add case where buffer size is not
 	large enough for buffer node overhead.
 

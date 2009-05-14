@@ -21,13 +21,28 @@ rtems_task Init(
   bool                    retbool;
   Heap_Information_block  info;
 
-  puts( "\n\n*** TEST PRINTK ***" );
+  printk( "\n\n*** TEST PRINTK ***\n" );
 
   printk( "bad format -- %%q in parentheses (%q)\n" );
 
-  printk( "bad format -- %%lq in parentheses (%lq)\n" );
+  printk( "bad format -- %%lq in parentheses (%lq)\n", 0x1234 );
 
-  puts( "*** END OF TEST PRINTK ***" );
+  printk( "%%O octal upper case 16 -- %O\n", 16 );
+  printk( "%%o octal lower case of 16 -- %O\n", 16 );
+  printk( "%%I of 16 -- %I\n", 16 );
+  printk( "%%i of 16 -- %i\n", 16 );
+  printk( "%%D of 16 -- %D\n", 16 );
+  printk( "%%d of 16 -- %d\n", 16 );
+  printk( "%%U of 16 -- %U\n", 16 );
+  printk( "%%u of 16 -- %u\n", 16 );
+  printk( "%%X of 16 -- %X\n", 16 );
+  printk( "%%x of 16 -- %x\n", 16 );
+  printk( "%%p of 0x1234 -- %p\n", (void *)0x1234 );
+  printk( "%%s of Mary Had a Little Lamb -- (%s)\n", 
+          "Mary Had a Little Lamb" );
+  printk( "%%s of NULL -- (%s)\n", NULL );
+
+  printk( "*** END OF TEST PRINTK ***" );
   rtems_test_exit( 0 );
 }
 
