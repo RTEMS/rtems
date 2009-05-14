@@ -1,3 +1,8 @@
+2009-05-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen11.c, sp09/sp09.scn: Add case where buffer size is not
+	large enough for buffer node overhead.
+
 2009-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac, spwatchdog/system.h,

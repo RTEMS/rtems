@@ -189,6 +189,7 @@ TA1 - rtems_partition_create - RTEMS_INVALID_NAME
 TA1 - rtems_partition_create - length - RTEMS_INVALID_SIZE
 TA1 - rtems_partition_create - buffer size - RTEMS_INVALID_SIZE
 TA1 - rtems_partition_create - length < buffer size - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_create - buffer size < overhead - RTEMS_INVALID_SIZE
 TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED
 TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_partition_create - RTEMS_INVALID_SIZE

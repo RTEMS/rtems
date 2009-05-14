@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@ void Screen11()
   void              *buffer_address_2;
   void              *buffer_address_3;
   rtems_status_code  status;
+  uint32_t           size;
 
   status = rtems_partition_create(
     0,
@@ -86,6 +87,33 @@ void Screen11()
   puts(
     "TA1 - rtems_partition_create - length < buffer size - RTEMS_INVALID_SIZE"
   );
+
+  /*
+   * Attempt to create a partition with a buffer size that is not large
+   * enough to account for the overhead.
+   */
+  puts(
+    "TA1 - rtems_partition_create - buffer size < overhead - RTEMS_INVALID_SIZE"
+  );
+#define SIZEOF_CHAIN_NODE 2 * sizeof(void *)
+  for ( size=0 ; size < SIZEOF_CHAIN_NODE ; size++) {
+    status = rtems_partition_create(
+      Partition_name[ 1 ],
+      Partition_good_area,
+      size,
+      256,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Junk_id
+    );
+    if ( status != RTEMS_INVALID_SIZE )
+      printf( "ERROR when size == %d\n", size );
+
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_SIZE,
+      "rtems_partition_create with buffer_size > length"
+    );
+  }
 
   /*
    *  The check for an object being global is only made if
