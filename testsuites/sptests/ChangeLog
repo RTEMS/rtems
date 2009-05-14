@@ -1,3 +1,12 @@
+2009-05-14	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, spwatchdog/system.h,
+	spwkspace/Makefile.am, spwkspace/init.c: Add shell of test for
+	printk. These will help coverage. Simplify spwkspace.
+	* spprintk/.cvsignore, spprintk/Makefile.am, spprintk/init.c,
+	spprintk/spprintk.scn: New files.
+	* spwkspace/system.h: Removed.
+
 2009-05-13	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: New test to exercise rtems_workspace_XXX

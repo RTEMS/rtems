@@ -1,5 +1,5 @@
 /*
- *  Exercise SuperCore Object Get Next
+ *  Exercise Classic API Workspace Wrappers
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,8 +11,8 @@
  *  $Id$
  */
 
-#define CONFIGURE_INIT
-#include "system.h"
+#include <tmacros.h>
+
 
 rtems_task Init(
   rtems_task_argument argument
@@ -57,7 +57,18 @@ rtems_task Init(
   retbool = rtems_workspace_free( p1 ); 
   assert( retbool == true );
 
-
   puts( "*** END OF TEST WORKSPACE CLASSIC API ***" );
   rtems_test_exit( 0 );
 }
+
+/* configuration information */
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_MAXIMUM_TASKS             1
+
+#define CONFIGURE_INIT
+#include <rtems/confdefs.h>

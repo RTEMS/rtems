@@ -10,7 +10,7 @@ SUBDIRS = sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 sp11 sp12 sp13 sp14 \
     sp30 sp31 sp32 sp33 sp34 sp35 sp37 sp38 sp39 sp40 sp41 sp42 sp43 sp44 \
     sp45 sp46 sp47 sp48 spsize spwatchdog spfatal01 spfatal02 spfatal03 \
     spfatal04 spfatal05 spfatal06 spfatal07 spfatal08 spfatal09 spobjgetnext \
-    spwkspace
+    spprintk spwkspace
  
 DIST_SUBDIRS = $(SUBDIRS) spfatal spfatal_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h

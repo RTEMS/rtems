@@ -86,6 +86,7 @@ spfatal07/Makefile
 spfatal08/Makefile
 spfatal09/Makefile
 spobjgetnext/Makefile
+spprintk/Makefile
 spwkspace/Makefile
 ])
 AC_OUTPUT

@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = spwkspace
-spwkspace_SOURCES = init.c system.h
+spwkspace_SOURCES = init.c
 
 dist_rtems_tests_DATA = spwkspace.scn
 
