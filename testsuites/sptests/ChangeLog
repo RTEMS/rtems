@@ -1,3 +1,7 @@
+2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spprintk/init.c: printk() now 100% covered.
+
 2009-05-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spprintk/init.c: More test cases.

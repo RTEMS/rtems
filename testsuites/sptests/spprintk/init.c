@@ -33,14 +33,28 @@ rtems_task Init(
   printk( "%%i of 16 -- %i\n", 16 );
   printk( "%%D of 16 -- %D\n", 16 );
   printk( "%%d of 16 -- %d\n", 16 );
+  printk( "%%-3d of 16 -- %-3d\n", 16 );
   printk( "%%U of 16 -- %U\n", 16 );
   printk( "%%u of 16 -- %u\n", 16 );
   printk( "%%X of 16 -- %X\n", 16 );
   printk( "%%x of 16 -- %x\n", 16 );
   printk( "%%p of 0x1234 -- %p\n", (void *)0x1234 );
+
+  /* negative numbers */
+  printk( "%%d of -16 -- %d\n", -16 );
+  printk( "%%d of -16 -- %-3d\n", -16 );
+  printk( "%%u of -16 -- %u\n", -16 );
+
+  /* string formats */
   printk( "%%s of Mary Had a Little Lamb -- (%s)\n", 
           "Mary Had a Little Lamb" );
   printk( "%%s of NULL -- (%s)\n", NULL );
+  printk( "%%12s of joel -- (%20s)\n", "joel" );
+  printk( "%%4s of joel -- (%4s)\n", "joel" );
+  printk( "%%-12s of joel -- (%-20s)\n", "joel" );
+  printk( "%%-4s of joel -- (%-4s)\n", "joel" );
+  printk( "%%c of X -- (%c)\n", 'X' );
+
 
   printk( "*** END OF TEST PRINTK ***" );
   rtems_test_exit( 0 );
