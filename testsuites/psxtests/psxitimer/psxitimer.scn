@@ -1,0 +1,13 @@
+*** POSIX TEST ITIMER ***
+getitimer -- bad which - EINVAL 
+getitimer -- NULL pointer - EFAULT 
+getitimer -- ITIMER_REAL - ENOSYS 
+getitimer -- ITIMER_VIRTUAL - ENOSYS 
+getitimer -- ITIMER_PROF - ENOSYS 
+setitimer -- bad which - EINVAL 
+setitimer -- NULL value pointer - EFAULT 
+setitimer -- NULL value pointer - EFAULT 
+setitimer -- ITIMER_REAL - ENOSYS 
+setitimer -- ITIMER_VIRTUAL - ENOSYS 
+setitimer -- ITIMER_PROF - ENOSYS 
+*** END OF POSIX TEST ITIMER ***

@@ -1,5 +1,12 @@
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to provide coverage analysis
+	of the current implementation of getitimer() and setitimer().
+	* psxitimer/.cvsignore, psxitimer/Makefile.am, psxitimer/init.c,
+	psxitimer/psxitimer.scn: New files.
+
+2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxsysconf/init.c, psxsysconf/psxsysconf.scn: Add missing error test
 	case to improve coverage analysis.
 
