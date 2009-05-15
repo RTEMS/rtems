@@ -1,5 +1,10 @@
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/getitimer.c, posix/src/setitimer.c: Add error checks and
+	clean up so coverage analysis is possible.
+
+2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/sysconf.c: Restructure to improve coverage analysis.
 
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>

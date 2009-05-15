@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-20089
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,12 +23,17 @@ int getitimer(
   struct itimerval *value
 )
 {
+  if ( !value )
+    rtems_set_errno_and_return_minus_one( EFAULT );
+
   switch ( which ) {
-    case ITIMER_REAL:  break;
-    case ITIMER_VIRTUAL: break;
-    case ITIMER_PROF: break;
+    case ITIMER_REAL:
+    case ITIMER_VIRTUAL:
+    case ITIMER_PROF:
+      rtems_set_errno_and_return_minus_one( ENOSYS );
+    default:
+      break;
   }
-  rtems_set_errno_and_return_minus_one( ENOSYS );
-  /* return -1; */
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }
 
