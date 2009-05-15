@@ -109,7 +109,7 @@ LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
-    src/printk_plugin.c \
+    src/printk_plugin.c src/vprintk.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
 
