@@ -146,6 +146,14 @@ static inline bool bsp_interrupt_is_valid_vector( rtems_vector_number vector)
  */
 void bsp_interrupt_handler_default( rtems_vector_number vector);
 
+/**
+ * @brief Initialize BSP interrupt support.
+ *
+ * You must call this function before you can install, remove and dispatch
+ * interrupt handlers.  The BSP specific bsp_interrupt_facility_initialize()
+ * function will be called after all internals are initialized.  Initialization
+ * is complete if everything was successful.
+ */
 rtems_status_code bsp_interrupt_initialize( void);
 
 /**
