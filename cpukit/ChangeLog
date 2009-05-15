@@ -1,5 +1,9 @@
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/sysconf.c: Restructure to improve coverage analysis.
+
+2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libcsupport/Makefile.am, libcsupport/src/printk.c: Restructure to
 	make analysis and coverage easier. Now 100% covered.
 	* libcsupport/src/vprintk.c: New file.

@@ -33,29 +33,23 @@ long sysconf(
   int name
 )
 {
+  if ( name == _SC_CLK_TCK )
+    return (TOD_MICROSECONDS_PER_SECOND /
+      rtems_configuration_get_microseconds_per_tick());
 
-  switch (name) {
-    case _SC_CLK_TCK:
-      return (TOD_MICROSECONDS_PER_SECOND /
-        rtems_configuration_get_microseconds_per_tick());
+  if ( name == _SC_OPEN_MAX )
+    return rtems_libio_number_iops;
 
-    case _SC_OPEN_MAX:
-      return rtems_libio_number_iops;
-
-    case _SC_GETPW_R_SIZE_MAX:
-        return 1024;
-    
-    case _SC_PAGESIZE:
-        return PAGE_SIZE;
+  if ( name == _SC_GETPW_R_SIZE_MAX )
+    return 1024;
+  
+  if ( name == _SC_PAGESIZE )
+    return PAGE_SIZE;
 
 #if defined(__sparc__)
-    case 515: /* Solaris _SC_STACK_PROT */
-     return 0;
+  if ( name == 515 ) /* Solaris _SC_STACK_PROT */
+   return 0;
 #endif
-
-    default:
-      break;
-  }
 
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
