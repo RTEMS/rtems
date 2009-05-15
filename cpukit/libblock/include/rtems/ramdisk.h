@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_ramdisk
+ *
  * RAM disk block device.
  */
 

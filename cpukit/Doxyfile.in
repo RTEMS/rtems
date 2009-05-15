@@ -17,13 +17,13 @@
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = RTEMS CPU Kit including SuperCore
+PROJECT_NAME           = "RTEMS CPU Kit with SuperCore"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. 
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 
+PROJECT_NUMBER         = @PACKAGE_VERSION@
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
@@ -105,7 +105,15 @@ SHORT_NAMES            = NO
 # comments will behave just like the Qt-style comments (thus requiring an 
 # explict @brief command for a brief description.
 
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
+
+# If the QT_AUTOBRIEF tag is set to YES then Doxygen will 
+# interpret the first line (until the first dot) of a Qt-style 
+# comment as the brief description. If set to NO, the comments 
+# will behave just like regular Qt-style comments (thus requiring 
+# an explicit \brief command for a brief description.)
+
+QT_AUTOBRIEF           = YES
 
 # The MULTILINE_CPP_IS_BRIEF tag can be set to YES to make Doxygen 
 # treat a multi-line C++ special comment block (i.e. a block of //! or /// 
@@ -876,7 +884,10 @@ INCLUDE_FILE_PATTERNS  =
 # omitted =1 is assumed.
 
 PREDEFINED             = FALSE=0 \
-   CPU_USE_GENERIC_BITFIELD_DATA=0
+   CPU_USE_GENERIC_BITFIELD_DATA=0 \
+   __attribute__(x)= \
+   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE= \
+   RTEMS_COMPILER_DEPRECATED_ATTRIBUTE=
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 
 # this tag can be used to specify a list of macro names that should be expanded. 
@@ -991,14 +1002,14 @@ TEMPLATE_RELATIONS     = NO
 # file showing the direct and indirect include dependencies of the file with 
 # other documented files.
 
-INCLUDE_GRAPH          = YES
+INCLUDE_GRAPH          = NO
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDED_BY_GRAPH, and 
 # HAVE_DOT tags are set to YES then doxygen will generate a graph for each 
 # documented header file showing the documented files that directly or 
 # indirectly include this file.
 
-INCLUDED_BY_GRAPH      = YES
+INCLUDED_BY_GRAPH      = NO
 
 # If the CALL_GRAPH and HAVE_DOT tags are set to YES then doxygen will 
 # generate a call dependency graph for every global function or class method. 

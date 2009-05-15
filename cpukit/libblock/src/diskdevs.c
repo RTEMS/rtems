@@ -1,12 +1,12 @@
 /**
  * @file
  *
+ * @ingroup rtems_disk
+ *
  * Block device disk management.
  */
  
 /*
- * diskdevs.c - Physical and logical block devices (disks) support
- *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_bdpart
+ *
  * Block device partition management.
  */
 
@@ -319,7 +321,7 @@ rtems_status_code rtems_bdpart_read(
   rtems_status_code esc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *block = NULL;
   rtems_bdpart_partition *p = pt - 1;
-  rtems_bdpart_partition *p_end = NULL;
+  const rtems_bdpart_partition *p_end = pt + (count != NULL ? *count : 0);
   rtems_blkdev_bnum ep_begin = 0; /* Extended partition begin */
   rtems_blkdev_bnum ebr = 0; /* Extended boot record block index */
   rtems_blkdev_bnum disk_end = 0;
@@ -332,8 +334,7 @@ rtems_status_code rtems_bdpart_read(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  /* Set table end and the count to a save value */
-  p_end = pt + *count;
+  /* Set count to a save value */
   *count = 0;
 
   /* Get disk data */
@@ -463,7 +464,8 @@ rtems_status_code rtems_bdpart_write(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code esc = RTEMS_SUCCESSFUL;
-  bool dos_compatibility = format->type == RTEMS_BDPART_FORMAT_MBR
+  bool dos_compatibility = format != NULL
+    && format->type == RTEMS_BDPART_FORMAT_MBR
     && format->mbr.dos_compatibility;
   rtems_bdbuf_buffer *block = NULL;
   rtems_blkdev_bnum disk_end = 0;
@@ -680,7 +682,8 @@ rtems_status_code rtems_bdpart_create(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bool dos_compatibility = format->type == RTEMS_BDPART_FORMAT_MBR
+  bool dos_compatibility = format != NULL
+    && format->type == RTEMS_BDPART_FORMAT_MBR
     && format->mbr.dos_compatibility;
   rtems_blkdev_bnum disk_end = 0;
   rtems_blkdev_bnum pos = 0;

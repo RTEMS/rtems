@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_blkdev
+ *
  * Block device management.
  */
  

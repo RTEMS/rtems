@@ -3,7 +3,7 @@
  *
  * @ingroup rtems_interrupt_extension
  *
- * @brief Header file for the RTEMS Interrupt Manager Extension.
+ * @brief Header file for the Interrupt Manager Extension.
  */
 
 /*
@@ -30,7 +30,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup rtems_interrupt_extension RTEMS Interrupt Manager Extension
+ * @defgroup rtems_interrupt_extension Interrupt Manager Extension
  *
  * @ingroup ClassicINTR
  *

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_bdpart
+ *
  * Block device partition management.
  */
 
@@ -245,11 +247,11 @@ rtems_status_code rtems_bdpart_write(
  * Creates a partition table in @a partitions with @a count partitions for the
  * physical disk device with name @a disk_name.
  *
- * The array of positive integer weights in @a distribution must be of size @a
- * size.  The weights in the distribution array are summed up.  Each weight is
- * then divided by the sum to obtain the disk fraction which forms the
- * corresponding partition.  The partition boundaries are generated with
- * respect to the output format in @a format.
+ * The array of positive integer weights in @a distribution must have exactly
+ * @a count elements.  The weights in the distribution array are summed up.
+ * Each weight is then divided by the sum to obtain the disk fraction which
+ * forms the corresponding partition.  The partition boundaries are generated
+ * with respect to the output format in @a format.
  */
 rtems_status_code rtems_bdpart_create(
   const char *disk_name,

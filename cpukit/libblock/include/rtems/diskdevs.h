@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup rtems_disk
+ *
  * Block device disk management.
  */
  
