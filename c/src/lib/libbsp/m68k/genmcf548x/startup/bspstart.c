@@ -66,37 +66,56 @@ extern char WorkAreaBase [];
 /*
  * CPU-space access
  */
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
-#define m68k_set_acr0(_acr0) asm volatile ("movec %0,#0x0004" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) asm volatile ("movec %0,#0x0005" : : "d" (_acr1))
 #define m68k_set_acr2(_acr2) asm volatile ("movec %0,#0x0005" : : "d" (_acr2))
 #define m68k_set_acr3(_acr3) asm volatile ("movec %0,#0x0007" : : "d" (_acr3))
 
 /*
- * Set initial cacr mode, mainly enables branch/intruction/data cache and switch off FPU.
+ * Set initial cacr mode, mainly enables branch/intruction/data cache and
+ * switch off FPU.
  */
-static uint32_t cacr_mode = (0                                          |
-                             MCF548X_CACR_DEC                           | /* enable data cache */
-                             MCF548X_CACR_BEC                           | /* enable branch cache */
-                             MCF548X_CACR_IEC                           | /* enable instruction cache */
-                             MCF548X_CACR_DDCM(DCACHE_ON_WRIGHTTHROUGH) | /* set data cache mode to write-through */
-                             MCF548X_CACR_DESB                          | /* enable data store buffer */
-                             MCF548X_CACR_DDSP                          | /* data access only in supv. mode */
-                             MCF548X_CACR_IDSP                          | /* instr. access only in supv. mode */
-                             MCF548X_CACR_DF);                            /* disable FPU */
-
+static const uint32_t BSP_CACR_INIT = MCF548X_CACR_DEC /* enable data cache */
+  | MCF548X_CACR_BEC /* enable branch cache */
+  | MCF548X_CACR_IEC /* enable instruction cache */
+  | MCF548X_CACR_DDCM(DCACHE_ON_WRIGHTTHROUGH)
+      /* set data cache mode to write-through */
+  | MCF548X_CACR_DESB /* enable data store buffer */
+  | MCF548X_CACR_DDSP /* data access only in supv. mode */
+  | MCF548X_CACR_IDSP /* instr. access only in supv. mode */
+  | MCF548X_CACR_DF; /* disable FPU */
 
 /*
- * Coldfire cacr maintenance functions
+ * CACR maintenance functions
  */
-void _CPU_cacr_set_mode(uint32_t new_cacr_mode)
-{
-rtems_interrupt_level level;
 
-rtems_interrupt_disable(level);
-cacr_mode = new_cacr_mode;
-m68k_set_cacr(new_cacr_mode);
-rtems_interrupt_enable(level);
+void bsp_cacr_set_flags( uint32_t flags)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level);
+  _CPU_cacr_shadow |= flags;
+  m68k_set_cacr( _CPU_cacr_shadow);
+  rtems_interrupt_enable( level);
+}
+
+void bsp_cacr_set_self_clear_flags( uint32_t flags)
+{
+  rtems_interrupt_level level;
+  uint32_t cacr = 0;
+
+  rtems_interrupt_disable( level);
+  cacr = _CPU_cacr_shadow | flags;
+  m68k_set_cacr( cacr);
+  rtems_interrupt_enable( level);
+}
+
+void bsp_cacr_clear_flags( uint32_t flags)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level);
+  _CPU_cacr_shadow &= ~flags;
+  m68k_set_cacr( _CPU_cacr_shadow);
+  rtems_interrupt_enable( level);
 }
 
 /*
@@ -104,86 +123,90 @@ rtems_interrupt_enable(level);
  */
 void _CPU_cache_freeze_data(void)
 {
+  /* Do nothing */
 }
 
 void _CPU_cache_unfreeze_data(void)
 {
+  /* Do nothing */
 }
 
 void _CPU_cache_freeze_instruction(void)
 {
+  /* Do nothing */
 }
 
 void _CPU_cache_unfreeze_instruction(void)
 {
+  /* Do nothing */
 }
 
 void _CPU_cache_enable_instruction(void)
 {
-    cacr_mode &= ~(MCF548X_CACR_IDCM);
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_clear_flags( MCF548X_CACR_IDCM);
 }
 
 void _CPU_cache_disable_instruction(void)
 {
-    cacr_mode |= MCF548X_CACR_IDCM;
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_set_flags( MCF548X_CACR_IDCM);
 }
 
 void _CPU_cache_invalidate_entire_instruction(void)
 {
-	cacr_mode |= MCF548X_CACR_ICINVA;
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_set_self_clear_flags( MCF548X_CACR_ICINVA);
 }
 
 void _CPU_cache_invalidate_1_instruction_line(const void *addr)
 {
+  uint32_t a = (uint32_t) addr & ~0x3;
 
-    asm volatile ("cpushl %%ic,(%0)" :: "a" (addr));
+  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x0));
+  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x1));
+  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x2));
+  asm volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x3));
 }
 
 void _CPU_cache_enable_data(void)
 {
-    cacr_mode &= ~MCF548X_CACR_DDCM(DCACHE_OFF_IMPRECISE);
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_clear_flags( MCF548X_CACR_DDCM( DCACHE_OFF_IMPRECISE));
 }
 
 void _CPU_cache_disable_data(void)
 {
-    cacr_mode |= MCF548X_CACR_DDCM(DCACHE_OFF_IMPRECISE);
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_set_flags( MCF548X_CACR_DDCM( DCACHE_OFF_IMPRECISE));
 }
 
 void _CPU_cache_invalidate_entire_data(void)
 {
-    cacr_mode |= MCF548X_CACR_DCINVA;
-    _CPU_cacr_set_mode(cacr_mode);
+  bsp_cacr_set_self_clear_flags( MCF548X_CACR_DCINVA);
 }
 
-void _CPU_cache_invalidate_1_data_line(const void *addr)
+void _CPU_cache_invalidate_1_data_line( const void *addr)
 {
+  uint32_t a = (uint32_t) addr & ~0x3;
 
-   asm volatile ("cpushl %%dc,(%0)" :: "a" (addr));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
 }
 
-void _CPU_cache_flush_1_data_line(const void *addr)
+void _CPU_cache_flush_1_data_line( const void *addr)
 {
-   asm volatile ("cpushl %%dc,(%0)" :: "a" (addr));
+  uint32_t a = (uint32_t) addr & ~0x3;
+
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
+  asm volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
 }
 
-void _CPU_cache_flush_entire_data(void)
+void _CPU_cache_flush_entire_data( void)
 {
-register uint32_t way_cnt, set_cnt, addr;
+  uint32_t line = 0;
 
-asm volatile("nop");
-
-for(way_cnt=0; way_cnt<4; way_cnt++)
-  {
-  for(addr=0,set_cnt=0; set_cnt<512; set_cnt++,addr+=0x10)
-    {
-    asm volatile ("cpushl %%dc,(%0)" :: "a" (addr));
-    }
-  addr=way_cnt;
+  for (line = 0; line < 512; ++line) {
+    _CPU_cache_flush_1_data_line( (const void *) (line * 16));
   }
 }
 
@@ -247,18 +270,29 @@ for(way_cnt=0; way_cnt<4; way_cnt++)
  */
 void bsp_start( void )
 {
+  /* Initialize CACR shadow register */
+  _CPU_cacr_shadow = BSP_CACR_INIT;
+
+  /* Switch on FPU in CACR shadow register if necessary */
+  if (
+    Configuration_RTEMS_API.User_initialization_tasks_table != NULL &&
+      (Configuration_RTEMS_API.User_initialization_tasks_table->attribute_set
+        & RTEMS_FLOATING_POINT) != 0
+  ) {
+    _CPU_cacr_shadow &= ~MCF548X_CACR_DF;
+  }
+
+  /*
+   * Load the shadow variable of CACR with initial mode and write it to the
+   * CACR.  Interrupts are still disabled, so there is no need for surrounding
+   * rtems_interrupt_enable() / rtems_interrupt_disable().
+   */
+  m68k_set_cacr( _CPU_cacr_shadow);
+
   /*
    * do mapping of acr's and/or mmu
    */
   acr_mmu_mapping();
-
-  /*
-   * Load the shadow variable of cacr with initial mode and write it to the cacr.
-   * Interrupts are still disabled, so there is no need for surrounding rtems_interrupt_enable()/rtems_interrupt_disable()
-   */
-  _CPU_cacr_shadow = cacr_mode;
-  m68k_set_cacr(_CPU_cacr_shadow);
-
 }
 
 
