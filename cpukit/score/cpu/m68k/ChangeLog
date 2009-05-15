@@ -1,3 +1,8 @@
+2009-05-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Cleanup of the floating point
+	context initialization, save and restore code.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

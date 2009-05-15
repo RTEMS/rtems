@@ -14,6 +14,10 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 
+#if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )
+  uint32_t _CPU_cacr_shadow;
+#endif
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -185,7 +189,7 @@ const unsigned char _CPU_m68k_BFFFO_table[256] = {
 #if (CPU_SOFTWARE_FP == TRUE)
 extern Context_Control_fp _fpCCR;
 
-void CPU_Context_save_fp (Context_Control_fp **fp_context_ptr)
+void _CPU_Context_save_fp (Context_Control_fp **fp_context_ptr)
 {
   Context_Control_fp *fp;
 
@@ -194,7 +198,7 @@ void CPU_Context_save_fp (Context_Control_fp **fp_context_ptr)
   *fp = _fpCCR;
 }
 
-void CPU_Context_restore_fp (Context_Control_fp **fp_context_ptr)
+void _CPU_Context_restore_fp (Context_Control_fp **fp_context_ptr)
 {
   Context_Control_fp *fp;
 
