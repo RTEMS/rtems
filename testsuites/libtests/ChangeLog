@@ -1,3 +1,7 @@
+2009-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtmonuse/init.c: Do not use Task_name array before initialized.
+
 2009-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloctest/init.c: Fix warning.

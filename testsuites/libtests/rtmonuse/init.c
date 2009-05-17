@@ -38,8 +38,10 @@ rtems_task Init(
   period =  rtems_build_name( 'I', 'G', 'N', 'R' );
   status = rtems_rate_monotonic_create( period, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
-  put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_create id = 0x%08x (stays inactive)\n", rmid );
+  printf(
+    "INIT - rtems_rate_monotonic_create id = 0x%08x (stays inactive)\n",
+    rmid
+  );
 
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
