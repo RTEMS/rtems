@@ -257,13 +257,13 @@ void *POSIX_Init(
 
   puts( "Init: Firing alarm in 2 seconds" );
   remaining = alarm( 2 );
-  printf( "Init: %d seconds left on previous alarm\n", status );
-  assert( status );
+  printf( "Init: %d seconds left on previous alarm\n", remaining );
+  assert( remaining == 5 );
 
   puts( "Init: Wait 4 seconds for alarm" );
   remaining = sleep( 4 );
-  printf( "Init: %d seconds left in sleep\n", status );
-  assert( status );
+  printf( "Init: %d seconds left in sleep\n", remaining );
+  assert( remaining == 2 );
 
   /* test SIG_SETMASK case and returning oset of pthread_sigmask */
 

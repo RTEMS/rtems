@@ -1,3 +1,8 @@
+2009-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx04/init.c: Correct errors introduced by using different variable
+	for return type when correcting typing warnings.
+
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to provide coverage analysis
