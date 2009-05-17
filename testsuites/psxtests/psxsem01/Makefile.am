@@ -5,7 +5,8 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = psxsem01
-psxsem01_SOURCES = init.c system.h ../include/pmacros.h
+psxsem01_SOURCES = init.c system.h ../include/pmacros.h \
+     ../../support/src/test_support.c
 
 dist_rtems_tests_DATA = psxsem01.scn
 

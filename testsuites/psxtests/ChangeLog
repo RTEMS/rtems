@@ -1,3 +1,9 @@
+2009-05-17	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psxsem01/Makefile.am, psxsem01/init.c, psxsem01/psxsem01.scn,
+	psxtimer01/psxtimer.c, psxtimer01/system.h, psxtimer02/psxtimer.c:
+	Improved so coverage is better.
+
 2009-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx04/init.c: Correct errors introduced by using different variable

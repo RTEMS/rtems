@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <tmacros.h>
+#include "test_support.h"
 
 void *POSIX_Init(
   void *argument
@@ -20,6 +21,11 @@ void *POSIX_Init(
   char            failure_msg[80];
 
   puts( "\n\n*** POSIX SEMAPHORE MANAGER TEST 1 ***" );
+
+  puts( "Init: sem_init - UNSUCCESSFUL (EINVAL)" );
+  status = sem_init(NULL, 0, 1);
+  fatal_posix_service_status( status, -1, "sem_init error return status");
+  fatal_posix_service_status( errno, EINVAL, "sem_init errorno EINVAL" );
 
   puts( "Init: sem_init - SUCCESSFUL" );
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_SEMAPHORES; i++) {
@@ -112,7 +118,8 @@ void *POSIX_Init(
   puts( "Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)" );
   status = sem_timedwait(&sems[2], &waittime);
   fatal_posix_service_status( status, -1, "sem_timedwait error return status");
-  fatal_posix_service_status( errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
+  fatal_posix_service_status(
+    errno, ETIMEDOUT, "sem_timedwait errno ETIMEDOUT");
 
   /*
    * To do this case, we must be blocking when we want the semaphore.
@@ -148,18 +155,29 @@ void *POSIX_Init(
    * Validate all sem_open return paths.
    */
 
+  puts( "Init: sem_open - UNSUCCESSFUL (ENAMETOOLONG)" );
+  status = sem_open(Get_Too_Long_Name(), O_CREAT, 0777, 1 );
+  fatal_posix_service_status( status, -1, "sem_open error return status");
+  fatal_posix_service_status(
+    errno, ENAMETOOLONG, "sem_open errorno ENAMETOOLONG" );
+
   puts( "Init: sem_open - sem1 SUCCESSFUL" );
-  n_sem1 = sem_open( "sem1", O_CREAT, 00777, 1 );
+  n_sem1 = sem_open( "sem1",O_CREAT, 0777, 1 ); 
   assert( n_sem1 != SEM_FAILED );
 
+  puts( "Init: sem_destroy - named sem1 - EINVAL" );
+  status = sem_destroy(n_sem1);
+  fatal_posix_service_status( status, -1, "sem_destroy named semaphore");
+  fatal_posix_service_status( errno, EINVAL,  "sem_destroy named semaphore");
+
   puts( "Init: sem_open - Create an Existing sem (EEXIST)" );
-  n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 00777, 1);
+  n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 0777, 1);
   fatal_posix_service_status(
     (int) n_sem2, (int ) SEM_FAILED, "sem_open error return status" );
   fatal_posix_service_status( errno, EEXIST,  "sem_open errno EEXIST");
 
   puts( "Init: sem_open - Open new sem without create flag (ENOENT)" );
-  n_sem2 = sem_open("sem3", O_EXCL, 00777, 1);
+  n_sem2 = sem_open("sem3", O_EXCL, 0777, 1);
   fatal_posix_service_status(
     (int) n_sem2, (int ) SEM_FAILED, "sem_open error return status" );
   fatal_posix_service_status( errno, ENOENT,  "sem_open errno EEXIST");
@@ -198,7 +216,7 @@ void *POSIX_Init(
   fatal_posix_service_status( status, 0, "sem_unlink locked semaphore");
 
   puts( "Init: sem_open - Reopen sem1 SUCCESSFUL with a different id" );
-  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 00777, 1);
+  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 0777, 1);
   assert( n_sem2 != SEM_FAILED );
   assert( n_sem2 != n_sem1 );
 

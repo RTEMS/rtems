@@ -1,4 +1,5 @@
 *** POSIX SEMAPHORE MANAGER TEST 1 ***
+Init: sem_init - UNSUCCESSFUL (EINVAL)
 Init: sem_init - SUCCESSFUL
 Init: sem_init - UNSUCCESSFUL (ENOSPC)
 Init: sem_init - UNSUCCESSFUL (ENOSYS -- pshared not supported)
@@ -18,7 +19,9 @@ Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)
 Init: sem_timedwait - UNSUCCESSFUL (EINVAL)
 Init: sem_post - UNSUCCESSFUL (EINVAL)
 Init: sem_destroy - SUCCESSFUL
+Init: sem_open - UNSUCCESSFUL (ENAMETOOLONG)
 Init: sem_open - sem1 SUCCESSFUL
+Init: sem_destroy - named sem1 - EINVAL
 Init: sem_open - Create an Existing sem (EEXIST)
 Init: sem_open - Open new sem without create flag (ENOENT)
 Init: sem_wait on sem1

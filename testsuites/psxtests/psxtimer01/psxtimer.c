@@ -63,9 +63,11 @@ void StopTimer(
   struct   itimerspec *timerdata
 )
 {
+   struct   itimerspec prev;
+
    timerdata->it_value.tv_sec  = 0;
    timerdata->it_value.tv_nsec  = 0;
-   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,NULL) == -1) {
+   if (timer_settime(timer_id,POSIX_TIMER_RELATIVE,timerdata,&prev) == -1) {
      perror ("Error in timer setting\n");
      pthread_exit ((void *) -1);
    }
@@ -307,11 +309,11 @@ void *POSIX_Init (
    pthread_mutexattr_t mutexattr;    /* mutex attributes */
    pthread_condattr_t  condattr;     /* condition attributes */
    pthread_attr_t attr;              /* task attributes */
-   pthread_t ta,tb,tc;               /* threads */
+   pthread_t ta,tb,tc, tc1;          /* threads */
    sigset_t  set;                    /* signals */
 
    struct sched_param sch_param;     /* schedule parameters */
-   struct periodic_params params_a, params_b, params_c;
+   struct periodic_params params_a, params_b, params_c, params_c1;
 
    puts( "\n\n*** POSIX Timers Test 01 ***" );
 
@@ -412,9 +414,21 @@ void *POSIX_Init (
      perror ("Error in thread create for task c\n");
    }
 
-
    /* execute 25 seconds and finish */
    sleep (25);
+
+   puts( "starting C again with 0.5 second periodicity" );
+   /* Temporal parameters (0.5 sec. periodicity) */
+   params_c1.period.tv_sec  = 0;         /* seconds */
+   params_c1.period.tv_nsec = 500000000; /* nanoseconds */
+   params_c1.count          = 6;
+   params_c1.signo = SIGALRM;
+   if (pthread_create (&tc1, &attr, task_c, &params_c1) != 0) {
+     perror ("Error in thread create for task c1\n");
+   }
+
+   sleep(5);
+
    puts( "*** END OF POSIX Timers Test 01 ***" );
    rtems_test_exit (0);
  }
