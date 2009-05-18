@@ -274,6 +274,15 @@ int main(
   status = pthread_rwlock_destroy( &rwlock );
   assert( status == 0 );
 
+  /********* CREATE RWLOCK WITH DEFAULT ATTRIBUTES AND DESTROY IT *********/
+  puts( "pthread_rwlock_init( &rwlock, NULL ) -- OK" );
+  status = pthread_rwlock_init( &rwlock, NULL );
+  assert( status == 0 );
+
+  puts( "pthread_rwlock_destroy( &rwlock ) -- OK" );
+  status = pthread_rwlock_destroy( &rwlock );
+  assert( status == 0 );
+
   /*************** CREATE THREADS AND LET THEM OBTAIN READLOCK ***************/
   puts( "pthread_rwlock_init( &RWLock, &attr ) -- OK" );
   status = pthread_rwlock_init( &RWLock, &attr );

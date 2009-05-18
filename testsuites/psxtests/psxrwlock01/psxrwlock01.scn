@@ -39,6 +39,8 @@ pthread_rwlockattr_init( &attr ) -- OK
 pthread_rwlock_init( &rwlock, &attr ) -- OK
 pthread_rwlock_init( &rwlock, &attr ) -- EAGAIN
 pthread_rwlock_destroy( &rwlock ) -- OK
+pthread_rwlock_init( &rwlock, NULL ) -- OK
+pthread_rwlock_destroy( &rwlock ) -- OK
 pthread_rwlock_init( &RWLock, &attr ) -- OK
 pthread_rwlock_tryrdlock(RWLock) -- OK
 Init: pthread_create - thread 1 OK

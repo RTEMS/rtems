@@ -1,3 +1,8 @@
+2009-05-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Add test case for
+	NULL attribute pointer on init.
+
 2009-05-17	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxsem01/Makefile.am, psxsem01/init.c, psxsem01/psxsem01.scn,
