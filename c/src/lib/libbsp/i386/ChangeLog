@@ -1,3 +1,8 @@
+2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* shared/irq/irq.c, shared/irq/irq.h, shared/irq/irq_asm.S: Add shared
+	interrupt support to i386.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

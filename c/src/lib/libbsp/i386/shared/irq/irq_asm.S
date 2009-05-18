@@ -107,11 +107,7 @@ nested:
 	 */
 
         pushl     ecx                       /* push vector number */
-        lea       (ecx,ecx,2), eax
-        mov       SYM (rtems_hdl_tbl), edx
-        shl       $0x3,eax
-        pushl     0x8(edx,eax,1)            /* push hdl argument */
-        call      *0x4(edx,eax,1)           /* call hdl */
+	call	  C_dispatch_isr
         addl      $4, esp
 
 	/*

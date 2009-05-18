@@ -2,7 +2,7 @@
  *
  *  This file contains the implementation of the function described in irq.h
  *
- *  CopyRight (C) 1998 valette@crf.canon.fr
+ *  Copyright (C) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
@@ -195,7 +195,63 @@ static int isValidInterrupt(int irq)
 }
 
 /*
- * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
+ * ------------------- RTEMS Shared Irq Handler Mngt Routines ------------
+ */
+int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
+{
+  rtems_interrupt_level   level;
+  rtems_irq_connect_data* vchain;
+
+  if (!isValidInterrupt(irq->name)) {
+    printk("Invalid interrupt vector %d\n",irq->name);
+    return 0;
+  }
+
+  rtems_interrupt_disable(level);
+
+  if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
+    rtems_interrupt_enable(level);
+    printk(
+      "IRQ vector %d already connected to an unshared handler\n",
+      irq->name
+    );
+    return 0;
+  }
+
+   vchain = (rtems_irq_connect_data*)malloc(sizeof(rtems_irq_connect_data));
+
+  /* save off topmost handler */
+  vchain[0]= rtems_hdl_tbl[irq->name];
+
+  /*
+   * store the data provided by user
+   */
+  rtems_hdl_tbl[irq->name] = *irq;
+
+  /* link chain to new topmost handler */
+  rtems_hdl_tbl[irq->name].next_handler = (void *)vchain;
+
+  /*
+   * enable_irq_at_pic is supposed to ignore
+   * requests to disable interrupts outside
+   * of the range handled by the PIC
+   */
+  BSP_irq_enable_at_i8259s (irq->name);
+
+  /*
+   * Enable interrupt on device
+   */
+  if (irq->on)
+    irq->on(irq);
+
+  rtems_interrupt_enable(level);
+
+  return 1;
+}
+
+
+/*
+ * --------------- RTEMS Single Irq Handler Mngt Routines ---------------
  */
 
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
@@ -222,6 +278,8 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
+    rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
+
     /*
      * Enable interrupt at PIC level
      */
@@ -229,7 +287,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Enable interrupt on device
      */
-	if (irq->on)
+    if (irq->on)
     	irq->on(irq);
 
     rtems_interrupt_enable(level);
@@ -252,43 +310,86 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
-    rtems_interrupt_level       level;
+  rtems_interrupt_level       level;
+  rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
 
-    if (!isValidInterrupt(irq->name)) {
+  if (!isValidInterrupt(irq->name)) {
+    return 0;
+  }
+
+  /*
+   * Check if default handler is actually connected. If not issue an error.
+   * You must first get the current handler via i386_get_current_idt_entry
+   * and then disconnect it using i386_delete_idt_entry.
+   * RATIONALE : to always have the same transition by forcing the user
+   * to get the previous handler before accepting to disconnect.
+   */
+  rtems_interrupt_disable(level);
+  if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
+    rtems_interrupt_enable(level);
+    return 0;
+  }
+
+  if ( (int)rtems_hdl_tbl[irq->name].next_handler != -1 ) {
+    int found = 0;
+
+    for( (pchain= NULL, vchain = &rtems_hdl_tbl[irq->name]);
+         (vchain->hdl != default_rtems_entry.hdl);
+         (pchain= vchain,
+          vchain = (rtems_irq_connect_data*)vchain->next_handler) ) {
+      if ( vchain->hdl == irq->hdl ) {
+        found =  -1;
+        break;
+      }
+    }
+
+    if ( !found ) {
+      rtems_interrupt_enable(level);
       return 0;
     }
-    /*
-     * Check if default handler is actually connected. If not issue an error.
-     * You must first get the current handler via i386_get_current_idt_entry
-     * and then disconnect it using i386_delete_idt_entry.
-     * RATIONALE : to always have the same transition by forcing the user
-     * to get the previous handler before accepting to disconnect.
-     */
-    rtems_interrupt_disable(level);
+  } else {
     if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) {
       rtems_interrupt_enable(level);
       return 0;
     }
+  }
 
-    /*
-     * disable interrupt at PIC level
-     */
-    BSP_irq_disable_at_i8259s (irq->name);
+  /*
+   * disable interrupt at PIC level
+   */
+  BSP_irq_disable_at_i8259s (irq->name);
 
-    /*
-     * Disable interrupt on device
-     */
-	if (irq->off)
-    	irq->off(irq);
+  /*
+   * Disable interrupt on device
+   */
+  if (irq->off)
+    irq->off(irq);
 
-    /*
-     * restore the default irq value
-     */
-    rtems_hdl_tbl[irq->name] = default_rtems_entry;
+  /*
+   * restore the default irq value
+   */
+  if( !vchain ) {
+     /* single handler vector... */
+     rtems_hdl_tbl[irq->name] = default_rtems_entry;
+  } else {
+    if ( pchain ) {
+       /* non-first handler being removed */
+       pchain->next_handler = vchain->next_handler;
+    } else {
+       /* first handler isn't malloc'ed, so just overwrite it.  Since
+        * the contents of vchain are being struct copied, vchain itself
+        * goes away
+        */
+       vchain = vchain->next_handler;
+       rtems_hdl_tbl[irq->name]= *vchain;
+    }
+    free(vchain);
+  }
 
-    rtems_interrupt_enable(level);
 
-    return 1;
+  rtems_interrupt_enable(level);
+
+  return 1;
 }
 
 /*
@@ -298,6 +399,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 {
     int                    i;
+    rtems_irq_connect_data*       vchain;
     rtems_interrupt_level  level;
 
     /*
@@ -314,17 +416,16 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
     compute_i8259_masks_from_prio ();
 
     for (i=0; i < internal_config->irqNb; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
+      BSP_irq_disable_at_i8259s (i);
+      for( vchain = &rtems_hdl_tbl[i];
+           ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+           vchain = (rtems_irq_connect_data*)vchain->next_handler ) {
 	BSP_irq_enable_at_i8259s (i);
-	if (rtems_hdl_tbl[i].on)
-		rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
-      }
-      else {
-	if (rtems_hdl_tbl[i].off)
-		rtems_hdl_tbl[i].off(&rtems_hdl_tbl[i]);
-	BSP_irq_disable_at_i8259s (i);
+        if (vchain->on)
+          vchain->on(vchain);
       }
     }
+
     /*
      * must enable slave pic anyway
      */
@@ -363,3 +464,23 @@ void processIrq(unsigned index)
   rtems_hdl_tbl[index].hdl(rtems_hdl_tbl[index].handle);
 }
 
+static inline void
+bsp_irq_dispatch_list(
+  rtems_irq_connect_data *tbl,
+  unsigned                irq,
+  rtems_irq_hdl                sentinel
+)
+{
+  rtems_irq_connect_data* vchain;
+  for( vchain = &tbl[irq];
+       ((int)vchain != -1 && vchain->hdl != sentinel);
+       vchain = (rtems_irq_connect_data*)vchain->next_handler ) {
+          vchain->hdl(vchain->handle);
+  }
+}
+
+
+void C_dispatch_isr(int irq)
+{
+  bsp_irq_dispatch_list(rtems_hdl_tbl, irq, default_rtems_entry.hdl);
+}
