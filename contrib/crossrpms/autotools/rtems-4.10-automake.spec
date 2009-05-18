@@ -45,9 +45,9 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define rpmvers 1.10.2
-%define srcvers	1.10.2
-%define amvers  1.10
+%define rpmvers 1.11
+%define srcvers	1.11
+%define amvers  1.11
 
 %define name			rtems-4.10-automake
 %define requirements		rtems-4.10-autoconf >= 2.60
@@ -57,7 +57,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 Obsoletes:	rtems-4.10-automake-rtems < %{version}-%{release}
@@ -65,13 +65,15 @@ Provides:	rtems-4.10-automake-rtems = %{version}-%{release}
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
-BuildRequires:  %{requirements} perl help2man
+BuildRequires:  %{requirements} perl
+%if "%{version}" < "1.11"
+BuildRequires:  help2man
+%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
-Patch0:  ftp://ftp.rtems.org/pub/rtems/4.10/SOURCES/automake-1.10.2-rtems4.10-20090222.diff
 
 
 %description
@@ -116,6 +118,8 @@ make
 rm -rf "$RPM_BUILD_ROOT"
 make DESTDIR=${RPM_BUILD_ROOT} install
 
+%if "%{version}" < "1.11"
+# automake >= 1.11 ships man-pages
 install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
 for i in $RPM_BUILD_ROOT%{_bindir}/aclocal \
   $RPM_BUILD_ROOT%{_bindir}/automake ; 
@@ -124,6 +128,7 @@ do
   help2man $i > `basename $i`.1
   install -m 644 `basename $i`.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 done
+%endif
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/aclocal
 echo "/usr/share/aclocal" > $RPM_BUILD_ROOT%{_datadir}/aclocal/dirlist
