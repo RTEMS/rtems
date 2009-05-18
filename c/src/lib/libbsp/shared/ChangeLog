@@ -1,3 +1,7 @@
+2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* bsppost.c: Fix typo.
+
 2009-05-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/irq-generic.h, src/irq-generic.c: Documentation.

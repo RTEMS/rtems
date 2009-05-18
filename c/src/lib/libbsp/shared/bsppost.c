@@ -2,7 +2,7 @@
  *  This is a shared BSP post driver hook designed to open
  *  /dev/console for stdin, stdout, and stderr if it exists.
  *  Newlib will automatically associate the file descriptors
- *  with the first thress files opened.
+ *  with the first three files opened.
  *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
