@@ -1,3 +1,9 @@
+2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1412/cpukit
+	* score/src/coremutex.c: Add missing braces. Broken with strict mutex
+	code added.
+
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/getitimer.c, posix/src/setitimer.c: Add error checks and

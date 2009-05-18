@@ -63,7 +63,7 @@ void _CORE_mutex_Initialize(
     the_mutex->holder     = _Thread_Executing;
     the_mutex->holder_id  = _Thread_Executing->Object.id;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) )
+         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
       
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
@@ -72,6 +72,7 @@ void _CORE_mutex_Initialize(
 #endif
 
       _Thread_Executing->resource_count++;
+    }
   } else {
     the_mutex->nest_count = 0;
     the_mutex->holder     = NULL;
