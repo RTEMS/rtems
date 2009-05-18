@@ -1,3 +1,7 @@
+2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds: Correct name of ENTRY.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* startup/start.S: Update for boot_card command line change.
