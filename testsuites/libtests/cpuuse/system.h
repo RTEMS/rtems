@@ -13,6 +13,7 @@
  *  $Id$
  */
 
+#include <bsp.h>
 #include <tmacros.h>
 
 /* functions */
@@ -46,10 +47,11 @@ void Task_switch(
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
 #define CONFIGURE_MAXIMUM_TASKS               4
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
+#if !BSP_SMALL_MEMORY
+#define CONFIGURE_EXTRA_TASK_STACKS           (6 * RTEMS_MINIMUM_STACK_SIZE)
+#endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_EXTRA_TASK_STACKS (6 * RTEMS_MINIMUM_STACK_SIZE)
 
 #include <rtems/confdefs.h>
 
