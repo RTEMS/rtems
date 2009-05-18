@@ -22,7 +22,11 @@
 
 #include "system.h"
 
+#if BSP_SMALL_MEMORY
+struct taskSwitchLog taskSwitchLog[100];
+#else
 struct taskSwitchLog taskSwitchLog[1000];
+#endif
 unsigned int taskSwitchLogIndex;
 volatile int testsFinished;
 

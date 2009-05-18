@@ -1,3 +1,7 @@
+2009-05-19	Chris Johns <chrisj@rtems.org>
+
+	* sp04/tswitch.c: Lower sample count for small memory targets.
+	
 2009-05-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spprintk/init.c: printk() now 100% covered.
