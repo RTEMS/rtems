@@ -1,3 +1,7 @@
+2009-05-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* librpc/src/xdr/xdr_float.c: Change detection logic for h8300.
+
 2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1412/cpukit
