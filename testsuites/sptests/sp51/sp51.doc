@@ -1,0 +1,28 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp51
+
+directives:
+
+  rtems_semaphore_create
+  rtems_semaphore_obtain
+  rtems_semaphore_mutex
+
+concepts:
+
++ Ensure that obtaining a binary semaphore with priority ceiling enabled
+  properly detects a ceiling violation when there is no conflict.
+
++ Ensure the when the binary semaphore lock fails to acquire the mutex,
+  it is an error to release it since the lock failed.

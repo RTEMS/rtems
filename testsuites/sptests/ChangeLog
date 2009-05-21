@@ -1,5 +1,13 @@
 2009-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	PR 1415/cpukit
+	* Makefile.am, configure.ac: Add test for very simple priority ceiling
+	violation.
+	* sp51/.cvsignore, sp51/Makefile.am, sp51/init.c, sp51/sp51.doc,
+	sp51/sp51.scn: New files.
+
+2009-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	PR 1413/cpukit
 	* Makefile.am, configure.ac: Add test for case where server based
 	timers which reinitiated themselves did not get reinserted onto timer
