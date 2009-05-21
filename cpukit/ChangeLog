@@ -1,3 +1,11 @@
+2009-05-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1414/cpukit
+	* score/src/objectget.c, score/src/objectgetisr.c,
+	score/src/objectgetnoprotection.c: Tighten math on extraction of
+	index so it is harder to trick by passing in a valid id of an
+	incorrect object class.
+
 2009-04-02	Ralf Corsépius <ralfcorsepius@rtems.org>
 
 	* aclocal/check-rtems-debug.m4: Add missing ','.

@@ -57,14 +57,7 @@ Objects_Control *_Objects_Get(
   Objects_Control *the_object;
   uint32_t         index;
 
-#if defined(RTEMS_MULTIPROCESSING)
   index = id - information->minimum_id + 1;
-#else
-  /* index = _Objects_Get_index( id ); */
-  index = id & 0x0000ffff;
-  /* This should work but doesn't always :( */
-  /* index = (uint16_t) id; */
-#endif
 
    if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
