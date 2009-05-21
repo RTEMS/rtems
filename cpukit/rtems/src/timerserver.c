@@ -137,7 +137,13 @@ static void _Timer_Server_process_insertions(void)
     } else if ( the_timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
       _Watchdog_Insert( &_Timer_Seconds_chain, &the_timer->Ticker );
     }
+
+    /*
+     *  Insert the timers that have been requested to be inserted.
+     */
+    _Timer_Server_process_insertions();
   }
+
 }
 
 /**

@@ -1,3 +1,9 @@
+2009-05-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1413/cpukit
+	* rtems/src/timerserver.c: Fix bug where server based timers which
+	reinitiated themselves did not get reinserted onto timer chain.
+
 2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1412/cpukit
