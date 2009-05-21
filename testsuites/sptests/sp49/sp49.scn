@@ -1,0 +1,5 @@
+*** TEST 49 ***
+Create Message Queue
+Flush Message Queue using Task Self ID
+Flush returned INVALID_ID as expected
+*** END OF TEST 49 ***

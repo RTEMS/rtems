@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2008.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp49
+
+directives:
+
+  rtems_task_self
+  rtems_message_queue_create
+  rtems_message_queue_flush
+
+concepts:
+
++ Ensure that the id for a task cannot be used to operate upon
+  another object.

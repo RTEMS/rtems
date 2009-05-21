@@ -73,6 +73,7 @@ sp45/Makefile
 sp46/Makefile
 sp47/Makefile
 sp48/Makefile
+sp49/Makefile
 spwatchdog/Makefile
 spsize/Makefile
 spfatal/Makefile

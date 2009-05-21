@@ -1,3 +1,12 @@
+2009-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1414/cpukit
+	* Makefile.am, configure.ac: Tighten math on extraction of index so it
+	is harder to trick by passing in a valid id of an incorrect object
+	class.
+	* sp49/.cvsignore, sp49/Makefile.am, sp49/init.c, sp49/sp49.doc,
+	sp49/sp49.scn: New files.
+
 2009-05-19	Chris Johns <chrisj@rtems.org>
 
 	* sp04/tswitch.c: Lower sample count for small memory targets.
