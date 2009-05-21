@@ -316,7 +316,13 @@ rtems_task _Timer_Server_body(
 
       (*watch->routine)( watch->id, watch->user_data );
     }
+
+    /*
+     *  Insert the timers that have been requested to be inserted.
+     */
+    _Timer_Server_process_insertions();
   }
+
 }
 
 /**
