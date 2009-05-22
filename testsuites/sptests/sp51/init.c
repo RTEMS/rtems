@@ -20,7 +20,17 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 51 ***" );
 
-  puts( "Create semaphore" );
+  puts( "Create semaphore - priority ceiling locked - violate ceiling" );
+  sc = rtems_semaphore_create(
+    rtems_build_name( 'S', 'E', 'M', '1' ),
+    0,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING | RTEMS_PRIORITY,
+    (RTEMS_MAXIMUM_PRIORITY - 4u),
+    &mutex
+  );
+  fatal_directive_status(sc, RTEMS_INVALID_PRIORITY, "rtems_semaphore_create");
+
+  puts( "Create semaphore - priority ceiling unlocked" );
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'E', 'M', '1' ),
     1,
@@ -32,12 +42,14 @@ rtems_task Init(
 
   puts( "Obtain semaphore -- violate ceiling" );
   sc = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
-  fatal_directive_status( sc, RTEMS_INTERNAL_ERROR, "rtems_semaphore_obtain" );
+  fatal_directive_status(
+    sc, RTEMS_INVALID_PRIORITY, "rtems_semaphore_obtain" );
 
-  puts( "Release semaphore we did not obtain-- violate ceiling" );
+  /* This returns successful because RTEMS eats the unneeded unlock */
+  puts( "Release semaphore we did not obtain" );
   sc = rtems_semaphore_release( mutex );
   fatal_directive_status(
-    sc, RTEMS_NOT_OWNER_OF_RESOURCE, "rtems_semaphore_release" );
+    sc, RTEMS_SUCCESSFUL, "rtems_semaphore_release" );
 
   puts( "*** END OF TEST 51 ***" );
   rtems_test_exit( 0 );

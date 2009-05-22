@@ -1,0 +1,6 @@
+*** TEST 51 ***
+Create semaphore - priority ceiling locked - violate ceiling
+Create semaphore - priority ceiling unlocked
+Obtain semaphore -- violate ceiling
+Release semaphore we did not obtain
+*** END OF TEST 51 ***

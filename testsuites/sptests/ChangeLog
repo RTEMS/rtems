@@ -1,3 +1,7 @@
+2009-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp51/init.c, sp51/sp51.scn: Add more priority ceiling test cases.
+
 2009-05-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1415/cpukit
