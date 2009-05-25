@@ -33,7 +33,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c ../../shared/bspclean.c \
-    startup/bspreset.c startup/memmap.c ../../shared/bootcard.c \
+    ../../shared/bspreset.c startup/memmap.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 # console
 libbsp_a_SOURCES += console/uart.c 

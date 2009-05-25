@@ -1,3 +1,8 @@
+2009-05-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am: Remove junk bsp_reset().
+	* startup/bspreset.c: Removed.
+
 2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* console/uart.c: Remove warning.
