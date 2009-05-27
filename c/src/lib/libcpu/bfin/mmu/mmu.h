@@ -25,12 +25,22 @@
 #include <libcpu/mmuRegs.h>
 
 
+#define INSTR_NOCACHE   (ICPLB_DATA_CPLB_USER_RD | \
+                         ICPLB_DATA_CPLB_VALID)
+
 #define INSTR_CACHEABLE (ICPLB_DATA_CPLB_L1_CHBL | \
                          ICPLB_DATA_CPLB_USER_RD | \
                          ICPLB_DATA_CPLB_VALID)
 
+#define DATA_NOCACHE   (DCPLB_DATA_CPLB_DIRTY | \
+                        DCPLB_DATA_CPLB_SUPV_WR | \
+                        DCPLB_DATA_CPLB_USER_WR | \
+                        DCPLB_DATA_CPLB_USER_RD | \
+                        DCPLB_DATA_CPLB_VALID)
+
 #define DATA_WRITEBACK (DCPLB_DATA_CPLB_L1_AOW | \
                         DCPLB_DATA_CPLB_L1_CHBL | \
+                        DCPLB_DATA_CPLB_DIRTY | \
                         DCPLB_DATA_CPLB_SUPV_WR | \
                         DCPLB_DATA_CPLB_USER_WR | \
                         DCPLB_DATA_CPLB_USER_RD | \

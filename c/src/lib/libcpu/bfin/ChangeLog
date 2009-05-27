@@ -1,3 +1,9 @@
+2009-05-25	Allan Hessenflow <allanh@kallisti.com>
+
+	* mmu/mmu.c: enable mmu after initializing it.
+	* mmu/mmu.h: add missing mmu flags entries.
+	* include/mmuRegs.h: correct a couple field name typos.
+
 2008-09-25	Allan Hessenflow <allanh@kallisti.com>
 
 	* clock/clock.c, include/bf533.h, include/bf537.h, include/sicRegs.h:

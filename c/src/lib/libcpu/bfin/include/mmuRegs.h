@@ -50,8 +50,8 @@
 #define ICPLB_DATA_CPLB_L1_CHBL                   0x00001000
 #define ICPLB_DATA_CPLB_LRUPRIO                   0x00000100
 #define ICPLB_DATA_CPLB_USER_RD                   0x00000004
-#define ICPLB_DATA_CPLB_CPLB_LOCK                 0x00000002
-#define ICPLB_DATA_CPLB_CPLB_VALID                0x00000001
+#define ICPLB_DATA_CPLB_LOCK                      0x00000002
+#define ICPLB_DATA_CPLB_VALID                     0x00000001
 
 #endif /* _mmuRegs_h_ */
 

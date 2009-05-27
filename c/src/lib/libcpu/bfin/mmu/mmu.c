@@ -13,8 +13,8 @@
 
 #include <rtems.h>
 
+#include <libcpu/memoryRegs.h>
 #include "mmu.h"
-
 
 /* NOTE: see notes in mmu.h */
 
@@ -32,6 +32,7 @@ void bfin_mmu_init(bfin_mmu_config_t *config) {
     *(uint32_t volatile *) data = config->instruction[i].flags;
     data += ICPLB_DATA_PITCH;
   }
+  *(uint32_t volatile *) IMEM_CONTROL |= IMEM_CONTROL_ENICPLB;
   addr = (intptr_t) DCPLB_ADDR0;
   data = (intptr_t) DCPLB_DATA0;
   for (i = 0; i < sizeof(config->data) / sizeof(config->data[0]); i++) {
@@ -40,5 +41,6 @@ void bfin_mmu_init(bfin_mmu_config_t *config) {
     *(uint32_t volatile *) data = config->data[i].flags;
     data += DCPLB_DATA_PITCH;
   }
+  *(uint32_t volatile *) DMEM_CONTROL |= DMEM_CONTROL_ENDCPLB;
 }
 
