@@ -14,9 +14,8 @@
 
 #include <rtems.h>
 #include "tod.h"
+#include <rtems/rtc.h>
 #include <rtems/libio.h>
-#include <rtems/score/tod.h>
-#include <rtems/rtems/types.h>
 #include <bsp.h>
 #include <libcpu/rtcRegs.h>
 
@@ -33,29 +32,6 @@ int Leap_years_until_now (int year);
 void Init_RTC(void)
 {
   *((uint16_t*)RTC_PREN)    = RTC_PREN_PREN; /* Enable Prescaler */
-}
-
-rtems_device_driver rtc_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor_arg,
-  void                      *arg
-)
-{
-  rtems_status_code          status;
-
-  /*
-   *  Register and initialize the primary RTC's
-   */
-
-  status = rtems_io_register_name( "/dev/rtc", major, 0 );
-  if (status != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(status);
-  }
-
-  Init_RTC();
-
-  setRealTimeToRTEMS();
-  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -89,7 +65,7 @@ void setRealTimeToRTEMS (void)
   * Set the RTC time
   */
 int setRealTime(
-  rtems_time_of_day *tod
+  const rtems_time_of_day *tod
 )
 {
   uint32_t days;
@@ -181,4 +157,104 @@ int Leap_years_until_now (int year)
   return ((year/4 - year/100 + year/400) -
          ((TOD_BASE_YEAR - 1)/4 - (TOD_BASE_YEAR - 1)/100 +
           (TOD_BASE_YEAR - 1)/400));
+}
+
+rtems_device_driver rtc_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor_arg,
+  void                      *arg
+)
+{
+  rtems_status_code          status;
+
+  /*
+   *  Register and initialize the primary RTC's
+   */
+
+  status = rtems_io_register_name( RTC_DEVICE_NAME, major, 0 );
+  if (status != RTEMS_SUCCESSFUL) {
+    rtems_fatal_error_occurred(status);
+  }
+
+  Init_RTC();
+
+  setRealTimeToRTEMS();
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver rtc_read(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void *arg
+)
+{
+  rtems_libio_rw_args_t *rw = arg;
+  rtems_time_of_day *tod = (rtems_time_of_day *) rw->buffer;
+
+  rw->offset = 0;
+  rw->bytes_moved = 0;
+
+  if (rw->count != sizeof( rtems_time_of_day)) {
+    return RTEMS_INVALID_SIZE;
+  }
+
+  getRealTime( tod);
+
+  rw->bytes_moved = rw->count;
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver rtc_write(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void *arg
+)
+{
+  int rv = 0;
+  rtems_libio_rw_args_t *rw = arg;
+  const rtems_time_of_day *tod = (const rtems_time_of_day *) rw->buffer;
+
+  rw->offset = 0;
+  rw->bytes_moved = 0;
+
+  if (rw->count != sizeof( rtems_time_of_day)) {
+    return RTEMS_INVALID_SIZE;
+  }
+
+  rv = setRealTime( tod);
+  if (rv != 0) {
+    return RTEMS_IO_ERROR;
+  }
+
+  rw->bytes_moved = rw->count;
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver rtc_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver rtc_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver rtc_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_NOT_IMPLEMENTED;
 }

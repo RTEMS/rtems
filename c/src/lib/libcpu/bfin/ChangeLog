@@ -1,3 +1,7 @@
+2009-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* clock/rtc.c, clock/tod.h: Update for new RTC driver interface.
+
 2009-05-25	Allan Hessenflow <allanh@kallisti.com>
 
 	* mmu/mmu.c: enable mmu after initializing it.

@@ -26,7 +26,7 @@ extern "C" {
  */
 
 int setRealTime(
-  rtems_time_of_day *tod
+  const rtems_time_of_day *tod
 );
 
 /*
