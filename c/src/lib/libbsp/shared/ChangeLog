@@ -1,3 +1,7 @@
+2009-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* tod.h, tod.c: Update for new RTC driver interface.
+
 2009-05-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* bsppost.c: Fix typo.
