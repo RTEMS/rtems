@@ -1,3 +1,8 @@
+2009-05-27	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* at91rm9200/clock/clock.c: Add support for nanoseconds since last
+	tick. The resolution is not that high but better than nothing.
+
 2008-12-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* at91rm9200/clock/clock.c, lpc22xx/clock/clockdrv.c,

@@ -76,6 +76,7 @@ rtems_irq_connect_data clock_isr_data = {AT91RM9200_INT_SYSIRQ,
 #define Clock_driver_support_install_isr( _new, _old ) \
   BSP_install_rtems_irq_handler(&clock_isr_data)
 
+uint16_t st_pimr_value;
 void Clock_driver_support_initialize_hardware(void)
 {
   uint32_t st_str;
@@ -83,8 +84,9 @@ void Clock_driver_support_initialize_hardware(void)
 
   /* the system timer is driven from SLCK */
   slck = at91rm9200_get_slck();
-  st_pimr_reload =
+  st_pimr_value =
     (((rtems_configuration_get_microseconds_per_tick() * slck) + (1000000/2))/ 1000000);
+  st_pimr_reload = st_pimr_value;
 
   /* read the status to clear the int */ 
   st_str = ST_REG(ST_SR);
@@ -96,6 +98,17 @@ void Clock_driver_support_initialize_hardware(void)
   ST_REG(ST_PIMR) = st_pimr_reload;
 }
 
+uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+{
+  uint16_t slck_counts;
+
+  slck_counts = st_pimr_value - st_pimr_reload;
+  return (rtems_configuration_get_microseconds_per_tick() * slck_counts * 1000)
+     / st_pimr_value;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick \
+  bsp_clock_nanoseconds_since_last_tick
 
 #define CLOCK_VECTOR 0
 
