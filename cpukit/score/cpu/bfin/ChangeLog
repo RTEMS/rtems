@@ -1,3 +1,9 @@
+2009-05-25	Allan Hessenflow <allanh@kallisti.com>
+
+	PR 1418/cpukit
+	* rtems/score/cpu.h: corrected _CPU_ISR_Flash implementation, added
+	core synchronization after all cli/sti.
+
 2009-03-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1385/cpukit

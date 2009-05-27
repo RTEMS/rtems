@@ -727,7 +727,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 #define _CPU_ISR_Disable( _level ) \
   {                                     \
-       asm volatile ("cli %0 \n" : "=d" (_level) );     \
+       asm volatile ("cli %0; csync \n" : "=d" (_level) );     \
   }
   
 
@@ -744,7 +744,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  XXX document implementation including references if appropriate
  */
 #define _CPU_ISR_Enable( _level ) { \
-    __asm__ __volatile__ ("sti %0 \n" : : "d" (_level) );   \
+    __asm__ __volatile__ ("sti %0; csync \n" : : "d" (_level) );   \
   }
 
 /**
@@ -761,8 +761,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  XXX document implementation including references if appropriate
  */
 #define _CPU_ISR_Flash( _level ) { \
-    __asm__ __volatile__ ("sti %0; ssync; sti %1" \
-                          : : "d"(0xffff), "d"(_level)); \
+    __asm__ __volatile__ ("sti %0; csync; cli r0; csync" \
+                          : : "d"(_level) : "R0" ); \
   }
 
 /**
@@ -784,7 +784,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  */
 #define _CPU_ISR_Set_level( _new_level ) \
   { \
-    __asm__ __volatile__ ( "sti %0" : : "d"(_new_level ? 0 : 0xffff) ); \
+    __asm__ __volatile__ ( "sti %0; csync" : : "d"(_new_level ? 0 : 0xffff) ); \
   }
 
 
