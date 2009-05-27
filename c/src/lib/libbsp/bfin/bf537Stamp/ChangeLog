@@ -1,5 +1,6 @@
 2009-05-25	Allan Hessenflow <allanh@kallisti.com>
 
+	PR 1418/bsps
 	* startup/bspstart.c, startup/linkcmds: Enable caches and therefore
 	enable the mmu.
 	* start/start.S: Correct call to boot_card to meet bfin abi by
