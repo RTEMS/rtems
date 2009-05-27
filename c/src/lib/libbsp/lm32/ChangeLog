@@ -1,3 +1,8 @@
+2009-05-27	Michael Walle <michael@walle.cc>
+
+	* shared/start/start.S: Export crt0 symbol because the debug.S uses
+	that.
+
 2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/start/start.S: Confirmed OK by mwalle.

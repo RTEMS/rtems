@@ -26,6 +26,8 @@
      .type   __start,@function
      .globl  LatticeDDInit
      .type   LatticeDDInit,@function
+     .globl  crt0
+     .type   crt0,@function
 
 LatticeDDInit:	
 __start:	
