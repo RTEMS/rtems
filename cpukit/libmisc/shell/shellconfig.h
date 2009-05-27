@@ -55,6 +55,8 @@ extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
 extern rtems_shell_cmd_t rtems_shell_FDISK_Command;
 
+extern rtems_shell_cmd_t rtems_shell_RTC_Command;
+
 extern rtems_shell_cmd_t rtems_shell_HALT_Command;
 extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
@@ -366,6 +368,13 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
           defined(CONFIGURE_SHELL_COMMAND_NETSTATS)
         &rtems_shell_NETSTATS_Command,
       #endif
+    #endif
+
+    /* Miscanellous shell commands */
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) \
+          && !defined(CONFIGURE_SHELL_NO_COMMAND_RTC)) \
+        || defined(CONFIGURE_SHELL_COMMAND_RTC)
+      &rtems_shell_RTC_Command,
     #endif
 
     /*
