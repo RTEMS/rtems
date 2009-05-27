@@ -19,15 +19,53 @@
 
 #include <bsp.h>
 #include <libcpu/bf537.h>
+#include <libcpu/ebiuRegs.h>
 #include <libcpu/gpioRegs.h>
 #include <libcpu/mmu.h>
+#include <libcpu/mmuRegs.h>
 #include <libcpu/interrupt.h>
 
 
-#if 0
-static bfin_mmu_region_t mmuRegions[] = {
+static bfin_mmu_config_t mmuRegions = {
+    /* instruction */
+    {
+        {(void *) 0x00000000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x00400000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x00800000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x00c00000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x01000000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x01400000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x01800000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x01c00000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x02000000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x02400000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x02800000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x02c00000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x03000000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0x20000000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_CACHEABLE},
+        {(void *) 0xff800000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_NOCACHE},
+        {(void *) 0xffc00000, ICPLB_DATA_PAGE_SIZE_4MB | INSTR_NOCACHE}
+    },
+    /* data */
+    {
+        {(void *) 0x00000000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x00400000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x00800000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x00c00000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x01000000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x01400000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x01800000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x01c00000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x02000000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x02400000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x02800000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x02c00000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x03000000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0x20000000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_WRITEBACK},
+        {(void *) 0xff800000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_NOCACHE},
+        {(void *) 0xffc00000, DCPLB_DATA_PAGE_SIZE_4MB | DATA_NOCACHE}
+    }
 };
-#endif
 
 void Init_RTC(void);
 
@@ -52,7 +90,11 @@ void bsp_start(void)
 {
   /* BSP Hardware Initialization*/
 
-  /*bfin_mmu_init(sizeof(mmuRegions) / sizeof(mmuRegions[0]), mmuRegions);*/
+  *(uint32_t volatile *) DMEM_CONTROL |= DMEM_CONTROL_PORT_PREF0;
+  *(uint32_t volatile *) DMEM_CONTROL &= ~DMEM_CONTROL_PORT_PREF1;
+  bfin_mmu_init(&mmuRegions);
+  rtems_cache_enable_instruction();
+  rtems_cache_enable_data();
 
   Init_RTC();   /* Blackfin Real Time Clock initialization */
 
@@ -96,6 +138,16 @@ static void initPLL(void) {
   */
 
 static void initEBIU(void) {
+
+  /* by default the processor has priority over dma channels for access to
+     external memory.  this has been seen to result in dma unerruns on
+     ethernet transmit; it seems likely it could cause dma overruns on
+     ethernet receive as well.  setting the following bit gives the dma
+     channels priority over the cpu, fixing that problem.  unfortunately
+     we don't have finer grain control than that; all dma channels now
+     have priority over the cpu. */
+  *(uint16_t volatile *) EBIU_AMGCTL |= EBIU_AMGCTL_CDPRIO;
+
 #ifdef BISON
   /* Configure FLASH */
   *((uint32_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;

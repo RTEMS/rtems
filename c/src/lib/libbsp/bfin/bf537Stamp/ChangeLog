@@ -1,3 +1,10 @@
+2009-05-25	Allan Hessenflow <allanh@kallisti.com>
+
+	* startup/bspstart.c, startup/linkcmds: Enable caches and therefore
+	enable the mmu.
+	* start/start.S: Correct call to boot_card to meet bfin abi by
+	clearing l0 - l3 and allocating some stack space.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S: Update for boot_card command line change.
