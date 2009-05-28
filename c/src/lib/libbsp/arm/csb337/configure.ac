@@ -18,6 +18,12 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
+RTEMS_BSPOPTS_SET([csb637],[csb637],[1])
+RTEMS_BSPOPTS_SET([csb637],[*],[0])
+RTEMS_BSPOPTS_HELP([csb637],
+[If defined, this indicates that the BSP is being built for the
+ csb637 variant.])
+
 RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
 [If defined, print a message and wait until pressed before resetting

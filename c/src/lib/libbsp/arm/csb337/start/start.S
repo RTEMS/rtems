@@ -12,11 +12,6 @@
  *  $Id$
 */
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
-                
 /* Some standard definitions...*/
 .equ PSR_MODE_USR,       0x10
 .equ PSR_MODE_FIQ,       0x11
@@ -105,6 +100,7 @@ _bss_init:
         stmia   r0!, {r2-r9}
 
         /* Now we are prepared to start the BSP's C code */
+        mov     r0, #0
         bl      boot_card
 
         /* 
