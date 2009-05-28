@@ -10,8 +10,9 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     bare*)        $2=bare             ;; # EXP: bare-aliases
 
     c3xsim)       $2=c4xsim           ;; # TI C3x Simulator in gdb
+    csb637)       $2=csb337           ;; # Cogent CSB637
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
-    h8sxsim)      $2=h8sim          ;; # h8sim built for h8sx
+    h8sxsim)      $2=h8sim            ;; # h8sim built for h8sx
     pghplus)      $2=tqm8xx           ;; # powerpc - mpc8xx custom board
     tqm8xx_stk8xx) $2=tqm8xx          ;; # powerpc - tqm8xx on starter kit
     pgh360)       $2=gen68360         ;; # m68k - 68360 custom board

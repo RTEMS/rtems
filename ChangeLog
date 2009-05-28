@@ -1,3 +1,7 @@
+2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* aclocal/bsp-alias.m4: Add csb637 as variant of csb337.
+
 2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added defines for
