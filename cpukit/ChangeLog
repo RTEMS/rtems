@@ -1,3 +1,12 @@
+2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1415/cpukit
+	* rtems/src/semcreate.c, rtems/src/semtranslatereturncode.c,
+	score/include/rtems/score/coremutex.h,
+	score/inline/rtems/score/coremutex.inl, score/src/coremutex.c:
+	Address two paths where a task with a priority above the ceiling
+	could obtain a priority ceiling mutex.
+
 2009-05-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtc.h: New RTC driver interface.

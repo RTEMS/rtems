@@ -80,7 +80,6 @@ rtems_status_code rtems_semaphore_create(
   register Semaphore_Control *the_semaphore;
   CORE_mutex_Attributes       the_mutex_attributes;
   CORE_semaphore_Attributes   the_semaphore_attributes;
-  uint32_t                    lock;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -146,6 +145,8 @@ rtems_status_code rtems_semaphore_create(
    */
 
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
+    CORE_mutex_Status mutex_status;
+
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       the_mutex_attributes.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
     else if ( _Attributes_Is_priority_ceiling( attribute_set ) )
@@ -176,16 +177,17 @@ rtems_status_code rtems_semaphore_create(
 
     the_mutex_attributes.priority_ceiling = priority_ceiling;
 
-    if ( count == 1 )
-      lock = CORE_MUTEX_UNLOCKED;
-    else
-      lock = CORE_MUTEX_LOCKED;
-
-    _CORE_mutex_Initialize(
+    mutex_status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
       &the_mutex_attributes,
-      lock
-    );
+      (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
+     ); 
+
+     if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
+       _Semaphore_Free( the_semaphore );
+       _Thread_Enable_dispatch();
+       return RTEMS_INVALID_PRIORITY;
+     }
   } else {
     if ( _Attributes_Is_priority( attribute_set ) )
       the_semaphore_attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;

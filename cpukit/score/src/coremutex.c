@@ -42,7 +42,7 @@
  *  Output parameters:  NONE
  */
 
-void _CORE_mutex_Initialize(
+CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   CORE_mutex_Attributes        *the_mutex_attributes,
   uint32_t                      initial_lock
@@ -65,6 +65,9 @@ void _CORE_mutex_Initialize(
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
       
+      if ( _Thread_Executing->current_priority < 
+             the_mutex->Attributes.priority_ceiling )
+       return CORE_MUTEX_STATUS_CEILING_VIOLATED;
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
@@ -86,4 +89,6 @@ void _CORE_mutex_Initialize(
     STATES_WAITING_FOR_MUTEX,
     CORE_MUTEX_TIMEOUT
   );
+
+  return CORE_MUTEX_STATUS_SUCCESSFUL;
 }
