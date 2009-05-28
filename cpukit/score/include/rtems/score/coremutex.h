@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -257,8 +257,10 @@ typedef struct {
  *  @param[in] the_mutex_attributes is the attributes associated with this
  *         mutex instance
  *  @param[in] initial_lock is the initial value of the mutex
+ *
+ *  @return This method returns CORE_MUTEX_STATUS_SUCCESSFUL if successful.
  */
-void _CORE_mutex_Initialize(
+CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   CORE_mutex_Attributes        *the_mutex_attributes,
   uint32_t                      initial_lock
