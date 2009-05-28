@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -172,6 +172,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
       }
       /* if ( current < ceiling ) */ {
         executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
+        the_mutex->lock       = CORE_MUTEX_UNLOCKED;
         the_mutex->nest_count = 0;     /* undo locking above */
         executing->resource_count--;   /* undo locking above */
         _ISR_Enable( level );

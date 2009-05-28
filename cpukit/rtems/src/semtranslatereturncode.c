@@ -15,7 +15,7 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,7 +68,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
   RTEMS_NOT_OWNER_OF_RESOURCE, /* CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE */
   RTEMS_OBJECT_WAS_DELETED, /* CORE_MUTEX_WAS_DELETED */
   RTEMS_TIMEOUT,            /* CORE_MUTEX_TIMEOUT */
-  RTEMS_INTERNAL_ERROR,     /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
+  RTEMS_INVALID_PRIORITY    /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
 };
 
 
