@@ -7,10 +7,6 @@
 #include <libcpu/cecRegs.h>
 #include <libcpu/coreTimerRegs.h>
 
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning Please check and remove these warnings.
-
 #ifndef LO
 #define LO(con32) ((con32) & 0xFFFF)
 #endif
@@ -49,6 +45,12 @@ __start:
 	/* disable all interrupts routed through sic */
 	p0.h = HI(SIC_IMASK);
 	p0.l = LO(SIC_IMASK);
+	[p0] = r0;
+
+	/* clear any pending interrupts */
+	p0.h = HI(CEC_ILAT);
+	p0.l = LO(CEC_ILAT);
+	r0 = 0xffff (z);
 	[p0] = r0;
 
 	/* this is so we can stay in supervisor mode and still be able to
@@ -96,9 +98,16 @@ start:
 loop1:	b[p0] = r0;
 loop2:	p0 +=1;
 
+	l0 = 0;
+	l1 = 0;
+	l2 = 0;
+	l3 = 0;
+	sp += -12;
+	/* r0 == const char *cmdline (currently null) */
 	p0.h = _boot_card;
 	p0.l = _boot_card;
 	call (p0);
+	sp += 12;
 
 	p0.h = _exit;
 	p0.l = _exit;
