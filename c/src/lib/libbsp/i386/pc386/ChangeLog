@@ -1,3 +1,7 @@
+2009-05-29	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* Makefile.am, preinstall.am: Install tty_drv.h
+
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspgetworkarea.c: Switch from ssize_t to uintptr_t for
