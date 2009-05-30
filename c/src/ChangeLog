@@ -1,3 +1,9 @@
+2009-05-30	Chris Johns <chrisj@rtems.org>
+
+	* c/src/libchip/ide/ata.c: Fixed the bug that ignored slave
+	devices on an IDE bus and cleaned up the initialisation register
+	call.
+
 2009-05-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/network/i82586.c: Fix warning in manner suggested by 

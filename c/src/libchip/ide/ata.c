@@ -1293,10 +1293,15 @@ rtems_ata_initialize(rtems_device_major_number major,
                                           IDE_REGISTER_DEVICE_CONTROL_OFFSET,
                                           IDE_REGISTER_DEVICE_CONTROL_nIEN);
         }
-#if 0
+
+#if ATA_EXEC_DEVICE_DIAGNOSTIC
         /*
          * Issue EXECUTE DEVICE DIAGNOSTIC ATA command for explore is
          * there any ATA device on the controller.
+         *
+         * This command may fail and it assumes we have a master device and may
+         * be a slave device. I think the identify command will handle
+         * detection better than this method.
          */
         memset(&areq, 0, sizeof(ata_req_t));
         areq.type = ATA_COMMAND_TYPE_NON_DATA;
@@ -1317,42 +1322,57 @@ rtems_ata_initialize(rtems_device_major_number major,
         /*
          * check status of I/O operation
          */
-        if (breq.req.status != RTEMS_SUCCESSFUL)
-            continue;
-#endif
-        breq.req.error = ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT;
-        /* disassemble returned diagnostic codes */
-        if (breq.req.error == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
+        if (breq.req.status == RTEMS_SUCCESSFUL)
         {
-            ATA_DEV_INFO(ctrl_minor, 0).present = true;
+          /* disassemble returned diagnostic codes */
+          if (breq.req.error == ATA_DEV0_PASSED_DEV1_PASSED_OR_NOT_PRSNT)
+          {
+            printk("ATA: ctrl:%d: primary, secondary\n", ctrl_minor);
+            ATA_DEV_INFO(ctrl_minor,0).present = true;
             ATA_DEV_INFO(ctrl_minor,1).present = true;
-        }
-        else if (breq.req.error == ATA_DEV0_PASSED_DEV1_FAILED)
-        {
+          }
+          else if (breq.req.error == ATA_DEV0_PASSED_DEV1_FAILED)
+          {
+            printk("ATA: ctrl:%d: primary\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor,0).present = true;
             ATA_DEV_INFO(ctrl_minor,1).present = false;
-        }
-        else if (breq.req.error < ATA_DEV1_PASSED_DEV0_FAILED)
-        {
+          }
+          else if (breq.req.error < ATA_DEV1_PASSED_DEV0_FAILED)
+          {
+            printk("ATA: ctrl:%d: secondary\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor,0).present = false;
             ATA_DEV_INFO(ctrl_minor,1).present = true;
-        }
-        else
-        {
+          }
+          else
+          {
+            printk("ATA: ctrl:%d: none\n", ctrl_minor);
             ATA_DEV_INFO(ctrl_minor, 0).present = false;
             ATA_DEV_INFO(ctrl_minor, 1).present = false;
-        }
+          }
 
-        /* refine the returned codes */
-        if (ATA_DEV_INFO(ctrl_minor, 1).present != false)
-        {
+          /* refine the returned codes */
+          if (ATA_DEV_INFO(ctrl_minor, 1).present)
+          {
             ide_controller_read_register(ctrl_minor, IDE_REGISTER_ERROR, &ec);
             if (ec & ATA_DEV1_PASSED_DEV0_FAILED)
-                ATA_DEV_INFO(ctrl_minor, 1).present = true;
+            {
+              printk("ATA: ctrl:%d: secondary inforced\n", ctrl_minor);
+              ATA_DEV_INFO(ctrl_minor, 1).present = true;
+            }
             else
-                ATA_DEV_INFO(ctrl_minor, 1).present = false;
+            {
+              printk("ATA: ctrl:%d: secondary removed\n", ctrl_minor);
+              ATA_DEV_INFO(ctrl_minor, 1).present = false;
+            }
+          }
         }
-
+        else
+#endif
+        {
+          ATA_DEV_INFO(ctrl_minor, 0).present = true;
+          ATA_DEV_INFO(ctrl_minor,1).present = true;
+        }
+        
         /* for each found ATA device obtain it configuration */
         for (dev = 0; dev < 2; dev++)
         if (ATA_DEV_INFO(ctrl_minor, dev).present)
@@ -1496,7 +1516,7 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
     uint16_t           data_bs; /* the number of 512 bytes sectors into one
                                  * data block
                                  */
-	unsigned           retries;
+    volatile unsigned  retries;
     assert(areq);
 
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
@@ -1517,15 +1537,14 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
          * I'd like to do a proper timeout but don't know of a portable
          * timeout routine (w/o using multitasking / rtems_task_wake_after())
          */
-        if ( ! (byte & (IDE_REGISTER_STATUS_BSY | IDE_REGISTER_STATUS_DRDY)))
+        if ( ! (byte & (IDE_REGISTER_STATUS_BSY | IDE_REGISTER_STATUS_DRDY))) {
             retries++;
-        else
-            retries=0;
-        if ( 10000 == retries ) {
-            /* probably no drive connected */
-            areq->breq->status = RTEMS_UNSATISFIED;
-            areq->breq->error = RTEMS_IO_ERROR;
-            return;
+            if ( 10000 == retries ) {
+              /* probably no drive connected */
+              areq->breq->status = RTEMS_UNSATISFIED;
+              areq->breq->error = RTEMS_IO_ERROR;
+              return;
+            }
         }
     } while ((byte & IDE_REGISTER_STATUS_BSY) ||
              (!(byte & IDE_REGISTER_STATUS_DRDY)));
