@@ -29,10 +29,10 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
 
+bool pc386_ide_show;
+
 /* #define DEBUG_OUT */
 
-/* Not using this currently */
-#if 0
 static bool pc386_ide_status_busy (uint32_t port,
                                    uint32_t timeout,
                                    uint8_t* status_val)
@@ -53,7 +53,6 @@ static bool pc386_ide_status_busy (uint32_t port,
 
   return false;
 }
-#endif
 
 static bool pc386_ide_status_data_ready (uint32_t port,
                                          uint32_t timeout,
@@ -104,6 +103,12 @@ bool pc386_ide_probe
   return ide_card_plugged;
 }
 
+static void wait(volatile uint32_t loops)
+{
+  while (loops)
+    loops--;
+}
+
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
@@ -122,6 +127,136 @@ void pc386_ide_initialize
 |    <none>                                                                 |
 \*=========================================================================*/
 {
+  uint32_t port = IDE_Controller_Table[minor].port1;
+  uint8_t  dev = 0;
+
+  if (pc386_ide_show)
+    printk("IDE%d: port base: %04x\n", minor, port);
+
+  outport_byte(port+IDE_REGISTER_DEVICE_HEAD,
+               (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | 0xE0);
+  wait(10000);
+  outport_byte(port+IDE_REGISTER_DEVICE_CONTROL,
+               IDE_REGISTER_DEVICE_CONTROL_SRST | IDE_REGISTER_DEVICE_CONTROL_nIEN);
+  wait(10000);
+  outport_byte(port+IDE_REGISTER_DEVICE_CONTROL,
+               IDE_REGISTER_DEVICE_CONTROL_nIEN);
+  wait(10000);
+
+  for (dev = 0; dev < 2; dev++)
+  {
+    uint32_t    byte;
+    uint8_t     status;
+    uint8_t     error;
+    uint8_t     cyllsb;
+    uint8_t     cylmsb;
+    const char* label = dev ? " slave" : "master";
+    char        model_number[41];
+    char*       p = &model_number[0];
+
+    memset(model_number, 0, sizeof(model_number));
+
+    outport_byte(port+IDE_REGISTER_DEVICE_HEAD,
+                 (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | 0xE0);
+    /*
+    outport_byte(port+IDE_REGISTER_SECTOR_NUMBER,
+                 (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | IDE_REGISTER_LBA3_L);
+    */
+
+    outport_byte(port+IDE_REGISTER_COMMAND, 0x00);
+    
+    if (!pc386_ide_status_busy (port, 6000, &status))
+      continue;
+    
+    inport_byte(port+IDE_REGISTER_STATUS,        status);
+    inport_byte(port+IDE_REGISTER_ERROR,         error);
+    inport_byte(port+IDE_REGISTER_CYLINDER_LOW,  cyllsb);
+    inport_byte(port+IDE_REGISTER_CYLINDER_HIGH, cylmsb);
+
+    if (pc386_ide_show)
+    {
+      printk("IDE%d:%s: status=%02x\n", minor, label, status);
+      printk("IDE%d:%s: error=%02x\n", minor, label, error);
+      printk("IDE%d:%s: cylinder-low=%02x\n", minor, label, cyllsb);
+      printk("IDE%d:%s: cylinder-high=%02x\n", minor, label, cylmsb);
+    }
+
+#if 0
+    /*
+     * Filter based on the cylinder values and the status.
+     * Taken from grub's ata.c.
+     */
+    if (cyllsb != 0x14 || cylmsb != 0xeb)
+      if (status == 0 || (cyllsb != 0 && cylmsb != 0 &&
+                          cyllsb != 0xc3 && cylmsb != 0x3c))
+      {
+        if (pc386_ide_show)
+          printk("IDE%d:%s: bad device\n", minor, label);
+      }
+#endif
+    
+    outport_byte(port+IDE_REGISTER_COMMAND, 0xec);
+
+    if (!pc386_ide_status_busy (port, 6000, &status))
+    {
+      if (pc386_ide_show)
+        printk("IDE%d:%s: device busy: %02x\n", minor, label, status);
+      continue;
+    }
+    
+    byte = 0;
+    while (byte < 512)
+    {
+      uint16_t word;
+      bool     data_ready;
+
+      if (pc386_ide_show && ((byte % 16) == 0))
+        printk("\n %04x : ", byte);
+      
+      data_ready = pc386_ide_status_data_ready (port, 100, &status);
+
+      if (status & IDE_REGISTER_STATUS_ERR)
+      {
+        inport_byte(port+IDE_REGISTER_ERROR, error);
+        if (error != 4)
+        {
+          if (pc386_ide_show)
+            printk("IDE%d:%s: error=%04x\n", minor, label, error);
+          break;
+        }
+        /*
+         * The device is an ATAPI device.
+         */
+        outport_byte(port+IDE_REGISTER_COMMAND, 0xa1);
+        continue;
+      }
+
+      if (!data_ready)
+        break;
+      
+      inport_word(port+IDE_REGISTER_DATA, word);
+
+      if (pc386_ide_show)
+        printk ("%04x ", word);
+
+      if (byte >= 54 && byte < (54 + 40))
+      {
+        *p = word >> 8;
+        p++;
+        *p = word;
+        p++;
+      }
+        
+      byte += 2;
+    }
+    
+    if (pc386_ide_show)
+      printk("\nbytes read = %d\n", byte);
+
+    if (p != &model_number[0])
+      printk("IDE%d:%s: %s\n", minor, label, model_number);
+  }
+  
   /*
    * FIXME: enable interrupts, if needed
    */

@@ -1,3 +1,12 @@
+2009-05-30	Chris Johns <chrisj@rtems.org>
+
+	* ide/ide.c: Add initialisation code to reset the IDE devices and
+	to probe them and display their model numbers. Also add code to
+	display the probing to aid bring up new hardware.
+
+	* ide/idecfg.c: Add the --ide-show command to show probing type
+	accessing when finding devices on the configured IDE buses.
+
 2009-05-29	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* Makefile.am, preinstall.am: Install tty_drv.h

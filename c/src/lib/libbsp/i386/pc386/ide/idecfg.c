@@ -23,6 +23,8 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
 
+extern bool pc386_ide_show;
+
 /*
  * The following table configures the functions used for IDE drivers
  * in this BSP.
@@ -78,7 +80,7 @@ void bsp_ide_cmdline_init(void)
   
   /*
    * Can have:
-   *  --ide=1,2
+   *  --ide=0,1
    */
   ide = bsp_cmdline_arg ("--ide=");
   
@@ -96,12 +98,13 @@ void bsp_ide_cmdline_init(void)
     {
       switch (ide[i])
       {
-        case '1':
+        case '0':
           ide1 = true;
           break;
-        case '2':
+        case '1':
           ide2 = true;
           break;
+        case '2':
         case '3':
         case '4':
         case '5':
@@ -112,7 +115,7 @@ void bsp_ide_cmdline_init(void)
         case ',':
           break;
         default:
-        break;
+          break;
       }
     }
   }
@@ -124,4 +127,13 @@ void bsp_ide_cmdline_init(void)
     IDE_Controller_Count++;
   if (ide2)
     IDE_Controller_Count++;
+
+  /*
+   * Allow the user to get the initialise to print probing
+   * type information.
+   */
+  ide = bsp_cmdline_arg ("--ide-show");
+  
+  if (ide)
+    pc386_ide_show = true;
 }
