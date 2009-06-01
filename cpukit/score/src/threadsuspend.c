@@ -56,7 +56,9 @@ void _Thread_Suspend(
 
   ready = the_thread->ready;
   _ISR_Disable( level );
-  the_thread->suspend_count++;
+  #if defined(RTEMS_ITRON_API)
+    the_thread->suspend_count++;
+  #endif
   if ( !_States_Is_ready( the_thread->current_state ) ) {
     the_thread->current_state =
        _States_Set( STATES_SUSPENDED, the_thread->current_state );

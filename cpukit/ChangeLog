@@ -1,5 +1,12 @@
 2009-06-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/include/rtems/score/thread.h, score/src/threadinitialize.c,
+	score/src/threadreset.c, score/src/threadresume.c,
+	score/src/threadsuspend.c: Nesting count on thread suspension is only
+	supported from ITRON API so disable if ITRON is disabled.
+
+2009-06-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/include/rtems/score/thread.h, score/src/threadhandler.c: Merge
 	conditional code from main and init/fini C++ constructors so the body
 	of this method reads better. Mark thread prototypes which are not

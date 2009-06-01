@@ -347,14 +347,18 @@ struct Thread_Control_struct {
   MP_packet_Prefix        *receive_packet;
 #endif
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-  /**This field is the head of queue of priority inheritance mutex holed by the thread*/
+  /** This field is the head of queue of priority inheritance mutex
+   *  held by the thread.
+   */
   Chain_Control            lock_mutex;
 #endif
      /*================= end of common block =================*/
   /** This field is the number of nested suspend calls. */
   uint32_t                              suspend_count;
+#if defined(RTEMS_MULTIPROCESSING)
   /** This field is true if the thread is offered globally */
   bool                                  is_global;
+#endif
   /** This field is is true if the post task context switch should be 
    *  executed for this thread at the next context switch.
    */

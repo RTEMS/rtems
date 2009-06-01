@@ -196,7 +196,9 @@ bool _Thread_Initialize(
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;
-  the_thread->suspend_count           = 0;
+  #if defined(RTEMS_ITRON_API)
+    the_thread->suspend_count         = 0;
+  #endif
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
   _Thread_Set_priority( the_thread, priority );
