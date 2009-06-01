@@ -99,8 +99,10 @@ typedef uintptr_t Thread_Entry_numeric_type;
 typedef enum {
   THREAD_START_NUMERIC,
   THREAD_START_POINTER,
-  THREAD_START_BOTH_POINTER_FIRST,
-  THREAD_START_BOTH_NUMERIC_FIRST
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    THREAD_START_BOTH_POINTER_FIRST,
+    THREAD_START_BOTH_NUMERIC_FIRST
+  #endif
 } Thread_Start_types;
 
 /** This type corresponds to a very simple style thread entry point. */

@@ -2,7 +2,7 @@
  *  Thread Handler
  *
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -42,9 +42,13 @@
   #endif
 
   extern void INIT_NAME(void);
+  #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
+
 #if defined(__USE__MAIN__)
   extern void _main(void);
+  #define INIT_NAME __main
+  #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
 
 /*PAGE
@@ -79,10 +83,10 @@ void _Thread_Handler( void )
 {
   ISR_Level  level;
   Thread_Control *executing;
-#if defined(__USE_INIT_FINI__) || defined(__USE__MAIN__)
-  static char doneConstructors;
-  char doneCons;
-#endif
+  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+    static char doneConstructors;
+    char doneCons;
+  #endif
 
   executing = _Thread_Executing;
 
@@ -101,78 +105,72 @@ void _Thread_Handler( void )
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
 
-#if defined(__USE_INIT_FINI__) || defined(__USE__MAIN__)
-  doneCons = doneConstructors;
-  doneConstructors = 1;
-#endif
+  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+    doneCons = doneConstructors;
+    doneConstructors = 1;
+  #endif
 
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-  if ( (executing->fp_context != NULL) && !_Thread_Is_allocated_fp( executing ) ) {
-    if ( _Thread_Allocated_fp != NULL )
-      _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
-    _Thread_Allocated_fp = executing;
-  }
-#endif
-#endif
+  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+    #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+      if ( (executing->fp_context != NULL) &&
+            !_Thread_Is_allocated_fp( executing ) ) {
+        if ( _Thread_Allocated_fp != NULL )
+          _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+        _Thread_Allocated_fp = executing;
+      }
+    #endif
+  #endif
 
   /*
    * Take care that 'begin' extensions get to complete before
    * 'switch' extensions can run.  This means must keep dispatch
    * disabled until all 'begin' extensions complete.
    */
-
   _User_extensions_Thread_begin( executing );
 
   /*
    *  At this point, the dispatch disable level BETTER be 1.
    */
-
   _Thread_Enable_dispatch();
-#if defined(__USE_INIT_FINI__)
-  /*
-   *  _init could be a weak symbol and we SHOULD test it but it isn't
-   *  in any configuration I know of and it generates a warning on every
-   *  RTEMS target configuration.  --joel (12 May 2007)
-   */
-  if (!doneCons) /* && (volatile void *)_init) */
-  {
-    INIT_NAME ();
-  }
-#endif
-#if defined(__USE__MAIN__)
-  if (!doneCons && _main)
-    __main ();
-#endif
 
-  switch ( executing->Start.prototype ) {
-    case THREAD_START_NUMERIC:
-      executing->Wait.return_argument =
-        (*(Thread_Entry_numeric) executing->Start.entry_point)(
-          executing->Start.numeric_argument
+  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+    /*
+     *  _init could be a weak symbol and we SHOULD test it but it isn't
+     *  in any configuration I know of and it generates a warning on every
+     *  RTEMS target configuration.  --joel (12 May 2007)
+     */
+    if (!doneCons) /* && (volatile void *)_init) */ {
+      INIT_NAME ();
+    }
+  #endif
+
+  if ( executing->Start.prototype == THREAD_START_NUMERIC ) {
+    executing->Wait.return_argument =
+      (*(Thread_Entry_numeric) executing->Start.entry_point)(
+        executing->Start.numeric_argument
       );
-      break;
-    case THREAD_START_POINTER:
-      executing->Wait.return_argument =
-        (*(Thread_Entry_pointer) executing->Start.entry_point)(
-          executing->Start.pointer_argument
-        );
-      break;
-    case THREAD_START_BOTH_POINTER_FIRST:
+  } else if ( executing->Start.prototype == THREAD_START_POINTER ) {
+    executing->Wait.return_argument =
+      (*(Thread_Entry_pointer) executing->Start.entry_point)(
+        executing->Start.pointer_argument
+      );
+  }
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    else if ( executing->Start.prototype == THREAD_START_BOTH_POINTER_FIRST ) {
       executing->Wait.return_argument =
          (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)(
            executing->Start.pointer_argument,
            executing->Start.numeric_argument
          );
-      break;
-    case THREAD_START_BOTH_NUMERIC_FIRST:
+    }
+    else if ( executing->Start.prototype == THREAD_START_BOTH_NUMERIC_FIRST ) {
       executing->Wait.return_argument =
-         (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)(
-           executing->Start.numeric_argument,
-           executing->Start.pointer_argument
-         );
-      break;
-  }
+       (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)(
+         executing->Start.numeric_argument,
+         executing->Start.pointer_argument
+       );
+    }
+  #endif
 
   /*
    *  In the switch above, the return code from the user thread body

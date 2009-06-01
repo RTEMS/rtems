@@ -1,3 +1,11 @@
+2009-06-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/include/rtems/score/thread.h, score/src/threadhandler.c: Merge
+	conditional code from main and init/fini C++ constructors so the body
+	of this method reads better. Mark thread prototypes which are not
+	currently exercised by any APIs with
+	FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API conditional.
+
 2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1415/cpukit
