@@ -12,6 +12,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/sed1356.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -19,6 +20,11 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
+
+if ENABLE_LCD
+nodist_include_HEADERS += console/sed1356_16bit.h
+nodist_include_HEADERS += console/font8x16.h
+endif
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
@@ -39,6 +45,9 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c
 # console
 libbsp_a_SOURCES += console/uarts.c ../../shared/console.c
+if ENABLE_LCD
+libbsp_a_SOURCES += console/sed1356.c console/fbcons.c
+endif
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
 

@@ -24,7 +24,9 @@ mmu_sect_map_t mem_map[] = {
 #else /* CSB337 */
     {0x20000000, 0x20000000,  32,    MMU_CACHE_WTHROUGH}, /* SDRAM */
 #endif
+#if ENABLE_LCD
     {0x30000000, 0x30000000,   8,    MMU_CACHE_NONE},     /* video */
+#endif
     {0x40000000, 0x40000000,   1,    MMU_CACHE_NONE},     /* Expansion CS0 */
     {0x50000000, 0x50000000,   1,    MMU_CACHE_NONE},     /* CF CE 1 */
     {0x60000000, 0x60000000,   1,    MMU_CACHE_NONE},     /* CF CE 1 */

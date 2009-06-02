@@ -1,3 +1,13 @@
+2009-06-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, preinstall.am, console/uarts.c,
+	include/bsp.h, startup/memmap.c: Add support for /dev/fbcons which is
+	a console type output only device to print to the LCD screen. The
+	video controller (SED) and fonts are copied from MicroMonitor and
+	proper attribution is made in those files and confirmed by Ed Sutter.
+	* console/fbcons.c, console/font8x16.h, console/sed1356.c,
+	console/sed1356_16bit.h, include/sed1356.h: New files.
+
 2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, README, configure.ac, preinstall.am, start/start.S,

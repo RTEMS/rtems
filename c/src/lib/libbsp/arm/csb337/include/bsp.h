@@ -37,9 +37,6 @@ extern "C" {
 console_tbl *BSP_get_uart_from_minor(int minor);
 static inline int32_t BSP_get_baud(void) {return 38400;}
 
-/* How many serial ports? */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-
 #define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
   
 /*

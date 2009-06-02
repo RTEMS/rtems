@@ -29,6 +29,12 @@ RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
 [If defined, print a message and wait until pressed before resetting
  board when application exits.])
 
+RTEMS_BSPOPTS_SET([ENABLE_LCD],[*],[0])
+RTEMS_BSPOPTS_HELP([ENABLE_LCD],
+[If defined, enable use of the SED1356 controller.])
+
+AM_CONDITIONAL(ENABLE_LCD,test "$ENABLE_LCD" = "1")
+
 RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 [If defined, reset the board when the application exits.])
