@@ -1,3 +1,7 @@
+2009-06-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* at91rm9200/dbgu/dbgu.c: Needed carriage return on newline.
+
 2009-05-27	Fernando Nicodemos <fgnicodemos@terra.com.br>
 
 	* at91rm9200/clock/clock.c: Add support for nanoseconds since last
