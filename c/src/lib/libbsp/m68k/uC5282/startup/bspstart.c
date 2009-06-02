@@ -59,6 +59,20 @@ extern char RamBase[];
  * should be followed immediately by a NOP instruction.  This avoids the cache
  * corruption problem.
  * DATECODES AFFECTED: All
+ *
+ *
+ * Buffered writes must be disabled as described in "MCF5282 Chip Errata",
+ * MCF5282DE, Rev. 6, 5/2009:
+ *   SECF124: Buffered Write May Be Executed Twice 
+ *   Errata type: Silicon 
+ *   Affected component: Cache 
+ *   Description: If buffered writes are enabled using the CACR or ACR
+ *                registers, the imprecise write transaction generated
+ *                by a buffered write may be executed twice. 
+ *   Workaround: Do not enable buffered writes in the CACR or ACR registers: 
+ *               CACR[8] = DBWE (default buffered write enable) must be 0 
+ *               ACRn[5] = BUFW (buffered write enable) must be 0 
+ *   Fix plan: Currently, there are no plans to fix this. 
  */
 #define m68k_set_cacr_nop(_cacr) asm volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
 #define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
@@ -69,7 +83,7 @@ extern char RamBase[];
  * Read/write copy of cache registers
  *   Split instruction/data or instruction-only
  *   Allow CPUSHL to invalidate a cache line
- *   Enable buffered writes
+ *   Disable buffered writes
  *   No burst transfers on non-cacheable accesses
  *   Default cache mode is *disabled* (cache only ACRx areas)
  */
@@ -77,7 +91,6 @@ uint32_t mcf5282_cacr_mode = MCF5XXX_CACR_CENB |
 #ifndef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
                              MCF5XXX_CACR_DISD |
 #endif
-                             MCF5XXX_CACR_DBWE |
                              MCF5XXX_CACR_DCM;
 uint32_t mcf5282_acr0_mode = 0;
 uint32_t mcf5282_acr1_mode = 0;
@@ -243,7 +256,6 @@ void bsp_start( void )
   mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)RamBase)     |
                       MCF5XXX_ACR_AM((uint32_t)RamSize-1)   |
                       MCF5XXX_ACR_EN                         |
-                      MCF5XXX_ACR_BWE                        |
                       MCF5XXX_ACR_SM_IGNORE;
   m68k_set_acr0(mcf5282_acr0_mode);
 
