@@ -1,3 +1,7 @@
+2009-06-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix breakage having been introduced in previous patch.
+
 2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* Makefile.am, configure.ac, preinstall.am, PCI_bus/PCI.c,
