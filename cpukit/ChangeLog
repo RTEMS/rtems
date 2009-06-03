@@ -1,3 +1,10 @@
+2009-06-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	PR 1421/filesystem
+	* libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_handlers_device.c: Backport ftruncate support for
+	devices so fopen(device, w) works.
+
 2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1415/cpukit
