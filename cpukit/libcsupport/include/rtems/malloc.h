@@ -23,6 +23,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  *  Malloc Statistics Structure
  */
@@ -144,5 +148,9 @@ int rtems_memalign(
   size_t   alignment,
   size_t   size
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
