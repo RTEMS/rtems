@@ -18,16 +18,16 @@
 #ifndef _RTEMS_RTEMS_LIBIO__H
 #define _RTEMS_RTEMS_LIBIO__H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/libio.h>                /* include before standard IO */
 
 #include <sys/types.h>
 
 #include <errno.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *  Semaphore to protect the io table
