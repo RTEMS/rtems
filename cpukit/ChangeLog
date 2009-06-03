@@ -1,3 +1,9 @@
+2009-06-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/assoc.h,
+	libcsupport/include/rtems/malloc.h: Add extern "C" {} guards.
+	* libcsupport/include/rtems/libio_.h: Move extern "C" {} guards.
+
 2009-05-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1415/cpukit
