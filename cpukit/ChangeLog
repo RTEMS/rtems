@@ -1,3 +1,9 @@
+2009-06-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/assoc.h,
+	libcsupport/include/rtems/malloc.h: Add extern "C" {} guards.
+	* libcsupport/include/rtems/libio_.h: Move extern "C" {} guards.
+
 2009-06-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/include/rtems/score/thread.h, score/src/threadinitialize.c,
