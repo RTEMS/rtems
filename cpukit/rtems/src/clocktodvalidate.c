@@ -53,7 +53,8 @@ bool _TOD_Validate(
       (the_tod->day    == 0) )
      return false;
 
-  if ( (the_tod->year % 4) == 0 )
+  if (((the_tod->year % 4) == 0 && (the_tod->year % 100 != 0)) ||
+     (the_tod->year % 400 == 0))
     days_in_month = _TOD_Days_per_month[ 1 ][ the_tod->month ];
   else
     days_in_month = _TOD_Days_per_month[ 0 ][ the_tod->month ];
