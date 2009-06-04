@@ -1,3 +1,13 @@
+2009-06-04	Xi Yang <hiyangxi@gmail.com>
+
+	* Makefile.am, configure.ac, preinstall.am: New Gumstix BSP and PXA255
+	support.
+	* pxa255/clock/clock.c, pxa255/ffuart/ffuart.c, pxa255/include/bits.h,
+	pxa255/include/ffuart.h, pxa255/include/pxa255.h,
+	pxa255/irq/bsp_irq_asm.S, pxa255/irq/bsp_irq_init.c,
+	pxa255/irq/irq.c, pxa255/irq/irq.h, pxa255/pmc/pmc.c,
+	pxa255/timer/timer.c: New files.
+
 2009-06-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* at91rm9200/dbgu/dbgu.c: Needed carriage return on newline.

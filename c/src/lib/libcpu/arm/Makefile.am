@@ -23,6 +23,36 @@ shared_arm920_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
 shared_arm920_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if pxa255
+include_HEADERS = pxa255/include/pxa255.h pxa255/include/ffuart.h
+
+##pxa255/clock
+noinst_PROGRAMS += pxa255/clock.rel
+pxa255_clock_rel_SOURCES = pxa255/clock/clock.c
+pxa255_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pxa255_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## pxa255/timer
+noinst_PROGRAMS += pxa255/timer.rel
+pxa255_timer_rel_SOURCES = pxa255/timer/timer.c
+pxa255_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pxa255_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+## pxa255/ffuart
+noinst_PROGRAMS += pxa255/ffuart.rel
+pxa255_ffuart_rel_SOURCES = pxa255/ffuart/ffuart.c
+pxa255_ffuart_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pxa255_ffuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+## pxa255/interrupt
+include_HEADERS += pxa255/irq/irq.h
+noinst_PROGRAMS += pxa255/irq.rel
+pxa255_irq_rel_SOURCES = pxa255/irq/irq.c pxa255/irq/bsp_irq_init.c \
+    ../../libbsp/arm/shared/irq/irq_init.c pxa255/irq/bsp_irq_asm.S \
+    ../../libbsp/arm/shared/irq/irq_asm.S pxa255/irq/irq.h
+pxa255_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
+pxa255_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
 if at91rm9200
 include_HEADERS = at91rm9200/include/at91rm9200.h at91rm9200/include/at91rm9200_dbgu.h \
     at91rm9200/include/at91rm9200_emac.h at91rm9200/include/at91rm9200_gpio.h \

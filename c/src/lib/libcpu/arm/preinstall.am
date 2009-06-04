@@ -28,6 +28,21 @@ $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
 endif
+
+if pxa255
+$(PROJECT_INCLUDE)/pxa255.h: pxa255/include/pxa255.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pxa255.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/pxa255.h
+
+$(PROJECT_INCLUDE)/ffuart.h: pxa255/include/ffuart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ffuart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ffuart.h
+
+$(PROJECT_INCLUDE)/irq.h: pxa255/irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
+endif
+
 if at91rm9200
 $(PROJECT_INCLUDE)/at91rm9200.h: at91rm9200/include/at91rm9200.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200.h
