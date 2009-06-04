@@ -17,16 +17,6 @@
 #include <at91rm9200_pmc.h>
 #include <at91rm9200_emac.h>
 
-/* Global Variables */
-extern void            *_flash_size;
-extern void            *_flash_base;
-extern void            *_sdram_size;
-extern void            *_sdram_base;
-extern void            *_bss_free_start;
-
-unsigned long           free_mem_start;
-unsigned long           free_mem_end;
-
 /* Function prototypes */
 extern void rtems_irq_mngt_init(void);
 void bsp_libc_init( void *, uint32_t, int );
