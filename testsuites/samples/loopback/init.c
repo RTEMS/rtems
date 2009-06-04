@@ -51,6 +51,15 @@ static struct rtems_bsdnet_ifconfig loopback_config = {
     NULL,                           /* link to next interface */
     "127.0.0.1",                    /* IP address */
     "255.0.0.0",                    /* IP net mask */
+    NULL,                           /* hardware_address */
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    NULL
 };
 
 struct rtems_bsdnet_config rtems_bsdnet_config = {
@@ -65,6 +74,11 @@ struct rtems_bsdnet_config rtems_bsdnet_config = {
     "127.0.0.1",            /* Log host */
     {"127.0.0.1" },         /* Name server(s) */
     {"127.0.0.1" },         /* NTP server(s) */
+    0,
+    0,
+    0,
+    0,
+    0
 };
 
 /*
