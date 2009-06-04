@@ -50,6 +50,7 @@ EXTRA_DIST += custom/gensh1.cfg
 EXTRA_DIST += custom/gensh2.cfg
 EXTRA_DIST += custom/gensh4.cfg
 EXTRA_DIST += custom/gp32.cfg
+EXTRA_DIST += custom/gumstix.cfg
 EXTRA_DIST += custom/h8sim.cfg
 EXTRA_DIST += custom/h8sxsim.cfg
 EXTRA_DIST += custom/haleakala.cfg
