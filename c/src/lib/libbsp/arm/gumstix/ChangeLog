@@ -1,3 +1,8 @@
+2009-06-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac, include/bspopts.h.in: Add ON_SKYEYE option to at least
+	enable fast idle mode. Also added some standard BSP options.
+
 2009-06-04	Xi Yang <hiyangxi@gmail.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
