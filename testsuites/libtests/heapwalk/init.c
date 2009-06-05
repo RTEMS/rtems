@@ -33,7 +33,27 @@ void test_walk_freshly_initialized(void)
 {
   puts( "Walk freshly initialized heap" );
   test_heap_init();
+  _Heap_Walk( &TestHeap, 0x01, true );
+}
 
+void test_negative_source_value(void)
+{
+  test_heap_init();
+/* Passing a negative value for source so that
+ * the control enters the if block on line 67
+ */
+  puts( "Passing negative value for source" );
+  _Heap_Walk( &TestHeap, -1, true );
+
+}
+
+void test_prev_block_flag_check(void)
+{
+  /* Calling heapwalk without initialising the heap.
+   * Covers line 80 and 85 on heapwalk.
+   * Actually covers more than that.
+   */
+  puts( "Calling Heap Walk without initialising" );
   _Heap_Walk( &TestHeap, 0x01, true );
 }
 
@@ -43,7 +63,9 @@ rtems_task Init(
 {
   puts( "\n\n*** HEAP WALK TEST ***" );
 
+  test_prev_block_flag_check();
   test_walk_freshly_initialized();
+  test_negative_source_value();
 
   puts( "*** END OF HEAP WALK TEST ***" );
   rtems_test_exit(0);

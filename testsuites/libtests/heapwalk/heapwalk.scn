@@ -1,3 +1,6 @@
 *** HEAP WALK TEST ***
+Calling Heap Walk without initialising
+PASS: 1 !HEAP_PREV_USED flag of 1st block isn't set
 Walk freshly initialized heap
+Passing negative value for source
 *** END OF HEAP WALK TEST ***

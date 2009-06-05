@@ -1,3 +1,7 @@
+2009-06-05	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* heapwalk/heapwalk.scn, heapwalk/init.c: Add a test case.
+
 2009-05-19	Chris Johns <chrisj@rtems.org>
 
 	* cpuuse/tswitch.c: Lower sample count for small memory targets.
