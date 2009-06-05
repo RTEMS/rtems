@@ -8,25 +8,24 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *
  *  $Id$
  */
+
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/libio.h>
 
 #include <stdlib.h>
 #include <bsp.h>
+#include <bspopts.h>
 #include <irq.h>
 #include <pxa255.h>
 
-
+#if ON_SKYEYE==1
+  #define CLOCK_DRIVER_USE_FAST_IDLE
+#endif
 
 static unsigned long period_num;
-
-
-
-
 
 /**
  * Enables clock interrupt.

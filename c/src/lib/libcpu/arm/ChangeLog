@@ -1,3 +1,7 @@
+2009-06-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* pxa255/clock/clock.c: Add ON_SKYEYE option to enable fast idle mode.
+
 2009-06-04	Xi Yang <hiyangxi@gmail.com>
 
 	* Makefile.am, configure.ac, preinstall.am: New Gumstix BSP and PXA255
