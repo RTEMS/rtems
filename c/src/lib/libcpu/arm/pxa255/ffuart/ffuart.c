@@ -8,7 +8,6 @@
  *
  *  $Id$
  */
- */
 
 #include <bsp.h>
 #include <rtems/libio.h>

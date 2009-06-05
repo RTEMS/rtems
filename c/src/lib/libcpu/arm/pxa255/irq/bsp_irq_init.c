@@ -13,25 +13,27 @@
 #include <bsp.h>
 #include <pxa255.h>
 
-extern void default_int_handler();
+extern void default_int_handler(void);
 
 void (*IRQ_table[PRIMARY_IRQS])(uint32_t vector);
+
 /* 
  * Interrupt system initialization. Disable interrupts, clear 
  * any that are pending.
  */
-void BSP_rtems_irq_mngt_init()
+void BSP_rtems_irq_mngt_init(void)
 {
-    int i;
+  int i;
 
-    /* Initialize the vector table contents with default handler */
-    for (i=0; i<PRIMARY_IRQS; i++) {
-      IRQ_table[i] = default_int_handler;
-    }
+  /* Initialize the vector table contents with default handler */
+  for (i=0; i<PRIMARY_IRQS; i++) {
+    IRQ_table[i] = default_int_handler;
+  }
 
-    /* disable all interrupts */
-    XSCALE_INT_ICMR = 0x0;
-    /*Direct the interrupt to IRQ*/
-    XSCALE_INT_ICLR = 0x0;
+  /* disable all interrupts */
+  XSCALE_INT_ICMR = 0x0;
+
+  /* Direct the interrupt to IRQ*/
+  XSCALE_INT_ICLR = 0x0;
 }
 

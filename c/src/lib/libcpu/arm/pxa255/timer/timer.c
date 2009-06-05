@@ -1,5 +1,5 @@
 /*
- *PXA255 timer by Yang Xi <hiyangxi@gmail.com>
+ * PXA255 timer by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
  * Notes:
@@ -17,28 +17,25 @@
  *
  *  $Id$
  */
- *  $Id$
- */
 
 #include <rtems.h>
 #include <bsp.h>
 #include <pxa255.h>
 
 uint32_t tstart;
-bool Timer_driver_Find_average_overhead;
 static uint32_t tick_time;
+bool benchmark_timer_find_average_overhead;
+
+bool benchmark_timer_is_initialized = false;
+
 /*
  * Use the timer count register to measure. 
  * The frequency of it is 3.4864MHZ
- *The longest period we are able to capture is 4G/3.4864MHZ
- *   
- *   
+ * The longest period we are able to capture is 4G/3.4864MHZ
  */
-void Timer_initialize( void )
+void benchmark_timer_initialize(void)
 {
-
   tick_time = XSCALE_OS_TIMER_TCR;
-
 }
 
 /*
@@ -56,7 +53,7 @@ void Timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int Read_timer( void )
+int benchmark_timer_read(void)
 {
 
   uint32_t total;
@@ -64,32 +61,20 @@ int Read_timer( void )
   if(total>=tick_time)
     total -= tick_time;
   else
-    total += 0xffffffff-tick_time; /*Round up but not overflow*/
+    total += 0xffffffff - tick_time; /*Round up but not overflow*/
       
-  if ( Timer_driver_Find_average_overhead == 1 )
+  if ( benchmark_timer_find_average_overhead == true )
     return total;          /*Counter cycles*/
-  else {
-    if ( total < LEAST_VALID )
-      return 0;            /* below timer resolution */
-    return total;
-  }
 
+  if ( total < LEAST_VALID )
+    return 0;            /* below timer resolution */
+
+  return total;
 }
 
-/*
- *  Empty function call used in loops to measure basic cost of looping
- *  in Timing Test Suite.
- */
-
-rtems_status_code Empty_function( void )
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-void Set_find_average_overhead(
+void benchmark_timer_disable_subtracting_average_overhead(
   bool find_flag
 )
 {
-  Timer_driver_Find_average_overhead = find_flag;
+  benchmark_timer_find_average_overhead = find_flag;
 }
-
