@@ -1,3 +1,7 @@
+2009-06-05	Till Straumann <strauman@slac.stanford.edu>
+	* network/tsec.c, network/if_tsec_pub.h:
+	added multicast support.
+
 2009-03-05	Till Straumann <strauman@slac.stanford.edu>
 
 	* startup/bspstart.c: removed legacy code (inherited

@@ -173,9 +173,43 @@ BSP_tsec_reset_stats(struct tsec_private *mp);
  * 'promisc'	whether to set promiscuous flag.
  * 'enaddr'		pointer to six bytes with MAC address. Read
  *				from the device if NULL.
+ * NOTE:        multicast filter is cleared by this routine.
  */
 void
 BSP_tsec_init_hw(struct tsec_private *mp, int promisc, unsigned char *enaddr);
+
+/*
+ * Clear multicast hash filter. No multicast frames are accepted
+ * after executing this routine (unless the hardware was initialized
+ * in 'promiscuous' mode).
+ */
+void
+BSP_tsec_mcast_filter_clear(struct tsec_private *mp);
+
+/*
+ * Program multicast filter to accept all multicast frames.
+ */
+void
+BSP_tsec_mcast_filter_accept_all(struct tsec_private *mp);
+
+/*
+ * Add a MAC address to the multicast filter.
+ * Existing entries are not changed but note that
+ * the filter is imperfect, i.e., multiple MAC addresses
+ * may alias to a single filter entry. Hence software
+ * filtering must still be performed.
+ *
+ * NOTE: Deletion of an address is not possible. This is
+ *       usually accomplished by a higher-level driver
+ *       maintaining a list/database of multicast addresses
+ *       and going through a sequence:
+ *
+ *         BSP_tsec_mcast_filter_clear()
+ *         forall mcast addresses do
+ *            BSP_tsec_mcast_filter_accept_add()
+ */
+void
+BSP_tsec_mcast_filter_accept_add(struct tsec_private *mp, unsigned char *enaddr);
 
 /*
  * Dump statistics to FILE 'f'. If NULL, stdout is used.
