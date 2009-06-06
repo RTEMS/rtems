@@ -1,6 +1,11 @@
 2009-06-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* irq/irq_init.c: silenced compiler warning.
+
+2009-06-05	Till Straumann <strauman@slac.stanford.edu>
+
 	* network/tsec.c, network/if_tsec_pub.h:
-	added multicast support.
+	implemented multicast support.
 
 2009-03-05	Till Straumann <strauman@slac.stanford.edu>
 
