@@ -1,3 +1,8 @@
+2009-06-05	Till Straumann <strauman@slac.stanford.edu>
+
+	* network/tsec.c, network/if_tsec_pub.h:
+	implemented multicast support.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S: Update for boot_card command line change.
