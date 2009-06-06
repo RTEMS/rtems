@@ -18,33 +18,69 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <errno.h>
+#include <string.h>
 #include <rtems/score/heap.h>
 
 #define TEST_HEAP_SIZE 1024
-uint8_t TestHeapMemory[TEST_HEAP_SIZE];
+uint32_t TestHeapMemory[TEST_HEAP_SIZE];
 Heap_Control TestHeap;
 
 void test_heap_init(void)
 {
-  _Heap_Initialize( &TestHeap, TestHeapMemory, TEST_HEAP_SIZE, 0 );
+  memset( TestHeapMemory, '\0', sizeof(TestHeapMemory) );
+  _Heap_Initialize( &TestHeap, TestHeapMemory, sizeof(TestHeapMemory), 0 );
+}
+
+void test_heap_walk( int source, bool do_dump )
+{
+  int i, j, original;
+
+  _Heap_Walk( &TestHeap, source, do_dump );
+ 
+  /*
+   *  Now corrupt all non-zero values
+   */
+  for (i=0 ; i<TEST_HEAP_SIZE ; i++) {
+    original = TestHeapMemory[i];
+    if ( original == 0 )
+      continue;
+
+    /* mark it free -- may or may not have already been */
+    TestHeapMemory[i] &= ~0x01;    
+    _Heap_Walk( &TestHeap, source, do_dump );
+
+    /* mark it used -- may or may not have already been */
+    TestHeapMemory[i] |= 0x01;    
+    _Heap_Walk( &TestHeap, source, do_dump );
+
+    /* try 0 and see what that does */
+    TestHeapMemory[i] = 0x00;    
+    _Heap_Walk( &TestHeap, source, do_dump );
+
+    /* try 0xffffffff and see what that does */
+    TestHeapMemory[i] = 0xffffffff;    
+    _Heap_Walk( &TestHeap, source, do_dump );
+
+    TestHeapMemory[i] = original;
+  }
 }
 
 void test_walk_freshly_initialized(void)
 {
   puts( "Walk freshly initialized heap" );
   test_heap_init();
-  _Heap_Walk( &TestHeap, 0x01, true );
+  test_heap_walk(1, true);
 }
 
 void test_negative_source_value(void)
 {
   test_heap_init();
-/* Passing a negative value for source so that
- * the control enters the if block on line 67
- */
+  /*
+   * Passing a negative value for source so that
+   * the control enters the if block on line 67
+   */
   puts( "Passing negative value for source" );
-  _Heap_Walk( &TestHeap, -1, true );
-
+  test_heap_walk( -1, true );
 }
 
 void test_prev_block_flag_check(void)

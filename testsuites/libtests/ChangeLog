@@ -1,3 +1,7 @@
+2009-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* heapwalk/init.c: Add more automated corruption capability.
+
 2009-06-05	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* heapwalk/heapwalk.scn, heapwalk/init.c: Add a test case.
