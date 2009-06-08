@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <string.h>
 #include <rtems/score/heap.h>
+#include <rtems/dumpbuf.h>
 
 #define TEST_HEAP_SIZE 1024
 uint32_t TestHeapMemory[TEST_HEAP_SIZE];
@@ -46,18 +47,22 @@ void test_heap_walk( int source, bool do_dump )
       continue;
 
     /* mark it free -- may or may not have already been */
+printf( "%p -- free\n", i );
     TestHeapMemory[i] &= ~0x01;    
     _Heap_Walk( &TestHeap, source, do_dump );
 
     /* mark it used -- may or may not have already been */
+printf( "%p -- used\n", i );
     TestHeapMemory[i] |= 0x01;    
     _Heap_Walk( &TestHeap, source, do_dump );
 
     /* try 0 and see what that does */
+printf( "%p -- 0x00\n", i );
     TestHeapMemory[i] = 0x00;    
     _Heap_Walk( &TestHeap, source, do_dump );
 
     /* try 0xffffffff and see what that does */
+printf( "%p -- 0xff\n", i );
     TestHeapMemory[i] = 0xffffffff;    
     _Heap_Walk( &TestHeap, source, do_dump );
 
@@ -74,12 +79,12 @@ void test_walk_freshly_initialized(void)
 
 void test_negative_source_value(void)
 {
-  test_heap_init();
   /*
    * Passing a negative value for source so that
    * the control enters the if block on line 67
    */
   puts( "Passing negative value for source" );
+  test_heap_init();
   test_heap_walk( -1, true );
 }
 
@@ -90,7 +95,40 @@ void test_prev_block_flag_check(void)
    * Actually covers more than that.
    */
   puts( "Calling Heap Walk without initialising" );
-  _Heap_Walk( &TestHeap, 0x01, true );
+  test_heap_walk( 1, true );
+}
+
+void test_not_aligned(void)
+{
+  /*
+   * Hack to get to the error case where the blocks are
+   * not on the page size.  We initialize a heap with
+   * default settings and change the page size to something
+   * large.
+   */
+  puts( "Testing case of blocks not on page size" );
+  test_heap_init();
+  TestHeap.page_size = 128;
+  test_heap_walk( -1, true );
+}
+
+void test_not_in_free_list(void)
+{
+  void *p1, *p2, *p3;
+
+  /*
+   * Hack to get to the error case where the blocks are
+   * not on the page size.  We initialize a heap with
+   * default settings and change the page size to something
+   * large.
+   */
+  puts( "Testing case of blocks not on page size" );
+  test_heap_init();
+  p1 =_Heap_Allocate( &TestHeap, 32 );
+  p2 =_Heap_Allocate( &TestHeap, 32 );
+  p3 =_Heap_Allocate( &TestHeap, 32 );
+  _Heap_Free( &TestHeap, p2 );
+  test_heap_walk( -1, true );
 }
 
 rtems_task Init(
@@ -102,6 +140,8 @@ rtems_task Init(
   test_prev_block_flag_check();
   test_walk_freshly_initialized();
   test_negative_source_value();
+  test_not_aligned();
+  test_not_in_free_list();
 
   puts( "*** END OF HEAP WALK TEST ***" );
   rtems_test_exit(0);

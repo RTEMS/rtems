@@ -1,3 +1,7 @@
+2009-06-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* heapwalk/init.c: Add more cases.
+
 2009-06-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* heapwalk/init.c: Add more automated corruption capability.
