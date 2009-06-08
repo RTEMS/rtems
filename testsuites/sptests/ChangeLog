@@ -1,3 +1,12 @@
+2009-06-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add sp52 and sp53 based upon bug report
+	from Sergio Faustino <sergio.faustino@edisoft.pt> regarding moving
+	the time of day forward not making server based timers fire.
+	* sp52/.cvsignore, sp52/Makefile.am, sp52/init.c, sp52/sp52.doc,
+	sp52/sp52.scn, sp53/.cvsignore, sp53/Makefile.am, sp53/sp53.doc,
+	sp53/sp53.scn: New files.
+
 2009-05-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp51/init.c, sp51/sp51.scn: Add more priority ceiling test cases.
