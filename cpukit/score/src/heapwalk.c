@@ -18,6 +18,7 @@
 #include <stdlib.h> /* abort */
 
 #include <rtems/system.h>
+#include <rtems/score/address.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
@@ -100,13 +101,13 @@ bool _Heap_Walk(
         printk(" (prev_size) %d", the_block->prev_size);
     }
 
-    if (!_Heap_Is_block_in(the_heap, next_block)) {
-      if (do_dump) printk("\n");
-      printk("PASS: %d !block %p is out of heap\n", source, next_block);
+
+    if (!_Addresses_Is_aligned(next_block) ) {
+      printk("PASS: %d next_block %p is not aligned\n", source, next_block);
       error = 1;
       break;
     }
-
+   
     if (!_Heap_Is_prev_used(next_block)) {
       if (do_dump)
         printk( " prev %p next %p", the_block->prev, the_block->next);
@@ -123,9 +124,27 @@ bool _Heap_Walk(
 
       { /* Check if 'the_block' is in the free block list */
         Heap_Block* block = _Heap_First(the_heap);
-        while(block != the_block && block != tail)
+        if (!_Addresses_Is_aligned(block) ) {
+          printk(
+            "PASS: %d first free block %p is not aligned\n", source, block);
+          error = 1;
+          break;
+        }
+        while(block != the_block && block != tail) {
+          if (!_Addresses_Is_aligned(block) ) {
+            printk(
+              "PASS: %d a free block %p is not aligned\n", source, block);
+            error = 1;
+            break;
+          }
+          if (!_Heap_Is_block_in(the_heap, block)) {
+            printk("PASS: %d a free block %p is not in heap\n", source, block);
+            error = 1;
+            break;
+          }
           block = block->next;
-        if(block != the_block) {
+        }
+        if (block != the_block) {
           if (do_dump || error) printk("\n");
           printk("PASS: %d !the_block not in the free list", source);
           error = 1;

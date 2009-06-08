@@ -1,3 +1,7 @@
+2009-06-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/heapwalk.c: Verify addresses are aligned.
+
 2009-06-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/rtems/assoc.h,
