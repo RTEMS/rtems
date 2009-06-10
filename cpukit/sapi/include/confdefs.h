@@ -1900,7 +1900,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  then we need to install the code that runs that loop.
  */
 #ifdef CONFIGURE_INIT
-  #ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
+  #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) || \
+      defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
     void (_RTEMS_tasks_Initialize_user_tasks_body)(void);
     void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) =
               _RTEMS_tasks_Initialize_user_tasks_body;
@@ -1915,7 +1916,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #ifdef RTEMS_POSIX_API
   #ifdef CONFIGURE_INIT
-    #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
+    #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
+        defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
       void _POSIX_Threads_Initialize_user_threads_body(void);
       void (*_POSIX_Threads_Initialize_user_threads_p)(void) = 
                 _POSIX_Threads_Initialize_user_threads_body;
@@ -1931,7 +1933,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #ifdef RTEMS_ITRON_API
   #ifdef CONFIGURE_INIT
-    #ifdef CONFIGURE_ITRON_INIT_TASK_TABLE
+    #if defined(CONFIGURE_ITRON_INIT_TASK_TABLE) || \
+        defined(CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE)
       void _ITRON_Task_Initialize_user_tasks_body(void);
       void (*_ITRON_Initialize_user_tasks_p)(void) = 
                 _ITRON_Task_Initialize_user_tasks_body;
