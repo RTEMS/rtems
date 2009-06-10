@@ -1,3 +1,9 @@
+2009-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new test.
+	* sp54/.cvsignore, sp54/Makefile.am, sp54/init.c, sp54/sp54.doc,
+	sp54/sp54.scn: New files.
+
 2009-06-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add sp52 and sp53 based upon bug report

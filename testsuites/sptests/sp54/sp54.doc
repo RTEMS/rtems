@@ -1,0 +1,29 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp54
+
+directives:
+
+  rtems_task_set)priority
+  rtems_task_ident
+
+concepts:
+
++ Ensure that using what could be a valid Id but the class has no
+  objects in it is an error.
++ Ensure that looking up a name on a class with no objects is an error.
+  objects in it is an error.
++ Verify that when configuring a system which starts with the Idle task
+  and uses that as a user task, you can configure your own Classic API
+  Initialization Tasks Table and set to 0 tasks.
