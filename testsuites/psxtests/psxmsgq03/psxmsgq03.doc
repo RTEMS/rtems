@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxmsgq03
+
+directives:
+
+  mq_open
+  mq_send
+
+concepts:
+
++ Ensure that an error is returned when performing a blocking mq_send
+  from an Interrupt Service Routine.  This condition is beyond the
+  POSIX Standard because they do not discuss interrupt processing and
+  what operations are allowed.

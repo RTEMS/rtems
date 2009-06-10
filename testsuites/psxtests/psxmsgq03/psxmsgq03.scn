@@ -1,0 +1,7 @@
+*** POSIX MESSAGE QUEUE TEST 3 ***
+Init - Open message queue
+Init - send to message queue
+Init - Create Classic API Timer
+Init - Fire After Classic API Timer
+Init - mq_send from ISR returned correct status
+*** END OF POSIX MESSAGE QUEUE TEST 3 ***

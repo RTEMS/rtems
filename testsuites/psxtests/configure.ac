@@ -55,6 +55,7 @@ psxkey01/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
+psxmsgq03/Makefile
 psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile
