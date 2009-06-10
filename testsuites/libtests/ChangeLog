@@ -1,3 +1,8 @@
+2009-06-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* heapwalk/init.c: Add test code for first free block pointer not
+	aligned.
+
 2009-06-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* heapwalk/init.c: Add more cases.
