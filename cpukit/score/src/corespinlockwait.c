@@ -1,7 +1,7 @@
 /*
  *  SuperCore Spinlock Handler -- Wait for Spinlock
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +43,9 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
 )
 {
   ISR_Level level;
-  Watchdog_Interval       limit = _Watchdog_Ticks_since_boot + timeout;
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    Watchdog_Interval       limit = _Watchdog_Ticks_since_boot + timeout;
+  #endif
 
   _ISR_Disable( level );
     if ( (the_spinlock->lock == CORE_SPINLOCK_LOCKED) && 
@@ -69,14 +71,16 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
         return CORE_SPINLOCK_UNAVAILABLE;
       }
 
-      /*
-       *  They are willing to wait but there could be a timeout.
-       */
-      if ( timeout && (limit <= _Watchdog_Ticks_since_boot) ) {
-        the_spinlock->users -= 1;
-        _ISR_Enable( level );
-        return CORE_SPINLOCK_TIMEOUT;
-      }
+      #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+        /*
+         *  They are willing to wait but there could be a timeout.
+         */
+        if ( timeout && (limit <= _Watchdog_Ticks_since_boot) ) {
+          the_spinlock->users -= 1;
+          _ISR_Enable( level );
+          return CORE_SPINLOCK_TIMEOUT;
+        }
+      #endif
 
       /*
        *  The thread is willing to spin so let's set things up so

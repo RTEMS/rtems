@@ -1,3 +1,9 @@
+2009-06-11	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/corespinlockwait.c: Mark timeout code which is not
+	currently exercised by any API with the
+	FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API conditional.
+
 2009-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sapi/include/confdefs.h: Fix minor error when application has its own
