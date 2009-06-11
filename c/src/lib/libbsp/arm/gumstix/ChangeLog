@@ -1,3 +1,7 @@
+2009-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* startup/linkcmds: Fix spacing.
+
 2009-06-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac, include/bspopts.h.in: Add ON_SKYEYE option to at least
