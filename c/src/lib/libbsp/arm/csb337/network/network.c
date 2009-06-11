@@ -32,16 +32,47 @@
 #include <netinet/if_ether.h>
 
 #include <irq.h>
+#include <bspopts.h>
 
+#if csb637
+  /* Bit defines for the PHY Status Register #1 (phy address 0x01) */
+  /* 1 = PHY able to perform 100BASE-T4 */
+  #define PHY_STAT_100BASE_T4     BIT15
+  /* 1 = PHY able to perform full-duplex 100BASE-X */
+  #define PHY_STAT_100BASE_X_FDX  BIT14
+  /* 1 = PHY able to perform half-duplex 100BASE-X */
+  #define PHY_STAT_100BASE_X_HDX  BIT13
+  /* 1 = PHY able to operate at 10 Mbps in full-duplex mode */
+  #define PHY_STAT_10BASE_FDX     BIT12
+  /* 1 = PHY able to operate at 10 Mbps in half-duplex mode */
+  #define PHY_STAT_10BASE_HDX     BIT11
+  /* 1 = PHY will accept management frames with preamble suppressed */
+  #define PHY_STAT_MF_PREAMBLE    BIT6
+  /* 1 = Auto-negotiation complete */
+  #define PHY_STAT_AUTO_NEG_DONE  BIT5
+  /* 1 = Remote fault condition detected */
+  #define PHY_STAT_REM_FLT        BIT4
+  /* 1 = PHY is able to perform Auto-Negotiation */
+  #define PHY_STAT_AUTO_NEG_ABLE  BIT3
+  /* 1 = Link is up */
+  #define PHY_STAT_LINK_UP        BIT2
+  /* 1 = Jabber condition detected */
+  #define PHY_STAT_JABBER         BIT1
+  /* 1 = Extended register capabilities */
+  #define PHY_STAT_EXT_REG        BIT0
 
-/* interrupt stuff */
-#define EMAC_INT_PRIORITY       0       /* lowest priority */
+  /* Bit defines for the Auxillary Mode 3 register */
+  #define PHY_AUX_MODE2_TRAFFIC_LED   BIT6
+#endif
 
-/*  RTEMS event used by interrupt handler to start receive daemon. */
-#define START_RECEIVE_EVENT  RTEMS_EVENT_1
+  /* interrupt stuff */
+  #define EMAC_INT_PRIORITY       0       /* lowest priority */
 
-/* RTEMS event used to start transmit daemon. */
-#define START_TRANSMIT_EVENT    RTEMS_EVENT_2
+  /*  RTEMS event used by interrupt handler to start receive daemon. */
+  #define START_RECEIVE_EVENT  RTEMS_EVENT_1
+
+  /* RTEMS event used to start transmit daemon. */
+  #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
 rtems_isr at91rm9200_emac_isr(rtems_vector_number vector);
 static void at91rm9200_emac_isr_on(const rtems_irq_connect_data *unused);
@@ -50,7 +81,7 @@ static int at91rm9200_emac_isr_is_on(const rtems_irq_connect_data *irq);
 
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data at91rm9200_emac_isr_data = {
-    AT91RM9200_INT_EMAC,   
+    AT91RM9200_INT_EMAC,
     (rtems_irq_hdl)at91rm9200_emac_isr,
     at91rm9200_emac_isr_on,
     at91rm9200_emac_isr_off,
@@ -98,23 +129,23 @@ typedef struct
      * This entry *must* be the first in the sonic_softc structure.
      */
     struct arpcom                    arpcom;
-    
+
     /*
      * Interrupt vector
      */
     rtems_vector_number             vector;
-    
+
     /*
      *  Indicates configuration
      */
     int                             acceptBroadcast;
-    
+
     /*
      * Task waiting for interrupts
      */
     rtems_id                        rxDaemonTid;
     rtems_id                        txDaemonTid;
-    
+
     /*
      * current receive header
      */
@@ -132,7 +163,7 @@ typedef struct
     unsigned long                   rxNonOctet;
     unsigned long                   rxBadCRC;
     unsigned long                   rxCollision;
-    
+
     unsigned long                   txInterrupts;
     unsigned long                   txSingleCollision;
     unsigned long                   txMultipleCollision;
@@ -156,7 +187,7 @@ static at91rm9200_emac_softc_t softc;
  */
 
 /* function prototypes */
-int rtems_at91rm9200_emac_attach (struct rtems_bsdnet_ifconfig *config, 
+int rtems_at91rm9200_emac_attach (struct rtems_bsdnet_ifconfig *config,
                                   void *chip);
 void at91rm9200_emac_init(void *arg);
 void at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc);
@@ -166,9 +197,54 @@ void at91rm9200_emac_txDaemon (void *arg);
 void at91rm9200_emac_sendpacket (struct ifnet *ifp, struct mbuf *m);
 void at91rm9200_emac_rxDaemon(void *arg);
 void at91rm9200_emac_stats (at91rm9200_emac_softc_t *sc);
-static int at91rm9200_emac_ioctl (struct ifnet *ifp, 
-                                  ioctl_command_t command, 
+static int at91rm9200_emac_ioctl (struct ifnet *ifp,
+                                  ioctl_command_t command,
                                   caddr_t data);
+
+
+/*
+ * phyread(): Read the PHY
+ */
+uint32_t phyread(uint8_t reg)
+{
+  EMAC_REG(EMAC_MAN) = (0x01 << 30  /* Start of Frame Delimiter */
+            | 0x02 << 28            /* Operation, 0x01 = Write, 0x02 = Read */
+            | 0x00 << 23            /* Phy Number, 0 as we only have one */
+            | reg << 18             /* Phy Register */
+            | 0x02 << 16);          /* must be 0x02 for turn around field */
+
+  /* wait for phy read to complete (was udelay(5000)) */
+  rtems_task_wake_after(1);
+
+  #if EMAC_DBG
+    printk(
+      "EMAC: Phy 0, Reg %d, Read 0x%04lx.\n",
+       reg,
+       (EMAC_REG(EMAC_MAN) & 0xffff)
+    );
+  #endif
+
+  return EMAC_REG(EMAC_MAN) & 0xffff;
+}
+
+/*
+ * phywrite(): Write the PHY
+ */
+void phywrite(uint8_t reg, uint16_t data)
+{
+  EMAC_REG(EMAC_MAN) = (0x01 << 30 /* Start of Frame Delimiter */
+             | 0x01 << 28          /* Operation, 0x01 = Write, 0x02 = Read */
+             | 0x00 << 23          /* Phy Number, BCM5221 is address 0 */
+             | reg << 18           /* Phy Register */
+             | 0x02 << 16          /* must be 0x02 for turn around field */
+             | data);
+  #if EMAC_DBG
+    printf("EMAC: Phy 0, Reg %d, Write 0x%04x.\n", reg, data);
+  #endif
+
+  /* wait for phy write to complete (was udelay(5000)) */
+  rtems_task_wake_after(1);
+}
 
 
 int rtems_at91rm9200_emac_attach (
@@ -181,7 +257,7 @@ int rtems_at91rm9200_emac_attach (
     int unitnumber;
     char *unitname;
     void *p;
-    
+
     /* an array of receive buffer descriptors -- avoid type punned warning */
     p = (void *)&at91rm9200_emac_rxbuf_hdrs;
     rxbuf_hdrs = (RXBUF_HDR *)p;
@@ -196,7 +272,7 @@ int rtems_at91rm9200_emac_attach (
      */
     if ((unitnumber = rtems_bsdnet_parse_driver_name (config, &unitname)) < 0)
         return 0;
-    
+
     /*
      * Is driver free?
      */
@@ -209,14 +285,14 @@ int rtems_at91rm9200_emac_attach (
         printf ("Driver already in use.\n");
         return 0;
     }
-    
+
     /*
      *  zero out the control structure
      */
-    
+
     memset( &softc, 0, sizeof(softc) );
-    
-    
+
+
     /* get the MAC address from the chip */
     softc.arpcom.ac_enaddr[0] = (EMAC_REG(EMAC_SA1L) >> 0) & 0xff;
     softc.arpcom.ac_enaddr[1] = (EMAC_REG(EMAC_SA1L) >> 8) & 0xff;
@@ -225,6 +301,17 @@ int rtems_at91rm9200_emac_attach (
     softc.arpcom.ac_enaddr[4] = (EMAC_REG(EMAC_SA1H) >> 0) & 0xff;
     softc.arpcom.ac_enaddr[5] = (EMAC_REG(EMAC_SA1H) >> 8) & 0xff;
 
+    #if 0
+      printk( "MAC=%02x:%02x:%02x:%02x:%02x:%02x\n",
+        softc.arpcom.ac_enaddr[0],
+        softc.arpcom.ac_enaddr[1],
+        softc.arpcom.ac_enaddr[2],
+        softc.arpcom.ac_enaddr[3],
+        softc.arpcom.ac_enaddr[4],
+        softc.arpcom.ac_enaddr[5]
+      );
+    #endif
+
     if (config->mtu) {
         mtu = config->mtu;
     } else {
@@ -232,7 +319,7 @@ int rtems_at91rm9200_emac_attach (
     }
 
     softc.acceptBroadcast = !config->ignore_broadcast;
-    
+
     /*
      * Set up network interface values
      */
@@ -248,7 +335,7 @@ int rtems_at91rm9200_emac_attach (
     if (ifp->if_snd.ifq_maxlen == 0) {
         ifp->if_snd.ifq_maxlen = ifqmaxlen;
     }
-    
+
     softc.rx_buf_idx = 0;
 
     /*
@@ -261,34 +348,34 @@ int rtems_at91rm9200_emac_attach (
 
 void at91rm9200_emac_init(void *arg)
 {
-    at91rm9200_emac_softc_t     *sc = arg;      
+    at91rm9200_emac_softc_t     *sc = arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
-    
-    /* 
-     *This is for stuff that only gets done once (at91rm9200_emac_init() 
-     * gets called multiple times 
+
+    /*
+     *This is for stuff that only gets done once (at91rm9200_emac_init()
+     * gets called multiple times
      */
     if (sc->txDaemonTid == 0) {
         /* Set up EMAC hardware */
         at91rm9200_emac_init_hw(sc);
-        
+
         /*      Start driver tasks */
-        sc->rxDaemonTid = rtems_bsdnet_newproc("ENrx", 
-                                               4096, 
-                                               at91rm9200_emac_rxDaemon, 
+        sc->rxDaemonTid = rtems_bsdnet_newproc("ENrx",
+                                               4096,
+                                               at91rm9200_emac_rxDaemon,
                                                sc);
-        sc->txDaemonTid = rtems_bsdnet_newproc("ENtx", 
-                                               4096, 
-                                               at91rm9200_emac_txDaemon, 
+        sc->txDaemonTid = rtems_bsdnet_newproc("ENtx",
+                                               4096,
+                                               at91rm9200_emac_txDaemon,
                                                sc);
     } /* if txDaemonTid */
-    
+
     /* set our priority in the AIC */
     AIC_SMR_REG(AIC_SMR_EMAC) = AIC_SMR_PRIOR(EMAC_INT_PRIORITY);
-    
+
     /* install the interrupt handler */
     BSP_install_rtems_irq_handler(&at91rm9200_emac_isr_data);
-    
+
     /* EMAC doesn't support promiscuous, so ignore requests */
     if (ifp->if_flags & IFF_PROMISC) {
         printf ("Warning - AT91RM9200 Ethernet driver"
@@ -299,14 +386,14 @@ void at91rm9200_emac_init(void *arg)
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
-    
+
     /* Enable TX/RX and clear the statistics counters */
     EMAC_REG(EMAC_CTL) = (EMAC_CTL_TE | EMAC_CTL_RE | EMAC_CTL_CSR);
-    
+
     /* clear any pending interrupts */
     EMAC_REG(EMAC_TSR) = 0xffffffff;
     EMAC_REG(EMAC_RSR) = 0xffffffff;
-    
+
 } /* at91rm9200_emac_init() */
 
 void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
@@ -342,7 +429,7 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
                           BIT17 |   /* rx data valid */
                           BIT18 |   /* rx collistion */
                           BIT19 );  /* rx clock   */
-                          
+
 
     /* Enable the clock to the EMAC */
     PMC_REG(PMC_PCER) |= PMC_PCR_PID_EMAC;
@@ -354,37 +441,49 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
     }
 
     /* last one needs the wrapbit set as well  */
-    rxbuf_hdrs[i].address = ((unsigned long)(&rxbuf[i * RX_BUFFER_SIZE]) | 
+    rxbuf_hdrs[i].address = ((unsigned long)(&rxbuf[i * RX_BUFFER_SIZE]) |
                              RXBUF_ADD_WRAP);
     rxbuf_hdrs[i].status = 0x00000000;
-    
+
     /* point to our receive buffer queue */
     EMAC_REG(EMAC_RBQP) = (unsigned long)rxbuf_hdrs;
-    
+
     /* clear any left over status bits */
     EMAC_REG(EMAC_RSR)  &= ~(EMAC_RSR_OVR | EMAC_RSR_REC | EMAC_RSR_BNA);
-    
+
     /* set the MII clock divder to MCK/64 */
     EMAC_REG(EMAC_CFG) &= EMAC_CFG_CLK_MASK;
     EMAC_REG(EMAC_CFG) = (EMAC_CFG_CLK_64 | EMAC_CFG_BIG | EMAC_CFG_FD);
-    
+
     /* enable the MII interface */
     EMAC_REG(EMAC_CTL) = EMAC_CTL_MPE;
-    
+
     /* Set PHY LED2 to combined Link/Activity and enable pulse stretching */
+    #if csb637
+     /* Set PHY LED modes.  Traffic Meter Mode for ACTLED
+      * Set Bit 6 - Traffic Mode on
+      */
+     phywrite(0x1b, PHY_AUX_MODE2_TRAFFIC_LED);
+    #else
+      /* must be csb337 */
+      phywrite( 18, 0x0d0a );
+    #endif
+
+    #if 0
     EMAC_REG(EMAC_MAN) = (0x01 << 30 |   /* Start of Frame Delimiter */
                           0x01 << 28 |   /* Operation, 0x01 = Write */
                           0x00 << 23 |   /* Phy Number */
                           0x14 << 18 |   /* Phy Register */
                           0x02 << 16 |   /* must be 0x02 */
                           0x0D0A);       /* Write data (0x0000 if read) */
-    
+   #endif
+
 } /* at91rm9200_emac_init_hw() */
 
 void at91rm9200_emac_start(struct ifnet *ifp)
 {
     at91rm9200_emac_softc_t *sc = ifp->if_softc;
-    
+
     rtems_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
@@ -392,9 +491,9 @@ void at91rm9200_emac_start(struct ifnet *ifp)
 void at91rm9200_emac_stop (at91rm9200_emac_softc_t *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
-    
+
     ifp->if_flags &= ~IFF_RUNNING;
-    
+
     /*
      * Stop the transmitter and receiver.
      */
@@ -410,18 +509,18 @@ void at91rm9200_emac_txDaemon (void *arg)
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
     rtems_event_set events;
-    
+
     for (;;)
     {
         /* turn on TX interrupt, then wait for one */
         EMAC_REG(EMAC_IER) = EMAC_INT_TCOM;     /* Transmit complete */
-        
+
         rtems_bsdnet_event_receive(
             START_TRANSMIT_EVENT,
             RTEMS_EVENT_ANY | RTEMS_WAIT,
             RTEMS_NO_TIMEOUT,
             &events);
-        
+
         /* Send packets till queue is empty */
         for (;;)
         {
@@ -442,35 +541,35 @@ void at91rm9200_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
     unsigned int pkt_offset = 0;
     delay_cnt = 0;
     /* printf("at91rm9200_emac_sendpacket %p\n", m); */
-    
+
     /* Wait for EMAC Transmit Queue to become available. */
     while (((EMAC_REG(EMAC_TSR) & EMAC_TSR_COMP) == 0) &&
            ((EMAC_REG(EMAC_TSR) & EMAC_TSR_TXIDLE) == 0))
-        
+
     {
         delay_cnt++;
 /*        sleep(0);       make sure we don't hog the cpu */
         continue;
     }
-    
+
     /* copy the mbuf chain into the transmit buffer */
-    l = m;     
+    l = m;
     while (l != NULL) {
-        memcpy(((char *)txbuf + pkt_offset),  /* offset into pkt for mbuf */ 
-               (char *)mtod(l, void *),       /* cast to void */ 
+        memcpy(((char *)txbuf + pkt_offset),  /* offset into pkt for mbuf */
+               (char *)mtod(l, void *),       /* cast to void */
                l->m_len);                     /* length of this mbuf */
-        
+
         pkt_offset += l->m_len;               /* update offset */
-        l = l->m_next;                        /* get next mbuf, if any */     
+        l = l->m_next;                        /* get next mbuf, if any */
     }
-    
+
     /* free the mbuf chain we just copied */
     m_freem(m);
-    
+
     /* clear any pending status */
     EMAC_REG(EMAC_TSR) = (EMAC_TSR_OVR | EMAC_TSR_COL | EMAC_TSR_RLE
-                          | EMAC_TSR_COMP | EMAC_TSR_UND); 
-    
+                          | EMAC_TSR_COMP | EMAC_TSR_UND);
+
     /* tell the EMAC about our buffer */
     EMAC_REG(EMAC_TAR) = (unsigned long)txbuf;
     EMAC_REG(EMAC_TCR) = (unsigned long)pkt_offset;
@@ -486,20 +585,20 @@ void at91rm9200_emac_rxDaemon(void *arg)
     struct ether_header *eh;
     rtems_event_set events;
     int pktlen;
-    
+
     /* Input packet handling loop */
     for (;;) {
         /* turn on RX interrupts, then wait for one */
         EMAC_REG(EMAC_IER) = (EMAC_INT_RCOM |   /* Receive complete */
                               EMAC_INT_RBNA |   /* Receive buf not available */
                               EMAC_INT_ROVR);   /* Receive overrun */
-        
+
         rtems_bsdnet_event_receive(
             START_RECEIVE_EVENT,
             RTEMS_EVENT_ANY | RTEMS_WAIT,
             RTEMS_NO_TIMEOUT,
             &events);
-        
+
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_BNA) {
             printf("1: EMAC_BNA\n");
         }
@@ -510,34 +609,34 @@ void at91rm9200_emac_rxDaemon(void *arg)
 
         /* clear the receive status as we do not use it anyway */
         EMAC_REG(EMAC_RSR) = (EMAC_RSR_REC | EMAC_RSR_OVR | EMAC_RSR_BNA);
-        
+
         /* scan the buffer descriptors looking for any with data in them */
         while (rxbuf_hdrs[sc->rx_buf_idx].address & RXBUF_ADD_OWNED) {
             pktlen = rxbuf_hdrs[sc->rx_buf_idx].status & RXBUF_STAT_LEN_MASK;
-            
+
             /* get an mbuf this packet */
             MGETHDR(m, M_WAIT, MT_DATA);
-            
+
             /* now get a cluster pointed to by the mbuf */
             /* since an mbuf by itself is too small */
             MCLGET(m, M_WAIT);
-            
+
             /* set the type of mbuf to ifp (ethernet I/F) */
             m->m_pkthdr.rcvif = ifp;
             m->m_nextpkt = 0;
-            
-            /* copy the packet into the cluster pointed to by the mbuf */   
+
+            /* copy the packet into the cluster pointed to by the mbuf */
             memcpy((char *)m->m_ext.ext_buf,
                    (char *)(rxbuf_hdrs[sc->rx_buf_idx].address & 0xfffffffc),
                    pktlen);
-            
+
             /* Release the buffer ASAP back to the EMAC */
             rxbuf_hdrs[sc->rx_buf_idx].address &= ~RXBUF_ADD_OWNED;
-            
+
             /* set the length of the mbuf */
             m->m_len = pktlen - (sizeof(struct ether_header) + 4);
             m->m_pkthdr.len = m->m_len;
-            
+
             /* strip off the ethernet header from the mbuf */
             /* but save the pointer to it */
             eh = mtod (m, struct ether_header *);
@@ -548,10 +647,10 @@ void at91rm9200_emac_rxDaemon(void *arg)
             if (sc->rx_buf_idx >= NUM_RXBDS) {
                 sc->rx_buf_idx = 0;
             }
-            
+
             /* give all this stuff to the stack */
             ether_input(ifp, eh, m);
-            
+
         } /* while ADD_OWNED = 0 */
 
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_BNA) {
@@ -563,7 +662,7 @@ void at91rm9200_emac_rxDaemon(void *arg)
 
 
     } /* for (;;) */
-} /* at91rm9200_emac_rxDaemon() */ 
+} /* at91rm9200_emac_rxDaemon() */
 
 
 /* Show interface statistics */
@@ -576,7 +675,7 @@ void at91rm9200_emac_stats (at91rm9200_emac_softc_t *sc)
     printf ("          Bad CRC:%-8lu",          sc->rxBadCRC);
     printf ("        Collision:%-8lu",          sc->rxCollision);
     printf ("           Missed:%-8lu\n",                sc->rxMissed);
-    
+
     printf (    "    Tx Interrupts:%-8lu",      sc->txInterrupts);
     printf (  "           Deferred:%-8lu",      sc->txDeferred);
     printf ("        Lost Carrier:%-8lu\n",     sc->txLostCarrier);
@@ -599,7 +698,7 @@ static void at91rm9200_emac_isr_on(const rtems_irq_connect_data *unused)
                           EMAC_INT_TCOM | /* Transmit complete */
                           EMAC_INT_ROVR | /* Receive overrun */
                           EMAC_INT_ABT);  /* Abort on DMA transfer */
-    
+
     return;
 }
 
@@ -611,7 +710,7 @@ static void at91rm9200_emac_isr_off(const rtems_irq_connect_data *unused)
     return;
 }
 
-/* Tests to see if at91rm9200_emac interrupts are enabled, and 
+/* Tests to see if at91rm9200_emac interrupts are enabled, and
  * returns non-0 if so.
  * If interrupt is not enabled, returns 0.
  */
@@ -626,38 +725,38 @@ at91rm9200_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     at91rm9200_emac_softc_t *sc = ifp->if_softc;
     int error = 0;
-    
+
     switch (command) {
     case SIOCGIFADDR:
     case SIOCSIFADDR:
         ether_ioctl (ifp, command, data);
         break;
-        
+
     case SIOCSIFFLAGS:
         switch (ifp->if_flags & (IFF_UP | IFF_RUNNING))
         {
         case IFF_RUNNING:
             at91rm9200_emac_stop (sc);
             break;
-            
+
         case IFF_UP:
             at91rm9200_emac_init (sc);
             break;
-            
+
         case IFF_UP | IFF_RUNNING:
             at91rm9200_emac_stop (sc);
             at91rm9200_emac_init (sc);
             break;
-            
+
         default:
             break;
         } /* switch (if_flags) */
         break;
-        
+
     case SIO_RTEMS_SHOW_STATS:
         at91rm9200_emac_stats (sc);
         break;
-        
+
         /*
          * FIXME: All sorts of multicast commands need to be added here!
          */
@@ -672,33 +771,33 @@ at91rm9200_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 rtems_isr at91rm9200_emac_isr (rtems_vector_number v)
 {
     unsigned long status32;
-    
+
     /* get the ISR status and determine RX or TX */
     status32 = EMAC_REG(EMAC_ISR);
-    
+
     if (status32 & EMAC_INT_ABT) {
         EMAC_REG(EMAC_IDR) = EMAC_INT_ABT; /* disable it */
         rtems_panic("AT91RM9200 Ethernet MAC has received an Abort.\n");
     }
-    
+
     if (status32 & (EMAC_INT_RCOM |    /* Receive complete */
                     EMAC_INT_RBNA |    /* Receive buffer not available */
                     EMAC_INT_ROVR)) {  /* Receive overrun */
-        
+
         /* disable the RX interrupts */
         EMAC_REG(EMAC_IDR) = (EMAC_INT_RCOM |  /* Receive complete */
                               EMAC_INT_RBNA |  /* Receive buf not available */
                               EMAC_INT_ROVR);  /* Receive overrun */
-        
+
         rtems_event_send (softc.rxDaemonTid, START_RECEIVE_EVENT);
-    }   
+    }
 
     if (status32 & EMAC_INT_TCOM) {      /* Transmit buffer register empty */
-        
+
         /* disable the TX interrupts */
         EMAC_REG(EMAC_IDR) = EMAC_INT_TCOM;
-        
+
         rtems_event_send (softc.txDaemonTid, START_TRANSMIT_EVENT);
-    }   
+    }
 }
 
