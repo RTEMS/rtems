@@ -1,3 +1,7 @@
+2009-06-12	Chris Johns <chrisj@rtems.org>
+
+	* Makefile.am: Compile the shared bspinit.c.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S: Update for boot_card command line change.
