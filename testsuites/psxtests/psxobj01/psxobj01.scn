@@ -1,0 +1,5 @@
+*** POSIX OBJECT TEST 1 ***
+INIT - _Objects_Name_to_id_string - NULL name
+INIT - _Objects_Name_to_id_string - NULL ID
+INIT - _Objects_Name_to_id_string - name of non-existent object
+*** END OF POSIX OBJECT TEST 1 ***

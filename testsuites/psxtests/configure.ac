@@ -12,7 +12,6 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
-
 RTEMS_ENV_RTEMSBSP
 
 RTEMS_PROJECT_ROOT
@@ -56,6 +55,7 @@ psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
 psxmsgq03/Makefile
+psxobj01/Makefile
 psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile
