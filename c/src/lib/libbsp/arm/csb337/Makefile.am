@@ -48,9 +48,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppretaskinghook.c startup/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c \
     startup/memmap.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c
-# console
-libbsp_a_SOURCES += console/uarts.c ../../shared/console.c
+    ../../shared/gnatinstallhandler.c startup/umonsupp.c
 if ENABLE_LCD
 libbsp_a_SOURCES += console/sed1356.c console/fbcons.c
 endif

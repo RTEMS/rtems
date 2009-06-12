@@ -1,3 +1,7 @@
+2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am: Add MicroMonitor support.
+
 2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Add MicroMonitor support.
