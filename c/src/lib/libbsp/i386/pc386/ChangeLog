@@ -1,3 +1,7 @@
+2009-06-12	Chris Johns <chrisj@rtems.org>	
+
+	* ide/ide.c: Format the data output in DEBUG mode.
+
 2009-05-30	Chris Johns <chrisj@rtems.org>
 
 	* ide/ide.c: Add initialisation code to reset the IDE devices and

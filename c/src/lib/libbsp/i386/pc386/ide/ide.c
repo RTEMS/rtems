@@ -360,7 +360,9 @@ void pc386_ide_read_block
   uint8_t     status_val;
   uint16_t   *lbuf = (uint16_t*)
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
-
+#ifdef DEBUG_OUT
+  int i32 = 0;
+#endif
   while (cnt < block_size)
   {
     if (!pc386_ide_status_data_ready (port, 100, &status_val))
@@ -376,9 +378,15 @@ void pc386_ide_read_block
     inport_word(port+IDE_REGISTER_DATA,*lbuf);
 
 #ifdef DEBUG_OUT
-    printk("0x%x ",*lbuf);
+    printk("%04x ",*lbuf);
+    i32++;
+    if (i32 >= 16)
+    {
+      printk("\n");
+      i32 = 0;
+    }
 #endif
-
+    
     lbuf++;
     cnt    += sizeof(*lbuf);
     (*pos) += sizeof(*lbuf);
