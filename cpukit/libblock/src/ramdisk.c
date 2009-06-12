@@ -201,14 +201,14 @@ ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
                     return ramdisk_write(rd, r);
 
                 default:
-                    errno = EBADRQC;
+                    errno = EINVAL;
                     return -1;
             }
             break;
         }
 
         default:
-            errno = EBADRQC;
+            errno = EINVAL;
             return -1;
     }
 }

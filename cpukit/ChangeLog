@@ -1,3 +1,11 @@
+2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libblock/src/ramdisk.c, libfs/src/dosfs/fat.c,
+	libfs/src/dosfs/msdos_format.c: Eliminate using the GNU/Linux
+	specific error numbers EBADRQC and ENOTBLK. Switch to EINVAL and
+	ENOTTY as appropriate.
+
 2009-06-12	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/dd-args.c, libmisc/shell/dd-conv.c,

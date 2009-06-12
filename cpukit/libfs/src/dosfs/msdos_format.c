@@ -910,7 +910,7 @@ int msdos_format
   /* rtems feature: no block devices, all are character devices */   
   if ((ret_val == 0) &&
       (!S_ISCHR(stat_buf.st_mode))) {
-    errno = ENOTBLK;
+    errno = ENOTTY;
     ret_val = -1;
   }
   
@@ -918,7 +918,7 @@ int msdos_format
   if (ret_val == 0) {
     dd = rtems_disk_obtain(stat_buf.st_rdev);
     if (dd == NULL) {
-      errno = ENOTBLK;
+      errno = ENOTTY;
       ret_val = -1;
     }
   }

@@ -730,7 +730,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
             break;
             
           default:
-            errno = EBADRQC;
+            errno = EINVAL;
             break;
         }
         break;
@@ -744,7 +744,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
         
       default:
-        errno = EBADRQC;
+        errno = EINVAL;
         break;
     }
 

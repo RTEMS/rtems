@@ -2378,7 +2378,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
               break;
         
             default:
-              errno = EBADRQC;
+              errno = EINVAL;
               break;
           }
         }
@@ -2410,7 +2410,7 @@ rtems_fdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
 
       default:
-        errno = EBADRQC;
+        errno = EINVAL;
         break;
     }
 
