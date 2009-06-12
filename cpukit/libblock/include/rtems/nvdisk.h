@@ -31,7 +31,7 @@
 /**
  * The base name of the nv disks.
  */
-#define RTEMS_NVDISK_DEVICE_BASE_NAME "/dev/nvdisk"
+#define RTEMS_NVDISK_DEVICE_BASE_NAME "/dev/nvd"
 
 /**
  * NV disk specific ioctl request types. To use open the

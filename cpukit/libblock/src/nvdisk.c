@@ -790,15 +790,14 @@ rtems_nvdisk_initialize (rtems_device_major_number major,
 
   for (minor = 0; minor < rtems_nvdisk_configuration_size; minor++, c++)
   {
-    char     name[sizeof (RTEMS_NVDISK_DEVICE_BASE_NAME) + 10];
+    char     name[] = RTEMS_NVDISK_DEVICE_BASE_NAME "a";
     dev_t    dev = rtems_filesystem_make_dev_t (major, minor);
     uint32_t device;
     uint32_t blocks = 0;
 
     nvd = &rtems_nvdisks[minor];
   
-    snprintf (name, sizeof (name),
-              RTEMS_NVDISK_DEVICE_BASE_NAME "%" PRIu32, minor);
+    name [sizeof(RTEMS_NVDISK_DEVICE_BASE_NAME)] += minor;
   
     nvd->major        = major;
     nvd->minor        = minor;

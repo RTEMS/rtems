@@ -1,5 +1,12 @@
 2009-06-12	Chris Johns <chrisj@rtems.org>
 
+	* libblock/include/rtems/flashdisk.h,
+	libblock/include/rtems/nvdisk.h, libblock/src/flashdisk.c,
+	libblock/src/nvdisk.c: Change names to match the RAM disk change. 
+	* libcsupport/src/eval.c: Remove some warnings.
+	
+2009-06-12	Chris Johns <chrisj@rtems.org>
+
 	* libblock/src/bdbuf.c: Update comments.
 	* libblock/src/bdpart.c, libblock/src/ide_part_table.c: Get the
 	device from the rdev field of the stat buf.

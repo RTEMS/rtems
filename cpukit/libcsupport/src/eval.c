@@ -29,7 +29,7 @@ int rtems_filesystem_evaluate_relative_path(
   int                                follow_link
 )
 {
-  int                           i;
+  //int                           i;
   int                           result;
   rtems_filesystem_node_types_t type;
 
@@ -46,7 +46,7 @@ int rtems_filesystem_evaluate_relative_path(
   if ( !pathloc->ops->evalpath_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
-  result = (*pathloc->ops->evalpath_h)( &pathname[i], pathnamelen, flags, pathloc );
+  result = (*pathloc->ops->evalpath_h)( pathname, pathnamelen, flags, pathloc );
 
   /*
    * Get the Node type and determine if you need to follow the link or
@@ -99,9 +99,7 @@ int rtems_filesystem_evaluate_path(
   int                                follow_link
 )
 {
-  int                           i;
-  int                           result;
-  rtems_filesystem_node_types_t type;
+  int                           i = 0;
 
   /*
    * Verify Input parameters.
@@ -122,8 +120,8 @@ int rtems_filesystem_evaluate_path(
   /*
    * We evaluation the path relative to the start location we get got.
    */
-  return rtems_filesystem_evaluate_relative_path( pathname,
-                                                  pathnamelen,
+  return rtems_filesystem_evaluate_relative_path( &pathname[i],
+                                                  pathnamelen - i,
                                                   flags,
                                                   pathloc,
                                                   follow_link );

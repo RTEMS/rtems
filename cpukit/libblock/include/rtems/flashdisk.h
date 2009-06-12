@@ -21,7 +21,7 @@
 /**
  * The base name of the flash disks.
  */
-#define RTEMS_FLASHDISK_DEVICE_BASE_NAME "/dev/flashdisk"
+#define RTEMS_FLASHDISK_DEVICE_BASE_NAME "/dev/fdd"
 
 /**
  * Flash disk specific ioctl request types. To use open the
