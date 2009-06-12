@@ -1,3 +1,8 @@
+2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Add MicroMonitor support.
+	* startup/umonsupp.c: New file.
+
 2009-06-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* network/network.c: Attempt to support csb637 PHY.

@@ -49,6 +49,23 @@ $(PROJECT_INCLUDE)/sed1356.h: include/sed1356.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sed1356.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sed1356.h
 
+$(PROJECT_INCLUDE)/umon/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/umon
+	@: > $(PROJECT_INCLUDE)/umon/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/umon/$(dirstamp)
+
+$(PROJECT_INCLUDE)/umon/cli.h: ../../shared/umon/cli.h $(PROJECT_INCLUDE)/umon/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/umon/cli.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/umon/cli.h
+
+$(PROJECT_INCLUDE)/umon/monlib.h: ../../shared/umon/monlib.h $(PROJECT_INCLUDE)/umon/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/umon/monlib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/umon/monlib.h
+
+$(PROJECT_INCLUDE)/umon/tfs.h: ../../shared/umon/tfs.h $(PROJECT_INCLUDE)/umon/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/umon/tfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/umon/tfs.h
+
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h

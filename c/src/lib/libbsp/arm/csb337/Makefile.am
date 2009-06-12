@@ -14,6 +14,12 @@ include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 include_HEADERS += include/sed1356.h
 
+include_umondir = $(includedir)/umon
+include_umon_HEADERS  = ../../shared/umon/cli.h
+include_umon_HEADERS += ../../shared/umon/monlib.h
+include_umon_HEADERS += ../../shared/umon/tfs.h
+
+
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
@@ -50,6 +56,10 @@ libbsp_a_SOURCES += console/sed1356.c console/fbcons.c
 endif
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
+# umon
+libbsp_a_SOURCES += ../../shared/umon/umonrtemsglue.c  \
+    ../../shared/umon/monlib.c ../../shared/umon/tfsDriver.c \
+    startup/umonsupp.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
