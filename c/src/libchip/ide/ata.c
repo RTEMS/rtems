@@ -1053,7 +1053,7 @@ ata_ioctl(dev_t device, int cmd, void *argp)
             break;
 
         default:
-            errno = EBADRQC;
+            errno = EINVAL;
             return -1;
             break;
     }

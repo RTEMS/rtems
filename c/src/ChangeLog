@@ -1,3 +1,9 @@
+2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: Eliminate using the
+	GNU/Linux specific error numbers EBADRQC and ENOTBLK. Switch to
+	EINVAL and ENOTTY as appropriate.
+
 2009-05-30	Chris Johns <chrisj@rtems.org>
 
 	* c/src/libchip/ide/ata.c: Fixed the bug that ignored slave

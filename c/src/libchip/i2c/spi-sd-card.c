@@ -1130,14 +1130,14 @@ static int sd_card_disk_ioctl( dev_t dev, uint32_t req, void *arg)
 			case RTEMS_BLKDEV_REQ_WRITE:
 				return sd_card_disk_block_write( e, r);
 			default:
-				errno = EBADRQC;
+                                errno = EINVAL;
 				return -1;
 		}
 	} else if (req == RTEMS_BLKDEV_CAPABILITIES) {
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
-		errno = EBADRQC;
+                errno = EINVAL;
 		return -1;
 	}
 }
