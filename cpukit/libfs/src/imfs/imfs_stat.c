@@ -36,8 +36,8 @@ int IMFS_stat(
   switch ( the_jnode->type ) {
 
     case IMFS_DEVICE:
-      io          = &the_jnode->info.device;
-      buf->st_dev = rtems_filesystem_make_dev_t( io->major, io->minor );
+      io           = &the_jnode->info.device;
+      buf->st_rdev = rtems_filesystem_make_dev_t( io->major, io->minor );
       break;
 
     case IMFS_LINEAR_FILE:

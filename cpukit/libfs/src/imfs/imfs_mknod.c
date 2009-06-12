@@ -41,7 +41,7 @@ int IMFS_mknod(
   char               new_name[ IMFS_NAME_MAX + 1 ];
   IMFS_types_union   info;
 
-  IMFS_get_token( token, new_name, &result );
+  IMFS_get_token( token, strlen( token ), new_name, &result );
 
   /*
    *  Figure out what type of IMFS node this is.

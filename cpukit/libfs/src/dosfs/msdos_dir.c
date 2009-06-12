@@ -637,7 +637,8 @@ msdos_dir_chmod(rtems_filesystem_location_info_t *pathloc,
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  */
 int
-msdos_dir_rmnod(rtems_filesystem_location_info_t *pathloc)
+msdos_dir_rmnod(rtems_filesystem_location_info_t *parent_pathloc,
+                rtems_filesystem_location_info_t *pathloc)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;

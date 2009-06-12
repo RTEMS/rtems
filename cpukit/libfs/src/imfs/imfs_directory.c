@@ -282,7 +282,8 @@ int imfs_dir_fstat(
  */
 
 int imfs_dir_rmnod(
-  rtems_filesystem_location_info_t      *pathloc       /* IN */
+  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t  *pathloc         /* IN */
 )
 {
   IMFS_jnode_t *the_jnode;

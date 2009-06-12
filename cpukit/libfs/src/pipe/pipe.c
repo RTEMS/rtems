@@ -30,7 +30,7 @@ int pipe_create(
   int err = 0;
 
   /* Create /tmp if not exists */
-  if (rtems_filesystem_evaluate_path("/tmp", RTEMS_LIBIO_PERMS_RWX, &loc, TRUE)
+  if (rtems_filesystem_evaluate_path("/tmp", 3, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE)
       != 0) {
     if (errno != ENOENT)
       return -1;

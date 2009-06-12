@@ -72,6 +72,7 @@ msdos_set_handlers(rtems_filesystem_location_info_t *loc)
 int
 msdos_eval_path(
     const char                        *pathname,
+    int                                pathnamelen,
     int                                flags,
     rtems_filesystem_location_info_t  *pathloc
     )
@@ -106,7 +107,8 @@ msdos_eval_path(
 
     while ((type != MSDOS_NO_MORE_PATH) && (type != MSDOS_INVALID_TOKEN))
     {
-        type = msdos_get_token(&pathname[i], &token, &token_len);
+        type = msdos_get_token(&pathname[i], pathnamelen, &token, &token_len);
+        pathnamelen += token_len;
         i += token_len;
 
         fat_fd = pathloc->node_access;
@@ -150,6 +152,7 @@ msdos_eval_path(
 
                         rtems_semaphore_release(fs_info->vol_sema);
                         return (*pathloc->ops->evalpath_h)(&(pathname[i-token_len]),
+                                                           pathnamelen - token_len,
                                                            flags, pathloc);
                     }
                 }
@@ -288,7 +291,7 @@ msdos_eval4make(
 
     while (!done)
     {
-        type = msdos_get_token(&path[i], &token, &token_len);
+        type = msdos_get_token(&path[i], strlen(&path[i]), &token, &token_len);
         i += token_len;
         fat_fd = pathloc->node_access;
 

@@ -110,6 +110,9 @@ static void rtems_bdpart_type_to_string(
   uuid_unparse_lower( type, str);
 }
 
+/*
+ * FIXME: This code should the deviceio interface and not the bdbug interface.
+ */
 static rtems_status_code rtems_bdpart_get_disk_data(
   const char *disk_name,
   dev_t *disk,
@@ -128,7 +131,7 @@ static rtems_status_code rtems_bdpart_get_disk_data(
   if (rv != 0) {
     return RTEMS_INVALID_NAME;
   }
-  *disk = st.st_dev;
+  *disk = st.st_rdev;
 
   /* Get disk begin, end and block size */
   dd = rtems_disk_obtain( *disk);

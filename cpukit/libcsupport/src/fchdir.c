@@ -76,7 +76,7 @@ int fchdir(
   rtems_filesystem_current = iop->pathinfo;
 
   /* clone the current node */
-  if (rtems_filesystem_evaluate_path(".", 0, &loc, 0)) {
+  if (rtems_filesystem_evaluate_path(".", 1, 0, &loc, 0)) {
     /* cloning failed; restore original and bail out */
     rtems_filesystem_current = saved;
 	return -1;

@@ -33,7 +33,7 @@ int chown(
   rtems_filesystem_location_info_t   loc;
   int                                result;
 
-  if ( rtems_filesystem_evaluate_path( path, 0x00, &loc, true ) )
+  if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &loc, true ) )
     return -1;
 
   if ( !loc.ops->chown_h ) {

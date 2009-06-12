@@ -74,12 +74,12 @@ int IMFS_fsunmount(
      IMFS_Set_handlers( &loc );
 
      if ( jnode->type != IMFS_DIRECTORY ) {
-        result = IMFS_unlink( &loc );
+        result = IMFS_unlink( NULL, &loc );
         if (result != 0)
           return -1;
         jnode = next;
      } else if ( jnode_has_no_children( jnode ) ) {
-        result = IMFS_unlink( &loc );
+        result = IMFS_unlink( NULL, &loc );
         if (result != 0)
           return -1;
         jnode = next;

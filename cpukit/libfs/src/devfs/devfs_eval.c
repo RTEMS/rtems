@@ -17,6 +17,7 @@
 
 int devFS_evaluate_path(
   const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc
 )
@@ -37,7 +38,7 @@ int devFS_evaluate_path(
 
     for (i = 0; i < rtems_device_table_size; i++){
         if ((device_name_table[i].device_name) && 
-		(strcmp(device_name_table[i].device_name, pathname) == 0)){
+		(strncmp(pathname, device_name_table[i].device_name, pathnamelen) == 0)){
             /* find the device, set proper values */
             pathloc->node_access = (void *)&device_name_table[i];
             pathloc->handlers = &devFS_file_handlers;

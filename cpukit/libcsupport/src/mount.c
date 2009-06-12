@@ -139,7 +139,7 @@ int mount(
   if ( mount_point ) {
 
     if ( rtems_filesystem_evaluate_path(
-            mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
+           mount_point, strlen( mount_point ), RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
       goto cleanup_and_bail;
 
     loc_to_free = &loc;

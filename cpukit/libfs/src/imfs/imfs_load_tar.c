@@ -92,7 +92,8 @@ rtems_tarfs_load(
    IMFS_jnode_t    *node;
    int             status;
 
-   status = rtems_filesystem_evaluate_path(mountpoint, 0, &root_loc, 0);
+   status = rtems_filesystem_evaluate_path(mountpoint, strlen(mountpoint),
+                                           0, &root_loc, 0);
    if (status != 0)
       return(-1);
 

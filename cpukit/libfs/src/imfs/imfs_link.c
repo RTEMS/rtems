@@ -47,7 +47,7 @@ int IMFS_link(
    * Remove any separators at the end of the string.
    */
 
-  IMFS_get_token( token, new_name, &i );
+  IMFS_get_token( token, strlen( token ), new_name, &i );
 
   /*
    *  Create a new link node.

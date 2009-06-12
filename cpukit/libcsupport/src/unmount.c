@@ -113,7 +113,7 @@ int unmount(
    *    The mount entry that is being refered to.
    */
 
-  if ( rtems_filesystem_evaluate_path( path, 0x0, &loc, true ) )
+  if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x0, &loc, true ) )
     return -1;
 
   mt_entry     = loc.mt_entry;

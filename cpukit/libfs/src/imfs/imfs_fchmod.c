@@ -46,11 +46,9 @@ int IMFS_fchmod(
   /*
    * Change only the RWX permissions on the jnode to mode.
    */
-  if ( mode & (~ (S_IRWXU | S_IRWXG | S_IRWXO ) ) )
-    rtems_set_errno_and_return_minus_one( EPERM );
 
-  jnode->st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO);
-  jnode->st_mode |= mode;
+  jnode->st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
+  jnode->st_mode |= mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
 
   IMFS_update_ctime( jnode );
 

@@ -206,6 +206,7 @@ int IMFS_evaluate_sym_link(
 
   result = IMFS_eval_path(
     &jnode->info.sym_link.name[i],
+    strlen( &jnode->info.sym_link.name[i] ),
     flags,
     node
   );
@@ -294,6 +295,7 @@ int IMFS_evaluate_for_make(
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
   bool                                done = false;
+  int                                 pathlen;
   int                                 result;
 
   /*
@@ -303,12 +305,17 @@ int IMFS_evaluate_for_make(
   node = pathloc->node_access;
 
   /*
+   * Get the path length.
+   */
+  pathlen = strlen( path );
+  /*
    *  Evaluate all tokens until we are done or an error occurs.
    */
-
+  
   while( !done ) {
 
-    type = IMFS_get_token( &path[i], token, &len );
+    type = IMFS_get_token( &path[i], pathlen, token, &len );
+    pathlen -= len;
     i +=  len;
 
     if ( !pathloc->node_access )
@@ -480,6 +487,7 @@ int IMFS_evaluate_for_make(
 
 int IMFS_eval_path(
   const char                        *pathname,     /* IN     */
+  int                                pathnamelen,  /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
@@ -510,8 +518,9 @@ int IMFS_eval_path(
 
   while( (type != IMFS_NO_MORE_PATH) && (type != IMFS_INVALID_TOKEN) ) {
 
-    type = IMFS_get_token( &pathname[i], token, &len );
-    i +=  len;
+    type = IMFS_get_token( &pathname[i], pathnamelen, token, &len );
+    pathnamelen -= len;
+    i += len;
 
     if ( !pathloc->node_access )
       rtems_set_errno_and_return_minus_one( ENOENT );
@@ -551,7 +560,9 @@ int IMFS_eval_path(
 	  } else {
             newloc = pathloc->mt_entry->mt_point_node;
             *pathloc = newloc;
-            return (*pathloc->ops->evalpath_h)(&(pathname[i-len]),flags,pathloc);
+            return (*pathloc->ops->evalpath_h)(&(pathname[i-len]),
+                                               pathnamelen+len,
+                                               flags,pathloc);
 	  }
 	} else {
 
@@ -603,7 +614,9 @@ int IMFS_eval_path(
         if ( node->info.directory.mt_fs != NULL ) {
           newloc   = node->info.directory.mt_fs->mt_fs_root;
           *pathloc = newloc;
-          return (*pathloc->ops->evalpath_h)( &pathname[i-len], flags, pathloc );
+          return (*pathloc->ops->evalpath_h)( &pathname[i-len],
+                                              pathnamelen+len,
+                                              flags, pathloc );
 	}
 
 	/*
@@ -645,7 +658,9 @@ int IMFS_eval_path(
     if ( node->info.directory.mt_fs != NULL ) {
       newloc   = node->info.directory.mt_fs->mt_fs_root;
       *pathloc = newloc;
-      return (*pathloc->ops->evalpath_h)( &pathname[i-len], flags, pathloc );
+      return (*pathloc->ops->evalpath_h)( &pathname[i-len],
+                                          pathnamelen+len,
+                                          flags, pathloc );
     } else {
       result = IMFS_Set_handlers( pathloc );
     }

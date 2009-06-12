@@ -128,6 +128,7 @@ typedef int (*rtems_filesystem_fcntl_t)(
 );
 
 typedef int (*rtems_filesystem_rmnod_t)(
+ rtems_filesystem_location_info_t      *parent_loc,   /* IN */
  rtems_filesystem_location_info_t      *pathloc       /* IN */
 );
 
@@ -174,6 +175,7 @@ typedef int (*rtems_filesystem_mknod_t)(
 
 typedef int (*rtems_filesystem_evalpath_t)(
   const char                        *pathname,      /* IN     */
+  int                                pathnamelen,   /* IN     */
   int                                flags,         /* IN     */
   rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
 );
@@ -191,7 +193,8 @@ typedef int (*rtems_filesystem_link_t)(
 );
 
 typedef int (*rtems_filesystem_unlink_t)(
- rtems_filesystem_location_info_t  *pathloc       /* IN */
+ rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+ rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
 typedef int (*rtems_filesystem_chown_t)(
@@ -326,7 +329,8 @@ struct rtems_filesystem_mount_table_entry_tt {
    *  When someone adds a mounted filesystem on a real device,
    *  this will need to be used.
    *
-   *  The best option long term for this is probably an open file descriptor.
+   *  The lower layers can manage how this is managed. Leave as a
+   *  string.
    */
   char                                  *dev;
 };

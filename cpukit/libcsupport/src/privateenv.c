@@ -91,9 +91,9 @@ rtems_status_code rtems_libio_set_private_env(void) {
    * clones.
    */
 
-  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
   rtems_filesystem_root    = loc;
-  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
   rtems_filesystem_current = loc;
 
   return RTEMS_SUCCESSFUL;

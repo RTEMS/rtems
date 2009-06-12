@@ -467,7 +467,7 @@ rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
     }
 
     strncpy (disk_desc->dev_name, dev_name, 15);
-    disk_desc->dev = dev_stat.st_dev;
+    disk_desc->dev = dev_stat.st_rdev;
     disk_desc->sector_size = (dev_stat.st_blksize) ? dev_stat.st_blksize :
                                               RTEMS_IDE_SECTOR_SIZE;
 

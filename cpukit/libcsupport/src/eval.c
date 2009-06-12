@@ -21,8 +21,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_evaluate_path(
+int rtems_filesystem_evaluate_relative_path(
   const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
@@ -42,16 +43,10 @@ int rtems_filesystem_evaluate_path(
   if ( !pathloc )
     rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
 
-  /*
-   * Evaluate the path using the optable evalpath.
-   */
-
-  rtems_filesystem_get_start_loc( pathname, &i, pathloc );
-
   if ( !pathloc->ops->evalpath_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
-  result = (*pathloc->ops->evalpath_h)( &pathname[i], flags, pathloc );
+  result = (*pathloc->ops->evalpath_h)( &pathname[i], pathnamelen, flags, pathloc );
 
   /*
    * Get the Node type and determine if you need to follow the link or
@@ -90,34 +85,79 @@ int rtems_filesystem_evaluate_path(
          */
 
         result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
-
     }
   }
 
   return result;
 }
 
-
-int rtems_filesystem_evaluate_parent(
+int rtems_filesystem_evaluate_path(
+  const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
-  rtems_filesystem_location_info_t  *pathloc
+  rtems_filesystem_location_info_t  *pathloc,
+  int                                follow_link
 )
 {
-  rtems_filesystem_location_info_t  parent;
-  int                               result;
+  int                           i;
+  int                           result;
+  rtems_filesystem_node_types_t type;
+
+  /*
+   * Verify Input parameters.
+   */
+
+  if ( !pathname )
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   if ( !pathloc )
     rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
 
-  if ( !pathloc->ops->evalpath_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
+  /*
+   * Evaluate the path using the optable evalpath.
+   */
 
-  parent = *pathloc;
-  result = (*pathloc->ops->evalpath_h)( "..", flags, &parent );
-  if (result != 0){
-    return -1;
+  rtems_filesystem_get_start_loc( pathname, &i, pathloc );
+
+  /*
+   * We evaluation the path relative to the start location we get got.
+   */
+  return rtems_filesystem_evaluate_relative_path( pathname,
+                                                  pathnamelen,
+                                                  flags,
+                                                  pathloc,
+                                                  follow_link );
+}
+
+int rtems_filesystem_dirname(
+  const char  *pathname
+)
+{
+  int len = strlen( pathname );
+
+  while ( len ) {
+    len--;
+    if ( rtems_filesystem_is_separator( pathname[len] ) )
+      break;
   }
-  rtems_filesystem_freenode( &parent );
 
-  return result;
+  return len;
+}
+
+int rtems_filesystem_prefix_separators(
+  const char  *pathname,
+  int          pathnamelen
+)
+{
+  /*
+   * Eat any separators at start of the path.
+   */
+  int stripped = 0;
+  while ( *pathname && pathnamelen && rtems_filesystem_is_separator( *pathname ) )
+  {
+    pathname++;
+    pathnamelen--;
+    stripped++;
+  }
+  return stripped;
 }

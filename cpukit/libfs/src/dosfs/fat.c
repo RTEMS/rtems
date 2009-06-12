@@ -354,11 +354,11 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         rtems_set_errno_and_return_minus_one(ENOTBLK);
 
     /* check that device is registred as block device and lock it */
-    vol->dd = rtems_disk_obtain(stat_buf.st_dev);
+    vol->dd = rtems_disk_obtain(stat_buf.st_rdev);
     if (vol->dd == NULL)
         rtems_set_errno_and_return_minus_one(ENOTBLK);
 
-    vol->dev = stat_buf.st_dev;
+    vol->dev = stat_buf.st_rdev;
 
     /* Read boot record */
     /* FIXME: Asserts FAT_MAX_BPB_SIZE < bdbuf block size */

@@ -1355,6 +1355,7 @@ struct rtems_filesystem_location_info_tt
 	
 STATIC int nfs_do_evalpath(
 	const char                        *pathname,      /* IN     */
+	int                                pathnamelen,   /* IN     */
 	void                              *arg,
 	rtems_filesystem_location_info_t  *pathloc,       /* IN/OUT */
 	int								  forMake
@@ -1375,7 +1376,8 @@ unsigned long	niu,siu;
 		e = ENOMEM;
 		goto cleanup;
 	}
-	strcpy(p, pathname);
+	memset(p, 0, MAXPATHLEN+1);
+	memcpy(p, pathname, pathnamelen);
 
 	LOCK(nfsGlob.lock);
 	node = nfsNodeClone(node);
@@ -1510,7 +1512,7 @@ unsigned long	niu,siu;
 			if (forMake)
 				rval = pathloc->ops->evalformake_h(part, pathloc, (const char**)arg);
 			else
-				rval = pathloc->ops->evalpath_h(part, (int)arg, pathloc);
+				rval = pathloc->ops->evalpath_h(part, strlen(part), (int)arg, pathloc);
 
 			free(p);
 			return rval;
@@ -1667,16 +1669,17 @@ static int nfs_evalformake(
 	const char                      **pname       /* OUT    */
 )
 {
-	return nfs_do_evalpath(path, (void*)pname, pathloc, 1 /*forMake*/);
+	return nfs_do_evalpath(path, strlen(path), (void*)pname, pathloc, 1 /*forMake*/);
 }
 
 static int nfs_evalpath(
 	const char						 *path,		  /* IN */
+	int								 pathlen,		  /* IN */
 	int								 flags,		  /* IN */
 	rtems_filesystem_location_info_t *pathloc    /* IN/OUT */
 )
 {
-	return nfs_do_evalpath(path, (void*)flags, pathloc, 0 /*not forMake*/);
+	return nfs_do_evalpath(path, pathlen, (void*)flags, pathloc, 0 /*not forMake*/);
 }
 
 
@@ -1729,7 +1732,8 @@ NfsNode tNode = to_loc->node_access;
 }
 
 static int nfs_do_unlink(
-	rtems_filesystem_location_info_t  *loc,       /* IN */
+	rtems_filesystem_location_info_t  *parent_loc,/* IN */
+  rtems_filesystem_location_info_t  *loc,       /* IN */
 	int								  proc
 )
 {
@@ -1768,10 +1772,11 @@ char			*name = NFSPROC_REMOVE == proc ?
 }
 
 static int nfs_unlink(
-	rtems_filesystem_location_info_t  *loc       /* IN */
+ rtems_filesystem_location_info_t  *parent_loc, /* IN */
+ rtems_filesystem_location_info_t  *loc         /* IN */
 )
 {
-	return nfs_do_unlink(loc, NFSPROC_REMOVE);
+	return nfs_do_unlink(parent_loc, loc, NFSPROC_REMOVE);
 }
 
 static int nfs_chown(
@@ -2357,7 +2362,7 @@ int	 							rval = RVAL_ERR_AND_DO_FREENODE;
 
 				pathloc->handlers = &nfs_dir_file_handlers;
 
-				err = nfs_evalpath(buf, flags, pathloc);
+				err = nfs_evalpath(buf, strlen(buf), flags, pathloc);
 
 				/* according to its semantics,
 				 * nfs_evalpath cloned the node attached
@@ -2398,7 +2403,7 @@ int	 							rval = RVAL_ERR_AND_DO_FREENODE;
 			 */
 			rtems_filesystem_freenode(pathloc);
 
-			if (rtems_filesystem_evaluate_path(buf, flags, pathloc, 1)) {
+			if (rtems_filesystem_evaluate_path(buf, strlen(buf), flags, pathloc, 1)) {
 				/* If evalpath fails then there is no valid node
 				 * attached to pathloc; hence we must not attempt
 				 * to free the node
@@ -3079,10 +3084,11 @@ static int nfs_file_fcntl(
  * call, though...
  */
 static int nfs_dir_rmnod(
-	rtems_filesystem_location_info_t      *pathloc       /* IN */
+	rtems_filesystem_location_info_t      *parentpathloc, /* IN */
+	rtems_filesystem_location_info_t      *pathloc        /* IN */
 )
 {
-	return nfs_do_unlink(pathloc, NFSPROC_RMDIR);
+	return nfs_do_unlink(parentpathloc, pathloc, NFSPROC_RMDIR);
 }
 
 /* the file handlers table */

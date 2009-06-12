@@ -1183,6 +1183,7 @@ static int rtems_ftpfs_ftruncate( rtems_libio_t *iop, rtems_off64_t count)
 
 static int rtems_ftpfs_eval_path(
   const char *pathname,
+  int pathnamelen,
   int flags,
   rtems_filesystem_location_info_t *pathloc
 )
@@ -1192,6 +1193,11 @@ static int rtems_ftpfs_eval_path(
    * We need to store this path here or otherwise we would have to do this job
    * again.  The path is used in rtems_ftpfs_open() via iop->file_info.
    */
+  pathloc->node_access = malloc(pathnamelen + 1);
+  if (pathloc->node_access) {
+    memset(pathloc->node_access, 0, pathnamelen + 1);
+    memcpy(pathloc->node_access, pathname, pathnamelen);
+  }    
   pathloc->node_access = strdup( pathname);
 
   return 0;

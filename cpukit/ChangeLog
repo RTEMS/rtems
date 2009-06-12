@@ -1,3 +1,71 @@
+2009-06-12	Chris Johns <chrisj@rtems.org>
+
+	* libblock/src/bdbuf.c: Update comments.
+	* libblock/src/bdpart.c, libblock/src/ide_part_table.c: Get the
+	device from the rdev field of the stat buf.
+	* libcsupport/include/rtems/libio.h: Add a path length to evalpath
+	handler. Add parent locations to rmmod and unlink handlers.
+	* libcsupport/include/rtems/libio_.h: Add a path length to
+	rtems_filesystem_evaluate_path. Add
+	rtems_filesystem_evaluate_relative_path, rtems_filesystem_dirname,
+	and rtems_filesystem_prefix_separators. Remove
+	rtems_filesystem_evaluate_parent.
+	* libcsupport/src/base_fs.c, libcsupport/src/chdir.c,
+	libcsupport/src/chmod.c, libcsupport/src/chown.c,
+	libcsupport/src/chroot.c, libcsupport/src/fchdir.c,
+	libcsupport/src/link.c, libcsupport/src/mount.c,
+	libcsupport/src/open.c, libcsupport/src/privateenv.c,
+	libcsupport/src/readlink.c, libcsupport/src/unmount.c,
+	libcsupport/src/utime.c, libcsupport/src/unmount.c,
+	libcsupport/src/utime.c, libfs/src/devfs/devfs.h,
+	libfs/src/devfs/devfs_eval.c, libfs/src/devfs/devstat.c,
+	libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_misc.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_load_tar.c, libfs/src/imfs/ioman.c,
+	libfs/src/pipe/pipe.c, libmisc/fsmount/fsmount.c,
+	libnetworking/lib/ftpfs.c: Add the length parameter to the eval
+	call.
+	* libcsupport/src/eval.c: Add rtems_filesystem_prefix_separators,
+	rtems_filesystem_dirname,
+	rtems_filesystem_evaluate_relative_path. Add the length parameter
+	to the eval call.
+	* libcsupport/src/rmdir.c: Find the parent pathloc then the node
+	pathloc from that node. Remove the call to find the parent given
+	the node pathloc.
+	* libcsupport/src/stat.c: Add the length parameter to the eval
+	call. Set the device into the rdev field.
+	* libcsupport/src/unlink.c: Find the parent pathloc then the node
+	pathloc from that node. Remove the call to find the parent given
+	the node pathloc.
+	* libfs/src/dosfs/fat.c, libfs/src/dosfs/msdos_format.c: Get the
+	disk device number from the stat rdev field.
+	* libfs/src/dosfs/msdos.h: Add the length parameter to the eval
+	call. Add the parent pathloc to the rmnod handler.
+	* libfs/src/dosfs/msdos_dir.c: Add the parent pathloc to the rmnod
+	handler.
+	* libfs/src/dosfs/msdos_eval.c: Add the length parameter to the
+	eval and token call.
+	* libfs/src/imfs/imfs_directory.c: Add the parent pathloc to the
+	rmnod handler.
+	* libfs/src/imfs/imfs_fchmod.c: Do not test the mode flags for
+	only the allowed flags. Add the missing flags spec'ed in the POSIX
+	standard.
+	* libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_rmnod.c,
+	libfs/src/imfs/imfs_unlink.c, libfs/src/imfs/memfile.c: Add the
+	parent node. Currently ignored in the IMFS.
+	* libfs/src/imfs/imfs_stat.c: Return the device number in the rdev
+	field.
+	* libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/imfs_symlink.c : Add
+	the length parameter to the token call.
+	* libfs/src/nfsclient/src/nfs.c: Add the length parameter to the
+	eval call and parent node to the rmnod and unlink command.
+	* libmisc/shell/internal.h: Remove the libc mounter decl to make
+	public.
+	* libmisc/shell/main_mount.c: Add support for hooking external
+	mount support for new file systems.
+	* libmisc/shell/shell.h: Add helper functions for the mount
+	command.
+
 2009-06-11	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/src/corespinlockwait.c: Mark timeout code which is not

@@ -30,7 +30,7 @@ int devFS_stat(
   if (!the_dev)
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  buf->st_dev  = rtems_filesystem_make_dev_t( the_dev->major, the_dev->minor );
+  buf->st_rdev  = rtems_filesystem_make_dev_t( the_dev->major, the_dev->minor );
 
   buf->st_mode = the_dev->mode;
 

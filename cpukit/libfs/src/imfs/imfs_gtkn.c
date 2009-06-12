@@ -26,6 +26,7 @@
 
 IMFS_token_types IMFS_get_token(
   const char       *path,
+  int               pathlen,
   char             *token,
   int              *token_len
 )
@@ -38,7 +39,7 @@ IMFS_token_types IMFS_get_token(
    *  Copy a name into token.  (Remember NULL is a token.)
    */
   c = path[i];
-  while ( (!IMFS_is_separator(c)) && (i <= IMFS_NAME_MAX) ) {
+  while ( (!IMFS_is_separator(c)) && (i < pathlen) && (i <= IMFS_NAME_MAX) ) {
 
      token[i] = c;
 
@@ -58,7 +59,7 @@ IMFS_token_types IMFS_get_token(
   if ( i == 0 ) {
     token[i] = c;
 
-    if ( token[i] != '\0' ) {
+    if ( (token[i] != '\0') && pathlen ) {
       i++;
       type = IMFS_CURRENT_DIR;
     } else {

@@ -41,7 +41,7 @@ int IMFS_symlink(
    * Remove any separators at the end of the string.
    */
 
-  IMFS_get_token( node_name, new_name, &i );
+  IMFS_get_token( node_name, strlen( node_name ), new_name, &i );
 
   /*
    * Duplicate link name

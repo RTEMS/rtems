@@ -310,7 +310,7 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
     /*
      * check spelling and format new node name
      */
-    if (MSDOS_NAME != msdos_get_token(name, &token, &len)) {
+    if (MSDOS_NAME != msdos_get_token(name, strlen(name), &token, &len)) {
       rtems_set_errno_and_return_minus_one(ENAMETOOLONG);
     }
     /*

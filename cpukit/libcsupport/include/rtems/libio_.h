@@ -234,16 +234,29 @@ int rtems_libio_is_file_open(
  *  File System Routine Prototypes
  */
 
-int rtems_filesystem_evaluate_path(
+int rtems_filesystem_evaluate_relative_path(
   const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
 );
 
-int rtems_filesystem_evaluate_parent(
+int rtems_filesystem_evaluate_path(
+  const char                        *pathname,
+  int                                pathnamelen,
   int                                flags,
-  rtems_filesystem_location_info_t  *pathloc
+  rtems_filesystem_location_info_t  *pathloc,
+  int                                follow_link
+);
+
+int rtems_filesystem_dirname(
+  const char  *pathname
+);
+
+int rtems_filesystem_prefix_separators(
+  const char  *pathname,
+  int          pathnamelen
 );
 
 void rtems_filesystem_initialize(void);

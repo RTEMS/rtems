@@ -916,7 +916,7 @@ int msdos_format
   
   /* check that  device is registered as block device and lock it */
   if (ret_val == 0) {
-    dd = rtems_disk_obtain(stat_buf.st_dev);
+    dd = rtems_disk_obtain(stat_buf.st_rdev);
     if (dd == NULL) {
       errno = ENOTBLK;
       ret_val = -1;

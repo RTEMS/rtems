@@ -24,6 +24,7 @@
 #include <termios.h>
 #include <rtems/fs.h>
 #include <rtems/libio.h>
+#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -232,6 +233,7 @@ typedef int (*rtems_shell_filesystems_mounter_t)(
 );
 
 struct rtems_shell_filesystems_tt {
+  rtems_chain_node                         link;
   const char                              *name;
   int                                      driver_needed;
   const rtems_filesystem_operations_table *fs_ops;
@@ -256,6 +258,35 @@ void rtems_shell_get_prompt(
   char              *prompt,
   size_t             size
 );
+
+/**
+ * Helper for the mount command.
+ *
+ * @param[in] driver The path to the driver.
+ * @param[in] path The path to mount on.
+ * @param[in] fs The file system definition.
+ * @param[in] options Special file system options.
+ */
+int rtems_shell_libc_mounter(
+  const char*                driver,
+  const char*                path,
+  rtems_shell_filesystems_t* fs,
+  rtems_filesystem_options_t options
+);
+
+/**
+ * Add a new file system mount configuration to the mount command.
+ *
+ * @param[in] fs The file system mount data.
+ */
+void rtems_shell_mount_add_fsys(rtems_shell_filesystems_t* fs);
+
+/**
+ * Delete file system mount configuration from the mount command.
+ *
+ * @param[in] fs The file system mount data to remove.
+ */
+void rtems_shell_mount_del_fsys(rtems_shell_filesystems_t* fs);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,8 @@ int link(
    * Get the node we are linking to.
    */
 
-  result = rtems_filesystem_evaluate_path( existing, 0, &existing_loc, true );
+  result = rtems_filesystem_evaluate_path( existing, strlen( existing ),
+                                           0, &existing_loc, true );
   if ( result != 0 )
      return -1;
 

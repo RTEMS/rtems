@@ -28,20 +28,42 @@ int rmdir(
   const char *pathname
 )
 {
+  int                               parentpathlen;
+  const char                       *name;
+  rtems_filesystem_location_info_t  parentloc;
   rtems_filesystem_location_info_t  loc;
+  int                               i;
   int                               result;
-
+  
   /*
-   *  Get the node where we wish to go.
+   *  Get the parent node of the node we wish to remove. Find the parent path.
    */
 
-  result = rtems_filesystem_evaluate_path( pathname, 0, &loc, false );
-  if ( result != 0 )
-     return -1;
+  parentpathlen = rtems_filesystem_dirname ( pathname );
 
-  result = rtems_filesystem_evaluate_parent(RTEMS_LIBIO_PERMS_WRITE, &loc );
-  if (result != 0) {
-    rtems_filesystem_freenode( &loc );
+  if ( parentpathlen == 0 )
+    rtems_filesystem_get_start_loc( pathname, &i, &parentloc );
+  else {
+    result = rtems_filesystem_evaluate_path(pathname, parentpathlen,
+                                            RTEMS_LIBIO_PERMS_WRITE,
+                                            &parentloc,
+                                            false );
+    if ( result != 0 )
+      return -1;
+  }
+
+  /*
+   * Start from the parent to find the node that should be under it.
+   */
+  
+  loc = parentloc;
+  name = pathname + parentpathlen;
+  name += rtems_filesystem_prefix_separators( name, strlen( name ) );
+  
+  result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
+                                                    0, &loc, false );
+  if ( result != 0 ) {
+    rtems_filesystem_freenode( &parentloc );
     return -1;
   }
 
@@ -51,11 +73,13 @@ int rmdir(
 
   if ( !loc.ops->node_type_h ){
     rtems_filesystem_freenode( &loc );
+    rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
     rtems_filesystem_freenode( &loc );
+    rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
 
@@ -65,12 +89,14 @@ int rmdir(
 
   if ( !loc.handlers->rmnod_h ){
     rtems_filesystem_freenode( &loc );
+    rtems_filesystem_freenode( &parentloc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result =  (*loc.handlers->rmnod_h)( &loc );
+  result =  (*loc.handlers->rmnod_h)( &parentloc, &loc );
 
   rtems_filesystem_freenode( &loc );
+  rtems_filesystem_freenode( &parentloc );
 
   return result;
 }

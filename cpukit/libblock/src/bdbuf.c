@@ -1936,7 +1936,7 @@ rtems_bdbuf_swapout_modified_processing (rtems_bdpool_id      pid,
  * a device at a time. The task level loop will repeat this operation while
  * there are buffers to be written. If the transfer fails place the buffers
  * back on the modified list and try again later. The pool is unlocked while
- * the buffers are beign written to disk.
+ * the buffers are being written to disk.
  *
  * @param pid The pool id to process modified buffers on.
  * @param timer_delta It update_timers is true update the timers by this
@@ -1965,14 +1965,14 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
 
   /*
    * When the sync is for a device limit the sync to that device. If the sync
-   * is for a buffer handle the devices in the order on the sync list. This
-   * means the dev is -1.
+   * is for a buffer handle process the devices in the order on the sync
+   * list. This means the dev is -1.
    */
   if (pool->sync_active)
     dev = pool->sync_device;
 
   /*
-   * If we have any buffers in the sync queue move then to the modified
+   * If we have any buffers in the sync queue move them to the modified
    * list. The first sync buffer will select the device we use.
    */
   rtems_bdbuf_swapout_modified_processing (pid, &dev,
@@ -1990,22 +1990,22 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
                                            timer_delta);
 
   /*
-   * We have all the buffers that have been modified for this device so
-   * the pool can be unlocked because the state is set to TRANSFER.
+   * We have all the buffers that have been modified for this device so the
+   * pool can be unlocked because the state of each buffer has been set to
+   * TRANSFER.
    */
-
   rtems_bdbuf_unlock_pool (pool);
 
   /*
-   * If there are buffers to transfer to the media tranfer them.
+   * If there are buffers to transfer to the media transfer them.
    */
   if (rtems_chain_is_empty (&transfer))
     transfered_buffers = false;
   else
   {
     /*
-     * Obtain the disk device. Release the pool mutex to avoid a dead
-     * lock.
+     * Obtain the disk device. The pool's mutex has been released to avoid a
+     * dead lock.
      */
     dd = rtems_disk_obtain (dev);
     if (dd == NULL)
@@ -2020,14 +2020,13 @@ rtems_bdbuf_swapout_pool_processing (rtems_bdpool_id       pid,
       
       /*
        * Take as many buffers as configured and pass to the driver. Note, the
-       * API to the drivers has the array of buffers and if a chain was passed
+       * API to the drivers has an array of buffers and if a chain was passed
        * we could have just passed the list. If the driver API is updated it
        * should be possible to make this change with little effect in this
        * code. The array that is passed is broken in design and should be
-       * removed. Merging to members of a struct into the first member is
+       * removed. Merging members of a struct into the first member is
        * trouble waiting to happen.
        */
-
       write_req->status = RTEMS_RESOURCE_IN_USE;
       write_req->error = 0;
       write_req->bufnum = 0;

@@ -28,6 +28,30 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
+static rtems_chain_control filesystems;
+static bool                fs_init;
+
+static void rtems_shell_mount_fsys_init()
+{
+  if (!fs_init)
+  {
+    rtems_chain_initialize_empty (&filesystems);
+    fs_init = true;
+  }
+}
+
+void rtems_shell_mount_add_fsys(rtems_shell_filesystems_t* fs)
+{
+  rtems_shell_mount_fsys_init();
+  rtems_chain_append (&filesystems, &fs->link);
+}
+
+void rtems_shell_mount_del_fsys(rtems_shell_filesystems_t* fs)
+{
+  if (fs_init)
+    rtems_chain_extract (&fs->link);
+}
+
 int rtems_shell_libc_mounter(
   const char*                driver,
   const char*                path,
@@ -60,12 +84,14 @@ int rtems_shell_main_mount(
   char*                      driver = NULL;
   char*                      mount_point = NULL;
   int                        arg;
+
+  rtems_shell_mount_fsys_init();
   
   for (arg = 1; arg < argc; arg++) {
     if (argv[arg][0] == '-') {
       if (argv[arg][1] == 't') {
         rtems_shell_filesystems_t** a;
-        
+
         arg++;
         if (arg == argc) {
           fprintf(
@@ -80,6 +106,18 @@ int rtems_shell_main_mount(
           if (strcmp (argv[arg], (*a)->name) == 0) {
             fs = *a;
             break;
+          }
+        }
+
+        if (!fs && !rtems_chain_is_empty(&filesystems)) {
+          rtems_chain_node* node = filesystems.first;
+          while (!rtems_chain_is_tail (&filesystems, node)) {
+            rtems_shell_filesystems_t* f = (rtems_shell_filesystems_t*)node;
+            if (strcmp (argv[arg], f->name) == 0) {
+              fs = f;
+              break;
+            }
+            node = node->next;
           }
         }
       } else if (argv[arg][1] == 'r') {

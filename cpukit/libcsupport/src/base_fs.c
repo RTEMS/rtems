@@ -89,10 +89,10 @@ void rtems_filesystem_initialize( void )
    */
   rtems_filesystem_root        = entry->mt_fs_root;
   /* Clone the root pathloc */
-  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
   rtems_filesystem_root        = loc;
   /* One more clone for the current node */
-  rtems_filesystem_evaluate_path("/", 0, &loc, 0);
+  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
   rtems_filesystem_current     = loc;
 
   /* Note: the global_env's refcnt doesn't matter

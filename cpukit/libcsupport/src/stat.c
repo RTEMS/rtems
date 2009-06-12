@@ -59,7 +59,8 @@ int _STAT_NAME(
   if ( !buf )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  status = rtems_filesystem_evaluate_path( path, 0, &loc, _STAT_FOLLOW_LINKS );
+  status = rtems_filesystem_evaluate_path( path, strlen( path ),
+                                           0, &loc, _STAT_FOLLOW_LINKS );
   if ( status != 0 )
     return -1;
 

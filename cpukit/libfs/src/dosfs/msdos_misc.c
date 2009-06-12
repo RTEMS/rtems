@@ -227,7 +227,10 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
  *
  */
 msdos_token_types_t
-msdos_get_token(const char *path, const char **ret_token, int *ret_token_len)
+msdos_get_token(const char  *path,
+                int          pathlen,
+                const char **ret_token,
+                int         *ret_token_len)
 {
     msdos_token_types_t type = MSDOS_NAME;
     int                 i = 0;
@@ -238,7 +241,7 @@ msdos_get_token(const char *path, const char **ret_token, int *ret_token_len)
     /*
      *  Check for a separator.
      */
-    while (!msdos_is_separator(path[i]))
+    while (!msdos_is_separator(path[i]) && (i < pathlen))
     {
         if ( !msdos_is_valid_name_char(path[i]) )
             return MSDOS_INVALID_TOKEN;
@@ -254,7 +257,7 @@ msdos_get_token(const char *path, const char **ret_token, int *ret_token_len)
      */
     if ( i == 0 )
     {
-        if ( *path != '\0' )
+      if ( (*path != '\0') && pathlen )
         {
             i++;
             type = MSDOS_CURRENT_DIR;

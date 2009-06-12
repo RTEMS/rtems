@@ -277,6 +277,7 @@ extern int rtems_tarfs_load(
  */
 extern IMFS_token_types IMFS_get_token(
   const char       *path,
+  int               pathlen,
   char             *token,
   int              *token_len
 );
@@ -316,6 +317,7 @@ extern int IMFS_evaluate_link(
 
 extern int IMFS_eval_path(
   const char                        *pathname,     /* IN     */
+  int                               pathnamelen,   /* IN     */
   int                               flags,         /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 );
@@ -328,7 +330,8 @@ extern int IMFS_link(
 );
 
 extern int IMFS_unlink(
-  rtems_filesystem_location_info_t  *pathloc       /* IN */
+  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
 extern int IMFS_chown(
@@ -412,7 +415,8 @@ extern int imfs_dir_fstat(
 );
 
 extern int imfs_dir_rmnod(
-  rtems_filesystem_location_info_t      *pathloc       /* IN */
+  rtems_filesystem_location_info_t *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t *pathloc         /* IN */
 );
 
 extern int memfile_open(
@@ -451,7 +455,8 @@ extern rtems_off64_t memfile_lseek(
 );
 
 extern int memfile_rmnod(
-  rtems_filesystem_location_info_t      *pathloc       /* IN */
+  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
 extern int device_open(
@@ -527,7 +532,8 @@ extern int IMFS_fcntl(
 );
 
 extern int IMFS_rmnod(
-  rtems_filesystem_location_info_t      *pathloc       /* IN */
+  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
+  rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
 
 #ifdef __cplusplus
