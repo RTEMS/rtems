@@ -86,7 +86,12 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/verrx.c shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \
     shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c \
     shell/shell_script.c shell/login_prompt.c shell/login_check.c \
-    shell/fdisk.c shell/main_rtc.c
+    shell/fdisk.c shell/main_rtc.c \
+    shell/dd-args.c shell/main_dd.c shell/dd-conv.c shell/dd-conv_tab.c shell/dd-misc.c \
+    shell/dd-position.c \
+    shell/main_hexdump.c shell/hexdump-conv.c shell/hexdump-display.c \
+    shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c
+
 if LIBNETWORKING
 libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_tftp.c \
     shell/main_ifconfig.c shell/main_route.c shell/main_netstats.c \

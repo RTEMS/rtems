@@ -54,6 +54,8 @@ extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
 extern rtems_shell_cmd_t rtems_shell_FDISK_Command;
+extern rtems_shell_cmd_t rtems_shell_DD_Command;
+extern rtems_shell_cmd_t rtems_shell_HEXDUMP_Command;
 
 extern rtems_shell_cmd_t rtems_shell_RTC_Command;
 
@@ -306,6 +308,16 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_FDISK)) || \
         defined(CONFIGURE_SHELL_COMMAND_FDISK)
       &rtems_shell_FDISK_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_DD)) || \
+        defined(CONFIGURE_SHELL_COMMAND_DD)
+      &rtems_shell_DD_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_HEXDUMP)) || \
+        defined(CONFIGURE_SHELL_COMMAND_HEXDUMP)
+      &rtems_shell_HEXDUMP_Command,
     #endif
 
     /*

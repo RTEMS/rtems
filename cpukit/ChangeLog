@@ -1,5 +1,18 @@
 2009-06-12	Chris Johns <chrisj@rtems.org>
 
+	* libmisc/shell/dd-args.c, libmisc/shell/dd-conv.c,
+	libmisc/shell/dd-conv_tab.c, libmisc/shell/dd-misc.c,
+	libmisc/shell/dd-position.c, libmisc/shell/dd.h,
+	libmisc/shell/extern-dd.h, libmisc/shell/hexdump-conv.c,
+	libmisc/shell/hexdump-display.c, libmisc/shell/hexdump-odsyntax.c,
+	libmisc/shell/hexdump-parse.c, libmisc/shell/hexdump.h,
+	libmisc/shell/hexsyntax.c, libmisc/shell/main_dd.c,
+	libmisc/shell/main_hexdump.c: New.  
+	* libmisc/Makefile.am, libmisc/shell/shellconfig.h: Add dd and
+	hexdump commands.
+
+2009-06-12	Chris Johns <chrisj@rtems.org>
+
 	* libblock/include/rtems/flashdisk.h,
 	libblock/include/rtems/nvdisk.h, libblock/src/flashdisk.c,
 	libblock/src/nvdisk.c: Change names to match the RAM disk change. 
