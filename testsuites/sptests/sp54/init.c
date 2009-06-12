@@ -69,7 +69,6 @@ rtems_initialization_tasks_table Initialization_tasks[1] =
 #define CONFIGURE_INIT_TASK_TABLE_SIZE 0
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
 
-
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 

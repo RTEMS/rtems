@@ -1,5 +1,9 @@
 2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp54/init.c: Fix spacing.
+
+2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp02/sp02.doc, sp02/system.h: Update copyright year.
 
 2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
