@@ -1,3 +1,7 @@
+2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp02/sp02.doc, sp02/system.h: Add test case for configuring the IDLE
+
 2009-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add new test.

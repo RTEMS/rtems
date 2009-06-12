@@ -45,6 +45,12 @@ rtems_task Task_3(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS             4
 
+/*
+ *  Deliberately configure the IDLE Task's stack as greater than minimum
+ *  so it will have to be increased.
+ */
+#define CONFIGURE_IDLE_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+
 #include <rtems/confdefs.h>
 
 /* global variables */

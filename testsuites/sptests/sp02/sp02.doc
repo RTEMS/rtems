@@ -34,3 +34,6 @@ concepts:
   f.  Verifies the break statement in the _Block_activate routine.
 
   g.  Verifies the while loop in the _Prev_tcb routine.
+
+  h.  Verify behavior when the IDLE task's stack is configured for
+      less than the minimum stack size.
