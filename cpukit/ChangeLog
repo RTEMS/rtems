@@ -1,3 +1,11 @@
+2009-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/include/rtems/rtems/region.h,
+	rtems/src/rtemsobjectgetclassinfo.c, score/src/heapwalk.c,
+	score/src/objectgetnameasstring.c, score/src/objectsetname.c,
+	score/src/timespecdivide.c, score/src/ts64divide.c: Remove include of
+	stdio.h
+
 2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,

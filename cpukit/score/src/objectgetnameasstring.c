@@ -17,10 +17,8 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
-
 
 /*
  *  This method objects the name of an object and returns its name

@@ -14,7 +14,7 @@
  *     - return a segment to a region
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,8 +26,6 @@
 
 #ifndef _RTEMS_RTEMS_REGION_H
 #define _RTEMS_RTEMS_REGION_H
-
-#include <stddef.h>
 
 #include <rtems/score/object.h>
 #include <rtems/score/threadq.h>

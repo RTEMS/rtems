@@ -18,7 +18,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
 #include <string.h>

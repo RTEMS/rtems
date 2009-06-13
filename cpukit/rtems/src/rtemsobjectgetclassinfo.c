@@ -15,9 +15,6 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-#include <string.h>
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/score/object.h>

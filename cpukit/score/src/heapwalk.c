@@ -38,8 +38,6 @@
  *  Output parameters: NONE
  */
 
-#include <stdio.h>
-
 bool _Heap_Walk(
   Heap_Control  *the_heap,
   int            source,
