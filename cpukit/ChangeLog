@@ -1,5 +1,10 @@
 2009-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/heapwalk.c: Remove include of stdlib.h since abort was not
+	called anymore.
+
+2009-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* rtems/include/rtems/rtems/region.h,
 	rtems/src/rtemsobjectgetclassinfo.c, score/src/heapwalk.c,
 	score/src/objectgetnameasstring.c, score/src/objectsetname.c,

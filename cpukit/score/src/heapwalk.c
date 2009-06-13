@@ -15,8 +15,6 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h> /* abort */
-
 #include <rtems/system.h>
 #include <rtems/score/address.h>
 #include <rtems/score/sysstate.h>
@@ -180,7 +178,7 @@ bool _Heap_Walk(
     error = 1;
   }
 
-  if(do_dump && error)
+  if (do_dump && error)
     _Internal_error_Occurred( INTERNAL_ERROR_CORE, true, 0xffff0000 );
 
   return error;
