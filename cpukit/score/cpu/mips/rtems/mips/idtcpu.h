@@ -181,7 +181,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /* Disabled by chris -- horrible overload of common word.
 #ifndef WAIT
 #define WAIT .word 0x42000020
-#endif /* WAIT */
+#endif
 */
 /* Disabled by joel -- horrible overload of common word.
 #ifndef wait 
