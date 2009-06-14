@@ -178,10 +178,11 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define Hit_Set_Virtual_SI               0x1E        /* 7       2 */
 #define Hit_Set_Virtual_SD               0x1F        /* 7       3 */
 
+/* Disabled by chris -- horrible overload of common word.
 #ifndef WAIT
 #define WAIT .word 0x42000020
 #endif /* WAIT */
-
+*/
 /* Disabled by joel -- horrible overload of common word.
 #ifndef wait 
 #define wait .word 0x42000020

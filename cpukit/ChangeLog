@@ -1,3 +1,8 @@
+2009-06-15	Chris Johns <chrisj@rtems.org>
+
+	* score/cpu/mips/rtems/mips/idtcpu.h: Remote WAIT define. Horrible
+	overload.
+	
 2009-06-13	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/heapwalk.c: Remove include of stdlib.h since abort was not
