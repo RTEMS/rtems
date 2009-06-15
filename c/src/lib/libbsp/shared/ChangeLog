@@ -1,3 +1,9 @@
+2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* umon/monlib.h: Add umon.h to be installed as <rtems/umon.h> so umon
+	.h files are modified as little as possible.
+	* umon/umon.h: New file.
+
 2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* umon/README, umon/cli.h, umon/monlib.c, umon/monlib.h, umon/tfs.h,

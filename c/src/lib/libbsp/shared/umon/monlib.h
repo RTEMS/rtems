@@ -28,30 +28,6 @@
 extern "C" {
 #endif
 
-/*
- *  The following additions are RTEMS specific.
- */
-#if defined(__rtems__)
-  /*
-   * RTEMS uMonitor wrapper for monConnect().  This will deal with the
-   * getting MONCOMPTR as well as providing the locking routines.
-   */
-  void rtems_umon_connect(void);
-
-  /*
-   * BSP specific routine to help when calling monConnect().  This
-   * returns the value known to uMon as MONCOMPTR.
-   */
-  void *rtems_bsp_get_umon_monptr(void);
-
-  /*
-   * Initialize the TFS-RTEMS file system
-   */
-  int rtems_initialize_tfs_filesystem(
-    const char *path
-  );
-#endif
-
 extern int monConnect(int (*monptr)(int,void *,void *,void *),
 		void (*lock)(void),void (*unlock)(void));
 extern void mon_getargv(int *argc,char ***argv);
