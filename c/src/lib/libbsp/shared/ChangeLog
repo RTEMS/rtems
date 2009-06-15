@@ -1,5 +1,10 @@
 2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* umon/umonrtemsglue.c: Add flag to ensure that it umon connection is
+	initialized twice, it is safe.
+
+2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* umon/monlib.h: Add umon.h to be installed as <rtems/umon.h> so umon
 	.h files are modified as little as possible.
 	* umon/umon.h: New file.

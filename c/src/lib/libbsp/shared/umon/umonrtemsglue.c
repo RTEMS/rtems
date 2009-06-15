@@ -13,9 +13,16 @@
 
 /* XXX eventually add lock/unlock methods */
 
+static int rtems_umon_connected = 0;
+
 void rtems_umon_connect(void)
 {
   void *moncomptr;
+
+  if ( rtems_umon_connected )
+    return;
+
+  rtems_umon_connected = 1;
 
   moncomptr = rtems_bsp_get_umon_monptr();
   monConnect(
