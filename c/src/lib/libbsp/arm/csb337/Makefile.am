@@ -19,6 +19,8 @@ include_umon_HEADERS  = ../../shared/umon/cli.h
 include_umon_HEADERS += ../../shared/umon/monlib.h
 include_umon_HEADERS += ../../shared/umon/tfs.h
 
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS  = ../../shared/umon/umon.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h

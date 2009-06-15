@@ -1,5 +1,10 @@
 2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, preinstall.am: Make an RTEMS specific umon.h wrapper
+	include file.
+
+2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am: Re-add basic console code.
 
 2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>

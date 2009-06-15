@@ -66,6 +66,15 @@ $(PROJECT_INCLUDE)/umon/tfs.h: ../../shared/umon/tfs.h $(PROJECT_INCLUDE)/umon/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/umon/tfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/umon/tfs.h
 
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/umon.h: ../../shared/umon/umon.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/umon.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/umon.h
+
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
