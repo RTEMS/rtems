@@ -1,3 +1,7 @@
+2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/killinfo.c: Make easier to map coverage data.
+
 2009-06-15	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/hexdump-odsyntax.c: AVR has the same size float

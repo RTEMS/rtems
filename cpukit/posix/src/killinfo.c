@@ -1,7 +1,7 @@
 /*
  *  kill() support routine
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -140,10 +140,18 @@ int killinfo(
       the_thread = (Thread_Control *)the_node;
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ((the_thread->Wait.option & mask) || (~api->signals_blocked & mask)) {
+      /*
+       * Is this thread is actually blocked waiting for the signal?
+       */
+      if (the_thread->Wait.option & mask)
         goto process_it;
-      }
 
+      /*
+       * Is this thread is blocked waiting for another signal but has
+       * not blocked this one?
+       */
+      if (~api->signals_blocked & mask)
+        goto process_it;
     }
   }
 
@@ -179,7 +187,7 @@ int killinfo(
     the_info = _Objects_Information_table[ the_api ][ 1 ];
 
     /*
-     *  This cannot happen in the current (as of Dec 2007) implementation
+     *  This cannot happen in the current (as of June 2009) implementation
      *  of initialization but at some point, the object information
      *  structure for a particular manager may not be installed.
      */
@@ -209,7 +217,10 @@ int killinfo(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( !api || !_POSIX_signals_Is_interested( api, mask ) )
+      if ( !api )
+        continue;
+
+      if ( !_POSIX_signals_Is_interested( api, mask ) )
         continue;
 
       /*
