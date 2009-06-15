@@ -1,5 +1,12 @@
 2009-06-15	Chris Johns <chrisj@rtems.org>
 
+	* libmisc/shell/hexdump-odsyntax.c: AVR has the same size float
+	and double. Fix error in case statement.
+	* libmisc/shell/main_dd.c: Remove sys/conf.h header. It is not
+	available if networking is disabled.
+
+2009-06-15	Chris Johns <chrisj@rtems.org>
+
 	* score/cpu/mips/rtems/mips/idtcpu.h: Remote WAIT define. Horrible
 	overload.
 	

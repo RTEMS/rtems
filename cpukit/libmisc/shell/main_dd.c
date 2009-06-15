@@ -51,8 +51,8 @@ __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 
 #include <sys/param.h>
 #include <sys/stat.h>
-#include <sys/conf.h>
 #if RTEMS_REMOVED
+#include <sys/conf.h>
 #include <sys/disklabel.h>
 #endif
 #include <sys/filio.h>
