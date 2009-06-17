@@ -1,3 +1,8 @@
+2009-06-18	Chris Johns <chrisj@rtems.org>
+
+	* telnetd/des.c: Split the des_f struct into smaller parts so
+	targets that cannot address large structs can be supported.
+	
 2009-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/src/objectshrinkinformation.c: Fix spelling error.
