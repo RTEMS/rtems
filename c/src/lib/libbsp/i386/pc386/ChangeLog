@@ -1,3 +1,7 @@
+2009-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/ps2_mouse.c: Fix inconsistent spacing.
+
 2009-06-12	Chris Johns <chrisj@rtems.org>	
 
 	* ide/ide.c: Format the data output in DEBUG mode.

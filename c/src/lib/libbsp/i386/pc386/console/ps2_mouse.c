@@ -438,26 +438,24 @@ static int release_aux(void)
 
 static int open_aux(void)
 {
-  rtems_status_code status;
+  int status;
 
-	if (aux_count++) {
-		return 0;
-	}
-	queue->head = queue->tail = 0;		/* Flush input queue */
+  if (aux_count++) {
+    return 0;
+  }
+  queue->head = queue->tail = 0;		/* Flush input queue */
 
-   status = BSP_install_rtems_irq_handler( &ps2_isr_data );
-   if( !status )
-	{
-	  printk("Error installing ps2-mouse interrupt handler!\n" );
-	  rtems_fatal_error_occurred( status );
-	}
+  status = BSP_install_rtems_irq_handler( &ps2_isr_data );
+  if( !status ) {
+    printk("Error installing ps2-mouse interrupt handler!\n" );
+    rtems_fatal_error_occurred( status );
+  }
 
-	kbd_write_command_w(KBD_CCMD_MOUSE_ENABLE);	/* Enable the
-							   auxiliary port on
-							   controller. */
-	aux_write_ack(AUX_ENABLE_DEV); /* Enable aux device */
-	kbd_write_cmd(AUX_INTS_ON); /* Enable controller ints */
-	return 0;
+  kbd_write_command_w(KBD_CCMD_MOUSE_ENABLE); /* Enable the auxiliary port on
+                                                 controller. */
+  aux_write_ack(AUX_ENABLE_DEV); /* Enable aux device */
+  kbd_write_cmd(AUX_INTS_ON); /* Enable controller ints */
+  return 0;
 }
 
 /*
