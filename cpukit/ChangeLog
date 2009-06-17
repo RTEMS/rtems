@@ -1,3 +1,7 @@
+2009-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/objectshrinkinformation.c: Fix spelling error.
+
 2009-06-18	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/shell/hexdump-odsyntax.c: H8300 has the same size float

@@ -55,7 +55,7 @@ void _Objects_Shrink_information(
   uint32_t          index;
 
   /*
-   * Search the list to find block or chunnk with all objects inactive.
+   * Search the list to find block or chunk with all objects inactive.
    */
 
   index_base = _Objects_Get_index( information->minimum_id );
