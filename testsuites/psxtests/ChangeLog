@@ -1,3 +1,8 @@
+2009-06-18	Chris Johns <chrisj@rtems.org>
+
+	* psx04/task3.c: Declare unions volatile to workaround the H8300
+	gcc bug.
+
 2009-06-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add mq_send to full queue from ISR case.
