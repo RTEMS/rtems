@@ -21,6 +21,7 @@
  */
 extern rtems_shell_cmd_t rtems_shell_HELP_Command;
 extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
+extern rtems_shell_cmd_t rtems_shell_TIME_Command;
 extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
 
 extern rtems_shell_cmd_t rtems_shell_MDUMP_Command;
@@ -147,6 +148,7 @@ extern rtems_shell_filesystems_t *rtems_shell_Mount_filesystems[];
      */
     &rtems_shell_HELP_Command,
     &rtems_shell_ALIAS_Command,
+    &rtems_shell_TIME_Command,
 
     /*
      *  Common commands that can be optional

@@ -1,3 +1,11 @@
+2009-06-17	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/shell/extern-dd.h: Delcare the conv arrays extern to
+	stop PPC link errors.
+	* libmisc/shell/main_time.c, libmisc/Makefile.am,
+	libmisc/shell/shellconfig.h: Add a time command.
+	
+	* libmisc/shell/shellconfig.h, 
 2009-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/rtems/bspIo.h, libcsupport/Makefile.am: Add putk().

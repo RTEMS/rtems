@@ -90,7 +90,8 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/dd-args.c shell/main_dd.c shell/dd-conv.c shell/dd-conv_tab.c shell/dd-misc.c \
     shell/dd-position.c \
     shell/main_hexdump.c shell/hexdump-conv.c shell/hexdump-display.c \
-    shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c
+    shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c \
+    shell/main_time.c
 
 if LIBNETWORKING
 libshell_a_SOURCES += shell/main_mount_ftp.c shell/main_mount_tftp.c \

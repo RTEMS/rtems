@@ -95,9 +95,9 @@ void terminate(int);
 void unblock(rtems_shell_dd_globals* globals);
 void unblock_close(rtems_shell_dd_globals* globals);
 
-const u_char a2e_32V[256], a2e_POSIX[256];
-const u_char e2a_32V[256], e2a_POSIX[256];
-const u_char a2ibm_32V[256], a2ibm_POSIX[256];
+extern const u_char a2e_32V[256], a2e_POSIX[256];
+extern const u_char e2a_32V[256], e2a_POSIX[256];
+extern const u_char a2ibm_32V[256], a2ibm_POSIX[256];
 
 void rtems_shell_dd_exit(rtems_shell_dd_globals* globals, int code);
 
