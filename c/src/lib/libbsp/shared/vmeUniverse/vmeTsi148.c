@@ -54,7 +54,7 @@
 #include <stdlib.h>
 #include <rtems/bspIo.h>	/* printk */
 #include <rtems/error.h>	/* printk */
-#include <bsp/pci.h>
+#include <rtems/pci.h>
 #include <bsp.h>
 #include <libcpu/byteorder.h>
 

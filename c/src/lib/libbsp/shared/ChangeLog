@@ -1,3 +1,8 @@
+2009-06-17	Till Straumann <strauman@slac.stanford.edu>
+
+	* vmeUniverse/vmeUniverse.c, vmeUniverse/vmeTsi148.c:
+	include <rtems/pci.h> instead of <bsp/pci.h>.
+
 2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* umon/umonrtemsglue.c: Add flag to ensure that it umon connection is
