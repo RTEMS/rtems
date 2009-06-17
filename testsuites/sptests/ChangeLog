@@ -1,3 +1,8 @@
+2009-06-18	Chris Johns <chrisj@rtems.org>
+
+	* sp35/priinv.c, sp35/priinv.c: Declare unions volatile to
+	workaround the H8300 gcc bug.
+
 2009-06-12	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp54/init.c: Fix spacing.

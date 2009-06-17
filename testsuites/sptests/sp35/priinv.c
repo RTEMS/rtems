@@ -83,7 +83,7 @@ const char *CallerName(void)
   sprintf( buffer, "0x%08x -- %d",
       rtems_task_self(), _Thread_Executing->current_priority );
 #else
-  union {
+  volatile union {
     uint32_t u;
     unsigned char c[4];
   } TempName;

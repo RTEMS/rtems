@@ -41,17 +41,17 @@ const char *CallerName(void)
   sprintf( buffer, "0x%08x -- %d",
       rtems_task_self(), _Thread_Executing->current_priority );
 #else
-  union {
+  volatile union {
     uint32_t u;
     unsigned char c[4];
   } TempName;
-
+  
   #if defined(TEST_ON_RTEMS_45)
     TempName.u = *(uint32_t *)_Thread_Executing->Object.name;
   #else
     TempName.u = _Thread_Executing->Object.name.name_u32;
   #endif
-  sprintf( buffer, "%c%c%c%c -- %d",
+    sprintf( buffer, "%c%c%c%c -- %d",
       TempName.c[0], TempName.c[1], TempName.c[2], TempName.c[3],
       _Thread_Executing->current_priority
   );
