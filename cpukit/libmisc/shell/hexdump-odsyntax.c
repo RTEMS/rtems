@@ -353,7 +353,7 @@ odformatfp(rtems_shell_hexdump_globals* globals, char fchar __unused, const char
 	case sizeof(float):
 		digits = FLT_DIG;
 		break;
-#if !defined(__AVR__)
+#if !defined(__AVR__) && !defined(__H8300__)
 	case sizeof(double):
 		digits = DBL_DIG;
 		break;

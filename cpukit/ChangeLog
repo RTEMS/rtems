@@ -1,5 +1,10 @@
 2009-06-18	Chris Johns <chrisj@rtems.org>
 
+	* libmisc/shell/hexdump-odsyntax.c: H8300 has the same size float
+	and double. Fix error in case statement.
+	
+2009-06-18	Chris Johns <chrisj@rtems.org>
+
 	* score/cpu/mips/rtems/mips/idtcpu.h: Missed another WAIT
 	define. Removed.
 
