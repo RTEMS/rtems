@@ -1,3 +1,9 @@
+2009-06-18	Fernando Nicodemos <fgnicodemos@terra.com.br>
+
+	* Makefile.am, configure.ac, console/uarts.c: Add console device that
+	uses MicroMonitor to do actual input and output. This driver should
+	work on any board that uses MicroMonitor.
+
 2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* startup/linkcmds, startup/linkcmds.csb637: Move .init section from

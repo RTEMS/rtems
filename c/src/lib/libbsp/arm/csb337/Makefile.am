@@ -61,7 +61,7 @@ libbsp_a_SOURCES += ../shared/abort/abort.c
 # umon
 libbsp_a_SOURCES += ../../shared/umon/umonrtemsglue.c  \
     ../../shared/umon/monlib.c ../../shared/umon/tfsDriver.c \
-    startup/umonsupp.c
+    ../../shared/umon/umoncons.c startup/umonsupp.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
