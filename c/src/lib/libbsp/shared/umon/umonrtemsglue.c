@@ -9,7 +9,7 @@
  *  $Id$
  */
 
-#include <umon/monlib.h>
+#include <rtems/umon.h>
 
 /* XXX eventually add lock/unlock methods */
 
