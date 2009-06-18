@@ -1,3 +1,9 @@
+2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psxstat/psxstat.scn, psxstat/test.c: Disable test for error on wrong
+	mode bits being set. This behavior was not POSIX compliant and has
+	been corrected in the filesystem code.
+
 2009-06-18	Chris Johns <chrisj@rtems.org>
 
 	* psx04/task3.c: Declare unions volatile to workaround the H8300

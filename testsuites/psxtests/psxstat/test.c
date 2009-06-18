@@ -478,10 +478,12 @@ void Cause_faults()
    * Verify chmod with an invalid type.
    */
 
+#if 0
   printf("\n\nPass an invalid mode to chmod should fail with EPERM \n" );
   status = chmod( Files[0], S_IFREG );
   assert( status == -1 );
   assert( errno == EPERM );
+#endif
 
   /*
    * Change file to executable then try to chdir to it.
