@@ -71,11 +71,6 @@ SECTIONS
 
     } > sram
 
-    .init          : 
-    { 
-        KEEP (*(.init))
-    } > sdram   /*=0*/
-
     .text      :
     {
 	_text_start = .;
@@ -114,6 +109,11 @@ SECTIONS
 	_etext = .;
 	PROVIDE (etext = .);
     } > sdram  
+
+    .init          : 
+    { 
+        KEEP (*(.init))
+    } > sdram   /*=0*/
 
     .fini      :
     {

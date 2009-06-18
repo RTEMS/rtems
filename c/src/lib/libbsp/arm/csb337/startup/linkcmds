@@ -2,7 +2,7 @@
  * Cogent CSB337 Linker script
  *
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -58,7 +58,7 @@ SECTIONS
 
 	/* 256 byte aligned rx buffer header array */
 	. = ALIGN (0x100);
-	at91rm9200_emac_rxbuf_hdrs = .;	
+	at91rm9200_emac_rxbuf_hdrs = .;
 
 	/* 1 transmit buffer, 0x600 size */
 	. += (0x100);
@@ -70,11 +70,6 @@ SECTIONS
 	. += (0x600 * 8);
 
     } > sram
-
-    .init          : 
-    { 
-        KEEP (*(.init))
-    } > sdram   /*=0*/
 
     .text      :
     {
@@ -99,7 +94,7 @@ SECTIONS
 	*(.glue_7)
 	*(.glue_7t)
 
-	/* I think these come from the ld docs: */	
+	/* I think these come from the ld docs: */
 	___CTOR_LIST__ = .;
 	LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
 	*(.ctors)
@@ -114,6 +109,11 @@ SECTIONS
 	_etext = .;
 	PROVIDE (etext = .);
     } > sdram  
+
+    .init          : 
+    { 
+        KEEP (*(.init))
+    } > sdram   /*=0*/
 
     .fini      :
     {

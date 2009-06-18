@@ -1,3 +1,9 @@
+2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.csb637: Move .init section from
+	the front of the executable so the start label has the first
+	instruction in the executable.
+
 2009-06-15	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Make an RTEMS specific umon.h wrapper
