@@ -1,3 +1,8 @@
+2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/src/regionextend.c: Restructure to eliminate dead code being
+	generated.
+
 2009-06-18	Chris Johns <chrisj@rtems.org>
 
 	* telnetd/des.c: Split the des_f struct into smaller parts so

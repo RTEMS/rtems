@@ -1,8 +1,7 @@
 /*
- *  Region Manager
+ *  Region Manager - Extend (add memory to) a Region
  *
- *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,7 +51,7 @@ rtems_status_code rtems_region_extend(
   intptr_t            amount_extended;
   Heap_Extend_status  heap_status;
   Objects_Locations   location;
-  rtems_status_code   return_status = RTEMS_INTERNAL_ERROR;
+  rtems_status_code   return_status;
   Region_Control     *the_region;
 
   if ( !starting_address )
@@ -72,18 +71,14 @@ rtems_status_code rtems_region_extend(
           &amount_extended
         );
 
-        switch ( heap_status ) {
-          case HEAP_EXTEND_SUCCESSFUL:
-            the_region->length                += amount_extended;
-            the_region->maximum_segment_size  += amount_extended;
-            return_status = RTEMS_SUCCESSFUL;
-            break;
-          case HEAP_EXTEND_ERROR:
-            return_status = RTEMS_INVALID_ADDRESS;
-            break;
-          case HEAP_EXTEND_NOT_IMPLEMENTED:
-            return_status = RTEMS_NOT_IMPLEMENTED;
-            break;
+        if ( heap_status == HEAP_EXTEND_SUCCESSFUL ) {
+	  the_region->length                += amount_extended;
+	  the_region->maximum_segment_size  += amount_extended;
+	  return_status = RTEMS_SUCCESSFUL;
+        } else if ( heap_status == HEAP_EXTEND_ERROR ) {
+	  return_status = RTEMS_INVALID_ADDRESS;
+        } else if ( heap_status ==  HEAP_EXTEND_NOT_IMPLEMENTED ) {
+          return_status = RTEMS_NOT_IMPLEMENTED;
         }
         break;
 
@@ -93,6 +88,7 @@ rtems_status_code rtems_region_extend(
 #endif
 
       case OBJECTS_ERROR:
+      default:
         return_status = RTEMS_INVALID_ID;
         break;
     }
