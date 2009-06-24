@@ -54,6 +54,7 @@ int pthread_create(
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
   Objects_Name                        name;
+  int                                 rc;
 
   if ( !start_routine )
     return EFAULT;
@@ -73,10 +74,10 @@ int pthread_create(
   if ( the_attr->stackaddr && !_Stack_Is_enough(the_attr->stacksize) )
     return EINVAL;
 
-#if 0
-  int  cputime_clock_allowed;  /* see time.h */
-  rtems_set_errno_and_return_minus_one( ENOSYS );
-#endif
+  #if 0
+    int  cputime_clock_allowed;  /* see time.h */
+    rtems_set_errno_and_return_minus_one( ENOSYS );
+  #endif
 
   /*
    *  P1003.1c/Draft 10, p. 121.
@@ -86,7 +87,6 @@ int pthread_create(
    *  PTHREAD_EXPLICIT_SCHED, then scheduling parameters come from the
    *  attributes structure.
    */
-
   switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
       api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
@@ -107,14 +107,12 @@ int pthread_create(
    *  Check the contentionscope since rtems only supports PROCESS wide
    *  contention (i.e. no system wide contention).
    */
-
   if ( the_attr->contentionscope != PTHREAD_SCOPE_PROCESS )
     return ENOTSUP;
 
   /*
    *  Interpret the scheduling parameters.
    */
-
   if ( !_POSIX_Priority_Is_valid( schedparam.sched_priority ) )
     return EINVAL;
 
@@ -123,51 +121,24 @@ int pthread_create(
   /*
    *  Set the core scheduling policy information.
    */
-
-  budget_callout = NULL;
-  budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-
-  switch ( schedpolicy ) {
-    case SCHED_OTHER:
-      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
-      break;
-
-    case SCHED_FIFO:
-      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-      break;
-
-    case SCHED_RR:
-      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
-      break;
-
-    case SCHED_SPORADIC:
-      budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-      budget_callout = _POSIX_Threads_Sporadic_budget_callout;
-
-      if ( _Timespec_To_ticks( &schedparam.ss_replenish_period ) <
-           _Timespec_To_ticks( &schedparam.ss_initial_budget ) )
-        return EINVAL;
-
-      if ( !_POSIX_Priority_Is_valid( schedparam.ss_low_priority ) )
-        return EINVAL;
-
-      break;
-
-    default:
-      return EINVAL;
-  }
+  rc = _POSIX_Thread_Translate_sched_param(
+    schedpolicy,
+    &schedparam,
+    &budget_algorithm,
+    &budget_callout
+  );
+  if ( rc )
+    return rc;
 
   /*
    *  Currently all POSIX threads are floating point if the hardware
    *  supports it.
    */
-
-
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  is_fp = true;
-#else
-  is_fp = false;
-#endif
+  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+    is_fp = true;
+  #else
+    is_fp = false;
+  #endif
 
   /*
    *  Lock the allocator mutex for protection
@@ -179,9 +150,7 @@ int pthread_create(
    *
    *  NOTE:  Global threads are not currently supported.
    */
-
   the_thread = _POSIX_Threads_Allocate();
-
   if ( !the_thread ) {
     _RTEMS_Unlock_allocator();
     return EAGAIN;
@@ -190,7 +159,6 @@ int pthread_create(
   /*
    *  Initialize the core thread for this task.
    */
-
   name.name_p = NULL;   /* posix threads don't have a name by default */
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
@@ -215,8 +183,6 @@ int pthread_create(
   /*
    *  finish initializing the per API structure
    */
-
-
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   api->Attributes  = *the_attr;
@@ -230,13 +196,11 @@ int pthread_create(
    *
    *  NOTE:  Since the thread starts with all unblocked, this is necessary.
    */
-
   the_thread->do_post_task_switch_extension = true;
 
   /*
    *  POSIX threads are allocated and started in one operation.
    */
-
   status = _Thread_Start(
     the_thread,
     THREAD_START_POINTER,
@@ -244,6 +208,20 @@ int pthread_create(
     arg,
     0                     /* unused */
   );
+
+  #if defined(RTEMS_DEBUG)
+    /*
+     *  _Thread_Start only fails if the thread was in the incorrect state
+     *  
+     *  NOTE: This can only happen if someone slips in and touches the
+     *        thread while we are creating it.
+     */
+    if ( !status ) {
+      _POSIX_Threads_Free( the_thread );
+      _RTEMS_Unlock_allocator();
+      return EINVAL;
+    }
+  #endif
 
   if ( schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Insert_ticks(
@@ -253,22 +231,8 @@ int pthread_create(
   }
 
   /*
-   *  _Thread_Start only fails if the thread was in the incorrect state
-   *  
-   *  NOTE: This can only happen if someone slips in and touches the
-   *        thread while we are creating it.
-   */
-
-  if ( !status ) {
-    _POSIX_Threads_Free( the_thread );
-    _RTEMS_Unlock_allocator();
-    return EINVAL;
-  }
-
-  /*
    *  Return the id and indicate we successfully created the thread
    */
-
   *thread = the_thread->Object.id;
 
   _RTEMS_Unlock_allocator();

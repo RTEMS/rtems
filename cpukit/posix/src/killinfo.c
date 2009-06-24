@@ -186,13 +186,15 @@ int killinfo(
 
     the_info = _Objects_Information_table[ the_api ][ 1 ];
 
-    /*
-     *  This cannot happen in the current (as of June 2009) implementation
-     *  of initialization but at some point, the object information
-     *  structure for a particular manager may not be installed.
-     */
-    if ( !the_info )
-      continue;
+    #if defined(RTEMS_DEBUG)
+      /*
+       *  This cannot happen in the current (as of June 2009) implementation
+       *  of initialization but at some point, the object information
+       *  structure for a particular manager may not be installed.
+       */
+      if ( !the_info )
+	continue;
+    #endif
 
     maximum = the_info->maximum;
     object_table = the_info->local_table;
@@ -217,8 +219,10 @@ int killinfo(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( !api )
-        continue;
+      #if defined(RTEMS_DEBUG)
+        if ( !api )
+          continue;
+      #endif
 
       if ( !_POSIX_signals_Is_interested( api, mask ) )
         continue;

@@ -172,12 +172,17 @@ bool _POSIX_Threads_Create_extension(
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked
    *  by default.
+   *
+   *  The check for class == 1 is debug.  Should never really happen.
    */
 
   /* XXX use signal constants */
   api->signals_pending = 0;
-  if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API &&
-       _Objects_Get_class( created->Object.id ) == 1 ) {
+  if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API
+       #if defined(RTEMS_DEBUG)
+	 && _Objects_Get_class( created->Object.id ) == 1
+       #endif
+  ) {
     executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
     api->signals_blocked = executing_api->signals_blocked;
   } else {

@@ -1,3 +1,18 @@
+2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am, posix/include/rtems/posix/priority.h,
+	posix/include/rtems/posix/pthread.h,
+	posix/inline/rtems/posix/priority.inl, posix/src/killinfo.c,
+	posix/src/pthread.c, posix/src/pthreadcreate.c,
+	posix/src/pthreadsetschedparam.c: Various modifications to improve
+	binary code coverage analysis. Some of these are to mark code as
+	debug only. Some are to break conditional expressions into multiple
+	lines. Some are to move inline methods that are not time critical
+	into subroutines to make them easier to test. Inlining them multiple
+	times means that their logic paths are spread across multiple
+	methods. This explodes the test cases required.
+	* posix/src/psxpriorityisvalid.c, posix/src/psxtransschedparam.c: New files.
+
 2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/regionextend.c: Restructure to eliminate dead code being

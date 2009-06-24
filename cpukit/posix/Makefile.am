@@ -121,7 +121,7 @@ libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \
     src/pthreadattrgetschedpolicy.c src/pthreadattrsetschedpolicy.c \
     src/pthreadattrgetinheritsched.c src/pthreadattrsetinheritsched.c \
     src/pthreadattrgetscope.c src/pthreadattrsetscope.c \
-    src/pthreadinitthreads.c
+    src/pthreadinitthreads.c src/psxtransschedparam.c
 
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
@@ -166,6 +166,9 @@ libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
 
 ## ITIMER_C_FILES
 libposix_a_SOURCES += src/getitimer.c src/setitimer.c
+
+## SUPPORT_C_FILES
+libposix_a_SOURCES += src/psxpriorityisvalid.c
 
 EXTRA_DIST += src/README.mqueue
 
