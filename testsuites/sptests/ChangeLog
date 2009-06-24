@@ -1,5 +1,10 @@
 2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* spfatal10/.cvsignore, spfatal10/Makefile.am, spfatal10/init.c,
+	spfatal10/spfatal10.doc, spfatal10/spfatal10.scn: New files.
+
+2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, spprintk/init.c, spprintk/spprintk.scn:
 	Enhance spprintk. Add two new fatal error tests to cover
 	__assert_func.
