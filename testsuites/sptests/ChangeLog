@@ -1,3 +1,11 @@
+2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, spprintk/init.c, spprintk/spprintk.scn:
+	Enhance spprintk. Add two new fatal error tests to cover
+	__assert_func.
+	* spfatal11/.cvsignore, spfatal11/Makefile.am, spfatal11/init.c,
+	spfatal11/spfatal11.doc, spfatal11/spfatal11.scn: New files.
+
 2009-06-18	Chris Johns <chrisj@rtems.org>
 
 	* sp35/priinv.c, sp35/priinv.c: Declare unions volatile to

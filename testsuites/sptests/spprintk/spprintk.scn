@@ -1,0 +1,31 @@
+sparc-rtems4.10-run is /opt/rtems-4.10/bin/sparc-rtems4.10-run
+
+
+*** TEST PRINTK ***
+This is a test of putk
+
+bad format -- %q in parentheses (q)
+bad format -- %lq in parentheses (q)
+%O octal upper case 16 -- 20
+%o octal lower case of 16 -- 20
+%I of 16 -- 16
+%i of 16 -- 16
+%D of 16 -- 16
+%d of 16 -- 16
+%-3d of 16 --  16
+%U of 16 -- 16
+%u of 16 -- 16
+%X of 16 -- 10
+%x of 16 -- 10
+%p of 0x1234 -- 1234
+%d of -16 -- -16
+%d of -16 -- -16
+%u of -16 -- 4294967280
+%s of Mary Had a Little Lamb -- (Mary Had a Little Lamb)
+%s of NULL -- ()
+%12s of joel -- (                joel)
+%4s of joel -- (joel)
+%-12s of joel -- (joel                )
+%-4s of joel -- (joel)
+%c of X -- (X)
+*** END OF TEST PRINTK ***

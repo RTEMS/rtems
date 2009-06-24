@@ -23,6 +23,8 @@ rtems_task Init(
 
   printk( "\n\n*** TEST PRINTK ***\n" );
 
+  putk( "This is a test of putk\n" );
+
   printk( "bad format -- %%q in parentheses (%q)\n" );
 
   printk( "bad format -- %%lq in parentheses (%lq)\n", 0x1234 );
@@ -56,7 +58,7 @@ rtems_task Init(
   printk( "%%c of X -- (%c)\n", 'X' );
 
 
-  printk( "*** END OF TEST PRINTK ***" );
+  printk( "*** END OF TEST PRINTK ***\n" );
   rtems_test_exit( 0 );
 }
 

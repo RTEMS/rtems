@@ -1,0 +1,5 @@
+*** TEST FATAL 11 ***
+asserting with non-NULL strings...
+
+assertion "forced" failed: file "../../../../../../../rtems/c/src/../../testsuites/sptests/spfatal11/init.c", line 24
+program stopped with signal 2.
