@@ -1,3 +1,11 @@
+2009-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/killinfo.c, posix/src/mutexinit.c, posix/src/psignal.c,
+	posix/src/psignalchecksignal.c, posix/src/pthread.c,
+	posix/src/pthreadexit.c, posix/src/pthreadinitthreads.c: Remove
+	includes of <assert.h> where possible. Make other uses conditional on
+	ifdef RTEMS_DEBUG.
+
 2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/Makefile.am, posix/include/rtems/posix/priority.h,

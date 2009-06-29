@@ -13,7 +13,9 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>

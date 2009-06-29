@@ -13,7 +13,6 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
 #include <errno.h>
 #include <pthread.h>
 
@@ -50,7 +49,6 @@ int pthread_mutex_init(
   else        the_attr = &_POSIX_Mutex_Default_attributes;
 
   /* Check for NULL mutex */
-
   if ( !mutex )
     return EINVAL;
 
@@ -98,18 +96,17 @@ int pthread_mutex_init(
     return EINVAL;
 
   /*
-   *  XXX: Be careful about attributes when global!!!
+   *  We only support process private mutexes.
    */
-
-  assert( the_attr->process_shared == PTHREAD_PROCESS_PRIVATE );
-
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     return ENOSYS;
+
+  if ( the_attr->process_shared != PTHREAD_PROCESS_PRIVATE )
+    return EINVAL;
 
   /*
    *  Determine the discipline of the mutex
    */
-
   switch ( the_attr->protocol ) {
     case PTHREAD_PRIO_NONE:
       the_discipline = CORE_MUTEX_DISCIPLINES_FIFO;
@@ -127,6 +124,9 @@ int pthread_mutex_init(
   if ( !_POSIX_Priority_Is_valid( the_attr->prio_ceiling ) )
     return EINVAL;
 
+  /*
+   *  Enter a dispatching critical section and begin to do the real work.
+   */
   _Thread_Disable_dispatch();
 
   the_mutex = _POSIX_Mutex_Allocate();
@@ -152,7 +152,6 @@ int pthread_mutex_init(
   /*
    *  Must be initialized to unlocked.
    */
-
   _CORE_mutex_Initialize(
     &the_mutex->Mutex,
     the_mutex_attr,

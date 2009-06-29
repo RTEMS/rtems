@@ -19,7 +19,6 @@
 
 #include <pthread.h>
 #include <errno.h>
-#include <assert.h>
 
 #include <rtems/system.h>
 #include <rtems/score/apimutex.h>

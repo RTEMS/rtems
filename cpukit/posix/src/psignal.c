@@ -13,7 +13,9 @@
 #include "config.h"
 #endif
 
-#include <assert.h>
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>
@@ -172,9 +174,11 @@ void _POSIX_signals_Manager_Initialization(void)
    *  Ensure we have the same number of vectors and default vector entries
    */
 
-  assert(
-   sizeof(_POSIX_signals_Vectors) == sizeof(_POSIX_signals_Default_vectors)
-  );
+  #if defined(RTEMS_DEBUG)
+    assert(
+     sizeof(_POSIX_signals_Vectors) == sizeof(_POSIX_signals_Default_vectors)
+    );
+  #endif
 
   memcpy(
     _POSIX_signals_Vectors,
@@ -185,13 +189,11 @@ void _POSIX_signals_Manager_Initialization(void)
   /*
    *  Initialize the set of pending signals for the entire process
    */
-
   sigemptyset( &_POSIX_signals_Pending );
 
   /*
    *  Initialize the queue we use to block for signals
    */
-
   _Thread_queue_Initialize(
     &_POSIX_signals_Wait_queue,
     THREAD_QUEUE_DISCIPLINE_PRIORITY,
@@ -204,7 +206,6 @@ void _POSIX_signals_Manager_Initialization(void)
   /*
    *  Allocate the siginfo pools.
    */
-
   for ( signo=1 ; signo<= SIGRTMAX ; signo++ )
     _Chain_Initialize_empty( &_POSIX_signals_Siginfo[ signo ] );
 

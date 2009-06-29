@@ -18,7 +18,6 @@
 #include <pthread.h>
 #include <signal.h>
 #include <errno.h>
-#include <assert.h>
 
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
