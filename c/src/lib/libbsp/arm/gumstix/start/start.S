@@ -1,6 +1,6 @@
 /*
  *  By Yang Xi <hiyangxi@gmail.com>.
- *  Based upon CSB336
+ *  Based upon CSB337
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

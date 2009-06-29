@@ -1,3 +1,12 @@
+2009-06-29	Xi Yang <hiyangxi@gmail.com>
+
+	* Makefile.am: Update to current style.
+	* bsp_specs: Fix warning for _start.
+	* start/start.S: Proper attribution for origin.
+	* startup/bspstart.c: Add Skyeye bsp_reset() on Skyeye.
+	* include/.cvsignore: New file.
+	* include/bspopts.h.in: Removed.
+
 2009-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/linkcmds: Fix spacing.
