@@ -280,6 +280,21 @@ void *POSIX_Init(
   status = pthread_mutex_init( &Mutex_id, &attr );
   assert( status == EINVAL );
 
+  /* must get around various error checks before checking bad scope */
+  puts( "Init: Resetting mutex attributes" );
+  status = pthread_mutexattr_init( &attr );
+  assert( !status );
+
+  puts( "Init: pthread_mutex_init - ENOSYS (process wide scope)" );
+  attr.process_shared = PTHREAD_PROCESS_SHARED;
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  assert( status == ENOSYS );
+
+  puts( "Init: pthread_mutex_init - EINVAL (invalid scope)" );
+  attr.process_shared = -1;
+  status = pthread_mutex_init( &Mutex_id, &attr );
+  assert( status == EINVAL );
+
   /* now set up for a success pthread_mutex_init */
 
   puts( "Init: Resetting mutex attributes" );

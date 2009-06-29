@@ -1,3 +1,8 @@
+2009-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx05/init.c, psx05/psx05.scn: Add test case for process scope now
+	that the assert has been removed in the source.
+
 2009-06-18	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* psxstat/psxstat.scn, psxstat/test.c: Disable test for error on wrong
