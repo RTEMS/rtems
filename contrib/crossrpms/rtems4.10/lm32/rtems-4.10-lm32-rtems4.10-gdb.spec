@@ -45,14 +45,14 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.8.50.20090329
-%define gdb_rpmvers %{expand:%(echo 6.8.50.20090329 | tr - _)} 
+%define gdb_version 6.8.50.20090629
+%define gdb_rpmvers %{expand:%(echo 6.8.50.20090629 | tr - _)} 
 
 Name:		rtems-4.10-lm32-rtems4.10-gdb
 Summary:	Gdb for target lm32-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -116,7 +116,7 @@ Source0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-%{gdb_version}.tar.bz2
 # + lm32-sim/gdb http://sourceware.org/ml/gdb-patches/2008-12/msg00373.html
 # + misc small fixes to lm32-sim/gdb
 # + avr simulator
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090329-rtems4.10-20090417.diff
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8.50.20090629-rtems4.10-20090629.diff
 
 %description
 GDB for target lm32-rtems4.10
