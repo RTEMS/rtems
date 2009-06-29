@@ -86,8 +86,7 @@ typedef unsigned int word_t;
 #define FFUART_BASE   0x40100000
 
 
-/*Write the MAGIC_NUMBER to the MAGIC_ADDRESS then the Skyeye will exit,
-  we can use this function to automatic test the RTEMS bsp */
+/*Write to KSYEYE_MAGIC_ADDRESS makes SKYEYE to exits*/
 
 #define SKYEYE_MAGIC_ADDRESS (*(volatile word_t *)(0xb0000000))
 #define SKYEYE_MAGIC_NUMBER  (0xf0f0f0f0)

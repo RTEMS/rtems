@@ -20,6 +20,7 @@
 #include <libchip/sersupp.h>
 
 volatile int dbg_dly;
+void _start(void);
 
 /* static function prototypes */
 static int     ffuart_first_open(int major, int minor, void *arg);
@@ -126,6 +127,7 @@ static int ffuart_write(int minor, const char *buf, int len)
         }
         
         c = (char) buf[i];
+#if ON_SKYEYE != 1
 	if(c=='\n'){
 	  ffuart->rbr = '\r';
 	  for (x = 0; x < 100; x++) {
@@ -136,8 +138,8 @@ static int ffuart_write(int minor, const char *buf, int len)
 	      break;
 	    }
 	  }
-	  ffuart->rbr = c;
 	}
+#endif
         ffuart->rbr = c;
         
         /* the TXRDY flag does not seem to update right away (is this true?) */

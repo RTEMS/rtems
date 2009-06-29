@@ -1,3 +1,8 @@
+2009-06-29	Xi Yang <hiyangxi@gmail.com>
+
+	* pxa255/ffuart/ffuart.c, pxa255/include/pxa255.h: Add Skyeye support.
+	* pxa255/include/bits.h: Removed.
+
 2009-06-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* preinstall.am, pxa255/clock/clock.c, pxa255/ffuart/ffuart.c,
