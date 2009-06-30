@@ -73,6 +73,8 @@ WriteThread - pthread_rwlock_wrlock(RWLock) unblocked -- OK
 clock_gettime(CLOCK_REALTIME, &abstime) -- OK
 pthread_rwlock_timedwrlock( &RWLock, &abstime) -- OK
 WriteThread - pthread_rwlock_unlock(RWLock) -- OK
-pthread_rwlock_timedrdlock( &RWLock, &abstime) -- OK
+pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT
+pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT
+pthread_rwlock_timedrdlock( &RWLock, &abstime) -- in past -- OK
 pthread_rwlock_destroy( &RWLock ) -- OK
 *** END OF POSIX RWLOCK TEST 01 ***

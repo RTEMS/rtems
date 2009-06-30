@@ -328,6 +328,7 @@ int main(
   status = pthread_rwlock_destroy( &RWLock );
   assert( status == EBUSY );
 
+  /* now unlock it so the threads can continue */
   puts( "pthread_rwlock_unlock(RWLock) -- OK" );
   status = pthread_rwlock_unlock(&RWLock);
   assert( !status );
@@ -369,9 +370,23 @@ int main(
   assert( status == 0 );
 
   abstime.tv_sec += 1;
-  puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- OK" );
+  puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT" );
   status = pthread_rwlock_timedrdlock( &RWLock, &abstime );
   assert( status == ETIMEDOUT );
+
+  abstime.tv_sec -= 1;
+  puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- ETIMEDOUT" );
+  status = pthread_rwlock_timedrdlock( &RWLock, &abstime );
+  assert( status == ETIMEDOUT );
+
+  /*************** OBTAIN RWLOCK WITH ABSTIME IN PAST ***************/
+  status = pthread_rwlock_unlock(&RWLock);
+  assert( !status );
+
+  abstime.tv_sec -= 1;
+  puts( "pthread_rwlock_timedrdlock( &RWLock, &abstime) -- in past -- OK" );
+  status = pthread_rwlock_timedrdlock( &RWLock, &abstime );
+  assert( status == 0 );
 
   /*************** DESTROY RWLOCK ***************/
   puts( "pthread_rwlock_destroy( &RWLock ) -- OK" );
