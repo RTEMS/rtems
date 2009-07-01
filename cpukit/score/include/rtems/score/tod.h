@@ -219,7 +219,7 @@ uint32_t TOD_MICROSECONDS_TO_TICKS(
  *  @note This must be a macro so it can be used in "static" tables.
  */
 uint32_t TOD_MILLISECONDS_TO_TICKS(
-  uint32_t microseconds
+  uint32_t milliseconds
 );
 
 /** @brief How many ticks in a second?
