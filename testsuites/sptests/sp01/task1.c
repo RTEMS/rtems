@@ -27,10 +27,12 @@ rtems_task Task_1_through_3(
   rtems_id          tid;
   rtems_time_of_day time;
   rtems_status_code status;
+  rtems_interval    ticks;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
+  ticks = RTEMS_MILLISECONDS_TO_TICKS( task_number( tid ) * 5 * 1000 );
   while( FOREVER ) {
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
     directive_failed( status, "rtems_clock_get" );
@@ -43,7 +45,7 @@ rtems_task Task_1_through_3(
     put_name( Task_name[ task_number( tid ) ], FALSE );
     print_time( " - rtems_clock_get - ", &time, "\n" );
 
-    status = rtems_task_wake_after( task_number( tid ) * 5 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( ticks );
     directive_failed( status, "rtems_task_wake_after" );
   }
 }
