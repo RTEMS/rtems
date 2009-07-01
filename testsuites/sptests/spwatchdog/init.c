@@ -20,25 +20,19 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-/* #define HAVE_MENU */
-
-
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   rtems_time_of_day  time;
   rtems_status_code  status;
+  Chain_Control      empty;
 
    puts( "\n*** RTEMS WATCHDOG ***" );
 
-/*  XXXXXX
-  _Watchdog_Report_chain(
-   "_Watchdog_Ticks_chain",
-    & _Watchdog_Ticks_chain
-  );
-  puts( "*** END OF RTEMS WATCHDOG PROGRAM ***" );
-*/
+  puts( "INIT - report on empty watchdog chain" );
+  _Chain_Initialize_empty( &empty );
+  _Watchdog_Report_chain( "Empty Chain", &empty );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 
