@@ -21,3 +21,6 @@ directives:
 concepts:
 
   a.  This test checks out the region manager.
+
+  b.  Verifies implementation of SuperCore TOD_MICROSECONDS_TO_TICKS.  Normal
+      computation in applications is via a macro at the Classic API level.

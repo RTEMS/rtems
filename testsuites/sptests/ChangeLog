@@ -1,5 +1,11 @@
 2009-07-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp01/sp01.doc, sp01/task1.c, sp16/sp16.doc, sp16/task5.c: Bypass
+	RTEMS_MILLISECONDS_TO_TICKS and RTEMS_MICROSECONDS_TO_TICKS to
+	improve coverage.
+
+2009-07-01	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp01/task1.c: Use RTEMS_MILLISECONDS_TO_TICKS to improve coverage.
 
 2009-06-24	Joel Sherrill <joel.sherrill@oarcorp.com>

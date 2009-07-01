@@ -37,6 +37,9 @@ concepts:
 
   g.  Verifies that a task can get the task identification number of itself.
 
+  h.  Verifies implementation of SuperCore TOD_MILLISECONDS_TO_TICKS.  Normal
+      computation in applications is via a macro at the Classic API level.
+
 output:
  "TA1" is printed once every 5 seconds.  "TA2" is printed once
  every 10 seconds.  "TA3" is printed once every 15 seconds.
