@@ -79,8 +79,7 @@ sp51/Makefile
 sp52/Makefile
 sp53/Makefile
 sp54/Makefile
-spwatchdog/Makefile
-spsize/Makefile
+spchain/Makefile
 spfatal/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
@@ -95,6 +94,8 @@ spfatal10/Makefile
 spfatal11/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
+spsize/Makefile
+spwatchdog/Makefile
 spwkspace/Makefile
 ])
 AC_OUTPUT
