@@ -514,7 +514,7 @@ procedure Region_Get_Segment (
 the size of maximum segment which is possible for this region@*
 @code{@value{RPREFIX}UNSATISFIED} - segment of requested size not available@*
 @code{@value{RPREFIX}TIMEOUT} - timed out waiting for segment@*
-@code{@value{RPREFIX}OBJECT_WAS_DELETED} - semaphore deleted while waiting
+@code{@value{RPREFIX}OBJECT_WAS_DELETED} - region deleted while waiting
 
 @subheading DESCRIPTION:
 
@@ -556,7 +556,7 @@ The following segment acquisition option constants
 are defined by RTEMS:
 
 @itemize @bullet
-@item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
+@item @code{@value{RPREFIX}WAIT} - task will wait for segment (default)
 @item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
