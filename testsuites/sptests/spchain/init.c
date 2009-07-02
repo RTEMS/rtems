@@ -52,7 +52,7 @@ rtems_task Init(
      }
   }
 
-  puts( "*** TEST OF RTEMS CHAIN API ***" );
+  puts( "*** END OF RTEMS CHAIN API TEST ***" );
   rtems_test_exit(0);
 }
 
@@ -61,27 +61,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-/*
- *  In this application, the initialization task performs the system
- *  initialization and then transforms itself into the idle task.
- */
-#define CONFIGURE_IDLE_TASK_BODY Init
-#define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
-
-/*
- *  Another odd case to hit.  Since we use the Init task is Idle task
- *  configuration, we can dummy up the initialization task configuration
- *  to have a non-NULL pointer and 0 tasks.
- */
-
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE 1
-
-rtems_initialization_tasks_table Initialization_tasks[1] =
-{ { 0, }};
-
-#define CONFIGURE_INIT_TASK_TABLE      Initialization_tasks
-#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
-#define CONFIGURE_INIT_TASK_STACK_SIZE 0
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
