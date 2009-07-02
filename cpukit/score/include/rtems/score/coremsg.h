@@ -293,18 +293,20 @@ uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 );
 
-/**
- *  @brief Flush Waiting Threads.
- *
- *  This function flushes the threads which are blocked on
- *  @a the_message_queue's pending message queue.  They are
- *  unblocked whether blocked sending or receiving.
- *
- *  @param[in] the_message_queue points to the message queue to flush
- */
-void _CORE_message_queue_Flush_waiting_threads(
-  CORE_message_queue_Control *the_message_queue
-);
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+  /**
+   *  @brief Flush Waiting Threads.
+   *
+   *  This function flushes the threads which are blocked on
+   *  @a the_message_queue's pending message queue.  They are
+   *  unblocked whether blocked sending or receiving.
+   *
+   *  @param[in] the_message_queue points to the message queue to flush
+   */
+  void _CORE_message_queue_Flush_waiting_threads(
+    CORE_message_queue_Control *the_message_queue
+  );
+#endif
 
 /**
  *  @brief Broadcast a Message to the Message Queue

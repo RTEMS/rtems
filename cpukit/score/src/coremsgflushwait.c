@@ -30,41 +30,43 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- *  _CORE_message_queue_Flush_waiting_threads
- *
- *  This function flushes the message_queue's task wait queue.  The number
- *  of messages flushed from the queue is returned.
- *
- *  Input parameters:
- *    the_message_queue - the message_queue to be flushed
- *
- *  Output parameters:
- *    returns - the number of messages flushed from the queue
- */
-
-void _CORE_message_queue_Flush_waiting_threads(
-  CORE_message_queue_Control *the_message_queue
-)
-{
-  /* XXX this is not supported for global message queues */
-
-  /*
-   *  IF there are no pending messages,
-   *  THEN threads may be blocked waiting to RECEIVE a message,
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+  /*PAGE
    *
-   *  IF the pending message queue is full
-   *  THEN threads may be blocked waiting to SEND a message
+   *  _CORE_message_queue_Flush_waiting_threads
    *
-   *  But in either case, we will return "unsatisfied nowait"
-   *  to indicate that the blocking condition was not satisfied
-   *  and that the blocking state was canceled.
+   *  This function flushes the message_queue's task wait queue.  The number
+   *  of messages flushed from the queue is returned.
+   *
+   *  Input parameters:
+   *    the_message_queue - the message_queue to be flushed
+   *
+   *  Output parameters:
+   *    returns - the number of messages flushed from the queue
    */
 
-  _Thread_queue_Flush(
-    &the_message_queue->Wait_queue,
-    NULL,
-    CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT
-  );
-}
+  void _CORE_message_queue_Flush_waiting_threads(
+    CORE_message_queue_Control *the_message_queue
+  )
+  {
+    /* XXX this is not supported for global message queues */
+
+    /*
+     *  IF there are no pending messages,
+     *  THEN threads may be blocked waiting to RECEIVE a message,
+     *
+     *  IF the pending message queue is full
+     *  THEN threads may be blocked waiting to SEND a message
+     *
+     *  But in either case, we will return "unsatisfied nowait"
+     *  to indicate that the blocking condition was not satisfied
+     *  and that the blocking state was canceled.
+     */
+
+    _Thread_queue_Flush(
+      &the_message_queue->Wait_queue,
+      NULL,
+      CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT
+    );
+  }
+#endif
