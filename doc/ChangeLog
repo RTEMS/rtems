@@ -1,3 +1,7 @@
+2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/preface.texi: Correct list of supported CPU architectures.
+
 2009-02-27	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	PR 1387/doc

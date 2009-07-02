@@ -151,17 +151,17 @@ been implemented in both the Ada and C programming languages.
 It has been ported to the following processor families:
 
 @itemize @bullet
-@item Intel i386 and above 
-@item Motorola MC68xxx 
-@item Motorola MC683xx
-@item Motorola ColdFire
+@item Analog Devices Blackfin
 @item ARM
+@item Freescale (formerly Motorola) MC68xxx 
+@item Freescale (formerly Motorola) MC683xx
+@item Freescale (formerly Motorola) ColdFire
+@item Intel i386 and above 
 @item MIPS
 @item PowerPC
+@item Renesas (formerly Hitachi) SuperH
+@item Renesas (formerly Hitachi) H8/300
 @item SPARC
-@item Hitachi SH
-@item Hitachi H8/300
-@item OpenCores OR32
 @item UNIX
 @end itemize
 
