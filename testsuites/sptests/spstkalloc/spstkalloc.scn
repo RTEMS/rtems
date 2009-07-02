@@ -1,0 +1,5 @@
+*** TEST OF STACK ALLOCATOR PLUGIN ***
+Init - create task TA1 to use custom stack allocator - OK
+Init - create task TA1 to have custom stack allocator fail
+Init - delete task TA1 to use custom stack deallocator - OK
+*** END OF OF STACK ALLOCATOR PLUGIN TEST ***

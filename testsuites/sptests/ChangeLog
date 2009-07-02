@@ -1,5 +1,9 @@
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* spstkalloc/spstkalloc.scn: Update screen.
+
+2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new test for user configured stack
 	allocator/deallocator. Test both pass and fail cases.
 	* spstkalloc/.cvsignore, spstkalloc/Makefile.am, spstkalloc/init.c,
