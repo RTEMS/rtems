@@ -95,6 +95,7 @@ spfatal11/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
 spsize/Makefile
+spstkalloc/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
 ])

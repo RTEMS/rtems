@@ -1,5 +1,12 @@
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test for user configured stack
+	allocator/deallocator. Test both pass and fail cases.
+	* spstkalloc/.cvsignore, spstkalloc/Makefile.am, spstkalloc/init.c,
+	spstkalloc/spstkalloc.doc, spstkalloc/spstkalloc.scn: New files.
+
+2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spchain/init.c, spchain/spchain.scn: Clean up test.
 
 2009-07-01	Joel Sherrill <joel.sherrill@OARcorp.com>
