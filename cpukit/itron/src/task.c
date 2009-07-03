@@ -112,8 +112,10 @@ void _ITRON_Task_Initialize_user_tasks( void )
 
 API_extensions_Control _ITRON_Task_API_extensions = {
   { NULL, NULL },
-  NULL,                                     /* predriver */
-  _ITRON_Task_Initialize_user_tasks,       /* postdriver */
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    NULL,                                   /* predriver */
+  #endif
+  _ITRON_Task_Initialize_user_tasks,        /* postdriver */
   NULL                                      /* post switch */
 };
 

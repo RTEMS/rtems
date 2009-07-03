@@ -289,7 +289,9 @@ void _POSIX_Threads_Initialize_user_threads( void )
 
 API_extensions_Control _POSIX_Threads_API_extensions = {
   { NULL, NULL },
-  NULL,                                     /* predriver */
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    NULL,                                   /* predriver */
+  #endif
   _POSIX_Threads_Initialize_user_threads,   /* postdriver */
   _POSIX_signals_Post_switch_extension,     /* post switch */
 };

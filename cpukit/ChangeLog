@@ -1,5 +1,12 @@
 2009-07-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* itron/src/task.c, posix/src/pthread.c, rtems/src/tasks.c,
+	sapi/src/exinit.c, score/include/rtems/score/apiext.h,
+	score/src/apiext.c: No APIs currently implemented use the
+	predriver_hook so disable it until such time as it is used.
+
+2009-07-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/sigtimedwait.c: Restructure to improve coverage. Improve
 	comments.
 

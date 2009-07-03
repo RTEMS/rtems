@@ -41,26 +41,28 @@ void _API_extensions_Add(
   _Chain_Append( &_API_extensions_List, &the_extension->Node );
 }
 
-/*PAGE
- *
- *  _API_extensions_Run_predriver
- */
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+  /*PAGE
+   *
+   *  _API_extensions_Run_predriver
+   */
 
-void _API_extensions_Run_predriver( void )
-{
-  Chain_Node             *the_node;
-  API_extensions_Control *the_extension;
+  void _API_extensions_Run_predriver( void )
+  {
+    Chain_Node             *the_node;
+    API_extensions_Control *the_extension;
 
-  for ( the_node = _API_extensions_List.first ;
-        !_Chain_Is_tail( &_API_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
+    for ( the_node = _API_extensions_List.first ;
+	  !_Chain_Is_tail( &_API_extensions_List, the_node ) ;
+	  the_node = the_node->next ) {
 
-    the_extension = (API_extensions_Control *) the_node;
+      the_extension = (API_extensions_Control *) the_node;
 
-    if ( the_extension->predriver_hook )
-      (*the_extension->predriver_hook)();
+      if ( the_extension->predriver_hook )
+	(*the_extension->predriver_hook)();
+    }
   }
-}
+#endif
 
 /*PAGE
  *

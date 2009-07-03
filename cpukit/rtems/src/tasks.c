@@ -215,7 +215,9 @@ void _RTEMS_tasks_Post_switch_extension(
 
 API_extensions_Control _RTEMS_tasks_API_extensions = {
   { NULL, NULL },
-  NULL,                                     /* predriver */
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    NULL,                                   /* predriver */
+  #endif
   _RTEMS_tasks_Initialize_user_tasks,       /* postdriver */
   _RTEMS_tasks_Post_switch_extension        /* post switch */
 };

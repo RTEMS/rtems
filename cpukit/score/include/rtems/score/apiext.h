@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,10 +33,12 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
 
-/**
- *  This type defines the prototype of the Predriver Hook.
- */
-typedef void (*API_extensions_Predriver_hook)(void);
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+  /**
+   *  This type defines the prototype of the Predriver Hook.
+   */
+  typedef void (*API_extensions_Predriver_hook)(void);
+#endif
 
 /**
  *  This type defines the prototype of the Postdriver Hook.
@@ -57,14 +59,16 @@ typedef void (*API_extensions_Postswitch_hook)(
 typedef struct {
   /** This field allows this structure to be used with the Chain Handler. */
   Chain_Node                      Node;
-  /**
-   * This field is the callout invoked during RTEMS initialization after
-   * RTEMS data structures are initialized before device driver initialization
-   * has occurred.
-   *
-   * @note If this field is NULL, no extension is invoked.
-   */
-  API_extensions_Predriver_hook   predriver_hook;
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    /**
+     * This field is the callout invoked during RTEMS initialization after
+     * RTEMS data structures are initialized before device driver initialization
+     * has occurred.
+     *
+     * @note If this field is NULL, no extension is invoked.
+     */
+    API_extensions_Predriver_hook   predriver_hook;
+  #endif
   /**
    * This field is the callout invoked during RTEMS initialization after
    * RTEMS data structures and device driver initialization has occurred
@@ -103,11 +107,13 @@ void _API_extensions_Add(
   API_extensions_Control *the_extension
 );
 
-/** @brief Execute all Pre-Driver Extensions
- *
- *  This routine executes all of the predriver callouts.
- */
-void _API_extensions_Run_predriver( void );
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+  /** @brief Execute all Pre-Driver Extensions
+   *
+   *  This routine executes all of the predriver callouts.
+   */
+  void _API_extensions_Run_predriver( void );
+#endif
 
 /** @brief Execute all Post-Driver Extensions
  *

@@ -179,12 +179,12 @@ void rtems_initialize_before_drivers(void)
     _MPCI_Create_server();
   #endif
 
-  /*
-   *  Run the API and BSPs predriver hook.
-   */
-
-  _API_extensions_Run_predriver();
-
+  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
+    /*
+     *  Run the API and BSPs predriver hook.
+     */
+    _API_extensions_Run_predriver();
+  #endif
 }
 
 void rtems_initialize_device_drivers(void)
