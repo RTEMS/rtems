@@ -3,6 +3,7 @@
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
  *
+ *  Copyright (c) 2009 embedded brains GmbH
  *  CopyRight (C) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
@@ -12,10 +13,13 @@
  *  $Id$
  */
 
-#include <libcpu/cpu.h>
-#include <bsp/irq.h>
-#include <bsp.h>
 #include <rtems/bspIo.h>
+
+#include <libcpu/cpu.h>
+
+#include <bsp.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 /*
  * rtems prologue generated in irq_asm.S
@@ -60,51 +64,23 @@ static int raw_not_connected(
 
 static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
 
-/*
- * default IRQ handler
- */
-static void irq_default_handler(rtems_irq_hdl_param unused)
-{
-}
-
-/*
- * default IRQ on/off function
- */
-static void irq_nop_func(const struct __rtems_irq_connect_data__ *unused)
-{
-}
-
-/*
- * default irq isOn function
- */
-static int irq_not_connected( const struct __rtems_irq_connect_data__ *unused)
-{
-  return 0;
-}
-
-
-/*
- * Table used to store rtems managed interrupt handlers.
- * Borrow the table to store raw handler entries at the beginning.
- * The table will be reinitialized before the call to BSP_rtems_irq_mngt_set().
- */
-static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
-  {0,(rtems_irq_hdl)rtems_irq_prologue_0},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_1},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_2},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_3},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_4},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_5},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_6},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_7},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_8},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_9},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_10},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_11},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_12},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_13},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_14},
-  {0,(rtems_irq_hdl)rtems_irq_prologue_15}
+static rtems_raw_irq_hdl rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
+  rtems_irq_prologue_0,
+  rtems_irq_prologue_1,
+  rtems_irq_prologue_2,
+  rtems_irq_prologue_3,
+  rtems_irq_prologue_4,
+  rtems_irq_prologue_5,
+  rtems_irq_prologue_6,
+  rtems_irq_prologue_7,
+  rtems_irq_prologue_8,
+  rtems_irq_prologue_9,
+  rtems_irq_prologue_10,
+  rtems_irq_prologue_11,
+  rtems_irq_prologue_12,
+  rtems_irq_prologue_13,
+  rtems_irq_prologue_14,
+  rtems_irq_prologue_15
 };
 
 static rtems_raw_irq_connect_data 	defaultRawIrq = {
@@ -115,32 +91,8 @@ static rtems_raw_irq_connect_data 	defaultRawIrq = {
   raw_not_connected        /* isOn */
 };
 
-static rtems_irq_connect_data     	defaultIrq = {
-  0,                     /* vectorIdex */
-  irq_default_handler,   /* hdl */
-  0,                     /* handle */
-  irq_nop_func,          /* on */
-  irq_nop_func,          /* off */
-  irq_not_connected      /* isOn */
-};
-
-static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
-  /*
-   * actual rpiorities for interrupt :
-   *	0   means that only current interrupt is masked
-   *	255 means all other interrupts are masked
-   * The second entry has a priority of 255 because
-   * it is the slave pic entry and is should always remain
-   * unmasked.
-   */
-  0,0,
-  255,
-  0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0
-};
-
 static interrupt_gate_descriptor	idtEntry;
 
-static rtems_irq_global_settings     initial_config;
 static rtems_raw_irq_global_settings raw_initial_config;
 
 void raw_idt_notify(void)
@@ -191,7 +143,7 @@ void  rtems_irq_mngt_init(void)
      * with RTEMS prologue.
      */
     for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++) {
-      create_interrupt_gate_descriptor(&idtEntry,(rtems_raw_irq_hdl) rtemsIrq[i].hdl);
+      create_interrupt_gate_descriptor(&idtEntry, rtemsIrq[i]);
       idt_entry_tbl[i + BSP_ASM_IRQ_VECTOR_BASE] = idtEntry;
     }
     /*
@@ -199,23 +151,11 @@ void  rtems_irq_mngt_init(void)
      * with raw handlers.  We must now initialize the higher level
      * interrupt management.
      */
-    /*
-     * re-init the rtemsIrq table
-     */
-    for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++) {
-      rtemsIrq[i]      = defaultIrq;
-      rtemsIrq[i].name = i;
-    }
+
     /*
      * Init initial Interrupt management config
      */
-    initial_config.irqNb 	= BSP_IRQ_LINES_NUMBER;
-    initial_config.defaultEntry = defaultIrq;
-    initial_config.irqHdlTbl	= rtemsIrq;
-    initial_config.irqBase	= BSP_ASM_IRQ_VECTOR_BASE;
-    initial_config.irqPrioTbl	= irqPrioTable;
-
-    if (!BSP_rtems_irq_mngt_set(&initial_config)) {
+    if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
       /*
        * put something here that will show the failure...
        */

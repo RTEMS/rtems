@@ -33,6 +33,7 @@ extern "C" {
 #include <rtems.h>
 #define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 
 /*-------------------------------------------------------------------------+
 | Constants

@@ -1,3 +1,9 @@
+2009-07-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq/irq.h, shared/irq/irq.c, shared/irq/irq_init.c: Converted
+	to use generic interrupt support.
+	* shared/irq/irq-config.h: New file.
+
 2009-05-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/comm/i386-stub-glue.c, shared/comm/uart.c, shared/irq/irq.c,
