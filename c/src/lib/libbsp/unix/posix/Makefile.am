@@ -32,7 +32,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     startup/bspstart.c startup/bsppost.c startup/bspgetworkarea.c \
-    startup/setvec.c ../../shared/bootcard.c
+    ../../shared/setvec.c ../../shared/bootcard.c
 libbsp_a_SOURCES += startup/main.c
 
 # clock
