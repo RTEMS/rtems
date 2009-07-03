@@ -27,7 +27,10 @@ noinst_PROGRAMS =
 SUBDIRS = . tools
 
 include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
-    ../../i386/shared/irq/irq_asm.h ../../i386/shared/comm/tty_drv.h
+    ../../i386/shared/irq/irq_asm.h ../../i386/shared/comm/tty_drv.h \
+    ../../i386/shared/irq/irq-config.h \
+    ../../shared/include/irq-generic.h \
+    ../../shared/include/irq-info.h
 
 include_HEADERS += include/crt.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
@@ -93,7 +96,11 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bspclean.c startup/bspreset.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/bspinit.c ../../shared/sbrk.c \
-    startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
+    startup/ldsegs.S ../../i386/shared/irq/irq_asm.S \
+    ../../shared/src/irq-generic.c \
+    ../../shared/src/irq-legacy.c \
+    ../../shared/src/irq-info.c \
+    ../../shared/src/irq-shell.c
 
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S

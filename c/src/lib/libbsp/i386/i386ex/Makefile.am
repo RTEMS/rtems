@@ -22,7 +22,10 @@ noinst_PROGRAMS =
 include_HEADERS += include/coverhd.h
 
 include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
-    ../../i386/shared/irq/irq_asm.h
+    ../../i386/shared/irq/irq_asm.h \
+    ../../i386/shared/irq/irq-config.h \
+    ../../shared/include/irq-generic.h \
+    ../../shared/include/irq-info.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S start/80386ex.h start/80386ex.inc start/macros.inc
@@ -43,7 +46,11 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \
     ../../shared/gnatinstallhandler.c ../../i386/shared/comm/gdb_glue.c \
-    ../../i386/shared/comm/tty_drv.c ../../i386/shared/irq/irq_asm.S
+    ../../i386/shared/comm/tty_drv.c ../../i386/shared/irq/irq_asm.S \
+    ../../shared/src/irq-generic.c \
+    ../../shared/src/irq-legacy.c \
+    ../../shared/src/irq-info.c \
+    ../../shared/src/irq-shell.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console
