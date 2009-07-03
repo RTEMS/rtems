@@ -1,3 +1,8 @@
+2009-07-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/sigtimedwait.c: Restructure to improve coverage. Improve
+	comments.
+
 2009-07-03	Daniel Hellstrom <daniel@gaisler.com>
 
 	* sapi/src/exinit.c, score/include/rtems/score/objectmp.h,

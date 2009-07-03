@@ -33,18 +33,31 @@ int _POSIX_signals_Get_highest(
   int signo;
 
   for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
-    if ( set & signo_to_mask( signo ) )
-      return signo;
+    if ( set & signo_to_mask( signo ) ) {
+      goto found_it;
+    }
   }
 
-/* XXX - add __SIGFIRSTNOTRT or something like that to newlib signal .h */
+  /*
+   *  We assume SIGHUP == 1 and is the first non-real-time signal.
+   */
 
+  #if (SIGHUP != 1)
+    #error "Assumption that SIGHUP==1 violated!!"
+  #endif
   for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
-    if ( set & signo_to_mask( signo ) )
-      return signo;
+    if ( set & signo_to_mask( signo ) ) {
+      goto found_it;
+    }
   }
 
-  return 0;
+  /*
+   *  This is structured this way to eliminate the need to have
+   *  a return 0.  This routine will NOT be called unless a signal
+   *  is pending in the set passed in.
+   */
+found_it:
+  return signo;
 }
 
 int sigtimedwait(
@@ -63,8 +76,11 @@ int sigtimedwait(
 
   /*
    *  Error check parameters before disabling interrupts.
-   *
-   *  NOTE: This is very specifically a RELATIVE not ABSOLUTE time
+   */
+  if ( !set )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  
+  /*  NOTE: This is very specifically a RELATIVE not ABSOLUTE time
    *        in the Open Group specification.
    */
 
