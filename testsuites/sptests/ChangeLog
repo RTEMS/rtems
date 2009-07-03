@@ -1,3 +1,7 @@
+2009-07-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp54/init.c, sp54/sp54.doc: Fix typos and comments.
+
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spstkalloc/spstkalloc.scn: Update screen.

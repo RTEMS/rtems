@@ -1,4 +1,5 @@
-/*  Odd Id Error Case -- Valid Id on API with No Objects Configured
+/*  Odd Id Cases where API configured but No Threads
+ *    + Possibly Valid Id passed to directive
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -20,6 +21,10 @@ rtems_task Init(
   rtems_task_priority  pri;
   rtems_id             id;
 
+  /*
+   *  It is possible that since this thread prints and there is no idle
+   *  task, that the system could fail miserably. :(
+   */
   puts( "\n\n*** TEST 54 ***" );
 
   puts( "Init - use valid id of API class with no objects" );
