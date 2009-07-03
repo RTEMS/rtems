@@ -80,6 +80,20 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
 
+  /* generate some easy error cases */
+
+  status = sigwait( NULL, NULL );
+  if ( status != EINVAL )
+    printf( "status = %d (%s)\n", status, strerror(status) );
+  assert( status == EINVAL );
+  puts( "Init: sigwait - EINVAL (NULL set)" );
+
+  status = sigtimedwait( NULL, NULL, NULL );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: sigwait - EINVAL (NULL set)" );
+
 /* install a signal handler for SIGUSR1 */
 
   status = sigemptyset( &act.sa_mask );

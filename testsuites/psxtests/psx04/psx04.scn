@@ -1,25 +1,23 @@
-
-
 *** POSIX TEST 4 ***
 Init's ID is 0x0b010001
+Init: sigwait - EINVAL (NULL set)
+Init: sigwait - EINVAL (NULL set)
 Init: sigemptyset -  set= 0x00000000
 Init: sigfillset -  set= 0xffffffff
 Init: sigdelset - delete SIGUSR1 set= 0xfeffffff
 Init: sigismember - FALSE since SIGUSR1 is not a member
 Init: sigismember - TRUE since SIGUSR2 is a member
 Init: send SIGUSR1 to process
-Signal: 25 caught by 0xb010001 (1)
 
 Init: Block SIGUSR1
 Init: send SIGUSR1 to process
-Signal: 25 caught by 0xb010001 (1)
 
 Init: Block SIGUSR1
-Init: Signals pending 0x00000000
+Init: Signals pending 0x01000000
 Init: send SIGUSR1 to process
 Init: Signals pending 0x01000000
 Init: Unblock SIGUSR1
-Signal: 25 caught by 0xb010001 (2)
+Signal: 25 caught by 0xb010001 (1)
 
 Init: create a thread interested in SIGUSR1
 Init: Block SIGUSR1
@@ -29,7 +27,7 @@ Task_1: sleeping for 5 seconds
 Init: send SIGUSR1 to process
 Init: Signals pending 0x01000000
 Init: sleep so the other task can catch signal
-Signal: 25 caught by 0xb010002 (3)
+Signal: 25 caught by 0xb010002 (2)
 Task_1: 4 seconds left
 Task_1: exit
 
@@ -39,11 +37,11 @@ Init: 0 seconds left on previous alarm
 Init: Firing alarm in 2 seconds
 Init: 5 seconds left on previous alarm
 Init: Wait 4 seconds for alarm
-Signal: 14 caught by 0xb010001 (4)
+Signal: 14 caught by 0xb010001 (3)
 Init: 2 seconds left in sleep
 
 Init: Block SIGUSR1 and SIGUSR2 only
-Init: Previous blocked set was 0x01000000
+Init: Previous blocked set was 0xffffdfff
 Init: Current blocked set is 0x03000000
 Init: Unblock all signals
 Init: Previous blocked set was 0x03000000
@@ -52,13 +50,13 @@ Init: create a thread to send Init SIGUSR1
 Init: sigsuspend for any signal
 Task_2: sending SIGUSR1
 Task_2: exit
-Signal: 25 caught by 0xb010001 (5)
+Signal: 25 caught by 0xb010001 (4)
 Init: awakended from sigsuspend status=-0000001 
 
 Init: create a thread to sent Process SIGUSR1 with SA_SIGINFO
 Init: sleep so the Task_3 can sigqueue SIGUSR1
 Task_3: sigqueue SIGUSR1 with value= 25
-Signal_info: 25 caught by 0xb010004 (6) si_signo= 25 si_code= 1 value= 25
+Signal_info: 25 caught by 0xb010004 (5) si_signo= 25 si_code= 1 value= 25
 
 Task_3: sigwaitinfo SIGUSR1 with value= 25
 Init: sigqueue occurred
@@ -111,5 +109,3 @@ Init: kill - ESRCH (pid invalid)
 Init: kill - EINVAL (signal = 0)
 Init: kill - EINVAL (sig invalid)
 *** END OF POSIX TEST 4 ***
-Unexpected trap (0x09) at address 0x0201bc74
-data access exception at 0x00000008

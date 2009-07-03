@@ -1,3 +1,8 @@
+2009-07-03	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psx04/init.c, psx04/psx04.scn: Test error cases in sigwait() and
+	sigtimedwait(). Update screen file.
+
 2009-07-01	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Add test case for
