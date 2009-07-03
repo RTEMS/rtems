@@ -74,6 +74,12 @@ rtems_initialization_tasks_table Initialization_tasks[1] =
 #define CONFIGURE_INIT_TASK_TABLE_SIZE 0
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
 
+/*
+ *  Ensure we test the case where memory is zero.  Not
+ *  all BSPs will set this to TRUE by default.
+ */
+#define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY TRUE
+
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 
