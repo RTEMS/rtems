@@ -39,8 +39,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bspreset_fatal.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
-    ../../shared/sbrk.c startup/setvec.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 # dlentry
 libbsp_a_SOURCES += dlentry/dlentry.S
 # bspconsole
