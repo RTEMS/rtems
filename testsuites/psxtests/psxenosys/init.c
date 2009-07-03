@@ -177,6 +177,13 @@ void *POSIX_Init(
   sc = mprotect( NULL, 0, 0 );
   posix_service_failed( sc, "mprotect" );
 
+  puts( "vfork -- stub implementation - OK" );
+  sc = vfork();
+  if ( sc != -1 ) {
+    puts( "vfork did not return -1" );
+    rtems_test_exit( 0 );
+  }
+
   puts( "*** END OF POSIX TEST ENOSYS ***" );
   rtems_test_exit( 0 );
 

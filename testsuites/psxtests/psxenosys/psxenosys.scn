@@ -30,4 +30,5 @@ sched_getscheduler -- ENOSYS
 wait -- ENOSYS
 waitpid -- ENOSYS
 mprotect -- stub implementation - OK
+vfork -- stub implementation - OK
 *** END OF POSIX TEST ENOSYS ***
