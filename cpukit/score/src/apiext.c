@@ -80,7 +80,12 @@ void _API_extensions_Run_postdriver( void )
 
     the_extension = (API_extensions_Control *) the_node;
 
+    /*
+     *  Currently all APIs configure this hook so it is always non-NULL.
+     */
+#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
     if ( the_extension->postdriver_hook )
+#endif
       (*the_extension->postdriver_hook)();
   }
 }
@@ -101,7 +106,13 @@ void _API_extensions_Run_postswitch( void )
 
     the_extension = (API_extensions_Control *) the_node;
 
+    /*
+     *  Currently the ITRON API is the only API which does not
+     *  provide this hook.
+     */
+#if defined(RTEMS_ITRON_API)
     if ( the_extension->postswitch_hook )
+#endif
       (*the_extension->postswitch_hook)( _Thread_Executing );
   }
 }
