@@ -53,6 +53,13 @@ typedef struct {
  */
 void _Objects_MP_Handler_initialization(void);
 
+/** @brief  Objects MP Handler Early initialization
+ *
+ *  This routine intializes the global object node number
+ *  used in the ID field of all objects.
+ */
+void _Objects_MP_Handler_early_initialization(void);
+
 /** @brief Objects MP Open
  *
  *  This routine place the specified global object in the

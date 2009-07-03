@@ -96,6 +96,10 @@ void rtems_initialize_data_structures(void)
    */
   _CPU_Initialize();
 
+  #if defined(RTEMS_MULTIPROCESSING)
+    _Objects_MP_Handler_early_initialization();
+  #endif
+
   /*
    *  Do this as early as possible to ensure no debugging output
    *  is even attempted to be printed.

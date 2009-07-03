@@ -25,19 +25,16 @@
 
 /*PAGE
  *
- *  _Objects_MP_Handler_initialization
+ *  _Objects_MP_Handler_early_initialization
  *
  */
-
-void _Objects_MP_Handler_initialization(void)
+void _Objects_MP_Handler_early_initialization(void)
 {
   uint32_t   node;
   uint32_t   maximum_nodes;
-  uint32_t   maximum_global_objects;
 
   node                   = _Configuration_MP_table->node;
   maximum_nodes          = _Configuration_MP_table->maximum_nodes;
-  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
 
   if ( node < 1 || node > maximum_nodes )
     _Internal_error_Occurred(
@@ -46,9 +43,23 @@ void _Objects_MP_Handler_initialization(void)
       INTERNAL_ERROR_INVALID_NODE
     );
 
-
   _Objects_Local_node    = node;
   _Objects_Maximum_nodes = maximum_nodes;
+}
+
+/*PAGE
+ *
+ *  _Objects_MP_Handler_initialization
+ *
+ */
+
+void _Objects_MP_Handler_initialization(void)
+{
+
+  uint32_t   maximum_global_objects;
+
+  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
+
   _Objects_MP_Maximum_global_objects = maximum_global_objects;
 
   if ( maximum_global_objects == 0 ) {
@@ -293,3 +304,4 @@ void _Objects_MP_Is_remote (
   *the_object = NULL;
 
 }
+
