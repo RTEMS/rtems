@@ -53,21 +53,22 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
   rtems_id                          id;
   rtems_status_code                 return_value;
   rtems_initialization_tasks_table *user_tasks;
-  rtems_api_configuration_table    *api_configuration;
-
-
-  api_configuration = &Configuration_RTEMS_API;
 
   /*
-   *  NOTE:  This is slightly different from the Ada implementation.
+   *  Move information into local variables
    */
+  user_tasks = Configuration_RTEMS_API.User_initialization_tasks_table;
+  maximum    = Configuration_RTEMS_API.number_of_initialization_tasks;
 
-  user_tasks = api_configuration->User_initialization_tasks_table;
-  maximum    = api_configuration->number_of_initialization_tasks;
-
-  if ( !user_tasks || maximum == 0 )
+  /*
+   *  Verify that we have a set of user tasks to iterate
+   */
+  if ( !user_tasks )
     return;
 
+  /*
+   *  Now iterate over the initialization tasks and create/start them.
+   */
   for ( index=0 ; index < maximum ; index++ ) {
     return_value = rtems_task_create(
       user_tasks[ index ].name,
@@ -77,7 +78,6 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       user_tasks[ index ].attribute_set,
       &id
     );
-
     if ( !rtems_is_status_successful( return_value ) )
       _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, true, return_value );
 
@@ -86,7 +86,6 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       user_tasks[ index ].entry_point,
       user_tasks[ index ].argument
     );
-
     if ( !rtems_is_status_successful( return_value ) )
       _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, true, return_value );
   }
