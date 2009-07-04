@@ -79,4 +79,7 @@ pthread_rwlock_timedwrlock( &RWLock, &abstime) -- ETIMEDOUT
 pthread_rwlock_timedrdlock( &RWLock, &abstime) -- in past -- OK
 pthread_rwlock_timedwrlock( &RWLock, &abstime) -- in past -- OK
 pthread_rwlock_destroy( &RWLock ) -- OK
+pthread_rwlock_init( &rwlock, NULL ) -- OK
+pthread_rwlock_unlock ( &rwlock ) -- OK
+pthread_rwlock_unlock ( &rwlock ) -- OK
 *** END OF POSIX RWLOCK TEST 01 ***

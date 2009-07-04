@@ -407,6 +407,20 @@ int main(
   status = pthread_rwlock_destroy( &RWLock );
   assert( status == 0 );
 
+  /*************** OBTAIN A LOCK AND THEN RELEASE IT TWICE ***************/
+
+  puts( "pthread_rwlock_init( &rwlock, NULL ) -- OK" );
+  status = pthread_rwlock_init( &rwlock, NULL );
+  assert( status == 0 );
+  assert( rwlock != 0 );
+
+  puts( "pthread_rwlock_unlock ( &rwlock ) -- OK" );
+  status = pthread_rwlock_unlock( &rwlock );
+  assert( status == 0 );
+  
+  puts( "pthread_rwlock_unlock ( &rwlock ) -- OK" );
+  status = pthread_rwlock_unlock( &rwlock );
+  assert( status == 0 );
 
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX RWLOCK TEST 01 ***" );
