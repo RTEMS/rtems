@@ -1,5 +1,9 @@
 2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psx05/init.c, psx05/psx05.scn: Add a couple of invalid Id cases.
+
+2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxsignal01/init.c: Tune code to really hit POSIX signal from ISR
 	code.
 

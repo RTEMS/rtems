@@ -365,6 +365,18 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == EDEADLK );
 
+  puts( "Init: pthread_mutex_lock - EINVAL (NULL id)" );
+  status = pthread_mutex_lock( NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_mutex_unlock - EINVAL (NULL id)" );
+  status = pthread_mutex_unlock( NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+
   puts( "Init: pthread_mutex_lock - EDEADLK (already locked)" );
   status = pthread_mutex_lock( &Mutex_id );
   if ( status != EDEADLK )
