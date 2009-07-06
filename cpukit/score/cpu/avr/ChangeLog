@@ -1,3 +1,20 @@
+2009-07-03  Josh Switnicki <josh.switnicki@utoronto.ca>
+
+	* cpu.c: Implemented _CPU_Context_Initialize as a C function instead
+	of a macro.  It works with limited functionality.  Implemented
+	_CPU_Thread_Idle_body to use sleep instruction.
+	* Makefile.am: Changed cpu_asm.c -> cpu_asm.S
+	* cpu_asm.S: renamed from cpu_asm.c and implemented functions is asm
+	* rtems/asm.h: Appended "macros.inc" to the end of "asm.h" 
+	* rtems/score/cpu.h:
+	  + Included "avr/io.h".
+	  + Added use 16 bit object definition. 
+	  + Modified Context_Control struct to relect the registers
+	    that need to be saved.
+	  + Implemented _CPU_ISR_Disable, _CPU_ISR_Enable, and _CPU_ISR_Flash.
+	    Added function definitions for _CPU_Context_Initialize and
+	    _CPU_Push.
+
 2009-05-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* rtems/score/cpu.h: Lower number of priorities and do not inline as

@@ -44,6 +44,42 @@ void _CPU_Initialize(void)
 
 /*PAGE
  *
+ *  _CPU_Context_Initialize
+ *
+ *  This kernel routine initializes the basic non-FP context area associated
+ *  with each thread.
+ *
+ *  Input parameters:
+ *    the_context  - pointer to the context area
+ *    stack_base   - address of memory for the SPARC
+ *    size         - size in bytes of the stack area
+ *    new_level    - interrupt level for this context area
+ *    entry_point  - the starting execution point for this this context
+ *    is_fp        - TRUE if this context is associated with an FP thread
+ *
+ *  Output parameters: NONE
+ */
+
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+)
+{
+	uint16_t _stack; //declare helper variable
+	_stack = (uint16_t) (stack_base) + (uint16_t) (size); //calc stack pointer 
+	the_context->stack_pointer = _stack - 2; //save stack pointer (- 2 bytes)
+	_CPU_Push(_stack, (uint16_t)(entry_point)); //push entry point onto context stack
+	the_context->status = 0; //init status to zero
+	if (new_level == TRUE)	_CPU_ISR_Enable( 0 );
+}
+
+
+/*PAGE
+ *
  *  _CPU_ISR_Get_level
  *
  *  NO_CPU Specific Information:
@@ -120,7 +156,7 @@ void _CPU_ISR_install_vector(
    /*
     *  We put the actual user ISR address in '_ISR_vector_table'.  This will
     *  be used by the _ISR_Handler so the user gets control.
-    */
+    */	
 
     _ISR_Vector_table[ vector ] = new_handler;
 }
@@ -162,7 +198,7 @@ void _CPU_Install_interrupt_stack( void )
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
 
-  for( ; ; )
+  for( ; ; ) asm volatile ("sleep"::);
     /* insert your "halt" instruction here */ ;
   return (void *) 0;
 }

@@ -24,11 +24,16 @@ extern "C" {
 #endif
 
 #include <rtems/score/avr.h>            /* pick up machine definitions */
+#include <avr/io.h>
 #ifndef ASM
 #include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */
+
+#ifndef	RTEMS_USE_16_BIT_OBJECT
+#define RTEMS_USE_16_BIT_OBJECT
+#endif
 
 /*
  *  Should the calls to _Thread_Enable_dispatch be inlined?
@@ -419,13 +424,33 @@ extern "C" {
  */
 
 typedef struct {
-    uint32_t   some_integer_register;
-    uint32_t   some_system_register;
-    uint32_t   stack_pointer;
+	uint8_t		reg2;
+	uint8_t		reg3;
+	uint8_t		reg4;
+	uint8_t		reg5;
+	uint8_t		reg6;
+	uint8_t		reg7;
+	uint8_t		reg8;
+	uint8_t		reg9;
+	uint8_t		reg10;
+	uint8_t		reg11;
+	uint8_t		reg12;
+	uint8_t		reg13;
+	uint8_t		reg14;
+	uint8_t		reg15;
+	uint8_t		reg16;
+	uint8_t		reg17;
+	uint8_t		reg28;
+	uint8_t		reg29;
+   	uint8_t		status; //SREG 
+    	uint16_t 	stack_pointer;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->stack_pointer
+
+
+
 
 typedef struct {
     double      some_float_register;
@@ -633,8 +658,9 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   { \
-    (_isr_cookie) = 0;   /* do something to prevent warnings */ \
-  }
+    	(_isr_cookie) = SREG;   /* do something to prevent warnings */ \
+	asm volatile ("cli"::);  \
+}
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -648,6 +674,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Enable( _isr_cookie )  \
   { \
+	SREG  = _isr_cookie; \
+	asm volatile ("sei"::); \
   }
 
 /*
@@ -663,6 +691,10 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
   { \
+	SREG=(_isr_cookie); \
+	asm volatile("sei"::); \
+	(_isr_cookie) = SREG; \
+	asm volatile("cli"::); \
   }
 
 /*
@@ -716,12 +748,23 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX document implementation including references if appropriate
  */
-
+/*
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
-  { \
-  }
+  \
+	do { \
+	uint16_t *_stack;\
+	_stack	= (uint16_t) (_stack_base) + (uint16_t)(_size);\
+    	(_the_context)->stack_pointer = _stack-1;	\
+	*(_stack) = *(_entry_point);	\
+	printk("the ret address is %x\n", *(uint16_t *)(_stack));\
+	printk("sp = 0x%x\nep = 0x%x\n",_stack, *(_entry_point)); \
+	printk("stack base = 0x%x\n size = 0x%x\n",_stack_base, _size);\
+	printk("struct starting address = 0x%x\n", _the_context);\
+	printk("struct stack pointer address = 0x%x\n",(_the_context)->stack_pointer);\
+	} while ( 0 )
 
+*/
 /*
  *  This routine is responsible for somehow restarting the currently
  *  executing task.  If you are lucky, then all that is necessary
@@ -914,6 +957,58 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* end of Priority handler macros */
 
 /* functions */
+
+/*context_initialize asm function*/
+
+void context_initialize(unsigned short* context,
+		unsigned short stack_add, 
+		unsigned short entry_point);  
+
+/*PAGE
+ *
+ *  _CPU_Context_Initialize
+ *
+ *  This kernel routine initializes the basic non-FP context area associated
+ *  with each thread.
+ *
+ *  Input parameters:
+ *    the_context  - pointer to the context area
+ *    stack_base   - address of memory for the SPARC
+ *    size         - size in bytes of the stack area
+ *    new_level    - interrupt level for this context area
+ *    entry_point  - the starting execution point for this this context
+ *    is_fp        - TRUE if this context is associated with an FP thread
+ *
+ *  Output parameters: NONE
+ */
+
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+);
+
+/*
+*
+*  _CPU_Push
+*
+*  this routine pushes 2 bytes onto the stack
+*
+*
+*
+*
+*
+*
+*
+*/
+
+void _CPU_Push(uint16_t _SP_, uint16_t entry_point); 
+
+
+
 
 /*
  *  _CPU_Initialize

@@ -21,22 +21,115 @@
  *  and cpu.h should not be included in a "real" cpu_asm file.  An
  *  implementation in assembly should include "cpu_asm.h>
  */
+#include <avr/io.h>
+#include <avr/sfr_defs.h>
+#include <rtems/asm.h>
 
-#include <rtems/system.h>
-#include <rtems/score/cpu.h>
-/* #include "cpu_asm.h> */
 
-#include <rtems/bspIo.h> /* XXX remove me later */
+#define jmpb_hi 	r25
+#define jmpb_lo 	r24
+#define val_hi 		r23
+#define val_lo 		r22
 
-/* XXX remove me when really implemented */
-int setjmp(void)
-{
-  return 0;
-}
-int longjmp(void)
-{
-  return 0;
-}
+#define ret_lo		r24
+#define ret_hi 		r25
+
+
+
+	PUBLIC( setjmp )
+
+SYM( setjmp ):
+	X_movw		XL, jmpb_lo
+/*;save call-saved registers and frame pointer*/
+	.irp		.L_regno, 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,28,29	
+	st		X+, r\.L_regno
+	.endr
+/*;get return address*/
+	
+	pop		ZH
+	pop		ZL
+/*save stack pointer (after popping)*/
+	
+	in 		ret_lo, 	AVR_STACK_POINTER_LO_ADDR
+	st		X+, ret_lo
+	
+#ifdef _HAVE_AVR_STACK_POINTER_HI
+	in 		ret_lo, AVR_STACK_POINTER_HI_ADDR
+	st 		X+, ret_lo
+#else
+	in		ret_lo,	__zero_reg__
+	st		X+, ret_lo
+#endif
+/*save status reg (I flag)*/
+	in		ret_lo, AVR_STATUS_ADDR
+	st		X+, ret_lo
+/*save return addr*/
+	st		X+, ZL
+	st		X+, ZH
+/*return zero*/
+	clr 		ret_hi
+	clr		ret_lo
+	ijmp
+
+	.size		_U(setjmp),.-_U(setjmp)
+
+
+	.global _U(longjmp)
+	.type _U(longjmp), @function
+
+_U(longjmp):
+	X_movw		XL, jmpb_lo
+/*return value*/
+	X_movw		ret_lo, val_lo
+/*if zero, change to 1*/
+	cpi		ret_lo, 1
+	cpc		ret_hi, __zero_reg__
+	adc		ret_lo, __zero_reg__
+/*restore call-saved registers and frame pointer*/
+	.irp	.L_regno, 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,28,29
+	ld	r\.L_regno, X+
+	.endr
+/*; restore stack pointer (SP value before the setjmp() call) and SREG*/
+	ld	ZL, X+
+	ld	ZH, X+
+	ld	__tmp_reg__, X+
+#if  defined (__AVR_XMEGA__) && __AVR_XMEGA__
+	/* A write to SPL will automatically disable interrupts for up to 4
+	   instructions or until the next I/O memory write.	*/
+	out	AVR_STATUS_ADDR, __tmp_reg__
+	out	AVR_STACK_POINTER_LO_ADDR, ZL
+	out	AVR_STACK_POINTER_HI_ADDR, ZH
+#else
+# ifdef _HAVE_AVR_STACK_POINTER_HI
+	/* interrupts disabled for shortest possible time (3 cycles) */
+	cli
+	out	AVR_STACK_POINTER_HI_ADDR, ZH
+# endif
+	/* Restore status register (including the interrupt enable flag).
+	   Interrupts are re-enabled only after the next instruction.  */
+	out	AVR_STATUS_ADDR, __tmp_reg__
+	out	AVR_STACK_POINTER_LO_ADDR, ZL
+#endif
+  ; get return address and jump
+	ld	ZL, X+
+	ld	ZH, X+
+#if  defined(__AVR_3_BYTE_PC__) && __AVR_3_BYTE_PC__
+	ld	__tmp_reg__, X+
+.L_jmp3:
+	push	ZL
+	push	ZH
+	push	__tmp_reg__
+	ret
+#else
+	ijmp
+#endif
+	.size	_U(longjmp), . - _U(longjmp)
+
+
+
+
+
+
 
 /*
  *  _CPU_Context_save_fp_context
@@ -53,13 +146,25 @@ int longjmp(void)
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- */
+ 
 
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
 )
 {
 }
+*/
+
+	PUBLIC(_CPU_Context_save_fp)
+
+SYM(_CPU_Context_save_fp):
+	ret
+
+
+	
+
+
+
 
 /*
  *  _CPU_Context_restore_fp_context
@@ -76,13 +181,22 @@ void _CPU_Context_save_fp(
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- */
+ 
 
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 )
 {
 }
+*/
+
+
+	PUBLIC(_CPU_Context_restore_fp)
+
+SYM(_CPU_Context_restore_fp):
+	ret
+
+
 
 /*  _CPU_Context_switch
  *
@@ -91,15 +205,85 @@ void _CPU_Context_restore_fp(
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- */
+ 
+*/
 
-void _CPU_Context_switch(
-  Context_Control  *run,
-  Context_Control  *heir
-)
-{
-  printk( "AVR _CPU_Context_switch\n" );
-}
+
+
+
+
+	PUBLIC(_CPU_Context_switch)
+
+SYM(_CPU_Context_switch):
+	mov	r26, r18
+	mov	r27, r19
+	st	X+, r2
+	st	X+, r3
+	st	X+, r4
+	st	X+, r5
+	st	X+, r6
+	st	X+, r7
+	st 	X+, r8
+	st	X+, r9
+	st	X+, r10
+	st	X+, r11
+	st	X+, r12
+	st	X+, r13
+	st	X+, r14
+	st	X+, r15
+	st	X+, r16
+	st	X+, r17
+	st	X+, r28
+	st	X+, r29
+	st	X+, r29
+	lds 	r25,0x5f  /*load sreg*/
+	st 	X+, r25
+	lds	r25,0x5d /*spl*/
+	st	X+, r25
+	lds 	r25,0x5e /*sph*/
+	
+
+restore:
+	mov	r26,r22
+	mov	r27,r23
+	ld	r2, X+
+	ld	r3, X+
+	ld	r4, X+
+	ld	r5, X+
+	ld	r6, X+
+	ld	r7, X+
+	ld	r8, X+
+	ld	r9, X+
+	ld	r10, X+
+	ld	r11, X+
+	ld	r12, X+
+	ld	r13, X+
+	ld	r14, X+
+	ld	r15, X+
+	ld	r16, X+
+	ld	r17, X+
+	ld	r28, X+	
+	ld	r29, X+
+	ld	r25, X+
+	sts	0x5f,r25 /*sreg*/
+	ld	r25, X+
+	sts	0x5d,r25  /*spl*/
+	ld	r25, X+
+	sts 	0x5e ,r25 /*sph*/
+	ret
+
+
+	PUBLIC(_CPU_Push)
+SYM(_CPU_Push):
+	lds	r20, 0x5d /*spl*/
+	lds	r21, 0x5e /*sph*/
+	sts	0x5d, r24  /*spl*/
+	sts	0x5e, r25  /*sph*/	
+	push	r22
+	push	r23
+	sts	0x5d, r20  /*spl*/
+	sts 	0x5e, r21  /*sph*/
+	ret
 
 /*
  *  _CPU_Context_restore
@@ -112,7 +296,7 @@ void _CPU_Context_switch(
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- */
+ 
 
 void _CPU_Context_restore(
   Context_Control *new_context
@@ -120,6 +304,15 @@ void _CPU_Context_restore(
 {
   printk( "AVR _CPU_Context_restore\n" );
 }
+*/
+
+	PUBLIC(_CPU_Context_restore)
+
+SYM(_CPU_Context_restore):
+	//call printk("AVR _CPU_Context_restore\n")
+	ret
+
+
 
 /*  void __ISR_Handler()
  *
@@ -128,10 +321,12 @@ void _CPU_Context_restore(
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- */
+ 
 
 void _ISR_Handler(void)
 {
+
+*/
    /*
     *  This discussion ignores a lot of the ugly details in a real
     *  implementation such as saving enough registers/state to be
@@ -193,4 +388,9 @@ void _ISR_Handler(void)
    *  prepare to get out of interrupt
    *  return from interrupt
    */
-}
+/*}    */
+	PUBLIC(_ISR_Handler)
+
+SYM(_ISR_Handler):
+	ret
+
