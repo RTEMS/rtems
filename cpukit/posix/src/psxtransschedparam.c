@@ -33,33 +33,33 @@ int _POSIX_Thread_Translate_sched_param(
   *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   *budget_callout = NULL;
 
-  switch ( policy ) {
-    case SCHED_OTHER:
-      *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
-      break;
-
-    case SCHED_FIFO:
-      *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-      break;
-
-    case SCHED_RR:
-      *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
-      break;
-
-    case SCHED_SPORADIC:
-      *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-      *budget_callout = _POSIX_Threads_Sporadic_budget_callout;
-
-      if ( _Timespec_To_ticks( &param->ss_replenish_period ) <
-           _Timespec_To_ticks( &param->ss_initial_budget ) )
-        return EINVAL;
-
-      if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
-        return EINVAL;
-      break;
-
-    default:
-      return EINVAL;
+  if ( policy == SCHED_OTHER ) {
+    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+    return 0;
   }
-  return 0;
+
+  if ( policy == SCHED_FIFO ) {
+    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+    return 0;
+  }
+
+  if ( policy == SCHED_RR ) {
+    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
+    return 0;
+  }
+
+  if ( policy == SCHED_SPORADIC ) {
+    if ( _Timespec_To_ticks( &param->ss_replenish_period ) <
+	 _Timespec_To_ticks( &param->ss_initial_budget ) )
+      return EINVAL;
+
+    if ( !_POSIX_Priority_Is_valid( param->ss_low_priority ) )
+      return EINVAL;
+    
+    *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+    *budget_callout = _POSIX_Threads_Sporadic_budget_callout;
+    return 0;
+  }
+
+  return EINVAL;
 }
