@@ -1,6 +1,9 @@
-/*  set_vector
- *
- *  This routine installs an interrupt vector on the SPARC simulator.
+/*
+ *  This routine installs an interrupt vector on CPU architectures
+ *  using the Simple Vectored Interrupt Model.  This is the shared
+ *  version which does nothing BSP specific.  A BSP specific version
+ *  will be needed if you need to enable an interrupt source via
+ *  some register.
  *
  *  INPUT PARAMETERS:
  *    handler - interrupt handler entry point
@@ -13,13 +16,14 @@
  *  RETURNS:
  *    address of previous interrupt handler
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ *  $Id$
  */
 
 #include <bsp.h>
