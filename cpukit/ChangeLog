@@ -1,3 +1,8 @@
+2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/coremsgsubmit.c: Move impossible case inside an RTEMS_DEBUG
+	conditional.
+
 2009-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/Makefile.am, posix/src/mutex.c, posix/src/mutexinit.c: Add

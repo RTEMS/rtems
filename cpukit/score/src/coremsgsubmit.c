@@ -111,13 +111,14 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     the_message =
         _CORE_message_queue_Allocate_message_buffer( the_message_queue );
 
-    /*
-     *  NOTE: If the system is consistent, this error should never occur.
-     */
+    #if defined(RTEMS_DEBUG) 
+      /*
+       *  NOTE: If the system is consistent, this error should never occur.
+       */
 
-    if ( !the_message ) {
-      return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
-    }
+      if ( !the_message )
+        return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
+     #endif
 
     _CORE_message_queue_Copy_buffer(
       buffer,
