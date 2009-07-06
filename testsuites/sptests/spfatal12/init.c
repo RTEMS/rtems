@@ -19,7 +19,6 @@ rtems_task Init(
   puts( "\n\n*** TEST FATAL 12 ***" );
 
   puts( "_Heap_Initialize fails during RTEMS initialization" );
-  Configuration.work_space_start = (void *)0x03;
   Configuration.work_space_size  = sizeof(void *);
   rtems_initialize_data_structures();
 }

@@ -1,5 +1,10 @@
 2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* spfatal12/init.c: Address to heap initialize must be aligned but size
+	must be too small.
+
+2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new test to exercise case when
 	broadcasting to a message queue with a pending message.
 	* sp55/.cvsignore, sp55/Makefile.am, sp55/init.c, sp55/sp55.doc,
