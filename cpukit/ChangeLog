@@ -1,3 +1,10 @@
+2009-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/Makefile.am, posix/src/mutex.c, posix/src/mutexinit.c: Add
+	initial support for the pthread mutex type attribute added by UNIX98.
+	It can be normal, recursive, errorcheck or default.
+	* posix/src/mutexattrgettype.c, posix/src/mutexattrsettype.c: New files.
+
 2009-07-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/taskinitusers.c: Restructure to eliminate dead check --

@@ -97,15 +97,14 @@ libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
     src/mqueueunlink.c
 
 ## MUTEX_C_FILES
-libposix_a_SOURCES += src/mutex.c src/mutexattrdestroy.c \
-    src/mutexattrgetprioceiling.c src/mutexattrgetprotocol.c \
-    src/mutexattrgetpshared.c src/mutexattrinit.c \
-    src/mutexattrsetprioceiling.c src/mutexattrsetprotocol.c \
-    src/mutexattrsetpshared.c src/mutexdestroy.c \
+libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
+    src/mutexattrgetprotocol.c src/mutexattrgetpshared.c \
+    src/mutexattrgettype.c src/mutexattrinit.c src/mutexattrsetprioceiling.c \
+    src/mutexattrsetprotocol.c src/mutexattrsetpshared.c \
+    src/mutexattrsettype.c src/mutex.c src/mutexdestroy.c src/mutexget.c \
     src/mutexgetprioceiling.c src/mutexinit.c src/mutexlock.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
-    src/mutextranslatereturncode.c src/mutextrylock.c src/mutexunlock.c \
-    src/mutexget.c
+    src/mutextranslatereturncode.c src/mutextrylock.c src/mutexunlock.c
 
 ## PTHREAD_C_FILES
 libposix_a_SOURCES += src/pthread.c src/pthreadsetcputime.c \

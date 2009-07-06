@@ -53,6 +53,9 @@ void _POSIX_Mutex_Manager_initialization(void)
   default_attr->prio_ceiling   = POSIX_SCHEDULER_MAXIMUM_PRIORITY;
   default_attr->protocol       = PTHREAD_PRIO_NONE;
   default_attr->recursive      = false;
+  #if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
+    default_attr->type         = PTHREAD_MUTEX_DEFAULT;
+  #endif
 
   /*
    * Initialize the POSIX mutex object class information structure.
