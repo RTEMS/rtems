@@ -1,3 +1,8 @@
+2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psx07/init.c: Slight test fix to ensure state of sched_param
+	structure.
+
 2009-07-04	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* psxrwlock01/psxrwlock01.scn, psxrwlock01/test.c: Add test case for

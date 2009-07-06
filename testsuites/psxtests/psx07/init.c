@@ -504,7 +504,9 @@ void *POSIX_Init(
   status = pthread_setschedparam( pthread_self(), SCHED_OTHER, NULL );
   fatal_directive_check_status_only( status, EINVAL, "invalid priority" );
 
-  schedparam.sched_priority = sched_get_priority_max(SCHED_OTHER);
+  /* reset sched_param */
+  status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
+  posix_service_failed( status, "pthread_getschedparam");
 
   puts( "Init: pthread_setschedparam - EINVAL (invalid policy)" );
   status = pthread_setschedparam( pthread_self(), -1, &schedparam );
