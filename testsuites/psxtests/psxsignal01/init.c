@@ -72,8 +72,8 @@ rtems_timer_service_routine Signal_duringISR_TSR(
   void     *ignored_address
 )
 {
-  int               status;
-  status = kill( getpid(), SIGUSR1 );
+  int  status;
+  status = pthread_kill( pthread_self(), SIGUSR1 );
 }
 
 
