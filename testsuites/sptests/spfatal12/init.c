@@ -1,4 +1,4 @@
-/*  Test __assert_func with NULL function name
+/*  Test fatal error when _Heap_Initialize fails during initialization
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,17 +11,17 @@
  */
 
 #include <tmacros.h>
-#undef NDEBUG
-#include <assert.h>
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  puts( "\n\n*** TEST FATAL 11 ***" );
+  puts( "\n\n*** TEST FATAL 12 ***" );
 
-  puts( "asserting with non-NULL strings..." );
-  __assert_func( __FILE__, __LINE__, NULL, "forced" );
+  puts( "_Heap_Initialize fails during RTEMS initialization" );
+  Configuration.work_space_start = (void *)0x03;
+  Configuration.work_space_size  = sizeof(void *);
+  rtems_initialize_data_structures();
 }
 
 /* configuration information */

@@ -1,0 +1,2 @@
+*** TEST FATAL 12 ***
+_Heap_Initialize fails during RTEMS initialization
