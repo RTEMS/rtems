@@ -1,0 +1,6 @@
+*** TEST 55 ***
+Init - rtems_message_queue_create - OK
+Init - rtems_message_queue_send - make message pending - OK
+Init - rtems_message_queue_broadcast - with message pending - OK
+Init - rtems_message_queue_delete - OK
+*** END OF TEST 55 ***

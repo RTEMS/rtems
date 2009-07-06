@@ -1,3 +1,10 @@
+2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise case when
+	broadcasting to a message queue with a pending message.
+	* sp55/.cvsignore, sp55/Makefile.am, sp55/init.c, sp55/sp55.doc,
+	sp55/sp55.scn: New files.
+
 2009-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Remove obsolete test now that the numbered
