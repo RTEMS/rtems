@@ -1,8 +1,0 @@
-#
-#  $Id$
-#
-
-This test depends on tricks to test the fatal error paths in the 
-RTEMS executive initialization path.  These tricks have gotten
-out of sync with the implementation.  So this test is no longer
-included in the build set.

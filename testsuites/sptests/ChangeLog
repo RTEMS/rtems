@@ -1,5 +1,14 @@
 2009-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Remove obsolete test now that the numbered
+	spfatal tests appear to cover all fatal error cases.
+	* spfatal/.cvsignore, spfatal/Makefile.am, spfatal/README,
+	spfatal/fatal.c, spfatal/init.c, spfatal/puterr.c,
+	spfatal/spfatal.doc, spfatal/spfatal.scn, spfatal/system.h,
+	spfatal/task1.c: Removed.
+
+2009-07-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, spfatal11/init.c: Add test of cannot
 	initialize workspace heap during initialize. Can be caused by
 	unaligned address or not enough memory to initialize heap required

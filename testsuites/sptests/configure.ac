@@ -80,7 +80,6 @@ sp52/Makefile
 sp53/Makefile
 sp54/Makefile
 spchain/Makefile
-spfatal/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
 spfatal03/Makefile
