@@ -1,0 +1,5 @@
+*** TEST 56 ***
+Init - rtems_extension_create - OK
+Init - rtems_task_create - create extension fails - UNSATISFIED
+Init - rtems_extension_delete - OK
+*** END OF TEST 56 ***
