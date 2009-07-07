@@ -1,3 +1,10 @@
+2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/mutexsetprioceiling.c: Restructure to eliminate code
+	paths which are unreachable. Also add more comments.
+	* score/src/coremutexsurrender.c: Mark some code as RTEMS_DEBUG only
+	since it cannot be hit unless coremutexseize.c is broken.
+
 2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/mutexget.c: Restructure to improve ability to do coverage

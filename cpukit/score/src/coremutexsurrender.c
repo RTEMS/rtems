@@ -84,17 +84,27 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   the_mutex->nest_count--;
 
-  if ( the_mutex->nest_count != 0 ) {
-    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
-      case CORE_MUTEX_NESTING_ACQUIRES:
-        return CORE_MUTEX_STATUS_SUCCESSFUL;
-      case CORE_MUTEX_NESTING_IS_ERROR:
-        /* should never occur */
-        return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-      case CORE_MUTEX_NESTING_BLOCKS:
-        /* Currently no API exercises this behavior. */
-        break;
-    }
+  if ( the_mutex->nest_count != 0 ) { 
+    /*
+     *  All error checking is on the locking side, so if the lock was
+     *  allowed to acquired multiple times, then we should just deal with
+     *  that.  The RTEMS_DEBUG is just a validation.
+     */
+    #if defined(RTEMS_DEBUG)
+      switch ( the_mutex->Attributes.lock_nesting_behavior ) {
+        case CORE_MUTEX_NESTING_ACQUIRES:
+          return CORE_MUTEX_STATUS_SUCCESSFUL;
+        case CORE_MUTEX_NESTING_IS_ERROR:
+          /* should never occur */
+          return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+        case CORE_MUTEX_NESTING_BLOCKS:
+          /* Currently no API exercises this behavior. */
+          break;
+      }
+    #else
+      /* must be CORE_MUTEX_NESTING_ACQUIRES or we wouldn't be here */
+      return CORE_MUTEX_STATUS_SUCCESSFUL;
+    #endif
   }
 
   /*

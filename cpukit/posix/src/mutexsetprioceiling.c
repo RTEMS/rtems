@@ -48,13 +48,19 @@ int pthread_mutex_setprioceiling(
   the_priority = _POSIX_Priority_To_core( prioceiling );
 
   /*
-   *  Must acquire the mutex before we can change it's ceiling
+   *  Must acquire the mutex before we can change it's ceiling.
+   *  POSIX says block until we acquire it.
    */
+  (void) pthread_mutex_lock( mutex );
 
-  status = pthread_mutex_lock( mutex );
-  if ( status )
-    return status;
-
+  /*
+   *  Do not worry about the return code from this.  The Get operation
+   *  will also fail if it is a bad id or was deleted between the two
+   *  operations.
+   *
+   *  NOTE: This makes it easier to get 100% binary coverage since the
+   *        bad Id case is handled by the switch.
+   */
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
 
@@ -63,12 +69,16 @@ int pthread_mutex_setprioceiling(
         the_mutex->Mutex.Attributes.priority_ceiling
       );
       the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
+      /*
+       *  We are required to unlock the mutex before we return.
+       */
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id,
         NULL
       );
       _Thread_Enable_dispatch();
+
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
