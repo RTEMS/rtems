@@ -6,7 +6,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,7 +20,8 @@
 
 void Screen1()
 {
-  uint32_t      notepad_value;
+  uint32_t            notepad_value;
+  rtems_name          task_name;
   rtems_id            self_id;
   rtems_task_priority previous_priority;
   rtems_status_code   status;
@@ -93,9 +94,17 @@ void Screen1()
     "rtems_task_get_note with no tasks in API"
   );
 
+  puts( "TA1 - rtems_object_get_classic_name - bad ID" );
+  status = rtems_object_get_classic_name( 
+    rtems_build_id( OBJECTS_ITRON_API, OBJECTS_ITRON_TASKS, 1, 1 ),
+    &task_name
+  );
+  fatal_directive_status( status, RTEMS_INVALID_ID,
+    "rtems_object_get_classic_name with no tasks in API"
+  );
+
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &self_id );
   directive_failed( status, "rtems_task_ident of self" );
-
   if ( self_id != Task_id[ 1 ] ) {
     puts( "ERROR - rtems_task_ident - incorrect ID returned!" );
   }
