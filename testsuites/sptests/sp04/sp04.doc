@@ -15,8 +15,14 @@ This file describes the directives and concepts tested by this test set.
 test set name:  test4
 
 directives:
-  ex_init, ex_start, t_create, t_start, tm_tick, i_return,
-  tm_set, tm_get, ev_receive, t_mode
+  rtems_task_create
+  rtems_task_start
+  rtems_task_mode
+  rtems_clock_set
+  rtems_clock_get
+  rtems_event_receive
+  rtems_extension_create
+  rtems_extension_delete
 
 concepts:
 
@@ -27,6 +33,9 @@ concepts:
   c.  Verifies the no preemption mode.
 
   d.  Verifies time-slice gets reset even if only one task ready.
+
+  e.  Verifies that deleting a user extension with a task switch hook
+      works as expected.
 
 output:
   The task name and the current time are printed out each time that a new

@@ -110,6 +110,11 @@ rtems_task Task_1(
 
       while ( !testsFinished );
       showTaskSwitches ();
+
+      puts( "TA1 - rtems_extension_delete - successful" );
+      status = rtems_extension_delete( Extension_id[1] );
+      directive_failed( status, "rtems_extension_delete" );
+
       puts( "*** END OF TEST 4 ***" );
       rtems_test_exit (0);
     }

@@ -1,5 +1,10 @@
 2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp04/sp04.doc, sp04/sp04.scn, sp04/task1.c: Add test of
+	rtems_extension_delete.
+
+2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp09/screen01.c, sp09/sp09.scn: Add test for
 	rtems_object_get_classic_name with invalid id.
 
