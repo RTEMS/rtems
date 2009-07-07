@@ -16,7 +16,7 @@ command sequence is used to transform an ELF file into a U-Boot image.
 powerpc-rtems4.8-objcopy -R -S -O binary hello.exe hello.bin
 cat hello.bin | gzip -9 >hello.gz
 /opt/embedded/tools/usr/bin/mkimage \
-  -A ppc -O rtems -T kernel -a 0x40000 -e 0x40000 -n "RTEMS" \
+  -A ppc -O rtems -T kernel -a 0x10000 -e 0x10000 -n "RTEMS" \
   -d hello.gz hello.img 
 
 These ttcp results were between an EP5200 and Dell Insprion 9400
