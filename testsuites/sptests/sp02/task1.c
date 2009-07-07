@@ -37,7 +37,6 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_ident of TA2" );
 
   printf( "TA1 - rtems_task_ident - tid of TA2 (0x%.8x)\n", tid2 );
-
   status = rtems_object_get_classic_name( tid2, &tid2_name );
   directive_failed( status, "rtems_object_get_classic_name of TA2" );
 

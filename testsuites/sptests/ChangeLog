@@ -1,3 +1,7 @@
+2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp02/task1.c: Minor spacing.
+
 2009-07-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spfatal12/init.c: Address to heap initialize must be aligned but size
