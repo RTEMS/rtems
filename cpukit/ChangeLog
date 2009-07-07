@@ -1,3 +1,10 @@
+2009-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/src/rtemsobjectapimaximumclass.c,
+	score/include/rtems/score/object.h,
+	score/src/objectapimaximumclass.c, score/src/objectgetinfo.c: Change
+	return type of API maximum class methods to unsigned.
+
 2009-07-07	Chris Johns <chrisj@rtems.org>
 
 	* score/src/objectshrinkinformation.c: Rework loop to simplify and

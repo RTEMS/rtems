@@ -33,7 +33,7 @@ Objects_Information *_Objects_Get_information(
     return NULL;
 
   the_class_api_maximum = _Objects_API_maximum_class( the_api );
-  if ( the_class_api_maximum < 0 ||
+  if ( the_class_api_maximum == 0 ||
        the_class > (uint32_t) the_class_api_maximum )
     return NULL;
 

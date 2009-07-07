@@ -19,7 +19,7 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/types.h>
 
-int rtems_object_api_maximum_class(
+unsigned int rtems_object_api_maximum_class(
   uint32_t api
 )
 {

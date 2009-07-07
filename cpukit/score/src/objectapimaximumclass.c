@@ -16,7 +16,7 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 
-int _Objects_API_maximum_class(
+unsigned int _Objects_API_maximum_class(
   uint32_t api
 )
 {
@@ -33,6 +33,6 @@ int _Objects_API_maximum_class(
     default:
       break;
   }
-  return -1;
+  return 0;
 }
 

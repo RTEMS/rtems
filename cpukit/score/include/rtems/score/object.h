@@ -492,9 +492,9 @@ void _Objects_Initialize_information (
  *
  *  @param[in] api is the API of interest
  *
- *  @return A positive integer on success and -1 otherwise.
+ *  @return A positive integer on success and 0 otherwise.
  */
-int _Objects_API_maximum_class(
+unsigned int _Objects_API_maximum_class(
   uint32_t api
 );
 
