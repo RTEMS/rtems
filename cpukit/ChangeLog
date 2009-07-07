@@ -1,5 +1,13 @@
 2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* ChangeLog, posix/src/mutexsetprioceiling.c: Remove warning.
+
+2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* posix/src/mutexsetprioceiling.c: Remove warning.
+
+2009-07-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/src/mutexsetprioceiling.c: Restructure to eliminate code
 	paths which are unreachable. Also add more comments.
 	* score/src/coremutexsurrender.c: Mark some code as RTEMS_DEBUG only

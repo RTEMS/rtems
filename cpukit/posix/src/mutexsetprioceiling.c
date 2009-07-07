@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,7 +37,6 @@ int pthread_mutex_setprioceiling(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
   Priority_Control              the_priority;
-  int                           status;
 
   if ( !old_ceiling )
     return EINVAL;
