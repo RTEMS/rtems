@@ -11,7 +11,7 @@
  *
  *  Output parameters:  NONE
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -235,7 +235,21 @@ void test_heap_info(void)
   sc = malloc_info( &the_info );
   rtems_test_assert( sc == 0 );
   rtems_test_assert( s1 == the_info.Free.largest );
+}
 
+void test_protected_heap_info(void)
+{
+  Heap_Control           heap;
+  Heap_Information_block info;
+  bool                   rc;
+
+  puts( "_Protected_heap_Get_information - NULL heap" );
+  rc = _Protected_heap_Get_information( NULL, &info );
+  rtems_test_assert( rc == false );
+
+  puts( "_Protected_heap_Get_information - NULL info" );
+  rc = _Protected_heap_Get_information( &heap, NULL );
+  rtems_test_assert( rc == false );
 }
 
 /*
@@ -304,6 +318,7 @@ rtems_task Init(
   test_heap_cases_1();
   test_heap_extend();
   test_heap_info();
+  test_protected_heap_info();
 
   test_posix_memalign();
 
