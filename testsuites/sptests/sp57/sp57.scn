@@ -1,0 +1,7 @@
+*** TEST 57 ***
+Init - rtems_task_create - delay task - OK
+Init - rtems_task_start - delay task - OK
+Init - rtems_task_wake_after - let delay task block - OK
+Delay - rtems_task_wake_after - OK
+Init - rtems_task_restart - delay task - OK
+*** END OF TEST 57 ***
