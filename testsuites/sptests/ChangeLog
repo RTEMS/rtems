@@ -1,5 +1,10 @@
 2009-07-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp12/sp12.scn: Update screen to reflect priority changes from long
+	ago.
+
+2009-07-08	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac, sp27/Makefile.am, sp27/init.c,
 	sp27/sp27.doc, sp27/sp27.scn: Rework sp27 so it can be reinstantiated
 	as sp27a and test flushing both counting and binary semaphores.

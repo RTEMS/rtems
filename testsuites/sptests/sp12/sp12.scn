@@ -19,22 +19,22 @@ INIT - rtems_semaphore_delete - allocated binary semaphore
 PRI5 - rtems_semaphore_obtain - wait forever on SM2
 Set priority of self while holding resource
 PRI5 - rtems_task_suspend - until all priority tasks blocked
-PDRV - priority of PRI5 is 67
+PDRV - priority of PRI5 is 8
 PRI4 - rtems_semaphore_obtain - wait forever on SM2
-PDRV - change priority of PRI5 from 67 to 68
-PDRV - priority of PRI5 is 67
+PDRV - change priority of PRI5 from 8 to 9
+PDRV - priority of PRI5 is 8
 PRI3 - rtems_semaphore_obtain - wait forever on SM2
-PDRV - priority of PRI5 is 67
+PDRV - priority of PRI5 is 8
 PRI2 - rtems_semaphore_obtain - wait forever on SM2
-PDRV - priority of PRI5 is 66
+PDRV - priority of PRI5 is 7
 PRI1 - rtems_semaphore_obtain - wait forever on SM2
-PDRV - priority of PRI5 is 65
+PDRV - priority of PRI5 is 6
 PDRV - rtems_task_resume - PRI5
 PRI5 - rtems_task_delete - all tasks waiting on SM2
 PRI5 - rtems_semaphore_obtain - nested
 PRI5 - rtems_semaphore_release - nested
 PRI5 - rtems_semaphore_release - restore priority
-PRI5 - priority of PRI5 is 68
+PRI5 - priority of PRI5 is 9
 <pause>
 TA1 - rtems_semaphore_ident - smid => 1a010009
 TA1 - rtems_semaphore_obtain - wait forever on SM2
