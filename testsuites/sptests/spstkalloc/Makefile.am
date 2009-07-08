@@ -17,7 +17,6 @@ include $(top_srcdir)/../automake/leaf.am
 spstkalloc_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -DUSE_TIMER_SERVER
 
 LINK_OBJS = $(spstkalloc_OBJECTS) $(spstkalloc_LDADD)
 LINK_LIBS = $(spstkalloc_LDLIBS)
