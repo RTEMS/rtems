@@ -17,7 +17,6 @@ include $(top_srcdir)/../automake/leaf.am
 sp55_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -DUSE_TIMER_SERVER
 
 LINK_OBJS = $(sp55_OBJECTS) $(sp55_LDADD)
 LINK_LIBS = $(sp55_LDLIBS)
