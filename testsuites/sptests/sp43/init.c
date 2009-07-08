@@ -360,13 +360,31 @@ rtems_task Init(
     "rtems_object_get_class_information (API)"
   );
 
-  puts( "rtems_object_get_class_information - INVALID_NUMBER (bad class)" );
-  status =
-    rtems_object_get_class_information( OBJECTS_INTERNAL_API, 0, &info );
+  puts( "rtems_object_get_class_information - INVALID_NUMBER (api=0xff)" );
+  status = rtems_object_get_class_information( 0xff, 1, &info );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,
-    "rtems_object_get_class_information (API)"
+    "rtems_object_get_class_information (api=0xff)"
+  );
+
+  puts( "rtems_object_get_class_information - INVALID_NUMBER (class=0)" );
+  status = rtems_object_get_class_information(
+    OBJECTS_INTERNAL_API, 0, &info );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_object_get_class_information (class=0)"
+  );
+
+  puts(
+    "rtems_object_get_class_information - INVALID_NUMBER (class too high)" );
+  status = rtems_object_get_class_information(
+    OBJECTS_INTERNAL_API, 0xff, &info);
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_object_get_class_information (class #2)"
   );
 
   puts( "rtems_object_get_class_information - Classic Tasks - OK" );

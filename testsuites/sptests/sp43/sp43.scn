@@ -1,7 +1,5 @@
-
-
 *** TEST 43 ***
-RTEMS Version: rtems-4.9.99.0(PowerPC/Generic (classic FPU)/psim)
+RTEMS Version: rtems-4.9.99.0(SPARC/w/FPU/erc32)
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
@@ -32,7 +30,7 @@ rtems_object_get_name returned (N) for init task
 rtems_object_set_name - change name of init task to ()
 *    - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned () for init task
-rtems_object_set_name - change name of init task to (0x4e-0x07-0x09-0x31)
+rtems_object_set_name - change name of init task to (N-0x07-0x09-1)
 N**1 - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (N**1) for init task
 rtems_object_set_name - change name of init task to (SELF)
@@ -48,11 +46,11 @@ rtems_object_id_get_index - OK
 rtems_object_id_api_minimum returned 1
 rtems_object_id_api_maximum returned 4
 rtems_object_api_minimum_class(0) returned -1
-rtems_object_api_maximum_class(0) returned -1
+rtems_object_api_maximum_class(0) returned 0
 rtems_object_api_minimum_class(0) returned -1
-rtems_object_api_maximum_class(0) returned -1
+rtems_object_api_maximum_class(0) returned 0
 rtems_object_api_minimum_class(255) returned -1
-rtems_object_api_maximum_class(255) returned -1
+rtems_object_api_maximum_class(255) returned 0
 rtems_object_api_minimum_class(OBJECTS_INTERNAL_API) returned 1
 rtems_object_api_maximum_class(OBJECTS_INTERNAL_API) returned 2
 rtems_object_api_minimum_class(OBJECTS_CLASSIC_API) returned 1
@@ -72,7 +70,9 @@ rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = Barrier
 <pause>
 rtems_object_get_class_information - INVALID_ADDRESS
 rtems_object_get_class_information - INVALID_NUMBER (bad API)
-rtems_object_get_class_information - INVALID_NUMBER (bad class)
+rtems_object_get_class_information - INVALID_NUMBER (api=0xff)
+rtems_object_get_class_information - INVALID_NUMBER (class=0)
+rtems_object_get_class_information - INVALID_NUMBER (class too high)
 rtems_object_get_class_information - Classic Tasks - OK
 Classic API Task Information
     minimum id  : 0x0a010001 maximum id: 0x0a010002
