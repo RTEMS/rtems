@@ -15,11 +15,12 @@ test set name:  sp57
 
 directives:
 
-  rtems_extension_create
   rtems_task_create
-  rtems_extension_delete
+  rtems_task_start
+  rtems_task_restart
+  rtems_task_wake_after
 
 concepts:
 
-+ Ensure that when an extension create hook returns false (e.g. fails), that
-  the thread creation returns the proper error.
++ Ensure that when a task is restarted while it is sleeping that the
+  behavior is as expected.
