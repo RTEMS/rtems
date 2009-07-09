@@ -82,7 +82,6 @@ rtems_status_code rtems_semaphore_create(
   CORE_semaphore_Attributes   the_semaphore_attr;
   CORE_mutex_Status           mutex_status;
 
-
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
@@ -95,7 +94,8 @@ rtems_status_code rtems_semaphore_create(
     if ( !_System_state_Is_multiprocessing )
       return RTEMS_MP_NOT_CONFIGURED;
 
-    if ( _Attributes_Is_inherit_priority( attribute_set ) )
+    if ( _Attributes_Is_inherit_priority( attribute_set ) ||
+         _Attributes_Is_priority_ceiling( attribute_set ) ) {
       return RTEMS_NOT_DEFINED;
 
   } else
@@ -104,10 +104,8 @@ rtems_status_code rtems_semaphore_create(
   if ( _Attributes_Is_inherit_priority( attribute_set ) ||
               _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
-    if ( ! ( (_Attributes_Is_binary_semaphore( attribute_set ) ||
-              _Attributes_Is_simple_binary_semaphore( attribute_set )) &&
-
-             _Attributes_Is_priority( attribute_set ) ) )
+    if ( ! (_Attributes_Is_binary_semaphore( attribute_set ) &&
+            _Attributes_Is_priority( attribute_set ) ) )
       return RTEMS_NOT_DEFINED;
 
   }
@@ -165,51 +163,52 @@ rtems_status_code rtems_semaphore_create(
       &the_semaphore_attr,
       count
     );
-    goto open_object;
+  } else {
+    /*
+     *  It is either simple binary semaphore or a more powerful mutex
+     *  style binary semaphore.  This is the mutex style.
+     */
+    if ( _Attributes_Is_priority( attribute_set ) )
+      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY;
+    else
+      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
+
+    if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
+      the_mutex_attr.priority_ceiling      = priority_ceiling;
+      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
+      the_mutex_attr.only_owner_release    = false;
+
+      if ( the_mutex_attr.discipline == CORE_MUTEX_DISCIPLINES_PRIORITY ) {
+        if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
+          the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
+          the_mutex_attr.only_owner_release = true;
+        } else if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
+          the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
+          the_mutex_attr.only_owner_release = true;
+        }
+      }
+    } else /* must be simple binary semaphore */ {
+      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
+      the_mutex_attr.only_owner_release = false;
+    }
+
+    mutex_status = _CORE_mutex_Initialize(
+      &the_semaphore->Core_control.mutex,
+      &the_mutex_attr,
+      (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
+    ); 
+
+    if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
+      _Semaphore_Free( the_semaphore );
+      _Thread_Enable_dispatch();
+      return RTEMS_INVALID_PRIORITY;
+    }
   }
 
   /*
-   *  It is either simple binary semaphore or a more powerful mutex
-   *  style binary semaphore.  This is the mutex style.
+   *  Whether we initialized it as a mutex or counting semaphore, it is
+   *  now ready to be "offered" for use as a Classic API Semaphore.
    */
-
-  if ( _Attributes_Is_priority( attribute_set ) )
-    the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY;
-  else
-    the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
-
-  if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
-    the_mutex_attr.priority_ceiling      = priority_ceiling;
-    the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-
-    if ( the_mutex_attr.discipline == CORE_MUTEX_DISCIPLINES_PRIORITY ) {
-      if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
-        the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
-        the_mutex_attr.only_owner_release = true;
-      } else {
-        the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
-        the_mutex_attr.only_owner_release = true;
-      }
-    } else
-      the_mutex_attr.only_owner_release = false;
-  } else /* must be simple binary semaphore */ {
-    the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
-    the_mutex_attr.only_owner_release = false;
-  }
-
-  mutex_status = _CORE_mutex_Initialize(
-    &the_semaphore->Core_control.mutex,
-    &the_mutex_attr,
-    (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
-  ); 
-
-  if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
-    _Semaphore_Free( the_semaphore );
-    _Thread_Enable_dispatch();
-    return RTEMS_INVALID_PRIORITY;
-  }
-
-open_object:
   _Objects_Open(
     &_Semaphore_Information,
     &the_semaphore->Object,
