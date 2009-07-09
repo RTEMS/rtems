@@ -1,5 +1,11 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add test for timespec divide by zero.
+	* sp58/.cvsignore, sp58/Makefile.am, sp58/init.c, sp58/sp58.doc,
+	sp58/sp58.scn: New files.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp43/init.c, sp43/sp43.scn: Add test of having the object class
 	pointer being null. This does not happen naturally at this time so
 	force the point.
