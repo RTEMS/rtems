@@ -49,7 +49,6 @@ rtems_task Init(
 
   Region_name[ 1 ] = rtems_build_name('R', 'N', '0', '1');
 
-
   status = rtems_region_create(
     Region_name[ 1 ],
     Area_1,

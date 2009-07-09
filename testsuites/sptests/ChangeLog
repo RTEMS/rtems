@@ -1,5 +1,9 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp25/init.c: Spacing.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add sp59 to test path through
 	_Thread_queue_First_priority where the task's priority was in the
 	bottom 1/4 of the range.
