@@ -1,0 +1,29 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp59
+
+directives:
+
+  _Thread_queue_First_priority
+  rtems_region_create
+  rtems_region_get_segment
+  rtems_region_return_segment
+  rtems_task_create
+  rtems_task_wake_after
+
+concepts:
+
++ Ensure that the odd path of having a task in the bottom 1/4 of the
+  priority range blocked on a priority blocking based thread queue is
+  properly processed by _Thread_queue_First_priority.

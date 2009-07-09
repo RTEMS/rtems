@@ -1,5 +1,13 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add sp59 to test path through
+	_Thread_queue_First_priority where the task's priority was in the
+	bottom 1/4 of the range.
+	* sp59/.cvsignore, sp59/Makefile.am, sp59/init.c, sp59/sp59.doc,
+	sp59/sp59.scn: New files.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add test for Thread Queue extract a thread
 	not blocked on a thread queue.
 	* spthreadq01/.cvsignore, spthreadq01/Makefile.am, spthreadq01/init.c,

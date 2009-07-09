@@ -1,0 +1,13 @@
+*** TEST 59 ***
+Init - blocking task priority will be 220
+Init - rtems_task_create - delay task - OK
+Init - rtems_task_start - delay task - OK
+Init - rtems_region_create - OK
+TA1 - rtems_region_get_segment - get segment to consume memory
+Init - rtems_task_wake_after - let other task block - OK
+Blocking_task - wait for memory
+Init1 - rtems_region_get_segment - return segment
+Init - rtems_task_wake_after - let other task run again - OK
+Blocking_task - Got memory segment after freed
+Blocking_task - delete self
+*** END OF TEST 59 ***
