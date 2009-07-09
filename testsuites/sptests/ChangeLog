@@ -1,3 +1,9 @@
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp43/init.c, sp43/sp43.scn: Add test of having the object class
+	pointer being null. This does not happen naturally at this time so
+	force the point.
+
 2009-07-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp12/sp12.scn: Update screen to reflect priority changes from long

@@ -11,6 +11,7 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #define CONFIGURE_INIT
 #include "system.h"
 
@@ -399,7 +400,45 @@ rtems_task Init(
   directive_failed( status, "rtems_object_get_class_information" );
   print_class_info( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS, &info );
 
+  /*
+   *  Ugly hack to force a weird error
+   */
+  {
+    rtems_status_code                sc;
+    rtems_task_priority              old_priority;
+    void                            *tmp;
+    int                              class;
+    int                              api;
 
+    class = OBJECTS_INTERNAL_API;
+    api   = OBJECTS_INTERNAL_THREADS;
+
+    puts( "rtems_task_set_priority - use valid Idle thread id" );
+    sc = rtems_task_set_priority(
+      rtems_build_id( class, api, 1, 1 ),
+      RTEMS_CURRENT_PRIORITY,
+      &old_priority
+    );
+    directive_failed( sc, "rtems_task_set_priority" );
+
+    /* destroy class pointer */
+    puts( "rtems_task_set_priority - clobber internal thread class info" );
+    tmp = _Objects_Information_table[ class ][ api ];
+    _Objects_Information_table[ class ][ api ] = NULL;
+
+    puts( "rtems_task_set_priority - use valid Idle thread id again" );
+    sc = rtems_task_set_priority(
+      rtems_build_id( class, api, 1, 1 ),
+      RTEMS_CURRENT_PRIORITY,
+      &old_priority
+    );
+    fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_task_set_priority" );
+
+    /* restore pointer */
+    puts( "rtems_task_set_priority - restore internal thread class info" );
+    _Objects_Information_table[ class ][ api ] = tmp;
+  }
+  
   puts( "*** END OF TEST 43 ***" );
   rtems_test_exit( 0 );
 }

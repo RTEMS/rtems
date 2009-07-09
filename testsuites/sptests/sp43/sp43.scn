@@ -83,4 +83,8 @@ Classic API Timer Information
     minimum id  : 0x12010001 maximum id: 0x12010001
     maximum     :          1 available : 1
     auto_extend : no
+rtems_task_set_priority - use valid Idle thread id
+rtems_task_set_priority - clobber internal thread class info
+rtems_task_set_priority - use valid Idle thread id again
+rtems_task_set_priority - restore internal thread class info
 *** END OF TEST 43 ***
