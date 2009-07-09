@@ -1,5 +1,9 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp29/init.c: Simple binary semaphores can not be inherit priority.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp25/init.c: Spacing.
 
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>

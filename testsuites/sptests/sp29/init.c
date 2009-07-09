@@ -97,7 +97,7 @@ rtems_task Init (rtems_task_argument ignored)
 	}
 	sc = rtems_semaphore_create (rtems_build_name ('S', 'M', 'n', 'c'),
 		1,
-		RTEMS_PRIORITY|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_INHERIT_PRIORITY |RTEMS_NO_PRIORITY_CEILING|RTEMS_LOCAL,
+		RTEMS_PRIORITY|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_NO_INHERIT_PRIORITY |RTEMS_NO_PRIORITY_CEILING|RTEMS_LOCAL,
 		0,
 		&semnorec);
 	if (sc != RTEMS_SUCCESSFUL) {
