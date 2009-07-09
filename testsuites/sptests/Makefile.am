@@ -9,7 +9,8 @@ SUBDIRS = sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 sp11 sp12 sp13 sp14 \
     sp29 sp30 sp31 sp32 sp33 sp34 sp35 sp37 sp38 sp39 sp40 sp41 sp42 sp43 \
     sp44 sp45 sp46 sp47 sp48 sp49 sp50 sp51 sp52 sp53 sp54 sp55 sp56 sp57 \
     sp58 \
-    spchain spobjgetnext spprintk spsize spstkalloc spwatchdog spwkspace \
+    spchain spobjgetnext spprintk spsize spstkalloc spthreadq01 \
+    spwatchdog spwkspace \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12
  

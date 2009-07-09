@@ -1,0 +1,6 @@
+*** TEST THREAD QUEUE TEST 01 ***
+Init - initialize thread queue for FIFO
+Init - _Thread_queue_Extract - thread not blocked on a thread queue
+Init - initialize thread queue for Priority
+Init - _Thread_queue_Extract - thread not blocked on a thread queue
+*** END OF TEST THREAD QUEUE TEST 01 ***

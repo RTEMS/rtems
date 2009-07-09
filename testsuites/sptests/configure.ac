@@ -101,6 +101,7 @@ spobjgetnext/Makefile
 spprintk/Makefile
 spsize/Makefile
 spstkalloc/Makefile
+spthreadq01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
 ])

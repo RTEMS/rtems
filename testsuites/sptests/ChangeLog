@@ -1,5 +1,12 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add test for Thread Queue extract a thread
+	not blocked on a thread queue.
+	* spthreadq01/.cvsignore, spthreadq01/Makefile.am, spthreadq01/init.c,
+	spthreadq01/spthreadq01.doc, spthreadq01/spthreadq01.scn: New files.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add test for timespec divide by zero.
 	* sp58/.cvsignore, sp58/Makefile.am, sp58/init.c, sp58/sp58.doc,
 	sp58/sp58.scn: New files.
