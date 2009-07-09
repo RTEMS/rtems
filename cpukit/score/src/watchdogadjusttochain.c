@@ -4,7 +4,7 @@
  *  This is used by the Timer Server task.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,36 +31,47 @@ void _Watchdog_Adjust_to_chain(
 {
   Watchdog_Interval  units = units_arg;
   ISR_Level          level;
-  Chain_Node        *node;
-
-  if ( !units ) {
+  Watchdog_Control  *first; 
+  
+  if ( !units )
     return;
-  }
+ 
   _ISR_Disable( level );
 
   if ( !_Chain_Is_empty( header ) ) {
     while ( units ) {
-      if ( units < _Watchdog_First( header )->delta_interval ) {
-	_Watchdog_First( header )->delta_interval -= units;
-	break;
-      } else {
-	units -= _Watchdog_First( header )->delta_interval;
-	_Watchdog_First( header )->delta_interval = 0;
+      first = _Watchdog_First( header );
 
-        do {
-          node = _Chain_Get_unprotected( header );
-          _Chain_Append_unprotected( to_fire, node );
+      /*
+       *  If it is longer than "units" until the first element on the chain
+       *  fires, then bump it and quit.
+       */
+      if ( units < first->delta_interval ) {
+        first->delta_interval -= units;
+        break;
+      }
 
-	  _ISR_Flash( level );
+      /*
+       *  The first set happens in less than units, so take all of them
+       *  off the chain and adjust units to reflect this.
+       */
+      units -= first->delta_interval;
+      first->delta_interval = 0;
 
-        } while ( !_Chain_Is_empty( header ) &&
-                  _Watchdog_First( header )->delta_interval == 0 );
+      while (1) {
+        _Chain_Extract_unprotected( &first->Node );
+        _Chain_Append_unprotected( to_fire, &first->Node );
 
-	if ( _Chain_Is_empty( header ) )
-	  break;
+      _ISR_Flash( level );
+   
+        if ( _Chain_Is_empty( header ) )
+          break;
+
+        first = _Watchdog_First( header );
+        if ( first->delta_interval != 0 )
+          break;
       }
     }
-
   }
   _ISR_Enable( level );
 }

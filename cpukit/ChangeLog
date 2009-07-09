@@ -1,5 +1,10 @@
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/watchdogadjusttochain.c: Rework to ease code coverage
+	analysis.
+
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/src/semcreate.c: Clean up rework to eliminate the goto and fix
 	a bug introduced by rework.
 
