@@ -1,3 +1,7 @@
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/heap.c: Remove unneeded include.
+
 2009-07-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* rtems/src/semcreate.c: Restructure to simplify and improve ability to
