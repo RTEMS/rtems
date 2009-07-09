@@ -12,6 +12,9 @@ malloc_info - check free space drops after malloc
 malloc_info - verify free space returns to previous value
 _Protected_heap_Get_information - NULL heap
 _Protected_heap_Get_information - NULL info
+Initialize Test Heap
+Allocate most of heap
+Resize (shrink) the area to 8 bytes to ensure remainder gets freed
 posix_memalign - NULL return pointer -- EINVAL
 posix_memalign - alignment of 0 -- EINVAL
 posix_memalign - alignment  of 2-- EINVAL
@@ -49,1166 +52,1166 @@ posix_memalign - alignment of 1073741824 -- SKIPPED
 TA1  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 690 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:13   free:30   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 690 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:14   free:30   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 690 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:15   free:30   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 690 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:16   free:30   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 690 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:17   free:30   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:00   12/31/1988
 mallocing 505 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:18   free:31   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 505 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:19   free:32   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 591 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:20   free:33   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 505 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:21   free:34   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 554 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:22   free:35   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 591 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:23   free:36   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 505 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:24   free:37   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 378 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:25   free:38   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:01   12/31/1988
 mallocing 505 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:26   free:39   realloc:4095   calloc:
-TA1  - rtems_clock_get - 09:00:01   12/31/1988
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 257 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:27   free:40   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 554 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:28   free:41   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 591 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:29   free:42   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 207 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:30   free:43   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 626 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:31   free:44   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 378 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:32   free:45   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 591 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:33   free:46   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 340 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:34   free:47   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:02   12/31/1988
 mallocing 554 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:35   free:48   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 843 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:36   free:49   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 257 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:37   free:50   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 591 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:38   free:51   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 68 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:39   free:52   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 409 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:40   free:53   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 207 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:41   free:54   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:03   12/31/1988
-mallocing 554 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:42   free:55   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 378 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:42   free:55   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:03   12/31/1988
+mallocing 554 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:43   free:56   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:03   12/31/1988
 mallocing 879 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:44   free:57   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 319 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:45   free:58   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 626 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:46   free:59   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 980 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:47   free:60   realloc:4095   calloc:
-TA5  - rtems_clock_get - 09:00:04   12/31/1988
-mallocing 554 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:48   free:61   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 257 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:48   free:61   realloc:4095   calloc:
+TA5  - rtems_clock_get - 09:00:04   12/31/1988
+mallocing 554 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:49   free:62   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 85 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:50   free:63   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 340 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:51   free:64   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 378 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:52   free:65   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:04   12/31/1988
 mallocing 907 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:53   free:66   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:54   free:67   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 843 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:55   free:68   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 207 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:56   free:69   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 921 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:57   free:70   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 507 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:58   free:71   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 68 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:59   free:72   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:05   12/31/1988
-mallocing 257 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:60   free:73   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 378 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:60   free:73   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:05   12/31/1988
+mallocing 257 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:61   free:74   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 872 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:62   free:75   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:06   12/31/1988
+TA3  - rtems_clock_get - 09:00:05   12/31/1988
 mallocing 626 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:63   free:76   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 333 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:64   free:77   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 409 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:65   free:78   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 692 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:66   free:79   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 556 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:67   free:80   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 879 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:68   free:81   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:06   12/31/1988
-mallocing 207 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:69   free:82   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 340 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:69   free:82   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:06   12/31/1988
+mallocing 207 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:70   free:83   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 361 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:71   free:84   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:06   12/31/1988
 mallocing 257 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:72   free:85   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 31 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:73   free:86   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 319 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:74   free:87   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 858 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:75   free:88   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 843 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:76   free:89   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 98 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:77   free:90   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 980 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:78   free:91   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 626 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:79   free:92   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:07   12/31/1988
 mallocing 877 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:80   free:93   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 449 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:81   free:94   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 85 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:82   free:95   realloc:4095   calloc:
-TA5  - rtems_clock_get - 09:00:08   12/31/1988
-mallocing 207 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:83   free:96   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 68 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:83   free:96   realloc:4095   calloc:
+TA5  - rtems_clock_get - 09:00:08   12/31/1988
+mallocing 207 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:84   free:97   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 432 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:85   free:98   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 606 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:86   free:99   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 907 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:87   free:100   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 340 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:88   free:101   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 927 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:89   free:102   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:09   12/31/1988
+TA3  - rtems_clock_get - 09:00:08   12/31/1988
 mallocing 409 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:90   free:103   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 664 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:91   free:104   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:92   free:105   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 395 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:93   free:106   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 626 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:94   free:107   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 438 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:95   free:108   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 921 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:96   free:109   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:09   12/31/1988
-mallocing 843 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:97   free:110   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 879 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:97   free:110   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:09   12/31/1988
+mallocing 843 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:98   free:111   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:09   12/31/1988
 mallocing 652 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:99   free:112   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 928 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:100   free:113   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 507 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:101   free:114   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 949 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:102   free:115   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 319 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:103   free:116   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 307 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:104   free:117   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 872 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:105   free:118   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:10   12/31/1988
-mallocing 68 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:106   free:119   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 340 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:106   free:119   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:10   12/31/1988
+mallocing 68 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:107   free:120   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:10   12/31/1988
 mallocing 596 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:108   free:121   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 783 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:109   free:122   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 333 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:110   free:123   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 980 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:111   free:124   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 338 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:112   free:125   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 805 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:113   free:126   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 692 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:114   free:127   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 409 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:115   free:128   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 942 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:116   free:129   realloc:4095   calloc:
+TA3  - rtems_clock_get - 09:00:11   12/31/1988
+mallocing 85 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:117   free:130   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:11   12/31/1988
 mallocing 843 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:117   free:130   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:12   12/31/1988
-mallocing 85 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:118   free:131   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 66 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:119   free:132   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 556 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:120   free:133   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 857 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:121   free:134   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 977 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:122   free:135   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 361 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:123   free:136   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:12   12/31/1988
-mallocing 879 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:124   free:137   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 907 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:124   free:137   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:12   12/31/1988
+mallocing 879 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:125   free:138   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:12   12/31/1988
 mallocing 889 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:126   free:139   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 545 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:127   free:140   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 31 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:128   free:141   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 68 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:129   free:142   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 864 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:130   free:143   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:131   free:144   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 457 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:132   free:145   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 858 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:133   free:146   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 319 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:134   free:147   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:13   12/31/1988
 mallocing 800 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:135   free:148   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 873 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:136   free:149   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 98 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:137   free:150   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 921 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:138   free:151   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 821 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:139   free:152   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 409 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:140   free:153   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 185 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:141   free:154   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 877 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:142   free:155   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 980 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:143   free:156   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 86 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:144   free:157   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:15   12/31/1988
+TA3  - rtems_clock_get - 09:00:14   12/31/1988
 mallocing 507 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:145   free:158   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 638 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:146   free:159   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 449 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:147   free:160   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 233 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:148   free:161   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 462 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:149   free:162   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 432 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:150   free:163   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:15   12/31/1988
-mallocing 85 bytes
+TA3  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 872 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:151   free:164   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 879 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:152   free:165   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:15   12/31/1988
-mallocing 872 bytes
+TA4  - rtems_clock_get - 09:00:15   12/31/1988
+mallocing 85 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:153   free:166   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:15   12/31/1988
 mallocing 7 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:154   free:167   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 635 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:155   free:168   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 606 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:156   free:169   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 421 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:157   free:170   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 333 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:158   free:171   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 953 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:159   free:172   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 927 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:160   free:173   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 907 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:161   free:174   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 210 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:162   free:175   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:16   12/31/1988
 mallocing 319 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:163   free:176   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 970 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:164   free:177   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 664 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:165   free:178   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 692 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:166   free:179   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 261 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:167   free:180   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 857 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:168   free:181   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 395 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:169   free:182   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:170   free:183   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 581 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:171   free:184   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:18   12/31/1988
+TA3  - rtems_clock_get - 09:00:17   12/31/1988
 mallocing 556 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:172   free:185   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 707 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:173   free:186   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 438 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:174   free:187   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 980 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:175   free:188   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 285 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:176   free:189   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 318 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:177   free:190   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 652 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:178   free:191   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:18   12/31/1988
-mallocing 921 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:179   free:192   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 361 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:179   free:192   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:18   12/31/1988
+mallocing 921 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:180   free:193   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:18   12/31/1988
 mallocing 643 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:181   free:194   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 858 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:182   free:195   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 928 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:183   free:196   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 668 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:184   free:197   realloc:4095   calloc:
-TA5  - rtems_clock_get - 09:00:19   12/31/1988
-mallocing 85 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:185   free:198   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 31 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:185   free:198   realloc:4095   calloc:
+TA5  - rtems_clock_get - 09:00:19   12/31/1988
+mallocing 85 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:186   free:199   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 443 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:187   free:200   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 949 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:188   free:201   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 507 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:189   free:202   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:19   12/31/1988
 mallocing 55 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:190   free:203   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 777 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:191   free:204   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 307 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:192   free:205   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 858 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:193   free:206   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 594 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:194   free:207   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:195   free:208   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 596 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:196   free:209   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:20   12/31/1988
-mallocing 872 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:197   free:210   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 907 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:197   free:210   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:20   12/31/1988
+mallocing 872 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:198   free:211   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 299 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:199   free:212   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:21   12/31/1988
+TA3  - rtems_clock_get - 09:00:20   12/31/1988
 mallocing 98 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:200   free:213   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 950 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:201   free:214   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 783 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:202   free:215   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 665 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:203   free:216   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 947 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:204   free:217   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 338 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:205   free:218   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:21   12/31/1988
-mallocing 333 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:206   free:219   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 877 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:206   free:219   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:21   12/31/1988
+mallocing 333 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:207   free:220   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 879 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:208   free:221   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:21   12/31/1988
 mallocing 102 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:209   free:222   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 700 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:210   free:223   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 805 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:211   free:224   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 375 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:212   free:225   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 449 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:213   free:226   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 613 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:214   free:227   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 942 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:215   free:228   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 692 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:216   free:229   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:22   12/31/1988
 mallocing 863 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:217   free:230   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 136 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:218   free:231   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 66 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:219   free:232   realloc:4095   calloc:
-TA5  - rtems_clock_get - 09:00:23   12/31/1988
-mallocing 921 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:220   free:233   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 432 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:220   free:233   realloc:4095   calloc:
+TA5  - rtems_clock_get - 09:00:23   12/31/1988
+mallocing 921 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:221   free:234   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 439 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:222   free:235   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 274 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:223   free:236   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 857 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:224   free:237   realloc:4095   calloc:
 TA4  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 556 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:225   free:238   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 186 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:226   free:239   realloc:4095   calloc:
-TA3  - rtems_clock_get - 09:00:24   12/31/1988
+TA3  - rtems_clock_get - 09:00:23   12/31/1988
 mallocing 606 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:227   free:240   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 506 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:228   free:241   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 977 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:229   free:242   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 570 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:230   free:243   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 507 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:231   free:244   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 672 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:232   free:245   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 889 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:233   free:246   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:24   12/31/1988
-mallocing 361 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:234   free:247   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 927 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:234   free:247   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:24   12/31/1988
+mallocing 361 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:235   free:248   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:24   12/31/1988
 mallocing 623 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:236   free:249   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 61 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:237   free:250   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 545 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:238   free:251   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 550 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:239   free:252   realloc:4095   calloc:
 TA3  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 664 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:240   free:253   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 563 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:241   free:254   realloc:4095   calloc:
 TA2  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 864 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:242   free:255   realloc:4095   calloc:
-TA4  - rtems_clock_get - 09:00:25   12/31/1988
-mallocing 31 bytes
-Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
-  Call counts:   malloc:243   free:256   realloc:4095   calloc:
 TA5  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 872 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  Call counts:   malloc:243   free:256   realloc:4095   calloc:
+TA4  - rtems_clock_get - 09:00:25   12/31/1988
+mallocing 31 bytes
+Malloc statistic
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:244   free:257   realloc:4095   calloc:
 TA1  - rtems_clock_get - 09:00:25   12/31/1988
 mallocing 536 bytes
 Malloc statistic
-  avail:3769k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
+  avail:3768k  allocated:0k (0%) max:0k (0%) lifetime:0k freed:0
   Call counts:   malloc:245   free:258   realloc:4095   calloc:
 *** END OF MALLOC TEST ***

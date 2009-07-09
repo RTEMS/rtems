@@ -1,3 +1,9 @@
+2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* malloctest/init.c, malloctest/malloctest.scn: Add heap resize test
+	for shrinking a block enough to need to free the newly unused
+	portion.
+
 2009-07-08	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* malloctest/init.c, malloctest/malloctest.scn: Add error cases for

@@ -62,7 +62,7 @@ void test_realloc(void)
   free(p1);
 
   /* Test realloc that should fail "in place", i.e.,
-   * fallback to free()--malloc()
+   * fallback to free()-- malloc()
    */
   p1 = malloc(32);
   p2 = malloc(32);
@@ -252,6 +252,25 @@ void test_protected_heap_info(void)
   rtems_test_assert( rc == false );
 }
 
+void test_heap_resize(void)
+{
+  Heap_Resize_status  rc;
+  void               *p1;
+  intptr_t            oldsize;
+  intptr_t            avail;
+
+  puts( "Initialize Test Heap" );
+  test_heap_init();
+  
+  puts( "Allocate most of heap" );
+  p1 = _Heap_Allocate( &TestHeap, TEST_HEAP_SIZE - 32 );
+  rtems_test_assert( p1 != NULL );
+
+  puts( "Resize (shrink) the area to 8 bytes to ensure remainder gets freed" );
+  rc = _Heap_Resize_block( &TestHeap, p1, 8, &oldsize, &avail );
+  rtems_test_assert( rc == HEAP_RESIZE_SUCCESSFUL );
+}
+
 /*
  *  A simple test of posix_memalign
  */
@@ -319,6 +338,7 @@ rtems_task Init(
   test_heap_extend();
   test_heap_info();
   test_protected_heap_info();
+  test_heap_resize();
 
   test_posix_memalign();
 
