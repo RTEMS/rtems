@@ -1,6 +1,4 @@
 /*
- *  Classic API Signal to Task from ISR
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
