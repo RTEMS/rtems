@@ -81,21 +81,29 @@ typedef unsigned int word_t;
 
 #define XSCALE_CLOCKS_CCCR      (*(volatile word_t *)(XSCALE_CLOCKS + 0x00))
 
-
 /*Use ffuart port as the console*/
 #define FFUART_BASE   0x40100000
 
-
-/*Write to KSYEYE_MAGIC_ADDRESS makes SKYEYE to exits*/
+/*Write to SKYEYE_MAGIC_ADDRESS to make SKYEYE  exit*/
 
 #define SKYEYE_MAGIC_ADDRESS (*(volatile word_t *)(0xb0000000))
 #define SKYEYE_MAGIC_NUMBER  (0xf0f0f0f0)
 
 /*PMC*/
-/*Clock counter overflow flag*/
-#define CCOF (0x01<<10)
-#define ENABLE_CC_INT (0x01<<6)
-#define ENABLE_PMC_CC (0x01)
-#define RESET_CC (0x01<<2)
+#define PMC_PMNC 0
+#define PMC_CCNT 1
+#define PMC_INTEN 2
+#define PMC_FLAG 3
+#define PMC_EVTSEL 4
+#define PMC_PMN0 5
+#define PMC_PMN1 6
+#define PMC_PMN2 7
+#define PMC_PMN3 8
+
+#define PMC_PMNC_E (0x01)
+#define PMC_PMNC_PCR (0x01 << 1)
+#define PMC_PMNC_CCR (0x01 << 2)
+#define PMC_PMNC_CCD (0x01 << 3)
+#define PMC_PMNC_PCD (0x01 << 4)
 
 #endif

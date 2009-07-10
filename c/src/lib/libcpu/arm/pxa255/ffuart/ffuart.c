@@ -20,7 +20,6 @@
 #include <libchip/sersupp.h>
 
 volatile int dbg_dly;
-void _start(void);
 
 /* static function prototypes */
 static int     ffuart_first_open(int major, int minor, void *arg);

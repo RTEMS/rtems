@@ -12,34 +12,117 @@
 #include <bsp.h>
 #include <pxa255.h>
 
-unsigned int int_latency;
-
-static void pmc_isr_on(const rtems_irq_connect_data *unused)
+unsigned int xscale_read_pmc(int reg)
 {
-  unsigned int operand;
-  /*clean CC*/
-  operand = 0x0;
-  asm volatile("mcr p14,0,%0,c1,c0,0 \n"::"r"(operand));
-   /*clean the Clock counter flag and enable the interrupt of CC*/
-  operand = 0x0|RESET_CCOF|ENABLE_CC_INT|RESET_CC|ENABLE_PMC_CC;
-  asm volatile("mcr p14,0,%0,c0,c0,0 \n"::"r"(operand));
-  /*Set to the 4kHZ*/
-  operand = (unsigned int)0xffffffff-(unsigned int)100000;
-  asm volatile("mcr p14,0,%0,c1,c0,0 \n"::"r"(operand));
+  unsigned int val = 0;
+  switch(reg){
+  case PMC_PMNC:
+    asm volatile("mrc p14,0,%0,c0,c1,0\n":"=r"(val):);
+    break;
+  case PMC_CCNT:
+    asm volatile("mrc p14,0,%0,c1,c1,0\n":"=r"(val):);
+    break;
+  case PMC_INTEN:
+    asm volatile("mrc p14,0,%0,c4,c1,0\n":"=r"(val):);
+    break;
+  case PMC_FLAG:
+    asm volatile("mrc p14,0,%0,c5,c1,0\n":"=r"(val):);
+    break;
+  case PMC_EVTSEL:
+    asm volatile("mrc p14,0,%0,c8,c1,0\n":"=r"(val):);
+    break;
+  case PMC_PMN0:
+    asm volatile("mrc p14,0,%0,c0,c2,0\n":"=r"(val):);
+    break;
+  case PMC_PMN1:
+    asm volatile("mrc p14,0,%0,c1,c2,0\n":"=r"(val):);
+    break;
+  case PMC_PMN2:
+    asm volatile("mrc p14,0,%0,c2,c2,0\n":"=r"(val):);
+    break;
+  case PMC_PMN3:
+    asm volatile("mrc p14,0,%0,c3,c2,0\n":"=r"(val):);
+    break;
+  default:
+    val = 0;
+    break;
+  }
+  return val;
 }
 
-static void pmc_isr_off(const rtems_irq_connect_data *unused)
+void xscale_write_pmc(int reg, unsigned int val)
 {
-  unsigned int operand;
-  operand = 0x0|RESET_CCOF;
-  asm volatile("mcr p14,0,%0,c0,c0,0 \n"::"r"(operand));
+  switch(reg){
+  case PMC_PMNC:
+    asm volatile("mcr p14,0,%0,c0,c1,0\n"::"r"(val));
+    break;
+  case PMC_CCNT:
+    asm volatile("mcr p14,0,%0,c1,c1,0\n"::"r"(val));
+    break;
+  case PMC_INTEN:
+    asm volatile("mcr p14,0,%0,c4,c1,0\n"::"r"(val));
+    break;
+  case PMC_FLAG:
+    asm volatile("mcr p14,0,%0,c5,c1,0\n"::"r"(val));
+    break;
+  case PMC_EVTSEL:
+    asm volatile("mcr p14,0,%0,c8,c1,0\n"::"r"(val));
+    break;
+  case PMC_PMN0:
+    asm volatile("mcr p14,0,%0,c0,c2,0\n"::"r"(val));
+    break;
+  case PMC_PMN1:
+    asm volatile("mcr p14,0,%0,c1,c2,0\n"::"r"(val));
+    break;
+  case PMC_PMN2:
+    asm volatile("mcr p14,0,%0,c2,c2,0\n"::"r"(val));
+    break;
+  case PMC_PMN3:
+    asm volatile("mcr p14,0,%0,c3,c2,0\n"::"r"(val));
+    break;
+  default:
+    break;
+  }
 }
 
-static int pmc_isr_is_on(const rtems_irq_connect_data *unused)
+void xscale_pmc_enable_pmc(void)
 {
-  unsigned int operand;
-  asm volatile("mrc p14,0,%0,c0,c0,0 \n":"=r"(operand):);
-  if((operand & ENABLE_PMC_CC ) && (operand & ENABLE_CC_INT))
-    return 1;
-  return 0;
+  unsigned int val;
+  val = xscale_read_pmc(PMC_PMNC);
+  val = (val | PMC_PMNC_E)&(~PMC_PMNC_PCD);
+  xscale_write_pmc(PMC_PMNC,val);
+}
+void xscale_pmc_disable_pmc(void)
+{
+  unsigned int val;
+  val = xscale_read_pmc(PMC_PMNC);
+  val = val & (~PMC_PMNC_E);
+  xscale_write_pmc(PMC_PMNC,val);
+}
+
+void xscale_pmc_reset_pmc(void)
+{
+  unsigned int val;
+  val = xscale_read_pmc(PMC_PMNC);
+  val = val | PMC_PMNC_PCR;
+  xscale_write_pmc(PMC_PMNC,val);
+}
+
+void xscale_pmc_reset_ccnt(void)
+{
+  unsigned int val;
+  val = xscale_read_pmc(PMC_PMNC);
+  val = val | PMC_PMNC_CCR;
+  xscale_write_pmc(PMC_PMNC,val);
+}
+
+void xscale_pmc_setevent(int reg, unsigned char evt)
+{
+  unsigned int val;
+  val = xscale_read_pmc(PMC_EVTSEL);
+  if((reg >= PMC_PMN0) && (reg <= PMC_PMN3)){
+    val &= ~(0xff<<(reg-PMC_PMN0)*8);
+    val |= evt << (reg-PMC_PMN0)*8;
+    xscale_write_pmc(PMC_EVTSEL,val);
+  }
 }
