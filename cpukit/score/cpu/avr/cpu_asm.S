@@ -215,8 +215,8 @@ SYM(_CPU_Context_restore_fp):
 	PUBLIC(_CPU_Context_switch)
 
 SYM(_CPU_Context_switch):
-	mov	r26, r18
-	mov	r27, r19
+	mov	r26, r24
+	mov	r27, r25
 	st	X+, r2
 	st	X+, r3
 	st	X+, r4

@@ -1,4 +1,10 @@
-2009-07-03  Josh Switnicki <josh.switnicki@utoronto.ca>
+2009-07-09 	Josh Switnicki <josh.switnicki@utoronto.ca>
+
+	* cpu_asm.S: Fixed bug in _CPU_Context_Switch. The wrong registers
+	were being used for pointer to running task Context_Control
+	struct.
+
+2009-07-03  	Josh Switnicki <josh.switnicki@utoronto.ca>
 
 	* cpu.c: Implemented _CPU_Context_Initialize as a C function instead
 	of a macro.  It works with limited functionality.  Implemented
