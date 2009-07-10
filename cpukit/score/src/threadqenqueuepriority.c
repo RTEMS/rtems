@@ -1,8 +1,7 @@
 /*
- *  Thread Queue Handler
+ *  Thread Queue Handler - Enqueue By Priority
  *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +23,14 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
+
+/*
+ *  Support the user forcing the unrolling to be disabled.
+ */
+#if __RTEMS_DO_NOT_UNROLL_THREADQ_ENQUEUE_PRIORITY__
+  #undef CPU_UNROLL_ENQUEUE_PRIORITY
+  #define CPU_UNROLL_ENQUEUE_PRIORITY FALSE
+#endif
 
 /*PAGE
  *
