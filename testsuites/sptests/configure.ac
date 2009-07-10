@@ -12,7 +12,6 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
-
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_RTEMS_TEST_NO_PAUSE
 
@@ -66,7 +65,6 @@ sp37/Makefile
 sp38/Makefile
 sp39/Makefile
 sp40/Makefile
-sp41/Makefile
 sp42/Makefile
 sp43/Makefile
 sp44/Makefile
@@ -98,6 +96,11 @@ spfatal09/Makefile
 spfatal10/Makefile
 spfatal11/Makefile
 spfatal12/Makefile
+spintrcritical01/Makefile
+spintrcritical02/Makefile
+spintrcritical03/Makefile
+spintrcritical04/Makefile
+spintrcritical05/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
 spsize/Makefile

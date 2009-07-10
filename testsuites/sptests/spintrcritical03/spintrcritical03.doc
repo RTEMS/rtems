@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spintrcritical03
+
+directives:
+
+  _Thread_queue_Enqueue_priority
+  _Thread_queue_Dequeue_priority
+    - interrupt synchronization
+
+concepts:
+
++ Ensure that unblocking a task from an ISR while the task is in the process
+  of blocking on a thread queue works as expected.

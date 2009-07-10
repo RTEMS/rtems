@@ -1,0 +1,6 @@
+*** TEST INTERRUPT CRITICAL SECTION 01 ***
+Init - Trying to generate semaphore release from ISR while blocking
+Init - Variation is: FIFO/Without Timeout
+Support - rtems_timer_create - creating timer 1
+Init - Case hit
+*** END OF TEST INTERRUPT CRITICAL SECTION 01 ***

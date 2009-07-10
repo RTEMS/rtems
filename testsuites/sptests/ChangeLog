@@ -1,5 +1,24 @@
 2009-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new infrastructure which is more
+	reliable about generating cases which hit interrupt critical
+	sections. Remove sp41 since it used its own mechanism.
+	* spintrcritical01/.cvsignore, spintrcritical01/Makefile.am,
+	spintrcritical01/init.c, spintrcritical01/spintrcritical01.doc,
+	spintrcritical01/spintrcritical01.scn, spintrcritical02/.cvsignore,
+	spintrcritical02/Makefile.am, spintrcritical02/spintrcritical02.doc,
+	spintrcritical02/spintrcritical02.scn, spintrcritical03/.cvsignore,
+	spintrcritical03/Makefile.am, spintrcritical03/spintrcritical03.doc,
+	spintrcritical03/spintrcritical03.scn, spintrcritical04/.cvsignore,
+	spintrcritical04/Makefile.am, spintrcritical04/spintrcritical04.doc,
+	spintrcritical04/spintrcritical04.scn, spintrcritical05/.cvsignore,
+	spintrcritical05/Makefile.am, spintrcritical05/spintrcritical05.doc,
+	spintrcritical05/spintrcritical05.scn: New files.
+	* sp41/.cvsignore, sp41/Makefile.am, sp41/init.c, sp41/sp41.scn,
+	sp41/system.h: Removed.
+
+2009-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sp41/init.c: Remove incorrect comment.
 
 2009-07-09	Joel Sherrill <joel.sherrill@OARcorp.com>
