@@ -52,7 +52,7 @@ Name:		rtems-4.10-mipstx39-rtems4.10-gdb
 Summary:	Gdb for target mipstx39-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	9%{?dist}
+Release:	10%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,6 +73,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %define build_sim --disable-sim
 %endif
 %if "mipstx39-rtems4.10" == "h8300-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "mipstx39-rtems4.10" == "m32c-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%endif
+%if "mipstx39-rtems4.10" == "lm32-rtems4.10"
 %define build_sim --disable-sim
 %endif
 %if "mipstx39-rtems4.10" == "mipstx39-rtems4.10"
@@ -108,7 +116,7 @@ Requires:	rtems-4.10-gdb-common
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
 %if "%{gdb_version}" == "6.8"
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20090122.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.8-rtems4.10-20090312.diff
 %endif
 
 %description

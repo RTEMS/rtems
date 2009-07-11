@@ -75,6 +75,14 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %if "bfin-rtems4.10" == "h8300-rtems4.10"
 %define build_sim --disable-sim
 %endif
+%if "%{gdb_version}" >= "6.8.50"
+%if "bfin-rtems4.10" == "m32c-rtems4.10"
+%define build_sim --disable-sim
+%endif
+%endif
+%if "bfin-rtems4.10" == "lm32-rtems4.10"
+%define build_sim --disable-sim
+%endif
 %if "bfin-rtems4.10" == "mipstx39-rtems4.10"
 %define build_sim --disable-sim
 %endif
