@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
+ *  Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -12,5 +12,9 @@
 
 void bsp_reset(void)
 {
-  asm volatile ("b _start");
+  #if ON_SKYEYE
+    /* TBD use Skyeye reset device */
+  #else
+    asm volatile ("b _start");
+  #endif
 }

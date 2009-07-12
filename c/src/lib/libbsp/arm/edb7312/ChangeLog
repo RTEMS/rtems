@@ -1,3 +1,10 @@
+2009-07-12	Xi Yang <hiyangxi@gmail.com>
+
+	* configure.ac, clock/clockdrv.c, startup/bspreset.c: Adjust clock
+	initialization for clock tick so rtmonuse test now runs on Skyeye.
+	Joel added configure magic and place holder in bspreset.c for Skyeye
+	hardware reset device support.
+
 2009-04-28	Chris Johns <chrisj@rtems.org>
 
 	* start/start.S: Update for boot_card command line change.
