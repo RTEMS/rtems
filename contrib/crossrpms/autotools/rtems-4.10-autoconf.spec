@@ -59,9 +59,6 @@ Version:	%{rpmvers}
 Release:	3%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
-Obsoletes:	rtems-4.10-autoconf-rtems < %{version}-%{release}
-Provides:	rtems-4.10-autoconf-rtems = %{version}-%{release}
-
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires: 	perl m4 gawk emacs

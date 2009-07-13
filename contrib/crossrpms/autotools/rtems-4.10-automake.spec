@@ -57,18 +57,12 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
-
-Obsoletes:	rtems-4.10-automake-rtems < %{version}-%{release}
-Provides:	rtems-4.10-automake-rtems = %{version}-%{release}
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires:  %{requirements} perl
-%if "%{version}" < "1.11"
-BuildRequires:  help2man
-%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
