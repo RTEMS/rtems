@@ -9,7 +9,7 @@ autoconf.spec.in: $(AUTOCONF_SUBPACKAGES) Makefile.in $(srcdir)/autoconf-sources
 	  -e "/[@]SOURCES[@]/r $(srcdir)/autoconf-sources.add" \
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]AUTOCONF_VERS[@]/$(AUTOCONF_VERS)/" \
-	  -e "s/[@]AUTOCONF_RPMREL[@]/$(AUTOCONF_RPMREL)/" > $@
+	  -e "s/[@]AUTOCONF_RPMREL[@]/$(AUTOCONF_RPMREL)%{?dist}/" > $@
 CLEANFILES += autoconf.spec.in
 
 
