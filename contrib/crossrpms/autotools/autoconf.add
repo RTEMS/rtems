@@ -16,11 +16,6 @@ Version:	%{rpmvers}
 Release:	@AUTOCONF_RPMREL@
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
-%if "%{_prefix}" != "/usr"
-Obsoletes:	@rpmprefix@autoconf-rtems < %{version}-%{release}
-Provides:	@rpmprefix@autoconf-rtems = %{version}-%{release}
-%endif
-
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires: 	perl m4 gawk emacs
