@@ -58,7 +58,7 @@ Summary:      	m32r-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	6%{?dist}
+Release:      	7%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -97,7 +97,6 @@ BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{_gmp_minvers}
 
 %if %{defined _mpfr_minvers}
 # FIXME: This is an ugly cludge
-%{?fc9:%global mpfr_provided 2.3.1}
 %{?fc10:%global mpfr_provided 2.3.2}
 %{?fc11:%global mpfr_provided 2.4.1}
 %{?suse10_3:%global mpfr_provided 2.2.1}
@@ -133,7 +132,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-m32r-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32r-rtems4.10-binutils
-Requires:	rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-39%{?dist}
+Requires:	rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-40%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -156,7 +155,7 @@ Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtem
 
 %if "%{newlib_version}" == "1.17.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090505.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/newlib-1.17.0-rtems4.10-20090715.diff
 %endif
 %{?_without_sources:NoSource:	50}
 
@@ -464,7 +463,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32r-rtems4.10-binutils
-# Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-39%{?dist}
+# Requires:       rtems-4.10-m32r-rtems4.10-newlib = %{newlib_version}-40%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -523,7 +522,7 @@ Summary:      	C Library (newlib) for m32r-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        39%{?dist}
+Release:        40%{?dist}
 
 
 %description -n rtems-4.10-m32r-rtems4.10-newlib
