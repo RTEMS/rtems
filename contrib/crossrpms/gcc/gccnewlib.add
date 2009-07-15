@@ -114,7 +114,6 @@ BuildRequires:	zlib-devel
 %endif
 %if %build_gnat
 # Building gnat requires gnat
-# This really isn't available until RedHat 8.0.  How to conditionalize this?
 BuildRequires:	gcc-gnat
 BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMREL@
 %endif
