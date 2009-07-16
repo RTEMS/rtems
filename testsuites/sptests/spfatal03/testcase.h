@@ -1,5 +1,5 @@
 /*
- *  Classic API Init task create failure
+ *  Semaphore Obtain in Critical Section
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,25 +11,7 @@
  *  $Id$
  */
 
-/*
- *  Way too much stack space.  Should generate a fatal error
- *  on the init task create.
- */
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-#define CONFIGURE_INIT_TASK_STACK_SIZE            RTEMS_MINIMUM_STACK_SIZE 
-rtems_initialization_tasks_table Initialization_tasks[] = {
-  { rtems_build_name('I', 'N', 'I', ' '),
-    RTEMS_MINIMUM_STACK_SIZE,
-    1,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    Init,
-    RTEMS_DEFAULT_MODES,
-    0
-  }
-};
-#define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
-#define CONFIGURE_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
 
@@ -38,34 +20,30 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE 
 
-rtems_id   Mutex_id[1];
-rtems_name Mutex_name[1];
-
 void force_error(void)
 {
-  rtems_status_code status;
 
-  Mutex_name[0] = rtems_build_name( 'S','0',' ',' ');
+  rtems_status_code status;
+   rtems_id    mutex;
+
   status = rtems_semaphore_create(
-    Mutex_name[0],
+    rtems_build_name( 'S','0',' ',' '),
     1,
     RTEMS_LOCAL|
-    RTEMS_SIMPLE_BINARY_SEMAPHORE|
-    RTEMS_PRIORITY_CEILING |
-    RTEMS_PRIORITY,
+    RTEMS_SIMPLE_BINARY_SEMAPHORE,
     0,
-    &Mutex_id[0]
+    &mutex
   );
   directive_failed( status, "rtems_semaphore_create of S0");
-  printf("Create S0\n");
+  puts("Create semaphore S0");
 
-
+  puts("Obtain semaphore in dispatching critical section");
   _Thread_Disable_dispatch();
-  status = rtems_semaphore_obtain( Mutex_id[0], RTEMS_DEFAULT_OPTIONS, 0 );
+  status = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
   _Thread_Enable_dispatch();
-  directive_failed( status, "rtems_semaphore_obtain" );
+  puts("ERROR -- Obtain semaphore should not have returned");
  
   /* we will not run this far */
 }

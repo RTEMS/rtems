@@ -1,3 +1,8 @@
+2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spfatal03/spfatal03.scn, spfatal03/testcase.h: Fix spfatal03 to do
+	what it was intended to do.
+
 2009-07-10	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* spintrcritical_support/intrcritical.c,
