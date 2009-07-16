@@ -46,9 +46,9 @@
 %endif
 
 
-%define gcc_pkgvers 4.4.0
-%define gcc_version 4.4.0
-%define gcc_rpmvers %{expand:%(echo "4.4.0" | tr - _ )}
+%define gcc_pkgvers 4.4.1
+%define gcc_version 4.4.1
+%define gcc_rpmvers %{expand:%(echo "4.4.1" | tr - _ )}
 
 %define newlib_pkgvers		1.17.0
 %define newlib_version		1.17.0
@@ -58,7 +58,7 @@ Summary:      	sparc-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	1%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -133,7 +133,7 @@ BuildRequires:	rtems-4.10-sparc-rtems4.10-binutils
 
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-sparc-rtems4.10-binutils
-Requires:	rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-40%{?dist}
+Requires:	rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-41%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -144,21 +144,21 @@ Requires:	rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-40%{?dist}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.3.3"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.3.3-rtems4.10-20090125.diff
-%endif
 %if "%{gcc_version}" == "4.4.0"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090421.diff
 %endif
+%if "%{gcc_version}" == "4.4.1"
+Source1:        ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-%{gcc_pkgvers}-rtems4.10-20090717.diff
+%endif
 %{?_without_sources:NoSource:	0}
 
-%if "%{gcc_version}" == "4.3.3" 
-Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
 %if "%{gcc_version}" == "4.4.0" 
 Source1:        ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+%endif
+%if "%{gcc_version}" == "4.4.1" 
+Source1:        ftp://gcc.gnu.org/pub/gcc/snapshots/%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
 %endif
 %{?_without_sources:NoSource:	1}
 
@@ -474,7 +474,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-sparc-rtems4.10-binutils
-# Requires:       rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-40%{?dist}
+# Requires:       rtems-4.10-sparc-rtems4.10-newlib = %{newlib_version}-41%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -626,7 +626,7 @@ Summary:      	C Library (newlib) for sparc-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        40%{?dist}
+Release:        41%{?dist}
 
 Requires:	rtems-4.10-newlib-common
 
@@ -646,7 +646,7 @@ Newlib C Library for sparc-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        40%{?dist}
+Release:        41%{?dist}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
