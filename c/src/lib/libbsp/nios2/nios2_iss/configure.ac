@@ -15,16 +15,8 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[0])
-RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
-[If defined, print a message and wait until pressed before resetting
- board when application exits.])
-
-RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[1])
-RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
-[If defined, reset the board when the application exits.])
-
-BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

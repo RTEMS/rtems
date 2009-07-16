@@ -1,3 +1,9 @@
+2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* configure.ac: Rename BSP_BOOTCARD_OPTIONS to
+	RTEMS_BSP_BOOTCARD_OPTIONS. Add RTEMS_BSP_CLEANUP_OPTIONS so all BSPs
+	have the same options.
+
 2008-10-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, preinstall.am: Use shared tm27.h stub.

@@ -51,7 +51,8 @@ RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
       2 - /dev/tty2, Serial Port 3 on the MVME712M.
       3 - /dev/tty3, Serial Port 4 on the MVME712M.])
 
-BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

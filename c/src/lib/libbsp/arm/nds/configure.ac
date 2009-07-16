@@ -16,25 +16,15 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_TOOL(OBJCOPY,objcopy,:)
 RTEMS_PROG_CCAS
 
-RTEMS_CHECK_NETWORKING
-AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
-
-BSP_BOOTCARD_OPTIONS
-
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
 ## $srcdir/mk_libnds.sh $srcdir
 
-RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[1])
-RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
-[If defined, print a message and wait until pressed before resetting
- board when application exits.])
+RTEMS_CHECK_NETWORKING
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[1])
-RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
-[If defined, reset the board when the application exits.])
-
-BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_BOOTCARD_OPTIONS
+RTEMS_BSP_CLEANUP_OPTIONS(1, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
