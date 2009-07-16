@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxautoinit02
+
+directives:
+
+  pthread_cond_broadcast - auto initialization mode
+  pthread_cond_destroy
+  
+concepts:
+
++ Verify that auto initialization of POSIX message queues works.
+
++ Verify that auto intialization of POSIX message queues properly handles
+  running out of message queues.
