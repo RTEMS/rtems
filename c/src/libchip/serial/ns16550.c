@@ -30,6 +30,7 @@
 #include <rtems/libio.h>
 #include <rtems/ringbuf.h>
 #include <rtems/bspIo.h>
+#include <rtems/termiostypes.h>
 
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
@@ -164,20 +165,24 @@ NS16550_STATIC void ns16550_init(int minor)
  */
 
 NS16550_STATIC int ns16550_open(
-  int      major,
-  int      minor,
-  void    * arg
+  int major,
+  int minor,
+  void *arg
 )
 {
-  /*
-   * Assert DTR
-   */
+  rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
+  struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
+  console_tbl *c = &Console_Port_Tbl [minor];
 
-  if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_DTRCTS) {
-    ns16550_assert_DTR(minor);
+  /* Assert DTR */
+  if (c->pDeviceFlow != &ns16550_flow_DTRCTS) {
+    ns16550_assert_DTR( minor);
   }
 
-  return(RTEMS_SUCCESSFUL);
+  /* Set initial baud */
+  rtems_termios_set_initial_baud( tty, (int) c->pDeviceParams);
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
@@ -203,15 +208,22 @@ NS16550_STATIC int ns16550_close(
 /**
  * @brief Polled write for NS16550.
  */
-NS16550_STATIC void ns16550_write_polled( int minor, char c)
+NS16550_STATIC void ns16550_write_polled( int minor, char out)
 {
-  uint32_t port = Console_Port_Tbl [minor].ulCtrlPort1;
-  getRegister_f get = Console_Port_Tbl [minor].getRegister;
-  setRegister_f set = Console_Port_Tbl [minor].setRegister;
-  uint32_t status;
+  console_tbl *c = &Console_Port_Tbl [minor];
+  uint32_t port = c->ulCtrlPort1;
+  getRegister_f get = c->getRegister;
+  setRegister_f set = c->setRegister;
+  uint32_t status = 0;
   rtems_interrupt_level level;
 
-  while (1) {
+  /* Save port interrupt mask */
+  uint32_t interrupt_mask = get( port, NS16550_INTERRUPT_ENABLE);
+
+  /* Disable port interrupts */
+  ns16550_enable_interrupts( minor, NS16550_DISABLE_ALL_INTR);
+
+  while (true) {
     /* Try to transmit the character in a critical section */
     rtems_interrupt_disable( level);
 
@@ -219,7 +231,7 @@ NS16550_STATIC void ns16550_write_polled( int minor, char c)
     status = get( port, NS16550_LINE_STATUS);
     if ((status & SP_LSR_THOLD) != 0) {
       /* Transmit character */
-      set( port, NS16550_TRANSMIT_BUFFER, c);
+      set( port, NS16550_TRANSMIT_BUFFER, out);
 
       /* Finished */
       rtems_interrupt_enable( level);
@@ -233,6 +245,9 @@ NS16550_STATIC void ns16550_write_polled( int minor, char c)
       status = get( port, NS16550_LINE_STATUS);
     } while ((status & SP_LSR_THOLD) == 0);
   }
+
+  /* Restore port interrupt mask */
+  set( port, NS16550_INTERRUPT_ENABLE, interrupt_mask);
 }
 
 /*
@@ -448,72 +463,91 @@ NS16550_STATIC int ns16550_set_attributes(
 }
 
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
-/*
- *  ns16550_process
- *
- *  This routine is the console interrupt handler for A port.
- */
 
-NS16550_STATIC void ns16550_process(int minor)
+/**
+ * @brief Process interrupt.
+ */
+NS16550_STATIC void ns16550_process( int minor)
 {
   console_tbl *c = &Console_Port_Tbl [minor];
   console_data *d = &Console_Port_Data [minor];
+  ns16550_context *ctx = d->pDeviceContext;
+  uint32_t port = c->ulCtrlPort1;
+  getRegister_f get = c->getRegister;
+  setRegister_f set = c->setRegister;
+  int i = 0;
+  char buf [SP_FIFO_SIZE];
 
-  uint32_t                pNS16550;
-  volatile uint8_t        ucLineStatus;
-  volatile uint8_t        ucInterruptId;
-  char                    cChar;
-  getRegister_f           getReg;
-  setRegister_f           setReg;
-
-  pNS16550 = c->ulCtrlPort1;
-  getReg   = c->getRegister;
-  setReg   = c->setRegister;
-
+  /* Iterate until no more interrupts are pending */
   do {
-    /*
-     * Deal with any received characters
-     */
-    while (true) {
-      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-      if (~ucLineStatus & SP_LSR_RDY) {
+    /* Fetch received characters */
+    for (i = 0; i < SP_FIFO_SIZE; ++i) {
+      if ((get( port, NS16550_LINE_STATUS) & SP_LSR_RDY) != 0) {
+        buf [i] = (char) get(port, NS16550_RECEIVE_BUFFER);
+      } else {
         break;
       }
-      cChar = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER);
-      rtems_termios_enqueue_raw_characters(
-        d->termios_data,
-        &cChar,
-        1
-      );
     }
 
-    /*
-     *  TX all the characters we can
-     */
+    /* Enqueue fetched characters */
+    rtems_termios_enqueue_raw_characters( d->termios_data, buf, i);
 
-    while (true) {
-      ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-      if (~ucLineStatus & SP_LSR_THOLD) {
-        /*
-         * We'll get another interrupt when
-         * the transmitter holding reg. becomes
-         * free again
-         */
-        break;
-      }
+    /* Check if we can dequeue transmitted characters */
+    if (ctx->transmitFifoChars > 0
+        && (get( port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
+      unsigned chars = ctx->transmitFifoChars;
 
-      if (rtems_termios_dequeue_characters( d->termios_data, 1) == 0) {
-        if (c->pDeviceFlow != &ns16550_flow_RTSCTS) {
-          ns16550_negate_RTS(minor);
-        }
+      /*
+       * We finished the transmission, so clear the number of characters in the
+       * transmit FIFO.
+       */
+      ctx->transmitFifoChars = 0;
+
+      /* Dequeue transmitted characters */
+      if (rtems_termios_dequeue_characters( d->termios_data, chars) == 0) {
+        /* Nothing to do */
         d->bActive = false;
-        ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
-        break;
+        ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
       }
     }
+  } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
+}
+#endif
 
-    ucInterruptId = (*getReg)(pNS16550, NS16550_INTERRUPT_ID);
-  } while((ucInterruptId&0xf)!=0x1);
+/**
+ * @brief Transmits up to @a len characters from @a buf.
+ *
+ * This routine is invoked either from task context with disabled interrupts to
+ * start a new transmission process with exactly one character in case of an
+ * idle output state or from the interrupt handler to refill the transmitter.
+ *
+ * Returns always zero.
+ */
+NS16550_STATIC int ns16550_write_support_int(
+  int minor,
+  const char *buf,
+  int len
+)
+{
+  console_tbl *c = &Console_Port_Tbl [minor];
+  console_data *d = &Console_Port_Data [minor];
+  ns16550_context *ctx = d->pDeviceContext;
+  uint32_t port = c->ulCtrlPort1;
+  setRegister_f set = c->setRegister;
+  int i = 0;
+  int out = len > SP_FIFO_SIZE ? SP_FIFO_SIZE : len;
+
+  for (i = 0; i < out; ++i) {
+    set( port, NS16550_TRANSMIT_BUFFER, buf [i]);
+  }
+
+  if (len > 0) {
+    ctx->transmitFifoChars = out;
+    d->bActive = true;
+    ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR);
+  }
+
+  return 0;
 }
 
 /*
@@ -521,8 +555,6 @@ NS16550_STATIC void ns16550_process(int minor)
  *
  *  This routine initializes the port to have the specified interrupts masked.
  */
-#endif
-
 NS16550_STATIC void ns16550_enable_interrupts(
   int minor,
   int mask
@@ -619,48 +651,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
   #endif
   
   ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
-}
-
-/*
- *  ns16550_write_support_int
- *
- *  Console Termios output entry point.
- */
-
-NS16550_STATIC int ns16550_write_support_int(
-  int   minor,
-  const char *buf,
-  int   len
-)
-{
-  uint32_t       Irql;
-  uint32_t       pNS16550;
-  setRegister_f  setReg;
-
-  setReg   = Console_Port_Tbl[minor].setRegister;
-  pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;
-
-  /*
-   *  We are using interrupt driven output and termios only sends us
-   *  one character at a time.
-   */
-
-  if ( !len )
-    return 0;
-
-  if(Console_Port_Tbl[minor].pDeviceFlow != &ns16550_flow_RTSCTS) {
-    ns16550_assert_RTS(minor);
-  }
-
-  rtems_interrupt_disable(Irql);
-    if ( Console_Port_Data[minor].bActive == false) {
-      Console_Port_Data[minor].bActive = true;
-      ns16550_enable_interrupts(minor, NS16550_ENABLE_ALL_INTR);
-    }
-    (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, *buf);
-  rtems_interrupt_enable(Irql);
-
-  return 1;
 }
 
 /*

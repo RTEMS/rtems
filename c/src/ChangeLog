@@ -5,6 +5,12 @@
 	now use the same macros.
 	* aclocal/bsp-bspcleanup-options.m4: New file.
 
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/serial/ns16550.c, libchip/serial/ns16550_p.h: Removed
+	obsolete defines and declarations.  Set initial baud during device
+	open.  Fixed interrupt mode.
+
 2009-06-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libchip/i2c/spi-sd-card.c, libchip/ide/ata.c: Eliminate using the

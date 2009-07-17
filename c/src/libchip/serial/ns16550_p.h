@@ -29,47 +29,16 @@ extern "C" {
 
 #define NS16550_STATIC static
 
-/*
- * Define serial port read registers structure.
- */
-
-typedef volatile struct _SP_READ_REGISTERS {
-    unsigned char ReceiveBuffer;
-    unsigned char InterruptEnable;
-    unsigned char InterruptId;
-    unsigned char LineControl;
-    unsigned char ModemControl;
-    unsigned char LineStatus;
-    unsigned char ModemStatus;
-    unsigned char ScratchPad;
-} SP_READ_REGISTERS, *PSP_READ_REGISTERS;
-
 #define NS16550_RECEIVE_BUFFER   0
+#define NS16550_TRANSMIT_BUFFER  0
 #define NS16550_INTERRUPT_ENABLE 1
 #define NS16550_INTERRUPT_ID     2
+#define NS16550_FIFO_CONTROL     2
 #define NS16550_LINE_CONTROL     3
 #define NS16550_MODEM_CONTROL    4
 #define NS16550_LINE_STATUS      5
 #define NS16550_MODEM_STATUS     6
 #define NS16550_SCRATCH_PAD      7
-
-/*
- * Define serial port write registers structure.
- */
-
-typedef volatile struct _SP_WRITE_REGISTERS {
-    unsigned char TransmitBuffer;
-    unsigned char InterruptEnable;
-    unsigned char FifoControl;
-    unsigned char LineControl;
-    unsigned char ModemControl;
-    unsigned char Reserved1;
-    unsigned char ModemStatus;
-    unsigned char ScratchPad;
-} SP_WRITE_REGISTERS, *PSP_WRITE_REGISTERS;
-
-#define NS16550_TRANSMIT_BUFFER  0
-#define NS16550_FIFO_CONTROL     2
 
 /*
  * Define serial port interrupt enable register structure.
@@ -85,15 +54,13 @@ typedef volatile struct _SP_WRITE_REGISTERS {
 #define NS16550_ENABLE_ALL_INTR_EXCEPT_TX (SP_INT_RX_ENABLE)
 
 /*
- * Define serial port interrupt id register structure.
+ * Define serial port interrupt ID register structure.
  */
 
-typedef struct _SP_INTERRUPT_ID {
-    unsigned char InterruptPending : 1;
-    unsigned char Identification : 3;
-    unsigned char Reserved1 : 2;
-    unsigned char FifoEnabled : 2;
-} SP_INTERRUPT_ID, *PSP_INTERRUPT_ID;
+#define SP_IID_0 0x01
+#define SP_IID_1 0x02
+#define SP_IID_2 0x04
+#define SP_IID_3 0x08
 
 /*
  * Define serial port fifo control register structure.
@@ -104,6 +71,8 @@ typedef struct _SP_INTERRUPT_ID {
 #define SP_FIFO_TXRST 0x04
 #define SP_FIFO_DMA   0x08
 #define SP_FIFO_RXLEVEL 0xc0
+
+#define SP_FIFO_SIZE 16
 
 /*
  * Define serial port line control register structure.
@@ -156,9 +125,9 @@ typedef struct _SP_INTERRUPT_ID {
 #define SP_LSR_TX   0x40
 #define SP_LSR_EFIFO  0x80
 
-typedef struct _ns16550_context
-{
-        uint8_t         ucModemCtrl;
+typedef struct {
+  uint8_t ucModemCtrl;
+  int transmitFifoChars;
 } ns16550_context;
 
 /*
