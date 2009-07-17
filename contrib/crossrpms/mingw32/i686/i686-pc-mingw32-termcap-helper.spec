@@ -1,5 +1,5 @@
 Name:           i686-pc-mingw32-termcap-helper
-Version:        0.20090122.0
+Version:        0.20090717.0
 Release:        1%{?dist}
 Summary:        RTEMS mingw32 termcap libs helper
 
