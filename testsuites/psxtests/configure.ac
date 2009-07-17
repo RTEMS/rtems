@@ -57,6 +57,7 @@ psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
 psxmsgq03/Makefile
+psxmutexattr01/Makefile
 psxobj01/Makefile
 psxreaddir/Makefile
 psxrdwrv/Makefile

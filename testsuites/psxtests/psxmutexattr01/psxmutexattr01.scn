@@ -1,0 +1,23 @@
+*** POSIX MUTEX ATTRIBUTE TEST 1 ***
+Init - pthread_mutexattr_gettype - attr NULL - EINVAL
+Init - pthread_mutexattr_gettype - type NULL - EINVAL
+Init - pthread_mutexattr_gettype - attr not initialized - EINVAL
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_gettype - OK
+Init - pthread_mutexattr_settype - type NULL - EINVAL
+Init - pthread_mutexattr_settype - attr not initialized - EINVAL
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_settype - bad type - EINVAL
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_settype - PTHREAD_MUTEX_NORMAL - OK
+Init - pthread_mutexattr_gettype - PTHREAD_MUTEX_NORMAL - OK
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_settype - PTHREAD_MUTEX_RECURSIVE - OK
+Init - pthread_mutexattr_gettype - PTHREAD_MUTEX_RECURSIVE - OK
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_settype - PTHREAD_MUTEX_ERRORCHECK - OK
+Init - pthread_mutexattr_gettype - PTHREAD_MUTEX_ERRORCHECK - OK
+Init - pthread_mutexattr_init - OK
+Init - pthread_mutexattr_settype - PTHREAD_MUTEX_DEFAULT - OK
+Init - pthread_mutexattr_gettype - PTHREAD_MUTEX_DEFAULT - OK
+*** END OF POSIX MUTEX ATTRIBUTE TEST 1 ***
