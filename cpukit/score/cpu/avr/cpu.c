@@ -75,6 +75,11 @@ void _CPU_Context_Initialize(
 	_CPU_Push(_stack, (uint16_t)(entry_point)); //push entry point onto context stack
 	the_context->status = 0; //init status to zero
 	if (new_level == TRUE)	_CPU_ISR_Enable( 0 );
+#if 0
+	printk("");
+	printk("the_context = 0x%x\n", the_context);
+	printk("sp = 0x%x\n\n",_stack);
+#endif
 }
 
 

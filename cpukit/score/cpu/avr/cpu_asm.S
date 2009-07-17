@@ -34,8 +34,6 @@
 #define ret_lo		r24
 #define ret_hi 		r25
 
-
-
 	PUBLIC( setjmp )
 
 SYM( setjmp ):
@@ -127,10 +125,6 @@ _U(longjmp):
 
 
 
-
-
-
-
 /*
  *  _CPU_Context_save_fp_context
  *
@@ -205,18 +199,19 @@ SYM(_CPU_Context_restore_fp):
  *  NO_CPU Specific Information:
  *
  *  XXX document implementation including references if appropriate
- 
+ void _CPU_Context_switch(
+  Context_Control  *run,
+  Context_Control  *heir
+);
+
 */
 
-
-
-
-
 	PUBLIC(_CPU_Context_switch)
-
 SYM(_CPU_Context_switch):
 	mov	r26, r24
 	mov	r27, r25
+	mov	r24, r22
+ 	mov	r25, r23
 	st	X+, r2
 	st	X+, r3
 	st	X+, r4
@@ -236,16 +231,17 @@ SYM(_CPU_Context_switch):
 	st	X+, r28
 	st	X+, r29
 	st	X+, r29
-	lds 	r25,0x5f  /*load sreg*/
-	st 	X+, r25
-	lds	r25,0x5d /*spl*/
-	st	X+, r25
-	lds 	r25,0x5e /*sph*/
+	lds 	r23,0x5f  /*load sreg*/
+	st 	X+, r23
+	lds	r23,0x5d /*spl*/
+	st	X+, r23
+	lds 	r23,0x5e /*sph*/
 	
+	PUBLIC(_CPU_Context_restore)
 
-restore:
-	mov	r26,r22
-	mov	r27,r23
+SYM(_CPU_Context_restore):
+	mov	r26,r24
+	mov	r27,r25
 	ld	r2, X+
 	ld	r3, X+
 	ld	r4, X+
@@ -305,14 +301,14 @@ void _CPU_Context_restore(
   printk( "AVR _CPU_Context_restore\n" );
 }
 */
-
+/*
 	PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_restore):
 	//call printk("AVR _CPU_Context_restore\n")
 	ret
 
-
+*/
 
 /*  void __ISR_Handler()
  *
@@ -393,4 +389,3 @@ void _ISR_Handler(void)
 
 SYM(_ISR_Handler):
 	ret
-
