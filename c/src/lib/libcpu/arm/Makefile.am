@@ -55,7 +55,7 @@ include_HEADERS += pxa255/irq/irq.h
 noinst_PROGRAMS += pxa255/irq.rel
 pxa255_irq_rel_SOURCES = pxa255/irq/irq.c pxa255/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c pxa255/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S pxa255/irq/irq.h
+    pxa255/irq/irq.h
 pxa255_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pxa255_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -95,7 +95,7 @@ include_HEADERS += at91rm9200/irq/irq.h
 noinst_PROGRAMS += at91rm9200/irq.rel
 at91rm9200_irq_rel_SOURCES = at91rm9200/irq/irq.c at91rm9200/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c at91rm9200/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S at91rm9200/irq/irq.h
+    at91rm9200/irq/irq.h
 at91rm9200_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -121,7 +121,7 @@ include_HEADERS += mc9328mxl/irq/irq.h
 noinst_PROGRAMS += mc9328mxl/irq.rel
 mc9328mxl_irq_rel_SOURCES = mc9328mxl/irq/irq.c mc9328mxl/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c mc9328mxl/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S mc9328mxl/irq/irq.h
+    mc9328mxl/irq/irq.h
 mc9328mxl_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mc9328mxl_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -147,7 +147,7 @@ include_HEADERS += s3c2400/irq/irq.h
 noinst_PROGRAMS += s3c2400/irq.rel
 s3c2400_irq_rel_SOURCES = s3c24xx/irq/irq.c s3c24xx/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c s3c2400/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S s3c2400/irq/irq.h
+    s3c2400/irq/irq.h
 s3c2400_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c2400_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -173,7 +173,7 @@ include_HEADERS += s3c2410/irq/irq.h
 noinst_PROGRAMS += s3c2410/irq.rel
 s3c2410_irq_rel_SOURCES = s3c24xx/irq/irq.c s3c24xx/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c s3c2410/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S s3c2410/irq/irq.h
+    s3c2410/irq/irq.h
 s3c2410_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 s3c2410_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -199,7 +199,7 @@ include_HEADERS += lpc22xx/irq/irq.h
 noinst_PROGRAMS += lpc22xx/irq.rel
 lpc22xx_irq_rel_SOURCES = lpc22xx/irq/irq.c lpc22xx/irq/bsp_irq_init.c \
     ../../libbsp/arm/shared/irq/irq_init.c lpc22xx/irq/bsp_irq_asm.S \
-    ../../libbsp/arm/shared/irq/irq_asm.S lpc22xx/irq/irq.h
+    lpc22xx/irq/irq.h
 lpc22xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 lpc22xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif

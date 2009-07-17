@@ -11,8 +11,8 @@
 
 #define __asm__
         
-        .globl ExecuteITHandler
-ExecuteITHandler :
+        .globl bsp_interrupt_dispatch
+bsp_interrupt_dispatch :
 /*
  * Look at interrupt status register to determine source.
  * From source, determine offset into expanded vector table

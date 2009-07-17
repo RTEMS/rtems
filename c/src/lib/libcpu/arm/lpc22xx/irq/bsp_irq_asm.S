@@ -19,8 +19,8 @@
  * handler.
  * Called from ISR_Handler, It is better to write in C function
  */
-	.globl ExecuteITHandler
-ExecuteITHandler :
+	.globl bsp_interrupt_dispatch
+bsp_interrupt_dispatch :
 #ifdef __thumb__
     .code 16
 #endif

@@ -19,9 +19,9 @@
  * Function to obtain, execute an IT handler and acknowledge the IT
  */
 
-        .globl ExecuteITHandler
+        .globl bsp_interrupt_dispatch
 
-ExecuteITHandler :
+bsp_interrupt_dispatch :
 
         ldr     r0, =0x4A000014 /* Read rINTOFFSET */
         ldr     r1, [r0]
