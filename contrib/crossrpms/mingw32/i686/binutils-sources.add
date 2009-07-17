@@ -1,3 +1,0 @@
-Source0:	http://downloads.sourceforge.net/mingw/binutils-%{binutils_pkgvers}-src.tar.gz
-%{?_without_sources:NoSource:	0}
-@PATCH0@
