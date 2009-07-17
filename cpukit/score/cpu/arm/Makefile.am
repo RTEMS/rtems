@@ -11,8 +11,11 @@ include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/cpu_asm.h \
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
-libscorecpu_a_SOURCES = cpu.c cpu_asm.S
-libscorecpu_a_SOURCES += thumb/thumb_isr.c
+libscorecpu_a_SOURCES = cpu.c \
+	cpu_asm.S \
+	arm_exc_interrupt.S \
+	arm_exc_handler_low.S \
+	arm_exc_handler_high.c
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

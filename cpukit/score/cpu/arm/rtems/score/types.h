@@ -35,9 +35,6 @@ extern "C" {
 
 typedef uint16_t         Priority_Bit_map_control;
 
-typedef void               arm_cpu_isr;
-typedef void            (*arm_cpu_isr_entry)( void );
-
 #ifdef RTEMS_DEPRECATED_TYPES
 typedef bool		boolean;            /* Boolean value   */
 typedef float           single_precision;   /* single precision float */
