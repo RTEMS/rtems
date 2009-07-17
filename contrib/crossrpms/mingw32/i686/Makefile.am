@@ -60,18 +60,6 @@ MPFR_VERS = 2.3.1
 MPFR_RPMREL = 0.20081219.1%{?dist}
 include ../mpfr.am
 
-BINUTILS_VERS = 2.16.91-20060119-1
-BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 1%{?dist}
-include ../binutils.am
-BINUTILS_OPTS += --disable-infos
-
-GCC_VERS = 4.1.0
-GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = @VERSION@%{?dist}
-include ../gcc.am
-GCC_OPTS += --languages=c
-
 @rpmprefix@$(TARGET)-binutils-helper.spec: $(TARGET)-binutils-helper.spec.in  
 	$(MKSPEC) $(TARGET)-binutils-helper.spec.in | $(SPECSTRIP) > $@
 CLEANFILES += @rpmprefix@$(TARGET)-binutils-helper.spec
