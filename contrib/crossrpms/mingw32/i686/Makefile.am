@@ -5,11 +5,11 @@ TARGET = i686-pc-mingw32
 include $(top_srcdir)/mkspec.am
 
 GMP_VERS = 4.2.4
-GMP_RPMREL = 0.20081219.1%{?dist}
+GMP_RPMREL = 0.20090717.1%{?dist}
 include ../gmp.am
 
 MPFR_VERS = 2.3.1
-MPFR_RPMREL = 0.20081219.1%{?dist}
+MPFR_RPMREL = 0.20090717.1%{?dist}
 include ../mpfr.am
 
 @rpmprefix@$(TARGET)-binutils-helper.spec: $(TARGET)-binutils-helper.spec.in  

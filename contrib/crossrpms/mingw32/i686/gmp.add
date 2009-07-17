@@ -11,19 +11,16 @@ BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Version:      	%gmp_rpmvers
-Summary:      	Cygwin gmp Libraries
+Summary:      	MinGW gmp Libraries
 
 Source0:	ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 
 Provides:	@rpmprefix@@tool_target@-gmp-devel = %{version}-%{release}
 
 %define _mingw32_target          i686-pc-mingw32
-%if 0%{?fedora} >= 9
+
 # Fedora ships a mingw toolchain installed to /usr
 %define _mingw32_sysroot /usr/%{_mingw32_target}/sys-root
-%else
-%define _mingw32_sysroot %{_prefix}/@tool_target@/sys-root
-%endif
 
 BuildRequires:  m4
 BuildRequires:	@rpmprefix@i686-pc-mingw32-gcc

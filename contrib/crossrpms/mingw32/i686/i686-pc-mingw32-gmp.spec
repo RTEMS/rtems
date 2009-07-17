@@ -35,7 +35,7 @@
 %define debug_package %{nil}
 
 Name:         i686-pc-mingw32-gmp
-Release:      0.20090717.0%{?dist}
+Release:      0.20090717.1%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -50,12 +50,9 @@ Source0:	ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Provides:	i686-pc-mingw32-gmp-devel = %{version}-%{release}
 
 %define _mingw32_target          i686-pc-mingw32
-%if 0%{?fedora} >= 9
+
 # Fedora ships a mingw toolchain installed to /usr
 %define _mingw32_sysroot /usr/%{_mingw32_target}/sys-root
-%else
-%define _mingw32_sysroot %{_prefix}/i686-pc-mingw32/sys-root
-%endif
 
 BuildRequires:  m4
 BuildRequires:	i686-pc-mingw32-gcc
