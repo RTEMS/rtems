@@ -1,5 +1,5 @@
 Name:           @rpmprefix@i686-pc-mingw32-binutils-helper
-Version:        0.20090121.0
+Version:        0.20090717.0
 Release:        1%{?dist}
 Summary:        RTEMS binutils helper
 
