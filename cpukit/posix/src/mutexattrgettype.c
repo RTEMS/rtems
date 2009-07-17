@@ -29,7 +29,13 @@ int pthread_mutexattr_gettype(
   int                       *type
 )
 {
-  if ( !attr || !attr->is_initialized || !type )
+  if ( !attr )
+    return EINVAL;
+
+  if ( !attr->is_initialized )
+    return EINVAL;
+
+  if ( !type )
     return EINVAL;
 
   *type = attr->type;
