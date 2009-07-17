@@ -6,27 +6,6 @@ include $(top_srcdir)/mkspec.am
 
 MINGW32_VERS = 3.11
 MINGW32_RPMREL = 1
-EXTRA_DIST += libs.add
-EXTRA_DIST += target-libs.add
-
-LIBS_SUBPACKAGES = $(top_srcdir)/common/common.add
-LIBS_SUBPACKAGES += $(srcdir)/libs.add
-LIBS_SUBPACKAGES += $(top_srcdir)/gcc/rpm-install.add
-LIBS_SUBPACKAGES += $(top_srcdir)/common/clean.add
-LIBS_SUBPACKAGES += $(srcdir)/target-libs.add
-
-$(TARGET)-libs.spec.in: $(LIBS_SUBPACKAGES) Makefile.am
-	cat $(LIBS_SUBPACKAGES) | sed \
-	  -e "s/[@]MINGW32_VERS[@]/$(MINGW32_VERS)/g" \
-	  -e "s/[@]MINGW32_RPMREL[@]/$(MINGW32_RPMREL)/g" \
-	  -e "s,%{gcc_rpmvers},%{mingw32_rpmvers},g" \
-	> $(TARGET)-libs.spec.in
-CLEANFILES += $(TARGET)-libs.spec.in
-
-@rpmprefix@$(TARGET)-libs.spec: $(TARGET)-libs.spec.in
-	$(MKSPEC) $(TARGET)-libs.spec.in | $(SPECSTRIP) > $@
-CLEANFILES += @rpmprefix@$(TARGET)-libs.spec
-noinst_DATA += @rpmprefix@$(TARGET)-libs.spec
 
 W32API_VERS = 3.8
 W32API_RPMREL = 1
