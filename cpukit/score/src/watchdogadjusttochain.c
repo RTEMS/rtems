@@ -33,46 +33,51 @@ void _Watchdog_Adjust_to_chain(
   ISR_Level          level;
   Watchdog_Control  *first; 
   
-  if ( !units )
+  if ( units <= 0 ) {
     return;
+  }
  
   _ISR_Disable( level );
 
-  if ( !_Chain_Is_empty( header ) ) {
-    while ( units ) {
-      first = _Watchdog_First( header );
+  while ( 1 ) {
+    if ( units <= 0 ) {
+      break;
+    }
+    if ( _Chain_Is_empty( header ) ) {
+      break;
+    }
+    first = _Watchdog_First( header );
 
-      /*
-       *  If it is longer than "units" until the first element on the chain
-       *  fires, then bump it and quit.
-       */
-      if ( units < first->delta_interval ) {
-        first->delta_interval -= units;
-        break;
-      }
+    /*
+     *  If it is longer than "units" until the first element on the chain
+     *  fires, then bump it and quit.
+     */
+    if ( units < first->delta_interval ) {
+      first->delta_interval -= units;
+      break;
+    }
 
-      /*
-       *  The first set happens in less than units, so take all of them
-       *  off the chain and adjust units to reflect this.
-       */
-      units -= first->delta_interval;
-      first->delta_interval = 0;
+    /*
+     *  The first set happens in less than units, so take all of them
+     *  off the chain and adjust units to reflect this.
+     */
+    units -= first->delta_interval;
+    first->delta_interval = 0;
 
-      while (1) {
-        _Chain_Extract_unprotected( &first->Node );
-        _Chain_Append_unprotected( to_fire, &first->Node );
+    while ( 1 ) {
+      _Chain_Extract_unprotected( &first->Node );
+      _Chain_Append_unprotected( to_fire, &first->Node );
 
       _ISR_Flash( level );
-   
-        if ( _Chain_Is_empty( header ) )
-          break;
-
-        first = _Watchdog_First( header );
-        if ( first->delta_interval != 0 )
-          break;
-      }
+ 
+      if ( _Chain_Is_empty( header ) )
+        break;
+      first = _Watchdog_First( header );
+      if ( first->delta_interval != 0 )
+        break;
     }
   }
+
   _ISR_Enable( level );
 }
 
