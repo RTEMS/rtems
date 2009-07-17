@@ -196,6 +196,17 @@ void _ISR_Handler( void );
 void _ISR_Dispatch( void );
 
 /**
+ *  Invokes the thread dispatcher or signal extension if necessary.
+ *
+ *  It should be called at the end of interrupt processing.  The interrupt nest
+ *  level must be zero before calling this routine. 
+ *
+ *  This is a high level replacement of _ISR_Dispatch().  It must be invoked
+ *  within an environment such that a call to _Thread_Dispatch() is allowed.
+ */
+void _ISR_Thread_dispatch( void );
+
+/**
  *  This function returns true if the processor is currently servicing
  *  and interrupt and false otherwise.   A return value of true indicates
  *  that the caller is an interrupt service routine, NOT a thread.  The
