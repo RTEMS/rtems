@@ -3,23 +3,6 @@
 # 	http://www.rtems.org/bugzilla
 #
 
-%if "%{_prefix}" != "/usr"
-%define _prefix                 @_prefix@
-%define _exec_prefix            %{_prefix}
-%define _bindir                 %{_exec_prefix}/bin
-%define _sbindir                %{_exec_prefix}/sbin
-%define _libexecdir             %{_exec_prefix}/libexec
-%define _datarootdir            %{_prefix}/share
-%define _datadir                %{_datarootdir}
-%define _sysconfdir             %{_prefix}/etc
-%define _sharedstatedir         %{_prefix}/com
-%define _localstatedir          %{_prefix}/var
-%define _includedir             %{_prefix}/include
-%define _libdir                 %{_exec_prefix}/%{_lib}
-%define _mandir                 %{_datarootdir}/man
-%define _infodir                %{_datarootdir}/info
-%define _localedir              %{_datarootdir}/locale
-%endif
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
@@ -42,16 +25,16 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix @rpmprefix@%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gmp_version 4.2.4
-%define gmp_rpmvers %{expand:%(echo 4.2.4 | tr - _)} 
+%define mpfr_version 2.3.1
+%define mpfr_rpmvers %{expand:%(echo 2.3.1 | tr - _)} 
 %define debug_package %{nil}
 
-Name:         @rpmprefix@i686-pc-mingw32-gmp
+Name:         i686-pc-mingw32-mpfr
 Release:      0.20090717.1%{?dist}
 License:      GPL
 Group:        Development/Tools
@@ -59,23 +42,26 @@ Group:        Development/Tools
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Version:      	%gmp_rpmvers
-Summary:      	MinGW gmp Libraries
+Version:      	%mpfr_rpmvers
+Summary:      	MinGW MPFR Libraries
 
-Source0:	ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+Source0:	http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
 
-Provides:	@rpmprefix@i686-pc-mingw32-gmp-devel = %{version}-%{release}
+Provides:	i686-pc-mingw32-mpfr-devel = %{version}-%{release}
 
 %define _mingw32_target          i686-pc-mingw32
-
+%if 0%{?fedora} >= 9
 # Fedora ships a mingw toolchain installed to /usr
 %define _mingw32_sysroot /usr/%{_mingw32_target}/sys-root
+%else
+%define _mingw32_sysroot %{_prefix}/i686-pc-mingw32/sys-root
+%endif
 
-BuildRequires:  m4
-BuildRequires:	@rpmprefix@i686-pc-mingw32-gcc
+BuildRequires:	i686-pc-mingw32-gcc
+BuildRequires:	i686-pc-mingw32-gmp-devel
 
 %description
-MinGW gmp libraries.
+MinGW MPFR libraries.
 
 %prep
 %setup -c -q
@@ -89,7 +75,7 @@ MinGW gmp libraries.
 
   cd build
 
-  ../gmp-%{gmp_version}/configure \
+  ../mpfr-%{mpfr_version}/configure \
     --prefix=%{_mingw32_sysroot}/mingw \
     --bindir=%{_bindir} \
     --exec_prefix=%{_mingw32_sysroot}/mingw \
@@ -127,40 +113,29 @@ case $a in
   sed -e 's,find $RPM_BUILD_ROOT,find $RPM_BUILD_ROOT%_bindir $RPM_BUILD_ROOT%_libexecdir,' $a > $b
   chmod a+x $b
   ;;
-%if "%{_prefix}" != "/usr"
-# Fix up brp-compress to handle %%_prefix != /usr
-*/brp-compress*)
-  b=$(basename $a)
-  sed -e 's,\./usr/,.%{_prefix}/,g' < $a > $b
-  chmod a+x $b
-  ;;
-%endif
 esac
 done
 
 sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
-%if "%{_prefix}" != "/usr"
-  -e 's,^[ ]*/usr/lib/rpm.*/brp-compress,./brp-compress,' \
-%endif
 < os_install_post~ > os_install_post 
 %define __os_install_post . ./os_install_post
 
 
-cat << EOF > %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
+cat << EOF > %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_provides
 EOF
-chmod +x %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
-%define __find_provides %{_builddir}/%{name}-%{gmp_rpmvers}/find-provides
+chmod +x %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
+%define __find_provides %{_builddir}/%{name}-%{mpfr_rpmvers}/find-provides
 
-cat << EOF > %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires
+cat << EOF > %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/i686-pc-mingw32/(lib|include|sys-root)' \
   | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/i686-pc-mingw32/' | %__find_requires
 EOF
-chmod +x %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires
-%define __find_requires %{_builddir}/%{name}-%{gmp_rpmvers}/find-requires
+chmod +x %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
+%define __find_requires %{_builddir}/%{name}-%{mpfr_rpmvers}/find-requires
 
 %ifnarch noarch
 # Extract %%__debug_install_post into debug_install_post~
@@ -193,3 +168,4 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 %defattr(-,root,root,-)
 %{_mingw32_sysroot}/mingw
 %exclude %{_mingw32_sysroot}/mingw/share/info/dir
+
