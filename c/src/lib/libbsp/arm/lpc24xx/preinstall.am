@@ -65,6 +65,10 @@ $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
+$(PROJECT_INCLUDE)/bsp/stackalloc.h: ../../shared/include/stackalloc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stackalloc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stackalloc.h
+
 $(PROJECT_INCLUDE)/bsp/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tod.h
@@ -101,6 +105,18 @@ $(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h
 
+$(PROJECT_INCLUDE)/bsp/idle.h: include/idle.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/idle.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/idle.h
+
+$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
+
+$(PROJECT_INCLUDE)/bsp/io.h: include/io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/io.h
+
 $(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
@@ -112,10 +128,6 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 $(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
-
-$(PROJECT_LIB)/linkcmds.rom: ../shared/startup/linkcmds.rom $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.rom
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom
 
 $(PROJECT_LIB)/linkcmds.lpc2478: startup/linkcmds.lpc2478 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.lpc2478

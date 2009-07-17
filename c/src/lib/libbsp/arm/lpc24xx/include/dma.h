@@ -7,8 +7,8 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
+ * Copyright (c) 2008, 2009
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
@@ -21,19 +21,19 @@
 #ifndef LIBBSP_ARM_LPC24XX_DMA_H
 #define LIBBSP_ARM_LPC24XX_DMA_H
 
-#include <stdbool.h>
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-void lpc24xx_dma_initialize( void);
+void lpc24xx_dma_initialize(void);
 
-bool lpc24xx_dma_channel_obtain( unsigned channel);
+rtems_status_code lpc24xx_dma_channel_obtain(unsigned channel);
 
-void lpc24xx_dma_channel_release( unsigned channel);
+void lpc24xx_dma_channel_release(unsigned channel);
 
-void lpc24xx_dma_channel_disable( unsigned channel, bool force);
+void lpc24xx_dma_channel_disable(unsigned channel, bool force);
 
 #ifdef __cplusplus
 }

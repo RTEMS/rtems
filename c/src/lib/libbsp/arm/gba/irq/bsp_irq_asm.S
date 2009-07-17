@@ -23,7 +23,7 @@
 
 /**
  *  Execute interrupt handler
- *  function void ExecuteITHandler(void)
+ *  function void bsp_interrupt_dispatch(void)
  *
  * Look at interrupt status register to determine source.
  * From source, determine offset into expanded vector table
@@ -34,7 +34,7 @@
     .align
 /*  .section  .iwram  */
 
-PUBLIC_ARM_FUNCTION(ExecuteITHandler)
+PUBLIC_ARM_FUNCTION(bsp_interrupt_dispatch)
   ldr   r1, =GBA_REG_IE_ADDR
   ldrh  r1, [r1]
   ldr   r2, =GBA_REG_IF_ADDR
@@ -174,6 +174,6 @@ IRQ_NoInterrupt:
   /* return to the "main" interrupt handler */
   mov pc, lr
 
-LABEL_END(ExecuteITHandler)
+LABEL_END(bsp_interrupt_dispatch)
 /* @endcond */
 

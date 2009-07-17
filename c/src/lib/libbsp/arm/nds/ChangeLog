@@ -4,6 +4,10 @@
 	RTEMS_BSP_BOOTCARD_OPTIONS. Add RTEMS_BSP_CLEANUP_OPTIONS so all BSPs
 	have the same options.
 
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstart.c: Removed variable declaration.
+
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspgetworkarea.c: Switch from ssize_t to uintptr_t for

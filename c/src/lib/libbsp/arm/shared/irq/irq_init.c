@@ -17,11 +17,6 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-/*
- * default int vector
- */
-extern void _ISR_Handler(void);
-
 void default_int_handler(void)
 {
   printk("raw_idt_notify has been called \n");
@@ -33,9 +28,8 @@ void  rtems_irq_mngt_init(void)
 
     rtems_interrupt_disable(level);
 
-    /* First, connect the ISR_Handler for IRQ and FIQ interrupts */
-    _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ISR_Handler, NULL);
-    _CPU_ISR_install_vector(ARM_EXCEPTION_FIQ, _ISR_Handler, NULL);
+    /* First, connect the ISR_Handler for IRQ interrupts */
+    _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
 
     /* Initialize the INT at the BSP level */
     BSP_rtems_irq_mngt_init();

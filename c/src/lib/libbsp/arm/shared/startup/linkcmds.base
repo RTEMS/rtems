@@ -1,47 +1,7 @@
 /**
  * @file
  *
- * @brief Linker command base file for configuration with internal and external
- * RAM and optional ROM load.
- *
- * You need to add a linker command file to your board support package that
- * includes this file at the end and provides the following definitions.
- *
- * Compulsory are the memory regions RAM_INT, RAM_EXT and NIRVANA.
- * <pre>
- * MEMORY {
- *   RAM_INT (AIW) : ORIGIN = 0x40000000, LENGTH = 64k
- *   RAM_EXT (AIW) : ORIGIN = 0xa0000000, LENGTH = 32M
- *   NIRVANA : ORIGIN = 0, LENGTH = 0
- * }
- * </pre>
- *
- * You may optionally provide ROM start and size values.
- * <pre>
- * bsp_rom_start = 0x80000000;
- * bsp_rom_size = 0x01000000;
- * </pre>
- *
- * Optionally you can enable the load to ROM.  It is enabled then
- * bsp_enable_rom_load is defined.  The value is arbitrary.
- * <pre>
- * bsp_enable_rom_load = 1;
- * </pre>
- *
- * Include the linker command base file.  This file has to be installed in the
- * same directory than your linker command file.
- * <pre>
- * INCLUDE linkcmds.base
- * </pre>
- *
- * You may define optionally values for the following sizes:
- *   - bsp_ram_int_size
- *   - bsp_ram_ext_size
- *   - bsp_stack_abt_size
- *   - bsp_stack_fiq_size
- *   - bsp_stack_irq_size
- *   - bsp_stack_svc_size
- *   - bsp_stack_undef_size
+ * @brief Linker command base file.
  */
 
 /*
@@ -63,50 +23,67 @@ OUTPUT_ARCH (arm)
 ENTRY (start)
 
 /*
- * BSP: Symbols that may be defined externally.  The minimum alignment
- * requirement for regions is bsp_section_align.
- */
-bsp_ram_int_size = DEFINED (bsp_ram_int_size) ? bsp_ram_int_size : LENGTH (RAM_INT);
-
-bsp_ram_ext_size = DEFINED (bsp_ram_ext_size) ? bsp_ram_ext_size : LENGTH (RAM_EXT);
-
-bsp_rom_start = DEFINED (bsp_rom_start) ? bsp_rom_start : 0;
-
-bsp_rom_size = DEFINED (bsp_rom_size) ? bsp_rom_size : 0;
-
-bsp_ram_ext_load_start = DEFINED (bsp_enable_rom_load) ? bsp_rom_start : bsp_ram_ext_start;
-
-bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
-
-bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 128;
-
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 256;
-
-bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 256;
-
-bsp_stack_undef_size = DEFINED (bsp_stack_undef_size) ? bsp_stack_undef_size : 128;
-
-/*
  * BSP: Global symbols
  */
-bsp_ram_int_start = ORIGIN (RAM_INT);
-bsp_ram_int_end = bsp_ram_int_start + bsp_ram_int_size;
 
-bsp_ram_ext_start = ORIGIN (RAM_EXT);
-bsp_ram_ext_end = bsp_ram_ext_start + bsp_ram_ext_size;
+bsp_section_align = 32;
 
-bsp_rom_end = bsp_rom_start + bsp_rom_size;
+bsp_stack_align = 4;
 
-bsp_section_align = 16;
+bsp_region_text_begin = ORIGIN (REGION_TEXT);
+bsp_region_text_size = LENGTH (REGION_TEXT);
+bsp_region_text_end = bsp_region_text_begin + bsp_region_text_size;
 
-bsp_stack_align = 16;
+bsp_region_data_begin = ORIGIN (REGION_DATA);
+bsp_region_data_size = LENGTH (REGION_DATA);
+bsp_region_data_end = bsp_region_data_begin + bsp_region_data_size;
+
+/*
+ * BSP: Symbols that may be defined externally
+ */
+
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 128;
+bsp_stack_abt_size = ALIGN (bsp_stack_abt_size, bsp_stack_align);
+
+bsp_stack_fiq_size = DEFINED (bsp_stack_fiq_size) ? bsp_stack_fiq_size : 128;
+bsp_stack_fiq_size = ALIGN (bsp_stack_fiq_size, bsp_stack_align);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 512;
+bsp_stack_irq_size = ALIGN (bsp_stack_irq_size, bsp_stack_align);
+
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 512;
+bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
+
+bsp_stack_undef_size = DEFINED (bsp_stack_undef_size) ? bsp_stack_undef_size : 128;
+bsp_stack_undef_size = ALIGN (bsp_stack_undef_size, bsp_stack_align);
 
 SECTIONS {
+	.start : {
+		/*
+		 * BSP: Begin of start section
+		 */
+		bsp_section_start_begin = .;
+
+		/*
+		 * BSP: System startup entry
+		 */
+		KEEP (*(.bsp_start))
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of start section
+		 */
+		bsp_section_start_end = .;
+	} > REGION_START AT > REGION_START
+
+	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
+
 	.vector : {
 		/*
-		 * BSP: Start of vector section
+		 * BSP: Begin of vector section
 		 */
-		bsp_section_vector_start = .;
+		bsp_section_vector_begin = .;
 
 		/*
 		 * BSP: Reserve space for the the exception vector table and
@@ -114,26 +91,57 @@ SECTIONS {
 		 */
 		. = . + 64;
 
+		/*
+		 * BSP: Reserve space for mode stacks
+		 */
+
+		. = ALIGN (bsp_stack_align);
+
+		bsp_stack_abt_begin = .;
+		. = . + bsp_stack_abt_size;
+		bsp_stack_abt_end = .;
+
+		bsp_stack_fiq_begin = .;
+		. = . + bsp_stack_fiq_size;
+		bsp_stack_fiq_end = .;
+
+		bsp_stack_irq_begin = .;
+		. = . + bsp_stack_irq_size;
+		bsp_stack_irq_end = .;
+
+		bsp_stack_svc_begin = .;
+		. = . + bsp_stack_svc_size;
+		bsp_stack_svc_end = .;
+
+		bsp_stack_undef_begin = .;
+		. = . + bsp_stack_undef_size;
+		bsp_stack_undef_end = .;
+
+		/*
+		 * BSP: Special vector data
+		 */
+		*(.bsp_vector)
+
 		. = ALIGN (bsp_section_align);
 
 		/*
 		 * BSP: End of vector section
 		 */
 		bsp_section_vector_end = .;
-	} > RAM_INT
+	} > REGION_VECTOR AT > REGION_VECTOR
 
-	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_start;
+	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
 
-	.text : AT (bsp_ram_ext_load_start) {
+	.text : {
 		/*
-		 * BSP: Start of text section
+		 * BSP: Begin of text section
 		 */
-		bsp_section_text_start = .;
+		bsp_section_text_begin = .;
 
 		/*
 		 * BSP: System startup entry
 		 */
-		KEEP (*(.entry))
+		KEEP (*(.bsp_start))
 
 		/*
 		 * BSP: Moved into .text from .init
@@ -166,8 +174,6 @@ SECTIONS {
 		/*
 		 * BSP: Moved into .text from .*
 		 */
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
-		*(.rodata1)
 		*(.eh_frame_hdr)
 
 		/*
@@ -186,15 +192,45 @@ SECTIONS {
 		 * BSP: End of text section
 		 */
 		bsp_section_text_end = .;
-	} > RAM_EXT
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
 
-	bsp_section_text_size = bsp_section_text_end - bsp_section_text_start;
+	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+
+	bsp_section_text_load_begin = LOADADDR (.text);
+
+	.rodata : {
+		/*
+		 * BSP: Begin of rodata section
+		 */
+		bsp_section_rodata_begin = .;
+
+		__start_set_modmetadata_set = .;
+		*(set_modmetadata_set);
+		__stop_set_modmetadata_set = .;
+
+		/*
+		 * BSP: Moved into .rodata from .*
+		 */
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		*(.rodata1)
+
+		. = ALIGN (bsp_section_align);
+
+		/*
+		 * BSP: End of rodata section
+		 */
+		bsp_section_rodata_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+
+	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
+
+	bsp_section_rodata_load_begin = LOADADDR (.rodata);
 
 	.data : {
 		/*
-		 * BSP: Start of data section
+		 * BSP: Begin of data section
 		 */
-		bsp_section_data_start = .;
+		bsp_section_data_begin = .;
 
 		/*
 		 * BSP: Moved into .data from .ctors
@@ -245,15 +281,31 @@ SECTIONS {
 		 * BSP: End of data section
 		 */
 		bsp_section_data_end = .;
-	} > RAM_EXT
+	} > REGION_DATA AT > REGION_DATA_LOAD
 
-	bsp_section_data_size = bsp_section_data_end - bsp_section_data_start;
+	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+
+	bsp_section_data_load_begin = LOADADDR (.data);
+
+	.fast : {
+		bsp_section_fast_begin = .;
+
+		*(.fast)
+
+		. = ALIGN (bsp_section_align);
+
+		bsp_section_fast_end = .;
+	} > REGION_FAST AT > REGION_FAST_LOAD
+
+	bsp_section_fast_size = bsp_section_fast_end - bsp_section_fast_begin;
+
+	bsp_section_fast_load_begin = LOADADDR (.fast);
 
 	.bss : {
 		/*
-		 * BSP: Start of bss section
+		 * BSP: Begin of bss section
 		 */
-		bsp_section_bss_start = .;
+		bsp_section_bss_begin = .;
 
 		*(COMMON)
 		*(.dynbss)
@@ -265,73 +317,53 @@ SECTIONS {
 		 * BSP: End of bss section
 		 */
 		bsp_section_bss_end = .;
-	} > RAM_EXT
+	} > REGION_BSS AT > REGION_BSS
 
-	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_start;
+	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+	.work : {
+		/*
+		 * BSP: Begin of work section.  The work section will occupy
+		 * the remaining REGION_WORK region and contains the RTEMS work
+		 * space and heap.
+		 */
+		bsp_section_work_begin = .;
+
+		. += ORIGIN (REGION_WORK) + LENGTH (REGION_WORK) - ABSOLUTE (.);
+
+		/*
+		 * BSP: End of work section
+		 */
+		bsp_section_work_end = .;
+	} > REGION_WORK AT > REGION_WORK
+
+	bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
 
 	.stack : {
 		/*
-		 * BSP: Start of stack section
+		 * BSP: Begin of stack section.  The stack section will occupy
+		 * the remaining REGION_STACK region and may contain the task
+		 * stacks.  Depending on the region distribution this section
+		 * may be of zero size.
 		 */
-		bsp_section_stack_start = .;
+		bsp_section_stack_begin = .;
 
-		. = ALIGN (bsp_stack_align);
-		bsp_stack_abt_start = .;
-		. = . + bsp_stack_abt_size;
-
-		. = ALIGN (bsp_stack_align);
-		bsp_stack_fiq_start = .;
-		. = . + bsp_stack_fiq_size;
-
-		. = ALIGN (bsp_stack_align);
-		bsp_stack_irq_start = .;
-		. = . + bsp_stack_irq_size;
-
-		. = ALIGN (bsp_stack_align);
-		bsp_stack_svc_start = .;
-		. = . + bsp_stack_svc_size;
-
-		. = ALIGN (bsp_stack_align);
-		bsp_stack_undef_start = .;
-		. = . + bsp_stack_undef_size;
-
-		. = ALIGN (bsp_section_align);
+		. += ORIGIN (REGION_STACK) + LENGTH (REGION_STACK) - ABSOLUTE (.);
 
 		/*
 		 * BSP: End of stack section
 		 */
 		bsp_section_stack_end = .;
-	} > RAM_INT
+	} > REGION_STACK AT > REGION_STACK
 
-	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_start;
-
-	.work_area : {
-		/*
-		 * BSP: Start of work area.  The work area will occupy the remaining
-		 * RAM_EXT region and contains the RTEMS work space and heap.  We cannot
-		 * assign the region end directly since this leads to a region full
-		 * warning.
-		 */
-		bsp_section_work_area_start = .;
-
-		. = bsp_ram_ext_end - 4;
-
-		. = ALIGN (bsp_section_align);
-
-		/*
-		 * BSP: End of work area
-		 */
-		bsp_section_work_area_end = .;
-	} > RAM_EXT
-
-	bsp_section_work_area_size = bsp_section_work_area_end - bsp_section_work_area_start;
+	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
 
 	/*
 	 * BSP: External symbols (FIXME)
 	 */
-	RamBase = bsp_ram_ext_start;
-	RamSize = bsp_ram_ext_size;
-	WorkAreaBase = bsp_section_work_area_start;
+	RamBase = ORIGIN (REGION_WORK);
+	RamSize = LENGTH (REGION_WORK);
+	WorkAreaBase = bsp_section_work_begin;
 	HeapSize = 0;
 	
 	/* Stabs debugging sections.  */

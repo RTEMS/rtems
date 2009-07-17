@@ -18,10 +18,25 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems.h>
+
 #include <bsp/bootcard.h>
-#include <bsp/start.h>
+#include <bsp/lpc24xx.h>
 
 void bsp_reset( void)
 {
-  start();
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level);
+
+  /* Trigger watchdog reset */
+  WDCLKSEL = 0;
+  WDTC = 0xff;
+  WDMOD = 0x3;
+  WDFEED = 0xaa;
+  WDFEED = 0x55;
+
+  while (true) {
+    /* Do nothing */
+  }
 }

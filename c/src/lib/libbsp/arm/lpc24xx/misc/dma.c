@@ -7,8 +7,8 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
+ * Copyright (c) 2008, 2009
+ * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
  * Germany
@@ -22,6 +22,7 @@
 
 #include <bsp/lpc24xx.h>
 #include <bsp/dma.h>
+#include <bsp/io.h>
 
 /**
  * @brief Table that indicates if a channel is currently occupied.
@@ -31,14 +32,12 @@ static bool lpc24xx_dma_channel_occupation [GPDMA_CH_NUMBER];
 /**
  * @brief Initializes the general purpose DMA.
  */
-void lpc24xx_dma_initialize( void)
+void lpc24xx_dma_initialize(void)
 {
   rtems_interrupt_level level;
 
-  /* Enable power */
-  rtems_interrupt_disable( level);
-  PCONP = SET_FLAG( PCONP, PCONP_PCGPDMA);
-  rtems_interrupt_enable( level);
+  /* Enable module power */
+  lpc24xx_module_enable(LPC24XX_MODULE_GPDMA, 0, LPC24XX_MODULE_PCLK_DEFAULT);
 
   /* Disable module */
   GPDMA_CONFIG = 0;
@@ -59,66 +58,67 @@ void lpc24xx_dma_initialize( void)
 }
 
 /**
- * @brief Returns true if the channel @a channel was obtained.
+ * @brief Tries to obtain the channel @a channel.
  *
- * If the channel number @a channel is out of range the last valid channel will
- * be used.
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid channel number.
+ * @retval RTEMS_RESOURCE_IN_USE Channel already occupied.
  */
-bool lpc24xx_dma_channel_obtain( unsigned channel)
+rtems_status_code lpc24xx_dma_channel_obtain(unsigned channel)
 {
-  rtems_interrupt_level level;
-  bool occupation = true;
+  if (channel < GPDMA_CH_NUMBER) {
+    rtems_interrupt_level level;
+    bool occupation = true;
 
-  if (channel > GPDMA_CH_NUMBER) {
-    channel = GPDMA_CH_NUMBER - 1;
+    rtems_interrupt_disable(level);
+    occupation = lpc24xx_dma_channel_occupation [channel];
+    lpc24xx_dma_channel_occupation [channel] = true;
+    rtems_interrupt_enable(level);
+
+    return occupation ? RTEMS_RESOURCE_IN_USE : RTEMS_SUCCESSFUL;
+  } else {
+    return RTEMS_INVALID_ID;
   }
-
-  rtems_interrupt_disable( level);
-  occupation = lpc24xx_dma_channel_occupation [channel];
-  lpc24xx_dma_channel_occupation [channel] = true;
-  rtems_interrupt_enable( level);
-
-  return !occupation;
 }
 
 /**
- * @brief Releases the channel @a channel.  You must have obtained this channel
- * with lpc24xx_dma_channel_obtain() previously.
+ * @brief Releases the channel @a channel.
  *
- * If the channel number @a channel is out of range the last valid channel will
- * be used.
+ * You must have obtained this channel with lpc24xx_dma_channel_obtain()
+ * previously.
+ *
+ * If the channel number @a channel is out of range nothing will happen.
  */
-void lpc24xx_dma_channel_release( unsigned channel)
+void lpc24xx_dma_channel_release(unsigned channel)
 {
-  if (channel > GPDMA_CH_NUMBER) {
-    channel = GPDMA_CH_NUMBER - 1;
+  if (channel < GPDMA_CH_NUMBER) {
+    lpc24xx_dma_channel_occupation [channel] = false;
   }
-
-  lpc24xx_dma_channel_occupation [channel] = false;
 }
 
 /**
  * @brief Disables the channel @a channel.
  *
  * If @a force is false the channel will be halted and disabled when the
- * channel is inactive.  If the channel number @a channel is out of range the
- * last valid channel will be used.
+ * channel is inactive.
+ *
+ * If the channel number @a channel is out of range the behaviour is undefined.
  */
-void lpc24xx_dma_channel_disable( unsigned channel, bool force)
+void lpc24xx_dma_channel_disable(unsigned channel, bool force)
 {
-  volatile lpc24xx_dma_channel *ch = GPDMA_CH_BASE_ADDR( channel);
+  volatile lpc24xx_dma_channel *ch = GPDMA_CH_BASE_ADDR(channel);
   uint32_t cfg = ch->cfg;
 
   if (!force) {
     /* Halt */
-    ch->cfg = SET_FLAG( cfg, GPDMA_CH_CFG_HALT);
+    ch->cfg = SET_FLAG(cfg, GPDMA_CH_CFG_HALT);
 
     /* Wait for inactive */
     do {
       cfg = ch->cfg;
-    } while (IS_FLAG_SET( cfg, GPDMA_CH_CFG_ACTIVE));
+    } while (IS_FLAG_SET(cfg, GPDMA_CH_CFG_ACTIVE));
   }
 
   /* Disable */
-  ch->cfg = CLEAR_FLAG( cfg, GPDMA_CH_CFG_EN);
+  ch->cfg = CLEAR_FLAG(cfg, GPDMA_CH_CFG_EN);
 }

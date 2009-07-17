@@ -16,11 +16,6 @@
 #include <nds.h>
 
 /*
- * This definition comes from ARM cpu code.
- */
-extern unsigned int arm_cpu_mode;
-
-/*
  * start the platform.
  */
 

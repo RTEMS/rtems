@@ -51,7 +51,7 @@ include_HEADERS += irq/irq.h
 # irq
 libbsp_a_SOURCES += irq/irq.c irq/bsp_irq_init.c \
     ../../arm/shared/irq/irq_init.c irq/bsp_irq_asm.S \
-    ../../arm/shared/irq/irq_asm.S irq/irq.h
+    irq/irq.h
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

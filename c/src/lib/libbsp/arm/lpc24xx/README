@@ -2,6 +2,8 @@
 #  $Id$
 #
 
+Note: A Binutils version with REGION_ALIAS feature is required to link the BSP.
+
 Development Board: QVGA Base Board from Embedded Artists
 
 http://www.embeddedartists.com/products/uclinux/oem_lpc2478.php
@@ -13,6 +15,7 @@ Drivers:
 	o RTC
 	o SSP (SPI mode): This driver is in active development.  Use with care.
 	o Network
+	o I2C
 
 Howto setup QVGA Base Board?
 

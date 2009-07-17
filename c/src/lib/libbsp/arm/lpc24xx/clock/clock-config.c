@@ -25,6 +25,7 @@
 #include <bsp.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/irq.h>
+#include <bsp/io.h>
 #include <bsp/system-clocks.h>
 
 /* This is defined in ../../../shared/clockdrv_shell.h */
@@ -55,11 +56,8 @@ static void lpc24xx_clock_initialize( void)
   uint64_t interval = ((uint64_t) lpc24xx_cclk()
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
 
-  /* Set timer pclk to cclk */
-  rtems_interrupt_disable( level);
-  PCONP = SET_FLAGS( PCONP, 0x02);
-  PCLKSEL0 = SET_FLAGS( PCLKSEL0, 0x04);
-  rtems_interrupt_enable( level);
+  /* Enable module power */
+  lpc24xx_module_enable( LPC24XX_MODULE_TIMER, 0, LPC24XX_MODULE_CCLK);
 
   /* Reset timer */
   T0TCR = TCR_RST;

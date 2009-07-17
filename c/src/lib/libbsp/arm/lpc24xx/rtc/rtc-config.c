@@ -21,11 +21,17 @@
 #include <libchip/rtc.h>
 
 #include <bsp/lpc24xx.h>
+#include <bsp/io.h>
 
 #define LPC24XX_RTC_NUMBER 1
 
 static void lpc24xx_rtc_initialize( int minor)
 {
+  rtems_interrupt_level level;
+
+  /* Enable module power */
+  lpc24xx_module_enable( LPC24XX_MODULE_RTC, 0, LPC24XX_MODULE_PCLK_DEFAULT);
+
   /* Enable the RTC and use external clock */
   RTC_CCR = RTC_CCR_CLKEN | RTC_CCR_CLKSRC;
 

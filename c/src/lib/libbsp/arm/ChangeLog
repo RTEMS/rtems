@@ -1,3 +1,15 @@
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/irq/irq_asm.S, shared/startup/linkcmds.rom: Removed files.
+	* Makefile.am: Removed references to deleted file
+	'shared/irq/irq_asm.S'.
+	* shared/irq/irq_init.c: Do not install fast interrupt handler.
+	Changed interrupt handler.
+	* shared/abort/simple_abort.c: Fixed inline assembler statement.
+	* shared/include/linker-symbols.h: Renamed sections.  New symbols.
+	* shared/start/start.S: Added THUMB support.  Update for linker symbol
+	changes.
+
 2009-06-04	Xi Yang <hiyangxi@gmail.com>
 
 	* acinclude.m4: New Gumstix BSP.

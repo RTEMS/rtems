@@ -38,7 +38,7 @@
 #define VICProtection  (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x020))
 #define VICSWPrioMask  (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x024))
 
-#define VICVectAddrBase ((uint32_t *) (VIC_BASE_ADDR + 0x100))
+#define VICVectAddrBase ((volatile uint32_t *) (VIC_BASE_ADDR + 0x100))
 #define VICVectAddr0   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x100))
 #define VICVectAddr1   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x104))
 #define VICVectAddr2   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x108))
@@ -72,8 +72,7 @@
 #define VICVectAddr30  (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x178))
 #define VICVectAddr31  (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x17C))
 
-#define VICVectPriorityBase ((uint32_t *) (VIC_BASE_ADDR + 0x200))
-#define VICVectPriority( i) (*((volatile uint32_t *) (VIC_BASE_ADDR + 0x200) + (i)))
+#define VICVectPriorityBase ((volatile uint32_t *) (VIC_BASE_ADDR + 0x200))
 #define VICVectPriority0   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x200))
 #define VICVectPriority1   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x204))
 #define VICVectPriority2   (*(volatile uint32_t *) (VIC_BASE_ADDR + 0x208))
@@ -123,6 +122,7 @@
 #define PINSEL8        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x20))
 #define PINSEL9        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x24))
 #define PINSEL10       (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x28))
+#define PINSEL11       (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x2C))
 
 #define PINMODE0        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x40))
 #define PINMODE1        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x44))
@@ -794,6 +794,7 @@ Reset, and Code Security/Debugging */
 #define AD0CR          (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x00))
 #define AD0GDR         (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x04))
 #define AD0INTEN       (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x0C))
+#define AD0_DATA_START ((volatile uint32_t *) (AD0_BASE_ADDR + 0x10))
 #define AD0DR0         (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x10))
 #define AD0DR1         (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x14))
 #define AD0DR2         (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x18))
@@ -1121,63 +1122,37 @@ Reset, and Code Security/Debugging */
 #define MAC_POWERDOWN       (*(volatile uint32_t *) (MAC_BASE_ADDR + 0xFF4)) /* Power-down reg */
 #define MAC_MODULEID        (*(volatile uint32_t *) (MAC_BASE_ADDR + 0xFFC)) /* Module ID reg (RO) */
 
+/* LCD Controller */    
+
+#define LCD_BASE_ADDR 0xFFE10000                               
+#define LCD_CFG       (*(volatile uint32_t *) 0xE01FC1B8)
+#define LCD_TIMH      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x000))
+#define LCD_TIMV      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x004))
+#define LCD_POL       (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x008))
+#define LCD_LE        (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x00C))
+#define LCD_UPBASE    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x010))
+#define LCD_LPBASE    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x014))
+#define LCD_CTRL      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x018))
+#define LCD_INTMSK    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x01C))
+#define LCD_INTRAW    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x020))
+#define LCD_INTSTAT   (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x024))
+#define LCD_INTCLR    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x028))
+#define LCD_UPCURR    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x02C))
+#define LCD_LPCURR    (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x030))
+#define LCD_PAL_ADDR  (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x200))
+#define CRSR_IMG      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x800))
+#define CRSR_CTLR     (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC00))
+#define CRSR_CFG      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC04))
+#define CRSR_PAL0     (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC08))
+#define CRSR_PAL1     (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC0C))
+#define CRSR_XY       (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC10))
+#define CRSR_CLIP     (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC14))
+#define CRSR_INTMSK   (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC20))
+#define CRSR_INTCLR   (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC24))
+#define CRSR_INTRAW   (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC28))
+#define CRSR_INTSTAT  (*(volatile uint32_t *) (LCD_BASE_ADDR + 0xC2C))
+
 /* Register Fields */
-
-/* PCONP */
-
-#define PCONP_PCTIM0 0x00000002U
-
-#define PCONP_PCTIM1 0x00000004U
-
-#define PCONP_PCUART0 0x00000008U
-
-#define PCONP_PCUART1 0x00000010U
-
-#define PCONP_PCPWM0 0x00000020U
-
-#define PCONP_PCPWM1 0x00000040U
-
-#define PCONP_PCI2C0 0x00000080U
-
-#define PCONP_PCSPI 0x00000100U
-
-#define PCONP_PCRTC 0x00000200U
-
-#define PCONP_PCSSP1 0x00000400U
-
-#define PCONP_PCEMC 0x00000800U
-
-#define PCONP_PCAD 0x00001000U
-
-#define PCONP_PCCAN1 0x00002000U
-
-#define PCONP_PCCAN2 0x00004000U
-
-#define PCONP_PCI2C1 0x00080000U
-
-#define PCONP_PCLCD 0x00100000U
-
-#define PCONP_PCSSP0 0x00200000U
-
-#define PCONP_PCTIM2 0x00400000U
-
-#define PCONP_PCTIM3 0x00800000U
-
-#define PCONP_PCUART2 0x01000000U
-
-#define PCONP_PCUART3 0x02000000U
-
-#define PCONP_PCI2C2 0x04000000U
-
-#define PCONP_PCI2S 0x08000000U
-
-#define PCONP_PCSDC 0x10000000U
-
-#define PCONP_PCGPDMA 0x20000000U
-
-#define PCONP_PCENET 0x40000000U
-
-#define PCONP_PCUSB 0x80000000U
 
 /* CLKSRCSEL */
 
@@ -2022,6 +1997,12 @@ typedef struct {
 
 #define ETH_CMD_FULL_DUPLEX 0x00000400U
 
+/* ETH_STAT */
+
+#define ETH_STAT_RX_ACTIVE 0x00000001U
+
+#define ETH_STAT_TX_ACTIVE 0x00000002U
+
 /* AHBCFG */
 
 #define AHBCFG_SCHEDULER_UNIFORM 0x00000001U
@@ -2105,5 +2086,44 @@ typedef struct {
 #define EMC_DYN_CTRL_CMD_PALL 0x00000100U
 
 #define EMC_DYN_CTRL_CMD_NOP 0x00000180U
+
+/* I2C */
+
+typedef struct {
+  uint32_t conset;
+  uint32_t stat;
+  uint32_t dat;
+  uint32_t adr;
+  uint32_t sclh;
+  uint32_t scll;
+  uint32_t conclr;
+} lpc24xx_i2c;
+
+#define LPC24XX_I2C_AA (1U << 2U)
+
+#define LPC24XX_I2C_SI (1U << 3U)
+
+#define LPC24XX_I2C_STO (1U << 4U)
+
+#define LPC24XX_I2C_STA (1U << 5U)
+
+#define LPC24XX_I2C_EN (1U << 6U)
+
+/* IO */
+
+typedef struct {
+  uint32_t dir;
+  uint32_t reserved [3];
+  uint32_t mask;
+  uint32_t pin;
+  uint32_t set;
+  uint32_t clr;
+} lpc24xx_fio;
+
+static volatile uint32_t * const LPC24XX_PINSEL = &PINSEL0;
+
+static volatile uint32_t * const LPC24XX_PINMODE = &PINMODE0;
+
+static volatile lpc24xx_fio * const LPC24XX_FIO = (volatile lpc24xx_fio *) FIO_BASE_ADDR;
 
 #endif /* LIBBSP_ARM_LPC24XX_LPC24XX_H */

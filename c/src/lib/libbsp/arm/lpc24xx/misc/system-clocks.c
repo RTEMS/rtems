@@ -68,16 +68,15 @@ void lpc24xx_micro_seconds_delay( unsigned us)
 }
 
 /**
- * @brief Returns the CPU clock frequency in [Hz].
+ * @brief Returns the PLL output clock frequency in [Hz].
  *
- * Return zero in case of an unexpected PLL input frequency.
+ * Returns zero in case of an unexpected PLL input frequency.
  */
-unsigned lpc24xx_cclk( void)
+unsigned lpc24xx_pllclk( void)
 {
   unsigned clksrc = GET_CLKSRCSEL_CLKSRC( CLKSRCSEL);
   unsigned pllinclk = 0;
   unsigned pllclk = 0;
-  unsigned cclk = 0;
 
   /* Get PLL input frequency */
   switch (clksrc) {
@@ -105,8 +104,21 @@ unsigned lpc24xx_cclk( void)
     pllclk = pllinclk;
   }
 
-  /* Get CPU clock frequency */
-  cclk = pllclk / (GET_CCLKCFG_CCLKSEL( CCLKCFG) + 1);
+  return pllclk;
+}
+
+/**
+ * @brief Returns the CPU clock frequency in [Hz].
+ *
+ * Returns zero in case of an unexpected PLL input frequency.
+ */
+unsigned lpc24xx_cclk( void)
+{
+  /* Get PLL output frequency */
+  unsigned pllclk = lpc24xx_pllclk();
+
+  /* Get CPU frequency */
+  unsigned cclk = pllclk / (GET_CCLKCFG_CCLKSEL( CCLKCFG) + 1);
 
   return cclk;
 }

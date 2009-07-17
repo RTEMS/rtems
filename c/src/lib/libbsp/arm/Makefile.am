@@ -17,7 +17,6 @@ EXTRA_DIST += shared/comm/console.c
 EXTRA_DIST += shared/comm/uart.c
 
 # irq
-EXTRA_DIST += shared/irq/irq_asm.S
 EXTRA_DIST += shared/irq/irq_init.c
 
 # abort

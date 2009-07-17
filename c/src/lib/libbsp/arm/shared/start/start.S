@@ -15,11 +15,6 @@
  * The license and distribution terms for this file may be found in the file
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
-
-#warning Call to boot_card has changed and needs checking.
-#warning The call is "void boot_card(const char* cmdline);"
-#warning You need to pass a NULL.
-#warning Please check and remove these warnings.
 	
 #include <bsp/linker-symbols.h>
 #include <bsp/start.h>
@@ -47,7 +42,8 @@
 .equ PSR_F,          0x40
 .equ PSR_T,          0x20
 
-.section ".entry"
+.arm
+.section ".bsp_start", "x"
 
 /*
  * This is the exception vector table and the pointers to the default
@@ -120,49 +116,49 @@ start:
         /* Enter IRQ mode and set up the IRQ stack pointer */
 	mov	r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)
 	msr	cpsr, r0
-	ldr	r1, =bsp_stack_irq_size
-	ldr	sp, =bsp_stack_irq_start
-	add	sp, sp, r1
+	ldr	sp, =bsp_stack_irq_end
 
         /* Enter FIQ mode and set up the FIQ stack pointer */
 	mov	r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)
 	msr	cpsr, r0
-	ldr	r1, =bsp_stack_fiq_size
-	ldr	sp, =bsp_stack_fiq_start
-	add	sp, sp, r1
+	ldr	sp, =bsp_stack_fiq_end
 
         /* Enter ABT mode and set up the ABT stack pointer */
 	mov	r0, #(PSR_MODE_ABT | PSR_I | PSR_F)
 	msr	cpsr, r0
-	ldr	r1, =bsp_stack_abt_size
-	ldr	sp, =bsp_stack_abt_start
-	add	sp, sp, r1
+	ldr	sp, =bsp_stack_abt_end
 
         /* Enter UNDEF mode and set up the UNDEF stack pointer */
 	mov	r0, #(PSR_MODE_UNDEF | PSR_I | PSR_F)
 	msr	cpsr, r0
-	ldr	r1, =bsp_stack_undef_size
-	ldr	sp, =bsp_stack_undef_start
-	add	sp, sp, r1
+	ldr	sp, =bsp_stack_undef_end
 
         /* Enter SVC mode and set up the SVC stack pointer */
 	mov	r0, #(PSR_MODE_SVC | PSR_I | PSR_F)
 	msr	cpsr, r0
-	ldr	r1, =bsp_stack_svc_size
-	ldr	sp, =bsp_stack_svc_start
-	add	sp, sp, r1
+	ldr	sp, =bsp_stack_svc_end
 
         /* Stay in SVC mode */
 
         /* Brach to start hook 0 */
+#ifdef __thumb__
+	ldr	r3, =bsp_start_hook_0
+        mov	lr, pc
+        bx      r3
+.thumb
+	bx	pc
+	nop
+.arm
+#else
 	bl	bsp_start_hook_0
+#endif
 
         /*
 	 * Initialize the exception vectors.  This includes the exceptions
 	 * vectors and the pointers to the default exception handlers.
          */
 
-	ldr	r0, =bsp_section_vector_start
+	ldr	r0, =bsp_section_vector_begin
 	adr	r1, vector_block
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
@@ -170,14 +166,45 @@ start:
 	stmia	r0!, {r2-r9}
 
         /* Brach to start hook 1 */
+#ifdef __thumb__
+	ldr	r3, =bsp_start_hook_1
+        mov	lr, pc
+        bx      r3
+.thumb
+	bx	pc
+	nop
+.arm
+#else
 	bl	bsp_start_hook_1
+#endif
 
 
         /* Brach to boot card */
+	mov	r0, #0
+#ifdef __thumb__
+	ldr	r3, =boot_card
+        mov	lr, pc
+        bx      r3
+.thumb
+	bx	pc
+	nop
+.arm
+#else
 	bl	boot_card
+#endif
 
         /* Branch to reset function */
+#ifdef __thumb__
+	ldr	r3, =bsp_reset
+        mov	lr, pc
+        bx      r3
+.thumb
+	bx	pc
+	nop
+.arm
+#else
 	bl	bsp_reset
+#endif
 
         /* Spin forever */
 

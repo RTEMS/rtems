@@ -4,6 +4,18 @@
 	RTEMS_BSP_BOOTCARD_OPTIONS. Add RTEMS_BSP_CLEANUP_OPTIONS so all BSPs
 	have the same options.
 
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* i2c/i2c.c, include/i2c.h, include/idle.h, include/io.h, misc/idle.c,
+	misc/io.c: New files.
+	* Makefile.am, README, configure.ac, preinstall.am,
+	clock/clock-config.c, console/console-config.c, include/irq.h,
+	include/dma.h, include/lpc24xx.h, include/system-clocks.h, irq/irq.c,
+	misc/dma.c, misc/system-clocks.c, network/network.c, rtc/rtc-config.c,
+	startup/bspreset.c, startup/bspstart.c, startup/linkcmds,
+	startup/linkcmds.lpc2478, startup/linkcmds.lpc2478_ncs,
+	startup/linkcmds.lpc2478_ncs_ram: Changes throughout.
+
 2009-02-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* README: Added NCS.

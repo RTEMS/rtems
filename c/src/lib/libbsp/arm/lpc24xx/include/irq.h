@@ -66,6 +66,9 @@
 #define LPC24XX_IRQ_I2C_2 30
 #define LPC24XX_IRQ_I2S 31
 
+#define LPC24XX_IRQ_PRIORITY_VALUE_MIN 0
+#define LPC24XX_IRQ_PRIORITY_VALUE_MAX 15
+
 /**
  * @brief Minimum vector number.
  */
@@ -75,6 +78,12 @@
  * @brief Maximum vector number.
  */
 #define BSP_INTERRUPT_VECTOR_MAX LPC24XX_IRQ_I2S
+
+void bsp_interrupt_dispatch( void);
+
+void lpc24xx_irq_set_priority( rtems_vector_number vector, unsigned priority);
+
+unsigned lpc24xx_irq_priority( rtems_vector_number vector);
 
 /** @} */
 

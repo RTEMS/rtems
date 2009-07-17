@@ -4,6 +4,13 @@
 	RTEMS_BSP_BOOTCARD_OPTIONS. Add RTEMS_BSP_CLEANUP_OPTIONS so all BSPs
 	have the same options.
 
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am: Removed references to deleted file
+	'../shared/irq/irq_asm.S'.
+	* irq/bsp_irq_asm.S: Renamed ExecuteITHandler() into
+	bsp_interrupt_dispatch().
+
 2009-07-12	Xi Yang <hiyangxi@gmail.com>
 
 	* configure.ac, clock/clockdrv.c, startup/bspreset.c: Adjust clock

@@ -64,25 +64,20 @@ void _print_full_context(uint32_t spsr)
   mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
   if(!mode) mode="unknown";
 
-#if defined(__thumb__)
-  asm volatile (" .code 16 \n" \
-                "adr %[tmp], arm_code \n" \
-                "bx  %[tmp]           \n" \
-                "nop                  \n" \
-                ".code 32             \n" \
-                "arm_code:            \n" \
-                : [tmp]"=&r" (tmp) );
-#endif
-  asm volatile ("	MRS  %[cpsr], cpsr \n"
-            "	ORR  %[tmp], %[spsr], #0xc0 \n"
-            "	MSR  cpsr_c, %[tmp] \n"
-            "	MOV  %[prev_sp], sp \n"
-            "	MOV  %[prev_lr], lr \n"
-            "	MSR  cpsr_c, %[cpsr] \n"
-            : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
-              [cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
-            : [spsr] "r" (spsr)
-            : "cc");
+  asm volatile (
+    THUMB_TO_ARM
+    "mrs %[cpsr], cpsr\n"
+    "orr %[tmp], %[spsr], #0xc0\n"
+    "msr cpsr_c, %[tmp]\n"
+    "mov %[prev_sp], sp\n"
+    "mov %[prev_lr], lr\n"
+    "msr cpsr_c, %[cpsr]\n"
+    ARM_TO_THUMB
+    : [prev_sp] "=&r" (prev_sp), [prev_lr] "=&r" (prev_lr),
+      [cpsr] "=&r" (cpsr), [tmp] "=&r" (tmp)
+    : [spsr] "r" (spsr)
+    : "cc"
+  );
 
   printk(
     "Previous sp=0x%08x lr=0x%08x and actual cpsr=%08x\n",

@@ -4,6 +4,14 @@
 	RTEMS_BSP_BOOTCARD_OPTIONS. Add RTEMS_BSP_CLEANUP_OPTIONS so all BSPs
 	have the same options.
 
+2009-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/cpu.c, startup/cpu_asm.S: Removed files.
+	* Makefile.am: Removed references to deleted files 'startup/cpu.c' and
+	'startup/cpu_asm.S'.
+	* irq/irq_asm.S, irq/bsp_irq_asm.S: Renamed ExecuteITHandler() into
+	bsp_interrupt_dispatch().
+
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* startup/bspgetworkarea.c: Switch from ssize_t to uintptr_t for

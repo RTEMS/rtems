@@ -57,7 +57,7 @@ PUBLIC_ARM_FUNCTION(_ISR_Handler)
         str     r1, [r0]
 
 /* BSP specific function to INT handler */
-        bl      ExecuteITHandler
+        bl      bsp_interrupt_dispatch
 
 /* one less nest level  */
         ldr     r0, =_ISR_Nest_level

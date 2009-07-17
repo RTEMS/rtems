@@ -43,6 +43,7 @@
 #include <bsp.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/irq.h>
+#include <bsp/io.h>
 #include <bsp/utility.h>
 
 #include <rtems/status-checks.h>
@@ -141,22 +142,17 @@ static char lpc24xx_eth_transmit_buffer [LPC24XX_ETH_TRANSMIT_DATA_SIZE];
   (LPC24XX_ETH_TRANSMIT_STATUS_START \
     + LPC24XX_ETH_TRANSMIT_UNIT_NUMBER * ETH_TRANSMIT_STATUS_SIZE)
 
-#define LPC24XX_ETH_EVENT_TRANSMIT RTEMS_EVENT_1
+#define LPC24XX_ETH_EVENT_INITIALIZE RTEMS_EVENT_1
 
-#define LPC24XX_ETH_EVENT_TRANSMIT_START RTEMS_EVENT_2
+#define LPC24XX_ETH_EVENT_START RTEMS_EVENT_2
 
-#define LPC24XX_ETH_EVENT_TRANSMIT_ERROR RTEMS_EVENT_3
-
-#define LPC24XX_ETH_EVENT_RECEIVE RTEMS_EVENT_4
-
-#define LPC24XX_ETH_EVENT_RECEIVE_ERROR RTEMS_EVENT_5
-
-#define LPC24XX_ETH_TIMEOUT 10
+#define LPC24XX_ETH_EVENT_INTERRUPT RTEMS_EVENT_3
 
 #define LPC24XX_ETH_INTERRUPT_RECEIVE \
   (ETH_INT_RX_ERROR | ETH_INT_RX_FINISHED | ETH_INT_RX_DONE)
 
-#define LPC24XX_ETH_INTERRUPT_TRANSMIT (ETH_INT_TX_DONE | ETH_INT_TX_FINISHED | ETH_INT_TX_ERROR)
+#define LPC24XX_ETH_INTERRUPT_TRANSMIT \
+  (ETH_INT_TX_DONE | ETH_INT_TX_FINISHED | ETH_INT_TX_ERROR)
 
 #define LPC24XX_ETH_RX_STAT_ERRORS \
   (ETH_RX_STAT_CRC_ERROR \
@@ -272,13 +268,10 @@ static void lpc24xx_eth_interrupt_handler(
 
   /* Check receive interrupts */
   if (IS_FLAG_SET( is, ETH_INT_RX_OVERRUN)) {
-    re = LPC24XX_ETH_EVENT_RECEIVE_ERROR;
+    re = LPC24XX_ETH_EVENT_INITIALIZE;
     ++e->receive_fatal_errors;
-    /* FIXME */
-    printk( "%s: fatal receive error\n", __func__);
-    while (1);
   } else if (IS_ANY_FLAG_SET( is, LPC24XX_ETH_INTERRUPT_RECEIVE)) {
-    re = LPC24XX_ETH_EVENT_RECEIVE;
+    re = LPC24XX_ETH_EVENT_INTERRUPT;
     ie = SET_FLAGS( ie, LPC24XX_ETH_INTERRUPT_RECEIVE);
   }
 
@@ -290,13 +283,10 @@ static void lpc24xx_eth_interrupt_handler(
 
   /* Check transmit interrupts */
   if (IS_FLAG_SET( is, ETH_INT_TX_UNDERRUN)) {
-    te = LPC24XX_ETH_EVENT_TRANSMIT_ERROR;
+    te = LPC24XX_ETH_EVENT_INITIALIZE;
     ++e->transmit_fatal_errors;
-    /* FIXME */
-    printk( "%s: fatal transmit error\n", __func__);
-    while (1);
   } else if (IS_ANY_FLAG_SET( is, LPC24XX_ETH_INTERRUPT_TRANSMIT)) {
-    te = LPC24XX_ETH_EVENT_TRANSMIT;
+    te = LPC24XX_ETH_EVENT_INTERRUPT;
     ie = SET_FLAGS( ie, LPC24XX_ETH_INTERRUPT_TRANSMIT);
   }
 
@@ -379,7 +369,7 @@ static bool lpc24xx_eth_add_new_mbuf(
   struct ifnet *ifp,
   volatile lpc24xx_eth_transfer_descriptor *desc,
   struct mbuf **mbuf_table,
-  unsigned i,
+  uint32_t i,
   bool wait
 )
 {
@@ -416,59 +406,12 @@ static void lpc24xx_eth_receive_task( void *arg)
       LPC24XX_ETH_RECEIVE_INFO_START;
   struct mbuf **const mbuf_table =
     (struct mbuf **) LPC24XX_ETH_RECEIVE_MBUF_START;
-  uint32_t index_max = e->receive_unit_number - 1;
+  uint32_t index_max = 0;
   uint32_t produce_index = 0;
   uint32_t consume_index = 0;
   uint32_t receive_index = 0;
 
   LPC24XX_ETH_PRINTF( "%s\n", __func__);
-
-  /* Disable receive interrupts */
-  lpc24xx_eth_disable_receive_interrupts();
-
-  /* Disable receiver */
-  MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
-
-  /* Clear receive interrupts */
-  MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_RECEIVE;
-
-  /* Fill receive queue */
-  for (produce_index = 0; produce_index <= index_max; ++produce_index) {
-    if (
-      !lpc24xx_eth_add_new_mbuf( ifp, desc, mbuf_table, produce_index, false)
-    ) {
-      break;
-    }
-  }
-
-  /* Check if the queue is full */
-  if (produce_index == 0) {
-    RTEMS_DO_CLEANUP(
-      cleanup,
-      "no buffers to fill receive queue: terminate receive task\n"
-    );
-  } else if (produce_index <= index_max) {
-    /* Reduce the queue size */
-    index_max = produce_index - 1;
-
-    RTEMS_SYSLOG_ERROR( "not enough buffers to fill receive queue");
-  }
-
-  /* Receive descriptor table */
-  MAC_RXDESCRIPTORNUM = index_max;
-  MAC_RXDESCRIPTOR = (uint32_t) desc;
-  MAC_RXSTATUS = (uint32_t) info;
-
-  /* Initialize indices */
-  produce_index = MAC_RXPRODUCEINDEX;
-  consume_index = MAC_RXCONSUMEINDEX;
-  receive_index = consume_index;
-
-  /* Enable receiver */
-  MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
-
-  /* Enable receive interrupts */
-  lpc24xx_eth_enable_receive_interrupts();
 
   /* Main event loop */
   while (true) {
@@ -476,7 +419,7 @@ static void lpc24xx_eth_receive_task( void *arg)
 
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
-      LPC24XX_ETH_EVENT_RECEIVE, 
+      LPC24XX_ETH_EVENT_INITIALIZE | LPC24XX_ETH_EVENT_INTERRUPT, 
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
@@ -484,6 +427,79 @@ static void lpc24xx_eth_receive_task( void *arg)
     RTEMS_CLEANUP_SC( sc, cleanup, "wait for events");
 
     LPC24XX_ETH_PRINTF( "rx: wake up: 0x%08" PRIx32 "\n", events);
+
+    /* Initialize receiver? */
+    if (IS_FLAG_SET( events, LPC24XX_ETH_EVENT_INITIALIZE)) {
+      /* Disable receive interrupts */
+      lpc24xx_eth_disable_receive_interrupts();
+
+      /* Disable receiver */
+      MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
+
+      /* Wait for inactive status */
+      while (IS_FLAG_SET( MAC_STATUS, ETH_STAT_RX_ACTIVE)) {
+        /* Wait */
+      }
+
+      /* Reset */
+      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_RX_RESET);
+
+      /* Clear receive interrupts */
+      MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_RECEIVE;
+
+      /* Index maximum (determines queue size) */
+      index_max = e->receive_unit_number - 1;
+
+      /* Move existing mbufs to the front */
+      consume_index = 0;
+      for (produce_index = 0; produce_index <= index_max; ++produce_index) {
+        if (mbuf_table [produce_index] != NULL) {
+          mbuf_table [consume_index] = mbuf_table [produce_index];
+          ++consume_index;
+        }
+      }
+
+      /* Fill receive queue */
+      for (produce_index = consume_index; produce_index <= index_max; ++produce_index) {
+        if (
+          !lpc24xx_eth_add_new_mbuf( ifp, desc, mbuf_table, produce_index, false)
+        ) {
+          break;
+        }
+      }
+
+      /* Check if the queue is full */
+      if (produce_index == 0) {
+        RTEMS_DO_CLEANUP(
+          cleanup,
+          "no mbufs to fill receive queue: terminate receive task\n"
+        );
+      } else if (produce_index <= index_max) {
+        /* Reduce the queue size */
+        index_max = produce_index - 1;
+
+        RTEMS_SYSLOG_ERROR( "not enough mbufs to fill receive queue");
+      }
+
+      /* Receive descriptor table */
+      MAC_RXDESCRIPTORNUM = index_max;
+      MAC_RXDESCRIPTOR = (uint32_t) desc;
+      MAC_RXSTATUS = (uint32_t) info;
+
+      /* Initialize indices */
+      produce_index = MAC_RXPRODUCEINDEX;
+      consume_index = MAC_RXCONSUMEINDEX;
+      receive_index = consume_index;
+
+      /* Enable receiver */
+      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_RX_ENABLE);
+
+      /* Enable receive interrupts */
+      lpc24xx_eth_enable_receive_interrupts();
+
+      /* Wait for events */
+      continue;
+    }
 
     while (true) {
       /* Clear receive interrupt status */
@@ -496,6 +512,9 @@ static void lpc24xx_eth_receive_task( void *arg)
         /* Fragment mbuf and status */
         struct mbuf *m = mbuf_table [receive_index];
         uint32_t stat = info [receive_index].status;
+
+        /* Remove mbuf from table */
+        mbuf_table [receive_index] = NULL;
 
         if (
           IS_FLAG_SET( stat, ETH_RX_STAT_LAST_FLAG)
@@ -585,6 +604,9 @@ static void lpc24xx_eth_receive_task( void *arg)
 
 cleanup:
 
+  /* Clear task ID */
+  e->receive_task = RTEMS_ID_NONE;
+
   /* Release network semaphore */
   rtems_bsdnet_semaphore_release();
 
@@ -665,42 +687,19 @@ static void lpc24xx_eth_transmit_task( void *arg)
 
   LPC24XX_ETH_PRINTF( "%s\n", __func__);
 
-  /* Disable transmit interrupts */
-  lpc24xx_eth_disable_transmit_interrupts();
-
-  /* Disable transmitter */
-  MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
-
-  /* Clear transmit interrupts */
-  MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_TRANSMIT;
-
   /* Initialize descriptor table */
   for (produce_index = 0; produce_index <= index_max; ++produce_index) {
     desc [produce_index].start =
       (uint32_t) (buf + produce_index * LPC24XX_ETH_TRANSMIT_BUFFER_SIZE);
-    desc [produce_index].control = 0;
   }
-
-  /* Transmit descriptors */
-  MAC_TXDESCRIPTORNUM = index_max;
-  MAC_TXDESCRIPTOR = (uint32_t) desc;
-  MAC_TXSTATUS = (uint32_t) status;
-
-  /* Initialize indices */
-  produce_index = MAC_TXPRODUCEINDEX;
-  consume_index = MAC_TXCONSUMEINDEX;
-
-  /* Frame buffer start */
-  frame_buffer = (char *) desc [produce_index].start;
-
-  /* Enable transmitter */
-  MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
 
   /* Main event loop */
   while (true) {
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
-      LPC24XX_ETH_EVENT_TRANSMIT | LPC24XX_ETH_EVENT_TRANSMIT_START, 
+      LPC24XX_ETH_EVENT_INITIALIZE
+        | LPC24XX_ETH_EVENT_START 
+        | LPC24XX_ETH_EVENT_INTERRUPT,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
@@ -708,6 +707,41 @@ static void lpc24xx_eth_transmit_task( void *arg)
     RTEMS_CLEANUP_SC( sc, cleanup, "wait for events");
 
     LPC24XX_ETH_PRINTF( "tx: wake up: 0x%08" PRIx32 "\n", events);
+
+    /* Initialize transmitter? */
+    if (IS_FLAG_SET( events, LPC24XX_ETH_EVENT_INITIALIZE)) {
+      /* Disable transmit interrupts */
+      lpc24xx_eth_disable_transmit_interrupts();
+
+      /* Disable transmitter */
+      MAC_COMMAND = CLEAR_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
+
+      /* Wait for inactive status */
+      while (IS_FLAG_SET( MAC_STATUS, ETH_STAT_TX_ACTIVE)) {
+        /* Wait */
+      }
+
+      /* Reset */
+      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_TX_RESET);
+
+      /* Clear transmit interrupts */
+      MAC_INTCLEAR = LPC24XX_ETH_INTERRUPT_TRANSMIT;
+
+      /* Transmit descriptors */
+      MAC_TXDESCRIPTORNUM = index_max;
+      MAC_TXDESCRIPTOR = (uint32_t) desc;
+      MAC_TXSTATUS = (uint32_t) status;
+
+      /* Initialize indices */
+      produce_index = MAC_TXPRODUCEINDEX;
+      consume_index = MAC_TXCONSUMEINDEX;
+
+      /* Frame buffer start */
+      frame_buffer = (char *) desc [produce_index].start;
+
+      /* Enable transmitter */
+      MAC_COMMAND = SET_FLAG( MAC_COMMAND, ETH_CMD_TX_ENABLE);
+    }
 
     /* Free consumed fragments */
     while (true) {
@@ -748,9 +782,6 @@ static void lpc24xx_eth_transmit_task( void *arg)
             ++e->transmit_no_descriptor_errors;
           }
         }
-
-        /* Reinitialize control field */
-        desc [c].control = 0;
 
         /* Next consume index */
         c = lpc24xx_eth_increment( c, index_max);
@@ -849,6 +880,9 @@ static void lpc24xx_eth_transmit_task( void *arg)
 
 cleanup:
 
+  /* Clear task ID */
+  e->transmit_task = RTEMS_ID_NONE;
+
   /* Release network semaphore */
   rtems_bsdnet_semaphore_release();
 
@@ -858,6 +892,7 @@ cleanup:
 
 static void lpc24xx_eth_interface_init( void *arg)
 {
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc24xx_eth_driver_entry *e = (lpc24xx_eth_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
 
@@ -865,28 +900,25 @@ static void lpc24xx_eth_interface_init( void *arg)
 
   if (e->state == LPC24XX_ETH_INITIALIZED) {
     #ifndef LPC24XX_HAS_UBOOT
-      rtems_interrupt_level level;
+      /* Enable module power */
+      lpc24xx_module_enable(
+        LPC24XX_MODULE_ETHERNET,
+        0,
+        LPC24XX_MODULE_PCLK_DEFAULT
+      );
 
-      rtems_interrupt_disable( level);
-
-      /* Enable power */
-      PCONP = SET_FLAGS( PCONP, 0x40000000);
-
-      /* Set PIN selects */
+      /* Module IO configuration */
       #ifdef LPC24XX_ETHERNET_RMII
-        PINSEL2 = SET_FLAGS( PINSEL2, 0x55555555);
+      	lpc24xx_io_config( LPC24XX_MODULE_ETHERNET, 0, 0);
       #else
-        PINSEL2 = SET_FLAGS( PINSEL2, 0x50150105);
+      	lpc24xx_io_config( LPC24XX_MODULE_ETHERNET, 0, 1);
       #endif
-      PINSEL3 = SET_FLAGS( PINSEL3, 0x05);
-
-      rtems_interrupt_enable( level);
 
       /* Soft reset */
 
       /* Do soft reset */
-      MAC_MAC1 = 0xcf00;
       MAC_COMMAND = 0x38;
+      MAC_MAC1 = 0xcf00;
 
       /* Initialize PHY */
       /* TODO */
@@ -919,18 +951,14 @@ static void lpc24xx_eth_interface_init( void *arg)
       /* Enable receiver */
       MAC_MAC1 = 0x03;
     #else /* LPC24XX_HAS_UBOOT */
-      uint32_t reg = 0;
-
-      /* TODO */
+      /* Reset receiver and transmitter */
+      MAC_COMMAND = SET_FLAGS(
+        MAC_COMMAND,
+        ETH_CMD_RX_RESET | ETH_CMD_TX_RESET | ETH_CMD_REG_RESET
+      );
 
       /* MAC configuration */
       MAC_MAC1 = 0x3;
-
-      /* Disable and reset receiver and transmitter */
-      reg = MAC_COMMAND;
-      reg = CLEAR_FLAGS( reg, ETH_CMD_RX_ENABLE | ETH_CMD_TX_ENABLE);
-      reg = SET_FLAGS( reg, ETH_CMD_RX_RESET | ETH_CMD_TX_RESET);
-      MAC_COMMAND = reg;
     #endif /* LPC24XX_HAS_UBOOT */
 
     /* Start receive task */
@@ -941,6 +969,8 @@ static void lpc24xx_eth_interface_init( void *arg)
         lpc24xx_eth_receive_task,
         e
       );
+      sc = rtems_event_send( e->receive_task, LPC24XX_ETH_EVENT_INITIALIZE);
+      RTEMS_SYSLOG_ERROR_SC( sc, "send receive initialize event");
     }
 
     /* Start transmit task */
@@ -951,6 +981,8 @@ static void lpc24xx_eth_interface_init( void *arg)
         lpc24xx_eth_transmit_task,
         e
       );
+      sc = rtems_event_send( e->transmit_task, LPC24XX_ETH_EVENT_INITIALIZE);
+      RTEMS_SYSLOG_ERROR_SC( sc, "send transmit initialize event");
     }
 
     /* Change state */
@@ -983,6 +1015,8 @@ static void lpc24xx_eth_interface_init( void *arg)
 
 static void lpc24xx_eth_interface_stats( const lpc24xx_eth_driver_entry *e)
 {
+  rtems_bsdnet_semaphore_release();
+
   printf( "received frames:                     %u\n", e->received_frames);
   printf( "receive interrupts:                  %u\n", e->receive_interrupts);
   printf( "transmitted frames:                  %u\n", e->transmitted_frames);
@@ -1002,6 +1036,8 @@ static void lpc24xx_eth_interface_stats( const lpc24xx_eth_driver_entry *e)
   printf( "transmit no descriptor errors:       %u\n", e->transmit_no_descriptor_errors);
   printf( "transmit overflow errors:            %u\n", e->transmit_overflow_errors);
   printf( "transmit fatal errors:               %u\n", e->transmit_fatal_errors);
+
+  rtems_bsdnet_semaphore_obtain();
 }
 
 static int lpc24xx_eth_interface_ioctl(
@@ -1051,7 +1087,7 @@ static void lpc24xx_eth_interface_start( struct ifnet *ifp)
 
   ifp->if_flags = SET_FLAG( ifp->if_flags, IFF_OACTIVE);
 
-  sc = rtems_event_send( e->transmit_task, LPC24XX_ETH_EVENT_TRANSMIT_START);
+  sc = rtems_event_send( e->transmit_task, LPC24XX_ETH_EVENT_START);
   RTEMS_SYSLOG_ERROR_SC( sc, "send transmit start event");
 }
 
