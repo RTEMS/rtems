@@ -4,9 +4,9 @@ TARGET = lm32-rtems4.10
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.19.51-20090222
+BINUTILS_VERS = 2.19.51-20090601
 BINUTILS_PKGVERS = 2.19.51
-BINUTILS_RPMREL = 1
+BINUTILS_RPMREL = 2
 include ../binutils.am
 BINUTILS_OPTS += --disable-infos
 
