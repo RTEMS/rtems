@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.10-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -58,7 +58,7 @@ Summary:      	m32c-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	1%{?dist}
+Release:      	2%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -132,7 +132,7 @@ BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-m32c-rtems4.10-binutils
 
 Requires:	rtems-4.10-m32c-rtems4.10-binutils
-Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-41%{?dist}
+Requires:	rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-42%{?dist}
 
 
 %if "%{gcc_version}" >= "3.4"
@@ -463,7 +463,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-m32c-rtems4.10-binutils
-# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-41%{?dist}
+# Requires:       rtems-4.10-m32c-rtems4.10-newlib = %{newlib_version}-42%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -522,7 +522,7 @@ Summary:      	C Library (newlib) for m32c-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        41%{?dist}
+Release:        42%{?dist}
 
 
 %description -n rtems-4.10-m32c-rtems4.10-newlib

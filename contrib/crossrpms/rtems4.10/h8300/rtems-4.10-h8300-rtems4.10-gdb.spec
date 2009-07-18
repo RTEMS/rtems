@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.10-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -52,7 +52,7 @@ Name:		rtems-4.10-h8300-rtems4.10-gdb
 Summary:	Gdb for target h8300-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
