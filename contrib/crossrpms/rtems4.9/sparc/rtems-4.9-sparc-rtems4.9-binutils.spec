@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.9-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -53,7 +53,7 @@ Name:		rtems-4.9-sparc-rtems4.9-binutils
 Summary:	Binutils for target sparc-rtems4.9
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
