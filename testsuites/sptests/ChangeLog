@@ -1,5 +1,15 @@
 2009-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, configure.ac: Add sp60 to exercise case where a task is
+	blocked on one period while another expires. Add sp61 which exercises
+	the case where a call is made to rtems_shutdown_executive when the
+	system is not up.
+	* sp60/.cvsignore, sp60/Makefile.am, sp60/init.c, sp60/sp60.doc,
+	sp60/sp60.scn, sp61/.cvsignore, sp61/Makefile.am, sp61/init.c,
+	sp61/sp61.doc, sp61/sp61.scn: New files.
+
+2009-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp04/init.c: To be timesliced, tasks must also me preemptible.
 
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>

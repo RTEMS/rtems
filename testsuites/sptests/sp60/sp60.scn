@@ -1,0 +1,11 @@
+sparc-rtems4.10-run is /opt/rtems-4.10/bin/sparc-rtems4.10-run
+
+
+*** TEST 60 ***
+Init - rtems_rate_monotonic_create - first period
+Init - rtems_rate_monotonic_create - second period
+Init - rtems_rate_monotonic_period - short period
+Init - rtems_rate_monotonic_period - long period initiated
+Init - rtems_rate_monotonic_period - long period block
+Init - rtems_rate_monotonic_period - verify long period expired
+*** END OF TEST 60 ***

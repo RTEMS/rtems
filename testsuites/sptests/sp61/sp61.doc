@@ -1,0 +1,24 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp61
+
+directives:
+
+  _System_state_Set
+  rtems_shutdown_executive
+
+concepts:
+
++ Ensure that shutting RTEMS down when the system state indicates it is
+  already shutdown does not do anything.
