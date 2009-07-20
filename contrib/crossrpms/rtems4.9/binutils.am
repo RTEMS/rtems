@@ -18,7 +18,7 @@ $(TARGET)-binutils.spec.in: $(BINUTILS_SUBPACKAGES) Makefile.am $(srcdir)/binuti
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]BINUTILS_VERS[@]/$(BINUTILS_VERS)/g" \
 	  -e "s/[@]BINUTILS_PKGVERS[@]/$(BINUTILS_PKGVERS)/g" \
-	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)/g" \
+	  -e "s/[@]BINUTILS_RPMREL[@]/$(BINUTILS_RPMREL)%{?dist}/g" \
 	  -e "/--with-sysroot/d" \
 	  | $(MKSPEC0) > $(TARGET)-binutils.spec.in
 CLEANFILES += $(TARGET)-binutils.spec.in
