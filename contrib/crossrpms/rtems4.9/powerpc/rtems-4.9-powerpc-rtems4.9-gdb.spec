@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.9-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -52,7 +52,7 @@ Name:		rtems-4.9-powerpc-rtems4.9-gdb
 Summary:	Gdb for target powerpc-rtems4.9
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	6%{?dist}
+Release:	7%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
