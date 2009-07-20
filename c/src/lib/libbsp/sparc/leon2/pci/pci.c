@@ -13,11 +13,10 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  pci.c,v 1.2.4.4 2004/11/10 22:15:01 joel Exp
+ *  $Id$
  *
  *  Till Straumann, <strauman@slac.stanford.edu>, 1/2002
  *   - separated bridge detection code out of this file
- *
  *
  *  Adapted to LEON2 AT697 PCI 
  *  Copyright (C) 2006 Gaisler Research

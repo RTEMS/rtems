@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 
 #ifndef __CCHIP_H__
 #define __CCHIP_H__

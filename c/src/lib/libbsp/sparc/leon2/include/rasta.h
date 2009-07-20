@@ -1,3 +1,7 @@
+/*
+ * $Id$
+ */
+
 #ifndef __RASTA_H__
 #define __RASTA_H__
 
