@@ -1,5 +1,15 @@
 2009-07-20	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add test case for the
+	_Thread_queue_Enqueue_priority interrupt critical section where the
+	TCB we are using as a current pointer is removed from the thread
+	queue when we flash interrupts while searching forward.
+	* spintrcritical06/.cvsignore, spintrcritical06/Makefile.am,
+	spintrcritical06/init.c, spintrcritical06/spintrcritical06.doc,
+	spintrcritical06/spintrcritical06.scn: New files.
+
+2009-07-20	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spintrcritical_support/intrcritical.c,
 	spintrcritical_support/intrcritical.h: Change prototype of delay
 	method to indicate when counter is reset. This can be used to count

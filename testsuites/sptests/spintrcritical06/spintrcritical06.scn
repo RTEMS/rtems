@@ -1,0 +1,5 @@
+*** TEST INTERRUPT CRITICAL SECTION 06 ***
+Init - Trying to generate semaphore release from ISR while blocking
+Init - Variation is: Priority/Without Timeout/Multiple Tasks (Forward)
+Support - rtems_timer_create - creating timer 1
+*** END OF TEST INTERRUPT CRITICAL SECTION 06 ***
