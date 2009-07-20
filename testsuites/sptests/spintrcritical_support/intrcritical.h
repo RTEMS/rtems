@@ -21,6 +21,15 @@ void interrupt_critical_section_test_support_initialize(
   rtems_timer_service_routine (*tsr)( rtems_id, void * )
 );
 
-void interrupt_critical_section_test_support_delay(void);
+/**
+ *  @brief Delay Test Support
+ *
+ *  This method delays a varying amount of time each call.
+ *
+ *  @return This method returns true each time the delay counter has
+ *          to be reset.
+ */
+bool interrupt_critical_section_test_support_delay(void);
+
 #endif
 

@@ -57,10 +57,11 @@ void interrupt_critical_section_test_support_initialize(
   #endif
 }
 
-void interrupt_critical_section_test_support_delay(void)
+bool interrupt_critical_section_test_support_delay(void)
 {
   uint32_t          counter;
   Watchdog_Interval initial;
+  bool              retval;
 
   if (TSR) {
     rtems_status_code rc;
@@ -72,8 +73,12 @@ void interrupt_critical_section_test_support_delay(void)
   /*
    *  Count down
    */
-  if ( !Maximum_current )
+  if ( !Maximum_current ) {
     Maximum_current = Maximum;
+    retval = true;
+  } else
+    retval = false;
+
   initial = _Watchdog_Ticks_since_boot;
   for (counter=Maximum_current ; counter ; counter--)
     if ( initial != _Watchdog_Ticks_since_boot )
@@ -84,4 +89,5 @@ void interrupt_critical_section_test_support_delay(void)
   /*
    *  Return so the test can try to generate the condition
    */
+  return retval;
 }
