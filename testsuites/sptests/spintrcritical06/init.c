@@ -73,6 +73,11 @@ rtems_task Secondary_task(
   if ( arg )
     (void) rtems_semaphore_flush( Semaphore );
 
+  #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
+    status = rtems_task_resume( Main_task );
+    directive_failed( status, "rtems_task_resume" );
+  #endif
+
   status = rtems_semaphore_obtain(
     Semaphore,
     RTEMS_DEFAULT_OPTIONS,
@@ -121,6 +126,10 @@ rtems_task Init(
   for (resets=0 ; resets< 2 ;) {
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
+    #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
+      status = rtems_task_suspend( RTEMS_SELF );
+      directive_failed( status, "rtems_task_suspend" );
+    #endif
 
     status = rtems_semaphore_obtain(
       Semaphore,
