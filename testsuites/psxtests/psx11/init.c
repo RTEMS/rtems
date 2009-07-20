@@ -93,6 +93,8 @@ void *POSIX_Init(
   status = pthread_attr_init( &attr );
   assert( !status );
 
+  status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+  assert( !status );
   attr.schedpolicy = SCHED_RR;
   attr.schedparam.sched_priority = priority_4;
 
