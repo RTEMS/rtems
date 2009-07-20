@@ -20,8 +20,6 @@
 
 #include <rtems.h>  /* for task creation */
 
-#define NUMBER_THREADS 2
-pthread_t ThreadIds[NUMBER_THREADS];
 pthread_spinlock_t Spinlock;
 
 volatile int mainThreadSpinning;

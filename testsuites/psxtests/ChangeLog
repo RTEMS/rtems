@@ -1,5 +1,9 @@
 2009-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxspin01/test.c: Remove unnecessary defines.
+
+2009-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psx11/init.c: Use explicit scheduler.
 
 2009-07-17	Joel Sherrill <joel.sherrill@OARcorp.com>
