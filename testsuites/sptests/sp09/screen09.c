@@ -108,8 +108,22 @@ void Screen9()
     RTEMS_INVALID_ADDRESS,
     "rtems_port_create with illegal address"
   );
-  puts( "TA1 - rtems_port_create - RTEMS_INVALID_ADDRESS" );
+  puts( "TA1 - rtems_port_create - bad range - RTEMS_INVALID_ADDRESS" );
 #endif
+
+  status = rtems_port_create(
+     Port_name[ 1 ],
+     Internal_port_area,
+     External_port_area,
+     sizeof( Internal_port_area ),
+     NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_port_create null Id"
+  );
+  puts( "TA1 - rtems_port_create - null id - RTEMS_INVALID_ADDRESS" );
 
   status = rtems_port_create(
      Port_name[ 1 ],
