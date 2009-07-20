@@ -59,9 +59,9 @@ void _CORE_barrier_Wait(
   executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   the_barrier->number_of_waiting_threads++;
-  if ( the_barrier->number_of_waiting_threads == 
-       the_barrier->Attributes.maximum_count) {
-    if ( _CORE_barrier_Is_automatic( &the_barrier->Attributes ) ) {
+  if ( _CORE_barrier_Is_automatic( &the_barrier->Attributes ) ) {
+    if ( the_barrier->number_of_waiting_threads == 
+	 the_barrier->Attributes.maximum_count) {
       executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
       _ISR_Enable( level );
       _CORE_barrier_Release( the_barrier, id, api_barrier_mp_support );
