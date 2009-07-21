@@ -1,0 +1,33 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxcond01
+
+directives:
+
+  pthread_mutex_init
+  pthread_cond_init
+  pthread_cond_wait
+ 
+concepts:
+
++ Verify that if a task is waiting on a condition variable and has
+  associated one mutex instance that it is an error for another task
+  to attempt to block on the same condition variable using a different
+  mutex.
+
++ Verify error conditions in pthread_mutexattr_settype
+
++ Verify normal paths through pthread_mutexattr_gettype
+
++ Verify normal paths through pthread_mutexattr_settype

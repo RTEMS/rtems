@@ -1,0 +1,9 @@
+*** POSIX TEST -- CONDITION VARIABLE 01 ***
+Init - pthread_mutex_init - Mutex1 - OK
+Init - pthread_mutex_init - Mutex2 - OK
+Init - pthread_cond_init - Condition - OK
+Init -  pthread_create - OK
+Init - sleep to let BlockingThread run
+BlockingThread - pthread_cond_wait on Mutex1 - OK
+Init - pthread_cond_wait on Mutex2 - EINVAL
+*** END OF POSIX TEST CONDITION VARIABLE 01 ***
