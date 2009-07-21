@@ -182,13 +182,13 @@ fbvga_control( rtems_device_major_number major,
    printk( "FBVGA ioctl called, cmd=%x\n", args->command  );
    switch( args->command )
    {
-      case FB_SCREENINFO:
+      case FBIOGET_FSCREENINFO:
       args->ioctl_return =  get_screen_info( args->buffer );
       break;
-      case FB_GETPALETTE:
+      case FBIOGETCMAP:
       args->ioctl_return =  get_palette( args->buffer );
       break;
-      case FB_SETPALETTE:
+      case FBIOPUTCMAP:
       args->ioctl_return =  set_palette( args->buffer );
       break;
 
