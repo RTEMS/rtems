@@ -69,9 +69,9 @@ libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
     src/pbarriertranslatereturncode.c src/pbarrierwait.c
 
 ## CANCEL_C_FILES
-libposix_a_SOURCES += src/cancel.c src/cancelrun.c src/cleanuppop.c \
-    src/cleanuppush.c src/setcancelstate.c src/setcanceltype.c \
-    src/testcancel.c
+libposix_a_SOURCES += src/cancel.c src/canceleval.c src/cancelrun.c \
+    src/cleanuppop.c src/cleanuppush.c src/setcancelstate.c \
+    src/setcanceltype.c src/testcancel.c
 
 ## CONDITION_VARIABLE_C_FILES
 libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \

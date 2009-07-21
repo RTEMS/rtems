@@ -25,8 +25,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/threadsup.h>
 
-/*PAGE
- *
+/*
  *  18.2.1 Canceling Execution of a Thread, P1003.1c/Draft 10, p. 181
  */
 
@@ -37,7 +36,6 @@ int pthread_cancel(
   Thread_Control     *the_thread;
   POSIX_API_Control  *thread_support;
   Objects_Locations   location;
-  bool                cancel = false;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
@@ -54,13 +52,7 @@ int pthread_cancel(
 
       thread_support->cancelation_requested = 1;
 
-      if (thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
-          thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS)
-        cancel = true;
-
-      _Thread_Enable_dispatch();
-      if ( cancel )
-        _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
+      _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( thread_support );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

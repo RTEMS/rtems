@@ -1,0 +1,37 @@
+/*
+ *  COPYRIGHT (c) 1989-2009.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <pthread.h>
+#include <rtems/system.h>
+#include <rtems/score/thread.h>
+#include <rtems/posix/cancel.h>
+#include <rtems/posix/pthread.h>
+
+void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
+  POSIX_API_Control *thread_support
+)
+{
+  bool  cancel = false;
+
+  if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
+       thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
+       thread_support->cancelation_requested )
+    cancel = true;
+  
+  _Thread_Enable_dispatch();
+  
+  if ( cancel )
+    _POSIX_Thread_Exit( _Thread_Executing, PTHREAD_CANCELED );
+}
