@@ -35,6 +35,7 @@ sp06/Makefile
 sp07/Makefile
 sp08/Makefile
 sp09/Makefile
+sp10/Makefile
 sp11/Makefile
 sp12/Makefile
 sp13/Makefile
