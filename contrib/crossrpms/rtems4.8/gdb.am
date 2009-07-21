@@ -18,7 +18,7 @@ $(TARGET)-gdb.spec.in: $(GDB_SUBPACKAGES) Makefile.am $(srcdir)/gdb-sources.add
 	  -e "/[@]SOURCES[@]/d" \
 	  -e "s/[@]GDB_VERS[@]/$(GDB_VERS)/g" \
 	  -e "s/[@]GDB_PKGVERS[@]/$(GDB_PKGVERS)/g" \
-	  -e "s/[@]GDB_RPMREL[@]/$(GDB_RPMREL)/g" \
+	  -e "s/[@]GDB_RPMREL[@]/$(GDB_RPMREL)%{?dist}/g" \
 	  -e "/--with-sysroot/d" \
 	  | $(MKSPEC0) > $(TARGET)-gdb.spec.in
 CLEANFILES += $(TARGET)-gdb.spec.in
