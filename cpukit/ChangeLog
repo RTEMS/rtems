@@ -1,5 +1,11 @@
 2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/src/eventseize.c, rtems/src/eventsurrender.c,
+	rtems/src/eventtimeout.c: Clean up and minor rework as a side-effect
+	of coverage analysis.
+
+2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* sapi/src/debug.c, score/include/rtems/debug.h: Rename
 	_Debug_Is_enabled to rtems_is_debug_enabled.
 

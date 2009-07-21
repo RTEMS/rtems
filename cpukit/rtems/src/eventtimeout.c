@@ -63,22 +63,19 @@ void _Event_Timeout(
        *  this is the "timeout" transition.  After a request is satisfied,
        *  a timeout is not allowed to occur.
        */
-
-
       _ISR_Disable( level );
-        if ( !the_thread->Wait.count ) {  /* verify thread is waiting */
-          _Thread_Unnest_dispatch();
-          _ISR_Enable( level );
-          return;
-        }
+        #if defined(RTEMS_DEBUG)
+          if ( !the_thread->Wait.count ) {  /* verify thread is waiting */
+            _Thread_Unnest_dispatch();
+            _ISR_Enable( level );
+            return;
+          }
+        #endif
 
         the_thread->Wait.count = 0;
         if ( _Thread_Is_executing( the_thread ) ) {
-          Thread_blocking_operation_States sync = _Event_Sync_state;
-          if ( (sync == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
-               (sync == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
+          if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
             _Event_Sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
-          }
         }
 
         the_thread->Wait.return_code = RTEMS_TIMEOUT;
