@@ -1,0 +1,6 @@
+*** TEST INTERRUPT CRITICAL SECTION 08 ***
+Init - Trying to generate period ending while blocking
+Init - rtems_rate_monotonic_create - OK
+Support - rtems_timer_create - creating timer 1
+Init - It appears the case has been hit
+*** END OF TEST INTERRUPT CRITICAL SECTION 08 ***

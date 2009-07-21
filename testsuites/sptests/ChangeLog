@@ -1,3 +1,16 @@
+2009-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spintrcritical06/init.c: Add comment to indicate test is not finished
+	and known to not hit the case.
+	* Makefile.am, configure.ac: Add a couple more interrupt critical
+	section tests.
+	* spintrcritical08/.cvsignore, spintrcritical08/Makefile.am,
+	spintrcritical08/init.c, spintrcritical08/spintrcritical08.doc,
+	spintrcritical08/spintrcritical08.scn, spintrcritical09/.cvsignore,
+	spintrcritical09/Makefile.am, spintrcritical09/init.c,
+	spintrcritical09/spintrcritical09.doc,
+	spintrcritical09/spintrcritical09.scn: New files.
+
 2009-07-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, spintrcritical06/init.c: Add first attempt

@@ -61,6 +61,7 @@ rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
+printk("r");
   (void) rtems_task_restart( Secondary_task_id, 1 );
 }
 
@@ -70,14 +71,19 @@ rtems_task Secondary_task(
 {
   rtems_status_code     status;
 
-  if ( arg )
+#if 0
+  if ( arg ) {
+    printk("f");
     (void) rtems_semaphore_flush( Semaphore );
+  }
+#endif
 
-  #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
+  #if 0 && defined(PRIORITY_NO_TIMEOUT_REVERSE)
     status = rtems_task_resume( Main_task );
     directive_failed( status, "rtems_task_resume" );
   #endif
 
+    printk("O");
   status = rtems_semaphore_obtain(
     Semaphore,
     RTEMS_DEFAULT_OPTIONS,
@@ -94,6 +100,13 @@ rtems_task Init(
   int                   resets;
 
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+
+#if defined(PRIORITY_NO_TIMEOUT_REVERSE)
+  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
+  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
+  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
+  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
+#endif
 
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
   puts( "Init - Variation is: " TEST_STRING );
@@ -131,6 +144,7 @@ rtems_task Init(
       directive_failed( status, "rtems_task_suspend" );
     #endif
 
+printk("o");
     status = rtems_semaphore_obtain(
       Semaphore,
       RTEMS_DEFAULT_OPTIONS,

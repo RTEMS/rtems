@@ -1,0 +1,28 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spintrcritical09
+
+directives:
+
+  rtems_semaphore_flush
+  rtems_task_wake_after
+  rtems_semaphore_create
+  rtems_task_create
+  rtems_task_start
+  rtems_semaphore_obtain
+
+concepts:
+
++ Ensure that timing out while while the task is in the process
+  of blocking on a thread queue works as expected.

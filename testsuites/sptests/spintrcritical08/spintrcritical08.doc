@@ -1,0 +1,24 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spintrcritical08
+
+directives:
+
+  rtems_rate_monotonic_create
+  rtems_rate_monotonic_period
+
+concepts:
+
++ Ensure that having the period expire while we are in the process of
+  blocking on the period is handled properly.
