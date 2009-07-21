@@ -18,10 +18,10 @@ extern "C" {
 
 /* ioctls
    0x46 is 'F'                                */
-#define FB_SCREENINFO             0x4601
-#define FB_GETPALETTE             0x4602
-#define FB_SETPALETTE             0x4603
-#define FB_EXEC_FUNCTION          0x4604
+#define FBIOGET_FSCREENINFO     	0x4602
+#define FBIOGETCMAP               	0x4604
+#define FBIOPUTCMAP		        0x4603
+#define FB_EXEC_FUNCTION	        0x4606
 
 
 #define FB_TYPE_PACKED_PIXELS          0    /* Packed Pixels    */
@@ -79,43 +79,9 @@ struct fb_exec_function
 /* Micro Framebuffer API Wrapper */
 
 /*
- * This function returns the information regarding the display.
- * It is called just after the driver be opened to get all needed
- * information about the driver. No change in the mode of operation
- * of the driver is done with this call.
- */
-extern int ufb_get_screen_info( int fd, struct fb_screeninfo *info );
-
-
-/*
  * Returns the mode of the graphics subsystem
  */
 extern int ufb_get_mode( int fd, int *mode );
-
-
-/*
- * Returns the current collor pallete
- */
-extern int ufb_get_palette( int fd, struct fb_cmap *color );
-
-/*
- * Set the current collor pallete
- */
-extern int ufb_set_palette( int fd, struct fb_cmap *color );
-
-/*
- * Does all necessary initialization to put the device in
- * graphics mode
- */
-extern int ufb_enter_graphics( int fd, int mode );
-
-
-/*
- * Switch the device back to the default mode of operation.
- * In most cases it put the device back to plain text mode.
- */
-extern int ufb_exit_graphics( int fd );
-
 
 /*
  * Tell the driver that the "virtual buffer" is dirty, and an update
@@ -123,15 +89,6 @@ extern int ufb_exit_graphics( int fd );
  * is required
  */
 extern int ufb_buffer_is_dirty( int fd );
-
-
-/*
- * This function maps the physical ( kernel mode ) address of the framebuffer device
- * and maps it to the user space address.
- */
- int ufb_mmap_to_user_space( int fd, void **fb_addr, void *physical_addr, unsigned long size );
-
-
 
 /*
  * This function unmaps memory of the FB from the user's space

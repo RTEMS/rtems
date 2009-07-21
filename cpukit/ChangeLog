@@ -1,3 +1,10 @@
+2009-07-21	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* libmisc/Makefile.am, libmisc/mw-fb/mw_fb.h: mw_fb.h eliminated the
+	ufb_* calls and replaced some of the ioctl structures and numbers
+	with the linux framebuffer equivalents
+	* libmisc/mw-fb/mw_fb.c: Removed.
+
 2009-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/include/rtems/posix/cancel.h, posix/src/cancel.c,

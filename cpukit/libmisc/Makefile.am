@@ -57,7 +57,7 @@ EXTRA_DIST += monitor/README
 
 ## mw-fb
 noinst_LIBRARIES += libmw-fb.a
-libmw_fb_a_SOURCES = mw-fb/mw_fb.c mw-fb/mw_uid.c mw-fb/mw_fb.h \
+libmw_fb_a_SOURCES = mw-fb/mw_uid.c mw-fb/mw_fb.h \
     mw-fb/mw_uid.h
 
 ## shell
