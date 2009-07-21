@@ -115,7 +115,7 @@ Requires:	rtems-4.9-gdb-common
 
 Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
 %{?_without_sources:NoSource:	0}
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.5-bfinrtems-20071114.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/gdb-6.5-bfinrtems-20090122.diff
 
 %description
 GDB for target bfin-rtems4.9
