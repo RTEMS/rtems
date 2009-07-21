@@ -1,3 +1,12 @@
+2009-07-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* clock/clock-config.c, include/smsc9218i.h, network/smsc9218i.c: New
+	files.
+	* network/network.c: Removed file.
+	* Makefile.am, README, bsp_specs, preinstall.am, include/bsp.h,
+	startup/bspstart.c, startup/sd-card-init.c, tests/tests.c: Changes
+	throughout.
+
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Rename BSP_BOOTCARD_OPTIONS to

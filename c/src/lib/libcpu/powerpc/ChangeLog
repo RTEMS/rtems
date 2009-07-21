@@ -1,3 +1,11 @@
+2009-07-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* Makefile.am, preinstall.am: Update for MPC55XX changes.
+	* mpc55xx/emios/emios.c, mpc55xx/include/emios.h: New files.
+	* mpc55xx/dspi/dspi.c, mpc55xx/edma/edma.c, mpc55xx/esci/esci.c,
+	mpc55xx/include/dspi.h, mpc55xx/include/edma.h, mpc55xx/include/irq.h,
+	mpc55xx/include/regs.h, mpc55xx/irq/irq.c: Changes throughout.
+
 2009-05-05	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	* mpc6xx/mmu/bat.c, new-exceptions/e500_raw_exc_init.c,

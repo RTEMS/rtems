@@ -8,7 +8,6 @@ CPU FAMILY:         ppc
 CPU:                PowerPC e200z6
 COPROCESSORS:       N/A
 MODE:               32 bit mode
-DEBUG MONITOR:      BAM
 
 PERIPHERALS
 ===========
@@ -21,12 +20,13 @@ DMA:                eDMA
 VIDEO:              N/A
 SCSI:               N/A
 NETWORKING:         FEC (not yet supported)
+                    SMSC9218I (external)
 SPI:                DSPI
 
 DRIVER INFORMATION
 ==================
 
-CLOCK DRIVER:       Book E decrementer
+CLOCK DRIVER:       EMIOS channel 23
 IOSUPP DRIVER:      N/A
 SHMSUPP:            N/A
 TIMER DRIVER:       not yet supported
@@ -47,7 +47,7 @@ NOTES
 
 BUS WIDTH:          32 bit Flash, 32 bit SDRAM
 FLASH:              3 MByte
-RAM:                128 kByte SDRAM 
+INTERNAL RAM:       128 kByte SDRAM 
 EXTERNAL RAM:       512 kByte SDRAM 
 
 

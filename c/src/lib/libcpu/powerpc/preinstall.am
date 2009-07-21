@@ -287,6 +287,10 @@ $(PROJECT_INCLUDE)/mpc55xx/edma.h: mpc55xx/include/edma.h $(PROJECT_INCLUDE)/mpc
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/edma.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/edma.h
 
+$(PROJECT_INCLUDE)/mpc55xx/emios.h: mpc55xx/include/emios.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/emios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/emios.h
+
 $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h: mpc55xx/include/mpc55xx.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/mpc55xx.h

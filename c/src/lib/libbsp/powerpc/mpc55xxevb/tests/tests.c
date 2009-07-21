@@ -36,8 +36,6 @@
 
 #include <libcpu/powerpc-utility.h>
 
-/* #define DEBUG */
-
 #include <rtems/status-checks.h>
 
 static rtems_driver_address_table test_mpc55xx_drv_ops = {
@@ -216,7 +214,10 @@ rtems_status_code mpc55xx_dspi_register(void)
 	union SIU_PCR_tag pcr = MPC55XX_ZERO_FLAGS;
 
 	printk( "Boot time: %u\n", ppc_time_base());
+
+	/*
 	test_mpc55xx_intc( 0);
+	*/
 
 	rv = rtems_libi2c_initialize();
 	RTEMS_CHECK_RV_SC( rv, "rtems_libi2c_initialize");
@@ -268,7 +269,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	sc = rtems_semaphore_create (
 		rtems_build_name ( 'P', 'I', 'N', 'G'),
 		1,
-		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
 		RTEMS_NO_PRIORITY,
 		&test_mpc55xx_dspi_ping
 	);
@@ -277,7 +278,7 @@ rtems_status_code mpc55xx_dspi_register(void)
 	sc = rtems_semaphore_create (
 		rtems_build_name ( 'P', 'O', 'N', 'G'),
 		0,
-		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
 		RTEMS_NO_PRIORITY,
 		&test_mpc55xx_dspi_pong
 	);
@@ -325,6 +326,8 @@ rtems_status_code mpc55xx_dspi_register(void)
 	sc = rtems_task_start( sd_card_task_id, test_sd_card, 0);
 	RTEMS_CHECK_SC( sc, "rtems_task_start");
 
+	return RTEMS_SUCCESSFUL;
+
 	rtems_id intc_id;
 	sc = rtems_task_create(
 		rtems_build_name( 'I', 'N', 'T', 'C'),
@@ -338,11 +341,10 @@ rtems_status_code mpc55xx_dspi_register(void)
 	sc = rtems_task_start( intc_id, test_mpc55xx_intc, 0);
 	RTEMS_CHECK_SC( sc, "rtems_task_start");
 
-	sc = rtems_task_delete( RTEMS_SELF);
-	RTEMS_CHECK_SC( sc, "rtems_task_delete");
-
 	return RTEMS_SUCCESSFUL;
 }
+
+#if 0
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -421,35 +423,6 @@ static int test_sd_card_print_dir( const char* dirname, unsigned level)
 	return 0;
 }
 
-#define SD_CARD_NUMBER 1
-
-static sd_card_driver_entry sd_card_driver_table_XXX [SD_CARD_NUMBER] = { {
-#if 0
-		driver : {
-			ops : &sd_card_driver_ops,
-			size : sizeof( sd_card_driver_entry)
-		},
-		table_index : 0,
-		minor : 0,
-#endif
-		device_name : "sd-card-a",
-#if 0
-		disk_device_name : "/dev/sd-card-a",
-#endif
-		transfer_mode : SD_CARD_TRANSFER_MODE_DEFAULT,
-		command : SD_CARD_COMMAND_DEFAULT,
-		/* response : whatever, */
-		response_index : SD_CARD_COMMAND_SIZE,
-		n_ac_max : SD_CARD_N_AC_MAX_DEFAULT,
-		block_number : 0,
-		block_size : 0,
-		block_size_shift : 0,
-		busy : 1,
-		verbose : 1,
-		schedule_if_busy : 0,
-	}
-};
-
 rtems_task test_sd_card( rtems_task_argument arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -484,17 +457,19 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	sc = rtems_ide_part_table_initialize( TEST_SD_CARD_DEVICE_FILE);
 	RTEMS_CHECK_SC_TASK( sc, "Initialize IDE partition table");
 
-	rv = test_sd_card_print_dir( "/dev", 0);
-	RTEMS_CHECK_RV_TASK( rv, "Print directory");
-
 	rv = mkdir( TEST_SD_CARD_MOUNT_POINT, S_IRWXU);
 	RTEMS_CHECK_RV_TASK( rv, "Create mount point");
 
 	rv = rtems_fsmount( test_sd_card_fs_table, sizeof( test_sd_card_fs_table) / sizeof( test_sd_card_fs_table [0]), NULL);
 	RTEMS_CHECK_RV_TASK( rv, "Mount file systems");
 
-	/*rv = test_sd_card_print_dir( TEST_SD_CARD_MOUNT_POINT, 0); */
-	/*RTEMS_CHECK_RV_TASK( rv, "Print directory"); */
+	rv = test_sd_card_print_dir( "/dev", 0);
+	RTEMS_CHECK_RV_TASK( rv, "Print directory");
+
+	rv = test_sd_card_print_dir( TEST_SD_CARD_MOUNT_POINT, 0);
+	RTEMS_CHECK_RV_TASK( rv, "Print directory");
+
+	(void) rtems_task_delete( RTEMS_SELF);
 
 	rv = mkdir( TEST_SD_CARD_DIRECTORY, S_IRWXU);
 
@@ -522,6 +497,8 @@ rtems_task test_sd_card( rtems_task_argument arg)
 
 	rv = test_sd_card_print_dir( TEST_SD_CARD_DIRECTORY, 0);
 	RTEMS_CHECK_RV_TASK( rv, "Print directory");
+
+	(void) rtems_task_delete( RTEMS_SELF);
 
 
 	#if 0
@@ -561,9 +538,10 @@ rtems_task test_sd_card( rtems_task_argument arg)
 	RTEMS_CHECK_RV_TASK( rv, "close");
 	#endif
 
-	sc = rtems_task_delete( RTEMS_SELF);
-	RTEMS_CHECK_SC_TASK( sc, "rtems_task_delete");
+	(void) rtems_task_delete( RTEMS_SELF);
 }
+
+#endif
 
 #define ITER 4
 #define BUFSIZE (128 * ITER)
@@ -571,25 +549,35 @@ rtems_task test_sd_card( rtems_task_argument arg)
 static char inbuf [BUFSIZE];
 static char outbuf [BUFSIZE];
 
+static void test_mpc55xx_edma_done( mpc55xx_edma_channel_entry *e, uint32_t error_status)
+{
+	rtems_semaphore_release( e->id);
+
+	if (error_status != 0) {
+		printk( "%s: Error status: 0x%08x\n", __func__, error_status);
+	}
+}
+
 static rtems_status_code test_mpc55xx_edma(void)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	int rv = 0;
-	int channel = 0;
-	uint32_t error_status = 0;
-	rtems_id transfer_update;
+	mpc55xx_edma_channel_entry e = {
+		.channel = 0,
+		.done = test_mpc55xx_edma_done,
+		.id = RTEMS_ID_NONE
+	};
 
 	sc = rtems_semaphore_create (
 		rtems_build_name ( 'T', 'S', 'T', 'C'),
 		0,
-		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+		RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
 		RTEMS_NO_PRIORITY,
-		&transfer_update
+		&e.id
 	);
 	RTEMS_CHECK_SC( sc, "rtems_semaphore_create");
 
-	rv = mpc55xx_edma_obtain_channel( channel, &error_status, transfer_update);
-	RTEMS_CHECK_RV( rv, "mpc55xx_edma_obtain_channel");
+	sc = mpc55xx_edma_obtain_channel( &e);
+	RTEMS_CHECK_RV( sc, "mpc55xx_edma_obtain_channel");
 
 	int i = 0;
 	for (i = 0; i < BUFSIZE; ++i) {
@@ -599,38 +587,39 @@ static rtems_status_code test_mpc55xx_edma(void)
 	rtems_cache_flush_multiple_data_lines( inbuf, BUFSIZE);
 	rtems_cache_flush_multiple_data_lines( outbuf, BUFSIZE);
 
-	struct tcd_t tcd = MPC55XX_EDMA_TCD_DEFAULT;
+	struct tcd_t tcd = EDMA_TCD_DEFAULT;
 	tcd.SADDR = (uint32_t) &inbuf;
 	tcd.DADDR = (uint32_t) &outbuf;
 	tcd.NBYTES = BUFSIZE / ITER;
 	tcd.SLAST = -BUFSIZE;
-	tcd.CITER = ITER;
-	tcd.BITER = ITER;
-	tcd.INT_HALF = 1;
+	tcd.CDF.B.CITER = ITER;
+	tcd.BMF.B.BITER = ITER;
+	tcd.BMF.B.INT_HALF = 1;
 
-	EDMA.TCD [channel] = tcd;
+	EDMA.TCD [e.channel] = tcd;
 
 	while (1) {
 		while (1) {
-			if (EDMA.TCD [channel].DONE == 1) {
-				EDMA.TCD [channel].DONE = 0;
+			if (EDMA.TCD [e.channel].BMF.B.DONE == 1) {
+				EDMA.TCD [e.channel].BMF.B.DONE = 0;
 				printk( "%s: Done\n", __func__);
 				break;
-			} else if (EDMA.TCD [channel].ACTIVE == 0) {
-				EDMA.SSBR.R = channel;
-				printk( "%s: Start: %i (%i)\n", __func__, EDMA.TCD [channel].CITER, EDMA.TCD [channel].BITER);
+			} else if (EDMA.TCD [e.channel].BMF.B.ACTIVE == 0) {
+				EDMA.SSBR.R = e.channel;
+				printk( "%s: Start: %i (%i)\n", __func__, EDMA.TCD [e.channel].CDF.B.CITER, EDMA.TCD [e.channel].BMF.B.BITER);
 			}
-			sc = rtems_semaphore_obtain( transfer_update, RTEMS_WAIT, 10);
+			sc = rtems_semaphore_obtain( e.id, RTEMS_WAIT, 10);
 			if (sc == RTEMS_TIMEOUT) {
 				continue;
 			}
 			RTEMS_CHECK_SC( sc, "rtems_semaphore_obtain");
 		}
-		printk( "%s: Error status: 0x%08x\n", __func__, error_status);
 	}
 
-	return sc;
+	return RTEMS_SUCCESSFUL;
 }
+
+#include <stdlib.h>
 
 static unsigned test_mpc55xx_intc_counter = 0;
 
@@ -667,11 +656,15 @@ static int test_mpc55xx_intc_handler_data [MPC55XX_IRQ_SOFTWARE_NUMBER];
 
 static rtems_task test_mpc55xx_intc( rtems_task_argument arg)
 {
+	rtems_status_code sc = RTEMS_SUCCESSFUL;
+	rtems_irq_connect_data e = {
+		.on = NULL,
+		.off = NULL,
+		.isOn = NULL
+	};
 	volatile int i = 0;
 	int p = 0;
 	unsigned s = 0;
-	rtems_irq_connect_data e;
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
 	for (i = MPC55XX_IRQ_SOFTWARE_MIN, p = MPC55XX_INTC_MIN_PRIORITY; i <= MPC55XX_IRQ_SOFTWARE_MAX; ++i, ++p) {
 		test_mpc55xx_intc_handler_data [i] = i;
@@ -684,12 +677,12 @@ static rtems_task test_mpc55xx_intc( rtems_task_argument arg)
 		}
 
 		e.hdl = test_mpc55xx_intc_handler_2;
-		if (BSP_install_rtems_shared_irq_handler( &e) != RTEMS_SUCCESSFUL) {
+		if (BSP_install_rtems_shared_irq_handler( &e) != 1) {
 			BSP_panic( "Handler install 2 failed");
 		}
 
 		e.hdl = test_mpc55xx_intc_handler_3;
-		if (BSP_install_rtems_shared_irq_handler( &e) != RTEMS_SUCCESSFUL) {
+		if (BSP_install_rtems_shared_irq_handler( &e) != 1) {
 			BSP_panic( "Handler install 3 failed");
 		}
 	}

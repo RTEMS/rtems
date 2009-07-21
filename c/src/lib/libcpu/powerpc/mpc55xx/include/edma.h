@@ -22,78 +22,31 @@
 #define LIBCPU_POWERPC_MPC55XX_EDMA_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <rtems.h>
+#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define MPC55XX_EDMA_TCD_DEFAULT { \
-	.SADDR = 0, \
-	.SMOD = 0, \
-	.SSIZE = 0x2, \
-	.SOFF = 4, \
-	.DADDR = 0, \
-	.DMOD = 0, \
-	.DSIZE = 0x2, \
-	.DOFF = 4, \
-	.NBYTES = 0, \
-	.SLAST = 0, \
-	.CITER = 1, \
-	.BITER = 1, \
-	.MAJORLINKCH = 0, \
-	.CITERE_LINK = 0, \
-	.BITERE_LINK = 0, \
-	.MAJORE_LINK = 0, \
-	.E_SG = 0, \
-	.DLAST_SGA = 0, \
-	.D_REQ = 0, \
-	.BWC = 0, \
-	.INT_HALF = 0, \
-	.INT_MAJ = 0, \
-	.DONE = 0, \
-	.ACTIVE = 0, \
-	.START = 0, \
-}
-
-#define MPC55XX_EDMA_TCD_ALT_DEFAULT { \
-	.SADDR = 0, \
-	.SMOD = 0, \
-	.SSIZE = 2, \
-	.DMOD = 0, \
-	.DSIZE = 2, \
-	.SOFF = 4, \
-	.NBYTES = 0, \
-	.SLAST = 0, \
-	.DADDR = 0, \
-	.CITERE_LINK = 0, \
-	.CITERLINKCH = 0, \
-	.CITER = 0, \
-	.DOFF = 4, \
-	.DLAST_SGA = 0, \
-	.BITERE_LINK = 0, \
-	.BITERLINKCH = 0, \
-	.BITER = 0, \
-	.BWC = 0, \
-	.MAJORLINKCH = 0, \
-	.DONE = 0, \
-	.ACTIVE = 0, \
-	.MAJORE_LINK = 0, \
-	.E_SG = 0, \
-	.D_REQ = 0, \
-	.INT_HALF = 0, \
-	.INT_MAJ = 0, \
-	.START = 0, \
-}
+typedef struct mpc55xx_edma_channel_entry {
+	rtems_chain_node node;
+	unsigned channel;
+	void (*done)( struct mpc55xx_edma_channel_entry *, uint32_t);
+	rtems_id id;
+} mpc55xx_edma_channel_entry;
 
 rtems_status_code mpc55xx_edma_init();
 
-rtems_status_code mpc55xx_edma_obtain_channel( int channel, uint32_t *error_status, rtems_id transfer_update);
+rtems_status_code mpc55xx_edma_obtain_channel( mpc55xx_edma_channel_entry *e);
 
-rtems_status_code mpc55xx_edma_enable_hardware_requests( int channel, bool enable);
+rtems_status_code mpc55xx_edma_release_channel( mpc55xx_edma_channel_entry *e);
 
-rtems_status_code mpc55xx_edma_enable_error_interrupts( int channel, bool enable);
+void mpc55xx_edma_enable_hardware_requests( unsigned channel, bool enable);
+
+void mpc55xx_edma_enable_error_interrupts( unsigned channel, bool enable);
 
 #ifdef __cplusplus
 }

@@ -18,19 +18,15 @@
  * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
  */
 
-#include  <stdio.h>
+#include <stdio.h>
 
 #include <mpc55xx/mpc55xx.h>
 #include <mpc55xx/regs.h>
 #include <mpc55xx/dspi.h>
 
-#include <libchip/spi-sd-card.h>
-
-#define DEBUG
+#include <bsp.h>
 
 #include <rtems/status-checks.h>
-
-#include <bsp.h>
 
 static rtems_status_code mpc55xx_dspi_init(void)
 {
@@ -88,16 +84,13 @@ static rtems_status_code mpc55xx_dspi_init(void)
 	return RTEMS_SUCCESSFUL;
 }
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <dirent.h>
 #include <stdio.h>
 #include <rtems/fsmount.h>
 #include <rtems/dosfs.h>
-#include <rtems/ide_part_table.h>
+#include <rtems/bdpart.h>
 #include <rtems/console.h>
+
+#include <libchip/spi-sd-card.h>
 
 #define MPC55XX_DEVICE "sd-card-a"
 #define MPC55XX_DEVICE_FILE "/dev/" MPC55XX_DEVICE
@@ -117,21 +110,10 @@ static fstab_t mpc55xx_fs_table [] = { {
 	}
 };
 
-#define SD_CARD_NUMBER 1
-
-sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = { {
-#if 0
-		.driver = {
-			.ops = &sd_card_driver_ops,
-			.size = sizeof( sd_card_driver_entry)
-		},
-		.table_index = 0,
-		.minor = 0,
-#endif
-		.device_name = "sd-card-a",
-#if 0
-		.disk_device_name = "/dev/sd-card-a",
-#endif
+sd_card_driver_entry sd_card_driver_table [] = {
+	{
+		.device_name = "/dev/sd-card-a",
+		.bus = 0,
 		.transfer_mode = SD_CARD_TRANSFER_MODE_DEFAULT,
 		.command = SD_CARD_COMMAND_DEFAULT,
 		/* response : whatever, */
@@ -140,13 +122,15 @@ sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = { {
 		.block_number = 0,
 		.block_size = 0,
 		.block_size_shift = 0,
-		.busy = 1,
-		.verbose = 1,
-		.schedule_if_busy = 0,
+		.busy = true,
+		.verbose = true,
+		.schedule_if_busy = false
 	}
 };
 
-rtems_status_code mpc55xx_sd_card_init(void)
+size_t sd_card_driver_table_size = sizeof( sd_card_driver_table) / sizeof( sd_card_driver_table [0]);
+
+rtems_status_code mpc55xx_sd_card_init( bool mount)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	int rv = 0;
@@ -157,17 +141,18 @@ rtems_status_code mpc55xx_sd_card_init(void)
 	sc = mpc55xx_dspi_init();
 	RTEMS_CHECK_SC( rv, "Intitalize DSPI bus");
 
-	rv = rtems_libi2c_register_drv( e->device_name, (rtems_libi2c_drv_t *) e, mpc55xx_dspi_bus_table [0].bus_number, 0);
-	RTEMS_CHECK_RV_SC( rv, "Register SD Card driver");
+	e->bus = mpc55xx_dspi_bus_table [0].bus_number;
 
-	sc = rtems_ide_part_table_initialize( MPC55XX_DEVICE_FILE);
-	RTEMS_CHECK_SC( sc, "Initialize IDE partition table");
+	sc = sd_card_register();
+	RTEMS_CHECK_SC( sc, "Register SD Card");
 
-	rv = mkdir( MPC55XX_MOUNT_POINT, S_IRWXU);
-	RTEMS_CHECK_RV_SC( rv, "Create mount point");
+	if (mount) {
+		sc = rtems_bdpart_register_from_disk( MPC55XX_DEVICE_FILE);
+		RTEMS_CHECK_SC( sc, "Initialize IDE partition table");
 
-	rv = rtems_fsmount( mpc55xx_fs_table, sizeof( mpc55xx_fs_table) / sizeof( mpc55xx_fs_table [0]), NULL);
-	RTEMS_CHECK_RV_SC( rv, "Mount file systems");
+		rv = rtems_fsmount( mpc55xx_fs_table, sizeof( mpc55xx_fs_table) / sizeof( mpc55xx_fs_table [0]), NULL);
+		RTEMS_CHECK_RV_SC( rv, "Mount file systems");
+	}
 
 	return RTEMS_SUCCESSFUL;
 }

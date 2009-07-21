@@ -92,27 +92,10 @@ void bsp_predriver_hook()
 
 static void mpc55xx_ebi_init()
 {
-	struct EBI_CS_tag cs = { BR : MPC55XX_ZERO_FLAGS, OR : MPC55XX_ZERO_FLAGS };
+	struct EBI_CS_tag cs = { .BR = MPC55XX_ZERO_FLAGS, .OR = MPC55XX_ZERO_FLAGS };
 	union SIU_PCR_tag pcr = MPC55XX_ZERO_FLAGS;
+	struct MMU_tag mmu = MMU_DEFAULT;
 	int i = 0;
-
-	/* External SRAM (0 wait states, 512kB, 4 word burst) */
-	cs.BR.B.BA = 0;
-	cs.BR.B.PS = 1;
-	cs.BR.B.BL = 1;
-	cs.BR.B.WEBS = 0;
-	cs.BR.B.TBDIP = 0;
-	cs.BR.B.BI = 1; /* TODO: Enable burst */
-	cs.BR.B.V = 1;
-
-	cs.OR.B.AM = 0x1fff0;
-	cs.OR.B.SCY = 0;
-	cs.OR.B.BSCY = 0;
-
-	EBI.CS [0] = cs;
-
-	/* !CS [0] */
-	SIU.PCR [0].R = 0x443;
 
 	/* ADDR [8 : 31] */
 	for (i = 4; i < 4 + 24; ++i) {
@@ -140,6 +123,64 @@ static void mpc55xx_ebi_init()
 
 	/* !TS */
 	SIU.PCR [69].R = 0x443;
+
+	/* External SRAM (2 wait states, 512kB, 4 word burst) */
+
+	cs.BR.B.BA = 0;
+	cs.BR.B.PS = 1;
+	cs.BR.B.BL = 1;
+	cs.BR.B.WEBS = 0;
+	cs.BR.B.TBDIP = 0;
+	cs.BR.B.BI = 1; /* TODO: Enable burst */
+	cs.BR.B.V = 1;
+
+	cs.OR.B.AM = 0x1fff0;
+	cs.OR.B.SCY = 0;
+	cs.OR.B.BSCY = 0;
+
+	EBI.CS [0] = cs;
+
+	/* !CS [0] */
+	SIU.PCR [0].R = 0x443;
+
+	/* External Ethernet Controller (3 wait states, 64kB) */
+
+	mmu.MAS0.B.ESEL = 5;
+	mmu.MAS1.B.VALID = 1;
+	mmu.MAS1.B.IPROT = 1;
+	mmu.MAS1.B.TSIZ = 1;
+	mmu.MAS2.B.EPN = 0x3fff8;
+	mmu.MAS2.B.I = 1;
+	mmu.MAS2.B.G = 1;
+	mmu.MAS3.B.RPN = 0x3fff8;
+	mmu.MAS3.B.UW = 1;
+	mmu.MAS3.B.SW = 1;
+	mmu.MAS3.B.UR = 1;
+	mmu.MAS3.B.SR = 1;
+
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS0, mmu.MAS0.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS1, mmu.MAS1.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS2, mmu.MAS2.R);
+	PPC_SET_SPECIAL_PURPOSE_REGISTER( FREESCALE_EIS_MAS3, mmu.MAS3.R);
+
+	asm volatile ("tlbwe");
+
+	cs.BR.B.BA = 0x7fff;
+	cs.BR.B.PS = 1;
+	cs.BR.B.BL = 0;
+	cs.BR.B.WEBS = 0;
+	cs.BR.B.TBDIP = 0;
+	cs.BR.B.BI = 1;
+	cs.BR.B.V = 1;
+
+	cs.OR.B.AM = 0x1ffff;
+	cs.OR.B.SCY = 1;
+	cs.OR.B.BSCY = 0;
+
+	EBI.CS [3] = cs;
+
+	/* !CS [3] */
+	SIU.PCR [3].R = 0x443;
 }
 
 /**
@@ -198,7 +239,8 @@ void bsp_start(void)
 		DEBUG_DONE();
 	}
 	
-	RTEMS_DEBUG_PRINT( "BSP start done\n");
+	/* Initialize eMIOS */
+	mpc55xx_emios_initialize( 1);
 
 	return;
 

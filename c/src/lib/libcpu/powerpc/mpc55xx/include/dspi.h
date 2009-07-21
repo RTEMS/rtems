@@ -29,6 +29,8 @@
 
 #include <rtems/libi2c.h>
 
+#include <mpc55xx/edma.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -64,7 +66,7 @@ typedef struct {
 	/**
 	 * @brief Selects SPI master or slave mode.
 	 */
-	int master;
+	bool master;
 
 	/**
 	 * @brief Data for the Push Register.
@@ -72,50 +74,35 @@ typedef struct {
 	union DSPI_PUSHR_tag push_data;
 
 	/**
-	 * @brief eDMA channel for transmission.
+	 * @brief eDMA entry for transmission.
 	 *
-	 * The channel is fixed to particular DSPI.
+	 * The channel is fixed to a particular DSPI.
 	 */
-	int edma_channel_transmit;
+	mpc55xx_edma_channel_entry edma_transmit;
 
 	/**
-	 * @brief eDMA channel to generate the push data.
+	 * @brief eDMA entry for push data generation.
 	 *
-	 * You can choose any available channel.
+	 * You can choose every available channel.
 	 */
-	int edma_channel_push;
+	mpc55xx_edma_channel_entry edma_push;
 
 	/**
-	 * @brief eDMA channel for receiving.
+	 * @brief eDMA entry for receiving.
 	 *
-	 * The channel is fixed to particular DSPI.
+	 * The channel is fixed to a particular DSPI.
 	 */
-	int edma_channel_receive;
-
-	/**
-	 * @brief Semaphore ID for a transmit update.
-	 */
-	rtems_id edma_channel_transmit_update;
-
-	/**
-	 * @brief Semaphore ID for a receive update.
-	 */
-	rtems_id edma_channel_receive_update;
-
-	/**
-	 * @brief Transmit error status.
-	 */
-	uint32_t edma_channel_transmit_error;
-
-	/**
-	 * @brief Receive error status.
-	 */
-	uint32_t edma_channel_receive_error;
+	mpc55xx_edma_channel_entry edma_receive;
 
 	/**
 	 * @brief Idle character transmitted in read only mode.
 	 */
 	uint32_t idle_char;
+
+	/**
+	 * @brief Current baud.
+	 */
+	uint32_t baud;
 } mpc55xx_dspi_bus_entry;
 
 /**

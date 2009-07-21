@@ -419,6 +419,7 @@ include_mpc55xx_HEADERS = mpc55xx/include/regs.h \
 	mpc55xx/include/reg-defs.h \
 	mpc55xx/include/dspi.h \
 	mpc55xx/include/edma.h \
+	mpc55xx/include/emios.h \
 	mpc55xx/include/mpc55xx.h \
 	mpc55xx/include/esci.h \
 	mpc55xx/include/watchdog.h
@@ -433,12 +434,17 @@ noinst_PROGRAMS += mpc55xx/fec.rel
 mpc55xx_fec_rel_SOURCES = mpc55xx/fec/fec.c
 mpc55xx_fec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-# EMDA
+# eDMA
 noinst_PROGRAMS += mpc55xx/edma.rel
 mpc55xx_edma_rel_SOURCES = mpc55xx/edma/edma.c
 mpc55xx_edma_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-# ESCI
+# eMIOS
+noinst_PROGRAMS += mpc55xx/emios.rel
+mpc55xx_emios_rel_SOURCES = mpc55xx/emios/emios.c
+mpc55xx_emios_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+# eSCI
 noinst_PROGRAMS += mpc55xx/esci.rel
 mpc55xx_esci_rel_SOURCES = mpc55xx/esci/esci.c
 mpc55xx_esci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
