@@ -1,3 +1,8 @@
+2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/src/debug.c, score/include/rtems/debug.h: Rename
+	_Debug_Is_enabled to rtems_is_debug_enabled.
+
 2009-07-21	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* libmisc/Makefile.am, libmisc/mw-fb/mw_fb.h: mw_fb.h eliminated the

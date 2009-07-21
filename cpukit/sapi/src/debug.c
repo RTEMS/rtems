@@ -1,7 +1,7 @@
 /*
  *  Debug Manager
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,11 +18,10 @@
 #include <rtems/system.h>
 #include <rtems/debug.h>
 
-/*PAGE
+/*
  *
  *  _Debug_Manager_initialization
  */
-
 void _Debug_Manager_initialization( void )
 {
   rtems_debug_disable( RTEMS_DEBUG_ALL_MASK );
@@ -32,7 +31,6 @@ void _Debug_Manager_initialization( void )
  *
  *  rtems_debug_enable
  */
-
 void rtems_debug_enable (
   rtems_debug_control  to_be_enabled
 )
@@ -40,11 +38,9 @@ void rtems_debug_enable (
   _Debug_Level |= to_be_enabled;
 }
 
-/*PAGE
- *
+/*
  *  rtems_debug_disable
  */
-
 void rtems_debug_disable (
   rtems_debug_control  to_be_disabled
 )
@@ -52,12 +48,10 @@ void rtems_debug_disable (
   _Debug_Level &= ~to_be_disabled;
 }
 
-/*PAGE
- *
- *  _Debug_Is_enabled
+/*
+ *  rtems_debug_is_enabled
  */
-
-bool _Debug_Is_enabled(
+bool rtems_debug_is_enabled(
   rtems_debug_control  level
 )
 {
