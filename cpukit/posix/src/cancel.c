@@ -52,7 +52,7 @@ int pthread_cancel(
 
       thread_support->cancelation_requested = 1;
 
-      _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( thread_support );
+      _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( the_thread );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

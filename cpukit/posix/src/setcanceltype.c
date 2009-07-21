@@ -56,7 +56,7 @@ int pthread_setcanceltype(
     *oldtype = thread_support->cancelability_type;
     thread_support->cancelability_type = type;
 
-    _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( thread_support );
+    _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(_Thread_Executing);
  
   /*
    *  _Thread_Enable_dispatch is invoked by above call.
