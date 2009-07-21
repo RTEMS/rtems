@@ -1,0 +1,5 @@
+*** TEST INTERRUPT CRITICAL SECTION 11 ***
+Init - Test may not be able to detect case is hit reliably
+Init - Trying to generate event send from ISR while blocking
+Support - rtems_timer_create - creating timer 1
+*** END OF TEST INTERRUPT CRITICAL SECTION 11 ***

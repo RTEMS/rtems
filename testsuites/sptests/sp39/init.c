@@ -92,12 +92,12 @@ rtems_task Init(
   directive_failed( status, "rtems_timer_create" );
 
   status = rtems_task_create(
-     0xa5a5a5a5,
-     1,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &other_task
+    0xa5a5a5a5,
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &other_task
   );
   directive_failed( status, "rtems_task_create" );
 
@@ -129,9 +129,9 @@ rtems_task Init(
       break;
   }
 
-   printf(
-     "Event sent from ISR hitting synchronization point has %soccurred\n",
-     (( case_hit == TRUE ) ? "" : "NOT ")
+  printf(
+    "Event sent from ISR hitting synchronization point has %soccurred\n",
+    (( case_hit == TRUE ) ? "" : "NOT ")
   ); 
 
   /*
@@ -163,39 +163,11 @@ rtems_task Init(
       break;
   }
 
-   printf(
-     "Event sent from ISR (with timeout) hitting synchronization "
-       "point has %soccurred\n",
-     (( case_hit == TRUE ) ? "" : "NOT ")
+  printf(
+    "Event sent from ISR (with timeout) hitting synchronization "
+      "point has %soccurred\n",
+    (( case_hit == TRUE ) ? "" : "NOT ")
   ); 
-
-  /*
-   *  Now try for a timeout case
-   */
-  iterations = 0;
-  case_hit = FALSE;
-  max = 1;
-
-  puts(
-    "Run multiple times in attempt to hit event timeout synchronization point"
-  ); 
-  while (1) {
-
-    for (i=0 ; i<max ; i++ )
-      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
-        break;
-
-    status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
-    fatal_directive_status( status, RTEMS_TIMEOUT, "event_receive timeout" );
-
-    if ( ++max > 10240 )
-      max = 0;
-
-    /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4L * 1000L * 30L)
-      break;
-
-  }
 
   puts( "*** END OF TEST 39 ***" );
   rtems_test_exit( 0 );
