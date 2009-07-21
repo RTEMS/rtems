@@ -1,3 +1,9 @@
+2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spintrcritical06/init.c: Clean up.
+	* spintrcritical09/init.c: Adjust clock tick so it works on erc32.
+	* spintrcritical09/spintrcritical09.scn: Fill in.
+
 2009-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* spintrcritical06/init.c: Add comment to indicate test is not finished

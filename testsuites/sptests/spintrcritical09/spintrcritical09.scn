@@ -1,0 +1,6 @@
+*** TEST INTERRUPT CRITICAL SECTION 09 ***
+Init - Trying to generate timeout from ISR while blocking
+Init - Test may not be able to detect case is hit reliably
+Support - rtems_timer_create - creating timer 1
+Init - Trying to generate timeout from ISR while blocking
+*** END OF TEST INTERRUPT CRITICAL SECTION 09 ***

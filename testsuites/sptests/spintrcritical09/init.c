@@ -67,6 +67,7 @@ rtems_task Init(
 
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION 09 ***" );
 
+  puts( "Init - Test may not be able to detect case is hit reliably" );
   puts( "Init - Trying to generate timeout from ISR while blocking" );
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),
@@ -117,7 +118,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MICROSECONDS_PER_TICK  500
+#define CONFIGURE_MICROSECONDS_PER_TICK  1000
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

@@ -61,7 +61,6 @@ rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
-printk("r");
   (void) rtems_task_restart( Secondary_task_id, 1 );
 }
 
@@ -71,19 +70,14 @@ rtems_task Secondary_task(
 {
   rtems_status_code     status;
 
-#if 0
-  if ( arg ) {
-    printk("f");
+  if ( arg )
     (void) rtems_semaphore_flush( Semaphore );
-  }
-#endif
 
-  #if 0 && defined(PRIORITY_NO_TIMEOUT_REVERSE)
+  #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
     status = rtems_task_resume( Main_task );
     directive_failed( status, "rtems_task_resume" );
   #endif
 
-    printk("O");
   status = rtems_semaphore_obtain(
     Semaphore,
     RTEMS_DEFAULT_OPTIONS,
@@ -144,7 +138,6 @@ rtems_task Init(
       directive_failed( status, "rtems_task_suspend" );
     #endif
 
-printk("o");
     status = rtems_semaphore_obtain(
       Semaphore,
       RTEMS_DEFAULT_OPTIONS,
