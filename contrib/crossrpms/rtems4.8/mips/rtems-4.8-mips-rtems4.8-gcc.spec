@@ -3,24 +3,44 @@
 # 	http://www.rtems.org/bugzilla
 #
 
-%define _prefix			/opt/rtems-4.8
-%define _infodir		%{_prefix}/info
-%define _mandir			%{_prefix}/man
+%define _prefix                 /opt/rtems-4.8
+%define _exec_prefix            %{_prefix}
+%define _bindir                 %{_exec_prefix}/bin
+%define _sbindir                %{_exec_prefix}/sbin
+%define _libexecdir             %{_exec_prefix}/libexec
+%define _datarootdir            %{_prefix}/share
+%define _datadir                %{_datarootdir}
+%define _sysconfdir             %{_prefix}/etc
+%define _sharedstatedir         %{_prefix}/com
+%define _localstatedir          %{_prefix}/var
+%define _includedir             %{_prefix}/include
+%define _libdir                 %{_exec_prefix}/%{_lib}
+%define _mandir                 %{_datarootdir}/man
+%define _infodir                %{_datarootdir}/info
+%define _localedir              %{_datarootdir}/locale
 
 %ifos cygwin cygwin32 mingw mingw32
 %define _exeext .exe
+%define debug_package           %{nil}
+%define _libdir                 %{_exec_prefix}/lib
 %else
 %define _exeext %{nil}
 %endif
 
 %ifos cygwin cygwin32
 %define optflags -O3 -pipe -march=i486 -funroll-loops
-%define _libdir			%{_exec_prefix}/lib
-%define debug_package		%{nil}
+%endif
+
+%ifos mingw mingw32
+%if %{defined _mingw32_cflags}
+%define optflags %{_mingw32_cflags}
+%else
+%define optflags -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -mms-bitfields
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.8-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -40,7 +60,7 @@ Summary:      	mips-rtems4.8 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	32%{?dist}
+Release:      	33%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -92,18 +112,6 @@ Requires:	rtems-4.8-mips-rtems4.8-newlib = %{newlib_version}-%{release}
 %define gccexec %{_libdir}/gcc-lib
 %endif
 
-%if "%{gcc_version}" == "4.3.0"
-Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-%{gcc_pkgvers}-rtems4.8-20080417.diff
-%endif
-%if "%{gcc_version}" == "4.2.2"
-Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.2-rtems4.8-20071127.diff
-%endif
-%if "%{gcc_version}" == "4.2.3"
-Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		gcc-core-4.2.3-rtems4.8-20080508.diff
-%endif
 %if "%{gcc_version}" == "4.2.4"
 Source0:	ftp://gcc.gnu.org/pub/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
 Patch0:		gcc-core-4.2.4-rtems4.8-20080526.diff
