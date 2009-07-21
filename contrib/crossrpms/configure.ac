@@ -111,8 +111,6 @@ AC_SUBST(SPECSTRIP_OPTS)
 AS_IF([test "${host}" != "${build}"],[
 AC_MSG_CHECKING(for RPM OS)
 case "$host" in
-  i?86-*cygwin*) 	RPM_OS=cygwin ;;
-  i?86-*mingw*)		RPM_OS=mingw32 ;;
   sparc-*solaris*)	RPM_OS=solaris2.7 ;;
   *)
     AC_MSG_ERROR([Unsupported host ${host}])
@@ -136,12 +134,6 @@ AC_SUBST(TARGET_SUBDIRS,$target_subdirs)
 AC_SUBST(rtems_api,RTEMS_API)
 
 AC_CONFIG_FILES([Makefile])
-
-AC_CONFIG_FILES([cygwin/Makefile])
-AC_CONFIG_FILES([cygwin/i686/Makefile])
-
-AC_CONFIG_FILES([mingw32/Makefile])
-AC_CONFIG_FILES([mingw32/i686/Makefile])
 
 AC_CONFIG_FILES([rtems4.8/Makefile])
 AC_CONFIG_FILES([rtems4.8/arm/Makefile])
