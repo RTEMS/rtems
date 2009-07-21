@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <pthread.h>
 
+#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
 typedef struct {
   const char *name;
   int type;
@@ -28,6 +29,7 @@ ToCheck_t TypesToCheck[] = {
 };
 
 #define TO_CHECK sizeof(TypesToCheck) / sizeof(ToCheck_t)
+#endif
 
 void *POSIX_Init(
   void *ignored
@@ -40,6 +42,7 @@ void *POSIX_Init(
 
   puts( "\n\n*** POSIX MUTEX ATTRIBUTE TEST 1 ***" );
 
+#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
   puts( "Init - pthread_mutexattr_gettype - attr NULL - EINVAL" );
   sc = pthread_mutexattr_gettype( NULL, &type );
   rtems_test_assert( sc == EINVAL );
@@ -91,6 +94,9 @@ void *POSIX_Init(
       rtems_test_assert( type == TypesToCheck[i].type );
     }
   }
+#else
+  puts( "POSIX Mutex Attribute Type Not Supported in Tools" );
+#endif
 
   puts( "*** END OF POSIX MUTEX ATTRIBUTE TEST 1 ***" );
   rtems_test_exit(0);
