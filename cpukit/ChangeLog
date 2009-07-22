@@ -1,5 +1,11 @@
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* posix/include/semaphore.h, posix/include/rtems/posix/semaphore.h:
+	Move SEM_FAILED from private file to public file since it is defined
+	by POSIX.
+
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/main_mount.c: Eliminate warning.
 
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>

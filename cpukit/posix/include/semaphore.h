@@ -29,13 +29,16 @@ extern "C" {
 /*
  *  11.1 Semaphore Characteristics, P1003.1b-1993, p.219
  */
-
 typedef int sem_t;
+
+/*
+ *  Bad semaphore Id
+ */
+#define SEM_FAILED (sem_t *) -1
 
 /*
  *  11.2.1 Initialize an Unnamed Semaphore, P1003.1b-1993, p.219
  */
-
 int sem_init(
   sem_t         *sem,
   int            pshared,
@@ -45,7 +48,6 @@ int sem_init(
 /*
  *  11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
  */
-
 int sem_destroy(
   sem_t *sem
 );
@@ -55,7 +57,6 @@ int sem_destroy(
  *
  *  NOTE: Follows open() calling conventions.
  */
-
 sem_t *sem_open(
   const char *name,
   int         oflag,
@@ -65,7 +66,6 @@ sem_t *sem_open(
 /*
  *  11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
  */
-
 int sem_close(
   sem_t *sem
 );
@@ -73,7 +73,6 @@ int sem_close(
 /*
  *  11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
  */
-
 int sem_unlink(
   const char *name
 );
@@ -83,7 +82,6 @@ int sem_unlink(
  *
  *  NOTE: P1003.4b/D8 adds sem_timedwait(), p. 27
  */
-
 int sem_wait(
   sem_t *sem
 );

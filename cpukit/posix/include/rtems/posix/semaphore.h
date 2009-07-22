@@ -27,8 +27,6 @@ extern "C" {
 #include <semaphore.h>
 #include <rtems/score/coresem.h>
 
-#define SEM_FAILED (sem_t *) -1
-
 /*
  *  Data Structure used to manage a POSIX semaphore
  */
