@@ -34,8 +34,8 @@ int rtems_shell_help_cmd(
   const char * pc;
   int    col,line;
 
-  printf("%-10.10s - ",shell_cmd->name);
-  col = 12;
+  printf("%-12.12s - ",shell_cmd->name);
+  col = 14;
   line = 1;
   if (shell_cmd->alias) {
     printf("is an <alias> for command '%s'",shell_cmd->alias->name);

@@ -1,5 +1,10 @@
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/main_help.c: Provide a few more characters for command
+	names.
+
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/shell/main_mdump.c, libmisc/shell/main_mwdump.c: Fine tune
 	printf format.
 
