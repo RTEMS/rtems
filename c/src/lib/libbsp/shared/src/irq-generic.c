@@ -143,7 +143,7 @@ static rtems_status_code bsp_interrupt_lock( void)
 			sc = rtems_semaphore_create (
 				rtems_build_name( 'I', 'N', 'T', 'R'),
 				1,
-				RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+				RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_PRIORITY,
 				RTEMS_NO_PRIORITY,
 				&mutex
 			);
