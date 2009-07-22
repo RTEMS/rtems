@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 extern int rtems_shell_main_mdump(int, char *);
@@ -31,19 +32,38 @@ int rtems_shell_main_medit(
   char *argv[]
 )
 {
-  unsigned char * pb;
-  int n,i;
+  unsigned long  tmp;
+  unsigned char *pb;
+  int            n;
+  int            i;
 
-  if (argc<3) {
+  if ( argc < 3 ) {
     fprintf(stderr,"%s: too few arguments\n", argv[0]);
     return -1;
   }
 
-  pb = (unsigned char*)rtems_shell_str2int(argv[1]);
-  i = 2;
+  /*
+   *  Convert arguments into numbers
+   */
+  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    printf( "Address argument (%s) is not a number\n", argv[1] );
+    return -1;
+  }
+  pb = (unsigned char *) tmp;
+
+  /*
+   * Now edit the memory
+   */
   n = 0;
-  while (i<=argc) {
-    pb[n++] = rtems_shell_str2int(argv[i++]) % 0x100;
+  for (i=2 ; i<=argc ; i++) {
+    unsigned char tmpc;
+
+    if ( !rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
+      printf( "Value (%s) is not a number\n", argv[i] );
+      continue;
+    }
+
+    pb[n++] = tmpc;
   }
 
   return 0;

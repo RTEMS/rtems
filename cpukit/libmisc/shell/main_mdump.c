@@ -23,28 +23,37 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
-
-/*----------------------------------------------------------------------------*
- * RAM MEMORY COMMANDS
- *----------------------------------------------------------------------------*/
 
 int rtems_shell_main_mdump(
   int   argc,
   char *argv[]
 )
 {
-  unsigned char  n, m;
+  unsigned long  tmp;
+  unsigned char  n;
+  unsigned char  m;
   int            max;
   int            res;
   uintptr_t      addr = 0;
   unsigned char *pb;
 
-  if (argc>1)
-    addr = rtems_shell_str2int(argv[1]);
+  if (argc > 1) {
+    if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+      printf( "Address argument (%s) is not a number\n", argv[1] );
+      return -1;
+    }
+    addr = (uintptr_t) tmp;
+
+  }
 
   if (argc>2) {
-    max = rtems_shell_str2int(argv[2]);
+    if ( !rtems_string_to_int(argv[1], &max, NULL, 0) ) {
+      printf( "Length argument (%s) is not a number\n", argv[1] );
+      return -1;
+    }
+    addr = (uintptr_t) tmp;
     if (max <= 0) {
       max = 1;      /* print 1 item if 0 or neg. */ 
       res = 0;
@@ -66,8 +75,8 @@ int rtems_shell_main_mdump(
   }
 
   for (m=0; m<max; m++) {
-    printf("0x%08" PRIXPTR " ", addr);
     pb = (unsigned char*) addr;
+    printf("%p ", pb);
     for (n=0;n<=(m==(max-1)?res:0xf);n++)
       printf("%02X%c",pb[n],n==7?'-':' ');
     for (;n<=0xf;n++)

@@ -101,7 +101,7 @@ bool STRING_TO_NAME (
       return false;
   #endif
 
-  *n = result;
+  *n = (STRING_TO_TYPE) result;
   return true;
 }
 

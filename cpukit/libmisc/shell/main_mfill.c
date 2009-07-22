@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 int rtems_shell_main_mfill(
@@ -29,6 +30,7 @@ int rtems_shell_main_mfill(
   char *argv[]
 )
 {
+  unsigned long tmp;
   uintptr_t     addr;
   size_t        size;
   unsigned char value;
@@ -38,10 +40,30 @@ int rtems_shell_main_mfill(
     return -1;
   }
 
-  addr  = rtems_shell_str2int(argv[1]);
-  size  = rtems_shell_str2int(argv[2]);
-  value = rtems_shell_str2int(argv[3]) % 0x100;
-  memset((unsigned char*)addr,size,value);
+  /*
+   *  Convert arguments into numbers
+   */
+  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    printf( "Address argument (%s) is not a number\n", argv[1] );
+    return -1;
+  }
+  addr = (uintptr_t) tmp;
+
+  if ( !rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
+    printf( "Size argument (%s) is not a number\n", argv[2] );
+    return -1;
+  }
+  size = (size_t) tmp;
+
+  if ( !rtems_string_to_unsigned_char(argv[3], &value, NULL, 0) ) {
+    printf( "Value argument (%s) is not a number\n", argv[3] );
+    return -1;
+  }
+
+  /*
+   *  Now fill the memory.
+   */
+  memset((unsigned char*)addr, size, value);
 
   return 0;
 }

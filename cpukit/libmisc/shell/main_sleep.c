@@ -20,6 +20,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 int rtems_shell_main_sleep(
@@ -28,23 +29,39 @@ int rtems_shell_main_sleep(
 )
 {
   struct timespec delay;
+  unsigned long   tmp;
 
-  if (argc == 2) {
-    delay.tv_sec = rtems_shell_str2int(argv[1]);
-    delay.tv_nsec = 0;
-    nanosleep( &delay, NULL );
-    return 0;
+  if ((argc != 2) && (argc != 3)) {
+    fprintf( stderr, "%s: Usage seconds [nanoseconds]\n", argv[0] );
+    return -1;
   }
-  
+
+  /*
+   *  Convert the seconds argument to a number
+   */
+  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    printf( "Seconds argument (%s) is not a number\n", argv[1] );
+    return -1;
+  }
+  delay.tv_sec = (time_t) tmp;
+
+  /*
+   *  If the user specified a nanoseconds argument, convert it
+   */
+  delay.tv_nsec = 0;
   if (argc == 3) {
-    delay.tv_sec = rtems_shell_str2int(argv[1]);
-    delay.tv_nsec = rtems_shell_str2int(argv[2]);
-    nanosleep( &delay, NULL );
-    return 0;
+    if ( !rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
+      printf( "Seconds argument (%s) is not a number\n", argv[1] );
+      return -1;
+    }
+    delay.tv_nsec = tmp;
   }
-  
-  fprintf( stderr, "%s: Usage seconds [nanoseconds]\n", argv[0] );
-  return -1;
+
+  /*
+   *  Now sleep as requested.
+   */
+  nanosleep( &delay, NULL );
+  return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_SLEEP_Command = {

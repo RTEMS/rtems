@@ -80,7 +80,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/shell.c shell/shell_cmdset.c shell/shell_getchar.c \
     shell/shell_getprompt.c shell/shellconfig.c \
     shell/shellconfig.h shell/shell.h shell/shell_makeargs.c \
-    shell/str2int.c shell/filemode.c shell/pwcache.c shell/print-ls.c\
+    shell/filemode.c shell/pwcache.c shell/print-ls.c \
     shell/write_file.c shell/utils-cp.c  shell/utils-ls.c \
     shell/err.c shell/errx.c shell/verr.c shell/vis.c \
     shell/verrx.c shell/vwarn.c shell/vwarnx.c shell/warn.c shell/warnx.c \

@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 extern int rtems_shell_main_mdump(int, char *);
@@ -31,19 +32,41 @@ int rtems_shell_main_mmove(
   char *argv[]
 )
 {
- uintptr_t  src;
- uintptr_t  dst;
- size_t     length;
+  unsigned long tmp;
+  uintptr_t     src;
+  uintptr_t     dst;
+  size_t        length;
 
- if ( argc<4 ) {
-  fprintf(stderr,"%s: too few arguments\n", argv[0]);
-  return -1;
- }
+  if ( argc < 4 ) {
+    fprintf(stderr,"%s: too few arguments\n", argv[0]);
+    return -1;
+   }
 
- dst    = rtems_shell_str2int(argv[1]);
- src    = rtems_shell_str2int(argv[2]);
- length = rtems_shell_str2int(argv[3]);
- memcpy((unsigned char*)dst, (unsigned char*)src, length);
+  /*
+   *  Convert arguments into numbers
+   */
+  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    printf( "Destination argument (%s) is not a number\n", argv[1] );
+    return -1;
+  }
+  dst = (uintptr_t) tmp;
+
+  if ( !rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
+    printf( "Source argument (%s) is not a number\n", argv[2] );
+    return -1;
+  }
+  src = (uintptr_t) tmp;
+
+  if ( !rtems_string_to_unsigned_long(argv[3], &tmp, NULL, 0) ) {
+    printf( "Length argument (%s) is not a number\n", argv[3] );
+    return -1;
+  }
+  length = (size_t) tmp;
+
+  /*
+   *  Now copy the memory.
+   */
+  memcpy((unsigned char*)dst, (unsigned char*)src, length);
 
  return 0;
 }

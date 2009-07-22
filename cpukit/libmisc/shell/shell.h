@@ -183,22 +183,19 @@ rtems_status_code rtems_shell_script(
   bool                 echo
 );
 
-/*
- *  Things that are useful to external entities developing commands and plugging
- *  them in.
+/**
+ *  Private environment associated with each shell instance.
  */
-int rtems_shell_str2int(const char * s);
-
 typedef struct {
-  rtems_name magic; /* 'S','E','N','V': Shell Environment */
+  /** 'S','E','N','V': Shell Environment */
+  rtems_name magic;
   const char *devname;
   const char *taskname;
-  /* user extensions */
   bool exit_shell; /* logout */
   bool forever; /* repeat login */
   int errorlevel;
   bool echo;
-  char cwd [256];
+  char cwd[256];
   const char *input;
   const char *output;
   bool output_append;

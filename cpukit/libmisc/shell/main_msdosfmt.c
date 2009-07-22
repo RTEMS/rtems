@@ -1,10 +1,4 @@
 /*
- *   Shell Command Implmentation
- *
- *  Author: Fernando RUIZ CASAS
- *  Work: fernando.ruiz@ctv.es
- *  Home: correo@fernando-ruiz.com
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -23,6 +17,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include <rtems/shellconfig.h>
 #include <rtems/dosfs.h>
 #include <rtems/fsmount.h>
@@ -46,8 +41,9 @@ int rtems_shell_main_msdos_format(
     info_level:          0
   };
   
-  const char* driver = NULL;
-  int         arg;
+  unsigned long tmp;
+  const char*   driver = NULL;
+  int           arg;
   
   for (arg = 1; arg < argc; arg++) {
     if (argv[arg][0] == '-') {
@@ -67,7 +63,16 @@ int rtems_shell_main_msdos_format(
             fprintf (stderr, "error: sectors per cluster count.\n");
             return 1;
           }
-          rqdata.sectors_per_cluster = rtems_shell_str2int(argv[arg]);
+
+          if ( !rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
+            printf(
+              "sector per cluster argument (%s) is not a number\n",
+               argv[arg]
+            );
+            return -1;
+          }
+
+          rqdata.sectors_per_cluster = (uint32_t) tmp;
           break;
           
         case 'r':
@@ -76,7 +81,16 @@ int rtems_shell_main_msdos_format(
             fprintf (stderr, "error: no root directory size.\n");
             return 1;
           }
-          rqdata.files_per_root_dir = rtems_shell_str2int(argv[arg]);
+
+          if ( !rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
+            printf(
+              "root directory size argument (%s) is not a number\n",
+               argv[arg]
+            );
+            return -1;
+          }
+
+          rqdata.files_per_root_dir = (uint32_t) tmp;
           break;
           
         case 't':

@@ -25,6 +25,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 int rtems_shell_main_chmod(
@@ -32,15 +33,30 @@ int rtems_shell_main_chmod(
   char *argv[]
 )
 {
-  int n;
-  mode_t mode;
+  int           n;
+  mode_t        mode;
+  unsigned long tmp;
 
-  if (argc > 2) {
-    mode = rtems_shell_str2int(argv[1]) & 0777;
-    n = 2;
-    while (n < argc)
-      chmod(argv[n++], mode);
+  if (argc < 2) {
+    fprintf(stderr,"%s: too few arguments\n", argv[0]);
+    return -1;
   }
+
+  /*
+   *  Convert arguments into numbers
+   */
+  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    printf( "Mode argument (%s) is not a number\n", argv[1] );
+    return -1;
+  }
+  mode = (mode_t) (tmp & 0777);
+
+  /*
+   *  Now change the files modes
+   */
+  for (n=2 ; n < argc ; n++)
+    chmod(argv[n++], mode);
+
   return 0;
 }
 

@@ -30,6 +30,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 static void rtems_shell_joel_usage(void)
@@ -107,6 +108,7 @@ int rtems_shell_main_joel(
   char **argv
 )
 {
+  unsigned long        tmp;
   int                  option;
   int                  sc;
   int                  verbose = 0;
@@ -124,13 +126,26 @@ int rtems_shell_main_joel(
       case 'o':
         outputFile = getopt_reent.optarg;
         break;
-      case 'p':
-        taskPriority =
-          (rtems_task_priority) rtems_shell_str2int(getopt_reent.optarg);
+      case 'p': {
+        const char *s = getopt_reent.optarg;
+
+	if ( !rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
+	  printf( "Task Priority argument (%s) is not a number\n", s );
+	  return -1;
+	}
+	taskPriority = (rtems_task_priority) tmp;
         break;
-      case 's':
-        stackSize = (uint32_t) rtems_shell_str2int(getopt_reent.optarg);
+      }
+      case 's': {
+        const char *s = getopt_reent.optarg;
+
+	if ( !rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
+	  printf( "Stack size argument (%s) is not a number\n", s );
+	  return -1;
+	}
+        stackSize = (uint32_t) tmp;
         break;
+      }
       case 't':
         taskName = getopt_reent.optarg;
         break;

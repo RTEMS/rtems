@@ -1,5 +1,17 @@
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/Makefile.am, libmisc/shell/main_chmod.c,
+	libmisc/shell/main_mdump.c, libmisc/shell/main_medit.c,
+	libmisc/shell/main_mfill.c, libmisc/shell/main_mmove.c,
+	libmisc/shell/main_msdosfmt.c, libmisc/shell/main_mwdump.c,
+	libmisc/shell/main_sleep.c, libmisc/shell/main_umask.c,
+	libmisc/shell/shell.h, libmisc/shell/shell_script.c,
+	libmisc/stringto/stringto_template.h: Convert all shell code to use
+	stringto.h mehods with better error checking.
+	* libmisc/shell/str2int.c: Removed.
+
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, preinstall.am, libmisc/Makefile.am, wrapup/Makefile.am:
 	Add the stringto family of string to number converters. These are
 	error checking wrappers for the strtoXXX methods and do their best to

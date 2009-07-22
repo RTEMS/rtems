@@ -25,6 +25,7 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/stringto.h>
 #include "internal.h"
 
 int rtems_shell_main_umask(
@@ -32,10 +33,17 @@ int rtems_shell_main_umask(
   char *argv[]
 )
 {
-  mode_t msk = umask(0);
+  unsigned long tmp;
+  mode_t        msk = umask(0);
 
-  if (argc == 2)
-    msk = rtems_shell_str2int(argv[1]);
+  if (argc == 2) {
+    if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+      printf( "Mask argument (%s) is not a number\n", argv[1] );
+      return -1;
+    }
+    msk = (mode_t) tmp;
+
+  }
   umask(msk);
 
   msk = umask(0);
