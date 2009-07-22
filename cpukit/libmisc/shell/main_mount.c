@@ -31,7 +31,7 @@
 static rtems_chain_control filesystems;
 static bool                fs_init;
 
-static void rtems_shell_mount_fsys_init()
+static void rtems_shell_mount_fsys_init(void)
 {
   if (!fs_init)
   {

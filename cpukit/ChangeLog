@@ -1,5 +1,9 @@
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/shell/main_mount.c: Eliminate warning.
+
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* libmisc/Makefile.am, libmisc/shell/main_chmod.c,
 	libmisc/shell/main_mdump.c, libmisc/shell/main_medit.c,
 	libmisc/shell/main_mfill.c, libmisc/shell/main_mmove.c,
