@@ -1,3 +1,7 @@
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxcancel/init.c: Clean up.
+
 2009-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxmutexattr01/init.c: Make test optional if tools do not support
