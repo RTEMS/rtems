@@ -1,5 +1,9 @@
 2009-07-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/killinfo.c: Clean up. Avoid NULL pointer case.
+
+2009-07-22	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/inline/rtems/score/states.inl: Add
 	_States_Is_interruptible_by_signal. Add more DOxygen comments and
 	clean up.

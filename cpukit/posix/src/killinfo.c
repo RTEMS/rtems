@@ -60,14 +60,12 @@ int killinfo(
   /*
    *  Only supported for the "calling process" (i.e. this node).
    */
-
   if ( pid != getpid() )
     rtems_set_errno_and_return_minus_one( ESRCH );
 
   /*
    *  Validate the signal passed.
    */
-
   if ( !sig )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -77,17 +75,14 @@ int killinfo(
   /*
    *  If the signal is being ignored, then we are out of here.
    */
-
-  if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
+  if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN )
     return 0;
-  }
 
   /*
    *  P1003.1c/Draft 10, p. 33 says that certain signals should always
    *  be directed to the executing thread such as those caused by hardware
    *  faults.
    */
-
   if ( (sig == SIGFPE) || (sig == SIGILL) || (sig == SIGSEGV ) )
       return pthread_kill( pthread_self(), sig );
 
@@ -96,7 +91,6 @@ int killinfo(
   /*
    *  Build up a siginfo structure
    */
-
   siginfo = &siginfo_struct;
   siginfo->si_signo = sig;
   siginfo->si_code = SI_USER;
@@ -112,7 +106,6 @@ int killinfo(
    *  Is the currently executing thread interested?  If so then it will
    *  get it an execute it as soon as the dispatcher executes.
    */
-
   the_thread = _Thread_Executing;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
@@ -169,7 +162,6 @@ int killinfo(
    *
    *    + rtems internal threads do not receive signals.
    */
-
   interested_thread = NULL;
   interested_priority = PRIORITY_MAXIMUM + 1;
 
@@ -178,7 +170,7 @@ int killinfo(
         the_api++ ) {
 
     /*
-     *  Thie can occur when no one is interested and ITRON is not configured.
+     *  This can occur when no one is interested and ITRON is not configured.
      */
     if ( !_Objects_Information_table[ the_api ] )
       continue;
@@ -208,14 +200,12 @@ int killinfo(
        *  If this thread is of lower priority than the interested thread,
        *  go on to the next thread.
        */
-
       if ( the_thread->current_priority > interested_priority )
         continue;
 
       /*
        *  If this thread is not interested, then go on to the next thread.
        */
-
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       #if defined(RTEMS_DEBUG)
@@ -227,11 +217,20 @@ int killinfo(
         continue;
 
       /*
-       *  Now we know the thread under connsideration is interested.
+       *  If we have not seen a thread interested in this signal yet,
+       *  then we have found the first one.
+       */
+      if ( !interested_thread ) {
+        interested_thread   = the_thread;
+        interested_priority = the_thread->current_priority;
+        continue;
+      }
+
+      /*
+       *  Now we know the thread under consideration is interested.
        *  If the thread under consideration is of higher priority, then
        *  it becomes the interested thread.
        */
-
       if ( the_thread->current_priority < interested_priority ) {
         interested_thread   = the_thread;
         interested_priority = the_thread->current_priority;
@@ -243,7 +242,6 @@ int killinfo(
        *  If the interested thread is ready, then we don't need to send it
        *  to a blocked thread.
        */
-
       if ( _States_Is_ready( interested_thread->current_state ) )
         continue;
 
@@ -252,7 +250,6 @@ int killinfo(
        *  If the thread we are considering is not, the it becomes the
        *  interested thread.
        */
-
       if ( _States_Is_ready( the_thread->current_state ) ) {
         interested_thread   = the_thread;
         interested_priority = the_thread->current_priority;
@@ -263,9 +260,7 @@ int killinfo(
        *  Now we know both threads are blocked.
        *  If the interested thread is interruptible, then just use it.
        */
-
-      /* XXX need a new states macro */
-      if ( interested_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL )
+      if (_States_Is_interruptible_by_signal(interested_thread->current_state))
         continue;
 
       /*
@@ -274,9 +269,7 @@ int killinfo(
        *  If the thread under consideration is interruptible by a signal,
        *  then it becomes the interested thread.
        */
-
-      /* XXX need a new states macro */
-      if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+      if ( _States_Is_interruptible_by_signal(the_thread->current_state) ) {
         interested_thread   = the_thread;
         interested_priority = the_thread->current_priority;
       }
@@ -298,7 +291,6 @@ int killinfo(
    *    + sigprocmask() unblocks the signal, OR
    *    + sigaction() which changes the handler to SIG_IGN.
    */
-
   the_thread = NULL;
   goto post_process_signal;
 
@@ -307,7 +299,6 @@ int killinfo(
    *  thread needs to do the post context switch extension so it can
    *  evaluate the signals pending.
    */
-
 process_it:
 
   the_thread->do_post_task_switch_extension = true;
@@ -316,7 +307,6 @@ process_it:
    *  Returns true if the signal was synchronously given to a thread
    *  blocked waiting for the signal.
    */
-
   if ( _POSIX_signals_Unblock_thread( the_thread, sig, siginfo ) ) {
     _Thread_Enable_dispatch();
     return 0;
@@ -328,16 +318,14 @@ post_process_signal:
    *  We may have woken up a thread but we definitely need to post the
    *  signal to the process wide information set.
    */
-
   _POSIX_signals_Set_process_signals( mask );
 
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO ) {
 
     psiginfo = (POSIX_signals_Siginfo_node *)
                _Chain_Get( &_POSIX_signals_Inactive_siginfo );
-    if ( !psiginfo ) {
+    if ( !psiginfo )
       rtems_set_errno_and_return_minus_one( EAGAIN );
-    }
 
     psiginfo->Info = *siginfo;
 
