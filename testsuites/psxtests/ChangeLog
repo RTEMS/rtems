@@ -1,5 +1,9 @@
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxsem01/init.c: Eliminate warning.
+
+2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxcancel/init.c: Clean up.
 
 2009-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>

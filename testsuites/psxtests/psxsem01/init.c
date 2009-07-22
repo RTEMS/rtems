@@ -156,8 +156,9 @@ void *POSIX_Init(
    */
 
   puts( "Init: sem_open - UNSUCCESSFUL (ENAMETOOLONG)" );
-  status = sem_open(Get_Too_Long_Name(), O_CREAT, 0777, 1 );
-  fatal_posix_service_status( status, -1, "sem_open error return status");
+  n_sem1 = sem_open(Get_Too_Long_Name(), O_CREAT, 0777, 1 );
+  fatal_posix_service_status(
+    (int) n_sem1, (int) SEM_FAILED, "sem_open error return status");
   fatal_posix_service_status(
     errno, ENAMETOOLONG, "sem_open errorno ENAMETOOLONG" );
 
@@ -173,13 +174,13 @@ void *POSIX_Init(
   puts( "Init: sem_open - Create an Existing sem (EEXIST)" );
   n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 0777, 1);
   fatal_posix_service_status(
-    (int) n_sem2, (int ) SEM_FAILED, "sem_open error return status" );
+    (int) n_sem2, (int) SEM_FAILED, "sem_open error return status" );
   fatal_posix_service_status( errno, EEXIST,  "sem_open errno EEXIST");
 
   puts( "Init: sem_open - Open new sem without create flag (ENOENT)" );
   n_sem2 = sem_open("sem3", O_EXCL, 0777, 1);
   fatal_posix_service_status(
-    (int) n_sem2, (int ) SEM_FAILED, "sem_open error return status" );
+    (int) n_sem2, (int) SEM_FAILED, "sem_open error return status" );
   fatal_posix_service_status( errno, ENOENT,  "sem_open errno EEXIST");
 
   /*
@@ -204,7 +205,7 @@ void *POSIX_Init(
   puts( "Init: sem_open - Open an existing sem ( same id )" );
   n_sem2 = sem_open("sem1", 0 );
   fatal_posix_service_status(
-    (int) n_sem2, (int ) n_sem1, "sem_open error return status" );
+    (int) n_sem2, (int) n_sem1, "sem_open error return status" );
 
   /*
    * Unlink the semaphore, then verify an open of the same name produces a
