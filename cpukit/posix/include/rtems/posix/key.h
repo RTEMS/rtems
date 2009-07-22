@@ -24,62 +24,58 @@
 extern "C" {
 #endif
 
-/*
- *  Data Structure used to manage a POSIX key
+/**
+ *  This is the data Structure used to manage a POSIX key.
  *
- *  NOTE:  The Values is a table indexed by the index portion of the
- *         ID of the currently executing thread.
+ *  @note The Values is a table indexed by the index portion of the
+ *        ID of the currently executing thread.
  */
-
 typedef struct {
+   /** This field is the Object control structure. */
    Objects_Control     Object;
-   bool                is_active;
+   /** This field points to the optional destructor method. */
    void              (*destructor)( void * );
+   /** This field points to the values per thread. */
    void              **Values[ OBJECTS_APIS_LAST + 1 ];
 }  POSIX_Keys_Control;
 
-/*
+/**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 
-/*
- *  _POSIX_Keys_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief _POSIX_Keys_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _POSIX_Key_Manager_initialization(void);
 
-/*
- *  _POSIX_Keys_Run_destructors
- *
- *  DESCRIPTION:
+/**
+ *  @brief _POSIX_Keys_Run_destructors
  *
  *  This function executes all the destructors associated with the thread's
  *  keys.  This function will execute until all values have been set to NULL.
  *
- *  NOTE:  This is the routine executed when a thread exits to
- *         run through all the keys and do the destructor action.
+ *  @param[in] thread is the thread whose keys should have all their
+ *             destructors run.
+ *
+ *  @note This is the routine executed when a thread exits to
+ *        run through all the keys and do the destructor action.
  */
-
 void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 );
 
-/*
- *  _POSIX_Keys_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief _POSIX_Keys_Free
  *
  *  This routine frees a keys control block to the
  *  inactive chain of free keys control blocks.
+ *
+ *  @param[in] the_key is the POSIX key to free.
  */
-
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 );

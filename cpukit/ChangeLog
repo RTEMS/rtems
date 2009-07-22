@@ -1,5 +1,13 @@
 2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/include/rtems/posix/key.h, posix/src/keycreate.c,
+	posix/src/keydelete.c, posix/src/keyrundestructors.c: Restructure a
+	bit to make it easier to do coverage analysis. Eliminate is_active
+	member of control structure because it was redundant with very the
+	key object was open or closed.
+
+2009-07-21	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/src/eventseize.c, rtems/src/eventsurrender.c,
 	rtems/src/eventtimeout.c: Clean up and minor rework as a side-effect
 	of coverage analysis.

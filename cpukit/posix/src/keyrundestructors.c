@@ -59,13 +59,16 @@ void _POSIX_Keys_Run_destructors(
       the_key = (POSIX_Keys_Control *)
         _POSIX_Keys_Information.local_table[ index ];
 
-      if ( the_key && the_key->is_active && the_key->destructor ) {
-        value = the_key->Values[ thread_api ][ thread_index ];
-        if ( value ) {
-          (*the_key->destructor)( value );
-          if ( the_key->Values[ thread_api ][ thread_index ] )
-            are_all_null = false;
-        }
+      if ( !the_key )
+        continue;
+      if ( !the_key->destructor )
+        continue;
+
+      value = the_key->Values[ thread_api ][ thread_index ];
+      if ( value ) {
+	(*the_key->destructor)( value );
+	if ( the_key->Values[ thread_api ][ thread_index ] )
+	  are_all_null = false;
       }
     }
 

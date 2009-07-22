@@ -42,11 +42,7 @@ int pthread_key_delete(
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
 
-      the_key->is_active = false;
-
-      for ( the_api = 1;
-            the_api <= OBJECTS_APIS_LAST;
-            the_api++ )
+      for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ )
         if ( the_key->Values[ the_api ] )
           _Workspace_Free( the_key->Values[ the_api ] );
 
