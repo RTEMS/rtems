@@ -14,7 +14,6 @@
 #include <intrcritical.h>
 
 rtems_id Main_task;
-rtems_id Flusher_id;
 rtems_id Semaphore;
 volatile bool case_hit;
 
@@ -44,26 +43,12 @@ rtems_timer_service_routine test_release_from_isr(
   }
 }
 
-rtems_task Flusher(
-  rtems_task_argument ignored
-)
-{
-  rtems_status_code     sc;
-
-  while (1) {
-    sc = rtems_semaphore_flush( Semaphore );
-    directive_failed( sc, "rtems_semaphore_flush" );
-
-    sc = rtems_task_wake_after( 2 );
-    directive_failed( sc, "rtems_task_wake_after" );
-  }
-}
-
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
   rtems_status_code     sc;
+  int                   resets;
 
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION 09 ***" );
 
@@ -80,30 +65,23 @@ rtems_task Init(
 
   Main_task = rtems_task_self();
 
-  sc = rtems_task_create(
-    rtems_build_name( 'F', 'L', 'S', 'H' ),
-    1,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Flusher_id
-  );
-  directive_failed( sc, "rtems_task_create" );
-
-  sc = rtems_task_start( Flusher_id, Flusher, 0 );
-  directive_failed( sc, "rtems_task_start" );
-
   interrupt_critical_section_test_support_initialize( test_release_from_isr );
 
   case_hit = false;
 
-  while (!case_hit) {
+  for (resets=0 ; resets< 2 ;) {
+    if ( interrupt_critical_section_test_support_delay() )
+      resets++;
+ 
     interrupt_critical_section_test_support_delay();
 
     (void) rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
   }
 
-  puts( "Init - Case hit" );
+  if (!case_hit)
+    rtems_test_exit(0);
+
+  puts( "Init - It appears we hit the case" );
 
   puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 09 ***" );
   rtems_test_exit(0);
