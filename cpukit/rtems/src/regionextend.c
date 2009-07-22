@@ -57,6 +57,8 @@ rtems_status_code rtems_region_extend(
   if ( !starting_address )
     return RTEMS_INVALID_ADDRESS;
 
+  return_status = RTEMS_SUCCESSFUL;
+
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
 
     the_region = _Region_Get( id, &location );
@@ -72,11 +74,10 @@ rtems_status_code rtems_region_extend(
         );
 
         if ( heap_status == HEAP_EXTEND_SUCCESSFUL ) {
-	  the_region->length                += amount_extended;
-	  the_region->maximum_segment_size  += amount_extended;
-	  return_status = RTEMS_SUCCESSFUL;
+          the_region->length                += amount_extended;
+          the_region->maximum_segment_size  += amount_extended;
         } else if ( heap_status == HEAP_EXTEND_ERROR ) {
-	  return_status = RTEMS_INVALID_ADDRESS;
+          return_status = RTEMS_INVALID_ADDRESS;
         } else if ( heap_status ==  HEAP_EXTEND_NOT_IMPLEMENTED ) {
           return_status = RTEMS_NOT_IMPLEMENTED;
         }
