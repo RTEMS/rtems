@@ -251,6 +251,10 @@ $(PROJECT_INCLUDE)/rtems/shellconfig.h: libmisc/shell/shellconfig.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shellconfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/shellconfig.h
 endif
+$(PROJECT_INCLUDE)/rtems/stringto.h: libmisc/stringto/stringto.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stringto.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stringto.h
+
 $(PROJECT_INCLUDE)/rtems/libi2c.h: libi2c/libi2c.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libi2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libi2c.h

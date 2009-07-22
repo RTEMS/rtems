@@ -87,8 +87,8 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/fts.c shell/print_heapinfo.c shell/main_wkspaceinfo.c \
     shell/shell_script.c shell/login_prompt.c shell/login_check.c \
     shell/fdisk.c shell/main_rtc.c \
-    shell/dd-args.c shell/main_dd.c shell/dd-conv.c shell/dd-conv_tab.c shell/dd-misc.c \
-    shell/dd-position.c \
+    shell/dd-args.c shell/main_dd.c shell/dd-conv.c shell/dd-conv_tab.c \
+    shell/dd-misc.c shell/dd-position.c \
     shell/main_hexdump.c shell/hexdump-conv.c shell/hexdump-display.c \
     shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c \
     shell/main_time.c
@@ -126,26 +126,25 @@ libuntar_a_SOURCES = untar/untar.c untar/untar.h
 
 EXTRA_DIST += untar/README
 
+## stringto
+noinst_LIBRARIES += libstringto.a
+libstringto_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/stringto
+libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
+    stringto/stringtoint.c stringto/stringtolong.c stringto/stringtolonglong.c \
+    stringto/stringtounsignedchar.c stringto/stringtounsignedint.c \
+    stringto/stringtounsignedlong.c stringto/stringtounsignedlonglong.c
+
+EXTRA_DIST += stringto/stringto_template.h
+
 ## fsmount
 noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h
 
-EXTRA_DIST += fsmount/README
-
 ## uuid
 noinst_LIBRARIES += libuuid.a
-libuuid_a_SOURCES = uuid/clear.c \
-	uuid/compare.c \
-	uuid/copy.c \
-	uuid/gen_uuid.c \
-	uuid/isnull.c \
-	uuid/pack.c \
-	uuid/parse.c \
-	uuid/unpack.c \
-	uuid/unparse.c \
-	uuid/uuid_time.c \
-	uuid/uuidd.h \
-	uuid/uuidP.h
+libuuid_a_SOURCES = uuid/clear.c uuid/compare.c uuid/copy.c uuid/gen_uuid.c \
+	uuid/isnull.c uuid/pack.c uuid/parse.c uuid/unpack.c uuid/unparse.c \
+	uuid/uuid_time.c uuid/uuidd.h uuid/uuidP.h
 
 ## ---
 include $(srcdir)/preinstall.am

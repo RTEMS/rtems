@@ -132,6 +132,9 @@ if LIBSHELL
 include_rtems_HEADERS += libmisc/shell/shell.h libmisc/shell/shellconfig.h
 endif
 
+## stringto
+include_rtems_HEADERS += libmisc/stringto/stringto.h
+
 ## i2c
 include_rtems_HEADERS += libi2c/libi2c.h
 
