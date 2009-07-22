@@ -1090,7 +1090,9 @@ rtems_ata_initialize(rtems_device_major_number major,
     blkdev_request1    breq;
     uint8_t            i, dev = 0;
     uint16_t          *buffer;
+#if ATA_EXEC_DEVICE_DIAGNOSTIC
     uint16_t           ec;
+#endif
     char               name[ATA_MAX_NAME_LENGTH];
     dev_t              device;
     ata_int_st_t      *int_st;
