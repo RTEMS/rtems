@@ -76,7 +76,7 @@ int rtems_shell_main_mdump(
 
   for (m=0; m<max; m++) {
     pb = (unsigned char*) addr;
-    printf("%p ", pb);
+    printf("%10p ", pb);
     for (n=0;n<=(m==(max-1)?res:0xf);n++)
       printf("%02X%c",pb[n],n==7?'-':' ');
     for (;n<=0xf;n++)

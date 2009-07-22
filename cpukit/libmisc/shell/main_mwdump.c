@@ -73,7 +73,7 @@ int rtems_shell_main_mwdump(
 
   for (m=0;m<max;m++) {
     pb = (unsigned char *) addr;
-    printf("%p ", pb);
+    printf("%10p ", pb);
     for (n=0;n<=(m==(max-1)?res:0xf);n+=2)
       printf("%04X%c",*((unsigned short*)(pb+n)),n==6?'-':' ');
     for (;n<=0xf;n+=2)
