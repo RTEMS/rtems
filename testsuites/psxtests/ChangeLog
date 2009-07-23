@@ -1,3 +1,12 @@
+2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add test to exercise interrupt
+	synchronization logic in _POSIX_Timer_Insert_helper that supports
+	POSIX timers.
+	* psxintrcritical01/.cvsignore, psxintrcritical01/Makefile.am,
+	psxintrcritical01/init.c, psxintrcritical01/psxintrcritical01.doc,
+	psxintrcritical01/psxintrcritical01.scn: New files.
+
 2009-07-23	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* psxcancel/Makefile.am, psxcancel/init.c, psxcancel/psxcancel.scn: Add

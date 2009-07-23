@@ -52,6 +52,7 @@ psxfatal01/Makefile
 psxfatal02/Makefile
 psxfile01/Makefile
 psxhdrs/Makefile
+psxintrcritical01/Makefile
 psxitimer/Makefile
 psxkey01/Makefile
 psxmount/Makefile

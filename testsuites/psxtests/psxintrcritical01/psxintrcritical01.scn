@@ -1,0 +1,5 @@
+*** TEST POSIX INTERRUPT CRITICAL SECTION 01 ***
+Init - Trying to generate timer fire from ISR while firing
+Init - Variation is: POSIX Timer
+Init - There is no way for the test to know if it hits the case
+Support - rtems_timer_create - creating timer 1

@@ -6,10 +6,12 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psx10 psx11 psx12 psx13 psx14 psxautoinit01 psxautoinit02 psxbarrier01 \
-    psxcancel psxcleanup psxcond01 psxenosys psxfatal01 psxfatal02 psxkey01 \
-    psxitimer psxmsgq01 psxmsgq02 psxmsgq03 psxmutexattr01 psxobj01 \
-    psxrwlock01 psxsem01 psxsignal01 psxspin01 psxspin02 psxsysconf \
-    psxtime psxtimer01 psxtimer02 psxualarm 
+    psxcancel psxcleanup psxcond01 psxenosys psxkey01 psxitimer psxmsgq01 \
+    psxmsgq02 psxmsgq03 psxmutexattr01 psxobj01 psxrwlock01 psxsem01 \
+    psxsignal01 psxspin01 psxspin02 psxsysconf psxtime psxtimer01 \
+    psxtimer02 psxualarm \
+    psxfatal01 psxfatal02 \
+    psxintrcritical01
 
 ## File IO tests
 SUBDIRS += psxfile01 psxreaddir psxstat psxmount psx13 psxchroot01 
