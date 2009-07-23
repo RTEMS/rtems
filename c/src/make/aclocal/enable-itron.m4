@@ -10,7 +10,7 @@ AC_ARG_ENABLE(itron,
   yes) RTEMS_HAS_ITRON_API=yes ;;
   no) RTEMS_HAS_ITRON_API=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-itron option) ;;
-esac],[RTEMS_HAS_ITRON_API=yes]) 
+esac],[RTEMS_HAS_ITRON_API=no]) 
 
 AC_SUBST(RTEMS_HAS_ITRON_API)
 ])
