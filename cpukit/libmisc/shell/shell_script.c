@@ -129,7 +129,7 @@ int rtems_shell_main_joel(
       case 'p': {
         const char *s = getopt_reent.optarg;
 
-	if ( !rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
+	if ( rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
 	  printf( "Task Priority argument (%s) is not a number\n", s );
 	  return -1;
 	}
@@ -139,7 +139,7 @@ int rtems_shell_main_joel(
       case 's': {
         const char *s = getopt_reent.optarg;
 
-	if ( !rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
+	if ( rtems_string_to_unsigned_long( s, &tmp, NULL, 0) ) {
 	  printf( "Stack size argument (%s) is not a number\n", s );
 	  return -1;
 	}

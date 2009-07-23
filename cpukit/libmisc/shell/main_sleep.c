@@ -39,7 +39,7 @@ int rtems_shell_main_sleep(
   /*
    *  Convert the seconds argument to a number
    */
-  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
     printf( "Seconds argument (%s) is not a number\n", argv[1] );
     return -1;
   }
@@ -50,7 +50,7 @@ int rtems_shell_main_sleep(
    */
   delay.tv_nsec = 0;
   if (argc == 3) {
-    if ( !rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
+    if ( rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
       printf( "Seconds argument (%s) is not a number\n", argv[1] );
       return -1;
     }

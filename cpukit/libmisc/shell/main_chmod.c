@@ -45,7 +45,7 @@ int rtems_shell_main_chmod(
   /*
    *  Convert arguments into numbers
    */
-  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
     printf( "Mode argument (%s) is not a number\n", argv[1] );
     return -1;
   }

@@ -37,7 +37,7 @@ int rtems_shell_main_umask(
   mode_t        msk = umask(0);
 
   if (argc == 2) {
-    if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    if ( rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
       printf( "Mask argument (%s) is not a number\n", argv[1] );
       return -1;
     }

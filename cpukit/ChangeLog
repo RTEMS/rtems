@@ -1,3 +1,16 @@
+2009-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/Makefile.am, libmisc/shell/main_chmod.c,
+	libmisc/shell/main_mdump.c, libmisc/shell/main_medit.c,
+	libmisc/shell/main_mfill.c, libmisc/shell/main_mmove.c,
+	libmisc/shell/main_msdosfmt.c, libmisc/shell/main_mwdump.c,
+	libmisc/shell/main_sleep.c, libmisc/shell/main_umask.c,
+	libmisc/shell/shell_script.c, libmisc/stringto/stringto.h,
+	libmisc/stringto/stringto_template.h: Convert return type from bool
+	to rtems_status_code and add rtems_string_to_pointer. Perform
+	associated clean up and changes for return type change.
+	* libmisc/stringto/stringtopointer.c: New file.
+
 2009-07-22	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/killinfo.c: Clean up. Avoid NULL pointer case.

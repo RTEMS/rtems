@@ -64,7 +64,7 @@ int rtems_shell_main_msdos_format(
             return 1;
           }
 
-          if ( !rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
+          if ( rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
             printf(
               "sector per cluster argument (%s) is not a number\n",
                argv[arg]
@@ -82,7 +82,7 @@ int rtems_shell_main_msdos_format(
             return 1;
           }
 
-          if ( !rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
+          if ( rtems_string_to_unsigned_long(argv[arg], &tmp, NULL, 0) ) {
             printf(
               "root directory size argument (%s) is not a number\n",
                argv[arg]

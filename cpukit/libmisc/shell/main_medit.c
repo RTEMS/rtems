@@ -32,8 +32,8 @@ int rtems_shell_main_medit(
   char *argv[]
 )
 {
-  unsigned long  tmp;
   unsigned char *pb;
+  void          *tmpp;
   int            n;
   int            i;
 
@@ -45,11 +45,11 @@ int rtems_shell_main_medit(
   /*
    *  Convert arguments into numbers
    */
-  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_pointer(argv[1], &tmpp, NULL) ) {
     printf( "Address argument (%s) is not a number\n", argv[1] );
     return -1;
   }
-  pb = (unsigned char *) tmp;
+  pb = tmpp;
 
   /*
    * Now edit the memory
@@ -58,7 +58,7 @@ int rtems_shell_main_medit(
   for (i=2 ; i<=argc ; i++) {
     unsigned char tmpc;
 
-    if ( !rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
+    if ( rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
       printf( "Value (%s) is not a number\n", argv[i] );
       continue;
     }

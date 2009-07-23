@@ -30,10 +30,10 @@ int rtems_shell_main_mfill(
   char *argv[]
 )
 {
-  unsigned long tmp;
-  uintptr_t     addr;
-  size_t        size;
-  unsigned char value;
+  unsigned long  tmp;
+  void          *addr;
+  size_t         size;
+  unsigned char  value;
 
   if ( argc != 4 ) {
     fprintf(stderr,"%s: too few arguments\n", argv[0]);
@@ -43,19 +43,18 @@ int rtems_shell_main_mfill(
   /*
    *  Convert arguments into numbers
    */
-  if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_pointer(argv[1], &addr, NULL) ) {
     printf( "Address argument (%s) is not a number\n", argv[1] );
     return -1;
   }
-  addr = (uintptr_t) tmp;
 
-  if ( !rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
+  if ( rtems_string_to_unsigned_long(argv[2], &tmp, NULL, 0) ) {
     printf( "Size argument (%s) is not a number\n", argv[2] );
     return -1;
   }
   size = (size_t) tmp;
 
-  if ( !rtems_string_to_unsigned_char(argv[3], &value, NULL, 0) ) {
+  if ( rtems_string_to_unsigned_char(argv[3], &value, NULL, 0) ) {
     printf( "Value argument (%s) is not a number\n", argv[3] );
     return -1;
   }
@@ -63,7 +62,7 @@ int rtems_shell_main_mfill(
   /*
    *  Now fill the memory.
    */
-  memset((unsigned char*)addr, size, value);
+  memset(addr, size, value);
 
   return 0;
 }

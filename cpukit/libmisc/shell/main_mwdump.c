@@ -31,24 +31,22 @@ int rtems_shell_main_mwdump(
   char *argv[]
 )
 {
-  unsigned long  tmp;
   unsigned char  n;
   unsigned char  m;
   int            max;
   int            res;
-  uintptr_t      addr = 0;
+  void          *addr = 0;
   unsigned char *pb;
 
   if ( argc > 1 ) {
-    if ( !rtems_string_to_unsigned_long(argv[1], &tmp, NULL, 0) ) {
+    if ( rtems_string_to_pointer(argv[1], &addr, NULL) ) {
       printf( "Address argument (%s) is not a number\n", argv[1] );
       return -1;
     }
-    addr = (uintptr_t) tmp;
   }
 
   if ( argc > 2 ) {
-    if ( !rtems_string_to_int(argv[2], &max, NULL, 0) ) {
+    if ( rtems_string_to_int(argv[2], &max, NULL, 0) ) {
       printf( "Address argument (%s) is not a number\n", argv[1] );
       return -1;
     }
@@ -71,8 +69,8 @@ int rtems_shell_main_mwdump(
     res = 0xf;
   }
 
+  pb = addr;
   for (m=0;m<max;m++) {
-    pb = (unsigned char *) addr;
     printf("%10p ", pb);
     for (n=0;n<=(m==(max-1)?res:0xf);n+=2)
       printf("%04X%c",*((unsigned short*)(pb+n)),n==6?'-':' ');
@@ -82,7 +80,7 @@ int rtems_shell_main_mwdump(
       printf("%c", isprint(pb[n]) ? pb[n] : '.');
     }
     printf("\n");
-    addr += 16;
+    pb += 16;
   }
   return 0;
 }
