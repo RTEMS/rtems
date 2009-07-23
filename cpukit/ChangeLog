@@ -1,3 +1,8 @@
+2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/iterateoverthreads.c: Restructure a bit to make analysis
+	easier.
+
 2009-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/Makefile.am, libmisc/shell/main_chmod.c,
