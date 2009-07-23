@@ -56,10 +56,18 @@ rtems_status_code rtems_timer_reset(
           _Watchdog_Insert( &_Watchdog_Ticks_chain, &the_timer->Ticker );
           break;
         case TIMER_INTERVAL_ON_TASK:
-          if ( !_Timer_Server_schedule_operation ) {
-            _Thread_Enable_dispatch();
-            return RTEMS_INCORRECT_STATE;
-          }
+          /*
+           *  There is no way for a timer to have this class unless
+           *  it was scheduled as a server fire.  That requires that
+           *  the Timer Server be initiated.  So this error cannot
+           *  occur unless something is internally wrong.
+           */
+          #if defined(RTEMS_DEBUG)
+            if ( !_Timer_Server_schedule_operation ) {
+              _Thread_Enable_dispatch();
+              return RTEMS_INCORRECT_STATE;
+            }
+          #endif
           _Watchdog_Remove( &the_timer->Ticker );
           (*_Timer_Server_schedule_operation)( the_timer );
           break;

@@ -1,5 +1,10 @@
 2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/src/timerreset.c: Mark an unreachable path that is a sanity
+	check as conditional on RTEMS_DEBUG.
+
+2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/iterateoverthreads.c: Restructure a bit to make analysis
 	easier.
 
