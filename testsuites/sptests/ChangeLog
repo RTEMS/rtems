@@ -1,5 +1,10 @@
 2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp36/strict_order_mut.c: Simple binary semaphores cannot have an
+	inheritance protocol since there is no holder associated with them.
+
+2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new tests to exercise cases where a
 	timer is scheduled from an ISR while it is being scheduled at the
 	task level.

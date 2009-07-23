@@ -1,6 +1,7 @@
 /*
  *  Simple test program to demonstrate strict order mutex
  *
+ *  $Id$
  */
 
 #define CONFIGURE_INIT
@@ -55,7 +56,6 @@ rtems_task Init(rtems_task_argument ignored)
 				  1,
 				  RTEMS_LOCAL|
 				  RTEMS_SIMPLE_BINARY_SEMAPHORE|
-				  RTEMS_INHERIT_PRIORITY|
 				  RTEMS_PRIORITY,
 				  0,
 				  &Mutex_id[0]);
@@ -68,7 +68,6 @@ rtems_task Init(rtems_task_argument ignored)
 				  1,
 				  RTEMS_LOCAL|
 				  RTEMS_SIMPLE_BINARY_SEMAPHORE|
-				  RTEMS_PRIORITY_CEILING|
 				  RTEMS_PRIORITY,
 				  1,
 				  &Mutex_id[1]);
