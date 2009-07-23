@@ -148,12 +148,6 @@ AC_SUBST(rtems_api,RTEMS_API)
 
 AC_CONFIG_FILES([Makefile])
 
-AC_CONFIG_FILES([cygwin/Makefile])
-AC_CONFIG_FILES([cygwin/i686/Makefile])
-
-AC_CONFIG_FILES([mingw32/Makefile])
-AC_CONFIG_FILES([mingw32/i686/Makefile])
-
 AC_CONFIG_FILES([rtems4.9/Makefile])
 AC_CONFIG_FILES([rtems4.9/arm/Makefile])
 AC_CONFIG_FILES([rtems4.9/avr/Makefile])
