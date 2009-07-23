@@ -1,8 +1,0 @@
-%description -n @rpmprefix@@tool_target@-cpukit
-GNU cc compiler for @tool_target@.
-
-%files -n @rpmprefix@@tool_target@-cpukit
-%sysdir %{_prefix}
-%{_prefix}/@tool_target@
-# Violates the FHS
-%exclude %{_prefix}/make
