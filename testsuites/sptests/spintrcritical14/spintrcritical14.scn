@@ -1,0 +1,6 @@
+*** TEST INTERRUPT CRITICAL SECTION 14 ***
+Init - Trying to generate timer fire from ISR while firing
+Init - Variation is: Timer Fire After
+Init - There is no way for the test to know if it hits the case
+Init - rtems_timer_create - OK
+Support - rtems_timer_create - creating timer 1
