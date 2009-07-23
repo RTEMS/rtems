@@ -91,6 +91,7 @@ rtems_task Init(
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
 
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
+  puts( "Init - There is no way for the test to know if it hits the case" );
   puts( "Init - Variation is: " TEST_STRING );
   status = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),

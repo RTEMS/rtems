@@ -119,9 +119,12 @@ rtems_task Init(
     directive_failed( status, "rtems_semaphore_obtain" );
   }
 
-  puts( "Init - Case hit" );
+  if ( case_hit ) {
+    puts( "Init - Case hit" );
+    puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  } else 
+    puts( "Init - Case not hit - ran too long" );
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
   rtems_test_exit(0);
 }
 

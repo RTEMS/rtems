@@ -1,5 +1,11 @@
 2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* spintrcritical01/init.c, spintrcritical06/init.c,
+	spintrcritical08/init.c, spintrcritical09/init.c: Perform some
+	cleanup and make the tests more similar.
+
+2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spintrcritical06/init.c: Test now hits forward and reverse cases.
 
 2009-07-22	Joel Sherrill <joel.sherrill@OARcorp.com>

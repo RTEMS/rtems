@@ -78,12 +78,12 @@ rtems_task Init(
     (void) rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
   }
 
-  if (!case_hit)
-    rtems_test_exit(0);
+  if ( case_hit ) {
+    puts( "Init - It appears the case has been hit" );
+    puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 09 ***" );
+  } else 
+    puts( "Init - Case not hit - ran too long" );
 
-  puts( "Init - It appears we hit the case" );
-
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 09 ***" );
   rtems_test_exit(0);
 }
 
