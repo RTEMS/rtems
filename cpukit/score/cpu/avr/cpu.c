@@ -69,16 +69,34 @@ void _CPU_Context_Initialize(
   bool              is_fp
 )
 {
-	uint16_t _stack; //declare helper variable
-	_stack = (uint16_t) (stack_base) + (uint16_t) (size); //calc stack pointer 
-	the_context->stack_pointer = _stack - 2; //save stack pointer (- 2 bytes)
-	_CPU_Push(_stack, (uint16_t)(entry_point)); //push entry point onto context stack
-	the_context->status = 0; //init status to zero
-	if (new_level == TRUE)	_CPU_ISR_Enable( 0 );
+  uint16_t stack;
+  uint16_t start;
+  uint16_t *tmpsp;
+
+  /* calc stack high end */
+  stack = (uint16_t) (stack_base) + (uint16_t) (size);
+
+  /* calc stack pointer initial value */
+  stack -= 2;
+
+  the_context->stack_pointer = stack;
+  tmpsp = (uint16_t *) stack;
+  start = (uint16_t) entry_point;
+  *tmpsp = start;
 #if 0
-	printk("");
-	printk("the_context = 0x%x\n", the_context);
-	printk("sp = 0x%x\n\n",_stack);
+  tmpsp[0] = start & 0xff;
+  tmpsp[1] = (start >> 8) & 0xff;
+#endif
+
+  /* FIXME on level */
+  if (new_level) the_context->status = 0;
+  else           the_context->status = 0;
+
+#if 1
+  printk("");
+  printk("the_context = 0x%x\n", the_context);
+  printk("entry = 0x%x\n", entry_point);
+  printk("sp = 0x%x\n\n",stack);
 #endif
 }
 

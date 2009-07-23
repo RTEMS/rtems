@@ -240,7 +240,7 @@ SYM(_CPU_Context_switch):
 	PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_restore):
-	mov	r26,r24
+	mov	r26,r24         /* R26/27 are X */
 	mov	r27,r25
 	ld	r2, X+
 	ld	r3, X+
