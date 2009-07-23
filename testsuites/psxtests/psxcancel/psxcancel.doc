@@ -1,0 +1,46 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxcancel
+
+directives:
+
+  pthread_setcancelstate
+  pthread_setcanceltype
+  pthread_testcancel
+  pthread_cleanup_push
+  pthread_cleanup_pop
+  pthread_create
+  pthread_cancel
+  pthread_join
+ 
+concepts:
+
++ Verify that setting cancellation state and type to various
+  combinations of enable/disable and deferred/asynchronous works
+  as expected.
+
++ Verify that cleanup handlers that have been pushed do indeed run
+  as expected at at cancellation point.
+
++ Exercise argument checking error cases in pthread_setcancelstate and
+  pthread_setcanceltype.
+  associated one mutex instance that it is an error for another task
+  to attempt to block on the same condition variable using a different
+  mutex.
+
++ Verify error conditions in pthread_mutexattr_settype
+
++ Verify normal paths through pthread_mutexattr_gettype
+
++ Verify normal paths through pthread_mutexattr_settype

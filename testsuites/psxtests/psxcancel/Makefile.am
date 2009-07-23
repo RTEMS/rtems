@@ -8,6 +8,7 @@ rtems_tests_PROGRAMS = psxcancel
 psxcancel_SOURCES = init.c ../include/pmacros.h
 
 dist_rtems_tests_DATA = psxcancel.scn
+dist_rtems_tests_DATA += psxcancel.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

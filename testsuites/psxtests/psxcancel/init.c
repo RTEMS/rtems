@@ -6,7 +6,6 @@
  *  $Id$
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -15,18 +14,24 @@
 #include <errno.h>
 #include <sched.h>
 
-
 #if defined(__rtems__)
-#include <rtems.h>
-#include <bsp.h>
-#include <pmacros.h>
+  #include <rtems.h>
+  #include <bsp.h>
+  #include <pmacros.h>
 #endif
+
+volatile bool countTask_handler;
+
+void countTask_cancel_handler(void *ignored)
+{
+  countTask_handler = true;
+}
 
 void *countTaskDeferred(void *ignored)
 {
   int i=0;
   int type,state;
-
+  
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
   pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &state);
   while (1) {
@@ -43,9 +48,16 @@ void *countTaskAsync(void *ignored)
 
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &state);
+  pthread_cleanup_push(countTask_cancel_handler, NULL);
   while (1) {
     printf("countTaskAsync: elapsed time (second): %2d\n", i++ );
     sleep(1);
+  }
+  countTask_handler = false;
+  pthread_cleanup_pop(1);
+  if ( countTask_handler == false ){
+    puts("countTask_cancel_handler not executed");
+    rtems_test_exit(0);
   }
 }
 
@@ -56,15 +68,33 @@ void *countTaskAsync(void *ignored)
 #endif
 {
   pthread_t task;
-  int taskparameter = 0;
+  int       taskparameter = 0;
+  int       sc;
+  int       old;
 
   puts( "\n\n*** POSIX CANCEL TEST ***" );
 
+  /* generate some error conditions */
+  puts( "Init - pthread_setcancelstate - NULL oldstate - EINVAL" );
+  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+  fatal_posix_service_status( sc, EINVAL, "cancel state EINVAL" );
+
+  puts( "Init - pthread_setcancelstate - bad state - EINVAL" );
+  sc = pthread_setcancelstate(12, &old);
+  fatal_posix_service_status( sc, EINVAL, "cancel state EINVAL" );
+
+  puts( "Init - pthread_setcanceltype - NULL oldtype - EINVAL" );
+  sc = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+  fatal_posix_service_status( sc, EINVAL, "cancel type EINVAL" );
+
+  puts( "Init - pthread_setcanceltype - bad type - EINVAL" );
+  sc = pthread_setcanceltype(12, &old);
+  fatal_posix_service_status( sc, EINVAL, "cancel type EINVAL" );
+
   /* Start countTask deferred */
   {
-    int task_ret;
-    task_ret = pthread_create(&task, NULL, countTaskDeferred, &taskparameter);
-    if (task_ret) {
+    sc = pthread_create(&task, NULL, countTaskDeferred, &taskparameter);
+    if (sc) {
       perror("pthread_create: countTask");
       rtems_test_exit(EXIT_FAILURE);
     }
@@ -76,9 +106,8 @@ void *countTaskAsync(void *ignored)
 
   /* Start countTask asynchronous */
   {
-    int task_ret;
-    task_ret = pthread_create(&task, NULL, countTaskAsync, &taskparameter);
-    if (task_ret) {
+    sc = pthread_create(&task, NULL, countTaskAsync, &taskparameter);
+    if (sc) {
       perror("pthread_create: countTask");
       rtems_test_exit(EXIT_FAILURE);
     }

@@ -1,3 +1,9 @@
+2009-07-23	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* psxcancel/Makefile.am, psxcancel/init.c, psxcancel/psxcancel.scn: Add
+	multiple cases which complete coverage of thread cancellation.
+	* psxcancel/psxcancel.doc: New file.
+
 2009-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxsem01/Makefile.am, psxsem01/init.c: Much clean up.
