@@ -15,7 +15,6 @@
 
 /* common parameters */
 #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
-#define SEMAPHORE_OBTAIN_TIMEOUT 0
 
 #if defined(PRIORITY_NO_TIMEOUT_FORWARD)
   #define TEST_NAME          "06"
@@ -23,12 +22,14 @@
 
   #define INIT_PRIORITY      2
   #define BLOCKER_PRIORITY   1
+  #define SEMAPHORE_OBTAIN_TIMEOUT 0
 
 #elif defined(PRIORITY_NO_TIMEOUT_REVERSE)
   #define TEST_NAME          "07"
   #define TEST_STRING        "Priority/Restart Search Task (Backward)"
   #define INIT_PRIORITY      126
   #define BLOCKER_PRIORITY   127
+  #define SEMAPHORE_OBTAIN_TIMEOUT 2
 
 #else
 
@@ -38,7 +39,6 @@
 rtems_id Main_task;
 rtems_id Secondary_task_id;
 rtems_id Semaphore;
-volatile bool case_hit;
 
 Thread_blocking_operation_States getState(void)
 {
@@ -73,11 +73,6 @@ rtems_task Secondary_task(
   if ( arg )
     (void) rtems_semaphore_flush( Semaphore );
 
-  #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
-    status = rtems_task_resume( Main_task );
-    directive_failed( status, "rtems_task_resume" );
-  #endif
-
   status = rtems_semaphore_obtain(
     Semaphore,
     RTEMS_DEFAULT_OPTIONS,
@@ -95,13 +90,6 @@ rtems_task Init(
 
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
 
-#if defined(PRIORITY_NO_TIMEOUT_REVERSE)
-  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
-  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
-  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
-  puts( "WARNING!!! TEST IS NOT COMPLETE!!!" );
-#endif
-
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
   puts( "Init - Variation is: " TEST_STRING );
   status = rtems_semaphore_create(
@@ -117,7 +105,7 @@ rtems_task Init(
 
   status = rtems_task_create(
     rtems_build_name( 'B', 'L', 'C', 'K' ),
-    1,
+    BLOCKER_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_PREEMPT,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -133,17 +121,12 @@ rtems_task Init(
   for (resets=0 ; resets< 2 ;) {
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
-    #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
-      status = rtems_task_suspend( RTEMS_SELF );
-      directive_failed( status, "rtems_task_suspend" );
-    #endif
 
     status = rtems_semaphore_obtain(
       Semaphore,
       RTEMS_DEFAULT_OPTIONS,
       SEMAPHORE_OBTAIN_TIMEOUT
     );
-    fatal_directive_status(status, RTEMS_UNSATISFIED, "rtems_semaphore_obtain");
   }
 
   puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
