@@ -1,5 +1,9 @@
 2009-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psxsignal02/psxsignal02.scn: Fill in screen file.
+
+2009-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new test to exercise algorithm to
 	dispatch process wide signals to individual threads.
 	* psxsignal02/.cvsignore, psxsignal02/Makefile.am, psxsignal02/init.c,

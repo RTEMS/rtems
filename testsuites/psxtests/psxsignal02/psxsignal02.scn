@@ -1,19 +1,36 @@
-*** POSIX TEST SIGNAL ***
-Init's ID is 0x0b020002
-Validate signal with SIG_DFL
-Validate signal with SIG_IGN
-Init: Unblock SIGUSR1 SIGFPE SIGILL SIGSEGV
-Init: signal return value verified
-Init: send SIGUSR1 to process
-Signal: 25 caught by 0xb020002 (1)
-Init: send SIGFPE to process
-Handler_1: Signal: 8 caught by 0xb020002 (2)
-Init: send SIGILL to process
-Handler_1: Signal: 4 caught by 0xb020002 (3)
-Init: send SIGSEGV to process
-Handler_1: Signal: 11 caught by 0xb020002 (4)
-Init: send SIGUSR1 to process from a TSR (interruptible sleep)
-Signal: 25 caught by 0xb020002 (1)
-Init: send SIGUSR1 to process from a TSR (spin)
-Signal: 25 caught by 0xb020002 (1)
-*** Validate unexpected program termination ***
+*** POSIX TEST SIGNAL 02 ***
+Init - Raise my priority
+Init - Create thread 0, priority=8
+Init - sleep - let thread settle - OK
+P8 - Unblock SIGUSR1
+P8 - Suspends self
+Init - Create thread 1, priority=7
+Init - sleep - let thread settle - OK
+P7 - Unblock SIGUSR1
+P7 - Suspends self
+Init - Create thread 2, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Suspends self
+Init - Create thread 3, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Suspends self
+Init - Create thread 4, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Sleeps
+Init - Create thread 5, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Sleeps
+Init - Create thread 6, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Spins
+Init - Create thread 7, priority=12
+Init - sleep - let thread settle - OK
+P12 - Unblock SIGUSR1
+P12 - Spins
+Init - sending SIGUSR1
+*** END OF POSIX TEST SIGNAL 02 ***
