@@ -18,6 +18,6 @@ include ../gcc.am
 
 GDB_VERS = 6.5
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 6
+GDB_RPMREL = 8
 include ../gdb.am
 GDB_OPTS +=
