@@ -18,10 +18,12 @@ extern "C" {
 
 /* ioctls
    0x46 is 'F'                                */
-#define FBIOGET_FSCREENINFO     	0x4602
-#define FBIOGETCMAP               	0x4604
-#define FBIOPUTCMAP		        0x4603
-#define FB_EXEC_FUNCTION	        0x4606
+#define FBIOGET_VSCREENINFO	0x4600
+#define FBIOPUT_VSCREENINFO	0x4601
+#define FBIOGET_FSCREENINFO	0x4602
+#define FBIOGETCMAP		0x4604
+#define FBIOPUTCMAP		0x4605
+#define FB_EXEC_FUNCTION	0x4606
 
 
 #define FB_TYPE_PACKED_PIXELS          0    /* Packed Pixels    */
@@ -41,17 +43,18 @@ extern "C" {
 
 #define FB_ACCEL_NONE                  0    /* no hardware accelerator    */
 
-struct fb_screeninfo {
+struct fb_var_screeninfo {
     uint32_t xres;                  /* visible resolution        */
     uint32_t yres;
     uint32_t bits_per_pixel;        /* guess what            */
-	 uint32_t line_length;          /* number of chars per line */
-    volatile char *smem_start; /* Start of frame buffer mem  */
+};
+struct fb_fix_screeninfo {
+    volatile char *smem_start; 	/* Start of frame buffer mem  */
                                 /* (physical address)         */
-    uint32_t smem_len;             /* Length of frame buffer mem */
-    uint32_t type;                 /* see FB_TYPE_*              */
-    uint32_t visual;               /* see FB_VISUAL_*            */
-
+    uint32_t smem_len;          /* Length of frame buffer mem */
+    uint32_t type;              /* see FB_TYPE_*              */
+    uint32_t visual;            /* see FB_VISUAL_*            */
+    uint32_t line_length;       /* number of chars per line */
 };
 
 struct fb_cmap {
