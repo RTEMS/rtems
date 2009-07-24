@@ -66,6 +66,7 @@ psxrdwrv/Makefile
 psxrwlock01/Makefile
 psxsem01/Makefile
 psxsignal01/Makefile
+psxsignal02/Makefile
 psxspin01/Makefile
 psxspin02/Makefile
 psxstat/Makefile

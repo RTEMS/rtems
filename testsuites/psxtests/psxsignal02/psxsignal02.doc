@@ -1,0 +1,38 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxsignal02
+
+directives:
+
+  sigemptyset
+  sigaddset
+  pthread_sigmask
+  sigaction
+  pthread_attr_init
+  pthread_setschedparam
+  pthread_attr_setinheritsched
+  pthread_attr_setschedpolicy
+  pthread_attr_setschedparam
+  pthread_create
+  kill
+
+concepts:
+
++ Ensure the the algorithm in killinfo.c which decides which
+  thread to deliver a POSIX process signal to is fully exercised.
+
+NOTE:
+
++ The order of thread creation, priority and their action is
+  very carefully chosen to force every path through killinfo.c.
