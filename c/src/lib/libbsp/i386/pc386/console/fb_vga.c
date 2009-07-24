@@ -28,15 +28,19 @@ extern void ega_hwinit( void );
 extern void ega_hwterm( void );
 
 /* screen information for the VGA driver */
-static struct fb_screeninfo fb_info =
+static struct fb_var_screeninfo fb_var =
 {
    640, 480,                     /* screen size x, y  */
-   4,                            /* bits per pixel    */
-   80,                           /* chars per line    */
+   4                             /* bits per pixel    */
+};
+
+static struct fb_fix_screeninfo fb_fix =
+{
    (volatile char *)0xA0000,     /* buffer pointer    */
    0x10000,                      /* buffer size       */
    FB_TYPE_VGA_PLANES,           /* type of dsplay    */
-	FB_VISUAL_PSEUDOCOLOR         /* color scheme used */
+   FB_VISUAL_PSEUDOCOLOR,        /* color scheme used */
+   80                            /* chars per line    */
 };
 
 static uint16_t red16[] = {
@@ -130,9 +134,15 @@ fbvga_write( rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 }
 
-static int get_screen_info( struct fb_screeninfo *info )
+static int get_fix_screen_info( struct fb_fix_screeninfo *info )
 {
-  *info = fb_info;
+  *info = fb_fix;
+  return 0;
+}
+
+static int get_var_screen_info( struct fb_var_screeninfo *info )
+{
+  *info = fb_var;
   return 0;
 }
 
@@ -183,7 +193,13 @@ fbvga_control( rtems_device_major_number major,
    switch( args->command )
    {
       case FBIOGET_FSCREENINFO:
-      args->ioctl_return =  get_screen_info( args->buffer );
+      args->ioctl_return =  get_fix_screen_info( args->buffer );
+      break;
+      case FBIOGET_VSCREENINFO:
+      args->ioctl_return =  get_var_screen_info( args->buffer );
+      break;
+      case FBIOPUT_VSCREENINFO:
+      /* not implemented yet*/
       break;
       case FBIOGETCMAP:
       args->ioctl_return =  get_palette( args->buffer );
