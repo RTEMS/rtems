@@ -1,3 +1,10 @@
+2009-07-24	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise odd case in
+	rtems_iterate_over_all_threads.
+	* sp41/.cvsignore, sp41/Makefile.am, sp41/init.c, sp41/sp41.doc,
+	sp41/sp41.scn: New files.
+
 2009-07-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp36/strict_order_mut.c: Simple binary semaphores cannot have an
