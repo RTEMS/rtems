@@ -21,7 +21,7 @@ SUBDIRS = \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
-    spintrcritical13 spintrcritical14 spintrcritical15
+    spintrcritical13 spintrcritical14
  
 DIST_SUBDIRS = $(SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h
