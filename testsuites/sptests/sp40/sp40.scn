@@ -1,5 +1,7 @@
 *** TEST 40 ***
 Init - rtems_io_register_driver - init == NULL, open != NULL OK
-Init - Major slot returned = 3
+Init - Major slot returned = 2
+Init - rtems_io_register_driver - init == NULL, open != NULL OK
+Init - Major slot returned = 0
 Init - rtems_io_register_driver - used slot
 *** END OF TEST 40 ***

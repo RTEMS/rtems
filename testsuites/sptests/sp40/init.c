@@ -35,6 +35,7 @@ rtems_task Init(
 {
   rtems_status_code         sc;
   rtems_device_major_number registered;
+  rtems_device_major_number registered_not;
 
   puts( "\n\n*** TEST 40 ***" );
 
@@ -47,8 +48,17 @@ rtems_task Init(
   printf( "Init - Major slot returned = %d\n", (int) registered );
   directive_failed( sc, "rtems_io_register_driver" );
 
+  puts( "Init - rtems_io_register_driver - init == NULL, open != NULL OK" );
+  sc = rtems_io_register_driver( 0, &test_driver, &registered_not );
+  printf( "Init - Major slot returned = %d\n", (int) registered_not );
+  fatal_directive_status(
+    sc,
+    RTEMS_TOO_MANY,
+    "rtems_io_register_driver too many"
+  );
+
   puts( "Init - rtems_io_register_driver - used slot" );
-  sc = rtems_io_register_driver( 1, &test_driver, &registered );
+  sc = rtems_io_register_driver( registered, &test_driver, &registered );
   fatal_directive_status(
     sc,
     RTEMS_RESOURCE_IN_USE,
@@ -72,7 +82,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* more one more driver slot than are statically configured */
-#define CONFIGURE_MAXIMUM_DRIVERS 4
+#define CONFIGURE_MAXIMUM_DRIVERS 3
 
 #define CONFIGURE_MAXIMUM_TASKS  1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
