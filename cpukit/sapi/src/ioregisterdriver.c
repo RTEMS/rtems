@@ -1,7 +1,7 @@
 /*
  *  Input/Output Manager - Dynamically Register Device Driver
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,9 +35,9 @@
  */
 
 rtems_status_code rtems_io_register_driver(
-  rtems_device_major_number   major,
+  rtems_device_major_number         major,
   const rtems_driver_address_table *driver_table,
-  rtems_device_major_number  *registered_major
+  rtems_device_major_number        *registered_major
 )
 {
 
