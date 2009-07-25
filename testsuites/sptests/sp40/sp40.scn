@@ -1,3 +1,5 @@
 *** TEST 40 ***
-TBD - Write test case matching this description
+Init - rtems_io_register_driver - init == NULL, open != NULL OK
+Init - Major slot returned = 3
+Init - rtems_io_register_driver - used slot
 *** END OF TEST 40 ***
