@@ -21,6 +21,10 @@ Summary:	Tool for automatically generating GNU style Makefile.in's
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires:  %{requirements} perl
+%if "%{version}" < "1.11"
+# automake >= 1.11 ships man-pages
+BuildRequires:  help2man
+%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
