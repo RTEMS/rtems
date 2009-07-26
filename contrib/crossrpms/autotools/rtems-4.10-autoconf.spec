@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.10-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -56,7 +56,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

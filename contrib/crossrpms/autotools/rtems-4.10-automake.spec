@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.10-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -57,12 +57,16 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 BuildRequires:  %{requirements} perl
+%if "%{version}" < "1.11"
+# automake >= 1.11 ships man-pages
+BuildRequires:  help2man
+%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
