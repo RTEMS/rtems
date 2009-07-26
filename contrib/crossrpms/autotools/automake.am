@@ -4,10 +4,12 @@ AUTOMAKE_SUBPACKAGES += $(top_srcdir)/binutils/rpm-install.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/common/clean.add
 AUTOMAKE_SUBPACKAGES += $(top_srcdir)/autotools/target-automake.add
 
-automake.spec.in: $(AUTOMAKE_SUBPACKAGES) Makefile.in
+automake.spec.in: $(AUTOMAKE_SUBPACKAGES) Makefile.am $(srcdir)/automake-sources.add
 	cat $(AUTOMAKE_SUBPACKAGES) | sed \
-	  -e "s/[@]AUTOMAKE_VERS[@]/$(AUTOMAKE_VERS)/" \
-	  -e "s/[@]AUTOMAKE_RPMREL[@]/$(AUTOMAKE_RPMREL)/" > $@
+	  -e "/[@]SOURCES[@]/r $(srcdir)/automake-sources.add" \
+	  -e "/[@]SOURCES[@]/d" \
+	  -e "s/[@]AUTOMAKE_VERS[@]/$(AUTOMAKE_VERS)/g" \
+	  -e "s/[@]AUTOMAKE_RPMREL[@]/$(AUTOMAKE_RPMREL)%{?dist}/g" > $@
 CLEANFILES += automake.spec.in
 
 
