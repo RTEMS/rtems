@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.9-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -72,7 +72,8 @@ Requires:     	m4 gawk
 Requires(post):		/sbin/install-info
 Requires(preun):	/sbin/install-info
 
-Source0: 	ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.bz2
+Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.bz2
+
 
 %description
 GNU's Autoconf is a tool for configuring source code and Makefiles.
@@ -89,6 +90,7 @@ their use.
 
 %prep
 %setup -q -n autoconf-%{srcvers}
+%{?PATCH0:%patch0 -p1}
 
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov

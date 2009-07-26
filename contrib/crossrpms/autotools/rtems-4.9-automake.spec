@@ -40,7 +40,7 @@
 %endif
 
 %if "%{_build}" != "%{_host}"
-%define _host_rpmprefix rtems-4.9-%{_host}-
+%define _host_rpmprefix %{_host}-
 %else
 %define _host_rpmprefix %{nil}
 %endif
@@ -65,12 +65,17 @@ Provides:	rtems-4.9-automake-rtems = %{version}-%{release}
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
-BuildRequires:  %{requirements} perl help2man
+BuildRequires:  %{requirements} perl
+%if "%{version}" < "1.11"
+# automake >= 1.11 ships man-pages
+BuildRequires:  help2man
+%endif
 Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
@@ -81,6 +86,7 @@ standards.
 
 %prep
 %setup -q -n automake-%{srcvers}
+%{?PATCH0:%patch0 -p1}
 
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov
@@ -113,6 +119,8 @@ make
 rm -rf "$RPM_BUILD_ROOT"
 make DESTDIR=${RPM_BUILD_ROOT} install
 
+%if "%{version}" < "1.11"
+# automake >= 1.11 ships man-pages
 install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
 for i in $RPM_BUILD_ROOT%{_bindir}/aclocal \
   $RPM_BUILD_ROOT%{_bindir}/automake ; 
@@ -121,6 +129,7 @@ do
   help2man $i > `basename $i`.1
   install -m 644 `basename $i`.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 done
+%endif
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/aclocal
 echo "/usr/share/aclocal" > $RPM_BUILD_ROOT%{_datadir}/aclocal/dirlist
