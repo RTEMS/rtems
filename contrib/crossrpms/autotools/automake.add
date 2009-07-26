@@ -1,6 +1,6 @@
 %define rpmvers @AUTOMAKE_VERS@
 %define srcvers	@AUTOMAKE_VERS@
-%define amvers  1.11
+%define amvers  1.10
 
 %if "%{_prefix}" != "/usr"
 %define name			@rpmprefix@automake
