@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define srcvers	2.63
-%define rpmvers %{expand:%(echo "2.63" | tr - _ )}
+%define srcvers	2.64
+%define rpmvers %{expand:%(echo "2.64" | tr - _ )}
 
 %define name			rtems-4.10-autoconf
 
@@ -56,7 +56,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	4%{?dist}
+Release:	1%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

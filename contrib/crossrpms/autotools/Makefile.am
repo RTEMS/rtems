@@ -4,8 +4,8 @@
 
 include $(top_srcdir)/mkspec.am
 
-AUTOCONF_VERS = 2.63
-AUTOCONF_RPMREL = 4
+AUTOCONF_VERS = 2.64
+AUTOCONF_RPMREL = 1
 include ./autoconf.am
 
 AUTOMAKE_VERS = 1.11
