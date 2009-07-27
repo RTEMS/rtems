@@ -1,0 +1,7 @@
+*** TEST INTERRUPT CRITICAL SECTION 15 ***
+Init - Trying to generate timeout of a thread while another is blocking
+Init -   on the same thread queue
+Init - There is no way for the test to know if it hits the case
+Init - rtems_semaphore_create - OK
+Init - rtems_task_create - OK
+*** END OF TEST INTERRUPT CRITICAL SECTION 15 ***
