@@ -22,7 +22,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/context.h include/rtems/score/copyrt.h \
     include/rtems/score/corebarrier.h include/rtems/score/coremsg.h \
     include/rtems/score/coremutex.h include/rtems/score/corerwlock.h \
-    include/rtems/score/coresem.h include/rtems/score/corespinlock.h \
+    include/rtems/score/coresem.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
@@ -35,6 +35,10 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
     include/rtems/score/cpuopts.h
 
+if LIBPOSIX
+include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
+endif
+
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
 include_rtems_score_HEADERS += include/rtems/score/mpci.h \
@@ -46,7 +50,6 @@ endif
 include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/chain.inl inline/rtems/score/corebarrier.inl \
     inline/rtems/score/coremsg.inl inline/rtems/score/corerwlock.inl \
-    inline/rtems/score/corespinlock.inl \
     inline/rtems/score/coremutex.inl inline/rtems/score/coresem.inl \
     inline/rtems/score/heap.inl inline/rtems/score/isr.inl \
     inline/rtems/score/object.inl inline/rtems/score/priority.inl \
@@ -55,6 +58,9 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
     inline/rtems/score/tqdata.inl \
     inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
+if LIBPOSIX
+include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl
+endif
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
@@ -103,8 +109,10 @@ libscore_a_SOURCES += src/coresem.c src/coresemflush.c src/coresemseize.c \
     src/coresemsurrender.c
 
 ## CORE_SPINLOCK_C_FILES
+if LIBPOSIX
 libscore_a_SOURCES += src/corespinlock.c src/corespinlockrelease.c \
     src/corespinlockwait.c
+endif
 
 ## HEAP_C_FILES
 libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
