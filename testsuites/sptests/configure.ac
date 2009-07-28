@@ -115,6 +115,7 @@ spintrcritical12/Makefile
 spintrcritical13/Makefile
 spintrcritical14/Makefile
 spintrcritical15/Makefile
+spintrcritical16/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
 spsize/Makefile

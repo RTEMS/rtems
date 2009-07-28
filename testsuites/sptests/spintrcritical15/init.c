@@ -20,13 +20,6 @@ rtems_id Main_task;
 rtems_id Secondary_task_id;
 rtems_id Semaphore;
 
-rtems_timer_service_routine test_release_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
-{
-}
-
 rtems_task Secondary_task(
   rtems_task_argument ignored
 )
@@ -103,7 +96,6 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS          2
-#define CONFIGURE_MAXIMUM_TIMERS         1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INIT_TASK_PRIORITY  INIT_PRIORITY
 #define CONFIGURE_INIT_TASK_MODE      RTEMS_PREEMPT
