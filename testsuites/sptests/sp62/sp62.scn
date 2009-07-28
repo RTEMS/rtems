@@ -1,0 +1,11 @@
+*** TEST 62 ***
+Init - rtems_task_create Blocker - OK
+Init - rtems_task_start Blocker - OK
+Init - rtems_task_create Region - OK
+Init - rtems_region_get_segment - OK
+Init - sleep 1 second for Blocker - OK
+Blocker - rtems_region_get_segment - OK
+Init - sleep 1 second for Blocker to run again - OK
+Blocker - Got memory after resize
+Init - successfully resized and unblocked a task
+*** END OF TEST 62 ***

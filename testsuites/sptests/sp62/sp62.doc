@@ -1,0 +1,27 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp62
+
+directives:
+
+  rtems_region_create
+  rtems_region_get_segment
+  rtems_region_resize_segment
+
+concepts:
+
++ Ensure that where there is memory freed by the resize effort is
+  sufficient to result in needing to look to see if we can unblock any
+  tasks.
+

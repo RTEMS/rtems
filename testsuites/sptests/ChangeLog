@@ -1,5 +1,13 @@
 2009-07-28	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to handle the case where
+	a region resize frees enough memory to unblock a task.
+	* sp62/.cvsignore, sp62/Makefile.am, sp62/init.c, sp62/sp62.doc,
+	sp62/sp62.scn: New files.
+	* sp61/init.c: Test does not need regions.
+
+2009-07-28	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add test case for processing a timeout
 	on a thread (that is the thread executing) that has also had its
 	request satisfied while it is being enqueued.
