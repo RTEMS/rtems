@@ -278,11 +278,16 @@ void bsp_start( void )
 
   /*
    * Cache SDRAM
+   * Enable buffered writes
+   * As Device Errata SECF124 notes this may cause double writes,
+   * but that's not really a big problem and benchmarking tests have
+   * shown that buffered writes do gain some performance.
    */
   mcf5282_acr0_mode = MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
                       MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
                       MCF5XXX_ACR_EN                         |
-                      MCF5XXX_ACR_SM_IGNORE;
+                      MCF5XXX_ACR_SM_IGNORE                  |
+                      MCF5XXX_ACR_BWE;
   m68k_set_acr0(mcf5282_acr0_mode);
 
   /*
