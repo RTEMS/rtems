@@ -415,6 +415,14 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == ETIMEDOUT );
 
+  puts( "Init: pthread_mutex_timedlock - time out in the past" );
+  calculate_abstimeout( &times, -1, (TOD_NANOSECONDS_PER_SECOND / 2) );
+
+  status = pthread_mutex_timedlock( &Mutex_id, &times );
+  if ( status != EBUSY )
+    printf( "status = %d\n", status );
+  assert( status == EBUSY );
+
      /* switch to idle */
 
   puts( "Init: pthread_mutex_timedlock - EAGAIN (timeout)" );
@@ -577,7 +585,7 @@ void *POSIX_Init(
   priority = sched_get_priority_max( SCHED_FIFO );
   priority = (priority == 254) ? 200 : 13;
   
-  printf( "Init: pthread_mutex_setprioceiling - new ceiling = %d", priority );
+  printf( "Init: pthread_mutex_setprioceiling - new ceiling = %d\n", priority );
   status = pthread_mutex_setprioceiling( &Mutex2_id, priority, &old_ceiling );
   assert( !status );
   printf(

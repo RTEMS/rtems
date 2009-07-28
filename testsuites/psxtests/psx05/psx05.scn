@@ -59,6 +59,7 @@ Init: pthread_mutex_unlock - EPERM (not owner)
 Init: pthread_mutex_timedlock - time out in 1/2 second
 Task: mutex acquired
 Task: sleep for 2 seconds
+Init: pthread_mutex_timedlock - time out in the past
 Init: pthread_mutex_timedlock - EAGAIN (timeout)
 
 Init: pthread_mutex_init - SUCCESSFUL
