@@ -424,26 +424,8 @@ extern "C" {
  */
 
 typedef struct {
-	uint8_t		reg2;
-	uint8_t		reg3;
-	uint8_t		reg4;
-	uint8_t		reg5;
-	uint8_t		reg6;
-	uint8_t		reg7;
-	uint8_t		reg8;
-	uint8_t		reg9;
-	uint8_t		reg10;
-	uint8_t		reg11;
-	uint8_t		reg12;
-	uint8_t		reg13;
-	uint8_t		reg14;
-	uint8_t		reg15;
-	uint8_t		reg16;
-	uint8_t		reg17;
-	uint8_t		reg28;
-	uint8_t		reg29;
-   	uint8_t		status; //SREG 
     	uint16_t 	stack_pointer;
+   	uint8_t		status; //SREG 
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \

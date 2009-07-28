@@ -71,35 +71,52 @@ void _CPU_Context_Initialize(
 {
   uint16_t stack;
   uint16_t start;
-  uint16_t *tmpsp;
+  uint8_t  *tmp_sp;
+  uint8_t   start_low;
+  uint8_t   start_high;
 
   /* calc stack high end */
   stack = (uint16_t) (stack_base) + (uint16_t) (size);
-
   /* calc stack pointer initial value */
-  stack -= 2;
-
-  the_context->stack_pointer = stack;
-  tmpsp = (uint16_t *) stack;
+  the_context->stack_pointer = (stack - 18);
+  /* put the entry point on the stack */
   start = (uint16_t) entry_point;
-  *tmpsp = start;
-#if 0
-  tmpsp[0] = start & 0xff;
-  tmpsp[1] = (start >> 8) & 0xff;
-#endif
+  start_low = start & 0xff;
+  start_high = start >> 8;
+  tmp_sp = (uint8_t *) (stack+1);
+  tmp_sp[0] = start_high;
+  tmp_sp[1] = start_low;
 
-  /* FIXME on level */
-  if (new_level) the_context->status = 0;
-  else           the_context->status = 0;
+  if (new_level) the_context->status = 0x00; //interrupts are enabled
+  else           the_context->status = 0x80; //interrupts are disabled
 
+  /*
+   * JOEL: Why if I comment out these three lines does ticker not run?
+   */
 #if 1
-  printk("");
+  printk( "tmp_sp=0x%04x ", ((uint16_t)tmp_sp) );
   printk("the_context = 0x%x\n", the_context);
   printk("entry = 0x%x\n", entry_point);
+#endif
+#if 0
   printk("sp = 0x%x\n\n",stack);
+
+ { int i; uint8_t *p;
+   p = (uint8_t *)(stack - 18);
+   for( i=0 ; i<=20 ; i+=8 ) {
+     printk( "0x%04x ", ((uint16_t)&p[i]) );
+     printk(
+      "0x%02x 0x%02x 0x%02x 0x%02x   ",
+      p[i + 0], p[i + 1], p[i + 2], p[i + 3]
+     );
+     printk(
+      "0x%02x 0x%02x 0x%02x 0x%02x\n",
+      p[i + 4], p[i + 5], p[i + 6], p[i + 7]
+     );
+   }
+ }
 #endif
 }
-
 
 /*PAGE
  *

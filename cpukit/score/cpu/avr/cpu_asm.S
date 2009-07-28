@@ -208,78 +208,79 @@ SYM(_CPU_Context_restore_fp):
 
 	PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
-	mov	r26, r24
+	mov	r26, r24 	/* r26,r27 is X or current context */
 	mov	r27, r25
-	mov	r24, r22
+	mov	r24, r22        /* r24,r25 is heir context */
  	mov	r25, r23
-	st	X+, r2
-	st	X+, r3
-	st	X+, r4
-	st	X+, r5
-	st	X+, r6
-	st	X+, r7
-	st 	X+, r8
-	st	X+, r9
-	st	X+, r10
-	st	X+, r11
-	st	X+, r12
-	st	X+, r13
-	st	X+, r14
-	st	X+, r15
-	st	X+, r16
-	st	X+, r17
-	st	X+, r28
-	st	X+, r29
-	st	X+, r29
-	lds 	r23,0x5f  /*load sreg*/
-	st 	X+, r23
-	lds	r23,0x5d /*spl*/
-	st	X+, r23
-	lds 	r23,0x5e /*sph*/
-	
+	/*save registers*/
+	push	r2
+	push	r3
+	push	r4
+	push	r5
+	push	r6
+	push	r7
+	push	r8
+	push	r9
+	push	r10
+	push	r11
+	push	r12
+	push	r13
+	push	r14
+	push	r15
+	push	r16
+	push	r17
+	push	r28
+	push	r29
+	/*load sreg*/
+	lds 	r23,0x5F  /*load sreg*/
+	/*disable interrupts*/
+	cli
+	/*load stack pointer*/
+	lds	r22,0x5D /*spl*/
+	lds 	r21,0x5E /*sph*/
+	/*save sp to context struct*/
+	/*save low then high byte --- verify this delete when verified*/
+	st	X+, r22
+	st	X+, r21
+	/*save sreg and sp to context struct*/
+	st 	X, r23
+
+
 	PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_restore):
 	mov	r26,r24         /* R26/27 are X */
 	mov	r27,r25
-	ld	r2, X+
-	ld	r3, X+
-	ld	r4, X+
-	ld	r5, X+
-	ld	r6, X+
-	ld	r7, X+
-	ld	r8, X+
-	ld	r9, X+
-	ld	r10, X+
-	ld	r11, X+
-	ld	r12, X+
-	ld	r13, X+
-	ld	r14, X+
-	ld	r15, X+
-	ld	r16, X+
-	ld	r17, X+
-	ld	r28, X+	
-	ld	r29, X+
+	/*restore stack pointer*/
 	ld	r25, X+
-	sts	0x5f,r25 /*sreg*/
-	ld	r25, X+
-	sts	0x5d,r25  /*spl*/
-	ld	r25, X+
-	sts 	0x5e ,r25 /*sph*/
+	ld	r24, X+	
+	sts	0x5E, r24 /*sph*/
+	sts 	0x5D, r25 /*spl*/
+	/*restore registers from stack*/
+	pop	r29
+	pop	r28
+	pop	r17
+	pop	r16
+	pop	r15
+	pop	r14
+	pop	r13
+	pop	r12
+	pop	r11
+	pop	r10
+	pop	r9
+	pop	r8
+	pop	r7
+	pop	r6
+	pop	r5
+	pop	r4
+	pop	r3
+	pop	r2
+	/*restore status register*/
+	ld	r23, X
+	sts	0x5f,r23 /*sreg*/	
 	ret
 
 
-	PUBLIC(_CPU_Push)
-SYM(_CPU_Push):
-	lds	r20, 0x5d /*spl*/
-	lds	r21, 0x5e /*sph*/
-	sts	0x5d, r24  /*spl*/
-	sts	0x5e, r25  /*sph*/	
-	push	r22
-	push	r23
-	sts	0x5d, r20  /*spl*/
-	sts 	0x5e, r21  /*sph*/
-	ret
 
 /*
  *  _CPU_Context_restore

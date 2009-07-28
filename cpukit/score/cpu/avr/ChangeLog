@@ -1,3 +1,10 @@
+2009-07-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Context switch now works well
+	enough to run ticker to completion with the simulator clock idle
+	task. But if you comment out the printk's in _CPU_Context_Initialize,
+	it hangs. This remains to be investigated.
+
 2009-07-23	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, cpu_asm.S: Unsuccessful attempt to fix.
