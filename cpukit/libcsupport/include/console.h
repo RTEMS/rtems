@@ -24,46 +24,132 @@
 extern "C" {
 #endif
 
+/**
+ *  This macro defines the standard name for the console device
+ *  that is available to applications.
+ */
 #define CONSOLE_DEVICE_NAME "/dev/console"
 
+/**
+ *  This macro defines the standard device driver table entry for
+ *  a console device driver.
+ */
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   { console_initialize, console_open, console_close, \
     console_read, console_write, console_control }
 
+/**
+ *  @brief Console Initialization Entry Point
+ *
+ *  This method initializes the console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device driver is successfully initialized.
+ */
 rtems_device_driver console_initialize(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
-
+ 
+/**
+ *  @brief Console Open Entry Point
+ *
+ *  This method opens a specific device supported by the
+ *  console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device driver is successfully opened.
+ */
 rtems_device_driver console_open(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
 
+/**
+ *  @brief Console Close Entry Point
+ *
+ *  This method closes a specific device supported by the
+ *  console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device is successfully closed.
+ */
 rtems_device_driver console_close(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
 
+/**
+ *  @brief Console Read Entry Point
+ *
+ *  This method reads from a specific device supported by the
+ *  console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device is successfully read from.
+ */
 rtems_device_driver console_read(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
 
+/**
+ *  @brief Console Write Entry Point
+ *
+ *  This method writes to a specific device supported by the
+ *  console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device is successfully written.
+ */
 rtems_device_driver console_write(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
 
+/**
+ *  @brief Console IO Control Entry Point
+ *
+ *  This method performs an IO Control operation on a
+ *  specific device supported by the console device driver.
+ *
+ *  @param[in] major is the device driver major number
+ *  @param[in] minor is the device driver minor number
+ *  @param[in] arg is the parameters to this call
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL when 
+ *          the device driver IO control operation is
+ *          successfully performed.
+ */
 rtems_device_driver console_control(
-  rtems_device_major_number,
-  rtems_device_minor_number,
-  void *
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
 );
 
 #ifdef __cplusplus
