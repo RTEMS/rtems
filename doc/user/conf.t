@@ -462,6 +462,15 @@ By default, this is not defined.
 is defined if the application wishes to include the Watchdog Driver.
 By default, this is not defined.
 
+@findex CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+@item @code{CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER}
+is defined
+if the application wishes to include the BSP's Frame Buffer Device Driver.
+Most BSPs do not provide a Frame Buffer Device Driver.  If this is
+defined and the BSP does not have this device driver, then the user
+will get a link time error for an undefined symbol.
+By default, this is not defined.
+
 @findex CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER}
 is defined if the application wishes to include the Stub Device Driver.

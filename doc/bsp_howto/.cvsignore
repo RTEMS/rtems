@@ -21,6 +21,7 @@ bsp_howto.vr
 clock.texi
 console.texi
 discrete.texi
+framebuffer.texi
 ide-ctrl.texi
 index.html
 init.texi

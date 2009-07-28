@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2007.
+@c  COPYRIGHT (c) 1988-2009.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -74,6 +74,7 @@
 @include nvmem.texi
 @include network.texi
 @include shmsupp.texi
+@include framebuffer.texi
 @include analog.texi
 @include discrete.texi
 
@@ -100,6 +101,7 @@ This is the online version of the RTEMS BSP and Device Driver Development Guide.
 * Networking Driver::
 * Non-Volatile Memory Driver::
 * Shared Memory Support Driver::
+* Frame Buffer Driver::
 * Analog Driver::
 * Discrete Driver::
 * Command and Variable Index::

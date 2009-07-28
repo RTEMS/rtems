@@ -1,3 +1,10 @@
+2009-07-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bsp_howto/.cvsignore, bsp_howto/Makefile.am,
+	bsp_howto/bsp_howto.texi: Add Frame Buffer Device Driver shell.
+	* bsp_howto/framebuffer.t: New file.
+	* user/conf.t: Add CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER.
+
 2009-07-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* user/region.t: Fix typos where semaphore referenced instead of region

@@ -15,7 +15,7 @@ include $(top_srcdir)/main.am
 GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
     support.texi adaintr.texi init.texi console.texi clock.texi timer.texi \
     rtc.texi ata.texi ide-ctrl.texi nvmem.texi network.texi shmsupp.texi \
-    analog.texi discrete.texi
+    framebuffer.texi analog.texi discrete.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -113,6 +113,11 @@ network.texi: ../networking/driver.t
 	    -n "" < $< > $@
 
 shmsupp.texi: shmsupp.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+framebuffer.texi: framebuffer.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
