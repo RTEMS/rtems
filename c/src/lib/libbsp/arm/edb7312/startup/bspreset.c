@@ -9,12 +9,13 @@
  */
 
 #include <bsp.h>
+#include <ep7312.h>
 
 void bsp_reset(void)
 {
-  #if ON_SKYEYE
-    /* TBD use Skyeye reset device */
-  #else
-    asm volatile ("b _start");
-  #endif
+#if ON_SKYEYE == 1
+  SKYEYE_MAGIC_ADDRESS = 0xff;
+#else
+  asm volatile ("b _start");
+#endif
 }

@@ -26,7 +26,7 @@ RTEMS_BSPOPTS_HELP([ON_SKYEYE],
  the wall time required to execute the RTEMS test suites.])
 
 RTEMS_BSP_BOOTCARD_OPTIONS
-RTEMS_BSP_CLEANUP_OPTIONS(1, 1)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
