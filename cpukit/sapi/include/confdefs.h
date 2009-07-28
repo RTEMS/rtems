@@ -594,6 +594,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #include <rtems/watchdogdrv.h>
 #endif
 
+#ifdef CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+  #include <rtems/framebuffer.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   #include <rtems/devnull.h>
 #endif
@@ -641,6 +645,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
       ATA_DRIVER_TABLE_ENTRY,
     #endif
+    #ifdef CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+      FRAME_BUFFER_DRIVER_TABLE_ENTRY,
+    #endif
     #ifdef CONFIGURE_APPLICATION_EXTRA_DRIVERS
       CONFIGURE_APPLICATION_EXTRA_DRIVERS,
     #endif
@@ -652,6 +659,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_EXTRA_DRIVERS)
       NULL_DRIVER_TABLE_ENTRY
     #endif

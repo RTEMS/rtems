@@ -11,8 +11,8 @@ libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/console.h include/clockdrv.h \
-    include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
-    include/timerdrv.h include/vmeintr.h
+    include/rtems/framebuffer.h include/iosupp.h include/ringbuf.h \
+    include/rtc.h include/spurious.h include/timerdrv.h include/vmeintr.h
 
 ## motorola
 

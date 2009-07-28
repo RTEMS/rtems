@@ -40,6 +40,10 @@ $(PROJECT_INCLUDE)/rtems/clockdrv.h: include/clockdrv.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/clockdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/clockdrv.h
 
+$(PROJECT_INCLUDE)/rtems/framebuffer.h: include/rtems/framebuffer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/framebuffer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/framebuffer.h
+
 $(PROJECT_INCLUDE)/rtems/iosupp.h: include/iosupp.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/iosupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/iosupp.h
