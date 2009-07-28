@@ -21,9 +21,9 @@ Init: Unlink and Open without closing SUCCESSFUL
 Task1:mq_setattr - unopened queue (EBADF)
 Task1:mq_setattr - NULL attributes (EINVAL)
 Init: set_attr all queues to blocking
-Init: Init: mq_timedreceive - on queue Qnoblock Init: 1 sec 0 us
-Init: Init: mq_timedreceive - on queue Qblock Init: 1 sec 0 us
-Init: Init: mq_timedreceive - on queue Qdefault Init: 1 sec 0 us
+Init: Init: mq_timedreceive - on queue Qnoblock Init: 1 sec -12131 us
+Init: Init: mq_timedreceive - on queue Qblock Init: 1 sec -11843 us
+Init: Init: mq_timedreceive - on queue Qdefault Init: 0 sec 988133 us
 _______________mq_send errors
 Init: mq_send - Closed message queue (EBADF)
 Init: mq_send - Read only message queue (EBADF)
@@ -37,9 +37,9 @@ _______________mq_getattr errors
 Init: mq_getattr - unopened queue (EBADF)
 Init: mq_getattr - NULL attributes (EINVAL)
 _______________mq_timedsend
-Init: mq_timedsend - on queue Qnoblock Init: 0 sec 0 us
-Init: mq_timedsend - on queue Qblock Init: 1 sec 0 us
-Init: mq_timedsend - on queue Qdefault Init: 0 sec 0 us
+Init: mq_timedsend - on queue Qnoblock Init: 0 sec 77 us
+Init: mq_timedsend - on queue Qblock Init: 0 sec 988482 us
+Init: mq_timedsend - on queue Qdefault Init: 0 sec 101 us
 _______________mq_receive errors
 Init: mq_receive - Unopened message queue (EBADF)
 Init: mq_receive - Write only queue (EBADF)
@@ -48,9 +48,9 @@ Init: Verify Queues are full
 Init: Empty all Queues
 Init: mq_receive - Queue is empty (EAGAIN)
 _______________mq_timedreceive
-Init: Init: mq_timedreceive - on queue Qnoblock Init: 0 sec 0 us
-Init: Init: mq_timedreceive - on queue Qblock Init: 1 sec 0 us
-Init: Init: mq_timedreceive - on queue Qdefault Init: 1 sec 0 us
+Init: Init: mq_timedreceive - on queue Qnoblock Init: 0 sec 83 us
+Init: Init: mq_timedreceive - on queue Qblock Init: 0 sec 986568 us
+Init: Init: mq_timedreceive - on queue Qdefault Init: 1 sec -11823 us
 _______________mq_open functionality
 _______________mq_notify
 Init: mq_notify - Unopened message queue (EBADF)
@@ -70,19 +70,19 @@ Init: Verify No Signal when send
 Init: mq_send -  to Qnoblock msg: 12345678 priority 31
 waiting on any signal for 3 seconds.
 _______________multi-thread Task 1 Test
-Task_1: Fri Jan  1 00:00:20 1988
+Task_1: Fri Jan  1 00:00:17 1988
 Task_1: mq_send -  to Qblock msg: 12345678 priority 31
 Task_1: pthread_exit
-Init: Fri Jan  1 00:00:20 1988
+Init: Fri Jan  1 00:00:17 1988
 _______________multi-thread Task 2 Test
 Init: Verify Queues are empty
 Init: Fill Queues with messages
 Init: Verify Queues are full
 Init: mq_send -  to Qblock msg: Last priority 32
-Task_2: Fri Jan  1 00:00:21 1988
+Task_2: Fri Jan  1 00:00:17 1988
 Task_2: Verify Queues are full
 Task_2: pthread_exit
-Init: Fri Jan  1 00:00:21 1988
+Init: Fri Jan  1 00:00:17 1988
 Init: Verify Queues are full
 Init: Empty all Queues
 _______________multi-thread Task 3 Test
@@ -90,8 +90,14 @@ Init: Verify Queues are empty
 Init: Fill Queues with messages
 Init: Verify Queues are full
 Init: mq_send - Block while thread deletes queue (EBADF)
-Task_3: Fri Jan  1 00:00:21 1988
+Task_3: Fri Jan  1 00:00:18 1988
 _______________Unlink and Close All Files
 Task_3: pthread_exit
+_______________mq_timedout_receive
+Init: Init: verify_timedout_mq_timedreceive - on queue Qnoblock Init: 0 sec 54 us
+_______________verify_timedout_mq_timedsend
+Init: verify_timedout_mq_timedsend - on queue Qnoblock Init: 0 sec 54 us
+Init: verify_timedout_mq_timedsend - on queue Qblock Init: 0 sec 55 us
+Init: verify_timedout_mq_timedsend - on queue Qdefault Init: 0 sec 78 us
 *** END OF POSIX MESSAGE QUEUE TEST ***
 

@@ -1,5 +1,11 @@
 2009-07-28	Santosh G Vattam <vattam.santosh@gmail.com>
 
+	* psxmsgq01/init.c, psxmsgq01/psxmsgq01.scn: Add tests for various
+	mq_timedreceive and mq_timedsend conditions. In particular test
+	timeout in the past.
+
+2009-07-28	Santosh G Vattam <vattam.santosh@gmail.com>
+
 	* psx05/init.c, psx05/psx05.scn: Add test for pthread_mutex_timedlock
 	with timeout in the past.
 
