@@ -11,7 +11,7 @@
  *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
  *         time.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,6 +39,9 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
+#if defined(RTEMS_DEBUG)
+  #include <rtems/bspIo.h>
+#endif
 
 /*PAGE
  *
@@ -50,11 +53,20 @@ void _POSIX_Message_queue_Delete(
 )
 {
   if ( !the_mq->linked && !the_mq->open_count ) {
-      /* the name memory may have been freed by unlink. */
       Objects_Control *the_object = &the_mq->Object;
 
-      if ( the_object->name.name_p )
-        _Workspace_Free( (void *)the_object->name.name_p );
+      #if defined(RTEMS_DEBUG)
+        /*
+         *  the name memory will have been freed by unlink.
+         */
+	if ( the_object->name.name_p ) {
+          printk(
+            "POSIX MQ name (%p) not freed by unlink\n",
+	    (void *)the_object->name.name_p
+          );
+	  _Workspace_Free( (void *)the_object->name.name_p );
+        }
+      #endif
 
       _Objects_Close( &_POSIX_Message_queue_Information, the_object );
 
