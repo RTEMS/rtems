@@ -144,6 +144,11 @@ int killinfo(
     the_thread = (Thread_Control *)the_node;
     api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+    #if defined(DEBUG_SIGNAL_PROCESSING)
+      printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n", 
+        the_thread, the_thread->Wait.option, mask, api->signals_blocked);
+    #endif
+
     /*
      * Is this thread is actually blocked waiting for the signal?
      */
@@ -332,8 +337,10 @@ post_process_signal:
 
     psiginfo = (POSIX_signals_Siginfo_node *)
                _Chain_Get( &_POSIX_signals_Inactive_siginfo );
-    if ( !psiginfo )
+    if ( !psiginfo ) {
+      _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EAGAIN );
+    }
 
     psiginfo->Info = *siginfo;
 
