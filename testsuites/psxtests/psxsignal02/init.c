@@ -126,12 +126,12 @@ void *POSIX_Init(
   pthread_attr_t      attr;
   struct sched_param  param;
   Test_t             *test;
+  struct sigaction    act;
 
   puts( "\n\n*** POSIX TEST SIGNAL 02 ***" );
 
   Signal_occurred = false;
 
-  struct sigaction  act;
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
   sigaction( SIGUSR1, &act, NULL );
