@@ -65,7 +65,7 @@ libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c \
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = console/keyboard.h console/kd.h \
-    console/serial_mouse.h console/ps2_drv.h console/fb_vga.h
+    console/serial_mouse.h console/ps2_drv.h
 
 include_HEADERS += ../../i386/shared/comm/i386_io.h
 # console

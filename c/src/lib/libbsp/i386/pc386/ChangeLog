@@ -1,3 +1,10 @@
+2009-07-29	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* Makefile.am, preinstall.am, console/fb_vga.c: Switch to using
+	frame_buffer_ naming. Joel cleaned up formatting and removed tabs
+	that were there long before Roxana touched this file.
+	* console/fb_vga.h: Removed.
+
 2009-07-24	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* console/fb_vga.c: divided fb_screeninfo structure into
