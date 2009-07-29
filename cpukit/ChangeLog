@@ -1,3 +1,7 @@
+2009-07-29	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* libmisc/mw-fb/mw_fb.h: Cleaned code and added some more structures.
+
 2009-07-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/Makefile.am, libcsupport/preinstall.am,

@@ -43,11 +43,23 @@ extern "C" {
 
 #define FB_ACCEL_NONE                  0    /* no hardware accelerator    */
 
+struct fb_bitfield {
+	uint32_t offset;		/* beginning of bitfield	*/
+	uint32_t length;		/* length of bitfield		*/
+	uint32_t msb_right;		/* != 0 : Most significant bit is */ 
+					/* right */ 
+};
+
 struct fb_var_screeninfo {
     uint32_t xres;                  /* visible resolution        */
     uint32_t yres;
     uint32_t bits_per_pixel;        /* guess what            */
+    struct fb_bitfield red;	    /* bitfield in fb mem if true color, */
+    struct fb_bitfield green;	    /* else only length is significant */
+    struct fb_bitfield blue;
+    struct fb_bitfield transp;	    /* transparency			*/
 };
+
 struct fb_fix_screeninfo {
     volatile char *smem_start; 	/* Start of frame buffer mem  */
                                 /* (physical address)         */
@@ -66,37 +78,7 @@ struct fb_cmap {
     uint16_t *transp;              /* transparency, can be NULL */
 };
 
-/* type of function to be executed at the driver level */
-#define FB_FUNC_ENTER_GRAPHICS   0
-#define FB_FUNC_EXIT_GRAPHICS    1
-#define FB_FUNC_IS_DIRTY         2
-#define FB_FUNC_GET_MODE         3
 
-struct fb_exec_function
-{
-    int    func_no;
-    void  *param;
-};
-
-
-/* Micro Framebuffer API Wrapper */
-
-/*
- * Returns the mode of the graphics subsystem
- */
-extern int ufb_get_mode( int fd, int *mode );
-
-/*
- * Tell the driver that the "virtual buffer" is dirty, and an update
- * of it to the real device, maybe a serial/parallel LCD or whatever
- * is required
- */
-extern int ufb_buffer_is_dirty( int fd );
-
-/*
- * This function unmaps memory of the FB from the user's space
- */
- int ufb_unmmap_from_user_space( int fd, void *addr );
 
 #ifdef	__cplusplus
 }
