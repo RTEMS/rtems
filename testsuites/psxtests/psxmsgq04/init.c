@@ -39,6 +39,12 @@ void *POSIX_Init(
     perror( "mq_open failed" );
   assert( Queue != (-1) );
 
+  puts( "Init - Unlink message queue" );
+  sc = mq_unlink( "Queue" );
+  if ( sc != 0 )
+    perror( "mq_unlink failed" );
+  assert( sc == 0 );
+
   puts( "Init - Close message queue" );
   sc = mq_close( Queue );
   if ( sc != 0 )

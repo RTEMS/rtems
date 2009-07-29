@@ -1,5 +1,9 @@
 2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxmsgq04/init.c: Add call to mq_unlink.
+
+2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add shell of new test.
 	* psxmsgq04/.cvsignore, psxmsgq04/Makefile.am, psxmsgq04/init.c,
 	psxmsgq04/psxmsgq04.doc, psxmsgq04/psxmsgq04.scn: New files.
