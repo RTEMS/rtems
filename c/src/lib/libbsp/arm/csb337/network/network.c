@@ -5,6 +5,10 @@
  *  Written by Mike Kelly <mike@cogcomp.com>
  *         and Jay Monkman <jtm@lopingdog.com>
  *
+ *
+ *  July 2009: Joel Sherrill merged csb637 PHY differences from
+ *             MicroMonitor 1.17.
+ *
  *  $Id$
  */
 
@@ -33,6 +37,12 @@
 
 #include <irq.h>
 #include <bspopts.h>
+
+/* enable debugging of the PHY code */
+#define PHY_DBG
+
+/* enable debugging of the EMAC code */
+/* #define EMAC_DBG */
 
 #if csb637
   /* Bit defines for the PHY Status Register #1 (phy address 0x01) */
@@ -216,7 +226,7 @@ uint32_t phyread(uint8_t reg)
   /* wait for phy read to complete (was udelay(5000)) */
   rtems_task_wake_after(1);
 
-  #if EMAC_DBG
+  #if defined(EMAC_DBG)
     printk(
       "EMAC: Phy 0, Reg %d, Read 0x%04lx.\n",
        reg,
@@ -238,8 +248,8 @@ void phywrite(uint8_t reg, uint16_t data)
              | reg << 18           /* Phy Register */
              | 0x02 << 16          /* must be 0x02 for turn around field */
              | data);
-  #if EMAC_DBG
-    printf("EMAC: Phy 0, Reg %d, Write 0x%04x.\n", reg, data);
+  #if defined(EMAC_DBG)
+    printk("EMAC: Phy 0, Reg %d, Write 0x%04x.\n", reg, data);
   #endif
 
   /* wait for phy write to complete (was udelay(5000)) */
@@ -277,12 +287,12 @@ int rtems_at91rm9200_emac_attach (
      * Is driver free?
      */
     if (unitnumber != 0) {
-        printf ("Bad AT91RM9200 EMAC unit number.\n");
+        printk ("Bad AT91RM9200 EMAC unit number.\n");
         return 0;
     }
     ifp = &softc.arpcom.ac_if;
     if (ifp->if_softc != NULL) {
-        printf ("Driver already in use.\n");
+        printk ("Driver already in use.\n");
         return 0;
     }
 
@@ -378,7 +388,7 @@ void at91rm9200_emac_init(void *arg)
 
     /* EMAC doesn't support promiscuous, so ignore requests */
     if (ifp->if_flags & IFF_PROMISC) {
-        printf ("Warning - AT91RM9200 Ethernet driver"
+        printk ("Warning - AT91RM9200 Ethernet driver"
                 " doesn't support Promiscuous Mode!\n");
     }
 
@@ -458,14 +468,83 @@ void  at91rm9200_emac_init_hw(at91rm9200_emac_softc_t *sc)
     /* enable the MII interface */
     EMAC_REG(EMAC_CTL) = EMAC_CTL_MPE;
 
-    /* Set PHY LED2 to combined Link/Activity and enable pulse stretching */
     #if csb637
-     /* Set PHY LED modes.  Traffic Meter Mode for ACTLED
-      * Set Bit 6 - Traffic Mode on
-      */
-     phywrite(0x1b, PHY_AUX_MODE2_TRAFFIC_LED);
+    {
+      int      timeout;
+      uint32_t emac_link_status;
+
+      #if defined(PHY_DBG)
+        printk("EMAC: Getting Link Status.\n");
+      #endif
+      /* read the PHY ID registers */
+      emac_link_status = phyread(0x02);
+      emac_link_status = phyread(0x03);
+
+      /* Get the link status - wait for done with a timeout */
+      for (timeout = 10000 ; timeout ; ) {
+	for (i = 0; i < 100; i++)
+          ;
+        emac_link_status = phyread(0x01);
+        if (!(emac_link_status & PHY_STAT_AUTO_NEG_ABLE)) {
+	  #if defined(PHY_DBG)
+            printk("EMAC: PHY is unable to Auto-Negotatiate!\n");
+          #endif
+          timeout = 0;
+          break;
+        }
+        if (emac_link_status & PHY_STAT_AUTO_NEG_DONE) {
+	  #if defined(PHY_DBG)
+	    printk("EMAC: Auto-Negotiate Complete, Link = ");
+          #endif
+          break;
+        }
+        timeout-- ;
+      }
+      if (!timeout) {
+	#if defined(PHY_DBG)
+	  printk(
+           "EMAC: Auto-Negotatiate Failed, Status = 0x%04lx!\n"
+	   "EMAC: Initialization Halted.\n",
+           emac_link_status
+          );
+        #endif
+        /* if autonegotiation fails, just force to 10HD... */
+        emac_link_status = PHY_STAT_10BASE_HDX;
+      }
+
+      /* Set SPD and FD based on the return link status */
+      if (emac_link_status & (PHY_STAT_100BASE_X_FDX | PHY_STAT_100BASE_X_HDX)){
+        EMAC_REG(EMAC_CFG) |= EMAC_CFG_SPD;
+	#if defined(PHY_DBG)
+          printk("100MBIT, ");
+        #endif
+      } else {
+        EMAC_REG(EMAC_CFG) &= ~EMAC_CFG_SPD;
+	#if defined(PHY_DBG)
+          printk("10MBIT, ");
+        #endif
+      }                
+                        
+      if (emac_link_status & (PHY_STAT_100BASE_X_FDX | PHY_STAT_10BASE_FDX)) {
+        EMAC_REG(EMAC_CFG) |= EMAC_CFG_FD;
+	#if defined(PHY_DBG)
+          printk("Full Duplex.\n");
+        #endif
+      } else {
+        EMAC_REG(EMAC_CFG) &= ~EMAC_CFG_FD;
+	#if defined(PHY_DBG)
+          printk("Half Duplex.\n");
+        #endif
+      }                
+
+      /* Set PHY LED modes.  Traffic Meter Mode for ACTLED
+       * Set Bit 6 - Traffic Mode on
+       */
+      phywrite(0x1b, PHY_AUX_MODE2_TRAFFIC_LED);
+    }
     #else
       /* must be csb337 */
+      /* Set PHY LED2 to combined Link/Activity and enable pulse stretching */
       phywrite( 18, 0x0d0a );
     #endif
 
@@ -540,7 +619,7 @@ void at91rm9200_emac_sendpacket (struct ifnet *ifp, struct mbuf *m)
     struct mbuf *l = NULL;
     unsigned int pkt_offset = 0;
     delay_cnt = 0;
-    /* printf("at91rm9200_emac_sendpacket %p\n", m); */
+    /* printk("at91rm9200_emac_sendpacket %p\n", m); */
 
     /* Wait for EMAC Transmit Queue to become available. */
     while (((EMAC_REG(EMAC_TSR) & EMAC_TSR_COMP) == 0) &&
@@ -600,11 +679,11 @@ void at91rm9200_emac_rxDaemon(void *arg)
             &events);
 
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_BNA) {
-            printf("1: EMAC_BNA\n");
+            printk("1: EMAC_BNA\n");
         }
 
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_OVR) {
-            printf("1: EMAC_OVR\n");
+            printk("1: EMAC_OVR\n");
         }
 
         /* clear the receive status as we do not use it anyway */
@@ -654,10 +733,10 @@ void at91rm9200_emac_rxDaemon(void *arg)
         } /* while ADD_OWNED = 0 */
 
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_BNA) {
-            printf("2:EMAC_BNA\n");
+            printk("2:EMAC_BNA\n");
         }
         if (EMAC_REG(EMAC_RSR) & EMAC_RSR_OVR) {
-            printf("2:EMAC_OVR\n");
+            printk("2:EMAC_OVR\n");
         }
 
 
