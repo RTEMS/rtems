@@ -1,0 +1,38 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp42
+
+directives:
+
+  rtems_semaphore_create
+  rtems_semaphore_obtain
+  rtems_semaphore_release
+  rtems_semaphore_delete
+  rtems_task_create
+  rtems_task_delete
+  rtems_task_start
+  really exercising various Thread Queue capabilities:
+    _Thread_queue_Enqueue_FIFO
+    _Thread_queue_Enqueue_priority
+    _Thread_queue_Dequeue_FIFO
+    _Thread_queue_Dequeue_priority
+
+concepts:
+
++ This test is very carefully constructed to exercise the data structure
+  used to implement the priority blocking chains in the Thread Queue. The
+  task priorities used force forward and reverse searches and use of the
+  2-n chains
++ This test also ensures that the dequeues are performed in the correct
+  order.

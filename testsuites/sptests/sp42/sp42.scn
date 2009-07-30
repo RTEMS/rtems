@@ -1,0 +1,47 @@
+*** START OF TEST 42 ***
+Exercising blocking discipline w/extract in FIFO order 
+Exercising blocking discipline w/unblock in FIFO order
+TA00 - unblocked - OK
+TA01 - unblocked - OK
+TA02 - unblocked - OK
+TA03 - unblocked - OK
+TA04 - unblocked - OK
+TA05 - unblocked - OK
+TA06 - unblocked - OK
+TA07 - unblocked - OK
+TA08 - unblocked - OK
+TA09 - unblocked - OK
+TA10 - unblocked - OK
+TA11 - unblocked - OK
+TA12 - unblocked - OK
+TA13 - unblocked - OK
+TA14 - unblocked - OK
+TA15 - unblocked - OK
+TA16 - unblocked - OK
+TA17 - unblocked - OK
+TA18 - unblocked - OK
+TA19 - unblocked - OK
+<pause - screen 2>
+Exercising blocking discipline w/extract in priority order 
+Exercising blocking discipline w/unblock in priority order
+TA04 - unblocked - OK
+TA05 - unblocked - OK
+TA06 - unblocked - OK
+TA07 - unblocked - OK
+TA09 - unblocked - OK
+TA10 - unblocked - OK
+TA11 - unblocked - OK
+TA12 - unblocked - OK
+TA13 - unblocked - OK
+TA08 - unblocked - OK
+TA16 - unblocked - OK
+TA17 - unblocked - OK
+TA18 - unblocked - OK
+TA19 - unblocked - OK
+TA00 - unblocked - OK
+TA01 - unblocked - OK
+TA02 - unblocked - OK
+TA03 - unblocked - OK
+TA15 - unblocked - OK
+TA14 - unblocked - OK
+*** END OF TEST 42 ***

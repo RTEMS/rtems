@@ -32,8 +32,7 @@ void do_test(
  * Somewhat randomly sorted to ensure than if discipline is FIFO, run-time
  * behavior won't be the same when released.
  */
-#if (RTEMS_MAXIMUM_PRIORITY >= 64)
-rtems_task_priority Priorities[MAX_TASKS] = {
+rtems_task_priority Priorities_High[MAX_TASKS] = {
   37, 37, 37, 37,       /* backward - more 2-n */
   2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
   4, 3,                 /* forward - search forward arbitrary */
@@ -41,8 +40,8 @@ rtems_task_priority Priorities[MAX_TASKS] = {
   38, 37,               /* backward - search backward arbitrary */
   34, 34, 34, 34,       /* backward - multple on 2-n chain */
 };
-#else
-rtems_task_priority Priorities[MAX_TASKS] = {
+
+rtems_task_priority Priorities_Low[MAX_TASKS] = {
   13, 13, 13, 13,       /* backward - more 2-n */
   2, 2, 2, 2,           /* forward - multiple are on 2-n chain */
   4, 3,                 /* forward - search forward arbitrary */
@@ -50,8 +49,8 @@ rtems_task_priority Priorities[MAX_TASKS] = {
   14, 13,               /* backward - search backward arbitrary */
   12, 12, 12, 12,       /* backward - multple on 2-n chain */
 };
-#endif
 
+rtems_task_priority *Priorities;
 
 rtems_id   Semaphore;
 rtems_id   Task_id[ MAX_TASKS ];
@@ -149,11 +148,25 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** START OF TEST 40 ***" );
+  puts( "\n\n*** START OF TEST 42 ***" );
 
-  if ( sizeof( Priorities ) / sizeof( rtems_task_priority ) != MAX_TASKS ) {
-    puts( "Priorities table does not have right number of entries" );
-    exit( 0 );
+  if (RTEMS_MAXIMUM_PRIORITY == 255)
+    Priorities = Priorities_High;
+  else if (RTEMS_MAXIMUM_PRIORITY == 15)
+    Priorities = Priorities_Low;
+  else {
+    puts( "Test only supports 256 or 16 configured priority levels" );
+    rtems_test_exit( 0 );
+  }
+
+  if ( sizeof(Priorities_Low) / sizeof(rtems_task_priority) != MAX_TASKS ) {
+    puts( "Priorities_Low table does not have right number of entries" );
+    rtems_test_exit( 0 );
+  }
+
+  if ( sizeof(Priorities_High) / sizeof(rtems_task_priority) != MAX_TASKS ) {
+    puts( "Priorities_High table does not have right number of entries" );
+    rtems_test_exit( 0 );
   }
 
   puts( "Exercising blocking discipline w/extract in FIFO order " );
@@ -171,7 +184,7 @@ rtems_task Init(
   do_test( RTEMS_PRIORITY, FALSE );
 
   puts( "*** END OF TEST 42 ***" );
-  exit(0);
+  rtems_test_exit(0);
 }
 
 /**************** START OF CONFIGURATION INFORMATION ****************/
