@@ -43,6 +43,7 @@ sp14/Makefile
 sp15/Makefile
 sp16/Makefile
 sp17/Makefile
+sp18/Makefile
 sp19/Makefile
 sp20/Makefile
 sp21/Makefile

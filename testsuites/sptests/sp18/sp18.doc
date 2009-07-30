@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp18
+
+directives:
+
+  rtems_task_create
+  really allocation failures in _Thread_Initialize
+
+concepts:
+
++ Ensure that all memory is freed when some part of the task allocation
+  fails.  We start with a stack size that consumes all memory and work
+  down a bit at a time until the task create is successful.  This is designed
+  to hit all cases.
