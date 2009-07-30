@@ -1,5 +1,14 @@
 2009-07-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* Makefile.am, configure.ac: Add new test to account for properly
+	handling keys when a thread has non-NULL key value and key has NULL
+	destructor and when a thread has NULL key value and key has
+	destructor.
+	* psxkey03/.cvsignore, psxkey03/Makefile.am, psxkey03/init.c,
+	psxkey03/psxkey03.doc, psxkey03/psxkey03.scn: New files.
+
+2009-07-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* Makefile.am, configure.ac: Add new test for exercising running out of
 	memory while allocating the key pointers.
 	* psxkey02/.cvsignore, psxkey02/Makefile.am, psxkey02/init.c,

@@ -1,0 +1,28 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxkey03
+
+directives:
+
+  pthread_key_create
+  pthread_setspecific
+  pthread_key_delete
+
+concepts:
+
++ Ensure that keys with NULL destructors are properly processed when
+  a thread exits.
+
++ Ensure that keys with destructors but threads with NULL key values are
+  properly processed when the thread exits.
