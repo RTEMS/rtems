@@ -1,7 +1,7 @@
 /*
  *  Workspace Handler
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,11 @@
 #include <rtems/config.h>
 
 #include <string.h>  /* for memset */
+
+/* #define DEBUG_WORKSPACE */
+#if defined(DEBUG_WORKSPACE)
+  #include <rtems/bspIo.h>
+#endif
 
 /*
  *  _Workspace_Handler_initialization
@@ -67,7 +72,19 @@ void *_Workspace_Allocate(
   size_t   size
 )
 {
-   return _Heap_Allocate( &_Workspace_Area, size );
+  void *p;
+
+  p = _Heap_Allocate( &_Workspace_Area, size );
+  #if defined(DEBUG_WORKSPACE)
+    printk(
+      "Workspace_Allocate(%d) from %p/%p -> %p\n",
+      size,
+      __builtin_return_address( 0 ),
+      __builtin_return_address( 1 ),
+      p
+    );
+  #endif
+  return p;
 }
 
 /*
@@ -77,6 +94,14 @@ bool _Workspace_Free(
   void *block
 )
 {
+  #if defined(DEBUG_WORKSPACE)
+    printk(
+      "Workspace_Free(%p) from %p/%p\n",
+      block,
+      __builtin_return_address( 0 ),
+      __builtin_return_address( 1 )
+    );
+  #endif
    return _Heap_Free( &_Workspace_Area, block );
 }
 

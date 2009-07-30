@@ -1,5 +1,9 @@
 2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/wkspace.c: Add debug printks.
+
+2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* posix/src/mqueuedeletesupp.c: Mark unreachable section as
 	RTEMS_DEBUG.
 
