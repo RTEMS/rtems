@@ -1,3 +1,8 @@
+2009-07-30	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* spintrcritical16/init.c: Tinker with test to make it hit the case
+	more reliably.
+
 2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add new test to exercise as many cases as

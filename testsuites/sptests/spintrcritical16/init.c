@@ -44,8 +44,8 @@ rtems_timer_service_routine test_release_from_isr(
   if ( getState() == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
     case_hit = true;
     (void) rtems_semaphore_release( Semaphore );
-    _Thread_queue_Process_timeout( Main_TCB );
   }
+  _Thread_queue_Process_timeout( Main_TCB );
 }
 
 rtems_task Init(
