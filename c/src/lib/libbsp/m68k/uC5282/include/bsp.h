@@ -31,7 +31,7 @@ extern "C" {
  * Uncomment to use instruction/data cache
  * Leave commented to use instruction-only cache
  */
-/* #define RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE */
+#define RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
 
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
