@@ -55,6 +55,7 @@ psxhdrs/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile
 psxkey01/Makefile
+psxkey02/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
