@@ -112,7 +112,7 @@ void _CPU_cache_enable_instruction(void)
 
     rtems_interrupt_disable(level);
     mcf5282_cacr_mode &= ~MCF5XXX_CACR_DIDI;
-    m68k_set_cacr(mcf5282_cacr_mode);
+    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVI);
     rtems_interrupt_enable(level);
 }
 
@@ -146,8 +146,8 @@ void _CPU_cache_enable_data(void)
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
-    mcf5282_cacr_mode &= ~MCF5XXX_CACR_CENB;
-    m68k_set_cacr(mcf5282_cacr_mode);
+    mcf5282_cacr_mode &= ~MCF5XXX_CACR_DISD;
+    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVD);
     rtems_interrupt_enable(level);
 #endif
 }
@@ -158,8 +158,7 @@ void _CPU_cache_disable_data(void)
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
-    rtems_interrupt_disable(level);
-    mcf5282_cacr_mode |= MCF5XXX_CACR_CENB;
+    mcf5282_cacr_mode |= MCF5XXX_CACR_DISD;
     m68k_set_cacr(mcf5282_cacr_mode);
     rtems_interrupt_enable(level);
 #endif
