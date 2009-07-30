@@ -20,9 +20,7 @@ directives:
 
 concepts:
 
-+ Ensure that a thread timing out on a thread queue while ANOTHER thread is
-  in the process of blocking on the same thread queue is processed correctly.
-+ Ensuire that is processing a timeout on a thread (that is the thread
++ Ensure that is processing a timeout on a thread (that is the thread
   executing) that has also had its request satisfied while it is being
   enqueued is probably left as a satisfied case.
 
