@@ -1,5 +1,12 @@
 2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/src/threadinitialize.c: Rework so there is only one error exit
+	path. This required setting every variable that contains memory
+	allocated from the workspace to NULL early and using that assumption
+	in the one failed exit path.
+
+2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/src/wkspace.c: Add debug printks.
 
 2009-07-29	Joel Sherrill <joel.sherrill@oarcorp.com>
