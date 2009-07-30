@@ -1,15 +1,15 @@
 2009-07-30  Eric Norum <norume@aps.anl.gov>
 
 	* include/bsp.h, network/network.c, startup/bspstart.c:  Try enabling
-    the data cache.
+	the data cache.
 
 2009-07-28  Eric Norum <norume@aps.anl.gov>
 
 	PR 1420/bsps
 	* startup/bspstart.c: Turn on buffered writes to DRAM. As Device Errata
-      SECF124 notes this may cause double writes, but that's not really a big
-      problem and benchmarking tests have shown that buffered writes do gain
-      some performance.
+	SECF124 notes this may cause double writes, but that's not really a big
+	problem and benchmarking tests have shown that buffered writes do gain
+	some performance.
 
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
@@ -163,7 +163,7 @@
 
 2008-04-24	Eric Norum <norume@aps.anl.gov>
 
-    * startup/bspstart.c: More clean up of FPGA interrupts.
+	* startup/bspstart.c: More clean up of FPGA interrupts.
 
 2008-04-23	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -172,11 +172,11 @@
 
 2008-04-07	Eric Norum <norume@aps.anl.gov>
 
-    * startup/bspstart.c: Clean up non-FPGA use of EPORT interrupts.
+	* startup/bspstart.c: Clean up non-FPGA use of EPORT interrupts.
 
 2008-04-07	Eric Norum <norume@aps.anl.gov>
 
-    * network/network.c: Track half/fullduplex changes from 4.7 branch.
+	* network/network.c: Track half/fullduplex changes from 4.7 branch.
 
 2008-03-03	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -293,7 +293,7 @@
 2006-05-15  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Add checks for FPGA interrupt request overflow.
-                          Allow single spurious FPGA interrupt.
+	Allow single spurious FPGA interrupt.
 
 2006-04-11  Eric Norum <norume@aps.anl.gov>
 
@@ -309,7 +309,7 @@
 
 2006-02-06  Eric Norum <norume@aps.anl.gov>
 
-    * clock/clock.c: Avoid division by zero.
+	* clock/clock.c: Avoid division by zero.
 
 2006-01-29  Eric Norum <norume@aps.anl.gov>
 
@@ -322,8 +322,8 @@
 
 2005-12-19  Eric Norum <norume@aps.anl.gov>
 
-    * startup/bspstart.c: Add another 'extended BSP' routine which return
-                          reboot status register information.
+	* startup/bspstart.c: Add another 'extended BSP' routine which return
+	reboot status register information.
 
 2005-11-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
@@ -331,15 +331,15 @@
 
 2005-11-11  Eric Norum <norume@aps.anl.gov>
 
-    * console/console.c: Clean up UART2 pin setup.  Protect pin setup code.
+	* console/console.c: Clean up UART2 pin setup.  Protect pin setup code.
 
 2005-11-08  Eric Norum <norume@aps.anl.gov>
 
-    * console/console.c: Add code to set up pin assignments
+	* console/console.c: Add code to set up pin assignments
 
 2005-11-07  Eric Norum <norume@aps.anl.gov>
 
-    * Almost everything: Assign copyright to OAR.
+	* Almost everything: Assign copyright to OAR.
 
 2005-10-26  Eric Norum <norume@aps.anl.gov>
 
@@ -383,7 +383,7 @@
 2005-05-10  Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Poke RDAR/TDAR every time.
-                         Add more diagnostic printout.
+	Add more diagnostic printout.
 
 2005-05-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -402,13 +402,13 @@
 2005-04-19  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Expose read/write copy of cache control registers
-                          in case some application diagnostic code wants to
-                          display the values.
+	in case some application diagnostic code wants to
+	display the values.
 
 2005-04-13  Eric Norum <norume@aps.anl.gov>
 
 	* network/network.c: Add some more diagnostics.
-                         Poke TDAR/RDAR only when necessary.
+	Poke TDAR/RDAR only when necessary.
 
 2005-04-10  Eric Norum <norume@aps.anl.gov>
 
