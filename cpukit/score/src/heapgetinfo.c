@@ -1,7 +1,7 @@
 /*
  *  Heap Handler
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,8 +19,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
 
-/*PAGE
- *
+/*
  *  _Heap_Get_information
  *
  *  This kernel routine walks the heap and tots up the free and allocated
@@ -34,7 +33,6 @@
  *    *the_info  - contains information about heap
  *    return 0=success, otherwise heap is corrupt.
  */
-
 Heap_Get_information_status _Heap_Get_information(
   Heap_Control            *the_heap,
   Heap_Information_block  *the_info
@@ -54,29 +52,28 @@ Heap_Get_information_status _Heap_Get_information(
   the_info->Used.largest = 0;
 
   while ( the_block != end ) {
-    uint32_t const the_size = _Heap_Block_size(the_block);
-    Heap_Block *const next_block = _Heap_Block_at(the_block, the_size);
+    uint32_t const     the_size = _Heap_Block_size(the_block);
+    Heap_Block *const  next_block = _Heap_Block_at(the_block, the_size);
+    Heap_Information  *info;
 
-    if ( _Heap_Is_prev_used(next_block) ) {
-      the_info->Used.number++;
-      the_info->Used.total += the_size;
-      if ( the_info->Used.largest < the_size )
-        the_info->Used.largest = the_size;
-    } else {
-      the_info->Free.number++;
-      the_info->Free.total += the_size;
-      if ( the_info->Free.largest < the_size )
-        the_info->Free.largest = the_size;
-      if ( the_size != next_block->prev_size )
-        return HEAP_GET_INFORMATION_BLOCK_ERROR;
-    }
+    if ( _Heap_Is_prev_used(next_block) )
+      info = &the_info->Used;
+    else
+      info = &the_info->Free;
+
+    info->number++;
+    info->total += the_size;
+    if ( info->largest < the_size )
+      info->largest = the_size;
 
     the_block = next_block;
   }
 
-  /* Handle the last dummy block. Don't consider this block to be
-     "used" as client never allocated it. Make 'Used.total' contain this
-     blocks' overhead though. */
+  /*
+   *  Handle the last dummy block. Don't consider this block to be
+   *  "used" as client never allocated it. Make 'Used.total' contain this
+   *  blocks' overhead though.
+   */
   the_info->Used.total += HEAP_OVERHEAD;
 
   return HEAP_GET_INFORMATION_SUCCESSFUL;
