@@ -48,7 +48,7 @@ void test_case_two(void)
   printf( "Init - Heap size=%d\n", heap_size );
 
   puts( "Init - _Heap_Allocate_aligned - OK");
-  ptr1 = _Heap_Allocate_aligned( &Heap, 64, 32 );
+  ptr1 = _Heap_Allocate_aligned( &Heap, 64, 4 );
   assert( ptr1 );
 
   puts( "Init - _Heap_Resize_block - OK");

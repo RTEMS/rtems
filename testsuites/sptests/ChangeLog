@@ -1,5 +1,9 @@
 2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* sp63/init.c: Correct test case two.
+
+2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sp63/init.c, sp63/sp63.scn: Move into subroutines and add a second
 	test case to exercise another odd branch not taken.
 
