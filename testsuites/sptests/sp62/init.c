@@ -36,12 +36,10 @@ rtems_task Blocker(
   );
   directive_failed( sc, "rtems_region_get_segment" );
 
-
   puts( "Blocker - Got memory after resize" );
   case_hit = true;
   
   (void) rtems_task_delete( RTEMS_SELF );
-
 }
 
 rtems_task Init(
@@ -69,7 +67,6 @@ rtems_task Init(
   puts( "Init - rtems_task_start Blocker - OK" );
   sc = rtems_task_start( task_id, Blocker, 0 );
   directive_failed( sc, "rtems_task_start of Blocker" );
-
 
   puts( "Init - rtems_task_create Region - OK" );
   sc = rtems_region_create(

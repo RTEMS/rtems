@@ -1,3 +1,10 @@
+2009-07-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, sp62/init.c: Add new test to ensure a
+	particular path is taken through the _Heap_Resize_block code.
+	* sp63/.cvsignore, sp63/Makefile.am, sp63/init.c, sp63/sp63.doc,
+	sp63/sp63.scn: New files.
+
 2009-07-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp42/Makefile.am, sp42/init.c, sp42/sp42.scn: Test was testing the

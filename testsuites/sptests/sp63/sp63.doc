@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp63
+
+directives:
+
+  _Heap_Initialize
+  _Heap_Allocate_aligned
+  _Heap_Resize_block
+
+concepts:
+
++ Exercise the case where we shrink a block that creates a block that
+  is less than the minimum.  This is mainly to ensure that a branch is taken.
+

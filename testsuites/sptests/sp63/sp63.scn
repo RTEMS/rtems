@@ -1,0 +1,6 @@
+*** TEST 63 ***
+Init - _Heap_Initialize - OK
+Init - Heap size=1012
+Init - _Heap_Allocate_aligned - OK
+Init - _Heap_Resize_block - OK
+*** END OF TEST 63 ***

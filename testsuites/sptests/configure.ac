@@ -89,6 +89,7 @@ sp59/Makefile
 sp60/Makefile
 sp61/Makefile
 sp62/Makefile
+sp63/Makefile
 spchain/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
