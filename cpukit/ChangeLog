@@ -5,6 +5,10 @@
 
 2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* score/inline/rtems/score/heap.inl: Revert accidental commit.
+
+2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* score/inline/rtems/score/heap.inl, score/src/heapwalk.c: Do not
 	inline code to check if newline should be printed. It leads to branch
 	path explosion which is really hard to get coverage on.
