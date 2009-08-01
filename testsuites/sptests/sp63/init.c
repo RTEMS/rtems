@@ -12,21 +12,17 @@
 #include <tmacros.h>
 
 uint32_t      Memory[256];
+Heap_Control  Heap;
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+void test_case_one(void)
 {
-  Heap_Control       Heap;
   uint32_t           heap_size;
   void              *ptr1;
   intptr_t           old;
   intptr_t           avail;
   Heap_Resize_status hc;
 
-  puts( "\n\n*** TEST 63 ***" );
-  
-  puts( "Init - _Heap_Initialize - OK" );
+  puts( "Init - _Heap_Initialize (for test one) - OK" );
   heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
   printf( "Init - Heap size=%d\n", heap_size );
 
@@ -37,6 +33,38 @@ rtems_task Init(
   puts( "Init - _Heap_Resize_block - OK");
   hc = _Heap_Resize_block( &Heap, ptr1, 4, &old, &avail );
   assert( !hc );
+}
+
+void test_case_two(void)
+{
+  uint32_t           heap_size;
+  void              *ptr1;
+  intptr_t           old;
+  intptr_t           avail;
+  Heap_Resize_status hc;
+
+  puts( "\nInit - _Heap_Initialize (for test two) - OK" );
+  heap_size = _Heap_Initialize( &Heap, Memory, sizeof(Memory), 8 );
+  printf( "Init - Heap size=%d\n", heap_size );
+
+  puts( "Init - _Heap_Allocate_aligned - OK");
+  ptr1 = _Heap_Allocate_aligned( &Heap, 64, 32 );
+  assert( ptr1 );
+
+  puts( "Init - _Heap_Resize_block - OK");
+  hc = _Heap_Resize_block( &Heap, ptr1, 56, &old, &avail );
+  assert( !hc );
+}
+
+rtems_task Init(
+  rtems_task_argument ignored
+)
+{
+  puts( "\n\n*** TEST 63 ***" );
+  
+  test_case_one();
+
+  test_case_two();
 
   puts( "*** END OF TEST 63 ***" );
 
