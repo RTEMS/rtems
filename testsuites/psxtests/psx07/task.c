@@ -26,7 +26,7 @@ void *Task_1(
   void *argument
 )
 {
-  puts( "Task_1: exitting" );
+  puts( "Task_1 - exitting" );
   pthread_exit( NULL );
 
   return NULL; /* just so the compiler thinks we returned something */
