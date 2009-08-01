@@ -22,6 +22,22 @@
 #include <rtems/score/interr.h>
 #include <rtems/bspIo.h>
 
+#if defined(__GNUC__)
+  #define DO_NOT_INLINE __attribute__((__noinline__))
+#else
+  #define DO_NOT_INLINE
+#endif
+/*
+ *  Helper to avoid introducing even more branches and paths in this
+ *  code to do coverage analysis on.
+ *
+ *  We do not want this inlined.
+ */
+static void hw_nl( 
+  int    error,
+  bool   do_dump
+) DO_NOT_INLINE;
+
 /*PAGE
  *
  *  _Heap_Walk
@@ -113,7 +129,8 @@ bool _Heap_Walk(
         error = 1;
       }
       if (!prev_used) {
-        if (do_dump || error) printk("\n");
+        
+        hw_nl(do_dump, error);
         printk("PASS: %d !two consecutive blocks are free", source);
         error = 1;
       }
@@ -141,14 +158,14 @@ bool _Heap_Walk(
           block = block->next;
         }
         if (block != the_block) {
-          if (do_dump || error) printk("\n");
+          hw_nl(do_dump, error);
           printk("PASS: %d !the_block not in the free list", source);
           error = 1;
         }
       }
 
     }
-    if (do_dump || error) printk("\n");
+    hw_nl(do_dump, error);
 
     if (the_size < the_heap->min_block_size) {
       printk("PASS: %d !block size is too small\n", source);
@@ -183,4 +200,15 @@ bool _Heap_Walk(
 
   return error;
 
+}
+
+/*
+ *  This method exists to simplify branch paths in the generated code above.
+ */
+static void hw_nl( 
+  int            error,
+  bool           do_dump
+)
+{
+  if (do_dump || error) printk("\n");
 }
