@@ -240,16 +240,8 @@ RTEMS_INLINE_ROUTINE void _Heap_Align_up_uptr (
 {
   _H_uptr_t v = *value;
   uint32_t a = alignment;
-
-  if ( v % alignment ) 
-    *value = v - r + a;
-
-/*
-  else
-    *value = v;
-*/
-
-  /* *value = r ? v - r + a : v; */
+  _H_uptr_t r = v % a;
+  *value = r ? v - r + a : v;
 }
 
 /**
