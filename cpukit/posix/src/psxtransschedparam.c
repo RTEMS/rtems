@@ -49,6 +49,14 @@ int _POSIX_Thread_Translate_sched_param(
   }
 
   if ( policy == SCHED_SPORADIC ) {
+    if ( (param->ss_replenish_period.tv_sec == 0) &&
+         (param->ss_replenish_period.tv_nsec == 0) )
+      return EINVAL;
+
+    if ( (param->ss_initial_budget.tv_sec == 0) &&
+         (param->ss_initial_budget.tv_nsec == 0) )
+      return EINVAL;
+
     if ( _Timespec_To_ticks( &param->ss_replenish_period ) <
 	 _Timespec_To_ticks( &param->ss_initial_budget ) )
       return EINVAL;

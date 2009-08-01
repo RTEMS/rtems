@@ -78,10 +78,8 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+  /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.ss_initial_budget );
-
-  if ( !ticks )
-    ticks = 1;
 
   the_thread->cpu_time_budget = ticks;
 
@@ -92,10 +90,8 @@ void _POSIX_Threads_Sporadic_budget_TSR(
        the_thread->current_priority > new_priority )
     _Thread_Change_priority( the_thread, new_priority, true );
 
+  /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.ss_replenish_period );
-
-  if ( !ticks )
-    ticks = 1;
 
   _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
 }

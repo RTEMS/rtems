@@ -1,3 +1,10 @@
+2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/psxtransschedparam.c, posix/src/pthread.c: Add error checks
+	for 0 time on sporadic scheduler replenish period and initial budget.
+	This avoids having to correct for it in the TSR, so we can eliminate
+	the check for ticks == 0 there.
+
 2009-08-01	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* score/inline/rtems/score/heap.inl, score/src/heapresizeblock.c:
