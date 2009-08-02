@@ -1,3 +1,12 @@
+2009-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac, psxsignal03/Makefile.am,
+	psxsignal03/init.c, psxsignal03/psxsignal03.doc: Add new test
+	variation which focused on real-time signals rather than user
+	signals.
+	* psxsignal04/.cvsignore, psxsignal04/Makefile.am,
+	psxsignal04/psxsignal04.doc, psxsignal04/psxsignal04.scn: New files.
+
 2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx07/init.c, psx07/psx07.scn, psx07/task.c: Add test for budget and

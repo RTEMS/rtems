@@ -11,7 +11,7 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  psxsignal03
+test set name:  psxsignal04
 
 directives:
 
@@ -28,4 +28,4 @@ concepts:
 
 + Ensure the the algorithm in killinfo.c which decides which
   thread waiting on a signal is given a process wide signal to
-  dispatch.  This variation focuses on the user signals.
+  dispatch.  This variation focuses on the real-time signals.

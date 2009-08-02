@@ -9,6 +9,22 @@
  *  $Id$
  */
 
+#if defined(USE_USER_SIGNALS)
+  #define TEST_NAME                "01"
+  #define TEST_STRING              "User Signals"
+  #define SIGNAL_ONE               SIGUSR1
+  #define SIGNAL_TWO               SIGUSR2
+
+#elif defined(USE_REAL_TIME_SIGNALS)
+  #define TEST_NAME                "02"
+  #define TEST_STRING              "Real-Time Signals"
+  #define SIGNAL_ONE               SIGRTMIN
+  #define SIGNAL_TWO               SIGRTMAX
+
+#else
+  #error "Test Mode not defined"
+
+#endif
 
 #include <pmacros.h>
 #include <signal.h>
@@ -27,6 +43,19 @@ void Signal_handler(
 {
   Signal_occurred = true;
   Signal_thread   = pthread_self();
+}
+
+const char *signal_name(int signo)
+{
+  if (signo == SIGUSR1)
+    return "SIGUSR1";
+  if (signo == SIGUSR2)
+    return "SIGUSR2";
+  if (signo == SIGRTMIN)
+    return "SIGRTMIN";
+  if (signo == SIGRTMAX)
+    return "SIGRTMAX";
+  return "unknown-signal";
 }
 
 void *Test_Thread(void *arg)
@@ -49,13 +78,13 @@ void *Test_Thread(void *arg)
   sc = sigemptyset( &mask );
   assert( !sc );
 
-  printf( "%s - Unblock SIGUSR1\n", name );
-  sc = sigaddset( &mask, SIGUSR1 );
+  printf( "%s - Unblock %s\n", name, signal_name(SIGNAL_ONE) );
+  sc = sigaddset( &mask, SIGNAL_ONE );
   assert( !sc );
 
   if ( !blocked ) {
-    printf( "%s - Unblock SIGUSR2\n", name );
-    sc = sigaddset( &mask, SIGUSR2 );
+    printf( "%s - Unblock %s\n", name, signal_name(SIGNAL_TWO) );
+    sc = sigaddset( &mask, SIGNAL_TWO );
     assert( !sc );
   }
 
@@ -67,13 +96,13 @@ void *Test_Thread(void *arg)
   sc = sigemptyset( &wait_mask );
   assert( !sc );
 
-  sc = sigaddset( &wait_mask, SIGUSR1 );
+  sc = sigaddset( &wait_mask, SIGNAL_ONE );
   assert( !sc );
 
   /* wait for a signal */
   memset( &info, 0, sizeof(info) );
 
-  printf( "%s - Wait for SIGUSR1 unblocked\n", name );
+  printf( "%s - Wait for %s unblocked\n", signal_name(SIGNAL_ONE) );
   sigwaitinfo( &wait_mask, &info );
   assert( !sc );
 
@@ -81,7 +110,7 @@ void *Test_Thread(void *arg)
   printf( "%s - siginfo.si_code=%d\n", name, info.si_code );
   printf( "%s - siginfo.si_value=0x%08x\n", name, info.si_value );
 
-  assert( info.si_signo == SIGUSR2 );
+  assert( info.si_signo == SIGNAL_TWO );
   assert( info.si_code == SI_USER );
 
   printf( "%s - exiting\n", name );
@@ -99,15 +128,16 @@ void *POSIX_Init(
   bool                trueArg = true;
   bool                falseArg = false;
 
-  puts( "\n\n*** POSIX TEST SIGNAL 03 ***" );
+  puts( "\n\n*** POSIX TEST SIGNAL " TEST_NAME " ***" );
+  puts( "Init - Variation is: " TEST_STRING );
 
   Signal_occurred = false;
 
   act.sa_handler = NULL;
   act.sa_sigaction = Signal_handler;
   act.sa_flags   = SA_SIGINFO;
-  sigaction( SIGUSR1, &act, NULL );
-  sigaction( SIGUSR2, &act, NULL );
+  sigaction( SIGNAL_ONE, &act, NULL );
+  sigaction( SIGNAL_TWO, &act, NULL );
 
   /* create threads */
   sc = pthread_create( &id, NULL, Test_Thread, &falseArg );
@@ -122,16 +152,18 @@ void *POSIX_Init(
   puts( "Init - sleep - SignalBlocked thread settle - OK" );
   usleep(500000);
 
-  puts( "Init - sending SIGUSR2 - deliver to one thread" );
-  sc =  kill( getpid(), SIGUSR2 );
+  printf( "Init - sending %s - deliver to one thread\n",
+          signal_name(SIGNAL_TWO));
+  sc =  kill( getpid(), SIGNAL_TWO );
   assert( !sc );
 
-  puts( "Init - sending SIGUSR2 - deliver to other thread" );
-  sc =  kill( getpid(), SIGUSR2 );
+  printf( "Init - sending %s - deliver to other thread\n",
+          signal_name(SIGNAL_TWO));
+  sc =  kill( getpid(), SIGNAL_TWO );
   assert( !sc );
 
-  puts( "Init - sending SIGUSR2 - expect EAGAIN" );
-  sc =  kill( getpid(), SIGUSR2 );
+  printf( "Init - sending %s - expect EAGAIN\n", signal_name(SIGNAL_TWO) );
+  sc =  kill( getpid(), SIGNAL_TWO );
   assert( sc == -1 );
   assert( errno == EAGAIN );
 
@@ -141,7 +173,7 @@ void *POSIX_Init(
   /* we are just sigwait'ing the signal, not delivering it */
   assert( Signal_occurred == true );
 
-  puts( "*** END OF POSIX TEST SIGNAL 03 ***" );
+  puts( "*** END OF POSIX TEST SIGNAL " TEST_NAME " ***" );
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
