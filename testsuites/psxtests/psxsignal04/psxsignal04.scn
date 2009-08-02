@@ -1,4 +1,4 @@
-*** POSIX TEST SIGNAL 02 ***
+*** POSIX TEST SIGNAL 04 ***
 Init - Variation is: Real-Time Signals
 Init - sleep - let threads settle - OK
 SignalNotBlocked - Unblock SIGRTMIN
@@ -15,4 +15,4 @@ SignalNotBlocked - siginfo.si_signo=31
 SignalNotBlocked - siginfo.si_code=1
 SignalNotBlocked - siginfo.si_value=0x02027fe4
 SignalNotBlocked - exiting
-*** END OF POSIX TEST SIGNAL 02 ***
+*** END OF POSIX TEST SIGNAL 04 ***

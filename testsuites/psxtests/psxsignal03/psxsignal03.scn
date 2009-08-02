@@ -1,10 +1,11 @@
 *** POSIX TEST SIGNAL 03 ***
+Init - Variation is: User Signals
 Init - sleep - let threads settle - OK
 SignalNotBlocked - Unblock SIGUSR1
 SignalNotBlocked - Unblock SIGUSR2
-SignalNotBlocked - Wait for SIGUSR1 unblocked
+SIGUSR1 - Wait for SIGUSR2 unblocked
 SignalBlocked - Unblock SIGUSR1
-SignalBlocked - Wait for SIGUSR1 unblocked
+SIGUSR1 - Wait for SIGUSR1 unblocked
 Init - sleep - SignalBlocked thread settle - OK
 Init - sending SIGUSR2 - deliver to one thread
 Init - sending SIGUSR2 - deliver to other thread
@@ -12,6 +13,6 @@ Init - sending SIGUSR2 - expect EAGAIN
 Init - sleep - let thread report if it unblocked - OK
 SignalNotBlocked - siginfo.si_signo=26
 SignalNotBlocked - siginfo.si_code=1
-SignalNotBlocked - siginfo.si_value=0x02034474
+SignalNotBlocked - siginfo.si_value=0x02027fd4
 SignalNotBlocked - exiting
 *** END OF POSIX TEST SIGNAL 03 ***

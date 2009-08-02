@@ -1,5 +1,11 @@
 2009-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxsignal03/init.c, psxsignal03/psxsignal03.scn,
+	psxsignal04/psxsignal04.scn: Correct test numbers in macros so output
+	is right. Update both screens.
+
+2009-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac, psxsignal03/Makefile.am,
 	psxsignal03/init.c, psxsignal03/psxsignal03.doc: Add new test
 	variation which focused on real-time signals rather than user

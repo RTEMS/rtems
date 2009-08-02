@@ -10,13 +10,13 @@
  */
 
 #if defined(USE_USER_SIGNALS)
-  #define TEST_NAME                "01"
+  #define TEST_NAME                "03"
   #define TEST_STRING              "User Signals"
   #define SIGNAL_ONE               SIGUSR1
   #define SIGNAL_TWO               SIGUSR2
 
 #elif defined(USE_REAL_TIME_SIGNALS)
-  #define TEST_NAME                "02"
+  #define TEST_NAME                "04"
   #define TEST_STRING              "Real-Time Signals"
   #define SIGNAL_ONE               SIGRTMIN
   #define SIGNAL_TWO               SIGRTMAX
