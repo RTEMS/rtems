@@ -141,6 +141,9 @@ extern "C" {
 #elif defined(_AM29K)
 #define SHM_LOCK_VALUE    0
 #define SHM_UNLOCK_VALUE  1
+#elif defined(__nios2__)
+#define SHM_LOCK_VALUE    1
+#define SHM_UNLOCK_VALUE  0
 #elif defined(__sparc__)
 #define SHM_LOCK_VALUE    1
 #define SHM_UNLOCK_VALUE  0
