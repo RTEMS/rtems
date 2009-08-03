@@ -18,7 +18,7 @@
 #include <bsp/irq.h>
 #include <rtems/libio.h>
 
-#include <rtems/mw_fb.h>
+#include <rtems/fb.h>
 
 /* these routines are defined in the microwindows code. This
    driver is here more as an example of how to implement and
