@@ -69,10 +69,9 @@ bool rtems_workspace_get_information(
 );
 
 /**
- *  @brief get workspace information
+ *  @brief allocate memory from workspace
  *
- *  This returns information about the heap that is used as
- *  the RTEMS Executive Workspace.
+ *  This allocates memory from the the RTEMS Executive Workspace.
  *
  *  @param[in] bytes is the number of bytes to allocate 
  *  @param[in] pointer is the returned pointer to allocated memory
@@ -85,9 +84,9 @@ bool rtems_workspace_allocate(
 );
 
 /**
- * @brief free workspace
+ * @brief free memory back to the workspace
  *
- *  This frees the workspace that was allocated from   
+ *  This frees memory that was allocated from   
  *  the RTEMS Executive Workspace.
  *
  *  @param[in] pointer is the allocated workspace
