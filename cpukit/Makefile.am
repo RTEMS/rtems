@@ -125,7 +125,7 @@ include_rtems_HEADERS += libmisc/dumpbuf/dumpbuf.h
 include_rtems_HEADERS += libmisc/monitor/monitor.h
 
 ## mw-fb
-include_rtems_HEADERS += libmisc/mw-fb/mw_fb.h libmisc/mw-fb/mw_uid.h
+include_rtems_HEADERS += libmisc/mw-fb/fb.h libmisc/mw-fb/mw_uid.h
 
 ## shell
 if LIBSHELL

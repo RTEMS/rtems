@@ -1,3 +1,9 @@
+2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* Makefile.am, preinstall.am, libmisc/Makefile.am: changed the
+	references to mw_fb.h into fb.h
+	* libmisc/mw-fb/mw_fb.h: renamed fb.h
+
 2009-08-03	Roger Dahlkvist <ruppe@kth.se>
 
 	* score/cpu/Makefile.am: nios2 was not in the list.
