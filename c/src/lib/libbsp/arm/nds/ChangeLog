@@ -1,3 +1,7 @@
+2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
+
+	* fb/fb.c: changed the references to mw_fb.h into fb.h
+
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Rename BSP_BOOTCARD_OPTIONS to

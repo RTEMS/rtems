@@ -21,7 +21,7 @@
 #include <rtems/libio.h>
 #include <nds.h>
 
-#include <rtems/mw_fb.h>
+#include <rtems/fb.h>
 
 /*
  * screen information for the driver (fb0).
