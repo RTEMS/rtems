@@ -112,8 +112,14 @@ void _POSIX_signals_Post_switch_extension(
   ISR_Level           level;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-  if ( !api )
+
+  /*
+   * api cannot be NULL or we would not have registered this API extension.
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( !api )
     return;
+  #endif
 
   /*
    *  If we invoke any user code, there is the possibility that
@@ -124,7 +130,6 @@ void _POSIX_signals_Post_switch_extension(
    *  processed at all.  No point in doing this loop otherwise.
    */
   while (1) {
-  restart:
     _ISR_Disable( level );
       if ( !(~api->signals_blocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
@@ -134,28 +139,16 @@ void _POSIX_signals_Post_switch_extension(
     _ISR_Enable( level );
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
-
-      if ( _POSIX_signals_Check_signal( api, signo, false ) )
-        goto restart;
-
-      if ( _POSIX_signals_Check_signal( api, signo, true ) )
-        goto restart;
-
+      _POSIX_signals_Check_signal( api, signo, false );
+      _POSIX_signals_Check_signal( api, signo, true );
     }
-
-    /* XXX - add __SIGFIRSTNOTRT or something like that to newlib signal .h */
+    /* Unfortunately - nothing like __SIGFIRSTNOTRT in newlib signal .h */
 
     for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
-
-      if ( _POSIX_signals_Check_signal( api, signo, false ) )
-        goto restart;
-
-      if ( _POSIX_signals_Check_signal( api, signo, true ) )
-        goto restart;
-
+      _POSIX_signals_Check_signal( api, signo, false );
+      _POSIX_signals_Check_signal( api, signo, true );
     }
   }
-  return;
 }
 
 /*PAGE

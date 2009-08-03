@@ -1,5 +1,10 @@
 2009-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/psignal.c: Simplify implementation to ease coverage
+	analysis.
+
+2009-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/include/rtems/rtems/support.h: Fix comments.
 
 2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
