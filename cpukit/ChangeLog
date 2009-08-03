@@ -1,3 +1,7 @@
+2009-08-03	Roger Dahlkvist <ruppe@kth.se>
+
+	* score/cpu/Makefile.am: nios2 was not in the list.
+
 2009-08-02	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/psignal.c: Simplify implementation to ease coverage
