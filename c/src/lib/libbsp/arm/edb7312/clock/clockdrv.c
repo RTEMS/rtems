@@ -16,6 +16,10 @@
 #include <bsp.h>
 #include <irq.h>
 
+#if ON_SKYEYE==1
+  #define CLOCK_DRIVER_USE_FAST_IDLE
+#endif
+
 rtems_isr Clock_isr(rtems_vector_number vector);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
@@ -64,6 +68,14 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
   do {                                                                  \
     BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
   } while (0)
+
+uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
+{
+  return 0;
+}
+
+#define Clock_driver_nanoseconds_since_last_tick \
+  clock_driver_get_nanoseconds_since_last_tick
 
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {

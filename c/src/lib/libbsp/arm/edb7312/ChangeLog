@@ -1,3 +1,8 @@
+2009-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/clockdrv.c: Add stub nanoseconds since last tick handler to
+	improve coverage.
+
 2009-07-28	Xi Yang	<hiyangxi@gmail.com>
 
 	* configure.ac: undefine BSP_PRESS_KEY_FOR_RESET
