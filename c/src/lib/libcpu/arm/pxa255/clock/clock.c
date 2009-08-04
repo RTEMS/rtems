@@ -40,7 +40,7 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
   /* enable timer interrupt */
   XSCALE_OS_TIMER_IER |= 0x1;
 
-  period_num = TIMER_RATE*(Configuration.microseconds_per_tick/10000);
+  period_num = (TIMER_RATE* Configuration.microseconds_per_tick)/10000;
 
   XSCALE_OS_TIMER_MR0 = XSCALE_OS_TIMER_TCR + period_num;
 }
@@ -90,7 +90,7 @@ rtems_irq_connect_data clock_isr_data = {
 
 void Clock_driver_support_initialize_hardware(void)
 {
-  period_num = TIMER_RATE*(Configuration.microseconds_per_tick/10000);
+  period_num = (TIMER_RATE* Configuration.microseconds_per_tick)/10000;
 }
 
 
