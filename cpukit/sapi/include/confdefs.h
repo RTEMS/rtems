@@ -1432,12 +1432,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
   (_Configure_Max_Objects(_tasks) * \
    (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
-    _Configure_From_workspace(CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API) + \
+    CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB + \
     CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API))  + \
   _Configure_From_workspace( \
-    _Configure_Max_Objects(_number_FP_tasks) * CONTEXT_FP_SIZE) \
+    _Configure_Max_Objects(_number_FP_tasks) * CONTEXT_FP_SIZE) + \
+  _Configure_From_workspace( \
+          (CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1) * sizeof(void *)) \
  )
 
 /**

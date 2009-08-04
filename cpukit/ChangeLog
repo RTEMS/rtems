@@ -1,3 +1,8 @@
+2009-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sapi/include/confdefs.h: Account for allocation of user extension
+	data area pointers.
+
 2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* Makefile.am, preinstall.am, libmisc/Makefile.am: changed the
