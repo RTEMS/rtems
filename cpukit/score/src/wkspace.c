@@ -72,19 +72,19 @@ void *_Workspace_Allocate(
   size_t   size
 )
 {
-  void *p;
+  void *memory;
 
-  p = _Heap_Allocate( &_Workspace_Area, size );
+  memory = _Heap_Allocate( &_Workspace_Area, size );
   #if defined(DEBUG_WORKSPACE)
     printk(
       "Workspace_Allocate(%d) from %p/%p -> %p\n",
       size,
       __builtin_return_address( 0 ),
       __builtin_return_address( 1 ),
-      p
+      memory
     );
   #endif
-  return p;
+  return memory;
 }
 
 /*
@@ -112,9 +112,18 @@ void *_Workspace_Allocate_or_fatal_error(
   size_t      size
 )
 {
-  void        *memory;
+  void *memory;
 
-  memory = _Workspace_Allocate( size );
+  memory = _Heap_Allocate( &_Workspace_Area, size );
+  #if defined(DEBUG_WORKSPACE)
+    printk(
+      "Workspace_Allocate_or_fatal_error(%d) from %p/%p -> %p\n",
+      size,
+      __builtin_return_address( 0 ),
+      __builtin_return_address( 1 ),
+      memory
+    );
+  #endif
 
   if ( memory == NULL )
     _Internal_error_Occurred(
