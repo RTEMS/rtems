@@ -74,7 +74,7 @@ int sigaction(
       if ( act->sa_handler == SIG_DFL ) {
         _POSIX_signals_Vectors[ sig ] = _POSIX_signals_Default_vectors[ sig ];
       } else {
-         _POSIX_signals_Clear_process_signals( signo_to_mask(sig) );
+         _POSIX_signals_Clear_process_signals( sig );
          _POSIX_signals_Vectors[ sig ] = *act;
       }
     _ISR_Enable( level );
