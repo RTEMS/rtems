@@ -1102,7 +1102,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
                CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #endif
 
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_mqueue_fds) \
+    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
       _Configure_POSIX_Named_Object_RAM( \
          _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
   #endif
@@ -1192,6 +1192,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
           CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
           CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS( \
+          CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
           CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
       CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(CONFIGURE_MAXIMUM_POSIX_BARRIERS) + \

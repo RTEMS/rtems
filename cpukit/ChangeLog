@@ -1,3 +1,8 @@
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Account for memory for POSIX message queue
+	file descriptors.
+
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/mqueuecreatesupp.c: Now that the number of POSIX message
