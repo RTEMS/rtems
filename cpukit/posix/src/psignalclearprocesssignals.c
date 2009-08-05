@@ -35,14 +35,26 @@
  */
 
 void _POSIX_signals_Clear_process_signals(
-  sigset_t   mask
+  int signo
 )
 {
+  sigset_t   mask;
+  bool       clear_signal;
+
+  clear_signal = true;
+  mask         = signo_to_mask( signo );
+
   ISR_Level  level;
 
   _ISR_Disable( level );
-    _POSIX_signals_Pending &= ~mask;
-    if ( !_POSIX_signals_Pending )
-      _Thread_Do_post_task_switch_extension--;
+    if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
+      if ( !_Chain_Is_empty( &_POSIX_signals_Siginfo[ signo ] ) )
+       clear_signal = false;
+    }
+    if ( clear_signal ) {
+      _POSIX_signals_Pending &= ~mask;
+      if ( !_POSIX_signals_Pending )
+	_Thread_Do_post_task_switch_extension--;
+    }
   _ISR_Enable( level );
 }

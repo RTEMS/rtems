@@ -70,8 +70,7 @@ bool _POSIX_signals_Clear_signals(
          if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
            psiginfo = (POSIX_signals_Siginfo_node *)
              _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
-           if ( _Chain_Is_empty( &_POSIX_signals_Siginfo[ signo ] ) )
-             _POSIX_signals_Clear_process_signals( mask );
+           _POSIX_signals_Clear_process_signals( signo );
            if ( psiginfo ) {
              *info = psiginfo->Info;
              _Chain_Append_unprotected(
@@ -80,8 +79,8 @@ bool _POSIX_signals_Clear_signals(
              );
            } else
              do_callout = false;
-         } else
-           _POSIX_signals_Clear_process_signals( mask );
+         }
+         _POSIX_signals_Clear_process_signals( signo );
          do_callout = true;
        }
     } else {

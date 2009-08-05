@@ -97,10 +97,12 @@ int _POSIX_Message_queue_Create_support(
   }
 
   the_mq = _POSIX_Message_queue_Allocate();
-  if ( !the_mq ) {
-    _Thread_Enable_dispatch();
-    rtems_set_errno_and_return_minus_one( ENFILE );
-  }
+  #if defined(RTEMS_DEBUG)
+    if ( !the_mq ) {
+      _Thread_Enable_dispatch();
+      rtems_set_errno_and_return_minus_one( ENFILE );
+    }
+  #endif
 
   the_mq->process_shared  = pshared;
   the_mq->named = true;
