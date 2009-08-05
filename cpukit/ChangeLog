@@ -1,3 +1,7 @@
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Fix typo.
+
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* posix/src/psignalclearsignals.c: Add comments.
