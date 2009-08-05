@@ -1,3 +1,9 @@
+2009-08-05	Santosh G Vattam <vattam.santosh@gmail.com>
+
+	* Makefile.am, psxmsgq04/init.c, psxmsgq04/psxmsgq04.doc,
+	psxmsgq04/psxmsgq04.scn: Exercise running out of memory while
+	allocating the message buffers for a POSIX message queue.
+
 2009-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxsignal03/init.c, psxsignal03/psxsignal03.scn,

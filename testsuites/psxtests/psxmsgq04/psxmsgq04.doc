@@ -16,11 +16,10 @@ test set name:  psxmsgq04
 directives:
 
   mq_open
-  mq_send
+  mq_unlink
+  mq_close
 
 concepts:
 
-+ Ensure that an error is returned when performing a blocking mq_send
-  from an Interrupt Service Routine.  This condition is beyond the
-  POSIX Standard because they do not discuss interrupt processing and
-  what operations are allowed.
++ Ensure that the situation where we do not have enough Workspace memory
+  left to allocate the message buffers is properly handled.

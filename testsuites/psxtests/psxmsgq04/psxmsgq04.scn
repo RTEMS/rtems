@@ -1,0 +1,9 @@
+*** POSIX MESSAGE QUEUE TEST 4 ***
+Init - Open message queue
+Init - Unlink message queue
+Init - Close message queue
+Init - Memory allocation error test
+Init - Message Queue created
+Init - Unlink message queue
+Init - Close message queue
+*** END OF POSIX MESSAGE QUEUE TEST 4 ***

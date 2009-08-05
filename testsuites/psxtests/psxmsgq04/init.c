@@ -24,13 +24,15 @@ void *POSIX_Init(
   void *argument
 )
 {
-  struct mq_attr   attr;
-  mqd_t            Queue;
-  int              sc;
+  struct mq_attr          attr;
+  mqd_t                   Queue, second_Queue;
+  int                     sc;
+  Heap_Information_block  info;
+  bool                    sb;
 
   puts( "\n\n*** POSIX MESSAGE QUEUE TEST 4 ***" );
 
-  attr.mq_maxmsg  = 1;
+  attr.mq_maxmsg = 1;
   attr.mq_msgsize = sizeof(int);
 
   puts( "Init - Open message queue" );
@@ -51,6 +53,36 @@ void *POSIX_Init(
     perror( "mq_close failed" );
   assert( sc == 0 );
 
+  puts( "Init - Memory allocation error test" );
+
+  sb = rtems_workspace_get_information( &info );
+
+  attr.mq_msgsize = info.Free.largest;
+
+  while ( attr.mq_msgsize > 0 ) {
+    second_Queue = mq_open("second_queue",O_CREAT | O_RDWR, 0x777, &attr );
+    if ( second_Queue!=(-1) )
+      break;
+    attr.mq_msgsize -= 48;
+  }
+
+  if ( second_Queue == (-1) ) {
+    perror( "mq_open failed" );
+    assert( second_Queue != (-1) );
+  }
+
+  puts( "Init - Message Queue created" );
+  puts( "Init - Unlink message queue" );
+    sc = mq_unlink( "second_queue" );
+    if ( sc != 0 )
+      perror( "mq_unlink failed" );
+    assert( sc==0 );
+
+  puts( "Init - Close message queue" );
+    sc = mq_close( second_Queue );
+    if ( sc !=0 )
+      perror( "mq_close failed" );
+    assert( sc == 0 );
   puts( "*** END OF POSIX MESSAGE QUEUE TEST 4 ***" );
   rtems_test_exit( 0 );
 
