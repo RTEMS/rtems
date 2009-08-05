@@ -1,3 +1,9 @@
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* user/conf.t: Add configuration of posix message queue file
+	descriptors as separate entity. Also add documentation on posix
+	configuration elements not previously covered.
+
 2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* bsp_howto/framebuffer.t: added documentation

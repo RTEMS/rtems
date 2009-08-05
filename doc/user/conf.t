@@ -1329,11 +1329,12 @@ typedef struct @{
   int                                 maximum_timers;
   int                                 maximum_queued_signals;
   int                                 maximum_message_queues;
+  int                                 maximum_message_queue_descriptors;
   int                                 maximum_semaphores;
   int                                 maximum_barriers;
   int                                 maximum_rwlocks;
   int                                 maximum_spinlocks;
-  int                                 number_of_initialization_tasks;
+  int                                 number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_tasks_table;
 @} posix_api_configuration_table;
 @end group
@@ -1393,6 +1394,61 @@ an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS}.
 If not defined by the application, then the
 @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS} macro defaults to 0.
+
+@item maximum_message_queues
+is the maximum number of POSIX message queues that can be concurrently
+active in the system.  When using the @code{rtems/confdefs.h}
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}.  If not defined by the
+application, then the @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}
+macro defaults to 0.
+
+@item maximum_message_queue_descriptors
+is the maximum number of POSIX message queue descriptors
+that can be concurrently active in the system.  When using the
+@code{rtems/confdefs.h} mechanism for configuring an RTEMS application,
+the value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS}.
+If not defined by the application, then the
+@code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS} macro defaults
+to the value of @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}
+
+@item maximum_semaphores
+is the maximum number of POSIX semaphore that can be concurrently
+active in the system.  When using the @code{rtems/confdefs.h}
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_SEMAPHORES}.  If not defined by the
+application, then the @code{CONFIGURE_MAXIMUM_POSIX_SEMAPHORES}
+macro defaults to 0.
+
+@item maximum_barriers
+is the maximum number of POSIX barriers that can be concurrently
+active in the system.  When using the @code{rtems/confdefs.h}
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_BARRIERS}.  If not defined by the
+application, then the @code{CONFIGURE_MAXIMUM_POSIX_BARRIERS}
+macro defaults to 0.
+
+@item maximum_rwlocks
+is the maximum number of POSIX rwlocks that can be concurrently
+active in the system.  When using the @code{rtems/confdefs.h}
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_SPINLOCKS}.  If not defined by the
+application, then the @code{CONFIGURE_MAXIMUM_POSIX_SPINLOCKS}
+macro defaults to 0.
+
+@item maximum_spinlocks
+is the maximum number of POSIX spinlocks that can be concurrently
+active in the system.  When using the @code{rtems/confdefs.h}
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+@code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}.  If not defined by the
+application, then the @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}
+macro defaults to 0.
 
 @item number_of_initialization_threads
 is the number of initialization threads configured.  At least one
