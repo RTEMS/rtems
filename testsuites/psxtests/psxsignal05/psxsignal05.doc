@@ -1,0 +1,30 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxsignal05
+
+directives:
+
+  sigemptyset
+  sigaddset
+  sigwaitinfo
+
+concepts:
+
+
++ Ensure if _POSIX_signals_Clear_signals is called to clear a process wide
+  SA_SIGINFO signal which is pending but there is not a queued SA_SIGINFO 
+  structure, then things happen correctly.
+
+NOTE: This case may be impossible to hit in real code but until that is
+      proven we need to be defensive and protect against it.

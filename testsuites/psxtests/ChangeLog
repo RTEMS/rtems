@@ -1,3 +1,10 @@
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac: Add a test to exercise an odd case in
+	_POSIX_signals_Clear_signals.
+	* psxsignal05/.cvsignore, psxsignal05/Makefile.am, psxsignal05/init.c,
+	psxsignal05/psxsignal05.doc, psxsignal05/psxsignal05.scn: New files.
+
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxmsgq04/init.c: Correct typo in configuration so test does as
