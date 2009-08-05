@@ -61,8 +61,8 @@ bool _POSIX_signals_Clear_signals(
   else
     signals_blocked = SIGNAL_ALL_MASK;
 
-  /* XXX this is not right for siginfo type signals yet */
-  /* XXX since they can't be cleared the same way */
+  /* XXX is this right for siginfo type signals? */ 
+  /* XXX are we sure they can be cleared the same way? */
 
   _ISR_Disable( level );
     if ( is_global ) {
@@ -71,6 +71,11 @@ bool _POSIX_signals_Clear_signals(
            psiginfo = (POSIX_signals_Siginfo_node *)
              _Chain_Get_unprotected( &_POSIX_signals_Siginfo[ signo ] );
            _POSIX_signals_Clear_process_signals( signo );
+           /*
+            *  It may be impossible to get here with an empty chain
+            *  BUT until that is proven we need to be defensive and
+            *  protect against it.
+            */
            if ( psiginfo ) {
              *info = psiginfo->Info;
              _Chain_Append_unprotected(
