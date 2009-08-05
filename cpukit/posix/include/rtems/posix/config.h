@@ -52,6 +52,7 @@ typedef struct {
   int                                 maximum_timers;
   int                                 maximum_queued_signals;
   int                                 maximum_message_queues;
+  int                                 maximum_message_queue_descriptors;
   int                                 maximum_semaphores;
   int                                 maximum_barriers;
   int                                 maximum_rwlocks;

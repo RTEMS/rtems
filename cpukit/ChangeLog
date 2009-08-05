@@ -1,5 +1,11 @@
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/include/rtems/posix/config.h, posix/src/mqueue.c,
+	sapi/include/confdefs.h: Add configuration of posix message queue
+	file descriptors as separate entity.
+
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* rtems/include/rtems/rtems/region.h: Use new name.
 	* score/include/rtems/debug.h: Fix spacing.
 

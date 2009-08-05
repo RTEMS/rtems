@@ -73,7 +73,7 @@ void _POSIX_Message_queue_Manager_initialization(void)
     &_POSIX_Message_queue_Information_fds,
     OBJECTS_POSIX_API,
     OBJECTS_POSIX_MESSAGE_QUEUE_FDS,
-    Configuration_POSIX_API.maximum_message_queues,
+    Configuration_POSIX_API.maximum_message_queue_descriptors,
     sizeof( POSIX_Message_queue_Control_fd ),
                                 /* size of this object's control block */
     true,                       /* true if names for this object are strings */

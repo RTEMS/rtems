@@ -26,7 +26,7 @@
  */
  
 /* 
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -1089,10 +1089,22 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                     0
     #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) 0
+    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS          0
+    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_mqueue_fds)     0
   #else
     #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
       _Configure_POSIX_Named_Object_RAM( \
          _message_queues, sizeof(POSIX_Message_queue_Control) )
+
+    /* default to same number */
+    #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
+       #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
+               CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+    #endif
+
+    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_mqueue_fds) \
+      _Configure_POSIX_Named_Object_RAM( \
+         _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
@@ -1842,6 +1854,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
+      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS,
       CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
       CONFIGURE_MAXIMUM_POSIX_BARRIERS,
       CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
@@ -2029,6 +2042,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_BARRIERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SPINLOCKS != 0) || \
@@ -2100,6 +2114,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
+#endif
+
+/*
+ *  If you have fewer POSIX Message Queue Descriptors than actual
+ *  POSIX Message Queues, then you will not be able to open all the
+ *  queues.
+ */
+#if (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS < \
+     CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
+  #error "Fewer POSIX Message Queue descriptors than Queues!"
 #endif
 
 #endif
