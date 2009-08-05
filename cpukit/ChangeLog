@@ -1,5 +1,11 @@
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* posix/src/mqueuecreatesupp.c: Now that the number of POSIX message
+	queues and message queue descriptors are independently configured,
+	this code is reachable.
+
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* posix/include/rtems/posix/psignal.h, posix/src/mqueuecreatesupp.c,
 	posix/src/psignalclearprocesssignals.c,
 	posix/src/psignalclearsignals.c: Minor rework to ease coverage
