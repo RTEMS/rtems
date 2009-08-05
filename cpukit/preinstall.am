@@ -210,6 +210,10 @@ $(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ftpd.h
 endif
+$(PROJECT_INCLUDE)/rtems/bspcmdline.h: libmisc/bspcmdline/bspcmdline.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspcmdline.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bspcmdline.h
+
 $(PROJECT_INCLUDE)/rtems/capture.h: libmisc/capture/capture.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture.h

@@ -108,6 +108,9 @@ if LIBNETWORKING
 include_rtems_HEADERS += ftpd/ftpd.h
 endif
 
+## bspcmdline
+include_rtems_HEADERS += libmisc/bspcmdline/bspcmdline.h
+
 ## capture
 include_rtems_HEADERS += libmisc/capture/capture.h \
     libmisc/capture/capture-cli.h

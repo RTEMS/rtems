@@ -8,6 +8,12 @@ EXTRA_DIST = README
 
 noinst_LIBRARIES =
 
+## bspcmdline
+noinst_LIBRARIES += libbspcmdline.a
+libbspcmdline_a_SOURCES = bspcmdline/bspcmdline_get.c \
+    bspcmdline/bspcmdline_getparam.c bspcmdline/bspcmdline_getparamraw.c \
+    bspcmdline/bspcmdline_getparamrhs.c
+
 ## capture
 EXTRA_DIST += capture/README
 
@@ -23,7 +29,6 @@ libcpuuse_a_SOURCES = cpuuse/cpuusagereport.c cpuuse/cpuusagereset.c \
     cpuuse/cpuuse.h cpuuse/cpuusagedata.c
 
 ## devnull
-
 noinst_LIBRARIES += libdevnull.a
 libdevnull_a_SOURCES = devnull/devnull.c devnull/devnull.h
 

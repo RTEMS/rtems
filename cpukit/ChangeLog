@@ -1,5 +1,12 @@
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* Makefile.am, preinstall.am, libmisc/Makefile.am, wrapup/Makefile.am:
+	Add new BSP Boot Command Line helper routines. Recently boot_card()
+	has grown the ability to have a command line string pointer. These
+	routines provide an interface to that string.
+
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* sapi/include/confdefs.h: Fix typo.
 
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
