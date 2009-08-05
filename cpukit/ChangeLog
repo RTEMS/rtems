@@ -1,5 +1,11 @@
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* rtems/include/rtems/rtems/intr.h, rtems/src/intrcatch.c: Disable
+	rtems_interrupt_catch on targets which do not use the simple vectored
+	interrupt model.
+
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/heapallocatealigned.c: Fix spacing.
 
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>

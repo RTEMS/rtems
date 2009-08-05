@@ -21,6 +21,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+
 /*  rtems_interrupt_catch
  *
  *  This directive allows a thread to specify what action to take when
@@ -56,3 +58,4 @@ rtems_status_code rtems_interrupt_catch(
 
   return RTEMS_SUCCESSFUL;
 }
+#endif

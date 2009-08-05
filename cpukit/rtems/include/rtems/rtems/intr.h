@@ -57,6 +57,7 @@ typedef rtems_isr ( *rtems_isr_entry )(
                  rtems_vector_number
              );
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
  *  @brief Implementation of the rtems_interrupt_catch directive.
  *  
@@ -69,6 +70,7 @@ rtems_status_code rtems_interrupt_catch(
   rtems_vector_number  vector,
   rtems_isr_entry     *old_isr_handler
 );
+#endif
 
 /**
  *  @brief Disables all maskable interrupts and returns the previous level in
