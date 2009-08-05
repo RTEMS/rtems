@@ -1,5 +1,9 @@
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* score/src/heapallocatealigned.c: Fix spacing.
+
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/src/wkspace.c: Improve debug output.
 
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>

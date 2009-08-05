@@ -86,15 +86,14 @@ Heap_Block *block_allocate(
   _HAssert(alloc_size <= block_size);
   _HAssert(_Heap_Is_prev_used(the_block));
 
-  if(the_rest >= the_heap->min_block_size) {
+  if (the_rest >= the_heap->min_block_size) {
     /* Split the block so that lower part is still free, and upper part
        becomes used. */
     the_block->size = the_rest | HEAP_PREV_USED;
     the_block = _Heap_Block_at(the_block, the_rest);
     the_block->prev_size = the_rest;
     the_block->size = alloc_size;
-  }
-  else {
+  } else {
     /* Don't split the block as remainder is either zero or too small to be
        used as a separate free block. Change 'alloc_size' to the size of the
        block and remove the block from the list of free blocks. */
@@ -106,7 +105,7 @@ Heap_Block *block_allocate(
   _Heap_Block_at(the_block, alloc_size)->size |= HEAP_PREV_USED;
   /* Update statistics */
   stats->free_size -= alloc_size;
-  if(stats->min_free_size > stats->free_size)
+  if (stats->min_free_size > stats->free_size)
     stats->min_free_size = stats->free_size;
   stats->used_blocks += 1;
   return the_block;
@@ -150,15 +149,15 @@ void *_Heap_Allocate_aligned(
   uint32_t const the_size =
     _Heap_Calc_block_size(size, page_size, the_heap->min_block_size);
 
-  if(the_size == 0)
+  if (the_size == 0)
     return NULL;
 
-  if(alignment == 0)
+  if (alignment == 0)
     alignment = CPU_ALIGNMENT;
 
   /* Find large enough free block that satisfies the alignment requirements. */
 
-  for(the_block = _Heap_First(the_heap), search_count = 0;
+  for (the_block = _Heap_First(the_heap), search_count = 0;
       the_block != tail;
       the_block = the_block->next, ++search_count)
   {
@@ -167,7 +166,7 @@ void *_Heap_Allocate_aligned(
     /* As we always coalesce free blocks, prev block must have been used. */
     _HAssert(_Heap_Is_prev_used(the_block));
 
-    if(block_size >= the_size) { /* the_block is large enough. */
+    if (block_size >= the_size) { /* the_block is large enough. */
 
       _H_uptr_t user_addr;
       _H_uptr_t aligned_user_addr;
@@ -189,12 +188,12 @@ void *_Heap_Allocate_aligned(
       _Heap_Align_down_uptr(&user_addr, page_size);
 
       /* Make sure 'user_addr' calculated didn't run out of 'the_block'. */
-      if(user_addr >= user_area) {
+      if (user_addr >= user_area) {
 
         /* The block seems to be acceptable. Check if the remainder of
            'the_block' is less than 'min_block_size' so that 'the_block' won't
            actually be split at the address we assume. */
-        if(user_addr - user_area < the_heap->min_block_size) {
+        if (user_addr - user_area < the_heap->min_block_size) {
 
           /* The block won't be split, so 'user_addr' will be equal to the
              'user_area'. */
@@ -206,45 +205,43 @@ void *_Heap_Allocate_aligned(
            resurrect the block address from the user pointer. (Having the
            distance within [0,page_size) range allows resurrection by
            aligning user pointer down to the nearest 'page_size' boundary.) */
-          if(aligned_user_addr - user_addr >= page_size) {
+          if (aligned_user_addr - user_addr >= page_size) {
 
             /* The user pointer will be too far from 'user_addr'. See if we
                can make 'aligned_user_addr' to be close enough to the
                'user_addr'. */
             aligned_user_addr = user_addr;
             _Heap_Align_up_uptr(&aligned_user_addr, alignment);
-            if(aligned_user_addr - user_addr >= page_size) {
+            if (aligned_user_addr - user_addr >= page_size) {
               /* No, we can't use the block */
-              aligned_user_addr = 0;
-            }
+              goto exit_point;
           }
         }
+      }
 
-        if(aligned_user_addr) {
+      /* The block is indeed acceptable: calculate the size of the block
+         to be allocated and perform allocation. */
+      uint32_t const alloc_size =
+          block_end - user_addr + HEAP_BLOCK_USER_OFFSET;
 
-          /* The block is indeed acceptable: calculate the size of the block
-             to be allocated and perform allocation. */
-          uint32_t const alloc_size =
-            block_end - user_addr + HEAP_BLOCK_USER_OFFSET;
+      _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
 
-          _HAssert(_Heap_Is_aligned_ptr((void*)aligned_user_addr, alignment));
+      the_block = block_allocate(the_heap, the_block, alloc_size);
 
-          the_block = block_allocate(the_heap, the_block, alloc_size);
+      stats->searches += search_count + 1;
+      stats->allocs += 1;
 
-          stats->searches += search_count + 1;
-          stats->allocs += 1;
+      check_result(the_heap, the_block, user_addr,
+        aligned_user_addr, size);
 
-          check_result(the_heap, the_block, user_addr,
-            aligned_user_addr, size);
-
-          user_ptr = (void*)aligned_user_addr;
-          break;
-        }
+        user_ptr = (void*)aligned_user_addr;
+        break;
       }
     }
   }
 
-  if(stats->max_search < search_count)
+exit_point:
+  if (stats->max_search < search_count)
     stats->max_search = search_count;
 
   return user_ptr;
