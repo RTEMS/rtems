@@ -1,3 +1,11 @@
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* Makefile.am, configure.ac, sp63/init.c: Add new test for exercising
+	when we are unable to allocate the memory needed for an object
+	extend. Make sure all is handled properly.
+	* sp64/.cvsignore, sp64/Makefile.am, sp64/init.c, sp64/sp64.doc,
+	sp64/sp64.scn: New files.
+
 2009-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp63/init.c: Correct test case two.
