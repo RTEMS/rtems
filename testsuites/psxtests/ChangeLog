@@ -1,5 +1,10 @@
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxmsgq04/init.c: Correct typo in configuration so test does as
+	intended.
+
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* psxmsgq04/init.c, psxmsgq04/psxmsgq04.doc, psxmsgq04/psxmsgq04.scn:
 	Update to handle ENFILE case now that POSIX message queues and
 	message queue file descriptors are configured separately and this
