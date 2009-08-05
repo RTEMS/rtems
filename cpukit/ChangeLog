@@ -1,3 +1,8 @@
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* rtems/include/rtems/rtems/region.h: Use new name.
+	* score/include/rtems/debug.h: Fix spacing.
+
 2009-08-05	Chris Johns <chrisj@rtems.org>
 
 	* libmisc/dummy/dummy-networking.c: New.  

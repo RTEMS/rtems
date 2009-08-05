@@ -270,7 +270,7 @@ extern void _Region_Process_queue(Region_Control *the_region);
 
 #define _Region_Debug_Walk( _the_region, _source ) \
   do { \
-    if ( _Debug_Is_enabled( RTEMS_DEBUG_REGION ) ) \
+    if ( rtems_debug_is_enabled( RTEMS_DEBUG_REGION ) ) \
       _Heap_Walk( &(_the_region)->Memory, _source, false ); \
   } while ( 0 )
 

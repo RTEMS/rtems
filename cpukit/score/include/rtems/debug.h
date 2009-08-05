@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,14 +52,14 @@ void _Debug_Manager_initialization( void );
 /**
  *  This routine enables the specified types of debug checks.
  */
-void rtems_debug_enable (
+void rtems_debug_enable(
   rtems_debug_control  to_be_enabled
 );
 
 /**
  *  This routine disables the specified types of debug checks.
  */
-void rtems_debug_disable (
+void rtems_debug_disable(
   rtems_debug_control  to_be_disabled
 );
 
