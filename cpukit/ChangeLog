@@ -1,5 +1,13 @@
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* libmisc/bspcmdline/bspcmdline.h, libmisc/bspcmdline/bspcmdline_get.c,
+	libmisc/bspcmdline/bspcmdline_getparam.c,
+	libmisc/bspcmdline/bspcmdline_getparamraw.c,
+	libmisc/bspcmdline/bspcmdline_getparamrhs.c: New files.
+	Missed in previous commit.
+
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, preinstall.am, libmisc/Makefile.am, wrapup/Makefile.am:
 	Add new BSP Boot Command Line helper routines. Recently boot_card()
 	has grown the ability to have a command line string pointer. These
