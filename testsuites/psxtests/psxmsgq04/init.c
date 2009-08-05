@@ -35,19 +35,26 @@ void *POSIX_Init(
   attr.mq_maxmsg = 1;
   attr.mq_msgsize = sizeof(int);
 
-  puts( "Init - Open message queue" );
+  puts( "Init - Open message queue instance 1" );
   Queue = mq_open( "Queue", O_CREAT | O_RDWR, 0x777, &attr );
   if ( Queue == (-1) )
     perror( "mq_open failed" );
   assert( Queue != (-1) );
 
-  puts( "Init - Unlink message queue" );
+  puts( "Init - Open message queue instance 2 - FAIL - ENFILE " );
+  second_Queue = mq_open( "Queue2", O_CREAT | O_RDWR, 0x777, &attr );
+  if ( second_Queue != (-1) )
+    puts( "mq_open did not failed" );
+  assert( second_Queue == (-1) );
+  assert( errno == ENFILE );
+
+  puts( "Init - Unlink message queue instance 1" );
   sc = mq_unlink( "Queue" );
   if ( sc != 0 )
     perror( "mq_unlink failed" );
   assert( sc == 0 );
 
-  puts( "Init - Close message queue" );
+  puts( "Init - Close message queue instance 1" );
   sc = mq_close( Queue );
   if ( sc != 0 )
     perror( "mq_close failed" );
@@ -96,8 +103,9 @@ void *POSIX_Init(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        1
-#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS                        1
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                 1
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_FILE_DESCRIPTORS 2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

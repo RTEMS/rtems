@@ -1,3 +1,10 @@
+2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxmsgq04/init.c, psxmsgq04/psxmsgq04.doc, psxmsgq04/psxmsgq04.scn:
+	Update to handle ENFILE case now that POSIX message queues and
+	message queue file descriptors are configured separately and this
+	error is possible.
+
 2009-08-05	Santosh G Vattam <vattam.santosh@gmail.com>
 
 	* Makefile.am, psxmsgq04/init.c, psxmsgq04/psxmsgq04.doc,

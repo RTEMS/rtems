@@ -21,5 +21,8 @@ directives:
 
 concepts:
 
-+ Ensure that the situation where we do not have enough Workspace memory
++ Ensure the case where there are more file descriptors than message queues
+  configured is properly handled.
+
++ Ensure that the case where we do not have enough Workspace memory
   left to allocate the message buffers is properly handled.
