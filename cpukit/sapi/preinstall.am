@@ -8,10 +8,20 @@ endif
 PREINSTALL_DIRS =
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
+all-local: $(TMPINSTALL_FILES)
+
+TMPINSTALL_FILES =
+CLEANFILES = $(TMPINSTALL_FILES)
+
 all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
@@ -61,4 +71,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.inl
 $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
+
+$(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libsapi.a
 

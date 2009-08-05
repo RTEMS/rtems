@@ -1,5 +1,14 @@
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libcsupport/Makefile.am, rtems/Makefile.am, rtems/preinstall.am,
+	sapi/Makefile.am, sapi/preinstall.am, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/score/heap.h,
+	score/inline/rtems/score/heap.inl: Remove inline version now that it
+	is in a C file.
+	* libcsupport/src/end_profile.c: New file.
+
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* score/Makefile.am: Move from inline to body to avoid path explosion
 	from inlining this. Makes coverage analysis easier.
 	* score/src/heapalignupuptr.c: New file.

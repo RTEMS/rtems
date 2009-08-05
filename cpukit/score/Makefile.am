@@ -21,8 +21,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/bitfield.h include/rtems/score/chain.h \
     include/rtems/score/context.h include/rtems/score/copyrt.h \
     include/rtems/score/corebarrier.h include/rtems/score/coremsg.h \
-    include/rtems/score/coremutex.h include/rtems/score/corerwlock.h \
-    include/rtems/score/coresem.h \
+    include/rtems/score/coremutex.h include/rtems/score/coresem.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
@@ -35,8 +34,9 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
     include/rtems/score/cpuopts.h
 
-if LIBPOSIX
-include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
+if HAS_PTHREADS
+include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
+    include/rtems/score/corerwlock.h
 endif
 
 if HAS_MP
@@ -49,17 +49,18 @@ endif
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/chain.inl inline/rtems/score/corebarrier.inl \
-    inline/rtems/score/coremsg.inl inline/rtems/score/corerwlock.inl \
-    inline/rtems/score/coremutex.inl inline/rtems/score/coresem.inl \
-    inline/rtems/score/heap.inl inline/rtems/score/isr.inl \
-    inline/rtems/score/object.inl inline/rtems/score/priority.inl \
-    inline/rtems/score/stack.inl inline/rtems/score/states.inl \
-    inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
-    inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
-    inline/rtems/score/tqdata.inl \
+    inline/rtems/score/coremsg.inl inline/rtems/score/coremutex.inl \
+    inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
+    inline/rtems/score/isr.inl inline/rtems/score/object.inl \
+    inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
+    inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
+    inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
+    inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
     inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
-if LIBPOSIX
-include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl
+
+if HAS_PTHREADS
+include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl \
+    inline/rtems/score/corerwlock.inl
 endif
 
 if HAS_MP
@@ -72,6 +73,7 @@ endif
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
+project_lib_LIBRARIES = libscore.a
 noinst_LIBRARIES = libscore.a
 libscore_a_SOURCES =
 libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
@@ -101,15 +103,17 @@ libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
     src/coremutexseizeintr.c
 
 ## CORE_RWLOCK_C_FILES
+if HAS_PTHREADS
 libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
     src/corerwlockobtainwrite.c src/corerwlockrelease.c src/corerwlocktimeout.c
+endif
 
 ## CORE_SEMAPHORE_C_FILES
 libscore_a_SOURCES += src/coresem.c src/coresemflush.c src/coresemseize.c \
     src/coresemsurrender.c
 
 ## CORE_SPINLOCK_C_FILES
-if LIBPOSIX
+if HAS_PTHREADS
 libscore_a_SOURCES += src/corespinlock.c src/corespinlockrelease.c \
     src/corespinlockwait.c
 endif

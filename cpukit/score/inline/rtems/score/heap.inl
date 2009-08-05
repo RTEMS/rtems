@@ -226,28 +226,6 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned_ptr (
 }
 
 /**
- *  Align @a *value up to the nearest multiple of @a alignment.
- *
- *  @param[in] value is a pointer to be aligned.
- *  @param[in] alignment is the alignment value.
- *
- *  @return Upon return, @a value will contain the aligned result.
- */
-RTEMS_INLINE_ROUTINE void _Heap_Align_up_uptr (
-  _H_uptr_t *value,
-  uint32_t  alignment
-)
-{
-  _H_uptr_t remainder;
-  _H_uptr_t v = *value;
-
-  remainder = v % alignment;
-
-  if ( remainder )
-    *value = v - remainder + alignment;
-}
-
-/**
  *  Align @a *value down to the nearest multiple of @a alignment.
  *
  *  @param[in] value is a pointer to be aligned.

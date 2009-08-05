@@ -449,7 +449,7 @@ void _Heap_Get_free_information(
  *
  *  @return This method returns block size on success, 0 if overflow occured.
  */
-extern size_t _Heap_Calc_block_size(
+size_t _Heap_Calc_block_size(
   size_t   size,
   uint32_t page_size,
   uint32_t min_size
@@ -471,10 +471,23 @@ extern size_t _Heap_Calc_block_size(
  *
  *  @return This methods returns the size of the allocated block.
  */
-extern uint32_t _Heap_Block_allocate(
+uint32_t _Heap_Block_allocate(
   Heap_Control* the_heap,
   Heap_Block*   the_block,
   uint32_t      alloc_size
+);
+
+/**
+ *  Align @a *value up to the nearest multiple of @a alignment.
+ *
+ *  @param[in] value is a pointer to be aligned.
+ *  @param[in] alignment is the alignment value.
+ *
+ *  @return Upon return, @a value will contain the aligned result.
+ */
+void _Heap_Align_up_uptr (
+  _H_uptr_t *value,
+  uint32_t  alignment
 );
 
 /*

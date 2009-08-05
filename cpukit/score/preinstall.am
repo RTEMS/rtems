@@ -8,10 +8,20 @@ endif
 PREINSTALL_DIRS =
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 
+all-local: $(TMPINSTALL_FILES)
+
+TMPINSTALL_FILES =
+CLEANFILES = $(TMPINSTALL_FILES)
+
 all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
@@ -74,10 +84,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremsg.h
 $(PROJECT_INCLUDE)/rtems/score/coremutex.h: include/rtems/score/coremutex.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremutex.h
-
-$(PROJECT_INCLUDE)/rtems/score/corerwlock.h: include/rtems/score/corerwlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
 
 $(PROJECT_INCLUDE)/rtems/score/coresem.h: include/rtems/score/coresem.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.h
@@ -167,10 +173,14 @@ $(PROJECT_INCLUDE)/rtems/score/cpuopts.h: include/rtems/score/cpuopts.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuopts.h
 
-if LIBPOSIX
+if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corespinlock.h
+
+$(PROJECT_INCLUDE)/rtems/score/corerwlock.h: include/rtems/score/corerwlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
 endif
 if HAS_MP
 $(PROJECT_INCLUDE)/rtems/score/mpci.h: include/rtems/score/mpci.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
@@ -204,10 +214,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corebarrier.inl
 $(PROJECT_INCLUDE)/rtems/score/coremsg.inl: inline/rtems/score/coremsg.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremsg.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremsg.inl
-
-$(PROJECT_INCLUDE)/rtems/score/corerwlock.inl: inline/rtems/score/corerwlock.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.inl
 
 $(PROJECT_INCLUDE)/rtems/score/coremutex.inl: inline/rtems/score/coremutex.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremutex.inl
@@ -269,10 +275,14 @@ $(PROJECT_INCLUDE)/rtems/score/wkspace.inl: inline/rtems/score/wkspace.inl $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
 
-if LIBPOSIX
+if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.inl: inline/rtems/score/corespinlock.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corespinlock.inl
+
+$(PROJECT_INCLUDE)/rtems/score/corerwlock.inl: inline/rtems/score/corerwlock.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.inl
 endif
 if HAS_MP
 $(PROJECT_INCLUDE)/rtems/score/mppkt.inl: inline/rtems/score/mppkt.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
@@ -287,3 +297,7 @@ $(PROJECT_INCLUDE)/rtems/score/threadmp.inl: inline/rtems/score/threadmp.inl $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadmp.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadmp.inl
 endif
+$(PROJECT_LIB)/libscore.a: libscore.a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libscore.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libscore.a
+
