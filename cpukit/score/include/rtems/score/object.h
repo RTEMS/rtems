@@ -73,20 +73,20 @@ typedef uint16_t   Objects_Id;
  */
 typedef uint8_t    Objects_Maximum;
 
-#define OBJECTS_INDEX_START_BIT  0
-#define OBJECTS_API_START_BIT    8
-#define OBJECTS_CLASS_START_BIT 11
+#define OBJECTS_INDEX_START_BIT  0U
+#define OBJECTS_API_START_BIT    8U
+#define OBJECTS_CLASS_START_BIT 11U
 
-#define OBJECTS_INDEX_MASK      (Objects_Id)0x00ff
-#define OBJECTS_API_MASK        (Objects_Id)0x0700
-#define OBJECTS_CLASS_MASK      (Objects_Id)0xF800
+#define OBJECTS_INDEX_MASK      (Objects_Id)0x00ffU
+#define OBJECTS_API_MASK        (Objects_Id)0x0700U
+#define OBJECTS_CLASS_MASK      (Objects_Id)0xF800U
 
-#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x00ff
-#define OBJECTS_API_VALID_BITS    (Objects_Id)0x0007
+#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x00ffU
+#define OBJECTS_API_VALID_BITS    (Objects_Id)0x0007U
 /* OBJECTS_NODE_VALID_BITS should not be used with 16 bit Ids */
-#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x001f
+#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x001fU
 
-#define OBJECTS_UNLIMITED_OBJECTS 0x8000
+#define OBJECTS_UNLIMITED_OBJECTS 0x8000U
 
 #define OBJECTS_ID_INITIAL_INDEX  (0)
 #define OBJECTS_ID_FINAL_INDEX    (0xff)
@@ -113,76 +113,76 @@ typedef uint16_t   Objects_Maximum;
  *  This is the bit position of the starting bit of the index portion of
  *  the object Id.
  */
-#define OBJECTS_INDEX_START_BIT  0
+#define OBJECTS_INDEX_START_BIT  0U
 
 
 /**
  *  This is the bit position of the starting bit of the node portion of
  *  the object Id.
  */
-#define OBJECTS_NODE_START_BIT  16
+#define OBJECTS_NODE_START_BIT  16U
 
 /**
  *  This is the bit position of the starting bit of the API portion of
  *  the object Id.
  */
-#define OBJECTS_API_START_BIT   24
+#define OBJECTS_API_START_BIT   24U
 
 /**
  *  This is the bit position of the starting bit of the class portion of
  *  the object Id.
  */
-#define OBJECTS_CLASS_START_BIT 27
+#define OBJECTS_CLASS_START_BIT 27U
 
 /**
  *  This mask is used to extract the index portion of an object Id.
  */
-#define OBJECTS_INDEX_MASK      (Objects_Id)0x0000ffff
+#define OBJECTS_INDEX_MASK      (Objects_Id)0x0000ffffU
 
 /**
  *  This mask is used to extract the node portion of an object Id.
  */
-#define OBJECTS_NODE_MASK       (Objects_Id)0x00ff0000
+#define OBJECTS_NODE_MASK       (Objects_Id)0x00ff0000U
 
 /**
  *  This mask is used to extract the API portion of an object Id.
  */
-#define OBJECTS_API_MASK        (Objects_Id)0x07000000
+#define OBJECTS_API_MASK        (Objects_Id)0x07000000U
 
 /**
  *  This mask is used to extract the class portion of an object Id.
  */
-#define OBJECTS_CLASS_MASK      (Objects_Id)0xf8000000
+#define OBJECTS_CLASS_MASK      (Objects_Id)0xf8000000U
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the index portion of an object Id.
  */
-#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x0000ffff
+#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x0000ffffU
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the node portion of an object Id.
  */
-#define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ff
+#define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ffU
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the API portion of an object Id.
  */
-#define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007
+#define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007U
 
 /**
  *  This mask represents the bits that is used to ensure no extra bits
  *  are set after shifting to extract the class portion of an object Id.
  */
-#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001f
+#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001fU
 
 /**
  *  Mask to enable unlimited objects.  This is used in the configuration
  *  table when specifying the number of configured objects.
  */
-#define OBJECTS_UNLIMITED_OBJECTS 0x80000000
+#define OBJECTS_UNLIMITED_OBJECTS 0x80000000U
 
 /**
  *  This is the lowest value for the index portion of an object Id.
@@ -192,7 +192,7 @@ typedef uint16_t   Objects_Maximum;
 /**
  *  This is the highest value for the index portion of an object Id.
  */
-#define OBJECTS_ID_FINAL_INDEX    (0xffff)
+#define OBJECTS_ID_FINAL_INDEX    (0xffffU)
 #endif
 
 /**
@@ -336,7 +336,7 @@ typedef struct {
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
   /** This is the number of objects in a block. */
-  uint32_t          allocation_size;
+  Objects_Maximum   allocation_size;
   /** This is the size in bytes of each object instance. */
   size_t            size;
   /** This points to the table of local objects. */

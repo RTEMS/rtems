@@ -1,3 +1,28 @@
+2009-08-05	Chris Johns <chrisj@rtems.org>
+
+	* libmisc/dummy/dummy-networking.c: New.  
+	* libmisc/dummy/dummy.c, libmisc/Makefile.am: Move
+	trhe networking configuration into a separate file so
+	configuration varations do not cause conflicts.
+	* score/inline/rtems/score/object.inl,
+	score/include/rtems/score/object.h: Remove warnings.
+	* score/inline/rtems/score/object.inl: Add _Chain_First,
+	_Chain_Last, _Chain_Mext, and _Chain_Previous.
+	* sapi/inline/rtems/chain.inl: Add rtems_chain_first,
+	rtems_chain_last, rtems_chain_mext, and rtems_chain_previous.
+	* libblock/include/rtems/diskdevs.h: Remove the bdbuf pool id and
+	block_size_log2. Add media_block_size.
+	* libblock/src/diskdevs.c: Remove size restrictions on block
+	size. Add media block size initialisation. Remove comment to clean
+	up the bdbuf cache.
+	* libblock/src/blkdev.c: Remove references to
+	block_size_log2. Allow any block size.
+	* libblock/include/rtems/bdbuf.h, libblock/src/bdbuf.c: Remove all
+	references to pools and make the cache handle demand driver
+	variable buffer size allocation. Added worker threads support the
+	swapout task.
+	* sapi/include/confdefs.h: Updated the bdbuf configutation.
+	
 2009-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sapi/include/confdefs.h: Account for allocation of user extension

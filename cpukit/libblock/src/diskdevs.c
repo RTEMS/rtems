@@ -226,33 +226,17 @@ rtems_status_code rtems_disk_create_phys(
   const char *name
 )
 {
-    int bs_log2;
-    int i;
     rtems_disk_device *dd;
     rtems_status_code rc;
-    rtems_bdpool_id pool;
     rtems_device_major_number major;
     rtems_device_minor_number minor;
 
     rtems_filesystem_split_dev_t (dev, major, minor);
 
-
-    for (bs_log2 = 0, i = block_size; (i & 1) == 0; i >>= 1, bs_log2++);
-    if ((bs_log2 < 9) || (i != 1)) /* block size < 512 or not power of 2 */
-        return RTEMS_INVALID_NUMBER;
-
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
     diskdevs_protected = true;
-
-    rc = rtems_bdbuf_find_pool(block_size, &pool);
-    if (rc != RTEMS_SUCCESSFUL)
-    {
-        diskdevs_protected = false;
-        rtems_semaphore_release(diskdevs_mutex);
-        return rc;
-    }
 
     rc = create_disk(dev, name, &dd);
     if (rc != RTEMS_SUCCESSFUL)
@@ -266,10 +250,8 @@ rtems_status_code rtems_disk_create_phys(
     dd->uses = 0;
     dd->start = 0;
     dd->size = disk_size;
-    dd->block_size = block_size;
-    dd->block_size_log2 = bs_log2;
+    dd->block_size = dd->media_block_size = block_size;
     dd->ioctl = handler;
-    dd->pool = pool;
 
     rc = rtems_io_register_name(name, major, minor);
 
@@ -333,7 +315,6 @@ rtems_status_code rtems_disk_create_log(
   dd->start = start;
   dd->size = size;
   dd->block_size = pdd->block_size;
-  dd->block_size_log2 = pdd->block_size_log2;
   dd->ioctl = pdd->ioctl;
 
   rc = rtems_io_register_name(name, major, minor);
@@ -555,7 +536,6 @@ rtems_disk_io_done(void)
 
     rc = rtems_semaphore_delete(diskdevs_mutex);
 
-    /* XXX bdbuf should be released too! */
     disk_io_initialized = 0;
     return rc;
 }

@@ -727,32 +727,45 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_SWAPOUT_BLOCK_HOLD \
                               RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT
   #endif
+  #ifndef CONFIGURE_SWAPOUT_WORKER_TASKS
+    #define CONFIGURE_SWAPOUT_WORKER_TASKS \
+                              RTEMS_BDBUF_SWAPOUT_WORKER_TASKS_DEFAULT
+  #endif
+  #ifndef CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
+    #define CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY \
+                              RTEMS_BDBUF_SWAPOUT_WORKER_TASK_PRIORITY_DEFAULT
+  #endif
+  #ifndef CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
+    #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE \
+                              RTEMS_BDBUF_CACHE_MEMORY_SIZE_DEFAULT
+  #endif
+  #ifndef CONFIGURE_BDBUF_BUFFER_MIN_SIZE
+    #define CONFIGURE_BDBUF_BUFFER_MIN_SIZE \
+                              RTEMS_BDBUF_BUFFER_MIN_SIZE_DEFAULT
+  #endif
+  #ifndef CONFIGURE_BDBUF_BUFFER_MAX_SIZE
+    #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE \
+                              RTEMS_BDBUF_BUFFER_MAX_SIZE_DEFAULT
+  #endif
   #ifdef CONFIGURE_INIT
-    rtems_bdbuf_config rtems_bdbuf_configuration = { 
+    const rtems_bdbuf_config rtems_bdbuf_configuration = { 
       CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS,
       CONFIGURE_BDBUF_MAX_WRITE_BLOCKS,
       CONFIGURE_SWAPOUT_TASK_PRIORITY,
       CONFIGURE_SWAPOUT_SWAP_PERIOD,
-      CONFIGURE_SWAPOUT_BLOCK_HOLD
+      CONFIGURE_SWAPOUT_BLOCK_HOLD,
+      CONFIGURE_SWAPOUT_WORKER_TASKS,
+      CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY,
+      CONFIGURE_BDBUF_CACHE_MEMORY_SIZE,
+      CONFIGURE_BDBUF_BUFFER_MIN_SIZE,
+      CONFIGURE_BDBUF_BUFFER_MAX_SIZE
     };
   #endif
-  #ifndef CONFIGURE_HAS_OWN_BDBUF_TABLE
-    #ifndef CONFIGURE_BDBUF_BUFFER_COUNT
-      #define CONFIGURE_BDBUF_BUFFER_COUNT 64
-    #endif
-
-    #ifndef CONFIGURE_BDBUF_BUFFER_SIZE
-      #define CONFIGURE_BDBUF_BUFFER_SIZE 512
-    #endif
-    #ifdef CONFIGURE_INIT
-      rtems_bdbuf_pool_config rtems_bdbuf_pool_configuration[] = {
-        {CONFIGURE_BDBUF_BUFFER_SIZE, CONFIGURE_BDBUF_BUFFER_COUNT, NULL}
-      };
-      size_t rtems_bdbuf_pool_configuration_size = 
-        (sizeof(rtems_bdbuf_pool_configuration) /
-         sizeof(rtems_bdbuf_pool_configuration[0]));
-    #endif /* CONFIGURE_INIT */
-  #endif /* CONFIGURE_HAS_OWN_BDBUF_TABLE        */
+  #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
+      defined(CONFIGURE_BDBUF_BUFFER_SIZE) || \
+      defined(CONFIGURE_BDBUF_BUFFER_COUNT)
+    #error BDBUF Cache does not use a buffer configuration table. Please remove.
+  #endif
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 
 #if defined(RTEMS_MULTIPROCESSING)

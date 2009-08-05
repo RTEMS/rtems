@@ -111,7 +111,9 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
   Objects_Id id
 )
 {
-  return (id >> OBJECTS_INDEX_START_BIT) & OBJECTS_INDEX_VALID_BITS;
+  return
+    (Objects_Maximum)((id >> OBJECTS_INDEX_START_BIT) &
+                                          OBJECTS_INDEX_VALID_BITS);
 }
 
 /**
@@ -224,7 +226,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Information *information,
-  uint16_t             index,
+  uint32_t             index,
   Objects_Control     *the_object
 )
 {

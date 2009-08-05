@@ -20,13 +20,6 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 
-/**
- * @ingroup rtems_bdbuf
- *
- * Buffer pool identifier.
- */
-typedef int rtems_bdpool_id;
-
 #include <rtems/blkdev.h>
 
 #ifdef __cplusplus
@@ -107,19 +100,16 @@ typedef struct rtems_disk_device {
   /**
    * Device block size in bytes.
    *
-   * This is the minimum transfer unit and must be power of two.
+   * This is the minimum transfer unit. It can be any size.
    */
   uint32_t block_size;
 
   /**
-   * Binary logarithm of the block size.
+   * Device media block size in bytes.
+   *
+   * This is the media transfer unit the hardware defaults to.
    */
-  uint32_t block_size_log2;
-
-  /**
-   * Buffer pool assigned to this disk.
-   */
-  rtems_bdpool_id pool;
+  uint32_t media_block_size;
 
   /**
    * IO control handler for this disk.

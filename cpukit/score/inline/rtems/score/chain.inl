@@ -83,7 +83,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_null_node(
 
 /** @brief Return pointer to Chain Head
  *
- *  This function returns a pointer to the first node on the chain.
+ *  This function returns a pointer to the head node on the chain.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *
@@ -109,6 +109,68 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
 )
 {
    return (Chain_Node *) &the_chain->permanent_null;
+}
+
+/** @brief Return pointer to Chain's First node
+ *
+ *  This function returns a pointer to the first node on the chain after the
+ *  head.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the first node of the chain.
+ */
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_First(
+  Chain_Control *the_chain
+)
+{
+  return the_chain->first;
+}
+
+/** @brief Return pointer to Chain's Last node
+ *
+ *  This function returns a pointer to the last node on the chain just before
+ *  the tail.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the last node of the chain.
+ */
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Last(
+  Chain_Control *the_chain
+)
+{
+  return the_chain->last;
+}
+
+/** @brief Return pointer the next node from this node
+ *
+ *  This function returns a pointer to the next node after this node.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the next node on the chain.
+ */
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Next(
+  Chain_Node *the_node
+)
+{
+  return the_node->next;
+}
+
+/** @brief Return pointer the previous node from this node
+ *
+ *  This function returns a pointer to the previous node on this chain.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the previous node on the chain.
+ */
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Previous(
+  Chain_Node *the_node
+)
+{
+  return the_node->previous;
 }
 
 /** @brief Is the Chain Empty

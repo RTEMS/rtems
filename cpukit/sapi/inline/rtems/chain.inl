@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the permanent head node of the chain.
+ *  @return This method returns the permanent  node of the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
   rtems_chain_control *the_chain
@@ -119,6 +119,56 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
 )
 {
   return _Chain_Tail( the_chain );
+}
+
+/**
+ *  @brief Return pointer to Chain's First node after the permanent head.
+ *
+ *  This function returns a pointer to the first node on the chain after the
+ *  head.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the first node of the chain.
+ */
+RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
+  rtems_chain_control *the_chain
+)
+{
+  return _Chain_First( the_chain );
+}
+
+/**
+ *  @brief Return pointer to Chain's Last node before the permanent tail.
+ *
+ *  This function returns a pointer to the last node on the chain just before
+ *  the tail.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the last node of the chain.
+ */
+RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
+  rtems_chain_control *the_chain
+)
+{
+  return _Chain_Last( the_chain );
+}
+
+/**
+ *  @brief Return pointer the next node from this node
+ *
+ *  This function returns a pointer to the next node after this node.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the next node on the chain.
+ */
+RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
+  rtems_chain_node *the_node
+)
+{
+  return _Chain_Next( the_node );
 }
 
 /**

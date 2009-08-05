@@ -37,7 +37,6 @@ rtems_blkdev_generic_read(
     void                    * arg)
 {
     rtems_libio_rw_args_t *args = arg;
-    int block_size_log2;
     int block_size;
     char         *buf;
     unsigned int count;
@@ -51,15 +50,14 @@ rtems_blkdev_generic_read(
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
-    block_size_log2 = dd->block_size_log2;
     block_size = dd->block_size;
 
     buf = args->buffer;
     count = args->count;
     args->bytes_moved = 0;
 
-    block = args->offset >> block_size_log2;
-    blkofs = args->offset & (block_size - 1);
+    block = args->offset / block_size;
+    blkofs = args->offset % block_size;
 
     while (count > 0)
     {
@@ -97,7 +95,6 @@ rtems_blkdev_generic_write(
     void                    * arg)
 {
     rtems_libio_rw_args_t *args = arg;
-    int           block_size_log2;
     uint32_t      block_size;
     char         *buf;
     uint32_t      count;
@@ -112,15 +109,14 @@ rtems_blkdev_generic_write(
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
 
-    block_size_log2 = dd->block_size_log2;
     block_size = dd->block_size;
 
     buf = args->buffer;
     count = args->count;
     args->bytes_moved = 0;
 
-    block = args->offset >> block_size_log2;
-    blkofs = args->offset & (block_size - 1);
+    block = args->offset / block_size;
+    blkofs = args->offset % block_size;
 
     while (count > 0)
     {
