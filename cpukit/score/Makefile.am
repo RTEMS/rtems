@@ -117,8 +117,8 @@ endif
 ## HEAP_C_FILES
 libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
     src/heapfree.c src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c \
-    src/heapgetfreeinfo.c src/heapallocatealigned.c \
-    src/heapresizeblock.c
+    src/heapgetfreeinfo.c src/heapallocatealigned.c src/heapresizeblock.c \
+    src/heapalignupuptr.c
 
 ## OBJECT_C_FILES
 libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \

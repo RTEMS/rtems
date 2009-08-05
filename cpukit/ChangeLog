@@ -1,3 +1,9 @@
+2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/Makefile.am: Move from inline to body to avoid path explosion
+	from inlining this. Makes coverage analysis easier.
+	* score/src/heapalignupuptr.c: New file.
+
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libmisc/bspcmdline/bspcmdline.h, libmisc/bspcmdline/bspcmdline_get.c,
