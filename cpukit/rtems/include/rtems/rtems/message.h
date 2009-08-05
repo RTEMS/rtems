@@ -53,7 +53,9 @@ extern "C" {
 #include <rtems/score/coremsg.h>
 
 /**
- *  @defgroup ClassicMessageQueue Classic API Message Queue
+ *  @defgroup ClassicMessageQueue Message Queues
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

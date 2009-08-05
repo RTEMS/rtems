@@ -19,7 +19,9 @@
 #define _RTEMS_RTEMS_STATUS_H
 
 /**
- *  @defgroup ClassicStatus Classic API Status
+ *  @defgroup ClassicStatus Status Codes
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

@@ -29,7 +29,9 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 /**
- *  @defgroup ClassicEventMP Classic API Event MP Support
+ *  @defgroup ClassicEventMP Event MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

@@ -38,7 +38,9 @@
 #include <rtems/rtems/types.h>
 
 /**
- *  @defgroup ClassicRegion Classic API Region
+ *  @defgroup ClassicRegion Regions
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

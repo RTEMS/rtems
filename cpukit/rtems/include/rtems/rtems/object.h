@@ -25,7 +25,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicClassInfo Classic API Class Information
+ *  @defgroup ClassicClassInfo Object Class Information
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

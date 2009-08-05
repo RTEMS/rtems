@@ -23,7 +23,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicAttributes Classic API Attributes
+ *  @defgroup ClassicAttributes Attributes
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which defines and manages the
  *  set of Classic API object attributes.

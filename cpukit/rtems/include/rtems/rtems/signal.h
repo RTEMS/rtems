@@ -25,7 +25,9 @@
 #define _RTEMS_RTEMS_SIGNAL_H
 
 /**
- *  @defgroup ClassicSignal Classic API Signal
+ *  @defgroup ClassicSignal Signals
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

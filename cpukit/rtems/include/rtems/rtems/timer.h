@@ -56,7 +56,9 @@ extern "C" {
 #include <rtems/rtems/attr.h>
 
 /**
- *  @defgroup ClassicTimer Classic API Timer
+ *  @defgroup ClassicTimer Timers
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to the Classic API Timer
  *  Manager.  This manager provides functionality which allows the

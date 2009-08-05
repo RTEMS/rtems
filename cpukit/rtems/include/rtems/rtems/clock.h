@@ -35,7 +35,9 @@
 #include <sys/time.h> /* struct timeval */
 
 /**
- *  @defgroup ClassicClock Classic API Clock
+ *  @defgroup ClassicClock Clocks
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

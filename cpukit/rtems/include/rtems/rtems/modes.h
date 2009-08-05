@@ -19,7 +19,9 @@
 #define _RTEMS_RTEMS_MODES_H
 
 /**
- *  @defgroup ClassicModes Classic API Modes
+ *  @defgroup ClassicModes Modes
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

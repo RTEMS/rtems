@@ -30,7 +30,9 @@ extern "C" {
 #include <rtems/rtems/region.h>
 
 /**
- *  @defgroup ClassicRegionMP Classic API Region MP Support
+ *  @defgroup ClassicRegionMP Region MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

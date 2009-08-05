@@ -30,7 +30,9 @@ extern "C" {
 #include <rtems/rtems/part.h>
 
 /**
- *  @defgroup ClassicPartMP Classic API Partition MP Support
+ *  @defgroup ClassicPartMP Partition MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

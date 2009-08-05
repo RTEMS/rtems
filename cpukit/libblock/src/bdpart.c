@@ -858,7 +858,7 @@ rtems_status_code rtems_bdpart_register(
     logical_disk = rtems_filesystem_make_dev_t( major, minor);
 
     /* Set partition number for logical disk name */
-    rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%lu", i + 1);
+    rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
     if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
       esc = RTEMS_INVALID_NAME;
       goto cleanup;
@@ -994,7 +994,7 @@ rtems_status_code rtems_bdpart_mount(
   /* Mount supported file systems for each partition */
   for (i = 0; i < count; ++i) {
     /* Create logical disk name */
-    int rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%lu", i + 1);
+    int rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
     if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
       esc = RTEMS_INVALID_NAME;
       goto cleanup;
@@ -1070,7 +1070,7 @@ rtems_status_code rtems_bdpart_unmount(
   /* Mount supported file systems for each partition */
   for (i = 0; i < count; ++i) {
     /* Create mount point */
-    int rv = snprintf( mount_marker, RTEMS_BDPART_NUMBER_SIZE, "%lu", i + 1);
+    int rv = snprintf( mount_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
     if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
       esc = RTEMS_INVALID_NAME;
       goto cleanup;

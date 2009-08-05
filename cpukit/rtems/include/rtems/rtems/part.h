@@ -50,7 +50,9 @@ extern "C" {
 #include <rtems/rtems/types.h>
 
 /**
- *  @defgroup ClassicPart Classic API Partition
+ *  @defgroup ClassicPart Partitions
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to the
  *  Classic API Partition Manager.

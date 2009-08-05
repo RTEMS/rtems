@@ -1,8 +1,9 @@
 /**
- * @file  rtems.h
+ * @file
  *
- *  This include file provides the public interface to the RTEMS Classic
- *  API.
+ * @ingroup ClassicRTEMS
+ *
+ * @brief Provides the public interface to the RTEMS Classic API.
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -19,12 +20,12 @@
 #define _RTEMS_H
 
 /**
- *  @defgroup ClassicRTEMS Classic API RTEMS Header
+ * @defgroup ClassicRTEMS RTEMS Classic API
  *
- *  This encapsulates functionality which is specific to the Classic API
- *  and generally shared across the various object classes.
+ * RTEMS Classic API definitions and modules.
+ *
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,13 +34,13 @@ extern "C" {
 #if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && \
     (!defined(__RTEMS_INSIDE__))
 /**
- *  @brief Compiling RTEMS Application Macro
+ * @brief Compiling RTEMS application macro.
  *
- *  Unless told otherwise, the RTEMS include files will hide some stuff
- *  from normal application code.  Defining this crosses a boundary which
- *  is undesirable since it means your application is using RTEMS features
- *  which are not included in the formally defined and supported API.
- *  Define this at your own risk.
+ * Unless told otherwise, the RTEMS include files will hide some stuff from
+ * normal application code.  Defining this crosses a boundary which is
+ * undesirable since it means your application is using RTEMS features which
+ * are not included in the formally defined and supported API.  Define this at
+ * your own risk.
  */
 #define __RTEMS_APPLICATION__
 #endif
@@ -78,17 +79,13 @@ extern "C" {
 #include <rtems/score/sysstate.h>
 
 /**
- *  @brief Obtain the RTEMS Version String
- *
- *  This method may be used to obtain the RTEMS version string.
- *
- *  @return This method returns a pointer to the version string.
+ * @brief Returns the pointer to the RTEMS version string.
  */
 const char *rtems_get_version_string(void);
 
 /**
- *  This constant indicates whether this processor variant has
- *  hardware floating point support.
+ * @brief Indicates whether this processor variant has hardware floating point
+ * support.
  */
 #define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
@@ -97,28 +94,26 @@ const char *rtems_get_version_string(void);
  **********************************************************************/ 
 
 /**
- * This constant indicates that the search is across all nodes.
+ * @brief Indicates that a search is across all nodes.
  */
 #define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
 
 /**
- *  This constant indicates that the search is across all nodes
- *  except the one the call is made from.
+ * @brief Indicates that a search is across all nodes except the one the call
+ * is made from.
  */
 #define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
 
 /**
- *  This constant indicates that the search is to be restricted
- *  to the local node.
+ * @brief Indicates that the search is to be restricted to the local node.
  */
 #define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
 
 /**
- *  This constant indicates that the caller wants to obtain the
- *  name of the currently executing thread.
+ * @brief Indicates that the caller wants to obtain the name of the currently
+ * executing thread.
  *
- *  @note This constant is only meaningful when obtaining the name
- *        of a task.
+ * This constant is only meaningful when obtaining the name of a task.
  */
 #define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
 
@@ -127,61 +122,61 @@ const char *rtems_get_version_string(void);
  **********************************************************************/ 
 
 /**
- *  This constant is the lowest valid valid for the index portion
- *  of an object Id.
+ * @brief Lowest valid index value for the index portion of an object
+ * identifier.
  */
 #define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
 
 /**
- *  This constant is the maximum valid valid for the index portion
- *  of an object Id.
+ * @brief Maximum valid index value for the index portion of an object
+ * identifier.
  */
 #define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
 
 /**
- *  This method returns the Id of the object with the lowest
- *  valid index valud.
+ * @brief Returns the identifier of the object with the lowest valid index
+ * value.
  *
- *  @param[in] _api is the API of the object
- *  @param[in] _class is the Object Class of the object
- *  @param[in] _node is the node where the object resides
+ * The object is specified by the API @a _api, the object class @a _class and
+ * the node @a _node where the object resides.
  */
 #define RTEMS_OBJECT_ID_INITIAL(_api, _class, _node) \
    OBJECTS_ID_INITIAL(_api, _class, _node)
 
 /**
- *  This constant is the maximum valid object Id.
+ * @brief Maximum valid object identifier.
  */
 #define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
 
 /**
- *  The following constant defines the minimum stack size which every
- *  thread must exceed.
+ * @brief Minimum stack size which every thread must exceed.
  */
 #define RTEMS_MINIMUM_STACK_SIZE  STACK_MINIMUM_SIZE
 
 /**
- *  The following constant is used to specify that the task should
- *  be created with the configured minimum stack size.
+ * @brief Specifies that the task should be created with the configured minimum
+ * stack size.
  */
 #define RTEMS_CONFIGURED_MINIMUM_STACK_SIZE  0
 
 /**
- *  Constant for indefinite wait.  (actually an illegal interval)
+ * @brief Constant for indefinite wait.
+ *
+ * This is actually an illegal interval value.
  */
 #define RTEMS_NO_TIMEOUT  WATCHDOG_NO_TIMEOUT
 
 /**
- *  An MPCI must support packets of at least this size.
+ * @brief An MPCI must support packets of at least this size.
  */
 #define RTEMS_MINIMUM_PACKET_SIZE  MP_PACKET_MINIMUM_PACKET_SIZE
 
 /**
- *  The following constant defines the number of uint32_t's
- *  in a packet which must be converted to native format in a
- *  heterogeneous system.  In packets longer than
- *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t's, some of the "extra" data
- *  may a user message buffer which is not automatically endian swapped.
+ * @brief Defines the count of @c uint32_t numbers in a packet which must be
+ * converted to native format in a heterogeneous system.
+ *
+ * In packets longer than this value, some of the extra data may be a user
+ * message buffer which is not automatically endian swapped.
  */
 #define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
 

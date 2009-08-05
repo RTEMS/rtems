@@ -30,7 +30,9 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 /**
- *  @defgroup ClassicMsgMP Classic API Message Queue MP Support
+ *  @defgroup ClassicMsgMP Message Queue MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

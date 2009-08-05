@@ -26,7 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicASR Classic API ASR Support
+ *  @defgroup ClassicASR ASR Support
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

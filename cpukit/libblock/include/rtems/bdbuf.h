@@ -34,6 +34,8 @@ extern "C" {
 	
 /**
  * @defgroup rtems_libblock Block Device Library
+ *
+ * Block device modules.
  */
 
 /**

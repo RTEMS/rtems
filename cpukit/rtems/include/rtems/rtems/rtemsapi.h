@@ -20,11 +20,6 @@
 #include <rtems/config.h>
 
 /**
- *  @addtogroup ClassicRTEMS
- *  @{
- */
-
-/**
  *  _RTEMS_API_Initialize
  *
  *  This routine initializes the RTEMS API by invoking the initialization

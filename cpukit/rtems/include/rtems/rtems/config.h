@@ -26,7 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicConfig Classic API Configuration
+ *  @defgroup ClassicConfig Configuration
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

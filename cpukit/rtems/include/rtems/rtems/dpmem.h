@@ -48,7 +48,9 @@ extern "C" {
 #include <rtems/rtems/status.h>
 
 /**
- *  @defgroup ClassicDPMEM Classic API Dual Ported Memory
+ *  @defgroup ClassicDPMEM Dual Ported Memory
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to the
  *  Classic API Dual Ported Memory Manager.

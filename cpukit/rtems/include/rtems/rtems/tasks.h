@@ -55,7 +55,9 @@
 #endif
 
 /**
- *  @defgroup ClassicTasks Classic API Tasks
+ *  @defgroup ClassicTasks Tasks
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which X XX
  */

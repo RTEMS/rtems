@@ -19,7 +19,9 @@
 #define _RTEMS_RTEMS_MP_H
 
 /**
- *  @defgroup ClassicMP Classic API Multiprocessing
+ *  @defgroup ClassicMP Multiprocessing
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

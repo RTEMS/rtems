@@ -42,16 +42,44 @@ extern "C" {
  */
 
 /**
+ * @brief Makes the interrupt handler unique.  Prevents other handler from
+ * using the same interrupt vector.
+ */
+#define RTEMS_INTERRUPT_UNIQUE ((rtems_option) 0x00000001)
+
+/**
+ * @brief Allows that this interrupt handler may share a common interrupt
+ * vector with other handler.
+ */
+#define RTEMS_INTERRUPT_SHARED ((rtems_option) 0x00000000)
+
+/**
+ * @brief Returns true if the interrupt handler unique option is set.
+ */
+#define RTEMS_INTERRUPT_IS_UNIQUE( options) \
+  ((options) & RTEMS_INTERRUPT_UNIQUE)
+
+/**
+ * @brief Returns true if the interrupt handler shared option is set.
+ */
+#define RTEMS_INTERRUPT_IS_SHARED( options) \
+  (!RTEMS_INTERRUPT_IS_UNIQUE( options))
+
+/**
  * @brief Interrupt handler routine type.
  */
-typedef void (*rtems_interrupt_handler)( rtems_vector_number, void *);
+typedef void (*rtems_interrupt_handler)(rtems_vector_number, void *);
 
 /**
  * @brief Installs the interrupt handler routine @a handler for the interrupt
  * vector with number @a vector.
  *
- * You can set some @ref rtems_interrupt_extension_options "options" with @a
- * options for the interrupt handler.
+ * You can set one of the mutually exclusive options
+ *
+ * - @ref RTEMS_INTERRUPT_UNIQUE
+ * - @ref RTEMS_INTERRUPT_SHARED
+ *
+ * with the @a options parameter for the interrupt handler.
  *
  * The handler routine shall be called with argument @a arg when dispatched.
  * The order in which the shared interrupt handlers are dispatched for one
@@ -64,22 +92,23 @@ typedef void (*rtems_interrupt_handler)( rtems_vector_number, void *);
  * system debugging and status tools.  The string has to be persistent during
  * the handler life time.
  *
- * @note This function may block.
+ * This function may block.
  *
- * @return
- * - On success RTEMS_SUCCESSFUL shall be returned.
- * - If the vector is already occupied with a unique handler the
- * RTEMS_RESOURCE_IN_USE status code shall be returned.
- * - If you want to install a unique handler and there is already a handler
- * installed RTEMS_RESOURCE_IN_USE shall be returned.
- * - If this function is called within interrupt context RTEMS_CALLED_FROM_ISR
- * shall be returned.
- * - If the vector number is out of range RTEMS_INVALID_NUMBER shall be
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
+ * context this shall be returned.
+ * @retval RTEMS_INVALID_ADDRESS If the handler address is NULL this shall be
  * returned.
- * - If the handler address is NULL a RTEMS_INVALID_ADDRESS shall be returned.
- * - If a handler with this argument is already installed for this vector
- * RTEMS_TOO_MANY shall be returned.
- * - Other error states are BSP specific.
+ * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
+ * returned.
+ * @retval RTEMS_INVALID_NUMBER If an option is not applicable this shall be
+ * returned.
+ * @retval RTEMS_RESOURCE_IN_USE If the vector is already occupied with a
+ * unique handler this shall be returned.  If a unique handler should be
+ * installed and there is already a handler installed this shall be returned.
+ * @retval RTEMS_TOO_MANY If a handler with this argument is already installed
+ * for the vector this shall be returned.
+ * @retval * Other error states are BSP specific.
  */
 rtems_status_code rtems_interrupt_handler_install(
   rtems_vector_number vector,
@@ -93,18 +122,18 @@ rtems_status_code rtems_interrupt_handler_install(
  * @brief Removes the interrupt handler routine @a handler with argument @a arg
  * for the interrupt vector with number @a vector.
  *
- * @note This function may block.
+ * This function may block.
  *
- * @return
- * - On success RTEMS_SUCCESSFUL shall be returned.
- * - If this function is called within interrupt context RTEMS_CALLED_FROM_ISR
- * shall be returned.
- * - If the vector number is out of range RTEMS_INVALID_NUMBER shall be
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
+ * context this shall be returned.
+ * @retval RTEMS_INVALID_ADDRESS If the handler address is NULL this shall be
  * returned.
- * - If the handler address is NULL a RTEMS_INVALID_ADDRESS shall be returned.
- * - If the handler with this argument is not installed for this vector
- * RTEMS_UNSATISFIED shall be returned.
- * - Other error states are BSP specific.
+ * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
+ * returned.
+ * @retval RTEMS_UNSATISFIED If the handler with its argument is not installed
+ * for the vector this shall be returned.
+ * @retval * Other error states are BSP specific.
  */
 rtems_status_code rtems_interrupt_handler_remove(
   rtems_vector_number vector,
@@ -131,16 +160,15 @@ typedef void (*rtems_interrupt_per_handler_routine)(
  *
  * This function is intended for system information and diagnostics.
  *
- * @note This function may block.  Never install or remove an interrupt handler
+ * This function may block.  Never install or remove an interrupt handler
  * within the iteration routine.  This may result in a deadlock.
  *
- * @return
- * - On success RTEMS_SUCCESSFUL shall be returned.
- * - If this function is called within interrupt context RTEMS_CALLED_FROM_ISR
- * shall be returned.
- * - If the vector number is out of range RTEMS_INVALID_NUMBER shall be
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
+ * context this shall be returned.
+ * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
  * returned.
- * - Other error states are BSP specific.
+ * @retval * Other error states are BSP specific.
  */
 rtems_status_code rtems_interrupt_handler_iterate(
   rtems_vector_number vector,
@@ -148,55 +176,86 @@ rtems_status_code rtems_interrupt_handler_iterate(
   void *arg
 );
 
-/** @} */
-
 /**
- * @defgroup rtems_interrupt_extension_options Interrupt Handler Options
+ * @brief Initializes an interrupt server task.
  *
- * @ingroup rtems_interrupt_extension
+ * The task will have the priority @a priority, the stack size @a stack_size,
+ * the modes @a modes and the attributes @a attributes.  The identifier of the
+ * server task will be returned in @a server.  Interrupt handlers can be
+ * installed on the server with rtems_interrupt_server_handler_install() and
+ * removed with rtems_interrupt_server_handler_remove() using this identifier.
+ * In case of an interrupt the request will be forwarded to the server.  The
+ * handlers are executed within the server context.  If one handler blocks on
+ * something this may delay the processing of other handlers.
  *
- * @{
- */
-
-/**
- * @name Options
+ * The server identifier pointer @a server may be @a NULL to initialize the
+ * default server.
  *
- * @{
- */
-
-/**
- * @brief Makes the interrupt handler unique.  Prevents other handler from
- * using the same interrupt vector.
- */
-#define RTEMS_INTERRUPT_UNIQUE ((rtems_option) 0x00000001)
-
-/**
- * @brief Allows that this interrupt handler may share a common interrupt
- * vector with other handler.
- */
-#define RTEMS_INTERRUPT_SHARED ((rtems_option) 0x00000000)
-
-/** @} */
-
-/**
- * @name Option Set Checks
+ * This function may block.
  *
- * @{
+ * @see rtems_task_create().
+ *
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_INCORRECT_STATE If the default server is already initialized
+ * this shall be returned.
+ * @retval * Other error states are BSP specific.
  */
+rtems_status_code rtems_interrupt_server_initialize(
+  rtems_task_priority priority,
+  size_t stack_size,
+  rtems_mode modes,
+  rtems_attribute attributes,
+  rtems_id *server
+);
 
 /**
- * @brief Returns true if the interrupt handler unique option is set.
+ * @brief Installs the interrupt handler routine @a handler for the interrupt
+ * vector with number @a vector on the server @a server.
+ *
+ * The handler routine will be executed on the corresponding interrupt server
+ * task.  A server identifier @a server of @c RTEMS_ID_NONE may be used to
+ * install the handler on the default server.
+ *
+ * This function may block.
+ *
+ * @see rtems_interrupt_handler_install().
+ *
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_INCORRECT_STATE If the interrupt handler server is not
+ * initialized this shall be returned.
+ * @retval * For other errors see rtems_interrupt_handler_install().
  */
-#define RTEMS_INTERRUPT_IS_UNIQUE( options) \
-  ((options) & RTEMS_INTERRUPT_UNIQUE)
+rtems_status_code rtems_interrupt_server_handler_install(
+  rtems_id server,
+  rtems_vector_number vector,
+  const char *info,
+  rtems_option options,
+  rtems_interrupt_handler handler,
+  void *arg
+);
 
 /**
- * @brief Returns true if the interrupt handler shared option is set.
+ * @brief Removes the interrupt handler routine @a handler with argument @a arg
+ * for the interrupt vector with number @a vector from the server @a server.
+ *
+ * A server identifier @a server of @c RTEMS_ID_NONE may be used to remove the
+ * handler from the default server.
+ *
+ * This function may block.
+ *
+ * @see rtems_interrupt_handler_remove().
+ *
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_INCORRECT_STATE If the interrupt handler server is not
+ * initialized this shall be returned.
+ * @retval * For other errors see rtems_interrupt_handler_remove().
  */
-#define RTEMS_INTERRUPT_IS_SHARED( options) \
-  (!RTEMS_INTERRUPT_IS_UNIQUE( options))
-
-/** @} */
+rtems_status_code rtems_interrupt_server_handler_remove(
+  rtems_id server,
+  rtems_vector_number vector,
+  rtems_interrupt_handler handler,
+  void *arg
+);
 
 /** @} */
 

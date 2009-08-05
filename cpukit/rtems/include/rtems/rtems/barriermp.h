@@ -19,7 +19,9 @@
 #define _RTEMS_RTEMS_SEMMP_H
 
 /**
- *  @defgroup ClassicBarrierMP Classic API Barrier MP Support
+ *  @defgroup ClassicBarrierMP Barrier MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

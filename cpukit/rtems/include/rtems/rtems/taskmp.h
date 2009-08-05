@@ -26,7 +26,9 @@
 #include <rtems/score/thread.h>
 
 /**
- *  @defgroup ClassicTaskMP Classic API Task MP Support
+ *  @defgroup ClassicTaskMP Task MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

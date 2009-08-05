@@ -29,7 +29,9 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 /**
- *  @defgroup ClassicSignalMP Classic API Signal MP Support
+ *  @defgroup ClassicSignalMP Signal MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

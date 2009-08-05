@@ -52,7 +52,9 @@ extern "C" {
 #include <rtems/score/coresem.h>
 
 /**
- *  @defgroup ClassicSem Classic API Semaphore
+ *  @defgroup ClassicSem Semaphores
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to the Classic API
  *  Semaphore Manager.

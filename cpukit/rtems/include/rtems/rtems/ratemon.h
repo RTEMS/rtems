@@ -40,7 +40,9 @@
 #include <rtems/bspIo.h>
 
 /**
- *  @defgroup ClassicRateMon Classic API Rate Monotonic
+ *  @defgroup ClassicRateMon Rate Monotonic Scheduler
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to the
  *  Classic API Rate Monotonic Manager.

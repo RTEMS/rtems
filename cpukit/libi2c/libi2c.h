@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup libi2c
+ *
+ * @brief I2C library.
+ */
+
 #ifndef _RTEMS_LIBI2C_H
 #define _RTEMS_LIBI2C_H
 /*$Id$*/
@@ -54,6 +62,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup libi2c I2C Library
+ *
+ * @brief I2C library.
+ *
+ * @{
+ */
 
 /* Simple I2C driver API */
 
@@ -484,6 +500,8 @@ typedef struct {
   rtems_libi2c_read_write_done_t done;
   void                          *arg;
 } rtems_libi2c_read_write_async_t;
+
+/** @} */
 
 #ifdef __cplusplus
 }

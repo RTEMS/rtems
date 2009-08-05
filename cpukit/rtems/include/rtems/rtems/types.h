@@ -18,7 +18,9 @@
 #define _RTEMS_RTEMS_TYPES_H
 
 /**
- *  @defgroup ClassicTypes Classic API Types
+ *  @defgroup ClassicTypes Types
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

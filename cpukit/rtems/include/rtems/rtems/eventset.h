@@ -20,7 +20,9 @@
 #define _RTEMS_RTEMS_EVENTSET_H
 
 /**
- *  @defgroup ClassicEventSet Classic API Event Set
+ *  @defgroup ClassicEventSet Event Sets
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality related to Classic API
  *  Event Sets.  These are used by the Classic API Event Manager.

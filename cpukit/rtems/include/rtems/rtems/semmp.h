@@ -30,7 +30,9 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 /**
- *  @defgroup ClassicSEM Classic API Semaphore MP Support
+ *  @defgroup ClassicSEM Semaphore MP Support
+ *
+ *  @ingroup ClassicMP
  *
  *  This encapsulates functionality which XXX
  */

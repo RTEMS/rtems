@@ -23,7 +23,7 @@
  *  Set of null operations handlers.
  */
 
-rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers = {
+const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers = {
   NULL,       /* open */
   NULL,       /* close */
   NULL,       /* read */

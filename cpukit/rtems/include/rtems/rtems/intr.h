@@ -27,7 +27,9 @@ extern "C" {
 #include <rtems/score/isr.h>
 
 /**
- *  @defgroup ClassicINTR Classic API Interrupt
+ *  @defgroup ClassicINTR Interrupts
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

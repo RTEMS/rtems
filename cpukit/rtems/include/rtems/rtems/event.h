@@ -49,7 +49,9 @@ extern "C" {
 #include <rtems/rtems/eventset.h>
 
 /**
- *  @defgroup ClassicEvent Classic API Event
+ *  @defgroup ClassicEvent Events
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

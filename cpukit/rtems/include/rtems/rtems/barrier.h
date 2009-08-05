@@ -27,7 +27,9 @@
 #define _RTEMS_RTEMS_BARRIER_H
 
 /**
- *  @defgroup ClassicBarrier Classic API Barrier
+ *  @defgroup ClassicBarrier Barriers
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */

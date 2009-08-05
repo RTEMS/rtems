@@ -38,7 +38,9 @@ extern "C" {
 #include <sys/types.h>
 
 /**
- *  @defgroup ClassicCache Classic API Cache
+ *  @defgroup ClassicCache Cache
+ *
+ *  @ingroup ClassicRTEMS
  *
  *  This encapsulates functionality which XXX
  */
