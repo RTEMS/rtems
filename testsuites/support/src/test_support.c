@@ -36,7 +36,7 @@ const char *Get_Longest_Name()
 {
   int i;
 
-  for ( i=0; i < PATH_MAX; i++ )
+  for ( i=0; i < PATH_MAX-1; i++ )
     Longest_Name[i] = 'L';
   Longest_Name[i] = '\0';
   return Longest_Name;
