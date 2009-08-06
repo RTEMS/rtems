@@ -17,7 +17,9 @@ extern "C" {
  */
 
 /* #define TESTS_BUFFER_OUTPUT */
-/* #define TESTS_USE_PRINTK */
+#if defined(__AVR__)
+#define TESTS_USE_PRINTK
+#endif
 
 /*
  *  USE PRINTK TO MINIMIZE SIZE

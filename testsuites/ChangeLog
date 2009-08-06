@@ -1,3 +1,7 @@
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* support/include/buffer_test_io.h: Use printk on AVR by default.
+
 2009-05-10	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* support/src/tmtests_empty_function.c: Fix warnings.
