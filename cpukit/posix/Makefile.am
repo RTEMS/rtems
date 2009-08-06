@@ -11,7 +11,6 @@ if LIBPOSIX
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-project_lib_LIBRARIES = libposix.a
 noinst_LIBRARIES = libposix.a
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
