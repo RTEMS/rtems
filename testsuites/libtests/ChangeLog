@@ -1,3 +1,8 @@
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* bspcmdline01/bspcmdline01.scn, bspcmdline01/init.c: Add rtems_ as
+	prefix to all routines.
+
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add test for new BSP Boot Command Line

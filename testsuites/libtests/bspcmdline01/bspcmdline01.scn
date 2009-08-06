@@ -2,45 +2,45 @@
 BSP does not have a boot command line
 
 Test Parameter Error Conditions
-bsp_cmdline_get_param - name=NULL - returns NULL
-bsp_cmdline_get_param - result=NULL - returns NULL
-bsp_cmdline_get_param - length=0 - returns NULL
-bsp_cmdline_get_param_raw - name=NULL - returns NULL
-bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL
-bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL
+rtems_bsp_cmdline_get_param - name=NULL - returns NULL
+rtems_bsp_cmdline_get_param - result=NULL - returns NULL
+rtems_bsp_cmdline_get_param - length=0 - returns NULL
+rtems_bsp_cmdline_get_param_raw - name=NULL - returns NULL
+rtems_bsp_cmdline_get_param - bsp_boot_cmdline=NULL - returns NULL
+rtems_bsp_cmdline_get_param_raw - bsp_boot_cmdline=NULL - returns NULL
 
 Testing for param=(--arg)
   Command Line : (--arg=)
-bsp_cmdline_get_param_raw(--arg)
-bsp_cmdline_get_param_raw(--arg) returned (--arg=)
-bsp_cmdline_get_param_rhs(--arg)
-bsp_cmdline_get_param_rhs(--arg) returned (ZERO_LENGTH_STRING) value=(ZERO_LENGTH_STRING)
+rtems_bsp_cmdline_get_param_raw(--arg)
+rtems_bsp_cmdline_get_param_raw(--arg) returned (--arg=)
+rtems_bsp_cmdline_get_param_rhs(--arg)
+rtems_bsp_cmdline_get_param_rhs(--arg) returned (ZERO_LENGTH_STRING) value=(ZERO_LENGTH_STRING)
 
 Testing for param=(-g) - Expect NULL
   Command Line : (--arg=)
-bsp_cmdline_get_param_raw(-g)
-bsp_cmdline_get_param_raw(-g) returned NULL
-bsp_cmdline_get_param_rhs(-g)
-bsp_cmdline_get_param_rhs(-g) returned NULL
+rtems_bsp_cmdline_get_param_raw(-g)
+rtems_bsp_cmdline_get_param_raw(-g) returned NULL
+rtems_bsp_cmdline_get_param_rhs(-g)
+rtems_bsp_cmdline_get_param_rhs(-g) returned NULL
 
 Testing for param=(-name)
   Command Line : (--ip=192.168.1.151 --name=fred)
-bsp_cmdline_get_param_raw(-name)
-bsp_cmdline_get_param_raw(-name) returned (-name=fred)
-bsp_cmdline_get_param_rhs(-name)
-bsp_cmdline_get_param_rhs(-name) returned (fred) value=(fred)
+rtems_bsp_cmdline_get_param_raw(-name)
+rtems_bsp_cmdline_get_param_raw(-name) returned (-name=fred)
+rtems_bsp_cmdline_get_param_rhs(-name)
+rtems_bsp_cmdline_get_param_rhs(-name) returned (fred) value=(fred)
 
 Testing for param=(-ip)
   Command Line : (--ip=192.168.1.151 --name=fred)
-bsp_cmdline_get_param_raw(-ip)
-bsp_cmdline_get_param_raw(-ip) returned (-ip=192.168.1.151 --name=fred)
-bsp_cmdline_get_param_rhs(-ip)
-bsp_cmdline_get_param_rhs(-ip) returned (192.168.1.151) value=(192.168.1.151)
+rtems_bsp_cmdline_get_param_raw(-ip)
+rtems_bsp_cmdline_get_param_raw(-ip) returned (-ip=192.168.1.151 --name=fred)
+rtems_bsp_cmdline_get_param_rhs(-ip)
+rtems_bsp_cmdline_get_param_rhs(-ip) returned (192.168.1.151) value=(192.168.1.151)
 
 Testing for param=(-name)
   Command Line : (--ip=192.168.1.151 --name="joel and michele" --cpu=fast)
-bsp_cmdline_get_param_raw(-name)
-bsp_cmdline_get_param_raw(-name) returned (-name="joel and michele" --cpu=fast)
-bsp_cmdline_get_param_rhs(-name)
-bsp_cmdline_get_param_rhs(-name) returned (joel and michele) value=(joel and michele)
+rtems_bsp_cmdline_get_param_raw(-name)
+rtems_bsp_cmdline_get_param_raw(-name) returned (-name="joel and michele" --cpu=fast)
+rtems_bsp_cmdline_get_param_rhs(-name)
+rtems_bsp_cmdline_get_param_rhs(-name) returned (joel and michele) value=(joel and michele)
 *** END OF OF PARSING BOOT COMMAND STRING ***
