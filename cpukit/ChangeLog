@@ -1,3 +1,10 @@
+2009-08-06	Chris Johns <chrisj@rtems.org>
+
+	* libblock/src/bdbuf.c: Fix group user logic.
+	* libblock/include/rtems/blkdev.h, libblock/src/blkdev.c,
+	libblock/src/nvdisk.c, libblock/src/flashdisk.c: Add set block
+	size, and get media block size support.
+
 2009-08-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/sigaction.c: _POSIX_signals_Clear_process_signals now takes

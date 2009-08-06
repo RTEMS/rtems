@@ -48,9 +48,9 @@ typedef uint32_t rtems_blkdev_bnum;
  * Block device request type.
  */
 typedef enum rtems_blkdev_request_op {
-  RTEMS_BLKDEV_REQ_READ,
-  RTEMS_BLKDEV_REQ_WRITE,
-  RTEMS_BLKDEV_CAPABILITIES
+  RTEMS_BLKDEV_REQ_READ,       /**< Read the requested blocks of data. */
+  RTEMS_BLKDEV_REQ_WRITE,      /**< Write the requested blocks of data. */
+  RTEMS_BLKDEV_CAPABILITIES    /**< Return the driver capabilities set. */
 } rtems_blkdev_request_op;
 
 /** 
@@ -160,10 +160,12 @@ typedef struct rtems_blkdev_request {
  * @{
  */
 
-#define RTEMS_BLKIO_REQUEST _IOWR('B', 1, rtems_blkdev_request)
-#define RTEMS_BLKIO_GETBLKSIZE _IO('B', 2)
-#define RTEMS_BLKIO_GETSIZE _IO('B', 3)
-#define RTEMS_BLKIO_SYNCDEV _IO('B', 4)
+#define RTEMS_BLKIO_REQUEST         _IOWR('B', 1, rtems_blkdev_request)
+#define RTEMS_BLKIO_GETMEDIABLKSIZE _IO('B', 2)
+#define RTEMS_BLKIO_GETBLKSIZE      _IO('B', 3)
+#define RTEMS_BLKIO_SETBLKSIZE      _IO('B', 4)
+#define RTEMS_BLKIO_GETSIZE         _IO('B', 5)
+#define RTEMS_BLKIO_SYNCDEV         _IO('B', 6)
 
 /** @} */
 
@@ -241,6 +243,14 @@ rtems_blkdev_generic_ioctl(
     rtems_device_minor_number minor,
     void                    * arg
 );
+
+/**
+ * Common IO control primitive.
+ *
+ * Use this in all block devices to handle the common set of ioctl requests.
+ */
+int
+rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp);
 
 /** @} */
 

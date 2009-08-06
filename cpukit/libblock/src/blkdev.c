@@ -17,6 +17,7 @@
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <string.h>
 
 #include <rtems.h>
@@ -218,8 +219,16 @@ rtems_blkdev_generic_ioctl(
 
     switch (args->command)
     {
+        case RTEMS_BLKIO_GETMEDIABLKSIZE:
+            args->ioctl_return = dd->media_block_size;
+            break;
+
         case RTEMS_BLKIO_GETBLKSIZE:
             args->ioctl_return = dd->block_size;
+            break;
+
+        case RTEMS_BLKIO_SETBLKSIZE:
+            dd->block_size = *((size_t*) args->buffer);
             break;
 
         case RTEMS_BLKIO_GETSIZE:
@@ -247,4 +256,46 @@ rtems_blkdev_generic_ioctl(
     rtems_disk_release(dd);
 
     return RTEMS_SUCCESSFUL;
+}
+
+int
+rtems_blkdev_ioctl(dev_t dev, uint32_t req, void *argp)
+{
+    rtems_disk_device *dd;
+    size_t            *arg_size = argp;
+
+    dd = rtems_disk_obtain(dev);
+    if (dd == NULL)
+    {
+        errno = ENODEV;
+        return -1;
+    }
+    
+    switch (req)
+    {
+        case RTEMS_BLKIO_GETMEDIABLKSIZE:
+            *arg_size = dd->media_block_size;
+            break;
+
+        case RTEMS_BLKIO_GETBLKSIZE:
+            *arg_size = dd->block_size;
+            break;
+
+        case RTEMS_BLKIO_SETBLKSIZE:
+            dd->block_size = *arg_size;
+            break;
+
+        case RTEMS_BLKIO_GETSIZE:
+            *arg_size = dd->size;
+            break;
+
+        default:
+            errno = EINVAL;
+            return -1;
+            break;
+    }
+    
+    rtems_disk_release(dd);
+
+    return 0;
 }

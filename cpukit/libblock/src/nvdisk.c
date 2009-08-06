@@ -744,7 +744,7 @@ rtems_nvdisk_ioctl (dev_t dev, uint32_t req, void* argp)
         break;
         
       default:
-        errno = EINVAL;
+        return rtems_blkdev_ioctl (dev, req, argp);
         break;
     }
 

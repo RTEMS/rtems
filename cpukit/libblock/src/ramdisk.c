@@ -206,11 +206,14 @@ ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
             }
             break;
         }
-
+  
         default:
-            errno = EINVAL;
-            return -1;
+            return rtems_blkdev_ioctl (dev, req, argp);
+            break;
     }
+
+    errno = EINVAL;
+    return -1;
 }
 
 /* ramdisk_initialize --

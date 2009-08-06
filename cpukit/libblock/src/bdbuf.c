@@ -134,22 +134,30 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_ERROR(n) \
   (((uint32_t)'B' << 24) | ((uint32_t)(n) & (uint32_t)0x00FFFFFF))
 
-#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY  RTEMS_BLKDEV_FATAL_ERROR(1)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SWAPOUT      RTEMS_BLKDEV_FATAL_ERROR(2)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK    RTEMS_BLKDEV_FATAL_ERROR(3)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK  RTEMS_BLKDEV_FATAL_ERROR(4)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_LOCK   RTEMS_BLKDEV_FATAL_ERROR(5)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_UNLOCK RTEMS_BLKDEV_FATAL_ERROR(6)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_1 RTEMS_BLKDEV_FATAL_ERROR(7)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_2 RTEMS_BLKDEV_FATAL_ERROR(8)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_3 RTEMS_BLKDEV_FATAL_ERROR(9)
-#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAKE   RTEMS_BLKDEV_FATAL_ERROR(10)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE      RTEMS_BLKDEV_FATAL_ERROR(11)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM     RTEMS_BLKDEV_FATAL_ERROR(12)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_CREATE RTEMS_BLKDEV_FATAL_ERROR(13)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_START  RTEMS_BLKDEV_FATAL_ERROR(14)
-#define BLKDEV_FATAL_BDBUF_SWAPOUT_RE         RTEMS_BLKDEV_FATAL_ERROR(15)
-#define BLKDEV_FATAL_BDBUF_SWAPOUT_TS         RTEMS_BLKDEV_FATAL_ERROR(16)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_1 RTEMS_BLKDEV_FATAL_ERROR(1)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_2 RTEMS_BLKDEV_FATAL_ERROR(2)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_3 RTEMS_BLKDEV_FATAL_ERROR(3)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_4 RTEMS_BLKDEV_FATAL_ERROR(4)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_5 RTEMS_BLKDEV_FATAL_ERROR(5)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_6 RTEMS_BLKDEV_FATAL_ERROR(6)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_7 RTEMS_BLKDEV_FATAL_ERROR(7)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_8 RTEMS_BLKDEV_FATAL_ERROR(8)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_9 RTEMS_BLKDEV_FATAL_ERROR(9)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SWAPOUT       RTEMS_BLKDEV_FATAL_ERROR(10)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK     RTEMS_BLKDEV_FATAL_ERROR(11)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK   RTEMS_BLKDEV_FATAL_ERROR(12)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_LOCK    RTEMS_BLKDEV_FATAL_ERROR(13)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_UNLOCK  RTEMS_BLKDEV_FATAL_ERROR(14)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_1  RTEMS_BLKDEV_FATAL_ERROR(15)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_2  RTEMS_BLKDEV_FATAL_ERROR(16)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_3  RTEMS_BLKDEV_FATAL_ERROR(17)
+#define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAKE    RTEMS_BLKDEV_FATAL_ERROR(18)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE       RTEMS_BLKDEV_FATAL_ERROR(19)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM      RTEMS_BLKDEV_FATAL_ERROR(20)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_CREATE  RTEMS_BLKDEV_FATAL_ERROR(21)
+#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_START   RTEMS_BLKDEV_FATAL_ERROR(22)
+#define BLKDEV_FATAL_BDBUF_SWAPOUT_RE          RTEMS_BLKDEV_FATAL_ERROR(23)
+#define BLKDEV_FATAL_BDBUF_SWAPOUT_TS          RTEMS_BLKDEV_FATAL_ERROR(24)
 
 /**
  * The events used in this code. These should be system events rather than
@@ -876,9 +884,8 @@ rtems_bdbuf_wake (rtems_id sema, volatile uint32_t* waiters)
  * modified list. The disk image is forced to be snapshot at that moment in
  * time.
  *
- * and you must
- * hold the sync lock. The sync lock is used to block writes while a sync is
- * active.
+ * @note Do not lower the group user count as the modified list is a user of
+ * the buffer.
  *
  * @param bd The bd to queue to the cache's modified list.
  */
@@ -961,14 +968,23 @@ rtems_bdbuf_group_realloc (rtems_bdbuf_group* group, size_t new_bds_per_group)
        b < group->bds_per_group;
        b++, bd += bufs_per_bd)
   {
+    if ((bd->state == RTEMS_BDBUF_STATE_MODIFIED) ||
+        (bd->state == RTEMS_BDBUF_STATE_ACCESS) ||
+        (bd->state == RTEMS_BDBUF_STATE_ACCESS_MODIFIED) ||
+        (bd->state == RTEMS_BDBUF_STATE_SYNC) ||
+        (bd->state == RTEMS_BDBUF_STATE_TRANSFER))
+      rtems_fatal_error_occurred ((bd->state << 16) |
+                                  RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_8);
+    
     if ((bd->state == RTEMS_BDBUF_STATE_CACHED) ||
-        (bd->state == RTEMS_BDBUF_STATE_MODIFIED) ||
         (bd->state == RTEMS_BDBUF_STATE_READ_AHEAD))
     {
       if (rtems_bdbuf_avl_remove (&bdbuf_cache.tree, bd) != 0)
-        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
-      rtems_chain_extract (&bd->link);
+        rtems_fatal_error_occurred ((bd->state << 16) |
+                                    RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_1);
     }
+    
+    rtems_chain_extract (&bd->link);
   }
   
   group->bds_per_group = new_bds_per_group;
@@ -977,7 +993,10 @@ rtems_bdbuf_group_realloc (rtems_bdbuf_group* group, size_t new_bds_per_group)
   for (b = 0, bd = group->bdbuf;
        b < group->bds_per_group;
        b++, bd += bufs_per_bd)
+  {
+    bd->state = RTEMS_BDBUF_STATE_EMPTY;
     rtems_chain_prepend (&bdbuf_cache.ready, &bd->link);
+  }
 }
 
 /**
@@ -1004,7 +1023,6 @@ rtems_bdbuf_get_next_bd (size_t               bds_per_group,
     if (bd->group->bds_per_group == bds_per_group)
     {
       rtems_chain_extract (node);
-      bd->group->users++;
       return bd;
     }
 
@@ -1429,7 +1447,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
            * Remove the buffer from the AVL tree.
            */
           if (rtems_bdbuf_avl_remove (&bdbuf_cache.tree, bd) != 0)
-            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_2);
         }
         else
         {
@@ -1471,12 +1489,12 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
          */
         if ((bd->state != RTEMS_BDBUF_STATE_EMPTY) &&
             (bd->state != RTEMS_BDBUF_STATE_READ_AHEAD))
-          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_3);
 
         if (bd->state == RTEMS_BDBUF_STATE_READ_AHEAD)
         {
           if (rtems_bdbuf_avl_remove (&bdbuf_cache.tree, bd) != 0)
-            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+            rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_4);
         }
       }
 
@@ -1491,7 +1509,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
         bd->waiters   = 0;
 
         if (rtems_bdbuf_avl_insert (&bdbuf_cache.tree, bd) != 0)
-          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_5);
 
         return bd;
       }
@@ -1552,7 +1570,7 @@ rtems_bdbuf_get_buffer (rtems_disk_device* dd,
         break;
 
       default:
-        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_6);
     }
   }
 
@@ -1610,6 +1628,11 @@ rtems_bdbuf_get (dev_t                device,
   else
     bd->state = RTEMS_BDBUF_STATE_ACCESS;
 
+  /*
+   * Indicate a buffer in this group is being used.
+   */
+  bd->group->users++;
+  
   rtems_bdbuf_unlock_cache ();
 
   rtems_disk_release(dd);
@@ -1735,6 +1758,11 @@ rtems_bdbuf_read (dev_t                device,
     bd->error = 0;
 
     /*
+     * The buffer will be passed to the driver so this buffer has a user.
+     */
+    bd->group->users++;
+    
+    /*
      * @todo The use of these req blocks is not a great design. The req is a
      *       struct with a single 'bufs' declared in the req struct and the
      *       others are added in the outer level struct. This relies on the
@@ -1816,10 +1844,38 @@ rtems_bdbuf_read (dev_t                device,
       bd = req->bufs[b].user;
       bd->error = req->error;
       bd->state = RTEMS_BDBUF_STATE_READ_AHEAD;
-      rtems_bdbuf_release (bd);
+      bd->group->users--;
+      rtems_chain_prepend (&bdbuf_cache.ready, &bd->link);
+
+      /*
+       * If there is an error remove the BD from the AVL tree as it does is
+       * invalid, then wake any threads that may be waiting. A thread may have
+       * been waiting for this block and assumed it was in the tree.
+       */
+      if (bd->error)
+      {
+        bd->state = RTEMS_BDBUF_STATE_EMPTY;
+        if (rtems_bdbuf_avl_remove (&bdbuf_cache.tree, bd) != 0)
+          rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_9);
+      }
+
+      if (bd->waiters)
+        rtems_bdbuf_wake (bdbuf_cache.access, &bdbuf_cache.access_waiters);
+      else
+      {
+        if (rtems_chain_has_only_one_node (&bdbuf_cache.ready))
+          rtems_bdbuf_wake (bdbuf_cache.waiting, &bdbuf_cache.wait_waiters);
+      }
     }
 
     bd = req->bufs[0].user;
+
+    /*
+     * One less user. We do this here then increment again so the case of the
+     * buffer in the the cache and no read leaves the user counts at the
+     * correct level.
+     */
+    bd->group->users--;
   }
 
   /*
@@ -1828,7 +1884,13 @@ rtems_bdbuf_read (dev_t                device,
   if (bd->state == RTEMS_BDBUF_STATE_MODIFIED)
     bd->state = RTEMS_BDBUF_STATE_ACCESS_MODIFIED;
   else
+  {
+    /*
+     * The file system is a user of the buffer.
+     */
+    bd->group->users++;
     bd->state = RTEMS_BDBUF_STATE_ACCESS;
+  }
 
   rtems_bdbuf_unlock_cache ();
   rtems_disk_release (dd);
@@ -1969,12 +2031,13 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd)
       case RTEMS_BDBUF_STATE_SYNC:
       case RTEMS_BDBUF_STATE_TRANSFER:
         bd->waiters++;
-        rtems_bdbuf_wait (&bdbuf_cache.transfer, &bdbuf_cache.transfer_waiters);
+        rtems_bdbuf_wait (&bdbuf_cache.transfer,
+                          &bdbuf_cache.transfer_waiters);
         bd->waiters--;
         break;
 
       default:
-        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY);
+        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_CONSISTENCY_7);
     }
   }
 
@@ -2211,6 +2274,10 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
               bd = transfer->write_req->bufs[b].user;
               bd->state = RTEMS_BDBUF_STATE_CACHED;
               bd->error = 0;
+
+              /*
+               * The buffer is now not modified so lower the user count for the group.
+               */
               bd->group->users--;
               
               rtems_chain_append (&bdbuf_cache.lru, &bd->link);
