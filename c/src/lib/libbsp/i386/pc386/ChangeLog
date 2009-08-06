@@ -1,3 +1,8 @@
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/tm27.h: Remove references to rtems_interrupt_catch since this
+	archiecture does not use Simple Vectored Interrupt model.
+
 2009-08-03	Roxana Leontie <roxana.leontie@gmail.com>
 
 	* console/fb_vga.c: changed the reference to mw_fb.h into fb.h

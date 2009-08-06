@@ -21,11 +21,7 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector(handler) \
-{ \
-  rtems_isr_entry dummy; \
-  rtems_interrupt_catch(handler, 0x90, &dummy); \
-}
+#define Install_tm27_vector(handler)
 
 #define Cause_tm27_intr() asm volatile("int $0x90" : :);
 
