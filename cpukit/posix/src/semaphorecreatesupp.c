@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,15 +28,16 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/* pure ANSI mode does not have this prototype */
+size_t strnlen(const char *, size_t);
+
+/*
  *  _POSIX_Semaphore_Create_support
  *
  *  This routine does the actual creation and initialization of
  *  a poxix semaphore.  It is a support routine for sem_init and
  *  sem_open.
  */
-
 int _POSIX_Semaphore_Create_support(
   const char                *name,
   int                        pshared,
@@ -48,20 +49,16 @@ int _POSIX_Semaphore_Create_support(
   CORE_semaphore_Attributes *the_sem_attr;
   char                      *name_p = (char *)name;
 
-  _Thread_Disable_dispatch();
-
   /* Sharing semaphores among processes is not currently supported */
-  if (pshared != 0) {
-    _Thread_Enable_dispatch();
+  if (pshared != 0)
     rtems_set_errno_and_return_minus_one( ENOSYS );
-  }
 
   if ( name ) {
-    if( strlen(name) > PATH_MAX ) {
-      _Thread_Enable_dispatch();
+    if ( strnlen( name, NAME_MAX ) >= NAME_MAX )
       rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
-    }
   }
+
+  _Thread_Disable_dispatch();
 
   the_semaphore = _POSIX_Semaphore_Allocate();
 
@@ -91,13 +88,11 @@ int _POSIX_Semaphore_Create_support(
    *  thing is certain, no matter what we decide, it won't be
    *  the same as  all other POSIX implementations. :)
    */
-
   the_sem_attr->discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
 
   /*
    *  This effectively disables limit checking.
    */
-
   the_sem_attr->maximum_count = 0xFFFFFFFF;
 
   _CORE_semaphore_Initialize( &the_semaphore->Semaphore, the_sem_attr, value );
@@ -105,7 +100,6 @@ int _POSIX_Semaphore_Create_support(
   /*
    *  Make the semaphore available for use.
    */
-
   _Objects_Open_string(
     &_POSIX_Semaphore_Information,
     &the_semaphore->Object,
