@@ -1,3 +1,8 @@
+2009-08-06	Chris Johns <chrisj@rtems.org>
+
+	* src/rtemsInterrupt.cc: Fixed the code to compile on targets with
+	CPU_SIMPLE_VECTORED_INTERRUPTS defined to true.
+
 2008-12-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* include/rtems++/rtemsEvent.h, include/rtems++/rtemsMessageQueue.h,
