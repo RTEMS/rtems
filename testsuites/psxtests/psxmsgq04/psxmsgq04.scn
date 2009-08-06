@@ -1,8 +1,8 @@
 *** POSIX MESSAGE QUEUE TEST 4 ***
-Init - Open message queue
+Init - Open message queue instance 1
 Init - Open message queue instance 2 - FAIL - ENFILE 
-Init - Unlink message queue
-Init - Close message queue
+Init - Unlink message queue instance 1
+Init - Close message queue instance 1
 Init - Memory allocation error test
 Init - Message Queue created
 Init - Unlink message queue

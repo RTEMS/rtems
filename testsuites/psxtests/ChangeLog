@@ -1,5 +1,11 @@
 2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* psxmsgq04/init.c, psxmsgq04/psxmsgq04.scn: Tinker with test to ensure
+	that it hits both failing to allocate memory for the message queue
+	name and message buffers.
+
+2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* psxintrcritical01/init.c: Lower microseconds per tick so tests run
 	quicker and more reliably hit the intended critical section.
 

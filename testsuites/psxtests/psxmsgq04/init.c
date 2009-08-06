@@ -27,8 +27,12 @@ void *POSIX_Init(
   struct mq_attr          attr;
   mqd_t                   Queue, second_Queue;
   int                     sc;
+  Heap_Information_block  start;
   Heap_Information_block  info;
+  size_t                  to_alloc;
+  void                   *alloced;
   bool                    sb;
+  const char             *name;
 
   puts( "\n\n*** POSIX MESSAGE QUEUE TEST 4 ***" );
 
@@ -60,36 +64,64 @@ void *POSIX_Init(
     perror( "mq_close failed" );
   assert( sc == 0 );
 
+  sb = rtems_workspace_get_information( &start );
+  assert( start.Free.number == 1 );
+  to_alloc = start.Free.largest;
+
+  /* find the largest we can actually allocate */
+  while ( 1 ) {
+    sb = rtems_workspace_allocate( to_alloc, &alloced );
+    if ( sb )
+      break;
+    to_alloc -= 4;
+  }
+
+  rtems_workspace_free( alloced );
+
+  /*
+   * Now do the test
+   */
   puts( "Init - Memory allocation error test" );
 
   sb = rtems_workspace_get_information( &info );
 
-  attr.mq_msgsize = info.Free.largest;
+  attr.mq_maxmsg = 1;
+  attr.mq_msgsize = 200;
 
+  name = Get_Longest_Name();
   while ( attr.mq_msgsize > 0 ) {
-    second_Queue = mq_open("second_queue",O_CREAT | O_RDWR, 0x777, &attr );
-    if ( second_Queue!=(-1) )
+    sb = rtems_workspace_allocate( to_alloc, &alloced );
+    assert( sb );
+   
+    second_Queue = mq_open(name,O_CREAT | O_RDWR, 0x777, &attr );
+
+    /* free the memory we snagged, then check the status */
+    rtems_workspace_free( alloced );
+
+    if ( second_Queue != (-1) )
       break;
-    attr.mq_msgsize -= 48;
+
+    /* attr.mq_msgsize -= 48; */
+    to_alloc -= 4;
   }
 
-  if ( second_Queue == (-1) ) {
-    perror( "mq_open failed" );
-    assert( second_Queue != (-1) );
-  }
+  if ( second_Queue == -1 )
+    rtems_test_exit(0);
 
   puts( "Init - Message Queue created" );
+
   puts( "Init - Unlink message queue" );
-    sc = mq_unlink( "second_queue" );
+    sc = mq_unlink( name );
     if ( sc != 0 )
       perror( "mq_unlink failed" );
-    assert( sc==0 );
+    assert( sc == 0 );
 
   puts( "Init - Close message queue" );
     sc = mq_close( second_Queue );
-    if ( sc !=0 )
+    if ( sc != 0 )
       perror( "mq_close failed" );
     assert( sc == 0 );
+
   puts( "*** END OF POSIX MESSAGE QUEUE TEST 4 ***" );
   rtems_test_exit( 0 );
 
@@ -103,6 +135,10 @@ void *POSIX_Init(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
+/* account for message buffers and string names */
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, sizeof(int))
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS                   1
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES            1
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS 2
@@ -111,4 +147,3 @@ void *POSIX_Init(
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
-/* end of include file */
