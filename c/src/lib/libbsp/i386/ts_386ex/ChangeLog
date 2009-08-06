@@ -1,5 +1,9 @@
 2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* startup/setvec.c: Removed.
+
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* include/tm27.h: Remove references to rtems_interrupt_catch since this
 	archiecture does not use Simple Vectored Interrupt model.
 
