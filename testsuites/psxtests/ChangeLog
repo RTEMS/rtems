@@ -1,3 +1,8 @@
+2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* psxintrcritical01/init.c: Lower microseconds per tick so tests run
+	quicker and more reliably hit the intended critical section.
+
 2009-08-05	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* Makefile.am, configure.ac: Add a test to exercise an odd case in
