@@ -51,7 +51,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
  */
 #if ON_SKYEYE
   #define TCD_VALUE \
-    (rtems_configuration_get_microseconds_per_tick() * 2000)/10000
+    (rtems_configuration_get_microseconds_per_tick() * 2000)/25000
 #else
   #define TCD_VALUE \
     (rtems_configuration_get_microseconds_per_tick() * 2000)/1000000
@@ -69,6 +69,9 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
     BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
   } while (0)
 
+/**
+ *  Return the nanoseconds since last tick
+ */
 uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
 {
   return 0;

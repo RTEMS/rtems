@@ -1,3 +1,7 @@
+2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* clock/clockdrv.c: Tinker with clock on Skyeye.
+
 2009-08-04	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* clock/clockdrv.c: Add stub nanoseconds since last tick handler to
