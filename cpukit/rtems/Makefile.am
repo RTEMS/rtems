@@ -7,7 +7,6 @@ include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-project_lib_LIBRARIES = librtems.a
 noinst_LIBRARIES = librtems.a
 librtems_a_CPPFLAGS = $(AM_CPPFLAGS)
 
