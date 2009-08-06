@@ -11,7 +11,7 @@
 
 #include <rtems/bspcmdline.h>
 
-const char *bsp_cmdline_get_param_rhs(
+const char *rtems_bsp_cmdline_get_param_rhs(
   const char *name,
   char       *value,
   size_t      length
@@ -21,7 +21,7 @@ const char *bsp_cmdline_get_param_rhs(
   const char *rhs;
   char       *d;
 
-  p = bsp_cmdline_get_param( name, value, length );
+  p = rtems_bsp_cmdline_get_param( name, value, length );
   if ( !p )
     return NULL;
 

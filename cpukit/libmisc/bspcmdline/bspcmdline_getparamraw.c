@@ -15,7 +15,7 @@
 
 extern const char *bsp_boot_cmdline;
 
-const char *bsp_cmdline_get_param_raw(
+const char *rtems_bsp_cmdline_get_param_raw(
   const char *name
 )
 {

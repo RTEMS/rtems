@@ -1,3 +1,11 @@
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/bspcmdline/bspcmdline.h, libmisc/bspcmdline/bspcmdline_get.c,
+	libmisc/bspcmdline/bspcmdline_getparam.c,
+	libmisc/bspcmdline/bspcmdline_getparamraw.c,
+	libmisc/bspcmdline/bspcmdline_getparamrhs.c: Add rtems_ as prefix to
+	all routines.
+
 2009-08-06	Chris Johns <chrisj@rtems.org>
 
 	* libblock/src/bdbuf.c: Fix group user logic.

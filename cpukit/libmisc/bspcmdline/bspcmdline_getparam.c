@@ -35,7 +35,7 @@ static void copy_string(
 
 }
 
-const char *bsp_cmdline_get_param(
+const char *rtems_bsp_cmdline_get_param(
   const char *name,
   char       *value,
   size_t      length
@@ -54,7 +54,7 @@ const char *bsp_cmdline_get_param(
   
   value[0] = '\0';
 
-  p = bsp_cmdline_get_param_raw( name );
+  p = rtems_bsp_cmdline_get_param_raw( name );
 
   if ( !p )
     return NULL;

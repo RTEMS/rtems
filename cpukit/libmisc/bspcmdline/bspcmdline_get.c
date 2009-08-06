@@ -13,7 +13,7 @@
 
 extern const char *bsp_boot_cmdline;
 
-const char *bsp_cmdline_get(void)
+const char *rtems_bsp_cmdline_get(void)
 {
   return bsp_boot_cmdline;
 }
