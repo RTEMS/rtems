@@ -28,7 +28,7 @@ rtems_task Init(
   void                   *alloced;
 
   puts( "\n\n*** TEST 64 ***" );
-  
+
   puts( "Allocate one region -- so second auto extends" );
   sc = rtems_region_create(
     rtems_build_name( 'R', 'N', '1', ' ' ),
@@ -75,10 +75,10 @@ rtems_task Init(
 
   puts( "Init - rtems_region_create - auto-extend - RTEMS_UNSATISFIED" );
   while (1) {
-    
+
     sb = rtems_workspace_allocate( to_alloc, &alloced );
     assert( sb );
-   
+
     sc = rtems_region_create(
       rtems_build_name( 'R', 'N', '2', ' ' ),
       Area2,
@@ -99,14 +99,8 @@ rtems_task Init(
       rtems_test_exit(0);
     }
 
-/*
- *  Extending the object structure can fail after it has extended one 
- *  part of the object management information but not another.  Chris
- *  needs to think about this. XXX TBD
- */
-#if 0
     /*
-     * Verify heap is still in same shape if we couldn't allocate a task
+     * Verify heap is still in same shape if we couldn't allocate a region
      */
     sb = rtems_workspace_get_information( &info );
     #if 0
@@ -116,7 +110,6 @@ rtems_task Init(
     assert( sb );
     assert( info.Free.largest == start.Free.largest );
     assert( info.Free.number  == start.Free.number  );
-#endif
 
     to_alloc -= 8;
     if ( to_alloc == 0 )
@@ -126,10 +119,6 @@ rtems_task Init(
   if ( sc )
     rtems_test_exit(0);
 
-  /* another Chris thinking case .. will this shrink back to exactly
-   * the same? TBD XXX
-   */
-#if 0
   /*
    * Verify heap is still in same shape after we free the region
    */
@@ -137,16 +126,23 @@ rtems_task Init(
   sc = rtems_region_delete( region2 );
   assert( sc == 0 );
 
-  puts( "Init - verify workspace has same memory" );
-  sb = rtems_workspace_get_information( &info );
+  /*
+   *  Although it is intuitive that after deleting the region the
+   *  object space would shrink and go back to its original shape,
+   *  we could end up with fragmentation which prevents a simple
+   *  check from verifying this.
+   */
   #if 0
-    printf( "Init - workspace free/blocks = %d/%d\n",
+    puts( "Init - verify workspace has same memory" );
+    sb = rtems_workspace_get_information( &info );
+    #if 0
+        printf( "Init - workspace free/blocks = %d/%d\n",
       info.Free.largest, info.Free.number );
+    #endif
+    assert( sb );
+    assert( info.Free.largest == start.Free.largest );
+    assert( info.Free.number  == start.Free.number  );
   #endif
-  assert( sb );
-  assert( info.Free.largest == start.Free.largest );
-  assert( info.Free.number  == start.Free.number  );
-#endif
 
   puts( "*** END OF TEST 63 ***" );
   rtems_test_exit(0);

@@ -1,5 +1,11 @@
 2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* sp64/init.c, sp64/sp64.scn: Chris ensured that nothing is moved until
+	all memory is successfully allocated. This means the test can
+	validate the heap is unchanged on extend failure.
+
+2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* spintrcritical01/init.c, spintrcritical06/init.c,
 	spintrcritical08/init.c, spintrcritical13/init.c: Lower microseconds
 	per tick so tests run quicker and more reliably hit the intended

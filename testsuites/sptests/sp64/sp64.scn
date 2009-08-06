@@ -2,4 +2,5 @@
 Allocate one region -- so second auto extends
 Init - rtems_workspace_get_information - OK
 Init - rtems_region_create - auto-extend - RTEMS_UNSATISFIED
+Init - rtems_region_delete - OK
 *** END OF TEST 63 ***
