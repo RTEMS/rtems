@@ -733,10 +733,14 @@ sccInitialize (int chan)
     rtems_isr_entry old_handler;
     rtems_status_code sc;
     
+#if 0
     sc = rtems_interrupt_catch (sccInterruptHandler,
 				m8xx_console_chan_desc[chan].ivec_src 
 				| (m8xx.cicr & 0xE0),
 				&old_handler);
+#endif
+    #warning "Redo interrupt installation"
+    printk( "Redo interrupt installation" );
     CHN_MASK_SET(chan,3);	/* Enable TX and RX interrupts */
     m8xx.cimr |= m8xx_console_chan_desc[chan].ireg_mask;  /* Enable interrupts */
   }
