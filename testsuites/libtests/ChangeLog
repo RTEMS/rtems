@@ -1,5 +1,9 @@
 2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* bspcmdline01/init.c: Do not violate visibility.
+
+2009-08-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* bspcmdline01/bspcmdline01.scn, bspcmdline01/init.c: Add rtems_ as
 	prefix to all routines.
 

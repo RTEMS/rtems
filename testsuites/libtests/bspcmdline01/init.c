@@ -114,13 +114,16 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  const char *bspcmdline;
+
   puts( "\n\n*** TEST OF PARSING BOOT COMMAND STRING ***" );
 
-  if ( rtems_bsp_cmdline_get() ) {
+  bspcmdline = rtems_bsp_cmdline_get();
+  if ( bspcmdline ) {
     printf(
       "BSP has a boot command line:\n"
       "%s\n",
-      bsp_boot_cmdline
+      bspcmdline
     );
   } else {
     puts( "BSP does not have a boot command line" );
