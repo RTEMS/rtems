@@ -9,23 +9,7 @@
  *  $Id$
  */
 
-#define CONFIGURE_INIT
 #include <tmacros.h>
-
-rtems_task Init(rtems_task_argument argument);
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS    2
-
-#define CONFIGURE_MAXIMUM_TASKS              4
-#define CONFIGURE_MAXIMUM_TASK_VARIABLES     (4)
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MICROSECONDS_PER_TICK      10000
-
-#define CONFIGURE_MICROSECONDS_INIT
-
-#include <rtems/confdefs.h>
 
 #include <bsp.h>
 #include <rtems/error.h>
@@ -134,6 +118,14 @@ void test_errors(void)
   /*
    *  task variable get error status codes
    */
+  puts( "task variable get - bad Id - RTEMS_INVALID_ID" );
+  sc = rtems_task_variable_get(
+    rtems_task_self() + 10,
+    (void **)&taskvar1,
+    &value
+  );
+  fatal_directive_status( sc, RTEMS_INVALID_ID, "bad Id" );
+
   puts( "task variable get - NULL pointer - RTEMS_INVALID_ADDRESS" );
   sc = rtems_task_variable_get(RTEMS_SELF, NULL, &value );
   fatal_directive_status( sc, RTEMS_INVALID_ADDRESS, "get NULL pointer" );
@@ -149,6 +141,10 @@ void test_errors(void)
   /*
    *  task variable delete error status codes
    */
+  puts( "task variable delete - bad Id - RTEMS_INVALID_ID" );
+  sc = rtems_task_variable_delete( rtems_task_self() + 10, (void **)&taskvar1 );
+  fatal_directive_status( sc, RTEMS_INVALID_ID, "bad Id" );
+
   puts( "task variable delete - NULL pointer - RTEMS_INVALID_ADDRESS" );
   sc = rtems_task_variable_delete(RTEMS_SELF, NULL);
   fatal_directive_status( sc, RTEMS_INVALID_ADDRESS, "delete NULL pointer" );
@@ -178,6 +174,14 @@ void test_multiple_taskvars(void)
    *  Add multiple task variables and add each twice to
    *  verify that behavior is OK
    */
+  puts( "task variable add - bad Id - RTEMS_INVALID_ID" );
+  sc = rtems_task_variable_add(
+    rtems_task_self() + 10,
+    (void **)&taskvar1,
+    NULL
+  );
+  fatal_directive_status( sc, RTEMS_INVALID_ID, "bad Id" );
+
   puts( "Adding multiple task variables" );
   sc = rtems_task_variable_add(RTEMS_SELF, (void **)&taskvar1, NULL);
   directive_failed( sc, "add multiple #1" );
@@ -380,3 +384,16 @@ rtems_task Init (rtems_task_argument ignored)
 
   rtems_task_suspend (RTEMS_SELF);
 }
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS    2
+
+#define CONFIGURE_MAXIMUM_TASKS              4
+#define CONFIGURE_MAXIMUM_TASK_VARIABLES     (4)
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MICROSECONDS_PER_TICK      10000
+
+#define CONFIGURE_INIT
+#include <rtems/confdefs.h>
+

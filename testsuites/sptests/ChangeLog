@@ -1,3 +1,8 @@
+2009-08-07	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* sp28/init.c, sp28/sp28.scn: Update screen. Add a few missing error
+	cases.
+
 2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* sp64/init.c, sp64/sp64.scn: Chris ensured that nothing is moved until
