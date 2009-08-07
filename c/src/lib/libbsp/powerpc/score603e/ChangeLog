@@ -1,3 +1,9 @@
+2009-08-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* console/console.c, startup/genpvec.c, startup/setvec.c: Disable call
+	to rtems_interrupt_catch until it is fixed. Need to disabled
+	set_vector.
+
 2009-07-16	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* configure.ac: Rename BSP_BOOTCARD_OPTIONS to

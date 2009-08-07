@@ -154,6 +154,7 @@ void console_initialize_interrupts( void )
    */
   for (i=0; i < NUM_Z85C30_CHIPS; i++)
     set_vector( console_isr, Chips_85C30[i].vector, 1 );
+  #warning "Install interrupts using proper method for PIC vectors."
 
   atexit( console_exit );
 

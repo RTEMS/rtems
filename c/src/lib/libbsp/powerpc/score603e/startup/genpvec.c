@@ -51,33 +51,6 @@ typedef struct
 /* XXX */
 void init_irq_data_register(void);
 
-#if 0
-void initialize_external_exception_vector (void)
-{
-  int i;
-  rtems_isr_entry previous_isr;
-  rtems_status_code status;
-
-  Nodes_Used = 0;
-
-  /*
-   * Mask out all interupts until they have a handler installed.
-   */
-
-  for (i=0; i <NUM_LIRQ; i++)
-    rtems_chain_initialize_empty( &ISR_Array[i] );
-
-  init_irq_data_register();
-
-  /*
-   * Install external_exception_ISR () as the handler for
-   *  the General Purpose Interrupt.
-   */
-  status = rtems_interrupt_catch( external_exception_ISR,
-           PPC_IRQ_EXTERNAL, (rtems_isr_entry *) &previous_isr );
-}
-#endif
-
 void Init_EE_mask_init(void)
 {
 }

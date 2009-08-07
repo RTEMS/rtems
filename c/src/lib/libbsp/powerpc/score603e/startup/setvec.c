@@ -35,8 +35,12 @@ rtems_isr_entry set_vector(                     /* returns old vector */
     set_EE_vector( handler, vector );
   }
   else  {
+    ;
+    #if 0
     status = rtems_interrupt_catch(
        handler, vector, (rtems_isr_entry *) &previous_isr );
+    #endif
+    #warning "Remove this whole method."
   }
   return previous_isr;
 }
