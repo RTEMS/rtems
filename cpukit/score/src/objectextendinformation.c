@@ -53,6 +53,8 @@ void _Objects_Extend_information(
   uint32_t          index_base;
   uint32_t          minimum_index;
   uint32_t          index;
+  uint32_t          maximum;
+  size_t            block_size;
   void             *new_object_block;
 
   /*
@@ -77,27 +79,29 @@ void _Objects_Extend_information(
     }
   }
 
+  maximum = (uint32_t) information->maximum + information->allocation_size;
+
+  /*
+   *  We need to limit the number of objects to the maximum number
+   *  representable in the index portion of the object Id.  In the
+   *  case of 16-bit Ids, this is only 256 object instances.
+   */
+  if ( maximum > OBJECTS_ID_FINAL_INDEX ) {
+    return;
+  }
+
   /*
    * Allocate the name table, and the objects and if it fails either return or
    * generate a fatal error depending on auto-extending being active.
    */
   
-  new_object_block =
-    _Workspace_Allocate(
-      (information->allocation_size * information->size)
-    );
-  
-  if ( new_object_block == NULL ) {
-    if ( information->auto_extend ) {
+  block_size = information->allocation_size * information->size;
+  if ( information->auto_extend ) {
+    new_object_block = _Workspace_Allocate( block_size );
+    if ( !new_object_block )
       return;
-    }
-    else {
-      _Internal_error_Occurred(
-        INTERNAL_ERROR_CORE,
-        true,
-        INTERNAL_ERROR_WORKSPACE_ALLOCATION
-      );
-    }
+  } else {
+    new_object_block = _Workspace_Allocate_or_fatal_error( block_size );
   }
   
   /*
@@ -109,7 +113,6 @@ void _Objects_Extend_information(
     void            **object_blocks;
     uint32_t         *inactive_per_block;
     Objects_Control **local_table;
-    uint32_t          maximum;
     void             *old_tables;
     size_t            block_size;
 
@@ -136,24 +139,6 @@ void _Objects_Extend_information(
 
     block_count++;
 
-    maximum = (uint32_t) information->maximum + information->allocation_size;
-
-    /*
-     *  We need to limit the number of objects to the maximum number
-     *  representable in the index portion of the object Id.  In the
-     *  case of 16-bit Ids, this is only 256 object instances.
-     */
-    if ( maximum > OBJECTS_ID_FINAL_INDEX ) {
-      if ( !_Workspace_Free( new_object_block ) ) {
-        _Internal_error_Occurred(
-          INTERNAL_ERROR_CORE,
-          true,
-          INTERNAL_ERROR_WORKSPACE_ALLOCATION
-        );
-      }
-      return;
-    }
-
     /*
      *  Allocate the tables and break it up.
      */
@@ -164,13 +149,7 @@ void _Objects_Extend_information(
     object_blocks = (void**) _Workspace_Allocate( block_size );
 
     if ( !object_blocks ) {
-      if ( !_Workspace_Free( new_object_block ) ) {
-        _Internal_error_Occurred(
-          INTERNAL_ERROR_CORE,
-          true,
-          INTERNAL_ERROR_WORKSPACE_ALLOCATION
-        );
-      }
+      _Workspace_Free( new_object_block );
       return;
     }
     

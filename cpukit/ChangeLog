@@ -1,3 +1,8 @@
+2009-08-06	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* score/src/objectextendinformation.c: Minor rework to eliminate
+	uncovered ranges introduced by Chris' patch.
+
 2009-08-06	Chris Johns <chrisj@rtems.org>
 
 	* score/src/objectextendinformation.c: Ensure that nothing is moved or
