@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxstack01
+
+directives:
+
+  pthread_attr_init
+  pthread_attr_setstackaddr
+  pthread_attr_setstacksize
+  pthread_create
+
+concepts:
+
++ Ensure that the ability for the user to provide its own task stacks
+  via the POSIX threads API works as expected.

@@ -75,6 +75,7 @@ psxsignal04/Makefile
 psxsignal05/Makefile
 psxspin01/Makefile
 psxspin02/Makefile
+psxstack01/Makefile
 psxstat/Makefile
 psxsysconf/Makefile
 psxtime/Makefile
