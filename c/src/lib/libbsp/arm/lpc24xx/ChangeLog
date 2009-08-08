@@ -1,3 +1,9 @@
+2009-08-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds, startup/linkcmds.lpc2478,
+	startup/linkcmds.lpc2478_ncs, startup/linkcmds.lpc2478_ncs_ram:
+	Fixed dummy entries.
+
 2009-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds, startup/linkcmds.lpc2478,
