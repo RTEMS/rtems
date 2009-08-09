@@ -117,7 +117,6 @@ Heap_Resize_status _Heap_Resize_block(
     uint32_t free_block_size = old_user_size - size;
     _Heap_Align_down(&free_block_size, page_size);
 
-printk( "free=%d\n", free_block_size );
     if (free_block_size > 0) {
 
       /* To free some memory the block should be shortened so that it can
@@ -126,8 +125,6 @@ printk( "free=%d\n", free_block_size );
 
       uint32_t new_block_size = old_block_size - free_block_size;
 
-printk( "new=%d min=%d hit=%s\n", new_block_size, min_block_size,
-      ((new_block_size < min_block_size) ? "yes" : "no") );
       if (new_block_size < min_block_size) {
         uint32_t delta = min_block_size - new_block_size;
         _HAssert(free_block_size >= delta);
@@ -144,8 +141,6 @@ printk( "new=%d min=%d hit=%s\n", new_block_size, min_block_size,
       _HAssert(_Heap_Is_aligned(new_block_size, page_size));
       _HAssert(_Heap_Is_aligned(free_block_size, page_size));
 
-printk( "next_is_used=%d free=%d min=%d hit=%s\n", next_is_used, free_block_size, min_block_size,
-      ((next_is_used) && (free_block_size <= min_block_size) ? "yes" : "no") );
       if (!next_is_used) {
         /* Extend the next block to the low addresses by 'free_block_size' */
         Heap_Block *const new_next_block =

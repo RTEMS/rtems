@@ -1,3 +1,8 @@
+2009-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/heapresizeblock.c: Remove printk's that were accidentally
+	committed.
+
 2009-08-09	Xi Yang <hiyangxi@gmail.com>
 
 	* libcsupport/Makefile.am, posix/Makefile.am, rtems/Makefile.am,
